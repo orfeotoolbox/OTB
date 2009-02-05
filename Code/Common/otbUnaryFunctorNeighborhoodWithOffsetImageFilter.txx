@@ -153,13 +153,8 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
-  // Process each of the boundary faces.  These are N-d regions which border
-  // the edge of the buffer.
-  fit=faceList.begin();
-  fitOff=faceList.begin();
-
-  while (fit!=faceList.end() && fitOff!=faceListOff.end())
-  {
+  for (fit=faceList.begin(), fitOff=faceListOff.begin(); fit != faceList.end(), fitOff != faceListOff.end(); ++fit, ++fitOff)
+  {std::cout<<"ALOOOOOORRRRRRSSSSSSSS"<<threadId<<std::endl;	
     // neighborhood iterator
     neighInputIt = itk::ConstNeighborhoodIterator<TInputImage>(r, inputPtr, *fit);
     neighInputIt.OverrideBoundaryCondition(&nbc);
@@ -170,19 +165,19 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
     neighInputOffIt.GoToBegin();
 
     outputIt = itk::ImageRegionIterator<TOutputImage>(outputPtr, *fit);
-
+unsigned int pp=0;
     while ( ! outputIt.IsAtEnd() )
     {
-
+		std::cout<<threadId<<"/"<<m_FunctorList.size()<<" -> "<<pp<<std::endl;	
+		
       outputIt.Set( m_FunctorList[threadId]( neighInputIt, neighInputOffIt) );
-
+std::cout<<threadId<<"/"<<m_FunctorList.size()<<" -> "<<pp<<std::endl;
+pp++;
       ++neighInputIt;
       ++neighInputOffIt;
       ++outputIt;
       progress.CompletedPixel();
     }
-    ++fit;
-    ++fitOff;
   }
 }
 
