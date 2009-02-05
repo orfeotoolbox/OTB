@@ -69,7 +69,6 @@ public:
 
     double temp = 0.;
     double norm = 0.;
-    double output = 0.;
 
     offsetOff = offsetOffInit;
     for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )

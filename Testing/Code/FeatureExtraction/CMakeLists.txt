@@ -1051,26 +1051,29 @@ ADD_TEST(feTvTextureFunctorBase ${FEATUREEXTRACTION_TESTS11}
     -2   # offset[0]
     2    # offset[1]	
 )
-		
+
+
 # -------        otb::EnergyTextureFunctor   -------------
 ADD_TEST(feTvEnergyTextureFunctor ${FEATUREEXTRACTION_TESTS11} 
 --compare-image ${EPS}
                 ${BASELINE}/feTvEnergyTextureFunctor.tif
                 ${TEMP}/feTvEnergyTextureFunctor.tif
-  otbEnergyTextureFunctor
+  otbTextureFunctor
+    ENJ
     ${INPUTDATA}/poupees_sub.png
     ${TEMP}/feTvEnergyTextureFunctor.tif
     5    # radius
     -2   # offset[0]
     2    # offset[1]	
 )
-
+		
 # -------        otb::EntropyTextureFunctor   -------------
 ADD_TEST(feTvEntropyTextureFunctor ${FEATUREEXTRACTION_TESTS11} 
 --compare-image ${EPS}
                 ${BASELINE}/feTvEntropyTextureFunctor.tif
                 ${TEMP}/feTvEntropyTextureFunctor.tif
-  otbEntropyTextureFunctor
+  otbTextureFunctor
+    ENT #entropy
     ${INPUTDATA}/poupees_sub.png
     ${TEMP}/feTvEntropyTextureFunctor.tif
     5    # radius
@@ -1083,7 +1086,8 @@ ADD_TEST(feTvInverseDifferenceMomentTextureFunctor ${FEATUREEXTRACTION_TESTS11}
 --compare-image ${EPS}
                 ${BASELINE}/feTvInverseDifferenceMomentTextureFunctor.tif
                 ${TEMP}/feTvInverseDifferenceMomentTextureFunctor.tif
-  otbInverseDifferenceMomentTextureFunctor
+  otbTextureFunctor
+    IMD #inverse difference moment
     ${INPUTDATA}/poupees_sub.png
     ${TEMP}/feTvInverseDifferenceMomentTextureFunctor.tif
     5    # radius
@@ -1096,7 +1100,8 @@ ADD_TEST(feTvAngularSecondMomentumTextureFunctor ${FEATUREEXTRACTION_TESTS11}
 --compare-image ${EPS}
                 ${BASELINE}/feTvAngularSecondMomentumTextureFunctor.tif
                 ${TEMP}/feTvAngularSecondMomentumTextureFunctor.tif
-  otbAngularSecondMomentumTextureFunctor
+  otbTextureFunctor
+    ASM #angular second moment
     ${INPUTDATA}/poupees_sub.png
     ${TEMP}/feTvAngularSecondMomentumTextureFunctor.tif
     5    # radius
@@ -1298,10 +1303,7 @@ otbCloudDetectionFilterNew.cxx
 otbCloudDetectionFilter.cxx
 otbSimplifyManyPathListFilter.cxx
 otbTextureFunctorBase.cxx
-otbEnergyTextureFunctor.cxx
-otbEntropyTextureFunctor.cxx
-otbInverseDifferenceMomentTextureFunctor.cxx
-otbAngularSecondMomentumTextureFunctor.cxx
+otbTextureFunctor.cxx
 otbTextureImageFunction.cxx
 )
 

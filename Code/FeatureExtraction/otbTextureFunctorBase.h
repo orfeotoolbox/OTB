@@ -55,16 +55,111 @@ public:
   typedef typename IterType1::InternalPixelType InternalPixelType;
   typedef typename IterType1::ImageType         ImageType;
   typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
+  typedef std::vector<double>                   DoubleVectorType;
 
   void SetOffset(OffsetType off)
   {
     m_Offset=off;
+    m_Mini = itk::NumericTraits<double>::max();
+    m_MiniOff = itk::NumericTraits<double>::max();
+    m_Maxi = itk::NumericTraits<double>::NonpositiveMin();
+    m_MaxiOff = itk::NumericTraits<double>::NonpositiveMin();
+    m_Mean = 0.;
+    m_MeanOff = 0.;
+    m_Std = 0.;
+    m_StdOff = 0.;
   };
+
   OffsetType GetOffset()
   {
     return m_Offset;
   };
+  
+  double GetMaxi(){ return m_Maxi; };
+  double GetMini(){ return m_Mini; };
+  double GetMaxiOff(){ return m_MaxiOff; };
+  double GetMiniOff(){ return m_MiniOff; };
+  double GetMean(){ return m_Mean; };
+  double GetMeanOff(){ return m_MeanOff; };
+  double GetStd(){ return m_Std; };
+  double GetStdOff(){ return m_StdOff; };
 
+ /** Computes the histogram bins using Scott formula, plus min/max, means, stds */
+  DoubleVectorType StatComputation(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
+    {
+      DoubleVectorType output;
+      double binLength    = 0;
+      double binLengthOff =0;
+      m_Mean = 0.;
+      m_MeanOff = 0.;
+      m_Std = 0.;
+      m_StdOff = 0.;
+      RadiusType radius = neigh.GetRadius();
+      m_Mini = itk::NumericTraits<double>::max();
+      m_MiniOff = itk::NumericTraits<double>::max();
+      m_Maxi = itk::NumericTraits<double>::NonpositiveMin();
+      m_MaxiOff = itk::NumericTraits<double>::NonpositiveMin();
+      double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
+      double areaInv = 1/area;
+      double scottCoef =  3.5 /(vcl_pow(area, 1/3) );
+      
+      OffsetType offset;
+      offset.Fill(0);
+      OffsetType offsetOff;
+      OffsetType offsetOffInit;
+      
+      offsetOffInit[0] = -radius[0]+this->GetOffset()[0]-1;
+      offsetOffInit[1] = -radius[1]+this->GetOffset()[1]-1;
+      
+      offsetOff = offsetOffInit;
+      for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
+	{
+	  offsetOff[0]++;
+	  offsetOff[1] = offsetOffInit[1];
+	  offset[0] = l;
+	  for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+	    {
+	      offsetOff[1]++;
+	      offset[1] = k;
+	      m_Mean += static_cast<double>(neigh[offset]);
+	      m_MeanOff += static_cast<double>(neighOff[offsetOff]);
+	    
+	      m_Mini    = std::min(static_cast<double>(neigh[offset]),      m_Mini);
+	      m_Maxi    = std::max(static_cast<double>(neigh[offset]),      m_Maxi);
+	      m_MiniOff = std::min(static_cast<double>(neighOff[offsetOff]),m_MiniOff);
+	      m_MaxiOff = std::max(static_cast<double>(neighOff[offsetOff]),m_MaxiOff);
+	    }
+	}
+      m_Mean *= areaInv;
+      m_MeanOff *= areaInv;
+    
+      offsetOff = offsetOffInit;
+ 
+      for( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
+	{
+	  offsetOff[0]++;
+	  offsetOff[1] = offsetOffInit[1];  
+	  offset[0] = l;
+	  for( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+	    {
+	      offsetOff[1]++;
+	      offset[1] = k;
+	      binLength += vcl_pow( (m_Mean-static_cast<double>(neigh[offset])), 2);
+	      binLengthOff += vcl_pow( (m_MeanOff-static_cast<double>(neighOff[offsetOff])), 2);
+	    }
+	}
+    
+      binLength *= areaInv;
+      binLength = vcl_sqrt( binLength );
+      binLengthOff *= areaInv;
+      binLengthOff = vcl_sqrt( binLengthOff );
+      m_Std = binLength;
+      m_StdOff = binLengthOff;
+      output.push_back( scottCoef*binLength );
+      output.push_back( scottCoef*binLengthOff );
+
+      return output;
+    }
 
   inline TOutput operator()(const IterType1 &it, const IterType2 &itOff)
     { 
@@ -111,7 +206,18 @@ public:
  
  private:
   OffsetType m_Offset;
-
+  /** Stores min/max neighborhood area values */
+  double m_Mini;
+  double m_Maxi;
+  /** Stores min/max neighborhood+offset values */
+  double m_MiniOff;
+  double m_MaxiOff;
+  /** Stores mean of neighborhood+offset */
+  double m_Mean;
+  double m_MeanOff;
+  /** Stores standard deviation of neighborhood+offset */
+  double m_Std;
+  double m_StdOff;
 };
 
 
