@@ -153,7 +153,12 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
-  for (fit=faceList.begin(), fitOff=faceListOff.begin(); fit != faceList.end(), fitOff != faceListOff.end(); ++fit, ++fitOff)
+  // Process each of the boundary faces.  These are N-d regions which border
+  // the edge of the buffer.
+  fit=faceList.begin();
+  fitOff=faceList.begin();
+
+  while (fit!=faceList.end() && fitOff!=faceListOff.end())
   {
     // neighborhood iterator
     neighInputIt = itk::ConstNeighborhoodIterator<TInputImage>(r, inputPtr, *fit);
@@ -165,8 +170,10 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
     neighInputOffIt.GoToBegin();
 
     outputIt = itk::ImageRegionIterator<TOutputImage>(outputPtr, *fit);
+
     while ( ! outputIt.IsAtEnd() )
     {
+
       outputIt.Set( m_FunctorList[threadId]( neighInputIt, neighInputOffIt) );
 
       ++neighInputIt;
@@ -174,6 +181,8 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
       ++outputIt;
       progress.CompletedPixel();
     }
+    ++fit;
+    ++fitOff;
   }
 }
 
