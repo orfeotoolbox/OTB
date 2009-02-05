@@ -31,6 +31,8 @@
 #include "otbEntropyTextureFunctor.h"
 #include "otbInverseDifferenceMomentTextureFunctor.h"
 #include "otbAngularSecondMomentumTextureFunctor.h"
+#include "otbVarianceTextureFunctor.h"
+
 
 template<class TInputImage, class TOutputImage, class TFunctor>
 int generic_TextureImageFunction(int argc, char * argv[])
@@ -109,6 +111,11 @@ int otbTextureImageFunction(int argc, char * argv[])
  else if ( strArgv == "ASM" )
     {
       typedef otb::Functor::AngularSecondMomentumTextureFunctor<IteratorType, IteratorType, VectorType> FunctorType;
+      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    }
+ else if ( strArgv == "VAR" )
+    {
+      typedef otb::Functor::VarianceTextureFunctor<IteratorType, IteratorType, VectorType> FunctorType;
       return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else
