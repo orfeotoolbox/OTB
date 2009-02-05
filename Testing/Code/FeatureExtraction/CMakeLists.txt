@@ -1039,6 +1039,19 @@ ADD_TEST(feTpSimplifyManyPathListFilter ${FEATUREEXTRACTION_TESTS11}
          1.0
         )
 
+# -------        otb::TextureFunctorBase  -------------
+ADD_TEST(feTvTextureFunctorBase ${FEATUREEXTRACTION_TESTS11} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvTextureFunctorBase.tif
+                ${TEMP}/feTvTextureFunctorBase.tif
+  otbTextureFunctorBase
+    ${INPUTDATA}/poupees_sub.png
+    ${TEMP}/feTvTextureFunctorBase.tif
+    5    # radius
+    -2   # offset[0]
+    2    # offset[1]	
+)
+		
 # -------        otb::EnergyTextureFunctor   -------------
 ADD_TEST(feTvEnergyTextureFunctor ${FEATUREEXTRACTION_TESTS11} 
 --compare-image ${EPS}
@@ -1284,6 +1297,7 @@ otbCloudEstimatorFilter.cxx
 otbCloudDetectionFilterNew.cxx
 otbCloudDetectionFilter.cxx
 otbSimplifyManyPathListFilter.cxx
+otbTextureFunctorBase.cxx
 otbEnergyTextureFunctor.cxx
 otbEntropyTextureFunctor.cxx
 otbInverseDifferenceMomentTextureFunctor.cxx
