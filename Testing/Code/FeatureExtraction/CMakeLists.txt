@@ -1042,7 +1042,7 @@ ADD_TEST(feTpSimplifyManyPathListFilter ${FEATUREEXTRACTION_TESTS11}
 # -------        otb::TextureFunctorBase  -------------
 ADD_TEST(feTvTextureFunctorBase ${FEATUREEXTRACTION_TESTS11} 
 --compare-image ${EPS}
-                ${BASELINE}/feTvTextureFunctorBase.tif
+                ${INPUTDATA}/poupees_sub.png
                 ${TEMP}/feTvTextureFunctorBase.tif
   otbTextureFunctorBase
     ${INPUTDATA}/poupees_sub.png

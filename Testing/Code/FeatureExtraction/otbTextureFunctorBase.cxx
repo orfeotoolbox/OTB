@@ -45,7 +45,7 @@ public:
   
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
-    double out = 1;//neigh.GetCenterValue(); 
+    double out = neigh.GetCenterValue(); 
     
 	return out;
   }
