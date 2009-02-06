@@ -31,6 +31,7 @@
 #include "otbVarianceTextureFunctor.h"
 #include "otbCorrelationTextureFunctor.h"
 #include "otbContrastTextureFunctor.h"
+#include "otbSumAverageTextureFunctor.h"
 
 
 template<class TInputImage, class TOutputImage, class TFunctor>
@@ -112,6 +113,11 @@ int otbTextureFunctor(int argc, char * argv[])
  else if ( strArgv == "CON" )
     {
       typedef otb::Functor::ContrastTextureFunctor<IteratorType, IteratorType, PixelType> FunctorType;
+      return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
+    }
+  else if ( strArgv == "SAV" )
+    {
+      typedef otb::Functor::SumAverageTextureFunctor<IteratorType, IteratorType, PixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else

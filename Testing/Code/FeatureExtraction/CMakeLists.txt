@@ -28,6 +28,7 @@ SET(FEATUREEXTRACTION_TESTS9 ${CXX_TEST_PATH}/otbFeatureExtractionTests9)
 SET(FEATUREEXTRACTION_TESTS10 ${CXX_TEST_PATH}/otbFeatureExtractionTests10)
 SET(FEATUREEXTRACTION_TESTS11 ${CXX_TEST_PATH}/otbFeatureExtractionTests11)
 SET(FEATUREEXTRACTION_TESTS12 ${CXX_TEST_PATH}/otbFeatureExtractionTests12)
+SET(FEATUREEXTRACTION_TESTS13 ${CXX_TEST_PATH}/otbFeatureExtractionTests13)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests1 ~~~~~~~~~~~~~~~~~~~~~
@@ -977,7 +978,7 @@ ADD_TEST(feTuLandmarkNew ${FEATUREEXTRACTION_TESTS10}
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests11 ~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests11 ~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -1040,8 +1041,13 @@ ADD_TEST(feTpSimplifyManyPathListFilter ${FEATUREEXTRACTION_TESTS11}
          1.0
         )
 
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests11 ~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # -------        otb::TextureFunctorBase  -------------
-ADD_TEST(feTvTextureFunctorBase ${FEATUREEXTRACTION_TESTS11} 
+ADD_TEST(feTvTextureFunctorBase ${FEATUREEXTRACTION_TESTS12} 
 --compare-image ${EPS}
                 ${INPUTDATA}/poupees_sub.png
                 ${TEMP}/feTvTextureFunctorBase.tif
@@ -1055,7 +1061,7 @@ ADD_TEST(feTvTextureFunctorBase ${FEATUREEXTRACTION_TESTS11}
 
 
 # -------        otb::EnergyTextureFunctor   -------------
-ADD_TEST(feTvEnergyTextureFunctor ${FEATUREEXTRACTION_TESTS11} 
+ADD_TEST(feTvEnergyTextureFunctor ${FEATUREEXTRACTION_TESTS12} 
 --compare-image ${EPS}
                 ${BASELINE}/feTvEnergyTextureFunctor.tif
                 ${TEMP}/feTvEnergyTextureFunctor.tif
@@ -1069,7 +1075,7 @@ ADD_TEST(feTvEnergyTextureFunctor ${FEATUREEXTRACTION_TESTS11}
 )
 		
 # -------        otb::EntropyTextureFunctor   -------------
-ADD_TEST(feTvEntropyTextureFunctor ${FEATUREEXTRACTION_TESTS11} 
+ADD_TEST(feTvEntropyTextureFunctor ${FEATUREEXTRACTION_TESTS12} 
 --compare-image ${EPS}
                 ${BASELINE}/feTvEntropyTextureFunctor.tif
                 ${TEMP}/feTvEntropyTextureFunctor.tif
@@ -1083,7 +1089,7 @@ ADD_TEST(feTvEntropyTextureFunctor ${FEATUREEXTRACTION_TESTS11}
 )
 
 # -------   otb::InverseDifferenceMomentTextureFunctor  -------------
-ADD_TEST(feTvInverseDifferenceMomentTextureFunctor ${FEATUREEXTRACTION_TESTS11} 
+ADD_TEST(feTvInverseDifferenceMomentTextureFunctor ${FEATUREEXTRACTION_TESTS12} 
 --compare-image ${EPS}
                 ${BASELINE}/feTvInverseDifferenceMomentTextureFunctor.tif
                 ${TEMP}/feTvInverseDifferenceMomentTextureFunctor.tif
@@ -1097,7 +1103,7 @@ ADD_TEST(feTvInverseDifferenceMomentTextureFunctor ${FEATUREEXTRACTION_TESTS11}
 )
 
 # -------   otb::AngularSecondMomentumTextureFunctor  -------------
-ADD_TEST(feTvAngularSecondMomentumTextureFunctor ${FEATUREEXTRACTION_TESTS11} 
+ADD_TEST(feTvAngularSecondMomentumTextureFunctor ${FEATUREEXTRACTION_TESTS12} 
 --compare-image ${EPS}
                 ${BASELINE}/feTvAngularSecondMomentumTextureFunctor.tif
                 ${TEMP}/feTvAngularSecondMomentumTextureFunctor.tif
@@ -1111,7 +1117,7 @@ ADD_TEST(feTvAngularSecondMomentumTextureFunctor ${FEATUREEXTRACTION_TESTS11}
 )
 
 # -------   otb::VarianceTextureFunctor  -------------
-ADD_TEST(feTvVarianceTextureFunctor ${FEATUREEXTRACTION_TESTS11} 
+ADD_TEST(feTvVarianceTextureFunctor ${FEATUREEXTRACTION_TESTS12} 
 --compare-image ${EPS}
                 ${BASELINE}/feTvVarianceTextureFunctor.tif
                 ${TEMP}/feTvVarianceTextureFunctor.tif
@@ -1125,7 +1131,7 @@ ADD_TEST(feTvVarianceTextureFunctor ${FEATUREEXTRACTION_TESTS11}
 )
 
 # -------   otb::CorrelationTextureFunctor  -------------
-ADD_TEST(feTvCorrelationTextureFunctor ${FEATUREEXTRACTION_TESTS11} 
+ADD_TEST(feTvCorrelationTextureFunctor ${FEATUREEXTRACTION_TESTS12} 
 --compare-image ${EPS}
                 ${BASELINE}/feTvCorrelationTextureFunctor.tif
                 ${TEMP}/feTvCorrelationTextureFunctor.tif
@@ -1139,7 +1145,7 @@ ADD_TEST(feTvCorrelationTextureFunctor ${FEATUREEXTRACTION_TESTS11}
 )
 
 # -------   otb::ContrastTextureFunctor  -------------
-ADD_TEST(feTvContrastTextureFunctor ${FEATUREEXTRACTION_TESTS11} 
+ADD_TEST(feTvContrastTextureFunctor ${FEATUREEXTRACTION_TESTS12} 
 --compare-image ${EPS}
                 ${BASELINE}/feTvContrastTextureFunctor.tif
                 ${TEMP}/feTvContrastTextureFunctor.tif
@@ -1152,8 +1158,27 @@ ADD_TEST(feTvContrastTextureFunctor ${FEATUREEXTRACTION_TESTS11}
     2    # offset[1]	
 )
 
+
+# -------   otb::SumAverageTextureFunctor  -------------
+ADD_TEST(feTvSumAverageTextureFunctor ${FEATUREEXTRACTION_TESTS12} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvSumAverageTexture.tif
+                ${TEMP}/feTvSumAverageTextureFunctor.tif
+  otbTextureFunctor
+    SAV #sum average
+    ${INPUTDATA}/poupees_sub.png
+    ${TEMP}/feTvSumAverageTextureFunctor.tif
+    5    # radius
+    -2   # offset[0]
+    2    # offset[1]	
+)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests13 ~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # -------        otb::EnergyTextureImageFunction   -------------
-ADD_TEST(feTvEnergyTextureImageFunction ${FEATUREEXTRACTION_TESTS12} 
+ADD_TEST(feTvEnergyTextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
 --compare-image ${EPS}
                 ${BASELINE}/feTvEnergyTextureImageFunction.tif
                 ${TEMP}/feTvEnergyTextureImageFunction.tif
@@ -1169,7 +1194,7 @@ ADD_TEST(feTvEnergyTextureImageFunction ${FEATUREEXTRACTION_TESTS12}
 
 
 # -------        otb::EntropyTextureImageFunction   -------------
-ADD_TEST(feTvEntropyTextureImageFunction ${FEATUREEXTRACTION_TESTS12} 
+ADD_TEST(feTvEntropyTextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
 --compare-image ${EPS}
                 ${BASELINE}/feTvEntropyTextureImageFunction.tif
                 ${TEMP}/feTvEntropyTextureImageFunction.tif
@@ -1185,7 +1210,7 @@ ADD_TEST(feTvEntropyTextureImageFunction ${FEATUREEXTRACTION_TESTS12}
 
 
 # -------        otb::InverseDifferenceMomentTextureImageFunction   -------------
-ADD_TEST(feTvInverseDifferenceMomentTextureImageFunction ${FEATUREEXTRACTION_TESTS12} 
+ADD_TEST(feTvInverseDifferenceMomentTextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
 --compare-image ${EPS}
                 ${BASELINE}/feTvInverseDifferenceMomentTextureImageFunction.tif
                 ${TEMP}/feTvInverseDifferenceMomentTextureImageFunction.tif
@@ -1200,7 +1225,7 @@ ADD_TEST(feTvInverseDifferenceMomentTextureImageFunction ${FEATUREEXTRACTION_TES
 )
 
 # -------        otb::AngularSecondMomentumTextureImageFunction   -------------
-ADD_TEST(feTvAngularSecondMomentumTextureImageFunction ${FEATUREEXTRACTION_TESTS12} 
+ADD_TEST(feTvAngularSecondMomentumTextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
 --compare-image ${EPS}
                 ${BASELINE}/feTvAngularSecondMomentumTextureImageFunction.tif
                 ${TEMP}/feTvAngularSecondMomentumTextureImageFunction.tif
@@ -1215,7 +1240,7 @@ ADD_TEST(feTvAngularSecondMomentumTextureImageFunction ${FEATUREEXTRACTION_TESTS
 )
 
 # -------        otb::VarianceTextureImageFunction   -------------
-ADD_TEST(feTvVarianceTextureImageFunction ${FEATUREEXTRACTION_TESTS12} 
+ADD_TEST(feTvVarianceTextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
 --compare-image ${EPS}
                 ${BASELINE}/feTvVarianceTextureImageFunction.tif
                 ${TEMP}/feTvVarianceTextureImageFunction.tif
@@ -1230,7 +1255,7 @@ ADD_TEST(feTvVarianceTextureImageFunction ${FEATUREEXTRACTION_TESTS12}
 )
 
 # -------        otb::CorrelationTextureImageFunction   -------------
-ADD_TEST(feTvCorrelationTextureImageFunction ${FEATUREEXTRACTION_TESTS12} 
+ADD_TEST(feTvCorrelationTextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
 --compare-image ${EPS}
                 ${BASELINE}/feTvCorrelationTextureImageFunction.tif
                 ${TEMP}/feTvCorrelationTextureImageFunction.tif
@@ -1245,7 +1270,7 @@ ADD_TEST(feTvCorrelationTextureImageFunction ${FEATUREEXTRACTION_TESTS12}
 )
 
 # -------        otb::ContrastTextureImageFunction   -------------
-ADD_TEST(feTvContrastTextureImageFunction ${FEATUREEXTRACTION_TESTS12} 
+ADD_TEST(feTvContrastTextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
 --compare-image ${EPS}
                 ${BASELINE}/feTvContrastTextureImageFunction.tif
                 ${TEMP}/feTvContrastTextureImageFunction.tif
@@ -1259,6 +1284,20 @@ ADD_TEST(feTvContrastTextureImageFunction ${FEATUREEXTRACTION_TESTS12}
     2    # offset[1]	
 )
 
+# -------        otb::SumAverageTextureImageFunction   -------------
+ADD_TEST(feTvSumAverageTextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvSumAverageTextureImageFunction.tif
+                ${TEMP}/feTvSumAverageTextureImageFunction.tif
+   otbTextureImageFunction
+    SAV #sum average
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${TEMP}/feTvSumAverageTextureImageFunction.tif
+    5    # radius[0]
+    5    # radius[1]
+    -2   # offset[0]
+    2    # offset[1]	
+)
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -1390,11 +1429,13 @@ otbCloudEstimatorFilter.cxx
 otbCloudDetectionFilterNew.cxx
 otbCloudDetectionFilter.cxx
 otbSimplifyManyPathListFilter.cxx
+)
+SET(BasicFeatureExtraction_SRCS12
 otbTextureFunctorBase.cxx
 otbTextureFunctor.cxx
 )
 
-SET(BasicFeatureExtraction_SRCS12
+SET(BasicFeatureExtraction_SRCS13
 otbTextureImageFunction.cxx
 )
 
@@ -1424,6 +1465,8 @@ ADD_EXECUTABLE(otbFeatureExtractionTests11 otbFeatureExtractionTests11.cxx ${Bas
 TARGET_LINK_LIBRARIES(otbFeatureExtractionTests11  OTBFeatureExtraction OTBIO)
 ADD_EXECUTABLE(otbFeatureExtractionTests12 otbFeatureExtractionTests12.cxx ${BasicFeatureExtraction_SRCS12})
 TARGET_LINK_LIBRARIES(otbFeatureExtractionTests12  OTBFeatureExtraction OTBIO)
+ADD_EXECUTABLE(otbFeatureExtractionTests13 otbFeatureExtractionTests13.cxx ${BasicFeatureExtraction_SRCS13})
+TARGET_LINK_LIBRARIES(otbFeatureExtractionTests13  OTBFeatureExtraction OTBIO)
 
 # ADD_EXECUTABLE(roadDetect roadDetect.cxx)
 # TARGET_LINK_LIBRARIES(roadDetect  OTBFeatureExtraction OTBIO)

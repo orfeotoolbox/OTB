@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbContrastTextureFunctor_h
-#define __otbContrastTextureFunctor_h
+#ifndef __otbSumAverageTextureFunctor_h
+#define __otbSumAverageTextureFunctor_h
 
 #include "otbEntropyTextureFunctor.h"
 
@@ -24,7 +24,7 @@ namespace otb
 {
 namespace Functor
 {
-/** \class ContrastTextureFunctor
+/** \class SumAverageTextureFunctor
  *  \brief This functor calculates the inverse difference moment of an image
  *
  *   Computes joint histogram (neighborhood and offset neighborhood) 
@@ -38,12 +38,12 @@ namespace Functor
  *  \ingroup Statistics
  */
 template <class TIterInput1, class TIterInput2, class TOutput>
-class ITK_EXPORT ContrastTextureFunctor : 
+class ITK_EXPORT SumAverageTextureFunctor : 
 public EntropyTextureFunctor<TIterInput1, TIterInput2, TOutput>
 {
 public:
-  ContrastTextureFunctor(){};
-  ~ContrastTextureFunctor(){};
+  SumAverageTextureFunctor(){};
+  ~SumAverageTextureFunctor(){};
 
   typedef TIterInput1                           IterType1;
   typedef TIterInput2                           IterType2;
@@ -115,16 +115,18 @@ public:
     for (unsigned sB = 0; sB<histo[0].size(); sB++)
       { 
 	double nCeil = (static_cast<double>(sB)+0.5)*binsLength[0];
-	double nCeilSquare = vcl_pow( nCeil, 2);
 	for (unsigned r = 0; r<histo.size(); r++)
 	  {
 	    double rVal = (static_cast<double>(r)+0.5)*binsLength[1];
 	    for (unsigned s = 0; s<histo[r].size(); s++)
 	      { 
-		if( vcl_abs( rVal - (static_cast<double>(s)+0.5)*binsLength[0]) == nCeil )
+		double sVal = (static_cast<double>(s)+0.5)*binsLength[0];
+		// In theory don't have the abs but will deals with neighborhood and offset without the same histo
+		// thus loop over 2*Ng don't have sense
+		if( vcl_abs(rVal + sVal - nCeil)<binsLength[1] || vcl_abs(rVal + sVal - 2*nCeil)<binsLength[1] )
 		  {
 		    double p =  static_cast<double>(histo[r][s])*areaInv;
-		    out += nCeilSquare * p;
+		    out += sVal * p;
 		  }
 	      }
 	  }
