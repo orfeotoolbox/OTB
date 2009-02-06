@@ -52,10 +52,10 @@ ImageSeriesFileReader< TImage >
   if ( this->GetNumberOfOutputs() < 1 )
     return 0;
 
-  if ( idx >= m_ListReader->Size() )
+  if ( idx >= m_OutputList->Size() )
     return 0;
 
-  return static_cast<OutputImageType*>( this->m_ListReader->GetNthElement( idx )->GetOutput() );
+  return static_cast<OutputImageType*>( this->m_OutputList->GetNthElement( idx ) );
 }
 
 template < class TImage >
@@ -139,6 +139,19 @@ ImageSeriesFileReader< TImage >
     ReaderPointerType aReader = ReaderType::New();
     aReader->SetFileName( aLine );
 
+    try {
+      aReader->Update();
+    } 
+    catch ( itk::ImageFileReaderException & e )
+    {
+      std::vector< std::string > fullPath;
+      fullPath.push_back( itksys::SystemTools::GetFilenamePath( m_FileName ) );
+      fullPath.push_back( "/" );
+      fullPath.push_back( aLine );
+      aReader->SetFileName( itksys::SystemTools::JoinPath( fullPath ) );
+      aReader->Update();
+    }
+
     /*
      * Reading the Band number
      */
@@ -159,29 +172,59 @@ ImageSeriesFileReader< TImage >
     }
 
     int numBand = 0;
-    inputFile >> numBand;
-    //std::cerr << "-> '" << numBand << "'\n";
-
-#if 0
-    // FIXME
-    // At this step, we do not know how to handle band selection from ENVI META FILE...
-    //
-    if( strcmp( this->GetOutput()->GetNameOfClass(), "VectorImage" ) == 0 )
+    std::vector<int> bands;
+    int aBand,oldBand=-1;
+    char sep;
+    while ( 1 )
     {
+      inputFile >> aBand;
+      if ( oldBand != -1 )
+      {
+        for ( int i = oldBand; i <= aBand; i++ )
+          bands.push_back( i );
+        oldBand = -1;
+      }
+      else
+        bands.push_back( aBand );
 
+      int posRef = inputFile.tellg();
+      inputFile >> sep;
+      if ( sep == '-' )
+      {
+        oldBand = aBand+1;
+      }
+      else if ( sep != ',' )
+      {
+        inputFile.seekg( posRef, std::ios_base::beg );
+        break;
+      }
     }
-#endif
 
-    if ( numBand != 1 && strcmp( this->GetOutput()->GetNameOfClass(), "Image" ) == 0 )
+    if ( strcmp( this->GetOutput()->GetNameOfClass(), "Image" ) == 0 )
     {
-      inputFile.close();
-      itk::OStringStream msg;
-      msg << "Unable to handle multicomponent file from Image<> class\n";
-      msg << "\"ENVI META FILE\" FileName: " << m_FileName << "\n";
-      msg << "Image FileName             : " << aReader->GetFileName() << "\n";
-      ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
-      throw e;
-      return;
+      if (  bands.size() != 1 )
+      {
+        inputFile.close();
+        itk::OStringStream msg;
+        msg << "Unable to handle multicomponent file from Image<> class\n";
+        msg << "\"ENVI META FILE\" FileName: " << m_FileName << "\n";
+        msg << "Image FileName             : " << aReader->GetFileName() << "\n";
+        ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
+        throw e;
+        return;
+      }
+
+      if ( bands[0] != 1 )
+      {
+        std::cerr << "Perform band selection on Image\n";
+      }
+    }
+    else if ( strcmp( this->GetOutput()->GetNameOfClass(), "VectorImage" ) == 0 )
+    {
+      if ( bands[ bands.size()-1 ] != bands.size() )
+      {
+        std::cerr << "Perform bands selection on VectorImage\n";
+      }
     }
 
     /*
@@ -214,7 +257,7 @@ ImageSeriesFileReader< TImage >
 
     int beg_line,end_line,beg_col,end_col;
     char sep1,sep2,sep3;
-    inputFile >> beg_col >> sep1 >> beg_line >> sep2 >> end_col >> sep3 >> end_line;
+    inputFile >> beg_col >> sep1 >> end_col >> sep2 >> beg_line >> sep3 >> end_line;
 
     if ( !inputFile.good() )
     {
@@ -229,19 +272,19 @@ ImageSeriesFileReader< TImage >
     }
 
     IndexType index;
-    index[0] = beg_line - 1; 
-    index[1] = beg_col - 1;
+    index[0] = beg_col - 1;
+    index[1] = beg_line - 1; 
 
     SizeType size;
-    size[0] = end_line - beg_line;
-    size[1] = end_col - beg_col;
+    size[0] = end_col - beg_col;
+    size[1] = end_line - beg_line;
 
     RegionType region;
     region.SetSize( size );
     region.SetIndex( index );
 
     /*
-     * FIXME: it seems that teh region selection is not working as it stands...
+     * FIXME: it seems that the region selection is not working as it stands...
      * May be necessary to use MultiChannelExtractROI...
      */
 
