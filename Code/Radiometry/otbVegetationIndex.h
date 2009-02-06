@@ -94,7 +94,7 @@ private:
 *  the Evaluate() method.
 */
 template<class TInput1, class TInput2, class TInput3, class TOutput>
-class RBAndNIRIndexBase
+class RAndBAndNIRIndexBase
 {
 public:
   /// Vector pixel type used to support both vector images and multiple
@@ -113,9 +113,9 @@ public:
     return this->Evaluate(r,b,nir);
   };
   /// Constructor
-  RBAndNIRIndexBase() : m_RedIndex(3), m_BlueIndex(1), m_NIRIndex(4) {};
+  RAndBAndNIRIndexBase() : m_RedIndex(3), m_BlueIndex(1), m_NIRIndex(4) {};
   /// Desctructor
-  ~RBAndNIRIndexBase() {};
+  ~RAndBAndNIRIndexBase() {};
   
   /// Set Red Index
   void SetRedIndex(unsigned int channel)
@@ -156,6 +156,79 @@ protected:
 private:
   unsigned int m_RedIndex;
   unsigned int m_BlueIndex;
+  unsigned int m_NIRIndex;
+};
+
+/** base class for R, G And NIR based Index
+*  Implement operators for UnaryFunctorImageFilter templated with a
+*  VectorImage and BinaryFunctorImageFilter templated with single
+*  images.
+*  Subclasses should NOT overload operators, they must  re-implement 
+*  the Evaluate() method.
+*/
+template<class TInput1, class TInput2, class TInput3, class TOutput>
+class RAndGAndNIRIndexBase
+{
+public:
+  /// Vector pixel type used to support both vector images and multiple
+  /// input images
+  typedef itk::VariableLengthVector<TInput1> InputVectorType;
+  
+  // Operator on vector pixel type
+  inline TOutput operator()(const InputVectorType & inputVector)
+  {
+    return this->Evaluate(inputVector[m_RedIndex-1],static_cast<TInput2>(inputVector[m_GreenIndex-1]), static_cast<TInput3>(inputVector[m_NIRIndex-1])); 
+  }
+
+  // Binary operator
+  inline TOutput operator()(const TInput1 &r, const TInput2 &g, const TInput2 &nir) 
+  {
+    return this->Evaluate(r,g,nir);
+  };
+  /// Constructor
+  RAndGAndNIRIndexBase() : m_RedIndex(3), m_GreenIndex(2), m_NIRIndex(4) {};
+  /// Desctructor
+  ~RAndGAndNIRIndexBase() {};
+  
+  /// Set Red Index
+  void SetRedIndex(unsigned int channel)
+  {
+    m_RedIndex = channel;
+  }
+  /// Get Red Index
+  unsigned int GetRedIndex()
+  {
+    return m_RedIndex;
+  }
+  /// Set Green Index
+  void SetGreenIndex(unsigned int channel)
+  {
+    m_GreenIndex = channel;
+  }
+  /// Get Green Index
+  unsigned int GetGreenIndex()
+  {
+    return m_GreenIndex;
+  }
+
+  /// Set NIR Index
+  void SetNIRIndex(unsigned int channel)
+  {
+    m_NIRIndex = channel;
+  }
+  /// Get NIR Index
+  unsigned int GetNIRIndex()
+  {
+    return m_NIRIndex;
+  }
+protected:
+  // This method must be reimplemented in subclasses to actually
+  // compute the index value
+  virtual TOutput Evaluate(const TInput1 & r, const TInput2& g, const TInput3 & nir) const = 0;
+
+private:
+  unsigned int m_RedIndex;
+  unsigned int m_GreenIndex;
   unsigned int m_NIRIndex;
 };
 
@@ -402,6 +475,154 @@ protected:
 
 };
 
+/** \class GEMI
+ *  \brief This functor calculate the Global Environment Monitoring Index (GEMI)
+ *
+ *  [Pinty & Verstraete , 1992]
+ *
+ *  \ingroup Functor
+ */
+template <class TInput1, class TInput2, class TOutput>
+class GEMI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+{
+public:
+  GEMI() {};
+  ~GEMI() {};
+
+protected:
+  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
+  {
+    double dnir = static_cast<double>(nir);
+    double dr = static_cast<double>(r);
+
+    double dnu;
+    double dnumerateur_nu;
+    double ddenominateur_nu = dnir + dr + 0.5;
+    if ( ddenominateur_nu == 0 )
+      {
+        dnu = 0;
+      }
+    else
+      {
+        dnumerateur_nu = 2*(dnir*dnir - dr*dr) + 1.5*dnir + 0.5*dr;
+        dnu = dnumerateur_nu / ddenominateur_nu;
+      }
+
+    double ddenominateur_GEMI = 1 - dr;
+    if ( ddenominateur_GEMI == 0. )
+    {
+      return static_cast<TOutput>(0.);
+    }
+    return ( static_cast<TOutput>(  (dnu*(1 -0.25*dnu)-(dr-0.125))/ddenominateur_GEMI ) );
+  }
+
+};
+
+/** \class WDVI
+ *  \brief This functor calculate the Weighted Difference Vegetation Index (WDVI)
+ *
+ *  [Clevers, 1988]
+ *
+ *  \ingroup Functor
+ */
+template <class TInput1, class TInput2, class TOutput>
+class WDVI : public RAndNIRIndexBase<TInput1,TInput2,TOutput>
+{
+public:
+  /// Constructor
+  WDVI() {};
+  /// Desctructor
+  ~WDVI() {};
+  // Operator on r and nir single pixel values
+/** Set/Get Slop of soil line */
+  void SetG(const double g)
+  {
+    m_G = g;
+  }
+  double GetG(void)const
+  {
+    return (m_G);
+  }
+protected:
+  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
+  {
+    double dr = static_cast<double>(r);
+    double dnir = static_cast<double>(nir);
+    return (dnir -m_G*dr);
+  }
+private:
+  /** Slope of soil line */
+  double  m_G;
+};
+
+/** \class AVI
+ *  \brief This functor calculate the Angular Vegetation Index (AVI)
+ *
+ *  This vegetation index use three inputs channels
+ *
+ *  [Plummer & al., 1994]
+ *
+ *  \ingroup Functor
+ */
+template <class TInput1, class TInput2, class TInput3, class TOutput>
+class AVI : public RAndGAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
+{
+public:
+  AVI() : m_LambdaR(660.), m_LambdaG(560.), m_LambdaNir(830.) {};
+  ~AVI() {};
+/** Set/Get Lambda red parameter*/
+  void SetLambdaR(const double lr)
+  {
+    m_LambdaR = lr;
+  }
+  double GetLambdaR(void)const
+  {
+    return (m_LambdaR);
+  }
+/** Set/Get Lambda green parameter */
+  void SetLambdaG(const double lg)
+  {
+    m_LambdaG = lg;
+  }
+  double GetLambdaG(void)const
+  {
+    return (m_LambdaG);
+  }
+/** Set/Get Lambda red parameter */
+  void SetLambdaNir(const double lnir)
+  {
+    m_LambdaNir = lnir;
+  }
+  double GetLambdaNir(void)const
+  {
+    return (m_LambdaNir);
+  }
+protected:
+  inline TOutput Evaluate(const TInput1 &r, const TInput2 &g, const TInput3 &nir) const
+  {
+    double dr = static_cast<double>(r);
+    double dg = static_cast<double>(g);
+    double dnir = static_cast<double>(nir);
+
+    double dfact1 = (m_LambdaNir - m_LambdaR) / m_LambdaR;
+    double dfact2 = (m_LambdaR - m_LambdaG) / m_LambdaR;
+    double dAVI = vcl_atan(dfact1/(dnir - dr)) + vcl_atan(dfact2/(dg - dr));
+
+    return ( static_cast<TOutput>( dAVI ));
+  }
+private:
+
+  /**  Central wavelength of the red channel (=Lambda2) */
+  double  m_LambdaR;
+
+  /**  Central wavelength of the green channel (=Lambda1) */
+  double  m_LambdaG;
+
+  /**  Central wavelength of the nir channel (=Lambda3) */
+  double  m_LambdaNir;
+};
+
+
 /** \class ARVI
  *  \brief This functor calculate the Atmospherically Resistant Vegetation Index (ARVI)
  *
@@ -412,7 +633,7 @@ protected:
  *  \ingroup Functor
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
-class ARVI : public RBAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
+class ARVI : public RAndBAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
 {
 public:
   ARVI() : m_Gamma(0.5) {};
@@ -457,7 +678,7 @@ private:
  *  \ingroup Functor
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
-class TSARVI: public RBAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
+class TSARVI: public RAndBAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
 {
 public:
   TSARVI() : m_X(0.08), m_Gamma(0.5) {};
@@ -537,7 +758,7 @@ private:
  *  \ingroup Functor
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
-class EVI : public RBAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
+class EVI : public RAndBAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
 {
 public:
   EVI() : m_G(2.5), m_C1(6.0), m_C2(7.5), m_L(1.0) {};
@@ -605,6 +826,52 @@ private:
 
   /** Canopy background adjustment */
   double  m_L;
+};
+
+/** \class IPVI
+ *  \brief This functor calculate the 
+ *
+ *  [Qi et al., 1994]
+ *
+ *  \ingroup Functor
+ */
+template <class TInput1, class TInput2, class TOutput>
+class IPVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+{
+public:
+  IPVI() {};
+  ~IPVI() {};
+
+protected:
+  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
+  {
+  
+    return 0;
+  }
+
+};
+
+/** \class TNDVI
+ *  \brief This functor calculate the 
+ *
+ *  [Qi et al., 1994]
+ *
+ *  \ingroup Functor
+ */
+template <class TInput1, class TInput2, class TOutput>
+class TNDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+{
+public:
+  TNDVI() {};
+  ~TNDVI() {};
+
+protected:
+  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
+  {
+  
+    return 0;
+  }
+
 };
 
 } // namespace Functor

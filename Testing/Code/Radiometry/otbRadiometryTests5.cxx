@@ -27,16 +27,11 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew);
-  REGISTER_TEST(otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms);
-  REGISTER_TEST(otbAtmosphericCorrectionSequencementTest);
-  REGISTER_TEST(otbEVIRAndBAndNIRVegetationIndexImageFilter);
-  REGISTER_TEST(otbEVIMultiChannelRAndBAndNIRVegetationIndexImageFilter);
-  REGISTER_TEST(otbTSARVIRAndBAndNIRVegetationIndexImageFilter);
-  REGISTER_TEST(otbTSARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter);
-
-/* A TRIER */
-  REGISTER_TEST(otbRAndNIRVegetationIndexImageFilter);
-  REGISTER_TEST(otbMultiChannelRAndNIRVegetationIndexImageFilter);
+  REGISTER_TEST(otbRAndGAndNIRVegetationIndexImageFilterNew);
+  REGISTER_TEST(otbMultiChannelRAndGAndNIRVegetationIndexImageFilterNew);
+  REGISTER_TEST(otbAVIRAndGAndNIRVegetationIndexImageFilter);
+  REGISTER_TEST(otbAVIMultiChannelRAndGAndNIRVegetationIndexImageFilter);
+  REGISTER_TEST(otbWDVIRAndNIRVegetationIndexImageFilter);
+  REGISTER_TEST(otbWDVIMultiChannelRAndNIRVegetationIndexImageFilter);
 }
 

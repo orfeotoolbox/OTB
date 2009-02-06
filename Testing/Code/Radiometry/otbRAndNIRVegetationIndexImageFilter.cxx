@@ -97,6 +97,21 @@ int otbRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
                                            InputNIRImageType::PixelType,
                                            OutputImageType::PixelType> >
                                            (argc,argv) );
+  else if ( strArgv == "GEMI" ) return( generic_RAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
+                                           otb::Functor::GEMI<     InputRImageType::PixelType,
+                                           InputNIRImageType::PixelType,
+                                           OutputImageType::PixelType> >
+                                           (argc,argv) );
+  else if ( strArgv == "IPVI" ) return( generic_RAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
+                                           otb::Functor::IPVI<     InputRImageType::PixelType,
+                                           InputNIRImageType::PixelType,
+                                           OutputImageType::PixelType> >
+                                           (argc,argv) );
+  else if ( strArgv == "TNDVI" ) return( generic_RAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
+                                           otb::Functor::TNDVI<     InputRImageType::PixelType,
+                                           InputNIRImageType::PixelType,
+                                           OutputImageType::PixelType> >
+                                           (argc,argv) );
   else
     return EXIT_FAILURE;
   return EXIT_SUCCESS;
