@@ -27,8 +27,13 @@
 
 void RegisterTests()
 {
-
-  REGISTER_TEST(otbRAndNIRVegetationIndexImageFilterNew);
-  REGISTER_TEST(otbRAndNIRVegetationIndexImageFilter);
+  REGISTER_TEST(otbSetASetBRAndNIRVegetationIndexImageFilter);
+  REGISTER_TEST(otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter);
+  REGISTER_TEST(otbRAndGAndNIRVegetationIndexImageFilterNew);
+  REGISTER_TEST(otbMultiChannelRAndGAndNIRVegetationIndexImageFilterNew);
+  REGISTER_TEST(otbAVIRAndGAndNIRVegetationIndexImageFilter);
+  REGISTER_TEST(otbAVIMultiChannelRAndGAndNIRVegetationIndexImageFilter);
+  REGISTER_TEST(otbWDVIRAndNIRVegetationIndexImageFilter);
+  REGISTER_TEST(otbWDVIMultiChannelRAndNIRVegetationIndexImageFilter);
 }
 
