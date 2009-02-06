@@ -1043,7 +1043,7 @@ ADD_TEST(feTpSimplifyManyPathListFilter ${FEATUREEXTRACTION_TESTS11}
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests11 ~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests12 ~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -------        otb::TextureFunctorBase  -------------
@@ -1162,12 +1162,26 @@ ADD_TEST(feTvContrastTextureFunctor ${FEATUREEXTRACTION_TESTS12}
 # -------   otb::SumAverageTextureFunctor  -------------
 ADD_TEST(feTvSumAverageTextureFunctor ${FEATUREEXTRACTION_TESTS12} 
 --compare-image ${EPS}
-                ${BASELINE}/feTvSumAverageTexture.tif
+                ${BASELINE}/feTvSumAverageTextureFunctor.tif
                 ${TEMP}/feTvSumAverageTextureFunctor.tif
   otbTextureFunctor
     SAV #sum average
     ${INPUTDATA}/poupees_sub.png
     ${TEMP}/feTvSumAverageTextureFunctor.tif
+    5    # radius
+    -2   # offset[0]
+    2    # offset[1]	
+)
+
+# -------   otb::DifferenceEntropyTextureFunctor  -------------
+ADD_TEST(feTvDifferenceEntropyTextureFunctor ${FEATUREEXTRACTION_TESTS12} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvDifferenceEntropyTextureFunctor.tif
+                ${TEMP}/feTvDifferenceEntropyTextureFunctor.tif
+  otbTextureFunctor
+    DEN #difference entropy
+    ${INPUTDATA}/poupees_sub.png
+    ${TEMP}/feTvDifferenceEntropyTextureFunctor.tif
     5    # radius
     -2   # offset[0]
     2    # offset[1]	
@@ -1298,6 +1312,21 @@ ADD_TEST(feTvSumAverageTextureImageFunction ${FEATUREEXTRACTION_TESTS13}
     -2   # offset[0]
     2    # offset[1]	
 )
+
+# -------        otb::DifferenceEntropyTextureImageFunction   -------------
+ADD_TEST(feTvDifferenceEntropyTextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvDifferenceEntropyTextureImageFunction.tif
+                ${TEMP}/feTvDifferenceEntropyTextureImageFunction.tif
+   otbTextureImageFunction
+    DEN #difference entropy
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${TEMP}/feTvDifferenceEntropyTextureImageFunction.tif
+    5    # radius[0]
+    5    # radius[1]
+    -2   # offset[0]
+    2    # offset[1]
+ )
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
