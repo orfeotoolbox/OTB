@@ -27,5 +27,6 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbTextureImageFunction);
+REGISTER_TEST(otbTextureFunctorBase);
+REGISTER_TEST(otbTextureFunctor);
 }

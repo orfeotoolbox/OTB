@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCorrelationTextureFunctor_h
-#define __otbCorrelationTextureFunctor_h
+#ifndef __otbDifferenceEntropyTextureFunctor_h
+#define __otbDifferenceEntropyTextureFunctor_h
 
 #include "otbTextureFunctorBase.h"
 
@@ -24,7 +24,7 @@ namespace otb
 {
 namespace Functor
 {
-/** \class CorrelationTextureFunctor
+/** \class DifferenceEntropyTextureFunctor
  *  \brief This functor calculates the inverse difference moment of an image
  *
  *   Computes joint histogram (neighborhood and offset neighborhood) 
@@ -38,12 +38,12 @@ namespace Functor
  *  \ingroup Statistics
  */
 template <class TIterInput1, class TIterInput2, class TOutput>
-class ITK_EXPORT CorrelationTextureFunctor : 
+class ITK_EXPORT DifferenceEntropyTextureFunctor : 
 public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>
 {
 public:
-  CorrelationTextureFunctor(){};
-  ~CorrelationTextureFunctor(){};
+  DifferenceEntropyTextureFunctor(){};
+  ~DifferenceEntropyTextureFunctor(){};
 
   typedef TIterInput1                           IterType1;
   typedef TIterInput2                           IterType2;
@@ -110,64 +110,32 @@ public:
 	      
 	    }
 	}
-
-    double sumProb = 0.;
-    for (unsigned r = 0; r<histo.size(); r++)
-      {
-	for (unsigned s = 0; s<histo[r].size(); s++)
-	  { 
-	    double p =  static_cast<double>(histo[r][s])*areaInv;
-	    sumProb += p;
-	    double pixProd = ( (static_cast<double>(r)+0.5)*binsLength[1] ) * ( (static_cast<double>(s)+0.5)*binsLength[0] );
-	    out += pixProd * p;
-	  }
-    }
-    
-    double meanPOff = sumProb/histo.size();
-    double meanPNeigh = sumProb/histo[0].size();
-   
-    // Standard deviation of p for offset region
-    double stdPOff = 0.;
-    for (unsigned r = 0; r<histo.size(); r++)
-      {
-	double sumTemp = 0.;
-	for (unsigned s = 0; s<histo[r].size(); s++)
+    // loop over bin neighborhood values
+    for (unsigned sB = 0; sB<histo[0].size(); sB++)
+      { 
+	double Px_y = 0.;
+	double nCeil = (static_cast<double>(sB)+0.5)*binsLength[0];
+	double nCeilSquare = vcl_pow( nCeil, 2);
+	for (unsigned r = 0; r<histo.size(); r++)
 	  {
-	    sumTemp += histo[r][s];
+	    double rVal = (static_cast<double>(r)+0.5)*binsLength[1];
+	    for (unsigned s = 0; s<histo[r].size(); s++)
+	      { 
+		if( vcl_abs( rVal - (static_cast<double>(s)+0.5)*binsLength[0]) < nCeil )
+		  {
+		    Px_y += static_cast<double>(histo[r][s])*areaInv;
+		  }
+	      }
 	  }
-	stdPOff +=  vcl_pow( (meanPOff-sumTemp), 2);
+	if(Px_y != 0.)
+	  out += Px_y * nCeil * vcl_log(Px_y);
       }
-    stdPOff /= histo.size();
-    stdPOff = vcl_sqrt(stdPOff);
-
-    // Standard deviation of p for neighborhood region
-    double stdPNeigh = 0.;
-    for (unsigned r = 0; r<histo[0].size(); r++)
-      {
-	double sumTemp = 0.;
-	for (unsigned s = 0; s<histo.size(); s++)
-	  {
-	    sumTemp += histo[s][r];
-	  }
-	stdPNeigh +=  vcl_pow( (meanPNeigh-sumTemp), 2);
-      }
-    stdPNeigh /= histo[0].size();
-    stdPNeigh = vcl_sqrt(stdPNeigh);
     
-
-    if(stdPOff*stdPNeigh != 0)
-     	out = (out - meanPOff*meanPNeigh) / (stdPOff*stdPNeigh);
-    
-    /*
-    if(this->GetStd()*this->GetStdOff() != 0)
-     	out = (out - this->GetMean()*this->GetMeanOff()) / ( this->GetStd()*this->GetStdOff() );
-    */
+  
     return out;  
   }
   
 };
- 
- 
  
  
 } // namespace Functor

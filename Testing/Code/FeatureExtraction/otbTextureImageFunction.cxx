@@ -34,6 +34,8 @@
 #include "otbVarianceTextureFunctor.h"
 #include "otbCorrelationTextureFunctor.h"
 #include "otbContrastTextureFunctor.h"
+#include "otbSumAverageTextureFunctor.h"
+#include "otbDifferenceEntropyTextureFunctor.h"
 
 
 template<class TInputImage, class TOutputImage, class TFunctor>
@@ -128,6 +130,16 @@ int otbTextureImageFunction(int argc, char * argv[])
   else if ( strArgv == "CON" )
     {
       typedef otb::Functor::ContrastTextureFunctor<IteratorType, IteratorType, VectorType> FunctorType;
+      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    }
+  else if ( strArgv == "SAV" )
+    {
+      typedef otb::Functor::SumAverageTextureFunctor<IteratorType, IteratorType, VectorType> FunctorType;
+      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    }
+  else if ( strArgv == "DEN" )
+    {
+      typedef otb::Functor::DifferenceEntropyTextureFunctor<IteratorType, IteratorType, VectorType> FunctorType;
       return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else

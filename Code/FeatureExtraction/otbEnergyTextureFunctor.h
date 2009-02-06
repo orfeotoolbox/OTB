@@ -18,7 +18,6 @@
 #ifndef __otbEnergyTextureFunctor_h
 #define __otbEnergyTextureFunctor_h
 
-
 #include "otbTextureFunctorBase.h"
 
 
