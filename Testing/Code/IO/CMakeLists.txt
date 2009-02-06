@@ -5,6 +5,7 @@ IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
+SET(EXAMPLEDATA ${OTB_DATA_ROOT}/Examples)
 #Remote sensing images (large images )
 IF(OTB_DATA_USE_LARGEINPUT)
   SET(LARGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
@@ -41,6 +42,7 @@ ENDIF(OTB_COMPILE_JPEG2000)
 SET(IO_TESTS14    ${CXX_TEST_PATH}/otbIOTests14)
 SET(IO_TESTS15    ${CXX_TEST_PATH}/otbIOTests15)
 SET(IO_TESTS16    ${CXX_TEST_PATH}/otbIOTests16)
+SET(IO_TESTS17    ${CXX_TEST_PATH}/otbIOTests17)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COMMON_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1636,6 +1638,12 @@ ADD_TEST(ioTvPointSetFileReader ${IO_TESTS16}
   ${TEMP}/ioPointSetFileReader.txt)
 
 
+
+ADD_TEST(ioTvImageSeriesFileReader ${IO_TESTS17}
+        otbImageSeriesFileReader
+  -in ${EXAMPLEDATA}/GomaAvantApres
+)
+
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbImageFileReaderERS.cxx
@@ -1768,6 +1776,10 @@ otbPointSetFileReaderNew.cxx
 otbPointSetFileReader.cxx
 )
 
+SET(BasicIO_SRCS17
+otbImageSeriesFileReader.cxx
+)
+
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbIOTests1 otbIOTests1.cxx ${BasicIO_SRCS1})
@@ -1824,6 +1836,9 @@ TARGET_LINK_LIBRARIES(otbIOTests15 OTBIO otbossimplugins)
 
 ADD_EXECUTABLE(otbIOTests16 otbIOTests16.cxx ${BasicIO_SRCS16})
 TARGET_LINK_LIBRARIES(otbIOTests16 OTBIO  )
+
+ADD_EXECUTABLE(otbIOTests17 otbIOTests17.cxx ${BasicIO_SRCS17})
+TARGET_LINK_LIBRARIES(otbIOTests17 OTBIO OTBVisu )
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
