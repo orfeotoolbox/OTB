@@ -441,6 +441,22 @@ void
 ImageWidgetBase<TPixel>
 ::RebuildOpenGlBuffer(void)
 {
+  // Channel indices outofbound check
+  if(m_RedChannelIndex >= m_Image->GetNumberOfComponentsPerPixel())
+    {
+      itkExceptionMacro(<<"Red channel index out of bound.");
+    }
+  if(m_ViewModel != GRAYSCALE && m_GreenChannelIndex >= m_Image->GetNumberOfComponentsPerPixel())
+    {
+    itkExceptionMacro(<<"Green channel index out of bound.");
+    }
+  if(m_ViewModel == RGB && m_BlueChannelIndex >= m_Image->GetNumberOfComponentsPerPixel())
+    {
+    itkExceptionMacro(<<"Blue channel index out of bound.");
+    }
+
+
+
   //otbMsgDebugMacro(<<"RebuildOpenGlBuffer");
   if (m_OpenGlBuffer != NULL)
   {

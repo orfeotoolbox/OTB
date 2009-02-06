@@ -118,12 +118,9 @@ ImageViewerBase<TPixel,TLabel>
     while ( !it.IsAtEnd() )
     {
       PixelType pixel = it.Get();
-//       for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
-//       {
       double re = static_cast<double>(pixel[m_RedChannelIndex]);
       double im = static_cast<double>(pixel[m_GreenChannelIndex]);
       sl->GetNthElement(0)->PushBack(vcl_sqrt(static_cast<double>(re*re+im*im)));
-//       }
       ++it;
     }
   }
@@ -133,10 +130,7 @@ ImageViewerBase<TPixel,TLabel>
     while ( !it.IsAtEnd() )
     {
       PixelType pixel = it.Get();
-//       for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
-//       {
       sl->GetNthElement(0)->PushBack(vcl_atan2(static_cast<double>(pixel[m_GreenChannelIndex]),static_cast<double>(pixel[m_RedChannelIndex])));
-//       }
       ++it;
     }
 
@@ -344,10 +338,10 @@ ImageViewerBase<TPixel,TLabel>
     m_InterfaceBoxesList->PushBack(box);
   }
 
+  InitializeViewModel();
+
   // Compute the normalization factors
   ComputeNormalizationFactors();
-
-  InitializeViewModel();
 
   m_RedHistogramWidget->SetParent(this);
   m_BlueHistogramWidget->SetParent(this);
@@ -1051,6 +1045,20 @@ void
 ImageViewerBase<TPixel,TLabel>
 ::SetViewModel(ViewModelType viewModel)
 {
+   // Channel indices outofbound check
+  if(m_RedChannelIndex >= m_InputImage->GetNumberOfComponentsPerPixel())
+    {
+      itkExceptionMacro(<<"Red channel index out of bound.");
+    }
+  if(viewModel != ScrollWidgetType::GRAYSCALE && m_GreenChannelIndex >= m_InputImage->GetNumberOfComponentsPerPixel())
+    {
+    itkExceptionMacro(<<"Green channel index out of bound.");
+    }
+  if(viewModel == ScrollWidgetType::RGB && m_BlueChannelIndex >= m_InputImage->GetNumberOfComponentsPerPixel())
+    {
+    itkExceptionMacro(<<"Blue channel index out of bound.");
+    }
+
   switch (viewModel)
   {
   case ScrollWidgetType::RGB:
