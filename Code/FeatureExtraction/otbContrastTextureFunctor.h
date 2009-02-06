@@ -15,34 +15,35 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbEntropyTextureFunctor_h
-#define __otbEntropyTextureFunctor_h
+#ifndef __otbContrastTextureFunctor_h
+#define __otbContrastTextureFunctor_h
 
-#include "otbTextureFunctorBase.h"
+#include "otbEntropyTextureFunctor.h"
 
 namespace otb
 {
 namespace Functor
 {
-/** \class EntropyTextureFunctor
- *  \brief This functor calculates the local entropy of an image
+/** \class ContrastTextureFunctor
+ *  \brief This functor calculates the inverse difference moment of an image
  *
  *   Computes joint histogram (neighborhood and offset neighborhood) 
  *   which bins are computing using Scott formula.
  *   Computes the probabiltiy p for each pair of pixel.
- *   Entropy  is the sum p.log(p) over the neighborhood.
+ *   InverseDifferenceMoment  is the sum 1/(1+(pi-poff)²)*p over the neighborhood.
  *   TIterInput is an ietrator, TOutput is a PixelType.
  *
  *  \ingroup Functor
+ *  \ingroup 
  *  \ingroup Statistics
  */
 template <class TIterInput1, class TIterInput2, class TOutput>
-class ITK_EXPORT EntropyTextureFunctor : 
-public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>
+class ITK_EXPORT ContrastTextureFunctor : 
+public EntropyTextureFunctor<TIterInput1, TIterInput2, TOutput>
 {
 public:
-  EntropyTextureFunctor(){};
-  ~EntropyTextureFunctor(){};
+  ContrastTextureFunctor(){};
+  ~ContrastTextureFunctor(){};
 
   typedef TIterInput1                           IterType1;
   typedef TIterInput2                           IterType2;
@@ -55,11 +56,12 @@ public:
   typedef std::vector<double>                   DoubleVectorType;
   typedef std::vector<int>                      IntVectorType;
   typedef std::vector<IntVectorType>            IntVectorVectorType;
+  typedef EntropyTextureFunctor<TIterInput1, TIterInput2, TOutput> Superclass;
 
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
-    DoubleVectorType binsLength = this->StatComputation(neigh, neighOff);
+    DoubleVectorType binsLength = Superclass::StatComputation(neigh, neighOff);
 
     RadiusType radius = neigh.GetRadius();
     double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
@@ -82,11 +84,12 @@ public:
       histoTemp = IntVectorType( vcl_floor( static_cast<double>(this->GetMaxi()-this->GetMini())/binsLength[0])+1., 0);
     else
       histoTemp = IntVectorType( 1, 0 );
+
     if (binsLength[1] != 0)
         histo = IntVectorVectorType( vcl_floor(static_cast<double>(this->GetMaxiOff()-this->GetMiniOff())/binsLength[1])+1., histoTemp );
     else
       histo = IntVectorVectorType( 1, histoTemp );
-    
+
     offsetOff = offsetOffInit;
     for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
 	{
@@ -108,27 +111,35 @@ public:
 	      
 	    }
 	}
-
-      for (unsigned r = 0; r<histo.size(); r++)
-	{
-	  for (unsigned s = 0; s<histo[r].size(); s++)
-	    {
-	      double p = static_cast<double>(histo[r][s]) * areaInv;
-	      if (p != 0)
-		out += (p * vcl_log(p));
-	    }
-	}
-      if (out != 0.)
-	out = -(out);
-
-      return out;
+    // loop over bin neighborhood values
+    for (unsigned sB = 0; sB<histo[0].size(); sB++)
+      { 
+	double nCeil = (static_cast<double>(sB)+0.5)*binsLength[0];
+	double nCeilSquare = vcl_pow( nCeil, 2);
+	for (unsigned r = 0; r<histo.size(); r++)
+	  {
+	    double rVal = (static_cast<double>(r)+0.5)*binsLength[1];
+	    for (unsigned s = 0; s<histo[r].size(); s++)
+	      { 
+		if( vcl_abs( rVal - (static_cast<double>(s)+0.5)*binsLength[0]) < nCeil )
+		  {
+		    double p =  static_cast<double>(histo[r][s])*areaInv;
+		    out += nCeilSquare * p;
+		  }
+	      }
+	  }
+      }
+    
+  
+    return out;  
   }
+  
 };
-
-
-
-
-  } // namespace Functor
+ 
+ 
+ 
+ 
+} // namespace Functor
 } // namespace otb
 
 #endif

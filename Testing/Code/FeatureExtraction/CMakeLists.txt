@@ -1124,7 +1124,33 @@ ADD_TEST(feTvVarianceTextureFunctor ${FEATUREEXTRACTION_TESTS11}
     2    # offset[1]	
 )
 
+# -------   otb::CorrelationTextureFunctor  -------------
+ADD_TEST(feTvCorrelationTextureFunctor ${FEATUREEXTRACTION_TESTS11} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvCorrelationTextureFunctor.tif
+                ${TEMP}/feTvCorrelationTextureFunctor.tif
+  otbTextureFunctor
+    COR #correlation
+    ${INPUTDATA}/poupees_sub.png
+    ${TEMP}/feTvCorrelationTextureFunctor.tif
+    5    # radius
+    -2   # offset[0]
+    2    # offset[1]	
+)
 
+# -------   otb::ContrastTextureFunctor  -------------
+ADD_TEST(feTvContrastTextureFunctor ${FEATUREEXTRACTION_TESTS11} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvContrastTextureFunctor.tif
+                ${TEMP}/feTvContrastTextureFunctor.tif
+  otbTextureFunctor
+    CON #contrast
+    ${INPUTDATA}/poupees_sub.png
+    ${TEMP}/feTvContrastTextureFunctor.tif
+    5    # radius
+    -2   # offset[0]
+    2    # offset[1]	
+)
 
 # -------        otb::EnergyTextureImageFunction   -------------
 ADD_TEST(feTvEnergyTextureImageFunction ${FEATUREEXTRACTION_TESTS12} 
@@ -1202,6 +1228,37 @@ ADD_TEST(feTvVarianceTextureImageFunction ${FEATUREEXTRACTION_TESTS12}
     -2   # offset[0]
     2    # offset[1]	
 )
+
+# -------        otb::CorrelationTextureImageFunction   -------------
+ADD_TEST(feTvCorrelationTextureImageFunction ${FEATUREEXTRACTION_TESTS12} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvCorrelationTextureImageFunction.tif
+                ${TEMP}/feTvCorrelationTextureImageFunction.tif
+   otbTextureImageFunction
+    COR #correlation
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${TEMP}/feTvCorrelationTextureImageFunction.tif
+    5    # radius[0]
+    5    # radius[1]
+    -2   # offset[0]
+    2    # offset[1]	
+)
+
+# -------        otb::ContrastTextureImageFunction   -------------
+ADD_TEST(feTvContrastTextureImageFunction ${FEATUREEXTRACTION_TESTS12} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvContrastTextureImageFunction.tif
+                ${TEMP}/feTvContrastTextureImageFunction.tif
+   otbTextureImageFunction
+    CON #contrast
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${TEMP}/feTvContrastTextureImageFunction.tif
+    5    # radius[0]
+    5    # radius[1]
+    -2   # offset[0]
+    2    # offset[1]	
+)
+
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1

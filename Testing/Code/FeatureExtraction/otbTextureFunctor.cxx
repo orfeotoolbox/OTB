@@ -29,6 +29,8 @@
 #include "otbInverseDifferenceMomentTextureFunctor.h"
 #include "otbAngularSecondMomentumTextureFunctor.h"
 #include "otbVarianceTextureFunctor.h"
+#include "otbCorrelationTextureFunctor.h"
+#include "otbContrastTextureFunctor.h"
 
 
 template<class TInputImage, class TOutputImage, class TFunctor>
@@ -100,6 +102,16 @@ int otbTextureFunctor(int argc, char * argv[])
  else if ( strArgv == "VAR" )
     {
       typedef otb::Functor::VarianceTextureFunctor<IteratorType, IteratorType, PixelType> FunctorType;
+      return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
+    }
+ else if ( strArgv == "COR" )
+    {
+      typedef otb::Functor::CorrelationTextureFunctor<IteratorType, IteratorType, PixelType> FunctorType;
+      return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
+    }
+ else if ( strArgv == "CON" )
+    {
+      typedef otb::Functor::ContrastTextureFunctor<IteratorType, IteratorType, PixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else

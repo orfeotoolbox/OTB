@@ -116,7 +116,7 @@ public:
 	{
 	  for (unsigned s = 0; s<histo[r].size(); s++)
 	    {
-	      double p = histo[r][s] * areaInv;
+	      double p = static_cast<double>(histo[r][s]) * areaInv;
 	      out += vcl_pow( p, 2 );
 	    }
 	}
