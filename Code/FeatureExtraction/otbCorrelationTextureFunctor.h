@@ -15,34 +15,35 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbEntropyTextureFunctor_h
-#define __otbEntropyTextureFunctor_h
+#ifndef __otbCorrelationTextureFunctor_h
+#define __otbCorrelationTextureFunctor_h
 
-#include "otbTextureFunctorBase.h"
+#include "otbEntropyTextureFunctor.h"
 
 namespace otb
 {
 namespace Functor
 {
-/** \class EntropyTextureFunctor
- *  \brief This functor calculates the local entropy of an image
+/** \class CorrelationTextureFunctor
+ *  \brief This functor calculates the inverse difference moment of an image
  *
  *   Computes joint histogram (neighborhood and offset neighborhood) 
  *   which bins are computing using Scott formula.
  *   Computes the probabiltiy p for each pair of pixel.
- *   Entropy  is the sum p.log(p) over the neighborhood.
+ *   InverseDifferenceMoment  is the sum 1/(1+(pi-poff)²)*p over the neighborhood.
  *   TIterInput is an ietrator, TOutput is a PixelType.
  *
  *  \ingroup Functor
+ *  \ingroup 
  *  \ingroup Statistics
  */
 template <class TIterInput1, class TIterInput2, class TOutput>
-class ITK_EXPORT EntropyTextureFunctor : 
-public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>
+class ITK_EXPORT CorrelationTextureFunctor : 
+public EntropyTextureFunctor<TIterInput1, TIterInput2, TOutput>
 {
 public:
-  EntropyTextureFunctor(){};
-  ~EntropyTextureFunctor(){};
+  CorrelationTextureFunctor(){};
+  ~CorrelationTextureFunctor(){};
 
   typedef TIterInput1                           IterType1;
   typedef TIterInput2                           IterType2;
@@ -55,11 +56,12 @@ public:
   typedef std::vector<double>                   DoubleVectorType;
   typedef std::vector<int>                      IntVectorType;
   typedef std::vector<IntVectorType>            IntVectorVectorType;
+  typedef EntropyTextureFunctor<TIterInput1, TIterInput2, TOutput> Superclass;
 
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
-    DoubleVectorType binsLength = this->StatComputation(neigh, neighOff);
+    DoubleVectorType binsLength = Superclass::StatComputation(neigh, neighOff);
 
     RadiusType radius = neigh.GetRadius();
     double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
@@ -82,11 +84,12 @@ public:
       histoTemp = IntVectorType( vcl_floor( static_cast<double>(this->GetMaxi()-this->GetMini())/binsLength[0])+1., 0);
     else
       histoTemp = IntVectorType( 1, 0 );
+
     if (binsLength[1] != 0)
         histo = IntVectorVectorType( vcl_floor(static_cast<double>(this->GetMaxiOff()-this->GetMiniOff())/binsLength[1])+1., histoTemp );
     else
       histo = IntVectorVectorType( 1, histoTemp );
-    
+
     offsetOff = offsetOffInit;
     for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
 	{
@@ -109,26 +112,66 @@ public:
 	    }
 	}
 
-      for (unsigned r = 0; r<histo.size(); r++)
-	{
-	  for (unsigned s = 0; s<histo[r].size(); s++)
-	    {
-	      double p = static_cast<double>(histo[r][s]) * areaInv;
-	      if (p != 0)
-		out += (p * vcl_log(p));
-	    }
-	}
-      if (out != 0.)
-	out = -(out);
+    double sumProb = 0.;
+    for (unsigned r = 0; r<histo.size(); r++)
+      {
+	for (unsigned s = 0; s<histo[r].size(); s++)
+	  { 
+	    double p =  static_cast<double>(histo[r][s])*areaInv;
+	    sumProb += p;
+	    double pixProd = ( (static_cast<double>(r)+0.5)*binsLength[1] ) * ( (static_cast<double>(s)+0.5)*binsLength[0] );
+	    out += pixProd * p;
+	  }
+    }
+    
+    double meanPOff = sumProb/histo.size();
+    double meanPNeigh = sumProb/histo[0].size();
+   
+    // Standard deviation of p for offset region
+    double stdPOff = 0.;
+    for (unsigned r = 0; r<histo.size(); r++)
+      {
+	double sumTemp = 0.;
+	for (unsigned s = 0; s<histo[r].size(); s++)
+	  {
+	    sumTemp += histo[r][s];
+	  }
+	stdPOff +=  vcl_pow( (meanPOff-sumTemp), 2);
+      }
+    stdPOff /= histo.size();
+    stdPOff = vcl_sqrt(stdPOff);
 
-      return out;
+    // Standard deviation of p for neighborhood region
+    double stdPNeigh = 0.;
+    for (unsigned r = 0; r<histo[0].size(); r++)
+      {
+	double sumTemp = 0.;
+	for (unsigned s = 0; s<histo.size(); s++)
+	  {
+	    sumTemp += histo[s][r];
+	  }
+	stdPNeigh +=  vcl_pow( (meanPNeigh-sumTemp), 2);
+      }
+    stdPNeigh /= histo[0].size();
+    stdPNeigh = vcl_sqrt(stdPNeigh);
+    
+
+    if(stdPOff*stdPNeigh != 0)
+     	out = (out - meanPOff*meanPNeigh) / (stdPOff*stdPNeigh);
+    
+    /*
+    if(this->GetStd()*this->GetStdOff() != 0)
+     	out = (out - this->GetMean()*this->GetMeanOff()) / ( this->GetStd()*this->GetStdOff() );
+    */
+    return out;  
   }
+  
 };
-
-
-
-
-  } // namespace Functor
+ 
+ 
+ 
+ 
+} // namespace Functor
 } // namespace otb
 
 #endif

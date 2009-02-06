@@ -1124,7 +1124,19 @@ ADD_TEST(feTvVarianceTextureFunctor ${FEATUREEXTRACTION_TESTS11}
     2    # offset[1]	
 )
 
-
+# -------   otb::CorrelationTextureFunctor  -------------
+ADD_TEST(feTvCorrelationTextureFunctor ${FEATUREEXTRACTION_TESTS11} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvCorrelationTextureFunctor.tif
+                ${TEMP}/feTvCorrelationTextureFunctor.tif
+  otbTextureFunctor
+    COR #angular second moment
+    ${INPUTDATA}/poupees_sub.png
+    ${TEMP}/feTvCorrelationTextureFunctor.tif
+    5    # radius
+    -2   # offset[0]
+    2    # offset[1]	
+)
 
 # -------        otb::EnergyTextureImageFunction   -------------
 ADD_TEST(feTvEnergyTextureImageFunction ${FEATUREEXTRACTION_TESTS12} 
@@ -1197,6 +1209,21 @@ ADD_TEST(feTvVarianceTextureImageFunction ${FEATUREEXTRACTION_TESTS12}
     VAR #variance
     ${INPUTDATA}/poupees_sub_c1.png
     ${TEMP}/feTvVarianceTextureImageFunction.tif
+    5    # radius[0]
+    5    # radius[1]
+    -2   # offset[0]
+    2    # offset[1]	
+)
+
+# -------        otb::CorrelationTextureImageFunction   -------------
+ADD_TEST(feTvCorrelationTextureImageFunction ${FEATUREEXTRACTION_TESTS12} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvCorrelationTextureImageFunction.tif
+                ${TEMP}/feTvCorrelationTextureImageFunction.tif
+   otbTextureImageFunction
+    COR #correlation
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${TEMP}/feTvCorrelationTextureImageFunction.tif
     5    # radius[0]
     5    # radius[1]
     -2   # offset[0]

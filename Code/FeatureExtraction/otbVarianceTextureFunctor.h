@@ -109,13 +109,12 @@ public:
 	    }
 	}
     
-    double bigMean = (this->GetMean()+this->GetMeanOff())/2.;
     for (unsigned r = 0; r<histo.size(); r++)
       {
 	for (unsigned s = 0; s<histo[r].size(); s++)
 	  {
-	    double p = histo[r][s] * areaInv;
-	    double square = vcl_pow( ( ( (static_cast<double>(s)+0.5)*binsLength[0] ) - bigMean), 2);
+	    double p = static_cast<double>(histo[r][s]) * areaInv;
+	    double square = vcl_pow( ( ( (static_cast<double>(s)+0.5)*binsLength[0] ) - this->GetMean()), 2);
 	    out += square*p;
 	  }
       }

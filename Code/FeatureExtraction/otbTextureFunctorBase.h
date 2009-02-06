@@ -43,6 +43,14 @@ public:
   TextureFunctorBase()
   {
     m_Offset.Fill(1);
+    m_Mini = itk::NumericTraits<double>::max();
+    m_MiniOff = itk::NumericTraits<double>::max();
+    m_Maxi = itk::NumericTraits<double>::NonpositiveMin();
+    m_MaxiOff = itk::NumericTraits<double>::NonpositiveMin();
+    m_Mean = 0.;
+    m_MeanOff = 0.;
+    m_Std = 0.;
+    m_StdOff = 0.;
   };
   ~TextureFunctorBase() {};
 
@@ -57,24 +65,8 @@ public:
   typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
   typedef std::vector<double>                   DoubleVectorType;
 
-  void SetOffset(OffsetType off)
-  {
-    m_Offset=off;
-    m_Mini = itk::NumericTraits<double>::max();
-    m_MiniOff = itk::NumericTraits<double>::max();
-    m_Maxi = itk::NumericTraits<double>::NonpositiveMin();
-    m_MaxiOff = itk::NumericTraits<double>::NonpositiveMin();
-    m_Mean = 0.;
-    m_MeanOff = 0.;
-    m_Std = 0.;
-    m_StdOff = 0.;
-  };
-
-  OffsetType GetOffset()
-  {
-    return m_Offset;
-  };
-  
+  void SetOffset(OffsetType off){ m_Offset=off; };
+  OffsetType GetOffset(){ return m_Offset; };
   double GetMaxi(){ return m_Maxi; };
   double GetMini(){ return m_Mini; };
   double GetMaxiOff(){ return m_MaxiOff; };
