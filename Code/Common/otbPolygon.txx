@@ -22,6 +22,16 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
+
+template<class TValue>
+void
+Polygon<TValue>
+::AddVertex(const ContinuousIndexType &vertex)
+{
+  Superclass::AddVertex(vertex);
+  surfaceValid=false;
+}
+
 /**
  * Check wether point is strictly inside the polygon.
  * \param point The point to check.
@@ -478,9 +488,9 @@ Polygon<TValue>
  * Surface computation (for non convex polygons as well)
  */
 template<class TValue>
-double
+void
 Polygon<TValue>
-::GetSurface() const
+::ComputeSurface() const
 {
   double m_Surface;
   m_Surface = 0.0;
@@ -515,8 +525,24 @@ Polygon<TValue>
     m_Surface = 0.0;
   }
 
+  surfaceValid = true;
+}
+
+/**
+ * Get surface
+ */
+template<class TValue>
+    double
+    Polygon<TValue>
+  ::GetSurface() const
+{
+  if (!surfaceValid)
+  {
+    ComputeSurface();
+  }
   return m_Surface;
 }
+
 
 /**
  * Lenght computation (difference with path is in the last addition)
