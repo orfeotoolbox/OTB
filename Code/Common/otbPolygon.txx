@@ -492,8 +492,6 @@ void
 Polygon<TValue>
 ::ComputeSurface() const
 {
-  double m_Surface;
-  m_Surface = 0.0;
   VertexListConstIteratorType it =  this->GetVertexList()->Begin();
 
   if (this->GetVertexList()->Size()>2)
