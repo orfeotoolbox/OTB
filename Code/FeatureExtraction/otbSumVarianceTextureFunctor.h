@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSumAverageTextureFunctor_h
-#define __otbSumAverageTextureFunctor_h
+#ifndef __otbSumVarianceTextureFunctor_h
+#define __otbSumVarianceTextureFunctor_h
 
 #include "otbTextureFunctorBase.h"
 
@@ -24,26 +24,25 @@ namespace otb
 {
 namespace Functor
 {
-/** \class SumAverageTextureFunctor
- *  \brief This functor calculates the inverse difference moment of an image
+/** \class SumVarianceextureFunctor
+ *  \brief This functor calculates the local entropy of an image
  *
  *   Computes joint histogram (neighborhood and offset neighborhood) 
  *   which bins are computing using Scott formula.
  *   Computes the probabiltiy p for each pair of pixel.
- *   InverseDifferenceMoment  is the sum 1/(1+(pi-poff)²)*p over the neighborhood.
+ *   Entropy  is the sum (i-mu)².log(p) over the neighborhood.
  *   TIterInput is an ietrator, TOutput is a PixelType.
  *
  *  \ingroup Functor
- *  \ingroup 
  *  \ingroup Statistics
  */
 template <class TIterInput1, class TIterInput2, class TOutput>
-class ITK_EXPORT SumAverageTextureFunctor : 
+class ITK_EXPORT SumVarianceTextureFunctor : 
 public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>
 {
 public:
-  SumAverageTextureFunctor(){};
-  ~SumAverageTextureFunctor(){};
+  SumVarianceTextureFunctor(){};
+  ~SumVarianceTextureFunctor(){};
 
   typedef TIterInput1                           IterType1;
   typedef TIterInput2                           IterType2;
@@ -56,7 +55,7 @@ public:
   typedef std::vector<double>                   DoubleVectorType;
   typedef std::vector<int>                      IntVectorType;
   typedef std::vector<IntVectorType>            IntVectorVectorType;
- 
+
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
@@ -83,12 +82,11 @@ public:
       histoTemp = IntVectorType( vcl_floor( static_cast<double>(this->GetMaxi()-this->GetMini())/binsLength[0])+1., 0);
     else
       histoTemp = IntVectorType( 1, 0 );
-
     if (binsLength[1] != 0)
         histo = IntVectorVectorType( vcl_floor(static_cast<double>(this->GetMaxiOff()-this->GetMiniOff())/binsLength[1])+1., histoTemp );
     else
       histo = IntVectorVectorType( 1, histoTemp );
-
+    
     offsetOff = offsetOffInit;
     for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
 	{
@@ -110,9 +108,22 @@ public:
 	      
 	    }
 	}
-    // loop over bin neighborhood values
+    
+    for (unsigned r = 0; r<histo.size(); r++)
+      {
+	for (unsigned s = 0; s<histo[r].size(); s++)
+	  {
+	    double p = static_cast<double>(histo[r][s]) * areaInv;
+	    double square = vcl_pow( ( ( (static_cast<double>(s)+0.5)*binsLength[0] ) - this->GetMean()), 2);
+	    out += square*p;
+	  }
+      }
+
+    /*
+  // loop over bin neighborhood values
     for (unsigned sB = 0; sB<histo[0].size(); sB++)
       { 
+	double Px_y = 0.;
 	double nCeil = (static_cast<double>(sB)+0.5)*binsLength[0];
 	for (unsigned r = 0; r<histo.size(); r++)
 	  {
@@ -120,28 +131,25 @@ public:
 	    for (unsigned s = 0; s<histo[r].size(); s++)
 	      { 
 		double sVal = (static_cast<double>(s)+0.5)*binsLength[0];
-		// In theory don't have the abs but will deals with neighborhood and offset without the same histo
-		// thus loop over 2*Ng don't have sense
-		//if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(binsLength[0]+binsLength[1]) || vcl_abs(rVal + sVal - 2*nCeil) < vcl_abs(binsLength[0]+binsLength[1]) )
-		if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(binsLength[0]) || vcl_abs(rVal + sVal - 2*nCeil) < 2*vcl_abs(binsLength[0]) )
+		if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(binsLength[0]) || vcl_abs(rVal + sVal - 2*nCeil) < vcl_abs(binsLength[0]) )
 		  {
-		    double p =  static_cast<double>(histo[r][s])*areaInv;
-		    out += nCeil * p;
+		    Px_y +=  static_cast<double>(histo[r][s])*areaInv;
 		  }
 	      }
 	  }
+	if(Px_y != 0.)
+	  out += Px_y * vcl_log(Px_y);
       }
+    */
     
-  
-    return out;  
+    return out;
   }
-  
 };
- 
- 
- 
- 
-} // namespace Functor
+
+
+
+
+  } // namespace Functor
 } // namespace otb
 
 #endif

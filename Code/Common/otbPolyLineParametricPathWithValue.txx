@@ -32,11 +32,33 @@ PolyLineParametricPathWithValue<TValue,VDimension>
   itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
   m_Key = "Value";
   itk::EncapsulateMetaData<ValueType>(dict,m_Key,0);
+  m_LengthIsValid = false;
+  m_Length = -1.0;
+}
+
+template < class TValue,unsigned int VDimension>
+void PolyLineParametricPathWithValue<TValue,VDimension>
+::AddVertex(const ContinuousIndexType &vertex)
+{
+  Superclass::AddVertex(vertex);
+  m_LengthIsValid=false;
 }
 
 template < class TValue,unsigned int VDimension>
 double PolyLineParametricPathWithValue<TValue,VDimension>
 ::GetLength() const
+{
+  if (!m_LengthIsValid)
+  {
+    ComputeLength();
+  }
+  return m_Length;
+}
+
+template < class TValue,unsigned int VDimension>
+void 
+PolyLineParametricPathWithValue<TValue,VDimension>
+::ComputeLength() const
 {
   double length = 0.0;
   VertexListConstIteratorType it =  this->GetVertexList()->Begin();
@@ -68,7 +90,8 @@ double PolyLineParametricPathWithValue<TValue,VDimension>
     length = 0.0;
   }
 
-  return length;
+  m_Length = length;
+  m_LengthIsValid = true;
 }
 
 
