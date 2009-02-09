@@ -30,7 +30,7 @@ namespace otb
  */
 
 template <class TInputImageR, class TInputImageG, class TInputImageNIR, class TOutputImage,
-class TFunction = Functor::ARVI<              typename TInputImageR::PixelType,
+class TFunction = Functor::AVI<              typename TInputImageR::PixelType,
 typename TInputImageG::PixelType,
 typename TInputImageNIR::PixelType,
 typename TOutputImage::PixelType > >

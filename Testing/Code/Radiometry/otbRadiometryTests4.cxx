@@ -34,9 +34,5 @@ void RegisterTests()
   REGISTER_TEST(otbEVIMultiChannelRAndBAndNIRVegetationIndexImageFilter);
   REGISTER_TEST(otbTSARVIRAndBAndNIRVegetationIndexImageFilter);
   REGISTER_TEST(otbTSARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter);
-
-/* A TRIER */
-  REGISTER_TEST(otbRAndNIRVegetationIndexImageFilter);
-  REGISTER_TEST(otbMultiChannelRAndNIRVegetationIndexImageFilter);
 }
 

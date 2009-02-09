@@ -606,9 +606,33 @@ protected:
 
     double dfact1 = (m_LambdaNir - m_LambdaR) / m_LambdaR;
     double dfact2 = (m_LambdaR - m_LambdaG) / m_LambdaR;
-    double dAVI = vcl_atan(dfact1/(dnir - dr)) + vcl_atan(dfact2/(dg - dr));
+    double ddenom1;
+    double ddenom2;
+    if( (dnir-dr) == 0 )
+    {
+      ddenom1 = 0;
+    }
+    else
+    {
+      ddenom1 = vcl_tan(dfact1/(dnir - dr));
+    }
 
-    return ( static_cast<TOutput>( dAVI ));
+    if( (dg-dr) == 0 )
+    {
+      ddenom2 = 0;
+    }
+    else
+    {
+      ddenom2 = vcl_tan(dfact2/(dg - dr));
+    }
+
+    if (  ddenom2 == 0 || ddenom1 == 0 )
+    {
+      return ( static_cast<TOutput> (0) );
+    }
+    else
+      return ( static_cast<TOutput> (1/ddenom1 + 1/ddenom2) );
+
   }
 private:
 
@@ -808,7 +832,7 @@ protected:
     double denominator = dnir + m_C1*dr - m_C2*db + m_L;
     if ( denominator == 0. )
       {
-      return static_cast<TOutput>(0.);
+      return ( static_cast<TOutput>(0.) );
       }
     return ( static_cast<TOutput>( m_G * (dnir - dr)/denominator ) );
   }
@@ -829,9 +853,9 @@ private:
 };
 
 /** \class IPVI
- *  \brief This functor calculate the 
+ *  \brief This functor calculate the Infrared Percentage VI (IPVI)
  *
- *  [Qi et al., 1994]
+ *  [Crippen, 1990]
  *
  *  \ingroup Functor
  */
@@ -845,16 +869,23 @@ public:
 protected:
   inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
   {
-  
-    return 0;
+    double dr = static_cast<double>(r);
+    double dnir = static_cast<double>(nir);
+    if ((dnir + dr) == 0)
+    {
+      return static_cast<TOutput>(0.);
+    }
+    else
+    {
+      return ( static_cast<TOutput>( dnir/(dnir+dr) ) );
+    }
   }
-
 };
 
 /** \class TNDVI
- *  \brief This functor calculate the 
+ *  \brief This functor calculate the Transformed NDVI (TNDVI)
  *
- *  [Qi et al., 1994]
+ *  [Deering, 1975]
  *
  *  \ingroup Functor
  */
@@ -862,16 +893,22 @@ template <class TInput1, class TInput2, class TOutput>
 class TNDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
   TNDVI() {};
   ~TNDVI() {};
+  
+  NDVIFunctorType GetNDVI(void)const
+  {
+    return (m_NDVIfunctor);
+  }
 
 protected:
   inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
   {
-  
-    return 0;
+    return ( static_cast<TOutput>(this->GetNDVI()(r,nir) + 0.5 ));
   }
-
+private:
+  const NDVIFunctorType m_NDVIfunctor;
 };
 
 } // namespace Functor

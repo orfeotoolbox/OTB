@@ -132,8 +132,8 @@ int otbPolygon(int argc, char * argv[])
 
   file<<std::endl<<std::endl;
   file<<"Surface computation : "<<std::endl;
-  file<<"Surface 1 :" << (double) polygon1->GetSurface() << std::endl;
-  file<<"Surface 2 :" << polygon2->GetSurface() << std::endl;
+  file<<"Surface 1 :" << (double) polygon1->GetArea() << std::endl;
+  file<<"Surface 2 :" << polygon2->GetArea() << std::endl;
 
   file<<std::endl<<std::endl;
   file<<"Length computation : "<<std::endl;

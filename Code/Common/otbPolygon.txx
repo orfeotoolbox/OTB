@@ -22,6 +22,16 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
+
+template<class TValue>
+void
+Polygon<TValue>
+::AddVertex(const ContinuousIndexType &vertex)
+{
+  Superclass::AddVertex(vertex);
+  m_AreaIsValid=false;
+}
+
 /**
  * Check wether point is strictly inside the polygon.
  * \param point The point to check.
@@ -475,19 +485,18 @@ Polygon<TValue>
 
 
 /**
- * Surface computation (for non convex polygons as well)
+ * Area computation (for non convex polygons as well)
  */
 template<class TValue>
-double
+void
 Polygon<TValue>
-::GetSurface() const
+::ComputeArea() const
 {
-  double m_Surface;
-  m_Surface = 0.0;
   VertexListConstIteratorType it =  this->GetVertexList()->Begin();
 
   if (this->GetVertexList()->Size()>2)
   {
+    double area=0.0;
     VertexType origin = it.Value();
     it++;
     VertexType pt1 = it.Value();
@@ -503,20 +512,36 @@ Polygon<TValue>
       double vector2x = pt2[0] - origin[0];
       double vector2y = pt2[1] - origin[1];
       double crossProdduct = vector1x*vector2y - vector2x*vector1y;
-      m_Surface += crossProdduct;
+      area += crossProdduct;
       it++;
     }
 
-    m_Surface = fabs(m_Surface/2.0);
+    m_Area = fabs(area/2.0);
 
   }
   else //if there is strictly less than 3 points, surface is 0
   {
-    m_Surface = 0.0;
+    m_Area = 0.0;
   }
 
-  return m_Surface;
+  m_AreaIsValid = true;
 }
+
+/**
+ * Get surface
+ */
+template<class TValue>
+    double
+    Polygon<TValue>
+  ::GetArea() const
+{
+  if (!m_AreaIsValid)
+  {
+    ComputeArea();
+  }
+  return m_Area;
+}
+
 
 /**
  * Lenght computation (difference with path is in the last addition)
