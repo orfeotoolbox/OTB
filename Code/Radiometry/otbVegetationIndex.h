@@ -235,7 +235,7 @@ private:
 
 
 /** \class NDVI
- *  \brief This functor calculate the NormalizeD Vegetation Index (NDVI)
+ *  \brief This functor computes the NormalizeD Vegetation Index (NDVI)
  *
  *  [Pearson et Miller, 1972]
  *
@@ -265,7 +265,7 @@ protected:
 };
 
 /** \class RVI
- *  \brief This functor calculate the Ratio Vegetation Index (RVI)
+ *  \brief This functor computes the Ratio Vegetation Index (RVI)
  *
  *  [Rouse et al., 1973]
  *
@@ -290,7 +290,7 @@ protected:
   }
 };
 /** \class PVI
- *  \brief This functor calculate the Perpendicular Vegetation Index (PVI)
+ *  \brief This functor computes the Perpendicular Vegetation Index (PVI)
  *
  *  [Richardson et Wiegand, 1977]
  *
@@ -340,7 +340,7 @@ private:
 
 
 /** \class SAVI
- *  \brief This functor calculate the Soil Adjusted Vegetation Index (SAVI)
+ *  \brief This functor computes the Soil Adjusted Vegetation Index (SAVI)
  *
  *  [Huete, 1988]
  *
@@ -383,7 +383,7 @@ private:
 
 };
 /** \class TSAVI
- *  \brief This functor calculate the Transformed Soil Adjusted Vegetation Index (TSAVI)
+ *  \brief This functor computes the Transformed Soil Adjusted Vegetation Index (TSAVI)
  *
  *  [Baret et al. 1989, Baret et Guyot, 1991]
  *
@@ -447,7 +447,7 @@ private:
 };
 
 /** \class MSAVI
- *  \brief This functor calculate the Modified Soil Adjusted Vegetation Index (MSAVI)
+ *  \brief This functor computes the Modified Soil Adjusted Vegetation Index (MSAVI)
  *
  *  [Qi et al., 1994]
  *
@@ -476,7 +476,7 @@ protected:
 };
 
 /** \class GEMI
- *  \brief This functor calculate the Global Environment Monitoring Index (GEMI)
+ *  \brief This functor computes the Global Environment Monitoring Index (GEMI)
  *
  *  [Pinty & Verstraete , 1992]
  *
@@ -519,7 +519,7 @@ protected:
 };
 
 /** \class WDVI
- *  \brief This functor calculate the Weighted Difference Vegetation Index (WDVI)
+ *  \brief This functor computes the Weighted Difference Vegetation Index (WDVI)
  *
  *  [Clevers, 1988]
  *
@@ -556,7 +556,7 @@ private:
 };
 
 /** \class AVI
- *  \brief This functor calculate the Angular Vegetation Index (AVI)
+ *  \brief This functor computes the Angular Vegetation Index (AVI)
  *
  *  This vegetation index use three inputs channels
  *
@@ -648,7 +648,7 @@ private:
 
 
 /** \class ARVI
- *  \brief This functor calculate the Atmospherically Resistant Vegetation Index (ARVI)
+ *  \brief This functor computes the Atmospherically Resistant Vegetation Index (ARVI)
  *
  *  This vegetation index use three inputs channels
  *
@@ -695,7 +695,7 @@ private:
 };
 
 /** \class TSARVI
- *  \brief This functor calculate the Transformed Soil Atmospherical Resistant Vegetation Index (TSARVI)
+ *  \brief This functor computes the Transformed Soil Atmospherical Resistant Vegetation Index (TSARVI)
  *
  *  [Yoram J. Kaufman and Didier Tanré, 1992]
  *
@@ -773,7 +773,7 @@ private:
 
 
 /** \class EVI
- *  \brief This functor calculate the Enhanced Vegetation Index (EVI)
+ *  \brief This functor computes the Enhanced Vegetation Index (EVI)
  *
  *  This vegetation index use three inputs channels
  *
@@ -853,7 +853,7 @@ private:
 };
 
 /** \class IPVI
- *  \brief This functor calculate the Infrared Percentage VI (IPVI)
+ *  \brief This functor computes the Infrared Percentage VI (IPVI)
  *
  *  [Crippen, 1990]
  *
@@ -883,7 +883,7 @@ protected:
 };
 
 /** \class TNDVI
- *  \brief This functor calculate the Transformed NDVI (TNDVI)
+ *  \brief This functor computes the Transformed NDVI (TNDVI)
  *
  *  [Deering, 1975]
  *
