@@ -30,6 +30,7 @@ SET(FEATUREEXTRACTION_TESTS11 ${CXX_TEST_PATH}/otbFeatureExtractionTests11)
 SET(FEATUREEXTRACTION_TESTS12 ${CXX_TEST_PATH}/otbFeatureExtractionTests12)
 SET(FEATUREEXTRACTION_TESTS13 ${CXX_TEST_PATH}/otbFeatureExtractionTests13)
 
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests1 ~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
