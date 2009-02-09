@@ -25,65 +25,54 @@
 
 
 //  Software Guide : BeginCommandLineArgs
-//  INPUTS: {VegetationIndex.hd}
-//  OUTPUTS: {ARVIMultiChannelRAndBAndNIRVegetationIndex.tif} , {pretty_VegetationIndex.png} , {pretty_ARVIMultiChannelRAndBAndNIRVegetationIndex.png}
-//  1 3 2 0.6
+//  INPUTS: {qb_toulouse_sub.tif}
+//  OUTPUTS: {AVIMultiChannelRAndGAndNIRVegetationIndex.tif} , {pretty_qb_toulouse_sub.png} , {pretty_AVIMultiChannelRAndGAndNIRVegetationIndex.png}
+//  3 2 4 660 560 830
 //  Software Guide : EndCommandLineArgs
 
 
 
 // Software Guide : BeginLatex
 //
-// \index{otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter}
-// \index{otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter!header}
+// \index{otb::MultiChannelRAndGAndNIRVegetationIndexImageFilter}
+// \index{otb::MultiChannelRAndGAndNIRVegetationIndexImageFilter!header}
 // \index{otb::VegetationIndex}
 // \index{otb::VegetationIndex!header}
 //
 //
 // The following example illustrates the use of the
-// otb::MultiChannelRAndBAndNIR VegetationIndexImageFilter with the
-// use of the Atmospherically Resistant Vegetation Index (ARVI).  ARVI
-// is an improved version of the NDVI that is more resistent to the
-// atmospheric effect.  In addition to the red and NIR channels (used
-// in the NDVI), the ARVI takes advantage of the presence of the blue
-// channel to accomplish a self-correction process for the atmospheric
-// effect on the red channel. For this, it uses the difference in the
-// radiance between the blue and the red channels to correct the
-// radiance in the red channel.  Let's define $\rho_{NIR}^{*}$,
-// $\rho_{r}^{*}$, $\rho_{b}^{*}$ the normalized radiances (that is to
-// say the radiance normalized to reflectance units) of red, blue and
-// NIR channels respectively.  $\rho_{rb}^{*}$ is defined as
+// otb::MultiChannelRAndGAndNIR VegetationIndexImageFilter with the
+// use of the Angular Vegetation Index (AVI).
+// The equation for the Angular Vegetation Index involves the gren, red 
+// and near infra-red wavebands. Lambda_1, lambda_2 and lambda_3 are the mid-band
+// wavelengths for the green, red and NIR bands and tan-1 is the arctangent function.
+//
+// The AVI expression is
 //
 // \begin{equation}
-// \rho_{rb}^{*} = \rho_{r}^{*} - \gamma*(\rho_{b}^{*} - \rho_{r}^{*})
+// \mathbf{fact1} = \frac{\{lambda_3}-{lambda_2}}{lambda_2}}
 // \end{equation}
-//
-// The ARVI expression is
+// \begin{equation}
+// \mathbf{fact2} = \frac{\{lambda_2}-{lambda_1}}{lambda_2}}
+// \end{equation}
 //
 // \begin{equation}
-// \mathbf{ARVI} = \frac{\rho_{NIR}^{*}-\rho_{rb}^{*}}{\rho_{NIR}^{*}+\rho_{rb}^{*}}
+// \mathbf{AVI} = \tan^-1 {[\frac{{fact1}{{NIR}-{R}}}} + tan^-1{\frac{{fact2}{{G}-{R}}}}
 // \end{equation}
 //
+// For more details, refer to Plummer work \cite{AVI}.
 //
-// This formula can be simplified with :
-//
-// \begin{equation}
-// \mathbf{ARVI} = \frac{ L_{NIR}-L_{rb} }{ L_{NIR}+L_{rb} }
-// \end{equation}
-//
-// For more details, refer to Kaufman and Tanr� work \cite{ARVI}.
-//
-// With the \doxygen{otb}{MultiChannelRAndBAndNIRVegetationIndexImageFilter} class the
+// With the \doxygen{otb}{MultiChannelRAndGAndNIRVegetationIndexImageFilter} class the
 // input has to be a multi channel image and the user has to specify index channel
-// of the red, blue and NIR channel.
+// of the red, green and NIR channel.
 //
 // Let's look at the minimal code required to use this algorithm. First, the following header
-// defining the \doxygen{otb}{MultiChannelRAndBAndNIRVegetationIndexImageFilter}
+// defining the \doxygen{otb}{MultiChannelRAndGAndNIRVegetationIndexImageFilter}
 // class must be included.
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbMultiChannelRAndBAndNIRVegetationIndexImageFilter.h"
+#include "otbMultiChannelRAndGAndNIRVegetationIndexImageFilter.h"
 // Software Guide : EndCodeSnippet
 
 
@@ -100,11 +89,12 @@
 
 int main( int argc, char *argv[] )
 {
-  if ( argc < 8 )
+  if ( argc < 11 )
   {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputImage , outputImage , prettyInput , prettyOutput , redChannel , blueChannel , nirChannel , gama" << std::endl;
+    std::cerr << " inputImage , outputImage , prettyInput , prettyOutput , redChannel , greenChannel , nirChannel ,";
+    std::cerr << " lambdaR, lambdaG, lambdaNIR " << std::endl;
     return 1;
   }
 
@@ -130,15 +120,13 @@ int main( int argc, char *argv[] )
 
   //  Software Guide : BeginLatex
   //
-  // The ARVI (Atmospherically Resistant Vegetation Index) is
+  // The AVI (Angular Vegetation Index) is
   // instantiated using the image pixel types as template parameters.
-  // Note that we also can use other functors which operate with the 
-  // Red, Blue and Nir channels such as EVI, ARVI and TSARVI.
   //
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef  otb::Functor::ARVI< InputPixelType,
+  typedef  otb::Functor::AVI< InputPixelType,
   InputPixelType,
   InputPixelType,
   OutputPixelType >        FunctorType;
@@ -148,21 +136,21 @@ int main( int argc, char *argv[] )
   //  Software Guide : BeginLatex
   //
   // The
-  // \doxygen{otb}{MultiChannelRAndBAndNIRVegetationIndexImageFilter}
-  // type is defined using the image types and the ARVI functor as
+  // \doxygen{otb}{MultiChannelRAndGAndNIRVegetationIndexImageFilter}
+  // type is defined using the image types and the AVI functor as
   // template parameters. We then instantiate the filter itself.
   //
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter
+  typedef otb::MultiChannelRAndGAndNIRVegetationIndexImageFilter
   <InputImageType,
   OutputImageType,
   FunctorType      >
-  MultiChannelRAndBAndNIRVegetationIndexImageFilterType;
+  MultiChannelRAndGAndNIRVegetationIndexImageFilterType;
 
-  MultiChannelRAndBAndNIRVegetationIndexImageFilterType::Pointer
-  filter = MultiChannelRAndBAndNIRVegetationIndexImageFilterType::New();
+  MultiChannelRAndGAndNIRVegetationIndexImageFilterType::Pointer
+  filter = MultiChannelRAndGAndNIRVegetationIndexImageFilterType::New();
   // Software Guide : EndCodeSnippet
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -181,27 +169,30 @@ int main( int argc, char *argv[] )
 
   //  Software Guide : BeginLatex
   //
-  // The three used index bands (red, blue and NIR) are declared.
+  // The three used index bands (red, green and NIR) are declared.
   //
   //  Software Guide : EndLatex
 
+
   // Software Guide : BeginCodeSnippet
   filter->SetRedIndex(::atoi(argv[5]));
-  filter->SetBlueIndex(::atoi(argv[6]));
+  filter->SetGreenIndex(::atoi(argv[6]));
   filter->SetNIRIndex(::atoi(argv[7]));
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
-  // The $\gamma$ parameter is set. The
-  // \doxygen{otb}{MultiChannelRAndBAndNIRVegetationIndexImageFilter}
-  // class sets the default value of $\gamma$ to $0.5$.  This parameter
-  // is used to reduce the atmospheric effect on a global scale.
+  // The $\lambda$ 1,2,3 parameters are set. The
+  // \doxygen{otb}{MultiChannelRAndGAndNIRVegetationIndexImageFilter}
+  // class sets the default values of $\lambda$ to $660$. $560$. and 
+  // $830$. 
   //
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->GetFunctor().SetGamma(::atof(argv[8]));
+  filter->GetFunctor().SetLambdaR(::atof(argv[8]));
+  filter->GetFunctor().SetLambdaG(::atof(argv[9]));
+  filter->GetFunctor().SetLambdaNir(::atof(argv[10]));
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -217,7 +208,7 @@ int main( int argc, char *argv[] )
   writer->SetInput( filter->GetOutput() );
   // Software Guide : EndCodeSnippet
 
-//  Software Guide : BeginLatex
+  //  Software Guide : BeginLatex
   //
   //  The invocation of the \code{Update()} method on the writer triggers the
   //  execution of the pipeline.  It is recommended to place update calls in a
@@ -320,9 +311,9 @@ int main( int argc, char *argv[] )
   //
   // \begin{figure} \center
   // \includegraphics[width=0.24\textwidth]{pretty_VegetationIndex.eps}
-  // \includegraphics[width=0.24\textwidth]{pretty_ARVIMultiChannelRAndBAndNIRVegetationIndex.eps}
-  // \itkcaption[ARVI Example]{ARVI result on the right with the left image in input.}
-  // \label{fig:ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter}
+  // \includegraphics[width=0.24\textwidth]{pretty_AVIMultiChannelRAndGAndNIRVegetationIndex.eps}
+  // \itkcaption[AVI Example]{AVI result on the right with the left image in input.}
+  // \label{fig:AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter}
   // \end{figure}
   //
   //  Software Guide : EndLatex

@@ -31,15 +31,36 @@ ADD_TEST(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
   		  ${BASELINE}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
                   ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
        ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest
-        	  ${INPUTDATA}/poupees_sub.png
+        	  ${INPUTDATA}/poupees_sub.png 
 	          ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
-		  ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex3.tif		
+              ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex3.tif		
 	          ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex2.tif 
  	          1 
  	          2 
  	          3	
          	  0.6 # Gamma parameter
  	)
+
+
+
+# -------            AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest   ------------------------------
+
+ADD_TEST(AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}  
+  #--compare-image ${TOL}   
+              #${BASELINE}/AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest.tif
+              #${TEMP}/AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest.tif
+    AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest
+    ${INPUTDATA}/qb_toulouse_sub.tif
+    ${TEMP}/AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest.tif
+    ${TEMP}/AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest2.png
+    ${TEMP}/AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest3.png
+    3
+    2
+    4 # indices of the channels
+    660.
+    560.
+    830. # lambdaR, lambdaG, lambdaNir
+    )
 
 
 
@@ -57,6 +78,8 @@ ADD_TEST(NDVIRAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
  	${TEMP}/NDVIRAndNIRVegetationIndex3.tif
 	${TEMP}/NDVIRAndNIRVegetationIndex4.tif
  	)
+
+
 
 ADD_TEST(AtmosphericCorrectionSequencementTest ${EXE_TESTS}  
         --compare-image ${EPSILON}  
