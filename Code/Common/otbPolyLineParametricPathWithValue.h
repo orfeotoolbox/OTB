@@ -86,6 +86,8 @@ public:
    */
   virtual double GetLength() const;
 
+  void  AddVertex (const ContinuousIndexType &vertex);
+  
 protected:
   /** Constructor */
   PolyLineParametricPathWithValue();
@@ -95,10 +97,14 @@ protected:
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+  virtual void ComputeLength() const;
+  
 private:
   PolyLineParametricPathWithValue(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   std::string m_Key;
+  mutable double m_Length;
+  mutable bool m_LengthIsValid;
 };
 }// End namespace otb
 
