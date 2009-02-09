@@ -13,7 +13,7 @@
 #ifndef ossimTiffWriter_HEADER
 #define ossimTiffWriter_HEADER
 
-#include <itk_tiff.h>
+#include <tiffio.h>
 #include <ossim/imaging/ossimImageFileWriter.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimRefPtr.h>
