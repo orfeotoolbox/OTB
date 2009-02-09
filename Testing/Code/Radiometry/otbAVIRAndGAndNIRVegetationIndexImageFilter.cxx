@@ -75,8 +75,8 @@ int otbAVIRAndGAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   filter->SetInputG( readerG->GetOutput() );
   filter->SetInputNIR( readerNIR->GetOutput() );
 
-  filter->GetFunctor().SetLambdaG(lg);
   filter->GetFunctor().SetLambdaR(lr);
+  filter->GetFunctor().SetLambdaG(lg);
   filter->GetFunctor().SetLambdaNir(lnir);
 
   writer->SetInput( filter->GetOutput() );

@@ -19,7 +19,10 @@
 #define __otbTextureFunctorBase_h
 
 #include "otbMath.h"
+#include "itkMacro.h"
+#include "itkNumericTraits.h"
 #include "itkNeighborhood.h"
+
 
 namespace otb
 {
@@ -62,7 +65,7 @@ public:
   typedef typename OutputType::ValueType        OutputPixelType;
   typedef typename IterType1::InternalPixelType InternalPixelType;
   typedef typename IterType1::ImageType         ImageType;
-  typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
+  typedef itk::Neighborhood<InternalPixelType, ::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
   typedef std::vector<double>                   DoubleVectorType;
 
   void SetOffset(OffsetType off){ m_Offset=off; };

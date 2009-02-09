@@ -235,7 +235,7 @@ private:
 
 
 /** \class NDVI
- *  \brief This functor calculate the NormalizeD Vegetation Index (NDVI)
+ *  \brief This functor computes the NormalizeD Vegetation Index (NDVI)
  *
  *  [Pearson et Miller, 1972]
  *
@@ -265,7 +265,7 @@ protected:
 };
 
 /** \class RVI
- *  \brief This functor calculate the Ratio Vegetation Index (RVI)
+ *  \brief This functor computes the Ratio Vegetation Index (RVI)
  *
  *  [Rouse et al., 1973]
  *
@@ -290,7 +290,7 @@ protected:
   }
 };
 /** \class PVI
- *  \brief This functor calculate the Perpendicular Vegetation Index (PVI)
+ *  \brief This functor computes the Perpendicular Vegetation Index (PVI)
  *
  *  [Richardson et Wiegand, 1977]
  *
@@ -340,7 +340,7 @@ private:
 
 
 /** \class SAVI
- *  \brief This functor calculate the Soil Adjusted Vegetation Index (SAVI)
+ *  \brief This functor computes the Soil Adjusted Vegetation Index (SAVI)
  *
  *  [Huete, 1988]
  *
@@ -383,7 +383,7 @@ private:
 
 };
 /** \class TSAVI
- *  \brief This functor calculate the Transformed Soil Adjusted Vegetation Index (TSAVI)
+ *  \brief This functor computes the Transformed Soil Adjusted Vegetation Index (TSAVI)
  *
  *  [Baret et al. 1989, Baret et Guyot, 1991]
  *
@@ -447,7 +447,7 @@ private:
 };
 
 /** \class MSAVI
- *  \brief This functor calculate the Modified Soil Adjusted Vegetation Index (MSAVI)
+ *  \brief This functor computes the Modified Soil Adjusted Vegetation Index (MSAVI)
  *
  *  [Qi et al., 1994]
  *
@@ -476,7 +476,7 @@ protected:
 };
 
 /** \class GEMI
- *  \brief This functor calculate the Global Environment Monitoring Index (GEMI)
+ *  \brief This functor computes the Global Environment Monitoring Index (GEMI)
  *
  *  [Pinty & Verstraete , 1992]
  *
@@ -519,7 +519,7 @@ protected:
 };
 
 /** \class WDVI
- *  \brief This functor calculate the Weighted Difference Vegetation Index (WDVI)
+ *  \brief This functor computes the Weighted Difference Vegetation Index (WDVI)
  *
  *  [Clevers, 1988]
  *
@@ -556,7 +556,7 @@ private:
 };
 
 /** \class AVI
- *  \brief This functor calculate the Angular Vegetation Index (AVI)
+ *  \brief This functor computes the Angular Vegetation Index (AVI)
  *
  *  This vegetation index use three inputs channels
  *
@@ -606,9 +606,33 @@ protected:
 
     double dfact1 = (m_LambdaNir - m_LambdaR) / m_LambdaR;
     double dfact2 = (m_LambdaR - m_LambdaG) / m_LambdaR;
-    double dAVI = vcl_atan(dfact1/(dnir - dr)) + vcl_atan(dfact2/(dg - dr));
+    double ddenom1;
+    double ddenom2;
+    if( (dnir-dr) == 0 )
+    {
+      ddenom1 = 0;
+    }
+    else
+    {
+      ddenom1 = vcl_tan(dfact1/(dnir - dr));
+    }
 
-    return ( static_cast<TOutput>( dAVI ));
+    if( (dg-dr) == 0 )
+    {
+      ddenom2 = 0;
+    }
+    else
+    {
+      ddenom2 = vcl_tan(dfact2/(dg - dr));
+    }
+
+    if (  ddenom2 == 0 || ddenom1 == 0 )
+    {
+      return ( static_cast<TOutput> (0) );
+    }
+    else
+      return ( static_cast<TOutput> (1/ddenom1 + 1/ddenom2) );
+
   }
 private:
 
@@ -624,7 +648,7 @@ private:
 
 
 /** \class ARVI
- *  \brief This functor calculate the Atmospherically Resistant Vegetation Index (ARVI)
+ *  \brief This functor computes the Atmospherically Resistant Vegetation Index (ARVI)
  *
  *  This vegetation index use three inputs channels
  *
@@ -671,7 +695,7 @@ private:
 };
 
 /** \class TSARVI
- *  \brief This functor calculate the Transformed Soil Atmospherical Resistant Vegetation Index (TSARVI)
+ *  \brief This functor computes the Transformed Soil Atmospherical Resistant Vegetation Index (TSARVI)
  *
  *  [Yoram J. Kaufman and Didier Tanré, 1992]
  *
@@ -749,7 +773,7 @@ private:
 
 
 /** \class EVI
- *  \brief This functor calculate the Enhanced Vegetation Index (EVI)
+ *  \brief This functor computes the Enhanced Vegetation Index (EVI)
  *
  *  This vegetation index use three inputs channels
  *
@@ -808,7 +832,7 @@ protected:
     double denominator = dnir + m_C1*dr - m_C2*db + m_L;
     if ( denominator == 0. )
       {
-      return static_cast<TOutput>(0.);
+      return ( static_cast<TOutput>(0.) );
       }
     return ( static_cast<TOutput>( m_G * (dnir - dr)/denominator ) );
   }
@@ -829,9 +853,9 @@ private:
 };
 
 /** \class IPVI
- *  \brief This functor calculate the 
+ *  \brief This functor computes the Infrared Percentage VI (IPVI)
  *
- *  [Qi et al., 1994]
+ *  [Crippen, 1990]
  *
  *  \ingroup Functor
  */
@@ -845,16 +869,23 @@ public:
 protected:
   inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
   {
-  
-    return 0;
+    double dr = static_cast<double>(r);
+    double dnir = static_cast<double>(nir);
+    if ((dnir + dr) == 0)
+    {
+      return static_cast<TOutput>(0.);
+    }
+    else
+    {
+      return ( static_cast<TOutput>( dnir/(dnir+dr) ) );
+    }
   }
-
 };
 
 /** \class TNDVI
- *  \brief This functor calculate the 
+ *  \brief This functor computes the Transformed NDVI (TNDVI)
  *
- *  [Qi et al., 1994]
+ *  [Deering, 1975]
  *
  *  \ingroup Functor
  */
@@ -862,16 +893,22 @@ template <class TInput1, class TInput2, class TOutput>
 class TNDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
   TNDVI() {};
   ~TNDVI() {};
+  
+  NDVIFunctorType GetNDVI(void)const
+  {
+    return (m_NDVIfunctor);
+  }
 
 protected:
   inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
   {
-  
-    return 0;
+    return ( static_cast<TOutput>(this->GetNDVI()(r,nir) + 0.5 ));
   }
-
+private:
+  const NDVIFunctorType m_NDVIfunctor;
 };
 
 } // namespace Functor

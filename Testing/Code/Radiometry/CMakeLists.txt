@@ -16,73 +16,12 @@ SET(RADIOMETRY_TESTS2 ${CXX_TEST_PATH}/otbRadiometryTests2)
 SET(RADIOMETRY_TESTS3 ${CXX_TEST_PATH}/otbRadiometryTests3)
 SET(RADIOMETRY_TESTS4 ${CXX_TEST_PATH}/otbRadiometryTests4)
 SET(RADIOMETRY_TESTS5 ${CXX_TEST_PATH}/otbRadiometryTests5)
+SET(RADIOMETRY_TESTS6 ${CXX_TEST_PATH}/otbRadiometryTests6)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# -------            otb::RAndNIRVegetationIndexImageFilter   ------------------------------
 
-ADD_TEST(raTuRAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS1}  
-        otbRAndNIRVegetationIndexImageFilterNew )
-        
-ADD_TEST(raTvNDVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
-  --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif
-                    ${TEMP}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif
-        otbRAndNIRVegetationIndexImageFilter
-        NDVI
-	${INPUTDATA}/poupees_sub_c1.png
-	${INPUTDATA}/poupees_sub_c2.png
-	${TEMP}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif 
-	)
-ADD_TEST(raTvRVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
-  --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_RVI_poupees_subc1c2.tif
-                    ${TEMP}/raRAndNIRVegetationIndex_RVI_poupees_subc1c2.tif
-        otbRAndNIRVegetationIndexImageFilter
-        RVI
-	${INPUTDATA}/poupees_sub_c1.png
-	${INPUTDATA}/poupees_sub_c2.png
-	${TEMP}/raRAndNIRVegetationIndex_RVI_poupees_subc1c2.tif 
-	)
-ADD_TEST(raTvPVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
-  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif
-                    ${TEMP}/raRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif
-        otbSetASetBRAndNIRVegetationIndexImageFilter
-        PVI
-        0.7
-        0.9
-	${INPUTDATA}/poupees_sub_c1.png
-	${INPUTDATA}/poupees_sub_c2.png
-	${TEMP}/raRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif 
-	)
-ADD_TEST(raTvSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
-  --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_SAVI_poupees_subc1c2.tif
-                    ${TEMP}/raRAndNIRVegetationIndex_SAVI_poupees_subc1c2.tif
-        otbRAndNIRVegetationIndexImageFilter
-        SAVI
-	${INPUTDATA}/poupees_sub_c1.png
-	${INPUTDATA}/poupees_sub_c2.png
-	${TEMP}/raRAndNIRVegetationIndex_SAVI_poupees_subc1c2.tif 
-	)
-ADD_TEST(raTvTSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
-  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif
-                    ${TEMP}/raRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif
-        otbSetASetBRAndNIRVegetationIndexImageFilter
-        TSAVI
-        0.7
-        0.9
-	${INPUTDATA}/poupees_sub_c1.png
-	${INPUTDATA}/poupees_sub_c2.png
-	${TEMP}/raRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif 
-	)
-ADD_TEST(raTvMSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
-  --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_MSAVI_poupees_subc1c2.tif
-                    ${TEMP}/raRAndNIRVegetationIndex_MSAVI_poupees_subc1c2.tif
-        otbRAndNIRVegetationIndexImageFilter
-        MSAVI
-	${INPUTDATA}/poupees_sub_c1.png
-	${INPUTDATA}/poupees_sub_c2.png
-	${TEMP}/raRAndNIRVegetationIndex_MSAVI_poupees_subc1c2.tif 
-	)
 
 # -------            otb::MultiChannelRAndNIRVegetationIndexImageFilter   ------------------------------
 
@@ -107,17 +46,7 @@ ADD_TEST(raTvRVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TEST
 	${TEMP}/raMultiChannelRAndNIRVegetationIndex_RVI_poupees_subc1c2.tif 
 	1 2
 	)
-ADD_TEST(raTvPVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
-  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif
-                    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif
-        otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter
-        PVI
-        0.7
-        0.9
-	${INPUTDATA}/poupees_sub.png
-	${TEMP}/raMultiChannelRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif 
-	1 2
-        )
+
 ADD_TEST(raTvSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
   --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_SAVI_poupees_subc1c2.tif
                     ${TEMP}/raMultiChannelRAndNIRVegetationIndex_SAVI_poupees_subc1c2.tif
@@ -127,17 +56,7 @@ ADD_TEST(raTvSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TES
 	${TEMP}/raMultiChannelRAndNIRVegetationIndex_SAVI_poupees_subc1c2.tif 
 	1 2
 	)
-ADD_TEST(raTvTSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
-  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif
-                    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif
-        otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter
-        TSAVI
-        0.7
-        0.9
-	${INPUTDATA}/poupees_sub.png
-	${TEMP}/raMultiChannelRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif 
-	1 2
-	)
+
 ADD_TEST(raTvMSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
   --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_MSAVI_poupees_subc1c2.tif
                     ${TEMP}/raMultiChannelRAndNIRVegetationIndex_MSAVI_poupees_subc1c2.tif
@@ -147,6 +66,40 @@ ADD_TEST(raTvMSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TE
 	${TEMP}/raMultiChannelRAndNIRVegetationIndex_MSAVI_poupees_subc1c2.tif 
 	1 2
 	)
+
+# -------            IPVI MultiChannelRAndNIRVegetationIndexImageFilter   ------------------------------
+ADD_TEST(raTvIPVIMultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
+ --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_IPVI_qb_RoadExtract.tif
+                   ${TEMP}/raRAndNIRVegetationIndex_IPVI_qb_RoadExtract.tif
+        otbMultiChannelRAndNIRVegetationIndexImageFilter
+        IPVI
+        ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
+        ${TEMP}/raRAndNIRVegetationIndex_IPVI_qb_RoadExtract.tif
+        3 4  # red nir
+)
+
+# -------            TNDVI MultiChannelRAndNIRVegetationIndexImageFilter   ------------------------------
+ADD_TEST(raTvTNDVIMultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
+ --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_TNDVI_qb_RoadExtract.tif
+                   ${TEMP}/raRAndNIRVegetationIndex_TNDVI_qb_RoadExtract.tif
+        otbMultiChannelRAndNIRVegetationIndexImageFilter
+        TNDVI
+        ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
+        ${TEMP}/raRAndNIRVegetationIndex_TNDVI_qb_RoadExtract.tif
+        3 4
+)
+
+# -------            GEMI MultiChannelRAndNIRVegetationIndexImageFilter   ------------------------------
+ADD_TEST(raTvGEMIMultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
+ --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_GEMI_qb_RoadExtract.tif
+                   ${TEMP}/raRAndNIRVegetationIndex_GEMI_qb_RoadExtract.tif
+        otbMultiChannelRAndNIRVegetationIndexImageFilter
+        GEMI
+        ${INPUTDATA}/qb_RoadExtract.img
+        ${TEMP}/raRAndNIRVegetationIndex_GEMI_qb_RoadExtract.tif
+        3  4   # red nir
+)
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -552,8 +505,80 @@ ADD_TEST(raTvTSARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter ${RADIOMETR
         0.5   # gamma
 )
 
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS5 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# -------            otb::RAndNIRVegetationIndexImageFilter   ------------------------------
+ADD_TEST(raTuRAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS5}  
+        otbRAndNIRVegetationIndexImageFilterNew )
+        
+ADD_TEST(raTvNDVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}  
+  --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif
+                    ${TEMP}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif
+        otbRAndNIRVegetationIndexImageFilter
+        NDVI
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${INPUTDATA}/poupees_sub_c2.png
+    ${TEMP}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif 
+    )
+ADD_TEST(raTvRVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}  
+  --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_RVI_poupees_subc1c2.tif
+                    ${TEMP}/raRAndNIRVegetationIndex_RVI_poupees_subc1c2.tif
+        otbRAndNIRVegetationIndexImageFilter
+        RVI
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${INPUTDATA}/poupees_sub_c2.png
+    ${TEMP}/raRAndNIRVegetationIndex_RVI_poupees_subc1c2.tif 
+    )
+
+ADD_TEST(raTvSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}  
+  --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_SAVI_poupees_subc1c2.tif
+                    ${TEMP}/raRAndNIRVegetationIndex_SAVI_poupees_subc1c2.tif
+        otbRAndNIRVegetationIndexImageFilter
+        SAVI
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${INPUTDATA}/poupees_sub_c2.png
+    ${TEMP}/raRAndNIRVegetationIndex_SAVI_poupees_subc1c2.tif 
+    )
+
+ADD_TEST(raTvMSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}  
+  --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_MSAVI_poupees_subc1c2.tif
+                    ${TEMP}/raRAndNIRVegetationIndex_MSAVI_poupees_subc1c2.tif
+        otbRAndNIRVegetationIndexImageFilter
+        MSAVI
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${INPUTDATA}/poupees_sub_c2.png
+    ${TEMP}/raRAndNIRVegetationIndex_MSAVI_poupees_subc1c2.tif 
+    )
+
+# -------            IPVI RAndNIRVegetationIndexImageFilter   ------------------------------
+ADD_TEST(raTvIPVIRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}  
+ --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_IPVI_poupees_subc1c2c3.tif
+                   ${TEMP}/raRAndNIRVegetationIndex_IPVI_poupees_subc1c2c3.tif
+        otbRAndNIRVegetationIndexImageFilter
+        IPVI
+        ${INPUTDATA}/poupees_sub_c1.png
+        ${INPUTDATA}/poupees_sub_c2.png
+        ${TEMP}/raRAndNIRVegetationIndex_IPVI_poupees_subc1c2c3.tif
+)
+
+
+# -------            TNDVI RAndNIRVegetationIndexImageFilter   ------------------------------
+ADD_TEST(raTvTNDVIRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}  
+ --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_TNDVI_poupees_subc1c2c3.tif
+                   ${TEMP}/raRAndNIRVegetationIndex_TNDVI_poupees_subc1c2c3.tif
+        otbRAndNIRVegetationIndexImageFilter
+        TNDVI
+        ${INPUTDATA}/poupees_sub_c1.png
+        ${INPUTDATA}/poupees_sub_c2.png
+        ${TEMP}/raRAndNIRVegetationIndex_TNDVI_poupees_subc1c2c3.tif
+)
+
+
 # -------            GEMI RAndNIRVegetationIndexImageFilter   ------------------------------
-ADD_TEST(raTvGEMIRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS4}  
+ADD_TEST(raTvGEMIRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}  
  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_GEMI_poupees_subc1c2c3.tif
                    ${TEMP}/raRAndNIRVegetationIndex_GEMI_poupees_subc1c2c3.tif
         otbRAndNIRVegetationIndexImageFilter
@@ -563,135 +588,127 @@ ADD_TEST(raTvGEMIRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS4}
         ${TEMP}/raRAndNIRVegetationIndex_GEMI_poupees_subc1c2c3.tif
 )
 
-# -------            GEMI MultiChannelRAndNIRVegetationIndexImageFilter   ------------------------------
-ADD_TEST(raTvGEMIMultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS4}  
- --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_GEMI_qb_RoadExtract.tif
-                   ${TEMP}/raRAndNIRVegetationIndex_GEMI_qb_RoadExtract.tif
-        otbMultiChannelRAndNIRVegetationIndexImageFilter
-        GEMI
-        ${INPUTDATA}/qb_RoadExtract.img
-        ${TEMP}/raRAndNIRVegetationIndex_GEMI_qb_RoadExtract.tif
-        3  4   # red nir
-)
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS5 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS6 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
 # -------            otb::RAndGAndNIRVegetationIndexImageFilter   ------------------------------
-ADD_TEST(raTuRAndGAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS5}  
+ADD_TEST(raTuRAndGAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS6}
         otbRAndGAndNIRVegetationIndexImageFilterNew )
 
 # -------            otb::MultiChannelRAndGAndNIRVegetationIndexImageFilter   ------------------------------
-ADD_TEST(raTuMultiChannelRAndGAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS5}  
+ADD_TEST(raTuMultiChannelRAndGAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS6}
         otbMultiChannelRAndGAndNIRVegetationIndexImageFilterNew )
 
-# -------            AVI RAndGAndNIRVegetationIndexImageFilter   ------------------------------
-# ADD_TEST(raTvAVIRAndGAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}  
-#  --compare-image ${EPSILON}   ${BASELINE}/raRAndGAndNIRVegetationIndex_AVI_poupees_subc1c2c3.tif
-#                    ${TEMP}/raRAndGAndNIRVegetationIndex_AVI_poupees_subc1c2c3.tif
-#         otbAVIRAndGAndNIRVegetationIndexImageFilter
-#         ${INPUTDATA}/poupees_sub_c1.png
-#         ${INPUTDATA}/poupees_sub_c2.png
-#         ${INPUTDATA}/poupees_sub_c3.png
-#         ${TEMP}/raRAndGAndNIRVegetationIndex_AVI_poupees_subc1c2c3.tif
-#         0.7   # lambda1
-#         0.9   # lambda2
-#         0.8  # lambda3
-# )
-# 
-# # -------            AVI MultiChannelRAndGAndNIRVegetationIndexImageFilter   ------------------------------
-# ADD_TEST(raTvAVIMultiChannelRAndGAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}  
-#  --compare-image ${EPSILON}   ${BASELINE}/raRAndGAndNIRVegetationIndex_AVI_qb_RoadExtract.tif
-#                    ${TEMP}/raRAndGAndNIRVegetationIndex_AVI_qb_RoadExtract.tif
-#         otbAVIMultiChannelRAndGAndNIRVegetationIndexImageFilter
-#         ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
-#         ${TEMP}/raRAndGAndNIRVegetationIndex_AVI_qb_RoadExtract.tif
-#         3   # red
-#         2   # green
-#         4   # nir
-#         0.7   # lambda1
-#         0.9   # lambda2
-#         0.8  # lambda3
-# )
-# 
-# # -------            WDVI RAndNIRVegetationIndexImageFilter   ------------------------------
-# ADD_TEST(raTvWDVIRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}  
-#  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_WDVI_poupees_subc1c2c3.tif
-#                    ${TEMP}/raRAndNIRVegetationIndex_WDVI_poupees_subc1c2c3.tif
-#         otbWDVIRAndNIRVegetationIndexImageFilter
-#         ${INPUTDATA}/poupees_sub_c1.png
-#         ${INPUTDATA}/poupees_sub_c2.png
-#         ${TEMP}/raRAndNIRVegetationIndex_WDVI_poupees_subc1c2c3.tif
-#         1.0   # g : slope of soil line
-# )
-# 
-# # -------            WDVI MultiChannelRAndNIRVegetationIndexImageFilter   ------------------------------
-# ADD_TEST(raTvWDVIMultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}  
-#  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_WDVI_qb_RoadExtract.tif
-#                    ${TEMP}/raRAndNIRVegetationIndex_WDVI_qb_RoadExtract.tif
-#         otbWDVIMultiChannelRAndNIRVegetationIndexImageFilter
-#         ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
-#         ${TEMP}/raRAndNIRVegetationIndex_WDVI_qb_RoadExtract.tif
-#         3   # red
-#         4   # nir
-#         1.0   # g : slope of soil line
-# )
-# 
-# # -------            IPVI RAndNIRVegetationIndexImageFilter   ------------------------------
-# ADD_TEST(raTvIPVIRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}  
-#  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_IPVI_poupees_subc1c2c3.tif
-#                    ${TEMP}/raRAndNIRVegetationIndex_IPVI_poupees_subc1c2c3.tif
-#         otbRAndNIRVegetationIndexImageFilter
-#         ${INPUTDATA}/poupees_sub_c1.png
-#         ${INPUTDATA}/poupees_sub_c2.png
-#         ${TEMP}/raRAndNIRVegetationIndex_IPVI_poupees_subc1c2c3.tif
-# )
-# 
-# # -------            IPVI MultiChannelRAndNIRVegetationIndexImageFilter   ------------------------------
-# ADD_TEST(raTvIPVIMultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}  
-#  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_IPVI_qb_RoadExtract.tif
-#                    ${TEMP}/raRAndNIRVegetationIndex_IPVI_qb_RoadExtract.tif
-#         otbMultiChannelRAndNIRVegetationIndexImageFilter
-#         ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
-#         ${TEMP}/raRAndNIRVegetationIndex_IPVI_qb_RoadExtract.tif
-#         3   # red
-#         1   # blue
-#         4   # nir
-# )
-# 
-# # -------            TNDVI RAndNIRVegetationIndexImageFilter   ------------------------------
-# ADD_TEST(raTvTNDVIRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}  
-#  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_TNDVI_poupees_subc1c2c3.tif
-#                    ${TEMP}/raRAndNIRVegetationIndex_TNDVI_poupees_subc1c2c3.tif
-#         otbRAndNIRVegetationIndexImageFilter
-#         ${INPUTDATA}/poupees_sub_c1.png
-#         ${INPUTDATA}/poupees_sub_c2.png
-#         ${TEMP}/raRAndNIRVegetationIndex_TNDVI_poupees_subc1c2c3.tif
-# )
-# 
-# # -------            TNDVI MultiChannelRAndNIRVegetationIndexImageFilter   ------------------------------
-# ADD_TEST(raTvTNDVIMultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}  
-#  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_TNDVI_qb_RoadExtract.tif
-#                    ${TEMP}/raRAndNIRVegetationIndex_TNDVI_qb_RoadExtract.tif
-#         otbMultiChannelRAndNIRVegetationIndexImageFilter
-#         ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
-#         ${TEMP}/raRAndNIRVegetationIndex_TNDVI_qb_RoadExtract.tif
-#         3   # red
-#         1   # blue
-#         4   # nir
-# )
+ADD_TEST(raTvPVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS6}  
+  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif
+                    ${TEMP}/raRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif
+        otbSetASetBRAndNIRVegetationIndexImageFilter
+        PVI
+        0.7
+        0.9
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${INPUTDATA}/poupees_sub_c2.png
+    ${TEMP}/raRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif 
+)
 
+ADD_TEST(raTvPVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS6}  
+  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif
+                    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif
+        otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter
+        PVI
+        0.7
+        0.9
+    ${INPUTDATA}/poupees_sub.png
+    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif 
+    1 2
+)
+
+
+ADD_TEST(raTvTSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS6}  
+  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif
+                    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif
+        otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter
+        TSAVI
+        0.7
+        0.9
+    ${INPUTDATA}/poupees_sub.png
+    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif 
+    1 2
+)
+
+ADD_TEST(raTvTSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS6}  
+  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif
+                    ${TEMP}/raRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif
+        otbSetASetBRAndNIRVegetationIndexImageFilter
+        TSAVI
+        0.7
+        0.9
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${INPUTDATA}/poupees_sub_c2.png
+    ${TEMP}/raRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif 
+)
+
+# -------            AVI RAndGAndNIRVegetationIndexImageFilter   ------------------------------
+ADD_TEST(raTvAVIRAndGAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS6}
+ --compare-image ${EPSILON}   ${BASELINE}/raRAndGAndNIRVegetationIndex_AVI_poupees_subc1c2c3.tif
+                   ${TEMP}/raRAndGAndNIRVegetationIndex_AVI_poupees_subc1c2c3.tif
+        otbAVIRAndGAndNIRVegetationIndexImageFilter
+        ${INPUTDATA}/poupees_sub_c1.png
+        ${INPUTDATA}/poupees_sub_c2.png
+        ${INPUTDATA}/poupees_sub_c3.png
+        ${TEMP}/raRAndGAndNIRVegetationIndex_AVI_poupees_subc1c2c3.tif
+        660.  # lambda r
+        560.  # lambda g
+        830.  # lambda nir
+)
+
+# -------            AVI MultiChannelRAndGAndNIRVegetationIndexImageFilter   ------------------------------
+ADD_TEST(raTvAVIMultiChannelRAndGAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS6}  
+ --compare-image ${EPSILON}   ${BASELINE}/raRAndGAndNIRVegetationIndex_AVI_qb_RoadExtract.tif
+                   ${TEMP}/raRAndGAndNIRVegetationIndex_AVI_qb_RoadExtract.tif
+        otbAVIMultiChannelRAndGAndNIRVegetationIndexImageFilter
+        ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
+        ${TEMP}/raRAndGAndNIRVegetationIndex_AVI_qb_RoadExtract.tif
+        3   # red
+        2   # green
+        4   # nir
+        660.  # lambda r
+        560.  # lambda g
+        830.  # lambda nir
+)
+
+# -------            WDVI RAndNIRVegetationIndexImageFilter   ------------------------------
+ADD_TEST(raTvWDVIRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS6}  
+ --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_WDVI_poupees_subc1c2c3.tif
+                   ${TEMP}/raRAndNIRVegetationIndex_WDVI_poupees_subc1c2c3.tif
+        otbWDVIRAndNIRVegetationIndexImageFilter
+        ${INPUTDATA}/poupees_sub_c1.png
+        ${INPUTDATA}/poupees_sub_c2.png
+        ${TEMP}/raRAndNIRVegetationIndex_WDVI_poupees_subc1c2c3.tif
+        2.0   # g : slope of soil line
+)
+
+# -------            WDVI MultiChannelRAndNIRVegetationIndexImageFilter   ------------------------------
+ADD_TEST(raTvWDVIMultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS6}  
+ --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_WDVI_qb_RoadExtract.tif
+                   ${TEMP}/raRAndNIRVegetationIndex_WDVI_qb_RoadExtract.tif
+        otbWDVIMultiChannelRAndNIRVegetationIndexImageFilter
+        ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
+        ${TEMP}/raRAndNIRVegetationIndex_WDVI_qb_RoadExtract.tif
+        3   # red
+        4   # nir
+        2.0   # g : slope of soil line
+)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS7 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # A enrichir
 SET(Radiometry_SRCS1
-otbRAndNIRVegetationIndexImageFilterNew.cxx
-otbRAndNIRVegetationIndexImageFilter.cxx
-otbSetASetBRAndNIRVegetationIndexImageFilter.cxx
 otbMultiChannelRAndNIRVegetationIndexImageFilterNew.cxx
 otbMultiChannelRAndNIRVegetationIndexImageFilter.cxx
-otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter.cxx
 )
 SET(Radiometry_SRCS2
 otbRAndBAndNIRVegetationIndexImageFilterNew.cxx
@@ -726,24 +743,24 @@ otbEVIRAndBAndNIRVegetationIndexImageFilter.cxx
 otbEVIMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx
 otbTSARVIRAndBAndNIRVegetationIndexImageFilter.cxx
 otbTSARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx
-
-# je remets ça ? DUPLICATION pas bon
-otbRAndNIRVegetationIndexImageFilter.cxx
-otbMultiChannelRAndNIRVegetationIndexImageFilter.cxx
 )
+
 SET(Radiometry_SRCS5
+otbRAndNIRVegetationIndexImageFilterNew.cxx
+otbRAndNIRVegetationIndexImageFilter.cxx
+)
+
+SET(Radiometry_SRCS6
+otbSetASetBRAndNIRVegetationIndexImageFilter.cxx
+otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter.cxx
 otbRAndGAndNIRVegetationIndexImageFilterNew.cxx
 otbMultiChannelRAndGAndNIRVegetationIndexImageFilterNew.cxx
 otbAVIRAndGAndNIRVegetationIndexImageFilter.cxx
 otbAVIMultiChannelRAndGAndNIRVegetationIndexImageFilter.cxx
 otbWDVIRAndNIRVegetationIndexImageFilter.cxx
 otbWDVIMultiChannelRAndNIRVegetationIndexImageFilter.cxx
-
-
-# je remets ça ? DUPLICATION pas bon
-otbRAndNIRVegetationIndexImageFilter.cxx
-otbMultiChannelRAndNIRVegetationIndexImageFilter.cxx
 )
+
 
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
@@ -758,5 +775,7 @@ ADD_EXECUTABLE(otbRadiometryTests4 otbRadiometryTests4.cxx ${Radiometry_SRCS4})
 TARGET_LINK_LIBRARIES(otbRadiometryTests4 OTBRadiometry OTBIO)
 ADD_EXECUTABLE(otbRadiometryTests5 otbRadiometryTests5.cxx ${Radiometry_SRCS5})
 TARGET_LINK_LIBRARIES(otbRadiometryTests5 OTBRadiometry OTBIO)
+ADD_EXECUTABLE(otbRadiometryTests6 otbRadiometryTests6.cxx ${Radiometry_SRCS6})
+TARGET_LINK_LIBRARIES(otbRadiometryTests6 OTBRadiometry OTBIO)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

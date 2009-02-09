@@ -61,7 +61,7 @@ public:
 
   inline bool operator()(const TInput1 & input)
   {
-    double circularityRatio = 4*M_PI*input->GetSurface()
+    double circularityRatio = 4*M_PI*input->GetArea()
                               / M_SQUARE(input->GetLength());
 
     if (circularityRatio > m_Threshold)

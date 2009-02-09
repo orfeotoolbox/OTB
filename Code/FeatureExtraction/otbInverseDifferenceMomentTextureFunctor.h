@@ -18,7 +18,7 @@
 #ifndef __otbInverseDifferenceMomentTextureFunctor_h
 #define __otbInverseDifferenceMomentTextureFunctor_h
 
-#include "otbEntropyTextureFunctor.h"
+#include "otbTextureFunctorBase.h"
 
 namespace otb
 {
@@ -39,7 +39,7 @@ namespace Functor
  */
 template <class TIterInput1, class TIterInput2, class TOutput>
 class ITK_EXPORT InverseDifferenceMomentTextureFunctor : 
-public EntropyTextureFunctor<TIterInput1, TIterInput2, TOutput>
+public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>
 {
 public:
   InverseDifferenceMomentTextureFunctor(){};
@@ -56,12 +56,11 @@ public:
   typedef std::vector<double>                   DoubleVectorType;
   typedef std::vector<int>                      IntVectorType;
   typedef std::vector<IntVectorType>            IntVectorVectorType;
-  typedef EntropyTextureFunctor<TIterInput1, TIterInput2, TOutput> Superclass;
 
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
-    DoubleVectorType binsLength = Superclass::StatComputation(neigh, neighOff);
+    DoubleVectorType binsLength = this->StatComputation(neigh, neighOff);
 
     RadiusType radius = neigh.GetRadius();
     double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);

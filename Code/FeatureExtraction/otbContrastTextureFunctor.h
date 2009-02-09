@@ -18,7 +18,7 @@
 #ifndef __otbContrastTextureFunctor_h
 #define __otbContrastTextureFunctor_h
 
-#include "otbEntropyTextureFunctor.h"
+#include "otbTextureFunctorBase.h"
 
 namespace otb
 {
@@ -39,7 +39,7 @@ namespace Functor
  */
 template <class TIterInput1, class TIterInput2, class TOutput>
 class ITK_EXPORT ContrastTextureFunctor : 
-public EntropyTextureFunctor<TIterInput1, TIterInput2, TOutput>
+public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>
 {
 public:
   ContrastTextureFunctor(){};
@@ -56,12 +56,11 @@ public:
   typedef std::vector<double>                   DoubleVectorType;
   typedef std::vector<int>                      IntVectorType;
   typedef std::vector<IntVectorType>            IntVectorVectorType;
-  typedef EntropyTextureFunctor<TIterInput1, TIterInput2, TOutput> Superclass;
 
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
-    DoubleVectorType binsLength = Superclass::StatComputation(neigh, neighOff);
+    DoubleVectorType binsLength = this->StatComputation(neigh, neighOff);
 
     RadiusType radius = neigh.GetRadius();
     double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
@@ -121,7 +120,7 @@ public:
 	    double rVal = (static_cast<double>(r)+0.5)*binsLength[1];
 	    for (unsigned s = 0; s<histo[r].size(); s++)
 	      { 
-		if( vcl_abs( rVal - (static_cast<double>(s)+0.5)*binsLength[0]) < nCeil )
+		if( vcl_abs( rVal - (static_cast<double>(s)+0.5)*binsLength[0] - nCeil) < vcl_abs(binsLength[0]-binsLength[1]) )
 		  {
 		    double p =  static_cast<double>(histo[r][s])*areaInv;
 		    out += nCeilSquare * p;
@@ -130,14 +129,13 @@ public:
 	  }
       }
     
-  
     return out;  
   }
   
 };
  
  
- 
+
  
 } // namespace Functor
 } // namespace otb

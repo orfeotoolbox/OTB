@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCorrelationTextureFunctor_h
-#define __otbCorrelationTextureFunctor_h
+#ifndef __otbSumAverageTextureFunctor_h
+#define __otbSumAverageTextureFunctor_h
 
 #include "otbTextureFunctorBase.h"
 
@@ -24,7 +24,7 @@ namespace otb
 {
 namespace Functor
 {
-/** \class CorrelationTextureFunctor
+/** \class SumAverageTextureFunctor
  *  \brief This functor calculates the inverse difference moment of an image
  *
  *   Computes joint histogram (neighborhood and offset neighborhood) 
@@ -38,12 +38,12 @@ namespace Functor
  *  \ingroup Statistics
  */
 template <class TIterInput1, class TIterInput2, class TOutput>
-class ITK_EXPORT CorrelationTextureFunctor : 
+class ITK_EXPORT SumAverageTextureFunctor : 
 public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>
 {
 public:
-  CorrelationTextureFunctor(){};
-  ~CorrelationTextureFunctor(){};
+  SumAverageTextureFunctor(){};
+  ~SumAverageTextureFunctor(){};
 
   typedef TIterInput1                           IterType1;
   typedef TIterInput2                           IterType2;
@@ -56,7 +56,7 @@ public:
   typedef std::vector<double>                   DoubleVectorType;
   typedef std::vector<int>                      IntVectorType;
   typedef std::vector<IntVectorType>            IntVectorVectorType;
-
+ 
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
@@ -110,58 +110,28 @@ public:
 	      
 	    }
 	}
-
-    double sumProb = 0.;
-    for (unsigned r = 0; r<histo.size(); r++)
-      {
-	for (unsigned s = 0; s<histo[r].size(); s++)
-	  { 
-	    double p =  static_cast<double>(histo[r][s])*areaInv;
-	    sumProb += p;
-	    double pixProd = ( (static_cast<double>(r)+0.5)*binsLength[1] ) * ( (static_cast<double>(s)+0.5)*binsLength[0] );
-	    out += pixProd * p;
-	  }
-    }
-    
-    double meanPOff = sumProb/histo.size();
-    double meanPNeigh = sumProb/histo[0].size();
-   
-    // Standard deviation of p for offset region
-    double stdPOff = 0.;
-    for (unsigned r = 0; r<histo.size(); r++)
-      {
-	double sumTemp = 0.;
-	for (unsigned s = 0; s<histo[r].size(); s++)
+    // loop over bin neighborhood values
+    for (unsigned sB = 0; sB<histo[0].size(); sB++)
+      { 
+	double nCeil = (static_cast<double>(sB)+0.5)*binsLength[0];
+	for (unsigned r = 0; r<histo.size(); r++)
 	  {
-	    sumTemp += histo[r][s];
+	    double rVal = (static_cast<double>(r)+0.5)*binsLength[1];
+	    for (unsigned s = 0; s<histo[r].size(); s++)
+	      { 
+		double sVal = (static_cast<double>(s)+0.5)*binsLength[0];
+		// In theory don't have the abs but will deals with neighborhood and offset without the same histo
+		// thus loop over 2*Ng don't have sense
+		if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(binsLength[0]+binsLength[1]) || vcl_abs(rVal + sVal - 2*nCeil) < vcl_abs(binsLength[0]+binsLength[1]) )
+		  {
+		    double p =  static_cast<double>(histo[r][s])*areaInv;
+		    out += sVal * p;
+		  }
+	      }
 	  }
-	stdPOff +=  vcl_pow( (meanPOff-sumTemp), 2);
       }
-    stdPOff /= histo.size();
-    stdPOff = vcl_sqrt(stdPOff);
-
-    // Standard deviation of p for neighborhood region
-    double stdPNeigh = 0.;
-    for (unsigned r = 0; r<histo[0].size(); r++)
-      {
-	double sumTemp = 0.;
-	for (unsigned s = 0; s<histo.size(); s++)
-	  {
-	    sumTemp += histo[s][r];
-	  }
-	stdPNeigh +=  vcl_pow( (meanPNeigh-sumTemp), 2);
-      }
-    stdPNeigh /= histo[0].size();
-    stdPNeigh = vcl_sqrt(stdPNeigh);
     
-
-    if(stdPOff*stdPNeigh != 0)
-     	out = (out - meanPOff*meanPNeigh) / (stdPOff*stdPNeigh);
-    
-    /*
-    if(this->GetStd()*this->GetStdOff() != 0)
-     	out = (out - this->GetMean()*this->GetMeanOff()) / ( this->GetStd()*this->GetStdOff() );
-    */
+  
     return out;  
   }
   

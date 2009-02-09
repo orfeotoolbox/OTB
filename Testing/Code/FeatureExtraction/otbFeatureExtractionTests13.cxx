@@ -27,8 +27,5 @@
 
 void RegisterTests()
 {
-
-  REGISTER_TEST(otbRAndNIRVegetationIndexImageFilterNew);
-  REGISTER_TEST(otbRAndNIRVegetationIndexImageFilter);
+REGISTER_TEST(otbTextureImageFunction);
 }
-
