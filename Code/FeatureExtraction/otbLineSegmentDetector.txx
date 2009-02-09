@@ -78,6 +78,7 @@ LineSegmentDetector<TInputImage,TPrecision >
 
   /** Compute the modulus and the orientation gradient image*/
   m_GradientFilter->SetInput(this->GetInput());
+  m_GradientFilter->SetUseImageDirection(true);
   m_MagnitudeFilter->SetInput(m_GradientFilter->GetOutput());
   m_OrientationFilter->SetInput(m_GradientFilter->GetOutput());
   m_MagnitudeFilter->Update();
@@ -235,11 +236,11 @@ LineSegmentDetector<TInputImage, TPrecision>
   while(itRec != m_RectangleList.end())
     {
       float NFA = this->ComputeRectNFA(*itRec);
-      //float NFAImproved = this->ImproveRectangle(&(*itRec) , NFA);
+      //NFA = this->ImproveRectangle(&(*itRec) , NFA);
       /**
        * Here we start building the OUTPUT :a LineSpatialObjectList. 
        */
-      if(NFA > 0./** eps */)
+      if(NFA > -2./** eps */)
 	{
 	  //std::cout << (*itRec)[0] << " " << (*itRec)[1] << " " << (*itRec)[2] << " " << (*itRec)[3]<<std::endl;
 	  PointListType pointList;
@@ -532,9 +533,6 @@ LineSegmentDetector<TInputImage, TPrecision>
       if( diff < 0.0 ) diff = -diff;
     }
 
-
-
-
   return diff < prec;
 }
 
@@ -602,7 +600,7 @@ LineSegmentDetector<TInputImage, TPrecision>
       weight = *itNeigh.GetCenterValue(); 
       l =  ( static_cast<float>((*it)[0]) - x )*dx + ( static_cast<float>((*it)[1]) - y )*dy;
       w = -( static_cast<float>((*it)[0]) - x )*dy + ( static_cast<float>((*it)[1]) - y )*dx;
-      	
+      
       if(l<l_min) l_min = l;   if(l>l_max)  l_max = l;
       if(w<w_min) w_min = w;   if(w>w_max)  w_max = w;
 
@@ -621,21 +619,21 @@ LineSegmentDetector<TInputImage, TPrecision>
   for( s=0.0,i = static_cast<int>(l_min); s<sum_th && i<=static_cast<int>(l_max) ; i++) 
     s += sum_l[ Diagonal + i];
   
-  float lb = (static_cast<float>(i-1) - 0.5 ) ;
+  float lb = (static_cast<float>(i-1) - 0.5 );
   
   for(s=0.0,i=static_cast<int>(l_max); s<sum_th && i>=static_cast<int>(l_min); i--) 
     s += sum_l[ Diagonal  + i];
-  float lf =  (static_cast<float>(i-1) - 0.5 ); 
+  float lf =  (static_cast<float>(i+1) + 0.5 ); 
 
   for(s=0.0,i=static_cast<int>(w_min); s<sum_th && i<=static_cast<int>(w_max); i++) 
     s += sum_w[ Diagonal + i];
   
-  float wr = (static_cast<float>(i-1) - 0.5)  ;  
+  float wr = (static_cast<float>(i-1) - 0.5);  
 
   for(s=0.0,i=static_cast<int>(w_max); s<sum_th && i>=static_cast<int>(w_min); i--) 
     s += sum_w[Diagonal  + i];
   
-  float wl = (static_cast<float>(i-1) - 0.5 ) ;  
+  float wl = (static_cast<float>(i+1) + 0.5 );  
 
 
   /** Finally store the rectangle in vector this way : 
@@ -651,10 +649,10 @@ LineSegmentDetector<TInputImage, TPrecision>
   
   RectangleType          rec(8 ,0.);     // Definition of a rectangle : 8 components
   rec[0] = (x + lb*dx >0)?x + lb*dx:0.;
-  rec[1] = (y + lb*dy>0 )?y + lb*dy:0.;
+  rec[1] = (y + lb*dy >0)?y + lb*dy:0.;
   rec[2] = (x + lf*dx >0)?x + lf*dx:0.;
   rec[3] = (y + lf*dy >0)? y + lf*dy:0;
-  rec[4] = vcl_abs(wl - wr);
+  rec[4] = wl - wr;
   rec[5] = theta;
   rec[6] = M_PI/8;
   rec[7] = 1./8.;
@@ -778,6 +776,8 @@ LineSegmentDetector<TInputImage, TPrecision>
   X[3] = rec[2] - dy* halfWidth ;
   Y[3] = rec[3] + dx* halfWidth ;
 
+  //std::cout << " rectangle : " << rec[0]  << " " << rec[1]  << " " << rec[2] << " " << rec[3]<<  " et width"<<  rec[4]<<  std::endl;
+
   /** Compute the NFA of the rectangle  
    *  We Need : The number of : Points in the rec  (Area of the rectangle)
    *                            Aligned points  with theta in the rectangle
@@ -792,6 +792,7 @@ LineSegmentDetector<TInputImage, TPrecision>
     {
       InputIndexType   vertex;
       vertex[0] = X[i] ; vertex[1] = Y[i];
+      //std::cout << vertex << std::endl;
       rectangle->AddVertex(vertex);
     }
   
@@ -805,7 +806,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   
   while(!it.IsAtEnd())
     {
-      if( rectangle->IsInside( it.GetIndex() ))
+      if( rectangle->IsInside( it.GetIndex()) && m_OrientationFilter->GetOutput()->GetRequestedRegion().IsInside( it.GetIndex()) )
 	{
 	  pts++;
 
