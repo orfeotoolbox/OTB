@@ -131,7 +131,9 @@ public:
 	  out += Px_y * nCeil * vcl_log(Px_y);
       }
     
-  
+    if(out != 0)
+      out = -out;
+    
     return out;  
   }
   
