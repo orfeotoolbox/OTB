@@ -87,7 +87,8 @@ int otbLineSegmentDetector( int argc, char * argv[] )
       itLine.GoToBegin();
       while(!itLine.IsAtEnd())
 	{
-	  itLine.Set(255.);
+	  if(reader->GetOutput()->GetRequestedRegion().IsInside(itLine.GetIndex()))
+	    itLine.Set(255.);
 	  ++itLine;
 	}
       ++it;

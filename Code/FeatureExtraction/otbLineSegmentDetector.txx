@@ -23,12 +23,14 @@
 #include "itkNumericTraits.h"
 #include "itkMinimumMaximumImageCalculator.h"
 #include "itkConstNeighborhoodIterator.h"
+#include "itkNeighborhoodIterator.h"
 #include "otbPolygon.h"
 
 #include "otbMath.h"
 
 #include "itkMatrix.h"
 #include "itkSymmetricEigenAnalysis.h"
+
 
 #define MAXIT 100
 #define EPS 3.0e-7
@@ -78,8 +80,9 @@ LineSegmentDetector<TInputImage,TPrecision >
 
   /** Compute the modulus and the orientation gradient image*/
   m_GradientFilter->SetInput(this->GetInput());
-  m_GradientFilter->SetUseImageDirection(true);
+  m_GradientFilter->SetSigma(2.);
   m_MagnitudeFilter->SetInput(m_GradientFilter->GetOutput());
+    
   m_OrientationFilter->SetInput(m_GradientFilter->GetOutput());
   m_MagnitudeFilter->Update();
   m_OrientationFilter->Update();
@@ -240,7 +243,7 @@ LineSegmentDetector<TInputImage, TPrecision>
       /**
        * Here we start building the OUTPUT :a LineSpatialObjectList. 
        */
-      if(NFA > -2./** eps */)
+      if(NFA > 0./** eps */)
 	{
 	  //std::cout << (*itRec)[0] << " " << (*itRec)[1] << " " << (*itRec)[2] << " " << (*itRec)[3]<<std::endl;
 	  PointListType pointList;
@@ -526,7 +529,6 @@ LineSegmentDetector<TInputImage, TPrecision>
   float diff = Angle - regionAngle;
   
   if( diff < 0.0 ) diff = -diff;
-
   if( diff > 1.5*M_PI )
     {
       diff -= 2*M_PI;
@@ -651,7 +653,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   rec[0] = (x + lb*dx >0)?x + lb*dx:0.;
   rec[1] = (y + lb*dy >0)?y + lb*dy:0.;
   rec[2] = (x + lf*dx >0)?x + lf*dx:0.;
-  rec[3] = (y + lf*dy >0)? y + lf*dy:0;
+  rec[3] = (y + lf*dy >0)?y + lf*dy:0;
   rec[4] = wl - wr;
   rec[5] = theta;
   rec[6] = M_PI/8;
@@ -702,8 +704,8 @@ LineSegmentDetector<TInputImage, TPrecision>
   typedef std::vector<float >    MatrixEigenType;
   MatrixType Inertie, eigenVector;
   MatrixEigenType  eigenMatrix(2,0.);
-  Inertie[0][0] =Ixx;
-  Inertie[1][1] =Iyy;
+  Inertie[1][1] =Ixx;
+  Inertie[0][0] =Iyy;
   Inertie[0][1] =Ixy;
   Inertie[1][0] =Ixy;
   
@@ -776,7 +778,6 @@ LineSegmentDetector<TInputImage, TPrecision>
   X[3] = rec[2] - dy* halfWidth ;
   Y[3] = rec[3] + dx* halfWidth ;
 
-  //std::cout << " rectangle : " << rec[0]  << " " << rec[1]  << " " << rec[2] << " " << rec[3]<<  " et width"<<  rec[4]<<  std::endl;
 
   /** Compute the NFA of the rectangle  
    *  We Need : The number of : Points in the rec  (Area of the rectangle)
@@ -792,7 +793,6 @@ LineSegmentDetector<TInputImage, TPrecision>
     {
       InputIndexType   vertex;
       vertex[0] = X[i] ; vertex[1] = Y[i];
-      //std::cout << vertex << std::endl;
       rectangle->AddVertex(vertex);
     }
   

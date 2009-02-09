@@ -25,7 +25,9 @@
 #include "itkPointSet.h"
 
 #include "itkUnaryFunctorImageFilter.h"
-#include "itkGradientImageFilter.h"
+#include "itkGradientRecursiveGaussianImageFilter.h"
+
+#include "otbImageFileWriter.h"
 
 namespace otb
 {
@@ -42,7 +44,7 @@ namespace Functor
 	
 	inline TOutputPixel operator()(const TInputPixel& input)
 	  {
-	    return vcl_sqrt(input[0]*input[0] + input[1]*input[1] );
+	    return 2*vcl_sqrt(input[0]*input[0] + input[1]*input[1] );
 	  }
       };
     
@@ -58,15 +60,18 @@ namespace Functor
 	inline TOutputPixel operator()(const TInputPixel& input)
 	  {
 	    TOutputPixel resp = vcl_atan2(input[0],-input[1]);
- 	    if (resp<0) 
- 	      { 
- 		resp = -resp; 
- 	      } 
+ 	    if (resp<0)
+ 	      {
+ 		resp = -resp;
+ 	      }
+/* 	    if(resp<0.1) */
+/* 	      resp = 0; */
 	    
 	    return resp;
 	  }
       };
   }// end namespace Functor
+
 /** \class LineSegmentDetector
  *  \brief this class implement a fast line detector with false detection control
  *
@@ -125,7 +130,7 @@ public:
   typedef typename DirectionVectorType::iterator                        DirectionVectorIteratorType; 
 
   /** */ 
-  typedef itk::GradientImageFilter<InputImageType,InputPixelType,InputPixelType > GradientFilterType;
+  typedef itk::GradientRecursiveGaussianImageFilter<InputImageType > GradientFilterType;
   typedef typename GradientFilterType::Pointer GradientFilterPointerType;
   typedef typename GradientFilterType::OutputImageType GradientOutputImageType;
 
@@ -134,6 +139,7 @@ public:
   Functor::MagnitudeFunctor<typename GradientOutputImageType::PixelType,typename  InputImageType::PixelType> > MagnitudeFilterType;
   typedef typename MagnitudeFilterType::Pointer                                   MagnitudeFilterPointerType;
   typedef typename MagnitudeFilterType::OutputImageType::PixelType                MagnitudePixelType;
+  typedef typename MagnitudeFilterType::OutputImageType                           MagnitudeImageType;
             
   typedef itk::UnaryFunctorImageFilter<GradientOutputImageType,InputImageType,
   Functor::OrientationFunctor<typename GradientOutputImageType::PixelType,typename InputImageType::PixelType> > OrientationFilterType;
@@ -150,6 +156,10 @@ public:
   typedef typename RectangleType::iterator                          RectangleIteratorType;
   typedef std::vector< RectangleType>                               RectangleListType;
   typedef typename RectangleListType::iterator                      RectangleListTypeIterator; 
+
+  //typedef otb::ImageFileWriter<MagnitudeImageType  >                writerType;
+  //typedef typename writerType::Pointer                              writerPointerType;
+
 protected:
   LineSegmentDetector();
   virtual ~LineSegmentDetector() {};
