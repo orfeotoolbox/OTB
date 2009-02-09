@@ -110,27 +110,36 @@ public:
 	      
 	    }
 	}
+  
     // loop over bin neighborhood values
     for (unsigned sB = 0; sB<histo[0].size(); sB++)
       { 
-	double Px_y = 0.;
 	double nCeil = (static_cast<double>(sB)+0.5)*binsLength[0];
+	double nCeil2 = (static_cast<double>(sB)+histo[0].size()+0.5)*binsLength[0];
+	double Px_y = 0.;
+	double Px_y2 = 0.;
 	for (unsigned r = 0; r<histo.size(); r++)
 	  {
 	    double rVal = (static_cast<double>(r)+0.5)*binsLength[1];
 	    for (unsigned s = 0; s<histo[r].size(); s++)
 	      { 
 		double sVal = (static_cast<double>(s)+0.5)*binsLength[0];
-		if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(binsLength[0]) || vcl_abs(rVal + sVal - 2*nCeil) < vcl_abs(binsLength[0]) )
+		if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(binsLength[0]) )
 		  {
 		    Px_y +=  static_cast<double>(histo[r][s])*areaInv;
+		  }
+		if( vcl_abs(rVal + sVal - nCeil2) < vcl_abs(binsLength[0]) )
+		  {
+		    Px_y2 +=  static_cast<double>(histo[r][s])*areaInv;
 		  }
 	      }
 	  }
 	if(Px_y != 0.)
 	  out += Px_y * vcl_log(Px_y);
+	if(Px_y2 != 0.)
+	  out += Px_y2 * vcl_log(Px_y2);
       }
-    
+
       
     if(out != 0)
       out = -out;
