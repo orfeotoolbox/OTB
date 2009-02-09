@@ -122,7 +122,7 @@ public:
 		double sVal = (static_cast<double>(s)+0.5)*binsLength[0];
 		// In theory don't have the abs but will deals with neighborhood and offset without the same histo
 		// thus loop over 2*Ng don't have sense
-		if( vcl_abs(rVal + sVal - nCeil)<binsLength[1] || vcl_abs(rVal + sVal - 2*nCeil)<binsLength[1] )
+		if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(binsLength[0]+binsLength[1]) || vcl_abs(rVal + sVal - 2*nCeil) < vcl_abs(binsLength[0]+binsLength[1]) )
 		  {
 		    double p =  static_cast<double>(histo[r][s])*areaInv;
 		    out += sVal * p;
