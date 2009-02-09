@@ -42,7 +42,7 @@ namespace Functor
 	
 	inline TOutputPixel operator()(const TInputPixel& input)
 	  {
-	    return vcl_sqrt(input[0]*input[0]+input[1]*input[1] );
+	    return vcl_sqrt((input[0]+input[1])*(input[0]+input[1])  +(input[0]*input[1])*(input[0]*input[1]) );
 	  }
       };
     
@@ -58,10 +58,10 @@ namespace Functor
 	inline TOutputPixel operator()(const TInputPixel& input)
 	  {
 	    TOutputPixel resp = vcl_atan2(input[1],-input[0]);
-	    if (resp<0)
-	      {
-		resp+=2*M_PI;
-	      }
+/* 	    if (resp<0) */
+/* 	      { */
+/* 		resp+=2*M_PI; */
+/* 	      } */
 	    
 	    return resp;
 	  }

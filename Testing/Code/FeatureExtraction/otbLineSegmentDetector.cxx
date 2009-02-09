@@ -84,6 +84,7 @@ int otbLineSegmentDetector( int argc, char * argv[] )
       IndexEnd[0]= x1 ; IndexEnd[1] = y1;
 
       LineIteratorFilter   itLine(reader->GetOutput(),IndexBegin,  IndexEnd);
+      itLine.GoToBegin();
       while(!itLine.IsAtEnd())
 	{
 	  itLine.Set(255.);

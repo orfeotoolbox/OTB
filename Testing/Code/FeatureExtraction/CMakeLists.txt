@@ -1043,6 +1043,21 @@ ADD_TEST(feTpSimplifyManyPathListFilter ${FEATUREEXTRACTION_TESTS11}
         )
 
 
+# -------            otb::LineSegmenbtDetector   -------------
+ADD_TEST(feTuLineSegmentDetectorNew ${FEATUREEXTRACTION_TESTS11} 
+    otbLineSegmentDetectorNew)
+
+ADD_TEST(feTvLineSegmentDetector ${FEATUREEXTRACTION_TESTS11} 
+--compare-image ${EPS}
+     ${BASELINE}/feTvLineSegmentdetectorOutputImage.tif
+     ${TEMP}/feTvLineSegmentdetectorOutputImage.tif
+    otbLineSegmentDetector
+     ${INPUTDATA}/prison_toulouse.tif 
+    ${TEMP}/feTvLineSegmentdetectorOutputImage.tif
+)
+
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests12 ~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1459,6 +1474,8 @@ otbCloudEstimatorFilter.cxx
 otbCloudDetectionFilterNew.cxx
 otbCloudDetectionFilter.cxx
 otbSimplifyManyPathListFilter.cxx
+otbLineSegmentDetectorNew.cxx
+otbLineSegmentDetector.cxx
 )
 SET(BasicFeatureExtraction_SRCS12
 otbTextureFunctorBase.cxx

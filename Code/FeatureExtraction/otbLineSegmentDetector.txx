@@ -27,6 +27,9 @@
 
 #include "otbMath.h"
 
+#include "itkMatrix.h"
+#include "itkSymmetricEigenAnalysis.h"
+
 #define MAXIT 100
 #define EPS 3.0e-7
 #define FPMIN 1.0e-30
@@ -118,7 +121,8 @@ LineSegmentDetector<TInputImage,TPrecision >
   float logNT = 5.*(vcl_log10(static_cast<float>(SizeInput[0])) + vcl_log10(static_cast<float>(SizeInput[1])))/2.;
   float log1_p = vcl_log10(0.125);
   float rapport = logNT/log1_p;
-  m_MinimumRegionSize = -1*static_cast<unsigned int>(rapport);
+  m_MinimumRegionSize = -1*static_cast<unsigned  int>(rapport);
+
   
   /** Definition of the min & the max of an image*/
   OutputPixelType   min = itk::NumericTraits<MagnitudePixelType >::Zero;
@@ -147,7 +151,7 @@ LineSegmentDetector<TInputImage,TPrecision >
   itk::ImageRegionIterator<OutputImageType> it(modulusImage, 
 					       modulusImage->GetRequestedRegion());
     
-  std::cout << "min "<< min<<  " max " << max  << " lengthBin " << lengthBin <<  " et thresh" << m_Threshold << std::endl;
+  //std::cout << "min "<< min<<  " max " << max  << " lengthBin " << lengthBin <<  " et thresh" << m_Threshold << std::endl;
   it.GoToBegin();
   while(!it.IsAtEnd())
     {
@@ -216,9 +220,11 @@ LineSegmentDetector<TInputImage, TPrecision>
   /** Compute the rectangle*/
   CoordinateHistogramIteratorType     ItRegion = m_RegionList.begin();
   DirectionVectorIteratorType         ItDir    =  m_DirectionVector.begin();
-
+  std::cout << " NB DE REGIONS : "<< m_RegionList.size()<< std::endl;
+  
   while(ItRegion != m_RegionList.end() && ItDir !=m_DirectionVector.end() )
     {
+
       this->Region2Rect(*ItRegion, *ItDir );
       ++ItRegion;
       ++ItDir;
@@ -235,7 +241,7 @@ LineSegmentDetector<TInputImage, TPrecision>
        */
       if(NFA > 0./** eps */)
 	{
-	  std::cout << (*itRec)[0] << " " << (*itRec)[1] << " " << (*itRec)[2] << " " << (*itRec)[3]<<std::endl;
+	  //std::cout << (*itRec)[0] << " " << (*itRec)[1] << " " << (*itRec)[2] << " " << (*itRec)[3]<<std::endl;
 	  PointListType pointList;
 	  PointType     point;
 	  
@@ -490,11 +496,11 @@ LineSegmentDetector<TInputImage, TPrecision>
     }/** End Searching loop*/
     
   /** Store the region*/
-  if(reg.size()> m_MinimumRegionSize && reg.size() <static_cast<unsigned int>(m_NumberOfImagePixels/4))
-    {
+  if(reg.size()> m_MinimumRegionSize && reg.size() < static_cast<unsigned int>(m_NumberOfImagePixels/2))
+  {
       m_RegionList.push_back(reg);
       m_DirectionVector.push_back(regionAngle);
-    }
+  }
 }
 
 /**************************************************************************************************************/
@@ -506,16 +512,28 @@ bool
 LineSegmentDetector<TInputImage, TPrecision>
 ::IsAligned(float Angle, float regionAngle, float prec)
 {
+
+ //  if(Angle < 0.) Angle = - Angle;
+//   if(regionAngle < 0.)  regionAngle = -regionAngle ;
+
+//   while(Angle > M_PI) Angle -= M_PI;
+//   while( regionAngle > M_PI)  regionAngle -= M_PI;
+
+//   if(Angle < 0.) Angle = - Angle;
+//   if(regionAngle < 0.)  regionAngle = -regionAngle ;
+
   float diff = Angle - regionAngle;
-  if(diff > 2*M_PI ) diff -= 2*M_PI;
- 
   
   if( diff < 0.0 ) diff = -diff;
+
   if( diff > 1.5*M_PI )
     {
       diff -= 2*M_PI;
       if( diff < 0.0 ) diff = -diff;
     }
+
+
+
 
   return diff < prec;
 }
@@ -541,7 +559,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   NeighborhoodIteratorType                                itNeigh(radius,m_MagnitudeFilter->GetOutput(),
 								  m_MagnitudeFilter->GetOutput()->GetRequestedRegion());
 
-  /** Computing the center iof the rectangle*/
+  /** Computing the center of the rectangle*/
   IndexVectorIteratorType    it = region.begin();
   while(it != region.end())
     {
@@ -570,7 +588,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   typedef std::vector<MagnitudePixelType>                          MagnitudeVector;
   SizeType    sizeInput = this->GetInput()->GetRequestedRegion().GetSize();
 
-  int Diagonal =  2*static_cast<unsigned int>(vcl_sqrt(sizeInput[0]*sizeInput[0] +sizeInput[1]*sizeInput[1])) + 4;
+  int Diagonal =  static_cast<unsigned int>(vcl_sqrt(sizeInput[0]*sizeInput[0] +sizeInput[1]*sizeInput[1])) + 2;
   MagnitudeVector sum_l( 2*Diagonal, itk::NumericTraits<MagnitudePixelType>::Zero);
   MagnitudeVector sum_w( 2*Diagonal, itk::NumericTraits<MagnitudePixelType>::Zero);
   
@@ -582,14 +600,15 @@ LineSegmentDetector<TInputImage, TPrecision>
     {
       itNeigh.SetLocation(*it);
       weight = *itNeigh.GetCenterValue(); 
-      l = ( static_cast<float>((*it)[0]) - x )*dx + ( static_cast<float>((*it)[1]) - y )*dy;
+      l =  ( static_cast<float>((*it)[0]) - x )*dx + ( static_cast<float>((*it)[1]) - y )*dy;
       w = -( static_cast<float>((*it)[0]) - x )*dy + ( static_cast<float>((*it)[1]) - y )*dx;
-      
-      sum_l[static_cast< int>(l+0.5)+ Diagonal ] +=  weight;
-      sum_w[static_cast< int>(w+0.5)+ Diagonal ] +=  weight;
-	
+      	
       if(l<l_min) l_min = l;   if(l>l_max)  l_max = l;
       if(w<w_min) w_min = w;   if(w>w_max)  w_max = w;
+
+      sum_l[static_cast< int>(vcl_floor(l)+0.5)+ Diagonal ] +=  weight;
+      sum_w[static_cast< int>(vcl_floor(w)+0.5)+ Diagonal ] +=  weight;
+      
       ++it;
     }
   
@@ -618,6 +637,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   
   float wl = (static_cast<float>(i-1) - 0.5 ) ;  
 
+
   /** Finally store the rectangle in vector this way : 
    *  vec[0] = x1 
    *  vec[1] = y1
@@ -630,47 +650,20 @@ LineSegmentDetector<TInputImage, TPrecision>
    */
   
   RectangleType          rec(8 ,0.);     // Definition of a rectangle : 8 components
-  rec[0] = x + lb*dx;
-  rec[1] = y + lb*dy;
-  rec[2] = x + lf*dx;
-  rec[3] = y + lf*dy;
+  rec[0] = (x + lb*dx >0)?x + lb*dx:0.;
+  rec[1] = (y + lb*dy>0 )?y + lb*dy:0.;
+  rec[2] = (x + lf*dx >0)?x + lf*dx:0.;
+  rec[3] = (y + lf*dy >0)? y + lf*dy:0;
   rec[4] = vcl_abs(wl - wr);
   rec[5] = theta;
   rec[6] = M_PI/8;
-  rec[7] = 0.125;
+  rec[7] = 1./8.;
   
   if(rec[4] - 1. <1e-10) rec[4] = 1.;
   m_RectangleList.push_back(rec);
 }
 
 /**************************************************************************************************************/
-/*
-  Region inertia matrix A:
-  Ixx Ixy
-  Ixy Iyy
-  where
-  Ixx = \sum_i y_i^2
-  Iyy = \sum_i x_i^2
-  Ixy = -\sum_i x_i y_i
-
-  lambda1 and lambda2 are the eigenvalues, with lambda1 >= lambda2.
-  They are found by solving the characteristic polynomial
-  det(\lambda I - A) = 0.
-
-  To get the line segment direction we want to get the eigenvector of
-  the smaller eigenvalue. We have to solve a,b in:
-  a.Ixx + b.Ixy = a.lambda2
-  a.Ixy + b.Iyy = b.lambda2
-  We want the angle theta = atan(b/a). I can be computed with
-  any of the two equations:
-  theta = atan( (lambda2-Ixx) / Ixy )
-  or
-  theta = atan( Ixy / (lambda2-Iyy) )
-
-  When |Ixx| > |Iyy| we use the first, otherwise the second
-  (just to get better numeric precision).
-*/
-
 template <class TInputImage, class TPrecision  >
 float
 LineSegmentDetector<TInputImage, TPrecision>
@@ -680,7 +673,6 @@ LineSegmentDetector<TInputImage, TPrecision>
   float Ixx = 0.0;
   float Iyy = 0.0;
   float Ixy = 0.0;
-  float lambda1 = 0.,lambda2 = 0.,tmp = 0.;
   float theta = 0.;
   float weight = 0.,sum = 0.;
   
@@ -697,47 +689,38 @@ LineSegmentDetector<TInputImage, TPrecision>
     {
       itNeigh.SetLocation(*it);
       weight = *itNeigh.GetCenterValue(); 
-      float Ixx2 = static_cast<float>((*it)[0]) - x;
-      float Iyy2 = static_cast<float>((*it)[1]) - y;
+      float Iyy2 = static_cast<float>((*it)[0]) - x;
+      float Ixx2 = static_cast<float>((*it)[1]) - y;
       
-      Ixx += vcl_pow(Ixx2 ,2)*weight;
-      Iyy += vcl_pow(Iyy2 ,2)*weight;
+      Ixx += Ixx2*Ixx2*weight;
+      Iyy += Iyy2*Iyy2*weight;
       Ixy -= Ixx2*Iyy2*weight;
       sum +=  weight;
       ++it;
     }
+
+  /** using te itk Eigen analysis*/
+  typedef itk::Matrix<float , 2, 2>    MatrixType;
+  typedef std::vector<float >    MatrixEigenType;
+  MatrixType Inertie, eigenVector;
+  MatrixEigenType  eigenMatrix(2,0.);
+  Inertie[0][0] =Ixx;
+  Inertie[1][1] =Iyy;
+  Inertie[0][1] =Ixy;
+  Inertie[1][0] =Ixy;
   
-  if( sum <= 1e-10 )
-    {  Ixx=0.; Iyy =0.;  Ixy =0.; } 
-  else
-    {
-      Ixx /= sum;
-      Iyy /= sum;
-      Ixy /= sum;
-      lambda1 = ( Ixx+Iyy + vcl_sqrt( (Ixx-Iyy)*(Ixx-Iyy) + 4 * Ixy * Ixy ) ) / 2.0;
-      lambda2 = ( Ixx+Iyy - vcl_sqrt( (Ixx-Iyy)*(Ixx-Iyy) + 4 * Ixy * Ixy ) ) / 2.0;
-    }
-
-  if( vcl_abs(lambda1) < vcl_abs(lambda2) )
-    {
-      tmp = lambda1;
-      lambda1 = lambda2;
-      lambda2 = tmp;
-    }
-
-  if( vcl_fabs(Ixx) > vcl_fabs(Iyy) )
-    theta = vcl_atan2( lambda2 - Ixx , Ixy );
-  else
-    theta = vcl_atan2( Ixy, lambda2 - Iyy );
-
+  typedef itk::SymmetricEigenAnalysis<MatrixType,MatrixEigenType>   EigenAnalysisType;
+  EigenAnalysisType eigenFilter(2) ;
+  eigenFilter.ComputeEigenValuesAndVectors(Inertie,eigenMatrix,eigenVector  );
+  theta = vcl_atan2(eigenVector[1][1], -eigenVector[1][0]);
+  
   /* the previous procedure don't cares orientations,
      so it could be wrong by 180 degrees.
      here is corrected if necessary */
-  float prec = 0.125;
-  //std::cout << "AngleImage" <<theta  << "Angle Region" << angleRegion <<std::endl;
+
+  float prec = M_PI/8;
   if( this->angle_diff(theta,angleRegion) > prec ) theta += M_PI;
 
-  
   return theta;
 }
 
@@ -751,8 +734,8 @@ LineSegmentDetector<TInputImage, TPrecision>
 ::angle_diff(float a, float b)
 {
   a -= b;
-  while( a <= -M_PI ) a += 2.0*M_PI;
-  while( a >   M_PI ) a -= 2.0*M_PI;
+  while( a <= -M_PI ) a += 2*M_PI;
+  while( a >   M_PI ) a -= 2*M_PI;
   if( a < 0.0 ) a = -a;
   return a;
 }
@@ -837,8 +820,6 @@ LineSegmentDetector<TInputImage, TPrecision>
   float logNT = 5.*(vcl_log10(static_cast<float>(SizeInput[0])) + vcl_log10(static_cast<float>(SizeInput[1])))/2.;
   
   nfa_val = NFA(pts,NbAligned ,0.125,logNT);
-  //std::cout <<"Aligned " << NbAligned << " PtsInRegion" << pts << " NFA " << nfa_val <<std::endl;
-
   
   return nfa_val;
 }
