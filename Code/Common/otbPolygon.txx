@@ -29,7 +29,7 @@ Polygon<TValue>
 ::AddVertex(const ContinuousIndexType &vertex)
 {
   Superclass::AddVertex(vertex);
-  surfaceValid=false;
+  m_AreaIsValid=false;
 }
 
 /**
@@ -485,12 +485,12 @@ Polygon<TValue>
 
 
 /**
- * Surface computation (for non convex polygons as well)
+ * Area computation (for non convex polygons as well)
  */
 template<class TValue>
 void
 Polygon<TValue>
-::ComputeSurface() const
+::ComputeArea() const
 {
   VertexListConstIteratorType it =  this->GetVertexList()->Begin();
 
@@ -511,19 +511,19 @@ Polygon<TValue>
       double vector2x = pt2[0] - origin[0];
       double vector2y = pt2[1] - origin[1];
       double crossProdduct = vector1x*vector2y - vector2x*vector1y;
-      m_Surface += crossProdduct;
+      m_Area += crossProdduct;
       it++;
     }
 
-    m_Surface = fabs(m_Surface/2.0);
+    m_Area = fabs(m_Area/2.0);
 
   }
   else //if there is strictly less than 3 points, surface is 0
   {
-    m_Surface = 0.0;
+    m_Area = 0.0;
   }
 
-  surfaceValid = true;
+  m_AreaIsValid = true;
 }
 
 /**
@@ -532,13 +532,13 @@ Polygon<TValue>
 template<class TValue>
     double
     Polygon<TValue>
-  ::GetSurface() const
+  ::GetArea() const
 {
-  if (!surfaceValid)
+  if (!m_AreaIsValid)
   {
-    ComputeSurface();
+    ComputeArea();
   }
-  return m_Surface;
+  return m_Area;
 }
 
 
