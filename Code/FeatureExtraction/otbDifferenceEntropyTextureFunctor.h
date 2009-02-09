@@ -121,7 +121,7 @@ public:
 	    double rVal = (static_cast<double>(r)+0.5)*binsLength[1];
 	    for (unsigned s = 0; s<histo[r].size(); s++)
 	      { 
-		if( vcl_abs( rVal - (static_cast<double>(s)+0.5)*binsLength[0]) < nCeil )
+		if( vcl_abs( rVal - (static_cast<double>(s)+0.5)*binsLength[0] - nCeil ) < vcl_abs( binsLength[0]+binsLength[1]) )
 		  {
 		    Px_y += static_cast<double>(histo[r][s])*areaInv;
 		  }

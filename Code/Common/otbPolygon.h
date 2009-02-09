@@ -126,7 +126,7 @@ public:
   * Return the polygon surface.
   * \return The surface.
   */
-  double GetSurface() const;
+  double GetArea() const;
 
   /**
   * Return the polygon length (perimeter).
@@ -142,8 +142,8 @@ protected:
   Polygon()
   {
     m_Epsilon = 0.000001;
-    m_Surface = -1.0;
-    surfaceValid = false;
+    m_Area = -1.0;
+    m_AreaIsValid = false;
   };
 
   /** Destructor */
@@ -152,15 +152,15 @@ protected:
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  virtual void ComputeSurface() const;
+  virtual void ComputeArea() const;
 
 private:
   Polygon(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   double m_Epsilon;
-  mutable double m_Surface;
-  mutable bool surfaceValid;
+  mutable double m_Area;
+  mutable bool m_AreaIsValid;
 
 };
 }// End namespace otb
