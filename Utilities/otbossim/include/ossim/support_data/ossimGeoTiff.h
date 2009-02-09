@@ -22,7 +22,7 @@
   // #include <stdio.h>
 #include <vector>
 
-#include <tiffio.h>
+#include <itk_tiff.h>
 
 class ossimFilename;
 class ossimKeywordlist;
