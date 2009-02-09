@@ -1203,6 +1203,21 @@ ADD_TEST(feTvDifferenceEntropyTextureFunctor ${FEATUREEXTRACTION_TESTS12}
     2    # offset[1]	
 )
 
+# -------   otb::SumEntropyTextureFunctor  -------------
+ADD_TEST(feTvSumEntropyTextureFunctor ${FEATUREEXTRACTION_TESTS12} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvSumEntropyTextureFunctor.tif
+                ${TEMP}/feTvSumEntropyTextureFunctor.tif
+  otbTextureFunctor
+    SEN #difference entropy
+    ${INPUTDATA}/poupees_sub.png
+    ${TEMP}/feTvSumEntropyTextureFunctor.tif
+    5    # radius
+    -2   # offset[0]
+    2    # offset[1]	
+)
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests13 ~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1343,6 +1358,23 @@ ADD_TEST(feTvDifferenceEntropyTextureImageFunction ${FEATUREEXTRACTION_TESTS13}
     -2   # offset[0]
     2    # offset[1]
  )
+
+
+# -------        otb::SumEntropyTextureImageFunction   -------------
+ADD_TEST(feTvSumEntropyTextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
+--compare-image ${EPS}
+                ${BASELINE}/feTuSumEntropyTextureImageFunction.tif
+                ${TEMP}/feTvSumEntropyTextureImageFunction.tif
+   otbTextureImageFunction
+    SEN #difference entropy
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${TEMP}/feTvSumEntropyTextureImageFunction.tif
+    5    # radius[0]
+    5    # radius[1]
+    -2   # offset[0]
+    2    # offset[1]
+ )
+
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1

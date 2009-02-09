@@ -36,6 +36,7 @@
 #include "otbContrastTextureFunctor.h"
 #include "otbSumAverageTextureFunctor.h"
 #include "otbDifferenceEntropyTextureFunctor.h"
+#include "otbSumEntropyTextureFunctor.h"
 
 
 template<class TInputImage, class TOutputImage, class TFunctor>
@@ -98,7 +99,6 @@ int otbTextureImageFunction(int argc, char * argv[])
 
   if(strArgv == "ENJ")
     {
-      std::cout<<"ENEGRY"<<std::endl;
       typedef otb::Functor::EnergyTextureFunctor<IteratorType, IteratorType, VectorType> FunctorType;
       return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
     }
@@ -140,6 +140,11 @@ int otbTextureImageFunction(int argc, char * argv[])
   else if ( strArgv == "DEN" )
     {
       typedef otb::Functor::DifferenceEntropyTextureFunctor<IteratorType, IteratorType, VectorType> FunctorType;
+      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    }
+  else if ( strArgv == "SEN" )
+    {
+      typedef otb::Functor::SumEntropyTextureFunctor<IteratorType, IteratorType, VectorType> FunctorType;
       return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else

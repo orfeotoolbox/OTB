@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSumAverageTextureFunctor_h
-#define __otbSumAverageTextureFunctor_h
+#ifndef __otbSumEntropyTextureFunctor_h
+#define __otbSumEntropyTextureFunctor_h
 
 #include "otbTextureFunctorBase.h"
 
@@ -24,13 +24,13 @@ namespace otb
 {
 namespace Functor
 {
-/** \class SumAverageTextureFunctor
+/** \class SumEntropyTextureFunctor
  *  \brief This functor calculates the inverse difference moment of an image
  *
  *   Computes joint histogram (neighborhood and offset neighborhood) 
  *   which bins are computing using Scott formula.
  *   Computes the probabiltiy p for each pair of pixel.
- *   InverseDifferenceMoment  is the sum 1/(1+(pi-poff)²)*p over the neighborhood.
+ *   InverseSumMoment  is the sum 1/(1+(pi-poff)²)*p over the neighborhood.
  *   TIterInput is an ietrator, TOutput is a PixelType.
  *
  *  \ingroup Functor
@@ -38,12 +38,12 @@ namespace Functor
  *  \ingroup Statistics
  */
 template <class TIterInput1, class TIterInput2, class TOutput>
-class ITK_EXPORT SumAverageTextureFunctor : 
+class ITK_EXPORT SumEntropyTextureFunctor : 
 public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>
 {
 public:
-  SumAverageTextureFunctor(){};
-  ~SumAverageTextureFunctor(){};
+  SumEntropyTextureFunctor(){};
+  ~SumEntropyTextureFunctor(){};
 
   typedef TIterInput1                           IterType1;
   typedef TIterInput2                           IterType2;
@@ -56,7 +56,7 @@ public:
   typedef std::vector<double>                   DoubleVectorType;
   typedef std::vector<int>                      IntVectorType;
   typedef std::vector<IntVectorType>            IntVectorVectorType;
- 
+
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
@@ -113,6 +113,7 @@ public:
     // loop over bin neighborhood values
     for (unsigned sB = 0; sB<histo[0].size(); sB++)
       { 
+	double Px_y = 0.;
 	double nCeil = (static_cast<double>(sB)+0.5)*binsLength[0];
 	for (unsigned r = 0; r<histo.size(); r++)
 	  {
@@ -120,25 +121,25 @@ public:
 	    for (unsigned s = 0; s<histo[r].size(); s++)
 	      { 
 		double sVal = (static_cast<double>(s)+0.5)*binsLength[0];
-		// In theory don't have the abs but will deals with neighborhood and offset without the same histo
-		// thus loop over 2*Ng don't have sense
-		//if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(binsLength[0]+binsLength[1]) || vcl_abs(rVal + sVal - 2*nCeil) < vcl_abs(binsLength[0]+binsLength[1]) )
-		if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(binsLength[0]) || vcl_abs(rVal + sVal - 2*nCeil) < 2*vcl_abs(binsLength[0]) )
+		if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(binsLength[0]) || vcl_abs(rVal + sVal - 2*nCeil) < vcl_abs(binsLength[0]) )
 		  {
-		    double p =  static_cast<double>(histo[r][s])*areaInv;
-		    out += nCeil * p;
+		    Px_y +=  static_cast<double>(histo[r][s])*areaInv;
 		  }
 	      }
 	  }
+	if(Px_y != 0.)
+	  out += Px_y * vcl_log(Px_y);
       }
     
+      
+    if(out != 0)
+      out = -out;
+
   
     return out;  
   }
   
 };
- 
- 
  
  
 } // namespace Functor
