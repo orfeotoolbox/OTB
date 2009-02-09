@@ -496,6 +496,7 @@ Polygon<TValue>
 
   if (this->GetVertexList()->Size()>2)
   {
+    double area=0.0;
     VertexType origin = it.Value();
     it++;
     VertexType pt1 = it.Value();
@@ -511,11 +512,11 @@ Polygon<TValue>
       double vector2x = pt2[0] - origin[0];
       double vector2y = pt2[1] - origin[1];
       double crossProdduct = vector1x*vector2y - vector2x*vector1y;
-      m_Area += crossProdduct;
+      area += crossProdduct;
       it++;
     }
 
-    m_Area = fabs(m_Area/2.0);
+    m_Area = fabs(area/2.0);
 
   }
   else //if there is strictly less than 3 points, surface is 0
