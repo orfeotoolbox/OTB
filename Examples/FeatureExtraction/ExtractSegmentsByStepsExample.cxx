@@ -44,6 +44,7 @@
 #include "otbLocalHoughFilter.h"
 #include "otbFillGapsFilter.h"
 #include "otbDrawLineSpatialObjectListFilter.h"
+#include "otbLineSegmentDetector.h"
 #include "itkRescaleIntensityImageFilter.h"
 
 #include "otbLineSpatialObjectList.h"
@@ -111,7 +112,10 @@ int main( int argc, char * argv[] )
   InternalImageType >  DetectorType;
   typedef otb::PixelSuppressionByDirectionImageFilter< InternalImageType,
   InternalImageType >   PixelSuppressionType;
-  typedef otb::LocalHoughFilter< InternalImageType >        LocalHoughType;
+  //typedef otb::LocalHoughFilter< InternalImageType >        LocalHoughType;
+
+  typedef otb::LineSegmentDetector<InternalImageType, InternalPixelType>            LocalHoughType;
+  
   typedef otb::FillGapsFilter             FillGapsType;
   typedef otb::DrawLineSpatialObjectListFilter< InternalImageType,
   OutputImageType >  DrawLineListType;
@@ -196,7 +200,7 @@ int main( int argc, char * argv[] )
 
   rescaler->SetInput(pixelSuppression->GetOutput() );
 
-  localHough->SetInput( rescaler->GetOutput() );
+  localHough->SetInput( pixelSuppression->GetOutput() );
 
   fillGaps->SetInput ( localHough->GetOutput() );
 
@@ -243,12 +247,12 @@ int main( int argc, char * argv[] )
   pixelSuppression->SetRadius( PixelSuppressionRadius );
   pixelSuppression->SetAngularBeam( PixelSuppressionAngularBeam );
 
-  PixelSuppressionType::SizeType LocalHoughRadius;
-  LocalHoughRadius[0] = LocalHoughRadiusX;
-  LocalHoughRadius[1] = LocalHoughRadiusY;
+  //PixelSuppressionType::SizeType LocalHoughRadius;
+  //LocalHoughRadius[0] = LocalHoughRadiusX;
+  //LocalHoughRadius[1] = LocalHoughRadiusY;
 
-  localHough->SetRadius( LocalHoughRadius );
-  localHough->SetNumberOfLines( LocalHoughNumberOfLines );
+  //localHough->SetRadius( LocalHoughRadius );
+  //localHough->SetNumberOfLines( LocalHoughNumberOfLines );
 
   fillGaps->SetRadius( FillGapsRadius );
   fillGaps->SetAngularBeam( FillGapsAngularBeam );

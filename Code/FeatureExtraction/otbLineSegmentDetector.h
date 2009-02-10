@@ -25,7 +25,9 @@
 #include "itkPointSet.h"
 
 #include "itkUnaryFunctorImageFilter.h"
-#include "itkGradientImageFilter.h"
+#include "itkGradientRecursiveGaussianImageFilter.h"
+
+#include "otbImageFileWriter.h"
 
 namespace otb
 {
@@ -42,7 +44,7 @@ namespace Functor
 	
 	inline TOutputPixel operator()(const TInputPixel& input)
 	  {
-	    return vcl_sqrt(input[0]*input[0] + input[1]*input[1] );
+	    return 2*vcl_sqrt(input[0]*input[0] + input[1]*input[1] );
 	  }
       };
     
@@ -58,19 +60,21 @@ namespace Functor
 	inline TOutputPixel operator()(const TInputPixel& input)
 	  {
 	    TOutputPixel resp = vcl_atan2(input[0],-input[1]);
- 	    if (resp<0) 
- 	      { 
- 		resp = -resp; 
- 	      } 
+ 	    if (resp<0)
+ 	      {
+ 		resp = -resp;
+ 	      }
 	    
 	    return resp;
 	  }
       };
   }// end namespace Functor
+
 /** \class LineSegmentDetector
- *  \brief this class implement a fast line detector with false detection control
- *
- *
+ *  \brief this class implement a fast line detector with false detection control using 
+ *         the a contrario method
+ *  
+ *  See Publication : " LSD: A line segment detector ", R. Grompone, J.Jackubowicz, J-M.Morel, G.Randall 
  * 
  */
 
@@ -125,7 +129,7 @@ public:
   typedef typename DirectionVectorType::iterator                        DirectionVectorIteratorType; 
 
   /** */ 
-  typedef itk::GradientImageFilter<InputImageType,InputPixelType,InputPixelType > GradientFilterType;
+  typedef itk::GradientRecursiveGaussianImageFilter<InputImageType > GradientFilterType;
   typedef typename GradientFilterType::Pointer GradientFilterPointerType;
   typedef typename GradientFilterType::OutputImageType GradientOutputImageType;
 
@@ -134,6 +138,7 @@ public:
   Functor::MagnitudeFunctor<typename GradientOutputImageType::PixelType,typename  InputImageType::PixelType> > MagnitudeFilterType;
   typedef typename MagnitudeFilterType::Pointer                                   MagnitudeFilterPointerType;
   typedef typename MagnitudeFilterType::OutputImageType::PixelType                MagnitudePixelType;
+  typedef typename MagnitudeFilterType::OutputImageType                           MagnitudeImageType;
             
   typedef itk::UnaryFunctorImageFilter<GradientOutputImageType,InputImageType,
   Functor::OrientationFunctor<typename GradientOutputImageType::PixelType,typename InputImageType::PixelType> > OrientationFilterType;
@@ -150,6 +155,10 @@ public:
   typedef typename RectangleType::iterator                          RectangleIteratorType;
   typedef std::vector< RectangleType>                               RectangleListType;
   typedef typename RectangleListType::iterator                      RectangleListTypeIterator; 
+
+  //typedef otb::ImageFileWriter<MagnitudeImageType  >                writerType;
+  //typedef typename writerType::Pointer                              writerPointerType;
+
 protected:
   LineSegmentDetector();
   virtual ~LineSegmentDetector() {};
@@ -195,7 +204,7 @@ protected:
   virtual float ComputeRectNFA(RectangleType  rec);
 
   /** */
-  virtual float ImproveRectangle(RectangleType  * rec , float NFA);
+  virtual float ImproveRectangle(RectangleType  * rec);
 
   /** NFA For a rectangle*/
   virtual float NFA(int n, int k, double p, double logNT);
@@ -204,7 +213,7 @@ protected:
   virtual void CopyRectangle(RectangleType * rDst , RectangleType  *rSrc );
   
 
-  /** Rutines from numerical recipies*/
+  /** Rutines from numerical recipes*/
   virtual float betacf(float a, float b, float x);
   virtual float gammln(float xx);
   virtual float betai(float a, float b, float x);
@@ -223,6 +232,8 @@ private:
   RectangleListType                 m_RectangleList;
   
   float                             m_Threshold;
+  float                             m_Prec;
+  float                             m_DirectionsAllowed;
   unsigned int                      m_MinimumRegionSize;
   unsigned int                      m_NumberOfImagePixels;
   
@@ -237,6 +248,8 @@ private:
 
   /** Output*/
   LineSpatialObjectListPointer      m_LineList;
+
+  
   
   
 };
