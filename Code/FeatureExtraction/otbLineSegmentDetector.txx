@@ -83,7 +83,7 @@ LineSegmentDetector<TInputImage,TPrecision >
 
   /** Compute the modulus and the orientation gradient image*/
   m_GradientFilter->SetInput(this->GetInput());
-  m_GradientFilter->SetSigma(2.);
+  m_GradientFilter->SetSigma(1.4);
   m_MagnitudeFilter->SetInput(m_GradientFilter->GetOutput());
     
   m_OrientationFilter->SetInput(m_GradientFilter->GetOutput());
@@ -239,8 +239,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   RectangleListTypeIterator            itRec = m_RectangleList.begin();
   while(itRec != m_RectangleList.end())
     {
-      float NFA = this->ComputeRectNFA(*itRec);
-      NFA = this->ImproveRectangle(&(*itRec) , NFA);
+      float NFA = this->ImproveRectangle(&(*itRec) );
       /**
        * Here we start building the OUTPUT :a LineSpatialObjectList. 
        */
@@ -296,7 +295,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 template <class TInputImage, class TPrecision  >
 float
 LineSegmentDetector<TInputImage, TPrecision>
-:: ImproveRectangle(RectangleType  * rec , float NFA)
+:: ImproveRectangle(RectangleType  * rec)
 {
   int n = 0;
   float nfa_new;
@@ -304,6 +303,8 @@ LineSegmentDetector<TInputImage, TPrecision>
   float delta_2 = delta / 2.0;
   RectangleType r;
 
+  float NFA = this->ComputeRectNFA(*rec);
+  
   if( NFA > 0. ) return NFA;
  
   /*Try to improve the precison of the oriented */

@@ -204,7 +204,7 @@ protected:
   virtual float ComputeRectNFA(RectangleType  rec);
 
   /** */
-  virtual float ImproveRectangle(RectangleType  * rec , float NFA);
+  virtual float ImproveRectangle(RectangleType  * rec);
 
   /** NFA For a rectangle*/
   virtual float NFA(int n, int k, double p, double logNT);
