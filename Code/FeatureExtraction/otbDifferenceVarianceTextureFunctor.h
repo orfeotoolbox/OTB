@@ -58,8 +58,6 @@ public:
     this->ComputeJointHistogram(neigh, neighOff);
     double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
     double areaInv = 1/area;
-    double out = 0.;
-
 
     double MeanPx_y = 0.;
     // Computes mean Px_y
