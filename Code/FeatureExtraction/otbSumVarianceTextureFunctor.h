@@ -19,6 +19,7 @@
 #define __otbSumVarianceTextureFunctor_h
 
 #include "otbTextureFunctorBase.h"
+#include "otbSumAverageTextureFunctor.h"
 
 namespace otb
 {
@@ -38,7 +39,7 @@ namespace Functor
  */
 template <class TIterInput1, class TIterInput2, class TOutput>
 class ITK_EXPORT SumVarianceTextureFunctor : 
-public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>
+public SumAverageTextureFunctor<TIterInput1, TIterInput2, TOutput>
 {
 public:
   SumVarianceTextureFunctor(){};
@@ -50,60 +51,40 @@ public:
   typedef typename IterType1::InternalPixelType InternalPixelType;
   typedef typename IterType1::ImageType         ImageType;
   typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
-
+  typedef SumAverageTextureFunctor<TIterInput1, TIterInput2, TOutput> SuperClass;
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
-    this->ComputeJointHistogram(neigh, neighOff);
+    double f6 = SuperClass::ComputeOverSingleChannel(neigh, neighOff);
+   
     double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
     double areaInv = 1/area;
     double out = 0.;
-    // loop over bin neighborhood values
-    double f6 = 0.;
     for (unsigned sB = 0; sB<this->GetHisto()[0].size(); sB++)
       { 
 	double nCeil = (static_cast<double>(sB)+0.5)*this->GetNeighBinLength();
-	for (unsigned r = 0; r<this->GetHisto().size(); r++)
-	  {
-	    double rVal = (static_cast<double>(r)+0.5)*this->GetOffsetBinLength();
-	    for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-	      { 
-		double sVal = (static_cast<double>(s)+0.5)*this->GetNeighBinLength();
-		// In theory don't have the abs but will deals with neighborhood and offset without the same this->GetHisto()
-		// thus loop over 2*Ng don't have sense
-		//if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(binsLength[0]+binsLength[1]) || vcl_abs(rVal + sVal - 2*nCeil) < vcl_abs(binsLength[0]+binsLength[1]) )
-		if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(this->GetNeighBinLength()) || vcl_abs(rVal + sVal - 2*nCeil) < 2*vcl_abs(this->GetNeighBinLength()) )
-		  {
-		    double p =  static_cast<double>(this->GetHisto()[r][s])*areaInv;
-		    f6 += nCeil * p;
-		  }
-	      }
-	  }
-      }
-    
-    // loop over bin neighborhood values
-    for (unsigned sB = 0; sB<this->GetHisto()[0].size(); sB++)
-      { 
+	double nCeil2 = (static_cast<double>(sB)+this->GetHisto()[0].size()+0.5)*this->GetNeighBinLength();
 	double Px_y = 0.;
-	double nCeil = (static_cast<double>(sB)+0.5)*this->GetNeighBinLength();
-	double coef = vcl_pow( (nCeil-f6), 2);
+	double Px_y2 = 0.;
 	for (unsigned r = 0; r<this->GetHisto().size(); r++)
 	  {
 	    double rVal = (static_cast<double>(r)+0.5)*this->GetOffsetBinLength();
 	    for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
 	      { 
 		double sVal = (static_cast<double>(s)+0.5)*this->GetNeighBinLength();
-		if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(this->GetNeighBinLength()) || vcl_abs(rVal + sVal - 2*nCeil) < vcl_abs(this->GetNeighBinLength()) )
+		if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(this->GetNeighBinLength()) )
 		  {
 		    Px_y +=  static_cast<double>(this->GetHisto()[r][s])*areaInv;
 		  }
+		if( vcl_abs(rVal + sVal - nCeil2) < vcl_abs(this->GetNeighBinLength()) )
+		  {
+		    Px_y2 +=  static_cast<double>(this->GetHisto()[r][s])*areaInv;
+		  }
 	      }
 	  }
-	
-	out += coef * Px_y;
+	out += vcl_pow((nCeil-f6), 2)*Px_y + vcl_pow((nCeil2-f6), 2)*Px_y2;
       }
-    
-    
+  
     return out;
   }
 };
