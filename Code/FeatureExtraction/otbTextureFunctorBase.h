@@ -221,8 +221,7 @@ public:
       
       int histoIdX = 0;
       int histoIdY = 0;
-      double out = 0.;
-      
+          
       IntVectorType histoTemp;
       if (m_NeighBinLength != 0)
 	histoTemp = IntVectorType( vcl_floor( static_cast<double>(this->GetMaxi()-this->GetMini())/m_NeighBinLength)+1., 0);
