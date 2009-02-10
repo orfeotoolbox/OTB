@@ -35,8 +35,6 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/dxflib
   ${OTB_SOURCE_DIR}/Utilities/InsightJournal
   ${OTB_SOURCE_DIR}/Utilities/otb6S
-  ${OTB_SOURCE_DIR}/Utilities/otbgeotiff
-  ${OTB_SOURCE_DIR}/Utilities/otbgeotiff/libxtiff
   ${OTB_SOURCE_DIR}/Utilities/tinyXMLlib
 #  ${OTB_SOURCE_DIR}/Utilities/otbgalib
   ${OTB_SOURCE_DIR}/Utilities/otbkml
@@ -49,7 +47,8 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otbedison/segm
   ${OTB_SOURCE_DIR}/Utilities/otbedison/prompt
   ${OTB_SOURCE_DIR}/Utilities/otbedison/edge
-  ${OTB_SOURCE_DIR}/Utilities/otbsiftfast
+  ${OTB_SOURCE_DIR}/Utilities/otbsiftfast		
+
 )
 IF(OTB_COMPILE_JPEG2000)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
@@ -207,8 +206,6 @@ SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossimplugins
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/InsightJournal
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otb6S
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbgeotiff
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbgeotiff/libxtiff
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/tinyXMLlib
 #  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbgalib
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml

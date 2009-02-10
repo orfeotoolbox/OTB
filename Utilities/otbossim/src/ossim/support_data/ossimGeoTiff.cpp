@@ -33,8 +33,7 @@
 #include <ossim/base/ossimTieGptSet.h>
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/base/ossimUnitTypeLut.h>
-#include <itk_tiff.h>
-//#include <tiffio.h>
+#include <tiffio.h>
 #include <xtiffio.h>
 #include <geotiff.h>
 #include <geo_normalize.h>

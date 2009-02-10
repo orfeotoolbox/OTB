@@ -52,8 +52,6 @@ IF(WIN32)
   ENDIF(NOT BORLAND)
 ENDIF(WIN32)
 
-INCLUDE_DIRECTORIES(${OTB_BINARY_DIR}/Utilities/otbgeotiff/)
-
 ADD_CUSTOM_COMMAND(
   OUTPUT ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h
   DEPENDS version-config
@@ -84,7 +82,7 @@ ${ossim_imaging_SRCS}
 ${ossim_parallel_SRCS}
 ${ossim_elevation_SRCS}
 )
-TARGET_LINK_LIBRARIES(otbossim otbgeotiff otbxtiff itktiff itkjpeg8 itkjpeg12 itkjpeg16 OpenThreads)
+TARGET_LINK_LIBRARIES(otbossim ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} itkjpeg8 itkjpeg12 itkjpeg16 OpenThreads)
 
 INSTALL(TARGETS otbossim
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
