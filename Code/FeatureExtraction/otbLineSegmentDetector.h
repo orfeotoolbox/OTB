@@ -64,8 +64,6 @@ namespace Functor
  	      {
  		resp = -resp;
  	      }
-/* 	    if(resp<0.1) */
-/* 	      resp = 0; */
 	    
 	    return resp;
 	  }
@@ -73,9 +71,10 @@ namespace Functor
   }// end namespace Functor
 
 /** \class LineSegmentDetector
- *  \brief this class implement a fast line detector with false detection control
- *
- *
+ *  \brief this class implement a fast line detector with false detection control using 
+ *         the a contrario method
+ *  
+ *  See Publication : " LSD: A line segment detector ", R. Grompone, J.Jackubowicz, J-M.Morel, G.Randall 
  * 
  */
 
@@ -214,7 +213,7 @@ protected:
   virtual void CopyRectangle(RectangleType * rDst , RectangleType  *rSrc );
   
 
-  /** Rutines from numerical recipies*/
+  /** Rutines from numerical recipes*/
   virtual float betacf(float a, float b, float x);
   virtual float gammln(float xx);
   virtual float betai(float a, float b, float x);
@@ -233,6 +232,8 @@ private:
   RectangleListType                 m_RectangleList;
   
   float                             m_Threshold;
+  float                             m_Prec;
+  float                             m_DirectionsAllowed;
   unsigned int                      m_MinimumRegionSize;
   unsigned int                      m_NumberOfImagePixels;
   
@@ -247,6 +248,8 @@ private:
 
   /** Output*/
   LineSpatialObjectListPointer      m_LineList;
+
+  
   
   
 };
