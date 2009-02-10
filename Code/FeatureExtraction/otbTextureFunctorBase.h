@@ -89,9 +89,8 @@ public:
   IntVectorVectorType GetHisto(){ return m_Histo; };
 
  /** Computes the histogram bins using Scott formula, plus min/max, means, stds */
-  DoubleVectorType StatComputation(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
+  void StatComputation(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
     {
-      DoubleVectorType output;
       double binLength    = 0;
       double binLengthOff =0;
       m_Mean = 0.;
@@ -159,13 +158,9 @@ public:
       binLengthOff = vcl_sqrt( binLengthOff );
       m_Std = binLength;
       m_StdOff = binLengthOff;
-      output.push_back( scottCoef*binLength );
-      output.push_back( scottCoef*binLengthOff );
 
       m_NeighBinLength = scottCoef*binLength;
-      m_OffsetBinLength = scottCoef*binLengthOff;
-      
-      return output;
+      m_OffsetBinLength = scottCoef*binLengthOff;     
     }
 
   inline TOutput operator()(const IterType1 &it, const IterType2 &itOff)
@@ -211,7 +206,7 @@ public:
 
   void ComputeJointHistogram(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
     {
-      DoubleVectorType binsLength = this->StatComputation(neigh, neighOff);
+      this->StatComputation(neigh, neighOff);
       
       RadiusType radius = neigh.GetRadius();
       double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
@@ -229,12 +224,12 @@ public:
       double out = 0.;
       
       IntVectorType histoTemp;
-      if (binsLength[0] != 0)
+      if (m_NeighBinLength != 0)
 	histoTemp = IntVectorType( vcl_floor( static_cast<double>(this->GetMaxi()-this->GetMini())/m_NeighBinLength)+1., 0);
       else
 	histoTemp = IntVectorType( 1, 0 );
       
-      if (binsLength[1] != 0)
+      if (m_OffsetBinLength != 0)
         m_Histo = IntVectorVectorType( vcl_floor(static_cast<double>(this->GetMaxiOff()-this->GetMiniOff())/m_OffsetBinLength)+1., histoTemp );
       else
 	m_Histo = IntVectorVectorType( 1, histoTemp );
@@ -251,9 +246,9 @@ public:
 	      offset[1] = k;
 	      histoIdX = 0;
 	      histoIdY = 0;
-	      if ( binsLength[1] != 0)
+	      if ( m_OffsetBinLength != 0)
 		histoIdX = static_cast<int>(vcl_floor( (static_cast<double>(neighOff[offsetOff])-this->GetMiniOff()) / static_cast<double>(m_OffsetBinLength) ));
-	      if ( binsLength[0] !=0 )
+	      if ( m_NeighBinLength !=0 )
 		histoIdY = static_cast<int>(vcl_floor( (static_cast<double>(neigh[offset])-this->GetMini()) /static_cast<double>( m_NeighBinLength) ));
 	      
 	      m_Histo[histoIdX][histoIdY]++;

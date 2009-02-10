@@ -47,85 +47,34 @@ public:
   typedef TIterInput1                           IterType1;
   typedef TIterInput2                           IterType2;
   typedef TOutput                               OutputType;
-  typedef typename IterType1::OffsetType        OffsetType;
-  typedef typename IterType1::RadiusType        RadiusType;
   typedef typename IterType1::InternalPixelType InternalPixelType;
   typedef typename IterType1::ImageType         ImageType;
   typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
-  typedef std::vector<double>                   DoubleVectorType;
-  typedef std::vector<int>                      IntVectorType;
-  typedef std::vector<IntVectorType>            IntVectorVectorType;
 
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
-    DoubleVectorType binsLength = this->StatComputation(neigh, neighOff);
-
-    RadiusType radius = neigh.GetRadius();
+    this->ComputeJointHistogram(neigh, neighOff);
     double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
     double areaInv = 1/area;
-    OffsetType offset;
-    offset.Fill(0);
-    OffsetType offsetOff;
-    OffsetType offsetOffInit;
-
-    offsetOffInit[0] = -radius[0]+this->GetOffset()[0]-1;
-    offsetOffInit[1] = -radius[1]+this->GetOffset()[1]-1;
-
-    int histoIdX = 0;
-    int histoIdY = 0;
     double out = 0.;
-
-    IntVectorType histoTemp;
-    IntVectorVectorType histo;
-    if (binsLength[0] != 0)
-      histoTemp = IntVectorType( vcl_floor( static_cast<double>(this->GetMaxi()-this->GetMini())/binsLength[0])+1., 0);
-    else
-      histoTemp = IntVectorType( 1, 0 );
-    if (binsLength[1] != 0)
-        histo = IntVectorVectorType( vcl_floor(static_cast<double>(this->GetMaxiOff()-this->GetMiniOff())/binsLength[1])+1., histoTemp );
-    else
-      histo = IntVectorVectorType( 1, histoTemp );
-    
-    offsetOff = offsetOffInit;
-    for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
-	{
-	  offsetOff[0]++;
-	  offsetOff[1] = offsetOffInit[1];
-	  offset[0] = l;
-	  for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
-	    {
-	      offsetOff[1]++;
-	      offset[1] = k;
-	      histoIdX = 0;
-	      histoIdY = 0;
-	      if ( binsLength[1] != 0)
-		histoIdX = static_cast<int>(vcl_floor( (static_cast<double>(neighOff[offsetOff])-this->GetMiniOff()) / static_cast<double>(binsLength[1]) ));
-	      if ( binsLength[0] !=0 )
-		histoIdY = static_cast<int>(vcl_floor( (static_cast<double>(neigh[offset])-this->GetMini()) /static_cast<double>( binsLength[0]) ));
-	      
-	      histo[histoIdX][histoIdY]++;
-	      
-	    }
-	}
-  
     // loop over bin neighborhood values
     double f6 = 0.;
-    for (unsigned sB = 0; sB<histo[0].size(); sB++)
+    for (unsigned sB = 0; sB<this->GetHisto()[0].size(); sB++)
       { 
-	double nCeil = (static_cast<double>(sB)+0.5)*binsLength[0];
-	for (unsigned r = 0; r<histo.size(); r++)
+	double nCeil = (static_cast<double>(sB)+0.5)*this->GetNeighBinLength();
+	for (unsigned r = 0; r<this->GetHisto().size(); r++)
 	  {
-	    double rVal = (static_cast<double>(r)+0.5)*binsLength[1];
-	    for (unsigned s = 0; s<histo[r].size(); s++)
+	    double rVal = (static_cast<double>(r)+0.5)*this->GetOffsetBinLength();
+	    for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
 	      { 
-		double sVal = (static_cast<double>(s)+0.5)*binsLength[0];
-		// In theory don't have the abs but will deals with neighborhood and offset without the same histo
+		double sVal = (static_cast<double>(s)+0.5)*this->GetNeighBinLength();
+		// In theory don't have the abs but will deals with neighborhood and offset without the same this->GetHisto()
 		// thus loop over 2*Ng don't have sense
 		//if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(binsLength[0]+binsLength[1]) || vcl_abs(rVal + sVal - 2*nCeil) < vcl_abs(binsLength[0]+binsLength[1]) )
-		if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(binsLength[0]) || vcl_abs(rVal + sVal - 2*nCeil) < 2*vcl_abs(binsLength[0]) )
+		if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(this->GetNeighBinLength()) || vcl_abs(rVal + sVal - 2*nCeil) < 2*vcl_abs(this->GetNeighBinLength()) )
 		  {
-		    double p =  static_cast<double>(histo[r][s])*areaInv;
+		    double p =  static_cast<double>(this->GetHisto()[r][s])*areaInv;
 		    f6 += nCeil * p;
 		  }
 	      }
@@ -133,20 +82,20 @@ public:
       }
     
     // loop over bin neighborhood values
-    for (unsigned sB = 0; sB<histo[0].size(); sB++)
+    for (unsigned sB = 0; sB<this->GetHisto()[0].size(); sB++)
       { 
 	double Px_y = 0.;
-	double nCeil = (static_cast<double>(sB)+0.5)*binsLength[0];
+	double nCeil = (static_cast<double>(sB)+0.5)*this->GetNeighBinLength();
 	double coef = vcl_pow( (nCeil-f6), 2);
-	for (unsigned r = 0; r<histo.size(); r++)
+	for (unsigned r = 0; r<this->GetHisto().size(); r++)
 	  {
-	    double rVal = (static_cast<double>(r)+0.5)*binsLength[1];
-	    for (unsigned s = 0; s<histo[r].size(); s++)
+	    double rVal = (static_cast<double>(r)+0.5)*this->GetOffsetBinLength();
+	    for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
 	      { 
-		double sVal = (static_cast<double>(s)+0.5)*binsLength[0];
-		if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(binsLength[0]) || vcl_abs(rVal + sVal - 2*nCeil) < vcl_abs(binsLength[0]) )
+		double sVal = (static_cast<double>(s)+0.5)*this->GetNeighBinLength();
+		if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(this->GetNeighBinLength()) || vcl_abs(rVal + sVal - 2*nCeil) < vcl_abs(this->GetNeighBinLength()) )
 		  {
-		    Px_y +=  static_cast<double>(histo[r][s])*areaInv;
+		    Px_y +=  static_cast<double>(this->GetHisto()[r][s])*areaInv;
 		  }
 	      }
 	  }

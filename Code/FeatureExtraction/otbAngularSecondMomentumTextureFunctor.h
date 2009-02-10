@@ -74,10 +74,7 @@ public:
 
 };
 
-
-
-
-  } // namespace Functor
+} // namespace Functor
 } // namespace otb
 
 #endif
