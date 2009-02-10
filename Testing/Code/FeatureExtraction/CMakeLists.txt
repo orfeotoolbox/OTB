@@ -1217,7 +1217,35 @@ ADD_TEST(feTvSumEntropyTextureFunctor ${FEATUREEXTRACTION_TESTS12}
     2    # offset[1]	
 )
 
+# -------   otb::SumVarianceTextureFunctor  -------------
+ADD_TEST(feTvSumVarianceTextureFunctor ${FEATUREEXTRACTION_TESTS12} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvSumVarianceTextureFunctor.tif
+                ${TEMP}/feTvSumVarianceTextureFunctor.tif
+  otbTextureFunctor
+    SVA #sum variance	
+    ${INPUTDATA}/poupees_sub.png
+    ${TEMP}/feTvSumVarianceTextureFunctor.tif
+    5    # radius
+    -2   # offset[0]
+    2    # offset[1]	
+)
 
+# -------   otb::DifferenceVarianceTextureFunctor  -------------
+ADD_TEST(feTvDifferenceVarianceTextureFunctor ${FEATUREEXTRACTION_TESTS12} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvDifferenceVarianceTextureFunctor.tif
+                ${TEMP}/feTvDifferenceVarianceTextureFunctor.tif
+  otbTextureFunctor
+    DVA #difference variance	
+    ${INPUTDATA}/poupees_sub.png
+    ${TEMP}/feTvDifferenceVarianceTextureFunctor.tif
+    5    # radius
+    -2   # offset[0]
+    2    # offset[1]	
+)
+
+   
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests13 ~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1363,12 +1391,42 @@ ADD_TEST(feTvDifferenceEntropyTextureImageFunction ${FEATUREEXTRACTION_TESTS13}
 # -------        otb::SumEntropyTextureImageFunction   -------------
 ADD_TEST(feTvSumEntropyTextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
 --compare-image ${EPS}
-                ${BASELINE}/feTuSumEntropyTextureImageFunction.tif
+                ${BASELINE}/feTvSumEntropyTextureImageFunction.tif
                 ${TEMP}/feTvSumEntropyTextureImageFunction.tif
    otbTextureImageFunction
     SEN #difference entropy
     ${INPUTDATA}/poupees_sub_c1.png
     ${TEMP}/feTvSumEntropyTextureImageFunction.tif
+    5    # radius[0]
+    5    # radius[1]
+    -2   # offset[0]
+    2    # offset[1]
+)
+
+# -------        otb::SumVarianceTextureImageFunction   -------------
+ADD_TEST(feTvSumVarianceTextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvSumVarianceTextureImageFunction.tif
+                ${TEMP}/feTvSumVarianceTextureImageFunction.tif
+   otbTextureImageFunction
+    SVA #sum variance
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${TEMP}/feTvSumVarianceTextureImageFunction.tif
+    5    # radius[0]
+    5    # radius[1]
+    -2   # offset[0]
+    2    # offset[1]
+ )
+
+# -------        otb::DifferenceVarianceTextureImageFunction   -------------
+ADD_TEST(feTvDifferenceVarianceTextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvDifferenceVarianceTextureImageFunction.tif
+                ${TEMP}/feTvDifferenceVarianceTextureImageFunction.tif
+   otbTextureImageFunction
+    DVA #difference variance
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${TEMP}/feTvDifferenceVarianceTextureImageFunction.tif
     5    # radius[0]
     5    # radius[1]
     -2   # offset[0]

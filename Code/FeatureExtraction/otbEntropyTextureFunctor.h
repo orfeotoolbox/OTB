@@ -47,73 +47,22 @@ public:
   typedef TIterInput1                           IterType1;
   typedef TIterInput2                           IterType2;
   typedef TOutput                               OutputType;
-  typedef typename IterType1::OffsetType        OffsetType;
-  typedef typename IterType1::RadiusType        RadiusType;
   typedef typename IterType1::InternalPixelType InternalPixelType;
   typedef typename IterType1::ImageType         ImageType;
   typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
-  typedef std::vector<double>                   DoubleVectorType;
-  typedef std::vector<int>                      IntVectorType;
-  typedef std::vector<IntVectorType>            IntVectorVectorType;
 
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
-    DoubleVectorType binsLength = this->StatComputation(neigh, neighOff);
-
-    RadiusType radius = neigh.GetRadius();
+    this->ComputeJointHistogram(neigh, neighOff);
     double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
     double areaInv = 1/area;
-    OffsetType offset;
-    offset.Fill(0);
-    OffsetType offsetOff;
-    OffsetType offsetOffInit;
-
-    offsetOffInit[0] = -radius[0]+this->GetOffset()[0]-1;
-    offsetOffInit[1] = -radius[1]+this->GetOffset()[1]-1;
-
-    int histoIdX = 0;
-    int histoIdY = 0;
     double out = 0.;
-
-    IntVectorType histoTemp;
-    IntVectorVectorType histo;
-    if (binsLength[0] != 0)
-      histoTemp = IntVectorType( vcl_floor( static_cast<double>(this->GetMaxi()-this->GetMini())/binsLength[0])+1., 0);
-    else
-      histoTemp = IntVectorType( 1, 0 );
-    if (binsLength[1] != 0)
-        histo = IntVectorVectorType( vcl_floor(static_cast<double>(this->GetMaxiOff()-this->GetMiniOff())/binsLength[1])+1., histoTemp );
-    else
-      histo = IntVectorVectorType( 1, histoTemp );
-    
-    offsetOff = offsetOffInit;
-    for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
+      for (unsigned r = 0; r<this->GetHisto().size(); r++)
 	{
-	  offsetOff[0]++;
-	  offsetOff[1] = offsetOffInit[1];
-	  offset[0] = l;
-	  for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+	  for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
 	    {
-	      offsetOff[1]++;
-	      offset[1] = k;
-	      histoIdX = 0;
-	      histoIdY = 0;
-	      if ( binsLength[1] != 0)
-		histoIdX = static_cast<int>(vcl_floor( (static_cast<double>(neighOff[offsetOff])-this->GetMiniOff()) / static_cast<double>(binsLength[1]) ));
-	      if ( binsLength[0] !=0 )
-		histoIdY = static_cast<int>(vcl_floor( (static_cast<double>(neigh[offset])-this->GetMini()) /static_cast<double>( binsLength[0]) ));
-	      
-	      histo[histoIdX][histoIdY]++;
-	      
-	    }
-	}
-
-      for (unsigned r = 0; r<histo.size(); r++)
-	{
-	  for (unsigned s = 0; s<histo[r].size(); s++)
-	    {
-	      double p = static_cast<double>(histo[r][s]) * areaInv;
+	      double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
 	      if (p != 0)
 		out += (p * vcl_log(p));
 	    }
@@ -125,10 +74,7 @@ public:
   }
 };
 
-
-
-
-  } // namespace Functor
+} // namespace Functor
 } // namespace otb
 
 #endif

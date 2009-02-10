@@ -23,12 +23,14 @@
 #include "itkNumericTraits.h"
 #include "itkMinimumMaximumImageCalculator.h"
 #include "itkConstNeighborhoodIterator.h"
+#include "itkNeighborhoodIterator.h"
 #include "otbPolygon.h"
 
 #include "otbMath.h"
 
 #include "itkMatrix.h"
 #include "itkSymmetricEigenAnalysis.h"
+
 
 #define MAXIT 100
 #define EPS 3.0e-7
@@ -44,6 +46,9 @@ template <class TInputImage, class TPrecision>
 LineSegmentDetector<TInputImage,TPrecision >
 ::LineSegmentDetector()
 {
+
+  m_DirectionsAllowed = 1./8.;
+  m_Prec = M_PI * m_DirectionsAllowed;
   m_Threshold = 2.;
 
   /** Compute the modulus and the orientation gradient images */
@@ -51,10 +56,10 @@ LineSegmentDetector<TInputImage,TPrecision >
   m_MagnitudeFilter = MagnitudeFilterType::New();
   m_OrientationFilter = OrientationFilterType::New();
 
-  /** */
+  /** Image to store the pixels used 0:NotUsed  1:USED*/
   m_UsedPointImage  = LabelImageType::New();
 
-  /** */
+  /** A Line List : This is the output*/
   LineSpatialObjectListType::Pointer m_LineList = LineSpatialObjectListType::New();
 }
 
@@ -78,8 +83,9 @@ LineSegmentDetector<TInputImage,TPrecision >
 
   /** Compute the modulus and the orientation gradient image*/
   m_GradientFilter->SetInput(this->GetInput());
-  m_GradientFilter->SetUseImageDirection(true);
+  m_GradientFilter->SetSigma(1.4);
   m_MagnitudeFilter->SetInput(m_GradientFilter->GetOutput());
+    
   m_OrientationFilter->SetInput(m_GradientFilter->GetOutput());
   m_MagnitudeFilter->Update();
   m_OrientationFilter->Update();
@@ -93,8 +99,8 @@ LineSegmentDetector<TInputImage,TPrecision >
   
   /** 
    * Compute The rectangles 
-   * Out : a List of rectangles : m_RectangleList
-   * 
+   * Out : - a List of rectangles : m_RectangleList
+   *       - A Line List m_LineList 
    */
   this->ComputeRectangles();
 
@@ -115,12 +121,11 @@ LineSegmentDetector<TInputImage,TPrecision >
   SizeType     SizeInput = this->GetInput()->GetRequestedRegion().GetSize();
   m_NumberOfImagePixels  = SizeInput[0]*SizeInput[1];
 
-  /** Define constants 
-   *  prec = M_PI/8  : 8 is the number off direction allowed
-   *  p =1/8 
+  /** 
+   *  Compute the minimum region size 
    */
   float logNT = 5.*(vcl_log10(static_cast<float>(SizeInput[0])) + vcl_log10(static_cast<float>(SizeInput[1])))/2.;
-  float log1_p = vcl_log10(0.125);
+  float log1_p = vcl_log10(m_DirectionsAllowed);
   float rapport = logNT/log1_p;
   m_MinimumRegionSize = -1*static_cast<unsigned  int>(rapport);
 
@@ -140,8 +145,7 @@ LineSegmentDetector<TInputImage,TPrecision >
   max = minmaxCalculator->GetMaximum();
   
   /** Compute the threshold on the gradient*/
-  float d = 8.;                                                    // d : the number of allowed directions
-  m_Threshold = 4*m_Threshold /vcl_sin(M_PI/d)*((max-min)/255.);     // threshold normalized with min & max of the values
+  m_Threshold = 4*m_Threshold /vcl_sin(m_Prec)*((max-min)/255.);     // threshold normalized with min & max of the values
 
   /** Computing the length of the bins*/  
   unsigned int NbBin = 10;  
@@ -235,12 +239,11 @@ LineSegmentDetector<TInputImage, TPrecision>
   RectangleListTypeIterator            itRec = m_RectangleList.begin();
   while(itRec != m_RectangleList.end())
     {
-      float NFA = this->ComputeRectNFA(*itRec);
-      //NFA = this->ImproveRectangle(&(*itRec) , NFA);
+      float NFA = this->ImproveRectangle(&(*itRec) );
       /**
        * Here we start building the OUTPUT :a LineSpatialObjectList. 
        */
-      if(NFA > -2./** eps */)
+      if(NFA > 0./** eps */)
 	{
 	  //std::cout << (*itRec)[0] << " " << (*itRec)[1] << " " << (*itRec)[2] << " " << (*itRec)[3]<<std::endl;
 	  PointListType pointList;
@@ -268,7 +271,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 
 /**************************************************************************************************************/
 /**
- *
+ *  Copy o a rectangle rSrc in a rectangle rDst
  */
 template <class TInputImage, class TPrecision  >
 void
@@ -286,12 +289,13 @@ LineSegmentDetector<TInputImage, TPrecision>
 
 /**************************************************************************************************************/
 /**
- * Method used to compute improve the NFA of The rectangle
+ * Method used to compute improve the NFA of The rectangle by changing 
+ * the components of the rectangle
  */
 template <class TInputImage, class TPrecision  >
 float
 LineSegmentDetector<TInputImage, TPrecision>
-:: ImproveRectangle(RectangleType  * rec , float NFA)
+:: ImproveRectangle(RectangleType  * rec)
 {
   int n = 0;
   float nfa_new;
@@ -299,6 +303,8 @@ LineSegmentDetector<TInputImage, TPrecision>
   float delta_2 = delta / 2.0;
   RectangleType r;
 
+  float NFA = this->ComputeRectNFA(*rec);
+  
   if( NFA > 0. ) return NFA;
  
   /*Try to improve the precison of the oriented */
@@ -394,7 +400,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 
 /**************************************************************************************************************/
 /**
- * Method IsUsed : Determine if a point exists in the pointSet of already computed points.
+ * Method IsUsed : Determine if a point was used or not. search in the m_LabelImage
  */
 template <class TInputImage, class TPrecision  >
 bool
@@ -416,8 +422,10 @@ LineSegmentDetector<TInputImage, TPrecision>
   return isUsed;
 }
 
+/**************************************************************************************************************/
+
 /**
- * Method SetPixelToUsed : Determine if a point exists in the pointSet of already computed points.
+ * Method SetPixelToUsed : Seta pixel to used
  */
 template <class TInputImage, class TPrecision  >
 void
@@ -435,7 +443,8 @@ LineSegmentDetector<TInputImage, TPrecision>
 
 /**************************************************************************************************************/
 /**
- * Method GrowRegion : 
+ * Method GrowRegion : From a seed grow the region to find a connected region with the same orientation 
+ * within a precision (m_Prec)
  */
 template <class TInputImage, class TPrecision  >
 void
@@ -482,9 +491,8 @@ LineSegmentDetector<TInputImage, TPrecision>
 	{
 	  InputIndexType NeighIndex = itNeigh.GetIndex(s);
 	  float angleComp =   itNeighDir.GetPixel(s);
-	  float prec = M_PI/8;
 
-	  if( !this->IsUsed(NeighIndex) && this->IsAligned(angleComp, regionAngle ,prec) )
+	  if( !this->IsUsed(NeighIndex) && this->IsAligned(angleComp, regionAngle, m_Prec) )
 	    {
 	      if(this->GetInput()->GetRequestedRegion().IsInside(NeighIndex))  /** Check if the index is inside the image*/
 		{
@@ -506,27 +514,16 @@ LineSegmentDetector<TInputImage, TPrecision>
 
 /**************************************************************************************************************/
 /**
- *
+ *  The method atan2 gives values of angles modulo PI, put the angle in a rang [0,Pi]
  */
 template <class TInputImage, class TPrecision  >
 bool
 LineSegmentDetector<TInputImage, TPrecision>
 ::IsAligned(float Angle, float regionAngle, float prec)
 {
-
- //  if(Angle < 0.) Angle = - Angle;
-//   if(regionAngle < 0.)  regionAngle = -regionAngle ;
-
-//   while(Angle > M_PI) Angle -= M_PI;
-//   while( regionAngle > M_PI)  regionAngle -= M_PI;
-
-//   if(Angle < 0.) Angle = - Angle;
-//   if(regionAngle < 0.)  regionAngle = -regionAngle ;
-
   float diff = Angle - regionAngle;
   
   if( diff < 0.0 ) diff = -diff;
-
   if( diff > 1.5*M_PI )
     {
       diff -= 2*M_PI;
@@ -538,7 +535,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 
 /**************************************************************************************************************/
 /**
- *
+ *  compute the best rectangle possible that 
  */
 template <class TInputImage, class TPrecision  >
 void
@@ -651,17 +648,21 @@ LineSegmentDetector<TInputImage, TPrecision>
   rec[0] = (x + lb*dx >0)?x + lb*dx:0.;
   rec[1] = (y + lb*dy >0)?y + lb*dy:0.;
   rec[2] = (x + lf*dx >0)?x + lf*dx:0.;
-  rec[3] = (y + lf*dy >0)? y + lf*dy:0;
+  rec[3] = (y + lf*dy >0)?y + lf*dy:0;
   rec[4] = wl - wr;
   rec[5] = theta;
-  rec[6] = M_PI/8;
-  rec[7] = 1./8.;
+  rec[6] = m_Prec;
+  rec[7] = m_DirectionsAllowed;
   
   if(rec[4] - 1. <1e-10) rec[4] = 1.;
   m_RectangleList.push_back(rec);
 }
 
 /**************************************************************************************************************/
+/**
+ * Compute the orientation of a region , using an eigen Value analysis.
+ */
+
 template <class TInputImage, class TPrecision  >
 float
 LineSegmentDetector<TInputImage, TPrecision>
@@ -702,8 +703,8 @@ LineSegmentDetector<TInputImage, TPrecision>
   typedef std::vector<float >    MatrixEigenType;
   MatrixType Inertie, eigenVector;
   MatrixEigenType  eigenMatrix(2,0.);
-  Inertie[0][0] =Ixx;
-  Inertie[1][1] =Iyy;
+  Inertie[1][1] =Ixx;
+  Inertie[0][0] =Iyy;
   Inertie[0][1] =Ixy;
   Inertie[1][0] =Ixy;
   
@@ -716,8 +717,7 @@ LineSegmentDetector<TInputImage, TPrecision>
      so it could be wrong by 180 degrees.
      here is corrected if necessary */
 
-  float prec = M_PI/8;
-  if( this->angle_diff(theta,angleRegion) > prec ) theta += M_PI;
+  if( this->angle_diff(theta,angleRegion) > m_Prec ) theta += M_PI;
 
   return theta;
 }
@@ -738,6 +738,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   return a;
 }
 
+/**************************************************************************************************************/
 /**
  * compute the number of false alarm of the rectangle 
  */
@@ -776,7 +777,6 @@ LineSegmentDetector<TInputImage, TPrecision>
   X[3] = rec[2] - dy* halfWidth ;
   Y[3] = rec[3] + dx* halfWidth ;
 
-  //std::cout << " rectangle : " << rec[0]  << " " << rec[1]  << " " << rec[2] << " " << rec[3]<<  " et width"<<  rec[4]<<  std::endl;
 
   /** Compute the NFA of the rectangle  
    *  We Need : The number of : Points in the rec  (Area of the rectangle)
@@ -792,7 +792,6 @@ LineSegmentDetector<TInputImage, TPrecision>
     {
       InputIndexType   vertex;
       vertex[0] = X[i] ; vertex[1] = Y[i];
-      //std::cout << vertex << std::endl;
       rectangle->AddVertex(vertex);
     }
   
@@ -820,7 +819,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   SizeType     SizeInput = this->GetInput()->GetRequestedRegion().GetSize();
   float logNT = 5.*(vcl_log10(static_cast<float>(SizeInput[0])) + vcl_log10(static_cast<float>(SizeInput[1])))/2.;
   
-  nfa_val = NFA(pts,NbAligned ,0.125,logNT);
+  nfa_val = NFA(pts,NbAligned ,m_DirectionsAllowed,logNT);
   
   return nfa_val;
 }
@@ -964,7 +963,10 @@ LineSegmentDetector<TInputImage, TPrecision>
   if (n <= 100) return a[n] ? a[n] : (a[n]=this->gammln(n+1.0));
   else return this->gammln(n+1.0);
 }
-/*--------------------------------------------------------------------------------------------------------*/
+
+/*********************    end Numerical Recipes functions         **************************************************************************/
+/**************************************************************************************************************/
+
 } // end namespace otb
 
 #endif

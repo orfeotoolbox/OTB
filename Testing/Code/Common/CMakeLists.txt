@@ -270,6 +270,11 @@ ADD_TEST(coTuPathListToHistogramGeneratorNew ${COMMON_TESTS3}
 ADD_TEST(coTuPathListToHistogramGenerator ${COMMON_TESTS3}
          otbPathListToHistogramGenerator 100 2)
 
+# -------            otb::LineSpatialObjectListToPointSetFilter   ------------------------------
+
+ADD_TEST(coTuLineSpatialObjectListToPointSetFilter ${COMMON_TESTS3}
+         otbLineSpatialObjectListToPointSetFilterNew)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -599,6 +604,7 @@ otbDrawLineSpatialObjectList.cxx
 otbImageToLineSpatialObjectListNew.cxx
 otbPathListToHistogramGeneratorNew.cxx
 otbPathListToHistogramGenerator.cxx
+otbLineSpatialObjectListToPointSetFilterNew.cxx
 )
 SET(BasicCommon_SRCS4
 otbHistogramStatisticsFunction.cxx
