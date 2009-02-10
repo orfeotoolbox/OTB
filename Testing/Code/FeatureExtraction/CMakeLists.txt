@@ -1397,7 +1397,7 @@ ADD_TEST(feTvSumVarianceTextureImageFunction ${FEATUREEXTRACTION_TESTS13}
    otbTextureImageFunction
     SVA #sum variance
     ${INPUTDATA}/poupees_sub_c1.png
-    ${TEMP}/feTvSumVairanceTextureImageFunction.tif
+    ${TEMP}/feTvSumVarianceTextureImageFunction.tif
     5    # radius[0]
     5    # radius[1]
     -2   # offset[0]
