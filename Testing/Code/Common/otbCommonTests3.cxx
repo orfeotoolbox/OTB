@@ -36,4 +36,5 @@ void RegisterTests()
   REGISTER_TEST(otbImageToLineSpatialObjectListNew);
   REGISTER_TEST(otbPathListToHistogramGeneratorNew);
   REGISTER_TEST(otbPathListToHistogramGenerator);
+  REGISTER_TEST(otbLineSpatialObjectListToPointSetFilterNew);
 }
