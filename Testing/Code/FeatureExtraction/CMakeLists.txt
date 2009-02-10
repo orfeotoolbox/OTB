@@ -1391,7 +1391,7 @@ ADD_TEST(feTvDifferenceEntropyTextureImageFunction ${FEATUREEXTRACTION_TESTS13}
 # -------        otb::SumEntropyTextureImageFunction   -------------
 ADD_TEST(feTvSumEntropyTextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
 --compare-image ${EPS}
-                ${BASELINE}/feTuSumEntropyTextureImageFunction.tif
+                ${BASELINE}/feTvSumEntropyTextureImageFunction.tif
                 ${TEMP}/feTvSumEntropyTextureImageFunction.tif
    otbTextureImageFunction
     SEN #difference entropy
@@ -1406,7 +1406,7 @@ ADD_TEST(feTvSumEntropyTextureImageFunction ${FEATUREEXTRACTION_TESTS13}
 # -------        otb::SumVarianceTextureImageFunction   -------------
 ADD_TEST(feTvSumVarianceTextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
 --compare-image ${EPS}
-                ${BASELINE}/feTuSumVarianceTextureImageFunction.tif
+                ${BASELINE}/feTvSumVarianceTextureImageFunction.tif
                 ${TEMP}/feTvSumVarianceTextureImageFunction.tif
    otbTextureImageFunction
     SVA #sum variance
@@ -1421,7 +1421,7 @@ ADD_TEST(feTvSumVarianceTextureImageFunction ${FEATUREEXTRACTION_TESTS13}
 # -------        otb::DifferenceVarianceTextureImageFunction   -------------
 ADD_TEST(feTvDifferenceVarianceTextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
 --compare-image ${EPS}
-                ${BASELINE}/feTuDifferenceVarianceTextureImageFunction.tif
+                ${BASELINE}/feTvDifferenceVarianceTextureImageFunction.tif
                 ${TEMP}/feTvDifferenceVarianceTextureImageFunction.tif
    otbTextureImageFunction
     DVA #difference variance
