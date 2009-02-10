@@ -108,23 +108,36 @@ public:
 	      
 	    }
 	}
-    
-    for (unsigned r = 0; r<histo.size(); r++)
-      {
-	for (unsigned s = 0; s<histo[r].size(); s++)
+  
+    // loop over bin neighborhood values
+    double f6 = 0.;
+    for (unsigned sB = 0; sB<histo[0].size(); sB++)
+      { 
+	double nCeil = (static_cast<double>(sB)+0.5)*binsLength[0];
+	for (unsigned r = 0; r<histo.size(); r++)
 	  {
-	    double p = static_cast<double>(histo[r][s]) * areaInv;
-	    double square = vcl_pow( ( ( (static_cast<double>(s)+0.5)*binsLength[0] ) - this->GetMean()), 2);
-	    out += square*p;
+	    double rVal = (static_cast<double>(r)+0.5)*binsLength[1];
+	    for (unsigned s = 0; s<histo[r].size(); s++)
+	      { 
+		double sVal = (static_cast<double>(s)+0.5)*binsLength[0];
+		// In theory don't have the abs but will deals with neighborhood and offset without the same histo
+		// thus loop over 2*Ng don't have sense
+		//if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(binsLength[0]+binsLength[1]) || vcl_abs(rVal + sVal - 2*nCeil) < vcl_abs(binsLength[0]+binsLength[1]) )
+		if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(binsLength[0]) || vcl_abs(rVal + sVal - 2*nCeil) < 2*vcl_abs(binsLength[0]) )
+		  {
+		    double p =  static_cast<double>(histo[r][s])*areaInv;
+		    f6 += nCeil * p;
+		  }
+	      }
 	  }
       }
-
-    /*
-  // loop over bin neighborhood values
+    
+    // loop over bin neighborhood values
     for (unsigned sB = 0; sB<histo[0].size(); sB++)
       { 
 	double Px_y = 0.;
 	double nCeil = (static_cast<double>(sB)+0.5)*binsLength[0];
+	double coef = vcl_pow( (nCeil-f6), 2);
 	for (unsigned r = 0; r<histo.size(); r++)
 	  {
 	    double rVal = (static_cast<double>(r)+0.5)*binsLength[1];
@@ -137,10 +150,10 @@ public:
 		  }
 	      }
 	  }
-	if(Px_y != 0.)
-	  out += Px_y * vcl_log(Px_y);
+	
+	out += coef * Px_y;
       }
-    */
+    
     
     return out;
   }

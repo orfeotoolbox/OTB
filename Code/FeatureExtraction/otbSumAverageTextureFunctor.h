@@ -114,25 +114,28 @@ public:
     for (unsigned sB = 0; sB<histo[0].size(); sB++)
       { 
 	double nCeil = (static_cast<double>(sB)+0.5)*binsLength[0];
+	double nCeil2 = (static_cast<double>(sB)+histo[0].size()+0.5)*binsLength[0];
+	double Px_y = 0.;
+	double Px_y2 = 0.;
 	for (unsigned r = 0; r<histo.size(); r++)
 	  {
 	    double rVal = (static_cast<double>(r)+0.5)*binsLength[1];
 	    for (unsigned s = 0; s<histo[r].size(); s++)
 	      { 
 		double sVal = (static_cast<double>(s)+0.5)*binsLength[0];
-		// In theory don't have the abs but will deals with neighborhood and offset without the same histo
-		// thus loop over 2*Ng don't have sense
-		//if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(binsLength[0]+binsLength[1]) || vcl_abs(rVal + sVal - 2*nCeil) < vcl_abs(binsLength[0]+binsLength[1]) )
-		if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(binsLength[0]) || vcl_abs(rVal + sVal - 2*nCeil) < 2*vcl_abs(binsLength[0]) )
+		if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(binsLength[0]) )
 		  {
-		    double p =  static_cast<double>(histo[r][s])*areaInv;
-		    out += nCeil * p;
+		    Px_y += static_cast<double>(histo[r][s])*areaInv;
+		  }
+		if( vcl_abs(rVal + sVal - nCeil2) < vcl_abs(binsLength[0]) )
+		  {
+		    Px_y2 += static_cast<double>(histo[r][s])*areaInv;
 		  }
 	      }
 	  }
+	out += nCeil * Px_y + nCeil2 * Px_y2;
       }
-    
-  
+ 
     return out;  
   }
   
