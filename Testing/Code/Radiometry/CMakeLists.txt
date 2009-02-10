@@ -17,6 +17,7 @@ SET(RADIOMETRY_TESTS3 ${CXX_TEST_PATH}/otbRadiometryTests3)
 SET(RADIOMETRY_TESTS4 ${CXX_TEST_PATH}/otbRadiometryTests4)
 SET(RADIOMETRY_TESTS5 ${CXX_TEST_PATH}/otbRadiometryTests5)
 SET(RADIOMETRY_TESTS6 ${CXX_TEST_PATH}/otbRadiometryTests6)
+SET(RADIOMETRY_TESTS7 ${CXX_TEST_PATH}/otbRadiometryTests7)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -701,9 +702,27 @@ ADD_TEST(raTvWDVIMultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TEST
         2.0   # g : slope of soil line
 )
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS7 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# -------            otb::GAndRIndexImageFilter   ------------------------------
+ADD_TEST(raTuGAndRIndexImageFilterNew ${RADIOMETRY_TESTS7}
+        otbGAndRIndexImageFilterNew )
+
+# -------            otb::MultiChannelGAndRIndexImageFilter   ------------------------------
+ADD_TEST(raTuMultiChannelGAndRIndexImageFilterNew ${RADIOMETRY_TESTS7}
+        otbMultiChannelGAndRIndexImageFilterNew )
+
+ ADD_TEST(raTvRI_MultiChannelGAndRIndexImageFilter ${RADIOMETRY_TESTS7}  
+   --compare-image ${TOL}   ${BASELINE}/raMultiChannelGAndRIndex_IR_spot5SubWithGcps.tif
+                     ${TEMP}/raMultiChannelGAndRIndex_IR_spot5SubWithGcps.tif
+         otbMultiChannelGAndRIndexImageFilter
+         IR
+     ${INPUTDATA}/spot5SubWithGcps.tif
+     ${TEMP}/raMultiChannelGAndRIndex_IR_spot5SubWithGcps.tif
+     1 2
+)
 
 # A enrichir
 SET(Radiometry_SRCS1
@@ -761,6 +780,11 @@ otbWDVIRAndNIRVegetationIndexImageFilter.cxx
 otbWDVIMultiChannelRAndNIRVegetationIndexImageFilter.cxx
 )
 
+SET(Radiometry_SRCS7
+otbGAndRIndexImageFilterNew.cxx
+otbMultiChannelGAndRIndexImageFilterNew.cxx
+otbMultiChannelGAndRIndexImageFilter.cxx
+)
 
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
@@ -777,5 +801,7 @@ ADD_EXECUTABLE(otbRadiometryTests5 otbRadiometryTests5.cxx ${Radiometry_SRCS5})
 TARGET_LINK_LIBRARIES(otbRadiometryTests5 OTBRadiometry OTBIO)
 ADD_EXECUTABLE(otbRadiometryTests6 otbRadiometryTests6.cxx ${Radiometry_SRCS6})
 TARGET_LINK_LIBRARIES(otbRadiometryTests6 OTBRadiometry OTBIO)
+ADD_EXECUTABLE(otbRadiometryTests7 otbRadiometryTests7.cxx ${Radiometry_SRCS7})
+TARGET_LINK_LIBRARIES(otbRadiometryTests7 OTBRadiometry OTBIO)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
