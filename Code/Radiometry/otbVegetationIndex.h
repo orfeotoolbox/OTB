@@ -54,7 +54,7 @@ public:
   /// Constructor
   RAndNIRIndexBase() : m_RedIndex(3), m_NIRIndex(4) {};
   /// Desctructor
-  ~RAndNIRIndexBase() {};
+  virtual ~RAndNIRIndexBase() {};
   
   /// Set Red Index
   void SetRedIndex(unsigned int channel)
@@ -115,7 +115,7 @@ public:
   /// Constructor
   RAndBAndNIRIndexBase() : m_RedIndex(3), m_BlueIndex(1), m_NIRIndex(4) {};
   /// Desctructor
-  ~RAndBAndNIRIndexBase() {};
+  virtual ~RAndBAndNIRIndexBase() {};
   
   /// Set Red Index
   void SetRedIndex(unsigned int channel)
@@ -188,7 +188,7 @@ public:
   /// Constructor
   RAndGAndNIRIndexBase() : m_RedIndex(3), m_GreenIndex(2), m_NIRIndex(4) {};
   /// Desctructor
-  ~RAndGAndNIRIndexBase() {};
+  virtual ~RAndGAndNIRIndexBase() {};
   
   /// Set Red Index
   void SetRedIndex(unsigned int channel)
@@ -606,32 +606,27 @@ protected:
 
     double dfact1 = (m_LambdaNir - m_LambdaR) / m_LambdaR;
     double dfact2 = (m_LambdaR - m_LambdaG) / m_LambdaR;
-    double ddenom1;
-    double ddenom2;
+    double dterm1;
+    double dterm2;
     if( (dnir-dr) == 0 )
     {
-      ddenom1 = 0;
+      dterm1 = 0;
     }
     else
     {
-      ddenom1 = vcl_tan(dfact1/(dnir - dr));
+      dterm1 = vcl_atan(dfact1/(dnir - dr));
     }
 
     if( (dg-dr) == 0 )
     {
-      ddenom2 = 0;
+      dterm2 = 0;
     }
     else
     {
-      ddenom2 = vcl_tan(dfact2/(dg - dr));
+      dterm2 = vcl_atan(dfact2/(dg - dr));
     }
 
-    if (  ddenom2 == 0 || ddenom1 == 0 )
-    {
-      return ( static_cast<TOutput> (0) );
-    }
-    else
-      return ( static_cast<TOutput> (1/ddenom1 + 1/ddenom2) );
+    return static_cast<TOutput>( dterm1 + dterm2 );
 
   }
 private:

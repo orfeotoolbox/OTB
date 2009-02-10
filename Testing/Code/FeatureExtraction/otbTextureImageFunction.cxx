@@ -37,6 +37,9 @@
 #include "otbSumAverageTextureFunctor.h"
 #include "otbDifferenceEntropyTextureFunctor.h"
 #include "otbSumEntropyTextureFunctor.h"
+#include "otbSumVarianceTextureFunctor.h"
+#include "otbDifferenceVarianceTextureFunctor.h"
+
 
 
 template<class TInputImage, class TOutputImage, class TFunctor>
@@ -145,6 +148,16 @@ int otbTextureImageFunction(int argc, char * argv[])
   else if ( strArgv == "SEN" )
     {
       typedef otb::Functor::SumEntropyTextureFunctor<IteratorType, IteratorType, VectorType> FunctorType;
+      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    }
+  else if ( strArgv == "SVA" )
+    {
+      typedef otb::Functor::SumVarianceTextureFunctor<IteratorType, IteratorType, VectorType> FunctorType;
+      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    }
+  else if ( strArgv == "DVA" )
+    {
+      typedef otb::Functor::DifferenceVarianceTextureFunctor<IteratorType, IteratorType, VectorType> FunctorType;
       return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else
