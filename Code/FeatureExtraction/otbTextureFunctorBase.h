@@ -54,6 +54,9 @@ public:
     m_MeanOff = 0.;
     m_Std = 0.;
     m_StdOff = 0.;
+    m_NeighBinLength = 0;
+    m_OffsetBinLength = 0;
+    m_Histo.clear();
   };
   ~TextureFunctorBase() {};
 
@@ -67,6 +70,9 @@ public:
   typedef typename IterType1::ImageType         ImageType;
   typedef itk::Neighborhood<InternalPixelType, ::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
   typedef std::vector<double>                   DoubleVectorType;
+  typedef std::vector<int>                      IntVectorType;
+  typedef std::vector<IntVectorType>            IntVectorVectorType;
+
 
   void SetOffset(OffsetType off){ m_Offset=off; };
   OffsetType GetOffset(){ return m_Offset; };
@@ -77,12 +83,14 @@ public:
   double GetMean(){ return m_Mean; };
   double GetMeanOff(){ return m_MeanOff; };
   double GetStd(){ return m_Std; };
-  double GetStdOff(){ return m_StdOff; };
+  double GetStdOff(){ return m_StdOff;};
+  double GetNeighBinLength(){ return m_NeighBinLength; };
+  double GetOffsetBinLength(){ return m_OffsetBinLength; };
+  IntVectorVectorType GetHisto(){ return m_Histo; };
 
  /** Computes the histogram bins using Scott formula, plus min/max, means, stds */
-  DoubleVectorType StatComputation(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
+  void StatComputation(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
     {
-      DoubleVectorType output;
       double binLength    = 0;
       double binLengthOff =0;
       m_Mean = 0.;
@@ -150,10 +158,9 @@ public:
       binLengthOff = vcl_sqrt( binLengthOff );
       m_Std = binLength;
       m_StdOff = binLengthOff;
-      output.push_back( scottCoef*binLength );
-      output.push_back( scottCoef*binLengthOff );
 
-      return output;
+      m_NeighBinLength = scottCoef*binLength;
+      m_OffsetBinLength = scottCoef*binLengthOff;     
     }
 
   inline TOutput operator()(const IterType1 &it, const IterType2 &itOff)
@@ -197,6 +204,59 @@ public:
       return outPix;
     }
 
+  void ComputeJointHistogram(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
+    {
+      this->StatComputation(neigh, neighOff);
+      
+      RadiusType radius = neigh.GetRadius();
+      double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
+      double areaInv = 1/area;
+      OffsetType offset;
+      offset.Fill(0);
+      OffsetType offsetOff;
+      OffsetType offsetOffInit;
+      
+      offsetOffInit[0] = -radius[0]+this->GetOffset()[0]-1;
+      offsetOffInit[1] = -radius[1]+this->GetOffset()[1]-1;
+      
+      int histoIdX = 0;
+      int histoIdY = 0;
+      double out = 0.;
+      
+      IntVectorType histoTemp;
+      if (m_NeighBinLength != 0)
+	histoTemp = IntVectorType( vcl_floor( static_cast<double>(this->GetMaxi()-this->GetMini())/m_NeighBinLength)+1., 0);
+      else
+	histoTemp = IntVectorType( 1, 0 );
+      
+      if (m_OffsetBinLength != 0)
+        m_Histo = IntVectorVectorType( vcl_floor(static_cast<double>(this->GetMaxiOff()-this->GetMiniOff())/m_OffsetBinLength)+1., histoTemp );
+      else
+	m_Histo = IntVectorVectorType( 1, histoTemp );
+      
+      offsetOff = offsetOffInit;
+      for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
+	{
+	  offsetOff[0]++;
+	  offsetOff[1] = offsetOffInit[1];
+	  offset[0] = l;
+	  for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+	    {
+	      offsetOff[1]++;
+	      offset[1] = k;
+	      histoIdX = 0;
+	      histoIdY = 0;
+	      if ( m_OffsetBinLength != 0)
+		histoIdX = static_cast<int>(vcl_floor( (static_cast<double>(neighOff[offsetOff])-this->GetMiniOff()) / static_cast<double>(m_OffsetBinLength) ));
+	      if ( m_NeighBinLength !=0 )
+		histoIdY = static_cast<int>(vcl_floor( (static_cast<double>(neigh[offset])-this->GetMini()) /static_cast<double>( m_NeighBinLength) ));
+	      
+	      m_Histo[histoIdX][histoIdY]++;
+	      
+	    }
+	}
+    }
+
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff) = 0;
  
  private:
@@ -213,6 +273,11 @@ public:
   /** Stores standard deviation of neighborhood+offset */
   double m_Std;
   double m_StdOff;
+  /** Bins length */
+  double m_NeighBinLength;
+  double m_OffsetBinLength;
+  /** Joint histogramm */
+  IntVectorVectorType m_Histo;
 };
 
 
