@@ -71,8 +71,8 @@ public:
 	  }
     }
     
-    double meanPOff = sumProb/this->GetHisto().size();
-    double meanPNeigh = sumProb/this->GetHisto()[0].size();
+    double meanPOff = sumProb/static_cast<double>(this->GetHisto().size());
+    double meanPNeigh = sumProb/static_cast<double>(this->GetHisto()[0].size());
    
     // Standard deviation of p for offset region
     double stdPOff = 0.;
@@ -81,7 +81,7 @@ public:
 	double sumTemp = 0.;
 	for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
 	  {
-	    sumTemp += this->GetHisto()[r][s];
+	    sumTemp += this->GetHisto()[r][s]*areaInv;
 	  }
 	stdPOff +=  vcl_pow( (meanPOff-sumTemp), 2);
       }
@@ -95,7 +95,7 @@ public:
 	double sumTemp = 0.;
 	for (unsigned s = 0; s<this->GetHisto().size(); s++)
 	  {
-	    sumTemp += this->GetHisto()[s][r];
+	    sumTemp += this->GetHisto()[s][r]*areaInv;
 	  }
 	stdPNeigh +=  vcl_pow( (meanPNeigh-sumTemp), 2);
       }
