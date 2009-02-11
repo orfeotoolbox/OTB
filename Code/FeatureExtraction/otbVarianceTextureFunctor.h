@@ -18,7 +18,7 @@
 #ifndef __otbVarianceTextureFunctor_h
 #define __otbVarianceTextureFunctor_h
 
-#include "otbTextureFunctorBase.h"
+#include "otbMeanTextureFunctor.h"
 
 namespace otb
 {
@@ -38,7 +38,7 @@ namespace Functor
  */
 template <class TIterInput1, class TIterInput2, class TOutput>
 class ITK_EXPORT VarianceTextureFunctor : 
-public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>
+public MeanTextureFunctor<TIterInput1, TIterInput2, TOutput>
 {
 public:
   VarianceTextureFunctor(){};
@@ -50,11 +50,12 @@ public:
   typedef typename IterType1::InternalPixelType InternalPixelType;
   typedef typename IterType1::ImageType         ImageType;
   typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
-
+  typedef MeanTextureFunctor<TIterInput1, TIterInput2, TOutput> Superclass;
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
     this->ComputeJointHistogram(neigh, neighOff);
+    double mean = Superclass::ComputeOverSingleChannel(neigh, neighOff);
     double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
     double areaInv = 1/area;
     double out = 0.;

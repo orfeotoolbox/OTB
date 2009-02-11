@@ -209,8 +209,6 @@ public:
       this->StatComputation(neigh, neighOff);
       
       RadiusType radius = neigh.GetRadius();
-      //double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
-      //double areaInv = 1/area;
       OffsetType offset;
       offset.Fill(0);
       OffsetType offsetOff;

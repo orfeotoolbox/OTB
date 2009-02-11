@@ -38,7 +38,9 @@
 #include "otbDifferenceVarianceTextureFunctor.h"
 #include "otbInformationMeasureOfCorrelation1TextureFunctor.h"
 #include "otbInformationMeasureOfCorrelation2TextureFunctor.h"
-
+#include "otbClusterShadeTextureFunctor.h"
+#include "otbClusterProminenceTextureFunctor.h"
+#include "otbMeanTextureFunctor.h"
 
 template<class TInputImage, class TOutputImage, class TFunctor>
 int generic_TextureFunctor(int argc, char * argv[])
@@ -154,6 +156,21 @@ int otbTextureFunctor(int argc, char * argv[])
   else if ( strArgv == "IC2" )
     {
       typedef otb::Functor::InformationMeasureOfCorrelation2TextureFunctor<IteratorType, IteratorType, PixelType> FunctorType;
+      return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
+    }
+  else if ( strArgv == "CSH" )
+    {
+      typedef otb::Functor::ClusterShadeTextureFunctor<IteratorType, IteratorType, PixelType> FunctorType;
+      return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
+    }
+  else if ( strArgv == "CPR" )
+    {
+      typedef otb::Functor::ClusterProminenceTextureFunctor<IteratorType, IteratorType, PixelType> FunctorType;
+      return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
+    }
+  else if ( strArgv == "MEA" )
+    {
+      typedef otb::Functor::MeanTextureFunctor<IteratorType, IteratorType, PixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else
