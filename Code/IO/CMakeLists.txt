@@ -27,7 +27,7 @@ ENDIF(OTB_COMPILE_JPEG2000)
 
 
 ADD_LIBRARY(OTBIO ${OTBIO_SRCS})
-TARGET_LINK_LIBRARIES (OTBIO OTBCommon otbossim otbossimplugins ITKIO ITKCommon dxf otbkml otbliblas)
+TARGET_LINK_LIBRARIES (OTBIO OTBCommon otbossim gdal otbossimplugins ITKIO ITKCommon dxf otbkml otbliblas)
 IF( OTB_COMPILE_JPEG2000 )
     TARGET_LINK_LIBRARIES (OTBIO otbopenjpeg)
 ENDIF( OTB_COMPILE_JPEG2000 )
