@@ -103,7 +103,7 @@ public:
     if ( HXY2 != 0. )
       HXY2 = -HXY2;
     
-    out = vcl_sqrt( vcl_abs(1-vcl_exp( -2.*(vcl_abs(HXY2-HXY)))) );
+    out = vcl_sqrt( vcl_abs(1-vcl_exp( -2.*(HXY2-HXY))) );
 
     return out;  
   }
