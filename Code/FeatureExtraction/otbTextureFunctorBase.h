@@ -103,6 +103,7 @@ public:
       m_Maxi = itk::NumericTraits<double>::NonpositiveMin();
       m_MaxiOff = itk::NumericTraits<double>::NonpositiveMin();
       double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
+      double areaInv = 1/area;
       double scottCoef =  3.5 /(vcl_pow(area, 1/3) );
       
       OffsetType offset;
@@ -208,8 +209,8 @@ public:
       this->StatComputation(neigh, neighOff);
       
       RadiusType radius = neigh.GetRadius();
-      double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
-      double areaInv = 1/area;
+      //double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
+      //double areaInv = 1/area;
       OffsetType offset;
       offset.Fill(0);
       OffsetType offsetOff;
