@@ -68,8 +68,8 @@ public:
 	for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
 	  {
 	    double p = this->GetHisto()[r][s]*areaInv;
-	    out += vcl_pow( ((static_cast<double>(s)+0.5)*this->GetNeighBinLength() - mean) 
-			    + ((static_cast<double>(r)+0.5)*this->GetOffsetBinLength() - mean), 3) * p;
+	    double sumPixel = (static_cast<double>(s)+0.5)*this->GetNeighBinLength() + (static_cast<double>(r)+0.5)*this->GetOffsetBinLength();
+	    out += vcl_pow( sumPixel - 2*mean, 3) * p;
 	  }
       }
 
