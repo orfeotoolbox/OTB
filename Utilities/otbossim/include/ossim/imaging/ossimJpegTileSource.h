@@ -37,7 +37,7 @@ extern "C"
 #    define XMD_H
 #  endif
 #endif
-#include <itkjpeg/8/jpeglib.h>
+#include <jpeglib.h>
 #include <setjmp.h>
 }
 

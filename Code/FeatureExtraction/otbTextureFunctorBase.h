@@ -222,12 +222,12 @@ public:
           
       IntVectorType histoTemp;
       if (m_NeighBinLength != 0)
-	histoTemp = IntVectorType( vcl_floor( static_cast<double>(this->GetMaxi()-this->GetMini())/m_NeighBinLength)+1., 0);
+	histoTemp = IntVectorType( static_cast<unsigned int>(vcl_floor( static_cast<double>(this->GetMaxi()-this->GetMini())/m_NeighBinLength)+1.), 0);
       else
 	histoTemp = IntVectorType( 1, 0 );
       
       if (m_OffsetBinLength != 0)
-        m_Histo = IntVectorVectorType( vcl_floor(static_cast<double>(this->GetMaxiOff()-this->GetMiniOff())/m_OffsetBinLength)+1., histoTemp );
+        m_Histo = IntVectorVectorType( static_cast<unsigned int>(vcl_floor(static_cast<double>(this->GetMaxiOff()-this->GetMiniOff())/m_OffsetBinLength)+1.), histoTemp );
       else
 	m_Histo = IntVectorVectorType( 1, histoTemp );
       

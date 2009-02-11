@@ -8,7 +8,7 @@
 // 
 //*******************************************************************
 //  $Id: ossimNitfTileSource.cpp 12988 2008-06-04 16:49:43Z gpotts $
-#include <itkjpeg/8/jerror.h>
+#include <jerror.h>
 
 #include <ossim/imaging/ossimNitfTileSource.h>
 
