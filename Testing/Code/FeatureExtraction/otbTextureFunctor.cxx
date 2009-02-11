@@ -22,25 +22,8 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
+#include "otbTextureFunctors.h"
 
-// Functors list
-#include "otbEnergyTextureFunctor.h"
-#include "otbEntropyTextureFunctor.h"
-#include "otbInverseDifferenceMomentTextureFunctor.h"
-#include "otbAngularSecondMomentumTextureFunctor.h"
-#include "otbVarianceTextureFunctor.h"
-#include "otbCorrelationTextureFunctor.h"
-#include "otbContrastTextureFunctor.h"
-#include "otbSumAverageTextureFunctor.h"
-#include "otbDifferenceEntropyTextureFunctor.h"
-#include "otbSumEntropyTextureFunctor.h"
-#include "otbSumVarianceTextureFunctor.h"
-#include "otbDifferenceVarianceTextureFunctor.h"
-#include "otbInformationMeasureOfCorrelation1TextureFunctor.h"
-#include "otbInformationMeasureOfCorrelation2TextureFunctor.h"
-#include "otbClusterShadeTextureFunctor.h"
-#include "otbClusterProminenceTextureFunctor.h"
-#include "otbMeanTextureFunctor.h"
 
 template<class TInputImage, class TOutputImage, class TFunctor>
 int generic_TextureFunctor(int argc, char * argv[])
