@@ -1275,6 +1275,47 @@ ADD_TEST(feTvInformationMeasureOfCorrelation2TextureFunctor ${FEATUREEXTRACTION_
     2    # offset[1]	
 ) 
 
+# -------   otb::ClusterShadeTextureFunctor  -------------
+ADD_TEST(feTvClusterShadeTextureFunctor ${FEATUREEXTRACTION_TESTS12} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvClusterShadeTextureFunctor.tif
+                ${TEMP}/feTvClusterShadeTextureFunctor.tif
+  otbTextureFunctor
+    CSH #cluster shade	
+    ${INPUTDATA}/poupees_sub.png
+    ${TEMP}/feTvClusterShadeTextureFunctor.tif
+    5    # radius
+    -2   # offset[0]
+    2    # offset[1]	
+)
+
+# -------   otb::ClusterProminenceTextureFunctor  -------------
+ADD_TEST(feTvClusterProminenceTextureFunctor ${FEATUREEXTRACTION_TESTS12} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvClusterProminenceTextureFunctor.tif
+                ${TEMP}/feTvClusterProminenceTextureFunctor.tif
+  otbTextureFunctor
+    CPR #cluster prominence		
+    ${INPUTDATA}/poupees_sub.png
+    ${TEMP}/feTvClusterProminenceTextureFunctor.tif
+    5    # radius
+    -2   # offset[0]
+    2    # offset[1]	
+) 
+
+# -------   otb::MeanTextureFunctor  -------------
+ADD_TEST(feTvMeanTextureFunctor ${FEATUREEXTRACTION_TESTS12} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvMeanTextureFunctor.tif
+                ${TEMP}/feTvMeanTextureFunctor.tif
+  otbTextureFunctor
+    MEA #mean		
+    ${INPUTDATA}/poupees_sub.png
+    ${TEMP}/feTvMeanTextureFunctor.tif
+    5    # radius
+    -2   # offset[0]
+    2    # offset[1]	
+)
  
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests13 ~~~~~~~~~~~~~~~~~~~~~
@@ -1478,6 +1519,50 @@ ADD_TEST(feTvInformationMeasureOfCorrelation2TextureImageFunction ${FEATUREEXTRA
     2    # offset[1]
  )
 
+# -------        otb::ClusterShadeTextureImageFunction   -------------
+ADD_TEST(feTvClusterShadeTextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvClusterShadeTextureImageFunction.tif
+                ${TEMP}/feTvClusterShadeTextureImageFunction.tif
+   otbTextureImageFunction
+    CSH #cluster shade
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${TEMP}/feTvClusterShadeTextureImageFunction.tif
+    5    # radius[0]
+    5    # radius[1]
+    -2   # offset[0]
+    2    # offset[1]
+ )
+
+# -------        otb::ClusterProminenceShadeTextureImageFunction   -------------
+ADD_TEST(feTvClusterProminenceShadeTextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvClusterProminenceShadeTextureImageFunction.tif
+                ${TEMP}/feTvClusterProminenceShadeTextureImageFunction.tif
+   otbTextureImageFunction
+    CPR #cluster prominence
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${TEMP}/feTvClusterProminenceShadeTextureImageFunction.tif
+    5    # radius[0]
+    5    # radius[1]
+    -2   # offset[0]
+    2    # offset[1]
+ )
+
+# -------        otb::MeanTextureImageFunction   -------------
+ADD_TEST(feTvMeanTextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvMeanTextureImageFunction.tif
+                ${TEMP}/feTvMeanTextureImageFunction.tif
+   otbTextureImageFunction
+    MEA # mean
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${TEMP}/feTvMeanTextureImageFunction.tif
+    5    # radius[0]
+    5    # radius[1]
+    -2   # offset[0]
+    2    # offset[1]
+ )
 
 
 # A enrichir
