@@ -32,7 +32,7 @@
 /* #include <jinclude.h> */
 
 #include <ossim/imaging/ossimJpegMemSrc.h>
-#include <itkjpeg/8/jerror.h>
+#include <jerror.h>
 extern "C"
 {
 void ossimJpegErrorExit (j_common_ptr cinfo)
