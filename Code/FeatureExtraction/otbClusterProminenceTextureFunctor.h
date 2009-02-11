@@ -65,7 +65,6 @@ public:
     
     for (unsigned r = 0; r<this->GetHisto().size(); r++)
       {
-	double sumTemp = 0.;
 	for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
 	  {
 	    double p = this->GetHisto()[r][s]*areaInv;
