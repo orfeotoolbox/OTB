@@ -14,7 +14,7 @@ SET(FLTK_VERSION_PATCH "9")
 SET(FLTK_VERSION "${FLTK_VERSION_MAJOR}.${FLTK_VERSION_MINOR}")
 SET(FLTK_VERSION_FULL "${FLTK_VERSION}.${FLTK_VERSION_PATCH}")
 
-SET(FLTK_LIBRARIES "fltk_images;fltk;fltk_gl;fltk_forms")
+SET(FLTK_LIBRARIES "fltk_images;fltk;fltk_gl;fltk_forms" CACHE INTERNAL "Variable used by OTB to link against FLTK")
 
 # Executables and libraries should just go to bin
 #OTB Modifications
