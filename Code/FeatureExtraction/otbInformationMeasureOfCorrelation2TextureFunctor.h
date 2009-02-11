@@ -15,16 +15,16 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDifferenceVarianceTextureFunctor_h
-#define __otbDifferenceVarianceTextureFunctor_h
+#ifndef __otbInformationMeasureOfCorrelation2TextureFunctor_h
+#define __otbInformationMeasureOfCorrelation2TextureFunctor_h
 
-#include "otbTextureFunctorBase.h"
+#include "otbEntropyTextureFunctor.h"
 
 namespace otb
 {
 namespace Functor
 {
-/** \class DifferenceVarianceTextureFunctor
+/** \class InformationMeasureOfCorrelation2TextureFunctor
  *  \brief This functor calculates the inverse difference moment of an image
  *
  *   Computes joint histogram (neighborhood and offset neighborhood) 
@@ -38,12 +38,12 @@ namespace Functor
  *  \ingroup Statistics
  */
 template <class TIterInput1, class TIterInput2, class TOutput>
-class ITK_EXPORT DifferenceVarianceTextureFunctor : 
-public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>
+class ITK_EXPORT InformationMeasureOfCorrelation2TextureFunctor : 
+public EntropyTextureFunctor<TIterInput1, TIterInput2, TOutput>
 {
 public:
-  DifferenceVarianceTextureFunctor(){};
-  ~DifferenceVarianceTextureFunctor(){};
+  InformationMeasureOfCorrelation2TextureFunctor(){};
+  ~InformationMeasureOfCorrelation2TextureFunctor(){};
 
   typedef TIterInput1                           IterType1;
   typedef TIterInput2                           IterType2;
@@ -51,54 +51,61 @@ public:
   typedef typename IterType1::InternalPixelType InternalPixelType;
   typedef typename IterType1::ImageType         ImageType;
   typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
-
+  typedef EntropyTextureFunctor<TIterInput1, TIterInput2, TOutput> Superclass;
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
-    this->ComputeJointHistogram(neigh, neighOff);
+    double HXY = Superclass::ComputeOverSingleChannel(neigh, neighOff);
+
     double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
     double areaInv = 1/area;
-
-    double MeanPx_y = 0.;
-    // Computes mean Px_y
-    for (unsigned sB = 0; sB<this->GetHisto()[0].size(); sB++)
-      { 
-	double nCeil = (static_cast<double>(sB)+0.5)*this->GetNeighBinLength();
-	for (unsigned r = 0; r<this->GetHisto().size(); r++)
+    double out = 0.;
+    // Stores marginal proba values
+    std::vector<double> PxVector;
+    std::vector<double> PyVector;
+    
+    // Computes HX
+    for (unsigned r = 0; r<this->GetHisto()[0].size(); r++)
+      {
+	double sumTemp = 0.;
+	for (unsigned s = 0; s<this->GetHisto().size(); s++)
 	  {
-	    double rVal = (static_cast<double>(r)+0.5)*this->GetOffsetBinLength();
-	    for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-	      { 
-		if( vcl_abs((static_cast<double>(s)+0.5)*this->GetNeighBinLength() - rVal - nCeil) < vcl_abs(this->GetNeighBinLength()) )
-		  {
-		    MeanPx_y +=  static_cast<double>(this->GetHisto()[r][s])*areaInv;
-		  }
-	      }
+	    sumTemp += this->GetHisto()[s][r]*areaInv;
 	  }
-      }
-    MeanPx_y /= static_cast<double>(this->GetHisto()[0].size());
-
-    // Computes variance
-    double varPx_y = 0.;
-    for (unsigned sB = 0; sB<this->GetHisto()[0].size(); sB++)
-      { 
-	double Px_y = 0.;
-	double nCeil = (static_cast<double>(sB)+0.5)*this->GetNeighBinLength();
-	for (unsigned r = 0; r<this->GetHisto().size(); r++)
-	  {
-	    double rVal = (static_cast<double>(r)+0.5)*this->GetOffsetBinLength();
-	    for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-	      { 
-		if( vcl_abs((static_cast<double>(s)+0.5)*this->GetNeighBinLength() - rVal - nCeil) < vcl_abs(this->GetNeighBinLength()) )
-		  {
-		    Px_y +=  static_cast<double>(this->GetHisto()[r][s])*areaInv;
-		  }
-	      }
-	  }
-	varPx_y += vcl_pow((Px_y - MeanPx_y), 2);
+	PxVector.push_back( sumTemp );
       }
 
-    return varPx_y/this->GetHisto()[0].size();
+    // Computes HY
+    for (unsigned r = 0; r<this->GetHisto().size(); r++)
+      {
+	double sumTemp = 0.;
+	for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
+	  {
+	    sumTemp += this->GetHisto()[r][s]*areaInv;
+	  }
+	PyVector.push_back( sumTemp );
+      }
+ 
+    // Computes HXY2
+    double HXY2 = 0.;
+    for (unsigned r = 0; r<this->GetHisto().size(); r++)
+      {
+	for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
+	  {
+	    double PxPy = PyVector[r]*PxVector[s];
+	    if( PxPy != 0. )
+	      {
+		HXY2 += PxPy * vcl_log( PxPy );
+	      }
+	    
+	  }
+      }
+    if ( HXY2 != 0. )
+      HXY2 = -HXY2;
+    
+    out = vcl_sqrt( vcl_abs(1-vcl_exp( -2.*(HXY2-HXY))) );
+
+    return out;  
   }
   
 };

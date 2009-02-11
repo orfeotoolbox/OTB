@@ -1043,7 +1043,7 @@ ADD_TEST(feTpSimplifyManyPathListFilter ${FEATUREEXTRACTION_TESTS11}
         )
 
 
-# -------            otb::LineSegmenbtDetector   -------------
+# -------            otb::LineSegmentDetector   -------------
 ADD_TEST(feTuLineSegmentDetectorNew ${FEATUREEXTRACTION_TESTS11} 
     otbLineSegmentDetectorNew)
 
@@ -1245,7 +1245,37 @@ ADD_TEST(feTvDifferenceVarianceTextureFunctor ${FEATUREEXTRACTION_TESTS12}
     2    # offset[1]	
 )
 
-   
+
+# -------   otb::InformationMeasureOfCorrelation1TextureFunctor  -------------
+ADD_TEST(feTvInformationMeasureOfCorrelation1TextureFunctor ${FEATUREEXTRACTION_TESTS12} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvInformationMeasureOfCorrelation1TextureFunctor.tif
+                ${TEMP}/feTvInformationMeasureOfCorrelation1TextureFunctor.tif
+  otbTextureFunctor
+    IC1 #information measure of correlation 1	
+    ${INPUTDATA}/poupees_sub.png
+    ${TEMP}/feTvInformationMeasureOfCorrelation1TextureFunctor.tif
+    5    # radius
+    -2   # offset[0]
+    2    # offset[1]	
+) 
+
+
+# -------   otb::InformationMeasureOfCorrelation2TextureFunctor  -------------
+ADD_TEST(feTvInformationMeasureOfCorrelation2TextureFunctor ${FEATUREEXTRACTION_TESTS12} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvInformationMeasureOfCorrelation2TextureFunctor.tif
+                ${TEMP}/feTvInformationMeasureOfCorrelation2TextureFunctor.tif
+  otbTextureFunctor
+    IC2 #information measure of correlation 2	
+    ${INPUTDATA}/poupees_sub.png
+    ${TEMP}/feTvInformationMeasureOfCorrelation2TextureFunctor.tif
+    5    # radius
+    -2   # offset[0]
+    2    # offset[1]	
+) 
+
+ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests13 ~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1418,20 +1448,36 @@ ADD_TEST(feTvSumVarianceTextureImageFunction ${FEATUREEXTRACTION_TESTS13}
     2    # offset[1]
  )
 
-# -------        otb::DifferenceVarianceTextureImageFunction   -------------
-ADD_TEST(feTvDifferenceVarianceTextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
+# -------        otb::InformationMeasureOfCorrelation1TextureImageFunction   -------------
+ADD_TEST(feTvInformationMeasureOfCorrelation1TextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
 --compare-image ${EPS}
-                ${BASELINE}/feTvDifferenceVarianceTextureImageFunction.tif
-                ${TEMP}/feTvDifferenceVarianceTextureImageFunction.tif
+                ${BASELINE}/feTvInformationMeasureOfCorrelation1TextureImageFunction.tif
+                ${TEMP}/feTvInformationMeasureOfCorrelation1TextureImageFunction.tif
    otbTextureImageFunction
-    DVA #difference variance
+    IC1 #information measure of correlation 1
     ${INPUTDATA}/poupees_sub_c1.png
-    ${TEMP}/feTvDifferenceVarianceTextureImageFunction.tif
+    ${TEMP}/feTvInformationMeasureOfCorrelation1TextureImageFunction.tif
     5    # radius[0]
     5    # radius[1]
     -2   # offset[0]
     2    # offset[1]
  )
+
+# -------        otb::InformationMeasureOfCorrelation2TextureImageFunction   -------------
+ADD_TEST(feTvInformationMeasureOfCorrelation2TextureImageFunction ${FEATUREEXTRACTION_TESTS13} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvInformationMeasureOfCorrelation2TextureImageFunction.tif
+                ${TEMP}/feTvInformationMeasureOfCorrelation2TextureImageFunction.tif
+   otbTextureImageFunction
+    IC2 #information measure of correlation 2
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${TEMP}/feTvInformationMeasureOfCorrelation2TextureImageFunction.tif
+    5    # radius[0]
+    5    # radius[1]
+    -2   # offset[0]
+    2    # offset[1]
+ )
+
 
 
 # A enrichir

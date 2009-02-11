@@ -36,6 +36,8 @@
 #include "otbSumEntropyTextureFunctor.h"
 #include "otbSumVarianceTextureFunctor.h"
 #include "otbDifferenceVarianceTextureFunctor.h"
+#include "otbInformationMeasureOfCorrelation1TextureFunctor.h"
+#include "otbInformationMeasureOfCorrelation2TextureFunctor.h"
 
 
 template<class TInputImage, class TOutputImage, class TFunctor>
@@ -142,6 +144,16 @@ int otbTextureFunctor(int argc, char * argv[])
   else if ( strArgv == "DVA" )
     {
       typedef otb::Functor::DifferenceVarianceTextureFunctor<IteratorType, IteratorType, PixelType> FunctorType;
+      return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
+    }
+  else if ( strArgv == "IC1" )
+    {
+      typedef otb::Functor::InformationMeasureOfCorrelation1TextureFunctor<IteratorType, IteratorType, PixelType> FunctorType;
+      return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
+    }
+  else if ( strArgv == "IC2" )
+    {
+      typedef otb::Functor::InformationMeasureOfCorrelation2TextureFunctor<IteratorType, IteratorType, PixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else
