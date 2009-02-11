@@ -33,7 +33,8 @@ namespace otb
   * \ingroup ObjectListFilter
  */
 template <class TInputList, class TOutputList, class TFunction >
-class ITK_EXPORT UnaryFunctorObjectListFilter : public otb::ObjectListToObjectListFilter<TInputList,TOutputList>
+class ITK_EXPORT UnaryFunctorObjectListFilter :
+    public otb::ObjectListToObjectListFilter<TInputList,TOutputList>
 {
 public:
   /** Standard class typedefs. */
