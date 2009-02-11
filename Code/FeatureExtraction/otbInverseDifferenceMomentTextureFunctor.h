@@ -27,16 +27,16 @@ namespace Functor
 /** \class InverseDifferenceMomentTextureFunctor
  *  \brief This functor calculates the inverse difference moment of an image
  *
- *   Computes joint histogram (neighborhood and offset neighborhood) 
- *   which bins are computing using Scott formula.
- *   Computes the probabiltiy p for each pair of pixel.
- *   InverseDifferenceMoment  is the sum 1/(1+(pi-poff)²)*p over the neighborhood.
- *   TIterInput is an ietrator, TOutput is a PixelType.
+ *  Computes joint histogram (neighborhood and offset neighborhood).
+ *  The formula is:
+ *  $ \sum_{i}\sum_{j}\frac{1}{1+(i-j)^2}p(i,j) $
+ *  TIterInput is an ietrator, TOutput is a PixelType.
  *
+ *  \sa TextureFunctorBase
  *  \ingroup Functor
- *  \ingroup 
  *  \ingroup Statistics
  */
+
 template <class TIterInput1, class TIterInput2, class TOutput>
 class ITK_EXPORT InverseDifferenceMomentTextureFunctor : 
 public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>

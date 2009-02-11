@@ -25,16 +25,15 @@ namespace otb
 namespace Functor
 {
 /** \class SumAverageTextureFunctor
- *  \brief This functor calculates the inverse difference moment of an image
+ *  \brief This functor calculates the sum average image texture according to Haralick descriptors.
  *
- *   Computes joint histogram (neighborhood and offset neighborhood) 
- *   which bins are computing using Scott formula.
- *   Computes the probabiltiy p for each pair of pixel.
- *   InverseDifferenceMoment  is the sum 1/(1+(pi-poff)²)*p over the neighborhood.
- *   TIterInput is an ietrator, TOutput is a PixelType.
+ *  Computes sum average using joint histogram (neighborhood and offset neighborhood).
+ *  The formula is:
+ *  $ \sum_{i}{2N}i.p_{x+y}(i) $
+ *  TIterInput is an iterator, TOutput is a PixelType.
  *
- *  \ingroup Functor
- *  \ingroup 
+ *  \sa TextureFunctorBase
+ *  \ingroup Functor 
  *  \ingroup Statistics
  */
 template <class TIterInput1, class TIterInput2, class TOutput>

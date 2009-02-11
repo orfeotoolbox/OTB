@@ -25,18 +25,21 @@ namespace otb
 namespace Functor
 {
 /** \class InformationMeasureOfCorrelation2TextureFunctor
- *  \brief This functor calculates the inverse difference moment of an image
+ *  \brief This functor calculates the information measure of correlation 2 image texture according to Haralick descriptors.
  *
- *   Computes joint histogram (neighborhood and offset neighborhood) 
- *   which bins are computing using Scott formula.
- *   Computes the probabiltiy p for each pair of pixel.
- *   InverseDifferenceMoment  is the sum 1/(1+(pi-poff)²)*p over the neighborhood.
- *   TIterInput is an ietrator, TOutput is a PixelType.
+ *  Computes  information measure of correlation 2 using joint histogram (neighborhood and offset neighborhood) .
+ *  The formula is:
+ *  $ \sqrt{|1-exp(2.(H(X,Y)_{2}-H(X,Y)))|} $
+ *  Where $H(X,Y)$, $H(X)$, $H(Y)$ are the entropies and 
+ *  $ H(X,Y)_{2} = -\sum_{i}\sum_{j}p_{x}(i)p_{y}(j)\log{(p_{x}(i)p_{y}(j))} $
+ *  TIterInput is an iterator, TOutput is a PixelType.
  *
+ *  \sa EntropyTextureFunctor
+ *  \sa TextureFunctorBase
  *  \ingroup Functor
- *  \ingroup 
  *  \ingroup Statistics
  */
+ 
 template <class TIterInput1, class TIterInput2, class TOutput>
 class ITK_EXPORT InformationMeasureOfCorrelation2TextureFunctor : 
 public EntropyTextureFunctor<TIterInput1, TIterInput2, TOutput>

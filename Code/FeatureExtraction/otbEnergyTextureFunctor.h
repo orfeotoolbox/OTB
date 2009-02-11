@@ -26,14 +26,14 @@ namespace otb
 namespace Functor
 {
 /** \class EnergyTextureFunctor
- *  \brief This functor calculates the local energy of an image
+ *  \brief This functor calculates the energy image texture.
  *
- *   Computes the sqaure gradient which is computed using offset and
- *   angle pixel of the neighborhood.
+ *  The formula is:
+ *  $ \frac{1}{N}\sum_{i}\sum_{j}(i-j)^2 $
+ *  TIterInput is an iterator, TOutput is a PixelType.
  *
- *
+ *  \sa TextureFunctorBase
  *  \ingroup Functor
- *  \ingroup TextureFunctorBase
  *  \ingroup Statistics
  */
 template <class TIterInput1, class TIterInput2, class TOutput>

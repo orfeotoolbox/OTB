@@ -29,13 +29,14 @@ namespace otb
 namespace Functor
 {
 /** \class TextureFunctorBase
- *  \brief This functor is the basic class for texture computation.
+ *  \brief This functor ius the base for all texture functors.
  *
- *   Implements the offset setting and the computation loop over each channel
- *   TIterInput1 and TIterInput2  are an iterators. The first one for the neighborhood, the second for the considered offset.
- *   TOutput is a PixelType.
+ *  It uses a neighborhood (radius : m_Radius) and an offset (m_Offset)  to compute texture.
+ *  It computes the mean, standard deviation of the two areas and the joint histogram using
+ *  Scott formula for the bins lengths computation.
+ *  TIterInput is an iterator, TOutput is a PixelType.
  *
- *  \ingroup Functor
+ *  \ingroup Functor 
  *  \ingroup Statistics
  */
 

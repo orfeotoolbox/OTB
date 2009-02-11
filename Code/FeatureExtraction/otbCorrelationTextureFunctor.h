@@ -25,18 +25,20 @@ namespace otb
 namespace Functor
 {
 /** \class CorrelationTextureFunctor
- *  \brief This functor calculates the inverse difference moment of an image
+ *  \brief This functor calculates the correlation image texture according to Haralick descriptors.
  *
- *   Computes joint histogram (neighborhood and offset neighborhood) 
- *   which bins are computing using Scott formula.
- *   Computes the probabiltiy p for each pair of pixel.
- *   InverseDifferenceMoment  is the sum 1/(1+(pi-poff)²)*p over the neighborhood.
- *   TIterInput is an ietrator, TOutput is a PixelType.
+ *  Computes correlation using joint histogram (neighborhood and offset neighborhood).
+ *  The formula is:
+ *  $ \frac{\sum_{i}\sum_{j}i.j.p(i,j)-\mu_{x}\mu_{y}} {\sigma_{x}\sigma_{y}} $
+ *  Where $\mu_{x}$, $\mu_{y}$, $\sigma_{x}$ and $\sigma_{y}$ are the mean and standard deviation of $p_{x}$ and $p_{y}$.
+ *  TIterInput is an iterator, TOutput is a PixelType.
  *
+ *  \sa TextureFunctorBase
  *  \ingroup Functor
- *  \ingroup 
  *  \ingroup Statistics
  */
+
+
 template <class TIterInput1, class TIterInput2, class TOutput>
 class ITK_EXPORT CorrelationTextureFunctor : 
 public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>

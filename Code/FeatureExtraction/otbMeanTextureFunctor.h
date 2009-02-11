@@ -27,15 +27,16 @@ namespace Functor
 /** \class MeanTextureFunctor
  *  \brief This functor calculates the local entropy of an image
  *
- *   Computes joint histogram (neighborhood and offset neighborhood) 
- *   which bins are computing using Scott formula.
- *   Computes the probabiltiy p for each pair of pixel.
- *   Mean  is the sum p.log(p) over the neighborhood.
- *   TIterInput is an ietrator, TOutput is a PixelType.
+ *  Computes joint histogram (neighborhood and offset neighborhood) .
+ *  The formula is:
+ *  $ -\sum_{i}p(i,j) $
+ *  TIterInput is an ietrator, TOutput is a PixelType.
  *
+ *  \sa TextureFunctorBase
  *  \ingroup Functor
  *  \ingroup Statistics
  */
+
 template <class TIterInput1, class TIterInput2, class TOutput>
 class ITK_EXPORT MeanTextureFunctor : 
 public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>

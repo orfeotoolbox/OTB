@@ -25,18 +25,18 @@ namespace otb
 namespace Functor
 {
 /** \class DifferenceVarianceTextureFunctor
- *  \brief This functor calculates the inverse difference moment of an image
+ *  \brief This functor calculates the difference variance image texture according to Haralick descriptors.
  *
- *   Computes joint histogram (neighborhood and offset neighborhood) 
- *   which bins are computing using Scott formula.
- *   Computes the probabiltiy p for each pair of pixel.
- *   InverseDifferenceMoment  is the sum 1/(1+(pi-poff)²)*p over the neighborhood.
- *   TIterInput is an ietrator, TOutput is a PixelType.
+ *  Computes  difference variance using joint histogram (neighborhood and offset neighborhood).
+ *  The formula is:
+ *  variance of $p_{x-y}$
+ *  TIterInput is an iterator, TOutput is a PixelType.
  *
+ *  \sa TextureFunctorBase
  *  \ingroup Functor
- *  \ingroup 
  *  \ingroup Statistics
  */
+
 template <class TIterInput1, class TIterInput2, class TOutput>
 class ITK_EXPORT DifferenceVarianceTextureFunctor : 
 public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>

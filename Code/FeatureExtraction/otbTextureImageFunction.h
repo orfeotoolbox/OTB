@@ -28,11 +28,11 @@ namespace otb
 {
 
 /**
- * \class EnergyImageFunction
- * \brief Calculate the energy in the neighborhood of a pixel
+ * \class TextureImageFunction
+ * \brief Calculate a texture over an image.
  *
- * This class is templated over the input image type and the
- * coordinate representation type (e.g. float or double ).
+ * This class is templated with the input image and the Functor
+ * that will compute the texture.
  *
  * \ingroup ImageFunctions
  */

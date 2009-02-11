@@ -25,16 +25,15 @@ namespace otb
 namespace Functor
 {
 /** \class AngularSecondMomentumTextureFunctor
- *  \brief This functor calculates the inverse difference moment of an image
+ *  \brief This functor calculates the cluster shade image texture.
  *
- *   Computes joint histogram (neighborhood and offset neighborhood) 
- *   which bins are computing using Scott formula.
- *   Computes the probabiltiy p for each pair of pixel.
- *   AngularSecondMomentum  is the sum 1/(1+(pi-poff)²)*p over the neighborhood.
- *   TIterInput is an ietrator, TOutput is a PixelType.
+ *  Computes angular second moment using joint histogram (neighborhood and offset neighborhood) .
+ *  The formula is:
+ *  $ sum_{i}\sum_{j}p(i,j)^2 $
+ *  TIterInput is an iterator, TOutput is a PixelType.
  *
+ *  \sa TextureFunctorBase
  *  \ingroup Functor
- *  \ingroup 
  *  \ingroup Statistics
  */
 template <class TIterInput1, class TIterInput2, class TOutput>
