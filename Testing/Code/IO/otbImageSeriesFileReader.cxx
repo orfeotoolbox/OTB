@@ -22,16 +22,18 @@
 #include "otbVectorImage.h"
 #include "otbImageList.h"
 #include "otbImageSeriesFileReader.h"
-#include "otbImageViewer.h"
+#include "otbStreamingImageFileWriter.h"
+#include "base/ossimFilename.h"
 
-#include <otbCommandProgressUpdate.h>
-#include <otbCommandLineArgumentParser.h>
+#include "otbCommandProgressUpdate.h"
+#include "otbCommandLineArgumentParser.h"
 
 int otbImageSeriesFileReader(int argc, char* argv[] )
 {
   typedef otb::CommandLineArgumentParser ParserType;
   ParserType::Pointer parser = ParserType::New();
   parser->AddInputImage();
+  parser->AddOption("--OutputImageBaseName","Output Image Base Name","-out", 1, true);
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
@@ -56,7 +58,7 @@ int otbImageSeriesFileReader(int argc, char* argv[] )
   const char * inputListName = parseResult->GetInputImage().c_str();
 
   const  unsigned int Dimension = 2;
-  typedef double PixelType;
+  typedef unsigned char PixelType;
   typedef otb::VectorImage< PixelType, Dimension > ImageType;
   typedef otb::ImageList< ImageType > ImageListType;
 
@@ -65,9 +67,13 @@ int otbImageSeriesFileReader(int argc, char* argv[] )
   reader->SetFileName( inputListName );
   reader->Update();
 
+
+  ossimFilename outputFilenameBase(
+         parseResult->GetParameterString("--OutputImageBaseName").c_str());
+
   ImageListType * imageList = reader->GetOutput();
 
-  typedef otb::ImageViewer< PixelType >    ViewerType;
+  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
 
   for ( int i = 0; i < imageList->Size(); i++ )
   {
@@ -75,12 +81,20 @@ int otbImageSeriesFileReader(int argc, char* argv[] )
     title << "Image no " << i;
     std::cerr << title.str().c_str() << "\n";
 
-    ViewerType::Pointer  lViewer = ViewerType::New();
-    lViewer->SetLabel( title.str().c_str() );
-    lViewer->SetImage( reader->GetOutput(i) );
-    lViewer->Show();
+    std::stringstream number;
+    number << "-" << i;
+    ossimString fileNum(number.str());
+    ossimFilename outputFilename;
+    outputFilename.merge(outputFilenameBase.drive(),
+                          outputFilenameBase.path(),
+                          outputFilenameBase.fileNoExtension()+fileNum,
+                          outputFilenameBase.ext()
+                        );
+    WriterType::Pointer writer = WriterType::New();
+    writer->SetFileName(outputFilename);
+    writer->SetInput(reader->GetOutput(i));
+    writer->Update();
 
-    Fl::run();
   }
 
   std::cerr << "Normal Exit\n";

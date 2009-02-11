@@ -1640,8 +1640,14 @@ ADD_TEST(ioTvPointSetFileReader ${IO_TESTS16}
 
 
 ADD_TEST(ioTvImageSeriesFileReader ${IO_TESTS17}
+        --compare-n-images ${TOL} 2
+            ${EXAMPLEDATA}/GomaAvant.png
+            ${TEMP}/ioTvImageSeries-0.png
+            ${EXAMPLEDATA}/GomaApres.png
+            ${TEMP}/ioTvImageSeries-1.png
         otbImageSeriesFileReader
-  -in ${EXAMPLEDATA}/GomaAvantApres
+            -in ${EXAMPLEDATA}/GomaAvantApres
+            -out ${TEMP}/ioTvImageSeries.png
 )
 
 #----------------------------------------------------------------------------------
@@ -1838,7 +1844,7 @@ ADD_EXECUTABLE(otbIOTests16 otbIOTests16.cxx ${BasicIO_SRCS16})
 TARGET_LINK_LIBRARIES(otbIOTests16 OTBIO  )
 
 ADD_EXECUTABLE(otbIOTests17 otbIOTests17.cxx ${BasicIO_SRCS17})
-TARGET_LINK_LIBRARIES(otbIOTests17 OTBIO OTBVisu )
+TARGET_LINK_LIBRARIES(otbIOTests17 OTBIO )
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
