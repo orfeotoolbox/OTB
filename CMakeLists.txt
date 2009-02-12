@@ -315,24 +315,22 @@ ENDIF(OTB_USE_CURL)
 # GDAL Library
 #-------------------------------
 
-
-
-FIND_PATH(GDAL_LIBRARY_DIRS gdal PATHS $ENV{GDAL_LIBRARY_DIRS} )
 FIND_PATH(GDAL_INCLUDE_DIRS gdal.h $ENV{GDAL_INCLUDE_DIRS} /usr/include/gdal)
-IF (NOT GDAL_LIBRARY_DIRS)
-MESSAGE(FATAL_ERROR
-         "Cannot find GDAL library directory. Please set GDAL_LIBRARY_DIRS.")
-ENDIF (NOT GDAL_LIBRARY_DIRS)
+
 IF (NOT GDAL_INCLUDE_DIRS)
 MESSAGE(FATAL_ERROR
          "Cannot find GDAL include directory. Please set GDAL_INCLUDE_DIRS.")
 ENDIF (NOT GDAL_INCLUDE_DIRS)
 
 INCLUDE_DIRECTORIES(${GDAL_INCLUDE_DIRS})
-LINK_DIRECTORIES( ${GDAL_LIBRARY_DIRS} )
 
-FIND_LIBRARY(GDAL_LIBRARY NAMES gdal gdal1.5.0 PATHS GDAL_LIBRARY_DIRS)
+FIND_LIBRARY(GDAL_LIBRARY NAMES gdal gdal1.5.0 PATHS ${GDAL_LIBRARY_DIRS} /usr/lib/gdal)
 
+IF (NOT GDAL_LIBRARY)
+MESSAGE(FATAL_ERROR
+         "Cannot find GDAL library. Please set GDAL_LIBRARY.")
+ENDIF (NOT GDAL_LIBRARY)
+MESSAGE(STATUS "GDAL library found: ${GDAL_LIBRARY}")
 
 # Find geotiff headers
 FIND_PATH(GEOTIFF_INCLUDE_DIRS geotiff.h $ENV{GDAL_INCLUDE_DIRS} /usr/include/geotiff)
@@ -385,11 +383,13 @@ MESSAGE(STATUS "Testing if GDAL has geotiff -- no.")
 FIND_LIBRARY(GEOTIFF_LIBRARY geotiff PATHS)
 IF (NOT GEOTIFF_LIBRARY)
 MESSAGE(FATAL_ERROR
-         "Cannot find geotiff library. Please set LIBGEOTIFF_LIBRARY_DIR.")
+         "Cannot find geotiff library. Please set GEOTIFF_LIBRARY.")
 ENDIF (NOT GEOTIFF_LIBRARY)
 ENDIF(GDAL_HAS_GEOTIFF)
 ENDIF(NOT DEFINED GDAL_HAS_GEOTIFF)
 
+# Include jpeg headers
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkjpeg)
 
 #-------------------------------
 # End connections whith external libraries
