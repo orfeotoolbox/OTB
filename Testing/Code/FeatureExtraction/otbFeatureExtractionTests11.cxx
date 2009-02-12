@@ -35,4 +35,5 @@ REGISTER_TEST(otbCloudDetectionFilter);
 REGISTER_TEST(otbSimplifyManyPathListFilter);
 REGISTER_TEST(otbLineSegmentDetectorNew);
 REGISTER_TEST(otbLineSegmentDetector);
+REGISTER_TEST(otbLineSpatialObjectListToRightAnglePointSetFilterNew);
 }

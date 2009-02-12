@@ -20,12 +20,12 @@
 
 #include "otbDrawLineSpatialObjectListFilter.h"
 
+#include "itkLineIterator.h"
 #include "itkDataObject.h"
-#include "itkExceptionObject.h"
 #include "itkImageRegionIterator.h"
+#include "itkImageRegionConstIterator.h"
 
 #include <math.h>
-
 
 namespace otb
 {
@@ -34,16 +34,14 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputImage>
-DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>::DrawLineSpatialObjectListFilter()
+DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
+::DrawLineSpatialObjectListFilter()
 {
   this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredOutputs(1);
 
-  m_DrawLineFilter = DrawLineType::New();
-  m_RescaleFilter = RescalerType::New();
-
+  m_Value = static_cast<OutputPixelType>(255.);
 }
-
 
 template <class TInputImage, class TOutputImage>
 void
@@ -54,7 +52,6 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
                                        const_cast< LinesListType * >( list ) );
 
 }
-
 
 template <class TInputImage, class TOutputImage>
 typename DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>::LinesListType *
@@ -69,52 +66,60 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
-::GenerateData(void)
-{
+::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId )
 
+{
   typename InputImageType::ConstPointer input  = this->GetInput();
   typename OutputImageType::Pointer output  = this->GetOutput();
   typename LinesListType::Pointer    list = this->GetInputLineSpatialObjectList();
 
+     
+  /** Copy the input requested region in the output requested region*/
+  typedef itk::ImageRegionIterator< OutputImageType >      OutputIteratorType;
+  typedef itk::ImageRegionConstIterator< InputImageType >  InputIteratorType;
 
-  typename OutputImageType::RegionType region;
-  region.SetSize(input->GetLargestPossibleRegion().GetSize());
-  region.SetIndex(input->GetLargestPossibleRegion().GetIndex());
-  output->SetRegions( region );
-  output->SetOrigin(input->GetOrigin());
-  output->SetSpacing(input->GetSpacing());
-  output->Allocate();
-  output->FillBuffer(0);
+  OutputIteratorType    outputIt( output, outputRegionForThread);
+  InputIteratorType     inputIt(  input,  outputRegionForThread);
+  
+  outputIt.GoToBegin();
+  inputIt.GoToBegin();
+  
+  for (outputIt.GoToBegin(); !outputIt.IsAtEnd()  ; ++outputIt,++inputIt)
+      outputIt.Set( static_cast<OutputPixelType>(inputIt.Get()) );
+  
+  /** Draw the lines in the ouput image using lineIterator*/
+  typedef itk::LineIterator<OutputImageType>       LineIteratorFilter;
+  OutputIndexType                                  indexBeginLine, indexEndLine;
+  LineListIterator                                 itList = list->begin();
+  
+  while(itList != list->end())
+    {
+      PointListType & pointsList = (*itList)->GetPoints();
+      typename PointListType::const_iterator itPoints = pointsList.begin();
 
-  m_RescaleFilter->SetOutputMinimum( itk::NumericTraits< OutputPixelType >::min());
-  m_RescaleFilter->SetOutputMaximum( itk::NumericTraits< OutputPixelType >::max());
+      indexBeginLine[0] = static_cast<unsigned int>((*itPoints).GetPosition()[0]);
+      indexBeginLine[1] = static_cast<unsigned int>((*itPoints).GetPosition()[1]);
 
-  m_RescaleFilter->SetInput( input );
+      ++itPoints;  //Get the second extremity of the segment
 
-  LineListIterator  itList = list->begin();
-  m_DrawLineFilter->SetInputImage( m_RescaleFilter->GetOutput() );
-  m_DrawLineFilter->SetInputLine( *itList );
-  m_DrawLineFilter->GraftOutput( this->GetOutput() );
-  m_DrawLineFilter->Update();
-  ++itList;
+      indexEndLine[0] = static_cast<unsigned int>((*itPoints).GetPosition()[0]);
+      indexEndLine[1] = static_cast<unsigned int>((*itPoints).GetPosition()[1]);
 
-
-  // Draw each line of the list
-  while ( itList != list->end() )
-  {
-
-    m_DrawLineFilter->SetInputImage( this->GetOutput() );
-    m_DrawLineFilter->SetInputLine( *itList );
-    m_DrawLineFilter->Update();
-
-    ++itList;
-
-  }
-
-  this->GraftOutput( m_DrawLineFilter->GetOutput() );
-
-
+      /** Instanciation of the line iterator with begin and ending index*/
+      LineIteratorFilter   itLine(output,indexBeginLine ,indexEndLine  );
+      
+      /** Iteration over the line and writing white lines */
+      while(!itLine.IsAtEnd())
+	{
+	if(output->GetRequestedRegion().IsInside(itLine.GetIndex()))
+	  itLine.Set(m_Value);
+	++itLine;
+	}
+      
+      ++itList;
+    }
 }
+
 
 /**
  * Standard "PrintSelf" method
