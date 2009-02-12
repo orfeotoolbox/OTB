@@ -81,6 +81,19 @@ public:
     * should not be called on its own.
     */
   virtual void resize(int x, int y, int w, int h);
+
+  /** Set/Get the Isotropic zoom */
+  itkSetMacro(IsotropicZoom,double);
+  itkGetMacro(IsotropicZoom,double);
+
+  /** Enable/disable Gl acceleration */
+  itkSetMacro(UseGlAcceleration,bool);
+  itkGetMacro(UseGlAcceleration,bool);
+  itkBooleanMacro(UseGlAcceleration);
+
+  /** Set/Get the identifier */
+  itkSetStringMacro(Identifier);
+  itkGetStringMacro(Identifier);
  
 protected:
   /** Constructor */
@@ -114,7 +127,7 @@ protected:
    * \param index 2D index
    * \param region 2D region
    */
-  static inline unsigned int ComputeXAxisFlippedBufferIndex(const IndexType& iteratorIndex,const RegionType & region)
+  static inline unsigned int ComputeXAxisFlippedBufferIndex(const IndexType& index,const RegionType & region)
   {
     return  (region.GetSize()[1]-1+region.GetIndex()[1]-index[1])*3*region.GetSize()[0]+3*(index[0]-region.GetIndex()[0]);
   }
@@ -132,6 +145,8 @@ private:
   SizeType m_OpenGlBufferSize;
   /** Widget identifier */
   std::string m_Identifier;
+  /** Flag for GlAcceleration */
+  bool m_UseGlAcceleration;
 
 }; // end class 
 } // end namespace otb
