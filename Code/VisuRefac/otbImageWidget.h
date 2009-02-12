@@ -29,7 +29,7 @@
 // This include is needed to get the OTB_GL_USE_ACCEL definition
 #include "otbConfigure.h"
 
-//#include "otbImageViewerController.h"
+#include "otbImageWidgetController.h"
 
 namespace otb
 {
@@ -69,7 +69,8 @@ public:
   typedef typename RegionType::SizeType       SizeType;
   typedef typename RegionType::IndexType      IndexType;
   /** Controller typedef */
-  //typedef otb::ImageViewerController        ControllerType;
+  typedef otb::ImageWidgetController        ControllerType;
+  typedef typename ControllerType::Pointer  ControllerPointerType;
 
   /** Reads the OpenGl buffer from an image pointer
    *  \param image The image pointer,
@@ -82,12 +83,12 @@ public:
   virtual void ReadBuffer(InputImageType * image, RegionType & region);
 
   /** Set/Get the Controller */
-  //itkSetObjectMacro(Controller,ControllerType);
-  //itkGetObjectMacro(Controller,ControllerType);
+  itkSetObjectMacro(Controller,ControllerType);
+  itkGetObjectMacro(Controller,ControllerType);
 
- /** Handle resizing event. This method is used by FLTK routines and
-    * should not be called on its own.
-    */
+  /** Handle resizing event. This method is used by FLTK routines and
+   *  should not be called on its own.
+   */
   virtual void resize(int x, int y, int w, int h);
 
   /** Set/Get the Isotropic zoom */
@@ -147,12 +148,19 @@ private:
 
   /** OpenGl zoom factor */
   double m_IsotropicZoom;
+
   /** OpenGl buffer      */
   unsigned char * m_OpenGlBuffer;
+
   /** OpenGl buffer size */
   SizeType m_OpenGlBufferSize;
+
   /** Widget identifier */
   std::string m_Identifier;
+
+  /** Controller */
+  ControllerPointerType m_Controller;
+
   /** Flag for GlAcceleration */
   bool m_UseGlAcceleration;
 

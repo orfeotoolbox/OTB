@@ -97,7 +97,7 @@ ImageWidget<TInputImage>
     {
     itkExceptionMacro(<<"Region to read is oustside of the buffered region.");
     }
-
+  // Check if Gl acceleration mode is correct
   #ifndef OTB_GL_USE_ACCEL
   if(m_UseGlAcceleration)
     {
@@ -122,14 +122,17 @@ ImageWidget<TInputImage>
 
   while(!it.IsAtEnd())
     {
-    // Fill compute the linear index
+    // Fill the buffer
     unsigned int index = 0;
     if(!m_UseGlAcceleration)
       {
+      // compute the linear index (buffer is flipped around X axis
+      // when gl acceleration is disabled
       index = ComputeXAxisFlippedBufferIndex(it.GetIndex(),region);
       }
     else
       {
+      // Conpute the linear index
       index = ComputeBufferIndex(it.GetIndex(),region);
       }
 
@@ -148,6 +151,7 @@ void
 ImageWidget<TInputImage>
 ::draw()
 {
+  // Check if Gl acceleration mode is correct
   #ifndef OTB_GL_USE_ACCEL
   if(m_UseGlAcceleration)
     {
@@ -155,6 +159,7 @@ ImageWidget<TInputImage>
     }
   #endif
 
+  // Set up Gl environement
   if (!this->valid())
   {
     valid(1);
@@ -227,7 +232,13 @@ void
 ImageWidget<TInputImage>
 ::resize(int x, int y, int w, int h)
 {
+  // First call the superclass implementation
   Fl_Gl_Window::resize(x,y,w,h);
+  // If There is a controller
+  if(m_Controller.IsNotNull())
+    {
+    m_Controller->HandleWidgetResize(m_Identifier,x,y,w,h);
+    }
 }
 
 template <class TInputImage>
@@ -235,7 +246,15 @@ int
 ImageWidget<TInputImage>
 ::handle(int event)
 {
-
+  // If there is a controller
+  if(m_Controller.IsNotNull())
+    {
+    return m_Controller->HandleWidgetEvent(m_Identifier,event);
+    }
+  else
+    {
+    return 0;
+    }
 }
 }
 #endif
