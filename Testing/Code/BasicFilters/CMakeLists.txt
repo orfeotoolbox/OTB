@@ -1154,17 +1154,6 @@ ADD_TEST(bfTvPointSetToDensityImageFilterTest ${BASICFILTERS_TESTS11}
 	 3 5 10
 )
 
-# -------    otbPCAShapeModelEstimatorTest   ----------------------------
-ADD_TEST(bfTvImagePCAShapeModelEstimatorTest ${BASICFILTERS_TESTS11}
-    otbImagePCAShapeModelEstimatorTest
-    ${INPUTDATA}/poupees_sub_c1.png
-    ${INPUTDATA}/poupees_sub_c2.png
-    ${INPUTDATA}/poupees_sub_c3.png
-    ${TEMP}/imagePCAShapeModelEstimatorTest_mean.tif
-    ${TEMP}/imagePCAShapeModelEstimatorTest_eigen_vectors1.tif
-    ${TEMP}/imagePCAShapeModelEstimatorTest_eigen_vectors2.tif
-)
-
 # -------    otbKeyPointDensityImageFilter   ----------------------------
 ADD_TEST(bfTuKeyPointDensityImageFilterNew ${BASICFILTERS_TESTS11}
 	 otbKeyPointDensityImageFilterNew
@@ -1189,11 +1178,116 @@ ADD_TEST(bfTuStreamingInnerProductVectorImageFilterNew ${BASICFILTERS_TESTS11}
 )
 
 ADD_TEST(bfTvStreamingInnerProductVectorImageFilter ${BASICFILTERS_TESTS11}
-        otbStreamingInnerProductVectorImageFilter
-        ${INPUTDATA}/poupees_sub.png
-        ${TEMP}/bfTvStreamingInnerProductVectorImageFilterResults.txt
+      --compare-ascii ${TOL}
+      ${BASELINE_FILES}/bfStreamingInnerProductVectorImageFilterResults.txt
+      ${TEMP}/bfStreamingInnerProductVectorImageFilterResults.txt
+      otbStreamingInnerProductVectorImageFilter
+      ${INPUTDATA}/poupees_sub_3c.png
+      ${TEMP}/bfStreamingInnerProductVectorImageFilterResults.txt
 )
 
+ADD_TEST(bfTuEstimateInnerProductPCAImageFilterNew ${BASICFILTERS_TESTS11}
+        otbEstimateInnerProductPCAImageFilterNew )
+
+
+ADD_TEST(bfTvEstimateInnerProductPCAImageFilter ${BASICFILTERS_TESTS11}
+    --compare-image ${TOL}
+    ${BASELINE}/bfEstimateInnerProductPCAImageFilter.tif
+    ${TEMP}/bfEstimateInnerProductPCAImageFilter.tif
+    otbEstimateInnerProductPCAImageFilter
+    ${INPUTDATA}/poupees_sub_3c.png
+    ${TEMP}/bfEstimateInnerProductPCAImageFilter.tif
+    3
+)
+
+ADD_TEST(bfTvEstimateInnerProductPCAImageFilterCP1 ${BASICFILTERS_TESTS11}
+    --compare-image ${TOL}
+    ${BASELINE}/bfEstimateInnerProductPCAImageFilter_CP1.tif
+    ${TEMP}/bfEstimateInnerProductPCAImageFilter_CP1.tif
+    otbEstimateInnerProductPCAImageFilter
+    ${INPUTDATA}/poupees_sub_3c.png
+    ${TEMP}/bfEstimateInnerProductPCAImageFilter_CP1.tif
+    1
+)
+ADD_TEST(bfTvEstimateInnerProductPCAImageFilterCP12 ${BASICFILTERS_TESTS11}
+    --compare-image ${TOL}
+    ${BASELINE}/bfEstimateInnerProductPCAImageFilter_CP12.tif
+    ${TEMP}/bfEstimateInnerProductPCAImageFilter_CP12.tif
+    otbEstimateInnerProductPCAImageFilter
+    ${INPUTDATA}/poupees_sub_3c.png
+    ${TEMP}/bfEstimateInnerProductPCAImageFilter_CP12.tif
+    2
+)
+
+ADD_TEST(bfTuNormalizeInnerProductPCAImageFilterNew ${BASICFILTERS_TESTS11}
+        otbNormalizeInnerProductPCAImageFilterNew )
+
+ADD_TEST(bfTvNormalizeInnerProductPCAImageFilter ${BASICFILTERS_TESTS11}
+    --compare-image ${TOL}
+    ${BASELINE}/bfNormalizeInnerProductPCAImageFilter.tif
+    ${TEMP}/bfNormalizeInnerProductPCAImageFilter.tif
+    otbNormalizeInnerProductPCAImageFilter
+    ${INPUTDATA}/poupees_sub_3c.png
+    ${TEMP}/bfNormalizeInnerProductPCAImageFilter.tif
+)
+
+ADD_TEST(bfTuInnerProductPCAImageFilterNew ${BASICFILTERS_TESTS11}
+        otbInnerProductPCAImageFilterNew )
+
+
+ADD_TEST(bfTvInnerProductPCAImageFilter ${BASICFILTERS_TESTS11}
+    --compare-image ${TOL}
+    ${BASELINE}/bfInnerProductPCAImageFilter.tif
+    ${TEMP}/bfInnerProductPCAImageFilter.tif
+    otbInnerProductPCAImageFilter
+    ${INPUTDATA}/poupees_sub_3c.png
+    ${TEMP}/bfInnerProductPCAImageFilter.tif
+    3 
+    ${TEMP}/bfInnerProductPCAImageFilter_pc1.tif
+    ${TEMP}/bfInnerProductPCAImageFilter_pc2.tif
+    ${TEMP}/bfInnerProductPCAImageFilter_pc3.tif
+)
+
+ADD_TEST(bfTvInnerProductPCAImageFilter_PC1 ${BASICFILTERS_TESTS11}
+    --compare-image ${TOL}
+    ${BASELINE}/bfInnerProductPCAImageFilter_PC1.tif
+    ${TEMP}/bfInnerProductPCAImageFilter_PC1.tif
+    otbInnerProductPCAImageFilter
+    ${INPUTDATA}/poupees_sub_3c.png
+    ${TEMP}/bfInnerProductPCAImageFilter_PC1.tif
+    1 
+    ${TEMP}/bfInnerProductPCAImageFilter_PC1_1.tif
+)
+ADD_TEST(bfTvInnerProductPCAImageFilter_PC12 ${BASICFILTERS_TESTS11}
+    --compare-image ${TOL}
+    ${BASELINE}/bfInnerProductPCAImageFilter_PC12.tif
+    ${TEMP}/bfInnerProductPCAImageFilter_PC12.tif
+    otbInnerProductPCAImageFilter
+    ${INPUTDATA}/poupees_sub_3c.png
+    ${TEMP}/bfInnerProductPCAImageFilter_PC12.tif
+    2 
+    ${TEMP}/bfInnerProductPCAImageFilter_PC12_1.tif
+    ${TEMP}/bfInnerProductPCAImageFilter_PC12_2.tif
+)
+
+# -------    Check PCA Implementation with ITK ImagePCAShapeModelEstimator class ----------------------------
+ADD_TEST(bfTvItkImagePCAShapeModelEstimatorTest ${BASICFILTERS_TESTS11}
+    --compare-n-images ${EPSILON} 3
+    ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors1.tif
+    ${TEMP}/bfInnerProductPCAImageFilter_pc1.tif
+    ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors2.tif
+    ${TEMP}/bfInnerProductPCAImageFilter_pc2.tif
+    ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors3.tif
+    ${TEMP}/bfInnerProductPCAImageFilter_pc3.tif
+    otbImagePCAShapeModelEstimatorTest
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${INPUTDATA}/poupees_sub_c2.png
+    ${INPUTDATA}/poupees_sub_c3.png
+    ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_mean.tif
+    ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors1.tif
+    ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors2.tif
+    ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors3.tif
+)
 
 
 # A enrichir
@@ -1367,6 +1461,12 @@ otbImagePCAShapeModelEstimatorTest.cxx
 otbFunctionWithNeighborhoodToImageFilterNew.cxx
 otbStreamingInnerProductVectorImageFilterNew.cxx
 otbStreamingInnerProductVectorImageFilter.cxx
+otbEstimateInnerProductPCAImageFilterNew.cxx
+otbEstimateInnerProductPCAImageFilter.cxx
+otbNormalizeInnerProductPCAImageFilterNew.cxx
+otbNormalizeInnerProductPCAImageFilter.cxx
+otbInnerProductPCAImageFilter.cxx
+otbInnerProductPCAImageFilterNew.cxx
 )
 
 
@@ -1403,6 +1503,6 @@ ADD_EXECUTABLE(otbBasicFiltersTests10 otbBasicFiltersTests10.cxx ${BasicFilters_
 TARGET_LINK_LIBRARIES(otbBasicFiltersTests10  OTBBasicFilters  OTBIO )
 
 ADD_EXECUTABLE(otbBasicFiltersTests11 otbBasicFiltersTests11.cxx ${BasicFilters_SRCS11})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests11  OTBBasicFilters  OTBIO OTBFeatureExtraction)
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests11  OTBBasicFilters ITKAlgorithms OTBIO OTBFeatureExtraction)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

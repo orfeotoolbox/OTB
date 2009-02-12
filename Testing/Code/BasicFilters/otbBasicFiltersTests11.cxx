@@ -39,4 +39,10 @@ void RegisterTests()
   REGISTER_TEST(otbFunctionWithNeighborhoodToImageFilterNew);
   REGISTER_TEST(otbStreamingInnerProductVectorImageFilterNew);
   REGISTER_TEST(otbStreamingInnerProductVectorImageFilter);
+  REGISTER_TEST(otbEstimateInnerProductPCAImageFilterNew);
+  REGISTER_TEST(otbEstimateInnerProductPCAImageFilter);
+  REGISTER_TEST(otbNormalizeInnerProductPCAImageFilterNew);
+  REGISTER_TEST(otbNormalizeInnerProductPCAImageFilter);
+  REGISTER_TEST(otbInnerProductPCAImageFilterNew);
+  REGISTER_TEST(otbInnerProductPCAImageFilter);
 }
