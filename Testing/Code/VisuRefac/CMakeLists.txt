@@ -16,14 +16,20 @@ SET(EPSILON 0.000001)
 # Test programs
 SET(VISUREFAC_TESTS1 ${CXX_TEST_PATH}/otbVisuRefacTests1)
 
+#------------ otb::ImageWidget -------------------------
+
 ADD_TEST(vrTuImageWidgetNew ${VISUREFAC_TESTS1}
 otbImageWidgetNew
 )
 
-
+ADD_TEST(vrTvImageWidget ${VISUREFAC_TESTS1}
+otbImageWidget
+${INPUTDATA}/poupees.png
+)
 
 SET(VisuRefac_SRCS1
 otbImageWidgetNew.cxx
+otbImageWidget.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 
