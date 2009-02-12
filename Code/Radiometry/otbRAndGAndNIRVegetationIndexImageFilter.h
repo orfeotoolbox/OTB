@@ -17,9 +17,10 @@
 =========================================================================*/
 #ifndef __otbRAndGAndNIRVegetationIndexImageFilter_h
 #define __otbRAndGAndNIRVegetationIndexImageFilter_h
+#define DEPRECATED "This class is deprecated"
 
 #include "itkTernaryFunctorImageFilter.h"
-#include "otbVegetationIndex.h"
+#include "otbVegetationIndicesFunctor.h"
 
 namespace otb
 {
@@ -77,7 +78,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRAndGAndNIRVegetationIndexImageFilter.txx"
+#include "otbRAndGAndNIRIndexImageFilter.txx"
 #endif
 
 

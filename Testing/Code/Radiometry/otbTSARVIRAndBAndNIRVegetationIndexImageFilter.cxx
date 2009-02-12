@@ -17,11 +17,11 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbRAndBAndNIRVegetationIndexImageFilter.h"
+#include "otbRAndBAndNIRIndexImageFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbVegetationIndex.h"
+#include "otbVegetationIndicesFunctor.h"
 
 
 int otbTSARVIRAndBAndNIRVegetationIndexImageFilter(int argc, char * argv[])
@@ -43,14 +43,14 @@ int otbTSARVIRAndBAndNIRVegetationIndexImageFilter(int argc, char * argv[])
                                 InputNIRImageType::PixelType,
                                 OutputImageType::PixelType > FunctorType;
 
-  typedef otb::RAndBAndNIRVegetationIndexImageFilter< InputRImageType,
+  typedef otb::RAndBAndNIRIndexImageFilter< InputRImageType,
                                                       InputBImageType,
                                                       InputNIRImageType,
                                                       OutputImageType,
-                                                      FunctorType > RAndBAndNIRVegetationIndexImageFilterType;
+                                                      FunctorType > RAndBAndNIRIndexImageFilterType;
 
   // Instantiating object
-  RAndBAndNIRVegetationIndexImageFilterType::Pointer filter = RAndBAndNIRVegetationIndexImageFilterType::New();
+  RAndBAndNIRIndexImageFilterType::Pointer filter = RAndBAndNIRIndexImageFilterType::New();
   RReaderType::Pointer readerR = RReaderType::New();
   BReaderType::Pointer readerB = BReaderType::New();
   NIRReaderType::Pointer readerNIR = NIRReaderType::New();

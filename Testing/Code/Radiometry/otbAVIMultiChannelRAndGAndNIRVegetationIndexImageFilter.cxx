@@ -17,12 +17,12 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbMultiChannelRAndGAndNIRVegetationIndexImageFilter.h"
+#include "otbMultiChannelRAndGAndNIRIndexImageFilter.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbVegetationIndex.h"
+#include "otbVegetationIndicesFunctor.h"
 
 
 int otbAVIMultiChannelRAndGAndNIRVegetationIndexImageFilter(int argc, char * argv[])
@@ -36,11 +36,11 @@ int otbAVIMultiChannelRAndGAndNIRVegetationIndexImageFilter(int argc, char * arg
                                 InputImageType::InternalPixelType,
                                 InputImageType::InternalPixelType,
                                 OutputImageType::PixelType > FunctorType;
-  typedef otb::MultiChannelRAndGAndNIRVegetationIndexImageFilter<InputImageType,OutputImageType,FunctorType>
-                                                             MultiChannelRAndGAndNIRVegetationIndexImageFilterType;
+  typedef otb::MultiChannelRAndGAndNIRIndexImageFilter<InputImageType,OutputImageType,FunctorType>
+                                                             MultiChannelRAndGAndNIRIndexImageFilterType;
 
   // Instantiating object
-  MultiChannelRAndGAndNIRVegetationIndexImageFilterType::Pointer filter = MultiChannelRAndGAndNIRVegetationIndexImageFilterType::New();
+  MultiChannelRAndGAndNIRIndexImageFilterType::Pointer filter = MultiChannelRAndGAndNIRIndexImageFilterType::New();
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 

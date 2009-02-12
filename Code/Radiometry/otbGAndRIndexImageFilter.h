@@ -19,7 +19,7 @@
 #define __otbGAndRIndexImageFilter_h
 
 #include "itkBinaryFunctorImageFilter.h"
-#include "otbSoilIndex.h"
+#include "otbSoilIndicesFunctor.h"
 
 namespace otb
 {

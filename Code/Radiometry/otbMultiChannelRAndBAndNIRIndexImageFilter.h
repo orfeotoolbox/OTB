@@ -15,10 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultiChannelRAndBAndNIRVegetationIndexImageFilter_h
-#define __otbMultiChannelRAndBAndNIRVegetationIndexImageFilter_h
-
-#define DEPRECATED "This class is deprecated"
+#ifndef __otbMultiChannelRAndBAndNIRIndexImageFilter_h
+#define __otbMultiChannelRAndBAndNIRIndexImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
@@ -27,8 +25,8 @@
 namespace otb
 {
 
-/** \class MultiChannelRAndBAndNIRVegetationIndexImageFilter
- * \brief Implements mutli channel R and B and NIR pixel-wise generic vegetation index operation on one vector image.
+/** \class MultiChannelRAndBAndNIRIndexImageFilter
+ * \brief Implements mutli channel R and B and NIR pixel-wise generic index operation on one vector image.
  *
  * This class is parameterized over the type of the input image and
  * the type of the output image.  It is also parameterized by the
@@ -42,12 +40,12 @@ template <class TInputImage, class TOutputImage,
 					   typename TInputImage::InternalPixelType,
 					   typename TInputImage::InternalPixelType,
 					   typename TOutputImage::PixelType>  >
-class ITK_EXPORT MultiChannelRAndBAndNIRVegetationIndexImageFilter 
+class ITK_EXPORT MultiChannelRAndBAndNIRIndexImageFilter 
   : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,TFunction>
 {
 public:
   /** Standard class typedefs. */
-  typedef MultiChannelRAndBAndNIRVegetationIndexImageFilter                Self;
+  typedef MultiChannelRAndBAndNIRIndexImageFilter                          Self;
   typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,TFunction> Superclass;
   typedef itk::SmartPointer<Self>                                          Pointer;
   typedef itk::SmartPointer<const Self>                                    ConstPointer;
@@ -56,7 +54,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MultiChannelRAndBAndNIRVegetationIndexImageFilter, UnaryFunctorImageFilter);
+  itkTypeMacro(MultiChannelRAndBAndNIRIndexImageFilter, UnaryFunctorImageFilter);
 
   /** Some typedefs. */
   typedef TFunction   FunctorType;
@@ -73,9 +71,9 @@ public:
 
 protected:
   /// Constructor
-  MultiChannelRAndBAndNIRVegetationIndexImageFilter(): m_RedIndex(3),m_BlueIndex(1),m_NIRIndex(4) {};
+  MultiChannelRAndBAndNIRIndexImageFilter(): m_RedIndex(3),m_BlueIndex(1),m_NIRIndex(4) {};
   /// Destructor
-  virtual ~MultiChannelRAndBAndNIRVegetationIndexImageFilter() {};
+  virtual ~MultiChannelRAndBAndNIRIndexImageFilter() {};
   /// Before generating data, set functor parameters
   virtual void BeforeThreadedGenerateData()
   {
@@ -97,7 +95,7 @@ protected:
   }
 
 private:
-  MultiChannelRAndBAndNIRVegetationIndexImageFilter(const Self&); //purposely not implemented
+  MultiChannelRAndBAndNIRIndexImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /** Red channel index */

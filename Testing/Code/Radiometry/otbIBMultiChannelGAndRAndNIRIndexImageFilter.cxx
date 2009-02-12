@@ -17,30 +17,32 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbMultiChannelRAndBAndNIRIndexImageFilter.h"
+#include "otbMultiChannelRAndGAndNIRIndexImageFilter.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbVegetationIndicesFunctor.h"
+#include "otbSoilIndicesFunctor.h"
 
 
-int otbTSARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter(int argc, char * argv[])
+int otbIBMultiChannelGAndRAndNIRIndexImageFilter(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<double ,Dimension>    InputImageType;
   typedef otb::Image<double,Dimension>           OutputImageType;
   typedef otb::ImageFileReader<InputImageType>   ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>  WriterType;
-  typedef otb::Functor::TSARVI< InputImageType::InternalPixelType,
+  typedef otb::Functor::IB2< InputImageType::InternalPixelType,
                                 InputImageType::InternalPixelType,
                                 InputImageType::InternalPixelType,
                                 OutputImageType::PixelType > FunctorType;
-  typedef otb::MultiChannelRAndBAndNIRIndexImageFilter<InputImageType,OutputImageType,FunctorType>
-                                                             MultiChannelRAndBAndNIRIndexImageFilterType;
+
+  // Warning : the order of the channels are not the same between the functor and the filter
+  typedef otb::MultiChannelRAndGAndNIRIndexImageFilter<InputImageType,OutputImageType,FunctorType>
+                                                             MultiChannelRAndGAndNIRIndexImageFilterType;
 
   // Instantiating object
-  MultiChannelRAndBAndNIRIndexImageFilterType::Pointer filter = MultiChannelRAndBAndNIRIndexImageFilterType::New();
+  MultiChannelRAndGAndNIRIndexImageFilterType::Pointer filter = MultiChannelRAndGAndNIRIndexImageFilterType::New();
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
@@ -48,25 +50,15 @@ int otbTSARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter(int argc, char * 
   const char * outputFilename = argv[2];
 
   unsigned int redChannel(::atoi(argv[3]));
-  unsigned int blueChannel(::atoi(argv[4]));
+  unsigned int greenChannel(::atoi(argv[4]));
   unsigned int nirChannel(::atoi(argv[5]));
-
-  double  a(::atof(argv[6]));
-  double  b(::atof(argv[7]));
-  double  x(::atof(argv[8]));
-  double  gamma(::atof(argv[9]));
 
   reader->SetFileName( inputFilename );
   writer->SetFileName( outputFilename  );
   filter->SetRedIndex(redChannel);
-  filter->SetBlueIndex(blueChannel);
+  filter->SetGreenIndex(greenChannel);
   filter->SetNIRIndex(nirChannel);
   filter->SetInput( reader->GetOutput() );
-
-  filter->GetFunctor().SetA(a);
-  filter->GetFunctor().SetB(b);
-  filter->GetFunctor().SetX(x);
-  filter->GetFunctor().SetGamma(gamma);
 
   writer->SetInput( filter->GetOutput() );
   writer->Update();

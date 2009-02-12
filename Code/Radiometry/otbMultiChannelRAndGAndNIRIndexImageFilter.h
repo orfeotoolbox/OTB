@@ -15,10 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMultiChannelRAndBAndNIRVegetationIndexImageFilter_h
-#define __otbMultiChannelRAndBAndNIRVegetationIndexImageFilter_h
-
-#define DEPRECATED "This class is deprecated"
+#ifndef __otbMultiChannelRAndGAndNIRIndexImageFilter_h
+#define __otbMultiChannelRAndGAndNIRIndexImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
@@ -27,8 +25,8 @@
 namespace otb
 {
 
-/** \class MultiChannelRAndBAndNIRVegetationIndexImageFilter
- * \brief Implements mutli channel R and B and NIR pixel-wise generic vegetation index operation on one vector image.
+/** \class MultiChannelRAndGAndNIRIndexImageFilter
+ * \brief Implements mutli channel R and G and NIR pixel-wise generic index operation on one vector image.
  *
  * This class is parameterized over the type of the input image and
  * the type of the output image.  It is also parameterized by the
@@ -38,16 +36,16 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputImage,
-	  class TFunction = Functor::ARVI< typename TInputImage::InternalPixelType,
-					   typename TInputImage::InternalPixelType,
-					   typename TInputImage::InternalPixelType,
-					   typename TOutputImage::PixelType>  >
-class ITK_EXPORT MultiChannelRAndBAndNIRVegetationIndexImageFilter 
+      class TFunction = Functor::AVI< typename TInputImage::InternalPixelType,
+                       typename TInputImage::InternalPixelType,
+                       typename TInputImage::InternalPixelType,
+                       typename TOutputImage::PixelType>  >
+class ITK_EXPORT MultiChannelRAndGAndNIRIndexImageFilter 
   : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,TFunction>
 {
 public:
   /** Standard class typedefs. */
-  typedef MultiChannelRAndBAndNIRVegetationIndexImageFilter                Self;
+  typedef MultiChannelRAndGAndNIRIndexImageFilter                          Self;
   typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,TFunction> Superclass;
   typedef itk::SmartPointer<Self>                                          Pointer;
   typedef itk::SmartPointer<const Self>                                    ConstPointer;
@@ -56,7 +54,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MultiChannelRAndBAndNIRVegetationIndexImageFilter, UnaryFunctorImageFilter);
+  itkTypeMacro(MultiChannelRAndGAndNIRIndexImageFilter, UnaryFunctorImageFilter);
 
   /** Some typedefs. */
   typedef TFunction   FunctorType;
@@ -64,27 +62,27 @@ public:
   /** Set/Get the red channel index. Value must be in [1...[ */
   itkSetMacro(RedIndex,unsigned int);
   itkGetMacro(RedIndex,unsigned int);
-  /** Set/Get the blue channel index. Value must be in [1...[ */
-  itkSetMacro(BlueIndex,unsigned int);
-  itkGetMacro(BlueIndex,unsigned int);
+  /** Set/Get the green channel index. Value must be in [1...[ */
+  itkSetMacro(GreenIndex,unsigned int);
+  itkGetMacro(GreenIndex,unsigned int);
   /** Set/Get the nir channel index. Value must be in [1...[ */
   itkSetMacro(NIRIndex,unsigned int);
   itkGetMacro(NIRIndex,unsigned int);
 
 protected:
   /// Constructor
-  MultiChannelRAndBAndNIRVegetationIndexImageFilter(): m_RedIndex(3),m_BlueIndex(1),m_NIRIndex(4) {};
+  MultiChannelRAndGAndNIRIndexImageFilter(): m_RedIndex(3),m_GreenIndex(1),m_NIRIndex(4) {};
   /// Destructor
-  virtual ~MultiChannelRAndBAndNIRVegetationIndexImageFilter() {};
+  virtual ~MultiChannelRAndGAndNIRIndexImageFilter() {};
   /// Before generating data, set functor parameters
   virtual void BeforeThreadedGenerateData()
   {
-    if(m_RedIndex < 1 || m_BlueIndex < 1 || m_NIRIndex < 1)
+    if(m_RedIndex < 1 || m_GreenIndex < 1 || m_NIRIndex < 1)
       {
       itkExceptionMacro(<<"Channel indices must belong to range [1, ...[");
       }
     this->GetFunctor().SetRedIndex(m_RedIndex);
-    this->GetFunctor().SetBlueIndex(m_BlueIndex);
+    this->GetFunctor().SetGreenIndex(m_GreenIndex);
     this->GetFunctor().SetNIRIndex(m_NIRIndex);
   }
   /// PrintSelf
@@ -92,18 +90,18 @@ protected:
   {
     this->Superclass::PrintSelf(os,indent);
     os << indent << "Red  index: "<<m_RedIndex<<std::endl;
-    os << indent << "Blue index: "<<m_BlueIndex<<std::endl;
+    os << indent << "Green index: "<<m_GreenIndex<<std::endl;
     os << indent << "NIR  index: "<<m_NIRIndex<<std::endl;
   }
 
 private:
-  MultiChannelRAndBAndNIRVegetationIndexImageFilter(const Self&); //purposely not implemented
+  MultiChannelRAndGAndNIRIndexImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /** Red channel index */
   unsigned int m_RedIndex;
-  /** Blue channel index */
-  unsigned int m_BlueIndex;
+  /** Green channel index */
+  unsigned int m_GreenIndex;
   /** NIR channel index */
   unsigned int m_NIRIndex;
 };

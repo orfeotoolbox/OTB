@@ -17,11 +17,11 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbRAndBAndNIRVegetationIndexImageFilter.h"
+#include "otbRAndBAndNIRIndexImageFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbVegetationIndex.h"
+#include "otbVegetationIndicesFunctor.h"
 
 
 template<class TInputRImage, class TInputBImage, class TInputNIRImage, class TOutputImage, class TFunction>
@@ -32,11 +32,11 @@ int generic_EVIRAndBAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   typedef otb::ImageFileReader<TInputNIRImage> NIRReaderType;
   typedef otb::ImageFileWriter<TOutputImage> WriterType;
 
-  typedef otb::RAndBAndNIRVegetationIndexImageFilter<TInputRImage,TInputBImage,TInputNIRImage,TOutputImage,TFunction>
-  RAndBAndNIRVegetationIndexImageFilterType;
+  typedef otb::RAndBAndNIRIndexImageFilter<TInputRImage,TInputBImage,TInputNIRImage,TOutputImage,TFunction>
+  RAndBAndNIRIndexImageFilterType;
 
   // Instantiating object
-  typename RAndBAndNIRVegetationIndexImageFilterType::Pointer filter = RAndBAndNIRVegetationIndexImageFilterType::New();
+  typename RAndBAndNIRIndexImageFilterType::Pointer filter = RAndBAndNIRIndexImageFilterType::New();
   typename RReaderType::Pointer readerR = RReaderType::New();
   typename BReaderType::Pointer readerB = BReaderType::New();
   typename NIRReaderType::Pointer readerNIR = NIRReaderType::New();

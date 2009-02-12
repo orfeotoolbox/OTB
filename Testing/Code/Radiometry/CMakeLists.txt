@@ -714,14 +714,84 @@ ADD_TEST(raTuGAndRIndexImageFilterNew ${RADIOMETRY_TESTS7}
 ADD_TEST(raTuMultiChannelGAndRIndexImageFilterNew ${RADIOMETRY_TESTS7}
         otbMultiChannelGAndRIndexImageFilterNew )
 
- ADD_TEST(raTvRI_MultiChannelGAndRIndexImageFilter ${RADIOMETRY_TESTS7}  
-   --compare-image ${TOL}   ${BASELINE}/raMultiChannelGAndRIndex_IR_spot5SubWithGcps.tif
-                     ${TEMP}/raMultiChannelGAndRIndex_IR_spot5SubWithGcps.tif
-         otbMultiChannelGAndRIndexImageFilter
-         IR
-     ${INPUTDATA}/spot5SubWithGcps.tif
-     ${TEMP}/raMultiChannelGAndRIndex_IR_spot5SubWithGcps.tif
-     1 2
+
+ADD_TEST(raTvIR_GAndRIndexImageFilter ${RADIOMETRY_TESTS7}  
+ --compare-image ${EPSILON}   ${BASELINE}/raGAndRIndexImageFilter_IR_verySmallFSATSW.tif
+                   ${TEMP}/raGAndRIndexImageFilter_IR_verySmallFSATSW.tif
+        otbGAndRIndexImageFilter
+        IR
+        ${INPUTDATA}/verySmallFSATSW_g.tif
+        ${INPUTDATA}/verySmallFSATSW_r.tif
+        ${TEMP}/raGAndRIndexImageFilter_IR_verySmallFSATSW.tif
+)
+
+ADD_TEST(raTvIR_MultiChannelGAndRIndexImageFilter ${RADIOMETRY_TESTS7}  
+   --compare-image ${TOL}   ${BASELINE}/raMultiChannelGAndRIndex_IR_Romania_Extract.tif
+                     ${TEMP}/raMultiChannelGAndRIndex_IR_Romania_Extract.tif
+        otbMultiChannelGAndRIndexImageFilter
+        IR
+        ${INPUTDATA}/Romania_Extract.tif
+        ${TEMP}/raMultiChannelGAndRIndex_IR_Romania_Extract.tif
+        1 2
+)
+
+ADD_TEST(raTvIC_GAndRIndexImageFilter ${RADIOMETRY_TESTS7}  
+ --compare-image ${EPSILON}   ${BASELINE}/raGAndRIndexImageFilter_IC_verySmallFSATSW.tif
+                   ${TEMP}/raGAndRIndexImageFilter_IC_verySmallFSATSW.tif
+        otbGAndRIndexImageFilter
+        IC
+        ${INPUTDATA}/verySmallFSATSW_g.tif
+        ${INPUTDATA}/verySmallFSATSW_r.tif
+        ${TEMP}/raGAndRIndexImageFilter_IC_verySmallFSATSW.tif
+)
+
+ADD_TEST(raTvIC_MultiChannelGAndRIndexImageFilter ${RADIOMETRY_TESTS7}  
+   --compare-image ${TOL}   ${BASELINE}/raMultiChannelGAndRIndex_IC_Romania_Extract.tif
+                     ${TEMP}/raMultiChannelGAndRIndex_IC_Romania_Extract.tif
+        otbMultiChannelGAndRIndexImageFilter
+        IC
+        ${INPUTDATA}/Romania_Extract.tif
+        ${TEMP}/raMultiChannelGAndRIndex_IC_Romania_Extract.tif
+        1 2
+)
+
+ADD_TEST(raTvIB_GAndAndNirIndexImageFilter ${RADIOMETRY_TESTS7}  
+ --compare-image ${EPSILON}   ${BASELINE}/raGAndRIndexImageFilter_IB_verySmallFSATSW.tif
+                   ${TEMP}/raGAndRIndexImageFilter_IB_verySmallFSATSW.tif
+        otbGAndRIndexImageFilter
+        IB
+        ${INPUTDATA}/verySmallFSATSW_g.tif
+        ${INPUTDATA}/verySmallFSATSW_r.tif
+        ${TEMP}/raGAndRIndexImageFilter_IB_verySmallFSATSW.tif
+)
+
+ADD_TEST(raTvIB_MultiChannelGAndRIndexImageFilter ${RADIOMETRY_TESTS7}  
+   --compare-image ${TOL}   ${BASELINE}/raMultiChannelGAndRIndex_IB_Romania_Extract.tif
+                     ${TEMP}/raMultiChannelGAndRIndex_IB_Romania_Extract.tif
+        otbMultiChannelGAndRIndexImageFilter
+        IB
+        ${INPUTDATA}/Romania_Extract.tif
+        ${TEMP}/raMultiChannelGAndRIndex_IB_Romania_Extract.tif
+        1 2
+)
+
+ADD_TEST(raTvIB2_GAndRAndNIRIndexImageFilter ${RADIOMETRY_TESTS7}  
+ --compare-image ${EPSILON}   ${BASELINE}/raGAndRAndNIRIndexImageFilter_IB2_verySmallFSATSW.tif
+                   ${TEMP}/raGAndRAndNIRIndexImageFilter_IB2_verySmallFSATSW.tif
+        otbIBGAndRAndNIRIndexImageFilter
+        ${INPUTDATA}/verySmallFSATSW_g.tif
+        ${INPUTDATA}/verySmallFSATSW_r.tif
+        ${INPUTDATA}/verySmallFSATSW_nir.tif
+        ${TEMP}/raGAndRAndNIRIndexImageFilter_IB2_verySmallFSATSW.tif
+)
+
+ADD_TEST(raTvIB2_MultiChannelGAndRIndexImageFilter ${RADIOMETRY_TESTS7}  
+   --compare-image ${TOL}   ${BASELINE}/raMultiChannelGAndRAndNIRIndex_IB2_Romania_Extract.tif
+                     ${TEMP}/raMultiChannelGAndRAndNIRIndex_IB2_Romania_Extract.tif
+         otbIBMultiChannelGAndRAndNIRIndexImageFilter
+         ${INPUTDATA}/Romania_Extract.tif
+         ${TEMP}/raMultiChannelGAndRAndNIRIndex_IB2_Romania_Extract.tif
+         2 1 3
 )
 
 # A enrichir
@@ -782,8 +852,11 @@ otbWDVIMultiChannelRAndNIRVegetationIndexImageFilter.cxx
 
 SET(Radiometry_SRCS7
 otbGAndRIndexImageFilterNew.cxx
+otbGAndRIndexImageFilter.cxx
 otbMultiChannelGAndRIndexImageFilterNew.cxx
 otbMultiChannelGAndRIndexImageFilter.cxx
+otbIBGAndRAndNIRIndexImageFilter.cxx
+otbIBMultiChannelGAndRAndNIRIndexImageFilter.cxx
 )
 
 
