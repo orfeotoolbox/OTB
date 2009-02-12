@@ -117,8 +117,9 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
 {
   /** Extract the begining and the */
   
+  
   /** Define a line iterator */
-  //itk::LineIterator<InputImageType> itLine()
+  //itk::LineIterator<InputImageType> itLine(this->GetInputImage() , indexBegin , indexEnd);
   
   return 0.;
 }

@@ -83,7 +83,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
   
   outputIt.GoToBegin();
   inputIt.GoToBegin();
-  
+
   for (outputIt.GoToBegin(); !outputIt.IsAtEnd()  ; ++outputIt,++inputIt)
       outputIt.Set( static_cast<OutputPixelType>(inputIt.Get()) );
   
