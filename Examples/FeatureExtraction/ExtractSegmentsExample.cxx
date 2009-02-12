@@ -179,8 +179,8 @@ int main( int argc, char * argv[] )
 
 
   // Software Guide : BeginCodeSnippet
-  rescaler->SetOutputMinimum( itk::NumericTraits< OutputPixelType >::min());
-  rescaler->SetOutputMaximum( itk::NumericTraits< OutputPixelType >::max());
+  //rescaler->SetOutputMinimum( itk::NumericTraits< OutputPixelType >::min());
+  //rescaler->SetOutputMaximum( itk::NumericTraits< OutputPixelType >::max());
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
