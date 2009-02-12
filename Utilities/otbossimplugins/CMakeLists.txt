@@ -14,7 +14,7 @@ SET(ossimplugins_SOURCES
 
 ADD_LIBRARY(otbossimplugins ${ossimplugins_SOURCES} )
 IF( CYGWIN )
-    TARGET_LINK_LIBRARIES(otbossimplugins otbossim gdal)
+    TARGET_LINK_LIBRARIES(otbossimplugins otbossim ${GDAL_LIBRARY})
 ENDIF( CYGWIN )
 
 INSTALL(TARGETS otbossimplugins

@@ -99,6 +99,6 @@ ADD_TEST(Image6Test ${EXE_TESTS}
 
 
 ADD_EXECUTABLE(otbImageExamplesTests otbImageExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbImageExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+TARGET_LINK_LIBRARIES(otbImageExamplesTests ${GDAL_LIBRARY} ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
