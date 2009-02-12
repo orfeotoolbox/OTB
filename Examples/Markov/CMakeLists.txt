@@ -83,7 +83,7 @@ ADD_TEST(MarkovRegularizationExampleTest ${EXE_TESTS}
 
 
 ADD_EXECUTABLE(otbMarkovExamplesTests otbMarkovExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbMarkovExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBMarkov)
+TARGET_LINK_LIBRARIES(otbMarkovExamplesTests ${GDAL_LIBRARY} ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBMarkov)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

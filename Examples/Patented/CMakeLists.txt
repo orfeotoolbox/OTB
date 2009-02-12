@@ -36,6 +36,6 @@ ADD_TEST(HybridSegmentationFuzzyVoronoiTest ${EXE_TESTS}
 
 
 ADD_EXECUTABLE(otbPatentedExamplesTests otbPatentedExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbPatentedExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbPatentedExamplesTests ${GDAL_LIBRARY} ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -216,13 +216,13 @@ ADD_TEST(FA-0000041-mean_shift2 ${CXX_TEST_PATH}/0000041-mean_shift
 	)
 
 ADD_EXECUTABLE(AlignementsQB  AlignementsQB.cxx)
-TARGET_LINK_LIBRARIES(AlignementsQB OTBFeatureExtraction OTBIO OTBCommon gdal ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(AlignementsQB OTBFeatureExtraction OTBIO OTBCommon ${GDAL_LIBRARY} ITKIO ITKCommon)
 
 ADD_EXECUTABLE(MapActivation  MapActivation.cxx)
-TARGET_LINK_LIBRARIES(MapActivation OTBFeatureExtraction OTBIO OTBCommon gdal ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(MapActivation OTBFeatureExtraction OTBIO OTBCommon ${GDAL_LIBRARY} ITKIO ITKCommon)
 
 ADD_EXECUTABLE(StreamingStat  StreamingStat.cxx)
-TARGET_LINK_LIBRARIES(StreamingStat OTBFeatureExtraction OTBIO OTBCommon gdal ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(StreamingStat OTBFeatureExtraction OTBIO OTBCommon ${GDAL_LIBRARY} ITKIO ITKCommon)
 
 ADD_EXECUTABLE(0000041-mean_shift  0000041-mean_shift.cxx)
 TARGET_LINK_LIBRARIES(0000041-mean_shift OTBIO OTBCommon OTBBasicFilters)
