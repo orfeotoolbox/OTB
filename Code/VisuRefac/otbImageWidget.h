@@ -57,8 +57,9 @@ public:
   typedef TInputImage                         InputImageType;
   /** Image region typedef */
   typedef typename InputImageType::RegionType RegionType;
-  /** Region size typedef */
+  /** Region size & index typedef */
   typedef typename RegionType::SizeType       SizeType;
+  typedef typename RegionType::IndexType      IndexType;
   /** Controller typedef */
   //typedef otb::ImageViewerController        ControllerType;
 
@@ -75,6 +76,11 @@ public:
   /** Set/Get the Controller */
   //itkSetObjectMacro(Controller,ControllerType);
   //itkGetObjectMacro(Controller,ControllerType);
+
+ /** Handle resizing event. This method is used by FLTK routines and
+    * should not be called on its own.
+    */
+  virtual void resize(int x, int y, int w, int h);
  
 protected:
   /** Constructor */
@@ -87,14 +93,32 @@ protected:
     * used by FLTK routines and should not be called on its own.
     */
   virtual void draw(void);
-  /** Handle resizing event. This method is used by FLTK routines and
-    * should not be called on its own.
-    */
-  virtual void resize(int x, int y, int w, int h);
   /** Handle the event from the users.  This method is used by FLTK 
     * routines and should not be called on its own.
     */
   virtual int  handle(int event);
+
+  /** Compute the linear buffer index according to the 2D region and
+   * its 2D index.This method is used when OTB_GL_USE_ACCEL is ON.
+   * \param index 2D index
+   * \param region 2D region
+   */
+  static inline unsigned int ComputeBufferIndex(const IndexType& index, const RegionType & region)
+  {
+    return (index[1]-region.GetIndex()[1])*3*region.GetSize()[0]+3*(index[0]-region.GetIndex()[0]);
+  }
+
+  /** Compute the linear buffer index according to the 2D region and
+   * its 2D index.This method is used when OTB_GL_USE_ACCEL is OFF. 
+   * The resulting buffer will be flipped over the X axis.
+   * \param index 2D index
+   * \param region 2D region
+   */
+  static inline unsigned int ComputeXAxisFlippedBufferIndex(const IndexType& iteratorIndex,const RegionType & region)
+  {
+    return  (region.GetSize()[1]-1+region.GetIndex()[1]-index[1])*3*region.GetSize()[0]+3*(index[0]-region.GetIndex()[0]);
+  }
+
 
 private:
   ImageWidget(const Self&);    // purposely not implemented

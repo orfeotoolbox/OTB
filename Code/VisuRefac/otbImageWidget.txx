@@ -19,6 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbImageWidget_txx
 
 #include "otbImageWidget.h"
+#include "itkImageRegionConstIteratorWithIndex.h"
 
 namespace otb
 {
@@ -37,9 +38,11 @@ template <class TInputImage>
 ImageWidget<TInputImage>
 ::~ImageWidget()
 {
+  // Delete OpenGl buffer if needed
   if(m_OpenGlBuffer!=NULL)
     {
     delete [] m_OpenGlBuffer;
+    m_OpenGlBuffer = NULL;
     }
 }
 
@@ -75,7 +78,43 @@ void
 ImageWidget<TInputImage>
 ::ReadBuffer(InputImageType * image, RegionType & region)
 {
+  // Before doing anything, check if region is inside the buffered
+  // region of image
+  if(!image->GetBufferedRegion().IsInside(region))
+    {
+    itkExceptionMacro(<<"Region to read is oustside of the buffered region.");
+    }
+  // Delete previous buffer if needed
+  if(m_OpenGlBuffer != NULL)
+    {
+    delete [] m_OpenGlBuffer;
+    m_OpenGlBuffer = NULL;
+    }
+  // Allocate new memory
+  m_OpenGlBuffer = new unsigned char[3*region.GetNumberOfPixels()];
 
+  // Declare the iterator
+  itk::ImageRegionConstIteratorWithIndex<InputImageType> it(image,region);
+
+  // Go to begin
+  it.GoToBegin();
+
+  while(!it.IsAtEnd())
+    {
+    // Fill compute the linear index
+    #ifdef OTB_GL_USE_ACCEL
+    unsigned int index = ComputeBufferIndex(it.GetIndex(),region);
+    #else
+    unsigned int index = ComputeXAxisFlippedBufferIndex(it.GetIndex(),region);
+    #endif
+    // Fill the buffer
+    m_OpenGlBuffer[index]  =it.Get()[0];
+    m_OpenGlBuffer[index+1]=it.Get()[1];
+    m_OpenGlBuffer[index+2]=it.Get()[2];
+    ++it;
+    }
+  // Last, updating buffer size
+  m_OpenGlBufferSize = region.GetSize();
 }
 
 template <class TInputImage>
