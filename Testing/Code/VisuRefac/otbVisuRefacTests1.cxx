@@ -28,4 +28,7 @@ void RegisterTests()
 {
   REGISTER_TEST(otbImageWidgetNew);
   REGISTER_TEST(otbImageWidget);
+  REGISTER_TEST(otbImageWidgetActionHandlerNew);
+  REGISTER_TEST(otbImageWidgetControllerNew);
+  REGISTER_TEST(otbImageWidgetController);
 }

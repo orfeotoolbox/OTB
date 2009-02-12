@@ -34,9 +34,28 @@ ${INPUTDATA}/poupees.png 1
 )
 ENDIF(OTB_GL_USE_ACCEL)
 
+#------------ otb::ImageWidgetActionHandler -------------
+
+ADD_TEST(vrTuImageWidgetActionHandlerNew ${VISUREFAC_TESTS1}
+otbImageWidgetActionHandlerNew
+)
+
+#------------ otb::ImageWidgetController ----------------
+
+ADD_TEST(vrTuImageWidgetControllerNew ${VISUREFAC_TESTS1}
+otbImageWidgetControllerNew
+)
+
+ADD_TEST(vrTvImageWidgetController ${VISUREFAC_TESTS1}
+otbImageWidgetController
+)
+
 SET(VisuRefac_SRCS1
 otbImageWidgetNew.cxx
 otbImageWidget.cxx
+otbImageWidgetActionHandlerNew.cxx
+otbImageWidgetControllerNew.cxx
+otbImageWidgetController.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 
