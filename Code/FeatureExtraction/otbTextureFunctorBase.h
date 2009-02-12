@@ -31,7 +31,7 @@ namespace Functor
 /** \class TextureFunctorBase
  *  \brief This functor ius the base for all texture functors.
  *
- *  It uses a neighborhood (radius : m_Radius) and an offset (m_Offset)  to compute texture.
+ *  It uses a neighborhood and an offset (m_Offset)  to compute texture.
  *  It computes the mean, standard deviation of the two areas and the joint histogram using
  *  Scott formula for the bins lengths computation.
  *  TIterInput is an iterator, TOutput is a PixelType.
