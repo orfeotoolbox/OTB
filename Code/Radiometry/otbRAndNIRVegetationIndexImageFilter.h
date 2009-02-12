@@ -18,6 +18,9 @@
 #ifndef __otbRAndNIRVegetationIndexImageFilter_h
 #define __otbRAndNIRVegetationIndexImageFilter_h
 
+#define DEPRECATED "This class is deprecated, use RAndNIRIndexImageFilter"
+#pragma deprecated(RAndNIRVegetationIndexImageFilter)
+
 #include "itkBinaryFunctorImageFilter.h"
 #include "otbVegetationIndicesFunctor.h"
 
@@ -28,7 +31,7 @@ namespace otb
  * \brief
  *
  */
-#pragma deprecated(RAndNIRVegetationIndexImageFilter)
+
 template <class TInputImageR, class TInputImageNIR, class TOutputImage,
 class TFunction = Functor::NDVI<              typename TInputImageR::PixelType,
 typename TInputImageNIR::PixelType,
@@ -81,7 +84,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRAndNIRIndexImageFilter.txx"
+#include "otbRAndNIRVegetationIndexImageFilter.txx"
 #endif
 
 
