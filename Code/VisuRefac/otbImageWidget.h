@@ -34,7 +34,15 @@
 namespace otb
 {
 /** \class ImageWidget
-*   \brief render an RGB bytes image buffer to the screen
+*   \brief This class renders an RGB bytes image buffer to the screen.
+*   Rendered data can be loaded using the ReadBuffer() method.
+*   The SetIsotropicZoom() method allows to tune the zooming (zooming
+*   is centered).
+*   The SetUseGlAcceleration() allows you to disable Gl
+*   acceleration. If OTB_USE_GL_ACCEL is OFF, enabling Gl acceleration
+*   will generate an exception.
+*   Using Gl acceleration allows you to have a better rendering when
+*   zooming.
 */
 
 template <class TInputImage=otb::Image<itk::RGBPixel<unsigned char>,2 > > 
