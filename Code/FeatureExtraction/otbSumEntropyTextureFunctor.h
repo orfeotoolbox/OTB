@@ -25,16 +25,15 @@ namespace otb
 namespace Functor
 {
 /** \class SumEntropyTextureFunctor
- *  \brief This functor calculates the inverse difference moment of an image
+ *  \brief This functor calculates the sum entropy image texture according to Haralick descriptors.
  *
- *   Computes joint histogram (neighborhood and offset neighborhood) 
- *   which bins are computing using Scott formula.
- *   Computes the probabiltiy p for each pair of pixel.
- *   InverseSumMoment  is the sum 1/(1+(pi-poff)²)*p over the neighborhood.
- *   TIterInput is an ietrator, TOutput is a PixelType.
+ *  Computes sum entropy using joint histogram (neighborhood and offset neighborhood).
+ *  The formula is:
+ *  $ -\sum_{i}{2N}p_{x+y}(i)\log{(p_{x+y}(i))} $
+ *  TIterInput is an iterator, TOutput is a PixelType.
  *
+ *  \sa TextureFunctorBase
  *  \ingroup Functor
- *  \ingroup 
  *  \ingroup Statistics
  */
 template <class TIterInput1, class TIterInput2, class TOutput>

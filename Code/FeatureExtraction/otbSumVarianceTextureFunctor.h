@@ -18,7 +18,6 @@
 #ifndef __otbSumVarianceTextureFunctor_h
 #define __otbSumVarianceTextureFunctor_h
 
-#include "otbTextureFunctorBase.h"
 #include "otbSumAverageTextureFunctor.h"
 
 namespace otb
@@ -26,14 +25,16 @@ namespace otb
 namespace Functor
 {
 /** \class SumVarianceextureFunctor
- *  \brief This functor calculates the local entropy of an image
+ *  \brief This functor calculates the sum variance image texture according to Haralick descriptiors.
  *
- *   Computes joint histogram (neighborhood and offset neighborhood) 
- *   which bins are computing using Scott formula.
- *   Computes the probabiltiy p for each pair of pixel.
- *   Entropy  is the sum (i-mu)².log(p) over the neighborhood.
- *   TIterInput is an ietrator, TOutput is a PixelType.
+ *  Computes sum variance using joint histogram (neighborhood and offset neighborhood).
+ *  The formula is:
+ *  $ \sum_{i}{2N}(i-SAV)^2.p_{x+y}(i) $
+ *  With $SAV$ is the sum average texture value.
+ *  TIterInput is an iterator, TOutput is a PixelType.
  *
+ *  \sa SumAverageTextureFunctor
+ *  \sa TextureFunctorBase
  *  \ingroup Functor
  *  \ingroup Statistics
  */

@@ -25,18 +25,20 @@ namespace otb
 namespace Functor
 {
 /** \class ClusterProminenceTextureFunctor
- *  \brief This functor calculates the inverse difference moment of an image
+ *  \brief This functor calculates the cluster prominence image texture.
  *
- *   Computes joint histogram (neighborhood and offset neighborhood) 
- *   which bins are computing using Scott formula.
- *   Computes the probabiltiy p for each pair of pixel.
- *   InverseDifferenceMoment  is the sum 1/(1+(pi-poff)²)*p over the neighborhood.
- *   TIterInput is an ietrator, TOutput is a PixelType.
+ *  Computes scluster prominence using joint histogram (neighborhood and offset neighborhood).
+ *  The formula is:
+ *  $ \sum_{i}\sum_{j}((i-\mu) + (j-\mu))^4p(i,j) $
+ *  Where $\mu$ is the mean texture value.
+ *  TIterInput is an iterator, TOutput is a PixelType.
  *
+ *  \sa MeanTextureFunctor
+ *  \sa TextureFunctorBase
  *  \ingroup Functor
- *  \ingroup 
  *  \ingroup Statistics
  */
+
 template <class TIterInput1, class TIterInput2, class TOutput>
 class ITK_EXPORT ClusterProminenceTextureFunctor : 
 public MeanTextureFunctor<TIterInput1, TIterInput2, TOutput>

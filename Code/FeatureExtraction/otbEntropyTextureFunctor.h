@@ -27,15 +27,15 @@ namespace Functor
 /** \class EntropyTextureFunctor
  *  \brief This functor calculates the local entropy of an image
  *
- *   Computes joint histogram (neighborhood and offset neighborhood) 
- *   which bins are computing using Scott formula.
- *   Computes the probabiltiy p for each pair of pixel.
- *   Entropy  is the sum p.log(p) over the neighborhood.
- *   TIterInput is an ietrator, TOutput is a PixelType.
+ *  Computes joint histogram (neighborhood and offset neighborhood).
+ *  This formula is:
+ *  $ -\sum_{i}p_{x-y}(i)\log{(p_{x-y}(i))}  $
+ *  TIterInput is an ietrator, TOutput is a PixelType.
  *
  *  \ingroup Functor
  *  \ingroup Statistics
  */
+
 template <class TIterInput1, class TIterInput2, class TOutput>
 class ITK_EXPORT EntropyTextureFunctor : 
 public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>

@@ -24,18 +24,21 @@ namespace otb
 {
 namespace Functor
 {
-/** \class VarianceextureFunctor
- *  \brief This functor calculates the local entropy of an image
+/** \class VarianceTextureFunctor
+ *  \brief This functor calculates the cluster shade image texture.
  *
- *   Computes joint histogram (neighborhood and offset neighborhood) 
- *   which bins are computing using Scott formula.
- *   Computes the probabiltiy p for each pair of pixel.
- *   Entropy  is the sum (i-mu)².log(p) over the neighborhood.
- *   TIterInput is an ietrator, TOutput is a PixelType.
+ *  Computes variance using joint histogram (neighborhood and offset neighborhood) .
+ *  The formula is:
+ *  $ \sum_{i}{2N}(i-SAV)^2.p_{x+y}(i) $
+ *  With $SAV$ is the sum average texture value.
+ *  TIterInput is an iterator, TOutput is a PixelType.
  *
+ *  \sa MeanTextureFunctor
+ *  \sa TextureFunctorBase
  *  \ingroup Functor
  *  \ingroup Statistics
  */
+
 template <class TIterInput1, class TIterInput2, class TOutput>
 class ITK_EXPORT VarianceTextureFunctor : 
 public MeanTextureFunctor<TIterInput1, TIterInput2, TOutput>

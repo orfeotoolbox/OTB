@@ -518,6 +518,6 @@ ADD_TEST(RationalQuotientResampleImageFilterTest ${EXE_TESTS}
 
 
 ADD_EXECUTABLE(otbFilteringExamplesTests otbFilteringExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbFilteringExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbFilteringExamplesTests ${GDAL_LIBRARY} ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
