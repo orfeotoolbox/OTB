@@ -28,7 +28,10 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbGAndRIndexImageFilterNew);
+  REGISTER_TEST(otbGAndRIndexImageFilter);
   REGISTER_TEST(otbMultiChannelGAndRIndexImageFilterNew);
   REGISTER_TEST(otbMultiChannelGAndRIndexImageFilter);
+  REGISTER_TEST(otbIBGAndRAndNIRIndexImageFilter);
+  REGISTER_TEST(otbIBMultiChannelGAndRAndNIRIndexImageFilter);
 }
 

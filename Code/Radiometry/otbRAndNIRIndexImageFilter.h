@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRAndNIRVegetationIndexImageFilter_h
-#define __otbRAndNIRVegetationIndexImageFilter_h
+#ifndef __otbRAndNIRIndexImageFilter_h
+#define __otbRAndNIRIndexImageFilter_h
 
 #include "itkBinaryFunctorImageFilter.h"
 #include "otbVegetationIndicesFunctor.h"
@@ -24,21 +24,21 @@
 namespace otb
 {
 
-/** \class RAndNIRVegetationIndexImageFilter
+/** \class RAndNIRIndexImageFilter
  * \brief
  *
  */
-#pragma deprecated(RAndNIRVegetationIndexImageFilter)
+
 template <class TInputImageR, class TInputImageNIR, class TOutputImage,
 class TFunction = Functor::NDVI<              typename TInputImageR::PixelType,
 typename TInputImageNIR::PixelType,
 typename TOutputImage::PixelType > >
-class ITK_EXPORT RAndNIRVegetationIndexImageFilter :  public itk::BinaryFunctorImageFilter< TInputImageR, TInputImageNIR, TOutputImage, TFunction >
+class ITK_EXPORT RAndNIRIndexImageFilter :  public itk::BinaryFunctorImageFilter< TInputImageR, TInputImageNIR, TOutputImage, TFunction >
 {
 public:
 
   /** Standard typedefs */
-  typedef RAndNIRVegetationIndexImageFilter      Self;
+  typedef RAndNIRIndexImageFilter      Self;
   typedef itk::BinaryFunctorImageFilter< TInputImageR, TInputImageNIR, TOutputImage, TFunction >  Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
@@ -47,7 +47,7 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(RAndNIRVegetationIndexImageFilter,BinaryFunctorImageFilter);
+  itkTypeMacro(RAndNIRIndexImageFilter,BinaryFunctorImageFilter);
 
   void SetInputR( const TInputImageR * image1 );
   void SetInputNIR( const TInputImageNIR * image2 );
@@ -63,8 +63,8 @@ public:
   typedef typename Superclass::OutputImageRegionType OutputImageRegionType;
 
 protected:
-  RAndNIRVegetationIndexImageFilter();
-  virtual ~RAndNIRVegetationIndexImageFilter() {};
+  RAndNIRIndexImageFilter();
+  virtual ~RAndNIRIndexImageFilter() {};
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -72,7 +72,7 @@ protected:
                               int threadId );
   */
 private:
-  RAndNIRVegetationIndexImageFilter(const Self&); //purposely not implemented
+  RAndNIRIndexImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
 

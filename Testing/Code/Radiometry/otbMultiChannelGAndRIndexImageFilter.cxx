@@ -22,7 +22,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbVegetationIndex.h"
+#include "otbVegetationIndicesFunctor.h"
 
 
 template<class TInputImage, class TOutputImage, class TFunction>
@@ -68,11 +68,16 @@ int otbMultiChannelGAndRIndexImageFilter(int argc, char * argv[])
                                      InputImageType::InternalPixelType,
                                      OutputImageType::PixelType> >
                                      (argc,argv) );
-  /*else if ( strArgv == "IC" ) return( generic_MultiChannelRAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
+  else if ( strArgv == "IC" ) return( generic_MultiChannelGAndRIndexImageFilter<InputImageType, OutputImageType,
                                          otb::Functor::IC<     InputImageType::InternalPixelType,
                                          InputImageType::InternalPixelType,
                                          OutputImageType::PixelType> >
-                                         (argc,argv) );*/
+                                         (argc,argv) );
+  else if ( strArgv == "IB" ) return( generic_MultiChannelGAndRIndexImageFilter<InputImageType, OutputImageType,
+                                         otb::Functor::IB<     InputImageType::InternalPixelType,
+                                         InputImageType::InternalPixelType,
+                                         OutputImageType::PixelType> >
+                                         (argc,argv) );
   else
     return EXIT_FAILURE;
   return EXIT_SUCCESS;

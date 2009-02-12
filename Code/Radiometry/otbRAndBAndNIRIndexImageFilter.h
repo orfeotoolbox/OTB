@@ -15,9 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRAndBAndNIRVegetationIndexImageFilter_h
-#define __otbRAndBAndNIRVegetationIndexImageFilter_h
-#define DEPRECATED "This class is deprecated"
+#ifndef __otbRAndBAndNIRIndexImageFilter_h
+#define __otbRAndBAndNIRIndexImageFilter_h
 
 #include "itkTernaryFunctorImageFilter.h"
 #include "otbVegetationIndicesFunctor.h"
@@ -25,7 +24,7 @@
 namespace otb
 {
 
-/** \class RAndBAndNIRVegetationIndexImageFilter
+/** \class RAndBAndNIRIndexImageFilter
  * \brief
  *
  */
@@ -35,12 +34,12 @@ class TFunction = Functor::ARVI<              typename TInputImageR::PixelType,
 typename TInputImageB::PixelType,
 typename TInputImageNIR::PixelType,
 typename TOutputImage::PixelType > >
-class ITK_EXPORT RAndBAndNIRVegetationIndexImageFilter :  public itk::TernaryFunctorImageFilter< TInputImageR, TInputImageB, TInputImageNIR, TOutputImage, TFunction >
+class ITK_EXPORT RAndBAndNIRIndexImageFilter :  public itk::TernaryFunctorImageFilter< TInputImageR, TInputImageB, TInputImageNIR, TOutputImage, TFunction >
 {
 public:
 
   /** Standard typedefs */
-  typedef RAndBAndNIRVegetationIndexImageFilter      Self;
+  typedef RAndBAndNIRIndexImageFilter      Self;
   typedef itk::TernaryFunctorImageFilter< TInputImageR, TInputImageB, TInputImageNIR, TOutputImage, TFunction >  Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
@@ -49,7 +48,7 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(RAndBAndNIRVegetationIndexImageFilter,TernaryFunctorImageFilter);
+  itkTypeMacro(RAndBAndNIRIndexImageFilter,TernaryFunctorImageFilter);
 
   void SetInputR( const TInputImageR * image );
   void SetInputB( const TInputImageB * image );
@@ -63,13 +62,13 @@ public:
   typedef typename Superclass::FunctorType FunctorType;
 
 protected:
-  RAndBAndNIRVegetationIndexImageFilter();
-  virtual ~RAndBAndNIRVegetationIndexImageFilter() {};
+  RAndBAndNIRIndexImageFilter();
+  virtual ~RAndBAndNIRIndexImageFilter() {};
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  RAndBAndNIRVegetationIndexImageFilter(const Self&); //purposely not implemented
+  RAndBAndNIRIndexImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
 

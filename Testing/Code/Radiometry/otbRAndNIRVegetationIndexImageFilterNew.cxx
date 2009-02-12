@@ -33,10 +33,10 @@ int otbRAndNIRVegetationIndexImageFilterNew(int argc, char * argv[])
   typedef itk::Image<PixelType,Dimension> InputNIRImageType;
   typedef itk::Image<PixelType,Dimension> OutputImageType;
 
-  typedef otb::RAndNIRVegetationIndexImageFilter<InputRImageType,InputNIRImageType,OutputImageType>  RAndNIRVegetationIndexImageFilterType;
+  typedef otb::RAndNIRIndexImageFilter<InputRImageType,InputNIRImageType,OutputImageType>  RAndNIRIndexImageFilterType;
 
   // Instantiating object
-  RAndNIRVegetationIndexImageFilterType::Pointer object = RAndNIRVegetationIndexImageFilterType::New();
+  RAndNIRIndexImageFilterType::Pointer object = RAndNIRIndexImageFilterType::New();
 
   return EXIT_SUCCESS;
 }

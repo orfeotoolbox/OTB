@@ -15,9 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRAndBAndNIRVegetationIndexImageFilter_h
-#define __otbRAndBAndNIRVegetationIndexImageFilter_h
-#define DEPRECATED "This class is deprecated"
+#ifndef __otbRAndGAndNIRIndexImageFilter_h
+#define __otbRAndGAndNIRIndexImageFilter_h
 
 #include "itkTernaryFunctorImageFilter.h"
 #include "otbVegetationIndicesFunctor.h"
@@ -25,23 +24,23 @@
 namespace otb
 {
 
-/** \class RAndBAndNIRVegetationIndexImageFilter
+/** \class RAndGAndNIRIndexImageFilter
  * \brief
  *
  */
 
-template <class TInputImageR, class TInputImageB, class TInputImageNIR, class TOutputImage,
-class TFunction = Functor::ARVI<              typename TInputImageR::PixelType,
-typename TInputImageB::PixelType,
+template <class TInputImageR, class TInputImageG, class TInputImageNIR, class TOutputImage,
+class TFunction = Functor::AVI<              typename TInputImageR::PixelType,
+typename TInputImageG::PixelType,
 typename TInputImageNIR::PixelType,
 typename TOutputImage::PixelType > >
-class ITK_EXPORT RAndBAndNIRVegetationIndexImageFilter :  public itk::TernaryFunctorImageFilter< TInputImageR, TInputImageB, TInputImageNIR, TOutputImage, TFunction >
+class ITK_EXPORT RAndGAndNIRIndexImageFilter :  public itk::TernaryFunctorImageFilter< TInputImageR, TInputImageG, TInputImageNIR, TOutputImage, TFunction >
 {
 public:
 
   /** Standard typedefs */
-  typedef RAndBAndNIRVegetationIndexImageFilter      Self;
-  typedef itk::TernaryFunctorImageFilter< TInputImageR, TInputImageB, TInputImageNIR, TOutputImage, TFunction >  Superclass;
+  typedef RAndGAndNIRIndexImageFilter      Self;
+  typedef itk::TernaryFunctorImageFilter< TInputImageR, TInputImageG, TInputImageNIR, TOutputImage, TFunction >  Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
 
@@ -49,27 +48,27 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(RAndBAndNIRVegetationIndexImageFilter,TernaryFunctorImageFilter);
+  itkTypeMacro(RAndGAndNIRIndexImageFilter,TernaryFunctorImageFilter);
 
   void SetInputR( const TInputImageR * image );
-  void SetInputB( const TInputImageB * image );
+  void SetInputG( const TInputImageG * image );
   void SetInputNIR( const TInputImageNIR * image );
 
   /** Template parameters typedefs */
   typedef typename Superclass::Input1ImageType RInputImageType;
-  typedef typename Superclass::Input2ImageType BInputImageType;
+  typedef typename Superclass::Input2ImageType GInputImageType;
   typedef typename Superclass::Input3ImageType NIRInputImageType;
   typedef typename Superclass::OutputImageType OutputImageType;
   typedef typename Superclass::FunctorType FunctorType;
 
 protected:
-  RAndBAndNIRVegetationIndexImageFilter();
-  virtual ~RAndBAndNIRVegetationIndexImageFilter() {};
+  RAndGAndNIRIndexImageFilter();
+  virtual ~RAndGAndNIRIndexImageFilter() {};
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  RAndBAndNIRVegetationIndexImageFilter(const Self&); //purposely not implemented
+  RAndGAndNIRIndexImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
 
@@ -78,7 +77,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRAndBAndNIRIndexImageFilter.txx"
+#include "otbRAndGAndNIRIndexImageFilter.txx"
 #endif
 
 

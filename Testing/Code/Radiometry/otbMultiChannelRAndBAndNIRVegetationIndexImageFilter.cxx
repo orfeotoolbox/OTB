@@ -17,12 +17,12 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbMultiChannelRAndBAndNIRVegetationIndexImageFilter.h"
+#include "otbMultiChannelRAndBAndNIRIndexImageFilter.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbVegetationIndex.h"
+#include "otbVegetationIndicesFunctor.h"
 
 template<class TInputImage, class TOutputImage, class TFunction>
 int generic_MultiChannelRAndBAndNIRVegetationIndexImageFilter(int argc, char * argv[])
@@ -30,11 +30,11 @@ int generic_MultiChannelRAndBAndNIRVegetationIndexImageFilter(int argc, char * a
   typedef otb::ImageFileReader<TInputImage> ReaderType;
   typedef otb::ImageFileWriter<TOutputImage> WriterType;
 
-  typedef otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter<TInputImage,TOutputImage,TFunction>
-  MultiChannelRAndBAndNIRVegetationIndexImageFilterType;
+  typedef otb::MultiChannelRAndBAndNIRIndexImageFilter<TInputImage,TOutputImage,TFunction>
+  MultiChannelRAndBAndNIRIndexImageFilterType;
 
   // Instantiating object
-  typename MultiChannelRAndBAndNIRVegetationIndexImageFilterType::Pointer filter = MultiChannelRAndBAndNIRVegetationIndexImageFilterType::New();
+  typename MultiChannelRAndBAndNIRIndexImageFilterType::Pointer filter = MultiChannelRAndBAndNIRIndexImageFilterType::New();
   typename ReaderType::Pointer reader = ReaderType::New();
   typename WriterType::Pointer writer = WriterType::New();
 

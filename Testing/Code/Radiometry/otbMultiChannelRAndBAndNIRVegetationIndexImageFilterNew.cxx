@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbMultiChannelRAndBAndNIRVegetationIndexImageFilter.h"
+#include "otbMultiChannelRAndBAndNIRIndexImageFilter.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
 
@@ -27,10 +27,10 @@ int otbMultiChannelRAndBAndNIRVegetationIndexImageFilterNew(int argc, char * arg
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<unsigned char,Dimension> InputImageType;
   typedef otb::Image<float,Dimension> OutputImageType;
-  typedef otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter<InputImageType,OutputImageType> MultiChannelRAndBAndNIRVegetationIndexImageFilterType;
+  typedef otb::MultiChannelRAndBAndNIRIndexImageFilter<InputImageType,OutputImageType> MultiChannelRAndBAndNIRIndexImageFilterType;
 
   // Instantiating object
-  MultiChannelRAndBAndNIRVegetationIndexImageFilterType::Pointer object = MultiChannelRAndBAndNIRVegetationIndexImageFilterType::New();
+  MultiChannelRAndBAndNIRIndexImageFilterType::Pointer object = MultiChannelRAndBAndNIRIndexImageFilterType::New();
 
 
   return EXIT_SUCCESS;

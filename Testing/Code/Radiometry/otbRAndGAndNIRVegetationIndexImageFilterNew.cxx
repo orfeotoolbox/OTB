@@ -21,7 +21,7 @@
 
 #include "itkExceptionObject.h"
 
-#include "otbRAndGAndNIRVegetationIndexImageFilter.h"
+#include "otbRAndGAndNIRIndexImageFilter.h"
 #include "otbImage.h"
 
 int otbRAndGAndNIRVegetationIndexImageFilterNew(int argc, char * argv[])
@@ -33,10 +33,10 @@ int otbRAndGAndNIRVegetationIndexImageFilterNew(int argc, char * argv[])
   typedef otb::Image<PixelType,Dimension> InputNIRImageType;
   typedef otb::Image<PixelType,Dimension> OutputImageType;
 
-  typedef otb::RAndGAndNIRVegetationIndexImageFilter<InputRImageType,InputGImageType,InputNIRImageType,OutputImageType>  RAndGAndNIRVegetationIndexImageFilterType;
+  typedef otb::RAndGAndNIRIndexImageFilter<InputRImageType,InputGImageType,InputNIRImageType,OutputImageType>  RAndGAndNIRIndexImageFilterType;
 
   // Instantiating object
-  RAndGAndNIRVegetationIndexImageFilterType::Pointer object = RAndGAndNIRVegetationIndexImageFilterType::New();
+  RAndGAndNIRIndexImageFilterType::Pointer object = RAndGAndNIRIndexImageFilterType::New();
 
 
   return EXIT_SUCCESS;
