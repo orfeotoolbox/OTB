@@ -388,8 +388,8 @@ ENDIF (NOT GEOTIFF_LIBRARY)
 ENDIF(GDAL_HAS_GEOTIFF)
 ENDIF(NOT DEFINED GDAL_HAS_GEOTIFF)
 
-# Include jpeg headers
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkjpeg)
+# Include jpeg headers (FLTK ones)
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Utilities/FLTK/jpeg)
 
 #-------------------------------
 # End connections whith external libraries
