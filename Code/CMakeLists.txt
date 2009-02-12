@@ -16,5 +16,5 @@ SARPolarimetry
 ) 
 
 IF(OTB_USE_VISU_GUI)
-        SUBDIRS(Visu Gui)
+        SUBDIRS(Visu Gui VisuRefac)
 ENDIF(OTB_USE_VISU_GUI)

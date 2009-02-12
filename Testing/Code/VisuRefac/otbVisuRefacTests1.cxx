@@ -26,5 +26,5 @@
 
 void RegisterTests()
 {
-
+  REGISTER_TEST(otbImageWidgetNew);
 }

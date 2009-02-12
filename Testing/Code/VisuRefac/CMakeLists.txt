@@ -16,16 +16,19 @@ SET(EPSILON 0.000001)
 # Test programs
 SET(VISUREFAC_TESTS1 ${CXX_TEST_PATH}/otbVisuRefacTests1)
 
+ADD_TEST(vrTuImageWidgetNew ${VISUREFAC_TESTS1}
+otbImageWidgetNew
+)
 
 
 
 SET(VisuRefac_SRCS1
-
+otbImageWidgetNew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 
 
-ADD_EXECUTABLE(otbVisuRefacTests1 otbVisuTests1.cxx ${VisuRefac_SRCS1})
+ADD_EXECUTABLE(otbVisuRefacTests1 otbVisuRefacTests1.cxx ${VisuRefac_SRCS1})
 TARGET_LINK_LIBRARIES(otbVisuRefacTests1 OTBVisuRefac OTBIO)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
