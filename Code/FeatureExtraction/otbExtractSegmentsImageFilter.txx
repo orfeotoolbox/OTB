@@ -39,6 +39,8 @@ ExtractSegmentsImageFilter<TInputImage, TOutputImage>
   m_FillGaps         = FillGapsType::New();
   m_DrawLineList         = DrawLineListType::New();
   m_Rescaler             =RescaleType::New();
+
+  m_LineValue = static_cast<typename OutputImageType::PixelType>(255.);
 }
 
 /**
@@ -214,18 +216,19 @@ void
 ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 ::GenerateData()
 {
-  m_Rescaler->SetInput( this->GetInputImage() );
   
-  m_PixelSuppression->SetInputImage( m_Rescaler->GetOutput() );
+  m_PixelSuppression->SetInputImage(  this->GetInputImage() );
   m_PixelSuppression->SetInputImageDirection( this->GetInputImageDirection() );
 
-  m_LocalHough->SetInput( m_PixelSuppression->GetOutput() );
+  m_Rescaler->SetInput( m_PixelSuppression->GetOutput() );
+
+  m_LocalHough->SetInput( m_Rescaler->GetOutput() );
 
   m_FillGaps->SetInput ( m_LocalHough->GetOutput() );
 
-  m_DrawLineList->SetInput( /*this->GetInputImage()*/m_Rescaler->GetOutput() );
+  m_DrawLineList->SetInput( this->GetInputImage() );
   m_DrawLineList->SetInputLineSpatialObjectList( m_FillGaps->GetOutput() );
-  m_DrawLineList->SetValue(0.);
+  m_DrawLineList->SetValue(m_LineValue);
 
   m_DrawLineList->GraftOutput( this->GetOutput() );
   m_DrawLineList->Update();

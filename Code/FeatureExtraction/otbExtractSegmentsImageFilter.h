@@ -128,6 +128,9 @@ public:
   void SetInputImageDirection( const InputImageType *image);
   const InputImageType * GetInputImageDirection(void);
 
+  /** Set/Get the value of the drawed line*/
+  itkGetMacro(LineValue,typename OutputImageType::PixelType );
+  itkSetMacro(LineValue,typename OutputImageType::PixelType );
 
 
 protected:
@@ -147,6 +150,7 @@ private:
   ExtractSegmentsImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  typename OutputImageType::PixelType      m_LineValue;
 
   typename PixelSuppressionType::Pointer  m_PixelSuppression;
   typename LocalHoughType::Pointer    m_LocalHough;
