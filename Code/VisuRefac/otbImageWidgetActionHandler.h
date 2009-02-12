@@ -50,7 +50,10 @@ public:
   /** Runtime information */
   itkTypeMacro(ImageWidgetActionHandler,Object);
 
-  virtual int HandleWidgetEvent(std::string widgetId, int event){}
+  virtual int HandleWidgetEvent(std::string widgetId, int event)
+  {
+    return 0;
+  }
 
   /** Handle widget resizing
    * \param widgetId The id of the resized widget
