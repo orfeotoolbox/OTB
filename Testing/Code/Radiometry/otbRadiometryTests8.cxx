@@ -27,13 +27,11 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbCloudEstimatorFilterNew);
-REGISTER_TEST(otbCloudEstimatorDefaultFilter);
-REGISTER_TEST(otbCloudEstimatorFilter);
-REGISTER_TEST(otbCloudDetectionFilterNew);
-REGISTER_TEST(otbCloudDetectionFilter);
-REGISTER_TEST(otbSimplifyManyPathListFilter);
-REGISTER_TEST(otbLineSegmentDetectorNew);
-REGISTER_TEST(otbLineSegmentDetector);
-REGISTER_TEST(otbLineSpatialObjectListToRightAnglePointSetFilterNew);
+  REGISTER_TEST(otbNDBITM4AndTM5IndexImageFilter);
+  REGISTER_TEST(otbNDBIMultiChannelTM4AndTM5IndexImageFilter);
+  REGISTER_TEST(otbISURAndNIRIndexImageFilter);
+  REGISTER_TEST(otbISUMultiChannelRAndNIRIndexImageFilter);
 }
+
+
+

@@ -15,42 +15,32 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbStreamingInnerProductVectorImageFilter.h"
-#include "otbVectorImage.h"
+#include "otbNormalizeInnerProductPCAImageFilter.h"
 #include "otbImageFileReader.h"
-#include <fstream>
+#include "otbStreamingImageFileWriter.h"
+#include "otbVectorImage.h"
 
-int otbStreamingInnerProductVectorImageFilter( int argc, char* argv[] )
+int otbNormalizeInnerProductPCAImageFilter( int argc, char* argv[] )
 {
-  const char * inputFileName = argv[1];
-  const char * outfname = argv[2];
-
   typedef double PixelType;
   const unsigned int Dimension = 2;
-
-  // Typedef 
+  const char * inputFileName = argv[1];
+  const char * outputFilename = argv[2];
   typedef otb::VectorImage<PixelType,Dimension> ImageType;
   typedef otb::ImageFileReader< ImageType >                     ReaderType;
-  typedef otb::StreamingInnerProductVectorImageFilter<ImageType> FilterType;
+  typedef otb::StreamingImageFileWriter< ImageType >                     WriterType;
+  typedef otb::NormalizeInnerProductPCAImageFilter<ImageType,ImageType> NormalizePCAFilterType;
 
   ReaderType::Pointer     reader     = ReaderType::New();
   reader->SetFileName(inputFileName);
+  WriterType::Pointer     writer     = WriterType::New();
+  writer->SetFileName(outputFilename);
 
-  // Instanciation object
-  FilterType::Pointer filter = FilterType::New();
+  NormalizePCAFilterType::Pointer     normalizepcafilter     = NormalizePCAFilterType::New();
 
-  filter->GetStreamer()->SetNumberOfStreamDivisions(10);
-  filter->SetInput(reader->GetOutput());
-  filter->Update();
-
-
-  std::ofstream file;
-  file.open(outfname);
-  file.precision(10);
-  file<<std::fixed;
-  file<<"Inner Product: Dim ["<<filter->GetInnerProduct().size()<<"]:"<<std::endl;
-  file<<filter->GetInnerProduct()<<std::endl;
-  file.close();
+  normalizepcafilter->SetInput(reader->GetOutput());
+  writer->SetInput(normalizepcafilter->GetOutput());
+  writer->Update();
 
   return EXIT_SUCCESS;
 }
