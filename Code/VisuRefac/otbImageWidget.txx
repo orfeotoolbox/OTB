@@ -32,6 +32,12 @@ ImageWidget<TInputImage>
   m_OpenGlBuffer  = NULL;
   m_OpenGlBufferSize.Fill(0);
   m_Identifier    = "Default";
+
+  #ifdef OTB_GL_USE_ACCEL
+  m_UseGlAcceleration = true;
+  #else
+  m_UseGlAcceleration = false;
+  #endif
 }
 
 template <class TInputImage>
@@ -55,10 +61,17 @@ ImageWidget<TInputImage>
   Superclass::PrintSelf(os,indent);
   // Display information about the widget
   os<<indent<<"Widget "<<m_Identifier<<": "<<std::endl;
-  #ifdef OTB_GL_USE_ACCEL
-  os<<indent<<indent<<"OpenGl acceleration is enabled."<<std::endl;
+  #if (not defined OTB_GL_USE_ACCEL)
+  os<<indent<<indent<<"OpenGl acceleration is not allowed."<<std::endl;
   #else
-   os<<indent<<indent<<"OpenGl acceleration is disabled."<<std::endl;
+  if(m_UseGlAcceleration)
+    {
+    os<<indent<<indent<<"OpenGl acceleration is allowed and enabled."<<std::endl;
+    }
+  else
+    {
+    os<<indent<<indent<<"OpenGl acceleration is allowed but disabled."<<std::endl;
+    }
   #endif
   if(m_OpenGlBuffer == NULL)
     {
@@ -84,6 +97,14 @@ ImageWidget<TInputImage>
     {
     itkExceptionMacro(<<"Region to read is oustside of the buffered region.");
     }
+
+  #ifndef OTB_GL_USE_ACCEL
+  if(m_UseGlAcceleration)
+    {
+    itkException(<<"Gl acceleration enabled but not allowed. Consider rebuilding with OTB_USE_GL_ACCEL to ON.");
+    }
+  #endif
+
   // Delete previous buffer if needed
   if(m_OpenGlBuffer != NULL)
     {
@@ -102,11 +123,16 @@ ImageWidget<TInputImage>
   while(!it.IsAtEnd())
     {
     // Fill compute the linear index
-    #ifdef OTB_GL_USE_ACCEL
-    unsigned int index = ComputeBufferIndex(it.GetIndex(),region);
-    #else
-    unsigned int index = ComputeXAxisFlippedBufferIndex(it.GetIndex(),region);
-    #endif
+    unsigned int index = 0;
+    if(!m_UseGlAcceleration)
+      {
+      index = ComputeXAxisFlippedBufferIndex(it.GetIndex(),region);
+      }
+    else
+      {
+      index = ComputeBufferIndex(it.GetIndex(),region);
+      }
+
     // Fill the buffer
     m_OpenGlBuffer[index]  =it.Get()[0];
     m_OpenGlBuffer[index+1]=it.Get()[1];
@@ -122,7 +148,78 @@ void
 ImageWidget<TInputImage>
 ::draw()
 {
+  #ifndef OTB_GL_USE_ACCEL
+  if(m_UseGlAcceleration)
+    {
+    itkException(<<"Gl acceleration enabled but not allowed. Consider rebuilding with OTB_USE_GL_ACCEL to ON.");
+    }
+  #endif
 
+  if (!this->valid())
+  {
+    valid(1);
+    glLoadIdentity();
+    glViewport(0,0,w(),h());
+    glClearColor((float)0.0, (float)0.0, (float)0.0, (float)0.0);
+    glShadeModel(GL_FLAT);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+  }
+
+  glClear(GL_COLOR_BUFFER_BIT);    //this clears and paints to black
+  glMatrixMode(GL_MODELVIEW);      //clear previous 3D draw params
+  glLoadIdentity();
+  glMatrixMode(GL_PROJECTION);
+  this->ortho();
+  glDisable(GL_BLEND);
+
+  // Check if there is somthing to draw
+  if(m_OpenGlBuffer == NULL)
+    {
+    return;
+    }
+
+  // Image extent
+  double sizex = m_IsotropicZoom*static_cast<double>(m_OpenGlBufferSize[0]);
+  double sizey = m_IsotropicZoom*static_cast<double>(m_OpenGlBufferSize[1]);
+  double startx = (static_cast<double>(this->w())-sizex)/2;
+  double starty = (static_cast<double>(this->h())-sizey)/2;
+
+  if(!m_UseGlAcceleration)
+    {
+    // Set the pixel Zoom
+    glRasterPos2f(startx,starty);
+    glPixelZoom(m_IsotropicZoom,m_IsotropicZoom);
+    
+    // display the image
+    glDrawPixels(m_OpenGlBufferSize[0],
+		 m_OpenGlBufferSize[1],
+		 GL_RGB,
+		 GL_UNSIGNED_BYTE,
+		 m_OpenGlBuffer);
+    }
+  else
+    {
+    glEnable(GL_TEXTURE_2D);
+    glColor4f(1.0,1.0,1.0,0.0);
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, m_OpenGlBufferSize[0], m_OpenGlBufferSize[1], 0, GL_RGB, GL_UNSIGNED_BYTE, m_OpenGlBuffer);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);  // Linear Filtering
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);  // Linear Filtering
+    glBindTexture (GL_TEXTURE_2D, texture);
+    glBegin (GL_QUADS);
+    glTexCoord2f (0.0, 1.0);
+    glVertex3f (startx,starty, 0.0);
+    glTexCoord2f (1.0, 1.0);
+    glVertex3f (startx+sizex, starty, 0.0);
+    glTexCoord2f (1.0, 0.0);
+    glVertex3f (startx+sizex,starty+sizey, 0.0);
+    glTexCoord2f (0.0, 0.0);
+    glVertex3f (startx,starty+sizey, 0.0);
+    glEnd ();
+    glDisable(GL_TEXTURE_2D);
+    }
 }
 
 template <class TInputImage>
@@ -130,7 +227,7 @@ void
 ImageWidget<TInputImage>
 ::resize(int x, int y, int w, int h)
 {
-
+  Fl_Gl_Window::resize(x,y,w,h);
 }
 
 template <class TInputImage>

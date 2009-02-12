@@ -22,10 +22,17 @@ ADD_TEST(vrTuImageWidgetNew ${VISUREFAC_TESTS1}
 otbImageWidgetNew
 )
 
-ADD_TEST(vrTvImageWidget ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvImageWidgetWithoutGlAcceleration ${VISUREFAC_TESTS1}
 otbImageWidget
-${INPUTDATA}/poupees.png
+${INPUTDATA}/poupees.png 0
 )
+
+IF(OTB_GL_USE_ACCEL)
+ADD_TEST(vrTvImageWidgetWithGlAcceleration ${VISUREFAC_TESTS1}
+otbImageWidget
+${INPUTDATA}/poupees.png 1
+)
+ENDIF(OTB_GL_USE_ACCEL)
 
 SET(VisuRefac_SRCS1
 otbImageWidgetNew.cxx
