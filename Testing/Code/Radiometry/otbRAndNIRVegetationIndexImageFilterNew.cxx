@@ -21,7 +21,7 @@
 
 #include "itkExceptionObject.h"
 
-#include "otbRAndNIRVegetationIndexImageFilter.h"
+#include "otbRAndNIRIndexImageFilter.h"
 #include "itkImage.h"
 #include "otbImage.h"
 
