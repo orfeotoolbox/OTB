@@ -237,8 +237,8 @@ private:
   unsigned int                      m_MinimumRegionSize;
   unsigned int                      m_NumberOfImagePixels;
 
-  unsigned int                      m_Length;
-  unsigned int                      m_Width;
+  int                      m_Length;
+  int                      m_Width;
   
   /** Gradient filter */
   GradientFilterPointerType m_GradientFilter;
