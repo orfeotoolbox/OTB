@@ -32,8 +32,7 @@ LineSpatialObjectListToPointSetFilter<TLinesList,TPointSet>::LineSpatialObjectLi
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
 
-  typename PointSetType::Pointer pointSet = PointSetType::New();
-  this->SetOutput(pointSet );
+  this->SetNthOutput(0,PointSetType::New());
 
 }
 

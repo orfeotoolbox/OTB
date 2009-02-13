@@ -35,8 +35,9 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
   this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredOutputs(1);
   
-  m_OutputPointSet = OutputPointSetType::New();
-  
+  //m_OutputPointSet = OutputPointSetType::New();
+  std::cout << " Salut la terre Constructor"  <<std::endl;
+
 }
 
 /**
@@ -72,16 +73,23 @@ void
 LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
 ::GenerateData()
 {
+  /** Output*/
+  m_OutputPointSet = this->GetOutput();
+
   /** Get The input Lines*/
   typename InputLinesListType::Pointer inputLinesList = const_cast<InputLinesListType *>(this->GetInput());
-    
+ 
   /** Loop to get all the lines in the listLine */
   InputLinesListTypeIterator            itLinesListTest  = inputLinesList->begin();   /** Current tested Line */
   InputLinesListTypeIterator            itLinesListCur  = inputLinesList->begin();    /** Line tested with with current Line*/
   InputLinesListTypeIterator            itLinesListEnd  = inputLinesList->end();
   
+  
   while(itLinesListTest != itLinesListEnd )
     {
+      
+      std::cout <<  " First Postion : " << ((*itLinesListTest)->GetPoint(0)->GetPosition())[0]<<std::endl;
+
       while(itLinesListCur != itLinesListEnd)
 	{
 	  /** Compute the distance from CurLine to DstLine*/

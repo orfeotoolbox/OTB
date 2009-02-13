@@ -1,4 +1,3 @@
-# $Id: CMakeLists.txt 4312 2008-09-26 13:46:16Z guillaume $
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
@@ -1136,7 +1135,7 @@ ADD_TEST(ioTvImageMetadataWriterTest_TIF ${IO_TESTS11}
         )
 
 
-# Commented because ${GDAL_LIBRARY} does not seems to write the metadata the same way in both formats
+# Commented because gdal does not seems to write the metadata the same way in both formats
 #ADD_TEST(ioTvImageMetadataWriterTest_HFA2TIFF ${IO_TESTS11}
 #   --compare-metadata ${TOL}
 #		      ${INPUTDATA}/HFAGeoreferenced.img
@@ -1146,7 +1145,7 @@ ADD_TEST(ioTvImageMetadataWriterTest_TIF ${IO_TESTS11}
 #	${TEMP}/temp.tif
 #        )
 
-# Commented because ${GDAL_LIBRARY} does not seems to write the metadata the same way in both formats
+# Commented because gdal does not seems to write the metadata the same way in both formats
 #ADD_TEST(ioTvImageMetadataWriterTest_TIFF2HFA ${IO_TESTS11}
 #   --compare-metadata ${TOL}
 #		      ${INPUTDATA}/spot5SubWithGcps.tif
@@ -1175,7 +1174,7 @@ ADD_TEST(ioTvImageMetadataStreamingWriterTest_TIF ${IO_TESTS11}
 	${TEMP}/temp.tif
         )
 
-# Commented because ${GDAL_LIBRARY} does not seems to write the metadata the same way in both formats
+# Commented because gdal does not seems to write the metadata the same way in both formats
 #ADD_TEST(ioTvImageMetadataStreamingWriterTest_HFA2TIFF ${IO_TESTS11}
 #   --compare-metadata ${TOL}
 #		      ${INPUTDATA}/HFAGeoreferenced.img
@@ -1185,7 +1184,7 @@ ADD_TEST(ioTvImageMetadataStreamingWriterTest_TIF ${IO_TESTS11}
 #	${TEMP}/temp.tif
 #        )
 
-# Commented because ${GDAL_LIBRARY} does not seems to write the metadata the same way in both formats
+# Commented because gdal does not seems to write the metadata the same way in both formats
 #ADD_TEST(ioTvImageMetadataStreamingWriterTest_TIFF2HFA ${IO_TESTS11}
 #   --compare-metadata ${TOL}
 #		      ${INPUTDATA}/spot5SubWithGcps.tif

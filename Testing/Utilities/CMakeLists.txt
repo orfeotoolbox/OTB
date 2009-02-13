@@ -515,7 +515,7 @@ IF(NOT BUILD_SHARED_LIBS)
 ENDIF(NOT BUILD_SHARED_LIBS)
 
 ADD_EXECUTABLE(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
-TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon ${GDAL_LIBRARY} ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML otbkml otbsiftfast)
+TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon ${GDAL_LIBRARY} ITKAlgorithms ITKStatistics otbossim otbsvm otb6S tinyXML otbkml otbsiftfast)
 
 IF(OTB_COMPILE_JPEG2000)
   TARGET_LINK_LIBRARIES(otbUtilitiesTests otbopenjpeg)
@@ -546,14 +546,14 @@ ENDIF(UNIX)
 
 # Original 6S main executable in C
 #     ADD_EXECUTABLE(otb6SMain 6SMainTest.cxx )
-#     TARGET_LINK_LIBRARIES(otb6SMain OTBCommon ITKCommon otb6S)
+#     TARGET_LINK_LIBRARIES(otb6SMain OTBCommon otb6S)
 #     IF(UNIX)
 #         TARGET_LINK_LIBRARIES (otb6SMain m)
 #     ENDIF(UNIX)
 
 # OTB 6S main executable in C (call 6S main function.
 #     ADD_EXECUTABLE(otb6SMainWithCallFunction 6SMainOtbWithCallFunctionTest.cxx )
-#     TARGET_LINK_LIBRARIES(otb6SMainWithCallFunction OTBCommon ITKCommon otb6S)
+#     TARGET_LINK_LIBRARIES(otb6SMainWithCallFunction OTBCommon otb6S)
 #     IF(UNIX)
 #         TARGET_LINK_LIBRARIES (otb6SMainWithCallFunction m)
 #     ENDIF(UNIX)

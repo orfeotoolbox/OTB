@@ -119,12 +119,14 @@ LineSegmentDetector<TInputImage,TPrecision >
 {
   /* Size of the images **/
   SizeType     SizeInput = this->GetInput()->GetRequestedRegion().GetSize();
-  m_NumberOfImagePixels  = SizeInput[0]*SizeInput[1];
+  m_Width  = SizeInput[0];
+  m_Length = SizeInput[1];
+  m_NumberOfImagePixels  = m_Length * m_Width;
 
   /** 
    *  Compute the minimum region size 
    */
-  float logNT = 5.*(vcl_log10(static_cast<float>(SizeInput[0])) + vcl_log10(static_cast<float>(SizeInput[1])))/2.;
+  float logNT = 5.*(vcl_log10(static_cast<float>(m_Width)) + vcl_log10(static_cast<float>(m_Length)))/2.;
   float log1_p = vcl_log10(m_DirectionsAllowed);
   float rapport = logNT/log1_p;
   m_MinimumRegionSize = -1*static_cast<unsigned  int>(rapport);
@@ -161,8 +163,8 @@ LineSegmentDetector<TInputImage,TPrecision >
   while(!it.IsAtEnd())
     {
       OutputIndexType index = it.GetIndex();
-      if(static_cast<unsigned int>(index[0]) > 0 && static_cast<unsigned int>(index[1]) <SizeInput[0]-1 
-	 && static_cast<unsigned int>(index[1]) >0 && static_cast<unsigned int>(index[1]) <SizeInput[1]-1 )
+      if(static_cast<unsigned int>(index[0]) > 0 && static_cast<unsigned int>(index[0]) <m_Width-1 
+	 && static_cast<unsigned int>(index[1]) >0 && static_cast<unsigned int>(index[1]) <m_Length-1 )
 	{
 	  unsigned int bin = static_cast<unsigned int> (it.Value()/lengthBin);
 	  if( it.Value()- m_Threshold >1e-10 )
@@ -581,9 +583,8 @@ LineSegmentDetector<TInputImage, TPrecision>
   /* Lenght & Width of the rectangle **/
   
   typedef std::vector<MagnitudePixelType>                          MagnitudeVector;
-  SizeType    sizeInput = this->GetInput()->GetRequestedRegion().GetSize();
 
-  int Diagonal =  static_cast<unsigned int>(vcl_sqrt(sizeInput[0]*sizeInput[0] +sizeInput[1]*sizeInput[1])) + 2;
+  int Diagonal =  static_cast<unsigned int>(vcl_sqrt(m_Length*m_Length +m_Width*m_Width)) + 2;
   MagnitudeVector sum_l( 2*Diagonal, itk::NumericTraits<MagnitudePixelType>::Zero);
   MagnitudeVector sum_w( 2*Diagonal, itk::NumericTraits<MagnitudePixelType>::Zero);
   
@@ -816,8 +817,7 @@ LineSegmentDetector<TInputImage, TPrecision>
     }
   
   /** Compute the NFA from the rectangle computed below*/
-  SizeType     SizeInput = this->GetInput()->GetRequestedRegion().GetSize();
-  float logNT = 5.*(vcl_log10(static_cast<float>(SizeInput[0])) + vcl_log10(static_cast<float>(SizeInput[1])))/2.;
+  float logNT = 5.*(vcl_log10(static_cast<float>(m_Length)) + vcl_log10(static_cast<float>(m_Width)))/2.;
   
   nfa_val = NFA(pts,NbAligned ,m_DirectionsAllowed,logNT);
   

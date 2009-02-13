@@ -1,72 +1,72 @@
 PROJECT(IOExamples)
 
 ADD_EXECUTABLE(ImageReadWrite ImageReadWrite.cxx )
-TARGET_LINK_LIBRARIES(ImageReadWrite OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(ImageReadWrite OTBCommon OTBIO)
 
 ADD_EXECUTABLE(StreamingImageReadWrite StreamingImageReadWrite.cxx )
-TARGET_LINK_LIBRARIES(StreamingImageReadWrite OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(StreamingImageReadWrite OTBCommon OTBIO)
 
 ADD_EXECUTABLE(ExplicitStreamingExample ExplicitStreamingExample.cxx )
-TARGET_LINK_LIBRARIES(ExplicitStreamingExample OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(ExplicitStreamingExample OTBCommon OTBIO)
 
 
 ADD_EXECUTABLE(ImageReadCastWrite ImageReadCastWrite.cxx )
-TARGET_LINK_LIBRARIES(ImageReadCastWrite OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(ImageReadCastWrite OTBCommon OTBIO)
 
 #ADD_EXECUTABLE(ImageReadExtractWrite ImageReadExtractWrite.cxx )
-#TARGET_LINK_LIBRARIES(ImageReadExtractWrite OTBCommon OTBIO ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(ImageReadExtractWrite OTBCommon OTBIO)
 
 ADD_EXECUTABLE(ImageReadRegionOfInterestWrite ImageReadRegionOfInterestWrite.cxx )
-TARGET_LINK_LIBRARIES(ImageReadRegionOfInterestWrite OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(ImageReadRegionOfInterestWrite OTBCommon OTBIO)
 ADD_EXECUTABLE(RGBImageReadWrite RGBImageReadWrite.cxx )
-TARGET_LINK_LIBRARIES(RGBImageReadWrite OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(RGBImageReadWrite OTBCommon OTBIO)
 
 #ADD_EXECUTABLE(CovariantVectorImageWrite CovariantVectorImageWrite.cxx )
-#TARGET_LINK_LIBRARIES(CovariantVectorImageWrite ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(CovariantVectorImageWrite)
 
 #ADD_EXECUTABLE(CovariantVectorImageRead CovariantVectorImageRead.cxx )
-#TARGET_LINK_LIBRARIES(CovariantVectorImageRead ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(CovariantVectorImageRead)
 
 #ADD_EXECUTABLE(CovariantVectorImageExtractComponent CovariantVectorImageExtractComponent.cxx )
-#TARGET_LINK_LIBRARIES(CovariantVectorImageExtractComponent ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(CovariantVectorImageExtractComponent)
 
 #ADD_EXECUTABLE(VectorImageReadWrite VectorImageReadWrite.cxx )
-#TARGET_LINK_LIBRARIES(VectorImageReadWrite ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(VectorImageReadWrite)
 
 ADD_EXECUTABLE(ComplexImageReadWrite ComplexImageReadWrite.cxx )
-TARGET_LINK_LIBRARIES(ComplexImageReadWrite OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(ComplexImageReadWrite OTBCommon OTBIO)
 
 ADD_EXECUTABLE(MultibandImageReadWrite MultibandImageReadWrite.cxx )
-TARGET_LINK_LIBRARIES(MultibandImageReadWrite OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(MultibandImageReadWrite OTBCommon OTBIO)
 
 ADD_EXECUTABLE(ExtractROI ExtractROI.cxx )
-TARGET_LINK_LIBRARIES(ExtractROI OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(ExtractROI OTBCommon OTBIO)
 
 ADD_EXECUTABLE(ImageSeriesIOExample ImageSeriesIOExample.cxx )
-TARGET_LINK_LIBRARIES(ImageSeriesIOExample OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(ImageSeriesIOExample OTBCommon OTBIO)
 
 
 ADD_EXECUTABLE(MetadataExample MetadataExample.cxx )
-TARGET_LINK_LIBRARIES(MetadataExample OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(MetadataExample OTBCommon OTBIO)
 
 ADD_EXECUTABLE(DXFReaderExample DXFReaderExample.cxx )
-TARGET_LINK_LIBRARIES(DXFReaderExample OTBCommon OTBIO ITKCommon ITKIO  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+TARGET_LINK_LIBRARIES(DXFReaderExample OTBCommon OTBIO  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
 ADD_EXECUTABLE(VectorDataIOExample VectorDataIOExample.cxx )
-TARGET_LINK_LIBRARIES(VectorDataIOExample OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(VectorDataIOExample OTBCommon OTBIO)
 
 ADD_EXECUTABLE(DEMToImageGenerator DEMToImageGenerator.cxx )
-TARGET_LINK_LIBRARIES(DEMToImageGenerator OTBProjections OTBIO OTBCommon ITKCommon ITKIO otbossim )
+TARGET_LINK_LIBRARIES(DEMToImageGenerator OTBProjections OTBIO OTBCommon otbossim )
 
 ADD_EXECUTABLE(DEMToOrthoImageGenerator DEMToOrthoImageGenerator.cxx )
-TARGET_LINK_LIBRARIES(DEMToOrthoImageGenerator OTBProjections OTBIO OTBCommon ITKCommon ITKIO otbossim )
+TARGET_LINK_LIBRARIES(DEMToOrthoImageGenerator OTBProjections OTBIO OTBCommon otbossim )
 
 ADD_EXECUTABLE(LidarReaderExample LidarReaderExample.cxx )
-TARGET_LINK_LIBRARIES(LidarReaderExample OTBIO OTBCommon ITKCommon ITKIO otbossim )
+TARGET_LINK_LIBRARIES(LidarReaderExample OTBIO OTBCommon otbossim )
 
 IF(ITK_USE_REVIEW)
   ADD_EXECUTABLE(LidarToImageExample LidarToImageExample.cxx )
-  TARGET_LINK_LIBRARIES(LidarToImageExample OTBIO OTBCommon ITKCommon ITKIO otbossim )
+  TARGET_LINK_LIBRARIES(LidarToImageExample OTBIO OTBCommon otbossim )
 ENDIF(ITK_USE_REVIEW)
 
 IF( OTB_USE_CURL )
@@ -76,43 +76,43 @@ ENDIF( OTB_USE_CURL )
 
 
 #ADD_EXECUTABLE(ImageReadExportVTK ImageReadExportVTK.cxx )
-#TARGET_LINK_LIBRARIES(ImageReadExportVTK ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(ImageReadExportVTK)
 
 #ADD_EXECUTABLE(RGBImageSeriesReadWrite RGBImageSeriesReadWrite.cxx )
-#TARGET_LINK_LIBRARIES(RGBImageSeriesReadWrite ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(RGBImageSeriesReadWrite)
 
 #ADD_EXECUTABLE(ImageSeriesReadWrite ImageSeriesReadWrite.cxx )
-#TARGET_LINK_LIBRARIES(ImageSeriesReadWrite ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(ImageSeriesReadWrite)
 
 #ADD_EXECUTABLE(ImageReadImageSeriesWrite ImageReadImageSeriesWrite.cxx )
-#TARGET_LINK_LIBRARIES(ImageReadImageSeriesWrite ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(ImageReadImageSeriesWrite)
 
 #ADD_EXECUTABLE(DicomSeriesReadImageWrite DicomSeriesReadImageWrite.cxx )
-#TARGET_LINK_LIBRARIES(DicomSeriesReadImageWrite ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(DicomSeriesReadImageWrite)
 
 #ADD_EXECUTABLE(DicomSeriesReadImageWrite2 DicomSeriesReadImageWrite2.cxx )
-#TARGET_LINK_LIBRARIES(DicomSeriesReadImageWrite2 ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(DicomSeriesReadImageWrite2)
 
 #ADD_EXECUTABLE(DicomSeriesReadPrintTags DicomSeriesReadPrintTags.cxx )
-#TARGET_LINK_LIBRARIES(DicomSeriesReadPrintTags ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(DicomSeriesReadPrintTags)
 
 #ADD_EXECUTABLE(DicomImageReadPrintTags DicomImageReadPrintTags.cxx )
-#TARGET_LINK_LIBRARIES(DicomImageReadPrintTags ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(DicomImageReadPrintTags)
 
 #ADD_EXECUTABLE(DicomImageReadWrite DicomImageReadWrite.cxx )
-#TARGET_LINK_LIBRARIES(DicomImageReadWrite ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(DicomImageReadWrite)
 
 #ADD_EXECUTABLE(DicomImageReadChangeHeaderWrite DicomImageReadChangeHeaderWrite.cxx )
-#TARGET_LINK_LIBRARIES(DicomImageReadChangeHeaderWrite ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(DicomImageReadChangeHeaderWrite)
 
 #ADD_EXECUTABLE(DicomSeriesReadSeriesWrite DicomSeriesReadSeriesWrite.cxx )
-#TARGET_LINK_LIBRARIES(DicomSeriesReadSeriesWrite ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(DicomSeriesReadSeriesWrite)
 
 #ADD_EXECUTABLE(DicomPrintPatientInformation DicomPrintPatientInformation.cxx )
-#TARGET_LINK_LIBRARIES(DicomPrintPatientInformation ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(DicomPrintPatientInformation)
 
 #ADD_EXECUTABLE(TransformReadWrite TransformReadWrite.cxx )
-#TARGET_LINK_LIBRARIES(TransformReadWrite ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(TransformReadWrite)
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
@@ -202,7 +202,7 @@ ENDIF( OTB_USE_CURL )
 
 
 ADD_EXECUTABLE(otbIOExamplesTests1 otbIOExamplesTests1.cxx)
-TARGET_LINK_LIBRARIES(otbIOExamplesTests1 otbossim OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBProjections ITKIO ITKAlgorithms ITKStatistics ITKCommon  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+TARGET_LINK_LIBRARIES(otbIOExamplesTests1 otbossim OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBProjections ITKAlgorithms ITKStatistics  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
 IF( OTB_USE_CURL )
   ADD_EXECUTABLE(otbIOExamplesTests2 otbIOExamplesTests2.cxx)

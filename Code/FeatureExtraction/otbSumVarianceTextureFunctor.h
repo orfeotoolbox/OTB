@@ -44,7 +44,7 @@ public SumAverageTextureFunctor<TIterInput1, TIterInput2, TOutput>
 {
 public:
   SumVarianceTextureFunctor(){};
-  ~SumVarianceTextureFunctor(){};
+  virtual ~SumVarianceTextureFunctor(){};
 
   typedef TIterInput1                           IterType1;
   typedef TIterInput2                           IterType2;
