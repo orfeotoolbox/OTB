@@ -41,8 +41,8 @@ public:
   /** Standard class typedefs. */
   typedef LineSpatialObjectListToRightAnglePointSetFilter                                Self;
   typedef LineSpatialObjectListToPointSetFilter <TLinesList, TPointSet>                  Superclass;
-  typedef itk::SmartPointer<Self>                                     Pointer;
-  typedef itk::SmartPointer<const Self>                               ConstPointer;
+  typedef itk::SmartPointer<Self>                                                        Pointer;
+  typedef itk::SmartPointer<const Self>                                                  ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -51,18 +51,19 @@ public:
   itkTypeMacro(LineSpatialObjectListToRightAnglePointSetFilter,LineSpatialObjectListToPointSetFilter);
   
   /** Typedef support for ProcessObject*/
-  typedef itk::ProcessObject                                    ProcessObjectType;
+  typedef itk::ProcessObject                            ProcessObjectType;
 
   /** Template parameters typedefs*/
   typedef TLinesList                                    InputLinesListType;
   typedef typename TLinesList::LineType                 LineType;
-  typedef typename LineType::PointListType              InputPointListType;
+  //typedef typename LineType::PointListType              InputPointListType;
   typedef typename InputLinesListType::const_iterator   InputLinesListTypeIterator;
 
   /**  Typdedef dor The input image  :
    *   (ONLY USED FOR THE LINE ITERATOR -> To check if the index is inside the region)
    */
   typedef TImage                                        InputImageType;
+  typedef typename InputImageType::IndexType            InputIndexType;
   
   /** Typedef support for output PointSet*/
   typedef  TPointSet                                    OutputPointSetType;
@@ -108,7 +109,7 @@ protected:
   /**
    * Distance between segments computation
    */
-  virtual double ComputeDistanceBetweenSegments(LineType * lineDst , LineType * lineSrc);
+  virtual float ComputeDistanceBetweenSegments(LineType * lineDst , LineType * lineSrc);
   /**
    * Angle computation
    */
