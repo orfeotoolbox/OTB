@@ -1,44 +1,61 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libkmldom", "src\libkmldom.vcproj", "{19484FD7-58B0-44DA-89CE-EADF0CF39E04}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "otbexpat", "..\otbexpat\otbexpat.vcproj", "{8405EAB9-F324-4E9C-AE3C-E13A91CE1AE8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9312DC60-7647-4B64-8E02-284176140241} = {9312DC60-7647-4B64-8E02-284176140241}
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libkmlengine", "src\libkmlengine.vcproj", "{C7D291C3-46EC-441C-B7F1-911FD32CE185}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "otbkml", ".\otbkml.vcproj", "{34FC3352-E64D-4FF0-B547-BCB03B37CA52}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9312DC60-7647-4B64-8E02-284176140241} = {9312DC60-7647-4B64-8E02-284176140241}
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libkmlregionator", "src\libkmlregionator.vcproj", "{2A7D7DC5-8AB2-4B4F-848A-2A81226F2BC2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZERO_CHECK", ".\ZERO_CHECK.vcproj", "{9312DC60-7647-4B64-8E02-284176140241}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libkmlconvenience", "src\libkmlconvenience.vcproj", "{5E53C538-7B22-41FF-84AF-F08F0C019E7B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ALL_BUILD", ".\ALL_BUILD.vcproj", "{BDE41B21-D80B-4F62-A400-F72370134912}"
+	ProjectSection(ProjectDependencies) = postProject
+		{34FC3352-E64D-4FF0-B547-BCB03B37CA52} = {34FC3352-E64D-4FF0-B547-BCB03B37CA52}
+		{9312DC60-7647-4B64-8E02-284176140241} = {9312DC60-7647-4B64-8E02-284176140241}
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libkmlbase", "src\libkmlbase.vcproj", "{DA5DEA8E-4DF5-4B36-BF1E-4760104149F0}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "INSTALL", ".\INSTALL.vcproj", "{74CE7A38-FBE2-4417-95B8-ACE00B1839A8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BDE41B21-D80B-4F62-A400-F72370134912} = {BDE41B21-D80B-4F62-A400-F72370134912}
+		{9312DC60-7647-4B64-8E02-284176140241} = {9312DC60-7647-4B64-8E02-284176140241}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PACKAGE", ".\PACKAGE.vcproj", "{6F69530D-F142-476F-8120-1D4EBD0FA143}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BDE41B21-D80B-4F62-A400-F72370134912} = {BDE41B21-D80B-4F62-A400-F72370134912}
+		{9312DC60-7647-4B64-8E02-284176140241} = {9312DC60-7647-4B64-8E02-284176140241}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RUN_TESTS", ".\RUN_TESTS.vcproj", "{F40DA03B-972C-47DE-8835-8CBB147EDD39}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9312DC60-7647-4B64-8E02-284176140241} = {9312DC60-7647-4B64-8E02-284176140241}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Win32 = Debug|Win32
-		Release|Win32 = Release|Win32
+		RelWithDebInfo|Win32 = RelWithDebInfo|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{19484FD7-58B0-44DA-89CE-EADF0CF39E04}.Debug|Win32.ActiveCfg = Debug|Win32
-		{19484FD7-58B0-44DA-89CE-EADF0CF39E04}.Debug|Win32.Build.0 = Debug|Win32
-		{19484FD7-58B0-44DA-89CE-EADF0CF39E04}.Release|Win32.ActiveCfg = Release|Win32
-		{19484FD7-58B0-44DA-89CE-EADF0CF39E04}.Release|Win32.Build.0 = Release|Win32
-		{C7D291C3-46EC-441C-B7F1-911FD32CE185}.Debug|Win32.ActiveCfg = Debug|Win32
-		{C7D291C3-46EC-441C-B7F1-911FD32CE185}.Debug|Win32.Build.0 = Debug|Win32
-		{C7D291C3-46EC-441C-B7F1-911FD32CE185}.Release|Win32.ActiveCfg = Release|Win32
-		{C7D291C3-46EC-441C-B7F1-911FD32CE185}.Release|Win32.Build.0 = Release|Win32
-		{2A7D7DC5-8AB2-4B4F-848A-2A81226F2BC2}.Debug|Win32.ActiveCfg = Debug|Win32
-		{2A7D7DC5-8AB2-4B4F-848A-2A81226F2BC2}.Debug|Win32.Build.0 = Debug|Win32
-		{2A7D7DC5-8AB2-4B4F-848A-2A81226F2BC2}.Release|Win32.ActiveCfg = Release|Win32
-		{2A7D7DC5-8AB2-4B4F-848A-2A81226F2BC2}.Release|Win32.Build.0 = Release|Win32
-		{5E53C538-7B22-41FF-84AF-F08F0C019E7B}.Debug|Win32.ActiveCfg = Debug|Win32
-		{5E53C538-7B22-41FF-84AF-F08F0C019E7B}.Debug|Win32.Build.0 = Debug|Win32
-		{5E53C538-7B22-41FF-84AF-F08F0C019E7B}.Release|Win32.ActiveCfg = Release|Win32
-		{5E53C538-7B22-41FF-84AF-F08F0C019E7B}.Release|Win32.Build.0 = Release|Win32
-		{DA5DEA8E-4DF5-4B36-BF1E-4760104149F0}.Debug|Win32.ActiveCfg = Debug|Win32
-		{DA5DEA8E-4DF5-4B36-BF1E-4760104149F0}.Debug|Win32.Build.0 = Debug|Win32
-		{DA5DEA8E-4DF5-4B36-BF1E-4760104149F0}.Release|Win32.ActiveCfg = Release|Win32
-		{DA5DEA8E-4DF5-4B36-BF1E-4760104149F0}.Release|Win32.Build.0 = Release|Win32
+		{8405EAB9-F324-4E9C-AE3C-E13A91CE1AE8}.RelWithDebInfo|Win32.ActiveCfg = RelWithDebInfo|Win32
+		{8405EAB9-F324-4E9C-AE3C-E13A91CE1AE8}.RelWithDebInfo|Win32.Build.0 = RelWithDebInfo|Win32
+		{34FC3352-E64D-4FF0-B547-BCB03B37CA52}.RelWithDebInfo|Win32.ActiveCfg = RelWithDebInfo|Win32
+		{34FC3352-E64D-4FF0-B547-BCB03B37CA52}.RelWithDebInfo|Win32.Build.0 = RelWithDebInfo|Win32
+		{9312DC60-7647-4B64-8E02-284176140241}.RelWithDebInfo|Win32.ActiveCfg = RelWithDebInfo|Win32
+		{9312DC60-7647-4B64-8E02-284176140241}.RelWithDebInfo|Win32.Build.0 = RelWithDebInfo|Win32
+		{BDE41B21-D80B-4F62-A400-F72370134912}.RelWithDebInfo|Win32.ActiveCfg = RelWithDebInfo|Win32
+		{BDE41B21-D80B-4F62-A400-F72370134912}.RelWithDebInfo|Win32.Build.0 = RelWithDebInfo|Win32
+		{74CE7A38-FBE2-4417-95B8-ACE00B1839A8}.RelWithDebInfo|Win32.ActiveCfg = RelWithDebInfo|Win32
+		{6F69530D-F142-476F-8120-1D4EBD0FA143}.RelWithDebInfo|Win32.ActiveCfg = RelWithDebInfo|Win32
+		{F40DA03B-972C-47DE-8835-8CBB147EDD39}.RelWithDebInfo|Win32.ActiveCfg = RelWithDebInfo|Win32
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
 EndGlobal
