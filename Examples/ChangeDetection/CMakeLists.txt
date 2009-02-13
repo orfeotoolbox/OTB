@@ -12,31 +12,31 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 
 ADD_EXECUTABLE(ChangeDetectionFrameworkExample ChangeDetectionFrameworkExample.cxx )
-TARGET_LINK_LIBRARIES(ChangeDetectionFrameworkExample OTBCommon ${GDAL_LIBRARY} OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(ChangeDetectionFrameworkExample OTBCommon  OTBIO ITKCommon ITKIO)
 
 ADD_EXECUTABLE(DiffChDet DiffChDet.cxx)
-TARGET_LINK_LIBRARIES(DiffChDet OTBIO OTBCommon  ${GDAL_LIBRARY} ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(DiffChDet OTBIO OTBCommon   ITKCommon ITKIO)
 
 ADD_EXECUTABLE(RatioChDet RatioChDet.cxx)
-TARGET_LINK_LIBRARIES(RatioChDet OTBIO OTBCommon  ${GDAL_LIBRARY} ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(RatioChDet OTBIO OTBCommon   ITKCommon ITKIO)
 
 ADD_EXECUTABLE(CorrelChDet CorrelChDet.cxx)
-TARGET_LINK_LIBRARIES(CorrelChDet OTBIO OTBCommon  ${GDAL_LIBRARY} ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(CorrelChDet OTBIO OTBCommon   ITKCommon ITKIO)
 
 ADD_EXECUTABLE(LHMIChDet LHMIChDet.cxx)
-TARGET_LINK_LIBRARIES(LHMIChDet OTBIO OTBCommon ${GDAL_LIBRARY} ITKCommon ITKIO ITKStatistics)
+TARGET_LINK_LIBRARIES(LHMIChDet OTBIO OTBCommon  ITKCommon ITKIO ITKStatistics)
 
 ADD_EXECUTABLE(JHMIChDet JHMIChDet.cxx)
-TARGET_LINK_LIBRARIES(JHMIChDet OTBIO OTBCommon ${GDAL_LIBRARY} ITKCommon ITKIO ITKStatistics)
+TARGET_LINK_LIBRARIES(JHMIChDet OTBIO OTBCommon  ITKCommon ITKIO ITKStatistics)
 
 ADD_EXECUTABLE(KullbackLeiblerDistanceChDet KullbackLeiblerDistanceChDet.cxx)
-TARGET_LINK_LIBRARIES(KullbackLeiblerDistanceChDet OTBIO OTBCommon ${GDAL_LIBRARY} ITKCommon ITKIO ITKStatistics)
+TARGET_LINK_LIBRARIES(KullbackLeiblerDistanceChDet OTBIO OTBCommon  ITKCommon ITKIO ITKStatistics)
 
 ADD_EXECUTABLE(KullbackLeiblerProfileChDet KullbackLeiblerProfileChDet.cxx)
-TARGET_LINK_LIBRARIES(KullbackLeiblerProfileChDet OTBIO OTBCommon ${GDAL_LIBRARY} ITKCommon ITKIO ITKStatistics)
+TARGET_LINK_LIBRARIES(KullbackLeiblerProfileChDet OTBIO OTBCommon  ITKCommon ITKIO ITKStatistics)
 
 ADD_EXECUTABLE(KullbackLeiblerSupervizedDistanceChDet KullbackLeiblerSupervizedDistanceChDet.cxx)
-TARGET_LINK_LIBRARIES(KullbackLeiblerSupervizedDistanceChDet OTBIO OTBCommon ${GDAL_LIBRARY} ITKCommon ITKIO ITKStatistics)
+TARGET_LINK_LIBRARIES(KullbackLeiblerSupervizedDistanceChDet OTBIO OTBCommon  ITKCommon ITKIO ITKStatistics)
 
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
@@ -124,7 +124,7 @@ ADD_TEST(KullbackLeiblerProfileChDetTest ${EXE_TESTS}
 )
 
 ADD_EXECUTABLE(otbChangeDetectionExamplesTests otbChangeDetectionExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbChangeDetectionExamplesTests ${GDAL_LIBRARY} ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbChangeDetectionExamplesTests  ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 

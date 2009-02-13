@@ -53,6 +53,6 @@ ADD_TEST(PanSharpeningExampleTest ${EXE_TESTS}
 
 
 ADD_EXECUTABLE(otbFusionExamplesTests otbFusionExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbFusionExamplesTests ${GDAL_LIBRARY} ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion)
+TARGET_LINK_LIBRARIES(otbFusionExamplesTests  ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

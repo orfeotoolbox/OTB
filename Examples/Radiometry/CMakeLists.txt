@@ -115,6 +115,6 @@ ADD_TEST(AtmosphericCorrectionSequencementTest ${EXE_TESTS}
 
 
 ADD_EXECUTABLE(otbRadiometryExamplesTests otbRadiometryExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbRadiometryExamplesTests OTBBasicFilters OTBCommon OTBDisparityMap OTBRadiometry OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion  ${GDAL_LIBRARY} ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon )
+TARGET_LINK_LIBRARIES(otbRadiometryExamplesTests OTBBasicFilters OTBCommon OTBDisparityMap OTBRadiometry OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion   ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon )
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
