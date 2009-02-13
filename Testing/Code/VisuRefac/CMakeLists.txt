@@ -50,12 +50,19 @@ ADD_TEST(vrTvImageWidgetController ${VISUREFAC_TESTS1}
 otbImageWidgetController
 )
 
+#------------ otb::ImageLayer ---------- ----------------
+
+ADD_TEST(vrTuImageLayerNew ${VISUREFAC_TESTS1}
+otbImageLayerNew
+)
+
 SET(VisuRefac_SRCS1
 otbImageWidgetNew.cxx
 otbImageWidget.cxx
 otbImageWidgetActionHandlerNew.cxx
 otbImageWidgetControllerNew.cxx
 otbImageWidgetController.cxx
+otbImageLayerNew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 
