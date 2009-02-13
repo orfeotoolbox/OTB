@@ -6,37 +6,37 @@ TARGET_LINK_LIBRARIES(GenerateTrainingImageExample OTBCommon OTBIO OTBLearning I
 
 ADD_EXECUTABLE(SVMPointSetExample SVMPointSetExample.cxx )
 TARGET_LINK_LIBRARIES(SVMPointSetExample ITKIO OTBIO OTBCommon
-ITKCommon  OTBLearning  ${GDAL_LIBRARY})
+ITKCommon  OTBLearning)
 
 
 ADD_EXECUTABLE(SVMPointSetModelEstimatorExample SVMPointSetModelEstimatorExample.cxx )
 TARGET_LINK_LIBRARIES(SVMPointSetModelEstimatorExample ITKIO OTBIO
-OTBCommon ITKCommon  OTBLearning  ${GDAL_LIBRARY})
+OTBCommon ITKCommon  OTBLearning)
 
 ADD_EXECUTABLE(SVMImageModelEstimatorExample SVMImageModelEstimatorExample.cxx )
 TARGET_LINK_LIBRARIES(SVMImageModelEstimatorExample ITKIO OTBIO
-OTBCommon ITKCommon  OTBLearning  ${GDAL_LIBRARY})
+OTBCommon ITKCommon  OTBLearning)
 
 ADD_EXECUTABLE(SVMPointSetClassificationExample SVMPointSetClassificationExample.cxx )
 TARGET_LINK_LIBRARIES(SVMPointSetClassificationExample ITKIO OTBIO
-OTBCommon ITKCommon  OTBLearning  ${GDAL_LIBRARY})
+OTBCommon ITKCommon  OTBLearning)
 
 ADD_EXECUTABLE(SVMImageClassificationExample SVMImageClassificationExample.cxx )
 TARGET_LINK_LIBRARIES(SVMImageClassificationExample ITKIO OTBIO
-OTBCommon ITKCommon  OTBLearning  ${GDAL_LIBRARY})
+OTBCommon ITKCommon  OTBLearning)
 
 ADD_EXECUTABLE(SVMImageEstimatorClassificationMultiExample SVMImageEstimatorClassificationMultiExample.cxx )
 TARGET_LINK_LIBRARIES(SVMImageEstimatorClassificationMultiExample ITKIO OTBIO
-OTBCommon ITKCommon  OTBLearning  ${GDAL_LIBRARY})
+OTBCommon ITKCommon  OTBLearning)
 
 ADD_EXECUTABLE(SOMExample SOMExample.cxx )
-TARGET_LINK_LIBRARIES(SOMExample ITKIO OTBIO OTBCommon ITKCommon  OTBLearning  ${GDAL_LIBRARY})
+TARGET_LINK_LIBRARIES(SOMExample ITKIO OTBIO OTBCommon ITKCommon  OTBLearning)
 
 ADD_EXECUTABLE(SOMClassifierExample SOMClassifierExample.cxx )
-TARGET_LINK_LIBRARIES(SOMClassifierExample ITKIO OTBIO OTBCommon ITKCommon  OTBLearning  ${GDAL_LIBRARY})
+TARGET_LINK_LIBRARIES(SOMClassifierExample ITKIO OTBIO OTBCommon ITKCommon  OTBLearning)
 
 ADD_EXECUTABLE(SEMModelEstimatorExample SEMModelEstimatorExample.cxx )
-TARGET_LINK_LIBRARIES(SEMModelEstimatorExample ITKIO OTBIO OTBCommon ITKCommon  OTBLearning  ${GDAL_LIBRARY})
+TARGET_LINK_LIBRARIES(SEMModelEstimatorExample ITKIO OTBIO OTBCommon ITKCommon  OTBLearning)
 
 ADD_EXECUTABLE(SVMGenericKernelImageModelEstimatorExample SVMGenericKernelImageModelEstimatorExample.cxx)
 TARGET_LINK_LIBRARIES(SVMGenericKernelImageModelEstimatorExample OTBLearning OTBCommon OTBIO ITKCommon)
@@ -127,7 +127,7 @@ ADD_TEST(SOMExampleTest ${EXE_TESTS}
 # ------- SOMClassifierExampleTest----------
 
 ADD_TEST(SOMClassifierExampleTest ${EXE_TESTS}
-	--compare-image ${TOL} 
+	--compare-image ${TOL}
 	${BASELINE}/ROI_QB_MUL_extractSOMCLASS.tif
 	${TEMP}/ROI_QB_MUL_extractSOMCLASS.tif
 	SOMClassifierExampleTest
@@ -139,7 +139,7 @@ ADD_TEST(SOMClassifierExampleTest ${EXE_TESTS}
 # ------- SEMModelEstimatorExampleTest----------
 
 ADD_TEST(SEMModelEstimatorExampleTest ${EXE_TESTS}
-#	--compare-image ${TOL} 
+#	--compare-image ${TOL}
 #	${BASELINE}/ROI_QB_MUL_SEMMODEL_ESTIMATOR.png
 #	${TEMP}/ROI_QB_MUL_SEMMODEL_ESTIMATOR.png
 	SEMModelEstimatorExampleTest

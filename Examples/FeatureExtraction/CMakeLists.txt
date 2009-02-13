@@ -34,7 +34,7 @@ AssymmetricFusionOfLineDetectorExample.cxx)
 TARGET_LINK_LIBRARIES(AssymmetricFusionOfLineDetectorExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon ITKIO)
 
 ADD_EXECUTABLE(LocalHoughExample LocalHoughExample.cxx )
-TARGET_LINK_LIBRARIES(LocalHoughExample ITKIO OTBIO OTBFeatureExtraction OTBCommon ITKCommon ${GDAL_LIBRARY})
+TARGET_LINK_LIBRARIES(LocalHoughExample ITKIO OTBIO OTBFeatureExtraction OTBCommon ITKCommon)
 
 
 ADD_EXECUTABLE(ExtractSegmentsByStepsExample
@@ -111,7 +111,7 @@ ADD_TEST(CorrelationLineDetectorExampleTest ${EXE_TESTS1}
 	${INPUTDATA}/amst.png
 	${TEMP}/amstLineCorrelations.png
 	${TEMP}/amstLineCorrelationDirections.png
-    5 1 
+    5 1
 )
 
 # ------- LocalHoughExampleTest----------
@@ -150,7 +150,7 @@ ADD_TEST(TouziEdgeDetectorExampleTest ${EXE_TESTS1}
 	${INPUTDATA}/amst.png
 	${TEMP}/amstTouziEdges.png
 	${TEMP}/amstTouziDirections.png
-    3 
+    3
 )
 
 # ------- ExtractSegmentsByStepsExampleTest----------
@@ -174,7 +174,7 @@ ADD_TEST(AssymmetricFusionOfLineDetectorExampleTest ${EXE_TESTS1}
 	AssymmetricFusionOfLineDetectorExampleTest
 	${INPUTDATA}/amst.png
 	${TEMP}/amstLineFusion.png
-    5 1 
+    5 1
 )
 
 # ------- ExtractSegmentsExampleTest----------
@@ -201,7 +201,7 @@ ADD_TEST(RatioLineDetectorExampleTest ${EXE_TESTS1}
 	${INPUTDATA}/amst.png
 	${TEMP}/amstLineRatios.png
 	${TEMP}/amstLineRatioDirections.png
-    5 1 
+    5 1
 )
 
 # ------- AlignmentsExampleTest----------
@@ -285,14 +285,14 @@ ADD_TEST(ScaleInvariantFeatureImageFilterTest ${EXE_TESTS2}
         ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys1.png
 	${BASELINE}/ScaleInvariantFeatureImageFilterOutputKeys2.png
         ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys2.png
-	
+
         ScaleInvariantFeatureImageFilterTest
-	
+
         ${INPUTDATA}/Scene.png
         ${TEMP}/ScaleInvariantFeatureImageFilterOutput1.png
         ${TEMP}/ScaleInvariantFeatureImageFilterOutput2.png
         ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys1.png
-        ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys2.png	
+        ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys2.png
 	1 10 0.5 0
 )
 
