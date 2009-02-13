@@ -19,22 +19,17 @@
 #define __otbDrawLineSpatialObjectListFilter_h
 
 #include "itkImageToImageFilter.h"
-#include "itkLineSpatialObject.h"
-
 #include "otbLineSpatialObjectList.h"
-#include "otbDrawLineSpatialObjectFilter.h"
-#include "itkRescaleIntensityImageFilter.h"
-
 
 namespace otb
 {
 
 /** \class DrawLineSpatialObjectListFilter
- * \brief Composite filter which draw lines in a binary image.
+ * \brief Composite filter which draw lines in an image.
  *
- * This class implements a composite filter that draws a list of line in
- * a binary image by using the otb::DrawLineSpatialObjectFilter that
- * draws each line of the list.
+ * This class implements a composite filter that draws a list of lines in
+ * an input Image. This class 
+ * 
  *
  *
  */
@@ -52,28 +47,24 @@ public:
                           unsigned int,
                           TOutputImage::ImageDimension);
 
-
-  typedef TInputImage InputImageType;
-  typedef TOutputImage OutputImageType;
-
+  
+  /** typedefs support for inputs & outputs*/
+  typedef TInputImage                                           InputImageType;
+  typedef TOutputImage                                          OutputImageType;
+  typedef typename OutputImageType::RegionType                  OutputImageRegionType;
 
   /** typedef for the classes standards. */
-  typedef DrawLineSpatialObjectListFilter Self;
-  typedef itk::ImageToImageFilter< TInputImage, TOutputImage > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef DrawLineSpatialObjectListFilter                        Self;
+  typedef itk::ImageToImageFilter< TInputImage, TOutputImage >   Superclass;
+  typedef itk::SmartPointer<Self>                                Pointer;
+  typedef itk::SmartPointer<const Self>                          ConstPointer;
 
   typedef LineSpatialObjectList                           LinesListType;
-  typedef LinesListType::LineType                      LineType;
+  typedef LinesListType::LineType                         LineType;
+  typedef LineType::PointListType                         PointListType;
+  typedef typename LinesListType::const_iterator          LineListIterator;
 
-  typedef typename LinesListType::const_iterator LineListIterator;
-
-  typedef DrawLineSpatialObjectFilter< OutputImageType, OutputImageType > DrawLineType;
-
-  typedef itk::RescaleIntensityImageFilter< InputImageType,
-  OutputImageType > RescalerType;
-
-  typedef itk::ProcessObject ProcessObjectType;
+  typedef itk::ProcessObject                              ProcessObjectType;
 
   /** Method for management of the "object factory". */
   itkNewMacro(Self);
@@ -82,34 +73,33 @@ public:
   itkTypeMacro(DrawLineSpatialObjectListFilter, ImageToImageFilter);
 
   /** Definition of the input and output images */
-  typedef typename InputImageType::PixelType InputPixelType;
-  typedef typename OutputImageType::PixelType OutputPixelType;
+  typedef typename InputImageType::PixelType        InputPixelType;
+  typedef typename OutputImageType::PixelType       OutputPixelType;
+  typedef typename OutputImageType::IndexType       OutputIndexType;
 
-  typedef typename InputImageType::RegionType InputImageRegionType;
-  typedef typename OutputImageType::RegionType OutputImageRegionType;
-
-  /** Definition of the size of the images. */
-  typedef typename InputImageType::SizeType SizeType;
 
   /** Set/Get the image input of this process object. */
   virtual void SetInputLineSpatialObjectList(const LinesListType * list);
   LinesListType * GetInputLineSpatialObjectList(void);
 
 
+  /** Get/Set m_Value*/
+  itkGetMacro(Value,OutputPixelType );
+  itkSetMacro(Value,OutputPixelType );
+  
+  
 protected:
   DrawLineSpatialObjectListFilter();
   virtual ~DrawLineSpatialObjectListFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  virtual void GenerateData();
+  virtual void ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId ) ;
 
 private:
   DrawLineSpatialObjectListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  typename DrawLineType::Pointer  m_DrawLineFilter;
-  typename RescalerType::Pointer        m_RescaleFilter;
-
+  OutputPixelType       m_Value;
 
 };
 } // end namespace otb

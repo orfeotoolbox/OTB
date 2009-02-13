@@ -22,14 +22,40 @@ ADD_TEST(vrTuImageWidgetNew ${VISUREFAC_TESTS1}
 otbImageWidgetNew
 )
 
-ADD_TEST(vrTvImageWidget ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvImageWidgetWithoutGlAcceleration ${VISUREFAC_TESTS1}
 otbImageWidget
-${INPUTDATA}/poupees.png
+${INPUTDATA}/poupees.png 0
+)
+
+IF(OTB_GL_USE_ACCEL)
+ADD_TEST(vrTvImageWidgetWithGlAcceleration ${VISUREFAC_TESTS1}
+otbImageWidget
+${INPUTDATA}/poupees.png 1
+)
+ENDIF(OTB_GL_USE_ACCEL)
+
+#------------ otb::ImageWidgetActionHandler -------------
+
+ADD_TEST(vrTuImageWidgetActionHandlerNew ${VISUREFAC_TESTS1}
+otbImageWidgetActionHandlerNew
+)
+
+#------------ otb::ImageWidgetController ----------------
+
+ADD_TEST(vrTuImageWidgetControllerNew ${VISUREFAC_TESTS1}
+otbImageWidgetControllerNew
+)
+
+ADD_TEST(vrTvImageWidgetController ${VISUREFAC_TESTS1}
+otbImageWidgetController
 )
 
 SET(VisuRefac_SRCS1
 otbImageWidgetNew.cxx
 otbImageWidget.cxx
+otbImageWidgetActionHandlerNew.cxx
+otbImageWidgetControllerNew.cxx
+otbImageWidgetController.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 

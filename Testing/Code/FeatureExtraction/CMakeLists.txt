@@ -374,7 +374,7 @@ ADD_TEST(feTvLocalHoughDraw ${FEATUREEXTRACTION_TESTS5}
 	20 20 1)
 
 ADD_TEST(feTvLocalHoughDraw2 ${FEATUREEXTRACTION_TESTS5}
-  --compare-image ${EPSILON}  ${BASELINE}/feFilterLocalHoughDraw_amst_20_20_1.tif
+  --compare-image ${EPSILON}  ${BASELINE}/feFilterLocalHoughDraw_amst_20_20_1.png
                           ${TEMP}/feFilterLocalHoughDraw_amst_20_20_1.png
         otbLocalHoughDraw
 	${INPUTDATA}/amst.png
@@ -1052,9 +1052,14 @@ ADD_TEST(feTvLineSegmentDetector ${FEATUREEXTRACTION_TESTS11}
      ${BASELINE}/feTvLineSegmentdetectorOutputImage.tif
      ${TEMP}/feTvLineSegmentdetectorOutputImage.tif
     otbLineSegmentDetector
-     ${INPUTDATA}/prison_toulouse.tif 
+     ${INPUTDATA}/scene.png  #prison_toulouse.tif 
     ${TEMP}/feTvLineSegmentdetectorOutputImage.tif
 )
+
+# -------            otb::LineSpatialObjectListToRightAnglePointSetFilter   -------------
+ADD_TEST(feTuLineSpatialObjectListToRightAnglePointSetFilterNew ${FEATUREEXTRACTION_TESTS11} 
+    otbLineSpatialObjectListToRightAnglePointSetFilterNew)
+
 
 
 
@@ -1697,6 +1702,7 @@ otbCloudDetectionFilter.cxx
 otbSimplifyManyPathListFilter.cxx
 otbLineSegmentDetectorNew.cxx
 otbLineSegmentDetector.cxx
+otbLineSpatialObjectListToRightAnglePointSetFilterNew.cxx
 )
 SET(BasicFeatureExtraction_SRCS12
 otbTextureFunctorBase.cxx

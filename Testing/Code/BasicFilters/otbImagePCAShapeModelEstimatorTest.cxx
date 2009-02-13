@@ -36,7 +36,7 @@
 #define   IMGHEIGHT           2
 #define   NDIMENSION          2
 #define   NUMTRAINIMAGES      3
-#define   NUMLARGESTPC        2
+#define   NUMLARGESTPC        3
 
 // class to support progress feeback
 
@@ -100,6 +100,7 @@ int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[] )
   WriterType::Pointer writer1 = WriterType::New();
   WriterType::Pointer writer2 = WriterType::New();
   WriterType::Pointer writer3 = WriterType::New();
+  WriterType::Pointer writer4 = WriterType::New();
 
   reader1->SetFileName(argv[1]);
   reader2->SetFileName(argv[2]);
@@ -108,6 +109,7 @@ int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[] )
   writer1->SetFileName(argv[4]);
   writer2->SetFileName(argv[5]);
   writer3->SetFileName(argv[6]);
+  writer4->SetFileName(argv[7]);
 
   //----------------------------------------------------------------------
   // Test code for the Shape model estimator
@@ -140,6 +142,8 @@ int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[] )
   writer2->Update();
   writer3->SetInput(applyPCAShapeEstimator->GetOutput( 2 ));
   writer3->Update();
+  writer4->SetInput(applyPCAShapeEstimator->GetOutput( 3 ));
+  writer4->Update();
 
   //Test the printself function to increase coverage
   applyPCAShapeEstimator->Print(std::cout);

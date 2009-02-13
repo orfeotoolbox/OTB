@@ -20,6 +20,7 @@
 
 #include "otbDrawLineSpatialObjectFilter.h"
 
+
 #include "itkDataObject.h"
 #include "itkExceptionObject.h"
 #include "itkImageRegionIterator.h"
@@ -42,7 +43,7 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>::DrawLineSpatialObjectFil
   this->SetNumberOfRequiredOutputs(1);
 
   m_Value = static_cast<OutputPixelType>(255.0);
-
+  m_DrawLineListFilter = DrawLineSpatialObjectListFilterType::New();
 }
 
 template <class TInputImage, class TOutputImage>
@@ -50,7 +51,7 @@ void
 DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 ::SetInputLine(const InputLineType *line)
 {
-  this->ProcessObjectType::SetNthInput(0,
+  this->ProcessObjectType::SetNthInput(1,
                                        const_cast< InputLineType * >( line ) );
 }
 
@@ -58,36 +59,12 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 typename DrawLineSpatialObjectFilter<TInputImage, TOutputImage>::InputLineType *
 DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
-::GetInput(void)
+::GetInputLine(void)
 {
   return static_cast<InputLineType *>
-         (this->ProcessObjectType::GetInput(0) );
-}
-
-
-template <class TInputImage, class TOutputImage>
-void
-DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
-::SetInputImage(const InputImageType *image)
-{
-  this->ProcessObjectType::SetNthInput(1,
-                                       const_cast< InputImageType * >( image ) );
-}
-
-
-template <class TInputImage, class TOutputImage>
-const typename DrawLineSpatialObjectFilter<TInputImage, TOutputImage>::InputImageType *
-DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
-::GetInputImage(void)
-{
-  if (this->GetNumberOfInputs() < 2)
-  {
-    return 0;
-  }
-
-  return static_cast<const InputImageType *>
          (this->ProcessObjectType::GetInput(1) );
 }
+
 
 template <class TInputImage, class TOutputImage>
 void
@@ -95,118 +72,26 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 ::GenerateData(void)
 {
 
-  typename InputImageType::ConstPointer   input  = this->GetInputImage();
-  typename OutputImageType::Pointer      output = this->GetOutput();
+  typename InputImageType::ConstPointer        input    = this->GetInput();
+  InputLineType *                              line     = this->GetInputLine();
+  
+  typename OutputImageType::Pointer            output   = this->GetOutput();
+    
+  /** Create a new list line with one line*/
+  LineSpatialObjectListPointer  lineList = LineSpatialObjectListType::New();
+  lineList->push_back(line);
 
-  // Get the region
-  typename OutputImageType::RegionType region;
-
-
-  region.SetSize(input->GetLargestPossibleRegion().GetSize());
-  region.SetIndex(input->GetLargestPossibleRegion().GetIndex());
-  output->SetRegions( region );
-  output->SetOrigin(input->GetOrigin());
-  output->SetSpacing(input->GetSpacing());
-  output->Allocate();
-
-  typedef itk::ImageRegionIteratorWithIndex< OutputImageType > OutputIteratorType;
-  typedef itk::ImageRegionConstIteratorWithIndex< InputImageType >  InputIteratorType;
-
-  OutputIteratorType    outputIt( output, output->GetRequestedRegion() );
-  InputIteratorType     inputIt(  input,  input->GetRequestedRegion() );
-
-  outputIt.GoToBegin();
-  inputIt.GoToBegin();
-
-  // Copy the input image in the output image
-  for ( outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt,++inputIt)
-    outputIt.Set( static_cast<OutputPixelType>(inputIt.Get()) );
-
-  // Get the LineSpatialObject
-  InputLineType * inputLine = this->GetInput();
-
-  // Get the list of points which consists of two points to represent a
-  // straight line
-  PointListType & pointsList = inputLine->GetPoints();
-  typename PointListType::const_iterator   itPoints = pointsList.begin();
-
-  IndexType outputIndex;
-
-  double x1, y1;
-  x1 = (*itPoints).GetPosition()[0];
-  y1 = (*itPoints).GetPosition()[1];
-
-  itPoints++;
-
-  double x2, y2;
-  x2 = (*itPoints).GetPosition()[0];
-  y2 = (*itPoints).GetPosition()[1];
-
-
-  // Distance between two points
-  double DeltaX, DeltaY;
-
-  DeltaX = fabs(x2-x1);
-  DeltaY = fabs(y2-y1);
-
-  // To draw the line, we seek in which direction the number
-  // of pixels between the two points is most important
-
-  if ( (DeltaX >= DeltaY) && (DeltaX > 0.) )
-  {
-    double Xmin, Xmax;
-    /*Xmin = std::min(x1,x2);
-    Xmax = std::max(x1,x2);*/
-    Xmin = x1 < x2 ? x1 : x2;
-    Xmax = x1 > x2 ? x1 : x2;
-
-    // Slope of the line y=slope*(x-x1)+y1
-    double Slope = (y2-y1) / (x2-x1);
-
-    // Set a point for each x value between xmin and xmax
-    for ( double x = Xmin; x <= Xmax; x++)
-    {
-      outputIndex[0] = static_cast<unsigned long>( x );
-      outputIndex[1] = static_cast<unsigned long>( Slope*(x-x1) + y1 );
-
-
-      // Set the point if the pixel index belongs to the output image
-      if ( region.IsInside( outputIndex ) )
-        output->SetPixel( outputIndex, m_Value);
-
-    }
-
-  }
-  else if ( DeltaX < DeltaY )
-  {
-    double Ymin, Ymax;
-    /*Ymin = std::min(y1,y2);
-    Ymax = std::max(y1,y2);*/
-    Ymin = y1 < y2 ? y1 : y2;
-    Ymax = y1 > y2 ? y1 : y2;
-
-    double SlopeInv = (x2-x1) / (y2-y1);
-
-    for ( double y = Ymin; y <= Ymax; y++)
-    {
-      outputIndex[0] = static_cast<unsigned long>( SlopeInv * (y-y1) + x1 );
-      outputIndex[1] = static_cast<unsigned long>( y );
-
-      if ( region.IsInside( outputIndex ) )
-        output->SetPixel( outputIndex, m_Value);
-
-
-    }
-  }
-
-  // Exception
-  /*   else
-        {
-        itkExceptionMacro(<< "otb::DrawLineSpatialObjectFilter::GenerateData : "
-                          << "the line is defined by one point : deltaX = deltaY = 0.");
-        }
-    */
+  /** Invoke the DrawLineSpatialObjectListFilter to draw the line */
+  m_DrawLineListFilter->SetInput(input);
+  m_DrawLineListFilter->SetInputLineSpatialObjectList(lineList);
+  
+  m_DrawLineListFilter->GraftOutput(this->GetOutput());
+  m_DrawLineListFilter->Update();
+  this->GraftOutput(m_DrawLineListFilter->GetOutput());
+  
 }
+
+
 
 /**
  * Standard "PrintSelf" method

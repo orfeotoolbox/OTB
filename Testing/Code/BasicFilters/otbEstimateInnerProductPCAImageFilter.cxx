@@ -15,42 +15,39 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbStreamingInnerProductVectorImageFilter.h"
-#include "otbVectorImage.h"
+#include "otbEstimateInnerProductPCAImageFilter.h"
 #include "otbImageFileReader.h"
-#include <fstream>
+#include "otbImageFileWriter.h"
 
-int otbStreamingInnerProductVectorImageFilter( int argc, char* argv[] )
+#include "otbVectorImage.h"
+
+int otbEstimateInnerProductPCAImageFilter( int argc, char* argv[] )
 {
-  const char * inputFileName = argv[1];
-  const char * outfname = argv[2];
-
   typedef double PixelType;
   const unsigned int Dimension = 2;
+  const char * inputFileName = argv[1];
+  const char * outputFilename = argv[2];
+  const unsigned int numberOfPrincipalComponentsRequired(atoi(argv[3]));
 
-  // Typedef 
   typedef otb::VectorImage<PixelType,Dimension> ImageType;
   typedef otb::ImageFileReader< ImageType >                     ReaderType;
-  typedef otb::StreamingInnerProductVectorImageFilter<ImageType> FilterType;
+  typedef otb::ImageFileWriter< ImageType >                     WriterType;
+  typedef otb::EstimateInnerProductPCAImageFilter<ImageType,ImageType> PCAFilterType;
 
   ReaderType::Pointer     reader     = ReaderType::New();
   reader->SetFileName(inputFileName);
+  WriterType::Pointer     writer     = WriterType::New();
+  writer->SetFileName(outputFilename);
 
-  // Instanciation object
-  FilterType::Pointer filter = FilterType::New();
+  PCAFilterType::Pointer     pcafilter     = PCAFilterType::New();
 
-  filter->GetStreamer()->SetNumberOfStreamDivisions(10);
-  filter->SetInput(reader->GetOutput());
-  filter->Update();
+  // Compute Inner Product raw
+  pcafilter->SetNumberOfPrincipalComponentsRequired(numberOfPrincipalComponentsRequired);
+  pcafilter->SetInput(reader->GetOutput());
+  pcafilter->Update();
 
-
-  std::ofstream file;
-  file.open(outfname);
-  file.precision(10);
-  file<<std::fixed;
-  file<<"Inner Product: Dim ["<<filter->GetInnerProduct().size()<<"]:"<<std::endl;
-  file<<filter->GetInnerProduct()<<std::endl;
-  file.close();
+  writer->SetInput(pcafilter->GetOutput());
+  writer->Update();
 
   return EXIT_SUCCESS;
 }

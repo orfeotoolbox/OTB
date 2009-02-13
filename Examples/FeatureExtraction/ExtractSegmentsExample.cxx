@@ -75,7 +75,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef  float  InternalPixelType;
+  typedef  float          InternalPixelType;
   typedef  unsigned char  OutputPixelType;
   // Software Guide : EndCodeSnippet
 
@@ -196,6 +196,7 @@ int main( int argc, char * argv[] )
   detector->SetInput( reader->GetOutput() );
   extractor->SetInputImage( detector->GetOutput() );
   extractor->SetInputImageDirection( detector->GetOutputDirection() );
+  extractor->SetLineValue(0.);
   rescaler->SetInput( extractor->GetOutput() );
   writer->SetInput( rescaler->GetOutput() );
 

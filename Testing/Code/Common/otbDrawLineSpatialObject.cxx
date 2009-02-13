@@ -64,6 +64,7 @@ int otbDrawLineSpatialObject( int argc, char* argv[] )
   WriterType::Pointer writer = WriterType::New();
 
   reader->SetFileName( inputFilename  );
+  
   writer->SetFileName( outputFilename );
 
   // Definition of the line
@@ -81,16 +82,12 @@ int otbDrawLineSpatialObject( int argc, char* argv[] )
   line->SetPoints( list );
   line->ComputeBoundingBox();
 
-
   filter->SetValue( static_cast<OutputPixelType>(245) );
-  filter->SetInput( line );
-
-  filter->SetInputImage( reader->GetOutput() );
+  filter->SetInputLine( line );
+  filter->SetInput( reader->GetOutput() );
+  
   writer->SetInput( filter->GetOutput() );
-
   writer->Update();
-
-
 
   return EXIT_SUCCESS;
 }
