@@ -221,7 +221,7 @@ ImageSeriesFileReader< TImage >
     }
     else if ( strcmp( this->GetOutput()->GetNameOfClass(), "VectorImage" ) == 0 )
     {
-      if ( bands[ bands.size()-1 ] != bands.size() )
+      if ( bands[ bands.size()-1 ] != static_cast<int>(bands.size()) )
       {
         std::cerr << "Perform bands selection on VectorImage\n";
       }

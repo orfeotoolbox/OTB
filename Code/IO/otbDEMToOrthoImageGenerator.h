@@ -47,30 +47,30 @@ class ITK_EXPORT DEMToOrthoImageGenerator:
 {
 public :
   /** Standard class typedefs. */
-  typedef itk::Indent                  Indent;
-  typedef TDEMImage                          DEMImageType;
-  typedef typename DEMImageType::Pointer              DEMImagePointerType;
-  typedef typename DEMImageType::PixelType                           PixelType;
+  typedef itk::Indent                                        Indent;
+  typedef TDEMImage                                          DEMImageType;
+  typedef typename DEMImageType::Pointer                     DEMImagePointerType;
+  typedef typename DEMImageType::PixelType                   PixelType;
 
-  typedef TMapProjection                                                  MapProjectionType;
-  typedef typename MapProjectionType::Pointer                             MapProjectionPointerType;
+  typedef TMapProjection                                     MapProjectionType;
+  typedef typename MapProjectionType::Pointer                MapProjectionPointerType;
 
-  typedef DEMToOrthoImageGenerator                                              Self;
-  typedef otb::DEMToImageGenerator<DEMImageType> Superclass;
-  typedef itk::SmartPointer<Self>                                    Pointer;
-  typedef itk::SmartPointer<const Self>                              ConstPointer;
-  typedef Image<PixelType,2>                         OutputImageType;
+  typedef DEMToOrthoImageGenerator                           Self;
+  typedef otb::DEMToImageGenerator<DEMImageType>             Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef Image<PixelType,2>                                 OutputImageType;
 
-  typedef typename Superclass::Pointer                  OutputImagePointer;
-  typedef typename OutputImageType::SpacingType               SpacingType;
-  typedef typename OutputImageType::SizeType             SizeType;
-  typedef typename OutputImageType::PointType             PointType;
-  typedef typename OutputImageType::IndexType             IndexType;
-  typedef typename Superclass::OutputImageRegionType           OutputImageRegionType;
-  typedef itk::ImageRegionIteratorWithIndex< DEMImageType >      ImageIteratorType;
+  typedef typename Superclass::Pointer                       OutputImagePointer;
+  typedef typename OutputImageType::SpacingType              SpacingType;
+  typedef typename OutputImageType::SizeType                 SizeType;
+  typedef typename OutputImageType::PointType                PointType;
+  typedef typename OutputImageType::IndexType                IndexType;
+  typedef typename Superclass::OutputImageRegionType         OutputImageRegionType;
+  typedef itk::ImageRegionIteratorWithIndex< DEMImageType >  ImageIteratorType;
 
-  typedef otb::DEMHandler                                                 DEMHandlerType;
-  typedef typename DEMHandlerType::Pointer                               DEMHandlerPointerType;
+  typedef otb::DEMHandler                                    DEMHandlerType;
+  typedef typename DEMHandlerType::Pointer                   DEMHandlerPointerType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
