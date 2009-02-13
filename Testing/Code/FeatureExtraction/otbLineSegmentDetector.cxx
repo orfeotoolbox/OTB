@@ -50,13 +50,13 @@ int otbLineSegmentDetector( int argc, char * argv[] )
 
 
   /** */
-  typedef otb::LineSpatialObjectList            LinesListType;
-  typedef LinesListType::LineType               LineType;
-  LinesListType::Pointer list = LinesListType::New();
+  //typedef otb::LineSpatialObjectList            LinesListType;
+  //typedef LinesListType::LineType               LineType;
+  //LinesListType::Pointer list = LinesListType::New();
 
-  LineType::PointListType             pointList;
-  LineType::LinePointType             pointBegin , pointEnd;
-  IndexType                           IndexBegin , IndexEnd;
+  //LineType::PointListType             pointList;
+  //LineType::LinePointType             pointBegin , pointEnd;
+  //  IndexType                           IndexBegin , IndexEnd;
 
   /***/
 
