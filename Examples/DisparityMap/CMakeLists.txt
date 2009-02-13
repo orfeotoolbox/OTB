@@ -2,15 +2,15 @@ PROJECT(DisparityMapExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(SimpleDisparityMapEstimationExample SimpleDisparityMapEstimationExample.cxx )
-TARGET_LINK_LIBRARIES(SimpleDisparityMapEstimationExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon
+TARGET_LINK_LIBRARIES(SimpleDisparityMapEstimationExample OTBFeatureExtraction OTBCommon OTBIO
 ITKIO)
 
 ADD_EXECUTABLE(NCCRegistrationFilterExample NCCRegistrationFilterExample.cxx )
-TARGET_LINK_LIBRARIES(NCCRegistrationFilterExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon
+TARGET_LINK_LIBRARIES(NCCRegistrationFilterExample OTBFeatureExtraction OTBCommon OTBIO
 ITKIO)
 
 ADD_EXECUTABLE(SIFTDisparityMapEstimation SIFTDisparityMapEstimation.cxx )
-TARGET_LINK_LIBRARIES(SIFTDisparityMapEstimation OTBFeatureExtraction OTBCommon OTBIO ITKCommon
+TARGET_LINK_LIBRARIES(SIFTDisparityMapEstimation OTBFeatureExtraction OTBCommon OTBIO
 ITKIO)
 
 
@@ -44,6 +44,6 @@ ADD_TEST(SimpleDisparityMapEstimationExampleTest ${EXE_TESTS}
 
 
 ADD_EXECUTABLE(otbDisparityMapExamplesTests otbDisparityMapExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbDisparityMapExamplesTests  ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbDisparityMapExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -4,16 +4,16 @@ INCLUDE_REGULAR_EXPRESSION("^.*$")
 SET(Markov_EXAMPLES ${CXX_TEST_PATH}/otbMarkovExamplesTests)
 
 ADD_EXECUTABLE(MarkovClassification1Example MarkovClassification1Example.cxx )
-TARGET_LINK_LIBRARIES(MarkovClassification1Example OTBMarkov OTBCommon OTBIO ITKNumerics ITKIO)
+TARGET_LINK_LIBRARIES(MarkovClassification1Example OTBMarkov OTBCommon OTBIO ITKNumerics)
 
 ADD_EXECUTABLE(MarkovClassification2Example MarkovClassification2Example.cxx )
-TARGET_LINK_LIBRARIES(MarkovClassification2Example OTBMarkov OTBCommon OTBIO ITKNumerics ITKIO)
+TARGET_LINK_LIBRARIES(MarkovClassification2Example OTBMarkov OTBCommon OTBIO ITKNumerics)
 
 ADD_EXECUTABLE(MarkovRestaurationExample MarkovRestaurationExample.cxx )
-TARGET_LINK_LIBRARIES(MarkovRestaurationExample OTBMarkov OTBCommon OTBIO ITKNumerics ITKIO)
+TARGET_LINK_LIBRARIES(MarkovRestaurationExample OTBMarkov OTBCommon OTBIO ITKNumerics)
 
 ADD_EXECUTABLE(MarkovRegularizationExample MarkovRegularizationExample.cxx )
-TARGET_LINK_LIBRARIES(MarkovRegularizationExample OTBMarkov OTBCommon OTBIO ITKNumerics ITKIO)
+TARGET_LINK_LIBRARIES(MarkovRegularizationExample OTBMarkov OTBCommon OTBIO ITKNumerics)
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
@@ -83,7 +83,7 @@ ADD_TEST(MarkovRegularizationExampleTest ${EXE_TESTS}
 
 
 ADD_EXECUTABLE(otbMarkovExamplesTests otbMarkovExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbMarkovExamplesTests  ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBMarkov)
+TARGET_LINK_LIBRARIES(otbMarkovExamplesTests  ITKAlgorithms ITKStatistics ITKNumerics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBMarkov)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

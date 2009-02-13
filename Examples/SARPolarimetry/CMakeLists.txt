@@ -2,7 +2,7 @@ PROJECT(ImagePolarimetricSynthesisExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(PiOver4ExamplePolarimetricSynthesisFilter PiOver4ExamplePolarimetricSynthesisFilter.cxx )
-TARGET_LINK_LIBRARIES(PiOver4ExamplePolarimetricSynthesisFilter OTBSARPolarimetry OTBCommon OTBIO ITKNumerics ITKIO)
+TARGET_LINK_LIBRARIES(PiOver4ExamplePolarimetricSynthesisFilter OTBSARPolarimetry OTBCommon OTBIO ITKNumerics)
 
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
@@ -36,7 +36,7 @@ ADD_TEST(rdTvPiOver4ExamplePolarimetricSynthesisFilterTest ${SARPOLARIMETRY_TEST
 
 
 ADD_EXECUTABLE(otbSARPolarimetryExamplesTests otbSARPolarimetryExamplesTests.cxx )
-TARGET_LINK_LIBRARIES(otbSARPolarimetryExamplesTests OTBSARPolarimetry OTBCommon OTBIO  ITKIO ITKCommon ITKBasicFilters)
+TARGET_LINK_LIBRARIES(otbSARPolarimetryExamplesTests OTBSARPolarimetry OTBCommon OTBIO  ITKBasicFilters)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

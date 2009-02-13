@@ -2,248 +2,248 @@ PROJECT(FilteringExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 #ADD_EXECUTABLE(AntiAliasBinaryImageFilter AntiAliasBinaryImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(AntiAliasBinaryImageFilter ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(AntiAliasBinaryImageFilter)
 
 ADD_EXECUTABLE(CompositeFilterExample CompositeFilterExample.cxx )
-TARGET_LINK_LIBRARIES(CompositeFilterExample OTBCommon OTBIO ITKCommon ITKIO ITKBasicFilters)
+TARGET_LINK_LIBRARIES(CompositeFilterExample OTBCommon OTBIO ITKBasicFilters)
 
 #ADD_EXECUTABLE(FlipImageFilter FlipImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(FlipImageFilter ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(FlipImageFilter)
 
 #ADD_EXECUTABLE(FFTImageFilter FFTImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(FFTImageFilter ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(FFTImageFilter)
 
 IF( USE_FFTWF )
   #ADD_EXECUTABLE(FFTDirectInverse2 FFTDirectInverse2.cxx )
-  #TARGET_LINK_LIBRARIES(FFTDirectInverse2 ITKCommon ITKIO ITKAlgorithms )
+  #TARGET_LINK_LIBRARIES(FFTDirectInverse2 ITKAlgorithms )
 ENDIF( USE_FFTWF )
 
 ADD_EXECUTABLE(GradientMagnitudeImageFilter GradientMagnitudeImageFilter.cxx )
-TARGET_LINK_LIBRARIES(GradientMagnitudeImageFilter OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(GradientMagnitudeImageFilter OTBCommon OTBIO)
 
 ADD_EXECUTABLE(GradientMagnitudeRecursiveGaussianImageFilter GradientMagnitudeRecursiveGaussianImageFilter.cxx )
 TARGET_LINK_LIBRARIES(GradientMagnitudeRecursiveGaussianImageFilter
-OTBCommon OTBIO ITKCommon ITKIO)
+OTBCommon OTBIO)
 
 #ADD_EXECUTABLE(GradientRecursiveGaussianImageFilter GradientRecursiveGaussianImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(GradientRecursiveGaussianImageFilter ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(GradientRecursiveGaussianImageFilter)
 
 ADD_EXECUTABLE(SecondDerivativeRecursiveGaussianImageFilter SecondDerivativeRecursiveGaussianImageFilter.cxx )
 TARGET_LINK_LIBRARIES(SecondDerivativeRecursiveGaussianImageFilter
-OTBCommon OTBIO ITKCommon ITKIO)
+OTBCommon OTBIO)
 
 ADD_EXECUTABLE(BinaryThresholdImageFilter BinaryThresholdImageFilter.cxx )
-TARGET_LINK_LIBRARIES(BinaryThresholdImageFilter OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(BinaryThresholdImageFilter OTBCommon OTBIO)
 
 #ADD_EXECUTABLE(BinaryMedianImageFilter BinaryMedianImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(BinaryMedianImageFilter ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(BinaryMedianImageFilter)
 
 #ADD_EXECUTABLE(VotingBinaryHoleFillingImageFilter VotingBinaryHoleFillingImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(VotingBinaryHoleFillingImageFilter ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(VotingBinaryHoleFillingImageFilter)
 
 #ADD_EXECUTABLE(VotingBinaryIterativeHoleFillingImageFilter VotingBinaryIterativeHoleFillingImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(VotingBinaryIterativeHoleFillingImageFilter ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(VotingBinaryIterativeHoleFillingImageFilter)
 
 #ADD_EXECUTABLE(OtsuThresholdImageFilter OtsuThresholdImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(OtsuThresholdImageFilter ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(OtsuThresholdImageFilter)
 
 #ADD_EXECUTABLE(OtsuMultipleThresholdImageFilter OtsuMultipleThresholdImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(OtsuMultipleThresholdImageFilter                      ITKCommon ITKIO ITKStatistics)
+#TARGET_LINK_LIBRARIES(OtsuMultipleThresholdImageFilter                      ITKStatistics)
 
 ADD_EXECUTABLE(ThresholdImageFilter ThresholdImageFilter.cxx )
-TARGET_LINK_LIBRARIES(ThresholdImageFilter OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(ThresholdImageFilter OTBCommon OTBIO)
 
 #ADD_EXECUTABLE(CastingImageFilters CastingImageFilters.cxx )
-#TARGET_LINK_LIBRARIES(CastingImageFilters ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(CastingImageFilters)
 
 ADD_EXECUTABLE(CannyEdgeDetectionImageFilter CannyEdgeDetectionImageFilter.cxx )
-TARGET_LINK_LIBRARIES(CannyEdgeDetectionImageFilter OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(CannyEdgeDetectionImageFilter OTBCommon OTBIO)
 
 ADD_EXECUTABLE(DerivativeImageFilter DerivativeImageFilter.cxx )
-TARGET_LINK_LIBRARIES(DerivativeImageFilter OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(DerivativeImageFilter OTBCommon OTBIO)
 
 #ADD_EXECUTABLE(SigmoidImageFilter SigmoidImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(SigmoidImageFilter ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(SigmoidImageFilter)
 
 ADD_EXECUTABLE(MedianImageFilter MedianImageFilter.cxx )
-TARGET_LINK_LIBRARIES(MedianImageFilter OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(MedianImageFilter OTBCommon OTBIO)
 
 ADD_EXECUTABLE(MeanImageFilter MeanImageFilter.cxx )
-TARGET_LINK_LIBRARIES(MeanImageFilter OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(MeanImageFilter OTBCommon OTBIO)
 
 ADD_EXECUTABLE(MathematicalMorphologyBinaryFilters MathematicalMorphologyBinaryFilters.cxx )
 TARGET_LINK_LIBRARIES(MathematicalMorphologyBinaryFilters OTBCommon
-OTBIO ITKCommon ITKIO)
+OTBIO)
 
 ADD_EXECUTABLE(MathematicalMorphologyGrayscaleFilters MathematicalMorphologyGrayscaleFilters.cxx )
 TARGET_LINK_LIBRARIES(MathematicalMorphologyGrayscaleFilters OTBCommon
-OTBIO ITKCommon ITKIO)
+OTBIO)
 
 #ADD_EXECUTABLE(MorphologicalImageEnhancement MorphologicalImageEnhancement.cxx )
-#TARGET_LINK_LIBRARIES(MorphologicalImageEnhancement ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(MorphologicalImageEnhancement)
 
 #ADD_EXECUTABLE(CurvatureFlowImageFilter CurvatureFlowImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(CurvatureFlowImageFilter ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(CurvatureFlowImageFilter ITKBasicFilters)
 
 #ADD_EXECUTABLE(MinMaxCurvatureFlowImageFilter MinMaxCurvatureFlowImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(MinMaxCurvatureFlowImageFilter ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(MinMaxCurvatureFlowImageFilter ITKBasicFilters)
 
 #ADD_EXECUTABLE(BinaryMinMaxCurvatureFlowImageFilter BinaryMinMaxCurvatureFlowImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(BinaryMinMaxCurvatureFlowImageFilter ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(BinaryMinMaxCurvatureFlowImageFilter ITKBasicFilters)
 
 ADD_EXECUTABLE(DiscreteGaussianImageFilter DiscreteGaussianImageFilter.cxx )
-TARGET_LINK_LIBRARIES(DiscreteGaussianImageFilter OTBCommon OTBIO ITKCommon ITKBasicFilters ITKIO)
+TARGET_LINK_LIBRARIES(DiscreteGaussianImageFilter OTBCommon OTBIO ITKBasicFilters)
 
 #ADD_EXECUTABLE(GaussianBlurImageFunction GaussianBlurImageFunction.cxx )
-#TARGET_LINK_LIBRARIES(GaussianBlurImageFunction ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(GaussianBlurImageFunction ITKBasicFilters)
 
 #ADD_EXECUTABLE(SmoothingRecursiveGaussianImageFilter SmoothingRecursiveGaussianImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(SmoothingRecursiveGaussianImageFilter ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(SmoothingRecursiveGaussianImageFilter ITKBasicFilters)
 
 #ADD_EXECUTABLE(SmoothingRecursiveGaussianImageFilter2 SmoothingRecursiveGaussianImageFilter2.cxx )
-#TARGET_LINK_LIBRARIES(SmoothingRecursiveGaussianImageFilter2 ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(SmoothingRecursiveGaussianImageFilter2 ITKBasicFilters)
 
 ADD_EXECUTABLE(LaplacianRecursiveGaussianImageFilter1 LaplacianRecursiveGaussianImageFilter1.cxx )
 TARGET_LINK_LIBRARIES(LaplacianRecursiveGaussianImageFilter1 OTBCommon
-OTBIO ITKCommon ITKBasicFilters ITKIO)
+OTBIO ITKBasicFilters)
 
 ADD_EXECUTABLE(LaplacianRecursiveGaussianImageFilter2 LaplacianRecursiveGaussianImageFilter2.cxx )
 TARGET_LINK_LIBRARIES(LaplacianRecursiveGaussianImageFilter2 OTBCommon
-OTBIO ITKCommon ITKBasicFilters ITKIO)
+OTBIO ITKBasicFilters)
 
 #ADD_EXECUTABLE(ScaleSpaceGenerator2D ScaleSpaceGenerator2D.cxx )
-#TARGET_LINK_LIBRARIES(ScaleSpaceGenerator2D ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(ScaleSpaceGenerator2D ITKBasicFilters)
 
 #ADD_EXECUTABLE(BinomialBlurImageFilter BinomialBlurImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(BinomialBlurImageFilter ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(BinomialBlurImageFilter ITKBasicFilters)
 
 #ADD_EXECUTABLE(CurvatureAnisotropicDiffusionImageFilter CurvatureAnisotropicDiffusionImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(CurvatureAnisotropicDiffusionImageFilter ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(CurvatureAnisotropicDiffusionImageFilter ITKBasicFilters)
 
 ADD_EXECUTABLE(GradientAnisotropicDiffusionImageFilter GradientAnisotropicDiffusionImageFilter.cxx )
 TARGET_LINK_LIBRARIES(GradientAnisotropicDiffusionImageFilter
-OTBCommon OTBIO ITKCommon ITKBasicFilters ITKIO)
+OTBCommon OTBIO ITKBasicFilters)
 
 #ADD_EXECUTABLE(VectorGradientAnisotropicDiffusionImageFilter VectorGradientAnisotropicDiffusionImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(VectorGradientAnisotropicDiffusionImageFilter ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(VectorGradientAnisotropicDiffusionImageFilter ITKBasicFilters)
 
 #ADD_EXECUTABLE(VectorCurvatureAnisotropicDiffusionImageFilter VectorCurvatureAnisotropicDiffusionImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(VectorCurvatureAnisotropicDiffusionImageFilter ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(VectorCurvatureAnisotropicDiffusionImageFilter ITKBasicFilters)
 
 #ADD_EXECUTABLE(RGBCurvatureAnisotropicDiffusionImageFilter RGBCurvatureAnisotropicDiffusionImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(RGBCurvatureAnisotropicDiffusionImageFilter ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(RGBCurvatureAnisotropicDiffusionImageFilter ITKBasicFilters)
 
 #ADD_EXECUTABLE(RGBGradientAnisotropicDiffusionImageFilter RGBGradientAnisotropicDiffusionImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(RGBGradientAnisotropicDiffusionImageFilter ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(RGBGradientAnisotropicDiffusionImageFilter ITKBasicFilters)
 
 #ADD_EXECUTABLE(RGBToGrayscale RGBToGrayscale.cxx )
-#TARGET_LINK_LIBRARIES(RGBToGrayscale ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(RGBToGrayscale ITKBasicFilters)
 
 ADD_EXECUTABLE(DanielssonDistanceMapImageFilter DanielssonDistanceMapImageFilter.cxx )
 TARGET_LINK_LIBRARIES(DanielssonDistanceMapImageFilter OTBCommon OTBIO
-ITKCommon ITKBasicFilters ITKIO)
+ITKCommon ITKBasicFilters)
 
 #ADD_EXECUTABLE(SignedDanielssonDistanceMapImageFilter SignedDanielssonDistanceMapImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(SignedDanielssonDistanceMapImageFilter ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(SignedDanielssonDistanceMapImageFilter ITKBasicFilters)
 
 #ADD_EXECUTABLE(BilateralImageFilter BilateralImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(BilateralImageFilter ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(BilateralImageFilter ITKBasicFilters)
 
 #ADD_EXECUTABLE(ResampleImageFilter ResampleImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(ResampleImageFilter ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(ResampleImageFilter ITKBasicFilters)
 
 #ADD_EXECUTABLE(ResampleOrientedImageFilter ResampleOrientedImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(ResampleOrientedImageFilter ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(ResampleOrientedImageFilter ITKBasicFilters)
 
 #ADD_EXECUTABLE(ResampleImageFilter2 ResampleImageFilter2.cxx )
-#TARGET_LINK_LIBRARIES(ResampleImageFilter2 ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(ResampleImageFilter2 ITKBasicFilters)
 
 IF(NOT BORLAND)
 #ADD_EXECUTABLE(FFTImageFilterFourierDomainFiltering FFTImageFilterFourierDomainFiltering.cxx )
-#TARGET_LINK_LIBRARIES(FFTImageFilterFourierDomainFiltering ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(FFTImageFilterFourierDomainFiltering)
 
 #ADD_EXECUTABLE(LaplacianImageFilter LaplacianImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(LaplacianImageFilter ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(LaplacianImageFilter ITKBasicFilters)
 
 #ADD_EXECUTABLE(ResampleImageFilter3 ResampleImageFilter3.cxx )
-#TARGET_LINK_LIBRARIES(ResampleImageFilter3 ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(ResampleImageFilter3 ITKBasicFilters)
 
 #ADD_EXECUTABLE(ResampleImageFilter4 ResampleImageFilter4.cxx )
-#TARGET_LINK_LIBRARIES(ResampleImageFilter4 ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(ResampleImageFilter4 ITKBasicFilters)
 ENDIF(NOT BORLAND)
 
 #ADD_EXECUTABLE(ResampleImageFilter5 ResampleImageFilter5.cxx )
-#TARGET_LINK_LIBRARIES(ResampleImageFilter5 ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(ResampleImageFilter5 ITKBasicFilters)
 
 #ADD_EXECUTABLE(ResampleImageFilter6 ResampleImageFilter6.cxx )
-#TARGET_LINK_LIBRARIES(ResampleImageFilter6 ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(ResampleImageFilter6 ITKBasicFilters)
 
 #ADD_EXECUTABLE(ResampleImageFilter8 ResampleImageFilter8.cxx )
-#TARGET_LINK_LIBRARIES(ResampleImageFilter8 ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(ResampleImageFilter8 ITKBasicFilters)
 
 #ADD_EXECUTABLE(ResampleImageFilter9 ResampleImageFilter9.cxx )
-#TARGET_LINK_LIBRARIES(ResampleImageFilter9 ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(ResampleImageFilter9 ITKBasicFilters)
 
 #ADD_EXECUTABLE(ResampleVolumesToBeIsotropic ResampleVolumesToBeIsotropic.cxx )
-#TARGET_LINK_LIBRARIES(ResampleVolumesToBeIsotropic ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(ResampleVolumesToBeIsotropic ITKBasicFilters)
 
 #ADD_EXECUTABLE(WarpImageFilter1 WarpImageFilter1.cxx )
-#TARGET_LINK_LIBRARIES(WarpImageFilter1 ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(WarpImageFilter1 ITKBasicFilters)
 
 #ADD_EXECUTABLE(SubsampleVolume SubsampleVolume.cxx )
-#TARGET_LINK_LIBRARIES(SubsampleVolume ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(SubsampleVolume ITKBasicFilters)
 
 #ADD_EXECUTABLE(LaplacianSharpeningImageFilter LaplacianSharpeningImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(LaplacianSharpeningImageFilter ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(LaplacianSharpeningImageFilter ITKBasicFilters)
 
 #ADD_EXECUTABLE(SurfaceExtraction SurfaceExtraction.cxx )
-#TARGET_LINK_LIBRARIES(SurfaceExtraction ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(SurfaceExtraction ITKBasicFilters)
 
 #ADD_EXECUTABLE(VectorIndexSelection VectorIndexSelection.cxx )
-#TARGET_LINK_LIBRARIES(VectorIndexSelection ITKCommon ITKBasicFilters ITKIO)
+#TARGET_LINK_LIBRARIES(VectorIndexSelection ITKBasicFilters)
 
 
 #ADD_EXECUTABLE(FilteringExamples FilteringExamples.cxx)
-#TARGET_LINK_LIBRARIES(FilteringExamples ITKIO ITKBasicFilters ITKCommon)
+#TARGET_LINK_LIBRARIES(FilteringExamples ITKBasicFilters)
 
 #ADD_EXECUTABLE(FilteringExamples2 FilteringExamples2.cxx)
-#TARGET_LINK_LIBRARIES(FilteringExamples2 ITKIO ITKBasicFilters ITKCommon)
+#TARGET_LINK_LIBRARIES(FilteringExamples2 ITKBasicFilters)
 
 #ADD_EXECUTABLE(FilteringExamples3 FilteringExamples3.cxx)
-#TARGET_LINK_LIBRARIES(FilteringExamples3 ITKIO ITKBasicFilters ITKCommon)
+#TARGET_LINK_LIBRARIES(FilteringExamples3 ITKBasicFilters)
 
 #ADD_EXECUTABLE(FilteringExamples4 FilteringExamples4.cxx)
-#TARGET_LINK_LIBRARIES(FilteringExamples4 ITKIO ITKBasicFilters ITKCommon)
+#TARGET_LINK_LIBRARIES(FilteringExamples4 ITKBasicFilters)
 
 #ADD_EXECUTABLE(FilteringExamples5 FilteringExamples5.cxx)
-#TARGET_LINK_LIBRARIES(FilteringExamples5 ITKIO ITKBasicFilters ITKCommon                      ITKStatistics)
+#TARGET_LINK_LIBRARIES(FilteringExamples5 ITKBasicFilters                      ITKStatistics)
 
 #ADD_EXECUTABLE(FilteringExamples7 FilteringExamples7.cxx)
-#TARGET_LINK_LIBRARIES(FilteringExamples7 ITKIO ITKBasicFilters ITKCommon)
+#TARGET_LINK_LIBRARIES(FilteringExamples7 ITKBasicFilters)
 
 #ADD_EXECUTABLE(FilteringExamples8 FilteringExamples8.cxx)
-#TARGET_LINK_LIBRARIES(FilteringExamples8 ITKIO ITKBasicFilters ITKCommon)
+#TARGET_LINK_LIBRARIES(FilteringExamples8 ITKBasicFilters)
 
 #ADD_EXECUTABLE(FilteringExamples6 FilteringExamples6.cxx)
 IF( USE_FFTWF )
-  #TARGET_LINK_LIBRARIES(FilteringExamples6 ITKIO ITKBasicFilters ITKCommon ITKAlgorithms)
+  #TARGET_LINK_LIBRARIES(FilteringExamples6 ITKBasicFilters ITKAlgorithms)
 ELSE( USE_FFTWF )
-  #TARGET_LINK_LIBRARIES(FilteringExamples6 ITKIO ITKBasicFilters ITKCommon)
+  #TARGET_LINK_LIBRARIES(FilteringExamples6 ITKBasicFilters)
 ENDIF( USE_FFTWF )
 
 #ADD_EXECUTABLE(DiffusionTensor3DReconstructionImageFilter DiffusionTensor3DReconstructionImageFilter.cxx)
-#TARGET_LINK_LIBRARIES(DiffusionTensor3DReconstructionImageFilter ITKIO ITKBasicFilters ITKCommon)
+#TARGET_LINK_LIBRARIES(DiffusionTensor3DReconstructionImageFilter ITKBasicFilters)
 
 
   #ADD_EXECUTABLE(FFTDirectInverse FFTDirectInverse.cxx )
-  #TARGET_LINK_LIBRARIES(FFTDirectInverse ITKCommon ITKIO)
+  #TARGET_LINK_LIBRARIES(FFTDirectInverse)
 
 IF(NOT BORLAND)
   #ADD_EXECUTABLE(DigitallyReconstructedRadiograph1 DigitallyReconstructedRadiograph1.cxx )
-  #TARGET_LINK_LIBRARIES(DigitallyReconstructedRadiograph1 ITKCommon ITKIO)
+  #TARGET_LINK_LIBRARIES(DigitallyReconstructedRadiograph1)
 
   #ADD_EXECUTABLE(ResampleImageFilter7 ResampleImageFilter7.cxx )
-  #TARGET_LINK_LIBRARIES(ResampleImageFilter7 ITKCommon ITKBasicFilters ITKIO)
+  #TARGET_LINK_LIBRARIES(ResampleImageFilter7 ITKBasicFilters)
 ENDIF(NOT BORLAND)
 
 
@@ -518,6 +518,6 @@ ADD_TEST(RationalQuotientResampleImageFilterTest ${EXE_TESTS}
 
 
 ADD_EXECUTABLE(otbFilteringExamplesTests otbFilteringExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbFilteringExamplesTests  ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbFilteringExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -2,13 +2,13 @@ PROJECT(ImageRadiometryExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx )
-TARGET_LINK_LIBRARIES(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter OTBRadiometry OTBCommon OTBIO ITKNumerics ITKIO)
+TARGET_LINK_LIBRARIES(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter OTBRadiometry OTBCommon OTBIO ITKNumerics)
 
 ADD_EXECUTABLE(NDVIRAndNIRVegetationIndexImageFilter NDVIRAndNIRVegetationIndexImageFilter.cxx )
-TARGET_LINK_LIBRARIES(NDVIRAndNIRVegetationIndexImageFilter OTBRadiometry OTBCommon OTBIO ITKNumerics ITKIO)
+TARGET_LINK_LIBRARIES(NDVIRAndNIRVegetationIndexImageFilter OTBRadiometry OTBCommon OTBIO ITKNumerics)
 
 ADD_EXECUTABLE(AtmosphericCorrectionSequencement AtmosphericCorrectionSequencement.cxx )
-TARGET_LINK_LIBRARIES(AtmosphericCorrectionSequencement OTBRadiometry OTBCommon OTBIO ITKNumerics ITKIO)
+TARGET_LINK_LIBRARIES(AtmosphericCorrectionSequencement OTBRadiometry OTBCommon OTBIO ITKNumerics)
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
@@ -115,6 +115,6 @@ ADD_TEST(AtmosphericCorrectionSequencementTest ${EXE_TESTS}
 
 
 ADD_EXECUTABLE(otbRadiometryExamplesTests otbRadiometryExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbRadiometryExamplesTests OTBBasicFilters OTBCommon OTBDisparityMap OTBRadiometry OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion   ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon )
+TARGET_LINK_LIBRARIES(otbRadiometryExamplesTests OTBBasicFilters OTBCommon OTBDisparityMap OTBRadiometry OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion   ITKAlgorithms ITKStatistics ITKNumerics )
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -15,123 +15,123 @@ INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 
 ADD_EXECUTABLE(ImageRegistration1 ImageRegistration1.cxx )
-TARGET_LINK_LIBRARIES(ImageRegistration1 OTBCommon OTBIO ITKNumerics ITKIO)
+TARGET_LINK_LIBRARIES(ImageRegistration1 OTBCommon OTBIO ITKNumerics)
 
 ADD_EXECUTABLE(ImageRegistration2 ImageRegistration2.cxx )
-TARGET_LINK_LIBRARIES(ImageRegistration2 OTBCommon OTBIO ITKNumerics ITKIO)
+TARGET_LINK_LIBRARIES(ImageRegistration2 OTBCommon OTBIO ITKNumerics)
 
 
 # ADD_EXECUTABLE(ImageRegistration3 ImageRegistration3.cxx )
-# TARGET_LINK_LIBRARIES(ImageRegistration3 ITKNumerics ITKIO)
+# TARGET_LINK_LIBRARIES(ImageRegistration3 ITKNumerics)
 
 # ADD_EXECUTABLE(ImageRegistration4o ImageRegistration4o.cxx )
-# TARGET_LINK_LIBRARIES(ImageRegistration4o ITKNumerics ITKIO)
+# TARGET_LINK_LIBRARIES(ImageRegistration4o ITKNumerics)
 
 # ADD_EXECUTABLE(ImageRegistration6 ImageRegistration6.cxx )
-# TARGET_LINK_LIBRARIES(ImageRegistration6 ITKNumerics ITKIO)
+# TARGET_LINK_LIBRARIES(ImageRegistration6 ITKNumerics)
 
 # ADD_EXECUTABLE(ImageRegistration8 ImageRegistration8.cxx )
-# TARGET_LINK_LIBRARIES(ImageRegistration8 ITKNumerics ITKIO)
+# TARGET_LINK_LIBRARIES(ImageRegistration8 ITKNumerics)
 
 ADD_EXECUTABLE(ImageRegistration9 ImageRegistration9.cxx )
-TARGET_LINK_LIBRARIES(ImageRegistration9 OTBCommon OTBIO ITKNumerics ITKIO)
+TARGET_LINK_LIBRARIES(ImageRegistration9 OTBCommon OTBIO ITKNumerics)
 
 
 ADD_EXECUTABLE(ImageRegistration5 ImageRegistration5.cxx )
-TARGET_LINK_LIBRARIES(ImageRegistration5 OTBCommon OTBIO ITKNumerics ITKIO)
+TARGET_LINK_LIBRARIES(ImageRegistration5 OTBCommon OTBIO ITKNumerics)
 
 #   ADD_EXECUTABLE(ImageRegistration10 ImageRegistration10.cxx )
-#   TARGET_LINK_LIBRARIES(ImageRegistration10 ITKNumerics ITKIO)
+#   TARGET_LINK_LIBRARIES(ImageRegistration10 ITKNumerics)
 
 #   ADD_EXECUTABLE(DeformableRegistration4 DeformableRegistration4.cxx )
-#   TARGET_LINK_LIBRARIES(DeformableRegistration4 ITKNumerics ITKIO)
+#   TARGET_LINK_LIBRARIES(DeformableRegistration4 ITKNumerics)
 
 #   ADD_EXECUTABLE(ImageRegistration4 ImageRegistration4.cxx )
-#   TARGET_LINK_LIBRARIES(ImageRegistration4 ITKNumerics ITKIO)
+#   TARGET_LINK_LIBRARIES(ImageRegistration4 ITKNumerics)
 
 #   ADD_EXECUTABLE(ImageRegistration7 ImageRegistration7.cxx )
-#   TARGET_LINK_LIBRARIES(ImageRegistration7 ITKNumerics ITKIO)
+#   TARGET_LINK_LIBRARIES(ImageRegistration7 ITKNumerics)
 
 #   ADD_EXECUTABLE(ImageRegistration11 ImageRegistration11.cxx )
-#   TARGET_LINK_LIBRARIES(ImageRegistration11 ITKStatistics ITKNumerics ITKIO)
+#   TARGET_LINK_LIBRARIES(ImageRegistration11 ITKStatistics ITKNumerics)
 
 #   ADD_EXECUTABLE(ImageRegistration12 ImageRegistration12.cxx )
-#   TARGET_LINK_LIBRARIES(ImageRegistration12 ITKStatistics ITKNumerics ITKIO)
+#   TARGET_LINK_LIBRARIES(ImageRegistration12 ITKStatistics ITKNumerics)
 
 #   ADD_EXECUTABLE(ImageRegistration13 ImageRegistration13.cxx )
-#   TARGET_LINK_LIBRARIES(ImageRegistration13 ITKStatistics ITKNumerics ITKIO)
+#   TARGET_LINK_LIBRARIES(ImageRegistration13 ITKStatistics ITKNumerics)
 
 #   ADD_EXECUTABLE(ImageRegistration14 ImageRegistration14.cxx )
-#   TARGET_LINK_LIBRARIES(ImageRegistration14 ITKStatistics ITKNumerics ITKIO)
+#   TARGET_LINK_LIBRARIES(ImageRegistration14 ITKStatistics ITKNumerics)
 
 #   ADD_EXECUTABLE(ImageRegistration15 ImageRegistration15.cxx )
-#   TARGET_LINK_LIBRARIES(ImageRegistration15 ITKStatistics ITKNumerics ITKIO)
+#   TARGET_LINK_LIBRARIES(ImageRegistration15 ITKStatistics ITKNumerics)
 
 #   ADD_EXECUTABLE(ImageRegistration16 ImageRegistration16.cxx )
-#   TARGET_LINK_LIBRARIES(ImageRegistration16 ITKStatistics ITKNumerics ITKIO)
+#   TARGET_LINK_LIBRARIES(ImageRegistration16 ITKStatistics ITKNumerics)
 
 #   ADD_EXECUTABLE(DeformableRegistration6 DeformableRegistration6.cxx )
-#   TARGET_LINK_LIBRARIES(DeformableRegistration6 ITKNumerics ITKIO)
+#   TARGET_LINK_LIBRARIES(DeformableRegistration6 ITKNumerics)
 
 #   ADD_EXECUTABLE(DeformableRegistration7 DeformableRegistration7.cxx )
-#   TARGET_LINK_LIBRARIES(DeformableRegistration7 ITKNumerics ITKIO)
+#   TARGET_LINK_LIBRARIES(DeformableRegistration7 ITKNumerics)
 
 #   ADD_EXECUTABLE(DeformableRegistration8 DeformableRegistration8.cxx )
-#   TARGET_LINK_LIBRARIES(DeformableRegistration8 ITKNumerics ITKIO)
+#   TARGET_LINK_LIBRARIES(DeformableRegistration8 ITKNumerics)
 
 # IF( USE_FFTWD )
 #   ADD_EXECUTABLE(DeformableRegistration9 DeformableRegistration9.cxx )
-#   TARGET_LINK_LIBRARIES(DeformableRegistration9 ITKCommon
-#       ITKNumerics ITKIO ITKAlgorithms ITKStatistics )
+#   TARGET_LINK_LIBRARIES(DeformableRegistration9
+#       ITKNumerics ITKAlgorithms ITKStatistics )
 
 #   ADD_EXECUTABLE(DeformableRegistration10 DeformableRegistration10.cxx )
 #   TARGET_LINK_LIBRARIES(DeformableRegistration10
-#                         ITKCommon ITKNumerics ITKIO ITKAlgorithms ITKStatistics)
+#                         ITKNumerics ITKAlgorithms ITKStatistics)
 # ENDIF( USE_FFTWD )
 
 # ADD_EXECUTABLE(MultiResImageRegistration1 MultiResImageRegistration1.cxx )
-# TARGET_LINK_LIBRARIES(MultiResImageRegistration1 ITKNumerics ITKIO)
+# TARGET_LINK_LIBRARIES(MultiResImageRegistration1 ITKNumerics)
 
 # ADD_EXECUTABLE(RegistrationExamples7 RegistrationExamples7.cxx )
-# TARGET_LINK_LIBRARIES(RegistrationExamples7 ITKAlgorithms ITKFEM ITKStatistics ITKIO ITKBasicFilters ITKCommon)
+# TARGET_LINK_LIBRARIES(RegistrationExamples7 ITKAlgorithms ITKFEM ITKStatistics ITKBasicFilters)
 
 # ADD_EXECUTABLE(MultiResImageRegistration2 MultiResImageRegistration2.cxx )
-# TARGET_LINK_LIBRARIES(MultiResImageRegistration2 ITKNumerics ITKIO)
+# TARGET_LINK_LIBRARIES(MultiResImageRegistration2 ITKNumerics)
 
 # ADD_EXECUTABLE(DeformableRegistration1 DeformableRegistration1.cxx )
-# TARGET_LINK_LIBRARIES(DeformableRegistration1 ITKNumerics ITKFEM ITKIO
+# TARGET_LINK_LIBRARIES(DeformableRegistration1 ITKNumerics ITKFEM
 #                                               ITKStatistics)
 
 # ADD_EXECUTABLE(DeformableRegistration2 DeformableRegistration2.cxx )
-# TARGET_LINK_LIBRARIES(DeformableRegistration2 ITKNumerics ITKIO ITKStatistics)
+# TARGET_LINK_LIBRARIES(DeformableRegistration2 ITKNumerics ITKStatistics)
 
 # ADD_EXECUTABLE(DeformableRegistration3 DeformableRegistration3.cxx )
-# TARGET_LINK_LIBRARIES(DeformableRegistration3 ITKNumerics ITKIO ITKStatistics)
+# TARGET_LINK_LIBRARIES(DeformableRegistration3 ITKNumerics ITKStatistics)
 
 # ADD_EXECUTABLE(DeformableRegistration5 DeformableRegistration5.cxx )
-# TARGET_LINK_LIBRARIES(DeformableRegistration5 ITKNumerics ITKIO ITKStatistics)
+# TARGET_LINK_LIBRARIES(DeformableRegistration5 ITKNumerics ITKStatistics)
 
 # ADD_EXECUTABLE(DeformableRegistration11 DeformableRegistration11.cxx )
-# TARGET_LINK_LIBRARIES(DeformableRegistration11 ITKNumerics ITKFEM ITKIO
+# TARGET_LINK_LIBRARIES(DeformableRegistration11 ITKNumerics ITKFEM
 #                                               ITKStatistics)
 
 # ADD_EXECUTABLE(DeformationFieldInitialization DeformationFieldInitialization.cxx )
-# TARGET_LINK_LIBRARIES(DeformationFieldInitialization ITKNumerics ITKIO)
+# TARGET_LINK_LIBRARIES(DeformationFieldInitialization ITKNumerics)
 
 # ADD_EXECUTABLE(DeformationFieldJacobian DeformationFieldJacobian.cxx )
-# TARGET_LINK_LIBRARIES(DeformationFieldJacobian ITKNumerics ITKIO)
+# TARGET_LINK_LIBRARIES(DeformationFieldJacobian ITKNumerics)
 
 # ADD_EXECUTABLE(LandmarkWarping2 LandmarkWarping2.cxx )
-# TARGET_LINK_LIBRARIES(LandmarkWarping2 ITKNumerics ITKIO)
+# TARGET_LINK_LIBRARIES(LandmarkWarping2 ITKNumerics)
 
 # ADD_EXECUTABLE(BSplineWarping1 BSplineWarping1.cxx )
-# TARGET_LINK_LIBRARIES(BSplineWarping1 ITKNumerics ITKIO)
+# TARGET_LINK_LIBRARIES(BSplineWarping1 ITKNumerics)
 
 # ADD_EXECUTABLE(ModelToImageRegistration1 ModelToImageRegistration1.cxx )
-# TARGET_LINK_LIBRARIES(ModelToImageRegistration1 ITKStatistics ITKNumerics ITKIO)
+# TARGET_LINK_LIBRARIES(ModelToImageRegistration1 ITKStatistics ITKNumerics)
 
 # ADD_EXECUTABLE(ModelToImageRegistration2 ModelToImageRegistration2.cxx )
-# TARGET_LINK_LIBRARIES(ModelToImageRegistration2 ITKStatistics ITKNumerics ITKIO)
+# TARGET_LINK_LIBRARIES(ModelToImageRegistration2 ITKStatistics ITKNumerics)
 
 # IF( NOT ITK_DISABLE_CXX_TESTING )
 
@@ -301,17 +301,17 @@ TARGET_LINK_LIBRARIES(ImageRegistration5 OTBCommon OTBIO ITKNumerics ITKIO)
 
 # IF(NOT BORLAND)
 #   ADD_EXECUTABLE(ImageRegistration2 ImageRegistration2.cxx )
-#   TARGET_LINK_LIBRARIES(ImageRegistration2 ITKNumerics ITKIO)
+#   TARGET_LINK_LIBRARIES(ImageRegistration2 ITKNumerics)
 
 #   ADD_EXECUTABLE(ImageRegistration17 ImageRegistration17.cxx )
-#   TARGET_LINK_LIBRARIES(ImageRegistration17 ITKStatistics ITKNumerics ITKIO)
+#   TARGET_LINK_LIBRARIES(ImageRegistration17 ITKStatistics ITKNumerics)
 
 #   ADD_EXECUTABLE(ImageRegistrationHistogramPlotter ImageRegistrationHistogramPlotter.cxx )
 #   TARGET_LINK_LIBRARIES(ImageRegistrationHistogramPlotter 
-#                         ITKNumerics ITKIO ITKCommon ITKStatistics)
+#                         ITKNumerics ITKStatistics)
 
 #   ADD_EXECUTABLE(MeanSquaresImageMetric1  MeanSquaresImageMetric1.cxx )
-#   TARGET_LINK_LIBRARIES(MeanSquaresImageMetric1 ITKAlgorithms ITKIO ITKBasicFilters ITKCommon)
+#   TARGET_LINK_LIBRARIES(MeanSquaresImageMetric1 ITKAlgorithms ITKBasicFilters)
 
 # ENDIF(NOT BORLAND)
 
@@ -466,34 +466,34 @@ TARGET_LINK_LIBRARIES(ImageRegistration5 OTBCommon OTBIO ITKNumerics ITKIO)
 
 
 # ADD_EXECUTABLE(RegistrationExamples RegistrationExamples.cxx )
-# TARGET_LINK_LIBRARIES(RegistrationExamples ITKAlgorithms ITKIO ITKBasicFilters ITKCommon)
+# TARGET_LINK_LIBRARIES(RegistrationExamples ITKAlgorithms ITKBasicFilters)
 
 # ADD_EXECUTABLE(RegistrationExamplesO RegistrationExamplesO.cxx )
-# TARGET_LINK_LIBRARIES(RegistrationExamplesO ITKAlgorithms ITKIO ITKBasicFilters ITKCommon)
+# TARGET_LINK_LIBRARIES(RegistrationExamplesO ITKAlgorithms ITKBasicFilters)
 
 # ADD_EXECUTABLE(RegistrationExamplesO2 RegistrationExamplesO2.cxx )
-# TARGET_LINK_LIBRARIES(RegistrationExamplesO2 ITKAlgorithms ITKIO ITKBasicFilters ITKCommon)
+# TARGET_LINK_LIBRARIES(RegistrationExamplesO2 ITKAlgorithms ITKBasicFilters)
 
 # ADD_EXECUTABLE(RegistrationExamples2 RegistrationExamples2.cxx )
-# TARGET_LINK_LIBRARIES(RegistrationExamples2 ITKAlgorithms ITKFEM ITKStatistics ITKIO ITKBasicFilters ITKCommon)
+# TARGET_LINK_LIBRARIES(RegistrationExamples2 ITKAlgorithms ITKFEM ITKStatistics ITKBasicFilters)
 
 # ADD_EXECUTABLE(RegistrationExamples3 RegistrationExamples3.cxx )
-# TARGET_LINK_LIBRARIES(RegistrationExamples3 ITKAlgorithms ITKFEM ITKStatistics ITKIO ITKBasicFilters ITKCommon)
+# TARGET_LINK_LIBRARIES(RegistrationExamples3 ITKAlgorithms ITKFEM ITKStatistics ITKBasicFilters)
 
 # ADD_EXECUTABLE(RegistrationExamples4 RegistrationExamples4.cxx )
-# TARGET_LINK_LIBRARIES(RegistrationExamples4 ITKAlgorithms ITKFEM ITKStatistics ITKIO ITKBasicFilters ITKCommon)
+# TARGET_LINK_LIBRARIES(RegistrationExamples4 ITKAlgorithms ITKFEM ITKStatistics ITKBasicFilters)
 
 # ADD_EXECUTABLE(RegistrationExamples5 RegistrationExamples5.cxx )
-# TARGET_LINK_LIBRARIES(RegistrationExamples5 ITKAlgorithms ITKFEM ITKStatistics ITKIO ITKBasicFilters ITKCommon)
+# TARGET_LINK_LIBRARIES(RegistrationExamples5 ITKAlgorithms ITKFEM ITKStatistics ITKBasicFilters)
 
 # ADD_EXECUTABLE(RegistrationExamples6 RegistrationExamples6.cxx )
-# TARGET_LINK_LIBRARIES(RegistrationExamples6 ITKAlgorithms ITKFEM ITKStatistics ITKIO ITKBasicFilters ITKCommon)
+# TARGET_LINK_LIBRARIES(RegistrationExamples6 ITKAlgorithms ITKFEM ITKStatistics ITKBasicFilters)
 
 # ADD_EXECUTABLE(RegistrationExamples8 RegistrationExamples8.cxx )
-# TARGET_LINK_LIBRARIES(RegistrationExamples8 ITKAlgorithms ITKFEM ITKStatistics ITKIO ITKBasicFilters ITKCommon)
+# TARGET_LINK_LIBRARIES(RegistrationExamples8 ITKAlgorithms ITKFEM ITKStatistics ITKBasicFilters)
 
 # ADD_EXECUTABLE(RegistrationExamples9 RegistrationExamples9.cxx )
-# TARGET_LINK_LIBRARIES(RegistrationExamples9 ITKAlgorithms ITKFEM ITKStatistics ITKIO ITKBasicFilters ITKCommon)
+# TARGET_LINK_LIBRARIES(RegistrationExamples9 ITKAlgorithms ITKFEM ITKStatistics ITKBasicFilters)
 
 
 
@@ -557,6 +557,6 @@ ADD_TEST(ImageRegistration5Cas2ExampleTest ${EXE_TESTS}
 
 
 ADD_EXECUTABLE(otbRegistrationExamplesTests otbRegistrationExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbRegistrationExamplesTests  ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbRegistrationExamplesTests  ITKAlgorithms ITKStatistics ITKNumerics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

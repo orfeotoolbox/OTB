@@ -11,17 +11,17 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 
 ADD_EXECUTABLE(SensorModelExample SensorModelExample.cxx )
-TARGET_LINK_LIBRARIES(SensorModelExample OTBProjections OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(SensorModelExample OTBProjections OTBCommon OTBIO)
 
 ADD_EXECUTABLE(MapProjectionExample MapProjectionExample.cxx )
 TARGET_LINK_LIBRARIES(MapProjectionExample OTBProjections OTBCommon OTBIO)
 
 ADD_EXECUTABLE(OrthoRectificationExample OrthoRectificationExample.cxx )
-TARGET_LINK_LIBRARIES(OrthoRectificationExample OTBProjections OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(OrthoRectificationExample OTBProjections OTBCommon OTBIO)
 
 IF( OTB_USE_CURL )
 ADD_EXECUTABLE(PlaceNameToLonLatExample PlaceNameToLonLatExample.cxx )
-TARGET_LINK_LIBRARIES(PlaceNameToLonLatExample OTBProjections OTBCommon OTBIO ITKCommon ITKIO ${CURL_LIBRARY} tinyXML)
+TARGET_LINK_LIBRARIES(PlaceNameToLonLatExample OTBProjections OTBCommon OTBIO ${CURL_LIBRARY} tinyXML)
 ENDIF( OTB_USE_CURL )
 
 ADD_EXECUTABLE(VectorDataProjectionExample VectorDataProjectionExample.cxx )

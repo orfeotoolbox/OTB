@@ -2,17 +2,17 @@ PROJECT(MultiScaleExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(MorphologicalPyramidAnalysisFilterExample MorphologicalPyramidAnalysisFilterExample.cxx )
-TARGET_LINK_LIBRARIES(MorphologicalPyramidAnalysisFilterExample OTBCommon OTBIO OTBMultiScale ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(MorphologicalPyramidAnalysisFilterExample OTBCommon OTBIO OTBMultiScale)
 
 ADD_EXECUTABLE(MorphologicalPyramidSynthesisFilterExample MorphologicalPyramidSynthesisFilterExample.cxx )
-TARGET_LINK_LIBRARIES(MorphologicalPyramidSynthesisFilterExample OTBCommon OTBIO OTBMultiScale ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(MorphologicalPyramidSynthesisFilterExample OTBCommon OTBIO OTBMultiScale)
 
 ADD_EXECUTABLE(MorphologicalPyramidSegmenterExample MorphologicalPyramidSegmenterExample.cxx )
-TARGET_LINK_LIBRARIES(MorphologicalPyramidSegmenterExample OTBCommon OTBIO OTBMultiScale ITKCommon ITKIO  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+TARGET_LINK_LIBRARIES(MorphologicalPyramidSegmenterExample OTBCommon OTBIO OTBMultiScale  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
 
 ADD_EXECUTABLE(MorphologicalPyramidSegmentationExample MorphologicalPyramidSegmentationExample.cxx )
-TARGET_LINK_LIBRARIES(MorphologicalPyramidSegmentationExample OTBCommon OTBIO OTBMultiScale ITKCommon ITKIO ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+TARGET_LINK_LIBRARIES(MorphologicalPyramidSegmentationExample OTBCommon OTBIO OTBMultiScale ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
 
 
@@ -94,6 +94,6 @@ ADD_TEST(MorphologicalPyramidSegmenterExampleTest ${EXE_TESTS}
 
 
 ADD_EXECUTABLE(otbMultiScaleExamplesTests otbMultiScaleExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbMultiScaleExamplesTests  ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+TARGET_LINK_LIBRARIES(otbMultiScaleExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
