@@ -46,7 +46,7 @@ public EntropyTextureFunctor<TIterInput1, TIterInput2, TOutput>
 {
 public:
   InformationMeasureOfCorrelation1TextureFunctor(){};
-  ~InformationMeasureOfCorrelation1TextureFunctor(){};
+  virtual ~InformationMeasureOfCorrelation1TextureFunctor(){};
 
   typedef TIterInput1                           IterType1;
   typedef TIterInput2                           IterType2;

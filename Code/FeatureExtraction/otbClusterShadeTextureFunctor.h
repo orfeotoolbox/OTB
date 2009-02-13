@@ -45,7 +45,7 @@ public MeanTextureFunctor<TIterInput1, TIterInput2, TOutput>
 {
 public:
   ClusterShadeTextureFunctor(){};
-  ~ClusterShadeTextureFunctor(){};
+  virtual ~ClusterShadeTextureFunctor(){};
 
   typedef TIterInput1                           IterType1;
   typedef TIterInput2                           IterType2;

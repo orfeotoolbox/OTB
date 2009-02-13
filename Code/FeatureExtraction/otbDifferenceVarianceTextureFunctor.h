@@ -43,7 +43,7 @@ public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>
 {
 public:
   DifferenceVarianceTextureFunctor(){};
-  ~DifferenceVarianceTextureFunctor(){};
+  virtual ~DifferenceVarianceTextureFunctor(){};
 
   typedef TIterInput1                           IterType1;
   typedef TIterInput2                           IterType2;
