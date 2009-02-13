@@ -30,7 +30,7 @@
 
 template<class TInputImage, class TOutputImage, class TFunctor>
 int generic_TextureImageFunction(int argc, char * argv[])
-{
+{  
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
 
@@ -41,10 +41,9 @@ int generic_TextureImageFunction(int argc, char * argv[])
 
   typedef otb::TextureImageFunction<TInputImage, TFunctor> FunctionType;
   typedef otb::FunctionWithNeighborhoodToImageFilter<TInputImage, TOutputImage, FunctionType> FilterType;
-
-  typename FunctionType::Pointer energyFunction = FunctionType::New();
+  //typename FunctionType::Pointer energyFunction = FunctionType::New();
+  //typename FunctionType energyFunction;
   typename FilterType::Pointer filter = FilterType::New();
-
 
   // Instantiating object
   typename ReaderType::Pointer reader  = ReaderType::New();
@@ -53,17 +52,16 @@ int generic_TextureImageFunction(int argc, char * argv[])
   writer->SetFileName(outputFileName);
 
   filter->SetInput(reader->GetOutput());
-
+  //filter->SetFunction(energyFunction);
   SizeType radius;
   radius[0] = atoi(argv[3]);
   radius[1] = atoi(argv[4]);
-  energyFunction->SetRadius(radius);
+  filter->SetRadius(radius);
   OffsetType offset;
   offset[0] =  atoi(argv[5]);
   offset[1] =  atoi(argv[6]);
-  energyFunction->SetOffset(offset);
+  filter->SetOffset(offset);
 
-  filter->SetFunction(energyFunction);
   writer->SetInput(filter->GetOutput());
 
   writer->Update();

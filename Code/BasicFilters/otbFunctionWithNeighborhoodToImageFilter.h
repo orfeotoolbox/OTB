@@ -22,7 +22,7 @@
 #define __otbFunctionWithNeighborhoodToImageFilter_h
 
 #include "otbFunctionToImageFilter.h"
-
+#include "itkInPlaceImageFilter.h"
 
 
 
@@ -49,14 +49,14 @@ namespace otb
  * \ingroup ImageFilters
  */
 
-template <class TInputImage, class TOutputImage,class TFunction    >
+template <class TInputImage, class TOutputImage,class TFunction>
 class ITK_EXPORT FunctionWithNeighborhoodToImageFilter :
-      public FunctionToImageFilter<TInputImage,TOutputImage,TFunction>
+public  itk::InPlaceImageFilter<TInputImage,TOutputImage>
 {
 public:
   /** Standard class typedefs. */
   typedef FunctionWithNeighborhoodToImageFilter  Self;
-  typedef FunctionToImageFilter<TInputImage,TOutputImage,TFunction>   Superclass;
+  typedef itk::InPlaceImageFilter<TInputImage,TOutputImage>   Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -64,7 +64,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FunctionWithNeighborhoodToImageFilter, FunctionToImageFilter);
+  itkTypeMacro(FunctionWithNeighborhoodToImageFilter, itk::InPlaceImageFilter);
 
   /** Some typedefs. */
   /** Image size typedef. */
@@ -81,21 +81,12 @@ public:
   typedef typename OutputImageType::PixelType   OutputImagePixelType;
   /** Type of function. */
   typedef TFunction                             FunctionType;
+  typedef typename FunctionType::Pointer         FunctionPointerType;
   typedef typename FunctionType::OutputType     FunctionValueType;
   typedef typename FunctionType::InputType      FunctionPositionType;
 
-  /** Connect one of the operands for pixel-wise addition. */
-  //void SetInput( const TInputImage *image);
 
-  /** Set the internal spatial function. */
-  void SetFunction( FunctionType* PixelFunction )
-  {
-    Superclass::SetFunction( PixelFunction );
-    //m_Radius = this->GetFunction()->GetRadius();
-    //m_Offset = this->GetFunction()->GetOffset();
-    this->Modified();
-  };
-
+  itkGetObjectMacro(Function, FunctionType);
   /** Image dimensions */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension);
@@ -104,11 +95,23 @@ public:
 
   /** Accessors */
   itkGetMacro(Radius, InputImageSizeType);
+  void SetRadius( InputImageSizeType & rad )
+    {
+      m_Radius = rad;
+      m_Function->SetRadius( rad );
+      this->Modified();
+    }
   itkGetMacro(Offset, InputImageOffsetType);
+  void SetOffset( InputImageOffsetType & offset )
+    {
+      m_Offset = offset;
+      m_Function->SetOffset( offset );
+      this->Modified();
+    }
 
 protected:
   FunctionWithNeighborhoodToImageFilter();
-  virtual ~FunctionWithNeighborhoodToImageFilter() {};
+  virtual ~FunctionWithNeighborhoodToImageFilter(){};
 
   void BeforeThreadedGenerateData();
 
@@ -131,10 +134,11 @@ private:
   FunctionWithNeighborhoodToImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-
+  //FunctionPointerType  m_Function;
+  FunctionPointerType  m_Function;
+  std::vector<FunctionPointerType> m_FunctionList;
   InputImageSizeType m_Radius;
   InputImageOffsetType m_Offset;
-  //std::vector<FunctionType*> m_FunctionVector;
 };
 
 } // end namespace otb
