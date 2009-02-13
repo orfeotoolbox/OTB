@@ -18,9 +18,7 @@
 #ifndef __otbRAndBAndNIRVegetationIndexImageFilter_h
 #define __otbRAndBAndNIRVegetationIndexImageFilter_h
 
-#define DEPRECATED "This class is deprecated, use RAndBAndNIRIndexImageFilter"
-
-#include "itkTernaryFunctorImageFilter.h"
+s#include "itkTernaryFunctorImageFilter.h"
 #include "otbVegetationIndicesFunctor.h"
 
 namespace otb
