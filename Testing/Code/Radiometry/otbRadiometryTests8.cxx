@@ -21,14 +21,17 @@
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
+
 #include <iostream>
 #include "otbTestMain.h"
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbImageWidgetNew);
-  REGISTER_TEST(otbImageWidget);
-  REGISTER_TEST(otbImageWidgetActionHandlerNew);
-  REGISTER_TEST(otbImageWidgetControllerNew);
-  REGISTER_TEST(otbImageWidgetController);
+  REGISTER_TEST(otbNDBITM4AndTM5IndexImageFilter);
+  REGISTER_TEST(otbNDBIMultiChannelTM4AndTM5IndexImageFilter);
+  REGISTER_TEST(otbISURAndNIRIndexImageFilter);
+  REGISTER_TEST(otbISUMultiChannelRAndNIRIndexImageFilter);
 }
+
+
+

@@ -29,12 +29,20 @@
 // This include is needed to get the OTB_GL_USE_ACCEL definition
 #include "otbConfigure.h"
 
-//#include "otbImageViewerController.h"
+#include "otbImageWidgetController.h"
 
 namespace otb
 {
 /** \class ImageWidget
-*   \brief render an RGB bytes image buffer to the screen
+*   \brief This class renders an RGB bytes image buffer to the screen.
+*   Rendered data can be loaded using the ReadBuffer() method.
+*   The SetIsotropicZoom() method allows to tune the zooming (zooming
+*   is centered).
+*   The SetUseGlAcceleration() allows you to disable Gl
+*   acceleration. If OTB_USE_GL_ACCEL is OFF, enabling Gl acceleration
+*   will generate an exception.
+*   Using Gl acceleration allows you to have a better rendering when
+*   zooming.
 */
 
 template <class TInputImage=otb::Image<itk::RGBPixel<unsigned char>,2 > > 
@@ -61,7 +69,8 @@ public:
   typedef typename RegionType::SizeType       SizeType;
   typedef typename RegionType::IndexType      IndexType;
   /** Controller typedef */
-  //typedef otb::ImageViewerController        ControllerType;
+  typedef otb::ImageWidgetController        ControllerType;
+  typedef typename ControllerType::Pointer  ControllerPointerType;
 
   /** Reads the OpenGl buffer from an image pointer
    *  \param image The image pointer,
@@ -74,12 +83,12 @@ public:
   virtual void ReadBuffer(InputImageType * image, RegionType & region);
 
   /** Set/Get the Controller */
-  //itkSetObjectMacro(Controller,ControllerType);
-  //itkGetObjectMacro(Controller,ControllerType);
+  itkSetObjectMacro(Controller,ControllerType);
+  itkGetObjectMacro(Controller,ControllerType);
 
- /** Handle resizing event. This method is used by FLTK routines and
-    * should not be called on its own.
-    */
+  /** Handle resizing event. This method is used by FLTK routines and
+   *  should not be called on its own.
+   */
   virtual void resize(int x, int y, int w, int h);
 
   /** Set/Get the Isotropic zoom */
@@ -139,12 +148,19 @@ private:
 
   /** OpenGl zoom factor */
   double m_IsotropicZoom;
+
   /** OpenGl buffer      */
   unsigned char * m_OpenGlBuffer;
+
   /** OpenGl buffer size */
   SizeType m_OpenGlBufferSize;
+
   /** Widget identifier */
   std::string m_Identifier;
+
+  /** Controller */
+  ControllerPointerType m_Controller;
+
   /** Flag for GlAcceleration */
   bool m_UseGlAcceleration;
 

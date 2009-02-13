@@ -59,7 +59,7 @@ public:
     m_OffsetBinLength = 0;
     m_Histo.clear();
   };
-  ~TextureFunctorBase() {};
+  virtual ~TextureFunctorBase() {};
 
   typedef TIterInput1                           IterType1;
   typedef TIterInput2                           IterType2;

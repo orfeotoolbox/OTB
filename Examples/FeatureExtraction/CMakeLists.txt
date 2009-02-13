@@ -2,48 +2,48 @@ PROJECT(FeatureExtractionExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(AlignmentsExample AlignmentsExample.cxx )
-TARGET_LINK_LIBRARIES(AlignmentsExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon
+TARGET_LINK_LIBRARIES(AlignmentsExample OTBFeatureExtraction OTBCommon OTBIO
 ITKIO)
 
 ADD_EXECUTABLE(TouziEdgeDetectorExample TouziEdgeDetectorExample.cxx )
-TARGET_LINK_LIBRARIES(TouziEdgeDetectorExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(TouziEdgeDetectorExample OTBFeatureExtraction OTBCommon OTBIO)
 
 ADD_EXECUTABLE(HarrisExample HarrisExample.cxx )
-TARGET_LINK_LIBRARIES(HarrisExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(HarrisExample OTBFeatureExtraction OTBCommon OTBIO)
 
 ADD_EXECUTABLE(ComplexMomentImageExample ComplexMomentImageExample.cxx )
-TARGET_LINK_LIBRARIES(ComplexMomentImageExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(ComplexMomentImageExample OTBFeatureExtraction OTBCommon OTBIO)
 
 ADD_EXECUTABLE(ComplexMomentPathExample ComplexMomentPathExample.cxx )
-TARGET_LINK_LIBRARIES(ComplexMomentPathExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(ComplexMomentPathExample OTBFeatureExtraction OTBCommon OTBIO)
 
 ADD_EXECUTABLE(HuMomentImageExample HuMomentImageExample.cxx )
-TARGET_LINK_LIBRARIES(HuMomentImageExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(HuMomentImageExample OTBFeatureExtraction OTBCommon OTBIO)
 
 ADD_EXECUTABLE(FlusserMomentImageExample FlusserMomentImageExample.cxx )
-TARGET_LINK_LIBRARIES(FlusserMomentImageExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(FlusserMomentImageExample OTBFeatureExtraction OTBCommon OTBIO)
 
 ADD_EXECUTABLE(RatioLineDetectorExample RatioLineDetectorExample.cxx )
-TARGET_LINK_LIBRARIES(RatioLineDetectorExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(RatioLineDetectorExample OTBFeatureExtraction OTBCommon OTBIO)
 
 ADD_EXECUTABLE(CorrelationLineDetectorExample CorrelationLineDetectorExample.cxx )
-TARGET_LINK_LIBRARIES(CorrelationLineDetectorExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(CorrelationLineDetectorExample OTBFeatureExtraction OTBCommon OTBIO)
 
 ADD_EXECUTABLE(AssymmetricFusionOfLineDetectorExample
 AssymmetricFusionOfLineDetectorExample.cxx)
-TARGET_LINK_LIBRARIES(AssymmetricFusionOfLineDetectorExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(AssymmetricFusionOfLineDetectorExample OTBFeatureExtraction OTBCommon OTBIO)
 
 ADD_EXECUTABLE(LocalHoughExample LocalHoughExample.cxx )
-TARGET_LINK_LIBRARIES(LocalHoughExample ITKIO OTBIO OTBFeatureExtraction OTBCommon ITKCommon ${GDAL_LIBRARY})
+TARGET_LINK_LIBRARIES(LocalHoughExample OTBIO OTBFeatureExtraction OTBCommon)
 
 
 ADD_EXECUTABLE(ExtractSegmentsByStepsExample
 ExtractSegmentsByStepsExample.cxx)
-TARGET_LINK_LIBRARIES(ExtractSegmentsByStepsExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(ExtractSegmentsByStepsExample OTBFeatureExtraction OTBCommon OTBIO)
 
 ADD_EXECUTABLE(ExtractSegmentsExample
 ExtractSegmentsExample.cxx)
-TARGET_LINK_LIBRARIES(ExtractSegmentsExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(ExtractSegmentsExample OTBFeatureExtraction OTBCommon OTBIO)
 
 ADD_EXECUTABLE(ExtractRoadByStepsExample ExtractRoadByStepsExample.cxx)
 TARGET_LINK_LIBRARIES(ExtractRoadByStepsExample OTBIO OTBCommon OTBFeatureExtraction
@@ -111,7 +111,7 @@ ADD_TEST(CorrelationLineDetectorExampleTest ${EXE_TESTS1}
 	${INPUTDATA}/amst.png
 	${TEMP}/amstLineCorrelations.png
 	${TEMP}/amstLineCorrelationDirections.png
-    5 1 
+    5 1
 )
 
 # ------- LocalHoughExampleTest----------
@@ -150,7 +150,7 @@ ADD_TEST(TouziEdgeDetectorExampleTest ${EXE_TESTS1}
 	${INPUTDATA}/amst.png
 	${TEMP}/amstTouziEdges.png
 	${TEMP}/amstTouziDirections.png
-    3 
+    3
 )
 
 # ------- ExtractSegmentsByStepsExampleTest----------
@@ -174,7 +174,7 @@ ADD_TEST(AssymmetricFusionOfLineDetectorExampleTest ${EXE_TESTS1}
 	AssymmetricFusionOfLineDetectorExampleTest
 	${INPUTDATA}/amst.png
 	${TEMP}/amstLineFusion.png
-    5 1 
+    5 1
 )
 
 # ------- ExtractSegmentsExampleTest----------
@@ -201,7 +201,7 @@ ADD_TEST(RatioLineDetectorExampleTest ${EXE_TESTS1}
 	${INPUTDATA}/amst.png
 	${TEMP}/amstLineRatios.png
 	${TEMP}/amstLineRatioDirections.png
-    5 1 
+    5 1
 )
 
 # ------- AlignmentsExampleTest----------
@@ -285,14 +285,14 @@ ADD_TEST(ScaleInvariantFeatureImageFilterTest ${EXE_TESTS2}
         ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys1.png
 	${BASELINE}/ScaleInvariantFeatureImageFilterOutputKeys2.png
         ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys2.png
-	
+
         ScaleInvariantFeatureImageFilterTest
-	
+
         ${INPUTDATA}/Scene.png
         ${TEMP}/ScaleInvariantFeatureImageFilterOutput1.png
         ${TEMP}/ScaleInvariantFeatureImageFilterOutput2.png
         ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys1.png
-        ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys2.png	
+        ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys2.png
 	1 10 0.5 0
 )
 
@@ -309,10 +309,10 @@ ADD_TEST(CloudDetectionExampleTest ${EXE_TESTS2}
 )
 
 ADD_EXECUTABLE(otbFeatureExtractionExamplesTests1 otbFeatureExtractionExamplesTests1.cxx)
-TARGET_LINK_LIBRARIES(otbFeatureExtractionExamplesTests1 ${GDAL_LIBRARY} ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbFeatureExtractionExamplesTests1  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 
 ADD_EXECUTABLE(otbFeatureExtractionExamplesTests2 otbFeatureExtractionExamplesTests2.cxx)
-TARGET_LINK_LIBRARIES(otbFeatureExtractionExamplesTests2 ${GDAL_LIBRARY} ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbFeatureExtractionExamplesTests2  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
