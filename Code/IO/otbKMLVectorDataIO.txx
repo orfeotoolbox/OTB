@@ -36,6 +36,9 @@ PURPOSE.  See the above copyright notices for more information.
 #include "ossimOgcWktTranslator.h"
 #include "otbMetaDataKey.h"
 
+#ifdef WIN32
+#define CPL_DISABLE_DLL
+#endif
 #include "ogrsf_frmts.h"
 
 using kmldom::ElementPtr;

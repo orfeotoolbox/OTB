@@ -82,7 +82,7 @@ ${ossim_imaging_SRCS}
 ${ossim_parallel_SRCS}
 ${ossim_elevation_SRCS}
 )
-TARGET_LINK_LIBRARIES(otbossim ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} itkjpeg8 itkjpeg12 itkjpeg16 OpenThreads)
+TARGET_LINK_LIBRARIES(otbossim ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${JPEG_LIBRARY} OpenThreads)
 
 INSTALL(TARGETS otbossim
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
