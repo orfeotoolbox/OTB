@@ -584,7 +584,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   
   typedef std::vector<MagnitudePixelType>                          MagnitudeVector;
 
-  int Diagonal =  static_cast<unsigned int>(vcl_sqrt(m_Length*m_Length +m_Width*m_Width)) + 2;
+  unsigned int Diagonal =  static_cast< unsigned int>(vnl_math_hypot(m_Length ,m_Width)) + 2;
   MagnitudeVector sum_l( 2*Diagonal, itk::NumericTraits<MagnitudePixelType>::Zero);
   MagnitudeVector sum_w( 2*Diagonal, itk::NumericTraits<MagnitudePixelType>::Zero);
   
@@ -844,7 +844,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 
   val = -logNT - log10(betai((double)k,(double)(n-k+1),p));
 
-  if(isinf(val)) /* approximate by the first term of the tail */        
+  if(vnl_math_isinf(val)) /* approximate by the first term of the tail */        
     val = -logNT - ( factln(n) - factln(k) - factln(n-k) ) / M_LN10
           - (double)k * log10(p) - (double)(n-k) * log10(1.0-p);
 
