@@ -101,7 +101,7 @@ ImageWidget<TInputImage>
   #ifndef OTB_GL_USE_ACCEL
   if(m_UseGlAcceleration)
     {
-    itkException(<<"Gl acceleration enabled but not allowed. Consider rebuilding with OTB_USE_GL_ACCEL to ON.");
+    itkExceptionMacro(<<"Gl acceleration enabled but not allowed. Consider rebuilding with OTB_USE_GL_ACCEL to ON.");
     }
   #endif
 
