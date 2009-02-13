@@ -67,8 +67,27 @@ public:
   /** Typedef support for output PointSet*/
   typedef  TPointSet                                    OutputPointSetType;
   typedef typename OutputPointSetType::Pointer          OutputPointSetPointerType;
+  
+  /**
+   *  Public Methods : 
+   *       Get the Input Image & Get The input Image
+   */
+  virtual InputImageType* GetInputImage();
+
+  virtual void SetInputImage(InputImageType *);
 
 protected:
+
+  /**
+   * Without the GenrateOutputInformation below it does not work
+   * Because the ProcessObject class do a static_cast to allow memory and copy 
+   * the output (here a pointset). It works fine with images but with pointsets
+   * no size is specified ...
+   * the aim of the GenerateOutputInformation below is to avoid the guilty static_cast
+   * 
+   */
+  
+  virtual void GenerateOutputInformation(){};
 
   /**
    * Constructor.
@@ -98,14 +117,7 @@ protected:
    * 
    */
   virtual bool IsRightAngle(float Angle);
-  /**
-   *  Get the Input Image
-   */
-  virtual InputImageType* GetInputImage();
-   /**
-   * Set the Input Image
-   */
-  virtual void SetInputImage(InputImageType *);
+
 
 private:
 

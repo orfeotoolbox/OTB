@@ -1060,6 +1060,15 @@ ADD_TEST(feTvLineSegmentDetector ${FEATUREEXTRACTION_TESTS11}
 ADD_TEST(feTuLineSpatialObjectListToRightAnglePointSetFilterNew ${FEATUREEXTRACTION_TESTS11} 
     otbLineSpatialObjectListToRightAnglePointSetFilterNew)
 
+ADD_TEST(feTvLineSpatialObjectListToRightAnglePointSetFilter ${FEATUREEXTRACTION_TESTS11} 
+# --compare-ascii ${EPS}
+#	${BASELINE}/feTvLineSpatialObjectListToRightAnglePointSetFilterOutputAscii.txt
+#	${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterOutputAscii.txt
+    otbLineSpatialObjectListToRightAnglePointSetFilter
+    ${INPUTDATA}/scene.png
+    
+)
+
 
 
 
@@ -1703,6 +1712,7 @@ otbSimplifyManyPathListFilter.cxx
 otbLineSegmentDetectorNew.cxx
 otbLineSegmentDetector.cxx
 otbLineSpatialObjectListToRightAnglePointSetFilterNew.cxx
+otbLineSpatialObjectListToRightAnglePointSetFilter.cxx
 )
 SET(BasicFeatureExtraction_SRCS12
 otbTextureFunctorBase.cxx
