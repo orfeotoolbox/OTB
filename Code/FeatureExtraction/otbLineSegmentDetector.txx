@@ -163,8 +163,8 @@ LineSegmentDetector<TInputImage,TPrecision >
   while(!it.IsAtEnd())
     {
       OutputIndexType index = it.GetIndex();
-      if(static_cast<unsigned int>(index[0]) > 0 && static_cast<unsigned int>(index[0]) <m_Width-1 
-	 && static_cast<unsigned int>(index[1]) >0 && static_cast<unsigned int>(index[1]) <m_Length-1 )
+      if(static_cast<int>(index[0]) > 0 && static_cast<int>(index[0]) < m_Width-1 
+	 && static_cast<int>(index[1]) >0 && static_cast<int>(index[1]) < m_Length-1 )
 	{
 	  unsigned int bin = static_cast<unsigned int> (it.Value()/lengthBin);
 	  if( it.Value()- m_Threshold >1e-10 )
