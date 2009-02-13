@@ -18,8 +18,6 @@
 #ifndef __otbMultiChannelRAndNIRVegetationIndexImageFilter_h
 #define __otbMultiChannelRAndNIRVegetationIndexImageFilter_h
 
-#define DEPRECATED "This class is deprecated, use MultiChannelRAndNIRIndexImageFilter"
-
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "otbVegetationIndicesFunctor.h"

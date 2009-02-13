@@ -1191,7 +1191,7 @@ ADD_TEST(bfTuEstimateInnerProductPCAImageFilterNew ${BASICFILTERS_TESTS11}
 
 
 ADD_TEST(bfTvEstimateInnerProductPCAImageFilter ${BASICFILTERS_TESTS11}
-    --compare-image ${TOL}
+    --compare-image ${EPSILON}
     ${BASELINE}/bfEstimateInnerProductPCAImageFilter.tif
     ${TEMP}/bfEstimateInnerProductPCAImageFilter.tif
     otbEstimateInnerProductPCAImageFilter
@@ -1201,7 +1201,7 @@ ADD_TEST(bfTvEstimateInnerProductPCAImageFilter ${BASICFILTERS_TESTS11}
 )
 
 ADD_TEST(bfTvEstimateInnerProductPCAImageFilterCP1 ${BASICFILTERS_TESTS11}
-    --compare-image ${TOL}
+    --compare-image ${EPSILON}
     ${BASELINE}/bfEstimateInnerProductPCAImageFilter_CP1.tif
     ${TEMP}/bfEstimateInnerProductPCAImageFilter_CP1.tif
     otbEstimateInnerProductPCAImageFilter
@@ -1210,7 +1210,7 @@ ADD_TEST(bfTvEstimateInnerProductPCAImageFilterCP1 ${BASICFILTERS_TESTS11}
     1
 )
 ADD_TEST(bfTvEstimateInnerProductPCAImageFilterCP12 ${BASICFILTERS_TESTS11}
-    --compare-image ${TOL}
+    --compare-image ${EPSILON}
     ${BASELINE}/bfEstimateInnerProductPCAImageFilter_CP12.tif
     ${TEMP}/bfEstimateInnerProductPCAImageFilter_CP12.tif
     otbEstimateInnerProductPCAImageFilter
