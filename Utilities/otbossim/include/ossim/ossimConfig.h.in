@@ -126,4 +126,14 @@
 #define OSSIM_RELEASE_NUMBER @OSSIM_RELEASE_NUMBER@
 #define OSSIM_VERSION "@OSSIM_VERSION@"
 
+// Added by otb developpers
+#if defined (_BASETSD_H) && !defined (_BASE_TSD_H_)
+#define _BASE_TSD_H_
+#endif
+
+// Added by otb developpers
+#if defined (_BASETSD_H_) && !defined (_BASE_TSD_H)
+#define _BASE_TSD_H
+#endif
+
 #endif /* End of "#ifndef ossimConfig_HEADER" */
