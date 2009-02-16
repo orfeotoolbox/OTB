@@ -36,19 +36,18 @@ namespace Functor
  *  \ingroup Statistics
  */
 
-template <class TIterInput1, class TIterInput2, class TOutput>
+template <class TIterInput, class TOutput>
 class ITK_EXPORT EntropyTextureFunctor : 
-public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>
+public TextureFunctorBase<TIterInput, TOutput>
 {
 public:
   EntropyTextureFunctor(){};
   virtual ~EntropyTextureFunctor(){};
 
-  typedef TIterInput1                           IterType1;
-  typedef TIterInput2                           IterType2;
+  typedef TIterInput                            IterType;
   typedef TOutput                               OutputType;
-  typedef typename IterType1::InternalPixelType InternalPixelType;
-  typedef typename IterType1::ImageType         ImageType;
+  typedef typename IterType::InternalPixelType  InternalPixelType;
+  typedef typename IterType::ImageType          ImageType;
   typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
 
 

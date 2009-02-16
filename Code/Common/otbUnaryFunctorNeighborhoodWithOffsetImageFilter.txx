@@ -128,17 +128,7 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
   OutputImagePointer outputPtr = this->GetOutput(0);
 
   itk::ImageRegionIterator<TOutputImage> outputIt;
-
-  // Neighborhood radius
-  RadiusType r;
-  r.Fill(m_Radius);
-  NeighborhoodIteratorType neighInputIt;
-  // Find the data-set boundary "faces"
-  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::FaceListType faceList;
-  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage> bC;
-  faceList = bC(inputPtr, outputRegionForThread, r);
-  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::FaceListType::iterator fit;
-
+ 
   // Neighborhood+offset iterator
   RadiusType rOff;
   rOff[0] = m_Radius + vcl_abs(m_Offset[0]);
@@ -155,33 +145,26 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
 
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
-  fit=faceList.begin();
-  fitOff=faceList.begin();
+  fitOff=faceListOff.begin();
 
-  while (fit!=faceList.end() && fitOff!=faceListOff.end())
+  while ( fitOff!=faceListOff.end() )
   {
-    // neighborhood iterator
-    neighInputIt = itk::ConstNeighborhoodIterator<TInputImage>(r, inputPtr, *fit);
-    neighInputIt.OverrideBoundaryCondition(&nbc);
-    neighInputIt.GoToBegin();
     // Neighborhood+offset iterator
     neighInputOffIt = itk::ConstNeighborhoodIterator<TInputImage>(rOff, inputPtr, *fitOff);
     neighInputOffIt.OverrideBoundaryCondition(&nbcOff);
     neighInputOffIt.GoToBegin();
 
-    outputIt = itk::ImageRegionIterator<TOutputImage>(outputPtr, *fit);
+    outputIt = itk::ImageRegionIterator<TOutputImage>(outputPtr, *fitOff);
 
     while ( ! outputIt.IsAtEnd() )
     {
 
-      outputIt.Set( m_FunctorList[threadId]( neighInputIt, neighInputOffIt) );
+      outputIt.Set( m_FunctorList[threadId]( neighInputOffIt ) );
 
-      ++neighInputIt;
       ++neighInputOffIt;
       ++outputIt;
       progress.CompletedPixel();
     }
-    ++fit;
     ++fitOff;
   }
 }

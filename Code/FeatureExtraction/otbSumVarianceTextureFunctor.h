@@ -38,21 +38,20 @@ namespace Functor
  *  \ingroup Functor
  *  \ingroup Statistics
  */
-template <class TIterInput1, class TIterInput2, class TOutput>
+template <class TIterInput, class TOutput>
 class ITK_EXPORT SumVarianceTextureFunctor : 
-public SumAverageTextureFunctor<TIterInput1, TIterInput2, TOutput>
+public SumAverageTextureFunctor<TIterInput, TOutput>
 {
 public:
   SumVarianceTextureFunctor(){};
   virtual ~SumVarianceTextureFunctor(){};
 
-  typedef TIterInput1                           IterType1;
-  typedef TIterInput2                           IterType2;
-  typedef TOutput                               OutputType;
-  typedef typename IterType1::InternalPixelType InternalPixelType;
-  typedef typename IterType1::ImageType         ImageType;
+  typedef TIterInput                           IterType;
+  typedef TOutput                              OutputType;
+  typedef typename IterType::InternalPixelType InternalPixelType;
+  typedef typename IterType::ImageType         ImageType;
   typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
-  typedef SumAverageTextureFunctor<TIterInput1, TIterInput2, TOutput> SuperClass;
+  typedef SumAverageTextureFunctor<TIterInput, TOutput> SuperClass;
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
