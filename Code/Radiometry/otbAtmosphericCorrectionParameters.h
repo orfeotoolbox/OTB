@@ -31,7 +31,10 @@ namespace otb
 /** \class FilterFunctionValues
  *  \brief This class contains the values of the filter function for the processed spectral band.
  *
- *  The step between 2 values is 0.0025µm. The class contains the min and the max value.Those value can be directly read from the image metadatas.
+ * The step between 2 values is 0.0025µm. The class contains the min and the max value.
+ * Those value can be directly read from the image metadatas.
+ *
+ * \ingroup Radiometry
  */
 class ITK_EXPORT FilterFunctionValues : public itk::DataObject
 {
@@ -123,6 +126,9 @@ private:
  *  \brief This class contains all atmospheric correction parameters.
  *
  * Each value can be read in the metadata of an image (ex: SPOT5, ...) or directly set by the user.
+ *
+ * \ingroup Radiometry
+ *
  */
 
 class ITK_EXPORT AtmosphericCorrectionParameters : public itk::DataObject

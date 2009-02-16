@@ -25,8 +25,9 @@ namespace otb
 {
 
 /** \class RAndNIRIndexImageFilter
- * \brief
+ * \brief TODO
  *
+   * \ingroup Radiometry
  */
 
 template <class TInputImageR, class TInputImageNIR, class TOutputImage,

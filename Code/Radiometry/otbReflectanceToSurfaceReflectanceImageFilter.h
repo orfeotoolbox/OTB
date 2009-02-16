@@ -31,10 +31,12 @@ namespace otb
 {
 namespace Functor
 {
-/** Functor::LuminanceToReflectanceImageFunctor
- *  Compute the surface reflectance pixel from a TOA reflectance.
- *
- * \ingroup Functor
+/**
+   * \class ReflectanceToSurfaceReflectanceImageFunctor
+   *  \brief Compute the surface reflectance pixel from a TOA reflectance.
+   *
+   * \ingroup Functor
+   * \ingroup Radiometry
  */
 template <class TInput, class TOutput>
 class ReflectanceToSurfaceReflectanceImageFunctor
@@ -110,6 +112,7 @@ private:
  * \ingroup AtmosphericCorrectionParameters
  * \ingroup LuminanceToReflectanceImageFilter
  * \ingroup ImageToReflectanceImageFilter
+ * \ingroup Radiometry
  */
 template <class TInputImage, class TOutputImage >
 class ITK_EXPORT ReflectanceToSurfaceReflectanceImageFilter :

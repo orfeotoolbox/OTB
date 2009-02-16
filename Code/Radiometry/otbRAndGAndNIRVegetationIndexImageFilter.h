@@ -25,7 +25,9 @@ namespace otb
 {
 
 /** \class RAndGAndNIRVegetationIndexImageFilter
- * \brief
+ * \brief TODO
+ *
+   * \ingroup Radiometry
  *
  */
 
