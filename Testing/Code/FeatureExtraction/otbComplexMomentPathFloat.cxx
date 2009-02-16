@@ -36,6 +36,7 @@ int otbComplexMomentPathFloat( int argc, char * argv[] )
   typedef std::complex<float>                                     ComplexType;
   typedef otb::ComplexMomentPathFunction< PathType,ComplexType >  CMType;
 
+
   // Dessiner un carré:
   PathType::ContinuousIndexType cindex;
   PathType::Pointer pathElt = PathType::New();

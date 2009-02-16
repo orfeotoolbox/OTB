@@ -77,7 +77,7 @@ ADD_TEST(feTuComplexMomentPath ${FEATUREEXTRACTION_TESTS1}
         otbComplexMomentPath 1 1)
 
 ADD_TEST(feTuComplexMomentPathFloat ${FEATUREEXTRACTION_TESTS1}
-        otbComplexMomentPath 1 1)
+        otbComplexMomentPathFloat 1 1)
 
 ADD_TEST(feTuHuPathNew ${FEATUREEXTRACTION_TESTS1}
         otbHuPathNew)

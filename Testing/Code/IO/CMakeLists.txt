@@ -984,6 +984,29 @@ ADD_TEST(ioTvVectorImageFileReaderWriterTest ${IO_TESTS9}
         ${TEMP}/ioTvVectorImageFileReaderWriterTest.hdr
 )
 
+# ---  otb::StreamingShortImageFileWriterTest  ---
+ADD_TEST(ioTvStreamingShortImageFileWriterTest ${IO_TESTS9}
+   --compare-image ${TOL}
+		   ${INPUTDATA}/poupees_sub.png
+                   ${TEMP}/ioTvStreamingShortImageFileWriterTest.png
+        otbStreamingShortImageFileWriterTest
+        ${INPUTDATA}/poupees_sub.png
+        ${TEMP}/ioTvStreamingShortImageFileWriterTest.png
+        0
+)
+
+# ---  otb::StreamingShortImageFileWriterTest  ---
+ADD_TEST(ioTvStreamingShortImageFileWriterStreamedTest ${IO_TESTS9}
+   --compare-image ${TOL}
+		   ${INPUTDATA}/poupees_sub.png
+                   ${TEMP}/ioTvStreamingShortImageFileWriterStreamedTest.png
+        otbStreamingShortImageFileWriterTest
+        ${INPUTDATA}/poupees_sub.png
+        ${TEMP}/ioTvStreamingShortImageFileWriterStreamedTest.png
+        1
+	4
+)
+
 
 # ---  STREAMING : GDAL  ---
 ADD_TEST(ioTvStreamingImageFilterGDAL_ENVI ${IO_TESTS9}
