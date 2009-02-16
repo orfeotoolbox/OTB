@@ -1293,7 +1293,7 @@ ADD_TEST(bfTvItkImagePCAShapeModelEstimatorTest ${BASICFILTERS_TESTS11}
 # A enrichir
 SET(BasicFilters_SRCS1
 otbLeeFilter.cxx
-otbFrostFilterTest.cxx
+#otbFrostFilterTest.cxx
 otbFrostFilterNew.cxx
 otbFrostFilter.cxx
 otbImageToPointSetFilterTest.cxx

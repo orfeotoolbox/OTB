@@ -15,16 +15,16 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbContrastTextureFunctor_h
-#define __otbContrastTextureFunctor_h
+#ifndef __otbPanTexTextureFunctor_h
+#define __otbPanTexTextureFunctor_h
 
-#include "otbTextureFunctorBase.h"
+#include "otbContrastTextureFunctor.h"
 
 namespace otb
 {
 namespace Functor
 {
-/** \class ContrastTextureFunctor
+/** \class PanTexTextureFunctor
  *  \brief This functor calculates the contrast image texture according to Haralick descriptors.
  *
  *  Computes contrast using joint histogram (neighborhood and offset neighborhood).
@@ -38,53 +38,71 @@ namespace Functor
  */
 
 template <class TIterInput, class TOutput>
-class ITK_EXPORT ContrastTextureFunctor : 
-public TextureFunctorBase<TIterInput, TOutput>
+class ITK_EXPORT PanTexTextureFunctor : 
+public ContrastTextureFunctor<TIterInput, TOutput>
 {
 public:
-  ContrastTextureFunctor(){};
-  virtual ~ContrastTextureFunctor(){};
+  PanTexTextureFunctor()
+    {
+      OffsetType off;
+      off[0] = 0;
+      off[1] = 1;
+      m_OffsetList.push_back(off); //(0,1)
+      off[1] = 2;
+      m_OffsetList.push_back(off); //(0,2)
+      off[0] = 1;
+      off[1] = -2;
+      m_OffsetList.push_back(off); //(1,-2)
+      off[1] = -1;
+      m_OffsetList.push_back(off); //(1,-1)
+      off[1] = 0;
+      m_OffsetList.push_back(off); //(1,0)
+      off[1] = 1;
+      m_OffsetList.push_back(off); //(1,1)
+      off[1] = 2;
+      m_OffsetList.push_back(off); //(1,2)
+      off[0] = 2;
+      off[1] = -1;
+      m_OffsetList.push_back(off); //(2,-1)
+      off[1] = 0;
+      m_OffsetList.push_back(off); //(2,0)
+      off[1] = 1;
+      m_OffsetList.push_back(off); //(2,1)
+    };
+
+  virtual ~PanTexTextureFunctor(){};
 
   typedef TIterInput                            IterType;
   typedef TOutput                               OutputType;
   typedef typename IterType::InternalPixelType  InternalPixelType;
   typedef typename IterType::ImageType          ImageType;
+  typedef typename IterType::OffsetType         OffsetType;
   typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
+  typedef ContrastTextureFunctor<IterType, OutputType> Superclass;
 
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
-  {  
-    this->ComputeJointHistogram(neigh, neighOff);
-    double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
-    double areaInv = 1/area;
-    double out = 0.;
+    { 
+      // Loop over each offset
+      double out = itk::NumericTraits<double>::max();
+      Superclass contrast;
+      for(unsigned int k=0; k<m_OffsetList.size(); k++)
+	{
+	  contrast.SetOffset( m_OffsetList[k] );
+	  double res = contrast.ComputeOverSingleChannel(neigh, neighOff);
+	  if(res<out)
+	    out=res;
+	}
 
-    // loop over bin neighborhood values
-    for (unsigned sB = 0; sB<this->GetHisto()[0].size(); sB++)
-      { 
-	double nCeil = (static_cast<double>(sB)+0.5)*this->GetNeighBinLength();
-	double nCeilSquare = vcl_pow( nCeil, 2);
-	for (unsigned r = 0; r<this->GetHisto().size(); r++)
-	  {
-	    double rVal = (static_cast<double>(r)+0.5)*this->GetOffsetBinLength();
-	    for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-	      { 
-		if( vcl_abs((static_cast<double>(s)+0.5)*this->GetNeighBinLength() - rVal - nCeil) < vcl_abs(this->GetNeighBinLength()) )
-		  {
-		    double p =  static_cast<double>(this->GetHisto()[r][s])*areaInv;
-		    out += nCeilSquare * p;
-		  }
-	      }
-	  }
-      }
     
     return out;  
   }
+
+ private:
+  std::vector<OffsetType> m_OffsetList;
   
 };
  
- 
-
  
 } // namespace Functor
 } // namespace otb

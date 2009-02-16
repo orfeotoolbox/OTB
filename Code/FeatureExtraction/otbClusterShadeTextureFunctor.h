@@ -39,21 +39,20 @@ namespace Functor
  *  \ingroup Statistics
  */
 
-template <class TIterInput1, class TIterInput2, class TOutput>
+template <class TIterInput, class TOutput>
 class ITK_EXPORT ClusterShadeTextureFunctor : 
-public MeanTextureFunctor<TIterInput1, TIterInput2, TOutput>
+public MeanTextureFunctor<TIterInput, TOutput>
 {
 public:
   ClusterShadeTextureFunctor(){};
   virtual ~ClusterShadeTextureFunctor(){};
 
-  typedef TIterInput1                           IterType1;
-  typedef TIterInput2                           IterType2;
+  typedef TIterInput                            IterType;
   typedef TOutput                               OutputType;
-  typedef typename IterType1::InternalPixelType InternalPixelType;
-  typedef typename IterType1::ImageType         ImageType;
+  typedef typename IterType::InternalPixelType  InternalPixelType;
+  typedef typename IterType::ImageType          ImageType;
   typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
-  typedef MeanTextureFunctor<TIterInput1, TIterInput2, TOutput> Superclass;
+  typedef MeanTextureFunctor<TIterInput, TOutput> Superclass;
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
@@ -66,7 +65,6 @@ public:
     
     for (unsigned r = 0; r<this->GetHisto().size(); r++)
       {
-	double sumTemp = 0.;
 	for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
 	  {
 	    double p = this->GetHisto()[r][s]*areaInv;

@@ -81,7 +81,7 @@ OutputImageType::Pointer sift(ImageType::Pointer input,
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(siftFileName);
   writer->SetInput(pointSetFilter->GetOutput());
-  writer->Update();
+  //writer->Update();
 
   return pointSetFilter->GetOutput();
 }
@@ -99,7 +99,7 @@ OutputImageType::Pointer ddm( OutputImageType::Pointer input,
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(ddmFileName);
   writer->SetInput(ddmFilter->GetOutput());
-  writer->Update();
+  //writer->Update();
 
   return ddmFilter->GetOutput();
 }
@@ -253,7 +253,7 @@ void subtract(OutputImageType::Pointer image1,
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(subtractFileName);
   writer->SetInput(rescaler->GetOutput());
-  writer->Update();
+  //writer->Update();
 
   maximumCalculator->SetImage(subtract->GetOutput());
   maximumCalculator->Compute();
@@ -264,6 +264,13 @@ void subtract(OutputImageType::Pointer image1,
 
 int otbImageToSIFTKeyPointSetFilterDistanceMap(int argc, char * argv[])
 {
+
+  if (argc < 9 ){
+    std::cout << "Missing arguments " << std::endl;
+    return EXIT_FAILURE;
+  }
+  
+
   // Input Image file name
   const char * infname = argv[1];
 

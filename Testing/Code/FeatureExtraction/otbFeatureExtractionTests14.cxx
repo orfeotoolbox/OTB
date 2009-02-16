@@ -27,15 +27,8 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbLeeFilter);
-  REGISTER_TEST(otbFrostFilterNew);
-  // REGISTER_TEST(otbFrostFilterTest);
-  REGISTER_TEST(otbFrostFilter);
-  REGISTER_TEST(otbImageToPointSetFilterTest);
-  REGISTER_TEST(otbOpeningClosingMorphologicalFilterNew);
-  REGISTER_TEST(otbOpeningClosingMorphologicalFilter);
-  REGISTER_TEST(otbClosingOpeningMorphologicalFilterNew);
-  REGISTER_TEST(otbClosingOpeningMorphologicalFilter);
-  REGISTER_TEST(otbBinaryImageMinimalBoundingRegionCalculatorNew);
-  REGISTER_TEST(otbBinaryImageMinimalBoundingRegionCalculator);
+REGISTER_TEST(otbPanTexTextureImageFilterNew);
+REGISTER_TEST(otbPanTexTextureImageFilter);
+REGISTER_TEST(otbPanTexTextureImageFunctionFilterNew);
+REGISTER_TEST(otbPanTexTextureImageFunctionFilter);
 }

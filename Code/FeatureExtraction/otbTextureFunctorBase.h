@@ -40,7 +40,7 @@ namespace Functor
  *  \ingroup Statistics
  */
 
-template <class TIterInput1, class TIterInput2, class TOutput>
+template <class TIterInput, class TOutput>
 class TextureFunctorBase
 {
 public:
@@ -61,14 +61,13 @@ public:
   };
   virtual ~TextureFunctorBase() {};
 
-  typedef TIterInput1                           IterType1;
-  typedef TIterInput2                           IterType2;
-  typedef TOutput                               OutputType;
-  typedef typename IterType1::OffsetType        OffsetType;
-  typedef typename IterType1::RadiusType        RadiusType;
-  typedef typename OutputType::ValueType        OutputPixelType;
-  typedef typename IterType1::InternalPixelType InternalPixelType;
-  typedef typename IterType1::ImageType         ImageType;
+  typedef TIterInput                           IterType;
+  typedef TOutput                              OutputType;
+  typedef typename IterType::OffsetType        OffsetType;
+  typedef typename IterType::RadiusType        RadiusType;
+  typedef typename OutputType::ValueType       OutputPixelType;
+  typedef typename IterType::InternalPixelType InternalPixelType;
+  typedef typename IterType::ImageType         ImageType;
   typedef itk::Neighborhood<InternalPixelType, ::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
   typedef std::vector<double>                   DoubleVectorType;
   typedef std::vector<int>                      IntVectorType;
@@ -164,22 +163,24 @@ public:
       m_OffsetBinLength = scottCoef*binLengthOff;     
     }
 
-  inline TOutput operator()(const IterType1 &it, const IterType2 &itOff)
+  inline TOutput operator()(const IterType &itOff)
     { 
-      RadiusType radius = it.GetRadius();
       RadiusType radiusOff = itOff.GetRadius();
       OutputType outPix;
-      outPix.SetSize( it.GetCenterPixel().GetSize() );
+      outPix.SetSize( itOff.GetCenterPixel().GetSize() );
       outPix.Fill(0);
       OffsetType offset;
       offset.Fill(0);
-
-      for ( unsigned int i=0; i<it.GetCenterPixel().GetSize(); i++ )
+      RadiusType radius;
+      radius[0] = 0.5*( itOff.GetSize()[0] - 1 ) - vcl_abs(m_Offset[0]);
+      radius[1] = 0.5*( itOff.GetSize()[1] - 1 ) - vcl_abs(m_Offset[1]);
+  
+      for ( unsigned int i=0; i<itOff.GetCenterPixel().GetSize(); i++ )
 	{
 	  NeighborhoodType inNeigh;
-	  inNeigh.SetRadius(it.GetRadius());
+	  inNeigh.SetRadius(radius);
 	  NeighborhoodType offNeigh;
-	  offNeigh.SetRadius(itOff.GetRadius());
+	  offNeigh.SetRadius(radiusOff);
 	  
 	  for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
 	    {
@@ -187,7 +188,7 @@ public:
 	      for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
 		{
 		  offset[1] = k;
-		  inNeigh[offset] = it.GetPixel(offset)[i];
+		  inNeigh[offset] = itOff.GetPixel(offset)[i];
 		}
 	    }
 	  offset.Fill(0);

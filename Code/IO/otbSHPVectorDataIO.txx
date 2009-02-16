@@ -99,7 +99,7 @@ SHPVectorDataIO<TData>
   otbMsgDebugMacro( <<"Reading  file: "<< this->m_FileName);
 
   // Reading layers
-  otbMsgDebugMacro(<<"Number of layers: "<<m_DataSource->GetLayerCount());
+  otbMsgDevMacro(<<"Number of layers: "<<m_DataSource->GetLayerCount());
 
   // Retrieving root node
   DataTreePointerType tree = data->GetDataTree();
@@ -127,12 +127,6 @@ SHPVectorDataIO<TData>
 
   std::string projectionRefWkt = data->GetProjectionRef();
 
-//     if (projectionRefWkt.compare(this->m_TargetProjection) != 0)
-//     {
-//       itkGenericExceptionMacro(<<"OTB is currently not able to reproject shapefiles from: \n"
-//           << projectionRefWkt << "\n to \n" << this->m_TargetProjection);
-//     }
-
 
   bool projectionInformationAvailable = !projectionRefWkt.empty();
 
@@ -146,10 +140,12 @@ SHPVectorDataIO<TData>
   }
 
   // For each layer
-  for (int layerIndex = 0;layerIndex<m_DataSource->GetLayerCount();++layerIndex)
+  for (int layerIndex = 0; layerIndex < m_DataSource->GetLayerCount(); ++layerIndex)
   {
     /** retrieving layer and property */
     OGRLayer * layer = m_DataSource->GetLayer(layerIndex);
+    otbMsgDevMacro(<<"Number of features: " << layer->GetFeatureCount());
+
     OGRFeatureDefn * dfn = layer->GetLayerDefn();
 
     /** Create the document node */
@@ -158,9 +154,10 @@ SHPVectorDataIO<TData>
     document->SetNodeId(dfn->GetName());
 
     /** Retrieving the fields types */
+    OGRFieldDefn * field;
     for (int fieldIndex = 0; fieldIndex<dfn->GetFieldCount();++fieldIndex)
     {
-      OGRFieldDefn * field  = dfn->GetFieldDefn(fieldIndex);
+      field  = dfn->GetFieldDefn(fieldIndex);
       document->SetField(field->GetNameRef(),OGRFieldDefn::GetFieldTypeName(field->GetType()));
       // std::cout<<"Document "<<document->GetNodeId()<<": Adding field "<<field->GetNameRef()<<" "<<OGRFieldDefn::GetFieldTypeName(field->GetType())<<std::endl;
     }
@@ -422,8 +419,9 @@ SHPVectorDataIO<TData>
         }
 
       }
-    }
-  }
+      OGRFeature::DestroyFeature( feature );
+    }//end While feature
+  }// end For each layer
 }
 
 
