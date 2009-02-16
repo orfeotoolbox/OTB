@@ -142,13 +142,13 @@ FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
   outputIt.GoToBegin();
 
   while ( !inputIt.IsAtEnd() )
-  {
-    outputIt.Set( static_cast<OutputImagePixelType>(m_FunctionList[threadId]->EvaluateAtIndex(inputIt.GetIndex())) );
-    ++inputIt;
-    ++outputIt;
-
-    progress.CompletedPixel(); // potential exception thrown here
-  }
+    {
+      outputIt.Set( static_cast<OutputImagePixelType>(m_FunctionList[threadId]->EvaluateAtIndex(inputIt.GetIndex())) );
+      ++inputIt;
+      ++outputIt;
+      
+      progress.CompletedPixel(); // potential exception thrown here
+    }
 }
 } // end namespace otb
 
