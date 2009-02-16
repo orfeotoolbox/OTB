@@ -761,6 +761,17 @@ ADD_TEST(feTuImageToSIFTKeyPointSetFilterNew ${FEATUREEXTRACTION_TESTS9}
          otbImageToSIFTKeyPointSetFilterNew)
 
 
+ADD_TEST(feTvImageToSIFTKeyPointSetFilterDistanceMap ${FEATUREEXTRACTION_TESTS9}
+#--compare-ascii ${EPS}
+        #${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterDistanceMap.txt
+        #${TEMP}/feTvImageToSIFTKeyPointSetFilterDistanceMap.txt
+         otbImageToSIFTKeyPointSetFilterDistanceMap
+        ${INPUTDATA}/scene.png
+        6 3 0.08 10.0
+        15.0 # rotation
+        1.2 # zoom factor
+        10 255
+)
 
 ADD_TEST(feTvImageToSIFTKeyPointSetFilterSceneOutputInterestPointAscii ${FEATUREEXTRACTION_TESTS9}
 --compare-ascii ${EPS}
