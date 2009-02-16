@@ -28,7 +28,10 @@ namespace otb
 /**
  * \class AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
  * \brief This class computes the atmospheric radiative terms with 6S.
+ *
+ *
  * \ingroup DataSources
+ * \ingroup Radiometry
  */
 class ITK_EXPORT AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
       : public itk::ProcessObject

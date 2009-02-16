@@ -45,7 +45,7 @@ namespace otb
 *   zooming.
 */
 
-template <class TInputImage=otb::Image<itk::RGBPixel<unsigned char>,2 > > 
+template <class TInputImage=otb::Image<itk::RGBPixel<unsigned char>,2 > >
 class ImageWidget
   : public Fl_Gl_Window, public itk::Object
 {
@@ -55,10 +55,10 @@ public:
   typedef itk::Object                       Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(ImageWidget,Object);
   /** Input image typedef */
@@ -79,7 +79,7 @@ public:
    *  region.
    * This method fills the m_OpenGl buffer according to the region
    *  size. Buffer in flipped over X axis if OTB_USE_GL_ACCEL is OFF.
-   */  
+   */
   virtual void ReadBuffer(InputImageType * image, RegionType & region);
 
   /** Set/Get the Controller */
@@ -103,7 +103,7 @@ public:
   /** Set/Get the identifier */
   itkSetStringMacro(Identifier);
   itkGetStringMacro(Identifier);
- 
+
 protected:
   /** Constructor */
   ImageWidget();
@@ -111,11 +111,11 @@ protected:
   ~ImageWidget();
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  /** Actually render the buffer to the screen. This method is 
+  /** Actually render the buffer to the screen. This method is
     * used by FLTK routines and should not be called on its own.
     */
   virtual void draw(void);
-  /** Handle the event from the users.  This method is used by FLTK 
+  /** Handle the event from the users.  This method is used by FLTK
     * routines and should not be called on its own.
     */
   virtual int  handle(int event);
@@ -131,7 +131,7 @@ protected:
   }
 
   /** Compute the linear buffer index according to the 2D region and
-   * its 2D index.This method is used when OTB_GL_USE_ACCEL is OFF. 
+   * its 2D index.This method is used when OTB_GL_USE_ACCEL is OFF.
    * The resulting buffer will be flipped over the X axis.
    * \param index 2D index
    * \param region 2D region
@@ -164,7 +164,7 @@ private:
   /** Flag for GlAcceleration */
   bool m_UseGlAcceleration;
 
-}; // end class 
+}; // end class
 } // end namespace otb
 
 #ifndef  OTB_MANUAL_INSTANTIATION

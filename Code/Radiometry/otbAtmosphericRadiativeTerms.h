@@ -31,6 +31,8 @@ namespace otb
  *  \brief This class contains all atmospheric radiative terms for one channel.
  *
  * Each value can be deducted from the atmospheric correction parameters (using 6S) or directly set by the user.
+ *
+   * \ingroup Radiometry
  */
 
 class ITK_EXPORT AtmosphericRadiativeTermsSingleChannel : public itk::DataObject
@@ -151,6 +153,7 @@ private:
  *         it contains all atmospheric radiative terms for each studied channel.
  *
  * \ingroup AtmosphericRadiativeTermSingleChannel
+ * \ingroup Radiometry
  */
 
 

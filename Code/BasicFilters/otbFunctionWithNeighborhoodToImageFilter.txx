@@ -34,9 +34,13 @@ template<class TInputImage, class TOutputImage, class TFunction >
 FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
 ::FunctionWithNeighborhoodToImageFilter()
 {
-  m_Radius.Fill(0);
-  m_Offset.Fill(0);
-  //m_FunctionVector.clear();
+  this->InPlaceOff();
+  this->SetNumberOfRequiredInputs(1);
+  m_Radius.Fill(1);
+  m_Offset.Fill(1);
+  m_FunctionList.clear();
+  m_Function = FunctionType::New();
+
 }
 
 
@@ -44,11 +48,22 @@ template <class TInputImage, class TOutputImage, class TFunction  >
 void
 FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
 ::BeforeThreadedGenerateData()
-{
+{ 
   Superclass::BeforeThreadedGenerateData();
 
-  m_Radius = this->GetFunction()->GetRadius();
-  m_Offset = this->GetFunction()->GetOffset();
+  InputImageConstPointer inputPtr = dynamic_cast<const TInputImage*>((itk::ProcessObject::GetInput(0)));
+  if (inputPtr.IsNull())
+  {
+    itkExceptionMacro(<< "At least one input is missing."
+                      << " Input is missing :" << inputPtr.GetPointer();)
+
+  }
+  m_Function->SetInputImage(inputPtr);
+  for(unsigned int i = 0 ; i<static_cast<unsigned int>(this->GetNumberOfThreads()); i++)
+    {
+      FunctionPointerType func = m_Function;
+      m_FunctionList.push_back( func );
+    }
 }
 
 template <class TInputImage, class TOutputImage, class TFunction  >
@@ -128,7 +143,7 @@ FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
 
   while ( !inputIt.IsAtEnd() )
   {
-    outputIt.Set( static_cast<OutputImagePixelType>(this->GetFunction()->EvaluateAtIndex(inputIt.GetIndex())) );
+    outputIt.Set( static_cast<OutputImagePixelType>(m_FunctionList[threadId]->EvaluateAtIndex(inputIt.GetIndex())) );
     ++inputIt;
     ++outputIt;
 
