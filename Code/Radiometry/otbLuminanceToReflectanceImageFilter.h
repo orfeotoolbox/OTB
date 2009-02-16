@@ -34,10 +34,14 @@ namespace otb
 {
 namespace Functor
 {
-/** Functor::LuminanceToReflectanceImageFunctor
- *  Multiply by Pi and by an illumination correction coefficient the quotient between the input and the given solar illumination.
- *
- * \ingroup Functor
+/**
+   * \class LuminanceToReflectanceImageFunctor
+   * \brief Compupute reflectance from the luminance value
+   *
+   *  Multiply by Pi and by an illumination correction coefficient the quotient between the input and the given solar illumination.
+   *
+   * \ingroup Functor
+   * \ingroup Radiometry
  */
 template <class TInput, class TOutput>
 class LuminanceToReflectanceImageFunctor
@@ -91,6 +95,7 @@ private:
  *   calling for each component of each pixel.
  *
  * \ingroup ImageToLuminanceImageFunctor
+ * \ingroup Radiometry
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LuminanceToReflectanceImageFilter :

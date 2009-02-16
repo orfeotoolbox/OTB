@@ -34,10 +34,12 @@ namespace otb
 {
 namespace Functor
 {
-/** Functor::ImageToLuminanceImageFunctor
- *  Add beta to the quotient Input over alpha.
- *
- * \ingroup Functor
+/**
+   * \class ImageToLuminanceImageFunctor
+   * \brief Add beta to the quotient Input over alpha.
+   *
+   * \ingroup Functor
+   * \ingroup Radiometry
  */
 
 template <class TInput, class TOutput>
@@ -88,6 +90,7 @@ private:
  *  \brief Transform a classical image into the luminance image. For this it uses the functor ImageToLuminanceImageFunctor calling for each component of each pixel.
  *
  * \ingroup ImageToLuminanceImageFunctor
+ * \ingroup Radiometry
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ImageToLuminanceImageFilter :

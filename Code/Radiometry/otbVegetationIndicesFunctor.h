@@ -25,13 +25,18 @@ namespace otb
 {
 namespace Functor
 {
-/** Base class for R And NIR based Index
-*  Implement operators for UnaryFunctorImageFilter templated with a
-*  VectorImage and BinaryFunctorImageFilter templated with single
-*  images.
-*  Subclasses should NOT overload operators, they must  re-implement 
-*  the Evaluate() method.
-*/
+/**
+   * \class RAndNIRIndexBase
+   * \brief Base class for R And NIR based Index
+   *
+   *  Implement operators for UnaryFunctorImageFilter templated with a
+   *  VectorImage and BinaryFunctorImageFilter templated with single
+   *  images.
+   *  Subclasses should NOT overload operators, they must  re-implement
+   *  the Evaluate() method.
+   *
+   * \ingroup Radiometry
+ */
 template<class TInput1, class TInput2, class TOutput>
 class RAndNIRIndexBase
 {
@@ -39,15 +44,15 @@ public:
   /// Vector pixel type used to support both vector images and multiple
   /// input images
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
-  
+
   // Operator on vector pixel type
   inline TOutput operator()(const InputVectorType & inputVector)
   {
-    return this->Evaluate(inputVector[m_RedIndex-1],static_cast<TInput2>(inputVector[m_NIRIndex-1])); 
+    return this->Evaluate(inputVector[m_RedIndex-1],static_cast<TInput2>(inputVector[m_NIRIndex-1]));
   }
 
   // Binary operator
-  inline TOutput operator()(const TInput1 &r, const TInput2 &nir) 
+  inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
   {
     return this->Evaluate(r,nir);
   };
@@ -55,7 +60,7 @@ public:
   RAndNIRIndexBase() : m_RedIndex(3), m_NIRIndex(4) {};
   /// Desctructor
   virtual ~RAndNIRIndexBase() {};
-  
+
   /// Set Red Index
   void SetRedIndex(unsigned int channel)
   {
@@ -86,13 +91,16 @@ private:
   unsigned int m_NIRIndex;
 };
 
-/** base class for R, B And NIR based Index
-*  Implement operators for UnaryFunctorImageFilter templated with a
-*  VectorImage and BinaryFunctorImageFilter templated with single
-*  images.
-*  Subclasses should NOT overload operators, they must  re-implement 
-*  the Evaluate() method.
-*/
+/**
+ * \class RAndBAndNIRIndexBase
+ * \brief base class for R, B And NIR based Index
+ *  Implement operators for UnaryFunctorImageFilter templated with a
+ *  VectorImage and BinaryFunctorImageFilter templated with single
+ *  images.
+ *  Subclasses should NOT overload operators, they must  re-implement
+ *  the Evaluate() method.
+ * \ingroup Radiometry
+ */
 template<class TInput1, class TInput2, class TInput3, class TOutput>
 class RAndBAndNIRIndexBase
 {
@@ -100,15 +108,15 @@ public:
   /// Vector pixel type used to support both vector images and multiple
   /// input images
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
-  
+
   // Operator on vector pixel type
   inline TOutput operator()(const InputVectorType & inputVector)
   {
-    return this->Evaluate(inputVector[m_RedIndex-1],static_cast<TInput2>(inputVector[m_BlueIndex-1]), static_cast<TInput3>(inputVector[m_NIRIndex-1])); 
+    return this->Evaluate(inputVector[m_RedIndex-1],static_cast<TInput2>(inputVector[m_BlueIndex-1]), static_cast<TInput3>(inputVector[m_NIRIndex-1]));
   }
 
   // Binary operator
-  inline TOutput operator()(const TInput1 &r, const TInput2 &b, const TInput2 &nir) 
+  inline TOutput operator()(const TInput1 &r, const TInput2 &b, const TInput2 &nir)
   {
     return this->Evaluate(r,b,nir);
   };
@@ -116,7 +124,7 @@ public:
   RAndBAndNIRIndexBase() : m_RedIndex(3), m_BlueIndex(1), m_NIRIndex(4) {};
   /// Desctructor
   virtual ~RAndBAndNIRIndexBase() {};
-  
+
   /// Set Red Index
   void SetRedIndex(unsigned int channel)
   {
@@ -159,13 +167,16 @@ private:
   unsigned int m_NIRIndex;
 };
 
-/** base class for R, G And NIR based Index
-*  Implement operators for UnaryFunctorImageFilter templated with a
-*  VectorImage and BinaryFunctorImageFilter templated with single
-*  images.
-*  Subclasses should NOT overload operators, they must  re-implement 
-*  the Evaluate() method.
-*/
+/**
+ * \class RAndGAndNIRIndexBase
+ * \brief base class for R, G And NIR based Index
+ *  Implement operators for UnaryFunctorImageFilter templated with a
+ *  VectorImage and BinaryFunctorImageFilter templated with single
+ *  images.
+ *  Subclasses should NOT overload operators, they must  re-implement
+ *  the Evaluate() method.
+ * \ingroup Radiometry
+ */
 template<class TInput1, class TInput2, class TInput3, class TOutput>
 class RAndGAndNIRIndexBase
 {
@@ -173,15 +184,15 @@ public:
   /// Vector pixel type used to support both vector images and multiple
   /// input images
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
-  
+
   // Operator on vector pixel type
   inline TOutput operator()(const InputVectorType & inputVector)
   {
-    return this->Evaluate(inputVector[m_RedIndex-1],static_cast<TInput2>(inputVector[m_GreenIndex-1]), static_cast<TInput3>(inputVector[m_NIRIndex-1])); 
+    return this->Evaluate(inputVector[m_RedIndex-1],static_cast<TInput2>(inputVector[m_GreenIndex-1]), static_cast<TInput3>(inputVector[m_NIRIndex-1]));
   }
 
   // Binary operator
-  inline TOutput operator()(const TInput1 &r, const TInput2 &g, const TInput2 &nir) 
+  inline TOutput operator()(const TInput1 &r, const TInput2 &g, const TInput2 &nir)
   {
     return this->Evaluate(r,g,nir);
   };
@@ -189,7 +200,7 @@ public:
   RAndGAndNIRIndexBase() : m_RedIndex(3), m_GreenIndex(2), m_NIRIndex(4) {};
   /// Desctructor
   virtual ~RAndGAndNIRIndexBase() {};
-  
+
   /// Set Red Index
   void SetRedIndex(unsigned int channel)
   {
@@ -240,6 +251,7 @@ private:
  *  [Pearson et Miller, 1972]
  *
  *  \ingroup Functor
+ * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
 class NDVI : public RAndNIRIndexBase<TInput1,TInput2,TOutput>
@@ -270,6 +282,7 @@ protected:
  *  [Rouse et al., 1973]
  *
  *  \ingroup Functor
+ * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
 class RVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
@@ -295,6 +308,7 @@ protected:
  *  [Richardson et Wiegand, 1977]
  *
  *  \ingroup Functor2
+ * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
 class PVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
@@ -327,7 +341,7 @@ protected:
     double dr = static_cast<double>(r);
     return ( static_cast<TOutput>(  (dnir - m_A*dr - m_B)*m_Coeff) );
   }
- 
+
 private:
 
   /** A and B parameters */
@@ -345,6 +359,7 @@ private:
  *  [Huete, 1988]
  *
  *  \ingroup Functor
+ * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
 class SAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
@@ -388,6 +403,7 @@ private:
  *  [Baret et al. 1989, Baret et Guyot, 1991]
  *
  *  \ingroup Functor
+ * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
 class TSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
@@ -395,7 +411,7 @@ class TSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 public:
   TSAVI() : m_X(0.08) {};
   ~TSAVI() {};
-  
+
   /** Set/Get A and B parameters */
   void SetA(const double A)
   {
@@ -435,7 +451,7 @@ protected:
       }
     return ( static_cast<TOutput>(  (m_A*(dnir - m_A*dr - m_B))/denominator ) );
   }
-  
+
 private:
 
   /** A and B parameters */
@@ -452,6 +468,7 @@ private:
  *  [Qi et al., 1994]
  *
  *  \ingroup Functor
+ * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
 class MSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
@@ -481,6 +498,7 @@ protected:
  *  [Pinty & Verstraete , 1992]
  *
  *  \ingroup Functor
+ * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
 class GEMI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
@@ -524,6 +542,7 @@ protected:
  *  [Clevers, 1988]
  *
  *  \ingroup Functor
+ * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
 class WDVI : public RAndNIRIndexBase<TInput1,TInput2,TOutput>
@@ -563,6 +582,7 @@ private:
  *  [Plummer & al., 1994]
  *
  *  \ingroup Functor
+ * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
 class AVI : public RAndGAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
@@ -650,6 +670,7 @@ private:
  *  [Yoram J. Kaufman and Didier Tanre, 1992]
  *
  *  \ingroup Functor
+ * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
 class ARVI : public RAndBAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
@@ -695,6 +716,7 @@ private:
  *  [Yoram J. Kaufman and Didier Tanré, 1992]
  *
  *  \ingroup Functor
+ * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
 class TSARVI: public RAndBAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
@@ -702,7 +724,7 @@ class TSARVI: public RAndBAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
 public:
   TSARVI() : m_X(0.08), m_Gamma(0.5) {};
   ~TSARVI() {};
-  
+
   /** Set/Get A and B parameters */
   void SetA(const double A)
   {
@@ -753,7 +775,7 @@ protected:
     }
     return ( static_cast<TOutput>(  (m_A*(dnir - m_A*dRB - m_B))/denominator ) );
   }
-  
+
 private:
 
   /** A and B parameters */
@@ -775,6 +797,7 @@ private:
  *  [Huete, Justice, & Liu, 1994; Huete, Liu, Batchily, & van Leeuwen, 1997]
  *
  *  \ingroup Functor
+ * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
 class EVI : public RAndBAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
@@ -831,7 +854,7 @@ protected:
       }
     return ( static_cast<TOutput>( m_G * (dnir - dr)/denominator ) );
   }
-  
+
 private:
 
   /** Gain factor */
@@ -853,6 +876,7 @@ private:
  *  [Crippen, 1990]
  *
  *  \ingroup Functor
+ * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
 class IPVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
@@ -883,6 +907,7 @@ protected:
  *  [Deering, 1975]
  *
  *  \ingroup Functor
+ * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
 class TNDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
@@ -891,7 +916,7 @@ public:
   typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
   TNDVI() {};
   ~TNDVI() {};
-  
+
   NDVIFunctorType GetNDVI(void)const
   {
     return (m_NDVIfunctor);

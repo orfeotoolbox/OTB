@@ -25,8 +25,10 @@ namespace otb
 {
 
 /** \class GAndRIndexImageFilter
- * \brief
- *
+   * \brief TODO
+   *
+   * \ingroup Radiometry
+   *
  */
 
 template <class TInputImageG, class TInputImageR, class TOutputImage,

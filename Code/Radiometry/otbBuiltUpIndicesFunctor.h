@@ -26,13 +26,18 @@ namespace otb
 {
 namespace Functor
 {
-/** Base class for Green And Red channels of Spot Images
-*  Implement operators for UnaryFunctorImageFilter templated with a
-*  VectorImage and BinaryFunctorImageFilter templated with single
-*  images.
-*  Subclasses should NOT overload operators, they must  re-implement 
-*  the Evaluate() method.
-*/
+/**
+   * \class TM4AndTM5IndexBase
+   * \brief Base class for Green And Red channels of Spot Images
+   *
+   *  Implement operators for UnaryFunctorImageFilter templated with a
+   *  VectorImage and BinaryFunctorImageFilter templated with single
+   *  images.
+   *  Subclasses should NOT overload operators, they must  re-implement
+   *  the Evaluate() method.
+   *
+   * \ingroup Radiometry
+ */
 template<class TInput1, class TInput2, class TOutput>
 class TM4AndTM5IndexBase
 {
@@ -40,15 +45,15 @@ public:
   /// Vector pixel type used to support both vector images and multiple
   /// input images
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
-  
+
   // Operator on vector pixel type
   inline TOutput operator()(const InputVectorType & inputVector)
   {
-    return this->Evaluate(inputVector[m_TM4Index-1],static_cast<TInput2>(inputVector[m_TM5Index-1])); 
+    return this->Evaluate(inputVector[m_TM4Index-1],static_cast<TInput2>(inputVector[m_TM5Index-1]));
   }
 
   // Binary operator
-  inline TOutput operator()(const TInput1 &tm4, const TInput2 &tm5) 
+  inline TOutput operator()(const TInput1 &tm4, const TInput2 &tm5)
   {
     return this->Evaluate(tm4,tm5);
   };
@@ -56,7 +61,7 @@ public:
   TM4AndTM5IndexBase() : m_TM4Index(4), m_TM5Index(5) {};
   /// Desctructor
   virtual ~TM4AndTM5IndexBase() {};
-  
+
   /// Set TM4 Index
   void SetTM4Index(unsigned int channel)
   {
@@ -97,6 +102,7 @@ private:
  *  [ ]
  *
  *  \ingroup Functor
+ * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
 class NDBI : public TM4AndTM5IndexBase<TInput1,TInput2,TOutput>
@@ -127,6 +133,7 @@ protected:
  *  [ ]
  *
  *  \ingroup Functor
+ * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
 class ISU : public RAndNIRIndexBase<TInput1,TInput2,TOutput>

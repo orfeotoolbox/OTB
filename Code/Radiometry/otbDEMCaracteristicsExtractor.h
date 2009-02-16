@@ -45,12 +45,13 @@ namespace otb
 {
 
 /** \class DEMCaracteristicsExtractor
- *  \brief Calculates the slope, the orientation incidence and exitance radius values for each pixel.
- *
- * To note that azimuth value are projection over North-South direction and angles have to be given in degres.
- *
- * \ingroup DEMHanler
- * \ingroup DEMToImageGenerator
+   *  \brief Calculates the slope, the orientation incidence and exitance radius values for each pixel.
+   *
+   * To note that azimuth value are projection over North-South direction and angles have to be given in degres.
+   *
+   * \ingroup DEMHanler
+   * \ingroup DEMToImageGenerator
+   * \ingroup Radiometry
  */
 template <class TInputImage, class TOutputImage >
 class ITK_EXPORT DEMCaracteristicsExtractor :

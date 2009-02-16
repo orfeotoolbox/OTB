@@ -38,6 +38,7 @@ namespace Functor
 *   of the surrounding pixels value ponderated by a coefficient.
 *
 *  \ingroup Functor
+* \ingroup Radiometry
 */
 template <class TNeighIter, class TOutput>
 class ComputeNeighborhoodContributionFunctor
@@ -131,6 +132,8 @@ private:
  *   The SurfaceAdjencyEffect6SCorrectionSchemeFilter class allows to introduce a neighbor correction to the
  *   reflectance estimation. The satelite signal is considered as to be a combinaison of the signal coming from
  *   the target pixel and a weighting of the siganls coming from the neighbor pixels.
+ *
+ * \ingroup Radiometry
  *
  */
 template <class TInputImage, class TOutputImage>

@@ -418,7 +418,7 @@ ADD_TEST(coTuPolyLineParametricPathWithValueNew ${COMMON_TESTS6}
 ADD_TEST(coTuPolygonNew ${COMMON_TESTS6}
          otbPolygonNew)
 
-ADD_TEST(coTuPolygon ${COMMON_TESTS6}
+ADD_TEST(coTvPolygon ${COMMON_TESTS6}
 --compare-ascii ${EPS}
 		${BASELINE_FILES}/otbPolygonTest.txt
                 ${TEMP}/otbPolygonTest.txt
@@ -430,7 +430,7 @@ ADD_TEST(coTuPolygon ${COMMON_TESTS6}
 
 #-------- otb::PolyLineImageIterator -----------------------------------------
 
- ADD_TEST(coTuPolyLineImageIterator ${COMMON_TESTS6}
+ ADD_TEST(coTvPolyLineImageIterator ${COMMON_TESTS6}
 --compare-image ${TOL}
 		${BASELINE}/coTvPolyLineImageIterator.png
 		${TEMP}/coTvPolyLineImageIterator.png
@@ -559,13 +559,13 @@ ADD_TEST(coTvStandardWriterWatcher ${COMMON_TESTS7}
 ADD_TEST(coTuUnaryFunctorNeighborhoodWithOffsetImageFilterNew ${COMMON_TESTS7}
      otbUnaryFunctorNeighborhoodWithOffsetImageFilterNew
 )
-ADD_TEST(coTuUnaryFunctorNeighborhoodWithOffsetImageFilter ${COMMON_TESTS7}
+ADD_TEST(coTvUnaryFunctorNeighborhoodWithOffsetImageFilter ${COMMON_TESTS7}
 --compare-image ${TOL}
-	        ${INPUTDATA}/poupees.tif 
-                ${TEMP}/coTuUnaryFunctorNeighborhoodWithOffsetImageFilter.tif
+	        ${INPUTDATA}/poupees.tif
+                ${TEMP}/coTvUnaryFunctorNeighborhoodWithOffsetImageFilter.tif
     otbUnaryFunctorNeighborhoodWithOffsetImageFilter
         ${INPUTDATA}/poupees.tif
-	${TEMP}/coTuUnaryFunctorNeighborhoodWithOffsetImageFilter.tif
+	${TEMP}/coTvUnaryFunctorNeighborhoodWithOffsetImageFilter.tif
 	2 # radius
 	2 # offset[0]
 	2  #offset[1]
