@@ -22,6 +22,8 @@
 #include "itkHistogram.h"
 #include "itkDenseFrequencyContainer.h"
 #include "otbObjectList.h"
+#include "otbRenderingImageFilter.h"
+#include "itkExtractImageFilter.h"
 
 namespace otb
 {
@@ -51,20 +53,29 @@ public:
   itkTypeMacro(ImageLayer,Layer);
 
   /** Image typedef */
-  typedef TImage                                        ImageType;
-  typedef typename ImageType::Pointer                   ImagePointerType;
-  typedef typename ImageType::PixelType                 PixelType;
-  typedef typename ImageType::InternalPixelType         InternalPixelType;
+  typedef TImage                                              ImageType;
+  typedef typename ImageType::Pointer                         ImagePointerType;
+  typedef typename ImageType::PixelType                       PixelType;
+  typedef typename ImageType::InternalPixelType               InternalPixelType;
   
+  /** Output image typedef */
+  typedef TOutputImage                                        OutputImageType;
+
   /** Histogram typedef */
-  typedef itk::Statistics::DenseFrequencyContainer      DFContainerType;
+  typedef itk::Statistics::DenseFrequencyContainer            DFContainerType;
   typedef itk::Statistics::Histogram
-  <InternalPixelType,1,DFContainerType >                HistogramType;
-  typedef typename HistogramType::Pointer               HistogramPointerType;
+  <InternalPixelType,1,DFContainerType >                      HistogramType;
+  typedef typename HistogramType::Pointer                     HistogramPointerType;
   
   /** Histogram list typedef */
-  typedef otb::ObjectList<HistogramType>                HistogramListType;
-  typedef typename HistogramListType::Pointer           HistogramListPointerType; 
+  typedef otb::ObjectList<HistogramType>                      HistogramListType;
+  typedef typename HistogramListType::Pointer                 HistogramListPointerType; 
+
+  /** Rendering part */
+  typedef RenderingImageFilter<TImage,TOutputImage>           RenderingFilterType;
+  typedef typename RenderingFilterType::RenderingFunctionType RenderingFunctionType;
+  typedef typename RenderingFunctionType::Pointer             RenderingFunctionPointerType;
+  typedef itk::ExtractImageFilter<ImageType,ImageType>        ExtractFilterType;
 
   /** Set/Get the image */
   itkSetObjectMacro(Image,ImageType);
@@ -86,8 +97,12 @@ public:
   itkSetMacro(LowerClamp,PixelType);
   itkGetMacro(LowerClamp,PixelType);
 
+  /** Set/Get the rendering function */
+  itkSetObjectMacro(RenderingFunction,RenderingFunctionType);
+  itkGetObjectMacro(RenderingFunction,RenderingFunctionType);
+
   /** Actually render the image */
-  virtual void Render(){}
+  virtual void Render();
 
 protected:
   /** Constructor */
@@ -115,6 +130,9 @@ private:
 
   /** Lower clamping values */
   PixelType                m_LowerClamp;
+
+  /** Rendering function */
+  RenderingFunctionPointerType m_RenderingFunction;
 
 }; // end class 
 } // end namespace otb
