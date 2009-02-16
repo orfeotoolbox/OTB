@@ -22,44 +22,26 @@
 namespace otb
 {
 
-template <class TImage>
-ImageLayer<TImage>
+template <class TImage, class TOutputImage>
+ImageLayer<TImage,TOutputImage>
 ::ImageLayer()
 {
-  m_LayerName = "Default";
-  m_RedChannelIndex   = 0;
-  m_GreenChannelIndex = 0;
-  m_BlueChannelIndex  = 0;
   m_HistogramList = HistogramListType::New();
 }
 
-template <class TImage>
-ImageLayer<TImage>
+template <class TImage, class TOutputImage>
+ImageLayer<TImage,TOutputImage>
 ::~ImageLayer()
 {}
 
 
-template <class TImage>
+template <class TImage, class TOutputImage>
 void
-ImageLayer<TImage>
+ImageLayer<TImage,TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
-  os<<indent<<"Layer "<<m_LayerName<<std::endl;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
 
