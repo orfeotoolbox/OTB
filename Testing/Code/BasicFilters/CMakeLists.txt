@@ -1178,7 +1178,7 @@ ADD_TEST(bfTuStreamingInnerProductVectorImageFilterNew ${BASICFILTERS_TESTS11}
 )
 
 ADD_TEST(bfTvStreamingInnerProductVectorImageFilter ${BASICFILTERS_TESTS11}
-      --compare-ascii ${TOL}
+      --compare-ascii 0.000001
       ${BASELINE_FILES}/bfStreamingInnerProductVectorImageFilterResults.txt
       ${TEMP}/bfStreamingInnerProductVectorImageFilterResults.txt
       otbStreamingInnerProductVectorImageFilter
