@@ -155,7 +155,8 @@ ImageWidget<TInputImage>
   #ifndef OTB_GL_USE_ACCEL
   if(m_UseGlAcceleration)
     {
-    itkException(<<"Gl acceleration enabled but not allowed. Consider rebuilding with OTB_USE_GL_ACCEL to ON.");
+    itkWarningMacro(<<"Gl acceleration enabled but not allowed. Consider rebuilding with OTB_USE_GL_ACCEL to ON. For now, disabling Gl acceleration.");
+    m_UseGlAcceleration=false;
     }
   #endif
 
@@ -194,7 +195,7 @@ ImageWidget<TInputImage>
     // Set the pixel Zoom
     glRasterPos2f(startx,starty);
     glPixelZoom(m_IsotropicZoom,m_IsotropicZoom);
-    
+
     // display the image
     glDrawPixels(m_OpenGlBufferSize[0],
 		 m_OpenGlBufferSize[1],
