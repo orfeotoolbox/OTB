@@ -89,14 +89,6 @@ public:
   itkSetObjectMacro(HistogramList,HistogramListType);
   itkGetObjectMacro(HistogramList,HistogramListType);
 
-  /** Set/Get the upper clamp values */
-  itkSetMacro(UpperClamp,PixelType);
-  itkGetMacro(UpperClamp,PixelType);
-
-  /** Set/Get the lower clamp values */
-  itkSetMacro(LowerClamp,PixelType);
-  itkGetMacro(LowerClamp,PixelType);
-
   /** Set/Get the rendering function */
   itkSetObjectMacro(RenderingFunction,RenderingFunctionType);
   itkGetObjectMacro(RenderingFunction,RenderingFunctionType);
@@ -124,12 +116,6 @@ private:
 
   /** Histogram list */
   HistogramListPointerType m_HistogramList;
-
-  /** Upper clamping values */
-  PixelType                m_UpperClamp;
-
-  /** Lower clamping values */
-  PixelType                m_LowerClamp;
 
   /** Rendering function */
   RenderingFunctionPointerType m_RenderingFunction;
