@@ -32,7 +32,7 @@ int otbImageWidget( int argc, char * argv[] )
   
   // Reading the input image
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(argv[1]);
+  reader->SetFileName(infname);
   reader->Update();
   ImageType::RegionType region = reader->GetOutput()->GetLargestPossibleRegion();
 
