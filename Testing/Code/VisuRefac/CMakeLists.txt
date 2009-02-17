@@ -3,6 +3,7 @@ IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
+SET(EXAMPLESDATA ${OTB_DATA_ROOT}/Examples)
 IF(OTB_DATA_USE_LARGEINPUT)
   SET(IMAGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -132,6 +133,20 @@ ADD_TEST(vrTuUniformAlphaBlendingFunctionNew ${VISUREFAC_TESTS1}
 otbUniformAlphaBlendingFunctionNew
 )
 
+#------------ otb::BlendingImageFilter ----------------------
+
+ADD_TEST(vrTuBlendingImageFilterNew ${VISUREFAC_TESTS1}
+otbBlendingImageFilterNew
+)
+
+ADD_TEST(vrTvBlendingImageFilter ${VISUREFAC_TESTS1}
+otbBlendingImageFilter
+${EXAMPLESDATA}/SpotBefore.png
+${EXAMPLESDATA}/SpotAfter.png
+${TEMP}/vrTvBlendingImageFilterOutput.png
+)
+
+# Testing srcs
 SET(VisuRefac_SRCS1
 otbImageWidgetNew.cxx
 otbImageWidget.cxx
@@ -147,10 +162,11 @@ otbRenderingImageFilterVector.cxx
 otbImageLayerScalar.cxx
 otbImageLayerVector.cxx
 otbUniformAlphaBlendingFunctionNew.cxx
+otbBlendingImageFilterNew.cxx
+otbBlendingImageFilter.cxx
 )
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 
-
+# Building testing executables
 ADD_EXECUTABLE(otbVisuRefacTests1 otbVisuRefacTests1.cxx ${VisuRefac_SRCS1})
 TARGET_LINK_LIBRARIES(otbVisuRefacTests1 OTBVisuRefac OTBIO)
 
