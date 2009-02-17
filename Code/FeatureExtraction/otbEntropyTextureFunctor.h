@@ -29,15 +29,16 @@ namespace Functor
  *
  *  Computes joint histogram (neighborhood and offset neighborhood).
  *  This formula is:
- *  $ -\sum_{i}p_{x-y}(i)\log{(p_{x-y}(i))}  $
- *  TIterInput is an ietrator, TOutput is a PixelType.
+ *  \f[ -\sum_{i}p_{x-y}(i)\log{(p_{x-y}(i))}  \f]
+ *
+ *  TIterInput is an iterator, TOutput is a PixelType.
  *
  *  \ingroup Functor
  *  \ingroup Statistics
  */
 
 template <class TIterInput1, class TIterInput2, class TOutput>
-class ITK_EXPORT EntropyTextureFunctor : 
+class ITK_EXPORT EntropyTextureFunctor :
 public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>
 {
 public:

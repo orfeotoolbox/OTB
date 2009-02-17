@@ -29,7 +29,7 @@ namespace Functor
  *
  *  Computes contrast using joint histogram (neighborhood and offset neighborhood).
  *  The formula is:
- *  $ \sum_{n}n^2.p_{x-y}(n)^2 $
+ *  \f[ \sum_{n}n^2.p_{x-y}(n)^2 \f]
  *  TIterInput is an iterator, TOutput is a PixelType.
  *
  *  \sa TextureFunctorBase
@@ -38,7 +38,7 @@ namespace Functor
  */
 
 template <class TIterInput1, class TIterInput2, class TOutput>
-class ITK_EXPORT ContrastTextureFunctor : 
+class ITK_EXPORT ContrastTextureFunctor :
 public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>
 {
 public:
@@ -54,7 +54,7 @@ public:
 
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
-  {  
+  {
     this->ComputeJointHistogram(neigh, neighOff);
     double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
     double areaInv = 1/area;
@@ -62,14 +62,14 @@ public:
 
     // loop over bin neighborhood values
     for (unsigned sB = 0; sB<this->GetHisto()[0].size(); sB++)
-      { 
+      {
 	double nCeil = (static_cast<double>(sB)+0.5)*this->GetNeighBinLength();
 	double nCeilSquare = vcl_pow( nCeil, 2);
 	for (unsigned r = 0; r<this->GetHisto().size(); r++)
 	  {
 	    double rVal = (static_cast<double>(r)+0.5)*this->GetOffsetBinLength();
 	    for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-	      { 
+	      {
 		if( vcl_abs((static_cast<double>(s)+0.5)*this->GetNeighBinLength() - rVal - nCeil) < vcl_abs(this->GetNeighBinLength()) )
 		  {
 		    double p =  static_cast<double>(this->GetHisto()[r][s])*areaInv;
@@ -78,15 +78,15 @@ public:
 	      }
 	  }
       }
-    
-    return out;  
-  }
-  
-};
- 
- 
 
- 
+    return out;
+  }
+
+};
+
+
+
+
 } // namespace Functor
 } // namespace otb
 

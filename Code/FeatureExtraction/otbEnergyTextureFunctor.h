@@ -29,7 +29,8 @@ namespace Functor
  *  \brief This functor calculates the energy image texture.
  *
  *  The formula is:
- *  $ \frac{1}{N}\sum_{i}\sum_{j}(i-j)^2 $
+ *  \f[ \frac{1}{N}\sum_{i}\sum_{j}(i-j)^2 \f]
+ *
  *  TIterInput is an iterator, TOutput is a PixelType.
  *
  *  \sa TextureFunctorBase
@@ -37,7 +38,7 @@ namespace Functor
  *  \ingroup Statistics
  */
 template <class TIterInput1, class TIterInput2, class TOutput>
-class ITK_EXPORT EnergyTextureFunctor : 
+class ITK_EXPORT EnergyTextureFunctor :
 public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>
 {
 public:
@@ -83,7 +84,7 @@ public:
 	    temp += norm;
 	  }
       }
-    temp /= area; 
+    temp /= area;
     return vcl_pow(temp, 2);
   }
 

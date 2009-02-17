@@ -29,8 +29,10 @@ namespace Functor
  *
  *  Computes correlation using joint histogram (neighborhood and offset neighborhood).
  *  The formula is:
- *  $ \frac{\sum_{i}\sum_{j}i.j.p(i,j)-\mu_{x}\mu_{y}} {\sigma_{x}\sigma_{y}} $
- *  Where $\mu_{x}$, $\mu_{y}$, $\sigma_{x}$ and $\sigma_{y}$ are the mean and standard deviation of $p_{x}$ and $p_{y}$.
+ *  \f[ \frac{\sum_{i}\sum_{j}i.j.p(i,j)-\mu_{x}\mu_{y}} {\sigma_{x}\sigma_{y}} \f]
+ *
+ *  Where \$ \mu_{x} \$, \$ \mu_{y} \$, \$ \sigma_{x} \$ and \$ \sigma_{y} \$ are the mean
+ * and standard deviation of \$ p_{x} \$ and \$ p_{y} \$.
  *  TIterInput is an iterator, TOutput is a PixelType.
  *
  *  \sa TextureFunctorBase
@@ -40,7 +42,7 @@ namespace Functor
 
 
 template <class TIterInput1, class TIterInput2, class TOutput>
-class ITK_EXPORT CorrelationTextureFunctor : 
+class ITK_EXPORT CorrelationTextureFunctor :
 public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>
 {
 public:
@@ -65,17 +67,17 @@ public:
     for (unsigned r = 0; r<this->GetHisto().size(); r++)
       {
 	for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-	  { 
+	  {
 	    double p =  static_cast<double>(this->GetHisto()[r][s])*areaInv;
 	    sumProb += p;
 	    double pixProd = ( (static_cast<double>(r)+0.5)*this->GetOffsetBinLength() ) * ( (static_cast<double>(s)+0.5)*this->GetNeighBinLength() );
 	    out += pixProd * p;
 	  }
     }
-    
+
     double meanPOff = sumProb/static_cast<double>(this->GetHisto().size());
     double meanPNeigh = sumProb/static_cast<double>(this->GetHisto()[0].size());
-   
+
     // Standard deviation of p for offset region
     double stdPOff = 0.;
     for (unsigned r = 0; r<this->GetHisto().size(); r++)
@@ -103,17 +105,17 @@ public:
       }
     stdPNeigh /= this->GetHisto()[0].size();
     stdPNeigh = vcl_sqrt(stdPNeigh);
-    
+
 
     if(stdPOff*stdPNeigh != 0)
      	out = (out - meanPOff*meanPNeigh) / (stdPOff*stdPNeigh);
-    
-    return out;  
+
+    return out;
   }
-  
+
 };
- 
- 
+
+
 } // namespace Functor
 } // namespace otb
 
