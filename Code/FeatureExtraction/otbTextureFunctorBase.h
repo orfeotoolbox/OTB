@@ -172,8 +172,8 @@ public:
       OffsetType offset;
       offset.Fill(0);
       RadiusType radius;
-      radius[0] = 0.5*( itOff.GetSize()[0] - 1 ) - vcl_abs(m_Offset[0]);
-      radius[1] = 0.5*( itOff.GetSize()[1] - 1 ) - vcl_abs(m_Offset[1]);
+      radius[0] = static_cast<unsigned int>( 0.5*( static_cast<double>(itOff.GetSize()[0] - 1) ) - static_cast<double>( vcl_abs(m_Offset[0])) );
+      radius[1] = static_cast<unsigned int>( 0.5*( static_cast<double>(itOff.GetSize()[1] - 1) ) - static_cast<double>( vcl_abs(m_Offset[1])) );
   
       for ( unsigned int i=0; i<itOff.GetCenterPixel().GetSize(); i++ )
 	{
