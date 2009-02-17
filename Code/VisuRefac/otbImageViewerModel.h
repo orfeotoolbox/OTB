@@ -22,6 +22,7 @@
 #include "otbLayer.h"
 #include "otbObjectList.h"
 #include "otbImageViewerModelListener.h"
+#include "otbBlendingImageFilter.h"
 
 namespace otb
 {
@@ -56,9 +57,13 @@ public:
   /** Layer list typedef */
   typedef otb::ObjectList<LayerType>           LayerListType;
   typedef typename LayerListType::Pointer      LayerListPointerType;
+  typedef typename LayerListType::Iterator     LayerIteratorType;
 
   /** Listener typedef */
   typedef ImageViewerModelListener             ListenerType;
+
+  /** Blending filter typedef */
+  typedef otb::BlendingImageFilter<OutputImageType> BlendingFilterType;
 
   /** Add a new layer
    *  \param layer The layer to add.
