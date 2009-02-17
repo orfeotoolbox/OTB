@@ -33,6 +33,7 @@ void RegisterTests()
   REGISTER_TEST(otbImageWidgetController);
   REGISTER_TEST(otbImageLayerNew);
   REGISTER_TEST(otbGrayscaleRenderingFunctionNew);
+  REGISTER_TEST(otbRGBRenderingFunctionNew);
   REGISTER_TEST(otbRenderingImageFilterNew);
   REGISTER_TEST(otbRenderingImageFilterScalar);
   REGISTER_TEST(otbRenderingImageFilterVector);

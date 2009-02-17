@@ -78,6 +78,12 @@ ADD_TEST(vrTuGrayscaleRenderingFunctionNew ${VISUREFAC_TESTS1}
 otbGrayscaleRenderingFunctionNew
 )
 
+#------------ otb::RGBRenderingFunction ------------
+
+ADD_TEST(vrTuRGBRenderingFunctionNew ${VISUREFAC_TESTS1}
+otbRGBRenderingFunctionNew
+)
+
 #------------ otb::RenderingImageFilter ------------
 
 ADD_TEST(vrTuRenderingImageFilterNew ${VISUREFAC_TESTS1}
@@ -112,6 +118,7 @@ otbImageWidgetControllerNew.cxx
 otbImageWidgetController.cxx
 otbImageLayerNew.cxx
 otbGrayscaleRenderingFunctionNew.cxx
+otbRGBRenderingFunctionNew.cxx
 otbRenderingImageFilterNew.cxx
 otbRenderingImageFilterScalar.cxx
 otbRenderingImageFilterVector.cxx
