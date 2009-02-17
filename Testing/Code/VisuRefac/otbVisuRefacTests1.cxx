@@ -39,4 +39,5 @@ void RegisterTests()
   REGISTER_TEST(otbRenderingImageFilterVector);
   REGISTER_TEST(otbImageLayerScalar);
   REGISTER_TEST(otbImageLayerVector);
+  REGISTER_TEST(otbUniformAlphaBlendingFunctionNew);
 }

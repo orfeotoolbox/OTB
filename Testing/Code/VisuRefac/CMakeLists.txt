@@ -126,6 +126,12 @@ ${TEMP}/vrTvRenderingImageFilterVectorOutput.png
 0 179 0 0 0 802 0 0 0
 )
 
+#------------ otb::UniformAlphaBlendingFunction ------------
+
+ADD_TEST(vrTuUniformAlphaBlendingFunctionNew ${VISUREFAC_TESTS1}
+otbUniformAlphaBlendingFunctionNew
+)
+
 SET(VisuRefac_SRCS1
 otbImageWidgetNew.cxx
 otbImageWidget.cxx
@@ -140,6 +146,7 @@ otbRenderingImageFilterScalar.cxx
 otbRenderingImageFilterVector.cxx
 otbImageLayerScalar.cxx
 otbImageLayerVector.cxx
+otbUniformAlphaBlendingFunctionNew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 
