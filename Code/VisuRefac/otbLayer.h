@@ -21,6 +21,8 @@
 #include "itkObject.h"
 #include "otbImage.h"
 #include "itkRGBPixel.h"
+#include "otbBlendingFunction.h"
+#include "otbUniformAlphaBlendingFunction.h"
 
 namespace otb
 {
@@ -50,6 +52,11 @@ public:
   typedef typename OutputImageType::Pointer      OutputImagePointerType;
   typedef typename OutputImageType::RegionType   RegionType;
   typedef typename RegionType::SizeType          SizeType;
+  typedef typename OutputImageType::PixelType    PixelType;
+
+  /** Blending function typedef */
+  typedef Function::BlendingFunction<PixelType>  BlendingFunctionType;
+  typedef typename BlendingFunctionType::Pointer BlendingFunctionPointerType;
 
   /** Actually render the layer */
   virtual void Render() = 0;
@@ -92,6 +99,9 @@ public:
   itkSetMacro(QuicklookSubsamplingRate,unsigned int);
   itkGetMacro(QuicklookSubsamplingRate,unsigned int);
 
+  itkSetObjectMacro(BlendingFunction,BlendingFunctionType);
+  itkGetObjectMacro(BlendingFunction,BlendingFunctionType);
+
 protected:
   /** Constructor */
   Layer()
@@ -101,6 +111,8 @@ protected:
     m_HasScaledExtract = false;
     m_Visible          = false;
     m_Name             = "Default";
+    // Default blending function
+    m_BlendingFunction = Function::UniformAlphaBlendingFunction<PixelType>::New();
   }
   /** Destructor */
   ~Layer(){}
@@ -147,6 +159,9 @@ private:
   OutputImagePointerType m_RenderedScaledExtract;
   bool                   m_HasScaledExtract;
   RegionType             m_ScaledExtractRegion;
+
+  /** Pointer to the blending function */
+  BlendingFunctionPointerType m_BlendingFunction;
 
 }; // end class 
 } // end namespace otb
