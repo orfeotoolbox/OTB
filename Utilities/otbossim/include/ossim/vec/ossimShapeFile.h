@@ -27,7 +27,7 @@ public:
                               const ossimShapeObject& rhs);
    
    ossimShapeObject()
-      :theShape((SHPObject*)NULL),
+      :theShape((ossim_SHPObject*)NULL),
        theIndex(-1)
       {
       }
@@ -36,11 +36,11 @@ public:
       {
          if(theShape)
          {
-            SHPDestroyObject(theShape);
+            ossim_SHPDestroyObject(theShape);
             theShape = NULL;
          }
       }
-   void setShape(SHPObject* obj);
+   void setShape(ossim_SHPObject* obj);
    bool isLoaded()const
       {
          return (theShape!=NULL);
@@ -137,13 +137,13 @@ public:
          {
             return theShape->nSHPType;
          }
-         return SHPT_NULL;
+         return ossim_SHPT_NULL;
       }
    ossimString getTypeByName()const
       {
          if(theShape)
          {
-            return ossimString(SHPTypeName(theShape->nSHPType));
+            return ossimString(ossim_SHPTypeName(theShape->nSHPType));
          }
          return "unknown";
       }
@@ -165,27 +165,27 @@ public:
          }
          switch(theShape->panPartType[partIndex])
          {
-         case SHPP_TRISTRIP:
+         case ossim_SHPP_TRISTRIP:
          {
             ossimString("tristrip");
             break;
          }
-         case SHPP_TRIFAN:
+         case ossim_SHPP_TRIFAN:
          {
             ossimString("trifan");
             break;
          }
-         case SHPP_OUTERRING:
+         case ossim_SHPP_OUTERRING:
          {
             ossimString("outerring");
             break;
          }
-         case SHPP_INNERRING:
+         case ossim_SHPP_INNERRING:
          {
             ossimString("innerring");
             break;
          }
-         case SHPP_RING:
+         case ossim_SHPP_RING:
          {
             ossimString("ring");
             break;
@@ -193,18 +193,18 @@ public:
          }
          return ossimString("unknown");
       }
-   SHPObject* getShapeObject()
+   ossim_SHPObject* getShapeObject()
       {
          return theShape;
       }
-   const SHPObject* getShapeObject()const
+   const ossim_SHPObject* getShapeObject()const
       {
          return theShape;
       }
 
    
 protected:
-   SHPObject* theShape;
+   ossim_SHPObject* theShape;
    long       theIndex;
 };
 
@@ -229,12 +229,12 @@ public:
       {
          return (theHandle!=NULL);
       }
-   virtual SHPHandle getHandle()
+   virtual ossim_SHPHandle getHandle()
       {
          return theHandle;
       }
 
-   virtual const SHPHandle getHandle()const
+   virtual const ossim_SHPHandle getHandle()const
       {
          return theHandle;
       }
@@ -304,7 +304,7 @@ public:
          return theFilename;
       }
 protected:
-   SHPHandle	 theHandle;
+   ossim_SHPHandle	 theHandle;
    ossimFilename theFilename;
 
 };

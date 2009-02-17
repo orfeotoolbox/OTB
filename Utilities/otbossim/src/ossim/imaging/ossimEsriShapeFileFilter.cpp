@@ -49,7 +49,7 @@ ossimEsriShapeFileFilter::ossimEsriShapeFileFilter(ossimImageSource* inputSource
     theOwnsViewProjectionFlag(true),
     theCoordinateSystem(OSSIM_GEOGRAPHIC_SPACE),
     theUnitType(OSSIM_METERS),
-    theTree((SHPTree*)NULL),
+    theTree((ossim_SHPTree*)NULL),
     theMaxQuadTreeLevels(10),
     thePenColor(255,255,255),
     theBrushColor(255,255,255),
@@ -72,7 +72,7 @@ ossimEsriShapeFileFilter::~ossimEsriShapeFileFilter()
    
    if(theTree)
    {
-      SHPDestroyTree(theTree);
+      ossim_SHPDestroyTree(theTree);
    }
 
    deleteCache();
@@ -209,7 +209,7 @@ void ossimEsriShapeFileFilter::drawAnnotations(ossimRefPtr<ossimImageData> tile)
       int n;
       int *array=(int*)NULL;
       
-      array = SHPTreeFindLikelyShapes(theTree,
+      array = ossim_SHPTreeFindLikelyShapes(theTree,
                                       boundsMin,
                                       boundsMax,
                                       &n);
@@ -364,8 +364,8 @@ bool ossimEsriShapeFileFilter::loadShapeFile(const ossimFilename& shapeFile)
 {
    if(theTree)
    {
-      SHPDestroyTree(theTree);
-      theTree = (SHPTree*)NULL;
+      ossim_SHPDestroyTree(theTree);
+      theTree = (ossim_SHPTree*)NULL;
    }
    theShapeFile.open(shapeFile);
    deleteCache();
@@ -376,7 +376,7 @@ bool ossimEsriShapeFileFilter::loadShapeFile(const ossimFilename& shapeFile)
       theShapeFile.getBounds(theMinArray[0],theMinArray[1],theMinArray[2],theMinArray[3],
                              theMaxArray[0],theMaxArray[1],theMaxArray[2],theMaxArray[3]);
 
-      theTree = SHPCreateTree(theShapeFile.getHandle(),
+      theTree = ossim_SHPCreateTree(theShapeFile.getHandle(),
                               2,
                               theMaxQuadTreeLevels,
                               theMinArray,
@@ -392,25 +392,25 @@ bool ossimEsriShapeFileFilter::loadShapeFile(const ossimFilename& shapeFile)
          {
             switch(obj.getType())
             {
-               case SHPT_POLYGON:
-               case SHPT_POLYGONZ:
+               case ossim_SHPT_POLYGON:
+               case ossim_SHPT_POLYGONZ:
                {
                   loadPolygon(obj);
                   break;
                }
-               case SHPT_POINT:
-               case SHPT_POINTZ:
+               case ossim_SHPT_POINT:
+               case ossim_SHPT_POINTZ:
                {
                   loadPoint(obj);
                   break;
                }
-               case SHPT_ARC:
-               case SHPT_ARCZ:
+               case ossim_SHPT_ARC:
+               case ossim_SHPT_ARCZ:
                {
                   loadArc(obj);
                   break;
                }
-               case SHPT_NULL:
+               case ossim_SHPT_NULL:
                {
                   break;
                }
@@ -458,7 +458,7 @@ void ossimEsriShapeFileFilter::loadPolygon(ossimShapeObject& obj)
    vector<ossimGpt> groundPolygon;
    for(ossim_uint32 part = 0; part < obj.getNumberOfParts(); ++part)
    {
-      if(obj.getPartType(part) != SHPP_RING)
+      if(obj.getPartType(part) != ossim_SHPP_RING)
       {
          ossimNotify(ossimNotifyLevel_WARN)
             << "ossimEsriShapeFileFilter::loadPolygon\n"
@@ -571,7 +571,7 @@ void ossimEsriShapeFileFilter::loadArc(ossimShapeObject& obj)
    vector<ossimGpt> groundPolygon;
    for(ossim_uint32 part = 0; part < obj.getNumberOfParts(); ++part)
    {
-      if(obj.getPartType(part) != SHPP_RING)
+      if(obj.getPartType(part) != ossim_SHPP_RING)
       {
          ossimNotify(ossimNotifyLevel_WARN)
             << "ossimEsriShapeFileFilter::loadArc\n"

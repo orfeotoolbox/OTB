@@ -14,7 +14,7 @@ public:
    ossimString  theName;
    int         theWidth;
    int         theDecimals;
-   DBFFieldType theFieldType;
+   ossim_DBFFieldType theFieldType;
    ossimString  theValue;
 };
 
@@ -114,12 +114,12 @@ public:
       {
          return (theHandle!=NULL);
       }
-   virtual DBFHandle getHandle()
+   virtual ossim_DBFHandle getHandle()
       {
          return theHandle;
       }
 
-   virtual const DBFHandle getHandle()const
+   virtual const ossim_DBFHandle getHandle()const
       {
          return theHandle;
       }
@@ -127,7 +127,7 @@ public:
    virtual void print(std::ostream& out)const;
 
 protected:
-   DBFHandle theHandle;
+   ossim_DBFHandle theHandle;
    ossimFilename theFilename;
 
    int theRecordNumber;
