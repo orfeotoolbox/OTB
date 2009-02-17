@@ -965,7 +965,7 @@ ADD_TEST(feTuKeyPointSetsMatchingFilterNew ${FEATUREEXTRACTION_TESTS10}
 
 ADD_TEST(feTvKeyPointSetsMatchingFilter ${FEATUREEXTRACTION_TESTS10}
 --compare-ascii ${EPS}
-	${BASELINE}/feTvKeyPointSetsMatchingFilterOutputAscii.txt
+	${BASELINE_FILES}/feTvKeyPointSetsMatchingFilterOutputAscii.txt
 	${TEMP}/feTvKeyPointSetsMatchingFilterOutputAscii.txt
     otbKeyPointSetsMatchingFilter
 	${TEMP}/feTvKeyPointSetsMatchingFilterOutputAscii.txt
@@ -1049,11 +1049,11 @@ ADD_TEST(feTuLineSegmentDetectorNew ${FEATUREEXTRACTION_TESTS11}
 
 ADD_TEST(feTvLineSegmentDetector ${FEATUREEXTRACTION_TESTS11} 
 --compare-image ${EPS}
-     ${BASELINE}/feTvLineSegmentdetectorOutputImage.tif
-     ${TEMP}/feTvLineSegmentdetectorOutputImage.tif
+     ${BASELINE}/feTvLineSegmentDetectorOutputImage.tif
+     ${TEMP}/feTvLineSegmentDetectorOutputImage.tif
     otbLineSegmentDetector
      ${INPUTDATA}/scene.png  #prison_toulouse.tif 
-    ${TEMP}/feTvLineSegmentdetectorOutputImage.tif
+    ${TEMP}/feTvLineSegmentDetectorOutputImage.tif
 )
 
 # -------            otb::LineSpatialObjectListToRightAnglePointSetFilter   -------------
@@ -1061,15 +1061,22 @@ ADD_TEST(feTuLineSpatialObjectListToRightAnglePointSetFilterNew ${FEATUREEXTRACT
     otbLineSpatialObjectListToRightAnglePointSetFilterNew)
 
 ADD_TEST(feTvLineSpatialObjectListToRightAnglePointSetFilter ${FEATUREEXTRACTION_TESTS11} 
-# --compare-ascii ${EPS}
-#	${BASELINE}/feTvLineSpatialObjectListToRightAnglePointSetFilterOutputAscii.txt
-#	${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterOutputAscii.txt
+ --compare-ascii ${EPS}
+	${BASELINE_FILES}/feTvLineSpatialObjectListToRightAnglePointSetFilterOutputAscii.txt
+	${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterOutputAscii.txt
     otbLineSpatialObjectListToRightAnglePointSetFilter
-    ${INPUTDATA}/scene.png
-    
+    ${INPUTDATA}/carre.png
+    ${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterOutputAscii.txt
 )
 
-
+ADD_TEST(feTvLineSpatialObjectListToRightAnglePointSetFilterBySteps ${FEATUREEXTRACTION_TESTS11} 
+ --compare-ascii ${EPS}
+	${BASELINE_FILES}/feTvLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.txt
+	${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.txt
+    otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii 
+    ${INPUTDATA}/prison_toulouse.tif
+    ${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.txt
+)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1713,6 +1720,7 @@ otbLineSegmentDetectorNew.cxx
 otbLineSegmentDetector.cxx
 otbLineSpatialObjectListToRightAnglePointSetFilterNew.cxx
 otbLineSpatialObjectListToRightAnglePointSetFilter.cxx
+otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.cxx
 )
 SET(BasicFeatureExtraction_SRCS12
 otbTextureFunctorBase.cxx
