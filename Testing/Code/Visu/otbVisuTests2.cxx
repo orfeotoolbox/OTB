@@ -26,18 +26,17 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbImageViewerWithMultiBandFilter);
-  REGISTER_TEST(otbDoubleImageViewerWithLink);
-  REGISTER_TEST(otbImageToGrayscaleAnaglyphImageFilterNew);
-  REGISTER_TEST(otbImageToGrayscaleAnaglyphImageFilter);
-  REGISTER_TEST(otbVectorImageToColorAnaglyphVectorImageFilterNew);
-  REGISTER_TEST(otbVectorImageToColorAnaglyphVectorImageFilter);
-  REGISTER_TEST(otbAlternateViewerTest);
-  REGISTER_TEST(otbImageWidgetPolygonFormNew);
-  REGISTER_TEST(otbImageWidgetPolygonForm);
-  REGISTER_TEST(otbHistogramAndTransferFunctionWidgetNew);
-  REGISTER_TEST(otbHistogramAndTransferFunctionWidget);
-  REGISTER_TEST(otbImageWidgetTransferFunctionsNew);
-  REGISTER_TEST(otbImageWidgetTransferFunctions);
-  REGISTER_TEST(otbImageViewerWithOverlay);
+REGISTER_TEST(otbImageViewerWithMultiBandFilter);
+REGISTER_TEST(otbDoubleImageViewerWithLink);
+REGISTER_TEST(otbImageToGrayscaleAnaglyphImageFilterNew);
+REGISTER_TEST(otbImageToGrayscaleAnaglyphImageFilter);
+REGISTER_TEST(otbVectorImageToColorAnaglyphVectorImageFilterNew);
+REGISTER_TEST(otbVectorImageToColorAnaglyphVectorImageFilter);
+REGISTER_TEST(otbImageWidgetPolygonFormNew);
+REGISTER_TEST(otbImageWidgetPolygonForm);
+REGISTER_TEST(otbHistogramAndTransferFunctionWidgetNew);
+REGISTER_TEST(otbHistogramAndTransferFunctionWidget);
+REGISTER_TEST(otbImageWidgetTransferFunctionsNew);
+REGISTER_TEST(otbImageWidgetTransferFunctions);
+REGISTER_TEST(otbImageViewerWithOverlay);
 }
