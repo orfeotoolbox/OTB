@@ -13,7 +13,7 @@
  * option is discussed in more detail in shapelib.html.
  *
  * --
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -79,7 +79,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-SHP_CVSID("$Id: shptree.c 9094 2006-06-13 19:12:40Z dburken $")
+ossim_SHP_CVSID("$Id: shptree.c 9094 2006-06-13 19:12:40Z dburken $")
 
 #ifndef TRUE
 #  define TRUE 1
@@ -97,7 +97,7 @@ static int bBigEndian = 0;
 /*      up the tree.                                                    */
 /* -------------------------------------------------------------------- */
 
-#define SHP_SPLIT_RATIO	0.55
+#define ossim_SHP_SPLIT_RATIO	0.55
 
 /************************************************************************/
 /*                             SfRealloc()                              */
@@ -121,13 +121,13 @@ static void * SfRealloc( void * pMem, int nNewSize )
 /*      Initialize a tree node.                                         */
 /************************************************************************/
 
-static SHPTreeNode *SHPTreeNodeCreate( double * padfBoundsMin,
+static ossim_SHPTreeNode *ossim_SHPTreeNodeCreate( double * padfBoundsMin,
                                        double * padfBoundsMax )
 
 {
-    SHPTreeNode	*psTreeNode;
+    ossim_SHPTreeNode	*psTreeNode;
 
-    psTreeNode = (SHPTreeNode *) malloc(sizeof(SHPTreeNode));
+    psTreeNode = (ossim_SHPTreeNode *) malloc(sizeof(ossim_SHPTreeNode));
 
     psTreeNode->nShapeCount = 0;
     psTreeNode->panShapeIds = NULL;
@@ -146,15 +146,15 @@ static SHPTreeNode *SHPTreeNodeCreate( double * padfBoundsMin,
 
 
 /************************************************************************/
-/*                           SHPCreateTree()                            */
+/*                           ossim_SHPCreateTree()                            */
 /************************************************************************/
 
-SHPTree SHPAPI_CALL1(*)
-SHPCreateTree( SHPHandle hSHP, int nDimension, int nMaxDepth,
+ossim_SHPTree ossim_SHPAPI_CALL1(*)
+    ossim_SHPCreateTree( ossim_SHPHandle hSHP, int nDimension, int nMaxDepth,
                double *padfBoundsMin, double *padfBoundsMax )
 
 {
-    SHPTree	*psTree;
+    ossim_SHPTree	*psTree;
 
     if( padfBoundsMin == NULL && hSHP == NULL )
         return NULL;
@@ -162,7 +162,7 @@ SHPCreateTree( SHPHandle hSHP, int nDimension, int nMaxDepth,
 /* -------------------------------------------------------------------- */
 /*      Allocate the tree object                                        */
 /* -------------------------------------------------------------------- */
-    psTree = (SHPTree *) malloc(sizeof(SHPTree));
+    psTree = (ossim_SHPTree *) malloc(sizeof(ossim_SHPTree));
 
     psTree->hSHP = hSHP;
     psTree->nMaxDepth = nMaxDepth;
@@ -178,7 +178,7 @@ SHPCreateTree( SHPHandle hSHP, int nDimension, int nMaxDepth,
         int	nMaxNodeCount = 1;
         int	nShapeCount;
 
-        SHPGetInfo( hSHP, &nShapeCount, NULL, NULL, NULL );
+        ossim_SHPGetInfo( hSHP, &nShapeCount, NULL, NULL, NULL );
         while( nMaxNodeCount*4 < nShapeCount )
         {
             psTree->nMaxDepth += 1;
@@ -189,7 +189,7 @@ SHPCreateTree( SHPHandle hSHP, int nDimension, int nMaxDepth,
 /* -------------------------------------------------------------------- */
 /*      Allocate the root node.                                         */
 /* -------------------------------------------------------------------- */
-    psTree->psRoot = SHPTreeNodeCreate( padfBoundsMin, padfBoundsMax );
+    psTree->psRoot = ossim_SHPTreeNodeCreate( padfBoundsMin, padfBoundsMax );
 
 /* -------------------------------------------------------------------- */
 /*      Assign the bounds to the root node.  If none are passed in,     */
@@ -198,8 +198,8 @@ SHPCreateTree( SHPHandle hSHP, int nDimension, int nMaxDepth,
 /* -------------------------------------------------------------------- */
     if( padfBoundsMin == NULL )
     {
-        SHPGetInfo( hSHP, NULL, NULL,
-                    psTree->psRoot->adfBoundsMin, 
+        ossim_SHPGetInfo( hSHP, NULL, NULL,
+                    psTree->psRoot->adfBoundsMin,
                     psTree->psRoot->adfBoundsMax );
     }
 
@@ -209,37 +209,37 @@ SHPCreateTree( SHPHandle hSHP, int nDimension, int nMaxDepth,
     if( hSHP != NULL )
     {
         int	iShape, nShapeCount;
-        
-        SHPGetInfo( hSHP, &nShapeCount, NULL, NULL, NULL );
+
+        ossim_SHPGetInfo( hSHP, &nShapeCount, NULL, NULL, NULL );
 
         for( iShape = 0; iShape < nShapeCount; iShape++ )
         {
-            SHPObject	*psShape;
-            
-            psShape = SHPReadObject( hSHP, iShape );
-            SHPTreeAddShapeId( psTree, psShape );
-            SHPDestroyObject( psShape );
+            ossim_SHPObject	*psShape;
+
+            psShape = ossim_SHPReadObject( hSHP, iShape );
+            ossim_SHPTreeAddShapeId( psTree, psShape );
+            ossim_SHPDestroyObject( psShape );
         }
-    }        
+    }
 
     return psTree;
 }
 
 /************************************************************************/
-/*                         SHPDestroyTreeNode()                         */
+/*                         ossim_SHPDestroyTreeNode()                         */
 /************************************************************************/
 
-static void SHPDestroyTreeNode( SHPTreeNode * psTreeNode )
+static void ossim_SHPDestroyTreeNode( ossim_SHPTreeNode * psTreeNode )
 
 {
     int		i;
-    
+
     for( i = 0; i < psTreeNode->nSubNodes; i++ )
     {
         if( psTreeNode->apsSubNode[i] != NULL )
-            SHPDestroyTreeNode( psTreeNode->apsSubNode[i] );
+            ossim_SHPDestroyTreeNode( psTreeNode->apsSubNode[i] );
     }
-    
+
     if( psTreeNode->panShapeIds != NULL )
         free( psTreeNode->panShapeIds );
 
@@ -248,7 +248,7 @@ static void SHPDestroyTreeNode( SHPTreeNode * psTreeNode )
         for( i = 0; i < psTreeNode->nShapeCount; i++ )
         {
             if( psTreeNode->papsShapeObj[i] != NULL )
-                SHPDestroyObject( psTreeNode->papsShapeObj[i] );
+                ossim_SHPDestroyObject( psTreeNode->papsShapeObj[i] );
         }
 
         free( psTreeNode->papsShapeObj );
@@ -258,25 +258,25 @@ static void SHPDestroyTreeNode( SHPTreeNode * psTreeNode )
 }
 
 /************************************************************************/
-/*                           SHPDestroyTree()                           */
+/*                           ossim_SHPDestroyTree()                           */
 /************************************************************************/
 
-void SHPAPI_CALL
-SHPDestroyTree( SHPTree * psTree )
+void ossim_SHPAPI_CALL
+    ossim_SHPDestroyTree( ossim_SHPTree * psTree )
 
 {
-    SHPDestroyTreeNode( psTree->psRoot );
+    ossim_SHPDestroyTreeNode( psTree->psRoot );
     free( psTree );
 }
 
 /************************************************************************/
-/*                       SHPCheckBoundsOverlap()                        */
+/*                       ossim_SHPCheckBoundsOverlap()                        */
 /*                                                                      */
 /*      Do the given boxes overlap at all?                              */
 /************************************************************************/
 
-int SHPAPI_CALL
-SHPCheckBoundsOverlap( double * padfBox1Min, double * padfBox1Max,
+int ossim_SHPAPI_CALL
+    ossim_SHPCheckBoundsOverlap( double * padfBox1Min, double * padfBox1Max,
                        double * padfBox2Min, double * padfBox2Max,
                        int nDimension )
 
@@ -287,7 +287,7 @@ SHPCheckBoundsOverlap( double * padfBox1Min, double * padfBox1Max,
     {
         if( padfBox2Max[iDim] < padfBox1Min[iDim] )
             return FALSE;
-        
+
         if( padfBox1Max[iDim] < padfBox2Min[iDim] )
             return FALSE;
     }
@@ -296,30 +296,30 @@ SHPCheckBoundsOverlap( double * padfBox1Min, double * padfBox1Max,
 }
 
 /************************************************************************/
-/*                      SHPCheckObjectContained()                       */
+/*                      ossim_SHPCheckObjectContained()                       */
 /*                                                                      */
 /*      Does the given shape fit within the indicated extents?          */
 /************************************************************************/
 
-static int SHPCheckObjectContained( SHPObject * psObject, int nDimension,
+static int ossim_SHPCheckObjectContained( ossim_SHPObject * psObject, int nDimension,
                            double * padfBoundsMin, double * padfBoundsMax )
 
 {
     if( psObject->dfXMin < padfBoundsMin[0]
         || psObject->dfXMax > padfBoundsMax[0] )
         return FALSE;
-    
+
     if( psObject->dfYMin < padfBoundsMin[1]
         || psObject->dfYMax > padfBoundsMax[1] )
         return FALSE;
 
     if( nDimension == 2 )
         return TRUE;
-    
+
     if( psObject->dfZMin < padfBoundsMin[2]
         || psObject->dfZMax < padfBoundsMax[2] )
         return FALSE;
-        
+
     if( nDimension == 3 )
         return TRUE;
 
@@ -331,14 +331,14 @@ static int SHPCheckObjectContained( SHPObject * psObject, int nDimension,
 }
 
 /************************************************************************/
-/*                         SHPTreeSplitBounds()                         */
+/*                         ossim_SHPTreeSplitBounds()                         */
 /*                                                                      */
 /*      Split a region into two subregion evenly, cutting along the     */
 /*      longest dimension.                                              */
 /************************************************************************/
 
-void SHPAPI_CALL
-SHPTreeSplitBounds( double *padfBoundsMinIn, double *padfBoundsMaxIn,
+void ossim_SHPAPI_CALL
+    ossim_SHPTreeSplitBounds( double *padfBoundsMinIn, double *padfBoundsMaxIn,
                     double *padfBoundsMin1, double * padfBoundsMax1,
                     double *padfBoundsMin2, double * padfBoundsMax2 )
 
@@ -351,7 +351,7 @@ SHPTreeSplitBounds( double *padfBoundsMinIn, double *padfBoundsMaxIn,
     memcpy( padfBoundsMax1, padfBoundsMaxIn, sizeof(double) * 4 );
     memcpy( padfBoundsMin2, padfBoundsMinIn, sizeof(double) * 4 );
     memcpy( padfBoundsMax2, padfBoundsMaxIn, sizeof(double) * 4 );
-    
+
 /* -------------------------------------------------------------------- */
 /*      Split in X direction.                                           */
 /* -------------------------------------------------------------------- */
@@ -360,8 +360,8 @@ SHPTreeSplitBounds( double *padfBoundsMinIn, double *padfBoundsMaxIn,
     {
         double	dfRange = padfBoundsMaxIn[0] - padfBoundsMinIn[0];
 
-        padfBoundsMax1[0] = padfBoundsMinIn[0] + dfRange * SHP_SPLIT_RATIO;
-        padfBoundsMin2[0] = padfBoundsMaxIn[0] - dfRange * SHP_SPLIT_RATIO;
+        padfBoundsMax1[0] = padfBoundsMinIn[0] + dfRange * ossim_SHP_SPLIT_RATIO;
+        padfBoundsMin2[0] = padfBoundsMaxIn[0] - dfRange * ossim_SHP_SPLIT_RATIO;
     }
 
 /* -------------------------------------------------------------------- */
@@ -371,22 +371,22 @@ SHPTreeSplitBounds( double *padfBoundsMinIn, double *padfBoundsMaxIn,
     {
         double	dfRange = padfBoundsMaxIn[1] - padfBoundsMinIn[1];
 
-        padfBoundsMax1[1] = padfBoundsMinIn[1] + dfRange * SHP_SPLIT_RATIO;
-        padfBoundsMin2[1] = padfBoundsMaxIn[1] - dfRange * SHP_SPLIT_RATIO;
+        padfBoundsMax1[1] = padfBoundsMinIn[1] + dfRange * ossim_SHP_SPLIT_RATIO;
+        padfBoundsMin2[1] = padfBoundsMaxIn[1] - dfRange * ossim_SHP_SPLIT_RATIO;
     }
 }
 
 /************************************************************************/
-/*                       SHPTreeNodeAddShapeId()                        */
+/*                       ossim_SHPTreeNodeAddShapeId()                        */
 /************************************************************************/
 
 static int
-SHPTreeNodeAddShapeId( SHPTreeNode * psTreeNode, SHPObject * psObject,
+    ossim_SHPTreeNodeAddShapeId( ossim_SHPTreeNode * psTreeNode, ossim_SHPObject * psObject,
                        int nMaxDepth, int nDimension )
 
 {
     int		i;
-    
+
 /* -------------------------------------------------------------------- */
 /*      If there are subnodes, then consider wiether this object        */
 /*      will fit in them.                                               */
@@ -395,11 +395,11 @@ SHPTreeNodeAddShapeId( SHPTreeNode * psTreeNode, SHPObject * psObject,
     {
         for( i = 0; i < psTreeNode->nSubNodes; i++ )
         {
-            if( SHPCheckObjectContained(psObject, nDimension,
+            if( ossim_SHPCheckObjectContained(psObject, nDimension,
                                       psTreeNode->apsSubNode[i]->adfBoundsMin,
                                       psTreeNode->apsSubNode[i]->adfBoundsMax))
             {
-                return SHPTreeNodeAddShapeId( psTreeNode->apsSubNode[i],
+                return ossim_SHPTreeNodeAddShapeId( psTreeNode->apsSubNode[i],
                                               psObject, nMaxDepth-1,
                                               nDimension );
             }
@@ -420,40 +420,40 @@ SHPTreeNodeAddShapeId( SHPTreeNode * psTreeNode, SHPObject * psObject,
         double	adfBoundsMin3[4], adfBoundsMax3[4];
         double	adfBoundsMin4[4], adfBoundsMax4[4];
 
-        SHPTreeSplitBounds( psTreeNode->adfBoundsMin,
+        ossim_SHPTreeSplitBounds( psTreeNode->adfBoundsMin,
                             psTreeNode->adfBoundsMax,
                             adfBoundsMinH1, adfBoundsMaxH1,
                             adfBoundsMinH2, adfBoundsMaxH2 );
 
-        SHPTreeSplitBounds( adfBoundsMinH1, adfBoundsMaxH1,
+        ossim_SHPTreeSplitBounds( adfBoundsMinH1, adfBoundsMaxH1,
                             adfBoundsMin1, adfBoundsMax1,
                             adfBoundsMin2, adfBoundsMax2 );
 
-        SHPTreeSplitBounds( adfBoundsMinH2, adfBoundsMaxH2,
+        ossim_SHPTreeSplitBounds( adfBoundsMinH2, adfBoundsMaxH2,
                             adfBoundsMin3, adfBoundsMax3,
                             adfBoundsMin4, adfBoundsMax4 );
 
-        if( SHPCheckObjectContained(psObject, nDimension,
+        if( ossim_SHPCheckObjectContained(psObject, nDimension,
                                     adfBoundsMin1, adfBoundsMax1)
-            || SHPCheckObjectContained(psObject, nDimension,
+            || ossim_SHPCheckObjectContained(psObject, nDimension,
                                     adfBoundsMin2, adfBoundsMax2)
-            || SHPCheckObjectContained(psObject, nDimension,
+            || ossim_SHPCheckObjectContained(psObject, nDimension,
                                     adfBoundsMin3, adfBoundsMax3)
-            || SHPCheckObjectContained(psObject, nDimension,
+            || ossim_SHPCheckObjectContained(psObject, nDimension,
                                     adfBoundsMin4, adfBoundsMax4) )
         {
             psTreeNode->nSubNodes = 4;
-            psTreeNode->apsSubNode[0] = SHPTreeNodeCreate( adfBoundsMin1,
+            psTreeNode->apsSubNode[0] = ossim_SHPTreeNodeCreate( adfBoundsMin1,
                                                            adfBoundsMax1 );
-            psTreeNode->apsSubNode[1] = SHPTreeNodeCreate( adfBoundsMin2,
+            psTreeNode->apsSubNode[1] = ossim_SHPTreeNodeCreate( adfBoundsMin2,
                                                            adfBoundsMax2 );
-            psTreeNode->apsSubNode[2] = SHPTreeNodeCreate( adfBoundsMin3,
+            psTreeNode->apsSubNode[2] = ossim_SHPTreeNodeCreate( adfBoundsMin3,
                                                            adfBoundsMax3 );
-            psTreeNode->apsSubNode[3] = SHPTreeNodeCreate( adfBoundsMin4,
+            psTreeNode->apsSubNode[3] = ossim_SHPTreeNodeCreate( adfBoundsMin4,
                                                            adfBoundsMax4 );
 
             /* recurse back on this node now that it has subnodes */
-            return( SHPTreeNodeAddShapeId( psTreeNode, psObject,
+            return( ossim_SHPTreeNodeAddShapeId( psTreeNode, psObject,
                                            nMaxDepth, nDimension ) );
         }
     }
@@ -469,32 +469,32 @@ SHPTreeNodeAddShapeId( SHPTreeNode * psTreeNode, SHPObject * psObject,
         double	adfBoundsMin1[4], adfBoundsMax1[4];
         double	adfBoundsMin2[4], adfBoundsMax2[4];
 
-        SHPTreeSplitBounds( psTreeNode->adfBoundsMin, psTreeNode->adfBoundsMax,
+        ossim_SHPTreeSplitBounds( psTreeNode->adfBoundsMin, psTreeNode->adfBoundsMax,
                             adfBoundsMin1, adfBoundsMax1,
                             adfBoundsMin2, adfBoundsMax2 );
 
-        if( SHPCheckObjectContained(psObject, nDimension,
+        if( ossim_SHPCheckObjectContained(psObject, nDimension,
                                  adfBoundsMin1, adfBoundsMax1))
         {
             psTreeNode->nSubNodes = 2;
-            psTreeNode->apsSubNode[0] = SHPTreeNodeCreate( adfBoundsMin1,
+            psTreeNode->apsSubNode[0] = ossim_SHPTreeNodeCreate( adfBoundsMin1,
                                                            adfBoundsMax1 );
-            psTreeNode->apsSubNode[1] = SHPTreeNodeCreate( adfBoundsMin2,
+            psTreeNode->apsSubNode[1] = ossim_SHPTreeNodeCreate( adfBoundsMin2,
                                                            adfBoundsMax2 );
 
-            return( SHPTreeNodeAddShapeId( psTreeNode->apsSubNode[0], psObject,
+            return( ossim_SHPTreeNodeAddShapeId( psTreeNode->apsSubNode[0], psObject,
                                            nMaxDepth - 1, nDimension ) );
         }
-        else if( SHPCheckObjectContained(psObject, nDimension,
+        else if( ossim_SHPCheckObjectContained(psObject, nDimension,
                                          adfBoundsMin2, adfBoundsMax2) )
         {
             psTreeNode->nSubNodes = 2;
-            psTreeNode->apsSubNode[0] = SHPTreeNodeCreate( adfBoundsMin1,
+            psTreeNode->apsSubNode[0] = ossim_SHPTreeNodeCreate( adfBoundsMin1,
                                                            adfBoundsMax1 );
-            psTreeNode->apsSubNode[1] = SHPTreeNodeCreate( adfBoundsMin2,
+            psTreeNode->apsSubNode[1] = ossim_SHPTreeNodeCreate( adfBoundsMin2,
                                                            adfBoundsMax2 );
 
-            return( SHPTreeNodeAddShapeId( psTreeNode->apsSubNode[1], psObject,
+            return( ossim_SHPTreeNodeAddShapeId( psTreeNode->apsSubNode[1], psObject,
                                            nMaxDepth - 1, nDimension ) );
         }
     }
@@ -505,14 +505,14 @@ SHPTreeNodeAddShapeId( SHPTreeNode * psTreeNode, SHPObject * psObject,
 /* -------------------------------------------------------------------- */
     psTreeNode->nShapeCount++;
 
-    psTreeNode->panShapeIds = (int *) 
+    psTreeNode->panShapeIds = (int *)
         SfRealloc( psTreeNode->panShapeIds,
                    sizeof(int) * psTreeNode->nShapeCount );
     psTreeNode->panShapeIds[psTreeNode->nShapeCount-1] = psObject->nShapeId;
 
     if( psTreeNode->papsShapeObj != NULL )
     {
-        psTreeNode->papsShapeObj = (SHPObject **)
+      psTreeNode->papsShapeObj = (ossim_SHPObject **)
             SfRealloc( psTreeNode->papsShapeObj,
                        sizeof(void *) * psTreeNode->nShapeCount );
         psTreeNode->papsShapeObj[psTreeNode->nShapeCount-1] = NULL;
@@ -522,38 +522,38 @@ SHPTreeNodeAddShapeId( SHPTreeNode * psTreeNode, SHPObject * psObject,
 }
 
 /************************************************************************/
-/*                         SHPTreeAddShapeId()                          */
+/*                         ossim_SHPTreeAddShapeId()                          */
 /*                                                                      */
 /*      Add a shape to the tree, but don't keep a pointer to the        */
 /*      object data, just keep the shapeid.                             */
 /************************************************************************/
 
-int SHPAPI_CALL
-SHPTreeAddShapeId( SHPTree * psTree, SHPObject * psObject )
+int ossim_SHPAPI_CALL
+    ossim_SHPTreeAddShapeId( ossim_SHPTree * psTree, ossim_SHPObject * psObject )
 
 {
     psTree->nTotalCount++;
 
-    return( SHPTreeNodeAddShapeId( psTree->psRoot, psObject,
+    return( ossim_SHPTreeNodeAddShapeId( psTree->psRoot, psObject,
                                    psTree->nMaxDepth, psTree->nDimension ) );
 }
 
 /************************************************************************/
-/*                      SHPTreeCollectShapesIds()                       */
+/*                      ossim_SHPTreeCollectShapesIds()                       */
 /*                                                                      */
-/*      Work function implementing SHPTreeFindLikelyShapes() on a       */
+/*      Work function implementing ossim_SHPTreeFindLikelyShapes() on a       */
 /*      tree node by tree node basis.                                   */
 /************************************************************************/
 
-void SHPAPI_CALL
-SHPTreeCollectShapeIds( SHPTree *hTree, SHPTreeNode * psTreeNode,
+void ossim_SHPAPI_CALL
+    ossim_SHPTreeCollectShapeIds( ossim_SHPTree *hTree, ossim_SHPTreeNode * psTreeNode,
                         double * padfBoundsMin, double * padfBoundsMax,
                         int * pnShapeCount, int * pnMaxShapes,
                         int ** ppanShapeList )
 
 {
     int		i;
-    
+
 /* -------------------------------------------------------------------- */
 /*      Does this node overlap the area of interest at all?  If not,    */
 /*      return without adding to the list at all.                       */
@@ -582,14 +582,14 @@ SHPTreeCollectShapeIds( SHPTree *hTree, SHPTreeNode * psTreeNode,
     {
         (*ppanShapeList)[(*pnShapeCount)++] = psTreeNode->panShapeIds[i];
     }
-    
+
 /* -------------------------------------------------------------------- */
 /*      Recurse to subnodes if they exist.                              */
 /* -------------------------------------------------------------------- */
     for( i = 0; i < psTreeNode->nSubNodes; i++ )
     {
         if( psTreeNode->apsSubNode[i] != NULL )
-            SHPTreeCollectShapeIds( hTree, psTreeNode->apsSubNode[i],
+            ossim_SHPTreeCollectShapeIds( hTree, psTreeNode->apsSubNode[i],
                                     padfBoundsMin, padfBoundsMax,
                                     pnShapeCount, pnMaxShapes,
                                     ppanShapeList );
@@ -597,7 +597,7 @@ SHPTreeCollectShapeIds( SHPTree *hTree, SHPTreeNode * psTreeNode,
 }
 
 /************************************************************************/
-/*                      SHPTreeFindLikelyShapes()                       */
+/*                      ossim_SHPTreeFindLikelyShapes()                       */
 /*                                                                      */
 /*      Find all shapes within tree nodes for which the tree node       */
 /*      bounding box overlaps the search box.  The return value is      */
@@ -613,8 +613,8 @@ compare_ints( const void * a, const void * b)
     return (*(int*)a) - (*(int*)b);
 }
 
-int SHPAPI_CALL1(*)
-SHPTreeFindLikelyShapes( SHPTree * hTree,
+int ossim_SHPAPI_CALL1(*)
+SHPTreeFindLikelyShapes( ossim_SHPTree * hTree,
                          double * padfBoundsMin, double * padfBoundsMax,
                          int * pnShapeCount )
 
@@ -626,7 +626,7 @@ SHPTreeFindLikelyShapes( SHPTree * hTree,
 /* -------------------------------------------------------------------- */
     *pnShapeCount = 0;
 
-    SHPTreeCollectShapeIds( hTree, hTree->psRoot,
+    ossim_SHPTreeCollectShapeIds( hTree, hTree->psRoot,
                             padfBoundsMin, padfBoundsMax,
                             pnShapeCount, &nMaxShapes,
                             &panShapeList );
@@ -641,13 +641,13 @@ SHPTreeFindLikelyShapes( SHPTree * hTree,
 }
 
 /************************************************************************/
-/*                          SHPTreeNodeTrim()                           */
+/*                          ossim_SHPTreeNodeTrim()                           */
 /*                                                                      */
-/*      This is the recurve version of SHPTreeTrimExtraNodes() that     */
+/*      This is the recurve version of ossim_SHPTreeTrimExtraNodes() that     */
 /*      walks the tree cleaning it up.                                  */
 /************************************************************************/
 
-static int SHPTreeNodeTrim( SHPTreeNode * psTreeNode )
+static int ossim_SHPTreeNodeTrim( ossim_SHPTreeNode * psTreeNode )
 
 {
     int		i;
@@ -657,9 +657,9 @@ static int SHPTreeNodeTrim( SHPTreeNode * psTreeNode )
 /* -------------------------------------------------------------------- */
     for( i = 0; i < psTreeNode->nSubNodes; i++ )
     {
-        if( SHPTreeNodeTrim( psTreeNode->apsSubNode[i] ) )
+        if( ossim_SHPTreeNodeTrim( psTreeNode->apsSubNode[i] ) )
         {
-            SHPDestroyTreeNode( psTreeNode->apsSubNode[i] );
+            ossim_SHPDestroyTreeNode( psTreeNode->apsSubNode[i] );
 
             psTreeNode->apsSubNode[i] =
                 psTreeNode->apsSubNode[psTreeNode->nSubNodes-1];
@@ -677,17 +677,17 @@ static int SHPTreeNodeTrim( SHPTreeNode * psTreeNode )
 }
 
 /************************************************************************/
-/*                       SHPTreeTrimExtraNodes()                        */
+/*                       ossim_SHPTreeTrimExtraNodes()                        */
 /*                                                                      */
 /*      Trim empty nodes from the tree.  Note that we never trim an     */
 /*      empty root node.                                                */
 /************************************************************************/
 
-void SHPAPI_CALL
-SHPTreeTrimExtraNodes( SHPTree * hTree )
+void ossim_SHPAPI_CALL
+    ossim_SHPTreeTrimExtraNodes( ossim_SHPTree * hTree )
 
 {
-    SHPTreeNodeTrim( hTree->psRoot );
+    ossim_SHPTreeNodeTrim( hTree->psRoot );
 }
 
 /************************************************************************/
@@ -711,12 +711,12 @@ static void SwapWord( int length, void * wordP )
 }
 
 /************************************************************************/
-/*                       SHPSearchDiskTreeNode()                        */
+/*                       ossim_SHPSearchDiskTreeNode()                        */
 /************************************************************************/
 
 static int
-SHPSearchDiskTreeNode( FILE *fp, double *padfBoundsMin, double *padfBoundsMax,
-                       int **ppanResultBuffer, int *pnBufferMax, 
+    ossim_SHPSearchDiskTreeNode( FILE *fp, double *padfBoundsMin, double *padfBoundsMax,
+                       int **ppanResultBuffer, int *pnBufferMax,
                        int *pnResultCount, int bNeedSwap )
 
 {
@@ -740,7 +740,7 @@ SHPSearchDiskTreeNode( FILE *fp, double *padfBoundsMin, double *padfBoundsMax,
         SwapWord( 8, adfNodeBoundsMax + 0 );
         SwapWord( 8, adfNodeBoundsMax + 1 );
     }
-      
+
     fread( &numshapes, 4, 1, fp );
     if ( bNeedSwap ) SwapWord ( 4, &numshapes );
 
@@ -748,7 +748,7 @@ SHPSearchDiskTreeNode( FILE *fp, double *padfBoundsMin, double *padfBoundsMax,
 /*      If we don't overlap this node at all, we can just fseek()       */
 /*      pass this node info and all subnodes.                           */
 /* -------------------------------------------------------------------- */
-    if( !SHPCheckBoundsOverlap( adfNodeBoundsMin, adfNodeBoundsMax, 
+    if( !SHPCheckBoundsOverlap( adfNodeBoundsMin, adfNodeBoundsMax,
                                 padfBoundsMin, padfBoundsMax, 2 ) )
     {
         offset += numshapes*sizeof(int) + sizeof(int);
@@ -759,16 +759,16 @@ SHPSearchDiskTreeNode( FILE *fp, double *padfBoundsMin, double *padfBoundsMax,
 /* -------------------------------------------------------------------- */
 /*      Add all the shapeids at this node to our list.                  */
 /* -------------------------------------------------------------------- */
-    if(numshapes > 0) 
+    if(numshapes > 0)
     {
         if( *pnResultCount + numshapes > *pnBufferMax )
         {
             *pnBufferMax = (int) ((*pnResultCount + numshapes + 100) * 1.25);
-            *ppanResultBuffer = (int *) 
+            *ppanResultBuffer = (int *)
                 SfRealloc( *ppanResultBuffer, *pnBufferMax * sizeof(int) );
         }
 
-        fread( *ppanResultBuffer + *pnResultCount, 
+        fread( *ppanResultBuffer + *pnResultCount,
                sizeof(int), numshapes, fp );
 
         if (bNeedSwap )
@@ -777,8 +777,8 @@ SHPSearchDiskTreeNode( FILE *fp, double *padfBoundsMin, double *padfBoundsMax,
                 SwapWord( 4, *ppanResultBuffer + *pnResultCount + i );
         }
 
-        *pnResultCount += numshapes; 
-    } 
+        *pnResultCount += numshapes;
+    }
 
 /* -------------------------------------------------------------------- */
 /*      Process the subnodes.                                           */
@@ -788,8 +788,8 @@ SHPSearchDiskTreeNode( FILE *fp, double *padfBoundsMin, double *padfBoundsMax,
 
     for(i=0; i<numsubnodes; i++)
     {
-        if( !SHPSearchDiskTreeNode( fp, padfBoundsMin, padfBoundsMax, 
-                                    ppanResultBuffer, pnBufferMax, 
+      if( !ossim_SHPSearchDiskTreeNode( fp, padfBoundsMin, padfBoundsMax,
+                                    ppanResultBuffer, pnBufferMax,
                                     pnResultCount, bNeedSwap ) )
             return FALSE;
     }
@@ -798,11 +798,11 @@ SHPSearchDiskTreeNode( FILE *fp, double *padfBoundsMin, double *padfBoundsMax,
 }
 
 /************************************************************************/
-/*                         SHPSearchDiskTree()                          */
+/*                         ossim_SHPSearchDiskTree()                          */
 /************************************************************************/
 
-int SHPAPI_CALL1(*) 
-SHPSearchDiskTree( FILE *fp, 
+int ossim_SHPAPI_CALL1(*)
+    ossim_SHPSearchDiskTree( FILE *fp,
                    double *padfBoundsMin, double *padfBoundsMax,
                    int *pnShapeCount )
 
@@ -840,8 +840,8 @@ SHPSearchDiskTree( FILE *fp,
 /* -------------------------------------------------------------------- */
 /*      Search through root node and it's decendents.                   */
 /* -------------------------------------------------------------------- */
-    if( !SHPSearchDiskTreeNode( fp, padfBoundsMin, padfBoundsMax, 
-                                &panResultBuffer, &nBufferMax, 
+    if( !ossim_SHPSearchDiskTreeNode( fp, padfBoundsMin, padfBoundsMax,
+                                &panResultBuffer, &nBufferMax,
                                 pnShapeCount, bNeedSwap ) )
     {
         if( panResultBuffer != NULL )
@@ -853,30 +853,30 @@ SHPSearchDiskTree( FILE *fp,
 /*      Sort the id array                                               */
 /* -------------------------------------------------------------------- */
     qsort(panResultBuffer, *pnShapeCount, sizeof(int), compare_ints);
-    
+
     return panResultBuffer;
 }
 
 /************************************************************************/
-/*                        SHPGetSubNodeOffset()                         */
+/*                        ossim_SHPGetSubNodeOffset()                         */
 /*                                                                      */
 /*      Determine how big all the subnodes of this node (and their      */
 /*      children) will be.  This will allow disk based searchers to     */
 /*      seek past them all efficiently.                                 */
 /************************************************************************/
 
-static int SHPGetSubNodeOffset( SHPTreeNode *node) 
+static int ossim_SHPGetSubNodeOffset( ossim_SHPTreeNode *node)
 {
     int i;
     long offset=0;
 
-    for(i=0; i<node->nSubNodes; i++ ) 
+    for(i=0; i<node->nSubNodes; i++ )
     {
-        if(node->apsSubNode[i]) 
+        if(node->apsSubNode[i])
         {
-            offset += 4*sizeof(double) 
+            offset += 4*sizeof(double)
                 + (node->apsSubNode[i]->nShapeCount+3)*sizeof(int);
-            offset += SHPGetSubNodeOffset(node->apsSubNode[i]);
+            offset += ossim_SHPGetSubNodeOffset(node->apsSubNode[i]);
         }
     }
 
@@ -884,18 +884,18 @@ static int SHPGetSubNodeOffset( SHPTreeNode *node)
 }
 
 /************************************************************************/
-/*                          SHPWriteTreeNode()                          */
+/*                          ossim_SHPWriteTreeNode()                          */
 /************************************************************************/
 
-static void SHPWriteTreeNode( FILE *fp, SHPTreeNode *node) 
+static void ossim_SHPWriteTreeNode( FILE *fp, ossim_SHPTreeNode *node)
 {
     int i,j;
     int offset;
     unsigned char *pabyRec = NULL;
 
-    offset = SHPGetSubNodeOffset(node);
-  
-    pabyRec = (unsigned char *) 
+    offset = ossim_SHPGetSubNodeOffset(node);
+
+    pabyRec = (unsigned char *)
         malloc(sizeof(double) * 4
                + (3 * sizeof(int)) + (node->nShapeCount * sizeof(int)) );
 
@@ -914,30 +914,30 @@ static void SHPWriteTreeNode( FILE *fp, SHPTreeNode *node)
 
     fwrite( pabyRec, 44+j, 1, fp );
     free (pabyRec);
-  
-    for(i=0; i<node->nSubNodes; i++ ) 
+
+    for(i=0; i<node->nSubNodes; i++ )
     {
         if(node->apsSubNode[i])
-            SHPWriteTreeNode( fp, node->apsSubNode[i]);
+            ossim_SHPWriteTreeNode( fp, node->apsSubNode[i]);
     }
 }
 
 /************************************************************************/
-/*                            SHPWriteTree()                            */
+/*                            ossim_SHPWriteTree()                            */
 /************************************************************************/
 
-int SHPWriteTree(SHPTree *tree, const char *filename )
+int ossim_SHPWriteTree(ossim_SHPTree *tree, const char *filename )
 {
     char		signature[4] = "SQT";
     int		        i;
     char		abyBuf[32];
     FILE                *fp;
-  
+
 /* -------------------------------------------------------------------- */
 /*      Open the output file.                                           */
 /* -------------------------------------------------------------------- */
     fp = fopen(filename, "wb");
-    if( fp == NULL ) 
+    if( fp == NULL )
     {
         return FALSE;
     }
@@ -950,12 +950,12 @@ int SHPWriteTree(SHPTree *tree, const char *filename )
         bBigEndian = FALSE;
     else
         bBigEndian = TRUE;
-  
+
 /* -------------------------------------------------------------------- */
 /*      Write the header.                                               */
 /* -------------------------------------------------------------------- */
     memcpy( abyBuf+0, signature, 3 );
-    
+
     if( bBigEndian )
         abyBuf[3] = 2; /* New MSB */
     else
@@ -978,8 +978,8 @@ int SHPWriteTree(SHPTree *tree, const char *filename )
 /*      Write all the nodes "in order".                                 */
 /* -------------------------------------------------------------------- */
 
-    SHPWriteTreeNode( fp, tree->psRoot );  
-    
+    ossim_SHPWriteTreeNode( fp, tree->psRoot );
+
     fclose( fp );
 
     return TRUE;
