@@ -1060,11 +1060,11 @@ ADD_TEST(feTuLineSegmentDetectorNew ${FEATUREEXTRACTION_TESTS11}
 
 ADD_TEST(feTvLineSegmentDetector ${FEATUREEXTRACTION_TESTS11} 
 --compare-image ${EPS}
-     ${BASELINE}/feTvLineSegmentdetectorOutputImage.tif
-     ${TEMP}/feTvLineSegmentdetectorOutputImage.tif
+     ${BASELINE}/feTvLineSegmentDetectorOutputImage.tif
+     ${TEMP}/feTvLineSegmentDetectorOutputImage.tif
     otbLineSegmentDetector
      ${INPUTDATA}/scene.png  #prison_toulouse.tif 
-    ${TEMP}/feTvLineSegmentdetectorOutputImage.tif
+    ${TEMP}/feTvLineSegmentDetectorOutputImage.tif
 )
 
 # -------            otb::LineSpatialObjectListToRightAnglePointSetFilter   -------------

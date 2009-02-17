@@ -72,10 +72,32 @@ ${TEMP}/vrTvImageLayerScalarScaledExtractOutput.png
 2 127 417
 )
 
+ADD_TEST(vrTvImageLayerVector ${VISUREFAC_TESTS1}
+--compare-n-images ${TOL} 3
+${BASELINE}/vrTvImageLayerVectorQuicklookOutput.png
+${TEMP}/vrTvImageLayerVectorQuicklookOutput.png
+${BASELINE}/vrTvImageLayerVectorExtractOutput.png
+${TEMP}/vrTvImageLayerVectorExtractOutput.png
+${BASELINE}/vrTvImageLayerVectorScaledExtractOutput.png
+${TEMP}/vrTvImageLayerVectorScaledExtractOutput.png
+otbImageLayerVector
+${INPUTDATA}/couleurs.tif
+${TEMP}/vrTvImageLayerVectorQuicklookOutput.png
+${TEMP}/vrTvImageLayerVectorExtractOutput.png
+${TEMP}/vrTvImageLayerVectorScaledExtractOutput.png
+2 50 50 50 200 200 200
+)
+
 #------------ otb::GrayscaleRenderingFunction ------------
 
 ADD_TEST(vrTuGrayscaleRenderingFunctionNew ${VISUREFAC_TESTS1}
 otbGrayscaleRenderingFunctionNew
+)
+
+#------------ otb::RGBRenderingFunction ------------
+
+ADD_TEST(vrTuRGBRenderingFunctionNew ${VISUREFAC_TESTS1}
+otbRGBRenderingFunctionNew
 )
 
 #------------ otb::RenderingImageFilter ------------
@@ -112,10 +134,12 @@ otbImageWidgetControllerNew.cxx
 otbImageWidgetController.cxx
 otbImageLayerNew.cxx
 otbGrayscaleRenderingFunctionNew.cxx
+otbRGBRenderingFunctionNew.cxx
 otbRenderingImageFilterNew.cxx
 otbRenderingImageFilterScalar.cxx
 otbRenderingImageFilterVector.cxx
 otbImageLayerScalar.cxx
+otbImageLayerVector.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 

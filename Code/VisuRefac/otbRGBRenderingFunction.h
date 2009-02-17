@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGrayscaleRenderingFunction_h
-#define __otbGrayscaleRenderingFunction_h
+#ifndef __otbRGBRenderingFunction_h
+#define __otbRGBRenderingFunction_h
 
 #include "otbRenderingFunction.h"
 
@@ -24,25 +24,26 @@ namespace otb
 {
 namespace Function
 {
-/**\class GrayscaleRenderingFunction
- * \brief Grayscale rendering.
+/**\class RGBRenderingFunction
+ * \brief RGB rendering.
  * If the input image is an Image, the function
- * renders it. If it is a VectorImage, the function renders
- * the selected channel.
+ * renders it with R, G and B channels all equals. 
+ * If it is a VectorImage, the function renders
+ * the selected channels.
  */
 template <class TPixelPrecision, class TRGBPixel>
-class GrayscaleRenderingFunction
+class RGBRenderingFunction
   : public RenderingFunction<TPixelPrecision,TRGBPixel>
 {
 public:
   /** Standard class typedefs */
-  typedef GrayscaleRenderingFunction                   Self;
+  typedef RGBRenderingFunction                   Self;
   typedef RenderingFunction<TPixelPrecision,TRGBPixel> Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
 
   /** type macro */
-  itkTypeMacro(GrayscaleRenderingFunction,RenderingFunction);
+  itkTypeMacro(RGBRenderingFunction,RenderingFunction);
 
   /** new macro */
   itkNewMacro(Self);
@@ -66,27 +67,53 @@ public:
   virtual const OutputPixelType Evaluate(const VectorPixelType & vpixel)
   {
     OutputPixelType resp;
-    resp.Fill(this->Evaluate(vpixel[m_ChannelIndex],this->m_Minimum[m_ChannelIndex],this->m_Maximum[m_ChannelIndex]));
+    resp.SetRed(this->Evaluate(vpixel[m_RedChannelIndex],this->m_Minimum[m_RedChannelIndex],this->m_Maximum[m_RedChannelIndex]));
+    resp.SetBlue(this->Evaluate(vpixel[m_BlueChannelIndex],this->m_Minimum[m_BlueChannelIndex],this->m_Maximum[m_BlueChannelIndex]));
+    resp.SetGreen(this->Evaluate(vpixel[m_GreenChannelIndex],this->m_Minimum[m_GreenChannelIndex],this->m_Maximum[m_GreenChannelIndex]));
     return resp;
   }
 
-  /** Set the channel index (vector mode only) */
-  void SetChannelIndex(unsigned int index)
+  /** Set the red channel index (vector mode only) */
+  void SetRedChannelIndex(unsigned int index)
   {
-    m_ChannelIndex = index;
+    m_RedChannelIndex = index;
   }
   
-  /** Get the channel index (vector mode only) */
-  unsigned int GetChannelIndex(void)
+  /** Get the red channel index (vector mode only) */
+  unsigned int GetRedChannelIndex(void)
   {
-    return m_ChannelIndex;
+    return m_RedChannelIndex;
+  }
+
+  /** Set the blue channel index (vector mode only) */
+  void SetBlueChannelIndex(unsigned int index)
+  {
+    m_BlueChannelIndex = index;
+  }
+  
+  /** Get the blue channel index (vector mode only) */
+  unsigned int GetBlueChannelIndex(void)
+  {
+    return m_BlueChannelIndex;
+  }
+
+  /** Set the green channel index (vector mode only) */
+  void SetGreenChannelIndex(unsigned int index)
+  {
+    m_GreenChannelIndex = index;
+  }
+  
+  /** Get the green channel index (vector mode only) */
+  unsigned int GetGreenChannelIndex(void)
+  {
+    return m_GreenChannelIndex;
   }
 
 protected:
   /** Constructor */
-  GrayscaleRenderingFunction() : m_ChannelIndex(0) {}
+  RGBRenderingFunction() : m_RedChannelIndex(0), m_BlueChannelIndex(1), m_GreenChannelIndex(2) {}
   /** Destructor */
-  ~GrayscaleRenderingFunction() {}
+  ~RGBRenderingFunction() {}
   /** Perform the computation for a single value (this is done in
    * order to have the same code for vector and scalar version)
    */
@@ -107,13 +134,15 @@ protected:
   }
 
 private:
-  GrayscaleRenderingFunction(const Self&); //purposely not implemented
+  RGBRenderingFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /** Index of the channel to display (vector mode only, has no effet
+  /** Index of the channels to display (vector mode only, has no effet
    *  on scalar mode)
    */
-  unsigned int m_ChannelIndex;
+  unsigned int m_RedChannelIndex;
+  unsigned int m_GreenChannelIndex;
+  unsigned int m_BlueChannelIndex;
 };
 } // end namespace Functor
 } // end namespace otb

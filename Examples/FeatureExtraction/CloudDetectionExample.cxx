@@ -25,7 +25,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUT: {CloudsOnReunion.tif}
-//    OUTPUT: {CloudDetectionOutput.png}
+//    OUTPUT: {CloudDetectionOutput.tif} , {pretty_CloudsOnReunion.png} , {pretty_CloudDetectionOutput.png}
 //    553 467 734 581 0.4 0.6 1.0
 //  Software Guide : EndCommandLineArgs
 
@@ -52,19 +52,22 @@
 
 // Software Guide : EndCodeSnippet
 
+#include "itkExceptionObject.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkExceptionObject.h"
+#include "itkRescaleIntensityImageFilter.h"
+#include "otbVectorRescaleIntensityImageFilter.h"
+#include "otbMultiChannelExtractROI.h"
 
 int main( int argc, char * argv[] )
 {
 
-  if (argc != 10)
+  if (argc != 12)
   {
     std::cerr << "Usage: "<< argv[0];
-    std::cerr << "inputFileName outputFileName ";
+    std::cerr << "inputFileName outputFileName printableInputFileName printableOutputFileName";
     std::cerr << "firstPixelComponent secondPixelComponent thirdPixelComponent fourthPixelComponent ";
     std::cerr << "variance ";
     std::cerr << "minThreshold maxThreshold "<<std::endl;
@@ -83,7 +86,7 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
 
   typedef double         InputPixelType;
-  typedef unsigned short OutputPixelType;
+  typedef double         OutputPixelType;
 
   // Software Guide : EndCodeSnippet
 
@@ -96,9 +99,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::VectorImage<InputPixelType,Dimension>                             VectorImageType;
-  typedef VectorImageType::PixelType                                             VectorPixelType;
-  typedef otb::Image<OutputPixelType,Dimension>                                  OutputImageType;
+  typedef otb::VectorImage<InputPixelType,Dimension>   VectorImageType;
+  typedef VectorImageType::PixelType                   VectorPixelType;
+  typedef otb::Image<OutputPixelType,Dimension>        OutputImageType;
 
   // Software Guide : EndCodeSnippet
 
@@ -111,7 +114,7 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginCodeSnippet
 
-  typedef otb::Functor::CloudDetectionFunctor<VectorPixelType,InputPixelType >   FunctorType;
+  typedef otb::Functor::CloudDetectionFunctor<VectorPixelType, OutputPixelType>   FunctorType;
 
   // Software Guide : EndCodeSnippet
 
@@ -124,7 +127,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
 
-    typedef otb::CloudDetectionFilter<VectorImageType,OutputImageType,FunctorType > CloudDetectionFilterType;
+    typedef otb::CloudDetectionFilter<VectorImageType, OutputImageType, FunctorType> CloudDetectionFilterType;
 
   // Software Guide : EndCodeSnippet
 
@@ -175,10 +178,10 @@ int main( int argc, char * argv[] )
   VectorPixelType referencePixel;
   referencePixel.SetSize(4);
   referencePixel.Fill(0.);
-  referencePixel[0] = (atof(argv[3]));
-  referencePixel[1] = (atof(argv[4]));
-  referencePixel[2] = (atof(argv[5]));
-  referencePixel[3] = (atof(argv[6]));
+  referencePixel[0] = (atof(argv[5]));
+  referencePixel[1] = (atof(argv[6]));
+  referencePixel[2] = (atof(argv[7]));
+  referencePixel[3] = (atof(argv[8]));
   cloudDetection->SetReferencePixel(referencePixel);
 
   // Software Guide : EndCodeSnippet
@@ -192,7 +195,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
 
-  cloudDetection->SetVariance(atof(argv[7]));
+  cloudDetection->SetVariance(atof(argv[9]));
 
   // Software Guide : EndCodeSnippet
 
@@ -205,8 +208,8 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
 
-  cloudDetection->SetMinThreshold(atof(argv[8]));
-  cloudDetection->SetMaxThreshold(atof(argv[9]));
+  cloudDetection->SetMinThreshold(atof(argv[10]));
+  cloudDetection->SetMaxThreshold(atof(argv[11]));
 
   // Software Guide : EndCodeSnippet
 
@@ -224,14 +227,53 @@ int main( int argc, char * argv[] )
   // the cloud detection filter to a cloudy image.
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.44\textwidth]{CloudsOnReunion.eps}
-  // \includegraphics[width=0.44\textwidth]{CloudDetectionOutput.eps}
+  // \includegraphics[width=0.44\textwidth]{pretty_CloudsOnReunion.eps}
+  // \includegraphics[width=0.44\textwidth]{pretty_CloudDetectionOutput.eps}
   // From left to right : original image, mask cloud resulting from processing.}
   // \label{fig:CLOUDDETECTION_FILTER}
   // \end{figure}
   //
   // Software Guide : EndLatex
 
+
+ // Pretty image creation for printing
+  typedef otb::Image<unsigned char, Dimension>                                           OutputPrettyImageType;
+  typedef otb::VectorImage<unsigned char, Dimension>                                     InputPrettyImageType;
+  typedef otb::ImageFileWriter<OutputPrettyImageType>                                    WriterPrettyOutputType;
+  typedef otb::ImageFileWriter<InputPrettyImageType>                                     WriterPrettyInputType;
+  typedef itk::RescaleIntensityImageFilter< OutputImageType, OutputPrettyImageType>      RescalerOutputType;
+  typedef otb::VectorRescaleIntensityImageFilter< VectorImageType, InputPrettyImageType> RescalerInputType;
+  typedef otb::MultiChannelExtractROI<InputPixelType, InputPixelType>                    ChannelExtractorType;
+
+  ChannelExtractorType::Pointer selecter           = ChannelExtractorType::New();
+  RescalerInputType::Pointer     inputRescaler     = RescalerInputType::New();
+  WriterPrettyInputType::Pointer prettyInputWriter = WriterPrettyInputType::New();
+  selecter->SetInput( reader->GetOutput());
+  selecter->SetChannel(3);
+  selecter->SetChannel(2);
+  selecter->SetChannel(1);
+  inputRescaler->SetInput( selecter->GetOutput() );
+  VectorPixelType minimum, maximum;
+  minimum.SetSize( 3 );
+  maximum.SetSize( 3 );
+  minimum.Fill(0);
+  maximum.Fill(255);
+  inputRescaler->SetOutputMinimum(minimum);
+  inputRescaler->SetOutputMaximum(maximum);
+  prettyInputWriter->SetFileName( argv[3] );
+  prettyInputWriter->SetInput( inputRescaler->GetOutput() );
+
+
+  RescalerOutputType::Pointer     outputRescaler     = RescalerOutputType::New();
+  WriterPrettyOutputType::Pointer prettyOutputWriter = WriterPrettyOutputType::New();
+  outputRescaler->SetInput( cloudDetection->GetOutput() );
+  outputRescaler->SetOutputMinimum(0);
+  outputRescaler->SetOutputMaximum(255);
+  prettyOutputWriter->SetFileName( argv[4] );
+  prettyOutputWriter->SetInput( outputRescaler->GetOutput() );
+
+  prettyInputWriter->Update();
+  prettyOutputWriter->Update();
 
   return EXIT_SUCCESS;
 }
