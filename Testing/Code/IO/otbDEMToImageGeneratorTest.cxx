@@ -33,7 +33,7 @@ int otbDEMToImageGeneratorTest(int argc, char * argv[])
   char * outputName = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef otb::Image<float, Dimension>           ImageType;
+  typedef otb::Image<double, Dimension>           ImageType;
   typedef otb::DEMToImageGenerator<ImageType>      DEMToImageGeneratorType;
   typedef DEMToImageGeneratorType::DEMHandlerType  DEMHandlerType;
   typedef DEMHandlerType::PointType                PointType;

@@ -33,6 +33,6 @@ void RegisterTests()
   REGISTER_TEST(otbHHnHVPolarimetricSynthesisFilter);
   REGISTER_TEST(otbMultiChannelsPolarimetricSynthesisFilterNew);
   REGISTER_TEST(otbMultiChannelsPolarimetricSynthesisFilter);
-//  REGISTER_TEST(otbVectorMultiChannelsPolarimetricSynthesisFilter);
+  REGISTER_TEST(otbVectorMultiChannelsPolarimetricSynthesisFilter);
 }
 

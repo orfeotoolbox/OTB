@@ -29,7 +29,7 @@ SET(FEATUREEXTRACTION_TESTS10 ${CXX_TEST_PATH}/otbFeatureExtractionTests10)
 SET(FEATUREEXTRACTION_TESTS11 ${CXX_TEST_PATH}/otbFeatureExtractionTests11)
 SET(FEATUREEXTRACTION_TESTS12 ${CXX_TEST_PATH}/otbFeatureExtractionTests12)
 SET(FEATUREEXTRACTION_TESTS13 ${CXX_TEST_PATH}/otbFeatureExtractionTests13)
-
+SET(FEATUREEXTRACTION_TESTS14 ${CXX_TEST_PATH}/otbFeatureExtractionTests14)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests1 ~~~~~~~~~~~~~~~~~~~~~
@@ -77,7 +77,7 @@ ADD_TEST(feTuComplexMomentPath ${FEATUREEXTRACTION_TESTS1}
         otbComplexMomentPath 1 1)
 
 ADD_TEST(feTuComplexMomentPathFloat ${FEATUREEXTRACTION_TESTS1}
-        otbComplexMomentPath 1 1)
+        otbComplexMomentPathFloat 1 1)
 
 ADD_TEST(feTuHuPathNew ${FEATUREEXTRACTION_TESTS1}
         otbHuPathNew)
@@ -761,6 +761,17 @@ ADD_TEST(feTuImageToSIFTKeyPointSetFilterNew ${FEATUREEXTRACTION_TESTS9}
          otbImageToSIFTKeyPointSetFilterNew)
 
 
+ADD_TEST(feTvImageToSIFTKeyPointSetFilterDistanceMap ${FEATUREEXTRACTION_TESTS9}
+#--compare-ascii ${EPS}
+        #${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterDistanceMap.txt
+        #${TEMP}/feTvImageToSIFTKeyPointSetFilterDistanceMap.txt
+         otbImageToSIFTKeyPointSetFilterDistanceMap
+        ${INPUTDATA}/scene.png
+        6 3 0.08 10.0
+        15.0 # rotation
+        1.2 # zoom factor
+        10 255
+)
 
 ADD_TEST(feTvImageToSIFTKeyPointSetFilterSceneOutputInterestPointAscii ${FEATUREEXTRACTION_TESTS9}
 --compare-ascii ${EPS}
@@ -1330,7 +1341,8 @@ ADD_TEST(feTvMeanTextureFunctor ${FEATUREEXTRACTION_TESTS12}
     -2   # offset[0]
     2    # offset[1]	
 )
- 
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests13 ~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1579,6 +1591,38 @@ ADD_TEST(feTvMeanTextureImageFunction ${FEATUREEXTRACTION_TESTS13}
  )
 
 
+
+ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests14 ~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# -------    otb::PanTexTextureImageFilter   -------------
+ADD_TEST(feTuPanTexTextureImageFilterNew ${FEATUREEXTRACTION_TESTS14} 
+    otbPanTexTextureImageFilterNew)
+
+ADD_TEST(feTvPanTexTextureImageFilter ${FEATUREEXTRACTION_TESTS14} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvPanTexTextureImageFilter.tif
+                ${TEMP}/feTvPanTexTextureImageFilter.tif
+   otbPanTexTextureImageFilter
+    ${INPUTDATA}/poupees_sub.png
+    ${TEMP}/feTvPanTexTextureImageFilter.tif
+)
+
+ADD_TEST(feTuPanTexTextureImageFunctionFilterNew ${FEATUREEXTRACTION_TESTS14} 
+    otbPanTexTextureImageFunctionFilterNew)
+
+ADD_TEST(feTvPanTexTextureImageFunctionFilter ${FEATUREEXTRACTION_TESTS14} 
+--compare-image ${EPS}
+                ${BASELINE}/feTvPanTexTextureImageFunctionFilter.tif
+                ${TEMP}/feTvPanTexTextureImageFunctionFilter.tif
+   otbPanTexTextureImageFunctionFilter
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${TEMP}/feTvPanTexTextureImageFunctionFilter.tif
+)
+
+
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
 otbAlignImageToPath.cxx
@@ -1679,7 +1723,6 @@ otbImageToCarvingPathFilterNew.cxx
 )
 SET(BasicFeatureExtraction_SRCS9
 otbImageToSIFTKeyPointSetFilterNew.cxx
-otbImageToSIFTKeyPointSetFilterValid.cxx
 otbImageToSIFTKeyPointSetFilterDistanceMap.cxx
 otbImageToSIFTKeyPointSetFilterOutputInterestPointAscii.cxx
 otbImageToSIFTKeyPointSetFilterOutputDescriptorAscii.cxx
@@ -1717,11 +1760,20 @@ otbLineSpatialObjectListToRightAnglePointSetFilter.cxx
 SET(BasicFeatureExtraction_SRCS12
 otbTextureFunctorBase.cxx
 otbTextureFunctor.cxx
+otbPanTexTextureImageFilterNew.cxx
 )
 
 SET(BasicFeatureExtraction_SRCS13
 otbTextureImageFunction.cxx
 )
+
+SET(BasicFeatureExtraction_SRCS14
+otbPanTexTextureImageFilterNew.cxx
+otbPanTexTextureImageFilter.cxx
+otbPanTexTextureImageFunctionFilterNew.cxx
+otbPanTexTextureImageFunctionFilter.cxx
+)
+
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
@@ -1751,6 +1803,9 @@ ADD_EXECUTABLE(otbFeatureExtractionTests12 otbFeatureExtractionTests12.cxx ${Bas
 TARGET_LINK_LIBRARIES(otbFeatureExtractionTests12  OTBFeatureExtraction OTBIO)
 ADD_EXECUTABLE(otbFeatureExtractionTests13 otbFeatureExtractionTests13.cxx ${BasicFeatureExtraction_SRCS13})
 TARGET_LINK_LIBRARIES(otbFeatureExtractionTests13  OTBFeatureExtraction OTBIO)
+ADD_EXECUTABLE(otbFeatureExtractionTests14 otbFeatureExtractionTests14.cxx ${BasicFeatureExtraction_SRCS14})
+TARGET_LINK_LIBRARIES(otbFeatureExtractionTests14  OTBFeatureExtraction OTBIO)
+
 
 # ADD_EXECUTABLE(roadDetect roadDetect.cxx)
 # TARGET_LINK_LIBRARIES(roadDetect  OTBFeatureExtraction OTBIO)

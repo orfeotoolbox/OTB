@@ -50,10 +50,58 @@ ADD_TEST(vrTvImageWidgetController ${VISUREFAC_TESTS1}
 otbImageWidgetController
 )
 
-#------------ otb::ImageLayer ---------- ----------------
+#------------ otb::ImageLayer ----------------------------
 
 ADD_TEST(vrTuImageLayerNew ${VISUREFAC_TESTS1}
 otbImageLayerNew
+)
+
+ADD_TEST(vrTvImageLayerScalar ${VISUREFAC_TESTS1}
+--compare-n-images ${TOL} 3
+${BASELINE}/vrTvImageLayerScalarQuicklookOutput.png
+${TEMP}/vrTvImageLayerScalarQuicklookOutput.png
+${BASELINE}/vrTvImageLayerScalarExtractOutput.png
+${TEMP}/vrTvImageLayerScalarExtractOutput.png
+${BASELINE}/vrTvImageLayerScalarScaledExtractOutput.png
+${TEMP}/vrTvImageLayerScalarScaledExtractOutput.png
+otbImageLayerScalar
+${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+${TEMP}/vrTvImageLayerScalarQuicklookOutput.png
+${TEMP}/vrTvImageLayerScalarExtractOutput.png
+${TEMP}/vrTvImageLayerScalarScaledExtractOutput.png
+2 127 417
+)
+
+#------------ otb::GrayscaleRenderingFunction ------------
+
+ADD_TEST(vrTuGrayscaleRenderingFunctionNew ${VISUREFAC_TESTS1}
+otbGrayscaleRenderingFunctionNew
+)
+
+#------------ otb::RenderingImageFilter ------------
+
+ADD_TEST(vrTuRenderingImageFilterNew ${VISUREFAC_TESTS1}
+otbRenderingImageFilterNew
+)
+
+ADD_TEST(vrTvRenderingImageFilterScalar ${VISUREFAC_TESTS1}
+--compare-image ${TOL}
+${BASELINE}/vrTvRenderingImageFilterScalarOutput.png
+${TEMP}/vrTvRenderingImageFilterScalarOutput.png
+otbRenderingImageFilterScalar
+${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+${TEMP}/vrTvRenderingImageFilterScalarOutput.png
+127 417
+)
+
+ADD_TEST(vrTvRenderingImageFilterVector ${VISUREFAC_TESTS1}
+--compare-image ${TOL}
+${BASELINE}/vrTvRenderingImageFilterVectorOutput.png
+${TEMP}/vrTvRenderingImageFilterVectorOutput.png
+otbRenderingImageFilterVector
+${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+${TEMP}/vrTvRenderingImageFilterVectorOutput.png
+0 179 0 0 0 802 0 0 0
 )
 
 SET(VisuRefac_SRCS1
@@ -63,6 +111,11 @@ otbImageWidgetActionHandlerNew.cxx
 otbImageWidgetControllerNew.cxx
 otbImageWidgetController.cxx
 otbImageLayerNew.cxx
+otbGrayscaleRenderingFunctionNew.cxx
+otbRenderingImageFilterNew.cxx
+otbRenderingImageFilterScalar.cxx
+otbRenderingImageFilterVector.cxx
+otbImageLayerScalar.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 

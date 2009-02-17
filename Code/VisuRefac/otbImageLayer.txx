@@ -22,45 +22,70 @@
 namespace otb
 {
 
-template <class TImage>
-ImageLayer<TImage>
+template <class TImage, class TOutputImage>
+ImageLayer<TImage,TOutputImage>
 ::ImageLayer()
 {
-  m_LayerName = "Default";
-  m_RedChannelIndex   = 0;
-  m_GreenChannelIndex = 0;
-  m_BlueChannelIndex  = 0;
   m_HistogramList = HistogramListType::New();
 }
 
-template <class TImage>
-ImageLayer<TImage>
+template <class TImage, class TOutputImage>
+ImageLayer<TImage,TOutputImage>
 ::~ImageLayer()
 {}
 
 
-template <class TImage>
+template <class TImage, class TOutputImage>
 void
-ImageLayer<TImage>
+ImageLayer<TImage,TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
-  os<<indent<<"Layer "<<m_LayerName<<std::endl;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+template <class TImage, class TOutputImage>
+void
+ImageLayer<TImage,TOutputImage>
+::Render()
+{
+  // Render quicklook
+  if(this->GetHasQuicklook())
+    {
+    typename RenderingFilterType::Pointer renderer = RenderingFilterType::New();
+    renderer->SetRenderingFunction(m_RenderingFunction);
+    renderer->SetInput(m_Quicklook);
+    renderer->Update();
+    this->SetRenderedQuicklook(renderer->GetOutput());
+    }
+  // Render extract
+  if(this->GetHasExtract())
+    {
+    // Extracting region
+    typename ExtractFilterType::Pointer extract = ExtractFilterType::New();
+    extract->SetInput(m_Image);
+    extract->SetExtractionRegion(this->GetExtractRegion());
+    // Rendering
+    typename RenderingFilterType::Pointer renderer = RenderingFilterType::New();
+    renderer->SetRenderingFunction(m_RenderingFunction);
+    renderer->SetInput(extract->GetOutput());
+    renderer->Update();
+    this->SetRenderedExtract(renderer->GetOutput());
+    }
+  // Render scaled extract
+  if(this->GetHasScaledExtract())
+    {
+    // Extracting region
+    typename ExtractFilterType::Pointer extract = ExtractFilterType::New();
+    extract->SetInput(m_Image);
+    extract->SetExtractionRegion(this->GetScaledExtractRegion());
+    // Rendering
+    typename RenderingFilterType::Pointer renderer = RenderingFilterType::New();
+    renderer->SetRenderingFunction(m_RenderingFunction);
+    renderer->SetInput(extract->GetOutput());
+    renderer->Update();
+    this->SetRenderedScaledExtract(renderer->GetOutput());
+    }
+}
 }
 
 #endif
