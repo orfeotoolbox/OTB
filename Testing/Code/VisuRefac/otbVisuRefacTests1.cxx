@@ -36,4 +36,5 @@ void RegisterTests()
   REGISTER_TEST(otbRenderingImageFilterNew);
   REGISTER_TEST(otbRenderingImageFilterScalar);
   REGISTER_TEST(otbRenderingImageFilterVector);
+  REGISTER_TEST(otbImageLayerScalar);
 }

@@ -1,8 +1,8 @@
-#ifndef _SHAPEFILE_H_INCLUDED
-#define _SHAPEFILE_H_INCLUDED
+#ifndef SHAPEFILE_H_INCLUDED
+#define SHAPEFILE_H_INCLUDED
 
 /******************************************************************************
- * $Id: shapefil.h 11039 2007-05-24 15:42:43Z gpotts $
+ * $Id: shapefil.h 15715 2008-11-12 15:15:21Z warmerdam $
  *
  * Project:  Shapelib
  * Purpose:  Primary include file for Shapelib.
@@ -36,12 +36,63 @@
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
  *
- * $Log$
- * Revision 1.5  2005/10/08 12:57:26  gpotts
- * Added adiitional patches
+ * $Log: shapefil.h,v $
+ * Revision 1.46  2008/11/12 14:28:15  fwarmerdam
+ * DBFCreateField() now works on files with records
  *
- * Revision 1.14  2005/03/14 15:21:29  fwarmerdam
- * updated
+ * Revision 1.45  2008/11/11 17:47:10  fwarmerdam
+ * added DBFDeleteField() function
+ *
+ * Revision 1.44  2008/01/16 20:05:19  bram
+ * Add file hooks that accept UTF-8 encoded filenames on some platforms.  Use SASetupUtf8Hooks
+ *  tosetup the hooks and check SHPAPI_UTF8_HOOKS for its availability.  Currently, this
+ *  is only available on the Windows platform that decodes the UTF-8 filenames to wide
+ *  character strings and feeds them to _wfopen and _wremove.
+ *
+ * Revision 1.43  2008/01/10 16:35:30  fwarmerdam
+ * avoid _ prefix on #defined symbols (bug 1840)
+ *
+ * Revision 1.42  2007/12/18 18:28:14  bram
+ * - create hook for client specific atof (bugzilla ticket 1615)
+ * - check for NULL handle before closing cpCPG file, and close after reading.
+ *
+ * Revision 1.41  2007/12/15 20:25:32  bram
+ * dbfopen.c now reads the Code Page information from the DBF file, and exports
+ * this information as a string through the DBFGetCodePage function.  This is 
+ * either the number from the LDID header field ("LDID/<number>") or as the 
+ * content of an accompanying .CPG file.  When creating a DBF file, the code can
+ * be set using DBFCreateEx.
+ *
+ * Revision 1.40  2007/12/06 07:00:25  fwarmerdam
+ * dbfopen now using SAHooks for fileio
+ *
+ * Revision 1.39  2007/12/04 20:37:56  fwarmerdam
+ * preliminary implementation of hooks api for io and errors
+ *
+ * Revision 1.38  2007/11/21 22:39:56  fwarmerdam
+ * close shx file in readonly mode (GDAL #1956)
+ *
+ * Revision 1.37  2007/10/27 03:31:14  fwarmerdam
+ * limit default depth of tree to 12 levels (gdal ticket #1594)
+ *
+ * Revision 1.36  2007/09/10 23:33:15  fwarmerdam
+ * Upstreamed support for visibility flag in SHPAPI_CALL for the needs
+ * of GDAL (gdal ticket #1810).
+ *
+ * Revision 1.35  2007/09/03 19:48:10  fwarmerdam
+ * move DBFReadAttribute() static dDoubleField into dbfinfo
+ *
+ * Revision 1.34  2006/06/17 15:33:32  fwarmerdam
+ * added pszWorkField - bug 1202 (rso)
+ *
+ * Revision 1.33  2006/02/15 01:14:30  fwarmerdam
+ * added DBFAddNativeFieldType
+ *
+ * Revision 1.32  2006/01/26 15:07:32  fwarmerdam
+ * add bMeasureIsUsed flag from Craig Bruce: Bug 1249
+ *
+ * Revision 1.31  2006/01/05 01:27:27  fwarmerdam
+ * added dbf deletion mark/fetch
  *
  * Revision 1.30  2005/01/03 22:30:13  fwarmerdam
  * added support for saved quadtrees
@@ -69,67 +120,6 @@
  *
  * Revision 1.22  2002/01/15 14:32:00  warmerda
  * try to improve SHPAPI_CALL docs
- *
- * Revision 1.21  2001/11/01 16:29:55  warmerda
- * move pabyRec into SHPInfo for thread safety
- *
- * Revision 1.20  2001/07/20 13:06:02  warmerda
- * fixed SHPAPI attribute for SHPTreeFindLikelyShapes
- *
- * Revision 1.19  2001/05/31 19:20:13  warmerda
- * added DBFGetFieldIndex()
- *
- * Revision 1.18  2001/05/31 18:15:40  warmerda
- * Added support for NULL fields in DBF files
- *
- * Revision 1.17  2001/05/23 13:36:52  warmerda
- * added use of SHPAPI_CALL
- *
- * Revision 1.16  2000/09/25 14:15:59  warmerda
- * added DBFGetNativeFieldType()
- *
- * Revision 1.15  2000/02/16 16:03:51  warmerda
- * added null shape support
- *
- * Revision 1.14  1999/11/05 14:12:05  warmerda
- * updated license terms
- *
- * Revision 1.13  1999/06/02 18:24:21  warmerda
- * added trimming code
- *
- * Revision 1.12  1999/06/02 17:56:12  warmerda
- * added quad'' subnode support for trees
- *
- * Revision 1.11  1999/05/18 19:11:11  warmerda
- * Added example searching capability
- *
- * Revision 1.10  1999/05/18 17:49:38  warmerda
- * added initial quadtree support
- *
- * Revision 1.9  1999/05/11 03:19:28  warmerda
- * added new Tuple api, and improved extension handling - add from candrsn
- *
- * Revision 1.8  1999/03/23 17:22:27  warmerda
- * Added extern "C" protection for C++ users of shapefil.h.
- *
- * Revision 1.7  1998/12/31 15:31:07  warmerda
- * Added the TRIM_DBF_WHITESPACE and DISABLE_MULTIPATCH_MEASURE options.
- *
- * Revision 1.6  1998/12/03 15:48:15  warmerda
- * Added SHPCalculateExtents().
- *
- * Revision 1.5  1998/11/09 20:57:16  warmerda
- * Altered SHPGetInfo() call.
- *
- * Revision 1.4  1998/11/09 20:19:33  warmerda
- * Added 3D support, and use of SHPObject.
- *
- * Revision 1.3  1995/08/23 02:24:05  warmerda
- * Added support for reading bounds.
- *
- * Revision 1.2  1995/08/04  03:17:39  warmerda
- * Added header.
- *
  */
 
 #include <stdio.h>
@@ -140,6 +130,7 @@
 
 #ifdef USE_CPL
 #include "cpl_error.h"
+#include "cpl_vsi.h"
 #endif
 
 #ifdef __cplusplus
@@ -162,7 +153,7 @@ extern "C" {
 /*      is disabled.                                                    */
 /* -------------------------------------------------------------------- */
 #define DISABLE_MULTIPATCH_MEASURE
-
+    
 /* -------------------------------------------------------------------- */
 /*      SHPAPI_CALL                                                     */
 /*                                                                      */
@@ -191,32 +182,25 @@ extern "C" {
 /*      after any "*"'s in the return value of a function while the     */
 /*      __declspec(dllexport) must appear before them.                  */
 /* -------------------------------------------------------------------- */
-#include <ossim/base/ossimConstants.h>
-   
-#ifdef OSSIMMAKINGDLL
-#  define SHPAPI_CALL OSSIM_DLL
-#  define SHPAPI_CALL1(x)  OSSIM_DLL_DATA(x)
-#endif
-#ifndef SHPAPI_CALL
-#  define SHPAPI_CALL
-#endif
-#ifndef SHPAPI_CALL1
-#  define SHPAPI_CALL1(x)      x SHPAPI_CALL
-#endif
-   
-#if 0
+
 #ifdef SHAPELIB_DLLEXPORT
 #  define SHPAPI_CALL __declspec(dllexport)
 #  define SHPAPI_CALL1(x)  __declspec(dllexport) x
 #endif
+
 #ifndef SHPAPI_CALL
-#  define SHPAPI_CALL
+#  if defined(USE_GCC_VISIBILITY_FLAG)
+#    define SHPAPI_CALL     __attribute__ ((visibility("default")))
+#    define SHPAPI_CALL1(x) __attribute__ ((visibility("default")))     x
+#  else
+#    define SHPAPI_CALL
+#  endif
 #endif
+
 #ifndef SHPAPI_CALL1
 #  define SHPAPI_CALL1(x)      x SHPAPI_CALL
 #endif
-#endif
-   
+    
 /* -------------------------------------------------------------------- */
 /*      Macros for controlling CVSID and ensuring they don't appear     */
 /*      as unreferenced variables resulting in lots of warnings.        */
@@ -228,13 +212,52 @@ static char *cvsid_aw() { return( cvsid_aw() ? ((char *) NULL) : cpl_cvsid ); }
 #  define SHP_CVSID(string)
 #endif
 
+/* -------------------------------------------------------------------- */
+/*      On some platforms, additional file IO hooks are defined that    */
+/*      UTF-8 encoded filenames Unicode filenames                       */
+/* -------------------------------------------------------------------- */
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+#	define SHPAPI_WINDOWS
+#	define SHPAPI_UTF8_HOOKS
+#endif
+
+/* -------------------------------------------------------------------- */
+/*      IO/Error hook functions.                                        */
+/* -------------------------------------------------------------------- */
+typedef int *SAFile;
+
+#ifndef SAOffset
+typedef unsigned long SAOffset;
+#endif
+
+typedef struct {
+    SAFile     (*FOpen) ( const char *filename, const char *access);
+    SAOffset   (*FRead) ( void *p, SAOffset size, SAOffset nmemb, SAFile file);
+    SAOffset   (*FWrite)( void *p, SAOffset size, SAOffset nmemb, SAFile file);
+    SAOffset   (*FSeek) ( SAFile file, SAOffset offset, int whence );
+    SAOffset   (*FTell) ( SAFile file );
+    int        (*FFlush)( SAFile file );
+    int        (*FClose)( SAFile file );
+    int        (*Remove) ( const char *filename );
+
+    void       (*Error) ( const char *message );
+    double     (*Atof)  ( const char *str );
+} SAHooks;
+
+void SHPAPI_CALL SASetupDefaultHooks( SAHooks *psHooks );
+#ifdef SHPAPI_UTF8_HOOKS
+void SHPAPI_CALL SASetupUtf8Hooks( SAHooks *psHooks );
+#endif
+
 /************************************************************************/
 /*                             SHP Support.                             */
 /************************************************************************/
 typedef	struct
 {
-    FILE        *fpSHP;
-    FILE	*fpSHX;
+    SAHooks sHooks;
+
+    SAFile      fpSHP;
+    SAFile 	fpSHX;
 
     int		nShapeType;				/* SHPT_* */
     
@@ -316,15 +339,26 @@ typedef struct
     double	dfYMax;
     double	dfZMax;
     double	dfMMax;
+
+    int		bMeasureIsUsed;
 } SHPObject;
 
 /* -------------------------------------------------------------------- */
 /*      SHP API Prototypes                                              */
 /* -------------------------------------------------------------------- */
+
+/* If pszAccess is read-only, the fpSHX field of the returned structure */
+/* will be NULL as it is not necessary to keep the SHX file open */
 SHPHandle SHPAPI_CALL
       SHPOpen( const char * pszShapeFile, const char * pszAccess );
 SHPHandle SHPAPI_CALL
+      SHPOpenLL( const char *pszShapeFile, const char *pszAccess, 
+                 SAHooks *psHooks );
+SHPHandle SHPAPI_CALL
       SHPCreate( const char * pszShapeFile, int nShapeType );
+SHPHandle SHPAPI_CALL
+      SHPCreateLL( const char * pszShapeFile, int nShapeType,
+                   SAHooks *psHooks );
 void SHPAPI_CALL
       SHPGetInfo( SHPHandle hSHP, int * pnEntities, int * pnShapeType,
                   double * padfMinBound, double * padfMaxBound );
@@ -367,6 +401,9 @@ const char SHPAPI_CALL1(*)
 
 /* this can be two or four for binary or quad tree */
 #define MAX_SUBNODE	4
+
+/* upper limit of tree levels for automatic estimation */
+#define MAX_DEFAULT_TREE_DEPTH 12
 
 typedef struct shape_tree_node
 {
@@ -435,7 +472,9 @@ SHPSearchDiskTree( FILE *fp,
 /************************************************************************/
 typedef	struct
 {
-    FILE	*fp;
+    SAHooks sHooks;
+
+    SAFile	fp;
 
     int         nRecords;
 
@@ -452,9 +491,17 @@ typedef	struct
     int		nCurrentRecord;
     int		bCurrentRecordModified;
     char	*pszCurrentRecord;
+
+    int         nWorkFieldLength;
+    char        *pszWorkField;
     
     int		bNoHeader;
     int		bUpdated;
+
+    double      dfDoubleField;
+
+    int         iLanguageDriver;
+    char        *pszCodePage;
 } DBFInfo;
 
 typedef DBFInfo * DBFHandle;
@@ -469,10 +516,18 @@ typedef enum {
 
 #define XBASE_FLDHDR_SZ       32
 
+
 DBFHandle SHPAPI_CALL
       DBFOpen( const char * pszDBFFile, const char * pszAccess );
 DBFHandle SHPAPI_CALL
+      DBFOpenLL( const char * pszDBFFile, const char * pszAccess,
+                 SAHooks *psHooks );
+DBFHandle SHPAPI_CALL
       DBFCreate( const char * pszDBFFile );
+DBFHandle SHPAPI_CALL
+      DBFCreateEx( const char * pszDBFFile, const char * pszCodePage );
+DBFHandle SHPAPI_CALL
+      DBFCreateLL( const char * pszDBFFile, const char * pszCodePage, SAHooks *psHooks );
 
 int	SHPAPI_CALL
       DBFGetFieldCount( DBFHandle psDBF );
@@ -481,6 +536,13 @@ int	SHPAPI_CALL
 int	SHPAPI_CALL
       DBFAddField( DBFHandle hDBF, const char * pszFieldName,
                    DBFFieldType eType, int nWidth, int nDecimals );
+
+int	SHPAPI_CALL
+      DBFAddNativeFieldType( DBFHandle hDBF, const char * pszFieldName,
+                             char chType, int nWidth, int nDecimals );
+
+int	SHPAPI_CALL
+      DBFDeleteField( DBFHandle hDBF, int iField );
 
 DBFFieldType SHPAPI_CALL
       DBFGetFieldInfo( DBFHandle psDBF, int iField, 
@@ -523,6 +585,10 @@ const char SHPAPI_CALL1(*)
 int SHPAPI_CALL
       DBFWriteTuple(DBFHandle psDBF, int hEntity, void * pRawTuple );
 
+int SHPAPI_CALL DBFIsRecordDeleted( DBFHandle psDBF, int iShape );
+int SHPAPI_CALL DBFMarkRecordDeleted( DBFHandle psDBF, int iShape, 
+                                      int bIsDeleted );
+
 DBFHandle SHPAPI_CALL
       DBFCloneEmpty(DBFHandle psDBF, const char * pszFilename );
  
@@ -533,8 +599,11 @@ void    SHPAPI_CALL
 char    SHPAPI_CALL
       DBFGetNativeFieldType( DBFHandle hDBF, int iField );
 
+const char SHPAPI_CALL1(*)
+      DBFGetCodePage(DBFHandle psDBF );
+
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* ndef _SHAPEFILE_H_INCLUDED */
+#endif /* ndef SHAPEFILE_H_INCLUDED */

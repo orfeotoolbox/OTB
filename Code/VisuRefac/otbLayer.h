@@ -48,6 +48,8 @@ public:
   /** Output image typedef */
   typedef TOutputImage                           OutputImageType;
   typedef typename OutputImageType::Pointer      OutputImagePointerType;
+  typedef typename OutputImageType::RegionType   RegionType;
+  typedef typename RegionType::SizeType          SizeType;
 
   /** Actually render the layer */
   virtual void Render() = 0;
@@ -57,24 +59,49 @@ public:
   itkGetObjectMacro(RenderedScaledExtract, OutputImageType);
 
   itkSetMacro(HasQuicklook,bool);
+  itkGetMacro(HasQuicklook,bool);
   itkBooleanMacro(HasQuicklook);
 
   itkSetMacro(HasExtract,bool);
+  itkGetMacro(HasExtract,bool);
   itkBooleanMacro(HasExtract);
 
   itkSetMacro(HasScaledExtract,bool);
+  itkGetMacro(HasScaledExtract,bool);
   itkBooleanMacro(HasScaledExtract);
 
   itkSetMacro(Visible,bool);
+  itkGetMacro(Visible,bool);
   itkBooleanMacro(Visible);
 
   itkSetStringMacro(Name);
   itkGetStringMacro(Name);
 
+  itkSetMacro(QuicklookSize,SizeType);
+  itkGetConstReferenceMacro(QuicklookSize,SizeType);
+
+  itkSetMacro(Extent,RegionType);
+  itkGetConstReferenceMacro(Extent,RegionType);
+
+  itkSetMacro(ExtractRegion,RegionType);
+  itkGetConstReferenceMacro(ExtractRegion,RegionType);
+
+  itkSetMacro(ScaledExtractRegion,RegionType);
+  itkGetConstReferenceMacro(ScaledExtractRegion,RegionType);
+
+  itkSetMacro(QuicklookSubsamplingRate,unsigned int);
+  itkGetMacro(QuicklookSubsamplingRate,unsigned int);
+
 protected:
   /** Constructor */
-  Layer() : m_HasQuicklook(false), m_HasExtract(false), m_HasScaledExtract(false), m_Visible(false), m_Name("Default")
-  {}
+  Layer()
+  {
+    m_HasQuicklook     = false;
+    m_HasExtract       = false;
+    m_HasScaledExtract = false;
+    m_Visible          = false;
+    m_Name             = "Default";
+  }
   /** Destructor */
   ~Layer(){}
   /** Printself method */
@@ -86,16 +113,11 @@ protected:
     os<<indent<<indent<<"Has an extract: "      <<(m_HasExtract       ? "true" : "false") << std::endl;
     os<<indent<<indent<<"Has a scaled extract: "<<(m_HasScaledExtract ? "true" : "false") << std::endl;
   }
- 
-  /** Rendered quicklook */
-  OutputImagePointerType m_RenderedQuicklook;
-  bool                   m_HasQuicklook;
-  /** Rendered extract */
-  OutputImagePointerType m_RenderedExtract;
-  bool                   m_HasExtract;
-  /** Rendered scaled extract */
-  OutputImagePointerType m_RenderedScaledExtract;
-  bool                   m_HasScaledExtract;
+
+  // These are protected to prevent from unwanted usage
+  itkSetObjectMacro(RenderedQuicklook,     OutputImageType);
+  itkSetObjectMacro(RenderedExtract,       OutputImageType);
+  itkSetObjectMacro(RenderedScaledExtract, OutputImageType);
 
 private:
   Layer(const Self&);     // purposely not implemented
@@ -105,8 +127,27 @@ private:
   std::string            m_Name;
 
   /** Is the layer visible ? */
-  bool m_Visible;
+  bool                   m_Visible;
   
+  /** Data extent */
+  RegionType             m_Extent;
+
+  /** Rendered quicklook */
+  OutputImagePointerType m_RenderedQuicklook;
+  bool                   m_HasQuicklook;
+  SizeType               m_QuicklookSize;
+  unsigned int           m_QuicklookSubsamplingRate;
+
+  /** Rendered extract */
+  OutputImagePointerType m_RenderedExtract;
+  bool                   m_HasExtract;
+  RegionType             m_ExtractRegion;
+
+  /** Rendered scaled extract */
+  OutputImagePointerType m_RenderedScaledExtract;
+  bool                   m_HasScaledExtract;
+  RegionType             m_ScaledExtractRegion;
+
 }; // end class 
 } // end namespace otb
 

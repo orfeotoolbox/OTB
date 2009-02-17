@@ -56,17 +56,17 @@ ADD_EXECUTABLE(VectorDataIOExample VectorDataIOExample.cxx )
 TARGET_LINK_LIBRARIES(VectorDataIOExample OTBCommon OTBIO)
 
 ADD_EXECUTABLE(DEMToImageGenerator DEMToImageGenerator.cxx )
-TARGET_LINK_LIBRARIES(DEMToImageGenerator OTBProjections OTBIO OTBCommon otbossim )
+TARGET_LINK_LIBRARIES(DEMToImageGenerator OTBProjections OTBIO OTBCommon )
 
 ADD_EXECUTABLE(DEMToOrthoImageGenerator DEMToOrthoImageGenerator.cxx )
-TARGET_LINK_LIBRARIES(DEMToOrthoImageGenerator OTBProjections OTBIO OTBCommon otbossim )
+TARGET_LINK_LIBRARIES(DEMToOrthoImageGenerator OTBProjections OTBIO OTBCommon )
 
 ADD_EXECUTABLE(LidarReaderExample LidarReaderExample.cxx )
-TARGET_LINK_LIBRARIES(LidarReaderExample OTBIO OTBCommon otbossim )
+TARGET_LINK_LIBRARIES(LidarReaderExample OTBIO OTBCommon )
 
 IF(ITK_USE_REVIEW)
   ADD_EXECUTABLE(LidarToImageExample LidarToImageExample.cxx )
-  TARGET_LINK_LIBRARIES(LidarToImageExample OTBIO OTBCommon otbossim )
+  TARGET_LINK_LIBRARIES(LidarToImageExample OTBIO OTBCommon )
 ENDIF(ITK_USE_REVIEW)
 
 IF( OTB_USE_CURL )
@@ -202,11 +202,13 @@ ENDIF( OTB_USE_CURL )
 
 
 ADD_EXECUTABLE(otbIOExamplesTests1 otbIOExamplesTests1.cxx)
-TARGET_LINK_LIBRARIES(otbIOExamplesTests1 otbossim OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBProjections ITKAlgorithms ITKStatistics  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+# TARGET_LINK_LIBRARIES(otbIOExamplesTests1 OTBIO OTBBasicFilters OTBCommon OTBDisparityMap  OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBProjections ITKAlgorithms ITKStatistics  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+TARGET_LINK_LIBRARIES(otbIOExamplesTests1 OTBIO OTBCommon)
 
 IF( OTB_USE_CURL )
   ADD_EXECUTABLE(otbIOExamplesTests2 otbIOExamplesTests2.cxx)
-  TARGET_LINK_LIBRARIES(otbIOExamplesTests2 OTBCommon OTBIO ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES} ${CURL_LIBRARY} )
+#   TARGET_LINK_LIBRARIES(otbIOExamplesTests2 OTBCommon OTBIO ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES} ${CURL_LIBRARY} )
+  TARGET_LINK_LIBRARIES(otbIOExamplesTests2 OTBCommon OTBIO ${CURL_LIBRARY} )
 ENDIF( OTB_USE_CURL )
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

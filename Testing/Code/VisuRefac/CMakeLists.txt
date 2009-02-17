@@ -56,6 +56,22 @@ ADD_TEST(vrTuImageLayerNew ${VISUREFAC_TESTS1}
 otbImageLayerNew
 )
 
+ADD_TEST(vrTvImageLayerScalar ${VISUREFAC_TESTS1}
+--compare-n-images ${TOL} 3
+${BASELINE}/vrTvImageLayerScalarQuicklookOutput.png
+${TEMP}/vrTvImageLayerScalarQuicklookOutput.png
+${BASELINE}/vrTvImageLayerScalarExtractOutput.png
+${TEMP}/vrTvImageLayerScalarExtractOutput.png
+${BASELINE}/vrTvImageLayerScalarScaledExtractOutput.png
+${TEMP}/vrTvImageLayerScalarScaledExtractOutput.png
+otbImageLayerScalar
+${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+${TEMP}/vrTvImageLayerScalarQuicklookOutput.png
+${TEMP}/vrTvImageLayerScalarExtractOutput.png
+${TEMP}/vrTvImageLayerScalarScaledExtractOutput.png
+2 127 417
+)
+
 #------------ otb::GrayscaleRenderingFunction ------------
 
 ADD_TEST(vrTuGrayscaleRenderingFunctionNew ${VISUREFAC_TESTS1}
@@ -99,6 +115,7 @@ otbGrayscaleRenderingFunctionNew.cxx
 otbRenderingImageFilterNew.cxx
 otbRenderingImageFilterScalar.cxx
 otbRenderingImageFilterVector.cxx
+otbImageLayerScalar.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 
