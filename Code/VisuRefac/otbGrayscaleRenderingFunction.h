@@ -77,7 +77,7 @@ public:
   }
   
   /** Get the channel index (vector mode only) */
-  unsigned int ChannelIndex(void)
+  unsigned int GetChannelIndex(void)
   {
     return m_ChannelIndex;
   }
