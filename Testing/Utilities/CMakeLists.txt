@@ -1,4 +1,4 @@
- 
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
@@ -99,7 +99,7 @@ ADD_TEST(utTvSvmGenericKernelBasicOperationsTest ${UTILITIES_TESTS}
 )
 
 ADD_TEST(utTvSvmComposedKernelFunctorTest ${UTILITIES_TESTS}
---compare-n-ascii ${TOL} 3 
+--compare-n-ascii ${TOL} 3
 		  ${BASELINE_FILES}/utTvSVMComposedKernelFunctorResTest.txt
 		  ${TEMP}/SVMComposedKernelFunctorTestRes.txt
 		  ${BASELINE_FILES}/utTvSVMComposedKernelFunctorTest.txt
@@ -108,11 +108,11 @@ ADD_TEST(utTvSvmComposedKernelFunctorTest ${UTILITIES_TESTS}
 		  ${TEMP}/SVMComposedKernelFunctorTestOutputBis.txt
 
                otbSVMComposedKernelFunctorTest
-	           ${TEMP}/SVMComposedKernelFunctorTestRes.txt	
+	           ${TEMP}/SVMComposedKernelFunctorTestRes.txt
 	           ${TEMP}/SVMComposedKernelFunctorTestOutput.txt
 		   ${TEMP}/SVMComposedKernelFunctorTestOutputBis.txt
-)	
-	
+)
+
 # -------            lib otb6S   ------------------------------
 
 # The file is not read. It a screen user scan. main.exe < 132.149.107.66.wloip20967.INP
@@ -131,8 +131,8 @@ ADD_TEST(utTv6SFunctionMainTest ${UTILITIES_TESTS}
 
 # -------            lib tinyXMLlib   ------------------------------
 ADD_TEST(utTvTinyXMLTest ${UTILITIES_TESTS}
-        --compare-ascii ${TOL}  
-                        ${BASELINE_FILES}/utTinyXML_testStdout.txt 
+        --compare-ascii ${TOL}
+                        ${BASELINE_FILES}/utTinyXML_testStdout.txt
                         ${TEMP}/utTinyXML_testStdout.txt
                 tinyXMLlibTest
                 ${INPUTDATA}/utf8test.xml
@@ -157,174 +157,174 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 # -------            lib Galib   ------------------------------
 
 #                   FOREACH(num 1 12 14 16 17 25 27)
-#                   ADD_TEST( utTuGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
+#                   ADD_TEST( utTuGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #                           galibTests${num}
 #                           seed 555 )
 #                   ENDFOREACH(num)
 
 #                   FOREACH(num 6 8 19 20)
-#                           ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
-#                           --compare-ascii ${TOL}  
-#                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
+#                           ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
+#                           --compare-ascii ${TOL}
+#                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat
 #                                           ${TEMP}/utGalibTest${num}_bog.dat
 #                           galibTests${num}
-#                           score_filename ${TEMP}/utGalibTest${num}_bog.dat 
+#                           score_filename ${TEMP}/utGalibTest${num}_bog.dat
 #                           seed 555 )
 #                   ENDFOREACH(num)
 #                   FOREACH(num 2 4 9 11 15)
-#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
-#                           --compare-ascii ${TOL}  
-#                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
+#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
+#                           --compare-ascii ${TOL}
+#                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat
 #                                           ${TEMP}/utGalibTest${num}_bog.dat
 #                           galibTests${num}
-#                           ${TEMP}/utGalibTest${num}_bog.dat 
+#                           ${TEMP}/utGalibTest${num}_bog.dat
 #                           seed 555 )
 #                   ENDFOREACH(num)
 
 
 
 #                   SET(num 13)
-#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
-#                           --compare-ascii ${TOL}  
-#                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
+#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
+#                           --compare-ascii ${TOL}
+#                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat
 #                                           ${TEMP}/utGalibTest${num}_bog.dat
 #                           galibTests${num}
 #                           ${INPUTDATA}/galib-smiley.txt
-#                           score_filename ${TEMP}/utGalibTest${num}_bog.dat 
+#                           score_filename ${TEMP}/utGalibTest${num}_bog.dat
 #                           seed 555 )
 
 #                   FOREACH(num 3 18)
-#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
-#                           --compare-ascii ${TOL}  
-#                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
+#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
+#                           --compare-ascii ${TOL}
+#                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat
 #                                           ${TEMP}/utGalibTest${num}_bog.dat
-#                                   
+#
 #                           galibTests${num}
 #                           file ${INPUTDATA}/galib-smiley.txt
-#                           score_filename ${TEMP}/utGalibTest${num}_bog.dat 
+#                           score_filename ${TEMP}/utGalibTest${num}_bog.dat
 #                           seed 555 )
 #                   ENDFOREACH(num)
 
 #                   SET(num 5)
-#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}  
-#                           --compare-ascii ${TOL}  
-#                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
+#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
+#                           --compare-ascii ${TOL}
+#                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat
 #                                           ${TEMP}/utGalibTest${num}_bog.dat
 #                            galibTests${num}
-#                            score_filename ${TEMP}/utGalibTest${num}_bog.dat 
+#                            score_filename ${TEMP}/utGalibTest${num}_bog.dat
 #                            graph ${INPUTDATA}/galib-smiley.txt
 #                            values ${INPUTDATA}/galib-values.txt
 #                            seed 555 )
 
 # Test 7 commented becasue impossible to specific he bog.dat file name in the process ;-(
 #SET(num 7)
-#        ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
-#        --compare-ascii ${TOL}  
-#                        ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
+#        ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
+#        --compare-ascii ${TOL}
+#                        ${BASELINE_FILES}/utGalibTest${num}_bog.dat
 #                        ${TEMP}/utGalibTest${num}_bog.dat
 #        galibTests${num}
-#        ${TEMP}/utGalibTest${num}_bog.dat 
+#        ${TEMP}/utGalibTest${num}_bog.dat
 #        dfile ${INPUTDATA}/galib-smiley.txt
 #        pfile ${INPUTDATA}/galib-settings.txt
 #        seed 555 )
 
 
 #                   SET(num 10)
-#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
-#                           --compare-n-ascii ${TOL} 4 
-#                                           ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat 
-#                                           ${TEMP}/utGalibTest${num}_sinusoid.dat 
-#                                           ${BASELINE_FILES}/utGalibTest${num}_pop.nospec.dat 
-#                                           ${TEMP}/utGalibTest${num}_pop.nospec.dat 
-#                                           ${BASELINE_FILES}/utGalibTest${num}_pop.genespec.dat 
-#                                           ${TEMP}/utGalibTest${num}_pop.genespec.dat 
-#                                           ${BASELINE_FILES}/utGalibTest${num}_pop.phenespec.dat 
-#                                           ${TEMP}/utGalibTest${num}_pop.phenespec.dat 
+#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
+#                           --compare-n-ascii ${TOL} 4
+#                                           ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat
+#                                           ${TEMP}/utGalibTest${num}_sinusoid.dat
+#                                           ${BASELINE_FILES}/utGalibTest${num}_pop.nospec.dat
+#                                           ${TEMP}/utGalibTest${num}_pop.nospec.dat
+#                                           ${BASELINE_FILES}/utGalibTest${num}_pop.genespec.dat
+#                                           ${TEMP}/utGalibTest${num}_pop.genespec.dat
+#                                           ${BASELINE_FILES}/utGalibTest${num}_pop.phenespec.dat
+#                                           ${TEMP}/utGalibTest${num}_pop.phenespec.dat
 #                           galibTests${num}
-#                           ${TEMP}/utGalibTest${num}_sinusoid.dat 
-#                           ${TEMP}/utGalibTest${num}_pop.nospec.dat 
-#                           ${TEMP}/utGalibTest${num}_pop.genespec.dat 
-#                           ${TEMP}/utGalibTest${num}_pop.phenespec.dat 
+#                           ${TEMP}/utGalibTest${num}_sinusoid.dat
+#                           ${TEMP}/utGalibTest${num}_pop.nospec.dat
+#                           ${TEMP}/utGalibTest${num}_pop.genespec.dat
+#                           ${TEMP}/utGalibTest${num}_pop.phenespec.dat
 #                           seed 555 )
 
 #                   SET(num 21)
-#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
+#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #                           --compare-n-ascii ${TOL} 5
-#                                           ${BASELINE_FILES}/utGalibTest${num}_bog1.dat 
-#                                           ${TEMP}/utGalibTest${num}_bog1.dat 
-#                                           ${BASELINE_FILES}/utGalibTest${num}_bog2.dat 
-#                                           ${TEMP}/utGalibTest${num}_bog2.dat 
-#                                           ${BASELINE_FILES}/utGalibTest${num}_bog2a.dat 
-#                                           ${TEMP}/utGalibTest${num}_bog2a.dat 
-#                                           ${BASELINE_FILES}/utGalibTest${num}_bog3.dat 
-#                                           ${TEMP}/utGalibTest${num}_bog3.dat 
-#                                           ${BASELINE_FILES}/utGalibTest${num}_bog4.dat 
-#                                           ${TEMP}/utGalibTest${num}_bog4.dat 
+#                                           ${BASELINE_FILES}/utGalibTest${num}_bog1.dat
+#                                           ${TEMP}/utGalibTest${num}_bog1.dat
+#                                           ${BASELINE_FILES}/utGalibTest${num}_bog2.dat
+#                                           ${TEMP}/utGalibTest${num}_bog2.dat
+#                                           ${BASELINE_FILES}/utGalibTest${num}_bog2a.dat
+#                                           ${TEMP}/utGalibTest${num}_bog2a.dat
+#                                           ${BASELINE_FILES}/utGalibTest${num}_bog3.dat
+#                                           ${TEMP}/utGalibTest${num}_bog3.dat
+#                                           ${BASELINE_FILES}/utGalibTest${num}_bog4.dat
+#                                           ${TEMP}/utGalibTest${num}_bog4.dat
 #                           galibTests${num}
-#                           ${TEMP}/utGalibTest${num}_bog1.dat 
-#                           ${TEMP}/utGalibTest${num}_bog2.dat 
-#                           ${TEMP}/utGalibTest${num}_bog2a.dat 
-#                           ${TEMP}/utGalibTest${num}_bog3.dat 
-#                           ${TEMP}/utGalibTest${num}_bog4.dat 
+#                           ${TEMP}/utGalibTest${num}_bog1.dat
+#                           ${TEMP}/utGalibTest${num}_bog2.dat
+#                           ${TEMP}/utGalibTest${num}_bog2a.dat
+#                           ${TEMP}/utGalibTest${num}_bog3.dat
+#                           ${TEMP}/utGalibTest${num}_bog4.dat
 #                           seed 555 )
 
 
 #                   SET(num 22)
-#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
+#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #                           --compare-n-ascii ${TOL} 4
-#                                           ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat 
-#                                           ${TEMP}/utGalibTest${num}_sinusoid.dat 
-#                                           ${BASELINE_FILES}/utGalibTest${num}_pop.initial.dat 
-#                                           ${TEMP}/utGalibTest${num}_pop.initial.dat 
-#                                           ${BASELINE_FILES}/utGalibTest${num}_pop.final.dat 
-#                                           ${TEMP}/utGalibTest${num}_pop.final.dat 
-#                                           ${BASELINE_FILES}/utGalibTest${num}_blog.dat 
-#                                           ${TEMP}/utGalibTest${num}_blog.dat 
+#                                           ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat
+#                                           ${TEMP}/utGalibTest${num}_sinusoid.dat
+#                                           ${BASELINE_FILES}/utGalibTest${num}_pop.initial.dat
+#                                           ${TEMP}/utGalibTest${num}_pop.initial.dat
+#                                           ${BASELINE_FILES}/utGalibTest${num}_pop.final.dat
+#                                           ${TEMP}/utGalibTest${num}_pop.final.dat
+#                                           ${BASELINE_FILES}/utGalibTest${num}_blog.dat
+#                                           ${TEMP}/utGalibTest${num}_blog.dat
 #                           galibTests${num}
-#                           ${TEMP}/utGalibTest${num}_sinusoid.dat 
-#                           ${TEMP}/utGalibTest${num}_pop.initial.dat 
-#                           ${TEMP}/utGalibTest${num}_pop.final.dat 
-#                           score_filename ${TEMP}/utGalibTest${num}_blog.dat 
+#                           ${TEMP}/utGalibTest${num}_sinusoid.dat
+#                           ${TEMP}/utGalibTest${num}_pop.initial.dat
+#                           ${TEMP}/utGalibTest${num}_pop.final.dat
+#                           score_filename ${TEMP}/utGalibTest${num}_blog.dat
 #                           seed 555 )
 
 #                   SET(num 23)
-#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
+#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #                           --compare-n-ascii ${TOL} 4
-#                                           ${BASELINE_FILES}/utGalibTest${num}_popi.dat 
-#                                           ${TEMP}/utGalibTest${num}_popi.dat 
-#                                           ${BASELINE_FILES}/utGalibTest${num}_popf.dat 
-#                                           ${TEMP}/utGalibTest${num}_popf.dat 
-#                                           ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat 
-#                                           ${TEMP}/utGalibTest${num}_sinusoid.dat 
-#                                           ${BASELINE_FILES}/utGalibTest${num}_blog.dat 
-#                                           ${TEMP}/utGalibTest${num}_blog.dat 
+#                                           ${BASELINE_FILES}/utGalibTest${num}_popi.dat
+#                                           ${TEMP}/utGalibTest${num}_popi.dat
+#                                           ${BASELINE_FILES}/utGalibTest${num}_popf.dat
+#                                           ${TEMP}/utGalibTest${num}_popf.dat
+#                                           ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat
+#                                           ${TEMP}/utGalibTest${num}_sinusoid.dat
+#                                           ${BASELINE_FILES}/utGalibTest${num}_blog.dat
+#                                           ${TEMP}/utGalibTest${num}_blog.dat
 #                           galibTests${num}
-#                           ${TEMP}/utGalibTest${num}_popi.dat 
-#                           ${TEMP}/utGalibTest${num}_popf.dat 
-#                           ${TEMP}/utGalibTest${num}_sinusoid.dat 
-#                           score_filename ${TEMP}/utGalibTest${num}_blog.dat 
+#                           ${TEMP}/utGalibTest${num}_popi.dat
+#                           ${TEMP}/utGalibTest${num}_popf.dat
+#                           ${TEMP}/utGalibTest${num}_sinusoid.dat
+#                           score_filename ${TEMP}/utGalibTest${num}_blog.dat
 #                           seed 555 )
 
 #                   SET(num 24)
-#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num} 
+#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #                           --compare-n-ascii ${TOL} 3
-#                                           ${BASELINE_FILES}/utGalibTest${num}_population.dat 
-#                                           ${TEMP}/utGalibTest${num}_population.dat 
-#                                           ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat 
-#                                           ${TEMP}/utGalibTest${num}_sinusoid.dat 
-#                                           ${BASELINE_FILES}/utGalibTest${num}_blog.dat 
-#                                           ${TEMP}/utGalibTest${num}_blog.dat 
+#                                           ${BASELINE_FILES}/utGalibTest${num}_population.dat
+#                                           ${TEMP}/utGalibTest${num}_population.dat
+#                                           ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat
+#                                           ${TEMP}/utGalibTest${num}_sinusoid.dat
+#                                           ${BASELINE_FILES}/utGalibTest${num}_blog.dat
+#                                           ${TEMP}/utGalibTest${num}_blog.dat
 #                           galibTests${num}
 #                           ${INPUTDATA}/galib-settings.txt
-#                           ${TEMP}/utGalibTest${num}_population.dat 
-#                           ${TEMP}/utGalibTest${num}_sinusoid.dat 
-#                           score_filename ${TEMP}/utGalibTest${num}_blog.dat 
+#                           ${TEMP}/utGalibTest${num}_population.dat
+#                           ${TEMP}/utGalibTest${num}_sinusoid.dat
+#                           score_filename ${TEMP}/utGalibTest${num}_blog.dat
 #                           seed 555 )
 
 #                   SET(num 26)
-#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
+#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #                           galibTests${num}
-#                           ${INPUTDATA}/galib-tsp_rect_20.txt 
+#                           ${INPUTDATA}/galib-tsp_rect_20.txt
 #                           seed 555 )
 
 
@@ -334,7 +334,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 IF(OTB_COMPILE_JPEG2000)
 ADD_TEST(utOpenJpegEncoder ${UTILITIES_TESTS}
 	openJpegEncoder
-	${TEMP}/testjpeg.j2k	
+	${TEMP}/testjpeg.j2k
 )
 
 ADD_TEST(utOpenJpegDecoder ${UTILITIES_TESTS}
@@ -354,7 +354,7 @@ ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
 IF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
   ADD_TEST(utOpenthreadsSimpleThreader ${UTILITIES_TESTS}
 	openthreadsSimpleThreader
-	2 # [NUM_ELTS] 
+	2 # [NUM_ELTS]
 	1 # [NUM_THREADS]
 	)
   ADD_TEST(utOpenthreadsWorkCrew ${UTILITIES_TESTS}
@@ -375,7 +375,7 @@ ADD_TEST(ut2DSiftImageSquareSyntheticRotate10 ${UTILITIES_TESTS}
 
 ADD_TEST(ut2DSiftImageGridSyntheticRotate10 ${UTILITIES_TESTS}
 	 itk2DScaleInvariantFeatureImageFilterTest
-	 ${INPUTDATA}/damier.png 
+	 ${INPUTDATA}/damier.png
 	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier1.png
 	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier2.png
 	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier_keys1.png
@@ -393,7 +393,7 @@ ADD_TEST(ut2DSiftImageSceneSyntheticRotate10 ${UTILITIES_TESTS}
 
 # -------            lib Kml   ------------------------------
 FOREACH(id_test createkml helloattrs helloenum hellofolder hellogeometry helloregion helloworld parsekml )
-        ADD_TEST( utKml${id_test} ${UTILITIES_TESTS} 
+        ADD_TEST( utKml${id_test} ${UTILITIES_TESTS}
         kml${id_test}
         ${TEMP}/utkml${id_test}.txt
         )
@@ -411,15 +411,15 @@ ADD_TEST( utKmlhellohref   ${UTILITIES_TESTS}
         ${INPUTDATA}/abstractview.kml
 #        ${TEMP}/utkmlhellohref.txt
         )
-ADD_TEST( utKmlhellokmz   ${UTILITIES_TESTS}   
+ADD_TEST( utKmlhellokmz   ${UTILITIES_TESTS}
         kmlhellokmz
         ${INPUTDATA}/multikml-doc.kmz
 #        ${TEMP}/utkmlhellokmz.txt
         )
 
 ADD_TEST( utKmlprettykml   ${UTILITIES_TESTS}
-        --compare-ascii ${TOL}  
-                        ${BASELINE_FILES}/utkmlprettykml.txt 
+        --compare-ascii ${TOL}
+                        ${BASELINE_FILES}/utkmlprettykml.txt
                         ${TEMP}/utkmlprettykml.txt
         kmlprettykml
         ${INPUTDATA}/polygons2d.kml
@@ -449,14 +449,14 @@ otbSVMComposedKernelFunctorTest.cxx
 ossimRadarSatSupport.cxx
 itkScaleInvariantFeatureImageFilterTest.cxx
 kmlcreatekml.cc
-kmlhelloattrs.cc 
-kmlhelloenum.cc 
+kmlhelloattrs.cc
+kmlhelloenum.cc
 kmlhellofolder.cc
-kmlhellogeometry.cc 
+kmlhellogeometry.cc
 kmlhellohref.cc
-kmlhellokmz.cc 
+kmlhellokmz.cc
 kmlhelloregion.cc
-kmlhelloworld.cc 
+kmlhelloworld.cc
 kmlparsekml.cc
 kmlprettykml.cc
 kmlprintgeometry.cc
@@ -470,7 +470,7 @@ IF(OTB_COMPILE_JPEG2000)
 ENDIF(OTB_COMPILE_JPEG2000)
 
 IF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
-  SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}  
+  SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}
         openthreadsThreadObserver.cpp
         openthreadsThreadReporter.cpp
         openthreadsWorkCrew.cpp
@@ -478,7 +478,7 @@ IF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
 ENDIF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
 
 IF(NOT OTB_USE_EXTERNAL_EXPAT)
-  SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS} 
+  SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}
         expatchardata.cxx
         expatminicheck.cxx
         expatruntests.cxx )
@@ -486,13 +486,13 @@ ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
 
 
 # -------       Select sources files suppress warning  -----------------------------------
-SET(UtilitiesTests_DisableWarning_SRCS 
-    ijBSplineScatteredDataPointSetToImageFilterTest.cxx 
-    siftfast.cpp 
+SET(UtilitiesTests_DisableWarning_SRCS
+    ijBSplineScatteredDataPointSetToImageFilterTest.cxx
+    siftfast.cpp
     openthreadsWorkCrew.cpp
-    expatchardata.cxx 
-    expatminicheck.cxx 
-    expatruntests.cxx 
+    expatchardata.cxx
+    expatminicheck.cxx
+    expatruntests.cxx
 )
 IF(CMAKE_COMPILER_IS_GNUCXX)
       SET_SOURCE_FILES_PROPERTIES( ${UtilitiesTests_DisableWarning_SRCS} PROPERTIES COMPILE_FLAGS -w)
@@ -515,7 +515,9 @@ IF(NOT BUILD_SHARED_LIBS)
 ENDIF(NOT BUILD_SHARED_LIBS)
 
 ADD_EXECUTABLE(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
-TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon ${GDAL_LIBRARY} ITKAlgorithms ITKStatistics otbossim otbsvm otb6S tinyXML otbkml otbsiftfast)
+# TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon ${GDAL_LIBRARY} ITKAlgorithms ITKStatistics otbossim otbsvm otb6S tinyXML otbkml otbsiftfast)
+TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon otbsvm otb6S tinyXML otbkml otbsiftfast)
+
 
 IF(OTB_COMPILE_JPEG2000)
   TARGET_LINK_LIBRARIES(otbUtilitiesTests otbopenjpeg)
