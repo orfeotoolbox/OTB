@@ -83,7 +83,7 @@ LineSegmentDetector<TInputImage,TPrecision >
 
   /** Compute the modulus and the orientation gradient image*/
   m_GradientFilter->SetInput(this->GetInput());
-  m_GradientFilter->SetSigma(1.4);
+  m_GradientFilter->SetSigma(1.1);
   m_MagnitudeFilter->SetInput(m_GradientFilter->GetOutput());
     
   m_OrientationFilter->SetInput(m_GradientFilter->GetOutput());
@@ -791,7 +791,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   /** Fill the rectangle with the points*/
   for (int i = 0; i<static_cast<int>(X.size());  i++)
     {
-      InputIndexType   vertex;
+      OutputIndexType   vertex;
       vertex[0] = X[i] ; vertex[1] = Y[i];
       rectangle->AddVertex(vertex);
     }
