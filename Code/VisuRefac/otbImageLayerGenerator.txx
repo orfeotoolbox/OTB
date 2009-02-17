@@ -20,6 +20,8 @@
 
 #include "otbImageLayerGenerator.h"
 
+#include <FL/Fl.h>
+
 namespace otb
 {
 
@@ -27,46 +29,162 @@ template < class TImageLayer >
 ImageLayerGenerator<TImageLayer>
 ::ImageLayerGenerator()
 {
-
+  // Intialize output layer
+  m_Layer = ImageLayerType::New();
+  // Resampler
+  m_Resampler = ResampleFilterType::New();
 }
 
 template < class TImageLayer >  
 ImageLayerGenerator<TImageLayer>
 ::~ImageLayerGenerator()
-{
+{}
 
+template < class TImageLayer >  
+void 
+ImageLayerGenerator<TImageLayer>
+::GenerateLayer()
+{
+// Check if there is an input image
+  if(m_Image.IsNull())
+    {
+    return;
+    }
+
+  // Update image information
+  m_Image->UpdateOutputInformation();
+
+  // Build a new layer
+  m_Layer = ImageLayerType::New();
+
+  // Generate layer information
+  this->GenerateLayerInformation();
+
+  // If we need to generate the quicklook
+  if(m_GenerateQuicklook)
+    {
+    // Generate it
+    this->GenerateQuicklook();
+    }
+
+  // Generate histograms
+  this->GenerateHistograms();
+}
+
+template < class TImageLayer >  
+unsigned int 
+ImageLayerGenerator<TImageLayer>
+::GetOptimalSubSamplingRate()
+{
+  // Check if there is an input image
+  if(m_Image.IsNull())
+    {
+    return 1;
+    }
+  // The optimal rate will be computed according to the screen size.
+  // We want a quality quicklook up to a quarter of the screen.
+  // Get the screen size
+  unsigned int wscreen = static_cast<unsigned int>(Fl::w());
+  unsigned int hscreen = static_cast<unsigned int>(Fl::h());
+  
+  // Update image information
+  m_Image->UpdateOutputInformation();
+  
+  // Get the image largest possible region
+  typename ImageType::RegionType largestRegion = m_Image->GetLargestPossibleRegion();
+  
+  // Shannon (finner generation could be added later)
+  unsigned int wrequested = wscreen/2;
+  unsigned int hrequested = hscreen/2;
+
+  // Compute ratio in both directions
+  unsigned int wratio = m_Image->GetLargestPossibleRegion().GetSize()[0]/wrequested;
+  unsigned int hratio = m_Image->GetLargestPossibleRegion().GetSize()[1]/hrequested;
+
+  // find max ratio
+  unsigned int ratio = std::min(wratio,hratio);
+
+  // Ensure a non null ratio
+  if(ratio == 0)
+    {
+    ratio = 1;
+    }
+  // return the ratio
+  return ratio;
+}
+template < class TImageLayer >  
+void 
+ImageLayerGenerator<TImageLayer>
+::GenerateLayerInformation()
+{
+  // Set the layer extent
+  m_Layer->SetExtent(m_Image->GetLargestPossibleRegion());
+  m_Layer->SetHasExtract(true);
+  m_Layer->SetHasScaledExtract(true);
 }
 
 template < class TImageLayer >  
 void 
 ImageLayerGenerator<TImageLayer>
-::GenerateLayer(){}
+::GenerateQuicklook()
+{
+  if(m_GenerateQuicklook)
+    {
+    // Compute optimal subsampling rate
+    unsigned int ssrate = this->GetOptimalSubSamplingRate();
+    
+    // If no subsampling is needed
+    if(ssrate == 1)
+      {
+      m_Layer->SetHasQuicklook(false);
+      }
+    else
+      {
+      // build the quicklook
+      m_Layer->SetQuicklookSubsamplingRate(ssrate);
+      m_Resampler->SetInput(m_Image);
+      m_Resampler->SetShrinkFactor(ssrate);
+      m_Resampler->Update();
+      
+      // Set the quicklook to the layer
+      m_Layer->SetQuicklook(m_Resampler->GetOutput());
 
-template < class TImageLayer >  
-unsigned int 
-ImageLayerGenerator<TImageLayer>
-::GetOptimalSubSamplingRate(){}
+      m_Layer->SetHasQuicklook(true);
+      }
+    }
+  else
+    {
+    // If there is a quicklook
+    if(m_Quicklook.IsNotNull())
+      {
+      // Set it to the layer
+      m_Layer->SetQuicklook(m_Quicklook);
+      m_Layer->SetQuicklookSubsamplingRate(m_SubsamplingRate);
+      m_Layer->SetHasQuicklook(true);
+      }
+    else
+      {
+      // else there is no quicklook, disable it
+      m_Layer->SetHasQuicklook(false);
+      }
+    }
+}
 
 template < class TImageLayer >  
 void 
 ImageLayerGenerator<TImageLayer>
-::PrintSelf(std::ostream& os, itk::Indent indent) const{}
+::GenerateHistograms()
+{
+  /// TODO: Implement histogram generation
+}
 
 template < class TImageLayer >  
 void 
 ImageLayerGenerator<TImageLayer>
-::GenerateLayerInformation(){}
-
-template < class TImageLayer >  
-void 
-ImageLayerGenerator<TImageLayer>
-::GenerateQuicklook(){}
-
-template < class TImageLayer >  
-void 
-ImageLayerGenerator<TImageLayer>
-::GenerateHistograms(){}
-
+::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  Superclass::PrintSelf(os,indent);
+}
 } // end namespace otb
 
 #endif

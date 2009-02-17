@@ -20,6 +20,7 @@
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+#include "otbStreamingShrinkImageFilter.h"
 
 namespace otb
 {
@@ -61,12 +62,17 @@ public:
   itkTypeMacro(ImageLayerGenerator,Object);
 
   /** Image layer typedef */
-  typedef TImageLayer                        ImageLayerType;
-  typedef typename ImageLayerType::Pointer   ImageLayerPointerType;
+  typedef TImageLayer                          ImageLayerType;
+  typedef typename ImageLayerType::Pointer     ImageLayerPointerType;
 
   /** Image typedef */
-  typedef typename ImageLayerType::ImageType ImageType;
-  typedef typename ImageType::Pointer        ImagePointerType;
+  typedef typename ImageLayerType::ImageType   ImageType;
+  typedef typename ImageType::Pointer          ImagePointerType;
+
+  /** Resampler typedef */
+  typedef otb::StreamingShrinkImageFilter
+  <ImageType,ImageType>                        ResampleFilterType;
+  typedef typename ResampleFilterType::Pointer ResampleFilterPointerType;
   
   /** Get the generated layer */
   itkGetObjectMacro(Layer,ImageLayerType);
@@ -139,6 +145,9 @@ private:
   
   /** if true, the generator will also generate the quicklook */
   bool                  m_GenerateQuicklook;
+
+  /** Streaming resample filter */
+  ResampleFilterPointerType m_Resampler;
 
 }; // end class 
 } // end namespace otb
