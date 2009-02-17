@@ -301,10 +301,11 @@ ADD_TEST(ScaleInvariantFeatureImageFilterTest ${EXE_TESTS2}
 ADD_TEST(CloudDetectionExampleTest ${EXE_TESTS2}
         --compare-image ${TOL}
         ${BASELINE}/CloudDetectionOutput.png
-        ${TEMP}/CloudDetectionOutput.png
+        ${TEMP}/PrettyCloudDetectionOutput.png
         CloudDetectionExampleTest
         ${INPUTDATA}/CloudsOnReunion.tif
-        ${TEMP}/CloudDetectionOutput.png
+        ${TEMP}/CloudDetectionOutput.tif
+	${TEMP}/PrettyCloudDetectionOutput.png	
         553 467 734 581 0.4 0.6 1.0
 )
 
