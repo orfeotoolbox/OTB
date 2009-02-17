@@ -72,8 +72,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
   typename InputImageType::ConstPointer input  = this->GetInput();
   typename OutputImageType::Pointer output  = this->GetOutput();
   typename LinesListType::Pointer    list = this->GetInputLineSpatialObjectList();
-
-     
+       
   /** Copy the input requested region in the output requested region*/
   typedef itk::ImageRegionIterator< OutputImageType >      OutputIteratorType;
   typedef itk::ImageRegionConstIterator< InputImageType >  InputIteratorType;
@@ -91,6 +90,10 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
   typedef itk::LineIterator<OutputImageType>       LineIteratorFilter;
   OutputIndexType                                  indexBeginLine, indexEndLine;
   LineListIterator                                 itList = list->begin();
+
+  /** Dimensions of the buffered region*/
+  //   typename OutputImageRegionType::SizeType size = outputRegionForThread.GetSize();
+  //   typename OutputImageRegionType::IndexType start = outputRegionForThread.GetIndex();
   
   while(itList != list->end())
     {
@@ -111,7 +114,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
       /** Iteration over the line and writing white lines */
       while(!itLine.IsAtEnd())
 	{
-	if(output->GetRequestedRegion().IsInside(itLine.GetIndex()))
+	if(outputRegionForThread.IsInside(itLine.GetIndex()))
 	  itLine.Set(m_Value);
 	++itLine;
 	}
