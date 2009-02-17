@@ -29,28 +29,28 @@ namespace Functor
  *  \brief This functor calculates the energy image texture.
  *
  *  The formula is:
- *  $ \frac{1}{N}\sum_{i}\sum_{j}(i-j)^2 $
+ *  \f[ \frac{1}{N}\sum_{i}\sum_{j}(i-j)^2 \f]
+ *
  *  TIterInput is an iterator, TOutput is a PixelType.
  *
  *  \sa TextureFunctorBase
  *  \ingroup Functor
  *  \ingroup Statistics
  */
-template <class TIterInput1, class TIterInput2, class TOutput>
-class ITK_EXPORT EnergyTextureFunctor : 
-public TextureFunctorBase<TIterInput1, TIterInput2, TOutput>
+template <class TIterInput, class TOutput>
+class ITK_EXPORT EnergyTextureFunctor :
+public TextureFunctorBase<TIterInput, TOutput>
 {
 public:
   EnergyTextureFunctor(){};
   virtual ~EnergyTextureFunctor(){};
 
-  typedef TIterInput1                           IterType1;
-  typedef TIterInput2                           IterType2;
-  typedef TOutput                               OutputType;
-  typedef typename IterType1::OffsetType        OffsetType;
-  typedef typename IterType1::RadiusType        RadiusType;
-  typedef typename IterType1::InternalPixelType InternalPixelType;
-  typedef typename IterType1::ImageType         ImageType;
+  typedef TIterInput                           IterType;
+  typedef TOutput                              OutputType;
+  typedef typename IterType::OffsetType        OffsetType;
+  typedef typename IterType::RadiusType        RadiusType;
+  typedef typename IterType::InternalPixelType InternalPixelType;
+  typedef typename IterType::ImageType         ImageType;
   typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
 
   double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
@@ -83,7 +83,7 @@ public:
 	    temp += norm;
 	  }
       }
-    temp /= area; 
+    temp /= area;
     return vcl_pow(temp, 2);
   }
 

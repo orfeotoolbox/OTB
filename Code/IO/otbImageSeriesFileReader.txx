@@ -171,7 +171,6 @@ ImageSeriesFileReader< TImage >
       return;
     }
 
-    int numBand = 0;
     std::vector<int> bands;
     int aBand,oldBand=-1;
     char sep;

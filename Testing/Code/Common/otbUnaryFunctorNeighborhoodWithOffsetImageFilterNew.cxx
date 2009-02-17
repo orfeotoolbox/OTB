@@ -23,17 +23,15 @@
 
 namespace Functor
 {
-template <class TIter1, class TIter2, class TOutput>
+template <class TIter, class TOutput>
 class UnaryFunctorNeighborhoodWithOffsetImageFilterFunctorNewTest
 {
 public:
   UnaryFunctorNeighborhoodWithOffsetImageFilterFunctorNewTest() {};
   ~UnaryFunctorNeighborhoodWithOffsetImageFilterFunctorNewTest() {};
 
-  typedef TIter1 IterType1;
-  typedef typename IterType1::OffsetType OffsetType;
-  typedef TIter2 IterType2;
-
+  typedef TIter IterType;
+  typedef typename IterType::OffsetType OffsetType;
 
   void SetOffset(OffsetType off)
   {
@@ -44,9 +42,9 @@ public:
     return m_Offset;
   };
 
-  inline TOutput operator() (const TIter1 & it1, const TIter2 & it2)
+  inline TOutput operator() (const TIter & it)
   {
-    return(static_cast<TOutput>(it1.GetCenterPixel()));
+    return(static_cast<TOutput>(it.GetCenterPixel()));
 
   }
 private:
@@ -62,7 +60,7 @@ int otbUnaryFunctorNeighborhoodWithOffsetImageFilterNew(int argc, char * argv[])
   typedef otb::VectorImage<InputPixelType,Dimension> ImageType;
   typedef ImageType::PixelType PixelType;
   typedef itk::ConstNeighborhoodIterator<ImageType>   IterType;;
-  typedef Functor::UnaryFunctorNeighborhoodWithOffsetImageFilterFunctorNewTest<IterType, IterType, PixelType>  FunctorType;
+  typedef Functor::UnaryFunctorNeighborhoodWithOffsetImageFilterFunctorNewTest<IterType, PixelType>  FunctorType;
   typedef otb::UnaryFunctorNeighborhoodWithOffsetImageFilter<ImageType, ImageType, FunctorType> UnaryFunctorNeighborhoodWithOffsetImageFilterType;
 
   // Instantiating object

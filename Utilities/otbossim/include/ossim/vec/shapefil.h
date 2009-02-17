@@ -16,7 +16,7 @@
  * option is discussed in more detail in shapelib.html.
  *
  * --
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -192,44 +192,44 @@ extern "C" {
 /*      __declspec(dllexport) must appear before them.                  */
 /* -------------------------------------------------------------------- */
 #include <ossim/base/ossimConstants.h>
-   
+
 #ifdef OSSIMMAKINGDLL
-#  define SHPAPI_CALL OSSIM_DLL
-#  define SHPAPI_CALL1(x)  OSSIM_DLL_DATA(x)
+#  define ossim_SHPAPI_CALL OSSIM_DLL
+#  define ossim_SHPAPI_CALL1(x)  OSSIM_DLL_DATA(x)
 #endif
-#ifndef SHPAPI_CALL
-#  define SHPAPI_CALL
+#ifndef ossim_SHPAPI_CALL
+#  define ossim_SHPAPI_CALL
 #endif
-#ifndef SHPAPI_CALL1
-#  define SHPAPI_CALL1(x)      x SHPAPI_CALL
+#ifndef ossim_SHPAPI_CALL1
+#  define ossim_SHPAPI_CALL1(x)      x ossim_SHPAPI_CALL
 #endif
-   
+
 #if 0
 #ifdef SHAPELIB_DLLEXPORT
-#  define SHPAPI_CALL __declspec(dllexport)
-#  define SHPAPI_CALL1(x)  __declspec(dllexport) x
+#  define ossim_SHPAPI_CALL __declspec(dllexport)
+#  define ossim_SHPAPI_CALL1(x)  __declspec(dllexport) x
 #endif
-#ifndef SHPAPI_CALL
-#  define SHPAPI_CALL
+#ifndef ossim_SHPAPI_CALL
+#  define ossim_SHPAPI_CALL
 #endif
-#ifndef SHPAPI_CALL1
-#  define SHPAPI_CALL1(x)      x SHPAPI_CALL
+#ifndef ossim_SHPAPI_CALL1
+#  define ossim_SHPAPI_CALL1(x)      x ossim_SHPAPI_CALL
 #endif
 #endif
-   
+
 /* -------------------------------------------------------------------- */
 /*      Macros for controlling CVSID and ensuring they don't appear     */
 /*      as unreferenced variables resulting in lots of warnings.        */
 /* -------------------------------------------------------------------- */
 #ifndef DISABLE_CVSID
-#  define SHP_CVSID(string)     static char cpl_cvsid[] = string; \
+#  define ossim_SHP_CVSID(string)     static char cpl_cvsid[] = string; \
 static char *cvsid_aw() { return( cvsid_aw() ? ((char *) NULL) : cpl_cvsid ); }
 #else
-#  define SHP_CVSID(string)
+#  define ossim_SHP_CVSID(string)
 #endif
 
 /************************************************************************/
-/*                             SHP Support.                             */
+/*                             ossim_SHP Support.                             */
 /************************************************************************/
 typedef	struct
 {
@@ -237,7 +237,7 @@ typedef	struct
     FILE	*fpSHX;
 
     int		nShapeType;				/* SHPT_* */
-    
+
     int		nFileSize;				/* SHP file */
 
     int         nRecords;
@@ -252,43 +252,43 @@ typedef	struct
 
     unsigned char *pabyRec;
     int         nBufSize;
-} SHPInfo;
+} ossim_SHPInfo;
 
-typedef SHPInfo * SHPHandle;
+typedef ossim_SHPInfo * ossim_SHPHandle;
 
 /* -------------------------------------------------------------------- */
 /*      Shape types (nSHPType)                                          */
 /* -------------------------------------------------------------------- */
-#define SHPT_NULL	0
-#define SHPT_POINT	1
-#define SHPT_ARC	3
-#define SHPT_POLYGON	5
-#define SHPT_MULTIPOINT	8
-#define SHPT_POINTZ	11
-#define SHPT_ARCZ	13
-#define SHPT_POLYGONZ	15
-#define SHPT_MULTIPOINTZ 18
-#define SHPT_POINTM	21
-#define SHPT_ARCM	23
-#define SHPT_POLYGONM	25
-#define SHPT_MULTIPOINTM 28
-#define SHPT_MULTIPATCH 31
+#define ossim_SHPT_NULL	0
+#define ossim_SHPT_POINT	1
+#define ossim_SHPT_ARC	3
+#define ossim_SHPT_POLYGON	5
+#define ossim_SHPT_MULTIPOINT	8
+#define ossim_SHPT_POINTZ	11
+#define ossim_SHPT_ARCZ	13
+#define ossim_SHPT_POLYGONZ	15
+#define ossim_SHPT_MULTIPOINTZ 18
+#define ossim_SHPT_POINTM	21
+#define ossim_SHPT_ARCM	23
+#define ossim_SHPT_POLYGONM	25
+#define ossim_SHPT_MULTIPOINTM 28
+#define ossim_SHPT_MULTIPATCH 31
 
 
 /* -------------------------------------------------------------------- */
-/*      Part types - everything but SHPT_MULTIPATCH just uses           */
-/*      SHPP_RING.                                                      */
+/*      Part types - everything but ossim_SHPT_MULTIPATCH just uses           */
+/*      ossim_SHPP_RING.                                                      */
 /* -------------------------------------------------------------------- */
 
-#define SHPP_TRISTRIP	0
-#define SHPP_TRIFAN	1
-#define SHPP_OUTERRING	2
-#define SHPP_INNERRING	3
-#define SHPP_FIRSTRING	4
-#define SHPP_RING	5
+#define ossim_SHPP_TRISTRIP	0
+#define ossim_SHPP_TRIFAN	1
+#define ossim_SHPP_OUTERRING	2
+#define ossim_SHPP_INNERRING	3
+#define ossim_SHPP_FIRSTRING	4
+#define ossim_SHPP_RING	5
 
 /* -------------------------------------------------------------------- */
-/*      SHPObject - represents on shape (without attributes) read       */
+/*      ossim_SHPObject - represents on shape (without attributes) read       */
 /*      from the .shp file.                                             */
 /* -------------------------------------------------------------------- */
 typedef struct
@@ -300,7 +300,7 @@ typedef struct
     int		nParts;
     int		*panPartStart;
     int		*panPartType;
-    
+
     int		nVertices;
     double	*padfX;
     double	*padfY;
@@ -316,50 +316,50 @@ typedef struct
     double	dfYMax;
     double	dfZMax;
     double	dfMMax;
-} SHPObject;
+} ossim_SHPObject;
 
 /* -------------------------------------------------------------------- */
-/*      SHP API Prototypes                                              */
+/*      ossim_SHP API Prototypes                                              */
 /* -------------------------------------------------------------------- */
-SHPHandle SHPAPI_CALL
-      SHPOpen( const char * pszShapeFile, const char * pszAccess );
-SHPHandle SHPAPI_CALL
-      SHPCreate( const char * pszShapeFile, int nShapeType );
-void SHPAPI_CALL
-      SHPGetInfo( SHPHandle hSHP, int * pnEntities, int * pnShapeType,
+ossim_SHPHandle ossim_SHPAPI_CALL
+      ossim_SHPOpen( const char * pszShapeFile, const char * pszAccess );
+ossim_SHPHandle ossim_SHPAPI_CALL
+      ossim_SHPCreate( const char * pszShapeFile, int nShapeType );
+void ossim_SHPAPI_CALL
+      ossim_SHPGetInfo( ossim_SHPHandle hSHP, int * pnEntities, int * pnShapeType,
                   double * padfMinBound, double * padfMaxBound );
 
-SHPObject SHPAPI_CALL1(*)
-      SHPReadObject( SHPHandle hSHP, int iShape );
-int SHPAPI_CALL
-      SHPWriteObject( SHPHandle hSHP, int iShape, SHPObject * psObject );
+ossim_SHPObject ossim_SHPAPI_CALL1(*)
+      ossim_SHPReadObject( ossim_SHPHandle hSHP, int iShape );
+int ossim_SHPAPI_CALL
+      ossim_SHPWriteObject( ossim_SHPHandle hSHP, int iShape, ossim_SHPObject * psObject );
 
-void SHPAPI_CALL
-      SHPDestroyObject( SHPObject * psObject );
-void SHPAPI_CALL
-      SHPComputeExtents( SHPObject * psObject );
-SHPObject SHPAPI_CALL1(*)
-      SHPCreateObject( int nSHPType, int nShapeId, int nParts, 
+void ossim_SHPAPI_CALL
+      ossim_SHPDestroyObject( ossim_SHPObject * psObject );
+void ossim_SHPAPI_CALL
+      ossim_SHPComputeExtents( ossim_SHPObject * psObject );
+ossim_SHPObject ossim_SHPAPI_CALL1(*)
+      ossim_SHPCreateObject( int nSHPType, int nShapeId, int nParts,
                        const int * panPartStart, const int * panPartType,
-                       int nVertices, 
+                       int nVertices,
                        const double * padfX, const double * padfY,
                        const double * padfZ, const double * padfM );
-SHPObject SHPAPI_CALL1(*)
-      SHPCreateSimpleObject( int nSHPType, int nVertices,
-                             const double * padfX, 
-                             const double * padfY, 
+ossim_SHPObject ossim_SHPAPI_CALL1(*)
+      ossim_SHPCreateSimpleObject( int nSHPType, int nVertices,
+                             const double * padfX,
+                             const double * padfY,
                              const double * padfZ );
 
-int SHPAPI_CALL
-      SHPRewindObject( SHPHandle hSHP, SHPObject * psObject );
+int ossim_SHPAPI_CALL
+      ossim_SHPRewindObject( ossim_SHPHandle hSHP, ossim_SHPObject * psObject );
 
-void SHPAPI_CALL SHPClose( SHPHandle hSHP );
-void SHPAPI_CALL SHPWriteHeader( SHPHandle hSHP );
+void ossim_SHPAPI_CALL ossim_SHPClose( ossim_SHPHandle hSHP );
+void ossim_SHPAPI_CALL ossim_SHPWriteHeader( ossim_SHPHandle hSHP );
 
-const char SHPAPI_CALL1(*)
-      SHPTypeName( int nSHPType );
-const char SHPAPI_CALL1(*)
-      SHPPartTypeName( int nPartType );
+const char ossim_SHPAPI_CALL1(*)
+      ossim_SHPTypeName( int nSHPType );
+const char ossim_SHPAPI_CALL1(*)
+      ossim_SHPPartTypeName( int nPartType );
 
 /* -------------------------------------------------------------------- */
 /*      Shape quadtree indexing API.                                    */
@@ -378,55 +378,55 @@ typedef struct shape_tree_node
        or the whole list can be NULL */
     int		nShapeCount;
     int		*panShapeIds;
-    SHPObject   **papsShapeObj;
+    ossim_SHPObject   **papsShapeObj;
 
     int		nSubNodes;
     struct shape_tree_node *apsSubNode[MAX_SUBNODE];
-    
-} SHPTreeNode;
+
+} ossim_SHPTreeNode;
 
 typedef struct
 {
-    SHPHandle   hSHP;
-    
+    ossim_SHPHandle   hSHP;
+
     int		nMaxDepth;
     int		nDimension;
     int         nTotalCount;
-    
-    SHPTreeNode	*psRoot;
-} SHPTree;
 
-SHPTree SHPAPI_CALL1(*)
-      SHPCreateTree( SHPHandle hSHP, int nDimension, int nMaxDepth,
+    ossim_SHPTreeNode	*psRoot;
+} ossim_SHPTree;
+
+ossim_SHPTree ossim_SHPAPI_CALL1(*)
+      ossim_SHPCreateTree( ossim_SHPHandle hSHP, int nDimension, int nMaxDepth,
                      double *padfBoundsMin, double *padfBoundsMax );
-void    SHPAPI_CALL
-      SHPDestroyTree( SHPTree * hTree );
+void    ossim_SHPAPI_CALL
+      ossim_SHPDestroyTree( ossim_SHPTree * hTree );
 
-int	SHPAPI_CALL
-      SHPWriteTree( SHPTree *hTree, const char * pszFilename );
-SHPTree SHPAPI_CALL
-      SHPReadTree( const char * pszFilename );
+int	ossim_SHPAPI_CALL
+      ossim_SHPWriteTree( ossim_SHPTree *hTree, const char * pszFilename );
+ossim_SHPTree ossim_SHPAPI_CALL
+      ossim_SHPReadTree( const char * pszFilename );
 
-int	SHPAPI_CALL
-      SHPTreeAddObject( SHPTree * hTree, SHPObject * psObject );
-int	SHPAPI_CALL
-      SHPTreeAddShapeId( SHPTree * hTree, SHPObject * psObject );
-int	SHPAPI_CALL
-      SHPTreeRemoveShapeId( SHPTree * hTree, int nShapeId );
+int	ossim_SHPAPI_CALL
+      ossim_SHPTreeAddObject( ossim_SHPTree * hTree, ossim_SHPObject * psObject );
+int	ossim_SHPAPI_CALL
+      ossim_SHPTreeAddShapeId( ossim_SHPTree * hTree, ossim_SHPObject * psObject );
+int	ossim_SHPAPI_CALL
+      ossim_SHPTreeRemoveShapeId( ossim_SHPTree * hTree, int nShapeId );
 
-void 	SHPAPI_CALL
-      SHPTreeTrimExtraNodes( SHPTree * hTree );
+void 	ossim_SHPAPI_CALL
+      ossim_SHPTreeTrimExtraNodes( ossim_SHPTree * hTree );
 
-int    SHPAPI_CALL1(*)
-      SHPTreeFindLikelyShapes( SHPTree * hTree,
+int    ossim_SHPAPI_CALL1(*)
+      ossim_SHPTreeFindLikelyShapes( ossim_SHPTree * hTree,
                                double * padfBoundsMin,
                                double * padfBoundsMax,
                                int * );
-int     SHPAPI_CALL
-      SHPCheckBoundsOverlap( double *, double *, double *, double *, int );
+int     ossim_SHPAPI_CALL
+      ossim_SHPCheckBoundsOverlap( double *, double *, double *, double *, int );
 
-int SHPAPI_CALL1(*) 
-SHPSearchDiskTree( FILE *fp, 
+int ossim_SHPAPI_CALL1(*)
+    ossim_SHPSearchDiskTree( FILE *fp,
                    double *padfBoundsMin, double *padfBoundsMax,
                    int *pnShapeCount );
 
@@ -452,12 +452,12 @@ typedef	struct
     int		nCurrentRecord;
     int		bCurrentRecordModified;
     char	*pszCurrentRecord;
-    
+
     int		bNoHeader;
     int		bUpdated;
-} DBFInfo;
+} ossim_DBFInfo;
 
-typedef DBFInfo * DBFHandle;
+typedef ossim_DBFInfo * ossim_DBFHandle;
 
 typedef enum {
   FTString,
@@ -465,73 +465,73 @@ typedef enum {
   FTDouble,
   FTLogical,
   FTInvalid
-} DBFFieldType;
+} ossim_DBFFieldType;
 
 #define XBASE_FLDHDR_SZ       32
 
-DBFHandle SHPAPI_CALL
-      DBFOpen( const char * pszDBFFile, const char * pszAccess );
-DBFHandle SHPAPI_CALL
-      DBFCreate( const char * pszDBFFile );
+ossim_DBFHandle ossim_SHPAPI_CALL
+      ossim_DBFOpen( const char * pszDBFFile, const char * pszAccess );
+ossim_DBFHandle ossim_SHPAPI_CALL
+      ossim_DBFCreate( const char * pszDBFFile );
 
-int	SHPAPI_CALL
-      DBFGetFieldCount( DBFHandle psDBF );
-int	SHPAPI_CALL
-      DBFGetRecordCount( DBFHandle psDBF );
-int	SHPAPI_CALL
-      DBFAddField( DBFHandle hDBF, const char * pszFieldName,
-                   DBFFieldType eType, int nWidth, int nDecimals );
+int	ossim_SHPAPI_CALL
+      ossim_DBFGetFieldCount( ossim_DBFHandle psDBF );
+int	ossim_SHPAPI_CALL
+      ossim_DBFGetRecordCount( ossim_DBFHandle psDBF );
+int	ossim_SHPAPI_CALL
+      ossim_DBFAddField( ossim_DBFHandle hDBF, const char * pszFieldName,
+                   ossim_DBFFieldType eType, int nWidth, int nDecimals );
 
-DBFFieldType SHPAPI_CALL
-      DBFGetFieldInfo( DBFHandle psDBF, int iField, 
+ossim_DBFFieldType ossim_SHPAPI_CALL
+      ossim_DBFGetFieldInfo( ossim_DBFHandle psDBF, int iField,
                        char * pszFieldName, int * pnWidth, int * pnDecimals );
 
-int SHPAPI_CALL
-      DBFGetFieldIndex(DBFHandle psDBF, const char *pszFieldName);
+int ossim_SHPAPI_CALL
+      ossim_DBFGetFieldIndex(ossim_DBFHandle psDBF, const char *pszFieldName);
 
-int 	SHPAPI_CALL
-      DBFReadIntegerAttribute( DBFHandle hDBF, int iShape, int iField );
-double 	SHPAPI_CALL
-      DBFReadDoubleAttribute( DBFHandle hDBF, int iShape, int iField );
-const char SHPAPI_CALL1(*)
-      DBFReadStringAttribute( DBFHandle hDBF, int iShape, int iField );
-const char SHPAPI_CALL1(*)
-      DBFReadLogicalAttribute( DBFHandle hDBF, int iShape, int iField );
-int     SHPAPI_CALL
-      DBFIsAttributeNULL( DBFHandle hDBF, int iShape, int iField );
+int 	ossim_SHPAPI_CALL
+      ossim_DBFReadIntegerAttribute( ossim_DBFHandle hDBF, int iShape, int iField );
+double 	ossim_SHPAPI_CALL
+      ossim_DBFReadDoubleAttribute( ossim_DBFHandle hDBF, int iShape, int iField );
+const char ossim_SHPAPI_CALL1(*)
+      ossim_DBFReadStringAttribute( ossim_DBFHandle hDBF, int iShape, int iField );
+const char ossim_SHPAPI_CALL1(*)
+      ossim_DBFReadLogicalAttribute( ossim_DBFHandle hDBF, int iShape, int iField );
+int     ossim_SHPAPI_CALL
+      ossim_DBFIsAttributeNULL( ossim_DBFHandle hDBF, int iShape, int iField );
 
-int SHPAPI_CALL
-      DBFWriteIntegerAttribute( DBFHandle hDBF, int iShape, int iField, 
+int ossim_SHPAPI_CALL
+      ossim_DBFWriteIntegerAttribute( ossim_DBFHandle hDBF, int iShape, int iField,
                                 int nFieldValue );
-int SHPAPI_CALL
-      DBFWriteDoubleAttribute( DBFHandle hDBF, int iShape, int iField,
+int ossim_SHPAPI_CALL
+      ossim_DBFWriteDoubleAttribute( ossim_DBFHandle hDBF, int iShape, int iField,
                                double dFieldValue );
-int SHPAPI_CALL
-      DBFWriteStringAttribute( DBFHandle hDBF, int iShape, int iField,
+int ossim_SHPAPI_CALL
+      ossim_DBFWriteStringAttribute( ossim_DBFHandle hDBF, int iShape, int iField,
                                const char * pszFieldValue );
-int SHPAPI_CALL
-     DBFWriteNULLAttribute( DBFHandle hDBF, int iShape, int iField );
+int ossim_SHPAPI_CALL
+     ossim_DBFWriteNULLAttribute( ossim_DBFHandle hDBF, int iShape, int iField );
 
-int SHPAPI_CALL
-     DBFWriteLogicalAttribute( DBFHandle hDBF, int iShape, int iField,
+int ossim_SHPAPI_CALL
+     ossim_DBFWriteLogicalAttribute( ossim_DBFHandle hDBF, int iShape, int iField,
 			       const char lFieldValue);
-int SHPAPI_CALL
-     DBFWriteAttributeDirectly(DBFHandle psDBF, int hEntity, int iField,
+int ossim_SHPAPI_CALL
+     ossim_DBFWriteAttributeDirectly(ossim_DBFHandle psDBF, int hEntity, int iField,
                                void * pValue );
-const char SHPAPI_CALL1(*)
-      DBFReadTuple(DBFHandle psDBF, int hEntity );
-int SHPAPI_CALL
-      DBFWriteTuple(DBFHandle psDBF, int hEntity, void * pRawTuple );
+const char ossim_SHPAPI_CALL1(*)
+      ossim_DBFReadTuple(ossim_DBFHandle psDBF, int hEntity );
+int ossim_SHPAPI_CALL
+      ossim_DBFWriteTuple(ossim_DBFHandle psDBF, int hEntity, void * pRawTuple );
 
-DBFHandle SHPAPI_CALL
-      DBFCloneEmpty(DBFHandle psDBF, const char * pszFilename );
- 
-void	SHPAPI_CALL
-      DBFClose( DBFHandle hDBF );
-void    SHPAPI_CALL
-      DBFUpdateHeader( DBFHandle hDBF );
-char    SHPAPI_CALL
-      DBFGetNativeFieldType( DBFHandle hDBF, int iField );
+ossim_DBFHandle ossim_SHPAPI_CALL
+      ossim_DBFCloneEmpty(ossim_DBFHandle psDBF, const char * pszFilename );
+
+void	ossim_SHPAPI_CALL
+      ossim_DBFClose( ossim_DBFHandle hDBF );
+void    ossim_SHPAPI_CALL
+      ossim_DBFUpdateHeader( ossim_DBFHandle hDBF );
+char    ossim_SHPAPI_CALL
+      ossim_DBFGetNativeFieldType( ossim_DBFHandle hDBF, int iField );
 
 #ifdef __cplusplus
 }

@@ -25,22 +25,21 @@
 #include "otbTextureFunctorBase.h"
 
 
-template <class TIterInput1, class TIterInput2, class TOutput>
+template <class TIterInput, class TOutput>
 class ITK_EXPORT TextureFunctorTest : 
-	public otb::Functor::TextureFunctorBase<TIterInput1, TIterInput2, TOutput>
+public otb::Functor::TextureFunctorBase<TIterInput, TOutput>
 {
 public:
   TextureFunctorTest()
     {};
   ~TextureFunctorTest(){};
 
-  typedef TIterInput1                           IterType1;
-  typedef TIterInput2                           IterType2;
-  typedef TOutput                               OutputType;
-  typedef typename IterType1::OffsetType        OffsetType;
-  typedef typename IterType1::RadiusType        RadiusType;
-  typedef typename IterType1::InternalPixelType InternalPixelType;
-  typedef typename IterType1::ImageType         ImageType;
+  typedef TIterInput                           IterType;
+  typedef TOutput                              OutputType;
+  typedef typename IterType::OffsetType        OffsetType;
+  typedef typename IterType::RadiusType        RadiusType;
+  typedef typename IterType::InternalPixelType InternalPixelType;
+  typedef typename IterType::ImageType         ImageType;
   typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
   
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
@@ -66,7 +65,7 @@ int otbTextureFunctorBase(int argc, char * argv[])
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
   typedef itk::ConstNeighborhoodIterator<ImageType>   IterType;;
-  typedef TextureFunctorTest<IterType, IterType, PixelType>  FunctorType;
+  typedef TextureFunctorTest<IterType, PixelType>  FunctorType;
   typedef otb::UnaryFunctorNeighborhoodWithOffsetImageFilter<ImageType, ImageType, FunctorType> UnaryFunctorNeighborhoodImageFilterType;
 
   // Instantiating object

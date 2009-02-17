@@ -82,21 +82,31 @@ class ITK_EXPORT TextureImageFunction :
     IndexType index;
     this->ConvertPointToNearestIndex( point, index );
     return this->EvaluateAtIndex( index );
-  }
+  };
   virtual RealType EvaluateAtContinuousIndex(
     const ContinuousIndexType& cindex ) const
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex( cindex, index );
     return this->EvaluateAtIndex( index ) ;
-  }
-
+  };
+  
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */
-  itkSetMacro( Radius, SizeType);
+  void SetRadius(SizeType & rad)
+  {
+    m_Radius = rad;
+    this->Modified();
+  };
+  
+  void SetOffset(OffsetType & off)
+  {
+    m_Offset = off;
+    this->Modified();
+  };
+
   itkGetMacro( Radius, SizeType);
-  itkSetMacro( Offset, OffsetType);
-  itkGetMacro( Offset, OffsetType );
+  itkGetMacro( Offset, OffsetType);
 
 protected:
   TextureImageFunction();

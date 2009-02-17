@@ -26,19 +26,20 @@ namespace otb
 {
 
 /** \class MultiChannelGAndRIndexImageFilter
- * \brief Implements mutli channel G and R  pixel-wise generic index operation on one vector image.
- *
- * This class is parameterized over the type of the input image and
- * the type of the output image.  It is also parameterized by the
- * operation to be applied, using a Functor style.
- * 
- * \sa UnaryFunctorImageFilter
+   * \brief Implements mutli channel G and R  pixel-wise generic index operation on one vector image.
+   *
+   * This class is parameterized over the type of the input image and
+   * the type of the output image.  It is also parameterized by the
+   * operation to be applied, using a Functor style.
+   *
+   * \sa UnaryFunctorImageFilter
+   * \ingroup Radiometry
  */
 template <class TInputImage, class TOutputImage,
       class TFunction = Functor::IR< typename TInputImage::InternalPixelType,
                        typename TInputImage::InternalPixelType,
                        typename TOutputImage::PixelType>  >
-class ITK_EXPORT MultiChannelGAndRIndexImageFilter 
+class ITK_EXPORT MultiChannelGAndRIndexImageFilter
   : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
 {
 public:
@@ -56,7 +57,7 @@ public:
 
   /** Some typedefs. */
   typedef TFunction   FunctorType;
- 
+
   /** Set/Get the Green channel index. Value must be in [1...[ */
   itkSetMacro(GreenIndex,unsigned int);
   itkGetMacro(GreenIndex,unsigned int);

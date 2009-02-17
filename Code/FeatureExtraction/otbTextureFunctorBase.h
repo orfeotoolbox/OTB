@@ -29,9 +29,10 @@ namespace otb
 namespace Functor
 {
 /** \class TextureFunctorBase
- *  \brief This functor ius the base for all texture functors.
+ *  \brief This functor is the base for all texture functors.
  *
- *  It uses a neighborhood and an offset (m_Offset)  to compute texture.
+ *  It uses a neighborhood iterator which radius is the one of the considered 
+ *  neighborhood plsu an offset (m_Offset) to compute texture.
  *  It computes the mean, standard deviation of the two areas and the joint histogram using
  *  Scott formula for the bins lengths computation.
  *  TIterInput is an iterator, TOutput is a PixelType.
@@ -40,7 +41,7 @@ namespace Functor
  *  \ingroup Statistics
  */
 
-template <class TIterInput1, class TIterInput2, class TOutput>
+template <class TIterInput, class TOutput>
 class TextureFunctorBase
 {
 public:
@@ -61,14 +62,13 @@ public:
   };
   virtual ~TextureFunctorBase() {};
 
-  typedef TIterInput1                           IterType1;
-  typedef TIterInput2                           IterType2;
-  typedef TOutput                               OutputType;
-  typedef typename IterType1::OffsetType        OffsetType;
-  typedef typename IterType1::RadiusType        RadiusType;
-  typedef typename OutputType::ValueType        OutputPixelType;
-  typedef typename IterType1::InternalPixelType InternalPixelType;
-  typedef typename IterType1::ImageType         ImageType;
+  typedef TIterInput                           IterType;
+  typedef TOutput                              OutputType;
+  typedef typename IterType::OffsetType        OffsetType;
+  typedef typename IterType::RadiusType        RadiusType;
+  typedef typename OutputType::ValueType       OutputPixelType;
+  typedef typename IterType::InternalPixelType InternalPixelType;
+  typedef typename IterType::ImageType         ImageType;
   typedef itk::Neighborhood<InternalPixelType, ::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
   typedef std::vector<double>                   DoubleVectorType;
   typedef std::vector<int>                      IntVectorType;
@@ -164,32 +164,37 @@ public:
       m_OffsetBinLength = scottCoef*binLengthOff;     
     }
 
-  inline TOutput operator()(const IterType1 &it, const IterType2 &itOff)
+  inline TOutput operator()(const IterType &itOff)
     { 
-      RadiusType radius = it.GetRadius();
       RadiusType radiusOff = itOff.GetRadius();
       OutputType outPix;
-      outPix.SetSize( it.GetCenterPixel().GetSize() );
+      outPix.SetSize( itOff.GetCenterPixel().GetSize() );
       outPix.Fill(0);
       OffsetType offset;
       offset.Fill(0);
-
-      for ( unsigned int i=0; i<it.GetCenterPixel().GetSize(); i++ )
+      // Compute the neighborhood radius from the neigh+offset iterator to extract the neighborhood area from the iterator
+      RadiusType radius;
+      radius[0] = static_cast<unsigned int>( 0.5*( static_cast<double>(itOff.GetSize()[0] - 1) ) - static_cast<double>( vcl_abs(m_Offset[0])) );
+      radius[1] = static_cast<unsigned int>( 0.5*( static_cast<double>(itOff.GetSize()[1] - 1) ) - static_cast<double>( vcl_abs(m_Offset[1])) );
+  
+      // For each channel
+      for ( unsigned int i=0; i<itOff.GetCenterPixel().GetSize(); i++ )
 	{
 	  NeighborhoodType inNeigh;
-	  inNeigh.SetRadius(it.GetRadius());
+	  inNeigh.SetRadius(radius);
 	  NeighborhoodType offNeigh;
-	  offNeigh.SetRadius(itOff.GetRadius());
-	  
+	  offNeigh.SetRadius(radiusOff);
+	  // Extract the neighborhood area 
 	  for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
 	    {
 	      offset[0] = l;
 	      for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
 		{
 		  offset[1] = k;
-		  inNeigh[offset] = it.GetPixel(offset)[i];
+		  inNeigh[offset] = itOff.GetPixel(offset)[i];
 		}
 	    }
+	  // Extract the offset area
 	  offset.Fill(0);
 	  for ( int l = -static_cast<int>(radiusOff[0]); l <= static_cast<int>(radiusOff[0]); l++ )
 	    {

@@ -39,21 +39,20 @@ namespace Functor
  *  \ingroup Statistics
  */
 
-template <class TIterInput1, class TIterInput2, class TOutput>
+template <class TIterInput, class TOutput>
 class ITK_EXPORT VarianceTextureFunctor : 
-public MeanTextureFunctor<TIterInput1, TIterInput2, TOutput>
+public MeanTextureFunctor<TIterInput, TOutput>
 {
 public:
   VarianceTextureFunctor(){};
   virtual ~VarianceTextureFunctor(){};
 
-  typedef TIterInput1                           IterType1;
-  typedef TIterInput2                           IterType2;
-  typedef TOutput                               OutputType;
-  typedef typename IterType1::InternalPixelType InternalPixelType;
-  typedef typename IterType1::ImageType         ImageType;
+  typedef TIterInput                           IterType;
+  typedef TOutput                              OutputType;
+  typedef typename IterType::InternalPixelType InternalPixelType;
+  typedef typename IterType::ImageType         ImageType;
   typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
-  typedef MeanTextureFunctor<TIterInput1, TIterInput2, TOutput> Superclass;
+  typedef MeanTextureFunctor<TIterInput, TOutput> Superclass;
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
@@ -67,7 +66,7 @@ public:
 	for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
 	  {
 	    double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
-	    double square = vcl_pow( ( ( (static_cast<double>(s)+0.5)*this->GetNeighBinLength() ) - this->GetMean()), 2);
+	    double square = vcl_pow( ( ( (static_cast<double>(s)+0.5)*this->GetNeighBinLength() ) - mean), 2);
 	    out += square*p;
 	  }
       }

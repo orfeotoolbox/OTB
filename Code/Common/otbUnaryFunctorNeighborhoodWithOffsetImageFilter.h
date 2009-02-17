@@ -71,7 +71,7 @@ public:
   itkSetMacro(Radius,unsigned int);
   itkGetMacro(Radius,unsigned int);
   /** Set/Get the offset */
-  void SetOffset(InputImageOffsetType off)
+  virtual void SetOffset(InputImageOffsetType off)
   {
     m_Offset = off;
     this->GetFunctor().SetOffset(off);

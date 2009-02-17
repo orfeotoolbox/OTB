@@ -25,11 +25,13 @@ namespace otb
 
 
 /** \class SIXSTraits
- * \brief SIXSTraits operations.
- *
- * Call 6S main function. The main method call 6S to calculate atmospheric correction parameters.
- * It use by the OTB Atmospheric correction framework.
- *
+   * \brief SIXSTraits operations.
+   *
+   * Call 6S main function. The main method call 6S to calculate atmospheric correction parameters.
+   * It use by the OTB Atmospheric correction framework.
+   *
+   * \ingroup Radiometry
+   *
  */
 class ITK_EXPORT SIXSTraits
 {

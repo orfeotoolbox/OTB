@@ -3,6 +3,7 @@ IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
+SET(EXAMPLESDATA ${OTB_DATA_ROOT}/Examples)
 IF(OTB_DATA_USE_LARGEINPUT)
   SET(IMAGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -50,16 +51,122 @@ ADD_TEST(vrTvImageWidgetController ${VISUREFAC_TESTS1}
 otbImageWidgetController
 )
 
+#------------ otb::ImageLayer ----------------------------
+
+ADD_TEST(vrTuImageLayerNew ${VISUREFAC_TESTS1}
+otbImageLayerNew
+)
+
+ADD_TEST(vrTvImageLayerScalar ${VISUREFAC_TESTS1}
+--compare-n-images ${TOL} 3
+${BASELINE}/vrTvImageLayerScalarQuicklookOutput.png
+${TEMP}/vrTvImageLayerScalarQuicklookOutput.png
+${BASELINE}/vrTvImageLayerScalarExtractOutput.png
+${TEMP}/vrTvImageLayerScalarExtractOutput.png
+${BASELINE}/vrTvImageLayerScalarScaledExtractOutput.png
+${TEMP}/vrTvImageLayerScalarScaledExtractOutput.png
+otbImageLayerScalar
+${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+${TEMP}/vrTvImageLayerScalarQuicklookOutput.png
+${TEMP}/vrTvImageLayerScalarExtractOutput.png
+${TEMP}/vrTvImageLayerScalarScaledExtractOutput.png
+2 127 417
+)
+
+ADD_TEST(vrTvImageLayerVector ${VISUREFAC_TESTS1}
+--compare-n-images ${TOL} 3
+${BASELINE}/vrTvImageLayerVectorQuicklookOutput.png
+${TEMP}/vrTvImageLayerVectorQuicklookOutput.png
+${BASELINE}/vrTvImageLayerVectorExtractOutput.png
+${TEMP}/vrTvImageLayerVectorExtractOutput.png
+${BASELINE}/vrTvImageLayerVectorScaledExtractOutput.png
+${TEMP}/vrTvImageLayerVectorScaledExtractOutput.png
+otbImageLayerVector
+${INPUTDATA}/couleurs.tif
+${TEMP}/vrTvImageLayerVectorQuicklookOutput.png
+${TEMP}/vrTvImageLayerVectorExtractOutput.png
+${TEMP}/vrTvImageLayerVectorScaledExtractOutput.png
+2 50 50 50 200 200 200
+)
+
+#------------ otb::GrayscaleRenderingFunction ------------
+
+ADD_TEST(vrTuGrayscaleRenderingFunctionNew ${VISUREFAC_TESTS1}
+otbGrayscaleRenderingFunctionNew
+)
+
+#------------ otb::RGBRenderingFunction ------------
+
+ADD_TEST(vrTuRGBRenderingFunctionNew ${VISUREFAC_TESTS1}
+otbRGBRenderingFunctionNew
+)
+
+#------------ otb::RenderingImageFilter ------------
+
+ADD_TEST(vrTuRenderingImageFilterNew ${VISUREFAC_TESTS1}
+otbRenderingImageFilterNew
+)
+
+ADD_TEST(vrTvRenderingImageFilterScalar ${VISUREFAC_TESTS1}
+--compare-image ${TOL}
+${BASELINE}/vrTvRenderingImageFilterScalarOutput.png
+${TEMP}/vrTvRenderingImageFilterScalarOutput.png
+otbRenderingImageFilterScalar
+${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+${TEMP}/vrTvRenderingImageFilterScalarOutput.png
+127 417
+)
+
+ADD_TEST(vrTvRenderingImageFilterVector ${VISUREFAC_TESTS1}
+--compare-image ${TOL}
+${BASELINE}/vrTvRenderingImageFilterVectorOutput.png
+${TEMP}/vrTvRenderingImageFilterVectorOutput.png
+otbRenderingImageFilterVector
+${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+${TEMP}/vrTvRenderingImageFilterVectorOutput.png
+0 179 0 0 0 802 0 0 0
+)
+
+#------------ otb::UniformAlphaBlendingFunction ------------
+
+ADD_TEST(vrTuUniformAlphaBlendingFunctionNew ${VISUREFAC_TESTS1}
+otbUniformAlphaBlendingFunctionNew
+)
+
+#------------ otb::BlendingImageFilter ----------------------
+
+ADD_TEST(vrTuBlendingImageFilterNew ${VISUREFAC_TESTS1}
+otbBlendingImageFilterNew
+)
+
+ADD_TEST(vrTvBlendingImageFilter ${VISUREFAC_TESTS1}
+otbBlendingImageFilter
+${EXAMPLESDATA}/SpotBefore.png
+${EXAMPLESDATA}/SpotAfter.png
+${TEMP}/vrTvBlendingImageFilterOutput.png
+)
+
+# Testing srcs
 SET(VisuRefac_SRCS1
 otbImageWidgetNew.cxx
 otbImageWidget.cxx
 otbImageWidgetActionHandlerNew.cxx
 otbImageWidgetControllerNew.cxx
 otbImageWidgetController.cxx
+otbImageLayerNew.cxx
+otbGrayscaleRenderingFunctionNew.cxx
+otbRGBRenderingFunctionNew.cxx
+otbRenderingImageFilterNew.cxx
+otbRenderingImageFilterScalar.cxx
+otbRenderingImageFilterVector.cxx
+otbImageLayerScalar.cxx
+otbImageLayerVector.cxx
+otbUniformAlphaBlendingFunctionNew.cxx
+otbBlendingImageFilterNew.cxx
+otbBlendingImageFilter.cxx
 )
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 
-
+# Building testing executables
 ADD_EXECUTABLE(otbVisuRefacTests1 otbVisuRefacTests1.cxx ${VisuRefac_SRCS1})
 TARGET_LINK_LIBRARIES(otbVisuRefacTests1 OTBVisuRefac OTBIO)
 
