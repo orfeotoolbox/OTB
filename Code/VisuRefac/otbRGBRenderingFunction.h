@@ -111,7 +111,12 @@ public:
 
 protected:
   /** Constructor */
-  RGBRenderingFunction() : m_RedChannelIndex(0), m_BlueChannelIndex(1), m_GreenChannelIndex(2) {}
+  RGBRenderingFunction()
+  {
+    m_RedChannelIndex   = 0;
+    m_BlueChannelIndex  = 1;
+    m_GreenChannelIndex = 2; 
+  }
   /** Destructor */
   ~RGBRenderingFunction() {}
   /** Perform the computation for a single value (this is done in
