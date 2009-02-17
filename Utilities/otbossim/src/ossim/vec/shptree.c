@@ -614,7 +614,7 @@ compare_ints( const void * a, const void * b)
 }
 
 int ossim_SHPAPI_CALL1(*)
-SHPTreeFindLikelyShapes( ossim_SHPTree * hTree,
+    ossim_SHPTreeFindLikelyShapes( ossim_SHPTree * hTree,
                          double * padfBoundsMin, double * padfBoundsMax,
                          int * pnShapeCount )
 
