@@ -76,7 +76,7 @@ bool ossimShapeDatabase::open(const ossimFilename& file,
 {
    if(isOpen()) close();
 
-   theHandle = DBFOpen(file.c_str(), flags.c_str());
+   theHandle = ossim_DBFOpen(file.c_str(), flags.c_str());
    if(theHandle)
    {
       theFilename = file;
@@ -90,7 +90,7 @@ void ossimShapeDatabase::close()
 {
    if(isOpen())
    {
-      DBFClose(theHandle);
+      ossim_DBFClose(theHandle);
       theHandle = NULL;
       theRecordNumber = -1;
    }
@@ -121,7 +121,7 @@ bool ossimShapeDatabase::getRecord(ossimShapeDatabaseRecord& result)
       
       for(iField = 0; iField < theHandle->nFields; ++iField)
       {   
-         DBFFieldType fieldType = DBFGetFieldInfo(theHandle,
+         ossim_DBFFieldType fieldType = ossim_DBFGetFieldInfo(theHandle,
                                                   iField,
                                                   name,
                                                   &width,
@@ -140,17 +140,17 @@ bool ossimShapeDatabase::getRecord(ossimShapeDatabaseRecord& result)
          {
          case FTString:
          {
-            field.theValue = DBFReadStringAttribute(theHandle, theRecordNumber, iField);
+            field.theValue = ossim_DBFReadStringAttribute(theHandle, theRecordNumber, iField);
             break;
          }
          case FTInteger:
          {
-            field.theValue = ossimString::toString(DBFReadIntegerAttribute(theHandle, theRecordNumber, iField));
+            field.theValue = ossimString::toString(ossim_DBFReadIntegerAttribute(theHandle, theRecordNumber, iField));
             break;
          }
          case FTDouble:
          {
-            field.theValue = ossimString::toString(DBFReadDoubleAttribute(theHandle, theRecordNumber, iField));
+            field.theValue = ossimString::toString(ossim_DBFReadDoubleAttribute(theHandle, theRecordNumber, iField));
             break;
          }
 		 case FTLogical:
@@ -192,7 +192,7 @@ void ossimShapeDatabase::print(std::ostream& out)const
       
       for(iField = 0; iField < theHandle->nFields; ++iField)
       {
-         DBFFieldType fieldType = DBFGetFieldInfo(theHandle,
+         ossim_DBFFieldType fieldType = ossim_DBFGetFieldInfo(theHandle,
                                                   iField,
                                                   name,
                                                   &width,
@@ -218,7 +218,7 @@ void ossimShapeDatabase::print(std::ostream& out)const
       {
          for(iField = 0; iField < theHandle->nFields; ++iField)
          {   
-            DBFFieldType fieldType = DBFGetFieldInfo(theHandle,
+            ossim_DBFFieldType fieldType = ossim_DBFGetFieldInfo(theHandle,
                                                      iField,
                                                      name,
                                                      &width,
@@ -234,21 +234,21 @@ void ossimShapeDatabase::print(std::ostream& out)const
             {
                
                out << std::setw(25) << setiosflags(std::ios::left) << key.c_str()
-                   << DBFReadStringAttribute(theHandle, iShape, iField) <<std::endl;
+                   << ossim_DBFReadStringAttribute(theHandle, iShape, iField) <<std::endl;
                
                break;
             }
             case FTInteger:
             {
                out << std::setw(25) << setiosflags(std::ios::left) << key.c_str()
-                   << DBFReadIntegerAttribute(theHandle, iShape, iField) << std::endl;
+                   << ossim_DBFReadIntegerAttribute(theHandle, iShape, iField) << std::endl;
                
                break;
             }
             case FTDouble:
             {
                out << std::setw(25) << setiosflags(std::ios::left) << key.c_str()
-                   << DBFReadDoubleAttribute(theHandle, iShape, iField) << std::endl;
+                   << ossim_DBFReadDoubleAttribute(theHandle, iShape, iField) << std::endl;
                
                break;
             }

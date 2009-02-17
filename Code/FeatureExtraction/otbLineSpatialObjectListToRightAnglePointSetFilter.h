@@ -24,6 +24,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkPointSet.h"
 #include "otbLineSpatialObjectListToPointSetFilter.h"
 #include "otbMath.h"
+#include "itkVariableSizeMatrix.h"
 
 /** \class LineSpatialObjectListToRightAnglePointSetFilter
 
@@ -55,20 +56,25 @@ public:
 
   /** Template parameters typedefs*/
   typedef TLinesList                                    InputLinesListType;
-  typedef typename TLinesList::LineType                 LineType;
-  //typedef typename LineType::PointListType              InputPointListType;
+  typedef typename InputLinesListType::LineType         LineType;
+  typedef std::vector<LineType*>                        VectorLineType;
+  //typedef typename LineType::PointListType            InputPointListType;
   typedef typename InputLinesListType::const_iterator   InputLinesListTypeIterator;
 
-  /**  Typdedef dor The input image  :
+  /**  Typdedef for The input image  :
    *   (ONLY USED FOR THE LINE ITERATOR -> To check if the index is inside the region)
    */
   typedef TImage                                        InputImageType;
   typedef typename InputImageType::IndexType            InputIndexType;
   
   /** Typedef support for output PointSet*/
-  typedef  TPointSet                                    OutputPointSetType;
+  typedef TPointSet                                     OutputPointSetType;
+  typedef typename OutputPointSetType::PointType        PointType;
   typedef typename OutputPointSetType::Pointer          OutputPointSetPointerType;
-  
+
+  /** Typedef Support  for Checking couple of segments used*/
+  typedef itk::VariableSizeMatrix<unsigned int>         checkMatrixType;
+
   /**
    *  Public Methods : 
    *       Get the Input Image & Get The input Image
@@ -76,6 +82,14 @@ public:
   virtual InputImageType* GetInputImage();
 
   virtual void SetInputImage(InputImageType *);
+
+
+  /** Set/Get the thresholds*/
+  itkGetMacro(ThresholdDistance, float);
+  itkSetMacro(ThresholdDistance, float);
+  
+  itkGetMacro(ThresholdAngle, float);
+  itkSetMacro(ThresholdAngle, float);
 
 protected:
 
@@ -115,9 +129,13 @@ protected:
    */
   virtual float ComputeAngleFormedBySegments(LineType * lineDst , LineType * lineSrc);
   /**
-   * 
+   *  When we find a right angle, one compute the coordinate of the segments intersection
    */
-  virtual bool IsRightAngle(float Angle);
+  virtual  PointType ComputeAngleRightCoordinate(LineType * lineDst , LineType * lineSrc);
+  /**
+   * AddRightAngleToPointSet
+   */
+  virtual void AddRightAngleToPointSet(PointType rAngle  , LineType * LineDst , LineType* LineCur );
 
 
 private:
@@ -127,6 +145,9 @@ private:
 
   /** Smart pointer on the output PointSet*/
   OutputPointSetPointerType     m_OutputPointSet;
+
+  float m_ThresholdDistance;
+  float m_ThresholdAngle;
     
 };
 }

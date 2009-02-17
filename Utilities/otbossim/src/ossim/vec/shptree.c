@@ -53,7 +53,7 @@
  * updated email address
  *
  * Revision 1.6  2001/05/23 13:36:52  warmerda
- * added use of SHPAPI_CALL
+ * added use of ossim_SHPAPI_CALL
  *
  * Revision 1.5  1999/11/05 14:12:05  warmerda
  * updated license terms
@@ -116,7 +116,7 @@ static void * SfRealloc( void * pMem, int nNewSize )
 }
 
 /************************************************************************/
-/*                          SHPTreeNodeInit()                           */
+/*                          ossim_SHPTreeNodeInit()                           */
 /*                                                                      */
 /*      Initialize a tree node.                                         */
 /************************************************************************/
@@ -558,7 +558,7 @@ void ossim_SHPAPI_CALL
 /*      Does this node overlap the area of interest at all?  If not,    */
 /*      return without adding to the list at all.                       */
 /* -------------------------------------------------------------------- */
-    if( !SHPCheckBoundsOverlap( psTreeNode->adfBoundsMin,
+    if( !ossim_SHPCheckBoundsOverlap( psTreeNode->adfBoundsMin,
                                 psTreeNode->adfBoundsMax,
                                 padfBoundsMin,
                                 padfBoundsMax,
@@ -614,7 +614,7 @@ compare_ints( const void * a, const void * b)
 }
 
 int ossim_SHPAPI_CALL1(*)
-SHPTreeFindLikelyShapes( ossim_SHPTree * hTree,
+    ossim_SHPTreeFindLikelyShapes( ossim_SHPTree * hTree,
                          double * padfBoundsMin, double * padfBoundsMax,
                          int * pnShapeCount )
 
@@ -748,7 +748,7 @@ static int
 /*      If we don't overlap this node at all, we can just fseek()       */
 /*      pass this node info and all subnodes.                           */
 /* -------------------------------------------------------------------- */
-    if( !SHPCheckBoundsOverlap( adfNodeBoundsMin, adfNodeBoundsMax,
+    if( !ossim_SHPCheckBoundsOverlap( adfNodeBoundsMin, adfNodeBoundsMax,
                                 padfBoundsMin, padfBoundsMax, 2 ) )
     {
         offset += numshapes*sizeof(int) + sizeof(int);

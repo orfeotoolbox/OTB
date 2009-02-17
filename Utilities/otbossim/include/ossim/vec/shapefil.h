@@ -59,34 +59,34 @@
  * added FTLogical and logical attribute read/write calls
  *
  * Revision 1.25  2002/05/07 13:46:30  warmerda
- * added DBFWriteAttributeDirectly().
+ * added ossim_DBFWriteAttributeDirectly().
  *
  * Revision 1.24  2002/04/10 16:59:54  warmerda
- * added SHPRewindObject
+ * added ossim_SHPRewindObject
  *
  * Revision 1.23  2002/01/15 14:36:07  warmerda
  * updated email address
  *
  * Revision 1.22  2002/01/15 14:32:00  warmerda
- * try to improve SHPAPI_CALL docs
+ * try to improve ossim_SHPAPI_CALL docs
  *
  * Revision 1.21  2001/11/01 16:29:55  warmerda
- * move pabyRec into SHPInfo for thread safety
+ * move pabyRec into ossim_SHPInfo for thread safety
  *
  * Revision 1.20  2001/07/20 13:06:02  warmerda
- * fixed SHPAPI attribute for SHPTreeFindLikelyShapes
+ * fixed ossim_SHPAPI attribute for ossim_SHPTreeFindLikelyShapes
  *
  * Revision 1.19  2001/05/31 19:20:13  warmerda
- * added DBFGetFieldIndex()
+ * added ossim_DBFGetFieldIndex()
  *
  * Revision 1.18  2001/05/31 18:15:40  warmerda
- * Added support for NULL fields in DBF files
+ * Added support for NULL fields in ossim_DBF files
  *
  * Revision 1.17  2001/05/23 13:36:52  warmerda
- * added use of SHPAPI_CALL
+ * added use of ossim_SHPAPI_CALL
  *
  * Revision 1.16  2000/09/25 14:15:59  warmerda
- * added DBFGetNativeFieldType()
+ * added ossim_DBFGetNativeFieldType()
  *
  * Revision 1.15  2000/02/16 16:03:51  warmerda
  * added null shape support
@@ -116,13 +116,13 @@
  * Added the TRIM_DBF_WHITESPACE and DISABLE_MULTIPATCH_MEASURE options.
  *
  * Revision 1.6  1998/12/03 15:48:15  warmerda
- * Added SHPCalculateExtents().
+ * Added ossim_SHPCalculateExtents().
  *
  * Revision 1.5  1998/11/09 20:57:16  warmerda
- * Altered SHPGetInfo() call.
+ * Altered ossim_SHPGetInfo() call.
  *
  * Revision 1.4  1998/11/09 20:19:33  warmerda
- * Added 3D support, and use of SHPObject.
+ * Added 3D support, and use of ossim_SHPObject.
  *
  * Revision 1.3  1995/08/23 02:24:05  warmerda
  * Added support for reading bounds.
@@ -151,7 +151,7 @@ extern "C" {
 /************************************************************************/
 
 /* -------------------------------------------------------------------- */
-/*      Should the DBFReadStringAttribute() strip leading and           */
+/*      Should the ossim_DBFReadStringAttribute() strip leading and           */
 /*      trailing white space?                                           */
 /* -------------------------------------------------------------------- */
 #define TRIM_DBF_WHITESPACE
@@ -164,7 +164,7 @@ extern "C" {
 #define DISABLE_MULTIPATCH_MEASURE
 
 /* -------------------------------------------------------------------- */
-/*      SHPAPI_CALL                                                     */
+/*      ossim_SHPAPI_CALL                                                     */
 /*                                                                      */
 /*      The following two macros are present to allow forcing           */
 /*      various calling conventions on the Shapelib API.                */
@@ -183,8 +183,8 @@ extern "C" {
 /*      To get both at once it will be necessary to hack this           */
 /*      include file to define:                                         */
 /*                                                                      */
-/*        #define SHPAPI_CALL __declspec(dllexport) __stdcall           */
-/*        #define SHPAPI_CALL1 __declspec(dllexport) * __stdcall        */
+/*        #define ossim_SHPAPI_CALL __declspec(dllexport) __stdcall           */
+/*        #define ossim_SHPAPI_CALL1 __declspec(dllexport) * __stdcall        */
 /*                                                                      */
 /*      The complexity of the situtation is partly caused by the        */
 /*      peculiar requirement of Visual C++ that __stdcall appear        */
@@ -236,9 +236,9 @@ typedef	struct
     FILE        *fpSHP;
     FILE	*fpSHX;
 
-    int		nShapeType;				/* SHPT_* */
+    int		nShapeType;				/* ossim_SHPT_* */
 
-    int		nFileSize;				/* SHP file */
+    int		nFileSize;				/* ossim_SHP file */
 
     int         nRecords;
     int		nMaxRecords;
@@ -431,7 +431,7 @@ int ossim_SHPAPI_CALL1(*)
                    int *pnShapeCount );
 
 /************************************************************************/
-/*                             DBF Support.                             */
+/*                             ossim_DBF Support.                             */
 /************************************************************************/
 typedef	struct
 {

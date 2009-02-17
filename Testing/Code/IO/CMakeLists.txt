@@ -1347,7 +1347,7 @@ ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
          )
 
 ADD_TEST(ioTvossimElevManagerTest2 ${IO_TESTS12}
---compare-ascii ${TOL}  ${BASELINE}/ioTvossimElevManagerTest2.txt
+--compare-ascii ${TOL}  ${BASELINE_FILES}/ioTvossimElevManagerTest2.txt
                         ${TEMP}/ioTvossimElevManagerTest2.txt
         otbOssimElevManagerTest2
          ${INPUTDATA}/DEM/srtm_directory

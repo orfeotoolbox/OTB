@@ -234,7 +234,7 @@ protected:
     */
    ossimUnitType             theUnitType;
 
-   SHPTree*                  theTree;
+   ossim_SHPTree*                  theTree;
 
    ossimShapeFile            theShapeFile;
 

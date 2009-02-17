@@ -123,13 +123,13 @@ void ossimImageShapeFileIndex::build(ossim_uint32 maxDepth)const
 {
    if(theRecords.size())
    {
-      SHPHandle hSHP = SHPCreate( theFilename.c_str(), SHPT_POLYGON);
-      DBFHandle hDBF = DBFCreate( theFilename.c_str());
+      ossim_SHPHandle hSHP = ossim_SHPCreate( theFilename.c_str(), ossim_SHPT_POLYGON);
+      ossim_DBFHandle hDBF = ossim_DBFCreate( theFilename.c_str());
       
-      DBFAddField(hDBF, "GROUP", FTString, 256, 0);
-      DBFAddField(hDBF, "FILENAME", FTString, 256, 0);
-      DBFAddField(hDBF, "ENTRY", FTInteger, 10, 0);
-      DBFAddField(hDBF, "DATUM", FTString, 16, 0);
+      ossim_DBFAddField(hDBF, "GROUP", FTString, 256, 0);
+      ossim_DBFAddField(hDBF, "FILENAME", FTString, 256, 0);
+      ossim_DBFAddField(hDBF, "ENTRY", FTInteger, 10, 0);
+      ossim_DBFAddField(hDBF, "DATUM", FTString, 16, 0);
       
       double* x = new double[4];
       double* y = new double[4];
@@ -148,22 +148,22 @@ void ossimImageShapeFileIndex::build(ossim_uint32 maxDepth)const
          y[2] = theRecords[idx]->theMiny;
          y[3] = theRecords[idx]->theMiny;
          
-         SHPObject* obj = SHPCreateSimpleObject(SHPT_POLYGON,
+         ossim_SHPObject* obj = ossim_SHPCreateSimpleObject(ossim_SHPT_POLYGON,
                                                 nVertices,
                                                 x,
                                                 y,
                                                 0);
-         SHPWriteObject( hSHP, -1, obj );
-         iRecord = DBFGetRecordCount( hDBF );
-         DBFWriteStringAttribute(hDBF, iRecord, 0, theRecords[idx]->theGroupName.c_str());
-         DBFWriteStringAttribute(hDBF, iRecord, 1, theRecords[idx]->theFilename.c_str());
-         DBFWriteIntegerAttribute(hDBF, iRecord, 2, (int)(theRecords[idx]->theEntry));
-         DBFWriteStringAttribute(hDBF, iRecord, 3, "WGE");
-         SHPDestroyObject(obj);
+         ossim_SHPWriteObject( hSHP, -1, obj );
+         iRecord = ossim_DBFGetRecordCount( hDBF );
+         ossim_DBFWriteStringAttribute(hDBF, iRecord, 0, theRecords[idx]->theGroupName.c_str());
+         ossim_DBFWriteStringAttribute(hDBF, iRecord, 1, theRecords[idx]->theFilename.c_str());
+         ossim_DBFWriteIntegerAttribute(hDBF, iRecord, 2, (int)(theRecords[idx]->theEntry));
+         ossim_DBFWriteStringAttribute(hDBF, iRecord, 3, "WGE");
+         ossim_SHPDestroyObject(obj);
       }
 
-      DBFClose(hDBF);
-      SHPTree * shpTree = 0;
+      ossim_DBFClose(hDBF);
+      ossim_SHPTree * shpTree = 0;
       double minV[4] = {0.0,0.0,0.0,0.0};
       double maxV[4] = {0.0,0.0,0.0,0.0};
       
@@ -182,15 +182,15 @@ void ossimImageShapeFileIndex::build(ossim_uint32 maxDepth)const
                                                 << "maxx = " << theGlobalMaxx << std::endl
                                                 << "maxy = " << theGlobalMaxy << std::endl;
          }
-         shpTree = SHPCreateTree(hSHP, 2, maxDepth, minV, maxV);
+         shpTree = ossim_SHPCreateTree(hSHP, 2, maxDepth, minV, maxV);
       }
 
       if(shpTree)
       {
-         SHPWriteTree(shpTree, (theFilename+".qtree").c_str());
-         SHPDestroyTree(shpTree);
+         ossim_SHPWriteTree(shpTree, (theFilename+".qtree").c_str());
+         ossim_SHPDestroyTree(shpTree);
       }
-      SHPClose(hSHP);
+      ossim_SHPClose(hSHP);
    }
    
 }

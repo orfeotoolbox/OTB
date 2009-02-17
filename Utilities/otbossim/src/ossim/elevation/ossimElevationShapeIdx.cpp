@@ -15,23 +15,23 @@ public:
       {
          shpClose();
       }
-   SHPHandle shpOpen(const ossimFilename& file, bool overWriteFlag)
+   ossim_SHPHandle shpOpen(const ossimFilename& file, bool overWriteFlag)
       {
          shpClose();
          theShapeFilename = file;
          if(overWriteFlag)
          {
-            theShapefileHandle = SHPCreate(file.c_str(),
-                                           SHPT_POLYGON);
+            theShapefileHandle = ossim_SHPCreate(file.c_str(),
+                                           ossim_SHPT_POLYGON);
          }
          else
          {
-            theShapefileHandle = SHPOpen(file.c_str(),
+            theShapefileHandle = ossim_SHPOpen(file.c_str(),
                                          "r+b");
             if(!theShapefileHandle)
             {
-               theShapefileHandle = SHPCreate(file.c_str(),
-                                              SHPT_POLYGON);
+               theShapefileHandle = ossim_SHPCreate(file.c_str(),
+                                              ossim_SHPT_POLYGON);
             }
          }
          dbfOpen(overWriteFlag);
@@ -42,16 +42,16 @@ public:
       {
          if(theShapefileHandle)
          {
-            SHPClose(theShapefileHandle);
+            ossim_SHPClose(theShapefileHandle);
             theShapefileHandle = 0;  
          }
       }
-   SHPHandle shpHandle()
+   ossim_SHPHandle shpHandle()
       {
          return theShapefileHandle;
       }
 
-   DBFHandle dbfHandle()
+   ossim_DBFHandle dbfHandle()
       {
          return theDbfHandle;
       }
@@ -63,25 +63,25 @@ protected:
 
          if(overWriteFlag)
          {
-            theDbfHandle = DBFCreate(theShapeFilename.c_str());
+            theDbfHandle = ossim_DBFCreate(theShapeFilename.c_str());
             if(theDbfHandle)
             {
-               DBFAddField(theDbfHandle, "FILENAME", FTString, 256, 0);
-               DBFAddField(theDbfHandle, "MINZ", FTDouble, 32, 17);
-               DBFAddField(theDbfHandle, "MAXZ", FTDouble, 32, 17);
+               ossim_DBFAddField(theDbfHandle, "FILENAME", FTString, 256, 0);
+               ossim_DBFAddField(theDbfHandle, "MINZ", FTDouble, 32, 17);
+               ossim_DBFAddField(theDbfHandle, "MAXZ", FTDouble, 32, 17);
             }
          }
          else
          {
-            theDbfHandle = DBFOpen(theShapeFilename.c_str(), "r+b");
+            theDbfHandle = ossim_DBFOpen(theShapeFilename.c_str(), "r+b");
             if(!theDbfHandle)
             {
-               theDbfHandle = DBFCreate(theShapeFilename.c_str());
+               theDbfHandle = ossim_DBFCreate(theShapeFilename.c_str());
                if(theDbfHandle)
                {
-                  DBFAddField(theDbfHandle, "FILENAME", FTString, 256, 0);
-                  DBFAddField(theDbfHandle, "MINZ", FTDouble, 32, 17);
-                  DBFAddField(theDbfHandle, "MAXZ", FTDouble, 32, 17);
+                  ossim_DBFAddField(theDbfHandle, "FILENAME", FTString, 256, 0);
+                  ossim_DBFAddField(theDbfHandle, "MINZ", FTDouble, 32, 17);
+                  ossim_DBFAddField(theDbfHandle, "MAXZ", FTDouble, 32, 17);
                }
             }
          }
@@ -90,13 +90,13 @@ protected:
       {
          if(theDbfHandle)
          {
-            DBFClose(theDbfHandle);
+            ossim_DBFClose(theDbfHandle);
             theDbfHandle = 0;
          }
       }
    ossimFilename theShapeFilename;
-   SHPHandle   theShapefileHandle;
-   DBFHandle   theDbfHandle;
+   ossim_SHPHandle   theShapefileHandle;
+   ossim_DBFHandle   theDbfHandle;
 };
 
 ossimElevationShapeIdx::ossimElevationShapeIdx(const ossimFilename& shapeFilename,
@@ -154,8 +154,8 @@ void ossimElevationShapeIdx::setFilename(const ossimFilename& shapeFilename, boo
    double minBounds[4];
    double maxBounds[4];
    int nEntities = 0;
-   int shapeType = SHPT_NULL;
-   SHPGetInfo(thePrivateData->shpHandle(),
+   int shapeType = ossim_SHPT_NULL;
+   ossim_SHPGetInfo(thePrivateData->shpHandle(),
               &nEntities,
               &shapeType,
               minBounds,
@@ -187,7 +187,7 @@ void ossimElevationShapeIdx::add(const ossimFilename& filename,
                                  ossim_float64 maxz )// meters
 {
    if(!thePrivateData) return;
-   int iRecord = DBFGetRecordCount(thePrivateData->dbfHandle());
+   int iRecord = ossim_DBFGetRecordCount(thePrivateData->dbfHandle());
    double* x = new double[8];
    double* y = new double[8];
    int nVertices = 4;
@@ -218,24 +218,24 @@ void ossimElevationShapeIdx::add(const ossimFilename& filename,
    {
       theGlobalMaxy = maxy;
    }
-   SHPObject* obj = SHPCreateSimpleObject(SHPT_POLYGON,
+   ossim_SHPObject* obj = ossim_SHPCreateSimpleObject(ossim_SHPT_POLYGON,
                                           nVertices,
                                           x,
                                           y,
                                           0);
 
-   SHPWriteObject( thePrivateData->shpHandle(),
+   ossim_SHPWriteObject( thePrivateData->shpHandle(),
                    -1,
                    obj );
-   DBFWriteStringAttribute(thePrivateData->dbfHandle(),
+   ossim_DBFWriteStringAttribute(thePrivateData->dbfHandle(),
                            iRecord,
                            0,
                            filename.c_str());
-   DBFWriteDoubleAttribute(thePrivateData->dbfHandle(),
+   ossim_DBFWriteDoubleAttribute(thePrivateData->dbfHandle(),
                            iRecord,
                            0,
                            (double)minz);
-   DBFWriteDoubleAttribute(thePrivateData->dbfHandle(),
+   ossim_DBFWriteDoubleAttribute(thePrivateData->dbfHandle(),
                            iRecord,
                            0,
                            (double)maxz);
@@ -259,17 +259,17 @@ void ossimElevationShapeIdx::buildQuadTree(int maxDepth)
       maxBounds[0] = theGlobalMaxx;
       maxBounds[1] = theGlobalMaxy;
       
-      SHPTree* tree = SHPCreateTree(thePrivateData->shpHandle(),
+      ossim_SHPTree* tree = ossim_SHPCreateTree(thePrivateData->shpHandle(),
                                     2,
                                     maxDepth,
                                     minBounds,
                                     maxBounds);
       if(tree)
       {
-         SHPWriteTree(tree,
+         ossim_SHPWriteTree(tree,
                       qTree.c_str());
          
-         SHPDestroyTree(tree);
+         ossim_SHPDestroyTree(tree);
       }
    }
 }

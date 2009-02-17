@@ -50,14 +50,14 @@ std::ostream& operator<<(std::ostream& out,
             s2 += (ossimString::toString(i+1)+":");
             
             out << std::setw(15) << setiosflags(std::ios::left) << s1.c_str() << rhs.theShape->panPartStart[i]<<std::endl;
-            out << std::setw(15) << setiosflags(std::ios::left) << s2.c_str() <<  SHPPartTypeName(rhs.theShape->panPartType[i])<<std::endl;
+            out << std::setw(15) << setiosflags(std::ios::left) << s2.c_str() <<  ossim_SHPPartTypeName(rhs.theShape->panPartType[i])<<std::endl;
          }
          ossimString s1 = "part start ";
          ossimString s2 = "part type ";
          
          s1 += (ossimString::toString(rhs.getNumberOfParts())+":");
          out << std::setw(15) << setiosflags(std::ios::left) << s1.c_str() <<  rhs.theShape->panPartStart[i]<<std::endl;
-         out << std::setw(15) << setiosflags(std::ios::left) << s2.c_str() <<  SHPPartTypeName(rhs.theShape->panPartType[i]);
+         out << std::setw(15) << setiosflags(std::ios::left) << s2.c_str() <<  ossim_SHPPartTypeName(rhs.theShape->panPartType[i]);
       }
 
       out << std::setw(0);
@@ -91,11 +91,11 @@ void ossimShapeObject::getBoundingRect(ossimDrect& result,
    }
 }
 
-void ossimShapeObject::setShape(SHPObject* obj)
+void ossimShapeObject::setShape(ossim_SHPObject* obj)
 {
    if(theShape)
    {
-      SHPDestroyObject(theShape);
+      ossim_SHPDestroyObject(theShape);
       theShape = NULL;            
    }
    
@@ -107,12 +107,12 @@ bool ossimShapeObject::loadShape(const ossimShapeFile& shapeFile,
 {
    if(theShape)
    {
-      SHPDestroyObject(theShape);
+      ossim_SHPDestroyObject(theShape);
       theShape = NULL;            
    }
    if(shapeFile.isOpen())
    {
-      theShape = SHPReadObject(shapeFile.getHandle(),
+      theShape = ossim_SHPReadObject(shapeFile.getHandle(),
                                shapeRecord);
       theIndex = shapeRecord;
    }
@@ -120,7 +120,7 @@ bool ossimShapeObject::loadShape(const ossimShapeFile& shapeFile,
    {
       theIndex = -1;
    }
-   return (theShape != (SHPObject*)NULL);
+   return (theShape != (ossim_SHPObject*)NULL);
 }
 
 
@@ -138,7 +138,7 @@ void ossimShapeFile::close()
 {
    if(theHandle)
    {
-      SHPClose(theHandle);
+      ossim_SHPClose(theHandle);
       theHandle = NULL;
    }
 }
@@ -148,7 +148,7 @@ bool ossimShapeFile::open(const ossimFilename& file,
 {
    if(isOpen()) close();
    
-   theHandle = SHPOpen( file.c_str(),
+   theHandle = ossim_SHPOpen( file.c_str(),
                         flags.c_str());
    if(isOpen())
    {
@@ -198,7 +198,7 @@ ossimString ossimShapeFile::getShapeTypeString()const
 {
    if(theHandle)
    {
-      return SHPTypeName(theHandle->nShapeType);
+      return ossim_SHPTypeName(theHandle->nShapeType);
    }
    return "";
 }

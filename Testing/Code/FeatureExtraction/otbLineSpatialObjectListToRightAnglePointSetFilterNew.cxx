@@ -29,8 +29,10 @@ int otbLineSpatialObjectListToRightAnglePointSetFilterNew( int argc, char * argv
   
   /** Typedefs */
   typedef otb::Image<PixelType ,Dimension >                           ImageType;
-  typedef otb::LineSpatialObjectList                                LinesListType;
-  typedef itk::PointSet<PixelType>                                  PointSetType;
+  typedef otb::LineSpatialObjectList                                  LinesListType;
+  typedef LinesListType::LineType                                     LineType;
+  typedef std::vector<LineType *>                                       VectorLines;
+  typedef itk::PointSet<VectorLines , Dimension>                      PointSetType;
   typedef otb::LineSpatialObjectListToRightAnglePointSetFilter<ImageType ,LinesListType, 
                                                                PointSetType >    RightAngleFilterType;
 

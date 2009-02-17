@@ -26,6 +26,7 @@
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkGradientRecursiveGaussianImageFilter.h"
+#include "itkGradientImageFilter.h"
 
 #include "otbImageFileWriter.h"
 
@@ -111,9 +112,9 @@ public:
   
 
   /** Definition of temporary image ised to store LABELS*/
-  typedef otb::Image<TPrecision ,2>                                     OutputImageType;
+  typedef Image<TPrecision ,2>                                     OutputImageType;
   typedef typename OutputImageType::PixelType                           OutputPixelType;
-   typedef typename OutputImageType::IndexType                          OutputIndexType;
+  typedef typename OutputImageType::IndexType                          OutputIndexType;
   typedef typename OutputImageType::SizeType                            OutputSizeType;
   
   /** Histogram to store the coordinate of ordered pixels*/
@@ -130,6 +131,7 @@ public:
 
   /** */ 
   typedef itk::GradientRecursiveGaussianImageFilter<InputImageType > GradientFilterType;
+  //typedef itk::GradientImageFilter<InputImageType > GradientFilterType;
   typedef typename GradientFilterType::Pointer GradientFilterPointerType;
   typedef typename GradientFilterType::OutputImageType GradientOutputImageType;
 
