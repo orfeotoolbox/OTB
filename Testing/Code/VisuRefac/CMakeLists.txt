@@ -152,6 +152,12 @@ ADD_TEST(vrTuImageViewerModelNew ${VISUREFAC_TESTS1}
 otbImageViewerModelNew
 )
 
+#------------ otb::ImageLayerGenerator ------------
+
+ADD_TEST(vrTuImageLayerGeneratorNew ${VISUREFAC_TESTS1}
+otbImageLayerGeneratorNew
+)
+
 # Testing srcs
 SET(VisuRefac_SRCS1
 otbImageWidgetNew.cxx
@@ -171,6 +177,7 @@ otbUniformAlphaBlendingFunctionNew.cxx
 otbBlendingImageFilterNew.cxx
 otbBlendingImageFilter.cxx
 otbImageViewerModelNew.cxx
+otbImageLayerGeneratorNew.cxx
 )
 
 # Building testing executables
