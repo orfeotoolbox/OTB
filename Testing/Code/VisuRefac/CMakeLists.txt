@@ -146,6 +146,12 @@ ${EXAMPLESDATA}/SpotAfter.png
 ${TEMP}/vrTvBlendingImageFilterOutput.png
 )
 
+#------------ otb::UniformAlphaBlendingFunction ------------
+
+ADD_TEST(vrTuImageViewerModelNew ${VISUREFAC_TESTS1}
+otbImageViewerModelNew
+)
+
 # Testing srcs
 SET(VisuRefac_SRCS1
 otbImageWidgetNew.cxx
@@ -164,6 +170,7 @@ otbImageLayerVector.cxx
 otbUniformAlphaBlendingFunctionNew.cxx
 otbBlendingImageFilterNew.cxx
 otbBlendingImageFilter.cxx
+otbImageViewerModelNew.cxx
 )
 
 # Building testing executables

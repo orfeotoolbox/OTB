@@ -42,4 +42,5 @@ void RegisterTests()
   REGISTER_TEST(otbUniformAlphaBlendingFunctionNew);
   REGISTER_TEST(otbBlendingImageFilterNew);
   REGISTER_TEST(otbBlendingImageFilter);
+  REGISTER_TEST(otbImageViewerModelNew);
 }
