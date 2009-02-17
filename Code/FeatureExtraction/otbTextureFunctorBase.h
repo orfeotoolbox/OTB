@@ -29,9 +29,10 @@ namespace otb
 namespace Functor
 {
 /** \class TextureFunctorBase
- *  \brief This functor ius the base for all texture functors.
+ *  \brief This functor is the base for all texture functors.
  *
- *  It uses a neighborhood and an offset (m_Offset)  to compute texture.
+ *  It uses a neighborhood iterator which radius is the one of the considered 
+ *  neighborhood plsu an offset (m_Offset) to compute texture.
  *  It computes the mean, standard deviation of the two areas and the joint histogram using
  *  Scott formula for the bins lengths computation.
  *  TIterInput is an iterator, TOutput is a PixelType.
@@ -171,17 +172,19 @@ public:
       outPix.Fill(0);
       OffsetType offset;
       offset.Fill(0);
+      // Compute the neighborhood radius from the neigh+offset iterator to extract the neighborhood area from the iterator
       RadiusType radius;
       radius[0] = static_cast<unsigned int>( 0.5*( static_cast<double>(itOff.GetSize()[0] - 1) ) - static_cast<double>( vcl_abs(m_Offset[0])) );
       radius[1] = static_cast<unsigned int>( 0.5*( static_cast<double>(itOff.GetSize()[1] - 1) ) - static_cast<double>( vcl_abs(m_Offset[1])) );
   
+      // For each channel
       for ( unsigned int i=0; i<itOff.GetCenterPixel().GetSize(); i++ )
 	{
 	  NeighborhoodType inNeigh;
 	  inNeigh.SetRadius(radius);
 	  NeighborhoodType offNeigh;
 	  offNeigh.SetRadius(radiusOff);
-	  
+	  // Extract the neighborhood area 
 	  for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
 	    {
 	      offset[0] = l;
@@ -191,6 +194,7 @@ public:
 		  inNeigh[offset] = itOff.GetPixel(offset)[i];
 		}
 	    }
+	  // Extract the offset area
 	  offset.Fill(0);
 	  for ( int l = -static_cast<int>(radiusOff[0]); l <= static_cast<int>(radiusOff[0]); l++ )
 	    {

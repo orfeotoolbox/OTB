@@ -111,7 +111,7 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginCodeSnippet
 
-  typedef otb::Functor::CloudDetectionFunctor<VectorPixelType,InputPixelType >   FunctorType;
+  typedef otb::Functor::CloudDetectionFunctor<VectorPixelType,OutputPixelType/*InputPixelType*/ >   FunctorType;
 
   // Software Guide : EndCodeSnippet
 
