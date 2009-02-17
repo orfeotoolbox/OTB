@@ -305,6 +305,7 @@ ADD_TEST(CloudDetectionExampleTest ${EXE_TESTS2}
         CloudDetectionExampleTest
         ${INPUTDATA}/CloudsOnReunion.tif
         ${TEMP}/CloudDetectionOutput.tif
+	${TEMP}/PrettyCloudDetectionInput.png	
 	${TEMP}/PrettyCloudDetectionOutput.png	
         553 467 734 581 0.4 0.6 1.0
 )
