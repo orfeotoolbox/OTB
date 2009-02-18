@@ -20,12 +20,12 @@
 
 #include "otbImageLayerGenerator.h"
 
-#include <FL/Fl.h>
+#include <FL/Fl.H>
 
 namespace otb
 {
 
-template < class TImageLayer >  
+template < class TImageLayer >
 ImageLayerGenerator<TImageLayer>
 ::ImageLayerGenerator()
 {
@@ -35,13 +35,13 @@ ImageLayerGenerator<TImageLayer>
   m_Resampler = ResampleFilterType::New();
 }
 
-template < class TImageLayer >  
+template < class TImageLayer >
 ImageLayerGenerator<TImageLayer>
 ::~ImageLayerGenerator()
 {}
 
-template < class TImageLayer >  
-void 
+template < class TImageLayer >
+void
 ImageLayerGenerator<TImageLayer>
 ::GenerateLayer()
 {
@@ -71,8 +71,8 @@ ImageLayerGenerator<TImageLayer>
   this->GenerateHistograms();
 }
 
-template < class TImageLayer >  
-unsigned int 
+template < class TImageLayer >
+unsigned int
 ImageLayerGenerator<TImageLayer>
 ::GetOptimalSubSamplingRate()
 {
@@ -86,13 +86,13 @@ ImageLayerGenerator<TImageLayer>
   // Get the screen size
   unsigned int wscreen = static_cast<unsigned int>(Fl::w());
   unsigned int hscreen = static_cast<unsigned int>(Fl::h());
-  
+
   // Update image information
   m_Image->UpdateOutputInformation();
-  
+
   // Get the image largest possible region
   typename ImageType::RegionType largestRegion = m_Image->GetLargestPossibleRegion();
-  
+
   // Shannon (finner generation could be added later)
   unsigned int wrequested = wscreen/2;
   unsigned int hrequested = hscreen/2;
@@ -112,8 +112,8 @@ ImageLayerGenerator<TImageLayer>
   // return the ratio
   return ratio;
 }
-template < class TImageLayer >  
-void 
+template < class TImageLayer >
+void
 ImageLayerGenerator<TImageLayer>
 ::GenerateLayerInformation()
 {
@@ -123,8 +123,8 @@ ImageLayerGenerator<TImageLayer>
   m_Layer->SetHasScaledExtract(true);
 }
 
-template < class TImageLayer >  
-void 
+template < class TImageLayer >
+void
 ImageLayerGenerator<TImageLayer>
 ::GenerateQuicklook()
 {
@@ -132,7 +132,7 @@ ImageLayerGenerator<TImageLayer>
     {
     // Compute optimal subsampling rate
     unsigned int ssrate = this->GetOptimalSubSamplingRate();
-    
+
     // If no subsampling is needed
     if(ssrate == 1)
       {
@@ -145,7 +145,7 @@ ImageLayerGenerator<TImageLayer>
       m_Resampler->SetInput(m_Image);
       m_Resampler->SetShrinkFactor(ssrate);
       m_Resampler->Update();
-      
+
       // Set the quicklook to the layer
       m_Layer->SetQuicklook(m_Resampler->GetOutput());
 
@@ -170,16 +170,16 @@ ImageLayerGenerator<TImageLayer>
     }
 }
 
-template < class TImageLayer >  
-void 
+template < class TImageLayer >
+void
 ImageLayerGenerator<TImageLayer>
 ::GenerateHistograms()
 {
   /// TODO: Implement histogram generation
 }
 
-template < class TImageLayer >  
-void 
+template < class TImageLayer >
+void
 ImageLayerGenerator<TImageLayer>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
