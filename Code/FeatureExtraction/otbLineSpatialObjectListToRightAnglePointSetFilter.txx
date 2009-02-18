@@ -90,7 +90,6 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
   
   /** Loop to get all the lines in the listLine */
   InputLinesListTypeIterator             itLinesListTest  = inputLinesList->begin();   /** Current tested Line */
-  unsigned int id = 0;
   
   while(itLinesListTest != inputLinesList->end() )
     {
@@ -146,7 +145,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
 ::ComputeDistanceBetweenSegments(LineType * lineDst , LineType * lineSrc)
 {
   /** Local variable*/
-  InputIndexType IndexBeginDst, IndexEndDst,IndexBeginSrc, IndexEndSrc;  
+  InputIndexType IndexBeginSrc, IndexEndSrc;  
   
   /** Extract Indexes from the Src line for segment distance computation*/
   typename LineType::PointListType & pointsList = lineSrc->GetPoints();
