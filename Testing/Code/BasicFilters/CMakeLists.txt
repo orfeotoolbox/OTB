@@ -998,6 +998,20 @@ ADD_TEST(bfTvBinaryImageDensityFunction ${BASICFILTERS_TESTS9}
 	 ${TEMP}/bfTvBinaryImageDensityFunctionOutputAscii.txt
 	 )
 
+# -------            otb::BinaryImageToImageDensityFilter   ----------------------------
+ADD_TEST(bfTuBinaryImageToImageDensityFilterNew  ${BASICFILTERS_TESTS9}
+        otbBinaryImageToDensityImageFilterNew
+)
+
+ADD_TEST(bfTvBinaryImageToDensityImageFilter ${BASICFILTERS_TESTS9}
+	--compare-image ${EPSILON}
+	    ${BASELINE}/bfTvBinaryImageToDensityImageFilterOutputImage.tif
+	    ${TEMP}/bfTvBinaryImageToDensityImageFilterOutputImage.tif 
+        otbBinaryImageToDensityImageFilter
+	    ${INPUTDATA}/scene.png
+	    ${TEMP}/bfTvBinaryImageToDensityImageFilterOutputImage.tif 
+	    2 # radius
+)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1438,7 +1452,9 @@ otbMeanShiftVectorImageFilter.cxx
 otbFunctionToImageFilterNew.cxx
 otbFunctionToImageFilter.cxx
 otbBinaryImageDensityFunctionNew.cxx
-otbBinaryImageDensityFunction.cxx	
+otbBinaryImageDensityFunction.cxx
+otbBinaryImageToDensityImageFilterNew.cxx
+otbBinaryImageToDensityImageFilter.cxx		
 )
 
 # A enrichir
