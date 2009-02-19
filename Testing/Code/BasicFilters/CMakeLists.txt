@@ -989,6 +989,15 @@ ADD_TEST(bfTuBinaryImageDensityFunctionNew  ${BASICFILTERS_TESTS9}
         otbBinaryImageDensityFunctionNew
 )
 
+ADD_TEST(bfTvBinaryImageDensityFunction ${BASICFILTERS_TESTS9}
+--compare-ascii ${TOL}
+	     ${BASELINE_FILES}/bfTvBinaryImageDensityFunctionOutputAscii.txt
+	    ${TEMP}/bfTvBinaryImageDensityFunctionOutputAscii.txt
+	 otbBinaryImageDensityFunction
+	 ${INPUTDATA}/scene.png
+	 ${TEMP}/bfTvBinaryImageDensityFunctionOutputAscii.txt
+	 )
+
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1429,6 +1438,7 @@ otbMeanShiftVectorImageFilter.cxx
 otbFunctionToImageFilterNew.cxx
 otbFunctionToImageFilter.cxx
 otbBinaryImageDensityFunctionNew.cxx
+otbBinaryImageDensityFunction.cxx	
 )
 
 # A enrichir
