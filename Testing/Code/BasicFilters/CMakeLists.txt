@@ -970,20 +970,24 @@ ADD_TEST(bfTvMeanShiftVectorImageFilterNotStreamedNotThreaded ${BASICFILTERS_TES
 	16 16 10 1.0 0 0
 	)
 
-ADD_TEST(bfTvFunctionToImageFilterNew ${BASICFILTERS_TESTS9}
+ADD_TEST(bfTuFunctionToImageFilterNew ${BASICFILTERS_TESTS9}
         otbFunctionToImageFilterNew
 )
 
-ADD_TEST(bfTuFunctionToImageFilterTest ${BASICFILTERS_TESTS9}
+ADD_TEST(bfTvFunctionToImageFilterTest ${BASICFILTERS_TESTS9}
 	--compare-image ${EPSILON}
-	    ${BASELINE}/bfTuFunctionToImageFilterTest.tif
-	    ${TEMP}/bfTuFunctionToImageFilterTest.tif
+	    ${BASELINE}/bfTvFunctionToImageFilterTest.tif
+	    ${TEMP}/bfTvFunctionToImageFilterTest.tif
         otbFunctionToImageFilter
 	    ${INPUTDATA}/poupees_1canal.hd
-	    ${TEMP}/bfTuFunctionToImageFilterTest.tif
+	    ${TEMP}/bfTvFunctionToImageFilterTest.tif
 	    2 # radius
 )
 
+# -------            otb::BinaryImageDensityFunction   ----------------------------
+ADD_TEST(bfTuBinaryImageDensityFunctionNew  ${BASICFILTERS_TESTS9}
+        otbBinaryImageDensityFunctionNew
+)
 
 
 
@@ -1424,6 +1428,7 @@ otbMeanShiftVectorImageFilterNew.cxx
 otbMeanShiftVectorImageFilter.cxx
 otbFunctionToImageFilterNew.cxx
 otbFunctionToImageFilter.cxx
+otbBinaryImageDensityFunctionNew.cxx
 )
 
 # A enrichir
