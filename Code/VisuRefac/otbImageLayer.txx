@@ -18,15 +18,15 @@
 #ifndef __otbImageLayer_txx
 #define __otbImageLayer_txx
 
+#include "itkImageRegionConstIterator.h"
 
 namespace otb
 {
 
 template <class TImage, class TOutputImage>
 ImageLayer<TImage,TOutputImage>
-::ImageLayer()
+::ImageLayer() : m_NumberOfHistogramBins(255)
 {
-  m_HistogramList = HistogramListType::New();
 }
 
 template <class TImage, class TOutputImage>
@@ -47,6 +47,15 @@ template <class TImage, class TOutputImage>
 void
 ImageLayer<TImage,TOutputImage>
 ::Render()
+{
+  this->RenderHistogram();
+  this->RenderImages();
+}
+
+template <class TImage, class TOutputImage>
+void
+ImageLayer<TImage,TOutputImage>
+::RenderImages()
 {
   // Render quicklook
   if(this->GetHasQuicklook())
@@ -86,6 +95,56 @@ ImageLayer<TImage,TOutputImage>
     this->SetRenderedScaledExtract(renderer->GetOutput());
     }
 }
-}
 
+template <class TImage, class TOutputImage>
+void
+ImageLayer<TImage,TOutputImage>
+::RenderHistogram()
+{
+  // Declare the source of the histogram
+  ImagePointerType histogramSource;
+
+  // if there is a quicklook, use it for histogram generation
+  if(m_Quicklook.IsNotNull())
+    {
+    histogramSource = m_Quicklook;
+    }
+  else
+    {
+    // Else use the full image (update the data)
+    histogramSource = m_Image;
+    }
+  // Update the histogram source
+  histogramSource->Update();
+
+  // Iterate on the image
+  itk::ImageRegionConstIterator<ImageType> it(histogramSource,histogramSource->GetLargestPossibleRegion());
+  
+  // declare a list to store the samples
+  typename ListSampleType::Pointer listSample = ListSampleType::New();
+
+  // Set the measurement vector size
+  listSample->SetMeasurementVectorSize(histogramSource->GetNumberOfComponentsPerPixel());
+
+  // Fill the samples list
+  it.GoToBegin();
+  while(!it.IsAtEnd())
+    {
+    listSample->PushBack(it.Get());
+    ++it;
+    }
+ 
+  // Create the histogram generation filter 
+  typename HistogramFilterType::Pointer histogramFilter = HistogramFilterType::New();
+  histogramFilter->SetListSample(listSample);
+
+  typename HistogramFilterType::HistogramSizeType binSizes(histogramSource->GetNumberOfComponentsPerPixel());
+  binSizes.Fill(m_NumberOfHistogramBins);
+
+  histogramFilter->SetNumberOfBins(binSizes);
+
+  // Generate
+  histogramFilter->Update();
+}
+}
 #endif

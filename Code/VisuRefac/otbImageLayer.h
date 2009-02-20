@@ -19,11 +19,13 @@
 #define __otbImageLayer_h
 
 #include "otbLayer.h"
-#include "itkHistogram.h"
+#include "itkVariableLengthVector.h"
 #include "itkDenseFrequencyContainer.h"
-#include "otbObjectList.h"
 #include "otbRenderingImageFilter.h"
 #include "itkExtractImageFilter.h"
+#include "itkListSample.h"
+#include "otbListSampleToVariableDimensionHistogramGenerator.h"
+#include "itkArray.h"
 
 namespace otb
 {
@@ -62,15 +64,17 @@ public:
   typedef TOutputImage                                        OutputImageType;
 
   /** Histogram typedef */
-  typedef itk::Statistics::DenseFrequencyContainer            DFContainerType;
-  typedef itk::Statistics::Histogram
-  <InternalPixelType,1,DFContainerType >                      HistogramType;
-  typedef typename HistogramType::Pointer                     HistogramPointerType;
+   typedef itk::Statistics::DenseFrequencyContainer            DFContainerType;
   
-  /** Histogram list typedef */
-  typedef otb::ObjectList<HistogramType>                      HistogramListType;
-  typedef typename HistogramListType::Pointer                 HistogramListPointerType; 
+  typedef itk::VariableLengthVector<InternalPixelType>        SampleType;
+  typedef itk::Statistics::ListSample<SampleType>             ListSampleType;
+ 
+  typedef otb::ListSampleToVariableDimensionHistogramGenerator
+  <ListSampleType,InternalPixelType,DFContainerType>          HistogramFilterType;
+  typedef typename HistogramFilterType::HistogramType         HistogramType;
+  typedef typename HistogramType::Pointer                     HistogramPointerType;
 
+  
   /** Rendering part */
   typedef RenderingImageFilter<TImage,TOutputImage>           RenderingFilterType;
   typedef typename RenderingFilterType::RenderingFunctionType RenderingFunctionType;
@@ -86,12 +90,16 @@ public:
   itkGetObjectMacro(Quicklook,ImageType);
 
   /** Set/Get the histogram list */
-  itkSetObjectMacro(HistogramList,HistogramListType);
-  itkGetObjectMacro(HistogramList,HistogramListType);
+  itkSetObjectMacro(Histogram,HistogramType);
+  itkGetObjectMacro(Histogram,HistogramType);
 
   /** Set/Get the rendering function */
   itkSetObjectMacro(RenderingFunction,RenderingFunctionType);
   itkGetObjectMacro(RenderingFunction,RenderingFunctionType);
+
+  /** Set/Get the number of bins for histogram generation */
+  itkSetMacro(NumberOfHistogramBins,unsigned int);
+  itkGetMacro(NumberOfHistogramBins,unsigned int);
 
   /** Actually render the image */
   virtual void Render();
@@ -104,21 +112,30 @@ protected:
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
  
+  /** Update the histogram */
+  virtual void RenderHistogram();
+
+  /** Update the images */
+  virtual void RenderImages();
+
 private:
   ImageLayer(const Self&);     // purposely not implemented
   void operator=(const Self&); // purposely not implemented
 
   /** Pointer to the quicklook */
-  ImagePointerType         m_Quicklook;
+  ImagePointerType             m_Quicklook;
   
   /** Pointer to the image */
-  ImagePointerType         m_Image;
+  ImagePointerType             m_Image;
 
-  /** Histogram list */
-  HistogramListPointerType m_HistogramList;
+  /** Joint Histogram */
+  HistogramPointerType         m_Histogram;
 
   /** Rendering function */
   RenderingFunctionPointerType m_RenderingFunction;
+  
+  /** Number of bins for histograms generation */
+  unsigned int                 m_NumberOfHistogramBins;
 
 }; // end class 
 } // end namespace otb
@@ -128,5 +145,3 @@ private:
 #endif
 
 #endif
-
-
