@@ -21,7 +21,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 #include "itkRGBPixel.h"
-#include "otbGrayscaleRenderingFunction.h"
+#include "otbStandardRenderingFunction.h"
 
 int otbRenderingImageFilterVector( int argc, char * argv[] )
 {
@@ -32,7 +32,7 @@ int otbRenderingImageFilterVector( int argc, char * argv[] )
   typedef otb::RenderingImageFilter<ImageType,RGBImageType> RenderingFilterType;
   typedef otb::ImageFileReader<ImageType>                   ReaderType;
   typedef otb::StreamingImageFileWriter<RGBImageType>       WriterType;
-  typedef otb::Function::GrayscaleRenderingFunction<PixelType,itk::RGBPixel<unsigned char> > RenderingFunctionType;
+  typedef otb::Function::StandardRenderingFunction<PixelType,itk::RGBPixel<unsigned char> > RenderingFunctionType;
 
 
   // Instanatiation
@@ -64,7 +64,7 @@ int otbRenderingImageFilterVector( int argc, char * argv[] )
   rendering->SetRenderingFunction(function);
   function->SetMinimum(min);
   function->SetMaximum(max);
-  function->SetChannelIndex(channel);
+  function->SetAllChannels(channel);
 
   // writing
   writer->SetFileName(argv[2]);

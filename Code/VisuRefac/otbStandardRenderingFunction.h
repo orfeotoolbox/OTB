@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRGBRenderingFunction_h
-#define __otbRGBRenderingFunction_h
+#ifndef __otbStandardRenderingFunction_h
+#define __otbStandardRenderingFunction_h
 
 #include "otbRenderingFunction.h"
 
@@ -24,32 +24,32 @@ namespace otb
 {
 namespace Function
 {
-/**\class RGBRenderingFunction
- * \brief RGB rendering.
+/**\class StandardRenderingFunction
+ * \brief Standard rendering.
  * If the input image is an Image, the function
  * renders it with R, G and B channels all equals. 
  * If it is a VectorImage, the function renders
  * the selected channels.
  */
-template <class TPixelPrecision, class TRGBPixel>
-class RGBRenderingFunction
-  : public RenderingFunction<TPixelPrecision,TRGBPixel>
+template <class TPixelPrecision, class TStandardPixel>
+class StandardRenderingFunction
+  : public RenderingFunction<TPixelPrecision,TStandardPixel>
 {
 public:
   /** Standard class typedefs */
-  typedef RGBRenderingFunction                   Self;
-  typedef RenderingFunction<TPixelPrecision,TRGBPixel> Superclass;
+  typedef StandardRenderingFunction                   Self;
+  typedef RenderingFunction<TPixelPrecision,TStandardPixel> Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
 
   /** type macro */
-  itkTypeMacro(RGBRenderingFunction,RenderingFunction);
+  itkTypeMacro(StandardRenderingFunction,RenderingFunction);
 
   /** new macro */
   itkNewMacro(Self);
 
   /** PixelType macros */
-  typedef TRGBPixel                                  OutputPixelType;
+  typedef TStandardPixel                                  OutputPixelType;
   typedef typename OutputPixelType::ValueType        OutputValueType;
   typedef TPixelPrecision                            ScalarPixelType;
   typedef itk::VariableLengthVector<ScalarPixelType> VectorPixelType;
@@ -108,17 +108,25 @@ public:
   {
     return m_GreenChannelIndex;
   }
+  
+  /** Set all channels (grayscale mode) */
+  void SetAllChannels(unsigned int index)
+  {
+    m_RedChannelIndex   = index;
+    m_BlueChannelIndex  = index;
+    m_GreenChannelIndex = index; 
+  }
 
 protected:
   /** Constructor */
-  RGBRenderingFunction()
+  StandardRenderingFunction()
   {
     m_RedChannelIndex   = 0;
     m_BlueChannelIndex  = 1;
     m_GreenChannelIndex = 2; 
   }
   /** Destructor */
-  ~RGBRenderingFunction() {}
+  ~StandardRenderingFunction() {}
   /** Perform the computation for a single value (this is done in
    * order to have the same code for vector and scalar version)
    */
@@ -139,7 +147,7 @@ protected:
   }
 
 private:
-  RGBRenderingFunction(const Self&); //purposely not implemented
+  StandardRenderingFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /** Index of the channels to display (vector mode only, has no effet

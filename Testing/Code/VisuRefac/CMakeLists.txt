@@ -89,16 +89,10 @@ ${TEMP}/vrTvImageLayerVectorScaledExtractOutput.png
 2 50 50 50 200 200 200
 )
 
-#------------ otb::GrayscaleRenderingFunction ------------
+#------------ otb::StandardRenderingFunction ------------
 
-ADD_TEST(vrTuGrayscaleRenderingFunctionNew ${VISUREFAC_TESTS1}
-otbGrayscaleRenderingFunctionNew
-)
-
-#------------ otb::RGBRenderingFunction ------------
-
-ADD_TEST(vrTuRGBRenderingFunctionNew ${VISUREFAC_TESTS1}
-otbRGBRenderingFunctionNew
+ADD_TEST(vrTuStandardRenderingFunctionNew ${VISUREFAC_TESTS1}
+otbStandardRenderingFunctionNew
 )
 
 #------------ otb::RenderingImageFilter ------------
@@ -184,8 +178,7 @@ otbImageWidgetActionHandlerNew.cxx
 otbImageWidgetControllerNew.cxx
 otbImageWidgetController.cxx
 otbImageLayerNew.cxx
-otbGrayscaleRenderingFunctionNew.cxx
-otbRGBRenderingFunctionNew.cxx
+otbStandardRenderingFunctionNew.cxx
 otbRenderingImageFilterNew.cxx
 otbRenderingImageFilterScalar.cxx
 otbRenderingImageFilterVector.cxx

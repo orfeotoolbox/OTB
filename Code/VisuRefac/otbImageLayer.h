@@ -25,7 +25,7 @@
 #include "itkExtractImageFilter.h"
 #include "itkListSample.h"
 #include "otbListSampleToVariableDimensionHistogramGenerator.h"
-#include "itkArray.h"
+#include "otbStandardRenderingFunction.h"
 
 namespace otb
 {
@@ -76,10 +76,12 @@ public:
 
   
   /** Rendering part */
-  typedef RenderingImageFilter<TImage,TOutputImage>           RenderingFilterType;
-  typedef typename RenderingFilterType::RenderingFunctionType RenderingFunctionType;
-  typedef typename RenderingFunctionType::Pointer             RenderingFunctionPointerType;
-  typedef itk::ExtractImageFilter<ImageType,ImageType>        ExtractFilterType;
+  typedef RenderingImageFilter<TImage,TOutputImage>                    RenderingFilterType;
+  typedef typename RenderingFilterType::RenderingFunctionType          RenderingFunctionType;
+  typedef typename RenderingFunctionType::Pointer                      RenderingFunctionPointerType;
+  typedef Function::StandardRenderingFunction<InternalPixelType,
+				    typename TOutputImage::PixelType>  DefaultRenderingFunctionType;
+  typedef itk::ExtractImageFilter<ImageType,ImageType>                 ExtractFilterType;
 
   /** Set/Get the image */
   itkSetObjectMacro(Image,ImageType);

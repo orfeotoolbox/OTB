@@ -19,7 +19,7 @@
 #define __otbRenderingImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
-#include "otbGrayscaleRenderingFunction.h"
+#include "otbStandardRenderingFunction.h"
 #include "otbImage.h"
 #include "itkRGBPixel.h"
 
@@ -52,7 +52,7 @@ public:
   /** Rendering function pointer typedef */
   typedef typename RenderingFunctionType::Pointer                              RenderingFunctionPointerType;
   /** Default rendering function typedef */
-  typedef otb::Function::GrayscaleRenderingFunction<TPixelPrecision,TRGBPixel> DefaultRenderingFunctionType;
+  typedef otb::Function::StandardRenderingFunction<TPixelPrecision,TRGBPixel> DefaultRenderingFunctionType;
   /** Scalar pixel typedef */
   typedef TPixelPrecision                                                      ScalarPixelType;
   /** Vector pixel typedef */

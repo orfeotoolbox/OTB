@@ -27,6 +27,7 @@ template <class TImage, class TOutputImage>
 ImageLayer<TImage,TOutputImage>
 ::ImageLayer() : m_NumberOfHistogramBins(255)
 {
+  m_RenderingFunction = DefaultRenderingFunctionType::New();
 }
 
 template <class TImage, class TOutputImage>

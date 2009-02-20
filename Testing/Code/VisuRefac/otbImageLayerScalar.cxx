@@ -16,7 +16,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #include "otbImageLayer.h"
-#include "otbGrayscaleRenderingFunction.h"
+#include "otbStandardRenderingFunction.h"
 #include "otbImage.h"
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
@@ -41,7 +41,7 @@ int otbImageLayerScalar( int argc, char * argv[] )
   typedef otb::ImageFileReader<ImageType>                                   ReaderType;
   typedef otb::StreamingShrinkImageFilter<ImageType,ImageType>              ShrinkFilterType;
   typedef otb::ImageFileWriter<OutputImageType>                             WriterType;
-  typedef otb::Function::GrayscaleRenderingFunction<double,OutputPixelType> RenderingFunctionType;
+  typedef otb::Function::StandardRenderingFunction<double,OutputPixelType> RenderingFunctionType;
   // Instantiation
   ReaderType::Pointer reader = ReaderType::New();
   ShrinkFilterType::Pointer shrinker = ShrinkFilterType::New();
