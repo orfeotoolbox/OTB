@@ -1554,6 +1554,6 @@ ADD_EXECUTABLE(otbBasicFiltersTests10 otbBasicFiltersTests10.cxx ${BasicFilters_
 TARGET_LINK_LIBRARIES(otbBasicFiltersTests10  OTBBasicFilters  OTBIO )
 
 ADD_EXECUTABLE(otbBasicFiltersTests11 otbBasicFiltersTests11.cxx ${BasicFilters_SRCS11})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests11  OTBBasicFilters ITKAlgorithms OTBIO OTBFeatureExtraction)
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests11  OTBBasicFilters ITKAlgorithms OTBIO )
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
