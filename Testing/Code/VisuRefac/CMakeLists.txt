@@ -121,6 +121,16 @@ ${TEMP}/vrTvRenderingImageFilterVectorOutput.png
 0 179 0 0 0 802 0 0 0
 )
 
+ADD_TEST(vrTvRenderingImageFilterVectorWithExpNegativeTransfer ${VISUREFAC_TESTS1}
+--compare-image ${TOL}
+${BASELINE}/vrTvRenderingImageFilterVectorWithExpNegativeTransferOutput.png
+${TEMP}/vrTvRenderingImageFilterVectorWithExpNegativeTransferOutput.png
+otbRenderingImageFilterVectorWithExpNegativeTransfer
+${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+${TEMP}/vrTvRenderingImageFilterVectorWithExpNegativeTransferOutput.png
+0 0.05 179 0 0 0 802 0 0 0
+)
+
 #------------ otb::UniformAlphaBlendingFunction ------------
 
 ADD_TEST(vrTuUniformAlphaBlendingFunctionNew ${VISUREFAC_TESTS1}
@@ -192,6 +202,7 @@ otbImageLayerGeneratorNew.cxx
 otbImageLayerGeneratorScalar.cxx
 otbImageLayerGeneratorVector.cxx
 otbMultiplyBlendingFunctionNew.cxx
+otbRenderingImageFilterVectorWithExpNegativeTransfer.cxx
 )
 
 # Building testing executables

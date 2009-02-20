@@ -24,6 +24,30 @@ namespace otb
 {
 namespace Function
 {
+/** \class Identiy
+* \brief Default math functor parameter for rendering function.
+*/
+template <class TInputPixel, class TOutputPixel>
+class Identity
+{
+public:
+  Identity(){};
+  ~Identity(){};
+  bool operator !=(const Identity &) const
+  {
+    return false;
+  }
+  bool operator ==(const Identity & other) const
+  {
+    return !(*this != other);
+  }
+
+  inline TOutputPixel operator()(const TInputPixel & A) const
+  {
+    return static_cast<TOutputPixel>(A);
+  }
+};
+
 /**\class StandardRenderingFunction
  * \brief Standard rendering.
  * If the input image is an Image, the function
@@ -31,14 +55,14 @@ namespace Function
  * If it is a VectorImage, the function renders
  * the selected channels.
  */
-template <class TPixelPrecision, class TStandardPixel>
+template <class TPixelPrecision, class TRGBPixel, class TTransferFunction = Identity<TPixelPrecision,TPixelPrecision> >
 class StandardRenderingFunction
-  : public RenderingFunction<TPixelPrecision,TStandardPixel>
+  : public RenderingFunction<TPixelPrecision,TRGBPixel>
 {
 public:
   /** Standard class typedefs */
   typedef StandardRenderingFunction                   Self;
-  typedef RenderingFunction<TPixelPrecision,TStandardPixel> Superclass;
+  typedef RenderingFunction<TPixelPrecision,TRGBPixel> Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
 
@@ -49,28 +73,47 @@ public:
   itkNewMacro(Self);
 
   /** PixelType macros */
-  typedef TStandardPixel                                  OutputPixelType;
+  typedef TRGBPixel                                  OutputPixelType;
   typedef typename OutputPixelType::ValueType        OutputValueType;
   typedef TPixelPrecision                            ScalarPixelType;
   typedef itk::VariableLengthVector<ScalarPixelType> VectorPixelType;
   /** Extrema vector */
   typedef std::vector<ScalarPixelType>               ExtremaVectorType;
+  typedef TTransferFunction                          TransferFunctionType;
 
   /** Evaluate method (scalar version) */
   virtual const OutputPixelType Evaluate(ScalarPixelType spixel)
   {
+    // Update transfered min/max if necessary
+    if(!m_TransferedMinMaxUpToDate)
+      {
+      this->UpdateTransferedMinMax();
+      }
+
     OutputPixelType resp;
-    resp.Fill(this->Evaluate(spixel,this->m_Minimum[0],this->m_Maximum[0]));
+    resp.Fill(this->Evaluate(m_TransferFunction(spixel),m_TransferedMinimum[0],m_TransferedMaximum[0]));
     return resp;
   }
   /** Evaluate method (vector version) */
   virtual const OutputPixelType Evaluate(const VectorPixelType & vpixel)
   {
+    // Update transfered min/max if necessary
+    if(!m_TransferedMinMaxUpToDate)
+      {
+      this->UpdateTransferedMinMax();
+      }
+    
     OutputPixelType resp;
-    resp.SetRed(this->Evaluate(vpixel[m_RedChannelIndex],this->m_Minimum[m_RedChannelIndex],this->m_Maximum[m_RedChannelIndex]));
-    resp.SetBlue(this->Evaluate(vpixel[m_BlueChannelIndex],this->m_Minimum[m_BlueChannelIndex],this->m_Maximum[m_BlueChannelIndex]));
-    resp.SetGreen(this->Evaluate(vpixel[m_GreenChannelIndex],this->m_Minimum[m_GreenChannelIndex],this->m_Maximum[m_GreenChannelIndex]));
+    resp.SetRed(Evaluate(m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
+    resp.SetBlue(Evaluate(m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
+    resp.SetGreen(Evaluate(m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
     return resp;
+  }
+
+  /** Get the transfer function for tuning */
+  TransferFunctionType & GetTransferFunction()
+  {
+    return m_TransferFunction;
   }
 
   /** Set the red channel index (vector mode only) */
@@ -117,13 +160,122 @@ public:
     m_GreenChannelIndex = index; 
   }
 
+  /** Togle the UserDefinedTransferedMinMax mode */
+  void SetUserDefinedTransferedMinMax(bool val)
+  {
+    m_UserDefinedTransferedMinMax = val;
+  }
+
+  /** Togle the UserDefinedTransferedMinMax mode */
+  bool GetUserDefinedTransferedMinMax(void)
+  {
+    return m_UserDefinedTransferedMinMax;
+  }
+
+/** Set the transfered minimum (scalar version) */
+  virtual void SetTransferedMinimum(ScalarPixelType spixel)
+  {
+    m_TransferedMinimum.clear();
+    m_TransferedMinimum.push_back(spixel);
+    m_UserDefinedTransferedMinMax = true;
+    m_TransferedMinMaxUpToDate = true;
+  }
+  
+  /** Set the transfered maximum (scalar version) */
+  virtual void SetTransferedMaximum(ScalarPixelType spixel)
+  {
+    m_TransferedMaximum.clear();
+    m_TransferedMaximum.push_back(spixel);
+    m_UserDefinedTransferedMinMax = true;
+    m_TransferedMinMaxUpToDate = true;
+  }
+
+  /** Set transfered minimum (vector version) */
+  virtual void SetTransferedMinimum(const VectorPixelType & vpixel)
+  {
+    m_TransferedMinimum.clear();
+    for(unsigned int i = 0; i < vpixel.Size();++i)
+      {
+      m_TransferedMinimum.push_back(vpixel[i]);
+      }
+    m_UserDefinedTransferedMinMax = true;
+    m_TransferedMinMaxUpToDate = true;
+  }
+
+  /** Set transfered maximum (vector version) */
+  virtual void SetTransferedMaximum(const VectorPixelType & vpixel)
+  {
+    m_TransferedMaximum.clear();
+    for(unsigned int i = 0; i < vpixel.Size();++i)
+      {
+      m_TransferedMaximum.push_back(vpixel[i]);
+      }
+    m_UserDefinedTransferedMinMax = true;
+    m_TransferedMinMaxUpToDate = true;
+  }
+
+  /** Set the minimum (scalar version) */
+  virtual void SetMinimum(ScalarPixelType spixel)
+  {
+    Superclass::SetMinimum(spixel);
+    m_TransferedMinMaxUpToDate = false;
+  }
+  
+  /** Set the maximum (scalar version) */
+  virtual void SetMaximum(ScalarPixelType spixel)
+  {
+    Superclass::SetMaximum(spixel);
+    m_TransferedMinMaxUpToDate = false;
+  }
+  
+ /** Set minimum (vector version) */
+  virtual void SetMinimum(const VectorPixelType & vpixel)
+  {
+    Superclass::SetMinimum(vpixel);
+    m_TransferedMinMaxUpToDate = false;
+  }
+  
+  /** Set maximum (vector version) */
+  virtual void SetMaximum(const VectorPixelType & vpixel)
+  {
+    Superclass::SetMaximum(vpixel);
+    m_TransferedMinMaxUpToDate = false;
+  }
+
+
+  /** Update transfered min and max */
+  void UpdateTransferedMinMax()
+  {
+    if(!m_UserDefinedTransferedMinMax)
+      {
+      typename ExtremaVectorType::iterator minIt = this->m_Minimum.begin();
+      typename ExtremaVectorType::iterator maxIt = this->m_Maximum.begin();
+      
+      m_TransferedMinimum.clear();
+      m_TransferedMaximum.clear();
+      
+      while(minIt != this->m_Minimum.end() && maxIt != this->m_Maximum.end())
+	{
+	double v1 = m_TransferFunction(*minIt);
+	double v2 = m_TransferFunction(*maxIt);
+	m_TransferedMinimum.push_back(std::min(v1,v2));
+	m_TransferedMaximum.push_back(std::max(v1,v2));
+	++minIt;
+	++maxIt;
+	}
+      }
+      m_TransferedMinMaxUpToDate = true;
+  }
+     
+
 protected:
   /** Constructor */
-  StandardRenderingFunction()
+  StandardRenderingFunction() 
   {
     m_RedChannelIndex   = 0;
     m_BlueChannelIndex  = 1;
     m_GreenChannelIndex = 2; 
+    m_UserDefinedTransferedMinMax = false;
   }
   /** Destructor */
   ~StandardRenderingFunction() {}
@@ -156,6 +308,20 @@ private:
   unsigned int m_RedChannelIndex;
   unsigned int m_GreenChannelIndex;
   unsigned int m_BlueChannelIndex;
+
+  /** Transfert function */
+  TransferFunctionType m_TransferFunction;
+
+  /** If true, values mapped by the transfert function are clamped to
+      user defined min/max */
+  bool m_UserDefinedTransferedMinMax;
+
+  /** True if transfered min max are up-to-date.*/
+  bool m_TransferedMinMaxUpToDate;
+
+  /** Transfered min and max */
+  ExtremaVectorType m_TransferedMinimum;
+  ExtremaVectorType m_TransferedMaximum;
 };
 } // end namespace Functor
 } // end namespace otb
