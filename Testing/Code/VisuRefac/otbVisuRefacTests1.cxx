@@ -46,4 +46,5 @@ void RegisterTests()
   REGISTER_TEST(otbImageLayerGeneratorNew);
   REGISTER_TEST(otbImageLayerGeneratorScalar);
   REGISTER_TEST(otbImageLayerGeneratorVector);
+  REGISTER_TEST(otbMultiplyBlendingFunctionNew);
 }

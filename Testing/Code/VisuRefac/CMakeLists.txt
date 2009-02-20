@@ -198,6 +198,7 @@ otbImageViewerModelNew.cxx
 otbImageLayerGeneratorNew.cxx
 otbImageLayerGeneratorScalar.cxx
 otbImageLayerGeneratorVector.cxx
+otbMultiplyBlendingFunctionNew.cxx
 )
 
 # Building testing executables
