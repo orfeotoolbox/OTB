@@ -15,16 +15,15 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbRGBRenderingFunction.h"
+#include "otbMultiplyBlendingFunction.h"
 #include "itkRGBPixel.h"
 
-int otbRGBRenderingFunctionNew( int argc, char * argv[] )
+int otbMultiplyBlendingFunctionNew( int argc, char * argv[] )
 {
-  typedef double                       PixelType;
   typedef itk::RGBPixel<unsigned char> RGBPixelType;
-  typedef otb::Function::RGBRenderingFunction
-    <PixelType,RGBPixelType> RGBRenderingFunctionType;
-  RGBRenderingFunctionType::Pointer function = RGBRenderingFunctionType::New();
+  typedef otb::Function::MultiplyBlendingFunction
+    <RGBPixelType> BlendingFunctionType;
+  BlendingFunctionType::Pointer function = BlendingFunctionType::New();
 
   return EXIT_SUCCESS;
 }

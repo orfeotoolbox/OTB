@@ -32,11 +32,11 @@ void RegisterTests()
   REGISTER_TEST(otbImageWidgetControllerNew);
   REGISTER_TEST(otbImageWidgetController);
   REGISTER_TEST(otbImageLayerNew);
-  REGISTER_TEST(otbGrayscaleRenderingFunctionNew);
-  REGISTER_TEST(otbRGBRenderingFunctionNew);
+  REGISTER_TEST(otbStandardRenderingFunctionNew);
   REGISTER_TEST(otbRenderingImageFilterNew);
   REGISTER_TEST(otbRenderingImageFilterScalar);
   REGISTER_TEST(otbRenderingImageFilterVector);
+  REGISTER_TEST(otbRenderingImageFilterVectorWithExpNegativeTransfer);
   REGISTER_TEST(otbImageLayerScalar);
   REGISTER_TEST(otbImageLayerVector);
   REGISTER_TEST(otbUniformAlphaBlendingFunctionNew);
@@ -45,4 +45,6 @@ void RegisterTests()
   REGISTER_TEST(otbImageViewerModelNew);
   REGISTER_TEST(otbImageLayerGeneratorNew);
   REGISTER_TEST(otbImageLayerGeneratorScalar);
+  REGISTER_TEST(otbImageLayerGeneratorVector);
+  REGISTER_TEST(otbMultiplyBlendingFunctionNew);
 }

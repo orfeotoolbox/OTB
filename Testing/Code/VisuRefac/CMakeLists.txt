@@ -89,16 +89,10 @@ ${TEMP}/vrTvImageLayerVectorScaledExtractOutput.png
 2 50 50 50 200 200 200
 )
 
-#------------ otb::GrayscaleRenderingFunction ------------
+#------------ otb::StandardRenderingFunction ------------
 
-ADD_TEST(vrTuGrayscaleRenderingFunctionNew ${VISUREFAC_TESTS1}
-otbGrayscaleRenderingFunctionNew
-)
-
-#------------ otb::RGBRenderingFunction ------------
-
-ADD_TEST(vrTuRGBRenderingFunctionNew ${VISUREFAC_TESTS1}
-otbRGBRenderingFunctionNew
+ADD_TEST(vrTuStandardRenderingFunctionNew ${VISUREFAC_TESTS1}
+otbStandardRenderingFunctionNew
 )
 
 #------------ otb::RenderingImageFilter ------------
@@ -127,10 +121,26 @@ ${TEMP}/vrTvRenderingImageFilterVectorOutput.png
 0 179 0 0 0 802 0 0 0
 )
 
+ADD_TEST(vrTvRenderingImageFilterVectorWithExpNegativeTransfer ${VISUREFAC_TESTS1}
+--compare-image ${TOL}
+${BASELINE}/vrTvRenderingImageFilterVectorWithExpNegativeTransferOutput.png
+${TEMP}/vrTvRenderingImageFilterVectorWithExpNegativeTransferOutput.png
+otbRenderingImageFilterVectorWithExpNegativeTransfer
+${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+${TEMP}/vrTvRenderingImageFilterVectorWithExpNegativeTransferOutput.png
+0 0.05 179 0 0 0 802 0 0 0
+)
+
 #------------ otb::UniformAlphaBlendingFunction ------------
 
 ADD_TEST(vrTuUniformAlphaBlendingFunctionNew ${VISUREFAC_TESTS1}
 otbUniformAlphaBlendingFunctionNew
+)
+
+#------------ otb::MultiplyBlendingFunction ------------
+
+ADD_TEST(vrTuMultiplyBlendingFunctionNew ${VISUREFAC_TESTS1}
+otbMultiplyBlendingFunctionNew
 )
 
 #------------ otb::BlendingImageFilter ----------------------
@@ -164,6 +174,11 @@ ${INPUTDATA}/couleurs.tif
 1
 )
 
+ADD_TEST(vrTvImageLayerGeneratorVector ${VISUREFAC_TESTS1}
+otbImageLayerGeneratorVector
+${INPUTDATA}/couleurs.tif
+1
+)
 
 # Testing srcs
 SET(VisuRefac_SRCS1
@@ -173,8 +188,7 @@ otbImageWidgetActionHandlerNew.cxx
 otbImageWidgetControllerNew.cxx
 otbImageWidgetController.cxx
 otbImageLayerNew.cxx
-otbGrayscaleRenderingFunctionNew.cxx
-otbRGBRenderingFunctionNew.cxx
+otbStandardRenderingFunctionNew.cxx
 otbRenderingImageFilterNew.cxx
 otbRenderingImageFilterScalar.cxx
 otbRenderingImageFilterVector.cxx
@@ -186,6 +200,9 @@ otbBlendingImageFilter.cxx
 otbImageViewerModelNew.cxx
 otbImageLayerGeneratorNew.cxx
 otbImageLayerGeneratorScalar.cxx
+otbImageLayerGeneratorVector.cxx
+otbMultiplyBlendingFunctionNew.cxx
+otbRenderingImageFilterVectorWithExpNegativeTransfer.cxx
 )
 
 # Building testing executables

@@ -16,7 +16,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #include "otbImageLayer.h"
-#include "otbRGBRenderingFunction.h"
+#include "otbStandardRenderingFunction.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileWriter.h"
@@ -41,7 +41,7 @@ int otbImageLayerVector( int argc, char * argv[] )
   typedef otb::ImageFileReader<ImageType>                                   ReaderType;
   typedef otb::StreamingShrinkImageFilter<ImageType,ImageType>              ShrinkFilterType;
   typedef otb::ImageFileWriter<OutputImageType>                             WriterType;
-  typedef otb::Function::RGBRenderingFunction<double,OutputPixelType>       RenderingFunctionType;
+  typedef otb::Function::StandardRenderingFunction<double,OutputPixelType>  RenderingFunctionType;
   // Instantiation
   ReaderType::Pointer reader = ReaderType::New();
   ShrinkFilterType::Pointer shrinker = ShrinkFilterType::New();

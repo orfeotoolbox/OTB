@@ -61,7 +61,7 @@ ImageWidget<TInputImage>
   Superclass::PrintSelf(os,indent);
   // Display information about the widget
   os<<indent<<"Widget "<<m_Identifier<<": "<<std::endl;
-  #if (not defined OTB_GL_USE_ACCEL)
+  #ifndef OTB_GL_USE_ACCEL
   os<<indent<<indent<<"OpenGl acceleration is not allowed."<<std::endl;
   #else
   if(m_UseGlAcceleration)

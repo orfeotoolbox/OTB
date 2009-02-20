@@ -22,8 +22,9 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbStreamingImageFileWriter.h"
 #include "itkRGBPixel.h"
 #include "otbStandardRenderingFunction.h"
+#include "itkExpNegativeImageFilter.h"
 
-int otbRenderingImageFilterVector( int argc, char * argv[] )
+int otbRenderingImageFilterVectorWithExpNegativeTransfer( int argc, char * argv[] )
 {
   typedef double                                            PixelType;
   typedef otb::VectorImage<PixelType,2>                     ImageType;
@@ -32,7 +33,9 @@ int otbRenderingImageFilterVector( int argc, char * argv[] )
   typedef otb::RenderingImageFilter<ImageType,RGBImageType> RenderingFilterType;
   typedef otb::ImageFileReader<ImageType>                   ReaderType;
   typedef otb::StreamingImageFileWriter<RGBImageType>       WriterType;
-  typedef otb::Function::StandardRenderingFunction<PixelType,itk::RGBPixel<unsigned char> > RenderingFunctionType;
+  typedef itk::Function::ExpNegative<PixelType,PixelType>   ExpNegativeFunctionType;
+  typedef otb::Function::StandardRenderingFunction<PixelType,
+    itk::RGBPixel<unsigned char>,ExpNegativeFunctionType >  RenderingFunctionType;
 
 
   // Instanatiation
@@ -55,8 +58,8 @@ int otbRenderingImageFilterVector( int argc, char * argv[] )
 
   for(unsigned int i = 0; i<nbComponents;++i)
     {
-    min[i]=atof(argv[4+i]);
-    max[i]=atof(argv[4+nbComponents+i]);
+    min[i]=atof(argv[5+i]);
+    max[i]=atof(argv[5+nbComponents+i]);
     }
  
   // rendering
@@ -65,6 +68,7 @@ int otbRenderingImageFilterVector( int argc, char * argv[] )
   function->SetMinimum(min);
   function->SetMaximum(max);
   function->SetAllChannels(channel);
+  function->GetTransferFunction().SetFactor(atof(argv[4]));
 
   // writing
   writer->SetFileName(argv[2]);

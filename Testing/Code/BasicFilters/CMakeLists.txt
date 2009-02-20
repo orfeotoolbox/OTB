@@ -1013,6 +1013,24 @@ ADD_TEST(bfTvBinaryImageToDensityImageFilter ${BASICFILTERS_TESTS9}
 	    2 # radius
 )
 
+# -------            otb::EdgeDensityImageyFilter   ----------------------------
+ADD_TEST(bfTuEdgeDensityImageFilterNew  ${BASICFILTERS_TESTS9}
+        otbEdgeDensityImageFilterNew
+)
+
+ADD_TEST(bfTvEdgeDensityImageFilter ${BASICFILTERS_TESTS9}
+	--compare-image ${EPSILON}
+	    ${BASELINE}/bfTvEdgeDensityImageFilterOutputImage.tif
+	    ${TEMP}/bfTvEdgeDensityImageFilterOutputImage.tif
+        otbEdgeDensityImageFilter
+	    ${INPUTDATA}/scene.png
+	    ${TEMP}/bfTvEdgeDensityImageFilterOutputImage.tif
+	    2 # radius
+	    15 3  1. 0.01  #Canny Parameters
+	    
+)
+
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests10 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1316,6 +1334,20 @@ ADD_TEST(bfTvItkImagePCAShapeModelEstimatorTest ${BASICFILTERS_TESTS11}
     ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors3.tif
 )
 
+# -------  otb::ListSampleToVariableDimensionHistogramGenerator ----------------------------
+
+ADD_TEST(bfTuListSampleToVariableDimensionHistogramGeneratorNew ${BASICFILTERS_TESTS11}
+	otbListSampleToVariableDimensionHistogramGeneratorNew)
+
+ADD_TEST(bfTvListSampleToVariableDimensionHistogramGenerator ${BASICFILTERS_TESTS11}
+--compare-ascii ${TOL}
+	${BASELINE_FILES}/bfTvListSampleToVariableDimensionHistogramGeneratorOutput.txt
+	${TEMP}/bfTvListSampleToVariableDimensionHistogramGeneratorOutput.txt
+	otbListSampleToVariableDimensionHistogramGenerator
+	${INPUTDATA}/couleurs.tif
+	${TEMP}/bfTvListSampleToVariableDimensionHistogramGeneratorOutput.txt
+	10 1
+)
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -1454,7 +1486,9 @@ otbFunctionToImageFilter.cxx
 otbBinaryImageDensityFunctionNew.cxx
 otbBinaryImageDensityFunction.cxx
 otbBinaryImageToDensityImageFilterNew.cxx
-otbBinaryImageToDensityImageFilter.cxx		
+otbBinaryImageToDensityImageFilter.cxx	
+otbEdgeDensityImageFilterNew.cxx
+otbEdgeDensityImageFilter.cxx	
 )
 
 # A enrichir
@@ -1498,6 +1532,8 @@ otbNormalizeInnerProductPCAImageFilterNew.cxx
 otbNormalizeInnerProductPCAImageFilter.cxx
 otbInnerProductPCAImageFilter.cxx
 otbInnerProductPCAImageFilterNew.cxx
+otbListSampleToVariableDimensionHistogramGeneratorNew.cxx
+otbListSampleToVariableDimensionHistogramGenerator.cxx
 )
 
 
@@ -1534,6 +1570,6 @@ ADD_EXECUTABLE(otbBasicFiltersTests10 otbBasicFiltersTests10.cxx ${BasicFilters_
 TARGET_LINK_LIBRARIES(otbBasicFiltersTests10  OTBBasicFilters  OTBIO )
 
 ADD_EXECUTABLE(otbBasicFiltersTests11 otbBasicFiltersTests11.cxx ${BasicFilters_SRCS11})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests11  OTBBasicFilters ITKAlgorithms OTBIO OTBFeatureExtraction)
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests11  OTBBasicFilters ITKAlgorithms OTBIO )
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

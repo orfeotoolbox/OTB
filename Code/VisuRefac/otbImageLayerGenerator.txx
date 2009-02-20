@@ -66,9 +66,6 @@ ImageLayerGenerator<TImageLayer>
     // Generate it
     this->GenerateQuicklook();
     }
-
-  // Generate histograms
-  this->GenerateHistograms();
 }
 
 template < class TImageLayer >
@@ -168,14 +165,6 @@ ImageLayerGenerator<TImageLayer>
       m_Layer->SetHasQuicklook(false);
       }
     }
-}
-
-template < class TImageLayer >
-void
-ImageLayerGenerator<TImageLayer>
-::GenerateHistograms()
-{
-  /// TODO: Implement histogram generation
 }
 
 template < class TImageLayer >
