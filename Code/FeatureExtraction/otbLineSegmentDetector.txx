@@ -792,7 +792,8 @@ LineSegmentDetector<TInputImage, TPrecision>
   for (int i = 0; i<static_cast<int>(X.size());  i++)
     {
       OutputIndexType   vertex;
-      vertex[0] = X[i] ; vertex[1] = Y[i];
+      vertex[0] = static_cast<long int>(X[i]); 
+      vertex[1] = static_cast<long int>(Y[i]);
       rectangle->AddVertex(vertex);
     }
   

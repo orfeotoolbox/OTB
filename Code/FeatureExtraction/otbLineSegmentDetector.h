@@ -112,9 +112,9 @@ public:
   
 
   /** Definition of temporary image ised to store LABELS*/
-  typedef Image<TPrecision ,2>                                     OutputImageType;
+  typedef Image<TPrecision ,2>                                          OutputImageType;
   typedef typename OutputImageType::PixelType                           OutputPixelType;
-  typedef typename OutputImageType::IndexType                          OutputIndexType;
+  typedef typename OutputImageType::IndexType                           OutputIndexType;
   typedef typename OutputImageType::SizeType                            OutputSizeType;
   
   /** Histogram to store the coordinate of ordered pixels*/

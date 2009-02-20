@@ -24,7 +24,8 @@ namespace otb
 {
 namespace Function
 {
-/**\class GrayscaleRenderingFunction
+/**
+ * \class GrayscaleRenderingFunction
  * \brief Grayscale rendering.
  * If the input image is an Image, the function
  * renders it. If it is a VectorImage, the function renders
@@ -75,7 +76,7 @@ public:
   {
     m_ChannelIndex = index;
   }
-  
+
   /** Get the channel index (vector mode only) */
   unsigned int GetChannelIndex(void)
   {
