@@ -25,10 +25,11 @@ namespace otb
 {
 namespace Function
 {
-/**\class UniformAlphaBlendingFunction
+/**
+ * \class UniformAlphaBlendingFunction
  * \brief Implements simple blending
  * For each channel the blending function is as follows:
- * $P_{o} = \alpha P_{i1} + (1 - \alpha P_{i2} $
+ * \f[ P_{o} = \alpha P_{i1} + (1 - \alpha) P_{i2} \f]
  */
 template <class TInputRGBPixel1, class TInputRGBPixel2 = TInputRGBPixel1, class TOutputRGBPixel = TInputRGBPixel1>
 class UniformAlphaBlendingFunction
@@ -80,7 +81,7 @@ private:
 
   /** Alpha value for blending (should be in the range [0,1] */
   double m_Alpha;
-  
+
 };
 } // end namespace Functor
 } // end namespace otb

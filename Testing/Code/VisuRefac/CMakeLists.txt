@@ -133,6 +133,12 @@ ADD_TEST(vrTuUniformAlphaBlendingFunctionNew ${VISUREFAC_TESTS1}
 otbUniformAlphaBlendingFunctionNew
 )
 
+#------------ otb::MultiplyBlendingFunction ------------
+
+ADD_TEST(vrTuMultiplyBlendingFunctionNew ${VISUREFAC_TESTS1}
+otbMultiplyBlendingFunctionNew
+)
+
 #------------ otb::BlendingImageFilter ----------------------
 
 ADD_TEST(vrTuBlendingImageFilterNew ${VISUREFAC_TESTS1}

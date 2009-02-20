@@ -970,20 +970,65 @@ ADD_TEST(bfTvMeanShiftVectorImageFilterNotStreamedNotThreaded ${BASICFILTERS_TES
 	16 16 10 1.0 0 0
 	)
 
-ADD_TEST(bfTvFunctionToImageFilterNew ${BASICFILTERS_TESTS9}
+ADD_TEST(bfTuFunctionToImageFilterNew ${BASICFILTERS_TESTS9}
         otbFunctionToImageFilterNew
 )
 
-ADD_TEST(bfTuFunctionToImageFilterTest ${BASICFILTERS_TESTS9}
+ADD_TEST(bfTvFunctionToImageFilterTest ${BASICFILTERS_TESTS9}
 	--compare-image ${EPSILON}
-	    ${BASELINE}/bfTuFunctionToImageFilterTest.tif
-	    ${TEMP}/bfTuFunctionToImageFilterTest.tif
+	    ${BASELINE}/bfTvFunctionToImageFilterTest.tif
+	    ${TEMP}/bfTvFunctionToImageFilterTest.tif
         otbFunctionToImageFilter
 	    ${INPUTDATA}/poupees_1canal.hd
-	    ${TEMP}/bfTuFunctionToImageFilterTest.tif
+	    ${TEMP}/bfTvFunctionToImageFilterTest.tif
 	    2 # radius
 )
 
+# -------            otb::BinaryImageDensityFunction   ----------------------------
+ADD_TEST(bfTuBinaryImageDensityFunctionNew  ${BASICFILTERS_TESTS9}
+        otbBinaryImageDensityFunctionNew
+)
+
+ADD_TEST(bfTvBinaryImageDensityFunction ${BASICFILTERS_TESTS9}
+--compare-ascii ${TOL}
+	     ${BASELINE_FILES}/bfTvBinaryImageDensityFunctionOutputAscii.txt
+	    ${TEMP}/bfTvBinaryImageDensityFunctionOutputAscii.txt
+	 otbBinaryImageDensityFunction
+	 ${INPUTDATA}/scene.png
+	 ${TEMP}/bfTvBinaryImageDensityFunctionOutputAscii.txt
+	 )
+
+# -------            otb::BinaryImageToImageDensityFilter   ----------------------------
+ADD_TEST(bfTuBinaryImageToImageDensityFilterNew  ${BASICFILTERS_TESTS9}
+        otbBinaryImageToDensityImageFilterNew
+)
+
+ADD_TEST(bfTvBinaryImageToDensityImageFilter ${BASICFILTERS_TESTS9}
+	--compare-image ${EPSILON}
+	    ${BASELINE}/bfTvBinaryImageToDensityImageFilterOutputImage.tif
+	    ${TEMP}/bfTvBinaryImageToDensityImageFilterOutputImage.tif 
+        otbBinaryImageToDensityImageFilter
+	    ${INPUTDATA}/scene.png
+	    ${TEMP}/bfTvBinaryImageToDensityImageFilterOutputImage.tif 
+	    2 # radius
+)
+
+# -------            otb::EdgeDensityImageyFilter   ----------------------------
+ADD_TEST(bfTuEdgeDensityImageFilterNew  ${BASICFILTERS_TESTS9}
+        otbEdgeDensityImageFilterNew
+)
+
+ADD_TEST(bfTvEdgeDensityImageFilter ${BASICFILTERS_TESTS9}
+	--compare-image ${EPSILON}
+	    ${BASELINE}/bfTvEdgeDensityImageFilterOutputImage.tif
+	    ${TEMP}/bfTvEdgeDensityImageFilterOutputImage.tif
+        otbEdgeDensityImageFilter
+	    ${INPUTDATA}/scene.png
+	    ${TEMP}/bfTvEdgeDensityImageFilterOutputImage.tif
+	    2 # radius
+	    15 3  1. 0.01  #Canny Parameters
+	    
+)
 
 
 
@@ -1438,6 +1483,12 @@ otbMeanShiftVectorImageFilterNew.cxx
 otbMeanShiftVectorImageFilter.cxx
 otbFunctionToImageFilterNew.cxx
 otbFunctionToImageFilter.cxx
+otbBinaryImageDensityFunctionNew.cxx
+otbBinaryImageDensityFunction.cxx
+otbBinaryImageToDensityImageFilterNew.cxx
+otbBinaryImageToDensityImageFilter.cxx	
+otbEdgeDensityImageFilterNew.cxx
+otbEdgeDensityImageFilter.cxx	
 )
 
 # A enrichir
@@ -1519,6 +1570,6 @@ ADD_EXECUTABLE(otbBasicFiltersTests10 otbBasicFiltersTests10.cxx ${BasicFilters_
 TARGET_LINK_LIBRARIES(otbBasicFiltersTests10  OTBBasicFilters  OTBIO )
 
 ADD_EXECUTABLE(otbBasicFiltersTests11 otbBasicFiltersTests11.cxx ${BasicFilters_SRCS11})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests11  OTBBasicFilters ITKAlgorithms OTBIO OTBFeatureExtraction)
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests11  OTBBasicFilters ITKAlgorithms OTBIO )
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
