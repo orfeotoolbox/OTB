@@ -1289,6 +1289,20 @@ ADD_TEST(bfTvItkImagePCAShapeModelEstimatorTest ${BASICFILTERS_TESTS11}
     ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors3.tif
 )
 
+# -------  otb::ListSampleToVariableDimensionHistogramGenerator ----------------------------
+
+ADD_TEST(bfTuListSampleToVariableDimensionHistogramGeneratorNew ${BASICFILTERS_TESTS11}
+	otbListSampleToVariableDimensionHistogramGeneratorNew)
+
+ADD_TEST(bfTvListSampleToVariableDimensionHistogramGenerator ${BASICFILTERS_TESTS11}
+--compare-ascii ${TOL}
+	${BASELINE_FILES}/bfTvListSampleToVariableDimensionHistogramGeneratorOutput.txt
+	${TEMP}/bfTvListSampleToVariableDimensionHistogramGeneratorOutput.txt
+	otbListSampleToVariableDimensionHistogramGenerator
+	${INPUTDATA}/couleurs.tif
+	${TEMP}/bfTvListSampleToVariableDimensionHistogramGeneratorOutput.txt
+	10 1
+)
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -1467,6 +1481,8 @@ otbNormalizeInnerProductPCAImageFilterNew.cxx
 otbNormalizeInnerProductPCAImageFilter.cxx
 otbInnerProductPCAImageFilter.cxx
 otbInnerProductPCAImageFilterNew.cxx
+otbListSampleToVariableDimensionHistogramGeneratorNew.cxx
+otbListSampleToVariableDimensionHistogramGenerator.cxx
 )
 
 
