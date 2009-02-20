@@ -27,8 +27,8 @@ namespace otb
 /** \class ImageLayerGenerator
 *   \brief Helper class to generate image layer for visualization.
 *   This class is a helper class for displayable layer generation.
-*   It generates a layer with all the needed information, histograms 
-*   and optionnaly quicklook.
+*   It generates a layer with all the needed information and
+*   optionnaly quicklook.
 *
 *   It ca also suggest a subsampling rate if a user want to generate
 *   the quicklook by itself. 
@@ -119,11 +119,6 @@ protected:
    * QuicklookGeneration is on).
    */
   virtual void GenerateQuicklook();
-
-  /**
-   * Generate histograms.
-   */
-  virtual void GenerateHistograms();
 
 private:
   ImageLayerGenerator(const Self&);     // purposely not implemented
