@@ -1013,6 +1013,24 @@ ADD_TEST(bfTvBinaryImageToDensityImageFilter ${BASICFILTERS_TESTS9}
 	    2 # radius
 )
 
+# -------            otb::EdgeDensityImageyFilter   ----------------------------
+ADD_TEST(bfTuEdgeDensityImageFilterNew  ${BASICFILTERS_TESTS9}
+        otbEdgeDensityImageFilterNew
+)
+
+ADD_TEST(bfTvEdgeDensityImageFilter ${BASICFILTERS_TESTS9}
+	--compare-image ${EPSILON}
+	    ${BASELINE}/bfTvEdgeDensityImageFilterOutputImage.tif
+	    ${TEMP}/bfTvEdgeDensityImageFilterOutputImage.tif
+        otbEdgeDensityImageFilter
+	    ${INPUTDATA}/scene.png
+	    ${TEMP}/bfTvEdgeDensityImageFilterOutputImage.tif
+	    2 # radius
+	    15 3  1. 0.01  #Canny Parameters
+	    
+)
+
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests10 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1454,7 +1472,9 @@ otbFunctionToImageFilter.cxx
 otbBinaryImageDensityFunctionNew.cxx
 otbBinaryImageDensityFunction.cxx
 otbBinaryImageToDensityImageFilterNew.cxx
-otbBinaryImageToDensityImageFilter.cxx		
+otbBinaryImageToDensityImageFilter.cxx	
+otbEdgeDensityImageFilterNew.cxx
+otbEdgeDensityImageFilter.cxx	
 )
 
 # A enrichir

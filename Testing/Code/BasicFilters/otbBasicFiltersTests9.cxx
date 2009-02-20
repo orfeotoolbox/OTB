@@ -41,4 +41,6 @@ void RegisterTests()
   REGISTER_TEST(otbBinaryImageDensityFunction);
   REGISTER_TEST(otbBinaryImageToDensityImageFilterNew);
   REGISTER_TEST(otbBinaryImageToDensityImageFilter);
+  REGISTER_TEST(otbEdgeDensityImageFilterNew);
+  REGISTER_TEST(otbEdgeDensityImageFilter);
 }
