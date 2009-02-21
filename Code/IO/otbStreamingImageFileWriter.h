@@ -18,9 +18,8 @@
 #ifndef __otbStreamingImageFileWriter_h
 #define __otbStreamingImageFileWriter_h
 
-#include "itkMacro.h"
+#include "otbMacro.h"
 #include "itkImageIOBase.h"
-#include "itkImageSource.h"
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionSplitter.h"
 #include "otbStreamingTraits.h"

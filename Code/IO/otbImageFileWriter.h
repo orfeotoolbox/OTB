@@ -19,10 +19,6 @@
 #define __otbImageFileWriter_h
 
 #include "itkImageFileWriter.h"
-#include "itkImageIOBase.h"
-#include "itkExceptionObject.h"
-#include "itkSize.h"
-#include "itkImageIORegion.h"
 
 namespace otb
 {
@@ -37,8 +33,8 @@ namespace otb
  *
  */
 
-// Le 3ieme parametre template est bidon MAIS necessaire pour compiler avec Microsoft Visual C++ 6.0
-template <class TInputImage, unsigned int toto=0>
+
+template <class TInputImage>
 class ITK_EXPORT ImageFileWriter : public itk::ImageFileWriter<TInputImage>
 {
 public:

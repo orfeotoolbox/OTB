@@ -17,16 +17,15 @@
 =========================================================================*/
 #ifndef __otbStreamingImageFileWriter_txx
 #define __otbStreamingImageFileWriter_txx
-#include "otbStreamingImageFileWriter.h"
 
-#include "itkCommand.h"
-#include "itkImageRegionIterator.h"
-#include "itkObjectFactoryBase.h"
+#include "otbStreamingImageFileWriter.h"
 #include "itkImageFileWriter.h"
+
+#include "itkObjectFactoryBase.h"
+
 #include "itkImageRegionMultidimensionalSplitter.h"
 #include "otbImageIOFactory.h"
 
-#include "otbMacro.h"
 #include "otbConfigure.h"
 
 namespace otb

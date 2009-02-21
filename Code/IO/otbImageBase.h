@@ -27,7 +27,6 @@
 #include "otbMetaDataKey.h"
 #include "otbImageKeywordlist.h"
 
-#include <iostream>
 #include <string>
 
 namespace otb

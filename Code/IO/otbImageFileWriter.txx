@@ -22,9 +22,7 @@
 #include "otbImageIOFactory.h"
 
 #include "itkObjectFactoryBase.h"
-#include "itkCommand.h"
 #include "vnl/vnl_vector.h"
-#include "itkVectorImage.h"
 
 #include "otbMacro.h"
 
@@ -32,8 +30,8 @@ namespace otb
 {
 
 //---------------------------------------------------------
-template <class TInputImage, unsigned int toto>
-ImageFileWriter<TInputImage,toto>
+template <class TInputImage>
+ImageFileWriter<TInputImage>
 ::ImageFileWriter() : itk::ImageFileWriter<TInputImage>(),
     m_UserSpecifiedIORegion(false),
     m_FactorySpecifiedImageIO(false)
@@ -43,8 +41,8 @@ ImageFileWriter<TInputImage,toto>
 
 
 //---------------------------------------------------------
-template <class TInputImage, unsigned int toto>
-ImageFileWriter<TInputImage,toto>
+template <class TInputImage>
+ImageFileWriter<TInputImage>
 ::~ImageFileWriter()
 {
 }
@@ -52,9 +50,9 @@ ImageFileWriter<TInputImage,toto>
 
 
 //---------------------------------------------------------
-template <class TInputImage, unsigned int toto>
+template <class TInputImage>
 void
-ImageFileWriter<TInputImage,toto>
+ImageFileWriter<TInputImage>
 ::Write()
 {
   const InputImageType * input = this->GetInput();
@@ -206,9 +204,9 @@ ImageFileWriter<TInputImage,toto>
 
 
 //---------------------------------------------------------
-template <class TInputImage, unsigned int toto>
+template <class TInputImage>
 void
-ImageFileWriter<TInputImage,toto>
+ImageFileWriter<TInputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
