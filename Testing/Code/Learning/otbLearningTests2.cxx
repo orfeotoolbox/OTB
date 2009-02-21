@@ -23,7 +23,7 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include <iostream>
+
 #include "otbTestMain.h"
 
 void RegisterTests()
