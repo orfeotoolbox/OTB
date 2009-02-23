@@ -57,7 +57,7 @@
 // \end{equation}
 //
 // \begin{equation}
-// \mathbf{AVI} = \tan^-1 {[\frac{{fact1}{{NIR}-{R}}}} + tan^-1{\frac{{fact2}{{G}-{R}}}}
+// \mathbf{AVI} = \tan^{-1} {\frac{fact1}{NIR-R}} + tan^{-1}{\frac{fact2}{G-R}}
 // \end{equation}
 //
 // For more details, refer to Plummer work \cite{AVI}.
