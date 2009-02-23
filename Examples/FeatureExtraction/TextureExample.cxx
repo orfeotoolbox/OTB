@@ -57,10 +57,9 @@ int main(int argc, char * argv[])
   const unsigned int yOffset =  static_cast<unsigned int>(atoi(argv[6]));
 
  
-  typedef double InputPixelType;
+  typedef double PixelType;
   const int Dimension = 2;
-  typedef otb::Image<InputPixelType,Dimension> ImageType;
-  typedef ImageType::PixelType                       PixelType;
+  typedef otb::Image<PixelType,Dimension> ImageType;
   typedef itk::ConstNeighborhoodIterator<ImageType>  IteratorType;
   typedef itk::Vector< PixelType > VectorType;
 
