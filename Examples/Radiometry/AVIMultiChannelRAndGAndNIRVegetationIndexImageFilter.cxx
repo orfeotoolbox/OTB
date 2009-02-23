@@ -253,13 +253,13 @@ int main( int argc, char *argv[] )
   maximum.Fill(255);
   vectRescaler->SetOutputMinimum(minimum);
   vectRescaler->SetOutputMaximum(maximum);
-  vectRescaler->SetClampThreshold(0.01);
+  vectRescaler->SetClampThreshold(1);
   vectRescaler->SetInput( reader->GetOutput() );
 
   selecter->SetInput(vectRescaler->GetOutput());
-  selecter->SetChannel(1);
-  selecter->SetChannel(2);
   selecter->SetChannel(3);
+  selecter->SetChannel(2);
+  selecter->SetChannel(1);
 
   vectPrettyWriter->SetFileName( argv[3] );
   vectPrettyWriter->SetInput( selecter->GetOutput() );
@@ -302,7 +302,7 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginLatex
   //
   // Let's now run this example using as input the image
-  // \code{IndexVegetation.hd} and $\gamma$=0.6 provided in the
+  // \code{qb_toulouse_sub.tif} provided in the
   // directory \code{Examples/Data}.
   //
   //
