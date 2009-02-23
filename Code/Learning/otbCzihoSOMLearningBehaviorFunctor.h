@@ -41,8 +41,8 @@ namespace Functor
 *  \f[
        \beta =
        \begin{cases}
-   \beta_0 \left( 1 - \frac{t}{t_0} \right) & \textrm{if} t < t_0 \\
-       \beta_{\textrm{end}} \left( 1- \frac{t-t_O}{t_{\textrm{end}}-t_0} \right) & \textrm{if} t_0 \leqslant t < t_{\textrm{end}}
+   \beta_0 \left( 1 - \frac{t}{t_0} \right) & \textrm{ if } t < t_0 \\
+       \beta_{\textrm{end}} \left( 1- \frac{t-t_O}{t_{\textrm{end}}-t_0} \right) & \textrm{ if } t_0 \leqslant t < t_{\textrm{end}}
    \end{cases}
    \f]
 * where \f$ t_0 \f$ stands for IterationThreshold.
