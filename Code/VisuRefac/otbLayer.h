@@ -104,18 +104,17 @@ public:
 
 protected:
   /** Constructor */
-  Layer()
+  Layer() : m_Name("Default"), m_Visible(false), m_Extent(), 
+	    m_RenderedQuicklook(), m_HasQuicklook(false), m_QuicklookSize(),  m_QuicklookSubsamplingRate(1),
+	    m_RenderedExtract(),   m_HasExtract(false),   m_ExtractRegion(),
+	    m_RenderedScaledExtract(), m_HasScaledExtract(false), m_ScaledExtractRegion(),
+	    m_BlendingFunction()
   {
-    m_HasQuicklook     = false;
-    m_HasExtract       = false;
-    m_HasScaledExtract = false;
-    m_Visible          = false;
-    m_Name             = "Default";
     // Default blending function
     m_BlendingFunction = Function::UniformAlphaBlendingFunction<PixelType>::New();
   }
   /** Destructor */
-  ~Layer(){}
+  virtual ~Layer(){}
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
