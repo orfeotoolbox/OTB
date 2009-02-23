@@ -27,11 +27,11 @@ namespace otb
 
 /** \class PanTexTextureImageFilter
   * \brief This filter computes the panchromatic Texture measure.
-  * 
+  *
   * It is the min vamlue of the contrast in 8 directions.
   *
-  * sa\ ContrastTextureFunctor
-  *  \ingroup Functor
+  * \sa ContrastTextureFunctor
+  *
   */
 
 template <class TInputImage, class TOutputImage>
@@ -41,10 +41,10 @@ public UnaryFunctorNeighborhoodWithOffsetImageFilter< TInputImage, TOutputImage,
 public:
   /** Standard class typedefs. */
   typedef PanTexTextureImageFilter                      Self;
-  typedef UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage,  
-                                                        TOutputImage,  
-                                                        typename Functor::PanTexTextureFunctor<typename itk::ConstNeighborhoodIterator<TInputImage>,  
-                                                                                               typename TOutputImage::PixelType>                    > Superclass; 
+  typedef UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage,
+                                                        TOutputImage,
+                                                        typename Functor::PanTexTextureFunctor<typename itk::ConstNeighborhoodIterator<TInputImage>,
+                                                                                               typename TOutputImage::PixelType>                    > Superclass;
   typedef itk::SmartPointer<Self>                       Pointer;
   typedef itk::SmartPointer<const Self>                 ConstPointer;
 
@@ -60,7 +60,7 @@ public:
   typedef TOutputImage                                            OutputImageType;
   typedef typename itk::ConstNeighborhoodIterator<InputImageType> NeighborhoodIteratorType;
   typedef typename OutputImageType::PixelType                     OutputPixelType;
-  
+
   typedef typename InputImageType::RegionType                     InputImageRegionType;
   typedef typename InputImageType::PixelType                      InputImagePixelType;
   typedef typename InputImageType::SizeType                       InputImageSizeType;
@@ -73,12 +73,12 @@ public:
 
   typedef itk::ProcessObject ProcessObjectType;
 
- 
+
 protected:
-  
+
   PanTexTextureImageFilter();
   virtual ~PanTexTextureImageFilter() {};
-  
+
   /** UnaryFunctorNeighborhoodWithOffsetImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
    * which is called for each processing thread. The output image data is
@@ -96,7 +96,7 @@ private:
 
   PanTexTextureImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   //Offset is setted to [2,2] in the publication
   virtual void SetOffset(OffsetType off)
     {

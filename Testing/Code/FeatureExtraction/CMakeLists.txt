@@ -1629,6 +1629,23 @@ ADD_TEST(feTvPanTexTextureImageFunctionFilter ${FEATUREEXTRACTION_TESTS14}
     ${TEMP}/feTvPanTexTextureImageFunctionFilter.tif
 )
 
+# -------    otb::LineDirectionImageFilter   -------------
+ADD_TEST(feTuLineDirectionImageFilterNew ${FEATUREEXTRACTION_TESTS14} 
+    otbLineDirectionImageFilterNew)
+
+ADD_TEST(feTvLineDirectionImageFilterTest ${FEATUREEXTRACTION_TESTS14} 
+ #--compare-image ${EPS}
+ #               ${BASELINE}/feTvLineDirectionImageFilterTest.tif
+ #               ${TEMP}/feTvLineDirectionImageFilterTest.tif
+   otbLineDirectionImageFilterTest
+    ${INPUTDATA}/poupees_sub.png
+    ${TEMP}/feTvLineDirectionImageFilterTest.tif
+    8 # spectral threshold
+    3 # spatial threshold
+    5 # max min/max number takes in care for ratio
+    0.6 # alpha value
+)
+
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -1780,6 +1797,8 @@ otbPanTexTextureImageFilterNew.cxx
 otbPanTexTextureImageFilter.cxx
 otbPanTexTextureImageFunctionFilterNew.cxx
 otbPanTexTextureImageFunctionFilter.cxx
+otbLineDirectionImageFilterNew.cxx
+otbLineDirectionImageFilterTest.cxx
 )
 
 

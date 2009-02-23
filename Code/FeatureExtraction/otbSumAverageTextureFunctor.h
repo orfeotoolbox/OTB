@@ -29,15 +29,15 @@ namespace Functor
  *
  *  Computes sum average using joint histogram (neighborhood and offset neighborhood).
  *  The formula is:
- *  $ \sum_{i}{2N}i.p_{x+y}(i) $
+ *  \f$ \sum_{i}{2N}i.p_{x+y}(i) \f$
  *  TIterInput is an iterator, TOutput is a PixelType.
  *
  *  \sa TextureFunctorBase
- *  \ingroup Functor 
+ *  \ingroup Functor
  *  \ingroup Statistics
  */
 template <class TIterInput, class TOutput>
-class ITK_EXPORT SumAverageTextureFunctor : 
+class ITK_EXPORT SumAverageTextureFunctor :
 public TextureFunctorBase<TIterInput, TOutput>
 {
 public:
@@ -49,7 +49,7 @@ public:
   typedef typename IterType::InternalPixelType InternalPixelType;
   typedef typename IterType::ImageType         ImageType;
   typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
- 
+
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
     {
@@ -59,7 +59,7 @@ public:
       double out = 0.;
       // loop over bin neighborhood values
       for (unsigned sB = 0; sB<this->GetHisto()[0].size(); sB++)
-	{ 
+	{
 	  double nCeil = (static_cast<double>(sB)+0.5)*this->GetNeighBinLength();
 	  double nCeil2 = (static_cast<double>(sB)+this->GetHisto()[0].size()+0.5)*this->GetNeighBinLength();
 	  double Px_y = 0.;
@@ -68,7 +68,7 @@ public:
 	    {
 	      double rVal = (static_cast<double>(r)+0.5)*this->GetOffsetBinLength();
 	      for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-		{ 
+		{
 		  double sVal = (static_cast<double>(s)+0.5)*this->GetNeighBinLength();
 		  if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(this->GetNeighBinLength()) )
 		    {
@@ -82,13 +82,13 @@ public:
 	    }
 	  out += nCeil * Px_y + nCeil2 * Px_y2;
 	}
-      
-      return out;  
+
+      return out;
     }
-  
+
 };
- 
- 
+
+
 } // namespace Functor
 } // namespace otb
 

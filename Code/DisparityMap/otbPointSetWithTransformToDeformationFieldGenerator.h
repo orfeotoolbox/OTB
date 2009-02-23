@@ -25,10 +25,13 @@ namespace otb
 {
 /** \class PointSetWithTransformToDeformationFieldGenerator
  *  \brief Base class for filters generating a deformation field from a point set enriched with local transform information.
+ *
  *  The output of the filters deriving from this base class can be passed to the itk::WarpImageFilter for image resampling.
+ *
  *  \sa DisparityMapEstimationMethod
- *   \sa itk::WarpImageFilter
- *  \ingroup
+ *  \sa itk::WarpImageFilter
+ *
+ *  \ingroup DisparityMap
  */
 template <class TPointSet, class TDeformationField>
 class ITK_EXPORT PointSetWithTransformToDeformationFieldGenerator

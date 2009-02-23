@@ -29,8 +29,8 @@ namespace Functor
  *
  *  Computes variance using joint histogram (neighborhood and offset neighborhood) .
  *  The formula is:
- *  $ \sum_{i}{2N}(i-SAV)^2.p_{x+y}(i) $
- *  With $SAV$ is the sum average texture value.
+ *  \f$ \sum_{i}{2N}(i-SAV)^2.p_{x+y}(i) \f$
+ *  With \f$ SAV \f$ is the sum average texture value.
  *  TIterInput is an iterator, TOutput is a PixelType.
  *
  *  \sa MeanTextureFunctor
@@ -40,7 +40,7 @@ namespace Functor
  */
 
 template <class TIterInput, class TOutput>
-class ITK_EXPORT VarianceTextureFunctor : 
+class ITK_EXPORT VarianceTextureFunctor :
 public MeanTextureFunctor<TIterInput, TOutput>
 {
 public:
@@ -70,7 +70,7 @@ public:
 	    out += square*p;
 	  }
       }
-    
+
     return out;
   }
 };

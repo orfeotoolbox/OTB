@@ -23,9 +23,12 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class NNearestTransformsLinearInterpolateDeformationFieldGenerator
- *  \brief This class generate the deformation field by performing a linear interpolation of the deformations from the transforms induced by the n nearest points.
- * \ingroup
- * \ingroup
+ *  \brief generate the deformation field by performing a linear interpolation
+ *
+ * This class generate the deformation field by performing a linear interpolation of
+ * the deformations from the transforms induced by the n nearest points.
+ *
+ * \ingroup DisparityMap
  */
 template <class TPointSet, class TDeformationField>
 class ITK_EXPORT NNearestTransformsLinearInterpolateDeformationFieldGenerator
