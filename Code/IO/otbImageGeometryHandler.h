@@ -17,45 +17,29 @@
 =========================================================================*/
 #ifndef __otbImageGeometryHandler_h
 #define __otbImageGeometryHandler_h
-/*!otbImageGeometryHandler.h
- *
- *
- * PURPOSE:
- *
- *
- */
-// iostream is used for general output
-//#include <iostream>
-#include <sstream>
-#include <stdio.h>
-#include <iostream>
-#include <iterator>
+
 
 #include "base/ossimKeywordlist.h"
 #include "base/ossimFilename.h"
-#include "base/ossimString.h"
-#include "base/ossimDrect.h"
-#include "support_data/ossimFfL7.h"
-#include "imaging/ossimImageHandlerRegistry.h"
-#include "imaging/ossimImageHandler.h"
-#include "projection/ossimMapProjectionInfo.h"
-#include "projection/ossimMapProjection.h"
-#include "projection/ossimAdjMapModel.h"
 
-// this is the most important class and is called as the first line of all applications.
-// without this alll the important factories are not created.
-#include "init/ossimInit.h"
+#include "imaging/ossimImageHandler.h"
+
 #include "itkExceptionObject.h"
 #include "itkMacro.h"
-#include "itkSmartPointer.h"
 #include "itkObject.h"
+
+/**
+ * \class ImageGeometryHandler
+ * \brief used for orthorectification
+ *
+ */
 
 namespace otb
 {
 class ITK_EXPORT ImageGeometryHandler: public itk::Object
 {
 public :
-//Déclaration des types:
+
   typedef ImageGeometryHandler                       Self;
   typedef itk::Object                                Superclass;
 
@@ -71,40 +55,24 @@ public :
 
   itkTypeMacro( ImageGeometryHandler, Object);
 
-  /***********************************/
-  /*   Déclaration des méthodes      */
-  /***********************************/
-//Ouverture d'une image à partir d'un nom de fichier
+
+  /** Open image from filename*/
   void SetFileName(char *src);
 
-//Récupération de la keywordlist de l'image:
+  /** Get the image keyword list*/
   ossimKeywordlist GetGeometryKeywordlist();
 
-// //Récupération du model de projection(spécifique à AdjMapModel):
-// const ossimMapProjection* ImageGeometryHandler::GetProjection() const;
-//
-// //Récupération de ImageSize(spécifique à AdjMapModel):
-// const ossimIpt ImageGeometryHandler::GetImageSize() const;
-//
-// //Récupération du GeoFilename:
-// const ossimFilename ImageGeometryHandler::GetGeometryFileName() const;
-//
-// //Récupération du HeaderFile de type Ffl7:
-// const ossimFfL7 ImageGeometryHandler::GetFfL7();
-//
-// //Récupération du SpotDimapSupportData:
 
 protected:
-  ImageGeometryHandler();
-//ImageGeometryHandler(const char *src);
-  virtual ~ImageGeometryHandler();
+  ImageGeometryHandler() {};
+  virtual ~ImageGeometryHandler() {};
 
   ossimImageHandler *handler;
   ossimKeywordlist m_geom_kwl;
   ossimFilename m_filename;
-};//Fin définition de la classe
+};
 
-}//fin namespace
+}
 
 
 #endif
