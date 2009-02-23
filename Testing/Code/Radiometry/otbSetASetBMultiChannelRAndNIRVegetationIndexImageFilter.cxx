@@ -70,10 +70,6 @@ int otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter(int argc, char * ar
     InputImageType::InternalPixelType,
     OutputImageType::PixelType> >
     (argc,argv);
-  else if ( strArgv == "TSAVI" ) generic_SetASetBMultiChannelRAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
-    otb::Functor::TSAVI<     InputImageType::InternalPixelType,
-    InputImageType::InternalPixelType,
-    OutputImageType::PixelType> >
-    (argc,argv);
+
   return EXIT_SUCCESS;
 }

@@ -41,6 +41,11 @@ ADD_EXECUTABLE(ExtractSegmentsByStepsExample
 ExtractSegmentsByStepsExample.cxx)
 TARGET_LINK_LIBRARIES(ExtractSegmentsByStepsExample OTBFeatureExtraction OTBCommon OTBIO)
 
+ADD_EXECUTABLE(LineSegmentDetectorExample
+LineSegmentDetectorExample.cxx)
+TARGET_LINK_LIBRARIES(LineSegmentDetectorExample OTBFeatureExtraction OTBCommon OTBIO)
+
+
 ADD_EXECUTABLE(ExtractSegmentsExample
 ExtractSegmentsExample.cxx)
 TARGET_LINK_LIBRARIES(ExtractSegmentsExample OTBFeatureExtraction OTBCommon OTBIO)
@@ -83,8 +88,11 @@ TARGET_LINK_LIBRARIES(ParallelLineDetectionExample OTBIO OTBCommon OTBFeatureExt
 ITKCommon ITKBasicFilters)
 
 ADD_EXECUTABLE(CloudDetectionExample CloudDetectionExample.cxx)
-TARGET_LINK_LIBRARIES(CloudDetectionExample OTBIO OTBCommon OTBFeatureExtraction
-ITKCommon ITKBasicFilters)
+TARGET_LINK_LIBRARIES(CloudDetectionExample OTBIO OTBCommon OTBFeatureExtraction ITKCommon ITKBasicFilters)
+
+ADD_EXECUTABLE(TextureExample TextureExample.cxx)
+TARGET_LINK_LIBRARIES(TextureExample OTBIO OTBCommon OTBFeatureExtraction ITKCommon ITKBasicFilters)
+
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 

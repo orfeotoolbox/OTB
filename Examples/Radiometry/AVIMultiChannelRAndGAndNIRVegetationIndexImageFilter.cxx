@@ -25,8 +25,8 @@
 
 
 //  Software Guide : BeginCommandLineArgs
-//  INPUTS: {qb_toulouse_sub.tif}
-//  OUTPUTS: {AVIMultiChannelRAndGAndNIRVegetationIndex.tif} , {pretty_qb_toulouse_sub.png} , {pretty_AVIMultiChannelRAndGAndNIRVegetationIndex.png}
+//  INPUTS: {verySmallFSATSW.tif}
+//  OUTPUTS: {AVIMultiChannelRAndGAndNIRVegetationIndex.tif} , {pretty_FSATSW.png} , {pretty_AVIMultiChannelRAndGAndNIRVegetationIndex.png}
 //  3 2 4 660 560 830
 //  Software Guide : EndCommandLineArgs
 
@@ -44,20 +44,20 @@
 // otb::MultiChannelRAndGAndNIR VegetationIndexImageFilter with the
 // use of the Angular Vegetation Index (AVI).
 // The equation for the Angular Vegetation Index involves the gren, red 
-// and near infra-red bands. $lambda_1$, $lambda_2$ and $lambda_3$ are the mid-band
+// and near infra-red bands. $\lambda_1$, $\lambda_2$ and $\lambda_3$ are the mid-band
 // wavelengths for the green, red and NIR bands and $\tan^{-1}$ is the arctangent function.
 //
 // The AVI expression is
 //
 // \begin{equation}
-// \mathbf{fact1} = \frac{\{lambda_3}-{lambda_2}}{lambda_2}}
+// \mathbf{A_1} = \frac{\lambda_3-\lambda_2}{\lambda_2}
 // \end{equation}
 // \begin{equation}
-// \mathbf{fact2} = \frac{\{lambda_2}-{lambda_1}}{lambda_2}}
+// \mathbf{A_2} = \frac{\lambda_2-\lambda_1}{\lambda_2}
 // \end{equation}
 //
 // \begin{equation}
-// \mathbf{AVI} = \tan^-1 {[\frac{{fact1}{{NIR}-{R}}}} + tan^-1{\frac{{fact2}{{G}-{R}}}}
+// \mathbf{AVI} = \tan^{-1}\left({\frac{A_1}{NIR-R}}\right) + \tan^{-1}\left({\frac{A_2}{G-R}}\right)
 // \end{equation}
 //
 // For more details, refer to Plummer work \cite{AVI}.
@@ -253,13 +253,13 @@ int main( int argc, char *argv[] )
   maximum.Fill(255);
   vectRescaler->SetOutputMinimum(minimum);
   vectRescaler->SetOutputMaximum(maximum);
-  vectRescaler->SetClampThreshold(0.01);
+//  vectRescaler->SetClampThreshold(1);
   vectRescaler->SetInput( reader->GetOutput() );
 
   selecter->SetInput(vectRescaler->GetOutput());
-  selecter->SetChannel(1);
-  selecter->SetChannel(2);
   selecter->SetChannel(3);
+  selecter->SetChannel(2);
+  selecter->SetChannel(1);
 
   vectPrettyWriter->SetFileName( argv[3] );
   vectPrettyWriter->SetInput( selecter->GetOutput() );
@@ -270,7 +270,7 @@ int main( int argc, char *argv[] )
   ThresholderType::Pointer thresholder = ThresholderType::New();
   thresholder->SetInput(  filter->GetOutput() );
   thresholder->SetOutsideValue( 1.0 );
-  thresholder->ThresholdOutside( 0.0, 1.0 );
+  thresholder->ThresholdOutside( -1.0, 0.05 );
   thresholder->Update();
 
   RescalerType::Pointer     rescaler     = RescalerType::New();
@@ -302,12 +302,12 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginLatex
   //
   // Let's now run this example using as input the image
-  // \code{IndexVegetation.hd} and $\gamma$=0.6 provided in the
+  // \code{verySmallFSATSW.tif} provided in the
   // directory \code{Examples/Data}.
   //
   //
   // \begin{figure} \center
-  // \includegraphics[width=0.24\textwidth]{pretty_qb_toulouse_sub.eps}
+  // \includegraphics[width=0.24\textwidth]{pretty_FSATSW.eps}
   // \includegraphics[width=0.24\textwidth]{pretty_AVIMultiChannelRAndGAndNIRVegetationIndex.eps}
   // \itkcaption[AVI Example]{AVI result on the right with the left image in input.}
   // \label{fig:AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter}
