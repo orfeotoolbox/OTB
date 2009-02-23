@@ -50,10 +50,10 @@
 // The AVI expression is
 //
 // \begin{equation}
-// \mathbf{fact1} = \frac{\{lambda_3}-{lambda_2}}{lambda_2}}
+// \mathbf{fact1} = \frac{\lambda_3-\lambda_2}{\lambda_2}
 // \end{equation}
 // \begin{equation}
-// \mathbf{fact2} = \frac{\{lambda_2}-{lambda_1}}{lambda_2}}
+// \mathbf{fact2} = \frac{\lambda_2-\lambda_1}{lambda_2}
 // \end{equation}
 //
 // \begin{equation}
