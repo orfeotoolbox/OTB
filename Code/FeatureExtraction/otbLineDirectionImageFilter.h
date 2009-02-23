@@ -96,6 +96,19 @@ public:
       return this->GetFunctor().GetAlpha(); 
     }; 
  
+  /** Number Of Directions */
+  void SetNumberOfDirections( unsigned int D )
+    { 
+      this->GetFunctor().SetNumberOfDirections( D );
+      double step = 2*M_PI/static_cast<double>(D);
+      this->GetFunctor().SetDirectionStep( step );
+    };
+  unsigned int GetNumberOfDirections()
+    { 
+      return this->GetFunctor().GetNumberOfDirections(); 
+    }; 
+
+
  virtual void GenerateOutputInformation()
     {
       Superclass::GenerateOutputInformation();
@@ -103,7 +116,10 @@ public:
     }
 
 protected:
-  LineDirectionImageFilter(){};
+  LineDirectionImageFilter()
+    {
+      this->SetRadius(this->GetSpatialThreshold());
+    };
   virtual ~LineDirectionImageFilter(){};
 
 private:
