@@ -29,7 +29,7 @@ namespace Functor
  *
  *  Computes joint histogram (neighborhood and offset neighborhood).
  *  The formula is:
- *  $ \sum_{i}\sum_{j}\frac{1}{1+(i-j)^2}p(i,j) $
+ *  \f$ \sum_{i}\sum_{j}\frac{1}{1+(i-j)^2}p(i,j) \f$
  *  TIterInput is an ietrator, TOutput is a PixelType.
  *
  *  \sa TextureFunctorBase
@@ -38,7 +38,7 @@ namespace Functor
  */
 
 template <class TIterInput, class TOutput>
-class ITK_EXPORT InverseDifferenceMomentTextureFunctor : 
+class ITK_EXPORT InverseDifferenceMomentTextureFunctor :
 public TextureFunctorBase<TIterInput, TOutput>
 {
 public:
@@ -63,11 +63,11 @@ public:
 	    {
 	      double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
 	      double dist = vcl_pow( ( (static_cast<double>(r)+0.5)*this->GetOffsetBinLength())-((static_cast<double>(s)+0.5)*this->GetNeighBinLength()), 2);
-	      
+
 	      out += ((1/(1+dist)) * p);
 	    }
 	}
-      return out;  
+      return out;
   }
 
 };

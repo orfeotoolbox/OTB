@@ -29,8 +29,8 @@ namespace Functor
  *
  *  Computes scluster prominence using joint histogram (neighborhood and offset neighborhood).
  *  The formula is:
- *  $ \sum_{i}\sum_{j}((i-\mu) + (j-\mu))^4p(i,j) $
- *  Where $\mu$ is the mean texture value.
+ *  \f[ \sum_{i}\sum_{j}((i-\mu) + (j-\mu))^4p(i,j) \f]
+ *  Where \f$ \mu \f$ is the mean texture value.
  *  TIterInput is an iterator, TOutput is a PixelType.
  *
  *  \sa MeanTextureFunctor
@@ -40,7 +40,7 @@ namespace Functor
  */
 
 template <class TIterInput, class TOutput>
-class ITK_EXPORT ClusterProminenceTextureFunctor : 
+class ITK_EXPORT ClusterProminenceTextureFunctor :
 public MeanTextureFunctor<TIterInput, TOutput>
 {
 public:
@@ -63,7 +63,7 @@ public:
     double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
     double areaInv = 1/area;
     double out = 0.;
-    
+
     for (unsigned r = 0; r<this->GetHisto().size(); r++)
       {
 	for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
@@ -74,12 +74,12 @@ public:
 	  }
       }
 
-    return out;  
+    return out;
   }
-  
+
 };
- 
- 
+
+
 } // namespace Functor
 } // namespace otb
 

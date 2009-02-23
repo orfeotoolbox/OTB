@@ -146,8 +146,8 @@ ZoomableImageWidget<TPixel>
   }
 }
 /**
- * Set a new zoom factor (>1).
- * \param zoomFactor The new zoom factor.
+ * Set the zoom upper-left corner.
+ * \param index The upper-left corner index.
  */
 template <class TPixel>
 void

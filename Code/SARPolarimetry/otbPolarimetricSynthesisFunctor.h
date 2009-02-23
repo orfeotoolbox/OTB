@@ -24,10 +24,12 @@ namespace otb
 namespace Functor
 {
 /** \class PolarimetricSynthesisFunctor
- *  \brief This functor calculate the polarimetric synthesis
+ *  \brief Calculate the polarimetric synthesis
+ *
+ * This functor calculate the polarimetric synthesis
  *  using the electroMagneticField vectors as follow:
- *  $$ \sigma(\psi_{i},\chi_{i},\psi_{r},\chi_{r}) =
-                   \vec(E_{r}}\cdot\left[ S \right] \vec(E_{i}}$$
+ *  \f$ \sigma(\psi_{i},\chi_{i},\psi_{r},\chi_{r}) =
+                   \vec(E_{r}}\cdot\left[ S \right] \vec(E_{i}} \f$
  *
  *  \ingroup Functor
  */

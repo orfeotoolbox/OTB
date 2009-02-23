@@ -31,8 +31,8 @@ namespace Functor
  *  The formula is:
  *  \f[ \frac{\sum_{i}\sum_{j}i.j.p(i,j)-\mu_{x}\mu_{y}} {\sigma_{x}\sigma_{y}} \f]
  *
- *  Where \$ \mu_{x} \$, \$ \mu_{y} \$, \$ \sigma_{x} \$ and \$ \sigma_{y} \$ are the mean
- * and standard deviation of \$ p_{x} \$ and \$ p_{y} \$.
+ *  Where \f$ \mu_{x} \f$, \f$ \mu_{y} \f$, \f$ \sigma_{x} \f$ and \f$ \sigma_{y} \f$ are the mean
+ * and standard deviation of \f$ p_{x} \f$ and \f$ p_{y} \f$.
  *  TIterInput is an iterator, TOutput is a PixelType.
  *
  *  \sa TextureFunctorBase

@@ -29,9 +29,9 @@ namespace Functor
  *
  *  Computes  information measure of correlation 2 using joint histogram (neighborhood and offset neighborhood) .
  *  The formula is:
- *  $ \sqrt{|1-exp(2.(H(X,Y)_{2}-H(X,Y)))|} $
- *  Where $H(X,Y)$, $H(X)$, $H(Y)$ are the entropies and 
- *  $ H(X,Y)_{2} = -\sum_{i}\sum_{j}p_{x}(i)p_{y}(j)\log{(p_{x}(i)p_{y}(j))} $
+ *  \f$ \sqrt{|1-exp(2.(H(X,Y)_{2}-H(X,Y)))|} \f$
+ *  Where \f$H(X,Y)\f$, \f$H(X)\f$, \f$H(Y)\f$ are the entropies and
+ *  \f$ H(X,Y)_{2} = -\sum_{i}\sum_{j}p_{x}(i)p_{y}(j)\log{(p_{x}(i)p_{y}(j))} \f$
  *  TIterInput is an iterator, TOutput is a PixelType.
  *
  *  \sa EntropyTextureFunctor
@@ -39,9 +39,9 @@ namespace Functor
  *  \ingroup Functor
  *  \ingroup Statistics
  */
- 
+
 template <class TIterInput, class TOutput>
-class ITK_EXPORT InformationMeasureOfCorrelation2TextureFunctor : 
+class ITK_EXPORT InformationMeasureOfCorrelation2TextureFunctor :
 public EntropyTextureFunctor<TIterInput, TOutput>
 {
 public:
@@ -65,7 +65,7 @@ public:
     // Stores marginal proba values
     std::vector<double> PxVector;
     std::vector<double> PyVector;
-    
+
     // Computes HX
     for (unsigned r = 0; r<this->GetHisto()[0].size(); r++)
       {
@@ -87,7 +87,7 @@ public:
 	  }
 	PyVector.push_back( sumTemp );
       }
- 
+
     // Computes HXY2
     double HXY2 = 0.;
     for (unsigned r = 0; r<this->GetHisto().size(); r++)
@@ -99,20 +99,20 @@ public:
 	      {
 		HXY2 += PxPy * vcl_log( PxPy );
 	      }
-	    
+
 	  }
       }
     if ( HXY2 != 0. )
       HXY2 = -HXY2;
-    
+
     out = vcl_sqrt( vcl_abs(1-vcl_exp( -2.*(HXY2-HXY))) );
 
-    return out;  
+    return out;
   }
-  
+
 };
- 
- 
+
+
 } // namespace Functor
 } // namespace otb
 

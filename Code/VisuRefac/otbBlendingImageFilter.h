@@ -28,8 +28,8 @@ namespace otb
 namespace Functor
 {
 /**\class BlendingFunctor
- * \brief 
- * 
+ * \brief
+ *
  * \sa ImageLayer
  * \sa BlendingImageFilter
  * \sa BlendingFunction
@@ -52,25 +52,25 @@ public:
   {
     return m_Function->Evaluate(input1,input2);
   }
-  
+
 /** Constructor */
   BlendingFunctor()
   {
     // Default rendering function
     m_Function = DefaultBlendingFunctionType::New();
   }
-  
+
   /** Destructor */
   ~BlendingFunctor(){}
 
   /** Set the rendering function
-   *  \param the Blending function.
+   *  \param function the Blending function.
    */
   void SetFunction(BlendingFunctionType * function)
   {
     m_Function = function;
   }
-  
+
   /** Get the rendering function
    *  \return the Blending function.
    */
@@ -78,7 +78,7 @@ public:
   {
     return m_Function;
   }
-  
+
 private:
   /** The rendering function */
   BlendingFunctionPointerType m_Function;
@@ -87,18 +87,18 @@ private:
 
 /** \class BlendingImageFilter
 *   \brief This class applies the rendering functor to an image.
-*   
+*
 *   Please note that the rendering is actually done by a rendering
 *   function.
-*  
+*
 *   \sa BlendingFunction
 *
 */
 template <class TInputImage1, class TInputImage2 = TInputImage1, class TOutputImage = TInputImage1>
 class BlendingImageFilter
-  : public itk::BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage, 
+  : public itk::BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage,
 				        Functor::BlendingFunctor
-					< typename TInputImage1::PixelType, 
+					< typename TInputImage1::PixelType,
 					  typename TInputImage2::PixelType,
 					  typename TOutputImage::PixelType > >
 {
@@ -107,7 +107,7 @@ public:
   typedef BlendingImageFilter                                   Self;
   typedef itk::BinaryFunctorImageFilter
   <TInputImage1,TInputImage2,TOutputImage, Functor::BlendingFunctor
-   < typename TInputImage1::PixelType, 
+   < typename TInputImage1::PixelType,
      typename TInputImage2::PixelType,
      typename TOutputImage::PixelType > >                        Superclass;
   typedef itk::SmartPointer<Self>                                Pointer;
@@ -120,13 +120,13 @@ public:
   itkTypeMacro(BlendingImageFilter,itk::BinaryFunctorImageFilter);
 
   /** Blending function typedef */
-  typedef Functor::BlendingFunctor 
+  typedef Functor::BlendingFunctor
   < typename TInputImage1::PixelType,
-    typename TInputImage2::PixelType, 
+    typename TInputImage2::PixelType,
     typename TOutputImage::PixelType >                       BlendingFunctorType;
   typedef typename BlendingFunctorType::BlendingFunctionType BlendingFunctionType;
 
-  /** 
+  /**
    * Set the rendering function
    * \param function The rendering function.
    */
@@ -135,7 +135,7 @@ public:
     this->GetFunctor().SetFunction(function);
   }
 
-  /** 
+  /**
    * Get the rendering function
    * \return The rendering function.
    */
@@ -149,7 +149,7 @@ public:
   BlendingImageFilter() {}
   /** Destructor */
   virtual ~BlendingImageFilter() {}
-  
+
 private:
   BlendingImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
