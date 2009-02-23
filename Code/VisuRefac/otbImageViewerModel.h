@@ -27,7 +27,15 @@
 namespace otb
 {
 /** \class ImageViewerModel
-*   \brief 
+*   \brief This class is the model for ImageViewer.
+*   It is in charge of rendering to the screen a set of Layer.
+*   Each visible layer is rendered separately, and the resulting
+*   rendered layers are rasterized using the blending function
+*   associated to each layer.
+* 
+* \sa Layer
+* \sa BlendingFunction
+*
 */
 
 template <class TOutputImage = otb::Image<itk::RGBPixel<unsigned char>,2 >  > 
@@ -53,6 +61,7 @@ public:
   
   /** Layer typedef */
   typedef otb::Layer<OutputImageType>          LayerType;
+  typedef typename LayerType::RegionType       RegionType;
   
   /** Layer list typedef */
   typedef otb::ObjectList<LayerType>           LayerListType;
@@ -113,6 +122,14 @@ public:
   itkGetObjectMacro(RasterizedExtract,OutputImageType);
   itkGetObjectMacro(RasterizedScaledExtract,OutputImageType);
 
+  /** Set/Get the Extract Region */
+  itkSetMacro(ExtractRegion,RegionType);
+  itkGetConstReferenceMacro(ExtractRegion,RegionType);
+  
+  /** Set/Get the Scaled Extract Region */
+  itkSetMacro(ScaledExtractRegion,RegionType);
+  itkGetConstReferenceMacro(ScaledExtractRegion,RegionType);
+
   /** Update will render all visible layers, rasterize all visible
    * layers and notify all listeners. */
   virtual void Update(void);
@@ -152,10 +169,12 @@ private:
   /** Rendered extract */
   OutputImagePointerType m_RasterizedExtract;
   bool                   m_HasExtract;
+  RegionType             m_ExtractRegion;
 
   /** Rendered scaled extract */
   OutputImagePointerType m_RasterizedScaledExtract;
   bool                   m_HasScaledExtract;
+  RegionType             m_ScaledExtractRegion;
 }; // end class 
 } // end namespace otb
 

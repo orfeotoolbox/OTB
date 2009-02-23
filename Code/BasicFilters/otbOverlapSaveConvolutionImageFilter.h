@@ -147,7 +147,7 @@ protected:
   virtual ~OverlapSaveConvolutionImageFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** TODO For the moment this class provide only a GenerateData(),
+  /* TODO For the moment this class provide only a GenerateData(),
    * due to limited thread-safety of FFTW plan creation.
    */
   void GenerateData();

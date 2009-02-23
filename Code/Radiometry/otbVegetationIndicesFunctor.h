@@ -243,8 +243,6 @@ private:
   unsigned int m_NIRIndex;
 };
 
-
-
 /** \class NDVI
  *  \brief This functor computes the NormalizeD Vegetation Index (NDVI)
  *
@@ -302,6 +300,7 @@ protected:
     return ( static_cast<TOutput>(dnir/dr));
   }
 };
+
 /** \class PVI
  *  \brief This functor computes the Perpendicular Vegetation Index (PVI)
  *
@@ -352,7 +351,6 @@ private:
 
 };
 
-
 /** \class SAVI
  *  \brief This functor computes the Soil Adjusted Vegetation Index (SAVI)
  *
@@ -397,6 +395,7 @@ private:
   double  m_L;
 
 };
+
 /** \class TSAVI
  *  \brief This functor computes the Transformed Soil Adjusted Vegetation Index (TSAVI)
  *
@@ -409,10 +408,18 @@ template <class TInput1, class TInput2, class TOutput>
 class TSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
-  TSAVI() : m_X(0.08) {};
+  TSAVI() : m_A(0.7), m_S(0.9), m_X(0.08) {};
   ~TSAVI() {};
 
-  /** Set/Get A and B parameters */
+  /** Set/Get S and A parameters */
+  void SetS(const double S)
+  {
+    m_S = S;
+  }
+  double GetS(void)const
+  {
+    return (m_S);
+  }
   void SetA(const double A)
   {
     m_A = A;
@@ -420,14 +427,6 @@ public:
   double GetA(void)const
   {
     return (m_A);
-  }
-  void SetB(const double B)
-  {
-    m_B = B;
-  }
-  double GetB(void)const
-  {
-    return (m_B);
   }
   /** Set/Get X parameter */
   void SetX(const double X)
@@ -449,21 +448,21 @@ protected:
       {
       return static_cast<TOutput>(0.);
       }
-    return ( static_cast<TOutput>(  (m_A*(dnir - m_A*dr - m_B))/denominator ) );
+    return ( static_cast<TOutput>(  (m_A*(dnir - m_A*dr - m_S))/denominator ) );
   }
 
 private:
 
-  /** A and B parameters */
+  /** A and S parameters */
   double  m_A;
-  double  m_B;
+  double  m_S;
   /** X parameter */
   double  m_X;
 
 };
 
-/** \class MSAVI
- *  \brief This functor computes the Modified Soil Adjusted Vegetation Index (MSAVI)
+/** \class MSAVI2
+ *  \brief This functor computes the Modified Soil Adjusted Vegetation Index (MSAVI2)
  *
  *  [Qi et al., 1994]
  *
@@ -471,11 +470,11 @@ private:
  * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
-class MSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+class MSAVI2 : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
-  MSAVI() {};
-  ~MSAVI() {};
+  MSAVI2() {};
+  ~MSAVI2() {};
 
 protected:
   inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
@@ -554,24 +553,86 @@ public:
   ~WDVI() {};
   // Operator on r and nir single pixel values
 /** Set/Get Slop of soil line */
-  void SetG(const double g)
+  void SetS(const double s)
   {
-    m_G = g;
+    m_S = s;
   }
-  double GetG(void)const
+  double GetS(void)const
   {
-    return (m_G);
+    return (m_S);
   }
 protected:
   inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
   {
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
-    return (dnir -m_G*dr);
+    return (dnir -m_S*dr);
   }
 private:
   /** Slope of soil line */
-  double  m_G;
+  double  m_S;
+};
+
+/** \class MSAVI
+ *  \brief This functor computes the Modified Soil Adjusted Vegetation Index (MSAVI)
+ *
+ *  [Qi et al., 1994]
+ *
+ *  \ingroup Functor
+ * \ingroup Radiometry
+ */
+template <class TInput1, class TInput2, class TOutput>
+class MSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+{
+public:
+  typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
+  typedef SAVI<TInput1, TInput2, TOutput> SAVIFunctorType;
+  typedef WDVI<TInput1, TInput2, TOutput> WDVIFunctorType;
+  MSAVI() :  m_S(0.4) {};
+  ~MSAVI() {};
+/** Set/Get Slop of soil line */
+  void SetS(const double s)
+  {
+    m_S = s;
+  }
+  double GetS(void)const
+  {
+    return (m_S);
+  }
+  NDVIFunctorType GetNDVI(void)const
+  {
+    return (m_NDVIfunctor);
+  }
+  WDVIFunctorType GetWDVI(void)const
+  {
+    return (m_WDVIfunctor);
+  }
+
+
+protected:
+  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
+  {
+    double dnir = static_cast<double>(nir);
+    double dr = static_cast<double>(r);
+
+    double dNDVI = this->GetNDVI()(r,nir);
+    double dWDVI = this->GetWDVI()(r,nir);
+    double dL = 1 - 2*m_S*dNDVI*dWDVI;
+
+    double denominator = dnir + dr + dL;
+    if ( denominator == 0. )
+      {
+      return static_cast<TOutput>(0.);
+      }
+    return ( static_cast<TOutput>(  ((dnir-dr)*(1+dL))/denominator ) );
+  }
+
+private:
+  /** Slope of soil line */
+  double  m_S;
+  const NDVIFunctorType m_NDVIfunctor;
+  const WDVIFunctorType m_WDVIfunctor;
+
 };
 
 /** \class AVI
@@ -588,7 +649,7 @@ template <class TInput1, class TInput2, class TInput3, class TOutput>
 class AVI : public RAndGAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
 {
 public:
-  AVI() : m_LambdaR(660.), m_LambdaG(560.), m_LambdaNir(830.) {};
+  AVI() : m_LambdaG(560.), m_LambdaR(660.), m_LambdaNir(830.) {};
   ~AVI() {};
 /** Set/Get Lambda red parameter*/
   void SetLambdaR(const double lr)
@@ -651,16 +712,15 @@ protected:
   }
 private:
 
-  /**  Central wavelength of the red channel (=Lambda2) */
-  double  m_LambdaR;
-
   /**  Central wavelength of the green channel (=Lambda1) */
   double  m_LambdaG;
+
+  /**  Central wavelength of the red channel (=Lambda2) */
+  double  m_LambdaR;
 
   /**  Central wavelength of the nir channel (=Lambda3) */
   double  m_LambdaNir;
 };
-
 
 /** \class ARVI
  *  \brief This functor computes the Atmospherically Resistant Vegetation Index (ARVI)
@@ -787,7 +847,6 @@ private:
   double  m_Gamma;
 
 };
-
 
 /** \class EVI
  *  \brief This functor computes the Enhanced Vegetation Index (EVI)
@@ -925,7 +984,10 @@ public:
 protected:
   inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
   {
-    return ( static_cast<TOutput>(this->GetNDVI()(r,nir) + 0.5 ));
+    double dval = this->GetNDVI()(r,nir) + 0.5;
+    if(dval<0)
+      return  ( static_cast<TOutput>(0));
+    return ( static_cast<TOutput>(vcl_sqrt(dval)));
   }
 private:
   const NDVIFunctorType m_NDVIfunctor;

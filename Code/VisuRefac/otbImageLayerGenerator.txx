@@ -27,7 +27,9 @@ namespace otb
 
 template < class TImageLayer >
 ImageLayerGenerator<TImageLayer>
-::ImageLayerGenerator()
+::ImageLayerGenerator() : m_Layer(), m_Image(), m_Quicklook(),
+			  m_SubsamplingRate(1), m_GenerateQuicklook(true), 
+			  m_Resampler()
 {
   // Intialize output layer
   m_Layer = ImageLayerType::New();
@@ -116,8 +118,10 @@ ImageLayerGenerator<TImageLayer>
 {
   // Set the layer extent
   m_Layer->SetExtent(m_Image->GetLargestPossibleRegion());
+  m_Layer->SetImage(m_Image);
   m_Layer->SetHasExtract(true);
   m_Layer->SetHasScaledExtract(true);
+  m_Layer->VisibleOn();
 }
 
 template < class TImageLayer >
@@ -133,7 +137,9 @@ ImageLayerGenerator<TImageLayer>
     // If no subsampling is needed
     if(ssrate == 1)
       {
-      m_Layer->SetHasQuicklook(false);
+      m_Layer->SetHasQuicklook(true);
+      m_Layer->SetQuicklookSubsamplingRate(1);
+      m_Layer->SetQuicklook(m_Image);
       }
     else
       {
@@ -145,7 +151,6 @@ ImageLayerGenerator<TImageLayer>
 
       // Set the quicklook to the layer
       m_Layer->SetQuicklook(m_Resampler->GetOutput());
-
       m_Layer->SetHasQuicklook(true);
       }
     }

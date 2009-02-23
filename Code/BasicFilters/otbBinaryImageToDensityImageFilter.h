@@ -23,7 +23,7 @@
 
 namespace otb
 {
-/** \class 
+/** \class BinaryImageToDensityImageFilter
  *  \brief This class performs a streaming isotropic shrinking operation without smoothing.
  *
  */
@@ -53,7 +53,7 @@ public:
   typedef typename OutputImageType::Pointer                    OutputImagePointerType;
 
   typedef TCountFunction                                       CountFunctionType;
-  typedef typename CountFunctionType::Pointer                  CountFunctionPointerType;             
+  typedef typename CountFunctionType::Pointer                  CountFunctionPointerType;
 
   /** Shrink factor accessor */
   itkSetMacro(NeighborhoodRadius,unsigned int);

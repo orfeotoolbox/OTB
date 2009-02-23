@@ -25,7 +25,7 @@ namespace otb
 
 template <class TImage, class TOutputImage>
 ImageLayer<TImage,TOutputImage>
-::ImageLayer() : m_NumberOfHistogramBins(255)
+::ImageLayer() : m_NumberOfHistogramBins(255), m_AutoMinMax(true), m_AutoMinMaxQuantile(0.02)
 {
   m_RenderingFunction = DefaultRenderingFunctionType::New();
 }
@@ -49,7 +49,16 @@ void
 ImageLayer<TImage,TOutputImage>
 ::Render()
 {
+  // Render the histogram
   this->RenderHistogram();
+  
+  // If required, use histogram for auto min/max
+  if(m_AutoMinMax)
+    {
+    this->AutoMinMaxRenderingFunctionSetup();
+    }
+
+  // Render images
   this->RenderImages();
 }
 
@@ -146,6 +155,36 @@ ImageLayer<TImage,TOutputImage>
 
   // Generate
   histogramFilter->Update();
+
+  // Retrieve the histogram
+  m_Histogram = histogramFilter->GetOutput();
+}
+
+template <class TImage, class TOutputImage>
+void
+ImageLayer<TImage,TOutputImage>
+::AutoMinMaxRenderingFunctionSetup()
+{
+  // Check for an existing histogram
+  if(m_Histogram.IsNull())
+    {
+    itkExceptionMacro(<<"Empty histogram, can not use auto min/max evaluation.");
+    }
+
+  const unsigned int nbComps = m_Image->GetNumberOfComponentsPerPixel();
+  typename RenderingFunctionType::ExtremaVectorType min, max;
+
+  // For each components, use the histogram to compute min and max
+  for(unsigned int comp = 0; comp < nbComps;++comp)
+    {
+    // Compute quantiles
+    min.push_back(m_Histogram->Quantile(comp,m_AutoMinMaxQuantile));
+    max.push_back(m_Histogram->Quantile(comp,1.-m_AutoMinMaxQuantile));
+    }
+
+  // Setup rendering function
+  m_RenderingFunction->SetMinimum(min);
+  m_RenderingFunction->SetMaximum(max);
 }
 }
 #endif

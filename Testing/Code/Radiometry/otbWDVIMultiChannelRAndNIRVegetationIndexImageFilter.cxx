@@ -49,7 +49,7 @@ int otbWDVIMultiChannelRAndNIRVegetationIndexImageFilter(int argc, char * argv[]
   unsigned int redChannel(::atoi(argv[3]));
   unsigned int nirChannel(::atoi(argv[4]));
 
-  double  g(::atof(argv[5]));
+  double  s(::atof(argv[5]));
 
   reader->SetFileName( inputFilename );
   writer->SetFileName( outputFilename  );
@@ -57,7 +57,7 @@ int otbWDVIMultiChannelRAndNIRVegetationIndexImageFilter(int argc, char * argv[]
   filter->SetNIRIndex(nirChannel);
   filter->SetInput( reader->GetOutput() );
 
-  filter->GetFunctor().SetG(g);
+  filter->GetFunctor().SetS(s);
 
   writer->SetInput( filter->GetOutput() );
   writer->Update();

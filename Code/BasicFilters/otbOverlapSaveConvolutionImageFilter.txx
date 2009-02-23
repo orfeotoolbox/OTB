@@ -103,7 +103,7 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
 template< class TInputImage, class TOutputImage>
 void
 OverlapSaveConvolutionImageFilter< TInputImage, TOutputImage>
-/** TODO commented out since multi-threading is not supported for the moment
+/* TODO commented out since multi-threading is not supported for the moment
  * ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,int threadId) */
 ::GenerateData()
 {
@@ -112,7 +112,7 @@ OverlapSaveConvolutionImageFilter< TInputImage, TOutputImage>
   typename OutputImageType::Pointer output = this->GetOutput();
   typename InputImageType::ConstPointer input = this->GetInput();
 
-  /** TODO: This is a patch to switch from GenerateData() to ThreadedGenerateData(). Remove these two lines
+  /* TODO: This is a patch to switch from GenerateData() to ThreadedGenerateData(). Remove these two lines
   once multi-threading problem is solved */
   this->AllocateOutputs();
   OutputImageRegionType outputRegionForThread = output->GetRequestedRegion();

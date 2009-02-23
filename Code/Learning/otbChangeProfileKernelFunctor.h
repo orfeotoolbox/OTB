@@ -25,11 +25,12 @@
 namespace otb
 {
 
-/** \class ChangeProfileKernelFunctor
+/**
+ * \class ChangeProfileKernelFunctor
  * \brief Change Profile Kernel.
+ *
  * Performs a decision point of view dedicated to the multiscale
- * change profile delivered by
- * \subdoxygen{otb}{KullbackLeiblerProfileImageFilter}.
+ * change profile delivered by otb::KullbackLeiblerProfileImageFilter.
  *
  * It is implemented as a polynomial kernel:
  * \f$ \exp - \left( \gamma \left( \max_i | x_i - y_i | \right)^\textrm{degree} + \textrm{coef} \right) \f$.

@@ -19,18 +19,13 @@
 #define __otbImageFileReader_txx
 #include "otbImageFileReader.h"
 
-#include "itkObjectFactory.h"
-#include "itkConvertPixelBuffer.h"
-#include "itkImageRegion.h"
-#include "itkPixelTraits.h"
-#include "itkVectorImage.h"
 #include "itkMetaDataObject.h"
 
 #include "otbMacro.h"
 #include "otbSystem.h"
 #include "otbImageIOFactory.h"
-#include "otbMetaDataKey.h"
 #include "otbImageKeywordlist.h"
+#include "otbMetaDataKey.h"
 
 #include "imaging/ossimImageHandlerRegistry.h"
 #include "ossim/imaging/ossimImageHandlerSarFactory.h"

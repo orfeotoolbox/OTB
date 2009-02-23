@@ -218,7 +218,7 @@ ImageWidgetBase<TPixel>
 }
 
 /** Set the input overlay form list.
- * \param image The form list to view.
+ * \param formList The form list to view.
  */
 template <class TPixel>
 void

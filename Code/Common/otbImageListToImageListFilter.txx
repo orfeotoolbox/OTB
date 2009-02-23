@@ -33,7 +33,7 @@ ImageListToImageListFilter<TInputImage,TOutputImage>
 }
 /**
  * Input Connection
- * \param image The input image.
+ * \param imageList The input image list.
  */
 template <class TInputImage, class TOutputImage>
 void

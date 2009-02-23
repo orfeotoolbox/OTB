@@ -103,6 +103,15 @@ public:
   itkSetMacro(NumberOfHistogramBins,unsigned int);
   itkGetMacro(NumberOfHistogramBins,unsigned int);
 
+  /** Set/Get the AutoMinMax mode */
+  itkSetMacro(AutoMinMax,bool);
+  itkGetMacro(AutoMinMax,bool);
+  itkBooleanMacro(AutoMinMax);
+
+  /** Set/Get the auto min/max quantile */
+  itkSetClampMacro(AutoMinMaxQuantile,double,0.,1.);
+  itkGetMacro(AutoMinMaxQuantile,double);
+
   /** Actually render the image */
   virtual void Render();
 
@@ -119,6 +128,9 @@ protected:
 
   /** Update the images */
   virtual void RenderImages();
+  
+  /** Auto min/max rendering function setup */
+  virtual void AutoMinMaxRenderingFunctionSetup();
 
 private:
   ImageLayer(const Self&);     // purposely not implemented
@@ -138,6 +150,12 @@ private:
   
   /** Number of bins for histograms generation */
   unsigned int                 m_NumberOfHistogramBins;
+
+  /** Use histogram quantiles for min/max */
+  bool m_AutoMinMax;
+
+  /** Quantile used with AutoMinMax */
+  double m_AutoMinMaxQuantile;
 
 }; // end class 
 } // end namespace otb

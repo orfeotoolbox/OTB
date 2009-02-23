@@ -21,7 +21,7 @@
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
-#include <iostream>
+
 #include "otbTestMain.h"
 
 void RegisterTests()
@@ -43,6 +43,7 @@ void RegisterTests()
   REGISTER_TEST(otbBlendingImageFilterNew);
   REGISTER_TEST(otbBlendingImageFilter);
   REGISTER_TEST(otbImageViewerModelNew);
+  REGISTER_TEST(otbImageViewerModelSingleLayer);
   REGISTER_TEST(otbImageLayerGeneratorNew);
   REGISTER_TEST(otbImageLayerGeneratorScalar);
   REGISTER_TEST(otbImageLayerGeneratorVector);

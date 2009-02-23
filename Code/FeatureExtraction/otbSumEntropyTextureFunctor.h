@@ -29,7 +29,7 @@ namespace Functor
  *
  *  Computes sum entropy using joint histogram (neighborhood and offset neighborhood).
  *  The formula is:
- *  $ -\sum_{i}{2N}p_{x+y}(i)\log{(p_{x+y}(i))} $
+ *  \f$ -\sum_{i}{2N}p_{x+y}(i)\log{(p_{x+y}(i))} \f$
  *  TIterInput is an iterator, TOutput is a PixelType.
  *
  *  \sa TextureFunctorBase
@@ -37,7 +37,7 @@ namespace Functor
  *  \ingroup Statistics
  */
 template <class TIterInput, class TOutput>
-class ITK_EXPORT SumEntropyTextureFunctor : 
+class ITK_EXPORT SumEntropyTextureFunctor :
 public TextureFunctorBase<TIterInput, TOutput>
 {
 public:
@@ -59,7 +59,7 @@ public:
     double out = 0.;
     // loop over bin neighborhood values
     for (unsigned sB = 0; sB<this->GetHisto()[0].size(); sB++)
-      { 
+      {
 	double nCeil = (static_cast<double>(sB)+0.5)*this->GetNeighBinLength();
 	double nCeil2 = (static_cast<double>(sB)+this->GetHisto()[0].size()+0.5)*this->GetNeighBinLength();
 	double Px_y = 0.;
@@ -68,7 +68,7 @@ public:
 	  {
 	    double rVal = (static_cast<double>(r)+0.5)*this->GetOffsetBinLength();
 	    for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-	      { 
+	      {
 		double sVal = (static_cast<double>(s)+0.5)*this->GetNeighBinLength();
 		if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(this->GetNeighBinLength()) )
 		  {
@@ -86,17 +86,17 @@ public:
 	  out += Px_y2 * vcl_log(Px_y2);
       }
 
-      
+
     if(out != 0)
       out = -out;
 
-  
-    return out;  
+
+    return out;
   }
-  
+
 };
- 
- 
+
+
 } // namespace Functor
 } // namespace otb
 

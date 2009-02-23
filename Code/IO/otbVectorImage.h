@@ -23,13 +23,8 @@
 #endif
 
 #include "itkVectorImage.h"
-
 #include "otbImageBase.h"
-#include "itkDefaultVectorPixelAccessorFunctor.h"
-#include "itkDefaultVectorPixelAccessor.h"
-#include "itkVectorImageNeighborhoodAccessorFunctor.h"
 
-#include <iostream>
 #include <string.h>
 
 namespace otb

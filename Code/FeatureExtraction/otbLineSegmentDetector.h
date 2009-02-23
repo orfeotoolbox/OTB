@@ -45,7 +45,7 @@ namespace Functor
 	
 	inline TOutputPixel operator()(const TInputPixel& input)
 	  {
-	    return 2*vcl_sqrt(input[0]*input[0] + input[1]*input[1] );
+	    return static_cast<TOutputPixel>(2*vcl_sqrt(input[0]*input[0] + input[1]*input[1] ));
 	  }
       };
     

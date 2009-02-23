@@ -46,6 +46,19 @@
 // \mathbf{NDVI} = \frac{L_{NIR}-L_{r}}{L_{NIR}+L_{r}}
 // \end{equation}
 //
+//  \relatedClasses
+//  \begin{itemize}
+//  \item \subdoxygen{otb}{Functor}{RVI}
+//  \item \subdoxygen{otb}{Functor}{PVI}
+//  \item \subdoxygen{otb}{Functor}{SAVI}
+//  \item \subdoxygen{otb}{Functor}{TSAVI}
+//  \item \subdoxygen{otb}{Functor}{MSAVI}
+//  \item \subdoxygen{otb}{Functor}{GEMI}
+//  \item \subdoxygen{otb}{Functor}{WDVI}
+//  \item \subdoxygen{otb}{Functor}{IPVI}
+//  \item \subdoxygen{otb}{Functor}{TNDVI}
+//  \end{itemize}
+
 // With the \doxygen{otb}{RAndNIRVegetationIndexImageFilter} class the filter
 // inputs are one channel images: one inmage represents the NIR channel, the
 // the other the NIR channel.
@@ -103,9 +116,6 @@ int main( int argc, char *argv[] )
   // the images pixel type as template parameters. It is
   // implemented as a functor class which will be passed as a
   // parameter to an \doxygen{otb}{RAndNIRVegetationIndexImageFilter}.
-  // Note that we also can use other functors which operate with the 
-  // Red and Nir channels, such as PVI, RVI, SAVI, MSAVI, TSAVI, GEMI,
-  // WDVI, IPVI, and TNDVI.
   //
   //  Software Guide : EndLatex
 

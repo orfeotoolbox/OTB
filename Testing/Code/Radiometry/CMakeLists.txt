@@ -60,14 +60,34 @@ ADD_TEST(raTvSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TES
 	)
 
 ADD_TEST(raTvMSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
-  --compare-image ${TOL}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_MSAVI_verySmallFSATSWcRcNir.tif
-                    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_MSAVI_verySmallFSATSWcRcNir.tif
+  --compare-image ${TOL}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_MSAVI_qb_RoadExtract2sub200x200.tif
+                    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_MSAVI_qb_RoadExtract2sub200x200.tif
         otbMultiChannelRAndNIRVegetationIndexImageFilter
         MSAVI
-	${INPUTDATA}/verySmallFSATSW.tif
-	${TEMP}/raMultiChannelRAndNIRVegetationIndex_MSAVI_verySmallFSATSWcRcNir.tif 
-	3 4
+        ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
+        ${TEMP}/raMultiChannelRAndNIRVegetationIndex_MSAVI_qb_RoadExtract2sub200x200.tif 
+        3 4
+    )
+
+ADD_TEST(raTvMSAVI2_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
+  --compare-image ${TOL}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_MSAVI2_verySmallFSATSWcRcNir.tif
+                    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_MSAVI2_verySmallFSATSWcRcNir.tif
+        otbMultiChannelRAndNIRVegetationIndexImageFilter
+        MSAVI2
+	    ${INPUTDATA}/verySmallFSATSW.tif
+	    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_MSAVI2_verySmallFSATSWcRcNir.tif 
+	    3 4
 	)
+
+ADD_TEST(raTvTSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
+  --compare-image ${EPSILON}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
+                    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
+        otbMultiChannelRAndNIRVegetationIndexImageFilter
+        TSAVI
+        ${INPUTDATA}/verySmallFSATSW.tif
+        ${TEMP}/raMultiChannelRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif 
+        3 4
+)
 
 # -------            IPVI MultiChannelRAndNIRVegetationIndexImageFilter   ------------------------------
 ADD_TEST(raTvIPVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
@@ -555,6 +575,16 @@ ADD_TEST(raTvMSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}
     ${TEMP}/raRAndNIRVegetationIndex_MSAVI_verySmallFSATSWcRcNir.tif 
     )
 
+ADD_TEST(raTvMSAVI2_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}  
+  --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_MSAVI2_verySmallFSATSWcRcNir.tif
+                    ${TEMP}/raRAndNIRVegetationIndex_MSAVI2_verySmallFSATSWcRcNir.tif
+        otbRAndNIRVegetationIndexImageFilter
+        MSAVI2
+    ${INPUTDATA}/verySmallFSATSW_r.tif
+    ${INPUTDATA}/verySmallFSATSW_nir.tif
+    ${TEMP}/raRAndNIRVegetationIndex_MSAVI2_verySmallFSATSWcRcNir.tif 
+    )
+
 # -------            IPVI RAndNIRVegetationIndexImageFilter   ------------------------------
 ADD_TEST(raTvIPVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}  
  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_IPVI_verySmallFSATSWcRcNir.tif
@@ -590,6 +620,16 @@ ADD_TEST(raTvGEMI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}
         ${TEMP}/raRAndNIRVegetationIndex_GEMI_verySmallFSATSWcRcNir.tif
 )
 
+ADD_TEST(raTvTSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}  
+  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
+                    ${TEMP}/raRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
+        otbRAndNIRVegetationIndexImageFilter
+        TSAVI
+        ${INPUTDATA}/verySmallFSATSW_r.tif
+        ${INPUTDATA}/verySmallFSATSW_nir.tif
+        ${TEMP}/raRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
+)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS6 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -609,9 +649,9 @@ ADD_TEST(raTvPVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS6}
         PVI
         0.7
         0.9
-    ${INPUTDATA}/verySmallFSATSW_r.tif
-    ${INPUTDATA}/verySmallFSATSW_nir.tif
-    ${TEMP}/raRAndNIRVegetationIndex_PVI_verySmallFSATSWcRcNir.tif 
+        ${INPUTDATA}/verySmallFSATSW_r.tif
+        ${INPUTDATA}/verySmallFSATSW_nir.tif
+        ${TEMP}/raRAndNIRVegetationIndex_PVI_verySmallFSATSWcRcNir.tif 
 )
 
 ADD_TEST(raTvPVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS6}  
@@ -621,35 +661,12 @@ ADD_TEST(raTvPVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TEST
         PVI
         0.7
         0.9
-    ${INPUTDATA}/verySmallFSATSW.tif
-    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_PVI_verySmallFSATSWcRcNir.tif 
-    3 4
+        ${INPUTDATA}/verySmallFSATSW.tif
+        ${TEMP}/raMultiChannelRAndNIRVegetationIndex_PVI_verySmallFSATSWcRcNir.tif 
+        3 4
 )
 
 
-ADD_TEST(raTvTSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS6}  
-  --compare-image ${EPSILON}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
-                    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
-        otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter
-        TSAVI
-        0.7
-        0.9
-    ${INPUTDATA}/verySmallFSATSW.tif
-    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif 
-    3 4
-)
-
-ADD_TEST(raTvTSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS6}  
-  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
-                    ${TEMP}/raRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
-        otbSetASetBRAndNIRVegetationIndexImageFilter
-        TSAVI
-        0.7
-        0.9
-    ${INPUTDATA}/verySmallFSATSW_r.tif
-    ${INPUTDATA}/verySmallFSATSW_nir.tif
-    ${TEMP}/raRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
-)
 
 # -------            AVI RAndGAndNIRVegetationIndexImageFilter   ------------------------------
 ADD_TEST(raTvAVI_RAndGAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS6}

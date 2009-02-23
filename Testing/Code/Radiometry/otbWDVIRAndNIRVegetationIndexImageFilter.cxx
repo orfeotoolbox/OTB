@@ -56,7 +56,7 @@ int otbWDVIRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   const char * inputFilenameNIR  = argv[2];
   const char * outputFilename = argv[3];
 
-  double  g(::atof(argv[4]));
+  double  s(::atof(argv[4]));
 
   readerR->SetFileName( inputFilenameR );
   readerNIR->SetFileName( inputFilenameNIR );
@@ -64,7 +64,7 @@ int otbWDVIRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   filter->SetInputR( readerR->GetOutput() );
   filter->SetInputNIR( readerNIR->GetOutput() );
 
-  filter->GetFunctor().SetG(g);
+  filter->GetFunctor().SetS(s);
 
   writer->SetInput( filter->GetOutput() );
   writer->Update();

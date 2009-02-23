@@ -32,13 +32,13 @@ namespace Functor
  * This functor renders the input pixel to a printable format
  * (unsigned char RGB).
  * It uses a rendering function which is in charge of the rendering.
- * 
+ *
  * It defines both operators on scalar and vector pixels, so it can be
  * used either on VectorImage or Image.
  *
  * The operators call the Evaluate() method of the rendering function
  * and returns its result.
- * 
+ *
  * \sa ImageLayer
  * \sa RenderingImageFilter
  * \sa RenderingFunction
@@ -75,18 +75,18 @@ public:
     // Default rendering function
     m_Function = DefaultRenderingFunctionType::New();
   }
-  
+
   /** Destructor */
   ~RenderingFunctor(){}
 
   /** Set the rendering function
-   *  \param the Rendering function.
+   *  \param function the Rendering function.
    */
   void SetFunction(RenderingFunctionType * function)
   {
     m_Function = function;
   }
-  
+
   /** Get the rendering function
    *  \return the Rendering function.
    */
@@ -94,7 +94,7 @@ public:
   {
     return m_Function;
   }
-  
+
 private:
   /** The rendering function */
   RenderingFunctionPointerType m_Function;
@@ -103,18 +103,18 @@ private:
 
 /** \class RenderingImageFilter
 *   \brief This class applies the rendering functor to an image.
-*   
+*
 *   Please note that the rendering is actually done by a rendering
 *   function.
-*  
+*
 *   \sa RenderingFunction
 *
 */
 template <class TInputImage,class TOutputImage = Image<itk::RGBPixel<unsigned char>, 2 > >
 class RenderingImageFilter
-  : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, 
+  : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,
 				        Functor::RenderingFunctor
-					< typename TInputImage ::InternalPixelType, 
+					< typename TInputImage ::InternalPixelType,
 					  typename TOutputImage::PixelType > >
 {
 public:
@@ -122,7 +122,7 @@ public:
   typedef RenderingImageFilter                                   Self;
   typedef itk::UnaryFunctorImageFilter
   <TInputImage,TOutputImage, Functor::RenderingFunctor
-		 < typename TInputImage ::InternalPixelType, 
+		 < typename TInputImage ::InternalPixelType,
 		   typename TOutputImage::PixelType > >          Superclass;
   typedef itk::SmartPointer<Self>                                Pointer;
   typedef itk::SmartPointer<const Self>                          ConstPointer;
@@ -134,12 +134,12 @@ public:
   itkTypeMacro(RenderingImageFilter,itk::UnaryFunctorImageFilter);
 
   /** Rendering function typedef */
-  typedef Functor::RenderingFunctor 
-  < typename TInputImage ::InternalPixelType, 
+  typedef Functor::RenderingFunctor
+  < typename TInputImage ::InternalPixelType,
     typename TOutputImage::PixelType >                         RenderingFunctorType;
   typedef typename RenderingFunctorType::RenderingFunctionType RenderingFunctionType;
 
-  /** 
+  /**
    * Set the rendering function
    * \param function The rendering function.
    */
@@ -148,7 +148,7 @@ public:
     this->GetFunctor().SetFunction(function);
   }
 
-  /** 
+  /**
    * Get the rendering function
    * \return The rendering function.
    */
@@ -162,7 +162,7 @@ public:
   RenderingImageFilter() {}
   /** Destructor */
   virtual ~RenderingImageFilter() {}
-  
+
 private:
   RenderingImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
