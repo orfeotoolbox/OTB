@@ -45,14 +45,17 @@ public:
   double operator() ( const svm_node * x, const svm_node * y,
                       const svm_parameter & param ) const;
 
-  MixturePolyRBFKernelFunctor ();
-  virtual ~MixturePolyRBFKernelFunctor () { }
+
 
   /** Specific implementation of \code Update \endcode to split m_MapParameters
    * into specific variables to speed up kernel evaluations */
   void Update ();
 
 protected:
+
+  MixturePolyRBFKernelFunctor ();
+  virtual ~MixturePolyRBFKernelFunctor () { };
+
   double m_Mixture;
   double m_GammaPoly;
   double m_CoefPoly;
