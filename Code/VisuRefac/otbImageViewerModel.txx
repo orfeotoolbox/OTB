@@ -177,8 +177,14 @@ ImageViewerModel<TOutputImage>
   for(LayerIteratorType it = m_Layers->Begin();
       it != m_Layers->End(); ++it)
     {
+    // If the layer is visible
     if(it.Get()->GetVisible())
       {
+      // Set the extracted region
+      it.Get()->SetExtractRegion(m_ExtractRegion);
+      // Set the scaled extracted region
+      it.Get()->SetScaledExtractRegion(m_ScaledExtractRegion);
+      // Render it
       it.Get()->Render();
       }
     }
