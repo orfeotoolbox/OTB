@@ -43,6 +43,7 @@ void RegisterTests()
   REGISTER_TEST(otbBlendingImageFilterNew);
   REGISTER_TEST(otbBlendingImageFilter);
   REGISTER_TEST(otbImageViewerModelNew);
+  REGISTER_TEST(otbImageViewerModelSingleLayer);
   REGISTER_TEST(otbImageLayerGeneratorNew);
   REGISTER_TEST(otbImageLayerGeneratorScalar);
   REGISTER_TEST(otbImageLayerGeneratorVector);

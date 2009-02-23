@@ -86,7 +86,7 @@ public:
   void SetNumberOfBins(HistogramSizeType sizes)
   { m_Sizes = sizes ; }
 
-  const HistogramType* GetOutput() const
+  HistogramType* GetOutput() const
   { return m_Histogram ; }
 
   void Update() 

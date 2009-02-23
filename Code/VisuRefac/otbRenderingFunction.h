@@ -90,7 +90,19 @@ public:
       m_Maximum.push_back(vpixel[i]);
       }
   }
-  
+
+  /** Set minimum (std::vector version) */
+  virtual void SetMinimum(const ExtremaVectorType & vpixel)
+  {
+    m_Minimum = vpixel;
+  }
+
+  /** Set maximum (std::vector version) */
+  virtual void SetMaximum(const ExtremaVectorType & vpixel)
+  {
+    m_Maximum = vpixel;
+  }
+
 protected:
   /** Constructor */
   RenderingFunction()  {}

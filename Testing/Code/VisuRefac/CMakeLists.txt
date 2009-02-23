@@ -156,10 +156,25 @@ ${EXAMPLESDATA}/SpotAfter.png
 ${TEMP}/vrTvBlendingImageFilterOutput.png
 )
 
-#------------ otb::UniformAlphaBlendingFunction ------------
+#------------ otb::ImageViewerModel ------------
 
 ADD_TEST(vrTuImageViewerModelNew ${VISUREFAC_TESTS1}
 otbImageViewerModelNew
+)
+
+ADD_TEST(vrTvImageViewerModelSingleLayer ${VISUREFAC_TESTS1}
+--compare-n-images ${TOL} 3
+${BASELINE}/vrTvImageViewerModelSingleLayerQuicklookOutput.png
+${TEMP}/vrTvImageViewerModelSingleLayerQuicklookOutput.png
+${BASELINE}/vrTvImageViewerModelSingleLayerExtractOutput.png
+${TEMP}/vrTvImageViewerModelSingleLayerExtractOutput.png
+${BASELINE}/vrTvImageViewerModelSingleLayerScaledExtractOutput.png
+${TEMP}/vrTvImageViewerModelSingleLayerScaledExtractOutput.png
+otbImageViewerModelSingleLayer
+${INPUTDATA}/couleurs.tif
+${TEMP}/vrTvImageViewerModelSingleLayerQuicklookOutput.png
+${TEMP}/vrTvImageViewerModelSingleLayerExtractOutput.png
+${TEMP}/vrTvImageViewerModelSingleLayerScaledExtractOutput.png
 )
 
 #------------ otb::ImageLayerGenerator ------------
@@ -198,6 +213,7 @@ otbUniformAlphaBlendingFunctionNew.cxx
 otbBlendingImageFilterNew.cxx
 otbBlendingImageFilter.cxx
 otbImageViewerModelNew.cxx
+otbImageViewerModelSingleLayer.cxx
 otbImageLayerGeneratorNew.cxx
 otbImageLayerGeneratorScalar.cxx
 otbImageLayerGeneratorVector.cxx
