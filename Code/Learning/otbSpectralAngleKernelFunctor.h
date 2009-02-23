@@ -52,17 +52,14 @@ public:
   double operator() ( const svm_node * x, const svm_node * y,
                       const svm_parameter & param ) const;
 
-
+  SpectralAngleKernelFunctor ();
+  virtual ~SpectralAngleKernelFunctor () { }
 
   /** Specific implementation of \code Update \endcode to split m_MapParameters
    * into specific variables to speed up kernel evaluations */
   void Update ();
 
 protected:
-
-  SpectralAngleKernelFunctor ();
-  virtual ~SpectralAngleKernelFunctor () { };
-
   inline  double  SAM ( const svm_node * x, const svm_node * y ) const;
 
   double m_Coef;
