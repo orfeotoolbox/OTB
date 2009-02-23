@@ -109,7 +109,7 @@ int main(int argc, char * argv[])
   outputRescaler->SetInput( textureFilter->GetOutput() );
   outputRescaler->SetOutputMinimum(0);
   outputRescaler->SetOutputMaximum(255);
-  prettyOutputWriter->SetFileName( argv[4] );
+  prettyOutputWriter->SetFileName( argv[3] );
   prettyOutputWriter->SetInput( outputRescaler->GetOutput() );
 
   prettyOutputWriter->Update();
