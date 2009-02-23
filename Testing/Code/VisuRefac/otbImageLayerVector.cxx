@@ -82,7 +82,6 @@ int otbImageLayerVector( int argc, char * argv[] )
   RenderingFunctionType::Pointer function = RenderingFunctionType::New();
   function->SetMinimum(min);
   function->SetMaximum(max);
-  function->SetAllChannels(0);
   layer->SetRenderingFunction(function);
 
   ImageType::RegionType lregion = reader->GetOutput()->GetLargestPossibleRegion();
