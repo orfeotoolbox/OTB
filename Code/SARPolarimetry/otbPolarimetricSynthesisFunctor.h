@@ -28,7 +28,7 @@ namespace Functor
  *
  * This functor calculate the polarimetric synthesis
  *  using the electroMagneticField vectors as follow:
- *  \f$ \sigma(\psi_{i},\chi_{i},\psi_{r},\chi_{r}) =
+ *  \f$ \sigma(\psi_{i},\chi_{i},\psi_{r},\chi_{r}) = \\
                    \vec(E_{r}}\cdot\left[ S \right] \vec(E_{i}} \f$
  *
  *  \ingroup Functor

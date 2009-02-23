@@ -39,13 +39,12 @@ namespace Functor
 *
 *  Its behavior is decomposed into two steps depending on the number of iterations:
 *  \f[
-              \beta =
-              \begin{cases} \beta_0 \left( 1 - \frac{t}{t_0} \right) & \textrm{if} t \lt t_0}
-              \\
-              \beta_{\textrm{end}} \left( 1- \frac{t-t_O}{t_{\textrm{end}}-t_0} \right) & \textrm{ if $ t_0 \leqslant t \lt t_{\textrm{end}}$}
-              \end{cases}
-              \f]
-      * where \f$ t_0 \f$ stands for IterationThreshold.
+      \beta =
+      \begin{cases} \beta_0 \left( 1 - \frac{t}{t_0} \right) & \textrm{if} t \lt t_0}\\
+      \beta_{\textrm{end}} \left( 1- \frac{t-t_O}{t_{\textrm{end}}-t_0} \right) & \textrm{if} t_0 \leqslant t \lt t_{\textrm{end}}
+      \end{cases}
+  \f]
+* where \f$ t_0 \f$ stands for IterationThreshold.
 *
 *  CzihoSOMLearningBehaviorFunctor uses some parameters of the SOM class such as:
 *  BetaInit, BetaEnd, NumberOfIterations, but also NeighborhoodSizeInit which may be
