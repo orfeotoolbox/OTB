@@ -307,7 +307,7 @@ int main( int argc, char *argv[] )
   //
   //
   // \begin{figure} \center
-  // \includegraphics[width=0.24\textwidth]{pretty_VegetationIndex.eps}
+  // \includegraphics[width=0.24\textwidth]{pretty_qb_toulouse_sub.eps}
   // \includegraphics[width=0.24\textwidth]{pretty_AVIMultiChannelRAndGAndNIRVegetationIndex.eps}
   // \itkcaption[AVI Example]{AVI result on the right with the left image in input.}
   // \label{fig:AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter}
