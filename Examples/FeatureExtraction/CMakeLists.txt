@@ -83,8 +83,11 @@ TARGET_LINK_LIBRARIES(ParallelLineDetectionExample OTBIO OTBCommon OTBFeatureExt
 ITKCommon ITKBasicFilters)
 
 ADD_EXECUTABLE(CloudDetectionExample CloudDetectionExample.cxx)
-TARGET_LINK_LIBRARIES(CloudDetectionExample OTBIO OTBCommon OTBFeatureExtraction
-ITKCommon ITKBasicFilters)
+TARGET_LINK_LIBRARIES(CloudDetectionExample OTBIO OTBCommon OTBFeatureExtraction ITKCommon ITKBasicFilters)
+
+ADD_EXECUTABLE(TextureExample TextureExample.cxx)
+TARGET_LINK_LIBRARIES(TextureExample OTBIO OTBCommon OTBFeatureExtraction ITKCommon ITKBasicFilters)
+
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 

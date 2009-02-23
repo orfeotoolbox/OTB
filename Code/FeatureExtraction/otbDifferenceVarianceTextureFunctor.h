@@ -29,7 +29,7 @@ namespace Functor
  *
  *  Computes  difference variance using joint histogram (neighborhood and offset neighborhood).
  *  The formula is:
- *  variance of \$ p_{x-y} \$
+ *  variance of \f$ p_{x-y} \f$
  *  TIterInput is an iterator, TOutput is a PixelType.
  *
  *  \sa TextureFunctorBase

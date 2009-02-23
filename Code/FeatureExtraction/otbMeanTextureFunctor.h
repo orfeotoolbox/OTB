@@ -29,7 +29,7 @@ namespace Functor
  *
  *  Computes joint histogram (neighborhood and offset neighborhood) .
  *  The formula is:
- *  $ -\sum_{i}p(i,j) $
+ *  \f$ -\sum_{i}p(i,j) \f$
  *  TIterInput is an ietrator, TOutput is a PixelType.
  *
  *  \sa TextureFunctorBase
@@ -38,7 +38,7 @@ namespace Functor
  */
 
 template <class TIterInput, class TOutput>
-class ITK_EXPORT MeanTextureFunctor : 
+class ITK_EXPORT MeanTextureFunctor :
 public TextureFunctorBase<TIterInput, TOutput>
 {
 public:

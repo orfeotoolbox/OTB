@@ -25,8 +25,8 @@
 
 
 //  Software Guide : BeginCommandLineArgs
-//  INPUTS: {qb_toulouse_sub.tif}
-//  OUTPUTS: {AVIMultiChannelRAndGAndNIRVegetationIndex.tif} , {pretty_qb_toulouse_sub.png} , {pretty_AVIMultiChannelRAndGAndNIRVegetationIndex.png}
+//  INPUTS: {verySmallFSATSW.tif}
+//  OUTPUTS: {AVIMultiChannelRAndGAndNIRVegetationIndex.tif} , {pretty_FSATSW.png} , {pretty_AVIMultiChannelRAndGAndNIRVegetationIndex.png}
 //  3 2 4 660 560 830
 //  Software Guide : EndCommandLineArgs
 
@@ -44,30 +44,32 @@
 // otb::MultiChannelRAndGAndNIR VegetationIndexImageFilter with the
 // use of the Angular Vegetation Index (AVI).
 // The equation for the Angular Vegetation Index involves the gren, red 
-// and near infra-red wavebands. Lambda_1, lambda_2 and lambda_3 are the mid-band
-// wavelengths for the green, red and NIR bands and tan-1 is the arctangent function.
+// and near infra-red bands. $\lambda_1$, $\lambda_2$ and $\lambda_3$ are the mid-band
+// wavelengths for the green, red and NIR bands and $\tan^{-1}$ is the arctangent function.
 //
 // The AVI expression is
 //
 // \begin{equation}
-// \mathbf{fact1} = \frac{\{lambda_3}-{lambda_2}}{lambda_2}}
+// \mathbf{A_1} = \frac{\lambda_3-\lambda_2}{\lambda_2}
 // \end{equation}
 // \begin{equation}
-// \mathbf{fact2} = \frac{\{lambda_2}-{lambda_1}}{lambda_2}}
+// \mathbf{A_2} = \frac{\lambda_2-\lambda_1}{\lambda_2}
 // \end{equation}
 //
 // \begin{equation}
-// \mathbf{AVI} = \tan^-1 {[\frac{{fact1}{{NIR}-{R}}}} + tan^-1{\frac{{fact2}{{G}-{R}}}}
+// \mathbf{AVI} = \tan^{-1}\left({\frac{A_1}{NIR-R}}\right) + \tan^{-1}\left({\frac{A_2}{G-R}}\right)
 // \end{equation}
 //
 // For more details, refer to Plummer work \cite{AVI}.
 //
-// With the \doxygen{otb}{MultiChannelRAndGAndNIRVegetationIndexImageFilter} class the
-// input has to be a multi channel image and the user has to specify index channel
-// of the red, green and NIR channel.
+// With the
+// \doxygen{otb}{MultiChannelRAndGAndNIRVegetationIndexImageFilter}
+// class the input has to be a multi channel image and the user has to
+// specify the channel index of the red, green and NIR channel.
 //
-// Let's look at the minimal code required to use this algorithm. First, the following header
-// defining the \doxygen{otb}{MultiChannelRAndGAndNIRVegetationIndexImageFilter}
+// Let's look at the minimal code required to use this
+// algorithm. First, the following header defining the
+// \doxygen{otb}{MultiChannelRAndGAndNIRVegetationIndexImageFilter}
 // class must be included.
 // Software Guide : EndLatex
 
@@ -126,10 +128,8 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef  otb::Functor::AVI< InputPixelType,
-  InputPixelType,
-  InputPixelType,
-  OutputPixelType >        FunctorType;
+  typedef  otb::Functor::AVI< InputPixelType, InputPixelType,
+                              InputPixelType,  OutputPixelType > FunctorType;
   // Software Guide : EndCodeSnippet
 
 
@@ -144,10 +144,8 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::MultiChannelRAndGAndNIRVegetationIndexImageFilter
-  <InputImageType,
-  OutputImageType,
-  FunctorType      >
-  MultiChannelRAndGAndNIRVegetationIndexImageFilterType;
+                           <InputImageType, OutputImageType,FunctorType>
+                      MultiChannelRAndGAndNIRVegetationIndexImageFilterType;
 
   MultiChannelRAndGAndNIRVegetationIndexImageFilterType::Pointer
   filter = MultiChannelRAndGAndNIRVegetationIndexImageFilterType::New();
@@ -182,9 +180,9 @@ int main( int argc, char *argv[] )
 
   //  Software Guide : BeginLatex
   //
-  // The $\lambda$ R,G and Nir parameters are set. The
+  // The $\lambda$ R,G and NIR parameters are set. The
   // \doxygen{otb}{MultiChannelRAndGAndNIRVegetationIndexImageFilter}
-  // class sets the default values of $\lambda$ to $660$. $560$. and 
+  // class sets the default values of $\lambda$ to $660$, $560$ and 
   // $830$. 
   //
   //  Software Guide : EndLatex
@@ -255,13 +253,13 @@ int main( int argc, char *argv[] )
   maximum.Fill(255);
   vectRescaler->SetOutputMinimum(minimum);
   vectRescaler->SetOutputMaximum(maximum);
-  vectRescaler->SetClampThreshold(0.01);
+//  vectRescaler->SetClampThreshold(1);
   vectRescaler->SetInput( reader->GetOutput() );
 
   selecter->SetInput(vectRescaler->GetOutput());
-  selecter->SetChannel(1);
-  selecter->SetChannel(2);
   selecter->SetChannel(3);
+  selecter->SetChannel(2);
+  selecter->SetChannel(1);
 
   vectPrettyWriter->SetFileName( argv[3] );
   vectPrettyWriter->SetInput( selecter->GetOutput() );
@@ -272,7 +270,7 @@ int main( int argc, char *argv[] )
   ThresholderType::Pointer thresholder = ThresholderType::New();
   thresholder->SetInput(  filter->GetOutput() );
   thresholder->SetOutsideValue( 1.0 );
-  thresholder->ThresholdOutside( 0.0, 1.0 );
+  thresholder->ThresholdOutside( -1.0, 0.05 );
   thresholder->Update();
 
   RescalerType::Pointer     rescaler     = RescalerType::New();
@@ -304,13 +302,12 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginLatex
   //
   // Let's now run this example using as input the image
-  // \code{IndexVegetation.hd} (image kindly and free of charge given
-  // by SISA and CNES) and $\gamma$=0.6 provided in the
+  // \code{verySmallFSATSW.tif} provided in the
   // directory \code{Examples/Data}.
   //
   //
   // \begin{figure} \center
-  // \includegraphics[width=0.24\textwidth]{pretty_VegetationIndex.eps}
+  // \includegraphics[width=0.24\textwidth]{pretty_FSATSW.eps}
   // \includegraphics[width=0.24\textwidth]{pretty_AVIMultiChannelRAndGAndNIRVegetationIndex.eps}
   // \itkcaption[AVI Example]{AVI result on the right with the left image in input.}
   // \label{fig:AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter}

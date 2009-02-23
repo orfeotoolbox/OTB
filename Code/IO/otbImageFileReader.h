@@ -19,10 +19,6 @@
 #define __otbImageFileReader_h
 
 #include "itkImageFileReader.h"
-#include "itkExceptionObject.h"
-#include "itkSize.h"
-#include "itkImageRegion.h"
-#include "itkDefaultConvertPixelTraits.h"
 
 namespace otb
 {

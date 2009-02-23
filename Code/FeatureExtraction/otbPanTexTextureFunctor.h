@@ -29,7 +29,7 @@ namespace Functor
  *
  *  Computes contrast using joint histogram (neighborhood and offset neighborhood).
  *  The formula is:
- *  $ \sum_{n}n^2.p_{x-y}(n)^2 $
+ *  \f$ \sum_{n}n^2.p_{x-y}(n)^2 \f$
  *  TIterInput is an iterator, TOutput is a PixelType.
  *
  *  \sa TextureFunctorBase
@@ -38,7 +38,7 @@ namespace Functor
  */
 
 template <class TIterInput, class TOutput>
-class ITK_EXPORT PanTexTextureFunctor : 
+class ITK_EXPORT PanTexTextureFunctor :
 public ContrastTextureFunctor<TIterInput, TOutput>
 {
 public:
@@ -82,7 +82,7 @@ public:
 
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
-    { 
+    {
       // Loop over each offset
       double out = itk::NumericTraits<double>::max();
       Superclass contrast;
@@ -94,16 +94,16 @@ public:
 	    out=res;
 	}
 
-    
-    return out;  
+
+    return out;
   }
 
  private:
   std::vector<OffsetType> m_OffsetList;
-  
+
 };
- 
- 
+
+
 } // namespace Functor
 } // namespace otb
 

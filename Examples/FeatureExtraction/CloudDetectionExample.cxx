@@ -32,16 +32,20 @@
 
 // Software Guide : BeginLatex
 //
-// The cloud detection functor is a processing chain composed by the computation of a spectral angle (with SpectralAngleFunctor).
-// The result is multiplied by a gaussian factor (with CloudEstimatorFunctor) and finally thresholded to obtain 
-// a binary image (with CloudDetectionFilter). 
-// However, modifications can be added in the pipeline to adapt to a particular situation.
+// The cloud detection functor is a processing chain composed by the
+// computation of a spectral angle (with SpectralAngleFunctor).  The
+// result is multiplied by a gaussian factor (with
+// CloudEstimatorFunctor) and finally thresholded to obtain a binary
+// image (with CloudDetectionFilter).  However, modifications can be
+// added in the pipeline to adapt to a particular situation.
 //
-// This example demonstrates the use of the \doxygen{otb}{CloudDetectionFilter}.
-// This filter uses the spectral angle principle to measure the radiometric gap between a reference pixel
-// and the other pixels of the image.
+// This example demonstrates the use of the
+// \doxygen{otb}{CloudDetectionFilter}.  This filter uses the spectral
+// angle principle to measure the radiometric gap between a reference
+// pixel and the other pixels of the image.
 //
-// The first step toward the use of this filter is the inclusion of the proper header files.
+// The first step toward the use of this filter is the inclusion of
+// the proper header files.
 //
 // Software Guide : EndLatex
 
@@ -77,9 +81,8 @@ int main( int argc, char * argv[] )
   const unsigned int Dimension = 2;
   // Software Guide : BeginLatex
   //
-  // Then we must decide what pixel type to use for the image. We choose to do
-  // all the computation in double precision and rescale the results
-  // between 0 and 255 in order to export PNG images.
+  // Then we must decide what pixel type to use for the images. We choose to do
+  // all the computations in double precision.
   //
   // Software Guide : EndLatex
 
@@ -92,9 +95,11 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginLatex
   //
-  //  The images are defined using the pixel type and the dimension. Please note that
-  //  the \doxygen{otb}{RoadExtractionFilter} needs an \doxygen{otb}{VectorImage} as input
-  //  to handle multispectral images.
+  //  The images are defined using the pixel type and the
+  //  dimension. Please note that the
+  //  \doxygen{otb}{CloudDetectionFilter} needs an
+  //  \doxygen{otb}{VectorImage} as input to handle multispectral
+  //  images.
   //
   //  Software Guide : EndLatex
 
@@ -114,28 +119,32 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginCodeSnippet
 
-  typedef otb::Functor::CloudDetectionFunctor<VectorPixelType, OutputPixelType>   FunctorType;
+  typedef otb::Functor::CloudDetectionFunctor<VectorPixelType,
+                                       OutputPixelType>   FunctorType;
 
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
-  // Now we can define the \doxygen{otb}{CloudDetectionFilter} that takes a multi-spectral
-  // image as input and produces a binary image.
+  // Now we can define the \doxygen{otb}{CloudDetectionFilter} that
+  // takes a multi-spectral image as input and produces a binary
+  // image.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
 
-    typedef otb::CloudDetectionFilter<VectorImageType, OutputImageType, FunctorType> CloudDetectionFilterType;
+    typedef otb::CloudDetectionFilter<VectorImageType, OutputImageType,
+                                   FunctorType> CloudDetectionFilterType;
 
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
-  //  An \doxygen{otb}{ImageFileReader} class is also instantiated in order to read
-  //  image data from a file. Then, an \doxygen{otb}{ImageFileWriter} is instantiated in order 
-  //  to write the output image to a file.
+  //  An \doxygen{otb}{ImageFileReader} class is also instantiated in
+  //  order to read image data from a file. Then, an
+  //  \doxygen{otb}{ImageFileWriter} is instantiated in order to write
+  //  the output image to a file.
   //
   //  Software Guide : EndLatex
 
@@ -156,7 +165,8 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
 
   ReaderType::Pointer reader = ReaderType::New();
-  CloudDetectionFilterType::Pointer cloudDetection = CloudDetectionFilterType::New();
+  CloudDetectionFilterType::Pointer cloudDetection =
+                                    CloudDetectionFilterType::New();
   WriterType::Pointer writer = WriterType::New();
 
   // Software Guide : EndCodeSnippet
@@ -166,10 +176,10 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginLatex
   //
-  // The \doxygen{otb}{CloudDetectionFilter} needs to have a reference pixel
-  // corresponding to the spectral content likely to represent a cloud. This is done
-  // by passing a pixel to the filter. Here we suppose that the input image
-  // has four spectral bands.
+  // The \doxygen{otb}{CloudDetectionFilter} needs to have a reference
+  // pixel corresponding to the spectral content likely to represent a
+  // cloud. This is done by passing a pixel to the filter. Here we
+  // suppose that the input image has four spectral bands.
   //
   // Software Guide : EndLatex
 
@@ -188,8 +198,9 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginLatex
   //
-  // We must also set the variance parameter of the filter and the parameter of the gaussian functor.
-  // The bigger the value, the more tolerant the detector will be.
+  // We must also set the variance parameter of the filter and the
+  // parameter of the gaussian functor.  The bigger the value, the
+  // more tolerant the detector will be.
   //
   // Software Guide : EndLatex
 

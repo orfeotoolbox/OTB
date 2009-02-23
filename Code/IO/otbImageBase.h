@@ -27,7 +27,6 @@
 #include "otbMetaDataKey.h"
 #include "otbImageKeywordlist.h"
 
-#include <iostream>
 #include <string>
 
 namespace otb
@@ -37,7 +36,7 @@ namespace otb
  * \brief Creation of an "otb" ImageBase that gets metadata.
  *
  */
-class ITK_EXPORT ImageBase : public MetaDataKey
+class ITK_EXPORT ImageBase
 {
 public:
 

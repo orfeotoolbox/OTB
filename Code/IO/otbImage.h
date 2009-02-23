@@ -23,14 +23,8 @@
 #endif
 
 #include "itkImage.h"
-#include "itkDefaultPixelAccessor.h"
-#include "itkDefaultPixelAccessorFunctor.h"
-#include "itkWeakPointer.h"
-#include "itkNeighborhoodAccessorFunctor.h"
-
 #include "otbImageBase.h"
 
-#include <iostream>
 #include <string.h>
 
 namespace otb

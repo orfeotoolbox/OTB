@@ -87,7 +87,7 @@ protected:
   /** Constructor */
   ImageWidgetActionHandler(){}
   /** Destructor */
-  ~ImageWidgetActionHandler(){}
+  virtual ~ImageWidgetActionHandler(){}
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {

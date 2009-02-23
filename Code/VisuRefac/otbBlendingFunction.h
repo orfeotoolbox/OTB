@@ -56,7 +56,7 @@ protected:
   /** Constructor */
   BlendingFunction()  {}
   /** Destructor */
-  ~BlendingFunction() {}
+  virtual ~BlendingFunction() {}
 
 private:
   BlendingFunction(const Self&); //purposely not implemented
