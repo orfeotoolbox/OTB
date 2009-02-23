@@ -19,6 +19,7 @@
 #define __otbStandardRenderingFunction_h
 
 #include "otbRenderingFunction.h"
+#include <assert.h>
 
 namespace otb
 {
@@ -90,6 +91,11 @@ public:
       this->UpdateTransferedMinMax();
       }
 
+    assert(m_TransferedMinimum.size() == 1);
+    assert(m_TransferedMaximum.size() == 1);
+    assert(this->m_Minimum.size() == 1);
+    assert(this->m_Maximum.size() == 1);
+
     OutputPixelType resp;
     resp.Fill(this->Evaluate(m_TransferFunction(spixel),m_TransferedMinimum[0],m_TransferedMaximum[0]));
     return resp;
@@ -103,6 +109,12 @@ public:
       this->UpdateTransferedMinMax();
       }
     
+    assert(m_TransferedMinimum.size() == this->m_Minimum.size());
+    assert(m_TransferedMaximum.size() == this->m_Maximum.size());
+    assert(m_TransferedMinimum.size() == m_TransferedMaximum.size());
+    assert(m_TransferedMaximum.size() > std::max(m_RedChannelIndex,std::max(m_GreenChannelIndex,m_BlueChannelIndex)));
+    assert(m_TransferedMaximum.size() == vpixel.Size());
+
     OutputPixelType resp;
     resp.SetRed(Evaluate(m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
     resp.SetBlue(Evaluate(m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
@@ -261,16 +273,16 @@ public:
   {
     if(!m_UserDefinedTransferedMinMax)
       {
-      typename ExtremaVectorType::iterator minIt = this->m_Minimum.begin();
-      typename ExtremaVectorType::iterator maxIt = this->m_Maximum.begin();
+      typename ExtremaVectorType::const_iterator minIt = this->m_Minimum.begin();
+      typename ExtremaVectorType::const_iterator maxIt = this->m_Maximum.begin();
       
       m_TransferedMinimum.clear();
       m_TransferedMaximum.clear();
       
       while(minIt != this->m_Minimum.end() && maxIt != this->m_Maximum.end())
 	{
-	double v1 = m_TransferFunction(*minIt);
-	double v2 = m_TransferFunction(*maxIt);
+	const double v1 = m_TransferFunction(*minIt);
+	const double v2 = m_TransferFunction(*maxIt);
 	m_TransferedMinimum.push_back(std::min(v1,v2));
 	m_TransferedMaximum.push_back(std::max(v1,v2));
 	++minIt;
@@ -283,7 +295,7 @@ public:
 
 protected:
   /** Constructor */
-  StandardRenderingFunction() : m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2),
+  StandardRenderingFunction() : m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2), m_TransferFunction(),
 				m_UserDefinedTransferedMinMax(false), m_TransferedMinMaxUpToDate(false),
 				m_TransferedMinimum(), m_TransferedMaximum()
   {}
