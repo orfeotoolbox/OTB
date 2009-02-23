@@ -73,10 +73,5 @@ int otbSetASetBRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
     InputNIRImageType::PixelType,
     OutputImageType::PixelType> >
     (argc,argv);
-  else if ( strArgv == "TSAVI" ) generic_SetASetBRAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
-    otb::Functor::TSAVI<     InputRImageType::PixelType,
-    InputNIRImageType::PixelType,
-    OutputImageType::PixelType> >
-    (argc,argv);
   return EXIT_SUCCESS;
 }
