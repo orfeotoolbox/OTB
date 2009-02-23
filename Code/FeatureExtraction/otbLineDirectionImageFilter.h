@@ -65,7 +65,7 @@ public:
     };
   unsigned int GetSpatialThreshold()
     {
-      this->GetFunctor().GetSpatialThreshold(); 
+      return this->GetFunctor().GetSpatialThreshold(); 
     };
   /** Spectral Threshold accessor */
   void SetSpectralThreshold( InputInternalPixelType thresh )
