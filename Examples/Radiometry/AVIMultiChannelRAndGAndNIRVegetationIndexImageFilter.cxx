@@ -25,8 +25,8 @@
 
 
 //  Software Guide : BeginCommandLineArgs
-//  INPUTS: {qb_toulouse_sub.tif}
-//  OUTPUTS: {AVIMultiChannelRAndGAndNIRVegetationIndex.tif} , {pretty_qb_toulouse_sub.png} , {pretty_AVIMultiChannelRAndGAndNIRVegetationIndex.png}
+//  INPUTS: {verySmallFSATSW.tif}
+//  OUTPUTS: {AVIMultiChannelRAndGAndNIRVegetationIndex.tif} , {pretty_FSATSW.png} , {pretty_AVIMultiChannelRAndGAndNIRVegetationIndex.png}
 //  3 2 4 660 560 830
 //  Software Guide : EndCommandLineArgs
 
@@ -253,7 +253,7 @@ int main( int argc, char *argv[] )
   maximum.Fill(255);
   vectRescaler->SetOutputMinimum(minimum);
   vectRescaler->SetOutputMaximum(maximum);
-  vectRescaler->SetClampThreshold(1);
+//  vectRescaler->SetClampThreshold(1);
   vectRescaler->SetInput( reader->GetOutput() );
 
   selecter->SetInput(vectRescaler->GetOutput());
@@ -270,7 +270,7 @@ int main( int argc, char *argv[] )
   ThresholderType::Pointer thresholder = ThresholderType::New();
   thresholder->SetInput(  filter->GetOutput() );
   thresholder->SetOutsideValue( 1.0 );
-  thresholder->ThresholdOutside( 0.0, 1.0 );
+  thresholder->ThresholdOutside( -1.0, 0.05 );
   thresholder->Update();
 
   RescalerType::Pointer     rescaler     = RescalerType::New();
@@ -302,12 +302,12 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginLatex
   //
   // Let's now run this example using as input the image
-  // \code{qb_toulouse_sub.tif} provided in the
+  // \code{verySmallFSATSW.tif} provided in the
   // directory \code{Examples/Data}.
   //
   //
   // \begin{figure} \center
-  // \includegraphics[width=0.24\textwidth]{pretty_qb_toulouse_sub.eps}
+  // \includegraphics[width=0.24\textwidth]{pretty_FSATSW.eps}
   // \includegraphics[width=0.24\textwidth]{pretty_AVIMultiChannelRAndGAndNIRVegetationIndex.eps}
   // \itkcaption[AVI Example]{AVI result on the right with the left image in input.}
   // \label{fig:AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter}
