@@ -306,6 +306,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Iterators/NeighborhoodIterators4.cxx
   ${OTB_SOURCE_DIR}/Examples/Iterators/ImageRegionIteratorWithIndex.cxx
   ${OTB_SOURCE_DIR}/Examples/Radiometry/ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx
+  ${OTB_SOURCE_DIR}/Examples/Radiometry/AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Radiometry/NDVIRAndNIRVegetationIndexImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Radiometry/AtmosphericCorrectionSequencement.cxx
   ${OTB_SOURCE_DIR}/Examples/Fusion/BayesianFusionImageFilter.cxx
