@@ -44,20 +44,20 @@
 // otb::MultiChannelRAndGAndNIR VegetationIndexImageFilter with the
 // use of the Angular Vegetation Index (AVI).
 // The equation for the Angular Vegetation Index involves the gren, red 
-// and near infra-red bands. $lambda_1$, $lambda_2$ and $lambda_3$ are the mid-band
+// and near infra-red bands. $\lambda_1$, $\lambda_2$ and $\lambda_3$ are the mid-band
 // wavelengths for the green, red and NIR bands and $\tan^{-1}$ is the arctangent function.
 //
 // The AVI expression is
 //
 // \begin{equation}
-// \mathbf{fact1} = \frac{\lambda_3-\lambda_2}{\lambda_2}
+// \mathbf{A_1} = \frac{\lambda_3-\lambda_2}{\lambda_2}
 // \end{equation}
 // \begin{equation}
-// \mathbf{fact2} = \frac{\lambda_2-\lambda_1}{lambda_2}
+// \mathbf{A_2} = \frac{\lambda_2-\lambda_1}{\lambda_2}
 // \end{equation}
 //
 // \begin{equation}
-// \mathbf{AVI} = \tan^{-1} {\frac{fact1}{NIR-R}} + tan^{-1}{\frac{fact2}{G-R}}
+// \mathbf{AVI} = \tan^{-1}\left({\frac{A_1}{NIR-R}}\right) + \tan^{-1}\left({\frac{A_2}{G-R}}\right)
 // \end{equation}
 //
 // For more details, refer to Plummer work \cite{AVI}.
