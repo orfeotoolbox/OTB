@@ -242,6 +242,19 @@ public:
     m_TransferedMinMaxUpToDate = false;
   }
 
+/** Set minimum (std::vector version) */
+  virtual void SetMinimum(const ExtremaVectorType & vpixel)
+  {
+    Superclass::SetMinimum(vpixel);
+    m_TransferedMinMaxUpToDate = false;
+  }
+  
+  /** Set maximum (std::vector version) */
+  virtual void SetMaximum(const ExtremaVectorType & vpixel)
+  {
+    Superclass::SetMaximum(vpixel);
+    m_TransferedMinMaxUpToDate = false;
+  }
 
   /** Update transfered min and max */
   void UpdateTransferedMinMax()
@@ -270,13 +283,10 @@ public:
 
 protected:
   /** Constructor */
-  StandardRenderingFunction() 
-  {
-    m_RedChannelIndex   = 0;
-    m_BlueChannelIndex  = 1;
-    m_GreenChannelIndex = 2; 
-    m_UserDefinedTransferedMinMax = false;
-  }
+  StandardRenderingFunction() : m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2),
+				m_UserDefinedTransferedMinMax(false), m_TransferedMinMaxUpToDate(false),
+				m_TransferedMinimum(), m_TransferedMaximum()
+  {}
   /** Destructor */
   ~StandardRenderingFunction() {}
   /** Perform the computation for a single value (this is done in
