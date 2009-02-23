@@ -984,7 +984,10 @@ public:
 protected:
   inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
   {
-    return ( static_cast<TOutput>(this->GetNDVI()(r,nir) + 0.5 ));
+    double dval = this->GetNDVI()(r,nir) + 0.5;
+    if(dval<0)
+      return  ( static_cast<TOutput>(0));
+    return ( static_cast<TOutput>(vcl_sqrt(dval)));
   }
 private:
   const NDVIFunctorType m_NDVIfunctor;

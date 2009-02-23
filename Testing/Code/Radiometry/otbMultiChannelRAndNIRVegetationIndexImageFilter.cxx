@@ -104,7 +104,7 @@ int otbMultiChannelRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
                                            OutputImageType::PixelType> >
                                            (argc,argv) );
   else if ( strArgv == "TNDVI" ) return( generic_MultiChannelRAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
-                                           otb::Functor::IPVI<    InputImageType::InternalPixelType,
+                                           otb::Functor::TNDVI<    InputImageType::InternalPixelType,
                                            InputImageType::InternalPixelType,
                                            OutputImageType::PixelType> >
                                            (argc,argv) );
