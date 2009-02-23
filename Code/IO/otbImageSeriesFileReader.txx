@@ -25,331 +25,269 @@
 
 namespace otb {
 
-template < class TImage >
-ImageSeriesFileReader< TImage > 
+template < class TImage, class TInternalImage >
+ImageSeriesFileReader< TImage, TInternalImage > 
 ::ImageSeriesFileReader ()
 {
-  m_OutputList = OutputImageListType::New();
-  m_ListReader = ListReaderType::New();
+  this->m_OutputList = OutputImageListType::New();
+  this->m_ImageFileReaderList = ReaderListType::New();
+  m_ExtractorList = ExtractSelectionListType::New();
 }
 
-template < class TImage >
-typename ImageSeriesFileReader<TImage>::OutputImageListType *
-ImageSeriesFileReader< TImage > 
-::GetOutput ()
-{
-  if ( this->GetNumberOfOutputs() < 1 )
-    return 0;
-
-  return static_cast<OutputImageListType*>( this->m_OutputList );
-}
-
-template < class TImage >
-typename ImageSeriesFileReader<TImage>::OutputImageType *
-ImageSeriesFileReader< TImage > 
-::GetOutput ( unsigned int idx )
-{
-  if ( this->GetNumberOfOutputs() < 1 )
-    return 0;
-
-  if ( idx >= m_OutputList->Size() )
-    return 0;
-
-  return static_cast<OutputImageType*>( this->m_OutputList->GetNthElement( idx ) );
-}
-
-template < class TImage >
+template < class TImage, class TInternalImage >
 void
-ImageSeriesFileReader< TImage > 
-::GenerateData( )
+ImageSeriesFileReader< TImage, TInternalImage > 
+::AllocateListOfComponents ()
 {
-  this->TestFileExistanceAndReadability();
-
-  std::ifstream inputFile ( m_FileName.c_str(), std::ios_base::in );
-  std::string aLine;
-
-	inputFile >> aLine;
-	if ( aLine != "ENVI" ) 
-	{
-    inputFile.close();
-    itk::OStringStream msg;
-    msg << "The file " << m_FileName << " is not a \"ENVI META FILE\" format\n";
-    ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
-    throw e;
-    return;
-  }
-
-  inputFile >> aLine;
-	if ( aLine != "META" ) 
-	{
-    inputFile.close();
-    itk::OStringStream msg;
-    msg << "The file " << m_FileName << " is not a \"ENVI META FILE\" format\n";
-    ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
-    throw e;
-    return;
-  }
-  
-  inputFile >> aLine;
-	if ( aLine != "FILE" ) 
-	{
-    inputFile.close();
-    itk::OStringStream msg;
-    msg << "The file " << m_FileName << " is not a \"ENVI META FILE\" format\n";
-    ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
-    throw e;
-    return;
-  }
-
-  while ( 1 )
-	{
-    /* 
-     * Reading the filename
-     */
-    do {
-			inputFile >> aLine;
-			//std::cerr << "-> '" << aLine << "'\n";
-		} while ( aLine != "File" && inputFile.good() );
-
-		if ( inputFile.good() )
-    {
-      do {
-        inputFile >> aLine;
-        //std::cerr << "--> '" << aLine << "'\n";
-      } while ( aLine != ":" && inputFile.good() );
-
-      if ( !inputFile.good() )
-      {
-        inputFile.close();
-        itk::OStringStream msg;
-        msg << "Unable to read image files in the  \"ENVI META FILE\" file \n";
-        msg << "FileName: " << m_FileName << "\n";
-        ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
-        throw e;
-        return;
-      }
-    }
-    else
-      return; // normal exit 
-    
-    inputFile >> aLine;
-
-    std::cerr << "-> " << aLine << "\n";
-
-    ReaderPointerType aReader = ReaderType::New();
-    aReader->SetFileName( aLine );
-
-    try {
-      aReader->Update();
-    } 
-    catch ( itk::ImageFileReaderException & e )
-    {
-      std::vector< std::string > fullPath;
-      fullPath.push_back( itksys::SystemTools::GetFilenamePath( m_FileName ) );
-      fullPath.push_back( "/" );
-      fullPath.push_back( aLine );
-      aReader->SetFileName( itksys::SystemTools::JoinPath( fullPath ) );
-      aReader->Update();
-    }
-
-    /*
-     * Reading the Band number
-     */
-    do {
-			inputFile >> aLine;
-			//std::cerr << "-> '" << aLine << "'\n";
-		} while ( aLine != "Bands:" && inputFile.good() );
-
-    if ( !inputFile.good() )
-    {
-      inputFile.close();
-      itk::OStringStream msg;
-      msg << "Unable to read the number of bands in the images in the  \"ENVI META FILE\" file \n";
-      msg << "FileName: " << m_FileName << "\n";
-      ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
-      throw e;
-      return;
-    }
-
-    std::vector<int> bands;
-    int aBand,oldBand=-1;
-    char sep;
-    while ( 1 )
-    {
-      inputFile >> aBand;
-      if ( oldBand != -1 )
-      {
-        for ( int i = oldBand; i <= aBand; i++ )
-          bands.push_back( i );
-        oldBand = -1;
-      }
-      else
-        bands.push_back( aBand );
-
-      int posRef = inputFile.tellg();
-      inputFile >> sep;
-      if ( sep == '-' )
-      {
-        oldBand = aBand+1;
-      }
-      else if ( sep != ',' )
-      {
-        inputFile.seekg( posRef, std::ios_base::beg );
-        break;
-      }
-    }
-
-    if ( strcmp( this->GetOutput()->GetNameOfClass(), "Image" ) == 0 )
-    {
-      if (  bands.size() != 1 )
-      {
-        inputFile.close();
-        itk::OStringStream msg;
-        msg << "Unable to handle multicomponent file from Image<> class\n";
-        msg << "\"ENVI META FILE\" FileName: " << m_FileName << "\n";
-        msg << "Image FileName             : " << aReader->GetFileName() << "\n";
-        ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
-        throw e;
-        return;
-      }
-
-      if ( bands[0] != 1 )
-      {
-        std::cerr << "Perform band selection on Image\n";
-      }
-    }
-    else if ( strcmp( this->GetOutput()->GetNameOfClass(), "VectorImage" ) == 0 )
-    {
-      if ( bands[ bands.size()-1 ] != static_cast<int>(bands.size()) )
-      {
-        std::cerr << "Perform bands selection on VectorImage\n";
-      }
-    }
-
-    /*
-     * Reading the Region selection
-     */
-    do {
-			inputFile >> aLine;
-			//std::cerr << "-> '" << aLine << "'\n";
-		} while ( aLine != "Dims" && inputFile.good() );
-
-		if ( inputFile.good() )
-    {
-      do {
-        inputFile >> aLine;
-        //std::cerr << "--> '" << aLine << "'\n";
-      } while ( aLine != ":" && inputFile.good() );
-
-      if ( !inputFile.good() )
-      {
-        inputFile.close();
-        itk::OStringStream msg;
-        msg << "Unable to read image region in the  \"ENVI META FILE\" file \n";
-        msg << "FileName : " << m_FileName << "\n";
-        msg << "ImageName: " << aReader->GetFileName() << "\n";
-        ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
-        throw e;
-        return;
-      }
-    }
-
-    int beg_line,end_line,beg_col,end_col;
-    char sep1,sep2,sep3;
-    inputFile >> beg_col >> sep1 >> end_col >> sep2 >> beg_line >> sep3 >> end_line;
-
-    if ( !inputFile.good() )
-    {
-      inputFile.close();
-      itk::OStringStream msg;
-      msg << "Unable to read image region selection in the  \"ENVI META FILE\" file \n";
-      msg << "FileName : " << m_FileName << "\n";
-      msg << "ImageName: " << aReader->GetFileName() << "\n";
-      ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
-      throw e;
-      return;
-    }
-
-    IndexType index;
-    index[0] = beg_col - 1;
-    index[1] = beg_line - 1; 
-
-    SizeType size;
-    size[0] = end_col - beg_col;
-    size[1] = end_line - beg_line;
-
-    RegionType region;
-    region.SetSize( size );
-    region.SetIndex( index );
-
-    /*
-     * FIXME: it seems that the region selection is not working as it stands...
-     * May be necessary to use MultiChannelExtractROI...
-     */
-
-    aReader->UpdateOutputInformation(); 
-    aReader->GetOutput()->SetRequestedRegion( region );
-    aReader->GetOutput()->PropagateRequestedRegion();
-    aReader->GetOutput()->UpdateOutputData(); 
-
-    m_OutputList->PushBack( aReader->GetOutput() );  
-    m_ListReader->PushBack( aReader );
+  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); i++ )
+  {
+    this->m_ImageFileReaderList->PushBack( ReaderType::New() );
+    this->m_OutputList->PushBack( OutputImageType::New() );
+    m_ExtractorList->PushBack( ExtractSelectionListType::New() );
   }
 }
 
-template < class TImage >
+template < class TImage, class TInternalImage >
 void
-ImageSeriesFileReader< TImage > 
-::PrintSelf ( std::ostream& os, itk::Indent indent ) const
+ImageSeriesFileReader< TImage, TInternalImage > 
+::GenerateData( unsigned int idx )
 {
-  Superclass::PrintSelf(os, indent);
-  os << indent << "File to be read : " << m_FileName << "\n";
-
-  if ( m_ListReader->Size() > 0 )
-  {
-    os << indent << "Image File(s) to be read\n";
-    for ( typename ListReaderType::Iterator file = m_ListReader->Begin();
-      file != m_ListReader->End(); ++file )
-    {
-      os << indent << "  " << file.Get()->GetFileName() << "\n";
-    }
-  }
+	itk::OStringStream msg;
+	msg << "Something wrong... Check the template definition of this class in the program...\n";
+	msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
+	ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
+	throw e;
 }
 
-template < class TImage >
+/* **********************************************************
+ * Methods that are specific to instanciation with Image type
+ * **********************************************************
+ */
+
+template < class TPixel, class TInternalPixel >
+ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixel, 2 > >
+::ImageSeriesFileReader ()
+{
+  this->m_OutputList = OutputImageListType::New();
+  this->m_ImageFileReaderList = ReaderListType::New();
+  m_ExtractorList = ExtractSelectionListType::New();
+}
+
+/**
+ * Allocation of the component... Here, based on ExtractROI
+ */
+template < class TPixel, class TInternalPixel >
 void
-ImageSeriesFileReader< TImage > 
-::TestFileExistanceAndReadability ()
+ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixel, 2 > >
+::AllocateListOfComponents ()
 {
-  // Test if the file exists.
-  if( !itksys::SystemTools::FileExists( m_FileName.c_str() ) )
+  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); i++ )
   {
-    ImageSeriesFileReaderException e(__FILE__, __LINE__);
-    itk::OStringStream msg;
-    msg << "The file doesn't exist. "
-        << std::endl << "Filename = " << m_FileName
-        << std::endl;
-    e.SetDescription( msg.str().c_str() );
-    throw e;
-    return;
+    this->m_ImageFileReaderList->PushBack( ReaderType::New() );
+    this->m_OutputList->PushBack( OutputImageType::New() );
+    m_ExtractorList->PushBack( ExtractSelectionType::New() );
   }
-
-  // Test if the file can be open for reading access.
-  std::ifstream readTester;
-  readTester.open( m_FileName.c_str() );
-  if( readTester.fail() )
-  {
-    readTester.close();
-    itk::OStringStream msg;
-    msg << "The file couldn't be opened for reading. "
-        << std::endl << "Filename: " << m_FileName
-        << std::endl;
-    ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
-    throw e;
-    return;
-  }
-  readTester.close();
 }
+
+/**
+ * TestBandSelection tests if the templated Image type is compatible 
+ * with the bande selection provided in the Meta File
+ */
+template < class TPixel, class TInternalPixel >
+void
+ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixel, 2 > >
+::TestBandSelection ( std::vector<unsigned int> & bands )
+{
+	if (  bands.size() != 1 )
+	{
+		itk::OStringStream msg;
+		msg << "Unable to handle multicomponent file from Image<> class\n";
+		msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
+		ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
+		throw e;
+	}
+
+	if ( bands[0] != 1 )
+	{
+		itk::OStringStream msg;
+		msg << "Unable to handle given band reading from multicomponent file with Image<> class\n";
+		msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
+		ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
+		throw e;
+	}
+	return;
+}
+
+/**
+ * GenerateData for Image type
+ */
+template < class TPixel, class TInternalPixel >
+void
+ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixel, 2 > >
+::GenerateData( unsigned int idx )
+{
+  ReaderType * reader 
+    = static_cast<ReaderType*>( this->m_ImageFileReaderList->GetNthElement( idx ) );
+
+  reader->SetFileName( this->m_ListOfFileNames[ idx ] );
+
+  ExtractSelectionType * selection
+    = static_cast<ExtractSelectionType*>( m_ExtractorList->GetNthElement( idx ) );
+
+  selection->SetExtractionRegion( this->m_ListOfRegionSelection[ idx ] );
+
+  selection->SetInput( reader->GetOutput() );
+  selection->GraftOutput(  this->m_OutputList->GetNthElement( idx ) );
+  selection->Update();
+
+  this->m_OutputList->GetNthElement( idx )->Graft( selection->GetOutput() );
+}
+
+/* *********************************************************************
+ * Methods that are specific to instanciation with Image type for TImage 
+ * and VectorImage as TInternalImage
+ * *********************************************************************
+ */
+
+/**
+ * Constructor
+ */
+template < class TPixel, class TInternalPixel >
+ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
+::ImageSeriesFileReader ()
+{
+  this->m_OutputList = OutputImageListType::New();
+  this->m_ImageFileReaderList = ReaderListType::New();
+  m_ExtractorList = ExtractSelectionListType::New();
+}
+
+/**
+ * Allocation of the component... Here, based on MultiToMonoChannelExtractROI
+ */
+template < class TPixel, class TInternalPixel >
+void
+ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
+::AllocateListOfComponents ()
+{
+  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); i++ )
+  {
+    this->m_ImageFileReaderList->PushBack( ReaderType::New() );
+    this->m_OutputList->PushBack( OutputImageType::New() );
+    m_ExtractorList->PushBack( ExtractSelectionType::New() );
+  }
+}
+
+/**
+ * TestBandSelection tests if the templated Image type is compatible 
+ * with the bande selection provided in the Meta File
+ */
+template < class TPixel, class TInternalPixel >
+void
+ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
+::TestBandSelection ( std::vector<unsigned int> & bands )
+{
+	if (  bands.size() != 1 )
+	{
+		itk::OStringStream msg;
+		msg << "Unable to handle multicomponent file from Image<> class as output\n";
+		msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
+		ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
+		throw e;
+	}
+	return;
+}
+
+/**
+ * GenerateData for Image type as output and VectorImage type for reading 
+ */
+template < class TPixel, class TInternalPixel >
+void
+ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
+::GenerateData( unsigned int idx )
+{
+  ReaderType * reader 
+    = static_cast<ReaderType*>( this->m_ImageFileReaderList->GetNthElement( idx ) );
+
+  reader->SetFileName( this->m_ListOfFileNames[ idx ] );
+
+  ExtractSelectionType * selection
+    = static_cast<ExtractSelectionType*>( this->m_ExtractorList->GetNthElement( idx ) );
+
+  selection->SetExtractionRegion( this->m_ListOfRegionSelection[ idx ] );
+	selection->SetChannel(  this->m_ListOfBandSelection[ idx ][0] );
+
+  selection->SetInput( reader->GetOutput() );
+  selection->GraftOutput(  this->m_OutputList->GetNthElement( idx ) );
+  selection->Update();
+
+  this->m_OutputList->GetNthElement( idx )->Graft( selection->GetOutput() );
+}
+
+/* ******************************************************************
+ * Methods that are specific to instanciation with VectorImage types 
+ * ******************************************************************
+ */
+
+/**
+ * Constructor
+ */
+template < class TPixel, class TInternalPixel >
+ImageSeriesFileReader< VectorImage< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
+::ImageSeriesFileReader ()
+{
+  this->m_OutputList = OutputImageListType::New();
+  this->m_ImageFileReaderList = ReaderListType::New();
+  m_ExtractorList = ExtractSelectionListType::New();
+}
+
+/**
+ * Allocation of the component... Here, based on MultiChannelExtractROI
+ */
+template < class TPixel, class TInternalPixel >
+void
+ImageSeriesFileReader< VectorImage< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
+::AllocateListOfComponents ()
+{
+  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); i++ )
+  {
+    this->m_ImageFileReaderList->PushBack( ReaderType::New() );
+    this->m_OutputList->PushBack( OutputImageType::New() );
+    m_ExtractorList->PushBack( ExtractSelectionType::New() );
+  }
+}
+
+/**
+ * GenerateData specialised for VectorImages
+ */
+template < class TPixel, class TInternalPixel >
+void
+ImageSeriesFileReader< VectorImage< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
+::GenerateData( unsigned int idx )
+{
+  ReaderType * reader 
+    = static_cast<ReaderType*>( this->m_ImageFileReaderList->GetNthElement( idx ) );
+
+  reader->SetFileName( this->m_ListOfFileNames[ idx ] );
+
+  ExtractSelectionType * selection
+    = static_cast<ExtractSelectionType*>( this->m_ExtractorList->GetNthElement( idx ) );
+
+  selection->SetExtractionRegion( this->m_ListOfRegionSelection[ idx ] );
+
+	for ( std::vector<unsigned int>::iterator band = this->m_ListOfBandSelection[ idx ].begin();
+		band != this->m_ListOfBandSelection[ idx ].end();
+		++band )
+	{
+		selection->SetChannel( *band );
+	}
+
+  selection->SetInput( reader->GetOutput() );
+  selection->GraftOutput(  this->m_OutputList->GetNthElement( idx ) );
+  selection->Update();
+
+  this->m_OutputList->GetNthElement( idx )->Graft( selection->GetOutput() );
+}
+
 
 } // end of namespace otb
 
