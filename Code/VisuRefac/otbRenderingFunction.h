@@ -95,7 +95,7 @@ protected:
   /** Constructor */
   RenderingFunction()  {}
   /** Destructor */
-  ~RenderingFunction() {}
+  virtual ~RenderingFunction() {}
 
   /** Extrema values */
   ExtremaVectorType m_Minimum;
