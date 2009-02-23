@@ -105,7 +105,7 @@ public:
 
 protected:
   /** Constructor */
-  RenderingFunction()  {}
+  RenderingFunction() : m_Minimum(), m_Maximum()  {}
   /** Destructor */
   virtual ~RenderingFunction() {}
 
