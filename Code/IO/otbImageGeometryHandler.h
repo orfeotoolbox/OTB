@@ -27,6 +27,7 @@
 #include "itkExceptionObject.h"
 #include "itkMacro.h"
 #include "itkObject.h"
+#include "itkObjectFactory.h"
 
 /**
  * \class ImageGeometryHandler
@@ -46,15 +47,8 @@ public :
   typedef itk::SmartPointer<Self>                    Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
 
-  static Pointer New()
-  {
-    Pointer n = new Self;
-    n->UnRegister();
-    return n;
-  }
-
   itkTypeMacro( ImageGeometryHandler, Object);
-
+  itkNewMacro(Self);
 
   /** Open image from filename*/
   void SetFileName(char *src);
