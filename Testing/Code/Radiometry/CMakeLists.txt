@@ -79,6 +79,16 @@ ADD_TEST(raTvMSAVI2_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_T
 	    3 4
 	)
 
+ADD_TEST(raTvTSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
+  --compare-image ${EPSILON}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
+                    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
+        otbMultiChannelRAndNIRVegetationIndexImageFilter
+        TSAVI
+        ${INPUTDATA}/verySmallFSATSW.tif
+        ${TEMP}/raMultiChannelRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif 
+        3 4
+)
+
 # -------            IPVI MultiChannelRAndNIRVegetationIndexImageFilter   ------------------------------
 ADD_TEST(raTvIPVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
  --compare-image ${EPSILON}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_IPVI_qb_RoadExtract.tif
@@ -610,6 +620,16 @@ ADD_TEST(raTvGEMI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}
         ${TEMP}/raRAndNIRVegetationIndex_GEMI_verySmallFSATSWcRcNir.tif
 )
 
+ADD_TEST(raTvTSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}  
+  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
+                    ${TEMP}/raRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
+        otbRAndNIRVegetationIndexImageFilter
+        TSAVI
+        ${INPUTDATA}/verySmallFSATSW_r.tif
+        ${INPUTDATA}/verySmallFSATSW_nir.tif
+        ${TEMP}/raRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
+)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS6 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -629,9 +649,9 @@ ADD_TEST(raTvPVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS6}
         PVI
         0.7
         0.9
-    ${INPUTDATA}/verySmallFSATSW_r.tif
-    ${INPUTDATA}/verySmallFSATSW_nir.tif
-    ${TEMP}/raRAndNIRVegetationIndex_PVI_verySmallFSATSWcRcNir.tif 
+        ${INPUTDATA}/verySmallFSATSW_r.tif
+        ${INPUTDATA}/verySmallFSATSW_nir.tif
+        ${TEMP}/raRAndNIRVegetationIndex_PVI_verySmallFSATSWcRcNir.tif 
 )
 
 ADD_TEST(raTvPVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS6}  
@@ -641,31 +661,12 @@ ADD_TEST(raTvPVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TEST
         PVI
         0.7
         0.9
-    ${INPUTDATA}/verySmallFSATSW.tif
-    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_PVI_verySmallFSATSWcRcNir.tif 
-    3 4
+        ${INPUTDATA}/verySmallFSATSW.tif
+        ${TEMP}/raMultiChannelRAndNIRVegetationIndex_PVI_verySmallFSATSWcRcNir.tif 
+        3 4
 )
 
 
-ADD_TEST(raTvTSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS6}  
-  --compare-image ${EPSILON}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
-                    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
-        otbMultiChannelRAndNIRVegetationIndexImageFilter
-        TSAVI
-    ${INPUTDATA}/verySmallFSATSW.tif
-    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif 
-    3 4
-)
-
-ADD_TEST(raTvTSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS6}  
-  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
-                    ${TEMP}/raRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
-        otbRAndNIRVegetationIndexImageFilter
-        TSAVI
-    ${INPUTDATA}/verySmallFSATSW_r.tif
-    ${INPUTDATA}/verySmallFSATSW_nir.tif
-    ${TEMP}/raRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
-)
 
 # -------            AVI RAndGAndNIRVegetationIndexImageFilter   ------------------------------
 ADD_TEST(raTvAVI_RAndGAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS6}
