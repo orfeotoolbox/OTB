@@ -96,6 +96,9 @@ TARGET_LINK_LIBRARIES(TextureExample OTBIO OTBCommon OTBFeatureExtraction ITKCom
 ADD_EXECUTABLE(EdgeDensityExample EdgeDensityExample.cxx)
 TARGET_LINK_LIBRARIES(EdgeDensityExample OTBIO OTBCommon OTBBasicFilters ITKCommon ITKBasicFilters)
 
+ADD_EXECUTABLE(SIFTDensityExample SIFTDensityExample.cxx)
+TARGET_LINK_LIBRARIES(SIFTDensityExample OTBIO OTBCommon OTBBasicFilters ITKCommon ITKBasicFilters)
+
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
