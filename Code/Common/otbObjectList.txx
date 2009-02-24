@@ -166,7 +166,29 @@ ObjectList<TObject>
   m_InternalContainer.clear();
 }
 
+/**
+ * Insert an element
+ */
+template <class TObject>
+typename ObjectList<TObject>::Iterator
+ObjectList<TObject>
+::Insert(Iterator position, ObjectPointerType element)
+{
+  Iterator iter ( m_InternalContainer.insert( position.GetIter(), element ) );
+  return iter;
+}
 
+/**
+ * Insert an element
+ */
+template <class TObject>
+typename ObjectList<TObject>::ReverseIterator
+ObjectList<TObject>
+::Insert(ReverseIterator position, ObjectPointerType element)
+{
+  ReverseIterator iter ( m_InternalContainer.insert( position.GetIter(), element ) );
+  return iter;
+}
 
 /**
  * Get an Iterator that points to the beginning of the container.

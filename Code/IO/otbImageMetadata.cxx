@@ -25,19 +25,19 @@
 
 #include "itkMetaDataObject.h"
 
-#include "otbImageBase.h"
+#include "otbImageMetadata.h"
 #include "otbImageKeywordlist.h"
 
 namespace otb
 {
 
 
-ImageBase::ImageBase()
+ImageMetadata::ImageMetadata()
 {
 
 }
 
-std::string ImageBase::GetProjectionRef( const MetaDataDictionaryType & dict ) const
+std::string ImageMetadata::GetProjectionRef( const MetaDataDictionaryType & dict ) const
 {
   std::string metadata;
 
@@ -50,7 +50,7 @@ std::string ImageBase::GetProjectionRef( const MetaDataDictionaryType & dict ) c
     return ("");
 }
 
-std::string ImageBase::GetGCPProjection( const MetaDataDictionaryType & dict ) const
+std::string ImageMetadata::GetGCPProjection( const MetaDataDictionaryType & dict ) const
 {
   std::string metadata;
 
@@ -63,7 +63,7 @@ std::string ImageBase::GetGCPProjection( const MetaDataDictionaryType & dict ) c
     return ("");
 }
 
-unsigned int ImageBase::GetGCPCount( const MetaDataDictionaryType & dict) const
+unsigned int ImageMetadata::GetGCPCount( const MetaDataDictionaryType & dict) const
 {
   unsigned int GCPCount = 0;
 
@@ -76,7 +76,7 @@ unsigned int ImageBase::GetGCPCount( const MetaDataDictionaryType & dict) const
 }
 
 
-OTB_GCP & ImageBase::GetGCPs( MetaDataDictionaryType & dict, unsigned int GCPnum )
+OTB_GCP & ImageMetadata::GetGCPs( MetaDataDictionaryType & dict, unsigned int GCPnum )
 {
   std::string key;
 
@@ -93,7 +93,7 @@ OTB_GCP & ImageBase::GetGCPs( MetaDataDictionaryType & dict, unsigned int GCPnum
 
 }
 
-std::string ImageBase::GetGCPId( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const
+std::string ImageMetadata::GetGCPId( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const
 {
   std::string key;
 
@@ -111,7 +111,7 @@ std::string ImageBase::GetGCPId( const MetaDataDictionaryType & dict, unsigned i
     return ("");
 }
 
-std::string ImageBase::GetGCPInfo( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const
+std::string ImageMetadata::GetGCPInfo( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const
 {
   std::string key;
 
@@ -129,7 +129,7 @@ std::string ImageBase::GetGCPInfo( const MetaDataDictionaryType & dict, unsigned
     return ("");
 }
 
-double ImageBase::GetGCPRow( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const
+double ImageMetadata::GetGCPRow( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const
 {
   std::string key;
 
@@ -148,7 +148,7 @@ double ImageBase::GetGCPRow( const MetaDataDictionaryType & dict, unsigned int G
     return (0);
 }
 
-double ImageBase::GetGCPCol( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const
+double ImageMetadata::GetGCPCol( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const
 {
   std::string key;
 
@@ -167,7 +167,7 @@ double ImageBase::GetGCPCol( const MetaDataDictionaryType & dict, unsigned int G
     return (0);
 }
 
-double ImageBase::GetGCPX( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const
+double ImageMetadata::GetGCPX( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const
 {
   std::string key;
 
@@ -185,7 +185,7 @@ double ImageBase::GetGCPX( const MetaDataDictionaryType & dict, unsigned int GCP
     return (0);
 }
 
-double ImageBase::GetGCPY( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const
+double ImageMetadata::GetGCPY( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const
 {
   std::string key;
 
@@ -203,7 +203,7 @@ double ImageBase::GetGCPY( const MetaDataDictionaryType & dict, unsigned int GCP
     return (0);
 }
 
-double ImageBase::GetGCPZ( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const
+double ImageMetadata::GetGCPZ( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const
 {
   std::string key;
 
@@ -221,7 +221,7 @@ double ImageBase::GetGCPZ( const MetaDataDictionaryType & dict, unsigned int GCP
     return (0);
 }
 
-ImageBase::VectorType ImageBase::GetGeoTransform( const MetaDataDictionaryType & dict ) const
+ImageMetadata::VectorType ImageMetadata::GetGeoTransform( const MetaDataDictionaryType & dict ) const
 {
   VectorType adfGeoTransform;
 
@@ -232,7 +232,7 @@ ImageBase::VectorType ImageBase::GetGeoTransform( const MetaDataDictionaryType &
   return ( adfGeoTransform );
 }
 
-ImageBase::VectorType ImageBase::GetUpperLeftCorner( const MetaDataDictionaryType & dict ) const
+ImageMetadata::VectorType ImageMetadata::GetUpperLeftCorner( const MetaDataDictionaryType & dict ) const
 {
   VectorType UpperLeftCorner;
 
@@ -243,7 +243,7 @@ ImageBase::VectorType ImageBase::GetUpperLeftCorner( const MetaDataDictionaryTyp
   return ( UpperLeftCorner );
 }
 
-ImageBase::VectorType ImageBase::GetUpperRightCorner( const MetaDataDictionaryType & dict ) const
+ImageMetadata::VectorType ImageMetadata::GetUpperRightCorner( const MetaDataDictionaryType & dict ) const
 {
   VectorType UpperRightCorner;
 
@@ -254,7 +254,7 @@ ImageBase::VectorType ImageBase::GetUpperRightCorner( const MetaDataDictionaryTy
   return ( UpperRightCorner );
 }
 
-ImageBase::VectorType ImageBase::GetLowerLeftCorner( const MetaDataDictionaryType & dict ) const
+ImageMetadata::VectorType ImageMetadata::GetLowerLeftCorner( const MetaDataDictionaryType & dict ) const
 {
   VectorType LowerLeftCorner;
 
@@ -265,7 +265,7 @@ ImageBase::VectorType ImageBase::GetLowerLeftCorner( const MetaDataDictionaryTyp
   return ( LowerLeftCorner );
 }
 
-ImageBase::VectorType ImageBase::GetLowerRightCorner( const MetaDataDictionaryType & dict ) const
+ImageMetadata::VectorType ImageMetadata::GetLowerRightCorner( const MetaDataDictionaryType & dict ) const
 {
   VectorType LowerRightCorner;
 
@@ -276,7 +276,7 @@ ImageBase::VectorType ImageBase::GetLowerRightCorner( const MetaDataDictionaryTy
   return ( LowerRightCorner );
 }
 
-ImageBase::ImageKeywordlistType ImageBase::GetImageKeywordlist( MetaDataDictionaryType & dict )
+ImageMetadata::ImageKeywordlistType ImageMetadata::GetImageKeywordlist( MetaDataDictionaryType & dict )
 {
   ImageKeywordlistType ImageKeywordlist;
 
@@ -287,7 +287,7 @@ ImageBase::ImageKeywordlistType ImageBase::GetImageKeywordlist( MetaDataDictiona
   return ( ImageKeywordlist );
 }
 
-const ImageBase::ImageKeywordlistType ImageBase::GetImageKeywordlist(const MetaDataDictionaryType & dict ) const
+const ImageMetadata::ImageKeywordlistType ImageMetadata::GetImageKeywordlist(const MetaDataDictionaryType & dict ) const
 {
   ImageKeywordlistType ImageKeywordlist;
 
@@ -299,7 +299,7 @@ const ImageBase::ImageKeywordlistType ImageBase::GetImageKeywordlist(const MetaD
 }
 
 void
-ImageBase::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const
+ImageMetadata::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const
 {
 
   std::vector<std::string> keys = dict.GetKeys();

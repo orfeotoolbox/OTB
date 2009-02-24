@@ -68,7 +68,7 @@ public:
 
   typedef TFilter FilterType;
   typedef typename FilterType::Pointer FilterPointerType;
-  typedef List< FilterType > FilterListType;
+  typedef ObjectList< FilterType > FilterListType;
   typedef typename FilterListType::Pointer FilterListPointerType;
 
   itkGetObjectMacro(FilterList,FilterListType);

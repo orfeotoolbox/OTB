@@ -20,6 +20,7 @@
 
 #include "otbBinaryImageToDensityImageFilter.h"
 #include "itkImageRegionIterator.h"
+#include "itkImageRegionConstIterator.h"
 #include "otbMacro.h"
 
 namespace otb
@@ -53,7 +54,7 @@ BinaryImageToDensityImageFilter<TInputImage, TOutputImage, TCountFunction>
 
   m_CountFunction->SetInputImage(input);
 
-  itk::ImageRegionIterator<InputImageType>   it(input,outputRegionForThread );
+  itk::ImageRegionConstIterator<InputImageType>   it(input,outputRegionForThread );
   itk::ImageRegionIterator<OutputImageType>   itOut(output,outputRegionForThread );
   
   it.GoToBegin();
