@@ -395,7 +395,7 @@ ADD_TEST(feTvLocalHoughDrawBis ${FEATUREEXTRACTION_TESTS5}
 ADD_TEST(feTuFillGapsFilterNew ${FEATUREEXTRACTION_TESTS5}
         otbFillGapsFilterNew)
 
-ADD_TEST(feTuFillGapsFilter ${FEATUREEXTRACTION_TESTS5}
+ADD_TEST(feTvFillGapsFilter ${FEATUREEXTRACTION_TESTS5}
 	  --compare-image ${EPSILON}
 	       ${BASELINE}/feTvFillGapfilter.png
                ${TEMP}/feTvFillGapfilter.png
@@ -1065,6 +1065,7 @@ ADD_TEST(feTvLineSegmentDetector ${FEATUREEXTRACTION_TESTS11}
     otbLineSegmentDetector
      ${INPUTDATA}/scene.png  #prison_toulouse.tif 
     ${TEMP}/feTvLineSegmentDetectorOutputImage.tif
+    1
 )
 
 # -------            otb::LineSpatialObjectListToRightAnglePointSetFilter   -------------
@@ -1088,6 +1089,17 @@ ADD_TEST(feTvLineSpatialObjectListToRightAnglePointSetFilterBySteps ${FEATUREEXT
     ${INPUTDATA}/prison_toulouse.tif
     ${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.txt
 )
+
+#ADD_TEST(feTvLineSpatialObjectListToRightAnglePointSetFilterOutputImage ${FEATUREEXTRACTION_TESTS11} 
+# --compare-ascii ${EPS}
+#	${BASELINE_FILES}/feTvLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.txt
+#	${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.txt
+#    otbLineSpatialObjectListToRightAnglePointSetFilterOutputImage
+#    ${INPUTDATA}/prison_toulouse.tif
+#    ${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.txt
+#    ${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterOutputImage.tif
+#)
+
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1782,6 +1794,7 @@ otbLineSegmentDetector.cxx
 otbLineSpatialObjectListToRightAnglePointSetFilterNew.cxx
 otbLineSpatialObjectListToRightAnglePointSetFilter.cxx
 otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.cxx
+#otbLineSpatialObjectListToRightAnglePointSetFilterOutputImage.cxx
 )
 SET(BasicFeatureExtraction_SRCS12
 otbTextureFunctorBase.cxx
