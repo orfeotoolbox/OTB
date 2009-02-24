@@ -165,7 +165,7 @@ int main(int argc, char* argv[] )
   // Software Guide : BeginLatex
   //
   // After that, we can pass the edge detector to the filter which
-  // will use it internally.
+  // will be used it internally.
   //
   // Software Guide : EndLatex
 
