@@ -245,7 +245,7 @@ IF(OTB_USE_VISU_GUI)
 
         # Option for internal/external FLTK
         OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." ON)
-        MARK_AS_ADVANCED(OTB_USE_EXTERNAL_FLTK)
+#         MARK_AS_ADVANCED(OTB_USE_EXTERNAL_FLTK)
         # Add an option to use or not use FLTK (http://www.fltk.org)
         IF(OTB_USE_EXTERNAL_FLTK)
 

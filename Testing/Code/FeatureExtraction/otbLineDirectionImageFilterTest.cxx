@@ -28,27 +28,46 @@
 
 int otbLineDirectionImageFilterTest(int argc, char * argv[])
 {
-  const unsigned int Dimension =2;
   typedef double PixelType;
-  typedef otb::Image<PixelType,Dimension>                           ImageType;
+  const unsigned int Dimension =2;
+
+  std::string inName            = argv[1];
+  std::string outName           = argv[2];
+  PixelType spectThresh         = atof(argv[3]);
+  unsigned int spatialThresh    = atoi(argv[4]);
+  unsigned int dirNb            = atoi(argv[5]);
+  unsigned int maxConsideration = atoi(argv[6]);
+  double alpha                  = atof(argv[7]);  
+
+
+  typedef otb::VectorImage<PixelType,Dimension>                           ImageType;
+  typedef ImageType::PixelType                                InputPixelType;
   typedef otb::VectorImage<PixelType,Dimension>                     VectorImageType;
   typedef otb::ImageFileReader<ImageType>                           ReaderType;
   //typedef otb::StreamingImageFileWriter<VectorImageType>            WriterType;
-typedef otb::ImageFileWriter<VectorImageType>            WriterType;
+  typedef otb::ImageFileWriter<VectorImageType>            WriterType;
   typedef otb::LineDirectionImageFilter<ImageType, VectorImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New(); 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  reader->SetFileName(argv[1]);
-  writer->SetFileName(argv[2]);
-  PixelType spectThresh = atof(argv[3]);
+
+
+
+  reader->SetFileName(inName);
+  reader->GenerateOutputInformation();
+  writer->SetFileName(outName);
+
+  InputPixelType spect;
+  // TO MODIFY
+  //spect.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
+  //spect.Fill(spectThresh);
   filter->SetSpectralThreshold(spectThresh);
-  unsigned int spatialThresh = atoi(argv[4]);
   filter->SetSpatialThreshold(spatialThresh);
-  filter->SetRatioMaxConsiderationNumber(atoi(argv[5]));
-  filter->SetAlpha(atof(argv[6]));
+  filter->SetNumberOfDirections(dirNb);
+  filter->SetRatioMaxConsiderationNumber(maxConsideration);
+  filter->SetAlpha(alpha);
   filter->SetInput( reader->GetOutput() );
   writer->SetInput( filter->GetOutput() );
 

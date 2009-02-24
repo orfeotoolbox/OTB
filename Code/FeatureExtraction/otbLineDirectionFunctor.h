@@ -38,10 +38,11 @@ class LineDirectionFunctor
 public:
   LineDirectionFunctor()
   {
-    m_SpatialThreshold = 5;
-    m_SpectralThreshold = 7;
+    m_SpatialThreshold = 100;
+    m_SpectralThreshold = 50;
     m_RatioMaxConsiderationNumber = 5;
-    m_Alpha = 0.5;
+    m_Alpha = 1;
+    this->SetNumberOfDirections(20); // set the step too
   };
 
   ~LineDirectionFunctor() {};
@@ -56,103 +57,103 @@ public:
   void SetSpectralThreshold( InternalPixelType thresh ){ m_SpectralThreshold=thresh; };
   void SetRatioMaxConsiderationNumber( unsigned int value ){ m_RatioMaxConsiderationNumber=value; };
   void SetAlpha( double alpha ){ m_Alpha=alpha; };
+  void SetNumberOfDirections( unsigned int D )
+    { 
+      m_NumberOfDirections = D;
+      m_DirectionStep = 2*M_PI/static_cast<double>(D);
+    };
+  void SetDirectionStep( double step ){ m_DirectionStep = step; };
   unsigned int GetSpatialThreshold(){ return m_SpatialThreshold; };
   InternalPixelType GetSpectralThreshold(){ return m_SpectralThreshold; };  
   unsigned int GetRatioMaxConsiderationNumber(){ return m_RatioMaxConsiderationNumber; }; 
   double  GetAlpha(){ return m_Alpha; }; 
+  unsigned int GetNumberOfDirections(){ return m_NumberOfDirections(); };
+
 
   inline TOutputValue operator()(const TIter& it)
   {
     double length = itk::NumericTraits<double>::NonpositiveMin();
     double width = itk::NumericTraits<double>::max();
     double sum = 0.;
-    std::vector<double> di;
+    std::vector<double> di(m_NumberOfDirections, 0.);
     std::vector<double> minSorted(m_RatioMaxConsiderationNumber, width);
     std::vector<double> maxSorted(m_RatioMaxConsiderationNumber, length);
-    std::vector<double> sti;
-    std::vector<unsigned int> lengthLine;
+    std::vector<double> sti(m_NumberOfDirections, 0.);
+    std::vector<unsigned int> lengthLine(m_NumberOfDirections, 0);
 
     std::vector<double>::iterator itVector;
     TOutputValue out;
     out.SetSize(6);
     out.Fill(0);
-    SizeType radius = it.GetRadius();
+    //std::vector<double> radius(2, static_cast<double>(it.GetRadius()[0]));
+    //radius[1] = static_cast<double>(it.GetRadius()[0]);
  
     OffsetType off;
     off.Fill(0);
     double SpatialThresholdDouble = static_cast<double>(m_SpatialThreshold);
+    double NumberOfDirectionsDouble = static_cast<double>(m_NumberOfDirections);
+    double dist = 0.;
+    double angle = 0.;
+    double sdiVal = 0.;
+    double sumWMean = 0.;
 
-    double D = 0; // nulber of directions. Porbablity false : diag, vert, hor...
-    for (int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
+    for( unsigned int d = 0; d<m_NumberOfDirections; d++ )
       {
-	off[0] = l;
-	double ll = vcl_pow(static_cast<double>(l), 2);
+	// Current angle direction
+	angle = m_Alpha*static_cast<double>(d);
 
-	// start at 0 because of the image walking
-	for (int k = 0; k <= static_cast<int>(radius[1]); k++ )
+	// last offset in the diraction respecting spatial threshold
+	off[0] = vcl_floor(SpatialThresholdDouble*vcl_cos( angle ) + 0.5);
+	off[1] = vcl_floor(SpatialThresholdDouble*vcl_sin( angle ) + 0.5);
+	// last indices in the diration respecting spectral threshold
+	OffsetType offEnd = this->FindLastOffset( it, off );
+	// computes distance = dist between the 2 segment point. One of them is the center pixel -> (0,0)
+  	dist = vcl_sqrt( vcl_pow(static_cast<double>(offEnd[0]), 2 ) + vcl_pow(static_cast<double>(offEnd[1]), 2 ) );
+
+	// for length computation
+	if( dist>length)
+	  length = dist;
+
+	// for width computation 
+	if( dist<width)
+	  width = dist;
+
+	// for PSI computation
+	sum += dist;
+
+	// for w-mean computation
+	sdiVal = this->ComputeSDi(it, offEnd);
+
+	// for Ratio computation
+	bool doo = false;
+	itVector = maxSorted.begin();
+	while( itVector != maxSorted.end() && doo==false )
 	  {
-	    if( k == 0 && l < 0 )
-	      {	
-		double val = 0;
-		double sdiVal = 1.;
-		double kk = vcl_pow(static_cast<double>(k), 2);
-		if( vcl_sqrt(ll + kk) < SpatialThresholdDouble )
-		  {
-		    off[1] = k;
-
-		    // check the spectral threshold
-		    bool isGood = this->isLineRespectSpectralThreshold(it, off);
-		    if (isGood == true)
-		      { 
-			val = vcl_sqrt( vcl_pow(static_cast<double>(it.GetCenterPixel()/*[0]*/)-static_cast<double>(it.GetPixel(off)/*[0]*/), 2 ) 
-					       + vcl_pow(static_cast<double>(it.GetCenterPixel()/*[1]*/)-static_cast<double>(it.GetPixel(off)/*[1]*/), 2 ) );
-		
-			// for length computation
-			if( val>length)
-			  length = val;
-			// for width computation 
-			if( val<width)
-			  width = val;
-			// for PSI computation
-			sum += val;
-			// for w-mean computation
-			sdiVal = this->ComputeSDi(it, off);
-			// for Ratio computation
-			bool doo = false;
-			itVector = maxSorted.begin();
-			while( itVector != maxSorted.end() && doo==false )
-			  {
-			    if( val>(*itVector) )
-			      {
-				maxSorted.insert(itVector, val);
-				maxSorted.pop_back();
-				doo=true;
-			      }
-			    ++itVector;
-			  }
-			doo = false;
-			itVector = minSorted.begin();
-			while( itVector != minSorted.end() && doo==false )
-			  {
-			    if( val<(*itVector) )
-			      {
-				minSorted.insert(itVector, val);
-				minSorted.pop_back();
-				doo=true;
-			      }
-			    ++itVector;
-			  }
-			//std::cout<<"CA C FAIT OU PAS"<<std::endl;
-		      }
-		    di.push_back(val);
-		    lengthLine.push_back(static_cast<unsigned int>(vcl_sqrt(ll + kk)-1));
-		    sti.push_back(sdiVal);
-		    D++;
-		  } // if( vcl_sqrt(vcl_pow(i, 2)+vcl_pow(i, 2)) < m_SpatialTreshold )
-	      
-	      }// if( j == 0 && i<0 )
-	  
-	  }// for (int j = 0; j<= radius[1]; j++ )
+	    if( dist>(*itVector) )
+	      {
+		maxSorted.insert(itVector, dist);
+		maxSorted.pop_back();
+		doo=true;
+	      }
+	    ++itVector;
+	  }
+	doo = false;
+	itVector = minSorted.begin();
+	while( itVector != minSorted.end() && doo==false )
+	  {
+	    if( dist<(*itVector) )
+	      {
+		minSorted.insert(itVector, dist);
+		minSorted.pop_back();
+		doo=true;
+	      }
+	    ++itVector;
+	  }
+	di[d] = dist;
+	lengthLine[d] = dist;//static_cast<unsigned int>( vcl_sqrt(vcl_pow(static_cast<double>(offEnd[0]), 2) + vcl_pow(static_cast<double>(offEnd[1]), 2)) );
+	sti[d] = sdiVal;
+	if(sdiVal!=0.)
+	  sumWMean += (m_Alpha*(dist-1)*dist/*lengthLine[n]*di[n]*/)/sdiVal;
       }
 
     /////// FILL OUTPUT
@@ -161,12 +162,9 @@ public:
     // width
     out[1] = width;
     // PSI
-    out[3] = sum/D;
+    out[2] = sum/NumberOfDirectionsDouble;
     // w-mean
-    double sumWMean = 0.;
-    for(unsigned int n=0; n<di.size(); n++)
-      sumWMean += (m_Alpha*lengthLine[n]*di[n])/sti[n];
-    out[4] = sumWMean/D;
+    out[3] = sumWMean/NumberOfDirectionsDouble;
     // ratio
     double sumMin = 0;
     double sumMax = 0;
@@ -180,37 +178,64 @@ public:
     else if (sumMax == 0. && sumMin == 0.)
       out[4] = 1.;
     
-
     // SD
     double sumPSI = 0;
     for(unsigned int n=0; n<di.size(); n++)
       sumPSI += vcl_pow(di[n] - out[3] , 2);
-    out[5] = vcl_sqrt(sumPSI)/(D-1);
+    out[5] = vcl_sqrt(sumPSI)/(NumberOfDirectionsDouble-1.);
 
    
     return out;
 
   }
-  
-  /** checks spectral threshold condition */
-  bool isLineRespectSpectralThreshold( const TIter & it, const OffsetType & stopOffset )
-    {
+
+
+  /** Checks spectral threshold condition 
+   *  the last point in the directiuon is the first that doesn't 
+   *  respect the spectral condition.
+   */
+  OffsetType FindLastOffset( const TIter & it, const OffsetType & stopOffset )
+    {	
       bool res = true;
       OffsetType currentOff;
       currentOff.Fill(0);
-      currentOff[0]++;
-      double slop = static_cast<double>(stopOffset[1] / static_cast<double>(stopOffset[0]) );
-      while( currentOff[0]<=stopOffset[0] && currentOff[1]<=stopOffset[1] && res == true)
+      int signX = 1;
+      if(stopOffset[0]<0)
+	signX = -1;
+      int signY = 1;
+      if(stopOffset[1]<0)
+	signY = -1;
+
+      currentOff[0]=signX;
+      double slop = 0.;
+      if(stopOffset[0]!=0)
+	slop = static_cast<double>(stopOffset[1] / static_cast<double>(stopOffset[0]) );
+
+      bool isInside = true;
+      while( isInside == true && res == true)	
 	{
 	  // get the nearest point : Bresenham algo
-	  currentOff[1] = static_cast<int>( vcl_floor( slop*static_cast<double>(currentOff[0]) + 0.5 ));
-	  if( vcl_abs(it.GetPixel(currentOff)-it.GetCenterPixel()) >= m_SpectralThreshold )
-	    res = false;
-	  currentOff[0]++;
+	  if(stopOffset[0]!=0)
+	    currentOff[1] = static_cast<int>( vcl_floor( slop*static_cast<double>(currentOff[0]) + 0.5 ));
+	  else
+	    currentOff[1] += signY;
+
+	  if( vcl_abs(it.GetPixel(currentOff)[0]-it.GetCenterPixel()[0]) > m_SpectralThreshold )
+	    {
+	      res = false;
+	    }
+	  else
+	    currentOff[0]+=signX;
+       
+	  if( signX*currentOff[0]>signX*stopOffset[0] && stopOffset[0]!=0)
+	    isInside = false;
+	  else if( signY*currentOff[1]>signY*stopOffset[1] && stopOffset[1] != 0 )
+	    isInside = false;
 	}
-      return res;
+
+      return currentOff;
     }
-  
+
 
   /** Computes SD in the ith direction */
   double ComputeSDi( const TIter & it, const OffsetType & stopOffset)
@@ -219,53 +244,84 @@ public:
       bool canGo = true;
       OffsetType currentOff;
       currentOff.Fill(0);
-      currentOff[0]++;
       unsigned int nbElt = 0;
-      double mean = 0;
-      double slop = static_cast<double>(stopOffset[1] / static_cast<double>(stopOffset[0]) );
+      double mean = 0.;
+      double slop = 0.;
+      if(stopOffset[0]!=0)
+	slop = static_cast<double>(stopOffset[1] / static_cast<double>(stopOffset[0]) );
+      
+      int signX = 1;
+      if(stopOffset[0]<0)
+	signX = -1;
+      int signY = 1;
+      if(stopOffset[1]<0)
+	signY = -1;
+      currentOff[0]=signX;
+
+      bool isInside = true;
       // First compute mean
-      while( currentOff[0]<=stopOffset[0] && currentOff[1]<=stopOffset[1] && canGo == true)
+      while( isInside == true && canGo == true )
 	{
 	  // get the nearest point : Bresenham algo
-	  currentOff[1] = static_cast<int>( vcl_floor( slop*static_cast<double>(currentOff[0]) + 0.5 ));
-	  if( vcl_abs(it.GetPixel(currentOff)-it.GetCenterPixel()) >= m_SpectralThreshold )
-	    {
-	      mean = 0;
-	      canGo = false;
-	    }
+	  if(stopOffset[0]!=0)
+	    currentOff[1] = static_cast<int>( vcl_floor( slop*static_cast<double>(currentOff[0]) + 0.5 ));
 	  else
-	    {
-	      mean += static_cast<double>(it.GetPixel(currentOff));
-	    }
-	  currentOff[0]++;
+	    currentOff[1]+=signY;
+ 
+	  mean += static_cast<double>(it.GetPixel(currentOff)[0]);
 	  nbElt++;
+
+	  if( vcl_abs(it.GetPixel(currentOff)[0]-it.GetCenterPixel()[0]) >= m_SpectralThreshold )
+	      canGo = false;
+	  else
+	    currentOff[0]+=signX;
+ 
+	  if( signX*currentOff[0]>signX*stopOffset[0] && stopOffset[0]!=0)
+	    isInside = false;
+	  else if( signY*currentOff[1]>signY*stopOffset[1] && stopOffset[1] != 0 )
+	    isInside = false;
 	}
       
       mean /= static_cast<double>(nbElt);
-      
-      while( currentOff[0]<=stopOffset[0] && currentOff[1]<=stopOffset[1] && canGo == true)
+      currentOff[0] = signX;
+      currentOff[1] = 0;
+      isInside = true;      
+
+      while( isInside == true && canGo == true )
 	{
 	  // get the nearest point : Bresenham algo
-	  currentOff[1] = static_cast<int>( vcl_floor( slop*static_cast<double>(currentOff[0]) + 0.5 ));
-	  if( vcl_abs(it.GetPixel(currentOff)-it.GetCenterPixel()) >= m_SpectralThreshold )
-	    {
-	      SDi = 0;
-	      canGo = false;
-	    }
+	  if(stopOffset[0]!=0)
+	    currentOff[1] = static_cast<int>( vcl_floor( slop*static_cast<double>(currentOff[0]) + 0.5 ));
 	  else
-	    {
-	      SDi += vcl_pow((static_cast<double>(it.GetPixel(currentOff)) - mean), 2);
-	    }
-	  currentOff[0]++;
+	    currentOff[1]+=signY;
+	  SDi += vcl_pow((static_cast<double>(it.GetPixel(currentOff)[0]) - mean), 2);
+	  if( vcl_abs(it.GetPixel(currentOff)[0]-it.GetCenterPixel()[0]) >= m_SpectralThreshold )
+	      canGo = false;
+	  else
+	    currentOff[0]+=signX;
+
+	       
+	  if( signX*currentOff[0]>signX*stopOffset[0] && stopOffset[0]!=0)
+	    isInside = false;
+	  else if( signY*currentOff[1]>signY*stopOffset[1] && stopOffset[1] != 0 )
+	    isInside = false;
 	}
       return vcl_sqrt(SDi);
     }
 
 protected:
+  /** spectral threshold conditon*/
   InternalPixelType m_SpectralThreshold;
+  /** spatial threshold condition */
   unsigned int m_SpatialThreshold;
+  /** Max nulber of min and considered for Ration computation */
   unsigned int m_RatioMaxConsiderationNumber;
+  /** constant to adjust w-mean values */
   double m_Alpha;
+  /** Number of direction considered */
+  unsigned int m_NumberOfDirections;
+  /** Angular step between 2 directions (between  and 2*pi). */
+  double m_DirectionStep;
 };
 
 } // end namespace functor
