@@ -179,7 +179,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
  double slope         =  lengthSegment/(  (*indexToCrop)[0]  - (*otherIndex)[0]);
  double origin        =  (*otherIndex)[1] - (slope * (*otherIndex)[0]);
 
- (*indexToCrop)[0] = size[0]-1;
+ (*indexToCrop)[0] = static_cast<unsigned int>(size[0]-1);
  (*indexToCrop)[1] = static_cast<unsigned int>(slope *(*indexToCrop)[0] + origin +0.5) ;
 }
 
@@ -197,7 +197,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
   typename OutputImageRegionType::SizeType  size  = outputRegionForThread->GetSize();
   typename OutputImageRegionType::IndexType start = outputRegionForThread->GetIndex();
 
-  return (*indexToCrop)[1] < start[1];
+  return (*indexToCrop)[1] < static_cast<unsigned int>(start[1]);
 }
 
 /**
