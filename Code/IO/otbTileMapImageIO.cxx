@@ -34,7 +34,6 @@
 #include "otbTileMapImageIO.h"
 #include "otbMacro.h"
 #include "otbSystem.h"
-#include "otbImageBase.h"
 
 #include "itkMetaDataObject.h"
 #include "itkPNGImageIO.h"
