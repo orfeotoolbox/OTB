@@ -94,12 +94,31 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   virtual void ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId ) ;
+  
+  /**
+   * compute the intersection of the segment to draw with the region
+   */
+  virtual void CropSegment(OutputIndexType *indexToCrop,OutputIndexType *otherIndex, const OutputImageRegionType *outputRegionForThread )const;
+  
+  virtual void CropRightSegment(OutputIndexType *indexToCrop,OutputIndexType *otherIndex, const OutputImageRegionType *outputRegionForThread )const;
+  
+
+  virtual bool IsUpsideTheRegion(OutputIndexType *indexToCrop, const OutputImageRegionType *outputRegionForThread ) const;
+
+  virtual bool IsDownsideTheRegion(OutputIndexType *indexToCrop, const OutputImageRegionType *outputRegionForThread )const;
+  
+  virtual bool IsDownsideTheImage(OutputIndexType *indexToCrop )const;
+    
+  
+  virtual bool IsColumnOutsideOfTheRegion(OutputIndexType *indexToCheck, OutputIndexType *otherToCheck, const OutputImageRegionType *outputRegionForThread)const;
 
 private:
   DrawLineSpatialObjectListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   OutputPixelType       m_Value;
+  unsigned int          m_Length;
+  unsigned int          m_Width;
 
 };
 } // end namespace otb

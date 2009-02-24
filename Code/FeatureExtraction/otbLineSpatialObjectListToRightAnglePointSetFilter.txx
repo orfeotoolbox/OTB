@@ -162,17 +162,17 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
   unsigned int width = size[0];
   unsigned int length = size[1];
   
-  if(IndexBeginSrc[0] > width)  IndexBeginSrc[0] = width-1;
-  if(IndexBeginSrc[1] > length) IndexBeginSrc[1] = length-1;
+//   if(IndexBeginSrc[0] > width)  IndexBeginSrc[0] = width-1;
+//   if(IndexBeginSrc[1] > length) IndexBeginSrc[1] = length-1;
 
-  if(IndexEndSrc[0] > width)   IndexEndSrc[0] = width-1;
-  if(IndexEndSrc[1] > length)  IndexEndSrc[1] = length-1;
+//   if(IndexEndSrc[0] > width)   IndexEndSrc[0] = width-1;
+//   if(IndexEndSrc[1] > length)  IndexEndSrc[1] = length-1;
 
-  if(IndexBeginSrc[0] <0) IndexBeginSrc[0] = 0;
-  if(IndexBeginSrc[1] <0) IndexBeginSrc[1] = 0;
+//   if(IndexBeginSrc[0] <0) IndexBeginSrc[0] = 0;
+//   if(IndexBeginSrc[1] <0) IndexBeginSrc[1] = 0;
 
-  if(IndexEndSrc[0]<0)   IndexEndSrc[0] = 0;
-  if(IndexEndSrc[1]<0)   IndexEndSrc[1] = 0;
+//   if(IndexEndSrc[0]<0)   IndexEndSrc[0] = 0;
+//   if(IndexEndSrc[1]<0)   IndexEndSrc[1] = 0;
 
  
   /** Extract Indexes from the Dst line to instantiate the line iterator*/
@@ -288,7 +288,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
   /** Extract Indexes from the Dst line to instantiate the line iterator*/
   typename LineType::PointListType &pointsListDst = lineDst->GetPoints();
   typename LineType::PointListType::const_iterator itPointsDst = pointsListDst.begin();
-
+  
   float Xq1 = (*itPointsDst).GetPosition()[0];  //xq1
   float Yq1 = (*itPointsDst).GetPosition()[1];  //yq1
   ++itPointsDst;

@@ -126,9 +126,9 @@ LineSegmentDetector<TInputImage,TPrecision >
   /** 
    *  Compute the minimum region size 
    */
-  float logNT = 5.*(vcl_log10(static_cast<float>(m_Width)) + vcl_log10(static_cast<float>(m_Length)))/2.;
-  float log1_p = vcl_log10(m_DirectionsAllowed);
-  float rapport = logNT/log1_p;
+  double logNT = 5.*(vcl_log10(static_cast<double>(m_Width)) + vcl_log10(static_cast<double>(m_Length)))/2.;
+  double log1_p = vcl_log10(m_DirectionsAllowed);
+  double rapport = logNT/log1_p;
   m_MinimumRegionSize = -1*static_cast<unsigned  int>(rapport);
 
   
@@ -241,7 +241,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   RectangleListTypeIterator            itRec = m_RectangleList.begin();
   while(itRec != m_RectangleList.end())
     {
-      float NFA = this->ImproveRectangle(&(*itRec) );
+      double NFA = this->ImproveRectangle(&(*itRec) );
       /**
        * Here we start building the OUTPUT :a LineSpatialObjectList. 
        */
@@ -251,9 +251,9 @@ LineSegmentDetector<TInputImage, TPrecision>
 	  PointListType pointList;
 	  PointType     point;
 	  
-	  point.SetPosition((*itRec)[0],(*itRec)[1]);
+	  point.SetPosition(static_cast<TPrecision>((*itRec)[0]),static_cast<TPrecision>((*itRec)[1]));
 	  pointList.push_back(point);
-	  point.SetPosition((*itRec)[2],(*itRec)[3]);
+	  point.SetPosition(static_cast<TPrecision>((*itRec)[2]),static_cast<TPrecision>((*itRec)[3]));
 	  pointList.push_back(point);
 	  
 	  typename LineSpatialObjectType::Pointer line = LineSpatialObjectType::New();
@@ -295,17 +295,17 @@ LineSegmentDetector<TInputImage, TPrecision>
  * the components of the rectangle
  */
 template <class TInputImage, class TPrecision  >
-float
+double
 LineSegmentDetector<TInputImage, TPrecision>
 :: ImproveRectangle(RectangleType  * rec)
 {
   int n = 0;
-  float nfa_new;
-  float delta = 0.5;
-  float delta_2 = delta / 2.0;
+  double nfa_new;
+  double delta = 0.5;
+  double delta_2 = delta / 2.0;
   RectangleType r;
 
-  float NFA = this->ComputeRectNFA(*rec);
+  double NFA = this->ComputeRectNFA(*rec);
   
   if( NFA > 0. ) return NFA;
  
@@ -470,12 +470,12 @@ LineSegmentDetector<TInputImage, TPrecision>
   IndexVectorType                                 reg;
 
   /** Angle of the region*/
-  float regionAngle = 0;
+  double regionAngle = 0;
   
   /** Add the first point to the region */
   reg.push_back(index);
-  float sumX = 0.;
-  float sumY = 0.;
+  double sumX = 0.;
+  double sumY = 0.;
   
   /** 
    * Loop for searching regions 
@@ -492,7 +492,7 @@ LineSegmentDetector<TInputImage, TPrecision>
       while(s < neighSize )
 	{
 	  InputIndexType NeighIndex = itNeigh.GetIndex(s);
-	  float angleComp =   itNeighDir.GetPixel(s);
+	  double angleComp =   itNeighDir.GetPixel(s);
 
 	  if( !this->IsUsed(NeighIndex) && this->IsAligned(angleComp, regionAngle, m_Prec) )
 	    {
@@ -521,9 +521,9 @@ LineSegmentDetector<TInputImage, TPrecision>
 template <class TInputImage, class TPrecision  >
 bool
 LineSegmentDetector<TInputImage, TPrecision>
-::IsAligned(float Angle, float regionAngle, float prec)
+::IsAligned(double Angle, double regionAngle, double prec)
 {
-  float diff = Angle - regionAngle;
+  double diff = Angle - regionAngle;
   
   if( diff < 0.0 ) diff = -diff;
   if( diff > 1.5*M_PI )
@@ -542,12 +542,12 @@ LineSegmentDetector<TInputImage, TPrecision>
 template <class TInputImage, class TPrecision  >
 void
 LineSegmentDetector<TInputImage, TPrecision>
-::Region2Rect(IndexVectorType  region , float angleRegion)
+::Region2Rect(IndexVectorType  region , double angleRegion)
 {
   /** Local Variables*/
-  float weight = 0.,sumWeight = 0.; 
-  float  x = 0., y = 0.;
-  float l_min = 0., l_max = 0.,l =0., w=0. , w_min = 0. , w_max =0.;
+  double weight = 0.,sumWeight = 0.; 
+  double  x = 0., y = 0.;
+  double l_min = 0., l_max = 0.,l =0., w=0. , w_min = 0. , w_max =0.;
   
   /** Neighborhooding again*/
   typedef itk::ConstNeighborhoodIterator<InputImageType>  NeighborhoodIteratorType;
@@ -562,8 +562,8 @@ LineSegmentDetector<TInputImage, TPrecision>
     {
       itNeigh.SetLocation(*it);
       weight = *itNeigh.GetCenterValue(); 
-      x += static_cast<float>((*it)[0])* weight;
-      y += static_cast<float>((*it)[1])* weight;
+      x += static_cast<double>((*it)[0])* weight;
+      y += static_cast<double>((*it)[1])* weight;
       sumWeight +=  weight;
       ++it;
     }
@@ -578,7 +578,7 @@ LineSegmentDetector<TInputImage, TPrecision>
     }
   
   /** Compute the orientation of the region*/
-  float theta = this->ComputeRegionOrientation(region , x , y , angleRegion); 
+  double theta = this->ComputeRegionOrientation(region , x , y , angleRegion); 
     
   /* Lenght & Width of the rectangle **/
   
@@ -588,16 +588,16 @@ LineSegmentDetector<TInputImage, TPrecision>
   MagnitudeVector sum_l( 2*Diagonal, itk::NumericTraits<MagnitudePixelType>::Zero);
   MagnitudeVector sum_w( 2*Diagonal, itk::NumericTraits<MagnitudePixelType>::Zero);
   
-  float dx = vcl_cos(theta);
-  float dy = vcl_sin(theta);
+  double dx = vcl_cos(theta);
+  double dy = vcl_sin(theta);
   
   it = region.begin();
   while(it != region.end())
     {
       itNeigh.SetLocation(*it);
       weight = *itNeigh.GetCenterValue(); 
-      l =  ( static_cast<float>((*it)[0]) - x )*dx + ( static_cast<float>((*it)[1]) - y )*dy;
-      w = -( static_cast<float>((*it)[0]) - x )*dy + ( static_cast<float>((*it)[1]) - y )*dx;
+      l =  ( static_cast<double>((*it)[0]) - x )*dx + ( static_cast<double>((*it)[1]) - y )*dy;
+      w = -( static_cast<double>((*it)[0]) - x )*dy + ( static_cast<double>((*it)[1]) - y )*dx;
       
       if(l<l_min) l_min = l;   if(l>l_max)  l_max = l;
       if(w<w_min) w_min = w;   if(w>w_max)  w_max = w;
@@ -610,28 +610,28 @@ LineSegmentDetector<TInputImage, TPrecision>
   
   /** Thresholdinq the width and the length*/
   
-  float sum_th = 0.01 * sumWeight; /* weight threshold for selecting region */
-  float s = 0.;
+  double sum_th = 0.01 * sumWeight; /* weight threshold for selecting region */
+  double s = 0.;
   int i = 0;
   
   for( s=0.0,i = static_cast<int>(l_min); s<sum_th && i<=static_cast<int>(l_max) ; i++) 
     s += sum_l[ Diagonal + i];
   
-  float lb = (static_cast<float>(i-1) - 0.5 );
+  double lb = (static_cast<double>(i-1) - 0.5 );
   
   for(s=0.0,i=static_cast<int>(l_max); s<sum_th && i>=static_cast<int>(l_min); i--) 
     s += sum_l[ Diagonal  + i];
-  float lf =  (static_cast<float>(i+1) + 0.5 ); 
+  double lf =  (static_cast<double>(i+1) + 0.5 ); 
 
   for(s=0.0,i=static_cast<int>(w_min); s<sum_th && i<=static_cast<int>(w_max); i++) 
     s += sum_w[ Diagonal + i];
   
-  float wr = (static_cast<float>(i-1) - 0.5);  
+  double wr = (static_cast<double>(i-1) - 0.5);  
 
   for(s=0.0,i=static_cast<int>(w_max); s<sum_th && i>=static_cast<int>(w_min); i--) 
     s += sum_w[Diagonal  + i];
   
-  float wl = (static_cast<float>(i+1) + 0.5 );  
+  double wl = (static_cast<double>(i+1) + 0.5 );  
 
 
   /** Finally store the rectangle in vector this way : 
@@ -665,16 +665,16 @@ LineSegmentDetector<TInputImage, TPrecision>
  */
 
 template <class TInputImage, class TPrecision  >
-float
+double
 LineSegmentDetector<TInputImage, TPrecision>
-::ComputeRegionOrientation(IndexVectorType  region , float x,float y  , float angleRegion) 
+::ComputeRegionOrientation(IndexVectorType  region , double x,double y  , double angleRegion) 
 {
 
-  float Ixx = 0.0;
-  float Iyy = 0.0;
-  float Ixy = 0.0;
-  float theta = 0.;
-  float weight = 0.,sum = 0.;
+  double Ixx = 0.0;
+  double Iyy = 0.0;
+  double Ixy = 0.0;
+  double theta = 0.;
+  double weight = 0.,sum = 0.;
   
   /** Neighborhooding again*/
   typedef itk::ConstNeighborhoodIterator<InputImageType>  NeighborhoodIteratorType;
@@ -689,8 +689,8 @@ LineSegmentDetector<TInputImage, TPrecision>
     {
       itNeigh.SetLocation(*it);
       weight = *itNeigh.GetCenterValue(); 
-      float Iyy2 = static_cast<float>((*it)[0]) - x;
-      float Ixx2 = static_cast<float>((*it)[1]) - y;
+      double Iyy2 = static_cast<double>((*it)[0]) - x;
+      double Ixx2 = static_cast<double>((*it)[1]) - y;
       
       Ixx += Ixx2*Ixx2*weight;
       Iyy += Iyy2*Iyy2*weight;
@@ -700,8 +700,8 @@ LineSegmentDetector<TInputImage, TPrecision>
     }
 
   /** using te itk Eigen analysis*/
-  typedef itk::Matrix<float , 2, 2>    MatrixType;
-  typedef std::vector<float >    MatrixEigenType;
+  typedef itk::Matrix<double , 2, 2>    MatrixType;
+  typedef std::vector<double >    MatrixEigenType;
   MatrixType Inertie, eigenVector;
   MatrixEigenType  eigenMatrix(2,0.);
   Inertie[1][1] =Ixx;
@@ -728,9 +728,9 @@ LineSegmentDetector<TInputImage, TPrecision>
  * Compute the difference betwenn 2 angles modulo 2_PI
  */
 template <class TInputImage, class TPrecision  >
-float 
+double 
 LineSegmentDetector<TInputImage, TPrecision>
-::angle_diff(float a, float b)
+::angle_diff(double a, double b)
 {
   a -= b;
   while( a <= -M_PI ) a += 2*M_PI;
@@ -744,16 +744,16 @@ LineSegmentDetector<TInputImage, TPrecision>
  * compute the number of false alarm of the rectangle 
  */
 template <class TInputImage, class TPrecision  >
-float 
+double 
 LineSegmentDetector<TInputImage, TPrecision>
 ::ComputeRectNFA(RectangleType  rec)
 {
   int NbAligned = 0;
-  float nfa_val = 0.;
+  double nfa_val = 0.;
   
-  float dx = vcl_cos(rec[5]);
-  float dy = vcl_sin(rec[5]);
-  float halfWidth = rec[4]/2;
+  double dx = vcl_cos(rec[5]);
+  double dy = vcl_sin(rec[5]);
+  double halfWidth = rec[4]/2;
   
   /** Determine the four corners of the rectangle*/
   /** Remember : 
@@ -785,7 +785,7 @@ LineSegmentDetector<TInputImage, TPrecision>
    */
   
   /**  Compute the number of points aligned */
-  typedef otb::Polygon<float>       PolygonType;
+  typedef otb::Polygon<double>       PolygonType;
   PolygonType::Pointer  rectangle = PolygonType::New();
 
   /** Fill the rectangle with the points*/
@@ -818,7 +818,7 @@ LineSegmentDetector<TInputImage, TPrecision>
     }
   
   /** Compute the NFA from the rectangle computed below*/
-  float logNT = 5.*(vcl_log10(static_cast<float>(m_Length)) + vcl_log10(static_cast<float>(m_Width)))/2.;
+  double logNT = 5.*(vcl_log10(static_cast<double>(m_Length)) + vcl_log10(static_cast<double>(m_Width)))/2.;
   
   nfa_val = NFA(pts,NbAligned ,m_DirectionsAllowed,logNT);
   
@@ -835,11 +835,11 @@ LineSegmentDetector<TInputImage, TPrecision>
    logNT - logarithm of Number of Tests
  */
 template <class TInputImage, class TPrecision  >
-float 
+double 
 LineSegmentDetector<TInputImage, TPrecision>
 ::NFA(int n, int k, double p, double logNT)
 {
-  float val;
+  double val;
 
   if(k==0) return -logNT;
 
@@ -876,12 +876,12 @@ LineSegmentDetector<TInputImage, TPrecision>
 /**************************************************************************************************************/
 /**************************************************************************************************************/
 template <class TInputImage, class TPrecision  >
-float 
+double 
 LineSegmentDetector<TInputImage, TPrecision>
-::betacf(float a, float b, float x)
+::betacf(double a, double b, double x)
 {
   int m,m2;
-  float aa,c,d,del,h,qab,qam,qap;
+  double aa,c,d,del,h,qab,qam,qap;
 
   qab=a+b;
   qap=a+1.0;
@@ -915,9 +915,9 @@ LineSegmentDetector<TInputImage, TPrecision>
 }
 
 template <class TInputImage, class TPrecision  >
-float 
+double 
 LineSegmentDetector<TInputImage, TPrecision>
-::gammln(float xx)
+::gammln(double xx)
 {
   double x,y,tmp,ser;
   static double cof[6]={76.18009172947146,-86.50532032941677,
@@ -934,13 +934,13 @@ LineSegmentDetector<TInputImage, TPrecision>
 }
 
 template <class TInputImage, class TPrecision  >
-float 
+double 
 LineSegmentDetector<TInputImage, TPrecision>
-::betai(float a, float b, float x)
+::betai(double a, double b, double x)
 {
-  float betacf(float a, float b, float x);
-  float gammln(float xx);
-  float bt;
+  double betacf(double a, double b, double x);
+  double gammln(double xx);
+  double bt;
 
   if (x == 0.0 || x == 1.0) bt=0.0;
   else
@@ -953,12 +953,12 @@ LineSegmentDetector<TInputImage, TPrecision>
 
 
 template <class TInputImage, class TPrecision  >
-float 
+double 
 LineSegmentDetector<TInputImage, TPrecision>
 ::factln(int n)
 {
-  float gammln(float xx);
-  static float a[101];
+  double gammln(double xx);
+  static double a[101];
 
   if (n <= 1) return 0.0;
   if (n <= 100) return a[n] ? a[n] : (a[n]=this->gammln(n+1.0));
