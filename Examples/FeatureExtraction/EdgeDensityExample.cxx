@@ -23,8 +23,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {suburb2.jpeg}
-//    OUTPUTS: {EdgeDensityOutput.png}, {PrettyEdgeDensityOutput.png}
-//    3 30 10 1.0 0.01
+//    OUTPUTS: {EdgeDensityOutput.tif}, {PrettyEdgeDensityOutput.png}
+//    7 50 10 1.0 0.01
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -171,6 +171,7 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   filter->SetDetector(cannyFilter);
+  filter->SetNeighborhoodRadius( radius );
 
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
