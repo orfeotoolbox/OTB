@@ -128,8 +128,8 @@ int main(int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::EdgeDensityImageFilter<ImageType, CannyDetectorType,
-                     CountFunctionType, ImageType> EdgeDensityFilterType;
+  typedef otb::EdgeDensityImageFilter<ImageType, ImageType, CannyDetectorType,
+                     CountFunctionType> EdgeDensityFilterType;
 
   /**Instancitation of an object*/
   EdgeDensityFilterType::Pointer    filter =      EdgeDensityFilterType::New();

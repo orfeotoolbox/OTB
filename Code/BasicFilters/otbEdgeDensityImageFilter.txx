@@ -26,8 +26,8 @@ namespace otb
 /**---------------------------------------------------------
  * Constructor
  ----------------------------------------------------------*/
-template <class TInputImage , class TEdgeDetector, class TDensityCount , class TOutputImage>
-EdgeDensityImageFilter<TInputImage, TEdgeDetector, TDensityCount, TOutputImage>
+template <class TInputImage , class TOutputImage, class TEdgeDetector, class TDensityCount>
+EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
 ::EdgeDensityImageFilter()
 {
   this->SetNumberOfRequiredInputs( 1 );
@@ -41,8 +41,8 @@ EdgeDensityImageFilter<TInputImage, TEdgeDetector, TDensityCount, TOutputImage>
 /*---------------------------------------------------------
  * Destructor.c
  ----------------------------------------------------------*/
-template <class TInputImage , class TEdgeDetector, class TDensityCount , class TOutputImage>
-EdgeDensityImageFilter<TInputImage, TEdgeDetector, TDensityCount, TOutputImage>
+template <class TInputImage , class TOutputImage, class TEdgeDetector, class TDensityCount>
+EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
 ::~EdgeDensityImageFilter()
 {}
 
@@ -53,9 +53,9 @@ EdgeDensityImageFilter<TInputImage, TEdgeDetector, TDensityCount, TOutputImage>
 /**
 * ThreadedGenerateData Performs the pixel-wise addition
 */
-template <class TInputImage , class TEdgeDetector, class TDensityCount , class TOutputImage>
+template <class TInputImage , class TOutputImage, class TEdgeDetector, class TDensityCount>
 void
-EdgeDensityImageFilter<TInputImage, TEdgeDetector, TDensityCount, TOutputImage>
+EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
 //::GenerateData()
 ::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId )
 {
@@ -82,9 +82,9 @@ EdgeDensityImageFilter<TInputImage, TEdgeDetector, TDensityCount, TOutputImage>
 /**
  * Set Detector
  */
-template <class TInputImage , class TEdgeDetector, class TDensityCount , class TOutputImage>
+template <class TInputImage , class TOutputImage, class TEdgeDetector, class TDensityCount>
 void
-EdgeDensityImageFilter<TInputImage, TEdgeDetector, TDensityCount, TOutputImage>
+EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
 ::SetDetector(DetectorType* detector)
 {
   m_Detector = detector;
@@ -94,10 +94,10 @@ EdgeDensityImageFilter<TInputImage, TEdgeDetector, TDensityCount, TOutputImage>
 /**
  * Get Detector
  */
-template <class TInputImage , class TEdgeDetector, class TDensityCount , class TOutputImage>
-typename EdgeDensityImageFilter<TInputImage, TEdgeDetector, TDensityCount, TOutputImage> 
+template <class TInputImage , class TOutputImage, class TEdgeDetector, class TDensityCount>
+typename EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount> 
 ::DetectorType *
-EdgeDensityImageFilter<TInputImage, TEdgeDetector, TDensityCount, TOutputImage> 
+EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount> 
 ::GetDetector()
 {
   return m_Detector;
@@ -108,9 +108,9 @@ EdgeDensityImageFilter<TInputImage, TEdgeDetector, TDensityCount, TOutputImage>
 /*----------------------------------------------------------------
   PrintSelf
   -----------------------------------------------------------------*/
-template <class TInputImage , class TEdgeDetector, class TDensityCount , class TOutputImage>
+template <class TInputImage , class TOutputImage, class TEdgeDetector, class TDensityCount>
 void
-EdgeDensityImageFilter<TInputImage, TEdgeDetector, TDensityCount, TOutputImage>  
+EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>  
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
