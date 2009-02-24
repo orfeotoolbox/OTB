@@ -15,7 +15,6 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #ifndef __otbLineDirectionImageFilter_h
 #define __otbLineDirectionImageFilter_h
 
@@ -108,28 +107,37 @@ public:
       return this->GetFunctor().GetNumberOfDirections(); 
     }; 
 
-
- virtual void BeforeThreadedGenerateData()
+  /** Texture selection accessors 
+   *  1: length
+   *  2: width
+   *  3: PSI
+   *  4: w-mean
+   *  5: ratio
+   *  6: SD
+   *  Set to 1 means the texture will be computed.
+   **/
+  void SetTextureStatus( unsigned int id, bool isSelected )
     {
-      Superclass::BeforeThreadedGenerateData();
-      if(this->GetSpatialThreshold() < this->GetRatioMaxConsiderationNumber())
+      if ( id<this->GetFunctor().GetSelectedTextures().size()+1 && id>0 )
 	{
-	  itkExceptionMacro(<<"Spatial Threshold ("<<this->GetSpatialThreshold()<<") is lower than Ration Max Consideration Number ("<<this->GetRatioMaxConsiderationNumber()<<") what is not allowed.");
+	  itkExceptionMacro(<<"Invalid texture index "<<id<<", must be in [1;"<<this->GetFunctor().GetSelectedTextures().size()+1<<"]");
+	}
+      else
+	{
+	  this->GetFunctor().SetTextureStatus( id-1, isSelected );
 	}
     }
 
- virtual void GenerateOutputInformation()
-    {
-      Superclass::GenerateOutputInformation();
-      this->GetOutput()->SetNumberOfComponentsPerPixel(6);
-    }
+  
+  virtual void BeforeThreadedGenerateData();
+  virtual void GenerateOutputInformation();
+
 
 protected:
-  LineDirectionImageFilter()
-    {
-      this->SetRadius(this->GetSpatialThreshold());
-    };
+  LineDirectionImageFilter();
   virtual ~LineDirectionImageFilter(){};
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
 
 private:
   LineDirectionImageFilter(const Self&); //purposely not implemented
@@ -139,5 +147,8 @@ private:
 
 } // end namespace otb
 
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbLineDirectionImageFilter.txx"
+#endif
 
 #endif

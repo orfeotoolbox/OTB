@@ -1634,9 +1634,9 @@ ADD_TEST(feTuLineDirectionImageFilterNew ${FEATUREEXTRACTION_TESTS14}
     otbLineDirectionImageFilterNew)
 
 ADD_TEST(feTvLineDirectionImageFilterTest ${FEATUREEXTRACTION_TESTS14} 
- #--compare-image ${EPS}
- #               ${BASELINE}/feTvLineDirectionImageFilterTest.tif
- #               ${TEMP}/feTvLineDirectionImageFilterTest.tif
+--compare-image 0 #${EPS}
+                ${BASELINE}/feTvLineDirectionImageFilterTest.tif
+                ${TEMP}/feTvLineDirectionImageFilterTest.tif
    otbLineDirectionImageFilterTest
     ${INPUTDATA}/poupees_sub_c1.png
     ${TEMP}/feTvLineDirectionImageFilterTest.tif

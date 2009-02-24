@@ -60,11 +60,11 @@ int otbLineDirectionImageFilterTest(int argc, char * argv[])
   writer->SetFileName(outName);
 
   
-  //filter->SetSpectralThreshold(spectThresh);
+  filter->SetSpectralThreshold(spectThresh);
   filter->SetSpatialThreshold(spatialThresh);
-  //filter->SetNumberOfDirections(dirNb);
-  //filter->SetRatioMaxConsiderationNumber(maxConsideration);
-  //filter->SetAlpha(alpha);
+  filter->SetNumberOfDirections(dirNb);
+  filter->SetRatioMaxConsiderationNumber(maxConsideration);
+  filter->SetAlpha(alpha);
   
   filter->SetInput( reader->GetOutput() );
   writer->SetInput( filter->GetOutput() );
