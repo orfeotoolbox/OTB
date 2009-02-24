@@ -15,41 +15,83 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbImage.h"
-#include "otbEdgeDensityImageFilter.h"
-#include "otbBinaryImageDensityFunction.h"
-#include "itkCannyEdgeDetectionImageFilter.h"
 
+#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "itkRescaleIntensityImageFilter.h"
 
+//  Software Guide : BeginCommandLineArgs
+//    INPUTS: {amst.png}
+//    OUTPUTS: {EdgeDensityOutput.png}, {PrettyEdgeDensityOutput.png}
+//    3 30 10 1.0 0.01
+//  Software Guide : EndCommandLineArgs
 
+// Software Guide : BeginLatex
+//
+// This example illustrates the use of the
+// \doxygen{otb}{EdgeDensityImageFilter}. 
+// This filter computes a local density of edges on an image and can
+// be useful to detect man made objects or urban areas, for
+// instance. The filter has been implemented in a generic way, so that
+// the way the edges are detected and the way their density is
+// computed can be chosen by the user.
+//
+// The first step required to use this filter is to include its header file.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet
+#include "otbEdgeDensityImageFilter.h"
+// Software Guide : EndCodeSnippet
+// Software Guide : BeginLatex
+//
+// We will also include the header files for the edge detector (a
+// Canny filter) and the density estimation (a simple count on a
+// binary image).
+//
+// The first step required to use this filter is to include its header file.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet
+
+#include "itkCannyEdgeDetectionImageFilter.h"
+#include "otbBinaryImageDensityFunction.h"
+// Software Guide : EndCodeSnippet
 
 int main(int argc, char* argv[] )
 {
 
   const  char *     infname       = argv[1];
   const  char *     outfname      = argv[2];
+  const  char *     prettyfilename      = argv[3];
+  
+  const unsigned int radius       = atoi(argv[4]);
 
-  /** Variables for the canny detector*/
-  const double    upperThreshold   = atof(argv[3]);
-  const double    lowerThreshold   = atof(argv[4]);
-  const double    variance         = atof(argv[5]);
-  const double    maximumError     = atof(argv[6]);
+
   /*--*/
     
-  const   unsigned int                                      Dimension = 2;
-  typedef float                                             PixelType;
+  const   unsigned int        Dimension = 2;
+  typedef float               PixelType;
 
-  typedef otb::Image< PixelType, Dimension >                                      ImageType;
-  typedef ImageType::IndexType                                                    IndexType;
-  typedef otb::ImageFileReader<ImageType>                                         ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                                         WriterType;
+  /** Variables for the canny detector*/
+  const PixelType    upperThreshold   = static_cast<PixelType>(atof(argv[5]));
+  const PixelType    lowerThreshold   = static_cast<PixelType>(atof(argv[6]));
+  const double    variance         = atof(argv[7]);
+  const double    maximumError     = atof(argv[8]);
 
-  typedef otb::BinaryImageDensityFunction<ImageType>                              CountFunctionType;
-  typedef itk::CannyEdgeDetectionImageFilter<ImageType , ImageType>               CannyDetectorType;
+  typedef otb::Image< PixelType, Dimension >    ImageType;
+  typedef ImageType::IndexType                  IndexType;
+  typedef otb::ImageFileReader<ImageType>       ReaderType;
+  typedef otb::ImageFileWriter<ImageType>       WriterType;
 
-  typedef otb::EdgeDensityImageFilter<ImageType,CannyDetectorType  ,CountFunctionType , ImageType> EdgeDensityFilterType;
+  typedef otb::BinaryImageDensityFunction<ImageType> CountFunctionType;
+  typedef itk::CannyEdgeDetectionImageFilter<ImageType, ImageType>
+                                                     CannyDetectorType;
+
+  typedef otb::EdgeDensityImageFilter<ImageType, CannyDetectorType,
+                     CountFunctionType, ImageType> EdgeDensityFilterType;
 
   /**Instancitation of an object*/
   EdgeDensityFilterType::Pointer    filter =      EdgeDensityFilterType::New();
@@ -61,10 +103,10 @@ int main(int argc, char* argv[] )
   filter->SetInput(reader->GetOutput());
   
   /** Update the Canny Filter Information*/
-  CannyFilter->SetUpperThreshold(static_cast<ImageType::PixelType>(upperThreshold)); /** 30*/
-  CannyFilter->SetLowerThreshold(static_cast<ImageType::PixelType>(lowerThreshold));/** 10*/
-  CannyFilter->SetVariance(variance); //1.
-  CannyFilter->SetMaximumError(maximumError); ///0.01f
+  CannyFilter->SetUpperThreshold(upperThreshold); 
+  CannyFilter->SetLowerThreshold(lowerThreshold);
+  CannyFilter->SetVariance(variance); 
+  CannyFilter->SetMaximumError(maximumError); 
 
   filter->SetDetector(CannyFilter);
 
@@ -74,6 +116,30 @@ int main(int argc, char* argv[] )
   writer->SetInput(filter->GetOutput());
   writer->Update();
 
+
+  /************* Image for printing **************/
+
+  typedef otb::Image< unsigned char, 2 > OutputImageType;
+
+  typedef itk::RescaleIntensityImageFilter< ImageType, OutputImageType >
+    RescalerType;
+
+  RescalerType::Pointer rescaler = RescalerType::New();
+
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetOutputMaximum(255);
+
+  rescaler->SetInput( filter->GetOutput() );
+
+  typedef otb::ImageFileWriter< OutputImageType > OutputWriterType;
+  OutputWriterType::Pointer outwriter = OutputWriterType::New();
+
+  outwriter->SetFileName( prettyfilename );
+  outwriter->SetInput( rescaler->GetOutput() );
+  outwriter->Update();
+  
+  
+  
   return EXIT_SUCCESS;
 }
 
