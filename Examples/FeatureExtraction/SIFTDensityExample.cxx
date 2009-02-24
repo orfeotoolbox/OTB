@@ -198,7 +198,7 @@ int main(int argc, char* argv[] )
   // \begin{figure}
   // \center
   // \includegraphics[width=0.25\textwidth]{suburb2.eps}
-  // \includegraphics[width=0.25\textwidth]{PrettySIFDensityOutput.eps}
+  // \includegraphics[width=0.25\textwidth]{PrettySIFTDensityOutput.eps}
   // \itkcaption[SIFT Density Filter]{Result of applying the
   // \doxygen{otb}{KeypointDensityImageFilter} to an image. From left
   // to right : 
