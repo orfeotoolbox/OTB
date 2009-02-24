@@ -53,10 +53,16 @@ public:
   typedef std::vector<ScalarPixelType>               ExtremaVectorType;
   
   /** Evaluate method (scalar version) */
-  virtual const OutputPixelType Evaluate(ScalarPixelType spixel) = 0;
+  virtual const OutputPixelType Evaluate(ScalarPixelType spixel) const = 0;
+
   /** Evaluate method (vector version) */
-  virtual const OutputPixelType Evaluate(const VectorPixelType & vpixel) = 0;
+  virtual const OutputPixelType Evaluate(const VectorPixelType & vpixel) const = 0;
   
+  /** This method is available to allow implementation of
+   * preprocessing.
+   */
+  virtual void Initialize() = 0;
+
   /** Set the minimum (scalar version) */
   virtual void SetMinimum(ScalarPixelType spixel)
   {
