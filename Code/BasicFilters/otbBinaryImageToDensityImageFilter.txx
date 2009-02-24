@@ -25,7 +25,7 @@
 
 namespace otb
 {
-/** Constructor */ot
+/** Constructor */
 template <class TInputImage, class TOutputImage, class TCountFunction>
 BinaryImageToDensityImageFilter<TInputImage, TOutputImage, TCountFunction>
 ::BinaryImageToDensityImageFilter()
