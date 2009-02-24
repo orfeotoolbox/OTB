@@ -47,7 +47,15 @@
 int main(int argc, char * argv[])
 {
   // Parse command line parameters
-  
+  if ( argc != 7 )
+  {
+    std::cerr << "Usage: " << argv[0] << " <inputImage> ";
+    std::cerr << " <outputImage> <outputRescaled> ";
+    std::cerr << " <radius> <xOffset> <yOffset> ";
+    std::cerr << std::endl;
+    return EXIT_FAILURE;
+  }
+
   const char* infname   = argv[1];
   const char* outfname  = argv[2];
   const char* outprettyfname  = argv[3];
@@ -56,7 +64,7 @@ int main(int argc, char * argv[])
   const unsigned int xOffset =  static_cast<unsigned int>(atoi(argv[5]));
   const unsigned int yOffset =  static_cast<unsigned int>(atoi(argv[6]));
 
- 
+
   typedef double PixelType;
   const int Dimension = 2;
   typedef otb::Image<PixelType,Dimension> ImageType;
@@ -73,13 +81,13 @@ int main(int argc, char * argv[])
   typedef ImageType::OffsetType OffsetType;
   typedef otb::ImageFileReader<ImageType>  ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
-  
+
 
   // Instantiating object
   FilterType::Pointer textureFilter = FilterType::New();
   ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
-  
+
   reader->SetFileName(infname);
   writer->SetFileName(outfname);
 
