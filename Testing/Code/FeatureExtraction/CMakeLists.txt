@@ -1638,12 +1638,12 @@ ADD_TEST(feTvLineDirectionImageFilterTest ${FEATUREEXTRACTION_TESTS14}
  #               ${BASELINE}/feTvLineDirectionImageFilterTest.tif
  #               ${TEMP}/feTvLineDirectionImageFilterTest.tif
    otbLineDirectionImageFilterTest
-    ${INPUTDATA}/poupees_sub.png
+    ${INPUTDATA}/poupees_sub_c1.png
     ${TEMP}/feTvLineDirectionImageFilterTest.tif
     8 # spectral threshold
-    3 # spatial threshold
+    5 # spatial threshold
     15 # direction
-    5 # max min/max number takes in care for ratio
+    3 # max min/max number takes in care for ratio
     0.6 # alpha value
 )
 
