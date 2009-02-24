@@ -23,10 +23,11 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
+
 //  Software Guide : BeginCommandLineArgs
-//    INPUT: {CloudsOnReunion.tif}
-//    OUTPUT: {CloudDetectionOutput.tif} , {pretty_CloudsOnReunion.png} , {pretty_CloudDetectionOutput.png}
-//    553 467 734 581 0.4 0.6 1.0
+//  INPUTS: {CloudsOnReunion.tif}
+//  OUTPUTS: {CloudDetectionOutput.tif} , {pretty_CloudsOnReunion.png} , {pretty_CloudDetectionOutput.png}
+//  553 467 734 581 0.4 0.6 1.0
 //  Software Guide : EndCommandLineArgs
 
 
@@ -236,11 +237,10 @@ int main( int argc, char * argv[] )
   //
   // Figure~\ref{fig:CLOUDDETECTION_FILTER} shows the result of applying
   // the cloud detection filter to a cloudy image.
-  // \begin{figure}
-  // \center
+  // \begin{figure} \center
   // \includegraphics[width=0.44\textwidth]{pretty_CloudsOnReunion.eps}
   // \includegraphics[width=0.44\textwidth]{pretty_CloudDetectionOutput.eps}
-  // From left to right : original image, mask cloud resulting from processing.}
+  // \itkcaption[Cloud Detection Example]{From left to right : original image, cloud mask resulting from processing.}
   // \label{fig:CLOUDDETECTION_FILTER}
   // \end{figure}
   //

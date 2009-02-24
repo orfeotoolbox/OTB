@@ -83,38 +83,15 @@ public:
   typedef TTransferFunction                          TransferFunctionType;
 
   /** Evaluate method (scalar version) */
-  virtual const OutputPixelType Evaluate(ScalarPixelType spixel)
-  {
-    // Update transfered min/max if necessary
-    if(!m_TransferedMinMaxUpToDate)
-      {
-      this->UpdateTransferedMinMax();
-      }
-
-    assert(m_TransferedMinimum.size() == 1);
-    assert(m_TransferedMaximum.size() == 1);
-    assert(this->m_Minimum.size() == 1);
-    assert(this->m_Maximum.size() == 1);
-
+  virtual const OutputPixelType Evaluate(ScalarPixelType spixel) const
+  {    
     OutputPixelType resp;
     resp.Fill(this->Evaluate(m_TransferFunction(spixel),m_TransferedMinimum[0],m_TransferedMaximum[0]));
     return resp;
   }
   /** Evaluate method (vector version) */
-  virtual const OutputPixelType Evaluate(const VectorPixelType & vpixel)
+  virtual const OutputPixelType Evaluate(const VectorPixelType & vpixel) const
   {
-    // Update transfered min/max if necessary
-    if(!m_TransferedMinMaxUpToDate)
-      {
-      this->UpdateTransferedMinMax();
-      }
-    
-    assert(m_TransferedMinimum.size() == this->m_Minimum.size());
-    assert(m_TransferedMaximum.size() == this->m_Maximum.size());
-    assert(m_TransferedMinimum.size() == m_TransferedMaximum.size());
-    assert(m_TransferedMaximum.size() > std::max(m_RedChannelIndex,std::max(m_GreenChannelIndex,m_BlueChannelIndex)));
-    assert(m_TransferedMaximum.size() == vpixel.Size());
-
     OutputPixelType resp;
     resp.SetRed(Evaluate(m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
     resp.SetBlue(Evaluate(m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
@@ -184,13 +161,11 @@ public:
     return m_UserDefinedTransferedMinMax;
   }
 
-/** Set the transfered minimum (scalar version) */
+  /** Set the transfered minimum (scalar version) */
   virtual void SetTransferedMinimum(ScalarPixelType spixel)
   {
     m_TransferedMinimum.clear();
     m_TransferedMinimum.push_back(spixel);
-    m_UserDefinedTransferedMinMax = true;
-    m_TransferedMinMaxUpToDate = true;
   }
   
   /** Set the transfered maximum (scalar version) */
@@ -198,8 +173,6 @@ public:
   {
     m_TransferedMaximum.clear();
     m_TransferedMaximum.push_back(spixel);
-    m_UserDefinedTransferedMinMax = true;
-    m_TransferedMinMaxUpToDate = true;
   }
 
   /** Set transfered minimum (vector version) */
@@ -210,8 +183,6 @@ public:
       {
       m_TransferedMinimum.push_back(vpixel[i]);
       }
-    m_UserDefinedTransferedMinMax = true;
-    m_TransferedMinMaxUpToDate = true;
   }
 
   /** Set transfered maximum (vector version) */
@@ -222,54 +193,10 @@ public:
       {
       m_TransferedMaximum.push_back(vpixel[i]);
       }
-    m_UserDefinedTransferedMinMax = true;
-    m_TransferedMinMaxUpToDate = true;
-  }
-
-  /** Set the minimum (scalar version) */
-  virtual void SetMinimum(ScalarPixelType spixel)
-  {
-    Superclass::SetMinimum(spixel);
-    m_TransferedMinMaxUpToDate = false;
-  }
-  
-  /** Set the maximum (scalar version) */
-  virtual void SetMaximum(ScalarPixelType spixel)
-  {
-    Superclass::SetMaximum(spixel);
-    m_TransferedMinMaxUpToDate = false;
-  }
-  
- /** Set minimum (vector version) */
-  virtual void SetMinimum(const VectorPixelType & vpixel)
-  {
-    Superclass::SetMinimum(vpixel);
-    m_TransferedMinMaxUpToDate = false;
-  }
-  
-  /** Set maximum (vector version) */
-  virtual void SetMaximum(const VectorPixelType & vpixel)
-  {
-    Superclass::SetMaximum(vpixel);
-    m_TransferedMinMaxUpToDate = false;
-  }
-
-/** Set minimum (std::vector version) */
-  virtual void SetMinimum(const ExtremaVectorType & vpixel)
-  {
-    Superclass::SetMinimum(vpixel);
-    m_TransferedMinMaxUpToDate = false;
-  }
-  
-  /** Set maximum (std::vector version) */
-  virtual void SetMaximum(const ExtremaVectorType & vpixel)
-  {
-    Superclass::SetMaximum(vpixel);
-    m_TransferedMinMaxUpToDate = false;
   }
 
   /** Update transfered min and max */
-  void UpdateTransferedMinMax()
+  virtual void Initialize()
   {
     if(!m_UserDefinedTransferedMinMax)
       {
@@ -289,22 +216,19 @@ public:
 	++maxIt;
 	}
       }
-      m_TransferedMinMaxUpToDate = true;
   }
      
-
 protected:
   /** Constructor */
   StandardRenderingFunction() : m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2), m_TransferFunction(),
-				m_UserDefinedTransferedMinMax(false), m_TransferedMinMaxUpToDate(false),
-				m_TransferedMinimum(), m_TransferedMaximum()
+				m_UserDefinedTransferedMinMax(false), 	m_TransferedMinimum(), m_TransferedMaximum()
   {}
   /** Destructor */
   ~StandardRenderingFunction() {}
   /** Perform the computation for a single value (this is done in
    * order to have the same code for vector and scalar version)
    */
-  const OutputValueType Evaluate(ScalarPixelType input, ScalarPixelType min, ScalarPixelType max)
+  const OutputValueType Evaluate(ScalarPixelType input, ScalarPixelType min, ScalarPixelType max) const
   {
     if(input > max)
       {
@@ -316,7 +240,8 @@ protected:
       }
     else
       {
-      return static_cast<OutputValueType>(vcl_floor(255.*(static_cast<double>(input)-static_cast<double>(min))/(static_cast<double>(max)-static_cast<double>(min))+0.5));
+      return static_cast<OutputValueType>(vcl_floor(255.*(static_cast<double>(input)-static_cast<double>(min))
+						    /(static_cast<double>(max)-static_cast<double>(min))+0.5));
       }
   }
 
@@ -331,15 +256,18 @@ private:
   unsigned int m_GreenChannelIndex;
   unsigned int m_BlueChannelIndex;
 
-  /** Transfert function */
-  TransferFunctionType m_TransferFunction;
+  /** Transfer function 
+   *  \note This member is declared mutable because some functors that
+   * can be used as a transfer function but are not const correct.
+   *  Since a const reference is passed to the functor anyway, it is
+   * not harmful to do so and preserves const correctness of the
+   *  Evaluate() mehtods.
+   */
+  mutable TransferFunctionType m_TransferFunction;
 
   /** If true, values mapped by the transfert function are clamped to
       user defined min/max */
   bool m_UserDefinedTransferedMinMax;
-
-  /** True if transfered min max are up-to-date.*/
-  bool m_TransferedMinMaxUpToDate;
 
   /** Transfered min and max */
   ExtremaVectorType m_TransferedMinimum;
