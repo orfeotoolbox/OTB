@@ -117,6 +117,20 @@ public:
   friend class ReverseIterator;
   friend class ReverseConstIterator;
 
+  /**
+   * Insert an element at a given position 
+   * \param position A random access iterator
+   * \return An iterator that points to the newly insereted element.
+   */
+  Iterator Insert ( Iterator position, ObjectPointerType element );
+  /**
+   * Insert an element at a given position 
+   * \param position A reverse iterator
+   * \return A reverse iterator that points to the newly insereted element.
+   */
+  ReverseIterator Insert ( ReverseIterator position, ObjectPointerType element );
+
+
   /** \class Iterator
    *  \brief Iterator of the object list.
    */
@@ -142,6 +156,13 @@ public:
     {
       return (*m_Iter);
     };
+    /**
+     * Set the current object
+     */
+    void Set ( ObjectPointerType element )
+    {
+      (*m_Iter) = element;
+    }
     /**
        * Increment.
        */
@@ -334,6 +355,13 @@ public:
       return (*m_Iter);
     };
     /**
+     * Set the current object
+     */
+    void Set ( ObjectPointerType element )
+    {
+      (*m_Iter) = element;
+    }
+    /**
        * Increment.
        */
     ReverseIterator& operator++()
@@ -378,6 +406,14 @@ public:
     {
       m_Iter=it.m_Iter;
     };
+
+    /**
+      * Get the current internal iterator
+    */
+    InternalReverseIteratorType & GetIter(void)
+    {
+      return(m_Iter);
+    }
 
   private:
     // Internal iterator.
