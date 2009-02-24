@@ -1065,7 +1065,6 @@ ADD_TEST(feTvLineSegmentDetector ${FEATUREEXTRACTION_TESTS11}
     otbLineSegmentDetector
      ${INPUTDATA}/scene.png  #prison_toulouse.tif 
     ${TEMP}/feTvLineSegmentDetectorOutputImage.tif
-    1
 )
 
 # -------            otb::LineSpatialObjectListToRightAnglePointSetFilter   -------------
