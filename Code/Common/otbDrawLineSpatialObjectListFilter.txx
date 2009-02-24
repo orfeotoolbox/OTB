@@ -59,7 +59,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 ::GetInputLineSpatialObjectList(void)
 {
   //ROMAIN
-  return static_cast</*const */LinesListType *>
+  return static_cast</*const*/ LinesListType* >
          (this->ProcessObjectType::GetInput(1) );
 }
 
@@ -71,7 +71,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 {
   typename InputImageType::ConstPointer input  = this->GetInput();
   typename OutputImageType::Pointer output  = this->GetOutput();
-  typename LinesListType::Pointer    list = this->GetInputLineSpatialObjectList();
+  typename LinesListType::Pointer    list = const_cast<LinesListType*>(this->GetInputLineSpatialObjectList());
        
   /** Copy the input requested region in the output requested region*/
   typedef itk::ImageRegionIterator< OutputImageType >      OutputIteratorType;
@@ -91,9 +91,11 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
   OutputIndexType                                  indexBeginLine, indexEndLine;
   LineListIterator                                 itList = list->begin();
 
-  /** Dimensions of the buffered region*/
-  //   typename OutputImageRegionType::SizeType size = outputRegionForThread.GetSize();
-  //   typename OutputImageRegionType::IndexType start = outputRegionForThread.GetIndex();
+  typename OutputImageRegionType::SizeType size = input->GetLargestPossibleRegion().GetSize();
+  m_Length = size[1];
+  m_Width  = size[0];
+  
+  
   
   while(itList != list->end())
     {
@@ -107,21 +109,212 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 
       indexEndLine[0] = static_cast<unsigned int>((*itPoints).GetPosition()[0]);
       indexEndLine[1] = static_cast<unsigned int>((*itPoints).GetPosition()[1]);
+      
 
-      /** Instanciation of the line iterator with begin and ending index*/
-      LineIteratorFilter   itLine(output,indexBeginLine ,indexEndLine  );
+      /** Crop the segment if it is outside the region in the left*/
       
-      /** Iteration over the line and writing white lines */
-      while(!itLine.IsAtEnd())
+      if( !(this->IsColumnOutsideOfTheRegion(&indexBeginLine,&indexEndLine,&outputRegionForThread) && this->IsColumnOutsideOfTheRegion(&indexEndLine,&indexBeginLine,&outputRegionForThread)))
 	{
-	if(outputRegionForThread.IsInside(itLine.GetIndex()))
-	  itLine.Set(m_Value);
-	++itLine;
+	  if(indexEndLine[0] >=size[0]   )
+	    this->CropRightSegment(&indexEndLine,&indexBeginLine, &outputRegionForThread);
+	  
+	  if( indexBeginLine[0] >= size[0] )
+	    this->CropRightSegment(&indexBeginLine,&indexEndLine, &outputRegionForThread);
 	}
+
+      /** 
+       * If an extremity is under the region 
+       * Technically, the X component of the index is inside the image 
+       */
+      if(this->IsDownsideTheImage(&indexBeginLine)  && input->GetLargestPossibleRegion().IsInside(indexEndLine))
+	this->CropSegment(&indexBeginLine,&indexEndLine, &outputRegionForThread);
       
+      if(this->IsDownsideTheImage(&indexEndLine) && input->GetLargestPossibleRegion().IsInside(indexBeginLine))
+	this->CropSegment(&indexEndLine,&indexBeginLine, &outputRegionForThread);
+    
+
+      /** If the segments are not in the region (upside or downside the region)*/
+      if(!(this->IsUpsideTheRegion(&indexBeginLine,&outputRegionForThread)   && this->IsUpsideTheRegion(&indexEndLine,&outputRegionForThread)) &&
+	 !(this->IsDownsideTheRegion(&indexBeginLine,&outputRegionForThread) && this->IsDownsideTheRegion(&indexEndLine,&outputRegionForThread)) &&
+	 !(this->IsColumnOutsideOfTheRegion(&indexBeginLine,&indexEndLine, &outputRegionForThread) && this->IsColumnOutsideOfTheRegion(&indexEndLine,&indexBeginLine,&outputRegionForThread)) 
+	 )
+	{
+
+	  /** Instanciation of the line iterator with begin and ending index*/
+	  LineIteratorFilter   itLine(output,indexBeginLine ,indexEndLine  );
+      
+	  /** Iteration over the line and writing white lines */
+	  while(!itLine.IsAtEnd())
+	    {
+	      if(outputRegionForThread.IsInside(itLine.GetIndex()))
+		itLine.Set(m_Value);
+	      ++itLine;
+	    }
+	}
+   
       ++itList;
     }
 }
+
+
+/**
+ * Compute the intersection between the segment to draw and the region belonging to the current thread
+ * It is used if the segment abcisse is greater than the width of the image
+ *
+ */
+template <class TInputImage, class TOutput>
+void
+DrawLineSpatialObjectListFilter<TInputImage, TOutput>
+::CropRightSegment(OutputIndexType *indexToCrop,OutputIndexType *otherIndex, const OutputImageRegionType *outputRegionForThread ) const
+
+{
+ OutputIndexType tempIndex;
+
+ /** Dimensions of the buffered region*/
+ typename OutputImageRegionType::SizeType  size  = outputRegionForThread->GetSize();
+ typename OutputImageRegionType::IndexType start = outputRegionForThread->GetIndex();
+ 
+ /** Equation of the line (Begin, End)*/
+ float lengthSegment = -(*otherIndex)[1] + (*indexToCrop)[1];
+ float slope         =  lengthSegment/(  (*indexToCrop)[0]  - (*otherIndex)[0]);
+ float origin        =  (*otherIndex)[1] - (slope * (*otherIndex)[0]);
+
+ (*indexToCrop)[0] = size[0]-1;
+ (*indexToCrop)[1] = static_cast<unsigned int>(slope *(*indexToCrop)[0] + origin +0.5) ;
+}
+
+/**
+ * Define if the point is upside the region or not
+ *
+ */
+template <class TInputImage, class TOutput>
+bool
+DrawLineSpatialObjectListFilter<TInputImage, TOutput>
+::IsUpsideTheRegion(OutputIndexType *indexToCrop, const OutputImageRegionType *outputRegionForThread ) const
+
+{
+  /** Dimensions of the buffered region*/
+  typename OutputImageRegionType::SizeType  size  = outputRegionForThread->GetSize();
+  typename OutputImageRegionType::IndexType start = outputRegionForThread->GetIndex();
+
+  return (*indexToCrop)[1] < start[1];
+}
+
+/**
+ * Define if the point is upside the region or not
+ *
+ */
+template <class TInputImage, class TOutput>
+bool
+DrawLineSpatialObjectListFilter<TInputImage, TOutput>
+::IsDownsideTheRegion(OutputIndexType *indexToCrop, const OutputImageRegionType *outputRegionForThread ) const
+
+{
+  /** Dimensions of the buffered region*/
+  typename OutputImageRegionType::SizeType  size  = outputRegionForThread->GetSize();
+  typename OutputImageRegionType::IndexType start = outputRegionForThread->GetIndex();
+
+  return (*indexToCrop)[1] >= (start[1]+size[1]/*-1*/); //The down limit of the region in the Y direction
+}
+
+/**
+ * Define if the point is outside the hole image
+ *
+ */
+template <class TInputImage, class TOutput>
+bool
+DrawLineSpatialObjectListFilter<TInputImage, TOutput>
+::IsDownsideTheImage(OutputIndexType *indexToCrop) const
+
+{
+  return (*indexToCrop)[1] >= m_Length; //The down limit of the Image in the Y direction
+}
+
+
+/**
+ * 
+ *
+ */
+template <class TInputImage, class TOutput>
+bool
+DrawLineSpatialObjectListFilter<TInputImage, TOutput>
+::IsColumnOutsideOfTheRegion(OutputIndexType *indexToCheck, OutputIndexType *otherToCheck, const OutputImageRegionType *outputRegionForThread) const
+{
+  /** Dimensions of the buffered region*/
+  typename OutputImageRegionType::SizeType size = outputRegionForThread->GetSize();
+  bool res = false, res1= false , res2 = false;
+  
+  if (  ((*indexToCheck)[0]>=size[0]) && ((*otherToCheck)[0]>=size[0]) )
+    res  = true;
+  
+  if((*indexToCheck)[0]>=size[0] && this->IsUpsideTheRegion(otherToCheck,outputRegionForThread))  
+    res1 = true;
+  
+  if((*indexToCheck)[0]>=size[0] && this->IsDownsideTheRegion(otherToCheck,outputRegionForThread) )
+    res2 = true;
+
+
+  
+  return res || res1 || res2;
+
+}
+
+
+/**
+ * Compute the intersection between the segment to draw and the region belonging to the current thread
+ *
+ */
+template <class TInputImage, class TOutput>
+void
+DrawLineSpatialObjectListFilter<TInputImage, TOutput>
+::CropSegment(OutputIndexType *indexToCrop,OutputIndexType *otherIndex,  const OutputImageRegionType *outputRegionForThread) const
+
+{
+  OutputIndexType tempIndex ,tempOtherIndex;
+
+  /** Dimensions of the buffered region*/
+  typename OutputImageRegionType::SizeType  size = outputRegionForThread->GetSize();
+  typename OutputImageRegionType::IndexType start = outputRegionForThread->GetIndex();
+
+  /** Equation of the line (Begin, End)*/
+  float slope = 0.;
+  float lengthSegment =0.;
+  float origin = 0.;
+  
+  /** Equation of the first Line*/
+  tempOtherIndex = *otherIndex;
+
+  if(vcl_abs( -(*indexToCrop)[0] +(*otherIndex)[0]) <1e-4)
+     tempOtherIndex[0]= 0.000001;
+
+
+  if( (*indexToCrop)[0] < tempOtherIndex[0])
+    lengthSegment = (*otherIndex)[1] -(*indexToCrop)[1];
+  else 
+    lengthSegment = (*indexToCrop)[1] -(*otherIndex)[1];
+  
+  slope = lengthSegment/( tempOtherIndex[0] -(*indexToCrop)[0]);
+  origin = (*indexToCrop)[1] - (slope * (*indexToCrop)[0]);
+  
+
+  if((*indexToCrop)[1] < 0)
+    {
+      unsigned int Y = 0;
+      tempIndex[1] = Y;
+      tempIndex[0] = static_cast<unsigned int>((Y-origin) / slope);  // X = (Y-B)/A
+    }
+  
+  if(this->IsDownsideTheImage(indexToCrop ))
+    {
+      float Y = static_cast<float>(m_Length-1)/*tstart[1]+size[1]-1*/;
+      tempIndex[1] = static_cast<unsigned int>(Y);
+      tempIndex[0] = static_cast<unsigned int>((Y-origin) / slope);  // X = (Y-B)/A
+    } 
+
+  (*indexToCrop)[0] = tempIndex[0];
+  (*indexToCrop)[1] = tempIndex[1];
+}
+
 
 
 /**
