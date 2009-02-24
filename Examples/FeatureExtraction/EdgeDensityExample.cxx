@@ -93,7 +93,7 @@ int main(int argc, char* argv[] )
   typedef otb::Image< PixelType, Dimension >    ImageType;
   typedef otb::ImageFileReader<ImageType>       ReaderType;
   typedef otb::ImageFileWriter<ImageType>       WriterType;
-  // Software Guide : BeginCodeSnippet
+  // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
   // We define now the type for the function which will be used by the
@@ -105,7 +105,7 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::BinaryImageDensityFunction<ImageType> CountFunctionType;
-    // Software Guide : BeginCodeSnippet
+    // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
   // These {\em non null pixels} will be the result of an edge
