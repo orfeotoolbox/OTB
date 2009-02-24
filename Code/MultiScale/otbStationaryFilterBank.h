@@ -21,6 +21,7 @@
 #ifndef __otbStationaryFilterBank__h
 #define __otbStationaryFilterBank__h
 
+#include "itkProgressReporter.h"
 #include "itkImageToImageFilter.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkImageRegionIterator.h"
