@@ -38,4 +38,5 @@ REGISTER_TEST(otbLineSegmentDetector);
 REGISTER_TEST(otbLineSpatialObjectListToRightAnglePointSetFilterNew);
 REGISTER_TEST(otbLineSpatialObjectListToRightAnglePointSetFilter);
 REGISTER_TEST(otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii);
+//REGISTER_TEST(otbLineSpatialObjectListToRightAnglePointSetFilterOutputImage);
 }

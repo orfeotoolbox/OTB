@@ -46,7 +46,7 @@ int otbKeyPointDensityImageFilterTest(int argc, char* argv[] )
   typedef itk::PointSet<RealVectorType,Dimension>                               PointSetType;
   typedef otb::ImageToSIFTKeyPointSetFilter<ImageType,PointSetType>             DetectorType;
 
-  typedef otb::KeyPointDensityImageFilter< ImageType,DetectorType, ImageType>   FilterType;
+  typedef otb::KeyPointDensityImageFilter< ImageType, ImageType, DetectorType>   FilterType;
 
 
   /**Instancitation of an object*/
