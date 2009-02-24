@@ -30,13 +30,12 @@ int main(int argc, char* argv[] )
 
   const  char *     infname       = argv[1];
   const  char *     outfname      = argv[2];
-  const  unsigned int radius      = atoi(argv[3]);
 
   /** Variables for the canny detector*/
-  const double    upperThreshold   = atof(argv[4]);
-  const double    lowerThreshold   = atof(argv[5]);
-  const double    variance         = atof(argv[6]);
-  const double    maximumError     = atof(argv[7]);
+  const double    upperThreshold   = atof(argv[3]);
+  const double    lowerThreshold   = atof(argv[4]);
+  const double    variance         = atof(argv[5]);
+  const double    maximumError     = atof(argv[6]);
   /*--*/
     
   const   unsigned int                                      Dimension = 2;
