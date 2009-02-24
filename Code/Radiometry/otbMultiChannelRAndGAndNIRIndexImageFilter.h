@@ -77,7 +77,9 @@ protected:
   /// Before generating data, set functor parameters
   virtual void BeforeThreadedGenerateData()
   {
-    if(m_RedIndex < 1 || m_GreenIndex < 1 || m_NIRIndex < 1)
+    unsigned int lNbChan = this->GetInput()->GetNumberOfComponentsPerPixel();
+    if(m_RedIndex < 1 || m_GreenIndex < 1 || m_NIRIndex < 1 ||
+       m_RedIndex > lNbChan || m_GreenIndex > lNbChan || m_NIRIndex > lNbChan)
       {
       itkExceptionMacro(<<"Channel indices must belong to range [1, ...[");
       }

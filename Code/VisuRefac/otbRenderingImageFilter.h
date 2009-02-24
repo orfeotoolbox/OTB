@@ -59,18 +59,18 @@ public:
   typedef itk::VariableLengthVector<TPixelPrecision>                           VectorPixelType;
 
   /** Scalar pixel operator */
-  inline TRGBPixel operator()(const ScalarPixelType & pixel)
+  inline TRGBPixel operator()(const ScalarPixelType & pixel) const
   {
     return m_Function->Evaluate(pixel);
   }
   /** Vector pixel operator */
-  inline TRGBPixel operator()(const VectorPixelType & pixel)
+  inline TRGBPixel operator()(const VectorPixelType & pixel) const
   {
     return m_Function->Evaluate(pixel);
   }
 
   /** Constructor */
-  RenderingFunctor()
+  RenderingFunctor() : m_Function()
   {
     // Default rendering function
     m_Function = DefaultRenderingFunctionType::New();
@@ -93,6 +93,14 @@ public:
   RenderingFunctionType * GetFunction(void)
   {
     return m_Function;
+  }
+
+  /**
+   * Initialize the rendering function.
+   */
+  void InitializeFunction(void)
+  {
+    m_Function->Initialize();
   }
 
 private:
@@ -155,6 +163,18 @@ public:
   RenderingFunctionType * GetRenderingFunction(void)
   {
     return this->GetFunctor().GetFunction();
+  }
+
+  /**
+   * Initialize the function before any processing
+   */
+  virtual void BeforeThreadedGenerateData(void)
+  {
+    // Call the superclass implementation
+    Superclass::BeforeThreadedGenerateData();
+    
+    // Initialize the rendering function
+    this->GetFunctor().InitializeFunction();
   }
 
  protected:

@@ -109,6 +109,15 @@ public:
     }; 
 
 
+ virtual void BeforeThreadedGenerateData()
+    {
+      Superclass::BeforeThreadedGenerateData();
+      if(this->GetSpatialThreshold() < this->GetRatioMaxConsiderationNumber())
+	{
+	  itkExceptionMacro(<<"Spatial Threshold ("<<this->GetSpatialThreshold()<<") is lower than Ration Max Consideration Number ("<<this->GetRatioMaxConsiderationNumber()<<") what is not allowed.");
+	}
+    }
+
  virtual void GenerateOutputInformation()
     {
       Superclass::GenerateOutputInformation();

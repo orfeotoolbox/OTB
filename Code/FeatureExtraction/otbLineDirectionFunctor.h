@@ -217,20 +217,24 @@ public:
 	  // get the nearest point : Bresenham algo
 	  if(stopOffset[0]!=0)
 	    currentOff[1] = static_cast<int>( vcl_floor( slop*static_cast<double>(currentOff[0]) + 0.5 ));
+	  // case vertical line
 	  else
 	    currentOff[1] += signY;
 
-	  if( vcl_abs(it.GetPixel(currentOff)[0]-it.GetCenterPixel()[0]) > m_SpectralThreshold )
+	  if( vcl_abs(it.GetPixel(currentOff)-it.GetCenterPixel()) > m_SpectralThreshold )
 	    {
 	      res = false;
 	    }
 	  else
 	    currentOff[0]+=signX;
        
+	  isInside = this->CheckIsInside(signX, signY, currentOff, stopOffset);
+	  /*  
 	  if( signX*currentOff[0]>signX*stopOffset[0] && stopOffset[0]!=0)
 	    isInside = false;
 	  else if( signY*currentOff[1]>signY*stopOffset[1] && stopOffset[1] != 0 )
 	    isInside = false;
+	  */
 	}
 
       return currentOff;
@@ -268,18 +272,21 @@ public:
 	  else
 	    currentOff[1]+=signY;
  
-	  mean += static_cast<double>(it.GetPixel(currentOff)[0]);
+	  mean += static_cast<double>(it.GetPixel(currentOff));
 	  nbElt++;
 
-	  if( vcl_abs(it.GetPixel(currentOff)[0]-it.GetCenterPixel()[0]) >= m_SpectralThreshold )
+	  if( vcl_abs(it.GetPixel(currentOff)-it.GetCenterPixel()) >= m_SpectralThreshold )
 	      canGo = false;
 	  else
 	    currentOff[0]+=signX;
- 
-	  if( signX*currentOff[0]>signX*stopOffset[0] && stopOffset[0]!=0)
+	  
+	  isInside = this->CheckIsInside(signX, signY, currentOff, stopOffset);
+	  /*  
+	    if( signX*currentOff[0]>signX*stopOffset[0] && stopOffset[0]!=0)
 	    isInside = false;
 	  else if( signY*currentOff[1]>signY*stopOffset[1] && stopOffset[1] != 0 )
 	    isInside = false;
+	  */
 	}
       
       mean /= static_cast<double>(nbElt);
@@ -294,19 +301,34 @@ public:
 	    currentOff[1] = static_cast<int>( vcl_floor( slop*static_cast<double>(currentOff[0]) + 0.5 ));
 	  else
 	    currentOff[1]+=signY;
-	  SDi += vcl_pow((static_cast<double>(it.GetPixel(currentOff)[0]) - mean), 2);
-	  if( vcl_abs(it.GetPixel(currentOff)[0]-it.GetCenterPixel()[0]) >= m_SpectralThreshold )
+	  SDi += vcl_pow((static_cast<double>(it.GetPixel(currentOff)) - mean), 2);
+	  if( vcl_abs(it.GetPixel(currentOff)-it.GetCenterPixel()) >= m_SpectralThreshold )
 	      canGo = false;
 	  else
 	    currentOff[0]+=signX;
 
-	       
+	  isInside = this->CheckIsInside(signX, signY, currentOff, stopOffset);
+	  /*     
 	  if( signX*currentOff[0]>signX*stopOffset[0] && stopOffset[0]!=0)
 	    isInside = false;
 	  else if( signY*currentOff[1]>signY*stopOffset[1] && stopOffset[1] != 0 )
 	    isInside = false;
+	  */
 	}
       return vcl_sqrt(SDi);
+    }
+
+
+  /** Check if the current offset is inside the stop one. */
+  bool CheckIsInside(const int & signX, const int & signY, const OffsetType & currentOff, const OffsetType & stopOffset)
+    {
+      bool isInside = true;
+      if( signX*currentOff[0]>signX*stopOffset[0] && stopOffset[0]!=0)
+	isInside = false;
+      else if( signY*currentOff[1]>signY*stopOffset[1] && stopOffset[1] != 0 )
+	isInside = false;
+
+      return isInside;
     }
 
 protected:

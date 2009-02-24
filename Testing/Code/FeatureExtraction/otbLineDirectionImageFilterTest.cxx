@@ -22,7 +22,7 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-//#include "otbStreamingImageFileWriter.h"
+#include "otbStreamingImageFileWriter.h"
 #include "otbImageFileWriter.h"
 
 
@@ -40,7 +40,7 @@ int otbLineDirectionImageFilterTest(int argc, char * argv[])
   double alpha                  = atof(argv[7]);  
 
 
-  typedef otb::VectorImage<PixelType,Dimension>                           ImageType;
+  typedef otb::Image<PixelType,Dimension>                           ImageType;
   typedef ImageType::PixelType                                InputPixelType;
   typedef otb::VectorImage<PixelType,Dimension>                     VectorImageType;
   typedef otb::ImageFileReader<ImageType>                           ReaderType;
@@ -59,15 +59,13 @@ int otbLineDirectionImageFilterTest(int argc, char * argv[])
   reader->GenerateOutputInformation();
   writer->SetFileName(outName);
 
-  InputPixelType spect;
-  // TO MODIFY
-  //spect.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
-  //spect.Fill(spectThresh);
-  filter->SetSpectralThreshold(spectThresh);
+  
+  //filter->SetSpectralThreshold(spectThresh);
   filter->SetSpatialThreshold(spatialThresh);
-  filter->SetNumberOfDirections(dirNb);
-  filter->SetRatioMaxConsiderationNumber(maxConsideration);
-  filter->SetAlpha(alpha);
+  //filter->SetNumberOfDirections(dirNb);
+  //filter->SetRatioMaxConsiderationNumber(maxConsideration);
+  //filter->SetAlpha(alpha);
+  
   filter->SetInput( reader->GetOutput() );
   writer->SetInput( filter->GetOutput() );
 
