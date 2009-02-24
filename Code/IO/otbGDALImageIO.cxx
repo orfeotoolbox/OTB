@@ -34,7 +34,7 @@
 #include "otbGDALImageIO.h"
 #include "otbMacro.h"
 #include "otbSystem.h"
-#include "otbImageBase.h"
+#include "otbImageMetadata.h"
 #include "otbImage.h"
 
 #include "itkMetaDataObject.h"

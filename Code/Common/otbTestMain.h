@@ -668,11 +668,11 @@ bool isHexaPointerAddress(std::string str)
   return result;
 }
 
-std::string VectorToString(otb::ImageBase::VectorType vector)
+std::string VectorToString(otb::ImageMetadata::VectorType vector)
 {
   otb::StringStream oss;
   oss.str("");
-  otb::ImageBase::VectorType::iterator it = vector.begin();
+  otb::ImageMetadata::VectorType::iterator it = vector.begin();
   oss<<"[";
   while (it!=vector.end())
   {
