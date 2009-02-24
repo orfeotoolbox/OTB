@@ -61,7 +61,7 @@ namespace Functor
 	inline TOutputPixel operator()(const TInputPixel& input)
 	  {
 	    TOutputPixel resp = vcl_atan2(input[0],-input[1]);
- 	    if (resp<0)
+ 	    if (resp< itk::NumericTraits<TOutputPixel>::Zero)
  	      {
  		resp = -resp;
  	      }
@@ -79,7 +79,7 @@ namespace Functor
  * 
  */
 
-template <class TInputImage,class TPrecision>
+template <class TInputImage,class TPrecision = double>
 class ITK_EXPORT LineSegmentDetector :
       public otb::ImageToLineSpatialObjectListFilter< TInputImage >
 {
@@ -137,13 +137,13 @@ public:
 
 
   typedef itk::UnaryFunctorImageFilter<GradientOutputImageType,InputImageType,
-  Functor::MagnitudeFunctor<typename GradientOutputImageType::PixelType,typename  InputImageType::PixelType> > MagnitudeFilterType;
+  Functor::MagnitudeFunctor<typename GradientOutputImageType::PixelType,TPrecision> > MagnitudeFilterType;
   typedef typename MagnitudeFilterType::Pointer                                   MagnitudeFilterPointerType;
   typedef typename MagnitudeFilterType::OutputImageType::PixelType                MagnitudePixelType;
   typedef typename MagnitudeFilterType::OutputImageType                           MagnitudeImageType;
             
   typedef itk::UnaryFunctorImageFilter<GradientOutputImageType,InputImageType,
-  Functor::OrientationFunctor<typename GradientOutputImageType::PixelType,typename InputImageType::PixelType> > OrientationFilterType;
+  Functor::OrientationFunctor<typename GradientOutputImageType::PixelType,TPrecision> > OrientationFilterType;
   typedef typename OrientationFilterType::Pointer OrientationFilterPointerType;
   typedef typename OrientationFilterType::OutputImageType                         OutputImageDirType;
   typedef typename OutputImageDirType::RegionType                                 OutputImageDirRegionType ;
@@ -153,7 +153,7 @@ public:
   typedef typename LabelImageType::Pointer                          LabelImagePointerType;
   
   /** Vector to store the rectangle characteization  center, width, orientation ,( begin ,end ) of the central line*/
-  typedef std::vector<float>                                        RectangleType;
+  typedef std::vector<double>                                        RectangleType;
   typedef typename RectangleType::iterator                          RectangleIteratorType;
   typedef std::vector< RectangleType>                               RectangleListType;
   typedef typename RectangleListType::iterator                      RectangleListTypeIterator; 
@@ -188,38 +188,38 @@ protected:
   virtual void GrowRegion(InputIndexType  index);
   
   /** Define if two are aligned */
-  virtual bool IsAligned(float Angle, float regionAngle, float prec);
+  virtual bool IsAligned(double Angle, double regionAngle, double prec);
   
   /** For each region of the region List it builds a rectangle */
   virtual int ComputeRectangles();
   
   /** */
-  virtual void Region2Rect(IndexVectorType  region , float angleRegion);
+  virtual void Region2Rect(IndexVectorType  region , double angleRegion);
   
   /** */
-  virtual float ComputeRegionOrientation(IndexVectorType  region , float x, float y , float angleRegion);
+  virtual double ComputeRegionOrientation(IndexVectorType  region , double x, double y , double angleRegion);
 
   /** */
-  virtual float angle_diff(float a, float b);
+  virtual double angle_diff(double a, double b);
 
   /**  Compute the Number Of False Alarm for a rectangle*/
-  virtual float ComputeRectNFA(RectangleType  rec);
+  virtual double ComputeRectNFA(RectangleType  rec);
 
   /** */
-  virtual float ImproveRectangle(RectangleType  * rec);
+  virtual double ImproveRectangle(RectangleType  * rec);
 
   /** NFA For a rectangle*/
-  virtual float NFA(int n, int k, double p, double logNT);
+  virtual double NFA(int n, int k, double p, double logNT);
   
   /** Create a copy of a rectangle*/
   virtual void CopyRectangle(RectangleType * rDst , RectangleType  *rSrc );
   
 
   /** Rutines from numerical recipes*/
-  virtual float betacf(float a, float b, float x);
-  virtual float gammln(float xx);
-  virtual float betai(float a, float b, float x);
-  virtual float factln(int n);
+  virtual double betacf(double a, double b, double x);
+  virtual double gammln(double xx);
+  virtual double betai(double a, double b, double x);
+  virtual double factln(int n);
 
   /** Printself method*/
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -233,14 +233,14 @@ private:
   LabelImagePointerType             m_UsedPointImage;
   RectangleListType                 m_RectangleList;
   
-  float                             m_Threshold;
-  float                             m_Prec;
-  float                             m_DirectionsAllowed;
-  unsigned int                      m_MinimumRegionSize;
-  unsigned int                      m_NumberOfImagePixels;
+  double                             m_Threshold;
+  double                             m_Prec;
+  double                             m_DirectionsAllowed;
+  unsigned int                       m_MinimumRegionSize;
+  unsigned int                       m_NumberOfImagePixels;
 
-  int                      m_Length;
-  int                      m_Width;
+  int                                m_Length;
+  int                                m_Width;
   
   /** Gradient filter */
   GradientFilterPointerType m_GradientFilter;
