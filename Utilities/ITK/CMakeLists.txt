@@ -162,7 +162,7 @@ MARK_AS_ADVANCED(ITK_USE_PATENTED)
 
 #-----------------------------------------------------------------------------
 # ITK build classes that are in the review process
-OPTION(ITK_USE_REVIEW "Build algorithms that are candidates to be included in the Toolkit. This classes are not covered by the Backward Compatibility Policy, nor the Copyright Policy of ITK." OFF)
+OPTION(ITK_USE_REVIEW "Build algorithms that are candidates to be included in the Toolkit. This classes are not covered by the Backward Compatibility Policy, nor the Copyright Policy of ITK." ON)
 MARK_AS_ADVANCED(ITK_USE_REVIEW)
 
 #-----------------------------------------------------------------------------
@@ -189,7 +189,7 @@ MARK_AS_ADVANCED(ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE)
 OPTION(ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE "Makes itk::Image behave like itk::OrientedImage" ON)
 
 # ITK turn on experimental version of accelerated image registration
-OPTION(ITK_USE_OPTIMIZED_REGISTRATION_METHODS "Turn on the experimental version of accelerated registration methods." OFF)
+OPTION(ITK_USE_OPTIMIZED_REGISTRATION_METHODS "Turn on the experimental version of accelerated registration methods." ON)
 MARK_AS_ADVANCED(ITK_USE_OPTIMIZED_REGISTRATION_METHODS)
 IF(ITK_USE_OPTIMIZED_REGISTRATION_METHODS)
   IF(NOT ITK_USE_REVIEW)
