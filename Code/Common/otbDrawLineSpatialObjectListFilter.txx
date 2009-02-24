@@ -244,7 +244,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
   typename OutputImageRegionType::SizeType size = outputRegionForThread->GetSize();
   bool res = false, res1= false , res2 = false;
   
-  if (  ((*indexToCheck)[0]>=static_cast< int>(size[0])) && ((*otherToCheck)[0]>=static_cast< int>(size[0]) )
+  if (  ((*indexToCheck)[0]>=static_cast< int>(size[0])) && ((*otherToCheck)[0]>=static_cast< int>(size[0]) ))
     res  = true;
   
   if((*indexToCheck)[0]>=static_cast< int>(size[0]) && this->IsUpsideTheRegion(otherToCheck,outputRegionForThread))  
