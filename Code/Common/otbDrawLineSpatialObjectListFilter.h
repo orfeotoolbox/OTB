@@ -117,8 +117,8 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   OutputPixelType       m_Value;
-  unsigned int          m_Length;
-  unsigned int          m_Width;
+  int          m_Length;
+  int          m_Width;
 
 };
 } // end namespace otb
