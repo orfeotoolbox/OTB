@@ -81,15 +81,53 @@ int main(int argc, char* argv[] )
   const double    variance         = atof(argv[7]);
   const double    maximumError     = atof(argv[8]);
 
+
+  // Software Guide : BeginLatex
+  //
+  // As usual, we start by defining the types for the images, the reader
+  // and the writer.
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
   typedef otb::Image< PixelType, Dimension >    ImageType;
-  typedef ImageType::IndexType                  IndexType;
   typedef otb::ImageFileReader<ImageType>       ReaderType;
   typedef otb::ImageFileWriter<ImageType>       WriterType;
+  // Software Guide : BeginCodeSnippet
+  // Software Guide : BeginLatex
+  //
+  // We define now the type for the function which will be used by the
+  // edge density filter to estimate this density. Here we choose a
+  // function which counts the number of non null pixels per area. The
+  // fucntion takes as template the type of the image to be processed.
+  //
+  // Software Guide : EndLatex
 
+  // Software Guide : BeginCodeSnippet
   typedef otb::BinaryImageDensityFunction<ImageType> CountFunctionType;
+    // Software Guide : BeginCodeSnippet
+  // Software Guide : BeginLatex
+  //
+  // These {\em non null pixels} will be the result of an edge
+  // detector. We use here the classical Canny edge detector, which is
+  // templated over the input and output image types.
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
   typedef itk::CannyEdgeDetectionImageFilter<ImageType, ImageType>
                                                      CannyDetectorType;
 
+  // Software Guide : BeginCodeSnippet
+  // Software Guide : BeginLatex
+  //
+  // Finally, we can define the type for the edge density filter which
+  // takes as template the input image type, the edge detector type,
+  // the count fucntion type and the output image type.
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
   typedef otb::EdgeDensityImageFilter<ImageType, CannyDetectorType,
                      CountFunctionType, ImageType> EdgeDensityFilterType;
 
