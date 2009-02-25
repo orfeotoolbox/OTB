@@ -80,7 +80,8 @@ TextureImageFunction<TInputImage, TFunctor, TCoordRep>
   FunctorType funct;
   funct.SetOffset(m_Offset);
   
-  return static_cast<RealType>(funct.ComputeOverSingleChannel( it.GetNeighborhood(), itOff.GetNeighborhood()) );
+  //return static_cast<RealType>(funct.ComputeOverSingleChannel( it.GetNeighborhood(), itOff.GetNeighborhood()) );
+  return static_cast<RealType>(funct( it.GetNeighborhood() ));
 }
 
 

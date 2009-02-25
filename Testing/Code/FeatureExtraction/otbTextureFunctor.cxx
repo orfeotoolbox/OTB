@@ -70,12 +70,13 @@ int otbTextureFunctor(int argc, char * argv[])
   typedef otb::VectorImage<InputPixelType,Dimension> ImageType;
   typedef ImageType::PixelType                       PixelType;
   typedef itk::ConstNeighborhoodIterator<ImageType>  IteratorType;
-
+  /*
   if(strArgv == "ENJ")
     {
-      typedef otb::Functor::EnergyTextureFunctor<IteratorType, PixelType> FunctorType;
+      typedef otb::Functor::EnergyTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
+  
   else if ( strArgv == "ENT" )
     {
       typedef otb::Functor::EntropyTextureFunctor<IteratorType, PixelType> FunctorType;
@@ -156,10 +157,12 @@ int otbTextureFunctor(int argc, char * argv[])
       typedef otb::Functor::MeanTextureFunctor<IteratorType, PixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
+  
   else
     {
       return EXIT_FAILURE;
     }
-  
+  */
+
   return EXIT_SUCCESS;
 }

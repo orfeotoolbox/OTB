@@ -83,10 +83,10 @@ int otbTextureImageFunction(int argc, char * argv[])
   typedef itk::VariableLengthVector<double> VectorType;
   typedef itk::ConstNeighborhoodIterator<ImageType> IteratorType;
  
-
+  /*
   if(strArgv == "ENJ")
     {
-      typedef otb::Functor::EnergyTextureFunctor<IteratorType, VectorType> FunctorType;
+      typedef otb::Functor::EnergyTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else if ( strArgv == "ENT" )
@@ -173,6 +173,6 @@ int otbTextureImageFunction(int argc, char * argv[])
     {
       return EXIT_FAILURE;
     }
-  
+  */
   return EXIT_SUCCESS;
 }
