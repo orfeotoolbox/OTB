@@ -51,7 +51,9 @@ public:
   typedef typename TIter::SizeType          SizeType;
   typedef typename TIter::IndexType         IndexType;
   typedef typename TIter::OffsetType        OffsetType;
-  typedef typename TOutputValue::ValueType  InternalOutputPixelType;
+  typedef TOutputValue                      OutputValueType;
+  typedef std::vector<OutputValueType>      OutputType;
+  //typedef typename TOutputValue::ValueType  InternalOutputPixelType;
  
   void SetSpatialThreshold( unsigned int thresh ){ m_SpatialThreshold=thresh; };
   void SetSpectralThreshold( InternalPixelType thresh ){ m_SpectralThreshold=thresh; };
@@ -77,7 +79,7 @@ public:
   unsigned int GetNumberOfDirections(){ return m_NumberOfDirections(); };
   std::vector<bool> GetTextureStatus(){ return m_SelectedTextures; };
 
-  inline TOutputValue operator()(const TIter& it)
+  inline OutputType operator()(const TIter& it)
   {
     double length = itk::NumericTraits<double>::NonpositiveMin();
     double width = itk::NumericTraits<double>::max();
@@ -95,9 +97,10 @@ public:
     std::vector<unsigned int> lengthLine(m_NumberOfDirections, 0);
 
     std::vector<double>::iterator itVector;
-    TOutputValue out;
-    out.SetSize(6);
-    out.Fill(0);
+    OutputType out(6, 0);
+    //TOutputValue out;
+    //out.SetSize(6);
+    //out.Fill(0);
   
     OffsetType off;
     off.Fill(0);
@@ -176,16 +179,16 @@ public:
     /////// FILL OUTPUT
     // length
     if( m_SelectedTextures[0] == true )
-      out[0] = length;
+      out[0] = static_cast<OutputValueType>(length);
     // width
     if( m_SelectedTextures[1] == true )
-      out[1] = width;
+      out[1] = static_cast<OutputValueType>(width);
     // PSI
     if( m_SelectedTextures[2] == true )
-      out[2] = sum/NumberOfDirectionsDouble;
+      out[2] = static_cast<OutputValueType>(sum/NumberOfDirectionsDouble);
     // w-mean
     if( m_SelectedTextures[3] == true )
-      out[3] = sumWMean/NumberOfDirectionsDouble;
+      out[3] = static_cast<OutputValueType>(sumWMean/NumberOfDirectionsDouble);
     // ratio
     if( m_SelectedTextures[4] == true )
       {
@@ -197,9 +200,9 @@ public:
 	    sumMax += maxSorted[t];
 	  }
 	if (sumMax != 0.)
-	  out[4] = vcl_atan(sumMin/sumMax);
+	  out[4] = static_cast<OutputValueType>(vcl_atan(sumMin/sumMax));
 	else if (sumMax == 0. && sumMin == 0.)
-	  out[4] = 1.;
+	  out[4] = static_cast<OutputValueType>(1.);
       }
     // SD
     if( m_SelectedTextures[4] == true )
@@ -207,7 +210,7 @@ public:
 	double sumPSI = 0;
 	for(unsigned int n=0; n<di.size(); n++)
 	  sumPSI += vcl_pow(di[n] - sumWMean/NumberOfDirectionsDouble , 2);
-	out[5] = vcl_sqrt(sumPSI)/(NumberOfDirectionsDouble-1.);
+	out[5] = static_cast<OutputValueType>(vcl_sqrt(sumPSI)/(NumberOfDirectionsDouble-1.));
       }
    
     return out;

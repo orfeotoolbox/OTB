@@ -18,9 +18,9 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbLineDirectionImageFilter_h
 #define __otbLineDirectionImageFilter_h
 
-#include "otbMath.h"
 #include "otbLineDirectionFunctor.h"
-#include "otbUnaryFunctorNeighborhoodImageFilter.h"
+#include "itkImageToImageFilter.h"
+#include "itkImageRegionIteratorWithIndex.h"
 #include "itkConstNeighborhoodIterator.h"
 
 
@@ -32,34 +32,69 @@ namespace otb
 
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LineDirectionImageFilter :
-public UnaryFunctorNeighborhoodImageFilter< TInputImage,
+public itk::ImageToImageFilter<TInputImage,TOutputImage>
+  /*UnaryFunctorNeighborhoodImageFilter< TInputImage,
 				            TOutputImage, 
 				            Functor::LineDirectionFunctor< ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage>, 
-						           		   ITK_TYPENAME TOutputImage::PixelType> >
+					    ITK_TYPENAME TOutputImage::InternalPixelType> >*/
 {
 public:
   /** Standard class typedefs. */
   typedef LineDirectionImageFilter                           Self;
   typedef TInputImage                                        InputImageType;
   typedef TOutputImage                                       OutputImageType;
-  typedef typename InputImageType::PixelType                 InputPixelType;
-  typedef typename InputImageType::InternalPixelType         InputInternalPixelType;
-  typedef typename OutputImageType::PixelType                OutputPixelType;
-  typedef typename otb::UnaryFunctorNeighborhoodImageFilter< TInputImage,
-                                                             TOutputImage, 
-               				                     Functor::LineDirectionFunctor< typename itk::ConstNeighborhoodIterator<TInputImage>, 
-                                                                                            OutputPixelType > > Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef itk::ImageToImageFilter<TInputImage,TOutputImage >  Superclass;
+  typedef itk::SmartPointer<Self>                             Pointer;
+  typedef itk::SmartPointer<const Self>                       ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(UnaryFunctorNeighborhoodImageFilter,ImageToImageFilter);
+  
+  /** Some convenient typedefs. */
+  typedef typename InputImageType::ConstPointer InputImagePointerType;
+  typedef typename InputImageType::RegionType   InputImageRegionType;
+  typedef typename InputImageType::PixelType    InputImagePixelType;
+  typedef typename InputImageType::SizeType     InputImageSizeType;
+  typedef typename OutputImageType::Pointer     OutputImagePointerType;
+  typedef typename OutputImageType::RegionType  OutputImageRegionType;
+  typedef typename OutputImageType::PixelType   OutputImagePixelType;
+typedef typename OutputImageType::InternalPixelType   OutputInternalImagePixelType;
+  typedef itk::ConstNeighborhoodIterator<TInputImage>     NeighborhoodIteratorType;
+  typedef typename NeighborhoodIteratorType::RadiusType   RadiusType;
+  ////////////////////////////////////////////
+  // CHANGE THE OUTPUTINTERNAZL INTO OUTPUTPIXE/////////////
+  ///////////////////////////////////////////
+  typedef Functor::LineDirectionFunctor< NeighborhoodIteratorType,OutputInternalImagePixelType  > FunctorType; 
+  typedef typename FunctorType::OutputType FunctorOutputType;
+  typedef itk::ProcessObject ProcessObjectType;
+
+  /**Set/Get the radius of neighborhood.*/
+  itkGetMacro(Radius,unsigned int);
+
+  /** Functor accessors */
+  FunctorType& GetFunctor()
+  {
+    return m_Functor;
+  }
+
+  const FunctorType& GetFunctor() const
+  {
+    return m_Functor;
+  };
+  void SetFunctor(const FunctorType& functor)
+  {
+    m_Functor = functor;
+    this->Modified();
+  }
+
   /** Spatial Threshold accessor */
   void SetSpatialThreshold( unsigned int thresh )
     { 
       this->GetFunctor().SetSpatialThreshold( thresh ); 
-      this->SetRadius(thresh);
+      m_Radius = thresh;
       this->Modified();
     };
   unsigned int GetSpatialThreshold()
@@ -67,13 +102,13 @@ public:
       return this->GetFunctor().GetSpatialThreshold(); 
     };
   /** Spectral Threshold accessor */
-  void SetSpectralThreshold( InputInternalPixelType thresh )
+  void SetSpectralThreshold( InputImagePixelType thresh )
     { 
       this->GetFunctor().SetSpectralThreshold( thresh ); 
     };
-  InputInternalPixelType GetSpectralThreshold()
+  InputImagePixelType GetSpectralThreshold()
     { 
-      return this->GetFunctor().GSetSpectralThreshold(); 
+      return this->GetFunctor().GetSpectralThreshold(); 
     };
   /** RatioMaxConsiderationNumber accessor */
   void SetRatioMaxConsiderationNumber( unsigned int value )
@@ -128,21 +163,27 @@ public:
 	}
     }
 
-  
-  virtual void BeforeThreadedGenerateData();
+ 
   virtual void GenerateOutputInformation();
-
+  std::vector<FunctorType> m_FunctorList;
 
 protected:
   LineDirectionImageFilter();
   virtual ~LineDirectionImageFilter(){};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+  virtual void BeforeThreadedGenerateData();
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId );
+  /** Pad the input requested region by radius */
+  virtual void GenerateInputRequestedRegion(void);
 
 private:
   LineDirectionImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
+  unsigned int m_Radius;
+  FunctorType m_Functor;
+
 };
 
 } // end namespace otb
