@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageBase_h
-#define __otbImageBase_h
+#ifndef __otbImageMetadataInterface_h
+#define __otbImageMetadataInterface_h
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
@@ -31,16 +31,26 @@
 
 namespace otb
 {
-/** \class ImageBase
+/** \class ImageMetadataInterface
  *
- * \brief Creation of an "otb" ImageBase that gets metadata.
+ * \brief Creation of an "otb" ImageMetadataInterface that gets metadata.
  *
  */
-class ITK_EXPORT ImageBase
+class ITK_EXPORT ImageMetadataInterface : public itk::Object
 {
 public:
 
-  typedef ImageBase Self;
+  typedef ImageMetadataInterface Self;
+  typedef itk::Object Superclass;
+  typedef itk::SmartPointer<Self>  Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
+
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
+
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(ImageMetadataInterface, itk::Object);
+
 
   typedef itk::MetaDataDictionary   MetaDataDictionaryType;
 
@@ -50,77 +60,56 @@ public:
 
 
   /** Get the projection coordinate system of the image. */
-
   std::string GetProjectionRef( const MetaDataDictionaryType & dict ) const;
-  virtual std::string GetProjectionRef( void ) const = 0;
 
   /** Get the GCP projection coordinates of the image. */
-
   std::string GetGCPProjection( const MetaDataDictionaryType & dict ) const;
-  virtual std::string GetGCPProjection( void ) const = 0;
 
   unsigned int GetGCPCount( const MetaDataDictionaryType & dict ) const;
-  virtual unsigned int GetGCPCount( void ) const = 0;
 
   OTB_GCP & GetGCPs( MetaDataDictionaryType & dict, unsigned int GCPnum );
-  virtual OTB_GCP & GetGCPs( unsigned int GCPnum ) = 0;
 
   std::string GetGCPId( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const;
-  virtual std::string GetGCPId( unsigned int GCPnum ) const = 0;
 
   std::string GetGCPInfo( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const;
-  virtual std::string GetGCPInfo( unsigned int GCPnum ) const = 0;
 
   double GetGCPRow( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const;
-  virtual double GetGCPRow( unsigned int GCPnum ) const = 0;
 
   double GetGCPCol( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const;
-  virtual double GetGCPCol( unsigned int GCPnum ) const = 0;
 
   double GetGCPX( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const;
-  virtual double GetGCPX( unsigned int GCPnum ) const = 0;
 
   double GetGCPY( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const;
-  virtual double GetGCPY( unsigned int GCPnum ) const = 0;
 
   double GetGCPZ( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const;
-  virtual double GetGCPZ( unsigned int GCPnum ) const = 0;
 
   /** Get the six coefficients of affine geoTtransform. */
 
   VectorType GetGeoTransform( const MetaDataDictionaryType & dict ) const;
-  virtual VectorType GetGeoTransform( void ) const = 0;
 
   /** Get image corners. */
 
   VectorType GetUpperLeftCorner( const MetaDataDictionaryType & dict ) const;
-  virtual VectorType GetUpperLeftCorner() const = 0;
 
   VectorType GetUpperRightCorner( const MetaDataDictionaryType & dict ) const;
-  virtual VectorType GetUpperRightCorner() const = 0;
 
   VectorType GetLowerLeftCorner( const MetaDataDictionaryType & dict ) const;
-  virtual VectorType GetLowerLeftCorner() const = 0;
 
   VectorType GetLowerRightCorner( const MetaDataDictionaryType & dict ) const;
-  virtual VectorType GetLowerRightCorner() const = 0;
 
   /** Get the ImageKeywordlist */
   ImageKeywordlistType GetImageKeywordlist( MetaDataDictionaryType & dict );
   const ImageKeywordlistType GetImageKeywordlist(const MetaDataDictionaryType & dict ) const;
 
-  virtual ImageKeywordlistType GetImageKeywordlist() = 0;
-  virtual const ImageKeywordlistType GetImageKeywordlist(void) const = 0;
-
   void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const;
 
 
 protected:
-  ImageBase();
-  virtual ~ImageBase() {};
+  ImageMetadataInterface();
+  virtual ~ImageMetadataInterface() {};
 
 private:
-  ImageBase(const Self&); //purposely not implemented
+  ImageMetadataInterface(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   OTB_GCP m_GCP;
