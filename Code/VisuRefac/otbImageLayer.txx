@@ -79,30 +79,47 @@ ImageLayer<TImage,TOutputImage>
   // Render extract
   if(this->GetHasExtract())
     {
-    // Extracting region
-    typename ExtractFilterType::Pointer extract = ExtractFilterType::New();
-    extract->SetInput(m_Image);
-    extract->SetExtractionRegion(this->GetExtractRegion());
-    // Rendering
-    typename RenderingFilterType::Pointer renderer = RenderingFilterType::New();
-    renderer->SetRenderingFunction(m_RenderingFunction);
-    renderer->SetInput(extract->GetOutput());
-    renderer->Update();
-    this->SetRenderedExtract(renderer->GetOutput());
+    // If there are pixels to render
+    if(this->GetExtractRegion().GetNumberOfPixels() > 0)
+      {
+
+      // Extracting region
+      typename ExtractFilterType::Pointer extract = ExtractFilterType::New();
+      extract->SetInput(m_Image);
+      extract->SetExtractionRegion(this->GetExtractRegion());
+      // Rendering
+      typename RenderingFilterType::Pointer renderer = RenderingFilterType::New();
+      renderer->SetRenderingFunction(m_RenderingFunction);
+      renderer->SetInput(extract->GetOutput());
+      renderer->Update();
+      this->SetRenderedExtract(renderer->GetOutput());
+      }
+    else
+      {
+      this->SetHasExtract(false);
+      }
     }
   // Render scaled extract
   if(this->GetHasScaledExtract())
     {
-    // Extracting region
-    typename ExtractFilterType::Pointer extract = ExtractFilterType::New();
-    extract->SetInput(m_Image);
-    extract->SetExtractionRegion(this->GetScaledExtractRegion());
-    // Rendering
-    typename RenderingFilterType::Pointer renderer = RenderingFilterType::New();
-    renderer->SetRenderingFunction(m_RenderingFunction);
-    renderer->SetInput(extract->GetOutput());
-    renderer->Update();
-    this->SetRenderedScaledExtract(renderer->GetOutput());
+    // If there are pixels to render
+    if(this->GetScaledExtractRegion().GetNumberOfPixels() > 0)
+      {
+      // Extracting region
+      typename ExtractFilterType::Pointer extract = ExtractFilterType::New();
+      extract->SetInput(m_Image);
+      extract->SetExtractionRegion(this->GetScaledExtractRegion());
+      // Rendering
+      typename RenderingFilterType::Pointer renderer = RenderingFilterType::New();
+      renderer->SetRenderingFunction(m_RenderingFunction);
+      renderer->SetInput(extract->GetOutput());
+      renderer->Update();
+      this->SetRenderedScaledExtract(renderer->GetOutput());
+      }
+    else
+      {
+      this->SetHasScaledExtract(false);
+      }
     }
 }
 
