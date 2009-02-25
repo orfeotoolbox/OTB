@@ -126,8 +126,8 @@ public:
 	angle = m_Alpha*static_cast<double>(d);
 
 	// last offset in the diraction respecting spatial threshold
-	off[0] = vcl_floor(SpatialThresholdDouble*vcl_cos( angle ) + 0.5);
-	off[1] = vcl_floor(SpatialThresholdDouble*vcl_sin( angle ) + 0.5);
+	off[0] = static_cast<int>(vcl_floor(SpatialThresholdDouble*vcl_cos( angle ) + 0.5));
+	off[1] = static_cast<int>(vcl_floor(SpatialThresholdDouble*vcl_sin( angle ) + 0.5));
 	// last indices in the diration respecting spectral threshold
 	OffsetType offEnd = this->FindLastOffset( it, off );
 	// computes distance = dist between the 2 segment point. One of them is the center pixel -> (0,0)
@@ -183,7 +183,7 @@ public:
 	di[d] = dist;
 	if( m_SelectedTextures[3] == true )
 	  {
-	    lengthLine[d] = dist;//static_cast<unsigned int>( vcl_sqrt(vcl_pow(static_cast<double>(offEnd[0]), 2) + vcl_pow(static_cast<double>(offEnd[1]), 2)) );
+	    lengthLine[d] = static_cast<unsigned int>(dist);//static_cast<unsigned int>( vcl_sqrt(vcl_pow(static_cast<double>(offEnd[0]), 2) + vcl_pow(static_cast<double>(offEnd[1]), 2)) );
 	    sti[d] = sdiVal;
 	    if(sdiVal!=0.)
 	      sumWMean += (m_Alpha*(dist-1)*dist/*lengthLine[n]*di[n]*/)/sdiVal;
