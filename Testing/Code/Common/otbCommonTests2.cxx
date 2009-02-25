@@ -35,4 +35,5 @@ void RegisterTests()
   REGISTER_TEST(otbMultiChannelExtractROINew );
   REGISTER_TEST(otbTestMultiExtractMultiUpdate);
   REGISTER_TEST(otbVectorDataExtractROINew);
+  REGISTER_TEST(otbVectorDataExtractROI);
 }
