@@ -80,7 +80,7 @@ public:
    * This method fills the m_OpenGl buffer according to the region
    *  size. Buffer in flipped over X axis if OTB_USE_GL_ACCEL is OFF.
    */
-  virtual void ReadBuffer(InputImageType * image, RegionType & region);
+  virtual void ReadBuffer(const InputImageType * image, const RegionType & region);
 
   /** Set/Get the Controller */
   itkSetObjectMacro(Controller,ControllerType);

@@ -89,7 +89,7 @@ ImageWidget<TInputImage>
 template <class TInputImage>
 void
 ImageWidget<TInputImage>
-::ReadBuffer(InputImageType * image, RegionType & region)
+::ReadBuffer(const InputImageType * image, const RegionType & region)
 {
   // Before doing anything, check if region is inside the buffered
   // region of image
