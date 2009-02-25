@@ -62,17 +62,18 @@ public:
    * \param w new width
    * \param h new height
    */
-  virtual void HandleWidgetResize(std::string widgetId,int x,int y, int w, int h)
+  virtual bool HandleWidgetResize(std::string widgetId, int w, int h)
   {
     if(m_Model.IsNotNull() && m_View.IsNotNull())
       {
       // If resizing the scroll widget, nothing has to be done.
-      if(widgetId == m_View->GetFullWidget()->GetIdentifier() )
+      if(widgetId == m_View->GetScrollWidget()->GetIdentifier() )
 	{
 	// Nothing has to be acted to the model, juste update the view
 	m_View->Update();
+	return true;
 	}
-      else if(widgetId == m_View->GetScrollWidget()->GetIdentifier() )
+      else if(widgetId == m_View->GetFullWidget()->GetIdentifier() )
 	{
 	// Enlarge the model extract region
 	RegionType region = m_Model->GetExtractRegion();
@@ -83,33 +84,25 @@ public:
 	m_Model->SetExtractRegion(region);
 	// Update the model
 	m_Model->Update();
+	return true;
 	}
       else if(widgetId ==m_View->GetZoomWidget()->GetIdentifier() )
 	{
 	// Enlarge the model scaled extract region
 	RegionType region = m_Model->GetScaledExtractRegion();
 	typename RegionType::SizeType size = region.GetSize();
-	size[0] = static_cast<unsigned int>(w*m_View->GetZoomWidget()->GetIsotropicZoom());
-	size[1] = static_cast<unsigned int>(h*m_View->GetZoomWidget()->GetIsotropicZoom());
+	size[0] = static_cast<unsigned int>(static_cast<double>(w)/m_View->GetZoomWidget()->GetIsotropicZoom());
+	size[1] = static_cast<unsigned int>(static_cast<double>(h)/m_View->GetZoomWidget()->GetIsotropicZoom());
 	region.SetSize(size);
 	m_Model->SetScaledExtractRegion(region);
 	// Update the model
 	m_Model->Update();
+	return true;
 	}
       }
+    return false;
   }
   
-  /** Returns true if the resizing of the given widget is handled
-   * \param widgetId The id of the widget the event comes from
-   * \return True if the resizing is handled
-   */
-  virtual bool ListenToResize(std::string widgetId)
-  {
-    return (   widgetId == m_View->GetScrollWidget()->GetIdentifier() 
-	    || widgetId == m_View->GetFullWidget()->GetIdentifier() 
-	    || widgetId == m_View->GetZoomWidget()->GetIdentifier() );
-  }
-
   /** Set/Get the pointer to the view */
   itkSetObjectMacro(View,ViewType);
   itkGetObjectMacro(View,ViewType);
