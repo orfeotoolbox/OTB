@@ -25,6 +25,7 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNeighborhoodIterator.h"
 #include "otbPolygon.h"
+#include "itkCastImageFilter.h"
 
 #include "otbMath.h"
 
@@ -81,15 +82,20 @@ LineSegmentDetector<TInputImage,TPrecision >
   m_UsedPointImage->Allocate();
   m_UsedPointImage->FillBuffer(0);
 
+  /** Cast the MagnitudeOutput Image in */
+  typedef itk::CastImageFilter<InputImageType, OutputImageType>      castFilerType;
+  typename castFilerType::Pointer  castFilter =  castFilerType::New();
+  castFilter->SetInput(this->GetInput());
+  
   /** Compute the modulus and the orientation gradient image*/
-  m_GradientFilter->SetInput(this->GetInput());
+  m_GradientFilter->SetInput(castFilter->GetOutput());
   m_GradientFilter->SetSigma(1.1);
   m_MagnitudeFilter->SetInput(m_GradientFilter->GetOutput());
-    
   m_OrientationFilter->SetInput(m_GradientFilter->GetOutput());
+  
   m_MagnitudeFilter->Update();
   m_OrientationFilter->Update();
-  
+
   /** Comupute the seed histogram to begin the search*/
   CoordinateHistogramType   CoordinateHistogram;
   CoordinateHistogram = this->SortImageByModulusValue(m_MagnitudeFilter->GetOutput());
@@ -133,8 +139,8 @@ LineSegmentDetector<TInputImage,TPrecision >
 
   
   /** Definition of the min & the max of an image*/
-  OutputPixelType   min = itk::NumericTraits<MagnitudePixelType >::Zero;
-  OutputPixelType   max = itk::NumericTraits<MagnitudePixelType >::Zero;
+  OutputPixelType   min = itk::NumericTraits</*MagnitudePixelType*/TPrecision>::Zero;
+  OutputPixelType   max = itk::NumericTraits</*MagnitudePixelType*/TPrecision>::Zero;
   
   /** Computing the min & max of the image*/
   typedef  itk::MinimumMaximumImageCalculator<OutputImageType>  MinMaxCalculatorFilter;
@@ -151,14 +157,13 @@ LineSegmentDetector<TInputImage,TPrecision >
 
   /** Computing the length of the bins*/  
   unsigned int NbBin = 10;  
-  MagnitudePixelType lengthBin = (max - min)/static_cast<MagnitudePixelType>(NbBin-1) ;
+  double lengthBin = static_cast<double>((max - min))/static_cast<double>(NbBin-1) ;
   CoordinateHistogramType  tempHisto(NbBin);  /** Initializing the histogram */
 
   
   itk::ImageRegionIterator<OutputImageType> it(modulusImage, 
 					       modulusImage->GetRequestedRegion());
-    
-  //std::cout << "min "<< min<<  " max " << max  << " lengthBin " << lengthBin <<  " et thresh" << m_Threshold << std::endl;
+
   it.GoToBegin();
   while(!it.IsAtEnd())
     {
@@ -457,7 +462,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   this->SetPixelToUsed(index);
   
   /** Neighborhooding */
-  typedef itk::ConstNeighborhoodIterator<InputImageType>  NeighborhoodIteratorType;
+  typedef itk::ConstNeighborhoodIterator<OutputImageType>  NeighborhoodIteratorType;
   typename NeighborhoodIteratorType::SizeType             radius;
   radius.Fill(1);
   NeighborhoodIteratorType                                itNeigh(radius,m_MagnitudeFilter->GetOutput(),
@@ -550,7 +555,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   double l_min = 0., l_max = 0.,l =0., w=0. , w_min = 0. , w_max =0.;
   
   /** Neighborhooding again*/
-  typedef itk::ConstNeighborhoodIterator<InputImageType>  NeighborhoodIteratorType;
+  typedef itk::ConstNeighborhoodIterator<OutputImageType>  NeighborhoodIteratorType;
   typename NeighborhoodIteratorType::SizeType             radius;
   radius.Fill(0);
   NeighborhoodIteratorType                                itNeigh(radius,m_MagnitudeFilter->GetOutput(),
@@ -602,8 +607,8 @@ LineSegmentDetector<TInputImage, TPrecision>
       if(l<l_min) l_min = l;   if(l>l_max)  l_max = l;
       if(w<w_min) w_min = w;   if(w>w_max)  w_max = w;
 
-      sum_l[static_cast< int>(vcl_floor(l)+0.5)+ Diagonal ] +=  weight;
-      sum_w[static_cast< int>(vcl_floor(w)+0.5)+ Diagonal ] +=  weight;
+      sum_l[static_cast< int>(vcl_floor(l)+0.5)+ Diagonal ] +=  static_cast<MagnitudePixelType>(weight);
+      sum_w[static_cast< int>(vcl_floor(w)+0.5)+ Diagonal ] +=  static_cast<MagnitudePixelType>(weight);
       
       ++it;
     }
@@ -677,7 +682,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   double weight = 0.,sum = 0.;
   
   /** Neighborhooding again*/
-  typedef itk::ConstNeighborhoodIterator<InputImageType>  NeighborhoodIteratorType;
+  typedef itk::ConstNeighborhoodIterator<OutputImageType>  NeighborhoodIteratorType;
   typename NeighborhoodIteratorType::SizeType             radius;
   radius.Fill(0);
   NeighborhoodIteratorType                                itNeigh(radius,m_MagnitudeFilter->GetOutput(),

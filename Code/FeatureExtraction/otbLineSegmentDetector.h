@@ -60,7 +60,8 @@ namespace Functor
 	
 	inline TOutputPixel operator()(const TInputPixel& input)
 	  {
-	    TOutputPixel resp = vcl_atan2(input[0],-input[1]);
+	    TOutputPixel resp = static_cast<TOutputPixel>(vcl_atan2(input[0],-input[1]));
+	    
  	    if (resp< itk::NumericTraits<TOutputPixel>::Zero)
  	      {
  		resp = -resp;
@@ -130,19 +131,19 @@ public:
   typedef typename DirectionVectorType::iterator                        DirectionVectorIteratorType; 
 
   /** */ 
-  typedef itk::GradientRecursiveGaussianImageFilter<InputImageType > GradientFilterType;
+  typedef itk::GradientRecursiveGaussianImageFilter<OutputImageType > GradientFilterType;
   //typedef itk::GradientImageFilter<InputImageType > GradientFilterType;
   typedef typename GradientFilterType::Pointer GradientFilterPointerType;
   typedef typename GradientFilterType::OutputImageType GradientOutputImageType;
 
 
-  typedef itk::UnaryFunctorImageFilter<GradientOutputImageType,InputImageType,
+  typedef itk::UnaryFunctorImageFilter<GradientOutputImageType,OutputImageType,
   Functor::MagnitudeFunctor<typename GradientOutputImageType::PixelType,TPrecision> > MagnitudeFilterType;
   typedef typename MagnitudeFilterType::Pointer                                   MagnitudeFilterPointerType;
   typedef typename MagnitudeFilterType::OutputImageType::PixelType                MagnitudePixelType;
   typedef typename MagnitudeFilterType::OutputImageType                           MagnitudeImageType;
             
-  typedef itk::UnaryFunctorImageFilter<GradientOutputImageType,InputImageType,
+  typedef itk::UnaryFunctorImageFilter<GradientOutputImageType,OutputImageType,
   Functor::OrientationFunctor<typename GradientOutputImageType::PixelType,TPrecision> > OrientationFilterType;
   typedef typename OrientationFilterType::Pointer OrientationFilterPointerType;
   typedef typename OrientationFilterType::OutputImageType                         OutputImageDirType;
@@ -153,13 +154,11 @@ public:
   typedef typename LabelImageType::Pointer                          LabelImagePointerType;
   
   /** Vector to store the rectangle characteization  center, width, orientation ,( begin ,end ) of the central line*/
-  typedef std::vector<double>                                        RectangleType;
+  typedef std::vector<double>                                       RectangleType;
   typedef typename RectangleType::iterator                          RectangleIteratorType;
   typedef std::vector< RectangleType>                               RectangleListType;
   typedef typename RectangleListType::iterator                      RectangleListTypeIterator; 
 
-  //typedef otb::ImageFileWriter<MagnitudeImageType  >                writerType;
-  //typedef typename writerType::Pointer                              writerPointerType;
 
 protected:
   LineSegmentDetector();
