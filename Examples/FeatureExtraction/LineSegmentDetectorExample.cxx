@@ -52,38 +52,108 @@ int main( int argc, char * argv[] )
   const   unsigned int    Dimension = 2;
   
 
-  
-  typedef otb::Image< InputPixelType,  Dimension >    InputImageType;
-  typedef otb::ImageFileReader<InputImageType>        ReaderType;
+// Software Guide : BeginLatex
+//
+// As usual, we start by defining the types for the input image and
+// the image file reader.
+//
+// Software Guide : EndLatex
 
+// Software Guide : BeginCodeSnippet  
+  typedef otb::Image< InputPixelType,  Dimension >    ImageType;
+  typedef otb::ImageFileReader<ImageType>        ReaderType;
+// Software Guide : EndCodeSnippet    
+// Software Guide : BeginLatex
+//
+// We instantiate the reader and set the file name for the input image.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet  
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
-  
-  
-  typedef otb::LineSegmentDetector<InputImageType,
+// Software Guide : EndCodeSnippet    
+// Software Guide : BeginLatex
+//
+// We define now the type for the segment detector filter. It is
+// templated over the input image type and the precision with which
+// the coordinates of the detected segments will be given. It is
+// recommended to set this precision to a real type. The output of the
+// filter will be a list of \doxygen{itk}{LineSpatialObject}s.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet  
+    
+  typedef otb::LineSegmentDetector<ImageType,
                                                  PrecisionType> LsdFilterType;
 
 
   
-  LsdFilterType::Pointer  lsdFilter = lsdFilterType::New();
+  LsdFilterType::Pointer  lsdFilter = LsdFilterType::New();
+
+  // Software Guide : EndCodeSnippet    
+// Software Guide : BeginLatex
+//
+// In order to be able to display the results, we will draw the
+// detected segments on top of the input image. For this matter, we
+// will use the \doxygen{otb}{DrawLineSpatialObjectListFilter} which
+// is templated over the input and output image types.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet  
 
 
-  typedef otb::DrawLineSpatialObjectListFilter< InputImageType,
-                                       InputImageType > DrawLineListType;
+  typedef otb::DrawLineSpatialObjectListFilter< ImageType,
+                                       ImageType > DrawLineListType;
   DrawLineListType::Pointer drawLineFilter =   DrawLineListType::New();
 
 
-  reader->GenerateOutputInformation();
+  // Software Guide : EndCodeSnippet    
+// Software Guide : BeginLatex
+//
+// We can now define the type for the writer, instantiate it and set
+// the file name for the output image.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet  
+
+  typedef otb::ImageFileWriter<ImageType>        WriterType;
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName(outfname);
+
+  // Software Guide : EndCodeSnippet    
+// Software Guide : BeginLatex
+//
+// We plug the pipeline.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet  
+
   lsdFilter->SetInput(reader->GetOutput());
+  writer->SetInput(drawLineFilter->GetOutput());
+
   drawLineFilter->SetInput(reader->GetOutput());
   drawLineFilter->SetInputLineSpatialObjectList(lsdFilter->GetOutput());
 
- 
-  typedef otb::ImageFileWriter<InputImageType>        WriterType;
-  WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName(outfname);
-  writer->SetInput(drawLineFilter->GetOutput());
+  // Software Guide : EndCodeSnippet    
+// Software Guide : BeginLatex
+//
+// Before calling the \code{Update()} method of the writer in order to
+// trigger the pipeline execution, we call the
+// \doxygen{GenerateOutputInformation()} of the reader, so the LSD
+// filter gets the information about image size and spacing.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet  
+
+
+  reader->GenerateOutputInformation();
   writer->Update();
 
   
