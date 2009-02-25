@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageMetadata_h
-#define __otbImageMetadata_h
+#ifndef __otbImageMetadataInterface_h
+#define __otbImageMetadataInterface_h
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
@@ -31,16 +31,16 @@
 
 namespace otb
 {
-/** \class ImageMetadata
+/** \class ImageMetadataInterface
  *
- * \brief Creation of an "otb" ImageMetadata that gets metadata.
+ * \brief Creation of an "otb" ImageMetadataInterface that gets metadata.
  *
  */
-class ITK_EXPORT ImageMetadata : public itk::Object
+class ITK_EXPORT ImageMetadataInterface : public itk::Object
 {
 public:
 
-  typedef ImageMetadata Self;
+  typedef ImageMetadataInterface Self;
   typedef itk::Object Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -49,7 +49,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageMetadata, itk::Object);
+  itkTypeMacro(ImageMetadataInterface, itk::Object);
 
 
   typedef itk::MetaDataDictionary   MetaDataDictionaryType;
@@ -105,11 +105,11 @@ public:
 
 
 protected:
-  ImageMetadata();
-  virtual ~ImageMetadata() {};
+  ImageMetadataInterface();
+  virtual ~ImageMetadataInterface() {};
 
 private:
-  ImageMetadata(const Self&); //purposely not implemented
+  ImageMetadataInterface(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   OTB_GCP m_GCP;
