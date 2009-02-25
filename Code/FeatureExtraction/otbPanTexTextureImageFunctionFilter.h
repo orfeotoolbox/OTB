@@ -41,14 +41,14 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TCoordRep = float >
 class ITK_EXPORT PanTexTextureImageFunctionFilter : 
 public FunctionWithNeighborhoodToImageFilter< TInputImage, TOutputImage, 
-                                              TextureImageFunction<TInputImage, ITK_TYPENAME Functor::PanTexTextureFunctor< ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage>, itk::VariableLengthVector<double> >, TCoordRep  >      >
+                                              TextureImageFunction<TInputImage, ITK_TYPENAME Functor::PanTexTextureFunctor< ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType>, TCoordRep  > >
 
 {
   public:
   /** Standard class typedefs. */
   typedef PanTexTextureImageFunctionFilter Self;
   typedef FunctionWithNeighborhoodToImageFilter< TInputImage, TOutputImage, 
-                                              TextureImageFunction<TInputImage, typename Functor::PanTexTextureFunctor< typename itk::ConstNeighborhoodIterator<TInputImage>, itk::VariableLengthVector<double> >, TCoordRep  >      >  Superclass; 
+                                              TextureImageFunction<TInputImage, typename Functor::PanTexTextureFunctor< typename TInputImage::PixelType, typename TOutputImage::PixelType >, TCoordRep  > >  Superclass; 
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 

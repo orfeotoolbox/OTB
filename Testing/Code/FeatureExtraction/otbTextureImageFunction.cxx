@@ -86,7 +86,6 @@ int otbTextureImageFunction(int argc, char * argv[])
       typedef otb::Functor::EnergyTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
     }
-  
   else if ( strArgv == "ENT" )
     {
       typedef otb::Functor::EntropyTextureFunctor<InputPixelType, InputPixelType> FunctorType;
@@ -97,13 +96,12 @@ int otbTextureImageFunction(int argc, char * argv[])
       typedef otb::Functor::InverseDifferenceMomentTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
     }
-  /*
- else if ( strArgv == "ASM" )
+  else if ( strArgv == "ASM" )
     {
       typedef otb::Functor::AngularSecondMomentumTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
     }
- else if ( strArgv == "VAR" )
+  else if ( strArgv == "VAR" )
     {
       typedef otb::Functor::VarianceTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
@@ -168,7 +166,6 @@ int otbTextureImageFunction(int argc, char * argv[])
       typedef otb::Functor::MeanTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
     }
-  */
   else
     {
       return EXIT_FAILURE;
