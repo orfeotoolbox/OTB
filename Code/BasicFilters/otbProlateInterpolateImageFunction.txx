@@ -101,7 +101,7 @@ ProlateFunction<TInput, TOutput>
 template<class TInput, class TOutput>
 double
 ProlateFunction<TInput, TOutput>
-::ComputeEnergy(double resampleRatio)
+::ComputeEnergy(double resampleRatio) const
 {
   vnl_vector<vcl_complex<double> > resampledProfile(1024);
   resampledProfile.fill(0);
