@@ -17,12 +17,31 @@
 =========================================================================*/
 
 #include "otbImage.h"
-#include "otbLineSegmentDetector.h"
 #include "otbDrawLineSpatialObjectListFilter.h"
 #include "otbLineSpatialObjectList.h"
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+
+//  Software Guide : BeginCommandLineArgs
+//    INPUTS: {QB_Suburb.png}
+//    OUTPUTS: {QB_SuburbLSD.png}
+//    2
+//  Software Guide : EndCommandLineArgs
+
+// Software Guide : BeginLatex
+//
+// This example illustrates the use of the
+// \doxygen{otb}{LineSegmentDetector}\cite{LSD}, also known as {\em Lucy in the
+// Sky with Diamonds}.
+//
+// The first step required to use this filter is to include its header file.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet
+#include "otbLineSegmentDetector.h"
+// Software Guide : EndCodeSnippet
 
 int main( int argc, char * argv[] )
 {
@@ -30,6 +49,7 @@ int main( int argc, char * argv[] )
   const   char * outfname  = argv[2];
   
   typedef unsigned char   InputPixelType;
+  typedef unsigned char   PrecisionType;
   const   unsigned int    Dimension = 2;
   
   /** Typedefs */
@@ -42,7 +62,7 @@ int main( int argc, char * argv[] )
   
 
   typedef otb::LineSegmentDetector<InputImageType,
-                                                 InputPixelType> lsdFilterType;
+                                                 PrecisionType> lsdFilterType;
 
 
   /** Instanciation of smart pointer*/
