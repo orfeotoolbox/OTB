@@ -870,6 +870,29 @@ ADD_TEST(raTvISU_MultiChannelRAndNIRBuiltUpIndexImageFilter ${RADIOMETRY_TESTS8}
 )
 
 
+# -------            NDWI MutliChannel WaterIndexFilter ------------------------------
+ADD_TEST(raTvNDWI_MultiChannelWaterIndexImageFilter ${RADIOMETRY_TESTS8}  
+ --compare-image ${EPSILON}   ${BASELINE}/raMultiChannelWaterIndex_NDWI_qb_RoadExtract.tif
+                   ${TEMP}/raMultiChannelWaterIndex_NDWI_qb_RoadExtract.tif
+        otbNDWIMultiChannelWaterIndexImageFilter
+        ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
+        ${TEMP}/raMultiChannelWaterIndex_NDWI_qb_RoadExtract.tif
+        3 4 # mir nir channels
+)
+
+
+# -------            NDWI SingleChannel WaterIndexFilter ------------------------------
+ADD_TEST(raTvNDWI_WaterIndexImageFilter ${RADIOMETRY_TESTS8}  
+ --compare-image ${EPSILON}   ${BASELINE}/raWaterIndex_NDWI_verySmallFSATSW.tif
+                   ${TEMP}/raWaterIndex_NDWI_verySmallFSATSW.tif
+        otbNDWIWaterIndexImageFilter
+        ${INPUTDATA}/verySmallFSATSW_r.tif
+        ${INPUTDATA}/verySmallFSATSW_nir.tif
+        ${TEMP}/raWaterIndex_NDWI_verySmallFSATSW.tif
+)
+
+
+
 # A enrichir
 SET(Radiometry_SRCS1
 otbMultiChannelRAndNIRVegetationIndexImageFilterNew.cxx
@@ -940,6 +963,8 @@ otbNDBITM4AndTM5IndexImageFilter.cxx
 otbNDBIMultiChannelTM4AndTM5IndexImageFilter.cxx
 otbISURAndNIRIndexImageFilter.cxx
 otbISUMultiChannelRAndNIRIndexImageFilter.cxx
+otbNDWIMultiChannelWaterIndexImageFilter
+otbNDWIWaterIndexImageFilter
 )
 
 
