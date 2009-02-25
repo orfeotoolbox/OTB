@@ -4,6 +4,9 @@ INCLUDE_REGULAR_EXPRESSION("^.*$")
 ADD_EXECUTABLE(LeeImageFilter LeeImageFilter.cxx )
 TARGET_LINK_LIBRARIES(LeeImageFilter OTBCommon OTBIO)
 
+ADD_EXECUTABLE(FrostImageFilter FrostImageFilter.cxx )
+TARGET_LINK_LIBRARIES(FrostImageFilter OTBCommon OTBIO)
+
 ADD_EXECUTABLE(DEMToRainbowExample DEMToRainbowExample.cxx )
 TARGET_LINK_LIBRARIES(DEMToRainbowExample OTBCommon OTBIO)
 
@@ -42,6 +45,18 @@ ADD_TEST(LeeImageFilterTest ${EXE_TESTS}
 	${INPUTDATA}/GomaSmall.png
 	${TEMP}/GomaSmallLeeFiltered.png
     3 1
+)
+
+# ------- FrostImageFilterTest----------
+
+ADD_TEST(FrostImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/GomaSmallLeeFiltered.png
+	${TEMP}/GomaSmallFrostFiltered.png
+	FrostImageFilterTest
+	${INPUTDATA}/GomaSmall.png
+	${TEMP}/GomaSmallFrostFiltered.png
+    5 0.1
 )
 
 # ------- DEMToRainbowExampleTest ----------
