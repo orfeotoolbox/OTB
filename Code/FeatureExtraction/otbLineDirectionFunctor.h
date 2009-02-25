@@ -26,10 +26,28 @@
 namespace otb
 {
 /** \class LineDirectionFunctor
- *  \brief This functor first computes the spectral angle according to a reference pixel.
- *  \brief Then multiplies the result by a gaussian coefficient
- *  \brief And reverse the pixel values.
+ *  \brief This functor computes textures based on line direction analysis through the central pixel.
+ * 
+ *  Directions are computed using NumberOfDirection, used to compute a constant step angle.
+ *  A direction is defined as : $\mathit{d_{i} = \sqrt{(m^{e1}-m{e2})^{2}+(n^{e1}-n{e2})^{2}}}$
+ *  From  $\mathit{d_{i}}, histograms are defined :
+ *  $\mathit{H(c) : \{c \in I \mid \lbrack d_{1}(c), \ldots , d_{i}(c), \ldots , d_{D}(c)\rbrack  \}}$
+ *  Thus, 6 textures are defined :
+ *  $\mathit{length = \max_{i \in \lbrack1;D\rbrack}(d_{i}(c)}$
+ *  $\mathit{width = \min_{i \in \lbrack1;D\rbrack}(d_{i}(c)}$
+ *  $\mathit{PSI = \frac{1}{D}\sum_{1=1}^{D}d_{i}(c)}$
+ *  $\mathit{\omega-mean = \frac{1}{D}\sum_{1=1}^{D}\frac{\alpha.(k_{i}-1)}{st_{i}}d_{i}(c)}$
+ *  $\mathit{ratio = \arctan{\frac{\sum_{j=1}^{n}{sort_{min}^{j}(H(c))}}{\sum_{j=1}^{n}{sort_{max}^{j}(H(c))}}}}$
+ *  $\mathit{SD = \frac{1}{D-1}\sqrt{\sum_{1=1}^{D}(d_{i}(c)-PSI)^{2}}}$
+ *
+ *  For more details, please refer to refer to Xin Huang, Liangpei Zhang and Pingxiang Li publication,
+ *  Classification and Extraction of Spatial Features in Urban Areas
+ *  Using High-Resolution Multispectral Imagery.
+ *  IEEE Geoscience and Remote Sensing Letters,
+ *  vol. 4, n. 2, 2007, pp 260-264
  */
+
+
 namespace Functor
 {
 template<class TIter,class TOutputValue>
@@ -53,7 +71,6 @@ public:
   typedef typename TIter::OffsetType        OffsetType;
   typedef TOutputValue                      OutputValueType;
   typedef std::vector<OutputValueType>      OutputType;
-  //typedef typename TOutputValue::ValueType  InternalOutputPixelType;
  
   void SetSpatialThreshold( unsigned int thresh ){ m_SpatialThreshold=thresh; };
   void SetSpectralThreshold( InternalPixelType thresh ){ m_SpectralThreshold=thresh; };
@@ -98,9 +115,6 @@ public:
 
     std::vector<double>::iterator itVector;
     OutputType out(6, 0);
-    //TOutputValue out;
-    //out.SetSize(6);
-    //out.Fill(0);
   
     OffsetType off;
     off.Fill(0);
