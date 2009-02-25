@@ -65,20 +65,17 @@ public:
   };
   virtual ~TextureFunctorBase() {};
 
-  typedef TScalarInputPixelType                InputScalarType;
-  typedef TScalarOutputPixelType               OutputScalarType;
-  typedef itk::VariableLengthVector<InputScalarType> InputVectorType;
+  typedef TScalarInputPixelType                       InputScalarType;
+  typedef TScalarOutputPixelType                      OutputScalarType;
+  typedef itk::VariableLengthVector<InputScalarType>  InputVectorType;
   typedef itk::VariableLengthVector<OutputScalarType> OutputVectorType;
-  typedef itk::Offset<>                           OffsetType;
-  typedef itk::Size<>                            RadiusType;
-  //typedef typename OutputType::ValueType       OutputPixelType;
-  //typedef typename IterType::InternalPixelType InternalPixelType;
-  //typedef typename IterType::ImageType         ImageType;
-  typedef itk::Neighborhood<InputScalarType, 2>    NeighborhoodType;
-  typedef itk::Neighborhood<InputVectorType, 2>    NeighborhoodVectorType;
-  typedef std::vector<double>                   DoubleVectorType;
-  typedef std::vector<int>                      IntVectorType;
-  typedef std::vector<IntVectorType>            IntVectorVectorType;
+  typedef itk::Offset<>                               OffsetType;
+  typedef itk::Size<>                                 RadiusType;
+  typedef itk::Neighborhood<InputScalarType, 2>       NeighborhoodType;
+  typedef itk::Neighborhood<InputVectorType, 2>       NeighborhoodVectorType;
+  typedef std::vector<double>                         DoubleVectorType;
+  typedef std::vector<int>                            IntVectorType;
+  typedef std::vector<IntVectorType>                  IntVectorVectorType;
 
 
   void SetOffset(OffsetType off){ m_Offset=off; };

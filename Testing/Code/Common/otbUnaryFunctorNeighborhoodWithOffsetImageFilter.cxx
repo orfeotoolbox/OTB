@@ -25,15 +25,20 @@
 
 namespace Functor
 {
-template <class TIter, class TOutput>
+template <class TInput, class TOutput>
 class UnaryFunctorNeighborhoodWithOffseImageFilterTest
 {
 public:
   UnaryFunctorNeighborhoodWithOffseImageFilterTest() {};
   ~UnaryFunctorNeighborhoodWithOffseImageFilterTest() {};
 
-  typedef TIter IterType;
-  typedef typename IterType::OffsetType OffsetType;
+  typedef TInput                                      InputScalarType;
+  typedef TOutput                                     OutputScalarType;
+  typedef itk::VariableLengthVector<InputScalarType>  InputVectorType;
+  typedef itk::VariableLengthVector<OutputScalarType> OutputVectorType;
+  typedef itk::Offset<>                               OffsetType;
+  typedef itk::Neighborhood<InputScalarType, 2>       NeighborhoodType;
+  typedef itk::Neighborhood<InputVectorType, 2>       NeighborhoodVectorType;
 
   void SetOffset(OffsetType off)
   {
@@ -44,9 +49,13 @@ public:
     return m_Offset;
   };
 
-  inline TOutput operator() (const TIter & it)
+  inline OutputScalarType operator() (const NeighborhoodType & neigh)
   {
-    return(static_cast<TOutput>(it.GetCenterPixel()));
+    return(static_cast<OutputScalarType>(neigh.GetCenterValue()));
+  }
+  inline OutputVectorType operator() (const NeighborhoodVectorType & neigh)
+  {
+    return(static_cast<OutputVectorType>(neigh.GetCenterValue()));
 
   }
 private:
@@ -68,7 +77,7 @@ int otbUnaryFunctorNeighborhoodWithOffsetImageFilter(int argc, char * argv[])
   typedef otb::ImageFileReader<ImageType>            ReaderType;
   typedef otb::ImageFileWriter<ImageType>            WriterType;
   typedef itk::ConstNeighborhoodIterator<ImageType>  IterType;;
-  typedef Functor::UnaryFunctorNeighborhoodWithOffseImageFilterTest<IterType, PixelType>  FunctorType;
+  typedef Functor::UnaryFunctorNeighborhoodWithOffseImageFilterTest<InputPixelType, InputPixelType>  FunctorType;
   typedef otb::UnaryFunctorNeighborhoodWithOffsetImageFilter<ImageType, ImageType, FunctorType>     UnaryFunctorNeighborhoodImageFilterType;
 
   // Instantiating object
