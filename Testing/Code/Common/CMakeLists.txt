@@ -1,4 +1,3 @@
-
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
@@ -122,6 +121,10 @@ ADD_TEST(coTvExtractROI_RGB2 ${COMMON_TESTS2}
         ${INPUTDATA}/poupees.jpg
         ${TEMP}/coExtractROI_RGB_poupees_302_1_134_330.jpg
         303 2 134 330 )
+
+# -------            otb::VectorDataExtractROI   ------------------------------
+ADD_TEST(coTuVectorDataExtractROINew ${COMMON_TESTS2}
+	otbVectorDataExtractROINew)
 
 
 # -------            otb::MultiChannelExtractROI   ------------------------------
@@ -592,6 +595,7 @@ otbExtractROI_RGB.cxx
 otbMultiChannelExtractROI.cxx
 otbMultiChannelExtractROINew.cxx
 otbTestMultiExtractMultiUpdate.cxx
+otbVectorDataExtractROINew.cxx
 )
 SET(BasicCommon_SRCS3
 otbMultiToMonoChannelExtractROI.cxx

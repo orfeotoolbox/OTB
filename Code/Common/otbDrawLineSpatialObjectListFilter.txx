@@ -270,7 +270,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
 ::CropSegment(OutputIndexType *indexToCrop,OutputIndexType *otherIndex,  const OutputImageRegionType *outputRegionForThread) const
 
 {
-  OutputIndexType tempIndex ,tempOtherIndex;
+  OutputIndexType tempIndex;
 
   /** Dimensions of the buffered region*/
   typename OutputImageRegionType::SizeType  size = outputRegionForThread->GetSize();
@@ -280,21 +280,23 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
   double slope = 0.;
   double lengthSegment =0.;
   double origin = 0.;
+  double tempOtherIndexX= 0.;
   
   /** Equation of the first Line*/
-  tempOtherIndex = *otherIndex;
 
-  if(vcl_abs( -(*indexToCrop)[0] +(*otherIndex)[0]) <1e-4)
-     tempOtherIndex[0]= 0.000001;
+  if(vcl_abs( (*otherIndex)[0] -(*indexToCrop)[0] ) <1e-4)
+    tempOtherIndexX= 0.000001;
+  else
+    tempOtherIndexX = static_cast<double>((*otherIndex)[0]);
 
 
-  if( (*indexToCrop)[0] < tempOtherIndex[0])
+  if( (*indexToCrop)[0] < (*otherIndex)[0])
     lengthSegment = (*otherIndex)[1] -(*indexToCrop)[1];
   else 
     lengthSegment = (*indexToCrop)[1] -(*otherIndex)[1];
   
-  slope = lengthSegment/( tempOtherIndex[0] -(*indexToCrop)[0]);
-  origin = (*indexToCrop)[1] - (slope * (*indexToCrop)[0]);
+  slope = lengthSegment/( tempOtherIndexX - static_cast<double>((*indexToCrop)[0]));
+  origin = (*indexToCrop)[1] - (slope * static_cast<double>((*indexToCrop)[0]));
   
 
   if((*indexToCrop)[1] < 0)
