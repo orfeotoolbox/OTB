@@ -26,7 +26,6 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}
 //    OUTPUTS: {QB_SuburbLSD.png}
-//    2
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -52,21 +51,22 @@ int main( int argc, char * argv[] )
   typedef unsigned char   PrecisionType;
   const   unsigned int    Dimension = 2;
   
-  /** Typedefs */
+
+  
   typedef otb::Image< InputPixelType,  Dimension >    InputImageType;
   typedef otb::ImageFileReader<InputImageType>        ReaderType;
+
+
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
   
   
-  
-
   typedef otb::LineSegmentDetector<InputImageType,
-                                                 PrecisionType> lsdFilterType;
+                                                 PrecisionType> LsdFilterType;
 
 
-  /** Instanciation of smart pointer*/
-  lsdFilterType::Pointer  lsdFilter = lsdFilterType::New();
+  
+  LsdFilterType::Pointer  lsdFilter = lsdFilterType::New();
 
 
   typedef otb::DrawLineSpatialObjectListFilter< InputImageType,
