@@ -25,17 +25,16 @@ namespace otb
 
 template <class TOutputImage>
 ImageViewerModel<TOutputImage>
-::ImageViewerModel()
+::ImageViewerModel() : m_Name("Default"), m_Layers(), m_RasterizedQuicklook(), 
+		       m_HasQuicklook(false),m_RasterizedExtract(),m_HasExtract(false),
+		       m_ExtractRegion(), m_RasterizedScaledExtract(), m_HasScaledExtract(false),
+		       m_ScaledExtractRegion()
+
 {
   // Intializing the layer list
   m_Layers = LayerListType::New();
-  // Viewer name
-  m_Name = "Default";
+
   
-  // Default: nothing is available
-  m_HasQuicklook     = false;
-  m_HasExtract       = false;
-  m_HasScaledExtract = false;
 }
 
 template <class TOutputImage>

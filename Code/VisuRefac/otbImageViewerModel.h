@@ -130,6 +130,11 @@ public:
   itkSetMacro(ScaledExtractRegion,RegionType);
   itkGetConstReferenceMacro(ScaledExtractRegion,RegionType);
 
+  /** Get the state of each view */
+  itkGetMacro(HasQuicklook,bool);
+  itkGetMacro(HasExtract,bool);
+  itkGetMacro(HasScaledExtract,bool);
+  
   /** Update will render all visible layers, rasterize all visible
    * layers and notify all listeners. */
   virtual void Update(void);
