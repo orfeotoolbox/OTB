@@ -230,13 +230,6 @@ int main( int argc, char *argv[] )
   //
   //  Software Guide : EndLatex
 
-  //  \relatedClasses
-  //  \begin{itemize}
-  //  \item \doxygen{otb}{FrostImageFilter}
-  //  \end{itemize}
-  //
-  //  Software Guide : EndLatex
-
 
 
   return EXIT_SUCCESS;
