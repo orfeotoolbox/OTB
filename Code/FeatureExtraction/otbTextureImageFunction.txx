@@ -69,8 +69,6 @@ TextureImageFunction<TInputImage, TFunctor, TCoordRep>
     return ( itk::NumericTraits<RealType>::max() );
   }
 
-  IteratorType it(m_Radius, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
-  it.SetLocation(index);
   SizeType radiusOff;
   radiusOff[0] = (m_Radius[0]) + vcl_abs(m_Offset[0]);
   radiusOff[1] = (m_Radius[1]) + vcl_abs(m_Offset[1]);
@@ -80,8 +78,7 @@ TextureImageFunction<TInputImage, TFunctor, TCoordRep>
   FunctorType funct;
   funct.SetOffset(m_Offset);
   
-  //return static_cast<RealType>(funct.ComputeOverSingleChannel( it.GetNeighborhood(), itOff.GetNeighborhood()) );
-  return static_cast<RealType>(funct( it.GetNeighborhood() ));
+  return static_cast<RealType>(funct( itOff.GetNeighborhood() ));
 }
 
 

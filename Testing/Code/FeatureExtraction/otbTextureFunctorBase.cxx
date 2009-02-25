@@ -34,12 +34,6 @@ public:
     {};
   ~TextureFunctorTest(){};
 
-  //typedef TScalarInputT                        IterType;
-  //typedef TScalarOutput                        OutputType;
-  //typedef typename IterType::OffsetType        OffsetType;
-  ///typedef typename IterType::RadiusType        RadiusType;
-  //typedef typename IterType::InternalPixelType InternalPixelType;
-  //typedef typename IterType::ImageType         ImageType;
   typedef itk::Neighborhood<TScalarInput, 2>    NeighborhoodType;
   
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
