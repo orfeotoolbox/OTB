@@ -116,13 +116,31 @@ ImageView<TInputImage>
     // Compute the appropriate scale
     const double wratio = static_cast<double>(m_ScrollWidget->w())/static_cast<double>(qlRegion.GetSize()[0]);
     const double hratio = static_cast<double>(m_ScrollWidget->h())/static_cast<double>(qlRegion.GetSize()[1]);
-    const double scale = std::max(wratio,hratio);
+    const double scale = std::min(wratio,hratio);
     m_ScrollWidget->SetIsotropicZoom(scale);
+
+    // Setting widget label
+    std::string label = m_ScrollWidget->GetIdentifier();
+    label+=(" - ");
+    label+=m_Model->GetName();
+    m_ScrollWidget->label(label.c_str());
+
+    // display the zoom rectangle if necessary
+    if(m_Model->GetHasExtract())
+      {
+      m_ScrollWidget->SetDisplayRectangle(true);
+      m_ScrollWidget->SetRectangle(m_Model->GetSubsampledExtractRegion());
+      }
+    else
+      {
+      m_ScrollWidget->SetDisplayRectangle(false);
+      }
+    }
 
     // Redraw
     m_ScrollWidget->redraw();
-    }
 }
+
 
 template < class TInputImage >
 void
@@ -133,6 +151,24 @@ ImageView<TInputImage>
     {
     m_FullWidget->ReadBuffer(m_Model->GetRasterizedExtract(),m_Model->GetRasterizedExtract()
 			     ->GetLargestPossibleRegion());
+
+   // Setting widget label
+    std::string label = m_FullWidget->GetIdentifier();
+    label+=(" - ");
+    label+=m_Model->GetName();
+    m_FullWidget->label(label.c_str());
+
+    // display the zoom rectangle if necessary
+    if(m_Model->GetHasScaledExtract())
+      {
+      m_FullWidget->SetDisplayRectangle(true);
+      m_FullWidget->SetRectangle(m_Model->GetScaledExtractRegion());
+      }
+    else
+      {
+      m_FullWidget->SetDisplayRectangle(false);
+      }
+    // redraw the widget
     m_FullWidget->redraw();
     }
  }
@@ -146,6 +182,13 @@ ImageView<TInputImage>
     {
     m_ZoomWidget->ReadBuffer(m_Model->GetRasterizedScaledExtract(),m_Model->GetRasterizedScaledExtract()
 			     ->GetLargestPossibleRegion());
+
+    // Setting widget label
+    std::string label = m_ZoomWidget->GetIdentifier();
+    label+=(" - ");
+    label+=m_Model->GetName();
+    m_ZoomWidget->label(label.c_str());
+
     m_ZoomWidget->redraw();
     }  
 }

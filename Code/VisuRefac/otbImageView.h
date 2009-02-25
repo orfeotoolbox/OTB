@@ -51,7 +51,7 @@ public:
   /** Model typedef */
   typedef TViewerModel                         ModelType;
   typedef typename ModelType::Pointer          ModelPointerType;
-  typedef typename ModelType::OutputImageType ImageType;
+  typedef typename ModelType::OutputImageType  ImageType;
   
   /** Controller typedef */
   typedef ImageWidgetController                ControllerType;
