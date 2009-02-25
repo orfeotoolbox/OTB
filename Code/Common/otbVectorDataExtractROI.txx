@@ -20,6 +20,7 @@
 
 #include "otbVectorDataExtractROI.h"
 #include "itkImageRegion.h"
+#include "itkPreOrderTreeIterator.h"
 #include "itkIndex.h"
 #include "itkSize.h"
 
@@ -77,18 +78,20 @@ VectorDataExtractROI<TVectorData>
 ::GenerateData(void)
 {
   /** Get The input and the outptut*/
-  
-  
+  typename VectorDataType::ConstPointer   input = this->GetInput();
+  if(!input)
+    std::cout << " Probleme avec la recuperation du input"<<std::endl;
   
   /** Create a region with the right size*/
-  const   unsigned int                Dimension = 2;
+  const   unsigned int                        Dimension = 2;
   typedef itk::ImageRegion<Dimension>         ImageRegionType;
   typedef itk::Index<Dimension>               IndexType;
   typedef itk::Size<Dimension>                SizeType;
-    
-  ImageRegionType                     roi;
-  IndexType                           index;
-  SizeType                            size;
+  
+  /** */
+  ImageRegionType                             roi;
+  IndexType                                   index;
+  SizeType                                    size;
 
   /** Update the region information*/
   index[0] = m_StartX;
@@ -99,13 +102,31 @@ VectorDataExtractROI<TVectorData>
   /** Create the region*/
   roi.SetSize(size);
   roi.SetIndex(index);
+  
+  /** Loop in the vectorData file*/
+  typedef itk::PreOrderTreeIterator<DataTreeType>                 TreeIteratorType;
+  TreeIteratorType                                                it(input->GetDataTree());
 
-  std::cout << "ROI " << roi<<std::endl;
-  
-  /***/
-  
-  
-  
+  it.GoToBegin();
+  while (!it.IsAtEnd())
+  {
+    
+    itk::PreOrderTreeIterator<DataTreeType> itParent = it;
+    bool goesOn = true;
+
+    if (it.Get()->IsPolygonFeature())
+      std::cout << " C'est un polygone et les coordonnees " << it.Get()->GetPolygonExteriorRing()->GetVertexList()->GetElement(0)  << std::endl;
+    
+    if (it.Get()->IsLineFeature())
+	std::cout << "Vertex List Size " << it.Get()->GetLine()->GetVertexList()->Size() <<std::endl;
+
+    if (it.Get()->IsPointFeature())
+      std::cout << " C'est un point" << std::endl;
+        
+
+    ++it;
+  }
+
 
 }
 
