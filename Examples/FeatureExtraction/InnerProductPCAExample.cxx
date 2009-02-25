@@ -134,8 +134,7 @@ int main( int argc, char* argv[] )
 
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:INNERPRODUCTPCA_FILTER} shows the result of applying
-  // the key point density filter to an image using the SIFT
-  // detector.
+  // the PCA to a 3 band RGB image.
   // \begin{figure}
   // \center
   // \includegraphics[width=0.25\textwidth]{ROI_QB_MUL_1.eps}
