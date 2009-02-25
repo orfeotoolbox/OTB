@@ -34,12 +34,29 @@
 // This example illustrates the use of the \doxygen{otb}{FrostImageFilter}.
 // This filter belongs to the family of the edge-preserving smoothing
 // filters which are usually used for speckle reduction in radar
-// images. The Frost filter \cite{FrostFilter} aplies a linear regression
-// which minimizes the mean-square error in the frame of a
-// multiplicative speckle model.
+// images.
+//
+// This filter uses a negative exponential convolution kernel.
+// The output of the filter for pixel p is:
+//      $ \hat I_{s}=\sum_{p\in\eta_{p}} m_{p}I_{p} $
+//
+// where :   $ m_{p}=\frac{KC_{s}^{2}\exp(-KC_{s}^{2}d_{s,p})}{\sum_{p\in\eta_{p}} KC_{s}^{2}\exp(-KC_{s}^{2}d_{s,p})} $
+//    and  $ d_{s,p}=\sqrt{(i-i_{p})^2+(j-j_{p})^2} $
+//
+// \begin{itemize}
+// \item $ K $     : the decrease coefficient
+// \item $ (i,j)$ : the coordinates of the pixel inside the region
+// defined by $ \eta_{s} $
+// \item $ (i_{p},j_{p})$ : the coordinates of the pixels belonging to $ \eta_{p} \subset \eta_{s} $
+// \item $ C_{s}$ : the variation coefficient computed over $ \eta_{p}$
+// \end{itemize}
 //
 //
-// The first step required to use this filter is to include its header file.
+//
+// Most of this example is similar to the previous one and only the differences
+// will be highlighted.
+//
+// First, we need to include the header:
 //
 // Software Guide : EndLatex
 
@@ -61,31 +78,15 @@ int main( int argc, char * argv[] )
     return EXIT_FAILURE;
   }
 
-  //  Software Guide : BeginLatex
-  //
-  //  Then we must decide what pixel type to use for the image.
-  //
-  //  Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
   typedef  unsigned char  PixelType;
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
-  //  The images are defined using the pixel type and the dimension.
-  //
-  //  Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
   typedef otb::Image< PixelType,  2 >   InputImageType;
   typedef otb::Image< PixelType,  2 >   OutputImageType;
-  // Software Guide : EndCodeSnippet
 
 
   //  Software Guide : BeginLatex
   //
-  //  The filter can be instantiated using the image types defined above.
+  //  The filter can be instantiated using the image types defined previously.
   //
   //  Software Guide : EndLatex
 
@@ -94,41 +95,14 @@ int main( int argc, char * argv[] )
   // Software Guide : EndCodeSnippet
 
 
-  //  Software Guide : BeginLatex
-  //
-  //  An \doxygen{otb}{ImageFileReader} class is also instantiated in order to read
-  //  image data from a file.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader< InputImageType >  ReaderType;
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
-  // An \doxygen{otb}{ImageFileWriter} is instantiated in order to write the
-  // output image to a file.
-  //
-  //  Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileWriter< OutputImageType >  WriterType;
-  // Software Guide : EndCodeSnippet
 
-
-
-  //  Software Guide : BeginLatex
-  //
-  //  Both the filter and the reader are created by invoking their \code{New()}
-  //  methods and assigning the result to SmartPointers.
-  //
-  //  Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader = ReaderType::New();
   FilterType::Pointer filter = FilterType::New();
-  // Software Guide : EndCodeSnippet
+
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput( filter->GetOutput() );
@@ -154,12 +128,11 @@ int main( int argc, char * argv[] )
   //
   //  The method \code{SetRadius()} defines the size of the window to
   //  be used for the computation of the local statistics. The method
-  //  \code{SetNbLooks()} sets the number of looks of the input
-  //  image.
+  //  \code{SetDeramp()} sets the $K$ coefficient.
   //
   //  \index{otb::FrostImageFilter!SetRadius()}
-  //  \index{otb::FrostImageFilter!NbLooks()}
-  //  \index{SetNbLooks()!otb::FrostImageFilter}
+  //  \index{otb::FrostImageFilter!SetDeramp()}
+  //  \index{SetDeramp()!otb::FrostImageFilter}
   //
   //  Software Guide : EndLatex
 
