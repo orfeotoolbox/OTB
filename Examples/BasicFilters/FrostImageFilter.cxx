@@ -178,7 +178,7 @@ int main( int argc, char * argv[] )
   //
   //  \relatedClasses
   //  \begin{itemize}
-  //  \item \doxygen{otb}{FrostImageFilter}
+  //  \item \doxygen{otb}{LeeImageFilter}
   //  \end{itemize}
   //
   //  Software Guide : EndLatex

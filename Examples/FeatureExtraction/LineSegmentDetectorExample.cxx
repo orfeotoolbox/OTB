@@ -156,6 +156,8 @@ int main( int argc, char * argv[] )
   reader->GenerateOutputInformation();
   writer->Update();
 
+  // Software Guide : EndCodeSnippet      
+
   
   return EXIT_SUCCESS;
 }
