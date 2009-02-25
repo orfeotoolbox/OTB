@@ -1645,17 +1645,31 @@ ADD_TEST(feTuLineDirectionImageFilterNew ${FEATUREEXTRACTION_TESTS14}
     otbLineDirectionImageFilterNew)
 
 ADD_TEST(feTvLineDirectionImageFilterTest ${FEATUREEXTRACTION_TESTS14} 
---compare-image 0 #${EPS}
-                ${BASELINE}/feTvLineDirectionImageFilterTest.tif
-                ${TEMP}/feTvLineDirectionImageFilterTest.tif
+--compare-n-images 0 #${EPS}
+		   5
+                   ${BASELINE}/feTvLineDirectionLengthImageFilterTest.tif
+		   ${TEMP}/feTvLineDirectionLengthImageFilterTest.tif
+		   ${BASELINE}/feTvLineDirectionWidthImageFilterTest.tif
+		   ${TEMP}/feTvLineDirectionWidthImageFilterTest.tif
+		   ${BASELINE}/feTvLineDirectionWMeanImageFilterTest.tif
+		   ${TEMP}/feTvLineDirectionWMeanImageFilterTest.tif
+		   ${BASELINE}/feTvLineDirectionRatioImageFilterTest.tif
+		   ${TEMP}/feTvLineDirectionRatioImageFilterTest.tif
+		   ${BASELINE}/feTvLineDirectionSDImageFilterTest.tif
+		   ${TEMP}/feTvLineDirectionSDImageFilterTest.tif
    otbLineDirectionImageFilterTest
     ${INPUTDATA}/poupees_sub_c1.png
-    ${TEMP}/feTvLineDirectionImageFilterTest.tif
-    8 # spectral threshold
-    5 # spatial threshold
+    ${TEMP}/feTvLineDirectionLengthImageFilterTest.tif
+    ${TEMP}/feTvLineDirectionWidthImageFilterTest.tif
+    ${TEMP}/feTvLineDirectionWMeanImageFilterTest.tif
+    ${TEMP}/feTvLineDirectionRatioImageFilterTest.tif
+    ${TEMP}/feTvLineDirectionSDImageFilterTest.tif
+    50 # spectral threshold
+    20 # spatial threshold
     15 # direction
-    3 # max min/max number takes in care for ratio
+    4 # max min/max number takes in care for ratio
     0.6 # alpha value
+    # PSI is disable for texture selection test
 )
 
 

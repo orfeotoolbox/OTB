@@ -62,6 +62,10 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
   {
     return 0;
   }
+  if (this->GetTexturesStatus()[0] == false)
+  {
+    itkExceptionMacro(<<"Impossible to create length image : texture not selected");
+  }
   return static_cast<const OutputImageType * > (this->itk::ProcessObject::GetOutput(0) );
 }
 template <class TInputImage, class TOutputImage>
@@ -72,6 +76,10 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
   if (this->GetNumberOfOutputs() < 1)
   {
     return 0;
+  }
+  if (this->GetTexturesStatus()[0] == false)
+  {
+    itkExceptionMacro(<<"Impossible to create length image : texture not selected");
   }
   return static_cast<OutputImageType * >(this->itk::ProcessObject::GetOutput(0) );
 }
@@ -86,6 +94,10 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
   {
     return 0;
   }
+ if (this->GetTexturesStatus()[1] == false)
+  {
+     itkExceptionMacro(<<"Impossible to create width image : texture not selected");
+  }
   return static_cast<const OutputImageType * > (this->itk::ProcessObject::GetOutput(1) );
 }
 template <class TInputImage, class TOutputImage>
@@ -96,6 +108,10 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
   if (this->GetNumberOfOutputs() < 2)
   {
     return 0;
+  }
+ if (this->GetTexturesStatus()[1] == false)
+  {
+    itkExceptionMacro(<<"Impossible to create width image : texture not selected");
   }
   return static_cast<OutputImageType * >(this->itk::ProcessObject::GetOutput(1) );
 }
@@ -110,6 +126,10 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
   {
     return 0;
   }
+ if (this->GetTexturesStatus()[2] == false)
+  {
+    itkExceptionMacro(<<"Impossible to create PSI image : texture not selected");
+  }
   return static_cast<const OutputImageType * > (this->itk::ProcessObject::GetOutput(2) );
 }
 template <class TInputImage, class TOutputImage>
@@ -121,6 +141,11 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
   {
     return 0;
   }
+  if (this->GetTexturesStatus()[2] == false)
+  {
+    itkExceptionMacro(<<"Impossible to create PSI image : texture not selected");
+  }
+
   return static_cast<OutputImageType * >(this->itk::ProcessObject::GetOutput(2) );
 }
 
@@ -134,6 +159,10 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
   {
     return 0;
   }
+  if (this->GetTexturesStatus()[3] == false)
+  {
+    itkExceptionMacro(<<"Impossible to create W-Mean image : texture not selected");
+  }
   return static_cast<const OutputImageType * > (this->itk::ProcessObject::GetOutput(3) );
 }
 template <class TInputImage, class TOutputImage>
@@ -144,6 +173,10 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
   if (this->GetNumberOfOutputs() < 4)
   {
     return 0;
+  }
+ if (this->GetTexturesStatus()[3] == false)
+  {
+    itkExceptionMacro(<<"Impossible to create W-Mean image : texture not selected");
   }
   return static_cast<OutputImageType * >(this->itk::ProcessObject::GetOutput(3) );
 }
@@ -158,6 +191,10 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
   {
     return 0;
   }
+ if (this->GetTexturesStatus()[4] == false)
+  {
+    itkExceptionMacro(<<"Impossible to create Ratio image : texture not selected");
+  }
   return static_cast<const OutputImageType * > (this->itk::ProcessObject::GetOutput(4) );
 }
 template <class TInputImage, class TOutputImage>
@@ -168,6 +205,10 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
   if (this->GetNumberOfOutputs() < 5)
   {
     return 0;
+  }
+  if (this->GetTexturesStatus()[4] == false)
+  {
+    itkExceptionMacro(<<"Impossible to create Ratio image : texture not selected");
   }
   return static_cast<OutputImageType * >(this->itk::ProcessObject::GetOutput(4) );
 }
@@ -182,6 +223,10 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
   {
     return 0;
   }
+ if (this->GetTexturesStatus()[5] == false)
+  {
+    itkExceptionMacro(<<"Impossible to create SD image : texture not selected");
+  }
   return static_cast<const OutputImageType * > (this->itk::ProcessObject::GetOutput(5) );
 }
 template <class TInputImage, class TOutputImage>
@@ -193,6 +238,11 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
   {
     return 0;
   }
+  if (this->GetTexturesStatus()[5] == false)
+  {
+    itkExceptionMacro(<<"Impossible to create SD image : texture not selected");
+  }
+
   return static_cast<OutputImageType * >(this->itk::ProcessObject::GetOutput(5) );
 }
 
@@ -225,14 +275,13 @@ LineDirectionImageFilter<TInputImage,TOutputImage>
   Superclass::GenerateInputRequestedRegion();
 
   // get pointers to the input and output
-  typename Superclass::InputImagePointer  inputPtr =
-    const_cast< TInputImage * >( this->GetInput());
-  typename Superclass::OutputImagePointer outputPtr1 = this->GetLengthOutput();
-  typename Superclass::OutputImagePointer outputPtr2 = this->GetWidthOutput();
-  typename Superclass::OutputImagePointer outputPtr3 = this->GetPSIOutput();
-  typename Superclass::OutputImagePointer outputPtr4 = this->GetWMeanOutput();
-  typename Superclass::OutputImagePointer outputPtr5 = this->GetRatioOutput();
-  typename Superclass::OutputImagePointer outputPtr6 = this->GetSDOutput();
+  typename Superclass::InputImagePointer  inputPtr = const_cast< TInputImage * >( this->GetInput());
+  typename Superclass::OutputImagePointer outputPtr1 = this->GetOutput(0);//this->GetLengthOutput();
+  typename Superclass::OutputImagePointer outputPtr2 = this->GetOutput(1);//this->GetWidthOutput();
+  typename Superclass::OutputImagePointer outputPtr3 = this->GetOutput(2);//this->GetPSIOutput();
+  typename Superclass::OutputImagePointer outputPtr4 = this->GetOutput(3);//this->GetWMeanOutput();
+  typename Superclass::OutputImagePointer outputPtr5 = this->GetOutput(4);//this->GetRatioOutput();
+  typename Superclass::OutputImagePointer outputPtr6 = this->GetOutput(5);//this->GetSDOutput();
 
   if ( !inputPtr || !outputPtr1 || !outputPtr2 || !outputPtr3 || !outputPtr4 || !outputPtr5 || !outputPtr6 )
   {
@@ -330,7 +379,7 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
   {
     neighInputIt = itk::ConstNeighborhoodIterator<TInputImage>(r, inputPtr, *fit);
-
+    
     outputIt1 = itk::ImageRegionIterator<TOutputImage>(outputPtr1, *fit);
     outputIt2 = itk::ImageRegionIterator<TOutputImage>(outputPtr2, *fit);
     outputIt3 = itk::ImageRegionIterator<TOutputImage>(outputPtr3, *fit);
@@ -338,36 +387,38 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
     outputIt5 = itk::ImageRegionIterator<TOutputImage>(outputPtr5, *fit);
     outputIt6 = itk::ImageRegionIterator<TOutputImage>(outputPtr6, *fit);
     
-    std::vector< itk::ImageRegionIterator<TOutputImage> > outItList;
-    outItList.push_back(outputIt1);
-    outItList.push_back(outputIt2);
-    outItList.push_back(outputIt3);
-    outItList.push_back(outputIt4);
-    outItList.push_back(outputIt5);
-    outItList.push_back(outputIt6);
-
+    std::vector< itk::ImageRegionIterator<TOutputImage> *> outItList;
+    outItList.push_back(&outputIt1);
+    outItList.push_back(&outputIt2);
+    outItList.push_back(&outputIt3);
+    outItList.push_back(&outputIt4);
+    outItList.push_back(&outputIt5);
+    outItList.push_back(&outputIt6);
+    
     neighInputIt.OverrideBoundaryCondition(&nbc);
     neighInputIt.GoToBegin();
+    
     for(unsigned int i = 0; i<outItList.size(); i++)
       {
-	outItList[i].GoToBegin();
+	(*outItList[i]).GoToBegin();
       }
-
-    while ( ! outputIt1.IsAtEnd() )
+    
+    while ( !outputIt1.IsAtEnd() )
     {
 
-      outputFunctor = m_FunctorList[threadId]( neighInputIt);
-      for(unsigned int i = 0; i<textStatus.size(); i++)
+      outputFunctor = m_FunctorList[threadId]( neighInputIt);    
+      for(unsigned int i = 0; i<outItList.size(); i++)
 	{
 	  if( textStatus[i]==true )
-	    outItList[i].Set( outputFunctor[i] );
+	    (*outItList[i]).Set( outputFunctor[i] );
 	}	
-
+      
       ++neighInputIt;
       for(unsigned int i = 0; i<outItList.size(); i++)
-      {
-	++outItList[i];
-      }
+	{
+	  ++(*outItList[i]);
+	}
+      
       progress.CompletedPixel();
     }
   }
