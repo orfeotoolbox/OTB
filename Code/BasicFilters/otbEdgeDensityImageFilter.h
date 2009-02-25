@@ -36,7 +36,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-template <class TInputImage , class TEdgeDetector, class TDensityCount , class TOutputImage>
+template <class TInputImage, class TOutputImage , class TEdgeDetector, class TDensityCount>
 class ITK_EXPORT EdgeDensityImageFilter
       : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {

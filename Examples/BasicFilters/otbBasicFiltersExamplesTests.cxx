@@ -26,6 +26,7 @@
 void RegisterTests()
 {
   REGISTER_TEST(LeeImageFilterTest);
+  REGISTER_TEST(FrostImageFilterTest);
   REGISTER_TEST(DEMToRainbowExampleTest);
   REGISTER_TEST(ScalingFilterExampleTest);
   REGISTER_TEST(PrintableImageFilterExample1Test);
@@ -37,6 +38,10 @@ void RegisterTests()
 #undef main
 #define main LeeImageFilterTest
 #include "LeeImageFilter.cxx"
+
+#undef main
+#define main FrostImageFilterTest
+#include "FrostImageFilter.cxx"
 
 #undef main
 #define main DEMToRainbowExampleTest

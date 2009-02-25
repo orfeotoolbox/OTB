@@ -23,7 +23,7 @@
 #endif
 
 #include "itkImage.h"
-#include "otbImageBase.h"
+#include "otbImageMetadataInterface.h"
 
 #include <string.h>
 
@@ -34,11 +34,8 @@ namespace otb
  *
  */
 
-// Le 3ieme parametre template est bidon MAIS necessaire pour compiler avec Microsoft Visual C++ 6.0
 template <class TPixel,unsigned int VImageDimension>
-class ITK_EXPORT Image : public itk::Image<TPixel,VImageDimension>,
-      public ImageBase
-
+class ITK_EXPORT Image : public itk::Image<TPixel,VImageDimension>
 {
 public:
   /** Standard class typedefs. */
@@ -48,8 +45,8 @@ public:
   typedef itk::SmartPointer<const Self>  ConstPointer;
   typedef itk::WeakPointer<const Self>  ConstWeakPointer;
 
-  typedef ImageBase::VectorType  VectorType;
-  typedef ImageBase::ImageKeywordlistType  ImageKeywordlistType;
+  typedef ImageMetadataInterface::VectorType  VectorType;
+  typedef ImageMetadataInterface::ImageKeywordlistType  ImageKeywordlistType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -192,7 +189,7 @@ protected:
 private:
   Image(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
+  typename ImageMetadataInterface::Pointer m_ImageMetadataInterface;
 };
 
 

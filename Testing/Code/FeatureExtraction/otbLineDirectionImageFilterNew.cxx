@@ -26,31 +26,12 @@ int otbLineDirectionImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension =2;
   typedef double PixelType;
-  typedef otb::VectorImage<PixelType,Dimension>                ImageType;
+  typedef otb::Image<PixelType,Dimension>                ImageType;
   typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
   //typedef otb::StreamingImageFileWriter<VectorImageType> WriterType;
-  typedef otb::LineDirectionImageFilter<ImageType, VectorImageType> FilterType;
+  typedef otb::LineDirectionImageFilter<ImageType, ImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
 
- /*
-  typedef otb::ImageFileReader<ImageType> ReaderType;
 
-  typedef otb::LineDirectionFunctor<VectorImageTypeImageType, ImageType> FunctorType;
-  typedef otb::UnaryFunctorNeighborhoodImageFilter<ImageType, FunctorType> FilterType;
-
-
-  // Instantiating object
-  FilterType::Pointer filter = FilterType::New();
-  
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
-
-  reader->SetFileName(argv[1]);
-  writer->SetFileName(argv[2]);
-  filter->SetInput( reader->GetOutput() );
-  writer->SetInput( panTex->GetOutput() );
-
-  writer->Update();
-  */
   return EXIT_SUCCESS;
 }

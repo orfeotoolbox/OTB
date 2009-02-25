@@ -159,7 +159,7 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
     while ( ! outputIt.IsAtEnd() )
     {
 
-      outputIt.Set( m_FunctorList[threadId]( neighInputOffIt ) );
+      outputIt.Set( m_FunctorList[threadId]( neighInputOffIt.GetNeighborhood() ) );
 
       ++neighInputOffIt;
       ++outputIt;

@@ -35,7 +35,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-template <class TInputImage , class TDetector, class TOutputImage>
+template <class TInputImage, class TOutputImage , class TDetector>
 class ITK_EXPORT KeyPointDensityImageFilter
       : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {

@@ -1,10 +1,14 @@
-
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
+
+#Remote sensing images (large images )
+IF(OTB_DATA_USE_LARGEINPUT)
+  SET(LARGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
@@ -122,6 +126,25 @@ ADD_TEST(coTvExtractROI_RGB2 ${COMMON_TESTS2}
         ${INPUTDATA}/poupees.jpg
         ${TEMP}/coExtractROI_RGB_poupees_302_1_134_330.jpg
         303 2 134 330 )
+
+# -------            otb::VectorDataExtractROI   ------------------------------
+ADD_TEST(coTuVectorDataExtractROINew ${COMMON_TESTS2}
+	otbVectorDataExtractROINew)
+
+IF(OTB_DATA_USE_LARGEINPUT)
+
+ADD_TEST(coTvVectorDataExtractROI ${COMMON_TESTS2}
+#  --compare-image ${TOL}   
+#              ${BASELINE}/coVectorDataExtractROIOutput.shp 
+#              ${TEMP}/coVectorDataExtractROIOutput.shp 
+	 otbVectorDataExtractROI	
+        ${LARGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
+	${TEMP}/coVectorDataExtractROIOutput.shp
+	10 10 50 50 
+ )
+
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 
 
 # -------            otb::MultiChannelExtractROI   ------------------------------
@@ -592,6 +615,8 @@ otbExtractROI_RGB.cxx
 otbMultiChannelExtractROI.cxx
 otbMultiChannelExtractROINew.cxx
 otbTestMultiExtractMultiUpdate.cxx
+otbVectorDataExtractROINew.cxx
+otbVectorDataExtractROI.cxx	
 )
 SET(BasicCommon_SRCS3
 otbMultiToMonoChannelExtractROI.cxx

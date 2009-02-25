@@ -62,7 +62,7 @@ public:
   {
     return m_OriginalProfile;
   }
-  double ComputeEnergy(double resampleRatio);
+  double ComputeEnergy(double resampleRatio) const;
 
   inline TOutput operator()( const TInput & A ) const
   {

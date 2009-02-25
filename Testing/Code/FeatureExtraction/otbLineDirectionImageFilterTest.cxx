@@ -22,7 +22,7 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-//#include "otbStreamingImageFileWriter.h"
+#include "otbStreamingImageFileWriter.h"
 #include "otbImageFileWriter.h"
 
 
@@ -32,47 +32,67 @@ int otbLineDirectionImageFilterTest(int argc, char * argv[])
   const unsigned int Dimension =2;
 
   std::string inName            = argv[1];
-  std::string outName           = argv[2];
-  PixelType spectThresh         = atof(argv[3]);
-  unsigned int spatialThresh    = atoi(argv[4]);
-  unsigned int dirNb            = atoi(argv[5]);
-  unsigned int maxConsideration = atoi(argv[6]);
-  double alpha                  = atof(argv[7]);  
+  std::string outNameLength     = argv[2];
+  std::string outNameWidth      = argv[3];
+  std::string outNameWMean      = argv[4];
+  std::string outNameRatio      = argv[5];
+  std::string outNameSD         = argv[6];
+  PixelType spectThresh         = atof(argv[7]);
+  unsigned int spatialThresh    = atoi(argv[8]);
+  unsigned int dirNb            = atoi(argv[9]);
+  unsigned int maxConsideration = atoi(argv[10]);
+  double alpha                  = atof(argv[11]);  
 
 
-  typedef otb::VectorImage<PixelType,Dimension>                           ImageType;
+  typedef otb::Image<PixelType,Dimension>                           ImageType;
   typedef ImageType::PixelType                                InputPixelType;
   typedef otb::VectorImage<PixelType,Dimension>                     VectorImageType;
   typedef otb::ImageFileReader<ImageType>                           ReaderType;
   //typedef otb::StreamingImageFileWriter<VectorImageType>            WriterType;
-  typedef otb::ImageFileWriter<VectorImageType>            WriterType;
-  typedef otb::LineDirectionImageFilter<ImageType, VectorImageType> FilterType;
+  typedef otb::ImageFileWriter<ImageType>            WriterType;
+  typedef otb::LineDirectionImageFilter<ImageType, ImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New(); 
   ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
-
-
-
+  WriterType::Pointer writerLength = WriterType::New();
+  WriterType::Pointer writerWidth = WriterType::New();
+  WriterType::Pointer writerWMean = WriterType::New();
+  WriterType::Pointer writerRatio = WriterType::New();
+  WriterType::Pointer writerSD = WriterType::New();
 
   reader->SetFileName(inName);
   reader->GenerateOutputInformation();
-  writer->SetFileName(outName);
-
-  InputPixelType spect;
-  // TO MODIFY
-  //spect.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
-  //spect.Fill(spectThresh);
+   
   filter->SetSpectralThreshold(spectThresh);
   filter->SetSpatialThreshold(spatialThresh);
   filter->SetNumberOfDirections(dirNb);
   filter->SetRatioMaxConsiderationNumber(maxConsideration);
   filter->SetAlpha(alpha);
+  // disable PSI texture
+  filter->SetTextureStatus(3, false);
   filter->SetInput( reader->GetOutput() );
-  writer->SetInput( filter->GetOutput() );
 
-  writer->Update();
- 
+
+  writerLength->SetFileName(outNameLength);
+  writerLength->SetInput( filter->GetLengthOutput() );
+  writerLength->Update();
+
+  writerWidth->SetFileName(outNameWidth);
+  writerWidth->SetInput( filter->GetWidthOutput() );
+  writerWidth->Update();
+
+  writerWMean->SetFileName(outNameWMean);
+  writerWMean->SetInput( filter->GetWMeanOutput() );
+  writerWMean->Update();
+
+  writerRatio->SetFileName(outNameRatio);
+  writerRatio->SetInput( filter->GetRatioOutput() );
+  writerRatio->Update();
+
+  writerSD->SetFileName(outNameSD);
+  writerSD->SetInput( filter->GetSDOutput() );
+  writerSD->Update();
+  
 
   return EXIT_SUCCESS;
 }

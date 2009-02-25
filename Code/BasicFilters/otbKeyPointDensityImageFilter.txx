@@ -27,8 +27,8 @@ namespace otb
 /**---------------------------------------------------------
  * Constructor
  ----------------------------------------------------------*/
-template <class TInputImage , class TDetector, class TOutputImage>
-KeyPointDensityImageFilter<TInputImage , TDetector,  TOutputImage>
+template <class TInputImage , class TOutputImage, class TDetector>
+KeyPointDensityImageFilter<TInputImage , TOutputImage, TDetector>
 ::KeyPointDensityImageFilter()
 {
   this->SetNumberOfRequiredInputs( 1 );
@@ -41,8 +41,8 @@ KeyPointDensityImageFilter<TInputImage , TDetector,  TOutputImage>
 /*---------------------------------------------------------
  * Destructor.c
  ----------------------------------------------------------*/
-template <class TInputImage , class TDetector, class TOutputImage>
-KeyPointDensityImageFilter<TInputImage, TDetector, TOutputImage >
+template <class TInputImage , class TOutputImage, class TDetector>
+KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector >
 ::~KeyPointDensityImageFilter()
 {}
 
@@ -53,9 +53,9 @@ KeyPointDensityImageFilter<TInputImage, TDetector, TOutputImage >
 /**
 * ThreadedGenerateData Performs the pixel-wise addition
 */
-template <class TInputImage , class TDetector,  class TOutputImage>
+template <class TInputImage , class TOutputImage, class TDetector>
 void
-KeyPointDensityImageFilter<TInputImage, TDetector, TOutputImage >
+KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector >
 ::GenerateData()
 //::GenerateData( const OutputImageRegionType &outputRegionForThread, int threadId )
 {
@@ -83,9 +83,9 @@ KeyPointDensityImageFilter<TInputImage, TDetector, TOutputImage >
 /**
  * Set Detector
  */
-template <class TInputImage , class TDetector, class TOutputImage>
+template <class TInputImage , class TOutputImage, class TDetector>
 void
-KeyPointDensityImageFilter<TInputImage, TDetector, TOutputImage >
+KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector >
 ::SetDetector(DetectorType* detector)
 {
   m_Detector = detector;
@@ -95,10 +95,10 @@ KeyPointDensityImageFilter<TInputImage, TDetector, TOutputImage >
 /**
  * Get Detector
  */
-template <class TInputImage , class TDetector, class TOutputImage>
-typename KeyPointDensityImageFilter< TInputImage ,  TDetector,  TOutputImage >
+template <class TInputImage , class TOutputImage, class TDetector>
+typename KeyPointDensityImageFilter< TInputImage ,  TOutputImage, TDetector >
 ::DetectorType *
-KeyPointDensityImageFilter< TInputImage , TDetector, TOutputImage >
+KeyPointDensityImageFilter< TInputImage , TOutputImage, TDetector >
 ::GetDetector()
 {
   return m_Detector;
@@ -109,9 +109,9 @@ KeyPointDensityImageFilter< TInputImage , TDetector, TOutputImage >
 /*----------------------------------------------------------------
   PrintSelf
   -----------------------------------------------------------------*/
-template <class TInputImage , class TDetector, class TOutputImage>
+template <class TInputImage , class TOutputImage, class TDetector>
 void
-KeyPointDensityImageFilter< TInputImage ,  TDetector,  TOutputImage >
+KeyPointDensityImageFilter< TInputImage ,  TOutputImage, TDetector >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
