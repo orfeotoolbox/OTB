@@ -158,6 +158,20 @@ int main( int argc, char * argv[] )
 
   // Software Guide : EndCodeSnippet      
 
+  //  Software Guide : BeginLatex
+  // Figure~\ref{fig:LSD} shows the result of applying the line segment
+  // detection to a small patch extracted from a VHR image.
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.35\textwidth]{QB_Suburb.eps}
+  // \includegraphics[width=0.35\textwidth]{QB_SuburbLSD.eps}
+  // \itkcaption[LSD Application]{Result of applying the
+  // \doxygen{otb}{LineSegmentDetector} to a VHR image of a suburb.}
+  // \label{fig:LSD}
+  // \end{figure}
+  //
+  //  Software Guide : EndLatex
+
   
   return EXIT_SUCCESS;
 }
