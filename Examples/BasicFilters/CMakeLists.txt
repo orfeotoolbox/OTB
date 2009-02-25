@@ -51,7 +51,7 @@ ADD_TEST(LeeImageFilterTest ${EXE_TESTS}
 
 ADD_TEST(FrostImageFilterTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
-	${BASELINE}/GomaSmallLeeFiltered.png
+	${BASELINE}/GomaSmallFrostFiltered.png
 	${TEMP}/GomaSmallFrostFiltered.png
 	FrostImageFilterTest
 	${INPUTDATA}/GomaSmall.png
