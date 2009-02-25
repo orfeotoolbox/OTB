@@ -61,13 +61,13 @@ public:
   typedef typename OutputImageType::Pointer     OutputImagePointerType;
   typedef typename OutputImageType::RegionType  OutputImageRegionType;
   typedef typename OutputImageType::PixelType   OutputImagePixelType;
-typedef typename OutputImageType::InternalPixelType   OutputInternalImagePixelType;
+  //typedef typename OutputImageType::InternalPixelType   OutputInternalImagePixelType;
   typedef itk::ConstNeighborhoodIterator<TInputImage>     NeighborhoodIteratorType;
   typedef typename NeighborhoodIteratorType::RadiusType   RadiusType;
   ////////////////////////////////////////////
   // CHANGE THE OUTPUTINTERNAZL INTO OUTPUTPIXE/////////////
   ///////////////////////////////////////////
-  typedef Functor::LineDirectionFunctor< NeighborhoodIteratorType,OutputInternalImagePixelType  > FunctorType; 
+  typedef Functor::LineDirectionFunctor< NeighborhoodIteratorType,OutputImagePixelType  > FunctorType; 
   typedef typename FunctorType::OutputType FunctorOutputType;
   typedef itk::ProcessObject ProcessObjectType;
 
@@ -140,7 +140,7 @@ typedef typename OutputImageType::InternalPixelType   OutputInternalImagePixelTy
   unsigned int GetNumberOfDirections()
     { 
       return this->GetFunctor().GetNumberOfDirections(); 
-    }; 
+    };
 
   /** Texture selection accessors 
    *  1: length
@@ -153,15 +153,44 @@ typedef typename OutputImageType::InternalPixelType   OutputInternalImagePixelTy
    **/
   void SetTextureStatus( unsigned int id, bool isSelected )
     {
-      if ( id<this->GetFunctor().GetSelectedTextures().size()+1 && id>0 )
+      if ( id>this->GetTexturesStatus().size() || id == 0 )
 	{
-	  itkExceptionMacro(<<"Invalid texture index "<<id<<", must be in [1;"<<this->GetFunctor().GetSelectedTextures().size()+1<<"]");
+	  itkExceptionMacro(<<"Invalid texture index "<<id<<", must be in [1;"<<this->GetTexturesStatus().size()<<"]");
 	}
       else
 	{
 	  this->GetFunctor().SetTextureStatus( id-1, isSelected );
 	}
     }
+  std::vector<bool> GetTexturesStatus()
+    {
+      return this->GetFunctor().GetTexturesStatus();
+    }
+
+  /** Return output length image */
+  const OutputImageType * GetLengthOutput() const;
+  OutputImageType * GetLengthOutput();
+
+   /** Return output width image */
+  const OutputImageType * GetWidthOutput() const;
+  OutputImageType * GetWidthOutput();
+
+  /** Return output PSI image */
+  const OutputImageType * GetPSIOutput() const;
+  OutputImageType * GetPSIOutput();
+  
+  /** Return output WMean image */
+  const OutputImageType * GetWMeanOutput() const;
+  OutputImageType * GetWMeanOutput();
+  
+  /** Return output ratio image */
+  const OutputImageType * GetRatioOutput() const;
+  OutputImageType * GetRatioOutput();
+  
+  /** Return output SD image */
+  const OutputImageType * GetSDOutput() const;
+  OutputImageType * GetSDOutput();
+
 
  
   virtual void GenerateOutputInformation();

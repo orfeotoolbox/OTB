@@ -31,11 +31,171 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 LineDirectionImageFilter<TInputImage,TOutputImage>
 ::LineDirectionImageFilter()
-{  
+{
+  this->SetNumberOfInputs(1);
   this->SetNumberOfRequiredInputs( 1 );
+  this->SetNumberOfOutputs(6);
+  this->SetNumberOfRequiredOutputs(1);
+  
+  this->SetNthOutput(0,OutputImageType::New());
+  this->SetNthOutput(1,OutputImageType::New());
+  this->SetNthOutput(2,OutputImageType::New());
+  this->SetNthOutput(3,OutputImageType::New());
+  this->SetNthOutput(4,OutputImageType::New());
+  this->SetNthOutput(5,OutputImageType::New());
+
   m_Radius = this->GetSpatialThreshold();
   m_FunctorList.clear();
 }
+/************************************************************
+ *
+ *              OUTPUTS MANIPULATION
+ *
+ ************************************************************/
+// Return output length image
+template <class TInputImage, class TOutputImage>
+const typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
+LineDirectionImageFilter<TInputImage, TOutputImage>
+::GetLengthOutput() const
+{
+  if (this->GetNumberOfOutputs() < 1)
+  {
+    return 0;
+  }
+  return static_cast<const OutputImageType * > (this->itk::ProcessObject::GetOutput(0) );
+}
+template <class TInputImage, class TOutputImage>
+typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
+LineDirectionImageFilter<TInputImage, TOutputImage>
+::GetLengthOutput()
+{
+  if (this->GetNumberOfOutputs() < 1)
+  {
+    return 0;
+  }
+  return static_cast<OutputImageType * >(this->itk::ProcessObject::GetOutput(0) );
+}
+
+// Return output width image
+template <class TInputImage, class TOutputImage>
+const typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
+LineDirectionImageFilter<TInputImage, TOutputImage>
+::GetWidthOutput() const
+{
+  if (this->GetNumberOfOutputs() < 2)
+  {
+    return 0;
+  }
+  return static_cast<const OutputImageType * > (this->itk::ProcessObject::GetOutput(1) );
+}
+template <class TInputImage, class TOutputImage>
+typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
+LineDirectionImageFilter<TInputImage, TOutputImage>
+::GetWidthOutput()
+{
+  if (this->GetNumberOfOutputs() < 2)
+  {
+    return 0;
+  }
+  return static_cast<OutputImageType * >(this->itk::ProcessObject::GetOutput(1) );
+}
+
+//Return output PSI image 
+template <class TInputImage, class TOutputImage>
+const typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
+LineDirectionImageFilter<TInputImage, TOutputImage>
+::GetPSIOutput() const
+{
+  if (this->GetNumberOfOutputs() < 3)
+  {
+    return 0;
+  }
+  return static_cast<const OutputImageType * > (this->itk::ProcessObject::GetOutput(2) );
+}
+template <class TInputImage, class TOutputImage>
+typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
+LineDirectionImageFilter<TInputImage, TOutputImage>
+::GetPSIOutput()
+{
+  if (this->GetNumberOfOutputs() < 3)
+  {
+    return 0;
+  }
+  return static_cast<OutputImageType * >(this->itk::ProcessObject::GetOutput(2) );
+}
+
+// Return output WMean image
+template <class TInputImage, class TOutputImage>
+const typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
+LineDirectionImageFilter<TInputImage, TOutputImage>
+::GetWMeanOutput() const
+{
+  if (this->GetNumberOfOutputs() < 4)
+  {
+    return 0;
+  }
+  return static_cast<const OutputImageType * > (this->itk::ProcessObject::GetOutput(3) );
+}
+template <class TInputImage, class TOutputImage>
+typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
+LineDirectionImageFilter<TInputImage, TOutputImage>
+::GetWMeanOutput()
+{
+  if (this->GetNumberOfOutputs() < 4)
+  {
+    return 0;
+  }
+  return static_cast<OutputImageType * >(this->itk::ProcessObject::GetOutput(3) );
+}
+
+// Return output ratio image
+template <class TInputImage, class TOutputImage>
+const typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
+LineDirectionImageFilter<TInputImage, TOutputImage>
+::GetRatioOutput() const
+{
+  if (this->GetNumberOfOutputs() < 5)
+  {
+    return 0;
+  }
+  return static_cast<const OutputImageType * > (this->itk::ProcessObject::GetOutput(4) );
+}
+template <class TInputImage, class TOutputImage>
+typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
+LineDirectionImageFilter<TInputImage, TOutputImage>
+::GetRatioOutput()
+{
+  if (this->GetNumberOfOutputs() < 5)
+  {
+    return 0;
+  }
+  return static_cast<OutputImageType * >(this->itk::ProcessObject::GetOutput(4) );
+}
+
+// Return output SD image
+template <class TInputImage, class TOutputImage>
+const typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
+LineDirectionImageFilter<TInputImage, TOutputImage>
+::GetSDOutput() const
+{
+  if (this->GetNumberOfOutputs() < 6)
+  {
+    return 0;
+  }
+  return static_cast<const OutputImageType * > (this->itk::ProcessObject::GetOutput(5) );
+}
+template <class TInputImage, class TOutputImage>
+typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
+LineDirectionImageFilter<TInputImage, TOutputImage>
+::GetSDOutput()
+{
+  if (this->GetNumberOfOutputs() < 6)
+  {
+    return 0;
+  }
+  return static_cast<OutputImageType * >(this->itk::ProcessObject::GetOutput(5) );
+}
+
 
 
 template <class TInputImage, class TOutputImage>
@@ -46,7 +206,9 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
   Superclass::BeforeThreadedGenerateData();
   if(this->GetSpatialThreshold() < this->GetRatioMaxConsiderationNumber())
     {
-      itkExceptionMacro(<<"Spatial Threshold ("<<this->GetSpatialThreshold()<<") is lower than Ration Max Consideration Number ("<<this->GetRatioMaxConsiderationNumber()<<") what is not allowed.");
+      itkExceptionMacro(<<"Spatial Threshold ("<<this->GetSpatialThreshold()
+			<<") is lower than Ration Max Consideration Number ("
+			<<this->GetRatioMaxConsiderationNumber()<<") what is not allowed.");
     }
   for (int i =0; i<this->GetNumberOfThreads(); i++)
     {
@@ -65,9 +227,14 @@ LineDirectionImageFilter<TInputImage,TOutputImage>
   // get pointers to the input and output
   typename Superclass::InputImagePointer  inputPtr =
     const_cast< TInputImage * >( this->GetInput());
-  typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
+  typename Superclass::OutputImagePointer outputPtr1 = this->GetLengthOutput();
+  typename Superclass::OutputImagePointer outputPtr2 = this->GetWidthOutput();
+  typename Superclass::OutputImagePointer outputPtr3 = this->GetPSIOutput();
+  typename Superclass::OutputImagePointer outputPtr4 = this->GetWMeanOutput();
+  typename Superclass::OutputImagePointer outputPtr5 = this->GetRatioOutput();
+  typename Superclass::OutputImagePointer outputPtr6 = this->GetSDOutput();
 
-  if ( !inputPtr || !outputPtr )
+  if ( !inputPtr || !outputPtr1 || !outputPtr2 || !outputPtr3 || !outputPtr4 || !outputPtr5 || !outputPtr6 )
   {
     return;
   }
@@ -116,7 +283,7 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
-  this->GetOutput()->SetNumberOfComponentsPerPixel(6);
+  //this->GetOutput()->SetNumberOfComponentsPerPixel(6);
 }
 
 
@@ -130,15 +297,19 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
 // We use dynamic_cast since inputs are stored as DataObjects.  The
   // ImageToImageFilter::GetInput(int) always returns a pointer to a
   // TInputImage so it cannot be used for the second input.
-  InputImagePointerType inputPtr
-  = dynamic_cast<const TInputImage*>(ProcessObjectType::GetInput(0));
-  OutputImagePointerType outputPtr = this->GetOutput(0);
+  InputImagePointerType inputPtr = dynamic_cast<const TInputImage*>(ProcessObjectType::GetInput(0));
+  OutputImagePointerType outputPtr1 = this->GetOutput(0);
+  OutputImagePointerType outputPtr2 = this->GetOutput(1);
+  OutputImagePointerType outputPtr3 = this->GetOutput(2);
+  OutputImagePointerType outputPtr4 = this->GetOutput(3);
+  OutputImagePointerType outputPtr5 = this->GetOutput(4);
+  OutputImagePointerType outputPtr6 = this->GetOutput(5);
 
   RadiusType r;
   r.Fill(this->GetRadius());
   NeighborhoodIteratorType neighInputIt;
 
-  itk::ImageRegionIterator<TOutputImage> outputIt;
+  itk::ImageRegionIterator<TOutputImage> outputIt1, outputIt2, outputIt3, outputIt4, outputIt5, outputIt6;
   FunctorOutputType outputFunctor;
 
   // Find the data-set boundary "faces"
@@ -154,27 +325,49 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
 
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
+
+  std::vector<bool> textStatus = this->GetTexturesStatus();
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
   {
     neighInputIt = itk::ConstNeighborhoodIterator<TInputImage>(r, inputPtr, *fit);
 
-    outputIt = itk::ImageRegionIterator<TOutputImage>(outputPtr, *fit);
+    outputIt1 = itk::ImageRegionIterator<TOutputImage>(outputPtr1, *fit);
+    outputIt2 = itk::ImageRegionIterator<TOutputImage>(outputPtr2, *fit);
+    outputIt3 = itk::ImageRegionIterator<TOutputImage>(outputPtr3, *fit);
+    outputIt4 = itk::ImageRegionIterator<TOutputImage>(outputPtr4, *fit);
+    outputIt5 = itk::ImageRegionIterator<TOutputImage>(outputPtr5, *fit);
+    outputIt6 = itk::ImageRegionIterator<TOutputImage>(outputPtr6, *fit);
+    
+    std::vector< itk::ImageRegionIterator<TOutputImage> > outItList;
+    outItList.push_back(outputIt1);
+    outItList.push_back(outputIt2);
+    outItList.push_back(outputIt3);
+    outItList.push_back(outputIt4);
+    outItList.push_back(outputIt5);
+    outItList.push_back(outputIt6);
+
     neighInputIt.OverrideBoundaryCondition(&nbc);
     neighInputIt.GoToBegin();
+    for(unsigned int i = 0; i<outItList.size(); i++)
+      {
+	outItList[i].GoToBegin();
+      }
 
-    while ( ! outputIt.IsAtEnd() )
+    while ( ! outputIt1.IsAtEnd() )
     {
-      OutputImagePixelType out;
-      out.SetSize(6);
+
       outputFunctor = m_FunctorList[threadId]( neighInputIt);
-      for(unsigned int i = 0; i<outputFunctor.size(); i++)
+      for(unsigned int i = 0; i<textStatus.size(); i++)
 	{
-	  out[i] = outputFunctor[i];
+	  if( textStatus[i]==true )
+	    outItList[i].Set( outputFunctor[i] );
 	}	
-      outputIt.Set( out );
 
       ++neighInputIt;
-      ++outputIt;
+      for(unsigned int i = 0; i<outItList.size(); i++)
+      {
+	++outItList[i];
+      }
       progress.CompletedPixel();
     }
   }

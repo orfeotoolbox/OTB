@@ -45,8 +45,8 @@ int otbLineDirectionImageFilterTest(int argc, char * argv[])
   typedef otb::VectorImage<PixelType,Dimension>                     VectorImageType;
   typedef otb::ImageFileReader<ImageType>                           ReaderType;
   //typedef otb::StreamingImageFileWriter<VectorImageType>            WriterType;
-  typedef otb::ImageFileWriter<VectorImageType>            WriterType;
-  typedef otb::LineDirectionImageFilter<ImageType, VectorImageType> FilterType;
+  typedef otb::ImageFileWriter<ImageType>            WriterType;
+  typedef otb::LineDirectionImageFilter<ImageType, ImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New(); 
   ReaderType::Pointer reader = ReaderType::New();
@@ -65,9 +65,14 @@ int otbLineDirectionImageFilterTest(int argc, char * argv[])
   filter->SetNumberOfDirections(dirNb);
   filter->SetRatioMaxConsiderationNumber(maxConsideration);
   filter->SetAlpha(alpha);
+  for(unsigned int i = 1; i<7; i++)
+    {
+      filter->SetTextureStatus(i, false);
+    }
+  filter->SetTextureStatus(1, true);
   
   filter->SetInput( reader->GetOutput() );
-  writer->SetInput( filter->GetOutput() );
+  writer->SetInput( filter->GetLengthOutput() );
 
   writer->Update();
  

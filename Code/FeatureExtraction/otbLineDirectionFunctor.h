@@ -77,7 +77,7 @@ public:
   unsigned int GetRatioMaxConsiderationNumber(){ return m_RatioMaxConsiderationNumber; }; 
   double  GetAlpha(){ return m_Alpha; }; 
   unsigned int GetNumberOfDirections(){ return m_NumberOfDirections(); };
-  std::vector<bool> GetTextureStatus(){ return m_SelectedTextures; };
+  std::vector<bool> GetTexturesStatus(){ return m_SelectedTextures; };
 
   inline OutputType operator()(const TIter& it)
   {
