@@ -22,7 +22,7 @@
 #include "FL/Fl_Gl_Window.H"
 #include "otbVectorImage.h"
 #include "itkObject.h"
-#include "otbList.h"
+#include "otbObjectList.h"
 #include "otbImageWidgetFormBase.h"
 #include "otbImageWidgetTransferFunction.h"
 
@@ -68,14 +68,14 @@ public:
   /** Form overlay typedef */
   typedef ImageWidgetFormBase FormType;
   typedef FormType::Pointer FormPointerType;
-  typedef List<FormType> FormListType;
+  typedef ObjectList<FormType> FormListType;
   typedef typename FormListType::Pointer FormListPointerType;
   typedef typename FormListType::ReverseIterator ReverseIteratorType;
   typedef typename FormListType::Iterator IteratorType;
 
   typedef otb::ImageWidgetTransferFunction<PixelType> TransferFunctionType;
   typedef otb::ImageWidgetAffineTransferFunction<PixelType> AffineTransferFunctionType;
-  typedef List<TransferFunctionType> TransferFunctionListType;
+  typedef ObjectList<TransferFunctionType> TransferFunctionListType;
   typedef typename TransferFunctionListType::Pointer TransferFunctionListPointerType;
 
   itkSetMacro(BufferedRegion,RegionType);

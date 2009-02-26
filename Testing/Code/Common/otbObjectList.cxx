@@ -97,6 +97,19 @@ int otbObjectList(int argc, char * argv[])
     ++iter;
   }
 
+  // Testing operator+
+  iter = imageList->Begin();
+  index=0;
+  otbControlConditionTestMacro(imageList->GetNthElement(0) != iter.Get(),
+                               "Iterator != GetNthElement(0)");
+  otbControlConditionTestMacro(imageList->GetNthElement(1) != (iter+1).Get(),
+                               "Iterator+1 != GetNthElement(1)");
+  ++iter;
+  otbControlConditionTestMacro(imageList->GetNthElement(1) != iter.Get(),
+                               "Iterator != GetNthElement(1)");
+  otbControlConditionTestMacro(imageList->GetNthElement(0) != (iter-1).Get(),
+                               "Iterator-1 != GetNthElement(0)");
+
   // Testing const iterator
   ImageListType::ConstIterator constIter = imageList->Begin();
   index = 0;

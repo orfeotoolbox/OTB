@@ -77,11 +77,16 @@ public:
    */
   void PushBack(ObjectType* element);
   /**
+   * Delete the last element to the list.
+   */
+  void PopBack(void);
+  /**
    * Set the nth element of the list.
    * \param index The index where to put the element.
    * \param element Pointer to the element to set.
    */
   void SetNthElement(unsigned int index, ObjectPointerType element);
+  void SetNthElement(unsigned int index, const ObjectType * element);
   /**
    * Get the nth element of the list.
    * \param index The index of the object to get.
@@ -118,13 +123,13 @@ public:
   friend class ReverseConstIterator;
 
   /**
-   * Insert an element at a given position 
+   * Insert an element at a given position
    * \param position A random access iterator
    * \return An iterator that points to the newly insereted element.
    */
   Iterator Insert ( Iterator position, ObjectPointerType element );
   /**
-   * Insert an element at a given position 
+   * Insert an element at a given position
    * \param position A reverse iterator
    * \return A reverse iterator that points to the newly insereted element.
    */
