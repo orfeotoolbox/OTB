@@ -46,10 +46,10 @@
 int main(int argc, char * argv[])
 {
   // Parse command line parameters
-  if ( argc != 7 )
+  if ( argc != 8 )
   {
     std::cerr << "Usage: " << argv[0] << " <inputImage> ";
-    std::cerr << " <outputImage> <outputRescaled> ";
+    std::cerr << " <outputImage> <inputRescaled> <outputRescaled> ";
     std::cerr << " <radius> <xOffset> <yOffset> ";
     std::cerr << std::endl;
     return EXIT_FAILURE;
@@ -57,11 +57,12 @@ int main(int argc, char * argv[])
 
   const char* infname   = argv[1];
   const char* outfname  = argv[2];
-  const char* outprettyfname  = argv[3];
+  const char* inprettyfname  = argv[3];
+  const char* outprettyfname  = argv[4];
 
-  const unsigned int radius  =  static_cast<unsigned int>(atoi(argv[4]));
-  const unsigned int xOffset =  static_cast<unsigned int>(atoi(argv[5]));
-  const unsigned int yOffset =  static_cast<unsigned int>(atoi(argv[6]));
+  const unsigned int radius  =  static_cast<unsigned int>(atoi(argv[5]));
+  const unsigned int xOffset =  static_cast<unsigned int>(atoi(argv[6]));
+  const unsigned int yOffset =  static_cast<unsigned int>(atoi(argv[7]));
 
 
   typedef double PixelType;
@@ -109,6 +110,14 @@ int main(int argc, char * argv[])
   outputRescaler->SetOutputMinimum(0);
   outputRescaler->SetOutputMaximum(255);
   prettyOutputWriter->SetFileName( outprettyfname );
+  prettyOutputWriter->SetInput( outputRescaler->GetOutput() );
+
+  prettyOutputWriter->Update();
+
+  outputRescaler->SetInput( reader->GetOutput() );
+  outputRescaler->SetOutputMinimum(0);
+  outputRescaler->SetOutputMaximum(255);
+  prettyOutputWriter->SetFileName( inprettyfname );
   prettyOutputWriter->SetInput( outputRescaler->GetOutput() );
 
   prettyOutputWriter->Update();
