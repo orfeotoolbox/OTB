@@ -15,10 +15,10 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLineDirectionImageFilter_h
-#define __otbLineDirectionImageFilter_h
+#ifndef __otbSFSTexturesImageFilter_h
+#define __otbSFSTexturesImageFilter_h
 
-#include "otbLineDirectionFunctor.h"
+#include "otbSFSTexturesFunctor.h"
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkConstNeighborhoodIterator.h"
@@ -26,7 +26,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-/** \class LineDirectionImageFilter
+/** \class SFSTexturesImageFilter
  *  \brief This functor computes the texture describes in the following publication
  *  It is based on line direction estimation.
  *
@@ -45,16 +45,16 @@ namespace otb
  * You can choose the computed textures using SetTextureStatus method (1:length, 2:width,
  * 3:PSI, 4:w-mean, 5:ratio, 6:SD).
  *
- * \sa LineDirectionFunctor
+ * \sa SFSTexturesFunctor
 */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT LineDirectionImageFilter :
+class ITK_EXPORT SFSTexturesImageFilter :
 public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef LineDirectionImageFilter                           Self;
+  typedef SFSTexturesImageFilter                           Self;
   typedef TInputImage                                        InputImageType;
   typedef TOutputImage                                       OutputImageType;
   typedef itk::ImageToImageFilter<TInputImage,TOutputImage >  Superclass;
@@ -77,7 +77,7 @@ public:
   typedef typename OutputImageType::PixelType           OutputImagePixelType;
   typedef itk::ConstNeighborhoodIterator<TInputImage>   NeighborhoodIteratorType;
   typedef typename NeighborhoodIteratorType::RadiusType RadiusType;
-  typedef Functor::LineDirectionFunctor< NeighborhoodIteratorType,OutputImagePixelType  > FunctorType; 
+  typedef Functor::SFSTexturesFunctor< NeighborhoodIteratorType,OutputImagePixelType  > FunctorType; 
   typedef typename FunctorType::OutputType              FunctorOutputType;
   typedef itk::ProcessObject                            ProcessObjectType;
 
@@ -207,8 +207,8 @@ public:
   std::vector<FunctorType> m_FunctorList;
 
 protected:
-  LineDirectionImageFilter();
-  virtual ~LineDirectionImageFilter(){};
+  SFSTexturesImageFilter();
+  virtual ~SFSTexturesImageFilter(){};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   virtual void BeforeThreadedGenerateData();
@@ -217,7 +217,7 @@ protected:
   virtual void GenerateInputRequestedRegion(void);
 
 private:
-  LineDirectionImageFilter(const Self&); //purposely not implemented
+  SFSTexturesImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   unsigned int m_Radius;
@@ -228,7 +228,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLineDirectionImageFilter.txx"
+#include "otbSFSTexturesImageFilter.txx"
 #endif
 
 #endif

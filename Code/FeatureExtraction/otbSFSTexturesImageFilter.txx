@@ -15,10 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLineDirectionImageFilter_txx
-#define __otbLineDirectionImageFilter_txx
+#ifndef __otbSFSTexturesImageFilter_txx
+#define __otbSFSTexturesImageFilter_txx
 
-#include "otbLineDirectionImageFilter.h"
+#include "otbSFSTexturesImageFilter.h"
 
 #include "itkProgressReporter.h"
 #include "itkImageRegionIterator.h"
@@ -29,8 +29,8 @@ namespace otb
 {
 
 template <class TInputImage, class TOutputImage>
-LineDirectionImageFilter<TInputImage,TOutputImage>
-::LineDirectionImageFilter()
+SFSTexturesImageFilter<TInputImage,TOutputImage>
+::SFSTexturesImageFilter()
 {
   this->SetNumberOfInputs(1);
   this->SetNumberOfRequiredInputs( 1 );
@@ -54,8 +54,8 @@ LineDirectionImageFilter<TInputImage,TOutputImage>
  ************************************************************/
 // Return output length image
 template <class TInputImage, class TOutputImage>
-const typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
-LineDirectionImageFilter<TInputImage, TOutputImage>
+const typename SFSTexturesImageFilter<TInputImage, TOutputImage>::OutputImageType *
+SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::GetLengthOutput() const
 {
   if (this->GetNumberOfOutputs() < 1)
@@ -69,8 +69,8 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
   return static_cast<const OutputImageType * > (this->itk::ProcessObject::GetOutput(0) );
 }
 template <class TInputImage, class TOutputImage>
-typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
-LineDirectionImageFilter<TInputImage, TOutputImage>
+typename SFSTexturesImageFilter<TInputImage, TOutputImage>::OutputImageType *
+SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::GetLengthOutput()
 {
   if (this->GetNumberOfOutputs() < 1)
@@ -86,8 +86,8 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
 
 // Return output width image
 template <class TInputImage, class TOutputImage>
-const typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
-LineDirectionImageFilter<TInputImage, TOutputImage>
+const typename SFSTexturesImageFilter<TInputImage, TOutputImage>::OutputImageType *
+SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::GetWidthOutput() const
 {
   if (this->GetNumberOfOutputs() < 2)
@@ -101,8 +101,8 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
   return static_cast<const OutputImageType * > (this->itk::ProcessObject::GetOutput(1) );
 }
 template <class TInputImage, class TOutputImage>
-typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
-LineDirectionImageFilter<TInputImage, TOutputImage>
+typename SFSTexturesImageFilter<TInputImage, TOutputImage>::OutputImageType *
+SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::GetWidthOutput()
 {
   if (this->GetNumberOfOutputs() < 2)
@@ -118,8 +118,8 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
 
 //Return output PSI image 
 template <class TInputImage, class TOutputImage>
-const typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
-LineDirectionImageFilter<TInputImage, TOutputImage>
+const typename SFSTexturesImageFilter<TInputImage, TOutputImage>::OutputImageType *
+SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::GetPSIOutput() const
 {
   if (this->GetNumberOfOutputs() < 3)
@@ -133,8 +133,8 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
   return static_cast<const OutputImageType * > (this->itk::ProcessObject::GetOutput(2) );
 }
 template <class TInputImage, class TOutputImage>
-typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
-LineDirectionImageFilter<TInputImage, TOutputImage>
+typename SFSTexturesImageFilter<TInputImage, TOutputImage>::OutputImageType *
+SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::GetPSIOutput()
 {
   if (this->GetNumberOfOutputs() < 3)
@@ -151,8 +151,8 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
 
 // Return output WMean image
 template <class TInputImage, class TOutputImage>
-const typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
-LineDirectionImageFilter<TInputImage, TOutputImage>
+const typename SFSTexturesImageFilter<TInputImage, TOutputImage>::OutputImageType *
+SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::GetWMeanOutput() const
 {
   if (this->GetNumberOfOutputs() < 4)
@@ -166,8 +166,8 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
   return static_cast<const OutputImageType * > (this->itk::ProcessObject::GetOutput(3) );
 }
 template <class TInputImage, class TOutputImage>
-typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
-LineDirectionImageFilter<TInputImage, TOutputImage>
+typename SFSTexturesImageFilter<TInputImage, TOutputImage>::OutputImageType *
+SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::GetWMeanOutput()
 {
   if (this->GetNumberOfOutputs() < 4)
@@ -183,8 +183,8 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
 
 // Return output ratio image
 template <class TInputImage, class TOutputImage>
-const typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
-LineDirectionImageFilter<TInputImage, TOutputImage>
+const typename SFSTexturesImageFilter<TInputImage, TOutputImage>::OutputImageType *
+SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::GetRatioOutput() const
 {
   if (this->GetNumberOfOutputs() < 5)
@@ -198,8 +198,8 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
   return static_cast<const OutputImageType * > (this->itk::ProcessObject::GetOutput(4) );
 }
 template <class TInputImage, class TOutputImage>
-typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
-LineDirectionImageFilter<TInputImage, TOutputImage>
+typename SFSTexturesImageFilter<TInputImage, TOutputImage>::OutputImageType *
+SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::GetRatioOutput()
 {
   if (this->GetNumberOfOutputs() < 5)
@@ -215,8 +215,8 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
 
 // Return output SD image
 template <class TInputImage, class TOutputImage>
-const typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
-LineDirectionImageFilter<TInputImage, TOutputImage>
+const typename SFSTexturesImageFilter<TInputImage, TOutputImage>::OutputImageType *
+SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::GetSDOutput() const
 {
   if (this->GetNumberOfOutputs() < 6)
@@ -230,8 +230,8 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
   return static_cast<const OutputImageType * > (this->itk::ProcessObject::GetOutput(5) );
 }
 template <class TInputImage, class TOutputImage>
-typename LineDirectionImageFilter<TInputImage, TOutputImage>::OutputImageType *
-LineDirectionImageFilter<TInputImage, TOutputImage>
+typename SFSTexturesImageFilter<TInputImage, TOutputImage>::OutputImageType *
+SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::GetSDOutput()
 {
   if (this->GetNumberOfOutputs() < 6)
@@ -250,7 +250,7 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
 
 template <class TInputImage, class TOutputImage>
 void
-LineDirectionImageFilter<TInputImage, TOutputImage>
+SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::BeforeThreadedGenerateData()
 {
   Superclass::BeforeThreadedGenerateData();
@@ -268,7 +268,7 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
 
 template <class TInputImage, class TOutputImage>
 void
-LineDirectionImageFilter<TInputImage,TOutputImage>
+SFSTexturesImageFilter<TInputImage,TOutputImage>
 ::GenerateInputRequestedRegion()
 {
   // call the superclass' implementation of this method
@@ -328,7 +328,7 @@ LineDirectionImageFilter<TInputImage,TOutputImage>
 
 template <class TInputImage, class TOutputImage>
 void
-LineDirectionImageFilter<TInputImage, TOutputImage>
+SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
@@ -338,7 +338,7 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
 
 template <class TInputImage, class TOutputImage>
 void
-LineDirectionImageFilter<TInputImage, TOutputImage>
+SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId )
 {
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage> nbc;
@@ -430,7 +430,7 @@ LineDirectionImageFilter<TInputImage, TOutputImage>
  */
 template <class TInputImage, class TOutputImage>
 void
-LineDirectionImageFilter<TInputImage, TOutputImage>
+SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
