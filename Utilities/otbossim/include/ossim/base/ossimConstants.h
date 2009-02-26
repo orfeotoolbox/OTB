@@ -3,11 +3,11 @@
  * License:  See top level LICENSE.txt file.
  *
  * Author: Ken Melero
- * 
+ *
  * Description: Common file for global constants.
  *
  **************************************************************************
- * $Id$
+ * $Id: ossimConstants.h 13590 2008-09-24 12:35:43Z gpotts $
  */
 #ifndef ossimConstants_HEADER
 #define ossimConstants_HEADER
@@ -16,7 +16,7 @@
 extern "C" {
 #endif
 
-#ifdef __cplusplus   
+#ifdef __cplusplus
 #include <cfloat>
 #else
 #include <float.h>
@@ -48,7 +48,7 @@ extern "C" {
 #  define OSSIM_DLL
 #  define OSSIMDLLEXPORT_DATA(type) type
 #  define OSSIM_DLL_DATA(type) type
-#  define OSSIMDLLEXPORT_CTORFN 
+#  define OSSIMDLLEXPORT_CTORFN
 #elif defined(__MINGW32__) || defined(__CYGWIN__) || defined(_MSC_VER) || defined(__VISUALC__) || defined(__BORLANDC__) || defined(__WATCOMC__)
 #  define OSSIMEXPORT __declspec(dllexport)
 #  define OSSIMIMPORT __declspec(dllimport)
@@ -242,7 +242,7 @@ typedef double                 ossim_float64;
 typedef long long              ossim_int64;
 typedef unsigned long long     ossim_uint64;
 typedef signed long long       ossim_sint64;
-   
+
 typedef ossim_int32            ossimErrorCode;
 
 enum ossimVertexOrdering
@@ -268,7 +268,7 @@ enum ossimPixelType
 */
 enum ossimScalarType
 {
-   OSSIM_SCALAR_UNKNOWN    =  0, 
+   OSSIM_SCALAR_UNKNOWN    =  0,
    OSSIM_UINT8             =  1, /**< 8 bit unsigned integer        */
    OSSIM_SINT8             =  2, /**< 8 bit signed integer          */
    OSSIM_UINT16            =  3, /**< 16 bit unsigned integer       */

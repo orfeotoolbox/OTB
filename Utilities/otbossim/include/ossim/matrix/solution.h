@@ -1,6 +1,6 @@
 //$$ solution.h                      // solve routines
 
-#include <ossim/matrix/boolean.h>
+// #include <ossim/matrix/boolean.h>
 #include <ossim/matrix/myexcept.h>
 
 #ifdef use_namespace

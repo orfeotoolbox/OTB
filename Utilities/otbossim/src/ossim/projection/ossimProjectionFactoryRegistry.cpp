@@ -4,7 +4,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimProjectionFactoryRegistry.cpp 12082 2007-11-26 21:46:44Z dburken $
+// $Id: ossimProjectionFactoryRegistry.cpp 13508 2008-08-27 15:51:38Z gpotts $
 #include <algorithm>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimProjectionFactoryBase.h>
@@ -19,24 +19,32 @@
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/base/ossimObjectFactoryRegistry.h>
 
-ossimProjectionFactoryRegistry* ossimProjectionFactoryRegistry::theInstance=0;
+
+ossimProjectionFactoryRegistry::ossimProjectionFactoryRegistry()
+{
+   initializeDefaults();
+   ossimObjectFactoryRegistry::instance()->registerFactory(this);
+}
+
+ossimProjectionFactoryRegistry::ossimProjectionFactoryRegistry(const ossimProjectionFactoryRegistry& rhs)
+:
+ossimObjectFactory(rhs)
+{}
+
+void ossimProjectionFactoryRegistry::operator=(const ossimProjectionFactoryRegistry&)
+{}
 
 ossimProjectionFactoryRegistry::~ossimProjectionFactoryRegistry()
 {
    theFactoryList.clear();
-   theInstance = 0;
 }
 
 ossimProjectionFactoryRegistry* ossimProjectionFactoryRegistry::instance()
 {
-   if(!theInstance)
-   {
-      theInstance = new ossimProjectionFactoryRegistry;
-      theInstance->initializeDefaults();
-      ossimObjectFactoryRegistry::instance()->registerFactory(theInstance);
-   }
+   static ossimProjectionFactoryRegistry sharedInstance;
+   
 
-   return theInstance;
+   return &sharedInstance;
 }
 
 ossimProjection*
@@ -208,29 +216,16 @@ void ossimProjectionFactoryRegistry::getTypeNameList(
    }   
 }
 
-ossimProjectionFactoryRegistry::ossimProjectionFactoryRegistry()
-{}
-
-ossimProjectionFactoryRegistry::ossimProjectionFactoryRegistry(
-   const ossimProjectionFactoryRegistry& rhs)
-   :
-   ossimObjectFactory(rhs)
-{}
-
-void ossimProjectionFactoryRegistry::operator=(
-   const ossimProjectionFactoryRegistry&)
-{}
-
 void ossimProjectionFactoryRegistry::initializeDefaults()
 {
-   theInstance->registerFactory(ossimSensorModelFactory::instance());
-   theInstance->registerFactory(ossimMapProjectionFactory::instance());
-   theInstance->registerFactory(ossimSrsProjectionFactory::instance());
-   theInstance->registerFactory(ossimTiffProjectionFactory::instance());
-   theInstance->registerFactory(ossimPcsCodeProjectionFactory::instance());   
-   theInstance->registerFactory(ossimStatePlaneProjectionFactory::instance());
-   theInstance->registerFactory(ossimNitfProjectionFactory::instance());   
-   theInstance->registerFactory(ossimMiscProjectionFactory::instance());
+   registerFactory(ossimSensorModelFactory::instance());
+   registerFactory(ossimMapProjectionFactory::instance());
+   registerFactory(ossimSrsProjectionFactory::instance());
+   registerFactory(ossimTiffProjectionFactory::instance());
+   registerFactory(ossimPcsCodeProjectionFactory::instance());   
+   registerFactory(ossimStatePlaneProjectionFactory::instance());
+   registerFactory(ossimNitfProjectionFactory::instance());   
+   registerFactory(ossimMiscProjectionFactory::instance());
 }
 
 extern "C"

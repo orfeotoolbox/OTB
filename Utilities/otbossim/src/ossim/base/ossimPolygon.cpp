@@ -12,7 +12,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimPolygon.cpp 13019 2008-06-10 16:14:07Z dburken $
+//  $Id: ossimPolygon.cpp 13686 2008-10-07 02:13:52Z gpotts $
 
 #include <algorithm>
 #include <iterator>
@@ -743,7 +743,7 @@ bool ossimPolygon::loadState(const ossimKeywordlist& kwl,
 {
    ossimString order = kwl.find(prefix, VERTEX_ORDER_KW);
    const char* number_vertices = kwl.find(prefix, NUMBER_VERTICES_KW);
-
+   ossimString x,y;
    if(order=="unknown")
    {
       theOrderingType = OSSIM_VERTEX_ORDER_UNKNOWN;
@@ -759,7 +759,6 @@ bool ossimPolygon::loadState(const ossimKeywordlist& kwl,
 
    theVertexList.clear();
    int vertexCount = ossimString(number_vertices).toLong();
-   double x = 0.0, y =0.0;
    int i = 0;
    for(i = 0; i < vertexCount; ++i)
    {
@@ -768,7 +767,7 @@ bool ossimPolygon::loadState(const ossimKeywordlist& kwl,
 
       istringstream vStream(v);
       vStream >> x >> y;
-      theVertexList.push_back(ossimDpt(x,y));
+      theVertexList.push_back(ossimDpt(x.toDouble(),y.toDouble()));
    }
 
    return true;

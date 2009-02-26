@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixEcefModel.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimApplanixEcefModel.h 13562 2008-09-10 14:56:31Z gpotts $
 #ifndef ossimApplanixEcefModel_HEADER
 #define ossimApplanixEcefModel_HEADER
 #include <ossim/projection/ossimFcsiModel.h>
@@ -17,6 +17,14 @@ class OSSIM_DLL ossimApplanixEcefModel : public ossimSensorModel
 {
 public:
    ossimApplanixEcefModel();
+   ossimApplanixEcefModel(const ossimDrect& imageRect, // center in image space
+                          const ossimGpt& platformPosition,
+                          double roll,
+                          double pitch,
+                          double heading,
+                          const ossimDpt& principalPoint, // in millimeters
+                          double focalLength, // in millimeters
+                          const ossimDpt& pixelSize); // in millimeters
    ossimApplanixEcefModel(const ossimApplanixEcefModel& src);
    virtual ossimObject* dup()const;
    
@@ -62,6 +70,8 @@ public:
    virtual bool setupOptimizer(const ossimString& init_file); //!uses file path to init model
 
 protected:
+   void computeGsd();
+   
    NEWMAT::Matrix theCompositeMatrix;
    NEWMAT::Matrix theCompositeMatrixInverse;
    double         theRoll;

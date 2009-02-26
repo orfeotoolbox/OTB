@@ -36,75 +36,6 @@ PanTexTextureImageFilter<TInputImage,TOutputImage>
 }
 
 
-// template <class TInputImage, class TOutputImage, class TFunction  >
-// void
-// UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage,TOutputImage,TFunction>
-// ::BeforeThreadedGenerateData()
-// {
-//   Superclass::BeforeThreadedGenerateData();
-
-//   for (int i =0; i<this->GetNumberOfThreads(); i++)
-//   {
-//     m_FunctorList.push_back(m_Functor);
-//   }
-// }
-
-
-// template <class TInputImage, class TOutputImage, class TFunction  >
-// void
-// UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage,TOutputImage,TFunction>
-// ::GenerateInputRequestedRegion()
-// {
-//   // call the superclass' implementation of this method
-//   Superclass::GenerateInputRequestedRegion();
-
-//   // get pointers to the input and output
-//   typename Superclass::InputImagePointer  inputPtr =
-//     const_cast< TInputImage * >( this->GetInput());
-//   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
-
-//   if ( !inputPtr || !outputPtr )
-//   {
-//     return;
-//   }
-//   // get a copy of the input requested region (should equal the output
-//   // requested region)
-//   typename TInputImage::RegionType inputRequestedRegion;
-//   inputRequestedRegion = inputPtr->GetRequestedRegion();
-
-//   // pad the input requested region by the operator radius
-//   InputImageSizeType maxRad;
-//   maxRad[0] = m_Radius + vcl_abs(m_Offset[0]);
-//   maxRad[1] = m_Radius + vcl_abs(m_Offset[1]);;
-//   inputRequestedRegion.PadByRadius( maxRad );
-
-//   // crop the input requested region at the input's largest possible region
-//   if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
-//   {
-//     inputPtr->SetRequestedRegion( inputRequestedRegion );
-//     return;
-//   }
-//   else
-//   {
-//     // Couldn't crop the region (requested region is outside the largest
-//     // possible region).  Throw an exception.
-
-//     // store what we tried to request (prior to trying to crop)
-//     inputPtr->SetRequestedRegion( inputRequestedRegion );
-
-//     // build an exception
-//     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-//     itk::OStringStream msg;
-//     msg << this->GetNameOfClass()
-//     << "::GenerateInputRequestedRegion()";
-//     e.SetLocation(msg.str().c_str());
-//     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
-//     e.SetDataObject(inputPtr);
-//     throw e;
-//   }
-// }
-
-
 
 /**
  * ThreadedGenerateData Performs the neighborhood-wise operation
@@ -154,7 +85,7 @@ PanTexTextureImageFilter<TInputImage, TOutputImage>
     while ( ! outputIt.IsAtEnd() )
     {
 
-      outputIt.Set( this->m_FunctorList[threadId]( neighInputOffIt ) );
+      outputIt.Set( this->m_FunctorList[threadId]( neighInputOffIt.GetNeighborhood() ) );
 
       ++neighInputOffIt;
       ++outputIt;

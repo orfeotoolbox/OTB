@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixEcefModel.cpp 11483 2007-08-03 17:53:17Z gpotts $
+//  $Id: ossimApplanixEcefModel.cpp 13691 2008-10-07 12:46:58Z dburken $
 #include <sstream>
 #include <ossim/projection/ossimApplanixEcefModel.h>
 #include <ossim/base/ossimEllipsoid.h>
@@ -25,7 +25,7 @@ static ossimTrace traceDebug("ossimApplanixEcefModel:debug");
 RTTI_DEF1(ossimApplanixEcefModel, "ossimApplanixEcefModel", ossimSensorModel);
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimApplanixEcefModel.cpp 11483 2007-08-03 17:53:17Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimApplanixEcefModel.cpp 13691 2008-10-07 12:46:58Z dburken $";
 #endif
 
 ossimApplanixEcefModel::ossimApplanixEcefModel()
@@ -49,6 +49,40 @@ ossimApplanixEcefModel::ossimApplanixEcefModel()
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "ossimApplanixEcefModel::ossimApplanixEcefModel DEBUG:" << endl;
+#ifdef OSSIM_ID_ENABLED
+      ossimNotify(ossimNotifyLevel_DEBUG)<< "OSSIM_ID:  " << OSSIM_ID << endl;
+#endif
+   }
+}
+ossimApplanixEcefModel::ossimApplanixEcefModel(const ossimDrect& imageRect,
+                                               const ossimGpt& platformPosition,
+                                               double roll,
+                                               double pitch,
+                                               double heading,
+                                               const ossimDpt& principalPoint, // in millimeters
+                                               double focalLength, // in millimeters
+                                               const ossimDpt& pixelSize) // in millimeters
+{
+   theImageClipRect = imageRect;
+   theRefImgPt      = theImageClipRect.midPoint();
+   theCompositeMatrix          = ossimMatrix4x4::createIdentity();
+   theCompositeMatrixInverse   = ossimMatrix4x4::createIdentity();
+   theRoll                     = roll;
+   thePitch                    = pitch;
+   theHeading                  = heading;
+   theFocalLength              = focalLength;
+   thePixelSize                = pixelSize;
+   theEcefPlatformPosition     = platformPosition;
+   theAdjEcefPlatformPosition  = platformPosition;
+   theLensDistortion           = new ossimMeanRadialLensDistortion;
+   initAdjustableParameters();
+   updateModel();
+   computeGsd();
+   
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+      << "ossimApplanixEcefModel::ossimApplanixEcefModel DEBUG:" << endl;
 #ifdef OSSIM_ID_ENABLED
       ossimNotify(ossimNotifyLevel_DEBUG)<< "OSSIM_ID:  " << OSSIM_ID << endl;
 #endif
@@ -458,23 +492,29 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
       }
       if(ecef_platform_position)
       {
-         std::istringstream in(ecef_platform_position);
-         double x,y,z;
-         in >> x
-            >> y
-            >> z;
-         
-         theEcefPlatformPosition = ossimEcefPoint(x,y,z);
+         std::vector<ossimString> splitString;
+         ossimString tempString(ecef_platform_position);
+         if(splitString.size() > 2)
+         {
+            theEcefPlatformPosition  = ossimEcefPoint(splitString[0].toDouble(),
+                                                      splitString[1].toDouble(),
+                                                      splitString[2].toDouble());
+         }
       }
       else if(latlonh_platform_position)
       {
-         std::istringstream in(latlonh_platform_position);
-         double lat,lon,hgt;
-         in >> lat
-            >> lon
-            >> hgt;
+         std::vector<ossimString> splitString;
+         ossimString tempString(latlonh_platform_position);
+         std::string datumString;
+         double lat=0.0, lon=0.0, h=0.0;
+         if(splitString.size() > 2)
+         {
+            lat = splitString[0].toDouble();
+            lon = splitString[1].toDouble();
+            h = splitString[2].toDouble();
+         }
          
-         theEcefPlatformPosition = ossimGpt(lat,lon,hgt);
+         theEcefPlatformPosition = ossimGpt(lat,lon,h);
       }
    }
 
@@ -504,9 +544,14 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
       }
       if(image_size)
       {
-         std::istringstream in(image_size);
-         double w, h;
-         in>>w >> h;
+         std::vector<ossimString> splitString;
+         ossimString tempString(image_size);
+         double w=1, h=1;
+         if(splitString.size() == 2)
+         {
+            w = splitString[0].toDouble();
+            h = splitString[1].toDouble();
+         }
          theImageClipRect = ossimDrect(0,0,w-1,h-1);
          theRefImgPt      = ossimDpt(w/2.0, h/2.0);
       }
@@ -516,14 +561,28 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
       }
       if(principal_point)
       {
-         std::istringstream in(principal_point);
-         in >>thePrincipalPoint.x >> thePrincipalPoint.y;
+         std::vector<ossimString> splitString;
+         ossimString tempString(principal_point);
+         if(splitString.size() == 2)
+         {
+            thePrincipalPoint.x = splitString[0].toDouble();
+            thePrincipalPoint.y = splitString[1].toDouble();
+         }
       }
       if(pixel_size)
       {
-         std::istringstream in(pixel_size);
-         in >> thePixelSize.x;
-         thePixelSize.y = thePixelSize.x;
+         std::vector<ossimString> splitString;
+         ossimString tempString(pixel_size);
+         if(splitString.size() == 1)
+         {
+            thePixelSize.x = splitString[0].toDouble();
+            thePixelSize.y = thePixelSize.x;
+         }
+         else if(splitString.size() == 2)
+         {
+            thePixelSize.x = splitString[0].toDouble();
+            thePixelSize.y = splitString[1].toDouble();
+         }
       }
       if(focal_length)
       {
@@ -537,10 +596,16 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
 
          if(value)
          {
-            std::istringstream in(value);
-            double distance, distortion;
+            std::vector<ossimString> splitString;
+            ossimString tempString(value);
+            double distance = 0.0;
+            double distortion = 0.0;
 
-            in >> distance >> distortion;
+            if(splitString.size() == 2)
+            {
+               distance = splitString[0].toDouble();
+               distortion = splitString[1].toDouble();
+            }
             tool.setValue(distortion, unitType);
             lensKwl.add(ossimString("distance") + ossimString::toString(idx),
                         distance,
@@ -575,8 +640,13 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
       
       if(principal_point)
       {
-         std::istringstream in(principal_point);
-         in >>thePrincipalPoint.x >> thePrincipalPoint.y;
+         std::vector<ossimString> splitString;
+         ossimString tempString(principal_point);
+         if(splitString.size() == 2)
+         {
+            thePrincipalPoint.x = splitString[0].toDouble();
+            thePrincipalPoint.y = splitString[1].toDouble();
+         }
       }
       else
       {
@@ -588,8 +658,18 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
       }
       if(pixel_size)
       {
-         std::istringstream in(pixel_size);
-         in >> thePixelSize.x >> thePixelSize.y;
+         std::vector<ossimString> splitString;
+         ossimString tempString(pixel_size);
+         if(splitString.size() == 1)
+         {
+            thePixelSize.x = splitString[0].toDouble();
+            thePixelSize.y = thePixelSize.x;
+         }
+         else if(splitString.size() == 2)
+         {
+            thePixelSize.x = splitString[0].toDouble();
+            thePixelSize.y = splitString[1].toDouble();
+         }
       }
       else
       {
@@ -627,25 +707,11 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
 
    updateModel();
 
-   ossimGpt centerGpt;
-   lineSampleToWorld(theRefImgPt, centerGpt);
    if(compute_gsd_flag)
    {
       if(ossimString(compute_gsd_flag).toBool())
       {
-         ossimGpt right;
-         ossimGpt top;
-         lineSampleToWorld(theRefImgPt + ossimDpt(1.0, 0.0),
-                           right);
-         lineSampleToWorld(theRefImgPt + ossimDpt(0.0, -1.0),
-                           top);
-         
-         ossimEcefVector horizontal = ossimEcefPoint(centerGpt)-ossimEcefPoint(right);
-         ossimEcefVector vertical   = ossimEcefPoint(centerGpt)-ossimEcefPoint(top);
-
-         theGSD.x = horizontal.length();
-         theGSD.y = vertical.length();
-         theMeanGSD = (theGSD.x+theGSD.y)*.5;
+         computeGsd();
       }
    }
    if(traceDebug())
@@ -660,6 +726,25 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
                                           << "Ground:    " << ossimGpt(theEcefPlatformPosition) << std::endl;
    }
    return result;
+}
+
+void ossimApplanixEcefModel::computeGsd()
+{
+   ossimGpt right;
+   ossimGpt top;
+   ossimGpt centerGpt;
+   lineSampleToWorld(theRefImgPt, centerGpt);
+   lineSampleToWorld(theRefImgPt + ossimDpt(1.0, 0.0),
+                     right);
+   lineSampleToWorld(theRefImgPt + ossimDpt(0.0, -1.0),
+                     top);
+   
+   ossimEcefVector horizontal = ossimEcefPoint(centerGpt)-ossimEcefPoint(right);
+   ossimEcefVector vertical   = ossimEcefPoint(centerGpt)-ossimEcefPoint(top);
+   
+   theGSD.x = horizontal.length();
+   theGSD.y = vertical.length();
+   theMeanGSD = (theGSD.x+theGSD.y)*.5;
 }
 
 bool ossimApplanixEcefModel::setupOptimizer(const ossimString& init_file)

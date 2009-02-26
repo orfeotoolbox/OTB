@@ -10,15 +10,15 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimImageDataFactory.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImageDataFactory.h 13474 2008-08-22 14:20:42Z gpotts $
 #ifndef ossimImageDataFactory_HEADER
 #define ossimImageDataFactory_HEADER
 
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/base/ossimRefPtr.h>
-
+#include <OpenThreads/Mutex>
 class ossimSource;
-class ossimImageSourceInterface;
+class ossimImageSource;
 
 
 /*!
@@ -44,12 +44,12 @@ public:
    virtual ossimRefPtr<ossimImageData> create(
       ossimSource* owner,
       ossim_uint32 bands,
-      ossimImageSourceInterface* inputSource)const;
+      ossimImageSource* inputSource)const;
    
    
    virtual ossimRefPtr<ossimImageData> create(
       ossimSource* owner,
-      ossimImageSourceInterface* inputSource)const;
+      ossimImageSource* inputSource)const;
    
 protected:
    ossimImageDataFactory(); // hide
@@ -57,6 +57,7 @@ protected:
    void operator = (ossimImageDataFactory&){}// hide
    
    static ossimImageDataFactory* theInstance;
+   static OpenThreads::Mutex theInstanceMutex;
 };
 
 #endif

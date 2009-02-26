@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationEllipseObject.h 11389 2007-07-25 18:47:59Z dburken $
+// $Id: ossimGeoAnnotationEllipseObject.h 13349 2008-07-30 15:34:34Z dburken $
 #ifndef ossimGeoAnnotationEllipseObject_HEADER
 #define ossimGeoAnnotationEllipseObject_HEADER
 #include <ossim/imaging/ossimGeoAnnotationObject.h>
@@ -42,6 +42,20 @@ public:
    virtual void getBoundingRect(ossimDrect& rect)const;
    virtual void computeBoundingRect();
    virtual void transform(ossimProjection* projection);
+
+   /**
+    * @brief Transforms from geographic to image space for a reduced
+    * resolution data set (rrds).
+    *
+    * This will transform any world points to line sample; then, convert any
+    * line sample to the correct rrds point.
+    *
+    * @param model The model to use for transformation.
+    *
+    * @param rrds Reduced resolution data set to use.
+    */
+   virtual void transform(const ossimImageProjectionModel& model,
+                          ossim_uint32 rrds);
 
    /**
     * Saves the current state of this object.

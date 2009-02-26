@@ -7,7 +7,7 @@
 // Description: This file contains the Application cache algorithm
 //
 //***********************************
-// $Id: ossimFixedTileCache.cpp 11694 2007-09-09 21:55:16Z dburken $
+// $Id: ossimFixedTileCache.cpp 13485 2008-08-22 17:06:20Z gpotts $
 #include <ossim/imaging/ossimFixedTileCache.h>
 #include <algorithm>
 
@@ -42,6 +42,7 @@ ossimFixedTileCache::~ossimFixedTileCache()
 
 void ossimFixedTileCache::setRect(const ossimIrect& rect)
 {
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    ossim::defaultTileSize(theTileSize);
    theTileBoundaryRect      = rect;
    theTileBoundaryRect.stretchToTileBoundary(theTileSize);
@@ -55,6 +56,7 @@ void ossimFixedTileCache::setRect(const ossimIrect& rect)
 void ossimFixedTileCache::setRect(const ossimIrect& rect,
                                   const ossimIpt& tileSize)
 {
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    theTileBoundaryRect      = rect;
    theTileSize              = tileSize;
    theTileBoundaryRect.stretchToTileBoundary(theTileSize);
@@ -68,6 +70,7 @@ void ossimFixedTileCache::setRect(const ossimIrect& rect,
 
 void ossimFixedTileCache::keepTilesWithinRect(const ossimIrect& rect)
 {
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    std::map<ossim_int32, ossimFixedTileCacheInfo>::iterator tileIter = theTileMap.begin();
 
    while(tileIter != theTileMap.end())
@@ -87,6 +90,7 @@ void ossimFixedTileCache::keepTilesWithinRect(const ossimIrect& rect)
 ossimRefPtr<ossimImageData> ossimFixedTileCache::addTile(ossimRefPtr<ossimImageData> imageData,
                                                          bool duplicateData)
 {
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    ossimRefPtr<ossimImageData> result = NULL;
    if(!imageData.valid())
    {
@@ -131,6 +135,7 @@ ossimRefPtr<ossimImageData> ossimFixedTileCache::addTile(ossimRefPtr<ossimImageD
 
 ossimRefPtr<ossimImageData> ossimFixedTileCache::getTile(ossim_int32 id)
 {
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    ossimRefPtr<ossimImageData> result = NULL;
 
    std::map<ossim_int32, ossimFixedTileCacheInfo>::iterator tileIter =
@@ -146,6 +151,7 @@ ossimRefPtr<ossimImageData> ossimFixedTileCache::getTile(ossim_int32 id)
 
 ossimIpt ossimFixedTileCache::getTileOrigin(ossim_int32 tileId)
 {
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    ossimIpt result;
    result.makeNan();
 
@@ -202,6 +208,7 @@ void ossimFixedTileCache::deleteTile(ossim_int32 tileId)
 
 ossimRefPtr<ossimImageData> ossimFixedTileCache::removeTile(ossim_int32 tileId)
 {
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    ossimRefPtr<ossimImageData> result = NULL;
    
    std::map<ossim_int32, ossimFixedTileCacheInfo>::iterator tileIter =
@@ -223,6 +230,7 @@ ossimRefPtr<ossimImageData> ossimFixedTileCache::removeTile(ossim_int32 tileId)
 
 void ossimFixedTileCache::flush()
 {
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    std::map<ossim_int32, ossimFixedTileCacheInfo>::iterator tileIter =
       theTileMap.begin();
 
@@ -241,6 +249,7 @@ void ossimFixedTileCache::flush()
 
 void ossimFixedTileCache::deleteTile()
 {
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    if(theUseLruFlag)
    {
       if(theLruQueue.begin() != theLruQueue.end())
@@ -252,6 +261,7 @@ void ossimFixedTileCache::deleteTile()
 
 ossimRefPtr<ossimImageData> ossimFixedTileCache::removeTile()
 {
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    if(theUseLruFlag)
    {
       if(theLruQueue.begin() != theLruQueue.end())
@@ -265,6 +275,7 @@ ossimRefPtr<ossimImageData> ossimFixedTileCache::removeTile()
 
 void ossimFixedTileCache::adjustLru(ossim_int32 id)
 {
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    if(theUseLruFlag)
    {
       std::list<ossim_int32>::iterator iter = std::find(theLruQueue.begin(), theLruQueue.end(), id);
@@ -280,6 +291,7 @@ void ossimFixedTileCache::adjustLru(ossim_int32 id)
 
 void ossimFixedTileCache::eraseFromLru(ossim_int32 id)
 {
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    if(theUseLruFlag)
    {
       

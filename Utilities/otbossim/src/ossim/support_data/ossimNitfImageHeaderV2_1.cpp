@@ -7,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_1.cpp 13101 2008-07-01 18:44:31Z dburken $
+// $Id: ossimNitfImageHeaderV2_1.cpp 13931 2008-12-15 23:44:40Z dburken $
 #include <sstream>
 #include <iomanip>
 #include <cstring> // for memset
@@ -250,6 +250,7 @@ void ossimNitfImageHeaderV2_1::parseStream(std::istream &in)
             }
             theBlockMaskRecords[idx] = blockRead[idx];
          }
+         delete [] blockRead;
       }
       if((thePadPixelMaskRecordLength > 0)||
          (( (getCompressionCode().upcase() == "M3"))&&
@@ -345,8 +346,7 @@ void ossimNitfImageHeaderV2_1::writeStream(std::ostream &out)
       out.write(theGeographicLocation, 60);
    }
    // for now force the number of comments to be 0
-//   out.write(theNumberOfComments, 1);
-   out.write("0", 1);
+   out.write(theNumberOfComments, 1);
    
    out.write(theCompression, 2);
    ossimString compressionTest = theCompression;
@@ -732,7 +732,7 @@ void ossimNitfImageHeaderV2_1::clearFields()
    memcpy(theDisplayLevel, "001", 3);
    memset(theAttachmentLevel, '0', 3);
    memset(theImageLocation, '0', 10);
-   memcpy(theImageMagnification, "01.0", 4);
+   memcpy(theImageMagnification, "1.0 ", 4);
    
    memset(theUserDefinedImageDataLength,'0', 5);
    memset(theUserDefinedOverflow, '0', 3);
@@ -817,12 +817,25 @@ ossim_int32 ossimNitfImageHeaderV2_1::getNumberOfBlocksPerCol()const
 
 ossim_int32 ossimNitfImageHeaderV2_1::getNumberOfPixelsPerBlockHoriz()const
 {
-   return ossimString(theNumberOfPixelsPerBlockHoriz).toInt32();
+ //  return ossimString(theNumberOfPixelsPerBlockHoriz).toInt32();
+   ossim_int32 rval = ossimString(theNumberOfPixelsPerBlockHoriz).toInt32();
+   if ((rval == 0) && (getNumberOfBlocksPerCol() == 1))
+   {
+      rval = getNumberOfCols();
+   }
+   return rval;
+   
 }
 
 ossim_int32 ossimNitfImageHeaderV2_1::getNumberOfPixelsPerBlockVert()const
 {
-   return ossimString(theNumberOfPixelsPerBlockVert).toInt32();
+//   return ossimString(theNumberOfPixelsPerBlockVert).toInt32();
+   ossim_int32 rval = ossimString(theNumberOfPixelsPerBlockVert).toInt32();
+   if ((rval == 0) && (getNumberOfBlocksPerRow() == 1))
+   {
+      rval = getNumberOfRows();
+   }
+   return rval;
 }
 
 ossimDrect ossimNitfImageHeaderV2_1::getImageRect()const
@@ -939,18 +952,8 @@ void ossimNitfImageHeaderV2_1::setGeographicLocationDms(const ossimDpt& ul,
    }
       
    theCoordinateSystem[0] = 'G';
-   std::ostringstream out;
 
-   out << ossimDms(ul.y, true).toString("ddmmssC").c_str();
-   out << ossimDms(ul.x, false).toString("dddmmssC").c_str();
-   out << ossimDms(ur.y, true).toString("ddmmssC").c_str();
-   out << ossimDms(ur.x, false).toString("dddmmssC").c_str();
-   out << ossimDms(lr.y, true).toString("ddmmssC").c_str();
-   out << ossimDms(lr.x, false).toString("dddmmssC").c_str();
-   out << ossimDms(ll.y, true).toString("ddmmssC").c_str();
-   out << ossimDms(ll.x, false).toString("dddmmssC").c_str();
-
-   memcpy(theGeographicLocation, out.str().c_str(), 60);
+   memcpy(theGeographicLocation, ossimNitfCommon::encodeGeographicDms(ul, ur, lr, ll).c_str(), 60);
 }
 
 void ossimNitfImageHeaderV2_1::setGeographicLocationDecimalDegrees(
@@ -960,58 +963,8 @@ void ossimNitfImageHeaderV2_1::setGeographicLocationDecimalDegrees(
    const ossimDpt& ll)
 {
    theCoordinateSystem[0] = 'D';
-   ostringstream out;
 
-   out << (ul.lat >= 0.0?"+":"")
-       << std::setw(6)
-       << std::setfill('0')
-       << std::setprecision(3)
-       << std::setiosflags(std::ios::fixed)
-       << ul.lat
-       << (ul.lon >= 0.0?"+":"")
-       << std::setw(7)
-       << std::setfill('0')
-       << std::setprecision(3)
-       << std::setiosflags(std::ios::fixed)
-       << ul.lon;
-   out << (ur.lat >= 0.0?"+":"")
-       << std::setw(6)
-       << std::setfill('0')
-       << std::setprecision(3)
-       << std::setiosflags(std::ios::fixed)
-       << ur.lat
-       << (ur.lon >= 0.0?"+":"")
-       << std::setw(7)
-       << std::setfill('0')
-       << std::setprecision(3)
-       << std::setiosflags(std::ios::fixed)
-       << ur.lon;
-   out << (lr.lat >= 0.0?"+":"")
-       << std::setw(6)
-       << std::setfill('0')
-       << std::setprecision(3)
-       << std::setiosflags(std::ios::fixed)
-       << lr.lat
-       << (lr.lon >= 0.0?"+":"")
-       << std::setw(7)
-       << std::setfill('0')
-       << std::setprecision(3)
-       << std::setiosflags(std::ios::fixed)
-       << lr.lon;
-   out << (ll.lat >= 0.0?"+":"")
-       << std::setw(6)
-       << std::setfill('0')
-       << std::setprecision(3)
-       << std::setiosflags(std::ios::fixed)
-       << ll.lat
-       << (ll.lon >= 0.0?"+":"")
-       << std::setw(7)
-       << std::setfill('0')
-       << std::setprecision(3)
-       << std::setiosflags(std::ios::fixed)
-       << ll.lon;
-
-   memcpy(theGeographicLocation, out.str().c_str(), 60);
+   memcpy(theGeographicLocation, ossimNitfCommon::encodeGeographicDecimalDegrees(ul, ur, lr, ll).c_str(), 60);
 }
 
 void ossimNitfImageHeaderV2_1::setUtmNorth(ossim_uint32 zone,
@@ -1023,7 +976,7 @@ void ossimNitfImageHeaderV2_1::setUtmNorth(ossim_uint32 zone,
    theCoordinateSystem[0] = 'N';
    
    memcpy(theGeographicLocation,
-          encodeUtm(zone, ul, ur, lr, ll).c_str(), 60);
+          ossimNitfCommon::encodeUtm(zone, ul, ur, lr, ll).c_str(), 60);
 }
 
 void ossimNitfImageHeaderV2_1::setUtmSouth(ossim_uint32 zone,
@@ -1035,7 +988,7 @@ void ossimNitfImageHeaderV2_1::setUtmSouth(ossim_uint32 zone,
    theCoordinateSystem[0] = 'S';
    
    memcpy(theGeographicLocation,
-          encodeUtm(zone, ul, ur, lr, ll).c_str(), 60);
+          ossimNitfCommon::encodeUtm(zone, ul, ur, lr, ll).c_str(), 60);
 }
 
 void ossimNitfImageHeaderV2_1::setSecurityClassificationSystem(const ossimString& value)
@@ -1293,160 +1246,6 @@ void ossimNitfImageHeaderV2_1::getPropertyNames(std::vector<ossimString>& proper
    propertyNames.push_back(ISSRDT_KW);
    propertyNames.push_back(ISCTLN_KW);
    propertyNames.push_back(XBANDS_KW);
-}
-
-ossimString ossimNitfImageHeaderV2_1::encodeUtm(
-   ossim_uint32 zone,
-   const ossimDpt& ul,
-   const ossimDpt& ur,
-   const ossimDpt& lr,
-   const ossimDpt& ll)const
-{
-   ostringstream out;
-
-   if(zone > 60)
-   {
-      std::string s = "ossimNitfImageHeaderV2_1::encodeUtm: ERROR\nUTM zone greate than 60!";
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
-      }
-      throw std::out_of_range(s);
-   }
-   
-   ossim_float64 east  = ul.x;
-   ossim_float64 north = ul.y;
-   
-   if((ossim_uint32)(east+.5) > 999999)
-   {
-      std::string s = "ossimNitfImageHeaderV2_1::encodeUtm: ERROR\nUpper left easting too large for NITF field!";
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
-      }
-      throw std::out_of_range(s);
-   }
-   
-   if((ossim_uint32)(north+.5) > 9999999)
-   {
-      std::string s = "ossimNitfImageHeaderV2_1::encodeUtm: ERROR\nUpper left northing too large for NITF field!";
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
-      }
-      throw std::out_of_range(s);
-   }
-
-   out << setw(2)
-       << setfill('0')
-       << zone
-       << setw(6)
-       << setfill('0')
-       <<(ossim_uint32)(east+.5)
-       << setw(7)
-          << setfill('0')
-       <<(ossim_uint32)(north+.5);
-
-   
-   east  = ur.x;
-   north = ur.y;
-   
-   if((ossim_uint32)(east+.5) > 999999)
-   {
-      std::string s = "ossimNitfImageHeaderV2_1::encodeUtm: ERROR\nUpper right easting too large for NITF field!";
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
-      }
-      throw std::out_of_range(s);
-   }
-   
-   if((ossim_uint32)(north+.5) > 9999999)
-   {
-      std::string s = "ossimNitfImageHeaderV2_1::encodeUtm: ERROR\nUpper right northing too large for NITF field!";
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
-      }
-      throw std::out_of_range(s);
-   }
-   
-   out << setw(2)
-       << setfill('0')
-       << zone
-       << setw(6)
-       << setfill('0')
-       <<(ossim_uint32)(east+.5)
-       << setw(7)
-       << setfill('0')
-       <<(ossim_uint32)(north+.5);
-   east  = lr.x;
-   north = lr.y;
-
-   if((ossim_uint32)(east+.5) > 999999)
-   {
-      std::string s = "ossimNitfImageHeaderV2_1::encodeUtm: ERROR\nLower right easting too large for NITF field!";
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
-      }
-      throw std::out_of_range(s);
-   }
-   
-   if((ossim_uint32)(north+.5) > 9999999)
-   {
-      std::string s = "ossimNitfImageHeaderV2_1::encodeUtm: ERROR\nLower right northing too large for NITF field!";
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
-      }
-      throw std::out_of_range(s);
-   }   
-
-   out << setw(2)
-       << setfill('0')
-       << zone
-       << setw(6)
-       << setfill('0')
-       <<(ossim_uint32)(east+.5)
-       << setw(7)
-       << setfill('0')
-       <<(ossim_uint32)(north+.5);
-   
-   east  = ll.x;
-   north = ll.y;
-
-   if((ossim_uint32)(east+.5) > 999999)
-   {
-      std::string s = "ossimNitfImageHeaderV2_1::encodeUtm: ERROR\nLower left easting too large for NITF field!";
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
-      }
-      throw std::out_of_range(s);
-   }
-   
-   if((ossim_uint32)(north+.5) > 9999999)
-   {
-      std::string s = "ossimNitfImageHeaderV2_1::encodeUtm: ERROR\nLower left northing too large for NITF field!";
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
-      }
-      throw std::out_of_range(s);
-   }
-   
-   out << setw(2)
-       << setfill('0')
-       << zone
-       << setw(6)
-       << setfill('0')
-       <<(ossim_uint32)(east+.5)
-       << setw(7)
-       << setfill('0')
-       <<(ossim_uint32)(north+.5);
-   
-   return out.str().c_str();
 }
 
 const ossimRefPtr<ossimNitfCompressionHeader> ossimNitfImageHeaderV2_1::getCompressionHeader()const

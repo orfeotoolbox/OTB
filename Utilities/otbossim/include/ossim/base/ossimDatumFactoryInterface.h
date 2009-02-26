@@ -40,7 +40,7 @@ public:
     *
     * @param list The list to add to.
     */
-   virtual void getList(std::list<ossimString>& list) const = 0;
+   virtual void getList(std::vector<ossimString>& list) const = 0;
 };
 
 #endif /* #ifndef ossimDatumFactoryInterface_HEADER */

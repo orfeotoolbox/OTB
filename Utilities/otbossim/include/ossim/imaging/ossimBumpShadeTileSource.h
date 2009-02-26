@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBumpShadeTileSource.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimBumpShadeTileSource.h 13382 2008-08-04 18:53:26Z gpotts $
 #ifndef ossimBumpShadeTileSource_HEADER
 #define ossimBumpShadeTileSource_HEADER
 #include <ossim/imaging/ossimImageCombiner.h>
@@ -232,7 +232,14 @@ public:
     */
    void computeLightDirection();
 
+   /* ------------------- PROPERTY INTERFACE -------------------- */
+   virtual void setProperty(ossimRefPtr<ossimProperty> property);
+   virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
+   virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
+   /* ------------------ PROPERTY INTERFACE END ------------------- */
+   
 protected:
+   void allocate();
    /**
     * The result of the illumination equation is stored in
     * here.  This is populated on each call to getTile.

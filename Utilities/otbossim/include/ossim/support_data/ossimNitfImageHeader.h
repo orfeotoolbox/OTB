@@ -7,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeader.h 13101 2008-07-01 18:44:31Z dburken $
+// $Id: ossimNitfImageHeader.h 13630 2008-09-30 17:41:15Z gpotts $
 #ifndef ossimNitfImageHeader_HEADER
 #define ossimNitfImageHeader_HEADER
 
@@ -44,7 +44,7 @@ public:
    
    virtual ossim_uint32 getNumberOfTags()const;
 
-   virtual void addTag(ossimNitfTagInformation tag);
+   virtual void addTag(const ossimNitfTagInformation& tag);
    virtual void removeTag(const ossimString& tagName);
    
    virtual void parseStream(std::istream &in)= 0;

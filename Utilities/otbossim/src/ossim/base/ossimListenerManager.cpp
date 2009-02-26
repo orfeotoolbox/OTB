@@ -8,7 +8,7 @@
 // Description: A brief description of the contents of the file.
 //
 //*************************************************************************
-// $Id: ossimListenerManager.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimListenerManager.cpp 13362 2008-08-01 14:02:32Z gpotts $
 
 #include <algorithm>
 #include <ossim/base/ossimListenerManager.h>
@@ -35,6 +35,7 @@ ossimListenerManager::~ossimListenerManager()
 void ossimListenerManager::fireEvent(ossimEvent& event)
 {
    // only process the event if it has not been consumed.
+   event.setCurrentObject(PTR_CAST(ossimObject, this));
    if(event.isConsumed())
    {
       return;

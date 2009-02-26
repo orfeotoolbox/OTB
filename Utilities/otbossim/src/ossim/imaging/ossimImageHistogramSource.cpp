@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageHistogramSource.cpp 12614 2008-04-03 19:13:53Z gpotts $
+// $Id: ossimImageHistogramSource.cpp 13312 2008-07-27 01:26:52Z gpotts $
 #include <ossim/imaging/ossimImageHistogramSource.h>
 #include <ossim/base/ossimMultiResLevelHistogram.h>
 #include <ossim/base/ossimMultiBandHistogram.h>
@@ -106,7 +106,7 @@ bool ossimImageHistogramSource::execute()
    {
       if(theAreaOfInterest.hasNans())
       {
-         ossimImageSourceInterface* interface = PTR_CAST(ossimImageSourceInterface, getInput(0));
+         ossimImageSource* interface = PTR_CAST(ossimImageSource, getInput(0));
          if(interface)
          {
             theAreaOfInterest = interface->getBoundingRect();
@@ -144,7 +144,7 @@ bool ossimImageHistogramSource::execute()
 bool ossimImageHistogramSource::canConnectMyInputTo(ossim_int32 myInputIndex,
                                                     const ossimConnectableObject* object)const
 {
-   return ((myInputIndex==0)&&PTR_CAST(ossimImageSourceInterface,
+   return ((myInputIndex==0)&&PTR_CAST(ossimImageSource,
                                        object));
 }
 
@@ -196,7 +196,7 @@ void ossimImageHistogramSource::getBinInformation(ossim_uint32& numberOfBins,
 	minValue     = 0;
 	maxValue     = 0;
 	
-   ossimImageSourceInterface* input = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   ossimImageSource* input = PTR_CAST(ossimImageSource, getInput(0));
 	if(input)
 	{
 		switch(input->getOutputScalarType())
@@ -273,7 +273,7 @@ void ossimImageHistogramSource::computeNormalModeHistogram()
    // ref ptr, not a leak.
    theHistogram = new ossimMultiResLevelHistogram;
 	
-   ossimImageSourceInterface* input = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   ossimImageSource* input = PTR_CAST(ossimImageSource, getInput(0));
    if(!input)
    {
       setPercentComplete(100.0);
@@ -379,7 +379,7 @@ void ossimImageHistogramSource::computeFastModeHistogram()
    // ref ptr, not a leak.
    theHistogram = new ossimMultiResLevelHistogram;
 	theHistogram->create(resLevelsToCompute);
-   ossimImageSourceInterface* input = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   ossimImageSource* input = PTR_CAST(ossimImageSource, getInput(0));
    if(!input)
    {
       setPercentComplete(100.0);

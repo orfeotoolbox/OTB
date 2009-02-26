@@ -11,7 +11,7 @@
 // Remaps a tile based on mode and histogram clip points.
 //
 //*************************************************************************
-// $Id: ossimHistogramRemapper.cpp 12980 2008-06-04 00:50:33Z dburken $
+// $Id: ossimHistogramRemapper.cpp 13829 2008-10-31 19:11:59Z dburken $
 
 #include <cstdlib>
 #include <ossim/imaging/ossimHistogramRemapper.h>
@@ -42,7 +42,7 @@ static const char STRETCH_MODE_KW[] = "stretch_mode";
 static const char HISTOGRAM_FILENAME_KW[] = "histogram_filename";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimHistogramRemapper.cpp 12980 2008-06-04 00:50:33Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimHistogramRemapper.cpp 13829 2008-10-31 19:11:59Z dburken $";
 #endif
 
 ossimHistogramRemapper::ossimHistogramRemapper()
@@ -51,13 +51,13 @@ ossimHistogramRemapper::ossimHistogramRemapper()
    theStretchMode(ossimHistogramRemapper::LINEAR_ONE_PIECE),
    theDirtyFlag(false),
    theHistogram(0),
-   theTableSizeInBytes(0),
    theNormalizedLowClipPoint(),
    theNormalizedHighClipPoint(),
    theMidPoint(),
    theMinOutputValue(),
    theMaxOutputValue(),
-   theBandList()
+   theBandList(),
+   theByPassFlag(true)
 {
    if (traceDebug())
    {
@@ -68,23 +68,10 @@ ossimHistogramRemapper::ossimHistogramRemapper()
          << "OSSIM_ID:  " << OSSIM_ID << "\n";
 #endif      
    }
-	
-   disableSource();
-	
-   //---
-   // We will control the allocation and deletion of "theTable" so set the
-   // base class ownership flag to false (ossimTableRemapper does not own).
-   //---
-   setTableOwnership(false);
 }
 
 ossimHistogramRemapper::~ossimHistogramRemapper()
 {
-   if (theTable)
-   {
-      delete [] theTable;
-      theTable = 0;
-   }
 }
 
 void ossimHistogramRemapper::initialize()
@@ -113,12 +100,8 @@ void ossimHistogramRemapper::initialize()
          // Somethings changed.  Set everthing back.
          initializeClips();
          setNullCount();
-         if (theTable)
-         {
-            delete [] theTable;
-            theTable = 0;
-            recomputeAutoFlag = true;
-         }
+         theTable.clear();
+         recomputeAutoFlag = true;
       }
       else
       {
@@ -183,11 +166,7 @@ ossimHistogramRemapper::setHistogram(ossimRefPtr<ossimMultiResLevelHistogram> hi
    // Note: initializeClips before setNullCount since it relies on clips.
    initializeClips();
 	
-   if (theTable)
-   {
-      delete [] theTable;
-      theTable = 0;
-   }
+   theTable.clear();
 }
 
 bool ossimHistogramRemapper::openHistogram(const ossimFilename& histogram_file)
@@ -195,7 +174,7 @@ bool ossimHistogramRemapper::openHistogram(const ossimFilename& histogram_file)
    ossimRefPtr<ossimMultiResLevelHistogram> h = new ossimMultiResLevelHistogram();
    if (h->importHistogram(histogram_file))
    {
-      setHistogram(h); // True for, "I own it!"
+      setHistogram(h);
       return true;
    }
 	
@@ -207,19 +186,23 @@ ossimRefPtr<ossimImageData> ossimHistogramRemapper::getTile(
    const ossimIrect& tile_rect,
    ossim_uint32 resLevel)
 {
-   if((theStretchMode == STRETCH_UNKNOWN)||(!theEnableFlag))
+   ossimRefPtr<ossimImageData> result = 0;
+   if((theStretchMode == STRETCH_UNKNOWN)||(!theEnableFlag)||(theByPassFlag))
    {
       if(theInputConnection)
       {
-         return theInputConnection->getTile(tile_rect, resLevel);
+         result = theInputConnection->getTile(tile_rect, resLevel);
       }
-      return ossimRefPtr<ossimImageData>();
    }
-   if (theDirtyFlag || !theTable)
+   else // need remap
    {
-      buildTable();
+      if (theDirtyFlag || theTable.empty())
+      {
+         buildTable();
+      }
+      result = ossimTableRemapper::getTile(tile_rect, resLevel);
    }
-   return ossimTableRemapper::getTile(tile_rect, resLevel);
+   return result;
 }
 
 void ossimHistogramRemapper::setLowNormalizedClipPoint(const ossim_float64& clip)
@@ -762,7 +745,6 @@ bool ossimHistogramRemapper::loadState(const ossimKeywordlist& kwl,
                                        const char* prefix)
 {
    static const char MODULE[] = "ossimHistogramRemapper::loadState";
-	
    if (traceDebug())
    {
       CLOG << " Entered..."
@@ -905,7 +887,7 @@ bool ossimHistogramRemapper::loadState(const ossimKeywordlist& kwl,
          theStretchMode = ossimHistogramRemapper::STRETCH_UNKNOWN;
       }
    }
-	
+
    // Load the base class states...
    bool status = ossimTableRemapper::loadState(kwl, prefix);
 	
@@ -1006,6 +988,8 @@ bool ossimHistogramRemapper::saveState(ossimKeywordlist& kwl,
               theMaxOutputValue[band],
               true);
    }
+
+   return ossimConnectableObject::saveState(kwl, prefix);
    
    return ossimTableRemapper::saveState(kwl, prefix);
 }
@@ -1079,6 +1063,8 @@ void ossimHistogramRemapper::buildTable()
          }
          break;
    }
+
+   verifyEnabled();
 	
    if (traceDebug())
    {
@@ -1193,18 +1179,22 @@ template <class T> void ossimHistogramRemapper::buildLinearTable(T /* dummy */)
    theTableType = ossimTableRemapper::NATIVE;
    
    const ossim_uint32 BANDS = getNumberOfInputBands();
-	
+   theByPassFlag = false;
+   
    // Sanity check.
    if (theNormalizedLowClipPoint.size() != BANDS || !theHistogram)
    {
-      theEnableFlag = false;
-      ossimNotify(ossimNotifyLevel_WARN)
-         << "ossimHistogramRemapper::buildTable ERROR!"
-         << " Line:  " << __LINE__ << endl;
+      theByPassFlag = true;
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "ossimHistogramRemapper::buildTable ERROR!"
+            << " Line:  " << __LINE__ << endl;
+      }
       return;
    }
    
-   T* table = reinterpret_cast<T*>(theTable);
+   T* table = reinterpret_cast<T*>(&theTable.front());
    ossim_uint32 index = 0;
    
    // Finally, build the table...
@@ -1224,10 +1214,13 @@ template <class T> void ossimHistogramRemapper::buildLinearTable(T /* dummy */)
 		
       if (!h)
       {
-         theEnableFlag = false;
-         ossimNotify(ossimNotifyLevel_WARN)
+         theByPassFlag = true;
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
             << "ossimHistogramRemapper::buildTable ERROR!"
             << " Line:  " << __LINE__ << endl;
+         }
          return; 
       }
 		
@@ -1278,15 +1271,19 @@ template <class T> void ossimHistogramRemapper::buildLinearTable(T /* dummy */)
 template <class T> void ossimHistogramRemapper::buildAutoLinearMinMaxTableTemplate(T /* dummy */)
 {
    const ossim_uint32 BANDS = getNumberOfInputBands();
+	theByPassFlag = false;
 	
    // Sanity check.
    if (theNormalizedLowClipPoint.size() != BANDS || !theHistogram)
    {
-      theEnableFlag = false;
-      ossimNotify(ossimNotifyLevel_WARN)
+      theByPassFlag = true;
+		if(traceDebug())
+		{
+			ossimNotify(ossimNotifyLevel_WARN)
          << "ossimHistogramRemapper::buildTable ERROR!"
          << " Line:  " << __LINE__ << endl;
-      return;
+		}
+		return;
    }
    for (ossim_uint32 band = 0; band < BANDS; ++band)
    {
@@ -1356,16 +1353,21 @@ void ossimHistogramRemapper::buildLinearTableStdFromMean()
 {
    const ossim_uint32 BANDS = getNumberOfInputBands();
 	
+   theByPassFlag = false;
+   
    // Sanity check.
    if (theNormalizedLowClipPoint.size() != BANDS || !theHistogram)
    {
-      theEnableFlag = false;
-      ossimNotify(ossimNotifyLevel_WARN)
-         << "ossimHistogramRemapper::buildTable ERROR!"
-         << " Line:  " << __LINE__ << endl;
+      theByPassFlag = true;
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "ossimHistogramRemapper::buildTable ERROR!"
+            << " Line:  " << __LINE__ << endl;
+      }
       return;
    }
-	
+   
    ossim_float64 multiplier = 1.0;
    if (theStretchMode == LINEAR_2STD_FROM_MEAN)
    {
@@ -1422,14 +1424,15 @@ void ossimHistogramRemapper::initializeClips()
 
 void ossimHistogramRemapper::initializeClips(ossim_uint32 bands)
 {
-   theEnableFlag = false;
    theDirtyFlag  = false;
 	
    if (bands == 0)
    {
       return;
    }
-	
+   
+   theByPassFlag = false;
+   
    theNormalizedLowClipPoint.resize(bands);
    theNormalizedHighClipPoint.resize(bands);
    theMidPoint.resize(bands);
@@ -1506,8 +1509,10 @@ ostream& ossimHistogramRemapper::print(ostream& os) const
       << "\nossimHistogramRemapper::print:"
       << "\ntheStretchMode:         " << getStretchModeString().c_str()
       << "\ntheDirtyFlag:           " << (theDirtyFlag?"true":"false")
+      << "\ntheByPassFlag:          " << (theByPassFlag?"true":"false")
+      
       << "\ntheHistogram:           " << (theHistogram.valid()?"initialized":"null")
-      << "\ntheTableSizeInBytes:    " << theTableSizeInBytes
+      << "\ntheTableSizeInBytes:    " << theTable.size()
       << endl;
 	
    const ossim_uint32 BANDS = (ossim_uint32)theNormalizedLowClipPoint.size();
@@ -1603,20 +1608,13 @@ void ossimHistogramRemapper::setupTable()
    
    theTableBinCount  = values_per_band;
    theTableBandCount = BANDS;
-	
    // Check the size of the table prior to deletion and making a new one.
    ossim_uint32 size_in_bytes = values_per_band * BANDS * bytes_per_pixel;
-	
-   if (!theTable || (theTableSizeInBytes != size_in_bytes))
+   if(theTable.empty() || (theTable.size() != size_in_bytes))
    {
-      if (theTable)
-      {
-         delete [] theTable;
-      }
-      theTable = new ossim_uint8[size_in_bytes];
-      theTableSizeInBytes = size_in_bytes;
+      theTable.resize(size_in_bytes);
    }
-	
+
    //---
    // Last check for NaNs in key data members and set to some default if so.
    // This could occur if someone stripped a keyword list down to a minimal
@@ -1640,32 +1638,38 @@ void ossimHistogramRemapper::setupTable()
 
 void ossimHistogramRemapper::verifyEnabled()
 {
-   theEnableFlag = false;
-	
-   if (!theInputConnection)
+   theByPassFlag = true;
+
+   //---
+   // Since this filter can be constructed with no input connection do not
+   // output and error, simply return.
+   //---	
+   if (theInputConnection)
    {
-      //---
-      // Since this filter can be constructed with no input connection do not
-      // output and error, simply return.
-      //---
-      return;
-   }
-	
-   const ossim_uint32 BANDS = (ossim_uint32)theNormalizedLowClipPoint.size();
-   for (ossim_uint32 band = 0; band < BANDS; ++band)
-   {
-      const double MIN = getMinPixelValue(band);
-      const double MAX = getMaxPixelValue(band);
       
-      if ( theNormalizedLowClipPoint[band]  != 0.0   ||
-           theNormalizedHighClipPoint[band] != 1.0   ||
-           // theMidPoint != 0.0 || ????
-           theMinOutputValue[band] != MIN ||
-           theMaxOutputValue[band] != MAX )
+      const ossim_uint32 BANDS =
+         (ossim_uint32)theNormalizedLowClipPoint.size();
+      for (ossim_uint32 band = 0; band < BANDS; ++band)
       {
-         theEnableFlag = true;
-         break;
+         const double MIN = getMinPixelValue(band);
+         const double MAX = getMaxPixelValue(band);
+         
+         if ( theNormalizedLowClipPoint[band]  != 0.0   ||
+              theNormalizedHighClipPoint[band] != 1.0   ||
+              // theMidPoint != 0.0 || ????
+              theMinOutputValue[band] != MIN ||
+              theMaxOutputValue[band] != MAX )
+         {
+            theByPassFlag = false;
+            break;
+         }
       }
+   }
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimHistogramRemapper::verifyEnabled theBypassFlag: "
+         << (theByPassFlag ? "true" : "false") << endl;
    }
 }
 

@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-	 This software is distributed WITHOUT ANY WARRANTY; without even 
-	 the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+	 This software is distributed WITHOUT ANY WARRANTY; without even
+	 the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 	 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,26 +31,26 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 
-#include "otbList.h"
+#include "otbObjectList.h"
 #include "otbImageList.h"
 #include "otbImageListSource.h"
 #include "otbImageFileReader.h"
 
 namespace otb {
 
-  class ImageSeriesFileReaderException : public itk::ExceptionObject 
+  class ImageSeriesFileReaderException : public itk::ExceptionObject
   {
     public:
       itkTypeMacro( ImageSeriesFileReaderException, ExceptionObject );
 
-      ImageSeriesFileReaderException(const char *file, unsigned int line, 
+      ImageSeriesFileReaderException(const char *file, unsigned int line,
                                  const char* message = "Error in IO",
                                  const char* loc = "Unknown") :
         itk::ExceptionObject(file, line, message, loc) { }
 
-      ImageSeriesFileReaderException(const std::string &file, unsigned int line, 
+      ImageSeriesFileReaderException(const std::string &file, unsigned int line,
                                  const char* message = "Error in IO",
-                                 const char* loc = "Unknown") : 
+                                 const char* loc = "Unknown") :
         itk::ExceptionObject(file, line, message, loc) { }
   };
 
@@ -93,13 +93,13 @@ class ITK_EXPORT ImageSeriesFileReaderBase : public ImageListSource< TImage >
     typedef ImageFileReader< InternalImageType > ReaderType;
     typedef typename ReaderType::Pointer ReaderPointerType;
 
-    typedef List< ReaderType > ReaderListType;
+    typedef ObjectList< ReaderType > ReaderListType;
     typedef typename ReaderListType::Pointer ReaderListPointerType;
 
     /** Get the file to be read */
     itkGetStringMacro(FileName);
-    /** 
-     * Set the file to be read. Once the Filename is set, ReadMeatFile is called in order to get 
+    /**
+     * Set the file to be read. Once the Filename is set, ReadMeatFile is called in order to get
      * the number of image files to be read, the images file names, the band and region
      * selection
      */
@@ -122,7 +122,7 @@ class ITK_EXPORT ImageSeriesFileReaderBase : public ImageListSource< TImage >
     virtual OutputImageType * GenerateOutput ( unsigned int idx );
 
 	protected:
-    ImageSeriesFileReaderBase(); 
+    ImageSeriesFileReaderBase();
     virtual ~ImageSeriesFileReaderBase () { }
 
     enum FileType { kFileName = 0, kImageFileName, kAnyFileName };
@@ -136,7 +136,7 @@ class ITK_EXPORT ImageSeriesFileReaderBase : public ImageListSource< TImage >
 
     virtual void GenerateData ( void );
 
-		/** GenerateData 
+		/** GenerateData
 		 * This method will be specialised if template definitions follow:
 		 * - TImage is a VectorImage
 		 * - TImage is an Image and TInteranalImage is a VectorImage
@@ -158,7 +158,7 @@ class ITK_EXPORT ImageSeriesFileReaderBase : public ImageListSource< TImage >
     /** PrintSelf method */
     virtual void PrintSelf ( std::ostream& os, itk::Indent indent ) const;
 
-    std::string m_FileName; 
+    std::string m_FileName;
     OutputImageListPointerType m_OutputList;
 
     std::vector< std::string > m_ListOfFileNames;
@@ -170,7 +170,7 @@ class ITK_EXPORT ImageSeriesFileReaderBase : public ImageListSource< TImage >
 	private:
     ImageSeriesFileReaderBase ( const Self & );
     void operator= ( const Self & );
-}; // end of class 
+}; // end of class
 
 } // end of namespace otb
 

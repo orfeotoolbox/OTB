@@ -90,10 +90,20 @@ public:
   itkSetMacro(Extent,RegionType);
   itkGetConstReferenceMacro(Extent,RegionType);
 
-  itkSetMacro(ExtractRegion,RegionType);
+  /** This parameters should be reported to the appropriate filters in
+  implementations. Therefore this method is marked as virtual. */
+  virtual void SetExtractRegion(const RegionType & region)
+  {
+    m_ExtractRegion = region;
+  }
   itkGetConstReferenceMacro(ExtractRegion,RegionType);
 
-  itkSetMacro(ScaledExtractRegion,RegionType);
+  /** This parameters should be reported to the appropriate filters in
+  implementations. Therefore this method is marked as virtual. */
+  virtual void SetScaledExtractRegion(const RegionType & region)
+  {
+    m_ScaledExtractRegion = region;
+  }
   itkGetConstReferenceMacro(ScaledExtractRegion,RegionType);
 
   itkSetMacro(QuicklookSubsamplingRate,unsigned int);

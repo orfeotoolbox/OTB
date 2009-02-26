@@ -7,7 +7,7 @@
 // Description: This class parses an EOSAT Fast Format rev b header.
 //
 //********************************************************************
-// $Id: ossimFfRevb.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimFfRevb.cpp 13217 2008-07-23 19:19:13Z dburken $
 
 #include <cstdlib>
 #include <cstring>
@@ -173,11 +173,7 @@ int ossimFfRevb::path() const
    {
       is.get(tmpBuff, 4);
       tmpBuff[3] = '\0';
-
-      if (tmpBuff)
-      {
-         path = atoi(tmpBuff);
-      }
+      path = atoi(tmpBuff);
    }
 
    return path;
@@ -204,11 +200,7 @@ int ossimFfRevb::row() const
       is.seekg(4, ios::beg);
       is.get(tmpBuff, 4);
       tmpBuff[3] = '\0';
-
-      if (tmpBuff)
-      {
-         row = atoi(tmpBuff);
-      }
+      row = atoi(tmpBuff);
    }
 
    return row;
@@ -235,11 +227,7 @@ int ossimFfRevb::fraction() const
       is.seekg(7, ios::beg);
       is.get(tmpBuff, 3);
       tmpBuff[2] = '\0';
-
-      if (tmpBuff)
-      {
-         fraction = atoi(tmpBuff);
-      }
+      fraction = atoi(tmpBuff);
    }
 
    return fraction;
@@ -850,44 +838,20 @@ void ossimFfRevb::loadFromStream(istream& is)
    is.seekg(FIRST_LINE_IN_VOLUME_OFFSET, ios::beg);
    is.get(tmpBuff, FIRST_LINE_IN_VOLUME_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      the1stLineInVolume = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading 1st line in volume." << std::endl;
-   }
+
+   the1stLineInVolume = atoi(tmpBuff);
 
    is.seekg(LINES_PER_VOLUME_OFFSET, ios::beg);
    is.get(tmpBuff, LINES_PER_VOLUME_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theLinesPerVolume = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "\tDetected an error reading the lines per volume." << std::endl;
-   }
+
+   theLinesPerVolume = atoi(tmpBuff);
    
    is.seekg(ORIENTATION_ANGLE_OFFSET, ios::beg);
    is.get(tmpBuff, ORIENTATION_ANGLE_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theOrientationAngle = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading orientation angle." << std::endl;
-   }
+
+   theOrientationAngle = atof(tmpBuff);
 
    is.seekg(MAP_PROJ_NAME_OFFSET, ios::beg);
    is.get(theMapProjName, MAP_PROJ_NAME_SIZE + 1);
@@ -896,30 +860,14 @@ void ossimFfRevb::loadFromStream(istream& is)
    is.seekg(USGS_PROJ_NUMBER_OFFSET, ios::beg);
    is.get(tmpBuff, USGS_PROJ_NUMBER_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theUsgsProjNumber = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading USGS Projection Number." << std::endl;
-   }
+
+   theUsgsProjNumber = atoi(tmpBuff);
 
    is.seekg(USGS_MAP_ZONE_OFFSET, ios::beg);
    is.get(tmpBuff, USGS_MAP_ZONE_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theUsgsMapZone = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading USGS Projection Number." << std::endl;
-   }
+
+   theUsgsMapZone = atoi(tmpBuff);
 
    //***
    // Get the fifteen projection parameters.
@@ -938,72 +886,32 @@ void ossimFfRevb::loadFromStream(istream& is)
    is.seekg(MAJOR_AXIS_OFFSET, ios::beg);
    is.get(tmpBuff,  MAJOR_AXIS_SIZE+ 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theSemiMajorAxis = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading semi major axis." << std::endl;
-   }
+
+   theSemiMajorAxis = atof(tmpBuff);
    
    is.seekg(MINOR_AXIS_OFFSET, ios::beg);
    is.get(tmpBuff,  MINOR_AXIS_SIZE+ 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theSemiMinorAxis = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading semi minor axis." << std::endl;
-   }
+
+   theSemiMinorAxis = atof(tmpBuff);
 
    is.seekg(PIXEL_GSD_OFFSET, ios::beg);
    is.get(tmpBuff, PIXEL_GSD_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theGsd = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading pixel size." << std::endl;
-   }
+
+   theGsd = atof(tmpBuff);
    
    is.seekg(PIXELS_PER_LINE_OFFSET, ios::beg);
    is.get(tmpBuff, PIXELS_PER_LINE_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      thePixelsPerLine = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading pixels per line." << std::endl;
-   }
+
+   thePixelsPerLine = atoi(tmpBuff);
 
    is.seekg(LINES_PER_IMAGE_OFFSET, ios::beg);
    is.get(tmpBuff, LINES_PER_IMAGE_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theLinesPerImage = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream:"
-                                          << "Detected an error reading lines per image." << std::endl;
-   }
+
+   theLinesPerImage = atoi(tmpBuff);
 
    //***
    // Start of upper left data:  longitude, latitude, easting, and northing. 
@@ -1019,30 +927,15 @@ void ossimFfRevb::loadFromStream(istream& is)
    is.seekg(UL_EASTING_OFFSET, ios::beg);
    is.get(tmpBuff, EASTING_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theUlEasting = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream:"
-                                          << "Detected an error reading UL easting." << std::endl;
-   }
+
+   theUlEasting = atof(tmpBuff);
 
    is.seekg(UL_NORTHING_OFFSET, ios::beg);
    is.get(tmpBuff, NORTHING_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theUlNorthing = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream:: "
-                                          << "Detected an error reading UL northing." << std::endl;
-   }
+
+   theUlNorthing = atof(tmpBuff);
+
    //***
    // End of upper left data.
    //***
@@ -1061,30 +954,15 @@ void ossimFfRevb::loadFromStream(istream& is)
    is.seekg(UR_EASTING_OFFSET, ios::beg);
    is.get(tmpBuff, EASTING_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theUrEasting = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading UR easting." << std::endl;
-   }
+
+   theUrEasting = atof(tmpBuff);
 
    is.seekg(UR_NORTHING_OFFSET, ios::beg);
    is.get(tmpBuff, NORTHING_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theUrNorthing = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading UR northing." << std::endl;
-   }
+
+   theUrNorthing = atof(tmpBuff);
+   
    //***
    // End of upper right data.
    //***
@@ -1103,30 +981,15 @@ void ossimFfRevb::loadFromStream(istream& is)
    is.seekg(LR_EASTING_OFFSET, ios::beg);
    is.get(tmpBuff, EASTING_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theLrEasting = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading LR easting." << std::endl;
-   }
+
+   theLrEasting = atof(tmpBuff);
 
    is.seekg(LR_NORTHING_OFFSET, ios::beg);
    is.get(tmpBuff, NORTHING_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theLrNorthing = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading LR northing." << std::endl;
-   }
+
+   theLrNorthing = atof(tmpBuff);
+
    //***
    // End of lower right data.
    //***
@@ -1145,30 +1008,15 @@ void ossimFfRevb::loadFromStream(istream& is)
    is.seekg(LL_EASTING_OFFSET, ios::beg);
    is.get(tmpBuff, EASTING_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theLlEasting = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading LL easting." << std::endl;
-   }
+
+   theLlEasting = atof(tmpBuff);
 
    is.seekg(LL_NORTHING_OFFSET, ios::beg);
    is.get(tmpBuff, NORTHING_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theLlNorthing = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading LL northing." << std::endl;
-   }
+
+   theLlNorthing = atof(tmpBuff);
+
    //***
    // End of lower left data.
    //***
@@ -1180,58 +1028,26 @@ void ossimFfRevb::loadFromStream(istream& is)
    is.seekg(BLOCKING_FACTOR_OFFSET, ios::beg);
    is.get(tmpBuff, BLOCKING_FACTOR_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theBlockingFactor = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading the blocking factor." << std::endl;
-   }
+
+   theBlockingFactor = atoi(tmpBuff);
 
    is.seekg(RECORD_LENGTH_OFFSET, ios::beg);
    is.get(tmpBuff, RECORD_LENGTH_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theRecordSize = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading record size." << std::endl;
-   }
+
+   theRecordSize = atoi(tmpBuff);
 
    is.seekg(SUN_ELEVATION_OFFSET, ios::beg);
    is.get(tmpBuff, SUN_ELEVATION_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theSunElevation = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading sun elevation angle." << std::endl;
-   }
+
+   theSunElevation = atoi(tmpBuff);
 
    is.seekg(SUN_AZIMUTH_OFFSET, ios::beg);
    is.get(tmpBuff, SUN_AZIMUTH_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theSunAzimuth = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL  ossimFfRevb::loadFromStream:"
-                                          << "\tDetected an error reading sun azimuth." << std::endl;
-   }
+
+   theSunAzimuth = atoi(tmpBuff);
 
    //***
    // Start of scene center data:  longitude, latitude, easting, northing,
@@ -1248,58 +1064,27 @@ void ossimFfRevb::loadFromStream(istream& is)
    is.seekg(CENTER_EASTING_OFFSET, ios::beg);
    is.get(tmpBuff, EASTING_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theCenterEasting = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading center easting." << std::endl;
-   }
+
+   theCenterEasting = atof(tmpBuff);
 
    is.seekg(CENTER_NORTHING_OFFSET, ios::beg);
    is.get(tmpBuff, NORTHING_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theCenterNorthing = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading center northing." << std::endl;
-   }
+
+   theCenterNorthing = atof(tmpBuff);
 
    is.seekg(CENTER_SAMPLE_OFFSET, ios::beg);
    is.get(tmpBuff, CENTER_SAMPLE_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theCenterSample = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading center sample." << std::endl;
-   }
+
+   theCenterSample = atoi(tmpBuff);
 
    is.seekg(CENTER_LINE_OFFSET, ios::beg);
    is.get(tmpBuff, CENTER_LINE_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theCenterLine = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading center line." << std::endl;
-   }
+
+   theCenterLine = atoi(tmpBuff);
+
    //***
    // End of scene center data.
    //***
@@ -1307,16 +1092,8 @@ void ossimFfRevb::loadFromStream(istream& is)
    is.seekg(OFFSET_OFFSET, ios::beg);
    is.get(tmpBuff, OFFSET_SIZE + 1);
    if (checkStream(is)) return;
-   if (tmpBuff)
-   {
-      theOffset = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL  ossimFfRevb::loadFromStream: "
-                                          << "Detected an error reading horizontal offset." << std::endl;
-   }
+
+   theOffset = atoi(tmpBuff);
 
    is.seekg(FORMAT_VERSION_OFFSET, ios::beg);
    is.get(theFormatVersion, FORMAT_VERSION_SIZE + 1);

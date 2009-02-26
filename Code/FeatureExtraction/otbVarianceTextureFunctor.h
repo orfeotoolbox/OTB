@@ -39,20 +39,17 @@ namespace Functor
  *  \ingroup Statistics
  */
 
-template <class TIterInput, class TOutput>
+template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT VarianceTextureFunctor :
-public MeanTextureFunctor<TIterInput, TOutput>
+public MeanTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
   VarianceTextureFunctor(){};
   virtual ~VarianceTextureFunctor(){};
 
-  typedef TIterInput                           IterType;
-  typedef TOutput                              OutputType;
-  typedef typename IterType::InternalPixelType InternalPixelType;
-  typedef typename IterType::ImageType         ImageType;
-  typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
-  typedef MeanTextureFunctor<TIterInput, TOutput> Superclass;
+  typedef MeanTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
+  typedef typename Superclass::NeighborhoodType                             NeighborhoodType;
+
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {

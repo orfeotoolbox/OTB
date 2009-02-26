@@ -15,7 +15,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimImageViewProjectionTransform.cpp 11412 2007-07-27 13:56:11Z dburken $
+//  $Id: ossimImageViewProjectionTransform.cpp 13516 2008-08-29 14:54:12Z dburken $
 //
 #include <ossim/projection/ossimImageViewProjectionTransform.h>
 #include <ossim/projection/ossimProjection.h>
@@ -70,6 +70,36 @@ ossimImageViewProjectionTransform::ossimImageViewProjectionTransform
    }
 }
 
+ossimImageViewProjectionTransform::ossimImageViewProjectionTransform(
+   const ossimImageViewProjectionTransform& src)
+   : ossimImageViewTransform(src),
+     theImageProjection(0),
+     theViewProjection(0),
+     theOwnsImageProjFlag(src.theOwnsImageProjFlag),
+     theOwnsViewProjFlag(src.theOwnsViewProjFlag),
+     theSameProjection(src.theSameProjection),
+     theInputMapProjectionFlag(src.theInputMapProjectionFlag),
+     theOutputMapProjectionFlag(src.theOutputMapProjectionFlag)
+{
+   if(theOwnsImageProjFlag)
+   {
+      theImageProjection = src.theImageProjection?(ossimProjection*)src.theImageProjection->dup():(ossimProjection*)0;
+   }
+   else
+   {
+      theImageProjection = src.theImageProjection;
+   }
+   if(theOwnsViewProjFlag)
+   {
+      theViewProjection = src.theViewProjection?(ossimProjection*)src.theViewProjection->dup():(ossimProjection*)0;
+   }
+   else
+   {
+      theViewProjection = src.theViewProjection;
+   }
+}
+
+
 //*****************************************************************************
 //  DESTRUCTOR: ~ossimImageViewProjectionTransform
 //  
@@ -79,12 +109,12 @@ ossimImageViewProjectionTransform::~ossimImageViewProjectionTransform()
    if(theImageProjection && theOwnsImageProjFlag)
    {
       delete theImageProjection;
-      theImageProjection = NULL;
+      theImageProjection = 0;
    }
    if(theViewProjection && theOwnsViewProjFlag)
    {
       delete theViewProjection;
-      theViewProjection = NULL;
+      theViewProjection = 0;
    }
 }
 
@@ -204,7 +234,7 @@ void ossimImageViewProjectionTransform::setViewProjection(ossimProjection* viewP
       theOwnsViewProjFlag)
    {
       delete theViewProjection;
-      theViewProjection = (ossimProjection*)NULL;
+      theViewProjection = (ossimProjection*)0;
    }
    theOwnsViewProjFlag = ownsViewProjection;
    theViewProjection   = viewProjection;
@@ -242,7 +272,7 @@ bool ossimImageViewProjectionTransform::setView(ossimObject* baseObject,
    else
    {
       // if it's null we will just clear the view out
-      setViewProjection((ossimProjection*)NULL, true);
+      setViewProjection((ossimProjection*)0, true);
    }
 
    checkSameProjection();
@@ -260,7 +290,7 @@ void ossimImageViewProjectionTransform::setImageProjection(ossimProjection* imag
       theOwnsImageProjFlag)
    {
       delete theImageProjection;
-      theImageProjection = (ossimProjection*)NULL;
+      theImageProjection = (ossimProjection*)0;
    }
    theOwnsImageProjFlag = ownsImageProjection;
    theImageProjection = imageProjection;
@@ -286,7 +316,7 @@ void ossimImageViewProjectionTransform::setViewProjection(const ossimProjection&
    if(theViewProjection && theOwnsViewProjFlag)
    {
       delete theViewProjection;
-      theViewProjection = (ossimProjection*)NULL;
+      theViewProjection = (ossimProjection*)0;
    }
    theViewProjection   = (ossimProjection*)viewProjection.dup();
    theOwnsViewProjFlag = true;
@@ -423,12 +453,12 @@ bool ossimImageViewProjectionTransform::loadState(const ossimKeywordlist& kwl,
    if(theImageProjection)
    {
       delete theImageProjection;
-      theImageProjection = NULL;
+      theImageProjection = 0;
    }
    if(theViewProjection)
    {
       delete theViewProjection;
-      theViewProjection = NULL;
+      theViewProjection = 0;
    }
 
    newPrefix = ossimString(prefix) + "view_proj.";

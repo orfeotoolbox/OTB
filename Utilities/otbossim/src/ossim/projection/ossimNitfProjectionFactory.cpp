@@ -9,7 +9,7 @@
 //
 // Contains class definition for ossimNitfProjectionFactory.
 //
-// $Id: ossimNitfProjectionFactory.cpp 12276 2008-01-07 19:58:43Z dburken $
+// $Id: ossimNitfProjectionFactory.cpp 13909 2008-12-03 20:55:04Z gpotts $
 //----------------------------------------------------------------------------
 
 #include <fstream>
@@ -106,7 +106,7 @@ ossimNitfProjectionFactory::createProjection(const ossimFilename& filename,
       return result;
    }
 
-   ossimNitfImageHeader* imageHeader = nitf->getNewImageHeader(imageIndex);
+   ossimRefPtr<ossimNitfImageHeader> imageHeader = nitf->getNewImageHeader(imageIndex);
    {
       if (!imageHeader)
       {
@@ -115,14 +115,17 @@ ossimNitfProjectionFactory::createProjection(const ossimFilename& filename,
    }
 
    ossimString coordinateSystem   = imageHeader->getCoordinateSystem();
-   
+   ossimString version = nitf->getHeader()->getVersion();
    if (coordinateSystem == "G" || coordinateSystem == "D")
    {
-      result = makeGeographic(imageHeader, coordinateSystem, filename);
+      result = makeGeographic(imageHeader.get(), coordinateSystem, filename);
    }
    else if(coordinateSystem == "N" || coordinateSystem == "S")
    {
-      result = makeUtm(imageHeader, coordinateSystem, filename);
+      if((coordinateSystem == 'N') && (version.toDouble() > 2.0))
+      {
+         result = makeUtm(imageHeader.get(), coordinateSystem, filename);
+      }
    }
 
    if (traceDebug())
@@ -444,7 +447,10 @@ ossimProjection* ossimNitfProjectionFactory::makeBilinear(
    ossimDpt lr(cols-1.0, rows-1.0);
    ossimDpt ll(0.0, rows-1.0);
 
-   return new ossimBilinearProjection(ul,
+   ossimBilinearProjection* proj = 0;
+   try
+   {
+     proj = new ossimBilinearProjection(ul,
                                       ur,
                                       lr,
                                       ll,
@@ -452,6 +458,17 @@ ossimProjection* ossimNitfProjectionFactory::makeBilinear(
                                       gpts[1],
                                       gpts[2],
                                       gpts[3]);
+   }
+   catch(...)
+   {
+      if(proj)
+      {
+         delete proj;
+         proj = 0;
+      }
+   }
+   
+   return proj;
 }
 
 bool ossimNitfProjectionFactory::isSkewed(

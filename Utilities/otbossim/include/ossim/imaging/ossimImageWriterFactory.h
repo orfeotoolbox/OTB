@@ -8,7 +8,7 @@
 // Author:  Frank Warmerdam (warmerda@home.com)
 //
 //*******************************************************************
-//  $Id: ossimImageWriterFactory.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimImageWriterFactory.h 13206 2008-07-22 19:48:02Z gpotts $
 
 #ifndef ossimImageWriterFactory_HEADER
 #define ossimImageWriterFactory_HEADER
@@ -52,7 +52,7 @@ protected:
 
    static ossimImageWriterFactory* theInstance;
 
-
+	ossimImageFileWriter* createFromMimeType(const ossimString& mimeType)const;
    bool isImageTypeName(const ossimString& name)const;
 };
 

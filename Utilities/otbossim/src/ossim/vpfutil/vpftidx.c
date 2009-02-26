@@ -272,7 +272,7 @@ long int create_thematic_index ( char indextype,
 #endif
   }	/* end of for loop */
 
-  table = vpf_open_table ( tablename, disk, "rb", (char) NULL ) ;
+  table = vpf_open_table ( tablename, disk, "rb", NULL ) ;
 
 
   /* Determine the id_data_size. This will save 50% of file size  */
@@ -492,7 +492,7 @@ long int create_thematic_index ( char indextype,
   if ( h.column_type == 'K' )		/* It's really an I */
     h.column_type = 'I' ;
   for ( i=0; i < 4; i++ )
-    h.padding[i] = (char) NULL ;
+    h.padding[i] = '\0' ;
 
   /* only write the table name, no pathname */
 
@@ -1141,7 +1141,7 @@ long int create_gazetteer_index (char *tablename,
   unsigned long int l,
                     set_byte_size;
 
-  t = vpf_open_table(tablename, disk, "rb", (char) NULL);
+  t = vpf_open_table(tablename, disk, "rb", NULL);
   c = table_pos(strupr(columnname), t);
 
   if (t.header[c].type != 'T') {

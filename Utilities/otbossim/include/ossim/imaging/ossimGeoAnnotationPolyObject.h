@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationPolyObject.h 9480 2006-09-01 13:52:19Z gpotts $
+// $Id: ossimGeoAnnotationPolyObject.h 13349 2008-07-30 15:34:34Z dburken $
 #ifndef ossimGeoAnnotationPolyObject_HEADER
 #define ossimGeoAnnotationPolyObject_HEADER
 
@@ -41,6 +41,20 @@ public:
    virtual void applyScale(double x, double y);
 
    virtual void transform(ossimProjection* projection);
+
+   /**
+    * @brief Transforms from geographic to image space for a
+    * reduced resolution data set (rrds).
+    *
+    * This will transform any world points to line sample; then, convert any
+    * line sample to the correct rrds point.
+    *
+    * @param model The model to use for transformation.
+    *
+    * @param rrds Reduced resolution data set to use.
+    */
+   virtual void transform(const ossimImageProjectionModel& model,
+                          ossim_uint32 rrds);  
    
    virtual std::ostream& print(std::ostream& out)const;
 

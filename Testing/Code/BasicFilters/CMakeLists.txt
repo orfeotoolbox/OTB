@@ -450,7 +450,7 @@ ADD_TEST(bfTvStreamingStatisticsVectorImageFilter ${BASICFILTERS_TESTS5}
  		   ${TEMP}/bfTvStreamingStatisticsVectorImageFilterResults.txt
          otbStreamingStatisticsVectorImageFilter
 		#${IMAGEDATA}/SPOT5_SCENE01/IMAGERY.TIF
-		${INPUTDATA}/sbuv.png
+		${INPUTDATA}/couleurs_extrait.png
 		${TEMP}/bfTvStreamingStatisticsVectorImageFilterResults.txt
 		)
 
@@ -1025,7 +1025,7 @@ ADD_TEST(bfTvEdgeDensityImageFilter ${BASICFILTERS_TESTS9}
         otbEdgeDensityImageFilter
 	    ${INPUTDATA}/scene.png
 	    ${TEMP}/bfTvEdgeDensityImageFilterOutputImage.tif
-	    2 # radius
+	    1 # radius
 	    15 3  1. 0.01  #Canny Parameters
 	    
 )

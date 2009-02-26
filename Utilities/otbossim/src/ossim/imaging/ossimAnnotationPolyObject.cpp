@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationPolyObject.cpp 10867 2007-05-09 19:58:25Z gpotts $
+// $Id: ossimAnnotationPolyObject.cpp 13964 2009-01-14 16:30:07Z gpotts $
 #include <ossim/imaging/ossimAnnotationPolyObject.h>
 #include <ossim/imaging/ossimAnnotationMultiPolyObject.h>
 #include <ossim/imaging/ossimAnnotationMultiLineObject.h>
@@ -64,7 +64,7 @@ ossimAnnotationPolyObject::~ossimAnnotationPolyObject()
 void ossimAnnotationPolyObject::applyScale(double x, double y)
 {
    thePolygon      *= ossimDpt(x, y);
-   theBoundingRect *= ossimDpt(x,y);
+   computeBoundingRect();
 }
 
 bool ossimAnnotationPolyObject::intersects(const ossimDrect& rect)const

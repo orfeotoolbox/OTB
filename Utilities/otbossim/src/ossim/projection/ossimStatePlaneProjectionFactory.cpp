@@ -4,7 +4,7 @@
 //
 // Author: Garrett Potts
 //*******************************************************************
-//  $Id: ossimStatePlaneProjectionFactory.cpp 12623 2008-04-07 14:10:08Z gpotts $
+//  $Id: ossimStatePlaneProjectionFactory.cpp 13401 2008-08-07 18:07:30Z dburken $
 
 #include <fstream>
 #include <sstream>
@@ -191,7 +191,8 @@ ossimObject* ossimStatePlaneProjectionFactory::createObject(
 void ossimStatePlaneProjectionFactory::getTypeNameList(
    std::vector<ossimString>& typeList)const
 {
-	OpenThreads::ScopedReadLock lock(theMutex);
+   OpenThreads::ScopedReadLock lock(theMutex);
+   
    // Iterate throught the cvs files to try and get the names.
    std::vector<ossimFilename>::const_iterator i = theCsvFiles.begin();
    while (i != theCsvFiles.end())
@@ -236,10 +237,11 @@ void ossimStatePlaneProjectionFactory::getTypeNameList(
 
 void ossimStatePlaneProjectionFactory::addCsvFile(const ossimFilename csvFile)
 {
-	OpenThreads::ScopedWriteLock lock(theMutex);
+   OpenThreads::ScopedWriteLock lock(theMutex);
+   
    std::vector<ossimFilename>::iterator iter = std::find(theCsvFiles.begin(),
-                                                theCsvFiles.end(),
-                                                csvFile);
+                                                         theCsvFiles.end(),
+                                                         csvFile);
    if(iter == theCsvFiles.end())
    {
       theCsvFiles.push_back(csvFile);
@@ -286,7 +288,8 @@ ossimStatePlaneProjectionInfo* ossimStatePlaneProjectionFactory::findInfo(
 ossimStatePlaneProjectionInfo*
 ossimStatePlaneProjectionFactory::findInInfoList(ossim_uint32 pcsCode)const
 {
-	OpenThreads::ScopedReadLock lock(theMutex);
+   OpenThreads::ScopedReadLock lock(theMutex);
+
    // See if it's in the list.
    std::vector<ossimStatePlaneProjectionInfo*>::const_iterator i =
       theInfos.begin();

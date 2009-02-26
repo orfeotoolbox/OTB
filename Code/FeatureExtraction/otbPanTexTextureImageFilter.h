@@ -36,15 +36,15 @@ namespace otb
 
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT PanTexTextureImageFilter :
-public UnaryFunctorNeighborhoodWithOffsetImageFilter< TInputImage, TOutputImage, ITK_TYPENAME Functor::PanTexTextureFunctor< ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage>, ITK_TYPENAME TOutputImage::PixelType> >
+public UnaryFunctorNeighborhoodWithOffsetImageFilter< TInputImage, TOutputImage, ITK_TYPENAME Functor::PanTexTextureFunctor< ITK_TYPENAME TInputImage::InternalPixelType, ITK_TYPENAME TOutputImage::InternalPixelType> >
 {
 public:
   /** Standard class typedefs. */
   typedef PanTexTextureImageFilter                      Self;
   typedef UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage,
                                                         TOutputImage,
-                                                        typename Functor::PanTexTextureFunctor<typename itk::ConstNeighborhoodIterator<TInputImage>,
-                                                                                               typename TOutputImage::PixelType>                    > Superclass;
+                                                        typename Functor::PanTexTextureFunctor<typename TInputImage::InternalPixelType,
+                                                                                               typename TOutputImage::InternalPixelType>  > Superclass;
   typedef itk::SmartPointer<Self>                       Pointer;
   typedef itk::SmartPointer<const Self>                 ConstPointer;
 

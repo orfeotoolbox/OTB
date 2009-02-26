@@ -194,6 +194,17 @@ otbImageLayerGeneratorVector
 ${INPUTDATA}/couleurs.tif
 1
 )
+#------------ otb::ImageView ------------
+ADD_TEST(vrTuImageViewNew ${VISUREFAC_TESTS1}
+otbImageViewNew
+)
+
+ADD_TEST(vrTvImageViewerEndToEndSingleLayer ${VISUREFAC_TESTS1}
+otbImageViewerEndToEndSingleLayer
+${INPUTDATA}/couleurs.tif
+200 500 200 0
+)
+
 
 # Testing srcs
 SET(VisuRefac_SRCS1
@@ -219,6 +230,8 @@ otbImageLayerGeneratorScalar.cxx
 otbImageLayerGeneratorVector.cxx
 otbMultiplyBlendingFunctionNew.cxx
 otbRenderingImageFilterVectorWithExpNegativeTransfer.cxx
+otbImageViewNew.cxx
+otbImageViewerEndToEndSingleLayer.cxx
 )
 
 # Building testing executables

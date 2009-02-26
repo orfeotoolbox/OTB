@@ -65,13 +65,13 @@ int ImageWidgetController::HandleWidgetEvent(std::string widgetId, int event)
     // Get the current handler
     handler = it.Get();
     // Check if it listens to (widget,event)
-    found   = handler->ListenToEvent(widgetId,event);
+    found   =  handler->HandleWidgetEvent(widgetId,event);
     ++it;
     }
   // If an handler was found, use it
   if(found)
     {
-    return handler->HandleWidgetEvent(widgetId,event);
+    return 1;
     }
   else
     {
@@ -79,7 +79,28 @@ int ImageWidgetController::HandleWidgetEvent(std::string widgetId, int event)
     }
 }
 
-void ImageWidgetController::HandleWidgetResize(std::string widgetId, int x, int y, int w, int h)
+void ImageWidgetController::HandleWidgetResize(std::string widgetId, int w, int h)
+{
+  // Define an iterator on the action handlers list
+  ActionHandlerListType::Iterator it = m_ActionHandlersList->Begin();
+  
+  // Found indicates if a handler was found to respond to this event
+  bool found = false;
+
+  // The action handler found
+  ActionHandlerType * handler;
+
+  while(!found && it!=m_ActionHandlersList->End())
+    {
+    // Get the current handler
+    handler = it.Get();
+    // try to handle the event with the current handler
+    found = handler->HandleWidgetResize(widgetId,w,h);
+    ++it;
+    }   
+}
+
+void ImageWidgetController::HandleWidgetMove(std::string widgetId, int x, int y)
 {
   // Define an iterator on the action handlers list
   ActionHandlerListType::Iterator it = m_ActionHandlersList->Begin();
@@ -95,15 +116,11 @@ void ImageWidgetController::HandleWidgetResize(std::string widgetId, int x, int 
     // Get the current handler
     handler = it.Get();
     // Check if it listens to (widget,event)
-    found   = handler->ListenToResize(widgetId);
+    found   = handler->HandleWidgetMove(widgetId,x,y);
     ++it;
     }
-  // If an handler was found, use it
-  if(found)
-    {
-    handler->HandleWidgetResize(widgetId,x,y,w,h);
-    }
 }
+
 
 void ImageWidgetController::PrintSelf(std::ostream& os, itk::Indent indent) const
 {

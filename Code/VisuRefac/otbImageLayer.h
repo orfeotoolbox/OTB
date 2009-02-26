@@ -55,40 +55,59 @@ public:
   itkTypeMacro(ImageLayer,Layer);
 
   /** Image typedef */
-  typedef TImage                                              ImageType;
-  typedef typename ImageType::Pointer                         ImagePointerType;
-  typedef typename ImageType::PixelType                       PixelType;
-  typedef typename ImageType::InternalPixelType               InternalPixelType;
+  typedef TImage                                                      ImageType;
+  typedef typename ImageType::Pointer                                 ImagePointerType;
+  typedef typename ImageType::PixelType                               PixelType;
+  typedef typename ImageType::InternalPixelType                       InternalPixelType;
+  typedef typename ImageType::RegionType                              RegionType;
   
   /** Output image typedef */
-  typedef TOutputImage                                        OutputImageType;
+  typedef TOutputImage                                                OutputImageType;
 
   /** Histogram typedef */
-   typedef itk::Statistics::DenseFrequencyContainer            DFContainerType;
+   typedef itk::Statistics::DenseFrequencyContainer                   DFContainerType;
   
-  typedef itk::VariableLengthVector<InternalPixelType>        SampleType;
-  typedef itk::Statistics::ListSample<SampleType>             ListSampleType;
+  typedef itk::VariableLengthVector<InternalPixelType>                SampleType;
+  typedef itk::Statistics::ListSample<SampleType>                     ListSampleType;
  
   typedef otb::ListSampleToVariableDimensionHistogramGenerator
-  <ListSampleType,InternalPixelType,DFContainerType>          HistogramFilterType;
-  typedef typename HistogramFilterType::HistogramType         HistogramType;
-  typedef typename HistogramType::Pointer                     HistogramPointerType;
+  <ListSampleType,InternalPixelType,DFContainerType>                  HistogramFilterType;
+  typedef typename HistogramFilterType::HistogramType                 HistogramType;
+  typedef typename HistogramType::Pointer                             HistogramPointerType;
 
   
   /** Rendering part */
-  typedef RenderingImageFilter<TImage,TOutputImage>                    RenderingFilterType;
-  typedef typename RenderingFilterType::RenderingFunctionType          RenderingFunctionType;
-  typedef typename RenderingFunctionType::Pointer                      RenderingFunctionPointerType;
+  typedef RenderingImageFilter<TImage,TOutputImage>                   RenderingFilterType;
+  typedef typename RenderingFilterType::Pointer                       RenderingFilterPointerType;
+  typedef typename RenderingFilterType::RenderingFunctionType         RenderingFunctionType;
+  typedef typename RenderingFunctionType::Pointer                     RenderingFunctionPointerType;
   typedef Function::StandardRenderingFunction<InternalPixelType,
-				    typename TOutputImage::PixelType>  DefaultRenderingFunctionType;
-  typedef itk::ExtractImageFilter<ImageType,ImageType>                 ExtractFilterType;
+				    typename TOutputImage::PixelType> DefaultRenderingFunctionType;
+  typedef itk::ExtractImageFilter<ImageType,ImageType>                ExtractFilterType;
+  typedef typename ExtractFilterType::Pointer                         ExtractFilterPointerType;
 
   /** Set/Get the image */
-  itkSetObjectMacro(Image,ImageType);
+  void SetImage(ImageType * img)
+  {
+    if(m_Image != img)
+      {
+      m_Image = img;
+      m_ExtractFilter->SetInput(m_Image);
+      m_ScaledExtractFilter->SetInput(m_Image);
+      }
+  }
   itkGetObjectMacro(Image,ImageType);
 
   /** Set/Get the quicklook */
-  itkSetObjectMacro(Quicklook,ImageType);
+  void SetQuicklook(ImageType * ql)
+  {
+    if(m_Quicklook != ql)
+      {
+      m_Quicklook = ql;
+      m_QuicklookRenderingFilter->SetInput(m_Quicklook);
+      }
+    
+  }
   itkGetObjectMacro(Quicklook,ImageType);
 
   /** Set/Get the histogram list */
@@ -96,7 +115,16 @@ public:
   itkGetObjectMacro(Histogram,HistogramType);
 
   /** Set/Get the rendering function */
-  itkSetObjectMacro(RenderingFunction,RenderingFunctionType);
+  void SetRenderingFunction(RenderingFunctionType * function)
+  {
+    if(m_RenderingFunction != function)
+      {
+      m_RenderingFunction = function;
+      m_QuicklookRenderingFilter->SetRenderingFunction(m_RenderingFunction);
+      m_ExtractRenderingFilter->SetRenderingFunction(m_RenderingFunction);
+      m_ScaledExtractRenderingFilter->SetRenderingFunction(m_RenderingFunction);
+      }
+  }
   itkGetObjectMacro(RenderingFunction,RenderingFunctionType);
 
   /** Set/Get the number of bins for histogram generation */
@@ -109,8 +137,46 @@ public:
   itkBooleanMacro(AutoMinMax);
 
   /** Set/Get the auto min/max quantile */
-  itkSetClampMacro(AutoMinMaxQuantile,double,0.,1.);
+  void SetAutoMinMaxQuantile(double value)
+  {
+    if(value < 0. || value > 1.)
+      {
+      itkExceptionMacro(<<"MinMax quantile should be in the range [0,1]");
+      }
+    m_AutoMinMaxQuantile = value;
+    m_AutoMinMaxUpToDate = false;
+  }
   itkGetMacro(AutoMinMaxQuantile,double);
+
+  /** Reimplemented to pass the parameter to the extract filter */
+  virtual void SetExtractRegion(const RegionType & region)
+  {
+    // This check should be done in the itk::ExtractImageFilter
+    if(this->GetExtractRegion() != region)
+      {
+      Superclass::SetExtractRegion(region);
+      // SetExtractionRegion throws an exception in case of empty region
+      if(region.GetNumberOfPixels() > 0)
+	{
+	m_ExtractFilter->SetExtractionRegion(region);
+	}
+      }
+  }
+  
+ /** Reimplemented to pass the parameter to the extract filter */
+  virtual void SetScaledExtractRegion(const RegionType & region)
+  {    
+    // This check should be done in the itk::ExtractImageFilter
+    if(this->GetScaledExtractRegion() != region)
+      {
+      Superclass::SetScaledExtractRegion(region);
+      // SetExtractionRegion throws an exception in case of empty region
+      if(region.GetNumberOfPixels() > 0)
+	{
+	m_ScaledExtractFilter->SetExtractionRegion(region);
+	}
+      }
+  }
 
   /** Actually render the image */
   virtual void Render();
@@ -153,9 +219,19 @@ private:
 
   /** Use histogram quantiles for min/max */
   bool m_AutoMinMax;
+  bool m_AutoMinMaxUpToDate;
 
   /** Quantile used with AutoMinMax */
   double m_AutoMinMaxQuantile;
+
+  /** Rendering filters */
+  RenderingFilterPointerType  m_QuicklookRenderingFilter;
+  RenderingFilterPointerType  m_ExtractRenderingFilter;
+  RenderingFilterPointerType  m_ScaledExtractRenderingFilter;
+
+  /** Extract filters */
+  ExtractFilterPointerType    m_ExtractFilter;
+  ExtractFilterPointerType    m_ScaledExtractFilter;
 
 }; // end class 
 } // end namespace otb

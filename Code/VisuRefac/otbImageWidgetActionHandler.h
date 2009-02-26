@@ -50,39 +50,38 @@ public:
   /** Runtime information */
   itkTypeMacro(ImageWidgetActionHandler,Object);
 
-  virtual int HandleWidgetEvent(std::string widgetId, int event)
-  {
-    return 0;
-  }
-
-  /** Handle widget resizing
-   * \param widgetId The id of the resized widget
-   * \param x new x location
-   * \param y new y location
-   * \param w new width
-   * \param h new height
-   */
-  virtual void HandleWidgetResize(std::string widgetId,int x,int y, int w, int h){}
-  
-  /** Returns true if the given event from the given widget is
-   * handled.
-   * \param widgetId The id of the widget the event comes from
+  /** Handle widget event
+   * \param widgetId The id of the moved widget
    * \param event The event
-   * \return True if the event is handled
+   * \return true if the event is handled
    */
-  virtual bool ListenToEvent(std::string widgetId,int event)
-    {
-      return false;
-    }
-  /** Returns true if the resizing of the given widget is handled
-   * \param widgetId The id of the widget the event comes from
-   * \return True if the resizing is handled
-   */
-  virtual bool ListenToResize(std::string widgetId)
+  virtual bool HandleWidgetEvent(std::string widgetId, int event)
   {
     return false;
   }
 
+  /** Handle widget move
+   * \param widgetId The id of the moved widget
+   * \param x new x location
+   * \param y new y location
+   * \return true if the event is handled
+   */
+  virtual bool HandleWidgetMove(std::string widgetId,int x,int y)
+  {
+    return false;
+  }
+
+ /** Handle widget resize
+   * \param widgetId The id of the resized widget
+   * \param w new width
+   * \param h new height
+   * \return true if the event is handled
+   */
+  virtual bool HandleWidgetResize(std::string widgetId,int w, int h)
+  {
+    return false;
+  }
+  
 protected:
   /** Constructor */
   ImageWidgetActionHandler(){}

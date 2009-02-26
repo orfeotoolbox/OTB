@@ -37,21 +37,18 @@ namespace Functor
  *  \ingroup Statistics
  */
 
-template <class TIterInput, class TOutput>
+template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT InverseDifferenceMomentTextureFunctor :
-public TextureFunctorBase<TIterInput, TOutput>
+public TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
   InverseDifferenceMomentTextureFunctor(){};
   virtual ~InverseDifferenceMomentTextureFunctor(){};
 
-  typedef TIterInput                            IterType;
-  typedef TOutput                               OutputType;
-  typedef typename IterType::InternalPixelType InternalPixelType;
-  typedef typename IterType::ImageType         ImageType;
-  typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
-
-  virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
+  typedef TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
+  typedef typename Superclass::NeighborhoodType                             NeighborhoodType;
+ 
+ virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
     this->ComputeJointHistogram(neigh, neighOff);
     double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);

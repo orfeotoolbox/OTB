@@ -22,6 +22,9 @@
 #include "itkMacro.h"
 #include "itkNumericTraits.h"
 #include "itkNeighborhood.h"
+#include "itkOffset.h"
+#include "itkSize.h"
+#include "itkVariableLengthVector.h"
 
 
 namespace otb
@@ -41,7 +44,7 @@ namespace Functor
  *  \ingroup Statistics
  */
 
-template <class TIterInput, class TOutput>
+template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class TextureFunctorBase
 {
 public:
@@ -62,17 +65,17 @@ public:
   };
   virtual ~TextureFunctorBase() {};
 
-  typedef TIterInput                           IterType;
-  typedef TOutput                              OutputType;
-  typedef typename IterType::OffsetType        OffsetType;
-  typedef typename IterType::RadiusType        RadiusType;
-  typedef typename OutputType::ValueType       OutputPixelType;
-  typedef typename IterType::InternalPixelType InternalPixelType;
-  typedef typename IterType::ImageType         ImageType;
-  typedef itk::Neighborhood<InternalPixelType, ::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
-  typedef std::vector<double>                   DoubleVectorType;
-  typedef std::vector<int>                      IntVectorType;
-  typedef std::vector<IntVectorType>            IntVectorVectorType;
+  typedef TScalarInputPixelType                       InputScalarType;
+  typedef TScalarOutputPixelType                      OutputScalarType;
+  typedef itk::VariableLengthVector<InputScalarType>  InputVectorType;
+  typedef itk::VariableLengthVector<OutputScalarType> OutputVectorType;
+  typedef itk::Offset<>                               OffsetType;
+  typedef itk::Size<>                                 RadiusType;
+  typedef itk::Neighborhood<InputScalarType, 2>       NeighborhoodType;
+  typedef itk::Neighborhood<InputVectorType, 2>       NeighborhoodVectorType;
+  typedef std::vector<double>                         DoubleVectorType;
+  typedef std::vector<int>                            IntVectorType;
+  typedef std::vector<IntVectorType>                  IntVectorVectorType;
 
 
   void SetOffset(OffsetType off){ m_Offset=off; };
@@ -164,21 +167,64 @@ public:
       m_OffsetBinLength = scottCoef*binLengthOff;     
     }
 
-  inline TOutput operator()(const IterType &itOff)
+inline OutputScalarType operator()(const NeighborhoodType &neigh)
+  {
+    RadiusType radiusOff = neigh.GetRadius();
+    //OutputScalarType outPix;
+    //outPix.SetSize( neigh.GetCenterPixel().GetSize() );
+    //outPix.Fill(0);
+    OffsetType offset;
+    offset.Fill(0);
+    // Compute the neighborhood radius from the neigh+offset iterator to extract the neighborhood area from the iterator
+    RadiusType radius;
+    radius[0] = static_cast<unsigned int>( 0.5*( static_cast<double>(neigh.GetSize()[0] - 1) ) - static_cast<double>( vcl_abs(m_Offset[0])) );
+    radius[1] = static_cast<unsigned int>( 0.5*( static_cast<double>(neigh.GetSize()[1] - 1) ) - static_cast<double>( vcl_abs(m_Offset[1])) );
+    
+    NeighborhoodType inNeigh;
+    inNeigh.SetRadius(radius);
+    NeighborhoodType offNeigh;
+    offNeigh.SetRadius(radiusOff);
+    // Extract the neighborhood area 
+    for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
+      {
+	offset[0] = l;
+	for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+	  {
+	    offset[1] = k;
+	    inNeigh[offset] =  neigh[offset];//neigh.GetPixel(offset);
+	  }
+      }
+    // Extract the offset area
+    offset.Fill(0);
+    for ( int l = -static_cast<int>(radiusOff[0]); l <= static_cast<int>(radiusOff[0]); l++ )
+      {
+	offset[0] = l;
+	for ( int k = -static_cast<int>(radiusOff[1]); k <= static_cast<int>(radiusOff[1]); k++)
+	  {
+	    offset[1] = k;
+	    offNeigh[offset] =  neigh[offset];//neigh.GetPixel(offset);
+	  }
+      }
+    OutputScalarType outPix = static_cast<OutputScalarType>( this->ComputeOverSingleChannel(inNeigh, offNeigh) );
+    
+    return outPix;
+  }
+
+  inline OutputVectorType operator()(const NeighborhoodVectorType &neigh)
     { 
-      RadiusType radiusOff = itOff.GetRadius();
-      OutputType outPix;
-      outPix.SetSize( itOff.GetCenterPixel().GetSize() );
+      RadiusType radiusOff = neigh.GetRadius();
+      OutputVectorType outPix;
+      outPix.SetSize( neigh.GetCenterValue/*Pixel*/().GetSize() );
       outPix.Fill(0);
       OffsetType offset;
       offset.Fill(0);
       // Compute the neighborhood radius from the neigh+offset iterator to extract the neighborhood area from the iterator
       RadiusType radius;
-      radius[0] = static_cast<unsigned int>( 0.5*( static_cast<double>(itOff.GetSize()[0] - 1) ) - static_cast<double>( vcl_abs(m_Offset[0])) );
-      radius[1] = static_cast<unsigned int>( 0.5*( static_cast<double>(itOff.GetSize()[1] - 1) ) - static_cast<double>( vcl_abs(m_Offset[1])) );
+      radius[0] = static_cast<unsigned int>( 0.5*( static_cast<double>(neigh.GetSize()[0] - 1) ) - static_cast<double>( vcl_abs(m_Offset[0])) );
+      radius[1] = static_cast<unsigned int>( 0.5*( static_cast<double>(neigh.GetSize()[1] - 1) ) - static_cast<double>( vcl_abs(m_Offset[1])) );
   
       // For each channel
-      for ( unsigned int i=0; i<itOff.GetCenterPixel().GetSize(); i++ )
+      for ( unsigned int i=0; i<neigh.GetCenterValue/*Pixel*/().GetSize(); i++ )
 	{
 	  NeighborhoodType inNeigh;
 	  inNeigh.SetRadius(radius);
@@ -191,7 +237,7 @@ public:
 	      for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
 		{
 		  offset[1] = k;
-		  inNeigh[offset] = itOff.GetPixel(offset)[i];
+		  inNeigh[offset] = neigh[offset][i];//neigh.GetPixel(offset)[i];
 		}
 	    }
 	  // Extract the offset area
@@ -202,10 +248,10 @@ public:
 	      for ( int k = -static_cast<int>(radiusOff[1]); k <= static_cast<int>(radiusOff[1]); k++)
 		{
 		  offset[1] = k;
-		  offNeigh[offset] = itOff.GetPixel(offset)[i];
+		  offNeigh[offset] = neigh[offset][i];
 		}
 	    }
-	  outPix[i] = static_cast<OutputPixelType>( this->ComputeOverSingleChannel(inNeigh, offNeigh) );
+	  outPix[i] = static_cast<OutputScalarType>( this->ComputeOverSingleChannel(inNeigh, offNeigh) );
 	}
       return outPix;
     }

@@ -223,17 +223,10 @@ int main( int argc, char *argv[] )
   // \center
   // \includegraphics[width=0.35\textwidth]{QB_Suburb.eps}
   // \includegraphics[width=0.35\textwidth]{QB_SuburbAlign.eps}
-  // \itkcaption[Lee Filter Application]{Result of applying the
+  // \itkcaption[Alignment Detection Application]{Result of applying the
   // \doxygen{otb}{ImageToPathListAlignFilter} to a VHR image of a suburb.}
   // \label{fig:Align}
   // \end{figure}
-  //
-  //  Software Guide : EndLatex
-
-  //  \relatedClasses
-  //  \begin{itemize}
-  //  \item \doxygen{otb}{FrostImageFilter}
-  //  \end{itemize}
   //
   //  Software Guide : EndLatex
 

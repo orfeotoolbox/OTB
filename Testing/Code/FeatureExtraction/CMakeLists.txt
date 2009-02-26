@@ -1640,22 +1640,36 @@ ADD_TEST(feTvPanTexTextureImageFunctionFilter ${FEATUREEXTRACTION_TESTS14}
     ${TEMP}/feTvPanTexTextureImageFunctionFilter.tif
 )
 
-# -------    otb::LineDirectionImageFilter   -------------
-ADD_TEST(feTuLineDirectionImageFilterNew ${FEATUREEXTRACTION_TESTS14} 
-    otbLineDirectionImageFilterNew)
+# -------    otb::SFSTexturesImageFilter   -------------
+ADD_TEST(feTuSFSTexturesImageFilterNew ${FEATUREEXTRACTION_TESTS14} 
+    otbSFSTexturesImageFilterNew)
 
-ADD_TEST(feTvLineDirectionImageFilterTest ${FEATUREEXTRACTION_TESTS14} 
- #--compare-image ${EPS}
- #               ${BASELINE}/feTvLineDirectionImageFilterTest.tif
- #               ${TEMP}/feTvLineDirectionImageFilterTest.tif
-   otbLineDirectionImageFilterTest
+ADD_TEST(feTvSFSTexturesImageFilterTest ${FEATUREEXTRACTION_TESTS14} 
+--compare-n-images 0 #${EPS}
+		   5
+                   ${BASELINE}/feTvSFSTexturesLengthImageFilterTest.tif
+		   ${TEMP}/feTvSFSTexturesLengthImageFilterTest.tif
+		   ${BASELINE}/feTvSFSTexturesWidthImageFilterTest.tif
+		   ${TEMP}/feTvSFSTexturesWidthImageFilterTest.tif
+		   ${BASELINE}/feTvSFSTexturesWMeanImageFilterTest.tif
+		   ${TEMP}/feTvSFSTexturesWMeanImageFilterTest.tif
+		   ${BASELINE}/feTvSFSTexturesRatioImageFilterTest.tif
+		   ${TEMP}/feTvSFSTexturesRatioImageFilterTest.tif
+		   ${BASELINE}/feTvSFSTexturesSDImageFilterTest.tif
+		   ${TEMP}/feTvSFSTexturesSDImageFilterTest.tif
+   otbSFSTexturesImageFilterTest
     ${INPUTDATA}/poupees_sub_c1.png
-    ${TEMP}/feTvLineDirectionImageFilterTest.tif
-    8 # spectral threshold
-    5 # spatial threshold
+    ${TEMP}/feTvSFSTexturesLengthImageFilterTest.tif
+    ${TEMP}/feTvSFSTexturesWidthImageFilterTest.tif
+    ${TEMP}/feTvSFSTexturesWMeanImageFilterTest.tif
+    ${TEMP}/feTvSFSTexturesRatioImageFilterTest.tif
+    ${TEMP}/feTvSFSTexturesSDImageFilterTest.tif
+    50 # spectral threshold
+    20 # spatial threshold
     15 # direction
-    3 # max min/max number takes in care for ratio
+    4 # max min/max number takes in care for ratio
     0.6 # alpha value
+    # PSI is disable for texture selection test
 )
 
 
@@ -1810,8 +1824,8 @@ otbPanTexTextureImageFilterNew.cxx
 otbPanTexTextureImageFilter.cxx
 otbPanTexTextureImageFunctionFilterNew.cxx
 otbPanTexTextureImageFunctionFilter.cxx
-otbLineDirectionImageFilterNew.cxx
-otbLineDirectionImageFilterTest.cxx
+otbSFSTexturesImageFilterNew.cxx
+otbSFSTexturesImageFilterTest.cxx
 )
 
 

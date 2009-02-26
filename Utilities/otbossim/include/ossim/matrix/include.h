@@ -10,8 +10,8 @@
 // Activate just one of the following 3 statements
 
 //#define SimulateExceptions              // use simulated exceptions
-//#define UseExceptions                   // use C++ exceptions
-#define DisableExceptions               // do not use exceptions
+#define UseExceptions                   // use C++ exceptions
+//#define DisableExceptions               // do not use exceptions
 
 
 //#define TEMPS_DESTROYED_QUICKLY         // for compilers that delete

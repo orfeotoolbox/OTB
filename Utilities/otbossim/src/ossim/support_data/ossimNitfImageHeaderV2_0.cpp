@@ -8,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_0.cpp 13101 2008-07-01 18:44:31Z dburken $
+// $Id: ossimNitfImageHeaderV2_0.cpp 13931 2008-12-15 23:44:40Z dburken $
 
 
 #include <iomanip>
@@ -21,8 +21,13 @@
 #include <ossim/base/ossimEndian.h>
 #include <ossim/support_data/ossimNitfVqCompressionHeader.h>
 #include <ossim/base/ossimTrace.h>
+#include <ossim/base/ossimDms.h>
 #include <ossim/base/ossimStringProperty.h>
-// static const ossimTrace traceDebug("ossimNitfFileHeaderV2_0:debug");
+#include <stdexcept>
+#include <sstream>
+#include <ossim/base/ossimTrace.h>
+#include <ossim/support_data/ossimNitfCommon.h>
+static const ossimTrace traceDebug(ossimString("ossimNitfImageHeaderV2_0:debug"));
 
 RTTI_DEF1(ossimNitfImageHeaderV2_0,
           "ossimNitfImageHeaderV2_0",
@@ -226,6 +231,7 @@ void ossimNitfImageHeaderV2_0::parseStream(std::istream &in)
             }
             theBlockMaskRecords[idx] = blockRead[idx];
          }
+         delete [] blockRead;
       }
       if((thePadPixelMaskRecordLength > 0)||
          (( (getCompressionCode().upcase() == "M3"))&&
@@ -284,6 +290,106 @@ void ossimNitfImageHeaderV2_0::parseStream(std::istream &in)
 
 void ossimNitfImageHeaderV2_0::writeStream(std::ostream &out)
 {
+   out.write(theType, 2);
+   out.write(theImageId, 10);
+   out.write(theDateTime, 14);
+   out.write(theTargetId, 17);
+   out.write(theTitle, 80);
+   out.write(theSecurityClassification, 1);
+   out.write(theCodewords, 40);
+   out.write(theControlAndHandling, 40);
+   out.write(theReleasingInstructions, 40);
+   out.write(theClassificationAuthority, 20);
+   out.write(theSecurityControlNumber, 20);
+   out.write(theSecurityDowngrade, 6);
+   if(ossimString(theSecurityDowngrade) == "999998")
+   {
+      out.write(theDowngradingEvent, 40);
+   }
+   out.write(theEncryption, 1);
+   out.write(theImageSource, 42);
+   out.write(theSignificantRows, 8);
+   out.write(theSignificantCols, 8);
+   out.write(thePixelValueType, 3);
+   out.write(theRepresentation, 8);
+   out.write(theCategory, 8);
+   out.write(theActualBitsPerPixelPerBand, 2);
+   out.write(theJustification, 1);
+   out.write(theCoordinateSystem, 1);
+   if(theCoordinateSystem[0] != 'N')
+   {
+      out.write(theGeographicLocation, 60);
+   }
+   out.write(theNumberOfComments, 1);
+   out.write(theCompression, 2);
+   if(ossimString(theCompression) != "NC")
+   {
+      out.write(theCompressionRateCode, 4);
+   }
+   out.write(theNumberOfBands, 1);
+   ossim_uint32 bandIdx = 0;
+   for(bandIdx=0;bandIdx<theImageBands.size();++bandIdx)
+   {
+      theImageBands[bandIdx]->writeStream(out);
+   }
+   out.write(theImageSyncCode, 1);
+   out.write(theImageMode, 1);
+   out.write(theNumberOfBlocksPerRow, 4);
+   out.write(theNumberOfBlocksPerCol, 4);
+   out.write(theNumberOfPixelsPerBlockHoriz, 4);
+   out.write(theNumberOfPixelsPerBlockVert, 4);
+   out.write(theNumberOfBitsPerPixelPerBand, 2);
+   out.write(theDisplayLevel, 3);
+   out.write(theAttachmentLevel, 3);
+   out.write(theImageLocation, 10);
+   out.write(theImageMagnification, 4);
+   out.write(theUserDefinedImageDataLength, 5);
+   if(ossimString(theUserDefinedImageDataLength).toInt32() > 0)
+   {
+      out.write(theUserDefinedOverflow, 3);
+   }
+   ossim_uint32 totalLength = getTotalTagLength();
+   
+   if(totalLength == 0)
+   {
+      //memcpy(theExtendedSubheaderDataLen, "00000", 5);
+      out.write(theExtendedSubheaderDataLen, 5);
+   }
+   else
+   {
+      totalLength += 3; // per Table A-3 of MIL-STD-2500B
+      
+      if(totalLength <= 99999)
+      {
+         std::ostringstream tempOut;
+         
+         tempOut << std::setw(5)
+         << std::setfill('0')
+         << std::setiosflags(ios::right)
+         << totalLength;
+         
+         memcpy(theExtendedSubheaderDataLen, tempOut.str().c_str(), 5);
+         
+         out.write(theExtendedSubheaderDataLen, 5);
+         memset(theExtendedSubheaderOverflow, '0', 3);
+         
+         if(totalLength > 0)
+         {
+            out.write(theExtendedSubheaderOverflow, 3);
+            
+            ossim_uint32 i = 0;
+            
+            for(i = 0; i < theTagList.size(); ++i)
+            {
+               theTagList[i].writeStream(out);
+            }
+         }
+      }
+      else
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << "WARNING ossimNitfFileHeaderV2_0::writeStream: Only support writing of total tag length < 99999" << std::endl;
+      }
+   }
 }
 
 std::ostream& ossimNitfImageHeaderV2_0::print(std::ostream& out)const
@@ -653,7 +759,7 @@ void ossimNitfImageHeaderV2_0::clearFields()
 {
    theTagList.clear();
    
-   memset(theType, ' ', 2);
+   memcpy(theType, "IM", 2);
    memset(theImageId, ' ', 10);
    memset(theDateTime, ' ', 14);
    memset(theTargetId, ' ', 17);
@@ -666,7 +772,7 @@ void ossimNitfImageHeaderV2_0::clearFields()
    memset(theSecurityControlNumber, ' ', 20);
    memset(theSecurityDowngrade, ' ', 6);
    memset(theDowngradingEvent, ' ', 40);
-   memset(theEncryption, ' ', 1);
+   memset(theEncryption, '0', 1);
    memset(theImageSource, ' ', 42);
    memset(theSignificantRows, ' ', 8);
    memset(theSignificantCols, ' ', 8);
@@ -675,13 +781,13 @@ void ossimNitfImageHeaderV2_0::clearFields()
    memset(theCategory, ' ', 8);
    memset(theActualBitsPerPixelPerBand, ' ', 2);
    memset(theJustification, ' ', 1);
-   memset(theCoordinateSystem, ' ', 1);
+   memset(theCoordinateSystem, 'N', 1);
    memset(theGeographicLocation, ' ', 60);
-   memset(theNumberOfComments, ' ', 1);
-   memset(theCompression, ' ', 2);
+   memset(theNumberOfComments, '0', 1);
+   memcpy(theCompression, "NC", 2);
    memset(theCompressionRateCode, ' ', 4);
    memset(theNumberOfBands, ' ', 1);
-   memset(theImageSyncCode, ' ', 1);
+   memset(theImageSyncCode, '0', 1);
    memset(theImageMode, ' ', 1);
    memset(theNumberOfBlocksPerRow, ' ', 4);
    memset(theNumberOfBlocksPerCol, ' ', 4);
@@ -690,11 +796,11 @@ void ossimNitfImageHeaderV2_0::clearFields()
    memset(theNumberOfBitsPerPixelPerBand, ' ', 2);
    memset(theDisplayLevel, ' ', 3);
    memset(theAttachmentLevel, ' ', 3);
-   memset(theImageLocation, ' ', 10);
-   memset(theImageMagnification, ' ', 4);
-   memset(theUserDefinedImageDataLength, ' ', 5);
-   memset(theUserDefinedOverflow, ' ', 3);
-   memset(theExtendedSubheaderDataLen, ' ', 5);
+   memcpy(theImageLocation, "0000000000", 10);
+   memcpy(theImageMagnification, "1.00", 4);
+   memset(theUserDefinedImageDataLength, '0', 5);
+   memset(theUserDefinedOverflow, '0', 3);
+   memset(theExtendedSubheaderDataLen, '0', 5);
    memset(theExtendedSubheaderOverflow, ' ', 3);
    
    theBlockMaskRecords.clear();
@@ -766,6 +872,121 @@ const ossimRefPtr<ossimNitfImageBand> ossimNitfImageHeaderV2_0::getBandInformati
    
    return NULL;
 }
+
+void ossimNitfImageHeaderV2_0::setNumberOfBands(ossim_uint32 nbands)
+{
+   std::ostringstream out;
+   if(nbands > 9)
+   {
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << "ossimNitfImageHeaderV2_0::setNumberOfBands: NBANDS is too large.  For 2.0 spec we can only have up to 9 bands\n";
+      }
+      std::string s = "ossimNitfImageHeaderV2_0::setNumberOfBands:";
+      s += " ERROR\nExceeded max number of bands of 9!";
+      throw std::out_of_range(s);
+   }
+   else
+   {
+      out << nbands;
+      theNumberOfBands[0] = out.str().c_str()[0];
+   }
+   
+   theImageBands.resize(getNumberOfBands());
+}
+
+void ossimNitfImageHeaderV2_0::setBandInfo(ossim_uint32 idx,
+                                           const ossimNitfImageBandV2_0& info)
+{
+   if(idx < theImageBands.size())
+   {
+      if(!theImageBands[idx].valid())
+      {
+         theImageBands[idx] = new ossimNitfImageBandV2_0;
+      }
+      (*theImageBands[idx]) = info;
+   }
+}
+void ossimNitfImageHeaderV2_0::setNumberOfRows(ossim_uint32 rows)
+{
+   std::ostringstream out;
+   if(rows > 99999999) rows = 99999999;
+   
+   out << rows;
+   ossimNitfCommon::setField(theSignificantRows, out.str(), 8, ios::right, '0');
+}
+
+void ossimNitfImageHeaderV2_0::setNumberOfCols(ossim_uint32 cols)
+{
+   std::ostringstream out;
+   if(cols > 99999999) cols = 99999999;
+   
+   out << cols;
+   ossimNitfCommon::setField(theSignificantCols, out.str(), 8, ios::right, '0');
+}
+
+void ossimNitfImageHeaderV2_0::setGeographicLocationDms(const ossimDpt& ul,
+                                                        const ossimDpt& ur,
+                                                        const ossimDpt& lr,
+                                                        const ossimDpt& ll)
+{
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+      << ossimDms(ul.y, true).toString("ddmmss.ssssC").c_str()
+      << ossimDms(ul.x, false).toString("dddmmss.ssssC").c_str()
+      << ossimDms(ur.y, true).toString("ddmmss.ssssC").c_str()
+      << ossimDms(ur.x, false).toString("dddmmss.ssssC").c_str()
+      << ossimDms(lr.y, true).toString("ddmmss.ssssC").c_str()
+      << ossimDms(lr.x, false).toString("dddmmss.ssssC").c_str()
+      << ossimDms(ll.y, true).toString("ddmmss.ssssC").c_str()
+      << ossimDms(ll.x, false).toString("dddmmss.ssssC").c_str()
+      << std::endl;
+      
+      checkForGeographicTiePointTruncation(ul);
+      checkForGeographicTiePointTruncation(ur);
+      checkForGeographicTiePointTruncation(lr);
+      checkForGeographicTiePointTruncation(ll);
+   }
+   
+   theCoordinateSystem[0] = 'G';
+   
+   memcpy(theGeographicLocation, ossimNitfCommon::encodeGeographicDms(ul,ur,lr,ll).c_str(), 60);
+}
+void ossimNitfImageHeaderV2_0::setGeographicLocationDecimalDegrees(
+                                                                   const ossimDpt& ul,
+                                                                   const ossimDpt& ur,
+                                                                   const ossimDpt& lr,
+                                                                   const ossimDpt& ll)
+{
+   theCoordinateSystem[0] = 'D';
+   memcpy(theGeographicLocation, ossimNitfCommon::encodeGeographicDecimalDegrees(ul, ur, lr, ll).c_str(), 60);
+}
+
+void ossimNitfImageHeaderV2_0::setUtmNorth(ossim_uint32 zone,
+                                           const ossimDpt& ul,
+                                           const ossimDpt& ur,
+                                           const ossimDpt& lr,
+                                           const ossimDpt& ll)
+{
+   theCoordinateSystem[0] = 'N';
+   
+   memcpy(theGeographicLocation,
+          ossimNitfCommon::encodeUtm(zone, ul, ur, lr, ll).c_str(), 60);
+}
+
+void ossimNitfImageHeaderV2_0::setUtmSouth(ossim_uint32 zone,
+                                           const ossimDpt& ul,
+                                           const ossimDpt& ur,
+                                           const ossimDpt& lr,
+                                           const ossimDpt& ll)
+{
+   theCoordinateSystem[0] = 'S';
+   
+   memcpy(theGeographicLocation,
+          ossimNitfCommon::encodeUtm(zone, ul, ur, lr, ll).c_str(), 60);
+}
+
 void ossimNitfImageHeaderV2_0::setProperty(ossimRefPtr<ossimProperty> property)
 {
    ossimNitfImageHeaderV2_X::setProperty(property);

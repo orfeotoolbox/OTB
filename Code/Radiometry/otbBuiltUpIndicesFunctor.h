@@ -63,22 +63,22 @@ public:
   virtual ~TM4AndTM5IndexBase() {};
 
   /// Set TM4 Index
-  void SetTM4Index(unsigned int channel)
+  void SetIndex1(unsigned int channel)
   {
     m_TM4Index = channel;
   }
   /// Get TM4 Index
-  unsigned int GetTM4Index()
+  unsigned int GetIndex1()
   {
     return m_TM4Index;
   }
   /// Set TM5 Index
-  void SetTM5Index(unsigned int channel)
+  void SetIndex2(unsigned int channel)
   {
     m_TM5Index = channel;
   }
   /// Get TM5 Index
-  unsigned int GetTM5Index()
+  unsigned int GetIndex2()
   {
     return m_TM5Index;
   }

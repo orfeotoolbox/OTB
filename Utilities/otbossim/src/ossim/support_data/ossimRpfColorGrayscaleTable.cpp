@@ -34,7 +34,7 @@ ossimRpfColorGrayscaleTable::~ossimRpfColorGrayscaleTable()
 {
    if(theData)
    {
-      delete theData;
+      delete [] theData;
       theData = NULL;
    }
 }

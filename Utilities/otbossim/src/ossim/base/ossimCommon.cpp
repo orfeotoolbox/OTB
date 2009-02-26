@@ -7,7 +7,7 @@
 // Description: Common file for global functions.
 //
 //*************************************************************************
-// $Id: ossimCommon.cpp 12334 2008-01-18 18:01:10Z dburken $
+// $Id: ossimCommon.cpp 13666 2008-10-02 19:59:15Z gpotts $
 
 #include <sstream>
 
@@ -287,10 +287,24 @@ void ossim::defaultTileSize(ossimIpt& tileSize)
 
    if(tileSizeKw)
    {
-      std::istringstream in(tileSizeKw);
+      std::vector<ossimString> splitArray;
+      ossimString tempString(tileSizeKw);
+      tempString.split(splitArray, " ");
       bool hasX = true;
-      in >> tileSize.x >> tileSize.y;
-      
+    if(splitArray.size() == 2)
+      {
+         tileSize.x = splitArray[0].toInt32();
+         tileSize.y = splitArray[1].toInt32();
+      }
+      else if(splitArray.size() == 1)
+      {
+         tileSize.x = splitArray[0].toInt32();
+         tileSize.y = splitArray[0].toInt32();
+      }
+      else
+      {
+         tileSize = ossimIpt(0,0);
+      }
       if(tileSize.x < 1)
       {
          tileSize.x = OSSIM_DEFAULT_TILE_WIDTH;

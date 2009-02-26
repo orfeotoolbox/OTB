@@ -5,7 +5,7 @@
 
     Licence: wxWidgets Licence
 
-    RCS-ID: $Id: _dl_itr.h 9094 2006-06-13 19:12:40Z dburken $
+    RCS-ID: $Id: _dl_itr.h 13215 2008-07-23 18:51:54Z dburken $
 */
 
 //! author="Klaas Holwerda"
@@ -103,7 +103,7 @@ template <class Dtype> class DL_List
          ~DL_List();
 
 		   //!Report off List Errors
-   		void Error(char* function,Lerror a_error);
+   		void Error(const char* function,Lerror a_error);
 
 		   //!Number of items in the list
          int  count();
@@ -168,7 +168,7 @@ class DL_Iter
 		~DL_Iter();
 
 	   //!Report off Iterator Errors
-		void 	  Error(char* function,Lerror a_error);
+		void 	  Error(const char* function,Lerror a_error);
 
 //                bool isAttached()const;
 

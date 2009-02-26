@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageChain.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImageChain.h 13475 2008-08-22 14:21:54Z gpotts $
 #ifndef ossimImageChain_HEADER
 #define ossimImageChain_HEADER
 #include <vector>
@@ -54,18 +54,19 @@ public:
     */
    virtual ossimConnectableObject* getConnectableObject(ossim_uint32 index);
    
+   virtual ossim_int32 indexOf(ossimConnectableObject* obj)const;
    /**
     * Return the first source which is the one that first receives the
     * getTile request
     */
-   virtual ossimImageSourceInterface* getFirstSource();
+   virtual ossimImageSource* getFirstSource();
    virtual ossimObject* getFirstObject();
 
    /**
     * Return the last source which is the one that last receives the
     * getTile request.
     */
-   virtual ossimImageSourceInterface* getLastSource();
+   virtual ossimImageSource* getLastSource();
    virtual ossimObject* getLastObject();
 
 
@@ -120,8 +121,9 @@ public:
     */
    bool insertLeft(ossimConnectableObject* newObj,
                    ossimConnectableObject* leftOfThisObj);
-
    
+   bool replace(ossimConnectableObject* newObj,
+                ossimConnectableObject* oldObj);
    /**
     * Will return true or false if an image source was
     * added to the chain.  It will add and do a connection
@@ -212,7 +214,10 @@ public:
                                                object);
             }
          }
-         
+         else if(!theImageChainList.size())
+         {
+            return true;
+         }
          return false;
       }
       
@@ -335,7 +340,7 @@ protected:
    
    ossimRefPtr<ossimImageData>     theBlankTile;
    ossimImageChainChildListener*   theChildListener;
-   mutable bool                    thePropagateEventFlag;
+  // mutable bool                    thePropagateEventFlag;
    mutable bool                    theLoadStateFlag;
    /**
     * For dynamic loading to take place we must allocate all objects first and

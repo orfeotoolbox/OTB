@@ -38,24 +38,20 @@ namespace Functor
  *  \ingroup Functor
  *  \ingroup Statistics
  */
-template <class TIterInput, class TOutput>
+template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT SumVarianceTextureFunctor :
-public SumAverageTextureFunctor<TIterInput, TOutput>
+public SumAverageTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
   SumVarianceTextureFunctor(){};
   virtual ~SumVarianceTextureFunctor(){};
-
-  typedef TIterInput                           IterType;
-  typedef TOutput                              OutputType;
-  typedef typename IterType::InternalPixelType InternalPixelType;
-  typedef typename IterType::ImageType         ImageType;
-  typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
-  typedef SumAverageTextureFunctor<TIterInput, TOutput> SuperClass;
+ 
+  typedef SumAverageTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
+  typedef typename Superclass::NeighborhoodType                                   NeighborhoodType;
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
-    double f6 = SuperClass::ComputeOverSingleChannel(neigh, neighOff);
+    double f6 = Superclass::ComputeOverSingleChannel(neigh, neighOff);
 
     double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
     double areaInv = 1/area;

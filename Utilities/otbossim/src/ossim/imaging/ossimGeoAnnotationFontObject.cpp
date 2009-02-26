@@ -4,15 +4,17 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-//$Id: ossimGeoAnnotationFontObject.cpp 11411 2007-07-27 13:53:51Z dburken $
+//$Id: ossimGeoAnnotationFontObject.cpp 13965 2009-01-14 16:30:52Z gpotts $
 
 #include <sstream>
 
 #include <ossim/imaging/ossimGeoAnnotationFontObject.h>
 #include <ossim/imaging/ossimAnnotationFontObject.h>
 #include <ossim/projection/ossimProjection.h>
+#include <ossim/projection/ossimImageProjectionModel.h>
 #include <ossim/font/ossimFont.h>
 #include <ossim/font/ossimFontFactoryRegistry.h>
+#include <ossim/base/ossimException.h>
 #include <ossim/base/ossimNotifyContext.h>
 
 RTTI_DEF1(ossimGeoAnnotationFontObject,
@@ -186,7 +188,36 @@ void ossimGeoAnnotationFontObject::transform(ossimProjection* projection)
       ossimDpt ipt;
 
       projection->worldToLineSample(theCenterGround, ipt);
-      theAnnotationFontObject->setPositionCenter(ipt);
+      theAnnotationFontObject->setCenterPosition(ipt);
+      theAnnotationFontObject->computeBoundingRect();
+   }
+}
+
+void ossimGeoAnnotationFontObject::transform(
+   const ossimImageProjectionModel& model, ossim_uint32 rrds)
+{
+   const ossimProjection* projection = model.getProjection();
+   if (projection)
+   {
+      ossimDpt projectedCenter;
+      projection->worldToLineSample(theCenterGround, projectedCenter);
+
+      if (rrds)
+      {
+         // Transform r0 point to new rrds level.
+         try
+         {
+            ossimDpt rnPt;
+            model.r0ToRn(rrds, projectedCenter, rnPt);
+            projectedCenter = rnPt; 
+            
+         }
+         catch (const ossimException& e)
+         {
+            ossimNotify(ossimNotifyLevel_WARN) << e.what() << std::endl;
+         }
+      }
+      theAnnotationFontObject->setCenterPosition(projectedCenter);
       theAnnotationFontObject->computeBoundingRect();
    }
 }

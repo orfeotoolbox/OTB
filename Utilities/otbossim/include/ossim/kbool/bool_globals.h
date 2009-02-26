@@ -8,6 +8,7 @@
 #endif
 
 #include <limits> /* for numeric_limits::min/max */
+#include <string>
 #include <ossim/base/ossimConstants.h>
 
 #ifdef OSSIMMAKINGDLL
@@ -88,8 +89,8 @@ B_INT babs(B_INT);
 #define NULL 0
 #endif
 
-B_INT bmin(B_INT const value1, B_INT const value2);
-B_INT bmax(B_INT const value1, B_INT const value2);
+//B_INT bmin(B_INT const value1, B_INT const value2);
+//B_INT bmax(B_INT const value1, B_INT const value2);
 
 B_INT bmin(B_INT value1, B_INT value2);
 B_INT bmax(B_INT value1, B_INT value2);
@@ -130,19 +131,19 @@ enum BOOL_OP
 class A2DKBOOLDLLEXP Bool_Engine_Error
 {
 	public:
-		Bool_Engine_Error(char* message, char* header=0, int degree = 9, int fatal = 0);
+		Bool_Engine_Error(const char* message, const char* header=0, int degree = 9, int fatal = 0);
 		Bool_Engine_Error(const Bool_Engine_Error& a);
 		~Bool_Engine_Error();
-		char*	GetErrorMessage();
-		char* GetHeaderMessage();
+		const char* GetErrorMessage();
+		const char* GetHeaderMessage();
 		int	GetErrorDegree();
 		int	GetFatal();
 
 	protected:
-		char*	_message;
-		char*	_header;
-		int 	_degree;
-		int 	_fatal;
+                std::string _message;
+                std::string _header;
+		int _degree;
+		int _fatal;
 };
 
 // Re-enable the warning for other files

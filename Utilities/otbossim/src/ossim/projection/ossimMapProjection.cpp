@@ -9,7 +9,7 @@
 // Base class for all map projections.
 // 
 //*******************************************************************
-//  $Id: ossimMapProjection.cpp 13025 2008-06-13 17:06:30Z sbortman $
+//  $Id: ossimMapProjection.cpp 13913 2008-12-04 19:16:38Z gpotts $
 
 #include <iostream>
 #include <cstdlib>
@@ -17,6 +17,7 @@
 #include <sstream>
 
 #include <ossim/projection/ossimMapProjection.h>
+#include <ossim/projection/ossimPcsCodeProjectionFactory.h>
 #include <ossim/projection/ossimStatePlaneProjectionFactory.h>
 #include <ossim/projection/ossimStatePlaneProjectionInfo.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -31,6 +32,9 @@
 #include <ossim/base/ossimMatrix3x3.h>
 #include <ossim/base/ossimUnitConversionTool.h>
 #include <ossim/base/ossimUnitTypeLut.h>
+#include <ossim/base/ossimTrace.h>
+
+static ossimTrace traceDebug("ossimMapProjection:debug");
 
 // RTTI information for the ossimMapProjection
 RTTI_DEF1(ossimMapProjection, "ossimMapProjection" , ossimProjection);
@@ -286,9 +290,29 @@ void ossimMapProjection::update()
       }
    }
 
-   if (thePcsCode)
+   //---
+   // Projection Coordinate System(PCS) code check:
+   //---
+   
+   // See if this projection has a pcs code.
+   ossim_uint16 pcsCode = ossimPcsCodeProjectionFactory::instance()->
+      getPcsCodeFromProjection(this);
+   
+   if (pcsCode)
    {
-      verifyPcsCodeMatches();
+      // If so store it.
+      thePcsCode = pcsCode;
+   }
+   else if (thePcsCode)
+   {
+      //---
+      // A code was stored previously.  Verify the projection parameters for
+      // the code.
+      //---
+      if ( verifyPcsCodeMatches() == false )
+      {
+         thePcsCode = 0;
+      }
    }
 }
 
@@ -684,6 +708,7 @@ void ossimMapProjection::lineSampleToEastingNorthing(const ossimDpt& lineSample,
    //   eastingNorthing.y += (-lineSample.y*theMetersPerPixel.y);
 }
 
+
 void ossimMapProjection::setMetersPerPixel(const ossimDpt& gsd)
 {
    theMetersPerPixel=gsd;
@@ -737,6 +762,19 @@ void ossimMapProjection::eastingNorthingToLineSample(const ossimDpt& eastingNort
      lineSample.y = (-(eastingNorthing.y-theUlEastingNorthing.y))/theMetersPerPixel.y;
    }
 }
+
+void ossimMapProjection::setUlTiePoints(const ossimGpt& gpt)
+{
+   setUlGpt(gpt);
+   setUlEastingNorthing(forward(gpt));
+}
+
+void ossimMapProjection::setUlTiePoints(const ossimDpt& eastingNorthing)
+{
+   setUlGpt(inverse(eastingNorthing));
+   setUlEastingNorthing(eastingNorthing);
+}
+
 
 //*****************************************************************************
 //  METHOD: ossimMapProjection::setUlEastingNorthing
@@ -964,14 +1002,17 @@ bool ossimMapProjection::loadState(const ossimKeywordlist& kwl, const char* pref
             }
             default:
             {
-               // Unhandled unit type!
-               ossimNotify(ossimNotifyLevel_WARN)
+               if(traceDebug())
+               {
+                  // Unhandled unit type!
+                  ossimNotify(ossimNotifyLevel_WARN)
                   << "ossimMapProjection::loadState WARNING!"
                   << "Unhandled unit type for "
                   << ossimKeywordNames::PIXEL_SCALE_UNITS_KW << ":  "
                   << ( ossimUnitTypeLut::instance()->
-                       getEntryString(units).c_str() )
+                      getEntryString(units).c_str() )
                   << endl;
+               }
                break;
             }
          } // End of switch (units)
@@ -1054,14 +1095,17 @@ bool ossimMapProjection::loadState(const ossimKeywordlist& kwl, const char* pref
             }
             default:
             {
-               // Unhandled unit type!
-               ossimNotify(ossimNotifyLevel_WARN)
+               if(traceDebug())
+               {
+                  // Unhandled unit type!
+                  ossimNotify(ossimNotifyLevel_WARN)
                   << "ossimMapProjection::loadState WARNING!"
                   << "Unhandled unit type for "
                   << ossimKeywordNames::TIE_POINT_UNITS_KW << ": " 
                   << ( ossimUnitTypeLut::instance()->
-                       getEntryString(units).c_str() )
+                      getEntryString(units).c_str() )
                   << endl;
+               }
                break;
             }
          } // End of switch (units)
@@ -1133,15 +1177,18 @@ bool ossimMapProjection::loadState(const ossimKeywordlist& kwl, const char* pref
             }
             default:
             {
-               // Unhandled unit type!
-               ossimNotify(ossimNotifyLevel_WARN)
+               if(traceDebug())
+               {
+                  // Unhandled unit type!
+                  ossimNotify(ossimNotifyLevel_WARN)
                   << "ossimMapProjection::loadState WARNING!"
                   << "Unhandled unit type for "
                   << ossimKeywordNames::FALSE_EASTING_NORTHING_UNITS_KW
                   << ":  " 
                   << ( ossimUnitTypeLut::instance()->
-                       getEntryString(units).c_str() )
+                      getEntryString(units).c_str() )
                   << endl;
+               }
                break;
             }
          } // End of switch (units)
@@ -1155,13 +1202,13 @@ bool ossimMapProjection::loadState(const ossimKeywordlist& kwl, const char* pref
       lookup =  kwl.find(prefix, ossimKeywordNames::FALSE_EASTING_KW);
       if(lookup)
       {
-         theFalseEastingNorthing.x = fabs(ossimString(lookup).toFloat64());
+         theFalseEastingNorthing.x = (ossimString(lookup).toFloat64());
       }
       
       lookup =  kwl.find(prefix, ossimKeywordNames::FALSE_NORTHING_KW);
       if(lookup)
       {
-         theFalseEastingNorthing.y = fabs(ossimString(lookup).toFloat64());
+         theFalseEastingNorthing.y = (ossimString(lookup).toFloat64());
       }
    }            
 
@@ -1221,11 +1268,13 @@ bool ossimMapProjection::loadState(const ossimKeywordlist& kwl, const char* pref
       NEWMAT::Matrix& m = theModelTransform.getData();
       istringstream in(modelTransform);
       ossim_uint32 row, col;
+      ossimString value;
       for(row = 0; row < 4; ++row)
       {
          for(col = 0; col < 4; ++col)
          {
-            in >> m[row][col];
+            in >> value;
+            m[row][col] = value.toDouble();
          }
       }
       // make sure these have the identity and all unused are 0.0
@@ -1240,10 +1289,17 @@ bool ossimMapProjection::loadState(const ossimKeywordlist& kwl, const char* pref
       
       if(!in.fail())
       {
-         theInverseModelTransform = theModelTransform;
-         theInverseModelTransform.i();
-         theModelTransformUnitType = static_cast<ossimUnitType>(ossimUnitTypeLut::instance()->
-                                                                getEntryNumber(modelTransformUnit));
+         try
+         {
+            theInverseModelTransform = theModelTransform;
+            theInverseModelTransform.i();
+            theModelTransformUnitType = static_cast<ossimUnitType>(ossimUnitTypeLut::instance()->
+                                                                   getEntryNumber(modelTransformUnit));
+         }
+         catch(...)
+         {
+            theModelTransformUnitType = OSSIM_UNIT_UNKNOWN;   
+         }
       }
   }
    //---
@@ -1458,8 +1514,6 @@ void ossimMapProjection::snapTiePointTo(ossim_float64 multiple,
       convertedMultiple = convertor.getMeters();
    }
 
-   // cout << "multiple: " << convertedMultiple << endl;
-   
    // Convert the tie point.
    if (isGeographic())
    {
@@ -1493,6 +1547,42 @@ void ossimMapProjection::snapTiePointTo(ossim_float64 multiple,
    }
 }
 
+
+void ossimMapProjection::snapTiePointToOrigin()
+{
+   // Convert the tie point.
+   if (isGeographic())
+   {
+      // Snap the latitude.
+      ossim_float64 d = theUlGpt.latd();
+      d = ossim::round<int>(d / theDegreesPerPixel.y) * theDegreesPerPixel.y;
+      theUlGpt.latd(d);
+
+      // Snap the longitude.
+      d = theUlGpt.lond();
+      d = ossim::round<int>(d / theDegreesPerPixel.x) * theDegreesPerPixel.x;
+      theUlGpt.lond(d);
+
+      // Adjust the stored easting / northing.
+      theUlEastingNorthing = forward(theUlGpt);
+   }
+   else
+   {
+      // Snap the easting.
+      ossim_float64 d = theUlEastingNorthing.x - getFalseEasting();
+      d = ossim::round<int>(d / theMetersPerPixel.x) * theMetersPerPixel.x;
+      theUlEastingNorthing.x = d + getFalseEasting();
+
+      // Snap the northing.
+      d = theUlEastingNorthing.y - getFalseNorthing();
+      d = ossim::round<int>(d / theMetersPerPixel.y) * theMetersPerPixel.y;
+      theUlEastingNorthing.y = d + getFalseNorthing();
+
+      // Adjust the stored upper left ground point.
+      theUlGpt = inverse(theUlEastingNorthing);
+   }
+}
+
 void ossimMapProjection::setElevationLookupFlag(bool flag)
 {
    theElevationLookupFlag = flag;
@@ -1504,27 +1594,23 @@ bool ossimMapProjection::getElevationLookupFlag()const
 }
    
 
-bool ossimMapProjection::verifyPcsCodeMatches()
+bool ossimMapProjection::verifyPcsCodeMatches() const
 {
-   if (thePcsCode == 0)
+   bool result = false;
+   if ( thePcsCode )
    {
-      return false;
-   }
-
-   ossim_int32 code = static_cast<ossim_int32>(thePcsCode);
-   
-   const ossimStatePlaneProjectionInfo* info =
-      ossimStatePlaneProjectionFactory::instance()->getInfo(code);
-   if (info)
-   {
-      if (info->matchesProjection(this))
+      // See if it's a state plane.
+      ossim_int32 code = static_cast<ossim_int32>(thePcsCode);
+      
+      const ossimStatePlaneProjectionInfo* info =
+         ossimStatePlaneProjectionFactory::instance()->getInfo(code);
+      if (info)
       {
-         return true;
+         if (info->matchesProjection(this))
+         {
+            result = true;
+         }
       }
    }
-
-   // Reset to zero since it doesn't belong to this projection.
-   thePcsCode = 0;
-   
-   return false;
+   return result;
 }

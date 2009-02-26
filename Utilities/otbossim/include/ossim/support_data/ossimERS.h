@@ -9,7 +9,7 @@
 // This class parses a ER Mapper raster file format header.
 //
 //********************************************************************
-// $Id: ossimERS.h 10315 2007-01-19 18:05:28Z dburken $
+// $Id: ossimERS.h 13216 2008-07-23 18:56:53Z dburken $
 
 #ifndef ossimERS_HEADER
 #define ossimERS_HEADER
@@ -80,7 +80,7 @@ public:
    
 private:
 
-   void parseError(char *msg);
+   void parseError(const char *msg);
    std::vector<ossimString> parseLine(std::istream& in);
    void parseHeader(std::istream& fptr);
    void parseRasterInfo(std::istream& fptr);

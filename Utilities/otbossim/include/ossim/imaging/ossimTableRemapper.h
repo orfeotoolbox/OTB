@@ -16,7 +16,7 @@
 // uses a normalized remap table (more scalar independent).
 //
 //*************************************************************************
-// $Id: ossimTableRemapper.h 11909 2007-10-28 18:17:05Z dburken $
+// $Id: ossimTableRemapper.h 13473 2008-08-22 14:19:49Z gpotts $
 #ifndef ossimTableRemapper_HEADER
 #define ossimTableRemapper_HEADER
 
@@ -101,23 +101,16 @@ protected:
     *   build the table and manage the memory yourself; in which case, you
     *   would set the own_table false; else it will be de
     */
-   virtual void setTable(ossim_uint8*    table,
+   virtual void setTable(const std::vector<ossim_uint8>&    table,
                          ossim_uint32    table_bin_count,
                          ossim_uint32    table_band_count,
                          RemapTableType  table_type,
-                         ossimScalarType output_scalar_type,
-                         bool            own_table = true);
+                         ossimScalarType output_scalar_type);
 
-   /**
-    * @param flag Should be true if this object is owner of theTable,
-    * false if derived class or user is responsible for allocation,
-    * deletion of "theTable".
-    */
-   virtual void setTableOwnership(bool flag);
    
    ossimRefPtr<ossimImageData> theTile;
    ossimRefPtr<ossimImageData> theTmpTile;
-   ossim_uint8*    theTable;
+   std::vector<ossim_uint8>    theTable;
    ossim_float64*  theNormBuf;
    ossim_uint32    theTableBinCount;
    ossim_uint32    theTableBandCount;
@@ -125,7 +118,6 @@ protected:
    ossimScalarType theInputScalarType;
    ossimScalarType theOutputScalarType;
    
-   bool theTableOwnerFlag; ///< True if "this" is responsible for memory.
    
    void allocate(const ossimIrect& rect);
    void destroy();

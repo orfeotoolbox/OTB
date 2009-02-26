@@ -25,17 +25,16 @@ namespace otb
 
 template <class TOutputImage>
 ImageViewerModel<TOutputImage>
-::ImageViewerModel()
+::ImageViewerModel() : m_Name("Default"), m_Layers(), m_RasterizedQuicklook(), 
+		       m_HasQuicklook(false),m_RasterizedExtract(),m_HasExtract(false),
+		       m_ExtractRegion(), m_SubsampledExtractRegion(), m_RasterizedScaledExtract(), m_HasScaledExtract(false),
+		       m_ScaledExtractRegion()
+
 {
   // Intializing the layer list
   m_Layers = LayerListType::New();
-  // Viewer name
-  m_Name = "Default";
+
   
-  // Default: nothing is available
-  m_HasQuicklook     = false;
-  m_HasExtract       = false;
-  m_HasScaledExtract = false;
 }
 
 template <class TOutputImage>
@@ -160,12 +159,18 @@ void
 ImageViewerModel<TOutputImage>
 ::Update()
 {
-  // Render all visible layers
-  this->RenderVisibleLayers();
-  // Rasterize all visible layers
-  this->RasterizeVisibleLayers();
-  // Notify all listeners
-  this->NotifyAll();
+  // Multiple concurrent update guards
+  if(!m_Updating)
+    {
+    m_Updating = true;
+    // Render all visible layers
+    this->RenderVisibleLayers();
+    // Rasterize all visible layers
+    this->RasterizeVisibleLayers();
+    // Notify all listeners
+    this->NotifyAll();
+    m_Updating = false;
+    }
 }
 
 template <class TOutputImage>
@@ -181,8 +186,10 @@ ImageViewerModel<TOutputImage>
     if(it.Get()->GetVisible())
       {
       // Set the extracted region
+      m_ExtractRegion = this->ConstrainRegion(m_ExtractRegion,it.Get()->GetExtent());
       it.Get()->SetExtractRegion(m_ExtractRegion);
       // Set the scaled extracted region
+      m_ScaledExtractRegion = this->ConstrainRegion(m_ScaledExtractRegion,it.Get()->GetExtent());
       it.Get()->SetScaledExtractRegion(m_ScaledExtractRegion);
       // Render it
       it.Get()->Render();
@@ -217,6 +224,17 @@ ImageViewerModel<TOutputImage>
     {
     m_HasQuicklook = true;
     m_RasterizedQuicklook = baseLayer->GetRenderedQuicklook();
+   
+    // Update the subsampled extract region 
+    m_SubsampledExtractRegion = m_ExtractRegion;
+    typename RegionType::SizeType size = m_SubsampledExtractRegion.GetSize();
+    typename RegionType::IndexType index = m_SubsampledExtractRegion.GetIndex();
+    size[0]/=baseLayer->GetQuicklookSubsamplingRate();
+    size[1]/=baseLayer->GetQuicklookSubsamplingRate();
+    index[0]/=baseLayer->GetQuicklookSubsamplingRate();
+    index[1]/=baseLayer->GetQuicklookSubsamplingRate();
+    m_SubsampledExtractRegion.SetIndex(index);
+    m_SubsampledExtractRegion.SetSize(size);
     }
 
   if(baseLayer->GetHasExtract())
@@ -230,6 +248,9 @@ ImageViewerModel<TOutputImage>
     m_HasScaledExtract = true;
     m_RasterizedScaledExtract = baseLayer->GetRenderedScaledExtract();
     }
+
+  // Move to the next layer
+  ++it;
   
   // Walk the remaining layers
   while(it!=m_Layers->End())
@@ -288,7 +309,100 @@ void
 ImageViewerModel<TOutputImage>
 ::Notify(ListenerType * listener)
 {
+  // Notify the listener
   listener->ImageViewerNotify();
+}
+
+
+template <class TOutputImage>
+void
+ImageViewerModel<TOutputImage>
+::SetScaledExtractRegionCenter(const IndexType & index)
+{
+  // Set the center of the scaled extract region
+  IndexType newIndex = index;
+  newIndex[0]-=m_ScaledExtractRegion.GetSize()[0]/2;
+  newIndex[1]-=m_ScaledExtractRegion.GetSize()[1]/2;
+  m_ScaledExtractRegion.SetIndex(newIndex);
+}
+
+template <class TOutputImage>
+void
+ImageViewerModel<TOutputImage>
+::SetExtractRegionCenter(const IndexType & index)
+{
+  // Set the center of the extract region
+  IndexType newIndex = index;
+
+// Update Scaled extract center as well
+  this->SetScaledExtractRegionCenter(newIndex);
+
+  // Update extract region
+  newIndex[0]-=m_ExtractRegion.GetSize()[0]/2;
+  newIndex[1]-=m_ExtractRegion.GetSize()[1]/2;
+  m_ExtractRegion.SetIndex(newIndex);
+}
+
+template <class TOutputImage>
+void
+ImageViewerModel<TOutputImage>
+::SetExtractRegionSubsampledCenter(const IndexType & index)
+{
+// Get the lowest layer
+  LayerIteratorType it = m_Layers->Begin();
+  // Base layer
+  typename LayerType::Pointer baseLayer = it.Get();
+  // Set compute the upsampled center of the extract region
+  IndexType newIndex = index;
+  newIndex[0]*= baseLayer->GetQuicklookSubsamplingRate();
+  newIndex[1]*= baseLayer->GetQuicklookSubsamplingRate();
+  
+  // Update Scaled extract center as well
+  this->SetScaledExtractRegionCenter(newIndex);
+
+  // Update extract region
+  newIndex[0]-=m_ExtractRegion.GetSize()[0]/2;
+  newIndex[1]-=m_ExtractRegion.GetSize()[1]/2;
+  m_ExtractRegion.SetIndex(newIndex);
+}
+
+template <class TOutputImage>
+typename ImageViewerModel<TOutputImage>
+::RegionType
+ImageViewerModel<TOutputImage>
+::ConstrainRegion(const RegionType & small, const RegionType & big)
+{
+  RegionType resp = small;
+// If not small is larger than big, then crop
+  if (small.GetSize()[0]>big.GetSize()[0]
+      ||small.GetSize()[1]>big.GetSize()[1])
+  {
+  resp.Crop(big);
+  }
+  else
+  {
+  // Else we can constrain it
+    IndexType index = resp.GetIndex();
+    typename RegionType::SizeType size = resp.GetSize();
+
+    // For each dimension
+    for(unsigned int dim = 0; dim < RegionType::ImageDimension; ++dim)
+      {
+      // push left if necessary
+      if (small.GetIndex()[dim]<big.GetIndex()[dim])
+	{
+	index[dim]=big.GetIndex()[dim];
+	}
+      // push right if necessary
+      if (index[dim]+size[dim]>=big.GetIndex()[dim]+big.GetSize()[dim])
+	{
+	index[dim]=big.GetIndex()[dim]+big.GetSize()[dim]-size[dim];
+	}
+      }
+    resp.SetSize(size);
+    resp.SetIndex(index);
+  }
+  return resp;
 }
 
 template <class TOutputImage>

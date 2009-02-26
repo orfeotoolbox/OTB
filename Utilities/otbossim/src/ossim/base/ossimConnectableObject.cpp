@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimConnectableObject.cpp 12645 2008-04-09 21:02:33Z dburken $
+// $Id: ossimConnectableObject.cpp 13362 2008-08-01 14:02:32Z gpotts $
 #include <ossim/base/ossimConnectableObject.h>
 #include <ossim/base/ossimIdManager.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -1647,6 +1647,7 @@ void ossimConnectableObject::propagateEventToOutputs(ossimEvent& event)
       ossimConnectableObject* obj = getOutput(i);
       if(obj)
       {
+         event.setPropagationType(ossimEvent::PROPAGATION_OUTPUT);
          obj->fireEvent(event);
          obj->propagateEventToOutputs(event);
       }

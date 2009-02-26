@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimObjectFactoryRegistry.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimObjectFactoryRegistry.h 13508 2008-08-27 15:51:38Z gpotts $
 #ifndef ossimObjectFactoryRegistry_HEADER
 #define ossimObjectFactoryRegistry_HEADER
 #include <vector>
@@ -57,11 +57,10 @@ public:
                                 const ossimString& baseType)const;
    
 protected:
-   ossimObjectFactoryRegistry(){}//hide
+   ossimObjectFactoryRegistry();//hide
    ossimObjectFactoryRegistry(const ossimObjectFactoryRegistry&):ossimObject(){}//hide
    void operator =(const ossimObjectFactoryRegistry&){}//hide
    
-   static ossimObjectFactoryRegistry* theInstance;
    std::vector<ossimObjectFactory*>   theFactoryList;
 
    ossimObjectFactory* findFactory(ossimObjectFactory* factory)const;

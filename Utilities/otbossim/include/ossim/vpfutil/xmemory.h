@@ -9,18 +9,6 @@
 extern "C" {
 #endif
 
-#include <ossim/ossimConfig.h>
-
-#if __OSSIM_DOS__
-#include <alloc.h>
-#else
-#if __OSSIM_CARBON__
-#include <sys/types.h>
-#include <sys/malloc.h>
-#else
-/*  #include <malloc.h> */
-#endif
-#endif
 
 
 #define Xmark()

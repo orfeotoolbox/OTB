@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixUtmModel.cpp 11482 2007-08-03 15:18:45Z gpotts $
+//  $Id: ossimApplanixUtmModel.cpp 13665 2008-10-02 19:58:00Z gpotts $
 #include <sstream>
 #include <ossim/projection/ossimApplanixUtmModel.h>
 #include <ossim/base/ossimEllipsoid.h>
@@ -25,7 +25,7 @@ static ossimTrace traceDebug("ossimApplanixUtmModel:debug");
 RTTI_DEF1(ossimApplanixUtmModel, "ossimApplanixUtmModel", ossimSensorModel);
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimApplanixUtmModel.cpp 11482 2007-08-03 15:18:45Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimApplanixUtmModel.cpp 13665 2008-10-02 19:58:00Z gpotts $";
 #endif
 
 ossimApplanixUtmModel::ossimApplanixUtmModel()
@@ -263,6 +263,7 @@ void ossimApplanixUtmModel::updateModel()
    ossimUtmProjection utmProj;
    
    utmProj.setZone(theUtmZone);
+   utmProj.setZone(theUtmHemisphere);
    utmProj.setMetersPerPixel(ossimDpt(1.0,1.0));
    ossimDpt midPt  = utmProj.forward(theAdjEcefPlatformPosition);
    ossimDpt rPt    = midPt + ossimDpt(10, 0.0);
@@ -570,13 +571,16 @@ bool ossimApplanixUtmModel::loadState(const ossimKeywordlist& kwl,
    {
       if(shift_values)
       {
-         std::istringstream in(shift_values);
-         double x, y, z;
-
-         in >> x >> y >> z;
-
-         theShiftValues = ossimEcefVector(x,y,z);
-         
+         std::vector<ossimString> splitString;
+         ossimString tempString(shift_values);
+         tempString = tempString.trim();
+         tempString.split(splitString, " " );
+         if(splitString.size() == 3)
+         {
+            theShiftValues = ossimEcefVector(splitString[0].toDouble(),
+                                             splitString[1].toDouble(),
+                                             splitString[2].toDouble());
+         }
       }
       if(omega&&phi&&kappa)
       {
@@ -590,7 +594,7 @@ bool ossimApplanixUtmModel::loadState(const ossimKeywordlist& kwl,
          theBoreSightTy = ossimString(bore_sight_ty).toDouble()/60.0;
          theBoreSightTz = ossimString(bore_sight_tz).toDouble()/60.0;
       }
-      double lat, lon, h;
+      double lat=0.0, lon=0.0, h=0.0;
       if(utm_zone)
       {
          theUtmZone = ossimString(utm_zone).toInt32();
@@ -605,11 +609,23 @@ bool ossimApplanixUtmModel::loadState(const ossimKeywordlist& kwl,
       if(utm_platform_position)
       {
          ossimUtmProjection utmProj;
-         istringstream in(utm_platform_position);
+         std::vector<ossimString> splitString;
+         ossimString tempString(utm_platform_position);
+         tempString = tempString.trim();
          ossimString datumString;
          utmProj.setZone(theUtmZone);
          utmProj.setHemisphere((char)theUtmHemisphere);
-         in >> theUtmPlatformPosition.x >> theUtmPlatformPosition.y >> theUtmPlatformPosition.z >> datumString;
+         tempString.split(splitString, " ");
+         if(splitString.size() > 2)
+         {
+            theUtmPlatformPosition.x = splitString[0].toDouble();
+            theUtmPlatformPosition.y = splitString[1].toDouble();
+            theUtmPlatformPosition.z = splitString[2].toDouble();
+         }
+         if(splitString.size() > 3)
+         {
+            datumString = splitString[3];
+         }
          const ossimDatum* datum = ossimDatumFactory::instance()->create(datumString);
          if(datum)
          {
@@ -634,13 +650,25 @@ bool ossimApplanixUtmModel::loadState(const ossimKeywordlist& kwl,
       }
       else if(latlonh_platform_position)
       {
-         std::istringstream in(latlonh_platform_position);
-         std::string datumCode;
-         in >> lat >> lon >> h >> datumCode;
+         std::vector<ossimString> splitString;
+         ossimString tempString(latlonh_platform_position);
+         std::string datumString;
+         tempString = tempString.trim();
+         tempString.split(splitString, " ");
+         if(splitString.size() > 2)
+         {
+            lat = splitString[0].toDouble();
+            lon = splitString[1].toDouble();
+            h = splitString[2].toDouble();
+         }
+         if(splitString.size() > 3)
+         {
+            datumString = splitString[3];
+         }
          thePlatformPosition.latd(lat);
          thePlatformPosition.lond(lon);
          thePlatformPosition.height(h);
-         const ossimDatum* datum = ossimDatumFactory::instance()->create(datumCode);
+         const ossimDatum* datum = ossimDatumFactory::instance()->create(datumString);
          if(datum)
          {
             thePlatformPosition.datum(datum);
@@ -659,13 +687,27 @@ bool ossimApplanixUtmModel::loadState(const ossimKeywordlist& kwl,
    }
    if(principal_point)
    {
-      std::istringstream in(principal_point);
-      in >>thePrincipalPoint.x >> thePrincipalPoint.y;
+      std::vector<ossimString> splitString;
+      ossimString tempString(principal_point);
+      tempString = tempString.trim();
+      tempString.split(splitString, " ");
+      if(splitString.size() == 2)
+      {
+         thePrincipalPoint.x = splitString[0].toDouble();
+         thePrincipalPoint.y = splitString[1].toDouble();
+      }
    }
    if(pixel_size)
    {
-      std::istringstream in(pixel_size);
-      in >> thePixelSize.x >> thePixelSize.y;
+      std::vector<ossimString> splitString;
+      ossimString tempString(principal_point);
+      tempString = tempString.trim();
+      tempString.split(splitString, " ");
+      if(splitString.size() == 2)
+      {
+         thePixelSize.x = splitString[0].toDouble();
+         thePixelSize.y = splitString[1].toDouble();
+      }
    }
    if(focal_length)
    {
@@ -698,9 +740,16 @@ bool ossimApplanixUtmModel::loadState(const ossimKeywordlist& kwl,
       }
       if(image_size)
       {
-         std::istringstream in(image_size);
-         double w, h;
-         in>>w >> h;
+         std::vector<ossimString> splitString;
+         ossimString tempString(image_size);
+         tempString = tempString.trim();
+         tempString.split(splitString, " ");
+         double w=1, h=1;
+         if(splitString.size() == 2)
+         {
+            w = splitString[0].toDouble();
+            h = splitString[1].toDouble();
+         }
          theImageClipRect = ossimDrect(0,0,w-1,h-1);
          theRefImgPt      = ossimDpt(w/2.0, h/2.0);
       }
@@ -710,14 +759,32 @@ bool ossimApplanixUtmModel::loadState(const ossimKeywordlist& kwl,
       }
       if(principal_point)
       {
-         std::istringstream in(principal_point);
-         in >>thePrincipalPoint.x >> thePrincipalPoint.y;
+         std::vector<ossimString> splitString;
+         ossimString tempString(principal_point);
+         tempString = tempString.trim();
+         tempString.split(splitString, " ");
+         if(splitString.size() == 2)
+         {
+            thePrincipalPoint.x = splitString[0].toDouble();
+            thePrincipalPoint.y = splitString[1].toDouble();
+         }
       }
       if(pixel_size)
       {
-         std::istringstream in(pixel_size);
-         in >> thePixelSize.x;
-         thePixelSize.y = thePixelSize.x;
+         std::vector<ossimString> splitString;
+         ossimString tempString(pixel_size);
+         tempString = tempString.trim();
+         tempString.split(splitString, " ");
+         if(splitString.size() == 1)
+         {
+            thePixelSize.x = splitString[0].toDouble();
+            thePixelSize.y = thePixelSize.x;
+         }
+         else if(splitString.size() == 2)
+         {
+            thePixelSize.x = splitString[0].toDouble();
+            thePixelSize.y = splitString[1].toDouble();
+         }
       }
       if(focal_length)
       {
@@ -731,10 +798,17 @@ bool ossimApplanixUtmModel::loadState(const ossimKeywordlist& kwl,
 
          if(value)
          {
-            std::istringstream in(value);
-            double distance, distortion;
-
-            in >> distance >> distortion;
+            std::vector<ossimString> splitString;
+            ossimString tempString(value);
+            double distance=0.0, distortion=0.0;
+            tempString = tempString.trim();
+            tempString.split(splitString, " ");
+            if(splitString.size() == 2)
+            {
+               distance = splitString[0].toDouble();
+               distortion = splitString[1].toDouble();
+            }
+            
             tool.setValue(distortion, unitType);
             lensKwl.add(ossimString("distance") + ossimString::toString(idx),
                         distance,
@@ -769,8 +843,15 @@ bool ossimApplanixUtmModel::loadState(const ossimKeywordlist& kwl,
       
       if(principal_point)
       {
-         std::istringstream in(principal_point);
-         in >>thePrincipalPoint.x >> thePrincipalPoint.y;
+         std::vector<ossimString> splitString;
+         ossimString tempString(principal_point);
+         tempString = tempString.trim();
+         tempString.split(splitString, " ");
+         if(splitString.size() == 2)
+         {
+            thePrincipalPoint.x = splitString[0].toDouble();
+            thePrincipalPoint.y = splitString[1].toDouble();
+         }
       }
       else
       {
@@ -782,8 +863,20 @@ bool ossimApplanixUtmModel::loadState(const ossimKeywordlist& kwl,
       }
       if(pixel_size)
       {
-         std::istringstream in(pixel_size);
-         in >> thePixelSize.x >> thePixelSize.y;
+         std::vector<ossimString> splitString;
+         ossimString tempString(pixel_size);
+         tempString = tempString.trim();
+         tempString.split(splitString, " ");
+         if(splitString.size() == 1)
+         {
+            thePixelSize.x = splitString[0].toDouble();
+            thePixelSize.y = thePixelSize.x;
+         }
+         else if(splitString.size() == 2)
+         {
+            thePixelSize.x = splitString[0].toDouble();
+            thePixelSize.y = splitString[1].toDouble();
+         }
       }
       else
       {

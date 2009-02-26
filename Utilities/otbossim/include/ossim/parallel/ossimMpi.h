@@ -6,16 +6,12 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimMpi.h 10167 2007-01-03 16:46:42Z dburken $
+// $Id: ossimMpi.h 13602 2008-09-25 14:23:32Z gpotts $
 #ifndef ossimMpi_HEADER
 #define ossimMpi_HEADER
 
 #include <ossim/ossimConfig.h>
 #include <ossim/base/ossimConstants.h>
-
-#if OSSIM_HAS_MPI
-#  include <mpi.h>
-#endif
 
 class OSSIM_DLL ossimMpi
 {

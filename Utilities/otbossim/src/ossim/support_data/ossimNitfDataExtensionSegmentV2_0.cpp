@@ -8,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfDataExtensionSegmentV2_0.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfDataExtensionSegmentV2_0.cpp 13218 2008-07-23 19:22:37Z dburken $
 
 #include <iostream>
 #include <ossim/support_data/ossimNitfDataExtensionSegmentV2_0.h>
@@ -115,7 +115,7 @@ void ossimNitfDataExtensionSegmentV2_0::clearFields()
    theIdentSecurityChunk.theDataExtDowngradingEvent[40] = '\0'; // 40 byte alpha num
    theOverflowedHeaderType[6] = '\0';
    theDataItemOverflowed[3]   = '\0';
-   theLengthOfUserDefinedSubheaderFields[5] = '\0';
+   theLengthOfUserDefinedSubheaderFields[4] = '\0';
    
 }
 

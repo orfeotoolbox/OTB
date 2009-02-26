@@ -8,7 +8,7 @@
 // Author:  Kenneth Melero (kmelero@sanz.com)
 //
 //*******************************************************************
-//  $Id: ossimMetadataFileWriter.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimMetadataFileWriter.cpp 13312 2008-07-27 01:26:52Z gpotts $
 
 #include <ossim/imaging/ossimMetadataFileWriter.h>
 #include <ossim/base/ossimTrace.h>
@@ -47,7 +47,7 @@ ossimMetadataFileWriter::~ossimMetadataFileWriter()
 
 void ossimMetadataFileWriter::initialize()
 {
-   theInputConnection = PTR_CAST(ossimImageSourceInterface,
+   theInputConnection = PTR_CAST(ossimImageSource,
                                  getInput());
 }
 
@@ -99,7 +99,7 @@ void ossimMetadataFileWriter::disconnectInputEvent(ossimConnectionEvent& event)
 
 void ossimMetadataFileWriter::connectInputEvent(ossimConnectionEvent& event)
 {
-   theInputConnection = PTR_CAST(ossimImageSourceInterface, getInput());
+   theInputConnection = PTR_CAST(ossimImageSource, getInput());
    initialize();
 }
 
@@ -222,7 +222,7 @@ bool ossimMetadataFileWriter::canConnectMyInputTo(ossim_int32 inputIndex,
                                                   const ossimConnectableObject* object) const
 {
    return (object &&
-           ((PTR_CAST(ossimImageSourceInterface, object) &&
+           ((PTR_CAST(ossimImageSource, object) &&
              inputIndex == 0)||
             (PTR_CAST(ossimViewController, object) &&
              inputIndex == 1)));

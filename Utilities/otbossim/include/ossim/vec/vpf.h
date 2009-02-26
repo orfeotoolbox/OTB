@@ -11,7 +11,7 @@
 //              vpf file.
 //
 //********************************************************************
-// $Id: vpf.h 9097 2006-06-13 20:57:27Z dburken $
+// $Id: vpf.h 13586 2008-09-17 01:35:25Z gpotts $
 #ifndef VPF_HEADER
 #define VPF_HEADER
 
@@ -23,6 +23,7 @@
 
 extern "C"
 {
+#include <ossim/vpfutil/vpfapi.h>
 #include <ossim/vpfutil/vpfview.h>
 #include <ossim/vpfutil/vpfselec.h>
 #include <ossim/vpfutil/vpftable.h>

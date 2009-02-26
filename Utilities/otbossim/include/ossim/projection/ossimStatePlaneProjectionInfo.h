@@ -4,7 +4,7 @@
 //
 // Author: Garrett Potts
 //*******************************************************************
-//  $Id: ossimStatePlaneProjectionInfo.h 12442 2008-02-07 22:33:52Z dburken $
+//  $Id: ossimStatePlaneProjectionInfo.h 13399 2008-08-07 18:06:05Z dburken $
 #ifndef ossimStatePlaneProjectionInfo_HEADER
 #define ossimStatePlaneProjectionInfo_HEADER
 
@@ -99,7 +99,7 @@ private:
    
    double               theScaleFactor;
    
-   ossimUnitType        theUnits;        // "us_survey_ft" or "meters"
+   ossimUnitType        theUnits;        // "us_survey_ft" "feet" or "meters"
 };
 
 #endif /* #ifndef ossimStatePlaneProjectionInfo_HEADER */

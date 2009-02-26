@@ -17,9 +17,10 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSubImageTileSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimSubImageTileSource.cpp 13330 2008-07-28 18:04:40Z dburken $
 
 #include <ossim/imaging/ossimSubImageTileSource.h>
+#include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/imaging/ossimImageData.h>
 

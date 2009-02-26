@@ -41,14 +41,14 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TCoordRep = float >
 class ITK_EXPORT PanTexTextureImageFunctionFilter : 
 public FunctionWithNeighborhoodToImageFilter< TInputImage, TOutputImage, 
-                                              TextureImageFunction<TInputImage, ITK_TYPENAME Functor::PanTexTextureFunctor< ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage>, itk::VariableLengthVector<double> >, TCoordRep  >      >
+                                              TextureImageFunction<TInputImage, ITK_TYPENAME Functor::PanTexTextureFunctor< ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType>, TCoordRep  > >
 
 {
   public:
   /** Standard class typedefs. */
   typedef PanTexTextureImageFunctionFilter Self;
   typedef FunctionWithNeighborhoodToImageFilter< TInputImage, TOutputImage, 
-                                              TextureImageFunction<TInputImage, typename Functor::PanTexTextureFunctor< typename itk::ConstNeighborhoodIterator<TInputImage>, itk::VariableLengthVector<double> >, TCoordRep  >      >  Superclass; 
+                                              TextureImageFunction<TInputImage, typename Functor::PanTexTextureFunctor< typename TInputImage::PixelType, typename TOutputImage::PixelType >, TCoordRep  > >  Superclass; 
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -59,44 +59,14 @@ public FunctionWithNeighborhoodToImageFilter< TInputImage, TOutputImage,
   itkNewMacro(Self);
 
   /** typedef support. */
-  typedef TInputImage                              InputImageType;
-  typedef TOutputImage                              OutputImageType;
-  //typedef TFunctor                                 FunctorType;
-  typedef typename InputImageType::OffsetType      OffsetType;
-  typedef typename InputImageType::SizeType        SizeType;
-  /*
-  typedef typename InputImageType::PixelType       PixelType;
-  typedef typename Superclass::OutputType          OutputType;
-  typedef typename Superclass::IndexType           IndexType;
-  typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
-  typedef typename Superclass::PointType           PointType;
-  typedef itk::ConstNeighborhoodIterator<InputImageType>                             IteratorType;
-  typedef typename IteratorType::NeighborhoodType                                    NeighborhoodType;
-  typedef typename itk::NumericTraits<typename InputImageType::PixelType>::RealType  RealType;
-  */
+  typedef TInputImage                          InputImageType;
+  typedef TOutputImage                         OutputImageType;
+  typedef typename InputImageType::OffsetType  OffsetType;
+  typedef typename InputImageType::SizeType    SizeType;
 
   /** Dimension of the underlying image. */
   itkStaticConstMacro(ImageDimension, unsigned int,InputImageType::ImageDimension);
 
-
-  /** Evalulate the function at specified index */
-  //virtual RealType EvaluateAtIndex( const IndexType& index ) const;
-
-  /** Evaluate the function at non-integer positions */
- /*  virtual RealType Evaluate( const PointType& point ) const */
-/*   { */
-/*     IndexType index; */
-/*     this->ConvertPointToNearestIndex( point, index ); */
-/*     return this->EvaluateAtIndex( index ); */
-/*   }; */
-/*   virtual RealType EvaluateAtContinuousIndex( */
-/*     const ContinuousIndexType& cindex ) const */
-/*   { */
-/*     IndexType index; */
-/*     this->ConvertContinuousIndexToNearestIndex( cindex, index ); */
-/*     return this->EvaluateAtIndex( index ) ; */
-/*   }; */
-  
 
 protected:
   PanTexTextureImageFunctionFilter()

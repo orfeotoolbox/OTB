@@ -46,6 +46,7 @@
 #ifdef __MSDOS__
 #include <graphics.h>
 #endif
+#include <ossim/vpfutil/vpfapi.h>
 #include <ossim/vpfutil/vpftable.h>
 #include <ossim/vpfutil/vpfprim.h>
 #include <ossim/vpfutil/vpfview.h>

@@ -52,8 +52,10 @@ int otbNDBIMultiChannelTM4AndTM5IndexImageFilter(int argc, char * argv[])
 
   reader->SetFileName( inputFilename );
   writer->SetFileName( outputFilename  );
-  filter->GetFunctor().SetTM5Index(tm5Channel);
-  filter->GetFunctor().SetTM4Index(tm4Channel);
+  filter->GetFunctor().SetIndex1(tm4Channel);
+  filter->GetFunctor().SetIndex2(tm5Channel);
+  //filter->GetFunctor().SetTM5Index(tm5Channel);
+  //filter->GetFunctor().SetTM4Index(tm4Channel);
   filter->SetInput( reader->GetOutput() );
 
   writer->SetInput( filter->GetOutput() );

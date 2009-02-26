@@ -25,7 +25,7 @@
 
 namespace itk
 {
-/** /class FFTWComplexToComplexImageFilter
+/** \class FFTWComplexToComplexImageFilter
  *  /brief Implements an API to enable the Fourier transform or the inverse
  *  Fourier transform of images with complex valued voxels to be computed using
  *  either FFTW from MIT or the FFTW interface in Intel MKL.
@@ -34,7 +34,7 @@ namespace itk
  *
  * \author Simon K. Warfield simon.warfield@childrens.harvard.edu
  *
- * \note Attribution Notice. This research work was made possible by 
+ * \note Attribution Notice. This research work was made possible by
  * Grant Number R01 RR021885 (PI Simon K. Warfield, Ph.D.) from
  * the National Center for Research Resources (NCRR), a component of the
  * National Institutes of Health (NIH).  Its contents are solely the
@@ -95,8 +95,8 @@ protected:
       fftwf_destroy_plan(m_Plan);
       }
     }
-  
-  /** 
+
+  /**
    * these methods should be defined in every FFT filter class
    */
   virtual void GenerateData();  // generates output from input

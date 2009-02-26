@@ -6,7 +6,7 @@
 // Author:  David Burken
 //
 //*******************************************************************
-//  $Id: ossimGeneralRasterWriter.cpp 12980 2008-06-04 00:50:33Z dburken $
+//  $Id: ossimGeneralRasterWriter.cpp 13312 2008-07-27 01:26:52Z gpotts $
 
 #include <cstdlib>
 #include <fstream>
@@ -196,7 +196,7 @@ bool ossimGeneralRasterWriter::writeToBip()
    
    //---
    // Get an arbitrary tile just to get the size in bytes!
-   // This should be changed later... An ossimImageSourceInterface should know
+   // This should be changed later... An ossimImageSource should know
    // this.
    //---
    ossimRefPtr<ossimImageData> id;
@@ -342,7 +342,7 @@ bool ossimGeneralRasterWriter::writeToBil()
 
    //***
    // Get an arbitrary tile just to get the size in bytes!
-   // This should be changed later... An ossimImageSourceInterface should know
+   // This should be changed later... An ossimImageSource should know
    // this.
    //***
    ossimRefPtr<ossimImageData> id;
@@ -477,7 +477,7 @@ bool ossimGeneralRasterWriter::writeToBsq()
 
    //***
    // Get an arbitrary tile just to get the size in bytes!
-   // This should be changed later... An ossimImageSourceInterface should know
+   // This should be changed later... An ossimImageSource should know
    // this.
    //***
    ossimRefPtr<ossimImageData> id;

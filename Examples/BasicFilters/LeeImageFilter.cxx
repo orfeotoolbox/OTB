@@ -158,7 +158,7 @@ int main( int argc, char * argv[] )
   //  image.
   //
   //  \index{otb::LeeImageFilter!SetRadius()}
-  //  \index{otb::LeeImageFilter!NbLooks()}
+  //  \index{otb::LeeImageFilter!SetNbLooks()}
   //  \index{SetNbLooks()!otb::LeeImageFilter}
   //
   //  Software Guide : EndLatex

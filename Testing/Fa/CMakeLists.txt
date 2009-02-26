@@ -215,6 +215,14 @@ ADD_TEST(FA-0000041-mean_shift2 ${CXX_TEST_PATH}/0000041-mean_shift
         ${TEMP}/boundary_of_labelled_image2.tif
 	)
 
+# -------       Vectorization issue   -----------------------------------
+ADD_TEST(FA-0000094-fe-PolygonsVectorization ${CXX_TEST_PATH}/PolygonsVectorization
+	-in ${INPUTDATA}/objtest2.tif
+	-ot ${TEMP}/output.txt
+	-out ${TEMP}/objtest2-result.tif
+	)
+
+
 ADD_EXECUTABLE(AlignementsQB  AlignementsQB.cxx)
 TARGET_LINK_LIBRARIES(AlignementsQB OTBFeatureExtraction OTBIO OTBCommon)
 
@@ -226,6 +234,9 @@ TARGET_LINK_LIBRARIES(StreamingStat OTBFeatureExtraction OTBIO OTBCommon)
 
 ADD_EXECUTABLE(0000041-mean_shift  0000041-mean_shift.cxx)
 TARGET_LINK_LIBRARIES(0000041-mean_shift OTBIO OTBCommon OTBBasicFilters)
+
+ADD_EXECUTABLE(PolygonsVectorization PolygonsVectorization.cxx)
+TARGET_LINK_LIBRARIES(PolygonsVectorization OTBIO OTBCommon)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 

@@ -6,13 +6,15 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationPolyObject.cpp 9479 2006-08-31 20:46:39Z gpotts $
+// $Id: ossimGeoAnnotationPolyObject.cpp 13387 2008-08-04 21:30:04Z dburken $
 
 #include <sstream>
 
 #include <ossim/imaging/ossimGeoAnnotationPolyObject.h>
 #include <ossim/imaging/ossimAnnotationPolyObject.h>
 #include <ossim/projection/ossimProjection.h>
+#include <ossim/projection/ossimImageProjectionModel.h>
+#include <ossim/base/ossimException.h>
 #include <ossim/base/ossimTrace.h>
 
 static const ossimTrace
@@ -111,9 +113,9 @@ void ossimGeoAnnotationPolyObject::transform(ossimProjection* projection)
       return;
    }
    ossimPolygon& poly = theProjectedPolyObject->getPolygon();
-   long upperBound = thePolygon.size();
-
-   for(long index=0; index < upperBound; ++index)
+   const std::vector<ossimGpt>::size_type BOUNDS = thePolygon.size();
+   
+   for(std::vector<ossimGpt>::size_type index=0; index < BOUNDS; ++index)
    {
       projection->worldToLineSample(thePolygon[index], poly[index]);
    }
@@ -121,6 +123,46 @@ void ossimGeoAnnotationPolyObject::transform(ossimProjection* projection)
    // update the bounding rect
    //
    theProjectedPolyObject->computeBoundingRect();
+}
+
+void ossimGeoAnnotationPolyObject::transform(
+   const ossimImageProjectionModel& model, ossim_uint32 rrds)
+{
+   const ossimProjection* projection = model.getProjection();
+   if (projection)
+   {
+      ossimPolygon& poly = theProjectedPolyObject->getPolygon();
+      const std::vector<ossimGpt>::size_type BOUNDS = thePolygon.size();
+
+      for(std::vector<ossimGpt>::size_type index=0; index < BOUNDS; ++index)
+      {
+         ossimDpt r0Pt;
+         projection->worldToLineSample(thePolygon[index], r0Pt);
+
+         if (rrds)
+         {
+            // Transform r0 point to new rrds level.
+            try
+            {
+               ossimDpt rnPt;
+               model.r0ToRn(rrds, r0Pt, rnPt);
+               poly[index] = rnPt;
+            }
+            catch (const ossimException& e)
+            {
+               ossimNotify(ossimNotifyLevel_WARN) << e.what() << std::endl;
+            } 
+         }
+         else
+         {
+            poly[index] = r0Pt;
+         }
+      }
+
+      // update the bounding rect
+      theProjectedPolyObject->computeBoundingRect();
+
+   } // End: if (projection)
 }
 
 std::ostream& ossimGeoAnnotationPolyObject::print(std::ostream& out)const
