@@ -69,11 +69,8 @@ int main(int argc, char * argv[])
   const int Dimension = 2;
   typedef otb::Image<PixelType,Dimension> ImageType;
   typedef itk::ConstNeighborhoodIterator<ImageType>  IteratorType;
-  typedef itk::Vector< PixelType > VectorType;
-
 
   typedef otb::Functor::ContrastTextureFunctor<PixelType, PixelType> FunctorType;
-
   typedef otb::TextureImageFunction<ImageType, FunctorType> FunctionType;
   typedef otb::FunctionWithNeighborhoodToImageFilter<ImageType,
                                           ImageType, FunctionType> FilterType;
