@@ -186,8 +186,10 @@ ImageViewerModel<TOutputImage>
     if(it.Get()->GetVisible())
       {
       // Set the extracted region
+      m_ExtractRegion = this->ConstrainRegion(m_ExtractRegion,it.Get()->GetExtent());
       it.Get()->SetExtractRegion(m_ExtractRegion);
       // Set the scaled extracted region
+      m_ScaledExtractRegion = this->ConstrainRegion(m_ScaledExtractRegion,it.Get()->GetExtent());
       it.Get()->SetScaledExtractRegion(m_ScaledExtractRegion);
       // Render it
       it.Get()->Render();
@@ -331,6 +333,34 @@ ImageViewerModel<TOutputImage>
 {
   // Set the center of the extract region
   IndexType newIndex = index;
+
+// Update Scaled extract center as well
+  this->SetScaledExtractRegionCenter(newIndex);
+
+  // Update extract region
+  newIndex[0]-=m_ExtractRegion.GetSize()[0]/2;
+  newIndex[1]-=m_ExtractRegion.GetSize()[1]/2;
+  m_ExtractRegion.SetIndex(newIndex);
+}
+
+template <class TOutputImage>
+void
+ImageViewerModel<TOutputImage>
+::SetExtractRegionSubsampledCenter(const IndexType & index)
+{
+// Get the lowest layer
+  LayerIteratorType it = m_Layers->Begin();
+  // Base layer
+  typename LayerType::Pointer baseLayer = it.Get();
+  // Set compute the upsampled center of the extract region
+  IndexType newIndex = index;
+  newIndex[0]*= baseLayer->GetQuicklookSubsamplingRate();
+  newIndex[1]*= baseLayer->GetQuicklookSubsamplingRate();
+  
+  // Update Scaled extract center as well
+  this->SetScaledExtractRegionCenter(newIndex);
+
+  // Update extract region
   newIndex[0]-=m_ExtractRegion.GetSize()[0]/2;
   newIndex[1]-=m_ExtractRegion.GetSize()[1]/2;
   m_ExtractRegion.SetIndex(newIndex);
@@ -340,48 +370,40 @@ template <class TOutputImage>
 typename ImageViewerModel<TOutputImage>
 ::RegionType
 ImageViewerModel<TOutputImage>
-::ConstrainRegion(const RegionType & region, const RegionType & largest)
+::ConstrainRegion(const RegionType & small, const RegionType & big)
 {
-  // First check if the case is trivial
-  if(region.GetNumberOfPixels() == 0 || largest.IsInside(region))
-    {
-    return region;
-    }
-  
-  RegionType resp = region;
-  typename RegionType::IndexType index = resp.GetIndex();
-  typename RegionType::SizeType size   = resp.GetSize();
+  RegionType resp = small;
+// If not small is larger than big, then crop
+  if (small.GetSize()[0]>big.GetSize()[0]
+      ||small.GetSize()[1]>big.GetSize()[1])
+  {
+  resp.Crop(big);
+  }
+  else
+  {
+  // Else we can constrain it
+    IndexType index = resp.GetIndex();
+    typename RegionType::SizeType size = resp.GetSize();
 
-  for(unsigned int dim = 0; dim<RegionType::ImageDimension;++dim)
-    {
-    const int offset = index[dim]+size[dim] - largest.GetIndex()[dim] + largest.GetSize()[dim];
-    // If the region is not larger than the largest, wen can constrain
-    if(largest.GetSize()[dim] > size[dim])
+    // For each dimension
+    for(unsigned int dim = 0; dim < RegionType::ImageDimension; ++dim)
       {
-      // If the region is to the left, push left
-      if(index[dim] < largest.GetIndex()[dim])
+      // push left if necessary
+      if (small.GetIndex()[dim]<big.GetIndex()[dim])
 	{
-	index[dim] = largest.GetIndex()[dim];
+	index[dim]=big.GetIndex()[dim];
 	}
-      	// If the region is to the right, push right
-      else if(offset > 0)
+      // push right if necessary
+      if (index[dim]+size[dim]>=big.GetIndex()[dim]+big.GetSize()[dim])
 	{
-	index[dim]-=offset;
+	index[dim]=big.GetIndex()[dim]+big.GetSize()[dim]-size[dim];
 	}
       }
-    else
-      {
-      // else crop
-      index[dim] = largest.GetIndex()[dim];
-      size[dim]   = largest.GetSize()[dim];
-      }
-      }
-  resp.SetIndex(index);
-  resp.SetSize(size);
-
+    resp.SetSize(size);
+    resp.SetIndex(index);
+  }
   return resp;
 }
-
 
 template <class TOutputImage>
 void
