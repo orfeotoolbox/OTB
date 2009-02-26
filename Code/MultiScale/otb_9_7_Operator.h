@@ -20,8 +20,7 @@
 #ifndef __otb_9_7_Operator__h
 #define __otb_9_7_Operator__h
 
-#include "itkExceptionObject.h"
-#include "itkNeighborhoodOperator.h"
+#include "otbWaveletOperator.h"
 
 namespace otb {
 
@@ -40,6 +39,7 @@ namespace otb {
  *
  * In N dimensions, the operator is directional
  *
+ * \sa WaveletOperator
  * \sa NeighborhoodOperator
  * \sa Neighborhood
  * \sa ForwardDifferenceOperator
@@ -50,14 +50,14 @@ namespace otb {
 template<class TPixel, unsigned int VDimension,
   class TAllocator = itk::NeighborhoodAllocator< TPixel > >
 class ITK_EXPORT LowPass_9_7_Operator
-  : public itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>
+  : public WaveletOperator<TPixel, VDimension, TAllocator>
 {
 public:
   /** Standard typedefs */
   typedef LowPass_9_7_Operator Self;
-  typedef itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>  Superclass;
+  typedef WaveletOperator<TPixel, VDimension, TAllocator>  Superclass;
 
-  itkTypeMacro(LowPass_9_7_Operator, NeighborhoodOperator);
+  itkTypeMacro(LowPass_9_7_Operator, WaveletOperator);
   
   LowPass_9_7_Operator() 
 	{
@@ -66,7 +66,7 @@ public:
   }
 
   LowPass_9_7_Operator(const Self& other)
-    : itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>(other) 
+    : WaveletOperator<TPixel, VDimension, TAllocator>(other) 
   {
     /* ... */
   }
@@ -112,7 +112,7 @@ protected:
     coeff.push_back(-0.016864118443); 
     coeff.push_back( 0.026748757411);
 
-    return coeff;
+    return Superclass::UpSamplingCoefficients( coeff );
   }
 
   /** Arranges coefficients spatially in the memory buffer. */
@@ -136,6 +136,7 @@ protected:
  *
  * In N dimensions, the operator is directional
  *
+ * \sa WaveletOperator
  * \sa NeighborhoodOperator
  * \sa Neighborhood
  * \sa ForwardDifferenceOperator
@@ -146,14 +147,14 @@ protected:
 template<class TPixel, unsigned int VDimension,
   class TAllocator = itk::NeighborhoodAllocator< TPixel > >
 class ITK_EXPORT HighPass_9_7_Operator
-  : public itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>
+  : public WaveletOperator<TPixel, VDimension, TAllocator>
 {
 public:
   /** Standard typedefs */
   typedef HighPass_9_7_Operator Self;
-  typedef itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>  Superclass;
+  typedef WaveletOperator<TPixel, VDimension, TAllocator>  Superclass;
 
-  itkTypeMacro(HighPass_9_7_Operator, NeighborhoodOperator);
+  itkTypeMacro(HighPass_9_7_Operator, WaveletOperator);
   
   HighPass_9_7_Operator() 
 	{
@@ -162,7 +163,7 @@ public:
   }
 
   HighPass_9_7_Operator(const Self& other)
-    : itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>(other) 
+    : WaveletOperator<TPixel, VDimension, TAllocator>(other) 
   {
     /* ... */
   }
@@ -206,7 +207,7 @@ protected:
     coeff.push_back(-0.028771763114 );
     coeff.push_back( 0.045635881557 );
 
-    return coeff;
+    return Superclass::UpSamplingCoefficients( coeff );
   }
 
   /** Arranges coefficients spatially in the memory buffer. */

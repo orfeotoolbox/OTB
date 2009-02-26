@@ -20,8 +20,7 @@
 #ifndef __otbHaarOperator__h
 #define __otbHaarOperator__h
 
-#include "itkExceptionObject.h"
-#include "itkNeighborhoodOperator.h"
+#include "otbWaveletOperator.h"
 
 namespace otb {
 
@@ -31,11 +30,12 @@ namespace otb {
  * \brief A NeighborhoodOperator for performing a Haar based filtering
  * at a pixel location.
  * 
- * LowPassHaarOperator is a NeighborhoodOperator that should be applied a 
+ * LowPassHaarOperator is a NeighborhoodOperator that should be applied to a 
  * NeighborhoodIterator using the NeighborhoodInnerProduct method. 
  * The Haar Operator is defiend in 1D as \$ H(z) = ( 1 + z^{-1} ) / 2 \$.
  * In N dimensions, the operator is directional
  *
+ * \sa WaveletOperator
  * \sa NeighborhoodOperator
  * \sa Neighborhood
  * \sa ForwardDifferenceOperator
@@ -46,23 +46,23 @@ namespace otb {
 template<class TPixel, unsigned int VDimension,
   class TAllocator = itk::NeighborhoodAllocator< TPixel > >
 class ITK_EXPORT LowPassHaarOperator
-  : public itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>
+  : public WaveletOperator<TPixel, VDimension, TAllocator>
 {
 public:
   /** Standard typedefs */
   typedef LowPassHaarOperator Self;
-  typedef itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>  Superclass;
+  typedef WaveletOperator<TPixel, VDimension, TAllocator>  Superclass;
 
-  itkTypeMacro(LowPassHaarOperator, NeighborhoodOperator);
+  itkTypeMacro(LowPassHaarOperator, WaveletOperator);
   
-  LowPassHaarOperator() 
+  LowPassHaarOperator() : WaveletOperator ()
 	{
     this->SetRadius(1);
 		this->CreateToRadius(1);
   }
 
   LowPassHaarOperator(const Self& other)
-    : itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>(other) 
+    : WaveletOperator<TPixel, VDimension, TAllocator>(other) 
   {
     /* ... */
   }
@@ -98,11 +98,14 @@ protected:
   CoefficientVector GenerateCoefficients()
   {
     CoefficientVector coeff;
+    // stands for z^{-1}
+    coeff.push_back(0.5); 
+    // stands for z^0
+    coeff.push_back(0.5);
+    // stands for z^1
     coeff.push_back(0.0);  
-    coeff.push_back(0.5);  
-    coeff.push_back(0.5);  
 
-    return coeff;
+    return Superclass::UpSamplingCoefficients( coeff );
   }
 
   /** Arranges coefficients spatially in the memory buffer. */
@@ -120,9 +123,10 @@ protected:
  * 
  * HighPassHaarOperator is a NeighborhoodOperator that should be applied a 
  * NeighborhoodIterator using the NeighborhoodInnerProduct method. 
- * The Haar Operator is defiend in 1D as \$ G(z) = ( 1 + z^{-1} ) / 2 \$.
+ * The Haar Operator is defiend in 1D as \$ G(z) = ( 1 - z^{-1} ) / 2 \$.
  * In N dimensions, the operator is directional
  *
+ * \sa WaveletOperator
  * \sa NeighborhoodOperator
  * \sa Neighborhood
  * \sa ForwardDifferenceOperator
@@ -133,14 +137,14 @@ protected:
 template<class TPixel, unsigned int VDimension,
   class TAllocator = itk::NeighborhoodAllocator< TPixel > >
 class ITK_EXPORT HighPassHaarOperator
-  : public itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>
+  : public WaveletOperator<TPixel, VDimension, TAllocator>
 {
 public:
   /** Standard typedefs */
   typedef HighPassHaarOperator Self;
-  typedef itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>  Superclass;
+  typedef WaveletOperator<TPixel, VDimension, TAllocator>  Superclass;
 
-  itkTypeMacro(HighPassHaarOperator, NeighborhoodOperator);
+  itkTypeMacro(HighPassHaarOperator, WaveletOperator);
   
   HighPassHaarOperator() 
 	{
@@ -149,7 +153,7 @@ public:
   }
 
   HighPassHaarOperator(const Self& other)
-    : itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>(other) 
+    : WaveletOperator<TPixel, VDimension, TAllocator>(other) 
   {
     /* ... */
   }
@@ -185,11 +189,11 @@ protected:
   CoefficientVector GenerateCoefficients()
   {
     CoefficientVector coeff;
-    coeff.push_back(0.0);  
-    coeff.push_back(0.5);  
     coeff.push_back(-0.5);  
+    coeff.push_back(0.5);  
+    coeff.push_back(0.0);  
 
-    return coeff;
+    return Superclass::UpSamplingCoefficients( coeff );
   }
 
   /** Arranges coefficients spatially in the memory buffer. */
