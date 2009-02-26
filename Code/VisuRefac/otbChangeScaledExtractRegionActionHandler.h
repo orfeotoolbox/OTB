@@ -71,9 +71,7 @@ public:
 	// Get the clicked index
 	typename ViewType::IndexType index;
 	index[0] = Fl::event_x();
-	index[1] = m_View->GetFullWidget()->h()-Fl::event_y();
-	// Convert to image index
-	index = m_View->GetFullWidget()->ScreenIndexToRegionIndex(index);
+	index[1] = Fl::event_y();
 	// Change scaled extract region center
 	m_Model->SetScaledExtractRegionCenter(m_View->GetFullWidget()->ScreenIndexToRegionIndex(index));
 	// Update model
