@@ -613,7 +613,7 @@ Call setFilename method.\n",
       gcs = USER_DEFINED;
 
       std::ostringstream os;
-      os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 11971 $ $Date: 2007-11-01 17:44:19 +0100 (Thu, 01 Nov 2007) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
+      os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 11971 $ $Date: 2007-11-02 00:44:19 +0800 (Fri, 02 Nov 2007) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
 
       GTIFKeySet(gtif,
                  GeogCitationGeoKey,
