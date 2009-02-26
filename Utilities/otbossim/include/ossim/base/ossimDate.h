@@ -173,15 +173,15 @@ public:
     time_t getTicks()const;
     time_t getEpoc()const;
     
-    void addSeconds(ossim_float64 n);
-    void addMinutes(ossim_float64 n);
-    void addHours(ossim_float64 n);
-    void addDays(ossim_float64 n);
-    
-    ossim_float64 deltaInSeconds(const ossimLocalTm& d)const;
-    ossim_float64 deltaInMinutes(const ossimLocalTm& d)const;
-    ossim_float64 delatInHours(const ossimLocalTm& d)const;
-    ossim_float64 deltaInDays(const ossimLocalTm& d)const;
+   void addSeconds(ossim_float64 n);
+   void addMinutes(ossim_float64 n);
+   void addHours(ossim_float64 n);
+   void addDays(ossim_float64 n);
+   
+   ossim_float64 deltaInSeconds(const ossimLocalTm& d)const;
+   ossim_float64 deltaInMinutes(const ossimLocalTm& d)const;
+   ossim_float64 delatInHours(const ossimLocalTm& d)const;
+   ossim_float64 deltaInDays(const ossimLocalTm& d)const;
     /**
      * Will not adjust for timezone.  The passed in value is based on seconds.
      */ 

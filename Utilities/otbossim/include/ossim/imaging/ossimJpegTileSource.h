@@ -13,33 +13,10 @@
 // JpegTileSource is derived from ImageHandler which is derived from
 // TileSource.
 //*******************************************************************
-//  $Id: ossimJpegTileSource.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimJpegTileSource.h 13054 2008-06-23 13:55:13Z gpotts $
 
 #ifndef ossimJpegTileSource_HEADER
 #define ossimJpegTileSource_HEADER
-
-#include <cstdio>
-
-//---
-// Using windows .NET compiler there is a conflict in the libjpeg with INT32
-// in the file jmorecfg.h.  Defining XMD_H fixes this.
-//---
-#if defined(__BORLANDC__)
-#include <iostream>
-using std::size_t;
-#include <stdlib.h>
-#include <stdio.h>
-#endif
-extern "C"
-{
-#if defined(_MSC_VER) || defined(__MINGW32__) || defined(__BORLANDC__)
-#  ifndef XMD_H
-#    define XMD_H
-#  endif
-#endif
-#include <jpeglib.h>
-#include <setjmp.h>
-}
 
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/imaging/ossimAppFixedTileCache.h>
@@ -156,6 +133,18 @@ public:
     */
    bool open(const ossimFilename& jpeg_file);
 
+   /**
+    * @brief Gets a property for matching name.
+    * @param name The name of the property to get.
+    * @return Returns property matching "name".
+    */
+   virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
+   
+   /**
+    * @brief Gets a list of property names available.
+    * @param propertyNames The list to push back names to.
+    */
+   virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
 protected:
 	class PrivateData;
    /**
@@ -189,9 +178,6 @@ protected:
    ossimIpt                     theCacheSize;
 
    PrivateData*                 thePrivateData;
-
-   struct jpeg_decompress_struct theCinfo;
-   struct jpeg_error_mgr         theJerr;
 
    ossimAppFixedTileCache::ossimAppFixedCacheId theCacheId;
 
