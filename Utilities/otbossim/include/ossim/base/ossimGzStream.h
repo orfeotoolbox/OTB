@@ -19,7 +19,7 @@
 //
 // File          : gzstream.h
 // Revision      : $Revision: 13050 $
-// Revision_date : $Date: 2008-06-19 20:07:35 +0200 (Thu, 19 Jun 2008) $
+// Revision_date : $Date: 2008-06-20 02:07:35 +0800 (Fri, 20 Jun 2008) $
 // Author(s)     : Deepak Bandyopadhyay, Lutz Kettner
 // 
 // Standard streambuf implementation following Nicolai Josuttis, "The 
@@ -68,7 +68,7 @@ public:
 /*                              std::ios_base::out); */
    
 private:
-   struct PrivateData;
+	struct PrivateData;
    int flush_buffer();
 
    static const int bufferSize = 303; // 47+256 size of data buff

@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*********************************************************************
-// $Id: ossimDynamicLibrary.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimDynamicLibrary.cpp 13616 2008-09-29 15:32:12Z dburken $
 #include <ossim/plugin/ossimDynamicLibrary.h>
 #include <ossim/plugin/ossimSharedObjectBridge.h>
 #include <ossim/base/ossimTrace.h>
@@ -43,14 +43,12 @@ bool ossimDynamicLibrary::load()
 bool ossimDynamicLibrary::load(const ossimString& name)
 {
    ossimFilename libraryName = name;
-#if OSSIM_DYNAMIC_ENABLED
 #  if defined(__WIN32__) || defined(_WIN32)
    libraryName.convertForwardToBackSlashes();
    theLibrary = LoadLibrary(libraryName.c_str());
-#  elif HAVE_DLFCN_H
+#  else 
    libraryName.convertBackToForwardSlashes();
    theLibrary = dlopen(libraryName.c_str(), RTLD_LAZY);
-#  endif
 #endif
 
    if (isLoaded())
@@ -74,10 +72,8 @@ bool ossimDynamicLibrary::load(const ossimString& name)
             << "ossimDynamicLibrary::load DEBUG:"
             << "\nFailed to load library:  " << name
             << std::endl;
-#if OSSIM_DYNAMIC_ENABLED
-#  if HAVE_DLFCN_H
+#  if !defined(__WIN32__) && !defined(_WIN32)
          ossimNotify(ossimNotifyLevel_DEBUG) << dlerror() << std::endl;
-#  endif
 #endif
       }
       
@@ -90,12 +86,11 @@ void ossimDynamicLibrary::unload()
 {
    if(isLoaded())
    {
-#if OSSIM_DYNAMIC_ENABLED
-#  if defined(__WIN32__) || defined(_WIN32)
+#if defined(__WIN32__) || defined(_WIN32)
       FreeLibrary(theLibrary);
-#  elif HAVE_DLFCN_H
+// #else HAVE_DLFCN_H
+#else
       dlclose(theLibrary);
-#  endif
 #endif
       theLibrary = NULL;
    }
@@ -105,12 +100,10 @@ void *ossimDynamicLibrary::getSymbol(const ossimString& name) const
 {
    if(isLoaded())
    {
-#if OSSIM_DYNAMIC_ENABLED
-#  if defined(__WIN32__) || defined(_WIN32)
+#if defined(__WIN32__) || defined(_WIN32)
       return (void*)GetProcAddress( (HINSTANCE)theLibrary, name.c_str());
-#  elif HAVE_DLFCN_H
+#else
       return dlsym(theLibrary, name.c_str());
-#  endif
 #endif
    }
 

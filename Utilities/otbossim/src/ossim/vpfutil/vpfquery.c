@@ -187,9 +187,9 @@ static void return_token( char *expr, char *token )
       for (j=0;j<ndelim;j++) {
 	 if (ossim_strncasecmp(expr,delimstr[j],strlen(delimstr[j]))==0) {
 	    if (n>0)
-	       token[i] = (char)NULL;
+	       token[i] = '\0';
 	    else
-	       token[strlen(delimstr[j])] = (char)NULL;
+	       token[strlen(delimstr[j])] = '\0';
 	    found = 1;
 	    break;
 	 }
@@ -253,7 +253,7 @@ static char *get_token( char *expression,
 
    *token_type = (int)NULL;
 
-   if (*expression == (char)NULL) {
+   if (*expression == '\0') {
       *token_type = FINISHED;
       *token_value = (int)NULL;
       return expression;
@@ -281,9 +281,9 @@ static char *get_token( char *expression,
    return_token( expression, token );
    expression += strlen(token);
 
-   if (*token == (char)NULL) {
+   if (*token == '\0') {
       *token_type = FINISHED;
-      *expression = (char)NULL;
+      *expression = '\0';
       return expression;
    }
 
@@ -313,7 +313,7 @@ static char *get_token( char *expression,
 	 token[i] = *expression;
 	 i++;
 	 expression++;
-	 if (*expression == (char)NULL) {
+	 if (*expression == '\0') {
 	    *token_type = ERROR;
 	    *token_value = ERROR;
 	    return expression;
@@ -458,7 +458,7 @@ static linked_list_type parse_expression( char *expression, vpf_table_type table
 	 expression = get_token( expression, token, &token_type,
 				 &token_value );
       } else if (token_type == FINISHED) {
-	 expr.join = (char)NULL;
+	 expr.join = '\0';
 	 ll_insert( &expr, sizeof(expr), pos );
       } else {
 	 display_message("Expression syntax error");

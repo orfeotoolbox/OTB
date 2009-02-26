@@ -76,6 +76,7 @@ public:
    static const ossimString IDATIM_KW;
    static const ossimString TGTID_KW;
    static const ossimString IID2_KW;
+   static const ossimString ITITLE_KW; // also IID2 in 2.1 spec and ITITLE in 2.0 spec
    static const ossimString ISCLAS_KW;
    static const ossimString ENCRYP_KW;
    static const ossimString ISORCE_KW;

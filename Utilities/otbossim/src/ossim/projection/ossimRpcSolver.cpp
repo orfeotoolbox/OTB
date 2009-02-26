@@ -10,7 +10,7 @@
 // AUTHOR: Garrett Potts
 //
 //*****************************************************************************
-//  $Id: ossimRpcSolver.cpp 13010 2008-06-08 21:12:45Z dburken $
+//  $Id: ossimRpcSolver.cpp 13559 2008-09-10 11:16:12Z gpotts $
 
 #include <cstdlib>
 #include <ctime>
@@ -367,7 +367,7 @@ void ossimRpcSolver::solveCoefficients(const std::vector<ossimDpt>& imagePoints,
       }
       else
       {
-         z = (z - theGroundOffset.height())/theHeightScale;
+         z = (z - theGroundOffset.height()/theHeightScale);
       }
        ossim_float64 imageX = ((eval(theXNumCoeffs, x, y, z)/
                                 eval(theXDenCoeffs, x, y, z))*theImageScale.x) + theImageOffset.x;

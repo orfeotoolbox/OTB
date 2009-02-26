@@ -9,7 +9,7 @@
 // Base class for all map projections.
 // 
 //*******************************************************************
-//  $Id: ossimMapProjection.h 12517 2008-02-28 15:21:44Z dburken $
+//  $Id: ossimMapProjection.h 13823 2008-10-31 17:21:22Z dburken $
 
 #ifndef ossimMapProjection_HEADER
 #define ossimMapProjection_HEADER
@@ -169,6 +169,8 @@ public:
    
    virtual void setMetersPerPixel(const ossimDpt& gsd);
    virtual void setDecimalDegreesPerPixel(const ossimDpt& gsd);
+   virtual void setUlTiePoints(const ossimGpt& gpt);
+   virtual void setUlTiePoints(const ossimDpt& eastingNorthing);
    virtual void setUlEastingNorthing(const  ossimDpt& ulEastingNorthing);
    virtual void setUlGpt(const  ossimGpt& ulGpt);
    virtual void assign( const  ossimProjection &aProjection);
@@ -259,6 +261,7 @@ public:
     * new tie point: -90.3246 42.0298
     */
    void snapTiePointTo(ossim_float64 multiple, ossimUnitType unitType);
+   void snapTiePointToOrigin();
                       
    void setElevationLookupFlag(bool flag);
    bool getElevationLookupFlag()const;
@@ -290,7 +293,7 @@ protected:
     *
     * @return true if match, false if not.
     */
-   bool verifyPcsCodeMatches();
+   bool verifyPcsCodeMatches() const;
    
    ossimEllipsoid   theEllipsoid;
    ossimGpt         theOrigin;

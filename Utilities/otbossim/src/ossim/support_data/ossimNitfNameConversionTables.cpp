@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimNitfNameConversionTables.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimNitfNameConversionTables.cpp 13219 2008-07-23 19:27:49Z dburken $
 
 #include <cstddef>
 #include <ossim/support_data/ossimNitfNameConversionTables.h>
@@ -16,14 +16,14 @@
 
 struct ossimNitfMapProjectionCodeToOssimName
 {
-   char* nitfProjCode; // nitf code name
-   char* projectionName; // ossim projection name
+   const char* nitfProjCode; // nitf code name
+   const char* projectionName; // ossim projection name
 };
 
 struct ossimNitfMapProjectionCodeToNitfName
 {
-   char* nitfProjCode; // nitf code name
-   char* projectionName; // ossim projection name
+   const char* nitfProjCode; // nitf code name
+   const char* projectionName; // ossim projection name
 };
 
 static const ossimNitfMapProjectionCodeToOssimName mapProjectiontable[]=
@@ -51,7 +51,7 @@ static const ossimNitfMapProjectionCodeToOssimName mapProjectiontable[]=
    {"TC", "ossimTransMercatorProjection"},
    {"TX", "ossimTransCylEquAreaProjection"},
    {"VA", "ossimVanDerGrintenProjection"},
-   {(char*)NULL, (char*)NULL}
+   { 0, 0 }
 };
 
 static const ossimNitfMapProjectionCodeToNitfName nitfMapProjectiontable[]=
@@ -91,7 +91,7 @@ static const ossimNitfMapProjectionCodeToNitfName nitfMapProjectiontable[]=
    {"TX", "Transverse Cylindrical Equal Area"},
    {"VA", "Van der Grinten"},
    {"VX", "General Vertical NearSide Perspective"},
-   {(char*)NULL, (char*)NULL}
+   { 0, 0 }
 };
 
 ossimNitfNameConversionTables::ossimNitfNameConversionTables()

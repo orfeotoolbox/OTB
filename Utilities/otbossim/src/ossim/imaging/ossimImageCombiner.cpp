@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageCombiner.cpp 11411 2007-07-27 13:53:51Z dburken $
+// $Id: ossimImageCombiner.cpp 13312 2008-07-27 01:26:52Z gpotts $
 #include <ossim/imaging/ossimImageCombiner.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimIrect.h>
@@ -85,7 +85,7 @@ void ossimImageCombiner::getDecimationFactor(ossim_uint32 resLevel,
 {
    if(getInput(0))
    {
-      ossimImageSourceInterface* temp = PTR_CAST(ossimImageSourceInterface, getInput(0));
+      ossimImageSource* temp = PTR_CAST(ossimImageSource, getInput(0));
       if(temp)
       {
          temp->getDecimationFactor(resLevel, result);
@@ -102,7 +102,7 @@ void ossimImageCombiner::getDecimationFactors(vector<ossimDpt>& decimations) con
 {
    if(getInput(0))
    {
-      ossimImageSourceInterface* temp = PTR_CAST(ossimImageSourceInterface, getInput(0));
+      ossimImageSource* temp = PTR_CAST(ossimImageSource, getInput(0));
       if(temp)
       {
          temp->getDecimationFactors(decimations);
@@ -118,7 +118,7 @@ ossim_uint32 ossimImageCombiner::getNumberOfDecimationLevels()const
 {
    if(getInput(0))
    {
-      ossimImageSourceInterface* temp = PTR_CAST(ossimImageSourceInterface, getInput(0));
+      ossimImageSource* temp = PTR_CAST(ossimImageSource, getInput(0));
       if(temp)
       {
          return temp->getNumberOfDecimationLevels();
@@ -142,10 +142,10 @@ ossimIrect ossimImageCombiner::getBoundingRect(ossim_uint32 resLevel)const
    result.makeNan();
    
    ossim_uint32 inputIndex = 0;
-   ossimImageSourceInterface* interface;
+   ossimImageSource* interface;
    for(inputIndex = 0;inputIndex < getNumberOfInputs(); ++inputIndex)
    {
-      interface = PTR_CAST(ossimImageSourceInterface, getInput(inputIndex));
+      interface = PTR_CAST(ossimImageSource, getInput(inputIndex));
       if(interface)
       {
          ossimIrect rect  = theFullResBounds[inputIndex];
@@ -181,7 +181,7 @@ ossimScalarType ossimImageCombiner::getOutputScalarType() const
 {
    if(getInput(theInputToPassThrough))
    {
-      ossimImageSourceInterface* temp = PTR_CAST(ossimImageSourceInterface, getInput(theInputToPassThrough));
+      ossimImageSource* temp = PTR_CAST(ossimImageSource, getInput(theInputToPassThrough));
       if(temp)
       {
          return temp->getOutputScalarType();
@@ -195,7 +195,7 @@ ossim_uint32 ossimImageCombiner::getTileWidth()const
 {
    if(getInput(theInputToPassThrough))
    {
-      ossimImageSourceInterface* temp = PTR_CAST(ossimImageSourceInterface, getInput(theInputToPassThrough));
+      ossimImageSource* temp = PTR_CAST(ossimImageSource, getInput(theInputToPassThrough));
       if(temp)
       {
          return temp->getTileWidth();
@@ -209,7 +209,7 @@ ossim_uint32 ossimImageCombiner::getTileHeight()const
 {
    if(getInput(theInputToPassThrough))
    {
-      ossimImageSourceInterface* temp = PTR_CAST(ossimImageSourceInterface, getInput(theInputToPassThrough));
+      ossimImageSource* temp = PTR_CAST(ossimImageSource, getInput(theInputToPassThrough));
       if(temp)
       {
          return temp->getTileHeight();
@@ -223,7 +223,7 @@ double ossimImageCombiner::getNullPixelValue(ossim_uint32 band)const
 {
    if(getInput(theInputToPassThrough))
    {
-      ossimImageSourceInterface* temp = PTR_CAST(ossimImageSourceInterface, getInput(theInputToPassThrough));
+      ossimImageSource* temp = PTR_CAST(ossimImageSource, getInput(theInputToPassThrough));
       if(temp)
       {
          ossim_uint32 bands = temp->getNumberOfOutputBands();
@@ -257,7 +257,7 @@ double ossimImageCombiner::getMinPixelValue(ossim_uint32 band)const
    
    for(ossim_uint32 index = 0; index < getNumberOfInputs();++index)
    {
-      ossimImageSourceInterface* input = PTR_CAST(ossimImageSourceInterface, getInput(index));
+      ossimImageSource* input = PTR_CAST(ossimImageSource, getInput(index));
       if(input)
       {
          ossim_uint32 bands = input->getNumberOfOutputBands();
@@ -303,7 +303,7 @@ double ossimImageCombiner::getMaxPixelValue(ossim_uint32 band)const
    
    for(ossim_uint32 idx = 0; idx < getNumberOfInputs();++idx)
    {
-      ossimImageSourceInterface* input = PTR_CAST(ossimImageSourceInterface, getInput(idx));
+      ossimImageSource* input = PTR_CAST(ossimImageSource, getInput(idx));
       if(input)
       {
          ossim_uint32 bands = input->getNumberOfOutputBands();
@@ -352,7 +352,7 @@ void ossimImageCombiner::initialize()
    {
       for(ossim_uint32 idx = 0; idx < size; ++idx)
       {
-         ossimImageSourceInterface* temp = PTR_CAST(ossimImageSourceInterface, getInput(idx));
+         ossimImageSource* temp = PTR_CAST(ossimImageSource, getInput(idx));
          if(temp)
          {
             ossim_uint32 numberOfBands = temp->getNumberOfOutputBands();
@@ -454,7 +454,7 @@ ossimRefPtr<ossimImageData> ossimImageCombiner::getNextTile(ossim_uint32& return
       precomputeBounds();
    }
    
-   ossimImageSourceInterface* temp = 0;
+   ossimImageSource* temp = 0;
    ossimRefPtr<ossimImageData> result = 0;
    ossimDataObjectStatus status = OSSIM_NULL;
 
@@ -467,7 +467,7 @@ ossimRefPtr<ossimImageData> ossimImageCombiner::getNextTile(ossim_uint32& return
       if(!rect.hasNans())
       {
          rect = rect * scalar;
-         temp = PTR_CAST(ossimImageSourceInterface,
+         temp = PTR_CAST(ossimImageSource,
                          getInput(theCurrentIndex));
          
          if(rect.intersects(tileRect)&&temp)
@@ -655,7 +655,7 @@ bool ossimImageCombiner::getImageGeometry(ossimKeywordlist& kwl,
 {
    if(getInput(0))
    {
-      ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface,
+      ossimImageSource* inter = PTR_CAST(ossimImageSource,
                                                   getInput(0));
       if(inter)
       {
@@ -675,7 +675,7 @@ bool ossimImageCombiner::saveState(ossimKeywordlist& kwl,
 bool ossimImageCombiner::canConnectMyInputTo(ossim_int32 inputIndex,
                                              const ossimConnectableObject* object)const
 {
-   return (object&& PTR_CAST(ossimImageSourceInterface, object));
+   return (object&& PTR_CAST(ossimImageSource, object));
 }
 
 void ossimImageCombiner::precomputeBounds()const
@@ -685,14 +685,14 @@ void ossimImageCombiner::precomputeBounds()const
 
    if(inputSize)
    {
-      ossimImageSourceInterface* tempInterface=0;
+      ossimImageSource* tempInterface=0;
       if(theFullResBounds.size() != inputSize)
       {
          theFullResBounds.resize(inputSize);
       }
       for(ossim_uint32 inputIndex = 0; inputIndex < inputSize; ++inputIndex)
       {
-         tempInterface = PTR_CAST(ossimImageSourceInterface, getInput(inputIndex));
+         tempInterface = PTR_CAST(ossimImageSource, getInput(inputIndex));
          if(tempInterface)
          {
             theFullResBounds[inputIndex] = tempInterface->getBoundingRect();

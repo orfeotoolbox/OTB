@@ -8,7 +8,7 @@
 //
 //*************************************************************************
 #include <ossim/imaging/ossimImageStatisticsSource.h>
-#include <ossim/imaging/ossimImageSourceInterface.h>
+#include <ossim/imaging/ossimImageSource.h>
 #include <ossim/imaging/ossimImageSourceSequencer.h>
 
 
@@ -28,7 +28,7 @@ ossimImageStatisticsSource::~ossimImageStatisticsSource()
 
 void ossimImageStatisticsSource::computeStatistics()
 {
-   ossimImageSourceInterface* anInterface = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* anInterface = PTR_CAST(ossimImageSource,
                                                      getInput());
 
    if(anInterface&&isSourceEnabled())
@@ -77,7 +77,7 @@ void ossimImageStatisticsSource::computeStatistics()
 bool ossimImageStatisticsSource::canConnectMyInputTo(ossim_int32 inputIndex,
                                                      const ossimConnectableObject* object)const
 {
-   return (PTR_CAST(ossimImageSourceInterface, object)&&(inputIndex < 1));
+   return (PTR_CAST(ossimImageSource, object)&&(inputIndex < 1));
 }
 
 template <class T>

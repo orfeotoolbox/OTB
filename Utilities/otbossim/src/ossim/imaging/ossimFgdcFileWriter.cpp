@@ -11,7 +11,7 @@
 // Committe (FGDC) format.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimFgdcFileWriter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimFgdcFileWriter.cpp 13312 2008-07-27 01:26:52Z gpotts $
 
 #include <fstream>
 using namespace std;
@@ -21,7 +21,7 @@ using namespace std;
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimXmlNode.h>
-#include <ossim/imaging/ossimImageSourceInterface.h>
+#include <ossim/imaging/ossimImageSource.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimMapProjectionInfo.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -832,8 +832,11 @@ bool ossimFgdcFileWriter::writeTemplate(const ossimFilename& file) const
 
    os.close();
 
-   ossimNotify(ossimNotifyLevel_NOTICE)
+	if(traceDebug())
+	{
+		ossimNotify(ossimNotifyLevel_NOTICE)
       << "Wrote file:  " << file.c_str() << endl;
+	}
    
    return true;
 }

@@ -4,13 +4,22 @@
 #include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimUnitTypeLut.h>
-#include <OpenThreads/ScopedLock>
+#include <ossim/imaging/ossimImageHandlerRegistry.h>
+#include <ossim/imaging/ossimImageHandler.h>
+#include <ossim/imaging/ossimImageSource.h>
+#include <ossim/projection/ossimProjectionFactoryRegistry.h>
+#include <ossim/projection/ossimMapProjection.h>
+#include <ossim/projection/ossimImageViewTransform.h>
+#include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimDpt.h>
+#include <ossim/base/ossimGpt.h>
 
 RTTI_DEF1(ossimGeneralRasterElevHandler, "ossimGeneralRasterElevHandler", ossimElevCellHandler);
 
 ossimGeneralRasterElevHandler::ossimGeneralRasterElevHandler(const ossimFilename& file)
    :ossimElevCellHandler(file.c_str())
 {
+
    if(file != "")
    {
       if(!setFilename(file))
@@ -29,6 +38,7 @@ ossimGeneralRasterElevHandler::ossimGeneralRasterElevHandler(const ossimGeneralR
 
 ossimGeneralRasterElevHandler::ossimGeneralRasterElevHandler(const ossimGeneralRasterElevHandler::GeneralRasterInfo& generalRasterInfo)
 {
+
    close();
    theGeneralRasterInfo = generalRasterInfo;
    if(!open())
@@ -55,7 +65,6 @@ ossimGeneralRasterElevHandler::~ossimGeneralRasterElevHandler()
 
 double ossimGeneralRasterElevHandler::getHeightAboveMSL(const ossimGpt& gpt)
 {
-	OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    if(!theInputStream.valid())
    {
       return ossim::nan();
@@ -132,7 +141,7 @@ double ossimGeneralRasterElevHandler::getHeightAboveMSL(const ossimGpt& gpt)
 
 ossimIpt ossimGeneralRasterElevHandler::getSizeOfElevCell() const
 {
-   return ossimIpt(theGeneralRasterInfo.theNumberOfSamples, theGeneralRasterInfo.theNumberOfLines);
+   return ossimIpt(theGeneralRasterInfo.theWidth, theGeneralRasterInfo.theHeight);
 }
    
 double ossimGeneralRasterElevHandler::getPostValue(const ossimIpt& gridPt) const
@@ -164,7 +173,6 @@ void ossimGeneralRasterElevHandler::close()
 
 bool ossimGeneralRasterElevHandler::setFilename(const ossimFilename& file)
 {
-	OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    if(file.trim() == "")
    {
       return false;
@@ -172,11 +180,8 @@ bool ossimGeneralRasterElevHandler::setFilename(const ossimFilename& file)
    ossimFilename hdrFile  = file;
    ossimFilename geomFile = file;
    theGeneralRasterInfo.theFilename = file;
-   theGeneralRasterInfo.thePostSpacing.makeNan();
-   theGeneralRasterInfo.theUlGpt.makeNan();
-   theGeneralRasterInfo.theLrGpt.makeNan();
-   theGeneralRasterInfo.theNumberOfSamples = 0;
-   theGeneralRasterInfo.theNumberOfLines = 0;
+   theGeneralRasterInfo.theWidth = 0;
+   theGeneralRasterInfo.theHeight = 0;
    theNullHeightValue = ossim::nan();
    hdrFile = hdrFile.setExtension("omd");
    geomFile = geomFile.setExtension("geom");
@@ -210,101 +215,42 @@ bool ossimGeneralRasterElevHandler::setFilename(const ossimFilename& file)
    kwl.clear();
    if(kwl.addFile(geomFile))
    {
-      theGeneralRasterInfo.theDatum = 0;
-      const char* datumCode = kwl.find(ossimKeywordNames::DATUM_KW);
-      const char* dlat      = kwl.find(ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LAT);
-      const char* dlon      = kwl.find(ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LON);
-      const char* tieLat    = kwl.find(ossimKeywordNames::TIE_POINT_LAT_KW);
-      const char* tieLon    = kwl.find(ossimKeywordNames::TIE_POINT_LON_KW);
-
-      if(datumCode)
-      {
-         theGeneralRasterInfo.theDatum = ossimDatumFactory::instance()->create(datumCode);
-      }
-      if(!theGeneralRasterInfo.theDatum)
-      {
-         theGeneralRasterInfo.theDatum = ossimDatumFactory::instance()->wgs84();
-      }
-      if(!dlat||!dlon)
-      {
-         const char* scale     = kwl.find(ossimKeywordNames::PIXEL_SCALE_XY_KW);
-         const char* scaleUnit = kwl.find(ossimKeywordNames::PIXEL_SCALE_UNITS_KW);
-         if(scale&&scaleUnit)
-         {
-            if(ossimString(scaleUnit).trim() == ossimUnitTypeLut::instance()->getEntryString(OSSIM_DEGREES))
-            {
-               theGeneralRasterInfo.thePostSpacing.toPoint(scale);
-            }
-            else
-            {
-               ossimNotify(ossimNotifyLevel_WARN) << "ossimGeneralRasterElevHandler::initializeInfo WARNING: Decimal degrees per pixel for lat and lon are not specified" << std::endl;
-               return false;
-            }
-         }
-         else
-         {
-            ossimNotify(ossimNotifyLevel_WARN) << "ossimGeneralRasterElevHandler::initializeInfo WARNING: Decimal degrees per pixel for lat and lon are not specified" << std::endl;
-            return false;
-         }
-
-      }
-      else
-      {
-         theGeneralRasterInfo.thePostSpacing.x   = ossimString(dlon).toDouble();
-         theGeneralRasterInfo.thePostSpacing.y   = ossimString(dlat).toDouble();
-      }
-      if(!tieLat||!tieLon)
-      {
-         const char* tie_point_xy = kwl.find(ossimKeywordNames::TIE_POINT_XY_KW);
-         const char* tie_point_units = kwl.find(ossimKeywordNames::TIE_POINT_UNITS_KW);
-         if(tie_point_xy&&(ossimString(tie_point_units).downcase() == "degrees"))
-         {
-            ossimDpt tie;
-            tie.toPoint(tie_point_xy);
-           
-            theGeneralRasterInfo.theUlGpt = ossimGpt(tie.lat+(theGeneralRasterInfo.thePostSpacing.y*.5),
-                                                     tie.lon-(theGeneralRasterInfo.thePostSpacing.x*.5),
-                                                     0.0,
-                                                     theGeneralRasterInfo.theDatum);
-
-         }
-         else
-         {
-            return false;
-         }
-      }
-      else
-      {
-         theGeneralRasterInfo.theUlGpt = ossimGpt(ossimString(tieLat).toDouble(),
-                                                  ossimString(tieLon).toDouble(),
-                                                  0.0,
-                                                  theGeneralRasterInfo.theDatum);
-      }
-      theGeneralRasterInfo.theLrGpt = theGeneralRasterInfo.theUlGpt;
-      theGeneralRasterInfo.theNumberOfSamples = generalInfo.rawSamples();
-      theGeneralRasterInfo.theNumberOfLines   = generalInfo.rawLines();
-      if(theGeneralRasterInfo.theNumberOfLines && theGeneralRasterInfo.theNumberOfSamples)
-      {
-         theGeneralRasterInfo.theLrGpt.latd(theGeneralRasterInfo.theUlGpt.latd() - ((theGeneralRasterInfo.theNumberOfLines)*
-                                                                                    theGeneralRasterInfo.thePostSpacing.y));
-         theGeneralRasterInfo.theLrGpt.lond(theGeneralRasterInfo.theUlGpt.lond() + ((theGeneralRasterInfo.theNumberOfSamples)*
-                                                                                    theGeneralRasterInfo.thePostSpacing.x));
-      }
       theGeneralRasterInfo.theNullHeightValue = generalInfo.getNullPixelValue(0);
-      theGeneralRasterInfo.theBounds = ossimDrect(theGeneralRasterInfo.theUlGpt,
-                                                  theGeneralRasterInfo.theUlGpt,
-                                                  theGeneralRasterInfo.theLrGpt,
-                                                  theGeneralRasterInfo.theLrGpt,
-                                                  OSSIM_RIGHT_HANDED);
-      theGeneralRasterInfo.theByteOrder = generalInfo.getImageDataByteOrder();
-      theGeneralRasterInfo.theScalarType = generalInfo.getScalarType();
+      theGeneralRasterInfo.theImageRect       = generalInfo.imageRect();
+      theGeneralRasterInfo.theUl              = theGeneralRasterInfo.theImageRect.ul();
+      theGeneralRasterInfo.theLr              = theGeneralRasterInfo.theImageRect.lr();
+      theGeneralRasterInfo.theWidth           = theGeneralRasterInfo.theImageRect.width();
+      theGeneralRasterInfo.theHeight          = theGeneralRasterInfo.theImageRect.height();
+      theGeneralRasterInfo.theImageRect       = generalInfo.imageRect();
+      theGeneralRasterInfo.theByteOrder       = generalInfo.getImageDataByteOrder();
+      theGeneralRasterInfo.theScalarType      = generalInfo.getScalarType();
       theGeneralRasterInfo.theBytesPerRawLine = generalInfo.bytesPerRawLine();
-      theMeanSpacing = (theGeneralRasterInfo.thePostSpacing.lat +
-                        theGeneralRasterInfo.thePostSpacing.lon)*ossimGpt().metersPerDegree().x / 2.0;
-      theGroundRect = ossimGrect(theGeneralRasterInfo.theBounds.ul().lat,
-                                 theGeneralRasterInfo.theBounds.ul().lon,
-                                 theGeneralRasterInfo.theBounds.lr().lat,
-                                 theGeneralRasterInfo.theBounds.lr().lon);
+
+	  //add  by simbla
+      theGeneralRasterInfo.theProjection = ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
+      
+      if(!theGeneralRasterInfo.theProjection.valid())
+      {
+         return false;
+      }
+      ossimGpt defaultDatum;
+      ossimGpt ulGpt;
+      ossimGpt urGpt;
+      ossimGpt lrGpt;
+      ossimGpt llGpt;
+      theGeneralRasterInfo.theDatum = defaultDatum.datum();
+      theGeneralRasterInfo.theProjection->lineSampleToWorld(theGeneralRasterInfo.theImageRect.ul(), ulGpt);
+      theGeneralRasterInfo.theProjection->lineSampleToWorld(theGeneralRasterInfo.theImageRect.ur(), urGpt);
+      theGeneralRasterInfo.theProjection->lineSampleToWorld(theGeneralRasterInfo.theImageRect.lr(), lrGpt);
+      theGeneralRasterInfo.theProjection->lineSampleToWorld(theGeneralRasterInfo.theImageRect.ll(), llGpt);
+      
+      ulGpt.changeDatum(theGeneralRasterInfo.theDatum);
+      urGpt.changeDatum(theGeneralRasterInfo.theDatum);
+      lrGpt.changeDatum(theGeneralRasterInfo.theDatum);
+      llGpt.changeDatum(theGeneralRasterInfo.theDatum);
+      theMeanSpacing = theGeneralRasterInfo.theProjection->getMetersPerPixel().y;
+      theGroundRect = ossimGrect(ulGpt, urGpt, lrGpt, llGpt);
+      theGeneralRasterInfo.theWgs84GroundRect = ossimDrect(ulGpt, urGpt, lrGpt, llGpt, OSSIM_RIGHT_HANDED);
       theNullHeightValue = theGeneralRasterInfo.theNullHeightValue;
    }
    else
@@ -313,7 +259,6 @@ bool ossimGeneralRasterElevHandler::setFilename(const ossimFilename& file)
    }
    
    return true;
-   
 }
 
 #if 0
@@ -411,16 +356,26 @@ double ossimGeneralRasterElevHandler::getHeightAboveMSLTemplate(
    ossimEndian endian;
    
    ossimGpt shiftedPoint = gpt;
-   shiftedPoint.changeDatum(info.theUlGpt.datum());
-   if(!info.theBounds.pointWithin(shiftedPoint))
+   shiftedPoint.changeDatum(info.theDatum);
+   if(!info.theWgs84GroundRect.pointWithin(shiftedPoint))
    {
       return ossim::nan();
    }
    
-   double xi = (shiftedPoint.lond() - info.theUlGpt.lond())/info.thePostSpacing.x;
-   double yi = (info.theUlGpt.latd() -
-                shiftedPoint.latd())/info.thePostSpacing.y;
-
+   ossimDpt pt;
+   info.theProjection->worldToLineSample(shiftedPoint,pt);
+   double xi = pt.x;
+   double yi = pt.y;
+   
+   xi -= info.theUl.x;
+   yi -= info.theUl.y;
+   
+  //modifed by simbla  2008 7.17
+   //double xi = (shiftedPoint.lond() - info.theUlGpt.lond())/info.thePostSpacing.x;
+   //double yi = (info.theUlGpt.latd() -
+   //             shiftedPoint.latd())/info.thePostSpacing.y;
+   
+   
    ossim_sint64 x0 = static_cast<ossim_sint64>(xi);
    ossim_sint64 y0 = static_cast<ossim_sint64>(yi);
 
@@ -434,18 +389,19 @@ double ossimGeneralRasterElevHandler::getHeightAboveMSLTemplate(
    double w10 = xt1*yt0;
    double w11 = xt0*yt0;
    
-   if ( xi < 0.0 || yi < 0.0 ||
-        x0 > (info.theNumberOfSamples  - 1.0) ||
-        y0 > (info.theNumberOfLines    - 1.0) )
+   
+   if ( xi < 0 || yi < 0 ||
+        x0 > (info.theWidth  - 1.0) ||
+        y0 > (info.theHeight  - 1.0) )
    {
       return ossim::nan();
    }
 
-   if(x0 == (info.theNumberOfSamples  - 1.0))
+   if(x0 == (info.theWidth  - 1.0))
    {
       --x0;
    }
-   if(y0 == (info.theNumberOfLines  - 1.0))
+   if(y0 == (info.theHeight  - 1.0))
    {
       --y0;
    }
@@ -552,14 +508,14 @@ void ossimGeneralRasterElevHandler::addInfo(const ossimGeneralRasterElevHandler:
 #endif
 ossimDrect ossimGeneralRasterElevHandler::getBoundingRect()const
 {
-   return theGeneralRasterInfo.theBounds;
+   return theGeneralRasterInfo.theWgs84GroundRect;
 }
 
 bool ossimGeneralRasterElevHandler::pointHasCoverage(const ossimGpt& gpt) const
 {
    ossimDpt pt = gpt;
 
-   return theGeneralRasterInfo.theBounds.pointWithin(pt);
+   return theGeneralRasterInfo.theWgs84GroundRect.pointWithin(pt);
 //    BoundingRectListType::const_iterator i = theBoundingRectInfoList.begin();
 //    while (i != theBoundingRectInfoList.end())
 //    {

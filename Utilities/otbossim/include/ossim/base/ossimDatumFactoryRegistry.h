@@ -13,7 +13,6 @@
 #define ossimDatumFactoryRegistry_HEADER
 
 #include <vector>
-#include <list>
 #include <ossim/base/ossimConstants.h> /* for OSSIM_DLL macro */
 #include <OpenThreads/ReadWriteMutex>
 
@@ -57,9 +56,9 @@ public:
     *
     * @param list The list to add to.
     */
-   void getList(std::list<ossimString>& list) const;
+   void getList(std::vector<ossimString>& list) const;
    
-private:
+protected:
 
    /** hidden from use default constructor */
    ossimDatumFactoryRegistry();
@@ -72,7 +71,7 @@ private:
       const ossimDatumFactoryRegistry& rhs);
 
    /** Single static instance of this class. */
-   static ossimDatumFactoryRegistry* theInstance;
+   //static ossimDatumFactoryRegistry* theInstance;
 
    mutable OpenThreads::ReadWriteMutex theFactoryListMutex;
    std::vector<ossimDatumFactoryInterface*> theFactoryList;

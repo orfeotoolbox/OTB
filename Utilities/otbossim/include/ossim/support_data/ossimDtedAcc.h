@@ -8,7 +8,7 @@
 //               (ACC) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedAcc.h 10262 2007-01-14 18:58:38Z dburken $
+// $Id: ossimDtedAcc.h 13571 2008-09-12 14:59:59Z gpotts $
 
 #ifndef ossimDtedAcc_H
 #define ossimDtedAcc_H
@@ -70,6 +70,7 @@ public:
                                               const ossimDtedAcc& acc);
    void parse(std::istream& in);
 
+   void clearFields();
 private:
    // Do not allow...
    ossimDtedAcc(const ossimDtedAcc& source);

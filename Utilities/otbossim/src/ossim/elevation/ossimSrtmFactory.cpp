@@ -10,7 +10,7 @@
 // ossimSrtmElevSource given a ground point.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmFactory.cpp 12982 2008-06-04 01:12:46Z dburken $
+// $Id: ossimSrtmFactory.cpp 13282 2008-07-25 15:06:00Z dburken $
 
 #include <cstdlib> /* abs() */
 #include <iostream>
@@ -26,7 +26,6 @@
 #include <ossim/base/ossimDirectory.h>
 #include <ossim/support_data/ossimSrtmFilename.h>
 #include <ossim/support_data/ossimSrtmSupportData.h>
-#include <ossim/elevation/ossimElevationShapeIdx.h>
 
 static ossimTrace traceDebug ("ossimSrtmFactory:debug");
 
@@ -167,62 +166,4 @@ ossimElevSource* ossimSrtmFactory::getNewElevSource(const ossimGpt& gpt) const
       }
    }
    return srtmPtr;
-}
-
-void ossimSrtmFactory::createIndex()
-{
-   ossimDirectory dir;
-
-   if(dir.open(theDirectory))
-   {
-      ossimFilename f;
-      if(dir.getFirst(f, ossimDirectory::OSSIM_DIR_FILES))
-      {
-         ossimRefPtr<ossimElevationShapeIdx> shpIdx = 0;
-         try
-         {
-            shpIdx = new ossimElevationShapeIdx(theDirectory, true);
-         }
-         catch(...)
-         {
-            shpIdx = 0;
-            return;
-         }
-         
-         do
-         {
-            if(f.contains(".hgt"))
-            {
-               // check and remove the gz extension if present
-               //
-               ossimFilename file = f.file();
-               if(f.ext() == "gz")
-               {
-                  f = f.setExtension("");
-               }
-               ossimSrtmFilename srtmFile;
-               if(srtmFile.setFilename(f.file()))
-               {
-                  ossimSrtmSupportData srtmSupport;
-
-                  if(srtmSupport.setFilename(f, true))
-                  {
-                     shpIdx->add(f,
-                                 srtmFile.ul().lond(),
-                                 srtmFile.ll().latd(),
-                                 srtmSupport.getMinPixelValue(),
-                                 srtmFile.ur().lond(),
-                                 srtmFile.ur().latd(),
-                                 srtmSupport.getMaxPixelValue());
-                  }
-               }
-            }
-         }while(dir.getNext(f));
-         shpIdx->buildQuadTree();
-      }
-   }
-   else
-   {
-      ossimNotify(ossimNotifyLevel_WARN) << "ossimSrtmFactory::createIndex(): Directory can't be opened for indexing." << std::endl;
-   }
 }

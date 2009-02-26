@@ -6,11 +6,12 @@
 // Description: This class extends the stl's string class.
 // 
 //********************************************************************
-// $Id: ossimString.cpp 13141 2008-07-06 20:19:03Z dburken $
+// $Id: ossimString.cpp 13761 2008-10-22 19:28:35Z gpotts $
 
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <stdlib.h>
 #include <algorithm>
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimString.h>
@@ -21,7 +22,7 @@
 static ossimTrace traceDebug("ossimString:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static char OSSIM_ID[] = "$Id: ossimString.cpp 13141 2008-07-06 20:19:03Z dburken $";
+static char OSSIM_ID[] = "$Id: ossimString.cpp 13761 2008-10-22 19:28:35Z gpotts $";
 #endif
 
 ossimString ossimString::upcase(const ossimString& aString)
@@ -82,7 +83,7 @@ char* ossimString::stringDup()const
 
    if(length() == 0)
    {
-      result = new char;
+      result = new char[1];
       result[0] = '\0';
    }
    else
@@ -443,169 +444,141 @@ bool ossimString::toBool(const ossimString& aString)
 int ossimString::toInt()const
 {
    int i = 0;
-   ossimString os = c_str();
-   if (!os.empty())
+   if (!empty())
    {
-      std::istringstream is(os);
+      std::istringstream is(*this);
       is >> i;
+      if(is.fail())
+      {
+         i = 0;
+      }
    }
    return i;
 }
 
 int ossimString::toInt(const ossimString& aString)
 {
-   int i = 0;
-   ossimString os = aString;
-   if (!os.empty())
-   {
-      std::istringstream is(os);
-      is >> i;
-   }
-   return i;
+   return aString.toInt();
 }
 
 ossim_int32 ossimString::toInt32()const
 {
    ossim_int32 i = 0;
-   ossimString os = c_str();
-   if (!os.empty())
+   if (!empty())
    {
-      std::istringstream is(os);
+      std::istringstream is(*this);
       is >> i;
+      if(is.fail())
+      {
+         i = 0;
+      }
    }
    return i;
 }
 
 ossim_int32 ossimString::toInt32(const ossimString& aString)
 {
-   ossim_int32 i = 0;
-   ossimString os = aString;
-   if (!os.empty())
-   {
-      std::istringstream is(os);
-      is >> i;
-   }
-   return i;
+   return aString.toInt32();
 }
 
 ossim_uint32 ossimString::toUInt32()const
 {
    ossim_uint32 i = 0;
-   ossimString os = c_str();
-   if (!os.empty())
+   if (!empty())
    {
-      std::istringstream is(os);
+      std::istringstream is(*this);
       is >> i;
+      if(is.fail())
+      {
+         i = 0;
+      }
    }
    return i;
 }
 
 ossim_uint32 ossimString::toUInt32(const ossimString& aString)
 {
-   ossim_uint32 i = 0;
-   ossimString os = aString;
-   if (!os.empty())
-   {
-      std::istringstream is(os);
-      is >> i;
-   }
-   return i;   
+   return aString.toUInt32();
 }
 
 ossim_int64 ossimString::toInt64()const
 {
    ossim_int64 i = 0;
-   ossimString os = c_str();
-   if (!os.empty())
+   if (!empty())
    {
-      std::istringstream is(os);
+      std::istringstream is(*this);
       is >> i;
+      if(is.fail())
+      {
+         i = 0;
+      }
    }
    return i;
 }
 
 ossim_int64 ossimString::toInt64(const ossimString& aString)
 {
-   ossim_int64 i = 0;
-   ossimString os = aString;
-   if (!os.empty())
-   {
-      std::istringstream is(os);
-      is >> i;
-   }
-   return i;
+   return aString.toInt64();
 }
 
 ossim_uint64 ossimString::toUInt64()const
 {
    ossim_uint64 i = 0;
-   ossimString os = c_str();
-   if (!os.empty())
+   if (!empty())
    {
-      std::istringstream is(os);
+      std::istringstream is(*this);
       is >> i;
+      if(is.fail())
+      {
+         i = 0;
+      }
    }
    return i;
 }
 
 ossim_uint64 ossimString::toUInt64(const ossimString& aString)
 {
-   ossim_int64 i = 0;
-   ossimString os = aString;
-   if (!os.empty())
-   {
-      std::istringstream is(os);
-      is >> i;
-   }
-   return i;
+   return aString.toUInt64();
 }
 
 long ossimString::toLong()const
 {
-   long i = 0;
-   ossimString os = c_str();
-   if (!os.empty())
+  long i = 0;
+   if (!empty())
    {
-      std::istringstream is(os);
+      std::istringstream is(*this);
       is >> i;
+      if(is.fail())
+      {
+         i = 0;
+      }
    }
    return i;
 }
 
 long ossimString::toLong(const ossimString& aString)
 {
-   long i = 0;
-   ossimString os = aString;
-   if (!os.empty())
-   {
-      std::istringstream is(os);
-      is >> i;
-   }
-   return i;
+   return aString.toLong();
 }
 
 unsigned long  ossimString::toULong()const
 {
    unsigned long i = 0;
-   ossimString os = c_str();
-   if (!os.empty())
+   if (!empty())
    {
-      std::istringstream is(os);
+      std::istringstream is(*this);
       is >> i;
+      if(is.fail())
+      {
+         i = 0;
+      }
    }
    return i;
 }
 
 unsigned long ossimString::toULong(const ossimString& aString)
 {
-   unsigned long i = 0;
-   ossimString os = aString;
-   if (!os.empty())
-   {
-      std::istringstream is(os);
-      is >> i;
-   }
-   return i;
+   return aString.toULong();
 }
 
 ossim_float32 ossimString::toFloat32()const
@@ -619,47 +592,26 @@ ossim_float32 ossimString::toFloat32()const
    // There is a possibility that this isn't a thread safe implementation
    // in mingw stl.  Let's resort back to atof for now
 
+#if 1
+   d = (ossim_float32)atof(c_str());
+#endif
 #if 0
-   ossimString os = c_str();
-   if (!os.empty())
+   if (!empty())
    {
-      std::istringstream is(os);
+      std::istringstream is(*this);
       is >> d;
+      if(is.fail())
+      {
+         d = 0.0;
+      }
    }
 #endif
-   if(!this->empty())
-   {
-      d = (ossim_float32)atof(this->c_str());
-   }
-
    return d;
 }
 
 ossim_float32 ossimString::toFloat32(const ossimString& aString)
 {
-   if(aString.contains("nan"))
-   {
-      return ossim::nan();
-   }
-   ossim_float32 d = 0.0;
-   // this part is core dumping under mingw in ossimPlanet.
-   // There is a possibility that this isn't a thread safe implementation
-   // in mingw stl.  Let's resort back to atof for now
-
-#if 0
-   ossimString os =aString.c_str();
-   if (!os.empty())
-   {
-      std::istringstream is(os);
-      is >> d;
-   }
-#endif
-   if(!aString.empty())
-   {
-      d = (ossim_float32)atof(aString.c_str());
-   }
-
-   return d;
+   return aString.toFloat32();
 }
 
 ossim_float64 ossimString::toFloat64()const
@@ -673,46 +625,26 @@ ossim_float64 ossimString::toFloat64()const
    // There is a possibility that this isn't a thread safe implementation
    // in mingw stl.  Let's resort back to atof for now
 
+#if 1
+   d = (ossim_float64)atof(c_str());
+#endif
 #if 0
-   ossimString os = ths->c_str();
-   if (!os.empty())
+   if (!empty())
    {
-      std::istringstream is(os);
+      std::istringstream is(*this);
       is >> d;
+      if(is.fail())
+      {
+         d = 0.0;
+      }
    }
 #endif
-   if(!this->empty())
-   {
-      d = (ossim_float64)atof(this->c_str());
-   }
-   
    return d;
 }
 
 ossim_float64 ossimString::toFloat64(const ossimString& aString)
 {
-   if(aString.contains("nan"))
-   {
-      return ossim::nan();
-   }
-   ossim_float64 d = 0.0;
-   // this part is core dumping under mingw in ossimPlanet.
-   // There is a possibility that this isn't a thread safe implementation
-   // in mingw stl.  Let's resort back to atof for now
-
-#if 0
-   ossimString os = aString;
-   if (!os.empty())
-   {
-      std::istringstream is(os);
-      is >> d;
-   }
-#endif
-   if(!aString.empty())
-   {
-      d = (ossim_float64)atof(aString.c_str());
-   }
-   return d;
+   return aString.toFloat64();
 }
 
 double ossimString::toDouble()const
@@ -727,48 +659,26 @@ double ossimString::toDouble()const
    // There is a possibility that this isn't a thread safe implementation
    // in mingw stl.  Let's resort back to atof for now
 
-#if 0
-   ossimString os = c_str();
-   if (!os.empty())
+   if (!empty())
    {
-      std::istringstream is(os);
-      is >> d;
-   }
+#if 1
+      d = atof(c_str());
 #endif
-
-   if(!this->empty())
-   {
-      d = atof(this->c_str());
+#if 0
+      std::istringstream is(*this);
+      is >> d;
+      if(is.fail())
+      {
+         d = 0.0;
+      }
+#endif
    }
-   
    return d;
 }
 
 double ossimString::toDouble(const ossimString& aString)
 {
-   if(aString.contains("nan"))
-   {
-      return ossim::nan();
-   }
-   double d = 0.0;
-   // this part is core dumping under mingw in ossimPlanet.
-   // There is a possibility that this isn't a thread safe implementation
-   // in mingw stl.  Let's resort back to atof for now
-
-#if 0
-   ossimString os = c_str();
-   if (!os.empty())
-   {
-      std::istringstream is(os);
-      is >> d;
-   }
-#endif
-   if(!aString.empty())
-   {
-      d = atof(aString.c_str());
-   }
-
-   return d;
+   return aString.toDouble();
 }
 
 ossimString ossimString::toString(bool aValue)

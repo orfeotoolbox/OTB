@@ -9,7 +9,7 @@
 // Contains class definition for TiffOverviewBuilder
 // 
 //*******************************************************************
-//  $Id: ossimTiffOverviewBuilder.cpp 11699 2007-09-10 15:23:26Z gpotts $
+//  $Id: ossimTiffOverviewBuilder.cpp 13155 2008-07-08 15:59:52Z gpotts $
 
 #include <cstring>
 #include <sstream>
@@ -49,7 +49,7 @@ RTTI_DEF1(ossimTiffOverviewBuilder,
 static ossimTrace traceDebug("ossimTiffOverviewBuilder:degug");
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimTiffOverviewBuilder.cpp 11699 2007-09-10 15:23:26Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimTiffOverviewBuilder.cpp 13155 2008-07-08 15:59:52Z gpotts $";
 #endif
 
 
@@ -397,9 +397,11 @@ bool ossimTiffOverviewBuilder::execute()
       }
 
       theOutputFileTmp.rename(theOutputFile);
-      ossimNotify(ossimNotifyLevel_INFO)
+		if(traceDebug())
+		{
+			ossimNotify(ossimNotifyLevel_INFO)
          << "Wrote file:  " << theOutputFile.c_str() << std::endl;
-   
+		}
       ossimFilename file=theOutputFile;
       file = file.setExtension("omd");
       ossimKeywordlist kwl;

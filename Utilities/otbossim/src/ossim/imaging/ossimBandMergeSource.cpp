@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBandMergeSource.cpp 11411 2007-07-27 13:53:51Z dburken $
+// $Id: ossimBandMergeSource.cpp 13312 2008-07-27 01:26:52Z gpotts $
 #include <ossim/imaging/ossimBandMergeSource.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
@@ -84,7 +84,7 @@ ossimRefPtr<ossimImageData> ossimBandMergeSource::getTile(const ossimIrect& tile
    ossim_uint32 inputIdx = 0;
    for(inputIdx = 0; inputIdx < getNumberOfInputs(); ++inputIdx)
    {
-      ossimImageSourceInterface* input = PTR_CAST(ossimImageSourceInterface,
+      ossimImageSource* input = PTR_CAST(ossimImageSource,
                                                   getInput(inputIdx));
       ossimRefPtr<ossimImageData> currentTile = 0;
 
@@ -147,7 +147,7 @@ double ossimBandMergeSource::getNullPixelValue(ossim_uint32 band)const
    while((currentBandCount < maxBands)&&
 	 (idx < getNumberOfInputs()))
    {
-      ossimImageSourceInterface* temp = PTR_CAST(ossimImageSourceInterface, getInput(idx));
+      ossimImageSource* temp = PTR_CAST(ossimImageSource, getInput(idx));
       if(temp)
       {
 	ossim_uint32 previousCount = currentBandCount;
@@ -175,7 +175,7 @@ double ossimBandMergeSource::getMinPixelValue(ossim_uint32 band)const
    while((currentBandCount < maxBands)&&
 	 (idx < getNumberOfInputs()))
    {
-      ossimImageSourceInterface* temp = PTR_CAST(ossimImageSourceInterface, getInput(idx));
+      ossimImageSource* temp = PTR_CAST(ossimImageSource, getInput(idx));
       if(temp)
       {
 	ossim_uint32 previousCount = currentBandCount;
@@ -203,7 +203,7 @@ double ossimBandMergeSource::getMaxPixelValue(ossim_uint32 band)const
    while((currentBandCount < maxBands)&&
 	 (idx < getNumberOfInputs()))
    {
-      ossimImageSourceInterface* temp = PTR_CAST(ossimImageSourceInterface, getInput(idx));
+      ossimImageSource* temp = PTR_CAST(ossimImageSource, getInput(idx));
       if(temp)
       {
 	ossim_uint32 previousCount = currentBandCount;
@@ -248,7 +248,7 @@ ossim_uint32 ossimBandMergeSource::computeNumberOfInputBands()const
    ossim_uint32 size   = getNumberOfInputs();
    for(ossim_uint32 index = 0; index < size; ++index)
    {
-      ossimImageSourceInterface* temp = PTR_CAST(ossimImageSourceInterface, getInput(index));
+      ossimImageSource* temp = PTR_CAST(ossimImageSource, getInput(index));
       if(temp)
       {
          if(temp->getNumberOfOutputBands() == 0)

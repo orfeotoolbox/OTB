@@ -9,7 +9,7 @@
 // ossimThreeParamDatum. This is a base class for all
 // three param datums.
 //*******************************************************************
-//  $Id: ossimThreeParamDatum.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimThreeParamDatum.h 13560 2008-09-10 11:42:57Z gpotts $
 
 #ifndef ossimThreeParamDatum_HEADER
 #define ossimThreeParamDatum_HEADER
@@ -18,6 +18,20 @@
 class OSSIMDLLEXPORT ossimThreeParamDatum : public ossimDatum
 {
 public:
+   /**
+    *   @param code           new datum code.                               (input)
+    *   @param name           Name of the new datum                         (input)
+    *   @param SigmaX         Standard error in X in meters                 (input)
+    *   @param SigmaY         Standard error in Y in meters                 (input)
+    *   @param SigmaZ         Standard error in Z in meters                 (input)
+    *   @param southLatitude  Southern edge of validity rectangle in radians(input)
+    *   @param northLatitude  Northern edge of validity rectangle in radians(input)
+    *   @param westLongitude  Western edge of validity rectangle in radians (input)
+    *   @param eastLongitude  Eastern edge of validity rectangle in radians (input)
+    *   @param param1         X translation
+    *   @param param2         Y translation
+    *   @param param3         Z translation
+    */
    ossimThreeParamDatum(const ossimString &code, const ossimString &name,
                         const ossimEllipsoid* anEllipsoid,
                         ossim_float64 sigmaX,

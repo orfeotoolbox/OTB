@@ -17,13 +17,14 @@
 //    the fourth band will not be drawn to.
 //
 //*************************************************************************
-// $Id: ossimAnnotationSource.h 11831 2007-10-10 13:37:29Z dburken $
+// $Id: ossimAnnotationSource.h 13330 2008-07-28 18:04:40Z dburken $
 #ifndef ossimAnnotationSource_HEADER
 #define ossimAnnotationSource_HEADER
 
 #include <vector>
 #include <ossim/imaging/ossimImageSourceFilter.h>
 #include <ossim/base/ossimIrect.h>
+#include <ossim/base/ossimDrect.h>
 #include <ossim/imaging/ossimRgbImage.h>
 
 class ossimAnnotationObject;

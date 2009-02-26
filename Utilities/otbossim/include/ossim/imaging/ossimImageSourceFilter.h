@@ -10,7 +10,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimImageSourceFilter.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimImageSourceFilter.h 13312 2008-07-27 01:26:52Z gpotts $
 #ifndef ossimImageSourceFilter_HEADER
 #define ossimImageSourceFilter_HEADER
 #include <ossim/imaging/ossimImageSource.h>
@@ -108,7 +108,7 @@ public:
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
    
 protected:
-   ossimImageSourceInterface* theInputConnection;
+   ossimImageSource* theInputConnection;
 TYPE_DATA
 };
 

@@ -1,4 +1,4 @@
-// $Id: ossimOrthoIgen.cpp 13103 2008-07-03 01:06:37Z gpotts $
+// $Id: ossimOrthoIgen.cpp 13706 2008-10-13 18:46:27Z gpotts $
 #include <sstream>
 #include <ossim/parallel/ossimOrthoIgen.h>
 #include <ossim/parallel/ossimIgen.h>
@@ -645,7 +645,6 @@ bool ossimOrthoIgen::setupIgenKwl(ossimKeywordlist& kwl)
                   ossimFilename inputHisto = handler->createDefaultHistogramFilename();
                   if(inputHisto.exists())
                   {
-                     tempChain->addLast(histRemapper);
                      histRemapper = new ossimHistogramRemapper;
                      tempChain->insertRight(histRemapper, h);
                      histRemapper->openHistogram(inputHisto);
@@ -1150,6 +1149,7 @@ bool ossimOrthoIgen::setupView(ossimKeywordlist& kwl)
                                          midGpt);
             
             utm->setZone(midGpt);
+            utm->setHemisphere(midGpt);
             ossimDpt eastingNorthing;
             
             utm->setMetersPerPixel(ossimDpt(ossimUnitConversionTool(gsd.x,

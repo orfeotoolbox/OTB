@@ -8,17 +8,16 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSource.cpp 11349 2007-07-23 13:30:44Z gpotts $
+// $Id: ossimImageSource.cpp 13312 2008-07-27 01:26:52Z gpotts $
 
 #include <ossim/imaging/ossimImageSource.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/base/ossimProperty.h>
 #include <ossim/base/ossimKeywordNames.h>
 
-RTTI_DEF2(ossimImageSource,
+RTTI_DEF1(ossimImageSource,
           "ossimImageSource" ,
-          ossimSource,
-          ossimImageSourceInterface)
+          ossimSource)
 
 ossimImageSource::ossimImageSource(ossimObject* owner)
    :ossimSource(owner, 0,0,false,false)
@@ -54,7 +53,7 @@ ossimRefPtr<ossimImageData> ossimImageSource::getTile(const ossimIpt& origin,
 ossimRefPtr<ossimImageData> ossimImageSource::getTile(const ossimIrect& rect,
                                                       ossim_uint32 resLevel)
 {
-   ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* inter = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(inter)
    {
@@ -66,7 +65,7 @@ ossimRefPtr<ossimImageData> ossimImageSource::getTile(const ossimIrect& rect,
 void ossimImageSource::getDecimationFactor(ossim_uint32 resLevel,
                                            ossimDpt& result)const
 {
-   ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* inter = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(inter)
    {
@@ -74,9 +73,9 @@ void ossimImageSource::getDecimationFactor(ossim_uint32 resLevel,
    }
 }
 
-void ossimImageSource::getDecimationFactors(vector<ossimDpt>& decimations)const
+void ossimImageSource::getDecimationFactors(std::vector<ossimDpt>& decimations)const
 {
-   ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* inter = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(inter)
    {
@@ -86,7 +85,7 @@ void ossimImageSource::getDecimationFactors(vector<ossimDpt>& decimations)const
 
 ossim_uint32 ossimImageSource::getNumberOfDecimationLevels() const
 {
-   ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* inter = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(inter)
    {
@@ -97,7 +96,7 @@ ossim_uint32 ossimImageSource::getNumberOfDecimationLevels() const
 
 ossimScalarType ossimImageSource::getOutputScalarType() const
 {
-   ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* inter = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(inter)
    {
@@ -109,7 +108,7 @@ ossimScalarType ossimImageSource::getOutputScalarType() const
 
 ossim_uint32 ossimImageSource::getTileWidth()  const
 {
-   ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* inter = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(inter)
    {
@@ -123,7 +122,7 @@ ossim_uint32 ossimImageSource::getTileWidth()  const
 
 ossim_uint32 ossimImageSource::getTileHeight() const
 {
-   ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* inter = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(inter)
    {
@@ -138,7 +137,7 @@ ossim_uint32 ossimImageSource::getTileHeight() const
 
 ossimIrect ossimImageSource::getBoundingRect(ossim_uint32 resLevel)const
 {
-   ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* inter = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(inter)
    {
@@ -164,11 +163,11 @@ bool ossimImageSource::loadState(const ossimKeywordlist& kwl,
 //*****************************************************************************
 //  METHOD: ossimImageSource::getValidImageVertices()
 //*****************************************************************************
-void ossimImageSource::getValidImageVertices(vector<ossimIpt>& validVertices,
+void ossimImageSource::getValidImageVertices(std::vector<ossimIpt>& validVertices,
                                              ossimVertexOrdering ordering,
                                              ossim_uint32 resLevel)const
 {
-  ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface,
+  ossimImageSource* inter = PTR_CAST(ossimImageSource,
 					      getInput(0));
   if(inter)
     {
@@ -197,7 +196,7 @@ void ossimImageSource::getValidImageVertices(vector<ossimIpt>& validVertices,
 
 double ossimImageSource::getNullPixelValue(ossim_uint32 band)const
 {
-   ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* inter = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(inter)
    {
@@ -209,7 +208,7 @@ double ossimImageSource::getNullPixelValue(ossim_uint32 band)const
 
 double ossimImageSource::getMinPixelValue(ossim_uint32 band)const
 {
-   ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* inter = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(inter)
    {
@@ -220,7 +219,7 @@ double ossimImageSource::getMinPixelValue(ossim_uint32 band)const
 
 double ossimImageSource::getMaxPixelValue(ossim_uint32 band)const
 {
-   ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* inter = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(inter)
    {
@@ -237,7 +236,7 @@ bool ossimImageSource::getImageGeometry(ossimKeywordlist& kwl,
    int i = 0;
    for(i = 0; i < (int)getNumberOfInputs(); ++i)
    {
-      ossimImageSourceInterface* interface = PTR_CAST(ossimImageSourceInterface,
+      ossimImageSource* interface = PTR_CAST(ossimImageSource,
                                                       getInput(i));
       if(interface)
       {
@@ -250,7 +249,7 @@ bool ossimImageSource::getImageGeometry(ossimKeywordlist& kwl,
 
 void ossimImageSource::setImageGeometry(const ossimKeywordlist& kwl)
 {
-   ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* inter = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if (inter)
    {
@@ -260,7 +259,7 @@ void ossimImageSource::setImageGeometry(const ossimKeywordlist& kwl)
 
 void ossimImageSource::saveImageGeometry() const
 {
-   ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* inter = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if (inter)
    {
@@ -270,7 +269,7 @@ void ossimImageSource::saveImageGeometry() const
 
 void ossimImageSource::saveImageGeometry(const ossimFilename& geometry_file) const
 {
-   ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* inter = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if (inter)
    {
@@ -325,8 +324,7 @@ void ossimImageSource::getPropertyNames(std::vector<ossimString>& propertyNames)
 
 // Protected to hide from use...
 ossimImageSource::ossimImageSource (const ossimImageSource& rhs)
-   :ossimSource(),
-    ossimImageSourceInterface(rhs)
+   :ossimSource() 
 {}
 
 // Protected to hide from use...

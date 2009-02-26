@@ -5,7 +5,7 @@
 
     Licence: wxWidgets Licence
 
-    RCS-ID: $Id: booleng.h 12954 2008-06-01 16:26:32Z dburken $
+    RCS-ID: $Id: booleng.h 13215 2008-07-23 18:51:54Z dburken $
 */
 
 #ifndef BOOLENG_H
@@ -50,13 +50,13 @@ class A2DKBOOLDLLEXP Bool_Engine {
    const char* GetVersion() { return KBOOL_VERSION; }
 
 	//! reports progress of algorithm.
-   virtual void SetState( char* = 0 );
+   virtual void SetState( const char* = 0 );
 
 	//! called at an internal error.
-	virtual void error(char *text, char *title);
+	virtual void error(const char *text, const char *title);
 
 	//! called at an internal generated possible error.
-   virtual void info(char *text, char *title);
+   virtual void info(const char *text, const char *title);
 
    bool Do_Operation(BOOL_OP operation);
 
@@ -235,13 +235,13 @@ class A2DKBOOLDLLEXP Bool_Engine {
    void SetLog( bool OnOff ); 
 
    //! used to write to log file
-   void Write_Log(char *);
+   void Write_Log(const char *);
    //! used to write to log file
-   void Write_Log(char *, char *);
+   void Write_Log(const char *, const char *);
    //! used to write to log file
-   void Write_Log(char *, double);
+   void Write_Log(const char *, double);
    //! used to write to log file
-   void Write_Log(char *, B_INT);
+   void Write_Log(const char *, B_INT);
 
    FILE* GetLogFile() { return m_logfile; }
 

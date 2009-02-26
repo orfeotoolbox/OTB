@@ -201,7 +201,8 @@ static char *cpy_del(char *src, char delimiter, long int *ind )
 
   temp = &src[skipchar];
 
-  /* If the first character is a COMMENT, goto LINE_CONTINUE */
+  /* If t
+  he first character is a COMMENT, goto LINE_CONTINUE */
 
   if ( *temp == COMMENT ) {
     while ( *temp != LINE_CONTINUE && *temp != END_OF_FIELD && *temp != '\0'){
@@ -230,7 +231,7 @@ static char *cpy_del(char *src, char delimiter, long int *ind )
       /* Now copy the char into the output string */
       tempstr[i] = *temp ;
     }
-    tempstr[i] = (char) NULL ;		/* terminate string */
+    tempstr[i] = '\0';		/* terminate string */
     *ind += ( i + skipchar + 2) ;	/* Increment position locate past */
     return tempstr ;			/* quote and semicolon */
   }
@@ -254,7 +255,7 @@ static char *cpy_del(char *src, char delimiter, long int *ind )
                              /* Eat the delimiter from ind also */
     *ind += ( i + skipchar + 1) ;	/* Increment position locate */
   }	
-  tempstr[i] = (char) NULL ;		/* terminate string */   
+  tempstr[i] = '\0';		/* terminate string */   
   return tempstr;
 }
 /***********Mody B*********/
@@ -472,35 +473,35 @@ long int parse_data_def( vpf_table_type *table )
 	   (char *) vpfmalloc ( table->header[i].count + 1 ) ;
 	 for ( k=0; k < table->header[i].count; k++ )
 	   table->header[i].nullval.Char[k] = NULLCHAR ;
-	 table->header[i].nullval.Char[k] = (char) NULL ;
+	 table->header[i].nullval.Char[k] = '\0';
        } else {			/* variable length */
 	 table->header[i].nullval.Char =
 	   (char *) vpfmalloc ( VARIABLE_STRING_NULL_LENGTH + 1 ) ;
 	 for ( k=0; k < VARIABLE_STRING_NULL_LENGTH ; k++ )
 	   table->header[i].nullval.Char[k] = NULLCHAR ;
-	 table->header[i].nullval.Char[k] = (char) NULL ;
+	 table->header[i].nullval.Char[k] = '\0';
        }
        break;
      case 'C':
        if ( reclen >= 0 )
 	 reclen += (sizeof(coordinate_type)*table->header[i].count);
-       table->header[i].nullval.Other = (char) NULL ;
+       table->header[i].nullval.Other = '\0';
        break;
      case 'Z':
        if ( reclen >= 0 )
 	 reclen += (sizeof(tri_coordinate_type)*table->header[i].count);
-       table->header[i].nullval.Other = (char) NULL ;
+       table->header[i].nullval.Other = '\0' ;
        break;
      case 'B':
        if ( reclen >= 0 )
 	 reclen += (sizeof(double_coordinate_type)*table->header[i].count);
-       table->header[i].nullval.Other = (char) NULL ;
+       table->header[i].nullval.Other = '\0' ;
        break;
      case 'Y':
        if ( reclen >= 0 )
 	 reclen +=
 	   (sizeof(double_tri_coordinate_type)*table->header[i].count);
-       table->header[i].nullval.Other =(char) NULL;
+       table->header[i].nullval.Other ='\0';
        break;
      case 'D':
        if ( reclen >= 0 )
@@ -509,11 +510,11 @@ long int parse_data_def( vpf_table_type *table )
        break;
      case 'K':
        reclen = -1;
-       table->header[i].nullval.Other = (char) NULL ;
+       table->header[i].nullval.Other = '\0' ;
        break;
      case 'X':
        /* do nothing */
-       table->header[i].nullval.Other = (char) NULL ;
+       table->header[i].nullval.Other = '\0' ;
        break ;
      default:
        status = 1;
@@ -646,11 +647,12 @@ static int vpfhandler(long int errval, long int ax, long int bp, long int si)
  *    Dave Flinn        July 1991     Updated for UNIX
  *E
  *************************************************************************/
-FILE *vpfopencheck( char *filename,
-		    char *mode,
-		    char *diskname )
+FILE *vpfopencheck( const char *filename,
+		    const char *mode,
+		    const char *diskname )
 {
    FILE *fp;
+   char* tmpFilename = (char*) malloc ( strlen(filename) + 1 );
 /*
    char *text[] = {"Please insert",
 		   "                                        ",
@@ -669,25 +671,38 @@ FILE *vpfopencheck( char *filename,
    strcpy(text[3],filename);
 #endif
    fp = NULL;
-   while (fp == NULL) {
-      fp = fopen(filename,mode);
-      if (fp == NULL) {
+
+
+   /* copy the filename because we might modify it. */
+   tmpFilename[strlen(filename)] = '\0'; /* just in case */
+   strcpy(tmpFilename, filename);
+   
+   while (fp == NULL)
+   {
+      fp = fopen(tmpFilename,mode);
+      if (fp == NULL)
+      {
 #ifdef __MSDOS__
-	 if ( toupper(home[0]) != toupper(filename[0]) )
+	 if ( toupper(home[0]) != toupper(tmpFilename[0]) )
 	    retry = displayerror(text,   4);
 	 else
 #else
-	     /* give names ending in dot another chance without the dot */
-	     if (filename[strlen(filename)-1] == '.') {
-		 filename[strlen(filename)-1] = '\0';
-		 retry = TRUE;
-	     }
-	 else
+            /* give names ending in dot another chance without the dot */
+            if (tmpFilename[strlen(tmpFilename)-1] == '.')
+            {
+               tmpFilename[strlen(tmpFilename)-1] = '\0';
+               retry = TRUE;
+            }
+            else
 #endif
-	    retry = FALSE;
+               retry = FALSE;
 	 if (!retry) break;
       }
    }
+
+   free(tmpFilename);
+   tmpFilename = 0;
+   
 #ifdef __MSDOS__
    setvect(36,doshandler);
 #endif
@@ -710,10 +725,10 @@ FILE *vpfopencheck( char *filename,
  *
  *   Parameters:
  *A
- *    tablename <input> == (char *) file name of the table.
+ *    tablename <input> == (const char *) file name of the table.
  *    storage   <input> == (storage_type) table storage mode -
  *                                        either ram or disk.
- *    mode      <input> == (char *) file mode for opening the table -
+ *    mode      <input> == (const char *) file mode for opening the table -
  *                                  same as fopen() mode in C.
  *    defstr    <input> == (char *) table definition string used for
  *                                  creating a writable table.
@@ -744,9 +759,9 @@ FILE *vpfopencheck( char *filename,
  *    This module should be ANSI C compatible.
  *E
  *************************************************************************/
-vpf_table_type vpf_open_table( char         * tablename,
+vpf_table_type vpf_open_table( const char * tablename,
 			       storage_type   storage ,
-			       char         * mode,
+			       const char * mode,
 			       char         * defstr )
 {
    vpf_table_type   table;
@@ -1046,7 +1061,7 @@ void vpf_close_table( vpf_table_type *table )
 
 
 
-long int is_vpf_table( char *fname )
+long int is_vpf_table( const char *fname )
 {
    FILE *fp;
    long int n, ok;

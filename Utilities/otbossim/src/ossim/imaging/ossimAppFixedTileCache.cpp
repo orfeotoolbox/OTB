@@ -7,7 +7,7 @@
 // Description: This file contains the Application cache algorithm
 //
 //***********************************
-// $Id: ossimAppFixedTileCache.cpp 12653 2008-04-10 15:32:46Z gpotts $
+// $Id: ossimAppFixedTileCache.cpp 13676 2008-10-03 17:35:02Z gpotts $
 #include <algorithm>
 #include <sstream>
 #include <ossim/imaging/ossimAppFixedTileCache.h>
@@ -60,11 +60,21 @@ ossimAppFixedTileCache::ossimAppFixedTileCache()
    const char* tileSize = ossimPreferences::instance()->findPreference("tile_size");
    if(tileSize)
    {
-      std::stringstream in(tileSize);
-      in >> theTileSize.x >> theTileSize.y;
-      if(theTileSize.x < 1) theTileSize.x = 64;
-      if(theTileSize.y < 1) theTileSize.y = 64;
-   }
+      ossimString tempString(tileSize);
+      std::vector<ossimString> splitString;
+      tempString = tempString.trim();
+      tempString.split(splitString, " ");
+      if(splitString.size() > 1)
+      {
+         theTileSize.x = splitString[0].toInt32();
+         theTileSize.y = splitString[1].toInt32();
+      }
+      else 
+      {
+         theTileSize = ossimIpt(64,64);
+      }
+         
+    }
    if(cacheSize)
    {
       setMaxCacheSize(cacheSize);
@@ -107,7 +117,7 @@ ossimAppFixedTileCache *ossimAppFixedTileCache::instance(ossim_uint32  maxSize)
 
 void ossimAppFixedTileCache::setMaxCacheSize(ossim_uint32 cacheSize)
 {
-OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    theMaxGlobalCacheSize = cacheSize;
    theMaxCacheSize = cacheSize;
    //   theMaxCacheSize      = (ossim_uint32)(theMaxGlobalCacheSize*.2);
@@ -223,11 +233,11 @@ ossimRefPtr<ossimImageData> ossimAppFixedTileCache::getTile(
    ossimAppFixedCacheId cacheId,
    const ossimIpt& origin)
 {
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    ossimRefPtr<ossimImageData> result = 0;
    ossimFixedTileCache* cache = getCache(cacheId);
    if(cache)
    {
-      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
       result = cache->getTile(origin);
    }
 

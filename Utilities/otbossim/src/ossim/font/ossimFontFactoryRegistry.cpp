@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimFontFactoryRegistry.cpp 9099 2006-06-13 21:21:10Z dburken $
+// $Id: ossimFontFactoryRegistry.cpp 13508 2008-08-27 15:51:38Z gpotts $
 #include <algorithm>
 #include <ossim/font/ossimFontFactoryRegistry.h>
 #include <ossim/font/ossimGdBitmapFont.h>
@@ -17,25 +17,23 @@
 
 #include <ossim/font/ossimGdSansBold.inc>
 
-ossimFontFactoryRegistry* ossimFontFactoryRegistry::theInstance = 0;
+//ossimFontFactoryRegistry* ossimFontFactoryRegistry::theInstance = 0;
 
 ossimFontFactoryRegistry::ossimFontFactoryRegistry()
    :theDefaultFont(NULL)
 {
-   theInstance = this;
+  // theInstance = this;
+#if OSSIM_HAS_FREETYPE
+   registerFactory(ossimFreeTypeFontFactory::instance());
+#endif
 }
 
 ossimFontFactoryRegistry* ossimFontFactoryRegistry::instance()
 {
-   if(!theInstance)
-   {
-      theInstance = new ossimFontFactoryRegistry;
-#if OSSIM_HAS_FREETYPE
-      theInstance->registerFactory(ossimFreeTypeFontFactory::instance());
-#endif
-   }
+   static ossimFontFactoryRegistry sharedInstance;
+      //theInstance = new ossimFontFactoryRegistry;
 
-   return theInstance;
+   return &sharedInstance;
 }
 
 bool ossimFontFactoryRegistry::registerFactory(ossimFontFactoryBase* factory)

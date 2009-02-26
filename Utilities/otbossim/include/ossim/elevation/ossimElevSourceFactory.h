@@ -21,7 +21,7 @@
 // new'd from the method.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimElevSourceFactory.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimElevSourceFactory.h 13269 2008-07-25 14:27:36Z dburken $
 
 #ifndef ossimElevSourceFactory_HEADER
 #define ossimElevSourceFactory_HEADER
@@ -54,7 +54,6 @@ public:
     *  allocated.
     */
    virtual ossimElevSource* getNewElevSource(const ossimGpt& gpt)const=0;
-   virtual void createIndex()=0;
 
    /**
     * @return The directory the factory returns data from.

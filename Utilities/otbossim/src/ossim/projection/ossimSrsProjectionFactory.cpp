@@ -5,7 +5,7 @@
 //   Contains implementation of class ossimMapProjectionFactory
 //
 //*****************************************************************************
-//  $Id: ossimSrsProjectionFactory.cpp 12082 2007-11-26 21:46:44Z dburken $
+//  $Id: ossimSrsProjectionFactory.cpp 13459 2008-08-20 12:48:50Z gpotts $
 #include <sstream>
 #include <ossim/projection/ossimSrsProjectionFactory.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -79,6 +79,7 @@ ossimProjection* ossimSrsProjectionFactory::createProjection(const ossimString &
          {
             ossimUtmProjection* utm = new ossimUtmProjection;
             utm->setZone(origin);
+            utm->setHemisphere(origin);
             utm->setOrigin(origin);
             utm->update();
             return utm;

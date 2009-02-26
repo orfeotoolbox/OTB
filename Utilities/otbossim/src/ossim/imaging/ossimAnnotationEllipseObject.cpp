@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationEllipseObject.cpp 11955 2007-10-31 16:10:22Z gpotts $
+// $Id: ossimAnnotationEllipseObject.cpp 13964 2009-01-14 16:30:07Z gpotts $
 #include <ossim/imaging/ossimAnnotationEllipseObject.h>
 #include <ossim/imaging/ossimRgbImage.h>
 #include <ossim/base/ossimCommon.h>
@@ -36,7 +36,7 @@ ossimAnnotationEllipseObject::ossimAnnotationEllipseObject(
 
 ossimAnnotationEllipseObject::ossimAnnotationEllipseObject(
    const ossimAnnotationEllipseObject& rhs)
-   :
+   :ossimAnnotationObject(rhs),
    theCenter(rhs.theCenter),
    theWidthHeight(rhs.theWidthHeight),
    theAzimuthInDegrees(rhs.theAzimuthInDegrees),
@@ -61,7 +61,7 @@ void ossimAnnotationEllipseObject::applyScale(double x, double y)
    theCenter.y      *= y;
    theWidthHeight.x *= x;
    theWidthHeight.y *= y;
-   theBoundingRect  *= ossimDpt(x,y);
+   computeBoundingRect();
 }
 
 

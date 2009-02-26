@@ -13,7 +13,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimEllipsoid.cpp 12755 2008-04-29 13:33:56Z dburken $
+//  $Id: ossimEllipsoid.cpp 13864 2008-11-14 13:24:37Z gpotts $
 
 #include <ossim/base/ossimEllipsoid.h>
 
@@ -460,11 +460,14 @@ void ossimEllipsoid::jacobianWrtGeo(const ossimEcefPoint& location,
 //*****************************************************************************
 double ossimEllipsoid::geodeticRadius(const double& lat) const
 {
+   double cos_lat = ossim::cosd(lat);
    double sin_lat = ossim::sind(lat);
+   double cos2_lat = cos_lat*cos_lat;
    double sin2_lat = sin_lat*sin_lat;
+   double a2_cos = theA_squared*cos_lat;
+   double b2_sin = theB_squared*sin_lat;
    
-   return (theA_squared/
-           sqrt(theA_squared - theA_squared*sin2_lat + theB_squared*sin2_lat));
+   return sqrt( ( (a2_cos*a2_cos) + (b2_sin*b2_sin) )/ (theA_squared*cos2_lat + theB_squared*sin2_lat));
 }
 
 void ossimEllipsoid::latLonHeightToXYZ(double lat, double lon, double height,

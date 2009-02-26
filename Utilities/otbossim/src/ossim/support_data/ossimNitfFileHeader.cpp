@@ -8,12 +8,10 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeader.cpp 10173 2007-01-03 18:21:26Z gpotts $
+// $Id: ossimNitfFileHeader.cpp 13874 2008-11-17 19:44:49Z dburken $
 #include <ossim/support_data/ossimNitfFileHeader.h>
 #include <ossim/base/ossimContainerProperty.h>
-#ifndef NULL
-#include <stddef.h>
-#endif
+#include <iostream>
 
 static const char* TAGS_KW = "tags";
 
@@ -83,6 +81,24 @@ bool ossimNitfFileHeader::hasDataExtSegments()const
    return (getNumberOfDataExtSegments() > 0);
 }
 
+void ossimNitfFileHeader::removeTag(const ossimString& tagName)
+{
+   ossim_uint32 idx = 0;
+   for(idx = 0; idx < theTagList.size(); ++idx)
+   {
+      if(theTagList[idx].getTagName() == tagName)
+      {
+         theTagList.erase(theTagList.begin() + idx);
+         return;
+      }
+   }
+}
+void ossimNitfFileHeader::addTag(const ossimNitfTagInformation& tag)
+{
+   removeTag(tag.getTagName());
+   theTagList.push_back(tag);
+}
+
 bool ossimNitfFileHeader::getTagInformation(ossimNitfTagInformation& tag,
                                             int idx) const
 {
@@ -121,7 +137,7 @@ void ossimNitfFileHeader::setProperty(ossimRefPtr<ossimProperty> property)
 
 ossimRefPtr<ossimProperty> ossimNitfFileHeader::getProperty(const ossimString& name)const
 {
-   ossimProperty* result = 0;
+   ossimRefPtr<ossimProperty> result = 0;
 
    if(name == TAGS_KW)
    {

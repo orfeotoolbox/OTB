@@ -10,10 +10,11 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimImageSourceSequencer.cpp 11349 2007-07-23 13:30:44Z gpotts $
+//  $Id: ossimImageSourceSequencer.cpp 13374 2008-08-04 13:02:22Z gpotts $
 #include <ossim/imaging/ossimImageSourceSequencer.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/base/ossimIrect.h>
+#include <ossim/base/ossimDrect.h>
 #include <ossim/imaging/ossimImageWriter.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
@@ -116,7 +117,7 @@ void ossimImageSourceSequencer::updateTileDimensions()
 
 void ossimImageSourceSequencer::initialize()
 {
-   theInputConnection = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   theInputConnection = PTR_CAST(ossimImageSource, getInput(0));
 
    if(theInputConnection)
    {
@@ -150,18 +151,18 @@ void ossimImageSourceSequencer::initialize()
 bool ossimImageSourceSequencer::canConnectMyInputTo(ossim_int32 inputIndex,
 						    const ossimConnectableObject* object)const
 {      
-  return (object&& PTR_CAST(ossimImageSourceInterface, object));
+  return (object&& PTR_CAST(ossimImageSource, object));
 }
 
 void ossimImageSourceSequencer::connectInputEvent(ossimConnectionEvent& event)
 {
-  theInputConnection = PTR_CAST(ossimImageSourceInterface, getInput(0));
+  theInputConnection = PTR_CAST(ossimImageSource, getInput(0));
   initialize();
 }
 
 void ossimImageSourceSequencer::disconnectInputEvent(ossimConnectionEvent& event)
 {
-  theInputConnection = PTR_CAST(ossimImageSourceInterface, getInput(0));
+  theInputConnection = PTR_CAST(ossimImageSource, getInput(0));
 }
 
 ossimIrect ossimImageSourceSequencer::getBoundingRect(ossim_uint32 resLevel)const

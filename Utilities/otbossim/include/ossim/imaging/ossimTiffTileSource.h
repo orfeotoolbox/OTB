@@ -16,10 +16,10 @@
 #ifndef ossimTiffTileSource_HEADER
 #define ossimTiffTileSource_HEADER
 
-#include <tiffio.h>
 
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/base/ossimIrect.h>
+#include <tiffio.h>
 
 class ossimImageData;
 class ossimTiffOverviewTileSource;

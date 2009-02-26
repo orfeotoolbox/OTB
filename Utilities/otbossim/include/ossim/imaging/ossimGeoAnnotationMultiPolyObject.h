@@ -6,7 +6,7 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationMultiPolyObject.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimGeoAnnotationMultiPolyObject.h 13349 2008-07-30 15:34:34Z dburken $
 #ifndef ossimGeoAnnotationMultiPolyObject_HEADER
 #define ossimGeoAnnotationMultiPolyObject_HEADER
 #include <ossim/imaging/ossimGeoAnnotationObject.h>
@@ -26,12 +26,25 @@ public:
                                      long thickness=1);
    
    ossimGeoAnnotationMultiPolyObject(const ossimGeoAnnotationMultiPolyObject& rhs);
-   virtual ossimObject* dup()const
-      {
-         return new ossimGeoAnnotationMultiPolyObject(*this);
-      }
+   virtual ossimObject* dup()const;
+
    virtual ~ossimGeoAnnotationMultiPolyObject();
    virtual void transform(ossimProjection* projection);
+
+   /**
+    * @brief Transforms from geographic to image space for a
+    * reduced resolution data set (rrds).
+    *
+    * This will transform any world points to line sample; then, convert any
+    * line sample to the correct rrds point.
+    *
+    * @param model The model to use for transformation.
+    *
+    * @param rrds Reduced resolution data set to use.
+    */
+   virtual void transform(const ossimImageProjectionModel& model,
+                          ossim_uint32 rrds);
+
    virtual void applyScale(double x,
                                 double y);
    virtual void draw(ossimRgbImage& anImage)const;
@@ -40,50 +53,14 @@ public:
    virtual ossimAnnotationObject* getNewClippedObject(const ossimDrect& rect)const;
    virtual std::ostream& print(std::ostream& out)const;
    virtual void getBoundingRect(ossimDrect& rect)const;
-   virtual void addPoint(ossim_uint32 polygonIndex,
-                         const ossimGpt& pt)
-      {
-         if(polygonIndex < theMultiPolygon.size())
-         {
-            theMultiPolygon[polygonIndex].addPoint(pt);
+   virtual void addPoint(ossim_uint32 polygonIndex, const ossimGpt& pt);
+   
+   virtual void setMultiPolygon(const vector<ossimGeoPolygon>& multiPoly);
 
-            // we will have to reset the projected polygon
-            if(theProjectedPolyObject)
-            {
-               delete theProjectedPolyObject;
-               theProjectedPolyObject = NULL;
-            }
-         }
-      }
+   virtual void setColor(unsigned char r, unsigned char g, unsigned char b);
    
-   virtual void setMultiPolygon(const vector<ossimGeoPolygon>& multiPoly)
-      {
-         theMultiPolygon = multiPoly;
-         if(theProjectedPolyObject)
-         {
-            delete theProjectedPolyObject;
-            theProjectedPolyObject = NULL;
-         }
-      }
-   virtual void setColor(unsigned char r,
-                         unsigned char g,
-                         unsigned char b)
-      {
-         ossimAnnotationObject::setColor(r, g, b);
-         if(theProjectedPolyObject)
-         {
-            theProjectedPolyObject->setColor(r, g, b);
-         }
-      }
-   
-   virtual void setThickness(ossim_uint8 thickness)
-      {
-         ossimAnnotationObject::setThickness(thickness);
-         if(theProjectedPolyObject)
-         {
-            theProjectedPolyObject->setThickness(thickness);
-         }
-      }
+   virtual void setThickness(ossim_uint8 thickness);
+
    virtual void computeBoundingRect();
    virtual bool isPointWithin(const ossimDpt& imagePoint)const;
    virtual void setFillFlag(bool flag);
@@ -92,9 +69,9 @@ public:
    std::vector<ossimGeoPolygon>& getMultiPolygon(){return theMultiPolygon;}
    
 protected:
-   vector<ossimGeoPolygon> theMultiPolygon;
-   ossimDrect              theBoundingRect;
-   bool                   theFillEnabled;
+   std::vector<ossimGeoPolygon>    theMultiPolygon;
+   ossimDrect                      theBoundingRect;
+   bool                            theFillEnabled;
    ossimAnnotationMultiPolyObject* theProjectedPolyObject;
    
    void allocateProjectedPolygon();

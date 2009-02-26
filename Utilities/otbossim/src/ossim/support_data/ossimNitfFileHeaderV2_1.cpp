@@ -7,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_1.cpp 12403 2008-02-04 17:59:13Z gpotts $
+// $Id: ossimNitfFileHeaderV2_1.cpp 13953 2009-01-09 15:20:58Z gpotts $
 
 #include <iostream>
 #include <iomanip>
@@ -24,9 +24,6 @@
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/support_data/ossimNitfImageHeaderV2_1.h>
 
-#ifndef NULL
-#  include <cstddef>
-#endif
 
 RTTI_DEF1(ossimNitfFileHeaderV2_1,
           "ossimNitfFileHeaderV2_1",
@@ -614,13 +611,13 @@ ossimNitfImageHeader* ossimNitfFileHeaderV2_1::allocateImageHeader()const
 
 ossimNitfTextHeader *ossimNitfFileHeaderV2_1::allocateTextHeader()const
 {
-   return NULL;
+   return 0;
 }
 
 ossimNitfDataExtensionSegment*
 ossimNitfFileHeaderV2_1::allocateDataExtSegment()const
 {
-   return NULL;
+   return 0;
 }
 
 bool ossimNitfFileHeaderV2_1::isEncrypted()const
@@ -878,7 +875,7 @@ ossim_int32 ossimNitfFileHeaderV2_1::getNumberOfDataExtSegments()const
 
 const char* ossimNitfFileHeaderV2_1::getDateTime()const
 {
-   return NULL;
+   return 0;
 }
 
 ossimDrect ossimNitfFileHeaderV2_1::getImageRect()const
@@ -900,12 +897,12 @@ void ossimNitfFileHeaderV2_1::replaceImageInfoRecord(int i, const ossimNitfImage
 
 ossimNitfSymbolHeader *ossimNitfFileHeaderV2_1::allocateSymbolHeader()const
 {
-   return NULL;
+   return 0;
 }
 
 ossimNitfLabelHeader *ossimNitfFileHeaderV2_1::allocateLabelHeader()const
 {
-   return NULL;
+   return 0;
 }
 
 void ossimNitfFileHeaderV2_1::initializeAllOffsets()
@@ -929,7 +926,7 @@ ossimNitfImageHeader*
 ossimNitfFileHeaderV2_1::getNewImageHeader(ossim_int32 imageNumber,
                                            std::istream& in)const
 {
-   ossimNitfImageHeader *result = NULL;
+   ossimNitfImageHeader *result = 0;
    
    if((getNumberOfImages() > 0) &&
       (imageNumber < (ossim_int32)theImageOffsetList.size()) &&
@@ -941,9 +938,11 @@ ossimNitfFileHeaderV2_1::getNewImageHeader(ossim_int32 imageNumber,
    }
    else
    {
+#if 0
       ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimNitfFileHeaderV2_1::getNewImageHeader: "
                                           << "\nNo images in file or image number (" << imageNumber
                                           << ") is out of range!\n";
+#endif
    }
    
    return result;
@@ -955,7 +954,7 @@ ossimNitfFileHeaderV2_1::getNewSymbolHeader(ossim_int32 symbolNumber,
 {
    // Currently not implemented...
    
-   ossimNitfSymbolHeader *result = NULL;
+   ossimNitfSymbolHeader *result = 0;
    
    return result;
 }
@@ -965,7 +964,7 @@ ossimNitfFileHeaderV2_1::getNewLabelHeader(ossim_int32 labelNumber,
                                            std::istream& in)const
 {
    // Currently not implemented...
-   ossimNitfLabelHeader *result = NULL;
+   ossimNitfLabelHeader *result = 0;
    
    return result;
 }
@@ -975,7 +974,7 @@ ossimNitfFileHeaderV2_1::getNewTextHeader(ossim_int32 textNumber,
                                           std::istream& in)const
 {
    // Currently not implemented...
-   ossimNitfTextHeader *result = NULL;
+   ossimNitfTextHeader *result = 0;
    
    return result;
 }
@@ -985,7 +984,7 @@ ossimNitfFileHeaderV2_1::getNewDataExtensionSegment(ossim_int32 dataExtNumber,
                                                     std::istream& in)const
 {
    // Currently not implemented...
-   ossimNitfDataExtensionSegment *result = NULL;
+   ossimNitfDataExtensionSegment *result = 0;
    
    return result;
 }
@@ -1195,7 +1194,7 @@ void ossimNitfFileHeaderV2_1::setDeclassificationType(const ossimString& declass
 
 void ossimNitfFileHeaderV2_1::setDeclassificationDate(const ossimLocalTm& d)
 {
-   memcpy(theDeclassificationDate, formatDate(d).c_str(), 8);
+   memcpy(theDeclassificationDate, formatDate(getVersion(), d).c_str(), 8);
 }
 
 void ossimNitfFileHeaderV2_1::setDeclassificationDate(const ossimString& d)
@@ -1232,7 +1231,7 @@ void ossimNitfFileHeaderV2_1::setDowngrade(const ossimString& downgrade)
 
 void ossimNitfFileHeaderV2_1::setDowngradingDate(const ossimLocalTm& d)
 {
-   memcpy(theDowngradingDate, formatDate(d).c_str(), 8);
+   memcpy(theDowngradingDate, formatDate(getVersion(), d).c_str(), 8);
 }
 
 void ossimNitfFileHeaderV2_1::setDowngradingDate(const ossimString& d)
@@ -1293,7 +1292,7 @@ void ossimNitfFileHeaderV2_1::setClassificationReason(const ossimString& reason)
 
 void ossimNitfFileHeaderV2_1::setSecuritySourceDate(const ossimLocalTm& d)
 {
-   memcpy(theSecuritySourceDate, formatDate(d).c_str(), 8);
+   memcpy(theSecuritySourceDate, formatDate(getVersion(), d).c_str(), 8);
 }
 
 void ossimNitfFileHeaderV2_1::setSecuritySourceDate(const ossimString& d)
@@ -1397,12 +1396,15 @@ void ossimNitfFileHeaderV2_1::setProperty(ossimRefPtr<ossimProperty> property)
    else if(name == FBKGC_KW)
    {
       ossimString value = property->valueToString();
-      istringstream in(value);
-      ossim_uint8 r, g, b;
-
-      in >> r >> g >> b;
-      
-      setFileBackgroundColor(r, g, b);
+      std::vector<ossimString> splitString;
+      value = value.trim();
+      value.split(splitString, " ");
+      if(splitString.size() == 3)
+      {
+         setFileBackgroundColor((ossim_uint8)splitString[0].toUInt32(), 
+                                (ossim_uint8)splitString[1].toUInt32(), 
+                                (ossim_uint8)splitString[2].toUInt32());
+      }
    }
    else
    {
@@ -1412,9 +1414,9 @@ void ossimNitfFileHeaderV2_1::setProperty(ossimRefPtr<ossimProperty> property)
 
 ossimRefPtr<ossimProperty> ossimNitfFileHeaderV2_1::getProperty(const ossimString& name)const
 {
-   ossimProperty* property = NULL;
-   ossimStringProperty* stringProperty = NULL;
-   ossimColorProperty* colorProperty = NULL;
+   ossimProperty* property = 0;
+   ossimStringProperty* stringProperty = 0;
+   ossimColorProperty* colorProperty = 0;
 
    if(name == CLEVEL_KW)
    {
@@ -1518,7 +1520,7 @@ ossimRefPtr<ossimProperty> ossimNitfFileHeaderV2_1::getProperty(const ossimStrin
    }
    else
    {
-      return ossimNitfFileHeader::getProperty(name);
+      return ossimNitfFileHeaderV2_X::getProperty(name);
    }
    return property;
 }
@@ -1526,7 +1528,7 @@ ossimRefPtr<ossimProperty> ossimNitfFileHeaderV2_1::getProperty(const ossimStrin
 
 void ossimNitfFileHeaderV2_1::getPropertyNames(std::vector<ossimString>& propertyNames)const
 {
-   ossimNitfFileHeader::getPropertyNames(propertyNames);
+   ossimNitfFileHeaderV2_X::getPropertyNames(propertyNames);
 
    propertyNames.push_back(FSCLASY_KW);
    propertyNames.push_back(FSDCTP_KW);

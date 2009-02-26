@@ -23,7 +23,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageLayerGenerator.h"
 #include "otbImageLayer.h"
 #include "otbImageView.h"
-#include <FL/Fl.h>
+#include <FL/Fl.H>
 #include "otbImageWidgetController.h"
 #include "otbWidgetResizingActionHandler.h"
 #include "otbChangeScaledExtractRegionActionHandler.h"

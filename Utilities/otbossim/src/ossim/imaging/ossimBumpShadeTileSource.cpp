@@ -8,13 +8,14 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBumpShadeTileSource.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimBumpShadeTileSource.cpp 13382 2008-08-04 18:53:26Z gpotts $
 
 #include <ossim/imaging/ossimBumpShadeTileSource.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/imaging/ossimTilePatch.h>
 #include <ossim/imaging/ossimImageData.h>
+#include <ossim/base/ossimNumericProperty.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimKeyword.h>
@@ -49,37 +50,23 @@ ossimRefPtr<ossimImageData> ossimBumpShadeTileSource::getTile(
 
    if(!theTile.get())
    {
-      initialize();
+      allocate();
    }
-   
-   ossimImageSourceInterface* normalSource =
-      PTR_CAST(ossimImageSourceInterface, getInput(0));
-   ossimImageSourceInterface* colorSource =
-      PTR_CAST(ossimImageSourceInterface, getInput(1));
+   if(!theTile.valid())
+   {
+      return theTile;
+   }
+   ossimImageSource* normalSource =
+      PTR_CAST(ossimImageSource, getInput(0));
+   ossimImageSource* colorSource =
+      PTR_CAST(ossimImageSource, getInput(1));
    
    if(!theTile.get())
    {
       return ossimRefPtr<ossimImageData>();
    }
 
-   long w = tileRect.width();
-   long h = tileRect.height();
-   ossimIpt origin = tileRect.ul();
-   
-   theTile->setOrigin(origin);
-
-   long tileW = theTile->getWidth();
-   long tileH = theTile->getHeight();
-   if((w != tileW)||
-      (h != tileH))
-   {
-      theTile->setWidth(w);
-      theTile->setHeight(h);
-      if((w*h)!=(tileW*tileH))
-      {
-         theTile->initialize();
-      }
-   }
+   theTile->setImageRectangle(tileRect);
  
    ossimRefPtr<ossimImageData> inputTile = NULL;
 
@@ -282,7 +269,7 @@ void ossimBumpShadeTileSource::computeColor(ossim_uint8& r,
 
 ossimIrect ossimBumpShadeTileSource::getBoundingRect(ossim_uint32 resLevel)const
 {
-   ossimImageSourceInterface* source = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   ossimImageSource* source = PTR_CAST(ossimImageSource, getInput(0));
    if(source)
    {
       return source->getBoundingRect(resLevel);
@@ -296,7 +283,7 @@ ossimIrect ossimBumpShadeTileSource::getBoundingRect(ossim_uint32 resLevel)const
 void ossimBumpShadeTileSource::getDecimationFactor(ossim_uint32 resLevel,
                                                    ossimDpt& result) const
 {
-   ossimImageSourceInterface* source = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   ossimImageSource* source = PTR_CAST(ossimImageSource, getInput(0));
    if(source)
    {
       return source->getDecimationFactor(resLevel, result);
@@ -307,7 +294,7 @@ void ossimBumpShadeTileSource::getDecimationFactor(ossim_uint32 resLevel,
 
 void ossimBumpShadeTileSource::getDecimationFactors(vector<ossimDpt>& decimations) const
 {
-   ossimImageSourceInterface* source = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   ossimImageSource* source = PTR_CAST(ossimImageSource, getInput(0));
    
    if(source)
    {
@@ -317,7 +304,7 @@ void ossimBumpShadeTileSource::getDecimationFactors(vector<ossimDpt>& decimation
 
 ossim_uint32 ossimBumpShadeTileSource::getNumberOfDecimationLevels()const
 {
-   ossimImageSourceInterface* source = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   ossimImageSource* source = PTR_CAST(ossimImageSource, getInput(0));
    
    if(source)
    {
@@ -329,7 +316,7 @@ ossim_uint32 ossimBumpShadeTileSource::getNumberOfDecimationLevels()const
 
 ossim_uint32 ossimBumpShadeTileSource::getTileWidth()const
 {
-   ossimImageSourceInterface* source = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   ossimImageSource* source = PTR_CAST(ossimImageSource, getInput(0));
    if(source)
    {
       return source->getTileWidth();
@@ -340,7 +327,7 @@ ossim_uint32 ossimBumpShadeTileSource::getTileWidth()const
 
 ossim_uint32 ossimBumpShadeTileSource::getTileHeight()const
 {
-   ossimImageSourceInterface* source = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   ossimImageSource* source = PTR_CAST(ossimImageSource, getInput(0));
    if(source)
    {
       return source->getTileHeight();
@@ -352,11 +339,16 @@ ossim_uint32 ossimBumpShadeTileSource::getTileHeight()const
 void ossimBumpShadeTileSource::initialize()
 {
   ossimImageCombiner::initialize();
-  
-  theTile = ossimImageDataFactory::instance()->create(this, this);
-  theTile->initialize();
+   theTile = 0;
+   
   computeLightDirection();
   
+}
+
+void ossimBumpShadeTileSource::allocate()
+{
+   theTile = ossimImageDataFactory::instance()->create(this, this);
+   theTile->initialize();
 }
 
 void ossimBumpShadeTileSource::computeLightDirection()
@@ -482,7 +474,7 @@ bool ossimBumpShadeTileSource::canConnectMyInputTo(ossim_int32 inputIndex,
 {
    return (object&&
            ( (inputIndex>=0) && inputIndex < 2)&&
-           PTR_CAST(ossimImageSourceInterface, object));
+           PTR_CAST(ossimImageSource, object));
    
 }
 
@@ -505,3 +497,46 @@ void ossimBumpShadeTileSource::refreshEvent(ossimRefreshEvent& event)
 {
    initialize();
 }
+
+void ossimBumpShadeTileSource::setProperty(ossimRefPtr<ossimProperty> property)
+{
+   ossimString name = property->getName();
+   if(name == "lightSourceElevationAngle")
+   {
+      theLightSourceElevationAngle = property->valueToString().toDouble();
+   }
+   else if(name == "lightSourceAzimuthAngle")
+   {
+      theLightSourceAzimuthAngle = property->valueToString().toDouble();
+   }
+   else
+   {
+      ossimImageCombiner::setProperty(property);
+   }
+}
+
+ossimRefPtr<ossimProperty> ossimBumpShadeTileSource::getProperty(const ossimString& name)const
+{
+   if(name == "lightSourceElevationAngle")
+   {
+      ossimProperty* prop = new ossimNumericProperty(name, theLightSourceElevationAngle, 0.0, 90.0);
+      prop->setCacheRefreshBit();
+      return prop;
+   }
+   else if(name == "lightSourceAzimuthAngle")
+   {
+      ossimProperty* prop = new ossimNumericProperty(name, theLightSourceAzimuthAngle, 0.0, 90.0);
+      prop->setCacheRefreshBit();
+      return prop;
+   }
+   
+   return ossimImageCombiner::getProperty(name);
+}
+
+void ossimBumpShadeTileSource::getPropertyNames(std::vector<ossimString>& propertyNames)const
+{
+   ossimImageCombiner::getPropertyNames(propertyNames);
+   propertyNames.push_back("lightSourceElevationAngle");
+   propertyNames.push_back("lightSourceAzimuthAngle");
+}
+

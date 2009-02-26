@@ -8,10 +8,12 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationBitmap.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimGeoAnnotationBitmap.cpp 13348 2008-07-30 15:33:53Z dburken $
 
 #include <ossim/imaging/ossimGeoAnnotationBitmap.h>
 #include <ossim/projection/ossimProjection.h>
+#include <ossim/projection/ossimImageProjectionModel.h>
+#include <ossim/base/ossimException.h>
 #include <ossim/base/ossimIrect.h>
 
 RTTI_DEF1(ossimGeoAnnotationBitmap,
@@ -56,7 +58,42 @@ ossimGeoAnnotationBitmap::ossimGeoAnnotationBitmap(
 ossimGeoAnnotationBitmap::~ossimGeoAnnotationBitmap()
 {
 }
+
+ossimObject* ossimGeoAnnotationBitmap::dup()const
+{
+   return new ossimGeoAnnotationBitmap(*this);
+}
+
+bool ossimGeoAnnotationBitmap::intersects(const ossimDrect& rect) const
+{
+   if(theImageData.valid())
+   {
+      return theImageData->getImageRectangle().intersects(rect);
+   }
    
+   return false;
+}
+
+ossimGeoAnnotationBitmap* ossimGeoAnnotationBitmap::getNewClippedObject(
+   const ossimDrect& rect)const
+{
+   ossimGeoAnnotationBitmap* result = (ossimGeoAnnotationBitmap*)dup();
+   
+   ossimNotify(ossimNotifyLevel_WARN)
+      << "ossimGeoAnnotationBitmap::getNewClippedObject WRNING: "
+      << "not implemented" << std::endl;
+   
+   return result;
+}
+
+void ossimGeoAnnotationBitmap::applyScale(double x, double y)
+{
+     ossimNotify(ossimNotifyLevel_WARN)
+      << "ossimGeoAnnotationBitmap::applyScale WRNING: not implemented"
+      << std::endl; 
+}
+
+
 std::ostream& ossimGeoAnnotationBitmap::print(std::ostream& out)const
 {
    out << "center:    " << theCenterPoint << endl;
@@ -142,8 +179,7 @@ void ossimGeoAnnotationBitmap::transform(ossimProjection* projection)
 {
    if(projection)
    {
-      projection->worldToLineSample(theCenterPoint,
-                                    theProjectedPoint);
+      projection->worldToLineSample(theCenterPoint, theProjectedPoint);
       theProjectedPoint = ossimIpt(theProjectedPoint);
       if(theImageData.valid())
       {
@@ -153,6 +189,43 @@ void ossimGeoAnnotationBitmap::transform(ossimProjection* projection)
          theImageData->setOrigin(origin);
       }
    }
+}
+
+void ossimGeoAnnotationBitmap::transform(
+   const ossimImageProjectionModel& model, ossim_uint32 rrds)
+{
+   const ossimProjection* projection = model.getProjection();
+   if (projection)
+   {
+      projection->worldToLineSample(theCenterPoint, theProjectedPoint);
+      if (rrds)
+      {
+         // Transform r0 point to new rrds level.
+         try
+         {
+            ossimDpt rnPt;
+            model.r0ToRn(rrds, theProjectedPoint, rnPt);
+            theProjectedPoint = rnPt;
+            
+         }
+         catch (const ossimException& e)
+         {
+            ossimNotify(ossimNotifyLevel_WARN) << e.what() << std::endl;
+         }
+      }
+
+      // Not sure about cast???  drb.
+      // theProjectedPoint = ossimIpt(theProjectedPoint);
+      
+      if(theImageData.valid())
+      {
+         ossimDpt origin(theProjectedPoint.x - theImageData->getWidth()/2.0,
+                         theProjectedPoint.y - theImageData->getHeight()/2.0);
+         
+         theImageData->setOrigin(origin);
+      } 
+   }
+      
 }
 
 void ossimGeoAnnotationBitmap::setImageData(

@@ -6,10 +6,11 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimSFIMFusion.cpp 11347 2007-07-23 13:01:59Z gpotts $
+//  $Id: ossimSFIMFusion.cpp 13371 2008-08-02 13:42:42Z gpotts $
 #include <ossim/imaging/ossimSFIMFusion.h>
 #include <ossim/matrix/newmat.h>
 #include <ossim/matrix/newmatio.h>
+#include <ossim/base/ossimNumericProperty.h>
 #include <ossim/base/ossim2dLinearRegression.h>
 #include <ossim/base/ossimNormRgbVector.h>
 #include <ossim/base/ossimHsiVector.h>
@@ -19,11 +20,11 @@ RTTI_DEF2(ossimSFIMFusion, "ossimSFIMFusion", ossimFusionCombiner, ossimAdjustab
 
 
 static const ossim_uint32 HIGH_PASS_GAIN_OFFSET = 0;
-static const ossim_uint32 PAN_BLURR_WIDTH_OFFSET = 1;
+static const ossim_uint32 LOW_PASS_WIDTH_OFFSET = 1;
 static const ossim_uint32  NUMBER_OF_ADJUSTABLE_PARAMETERS = 2;
 
 ossimSFIMFusion::ossimSFIMFusion()
-   :theBlurrKernelWidth(1.5),
+   :theLowPassKernelWidth(1.5),
     theHighPassKernelWidth(3)
 {
    theLowPassFilter  = new ossimImageGaussianFilter;
@@ -168,10 +169,12 @@ ossimRefPtr<ossimImageData> ossimSFIMFusion::getTile(const ossimIrect& rect,
                if(*bands[idx] > 1.0) *bands[idx] = 1.0;
                if(*bands[idx] < normMinPix) *bands[idx] = normMinPix;
             }
-            else
-            {
-               *bands[idx] = 0.0;
-            }
+            // let's comment out the nulling and we will instead just pass the color on
+            //
+//            else
+//            {
+//               *bands[idx] = 0.0;
+//            }
             ++bands[idx];
          }
          ++panHigh;
@@ -207,7 +210,7 @@ void ossimSFIMFusion::initialize()
 
 void ossimSFIMFusion::setFilters()
 {
-   theLowPassFilter->setGaussStd(theBlurrKernelWidth);
+   theLowPassFilter->setGaussStd(theLowPassKernelWidth);
    
    theHighPassMatrix = NEWMAT::Matrix(theHighPassKernelWidth, theHighPassKernelWidth);
    theHighPassMatrix = 0;
@@ -250,26 +253,73 @@ void ossimSFIMFusion::initAdjustableParameters()
    setParameterCenter(HIGH_PASS_GAIN_OFFSET,
                       1.0);
 
-   setAdjustableParameter(PAN_BLURR_WIDTH_OFFSET,
+   setAdjustableParameter(LOW_PASS_WIDTH_OFFSET,
                           -1);
-   setParameterDescription(PAN_BLURR_WIDTH_OFFSET,
-                           "Blurring kernel width");
-   setParameterSigma(PAN_BLURR_WIDTH_OFFSET,
-                     7);
-   setParameterCenter(PAN_BLURR_WIDTH_OFFSET,
-                      7.5);
+   setParameterDescription(LOW_PASS_WIDTH_OFFSET,
+                           "Low pass kernel width");
+   setParameterSigma(LOW_PASS_WIDTH_OFFSET,
+                     40);
+   setParameterCenter(LOW_PASS_WIDTH_OFFSET,
+                      40.5);
    
 
-   setParameterOffset(PAN_BLURR_WIDTH_OFFSET,
+   setParameterOffset(LOW_PASS_WIDTH_OFFSET,
                       1.5);
 }
 
 void ossimSFIMFusion::adjustableParametersChanged()
 {
 //   std::cout << "Parameter offset = " << computeParameterOffset(2) << std::endl;
-   theBlurrKernelWidth = (ossim_uint32)(ossim::round<int>(computeParameterOffset(PAN_BLURR_WIDTH_OFFSET)));
+   theLowPassKernelWidth = (ossim_uint32)(ossim::round<int>(computeParameterOffset(LOW_PASS_WIDTH_OFFSET)));
 }
 
+void ossimSFIMFusion::setProperty(ossimRefPtr<ossimProperty> property)
+{
+   ossimString name = property->getName();
+   if(name=="lowPassKernelWidth")
+   {
+      setParameterOffset(LOW_PASS_WIDTH_OFFSET,
+                         property->valueToString().toDouble(),
+                         true);
+   }
+   else if(name=="highPassGain")
+   {
+      setParameterOffset(HIGH_PASS_GAIN_OFFSET,
+                         property->valueToString().toDouble(computeParameterOffset(HIGH_PASS_GAIN_OFFSET)),
+                         true);
+   }
+   else
+   {
+      ossimFusionCombiner::setProperty(property);
+   }
+}
+
+ossimRefPtr<ossimProperty> ossimSFIMFusion::getProperty(const ossimString& name)const
+{
+   if(name == "lowPassKernelWidth")
+   {
+      return new ossimNumericProperty(name, 
+                                      ossimString::toString(computeParameterOffset(LOW_PASS_WIDTH_OFFSET)),
+                                      getParameterCenter(LOW_PASS_WIDTH_OFFSET)-getParameterSigma(LOW_PASS_WIDTH_OFFSET),
+                                      getParameterCenter(LOW_PASS_WIDTH_OFFSET)+getParameterSigma(LOW_PASS_WIDTH_OFFSET));
+   }
+   else if(name == "highPassGain")
+   {
+      return new ossimNumericProperty(name, 
+                                      ossimString::toString(computeParameterOffset(HIGH_PASS_GAIN_OFFSET)),
+                                      getParameterCenter(HIGH_PASS_GAIN_OFFSET)-getParameterSigma(HIGH_PASS_GAIN_OFFSET),
+                                      getParameterCenter(HIGH_PASS_GAIN_OFFSET)+getParameterSigma(HIGH_PASS_GAIN_OFFSET));
+   }
+   
+   return ossimFusionCombiner::getProperty(name);
+}
+
+void ossimSFIMFusion::getPropertyNames(std::vector<ossimString>& propertyNames)const
+{
+   ossimFusionCombiner::getPropertyNames(propertyNames);
+   propertyNames.push_back("lowPassKernelWidth");
+   propertyNames.push_back("highPassGain");
+}
 
 bool ossimSFIMFusion::saveState(ossimKeywordlist& kwl,
                                             const char* prefix) const

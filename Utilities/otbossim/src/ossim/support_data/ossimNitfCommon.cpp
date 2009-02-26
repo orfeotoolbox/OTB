@@ -7,14 +7,17 @@
 // Description: Utility class for global nitf methods.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfCommon.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfCommon.cpp 13619 2008-09-29 19:10:31Z gpotts $
 
 #include <cstring> /* for memcpy */
 #include <sstream>
 #include <iomanip>
-
+#include <sstream>
+#include <stdexcept>
+#include <iostream>
 #include <ossim/support_data/ossimNitfCommon.h>
 #include <ossim/base/ossimTrace.h>
+#include <ossim/base/ossimDms.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimDpt.h>
 
@@ -222,4 +225,236 @@ void ossimNitfCommon::setField(void* fieldDestination,
        << src.trim().c_str();
    
    memcpy(fieldDestination, out.str().c_str(), width);
+}
+
+ossimString ossimNitfCommon::encodeUtm(
+                                       ossim_uint32 zone,
+                                       const ossimDpt& ul,
+                                       const ossimDpt& ur,
+                                       const ossimDpt& lr,
+                                       const ossimDpt& ll)
+{
+   std::ostringstream out;
+   
+   if(zone > 60)
+   {
+      std::string s = "ossimNitfImageHeaderV2_1::encodeUtm: ERROR\nUTM zone greate than 60!";
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
+      }
+      throw std::out_of_range(s);
+   }
+   
+   ossim_float64 east  = ul.x;
+   ossim_float64 north = ul.y;
+   
+   if((ossim_uint32)(east+.5) > 999999)
+   {
+      std::string s = "ossimNitfImageHeaderV2_1::encodeUtm: ERROR\nUpper left easting too large for NITF field!";
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
+      }
+      throw std::out_of_range(s);
+   }
+   
+   if((ossim_uint32)(north+.5) > 9999999)
+   {
+      std::string s = "ossimNitfImageHeaderV2_1::encodeUtm: ERROR\nUpper left northing too large for NITF field!";
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
+      }
+      throw std::out_of_range(s);
+   }
+   
+   out << std::setw(2)
+   << std::setfill('0')
+   << zone
+   << std::setw(6)
+   << std::setfill('0')
+   <<(ossim_uint32)(east+.5)
+   << std::setw(7)
+   << std::setfill('0')
+   <<(ossim_uint32)(north+.5);
+   
+   
+   east  = ur.x;
+   north = ur.y;
+   
+   if((ossim_uint32)(east+.5) > 999999)
+   {
+      std::string s = "ossimNitfImageHeaderV2_1::encodeUtm: ERROR\nUpper right easting too large for NITF field!";
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
+      }
+      throw std::out_of_range(s);
+   }
+   
+   if((ossim_uint32)(north+.5) > 9999999)
+   {
+      std::string s = "ossimNitfImageHeaderV2_1::encodeUtm: ERROR\nUpper right northing too large for NITF field!";
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
+      }
+      throw std::out_of_range(s);
+   }
+   
+   out << std::setw(2)
+   << std::setfill('0')
+   << zone
+   << std::setw(6)
+   << std::setfill('0')
+   <<(ossim_uint32)(east+.5)
+   << std::setw(7)
+   << std::setfill('0')
+   <<(ossim_uint32)(north+.5);
+   east  = lr.x;
+   north = lr.y;
+   
+   if((ossim_uint32)(east+.5) > 999999)
+   {
+      std::string s = "ossimNitfImageHeaderV2_1::encodeUtm: ERROR\nLower right easting too large for NITF field!";
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
+      }
+      throw std::out_of_range(s);
+   }
+   
+   if((ossim_uint32)(north+.5) > 9999999)
+   {
+      std::string s = "ossimNitfImageHeaderV2_1::encodeUtm: ERROR\nLower right northing too large for NITF field!";
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
+      }
+      throw std::out_of_range(s);
+   }   
+   
+   out << std::setw(2)
+   << std::setfill('0')
+   << zone
+   << std::setw(6)
+   << std::setfill('0')
+   <<(ossim_uint32)(east+.5)
+   << std::setw(7)
+   << std::setfill('0')
+   <<(ossim_uint32)(north+.5);
+   
+   east  = ll.x;
+   north = ll.y;
+   
+   if((ossim_uint32)(east+.5) > 999999)
+   {
+      std::string s = "ossimNitfImageHeaderV2_1::encodeUtm: ERROR\nLower left easting too large for NITF field!";
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
+      }
+      throw std::out_of_range(s);
+   }
+   
+   if((ossim_uint32)(north+.5) > 9999999)
+   {
+      std::string s = "ossimNitfImageHeaderV2_1::encodeUtm: ERROR\nLower left northing too large for NITF field!";
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
+      }
+      throw std::out_of_range(s);
+   }
+   
+   out << std::setw(2)
+   << std::setfill('0')
+   << zone
+   << std::setw(6)
+   << std::setfill('0')
+   <<(ossim_uint32)(east+.5)
+   << std::setw(7)
+   << std::setfill('0')
+   <<(ossim_uint32)(north+.5);
+   
+   return out.str().c_str();
+}
+
+ossimString ossimNitfCommon::encodeGeographicDms(const ossimDpt& ul,
+                                                 const ossimDpt& ur,
+                                                 const ossimDpt& lr,
+                                                 const ossimDpt& ll)
+{
+   std::ostringstream out;
+   
+   out << ossimDms(ul.y, true).toString("ddmmssC").c_str();
+   out << ossimDms(ul.x, false).toString("dddmmssC").c_str();
+   out << ossimDms(ur.y, true).toString("ddmmssC").c_str();
+   out << ossimDms(ur.x, false).toString("dddmmssC").c_str();
+   out << ossimDms(lr.y, true).toString("ddmmssC").c_str();
+   out << ossimDms(lr.x, false).toString("dddmmssC").c_str();
+   out << ossimDms(ll.y, true).toString("ddmmssC").c_str();
+   out << ossimDms(ll.x, false).toString("dddmmssC").c_str();
+
+   return ossimString(out.str());
+}
+
+ossimString ossimNitfCommon::encodeGeographicDecimalDegrees(const ossimDpt& ul,
+                                                            const ossimDpt& ur,
+                                                            const ossimDpt& lr,
+                                                            const ossimDpt& ll)
+{
+   std::ostringstream out;
+   
+   out << (ul.lat >= 0.0?"+":"")
+   << std::setw(6)
+   << std::setfill('0')
+   << std::setprecision(3)
+   << std::setiosflags(std::ios::fixed)
+   << ul.lat
+   << (ul.lon >= 0.0?"+":"")
+   << std::setw(7)
+   << std::setfill('0')
+   << std::setprecision(3)
+   << std::setiosflags(std::ios::fixed)
+   << ul.lon;
+   out << (ur.lat >= 0.0?"+":"")
+   << std::setw(6)
+   << std::setfill('0')
+   << std::setprecision(3)
+   << std::setiosflags(std::ios::fixed)
+   << ur.lat
+   << (ur.lon >= 0.0?"+":"")
+   << std::setw(7)
+   << std::setfill('0')
+   << std::setprecision(3)
+   << std::setiosflags(std::ios::fixed)
+   << ur.lon;
+   out << (lr.lat >= 0.0?"+":"")
+   << std::setw(6)
+   << std::setfill('0')
+   << std::setprecision(3)
+   << std::setiosflags(std::ios::fixed)
+   << lr.lat
+   << (lr.lon >= 0.0?"+":"")
+   << std::setw(7)
+   << std::setfill('0')
+   << std::setprecision(3)
+   << std::setiosflags(std::ios::fixed)
+   << lr.lon;
+   out << (ll.lat >= 0.0?"+":"")
+   << std::setw(6)
+   << std::setfill('0')
+   << std::setprecision(3)
+   << std::setiosflags(std::ios::fixed)
+   << ll.lat
+   << (ll.lon >= 0.0?"+":"")
+   << std::setw(7)
+   << std::setfill('0')
+   << std::setprecision(3)
+   << std::setiosflags(std::ios::fixed)
+   << ll.lon;
+   
+   return ossimString(out.str());
 }

@@ -8,7 +8,7 @@
 //               (ACC) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedAcc.cpp 13025 2008-06-13 17:06:30Z sbortman $
+// $Id: ossimDtedAcc.cpp 13571 2008-09-12 14:59:59Z gpotts $
 
 #include <cstdlib>
 #include <iostream>
@@ -22,28 +22,10 @@
 //**************************************************************************
 ossimDtedAcc::ossimDtedAcc(const ossimFilename& dted_file,
                            ossim_int32 offset)
-   :
-      theRecSen(),
-      theAbsoluteCE(),
-      theAbsoluteLE(),
-      theRelativeCE(),
-      theRelativeLE(),
-      theField6(),
-      theField7(),
-      theField8(),
-      theField9(),
-      theField10(),
-      theField11(),
-      theField12(),
-      theField13(),
-      theField14(),
-      theField15(),
-      theField16(),
-      theField17(),
-      theStartOffset(offset),
-      theStopOffset(0)
 {
-   // Check to see that dted file exists.
+	clearFields();
+	theStartOffset = offset;
+   // Check to see that dted file exists. 
    if(!dted_file.exists())
    {
       theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
@@ -71,32 +53,37 @@ ossimDtedAcc::ossimDtedAcc(const ossimFilename& dted_file,
    parse(in);
 }
 
+void ossimDtedAcc::clearFields()
+{
+   memset(theRecSen, '\0', FIELD1_SIZE+1);
+   memset(theAbsoluteCE, '\0',FIELD2_SIZE+1);
+   memset(theAbsoluteLE, '\0',FIELD3_SIZE+1);
+   memset(theRelativeCE, '\0',FIELD4_SIZE+1);
+   memset(theRelativeLE, '\0',FIELD5_SIZE+1);
+   memset(theField6, '\0',FIELD6_SIZE+1);
+   memset(theField7, '\0',FIELD7_SIZE+1);
+   memset(theField8, '\0',FIELD8_SIZE+1);
+   memset(theField9, '\0',FIELD9_SIZE+1);
+   memset(theField10, '\0',FIELD10_SIZE+1);
+   memset(theField11, '\0',FIELD11_SIZE+1);
+   memset(theField12, '\0',FIELD12_SIZE+1);
+   memset(theField13, '\0',FIELD13_SIZE+1);
+   memset(theField14, '\0',FIELD14_SIZE+1);
+   memset(theField15, '\0',FIELD15_SIZE+1);
+   memset(theField16, '\0',FIELD16_SIZE+1);
+   memset(theField17, '\0',FIELD17_SIZE+1);
+   
+   theStartOffset = 0;
+   theStopOffset = 0;
+}
 //**************************************************************************
 // CONSTRUCTOR
 //**************************************************************************
 ossimDtedAcc::ossimDtedAcc(std::istream& in,
                            ossim_int32 offset)
-   :
-      theRecSen(),
-      theAbsoluteCE(),
-      theAbsoluteLE(),
-      theRelativeCE(),
-      theRelativeLE(),
-      theField6(),
-      theField7(),
-      theField8(),
-      theField9(),
-      theField10(),
-      theField11(),
-      theField12(),
-      theField13(),
-      theField14(),
-      theField15(),
-      theField16(),
-      theField17(),
-      theStartOffset(offset),
-      theStopOffset(0)
 {
+	clearFields();
+	theStartOffset = offset;
    parse(in);
 }
 

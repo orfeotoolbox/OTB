@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimDate.h 12992 2008-06-05 18:09:11Z gpotts $
+// $Id: ossimDate.h 13732 2008-10-17 19:47:43Z gpotts $
 #ifndef ossimDate_HEADER
 #define ossimDate_HEADER
 #include <ctime>
@@ -162,7 +162,8 @@ public:
     double getFractionalSecond()const;
     ossimLocalTm& setHour(int h);
     ossimLocalTm& setMin(int m);
-    ossimLocalTm& setSec(int s);
+   ossimLocalTm& setSec(int s);
+   ossimLocalTm& setFloatSec(double s);
     ossimLocalTm& setFractionalSecond(double fractS);
 
     /**
@@ -172,15 +173,15 @@ public:
     time_t getTicks()const;
     time_t getEpoc()const;
     
-    void addSeconds(ossim_float64 n);
-    void addMinutes(ossim_float64 n);
-    void addHours(ossim_float64 n);
-    void addDays(ossim_float64 n);
-    
-    ossim_float64 deltaInSeconds(const ossimLocalTm& d)const;
-    ossim_float64 deltaInMinutes(const ossimLocalTm& d)const;
-    ossim_float64 delatInHours(const ossimLocalTm& d)const;
-    ossim_float64 deltaInDays(const ossimLocalTm& d)const;
+   void addSeconds(ossim_float64 n);
+   void addMinutes(ossim_float64 n);
+   void addHours(ossim_float64 n);
+   void addDays(ossim_float64 n);
+   
+   ossim_float64 deltaInSeconds(const ossimLocalTm& d)const;
+   ossim_float64 deltaInMinutes(const ossimLocalTm& d)const;
+   ossim_float64 delatInHours(const ossimLocalTm& d)const;
+   ossim_float64 deltaInDays(const ossimLocalTm& d)const;
     /**
      * Will not adjust for timezone.  The passed in value is based on seconds.
      */ 
@@ -191,6 +192,8 @@ public:
      */ 
     void setTimeGivenEpoc(time_t ticks);
     
+   bool setIso8601(const std::string& timeString, bool shiftToGmtOffsetZero=false);
+   
     ossimRefPtr<ossimXmlNode> saveXml()const;
     bool loadXml(ossimRefPtr<ossimXmlNode> dateNode);
     

@@ -9,7 +9,7 @@
 // Contains class declaration for NitfTileSource.
 //
 //*******************************************************************
-//  $Id: ossimNitfTileSource.h 12218 2007-12-26 14:14:02Z dburken $
+//  $Id: ossimNitfTileSource.h 13942 2009-01-01 18:58:36Z dburken $
 #ifndef ossimNitfTileSource_HEADER
 #define ossimNitfTileSource_HEADER
 
@@ -17,9 +17,10 @@
 
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/imaging/ossimAppFixedTileCache.h>
+#include <ossim/support_data/ossimNitfFile.h>
+#include <ossim/support_data/ossimNitfFileHeader.h>
+#include <ossim/support_data/ossimNitfImageHeader.h>
 
-class ossimNitfFile;
-class ossimNitfImageHeader;
 struct jpeg_decompress_struct;
 
 class OSSIM_DLL ossimNitfTileSource : public ossimImageHandler
@@ -206,6 +207,7 @@ public:
    virtual double getMaxPixelValue(ossim_uint32 band=0)const;
    virtual double getNullPixelValue(ossim_uint32 band=0)const;
 
+   const ossimNitfFileHeader* getFileHeader()const;
    /**
     * @return The image header for the current entry.
     */
@@ -304,7 +306,7 @@ protected:
    /**
     * Initializes the data member "theScalarType" from the current entry.
     */
-   void initializeScalarType();
+   virtual void initializeScalarType();
 
    /**
     * Initializes the data member "theSwapBytesFlag" from the current entry.
@@ -378,6 +380,12 @@ protected:
     * Initializes the data member theCompressedBuf.
     */
    virtual void initializeCompressedBuf();
+
+   /**
+    * Initializes the output tile size(width and height).
+    */
+   virtual void initializeOutputTile();
+   
 
    /**
     * Loads a block of data to theCacheTile.
@@ -476,8 +484,8 @@ protected:
    
    ossimRefPtr<ossimImageData>   theTile;
    ossimRefPtr<ossimImageData>   theCacheTile;
-   ossimNitfFile*                theNitfFile;
-   vector<ossimNitfImageHeader*> theNitfImageHeader;
+   ossimRefPtr<ossimNitfFile>    theNitfFile;
+   vector<ossimRefPtr<ossimNitfImageHeader> > theNitfImageHeader;
    ReadMode                      theReadMode;
    ossimScalarType               theScalarType;
    bool                          theSwapBytesFlag;

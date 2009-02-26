@@ -6,7 +6,7 @@
 // Description: 
 // 
 //********************************************************************
-// $Id: ossimFontFactoryRegistry.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimFontFactoryRegistry.h 13508 2008-08-27 15:51:38Z gpotts $
 #ifndef ossimFontFactoryRegistry_HEADER
 #define ossimFontFactoryRegistry_HEADER
 #include <vector>
@@ -54,7 +54,7 @@ public:
 protected:
    mutable ossimFont* theDefaultFont;
 
-   static ossimFontFactoryRegistry* theInstance;
+   //static ossimFontFactoryRegistry* theInstance;
 
    std::vector<ossimFontFactoryBase*> theFactoryList;
 

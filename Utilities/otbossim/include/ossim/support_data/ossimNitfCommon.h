@@ -7,7 +7,7 @@
 // Description: Utility class for global nitf methods.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfCommon.h 13025 2008-06-13 17:06:30Z sbortman $
+// $Id: ossimNitfCommon.h 13619 2008-09-29 19:10:31Z gpotts $
 #ifndef ossimNitfCommon_HEADER
 #define ossimNitfCommon_HEADER
 
@@ -122,7 +122,26 @@ public:
                         std::streamsize width,
                         std::ios_base::fmtflags ioflags = std::ios::left,
                         char fill = ' ');
-
+   /**
+    * This will encode a 60 character IGEOLO field.
+    */
+   static ossimString encodeUtm(
+                                ossim_uint32 zone,
+                                const ossimDpt& ul,
+                                const ossimDpt& ur,
+                                const ossimDpt& lr,
+                                const ossimDpt& ll);
+   static ossimString encodeGeographicDms(
+                                          const ossimDpt& ul,
+                                          const ossimDpt& ur,
+                                          const ossimDpt& lr,
+                                          const ossimDpt& ll);
+   static ossimString encodeGeographicDecimalDegrees(
+                                                     const ossimDpt& ul,
+                                                     const ossimDpt& ur,
+                                                     const ossimDpt& lr,
+                                                     const ossimDpt& ll);
+   
 }; // End of class ossimNitfCommon.
    
 #endif /* #ifndef ossimNitfCommon_HEADER */

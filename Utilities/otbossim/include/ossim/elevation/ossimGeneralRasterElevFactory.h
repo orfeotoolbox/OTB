@@ -10,12 +10,11 @@
 // elevation handler for general raster elevation files.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimGeneralRasterElevFactory.h 11441 2007-07-30 15:17:55Z gpotts $
+// $Id: ossimGeneralRasterElevFactory.h 13269 2008-07-25 14:27:36Z dburken $
 #ifndef ossimGeneralRasterElevFactory_HEADER
 #define ossimGeneralRasterElevFactory_HEADER
 
 #include <ossim/elevation/ossimElevSourceFactory.h>
-#include <ossim/elevation/ossimElevationShapeIdx.h>
 #include <ossim/base/ossimDrect.h>
 #include <ossim/elevation/ossimGeneralRasterElevHandler.h>
 

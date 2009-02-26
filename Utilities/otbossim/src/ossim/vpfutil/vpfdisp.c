@@ -63,13 +63,12 @@
 #else
 #include <ossim/vpfutil/values.h>
 #endif
+#include <ossim/vpfutil/vpfapi.h>
 #include <ossim/vpfutil/vpftable.h>
 #include <ossim/vpfutil/vpfview.h>
 
-#ifdef HAVE_UNISTD_H
-#  if HAVE_UNISTD_H
+#if (!defined(_WIN32)||defined(__CYGWIN__))
 #    include <unistd.h>  /* For "access" function. */
-#  endif
 #endif
 
 extern color_type menucolor, menubordercolor, menutextcolor;

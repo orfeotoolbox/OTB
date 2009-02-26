@@ -8,10 +8,10 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimIgenGenerator.cpp 11411 2007-07-27 13:53:51Z dburken $
+// $Id: ossimIgenGenerator.cpp 13312 2008-07-27 01:26:52Z gpotts $
 #include <ossim/imaging/ossimIgenGenerator.h>
 #include <ossim/base/ossimKeywordNames.h>
-#include <ossim/imaging/ossimImageSourceInterface.h>
+#include <ossim/imaging/ossimImageSource.h>
 #include <ossim/imaging/ossimImageChain.h>
 #include <ossim/imaging/ossimGeoPolyCutter.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -77,7 +77,7 @@ void ossimIgenGenerator::setInput(ossimConnectableObject* input)
 {
    theSpecList.clear();
    generateInputKwl(input);
-   ossimImageSourceInterface* inputInterface = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* inputInterface = PTR_CAST(ossimImageSource,
                                                         input);
    if(inputInterface)
    {
@@ -551,7 +551,7 @@ int ossimIgenGenerator::getTileId(const ossimDrect& rect,
 ossimIrect ossimIgenGenerator::getInputBoundingRect()const
 {
    ossimObject* obj = createInput();
-   ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface, obj);
+   ossimImageSource* inter = PTR_CAST(ossimImageSource, obj);
    ossimIrect result;
 
    result.makeNan();

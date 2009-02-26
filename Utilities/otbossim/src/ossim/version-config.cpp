@@ -19,12 +19,17 @@
 #include <string>
 #include <iostream>
 
-#include <ossim/ossimConfig.h>
-
-// Caller should pass in path to ossim/include/ossim/ossimVersion.h
+/**
+ * @brief main application for getting version / date and generating the
+ * ossimVersion.h file.
+ *
+ * @param argv[1] Path to ossim/include/ossim/ossimVersion.h
+ *
+ * @param argv[2] Version number string like "1.7.11"
+ */
 int main(int argc, char* argv[])
 {
-   if (argc < 2)
+   if (argc != 3)
    {
       return(1);
    }
@@ -32,21 +37,38 @@ int main(int argc, char* argv[])
    std::ofstream os(argv[1]);
    if (!os)
    {
-      return(12);
+      return(1);
    }
 
-   // Get the version from the ossimConfig.h
+   // Get the version.  This is now passed in from the make file.
    std::string versionString = "Version ";
-   std::string versionNumber = "";
+   versionString += argv[2];
+   std::string versionNumber = argv[2];
+   std::string majorVersion;
+   std::string minorVersion = "0";
+   std::string releaseVersion = "0";
+   std::string::size_type pos1 = std::string::npos;
+   std::string::size_type pos2 = std::string::npos;
+   std::string::size_type pos3 = std::string::npos;
 
-#ifdef OSSIM_VERSION
-   versionString += OSSIM_VERSION;
-   versionNumber =  OSSIM_VERSION;
-#else
-   versionString += "?.?.?";
-   versionNumber += "?.?.?";
-#endif
-
+   pos1 = versionNumber.find(".", 0);
+   if(pos1 != std::string::npos)
+   {
+      majorVersion = std::string(versionNumber.begin(),
+                                 versionNumber.begin()+pos1);
+      pos2 = versionNumber.find(".", pos1+1);
+      if(pos2 != std::string::npos)
+      {
+         minorVersion = std::string(versionNumber.begin()+pos1+1,
+                                    versionNumber.begin()+pos2);
+         releaseVersion = std::string(versionNumber.begin()+pos2+1,
+                                      versionNumber.end());
+      }
+   }
+   else
+   {
+      majorVersion = versionNumber;
+   }
    // Get the build date in the format of (yyyymmdd).
    char s[11];
    s[10] = '\0';
@@ -66,6 +88,9 @@ int main(int argc, char* argv[])
       << "#ifndef OSSIM_VERSION\n"
       << "#  define OSSIM_VERSION " << "\"" << versionString << "\"\n"
       << "#  define OSSIM_VERSION_NUMBER " << "\"" << versionNumber << "\"\n"
+      << "#  define OSSIM_MAJOR_VERSION_NUMBER " << majorVersion << "\n"
+      << "#  define OSSIM_MINOR_VERSION_NUMBER " << minorVersion << "\n"
+      << "#  define OSSIM_RELEASE_NUMBER " << releaseVersion << "\n"
       << "#endif\n"
       << "\n"
       << "// date format = (yyyymmdd)\n"
@@ -79,7 +104,6 @@ int main(int argc, char* argv[])
    os.close();
 
    std::cout << "wrote file: " << argv[1] << std::endl;
-//OTB Modifications
-//   exit(0);
+
    return(0);
 }

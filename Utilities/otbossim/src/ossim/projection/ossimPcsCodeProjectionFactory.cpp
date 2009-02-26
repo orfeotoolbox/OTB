@@ -14,7 +14,7 @@
 // http://www.remotesensing.org/geotiff/spec/geotiff6.html#6.3.3.1
 // 
 //----------------------------------------------------------------------------
-//  $Id: ossimPcsCodeProjectionFactory.cpp 12082 2007-11-26 21:46:44Z dburken $
+//  $Id: ossimPcsCodeProjectionFactory.cpp 13819 2008-10-31 16:58:37Z dburken $
 
 #include <ossim/projection/ossimPcsCodeProjectionFactory.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -30,7 +30,7 @@ static const ossimTrace
 traceDebug(ossimString("ossimPcsCodeProjectionFactory:debug"));
 
 #if OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimPcsCodeProjectionFactory.cpp 12082 2007-11-26 21:46:44Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimPcsCodeProjectionFactory.cpp 13819 2008-10-31 16:58:37Z dburken $";
 #endif
 
 ossimPcsCodeProjectionFactory* ossimPcsCodeProjectionFactory::theInstance = 0;
@@ -318,10 +318,10 @@ void ossimPcsCodeProjectionFactory::getTypeNameList(
 {
 }
 
-ossim_int16 ossimPcsCodeProjectionFactory::getPcsCodeFromProjection(
+ossim_uint16 ossimPcsCodeProjectionFactory::getPcsCodeFromProjection(
    const ossimMapProjection* proj) const
 {
-   ossim_int16 pcsCode = 0;
+   ossim_uint16 pcsCode = 0;
    
    if (!proj)
    {
@@ -331,7 +331,7 @@ ossim_int16 ossimPcsCodeProjectionFactory::getPcsCodeFromProjection(
    ossimUtmProjection* utm = PTR_CAST(ossimUtmProjection, proj);
    if (utm)
    {
-      ossim_int32 mapZone    = utm->getZone();
+      ossim_uint16 mapZone   = static_cast<ossim_uint16>(utm->getZone());
       ossimString hemisphere = utm->getHemisphere();
       ossimString datumCode  = utm->getDatum()->code();
 

@@ -9,7 +9,7 @@
 //
 // This holds the class definition of DatumFactory.
 //*******************************************************************
-//  $Id: ossimDatumFactory.cpp 13018 2008-06-10 16:11:57Z dburken $
+//  $Id: ossimDatumFactory.cpp 13302 2008-07-25 19:10:39Z gpotts $
 
 #include <utility> /* for std::make_pair */
 
@@ -29,6 +29,9 @@
 ossimDatumFactory* ossimDatumFactory::theInstance = 0;
 std::map<ossimString, ossimDatum*> ossimDatumFactory::theDatumTable;
 
+static const char WGE[] = "WGE";
+static const char WGD[] = "WGD";
+
 ossimDatumFactory::~ossimDatumFactory()
 {
    deleteAll();
@@ -46,8 +49,8 @@ ossimDatumFactory* ossimDatumFactory::instance()
       // so make sure an instance exists
       ossimEllipsoidFactory::instance();
       theInstance->initializeDefaults();
-      theInstance->theWgs84Datum = theInstance->create("WGE");
-      theInstance->theWgs72Datum = theInstance->create("WGD");
+      theInstance->theWgs84Datum = theInstance->create(WGE);
+      theInstance->theWgs72Datum = theInstance->create(WGD);
    }  
    return theInstance; 
 } 
@@ -234,10 +237,10 @@ const ossimDatum* ossimDatumFactory::create(const ossimDatum* aDatum)const
       return 0;
 }
 
-std::list<ossimString> ossimDatumFactory::getList()const
+std::vector<ossimString> ossimDatumFactory::getList()const
 {
    std::map<ossimString, ossimDatum*>::const_iterator datum = theDatumTable.begin();
-   std::list<ossimString> result;
+   std::vector<ossimString> result;
    
    while(datum != theDatumTable.end())
    {
@@ -247,7 +250,7 @@ std::list<ossimString> ossimDatumFactory::getList()const
    return result;
 }
 
-void ossimDatumFactory::getList(std::list<ossimString>& list) const
+void ossimDatumFactory::getList(std::vector<ossimString>& list) const
 {
    std::map<ossimString, ossimDatum*>::const_iterator datum =
       theDatumTable.begin();
@@ -278,17 +281,17 @@ void ossimDatumFactory::deleteAll()
 void ossimDatumFactory::initializeDefaults()
 {
    //make the standards
-   theDatumTable.insert(make_pair(ossimString("WGE"),
+   theDatumTable.insert(make_pair(ossimString(WGE),
                                   (ossimDatum*)new ossimWgs84Datum));
-   theDatumTable.insert(make_pair(ossimString("WGD"),
+   theDatumTable.insert(make_pair(ossimString(WGD),
                                   (ossimDatum*)new ossimWgs72Datum));
 
    ossim_uint32 idx = 0;     
 
    for(idx = 0; idx < NUMBER_OF_THREE_PARAM_DATUMS; ++idx)
    {
-      if((threeParamDatum[idx].theCode != "WGE")&&
-         (threeParamDatum[idx].theCode != "WGD"))
+      if( (threeParamDatum[idx].theCode != WGE) &&
+          (threeParamDatum[idx].theCode != WGD) )
       {
          theDatumTable.insert(std::make_pair(threeParamDatum[idx].theCode,
                                              (ossimDatum*)new ossimThreeParamDatum(threeParamDatum[idx].theCode, threeParamDatum[idx].theName,
@@ -301,8 +304,8 @@ void ossimDatumFactory::initializeDefaults()
    }
    for(idx = 0; idx < NUMBER_OF_SEVEN_PARAM_DATUMS; ++idx)
    {
-      if((threeParamDatum[idx].theCode != "WGE")&&
-         (threeParamDatum[idx].theCode != "WGD"))
+      if((threeParamDatum[idx].theCode != WGE)&&
+         (threeParamDatum[idx].theCode != WGD))
       {
          theDatumTable.insert(std::make_pair(sevenParamDatum[idx].theCode,
                                              (ossimDatum*)new ossimSevenParamDatum(sevenParamDatum[idx].theCode, sevenParamDatum[idx].theName,

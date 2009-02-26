@@ -59,8 +59,8 @@
  *    Added kilometers option - May 1991 - BJM
  *E
  *************************************************************************/
-float distance( double lat1, double lon1, double lat2, double lon2,
-		int units )
+float distance(double lat1, double lon1, double lat2, double lon2,
+               int units )
 {
    double a,b,p,dtheta,d;
    double R[2] = { 3958.754, 6370.997 }

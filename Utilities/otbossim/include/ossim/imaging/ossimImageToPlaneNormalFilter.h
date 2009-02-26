@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageToPlaneNormalFilter.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImageToPlaneNormalFilter.h 13382 2008-08-04 18:53:26Z gpotts $
 #ifndef ossimImageToPlaneNormalFilter_HEADER
 #define ossimImageToPlaneNormalFilter_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
@@ -45,6 +45,11 @@ public:
    bool saveState(ossimKeywordlist& kwl,
                   const char* prefix)const;
    virtual void initialize();
+   /* ------------------- PROPERTY INTERFACE -------------------- */
+   virtual void setProperty(ossimRefPtr<ossimProperty> property);
+   virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
+   virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
+   /* ------------------ PROPERTY INTERFACE END ------------------- */
    
 protected:
    ossimRefPtr<ossimImageData> theTile;

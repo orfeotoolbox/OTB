@@ -7,7 +7,7 @@
 // Description: This class extends the stl's string class.
 //
 //********************************************************************
-// $Id: ossimString.h 13141 2008-07-06 20:19:03Z dburken $
+// $Id: ossimString.h 13586 2008-09-17 01:35:25Z gpotts $
 #ifndef ossimString_HEADER
 #define ossimString_HEADER 1
 
@@ -43,7 +43,7 @@ public:
    ossimString(char aChar):std::string(1, aChar){}
    
    template <class Iter>
-	   ossimString(Iter start, Iter end):std::string(start, end){}
+	   ossimString(Iter startIter, Iter endIter):std::string(startIter, endIter){}
 
    bool contains(const ossimString& aString) const {return find(aString)!=npos;}
    bool contains(const char*   aString) const {return find(aString)!=npos;}
@@ -398,7 +398,7 @@ public:
    ossimString urlEncode()const;
    /**
     * If OSSIM_ID_ENABLED returns the OSSIM_ID which currently is the
-    * expanded cvs $Id: ossimString.h 13141 2008-07-06 20:19:03Z dburken $ macro; else, an empty string.
+    * expanded cvs $Id: ossimString.h 13586 2008-09-17 01:35:25Z gpotts $ macro; else, an empty string.
     */
    ossimString getOssimId() const;
 };

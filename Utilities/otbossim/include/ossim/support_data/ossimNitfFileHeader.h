@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeader.h 10552 2007-02-28 20:35:07Z gpotts $
+// $Id: ossimNitfFileHeader.h 13629 2008-09-30 17:39:20Z gpotts $
 #ifndef ossimNitfFileHeader_HEADER
 #define ossimNitfFileHeader_HEADER
 
@@ -128,6 +128,8 @@ public:
    virtual ossim_int32 getNumberOfDataExtSegments()const=0;
    virtual ossim_int32 getHeaderSize()const=0;
    
+   void addTag(const ossimNitfTagInformation& tag);
+   virtual void removeTag(const ossimString& tagName);
    virtual bool  getTagInformation(ossimNitfTagInformation& tag,
                                    int idx)const;
 

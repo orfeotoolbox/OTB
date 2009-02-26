@@ -6,7 +6,7 @@
 
     Licence: wxWidgets Licence
 
-    RCS-ID: $Id: _dl_itr.inc 11045 2007-05-25 17:29:17Z gpotts $
+    RCS-ID: $Id: _dl_itr.inc 13215 2008-07-23 18:51:54Z dburken $
 */
 
 #ifdef __GNUG__
@@ -124,7 +124,7 @@ Error("remove_all",ITER_GT_O);
 \param error code to generate a message for
 */
 template <class Dtype>
-void DL_List<Dtype>::Error(char* function,Lerror a_error)
+void DL_List<Dtype>::Error(const char* function,Lerror a_error)
 {
 	std::string buf = "DL_List<Dtype>::";
 	buf += ((function?function:""));
@@ -553,7 +553,7 @@ void DL_List<Dtype>::takeover(DL_List<Dtype>* otherlist)
  \param a_error:  error code to generate a message for
 */
 template <class Dtype>
-void DL_Iter<Dtype>::Error(char* function,Lerror a_error)
+void DL_Iter<Dtype>::Error(const char* function,Lerror a_error)
 {
 	std::string buf;
 	buf += "DL_Iter<Dtype>::";

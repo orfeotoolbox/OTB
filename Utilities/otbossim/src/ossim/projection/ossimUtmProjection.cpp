@@ -8,7 +8,7 @@
 //
 // Calls Geotrans Utm projection code.  
 //*******************************************************************
-//  $Id: ossimUtmProjection.cpp 13012 2008-06-08 21:26:58Z dburken $
+//  $Id: ossimUtmProjection.cpp 13859 2008-11-11 14:45:00Z dburken $
 
 #include <cstdlib>
 #include <cmath>
@@ -81,6 +81,7 @@ ossimUtmProjection::ossimUtmProjection(const ossimEllipsoid& ellipsoid,
       
 {
    setZone(origin);
+   setHemisphere(origin);
    update();
 }
 
@@ -106,7 +107,7 @@ ossimUtmProjection::ossimUtmProjection(const ossimEllipsoid& ellipsoid,
       theTranMerc_Delta_Easting(40000000.0),
       theTranMerc_Delta_Northing(40000000.0),
       theZone(zone),
-      theHemisphere('N')      
+      theHemisphere(hemisphere)      
 {
    setZone(zone);
    setHemisphere(hemisphere);
@@ -135,7 +136,6 @@ ossimUtmProjection::ossimUtmProjection(ossim_int32 zone)
       theHemisphere('N')      
 {
    setZone(zone);
-   theOrigin.lond(computeZoneMeridian(theZone));
    update();
 }
 
@@ -159,16 +159,27 @@ ossimUtmProjection::ossimUtmProjection(const ossimUtmProjection& src)
       theZone(src.theZone),
       theHemisphere(src.theHemisphere)      
 {
+   setZone(theZone);
+   setHemisphere(theHemisphere);
+   update();
 }
 
 void ossimUtmProjection::update()
 {
+   ossimGpt origin = theOrigin;
+   origin.lond(computeZoneMeridian(theZone));
+   origin.latd(0.0);
+   double falseNorthing = 10000000.0;
+   if (theHemisphere == 'N')
+   {
+      falseNorthing = 0.0;
+   }
    Set_Transverse_Mercator_Parameters(theEllipsoid.getA(),
                                       theEllipsoid.getFlattening(),
-                                      theOrigin.latr(),
-                                      theOrigin.lonr(),
+                                      origin.latr(),
+                                      origin.lonr(),
                                       theTranMerc_False_Easting,
-                                      theTranMerc_False_Northing,
+                                      falseNorthing,
                                       theTranMerc_Scale_Factor);
 
    theFalseEastingNorthing.x = theTranMerc_False_Easting;
@@ -215,16 +226,6 @@ ossimDpt ossimUtmProjection::forward(const ossimGpt &latLon)const
 ossimObject* ossimUtmProjection::dup()const
 {
    ossimUtmProjection* proj = new ossimUtmProjection(*this);
-
-   //---
-   // TEMP:
-   // Set the projection up correctly.
-   // Note: The setZone sets the origin, but does not set all parameter
-   // needed; hence, the setZone, setOrigin.
-   //---
-   proj->setZone(theZone);
-   proj->setOrigin(proj->origin());
-   proj->setUlGpt(proj->origin());
    return proj;
 }
 
@@ -238,14 +239,25 @@ char ossimUtmProjection::getHemisphere() const
    return theHemisphere;
 }
 
+void ossimUtmProjection::setOrigin(const ossimGpt& origin)
+{
+   setZone(origin);
+   // NOTE: We will not set the hemisphere if the origin latitude is 0.0.
+   if (origin.latd() != 0.0)
+   {
+      setHemisphere(origin);
+   }
+   ossimMapProjection::setOrigin(theOrigin);
+}
+
 void ossimUtmProjection::setZone(const ossimGpt& ground)
 {
    theZone = computeZone(ground);
    theOrigin.lond(computeZoneMeridian(theZone));
    theOrigin.latd(0.0);
    theTranMerc_Origin_Long = theOrigin.lonr();
-   char hemisphere = theOrigin.latd() < 0.0?'S':'N';
-   setHemisphere(hemisphere);
+   //char hemisphere = theOrigin.latd() < 0.0?'S':'N';
+   //setHemisphere(hemisphere);
 }
 
 void ossimUtmProjection::setZone(ossim_int32 zone)
@@ -261,6 +273,12 @@ void ossimUtmProjection::setZone(ossim_int32 zone)
    theOrigin.lond(computeZoneMeridian(theZone));
    theOrigin.latd(0);
    theTranMerc_Origin_Long = theOrigin.lonr();
+}
+
+void ossimUtmProjection::setHemisphere(const ossimGpt& ground)
+{
+   char hemisphere = ground.latd()<0.0?'S':'N';
+   setHemisphere(hemisphere);
 }
 
 void ossimUtmProjection::setHemisphere(char hemisphere)
@@ -344,7 +362,7 @@ bool ossimUtmProjection::loadState(const ossimKeywordlist& kwl,
 {
    const char* zone       = kwl.find(prefix, ossimKeywordNames::ZONE_KW);
    const char* hemisphere = kwl.find(prefix, ossimKeywordNames::HEMISPHERE_KW);
-   
+
    ossimMapProjection::loadState(kwl, prefix);
 
    // initialize zone to a dummy value.

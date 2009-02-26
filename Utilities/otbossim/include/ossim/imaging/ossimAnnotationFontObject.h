@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationFontObject.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimAnnotationFontObject.h 13967 2009-01-14 16:32:01Z gpotts $
 #ifndef ossimAnnotationFontObject_HEADER
 #define ossimAnnotationFontObject_HEADER
 #include <ossim/imaging/ossimAnnotationObject.h>
@@ -57,7 +57,8 @@ public:
    virtual bool isPointWithin(const ossimDpt& imagePoint)const;
    virtual void setFont(ossimFont* font,
                         bool ownsFontFlag=true);
-   virtual void setPositionCenter(const ossimIpt& position);
+   virtual void setCenterPosition(const ossimIpt& position);
+   virtual void setUpperLeftPosition(const ossimIpt& position);
    virtual void setPointSize(const ossimIpt& size);
    virtual void setRotation(double rotation);
    virtual void setScale(const ossimDpt& scale);
@@ -68,7 +69,7 @@ public:
 protected:
    mutable ossimFont*   theFont;
    bool                 theOwnsFontFlag;
-   ossimIpt             theCenterPosition;
+   ossimIpt             thePosition;
    ossimString          theString;
    ossimIpt             thePixelSize;
    double               theRotation;

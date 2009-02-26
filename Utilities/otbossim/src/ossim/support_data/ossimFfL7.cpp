@@ -8,7 +8,7 @@
 // Description: Container class for LandSat7 Fast Format header files.
 //
 //********************************************************************
-// $Id: ossimFfL7.cpp 10835 2007-05-03 18:08:04Z dburken $
+// $Id: ossimFfL7.cpp 13663 2008-10-02 18:47:32Z gpotts $
 
   // #include <cstdlib>
 
@@ -355,12 +355,15 @@ void ossimFfL7::readRadiomRecord(FILE* fptr)
 
       if (blank_line == true) continue; // go to next line...
       
-      double d = 0.0;
-      std::istringstream is2(temp_chars);
-      is2 >> d;
-      theBias.push_back(d);
-      is2 >> d;
-      theGain.push_back(d);
+      std::vector<ossimString> splitString;
+      ossimString tempString(temp_chars);
+      tempString.split(splitString, " ");
+      
+      if(splitString.size() > 1)
+      {
+         theBias.push_back(splitString[0].toDouble());
+         theGain.push_back(splitString[1].toDouble());
+     }
    }
 }
 

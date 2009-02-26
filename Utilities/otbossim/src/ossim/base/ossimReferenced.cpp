@@ -5,6 +5,11 @@
 
 ossimReferenced::~ossimReferenced()
 {
+   if(theRefMutex)
+   {
+      delete theRefMutex;
+      theRefMutex = 0;
+   }
    if (theRefCount>0)
    {
       ossimNotify(ossimNotifyLevel_WARN)<<"Warning: deleting still referenced object "<<this<<std::endl;

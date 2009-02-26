@@ -8,7 +8,7 @@
 // Description:  Contains class declaration for ossimBandSelector.
 // 
 //*******************************************************************
-//  $Id: ossimBandSelector.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimBandSelector.h 13486 2008-08-22 17:07:13Z gpotts $
 #ifndef ossimBandSelector_HEADER
 #define ossimBandSelector_HEADER
 
@@ -121,6 +121,7 @@ private:
    ossimRefPtr<ossimImageData> theTile;
    vector<ossim_uint32>        theOutputBandList;
    mutable ossimBandSelectorWithinRangeFlagState theWithinRangeFlag;
+   bool theOrderedCorrectlyFlag;
 
 TYPE_DATA
 };

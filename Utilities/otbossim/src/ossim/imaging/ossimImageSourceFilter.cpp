@@ -11,7 +11,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimImageSourceFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimImageSourceFilter.cpp 13312 2008-07-27 01:26:52Z gpotts $
 
 #include <ossim/imaging/ossimImageSourceFilter.h>
 #include <ossim/base/ossimTrace.h>
@@ -181,7 +181,7 @@ ossim_uint32 ossimImageSourceFilter::getTileHeight() const
 
 void ossimImageSourceFilter::initialize()
 {
-   theInputConnection = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   theInputConnection = PTR_CAST(ossimImageSource, getInput(0));
 }
 
 bool ossimImageSourceFilter::loadState(const ossimKeywordlist& kwl,
@@ -212,7 +212,7 @@ bool ossimImageSourceFilter::canConnectMyInputTo(ossim_int32 inputIndex,
 						 const ossimConnectableObject* object)const
 {
   
-  return ((PTR_CAST(ossimImageSourceInterface, object)||!object) && ( inputIndex == 0 ) );
+  return ((PTR_CAST(ossimImageSource, object)||!object) && ( inputIndex == 0 ) );
 }
 
 void ossimImageSourceFilter::connectInputEvent(ossimConnectionEvent& event)
@@ -230,7 +230,7 @@ void ossimImageSourceFilter::connectInputEvent(ossimConnectionEvent& event)
           ossimNotify(ossimNotifyLevel_DEBUG) << "to NULL" << std::endl;
        }
     }
-  theInputConnection = PTR_CAST(ossimImageSourceInterface, getInput(0));
+  theInputConnection = PTR_CAST(ossimImageSource, getInput(0));
   initialize();
   if(traceDebug())
   {
@@ -251,7 +251,7 @@ void ossimImageSourceFilter::disconnectInputEvent(ossimConnectionEvent& event)
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << "ossimImageSourceFilter::disconnectInputEvent" << std::endl;
    }
-   theInputConnection = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   theInputConnection = PTR_CAST(ossimImageSource, getInput(0));
    initialize();
    if(traceDebug())
    {

@@ -5,7 +5,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageRenderer.cpp 12738 2008-04-25 19:02:43Z gpotts $
+//  $Id: ossimImageRenderer.cpp 13905 2008-12-02 14:37:12Z gpotts $
 
 #include <iostream>
 using namespace std;
@@ -13,6 +13,7 @@ using namespace std;
 #include <ossim/imaging/ossimImageRenderer.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimDpt3d.h>
+#include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimProcessProgressEvent.h>
@@ -38,13 +39,12 @@ using namespace std;
 #include <ossim/projection/ossimEquDistCylProjection.h>
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageRenderer.cpp 12738 2008-04-25 19:02:43Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimImageRenderer.cpp 13905 2008-12-02 14:37:12Z gpotts $";
 #endif
 
 static ossimTrace traceDebug("ossimImageRenderer:debug");
 
 RTTI_DEF2(ossimImageRenderer, "ossimImageRenderer", ossimImageSourceFilter, ossimViewInterface);
-
 
 void ossimImageRenderer::ossimRendererSubRectInfo::splitView(ossimImageViewTransform* transform,
                                                              ossimRendererSubRectInfo& ulRect,
@@ -817,6 +817,8 @@ void ossimImageRenderer::recursiveResample(ossimRefPtr<ossimImageData> outputDat
    }
 }
 
+#define RSET_SEARCH_THRESHHOLD 0.1
+
 void ossimImageRenderer::fillTile(ossimRefPtr<ossimImageData> outputData,
                                   const ossimRendererSubRectInfo& rectInfo)
 {
@@ -843,8 +845,69 @@ void ossimImageRenderer::fillTile(ossimRefPtr<ossimImageData> outputData,
    
    ossim_uint32 resLevel = closestFitResLevel<0 ? 0:closestFitResLevel;
    resLevel += theStartingResLevel;
+
+   //---
+   // ESH 11/2008: Check the rset at the calculated resLevel to see
+   // if it has the expected decimation factor. It it does, we can 
+   // use this rset and assume it is at resLevel.
+   //--- 
+   ossimDpt decimation;
+   decimation.makeNan(); // initialize to nan.
+   theInputConnection->getDecimationFactor(resLevel, decimation);
+   double requestScale = 1.0 / pow( (double)2.0, (double)resLevel );
+   double closestScale = decimation.hasNans() ? requestScale : decimation.x;
    
-   double closestScale = 1.0 / pow( (double)2.0, (double)resLevel );
+   double differenceTest = 0.0;
+   if (closestScale != 0.0)
+   {
+      differenceTest = (1.0/closestScale) - (1.0/requestScale);
+   }
+
+   //---
+   // ESH 11/2008: Add in threshold test so search only happens when 
+   //              necessary.
+   // We do an rset search if 1 of 2 conditions is met: either
+   //   1) the rset is really different in size from the requested size, or
+   //   2) they're similar in size, and the actual rset is smaller than 
+   //      the requested size.
+   //---
+   if ( (fabs(differenceTest) > RSET_SEARCH_THRESHHOLD) || 
+        ((fabs(differenceTest) < RSET_SEARCH_THRESHHOLD) &&
+         (differenceTest < 0.0) ) )
+   {
+      // ESH 11/2008: We test for the best rset. We assume 
+      // that decimation level always decreases as resLevel increases, so 
+      // the search can end before testing all rsets.
+      ossim_uint32 savedResLevel = resLevel;
+      closestScale = 1.0; // resLevel 0
+      resLevel = 0;
+      ossim_uint32 numLevels =
+         theInputConnection->getNumberOfDecimationLevels();
+      ossim_uint32 i;
+      for( i=1; i<numLevels; ++i )
+      {
+         theInputConnection->getDecimationFactor(i, decimation);
+         if(decimation.hasNans() == false )
+         {
+            double testDiscrepancy = decimation.x - requestScale;
+            if ( testDiscrepancy < 0.0 ) // we're done
+            {
+               break;
+            }
+            else
+            {
+               closestScale = decimation.x;
+               resLevel = i;
+            }
+         }
+         else // use the default value
+         {
+            closestScale = requestScale;
+            resLevel = savedResLevel;
+            break;
+         }
+      }
+   }
    
    ossimDpt nul(rectInfo.theIul.x*closestScale,
                 rectInfo.theIul.y*closestScale);
@@ -948,6 +1011,11 @@ ossimIrect ossimImageRenderer::getBoundingRect(ossim_uint32 resLevel)const
          << MODULE << "entered..." << endl;
    }
 #endif
+
+   if ( (isSourceEnabled() == false) && theInputConnection )
+   {
+      return theInputConnection->getBoundingRect(resLevel);
+   }
    
    if(!theBoundingViewRect.hasNans())
    {
@@ -1251,7 +1319,7 @@ bool ossimImageRenderer::getImageGeometry(ossimKeywordlist& kwl,
 
 void ossimImageRenderer::connectInputEvent(ossimConnectionEvent& event)
 {
-   theInputConnection = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   theInputConnection = PTR_CAST(ossimImageSource, getInput(0));
    // All this code in here will change after the demo.  For now we need a
    // way to bring every one up with a projection.  Later we will have to
    // tie to a projection source.
@@ -1369,8 +1437,7 @@ void ossimImageRenderer::checkTransform()
    // tie to a projection source.
    ossimImageViewProjectionTransform* transform = PTR_CAST(ossimImageViewProjectionTransform,
                                                            theImageViewTransform);
-   ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface,
-                                               getInput(0));
+   ossimImageSource* inter = PTR_CAST(ossimImageSource, getInput(0));
 
    // we will only check for projection transforms
    if(!transform||!inter) return;
@@ -1397,6 +1464,11 @@ void ossimImageRenderer::checkTransform()
    
    if(proj)
    {
+      //---
+      // Set the view or output projection.  This will be the same as input
+      // if already map projected; else, the default is geographic
+      // (EquDistCyl).
+      //---
       if(!transform->getView()) // check to see if we found a view controller and the view was set
       {                         // if not then we will create a default output projection
          ossimProjection* newProj = (ossimProjection*)NULL;
@@ -1408,22 +1480,37 @@ void ossimImageRenderer::checkTransform()
          else
          {
             newProj = new ossimEquDistCylProjection;
+
+            mapProj = PTR_CAST(ossimMapProjection, newProj);
+            if(mapProj) 
+            {
+               ossimDpt meters = proj->getMetersPerPixel();
+               
+               double GSD = (meters.x + meters.y)/2.0;
+               meters.x = GSD;
+               meters.y = GSD;
+               mapProj->setUlGpt(proj->origin());
+               mapProj->setOrigin(proj->origin());
+               mapProj->setMetersPerPixel(meters);
+            }            
          }
-         mapProj = PTR_CAST(ossimMapProjection, newProj);
-         if(mapProj) 
-         {
-            ossimDpt meters = proj->getMetersPerPixel();
+
+         // drb only do below if using default projection... See above.
+//          mapProj = PTR_CAST(ossimMapProjection, newProj);
+//          if(mapProj) 
+//          {
+//             ossimDpt meters = proj->getMetersPerPixel();
 	    
-            double GSD = (meters.x + meters.y)/2.0;
-            meters.x = GSD;
-            meters.y = GSD;
-            mapProj->setUlGpt(proj->origin());
-            mapProj->setOrigin(proj->origin());
-            mapProj->setMetersPerPixel(meters);
-         }
+//             double GSD = (meters.x + meters.y)/2.0;
+//             meters.x = GSD;
+//             meters.y = GSD;
+//             mapProj->setUlGpt(proj->origin());
+//             mapProj->setOrigin(proj->origin());
+//             mapProj->setMetersPerPixel(meters);
+//          }
+
          transform->setViewProjection(newProj, true);
       }
-//       }
    }
    else
    {
@@ -1575,8 +1662,8 @@ ossimRefPtr<ossimImageData>  ossimImageRenderer::getTileAtResLevel(const ossimIr
          theTemporaryBuffer->makeBlank();
       }
       
-      ossim_uint32 totalCount   = ((requestedRectAtValidRLevel.lr().y-requestedRectAtValidRLevel.ul().y)*
-                                   (requestedRectAtValidRLevel.lr().x-requestedRectAtValidRLevel.ul().x));
+     // ossim_uint32 totalCount   = ((requestedRectAtValidRLevel.lr().y-requestedRectAtValidRLevel.ul().y)*
+   //                                (requestedRectAtValidRLevel.lr().x-requestedRectAtValidRLevel.ul().x));
       ossim_uint32 currentCount = 0;
       ossimIrect boundingRect = theInputConnection->getBoundingRect(levels-1);
       for(yIndex = requestedRectAtValidRLevel.ul().y;yIndex < requestedRectAtValidRLevel.lr().y; yIndex += tileSize.y)
@@ -1646,8 +1733,8 @@ ossimRefPtr<ossimImageData>  ossimImageRenderer::getTileAtResLevel(const ossimIr
                }
             }
             ++currentCount;
-            fireProgressEvent((double)currentCount/
-                              (double)totalCount);
+            //fireProgressEvent((double)currentCount/
+            //                  (double)totalCount);
             
          }
       }

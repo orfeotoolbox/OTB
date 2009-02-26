@@ -9,7 +9,7 @@
 // SevenParamDatum. This is a base class for all
 // seven param datums.
 //*******************************************************************
-//  $Id: ossimSevenParamDatum.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimSevenParamDatum.h 13560 2008-09-10 11:42:57Z gpotts $
 
 #ifndef ossimSevenParamDatum_HEADER
 #define ossimSevenParamDatum_HEADER
@@ -19,6 +19,24 @@ class OSSIMDLLEXPORT ossimEllipsoid;
 class OSSIM_DLL ossimSevenParamDatum : public ossimDatum
 {
 public:
+   /**
+    *   @param code           new datum code.                               (input)
+    *   @param name           Name of the new datum                         (input)
+    *   @param SigmaX         Standard error in X in meters                 (input)
+    *   @param SigmaY         Standard error in Y in meters                 (input)
+    *   @param SigmaZ         Standard error in Z in meters                 (input)
+    *   @param southLatitude  Southern edge of validity rectangle in radians(input)
+    *   @param northLatitude  Northern edge of validity rectangle in radians(input)
+    *   @param westLongitude  Western edge of validity rectangle in radians (input)
+    *   @param eastLongitude  Eastern edge of validity rectangle in radians (input)
+    *   @param param1         X translation
+    *   @param param2         Y translation
+    *   @param param3         Z translation
+    *   @param param4         X Rotation
+    *   @param param5         Y Rotation
+    *   @param param6         Z Rotation
+    *   @param param7         x,y,z Scale
+    */
    ossimSevenParamDatum(const ossimString &code, const ossimString &name,
                         const ossimEllipsoid* anEllipsoid,
                         ossim_float64 sigmaX,

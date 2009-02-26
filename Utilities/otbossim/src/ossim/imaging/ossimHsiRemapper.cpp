@@ -12,7 +12,7 @@
 // Remapper to adjust hue, saturation and intensity.
 //
 //*************************************************************************
-// $Id: ossimHsiRemapper.cpp 12980 2008-06-04 00:50:33Z dburken $
+// $Id: ossimHsiRemapper.cpp 13764 2008-10-22 19:30:19Z gpotts $
 
 #include <cstdlib>
 #include <ossim/imaging/ossimHsiRemapper.h>
@@ -471,6 +471,11 @@ void ossimHsiRemapper::allocate(const ossimIrect& rect)
 
       ossim_uint32 width  = rect.width();
       ossim_uint32 height = rect.height();
+      if(theBuffer)
+      {
+         delete [] theBuffer;
+         theBuffer = 0;
+      }
       ossim_uint32 size = width * height * 3; // Buffer always 3 bands.
       theBuffer = new double[size];
       memset(theBuffer, '\0', sizeof(double) * size);

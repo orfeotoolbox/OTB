@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimTilePatch.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimTilePatch.cpp 13312 2008-07-27 01:26:52Z gpotts $
 
 #include <vector>
 using namespace std;
@@ -20,7 +20,7 @@ using namespace std;
 #include <ossim/base/ossimErrorCodes.h>
 ossimDiscreteNearestNeighbor ossimTilePatch::nearestNeighborKernel;
 
-ossimTilePatch::ossimTilePatch(ossimImageSourceInterface* input)
+ossimTilePatch::ossimTilePatch(ossimImageSource* input)
 {
    thePatchData = ossimImageDataFactory::instance()->create(NULL, input);
    thePatchData->initialize();
@@ -65,7 +65,7 @@ ossimDrect ossimTilePatch::findBoundingRect(const ossimDpt &p1,
    return ossimDrect(points);
 }
 
-void ossimTilePatch::fillPatch(ossimImageSourceInterface* tileSource,
+void ossimTilePatch::fillPatch(ossimImageSource* tileSource,
                                long resLevel)
 {
    // long w = tileSource->getTileWidth();
