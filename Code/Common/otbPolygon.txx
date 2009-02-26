@@ -418,70 +418,7 @@ Polygon<TValue>
   return resp;
 }
 
-/**
- * Bounding Box computation
- */
-template<class TValue>
-typename Polygon<TValue>::RegionType
-Polygon<TValue>
-::GetBoundingRegion()
-{
-  RegionType region;
-  SizeType size;
-  IndexType index;
 
-  size.Fill(0);
-  index.Fill(0);
-
-  IndexType maxId;
-  maxId.Fill(0);
-
-  VertexListConstIteratorType it =  this->GetVertexList()->Begin();
-
-  long int x,y;
-
-  if (this->GetVertexList()->Size()>0)
-  {
-    x = static_cast<long int>(it.Value()[0]);
-    y = static_cast<long int>(it.Value()[1]);
-    index[0] = x;
-    index[1] = y;
-
-    ++it;
-    while (it != this->GetVertexList()->End())
-    {
-      x = static_cast<long int>(it.Value()[0]);
-      y = static_cast<long int>(it.Value()[1]);
-
-      // Index search
-      if ( x < index[0] )
-      {
-        index[0] = x;
-      }
-      if ( y < index[1] )
-      {
-        index[1] = y;
-      }
-      // Max Id search for size computation
-      if ( x > maxId[0] )
-      {
-        maxId[0] = x;
-      }
-      if ( y > maxId[1] )
-      {
-        maxId[1] = y;
-      }
-
-      ++it;
-    }
-
-    size[0] = maxId[0] - index[0];
-    size[1] = maxId[1] - index[1];
-  }
-  region.SetSize(size);
-  region.SetIndex(index);
-  return region;
-}
 
 
 /**
