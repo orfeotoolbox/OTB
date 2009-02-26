@@ -85,6 +85,21 @@ ObjectList<TObject>
 {
   m_InternalContainer.push_back(element);
 }
+
+/**
+ * Delete the last element to the list.
+ */
+template <class TObject>
+void
+ObjectList<TObject>
+::PopBack(void)
+{
+  if ( m_InternalContainer.size() > 0 )
+  {
+    m_InternalContainer.pop_back();
+  }
+}
+
 /**
  * Set the nth element of the list.
  * \param index The index where to put the element.
@@ -101,6 +116,23 @@ ObjectList<TObject>
   }
   m_InternalContainer[index]=element;
 }
+/**
+ * Set the nth element of the list.
+ * \param index The index where to put the element.
+ * \param element Pointer to the element to set.
+ */
+template <class TObject>
+void
+ObjectList<TObject>
+::SetNthElement(unsigned int index,const ObjectType * element)
+{
+  if ( index >= m_InternalContainer.size() )
+  {
+    itkExceptionMacro(<<"Impossible to SetNthElement with the index element "<<index<<"; this element don't exist, the size of the list is "<<m_InternalContainer.size()<<"." );
+  }
+  m_InternalContainer[index]=const_cast<ObjectType*>(element);
+}
+
 /**
  * Get the nth element of the list.
  * \param index The index of the object to get.
@@ -318,6 +350,16 @@ ObjectList<TObject>
 {
   Superclass::PrintSelf(os,indent);
   os << indent << "Size: " << m_InternalContainer.size() << std::endl;
+  os << indent << "List contains : " << std::endl;
+  ConstIterator iter = this->Begin();
+  while (iter!=this->End())
+  {
+    os << indent.GetNextIndent() << iter.Get().GetPointer() << std::endl;
+    os << indent.GetNextIndent() << iter.Get() << std::endl;
+//                iter.Get()->PrintSelf(os,indent.GetNextIndent());
+//                iter.Get()->Print(os,indent.GetNextIndent());
+    ++iter;
+  }
 }
 } // end namespace otb
 
