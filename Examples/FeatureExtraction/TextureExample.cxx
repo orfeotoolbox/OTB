@@ -40,8 +40,7 @@
 
 
 #include "otbTextureFunctors.h"
-#include "otbFunctionWithNeighborhoodToImageFilter.h"
-#include "otbTextureImageFunction.h"
+#include "otbUnaryFunctorNeighborhoodWithOffsetImageFilter.h"
 
 
 int main(int argc, char * argv[])
@@ -71,9 +70,9 @@ int main(int argc, char * argv[])
   typedef itk::ConstNeighborhoodIterator<ImageType>  IteratorType;
 
   typedef otb::Functor::ContrastTextureFunctor<PixelType, PixelType> FunctorType;
-  typedef otb::TextureImageFunction<ImageType, FunctorType> FunctionType;
-  typedef otb::FunctionWithNeighborhoodToImageFilter<ImageType,
-                                          ImageType, FunctionType> FilterType;
+
+  typedef otb::UnaryFunctorNeighborhoodWithOffsetImageFilter<ImageType,
+                                          ImageType, FunctorType> FilterType;
   typedef ImageType::OffsetType OffsetType;
   typedef otb::ImageFileReader<ImageType>  ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
@@ -88,10 +87,7 @@ int main(int argc, char * argv[])
   writer->SetFileName(outfname);
 
   textureFilter->SetInput(reader->GetOutput());
-  ImageType::SizeType tRadius;
-  tRadius[0] = radius;
-  tRadius[1] = radius;
-  textureFilter->SetRadius(tRadius);
+  textureFilter->SetRadius(radius);
   OffsetType offset;
   offset[0] =  xOffset;
   offset[1] =  yOffset;
