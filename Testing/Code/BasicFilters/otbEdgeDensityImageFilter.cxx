@@ -68,6 +68,7 @@ int otbEdgeDensityImageFilter(int argc, char* argv[] )
   CannyFilter->SetMaximumError(maximumError); ///0.01f
 
   filter->SetDetector(CannyFilter);
+  filter->SetNeighborhoodRadius(radius);
 
   /** Write the output*/
   WriterType::Pointer          writer = WriterType::New();

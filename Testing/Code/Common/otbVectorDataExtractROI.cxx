@@ -20,15 +20,34 @@
 
 #include "otbVectorDataFileReader.h"
 
-int otbVectorDataExtractROINew( int argc, char * argv[] )
+int otbVectorDataExtractROI( int argc, char * argv[] )
 {
+  const char * infname = argv[1];
+
+  const unsigned int  startX = atoi(argv[3]);
+  const unsigned int  startY = atoi(argv[4]);
+  const unsigned int  sizeX = atoi(argv[5]);
+  const unsigned int  sizeY = atoi(argv[6]);
+  
   typedef otb::VectorData<>                                  VectorDataType;
   typedef otb::VectorDataExtractROI< VectorDataType >        FilterType;
   typedef otb::VectorDataFileReader<VectorDataType>          VectorDataFileReaderType;
 
-  
+  /** */
   FilterType::Pointer filter = FilterType::New();
+  VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
+  
+  /** */
+  reader->SetFileName(infname);
+  
+  filter->SetInput(reader->GetOutput());
+  filter->SetSizeX(sizeX);
+  filter->SetSizeY(sizeY);
+  filter->SetStartX(startX);
+  filter->SetStartY(startY);
 
+  filter->Update();
+  
   return EXIT_SUCCESS;
 }
 

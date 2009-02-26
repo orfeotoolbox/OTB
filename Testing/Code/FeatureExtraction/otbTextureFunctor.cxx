@@ -70,90 +70,90 @@ int otbTextureFunctor(int argc, char * argv[])
   typedef otb::VectorImage<InputPixelType,Dimension> ImageType;
   typedef ImageType::PixelType                       PixelType;
   typedef itk::ConstNeighborhoodIterator<ImageType>  IteratorType;
-
+  
   if(strArgv == "ENJ")
     {
-      typedef otb::Functor::EnergyTextureFunctor<IteratorType, PixelType> FunctorType;
+      typedef otb::Functor::EnergyTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else if ( strArgv == "ENT" )
     {
-      typedef otb::Functor::EntropyTextureFunctor<IteratorType, PixelType> FunctorType;
+      typedef otb::Functor::EntropyTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else if ( strArgv == "IMD" )
     {
-      typedef otb::Functor::InverseDifferenceMomentTextureFunctor<IteratorType, PixelType> FunctorType;
+      typedef otb::Functor::InverseDifferenceMomentTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
- else if ( strArgv == "ASM" )
+  else if ( strArgv == "ASM" )
     {
-      typedef otb::Functor::AngularSecondMomentumTextureFunctor<IteratorType, PixelType> FunctorType;
+      typedef otb::Functor::AngularSecondMomentumTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
- else if ( strArgv == "VAR" )
+  else if ( strArgv == "VAR" )
     {
-      typedef otb::Functor::VarianceTextureFunctor<IteratorType, PixelType> FunctorType;
+      typedef otb::Functor::VarianceTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
  else if ( strArgv == "COR" )
     {
-      typedef otb::Functor::CorrelationTextureFunctor<IteratorType, PixelType> FunctorType;
+      typedef otb::Functor::CorrelationTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
  else if ( strArgv == "CON" )
     {
-      typedef otb::Functor::ContrastTextureFunctor<IteratorType, PixelType> FunctorType;
+      typedef otb::Functor::ContrastTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else if ( strArgv == "SAV" )
     {
-      typedef otb::Functor::SumAverageTextureFunctor<IteratorType, PixelType> FunctorType;
+      typedef otb::Functor::SumAverageTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else if ( strArgv == "DEN" )
     {
-      typedef otb::Functor::DifferenceEntropyTextureFunctor<IteratorType, PixelType> FunctorType;
+      typedef otb::Functor::DifferenceEntropyTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else if ( strArgv == "SEN" )
     {
-      typedef otb::Functor::SumEntropyTextureFunctor<IteratorType, PixelType> FunctorType;
+      typedef otb::Functor::SumEntropyTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else if ( strArgv == "SVA" )
     {
-      typedef otb::Functor::SumVarianceTextureFunctor<IteratorType, PixelType> FunctorType;
+      typedef otb::Functor::SumVarianceTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else if ( strArgv == "DVA" )
     {
-      typedef otb::Functor::DifferenceVarianceTextureFunctor<IteratorType, PixelType> FunctorType;
+      typedef otb::Functor::DifferenceVarianceTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else if ( strArgv == "IC1" )
     {
-      typedef otb::Functor::InformationMeasureOfCorrelation1TextureFunctor<IteratorType, PixelType> FunctorType;
+      typedef otb::Functor::InformationMeasureOfCorrelation1TextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else if ( strArgv == "IC2" )
     {
-      typedef otb::Functor::InformationMeasureOfCorrelation2TextureFunctor<IteratorType, PixelType> FunctorType;
+      typedef otb::Functor::InformationMeasureOfCorrelation2TextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else if ( strArgv == "CSH" )
     {
-      typedef otb::Functor::ClusterShadeTextureFunctor<IteratorType, PixelType> FunctorType;
+      typedef otb::Functor::ClusterShadeTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else if ( strArgv == "CPR" )
     {
-      typedef otb::Functor::ClusterProminenceTextureFunctor<IteratorType, PixelType> FunctorType;
+      typedef otb::Functor::ClusterProminenceTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else if ( strArgv == "MEA" )
     {
-      typedef otb::Functor::MeanTextureFunctor<IteratorType, PixelType> FunctorType;
+      typedef otb::Functor::MeanTextureFunctor<InputPixelType, InputPixelType> FunctorType;
       return( generic_TextureFunctor<ImageType, ImageType, FunctorType>(argc,argv) );
     }
   else
@@ -161,5 +161,6 @@ int otbTextureFunctor(int argc, char * argv[])
       return EXIT_FAILURE;
     }
   
+
   return EXIT_SUCCESS;
 }

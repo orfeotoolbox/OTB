@@ -154,6 +154,7 @@ public:
   void SetRenderingFunction(RenderingFunctionType * function)
   {
     this->GetFunctor().SetFunction(function);
+    this->Modified();
   }
 
   /**

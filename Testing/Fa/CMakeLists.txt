@@ -216,7 +216,7 @@ ADD_TEST(FA-0000041-mean_shift2 ${CXX_TEST_PATH}/0000041-mean_shift
 	)
 
 # -------       Vectorization issue   -----------------------------------
-ADD_TEST(PolygonsVectorization ${CXX_TEST_PATH}/PolygonsVectorization
+ADD_TEST(FA-0000094-fe-PolygonsVectorization ${CXX_TEST_PATH}/PolygonsVectorization
 	-in ${INPUTDATA}/objtest2.tif
 	-ot ${TEMP}/output.txt
 	-out ${TEMP}/objtest2-result.tif

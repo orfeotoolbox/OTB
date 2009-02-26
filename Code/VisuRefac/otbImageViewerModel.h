@@ -62,6 +62,7 @@ public:
   /** Layer typedef */
   typedef otb::Layer<OutputImageType>          LayerType;
   typedef typename LayerType::RegionType       RegionType;
+  typedef typename RegionType::IndexType       IndexType;
   
   /** Layer list typedef */
   typedef otb::ObjectList<LayerType>           LayerListType;
@@ -122,17 +123,34 @@ public:
   itkGetObjectMacro(RasterizedExtract,OutputImageType);
   itkGetObjectMacro(RasterizedScaledExtract,OutputImageType);
 
+
   /** Set/Get the Extract Region */
   itkSetMacro(ExtractRegion,RegionType);
   itkGetConstReferenceMacro(ExtractRegion,RegionType);
+  /** Get the extract region in the quicklook space */
+  itkGetConstReferenceMacro(SubsampledExtractRegion,RegionType);
   
   /** Set/Get the Scaled Extract Region */
   itkSetMacro(ScaledExtractRegion,RegionType);
   itkGetConstReferenceMacro(ScaledExtractRegion,RegionType);
 
+  /** Get the state of each view */
+  itkGetMacro(HasQuicklook,bool);
+  itkGetMacro(HasExtract,bool);
+  itkGetMacro(HasScaledExtract,bool);
+  
   /** Update will render all visible layers, rasterize all visible
    * layers and notify all listeners. */
-  virtual void Update(void);
+  void Update(void);
+
+  /** Change the Scaled extract region by giving the center of the
+   * region */
+  void SetScaledExtractRegionCenter(const IndexType & index);
+
+  /** Change the extract region by giving the center of the
+   * region */
+  void SetExtractRegionCenter(const IndexType & index);
+
 
 protected:
   /** Constructor */
@@ -141,16 +159,19 @@ protected:
   ~ImageViewerModel();
 
   /** Printself method */
-  void                PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void          PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Renders all visible layers */
-  virtual void         RenderVisibleLayers(void);
+   void         RenderVisibleLayers(void);
 
   /** Rasterize visible layers */
-  virtual void         RasterizeVisibleLayers(void);
+   void         RasterizeVisibleLayers(void);
 
   /** Notify a registered listener */
-  virtual void         Notify(ListenerType * listener);
+   void         Notify(ListenerType * listener);
+
+  /** Constrains the given region to the largest possible one. */
+  RegionType    ConstrainRegion(const RegionType & region, const RegionType & largest);
 
 private:
   ImageViewerModel(const Self&);     // purposely not implemented
@@ -170,11 +191,15 @@ private:
   OutputImagePointerType m_RasterizedExtract;
   bool                   m_HasExtract;
   RegionType             m_ExtractRegion;
+  RegionType             m_SubsampledExtractRegion;
 
   /** Rendered scaled extract */
   OutputImagePointerType m_RasterizedScaledExtract;
   bool                   m_HasScaledExtract;
   RegionType             m_ScaledExtractRegion;
+
+  /** Wether the model is currently updating or not */
+  bool                   m_Updating;
 }; // end class 
 } // end namespace otb
 

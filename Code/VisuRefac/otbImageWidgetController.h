@@ -74,14 +74,19 @@ public:
    */
   int HandleWidgetEvent(std::string widgetId, int event);
 
-  /** Handle widget resizing
+  /** Handle widget resize
    * \param widgetId The id of the resized widget
-   * \param x new x location
-   * \param y new y location
    * \param w new width
    * \param h new height
    */
-  void HandleWidgetResize(std::string widgetId,int x,int y, int w, int h);
+  void HandleWidgetResize(std::string widgetId, int w, int h);
+
+   /** Handle widget move
+   * \param widgetId The id of the resized widget
+   * \param x new x location
+   * \param y new y location
+   */
+  void HandleWidgetMove(std::string widgetId, int x, int y);
 
 protected:
   /** Constructor */

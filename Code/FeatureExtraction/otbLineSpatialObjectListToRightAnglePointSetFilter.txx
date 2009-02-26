@@ -159,8 +159,8 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
   
   /** Verify if the indexes of the line are inside the region*/
   typename InputImageType::SizeType size = this->GetInputImage()->GetRequestedRegion().GetSize();
-  unsigned int width = size[0];
-  unsigned int length = size[1];
+  //unsigned int width = size[0];
+  //unsigned int length = size[1];
   
 //   if(IndexBeginSrc[0] > width)  IndexBeginSrc[0] = width-1;
 //   if(IndexBeginSrc[1] > length) IndexBeginSrc[1] = length-1;

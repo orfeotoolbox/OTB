@@ -29,7 +29,6 @@ int otbPanTexTextureImageFilterNew(int argc, char * argv[])
 
   // Instantiating object
   PanTexType::Pointer object = PanTexType::New();
-
-
+  
   return EXIT_SUCCESS;
 }
