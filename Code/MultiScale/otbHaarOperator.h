@@ -55,7 +55,7 @@ public:
 
   itkTypeMacro(LowPassHaarOperator, WaveletOperator);
   
-  LowPassHaarOperator() : WaveletOperator ()
+  LowPassHaarOperator() 
 	{
     this->SetRadius(1);
 		this->CreateToRadius(1);

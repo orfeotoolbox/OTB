@@ -98,6 +98,12 @@ private:
   unsigned int m_NumberOfDecompositions;
   FilterListPointerType m_FilterList;
 
+  /*
+   * At this level, m_UseSubSampleImage is set to FALSE to perform
+   * multiscale analysis only
+   */
+  bool m_UseSubSampleImage;
+
 }; // end of class
 
 } // end of namespace

@@ -73,7 +73,7 @@ public:
   WaveletOperator( const Self & other ) 
     : itk::NeighborhoodOperator<TPixel, VDimension, TAllocator> (other)
   {
-    m_UpsampleFactor = other.GetUpSampleFactor();
+    m_UpSampleFactor = other.GetUpSampleFactor();
   }
   virtual ~WaveletOperator() {}
 
@@ -96,10 +96,16 @@ public:
   /**
    * Set/Get the level of up sampling of the filter
    */
-  itkGetMacro(UpSampleFactor,unsigned int);
-  itkSetMacro(UpSampleFactor,unsigned int);
+  unsigned int GetUpSampleFactor () const 
+  {
+    return this->m_UpSampleFactor;
+  }
+  void SetUpSampleFactor ( unsigned int upSampleFactor )
+  {
+    this->m_UpSampleFactor = upSampleFactor;
+  }
 
-    protected:
+protected:
   /**
    * Typedef support for coefficient vector type.  Necessary to
    * work around compiler bug on VC++.
@@ -113,13 +119,14 @@ public:
    */
   CoefficientVector UpSamplingCoefficients ( CoefficientVector & coeff ) 
   {
-    if ( m_UpsampleFactor == 0 )
+    if ( m_UpSampleFactor == 0 )
       return coeff;
 
-    for ( unsigned int up = 0; up < m_UpsampleFactor; ++up )
+    for ( unsigned int up = 0; up < m_UpSampleFactor; ++up )
     {
-      this->SetRadius( 2*this->GetRadius() );
-      this->CreateToRadius( this->GetRadius() );
+      unsigned long radius = static_cast<unsigned long>( coeff.size() ) >> 1;
+
+      this->SetRadius( 2*radius );
 
       CoefficientVector upSampledCoeff;
       upSampledCoeff.push_back( coeff[0] );
@@ -134,10 +141,10 @@ public:
     return coeff;
   }
 
-
-
   unsigned int m_UpSampleFactor;
 };
+
+} // end of namespace otb
 
 #endif
 

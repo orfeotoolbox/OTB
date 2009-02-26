@@ -42,6 +42,8 @@ StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOper
   {
     this->SetNthOutput(i,OutputImageType::New());
   }
+
+  m_UpSampleFactor = 0;
 }
 
 template < class TInputImage, class TOutputImage, class TLowPassOperator, class THighPassOperator >
@@ -95,6 +97,7 @@ StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOper
   // High pass part calculation
   HighPassOperatorType highPassOperator;
   highPassOperator.SetDirection(idx);
+  highPassOperator.SetUpSampleFactor( this->GetUpSampleFactor() );
   highPassOperator.CreateDirectional();
 
   faceList = faceCalculator( input, outputRegionForThread, highPassOperator.GetRadius() );
@@ -114,6 +117,7 @@ StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOper
   // Low pass part calculation
   LowPassOperatorType lowPassOperator;
   lowPassOperator.SetDirection(idx);
+  lowPassOperator.SetUpSampleFactor( this->GetUpSampleFactor() );
   lowPassOperator.CreateDirectional();
 
   faceList = faceCalculator( input, outputRegionForThread, lowPassOperator.GetRadius() );
@@ -158,6 +162,7 @@ StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOper
   // High pass part calculation
   HighPassOperatorType highPassOperator;
   highPassOperator.SetDirection(direction);
+  highPassOperator.SetUpSampleFactor( this->GetUpSampleFactor() );
   highPassOperator.CreateDirectional();
 
   faceList = faceCalculator( input, outputRegionForThread, highPassOperator.GetRadius() );
@@ -177,6 +182,7 @@ StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOper
   // Low pass part calculation
   LowPassOperatorType lowPassOperator;
   lowPassOperator.SetDirection(direction);
+  lowPassOperator.SetUpSampleFactor( this->GetUpSampleFactor() );
   lowPassOperator.CreateDirectional();
 
   faceList = faceCalculator( input, outputRegionForThread, lowPassOperator.GetRadius() );

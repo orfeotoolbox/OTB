@@ -34,6 +34,8 @@ WaveletForwardTransform< TInputImage, TOutputImage, TFilter >
 
   m_NumberOfDecompositions = 1;
   m_FilterList = FilterListType::New();
+
+  m_UseSubSampleImage = false;
 }
 
 template < class TInputImage, class TOutputImage, class TFilter >
@@ -86,6 +88,7 @@ WaveletForwardTransform< TInputImage, TOutputImage, TFilter >
   std::cerr << "outputIdxToGraft = " << outputIdxToGraft << "\n";
   */
 
+  unsigned int subSampleFactor = 0;
   while ( nbDecomp > 0 )
   { 
     /*
@@ -98,6 +101,9 @@ WaveletForwardTransform< TInputImage, TOutputImage, TFilter >
     idx = this->GetFilter(nbDecomp)->GetNumberOfOutputs();
     while ( idx-- > 1 )
       GetFilter(nbDecomp)->GraftNthOutput( idx, this->GetOutput( outputIdxForGraft-- ) );
+
+    if ( m_UseSubSampleImage == false )
+      GetFilter(nbDecomp)->SetUpSampleFactor( ++subSampleFactor );
 
     GetFilter( nbDecomp )->Update();
 
@@ -121,13 +127,15 @@ WaveletForwardTransform< TInputImage, TOutputImage, TFilter >
   while ( idx-- > 0 )
     GetFilter(nbDecomp)->GraftNthOutput( idx, this->GetOutput( outputIdxForGraft-- ) );
 
+  if ( m_UseSubSampleImage == false )
+      GetFilter(nbDecomp)->SetUpSampleFactor( ++subSampleFactor );
+
   GetFilter( nbDecomp )->Update();
 
   idx = this->GetFilter(nbDecomp)->GetNumberOfOutputs();
   while ( idx-- > 0 )
     this->GetOutput( outputIdxToGraft-- )->Graft( GetFilter(nbDecomp)->GetOutput( idx ) );
 }
-
 
 } // end of namespace otb
 

@@ -120,6 +120,12 @@ public:
 	itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 	itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
+  /**
+   * Set/Get the level of up sampling of the filter used in the A-trou algorithm
+   */
+  itkGetMacro(UpSampleFactor,unsigned int);
+  itkSetMacro(UpSampleFactor,unsigned int);
+
 protected:
   StationaryFilterBank();
   virtual ~StationaryFilterBank() { }
@@ -136,6 +142,7 @@ protected:
                                         itk::ProgressReporter & reporter,
                                         const OutputImageRegionType& outputRegionForThread, int threadId );
 
+  unsigned int m_UpSampleFactor;
 
 private:
   StationaryFilterBank( const Self & );
