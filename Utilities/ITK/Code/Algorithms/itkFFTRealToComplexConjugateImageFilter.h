@@ -24,7 +24,7 @@
 
 namespace itk
 {
-/** /class FFTRealToComplexConjugateImageFilter
+/** \class FFTRealToComplexConjugateImageFilter
  * /brief 
  *
  * \ingroup 
