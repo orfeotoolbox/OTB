@@ -108,32 +108,7 @@ bool GDALImageIO::CanReadFile(const char* file)
     itkDebugMacro(<<"No filename specified.");
     return false;
   }
-  bool lCanRead(false);
 
-  //Traitement particulier sur certain format o� l'on pr�f�re utiliser
-  // Format PNG -> lecture avec ITK (pas GDAL car certains tests sortent en erreurs)
-  itk::PNGImageIO::Pointer lPNGImageIO = itk::PNGImageIO::New();
-  lCanRead = lPNGImageIO->CanReadFile(file);
-  if ( lCanRead == true)
-  {
-    return false;
-  }
-  itk::JPEGImageIO::Pointer lJPEGImageIO = itk::JPEGImageIO::New();
-  lCanRead = lJPEGImageIO->CanReadFile(file);
-  if ( lCanRead == true)
-  {
-    return false;
-  }
-
-  // Regarde si c'est un r�pertoire
-  /*        std::string lFileNameGdal;
-      otbMsgDevMacro(<<"GDALImageIO::CanReadFile()");
-      bool found = GetGdalReadImageFileName(file,lFileNameGdal);
-      if( found == false )
-      {
-      return false;
-    }
-  */
   std::string lFileNameGdal;
   lFileNameGdal = std::string(file);
 
@@ -353,6 +328,7 @@ void GDALImageIO::InternalReadImageInformation()
       itkExceptionMacro(<<"Zero band found in the dataset");
       return;
     }
+
     this->SetNumberOfComponents(m_NbBands);
 
     otbMsgDevMacro(<<"NbBands : "<<m_NbBands);
@@ -453,7 +429,7 @@ void GDALImageIO::InternalReadImageInformation()
     }
     else
     {
-      m_NbOctetPixel = 1;
+      itkExceptionMacro(<<"Component type unknown");
     }
 
 
