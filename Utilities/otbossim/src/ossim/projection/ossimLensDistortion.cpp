@@ -9,7 +9,7 @@
 //
 // ossimLensDistortion
 //*******************************************************************
-//  $Id: ossimLensDistortion.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimLensDistortion.cpp 13665 2008-10-02 19:58:00Z gpotts $
 #include <sstream>
 #include <ossim/projection/ossimLensDistortion.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -39,9 +39,15 @@ bool ossimLensDistortion::loadState(const ossimKeywordlist& kwl,
    
    if(center)
    {
-      std::istringstream in(center);
-      
-      in >> theCenter.x >> theCenter.y;
+      std::vector<ossimString> splitString;
+      ossimString tempString(center);
+      tempString = tempString.trim();
+      tempString.split(splitString, " ");
+      if(splitString.size() == 2)
+      {
+         theCenter.x = splitString[0].toDouble();
+         theCenter.y = splitString[1].toDouble();
+      }
    }
 
    return ossim2dTo2dTransform::loadState(kwl, prefix);

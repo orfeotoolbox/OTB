@@ -6,7 +6,7 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationGdBitmapFont.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimGeoAnnotationGdBitmapFont.h 13349 2008-07-30 15:34:34Z dburken $
 #ifndef ossimGeoAnnotationGdBitmapFont_HEADER
 #define ossimGeoAnnotationGdBitmapFont_HEADER
 
@@ -27,10 +27,7 @@ public:
                                   long thickness = 1);
    ossimGeoAnnotationGdBitmapFont(const ossimGeoAnnotationGdBitmapFont& rhs);
    virtual ~ossimGeoAnnotationGdBitmapFont();
-   virtual ossimObject* dup()const
-      {
-         return new ossimGeoAnnotationGdBitmapFont(*this);
-      }
+   virtual ossimObject* dup()const;
    virtual void applyScale(double x, double y);
    virtual std::ostream& print(std::ostream& out)const;
    virtual void draw(ossimRgbImage& anImage)const;
@@ -43,6 +40,20 @@ public:
     * geographically defined objects.
     */
    virtual void transform(ossimProjection* projection);
+
+   /**
+    * @brief Transforms from geographic to image space for a
+    * reduced resolution data set (rrds).
+    *
+    * This will transform any world points to line sample; then, convert any
+    * line sample to the correct rrds point.
+    *
+    * @param model The model to use for transformation.
+    *
+    * @param rrds Reduced resolution data set to use.
+    */
+   virtual void transform(const ossimImageProjectionModel& model,
+                          ossim_uint32 rrds);
 
    virtual void setText(const ossimString& text);
    virtual void setFont(ossimGdFontPtr font);

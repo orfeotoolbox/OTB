@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageData.cpp 12038 2007-11-13 20:38:43Z gpotts $
+// $Id: ossimImageData.cpp 13763 2008-10-22 19:29:48Z gpotts $
 
 #include <iterator>
 
@@ -4350,6 +4350,7 @@ ossimImageData::unloadTileToBilTemplate(T,  // dummy template arg...
             d += buf_width;
          }
       }
+      delete [] nulls;
    }
 }
 

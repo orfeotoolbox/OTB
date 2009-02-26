@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimHistogramWriter.cpp 12580 2008-03-26 18:54:03Z gpotts $
+// $Id: ossimHistogramWriter.cpp 13312 2008-07-27 01:26:52Z gpotts $
 #include <ossim/base/ossimProcessListener.h>
 #include <ossim/imaging/ossimHistogramWriter.h>
 #include <ossim/imaging/ossimImageSource.h>
@@ -137,7 +137,7 @@ bool ossimHistogramWriter::canConnectMyInputTo(
 {
    return (object&&(inputIndex == 0)&& 
            (PTR_CAST(ossimHistogramSource, object)||
-            PTR_CAST(ossimImageSourceInterface, object)));
+            PTR_CAST(ossimImageSource, object)));
 }
 
 const ossimObject* ossimHistogramWriter::getObject()const

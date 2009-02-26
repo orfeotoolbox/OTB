@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimMapCompositionSource.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimMapCompositionSource.cpp 13966 2009-01-14 16:31:17Z gpotts $
 
 #include <ossim/imaging/ossimMapCompositionSource.h>
 #include <ossim/imaging/ossimU8ImageData.h>
@@ -896,7 +896,7 @@ void ossimMapCompositionSource::addGeographicTopGridLabels()
                                    ossim::round<int>(rect.ul().y-(boundsD.height()/2)));
                
                   lonLabel->setColor(theTopGeographicLabelColor.getR(), theTopGeographicLabelColor.getG(), theTopGeographicLabelColor.getB());
-                  lonLabel->setPositionCenter(center);
+                  lonLabel->setCenterPosition(center);
                   lonLabel->computeBoundingRect();
 
                   ossimDrect labelRect;
@@ -909,7 +909,7 @@ void ossimMapCompositionSource::addGeographicTopGridLabels()
                   }
 
                   center.y -= 24; // this will need to be the tick height later;
-                  lonLabel->setPositionCenter(center);
+                  lonLabel->setCenterPosition(center);
                   lonLabel->computeBoundingRect();
                   
                   addFixedAnnotation(lonLabel);
@@ -1036,7 +1036,7 @@ void ossimMapCompositionSource::addGeographicBottomGridLabels()
                                    ossim::round<int>(rect.lr().y+(bounds.height()/2)));
                   
                   lonLabel->setColor(theBottomGeographicLabelColor.getR(), theBottomGeographicLabelColor.getG(), theBottomGeographicLabelColor.getB());
-                  lonLabel->setPositionCenter(center);
+                  lonLabel->setCenterPosition(center);
                   lonLabel->computeBoundingRect();
                   lonLabel->getBoundingRect(boundsD);
                   bounds = boundsD;
@@ -1051,7 +1051,7 @@ void ossimMapCompositionSource::addGeographicBottomGridLabels()
                   }
 
                   center.y += 24; // this will need to be the tick height later;
-                  lonLabel->setPositionCenter(center);
+                  lonLabel->setCenterPosition(center);
                   lonLabel->computeBoundingRect();
 
 
@@ -1172,7 +1172,7 @@ void ossimMapCompositionSource::addGeographicLeftGridLabels()
                                    rounded.y);
                   
                   latLabel->setColor(theLeftGeographicLabelColor.getR(), theLeftGeographicLabelColor.getG(), theLeftGeographicLabelColor.getB());
-                  latLabel->setPositionCenter(center);
+                  latLabel->setCenterPosition(center);
                   latLabel->computeBoundingRect();
                   latLabel->getBoundingRect(boundsD);
                   bounds = boundsD;
@@ -1187,7 +1187,7 @@ void ossimMapCompositionSource::addGeographicLeftGridLabels()
                   }
 
                   center.x -= 24; // this will need to be the tick height later;
-                  latLabel->setPositionCenter(center);
+                  latLabel->setCenterPosition(center);
                   latLabel->computeBoundingRect();
 
 
@@ -1310,7 +1310,7 @@ void ossimMapCompositionSource::addGeographicRightGridLabels()
                                    rounded.y);
                
                   latLabel->setColor(theRightGeographicLabelColor.getR(), theRightGeographicLabelColor.getG(), theRightGeographicLabelColor.getB());
-                  latLabel->setPositionCenter(center);
+                  latLabel->setCenterPosition(center);
                   latLabel->computeBoundingRect();
                   latLabel->getBoundingRect(boundsD);
                   bounds = boundsD;
@@ -1325,7 +1325,7 @@ void ossimMapCompositionSource::addGeographicRightGridLabels()
                   }
 
                   center.x += 24; // this will need to be the tick height later;
-                  latLabel->setPositionCenter(center);
+                  latLabel->setCenterPosition(center);
                   latLabel->computeBoundingRect();
                   
 
@@ -1765,7 +1765,7 @@ void ossimMapCompositionSource::addMeterGridLabels()
                                   theTopMeterLabelColor.getB());
                
                
-               topLabel->setPositionCenter(centerTop);
+               topLabel->setCenterPosition(centerTop);
                topLabel->computeBoundingRect();
                
                topLabel->getBoundingRect(labelRect);
@@ -1777,7 +1777,7 @@ void ossimMapCompositionSource::addMeterGridLabels()
                }
                
                centerTop.y -= (24+extraTopDelta); // this will need to be the tick height later;
-               topLabel->setPositionCenter(centerTop);
+               topLabel->setCenterPosition(centerTop);
                topLabel->computeBoundingRect();
                addFixedAnnotation(topLabel);
 
@@ -1815,7 +1815,7 @@ void ossimMapCompositionSource::addMeterGridLabels()
                                      theBottomMeterLabelColor.getB());
                
                
-               bottomLabel->setPositionCenter(centerBottom);
+               bottomLabel->setCenterPosition(centerBottom);
                bottomLabel->computeBoundingRect();
                
                bottomLabel->getBoundingRect(labelRect);
@@ -1827,7 +1827,7 @@ void ossimMapCompositionSource::addMeterGridLabels()
                }
                
                centerBottom.y += (24+extraBottomDelta); // this will need to be the tick height later;
-               bottomLabel->setPositionCenter(centerBottom);
+               bottomLabel->setCenterPosition(centerBottom);
                bottomLabel->computeBoundingRect();
                addFixedAnnotation(bottomLabel);
                if(theBottomMeterTickFlag)
@@ -1884,7 +1884,7 @@ void ossimMapCompositionSource::addMeterGridLabels()
                                    theLeftMeterLabelColor.getB());
                
                
-               leftLabel->setPositionCenter(centerLeft);
+               leftLabel->setCenterPosition(centerLeft);
                leftLabel->computeBoundingRect();
                
                leftLabel->getBoundingRect(labelRect);
@@ -1896,7 +1896,7 @@ void ossimMapCompositionSource::addMeterGridLabels()
                }
                
                centerLeft.x -= (24+extraLeftDelta); // this will need to be the tick height later;
-               leftLabel->setPositionCenter(centerLeft);
+               leftLabel->setCenterPosition(centerLeft);
                leftLabel->computeBoundingRect();
                addFixedAnnotation(leftLabel);
                if(theLeftMeterTickFlag)
@@ -1932,7 +1932,7 @@ void ossimMapCompositionSource::addMeterGridLabels()
                                     theRightMeterLabelColor.getB());
                
                
-               rightLabel->setPositionCenter(centerRight);
+               rightLabel->setCenterPosition(centerRight);
                rightLabel->computeBoundingRect();
                
                rightLabel->getBoundingRect(labelRect);
@@ -1944,7 +1944,7 @@ void ossimMapCompositionSource::addMeterGridLabels()
                }
                
                centerRight.x += (24+extraRightDelta); // this will need to be the tick height later;
-               rightLabel->setPositionCenter(centerRight);
+               rightLabel->setCenterPosition(centerRight);
                rightLabel->computeBoundingRect();
                addFixedAnnotation(rightLabel);
                if(theRightMeterTickFlag)
@@ -2044,7 +2044,7 @@ void ossimMapCompositionSource::addTitle()
    title->setColor(theTitleColor.getR(),
                    theTitleColor.getG(),
                    theTitleColor.getB());
-   title->setPositionCenter(theTopBorder.midPoint());
+   title->setCenterPosition(theTopBorder.midPoint());
    title->computeBoundingRect();
 
    addFixedAnnotation(title);
@@ -3154,36 +3154,38 @@ bool ossimMapCompositionSource::loadState(const ossimKeywordlist& kwl,
    {
       istringstream in(borderColor);
 
-      int r;
-      int g;
-      int b;
+      ossimString r;
+      ossimString g;
+      ossimString b;
       in >> r >> g >> b;
 
-      theBorderColor = ossimRgbVector((ossim_uint8)r, (ossim_uint8)g, (ossim_uint8)b);
+      theBorderColor = ossimRgbVector((ossim_uint8)r.toUInt32(), 
+                                      (ossim_uint8)g.toUInt32(), 
+                                      (ossim_uint8)b.toUInt32());
    }
 
    if(geoGridColor)
    {
       istringstream in(geoGridColor);
 
-      int r;
-      int g;
-      int b;
+      ossimString r;
+      ossimString g;
+      ossimString b;
       in >> r >> g >> b;
-
-      theGeographicGridColor = ossimRgbVector((ossim_uint8)r, (ossim_uint8)g, (ossim_uint8)b);
+      
+      theGeographicGridColor = ossimRgbVector((ossim_uint8)r.toUInt32(), (ossim_uint8)g.toUInt32(), (ossim_uint8)b.toUInt32());
    }
 
    if(meterGridColor)
    {
       istringstream in(meterGridColor);
 
-      int r;
-      int g;
-      int b;
+      ossimString r;
+      ossimString g;
+      ossimString b;
       in >> r >> g >> b;
-
-      theMeterGridColor = ossimRgbVector((ossim_uint8)r, (ossim_uint8)g, (ossim_uint8)b);      
+      
+      theMeterGridColor = ossimRgbVector((ossim_uint8)r.toUInt32(), (ossim_uint8)g.toUInt32(), (ossim_uint8)b.toUInt32());      
    }
 
    if(titleString)
@@ -3195,60 +3197,61 @@ bool ossimMapCompositionSource::loadState(const ossimKeywordlist& kwl,
    {
       istringstream in(titleColor);
 
-      int r;
-      int g;
-      int b;
+      ossimString r;
+      ossimString g;
+      ossimString b;
       in >> r >> g >> b;
-
-      theTitleColor = ossimRgbVector((ossim_uint8)r, (ossim_uint8)g, (ossim_uint8)b);
+      
+      
+      theTitleColor = ossimRgbVector((ossim_uint8)r.toUInt32(), (ossim_uint8)g.toUInt32(), (ossim_uint8)b.toUInt32());
    }
 
    if(topGeoLabelColor)
    {
       istringstream in(topGeoLabelColor);
 
-      int r;
-      int g;
-      int b;
+      ossimString r;
+      ossimString g;
+      ossimString b;
       in >> r >> g >> b;
-
-      theTopGeographicLabelColor = ossimRgbVector((ossim_uint8)r, (ossim_uint8)g, (ossim_uint8)b);
+      
+      theTopGeographicLabelColor = ossimRgbVector((ossim_uint8)r.toUInt32(), (ossim_uint8)g.toUInt32(), (ossim_uint8)b.toUInt32());
    }
 
    if(bottomGeoLabelColor)
    {
       istringstream in(bottomGeoLabelColor);
 
-      int r;
-      int g;
-      int b;
+      ossimString r;
+      ossimString g;
+      ossimString b;
       in >> r >> g >> b;
-
-      theBottomGeographicLabelColor = ossimRgbVector((ossim_uint8)r, (ossim_uint8)g, (ossim_uint8)b);
+      
+      theBottomGeographicLabelColor = ossimRgbVector((ossim_uint8)r.toUInt32(), (ossim_uint8)g.toUInt32(), (ossim_uint8)b.toUInt32());
    }
 
    if(leftGeoLabelColor)
    {
       istringstream in(leftGeoLabelColor);
 
-      int r;
-      int g;
-      int b;
+      ossimString r;
+      ossimString g;
+      ossimString b;
       in >> r >> g >> b;
 
-      theLeftGeographicLabelColor = ossimRgbVector((ossim_uint8)r, (ossim_uint8)g, (ossim_uint8)b);
+      theLeftGeographicLabelColor = ossimRgbVector((ossim_uint8)r.toUInt32(), (ossim_uint8)g.toUInt32(), (ossim_uint8)b.toUInt32());
    }
 
    if(rightGeoLabelColor)
    {
       istringstream in(rightGeoLabelColor);
 
-      int r;
-      int g;
-      int b;
+      ossimString r;
+      ossimString g;
+      ossimString b;
       in >> r >> g >> b;
-
-      theRightGeographicLabelColor = ossimRgbVector((ossim_uint8)r, (ossim_uint8)g, (ossim_uint8)b);
+      
+      theRightGeographicLabelColor = ossimRgbVector((ossim_uint8)r.toUInt32(), (ossim_uint8)g.toUInt32(), (ossim_uint8)b.toUInt32());
    }
 
 
@@ -3257,48 +3260,48 @@ bool ossimMapCompositionSource::loadState(const ossimKeywordlist& kwl,
    {
       istringstream in(topMeterLabelColor);
 
-      int r;
-      int g;
-      int b;
+      ossimString r;
+      ossimString g;
+      ossimString b;
       in >> r >> g >> b;
-
-      theTopMeterLabelColor = ossimRgbVector((ossim_uint8)r, (ossim_uint8)g, (ossim_uint8)b);
+      
+      theTopMeterLabelColor = ossimRgbVector((ossim_uint8)r.toUInt32(), (ossim_uint8)g.toUInt32(), (ossim_uint8)b.toUInt32());
    }
 
    if(bottomMeterLabelColor)
    {
       istringstream in(bottomMeterLabelColor);
 
-      int r;
-      int g;
-      int b;
+      ossimString r;
+      ossimString g;
+      ossimString b;
       in >> r >> g >> b;
-
-      theBottomMeterLabelColor = ossimRgbVector((ossim_uint8)r, (ossim_uint8)g, (ossim_uint8)b);
+      
+      theBottomMeterLabelColor = ossimRgbVector((ossim_uint8)r.toUInt32(), (ossim_uint8)g.toUInt32(), (ossim_uint8)b.toUInt32());
    }
 
    if(leftMeterLabelColor)
    {
       istringstream in(leftMeterLabelColor);
 
-      int r;
-      int g;
-      int b;
+      ossimString r;
+      ossimString g;
+      ossimString b;
       in >> r >> g >> b;
-
-      theLeftMeterLabelColor = ossimRgbVector((ossim_uint8)r, (ossim_uint8)g, (ossim_uint8)b);
+      
+      theLeftMeterLabelColor = ossimRgbVector((ossim_uint8)r.toUInt32(), (ossim_uint8)g.toUInt32(), (ossim_uint8)b.toUInt32());
    }
 
    if(rightMeterLabelColor)
    {
       istringstream in(rightMeterLabelColor);
 
-      int r;
-      int g;
-      int b;
+      ossimString r;
+      ossimString g;
+      ossimString b;
       in >> r >> g >> b;
-
-      theRightMeterLabelColor = ossimRgbVector((ossim_uint8)r, (ossim_uint8)g, (ossim_uint8)b);
+      
+      theRightMeterLabelColor = ossimRgbVector((ossim_uint8)r.toUInt32(), (ossim_uint8)g.toUInt32(), (ossim_uint8)b.toUInt32());
    }
 
    if(topGeoLabelFormat)

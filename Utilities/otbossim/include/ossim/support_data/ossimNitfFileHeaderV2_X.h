@@ -8,7 +8,8 @@ class ossimNitfFileHeaderV2_X : public ossimNitfFileHeader
 public:
    ossimNitfFileHeaderV2_X();
 
-   static ossimString formatDate(const ossimLocalTm& d);
+   static ossimString formatDate(const ossimString& version,
+                                 const ossimLocalTm& d);
 
    virtual void setCodeWords(const ossimString& codeWords) = 0;
    virtual void setControlAndHandling(const ossimString& controlAndHandling) = 0;
@@ -114,6 +115,8 @@ protected:
    /**
     * Field: FDT
     * 
+    * for NITF 2.1 format we have
+    *
     * Has the form CCYYMMDDhhmmss and is a required field
     *
     * where CC is the first two digits of the year 00-99
@@ -123,6 +126,17 @@ protected:
     *       hh is the hour 00-23
     *       mm is the minutes 00-59
     *       ss is the seconds 00-59
+    *
+    * For NITF 2.0 format we have
+    *
+    * DDHHMMSSZMONYY
+    *
+    * where  DD is the day
+    *        HH is the hour
+    *        MM is the minutes
+    *        SS is the seconds
+    *        MON is the first 3 characters of the month
+    *        YY is the 2 digit year
     */
    char  theDateTime[15];  // 14 bytes
 

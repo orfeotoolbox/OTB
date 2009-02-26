@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimTopographicCorrectionFilter.cpp 11955 2007-10-31 16:10:22Z gpotts $
+// $Id: ossimTopographicCorrectionFilter.cpp 13312 2008-07-27 01:26:52Z gpotts $
 #include <algorithm>
 #include <sstream>
 #include <ossim/imaging/ossimTopographicCorrectionFilter.h>
@@ -68,9 +68,9 @@ ossimRefPtr<ossimImageData> ossimTopographicCorrectionFilter::getTile(
    const  ossimIrect& tileRect,
    ossim_uint32 resLevel)
 {
-   ossimImageSourceInterface* colorSource = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* colorSource = PTR_CAST(ossimImageSource,
                                                      getInput(0));
-   ossimImageSourceInterface* normalSource  = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* normalSource  = PTR_CAST(ossimImageSource,
                                                        getInput(1));
 
    if(!isSourceEnabled()||!normalSource||!colorSource)
@@ -161,7 +161,7 @@ void ossimTopographicCorrectionFilter::allocate()
    theBandMapping.clear();
    if(isSourceEnabled())
    {
-      // ossimImageSourceInterface* colorSource = PTR_CAST(ossimImageSourceInterface, getInput(0));
+      // ossimImageSource* colorSource = PTR_CAST(ossimImageSource, getInput(0));
 
       theTile = ossimImageDataFactory::instance()->create(this, this);
       theTile->initialize();
@@ -175,7 +175,7 @@ void ossimTopographicCorrectionFilter::allocate()
       //
       resizeArrays(arraySize);
 
-      ossimImageSourceInterface* input1 = PTR_CAST(ossimImageSourceInterface,
+      ossimImageSource* input1 = PTR_CAST(ossimImageSource,
                                                    getInput(0));
       if(input1)
       {
@@ -579,8 +579,8 @@ void ossimTopographicCorrectionFilter::computeC()
    theNdviLowTest  = 0.1;
    theNdviHighTest = 1;
 
-   ossimImageSourceInterface* colorSource  = PTR_CAST(ossimImageSourceInterface, getInput(0));
-   ossimImageSourceInterface* normalSource = PTR_CAST(ossimImageSourceInterface, getInput(1));
+   ossimImageSource* colorSource  = PTR_CAST(ossimImageSource, getInput(0));
+   ossimImageSource* normalSource = PTR_CAST(ossimImageSource, getInput(1));
 
    if(!colorSource || !normalSource)
    {
@@ -1069,7 +1069,7 @@ bool ossimTopographicCorrectionFilter::saveState(ossimKeywordlist& kwl,
 
 ossim_uint32 ossimTopographicCorrectionFilter::getNumberOfOutputBands() const
 {
-   ossimImageSourceInterface* colorSource = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   ossimImageSource* colorSource = PTR_CAST(ossimImageSource, getInput(0));
    if(colorSource)
    {
       return colorSource->getNumberOfOutputBands();
@@ -1079,7 +1079,7 @@ ossim_uint32 ossimTopographicCorrectionFilter::getNumberOfOutputBands() const
 
 ossimScalarType ossimTopographicCorrectionFilter::getOutputScalarType() const
 {
-   ossimImageSourceInterface* colorSource = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   ossimImageSource* colorSource = PTR_CAST(ossimImageSource, getInput(0));
    if(colorSource)
    {
       return colorSource->getOutputScalarType();
@@ -1089,7 +1089,7 @@ ossimScalarType ossimTopographicCorrectionFilter::getOutputScalarType() const
 
 double ossimTopographicCorrectionFilter::getNullPixelValue(ossim_uint32 band)const
 {
-   ossimImageSourceInterface* colorSource = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   ossimImageSource* colorSource = PTR_CAST(ossimImageSource, getInput(0));
    if(colorSource)
    {
       return colorSource->getNullPixelValue(band);
@@ -1099,7 +1099,7 @@ double ossimTopographicCorrectionFilter::getNullPixelValue(ossim_uint32 band)con
 
 double ossimTopographicCorrectionFilter::getMinPixelValue(ossim_uint32 band)const
 {
-   ossimImageSourceInterface* colorSource = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   ossimImageSource* colorSource = PTR_CAST(ossimImageSource, getInput(0));
    if(colorSource)
    {
       return colorSource->getMinPixelValue(band);
@@ -1109,7 +1109,7 @@ double ossimTopographicCorrectionFilter::getMinPixelValue(ossim_uint32 band)cons
 
 double ossimTopographicCorrectionFilter::getMaxPixelValue(ossim_uint32 band)const
 {
-   ossimImageSourceInterface* colorSource = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   ossimImageSource* colorSource = PTR_CAST(ossimImageSource, getInput(0));
    if(colorSource)
    {
       return colorSource->getMaxPixelValue(band);
@@ -1121,7 +1121,7 @@ ossimIrect ossimTopographicCorrectionFilter::getBoundingRect(ossim_uint32 resLev
 {
    ossimIrect result;
    result.makeNan();
-   ossimImageSourceInterface* colorSource = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   ossimImageSource* colorSource = PTR_CAST(ossimImageSource, getInput(0));
 
    if(colorSource)
    {
@@ -1135,7 +1135,7 @@ void ossimTopographicCorrectionFilter::getDecimationFactor(ossim_uint32 resLevel
                                                            ossimDpt& result) const
 {
    result.makeNan();
-   ossimImageSourceInterface* colorSource = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   ossimImageSource* colorSource = PTR_CAST(ossimImageSource, getInput(0));
 
    if(colorSource)
    {
@@ -1146,7 +1146,7 @@ void ossimTopographicCorrectionFilter::getDecimationFactor(ossim_uint32 resLevel
 
 void ossimTopographicCorrectionFilter::getDecimationFactors(vector<ossimDpt>& decimations) const
 {
-   ossimImageSourceInterface* colorSource = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   ossimImageSource* colorSource = PTR_CAST(ossimImageSource, getInput(0));
    if(colorSource)
    {
       colorSource->getDecimationFactors(decimations);
@@ -1155,7 +1155,7 @@ void ossimTopographicCorrectionFilter::getDecimationFactors(vector<ossimDpt>& de
 
 ossim_uint32 ossimTopographicCorrectionFilter::getNumberOfDecimationLevels()const
 {
-   ossimImageSourceInterface* colorSource = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   ossimImageSource* colorSource = PTR_CAST(ossimImageSource, getInput(0));
    if(colorSource)
    {
       return colorSource->getNumberOfDecimationLevels();
@@ -1187,7 +1187,7 @@ bool ossimTopographicCorrectionFilter::canConnectMyInputTo(ossim_int32 inputInde
 {
    return (object&&
            ( (inputIndex>=0) && inputIndex < 2)&&
-           PTR_CAST(ossimImageSourceInterface, object));
+           PTR_CAST(ossimImageSource, object));
 
 }
 

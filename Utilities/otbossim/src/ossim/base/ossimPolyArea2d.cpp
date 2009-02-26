@@ -1,7 +1,7 @@
 //---
 // License:  See top level LICENSE.txt file.
 //
-// $Id: ossimPolyArea2d.cpp 12966 2008-06-03 14:17:40Z gpotts $
+// $Id: ossimPolyArea2d.cpp 13710 2008-10-14 16:27:57Z gpotts $
 //---
 #include <ossim/base/ossimPolyArea2d.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -678,7 +678,7 @@ bool ossimPolyArea2d::loadState(const ossimKeywordlist& kwl,
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimPolyArea2d.cpp 12966 2008-06-03 14:17:40Z gpotts $
+// $Id: ossimPolyArea2d.cpp 13710 2008-10-14 16:27:57Z gpotts $
 #include <list>
 #include <sstream>
 using namespace std;
@@ -1539,6 +1539,7 @@ bool ossimPolyArea2d::loadState(const ossimKeywordlist& kwl,
          ossim_uint32 currentPoint = 0;
          while(numberOfMatches < numberOfPoints)
          {
+            ossimString x,y;
             ossimString pointString = "point";
             pointString += ossimString::toString(currentPoint);
             const char* pointLookup = kwl.find((*currentContour).c_str(),
@@ -1547,9 +1548,10 @@ bool ossimPolyArea2d::loadState(const ossimKeywordlist& kwl,
             {
                istringstream s(pointLookup);
 
-               s >> v[0] >> v[1];
+               s >> x >> y;
+               v[0] = x.toDouble();
+               v[1] = y.toDouble();
                v[2] = 0;
-
                // initialize the poly if we are on the
                // first match point else we just add it.
                if(!numberOfMatches)

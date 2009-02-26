@@ -8,11 +8,12 @@
 // Author: Garrett Potts
 //
 //*******************************************************************
-// $Id: ossimImageRenderer.h 12668 2008-04-14 14:12:31Z gpotts $
+// $Id: ossimImageRenderer.h 13330 2008-07-28 18:04:40Z dburken $
 
 #ifndef ossimImageRenderer_HEADER
 #define ossimImageRenderer_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
+#include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimViewInterface.h>
 #include <ossim/base/ossimRationalNumber.h>
 

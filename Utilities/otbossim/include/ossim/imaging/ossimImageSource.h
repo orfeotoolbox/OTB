@@ -8,21 +8,18 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSource.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImageSource.h 13329 2008-07-28 18:03:19Z dburken $
 #ifndef ossimImageSource_HEADER
 #define ossimImageSource_HEADER
 
-#include <ossim/base/ossimSource.h>
-#include <ossim/base/ossimErrorContext.h>
 #include <ossim/base/ossimConstants.h>
-#include <ossim/base/ossimDrect.h>
+#include <ossim/base/ossimSource.h>
+#include <ossim/base/ossimIrect.h>
 #include <ossim/imaging/ossimImageData.h>
-#include <ossim/imaging/ossimImageSourceInterface.h>
 
 class ossimDpt;
 
-class OSSIMDLLEXPORT ossimImageSource : public ossimSource,
-			                public ossimImageSourceInterface
+class OSSIMDLLEXPORT ossimImageSource : public ossimSource
 {
 public:
    ossimImageSource(ossimObject* owner = 0);
@@ -47,14 +44,14 @@ public:
                                                ossim_uint32 resLevel=0);
    
   /**
-   * For RTTI support. overrides ossimImageSourceInterface
+   * For RTTI support. overrides ossimImageSource
    * get object to return the correct casted base pointer
    * for RTTI casting
    */
    virtual ossimObject* getObject() { return this; }
    
    /**
-    * For RTTI support. overrides ossimImageSourceInterface
+    * For RTTI support. overrides ossimImageSource
     * get object to return the correct casted base pointer
     * for RTTI casting
     */
@@ -73,13 +70,18 @@ public:
    /**
     * Will return an array of all decimations for each resolution level.
     */
-   virtual void getDecimationFactors(vector<ossimDpt>& decimations) const;
+   virtual void getDecimationFactors(std::vector<ossimDpt>& decimations) const;
 
    /**
     * Will return the number of resolution levels.  Note: resolution
     * level 0 is included in the return count.
     */
    virtual ossim_uint32 getNumberOfDecimationLevels() const;
+   
+   /*!
+    * Returns the number of bands available from the input.
+    */
+   virtual ossim_uint32 getNumberOfInputBands() const = 0;
    
    /**
     * Returns the number of bands in a tile returned from this TileSource.
@@ -108,7 +110,7 @@ public:
    virtual ossim_uint32 getTileHeight() const;
 
    /**
-    * Each band has a null pixel associated with it.  The null pixel 
+         * Each band has a null pixel associated with it.  The null pixel 
     * represents an invalid value.
     */ 
    virtual double getNullPixelValue(ossim_uint32 band=0)const;
@@ -159,13 +161,13 @@ public:
     *
     * The default implementation is to return the bounding rect.
     */
-   virtual void getValidImageVertices(vector<ossimIpt>& validVertices,
+   virtual void getValidImageVertices(std::vector<ossimIpt>& validVertices,
                                       ossimVertexOrdering ordering=OSSIM_CLOCKWISE_ORDER,
                                       ossim_uint32 resLevel=0)const;
 
    /**
     * the default is to find the first input source that is of
-    * type ossimImageSourceInterface and return its input geometry.
+    * type ossimImageSource and return its input geometry.
     */
    virtual bool getImageGeometry(ossimKeywordlist& kwl,
                                  const char* prefix=0);
@@ -184,6 +186,9 @@ public:
     * Default method to call input's saveImageGeometry.
     */
    virtual void saveImageGeometry(const ossimFilename& geometry_file) const;
+   
+   virtual void initialize()=0;
+   
    
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void setProperty(ossimRefPtr<ossimProperty> property);

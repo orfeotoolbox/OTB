@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimColorProperty.cpp 9966 2006-11-29 02:01:07Z gpotts $
+// $Id: ossimColorProperty.cpp 13667 2008-10-02 19:59:55Z gpotts $
 #include <sstream>
 #include <ossim/base/ossimColorProperty.h>
 
@@ -53,15 +53,22 @@ const ossimProperty& ossimColorProperty::assign(const ossimProperty& rhs)
 
 bool ossimColorProperty::setValue(const ossimString& value)
 {
-   istringstream in(value);
-
-   int r,g,b;
-
-   in >> r >> g >> b;
-
-   theValue = ossimRgbVector(r,g,b);
+   bool result = false;
+   std::vector<ossimString> splitArray;
    
-   return in.good();
+   value.split(splitArray, " ");
+   if(splitArray.size() == 3)
+   {
+      int r,g,b;
+      r = splitArray[0].toInt32();
+      g = splitArray[1].toInt32();
+      b = splitArray[2].toInt32();
+      result = true;
+      
+      theValue = ossimRgbVector(r,g,b);
+   }
+   
+   return result;
 }
 
 void ossimColorProperty::valueToString(ossimString& valueResult)const

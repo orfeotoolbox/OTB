@@ -15,7 +15,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-// $Id: ossimElevSource.cpp 11506 2007-08-06 09:41:03Z dburken $
+// $Id: ossimElevSource.cpp 13457 2008-08-18 18:49:25Z gpotts $
 
 #include <ossim/elevation/ossimElevSource.h>
 #include <ossim/base/ossimPreferences.h>
@@ -149,7 +149,11 @@ bool ossimElevSource::intersectRay(const ossimEcefRay& ray, ossimGpt& gpt)
    bool            done = false;
    int             iteration_count = 0;
 
-   if(ray.hasNans()) return false;
+   if(ray.hasNans()) 
+   {
+      gpt.makeNan();
+      return false;
+   }
    //***
    // Set the initial guess for horizontal intersect position as the ray's
    // origin, and establish the datum and ellipsoid:

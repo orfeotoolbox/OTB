@@ -8,7 +8,7 @@
 // AUTHOR: Garrett Potts
 //
 //*****************************************************************************
-//$Id: ossimRpcProjection.cpp 12153 2007-12-10 15:13:54Z gpotts $
+//$Id: ossimRpcProjection.cpp 13770 2008-10-22 19:33:24Z gpotts $
 
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimRpcProjection.h>
@@ -1253,7 +1253,7 @@ ossimRpcProjection::buildNormalEquation(const ossimTieGptSet& tieSet,
    else
    {
       // ground observations
-      ossimGpt* gdDerp=new ossimGpt[np];
+      std::vector<ossimGpt> gdDerp(np);
       ossimGpt gd, resGd;
       // loop on tie points
       for (tit = theTPV.begin() ; tit != theTPV.end() ; ++tit)

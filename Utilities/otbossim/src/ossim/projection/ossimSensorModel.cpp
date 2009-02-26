@@ -25,7 +25,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSensorModel.cpp 12253 2008-01-03 21:40:15Z dburken $
+//  $Id: ossimSensorModel.cpp 13771 2008-10-22 19:33:54Z gpotts $
 #include <iostream>
 #include <sstream>
 using namespace std;
@@ -105,7 +105,9 @@ ossimSensorModel::ossimSensorModel()
    theRefImgPt         (0.0, 0.0),
    theBoundGndPolygon  (),
    theImageClipRect    (),
-   theNominalPosError  (0)
+   theNominalPosError  (0),
+   theExtrapolateImageFlag(false),
+   theExtrapolateGroundFlag(false)
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSensorModel::ossimSensorModel(geom_kwl): entering..." << endl;
 
@@ -129,7 +131,9 @@ ossimSensorModel::ossimSensorModel(const ossimSensorModel& model)
    theRefImgPt        (model.theRefImgPt),
    theBoundGndPolygon (model.theBoundGndPolygon),
    theImageClipRect   (model.theImageClipRect),
-   theNominalPosError (model.theNominalPosError)
+theNominalPosError (model.theNominalPosError),
+theExtrapolateImageFlag(false),
+theExtrapolateGroundFlag(false)
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSensorModel::ossimSensorModel(model): entering..." << std::endl;
 
@@ -159,7 +163,9 @@ ossimSensorModel::ossimSensorModel(const ossimKeywordlist& geom_kwl)
    theRefImgPt         (0.0, 0.0),
    theBoundGndPolygon  (),
    theImageClipRect    (),
-   theNominalPosError  (0)
+theNominalPosError  (0),
+theExtrapolateImageFlag(false),
+theExtrapolateGroundFlag(false)
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSensorModel::ossimSensorModel(geom_kwl): entering..." << std::endl;
 
@@ -213,7 +219,7 @@ void ossimSensorModel::lineSampleToWorld(const ossimDpt& image_point,
    //***
    // Extrapolate if image point is outside image:
    //***
-   if (!insideImage(image_point))
+   if (!insideImage(image_point)&&(!theExtrapolateImageFlag))
    {
       gpt = extrapolate(image_point);
       return;
@@ -276,7 +282,8 @@ void ossimSensorModel::worldToLineSample(const ossimGpt& worldPoint,
          {
             theSeedFunction->worldToLineSample(worldPoint, ip);
          }
-         else
+         else if(!theExtrapolateGroundFlag) // if I am not already in the extrapolation routine
+
          {
          //      recursionFlag = true;
             ip = extrapolate(worldPoint);
@@ -779,10 +786,22 @@ bool ossimSensorModel::loadState(const ossimKeywordlist& kwl,
    const char* rect = kwl.find(prefix, "rect");
    if(rect)
    {
-      std::istringstream in(rect);
-      double ulx, uly, lrx, lry;
-      in >> ulx >> uly >> lrx >> lry;
-      theImageClipRect = ossimDrect(ulx, uly, lrx, lry);
+      std::vector<ossimString> splitArray;
+      ossimString rectString(rect);
+      rectString = rectString.trim();
+      rectString.split(splitArray, " ");
+      if(splitArray.size() == 4)
+      {
+         theImageClipRect = ossimDrect(splitArray[0].toDouble(),
+                                       splitArray[1].toDouble(),
+                                       splitArray[2].toDouble(),
+                                       splitArray[3].toDouble());
+      }
+      else
+      {
+         theImageClipRect = ossimDrect(0.0, 0.0,
+                                       theImageSize.samp-1, theImageSize.line-1);
+      }
    }
    else
    {
@@ -811,6 +830,7 @@ bool ossimSensorModel::loadState(const ossimKeywordlist& kwl,
 ossimGpt ossimSensorModel::extrapolate (const ossimDpt& imagePoint,
                                         const double&   height) const
 {
+   theExtrapolateImageFlag = true;
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) <<  "DEBUG ossimSensorModel::extrapolate: entering... " << std::endl;
 
    //---
@@ -820,6 +840,7 @@ ossimGpt ossimSensorModel::extrapolate (const ossimDpt& imagePoint,
    //---
    if (imagePoint.hasNans())
    {
+      theExtrapolateImageFlag = false;
       if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSensorModel::extrapolate: returning..." << std::endl;
       return ossimGpt(ossim::nan(), ossim::nan(), ossim::nan());
    }
@@ -829,7 +850,7 @@ ossimGpt ossimSensorModel::extrapolate (const ossimDpt& imagePoint,
       ossimGpt wpt;
 
       theSeedFunction->lineSampleToWorld(imagePoint, wpt);
-
+      theExtrapolateImageFlag = false;
       return wpt;
    }
    //***
@@ -891,6 +912,7 @@ ossimGpt ossimSensorModel::extrapolate (const ossimDpt& imagePoint,
    {
       gpt.hgt = height;
    }
+   theExtrapolateImageFlag = false;
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSensorModel::extrapolate: returning..." << std::endl;
    return gpt;
 }
@@ -905,7 +927,7 @@ ossimGpt ossimSensorModel::extrapolate (const ossimDpt& imagePoint,
 ossimDpt ossimSensorModel::extrapolate (const ossimGpt& gpt) const
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) <<  "DEBUG ossimSensorModel::extrapolate: entering... " << std::endl;
-
+   theExtrapolateGroundFlag = true;
    double height = 0.0;
    //---
    // If ground point supplied has NaN components, return now with a NaN point.
@@ -913,6 +935,7 @@ ossimDpt ossimSensorModel::extrapolate (const ossimGpt& gpt) const
    if ( (ossim::isnan(gpt.lat)) || (ossim::isnan(gpt.lon)) )
 //       (gpt.hgt==OSSIM_DBL_NAN))
    {
+      theExtrapolateGroundFlag = false;
       if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSensorModel::extrapolate: returning..." << std::endl;
       return ossimDpt(ossim::nan(), ossim::nan());
    }
@@ -927,7 +950,8 @@ ossimDpt ossimSensorModel::extrapolate (const ossimGpt& gpt) const
 
       theSeedFunction->worldToLineSample(gpt, ipt);
 
-      return ipt;
+      theExtrapolateGroundFlag = false;
+     return ipt;
    }
    //***
    // Determine which edge is intersected by the radial, and establish
@@ -975,6 +999,7 @@ ossimDpt ossimSensorModel::extrapolate (const ossimGpt& gpt) const
 
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSensorModel::extrapolate: returning..." << std::endl;
 
+   theExtrapolateGroundFlag = false;
    return extrapolated_ip;
 }
 
@@ -1244,7 +1269,7 @@ ossimSensorModel::buildNormalEquation(const ossimTieGptSet& tieSet,
    if (useImageObs)
    { 
      //image observations 
-     ossimDpt* imDerp = new ossimDpt[np];
+      std::vector<ossimDpt> imDerp(np);
      ossimDpt resIm;
      // loop on tie points
       for (tit = theTPV.begin() ; tit != theTPV.end() ; ++tit)
@@ -1273,12 +1298,11 @@ ossimSensorModel::buildNormalEquation(const ossimTieGptSet& tieSet,
             }
          }
       }
-      delete []imDerp;
    }
    else
    {
       // ground observations
-      ossimGpt* gdDerp=new ossimGpt[np];
+      std::vector<ossimGpt>  gdDerp(np);
       ossimGpt gd, resGd;
       // loop on tie points
       for (tit = theTPV.begin() ; tit != theTPV.end() ; ++tit)
@@ -1308,6 +1332,7 @@ ossimSensorModel::buildNormalEquation(const ossimTieGptSet& tieSet,
             }
          }
       }
+
    } //end of if (useImageObs)
 }
 

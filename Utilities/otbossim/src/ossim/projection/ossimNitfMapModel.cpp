@@ -86,6 +86,7 @@ ossimNitfMapModel::ossimNitfMapModel(const ossimFilename& init_file)
                                              << "> as NITF2.00."<<endl;
       }
       theErrorStatus = 1;
+      delete [] header;
       return;
    }
 
@@ -273,6 +274,7 @@ ossimNitfMapModel::ossimNitfMapModel(const ossimFilename& init_file)
                                             << " Aborting with error..." << std::endl;
       }
       theErrorStatus = 1;
+      delete [] header;
       return;
    }
    
@@ -335,6 +337,7 @@ ossimNitfMapModel::ossimNitfMapModel(const ossimFilename& init_file)
                                                    << init_file << ">." << " Aborting with error..." << std::endl;
             }
             theErrorStatus = 1;
+            delete [] header;
             return;
          }
 
@@ -368,6 +371,7 @@ ossimNitfMapModel::ossimNitfMapModel(const ossimFilename& init_file)
    saveState(geom_kwl);
    geom_kwl.write(geom_filename.chars());
 
+   delete [] header;
 
    if (traceExec()) ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNitfMapModel::ossimNitfMapModel: Exited..." << std::endl;
 }

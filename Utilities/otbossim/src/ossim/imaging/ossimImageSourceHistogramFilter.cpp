@@ -6,7 +6,7 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimImageSourceHistogramFilter.cpp 11721 2007-09-13 13:19:34Z gpotts $
+// $Id: ossimImageSourceHistogramFilter.cpp 13312 2008-07-27 01:26:52Z gpotts $
 #include <ossim/imaging/ossimImageSourceHistogramFilter.h>
 #include <ossim/base/ossimHistogramSource.h>
 #include <ossim/base/ossimMultiResLevelHistogram.h>
@@ -118,7 +118,7 @@ bool ossimImageSourceHistogramFilter::canConnectMyInputTo(ossim_int32 inputIndex
 {
    if(object)
    {
-      if(PTR_CAST(ossimImageSourceInterface, object) && ( inputIndex == 0 ))
+      if(PTR_CAST(ossimImageSource, object) && ( inputIndex == 0 ))
       {
          return true;
       }
@@ -133,7 +133,7 @@ bool ossimImageSourceHistogramFilter::canConnectMyInputTo(ossim_int32 inputIndex
 
 void ossimImageSourceHistogramFilter::connectInputEvent(ossimConnectionEvent& event)
 {
-   theInputConnection = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   theInputConnection = PTR_CAST(ossimImageSource, getInput(0));
    if(PTR_CAST(ossimHistogramSource, event.getNewObject()))
    {
       // only initialize if it's a new object

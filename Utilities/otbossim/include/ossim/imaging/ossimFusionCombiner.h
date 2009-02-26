@@ -12,7 +12,7 @@
 //              the intensity source.
 //
 //*************************************************************************
-// $Id: ossimFusionCombiner.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimFusionCombiner.h 13312 2008-07-27 01:26:52Z gpotts $
 #ifndef ossimFusionCombiner_HEADER
 #define ossimFusionCombiner_HEADER
 
@@ -34,8 +34,8 @@ protected:
   ossimRefPtr<ossimImageData> theTile;
   ossimRefPtr<ossimImageData> theNormTile;
   ossimRefPtr<ossimImageData> theNormIntensity;
-  ossimImageSourceInterface*  theInputConnection;
-  ossimImageSourceInterface*  theIntensityConnection;
+  ossimImageSource*  theInputConnection;
+  ossimImageSource*  theIntensityConnection;
   
   ossimRefPtr<ossimImageData> getNormIntensity(const ossimIrect& rect,
                                                ossim_uint32 resLevel);

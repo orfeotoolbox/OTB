@@ -13,12 +13,12 @@
 // writing an ENVI (The Environment for Visualizing Images) header file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimEnviHeaderFileWriter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimEnviHeaderFileWriter.cpp 13312 2008-07-27 01:26:52Z gpotts $
 
 #include <ossim/imaging/ossimEnviHeaderFileWriter.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimIrect.h>
-#include <ossim/imaging/ossimImageSourceInterface.h>
+#include <ossim/imaging/ossimImageSource.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimMapProjectionInfo.h>

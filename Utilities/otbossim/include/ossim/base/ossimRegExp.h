@@ -159,7 +159,11 @@ inline ossimRegExp::ossimRegExp (const char* s) {
 
 inline ossimRegExp::~ossimRegExp () {
 //#ifndef WIN32
-  delete [] this->program;
+   if(program)
+   {
+      delete [] this->program;
+      this->program = 0;
+   }
 //#endif
 }
 

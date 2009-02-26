@@ -7,7 +7,7 @@
 // Description: This class parses an EOSAT Fast Format rev c header.
 //
 //********************************************************************
-// $Id: ossimFfRevc.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimFfRevc.cpp 13217 2008-07-23 19:19:13Z dburken $
 
 #include <fstream>
 #include <sstream>
@@ -154,11 +154,7 @@ int ossimFfRevc::path(int sceneNbr) const
    if (is)
    {
       is.get(tmpBuff, 4);
-
-      if (tmpBuff)
-      {
-         path = atoi(tmpBuff);
-      }
+      path = atoi(tmpBuff);
    }
 
    return path;
@@ -184,11 +180,7 @@ int ossimFfRevc::row(int sceneNbr) const
    {
       is.seekg(4, ios::beg);
       is.get(tmpBuff, 4);
-
-      if (tmpBuff)
-      {
-         row = atoi(tmpBuff);
-      }
+      row = atoi(tmpBuff);
    }
 
    return row;
@@ -214,11 +206,7 @@ int ossimFfRevc::fraction(int sceneNbr) const
    {
       is.seekg(7, ios::beg);
       is.get(tmpBuff, 3);
-
-      if (tmpBuff)
-      {
-         fraction = atoi(tmpBuff);
-      }
+      fraction = atoi(tmpBuff);
    }
 
    return fraction;
@@ -244,11 +232,7 @@ ossimString ossimFfRevc::subScene(int sceneNbr) const
    {
       is.seekg(9, ios::beg);
       is.get(tmpBuff, 3);
-
-      if (tmpBuff)
-      {
-         subScene = tmpBuff;
-      }
+      subScene = tmpBuff;
    }
 
    return subScene;
@@ -1117,16 +1101,8 @@ void ossimFfRevc::loadFromStream(istream& is)
 
       if (checkStream(is)) return;
 
-      if (tmpBuff)
-      {
-         theAdminRecord.theOffNadirAngle[i] = atof(tmpBuff);
-      }
-      else
-      {
-         theErrorStatus = OSSIM_ERROR;
-         ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                             << "Detected an error reading the1stOffNadirAngle." << std::endl;
-      }
+      theAdminRecord.theOffNadirAngle[i] = atof(tmpBuff);
+
    } // End of scene loop.
    
    is.seekg(PRODUCT_TYPE_OFFSET, ios::beg);
@@ -1159,16 +1135,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theAdminRecord.theTapeVolumeNumber = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading theTapeVolumeNumber." << std::endl;
-   }
+   theAdminRecord.theTapeVolumeNumber = atoi(tmpBuff);
 
    is.seekg(VOLUMES_PER_TAPE_OFFSET, ios::beg);
 
@@ -1176,16 +1143,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theAdminRecord.theNumberVolumesPerTape = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading theNumberVolumesPerTape." << std::endl;
-   }
+   theAdminRecord.theNumberVolumesPerTape = atoi(tmpBuff);
     
    is.seekg(PIXELS_PER_LINE_OFFSET, ios::beg);
 
@@ -1193,16 +1151,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theAdminRecord.thePixelsPerLine = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading thePixelsPerLine." << std::endl;
-   }
+   theAdminRecord.thePixelsPerLine = atoi(tmpBuff);
    
    is.seekg(LINES_PER_IMAGE_OFFSET, ios::beg);
 
@@ -1210,16 +1159,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theAdminRecord.theLinesPerImage = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading theLinesPerImage." << std::endl;
-   }
+   theAdminRecord.theLinesPerImage = atoi(tmpBuff);
 
    is.seekg(FIRST_LINE_IN_VOLUME_OFFSET, ios::beg);
 
@@ -1227,16 +1167,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theAdminRecord.the1stLineInVolume = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading the1stLineInVolume." << std::endl;
-   }
+   theAdminRecord.the1stLineInVolume = atoi(tmpBuff);
 
    is.seekg(BLOCKING_FACTOR_OFFSET, ios::beg);
 
@@ -1244,16 +1175,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theAdminRecord.theTapeBlockingFactor = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading theTapeBlockingFactor." << std::endl;
-   }
+   theAdminRecord.theTapeBlockingFactor = atoi(tmpBuff);
    
    is.seekg(RECORD_LENGTH_OFFSET, ios::beg);
 
@@ -1261,16 +1183,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theAdminRecord.theRecordSize = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading theRecordSize." << std::endl;
-   }
+   theAdminRecord.theRecordSize = atoi(tmpBuff);
    
    is.seekg(PIXEL_GSD_OFFSET, ios::beg);
 
@@ -1278,16 +1191,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theAdminRecord.theGsd = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading theGsd." << std::endl;
-   }
+   theAdminRecord.theGsd = atof(tmpBuff);
    
    is.seekg(BITS_PER_PIXEL_OFFSET, ios::beg);
 
@@ -1295,16 +1199,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theAdminRecord.theOutputBitsPerPixel = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading theOutputBitsPerPixel." << std::endl;
-   }
+   theAdminRecord.theOutputBitsPerPixel = atoi(tmpBuff);
    
    is.seekg(ACQUIRED_BITS_PER_PIXEL_OFFSET, ios::beg);
 
@@ -1312,16 +1207,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theAdminRecord.theAcquiredBitsPerPixel = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream:"
-                                          << "Detected an error reading theAcquiredBitsPerPixel." << std::endl;
-   }
+   theAdminRecord.theAcquiredBitsPerPixel = atoi(tmpBuff);
    
    is.seekg(BANDS_PRESENT_OFFSET, ios::beg);
 
@@ -1350,17 +1236,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
       if (checkStream(is)) return;
    
-      if (tmpBuff)
-      {
-         theRadiomRecord.theBias[i] = atof(tmpBuff);
-      }
-      else
-      {
-         theErrorStatus = OSSIM_ERROR;
-         ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                             << "Detected an error reading bias for band:  "
-                                             << (i + 1) << endl;
-      }
+      theRadiomRecord.theBias[i] = atof(tmpBuff);
 
       is.seekg(GAIN_OFFSET[i], ios::beg);
 
@@ -1368,17 +1244,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
       if (checkStream(is)) return;
    
-      if (tmpBuff)
-      {
-         theRadiomRecord.theGain[i] = atof(tmpBuff);
-      }
-      else
-      {
-         theErrorStatus = OSSIM_ERROR;
-         ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream:"
-                                             << "Detected an error reading gain for band:  "
-                                             << i << std::endl;
-      }
+      theRadiomRecord.theGain[i] = atof(tmpBuff);
    }
    //***
    // End of radiometric record.
@@ -1418,16 +1284,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
       if (checkStream(is)) return;
 
-      if (tmpBuff)
-      {
-         theGeoRecord.theProjectionParams[i] = atof(tmpBuff);
-      }
-      else
-      {
-         theErrorStatus = OSSIM_ERROR;
-         ossimNotify(ossimNotifyLevel_FATAL) << "FATALossimFfRevc::loadFromStream: "
-                                             << "Detected an error reading ProjectionParams." << std::endl;
-      }
+      theGeoRecord.theProjectionParams[i] = atof(tmpBuff);
    }
 
    //***
@@ -1451,16 +1308,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theGeoRecord.theUlEasting = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading UL easting." << std::endl;
-   }
+   theGeoRecord.theUlEasting = atof(tmpBuff);
 
    is.seekg(UL_NORTHING_OFFSET, ios::beg);
 
@@ -1468,16 +1316,8 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theGeoRecord.theUlNorthing = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading UL northing." << std::endl;
-   }
+   theGeoRecord.theUlNorthing = atof(tmpBuff);
+
    //***
    // End of upper left data.
    //***
@@ -1503,16 +1343,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theGeoRecord.theUrEasting = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading UR easting." << std::endl;
-   }
+   theGeoRecord.theUrEasting = atof(tmpBuff);
 
    is.seekg(UR_NORTHING_OFFSET, ios::beg);
 
@@ -1520,16 +1351,8 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theGeoRecord.theUrNorthing = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream:"
-                                          << "Detected an error reading UR northing." << std::endl;
-   }
+   theGeoRecord.theUrNorthing = atof(tmpBuff);
+
    //***
    // End of upper right data.
    //***
@@ -1555,16 +1378,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theGeoRecord.theLrEasting = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading LR easting." << std::endl;
-   }
+   theGeoRecord.theLrEasting = atof(tmpBuff);
 
    is.seekg(LR_NORTHING_OFFSET, ios::beg);
 
@@ -1572,16 +1386,8 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theGeoRecord.theLrNorthing = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading LR northing." << std::endl;
-   }
+   theGeoRecord.theLrNorthing = atof(tmpBuff);
+
    //***
    // End of lower right data.
    //***
@@ -1607,16 +1413,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theGeoRecord.theLlEasting = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading LL easting." << std::endl;
-   }
+   theGeoRecord.theLlEasting = atof(tmpBuff);
 
    is.seekg(LL_NORTHING_OFFSET, ios::beg);
 
@@ -1624,16 +1421,8 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theGeoRecord.theLlNorthing = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading LL northing." << std::endl;
-   }
+   theGeoRecord.theLlNorthing = atof(tmpBuff);
+
    //***
    // End of lower left data.
    //***
@@ -1660,16 +1449,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theGeoRecord.theCenterEasting = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading center easting." << std::endl;
-   }
+   theGeoRecord.theCenterEasting = atof(tmpBuff);
 
    is.seekg(CENTER_NORTHING_OFFSET, ios::beg);
 
@@ -1677,16 +1457,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theGeoRecord.theCenterNorthing = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading center northing." << std::endl;
-   }
+   theGeoRecord.theCenterNorthing = atof(tmpBuff);
 
    is.seekg(CENTER_SAMPLE_OFFSET, ios::beg);
 
@@ -1694,16 +1465,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theGeoRecord.theCenterSample = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading center sample." << std::endl;
-   }
+   theGeoRecord.theCenterSample = atoi(tmpBuff);
 
    is.seekg(CENTER_LINE_OFFSET, ios::beg);
 
@@ -1711,16 +1473,8 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theGeoRecord.theCenterLine = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading center line." << std::endl;
-   }
+   theGeoRecord.theCenterLine = atoi(tmpBuff);
+
    //***
    // End of scene center data.
    //***
@@ -1731,16 +1485,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theGeoRecord.theHorizontalOffset = atoi(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading horizontal offset." << std::endl;
-   }
+   theGeoRecord.theHorizontalOffset = atoi(tmpBuff);
    
    is.seekg(ORIENTATION_ANGLE_OFFSET, ios::beg);
 
@@ -1748,16 +1493,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theGeoRecord.theOrientationAngle = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading orientation angle." << std::endl;
-   }
+   theGeoRecord.theOrientationAngle = atof(tmpBuff);
    
    is.seekg(SUN_ELEVATION_OFFSET, ios::beg);
 
@@ -1765,16 +1501,7 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theGeoRecord.theSunElevationAngle = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading sun elevation angle." << std::endl;
-   }
+   theGeoRecord.theSunElevationAngle = atof(tmpBuff);
    
    is.seekg(SUN_AZIMUTH_OFFSET, ios::beg);
 
@@ -1782,16 +1509,8 @@ void ossimFfRevc::loadFromStream(istream& is)
 
    if (checkStream(is)) return;
 
-   if (tmpBuff)
-   {
-      theGeoRecord.theSunAzimuth = atof(tmpBuff);
-   }
-   else
-   {
-      theErrorStatus = OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimFfRevc::loadFromStream: "
-                                          << "Detected an error reading sun azimuth." << std::endl;
-   }
+   theGeoRecord.theSunAzimuth = atof(tmpBuff);
+
    //***
    // End of geometric record.
    //***

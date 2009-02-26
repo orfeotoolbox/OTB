@@ -9,7 +9,7 @@
 // Contains definition of class ossimSpotDimapSupportData.
 //
 //*****************************************************************************
-// $Id: ossimSpotDimapSupportData.cpp 13025 2008-06-13 17:06:30Z sbortman $
+// $Id: ossimSpotDimapSupportData.cpp 13676 2008-10-03 17:35:02Z gpotts $
 
 
 #include <iostream>
@@ -1267,11 +1267,11 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    if(tempString != "")
    {
       std::istringstream in(tempString);
-      double tempValue = 0.0;
+      ossimString tempValue;
       for(idx = 0; idx < thePixelLookAngleX.size();++idx)
       {
          in >> tempValue;
-         thePixelLookAngleX[idx] = tempValue;
+         thePixelLookAngleX[idx] = tempValue.toDouble();
       }
    }
 
@@ -1281,11 +1281,11 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    if(tempString != "")
    {
       std::istringstream in(tempString);
-      double tempValue = 0.0;
+      ossimString tempValue;
       for(idx = 0; idx < thePixelLookAngleY.size();++idx)
       {
          in >> tempValue;
-         thePixelLookAngleY[idx] = tempValue;
+         thePixelLookAngleY[idx] = tempValue.toDouble();
       }
    }
 
@@ -1296,11 +1296,11 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    if(tempString != "")
    {
       std::istringstream in(tempString);
-      double x, y, z = 0.0;
+      ossimString x, y, z;
       for(idx = 0; idx < theAttitudeSamples.size();++idx)
       {
          in >> x >> y >> z;
-         theAttitudeSamples[idx] =ossimDpt3d(x, y, z);
+         theAttitudeSamples[idx] =ossimDpt3d(x.toDouble(), y.toDouble(), z.toDouble());
       }
    }
 
@@ -1310,11 +1310,11 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    if(tempString != "")
    {
       std::istringstream in(tempString);
-      double tempValue = 0.0;
+      ossimString tempValue;
       for(idx = 0; idx < theAttSampTimes.size();++idx)
       {
          in >> tempValue;
-         theAttSampTimes[idx] = tempValue;
+         theAttSampTimes[idx] = tempValue.toDouble();
       }
    }
 
@@ -1324,11 +1324,11 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    if(tempString != "")
    {
       std::istringstream in(tempString);
-      double x, y, z = 0.0;
+      ossimString x, y, z;
       for(idx = 0; idx < thePosEcfSamples.size();++idx)
       {
          in >> x >> y >> z;
-         thePosEcfSamples[idx] = ossimDpt3d(x, y, z);
+         thePosEcfSamples[idx] = ossimDpt3d(x.toDouble(), y.toDouble(), z.toDouble());
       }
    }
 
@@ -1338,11 +1338,11 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    if(tempString != "")
    {
       std::istringstream in(tempString);
-      double x, y, z = 0.0;
+      ossimString x, y, z;
       for(idx = 0; idx < theVelEcfSamples.size();++idx)
       {
          in >> x >> y >> z;
-         theVelEcfSamples[idx] = ossimDpt3d(x, y, z);
+         theVelEcfSamples[idx] = ossimDpt3d(x.toDouble(), y.toDouble(), z.toDouble());
       }
    }
 
@@ -1352,11 +1352,11 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    if(tempString != "")
    {
       std::istringstream in(tempString);
-      double tempValue = 0.0;
+      ossimString tempValue;
       for(idx = 0; idx < theEphSampTimes.size();++idx)
       {
          in >> tempValue;
-         theEphSampTimes[idx] = tempValue;
+         theEphSampTimes[idx] = tempValue.toDouble();
       }
    }
 
@@ -1384,14 +1384,14 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
 ossimGpt ossimSpotDimapSupportData::createGround(const ossimString& s)const
 {
    std::istringstream in(s);
-   double lat, lon, height;
+   ossimString lat, lon, height;
    ossimString code;
 
    in >> lat >> lon >> height >> code;
 
-   return ossimGpt(lat,
-                   lon,
-                   height,
+   return ossimGpt(lat.toDouble(),
+                   lon.toDouble(),
+                   height.toDouble(),
                    ossimDatumFactory::instance()->create(code));
 
 }
@@ -1399,12 +1399,12 @@ ossimGpt ossimSpotDimapSupportData::createGround(const ossimString& s)const
 ossimDpt ossimSpotDimapSupportData::createDpt(const ossimString& s)const
 {
    std::istringstream in(s);
-   double x, y;
+   ossimString x, y;
    ossimString code;
 
    in >> x >> y;
 
-   return ossimDpt(x,y);
+   return ossimDpt(x.toDouble(), y.toDouble());
 
 }
 

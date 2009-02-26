@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLineDirectionFunctor_h
-#define __otbLineDirectionFunctor_h
+#ifndef __otbSFSTexturesFunctor_h
+#define __otbSFSTexturesFunctor_h
 
 #include "otbMath.h"
 #include "itkNumericTraits.h"
@@ -25,7 +25,7 @@
 
 namespace otb
 {
-/** \class LineDirectionFunctor
+/** \class SFSTexturesFunctor
  *  \brief This functor computes textures based on line direction analysis through the central pixel.
  * 
  *  Directions are computed using NumberOfDirection, used to compute a constant step angle.
@@ -51,10 +51,10 @@ namespace otb
 namespace Functor
 {
 template<class TIter,class TOutputValue>
-class LineDirectionFunctor
+class SFSTexturesFunctor
 {
 public:
-  LineDirectionFunctor()
+  SFSTexturesFunctor()
   {
     m_SpatialThreshold = 100;
     m_SpectralThreshold = 50;
@@ -63,7 +63,7 @@ public:
     this->SetNumberOfDirections(20); // set the step too
     m_SelectedTextures = std::vector<bool>(6, 1);
   }
-  ~LineDirectionFunctor() {};
+  ~SFSTexturesFunctor() {};
 
   typedef typename TIter::InternalPixelType InternalPixelType;
   typedef typename TIter::SizeType          SizeType;
@@ -118,16 +118,15 @@ public:
   
     OffsetType off;
     off.Fill(0);
-  
-
+ 
     for( unsigned int d = 0; d<m_NumberOfDirections; d++ )
       {
 	// Current angle direction
 	angle = m_Alpha*static_cast<double>(d);
 
 	// last offset in the diraction respecting spatial threshold
-	off[0] = static_cast<unsigned int>(vcl_floor(SpatialThresholdDouble*vcl_cos( angle ) + 0.5));
-	off[1] = static_cast<unsigned int>(vcl_floor(SpatialThresholdDouble*vcl_sin( angle ) + 0.5));
+	off[0] = static_cast<int>(vcl_floor(SpatialThresholdDouble*vcl_cos( angle ) + 0.5));
+	off[1] = static_cast<int>(vcl_floor(SpatialThresholdDouble*vcl_sin( angle ) + 0.5));
 	// last indices in the diration respecting spectral threshold
 	OffsetType offEnd = this->FindLastOffset( it, off );
 	// computes distance = dist between the 2 segment point. One of them is the center pixel -> (0,0)

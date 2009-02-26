@@ -3,7 +3,7 @@
 // License:  See top level LICENSE.txt file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimImageHandlerFactory.cpp 10845 2007-05-04 15:14:11Z dburken $
+// $Id: ossimImageHandlerFactory.cpp 13910 2008-12-03 21:13:09Z gpotts $
 #include <ossim/imaging/ossimImageHandlerFactory.h>
 #include <ossim/imaging/ossimAdrgTileSource.h>
 #include <ossim/imaging/ossimCcfTileSource.h>
@@ -568,7 +568,7 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    {
       return result;
    }
-
+   delete result;
    // Note:  SRTM should be in front of general raster...
    if(traceDebug())
    {

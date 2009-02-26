@@ -5,13 +5,15 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationEllipseObject.cpp 11570 2007-08-10 19:59:59Z dburken $
+// $Id: ossimGeoAnnotationEllipseObject.cpp 13348 2008-07-30 15:33:53Z dburken $
 
 #include <sstream>
 
 #include <ossim/imaging/ossimGeoAnnotationEllipseObject.h>
 #include <ossim/imaging/ossimAnnotationEllipseObject.h>
 #include <ossim/projection/ossimProjection.h>
+#include <ossim/projection/ossimImageProjectionModel.h>
+#include <ossim/base/ossimException.h>
 #include <ossim/base/ossimUnitTypeLut.h>
 #include <ossim/base/ossimUnitConversionTool.h>
 
@@ -154,6 +156,44 @@ void ossimGeoAnnotationEllipseObject::transform(ossimProjection* projection)
 
    theProjectedEllipse->setCenterWidthHeight(projectedCenter,
                                              projectedWidthHeight);      
+}
+
+void ossimGeoAnnotationEllipseObject::transform(
+   const ossimImageProjectionModel& model,
+   ossim_uint32 rrds)
+{
+   const ossimProjection* projection = model.getProjection();
+   if (projection)
+   {
+
+      // Ellipse center, height and width in image space.
+      ossimDpt projectedCenter;
+      ossimDpt projectedWidthHeight;
+
+      // first get the center projected
+      projection->worldToLineSample(theCenter, projectedCenter);
+      
+      if (rrds)
+      {
+         // Transform r0 point to new rrds level.
+         try
+         {
+            ossimDpt rnPt;
+            model.r0ToRn(rrds, projectedCenter, rnPt);
+            projectedCenter = rnPt;
+            
+         }
+         catch (const ossimException& e)
+         {
+            ossimNotify(ossimNotifyLevel_WARN) << e.what() << std::endl;
+         }
+      }
+
+      getWidthHeightInPixels(projectedWidthHeight, projection);
+      
+      theProjectedEllipse->setCenterWidthHeight(projectedCenter,
+                                                projectedWidthHeight);
+   }
 }
 
 bool ossimGeoAnnotationEllipseObject::saveState(ossimKeywordlist& kwl,

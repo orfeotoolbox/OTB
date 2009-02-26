@@ -62,6 +62,7 @@
 #include <ossim/vpfutil/vpfmisc.h>
 #include <ossim/vpfutil/vpfdisp.h>
 
+#include <ossim/vpfutil/vpfapi.h>
 
 
 

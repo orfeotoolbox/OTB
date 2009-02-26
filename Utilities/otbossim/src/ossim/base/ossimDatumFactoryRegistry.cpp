@@ -14,7 +14,7 @@
 #include <ossim/base/ossimDatum.h>
 #include <ossim/base/ossimString.h>
 
-ossimDatumFactoryRegistry* ossimDatumFactoryRegistry::theInstance = 0;
+//ossimDatumFactoryRegistry* ossimDatumFactoryRegistry::theInstance = 0;
 
 ossimDatumFactoryRegistry::~ossimDatumFactoryRegistry()
 {
@@ -22,11 +22,9 @@ ossimDatumFactoryRegistry::~ossimDatumFactoryRegistry()
 
 ossimDatumFactoryRegistry* ossimDatumFactoryRegistry::instance()
 {
-   if (!theInstance)
-   {
-      theInstance = new ossimDatumFactoryRegistry();
-   }
-   return theInstance;
+   static ossimDatumFactoryRegistry sharedInstance;
+
+   return &sharedInstance;
 }
 
 void ossimDatumFactoryRegistry::registerFactory(
@@ -58,7 +56,7 @@ const ossimDatum* ossimDatumFactoryRegistry::create(
    return result;
 }
 
-void ossimDatumFactoryRegistry::getList(std::list<ossimString>& list) const
+void ossimDatumFactoryRegistry::getList(std::vector<ossimString>& list) const
 {
    std::vector<ossimDatumFactoryInterface*>::const_iterator i =
       theFactoryList.begin();

@@ -8,7 +8,7 @@
 //               ImageHandlerRegistry.
 //
 //*******************************************************************
-//  $Id: ossimImageHandlerRegistry.h 10103 2006-12-14 16:12:19Z gpotts $
+//  $Id: ossimImageHandlerRegistry.h 13508 2008-08-27 15:51:38Z gpotts $
 
 #ifndef ossimImageHandlerRegistry_HEADER
 #define ossimImageHandlerRegistry_HEADER
@@ -83,7 +83,7 @@ protected:
 private:
    void clear();
    std::vector<ossimImageHandlerFactoryBase*>   theFactoryList;
-   static ossimImageHandlerRegistry*            theInstance;
+   //static ossimImageHandlerRegistry*            theInstance;
 
 TYPE_DATA
 };

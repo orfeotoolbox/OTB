@@ -72,8 +72,7 @@ int main(int argc, char * argv[])
   typedef itk::Vector< PixelType > VectorType;
 
 
-  typedef otb::Functor::ContrastTextureFunctor<IteratorType, VectorType>
-                                                             FunctorType;
+  typedef otb::Functor::ContrastTextureFunctor<PixelType, PixelType> FunctorType;
 
   typedef otb::TextureImageFunction<ImageType, FunctorType> FunctionType;
   typedef otb::FunctionWithNeighborhoodToImageFilter<ImageType,

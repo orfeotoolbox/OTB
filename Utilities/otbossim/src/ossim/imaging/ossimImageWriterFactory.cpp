@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageWriterFactory.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimImageWriterFactory.cpp 13619 2008-09-29 19:10:31Z gpotts $
 
 #include <ossim/imaging/ossimImageWriterFactory.h>
 #include <ossim/imaging/ossimImageWriterFactoryRegistry.h>
@@ -17,6 +17,7 @@
 #include <ossim/imaging/ossimJpegWriter.h>
 #include <ossim/imaging/ossimGeneralRasterWriter.h>
 #include <ossim/imaging/ossimNitfWriter.h>
+#include <ossim/imaging/ossimNitf20Writer.h>
 #include <ossim/base/ossimImageTypeLut.h>
 
 ossimImageWriterFactory* ossimImageWriterFactory::theInstance = (ossimImageWriterFactory*)NULL;
@@ -99,9 +100,20 @@ ossimImageWriterFactory::createWriter(const ossimKeywordlist& kwl,
 ossimImageFileWriter*
 ossimImageWriterFactory::createWriter(const ossimString& typeName)const
 {
+	ossimString mimeType = typeName;
+	mimeType = mimeType.downcase();
+	
    // Check for tiff writer.
-   ossimImageFileWriter* writer = new ossimTiffWriter;
-   if (writer->getClassName() == typeName )
+   ossimImageFileWriter* writer = createFromMimeType(mimeType);
+	
+	if(writer)
+	{
+		return writer;
+	}
+ 
+   writer = new ossimTiffWriter;
+	
+   if (STATIC_TYPE_NAME(ossimTiffWriter) == typeName )
    {
       return writer;
    }
@@ -114,13 +126,13 @@ ossimImageWriterFactory::createWriter(const ossimString& typeName)const
          return writer;
       }
    }
-   delete writer; // Not a tiff writer.
+   delete writer; // Not a tiff writer.   
 
    // Check for jpeg writer.
    writer = new ossimJpegWriter;
    if ( writer->getClassName() == typeName )
    {
-      return writer;
+      return new ossimJpegWriter;
    }
    else
    {
@@ -131,8 +143,8 @@ ossimImageWriterFactory::createWriter(const ossimString& typeName)const
          return writer;
       }
    }
-   delete writer; // Not a jpeg writer.
-
+	delete writer; // not a jpeg writer
+	
    // Check for general raster writer.
    writer = new ossimGeneralRasterWriter;
    if ( writer->getClassName() == typeName )
@@ -166,10 +178,60 @@ ossimImageWriterFactory::createWriter(const ossimString& typeName)const
       }
    }
    delete writer; // Not a nitf writer.   
-
-   writer = NULL;
+   // Check for nitf writer.
+   writer = new ossimNitf20Writer;
+   if ( writer->getClassName() == typeName )
+   {
+      return writer;
+   }
+   else
+   {
+      // See if the type name is supported by the writer.
+      if ( writer->hasImageType(typeName) )
+      {
+         writer->setOutputImageType(typeName);
+         return writer;
+      }
+   }
+   delete writer; // Not a nitf writer.   
+   
+   writer = 0;
 
    return writer; // Return a null writer.
+}
+
+ossimImageFileWriter* ossimImageWriterFactory::createFromMimeType(const ossimString& mimeType)const
+{
+	if((mimeType == "image/jpeg")||
+		(mimeType == "image/jpg"))
+	{
+		ossimJpegWriter* writer = new ossimJpegWriter;
+		writer->setOutputImageType("jpeg");
+		return writer;
+	}
+	else if((mimeType == "image/tiff")||
+			  (mimeType == "image/tif")||
+			  (mimeType == "image/gtif")||
+			  (mimeType == "image/gtiff"))
+	{
+		ossimTiffWriter* writer = new ossimTiffWriter;
+		writer->setOutputImageType("tiff_tiled_band_separate");
+		return writer;
+	}
+	else if((mimeType == "image/nitf") ||
+			  (mimeType == "image/ntf"))
+	{
+		ossimNitfWriter* writer = new ossimNitfWriter;
+		writer->setOutputImageType("nitf_block_band_separate");
+		return writer;
+	}
+	else if((mimeType == "image/ras"))
+	{
+		ossimGeneralRasterWriter* writer = new ossimGeneralRasterWriter;
+		writer->setOutputImageType("general_raster_bsq");
+		return writer;
+	}
+	return 0;
 }
 
 ossimObject* ossimImageWriterFactory::createObject(const ossimKeywordlist& kwl,
@@ -198,6 +260,7 @@ void ossimImageWriterFactory::getTypeNameList(std::vector<ossimString>& typeList
    typeList.push_back(STATIC_TYPE_NAME(ossimJpegWriter));
    typeList.push_back(STATIC_TYPE_NAME(ossimGeneralRasterWriter));
    typeList.push_back(STATIC_TYPE_NAME(ossimNitfWriter));
+   typeList.push_back(STATIC_TYPE_NAME(ossimNitf20Writer));
 }
 
 void ossimImageWriterFactory::getImageTypeList(std::vector<ossimString>& imageTypeList)const
@@ -220,6 +283,11 @@ void ossimImageWriterFactory::getImageTypeList(std::vector<ossimString>& imageTy
 
    // Add the nitf writer types.
    writer = new ossimNitfWriter;
+   writer->getImageTypeList(imageTypeList);
+   delete writer;
+   writer = NULL;
+   // Add the nitf writer types.
+   writer = new ossimNitf20Writer;
    writer->getImageTypeList(imageTypeList);
    delete writer;
    writer = NULL;

@@ -8,7 +8,7 @@
 //
 // Contains class definition for ossimGeneralRasterTileSource.
 //*******************************************************************
-//  $Id: ossimGeneralRasterTileSource.cpp 11347 2007-07-23 13:01:59Z gpotts $
+//  $Id: ossimGeneralRasterTileSource.cpp 13768 2008-10-22 19:32:18Z gpotts $
 
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
 #include <ossim/base/ossimConstants.h>
@@ -997,6 +997,11 @@ bool ossimGeneralRasterTileSource::initializeHandler()
    // Get the buffer size.  This is bytes, not pixels.
    ossim_int32 buffer_size = theBufferSizeInPixels * theImageData.bytesPerPixel();
 
+   if(theBuffer)
+   {
+      delete [] theBuffer;
+      theBuffer = 0;
+   }
    theBuffer = new ossim_uint8[buffer_size];
 
    // Set the buffer interleave type.
@@ -1093,7 +1098,7 @@ void ossimGeneralRasterTileSource::close()
    if (theBuffer)
    {
       delete [] theBuffer;
-      theBuffer = NULL;
+      theBuffer = 0;
    }
 
    // Delete the list of input streams and clear the list.

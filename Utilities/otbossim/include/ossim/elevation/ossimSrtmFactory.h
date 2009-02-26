@@ -13,7 +13,7 @@
 // ossimSrtmElevSource given a ground point.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmFactory.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimSrtmFactory.h 13269 2008-07-25 14:27:36Z dburken $
 #ifndef ossimSrtmFactory_HEADER
 #define ossimSrtmFactory_HEADER
 
@@ -48,8 +48,6 @@ public:
     * for the point.
     */
    virtual ossimElevSource* getNewElevSource(const ossimGpt& gpt) const;
-
-   virtual void createIndex();
    
 protected:
 

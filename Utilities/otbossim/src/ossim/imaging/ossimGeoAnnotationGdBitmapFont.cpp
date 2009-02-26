@@ -6,12 +6,16 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationGdBitmapFont.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimGeoAnnotationGdBitmapFont.cpp 13348 2008-07-30 15:33:53Z dburken $
 #include <ossim/imaging/ossimGeoAnnotationGdBitmapFont.h>
 #include <ossim/imaging/ossimAnnotationGdBitmapFont.h>
 #include <ossim/projection/ossimProjection.h>
+#include <ossim/projection/ossimImageProjectionModel.h>
+#include <ossim/base/ossimException.h>
 
-RTTI_DEF1(ossimGeoAnnotationGdBitmapFont, "ossimGeoAnnotationGdBitmapFont", ossimGeoAnnotationObject)
+RTTI_DEF1(ossimGeoAnnotationGdBitmapFont,
+          "ossimGeoAnnotationGdBitmapFont",
+          ossimGeoAnnotationObject)
 
 ossimGeoAnnotationGdBitmapFont::ossimGeoAnnotationGdBitmapFont(const ossimGpt& position,
                                                                const ossimString &text,
@@ -34,19 +38,23 @@ ossimGeoAnnotationGdBitmapFont::ossimGeoAnnotationGdBitmapFont(const ossimGpt& p
 
 ossimGeoAnnotationGdBitmapFont::ossimGeoAnnotationGdBitmapFont(const ossimGeoAnnotationGdBitmapFont& rhs)
    :ossimGeoAnnotationObject(rhs),
-    theProjectedFont(rhs.theProjectedFont?(ossimAnnotationGdBitmapFont*)theProjectedFont->dup():(ossimAnnotationGdBitmapFont*)NULL),
+    theProjectedFont(rhs.theProjectedFont?(ossimAnnotationGdBitmapFont*)theProjectedFont->dup():(ossimAnnotationGdBitmapFont*)0),
     thePosition(rhs.thePosition)
 {
 }
-
 
 ossimGeoAnnotationGdBitmapFont::~ossimGeoAnnotationGdBitmapFont()
 {
    if(theProjectedFont)
    {
       delete theProjectedFont;
-      theProjectedFont=NULL;
+      theProjectedFont=0;
    }
+}
+
+ossimObject* ossimGeoAnnotationGdBitmapFont::dup()const
+{
+   return new ossimGeoAnnotationGdBitmapFont(*this);
 }
 
 void ossimGeoAnnotationGdBitmapFont::applyScale(double x, double y)
@@ -97,7 +105,7 @@ ossimAnnotationObject* ossimGeoAnnotationGdBitmapFont::getNewClippedObject(const
       }
    }
    
-   return (ossimAnnotationObject*)NULL;
+   return (ossimAnnotationObject*)0;
 }
 
 void ossimGeoAnnotationGdBitmapFont::computeBoundingRect()
@@ -108,10 +116,35 @@ void ossimGeoAnnotationGdBitmapFont::computeBoundingRect()
 void ossimGeoAnnotationGdBitmapFont::transform(ossimProjection* projection)
 {
    ossimDpt position;
-
    projection->worldToLineSample(thePosition, position);
-   
    theProjectedFont->setUpperLeftTextPosition(position);
+}
+
+void ossimGeoAnnotationGdBitmapFont::transform(
+   const ossimImageProjectionModel& model, ossim_uint32 rrds)
+{
+   const ossimProjection* projection = model.getProjection();
+   if (projection)
+   {
+      ossimDpt position;
+      projection->worldToLineSample(thePosition, position);
+      
+      if (rrds)
+      {
+         // Transform r0 point to new rrds level.
+         try
+         {
+            ossimDpt rnPt;
+            model.r0ToRn(rrds, position, rnPt);
+            position = rnPt;
+         }
+         catch (const ossimException& e)
+         {
+            ossimNotify(ossimNotifyLevel_WARN) << e.what() << std::endl;
+         }
+      }
+      theProjectedFont->setUpperLeftTextPosition(position);
+   }
 }
 
 void ossimGeoAnnotationGdBitmapFont::setText(const ossimString& text)

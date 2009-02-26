@@ -9,7 +9,7 @@
 // Contains class definition for ImageHandlerRegistry.
 //
 //*******************************************************************
-//  $Id: ossimImageHandlerRegistry.cpp 10104 2006-12-14 16:13:05Z gpotts $
+//  $Id: ossimImageHandlerRegistry.cpp 13646 2008-10-01 15:52:51Z gpotts $
 #include <algorithm>
 #include <ossim/imaging/ossimImageHandlerRegistry.h>
 #include <ossim/imaging/ossimImageHandlerFactory.h>
@@ -22,27 +22,24 @@ using namespace std;
 
 RTTI_DEF1(ossimImageHandlerRegistry, "ossimImageHandlerRegistry", ossimObjectFactory);
 
-ossimImageHandlerRegistry* ossimImageHandlerRegistry::theInstance = 0;
+//ossimImageHandlerRegistry* ossimImageHandlerRegistry::theInstance = 0;
 
 ossimImageHandlerRegistry::ossimImageHandlerRegistry()
-{  
+{
+   ossimObjectFactoryRegistry::instance()->registerFactory(this);
+   registerFactory(ossimImageHandlerFactory::instance());
 }
 
 ossimImageHandlerRegistry* ossimImageHandlerRegistry::instance()
 {
-   if (theInstance == 0)
-   {
-      theInstance = new ossimImageHandlerRegistry();
-      ossimObjectFactoryRegistry::instance()->registerFactory(theInstance);
-      theInstance->registerFactory(ossimImageHandlerFactory::instance());
-   }
-   return theInstance;
+   static ossimImageHandlerRegistry sharedInstance;
+   
+   return &sharedInstance;
 }
 
 ossimImageHandlerRegistry::~ossimImageHandlerRegistry()
 {
    clear();
-   theInstance = 0;
 }
 
 void ossimImageHandlerRegistry::addFactory(
@@ -155,6 +152,7 @@ void ossimImageHandlerRegistry::getSupportedExtensions(ossimImageHandlerFactoryB
 
 ossimImageHandler* ossimImageHandlerRegistry::open(const ossimFilename& fileName)const
 {
+   if(!fileName.exists()) return 0;
    ossimImageHandler*                   result = NULL;
    vector<ossimImageHandlerFactoryBase*>::const_iterator factory;
 

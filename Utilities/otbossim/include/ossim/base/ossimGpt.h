@@ -13,7 +13,7 @@
 // Height is relative to the ellipsoid in meters.
 //
 //*******************************************************************
-//  $Id: ossimGpt.h 11495 2007-08-06 09:16:43Z dburken $
+//  $Id: ossimGpt.h 13238 2008-07-25 01:14:42Z gpotts $
 
 #ifndef gpt_HEADER
 #define gpt_HEADER
@@ -24,10 +24,10 @@
 #include <ossim/base/ossimDatumFactory.h>
 #include <ossim/base/ossimString.h>
 
-class OSSIMDLLEXPORT ossimDatum;
-class OSSIMDLLEXPORT ossimEcefPoint;
+class  ossimDatum;
+class  ossimEcefPoint;
 
-class OSSIMDLLEXPORT ossimGpt
+class OSSIM_DLL ossimGpt
 {
 public:
    /**

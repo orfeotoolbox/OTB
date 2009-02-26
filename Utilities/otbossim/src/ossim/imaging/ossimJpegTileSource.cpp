@@ -8,7 +8,19 @@
 //
 // Contains class definition for JpegTileSource.
 //*******************************************************************
-//  $Id: ossimJpegTileSource.cpp 11349 2007-07-23 13:30:44Z gpotts $
+//  $Id: ossimJpegTileSource.cpp 13054 2008-06-23 13:55:13Z gpotts $
+#if defined(__BORLANDC__)
+#include <iostream>
+using std::size_t;
+#include <stdlib.h>
+#include <stdio.h>
+#endif
+extern "C"
+{
+#include <stdio.h>
+#include <jpeglib.h>
+#include <setjmp.h>
+}
 
 #include <ossim/imaging/ossimJpegTileSource.h>
 #include <ossim/imaging/ossimTiffTileSource.h>
@@ -22,12 +34,37 @@
 #include <ossim/imaging/ossimU8ImageData.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
-
+#include <ossim/base/ossimStringProperty.h>
+#include <ossim/base/ossimContainerProperty.h>
+//---
+// Using windows .NET compiler there is a conflict in the libjpeg with INT32
+// in the file jmorecfg.h.  Defining XMD_H fixes this.
+//---
 
 RTTI_DEF1_INST(ossimJpegTileSource, "ossimJpegTileSource", ossimImageHandler)
 
 static ossimTrace traceDebug("ossimJpegTileSource:degug");  
 
+class ossimJpegTileSource::PrivateData
+{
+public:
+	PrivateData()
+		:theCinfo(),
+		theJerr()
+	{
+
+	}
+	virtual ~PrivateData()
+	{
+		clear();
+	}
+	void clear()
+	{
+		jpeg_destroy_decompress( &theCinfo );
+	}
+   struct jpeg_decompress_struct theCinfo;
+   struct jpeg_error_mgr         theJerr;
+};
 //*******************************************************************
 // Public Constructor:
 //*******************************************************************
@@ -42,10 +79,10 @@ ossimJpegTileSource::ossimJpegTileSource()
       theImageRect(0, 0, 0, 0),
       theNumberOfBands(0),
       theCacheSize	(0),
-      theCinfo(),
-      theJerr(),
+	  thePrivateData(0),
       theCacheId(-1)
-{}
+{
+}
 
 //*******************************************************************
 // Public Constructor:
@@ -62,8 +99,7 @@ ossimJpegTileSource::ossimJpegTileSource(const ossimKeywordlist& kwl,
       theImageRect(0, 0, 0, 0),
       theNumberOfBands(0),
       theCacheSize	(0),
-      theCinfo(),
-      theJerr(),
+	  thePrivateData(0),
       theCacheId(-1)
 {
    if (loadState(kwl, prefix) == false)
@@ -86,8 +122,7 @@ ossimJpegTileSource::ossimJpegTileSource(const char* jpeg_file)
       theImageRect(0, 0, 0, 0),
       theNumberOfBands(0),
       theCacheSize(0),
-      theCinfo(),
-      theJerr(),
+	  thePrivateData(0),
       theCacheId(-1)
 {
    static const char MODULE[]
@@ -129,7 +164,11 @@ void ossimJpegTileSource::destroy()
       fclose(theFilePtr);
       theFilePtr = NULL;
    }
-   jpeg_destroy_decompress( &theCinfo );
+   if(thePrivateData)
+   {
+	   delete thePrivateData;
+	   thePrivateData = 0;
+   }
 }
 
 void ossimJpegTileSource::allocate()
@@ -268,7 +307,7 @@ void ossimJpegTileSource::fillTile(const ossimIrect& clip_rect)
             theCacheTile->makeBlank();
          }
 
-         if (start_line < theCinfo.output_scanline)
+         if (start_line < thePrivateData->theCinfo.output_scanline)
          {
             // Must restart the compression process again.
             restart();
@@ -287,15 +326,15 @@ void ossimJpegTileSource::fillTile(const ossimIrect& clip_rect)
          jbuf[0] = (JSAMPROW) theLineBuffer;
 
          // Gobble any not needed lines.
-         while (theCinfo.output_scanline < start_line)
+         while (thePrivateData->theCinfo.output_scanline < start_line)
          {
-            jpeg_read_scanlines(&theCinfo, jbuf, 1);
+            jpeg_read_scanlines(&thePrivateData->theCinfo, jbuf, 1);
          }
 
-         while (theCinfo.output_scanline <= stop_line)
+         while (thePrivateData->theCinfo.output_scanline <= stop_line)
          {
             // Read a line from the jpeg file.
-            jpeg_read_scanlines(&theCinfo, jbuf, 1);
+            jpeg_read_scanlines(&thePrivateData->theCinfo, jbuf, 1);
             
             //---
             // Copy the line which if band interleaved by pixel the the band
@@ -382,7 +421,8 @@ bool ossimJpegTileSource::open(const ossimFilename& jpeg_file)
 }
 
 //*******************************************************************
-// Private method:
+// Private method:I have problems
+
 //*******************************************************************
 bool ossimJpegTileSource::open()
 {
@@ -390,7 +430,6 @@ bool ossimJpegTileSource::open()
 
    // Start with a clean slate.
    destroy();
-
    // Check for empty filename.
    if (theImageFile.empty())
    {
@@ -432,33 +471,34 @@ bool ossimJpegTileSource::open()
       return false;
    }
 
+   thePrivateData = new PrivateData();
    rewind(theFilePtr);
 
    //---
    // Step 1: allocate and initialize JPEG decompression object
    // We set up the normal JPEG error routines, then override error_exit.
    //---   
-   theCinfo.err = jpeg_std_error(&theJerr);
+   thePrivateData->theCinfo.err = jpeg_std_error(&thePrivateData->theJerr);
 
    // Initialize the JPEG decompression object.
-   jpeg_create_decompress(&theCinfo);
+   jpeg_create_decompress(&thePrivateData->theCinfo);
 
    // Specify data source.
-   jpeg_stdio_src(&theCinfo, theFilePtr);
+   jpeg_stdio_src(&thePrivateData->theCinfo, theFilePtr);
 
    // Read the file parameters with jpeg_read_header.
-   jpeg_read_header(&theCinfo, TRUE);
+   jpeg_read_header(&thePrivateData->theCinfo, TRUE);
 
-   jpeg_start_decompress(&theCinfo);
+   jpeg_start_decompress(&thePrivateData->theCinfo);
 
-   theNumberOfBands = theCinfo.output_components;
+   theNumberOfBands = thePrivateData->theCinfo.output_components;
 
    theImageRect = ossimIrect(0,
                              0,
-                             theCinfo.output_width  - 1,
-                             theCinfo.output_height - 1);
+                             thePrivateData->theCinfo.output_width  - 1,
+                             thePrivateData->theCinfo.output_height - 1);
    
-   theBufferRect.set_lrx(theCinfo.output_width  - 1);
+   theBufferRect.set_lrx(thePrivateData->theCinfo.output_width  - 1);
    
    completeOpen();
 
@@ -466,6 +506,21 @@ bool ossimJpegTileSource::open()
    allocate();
 
    return true;
+}
+
+ossimRefPtr<ossimProperty> ossimJpegTileSource::getProperty(const ossimString& name)const
+{
+	if(name == "file_type")
+	{
+		return new ossimStringProperty("file_type", "JPEG");
+	}
+	return ossimImageHandler::getProperty(name);
+}
+
+void ossimJpegTileSource::getPropertyNames(std::vector<ossimString>& propertyNames)const
+{
+	ossimImageHandler::getPropertyNames(propertyNames);
+	propertyNames.push_back("file_type");
 }
 
 //*******************************************************************
@@ -589,20 +644,20 @@ bool ossimJpegTileSource::isOpen()const
 
 void ossimJpegTileSource::restart()
 {
-   jpeg_abort_decompress( &theCinfo );
-   jpeg_destroy_decompress( &theCinfo );
+   jpeg_abort_decompress( &thePrivateData->theCinfo );
+   jpeg_destroy_decompress( &thePrivateData->theCinfo );
    
    // Put the theFilePtr back to the start...
    rewind(theFilePtr);
 
    // Initialize the JPEG decompression object.
-   jpeg_create_decompress(&theCinfo);
+   jpeg_create_decompress(&thePrivateData->theCinfo);
 
    // Specify data source.
-   jpeg_stdio_src(&theCinfo, theFilePtr);
+   jpeg_stdio_src(&thePrivateData->theCinfo, theFilePtr);
 
    // Read the file parameters with jpeg_read_header.
-   jpeg_read_header(&theCinfo, TRUE);
+   jpeg_read_header(&thePrivateData->theCinfo, TRUE);
 
-   jpeg_start_decompress(&theCinfo);
+   jpeg_start_decompress(&thePrivateData->theCinfo);
 }

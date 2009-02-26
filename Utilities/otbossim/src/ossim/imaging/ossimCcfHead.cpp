@@ -9,7 +9,7 @@
 // Contains class definition for CcfHead.
 // 
 //*******************************************************************
-//  $Id: ossimCcfHead.cpp 10268 2007-01-15 10:53:26Z dburken $
+//  $Id: ossimCcfHead.cpp 13842 2008-11-04 19:40:10Z gpotts $
 
 #include <sstream>
 #include <iostream>
@@ -197,7 +197,7 @@ bool ossimCcfHead::parseCcfHeader(const char* ccf_file)
       }
       is->close();
       delete is;
-      status = false;
+       return false;
 
       break;
    }
@@ -428,17 +428,17 @@ bool ossimCcfHead::parseV6CcfHeader(std::istream& is)
 
    for (i=0; i<theNumberOfValidImageVertices; i++)
    {
-      ossim_float64 tmp_dbl;  // Can be doubles in header.
+      ossimString tmp_dbl;  // Can be doubles in header.
       
       is >> tmp      // skip "Vertex"
          >> tmp      // skip Vertex number
          >> tmp_dbl; // line
 
-      theValidImageVertices[i].y = static_cast<int>(tmp_dbl);
-
+      theValidImageVertices[i].y = static_cast<int>(tmp_dbl.toDouble());
+      tmp_dbl = "";
       is >> tmp_dbl; // sample
 
-      theValidImageVertices[i].x = static_cast<int>(tmp_dbl);
+      theValidImageVertices[i].x = static_cast<int>(tmp_dbl.toDouble());
    }
 
    is.read(tmp, 1);                   // eat the '\n'

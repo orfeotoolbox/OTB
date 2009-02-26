@@ -21,7 +21,7 @@ ossimRpfColorConverterTable::~ossimRpfColorConverterTable()
 {
    if(theColorGrayscaleTableEntryList)
    {
-      delete theColorGrayscaleTableEntryList;
+      delete [] theColorGrayscaleTableEntryList;
       theColorGrayscaleTableEntryList = NULL;
    }
 }
@@ -74,7 +74,7 @@ void ossimRpfColorConverterTable::setNumberOfEntries(ossim_uint32 entries)
 {
    if(theColorGrayscaleTableEntryList)
    {
-      delete theColorGrayscaleTableEntryList;
+      delete [] theColorGrayscaleTableEntryList;
       theColorGrayscaleTableEntryList = NULL;
    }
    theColorGrayscaleTableEntryList = new ossim_uint32[entries];

@@ -9,11 +9,11 @@
 // This is the DatumFactory class.  You give it a code and it will
 // construct a Datum class.  It returns NULL if no code was found.
 //*******************************************************************
-//  $Id: ossimDatumFactory.h 12078 2007-11-26 14:35:57Z dburken $
+//  $Id: ossimDatumFactory.h 13302 2008-07-25 19:10:39Z gpotts $
 
 #ifndef ossimDatumFactory_HEADER
 #define ossimDatumFactory_HEADER
-#include <list>
+#include <vector>
 #include <map>
 
 #include <ossim/base/ossimDatumFactoryInterface.h>
@@ -45,8 +45,8 @@ public:
    static ossimDatumFactory* instance();
    const ossimDatum* wgs84()const{return theWgs84Datum;}
    const ossimDatum* wgs72()const{return theWgs72Datum;}
-   std::list<ossimString> getList()const;
-   virtual void getList(std::list<ossimString>& list)const;
+   std::vector<ossimString> getList()const;
+   virtual void getList(std::vector<ossimString>& list)const;
    void writeCStructure(const ossimFilename& file);
 protected:
    static ossimDatumFactory*       theInstance;

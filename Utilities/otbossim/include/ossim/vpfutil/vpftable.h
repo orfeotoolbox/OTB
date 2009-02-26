@@ -245,9 +245,9 @@ row_type  read_next_row( vpf_table_type table );
 row_type  read_row( long int row_number,
 		    vpf_table_type table );
 
-vpf_table_type vpf_open_table( char *tablename,
+vpf_table_type vpf_open_table( const char *tablename,
 			       storage_type storage,
-			       char *mode,
+			       const char *mode,
 			       char *defstr );   /* rdf added */
 
 row_type get_row( long int row_number,
@@ -255,8 +255,8 @@ row_type get_row( long int row_number,
 
 void free_row( row_type row, vpf_table_type table );
 
-long int table_pos( char *field_name,
-	       vpf_table_type table );
+long int table_pos( const char *field_name,
+                    vpf_table_type table );
 
 void *get_table_element( long int field_number,
 			 row_type row,
@@ -280,7 +280,7 @@ void vpf_close_table( vpf_table_type *table );
 
 void vpf_dump_table( char *tablename, char *outname );
 
-long int is_vpf_table( char *fname );
+long int is_vpf_table( const char *fname );
 
 /* Write functions */
 
@@ -294,6 +294,8 @@ void nullify_table_element( long int field, row_type row,
 long int put_table_element( long int field, row_type row,
 			    vpf_table_type table,
 			    void *value, long int count );
+void vpf_dump_table( char *tablename, char *outname );
+void vpf_dump_doc_table( char *tablename, char *outname );
 
 void swap_two(char*, char*);
 void swap_four(char*, char*);

@@ -25,7 +25,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSensorModel.h 12123 2007-12-06 15:21:16Z gpotts $
+//  $Id: ossimSensorModel.h 13673 2008-10-03 15:10:52Z gpotts $
 
 #ifndef ossimSensorModel_HEADER
 #define ossimSensorModel_HEADER
@@ -189,7 +189,9 @@ public:
 /*                  (p.u<=(double)(theImageSize.u-(1-FLT_EPSILON))) && */
 /*                  (p.v>=(0.0-FLT_EPSILON)) && */
 /*                  (p.v<=(double)(theImageSize.v-(1-FLT_EPSILON))) ); */
-         return theImageClipRect.pointWithin(p);
+         // if it's close to the edge we will consider it inside the image
+         //
+         return theImageClipRect.pointWithin(p, 2.0);
       }
 
    /*!
@@ -319,6 +321,10 @@ protected:
     * bounds.
     */ 
    ossimRefPtr<ossimProjection> theSeedFunction;
+   
+   mutable bool theExtrapolateImageFlag;
+   mutable bool theExtrapolateGroundFlag;
+   
 TYPE_DATA
 };
 

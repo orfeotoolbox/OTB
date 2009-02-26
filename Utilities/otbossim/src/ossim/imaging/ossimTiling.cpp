@@ -10,7 +10,7 @@
 // Description: implementation for image generator
 //
 //*************************************************************************
-// $Id: ossimTiling.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimTiling.cpp 13711 2008-10-14 16:49:38Z gpotts $
 
 #include <sstream>
 #include <iomanip>
@@ -742,8 +742,11 @@ bool ossimTiling::loadState(const ossimKeywordlist& kwl,
                                               "padding_size_in_pixels");
    if (paddingSizeInPixels)
    {
+      ossimString x,y;
       std::istringstream padding(ossimString(paddingSizeInPixels).c_str());
-      padding >> thePaddingSizeInPixels.x >> thePaddingSizeInPixels.y;
+      padding >> x >> y;
+      thePaddingSizeInPixels.x = x.toFloat64();
+      thePaddingSizeInPixels.y = y.toFloat64();
    }
    
    // Check to tile by size in bytes.
@@ -816,10 +819,11 @@ bool ossimTiling::loadState(const ossimKeywordlist& kwl,
                                        "delta_type");
       
       result = tilingDistance&&tilingDistanceType&&delta&&deltaType&&paddingSizeInPixels;
-      
+      ossimString x,y;
       std::istringstream distance(ossimString(tilingDistance).c_str());
-      distance >> theTilingDistance.x >> theTilingDistance.y;
-      
+      distance >> x >> y;
+      theTilingDistance.x = x.toFloat64();
+      theTilingDistance.y = y.toFloat64();
       if(theTilingDistance.x <= 0.0)
       {
          theTilingDistance.x = 1.0;
@@ -836,9 +840,12 @@ bool ossimTiling::loadState(const ossimKeywordlist& kwl,
             ossimString(tilingDistanceType).c_str());
       
       theDelta = ossimDpt(0,0);
-      
+      x="";
+      y="";
       std::istringstream deltaValues(ossimString(delta).c_str());
-      deltaValues >> theDelta.x >> theDelta.y;
+      deltaValues >> x >> y;
+      theDelta.x = x.toFloat64();
+      theDelta.y = y.toFloat64();
       
       if(theDelta.x <= 0.0)
       {

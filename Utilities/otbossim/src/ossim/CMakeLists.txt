@@ -56,7 +56,7 @@ ADD_CUSTOM_COMMAND(
   OUTPUT ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h
   DEPENDS version-config
   COMMAND version-config
-  ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h"
+  ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h" "${OSSIM_VERSION}"
   COMMENT "Generating ossimVersion.h"
   )
 SET_SOURCE_FILES_PROPERTIES(

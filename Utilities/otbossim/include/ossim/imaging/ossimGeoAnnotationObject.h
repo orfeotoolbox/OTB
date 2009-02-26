@@ -6,13 +6,14 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationObject.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimGeoAnnotationObject.h 13349 2008-07-30 15:34:34Z dburken $
 #ifndef ossimGeoAnnotationObject_HEADER
 #define ossimGeoAnnotationObject_HEADER
 #include <ossim/imaging/ossimAnnotationObject.h>
 #include <ossim/base/ossimGpt.h>
 
 class ossimProjection;
+class ossimImageProjectionModel;
 
 class OSSIM_DLL ossimGeoAnnotationObject : public ossimAnnotationObject
 {
@@ -31,6 +32,20 @@ public:
     * geographically defined objects.
     */
    virtual void transform(ossimProjection* projection)=0;
+
+   /**
+    * @brief Pure virtual transforms from geographic to image space for a
+    * reduced resolution data set (rrds).
+    *
+    * This will transform any world points to line sample; then, convert any
+    * line sample to the correct rrds point.
+    *
+    * @param model The model to use for transformation.
+    *
+    * @param rrds Reduced resolution data set to use.
+    */
+   virtual void transform(const ossimImageProjectionModel& model,
+                          ossim_uint32 rrds) = 0;
 
    /**
     * Saves the current state of this object.

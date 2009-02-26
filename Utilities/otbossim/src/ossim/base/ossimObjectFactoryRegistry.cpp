@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimObjectFactoryRegistry.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimObjectFactoryRegistry.cpp 13508 2008-08-27 15:51:38Z gpotts $
 
 #include <ossim/base/ossimObjectFactoryRegistry.h>
 
@@ -17,21 +17,20 @@ RTTI_DEF1(ossimObjectFactoryRegistry, "ossimObjectFactoryRegistry", ossimObject)
 #include <ossim/base/ossimString.h>
 using namespace std;
 
-ossimObjectFactoryRegistry* ossimObjectFactoryRegistry::theInstance=NULL;
+
+ossimObjectFactoryRegistry::ossimObjectFactoryRegistry()
+{
+}
 
 ossimObjectFactoryRegistry::~ossimObjectFactoryRegistry()
 {
-   theInstance = NULL;
 }
 
 ossimObjectFactoryRegistry* ossimObjectFactoryRegistry::instance()
 {
-   if(!theInstance)
-   {
-      theInstance = new ossimObjectFactoryRegistry;
-   }
+   static ossimObjectFactoryRegistry sharedInstance;
    
-   return theInstance;
+   return &sharedInstance;
 }
 
 bool ossimObjectFactoryRegistry::addFactory(ossimObjectFactory* factory)

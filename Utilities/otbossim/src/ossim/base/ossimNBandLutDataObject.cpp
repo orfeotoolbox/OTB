@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimNBandLutDataObject.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimNBandLutDataObject.cpp 13710 2008-10-14 16:27:57Z gpotts $
 
 #include <iostream>
 #include <sstream>
@@ -327,12 +327,13 @@ bool ossimNBandLutDataObject::loadState(const ossimKeywordlist& kwl, const char*
          if(v != "")
          {
             std::istringstream istr(v);
-            
+            ossimString lutValue;
             for(bandIdx = 0; bandIdx < theNumberOfBands; ++bandIdx)
             {
                if(!istr.fail())
                {
-                  istr >> lutPtr[bandIdx];
+                  istr >> lutValue;
+                  lutPtr[bandIdx] = lutValue.toInt32();
                }
             }
          }

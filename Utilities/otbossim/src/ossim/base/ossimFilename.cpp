@@ -5,7 +5,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.cpp 13049 2008-06-19 18:06:45Z gpotts $
+// $Id: ossimFilename.cpp 13604 2008-09-25 14:41:28Z gpotts $
 
 #include <ossim/ossimConfig.h>  /* to pick up platform defines */
 
@@ -29,15 +29,9 @@ using namespace std;
 #include <sys/types.h>
 #include <utime.h>
 #include <sys/stat.h>
-#   if HAVE_UNISTD_H
-#      include <unistd.h>
-#   endif
-#   if HAVE_DIRENT_H
-#      include <dirent.h>
-#   endif
-#   if HAVE_FCNTL_H
-#      include <fcntl.h>
-#   endif
+#include <unistd.h>
+#include <dirent.h>
+#include <fcntl.h>
 #endif
 
 #include <sys/stat.h>
@@ -1014,7 +1008,7 @@ bool ossimFilename::remove(const ossimFilename& pathname)
    {
       result = false;
    }
-#elif HAVE_UNISTD_H
+#else
    if(pathname.isDir())
    {
       result = (rmdir(pathname) >=0);
@@ -1022,14 +1016,6 @@ bool ossimFilename::remove(const ossimFilename& pathname)
    else if (unlink(pathname.c_str()) < 0)
    {
       result = false;
-   }
-#else
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_WARN)
-         << "WARNING: "
-         << "ossimFilename::remove,  Not supported by platform!"
-         << endl;
    }
 #endif /* HAVE_UNISTD_H */
 
@@ -1074,20 +1060,11 @@ bool ossimFilename::wildcardRemove(const ossimFilename& pathname)
       {
          result = false;
       }
-#elif HAVE_UNISTD_H
+#else
       if (unlink(fileListToRemove[idx]) == -1)
       {
          result = false;
       }
-#else
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << "WARNING: "
-            << "ossimFilename::remove,  Not supported by platform!"
-            << endl;
-      }
-      result = false;
 #endif /* HAVE_UNISTD_H */
    }
    return result;

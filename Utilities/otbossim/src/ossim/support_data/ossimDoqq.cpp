@@ -11,7 +11,7 @@
 //              header.
 //
 //********************************************************************
-// $Id: ossimDoqq.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimDoqq.cpp 13175 2008-07-14 15:23:45Z gpotts $
 
 #include <fstream>
 #include <iostream>
@@ -99,7 +99,8 @@ void ossimDoqq::ldstr_v2(std::istream& in)
    }
 
    char line[100];
-   while(!strncmp(line, "END_USGS_HEADER", 15) == 0)
+   while((!strncmp(line, "END_USGS_HEADER", 15) == 0)&&
+			(in.good()))
    {
       // Read in one line of header at a time.
       in.getline(line, 100);
@@ -228,6 +229,19 @@ void ossimDoqq::ldstr_v2(std::istream& in)
       }
    }
 
+	if(!in.good())
+	{
+      theErrorStatus = OSSIM_ERROR;
+		
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+			<< MODULE << " ERROR:\n"
+			<< "\tHeader stream is bad."
+			<< std::endl;
+      }
+		return;
+	}
    // Check for valid lines and samples and header size.
    if(theLine <= 0 || theSample <= 0 || theHeaderSize <= 0)
    {

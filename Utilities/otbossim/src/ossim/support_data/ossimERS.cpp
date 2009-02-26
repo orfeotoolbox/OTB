@@ -10,7 +10,7 @@
 // file format header.
 //
 //********************************************************************
-// $Id: ossimERS.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimERS.cpp 13216 2008-07-23 18:56:53Z dburken $
 
 #include <fstream>
 #include <iostream>
@@ -62,7 +62,7 @@ ossimERS::ossimERS(const char* headerFile)
    }
 }
 
-void ossimERS::parseError(char *msg)
+void ossimERS::parseError(const char* /* msg*/ )
 {
    theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
 }

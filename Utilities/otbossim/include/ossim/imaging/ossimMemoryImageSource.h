@@ -18,6 +18,14 @@ public:
    ossimMemoryImageSource();
 
    void setImage(ossimRefPtr<ossimImageData> image);
+   void setImage(ossimScalarType scalarType,
+                 ossim_uint32 numberOfBands,
+                 ossim_uint32 width,
+                 ossim_uint32 height);
+   void setRect(ossim_uint32 ulx,
+                ossim_uint32 uly,
+                ossim_uint32 width,
+                ossim_uint32 height);
    virtual ossim_uint32 getNumberOfInputBands() const;
    virtual ossim_uint32 getNumberOfOutputBands() const;
    virtual ossimScalarType getOutputScalarType() const;
@@ -44,10 +52,9 @@ public:
       kwl.add(prefix, theImageGeometry);
       return (theImageGeometry.getSize() > 0);
    }
-	virtual ossim_uint32 getNumberOfDecimationLevels() const
-	{
-		return 1;
-	}
+	virtual ossim_uint32 getNumberOfDecimationLevels() const;
+   virtual void getDecimationFactor(ossim_uint32 resLevel,
+                                    ossimDpt& result) const;
   
 protected:
    ossimRefPtr<ossimImageData> theImage;

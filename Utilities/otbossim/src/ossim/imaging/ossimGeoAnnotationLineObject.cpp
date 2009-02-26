@@ -6,12 +6,17 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationLineObject.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimGeoAnnotationLineObject.cpp 13348 2008-07-30 15:33:53Z dburken $
 #include <ossim/imaging/ossimGeoAnnotationLineObject.h>
 #include <ossim/imaging/ossimAnnotationLineObject.h>
 #include <ossim/projection/ossimProjection.h>
+#include <ossim/projection/ossimImageProjectionModel.h>
+#include <ossim/base/ossimException.h>
 
-RTTI_DEF1(ossimGeoAnnotationLineObject, "ossimGeoAnnotationLineObject", ossimGeoAnnotationObject)
+
+RTTI_DEF1(ossimGeoAnnotationLineObject,
+          "ossimGeoAnnotationLineObject",
+          ossimGeoAnnotationObject)
    
 ossimGeoAnnotationLineObject::ossimGeoAnnotationLineObject(const ossimGpt& start,
                                                            const ossimGpt& end,
@@ -20,7 +25,7 @@ ossimGeoAnnotationLineObject::ossimGeoAnnotationLineObject(const ossimGpt& start
                                                            unsigned char b,
                                                            long thickness)
    :ossimGeoAnnotationObject(r, g, b, thickness),
-    theProjectedLineObject(NULL),
+    theProjectedLineObject(0),
     theStart(start),
     theEnd(end)
 {
@@ -34,7 +39,7 @@ ossimGeoAnnotationLineObject::ossimGeoAnnotationLineObject(const ossimGpt& start
 
 ossimGeoAnnotationLineObject::ossimGeoAnnotationLineObject(const ossimGeoAnnotationLineObject& rhs)
    :ossimGeoAnnotationObject(rhs),
-    theProjectedLineObject(rhs.theProjectedLineObject?(ossimAnnotationLineObject*)rhs.theProjectedLineObject->dup():(ossimAnnotationLineObject*)NULL),
+    theProjectedLineObject(rhs.theProjectedLineObject?(ossimAnnotationLineObject*)rhs.theProjectedLineObject->dup():(ossimAnnotationLineObject*)0),
     theStart(rhs.theStart),
     theEnd(rhs.theEnd)
 {
@@ -47,8 +52,13 @@ ossimGeoAnnotationLineObject::~ossimGeoAnnotationLineObject()
    if(theProjectedLineObject)
    {
       delete theProjectedLineObject;
-      theProjectedLineObject = NULL;
+      theProjectedLineObject = 0;
    }
+}
+
+ossimObject* ossimGeoAnnotationLineObject::dup()const
+{
+   return new ossimGeoAnnotationLineObject(*this);
 }
 
 void ossimGeoAnnotationLineObject::applyScale(double x, double y)
@@ -71,13 +81,43 @@ void ossimGeoAnnotationLineObject::transform(ossimProjection* projection)
       ossimDpt projectedStart;
       ossimDpt projectedEnd;
       
-      projection->worldToLineSample(theStart,
-                                    projectedStart);
-      projection->worldToLineSample(theEnd,
-                                    projectedEnd);
+      projection->worldToLineSample(theStart, projectedStart);
+      projection->worldToLineSample(theEnd,   projectedEnd);
 
-      theProjectedLineObject->setLine(projectedStart,
-                                      projectedEnd);
+      theProjectedLineObject->setLine(projectedStart, projectedEnd);
+   }
+}
+
+void ossimGeoAnnotationLineObject::transform(
+   const ossimImageProjectionModel& model, ossim_uint32 rrds)
+{
+   const ossimProjection* projection = model.getProjection();
+   if (projection)
+   {
+      ossimDpt projectedStart;
+      ossimDpt projectedEnd;
+      projection->worldToLineSample(theStart, projectedStart);
+      projection->worldToLineSample(theEnd,   projectedEnd);
+
+      if (rrds)
+      {
+         // Transform r0 point to new rrds level.
+         try
+         {
+            ossimDpt startRnPt;
+            ossimDpt endRnPt;
+            model.r0ToRn(rrds, projectedStart, startRnPt);
+            model.r0ToRn(rrds, projectedEnd,   endRnPt);
+            projectedStart = startRnPt;
+            projectedEnd   = endRnPt;
+         }
+         catch (const ossimException& e)
+         {
+            ossimNotify(ossimNotifyLevel_WARN) << e.what() << std::endl;
+         }
+      }
+
+      theProjectedLineObject->setLine(projectedStart, projectedEnd);
    }
 }
 
@@ -113,7 +153,7 @@ ossimAnnotationObject* ossimGeoAnnotationLineObject::getNewClippedObject(const o
       }
    }
    
-   return (ossimAnnotationObject*)NULL;
+   return (ossimAnnotationObject*)0;
 }
 
 void ossimGeoAnnotationLineObject::getBoundingRect(ossimDrect& rect)const

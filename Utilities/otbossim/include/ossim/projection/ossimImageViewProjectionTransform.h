@@ -12,16 +12,13 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimImageViewProjectionTransform.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimImageViewProjectionTransform.h 13516 2008-08-29 14:54:12Z dburken $
 
 #ifndef ossimImageViewProjectionTransform_HEADER
 #define ossimImageViewProjectionTransform_HEADER
 
 #include <ossim/projection/ossimImageViewTransform.h>
 #include <ossim/projection/ossimProjection.h>
-#ifndef NULL
-#include <stddef.h>
-#endif
 
 class ossimProjection;
 class ossimMapProjection;
@@ -29,11 +26,18 @@ class ossimMapProjection;
 class OSSIMDLLEXPORT ossimImageViewProjectionTransform : public ossimImageViewTransform
 {
 public:
-   ossimImageViewProjectionTransform(ossimProjection* imageProjection=NULL,
-                                     ossimProjection* viewProjection=NULL,
+   ossimImageViewProjectionTransform(ossimProjection* imageProjection=0,
+                                     ossimProjection* viewProjection=0,
                                      bool ownsImageProjectionFlag=true,
                                      bool ownsViewProjectionFlag=true);
-   
+
+   /** copy constructor */
+   ossimImageViewProjectionTransform(const ossimImageViewProjectionTransform& src);
+
+   virtual ossimObject* dup()const
+   {
+      return new ossimImageViewProjectionTransform(*this);
+   }
    virtual ~ossimImageViewProjectionTransform();
 
    virtual bool isValid()const

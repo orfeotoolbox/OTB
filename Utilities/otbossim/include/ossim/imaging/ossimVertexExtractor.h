@@ -5,7 +5,7 @@
 // Author: David Burken (dburken@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimVertexExtractor.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimVertexExtractor.h 13312 2008-07-27 01:26:52Z gpotts $
 
 #ifndef ossimVertexExtractor_HEADER
 #define ossimVertexExtractor_HEADER
@@ -107,7 +107,7 @@ public:
                             const ossimConnectableObject* object)const
       {
          
-         return (object&& PTR_CAST(ossimImageSourceInterface, object));
+         return (object&& PTR_CAST(ossimImageSource, object));
       }
 
    vector<ossimIpt> getVertices() { return theVertice; }

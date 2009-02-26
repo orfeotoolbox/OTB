@@ -5,7 +5,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimOrthoImageMosaic.cpp 10777 2007-04-25 14:49:17Z gpotts $
+//  $Id: ossimOrthoImageMosaic.cpp 13312 2008-07-27 01:26:52Z gpotts $
 #include <ossim/imaging/ossimOrthoImageMosaic.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimTrace.h>
@@ -41,7 +41,7 @@ ossim_uint32 ossimOrthoImageMosaic::getNumberOfOverlappingImages(const ossimIrec
    ossim_uint32 result = 0;
    for(ossim_uint32 i = 0; i < theInputTiePoints.size(); ++i)
    {
-      ossimImageSourceInterface* interface = PTR_CAST(ossimImageSourceInterface,
+      ossimImageSource* interface = PTR_CAST(ossimImageSource,
                                                       getInput(i));
       if(interface&&
          !theInputTiePoints[i].hasNans())
@@ -68,7 +68,7 @@ void ossimOrthoImageMosaic::getOverlappingImages(std::vector<ossim_uint32>& resu
    result.clear();
    for(ossim_uint32 i = 0; i < theInputTiePoints.size(); ++i)
    {
-      ossimImageSourceInterface* interface = PTR_CAST(ossimImageSourceInterface,
+      ossimImageSource* interface = PTR_CAST(ossimImageSource,
                                                       getInput(i));
       if(interface&&
          !theInputTiePoints[i].hasNans())
@@ -90,7 +90,7 @@ bool ossimOrthoImageMosaic::getImageGeometry(ossimKeywordlist& kwl,
                                              const char* prefix)
 {
    bool result = true;
-   ossimImageSourceInterface* interface = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* interface = PTR_CAST(ossimImageSource,
                                                    getInput(0));
    if(interface)
    {
@@ -168,7 +168,7 @@ ossimIrect ossimOrthoImageMosaic::getBoundingRect(ossim_uint32 resLevel) const
 
    decimation.makeNan();
 
-   ossimImageSourceInterface* interface = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* interface = PTR_CAST(ossimImageSource,
                                                    getInput(0));
    if(interface)
    {
@@ -200,8 +200,8 @@ void ossimOrthoImageMosaic::initialize()
       theInputTiePoints.resize(getNumberOfInputs());
       for(ossim_uint32 i = 0; i < getNumberOfInputs(); ++i)
       {
-         ossimImageSourceInterface *interface =
-            PTR_CAST(ossimImageSourceInterface, getInput(i));
+         ossimImageSource *interface =
+            PTR_CAST(ossimImageSource, getInput(i));
          theInputTiePoints[i].makeNan();
          if(interface)
          {
@@ -307,13 +307,13 @@ ossimRefPtr<ossimImageData> ossimOrthoImageMosaic::getNextTile(ossim_uint32& ret
       return ossimRefPtr<ossimImageData>();
    }
    
-   ossimImageSourceInterface* temp = NULL;
+   ossimImageSource* temp = NULL;
    ossimRefPtr<ossimImageData> result;
    ossimDataObjectStatus status = OSSIM_NULL;
    
    do
    {
-      temp = PTR_CAST(ossimImageSourceInterface, getInput(theCurrentIndex));
+      temp = PTR_CAST(ossimImageSource, getInput(theCurrentIndex));
       if(temp)
       {
          ossimIrect relRect = getRelativeRect(theCurrentIndex, resLevel);
@@ -401,7 +401,7 @@ ossimIrect ossimOrthoImageMosaic::getRelativeRect(ossim_uint32 index,
                                                   ossim_uint32 resLevel)const
 {
    ossimIrect result;
-   ossimImageSourceInterface* interface = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* interface = PTR_CAST(ossimImageSource,
                                                    getInput(index));
    result.makeNan();
    if(interface&&

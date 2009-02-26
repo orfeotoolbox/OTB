@@ -8,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_0.h 13101 2008-07-01 18:44:31Z dburken $
+// $Id: ossimNitfImageHeaderV2_0.h 13619 2008-09-29 19:10:31Z gpotts $
 #ifndef ossimNitfImageHeaderV2_0_HEADER
 #define ossimNitfImageHeaderV2_0_HEADER
 #include <ossim/support_data/ossimNitfImageHeaderV2_X.h>
@@ -71,6 +71,31 @@ public:
    virtual const ossimRefPtr<ossimNitfCompressionHeader> getCompressionHeader()const;
    virtual const ossimRefPtr<ossimNitfImageBand> getBandInformation(ossim_uint32 idx)const;
 
+   virtual void setNumberOfBands(ossim_uint32 nbands);
+   virtual void setBandInfo(ossim_uint32 idx,
+                            const ossimNitfImageBandV2_0& info);
+   virtual void setNumberOfRows(ossim_uint32 rows);
+   virtual void setNumberOfCols(ossim_uint32 cols);
+   virtual void setGeographicLocationDms(const ossimDpt& ul,
+                                         const ossimDpt& ur,
+                                         const ossimDpt& lr,
+                                         const ossimDpt& ll);
+   
+   virtual void setGeographicLocationDecimalDegrees(const ossimDpt& ul,
+                                                    const ossimDpt& ur,
+                                                    const ossimDpt& lr,
+                                                    const ossimDpt& ll);
+   virtual void setUtmNorth(ossim_uint32 zone,
+                            const ossimDpt& ul,
+                            const ossimDpt& ur,
+                            const ossimDpt& lr,
+                            const ossimDpt& ll);
+   virtual void setUtmSouth(ossim_uint32 zone,
+                            const ossimDpt& ul,
+                            const ossimDpt& ur,
+                            const ossimDpt& lr,
+                            const ossimDpt& ll);
+   
    static const ossimString ISCODE_KW;
    static const ossimString ISCTLH_KW;
    static const ossimString ISREL_KW;

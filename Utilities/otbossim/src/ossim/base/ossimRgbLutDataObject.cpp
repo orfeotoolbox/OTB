@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRgbLutDataObject.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimRgbLutDataObject.cpp 13710 2008-10-14 16:27:57Z gpotts $
 #include <ossim/base/ossimRgbLutDataObject.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimFilename.h>
@@ -243,11 +243,11 @@ bool ossimRgbLutDataObject::loadState(const ossimKeywordlist& kwl, const char* p
          ossimString v = tempKwl->find(tempPrefix, newPrefix.c_str());
          istringstream istr(v);
 
-         int r, g, b;
+         ossimString r, g, b;
          istr >> r >> g >> b;
-         theLut[index].setR((unsigned char)r);
-         theLut[index].setG((unsigned char)g);
-         theLut[index].setB((unsigned char)b);
+         theLut[index].setR((unsigned char)r.toInt32());
+         theLut[index].setG((unsigned char)g.toInt32());
+         theLut[index].setB((unsigned char)b.toInt32());
       }
    }
    else

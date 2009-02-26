@@ -7,27 +7,32 @@
 //
 //
 //*************************************************************************
-// $Id: ossimEvent.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimEvent.cpp 13362 2008-08-01 14:02:32Z gpotts $
 #include <ossim/base/ossimEvent.h>
 
 RTTI_DEF1(ossimEvent, "ossimEvent", ossimObject);
 
 
 ossimEvent::ossimEvent(ossimObject* object, long id)
-   :
-      ossimObject(),
-      theObject(object),
-      theId(id),
-      theIsConsumedFlag(false)
+:
+ossimObject(),
+theObject(object),
+theCurrentObject(object),
+theId(id),
+theIsConsumedFlag(false),
+thePropagationType(PROPAGATION_NONE)
 {
 }
 
 ossimEvent::ossimEvent(const ossimEvent& rhs)
-   :
-      ossimObject(),
-      theObject(rhs.theObject),
-      theId(rhs.theId),
-      theIsConsumedFlag(rhs.theIsConsumedFlag)
+:
+ossimObject(),
+theObject(rhs.theObject),
+theCurrentObject(rhs.theCurrentObject),
+theId(rhs.theId),
+theIsConsumedFlag(rhs.theIsConsumedFlag),
+thePropagationType(PROPAGATION_NONE)
+
 {
 }
 
@@ -66,7 +71,38 @@ ossimObject* ossimEvent::getObject()
    return theObject;
 }
 
+const ossimObject* ossimEvent::getCurrentObject() const
+{
+   return theCurrentObject;
+}
+
+ossimObject* ossimEvent::getCurrentObject()
+{
+   return theCurrentObject;
+}
+
 void ossimEvent::setObject(ossimObject* object)
 {
    theObject = object;
 }
+
+void ossimEvent::setCurrentObject(ossimObject* object)
+{
+   theCurrentObject = object;
+}
+
+void ossimEvent::setPropagationType(PropagationType type)
+{
+   thePropagationType = type;
+}
+
+bool ossimEvent::isPropagatingToOutputs()const
+{
+   return thePropagationType&PROPAGATION_OUTPUT;
+}
+
+bool ossimEvent::isPropagatingToInputs()const
+{
+   return thePropagationType&PROPAGATION_INPUT;
+}
+

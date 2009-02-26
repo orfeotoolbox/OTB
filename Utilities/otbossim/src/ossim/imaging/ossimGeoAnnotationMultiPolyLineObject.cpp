@@ -5,13 +5,16 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationMultiPolyLineObject.cpp 11411 2007-07-27 13:53:51Z dburken $
+// $Id: ossimGeoAnnotationMultiPolyLineObject.cpp 13711 2008-10-14 16:49:38Z gpotts $
 
 #include <sstream>
 
 #include <ossim/imaging/ossimGeoAnnotationMultiPolyLineObject.h>
 #include <ossim/imaging/ossimAnnotationMultiPolyLineObject.h>
 #include <ossim/projection/ossimProjection.h>
+#include <ossim/projection/ossimImageProjectionModel.h>
+#include <ossim/base/ossimException.h>
+
 
 RTTI_DEF1(ossimGeoAnnotationMultiPolyLineObject,
           "ossimGeoAnnotationMultiPolyLineObject",
@@ -101,7 +104,9 @@ void ossimGeoAnnotationMultiPolyLineObject::transform(ossimProjection* projectio
       theProjectedPolyLineObject->getMultiPolyLine();
    ossimGpt tempPoint(0,0, ossim::nan(), theDatum);
    
-   for(ossim_uint32 polyI = 0; polyI < theMultiPolyLine.size(); ++polyI)
+   for(std::vector<ossimPolyLine>::size_type polyI = 0;
+       polyI < theMultiPolyLine.size();
+       ++polyI)
    {
       ossimPolyLine polyLine;
       
@@ -120,6 +125,74 @@ void ossimGeoAnnotationMultiPolyLineObject::transform(ossimProjection* projectio
       }
       multiPolyLine[polyI].roundToIntegerBounds(true);
    }
+}
+
+void ossimGeoAnnotationMultiPolyLineObject::transform(
+   const ossimImageProjectionModel& model, ossim_uint32 rrds)
+{
+   const ossimProjection* projection = model.getProjection();
+   if (projection)
+   {
+      allocateProjectedPolyLine();
+
+      //---
+      // NOTE:
+      // allocateProjectedPolygon() will set theProjectedPolyLineObject to 0 if
+      // theMultiPolyLine is empty (theMultiPolyLine.size() == 0).  So check
+      // before accessing pointer to avoid a core dump.
+      //---
+      if(theProjectedPolyLineObject)
+      {
+         std::vector<ossimPolyLine>& multiPolyLine =
+            theProjectedPolyLineObject->getMultiPolyLine();
+         ossimGpt tempPoint(0,0, ossim::nan(), theDatum);
+   
+         for(vector<ossimPolyLine>::size_type polyI = 0;
+             polyI < theMultiPolyLine.size();
+             ++polyI)
+         {
+            ossimPolyLine polyLine;
+            
+            ossim_uint32 numberOfVertices =
+               theMultiPolyLine[polyI].getNumberOfVertices();
+            for(ossim_uint32 pointI = 0; pointI < numberOfVertices; ++pointI)
+            {
+               tempPoint.latd(theMultiPolyLine[polyI][pointI].lat);
+               tempPoint.lond(theMultiPolyLine[polyI][pointI].lon);
+               ossimDpt r0Pt;
+               projection->worldToLineSample(tempPoint, r0Pt);
+               if ( !r0Pt.hasNans() )
+               {
+                  if (rrds)
+                  {
+                     // Transform r0 point to new rrds level.
+                     try
+                     {
+                        ossimDpt rnPt;
+                        model.r0ToRn(rrds, r0Pt, rnPt);
+                        multiPolyLine[polyI].addPoint(rnPt);
+                     }
+                     catch (const ossimException& e)
+                     {
+                        ossimNotify(ossimNotifyLevel_WARN)
+                           << e.what() << std::endl;
+                     } 
+                  }
+                  else
+                  {
+                     multiPolyLine[polyI].addPoint(r0Pt);
+                  }
+               }
+               
+            } // End point loop
+            
+            multiPolyLine[polyI].roundToIntegerBounds(true);
+            
+         } // End poly line loop
+         
+      } // End if (theProjectedPolyLineObject)
+      
+   } // End if (projection)
 }
 
 std::ostream& ossimGeoAnnotationMultiPolyLineObject::print(std::ostream& out)const
@@ -301,10 +374,10 @@ bool ossimGeoAnnotationMultiPolyLineObject::loadState(
       {
          ++numberOfMatches;
          ossimDpt dpt;
-
+         ossimString x,y;
          std::istringstream is(lookup);
-         is >> dpt.x >> dpt.y;
-         pl.addPoint(dpt);
+         is >> x >> y;
+         pl.addPoint(ossimDpt(x.toDouble(), y.toDouble()));
       }
 
       if (pl.size() == 2)

@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRLevelFilter.h 9526 2006-09-06 16:18:51Z dburken $
+// $Id: ossimRLevelFilter.h 13180 2008-07-16 21:01:56Z dburken $
 #ifndef ossimRLevelFilter_HEADER
 #define ossimRLevelFilter_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
@@ -52,6 +52,19 @@ public:
    virtual bool getOverrideGeometryFlag() const;
    virtual void setOverrideGeometryFlag(bool override);
 
+   /**
+    * @brief Returns the bounding rectangle.
+    *
+    * @param resLevel This argument is only passed onto the input connection
+    * if this filter is disabled.  @see disableSource().
+    *
+    * To get the bounding rectangle of an rlevel when source is enabled do:
+    * myRLevelFilter->setCurrentRLevel(level);
+    * myRLevelFilter->getBoundingRect();
+    *
+    * @return Rectangle of the current rlevel if enabled; else, the rectangle
+    * of the input connection for resLevel.
+    */
    virtual ossimIrect getBoundingRect(ossim_uint32 resLevel=0) const;
 
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& tileRect,

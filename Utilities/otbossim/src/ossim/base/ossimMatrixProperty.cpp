@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimMatrixProperty.cpp 12911 2008-05-28 13:36:06Z gpotts $
+// $Id: ossimMatrixProperty.cpp 13710 2008-10-14 16:27:57Z gpotts $
 #include <sstream>
 #include <ossim/base/ossimMatrixProperty.h>
 #include <ossim/base/ossimCommon.h>
@@ -82,15 +82,15 @@ bool ossimMatrixProperty::setValue(const ossimString& value)
 {
    std::istringstream in(value);
    
-   int numberOfRows;
-   int numberOfCols;
-   double tempValue;
+   ossimString numberOfRows;
+   ossimString numberOfCols;
+   ossimString tempValue;
    
    in>>numberOfRows >> numberOfCols;
 
    if(!in.bad())
    {
-      resize(numberOfRows, numberOfCols);
+      resize(numberOfRows.toInt32(), numberOfCols.toInt32());
 
       int rowIdx = 0;
       int colIdx = 0;
@@ -100,7 +100,7 @@ bool ossimMatrixProperty::setValue(const ossimString& value)
          {
             in >> tempValue;
             
-            theValueArray[rowIdx][colIdx] = tempValue;
+            theValueArray[rowIdx][colIdx] = tempValue.toDouble();
          }
       }
    }

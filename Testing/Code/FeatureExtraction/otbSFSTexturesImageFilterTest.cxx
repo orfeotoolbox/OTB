@@ -17,16 +17,13 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbLineDirectionImageFilter.h"
-#include "otbUnaryFunctorNeighborhoodImageFilter.h"
+#include "otbSFSTexturesImageFilter.h"
 #include "otbImage.h"
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
 #include "otbImageFileWriter.h"
 
 
-int otbLineDirectionImageFilterTest(int argc, char * argv[])
+int otbSFSTexturesImageFilterTest(int argc, char * argv[])
 {
   typedef double PixelType;
   const unsigned int Dimension =2;
@@ -44,21 +41,19 @@ int otbLineDirectionImageFilterTest(int argc, char * argv[])
   double alpha                  = atof(argv[11]);  
 
 
-  typedef otb::Image<PixelType,Dimension>                           ImageType;
-  typedef ImageType::PixelType                                InputPixelType;
-  typedef otb::VectorImage<PixelType,Dimension>                     VectorImageType;
-  typedef otb::ImageFileReader<ImageType>                           ReaderType;
-  //typedef otb::StreamingImageFileWriter<VectorImageType>            WriterType;
-  typedef otb::ImageFileWriter<ImageType>            WriterType;
-  typedef otb::LineDirectionImageFilter<ImageType, ImageType> FilterType;
+  typedef otb::Image<PixelType,Dimension>                   ImageType;
+  typedef ImageType::PixelType                              InputPixelType;
+  typedef otb::ImageFileReader<ImageType>                   ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                   WriterType;
+  typedef otb::SFSTexturesImageFilter<ImageType, ImageType> FilterType;
 
-  FilterType::Pointer filter = FilterType::New(); 
-  ReaderType::Pointer reader = ReaderType::New();
+  FilterType::Pointer filter       = FilterType::New(); 
+  ReaderType::Pointer reader       = ReaderType::New();
   WriterType::Pointer writerLength = WriterType::New();
-  WriterType::Pointer writerWidth = WriterType::New();
-  WriterType::Pointer writerWMean = WriterType::New();
-  WriterType::Pointer writerRatio = WriterType::New();
-  WriterType::Pointer writerSD = WriterType::New();
+  WriterType::Pointer writerWidth  = WriterType::New();
+  WriterType::Pointer writerWMean  = WriterType::New();
+  WriterType::Pointer writerRatio  = WriterType::New();
+  WriterType::Pointer writerSD     = WriterType::New();
 
   reader->SetFileName(inName);
   reader->GenerateOutputInformation();

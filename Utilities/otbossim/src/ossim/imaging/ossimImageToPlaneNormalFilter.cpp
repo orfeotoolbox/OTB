@@ -8,12 +8,14 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageToPlaneNormalFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImageToPlaneNormalFilter.cpp 13382 2008-08-04 18:53:26Z gpotts $
 #include <ossim/imaging/ossimImageToPlaneNormalFilter.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimNumericProperty.h>
+#include <ossim/base/ossimBooleanProperty.h>
 
 static const char* SMOOTHNESS_FACTOR_KW="smoothness_factor";
 
@@ -429,4 +431,72 @@ void ossimImageToPlaneNormalFilter::setSmoothnessFactor(double value)
 double ossimImageToPlaneNormalFilter::getSmoothnessFactor()const
 {
    return theSmoothnessFactor;
+}
+
+void ossimImageToPlaneNormalFilter::setProperty(ossimRefPtr<ossimProperty> property)
+{
+   ossimString name = property->getName();
+   if(name == "smoothnessFactor")
+   {
+      theSmoothnessFactor = property->valueToString().toDouble();
+      initialize();
+   }
+   else if(name == "xscale")
+   {
+      theXScale = property->valueToString().toDouble();
+      initialize();
+   }
+   else if(name == "yscale")
+   {
+      theYScale = property->valueToString().toDouble();
+      initialize();
+   }
+   else if(name == "autoTrackScaleFlag")
+   {
+      theTrackScaleFlag = property->valueToString().toDouble();
+      initialize();
+   }
+   else
+   {
+      ossimImageSourceFilter::setProperty(property);
+   }
+}
+
+ossimRefPtr<ossimProperty> ossimImageToPlaneNormalFilter::getProperty(const ossimString& name)const
+{
+   if(name == "smoothnessFactor")
+   {
+      ossimNumericProperty* prop = new ossimNumericProperty(name, theSmoothnessFactor, .0001, 40);
+      prop->setCacheRefreshBit();
+      return prop;
+   }
+   else if(name == "xscale")
+   {
+      ossimNumericProperty* prop = new ossimNumericProperty(name, theXScale, .0001, 50000);
+      prop->setCacheRefreshBit();
+      return prop;
+   }
+   else if(name == "yscale")
+   {
+      ossimNumericProperty* prop = new ossimNumericProperty(name, theYScale, .0001, 50000);
+      prop->setCacheRefreshBit();
+      return prop;
+   }
+   else if(name == "autoTrackScaleFlag")
+   {
+      ossimBooleanProperty* prop = new ossimBooleanProperty(name, theTrackScaleFlag);
+      prop->setCacheRefreshBit();
+      return prop;
+   }
+   
+   return ossimImageSourceFilter::getProperty(name);
+}
+
+void ossimImageToPlaneNormalFilter::getPropertyNames(std::vector<ossimString>& propertyNames)const
+{
+   ossimImageSourceFilter::getPropertyNames(propertyNames);
+   propertyNames.push_back("smoothnessFactor");
+   propertyNames.push_back("xscale");
+   propertyNames.push_back("yscale");
+   propertyNames.push_back("autoTrackScaleFlag");
 }

@@ -7,7 +7,7 @@
 //              support data for a ADRG image file(s).
 //
 //********************************************************************
-// $Id: ossimAdrgHeader.cpp 12956 2008-06-02 01:38:50Z dburken $
+// $Id: ossimAdrgHeader.cpp 13766 2008-10-22 19:31:32Z gpotts $
 
 #include <cstring>
 #include <iostream>
@@ -68,7 +68,10 @@ ossimAdrgHeader::ossimAdrgHeader(const ossimFilename& img_file)
 ossimAdrgHeader::~ossimAdrgHeader()
 {
    if(theTim)
+   {
       delete [] theTim;
+      theTim = 0;
+   }
 }
 
 //**************************************************************************
@@ -254,6 +257,11 @@ void ossimAdrgHeader::parse()
 
    theValidImageRect = ossimIrect(0, 0, theSamples - 1, theLines - 1);
 
+   if(theTim)
+   {
+      delete [] theTim;
+      theTim = 0;
+   }
    // Initialize the TIM (tile index map).
    theTim = new ossim_uint32[theLinesInTiles * theSamplesInTiles];
 

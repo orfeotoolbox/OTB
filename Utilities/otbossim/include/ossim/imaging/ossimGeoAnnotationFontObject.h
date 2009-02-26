@@ -4,7 +4,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationFontObject.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimGeoAnnotationFontObject.h 13349 2008-07-30 15:34:34Z dburken $
 #ifndef ossimGeoAnnotationFontObject_HEADER
 #define ossimGeoAnnotationFontObject_HEADER
 #include <ossim/imaging/ossimGeoAnnotationObject.h>
@@ -52,6 +52,20 @@ public:
                          ossim_uint8 b);
 
    virtual void transform(ossimProjection* projection);
+
+   /**
+    * @brief Transforms from geographic to image space for a reduced
+    * resolution data set (rrds).
+    *
+    * This will transform any world points to line sample; then, convert any
+    * line sample to the correct rrds point.
+    *
+    * @param model The model to use for transformation.
+    *
+    * @param rrds Reduced resolution data set to use.
+    */
+   virtual void transform(const ossimImageProjectionModel& model,
+                          ossim_uint32 rrds);
    
    virtual void setCenterGround(const ossimGpt& gpt);
    

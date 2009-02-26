@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimLandsatTopoCorrectionFilter.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimLandsatTopoCorrectionFilter.cpp 13312 2008-07-27 01:26:52Z gpotts $
 #include <ossim/imaging/ossimLandsatTopoCorrectionFilter.h>
 #include <ossim/imaging/ossimImageToPlaneNormalFilter.h>
 #include <ossim/support_data/ossimFfL7.h>
@@ -162,8 +162,8 @@ void ossimLandsatTopoCorrectionFilter::computeC()
    {
       std::vector<ossim2dLinearRegression> linearRegression(6);
       
-      ossimImageSourceInterface* colorSource = PTR_CAST(ossimImageSourceInterface, getInput(0));
-      ossimImageSourceInterface* normalSource  = PTR_CAST(ossimImageSourceInterface, getInput(1));
+      ossimImageSource* colorSource = PTR_CAST(ossimImageSource, getInput(0));
+      ossimImageSource* normalSource  = PTR_CAST(ossimImageSource, getInput(1));
       ossimFfL7 headerL7(theLandsatHeader.c_str());
 
       if(theLandsatHeader == "")

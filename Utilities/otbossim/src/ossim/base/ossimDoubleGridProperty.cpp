@@ -60,26 +60,28 @@ const ossimProperty& ossimDoubleGridProperty::assign(const ossimProperty& rhs)
   
 bool ossimDoubleGridProperty::setValue(const ossimString& value)
 {
-  std::istringstream in(value.c_str());
-
-  int numberOfRows;
-  int numberOfCols;
-  int rowIdx = 0;
-  int colIdx = 0;
-  in >> numberOfRows >> numberOfCols;
-  
-  theValues.resize(numberOfRows);
-
-  for(rowIdx = 0; rowIdx < numberOfRows; ++rowIdx)
-    {
+   std::istringstream in(value.c_str());
+   ossimString nRows, nCols, v;
+   int numberOfRows=0;
+   int numberOfCols=0;
+   int rowIdx = 0;
+   int colIdx = 0;
+   in >> nRows >> nCols;
+   numberOfRows = nRows.toInt32();
+   numberOfCols = nCols.toInt32();
+   theValues.resize(numberOfRows);
+   
+   for(rowIdx = 0; rowIdx < numberOfRows; ++rowIdx)
+   {
       theValues[rowIdx].resize(numberOfCols);
       for(colIdx = 0; colIdx < numberOfCols; ++ colIdx)
-	{
-	  in >> theValues[rowIdx][colIdx];
-	}
-    }
-
-  return true;
+      {
+         in >> v;
+         theValues[rowIdx][colIdx] = v.toDouble();
+      }
+   }
+   
+   return true;
 }
 
 void ossimDoubleGridProperty::valueToString(ossimString& valueResult)const

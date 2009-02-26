@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationMultiPolyLineObject.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimAnnotationMultiPolyLineObject.cpp 13964 2009-01-14 16:30:07Z gpotts $
 #include <ossim/imaging/ossimAnnotationMultiPolyLineObject.h>
 #include <ossim/imaging/ossimAnnotationMultiLineObject.h>
 #include <ossim/imaging/ossimRgbImage.h>
@@ -43,8 +43,8 @@ void ossimAnnotationMultiPolyLineObject::applyScale(double x,
    {
       theMultiPolyLine[i] *= ossimDpt(x, y);
    }
-   
-   theBoundingRect *= ossimDpt(x,y);
+   computeBoundingRect();
+   // theBoundingRect *= ossimDpt(x,y);
 }
 
 bool ossimAnnotationMultiPolyLineObject::intersects(const ossimDrect& rect)const

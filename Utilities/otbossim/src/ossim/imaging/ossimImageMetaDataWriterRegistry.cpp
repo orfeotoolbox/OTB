@@ -3,7 +3,7 @@
 // 
 // See LICENSE.txt file in the top level directory for more details.
 //----------------------------------------------------------------------------
-// $Id: ossimImageMetaDataWriterRegistry.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImageMetaDataWriterRegistry.cpp 13508 2008-08-27 15:51:38Z gpotts $
 
 
 #include <ossim/imaging/ossimImageMetaDataWriterRegistry.h>
@@ -12,30 +12,25 @@
 #include <ossim/base/ossimObjectFactoryRegistry.h>
 #include <algorithm>
 
-ossimImageMetaDataWriterRegistry*
-ossimImageMetaDataWriterRegistry::theInstance= NULL;
+//ossimImageMetaDataWriterRegistry*
+//ossimImageMetaDataWriterRegistry::theInstance= NULL;
 
 ossimImageMetaDataWriterRegistry::ossimImageMetaDataWriterRegistry()
 {
-   theInstance = this;
+   registerFactory(ossimImageMetaDataWriterFactory::instance());
+   ossimObjectFactoryRegistry::instance()->registerFactory(this);
 }
 
 ossimImageMetaDataWriterRegistry::~ossimImageMetaDataWriterRegistry()
 {
-   ossimObjectFactoryRegistry::instance()->unregisterFactory(theInstance);
-   theInstance = NULL;
+   ossimObjectFactoryRegistry::instance()->unregisterFactory(this);
 }
 
 ossimImageMetaDataWriterRegistry* ossimImageMetaDataWriterRegistry::instance()
 {
-   if(!theInstance)
-   {
-      theInstance = new ossimImageMetaDataWriterRegistry;
-      theInstance->registerFactory(ossimImageMetaDataWriterFactory::instance());
-      ossimObjectFactoryRegistry::instance()->registerFactory(theInstance);
-   }
+   static ossimImageMetaDataWriterRegistry sharedInstance;
 
-   return theInstance;
+   return &sharedInstance;
 }
 
 void ossimImageMetaDataWriterRegistry::registerFactory(

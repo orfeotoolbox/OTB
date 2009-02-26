@@ -6,7 +6,7 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationLineObject.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimGeoAnnotationLineObject.h 13349 2008-07-30 15:34:34Z dburken $
 #ifndef ossimGeoAnnotationLineObject_HEADER
 #define ossimGeoAnnotationLineObject_HEADER
 #include <ossim/base/ossimGpt.h>
@@ -26,13 +26,25 @@ public:
    ossimGeoAnnotationLineObject(const ossimGeoAnnotationLineObject& rhs);
    virtual ~ossimGeoAnnotationLineObject();
 
-   virtual ossimObject* dup()const
-      {
-         return new ossimGeoAnnotationLineObject(*this);
-      }
+   virtual ossimObject* dup()const;
 
    virtual void applyScale(double x, double y);
    virtual void transform(ossimProjection* projection);
+
+   /**
+    * @brief Transforms from geographic to image space for a
+    * reduced resolution data set (rrds).
+    *
+    * This will transform any world points to line sample; then, convert any
+    * line sample to the correct rrds point.
+    *
+    * @param model The model to use for transformation.
+    *
+    * @param rrds Reduced resolution data set to use.
+    */
+   virtual void transform(const ossimImageProjectionModel& model,
+                          ossim_uint32 rrds);
+   
    virtual std::ostream& print(std::ostream& out)const;
    virtual bool intersects(const ossimDrect& rect)const;
    virtual ossimAnnotationObject* getNewClippedObject(const ossimDrect& rect)const;

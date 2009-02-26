@@ -9,7 +9,7 @@
 // Contains class implementaiton for the class "ossim LandsatTileSource".
 //
 //*******************************************************************
-//  $Id: ossimLandsatTileSource.cpp 12988 2008-06-04 16:49:43Z gpotts $
+//  $Id: ossimLandsatTileSource.cpp 13468 2008-08-20 18:25:57Z gpotts $
 
 #include <ossim/imaging/ossimLandsatTileSource.h>
 #include <ossim/base/ossimDirectory.h>
@@ -212,6 +212,11 @@ void ossimLandsatTileSource::openHeader(const ossimFilename& file)
    //***
    ossimFilename hdr = file.file();
    hdr.downcase();
+   if(theFfHdr)
+   {
+      delete theFfHdr;
+      theFfHdr = 0;
+   }
    if ( hdr.contains("hpn") || hdr.contains("hrf") || hdr.contains("htm") )
    {
       theFfHdr = new ossimFfL7(file.c_str());      
