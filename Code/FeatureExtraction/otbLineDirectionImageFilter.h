@@ -26,17 +26,31 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  /** \class LineDirectionImageFilter
-   *  \brief This functor computes water, ndvi and spectral index of an image
-   */
+/** \class LineDirectionImageFilter
+ *  \brief This functor computes the texture describes in the following publication
+ *  It is based on line direction estimation.
+ *
+ * Please refer to Xin Huang, Liangpei Zhang and Pingxiang Li publication,
+ * Classification and Extraction of Spatial Features in Urban Areas
+ * Using High-Resolution Multispectral Imagery.
+ * IEEE Geoscience and Remote Sensing Letters,
+ * vol. 4, n. 2, 2007, pp 260-264
+ *
+ * The texture is computaed for each pixel using its neighborhood.
+ * User can set the spatial threshold taht is the max line length, the spectral threshold
+ * that is the max difference authorized between a pixel of the line and the center pixel
+ * of the current neighborhood. Alpha and RationMaxConsideration are used to compute 
+ * the \omega -mean value. Finally, The number of direction can be precised with 
+ * NumberOfDirections.
+ * You can choose the computed textures using SetTextureStatus method (1:length, 2:width,
+ * 3:PSI, 4:w-mean, 5:ratio, 6:SD).
+ *
+ * \sa LineDirectionFunctor
+*/
 
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LineDirectionImageFilter :
 public itk::ImageToImageFilter<TInputImage,TOutputImage>
-  /*UnaryFunctorNeighborhoodImageFilter< TInputImage,
-				            TOutputImage, 
-				            Functor::LineDirectionFunctor< ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage>, 
-					    ITK_TYPENAME TOutputImage::InternalPixelType> >*/
 {
 public:
   /** Standard class typedefs. */
@@ -54,22 +68,18 @@ public:
   itkTypeMacro(UnaryFunctorNeighborhoodImageFilter,ImageToImageFilter);
   
   /** Some convenient typedefs. */
-  typedef typename InputImageType::ConstPointer InputImagePointerType;
-  typedef typename InputImageType::RegionType   InputImageRegionType;
-  typedef typename InputImageType::PixelType    InputImagePixelType;
-  typedef typename InputImageType::SizeType     InputImageSizeType;
-  typedef typename OutputImageType::Pointer     OutputImagePointerType;
-  typedef typename OutputImageType::RegionType  OutputImageRegionType;
-  typedef typename OutputImageType::PixelType   OutputImagePixelType;
-  //typedef typename OutputImageType::InternalPixelType   OutputInternalImagePixelType;
-  typedef itk::ConstNeighborhoodIterator<TInputImage>     NeighborhoodIteratorType;
-  typedef typename NeighborhoodIteratorType::RadiusType   RadiusType;
-  ////////////////////////////////////////////
-  // CHANGE THE OUTPUTINTERNAZL INTO OUTPUTPIXE/////////////
-  ///////////////////////////////////////////
+  typedef typename InputImageType::ConstPointer         InputImagePointerType;
+  typedef typename InputImageType::RegionType           InputImageRegionType;
+  typedef typename InputImageType::PixelType            InputImagePixelType;
+  typedef typename InputImageType::SizeType             InputImageSizeType;
+  typedef typename OutputImageType::Pointer             OutputImagePointerType;
+  typedef typename OutputImageType::RegionType          OutputImageRegionType;
+  typedef typename OutputImageType::PixelType           OutputImagePixelType;
+  typedef itk::ConstNeighborhoodIterator<TInputImage>   NeighborhoodIteratorType;
+  typedef typename NeighborhoodIteratorType::RadiusType RadiusType;
   typedef Functor::LineDirectionFunctor< NeighborhoodIteratorType,OutputImagePixelType  > FunctorType; 
-  typedef typename FunctorType::OutputType FunctorOutputType;
-  typedef itk::ProcessObject ProcessObjectType;
+  typedef typename FunctorType::OutputType              FunctorOutputType;
+  typedef itk::ProcessObject                            ProcessObjectType;
 
   /**Set/Get the radius of neighborhood.*/
   itkGetMacro(Radius,unsigned int);

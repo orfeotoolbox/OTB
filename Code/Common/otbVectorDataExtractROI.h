@@ -49,6 +49,7 @@ public:
 
   /** Image type information. */
   typedef TVectorData                                        VectorDataType;
+  typedef typename VectorDataType::DataTreeType               DataTreeType;
   
   /** Get/Set Macro for ROI Column size */
   itkGetMacro(SizeX, unsigned int);

@@ -43,6 +43,6 @@ int otbPanTexTextureImageFilter(int argc, char * argv[])
   writer->SetInput( panTex->GetOutput() );
 
   writer->Update();
-
+ 
   return EXIT_SUCCESS;
 }

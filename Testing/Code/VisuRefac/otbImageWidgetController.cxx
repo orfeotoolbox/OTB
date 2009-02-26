@@ -47,7 +47,10 @@ int otbImageWidgetController( int argc, char * argv[] )
   controller->HandleWidgetEvent("default",10);
 
   // Simulate a resize from a widget
-  controller->HandleWidgetResize("default",0,0,0,0);
+  controller->HandleWidgetResize("default",0,0);
+
+  // Simulate a move from a widget
+  controller->HandleWidgetMove("default",0,0);
 
   return EXIT_SUCCESS;
 }

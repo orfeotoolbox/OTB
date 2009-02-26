@@ -48,7 +48,7 @@ int main( int argc, char * argv[] )
   const   char * outfname  = argv[2];
   
   typedef unsigned char   InputPixelType;
-  typedef unsigned char   PrecisionType;
+  typedef double   PrecisionType;
   const   unsigned int    Dimension = 2;
   
 

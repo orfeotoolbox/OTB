@@ -40,20 +40,16 @@ namespace Functor
  *  \ingroup Statistics
  */
 
-template <class TIterInput, class TOutput>
+template  <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT InformationMeasureOfCorrelation1TextureFunctor :
-public EntropyTextureFunctor<TIterInput, TOutput>
+public EntropyTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
   InformationMeasureOfCorrelation1TextureFunctor(){};
   virtual ~InformationMeasureOfCorrelation1TextureFunctor(){};
-
-  typedef TIterInput                            IterType;
-  typedef TOutput                               OutputType;
-  typedef typename IterType::InternalPixelType InternalPixelType;
-  typedef typename IterType::ImageType         ImageType;
-  typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
-  typedef EntropyTextureFunctor<TIterInput, TOutput> Superclass;
+ 
+  typedef EntropyTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
+  typedef typename Superclass::NeighborhoodType                                NeighborhoodType;
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {

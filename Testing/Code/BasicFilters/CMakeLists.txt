@@ -1025,7 +1025,7 @@ ADD_TEST(bfTvEdgeDensityImageFilter ${BASICFILTERS_TESTS9}
         otbEdgeDensityImageFilter
 	    ${INPUTDATA}/scene.png
 	    ${TEMP}/bfTvEdgeDensityImageFilterOutputImage.tif
-	    2 # radius
+	    1 # radius
 	    15 3  1. 0.01  #Canny Parameters
 	    
 )

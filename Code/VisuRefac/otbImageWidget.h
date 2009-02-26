@@ -25,6 +25,7 @@
 // This is included for the default template
 #include "otbImage.h"
 #include "itkRGBPixel.h"
+#include "itkFixedArray.h"
 
 // This include is needed to get the OTB_GL_USE_ACCEL definition
 #include "otbConfigure.h"
@@ -43,6 +44,8 @@ namespace otb
 *   will generate an exception.
 *   Using Gl acceleration allows you to have a better rendering when
 *   zooming.
+*  
+*   It is also able to display a rectangle on the displayed image.
 */
 
 template <class TInputImage=otb::Image<itk::RGBPixel<unsigned char>,2 > >
@@ -69,8 +72,11 @@ public:
   typedef typename RegionType::SizeType       SizeType;
   typedef typename RegionType::IndexType      IndexType;
   /** Controller typedef */
-  typedef otb::ImageWidgetController        ControllerType;
-  typedef typename ControllerType::Pointer  ControllerPointerType;
+  typedef otb::ImageWidgetController          ControllerType;
+  typedef typename ControllerType::Pointer    ControllerPointerType;
+
+  /** Color typedef (used to draw the rectangle, 4th channel is alpha) */
+  typedef itk::FixedArray<float,4>            ColorType;
 
   /** Reads the OpenGl buffer from an image pointer
    *  \param image The image pointer,
@@ -80,7 +86,7 @@ public:
    * This method fills the m_OpenGl buffer according to the region
    *  size. Buffer in flipped over X axis if OTB_USE_GL_ACCEL is OFF.
    */
-  virtual void ReadBuffer(InputImageType * image, RegionType & region);
+  virtual void ReadBuffer(const InputImageType * image, const RegionType & region);
 
   /** Set/Get the Controller */
   itkSetObjectMacro(Controller,ControllerType);
@@ -100,9 +106,28 @@ public:
   itkGetMacro(UseGlAcceleration,bool);
   itkBooleanMacro(UseGlAcceleration);
 
+  /** Enable/disable rectangle drawing */
+  itkSetMacro(DisplayRectangle,bool);
+  itkGetMacro(DisplayRectangle,bool);
+  itkBooleanMacro(DisplayRectangle);
+  
+  /** Set/Get the rectangle to display */
+  itkSetMacro(Rectangle,RegionType);
+  itkGetConstReferenceMacro(Rectangle,RegionType);
+
   /** Set/Get the identifier */
   itkSetStringMacro(Identifier);
   itkGetStringMacro(Identifier);
+
+  /** Set/Get the color of the rectangle */
+  itkSetMacro(RectangleColor,ColorType);
+  itkGetConstReferenceMacro(RectangleColor,ColorType);
+
+  /** Convert a screen index to a buffered region index */
+  IndexType ScreenIndexToRegionIndex(const IndexType& index );
+  
+  /** Convert a buffered region index to a screen index */
+  IndexType RegionIndexToScreenIndex(const IndexType& index);
 
 protected:
   /** Constructor */
@@ -141,7 +166,6 @@ protected:
     return  (region.GetSize()[1]-1+region.GetIndex()[1]-index[1])*3*region.GetSize()[0]+3*(index[0]-region.GetIndex()[0]);
   }
 
-
 private:
   ImageWidget(const Self&);    // purposely not implemented
   void operator=(const Self&); // purposely not implemented
@@ -152,8 +176,8 @@ private:
   /** OpenGl buffer      */
   unsigned char * m_OpenGlBuffer;
 
-  /** OpenGl buffer size */
-  SizeType m_OpenGlBufferSize;
+  /** OpenGl buffered region */
+  RegionType m_OpenGlBufferedRegion;
 
   /** Widget identifier */
   std::string m_Identifier;
@@ -163,6 +187,17 @@ private:
 
   /** Flag for GlAcceleration */
   bool m_UseGlAcceleration;
+
+  /** Rectangle region */
+  RegionType m_Rectangle;
+  bool       m_DisplayRectangle;
+  ColorType  m_RectangleColor;
+  
+  /** Image extent coordinates in the display axis system */
+  double m_ImageExtentWidth;
+  double m_ImageExtentHeight;
+  double m_ImageExtentX;
+  double m_ImageExtentY;
 
 }; // end class
 } // end namespace otb
