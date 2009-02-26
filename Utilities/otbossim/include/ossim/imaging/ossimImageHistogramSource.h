@@ -5,18 +5,18 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageHistogramSource.h 12579 2008-03-26 18:52:51Z gpotts $
+// $Id: ossimImageHistogramSource.h 13312 2008-07-27 01:26:52Z gpotts $
 #ifndef ossimImageHistogramSource_HEADER
 #define ossimImageHistogramSource_HEADER
 #include <ossim/base/ossimHistogramSource.h>
-#include <ossim/imaging/ossimImageSourceInterface.h>
+#include <ossim/imaging/ossimImageSource.h>
 #include <ossim/base/ossimProcessInterface.h>
 #include <ossim/base/ossimConnectableObjectListener.h>
 #include <ossim/base/ossimObjectEvents.h>
 #include <ossim/base/ossimIrect.h>
 
 /*!
- * This source expects as input an ossimImageSourceInterface.
+ * This source expects as input an ossimImageSource.
  * it will slice up the requested region into tiles and compute
  * the histogram of the passed in rectangle.
  */

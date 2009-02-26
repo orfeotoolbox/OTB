@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimSFIMFusion.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimSFIMFusion.h 13371 2008-08-02 13:42:42Z gpotts $
 #ifndef ossimSFIMFusion_HEADER
 #define ossimSFIMFusion_HEADER
 #include <ossim/imaging/ossimFusionCombiner.h>
@@ -23,6 +23,10 @@
  *  Pulished in INT. J. Remote Sensing, 2000, Vol. 21 NO. 18, 3461-3472
  *
  *  By J. G. LIU
+ *
+ *
+ * Auther: Garrett Potts
+ * LICENSE: LGPL
  */
 class OSSIM_DLL ossimSFIMFusion : public ossimFusionCombiner,
                                   public ossimAdjustableParameterInterface
@@ -44,6 +48,11 @@ public:
    }
    virtual void initAdjustableParameters();
    virtual void adjustableParametersChanged();
+   
+   virtual void setProperty(ossimRefPtr<ossimProperty> property);
+   virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
+   virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
+   
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix=0) const;
 
@@ -58,7 +67,7 @@ protected:
                           ossimRefPtr<ossimImageData> colorData,
                           ossim_uint32 colorBandIdx);
    
-   ossim_float64 theBlurrKernelWidth;
+   ossim_float64 theLowPassKernelWidth;
    ossim_uint32 theHighPassKernelWidth;
    // These are low and high pass filters for the single pan band
    //

@@ -6,7 +6,7 @@
 // Contributor: David A. Horner (DAH) - http://dave.thehorners.com
 // 
 //*************************************************************************
-// $Id: ossimImageDataFactory.cpp 11349 2007-07-23 13:30:44Z gpotts $
+// $Id: ossimImageDataFactory.cpp 13474 2008-08-22 14:20:42Z gpotts $
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/imaging/ossimU8ImageData.h>
 #include <ossim/imaging/ossimU11ImageData.h>
@@ -21,6 +21,7 @@
 static ossimTrace traceDebug("ossimImageDataFactory:debug");
 
 ossimImageDataFactory* ossimImageDataFactory::theInstance = 0;
+OpenThreads::Mutex ossimImageDataFactory::theInstanceMutex;
 ossimImageDataFactory::ossimImageDataFactory()
 {
    theInstance = 0;
@@ -30,18 +31,19 @@ ossimImageDataFactory::~ossimImageDataFactory()
 {
    if(theInstance)
    {
-      delete theInstance;
+      //delete theInstance;
       theInstance = 0;
    }
 }
 
 ossimImageDataFactory* ossimImageDataFactory::instance()
 {
+   theInstanceMutex.lock();
    if(!theInstance)
    {
       theInstance = new ossimImageDataFactory;
    }
-
+   theInstanceMutex.unlock();
    return theInstance;
 }
 
@@ -189,7 +191,7 @@ ossimRefPtr<ossimImageData> ossimImageDataFactory::create(
 ossimRefPtr<ossimImageData> ossimImageDataFactory::create(
    ossimSource* owner,
    ossim_uint32 bands,
-   ossimImageSourceInterface* inputSource)const
+   ossimImageSource* inputSource)const
 {
    ossimRefPtr<ossimImageData> result = 0;
 
@@ -220,7 +222,7 @@ ossimRefPtr<ossimImageData> ossimImageDataFactory::create(
 
 ossimRefPtr<ossimImageData> ossimImageDataFactory::create(
    ossimSource* owner,
-   ossimImageSourceInterface* inputSource)const
+   ossimImageSource* inputSource)const
 {
    ossimRefPtr<ossimImageData> result = 0;
 

@@ -10,7 +10,7 @@
 // for Geotrans datum.  For more thorough description of each function
 // look at the datum.h file.
 //*******************************************************************
-//  $Id: ossimDatum.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimDatum.h 13560 2008-09-10 11:42:57Z gpotts $
 #ifndef ossimDatum_HEADER
 #define ossimDatum_HEADER
 #include <ossim/base/ossimConstants.h>
@@ -21,7 +21,18 @@
 class OSSIMDLLEXPORT ossimDatum
 {
 public:
-   ossimDatum(const ossimString &code, const ossimString &name,
+   /**
+    *   @param code           new datum code.                               (input)
+    *   @param name           Name of the new datum                         (input)
+    *   @param SigmaX         Standard error in X in meters                 (input)
+    *   @param SigmaY         Standard error in Y in meters                 (input)
+    *   @param SigmaZ         Standard error in Z in meters                 (input)
+    *   @param southLatitude  Southern edge of validity rectangle in radians(input)
+    *   @param northLatitude  Northern edge of validity rectangle in radians(input)
+    *   @param westLongitude  Western edge of validity rectangle in radians (input)
+    *   @param eastLongitude  Eastern edge of validity rectangle in radians (input)
+    */
+    ossimDatum(const ossimString &code, const ossimString &name,
               const ossimEllipsoid* anEllipsoid,
               ossim_float64 sigmaX, ossim_float64 sigmaY, ossim_float64 sigmaZ,
               ossim_float64 westLongitude, ossim_float64 eastLongitude,

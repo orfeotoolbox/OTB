@@ -8,7 +8,7 @@
 //
 // Contains class declaration for ossimImageFileWriter.
 //*******************************************************************
-//  $Id: ossimImageFileWriter.cpp 11184 2007-06-08 02:21:08Z gpotts $
+//  $Id: ossimImageFileWriter.cpp 13312 2008-07-27 01:26:52Z gpotts $
 
 
 #include <tiffio.h> /* for tiff compression defines */
@@ -50,7 +50,7 @@
 static ossimTrace traceDebug("ossimImageFileWriter:debug");
 
 #if OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageFileWriter.cpp 11184 2007-06-08 02:21:08Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimImageFileWriter.cpp 13312 2008-07-27 01:26:52Z gpotts $";
 #endif
 
 RTTI_DEF3(ossimImageFileWriter,
@@ -655,9 +655,11 @@ bool ossimImageFileWriter::writeMetaDataFiles() const
       if( writeExternalGeometryFile() == false)
       {
          status = false;
-
-         ossimNotify(ossimNotifyLevel_WARN)
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
             << "Write of geometry file failed!" << endl;
+         }
       }
    }
    if(theWriteFgdcFlag)
@@ -665,9 +667,11 @@ bool ossimImageFileWriter::writeMetaDataFiles() const
       if(writeFgdcFile() == false)
       {
          status = false;
-
-         ossimNotify(ossimNotifyLevel_WARN)
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
             << "Write of fgdc file failed!" << endl;
+         }
       }
    }
    if(theWriteJpegWorldFileFlag)
@@ -675,9 +679,11 @@ bool ossimImageFileWriter::writeMetaDataFiles() const
       if(writeJpegWorldFile() == false)
       {
          status = false;
-         
-         ossimNotify(ossimNotifyLevel_WARN)
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
             << "Write of jpeg world file failed!" << endl;
+         }
       }
    }
    if(theWriteReadmeFlag)
@@ -686,8 +692,11 @@ bool ossimImageFileWriter::writeMetaDataFiles() const
       {
          status = false;
          
-         ossimNotify(ossimNotifyLevel_WARN)
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
             << "Write of readme file failed!" << endl;
+         }
       }
    }
    if(theWriteTiffWorldFileFlag)
@@ -695,9 +704,11 @@ bool ossimImageFileWriter::writeMetaDataFiles() const
       if(writeTiffWorldFile() == false)
       {
          status = false;
-         
-         ossimNotify(ossimNotifyLevel_WARN)
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
             << "Write of tiff world file failed!" << endl;
+         }
       }
    }
 
@@ -706,9 +717,11 @@ bool ossimImageFileWriter::writeMetaDataFiles() const
       if (!writeHistogramFile())
       {
          status = false;
-         
-         ossimNotify(ossimNotifyLevel_WARN)
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
             << "Write of histogram file failed!" << endl;
+         }
       }
    }
 
@@ -1025,8 +1038,11 @@ bool ossimImageFileWriter::execute()
       if (!writeOverviewFile(theOverviewCompressType,
                              theOverviewJpegCompressQuality))
       {
-         ossimNotify(ossimNotifyLevel_WARN)
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
             << "Write of overview file failed!" << endl;
+         }
       }
    }
 
@@ -1039,8 +1055,11 @@ bool ossimImageFileWriter::execute()
          {
             if (writeMetaDataFiles() == false)
             {
-               ossimNotify(ossimNotifyLevel_WARN)
-                  << "Write of overview file failed!" << endl;
+               if(traceDebug())
+               {
+                  ossimNotify(ossimNotifyLevel_WARN)
+                  << "Write of metadata file failed!" << endl;
+               }
                result = false;
             }
          }
@@ -1127,7 +1146,7 @@ bool ossimImageFileWriter::canConnectMyInputTo(ossim_int32 inputIndex,
                                                const ossimConnectableObject* object)const
 {
    return (object&&
-           ( (PTR_CAST(ossimImageSourceInterface, object)&&inputIndex == 0)||
+           ( (PTR_CAST(ossimImageSource, object)&&inputIndex == 0)||
              (PTR_CAST(ossimViewController, object)&&inputIndex == 1)) );
 }
 

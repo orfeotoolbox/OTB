@@ -18,8 +18,8 @@
 // ============================================================================
 //
 // File          : gzstream.C
-// Revision      : $Revision: 13050 $
-// Revision_date : $Date: 2008-06-19 20:07:35 +0200 (Thu, 19 Jun 2008) $
+// Revision      : $Revision: 13213 $
+// Revision_date : $Date: 2008-07-24 01:36:39 +0800 (Thu, 24 Jul 2008) $
 // Author(s)     : Deepak Bandyopadhyay, Lutz Kettner
 // 
 // Standard streambuf implementation following Nicolai Josuttis, "The 
@@ -49,8 +49,9 @@ struct ossimGzStreamBuf::PrivateData
 // Internal classes to implement gzstream. See header file for user classes.
 // ----------------------------------------------------------------------------
 ossimGzStreamBuf::ossimGzStreamBuf()
-   : opened(false),
-   prvtData(new PrivateData())
+   : prvtData(new PrivateData()),
+     opened(false),
+     mode(0) // ??? (drb)
 {
 
    setp( buffer, buffer + (bufferSize-1));

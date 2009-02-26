@@ -10,7 +10,7 @@
 // Contains class definition for TiffTileSource.
 //
 //*******************************************************************
-//  $Id: ossimTiffTileSource.cpp 12988 2008-06-04 16:49:43Z gpotts $
+//  $Id: ossimTiffTileSource.cpp 13482 2008-08-22 17:04:25Z gpotts $
 
 #include <cstdlib> /* for abs(int) */
 #include <ossim/imaging/ossimTiffTileSource.h>
@@ -206,15 +206,19 @@ ossimRefPtr<ossimImageData> ossimTiffTileSource::getTile(
       }
       else
       {
-         // Error in filling buffer.
-         ossimNotify(ossimNotifyLevel_WARN)
+         theTile->makeBlank();
+         if(traceDebug())
+         {
+            // Error in filling buffer.
+            ossimNotify(ossimNotifyLevel_WARN)
             << MODULE << " Returning blank tile..." << endl;
-         return ossimRefPtr<ossimImageData>();
+         }
+         return theTile;
       }
    }
-
+   theTile->makeBlank();
    // No part of requested tile within the image rectangle.
-   return ossimRefPtr<ossimImageData>();
+   return theTile;
 }
 
 //*******************************************************************

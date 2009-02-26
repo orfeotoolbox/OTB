@@ -142,7 +142,7 @@ static char * get_line (FILE *fp)
 
   }  /* end of for count */
 
-  CurrentLine[count] = (char) NULL ;  /* terminate string */
+  CurrentLine[count] = '\0';  /* terminate string */
   return CurrentLine ;
 
 }
@@ -1281,8 +1281,7 @@ row_type get_row( long int row_number,
  *    This module should be ANSI C compatible.
  *E
  *************************************************************************/
-long int table_pos( char           * field_name,
-		    vpf_table_type   table )
+long int table_pos( const char* field_name, vpf_table_type table )
 {
    register long int i;
    long int col;

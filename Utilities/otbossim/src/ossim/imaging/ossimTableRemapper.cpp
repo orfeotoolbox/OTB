@@ -16,7 +16,7 @@
 // uses a normalized remap table (more scalar independent).
 //
 //*************************************************************************
-// $Id: ossimTableRemapper.cpp 11911 2007-10-28 18:21:41Z dburken $
+// $Id: ossimTableRemapper.cpp 13883 2008-11-19 14:21:16Z gpotts $
 
 #include <ossim/imaging/ossimTableRemapper.h>
 #include <ossim/base/ossimTrace.h>
@@ -35,20 +35,18 @@ ossimTableRemapper::ossimTableRemapper()
       ossimImageSourceFilter(),  // base class
       theTile(0),
       theTmpTile(0),
-      theTable(0),
       theNormBuf(0),
       theTableBinCount(0),
       theTableBandCount(0),
       theTableType(ossimTableRemapper::UKNOWN),
       theInputScalarType(OSSIM_SCALAR_UNKNOWN),
-      theOutputScalarType(OSSIM_SCALAR_UNKNOWN),
-      theTableOwnerFlag(true)
+      theOutputScalarType(OSSIM_SCALAR_UNKNOWN)
 {
    //***
    // Set the base class "theEnableFlag" to off since no adjustments have been
    // made yet.
    //***
-   disableSource();
+   //disableSource();
 }
 
 ossimTableRemapper::~ossimTableRemapper()
@@ -62,11 +60,6 @@ void ossimTableRemapper::destroy()
    {
       delete [] theNormBuf;
       theNormBuf = 0;
-   }
-   if (theTableOwnerFlag && theTable)
-   {
-      delete [] theTable;
-      theTable = 0;
    }
    theTmpTile = 0;
    theTile    = 0;
@@ -150,69 +143,54 @@ void ossimTableRemapper::allocate(const ossimIrect& rect)
 }
 
 ossimRefPtr<ossimImageData> ossimTableRemapper::getTile(
-   const ossimIrect& tile_rect,
-   ossim_uint32 resLevel)
+   const ossimIrect& tile_rect, ossim_uint32 resLevel)
 {
-   if(!theInputConnection)
+   ossimRefPtr<ossimImageData> result = 0;
+   
+   if(theInputConnection)
    {
-      return ossimRefPtr<ossimImageData>();
-   }
+      // Fetch tile from pointer from the input source.
+      result = theInputConnection->getTile(tile_rect, resLevel);
+      if (theEnableFlag&&result.valid())
+      {  
+         // Get its status of the input tile.
+         ossimDataObjectStatus tile_status = result->getDataObjectStatus();
+         
+         // Check for remap bypass:
+         if ( (tile_status != OSSIM_NULL) &&
+              (tile_status != OSSIM_EMPTY) && theTable.size() )
+         {
 
-   // Fetch tile from pointer from the input source.
-   ossimRefPtr<ossimImageData> inputTile =
-      theInputConnection->getTile(tile_rect, resLevel);
-
-   if (!inputTile.valid())  // Just in case...
-   {
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << "ossimTableRemapper::getTile ERROR:"
-            << "\nReceived null pointer to tile from input source!"
-            << "\nReturning blank tile.\n";
+            // OK we have an input tile... and it's not null or empty.
+            if(!theTile)
+            {
+               allocate(tile_rect);
+            }
+            if (theTile.valid())
+            {
+               theTile->setImageRectangle(tile_rect);
+               if(theTmpTile.valid()) // not mandatory for all modes.
+               {
+                  theTmpTile->setImageRectangle(tile_rect);
+               }   
+               // Think things are good.  Do the real work...
+               if (theTableType == ossimTableRemapper::NATIVE)
+               {
+                  // Most efficient case...
+                  remapFromNativeTable(result);
+               }
+               else
+               {
+                  remapFromNormalizedTable(result);
+               }
+              
+               theTile->validate();
+               result = theTile;
+            }
+         }
       }
-      return inputTile;
    }
-
-   // Get its status.
-   ossimDataObjectStatus tile_status = inputTile->getDataObjectStatus();
-
-   // Check for remap bypass:
-   if ( !theEnableFlag ||
-        tile_status == OSSIM_NULL ||
-        tile_status == OSSIM_EMPTY )
-   {
-      return inputTile;
-   }
-
-   // OK we have an input tile... and it's not null or empty.
-
-   // Check for first time through or size or band change.
-   if ( !theTile ||  
-        tile_rect.height() != theTile->getHeight() ||
-        tile_rect.width()  != theTile->getWidth()  ||
-        inputTile->getNumberOfBands() != theTile->getNumberOfBands())
-   {
-      allocate(tile_rect);
-   }
-
-   // Set the origin of the output tile.
-   theTile->setImageRectangle(tile_rect);
-   
-   // Think things are good.  Do the real work...
-   if (theTableType == ossimTableRemapper::NATIVE)
-   {
-      // Most efficient case...
-      remapFromNativeTable(inputTile);
-   }
-   else
-   {
-      remapFromNormalizedTable(inputTile);
-   }
-   
-   theTile->validate();
-
-   return theTile;
+   return result;
 }
 
 void ossimTableRemapper::remapFromNativeTable(
@@ -220,7 +198,7 @@ void ossimTableRemapper::remapFromNativeTable(
 {
    switch (theOutputScalarType)
    {
-      case OSSIM_UCHAR:
+      case OSSIM_UINT8:
       {
          remapFromNativeTable(ossim_uint8(0), inputTile);
          break;
@@ -282,8 +260,8 @@ template <class T> void ossimTableRemapper::remapFromNativeTable(
    const ossim_uint32 BAND_OFFSET =
       (theTableBandCount != 1) ? theTableBinCount: 0;
 
-   const T* rt = reinterpret_cast<T*>(theTable); // remap table (rt)
-   ossimRefPtr<ossimImageData> id = NULL;
+   const T* rt = reinterpret_cast<T*>(&theTable.front()); // remap table (rt)
+   ossimRefPtr<ossimImageData> id;
    if (theInputScalarType == theOutputScalarType)
    {
       id = theTile;
@@ -296,7 +274,7 @@ template <class T> void ossimTableRemapper::remapFromNativeTable(
    for (ossim_uint32 band = 0; band < BANDS; ++band)
    {
       const T NULL_PIX = static_cast<T>(id->getNullPix(band));
-      const T MIN_PIX  = static_cast<T>(id->getMinPix(band));
+      //const T MIN_PIX  = static_cast<T>(id->getMinPix(band));
 
       const T* s = static_cast<T*>(inputTile->getBuf(band)); // source (s)
       T*       d = static_cast<T*>(id->getBuf(band));   // destination (d)
@@ -310,22 +288,51 @@ template <class T> void ossimTableRemapper::remapFromNativeTable(
          T p = s[pixel];
          if (p == NULL_PIX)  // Null is not always zero (dted).
          {
-            p = 0;
+            d[pixel] = NULL_PIX;
+           // p = 0;
          }
          else
          {
-            p = (p+1-MIN_PIX);  // If min == 1 we want that to map to index 1.
+//         else
+//         {
+//            p = (p+1-MIN_PIX);  // If min == 1 we want that to map to index 1.
+//         }
+
+            ossim_uint32 table_index = static_cast<ossim_uint32>(p);
+            
+            //---
+            // If within range use to index the remap table; else, null.
+            // Note:
+            // There is no min, max range checking on value retrieved from table.
+            // Range checking should be performed when the table is built.
+            //---
+            if((table_index >=0) && (table_index < theTableBinCount))
+            {
+               d[pixel] = rt[table_index];
+            }
+            else if(table_index < 0)
+            {
+               if(theTableBinCount > 1)
+               {
+                  d[pixel] = rt[1];
+               }
+               else
+               {
+                  d[pixel] = table_index;
+               }
+            }
+            else
+            {
+               if(theTableBinCount>0)
+               {
+                  d[pixel] = rt[theTableBinCount-1];
+               }
+               else
+               {
+                  d[pixel] = table_index;
+              }
+            }
          }
-
-         ossim_uint32 table_index = static_cast<ossim_uint32>(p);
-
-         //---
-         // If within range use to index the remap table; else, null.
-         // Note:
-         // There is no min, max range checking on value retrieved from table.
-         // Range checking should be performed when the table is built.
-         //---
-         d[pixel] =(table_index < theTableBinCount) ? rt[table_index] : NULL_PIX;
       }
 
       rt += BAND_OFFSET; // Go to next band in the table.
@@ -363,10 +370,10 @@ void ossimTableRemapper::remapFromNormalizedTable(
    const ossim_uint32 BAND_OFFSET = (theTableBandCount == 1) ? 0 : PPB;
 
    // remap table (rt)
-   ossim_float64* rt = reinterpret_cast<ossim_float64*>(theTable); 
+   ossim_float64* rt = reinterpret_cast<ossim_float64*>(&theTable.front()); 
 
    ossim_float64* buf = theNormBuf;
-   
+   ossim_float64 p = 0.0;
    for (ossim_uint32 band = 0; band < BANDS; ++band)
    {
       for (ossim_uint32 pixel = 0; pixel < PPB; ++pixel)
@@ -375,12 +382,21 @@ void ossimTableRemapper::remapFromNormalizedTable(
          ossim_uint32 index
             = static_cast<ossim_uint32>(buf[pixel]*theTableBinCount+0.5);
 
-         // If within range use to index the remap table; else, null.
-         ossim_float64 p = (index < theTableBinCount) ? rt[index] : 0.0;
-
+         if((index < theTableBinCount) && (index >=0))
+         {
+            // If within range use to index the remap table; else, null.
+            p = (index < theTableBinCount) ? rt[index] : 0.0;
+         }
+         else if(index < 0)
+         {
+            p = 0.0;
+         }
+         else 
+         {
+            p = 1.0;
+         }
          // Range check (in case table bad) and assign to destination pixel.
-         buf[pixel]
-            = (p >= 0.0) ? ( (p <=1.0) ? p : 1) : 0.0;
+         buf[pixel] = (p >= 0.0) ? ( (p <=1.0) ? p : 1) : 0.0;
       }
 
       // Go to next band.
@@ -402,12 +418,11 @@ ossimScalarType ossimTableRemapper::getOutputScalarType() const
    return ossimImageSourceFilter::getOutputScalarType();
 }
 
-void ossimTableRemapper::setTable(ossim_uint8* table,
+void ossimTableRemapper::setTable(const std::vector<ossim_uint8>& table,
                                   ossim_uint32 table_bin_count,
                                   ossim_uint32 table_band_count,
                                   RemapTableType table_type,
-                                  ossimScalarType output_scalar_type,
-                                  bool own_table)
+                                  ossimScalarType output_scalar_type)
 {
    // Start with a clean slate...
    destroy();
@@ -417,11 +432,6 @@ void ossimTableRemapper::setTable(ossim_uint8* table,
    theTableBandCount   = table_band_count;
    theTableType        = table_type;
    theOutputScalarType = output_scalar_type;
-
-   if (theInputConnection)
-   {
-      theEnableFlag = true;
-   }
 }
 
 bool ossimTableRemapper::loadState(const ossimKeywordlist& kwl,
@@ -463,7 +473,6 @@ ostream& ossimTableRemapper::print(ostream& os) const
       << "\ntheTableType:        " << TABLE_TYPE[theTableType]
       << "\ntheInputScalarType:  " << (*sl)[theInputScalarType]
       << "\ntheOutputScalarType: " << (*sl)[theOutputScalarType]
-      << "\ntheTableOwnerFlag:   " << (theTableOwnerFlag ? "true" : "false")
       << endl;
    
    if (theTile.valid())
@@ -527,12 +536,12 @@ ostream& ossimTableRemapper::print(ostream& os) const
 template <class T> void ossimTableRemapper::dumpTable(T /*dummy*/,
                                                       ostream& os) const
 {
-   if (!theTable || !theTableBinCount || !theTableBandCount)
+   if (theTable.empty() || !theTableBinCount || !theTableBandCount)
    {
       return;
    }
 
-   T* table = reinterpret_cast<T*>(theTable);
+   const T* table = reinterpret_cast<const T*>(&theTable.front());
 
    ossim_uint32 table_index = 0;
    for (ossim_uint32 band = 0; band < theTableBandCount; ++band)
@@ -546,10 +555,6 @@ template <class T> void ossimTableRemapper::dumpTable(T /*dummy*/,
    }
 }
 
-void ossimTableRemapper::setTableOwnership(bool flag)
-{
-   theTableOwnerFlag = flag;
-}
 
 ostream& operator<<(ostream& os, const ossimTableRemapper& tr)
 {

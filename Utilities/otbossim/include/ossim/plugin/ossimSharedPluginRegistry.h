@@ -1,5 +1,6 @@
 #ifndef ossimSharedPluginRegistry_HEADER
 #define ossimSharedPluginRegistry_HEADER
+#include <iostream>
 #include <vector>
 #include <ossim/plugin/ossimSharedObjectBridge.h>
 #include <ossim/base/ossimFilename.h>
@@ -15,7 +16,7 @@ public:
 
    bool registerPlugin(const ossimFilename& filename, bool insertFrontFlag=false);
    bool unregisterPlugin(int idx);
-  bool unregisterPlugin(ossimPluginLibrary* plugin);
+   bool unregisterPlugin(ossimPluginLibrary* plugin);
    const ossimPluginLibrary* getPlugin(const ossimFilename& filename)const;
    ossimPluginLibrary* getPlugin(const ossimFilename& filename);
 
@@ -23,7 +24,7 @@ public:
    ossimPluginLibrary* getPlugin(ossim_uint32 idx);
    const ossimPluginLibrary* getPlugin(ossim_uint32 idx)const;
    ossim_uint32 getNumberOfPlugins()const;
-   
+
    /**
     * Checks if filename is already loaded to avoid duplication.
     * 
@@ -32,13 +33,15 @@ public:
     * @return true if any of the plugins match file name, false if not.
     */
    bool isLoaded(const ossimFilename& filename) const;
-
+   
+   void printAllPluginInformation(std::ostream& out);
+   
 protected:
-   ossimSharedPluginRegistry(){}
+   ossimSharedPluginRegistry();
    ossimSharedPluginRegistry(const ossimSharedPluginRegistry&){}
    void operator = (const ossimSharedPluginRegistry&){}
 
-   static ossimSharedPluginRegistry* theInstance;   
+   //static ossimSharedPluginRegistry* theInstance;   
    std::vector<ossimRefPtr<ossimPluginLibrary> > theLibraryList;
 };
 

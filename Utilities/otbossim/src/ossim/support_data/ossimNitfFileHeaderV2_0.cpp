@@ -7,14 +7,14 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_0.cpp 12988 2008-06-04 16:49:43Z gpotts $
+// $Id: ossimNitfFileHeaderV2_0.cpp 13953 2009-01-09 15:20:58Z gpotts $
 
 
 #include <sstream>
 #include <cstring> // for memset
 #include <iostream>
 #include <iomanip>
-
+#include <stdexcept>
 #include <ossim/support_data/ossimNitfCommon.h>
 #include <ossim/support_data/ossimNitfFileHeaderV2_0.h>
 #include <ossim/support_data/ossimNitfImageHeaderV2_0.h>
@@ -57,6 +57,32 @@ ossim_int32  ossimNitfImageInfoRecordV2_0::getImageLength()const
 ossim_int32  ossimNitfImageInfoRecordV2_0::getTotalLength()const
 {
    return (getHeaderLength() + getImageLength());
+}
+
+void ossimNitfImageInfoRecordV2_0::setSubheaderLength(ossim_uint32 length)
+{
+   ostringstream out;
+   
+   out << std::setw(6)
+   << std::setfill('0')
+   << std::setiosflags(ios::right)
+   << length;
+   
+   memcpy(theImageSubheaderLength, out.str().c_str(), 6);
+   theImageSubheaderLength[6] = '\0';
+}
+
+void ossimNitfImageInfoRecordV2_0::setImageLength(ossim_uint32 length)
+{
+   ostringstream out;
+   
+   out << std::setw(10)
+   << std::setfill('0')
+   << std::setiosflags(ios::right)
+   << length;
+   
+   memcpy(theImageLength, out.str().c_str(), 10);
+   theImageLength[10] = '\0';
 }
 
 std::ostream& operator <<(std::ostream& out,
@@ -229,9 +255,9 @@ void ossimNitfFileHeaderV2_0::parseStream(std::istream &in)
    in.read(theOriginatorsPhone, 18);
    theHeaderSize+=18;
    
-   in.read(theNitfFileLength, 12);
+   in.read(theFileLength, 12);
    theHeaderSize+=12;
-   in.read(theNitfHeaderLength, 6);
+   in.read(theHeaderLength, 6);
    theHeaderSize+=6;
    
    // image description group
@@ -344,7 +370,165 @@ void ossimNitfFileHeaderV2_0::parseStream(std::istream &in)
 
 void ossimNitfFileHeaderV2_0::writeStream(std::ostream &out)
 {
+   // identification and origination group
+   out.write(theFileTypeVersion, 9);
+   out.write(theComplexityLevel, 2);
+   out.write(theSystemType, 4);
+   out.write(theOriginatingStationId, 10);
+   out.write(theDateTime, 14);
+   out.write(theFileTitle, 80);
    
+   // read security group
+   out.write(theSecurityClassification, 1);
+   out.write(theCodewords, 40);
+   out.write(theControlAndHandling, 40);
+   out.write(theReleasingInstructions, 40);
+   out.write(theClassificationAuthority, 20);
+   out.write(theSecurityControlNumber, 20);
+   out.write(theSecurityDowngrade, 6);
+   if(ossimString(theSecurityDowngrade) == "999998")
+   {
+      out.write(theDowngradingEvent, 40);
+   }      
+   out.write(theCopyNumber, 5);
+   out.write(theNumberOfCopies, 5);
+   out.write(theEncryption, 1);
+   out.write(theOriginatorsName, 27);
+   out.write(theOriginatorsPhone, 18);
+   
+   out.write(theFileLength, 12);
+   out.write(theHeaderLength, 6);   
+   ossim_uint32 idx = 0;
+   {
+      ostringstream outString;
+      
+      
+      outString << std::setw(3)
+      << std::setfill('0')
+      << std::setiosflags(ios::right)
+      << theNitfImageInfoRecords.size();
+      
+      out.write(outString.str().c_str(), 3);
+      
+      for(idx = 0; idx < theNitfImageInfoRecords.size(); ++idx)
+      {
+         out.write(theNitfImageInfoRecords[idx].theImageSubheaderLength, 6);
+         out.write(theNitfImageInfoRecords[idx].theImageLength, 10);
+      }
+   }
+   {
+      ostringstream outString;
+      
+      outString << std::setw(3)
+      << std::setfill('0')
+      << std::setiosflags(ios::right)
+      << theNitfSymbolInfoRecords.size();
+      
+      out.write(outString.str().c_str(), 3);
+      
+      for(idx = 0; idx < theNitfSymbolInfoRecords.size(); ++idx)
+      {
+         out.write(theNitfSymbolInfoRecords[idx].theSymbolSubheaderLength, 4);
+         out.write(theNitfSymbolInfoRecords[idx].theSymbolLength, 6);
+      }
+   }
+   {
+      ostringstream outString;
+      
+      outString << std::setw(3)
+      << std::setfill('0')
+      << std::setiosflags(ios::right)
+      << theNitfLabelInfoRecords.size();
+      
+      out.write(outString.str().c_str(), 3);
+      
+      for(idx = 0; idx < theNitfLabelInfoRecords.size(); ++idx)
+      {
+         out.write(theNitfLabelInfoRecords[idx].theLabelSubheaderLength, 4);
+         out.write(theNitfLabelInfoRecords[idx].theLabelLength, 3);
+      }
+   }
+   {
+      ostringstream outString;
+      
+      outString << std::setw(3)
+      << std::setfill('0')
+      << std::setiosflags(ios::right)
+      << theNitfTextInfoRecords.size();
+      
+      out.write(outString.str().c_str(), 3);
+      
+      for(idx = 0; idx < theNitfTextInfoRecords.size(); ++idx)
+      {
+         out.write(theNitfTextInfoRecords[idx].theTextSubheaderLength, 4);
+         out.write(theNitfTextInfoRecords[idx].theTextLength, 5);
+      }
+   }
+   {
+      ostringstream outString;
+      
+      outString << std::setw(3)
+      << std::setfill('0')
+      << std::setiosflags(ios::right)
+      << theNitfDataExtSegInfoRecords.size();
+      
+      out.write(outString.str().c_str(), 3);
+      
+      for(idx = 0; idx < theNitfDataExtSegInfoRecords.size(); ++idx)
+      {
+         out.write(theNitfDataExtSegInfoRecords[idx].theDataExtSegSubheaderLength, 4);
+         out.write(theNitfDataExtSegInfoRecords[idx].theDataExtSegLength, 9);
+      }
+   }
+   {
+      ostringstream outString;
+      
+      outString << std::setw(3)
+      << std::setfill('0')
+      << std::setiosflags(ios::right)
+      << theNitfResExtSegInfoRecords.size();
+      
+      out.write(outString.str().c_str(), 3);
+      
+      for(idx = 0; idx < theNitfResExtSegInfoRecords.size(); ++idx)
+      {
+         out.write(theNitfResExtSegInfoRecords[idx].theResExtSegSubheaderLength, 4);
+         out.write(theNitfResExtSegInfoRecords[idx].theResExtSegLength, 7);
+      }
+   }
+   out.write(theUserDefinedHeaderDataLength, 5);
+   if(ossimString(theUserDefinedHeaderDataLength).toInt32() > 0)
+   {
+      out.write(theUserDefinedHeaderOverflow, 3);
+   }
+   ossim_uint32 totalLength = getTotalTagLength();
+   if(totalLength <= 99999)
+   {
+      std::ostringstream tempOut;
+      
+      tempOut << std::setw(5)
+      << std::setfill('0')
+      << std::setiosflags(ios::right)
+      << totalLength;
+      
+      memcpy(theExtendedHeaderDataLength, tempOut.str().c_str(), 5);
+      
+      out.write(theExtendedHeaderDataLength, 5);
+      
+      if(totalLength > 0)
+      {
+         ossim_uint32 i = 0;
+         
+         for(i = 0; i < theTagList.size(); ++i)
+         {
+            theTagList[i].writeStream(out);
+         }
+      }
+   }
+   else
+   {
+      ossimNotify(ossimNotifyLevel_WARN) << "WARNING ossimNitfFileHeaderV2_0::writeStream: Only support writing of total tag length < 99999" << std::endl;
+   }
 }
 
 std::ostream& ossimNitfFileHeaderV2_0::print(std::ostream& out)const
@@ -370,8 +554,8 @@ std::ostream& ossimNitfFileHeaderV2_0::print(std::ostream& out)const
        << std::setw(24) << "\nENCRYP:"   << theEncryption
        << std::setw(24) << "\nONAME:"    << theOriginatorsName
        << std::setw(24) << "\nOPHONE:"   << theOriginatorsPhone
-       << std::setw(24) << "\nFL:"       << theNitfFileLength
-       << std::setw(24) << "\nHL:"       << theNitfHeaderLength
+       << std::setw(24) << "\nFL:"       << theFileLength
+       << std::setw(24) << "\nHL:"       << theHeaderLength
        << std::setw(24) << "\nNUMI:"     << theNumberOfImageInfoRecords;
 
    ossim_uint32 index;
@@ -512,6 +696,18 @@ ossimDrect ossimNitfFileHeaderV2_0::getImageRect()const
    return theImageRect;
 }
 
+void ossimNitfFileHeaderV2_0::addImageInfoRecord(const ossimNitfImageInfoRecordV2_0& recordInfo)
+{
+   theNitfImageInfoRecords.push_back(recordInfo);
+   
+   setNumberOfImageInfoRecords(theNitfImageInfoRecords.size());
+}
+
+void ossimNitfFileHeaderV2_0::replaceImageInfoRecord(ossim_uint32 i, const ossimNitfImageInfoRecordV2_0& recordInfo)
+{
+   theNitfImageInfoRecords[i]=recordInfo;
+}
+
 ossimNitfImageHeader*
 ossimNitfFileHeaderV2_0::getNewImageHeader(ossim_int32 imageNumber,
                                            std::istream& in)const
@@ -528,9 +724,11 @@ ossimNitfFileHeaderV2_0::getNewImageHeader(ossim_int32 imageNumber,
    }
    else
    {
+#if 0
       ossimNotify(ossimNotifyLevel_FATAL) << "ossimNitfFileHeaderV2_0::getNewImageHeader ERROR:"
                                           << "\nNo images in file or image number (" << imageNumber
                                           << ") is out of range!\n";
+#endif
    }
    
    return result;
@@ -791,7 +989,7 @@ ossim_int32 ossimNitfFileHeaderV2_0::getHeaderSize()const
 
 ossim_int32 ossimNitfFileHeaderV2_0::getFileSize()const
 {
-   ossimString temp = theNitfFileLength;
+   ossimString temp = theFileLength;
    if(temp == "999999999999")
    {
       return -1;
@@ -832,7 +1030,7 @@ void ossimNitfFileHeaderV2_0::clearFields()
    theNitfResExtSegInfoRecords.clear();
    
    theFilename = "";
-   memset(theFileTypeVersion, ' ', 9);
+   memcpy(theFileTypeVersion, "NITF02.00", 9);
    memset(theComplexityLevel, ' ', 2);
    memset(theSystemType, ' ', 4);
    memset(theOriginatingStationId, ' ', 10);
@@ -851,17 +1049,17 @@ void ossimNitfFileHeaderV2_0::clearFields()
    memset(theEncryption, ' ', 1);
    memset(theOriginatorsName, ' ', 27);
    memset(theOriginatorsPhone, ' ', 18);
-   memset(theNitfFileLength, ' ', 12);
-   memset(theNitfHeaderLength, ' ', 6);
+   memset(theFileLength, ' ', 12);
+   memset(theHeaderLength, ' ', 6);
    memset(theNumberOfImageInfoRecords, ' ', 3);
    memset(theNumberOfSymbolInfoRecords, ' ', 3);
    memset(theNumberOfLabelInfoRecords, ' ', 3);
    memset(theNumberOfTextFileInfoRecords, ' ', 3);
    memset(theNumberOfDataExtSegInfoRecords, ' ', 3);
    memset(theNumberOfResExtSegInfoRecords, ' ', 3);
-   memset(theUserDefinedHeaderDataLength, ' ', 5);
+   memset(theUserDefinedHeaderDataLength, '0', 5);
    memset(theUserDefinedHeaderOverflow, ' ', 3);
-   memset(theExtendedHeaderDataLength, ' ', 5);
+   memset(theExtendedHeaderDataLength, '0', 5);
    memset(theExtendedHeaderOverflow, ' ', 3);
    
    theFileTypeVersion[9] = '\0';
@@ -883,8 +1081,8 @@ void ossimNitfFileHeaderV2_0::clearFields()
    theEncryption[1] = '\0';
    theOriginatorsName[27] = '\0';
    theOriginatorsPhone[18] = '\0';
-   theNitfFileLength[12]  = '\0';
-   theNitfHeaderLength[6] = '\0';
+   theFileLength[12]  = '\0';
+   theHeaderLength[6] = '\0';
    theNumberOfImageInfoRecords[3] = '\0';
    theNumberOfSymbolInfoRecords[3] = '\0';
    theNumberOfLabelInfoRecords[3] = '\0';
@@ -896,6 +1094,31 @@ void ossimNitfFileHeaderV2_0::clearFields()
    theExtendedHeaderDataLength[5] = '\0';
    theExtendedHeaderOverflow[3] = '\0';
    theHeaderSize = 0;
+}
+
+void ossimNitfFileHeaderV2_0::setNumberOfImageInfoRecords(ossim_uint64 num)
+{
+   if (num < 1000)
+   {
+      ostringstream out;
+      
+      out << std::setw(3)
+      << std::setfill('0')
+      << std::setiosflags(ios::right)
+      << num;
+      
+      memcpy(theNumberOfImageInfoRecords, out.str().c_str(), 3);
+   }
+   else
+   {
+      std::string s = "ossimNitfFileHeaderV2_0::setNumberOfImageInfoRecords:";
+      s += " ERROR\nExceeded max image info number of 999!";
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
+      }
+      throw std::out_of_range(s);
+   }
 }
 
 void ossimNitfFileHeaderV2_0::readImageInfoRecords(std::istream &in)
@@ -1073,6 +1296,30 @@ void ossimNitfFileHeaderV2_0::setSecurityDowngrade(const ossimString& securityDo
 void ossimNitfFileHeaderV2_0::setDowngradingEvent(const ossimString& downgradeEvent)
 {
    ossimNitfCommon::setField(theDowngradingEvent, downgradeEvent, 40);
+}
+
+void ossimNitfFileHeaderV2_0::setFileLength(ossim_uint64 fileLength)
+{
+   ostringstream out;
+   
+   out << std::setw(12)
+   << std::setfill('0')
+   << std::setiosflags(ios::right)
+   << fileLength;
+   
+   memcpy(theFileLength, out.str().c_str(), 12);
+}
+
+void ossimNitfFileHeaderV2_0::setHeaderLength(ossim_uint64 headerLength)
+{
+   ostringstream out;
+   
+   out << std::setw(6)
+   << std::setfill('0')
+   << std::setiosflags(ios::right)
+   << headerLength;
+   
+   memcpy(theHeaderLength, out.str().c_str(), 6);
 }
 
 ossimString ossimNitfFileHeaderV2_0::getComplianceLevel()const

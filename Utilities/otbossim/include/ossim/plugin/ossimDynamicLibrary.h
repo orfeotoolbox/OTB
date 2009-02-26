@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimDynamicLibrary.h 12319 2008-01-16 19:55:24Z gpotts $
+// $Id: ossimDynamicLibrary.h 13600 2008-09-24 15:11:44Z gpotts $
 #ifndef ossimDynamicLibrary_HEADER
 #define ossimDynamicLibrary_HEADER
 
@@ -20,11 +20,8 @@
 
 #if defined(_WIN32) || defined(__WIN32__)
 #include <windows.h>
-#elif HAVE_DLFCN_H
+#else 
 #include <dlfcn.h>
-#else
-#define OSSIM_DYNAMIC_DISABLED
-// #error "dynamic loading interface is unsupported on this platform"
 #endif
 
 class ossimDynamicLibrary : public ossimReferenced

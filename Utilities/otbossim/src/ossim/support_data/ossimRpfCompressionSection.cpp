@@ -52,8 +52,8 @@ const ossimRpfCompressionOffsetTableData& ossimRpfCompressionOffsetTableData::op
    {
       if(theData)
       {
-         delete theData;
-         theData = NULL;
+         delete [] theData;
+         theData = 0;
       }
 
       if(rhs.theData)
@@ -88,8 +88,8 @@ ossimRpfCompressionOffsetTableData::~ossimRpfCompressionOffsetTableData()
 {
    if(theData)
    {
-      delete theData;
-      theData = NULL;
+      delete [] theData;
+      theData = 0;
    }
 }
 

@@ -7,7 +7,7 @@
 //
 //
 //*************************************************************************
-// $Id: ossimEvent.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimEvent.h 13362 2008-08-01 14:02:32Z gpotts $
 #ifndef ossimEvent_HEADER
 #define ossimEvent_HEADER
 #include <ossim/base/ossimEventIds.h>
@@ -16,7 +16,12 @@
 class OSSIMDLLEXPORT ossimEvent : public ossimObject
 {
 public:
-
+   enum PropagationType
+   {
+      PROPAGATION_NONE = 0,
+      PROPAGATION_INPUT = 1,
+      PROPAGATION_OUTPUT = 2
+   };
    /**
     * @param object The object associated with the event if any.
     *
@@ -34,15 +39,27 @@ public:
    void setConsumedFlag(bool flag=true);
    void consume();
 
+   /**
+    * This is the originating object that originally 
+    * produced the event.
+    */
    const ossimObject* getObject()const;
    ossimObject*       getObject();
+   const ossimObject* getCurrentObject()const;
+   ossimObject*       getCurrentObject();
 
    void setObject(ossimObject* object);
+   void setCurrentObject(ossimObject* object);
 
+   void setPropagationType(PropagationType type);
+   bool isPropagatingToOutputs()const;
+   bool isPropagatingToInputs()const;
 protected:
    ossimObject* theObject;
+   ossimObject* theCurrentObject;
    long         theId;
    bool         theIsConsumedFlag;
+   PropagationType thePropagationType;
 
 TYPE_DATA
 };

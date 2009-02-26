@@ -8,7 +8,7 @@
 // Description: This class parses a DEM header.
 //
 //********************************************************************
-// $Id: ossimDemHeader.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimDemHeader.cpp 13694 2008-10-08 20:16:02Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -590,18 +590,34 @@ bool ossimDemHeader::getImageGeometry(ossimKeywordlist& kwl,
 
    if (getGroundRefSysCode() == 0) // Geographic.
    {
+      // ESH 10/2008 -- The Dem ground units can be either radians or 
+      // arc seconds, so we have to convert parameters in these units 
+      // to degrees which is what OSSIM is assuming.
+      bool bIsArcSecs = (getGroundRefSysUnits() == 3) ? true : false;
+      bool bIsRadians = (getGroundRefSysUnits() == 0) ? true : false;
+
+      double convertFactor = 1.0;
+      if ( bIsArcSecs == true )
+      {
+         convertFactor = 1.0 / 3600;
+      }
+      else if ( bIsRadians == true )
+      {
+         convertFactor = 180.0 / M_PI;
+      }
+
       kwl.add(prefix,
               ossimKeywordNames::TIE_POINT_LON_KW,
-              tieX);
+              (tieX * convertFactor) );
       kwl.add(prefix,
               ossimKeywordNames::TIE_POINT_LAT_KW,
-              tieY);
+              (tieY * convertFactor) );
       kwl.add(prefix,
               ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LON,
-              scaleX);
+              (scaleX * convertFactor) );
       kwl.add(prefix,
               ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LAT,
-              scaleY);
+              (scaleY * convertFactor) );
    }
    else if (getGroundRefSysCode() == 1) // UTM
    {

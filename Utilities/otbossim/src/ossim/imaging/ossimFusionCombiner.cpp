@@ -8,7 +8,7 @@
 // Description: implementation for base fusion
 //
 //*************************************************************************
-// $Id: ossimFusionCombiner.cpp 9282 2006-07-17 14:50:54Z gpotts $
+// $Id: ossimFusionCombiner.cpp 13312 2008-07-27 01:26:52Z gpotts $
 
 #include <ossim/imaging/ossimFusionCombiner.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
@@ -69,7 +69,7 @@ bool ossimFusionCombiner::canConnectMyInputTo(ossim_int32 inputIndex,
 					      const ossimConnectableObject* object)const
 {
   return ((inputIndex<2)&&
-	  (PTR_CAST(ossimImageSourceInterface, object)||!object));
+	  (PTR_CAST(ossimImageSource, object)||!object));
 }
 
 ossimScalarType ossimFusionCombiner::getOutputScalarType() const
@@ -169,14 +169,14 @@ void ossimFusionCombiner::initialize()
 {
    ossimImageCombiner::initialize();
    
-   theInputConnection     = PTR_CAST(ossimImageSourceInterface, getInput(0));
-   theIntensityConnection = PTR_CAST(ossimImageSourceInterface, getInput(1));
+   theInputConnection     = PTR_CAST(ossimImageSource, getInput(0));
+   theIntensityConnection = PTR_CAST(ossimImageSource, getInput(1));
 
    if(getInput(0)&&getInput(1))
    {
-      ossimImageSourceInterface* temp  = PTR_CAST(ossimImageSourceInterface,
+      ossimImageSource* temp  = PTR_CAST(ossimImageSource,
                                                   getInput(0));
-      ossimImageSourceInterface* temp2 = PTR_CAST(ossimImageSourceInterface,
+      ossimImageSource* temp2 = PTR_CAST(ossimImageSource,
                                                   getInput(1));
 
       if(temp&&temp2)
@@ -184,9 +184,9 @@ void ossimFusionCombiner::initialize()
          if((temp->getNumberOfOutputBands()==1)&&
             (temp2->getNumberOfOutputBands()!=1))
          {
-            theIntensityConnection = PTR_CAST(ossimImageSourceInterface,
+            theIntensityConnection = PTR_CAST(ossimImageSource,
                                               getInput(0));
-            theInputConnection     = PTR_CAST(ossimImageSourceInterface,
+            theInputConnection     = PTR_CAST(ossimImageSource,
                                               getInput(1));
          }
       }

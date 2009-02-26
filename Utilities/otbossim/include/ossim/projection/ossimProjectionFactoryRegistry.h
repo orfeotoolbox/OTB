@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimProjectionFactoryRegistry.h 12081 2007-11-26 21:44:18Z dburken $
+// $Id: ossimProjectionFactoryRegistry.h 13508 2008-08-27 15:51:38Z gpotts $
 #ifndef ossimProjectionFactoryRegistry_HEADER
 #define ossimProjectionFactoryRegistry_HEADER
 #include <ossim/base/ossimString.h>
@@ -69,7 +69,6 @@ protected:
    ossimProjectionFactoryRegistry(const ossimProjectionFactoryRegistry& rhs);
    void operator = (const ossimProjectionFactoryRegistry&);
 
-   static ossimProjectionFactoryRegistry*   theInstance;
    std::vector<ossimProjectionFactoryBase*> theFactoryList;
 
    void initializeDefaults();

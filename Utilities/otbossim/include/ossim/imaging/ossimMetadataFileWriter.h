@@ -8,7 +8,7 @@
 // Author:  Kenneth Melero (kmelero@sanz.com)
 //
 //*******************************************************************
-//  $Id: ossimMetadataFileWriter.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimMetadataFileWriter.h 13312 2008-07-27 01:26:52Z gpotts $
 
 #ifndef ossimMetadataFileWriter_H
 #define ossimMetadataFileWriter_H
@@ -22,7 +22,7 @@
 #include <ossim/base/ossimObjectEvents.h>
 #include <ossim/base/ossimProcessProgressEvent.h>
 
-class ossimImageSourceInterface;
+class ossimImageSource;
 
 /**
  * ossimMetadataFileWriter
@@ -165,7 +165,7 @@ protected:
     */
    virtual bool writeFile() = 0;
 
-   ossimImageSourceInterface* theInputConnection;
+   ossimImageSource* theInputConnection;
    ossimFilename              theFilename;
    ossimPixelType             thePixelType;
    ossimIrect                 theAreaOfInterest;

@@ -9,7 +9,7 @@
 // Filter to toggle pixel values.
 //
 //*************************************************************************
-// $Id: ossimPixelFlipper.cpp 12983 2008-06-04 01:15:08Z dburken $
+// $Id: ossimPixelFlipper.cpp 13767 2008-10-22 19:31:51Z gpotts $
 
 #include <cstdlib>
 #include <ossim/imaging/ossimPixelFlipper.h>
@@ -31,7 +31,7 @@ static const char REPLACEMENT_MODE_KW[]  = "replacement_mode";
 static const char CLIP_MODE_KW[]  = "clip_mode";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimPixelFlipper.cpp 12983 2008-06-04 01:15:08Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimPixelFlipper.cpp 13767 2008-10-22 19:31:51Z gpotts $";
 #endif
 
 ossimPixelFlipper::ossimPixelFlipper(ossimObject* owner)
@@ -180,6 +180,7 @@ void ossimPixelFlipper::flipPixels(T dummy,
          {
             if(!rect.intersects(theBoundingRects[resLevel]))
             {
+               delete [] buf;
                return;
             }
             else
@@ -202,6 +203,7 @@ void ossimPixelFlipper::flipPixels(T dummy,
                (!lrFlag)&&
                (!llFlag))
             {
+               delete [] buf;
                return; // none of the tile is inside so return
             }
             else

@@ -16,7 +16,7 @@
 //   24Apr2001  Oscar Kramer
 //              Initial coding.
 //*****************************************************************************
-// $Id: ossimInit.cpp 13100 2008-07-01 17:42:50Z dburken $
+// $Id: ossimInit.cpp 13830 2008-11-02 18:02:03Z dburken $
 
 
 #include <ossim/init/ossimInit.h>
@@ -107,13 +107,6 @@ void ossimInit::addOptions(ossimArgumentParser& parser)
  *****************************************************************************/
 void ossimInit::initialize(int& argc, char** argv)
 {
-   if (traceExec())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG ossimInit::initialize(argc, argv): entering..."
-         << std::endl;
-   }
-
    if(theInitializedFlag)
    {
       if (traceDebug())
@@ -144,23 +137,16 @@ void ossimInit::initialize(int& argc, char** argv)
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "ossim preferences file: "
          << theInstance->thePreferences->getPreferencesFilename()
+         << "\nVersion: " << version()
+         << "\nossimInit::initialize(argc, argv) leaving..."
          << std::endl;
    }
-   
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG)
-      << "DEBUG ossimInit::initialize(argc, argv): leaving..." << std::endl;
 
    theInitializedFlag = true;
-   return;
 }
 
 void ossimInit::initialize(ossimArgumentParser& parser)
 {
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-      << "DEBUG ossimInit::initialize(parser): entering..." << endl;
-   }
    if(theInitializedFlag)
    {
       if (traceDebug())
@@ -198,7 +184,8 @@ void ossimInit::initialize(ossimArgumentParser& parser)
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "ossim preferences file: "
          << theInstance->thePreferences->getPreferencesFilename()
-         << "\nDEBUG ossimInit::initialize(parser): leaving..." << endl;
+         << "\nVersion: " << version()
+         << "\nossimInit::initialize(parser): leaving..." << std::endl;
    }
    
    theInitializedFlag = true;
@@ -207,8 +194,6 @@ void ossimInit::initialize(ossimArgumentParser& parser)
 
 void ossimInit::initialize()
 {
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG)
-      << "DEBUG ossimInit::initialize(): entering..." << std::endl;
    if(theInitializedFlag)
    {
       if (traceDebug())
@@ -234,9 +219,18 @@ void ossimInit::initialize()
    {
       theInstance->initializePlugins();
    }
-   theInitializedFlag = true;
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossim preferences file: "
+         << theInstance->thePreferences->getPreferencesFilename()
+         << "\nVersion: " << version()
+         << "\nossimInit::initialize() leaving..."
+         << std::endl;
+   } 
    
-   return;
+   theInitializedFlag = true;
 }
 
 void ossimInit::finalize()
@@ -308,7 +302,7 @@ void ossimInit::loadPlugins(const ossimFilename& plugin)
 void ossimInit::parseOptions(ossimArgumentParser& parser)
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG)
-      << "DEBUG ossimInit::parseOptions: entering..." << endl;
+      << "DEBUG ossimInit::parseOptions: entering..." << std::endl;
    
    std::string tempString;
    ossimArgumentParser::ossimParameter stringParameter(tempString);

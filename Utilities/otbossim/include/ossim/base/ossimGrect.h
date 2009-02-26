@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGrect.h 11955 2007-10-31 16:10:22Z gpotts $
+// $Id: ossimGrect.h 13357 2008-07-31 12:45:29Z gpotts $
 #ifndef ossimGrect_HEADER
 #define ossimGrect_HEADER
 #include <vector>
@@ -64,10 +64,10 @@ public:
     * Takes the upper left and lower right ground
     * points
     */
-   ossimGrect(const double ulLat,
-              const double ulLon,
-              const double lrLat,
-              const double lrLon,
+   ossimGrect(double ulLat,
+              double ulLon,
+              double lrLat,
+              double lrLon,
               const ossimDatum* aDatum=ossimDatumFactory::instance()->wgs84())
       : 
          theUlCorner(ulLat, ulLon,0, aDatum),

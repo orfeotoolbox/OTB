@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimFeatherMosaic.cpp 12912 2008-05-28 15:05:54Z gpotts $
+// $Id: ossimFeatherMosaic.cpp 13312 2008-07-27 01:26:52Z gpotts $
 
 #include <ossim/imaging/ossimFeatherMosaic.h>
 #include <ossim/base/ossimDpt.h>
@@ -376,7 +376,7 @@ void ossimFeatherMosaic::initialize()
    for(long index = 0; index < theFeatherInfoSize; ++ index)
    {
       validVertices.clear();
-      ossimImageSourceInterface* temp = PTR_CAST(ossimImageSourceInterface, getInput(index));
+      ossimImageSource* temp = PTR_CAST(ossimImageSource, getInput(index));
       if(temp)
       {
          temp->getValidImageVertices(validVertices, OSSIM_CLOCKWISE_ORDER);

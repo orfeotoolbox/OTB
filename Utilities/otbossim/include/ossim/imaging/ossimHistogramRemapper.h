@@ -28,7 +28,7 @@
 //   but is provided for convenience.
 //   
 //*************************************************************************
-// $Id: ossimHistogramRemapper.h 12961 2008-06-03 13:20:35Z gpotts $
+// $Id: ossimHistogramRemapper.h 13912 2008-12-04 19:15:51Z gpotts $
 #ifndef ossimHistogramRemapper_HEADER
 #define ossimHistogramRemapper_HEADER
 
@@ -75,6 +75,9 @@ public:
     */
    void setStretchMode(StretchMode mode);
 
+   /**
+    * Stretch mode values can be linear_one_piece, linear_1std_from_mean, linear_2std_from_mean, linear_3std_from_mean, linear_auto_min_max
+    */
    void setStretchModeAsString(const ossimString& mode);
    
    /**
@@ -482,6 +485,10 @@ private:
     */
    void setupTable();
 
+   /**
+    * This set theBypassFlag.  This is an internally used flag to signal that
+    * there is nothing to do in this filter; hence, bypass.
+    */
    void verifyEnabled();
 
    /**
@@ -495,7 +502,6 @@ private:
    StretchMode                   theStretchMode;
    bool                          theDirtyFlag;
    ossimRefPtr<ossimMultiResLevelHistogram>  theHistogram;
-   ossim_uint32                  theTableSizeInBytes;
    vector<ossim_float64>         theNormalizedLowClipPoint;
    vector<ossim_float64>         theNormalizedHighClipPoint;
    vector<ossim_float64>         theMidPoint;
@@ -504,6 +510,8 @@ private:
 
    // Maps zero based band to histogram band.
    vector<ossim_uint32>          theBandList;
+   
+   bool theByPassFlag;
    
    TYPE_DATA
 };

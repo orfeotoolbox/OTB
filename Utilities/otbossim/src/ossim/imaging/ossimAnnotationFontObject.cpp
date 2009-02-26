@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationFontObject.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimAnnotationFontObject.cpp 13964 2009-01-14 16:30:07Z gpotts $
 
 #include <ossim/imaging/ossimAnnotationFontObject.h>
 #include <ossim/font/ossimFontFactoryRegistry.h>
@@ -17,7 +17,7 @@ ossimAnnotationFontObject::ossimAnnotationFontObject()
    :ossimAnnotationObject(),
     theFont(ossimFontFactoryRegistry::instance()->getDefaultFont()),
     theOwnsFontFlag(false),
-    theCenterPosition(0,0),
+    thePosition(0,0),
     theString(""),
     theRotation(0.0),
     theHorizontalScale(0.0),
@@ -50,17 +50,21 @@ ossimAnnotationFontObject::ossimAnnotationFontObject(const ossimIpt& upperLeft,
     theVerticalShear(shear.y)
 {
    setFontInfo();
+   thePosition = upperLeft;
+   computeBoundingRect();
+#if 0
    if (theFont)
    {
       theFont->getBoundingBox(theBoundingRect);
    }
    theBoundingRect += upperLeft;
-   theCenterPosition = theBoundingRect.midPoint();
+   thePosition = theBoundingRect.ul();
+#endif
 }
 
 ossimAnnotationFontObject::ossimAnnotationFontObject(const ossimAnnotationFontObject& rhs)
    :ossimAnnotationObject(rhs),
-    theCenterPosition(rhs.theCenterPosition),
+    thePosition(rhs.thePosition),
     theString(rhs.theString),
     thePixelSize(rhs.thePixelSize),
     theRotation(rhs.theRotation),
@@ -70,9 +74,11 @@ ossimAnnotationFontObject::ossimAnnotationFontObject(const ossimAnnotationFontOb
     theVerticalShear(rhs.theVerticalShear),
     theBoundingRect(rhs.theBoundingRect)
 {
+   theOwnsFontFlag = false;
    if(rhs.theOwnsFontFlag&&theFont)
    {
       theFont = (ossimFont*)rhs.theFont->dup();
+      theOwnsFontFlag = true;
    }
    else
    {
@@ -143,7 +149,6 @@ void ossimAnnotationFontObject::draw(ossimRgbImage& anImage)const
          }
          
          theFont->getBufferRect(fontBufferRect);
-
          ossimIrect clipRect = boundingRect.clipToRect(fontBufferRect);
          
          long clipHeight = clipRect.height();
@@ -207,7 +212,7 @@ std::ostream& ossimAnnotationFontObject::print(std::ostream& out)const
           << "Style:           " << theFont->getStyleName()  << endl;
    }
    out << "String:             " << theString << endl
-       << "Center Position:    " << theCenterPosition << endl
+       << "Upper Left Position:    " << thePosition << endl
        << "Rotation:           " << theRotation << endl
        << "Horizontal shear:   " << theHorizontalShear << endl
        << "Vertical shear:     " << theVerticalShear << endl
@@ -231,8 +236,8 @@ void ossimAnnotationFontObject::computeBoundingRect()
       theFont->getBoundingBox(textRect);
       ossim_int32 w = textRect.width();
       ossim_int32 h = textRect.height();
-      ossim_int32 ulx = theCenterPosition.x - w/2;
-      ossim_int32 uly = theCenterPosition.y - h/2;
+      ossim_int32 ulx = thePosition.x;
+      ossim_int32 uly = thePosition.y;
       theBoundingRect = ossimIrect(ulx,
                                    uly,
                                    ulx + w - 1,
@@ -263,10 +268,20 @@ void ossimAnnotationFontObject::setFont(ossimFont* font,
    }
 }
 
-void ossimAnnotationFontObject::setPositionCenter(const ossimIpt& position)
+void ossimAnnotationFontObject::setCenterPosition(const ossimIpt& position)
 {
-   theCenterPosition = position;
-   computeBoundingRect();
+   ossimDpt pt = theBoundingRect.midPoint();
+   ossimIpt delta = position-pt;
+   theBoundingRect += delta;
+   thePosition = theBoundingRect.ul();
+}
+
+void ossimAnnotationFontObject::setUpperLeftPosition(const ossimIpt& position)
+{
+   ossimDpt pt = theBoundingRect.ul();
+   ossimIpt delta = position-pt;
+   theBoundingRect += delta;
+   thePosition = theBoundingRect.ul();
 }
 
 void ossimAnnotationFontObject::setFontInfo()const
@@ -315,8 +330,8 @@ void ossimAnnotationFontObject::setPointSize(const ossimIpt& size)
    {
       theFont->getBoundingBox(theBoundingRect);
    }
-   theBoundingRect += (theCenterPosition - theBoundingRect.midPoint());
-   theCenterPosition = theBoundingRect.midPoint();
+   theBoundingRect += (thePosition - theBoundingRect.ul());
+   thePosition = theBoundingRect.ul();         
 }
 
 void ossimAnnotationFontObject::setRotation(double rotation)
@@ -327,8 +342,8 @@ void ossimAnnotationFontObject::setRotation(double rotation)
    {
       theFont->getBoundingBox(theBoundingRect);
    }
-   theBoundingRect += (theCenterPosition - theBoundingRect.midPoint());
-   theCenterPosition = theBoundingRect.midPoint();         
+   theBoundingRect += (thePosition - theBoundingRect.ul());
+   thePosition = theBoundingRect.ul();         
 }
 
 void ossimAnnotationFontObject::setScale(const ossimDpt& scale)
@@ -340,8 +355,8 @@ void ossimAnnotationFontObject::setScale(const ossimDpt& scale)
    {
       theFont->getBoundingBox(theBoundingRect);
    }
-   theBoundingRect += (theCenterPosition - theBoundingRect.midPoint());
-   theCenterPosition = theBoundingRect.midPoint();         
+   theBoundingRect += (thePosition - theBoundingRect.ul());
+   thePosition = theBoundingRect.ul();         
 }
 
 void ossimAnnotationFontObject::setShear(const ossimDpt& shear)
@@ -353,8 +368,8 @@ void ossimAnnotationFontObject::setShear(const ossimDpt& shear)
    {
       theFont->getBoundingBox(theBoundingRect);
    }
-   theBoundingRect += (theCenterPosition - theBoundingRect.midPoint());
-   theCenterPosition = theBoundingRect.midPoint();                  
+   theBoundingRect += (thePosition - theBoundingRect.ul());
+   thePosition = theBoundingRect.ul();         
 }
 
 void ossimAnnotationFontObject::setGeometryInformation(const ossimFontInformation& info)
@@ -371,24 +386,18 @@ void ossimAnnotationFontObject::setGeometryInformation(const ossimFontInformatio
    {
       theFont->getBoundingBox(theBoundingRect);
    }
-   theBoundingRect += (theCenterPosition - theBoundingRect.midPoint());
-   theCenterPosition = theBoundingRect.midPoint();
+   theBoundingRect += (thePosition - theBoundingRect.ul());
+   thePosition = theBoundingRect.ul();         
 }
 
 void ossimAnnotationFontObject::applyScale(double x, double y)
 {
-   theCenterPosition.x = ossim::round<int>(theCenterPosition.x *x);
-   theCenterPosition.y = ossim::round<int>(theCenterPosition.x *y);
-   theHorizontalScale *= x;
-   theVerticalScale   *= y;
+   thePosition.x = ossim::round<int>(thePosition.x *x);
+   thePosition.y = ossim::round<int>(thePosition.y *y);
    
    setFontInfo();
-   if (theFont)
-   {
-      theFont->getBoundingBox(theBoundingRect);
-   }
-   theBoundingRect += (theCenterPosition - theBoundingRect.midPoint());
-   theCenterPosition = theBoundingRect.midPoint();
+   computeBoundingRect();
+
 }
 
 ossimObject* ossimAnnotationFontObject::dup()const

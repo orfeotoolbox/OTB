@@ -8,9 +8,10 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-// $Id: ossimIntensityAdjustmentFilter.cpp 11411 2007-07-27 13:53:51Z dburken $
+// $Id: ossimIntensityAdjustmentFilter.cpp 13330 2008-07-28 18:04:40Z dburken $
 #include <ossim/imaging/ossimIntensityAdjustmentFilter.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
+#include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimHsvVector.h>
 #include <ossim/base/ossimRgbVector.h>
 

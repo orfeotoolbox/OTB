@@ -5,7 +5,7 @@
 
     Licence: wxWidgets Licence
 
-    RCS-ID: $Id: booleng.cpp 9094 2006-06-13 19:12:40Z dburken $
+    RCS-ID: $Id: booleng.cpp 13795 2008-10-28 19:32:44Z gpotts $
 */
 
 #ifdef __GNUG__
@@ -23,12 +23,12 @@
 #include <ossim/kbool/graphlst.h>
 #include <iostream>
 
-B_INT bmin(B_INT const value1, B_INT const value2)
+B_INT bmin(B_INT value1, B_INT value2)
 {
 	return((value1 < value2) ? value1 : value2 );
 }
 
-B_INT bmax(B_INT const value1, B_INT const value2)
+B_INT bmax(B_INT value1, B_INT value2)
 {
 	return((value1 > value2) ? value1 : value2 );
 }
@@ -43,41 +43,24 @@ B_INT babs(B_INT a)
 //----------------- Bool_Engine_Error -------------------------------/
 //-------------------------------------------------------------------/
 
-Bool_Engine_Error::Bool_Engine_Error(char* message, char* header, int degree, int fatal)
+Bool_Engine_Error::Bool_Engine_Error(const char* message,
+                                     const char* header,
+                                     int degree,
+                                     int fatal)
 {
-	_message = new char[LINELENGTH];
-	_header  = new char[LINELENGTH];
-	if (message)
-		strcpy(_message, message);
-	else
-		strcpy(_message,"non specified");
-
-	if (header)
-		strcpy(_header, header);
-	else
-		strcpy(_header,"non specified");
-
-	_degree = degree;
-	_fatal = fatal;
+   _message = message;
+   _header  = header;
+   _degree = degree;
+   _fatal = fatal;
 
 }
 
 Bool_Engine_Error::Bool_Engine_Error(const Bool_Engine_Error& a)
 {
-	_message = new char[LINELENGTH];
-	_header  = new char[LINELENGTH];
-	if (a._message)
-		strcpy(_message, a._message);
-	else
-		strcpy(_message,"non specified");
-
-	if (a._header)
-		strcpy(_header, a._header);
-	else
-		strcpy(_header,"non specified");
-
-	_degree = a._degree;
-	_fatal = a._fatal;
+   _message = a._message;
+   _header  = a._header;
+   _degree = a._degree;
+   _fatal = a._fatal;
 
 }
 
@@ -123,38 +106,26 @@ Bool_Engine::Bool_Engine(const Bool_Engine& rhs)
 
 Bool_Engine_Error::~Bool_Engine_Error()
 {
-   strcpy(_message,"");
-   strcpy(_header,"");
-   if(_message)
-   {
-      delete _message;
-      _message = 0;
-   }
-   if(_header)
-   {
-      delete _header;
-      _header = 0;
-   }
 }
 
-char* Bool_Engine_Error::GetErrorMessage()
+const char* Bool_Engine_Error::GetErrorMessage()
 {
-	return _message;
+   return _message.c_str();
 }
 
-char* Bool_Engine_Error::GetHeaderMessage()
+const char* Bool_Engine_Error::GetHeaderMessage()
 {
-	return _header;
+   return _header.c_str();
 }
 
 int Bool_Engine_Error::GetErrorDegree()
 {
-	return _degree;
+   return _degree;
 }
 
 int Bool_Engine_Error::GetFatal()
 {
-	return _fatal;
+   return _fatal;
 }
 
 //-------------------------------------------------------------------/
@@ -233,19 +204,19 @@ void Bool_Engine::SetLog( bool OnOff )
 	}
 }
 
-void Bool_Engine::SetState( char* process )
+void Bool_Engine::SetState( const char* process )
 {
    Write_Log(process);
 }
 
-void Bool_Engine::error(char *text, char *title)
+void Bool_Engine::error(const char *text, const char *title)
 {
    Write_Log("FATAL ERROR: ", title);
    Write_Log("FATAL ERROR: ", text);
    throw Bool_Engine_Error(" Fatal Error", "Fatal Error", 9, 1);
 };
 
-void Bool_Engine::info(char *text, char *title)
+void Bool_Engine::info(const char *text, const char *title)
 {
    Write_Log("FATAL ERROR: ", title);
    Write_Log("FATAL ERROR: ", text);
@@ -681,7 +652,7 @@ kbEdgeType Bool_Engine::GetPolygonPointEdgeType()
 }
 
 
-void Bool_Engine::Write_Log(char *msg1)
+void Bool_Engine::Write_Log(const char *msg1)
 {
    if (m_logfile == NULL)
        return;
@@ -689,7 +660,7 @@ void Bool_Engine::Write_Log(char *msg1)
    fprintf(m_logfile,"%s \n",msg1);
 }
 
-void Bool_Engine::Write_Log(char *msg1, char*msg2)
+void Bool_Engine::Write_Log(const char *msg1, const char* msg2)
 {
    if (m_logfile == NULL)
        return;
@@ -697,7 +668,7 @@ void Bool_Engine::Write_Log(char *msg1, char*msg2)
    fprintf(m_logfile,"%s %s\n",msg1, msg2);
 }
 
-void Bool_Engine::Write_Log(char *fmt, double dval)
+void Bool_Engine::Write_Log(const char *fmt, double dval)
 {
    if (m_logfile == NULL)
        return;
@@ -705,7 +676,7 @@ void Bool_Engine::Write_Log(char *fmt, double dval)
    fprintf(m_logfile,fmt,dval);
 }
 
-void Bool_Engine::Write_Log(char *fmt, B_INT bval)
+void Bool_Engine::Write_Log(const char *fmt, B_INT bval)
 {
    if (m_logfile == NULL)
        return;

@@ -3,7 +3,7 @@
 // 
 // See LICENSE.txt file in the top level directory for more details.
 //----------------------------------------------------------------------------
-// $Id: ossimImageMetaDataWriterRegistry.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImageMetaDataWriterRegistry.h 13508 2008-08-27 15:51:38Z gpotts $
 
 #ifndef ossimImageMetaDataWriterRegistry_HEADER
 #define ossimImageMetaDataWriterRegistry_HEADER
@@ -86,7 +86,7 @@ protected:
    const ossimImageMetaDataWriterRegistry& operator=(
       const ossimImageMetaDataWriterRegistry &rhs);
 
-   static ossimImageMetaDataWriterRegistry* theInstance;
+  // static ossimImageMetaDataWriterRegistry* theInstance;
    std::vector<ossimImageMetaDataWriterFactoryBase*> theFactoryList;
 };
 

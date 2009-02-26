@@ -6,7 +6,7 @@
 
     Licence: wxWidgets Licence
 
-    RCS-ID: $Id: graph.cpp 9567 2006-09-14 18:02:56Z gpotts $
+    RCS-ID: $Id: graph.cpp 13795 2008-10-28 19:32:44Z gpotts $
 */
 
 // Grpah is the structure used to store polygons
@@ -831,7 +831,7 @@ void Graph::SetGroup(GroupType newgroup)
 
 
 // Set the number of the links to the same as newnr
-void Graph::SetNumber(const int newnr)
+void Graph::SetNumber(int newnr)
 {
    TDLI<KBoolLink> _LI=TDLI<KBoolLink>(_linklist);
 	_LI.tohead();

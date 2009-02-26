@@ -10,11 +10,11 @@
 // Description: A brief description of the contents of the file.
 //
 //*************************************************************************
-// $Id: ossimMaskFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimMaskFilter.cpp 13312 2008-07-27 01:26:52Z gpotts $
 
 #include <ossim/imaging/ossimMaskFilter.h>
 #include <ossim/imaging/ossimImageData.h>
-#include <ossim/imaging/ossimImageSourceInterface.h>
+#include <ossim/imaging/ossimImageSource.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/base/ossimNotifyContext.h>
 
@@ -70,12 +70,12 @@ ossimMaskFilter::~ossimMaskFilter()
 ossimRefPtr<ossimImageData> ossimMaskFilter::getTile(const ossimIrect& rect,
                                                      ossim_uint32 resLevel)
 {
-   ossimImageSourceInterface* imageSource = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* imageSource = PTR_CAST(ossimImageSource,
                                                      getInput(0));
    
    // we will check to see if it's a fileMaskSource
    //
-   ossimImageSourceInterface* maskSource = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* maskSource = PTR_CAST(ossimImageSource,
                                                     getInput(1));
    
    ossimRefPtr<ossimImageData> imageSourceData;
@@ -132,7 +132,7 @@ ossimRefPtr<ossimImageData> ossimMaskFilter::getTile(const ossimIrect& rect,
 bool ossimMaskFilter::canConnectMyInputTo(ossim_int32 index,
                                           const ossimConnectableObject* object)const
 {
-   return (PTR_CAST(ossimImageSourceInterface, object)!= NULL);
+   return (PTR_CAST(ossimImageSource, object)!= NULL);
 }
 
 void ossimMaskFilter::initialize()
@@ -603,7 +603,7 @@ ossimIrect ossimMaskFilter::getBoundingRect(ossim_uint32 resLevel)const
    ossimIrect result;
    result.makeNan();
 
-   ossimImageSourceInterface* imageSource = PTR_CAST(ossimImageSourceInterface, getInput(0));
+   ossimImageSource* imageSource = PTR_CAST(ossimImageSource, getInput(0));
    if(imageSource)
    {
       result = imageSource->getBoundingRect(resLevel);
@@ -676,7 +676,7 @@ bool ossimMaskFilter::saveState(ossimKeywordlist& kwl,
 void ossimMaskFilter::getDecimationFactor(ossim_uint32 resLevel,
                                           ossimDpt& result)const
 {
-   ossimImageSourceInterface* input = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* input = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(input)
    {
@@ -686,7 +686,7 @@ void ossimMaskFilter::getDecimationFactor(ossim_uint32 resLevel,
 
 void ossimMaskFilter::getDecimationFactors(vector<ossimDpt>& decimations)const
 {
-   ossimImageSourceInterface* input = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* input = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(input)
    {
@@ -696,7 +696,7 @@ void ossimMaskFilter::getDecimationFactors(vector<ossimDpt>& decimations)const
 
 ossim_uint32 ossimMaskFilter::getNumberOfDecimationLevels()const
 {
-   ossimImageSourceInterface* input = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* input = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(input)
    {
@@ -707,7 +707,7 @@ ossim_uint32 ossimMaskFilter::getNumberOfDecimationLevels()const
 
 ossim_uint32 ossimMaskFilter::getNumberOfOutputBands() const
 {
-   ossimImageSourceInterface* input = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* input = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(input)
    {
@@ -718,7 +718,7 @@ ossim_uint32 ossimMaskFilter::getNumberOfOutputBands() const
 
 ossimScalarType ossimMaskFilter::getOutputScalarType() const
 {
-   ossimImageSourceInterface* input = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* input = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(input)
    {
@@ -733,7 +733,7 @@ void ossimMaskFilter::getValidImageVertices(
    ossimVertexOrdering ordering,
    ossim_uint32 resLevel)const
 {
-   ossimImageSourceInterface* input = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* input = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(input)
    {
@@ -743,7 +743,7 @@ void ossimMaskFilter::getValidImageVertices(
 
 ossim_uint32 ossimMaskFilter::getTileWidth() const
 {
-   ossimImageSourceInterface* input = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* input = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(input)
    {
@@ -755,7 +755,7 @@ ossim_uint32 ossimMaskFilter::getTileWidth() const
 
 ossim_uint32 ossimMaskFilter::getTileHeight() const
 {
-   ossimImageSourceInterface* input = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* input = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(input)
    {
@@ -766,7 +766,7 @@ ossim_uint32 ossimMaskFilter::getTileHeight() const
 
 double ossimMaskFilter::getNullPixelValue(ossim_uint32 band)const
 {
-   ossimImageSourceInterface* input = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* input = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(input)
    {
@@ -777,7 +777,7 @@ double ossimMaskFilter::getNullPixelValue(ossim_uint32 band)const
 
 double ossimMaskFilter::getMinPixelValue(ossim_uint32 band)const
 {
-   ossimImageSourceInterface* input = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* input = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(input)
    {
@@ -788,7 +788,7 @@ double ossimMaskFilter::getMinPixelValue(ossim_uint32 band)const
 
 double ossimMaskFilter::getMaxPixelValue(ossim_uint32 band)const
 {
-   ossimImageSourceInterface* input = PTR_CAST(ossimImageSourceInterface,
+   ossimImageSource* input = PTR_CAST(ossimImageSource,
                                                getInput(0));
    if(input)
    {

@@ -8,7 +8,7 @@
 // 
 //
 //----------------------------------------------------------------------------
-// $Id: ossimGeneralRasterElevHandler.h 12874 2008-05-17 01:12:54Z gpotts $
+// $Id: ossimGeneralRasterElevHandler.h 13524 2008-09-02 16:22:15Z gpotts $
 #ifndef ossimGeneralRasterElevHandler_HEADER
 #define ossimGeneralRasterElevHandler_HEADER
 #include <list>
@@ -19,55 +19,65 @@
 #include <ossim/base/ossimDatum.h>
 #include <ossim/elevation/ossimElevCellHandler.h>
 #include <ossim/imaging/ossimGeneralRasterInfo.h>
-#include <OpenThreads/ReentrantMutex>
-
+#include <ossim/imaging/ossimImageHandlerRegistry.h>
+#include <ossim/imaging/ossimImageHandler.h>
+#include <ossim/imaging/ossimImageSource.h>
+#include <ossim/projection/ossimProjectionFactoryRegistry.h>
+#include <ossim/projection/ossimMapProjection.h>
+#include <ossim/projection/ossimImageViewTransform.h>
+#include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimDpt.h>
+#include <ossim/base/ossimGpt.h>
+class ossimProjection;
 /**
  * @class ossimGeneralRasterElevHandler Elevation source for an srtm file.
  */
-class OSSIM_DLL ossimGeneralRasterElevHandler : public ossimElevCellHandler
+class  OSSIM_DLL ossimGeneralRasterElevHandler : public ossimElevCellHandler
 {
 public:
-      class GeneralRasterInfo
-   {
-   public:
-      GeneralRasterInfo()
-         :thePostSpacing(0.0,0.0),
-         theNumberOfSamples(0),
-         theNumberOfLines(0),
+   class GeneralRasterInfo
+      {
+      public:
+         GeneralRasterInfo()
+         :theWidth(0),
+         theHeight(0),
          theNullHeightValue(ossim::nan()),
          theScalarType(OSSIM_SCALAR_UNKNOWN),
          theBytesPerRawLine(0),
-         theDatum(0)
-      {
-      }
-      GeneralRasterInfo(const  ossimGeneralRasterElevHandler::GeneralRasterInfo& src)
+         theDatum(0),
+         theProjection(0)
+         {
+         }
+         GeneralRasterInfo(const  ossimGeneralRasterElevHandler::GeneralRasterInfo& src)
          :theFilename(src.theFilename),
-         theBounds(src.theBounds),
-         thePostSpacing(src.thePostSpacing),
-         theUlGpt(src.theUlGpt),
-         theLrGpt(src.theLrGpt),
-         theNumberOfSamples(src.theNumberOfSamples),
-         theNumberOfLines(src.theNumberOfLines),
+         theImageRect(src.theImageRect),
+         theUl(src.theUl),
+         theLr(src.theLr),
+         theWidth(src.theWidth),
+         theHeight(src.theHeight),
+         theWgs84GroundRect(src.theWgs84GroundRect),
          theNullHeightValue(src.theNullHeightValue),
          theByteOrder(src.theByteOrder),
          theScalarType(src.theScalarType),
          theBytesPerRawLine(src.theBytesPerRawLine),
-         theDatum(src.theDatum)
-      {
-      }
-      ossimFilename     theFilename;
-      ossimDrect        theBounds;
-      ossimDpt          thePostSpacing;
-      ossimGpt          theUlGpt;
-      ossimGpt          theLrGpt;
-      ossim_int32       theNumberOfSamples;
-      ossim_int32       theNumberOfLines;
-      ossim_float64     theNullHeightValue;
-      ossimByteOrder    theByteOrder;
-      ossimScalarType   theScalarType;
-      ossim_uint32      theBytesPerRawLine;
-      const ossimDatum* theDatum; 
-   };
+         theDatum(src.theDatum),
+         theProjection(src.theProjection)
+         {
+         }
+         ossimFilename     theFilename;
+         ossimIrect        theImageRect;
+         ossimIpt          theUl;
+         ossimIpt          theLr;
+         ossim_uint32      theWidth;
+         ossim_uint32      theHeight;
+         ossimDrect        theWgs84GroundRect;
+         ossim_float64     theNullHeightValue;
+         ossimByteOrder    theByteOrder;
+         ossimScalarType   theScalarType;
+         ossim_uint32      theBytesPerRawLine;
+         const ossimDatum* theDatum;
+         ossimRefPtr<ossimProjection> theProjection;  //add by simbla
+      };
    ossimGeneralRasterElevHandler(const ossimFilename& file="");
    ossimGeneralRasterElevHandler(const ossimGeneralRasterElevHandler::GeneralRasterInfo& generalRasterInfo);
    ossimGeneralRasterElevHandler(const ossimGeneralRasterElevHandler& rhs);
@@ -132,7 +142,6 @@ public:
    const ossimGeneralRasterElevHandler::GeneralRasterInfo& generalRasterInfo()const;
    
 private:
-	OpenThreads::ReentrantMutex theMutex;
    template <class T>
    double getHeightAboveMSLTemplate(T dummy,
                                     const ossimGeneralRasterElevHandler::GeneralRasterInfo& info,
@@ -141,6 +150,7 @@ private:
    
    ossimGeneralRasterElevHandler::GeneralRasterInfo theGeneralRasterInfo;
    mutable ossimRefPtr<ossimIFStream> theInputStream;
+
 TYPE_DATA
 };
 

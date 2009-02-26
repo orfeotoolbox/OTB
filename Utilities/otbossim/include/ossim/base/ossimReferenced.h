@@ -5,24 +5,27 @@
 #ifndef ossimReferenced_HEADER
 #define ossimReferenced_HEADER
 #include <ossim/base/ossimConstants.h>
+#include <OpenThreads/ScopedLock>
+#include <OpenThreads/Mutex>
 
 class OSSIMDLLEXPORT ossimReferenced
 {
  public:
    ossimReferenced()
-      : theRefCount(0)
+   : theRefMutex(new OpenThreads::Mutex),
+     theRefCount(0)
       {}
    
    ossimReferenced(const ossimReferenced&)
-      : theRefCount(0)
-      {}
-   
+   : theRefMutex(new OpenThreads::Mutex),
+   theRefCount(0)
+   {}
    inline ossimReferenced& operator = (const ossimReferenced&) { return *this; }
    
 
    /*! increment the reference count by one, indicating that 
        this object has another pointer which is referencing it.*/
-   inline void ref() const { ++theRefCount; }
+   inline void ref() const;
    
    /*! decrement the reference count by one, indicating that 
        a pointer to this object is referencing it.  If the
@@ -36,7 +39,18 @@ class OSSIMDLLEXPORT ossimReferenced
        should only be called if the user knows exactly who will
        be resonsible for, one should prefer unref() over unref_nodelete() 
        as the later can lead to memory leaks.*/
-   inline void unref_nodelete() const { --theRefCount; }
+   inline void unref_nodelete() const 
+   { 
+      if (theRefMutex)
+      {
+         OpenThreads::ScopedLock<OpenThreads::Mutex> lock(*theRefMutex); 
+         --theRefCount;
+      }
+      else
+      {
+         --theRefCount;
+      }
+   }
    
    /*! return the number pointers currently referencing this object. */
    inline int referenceCount() const { return theRefCount; }
@@ -44,16 +58,50 @@ class OSSIMDLLEXPORT ossimReferenced
    
  protected:
    virtual ~ossimReferenced();
+   mutable OpenThreads::Mutex*     theRefMutex;
    mutable int theRefCount;
 };
 
+inline void ossimReferenced::ref() const
+{
+   if (theRefMutex)
+   {
+      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(*theRefMutex); 
+      ++theRefCount;
+   }
+   else
+   {
+      ++theRefCount;
+   }
+}
+
 inline void ossimReferenced::unref() const
 {
+   bool needDelete = false;
+   if (theRefMutex)
+   {
+      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(*theRefMutex); 
+      --theRefCount;
+      needDelete = theRefCount<=0;
+   }
+   else
+   {
+      --theRefCount;
+      needDelete = theRefCount<=0;
+   }
+   
+   if (needDelete)
+   {
+      delete this;
+   }
+   
+#if 0
     --theRefCount;
     if (theRefCount==0)
     {
         delete this;
     }
+#endif
 }
 
 #endif

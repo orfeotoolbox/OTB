@@ -6,7 +6,7 @@
 // AUTHOR: Garrett Potts
 //
 //*****************************************************************************
-//  $Id: ossimGeoPolygon.cpp 12976 2008-06-03 23:58:10Z dburken $
+//  $Id: ossimGeoPolygon.cpp 13686 2008-10-07 02:13:52Z gpotts $
 
 #include <ostream>
 #include <sstream>
@@ -319,24 +319,15 @@ bool ossimGeoPolygon::loadState(const ossimKeywordlist& kwl,
    theVertexList.clear();
    int i = 0;
    int vertexCount = ossimString(number_vertices).toLong();
-   double lat = 0.0, lon =0.0;
-   ossimString height;
+   ossimString lat, lon, height;
    for(i = 0; i < vertexCount; ++i)
    {
       ossimString v = kwl.find(prefix, (ossimString("v")+ossimString::toString(i)).c_str());
+      ossimString latString, lonString, heightString;
       v = v.trim();
-
-      std::istringstream vStream(v);
-      vStream >> lat >> lon >> height;
-      height = height.trim();
-      if(height == "nan")
-      {
-         theVertexList.push_back(ossimGpt(lat, lon, ossim::nan(), datum));
-      }
-      else
-      {
-         theVertexList.push_back(ossimGpt(lat, lon, height.toDouble(), datum));
-      }
+      std::istringstream in(v);
+      in>>lat>>lon>>height;
+      theVertexList.push_back(ossimGpt(lat.toDouble(), lon.toDouble(), height.toDouble(), datum));
    }
 
    return true;

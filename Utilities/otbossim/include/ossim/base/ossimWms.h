@@ -34,7 +34,7 @@ public:
    {
       return theFormatTypes;
    }
-   bool hasFomrats()const
+   bool hasFormats()const
    {
       return theFormatTypes.size() > 0;
    }

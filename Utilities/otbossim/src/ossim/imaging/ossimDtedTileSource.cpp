@@ -12,7 +12,7 @@
 // Contains class declaration for ossimDtedTileSource.
 //
 //********************************************************************
-// $Id: ossimDtedTileSource.cpp 12979 2008-06-04 00:25:14Z dburken $
+// $Id: ossimDtedTileSource.cpp 13484 2008-08-22 17:05:42Z gpotts $
 
 #include <cstdlib>
 #include <iostream>
@@ -363,7 +363,10 @@ void ossimDtedTileSource::allocate()
    // from the statistics.
    //---
    theTile = ossimImageDataFactory::instance()->create(this, this);
-   theTile->initialize();
+   if(theTile.valid())
+   {
+      theTile->initialize();
+   }
 
    if (traceDebug())
    {

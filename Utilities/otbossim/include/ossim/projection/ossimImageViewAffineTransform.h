@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageViewAffineTransform.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimImageViewAffineTransform.h 13459 2008-08-20 12:48:50Z gpotts $
 #ifndef ossimImageViewAffineTransform_HEADER
 #define ossimImageViewAffineTransform_HEADER
 #include <ossim/projection/ossimImageViewTransform.h>
@@ -26,6 +26,20 @@ public:
                                  double translateOriginYValue = 0);
    virtual ~ossimImageViewAffineTransform();
    
+   ossimImageViewAffineTransform(const ossimImageViewAffineTransform& src)
+   :ossimImageViewTransform(src),
+   theTransform(src.theTransform),
+   theInverseTransform(src.theInverseTransform),
+   theRotation(src.theRotation),
+   theScale(src.theScale),
+   theTranslate(src.theTranslate),
+   theTranslateOrigin(src.theTranslateOrigin)
+   {
+   }
+   virtual ossimObject* dup()const
+   {
+      return new ossimImageViewAffineTransform(*this);
+   }
    virtual void imageToView(const ossimDpt& imagePoint,
                             ossimDpt&       viewPoint)const;
    virtual void viewToImage(const ossimDpt& viewPoint,

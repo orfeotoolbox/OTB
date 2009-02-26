@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimEquationCombiner.cpp 12979 2008-06-04 00:25:14Z dburken $
+// $Id: ossimEquationCombiner.cpp 13312 2008-07-27 01:26:52Z gpotts $
 
 #include <cstdlib>
 #include <sstream>
@@ -420,7 +420,7 @@ double ossimEquationCombiner::getNullPixelValue(ossim_uint32 band)const
    {
       if(getInput())
       {
-         ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface, getInput());
+         ossimImageSource* inter = PTR_CAST(ossimImageSource, getInput());
          if(inter)
          {
             return inter->getNullPixelValue(band);
@@ -436,7 +436,7 @@ double ossimEquationCombiner::getMinPixelValue(ossim_uint32 band)const
    {
       if(getInput())
       {
-         ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface, getInput());
+         ossimImageSource* inter = PTR_CAST(ossimImageSource, getInput());
          if(inter)
          {
             return inter->getMinPixelValue(band);
@@ -452,7 +452,7 @@ double ossimEquationCombiner::getMaxPixelValue(ossim_uint32 band)const
    {
       if(getInput())
       {
-         ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface, getInput());
+         ossimImageSource* inter = PTR_CAST(ossimImageSource, getInput());
          if(inter)
          {
             return inter->getMaxPixelValue(band);
@@ -469,7 +469,7 @@ ossimScalarType ossimEquationCombiner::getOutputScalarType() const
    {
       if(getInput())
       {
-         ossimImageSourceInterface* inter = PTR_CAST(ossimImageSourceInterface, getInput());
+         ossimImageSource* inter = PTR_CAST(ossimImageSource, getInput());
          if(inter)
          {
             return inter->getOutputScalarType();
@@ -521,8 +521,8 @@ ossimRefPtr<ossimImageData> ossimEquationCombiner::getTile(
    {
       if(getInput())
       {
-         ossimImageSourceInterface* inter =
-            PTR_CAST(ossimImageSourceInterface, getInput());
+         ossimImageSource* inter =
+            PTR_CAST(ossimImageSource, getInput());
          if(inter)
          {
             return inter->getTile(tileRect, resLevel);

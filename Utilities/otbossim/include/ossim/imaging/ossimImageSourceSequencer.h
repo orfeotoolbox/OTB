@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageSourceSequencer.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimImageSourceSequencer.h 13312 2008-07-27 01:26:52Z gpotts $
 #ifndef ossimImageSourceSequencer_HEADER
 #define ossimImageSourceSequencer_HEADER
 #include <ossim/imaging/ossimImageSource.h>
@@ -135,7 +135,7 @@ public:
    virtual double getMaxPixelValue(ossim_uint32 band=0)const;
    
 protected:
-   ossimImageSourceInterface*  theInputConnection;
+   ossimImageSource*  theInputConnection;
    ossimRefPtr<ossimImageData> theBlankTile;
    /*!
     * Is the area of interest.  The default will

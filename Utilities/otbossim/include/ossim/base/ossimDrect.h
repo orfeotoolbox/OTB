@@ -13,7 +13,7 @@
 // Container class for four double points representing a rectangle.
 // 
 //*******************************************************************
-//  $Id: ossimDrect.h 11346 2007-07-23 12:59:48Z gpotts $
+//  $Id: ossimDrect.h 13672 2008-10-03 15:06:47Z gpotts $
 
 #ifndef ossimDrect_HEADER
 #define ossimDrect_HEADER
@@ -451,15 +451,16 @@ public:
 
    /*!
     * Returns true if "pt" falls within rectangle.  Fall on an edge is also
-    * considered to be within.
+    * considered to be within.  The edge is expanded by epsilon value so any value
+    * within epsilon is inside
     */
-   bool pointWithin(const ossimDpt& pt) const;
+   bool pointWithin(const ossimDpt& pt, double epsilon=0.0) const;
 
    /*!
     * Returns true if "pt" falls within rectangle.  Fall on an edge is also
     * considered to be within.
     */
-   bool pointWithin(const ossimFpt& pt) const;
+   bool pointWithin(const ossimFpt& pt, double epsilon=0.0) const;
 
    /*!
     * Returns true if any portion of an input rectangle "rect" intersects
@@ -695,36 +696,37 @@ inline void ossimDrect::set_lly(ossim_float64 y)
 //*******************************************************************
 // Inline Method: ossimDrect::pointWithin(const ossimDpt& pt) 
 //*******************************************************************
-inline bool ossimDrect::pointWithin(const ossimDpt& pt) const
+inline bool ossimDrect::pointWithin(const ossimDpt& pt, double epsilon) const
 {
    if (theOrientMode == OSSIM_LEFT_HANDED)
-      return ((pt.x >= ul().x) &&
-              (pt.x <= ur().x) &&
-              (pt.y >= ul().y) &&
-              (pt.y <= ll().y));
-   else
-      return ((pt.x >= ul().x) &&
-              (pt.x <= ur().x) &&
-              (pt.y <= ul().y) &&
-              (pt.y >= ll().y));
+   {
+      return ((pt.x >= (ul().x-epsilon)) &&
+              (pt.x <= (ur().x+epsilon)) &&
+              (pt.y >= (ul().y-epsilon)) &&
+              (pt.y <= (ll().y+epsilon)));
+   }
+   return ((pt.x >= (ul().x-epsilon)) &&
+           (pt.x <= (ur().x+epsilon)) &&
+           (pt.y <= (ul().y+epsilon)) &&
+           (pt.y >= (ll().y-epsilon)));
 }
 
 //*******************************************************************
 // Inline Method: ossimDrect::pointWithin(const ossimFpt& pt)
 //*******************************************************************
-inline bool ossimDrect::pointWithin(const ossimFpt& pt) const
+inline bool ossimDrect::pointWithin(const ossimFpt& pt, double epsilon) const
 {
    if (theOrientMode == OSSIM_LEFT_HANDED)
    {
-      return ( (pt.x >= ul().x) &&
-               (pt.x <= ur().x) &&
-               (pt.y >= ul().y) &&
-               (pt.y <= ll().y) );
+      return ((pt.x >= (ul().x-epsilon)) &&
+              (pt.x <= (ur().x+epsilon)) &&
+              (pt.y >= (ul().y-epsilon)) &&
+              (pt.y <= (ll().y+epsilon)));
    }
-   return ((pt.x >= ul().x) &&
-           (pt.x <= ur().x) &&
-           (pt.y <= ul().y) &&
-           (pt.y >= ll().y));
+   return ((pt.x >= (ul().x-epsilon)) &&
+           (pt.x <= (ur().x+epsilon)) &&
+           (pt.y <= (ul().y+epsilon)) &&
+           (pt.y >= (ll().y-epsilon)));
 }
 
 //*******************************************************************

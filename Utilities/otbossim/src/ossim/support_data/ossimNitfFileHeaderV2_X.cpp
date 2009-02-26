@@ -12,6 +12,7 @@
 #include <ossim/support_data/ossimNitfCommon.h>
 
 RTTI_DEF1(ossimNitfFileHeaderV2_X, "ossimNitfFileHeaderV2_X", ossimNitfFileHeader);
+static ossimString monthConversionTable[] = {"   ", "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
 
 const ossimString ossimNitfFileHeaderV2_X::FILE_TYPE_KW  = "file_type";
 const ossimString ossimNitfFileHeaderV2_X::VERSION_KW  = "version";
@@ -51,35 +52,60 @@ void ossimNitfFileHeaderV2_X::setOriginatingStationId(const ossimString& origina
    ossimNitfCommon::setField(theOriginatingStationId, originationId, 10);
 }
 
-ossimString ossimNitfFileHeaderV2_X::formatDate(const ossimLocalTm& d)
+ossimString ossimNitfFileHeaderV2_X::formatDate(const ossimString& version,
+                                                const ossimLocalTm& d)
 {
    std::ostringstream out;
 
-   out << std::setw(4)
-       << std::setfill('0')
-       << d.getYear()
-       << std::setw(2)
-       << std::setfill('0')
-       << d.getMonth()
-       << std::setw(2)
-       << std::setfill('0')
-       << d.getDay()
-       << std::setw(2)
-       << std::setfill('0')
-       << d.getHour()
-       << std::setw(2)
-       << std::setfill('0')
-       << d.getMin()
-       << std::setw(2)
-       << std::setfill('0')
-       << d.getSec();
-   
+   if(version.contains("2.1"))
+   {
+      out << std::setw(4)
+      << std::setfill('0')
+      << d.getYear()
+      << std::setw(2)
+      << std::setfill('0')
+      << d.getMonth()
+      << std::setw(2)
+      << std::setfill('0')
+      << d.getDay()
+      << std::setw(2)
+      << std::setfill('0')
+      << d.getHour()
+      << std::setw(2)
+      << std::setfill('0')
+      << d.getMin()
+      << std::setw(2)
+      << std::setfill('0')
+      << d.getSec();
+   }
+   else
+   {
+      out  << std::setw(2)
+      << std::setfill('0')
+      << d.getDay()
+      << std::setw(2)
+      << std::setfill('0')
+      << d.getHour()
+      << std::setw(2)
+      << std::setfill('0')
+      << d.getMin()
+      << std::setw(2)
+      << std::setfill('0')
+      << d.getSec()
+      << "Z"
+      <<monthConversionTable[d.getMonth()]
+      << std::setw(2)
+      << std::setfill('0')
+      <<d.getShortYear();
+      
+   }
+      
    return out.str();
 }
 
 void ossimNitfFileHeaderV2_X::setDate(const ossimLocalTm& d)
 {
-   memcpy(theDateTime, formatDate(d).c_str(), 14);
+   memcpy(theDateTime, formatDate(getVersion(), d).c_str(), 14);
 }
 
 void ossimNitfFileHeaderV2_X::setDate(const ossimString& d)
@@ -247,16 +273,16 @@ void ossimNitfFileHeaderV2_X::setProperty(ossimRefPtr<ossimProperty> property)
 
 ossimRefPtr<ossimProperty> ossimNitfFileHeaderV2_X::getProperty(const ossimString& name)const
 {
-   ossimProperty* property = NULL;
-
-	if(name == VERSION_KW)
-	{
+   ossimRefPtr<ossimProperty> property = 0;
+   
+   if(name == VERSION_KW)
+   {
       property = new ossimStringProperty(name, ossimString(getVersion()));
-	}
-	else if(name == FILE_TYPE_KW)
-	{
-		property = new ossimStringProperty(name, "NITF");
-	}
+   }
+   else if(name == FILE_TYPE_KW)
+   {
+      property = new ossimStringProperty(name, "NITF");
+   }
    else if(name == CLEVEL_KW)
    {
       ossimNumericProperty* numericProperty =
@@ -278,7 +304,7 @@ ossimRefPtr<ossimProperty> ossimNitfFileHeaderV2_X::getProperty(const ossimStrin
    }
    else if(name == FDT_KW)
    {
-      property = new ossimDateProperty(name, getDate());
+      property = new ossimStringProperty(name, getDate());
    }
    else if(name == FTITLE_KW)
    {
@@ -324,7 +350,7 @@ ossimRefPtr<ossimProperty> ossimNitfFileHeaderV2_X::getProperty(const ossimStrin
    {
       property = new ossimStringProperty(name,
                                          getSecurityControlNumber().trim());
-
+      
    }
    else if(name == FSCOP_KW)
    {
@@ -343,10 +369,10 @@ ossimRefPtr<ossimProperty> ossimNitfFileHeaderV2_X::getProperty(const ossimStrin
                                          false);
    }
    else
-	{
-		property = ossimNitfFileHeader::getProperty(name).get();
-	}
-
+   {
+      property = ossimNitfFileHeader::getProperty(name).get();
+   }
+   
    return property;
 }
 

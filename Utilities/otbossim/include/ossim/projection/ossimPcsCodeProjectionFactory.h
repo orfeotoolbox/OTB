@@ -14,7 +14,7 @@
 // http://www.remotesensing.org/geotiff/spec/geotiff6.html#6.3.3.1
 // 
 //----------------------------------------------------------------------------
-//  $Id: ossimPcsCodeProjectionFactory.h 12081 2007-11-26 21:44:18Z dburken $
+//  $Id: ossimPcsCodeProjectionFactory.h 13819 2008-10-31 16:58:37Z dburken $
 
 #ifndef ossimPcsCodeProjectionFactory_HEADER
 #define ossimPcsCodeProjectionFactory_HEADER
@@ -68,12 +68,11 @@ public:
    virtual void getTypeNameList(std::vector<ossimString>& typeList)const;
 
    /**
-    * Attempt to determine PCS code from projection.
+    * Attempts to determine PCS code from projection.
     *
     * @return a valid code or 0 if no match is found.
     */
-   
-   ossim_int16 getPcsCodeFromProjection(const ossimMapProjection* proj) const;
+   ossim_uint16 getPcsCodeFromProjection(const ossimMapProjection* proj) const;
 
 protected:
    ossimPcsCodeProjectionFactory();

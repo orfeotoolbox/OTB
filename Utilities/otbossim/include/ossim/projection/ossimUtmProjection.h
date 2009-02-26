@@ -8,7 +8,7 @@
 //
 // Calls Geotrans Utm projection code.  
 //*******************************************************************
-//  $Id: ossimUtmProjection.h 11436 2007-07-27 19:41:42Z dburken $
+//  $Id: ossimUtmProjection.h 13825 2008-10-31 17:29:51Z dburken $
 #ifndef ossimUtmProjection_HEADER
 #define ossimUtmProjection_HEADER
 #include <ossim/projection/ossimMapProjection.h>
@@ -31,8 +31,18 @@ public:
    virtual ossimGpt inverse(const ossimDpt &eastingNorthing)const;
    virtual ossimDpt forward(const ossimGpt &latLon)const;
    virtual void update();
+
+   /**
+    * This will set the utm zone and utm origin base on origin passed in.
+    *
+    * @note If the origin latitude is not 0.0 it will also set the
+    * hemisphere.  If 0.0 hemisphere is unchanged from previous stored value.
+    */
+   virtual void setOrigin(const ossimGpt& origin);
+   
    void setZone(const ossimGpt& ground);
    void setZone(ossim_int32 zone);
+   void setHemisphere(const ossimGpt& ground);
    void setHemisphere(char hemisphere);
    static ossim_int32 computeZone(const ossimGpt& gpt);
 
@@ -44,7 +54,6 @@ public:
    ossim_int32 getZone()const;
 
    char getHemisphere()const;
-   
    virtual bool operator==(const ossimProjection& projection) const;
 
    /**

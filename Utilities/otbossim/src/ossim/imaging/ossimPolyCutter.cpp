@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimPolyCutter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimPolyCutter.cpp 13660 2008-10-02 14:00:48Z gpotts $
 #include <ossim/imaging/ossimPolyCutter.h>
 #include <ossim/base/ossimPolyArea2d.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -178,6 +178,11 @@ ossimIrect ossimPolyCutter::getBoundingRect(ossim_uint32 resLevel)const
          }
       }
    }
+   else if(isSourceEnabled())
+   {
+      return theBoundingRect;
+   }
+   
    return result;
 }
 

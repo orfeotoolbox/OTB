@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossim2dTo2dTransform.cpp 12953 2008-06-01 16:24:05Z dburken $
+// $Id: ossim2dTo2dTransform.cpp 13664 2008-10-02 19:57:24Z gpotts $
 
 #include <cstdlib>
 #include <sstream>
@@ -194,8 +194,15 @@ bool ossim2dTo2dTransform::loadState(const ossimKeywordlist& kwl,
    const char* dxdy = kwl.find(prefix, "dxdy");
    if(dxdy)
    {
-      std::istringstream in(dxdy);
-      in>>theDxDy.x >> theDxDy.y;
+      ossimString tempString(dxdy);
+      std::vector<ossimString> splitArray;
+      tempString = tempString.trim();
+      tempString.split(splitArray, " ");
+      if(splitArray.size()==2)
+      {
+         theDxDy.x = splitArray[0].toDouble();
+         theDxDy.y = splitArray[1].toDouble();
+      }
    }
    if(result)
    {

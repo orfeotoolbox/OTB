@@ -6,15 +6,18 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimMpi.cpp 10297 2007-01-18 14:12:41Z gpotts $
+// $Id: ossimMpi.cpp 13602 2008-09-25 14:23:32Z gpotts $
 
 #include <ossim/parallel/ossimMpi.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <time.h>
+#if OSSIM_HAS_MPI
+#  include <mpi.h>
+#endif
 
 #if OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimMpi.cpp 10297 2007-01-18 14:12:41Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimMpi.cpp 13602 2008-09-25 14:23:32Z gpotts $";
 #endif
 
 static ossimTrace traceDebug = ossimTrace("ossimMpi:debug");

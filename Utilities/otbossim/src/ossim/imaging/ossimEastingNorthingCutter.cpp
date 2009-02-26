@@ -6,7 +6,7 @@
 //
 // Author:  Garrett Potts
 //
-// $Id: ossimEastingNorthingCutter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimEastingNorthingCutter.cpp 13711 2008-10-14 16:49:38Z gpotts $
 //----------------------------------------------------------------------------
 
 #include <sstream>
@@ -108,15 +108,26 @@ bool ossimEastingNorthingCutter::loadState(const ossimKeywordlist& kwl,
    if(ul)
    {
       istringstream in(ul);
-
-      in >> theUlEastingNorthing.x >> theUlEastingNorthing.y;
+      ossimString x;
+      ossimString y;
+      
+      in >> x >> y;
+      
+      theUlEastingNorthing.x = x.toDouble();
+      theUlEastingNorthing.y = y.toDouble();
+      
    }
    
    if(lr)
    {
       istringstream in(lr);
-
-      in >> theLrEastingNorthing.x >> theLrEastingNorthing.y;
+      ossimString x;
+      ossimString y;
+      
+      in >> x >> y;
+      
+      theLrEastingNorthing.x = x.toDouble();
+      theLrEastingNorthing.y = y.toDouble();
    }
 
    if (traceDebug())

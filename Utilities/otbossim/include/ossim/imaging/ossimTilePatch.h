@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimTilePatch.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimTilePatch.h 13312 2008-07-27 01:26:52Z gpotts $
 
 #ifndef ossimTilePatch_HEADER
 #define ossimTilePatch_HEADER
@@ -19,12 +19,12 @@
 #include <ossim/imaging/ossimDiscreteNearestNeighbor.h>
 #include <ossim/imaging/ossimImageData.h>
 
-class ossimImageSourceInterface;
+class ossimImageSource;
 
 class ossimTilePatch : public ossimObject
 {
 public:
-   ossimTilePatch(ossimImageSourceInterface* input);
+   ossimTilePatch(ossimImageSource* input);
    /*!
     * The rect is assumed up right and all we need
     * to do is compute the even tile boundary rect
@@ -86,7 +86,7 @@ public:
                          const ossimDpt   &length)const;
 
 
-   virtual void fillPatch(ossimImageSourceInterface *imageSource,
+   virtual void fillPatch(ossimImageSource *imageSource,
                           long resLevel = 0);
    
    

@@ -4,7 +4,7 @@
 //
 // Author: Garrett Potts
 //*******************************************************************
-//  $Id: ossimStatePlaneProjectionInfo.cpp 12442 2008-02-07 22:33:52Z dburken $
+//  $Id: ossimStatePlaneProjectionInfo.cpp 13400 2008-08-07 18:06:54Z dburken $
 
 #include <ossim/projection/ossimStatePlaneProjectionInfo.h>
 #include <ossim/projection/ossimTransMercatorProjection.h>
@@ -104,7 +104,9 @@ ossimStatePlaneProjectionInfo::ossimStatePlaneProjectionInfo(
       ossimUnitTypeLut::instance()->getEntryNumber(units.c_str()));
 
    // Currently only handle meters and us_survey_feet.
-   if ( (theUnits != OSSIM_METERS) && (theUnits != OSSIM_US_SURVEY_FEET) )
+   if ( (theUnits != OSSIM_METERS) &&
+        (theUnits != OSSIM_US_SURVEY_FEET) &&
+        (theUnits != OSSIM_FEET) )
    {
       ossimNotify(ossimNotifyLevel_WARN)
          << "ossimStatePlaneProjectionInfo unhandled unit type: "
@@ -190,22 +192,36 @@ bool ossimStatePlaneProjectionInfo::isSameCode(int pcsCode) const
 
 double ossimStatePlaneProjectionInfo::falseEastingInMeters() const
 {
-   if (theUnits == OSSIM_METERS)
+   double result = theFalseEasting;
+   switch (theUnits)
    {
-      return theFalseEasting;
+      case OSSIM_US_SURVEY_FEET:
+         result *= US_METERS_PER_FT;
+         break;
+      case OSSIM_FEET:
+         result *= MTRS_PER_FT;
+         break;
+      default:
+         break;
    }
-
-   return theFalseEasting * US_METERS_PER_FT;
+   return result;
 }
 
 double ossimStatePlaneProjectionInfo::falseNorthingInMeters() const
 {
-   if (theUnits == OSSIM_METERS)
+   double result = theFalseNorthing;
+   switch (theUnits)
    {
-      return theFalseNorthing;
+      case OSSIM_US_SURVEY_FEET:
+         result *= US_METERS_PER_FT;
+         break;
+      case OSSIM_FEET:
+         result *= MTRS_PER_FT;
+         break;
+      default:
+         break;
    }
-
-   return theFalseNorthing * US_METERS_PER_FT;
+   return result;
 }
 
 void ossimStatePlaneProjectionInfo::populateProjectionKeywords(

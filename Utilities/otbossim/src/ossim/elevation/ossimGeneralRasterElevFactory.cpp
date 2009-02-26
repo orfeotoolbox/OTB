@@ -64,7 +64,7 @@ ossimElevSource* ossimGeneralRasterElevFactory::getNewElevSource(const ossimGpt&
    std::vector<ossimGeneralRasterElevHandler::GeneralRasterInfo>::const_iterator i = theGeneralRasterInfoList.begin();
    while (i != theGeneralRasterInfoList.end())
    {
-      if ((*i).theBounds.pointWithin(pt))
+      if ((*i).theWgs84GroundRect.pointWithin(pt))
       {
          return new ossimGeneralRasterElevHandler((*i));
          

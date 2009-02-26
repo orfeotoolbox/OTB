@@ -8,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_1.h 13101 2008-07-01 18:44:31Z dburken $
+// $Id: ossimNitfImageHeaderV2_1.h 13618 2008-09-29 19:08:10Z gpotts $
 
 #ifndef ossimNitfImageHeaderV2_1_HEADER
 #define ossimNitfImageHeaderV2_1_HEADER
@@ -139,15 +139,6 @@ public:
 
 private:
    void clearFields();
-
-   /**
-   * WIll throw out_of_range exception;
-   */
-   ossimString encodeUtm(ossim_uint32 zone,
-                         const ossimDpt& ul,
-                         const ossimDpt& ur,
-                         const ossimDpt& lr,
-                         const ossimDpt& ll)const;
 
    /**
     * FIELD: ISCLSY

@@ -1,16 +1,16 @@
 //*******************************************************************
 //
 // License:  See top level LICENSE.txt file.
-// 
+//
 // Author:  Oscar Kramer <okramer@imagelinks.com>
 //          ossim port by David Burken <dburken@imagelinks.com>
 //
-// Description:  
+// Description:
 //
 // Contains declaration of class ossimSpot5Model.
-// 
+//
 //*****************************************************************************
-// $Id: ossimSpot5Model.h 12138 2007-12-07 14:30:22Z gpotts $
+// $Id: ossimSpot5Model.h 13976 2009-01-20 16:00:16Z gpotts $
 #ifndef ossimSpot5Model_HEADER
 #define ossimSpot5Model_HEADER
 
@@ -52,7 +52,7 @@ public:
       YAW_RATE,
       FOCAL_LEN_OFFSET,
       NUM_ADJUSTABLE_PARAMS // not an index
-   };   
+   };
 
    /*!
     * Returns pointer to a new instance, copy of this.
@@ -71,7 +71,7 @@ public:
     */
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix=NULL) const;
-   
+
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=NULL);
 
@@ -87,7 +87,7 @@ public:
    virtual void lineSampleHeightToWorld(const ossimDpt& image_point,
                                         const ossim_float64& heightEllipsoid,
                                         ossimGpt& worldPoint) const;
-   
+
    /*!
     * Given an image point, returns a ray originating at some arbitrarily high
     * point (ideally at the sensor position) and pointing towards the target.
@@ -115,10 +115,11 @@ protected:
     * Sets adjustables to default values.
     */
    void initAdjustableParameters();
-   
+
    void loadGeometry(FILE*);
    void loadSupportData();
-   NEWMAT::Matrix computeSatToOrbRotation(ossim_float64 t)const;
+    //void computeSatToOrbRotation(ossim_float64 t)const;
+   void computeSatToOrbRotation(NEWMAT::Matrix& result, ossim_float64 t)const;
 
 /*    virtual ossimDpt extrapolate (const ossimGpt& gp) const; */
 /*    virtual ossimGpt extrapolate (const ossimDpt& ip, */
@@ -130,14 +131,14 @@ protected:
    // Image constant parameters:
    //---
    ossimFilename  theMetaDataFile;
-   ossim_float64  theIllumAzimuth;  
+   ossim_float64  theIllumAzimuth;
    ossim_float64  theIllumElevation;
    ossim_float64  thePositionError;
    ossim_float64  theRefImagingTime;
 
    /** relative to full image */
    ossim_float64  theRefImagingTimeLine;
-   
+
    ossim_float64  theLineSamplingPeriod;
    ossimDpt       theSpotSubImageOffset;
 

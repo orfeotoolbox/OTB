@@ -13,7 +13,7 @@
 //              and image handlers (image readers)
 //
 //*************************************************************************
-// $Id: ossimImageSourceFactory.cpp 12247 2008-01-03 19:42:33Z dburken $
+// $Id: ossimImageSourceFactory.cpp 13324 2008-07-28 16:00:58Z gpotts $
 
 #include <ossim/imaging/ossimImageSourceFactory.h>
 #include <ossim/imaging/ossimConvolutionFilter1D.h>
@@ -67,8 +67,6 @@
 #include <ossim/imaging/ossimElevImageSource.h>
 #include <ossim/imaging/ossimLandsatTopoCorrectionFilter.h>
 #include <ossim/imaging/ossimGeoAnnotationSource.h>
-#include <ossim/imaging/ossimEsriShapeFileFilter.h>
-#include <ossim/imaging/ossimEsriShapeFileCutter.h>
 #include <ossim/imaging/ossimMapCompositionSource.h>
 #include <ossim/imaging/ossimScaleFilter.h>
 #include <ossim/imaging/ossimEastingNorthingCutter.h>
@@ -76,6 +74,7 @@
 #include <ossim/imaging/ossimFftFilter.h>
 #include <ossim/imaging/ossimWatermarkFilter.h>
 #include <ossim/imaging/ossimTrimFilter.h>
+#include <ossim/imaging/ossimTwoColorView.h>
 
 #include <ossim/imaging/ossimGridRemapSource.h>
 
@@ -333,14 +332,6 @@ ossimObject* ossimImageSourceFactory::createObject(const ossimString& name)const
    {
       return new ossim3x3ConvolutionFilter;
    }
-   else if(name == STATIC_TYPE_NAME(ossimEsriShapeFileFilter))
-   {
-      return new ossimEsriShapeFileFilter;
-   }
-   else if(name == STATIC_TYPE_NAME(ossimEsriShapeFileCutter))
-   {
-      return new ossimEsriShapeFileCutter;
-   }
    else if(name == STATIC_TYPE_NAME(ossimOrthoImageMosaic))
    {
       return new ossimOrthoImageMosaic;
@@ -417,7 +408,10 @@ ossimObject* ossimImageSourceFactory::createObject(const ossimString& name)const
    {
       return new ossimTrimFilter();
    }
-
+   else if(name == STATIC_TYPE_NAME(ossimTwoColorView))
+   {
+      return new ossimTwoColorView;
+   }
    return NULL;
 }
 
@@ -522,8 +516,6 @@ void ossimImageSourceFactory::getTypeNameList(std::vector<ossimString>& typeList
    typeList.push_back(STATIC_TYPE_NAME(ossimValueAssignImageSourceFilter));
    typeList.push_back(STATIC_TYPE_NAME(ossimImageSharpenFilter));
    typeList.push_back(STATIC_TYPE_NAME(ossim3x3ConvolutionFilter));
-   typeList.push_back(STATIC_TYPE_NAME(ossimEsriShapeFileFilter));
-   typeList.push_back(STATIC_TYPE_NAME(ossimEsriShapeFileCutter));
    typeList.push_back(STATIC_TYPE_NAME(ossimOrthoImageMosaic));
    typeList.push_back(STATIC_TYPE_NAME(ossimMapCompositionSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimCastTileSourceFilter));
@@ -546,6 +538,7 @@ void ossimImageSourceFactory::getTypeNameList(std::vector<ossimString>& typeList
    typeList.push_back(STATIC_TYPE_NAME(ossimWatermarkFilter));
    typeList.push_back(STATIC_TYPE_NAME(ossimImageGaussianFilter));
    typeList.push_back(STATIC_TYPE_NAME(ossimTrimFilter));
+   typeList.push_back(STATIC_TYPE_NAME(ossimTwoColorView));
 }
 
 // Hide from use...

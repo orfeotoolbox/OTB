@@ -16,6 +16,7 @@ const ossimString ossimNitfImageHeaderV2_X::IID1_KW = "iid1";
 const ossimString ossimNitfImageHeaderV2_X::IDATIM_KW = "idatim";
 const ossimString ossimNitfImageHeaderV2_X::TGTID_KW = "tgtid";
 const ossimString ossimNitfImageHeaderV2_X::IID2_KW = "iid2";
+const ossimString ossimNitfImageHeaderV2_X::ITITLE_KW="ititle";
 const ossimString ossimNitfImageHeaderV2_X::ISCLAS_KW = "isclas";
 const ossimString ossimNitfImageHeaderV2_X::ENCRYP_KW = "encryp";
 const ossimString ossimNitfImageHeaderV2_X::ISORCE_KW = "isorce";
@@ -351,7 +352,8 @@ void ossimNitfImageHeaderV2_X::setProperty(ossimRefPtr<ossimProperty> property)
    {
       setTargetId(property->valueToString());
    }
-   else if(name.contains(IID2_KW))
+   else if(name.contains(IID2_KW)||
+           name.contains(ITITLE_KW))
    {
       setTitle(property->valueToString());
    }
@@ -450,7 +452,7 @@ void ossimNitfImageHeaderV2_X::setProperty(ossimRefPtr<ossimProperty> property)
    }
    else
    {
-      ossimNitfImageHeaderV2_X::setProperty(property);
+      ossimNitfImageHeader::setProperty(property);
    }
 }
 
@@ -473,7 +475,8 @@ ossimRefPtr<ossimProperty> ossimNitfImageHeaderV2_X::getProperty(const ossimStri
       property = new ossimStringProperty(name,
                                          ossimString(theTargetId).trim());
    }
-   else if(name == IID2_KW)
+   else if((name == IID2_KW)||
+           (name == ITITLE_KW))
    {
       property = new ossimStringProperty(name,
                                          ossimString(theTitle).trim());

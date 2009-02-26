@@ -6,10 +6,13 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationPolyLineObject.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimGeoAnnotationPolyLineObject.cpp 13348 2008-07-30 15:33:53Z dburken $
 #include <ossim/imaging/ossimGeoAnnotationPolyLineObject.h>
 #include <ossim/imaging/ossimAnnotationMultiLineObject.h>
 #include <ossim/projection/ossimProjection.h>
+#include <ossim/projection/ossimImageProjectionModel.h>
+#include <ossim/base/ossimException.h>
+
 
 RTTI_DEF1(ossimGeoAnnotationPolyLineObject,
           "ossimGeoAnnotationPolyLineObject",
@@ -22,7 +25,7 @@ ossimGeoAnnotationPolyLineObject::ossimGeoAnnotationPolyLineObject(
    ossim_uint8 b,
    ossim_uint8 thickness)
    :ossimGeoAnnotationObject(r, g, b, thickness),
-    theProjectedMultiLineObject(NULL)
+    theProjectedMultiLineObject(0)
 {
 
    thePolygon = groundPts;
@@ -52,8 +55,13 @@ ossimGeoAnnotationPolyLineObject::~ossimGeoAnnotationPolyLineObject()
    if(theProjectedMultiLineObject)
    {
       delete theProjectedMultiLineObject;
-      theProjectedMultiLineObject = NULL;
+      theProjectedMultiLineObject = 0;
    }
+}
+
+ ossimObject* ossimGeoAnnotationPolyLineObject::dup()const
+{
+   return new ossimGeoAnnotationPolyLineObject(*this);
 }
 
 void ossimGeoAnnotationPolyLineObject::applyScale(double x,
@@ -78,23 +86,72 @@ void ossimGeoAnnotationPolyLineObject::transform(ossimProjection* projection)
    {
       return;
    }
-   vector<ossimPolyLine>& polyList =theProjectedMultiLineObject->getPolyLineList();
+   vector<ossimPolyLine>& polyList =
+      theProjectedMultiLineObject->getPolyLineList();
 
    if(polyList.size())
    {
       vector<ossimDpt>& poly = polyList[0].getVertexList();
       
-      long upperBound = thePolygon.size();
+      const std::vector<ossimGpt>::size_type BOUNDS = thePolygon.size();
       
-      for(long index=0; index < upperBound; ++index)
+      for(std::vector<ossimGpt>::size_type index=0; index < BOUNDS; ++index)
       {
          projection->worldToLineSample(thePolygon[index], poly[index]);
       }
       
       // update the bounding rect
-      //
       theProjectedMultiLineObject->computeBoundingRect();
    }
+}
+
+void ossimGeoAnnotationPolyLineObject::transform(
+   const ossimImageProjectionModel& model, ossim_uint32 rrds)
+{
+   const ossimProjection* projection = model.getProjection();
+   if (projection)
+   {
+      std::vector<ossimPolyLine>& polyList =
+         theProjectedMultiLineObject->getPolyLineList();
+      
+      if(polyList.size())
+      {
+         std::vector<ossimDpt>& poly = polyList[0].getVertexList();
+         
+         const std::vector<ossimGpt>::size_type BOUNDS = thePolygon.size();
+         
+         for(std::vector<ossimGpt>::size_type index = 0;
+             index < BOUNDS; ++index)
+         {
+            ossimDpt r0Pt;
+            projection->worldToLineSample(thePolygon[index], r0Pt);
+            
+            if (rrds)
+            {
+               // Transform r0 point to new rrds level.
+               try
+               {
+                  ossimDpt rnPt;
+                  model.r0ToRn(rrds, r0Pt, rnPt);
+                  poly[index] = rnPt;
+               }
+               catch (const ossimException& e)
+               {
+                  ossimNotify(ossimNotifyLevel_WARN) << e.what() << std::endl;
+               } 
+            }
+            else
+            {
+               poly[index] = r0Pt;
+            }
+            
+         } // End loop though polygon points.
+      }
+      
+      // update the bounding rect
+      theProjectedMultiLineObject->computeBoundingRect();
+      
+   } // End if (projection)
 }
 
 std::ostream& ossimGeoAnnotationPolyLineObject::print(std::ostream& out)const

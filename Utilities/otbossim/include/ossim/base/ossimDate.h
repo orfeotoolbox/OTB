@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimDate.h 12992 2008-06-05 18:09:11Z gpotts $
+// $Id: ossimDate.h 13732 2008-10-17 19:47:43Z gpotts $
 #ifndef ossimDate_HEADER
 #define ossimDate_HEADER
 #include <ctime>
@@ -162,7 +162,8 @@ public:
     double getFractionalSecond()const;
     ossimLocalTm& setHour(int h);
     ossimLocalTm& setMin(int m);
-    ossimLocalTm& setSec(int s);
+   ossimLocalTm& setSec(int s);
+   ossimLocalTm& setFloatSec(double s);
     ossimLocalTm& setFractionalSecond(double fractS);
 
     /**
@@ -191,6 +192,8 @@ public:
      */ 
     void setTimeGivenEpoc(time_t ticks);
     
+   bool setIso8601(const std::string& timeString, bool shiftToGmtOffsetZero=false);
+   
     ossimRefPtr<ossimXmlNode> saveXml()const;
     bool loadXml(ossimRefPtr<ossimXmlNode> dateNode);
     
