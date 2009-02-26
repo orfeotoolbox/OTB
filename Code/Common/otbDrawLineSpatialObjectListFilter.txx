@@ -168,7 +168,6 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
 ::CropRightSegment(OutputIndexType *indexToCrop,OutputIndexType *otherIndex, const OutputImageRegionType *outputRegionForThread ) const
 
 {
- OutputIndexType tempIndex;
 
  /** Dimensions of the buffered region*/
  typename OutputImageRegionType::SizeType  size  = outputRegionForThread->GetSize();
@@ -271,7 +270,8 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
 
 {
   OutputIndexType tempIndex;
-
+  tempIndex = *indexToCrop;
+  
   /** Dimensions of the buffered region*/
   typename OutputImageRegionType::SizeType  size = outputRegionForThread->GetSize();
   typename OutputImageRegionType::IndexType start = outputRegionForThread->GetIndex();

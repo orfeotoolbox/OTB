@@ -37,21 +37,21 @@ namespace Functor
  *  \ingroup Functor
  *  \ingroup Statistics
  */
-template <class TIterInput, class TOutput>
+template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT EnergyTextureFunctor :
-public TextureFunctorBase<TIterInput, TOutput>
+public TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
   EnergyTextureFunctor(){};
   virtual ~EnergyTextureFunctor(){};
 
-  typedef TIterInput                           IterType;
-  typedef TOutput                              OutputType;
-  typedef typename IterType::OffsetType        OffsetType;
-  typedef typename IterType::RadiusType        RadiusType;
-  typedef typename IterType::InternalPixelType InternalPixelType;
-  typedef typename IterType::ImageType         ImageType;
-  typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
+  typedef TScalarInputPixelType                  InputScalarType;
+  typedef TScalarOutputPixelType                 OutputScalarType;
+  typedef TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
+  typedef typename Superclass::OffsetType        OffsetType;
+  typedef typename Superclass::RadiusType        RadiusType;
+  typedef typename Superclass::NeighborhoodType  NeighborhoodType;
+ 
 
   double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {

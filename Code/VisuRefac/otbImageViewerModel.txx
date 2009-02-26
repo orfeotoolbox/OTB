@@ -25,17 +25,16 @@ namespace otb
 
 template <class TOutputImage>
 ImageViewerModel<TOutputImage>
-::ImageViewerModel()
+::ImageViewerModel() : m_Name("Default"), m_Layers(), m_RasterizedQuicklook(), 
+		       m_HasQuicklook(false),m_RasterizedExtract(),m_HasExtract(false),
+		       m_ExtractRegion(), m_SubsampledExtractRegion(), m_RasterizedScaledExtract(), m_HasScaledExtract(false),
+		       m_ScaledExtractRegion()
+
 {
   // Intializing the layer list
   m_Layers = LayerListType::New();
-  // Viewer name
-  m_Name = "Default";
+
   
-  // Default: nothing is available
-  m_HasQuicklook     = false;
-  m_HasExtract       = false;
-  m_HasScaledExtract = false;
 }
 
 template <class TOutputImage>
@@ -160,12 +159,18 @@ void
 ImageViewerModel<TOutputImage>
 ::Update()
 {
-  // Render all visible layers
-  this->RenderVisibleLayers();
-  // Rasterize all visible layers
-  this->RasterizeVisibleLayers();
-  // Notify all listeners
-  this->NotifyAll();
+  // Multiple concurrent update guards
+  if(!m_Updating)
+    {
+    m_Updating = true;
+    // Render all visible layers
+    this->RenderVisibleLayers();
+    // Rasterize all visible layers
+    this->RasterizeVisibleLayers();
+    // Notify all listeners
+    this->NotifyAll();
+    m_Updating = false;
+    }
 }
 
 template <class TOutputImage>
@@ -217,6 +222,17 @@ ImageViewerModel<TOutputImage>
     {
     m_HasQuicklook = true;
     m_RasterizedQuicklook = baseLayer->GetRenderedQuicklook();
+   
+    // Update the subsampled extract region 
+    m_SubsampledExtractRegion = m_ExtractRegion;
+    typename RegionType::SizeType size = m_SubsampledExtractRegion.GetSize();
+    typename RegionType::IndexType index = m_SubsampledExtractRegion.GetIndex();
+    size[0]/=baseLayer->GetQuicklookSubsamplingRate();
+    size[1]/=baseLayer->GetQuicklookSubsamplingRate();
+    index[0]/=baseLayer->GetQuicklookSubsamplingRate();
+    index[1]/=baseLayer->GetQuicklookSubsamplingRate();
+    m_SubsampledExtractRegion.SetIndex(index);
+    m_SubsampledExtractRegion.SetSize(size);
     }
 
   if(baseLayer->GetHasExtract())
@@ -230,6 +246,9 @@ ImageViewerModel<TOutputImage>
     m_HasScaledExtract = true;
     m_RasterizedScaledExtract = baseLayer->GetRenderedScaledExtract();
     }
+
+  // Move to the next layer
+  ++it;
   
   // Walk the remaining layers
   while(it!=m_Layers->End())
@@ -288,8 +307,81 @@ void
 ImageViewerModel<TOutputImage>
 ::Notify(ListenerType * listener)
 {
+  // Notify the listener
   listener->ImageViewerNotify();
 }
+
+
+template <class TOutputImage>
+void
+ImageViewerModel<TOutputImage>
+::SetScaledExtractRegionCenter(const IndexType & index)
+{
+  // Set the center of the scaled extract region
+  IndexType newIndex = index;
+  newIndex[0]-=m_ScaledExtractRegion.GetSize()[0]/2;
+  newIndex[1]-=m_ScaledExtractRegion.GetSize()[1]/2;
+  m_ScaledExtractRegion.SetIndex(newIndex);
+}
+
+template <class TOutputImage>
+void
+ImageViewerModel<TOutputImage>
+::SetExtractRegionCenter(const IndexType & index)
+{
+  // Set the center of the extract region
+  IndexType newIndex = index;
+  newIndex[0]-=m_ExtractRegion.GetSize()[0]/2;
+  newIndex[1]-=m_ExtractRegion.GetSize()[1]/2;
+  m_ExtractRegion.SetIndex(newIndex);
+}
+
+template <class TOutputImage>
+typename ImageViewerModel<TOutputImage>
+::RegionType
+ImageViewerModel<TOutputImage>
+::ConstrainRegion(const RegionType & region, const RegionType & largest)
+{
+  // First check if the case is trivial
+  if(region.GetNumberOfPixels() == 0 || largest.IsInside(region))
+    {
+    return region;
+    }
+  
+  RegionType resp = region;
+  typename RegionType::IndexType index = resp.GetIndex();
+  typename RegionType::SizeType size   = resp.GetSize();
+
+  for(unsigned int dim = 0; dim<RegionType::ImageDimension;++dim)
+    {
+    const int offset = index[dim]+size[dim] - largest.GetIndex()[dim] + largest.GetSize()[dim];
+    // If the region is not larger than the largest, wen can constrain
+    if(largest.GetSize()[dim] > size[dim])
+      {
+      // If the region is to the left, push left
+      if(index[dim] < largest.GetIndex()[dim])
+	{
+	index[dim] = largest.GetIndex()[dim];
+	}
+      	// If the region is to the right, push right
+      else if(offset > 0)
+	{
+	index[dim]-=offset;
+	}
+      }
+    else
+      {
+      // else crop
+      index[dim] = largest.GetIndex()[dim];
+      size[dim]   = largest.GetSize()[dim];
+      }
+      }
+  resp.SetIndex(index);
+  resp.SetSize(size);
+
+  return resp;
+}
+
 
 template <class TOutputImage>
 void

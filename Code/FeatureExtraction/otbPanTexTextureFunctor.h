@@ -37,9 +37,9 @@ namespace Functor
  *  \ingroup Statistics
  */
 
-template <class TIterInput, class TOutput>
+template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT PanTexTextureFunctor :
-public ContrastTextureFunctor<TIterInput, TOutput>
+public ContrastTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
   PanTexTextureFunctor()
@@ -72,6 +72,7 @@ public:
 
   virtual ~PanTexTextureFunctor(){};
 
+  /*
   typedef TIterInput                            IterType;
   typedef TOutput                               OutputType;
   typedef typename IterType::InternalPixelType  InternalPixelType;
@@ -79,8 +80,13 @@ public:
   typedef typename IterType::OffsetType         OffsetType;
   typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
   typedef ContrastTextureFunctor<IterType, OutputType> Superclass;
-
-
+  */
+ typedef TScalarInputPixelType                  InputScalarType;
+  typedef TScalarOutputPixelType                 OutputScalarType;
+  typedef ContrastTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
+  typedef typename Superclass::OffsetType        OffsetType;
+  typedef typename Superclass::RadiusType        RadiusType;
+  typedef typename Superclass::NeighborhoodType  NeighborhoodType;
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
     {
       // Loop over each offset
