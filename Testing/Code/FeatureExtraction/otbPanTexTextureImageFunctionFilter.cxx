@@ -25,7 +25,6 @@
 
 int otbPanTexTextureImageFunctionFilter(int argc, char * argv[])
 {
-  /*
   const unsigned int Dimension =2;
   typedef double PixelType;
   typedef otb::Image<PixelType,Dimension> ImageType;
@@ -44,6 +43,6 @@ int otbPanTexTextureImageFunctionFilter(int argc, char * argv[])
   writer->SetInput( panTex->GetOutput() );
 
   writer->Update();
-  */
+  
   return EXIT_SUCCESS;
 }

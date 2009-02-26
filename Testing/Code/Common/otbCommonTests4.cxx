@@ -27,8 +27,6 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbHistogramStatisticsFunction);
-  REGISTER_TEST(otbListNew);
-  REGISTER_TEST(otbList);
   REGISTER_TEST(otbObjectListNew);
   REGISTER_TEST(otbObjectList);
   REGISTER_TEST(otbObjectList2);

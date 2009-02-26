@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-	 This software is distributed WITHOUT ANY WARRANTY; without even 
-	 the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+	 This software is distributed WITHOUT ANY WARRANTY; without even
+	 the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 	 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,6 +25,7 @@
 
 #include "otbImage.h"
 #include "otbVectorImage.h"
+#include "otbObjectList.h"
 
 #include "otbExtractROI.h"
 #include "otbMultiChannelExtractROI.h"
@@ -33,7 +34,7 @@
 namespace otb {
 
 template < class TImage, class TInternalImage = TImage >
-class ITK_EXPORT ImageSeriesFileReader 
+class ITK_EXPORT ImageSeriesFileReader
 	: public ImageSeriesFileReaderBase< TImage, TInternalImage >
 {
   public:
@@ -86,11 +87,11 @@ class ITK_EXPORT ImageSeriesFileReader
     typedef itk::ImageToImageFilter< InternalImageType, OutputImageType > ExtractSelectionType;
     typedef typename ExtractSelectionType::Pointer ExtractSelectionPointerType;
 
-    typedef List< ExtractSelectionType > ExtractSelectionListType;
+    typedef ObjectList< ExtractSelectionType > ExtractSelectionListType;
     typedef typename ExtractSelectionListType::Pointer ExtractSelectionListPointerType;
-    
+
 	protected:
-    ImageSeriesFileReader(); 
+    ImageSeriesFileReader();
     virtual ~ImageSeriesFileReader () { }
 
 		/**
@@ -98,7 +99,7 @@ class ITK_EXPORT ImageSeriesFileReader
 		 */
 		virtual void TestBandSelection( std::vector<unsigned int> & bands ) { }
 
-		/** GenerateData 
+		/** GenerateData
 		 * This method will be specialised if template definitions follow:
 		 * - TImage is a VectorImage
 		 * - TImage is an Image and TInteranalImage is a VectorImage
@@ -119,7 +120,7 @@ class ITK_EXPORT ImageSeriesFileReader
 			return Superclass::PrintSelf( os, indent );
 		}
 
-		/** 
+		/**
 		 * Type of extractor to use
 		 */
     ExtractSelectionListPointerType m_ExtractorList;
@@ -127,7 +128,7 @@ class ITK_EXPORT ImageSeriesFileReader
   private:
     ImageSeriesFileReader ( const Self & );
     void operator= ( const Self & );
-}; // end of class 
+}; // end of class
 
 /** ImagerSeriesFileReader
  * \brief Specific definition for template Images
@@ -187,11 +188,11 @@ class ITK_EXPORT ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixe
     typedef ExtractROI< InternalPixelType, PixelType > ExtractSelectionType;
     typedef typename ExtractSelectionType::Pointer ExtractSelectionPointerType;
 
-    typedef List< ExtractSelectionType > ExtractSelectionListType;
+    typedef ObjectList< ExtractSelectionType > ExtractSelectionListType;
     typedef typename ExtractSelectionListType::Pointer ExtractSelectionListPointerType;
 
 	protected:
-    ImageSeriesFileReader(); 
+    ImageSeriesFileReader();
     virtual ~ImageSeriesFileReader () { }
 
 		/**
@@ -199,7 +200,7 @@ class ITK_EXPORT ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixe
 		 */
 		virtual void TestBandSelection( std::vector<unsigned int> & bands ) ;
 
-		/** GenerateData 
+		/** GenerateData
 		 * This method will be specialised if template definitions follow:
 		 * - TImage is a VectorImage
 		 * - TImage is an Image and TInteranalImage is a VectorImage
@@ -220,7 +221,7 @@ class ITK_EXPORT ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixe
 			return Superclass::PrintSelf( os, indent );
 		}
 
-		/** 
+		/**
 		 * Type of extractor to use
 		 */
     ExtractSelectionListPointerType m_ExtractorList;
@@ -289,11 +290,11 @@ class ITK_EXPORT ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TIntern
     typedef MultiToMonoChannelExtractROI< InternalPixelType, PixelType > ExtractSelectionType;
     typedef typename ExtractSelectionType::Pointer ExtractSelectionPointerType;
 
-    typedef List< ExtractSelectionType > ExtractSelectionListType;
+    typedef ObjectList< ExtractSelectionType > ExtractSelectionListType;
     typedef typename ExtractSelectionListType::Pointer ExtractSelectionListPointerType;
-    
+
 	protected:
-    ImageSeriesFileReader(); 
+    ImageSeriesFileReader();
     virtual ~ImageSeriesFileReader () { }
 
 		/**
@@ -301,7 +302,7 @@ class ITK_EXPORT ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TIntern
 		 */
 		virtual void TestBandSelection( std::vector<unsigned int> & bands ) ;
 
-		/** GenerateData 
+		/** GenerateData
 		 * This method will be specialised if template definitions follow:
 		 * - TImage is a VectorImage
 		 * - TImage is an Image and TInteranalImage is a VectorImage
@@ -322,7 +323,7 @@ class ITK_EXPORT ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TIntern
 			return Superclass::PrintSelf( os, indent );
 		}
 
-		/** 
+		/**
 		 * Type of extractor to use
 		 */
     ExtractSelectionListPointerType m_ExtractorList;
@@ -332,7 +333,7 @@ class ITK_EXPORT ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TIntern
     void operator= ( const Self & );
 
 
-}; // end of class specialized for Image and VectorImage 
+}; // end of class specialized for Image and VectorImage
 
 /** ImagerSeriesFileReader
  * \brief Specific definition for VectorImage in reading and output
@@ -393,19 +394,19 @@ class ITK_EXPORT ImageSeriesFileReader< VectorImage< TPixel, 2 >, VectorImage< T
     typedef MultiChannelExtractROI< InternalPixelType, PixelType > ExtractSelectionType;
     typedef typename ExtractSelectionType::Pointer ExtractSelectionPointerType;
 
-    typedef List< ExtractSelectionType > ExtractSelectionListType;
+    typedef ObjectList< ExtractSelectionType > ExtractSelectionListType;
     typedef typename ExtractSelectionListType::Pointer ExtractSelectionListPointerType;
-    
+
 	protected:
-    ImageSeriesFileReader(); 
+    ImageSeriesFileReader();
     virtual ~ImageSeriesFileReader () { }
 
 		/**
 		 * Tests the coherency of the Meta File (especifically band selection) with the image types
 		 */
-		virtual void TestBandSelection( std::vector<unsigned int> & bands ){ } 
+		virtual void TestBandSelection( std::vector<unsigned int> & bands ){ }
 
-		/** GenerateData 
+		/** GenerateData
 		 * This method will be specialised if template definitions follow:
 		 * - TImage is a VectorImage
 		 * - TImage is an Image and TInteranalImage is a VectorImage
@@ -426,7 +427,7 @@ class ITK_EXPORT ImageSeriesFileReader< VectorImage< TPixel, 2 >, VectorImage< T
 			return Superclass::PrintSelf( os, indent );
 		}
 
-		/** 
+		/**
 		 * Type of extractor to use
 		 */
     ExtractSelectionListPointerType m_ExtractorList;

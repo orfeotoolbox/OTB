@@ -85,7 +85,7 @@ PanTexTextureImageFilter<TInputImage, TOutputImage>
     while ( ! outputIt.IsAtEnd() )
     {
 
-      outputIt.Set( this->m_FunctorList[threadId]( neighInputOffIt ) );
+      outputIt.Set( this->m_FunctorList[threadId]( neighInputOffIt.GetNeighborhood() ) );
 
       ++neighInputOffIt;
       ++outputIt;

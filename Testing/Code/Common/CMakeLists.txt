@@ -323,15 +323,6 @@ ADD_TEST(coTvObjectListTestNotValid ${COMMON_TESTS4}
          otbObjectList2
  )
 
-ADD_TEST(coTuListNew ${COMMON_TESTS4}
-         otbListNew)
-
-ADD_TEST(coTvList ${COMMON_TESTS4}
-         otbList
-         ${INPUTDATA}/couleurs.jpg
-	 ${INPUTDATA}/poupees.png
-	 ${INPUTDATA}/sbuv.png
- )
 
 # -------            otb::ImageList   -------------------------------------------
 
@@ -633,8 +624,6 @@ otbLineSpatialObjectListToPointSetFilterNew.cxx
 )
 SET(BasicCommon_SRCS4
 otbHistogramStatisticsFunction.cxx
-otbListNew.cxx
-otbList.cxx
 otbObjectListNew.cxx
 otbObjectList.cxx
 otbObjectList2.cxx
