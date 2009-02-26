@@ -59,44 +59,14 @@ public FunctionWithNeighborhoodToImageFilter< TInputImage, TOutputImage,
   itkNewMacro(Self);
 
   /** typedef support. */
-  typedef TInputImage                              InputImageType;
-  typedef TOutputImage                              OutputImageType;
-  //typedef TFunctor                                 FunctorType;
-  typedef typename InputImageType::OffsetType      OffsetType;
-  typedef typename InputImageType::SizeType        SizeType;
-  /*
-  typedef typename InputImageType::PixelType       PixelType;
-  typedef typename Superclass::OutputType          OutputType;
-  typedef typename Superclass::IndexType           IndexType;
-  typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
-  typedef typename Superclass::PointType           PointType;
-  typedef itk::ConstNeighborhoodIterator<InputImageType>                             IteratorType;
-  typedef typename IteratorType::NeighborhoodType                                    NeighborhoodType;
-  typedef typename itk::NumericTraits<typename InputImageType::PixelType>::RealType  RealType;
-  */
+  typedef TInputImage                          InputImageType;
+  typedef TOutputImage                         OutputImageType;
+  typedef typename InputImageType::OffsetType  OffsetType;
+  typedef typename InputImageType::SizeType    SizeType;
 
   /** Dimension of the underlying image. */
   itkStaticConstMacro(ImageDimension, unsigned int,InputImageType::ImageDimension);
 
-
-  /** Evalulate the function at specified index */
-  //virtual RealType EvaluateAtIndex( const IndexType& index ) const;
-
-  /** Evaluate the function at non-integer positions */
- /*  virtual RealType Evaluate( const PointType& point ) const */
-/*   { */
-/*     IndexType index; */
-/*     this->ConvertPointToNearestIndex( point, index ); */
-/*     return this->EvaluateAtIndex( index ); */
-/*   }; */
-/*   virtual RealType EvaluateAtContinuousIndex( */
-/*     const ContinuousIndexType& cindex ) const */
-/*   { */
-/*     IndexType index; */
-/*     this->ConvertContinuousIndexToNearestIndex( cindex, index ); */
-/*     return this->EvaluateAtIndex( index ) ; */
-/*   }; */
-  
 
 protected:
   PanTexTextureImageFunctionFilter()
