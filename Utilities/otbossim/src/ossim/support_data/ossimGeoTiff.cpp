@@ -948,7 +948,7 @@ bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
    {
    }
    theScale.clear();
-   ossim_uint16 pixScaleSize;
+   ossim_uint16 pixScaleSize = 0;
    double* pixScale=0;
    if(TIFFGetField(theTiffPtr, TIFFTAG_GEOPIXELSCALE, &pixScaleSize, &pixScale))
    {
@@ -956,7 +956,7 @@ bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
                       pixScale, pixScale+pixScaleSize);
    }
    theTiePoint.clear();
-   ossim_uint16 tiePointSize;
+   ossim_uint16 tiePointSize = 0;
    double* tiepoints=0;
    if(TIFFGetField(theTiffPtr, TIFFTAG_GEOTIEPOINTS,  &tiePointSize, &tiepoints))
    {
@@ -977,7 +977,7 @@ bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
       }
    }
    theModelTransformation.clear();
-   ossim_uint16 transSize;
+   ossim_uint16 transSize = 0;
    double* trans = 0;
    
    if(TIFFGetField(theTiffPtr, TIFFTAG_GEOTRANSMATRIX, &transSize, &trans))
@@ -995,7 +995,7 @@ bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
 //       theTiePoint.push_back(theModelTransformation[7]);
 //       theTiePoint.push_back(0.0);
 //    }
-   ossim_uint16 doubleParamSize;
+   ossim_uint16 doubleParamSize = 0;
    double* tempDoubleParam;
    theDoubleParam.clear();
    if(TIFFGetField(theTiffPtr, TIFFTAG_GEODOUBLEPARAMS, &doubleParamSize, &tempDoubleParam))

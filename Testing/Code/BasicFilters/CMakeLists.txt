@@ -450,7 +450,7 @@ ADD_TEST(bfTvStreamingStatisticsVectorImageFilter ${BASICFILTERS_TESTS5}
  		   ${TEMP}/bfTvStreamingStatisticsVectorImageFilterResults.txt
          otbStreamingStatisticsVectorImageFilter
 		#${IMAGEDATA}/SPOT5_SCENE01/IMAGERY.TIF
-		${INPUTDATA}/sbuv.png
+		${INPUTDATA}/couleurs_extrait.png
 		${TEMP}/bfTvStreamingStatisticsVectorImageFilterResults.txt
 		)
 

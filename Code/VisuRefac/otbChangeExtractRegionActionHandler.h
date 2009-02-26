@@ -15,14 +15,14 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbChangeScaledExtractRegionActionHandler_h
-#define __otbChangeScaledExtractRegionActionHandler_h
+#ifndef __otbChangeExtractRegionActionHandler_h
+#define __otbChangeExtractRegionActionHandler_h
 
 #include "otbImageWidgetActionHandler.h"
 
 namespace otb
 {
-/** \class ChangeScaledExtractRegionActionHandler
+/** \class ChangeExtractRegionActionHandler
 *   \brief Implements basic Scroll, Full and Zoom  widgets resizing.
 * 
 *   \sa ImageWidgetController
@@ -30,12 +30,12 @@ namespace otb
 */
 
 template <class TModel, class TView> 
-class ChangeScaledExtractRegionActionHandler
+class ChangeExtractRegionActionHandler
   : public ImageWidgetActionHandler
 {
 public:
   /** Standard class typedefs */
-  typedef ChangeScaledExtractRegionActionHandler Self;
+  typedef ChangeExtractRegionActionHandler Self;
   typedef ImageWidgetActionHandler               Superclass;
   typedef itk::SmartPointer<Self>                Pointer;
   typedef itk::SmartPointer<const Self>          ConstPointer;
@@ -44,7 +44,7 @@ public:
   itkNewMacro(Self);
   
   /** Runtime information */
-  itkTypeMacro(ChangeScaledExtractRegionActionHandler,ImageWidgetActionHandler);
+  itkTypeMacro(ChangeExtractRegionActionHandler,ImageWidgetActionHandler);
 
   /** Model typedefs */
   typedef TModel                         ModelType;
@@ -65,7 +65,7 @@ public:
   {
     if( m_View.IsNotNull() && m_Model.IsNotNull() )
       {
-      if(widgetId == m_View->GetFullWidget()->GetIdentifier()
+      if(widgetId == m_View->GetScrollWidget()->GetIdentifier()
 	 && event == FL_PUSH)
 	{
 	// Get the clicked index
@@ -73,7 +73,7 @@ public:
 	index[0] = Fl::event_x();
 	index[1] = Fl::event_y();
 	// Change scaled extract region center
-	m_Model->SetScaledExtractRegionCenter(m_View->GetFullWidget()->ScreenIndexToRegionIndex(index));
+	m_Model->SetExtractRegionSubsampledCenter(m_View->GetScrollWidget()->ScreenIndexToRegionIndex(index));
 	// Update model
 	m_Model->Update();
 	return true;
@@ -92,11 +92,11 @@ public:
 
 protected:
   /** Constructor */
-  ChangeScaledExtractRegionActionHandler() : m_View(), m_Model()
+  ChangeExtractRegionActionHandler() : m_View(), m_Model()
   {}
 
   /** Destructor */
-  virtual ~ChangeScaledExtractRegionActionHandler(){}
+  virtual ~ChangeExtractRegionActionHandler(){}
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
@@ -104,7 +104,7 @@ protected:
   }
  
 private:
-  ChangeScaledExtractRegionActionHandler(const Self&);    // purposely not implemented
+  ChangeExtractRegionActionHandler(const Self&);    // purposely not implemented
   void operator=(const Self&); // purposely not implemented
 
   // Pointer to the view

@@ -151,6 +151,9 @@ public:
    * region */
   void SetExtractRegionCenter(const IndexType & index);
 
+ /** Change the extract region by giving the subsamppled center 
+  *  of the region */
+  void SetExtractRegionSubsampledCenter(const IndexType & index);
 
 protected:
   /** Constructor */

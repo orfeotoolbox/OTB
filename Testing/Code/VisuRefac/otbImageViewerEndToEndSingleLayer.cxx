@@ -27,6 +27,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageWidgetController.h"
 #include "otbWidgetResizingActionHandler.h"
 #include "otbChangeScaledExtractRegionActionHandler.h"
+#include "otbChangeExtractRegionActionHandler.h"
+
 
 int otbImageViewerEndToEndSingleLayer( int argc, char * argv[] )
 {
@@ -35,6 +37,7 @@ int otbImageViewerEndToEndSingleLayer( int argc, char * argv[] )
   const unsigned int scrollSize = atoi(argv[2]);
   const unsigned int fullSize = atoi(argv[3]);
   const unsigned int zoomSize = atoi(argv[4]);
+  const double       run      = atoi(argv[5]);
 
 
   // typedefs 
@@ -51,6 +54,8 @@ int otbImageViewerEndToEndSingleLayer( int argc, char * argv[] )
     <ModelType,ViewType>                             ResizingHandlerType;
   typedef otb::ChangeScaledExtractRegionActionHandler
     <ModelType,ViewType>                             ChangeScaledRegionHandlerType;
+  typedef otb::ChangeExtractRegionActionHandler
+    <ModelType,ViewType>                             ChangeRegionHandlerType;
 
   // Instantiation
   ModelType::Pointer model = ModelType::New();
@@ -87,6 +92,12 @@ int otbImageViewerEndToEndSingleLayer( int argc, char * argv[] )
   changeScaledHandler->SetView(view);
   controller->AddActionHandler(changeScaledHandler);
 
+  // Add the change extract region handler
+  ChangeRegionHandlerType::Pointer changeHandler =ChangeRegionHandlerType::New();
+  changeHandler->SetModel(model);
+  changeHandler->SetView(view);
+  controller->AddActionHandler(changeHandler);
+
   view->GetScrollWidget()->show();
   view->GetScrollWidget()->resize(fullSize,0,scrollSize,scrollSize);
   Fl::check();
@@ -98,8 +109,15 @@ int otbImageViewerEndToEndSingleLayer( int argc, char * argv[] )
 
   view->GetZoomWidget()->show();
   view->GetZoomWidget()->resize(fullSize,scrollSize,zoomSize,zoomSize);
-  
-  Fl::check();
+ 
+  if(run)
+    {
+    Fl::run();
+    }
+  else
+    {
+    Fl::check();
+    }
 
   return EXIT_SUCCESS;
 }

@@ -20,6 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "itkPolyLineParametricPath.h"
 #include "itkMetaDataObject.h"
+#include "itkImageRegion.h"
 #include "otbMacro.h"
 
 namespace otb
@@ -32,10 +33,10 @@ namespace otb
  * \sa itk::PolyLineParametricPath.
  */
 template < class TValue,unsigned int VDimension=2>
-class ITK_EXPORT PolyLineParametricPathWithValue
-      : public itk::PolyLineParametricPath<VDimension>
+  class ITK_EXPORT PolyLineParametricPathWithValue
+  : public itk::PolyLineParametricPath<VDimension>
 {
-public:
+  public:
   /** Standard typedefs */
   typedef PolyLineParametricPathWithValue          Self;
   typedef itk::PolyLineParametricPath<VDimension>  Superclass;
@@ -56,6 +57,10 @@ public:
   typedef typename Superclass::VertexListType VertexListType;
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename VertexListType::ConstIterator   VertexListConstIteratorType;
+
+  typedef itk::ImageRegion<2>                       RegionType;
+  typedef typename RegionType::SizeType            SizeType;
+  typedef typename RegionType::IndexType           IndexType;
 
   itkGetMacro(Key,std::string);
 
@@ -87,6 +92,12 @@ public:
   virtual double GetLength() const;
 
   void  AddVertex (const ContinuousIndexType &vertex);
+
+    /**
+   * Compute the path bounding region.
+   * \return The region.
+   */
+  RegionType GetBoundingRegion(void);
   
 protected:
   /** Constructor */

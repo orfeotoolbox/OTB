@@ -202,7 +202,7 @@ otbImageViewNew
 ADD_TEST(vrTvImageViewerEndToEndSingleLayer ${VISUREFAC_TESTS1}
 otbImageViewerEndToEndSingleLayer
 ${INPUTDATA}/couleurs.tif
-200 500 200
+200 500 200 0
 )
 
 

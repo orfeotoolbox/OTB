@@ -232,6 +232,8 @@ ImageWidget<TInputImage>
     typename RegionType::SizeType  size;
 
     index = m_Rectangle.GetIndex();
+    // UL left in image space is LR in opengl space, so we need to get
+    // the real upper left
     index[1]+=m_Rectangle.GetSize()[1];
     index = RegionIndexToScreenIndex(index);
     
@@ -309,7 +311,7 @@ ImageWidget<TInputImage>
 {
   IndexType resp; 
   resp[0] = static_cast<int>(m_OpenGlBufferedRegion.GetIndex()[0]+static_cast<double>(index[0]-m_ImageExtentX)/m_IsotropicZoom);
-  resp[1] = static_cast<int>(m_OpenGlBufferedRegion.GetIndex()[1]+static_cast<double>(m_ImageExtentY+m_ImageExtentHeight-index[1])/m_IsotropicZoom);
+  resp[1] = static_cast<int>(m_OpenGlBufferedRegion.GetIndex()[1]+static_cast<double>(index[1]-m_ImageExtentY)/m_IsotropicZoom);
   return resp;
 }
 
@@ -320,10 +322,8 @@ ImageWidget<TInputImage>
 ::RegionIndexToScreenIndex(const IndexType & index)
 {
   IndexType resp;
-  resp[0] = static_cast<int>(m_ImageExtentX + (static_cast<double>(index[0])
-					       -static_cast<double>(m_OpenGlBufferedRegion.GetIndex()[0]))*m_IsotropicZoom);
-  resp[1] = static_cast<int>(m_ImageExtentHeight + m_ImageExtentY - ((static_cast<double>(index[1])
-					       -static_cast<double>(m_OpenGlBufferedRegion.GetIndex()[1]))*m_IsotropicZoom));
+  resp[0]=static_cast<int>(m_ImageExtentX+(index[0]-m_OpenGlBufferedRegion.GetIndex()[0])*m_IsotropicZoom);
+  resp[1]=static_cast<int>(m_ImageExtentY+m_ImageExtentHeight-(index[1]-m_OpenGlBufferedRegion.GetIndex()[1])*m_IsotropicZoom);
    return resp;
 }
 

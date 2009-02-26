@@ -96,7 +96,7 @@ ImageLayer<TImage,TOutputImage>
   // If there are pixels to render
   if(this->GetExtractRegion().GetNumberOfPixels() > 0)
     {
-    
+    m_ExtractRenderingFilter->GetOutput()->SetRequestedRegion(this->GetExtractRegion());
     m_ExtractRenderingFilter->Update();
     this->SetRenderedExtract(m_ExtractRenderingFilter->GetOutput());
     }
@@ -108,6 +108,7 @@ ImageLayer<TImage,TOutputImage>
   // If there are pixels to render
   if(this->GetScaledExtractRegion().GetNumberOfPixels() > 0)
       {
+      m_ScaledExtractRenderingFilter->GetOutput()->SetRequestedRegion(this->GetScaledExtractRegion());
       m_ScaledExtractRenderingFilter->Update();
       this->SetRenderedScaledExtract(m_ScaledExtractRenderingFilter->GetOutput());
       this->SetHasScaledExtract(true);

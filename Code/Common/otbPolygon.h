@@ -19,7 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbPolygon_h
 
 #include "otbPolyLineParametricPathWithValue.h"
-#include "itkImageRegion.h"
+
 
 namespace otb
 {
@@ -59,9 +59,7 @@ public:
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename Superclass::VertexListConstIteratorType   VertexListConstIteratorType;
 
-  typedef itk::ImageRegion<2>                       RegionType;
-  typedef typename RegionType::SizeType            SizeType;
-  typedef typename RegionType::IndexType           IndexType;
+
 
   itkSetMacro(Epsilon,double);
   itkGetMacro(Epsilon,double);
@@ -116,11 +114,7 @@ public:
    */
   bool IsTouching(VertexType a1, VertexType a2, VertexType b1, VertexType b2) const;
 
-  /**
-   * Compute the polygon bounding region.
-   * \return The region.
-   */
-  RegionType GetBoundingRegion(void);
+
 
   /**
   * Return the polygon surface.
