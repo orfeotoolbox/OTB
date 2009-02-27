@@ -86,7 +86,10 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   InterpolatorType::Pointer        pro     = InterpolatorType::New();
   // Resampler connected to input image
   proresampler->SetInput(reader->GetOutput());
+  pro->SetInputImage(reader->GetOutput());
   pro->SetRadius(atoi(argv[6]));
+  pro->Initialize();
+
   proresampler->SetInterpolator(pro);
   StreamingResampleImageFilterType::SizeType size;
   size[0]=512;
@@ -115,7 +118,9 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   itkcosresampler->SetSize(size);
   itkcosresampler->SetOutputSpacing(tutu);
   cosresampler->SetInput(reader->GetOutput());
+  cos->SetInputImage(reader->GetOutput());
   cos->SetRadius(atoi(argv[6]));
+  cos->Initialize();
   cosresampler->SetInterpolator(cos);
   itkcosresampler->SetInput(reader->GetOutput());
   itkcosresampler->SetInterpolator(itkcos);
