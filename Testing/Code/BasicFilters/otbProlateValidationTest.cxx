@@ -60,6 +60,7 @@ int otbProlateValidationTest(int argc, char * argv[])
 
   prolate->SetInputImage(reader->GetOutput());
   prolate->SetRadius(rad);
+  prolate->Initialize();
 
 
   std::cout<<"Originalprofilsize: "<< prolate->GetFunction().GetOriginalProfileSize()<<std::endl;

@@ -64,6 +64,7 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   reader->Update();
   prolate->SetInputImage(reader->GetOutput());
   prolate->SetRadius(atoi(argv[6]));
+  prolate->Initialize();
 
   std::ofstream file;
   file.open(outfname);
