@@ -205,6 +205,11 @@ ${INPUTDATA}/couleurs.tif
 200 500 200 0
 )
 
+ADD_TEST(vrTvImageViewerEndToEndTwoLayers ${VISUREFAC_TESTS1}
+otbImageViewerEndToEndTwoLayers
+${INPUTDATA}/couleurs.tif
+200 500 200 0
+)
 
 # Testing srcs
 SET(VisuRefac_SRCS1
@@ -232,6 +237,7 @@ otbMultiplyBlendingFunctionNew.cxx
 otbRenderingImageFilterVectorWithExpNegativeTransfer.cxx
 otbImageViewNew.cxx
 otbImageViewerEndToEndSingleLayer.cxx
+otbImageViewerEndToEndTwoLayers.cxx
 )
 
 # Building testing executables
