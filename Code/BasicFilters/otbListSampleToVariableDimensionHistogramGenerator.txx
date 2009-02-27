@@ -22,6 +22,7 @@
 #define __otbListSampleToVariableDimensionHistogramGenerator_txx
 
 #include <exception>
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -49,6 +50,7 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
                                 TFrequencyContainer >
 ::GenerateData()
 {
+  otbMsgDebugMacro(<<"ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Entering");
   // TODO : Sanity checks
   if(m_Sizes.GetSize() != m_List->GetMeasurementVectorSize())
     {
@@ -129,14 +131,18 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
 
   // initialize the Histogram object using the sizes and
   // the upper and lower bound from the FindSampleBound function
+  
+  otbMsgDevMacro(<<"ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Intializing histogram with (sizes= "<<m_Sizes<<", lower = "<<h_lower<<", upper = "<<h_upper<<")");
   m_Histogram->Initialize(m_Sizes, h_lower, h_upper) ;
-
+  otbMsgDevMacro(<<"ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Histogram initialized");
   typename TListSample::ConstIterator iter = m_List->Begin() ;
   typename TListSample::ConstIterator last = m_List->End() ;
   typename HistogramType::IndexType index(m_List->GetMeasurementVectorSize()) ;
   typename TListSample::MeasurementVectorType lvector(m_List->GetMeasurementVectorSize()) ;
   typename HistogramType::MeasurementVectorType hvector(m_List->GetMeasurementVectorSize()) ;
   unsigned int i;
+  
+  otbMsgDevMacro(<<"ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Filling the histogram");
   while (iter != last)
     {
     lvector = iter.GetMeasurementVector() ;
@@ -144,8 +150,8 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
       {
       hvector[i] = (THistogramMeasurement) lvector[i] ;
       }
-
     m_Histogram->GetIndex(hvector,index);
+
     if (!m_Histogram->IsIndexOutOfBounds(index))
       {
       // if the measurement vector is out of bound then
@@ -158,6 +164,8 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
       }
     ++iter ;
     }
+
+  otbMsgDebugMacro(<<"ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Leaving");
 }
 
 template< class TListSample, 

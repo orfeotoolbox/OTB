@@ -19,6 +19,7 @@
 #define __otbImageWidgetController_cxx
 
 #include "otbImageWidgetController.h"
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -102,6 +103,7 @@ void ImageWidgetController::HandleWidgetResize(std::string widgetId, int w, int 
 
 void ImageWidgetController::HandleWidgetMove(std::string widgetId, int x, int y)
 {
+  otbMsgDevMacro(<<"ImageWidgetController::HandleWidgetMove(): ("<<widgetId<<", "<<x<<", "<<y<<")");
   // Define an iterator on the action handlers list
   ActionHandlerListType::Iterator it = m_ActionHandlersList->Begin();
   

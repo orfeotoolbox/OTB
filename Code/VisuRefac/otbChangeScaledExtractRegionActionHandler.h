@@ -68,6 +68,7 @@ public:
       if(widgetId == m_View->GetFullWidget()->GetIdentifier()
 	 && event == FL_PUSH)
 	{
+	otbMsgDevMacro(<<"ChangeScaledExtractRegionActionHandler::HandleWidgetEvent(): handling ("<<widgetId<<", "<<event<<")");
 	// Get the clicked index
 	typename ViewType::IndexType index;
 	index[0] = Fl::event_x();

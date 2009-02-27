@@ -108,6 +108,8 @@ ImageView<TInputImage>
   // If the model has a quicklook
   if(m_Model->GetHasQuicklook())
     {
+    otbMsgDevMacro(<<"ImageView::UpdateScrollWidget(): redrawing scroll widget");
+
     // Read the buffer
     const RegionType qlRegion =  m_Model->GetRasterizedQuicklook()
       ->GetLargestPossibleRegion(); 
@@ -149,6 +151,7 @@ ImageView<TInputImage>
 {
   if(m_Model->GetHasExtract())
     {
+    otbMsgDevMacro(<<"ImageView::UpdateFullWidget(): redrawing full widget");
     m_FullWidget->ReadBuffer(m_Model->GetRasterizedExtract(),m_Model->GetRasterizedExtract()
 			     ->GetLargestPossibleRegion());
 
@@ -180,6 +183,7 @@ ImageView<TInputImage>
 {
   if(m_Model->GetHasScaledExtract())
     {
+    otbMsgDevMacro(<<"ImageView::UpdateZoomWidget(): redrawing zoom widget");
     m_ZoomWidget->ReadBuffer(m_Model->GetRasterizedScaledExtract(),m_Model->GetRasterizedScaledExtract()
 			     ->GetLargestPossibleRegion());
 

@@ -83,14 +83,14 @@ public:
   typedef TTransferFunction                          TransferFunctionType;
 
   /** Evaluate method (scalar version) */
-  virtual const OutputPixelType Evaluate(ScalarPixelType spixel) const
+  inline virtual const OutputPixelType Evaluate(ScalarPixelType spixel) const
   {    
     OutputPixelType resp;
     resp.Fill(this->Evaluate(m_TransferFunction(spixel),m_TransferedMinimum[0],m_TransferedMaximum[0]));
     return resp;
   }
   /** Evaluate method (vector version) */
-  virtual const OutputPixelType Evaluate(const VectorPixelType & vpixel) const
+  inline virtual const OutputPixelType Evaluate(const VectorPixelType & vpixel) const
   {
     OutputPixelType resp;
     resp.SetRed(Evaluate(m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
