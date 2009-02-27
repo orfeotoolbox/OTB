@@ -218,7 +218,7 @@ public:
 	  out[4] = static_cast<OutputValueType>(1.);
       }
     // SD
-    if( m_SelectedTextures[4] == true )
+    if( m_SelectedTextures[5] == true )
       {
 	double sumPSI = 0;
 	for(unsigned int n=0; n<di.size(); n++)

@@ -48,7 +48,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction,TBoundaryCondition, TCoor
 template<class TInputImage, class TFunction, class TBoundaryCondition, class TCoordRep>
 void
 GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoordRep>
-::ResetOffsetTable() const
+::ResetOffsetTable()
 {
   // Clear the offset table
   if (m_OffsetTable!=NULL)
@@ -109,7 +109,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 template<class TInputImage, class TFunction, class TBoundaryCondition, class TCoordRep>
 void
 GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoordRep>
-::InitializeTables() const
+::InitializeTables()
 {
   // Compute the offset table size
   m_OffsetTableSize = 1;
@@ -133,7 +133,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 template<class TInputImage, class TFunction, class TBoundaryCondition, class TCoordRep>
 void
 GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoordRep>
-::FillWeightOffsetTable() const
+::FillWeightOffsetTable()
 {
   // Initialize the neighborhood
   SizeType radius;
@@ -183,6 +183,21 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
   }
 }
 
+/** Initialize tables: need to be call explicitely */
+template<class TInputImage, class TFunction, class TBoundaryCondition, class TCoordRep>
+void
+GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoordRep>
+::Initialize()
+{
+  // Delete existing tables
+  this->ResetOffsetTable();
+  // Tables initialization
+  this->InitializeTables();
+  // fill the weigth table
+  this->FillWeightOffsetTable();
+  m_TablesHaveBeenGenerated = true;
+}
+
 /** Evaluate at image index position */
 template<class TInputImage, class TFunction, class TBoundaryCondition, class TCoordRep>
 typename GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoordRep>::OutputType
@@ -191,13 +206,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 {
   if (!m_TablesHaveBeenGenerated)
   {
-    // Delete existing tables
-    this->ResetOffsetTable();
-    // Tables initialization
-    this->InitializeTables();
-    // fill the weigth table
-    this->FillWeightOffsetTable();
-    m_TablesHaveBeenGenerated = true;
+    itkExceptionMacro(<< "The Interpolation functor need to be explicitly intanciated with the method Initialize()");
   }
 
   //unsigned int dim;

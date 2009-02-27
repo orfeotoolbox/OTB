@@ -36,7 +36,7 @@ namespace otb
  * IEEE Geoscience and Remote Sensing Letters,
  * vol. 4, n. 2, 2007, pp 260-264
  *
- * The texture is computaed for each pixel using its neighborhood.
+ * The texture is computated for each pixel using its neighborhood.
  * User can set the spatial threshold taht is the max line length, the spectral threshold
  * that is the max difference authorized between a pixel of the line and the center pixel
  * of the current neighborhood. Alpha and RationMaxConsideration are used to compute 
@@ -164,18 +164,29 @@ public:
   void SetTextureStatus( unsigned int id, bool isSelected )
     {
       if ( id>this->GetTexturesStatus().size() || id == 0 )
-	{
-	  itkExceptionMacro(<<"Invalid texture index "<<id<<", must be in [1;"<<this->GetTexturesStatus().size()<<"]");
-	}
+	  {
+	    itkExceptionMacro(<<"Invalid texture index "<<id<<", must be in [1;"<<this->GetTexturesStatus().size()<<"]");
+	  }
       else
-	{
-	  this->GetFunctor().SetTextureStatus( id-1, isSelected );
-	}
+	  {
+	    this->GetFunctor().SetTextureStatus( id-1, isSelected );
+      }
     }
   std::vector<bool> GetTexturesStatus()
     {
       return this->GetFunctor().GetTexturesStatus();
     }
+
+  void InitTextureStatusFalse()
+    {
+      unsigned int id;
+      for (id=1;id<=6;id++)
+      {
+        this->SetTextureStatus(id,false);
+      }
+    }
+
+
 
   /** Return output length image */
   const OutputImageType * GetLengthOutput() const;

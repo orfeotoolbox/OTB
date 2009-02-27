@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbWaveletForwardTransform__h
-#define __otbWaveletForwardTransform__h
+#ifndef __otbWaveletForwardTransform_h
+#define __otbWaveletForwardTransform_h
 
 #include "itkImageToImageFilter.h"
 
@@ -97,6 +97,12 @@ private:
 
   unsigned int m_NumberOfDecompositions;
   FilterListPointerType m_FilterList;
+
+  /*
+   * At this level, m_UseSubSampleImage is set to FALSE to perform
+   * multiscale analysis only
+   */
+  bool m_UseSubSampleImage;
 
 }; // end of class
 

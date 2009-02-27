@@ -18,9 +18,10 @@
 
 =========================================================================*/
 
-#ifndef __otbStationaryFilterBank__h
-#define __otbStationaryFilterBank__h
+#ifndef __otbStationaryFilterBank_h
+#define __otbStationaryFilterBank_h
 
+#include "itkProgressReporter.h"
 #include "itkImageToImageFilter.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkImageRegionIterator.h"
@@ -37,7 +38,7 @@ namespace otb {
  * (ie. convolution-like operation).
  *
  * the inner operator are supposed to be defined through 1D filters. Then, the
- * transformation yields \$ 2^Dim \$ output images.
+ * transformation yields \f$ 2^Dim \f$ output images.
  *
  * In case of 1D, GetOutput(0) -> LowPass
  *
@@ -119,6 +120,12 @@ public:
 	itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 	itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
+  /**
+   * Set/Get the level of up sampling of the filter used in the A-trou algorithm
+   */
+  itkGetMacro(UpSampleFactor,unsigned int);
+  itkSetMacro(UpSampleFactor,unsigned int);
+
 protected:
   StationaryFilterBank();
   virtual ~StationaryFilterBank() { }
@@ -135,6 +142,7 @@ protected:
                                         itk::ProgressReporter & reporter,
                                         const OutputImageRegionType& outputRegionForThread, int threadId );
 
+  unsigned int m_UpSampleFactor;
 
 private:
   StationaryFilterBank( const Self & );

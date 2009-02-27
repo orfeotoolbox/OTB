@@ -113,12 +113,12 @@ ADD_TEST(coTvExtractROI2 ${COMMON_TESTS2}
         26 97 209 100 )
 
 ADD_TEST(coTvExtractROI_RGB ${COMMON_TESTS2}
-  --compare-image ${TOL}   ${BASELINE}/coExtractROI_RGB_sbuv_700_60_77_489.png
-                    ${TEMP}/coExtractROI_RGB_sbuv_700_60_77_489.png
+  --compare-image ${TOL}   ${BASELINE}/coExtractROI_RGB_300_10_200_50.png
+                    ${TEMP}/coExtractROI_RGB_300_10_200_50.png
         otbExtractROI_RGB
-        ${INPUTDATA}/sbuv.png
-        ${TEMP}/coExtractROI_RGB_sbuv_700_60_77_489.png
-        700 60 77 489 )
+        ${INPUTDATA}/couleurs_extrait.png
+        ${TEMP}/coExtractROI_RGB_300_10_200_50.png
+        300 10 200 50 )
 ADD_TEST(coTvExtractROI_RGB2 ${COMMON_TESTS2}
   --compare-image ${TOL}   ${BASELINE}/coExtractROI_RGB_poupees_302_1_134_330.jpg
                     ${TEMP}/coExtractROI_RGB_poupees_302_1_134_330.jpg
@@ -153,52 +153,52 @@ ADD_TEST(coTuMultiChannelROINew ${COMMON_TESTS2}
          otbMultiChannelExtractROINew)
 
 ADD_TEST(coTvMultiChannelROI_RGB2RGB_PNG ${COMMON_TESTS2}
-  --compare-image ${TOL}   ${INPUTDATA}/sbuv.png
-                           ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv.png
+  --compare-image ${TOL}   ${INPUTDATA}/couleurs_extrait.png
+                           ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG.png
          otbMultiChannelExtractROI
-         ${INPUTDATA}/sbuv.png
-         ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv.png
+         ${INPUTDATA}/couleurs_extrait.png
+         ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG.png
          -channels 1 2 3 )
 #         -sizeX 800 -sizeY 600 )
 
 ADD_TEST(coTvMultiChannelROI_RGB2RGB_PNG2 ${COMMON_TESTS2}
-  --compare-image ${TOL}   ${BASELINE}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv_700_60_77_489_channels_123.png
-                           ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv_700_60_77_489_channels_123.png
+  --compare-image ${TOL}   ${BASELINE}/coMultiChannelExtractROI_RGB2RGB_PNG_300_10_250_50_channels_123.png
+                           ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_300_10_250_50_channels_123.png
          otbMultiChannelExtractROI
-         -uchar ${INPUTDATA}/sbuv.png
-         -uchar ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv_700_60_77_489_channels_123.png
-         -startX 700 -startY 60 -sizeX 77 -sizeY 489 -channels 1 2 3  )
+         -uchar ${INPUTDATA}/couleurs_extrait.png
+         -uchar ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_300_10_250_50_channels_123.png
+         -startX 300 -startY 10 -sizeX 250 -sizeY 50 -channels 1 2 3  )
 
 ADD_TEST(coTvMultiChannelROI_RGB2RGB_PNG3 ${COMMON_TESTS2}
-  --compare-image ${TOL}  ${BASELINE}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv_700_60_77_489_channels_321.png
-                    ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv_700_60_77_489_channels_321.png
+  --compare-image ${TOL}  ${BASELINE}/coMultiChannelExtractROI_RGB2RGB_PNG_300_10_250_50_channels_321.png
+                    ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_300_10_250_50_channels_321.png
          otbMultiChannelExtractROI
-         ${INPUTDATA}/sbuv.png
-         ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv_700_60_77_489_channels_321.png
-         -startX 700 -startY 60 -sizeX 77 -sizeY 489 -channels 3 2 1  )
+         ${INPUTDATA}/couleurs_extrait.png
+         ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_300_10_250_50_channels_321.png
+         -startX 300 -startY 10 -sizeX 250 -sizeY 50  -channels 3 2 1  )
 ADD_TEST(coTvMultiChannelROI_RGB2NG_PNG1 ${COMMON_TESTS2}
-  --compare-image ${TOL}  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_1.png
-                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_1.png
+  --compare-image ${TOL}  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_1.png
+                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_1.png
          otbMultiChannelExtractROI
-         ${INPUTDATA}/sbuv.png
-         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_1.png
-         -startX 700 -startY 60 -sizeX 77 -sizeY 489 -channels 1 )
+         ${INPUTDATA}/couleurs_extrait.png
+         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_1.png
+         -startX 300 -startY 10 -sizeX 250 -sizeY 50 -channels 1 )
 
 
 ADD_TEST(coTvMultiChannelROI_RGB2NG_PNG2 ${COMMON_TESTS2}
-  --compare-image ${TOL}  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_2.png
-                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_2.png
+  --compare-image ${TOL}  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_2.png
+                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_2.png
          otbMultiChannelExtractROI
-         ${INPUTDATA}/sbuv.png
-         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_2.png
-         -startX 700 -startY 60 -sizeX 77 -sizeY 489 -channels 2 )
+         ${INPUTDATA}/couleurs_extrait.png
+         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_2.png
+         -startX 300 -startY 10 -sizeX 250 -sizeY 50  -channels 2 )
 ADD_TEST(coTvMultiChannelROI_RGB2NG_PNG3 ${COMMON_TESTS2}
-  --compare-image ${TOL}  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_3.png
-                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_3.png
+  --compare-image ${TOL}  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_3.png
+                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_3.png
          otbMultiChannelExtractROI
-         ${INPUTDATA}/sbuv.png
-         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_3.png
-         -startX 700 -startY 60 -sizeX 77 -sizeY 489 -channels 3 )
+         ${INPUTDATA}/couleurs_extrait.png
+         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_3.png
+         -startX 300 -startY 10 -sizeX 250 -sizeY 50  -channels 3 )
 
 ADD_TEST(coTvMultiChannelROI_5c_BSQ ${COMMON_TESTS2}
 #  --compare-binary  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_12321.c1
@@ -246,12 +246,12 @@ ADD_TEST(coTuMultiToMonoROINew ${COMMON_TESTS3}
          otbMultiToMonoChannelExtractROINew)
 
 ADD_TEST(coTvMultiToMonoROI_RGB2NG_PNG ${COMMON_TESTS3}
-  --compare-image ${TOL}   ${BASELINE}/coMultiToMonoChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_1.png
-                           ${TEMP}/coMultiToMonoChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_1.png
+  --compare-image ${TOL}   ${BASELINE}/coMultiToMonoChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_1.png
+                           ${TEMP}/coMultiToMonoChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_1.png
          otbMultiToMonoChannelExtractROI
-         ${INPUTDATA}/sbuv.png
-         ${TEMP}/coMultiToMonoChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_1.png
-         -startX 700 -startY 60 -sizeX 77 -sizeY 489 -channel 1 )
+         ${INPUTDATA}/couleurs_extrait.png
+         ${TEMP}/coMultiToMonoChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_1.png
+         -startX 300 -startY 10 -sizeX 250 -sizeY 50 -channel 1 )
 
 
 # -------            otb::PointSetSource   ------------------------------
@@ -316,7 +316,7 @@ ADD_TEST(coTvObjectList ${COMMON_TESTS4}
          otbObjectList
          ${INPUTDATA}/couleurs.jpg
          ${INPUTDATA}/poupees.png
-         ${INPUTDATA}/sbuv.png
+         ${INPUTDATA}/couleurs_extrait.png
  )
 
 ADD_TEST(coTvObjectListTestNotValid ${COMMON_TESTS4}

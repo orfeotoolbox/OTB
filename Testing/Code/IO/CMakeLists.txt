@@ -332,18 +332,26 @@ ADD_TEST(ioTvImageFileReaderBSQ2PNG ${IO_TESTS3}
         ${TEMP}/ioImageFileReaderBSQ2PNG.png )
 
 ADD_TEST(ioTvImageFileReaderRGB_PNG2BSQ ${IO_TESTS3}
-  --compare-image ${TOL}        ${INPUTDATA}/sbuv.png
+  --compare-image ${TOL}        ${INPUTDATA}/couleurs_extrait.png
                                 ${TEMP}/ioImageFileReaderRGB_PNG2BSQ.hd
         otbImageFileReaderRGBTest
-        ${INPUTDATA}/sbuv.png
+        ${INPUTDATA}/couleurs_extrait.png
         ${TEMP}/ioImageFileReaderRGB_PNG2BSQ.hd )
 
 ADD_TEST(ioTvImageFileReaderRGB_PNG2ENVI ${IO_TESTS3}
-  --compare-image ${TOL}        ${INPUTDATA}/sbuv.png
+  --compare-image ${TOL}        ${INPUTDATA}/couleurs_extrait.png
                                 ${TEMP}/ioImageFileReaderRGB_PNG2ENVI.hdr
         otbImageFileReaderRGBTest
-        ${INPUTDATA}/sbuv.png
+        ${INPUTDATA}/couleurs_extrait.png
         ${TEMP}/ioImageFileReaderRGB_PNG2ENVI.hdr )
+
+ADD_TEST(ioTvCheckReadPNGIndexee ${IO_TESTS3}
+  --compare-image ${TOL}        ${INPUTDATA}/sbuv_indexee.png
+                                ${TEMP}/ioImageFileReaderRGB_PNGIndexee2TIF.tif
+        otbImageFileReaderRGBTest
+        ${INPUTDATA}/sbuv_indexee.png
+        ${TEMP}/ioImageFileReaderRGB_PNGIndexee2TIF.tif )
+
 
 # --- Image I2
 ADD_TEST(ioTvImageFileReaderShortRGB_BSQ2HDR ${IO_TESTS3}
@@ -586,17 +594,17 @@ ADD_TEST(ioTvImageFileReaderPNG2PNG ${IO_TESTS7}
         ${TEMP}/ioImageFileReaderPNG2PNG_cthead1.png )
 # RGB
 ADD_TEST(ioTvImageFileReaderRGB_PNG2PNG ${IO_TESTS7}
-  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderRGB_PNG2PNG_sbuv.png
-                    ${TEMP}/ioImageFileReaderRGB_PNG2PNG_sbuv.png
+  --compare-image ${TOL}   ${INPUTDATA}/couleurs_extrait.png
+                    ${TEMP}/ioImageFileReaderRGB_PNG2PNG.png
         otbImageFileReaderRGBTest
-        ${INPUTDATA}/sbuv.png
-        ${TEMP}/ioImageFileReaderRGB_PNG2PNG_sbuv.png )
+        ${INPUTDATA}/couleurs_extrait.png
+        ${TEMP}/ioImageFileReaderRGB_PNG2PNG.png )
 ADD_TEST(ioTvImageFileReaderRGB_PNG2TIFF ${IO_TESTS7}
-  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderRGB_PNG2TIFF_sbuv.tiff
-                    ${TEMP}/ioImageFileReaderRGB_PNG2TIFF_sbuv.tiff
+  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderRGB_PNG2TIFF.tiff
+                    ${TEMP}/ioImageFileReaderRGB_PNG2TIFF.tiff
         otbImageFileReaderRGBTest
-        ${INPUTDATA}/sbuv.png
-        ${TEMP}/ioImageFileReaderRGB_PNG2TIFF_sbuv.tiff )
+        ${INPUTDATA}/couleurs_extrait.png
+        ${TEMP}/ioImageFileReaderRGB_PNG2TIFF.tiff )
 ADD_TEST(ioTvImageFileReaderRGB_BSQ2PNG ${IO_TESTS7}
   --compare-image ${TOL}   ${INPUTDATA}/poupees.hdr
                     ${TEMP}/ioImageFileReaderRGB_BSQ2PNG_poupees.png
@@ -668,23 +676,23 @@ ADD_TEST(ioTvImageFileReaderPDS2TIFF ${IO_TESTS8}
 # RGB
 
 ADD_TEST(ioTvImageFileWriterRGB_PNG2PNG ${IO_TESTS8}
-  --compare-image ${TOL}   ${BASELINE}/ioImageFileWriterRGB_PNG2PNG_sbuv.png
-                    ${TEMP}/ioImageFileWriterRGB_PNG2PNG_sbuv.png
+  --compare-image ${TOL}   ${BASELINE}/ioImageFileWriterRGB_PNG2PNG.png
+                    ${TEMP}/ioImageFileWriterRGB_PNG2PNG.png
         otbImageFileWriterRGBTest
-        ${INPUTDATA}/sbuv.png
-        ${TEMP}/ioImageFileWriterRGB_PNG2PNG_sbuv.png )
+        ${INPUTDATA}/couleurs_extrait.png
+        ${TEMP}/ioImageFileWriterRGB_PNG2PNG.png )
 
 ADD_TEST(ioTvImageFileWriterRGB_PNG2BSQ ${IO_TESTS8}
         otbImageFileWriterRGBTest
-        ${INPUTDATA}/sbuv.png
-        ${TEMP}/ioImageFileWriterRGB_PNG2BSQ_sbuv.hdr )
+        ${INPUTDATA}/couleurs_extrait.png
+        ${TEMP}/ioImageFileWriterRGB_PNG2BSQ.hdr )
 
 ADD_TEST(ioTvImageFileReaderRGB_BSQ2PNG_2 ${IO_TESTS8}
-  --compare-image ${TOL}   ${INPUTDATA}/sbuv.png
-                    ${TEMP}/ioImageFileWriterRGB_PNG2BSQ_sbuv_2.png
+  --compare-image ${TOL}   ${INPUTDATA}/couleurs_extrait.png
+                    ${TEMP}/ioImageFileReaderRGB_PNG2BSQ_2.png
         otbImageFileReaderRGBTest
-        ${TEMP}/ioImageFileWriterRGB_PNG2BSQ_sbuv.hdr
-        ${TEMP}/ioImageFileWriterRGB_PNG2BSQ_sbuv_2.png )
+        ${TEMP}/ioImageFileWriterRGB_PNG2BSQ.hdr
+        ${TEMP}/ioImageFileReaderRGB_PNG2BSQ_2.png )
 
 # WRITER GDAL
 ADD_TEST(ioTvGDALImageFileWriterTIF2TIF ${IO_TESTS8}
