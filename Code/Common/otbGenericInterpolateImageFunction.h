@@ -30,6 +30,9 @@ namespace otb
  *
  * GenericInterpolateImageFunction interpolates image intensity according to a
  * resampling profil.
+ *
+ * The Initialize() method need to be call to create the filter.
+ *
  * \ingroup ImageFunctions ImageInterpolators
  */
 template <class TInputImage, class TFunction, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep = double>
