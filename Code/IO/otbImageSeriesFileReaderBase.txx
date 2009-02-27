@@ -285,8 +285,8 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
     index[1] = beg_line - 1; 
 
     SizeType size;
-    size[0] = end_col - beg_col;
-    size[1] = end_line - beg_line;
+    size[0] = end_col - beg_col + 1;
+    size[1] = end_line - beg_line + 1;
 
     RegionType region;
     region.SetSize( size );
