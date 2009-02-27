@@ -115,7 +115,7 @@ protected:
 
   /** 
    * Perform the "a-trou" algorithm for shift-invariant transformation.
-   * It transforms the filter \$ H(z) \$ into \$ H(z^2) \$.
+   * It transforms the filter \f$ H(z) \f$ into \f$ H(z^2) \f$.
    */
   CoefficientVector UpSamplingCoefficients ( CoefficientVector & coeff ) 
   {

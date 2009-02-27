@@ -38,7 +38,7 @@ namespace otb {
  * (ie. convolution-like operation).
  *
  * the inner operator are supposed to be defined through 1D filters. Then, the
- * transformation yields \$ 2^Dim \$ output images.
+ * transformation yields \f$ 2^Dim \f$ output images.
  *
  * In case of 1D, GetOutput(0) -> LowPass
  *

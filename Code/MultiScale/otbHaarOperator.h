@@ -32,7 +32,7 @@ namespace otb {
  * 
  * LowPassHaarOperator is a NeighborhoodOperator that should be applied to a 
  * NeighborhoodIterator using the NeighborhoodInnerProduct method. 
- * The Haar Operator is defiend in 1D as \$ H(z) = ( 1 + z^{-1} ) / 2 \$.
+ * The Haar Operator is defiend in 1D as \f$ H(z) = ( 1 + z^{-1} ) / 2 \f$.
  * In N dimensions, the operator is directional
  *
  * \sa WaveletOperator
@@ -123,7 +123,7 @@ protected:
  * 
  * HighPassHaarOperator is a NeighborhoodOperator that should be applied a 
  * NeighborhoodIterator using the NeighborhoodInnerProduct method. 
- * The Haar Operator is defiend in 1D as \$ G(z) = ( 1 - z^{-1} ) / 2 \$.
+ * The Haar Operator is defiend in 1D as \f$ G(z) = ( 1 - z^{-1} ) / 2 \f$.
  * In N dimensions, the operator is directional
  *
  * \sa WaveletOperator

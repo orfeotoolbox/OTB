@@ -33,9 +33,9 @@ namespace otb {
  * LowPass_9_7_Operator is a NeighborhoodOperator that should be applied a 
  * NeighborhoodIterator using the NeighborhoodInnerProduct method. 
  * The _9_7_ Operator is defiend in 1D as 
- * \$ H(z) = 0.026748757411 z^{-4} -0.016864118443 z^{-3} -0.078223266529 z^{-2}
+ * \f$ H(z) = 0.026748757411 z^{-4} -0.016864118443 z^{-3} -0.078223266529 z^{-2}
  *           + 0.266864118443 z^{-1} + 0.602949018236 + 0.266864118443 z
- *           -0.078223266529 z^2 -0.016864118443 z^3 + 0.026748757411 z^4 \$.
+ *           -0.078223266529 z^2 -0.016864118443 z^3 + 0.026748757411 z^4 \f$.
  *
  * In N dimensions, the operator is directional
  *
@@ -131,8 +131,8 @@ protected:
  * HighPass_9_7_Operator is a NeighborhoodOperator that should be applied a 
  * NeighborhoodIterator using the NeighborhoodInnerProduct method. 
  * The _9_7_ Operator is defiend in 1D as 
- * \$ H(z) = 0.045635881557 z^{-3} -0.028771763114 z^{-2} -0.295635881557 z^{-1}
- *            + 0.557543526229  - 0.295635881557 z -0.028771763114 z^2 + 0.045635881557 z^3 \$.
+ * \f$ H(z) = 0.045635881557 z^{-3} -0.028771763114 z^{-2} -0.295635881557 z^{-1}
+ *            + 0.557543526229  - 0.295635881557 z -0.028771763114 z^2 + 0.045635881557 z^3 \f$.
  *
  * In N dimensions, the operator is directional
  *
