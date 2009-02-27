@@ -27,13 +27,13 @@ namespace otb
 {
 
 /** \class ImageView
-*   \brief
+*   \brief 
 *   \Todo: Rename ImageViewer when refactoring will be completed.
 */
 
 template <class TViewerModel >
 class ImageView
-      : public ImageViewerModelListener, public itk::Object
+  : public ImageViewerModelListener, public itk::Object
 {
 public:
   /** Standard class typedefs */
@@ -52,14 +52,14 @@ public:
   typedef TViewerModel                         ModelType;
   typedef typename ModelType::Pointer          ModelPointerType;
   typedef typename ModelType::OutputImageType  ImageType;
-
+  
   /** Controller typedef */
   typedef ImageWidgetController                ControllerType;
   typedef typename ControllerType::Pointer     ControllerPointerType;
 
-  /** Image region typedef */
+ /** Image region typedef */
   typedef typename ImageType::RegionType       RegionType;
-
+  
   /** Region size & index typedef */
   typedef typename RegionType::SizeType        SizeType;
   typedef typename RegionType::IndexType       IndexType;
@@ -69,16 +69,16 @@ public:
   typedef typename ImageWidgetType::Pointer    ImageWidgetPointerType;
 
   /**
-   * This method unregister with previous model if any, and
+   * This method unregister with previous model if any, and 
    * register with the new one.
    */
   void SetModel(ModelType * model);
-
+  
   /**
    * This method sets the controller and passes it to the widgets.
    */
   void SetController(ControllerType * controller);
-
+ 
   /**
    * Manually trigger a refresh
    */
@@ -89,7 +89,7 @@ public:
   itkGetObjectMacro(FullWidget,ImageWidgetType);
   itkGetObjectMacro(ZoomWidget,ImageWidgetType);
 
-protected:
+ protected:
   /** Constructor */
   ImageView();
   /** Destructor */
@@ -108,7 +108,7 @@ protected:
 
   /** Handle notification from the viewer */
   virtual void ImageViewerNotify();
-
+  
 private:
   ImageView(const Self&);      // purposely not implemented
   void operator=(const Self&); // purposely not implemented

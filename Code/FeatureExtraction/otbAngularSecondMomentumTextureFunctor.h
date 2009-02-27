@@ -38,11 +38,11 @@ namespace Functor
  */
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT AngularSecondMomentumTextureFunctor :
-      public TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType>
+public TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
-  AngularSecondMomentumTextureFunctor() {};
-  virtual ~AngularSecondMomentumTextureFunctor() {};
+  AngularSecondMomentumTextureFunctor(){};
+  virtual ~AngularSecondMomentumTextureFunctor(){};
 
   typedef TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
   typedef typename Superclass::NeighborhoodType  NeighborhoodType;
@@ -56,15 +56,15 @@ public:
 
     double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
     double areaInv = 1/area;
-    for (unsigned r = 0; r<this->GetHisto().size(); r++)
-    {
-      for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-      {
-        double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
-        out += vcl_pow( p, 2 );
-      }
-    }
-    return out;
+      for (unsigned r = 0; r<this->GetHisto().size(); r++)
+	{
+	  for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
+	    {
+	      double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
+	      out += vcl_pow( p, 2 );
+	    }
+	}
+      return out;
   }
 
 };

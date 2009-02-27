@@ -39,11 +39,11 @@ namespace Functor
  */
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT EnergyTextureFunctor :
-      public TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType>
+public TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
-  EnergyTextureFunctor() {};
-  virtual ~EnergyTextureFunctor() {};
+  EnergyTextureFunctor(){};
+  virtual ~EnergyTextureFunctor(){};
 
   typedef TScalarInputPixelType                  InputScalarType;
   typedef TScalarOutputPixelType                 OutputScalarType;
@@ -51,7 +51,7 @@ public:
   typedef typename Superclass::OffsetType        OffsetType;
   typedef typename Superclass::RadiusType        RadiusType;
   typedef typename Superclass::NeighborhoodType  NeighborhoodType;
-
+ 
 
   double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
@@ -71,18 +71,18 @@ public:
 
     offsetOff = offsetOffInit;
     for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
-    {
-      offsetOff[0]++;
-      offsetOff[1] = offsetOffInit[1];
-      offset[0] = l;
-      for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
       {
-        offsetOff[1]++;
-        offset[1] = k;
-        norm = vcl_pow(static_cast<double>( ( neigh[offset] - neighOff[neighOff.GetCenterNeighborhoodIndex()] ) ), 2);
-        temp += norm;
+        offsetOff[0]++;
+        offsetOff[1] = offsetOffInit[1];
+        offset[0] = l;
+        for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+	  {
+	    offsetOff[1]++;
+	    offset[1] = k;
+	    norm = vcl_pow(static_cast<double>( ( neigh[offset] - neighOff[neighOff.GetCenterNeighborhoodIndex()] ) ), 2);
+	    temp += norm;
+	  }
       }
-    }
     temp /= area;
     return vcl_pow(temp, 2);
   }

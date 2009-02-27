@@ -44,13 +44,13 @@ namespace otb
 *   will generate an exception.
 *   Using Gl acceleration allows you to have a better rendering when
 *   zooming.
-*
+*  
 *   It is also able to display a rectangle on the displayed image.
 */
 
 template <class TInputImage=otb::Image<itk::RGBPixel<unsigned char>,2 > >
 class ImageWidget
-      : public Fl_Gl_Window, public itk::Object
+  : public Fl_Gl_Window, public itk::Object
 {
 public:
   /** Standard class typedefs */
@@ -110,7 +110,7 @@ public:
   itkSetMacro(DisplayRectangle,bool);
   itkGetMacro(DisplayRectangle,bool);
   itkBooleanMacro(DisplayRectangle);
-
+  
   /** Set/Get the rectangle to display */
   itkSetMacro(Rectangle,RegionType);
   itkGetConstReferenceMacro(Rectangle,RegionType);
@@ -125,7 +125,7 @@ public:
 
   /** Convert a screen index to a buffered region index */
   IndexType ScreenIndexToRegionIndex(const IndexType& index );
-
+  
   /** Convert a buffered region index to a screen index */
   IndexType RegionIndexToScreenIndex(const IndexType& index);
 
@@ -192,7 +192,7 @@ private:
   RegionType m_Rectangle;
   bool       m_DisplayRectangle;
   ColorType  m_RectangleColor;
-
+  
   /** Image extent coordinates in the display axis system */
   double m_ImageExtentWidth;
   double m_ImageExtentHeight;

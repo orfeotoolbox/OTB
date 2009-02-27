@@ -468,9 +468,9 @@ Polygon<TValue>
  * Get surface
  */
 template<class TValue>
-double
-Polygon<TValue>
-::GetArea() const
+    double
+    Polygon<TValue>
+  ::GetArea() const
 {
   if (!m_AreaIsValid)
   {

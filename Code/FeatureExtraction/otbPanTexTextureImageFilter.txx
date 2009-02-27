@@ -31,8 +31,7 @@ PanTexTextureImageFilter<TInputImage,TOutputImage>
 ::PanTexTextureImageFilter()
 {
   this->SetRadius( 4 );
-  OffsetType off;
-  off.Fill(2);
+  OffsetType off; off.Fill(2);
   this->SetOffset( off );
 }
 
@@ -55,7 +54,7 @@ PanTexTextureImageFilter<TInputImage, TOutputImage>
   OutputImagePointer outputPtr = this->GetOutput(0);
 
   itk::ImageRegionIterator<TOutputImage> outputIt;
-
+ 
   // Neighborhood+offset iterator
   RadiusType rOff;
   rOff[0] = this->GetRadius() + vcl_abs(this->GetOffset()[0]);

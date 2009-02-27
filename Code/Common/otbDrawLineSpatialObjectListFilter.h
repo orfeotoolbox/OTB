@@ -28,8 +28,8 @@ namespace otb
  * \brief Composite filter which draw lines in an image.
  *
  * This class implements a composite filter that draws a list of lines in
- * an input Image. This class
- *
+ * an input Image. This class 
+ * 
  *
  *
  */
@@ -47,7 +47,7 @@ public:
                           unsigned int,
                           TOutputImage::ImageDimension);
 
-
+  
   /** typedefs support for inputs & outputs*/
   typedef TInputImage                                           InputImageType;
   typedef TOutputImage                                          OutputImageType;
@@ -86,30 +86,30 @@ public:
   /** Get/Set m_Value*/
   itkGetMacro(Value,OutputPixelType );
   itkSetMacro(Value,OutputPixelType );
-
-
+  
+  
 protected:
   DrawLineSpatialObjectListFilter();
   virtual ~DrawLineSpatialObjectListFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   virtual void ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId ) ;
-
+  
   /**
    * compute the intersection of the segment to draw with the region
    */
   virtual void CropSegment(OutputIndexType *indexToCrop,OutputIndexType *otherIndex, const OutputImageRegionType *outputRegionForThread )const;
-
+  
   virtual void CropRightSegment(OutputIndexType *indexToCrop,OutputIndexType *otherIndex, const OutputImageRegionType *outputRegionForThread )const;
-
+  
 
   virtual bool IsUpsideTheRegion(OutputIndexType *indexToCrop, const OutputImageRegionType *outputRegionForThread ) const;
 
   virtual bool IsDownsideTheRegion(OutputIndexType *indexToCrop, const OutputImageRegionType *outputRegionForThread )const;
-
+  
   virtual bool IsDownsideTheImage(OutputIndexType *indexToCrop )const;
-
-
+    
+  
   virtual bool IsColumnOutsideOfTheRegion(OutputIndexType *indexToCheck, OutputIndexType *otherToCheck, const OutputImageRegionType *outputRegionForThread)const;
 
 private:

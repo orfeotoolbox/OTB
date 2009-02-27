@@ -77,7 +77,7 @@ public:
   }
 
   /** Destructor */
-  ~RenderingFunctor() {}
+  ~RenderingFunctor(){}
 
   /** Set the rendering function
    *  \param function the Rendering function.
@@ -120,18 +120,18 @@ private:
 */
 template <class TInputImage,class TOutputImage = Image<itk::RGBPixel<unsigned char>, 2 > >
 class RenderingImageFilter
-      : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,
-      Functor::RenderingFunctor
-      < typename TInputImage ::InternalPixelType,
-      typename TOutputImage::PixelType > >
+  : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,
+				        Functor::RenderingFunctor
+					< typename TInputImage ::InternalPixelType,
+					  typename TOutputImage::PixelType > >
 {
 public:
   /** Standard typedefs */
   typedef RenderingImageFilter                                   Self;
   typedef itk::UnaryFunctorImageFilter
   <TInputImage,TOutputImage, Functor::RenderingFunctor
-  < typename TInputImage ::InternalPixelType,
-  typename TOutputImage::PixelType > >          Superclass;
+		 < typename TInputImage ::InternalPixelType,
+		   typename TOutputImage::PixelType > >          Superclass;
   typedef itk::SmartPointer<Self>                                Pointer;
   typedef itk::SmartPointer<const Self>                          ConstPointer;
 
@@ -144,7 +144,7 @@ public:
   /** Rendering function typedef */
   typedef Functor::RenderingFunctor
   < typename TInputImage ::InternalPixelType,
-  typename TOutputImage::PixelType >                         RenderingFunctorType;
+    typename TOutputImage::PixelType >                         RenderingFunctorType;
   typedef typename RenderingFunctorType::RenderingFunctionType RenderingFunctionType;
 
   /**
@@ -173,12 +173,12 @@ public:
   {
     // Call the superclass implementation
     Superclass::BeforeThreadedGenerateData();
-
+    
     // Initialize the rendering function
     this->GetFunctor().InitializeFunction();
   }
 
-protected:
+ protected:
   /** Constructor */
   RenderingImageFilter() {}
   /** Destructor */

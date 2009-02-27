@@ -111,9 +111,9 @@ protected:
     double dindex2 = static_cast<double>(id2);
     double ddenom = dindex1 + dindex2;
     if ( ddenom == 0 )
-    {
+      {
       return static_cast<TOutput>(0.);
-    }
+      }
     return ( static_cast<TOutput>((dindex1- dindex2)/ddenom));
   }
 };
@@ -145,9 +145,9 @@ protected:
     double drho860 = static_cast<double>(rho860);
     double drho1240 = static_cast<double>(rho1240);
     if ( drho1240 == 0 )
-    {
+      {
       return static_cast<TOutput>(0.);
-    }
+      }
     return ( static_cast<TOutput>(drho860/drho1240) );
   }
 };
@@ -346,7 +346,7 @@ public:
   {
     return this->GetIndex1;
   }
-/// Set Index G
+ /// Set Index G
   void SetGIndex(unsigned int channel)
   {
     this->SetIndex2(channel);
@@ -399,7 +399,7 @@ public:
   {
     return this->GetIndex1;
   }
-/// Set Index G
+ /// Set Index G
   void SetGIndex(unsigned int channel)
   {
     this->SetIndex2(channel);

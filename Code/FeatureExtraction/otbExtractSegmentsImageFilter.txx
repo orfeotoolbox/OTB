@@ -216,7 +216,7 @@ void
 ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 ::GenerateData()
 {
-
+  
   m_PixelSuppression->SetInputImage(  this->GetInputImage() );
   m_PixelSuppression->SetInputImageDirection( this->GetInputImageDirection() );
 

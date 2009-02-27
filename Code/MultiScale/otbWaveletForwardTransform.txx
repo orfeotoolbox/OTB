@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,8 +23,7 @@
 
 #include "otbWaveletForwardTransform.h"
 
-namespace otb
-{
+namespace otb {
 
 template < class TInputImage, class TOutputImage, class TFilter >
 WaveletForwardTransform< TInputImage, TOutputImage, TFilter >
@@ -57,7 +56,7 @@ WaveletForwardTransform< TInputImage, TOutputImage, TFilter >
 
   unsigned int idx = 0;
   GetFilter(0)->GraftNthOutput( 0, this->GetOutput(idx++) );
-
+  
   for ( unsigned int i = 0; i < this->GetNumberOfDecompositions(); i++ )
   {
     for ( unsigned int j = 1; j < this->GetFilter(i)->GetNumberOfOutputs(); j++ )
@@ -91,7 +90,7 @@ WaveletForwardTransform< TInputImage, TOutputImage, TFilter >
 
   unsigned int subSampleFactor = 0;
   while ( nbDecomp > 0 )
-  {
+  { 
     /*
     std::cerr << "Doing Decomp " << nbDecomp << "\n";
     std::cerr << "outputIdxForGraft = " << outputIdxForGraft << "\n";
@@ -129,7 +128,7 @@ WaveletForwardTransform< TInputImage, TOutputImage, TFilter >
     GetFilter(nbDecomp)->GraftNthOutput( idx, this->GetOutput( outputIdxForGraft-- ) );
 
   if ( m_UseSubSampleImage == false )
-    GetFilter(nbDecomp)->SetUpSampleFactor( ++subSampleFactor );
+      GetFilter(nbDecomp)->SetUpSampleFactor( ++subSampleFactor );
 
   GetFilter( nbDecomp )->Update();
 

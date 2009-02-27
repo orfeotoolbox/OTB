@@ -33,10 +33,10 @@ namespace otb
  * \sa itk::PolyLineParametricPath.
  */
 template < class TValue,unsigned int VDimension=2>
-class ITK_EXPORT PolyLineParametricPathWithValue
-      : public itk::PolyLineParametricPath<VDimension>
+  class ITK_EXPORT PolyLineParametricPathWithValue
+  : public itk::PolyLineParametricPath<VDimension>
 {
-public:
+  public:
   /** Standard typedefs */
   typedef PolyLineParametricPathWithValue          Self;
   typedef itk::PolyLineParametricPath<VDimension>  Superclass;
@@ -93,12 +93,12 @@ public:
 
   void  AddVertex (const ContinuousIndexType &vertex);
 
-  /**
-  * Compute the path bounding region.
-  * \return The region.
-  */
+    /**
+   * Compute the path bounding region.
+   * \return The region.
+   */
   RegionType GetBoundingRegion(void);
-
+  
 protected:
   /** Constructor */
   PolyLineParametricPathWithValue();
@@ -109,7 +109,7 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   virtual void ComputeLength() const;
-
+  
 private:
   PolyLineParametricPathWithValue(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

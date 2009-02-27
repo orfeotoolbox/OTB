@@ -39,11 +39,11 @@ namespace Functor
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT EntropyTextureFunctor :
-      public TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType>
+public TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
-  EntropyTextureFunctor() {};
-  virtual ~EntropyTextureFunctor() {};
+  EntropyTextureFunctor(){};
+  virtual ~EntropyTextureFunctor(){};
 
   typedef TScalarInputPixelType                  InputScalarType;
   typedef TScalarOutputPixelType                 OutputScalarType;
@@ -65,19 +65,19 @@ public:
     double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
     double areaInv = 1/area;
     double out = 0.;
-    for (unsigned r = 0; r<this->GetHisto().size(); r++)
-    {
-      for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-      {
-        double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
-        if (p != 0)
-          out += (p * vcl_log(p));
-      }
-    }
-    if (out != 0.)
-      out = -(out);
+      for (unsigned r = 0; r<this->GetHisto().size(); r++)
+	{
+	  for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
+	    {
+	      double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
+	      if (p != 0)
+		out += (p * vcl_log(p));
+	    }
+	}
+      if (out != 0.)
+	out = -(out);
 
-    return out;
+      return out;
   }
 };
 

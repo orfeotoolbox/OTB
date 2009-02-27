@@ -74,9 +74,9 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 
   typename InputImageType::ConstPointer        input    = this->GetInput();
   InputLineType *                              line     = this->GetInputLine();
-
+  
   typename OutputImageType::Pointer            output   = this->GetOutput();
-
+    
   /** Create a new list line with one line*/
   LineSpatialObjectListPointer  lineList = LineSpatialObjectListType::New();
   lineList->push_back(line);
@@ -84,11 +84,11 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
   /** Invoke the DrawLineSpatialObjectListFilter to draw the line */
   m_DrawLineListFilter->SetInput(input);
   m_DrawLineListFilter->SetInputLineSpatialObjectList(lineList);
-
+  
   m_DrawLineListFilter->GraftOutput(this->GetOutput());
   m_DrawLineListFilter->Update();
   this->GraftOutput(m_DrawLineListFilter->GetOutput());
-
+  
 }
 
 

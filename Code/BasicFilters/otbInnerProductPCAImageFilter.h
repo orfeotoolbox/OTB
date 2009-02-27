@@ -31,23 +31,23 @@ namespace otb
  * itk::ImagePCAShapeModelEstimator) (PCA) on a vector image in streaming capabilities.
  * Alls channels of the input vector image are used for training images
  * and also the number of desired largest principal components needed.
- * The number of channels of the output image are the user specified number of desired
+ * The number of channels of the output image are the user specified number of desired 
  * largest principal components.
  *
  * The algorithm uses the VNL library to perform the eigen analysis. To speed
- * the computation of the instead of performing the eigen analysis of the
+ * the computation of the instead of performing the eigen analysis of the 
  * covariance vector A*A' where A is a matrix with p x t, p = number of
  * pixels or voxels in each images and t = number of training images, we
  * calculate the eigen vectors of the inner product matrix A'*A. The resulting
- * eigen vectors (E) are then multiplied with the the matrix A to get the
- * principal compoenets. The covariance matrix has a dimension of p x p. Since
- * number of pixels in any image being typically very high the eigen
- * decomposition becomes computationally expensive. The inner product on the
- * other hand has the dimension of t x t, where t is typically much smaller
+ * eigen vectors (E) are then multiplied with the the matrix A to get the 
+ * principal compoenets. The covariance matrix has a dimension of p x p. Since 
+ * number of pixels in any image being typically very high the eigen 
+ * decomposition becomes computationally expensive. The inner product on the 
+ * other hand has the dimension of t x t, where t is typically much smaller 
  * that p. Hence the eigen decomposition (most compute intensive part) is an
  * orders of magnitude faster.
- *
- * The Update() function enables the calculation of the various models, creates
+ * 
+ * The Update() function enables the calculation of the various models, creates 
  * the membership function objects and populates them.
  *
  * \sa itk::ImagePCAShapeModelEstimator

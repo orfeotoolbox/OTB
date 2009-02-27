@@ -149,42 +149,42 @@ void
 PersistentInnerProductVectorImageFilter<TInputImage>
 ::Synthetize()
 {
-  // Compute Inner product Matrix
-  TInputImage * inputPtr = const_cast<TInputImage * >(this->GetInput());
-  unsigned int numberOfTrainingImages = inputPtr->GetNumberOfComponentsPerPixel();
-  unsigned int numberOfThreads = this->GetNumberOfThreads();
-  MatrixType innerProduct;
-  innerProduct.set_size( numberOfTrainingImages, numberOfTrainingImages );
-  innerProduct.fill( 0 );
+    // Compute Inner product Matrix
+    TInputImage * inputPtr = const_cast<TInputImage * >(this->GetInput());
+    unsigned int numberOfTrainingImages = inputPtr->GetNumberOfComponentsPerPixel();
+    unsigned int numberOfThreads = this->GetNumberOfThreads();
+    MatrixType innerProduct;
+    innerProduct.set_size( numberOfTrainingImages, numberOfTrainingImages );
+    innerProduct.fill( 0 );
 
-  // Concatenate threaded matrix
-  for ( unsigned int thread = 0; thread < numberOfThreads; thread++)
-  {
-    innerProduct += m_ThreadInnerProduct[thread];
-  }
-
-  //---------------------------------------------------------------------
-  // Fill the rest of the inner product matrix and make it symmetric
-  //---------------------------------------------------------------------
-  for (unsigned int band_x = 0; band_x < (numberOfTrainingImages - 1); band_x++)
-  {
-    for (unsigned int band_y = band_x+1; band_y < numberOfTrainingImages; band_y++)
+    // Concatenate threaded matrix 
+    for ( unsigned int thread = 0; thread < numberOfThreads; thread++)
     {
-      innerProduct[band_x][band_y] = innerProduct[band_y][band_x];
-    }// end band_y loop
-  }// end band_x loop
+        innerProduct += m_ThreadInnerProduct[thread];
+    }
 
-  if ( ( numberOfTrainingImages - 1 ) != 0 )
-  {
-    innerProduct /= ( numberOfTrainingImages - 1 );
-  }
-  else
-  {
-    innerProduct.fill(0);
-  }
+    //--------------------------------------------------------------------- 
+    // Fill the rest of the inner product matrix and make it symmetric
+    //---------------------------------------------------------------------
+    for(unsigned int band_x = 0; band_x < (numberOfTrainingImages - 1); band_x++)
+    {
+        for(unsigned int band_y = band_x+1; band_y < numberOfTrainingImages; band_y++)
+        {  
+            innerProduct[band_x][band_y] = innerProduct[band_y][band_x];    
+        }// end band_y loop
+    }// end band_x loop
 
-  // Set the output
-  this->GetInnerProductOutput()->Set( innerProduct );
+    if( ( numberOfTrainingImages - 1 ) != 0 )
+    {
+        innerProduct /= ( numberOfTrainingImages - 1 );
+    }
+    else
+    {
+        innerProduct.fill(0);
+    }
+
+    // Set the output
+    this->GetInnerProductOutput()->Set( innerProduct );
 }
 
 template<class TInputImage>
@@ -195,36 +195,36 @@ PersistentInnerProductVectorImageFilter<TInputImage>
   /**
    * Grab the input
    */
-  InputImagePointer inputPtr = const_cast< TInputImage * >( this->GetInput() );
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-  unsigned int numberOfTrainingImages = inputPtr->GetNumberOfComponentsPerPixel();
+    InputImagePointer inputPtr = const_cast< TInputImage * >( this->GetInput() );
+    // support progress methods/callbacks
+    itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+    unsigned int numberOfTrainingImages = inputPtr->GetNumberOfComponentsPerPixel();
 
-  itk::ImageRegionConstIterator<TInputImage> it (inputPtr, outputRegionForThread);
-  it.GoToBegin();
-  // do the work
-  while (!it.IsAtEnd())
-  {
-    PixelType vectorValue = it.Get();
-    double mean(0.);
-    for (unsigned int i=0; i<vectorValue.GetSize(); i++)
+    itk::ImageRegionConstIterator<TInputImage> it (inputPtr, outputRegionForThread);
+    it.GoToBegin();
+    // do the work
+    while (!it.IsAtEnd())
     {
-      mean += static_cast<double>(vectorValue[i]);
-    }
-    mean /= static_cast<double>(vectorValue.GetSize());
+        PixelType vectorValue = it.Get();
+        double mean(0.);
+        for (unsigned int i=0; i<vectorValue.GetSize(); i++)
+        {
+            mean += static_cast<double>(vectorValue[i]);
+        }
+        mean /= static_cast<double>(vectorValue.GetSize());
 
-    // Matrix iteration
-    for (unsigned int band_x = 0; band_x < numberOfTrainingImages; band_x++)
-    {
-      for (unsigned int band_y = 0; band_y <= band_x; band_y++ )
-      {
-        m_ThreadInnerProduct[threadId][band_x][band_y] +=
-          (static_cast<double>(vectorValue[band_x]) - mean) * (static_cast<double>(vectorValue[band_y]) - mean);
-      } // end: band_y loop
-    } // end: band_x loop
-    ++it;
-    progress.CompletedPixel();
-  }// end: looping through the image
+        // Matrix iteration  
+        for(unsigned int band_x = 0; band_x < numberOfTrainingImages; band_x++)
+        {
+            for(unsigned int band_y = 0; band_y <= band_x; band_y++ )
+            {
+                m_ThreadInnerProduct[threadId][band_x][band_y] += 
+                (static_cast<double>(vectorValue[band_x]) - mean) * (static_cast<double>(vectorValue[band_y]) - mean);
+            } // end: band_y loop
+        } // end: band_x loop
+        ++it;
+        progress.CompletedPixel();
+    }// end: looping through the image
 }
 
 template <class TImage>

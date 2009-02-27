@@ -36,23 +36,23 @@ namespace otb
  * If called with a ContinuousIndex or Point, the calculation is performed
  * at the nearest neighbor.
  *
- * This class is templated over the input image type and the
+ * This class is templated over the input image type and the 
  * coordinate representation type (e.g. float or double ).
  *
  * \ingroup ImageFunctions
  */
 template <class TInputImage, class TCoordRep = float >
 class ITK_EXPORT BinaryImageDensityFunction :
-      public itk::ImageFunction< TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,TCoordRep >
+  public itk::ImageFunction< TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,TCoordRep >
 {
 public:
   /** Standard class typedefs. */
   typedef BinaryImageDensityFunction                   Self;
   typedef itk::ImageFunction<TInputImage,typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
-  TCoordRep >                                        Superclass;
+    TCoordRep >                                        Superclass;
   typedef itk::SmartPointer<Self>                       Pointer;
   typedef itk::SmartPointer<const Self>                 ConstPointer;
-
+  
   /** Run-time type information (and related methods). */
   itkTypeMacro(BinaryImageDensityFunction, itk::ImageFunction);
 
@@ -67,7 +67,7 @@ public:
 
   /** Index typedef support. */
   typedef typename Superclass::IndexType IndexType;
-
+  
   /** ContinuousIndex typedef support. */
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
 
@@ -75,40 +75,40 @@ public:
   typedef typename Superclass::PointType PointType;
 
   /** Dimension of the underlying image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      InputImageType::ImageDimension);
+itkStaticConstMacro(ImageDimension, unsigned int,
+		     InputImageType::ImageDimension);
 
   /** Datatype used for the density */
   typedef typename itk::NumericTraits<typename InputImageType::PixelType>::RealType
-  RealType;
+      RealType;
 
   /** Evalulate the function at specified index */
   virtual RealType EvaluateAtIndex( const IndexType& index ) const;
-
+  
   /** Evaluate the function at non-integer positions */
   virtual RealType Evaluate( const PointType& point ) const
-  {
-    IndexType index;
-    this->ConvertPointToNearestIndex( point, index );
-    return this->EvaluateAtIndex( index );
-  }
-  virtual RealType EvaluateAtContinuousIndex(
+    { 
+      IndexType index;
+      this->ConvertPointToNearestIndex( point, index );
+      return this->EvaluateAtIndex( index ); 
+    }
+  virtual RealType EvaluateAtContinuousIndex( 
     const ContinuousIndexType& cindex ) const
-  {
-    IndexType index;
-    this->ConvertContinuousIndexToNearestIndex( cindex, index );
-    return this->EvaluateAtIndex( index ) ;
-  }
+    { 
+      IndexType index;
+      this->ConvertContinuousIndexToNearestIndex( cindex, index );
+      return this->EvaluateAtIndex( index ) ; 
+    }
 
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */
   itkSetMacro( NeighborhoodRadius, unsigned int );
   itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
 
-
+ 
 protected:
   BinaryImageDensityFunction();
-  ~BinaryImageDensityFunction() {};
+  ~BinaryImageDensityFunction(){};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

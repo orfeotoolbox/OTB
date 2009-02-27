@@ -92,7 +92,7 @@ private:
   // The number of output Pricipal Components
   unsigned int m_NumberOfPrincipalComponentsRequired;
 
-  /** Inner Product Matrix pre computed */
+  /** Inner Product Matrix pre computed */ 
   MatrixType m_InnerProduct;
 
   /** Contains Eigen Vectors Of Inner Product Matrix computed */

@@ -23,52 +23,52 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 
-template<InverseOrForwardTransformationEnum TransformDirection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
-::GeocentricTransform() : Superclass(SpaceDimension,ParametersDimension)
-{
-  m_Ellipsoid = new ossimEllipsoid();
-}
+  template<InverseOrForwardTransformationEnum TransformDirection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+      GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
+  ::GeocentricTransform() : Superclass(SpaceDimension,ParametersDimension)
+  {
+    m_Ellipsoid = new ossimEllipsoid();
+  }
 
-template<InverseOrForwardTransformationEnum TransformDirection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
-::~GeocentricTransform()
-{
-  if (m_Ellipsoid != NULL)
+  template<InverseOrForwardTransformationEnum TransformDirection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+      GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
+  ::~GeocentricTransform()
   {
-    delete m_Ellipsoid;
+    if (m_Ellipsoid != NULL)
+    {
+      delete m_Ellipsoid;
+    }
   }
-}
 
-template<InverseOrForwardTransformationEnum TransformDirection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-typename GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
-GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
-::TransformPoint(const InputPointType & point) const
-{
-  OutputPointType outputPoint;
+  template<InverseOrForwardTransformationEnum TransformDirection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+      typename GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
+          GeocentricTransform<TransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
+  ::TransformPoint(const InputPointType & point) const
+  {
+    OutputPointType outputPoint;
 
-  switch (DirectionOfMapping)
-  {
-  case INVERSE:
-  {
-    m_Ellipsoid->XYZToLatLonHeight(point[0], point[1], point[2], outputPoint[1],outputPoint[0],outputPoint[2]);
-    break;
-  }
-  case FORWARD:
-  {
-    m_Ellipsoid->latLonHeightToXYZ(point[1], point[0], point[2], outputPoint[0],outputPoint[1],outputPoint[2]);
+    switch (DirectionOfMapping)
+    {
+      case INVERSE:
+      {
+        m_Ellipsoid->XYZToLatLonHeight(point[0], point[1], point[2], outputPoint[1],outputPoint[0],outputPoint[2]);
+        break;
+      }
+      case FORWARD:
+      {
+        m_Ellipsoid->latLonHeightToXYZ(point[1], point[0], point[2], outputPoint[0],outputPoint[1],outputPoint[2]);
 
-    break;
+        break;
+      }
+      default:
+      {
+        itkExceptionMacro(<<"Model is INVERSE or FORWARD only !!");
+        break;
+      }
+    }
+    //To be completed
+    return outputPoint;
   }
-  default:
-  {
-    itkExceptionMacro(<<"Model is INVERSE or FORWARD only !!");
-    break;
-  }
-  }
-  //To be completed
-  return outputPoint;
-}
 
 
 } // namespace otb

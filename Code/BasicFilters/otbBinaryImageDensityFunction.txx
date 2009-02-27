@@ -61,43 +61,43 @@ typename BinaryImageDensityFunction<TInputImage,TCoordRep>
 BinaryImageDensityFunction<TInputImage,TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
-  RealType sum;
-  RealType var;
+   RealType sum;
+   RealType var;
 
-  sum = itk::NumericTraits<RealType>::Zero;
-
-  if ( !this->GetInputImage() )
-  {
-    return ( itk::NumericTraits<RealType>::max() );
-  }
-
-  if ( !this->IsInsideBuffer( index ) )
-  {
-    return ( itk::NumericTraits<RealType>::max() );
-  }
+   sum = itk::NumericTraits<RealType>::Zero;
+  
+   if( !this->GetInputImage() )
+     {
+       return ( itk::NumericTraits<RealType>::max() );
+     }
+  
+   if ( !this->IsInsideBuffer( index ) )
+     {
+       return ( itk::NumericTraits<RealType>::max() );
+     }
 
   // Create an N-d neighborhood kernel, using a zeroflux boundary condition
-  typename InputImageType::SizeType          kernelSize;
-  kernelSize.Fill( m_NeighborhoodRadius );
+   typename InputImageType::SizeType          kernelSize;
+   kernelSize.Fill( m_NeighborhoodRadius );
+  
+   itk::ConstNeighborhoodIterator<InputImageType>
+    it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
 
-  itk::ConstNeighborhoodIterator<InputImageType>
-  it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
+   // Set the iterator at the desired location
+   it.SetLocation(index);
 
-  // Set the iterator at the desired location
-  it.SetLocation(index);
+   // Walk the neighborhood
+   const unsigned int size = it.Size();
+   for (unsigned int i = 0; i < size; ++i)
+     {
+       const RealType value = static_cast<RealType>( it.GetPixel(i) );
+       sum           += value;
+     }
 
-  // Walk the neighborhood
-  const unsigned int size = it.Size();
-  for (unsigned int i = 0; i < size; ++i)
-  {
-    const RealType value = static_cast<RealType>( it.GetPixel(i) );
-    sum           += value;
-  }
-
-  const RealType  num = static_cast<RealType>( size );
-  var =  sum/num   ;
-
-  return var ;
+   const RealType  num = static_cast<RealType>( size );
+   var =  sum/num   ;
+  
+   return var ;
 }
 
 

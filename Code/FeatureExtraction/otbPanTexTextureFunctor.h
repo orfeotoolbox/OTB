@@ -39,38 +39,38 @@ namespace Functor
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT PanTexTextureFunctor :
-      public ContrastTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType>
+public ContrastTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
   PanTexTextureFunctor()
-  {
-    OffsetType off;
-    off[0] = 0;
-    off[1] = 1;
-    m_OffsetList.push_back(off); //(0,1)
-    off[1] = 2;
-    m_OffsetList.push_back(off); //(0,2)
-    off[0] = 1;
-    off[1] = -2;
-    m_OffsetList.push_back(off); //(1,-2)
-    off[1] = -1;
-    m_OffsetList.push_back(off); //(1,-1)
-    off[1] = 0;
-    m_OffsetList.push_back(off); //(1,0)
-    off[1] = 1;
-    m_OffsetList.push_back(off); //(1,1)
-    off[1] = 2;
-    m_OffsetList.push_back(off); //(1,2)
-    off[0] = 2;
-    off[1] = -1;
-    m_OffsetList.push_back(off); //(2,-1)
-    off[1] = 0;
-    m_OffsetList.push_back(off); //(2,0)
-    off[1] = 1;
-    m_OffsetList.push_back(off); //(2,1)
-  };
+    {
+      OffsetType off;
+      off[0] = 0;
+      off[1] = 1;
+      m_OffsetList.push_back(off); //(0,1)
+      off[1] = 2;
+      m_OffsetList.push_back(off); //(0,2)
+      off[0] = 1;
+      off[1] = -2;
+      m_OffsetList.push_back(off); //(1,-2)
+      off[1] = -1;
+      m_OffsetList.push_back(off); //(1,-1)
+      off[1] = 0;
+      m_OffsetList.push_back(off); //(1,0)
+      off[1] = 1;
+      m_OffsetList.push_back(off); //(1,1)
+      off[1] = 2;
+      m_OffsetList.push_back(off); //(1,2)
+      off[0] = 2;
+      off[1] = -1;
+      m_OffsetList.push_back(off); //(2,-1)
+      off[1] = 0;
+      m_OffsetList.push_back(off); //(2,0)
+      off[1] = 1;
+      m_OffsetList.push_back(off); //(2,1)
+    };
 
-  virtual ~PanTexTextureFunctor() {};
+  virtual ~PanTexTextureFunctor(){};
 
   /*
   typedef TIterInput                            IterType;
@@ -81,30 +81,30 @@ public:
   typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
   typedef ContrastTextureFunctor<IterType, OutputType> Superclass;
   */
-  typedef TScalarInputPixelType                  InputScalarType;
+ typedef TScalarInputPixelType                  InputScalarType;
   typedef TScalarOutputPixelType                 OutputScalarType;
   typedef ContrastTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
   typedef typename Superclass::OffsetType        OffsetType;
   typedef typename Superclass::RadiusType        RadiusType;
   typedef typename Superclass::NeighborhoodType  NeighborhoodType;
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
-  {
-    // Loop over each offset
-    double out = itk::NumericTraits<double>::max();
-    Superclass contrast;
-    for (unsigned int k=0; k<m_OffsetList.size(); k++)
     {
-      contrast.SetOffset( m_OffsetList[k] );
-      double res = contrast.ComputeOverSingleChannel(neigh, neighOff);
-      if (res<out)
-        out=res;
-    }
+      // Loop over each offset
+      double out = itk::NumericTraits<double>::max();
+      Superclass contrast;
+      for(unsigned int k=0; k<m_OffsetList.size(); k++)
+	{
+	  contrast.SetOffset( m_OffsetList[k] );
+	  double res = contrast.ComputeOverSingleChannel(neigh, neighOff);
+	  if(res<out)
+	    out=res;
+	}
 
 
     return out;
   }
 
-private:
+ private:
   std::vector<OffsetType> m_OffsetList;
 
 };

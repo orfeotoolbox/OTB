@@ -56,7 +56,7 @@ double PolyLineParametricPathWithValue<TValue,VDimension>
 }
 
 template < class TValue,unsigned int VDimension>
-void
+void 
 PolyLineParametricPathWithValue<TValue,VDimension>
 ::ComputeLength() const
 {
@@ -119,7 +119,7 @@ PolyLineParametricPathWithValue<TValue,VDimension>
 template < class TValue,unsigned int VDimension>
 typename PolyLineParametricPathWithValue<TValue,VDimension>
 ::RegionType
-PolyLineParametricPathWithValue<TValue,VDimension>
+PolyLineParametricPathWithValue<TValue,VDimension> 
 ::GetBoundingRegion()
 {
   RegionType region;

@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,8 +23,7 @@
 
 #include "itkImageToImageFilter.h"
 
-namespace otb
-{
+namespace otb {
 
 /** \class WaveletForwardTransform
  * \brief Wavelet transformation framework
@@ -32,13 +31,13 @@ namespace otb
  * This class defines the Wavelet Packet transformation of an image
  * by using a (templated) elementary wavelet transform.
  *
- * Here the number of decomposition is given. The output is then given
+ * Here the number of decomposition is given. The output is then given 
  * in the GetOutputs() array.
  *
  * Output image organization depends on the number of Dim on the image
- * In the OuputList, the first image is always the low passed one. Next,
+ * In the OuputList, the first image is always the low passed one. Next, 
  * follow the high Passed images of the lowest decomposition (ask
- * GetFilter(0)->GetNumberOfOutputs() to know the length) and so on until
+ * GetFilter(0)->GetNumberOfOutputs() to know the length) and so on until 
  * the high passed images of the highest decomposition.
  *
  * \sa StationaryFilterBank
@@ -47,20 +46,20 @@ namespace otb
  */
 template < class TInputImage, class TOutputImage, class TFilter >
 class ITK_EXPORT WaveletForwardTransform
-      : public itk::ImageToImageFilter< TInputImage, TOutputImage >
+  : public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
   /** Standard typedefs */
   typedef WaveletForwardTransform Self;
   typedef itk::ImageToImageFilter< TInputImage, TOutputImage > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+	typedef itk::SmartPointer<const Self> ConstPointer;
 
-  /** Type macro */
-  itkNewMacro(Self);
+	/** Type macro */
+	itkNewMacro(Self);
 
-  /** Creation through object factory macro */
-  itkTypeMacro(WaveletForwardTransform,ImageToImageFilter);
+	/** Creation through object factory macro */
+	itkTypeMacro(WaveletForwardTransform,ImageToImageFilter);
 
   typedef TInputImage InputImageType;
   typedef typename InputImageType::Pointer InputImagePointer;

@@ -54,7 +54,7 @@ template<class TInputImage, class TOutputImage>
 void
 EstimateInnerProductPCAImageFilter<TInputImage,TOutputImage>
 ::GenerateOutputInformation(void)
-{
+{ 
   Superclass::GenerateOutputInformation();
   this->GetOutput()->SetNumberOfComponentsPerPixel(m_NumberOfPrincipalComponentsRequired);
 }
@@ -112,10 +112,10 @@ EstimateInnerProductPCAImageFilter<TInputImage,TOutputImage>
     outputPixel.SetSize(m_NumberOfPrincipalComponentsRequired);
     outputPixel.Fill(0);
 
-    for (unsigned int img_number = 0; img_number < numberOfTrainingImages; img_number++ )
+    for(unsigned int img_number = 0; img_number < numberOfTrainingImages; img_number++ )
     {
       unsigned int indexNumberOfTrainingImages = numberOfTrainingImages-1;
-      for ( unsigned int vec_number = 0  ; vec_number < m_NumberOfPrincipalComponentsRequired; vec_number++, indexNumberOfTrainingImages-- )
+      for( unsigned int vec_number = 0  ; vec_number < m_NumberOfPrincipalComponentsRequired; vec_number++, indexNumberOfTrainingImages-- )
       {
         outputPixel[vec_number] += static_cast<OutputInternalPixelType>( static_cast<double>(inputPixel[img_number]) *  static_cast<double>(m_EigenVectorsOfInnerProductMatrix[img_number][indexNumberOfTrainingImages]));
       }

@@ -26,22 +26,22 @@ namespace otb
 template <class TImage, class TOutputImage>
 ImageLayer<TImage,TOutputImage>
 ::ImageLayer() : m_Quicklook(), m_Image(), m_Histogram(), m_RenderingFunction(),
-    m_NumberOfHistogramBins(255), m_AutoMinMax(true), m_AutoMinMaxUpToDate(false), m_AutoMinMaxQuantile(0.02),
-    m_QuicklookRenderingFilter(), m_ExtractRenderingFilter(), m_ScaledExtractRenderingFilter(),
-    m_ExtractFilter(), m_ScaledExtractFilter()
+		 m_NumberOfHistogramBins(255), m_AutoMinMax(true), m_AutoMinMaxUpToDate(false), m_AutoMinMaxQuantile(0.02),
+		 m_QuicklookRenderingFilter(), m_ExtractRenderingFilter(), m_ScaledExtractRenderingFilter(),
+		 m_ExtractFilter(), m_ScaledExtractFilter()
 {
-// Rendering filters
+ // Rendering filters
   m_QuicklookRenderingFilter = RenderingFilterType::New();
-  m_ExtractRenderingFilter = RenderingFilterType::New();
+  m_ExtractRenderingFilter = RenderingFilterType::New(); 
   m_ScaledExtractRenderingFilter = RenderingFilterType::New();
-
+ 
   // Default rendering function
   m_RenderingFunction = DefaultRenderingFunctionType::New();
   m_QuicklookRenderingFilter->SetRenderingFunction(m_RenderingFunction);
   m_ExtractRenderingFilter->SetRenderingFunction(m_RenderingFunction);
   m_ScaledExtractRenderingFilter->SetRenderingFunction(m_RenderingFunction);
-
-  // Extract filters
+  
+  // Extract filters 
   m_ExtractFilter = ExtractFilterType::New();
   m_ScaledExtractFilter = ExtractFilterType::New();
 
@@ -71,12 +71,12 @@ ImageLayer<TImage,TOutputImage>
 {
   // Render the histogram
   this->RenderHistogram();
-
+  
   // If required, use histogram for auto min/max
-  if (m_AutoMinMax)
-  {
+  if(m_AutoMinMax)
+    {
     this->AutoMinMaxRenderingFunctionSetup();
-  }
+    }
 
   // Render images
   this->RenderImages();
@@ -88,35 +88,35 @@ ImageLayer<TImage,TOutputImage>
 ::RenderImages()
 {
   // Render quicklook
-  if (this->GetHasQuicklook())
-  {
+  if(this->GetHasQuicklook())
+    {
     m_QuicklookRenderingFilter->Update();
     this->SetRenderedQuicklook(m_QuicklookRenderingFilter->GetOutput());
-  }
+    }
   // If there are pixels to render
-  if (this->GetExtractRegion().GetNumberOfPixels() > 0)
-  {
+  if(this->GetExtractRegion().GetNumberOfPixels() > 0)
+    {
     m_ExtractRenderingFilter->GetOutput()->SetRequestedRegion(this->GetExtractRegion());
     m_ExtractRenderingFilter->Update();
     this->SetRenderedExtract(m_ExtractRenderingFilter->GetOutput());
-  }
+    }
   else
-  {
+    {
     this->SetHasExtract(false);
-  }
+    }
   // Render scaled extract
   // If there are pixels to render
-  if (this->GetScaledExtractRegion().GetNumberOfPixels() > 0)
-  {
-    m_ScaledExtractRenderingFilter->GetOutput()->SetRequestedRegion(this->GetScaledExtractRegion());
-    m_ScaledExtractRenderingFilter->Update();
-    this->SetRenderedScaledExtract(m_ScaledExtractRenderingFilter->GetOutput());
-    this->SetHasScaledExtract(true);
-  }
+  if(this->GetScaledExtractRegion().GetNumberOfPixels() > 0)
+      {
+      m_ScaledExtractRenderingFilter->GetOutput()->SetRequestedRegion(this->GetScaledExtractRegion());
+      m_ScaledExtractRenderingFilter->Update();
+      this->SetRenderedScaledExtract(m_ScaledExtractRenderingFilter->GetOutput());
+      this->SetHasScaledExtract(true);
+      }
   else
-  {
+    {
     this->SetHasScaledExtract(false);
-  }
+    }
 }
 
 template <class TImage, class TOutputImage>
@@ -128,56 +128,56 @@ ImageLayer<TImage,TOutputImage>
   ImagePointerType histogramSource;
 
   // if there is a quicklook, use it for histogram generation
-  if (m_Quicklook.IsNotNull())
-  {
+  if(m_Quicklook.IsNotNull())
+    {
     histogramSource = m_Quicklook;
-  }
+    }
   else
-  {
+    {
     // Else use the full image (update the data)
     histogramSource = m_Image;
-  }
+    }
 
   // Check if we need to generate the histogram again
-  if ( !m_Histogram || (histogramSource->GetUpdateMTime() < histogramSource->GetPipelineMTime()) )
-  {
+  if( !m_Histogram || (histogramSource->GetUpdateMTime() < histogramSource->GetPipelineMTime()) )
+    {
     m_AutoMinMaxUpToDate = false;
 
     // Update the histogram source
     histogramSource->Update();
-
+    
     // Iterate on the image
     itk::ImageRegionConstIterator<ImageType> it(histogramSource,histogramSource->GetLargestPossibleRegion());
-
+    
     // declare a list to store the samples
     typename ListSampleType::Pointer listSample = ListSampleType::New();
-
+    
     // Set the measurement vector size
     listSample->SetMeasurementVectorSize(histogramSource->GetNumberOfComponentsPerPixel());
-
+    
     // Fill the samples list
     it.GoToBegin();
-    while (!it.IsAtEnd())
-    {
+    while(!it.IsAtEnd())
+      {
       listSample->PushBack(it.Get());
       ++it;
-    }
-
-    // Create the histogram generation filter
+      }
+    
+    // Create the histogram generation filter 
     typename HistogramFilterType::Pointer histogramFilter = HistogramFilterType::New();
     histogramFilter->SetListSample(listSample);
-
+    
     typename HistogramFilterType::HistogramSizeType binSizes(histogramSource->GetNumberOfComponentsPerPixel());
     binSizes.Fill(m_NumberOfHistogramBins);
-
+    
     histogramFilter->SetNumberOfBins(binSizes);
-
+    
     // Generate
     histogramFilter->Update();
-
+    
     // Retrieve the histogram
     m_Histogram = histogramFilter->GetOutput();
-  }
+    }
 }
 
 template <class TImage, class TOutputImage>
@@ -186,21 +186,21 @@ ImageLayer<TImage,TOutputImage>
 ::AutoMinMaxRenderingFunctionSetup()
 {
   // Check for an existing histogram
-  if (m_Histogram.IsNull())
-  {
+  if(m_Histogram.IsNull())
+    {
     itkExceptionMacro(<<"Empty histogram, can not use auto min/max evaluation.");
-  }
+    }
 
   const unsigned int nbComps = m_Image->GetNumberOfComponentsPerPixel();
   typename RenderingFunctionType::ExtremaVectorType min, max;
 
   // For each components, use the histogram to compute min and max
-  for (unsigned int comp = 0; comp < nbComps;++comp)
-  {
+  for(unsigned int comp = 0; comp < nbComps;++comp)
+    {
     // Compute quantiles
     min.push_back(m_Histogram->Quantile(comp,m_AutoMinMaxQuantile));
     max.push_back(m_Histogram->Quantile(comp,1.-m_AutoMinMaxQuantile));
-  }
+    }
 
   // Setup rendering function
   m_RenderingFunction->SetMinimum(min);

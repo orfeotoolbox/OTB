@@ -48,7 +48,7 @@ template <class TInputImage, class TOutputImage, class TFunction  >
 void
 FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
 ::BeforeThreadedGenerateData()
-{
+{ 
   Superclass::BeforeThreadedGenerateData();
 
   InputImageConstPointer inputPtr = dynamic_cast<const TInputImage*>((itk::ProcessObject::GetInput(0)));
@@ -59,11 +59,11 @@ FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
 
   }
   m_Function->SetInputImage(inputPtr);
-  for (unsigned int i = 0 ; i<static_cast<unsigned int>(this->GetNumberOfThreads()); i++)
-  {
-    FunctionPointerType func = m_Function;
-    m_FunctionList.push_back( func );
-  }
+  for(unsigned int i = 0 ; i<static_cast<unsigned int>(this->GetNumberOfThreads()); i++)
+    {
+      FunctionPointerType func = m_Function;
+      m_FunctionList.push_back( func );
+    }
 }
 
 template <class TInputImage, class TOutputImage, class TFunction  >
@@ -142,13 +142,13 @@ FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
   outputIt.GoToBegin();
 
   while ( !inputIt.IsAtEnd() )
-  {
-    outputIt.Set( static_cast<OutputImagePixelType>(m_FunctionList[threadId]->EvaluateAtIndex(inputIt.GetIndex())) );
-    ++inputIt;
-    ++outputIt;
-
-    progress.CompletedPixel(); // potential exception thrown here
-  }
+    {
+      outputIt.Set( static_cast<OutputImagePixelType>(m_FunctionList[threadId]->EvaluateAtIndex(inputIt.GetIndex())) );
+      ++inputIt;
+      ++outputIt;
+      
+      progress.CompletedPixel(); // potential exception thrown here
+    }
 }
 } // end namespace otb
 

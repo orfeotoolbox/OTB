@@ -128,7 +128,7 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
   OutputImagePointer outputPtr = this->GetOutput(0);
 
   itk::ImageRegionIterator<TOutputImage> outputIt;
-
+ 
   // Neighborhood+offset iterator
   RadiusType rOff;
   rOff[0] = m_Radius + vcl_abs(m_Offset[0]);

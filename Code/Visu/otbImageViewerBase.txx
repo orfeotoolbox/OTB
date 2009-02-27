@@ -1045,19 +1045,19 @@ void
 ImageViewerBase<TPixel,TLabel>
 ::SetViewModel(ViewModelType viewModel)
 {
-  // Channel indices outofbound check
-  if (m_RedChannelIndex >= m_InputImage->GetNumberOfComponentsPerPixel())
-  {
-    itkExceptionMacro(<<"Red channel index out of bound.");
-  }
-  if (viewModel != ScrollWidgetType::GRAYSCALE && m_GreenChannelIndex >= m_InputImage->GetNumberOfComponentsPerPixel())
-  {
+   // Channel indices outofbound check
+  if(m_RedChannelIndex >= m_InputImage->GetNumberOfComponentsPerPixel())
+    {
+      itkExceptionMacro(<<"Red channel index out of bound.");
+    }
+  if(viewModel != ScrollWidgetType::GRAYSCALE && m_GreenChannelIndex >= m_InputImage->GetNumberOfComponentsPerPixel())
+    {
     itkExceptionMacro(<<"Green channel index out of bound.");
-  }
-  if (viewModel == ScrollWidgetType::RGB && m_BlueChannelIndex >= m_InputImage->GetNumberOfComponentsPerPixel())
-  {
+    }
+  if(viewModel == ScrollWidgetType::RGB && m_BlueChannelIndex >= m_InputImage->GetNumberOfComponentsPerPixel())
+    {
     itkExceptionMacro(<<"Blue channel index out of bound.");
-  }
+    }
 
   switch (viewModel)
   {
