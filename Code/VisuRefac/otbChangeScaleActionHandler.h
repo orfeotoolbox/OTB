@@ -15,14 +15,14 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbChangeScaledExtractRegionActionHandler_h
-#define __otbChangeScaledExtractRegionActionHandler_h
+#ifndef __otbChangeScaleActionHandler_h
+#define __otbChangeScaleActionHandler_h
 
 #include "otbImageWidgetActionHandler.h"
 
 namespace otb
 {
-/** \class ChangeScaledExtractRegionActionHandler
+/** \class ChangeScaleActionHandler
 *   \brief Implements basic Scroll, Full and Zoom  widgets resizing.
 * 
 *   \sa ImageWidgetController
@@ -30,12 +30,12 @@ namespace otb
 */
 
 template <class TModel, class TView> 
-class ChangeScaledExtractRegionActionHandler
+class ChangeScaleActionHandler
   : public ImageWidgetActionHandler
 {
 public:
   /** Standard class typedefs */
-  typedef ChangeScaledExtractRegionActionHandler Self;
+  typedef ChangeScaleActionHandler Self;
   typedef ImageWidgetActionHandler               Superclass;
   typedef itk::SmartPointer<Self>                Pointer;
   typedef itk::SmartPointer<const Self>          ConstPointer;
@@ -44,7 +44,7 @@ public:
   itkNewMacro(Self);
   
   /** Runtime information */
-  itkTypeMacro(ChangeScaledExtractRegionActionHandler,ImageWidgetActionHandler);
+  itkTypeMacro(ChangeScaleActionHandler,ImageWidgetActionHandler);
 
   /** Model typedefs */
   typedef TModel                         ModelType;
@@ -65,18 +65,32 @@ public:
   {
     if( m_View.IsNotNull() && m_Model.IsNotNull() )
       {
-      if(widgetId == m_View->GetFullWidget()->GetIdentifier()
-	 && event == FL_PUSH)
+      if(widgetId == m_View->GetZoomWidget()->GetIdentifier()
+	 && event == FL_MOUSEWHEEL)
 	{
-	otbMsgDevMacro(<<"ChangeScaledExtractRegionActionHandler::HandleWidgetEvent(): handling ("<<widgetId<<", "<<event<<")");
-	// Get the clicked index
-	typename ViewType::IndexType index;
-	index[0] = Fl::event_x();
-	index[1] = Fl::event_y();
-	// Change scaled extract region center
-	m_Model->SetScaledExtractRegionCenter(m_View->GetFullWidget()->ScreenIndexToRegionIndex(index));
-	// Update model
-	m_Model->Update();
+	otbMsgDevMacro(<<"ChangeScaleActionHandler::HandleWidgetEvent(): handling ("<<widgetId<<", "<<event<<")");
+        // Get the mousewhell offset
+	int dy = Fl::event_dy();
+	
+	// Compute new scale
+	double newScale = m_View->GetZoomWidget()->GetIsotropicZoom() * vcl_pow(m_ScaleRatio,-dy);
+	if(newScale>=1.0)
+	  {
+	  m_View->GetZoomWidget()->SetIsotropicZoom(newScale);
+	  RegionType region = m_Model->GetScaledExtractRegion();
+	  
+	  typename RegionType::IndexType index = region.GetIndex();
+	  typename RegionType::SizeType size = region.GetSize();
+	  index[0]+=size[0]/2;
+	  index[1]+=size[1]/2;
+	  size[0] = static_cast<unsigned int>(m_View->GetZoomWidget()->w()/m_View->GetZoomWidget()->GetIsotropicZoom());
+	  size[1] = static_cast<unsigned int>(m_View->GetZoomWidget()->h()/m_View->GetZoomWidget()->GetIsotropicZoom());
+	  region.SetSize(size);
+	  m_Model->SetScaledExtractRegion(region);
+	  m_Model->SetScaledExtractRegionCenter(index);
+	  // Update the model
+	  m_Model->Update();
+	  }
 	return true;
 	}
       }
@@ -91,13 +105,17 @@ public:
   itkSetObjectMacro(Model,ModelType);
   itkGetObjectMacro(Model,ModelType);
 
+  /** Set/Get scale ratio */
+  itkSetMacro(ScaleRatio,double);
+  itkGetMacro(ScaleRatio,double);
+
 protected:
   /** Constructor */
-  ChangeScaledExtractRegionActionHandler() : m_View(), m_Model()
+  ChangeScaleActionHandler() : m_View(), m_Model()
   {}
 
   /** Destructor */
-  virtual ~ChangeScaledExtractRegionActionHandler(){}
+  virtual ~ChangeScaleActionHandler(){}
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
@@ -105,7 +123,7 @@ protected:
   }
  
 private:
-  ChangeScaledExtractRegionActionHandler(const Self&);    // purposely not implemented
+  ChangeScaleActionHandler(const Self&);    // purposely not implemented
   void operator=(const Self&); // purposely not implemented
 
   // Pointer to the view
@@ -114,6 +132,9 @@ private:
   // Pointer to the model
   ModelPointerType m_Model;
   
+  /** Scale Ratio */
+  double m_ScaleRatio;
+
 }; // end class 
 } // end namespace otb
 #endif

@@ -29,9 +29,10 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbChangeScaledExtractRegionActionHandler.h"
 #include "otbChangeExtractRegionActionHandler.h"
 #include "otbChangeScaleActionHandler.h"
+#include "itkSobelEdgeDetectionImageFilter.h"
+#include "otbPerBandVectorImageFilter.h"
 
-
-int otbImageViewerEndToEndSingleLayer( int argc, char * argv[] )
+int otbImageViewerEndToEndTwoLayers( int argc, char * argv[] )
 {
   // params
   const char * infname = argv[1];
@@ -46,6 +47,7 @@ int otbImageViewerEndToEndSingleLayer( int argc, char * argv[] )
   typedef itk::RGBPixel<unsigned char>               RGBPixelType;
   typedef otb::Image<RGBPixelType,2>                 OutputImageType;
   typedef otb::VectorImage<PixelType,2>              ImageType;
+  typedef otb::Image<PixelType,2>                    ScalarImageType;
   typedef otb::ImageLayer<ImageType>                 LayerType;
   typedef otb::ImageFileReader<ImageType>            ReaderType;
   typedef otb::ImageLayerGenerator<LayerType>        LayerGeneratorType;
@@ -61,6 +63,12 @@ int otbImageViewerEndToEndSingleLayer( int argc, char * argv[] )
   typedef otb::ChangeScaleActionHandler
     <ModelType,ViewType>                             ChangeScaleHandlerType;
 
+  // Filters for the second layer
+  typedef itk::SobelEdgeDetectionImageFilter<ScalarImageType,ScalarImageType> FilterType;
+  typedef otb::PerBandVectorImageFilter<ImageType,ImageType,FilterType>
+  PerBandFilterType;
+
+
   // Instantiation
   ModelType::Pointer model = ModelType::New();
 
@@ -68,13 +76,22 @@ int otbImageViewerEndToEndSingleLayer( int argc, char * argv[] )
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
   
-  // Generate the layer
+  // Generate the first layer
   LayerGeneratorType::Pointer generator = LayerGeneratorType::New();
   generator->SetImage(reader->GetOutput());
   generator->GenerateLayer();
   
+  // Generate the second layer
+  PerBandFilterType::Pointer filter = PerBandFilterType::New();
+  filter->SetInput(reader->GetOutput());
+
+  LayerGeneratorType::Pointer generator2 = LayerGeneratorType::New();
+  generator2->SetImage(filter->GetOutput());
+  generator2->GenerateLayer();
+  
    // Add the layer to the model
   model->AddLayer(generator->GetLayer());
+  model->AddLayer(generator2->GetLayer());
   
   // Build a view
   ViewType::Pointer view = ViewType::New();

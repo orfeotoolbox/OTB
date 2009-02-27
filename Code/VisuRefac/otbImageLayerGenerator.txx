@@ -29,7 +29,7 @@ template < class TImageLayer >
 ImageLayerGenerator<TImageLayer>
 ::ImageLayerGenerator() : m_Layer(), m_Image(), m_Quicklook(),
 			  m_SubsamplingRate(1), m_GenerateQuicklook(true), 
-			  m_Resampler()
+			  m_Resampler(), m_ScreenRatio(0.25)
 {
   // Intialize output layer
   m_Layer = ImageLayerType::New();
@@ -93,8 +93,8 @@ ImageLayerGenerator<TImageLayer>
   typename ImageType::RegionType largestRegion = m_Image->GetLargestPossibleRegion();
 
   // Shannon (finner generation could be added later)
-  unsigned int wrequested = wscreen/2;
-  unsigned int hrequested = hscreen/2;
+  unsigned int wrequested = static_cast<unsigned int>(wscreen*m_ScreenRatio);
+  unsigned int hrequested = static_cast<unsigned int>(hscreen*m_ScreenRatio);
 
   // Compute ratio in both directions
   unsigned int wratio = m_Image->GetLargestPossibleRegion().GetSize()[0]/wrequested;
@@ -137,8 +137,10 @@ ImageLayerGenerator<TImageLayer>
     // If no subsampling is needed
     if(ssrate == 1)
       {
+      otbMsgDevMacro(<<"ImageLayerGenerator::GenerateQuicklook(): subsampling rate is 1, Image itself is used as quicklook");
       m_Layer->SetHasQuicklook(true);
       m_Layer->SetQuicklookSubsamplingRate(1);
+      m_Image->Update();
       m_Layer->SetQuicklook(m_Image);
       }
     else
@@ -148,6 +150,9 @@ ImageLayerGenerator<TImageLayer>
       m_Resampler->SetInput(m_Image);
       m_Resampler->SetShrinkFactor(ssrate);
       m_Resampler->Update();
+
+      otbMsgDevMacro(<<"ImageLayerGenerator::GenerateQuicklook(): Quicklook generated (ssrate= "<<ssrate<<", size= "<<m_Resampler->GetOutput()->GetLargestPossibleRegion().GetSize()<<")");
+
 
       // Set the quicklook to the layer
       m_Layer->SetQuicklook(m_Resampler->GetOutput());

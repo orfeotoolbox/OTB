@@ -57,7 +57,7 @@ public:
   typedef typename OutputRGBPixelType::ValueType OutputValueType;
 
   /** Evaluate method  */
-  virtual const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type & input2)
+  inline virtual const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type & input2)
   {
     OutputRGBPixelType resp;
     resp.SetRed(  static_cast<OutputValueType>(vcl_floor(m_Alpha * static_cast<double>(input1.GetRed())   +(1-m_Alpha)*static_cast<double>(input2.GetRed())  +0.5)));

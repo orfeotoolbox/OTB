@@ -50,4 +50,5 @@ void RegisterTests()
   REGISTER_TEST(otbMultiplyBlendingFunctionNew);
   REGISTER_TEST(otbImageViewNew);
   REGISTER_TEST(otbImageViewerEndToEndSingleLayer);
+  REGISTER_TEST(otbImageViewerEndToEndTwoLayers);
 }

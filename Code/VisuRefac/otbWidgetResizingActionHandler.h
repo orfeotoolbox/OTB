@@ -69,12 +69,14 @@ public:
       // If resizing the scroll widget, nothing has to be done.
       if(widgetId == m_View->GetScrollWidget()->GetIdentifier() )
 	{
+	otbMsgDevMacro(<<"WidgetResizingActionHandler::HandleWidgetResize(): handling ("<<widgetId<<", "<<w<<", "<<h<<")");
 	// Nothing has to be acted to the model, juste update the view
 	m_View->Update();
 	return true;
 	}
       else if(widgetId == m_View->GetFullWidget()->GetIdentifier() )
 	{
+	otbMsgDevMacro(<<"WidgetResizingActionHandler::HandleWidgetResize(): handling ("<<widgetId<<", "<<w<<", "<<h<<")");
 	// Enlarge the model extract region
 	RegionType region = m_Model->GetExtractRegion();
 	typename RegionType::SizeType size = region.GetSize();
@@ -88,6 +90,7 @@ public:
 	}
       else if(widgetId ==m_View->GetZoomWidget()->GetIdentifier() )
 	{
+	otbMsgDevMacro(<<"WidgetResizingActionHandler::HandleWidgetResize(): handling ("<<widgetId<<", "<<w<<", "<<h<<")");
 	// Enlarge the model scaled extract region
 	RegionType region = m_Model->GetScaledExtractRegion();
 	typename RegionType::SizeType size = region.GetSize();

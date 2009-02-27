@@ -19,6 +19,7 @@
 #define __otbImageLayer_txx
 
 #include "itkImageRegionConstIterator.h"
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -26,7 +27,7 @@ namespace otb
 template <class TImage, class TOutputImage>
 ImageLayer<TImage,TOutputImage>
 ::ImageLayer() : m_Quicklook(), m_Image(), m_Histogram(), m_RenderingFunction(),
-		 m_NumberOfHistogramBins(255), m_AutoMinMax(true), m_AutoMinMaxUpToDate(false), m_AutoMinMaxQuantile(0.02),
+		 m_NumberOfHistogramBins(20), m_AutoMinMax(true), m_AutoMinMaxUpToDate(false), m_AutoMinMaxQuantile(0.02),
 		 m_QuicklookRenderingFilter(), m_ExtractRenderingFilter(), m_ScaledExtractRenderingFilter(),
 		 m_ExtractFilter(), m_ScaledExtractFilter()
 {
@@ -90,12 +91,14 @@ ImageLayer<TImage,TOutputImage>
   // Render quicklook
   if(this->GetHasQuicklook())
     {
+    otbMsgDevMacro(<<"ImageLayer::RenderImages(): Regenerating quicklook");
     m_QuicklookRenderingFilter->Update();
     this->SetRenderedQuicklook(m_QuicklookRenderingFilter->GetOutput());
     }
   // If there are pixels to render
   if(this->GetExtractRegion().GetNumberOfPixels() > 0)
     {
+    otbMsgDevMacro(<<"ImageLayer::RenderImages(): Regenerating extract");
     m_ExtractRenderingFilter->GetOutput()->SetRequestedRegion(this->GetExtractRegion());
     m_ExtractRenderingFilter->Update();
     this->SetRenderedExtract(m_ExtractRenderingFilter->GetOutput());
@@ -108,6 +111,7 @@ ImageLayer<TImage,TOutputImage>
   // If there are pixels to render
   if(this->GetScaledExtractRegion().GetNumberOfPixels() > 0)
       {
+      otbMsgDevMacro(<<"ImageLayer::RenderImages(): Regenerating scaled extract");
       m_ScaledExtractRenderingFilter->GetOutput()->SetRequestedRegion(this->GetScaledExtractRegion());
       m_ScaledExtractRenderingFilter->Update();
       this->SetRenderedScaledExtract(m_ScaledExtractRenderingFilter->GetOutput());
@@ -141,6 +145,7 @@ ImageLayer<TImage,TOutputImage>
   // Check if we need to generate the histogram again
   if( !m_Histogram || (histogramSource->GetUpdateMTime() < histogramSource->GetPipelineMTime()) )
     {
+    otbMsgDevMacro(<<"ImageLayer::RenderHistogram(): Regenerating histogram due to pippeline update.");
     m_AutoMinMaxUpToDate = false;
 
     // Update the histogram source
@@ -162,6 +167,8 @@ ImageLayer<TImage,TOutputImage>
       listSample->PushBack(it.Get());
       ++it;
       }
+    otbMsgDevMacro(<<"ImageLayer::RenderHistogram() Sample list generated ("<<listSample->Size()<<" samples, "<<histogramSource->GetNumberOfComponentsPerPixel()<<" bands)");
+    
     
     // Create the histogram generation filter 
     typename HistogramFilterType::Pointer histogramFilter = HistogramFilterType::New();
@@ -174,6 +181,7 @@ ImageLayer<TImage,TOutputImage>
     
     // Generate
     histogramFilter->Update();
+    otbMsgDevMacro(<<"ImageLayer::RenderHistogram() Histogram has been updated");
     
     // Retrieve the histogram
     m_Histogram = histogramFilter->GetOutput();
@@ -185,31 +193,37 @@ void
 ImageLayer<TImage,TOutputImage>
 ::AutoMinMaxRenderingFunctionSetup()
 {
-  // Check for an existing histogram
-  if(m_Histogram.IsNull())
+  if(!m_AutoMinMaxUpToDate)
     {
-    itkExceptionMacro(<<"Empty histogram, can not use auto min/max evaluation.");
+    // Check for an existing histogram
+    if(m_Histogram.IsNull())
+      {
+      itkExceptionMacro(<<"Empty histogram, can not use auto min/max evaluation.");
+      }
+    
+    otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup(): Updating min/max from histogram");
+    
+    const unsigned int nbComps = m_Image->GetNumberOfComponentsPerPixel();
+    typename RenderingFunctionType::ExtremaVectorType min, max;
+    otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup(): "<<nbComps<<" components, quantile= "<<100*m_AutoMinMaxQuantile<<" %");
+    // For each components, use the histogram to compute min and max
+    for(unsigned int comp = 0; comp < nbComps;++comp)
+      {
+      // Compute quantiles
+      min.push_back(m_Histogram->Quantile(comp,m_AutoMinMaxQuantile));
+      max.push_back(m_Histogram->Quantile(comp,1.-m_AutoMinMaxQuantile));
+      otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup(): component "<<comp<<", min= "<<min.back()<<", max= "<<max.back());
+      }
+    
+    // Setup rendering function
+    m_RenderingFunction->SetMinimum(min);
+    m_RenderingFunction->SetMaximum(max);
+    
+    m_QuicklookRenderingFilter->Modified();
+    m_ExtractRenderingFilter->Modified();
+    m_ScaledExtractRenderingFilter->Modified();
+    m_AutoMinMaxUpToDate = true;
     }
-
-  const unsigned int nbComps = m_Image->GetNumberOfComponentsPerPixel();
-  typename RenderingFunctionType::ExtremaVectorType min, max;
-
-  // For each components, use the histogram to compute min and max
-  for(unsigned int comp = 0; comp < nbComps;++comp)
-    {
-    // Compute quantiles
-    min.push_back(m_Histogram->Quantile(comp,m_AutoMinMaxQuantile));
-    max.push_back(m_Histogram->Quantile(comp,1.-m_AutoMinMaxQuantile));
-    }
-
-  // Setup rendering function
-  m_RenderingFunction->SetMinimum(min);
-  m_RenderingFunction->SetMaximum(max);
-
-  m_QuicklookRenderingFilter->Modified();
-  m_ExtractRenderingFilter->Modified();
-  m_ScaledExtractRenderingFilter->Modified();
-  m_AutoMinMaxUpToDate = true;
 }
 }
 #endif

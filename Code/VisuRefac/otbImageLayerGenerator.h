@@ -103,6 +103,10 @@ public:
   /** Activate/deactivate quicklook generation */
   itkSetMacro(GenerateQuicklook,bool);
   itkBooleanMacro(GenerateQuicklook);
+  
+  /** Set/Get the screen ratio */
+  itkSetMacro(ScreenRatio,double);
+  itkGetMacro(ScreenRatio,double);
 
 protected:
   /** Constructor */
@@ -143,6 +147,9 @@ private:
 
   /** Streaming resample filter */
   ResampleFilterPointerType m_Resampler;
+
+  /** Which ratio of the screen size the quicklook size should be */
+  double m_ScreenRatio;
 
 }; // end class 
 } // end namespace otb

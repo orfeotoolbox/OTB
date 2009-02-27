@@ -75,6 +75,12 @@ public:
   /** Blending filter typedef */
   typedef otb::BlendingImageFilter<OutputImageType> BlendingFilterType;
 
+  /** Blending filter typedef */
+  typedef otb::ObjectList<BlendingFilterType>      BlendingFilterListType;
+  typedef typename BlendingFilterListType::Pointer BlendingFilterListPointerType;
+  typedef typename BlendingFilterListType::Iterator BlendingFilterIteratorType;
+
+
   /** Add a new layer
    *  \param layer The layer to add.
    *  \return The location of the added layer.
@@ -203,6 +209,12 @@ private:
 
   /** Wether the model is currently updating or not */
   bool                   m_Updating;
+
+  /** Lists of the active blending filters */
+  BlendingFilterListPointerType m_QuicklookBlendingFilterList;
+  BlendingFilterListPointerType m_ExtractBlendingFilterList;
+  BlendingFilterListPointerType m_ScaledExtractBlendingFilterList;
+  
 }; // end class 
 } // end namespace otb
 

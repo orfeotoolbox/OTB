@@ -30,6 +30,9 @@ namespace otb
  *
  * GenericInterpolateImageFunction interpolates image intensity according to a
  * resampling profil.
+ *
+ * The Initialize() method need to be call to create the filter.
+ *
  * \ingroup ImageFunctions ImageInterpolators
  */
 template <class TInputImage, class TFunction, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep = double>
@@ -100,12 +103,9 @@ public:
     return m_Function;
   }
 
-  /** Delete tables.*/
-  void ResetOffsetTable() const;
-  /** Initialize used tables*/
-  void InitializeTables() const;
-  /** Fill the weight offset table*/
-  void FillWeightOffsetTable() const;
+  /** Initialize tables: need to be call explicitely */
+  virtual void Initialize();
+
 
   /** Weights normalization accessors*/
   itkSetMacro(NormalizeWeight, bool);
@@ -119,6 +119,13 @@ protected:
   /** Call the superclass implementation and set the TablesHaveBeenGenerated
    * flag to false */
   virtual void Modified(void);
+
+  /** Delete tables.*/
+  virtual void ResetOffsetTable();
+  /** Initialize used tables*/
+  virtual void InitializeTables();
+  /** Fill the weight offset table*/
+  virtual void FillWeightOffsetTable();
 
 private:
   GenericInterpolateImageFunction(const Self&); //purposely not implemented

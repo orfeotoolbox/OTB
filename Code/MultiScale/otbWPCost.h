@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbWPCost__h
-#define __otbWPCost__h
+#ifndef __otbWPCost_h
+#define __otbWPCost_h
 
 #include "itkObject.h"
 #include "itkMacro.h"

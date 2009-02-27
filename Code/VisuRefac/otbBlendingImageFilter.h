@@ -132,8 +132,11 @@ public:
    */
   void SetBlendingFunction(BlendingFunctionType * function)
   {
-    this->GetFunctor().SetFunction(function);
-    this->Modified();
+    if(function != this->GetFunctor().GetFunction())
+      {
+      this->GetFunctor().SetFunction(function);
+      this->Modified();
+      }
   }
 
   /**

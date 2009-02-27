@@ -19,6 +19,7 @@
 #define __otbImageViewerModel_txx
 
 #include "otbImageViewerModel.h"
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -28,13 +29,16 @@ ImageViewerModel<TOutputImage>
 ::ImageViewerModel() : m_Name("Default"), m_Layers(), m_RasterizedQuicklook(), 
 		       m_HasQuicklook(false),m_RasterizedExtract(),m_HasExtract(false),
 		       m_ExtractRegion(), m_SubsampledExtractRegion(), m_RasterizedScaledExtract(), m_HasScaledExtract(false),
-		       m_ScaledExtractRegion()
+		       m_ScaledExtractRegion(), m_QuicklookBlendingFilterList(), m_ExtractBlendingFilterList(), m_ScaledExtractBlendingFilterList()
 
 {
   // Intializing the layer list
   m_Layers = LayerListType::New();
 
-  
+  // Initalize the blending filter list 
+  m_QuicklookBlendingFilterList = BlendingFilterListType::New();
+  m_ExtractBlendingFilterList = BlendingFilterListType::New();
+  m_ScaledExtractBlendingFilterList = BlendingFilterListType::New();  
 }
 
 template <class TOutputImage>
@@ -51,6 +55,12 @@ ImageViewerModel<TOutputImage>
 {
   // Push back and return the size-1
   m_Layers->PushBack(layer);
+  
+  // Add new blending filters
+  m_QuicklookBlendingFilterList->PushBack(BlendingFilterType::New());
+  m_ExtractBlendingFilterList->PushBack(BlendingFilterType::New());
+  m_ScaledExtractBlendingFilterList->PushBack(BlendingFilterType::New());
+
   return (m_Layers->Size()-1);
 }
 
@@ -83,6 +93,9 @@ ImageViewerModel<TOutputImage>
   else
     {
     m_Layers->Erase(index);
+    m_QuicklookBlendingFilterList->Erase(index);
+    m_ExtractBlendingFilterList->Erase(index);
+    m_ScaledExtractBlendingFilterList->Erase(index);
     return true;
     }
 }
@@ -131,6 +144,9 @@ ImageViewerModel<TOutputImage>
   if(found)
     {
     m_Layers->Erase(index-1);
+    m_QuicklookBlendingFilterList->Erase(index-1);
+    m_ExtractBlendingFilterList->Erase(index-1);
+    m_ScaledExtractBlendingFilterList->Erase(index-1);
     }
 
   return found;
@@ -143,6 +159,9 @@ ImageViewerModel<TOutputImage>
 {
   // Clear layers list
   m_Layers->Clear();
+  m_QuicklookBlendingFilterList->Clear();
+  m_ExtractBlendingFilterList->Clear();
+  m_ScaledExtractBlendingFilterList->Clear();
 }
 
 template <class TOutputImage>
@@ -192,6 +211,9 @@ ImageViewerModel<TOutputImage>
       m_ScaledExtractRegion = this->ConstrainRegion(m_ScaledExtractRegion,it.Get()->GetExtent());
       it.Get()->SetScaledExtractRegion(m_ScaledExtractRegion);
       // Render it
+
+      otbMsgDevMacro(<<"ImageViewerModel::RenderVisibleLayers(): Rendering layer "<<it.Get()->GetName()<<" with regions ("<<m_ExtractRegion.GetIndex()<<" "<<m_ExtractRegion.GetSize()<<") ("<<m_ScaledExtractRegion.GetIndex()<<" "<<m_ScaledExtractRegion.GetSize()<<")");
+
       it.Get()->Render();
       }
     }
@@ -215,9 +237,44 @@ ImageViewerModel<TOutputImage>
   
   // Get the lowest layer
   LayerIteratorType it = m_Layers->Begin();
+
+  BlendingFilterIteratorType qlBlenderIt   = m_QuicklookBlendingFilterList->Begin();
+  BlendingFilterIteratorType extBlenderIt  = m_ExtractBlendingFilterList->Begin();
+  BlendingFilterIteratorType scalBlenderIt = m_ExtractBlendingFilterList->Begin(); 
+
+
+  bool visible = it.Get()->GetVisible();
+  ++it;
+  ++qlBlenderIt;
+  ++extBlenderIt;
+  ++scalBlenderIt;
+
+  while(!visible && it != m_Layers->End()
+	&& qlBlenderIt != m_QuicklookBlendingFilterList->End()
+	&& extBlenderIt != m_ExtractBlendingFilterList->End()
+	&& scalBlenderIt != m_ScaledExtractBlendingFilterList->End())
+    {
+    visible = it.Get()->GetVisible();
+    ++it;
+    ++qlBlenderIt;
+    ++extBlenderIt;
+    ++scalBlenderIt;
+    }
+
+  if(!visible)
+    {
+    // no visible layers, returning
+    return;
+    }
+  --it;
+  --qlBlenderIt;
+  --extBlenderIt;
+  --scalBlenderIt;
   
-  // Base layer
+  // base layer
   typename LayerType::Pointer baseLayer = it.Get();
+
+  otbMsgDevMacro(<<"ImageViewerModel::RasterizeVisibleLayers(): Found base layer named "<<it.Get()->GetName());
   
   // Configure base layer rasterization
   if(baseLayer->GetHasQuicklook())
@@ -251,18 +308,26 @@ ImageViewerModel<TOutputImage>
 
   // Move to the next layer
   ++it;
-  
+  ++qlBlenderIt;
+  ++extBlenderIt;
+  ++scalBlenderIt;
+
   // Walk the remaining layers
-  while(it!=m_Layers->End())
+  while(it!=m_Layers->End()
+	&& qlBlenderIt != m_QuicklookBlendingFilterList->End()
+	&& extBlenderIt != m_ExtractBlendingFilterList->End()
+	&& scalBlenderIt != m_ScaledExtractBlendingFilterList->End())
     {
     // If a layer is visible
     if(it.Get()->GetVisible())
       {
+      otbMsgDevMacro("ImageViewerModel::RasterizeVisibleLayers(): Rasterizing previous layer with layer "<<it.Get()->GetName());
+
       // If quicklook is activated and available for this layer 
       if(m_HasQuicklook && it.Get()->GetHasQuicklook())
 	{
         // Blend it with the current rasterized quicklook
-	typename BlendingFilterType::Pointer blender = BlendingFilterType::New();
+	typename BlendingFilterType::Pointer blender = BlendingFilterType::New(); //qlBlenderIt.Get();
 	// Using the blending function of the layer
 	blender->SetBlendingFunction(it.Get()->GetBlendingFunction());
 	blender->SetInput1(m_RasterizedQuicklook);
@@ -276,7 +341,7 @@ ImageViewerModel<TOutputImage>
       if(m_HasExtract && it.Get()->GetHasExtract())
 	{
         // Blend it with the current rasterized extract
-	typename BlendingFilterType::Pointer blender = BlendingFilterType::New();
+	typename BlendingFilterType::Pointer blender = BlendingFilterType::New(); //extBlenderIt.Get();
 	// Using the blending function of the layer
 	blender->SetBlendingFunction(it.Get()->GetBlendingFunction());
 	blender->SetInput1(m_RasterizedExtract);
@@ -290,7 +355,7 @@ ImageViewerModel<TOutputImage>
       if(m_HasScaledExtract && it.Get()->GetHasScaledExtract())
 	{
 	// Blend it with the current rasterized scaledExtract
-	typename BlendingFilterType::Pointer blender = BlendingFilterType::New();
+	typename BlendingFilterType::Pointer blender = BlendingFilterType::New(); //scalBlenderIt.Get();
 	// Using the blending function of the layer
 	blender->SetBlendingFunction(it.Get()->GetBlendingFunction());
 	blender->SetInput1(m_RasterizedScaledExtract);
@@ -301,6 +366,9 @@ ImageViewerModel<TOutputImage>
 	}
       }
     ++it;
+    ++qlBlenderIt;
+    ++extBlenderIt;
+    ++scalBlenderIt;
     }
 }
 
@@ -310,6 +378,7 @@ ImageViewerModel<TOutputImage>
 ::Notify(ListenerType * listener)
 {
   // Notify the listener
+  otbMsgDevMacro(<<"ImageViewerModel::Notify(): Notifying listener");
   listener->ImageViewerNotify();
 }
 
