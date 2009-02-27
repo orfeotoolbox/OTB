@@ -29,13 +29,13 @@ namespace otb
 /** \class Layer
 *   \brief Base class for all layers objects
 *   A layer is something that can be rendered to the screen.
-*   
+*
 *   \sa ImageViewerModel
 */
 
-template <class TOutputImage = Image<itk::RGBPixel<unsigned char>, 2 > > 
+template <class TOutputImage = Image<itk::RGBPixel<unsigned char>, 2 > >
 class Layer
-  : public itk::Object
+      : public itk::Object
 {
 public:
   /** Standard class typedefs */
@@ -43,7 +43,7 @@ public:
   typedef itk::Object                          Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
-    
+
   /** Runtime information */
   itkTypeMacro(Layer,Object);
 
@@ -114,17 +114,17 @@ public:
 
 protected:
   /** Constructor */
-  Layer() : m_Name("Default"), m_Visible(false), m_Extent(), 
-	    m_RenderedQuicklook(), m_HasQuicklook(false), m_QuicklookSize(),  m_QuicklookSubsamplingRate(1),
-	    m_RenderedExtract(),   m_HasExtract(false),   m_ExtractRegion(),
-	    m_RenderedScaledExtract(), m_HasScaledExtract(false), m_ScaledExtractRegion(),
-	    m_BlendingFunction()
+  Layer() : m_Name("Default"), m_Visible(false), m_Extent(),
+      m_RenderedQuicklook(), m_HasQuicklook(false), m_QuicklookSize(),  m_QuicklookSubsamplingRate(1),
+      m_RenderedExtract(),   m_HasExtract(false),   m_ExtractRegion(),
+      m_RenderedScaledExtract(), m_HasScaledExtract(false), m_ScaledExtractRegion(),
+      m_BlendingFunction()
   {
     // Default blending function
     m_BlendingFunction = Function::UniformAlphaBlendingFunction<PixelType>::New();
   }
   /** Destructor */
-  virtual ~Layer(){}
+  virtual ~Layer() {}
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
@@ -149,7 +149,7 @@ private:
 
   /** Is the layer visible ? */
   bool                   m_Visible;
-  
+
   /** Data extent */
   RegionType             m_Extent;
 
@@ -172,7 +172,7 @@ private:
   /** Pointer to the blending function */
   BlendingFunctionPointerType m_BlendingFunction;
 
-}; // end class 
+}; // end class
 } // end namespace otb
 
 #endif

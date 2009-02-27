@@ -32,7 +32,7 @@ namespace Function
  */
 template <class TInputRGBPixel1, class TInputRGBPixel2 = TInputRGBPixel1, class TOutputRGBPixel = TInputRGBPixel1>
 class BlendingFunction
-  : public itk::Object
+      : public itk::Object
 {
 public:
   /** Standard class typedefs */
@@ -51,7 +51,7 @@ public:
 
   /** Evaluate method  */
   virtual const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type & input2) = 0;
-    
+
 protected:
   /** Constructor */
   BlendingFunction()  {}

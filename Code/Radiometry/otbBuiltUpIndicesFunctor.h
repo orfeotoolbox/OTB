@@ -119,9 +119,9 @@ protected:
     double dTM4 = static_cast<double>(pTM4);
     double dTM5 = static_cast<double>(pTM5);
     if ( dTM5+dTM4 == 0 )
-      {
+    {
       return static_cast<TOutput>(0.);
-      }
+    }
 
     return ( static_cast<TOutput>((dTM5-dTM4)/(dTM5+dTM4)) );
   }
@@ -169,9 +169,9 @@ protected:
     double dRed = static_cast<double>(pRed);
     double dNIR = static_cast<double>(pNIR);
     if ( dNIR == 0 )
-      {
+    {
       return static_cast<TOutput>(0.);
-      }
+    }
 
     return ( static_cast<TOutput>(m_A - (m_B*dRed)/(dNIR)) );
   }

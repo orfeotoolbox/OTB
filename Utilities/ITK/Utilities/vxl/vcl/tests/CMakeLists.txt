@@ -11,6 +11,7 @@ ADD_EXECUTABLE( vcl_test_all
  # Driver
      test_driver.cxx
  # The actual tests
+     test_clean.cxx
      test_algorithm.cxx
      test_cctype.cxx
      test_cmath.cxx
@@ -37,6 +38,7 @@ ADD_EXECUTABLE( vcl_test_all
 )
 TARGET_LINK_LIBRARIES( vcl_test_all itkvcl )
 
+ADD_TEST( vcl_test_clean        ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_clean )
 ADD_TEST( vcl_test_algorithm    ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_algorithm )
 ADD_TEST( vcl_test_cctype       ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_cctype )
 ADD_TEST( vcl_test_cmath        ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_cmath )

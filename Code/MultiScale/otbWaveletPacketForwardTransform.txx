@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,7 +23,8 @@
 
 #include "otbWaveletPacketForwardTransform.h"
 
-namespace otb {
+namespace otb
+{
 
 template < class TInputImage, class TOutputImage, class TFilter, class TCost >
 WaveletPacketForwardTransform< TInputImage, TOutputImage, TFilter, TCost >
@@ -55,8 +56,8 @@ WaveletPacketForwardTransform< TInputImage, TOutputImage, TFilter, TCost >
    * Loop decompositions
    */
   for ( OutputImageIterator outputIt = this->GetOutput()->Begin();
-      outputIt != this->GetOutput()->End();
-      ++outputIt ) 
+        outputIt != this->GetOutput()->End();
+        ++outputIt )
   {
     PerformDecomposition( 1, outputIt );
   }

@@ -40,8 +40,8 @@ namespace otb
 
 template <class TInputImage, class TOutputImage>
 class  ITK_EXPORT DrawLineSpatialObjectFilter :
-  //public itk::SpatialObjectToImageFilter< itk::LineSpatialObject<2>, TOutputImage >
-  public itk::ImageToImageFilter<TInputImage, TOutputImage >
+      //public itk::SpatialObjectToImageFilter< itk::LineSpatialObject<2>, TOutputImage >
+      public itk::ImageToImageFilter<TInputImage, TOutputImage >
 {
 public:
   /**   Extract dimensions as well of the images of entry of exit. */
@@ -61,16 +61,16 @@ public:
 
   /** Method for management of the "object factory". */
   itkNewMacro(Self);
-  
+
   /** Return the name of the class. */
   itkTypeMacro(DrawLineSpatialObjectFilter, /*SpatialObjectToImageFilter*/itk::ImageToImageFilter);
-  
+
   /** typedef Support for input & output image*/
   typedef TInputImage                                                                InputImageType;
 
   typedef TOutputImage                                                               OutputImageType;
   typedef typename OutputImageType::PixelType                                        OutputPixelType;
-  
+
   /** Support typedef for input & Output*/
   typedef itk::LineSpatialObject<2>                                InputLineType;
   typedef itk::ProcessObject                                                         ProcessObjectType;
@@ -83,7 +83,7 @@ public:
   typedef otb::DrawLineSpatialObjectListFilter<InputImageType,OutputImageType >     DrawLineSpatialObjectListFilterType;
   typedef typename DrawLineSpatialObjectListFilterType::Pointer                     DrawLineSpatialObjectListFilterPointerType;
 
-  
+
   /** Set/Get the image input of this process object. */
   /*   virtual void SetInputImage(const InputImageType *image); */
   /*   const InputImageType * GetInputImage(void); */
@@ -92,7 +92,7 @@ public:
   virtual void SetInputLine(const InputLineType *line);
   InputLineType * GetInputLine(void);
 
-  
+
   /** Set/Get pixel value */
   itkSetMacro(Value, OutputPixelType);
   itkGetConstReferenceMacro(Value, OutputPixelType);

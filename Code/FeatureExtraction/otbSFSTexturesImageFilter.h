@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -39,8 +39,8 @@ namespace otb
  * The texture is computated for each pixel using its neighborhood.
  * User can set the spatial threshold taht is the max line length, the spectral threshold
  * that is the max difference authorized between a pixel of the line and the center pixel
- * of the current neighborhood. Alpha and RationMaxConsideration are used to compute 
- * the \omega -mean value. Finally, The number of direction can be precised with 
+ * of the current neighborhood. Alpha and RationMaxConsideration are used to compute
+ * the \omega -mean value. Finally, The number of direction can be precised with
  * NumberOfDirections.
  * You can choose the computed textures using SetTextureStatus method (1:length, 2:width,
  * 3:PSI, 4:w-mean, 5:ratio, 6:SD).
@@ -50,7 +50,7 @@ namespace otb
 
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT SFSTexturesImageFilter :
-public itk::ImageToImageFilter<TInputImage,TOutputImage>
+      public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -63,10 +63,10 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(UnaryFunctorNeighborhoodImageFilter,ImageToImageFilter);
-  
+
   /** Some convenient typedefs. */
   typedef typename InputImageType::ConstPointer         InputImagePointerType;
   typedef typename InputImageType::RegionType           InputImageRegionType;
@@ -77,7 +77,7 @@ public:
   typedef typename OutputImageType::PixelType           OutputImagePixelType;
   typedef itk::ConstNeighborhoodIterator<TInputImage>   NeighborhoodIteratorType;
   typedef typename NeighborhoodIteratorType::RadiusType RadiusType;
-  typedef Functor::SFSTexturesFunctor< NeighborhoodIteratorType,OutputImagePixelType  > FunctorType; 
+  typedef Functor::SFSTexturesFunctor< NeighborhoodIteratorType,OutputImagePixelType  > FunctorType;
   typedef typename FunctorType::OutputType              FunctorOutputType;
   typedef itk::ProcessObject                            ProcessObjectType;
 
@@ -102,57 +102,57 @@ public:
 
   /** Spatial Threshold accessor */
   void SetSpatialThreshold( unsigned int thresh )
-    { 
-      this->GetFunctor().SetSpatialThreshold( thresh ); 
-      m_Radius = thresh;
-      this->Modified();
-    };
+  {
+    this->GetFunctor().SetSpatialThreshold( thresh );
+    m_Radius = thresh;
+    this->Modified();
+  };
   unsigned int GetSpatialThreshold()
-    {
-      return this->GetFunctor().GetSpatialThreshold(); 
-    };
+  {
+    return this->GetFunctor().GetSpatialThreshold();
+  };
   /** Spectral Threshold accessor */
   void SetSpectralThreshold( InputImagePixelType thresh )
-    { 
-      this->GetFunctor().SetSpectralThreshold( thresh ); 
-    };
+  {
+    this->GetFunctor().SetSpectralThreshold( thresh );
+  };
   InputImagePixelType GetSpectralThreshold()
-    { 
-      return this->GetFunctor().GetSpectralThreshold(); 
-    };
+  {
+    return this->GetFunctor().GetSpectralThreshold();
+  };
   /** RatioMaxConsiderationNumber accessor */
   void SetRatioMaxConsiderationNumber( unsigned int value )
-    { 
-      this->GetFunctor().SetRatioMaxConsiderationNumber(value); 
-    };
+  {
+    this->GetFunctor().SetRatioMaxConsiderationNumber(value);
+  };
   unsigned int GetRatioMaxConsiderationNumber()
-    { 
-      return this->GetFunctor().GetRatioMaxConsiderationNumber(); 
-    }; 
- 
+  {
+    return this->GetFunctor().GetRatioMaxConsiderationNumber();
+  };
+
   /** Alpha accessor */
   void SetAlpha( double alpha )
-    { 
-      this->GetFunctor().SetAlpha(alpha); 
-    };
+  {
+    this->GetFunctor().SetAlpha(alpha);
+  };
   double GetAlpha()
-    { 
-      return this->GetFunctor().GetAlpha(); 
-    }; 
- 
+  {
+    return this->GetFunctor().GetAlpha();
+  };
+
   /** Number Of Directions */
   void SetNumberOfDirections( unsigned int D )
-    { 
-      this->GetFunctor().SetNumberOfDirections( D );
-      double step = 2*M_PI/static_cast<double>(D);
-      this->GetFunctor().SetDirectionStep( step );
-    };
+  {
+    this->GetFunctor().SetNumberOfDirections( D );
+    double step = 2*M_PI/static_cast<double>(D);
+    this->GetFunctor().SetDirectionStep( step );
+  };
   unsigned int GetNumberOfDirections()
-    { 
-      return this->GetFunctor().GetNumberOfDirections(); 
-    };
+  {
+    return this->GetFunctor().GetNumberOfDirections();
+  };
 
-  /** Texture selection accessors 
+  /** Texture selection accessors
    *  1: length
    *  2: width
    *  3: PSI
@@ -162,29 +162,29 @@ public:
    *  Set to 1 means the texture will be computed.
    **/
   void SetTextureStatus( unsigned int id, bool isSelected )
+  {
+    if ( id>this->GetTexturesStatus().size() || id == 0 )
     {
-      if ( id>this->GetTexturesStatus().size() || id == 0 )
-	  {
-	    itkExceptionMacro(<<"Invalid texture index "<<id<<", must be in [1;"<<this->GetTexturesStatus().size()<<"]");
-	  }
-      else
-	  {
-	    this->GetFunctor().SetTextureStatus( id-1, isSelected );
-      }
+      itkExceptionMacro(<<"Invalid texture index "<<id<<", must be in [1;"<<this->GetTexturesStatus().size()<<"]");
     }
+    else
+    {
+      this->GetFunctor().SetTextureStatus( id-1, isSelected );
+    }
+  }
   std::vector<bool> GetTexturesStatus()
-    {
-      return this->GetFunctor().GetTexturesStatus();
-    }
+  {
+    return this->GetFunctor().GetTexturesStatus();
+  }
 
   void InitTextureStatusFalse()
+  {
+    unsigned int id;
+    for (id=1;id<=6;id++)
     {
-      unsigned int id;
-      for (id=1;id<=6;id++)
-      {
-        this->SetTextureStatus(id,false);
-      }
+      this->SetTextureStatus(id,false);
     }
+  }
 
 
 
@@ -192,34 +192,34 @@ public:
   const OutputImageType * GetLengthOutput() const;
   OutputImageType * GetLengthOutput();
 
-   /** Return output width image */
+  /** Return output width image */
   const OutputImageType * GetWidthOutput() const;
   OutputImageType * GetWidthOutput();
 
   /** Return output PSI image */
   const OutputImageType * GetPSIOutput() const;
   OutputImageType * GetPSIOutput();
-  
+
   /** Return output WMean image */
   const OutputImageType * GetWMeanOutput() const;
   OutputImageType * GetWMeanOutput();
-  
+
   /** Return output ratio image */
   const OutputImageType * GetRatioOutput() const;
   OutputImageType * GetRatioOutput();
-  
+
   /** Return output SD image */
   const OutputImageType * GetSDOutput() const;
   OutputImageType * GetSDOutput();
 
 
- 
+
   virtual void GenerateOutputInformation();
   std::vector<FunctorType> m_FunctorList;
 
 protected:
   SFSTexturesImageFilter();
-  virtual ~SFSTexturesImageFilter(){};
+  virtual ~SFSTexturesImageFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   virtual void BeforeThreadedGenerateData();

@@ -42,11 +42,11 @@ namespace Functor
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT InformationMeasureOfCorrelation2TextureFunctor :
-public EntropyTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType>
+      public EntropyTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
-  InformationMeasureOfCorrelation2TextureFunctor(){};
-  virtual ~InformationMeasureOfCorrelation2TextureFunctor(){};
+  InformationMeasureOfCorrelation2TextureFunctor() {};
+  virtual ~InformationMeasureOfCorrelation2TextureFunctor() {};
 
   typedef EntropyTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
   typedef typename Superclass::NeighborhoodType                                NeighborhoodType;
@@ -64,40 +64,40 @@ public:
 
     // Computes HX
     for (unsigned r = 0; r<this->GetHisto()[0].size(); r++)
+    {
+      double sumTemp = 0.;
+      for (unsigned s = 0; s<this->GetHisto().size(); s++)
       {
-	double sumTemp = 0.;
-	for (unsigned s = 0; s<this->GetHisto().size(); s++)
-	  {
-	    sumTemp += this->GetHisto()[s][r]*areaInv;
-	  }
-	PxVector.push_back( sumTemp );
+        sumTemp += this->GetHisto()[s][r]*areaInv;
       }
+      PxVector.push_back( sumTemp );
+    }
 
     // Computes HY
     for (unsigned r = 0; r<this->GetHisto().size(); r++)
+    {
+      double sumTemp = 0.;
+      for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
       {
-	double sumTemp = 0.;
-	for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-	  {
-	    sumTemp += this->GetHisto()[r][s]*areaInv;
-	  }
-	PyVector.push_back( sumTemp );
+        sumTemp += this->GetHisto()[r][s]*areaInv;
       }
+      PyVector.push_back( sumTemp );
+    }
 
     // Computes HXY2
     double HXY2 = 0.;
     for (unsigned r = 0; r<this->GetHisto().size(); r++)
+    {
+      for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
       {
-	for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-	  {
-	    double PxPy = PyVector[r]*PxVector[s];
-	    if( PxPy != 0. )
-	      {
-		HXY2 += PxPy * vcl_log( PxPy );
-	      }
+        double PxPy = PyVector[r]*PxVector[s];
+        if ( PxPy != 0. )
+        {
+          HXY2 += PxPy * vcl_log( PxPy );
+        }
 
-	  }
       }
+    }
     if ( HXY2 != 0. )
       HXY2 = -HXY2;
 

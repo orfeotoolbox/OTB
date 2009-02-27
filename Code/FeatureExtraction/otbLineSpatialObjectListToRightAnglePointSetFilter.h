@@ -50,7 +50,7 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(LineSpatialObjectListToRightAnglePointSetFilter,LineSpatialObjectListToPointSetFilter);
-  
+
   /** Typedef support for ProcessObject*/
   typedef itk::ProcessObject                            ProcessObjectType;
 
@@ -66,7 +66,7 @@ public:
    */
   typedef TImage                                        InputImageType;
   typedef typename InputImageType::IndexType            InputIndexType;
-  
+
   /** Typedef support for output PointSet*/
   typedef TPointSet                                     OutputPointSetType;
   typedef typename OutputPointSetType::PointType        PointType;
@@ -76,7 +76,7 @@ public:
   typedef itk::VariableSizeMatrix<unsigned int>         checkMatrixType;
 
   /**
-   *  Public Methods : 
+   *  Public Methods :
    *       Get the Input Image & Get The input Image
    */
   virtual InputImageType* GetInputImage();
@@ -87,7 +87,7 @@ public:
   /** Set/Get the thresholds*/
   itkGetMacro(ThresholdDistance, float);
   itkSetMacro(ThresholdDistance, float);
-  
+
   itkGetMacro(ThresholdAngle, float);
   itkSetMacro(ThresholdAngle, float);
 
@@ -95,14 +95,14 @@ protected:
 
   /**
    * Without the GenrateOutputInformation below it does not work
-   * Because the ProcessObject class do a static_cast to allow memory and copy 
+   * Because the ProcessObject class do a static_cast to allow memory and copy
    * the output (here a pointset). It works fine with images but with pointsets
    * no size is specified ...
    * the aim of the GenerateOutputInformation below is to avoid the guilty static_cast
-   * 
+   *
    */
-  
-  virtual void GenerateOutputInformation(){};
+
+  virtual void GenerateOutputInformation() {};
 
   /**
    * Constructor.
@@ -111,7 +111,7 @@ protected:
   /**
    * Destructor.
    */
-  virtual ~LineSpatialObjectListToRightAnglePointSetFilter(){};
+  virtual ~LineSpatialObjectListToRightAnglePointSetFilter() {};
   /**
    * Standard PrintSelf method.
    */
@@ -148,7 +148,7 @@ private:
 
   float m_ThresholdDistance;
   float m_ThresholdAngle;
-    
+
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION

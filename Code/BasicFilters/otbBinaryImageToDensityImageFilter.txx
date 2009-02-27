@@ -48,7 +48,7 @@ void
 BinaryImageToDensityImageFilter<TInputImage, TOutputImage, TCountFunction>
 ::ThreadedGenerateData( const InputImageRegionType &outputRegionForThread, int threadId )
 {
-  
+
   InputImagePointerType    input = const_cast<InputImageType * > (this->GetInput());
   OutputImagePointerType   output = this->GetOutput();
 
@@ -56,23 +56,23 @@ BinaryImageToDensityImageFilter<TInputImage, TOutputImage, TCountFunction>
 
   itk::ImageRegionConstIterator<InputImageType>   it(input,outputRegionForThread );
   itk::ImageRegionIterator<OutputImageType>   itOut(output,outputRegionForThread );
-  
+
   it.GoToBegin();
   itOut.GoToBegin();
-  
-  while(!it.IsAtEnd())
+
+  while (!it.IsAtEnd())
+  {
+    m_CountFunction->SetNeighborhoodRadius(m_NeighborhoodRadius);
+    typename InputImageType::IndexType index = it.GetIndex();
+
+    if (outputRegionForThread.IsInside(index))
     {
-      m_CountFunction->SetNeighborhoodRadius(m_NeighborhoodRadius);
-      typename InputImageType::IndexType index = it.GetIndex();
-      
-      if(outputRegionForThread.IsInside(index))
-	{
-	  itOut.Set(m_CountFunction->EvaluateAtIndex(index));
-	}
-      
-      ++itOut;
-      ++it;
+      itOut.Set(m_CountFunction->EvaluateAtIndex(index));
     }
+
+    ++itOut;
+    ++it;
+  }
 }
 
 /** PrintSelf method */

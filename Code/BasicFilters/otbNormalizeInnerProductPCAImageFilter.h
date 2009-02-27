@@ -55,7 +55,7 @@ public:
   /** "typedef" to simplify the variables definition and the declaration. */
   typedef TInputImage         InputImageType;
   typedef TOutputImage        OutputImageType;
- 
+
   /** Supported images definition. */
   typedef typename InputImageType::PixelType                           InputPixelType;
   typedef typename InputImageType::InternalPixelType                   InputInternalPixelType;

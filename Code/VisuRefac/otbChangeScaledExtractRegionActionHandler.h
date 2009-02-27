@@ -24,14 +24,14 @@ namespace otb
 {
 /** \class ChangeScaledExtractRegionActionHandler
 *   \brief Implements basic Scroll, Full and Zoom  widgets resizing.
-* 
+*
 *   \sa ImageWidgetController
 *   \sa ImageWidgetActionHandler
 */
 
-template <class TModel, class TView> 
+template <class TModel, class TView>
 class ChangeScaledExtractRegionActionHandler
-  : public ImageWidgetActionHandler
+      : public ImageWidgetActionHandler
 {
 public:
   /** Standard class typedefs */
@@ -39,10 +39,10 @@ public:
   typedef ImageWidgetActionHandler               Superclass;
   typedef itk::SmartPointer<Self>                Pointer;
   typedef itk::SmartPointer<const Self>          ConstPointer;
-  
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(ChangeScaledExtractRegionActionHandler,ImageWidgetActionHandler);
 
@@ -63,25 +63,25 @@ public:
    */
   virtual bool HandleWidgetEvent(std::string widgetId, int event)
   {
-    if( m_View.IsNotNull() && m_Model.IsNotNull() )
+    if ( m_View.IsNotNull() && m_Model.IsNotNull() )
+    {
+      if (widgetId == m_View->GetFullWidget()->GetIdentifier()
+          && event == FL_PUSH)
       {
-      if(widgetId == m_View->GetFullWidget()->GetIdentifier()
-	 && event == FL_PUSH)
-	{
-	// Get the clicked index
-	typename ViewType::IndexType index;
-	index[0] = Fl::event_x();
-	index[1] = Fl::event_y();
-	// Change scaled extract region center
-	m_Model->SetScaledExtractRegionCenter(m_View->GetFullWidget()->ScreenIndexToRegionIndex(index));
-	// Update model
-	m_Model->Update();
-	return true;
-	}
+        // Get the clicked index
+        typename ViewType::IndexType index;
+        index[0] = Fl::event_x();
+        index[1] = Fl::event_y();
+        // Change scaled extract region center
+        m_Model->SetScaledExtractRegionCenter(m_View->GetFullWidget()->ScreenIndexToRegionIndex(index));
+        // Update model
+        m_Model->Update();
+        return true;
       }
+    }
     return false;
   }
-  
+
   /** Set/Get the pointer to the view */
   itkSetObjectMacro(View,ViewType);
   itkGetObjectMacro(View,ViewType);
@@ -96,24 +96,24 @@ protected:
   {}
 
   /** Destructor */
-  virtual ~ChangeScaledExtractRegionActionHandler(){}
+  virtual ~ChangeScaledExtractRegionActionHandler() {}
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os,indent);
   }
- 
+
 private:
   ChangeScaledExtractRegionActionHandler(const Self&);    // purposely not implemented
   void operator=(const Self&); // purposely not implemented
 
   // Pointer to the view
   ViewPointerType m_View;
-  
+
   // Pointer to the model
   ModelPointerType m_Model;
-  
-}; // end class 
+
+}; // end class
 } // end namespace otb
 #endif
 

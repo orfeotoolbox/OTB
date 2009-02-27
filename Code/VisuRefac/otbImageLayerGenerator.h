@@ -31,22 +31,22 @@ namespace otb
 *   optionnaly quicklook.
 *
 *   It ca also suggest a subsampling rate if a user want to generate
-*   the quicklook by itself. 
+*   the quicklook by itself.
 *
 *   The output layer can be passed to the AddLayer() method of the
 *   ImageViewerModel.
 *
 *   It can also be tuned afterward.
 
-*   Also it is quite a heavy thing to do, an image layer can still be 
+*   Also it is quite a heavy thing to do, an image layer can still be
 *   built by hands.
-*   
+*
 *   \sa ImageViewerModel
 *   \sa ImageLayer
 */
-template < class TImageLayer >  
+template < class TImageLayer >
 class ImageLayerGenerator
-  : public itk::Object
+      : public itk::Object
 {
 public:
   /** Standard class typedefs */
@@ -54,10 +54,10 @@ public:
   typedef itk::Object                        Superclass;
   typedef itk::SmartPointer<Self>            Pointer;
   typedef itk::SmartPointer<const Self>      ConstPointer;
-  
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(ImageLayerGenerator,Object);
 
@@ -73,7 +73,7 @@ public:
   typedef otb::StreamingShrinkImageFilter
   <ImageType,ImageType>                        ResampleFilterType;
   typedef typename ResampleFilterType::Pointer ResampleFilterPointerType;
-  
+
   /** Get the generated layer */
   itkGetObjectMacro(Layer,ImageLayerType);
 
@@ -114,7 +114,7 @@ protected:
 
   /** Generate the layer information */
   virtual void GenerateLayerInformation();
- 
+
   /** Generate the quicklook (this method is only called if
    * QuicklookGeneration is on).
    */
@@ -137,14 +137,14 @@ private:
    * GenerateQuicklook is on)
    */
   unsigned int          m_SubsamplingRate;
-  
+
   /** if true, the generator will also generate the quicklook */
   bool                  m_GenerateQuicklook;
 
   /** Streaming resample filter */
   ResampleFilterPointerType m_Resampler;
 
-}; // end class 
+}; // end class
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

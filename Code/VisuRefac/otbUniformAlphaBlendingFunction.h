@@ -33,14 +33,14 @@ namespace Function
  */
 template <class TInputRGBPixel1, class TInputRGBPixel2 = TInputRGBPixel1, class TOutputRGBPixel = TInputRGBPixel1>
 class UniformAlphaBlendingFunction
-  : public BlendingFunction<TInputRGBPixel1,TInputRGBPixel2,TOutputRGBPixel>
+      : public BlendingFunction<TInputRGBPixel1,TInputRGBPixel2,TOutputRGBPixel>
 {
 public:
   /** Standard class typedefs */
   typedef UniformAlphaBlendingFunction                 Self;
   typedef BlendingFunction<TInputRGBPixel1,
-			   TInputRGBPixel2,
-			   TOutputRGBPixel>            Superclass;
+  TInputRGBPixel2,
+  TOutputRGBPixel>            Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
 

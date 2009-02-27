@@ -193,9 +193,9 @@ protected:
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);
     if ( dGreen == 0 )
-      {
+    {
       return static_cast<TOutput>(0.);
-      }
+    }
 
     return ( static_cast<TOutput>( vcl_pow(dRed,2.)/vcl_pow(dGreen,3.) ) );
   }
@@ -224,9 +224,9 @@ protected:
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);
     if ( dGreen + dRed == 0 )
-      {
+    {
       return static_cast<TOutput>(0.);
-      }
+    }
 
     return ( static_cast<TOutput>( (dRed - dGreen)/(dRed + dGreen) ) );
   }

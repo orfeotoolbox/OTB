@@ -32,8 +32,8 @@ template <class TInputPixel, class TOutputPixel>
 class Identity
 {
 public:
-  Identity(){};
-  ~Identity(){};
+  Identity() {};
+  ~Identity() {};
   bool operator !=(const Identity &) const
   {
     return false;
@@ -52,13 +52,13 @@ public:
 /**\class StandardRenderingFunction
  * \brief Standard rendering.
  * If the input image is an Image, the function
- * renders it with R, G and B channels all equals. 
+ * renders it with R, G and B channels all equals.
  * If it is a VectorImage, the function renders
  * the selected channels.
  */
 template <class TPixelPrecision, class TRGBPixel, class TTransferFunction = Identity<TPixelPrecision,TPixelPrecision> >
 class StandardRenderingFunction
-  : public RenderingFunction<TPixelPrecision,TRGBPixel>
+      : public RenderingFunction<TPixelPrecision,TRGBPixel>
 {
 public:
   /** Standard class typedefs */
@@ -84,7 +84,7 @@ public:
 
   /** Evaluate method (scalar version) */
   virtual const OutputPixelType Evaluate(ScalarPixelType spixel) const
-  {    
+  {
     OutputPixelType resp;
     resp.Fill(this->Evaluate(m_TransferFunction(spixel),m_TransferedMinimum[0],m_TransferedMaximum[0]));
     return resp;
@@ -110,7 +110,7 @@ public:
   {
     m_RedChannelIndex = index;
   }
-  
+
   /** Get the red channel index (vector mode only) */
   unsigned int GetRedChannelIndex(void)
   {
@@ -122,7 +122,7 @@ public:
   {
     m_BlueChannelIndex = index;
   }
-  
+
   /** Get the blue channel index (vector mode only) */
   unsigned int GetBlueChannelIndex(void)
   {
@@ -134,19 +134,19 @@ public:
   {
     m_GreenChannelIndex = index;
   }
-  
+
   /** Get the green channel index (vector mode only) */
   unsigned int GetGreenChannelIndex(void)
   {
     return m_GreenChannelIndex;
   }
-  
+
   /** Set all channels (grayscale mode) */
   void SetAllChannels(unsigned int index)
   {
     m_RedChannelIndex   = index;
     m_BlueChannelIndex  = index;
-    m_GreenChannelIndex = index; 
+    m_GreenChannelIndex = index;
   }
 
   /** Togle the UserDefinedTransferedMinMax mode */
@@ -167,7 +167,7 @@ public:
     m_TransferedMinimum.clear();
     m_TransferedMinimum.push_back(spixel);
   }
-  
+
   /** Set the transfered maximum (scalar version) */
   virtual void SetTransferedMaximum(ScalarPixelType spixel)
   {
@@ -179,49 +179,49 @@ public:
   virtual void SetTransferedMinimum(const VectorPixelType & vpixel)
   {
     m_TransferedMinimum.clear();
-    for(unsigned int i = 0; i < vpixel.Size();++i)
-      {
+    for (unsigned int i = 0; i < vpixel.Size();++i)
+    {
       m_TransferedMinimum.push_back(vpixel[i]);
-      }
+    }
   }
 
   /** Set transfered maximum (vector version) */
   virtual void SetTransferedMaximum(const VectorPixelType & vpixel)
   {
     m_TransferedMaximum.clear();
-    for(unsigned int i = 0; i < vpixel.Size();++i)
-      {
+    for (unsigned int i = 0; i < vpixel.Size();++i)
+    {
       m_TransferedMaximum.push_back(vpixel[i]);
-      }
+    }
   }
 
   /** Update transfered min and max */
   virtual void Initialize()
   {
-    if(!m_UserDefinedTransferedMinMax)
-      {
+    if (!m_UserDefinedTransferedMinMax)
+    {
       typename ExtremaVectorType::const_iterator minIt = this->m_Minimum.begin();
       typename ExtremaVectorType::const_iterator maxIt = this->m_Maximum.begin();
-      
+
       m_TransferedMinimum.clear();
       m_TransferedMaximum.clear();
-      
-      while(minIt != this->m_Minimum.end() && maxIt != this->m_Maximum.end())
-	{
-	const double v1 = m_TransferFunction(*minIt);
-	const double v2 = m_TransferFunction(*maxIt);
-	m_TransferedMinimum.push_back(std::min(v1,v2));
-	m_TransferedMaximum.push_back(std::max(v1,v2));
-	++minIt;
-	++maxIt;
-	}
+
+      while (minIt != this->m_Minimum.end() && maxIt != this->m_Maximum.end())
+      {
+        const double v1 = m_TransferFunction(*minIt);
+        const double v2 = m_TransferFunction(*maxIt);
+        m_TransferedMinimum.push_back(std::min(v1,v2));
+        m_TransferedMaximum.push_back(std::max(v1,v2));
+        ++minIt;
+        ++maxIt;
       }
+    }
   }
-     
+
 protected:
   /** Constructor */
   StandardRenderingFunction() : m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2), m_TransferFunction(),
-				m_UserDefinedTransferedMinMax(false), 	m_TransferedMinimum(), m_TransferedMaximum()
+      m_UserDefinedTransferedMinMax(false), 	m_TransferedMinimum(), m_TransferedMaximum()
   {}
   /** Destructor */
   ~StandardRenderingFunction() {}
@@ -230,19 +230,19 @@ protected:
    */
   const OutputValueType Evaluate(ScalarPixelType input, ScalarPixelType min, ScalarPixelType max) const
   {
-    if(input > max)
-      {
+    if (input > max)
+    {
       return 255;
-      }
-    else if(input < min)
-      {
+    }
+    else if (input < min)
+    {
       return 0;
-      }
+    }
     else
-      {
+    {
       return static_cast<OutputValueType>(vcl_floor(255.*(static_cast<double>(input)-static_cast<double>(min))
-						    /(static_cast<double>(max)-static_cast<double>(min))+0.5));
-      }
+                                          /(static_cast<double>(max)-static_cast<double>(min))+0.5));
+    }
   }
 
 private:
@@ -256,7 +256,7 @@ private:
   unsigned int m_GreenChannelIndex;
   unsigned int m_BlueChannelIndex;
 
-  /** Transfer function 
+  /** Transfer function
    *  \note This member is declared mutable because some functors that
    * can be used as a transfer function but are not const correct.
    *  Since a const reference is passed to the functor anyway, it is

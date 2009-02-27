@@ -38,9 +38,9 @@ namespace otb
  */
 template <class TInputImage, class TFunctor, class TCoordRep = float >
 class ITK_EXPORT TextureImageFunction :
-  public itk::ImageFunction< TInputImage, ITK_TYPENAME itk::NumericTraits<typename TInputImage::PixelType>::RealType, TCoordRep >
+      public itk::ImageFunction< TInputImage, ITK_TYPENAME itk::NumericTraits<typename TInputImage::PixelType>::RealType, TCoordRep >
 {
-  public:
+public:
   /** Standard class typedefs. */
   typedef TextureImageFunction Self;
   typedef itk::ImageFunction<TInputImage, ITK_TYPENAME itk::NumericTraits<typename TInputImage::PixelType>::RealType,
@@ -67,7 +67,7 @@ class ITK_EXPORT TextureImageFunction :
   typedef itk::ConstNeighborhoodIterator<InputImageType>                             IteratorType;
   typedef typename IteratorType::NeighborhoodType                                    NeighborhoodType;
   typedef typename itk::NumericTraits<typename InputImageType::PixelType>::RealType  RealType;
-  
+
 
   /** Dimension of the underlying image. */
   itkStaticConstMacro(ImageDimension, unsigned int,InputImageType::ImageDimension);
@@ -90,7 +90,7 @@ class ITK_EXPORT TextureImageFunction :
     this->ConvertContinuousIndexToNearestIndex( cindex, index );
     return this->EvaluateAtIndex( index ) ;
   };
-  
+
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */
   void SetRadius(SizeType & rad)
@@ -98,7 +98,7 @@ class ITK_EXPORT TextureImageFunction :
     m_Radius = rad;
     this->Modified();
   };
-  
+
   void SetOffset(OffsetType & off)
   {
     m_Offset = off;

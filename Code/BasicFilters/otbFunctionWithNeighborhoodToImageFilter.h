@@ -51,7 +51,7 @@ namespace otb
 
 template <class TInputImage, class TOutputImage,class TFunction>
 class ITK_EXPORT FunctionWithNeighborhoodToImageFilter :
-public  itk::InPlaceImageFilter<TInputImage,TOutputImage>
+      public  itk::InPlaceImageFilter<TInputImage,TOutputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -96,22 +96,22 @@ public:
   /** Accessors */
   itkGetMacro(Radius, InputImageSizeType);
   void SetRadius( InputImageSizeType & rad )
-    {
-      m_Radius = rad;
-      m_Function->SetRadius( rad );
-      this->Modified();
-    }
+  {
+    m_Radius = rad;
+    m_Function->SetRadius( rad );
+    this->Modified();
+  }
   itkGetMacro(Offset, InputImageOffsetType);
   void SetOffset( InputImageOffsetType & offset )
-    {
-      m_Offset = offset;
-      m_Function->SetOffset( offset );
-      this->Modified();
-    }
+  {
+    m_Offset = offset;
+    m_Function->SetOffset( offset );
+    this->Modified();
+  }
 
 protected:
   FunctionWithNeighborhoodToImageFilter();
-  virtual ~FunctionWithNeighborhoodToImageFilter(){};
+  virtual ~FunctionWithNeighborhoodToImageFilter() {};
 
   void BeforeThreadedGenerateData();
 

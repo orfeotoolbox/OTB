@@ -40,8 +40,8 @@ VectorDataExtractROI<TVectorData>
   m_StartX = 0;
   m_StartY = 0;
 
-  
-  
+
+
 }
 
 /**
@@ -60,7 +60,7 @@ VectorDataExtractROI<TVectorData>
  * VectorDataExtractROI can produce an output vector data which is different depth
  * than the input vectorData
  * As such, VectorDataExtractROI have to provide an implementation for GenerateOutputInformation
- * in order to inform the pipeline execution model. 
+ * in order to inform the pipeline execution model.
  * \sa ProcessObject::GenerateOutputInformaton()
  */
 // template <class TVectorData>
@@ -79,15 +79,15 @@ VectorDataExtractROI<TVectorData>
 {
   /** Get The input and the outptut*/
   typename VectorDataType::ConstPointer   input = this->GetInput();
-  if(!input)
+  if (!input)
     std::cout << " Probleme avec la recuperation du input"<<std::endl;
-  
+
   /** Create a region with the right size*/
   const   unsigned int                        Dimension = 2;
   typedef itk::ImageRegion<Dimension>         ImageRegionType;
   typedef itk::Index<Dimension>               IndexType;
   typedef itk::Size<Dimension>                SizeType;
-  
+
   /** */
   ImageRegionType                             roi;
   IndexType                                   index;
@@ -102,7 +102,7 @@ VectorDataExtractROI<TVectorData>
   /** Create the region*/
   roi.SetSize(size);
   roi.SetIndex(index);
-  
+
   /** Loop in the vectorData file*/
   typedef itk::PreOrderTreeIterator<DataTreeType>                 TreeIteratorType;
   TreeIteratorType                                                it(input->GetDataTree());
@@ -110,19 +110,19 @@ VectorDataExtractROI<TVectorData>
   it.GoToBegin();
   while (!it.IsAtEnd())
   {
-    
+
     itk::PreOrderTreeIterator<DataTreeType> itParent = it;
     bool goesOn = true;
 
     if (it.Get()->IsPolygonFeature())
       std::cout << " C'est un polygone et les coordonnees " << it.Get()->GetPolygonExteriorRing()->GetVertexList()->GetElement(0)  << std::endl;
-    
+
     if (it.Get()->IsLineFeature())
-	std::cout << "Vertex List Size " << it.Get()->GetLine()->GetVertexList()->Size() <<std::endl;
+      std::cout << "Vertex List Size " << it.Get()->GetLine()->GetVertexList()->Size() <<std::endl;
 
     if (it.Get()->IsPointFeature())
       std::cout << " C'est un point" << std::endl;
-        
+
 
     ++it;
   }

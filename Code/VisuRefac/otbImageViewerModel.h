@@ -32,15 +32,15 @@ namespace otb
 *   Each visible layer is rendered separately, and the resulting
 *   rendered layers are rasterized using the blending function
 *   associated to each layer.
-* 
+*
 * \sa Layer
 * \sa BlendingFunction
 *
 */
 
-template <class TOutputImage = otb::Image<itk::RGBPixel<unsigned char>,2 >  > 
+template <class TOutputImage = otb::Image<itk::RGBPixel<unsigned char>,2 >  >
 class ImageViewerModel
-  : public MVCModel<ImageViewerModelListener>
+      : public MVCModel<ImageViewerModelListener>
 {
 public:
   /** Standard class typedefs */
@@ -48,7 +48,7 @@ public:
   typedef MVCModel<ImageViewerModelListener>   Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
-    
+
   /** Runtime information */
   itkTypeMacro(ImageViewerModel,MVCModel);
 
@@ -58,12 +58,12 @@ public:
   /** Output image typedef */
   typedef TOutputImage                         OutputImageType;
   typedef typename OutputImageType::Pointer    OutputImagePointerType;
-  
+
   /** Layer typedef */
   typedef otb::Layer<OutputImageType>          LayerType;
   typedef typename LayerType::RegionType       RegionType;
   typedef typename RegionType::IndexType       IndexType;
-  
+
   /** Layer list typedef */
   typedef otb::ObjectList<LayerType>           LayerListType;
   typedef typename LayerListType::Pointer      LayerListPointerType;
@@ -117,7 +117,7 @@ public:
   /** Get/Set the viewer name */
   itkGetStringMacro(Name);
   itkSetStringMacro(Name);
-  
+
   /** Get the rasterized views */
   itkGetObjectMacro(RasterizedQuicklook,OutputImageType);
   itkGetObjectMacro(RasterizedExtract,OutputImageType);
@@ -129,7 +129,7 @@ public:
   itkGetConstReferenceMacro(ExtractRegion,RegionType);
   /** Get the extract region in the quicklook space */
   itkGetConstReferenceMacro(SubsampledExtractRegion,RegionType);
-  
+
   /** Set/Get the Scaled Extract Region */
   itkSetMacro(ScaledExtractRegion,RegionType);
   itkGetConstReferenceMacro(ScaledExtractRegion,RegionType);
@@ -138,7 +138,7 @@ public:
   itkGetMacro(HasQuicklook,bool);
   itkGetMacro(HasExtract,bool);
   itkGetMacro(HasScaledExtract,bool);
-  
+
   /** Update will render all visible layers, rasterize all visible
    * layers and notify all listeners. */
   void Update(void);
@@ -151,8 +151,8 @@ public:
    * region */
   void SetExtractRegionCenter(const IndexType & index);
 
- /** Change the extract region by giving the subsamppled center 
-  *  of the region */
+  /** Change the extract region by giving the subsamppled center
+   *  of the region */
   void SetExtractRegionSubsampledCenter(const IndexType & index);
 
 protected:
@@ -165,13 +165,13 @@ protected:
   void          PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Renders all visible layers */
-   void         RenderVisibleLayers(void);
+  void         RenderVisibleLayers(void);
 
   /** Rasterize visible layers */
-   void         RasterizeVisibleLayers(void);
+  void         RasterizeVisibleLayers(void);
 
   /** Notify a registered listener */
-   void         Notify(ListenerType * listener);
+  void         Notify(ListenerType * listener);
 
   /** Constrains the given region to the largest possible one. */
   RegionType    ConstrainRegion(const RegionType & region, const RegionType & largest);
@@ -182,7 +182,7 @@ private:
 
   /** Viewer name */
   std::string m_Name;
-  
+
   /** Layer list */
   LayerListPointerType  m_Layers;
 
@@ -203,7 +203,7 @@ private:
 
   /** Wether the model is currently updating or not */
   bool                   m_Updating;
-}; // end class 
+}; // end class
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

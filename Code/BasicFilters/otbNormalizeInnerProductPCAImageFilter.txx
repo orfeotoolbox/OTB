@@ -46,7 +46,7 @@ template<class TInputImage, class TOutputImage>
 void
 NormalizeInnerProductPCAImageFilter<TInputImage,TOutputImage>
 ::GenerateOutputInformation(void)
-{ 
+{
   Superclass::GenerateOutputInformation();
 }
 
@@ -65,13 +65,13 @@ NormalizeInnerProductPCAImageFilter<TInputImage,TOutputImage>
   RealPixelType means = stats->GetMean();
   MatrixType cov = stats->GetCovariance();
   double NbPixels = static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[0] * this->GetInput()->GetLargestPossibleRegion().GetSize()[1]);
-  if( (cov.Rows() != means.Size()) || (cov.Cols() != means.Size()) )
+  if ( (cov.Rows() != means.Size()) || (cov.Cols() != means.Size()) )
   {
     itkExceptionMacro( << "Covariance matrix with size (" << cov.Rows() << "," <<
-                         cov.Cols() << ") is incompatible with mean vector with size" << means.Size() );
+                       cov.Cols() << ") is incompatible with mean vector with size" << means.Size() );
   }
   m_CoefNorm.SetSize(means.Size());
-  for(unsigned int i=0 ; i<m_CoefNorm.Size() ; i++)
+  for (unsigned int i=0 ; i<m_CoefNorm.Size() ; i++)
   {
     m_CoefNorm[i] = (1./vcl_sqrt(NbPixels*(cov[i][i] + means[i]*means[i])));
   }
@@ -109,7 +109,7 @@ NormalizeInnerProductPCAImageFilter<TInputImage,TOutputImage>
     //outPixel = m_Means * inPixel;
     for (unsigned int j=0; j<inputPtr->GetNumberOfComponentsPerPixel(); j++)
     {
-        outPixel[j] = static_cast<OutputInternalPixelType>(m_CoefNorm[j]*static_cast<double>(inPixel[j]));
+      outPixel[j] = static_cast<OutputInternalPixelType>(m_CoefNorm[j]*static_cast<double>(inPixel[j]));
     }
 
     outputIt.Set(outPixel);

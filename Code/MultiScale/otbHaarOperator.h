@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,16 +22,17 @@
 
 #include "otbWaveletOperator.h"
 
-namespace otb {
+namespace otb
+{
 
 /**
  * \class LowPassHaarOperator
  *
  * \brief A NeighborhoodOperator for performing a Haar based filtering
  * at a pixel location.
- * 
- * LowPassHaarOperator is a NeighborhoodOperator that should be applied to a 
- * NeighborhoodIterator using the NeighborhoodInnerProduct method. 
+ *
+ * LowPassHaarOperator is a NeighborhoodOperator that should be applied to a
+ * NeighborhoodIterator using the NeighborhoodInnerProduct method.
  * The Haar Operator is defiend in 1D as \$ H(z) = ( 1 + z^{-1} ) / 2 \$.
  * In N dimensions, the operator is directional
  *
@@ -40,13 +41,13 @@ namespace otb {
  * \sa Neighborhood
  * \sa ForwardDifferenceOperator
  * \sa BackwardDifferenceOperator
- * 
+ *
  * \ingroup Operators
  */
 template<class TPixel, unsigned int VDimension,
-  class TAllocator = itk::NeighborhoodAllocator< TPixel > >
+class TAllocator = itk::NeighborhoodAllocator< TPixel > >
 class ITK_EXPORT LowPassHaarOperator
-  : public WaveletOperator<TPixel, VDimension, TAllocator>
+      : public WaveletOperator<TPixel, VDimension, TAllocator>
 {
 public:
   /** Standard typedefs */
@@ -54,15 +55,15 @@ public:
   typedef WaveletOperator<TPixel, VDimension, TAllocator>  Superclass;
 
   itkTypeMacro(LowPassHaarOperator, WaveletOperator);
-  
-  LowPassHaarOperator() 
-	{
+
+  LowPassHaarOperator()
+  {
     this->SetRadius(1);
-		this->CreateToRadius(1);
+    this->CreateToRadius(1);
   }
 
   LowPassHaarOperator(const Self& other)
-    : WaveletOperator<TPixel, VDimension, TAllocator>(other) 
+      : WaveletOperator<TPixel, VDimension, TAllocator>(other)
   {
     /* ... */
   }
@@ -78,8 +79,8 @@ public:
   /**
    * Prints some debugging information
    */
-  virtual void PrintSelf(std::ostream &os, itk::Indent i) const  
-  { 
+  virtual void PrintSelf(std::ostream &os, itk::Indent i) const
+  {
     Superclass::PrintSelf(os, i.GetNextIndent());
     os << i << "LowPassHaarOperator {this=" << this << "}" << std::endl;
   }
@@ -99,19 +100,19 @@ protected:
   {
     CoefficientVector coeff;
     // stands for z^{-1}
-    coeff.push_back(0.5); 
+    coeff.push_back(0.5);
     // stands for z^0
     coeff.push_back(0.5);
     // stands for z^1
-    coeff.push_back(0.0);  
+    coeff.push_back(0.0);
 
     return Superclass::UpSamplingCoefficients( coeff );
   }
 
   /** Arranges coefficients spatially in the memory buffer. */
   void Fill(const CoefficientVector& coeff)
-  {    
-    this->FillCenteredDirectional(coeff);  
+  {
+    this->FillCenteredDirectional(coeff);
   }
 };
 
@@ -120,9 +121,9 @@ protected:
  *
  * \brief A NeighborhoodOperator for performing a Haar based filtering
  * at a pixel location.
- * 
- * HighPassHaarOperator is a NeighborhoodOperator that should be applied a 
- * NeighborhoodIterator using the NeighborhoodInnerProduct method. 
+ *
+ * HighPassHaarOperator is a NeighborhoodOperator that should be applied a
+ * NeighborhoodIterator using the NeighborhoodInnerProduct method.
  * The Haar Operator is defiend in 1D as \$ G(z) = ( 1 - z^{-1} ) / 2 \$.
  * In N dimensions, the operator is directional
  *
@@ -131,13 +132,13 @@ protected:
  * \sa Neighborhood
  * \sa ForwardDifferenceOperator
  * \sa BackwardDifferenceOperator
- * 
+ *
  * \ingroup Operators
  */
 template<class TPixel, unsigned int VDimension,
-  class TAllocator = itk::NeighborhoodAllocator< TPixel > >
+class TAllocator = itk::NeighborhoodAllocator< TPixel > >
 class ITK_EXPORT HighPassHaarOperator
-  : public WaveletOperator<TPixel, VDimension, TAllocator>
+      : public WaveletOperator<TPixel, VDimension, TAllocator>
 {
 public:
   /** Standard typedefs */
@@ -145,15 +146,15 @@ public:
   typedef WaveletOperator<TPixel, VDimension, TAllocator>  Superclass;
 
   itkTypeMacro(HighPassHaarOperator, WaveletOperator);
-  
-  HighPassHaarOperator() 
-	{
+
+  HighPassHaarOperator()
+  {
     this->SetRadius(1);
-		this->CreateToRadius(1);
+    this->CreateToRadius(1);
   }
 
   HighPassHaarOperator(const Self& other)
-    : WaveletOperator<TPixel, VDimension, TAllocator>(other) 
+      : WaveletOperator<TPixel, VDimension, TAllocator>(other)
   {
     /* ... */
   }
@@ -169,8 +170,8 @@ public:
   /**
    * Prints some debugging information
    */
-  virtual void PrintSelf(std::ostream &os, itk::Indent i) const  
-  { 
+  virtual void PrintSelf(std::ostream &os, itk::Indent i) const
+  {
     Superclass::PrintSelf(os, i.GetNextIndent());
     os << i << "HighPassHaarOperator {this=" << this << "}" << std::endl;
   }
@@ -189,17 +190,17 @@ protected:
   CoefficientVector GenerateCoefficients()
   {
     CoefficientVector coeff;
-    coeff.push_back(-0.5);  
-    coeff.push_back(0.5);  
-    coeff.push_back(0.0);  
+    coeff.push_back(-0.5);
+    coeff.push_back(0.5);
+    coeff.push_back(0.0);
 
     return Superclass::UpSamplingCoefficients( coeff );
   }
 
   /** Arranges coefficients spatially in the memory buffer. */
   void Fill(const CoefficientVector& coeff)
-  {    
-    this->FillCenteredDirectional(coeff);  
+  {
+    this->FillCenteredDirectional(coeff);
   }
 };
 

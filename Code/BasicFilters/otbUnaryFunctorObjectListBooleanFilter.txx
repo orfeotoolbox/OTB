@@ -35,9 +35,9 @@ UnaryFunctorObjectListBooleanFilter<TInputList,TOutputList,TFunction>
 
 
 template <class TInputList, class TOutputList, class TFunction  >
-    void
-        UnaryFunctorObjectListBooleanFilter<TInputList,TOutputList,TFunction>
-  ::ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex,int threadId)
+void
+UnaryFunctorObjectListBooleanFilter<TInputList,TOutputList,TFunction>
+::ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex,int threadId)
 {
 
   InputListPointer inputPtr = this->GetInput();
@@ -70,9 +70,9 @@ template <class TInputList, class TOutputList, class TFunction  >
 
 
 template <class TInputList, class TOutputList, class TFunction  >
-    void
-        UnaryFunctorObjectListBooleanFilter<TInputList,TOutputList,TFunction>
-  ::AfterThreadedGenerateData()
+void
+UnaryFunctorObjectListBooleanFilter<TInputList,TOutputList,TFunction>
+::AfterThreadedGenerateData()
 {
   // copy the lists to the output
   OutputListPointer outputPtr = this->GetOutput();

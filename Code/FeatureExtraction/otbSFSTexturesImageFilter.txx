@@ -36,7 +36,7 @@ SFSTexturesImageFilter<TInputImage,TOutputImage>
   this->SetNumberOfRequiredInputs( 1 );
   this->SetNumberOfOutputs(6);
   this->SetNumberOfRequiredOutputs(1);
-  
+
   this->SetNthOutput(0,OutputImageType::New());
   this->SetNthOutput(1,OutputImageType::New());
   this->SetNthOutput(2,OutputImageType::New());
@@ -94,9 +94,9 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
   {
     return 0;
   }
- if (this->GetTexturesStatus()[1] == false)
+  if (this->GetTexturesStatus()[1] == false)
   {
-     itkExceptionMacro(<<"Impossible to create width image : texture not selected");
+    itkExceptionMacro(<<"Impossible to create width image : texture not selected");
   }
   return static_cast<const OutputImageType * > (this->itk::ProcessObject::GetOutput(1) );
 }
@@ -109,14 +109,14 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
   {
     return 0;
   }
- if (this->GetTexturesStatus()[1] == false)
+  if (this->GetTexturesStatus()[1] == false)
   {
     itkExceptionMacro(<<"Impossible to create width image : texture not selected");
   }
   return static_cast<OutputImageType * >(this->itk::ProcessObject::GetOutput(1) );
 }
 
-//Return output PSI image 
+//Return output PSI image
 template <class TInputImage, class TOutputImage>
 const typename SFSTexturesImageFilter<TInputImage, TOutputImage>::OutputImageType *
 SFSTexturesImageFilter<TInputImage, TOutputImage>
@@ -126,7 +126,7 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
   {
     return 0;
   }
- if (this->GetTexturesStatus()[2] == false)
+  if (this->GetTexturesStatus()[2] == false)
   {
     itkExceptionMacro(<<"Impossible to create PSI image : texture not selected");
   }
@@ -174,7 +174,7 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
   {
     return 0;
   }
- if (this->GetTexturesStatus()[3] == false)
+  if (this->GetTexturesStatus()[3] == false)
   {
     itkExceptionMacro(<<"Impossible to create W-Mean image : texture not selected");
   }
@@ -191,7 +191,7 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
   {
     return 0;
   }
- if (this->GetTexturesStatus()[4] == false)
+  if (this->GetTexturesStatus()[4] == false)
   {
     itkExceptionMacro(<<"Impossible to create Ratio image : texture not selected");
   }
@@ -223,7 +223,7 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
   {
     return 0;
   }
- if (this->GetTexturesStatus()[5] == false)
+  if (this->GetTexturesStatus()[5] == false)
   {
     itkExceptionMacro(<<"Impossible to create SD image : texture not selected");
   }
@@ -254,16 +254,16 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::BeforeThreadedGenerateData()
 {
   Superclass::BeforeThreadedGenerateData();
-  if(this->GetSpatialThreshold() < this->GetRatioMaxConsiderationNumber())
-    {
-      itkExceptionMacro(<<"Spatial Threshold ("<<this->GetSpatialThreshold()
-			<<") is lower than Ration Max Consideration Number ("
-			<<this->GetRatioMaxConsiderationNumber()<<") what is not allowed.");
-    }
+  if (this->GetSpatialThreshold() < this->GetRatioMaxConsiderationNumber())
+  {
+    itkExceptionMacro(<<"Spatial Threshold ("<<this->GetSpatialThreshold()
+                      <<") is lower than Ration Max Consideration Number ("
+                      <<this->GetRatioMaxConsiderationNumber()<<") what is not allowed.");
+  }
   for (int i =0; i<this->GetNumberOfThreads(); i++)
-    {
-      m_FunctorList.push_back(m_Functor);
-    }
+  {
+    m_FunctorList.push_back(m_Functor);
+  }
 }
 
 template <class TInputImage, class TOutputImage>
@@ -379,14 +379,14 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
   {
     neighInputIt = itk::ConstNeighborhoodIterator<TInputImage>(r, inputPtr, *fit);
-    
+
     outputIt1 = itk::ImageRegionIterator<TOutputImage>(outputPtr1, *fit);
     outputIt2 = itk::ImageRegionIterator<TOutputImage>(outputPtr2, *fit);
     outputIt3 = itk::ImageRegionIterator<TOutputImage>(outputPtr3, *fit);
     outputIt4 = itk::ImageRegionIterator<TOutputImage>(outputPtr4, *fit);
     outputIt5 = itk::ImageRegionIterator<TOutputImage>(outputPtr5, *fit);
     outputIt6 = itk::ImageRegionIterator<TOutputImage>(outputPtr6, *fit);
-    
+
     std::vector< itk::ImageRegionIterator<TOutputImage> *> outItList;
     outItList.push_back(&outputIt1);
     outItList.push_back(&outputIt2);
@@ -394,31 +394,31 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
     outItList.push_back(&outputIt4);
     outItList.push_back(&outputIt5);
     outItList.push_back(&outputIt6);
-    
+
     neighInputIt.OverrideBoundaryCondition(&nbc);
     neighInputIt.GoToBegin();
-    
-    for(unsigned int i = 0; i<outItList.size(); i++)
-      {
-	(*outItList[i]).GoToBegin();
-      }
-    
+
+    for (unsigned int i = 0; i<outItList.size(); i++)
+    {
+      (*outItList[i]).GoToBegin();
+    }
+
     while ( !outputIt1.IsAtEnd() )
     {
 
-      outputFunctor = m_FunctorList[threadId]( neighInputIt);    
-      for(unsigned int i = 0; i<outItList.size(); i++)
-	{
-	  if( textStatus[i]==true )
-	    (*outItList[i]).Set( outputFunctor[i] );
-	}	
-      
+      outputFunctor = m_FunctorList[threadId]( neighInputIt);
+      for (unsigned int i = 0; i<outItList.size(); i++)
+      {
+        if ( textStatus[i]==true )
+          (*outItList[i]).Set( outputFunctor[i] );
+      }
+
       ++neighInputIt;
-      for(unsigned int i = 0; i<outItList.size(); i++)
-	{
-	  ++(*outItList[i]);
-	}
-      
+      for (unsigned int i = 0; i<outItList.size(); i++)
+      {
+        ++(*outItList[i]);
+      }
+
       progress.CompletedPixel();
     }
   }
@@ -435,13 +435,13 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
 {
   Superclass::PrintSelf( os, indent );
 
-  
+
   //os << indent << "Spatial Threshold             : "  << this->GetSpatialThreshold() << std::endl;
   //os << indent << "Spectral Threshold            : "  << this->GetSpectralThreshold() << std::endl;
   //os << indent << "Ratio Max Consideration Number: "  << this->GetRatioMaxConsiderationNumber() << std::endl;
   //os << indent << "Alpha                         : "  << this->GetAlpha() << std::endl;
   //os << indent << "Number Of Directions          : "  << this->GetNumberOfDirections() << std::endl;
-  
+
 }
 
 

@@ -56,10 +56,10 @@ public:
   /** Some convenient typedefs. */
   typedef TLinesList                                            LinesListType;
   typedef typename LinesListType::LineType                      LineType;
-  
+
   /** typedef support for output*/
   typedef TPointSet                                             PointSetType;
-  
+
   typedef itk::ProcessObject                                    ProcessObjectType;
 
   /** Set/Get the input image */
@@ -82,7 +82,7 @@ private:
   LineSpatialObjectListToPointSetFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  
+
 
 
 

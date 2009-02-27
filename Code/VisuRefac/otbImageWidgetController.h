@@ -34,7 +34,7 @@ namespace otb
 */
 
 class ImageWidgetController
-  : public itk::Object
+      : public itk::Object
 {
 public:
   /** Standard class typedefs */
@@ -42,10 +42,10 @@ public:
   typedef itk::Object                       Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(ImageWidgetController,Object);
 
@@ -68,7 +68,7 @@ public:
    */
   virtual void ClearAllActionHandlers();
 
-  /** Handle an event from a widget 
+  /** Handle an event from a widget
    * \param widgetId The id of the widget the event comes from
    * \param event The event code
    */
@@ -81,11 +81,11 @@ public:
    */
   void HandleWidgetResize(std::string widgetId, int w, int h);
 
-   /** Handle widget move
-   * \param widgetId The id of the resized widget
-   * \param x new x location
-   * \param y new y location
-   */
+  /** Handle widget move
+  * \param widgetId The id of the resized widget
+  * \param x new x location
+  * \param y new y location
+  */
   void HandleWidgetMove(std::string widgetId, int x, int y);
 
 protected:
@@ -95,7 +95,7 @@ protected:
   ~ImageWidgetController();
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
- 
+
 private:
   ImageWidgetController(const Self&);    // purposely not implemented
   void operator=(const Self&); // purposely not implemented
@@ -103,7 +103,7 @@ private:
   /** Action handlers list */
   ActionHandlerListPointerType m_ActionHandlersList;
 
-}; // end class 
+}; // end class
 } // end namespace otb
 #endif
 

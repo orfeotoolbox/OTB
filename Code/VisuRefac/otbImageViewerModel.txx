@@ -25,16 +25,16 @@ namespace otb
 
 template <class TOutputImage>
 ImageViewerModel<TOutputImage>
-::ImageViewerModel() : m_Name("Default"), m_Layers(), m_RasterizedQuicklook(), 
-		       m_HasQuicklook(false),m_RasterizedExtract(),m_HasExtract(false),
-		       m_ExtractRegion(), m_SubsampledExtractRegion(), m_RasterizedScaledExtract(), m_HasScaledExtract(false),
-		       m_ScaledExtractRegion()
+::ImageViewerModel() : m_Name("Default"), m_Layers(), m_RasterizedQuicklook(),
+    m_HasQuicklook(false),m_RasterizedExtract(),m_HasExtract(false),
+    m_ExtractRegion(), m_SubsampledExtractRegion(), m_RasterizedScaledExtract(), m_HasScaledExtract(false),
+    m_ScaledExtractRegion()
 
 {
   // Intializing the layer list
   m_Layers = LayerListType::New();
 
-  
+
 }
 
 template <class TOutputImage>
@@ -61,14 +61,14 @@ ImageViewerModel<TOutputImage>
 ::GetLayer(unsigned int index)
 {
   // Check if not out of bound and return the ith element
-  if(index >= m_Layers->Size())
-    {
+  if (index >= m_Layers->Size())
+  {
     return NULL;
-    }
+  }
   else
-    {
+  {
     return m_Layers->GetNthElement(index);
-    }
+  }
 }
 template <class TOutputImage>
 bool
@@ -76,15 +76,15 @@ ImageViewerModel<TOutputImage>
 ::DeleteLayer(unsigned int index)
 {
 // Check if not out of bound and delete the ith element
-  if(index >= m_Layers->Size())
-    {
+  if (index >= m_Layers->Size())
+  {
     return false;
-    }
+  }
   else
-    {
+  {
     m_Layers->Erase(index);
     return true;
-    }
+  }
 }
 
 template <class TOutputImage>
@@ -98,14 +98,14 @@ ImageViewerModel<TOutputImage>
   bool found  = false;
 
   // Look for the layer named after name
-  while(it!=m_Layers->End() && !found)
+  while (it!=m_Layers->End() && !found)
+  {
+    if (it.Get()->GetName() == name)
     {
-    if(it.Get()->GetName() == name)
-      {
       resp = it.Get();
       found = true;
-      }
     }
+  }
   return resp;
 }
 
@@ -119,19 +119,19 @@ ImageViewerModel<TOutputImage>
   unsigned int index = 0;
 
   // Look for the layer named after name
-  while(it!=m_Layers->End() && !found)
+  while (it!=m_Layers->End() && !found)
+  {
+    if (it.Get()->GetName() == name)
     {
-    if(it.Get()->GetName() == name)
-      {
       found = true;
-      }
+    }
     ++index;
-    }
-  
-  if(found)
-    {
+  }
+
+  if (found)
+  {
     m_Layers->Erase(index-1);
-    }
+  }
 
   return found;
 }
@@ -160,8 +160,8 @@ ImageViewerModel<TOutputImage>
 ::Update()
 {
   // Multiple concurrent update guards
-  if(!m_Updating)
-    {
+  if (!m_Updating)
+  {
     m_Updating = true;
     // Render all visible layers
     this->RenderVisibleLayers();
@@ -170,7 +170,7 @@ ImageViewerModel<TOutputImage>
     // Notify all listeners
     this->NotifyAll();
     m_Updating = false;
-    }
+  }
 }
 
 template <class TOutputImage>
@@ -179,12 +179,12 @@ ImageViewerModel<TOutputImage>
 ::RenderVisibleLayers()
 {
   // Render all visible layers
-  for(LayerIteratorType it = m_Layers->Begin();
-      it != m_Layers->End(); ++it)
-    {
+  for (LayerIteratorType it = m_Layers->Begin();
+       it != m_Layers->End(); ++it)
+  {
     // If the layer is visible
-    if(it.Get()->GetVisible())
-      {
+    if (it.Get()->GetVisible())
+    {
       // Set the extracted region
       m_ExtractRegion = this->ConstrainRegion(m_ExtractRegion,it.Get()->GetExtent());
       it.Get()->SetExtractRegion(m_ExtractRegion);
@@ -193,8 +193,8 @@ ImageViewerModel<TOutputImage>
       it.Get()->SetScaledExtractRegion(m_ScaledExtractRegion);
       // Render it
       it.Get()->Render();
-      }
     }
+  }
 }
 
 template <class TOutputImage>
@@ -203,29 +203,29 @@ ImageViewerModel<TOutputImage>
 ::RasterizeVisibleLayers()
 {
   // If there are no layer to render
-  if(this->GetNumberOfLayers() == 0)
-    {
+  if (this->GetNumberOfLayers() == 0)
+  {
     // Ensure nothing is available
     m_HasQuicklook     = false;
     m_HasExtract       = false;
     m_HasScaledExtract = false;
     // and return without doing anything
     return;
-    }
-  
+  }
+
   // Get the lowest layer
   LayerIteratorType it = m_Layers->Begin();
-  
+
   // Base layer
   typename LayerType::Pointer baseLayer = it.Get();
-  
+
   // Configure base layer rasterization
-  if(baseLayer->GetHasQuicklook())
-    {
+  if (baseLayer->GetHasQuicklook())
+  {
     m_HasQuicklook = true;
     m_RasterizedQuicklook = baseLayer->GetRenderedQuicklook();
-   
-    // Update the subsampled extract region 
+
+    // Update the subsampled extract region
     m_SubsampledExtractRegion = m_ExtractRegion;
     typename RegionType::SizeType size = m_SubsampledExtractRegion.GetSize();
     typename RegionType::IndexType index = m_SubsampledExtractRegion.GetIndex();
@@ -235,73 +235,73 @@ ImageViewerModel<TOutputImage>
     index[1]/=baseLayer->GetQuicklookSubsamplingRate();
     m_SubsampledExtractRegion.SetIndex(index);
     m_SubsampledExtractRegion.SetSize(size);
-    }
+  }
 
-  if(baseLayer->GetHasExtract())
-    {
+  if (baseLayer->GetHasExtract())
+  {
     m_HasExtract = true;
     m_RasterizedExtract = baseLayer->GetRenderedExtract();
-    }
+  }
 
-  if(baseLayer->GetHasScaledExtract())
-    {
+  if (baseLayer->GetHasScaledExtract())
+  {
     m_HasScaledExtract = true;
     m_RasterizedScaledExtract = baseLayer->GetRenderedScaledExtract();
-    }
+  }
 
   // Move to the next layer
   ++it;
-  
-  // Walk the remaining layers
-  while(it!=m_Layers->End())
-    {
-    // If a layer is visible
-    if(it.Get()->GetVisible())
-      {
-      // If quicklook is activated and available for this layer 
-      if(m_HasQuicklook && it.Get()->GetHasQuicklook())
-	{
-        // Blend it with the current rasterized quicklook
-	typename BlendingFilterType::Pointer blender = BlendingFilterType::New();
-	// Using the blending function of the layer
-	blender->SetBlendingFunction(it.Get()->GetBlendingFunction());
-	blender->SetInput1(m_RasterizedQuicklook);
-	blender->SetInput2(it.Get()->GetRenderedQuicklook());
-	blender->Update();
-	// Store the result as being the current rasterized quicklook
-	m_RasterizedQuicklook = blender->GetOutput();
-	}
-      
-      // If extract is activated and available for this layer 
-      if(m_HasExtract && it.Get()->GetHasExtract())
-	{
-        // Blend it with the current rasterized extract
-	typename BlendingFilterType::Pointer blender = BlendingFilterType::New();
-	// Using the blending function of the layer
-	blender->SetBlendingFunction(it.Get()->GetBlendingFunction());
-	blender->SetInput1(m_RasterizedExtract);
-	blender->SetInput2(it.Get()->GetRenderedExtract());
-	blender->Update();
-	// Store the result as being the current rasterized extract
-	m_RasterizedExtract = blender->GetOutput();
-	}
 
-      // If scaledExtract is activated and available for this layer 
-      if(m_HasScaledExtract && it.Get()->GetHasScaledExtract())
-	{
-	// Blend it with the current rasterized scaledExtract
-	typename BlendingFilterType::Pointer blender = BlendingFilterType::New();
-	// Using the blending function of the layer
-	blender->SetBlendingFunction(it.Get()->GetBlendingFunction());
-	blender->SetInput1(m_RasterizedScaledExtract);
-	blender->SetInput2(it.Get()->GetRenderedScaledExtract());
-	blender->Update();
-	// Store the result as being the current rasterized scaledExtract
-	m_RasterizedScaledExtract = blender->GetOutput();
-	}
+  // Walk the remaining layers
+  while (it!=m_Layers->End())
+  {
+    // If a layer is visible
+    if (it.Get()->GetVisible())
+    {
+      // If quicklook is activated and available for this layer
+      if (m_HasQuicklook && it.Get()->GetHasQuicklook())
+      {
+        // Blend it with the current rasterized quicklook
+        typename BlendingFilterType::Pointer blender = BlendingFilterType::New();
+        // Using the blending function of the layer
+        blender->SetBlendingFunction(it.Get()->GetBlendingFunction());
+        blender->SetInput1(m_RasterizedQuicklook);
+        blender->SetInput2(it.Get()->GetRenderedQuicklook());
+        blender->Update();
+        // Store the result as being the current rasterized quicklook
+        m_RasterizedQuicklook = blender->GetOutput();
       }
-    ++it;
+
+      // If extract is activated and available for this layer
+      if (m_HasExtract && it.Get()->GetHasExtract())
+      {
+        // Blend it with the current rasterized extract
+        typename BlendingFilterType::Pointer blender = BlendingFilterType::New();
+        // Using the blending function of the layer
+        blender->SetBlendingFunction(it.Get()->GetBlendingFunction());
+        blender->SetInput1(m_RasterizedExtract);
+        blender->SetInput2(it.Get()->GetRenderedExtract());
+        blender->Update();
+        // Store the result as being the current rasterized extract
+        m_RasterizedExtract = blender->GetOutput();
+      }
+
+      // If scaledExtract is activated and available for this layer
+      if (m_HasScaledExtract && it.Get()->GetHasScaledExtract())
+      {
+        // Blend it with the current rasterized scaledExtract
+        typename BlendingFilterType::Pointer blender = BlendingFilterType::New();
+        // Using the blending function of the layer
+        blender->SetBlendingFunction(it.Get()->GetBlendingFunction());
+        blender->SetInput1(m_RasterizedScaledExtract);
+        blender->SetInput2(it.Get()->GetRenderedScaledExtract());
+        blender->Update();
+        // Store the result as being the current rasterized scaledExtract
+        m_RasterizedScaledExtract = blender->GetOutput();
+      }
     }
+    ++it;
+  }
 }
 
 template <class TOutputImage>
@@ -356,7 +356,7 @@ ImageViewerModel<TOutputImage>
   IndexType newIndex = index;
   newIndex[0]*= baseLayer->GetQuicklookSubsamplingRate();
   newIndex[1]*= baseLayer->GetQuicklookSubsamplingRate();
-  
+
   // Update Scaled extract center as well
   this->SetScaledExtractRegionCenter(newIndex);
 
@@ -377,28 +377,28 @@ ImageViewerModel<TOutputImage>
   if (small.GetSize()[0]>big.GetSize()[0]
       ||small.GetSize()[1]>big.GetSize()[1])
   {
-  resp.Crop(big);
+    resp.Crop(big);
   }
   else
   {
-  // Else we can constrain it
+    // Else we can constrain it
     IndexType index = resp.GetIndex();
     typename RegionType::SizeType size = resp.GetSize();
 
     // For each dimension
-    for(unsigned int dim = 0; dim < RegionType::ImageDimension; ++dim)
-      {
+    for (unsigned int dim = 0; dim < RegionType::ImageDimension; ++dim)
+    {
       // push left if necessary
       if (small.GetIndex()[dim]<big.GetIndex()[dim])
-	{
-	index[dim]=big.GetIndex()[dim];
-	}
+      {
+        index[dim]=big.GetIndex()[dim];
+      }
       // push right if necessary
       if (index[dim]+size[dim]>=big.GetIndex()[dim]+big.GetSize()[dim])
-	{
-	index[dim]=big.GetIndex()[dim]+big.GetSize()[dim]-size[dim];
-	}
+      {
+        index[dim]=big.GetIndex()[dim]+big.GetSize()[dim]-size[dim];
       }
+    }
     resp.SetSize(size);
     resp.SetIndex(index);
   }
@@ -413,13 +413,13 @@ ImageViewerModel<TOutputImage>
   // Call superclass implementation
   Superclass::PrintSelf(os,indent);
   os<<indent<<"Viewer "<<m_Name<<": "<<std::endl;
-  for(LayerIteratorType it = m_Layers->Begin();
-      it != m_Layers->End(); ++it)
-    {
+  for (LayerIteratorType it = m_Layers->Begin();
+       it != m_Layers->End(); ++it)
+  {
     os<<indent<<it.Get()<<std::endl;
-    }
+  }
 }
 
 } // end namespace otb
 
-#endif 
+#endif

@@ -36,12 +36,12 @@ namespace otb
    * \ingroup Radiometry
  */
 template <class TInputImage, class TOutputImage,
-      class TFunction = Functor::AVI< typename TInputImage::InternalPixelType,
-                       typename TInputImage::InternalPixelType,
-                       typename TInputImage::InternalPixelType,
-                       typename TOutputImage::PixelType>  >
+class TFunction = Functor::AVI< typename TInputImage::InternalPixelType,
+typename TInputImage::InternalPixelType,
+typename TInputImage::InternalPixelType,
+typename TOutputImage::PixelType>  >
 class ITK_EXPORT MultiChannelRAndGAndNIRVegetationIndexImageFilter
-  : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,TFunction>
+      : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,TFunction>
 {
 public:
   /** Standard class typedefs. */
@@ -78,11 +78,11 @@ protected:
   virtual void BeforeThreadedGenerateData()
   {
     unsigned int lNbChan = this->GetInput()->GetNumberOfComponentsPerPixel();
-    if(m_RedIndex < 1 || m_GreenIndex < 1 || m_NIRIndex < 1 ||
-       m_RedIndex > lNbChan || m_GreenIndex > lNbChan || m_NIRIndex > lNbChan)
-      {
+    if (m_RedIndex < 1 || m_GreenIndex < 1 || m_NIRIndex < 1 ||
+        m_RedIndex > lNbChan || m_GreenIndex > lNbChan || m_NIRIndex > lNbChan)
+    {
       itkExceptionMacro(<<"Channel indices must belong to range [1, ...[");
-      }
+    }
     this->GetFunctor().SetRedIndex(m_RedIndex);
     this->GetFunctor().SetGreenIndex(m_GreenIndex);
     this->GetFunctor().SetNIRIndex(m_NIRIndex);

@@ -50,29 +50,29 @@ public:
   /** Image type information. */
   typedef TVectorData                                        VectorDataType;
   typedef typename VectorDataType::DataTreeType               DataTreeType;
-  
+
   /** Get/Set Macro for ROI Column size */
   itkGetMacro(SizeX, unsigned int);
   itkSetMacro(SizeX, unsigned int);
-  
+
   /** Get/Set Macro for ROI Lines size */
   itkGetMacro(SizeY, unsigned int);
   itkSetMacro(SizeY, unsigned int);
-  
+
   /** Get/Set Macro for ROI Start Point Coordinate */
   itkGetMacro(StartX, unsigned int);
   itkSetMacro(StartX, unsigned int);
-  
+
   /** Get/Set Macro for  ROI Start Point Abcisse */
   itkGetMacro(StartY, unsigned int);
-  itkSetMacro(StartY, unsigned int);  
+  itkSetMacro(StartY, unsigned int);
 
-  
+
   /** Prototype of the generate data method*/
   void GenerateData(void );
 
-  
-  
+
+
 
 protected:
   VectorDataExtractROI();
@@ -92,7 +92,7 @@ private:
   unsigned int m_SizeY;
   unsigned int m_StartX;
   unsigned int m_StartY;
-  
+
 
 };
 

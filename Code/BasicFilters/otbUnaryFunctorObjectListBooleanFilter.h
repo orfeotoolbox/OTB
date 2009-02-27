@@ -34,7 +34,7 @@ namespace otb
  */
 template <class TInputList, class TOutputList, class TFunction >
 class ITK_EXPORT UnaryFunctorObjectListBooleanFilter :
-    public otb::ObjectListToObjectListFilter<TInputList,TOutputList>
+      public otb::ObjectListToObjectListFilter<TInputList,TOutputList>
 {
 public:
   /** Standard class typedefs. */

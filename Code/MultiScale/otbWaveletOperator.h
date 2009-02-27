@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,7 +23,8 @@
 #include "itkExceptionObject.h"
 #include "itkNeighborhoodOperator.h"
 
-namespace otb {
+namespace otb
+{
 
 /**
  * \class WaveletOperator
@@ -31,20 +32,20 @@ namespace otb {
  * \brief A NeighborhoodOperator wavelet base class
  *
  * This class is the mother class for any wavelet operator that requires
- * "a-trou" approach for shift-invariant wavelet transform. This class has 
+ * "a-trou" approach for shift-invariant wavelet transform. This class has
  * to be derived, it cannot be used directly.
  *
  * Any wavelet operator that inherits from WaveletOperator is to be used
- * as a NeighborhoodOperator that should be applied to a 
+ * as a NeighborhoodOperator that should be applied to a
  * NeighborhoodIterator using the NeighborhoodInnerProduct method.
  *
  * It is assumed that any wavelet is directional.
  *
- * Set the level of up-sampling though SetUpSampleFactor() before calling 
- * CreateDirectional(). Each class that inherits from WaveletOperator has 
+ * Set the level of up-sampling though SetUpSampleFactor() before calling
+ * CreateDirectional(). Each class that inherits from WaveletOperator has
  * to re-implement GenerateCoefficients(). It has to end by:
  * return this->UpSamplingCoefficients( coeff ) to perform the up-sampling
- *  
+ *
  * \sa LowPassHaarOperator
  * \sa HighPassHaarOperator
  * \sa NeighborhoodOperator
@@ -53,9 +54,9 @@ namespace otb {
  * \ingroup Operators
  */
 template<class TPixel, unsigned int VDimension,
-  class TAllocator = itk::NeighborhoodAllocator< TPixel > >
+class TAllocator = itk::NeighborhoodAllocator< TPixel > >
 class ITK_EXPORT WaveletOperator
-	: public itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>
+      : public itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>
 {
 public:
   /** Standard typedefs */
@@ -65,13 +66,13 @@ public:
   itkTypeMacro(WaveletOperator,NeighborhoodOperator);
 
   /** Construction */
-  WaveletOperator() 
+  WaveletOperator()
   {
     m_UpSampleFactor = 0;
   }
   /** Construction by copy */
-  WaveletOperator( const Self & other ) 
-    : itk::NeighborhoodOperator<TPixel, VDimension, TAllocator> (other)
+  WaveletOperator( const Self & other )
+      : itk::NeighborhoodOperator<TPixel, VDimension, TAllocator> (other)
   {
     m_UpSampleFactor = other.GetUpSampleFactor();
   }
@@ -87,8 +88,8 @@ public:
   /**
    * Prints some debugging information
    */
-  virtual void PrintSelf(std::ostream &os, itk::Indent i) const  
-  { 
+  virtual void PrintSelf(std::ostream &os, itk::Indent i) const
+  {
     Superclass::PrintSelf(os, i.GetNextIndent());
     os << i << "Up-Sampling factor " << this->m_UpSampleFactor << "\n";
   }
@@ -96,7 +97,7 @@ public:
   /**
    * Set/Get the level of up sampling of the filter
    */
-  unsigned int GetUpSampleFactor () const 
+  unsigned int GetUpSampleFactor () const
   {
     return this->m_UpSampleFactor;
   }
@@ -113,11 +114,11 @@ protected:
   typedef typename Superclass::CoefficientVector CoefficientVector;
   typedef typename Superclass::PixelType PixelType;
 
-  /** 
+  /**
    * Perform the "a-trou" algorithm for shift-invariant transformation.
    * It transforms the filter \$ H(z) \$ into \$ H(z^2) \$.
    */
-  CoefficientVector UpSamplingCoefficients ( CoefficientVector & coeff ) 
+  CoefficientVector UpSamplingCoefficients ( CoefficientVector & coeff )
   {
     if ( m_UpSampleFactor == 0 )
       return coeff;

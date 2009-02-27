@@ -31,7 +31,7 @@ EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
 ::EdgeDensityImageFilter()
 {
   this->SetNumberOfRequiredInputs( 1 );
-  
+
   m_NeighborhoodRadius = 1;
   m_Detector =  DetectorType::New();
   m_DensityImageFilter = DensityImageType::New();
@@ -66,7 +66,7 @@ EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
 
   /** Apply Canny Detector*/
   m_Detector->SetInput(ptr);
-  
+
 
   /** Compute density on the binaruzed Image */
   m_DensityImageFilter->SetInput(m_Detector->GetOutput());
@@ -95,9 +95,9 @@ EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
  * Get Detector
  */
 template <class TInputImage , class TOutputImage, class TEdgeDetector, class TDensityCount>
-typename EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount> 
+typename EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
 ::DetectorType *
-EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount> 
+EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
 ::GetDetector()
 {
   return m_Detector;
@@ -110,7 +110,7 @@ EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
   -----------------------------------------------------------------*/
 template <class TInputImage , class TOutputImage, class TEdgeDetector, class TDensityCount>
 void
-EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>  
+EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

@@ -29,13 +29,13 @@ namespace otb
 *   To implement a new action handler, derive this class and implement
 *   the ListenTo*() and the HandleWidget*() methods. Then register an
 *   instance of your handler in the ImageWidgetController.
-* 
+*
 *   \sa ImageWidgetController
 *   \sa ImageWidget
 */
 
 class ImageWidgetActionHandler
-  : public itk::Object
+      : public itk::Object
 {
 public:
   /** Standard class typedefs */
@@ -43,10 +43,10 @@ public:
   typedef itk::Object                       Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(ImageWidgetActionHandler,Object);
 
@@ -71,32 +71,32 @@ public:
     return false;
   }
 
- /** Handle widget resize
-   * \param widgetId The id of the resized widget
-   * \param w new width
-   * \param h new height
-   * \return true if the event is handled
-   */
+  /** Handle widget resize
+    * \param widgetId The id of the resized widget
+    * \param w new width
+    * \param h new height
+    * \return true if the event is handled
+    */
   virtual bool HandleWidgetResize(std::string widgetId,int w, int h)
   {
     return false;
   }
-  
+
 protected:
   /** Constructor */
-  ImageWidgetActionHandler(){}
+  ImageWidgetActionHandler() {}
   /** Destructor */
-  virtual ~ImageWidgetActionHandler(){}
+  virtual ~ImageWidgetActionHandler() {}
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os,indent);
   }
- 
+
 private:
   ImageWidgetActionHandler(const Self&);    // purposely not implemented
   void operator=(const Self&); // purposely not implemented
-}; // end class 
+}; // end class
 } // end namespace otb
 #endif
 

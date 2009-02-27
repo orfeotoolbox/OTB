@@ -33,7 +33,7 @@ namespace Function
  */
 template <class TPixelPrecision, class TRGBPixel>
 class RenderingFunction
-  : public itk::Object
+      : public itk::Object
 {
 public:
   /** Standard class typedefs */
@@ -51,13 +51,13 @@ public:
   typedef itk::VariableLengthVector<ScalarPixelType> VectorPixelType;
   /** Extrema vector */
   typedef std::vector<ScalarPixelType>               ExtremaVectorType;
-  
+
   /** Evaluate method (scalar version) */
   virtual const OutputPixelType Evaluate(ScalarPixelType spixel) const = 0;
 
   /** Evaluate method (vector version) */
   virtual const OutputPixelType Evaluate(const VectorPixelType & vpixel) const = 0;
-  
+
   /** This method is available to allow implementation of
    * preprocessing.
    */
@@ -69,32 +69,32 @@ public:
     m_Minimum.clear();
     m_Minimum.push_back(spixel);
   }
-  
+
   /** Set the maximum (scalar version) */
   virtual void SetMaximum(ScalarPixelType spixel)
   {
     m_Maximum.clear();
     m_Maximum.push_back(spixel);
   }
-  
- /** Set minimum (vector version) */
+
+  /** Set minimum (vector version) */
   virtual void SetMinimum(const VectorPixelType & vpixel)
   {
     m_Minimum.clear();
-    for(unsigned int i = 0; i < vpixel.Size();++i)
-      {
+    for (unsigned int i = 0; i < vpixel.Size();++i)
+    {
       m_Minimum.push_back(vpixel[i]);
-      }
+    }
   }
-  
+
   /** Set maximum (vector version) */
   virtual void SetMaximum(const VectorPixelType & vpixel)
   {
     m_Maximum.clear();
-    for(unsigned int i = 0; i < vpixel.Size();++i)
-      {
+    for (unsigned int i = 0; i < vpixel.Size();++i)
+    {
       m_Maximum.push_back(vpixel[i]);
-      }
+    }
   }
 
   /** Set minimum (std::vector version) */

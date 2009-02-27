@@ -41,11 +41,11 @@ namespace Functor
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT VarianceTextureFunctor :
-public MeanTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType>
+      public MeanTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
-  VarianceTextureFunctor(){};
-  virtual ~VarianceTextureFunctor(){};
+  VarianceTextureFunctor() {};
+  virtual ~VarianceTextureFunctor() {};
 
   typedef MeanTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
   typedef typename Superclass::NeighborhoodType                             NeighborhoodType;
@@ -59,14 +59,14 @@ public:
     double areaInv = 1/area;
     double out = 0.;
     for (unsigned r = 0; r<this->GetHisto().size(); r++)
+    {
+      for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
       {
-	for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-	  {
-	    double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
-	    double square = vcl_pow( ( ( (static_cast<double>(s)+0.5)*this->GetNeighBinLength() ) - mean), 2);
-	    out += square*p;
-	  }
+        double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
+        double square = vcl_pow( ( ( (static_cast<double>(s)+0.5)*this->GetNeighBinLength() ) - mean), 2);
+        out += square*p;
       }
+    }
 
     return out;
   }

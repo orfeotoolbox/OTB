@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,7 +27,8 @@
 #include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkProgressReporter.h"
 
-namespace otb {
+namespace otb
+{
 
 template < class TInputImage, class TOutputImage, class TLowPassOperator, class THighPassOperator >
 StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOperator >
@@ -37,7 +38,7 @@ StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOper
 
   unsigned int numOfOutput = 1<<InputImageType::ImageDimension;
 
-	this->SetNumberOfOutputs( numOfOutput );
+  this->SetNumberOfOutputs( numOfOutput );
   for ( unsigned i = 1; i < numOfOutput; i++ )
   {
     this->SetNthOutput(i,OutputImageType::New());
@@ -51,8 +52,8 @@ void
 StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOperator >
 ::ThreadedGenerateData ( const OutputImageRegionType& outputRegionForThread, int threadId )
 {
-  itk::ProgressReporter reporter ( this, threadId, 
-    outputRegionForThread.GetNumberOfPixels() * this->GetNumberOfOutputs() );
+  itk::ProgressReporter reporter ( this, threadId,
+                                   outputRegionForThread.GetNumberOfPixels() * this->GetNumberOfOutputs() );
 
   ThreadedGenerateData( reporter, outputRegionForThread, threadId );
 }
@@ -60,7 +61,7 @@ StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOper
 template < class TInputImage, class TOutputImage, class TLowPassOperator, class THighPassOperator >
 void
 StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOperator >
-::ThreadedGenerateData 
+::ThreadedGenerateData
 ( itk::ProgressReporter & reporter,
   const OutputImageRegionType& outputRegionForThread, int threadId )
 {
@@ -79,7 +80,7 @@ StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOper
   if ( outputHighPass == 0 )
   {
     itk::OStringStream msg;
-		msg << "Sortie 1<<" << idx << " = " << (1<<idx) << " nulle\n";
+    msg << "Sortie 1<<" << idx << " = " << (1<<idx) << " nulle\n";
     msg << "Nombre de sortie attendue " << this->GetNumberOfOutputs() << "\n";
     throw itk::ExceptionObject( __FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION );
   }
@@ -91,7 +92,7 @@ StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOper
   typedef typename InputFaceListType::iterator InputFaceListIterator;
 
   InputInnerProductType innerProduct;
-  InputFaceCalculatorType faceCalculator;  
+  InputFaceCalculatorType faceCalculator;
   InputFaceListType faceList;
 
   // High pass part calculation
@@ -107,8 +108,8 @@ StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOper
     InputNeighborhoodIteratorType it ( highPassOperator.GetRadius(), input, *faceIt );
     IteratorType out ( outputHighPass, *faceIt );
 
-    for ( it.GoToBegin(), out.GoToBegin(); !it.IsAtEnd(); ++it, ++out )  
-    {  
+    for ( it.GoToBegin(), out.GoToBegin(); !it.IsAtEnd(); ++it, ++out )
+    {
       out.Set( innerProduct( it, highPassOperator ) );
       reporter.CompletedPixel();
     }
@@ -127,8 +128,8 @@ StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOper
     InputNeighborhoodIteratorType it ( lowPassOperator.GetRadius(), input, *faceIt );
     IteratorType out ( outputLowPass, *faceIt );
 
-    for ( it.GoToBegin(), out.GoToBegin(); !it.IsAtEnd(); ++it, ++out )  
-    {  
+    for ( it.GoToBegin(), out.GoToBegin(); !it.IsAtEnd(); ++it, ++out )
+    {
       out.Set( innerProduct( it, lowPassOperator ) );
       reporter.CompletedPixel();
     }
@@ -144,7 +145,7 @@ StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOper
 template < class TInputImage, class TOutputImage, class TLowPassOperator, class THighPassOperator >
 void
 StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOperator >
-::ThreadedGenerateData 
+::ThreadedGenerateData
 ( unsigned int idx, unsigned int direction, itk::ProgressReporter & reporter,
   const OutputImageRegionType& outputRegionForThread, int threadId )
 {
@@ -156,7 +157,7 @@ StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOper
   outputLowPass->Allocate();
 
   InnerProductType innerProduct;
-  FaceCalculatorType faceCalculator;  
+  FaceCalculatorType faceCalculator;
   FaceListType faceList;
 
   // High pass part calculation
@@ -172,8 +173,8 @@ StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOper
     NeighborhoodIteratorType it ( highPassOperator.GetRadius(), input, *faceIt );
     IteratorType out ( outputHighPass, *faceIt );
 
-    for ( it.GoToBegin(), out.GoToBegin(); !it.IsAtEnd(); ++it, ++out )  
-    {  
+    for ( it.GoToBegin(), out.GoToBegin(); !it.IsAtEnd(); ++it, ++out )
+    {
       out.Set( innerProduct( it, highPassOperator ) );
       reporter.CompletedPixel();
     }
@@ -192,8 +193,8 @@ StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOper
     NeighborhoodIteratorType it ( lowPassOperator.GetRadius(), input, *faceIt );
     IteratorType out ( outputLowPass, *faceIt );
 
-    for ( it.GoToBegin(), out.GoToBegin(); !it.IsAtEnd(); ++it, ++out )  
-    {  
+    for ( it.GoToBegin(), out.GoToBegin(); !it.IsAtEnd(); ++it, ++out )
+    {
       out.Set( innerProduct( it, lowPassOperator ) );
       reporter.CompletedPixel();
     }

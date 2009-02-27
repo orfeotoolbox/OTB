@@ -266,9 +266,9 @@ protected:
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
     if ( (nir + r) == 0 )
-      {
+    {
       return static_cast<TOutput>(0.);
-      }
+    }
 
     return ( static_cast<TOutput>((dnir-dr)/(dnir+dr)));
   }
@@ -294,9 +294,9 @@ protected:
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
     if ( r == 0 )
-      {
+    {
       return static_cast<TOutput>(0.);
-      }
+    }
     return ( static_cast<TOutput>(dnir/dr));
   }
 };
@@ -383,9 +383,9 @@ protected:
     double dr = static_cast<double>(r);
     double denominator = dnir + dr + m_L;
     if ( denominator == 0. )
-      {
+    {
       return static_cast<TOutput>(0.);
-      }
+    }
     return ( static_cast<TOutput>(  ((dnir-dr)*(1+m_L))/denominator ) );
   }
 
@@ -445,9 +445,9 @@ protected:
     double dr = static_cast<double>(r);
     double denominator = m_A*dnir + dr + m_X*(1.+m_A*m_A);
     if ( denominator == 0. )
-      {
+    {
       return static_cast<TOutput>(0.);
-      }
+    }
     return ( static_cast<TOutput>(  (m_A*(dnir - m_A*dr - m_S))/denominator ) );
   }
 
@@ -483,9 +483,9 @@ protected:
     double dr = static_cast<double>(r);
     double sqrt_value = (2*dnir+1)*(2*dnir+1) - 8*(dnir-dr);
     if ( sqrt_value < 0. )
-      {
+    {
       return static_cast<TOutput>(0.);
-      }
+    }
     return ( static_cast<TOutput>(  (2*dnir + 1 - vcl_sqrt(sqrt_value))/2. ) );
   }
 
@@ -516,14 +516,14 @@ protected:
     double dnumerateur_nu;
     double ddenominateur_nu = dnir + dr + 0.5;
     if ( ddenominateur_nu == 0 )
-      {
-        dnu = 0;
-      }
+    {
+      dnu = 0;
+    }
     else
-      {
-        dnumerateur_nu = 2*(dnir*dnir - dr*dr) + 1.5*dnir + 0.5*dr;
-        dnu = dnumerateur_nu / ddenominateur_nu;
-      }
+    {
+      dnumerateur_nu = 2*(dnir*dnir - dr*dr) + 1.5*dnir + 0.5*dr;
+      dnu = dnumerateur_nu / ddenominateur_nu;
+    }
 
     double ddenominateur_GEMI = 1 - dr;
     if ( ddenominateur_GEMI == 0. )
@@ -552,7 +552,7 @@ public:
   /// Desctructor
   ~WDVI() {};
   // Operator on r and nir single pixel values
-/** Set/Get Slop of soil line */
+  /** Set/Get Slop of soil line */
   void SetS(const double s)
   {
     m_S = s;
@@ -590,7 +590,7 @@ public:
   typedef WDVI<TInput1, TInput2, TOutput> WDVIFunctorType;
   MSAVI() :  m_S(0.4) {};
   ~MSAVI() {};
-/** Set/Get Slop of soil line */
+  /** Set/Get Slop of soil line */
   void SetS(const double s)
   {
     m_S = s;
@@ -621,9 +621,9 @@ protected:
 
     double denominator = dnir + dr + dL;
     if ( denominator == 0. )
-      {
+    {
       return static_cast<TOutput>(0.);
-      }
+    }
     return ( static_cast<TOutput>(  ((dnir-dr)*(1+dL))/denominator ) );
   }
 
@@ -651,7 +651,7 @@ class AVI : public RAndGAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
 public:
   AVI() : m_LambdaG(560.), m_LambdaR(660.), m_LambdaNir(830.) {};
   ~AVI() {};
-/** Set/Get Lambda red parameter*/
+  /** Set/Get Lambda red parameter*/
   void SetLambdaR(const double lr)
   {
     m_LambdaR = lr;
@@ -660,7 +660,7 @@ public:
   {
     return (m_LambdaR);
   }
-/** Set/Get Lambda green parameter */
+  /** Set/Get Lambda green parameter */
   void SetLambdaG(const double lg)
   {
     m_LambdaG = lg;
@@ -669,7 +669,7 @@ public:
   {
     return (m_LambdaG);
   }
-/** Set/Get Lambda red parameter */
+  /** Set/Get Lambda red parameter */
   void SetLambdaNir(const double lnir)
   {
     m_LambdaNir = lnir;
@@ -689,7 +689,7 @@ protected:
     double dfact2 = (m_LambdaR - m_LambdaG) / m_LambdaR;
     double dterm1;
     double dterm2;
-    if( (dnir-dr) == 0 )
+    if ( (dnir-dr) == 0 )
     {
       dterm1 = 0;
     }
@@ -698,7 +698,7 @@ protected:
       dterm1 = vcl_atan(dfact1/(dnir - dr));
     }
 
-    if( (dg-dr) == 0 )
+    if ( (dg-dr) == 0 )
     {
       dterm2 = 0;
     }
@@ -758,9 +758,9 @@ protected:
     double RHOrb = dr - m_Gamma*(db - dr);
     double denominator = dnir + RHOrb;
     if ( denominator == 0. )
-      {
+    {
       return static_cast<TOutput>(0.);
-      }
+    }
     return ( static_cast<TOutput>(  (dnir - RHOrb)/denominator ) );
   }
 
@@ -864,7 +864,7 @@ class EVI : public RAndBAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
 public:
   EVI() : m_G(2.5), m_C1(6.0), m_C2(7.5), m_L(1.0) {};
   ~EVI() {};
-/** Set/Get G parameter */
+  /** Set/Get G parameter */
   void SetG(const double g)
   {
     m_G = g;
@@ -908,9 +908,9 @@ protected:
     double dnir = static_cast<double>(nir);
     double denominator = dnir + m_C1*dr - m_C2*db + m_L;
     if ( denominator == 0. )
-      {
+    {
       return ( static_cast<TOutput>(0.) );
-      }
+    }
     return ( static_cast<TOutput>( m_G * (dnir - dr)/denominator ) );
   }
 
@@ -985,7 +985,7 @@ protected:
   inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
   {
     double dval = this->GetNDVI()(r,nir) + 0.5;
-    if(dval<0)
+    if (dval<0)
       return  ( static_cast<TOutput>(0));
     return ( static_cast<TOutput>(vcl_sqrt(dval)));
   }

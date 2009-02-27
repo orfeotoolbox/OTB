@@ -41,11 +41,11 @@ namespace Functor
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT ClusterShadeTextureFunctor :
-public MeanTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType>
+      public MeanTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
-  ClusterShadeTextureFunctor(){};
-  virtual ~ClusterShadeTextureFunctor(){};
+  ClusterShadeTextureFunctor() {};
+  virtual ~ClusterShadeTextureFunctor() {};
 
   typedef MeanTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
   typedef typename Superclass::NeighborhoodType                             NeighborhoodType;
@@ -60,14 +60,14 @@ public:
 
 
     for (unsigned r = 0; r<this->GetHisto().size(); r++)
+    {
+      for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
       {
-	for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-	  {
-	    double p = this->GetHisto()[r][s]*areaInv;
-	    double sumPixel = (static_cast<double>(s)+0.5)*this->GetNeighBinLength() + (static_cast<double>(r)+0.5)*this->GetOffsetBinLength();
-	    out += vcl_pow( sumPixel - 2*mean, 3) * p;
-	  }
+        double p = this->GetHisto()[r][s]*areaInv;
+        double sumPixel = (static_cast<double>(s)+0.5)*this->GetNeighBinLength() + (static_cast<double>(r)+0.5)*this->GetOffsetBinLength();
+        out += vcl_pow( sumPixel - 2*mean, 3) * p;
       }
+    }
 
     return out;
   }

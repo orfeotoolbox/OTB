@@ -25,57 +25,57 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  template <InverseOrForwardTransformationEnum TDirectionOfMapping,
-  class TScalarType = double,
-  unsigned int NInputDimensions=3,
-  unsigned int NOutputDimensions=3>
-      class ITK_EXPORT GeocentricTransform: public itk::Transform<TScalarType,       // Data type for scalars
+template <InverseOrForwardTransformationEnum TDirectionOfMapping,
+class TScalarType = double,
+unsigned int NInputDimensions=3,
+unsigned int NOutputDimensions=3>
+class ITK_EXPORT GeocentricTransform: public itk::Transform<TScalarType,       // Data type for scalars
       NInputDimensions,  // Number of dimensions in the input space
       NOutputDimensions> // Number of dimensions in the output space
-      {
-        public :
-          /** Standard class typedefs. */
-          typedef itk::Transform< TScalarType,
-          NInputDimensions,
-          NOutputDimensions >       Superclass;
-          typedef GeocentricTransform                      Self;
-          typedef itk::SmartPointer<Self>                   Pointer;
-          typedef itk::SmartPointer<const Self>             ConstPointer;
+{
+public :
+  /** Standard class typedefs. */
+  typedef itk::Transform< TScalarType,
+  NInputDimensions,
+  NOutputDimensions >       Superclass;
+  typedef GeocentricTransform                      Self;
+  typedef itk::SmartPointer<Self>                   Pointer;
+  typedef itk::SmartPointer<const Self>             ConstPointer;
 
-          typedef typename Superclass::ScalarType           ScalarType;
-          typedef ossimProjection                           OssimMapProjectionType;
-          typedef itk::Point<ScalarType,NInputDimensions >  InputPointType;
-          typedef itk::Point<ScalarType,NOutputDimensions > OutputPointType;
+  typedef typename Superclass::ScalarType           ScalarType;
+  typedef ossimProjection                           OssimMapProjectionType;
+  typedef itk::Point<ScalarType,NInputDimensions >  InputPointType;
+  typedef itk::Point<ScalarType,NOutputDimensions > OutputPointType;
 
-          /** Method for creation through the object factory. */
-          itkNewMacro( Self );
+  /** Method for creation through the object factory. */
+  itkNewMacro( Self );
 
-          /** Run-time type information (and related methods). */
-          itkTypeMacro( GeocentricTransform, itk::Transform );
-
-
-          typedef InverseOrForwardTransformationEnum DirectionOfMappingEnumType;
-
-          itkStaticConstMacro(DirectionOfMapping,DirectionOfMappingEnumType,TDirectionOfMapping);
-          itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
-          itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
-          itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);
-          itkStaticConstMacro(ParametersDimension, unsigned int,NInputDimensions*(NInputDimensions+1));
+  /** Run-time type information (and related methods). */
+  itkTypeMacro( GeocentricTransform, itk::Transform );
 
 
-          OutputPointType TransformPoint(const InputPointType &point) const;
+  typedef InverseOrForwardTransformationEnum DirectionOfMappingEnumType;
+
+  itkStaticConstMacro(DirectionOfMapping,DirectionOfMappingEnumType,TDirectionOfMapping);
+  itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
+  itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
+  itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);
+  itkStaticConstMacro(ParametersDimension, unsigned int,NInputDimensions*(NInputDimensions+1));
 
 
-        protected:
-          GeocentricTransform();
-          virtual ~GeocentricTransform();
-          ossimEllipsoid* m_Ellipsoid;
+  OutputPointType TransformPoint(const InputPointType &point) const;
 
-        private :
-          GeocentricTransform(const Self&); //purposely not implemented
-          void operator=(const Self&); //purposely not implemented
 
-      };
+protected:
+  GeocentricTransform();
+  virtual ~GeocentricTransform();
+  ossimEllipsoid* m_Ellipsoid;
+
+private :
+  GeocentricTransform(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
+};
 
 } // namespace otb
 
