@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbWaveletForwardTransform__h
-#define __otbWaveletForwardTransform__h
+#ifndef __otbWaveletForwardTransform_h
+#define __otbWaveletForwardTransform_h
 
 #include "itkImageToImageFilter.h"
 

@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHaarOperator__h
-#define __otbHaarOperator__h
+#ifndef __otbHaarOperator_h
+#define __otbHaarOperator_h
 
 #include "otbWaveletOperator.h"
 

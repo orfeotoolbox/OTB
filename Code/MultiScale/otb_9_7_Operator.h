@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otb_9_7_Operator__h
-#define __otb_9_7_Operator__h
+#ifndef __otb_9_7_Operator_h
+#define __otb_9_7_Operator_h
 
 #include "otbWaveletOperator.h"
 

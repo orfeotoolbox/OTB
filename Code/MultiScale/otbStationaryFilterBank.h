@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbStationaryFilterBank__h
-#define __otbStationaryFilterBank__h
+#ifndef __otbStationaryFilterBank_h
+#define __otbStationaryFilterBank_h
 
 #include "itkProgressReporter.h"
 #include "itkImageToImageFilter.h"

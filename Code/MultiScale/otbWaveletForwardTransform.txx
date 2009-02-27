@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbWaveletForwardTransform__txx
-#define __otbWaveletForwardTransform__txx
+#ifndef __otbWaveletForwardTransform_txx
+#define __otbWaveletForwardTransform_txx
 
 #include "otbWaveletForwardTransform.h"
 

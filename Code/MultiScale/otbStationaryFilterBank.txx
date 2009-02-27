@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbStationaryFilterBank__txx
-#define __otbStationaryFilterBank__txx
+#ifndef __otbStationaryFilterBank_txx
+#define __otbStationaryFilterBank_txx
 
 #include "otbStationaryFilterBank.h"
 
