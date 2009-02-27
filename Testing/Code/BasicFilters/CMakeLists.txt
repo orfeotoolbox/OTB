@@ -112,6 +112,16 @@ ADD_TEST(bfTvBoundingRegionCalculator ${BASICFILTERS_TESTS1}
 	${INPUTDATA}/rcc8_mire4.png
 	)
 
+
+ADD_TEST(bfTvMeanFunctorImageTest ${BASICFILTERS_TESTS1}
+  --compare-image ${TOL}  ${BASELINE}/bfMeanFunctorImage.tif
+                           ${TEMP}/bfMeanFunctorImage.tif
+  otbMeanFunctorImageTest
+  ${INPUTDATA}/couleurs_extrait.png
+  ${TEMP}/bfMeanFunctorImage.tif
+  )
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests2 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1362,6 +1372,7 @@ otbClosingOpeningMorphologicalFilterNew.cxx
 otbClosingOpeningMorphologicalFilter.cxx
 otbBinaryImageMinimalBoundingRegionCalculatorNew.cxx
 otbBinaryImageMinimalBoundingRegionCalculator.cxx
+otbMeanFunctorImageTest.cxx
 )
 
 # A enrichir
