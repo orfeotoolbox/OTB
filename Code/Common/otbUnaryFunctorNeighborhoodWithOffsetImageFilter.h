@@ -68,8 +68,16 @@ public:
   typedef itk::ProcessObject ProcessObjectType;
 
   /**Set/Get the radius of neighborhood.*/
-  itkSetMacro(Radius,unsigned int);
-  itkGetMacro(Radius,unsigned int);
+  itkSetMacro(Radius,InputImageSizeType);
+  itkGetMacro(Radius,InputImageSizeType);
+
+  /** Set squared radius */
+  void SetRadius(unsigned int radius)
+  {
+    m_Radius.Fill(radius);
+  }
+
+
   /** Set/Get the offset */
   virtual void SetOffset(InputImageOffsetType off)
   {
@@ -148,7 +156,8 @@ private:
   UnaryFunctorNeighborhoodWithOffsetImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  unsigned int m_Radius;
+  /* unsigned int m_Radius; */
+  InputImageSizeType m_Radius;
 
   FunctorType m_Functor;
 

@@ -37,7 +37,8 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage,TOutputImage,TFunction
 ::UnaryFunctorNeighborhoodWithOffsetImageFilter()
 {
   this->SetNumberOfRequiredInputs( 1 );
-  m_Radius = 1;
+  //m_Radius = 1;
+  m_Radius.Fill(1);
   m_Offset.Fill(1);
   m_FunctorList.clear();
 }
@@ -81,8 +82,8 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage,TOutputImage,TFunction
 
   // pad the input requested region by the operator radius
   InputImageSizeType maxRad;
-  maxRad[0] = m_Radius + vcl_abs(m_Offset[0]);
-  maxRad[1] = m_Radius + vcl_abs(m_Offset[1]);;
+  maxRad[0] = m_Radius[0] + vcl_abs(m_Offset[0]);
+  maxRad[1] = m_Radius[1] + vcl_abs(m_Offset[1]);;
   inputRequestedRegion.PadByRadius( maxRad );
 
   // crop the input requested region at the input's largest possible region
@@ -131,8 +132,8 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
  
   // Neighborhood+offset iterator
   RadiusType rOff;
-  rOff[0] = m_Radius + vcl_abs(m_Offset[0]);
-  rOff[1] = m_Radius + vcl_abs(m_Offset[1]);
+  rOff[0] = m_Radius[0] + vcl_abs(m_Offset[0]);
+  rOff[1] = m_Radius[1] + vcl_abs(m_Offset[1]);
   NeighborhoodIteratorType neighInputOffIt;
   // Find the data-set boundary "faces"
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::FaceListType faceListOff;
