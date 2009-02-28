@@ -169,15 +169,13 @@ public:
   typedef typename std::vector<double>                                               VectorType;
 
   /** Compute a resampled profil according to the window size.*/
-  void ComputeResampledWindowedSincProfil();
+  virtual void ComputeResampledWindowedSincProfil();
 
-  /** Positionne le sigma de l'interpolateur */
-  void SetRadius(unsigned int sigma);
 
 protected:
   WindowedSincInterpolateImageFunctionBase();
   ~WindowedSincInterpolateImageFunctionBase();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
   WindowedSincInterpolateImageFunctionBase(const Self&); //purposely not implemented
