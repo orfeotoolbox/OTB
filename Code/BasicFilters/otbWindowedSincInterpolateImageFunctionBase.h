@@ -169,7 +169,7 @@ public:
   typedef typename std::vector<double>                                               VectorType;
 
   /** Compute a resampled profil according to the window size.*/
-  virtual void ComputeResampledWindowedSincProfil();
+//   virtual void ComputeResampledWindowedSincProfil();
 
 
 protected:
