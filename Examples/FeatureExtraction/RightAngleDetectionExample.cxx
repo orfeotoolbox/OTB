@@ -75,18 +75,29 @@ int main( int argc, char * argv[] )
   VectorLines               outputVectorLines;
   LinesListType::Pointer    outputLinesList = LinesListType::New();
   
-  std::ofstream outfile(outfname);
   for (unsigned int i = 0; i<segmentOrtho->GetNumberOfPoints() ; i++)
     {
       segmentOrtho->GetPoint(i, &pRight);
-      outfile << " Right Angle found in point : " <<  pRight << std::endl;
-      
-      /** Exemple To extract The coordinate of the segment (Just for example)*/
       segmentOrtho->GetPointData(i, &outputVectorLines);
       outputLinesList->push_back(outputVectorLines[0]);
       outputLinesList->push_back(outputVectorLines[1]);
     }
-  outfile.close();
+
+  typedef otb::DrawLineSpatialObjectListFilter< ImageType,
+                                       ImageType > DrawLineListType;
+  DrawLineListType::Pointer drawLineFilter =   DrawLineListType::New();
+
+    drawLineFilter->SetInput(reader->GetOutput());
+  drawLineFilter->SetInputLineSpatialObjectList(outputLinesList);
+
+  WriterType::Pointer writer = WriterType::New();
+    writer->SetInput(drawLineFilter->GetOutput());
+    writer->SetFileName(outfname);
+
+    
+  reader->GenerateOutputInformation();
+  writer->Update();
+
   
   return EXIT_SUCCESS;
 }
