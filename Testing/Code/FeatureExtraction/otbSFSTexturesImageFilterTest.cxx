@@ -64,7 +64,7 @@ int otbSFSTexturesImageFilterTest(int argc, char * argv[])
   filter->SetRatioMaxConsiderationNumber(maxConsideration);
   filter->SetAlpha(alpha);
   // disable PSI texture
-  filter->SetFeatureStatus(3, false);
+  filter->SetFeatureStatus(FilterType::PSI, false);
   filter->SetInput( reader->GetOutput() );
 
 

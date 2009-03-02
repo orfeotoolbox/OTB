@@ -26,6 +26,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
+
 /** \class SFSTexturesImageFilter
  *  \brief This functor computes the texture describes in the following publication
  *  It is based on line direction estimation.
@@ -153,15 +154,16 @@ public:
     };
 
   /** Texture selection accessors 
-   *  1: length
-   *  2: width
+   *  1: LENGTH
+   *  2: WIDTH
    *  3: PSI
-   *  4: w-mean
-   *  5: ratio
+   *  4: WMEAN
+   *  5: RATIO
    *  6: SD
    *  Set to 1 means the texture will be computed.
    **/
-  void SetFeatureStatus( unsigned int id, bool isSelected )
+  typedef enum {LENGTH, WIDTH, PSI, WMEAN, RATIO, SD} FeatureType;
+  void SetFeatureStatus(FeatureType id, bool isSelected )
     {
       if ( id>this->GetTexturesStatus().size() || id == 0 )
 	  {

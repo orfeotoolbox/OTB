@@ -147,7 +147,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet    
-  filter->SetFeatureStatus(3, true);
+  filter->SetFeatureStatus(SFSFilterType::PSI, true);
   filter->SetInput( reader->GetOutput() );
 
 
