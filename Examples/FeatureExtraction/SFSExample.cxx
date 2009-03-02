@@ -69,32 +69,85 @@ int main(int argc, char * argv[])
   unsigned int maxConsideration = atoi(argv[17]);
   double alpha                  = atof(argv[18]);  
 
+// Software Guide : BeginLatex
+//
+// As with every OTB program, we start by defining the types for the
+// images, the readers and the writers.
+//
+// Software Guide : EndLatex
 
+// Software Guide : BeginCodeSnippet  
   typedef otb::Image<PixelType,Dimension>                   ImageType;
-  typedef ImageType::PixelType                              InputPixelType;
   typedef otb::ImageFileReader<ImageType>                   ReaderType;
   typedef otb::ImageFileWriter<ImageType>                   WriterType;
-  typedef otb::SFSTexturesImageFilter<ImageType, ImageType> FilterType;
+// Software Guide : EndCodeSnippet  
+// Software Guide : BeginLatex
+//
+// The we can instantiate the type for the SFS filter, which is
+// templated over the input and output pixel types.
+//
+// Software Guide : EndLatex
 
-  FilterType::Pointer filter       = FilterType::New(); 
+// Software Guide : BeginCodeSnippet  
+  typedef otb::SFSTexturesImageFilter<ImageType, ImageType> SFSFilterType;
+// Software Guide : EndCodeSnippet  
+// Software Guide : BeginLatex
+//
+// After that, we can instantiate the filter. We will also instantiate
+// the reader and one writer for each output image, since the SFS
+// filter generates 6 different features.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet  
+  SFSFilterType::Pointer filter    = SFSFilterType::New(); 
   ReaderType::Pointer reader       = ReaderType::New();
   WriterType::Pointer writerLength = WriterType::New();
   WriterType::Pointer writerWidth  = WriterType::New();
   WriterType::Pointer writerWMean  = WriterType::New();
   WriterType::Pointer writerRatio  = WriterType::New();
   WriterType::Pointer writerSD     = WriterType::New();
-  WriterType::Pointer writerPsi     = WriterType::New();
+  WriterType::Pointer writerPsi    = WriterType::New();
+// Software Guide : BeginCodeSnippet    
 
   reader->SetFileName(inName);
-  reader->GenerateOutputInformation();
-   
+
+// Software Guide : BeginLatex
+//
+// The SFS filter has several parameters which have to be
+// selected. They are:
+  // \begin{enumerate}
+  // \item a spectral threshold to decide if 2 neighboring pixels are
+// connected;
+  //\item a spatial threshold defining the maximum length for an
+// extracted line;
+  //\item the number of directions which will be analyzed (the first
+// one is to the right and they are equally distributed between 0 and
+// $2\pi$);
+  // \item the $\alpha$ parameter fort the $\omega-mean$ feature;
+  // \item the RatioMax parameter fort the $\omega-mean$ feature.
+  // \end{enumerate}
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet    
   filter->SetSpectralThreshold(spectThresh);
   filter->SetSpatialThreshold(spatialThresh);
   filter->SetNumberOfDirections(dirNb);
   filter->SetRatioMaxConsiderationNumber(maxConsideration);
   filter->SetAlpha(alpha);
-  // disable PSI texture
-  filter->SetTextureStatus(3, true);
+  // Software Guide : BeginCodeSnippet    
+// Software Guide : BeginLatex
+//
+// In order to disable the computation of a feature, the
+// \code{SetFeatureStatus} parameter can be used. The $true$ value
+// enables the feature (default behavior) and the $false$ value
+// disables the computation.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet    
+  filter->SetFeatureStatus(3, true);
   filter->SetInput( reader->GetOutput() );
 
 
