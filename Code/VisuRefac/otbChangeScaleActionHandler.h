@@ -111,7 +111,7 @@ public:
 
 protected:
   /** Constructor */
-  ChangeScaleActionHandler() : m_View(), m_Model()
+  ChangeScaleActionHandler() : m_View(), m_Model(), m_ScaleRatio(1.25)
   {}
 
   /** Destructor */
