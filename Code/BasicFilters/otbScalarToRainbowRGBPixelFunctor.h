@@ -27,6 +27,80 @@ namespace otb
 
 namespace Functor
 {
+  template< class TRGBPixel >
+  class ITK_EXPORT HSVToRGBFunctor
+  {
+//----------------------------------------------------------------------------
+    public:
+      inline TRGBPixel operator()(double h, double s, double v) const
+      {
+        const double onethird = 1.0 / 3.0;
+        const double onesixth = 1.0 / 6.0;
+        const double twothird = 2.0 / 3.0;
+        const double fivesixth = 5.0 / 6.0;
+        double r, g, b;
+
+  // compute RGB from HSV
+        if (h > onesixth && h <= onethird) // green/red
+        {
+          g = 1.0;
+          r = (onethird - h) / onesixth;
+          b = 0.0;
+        }
+        else if (h > onethird && h <= 0.5) // green/blue
+        {
+          g = 1.0;
+          b = (h - onethird) / onesixth;
+          r = 0.0;
+        }
+        else if (h > 0.5 && h <= twothird) // blue/green
+        {
+          b = 1.0;
+          g = (twothird - h) / onesixth;
+          r = 0.0;
+        }
+        else if (h > twothird && h <= fivesixth) // blue/red
+        {
+          b = 1.0;
+          r = (h - twothird) / onesixth;
+          g = 0.0;
+        }
+        else if (h > fivesixth && h <= 1.0) // red/blue
+        {
+          r = 1.0;
+          b = (1.0 - h) / onesixth;
+          g = 0.0;
+        }
+        else // red/green
+        {
+          r = 1.0;
+          g = h / onesixth;
+          b = 0.0;
+        }
+
+  // add Saturation to the equation.
+        r = (s * r + (1.0 - s));
+        g = (s * g + (1.0 - s));
+        b = (s * b + (1.0 - s));
+
+        r *= v;
+        g *= v;
+        b *= v;
+
+        TRGBPixel ans;
+        typedef typename TRGBPixel::ComponentType RGBComponentType;
+        ans[0] = static_cast<RGBComponentType>( r );
+        ans[1] = static_cast<RGBComponentType>( g );
+        ans[2] = static_cast<RGBComponentType>( b );
+        return ans;
+
+      }
+};
+}
+
+
+namespace Functor
+{
 
 /**
  * \class ScalarToRainbowRGBPixelFunctor
@@ -52,6 +126,7 @@ public:
   typedef unsigned char               RGBComponentType;
   typedef itk::RGBPixel<RGBComponentType>  RGBPixelType;
   typedef TScalar                     ScalarType;
+  typedef HSVToRGBFunctor<RGBPixelType>  HSVToRGBFunctorType;
 
   RGBPixelType operator()( const TScalar &) const;
 
@@ -73,6 +148,7 @@ protected:
 private:
   ScalarType m_Maximum;
   ScalarType m_Minimum;
+  HSVToRGBFunctorType m_HSVToRGBFunctor;
 };
 
 } // end namespace functor
