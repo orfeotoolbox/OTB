@@ -32,7 +32,6 @@
 #include "itkExceptionObject.h"
 #include "otbImage.h"
 #include "itkVector.h"
-#include "itkConstNeighborhoodIterator.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"
@@ -108,7 +107,7 @@
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
+
 
 int main(int argc, char * argv[])
 {
@@ -135,35 +134,104 @@ int main(int argc, char * argv[])
   typedef double PixelType;
   const int Dimension = 2;
   typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef itk::ConstNeighborhoodIterator<ImageType>  IteratorType;
 
-  typedef otb::Functor::ContrastTextureFunctor<PixelType, PixelType> FunctorType;
+  // Software Guide : BeginLatex
+//
+// After defining the types for the pixels and the images used in the
+// example, we define the type for the texture functor. It is
+// templated by the input and output pixel types.
+//
+// Software Guide : EndLatex
 
+  // Software Guide : BeginCodeSnippet
+  typedef otb::Functor::ContrastTextureFunctor<PixelType, PixelType>
+                                                                FunctorType;
+  // Software Guide : EndCodeSnippet
+  // Software Guide : BeginLatex
+//
+// The filter for computing the texture features for a complete image
+// is templated by the input and output image types and, of course,
+// the functor type.
+//
+// Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
   typedef otb::UnaryFunctorNeighborhoodWithOffsetImageFilter<ImageType,
                                           ImageType, FunctorType> FilterType;
-  typedef ImageType::OffsetType OffsetType;
+
+  // Software Guide : EndCodeSnippet
   typedef otb::ImageFileReader<ImageType>  ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
-
-  // Instantiating object
-  FilterType::Pointer textureFilter = FilterType::New();
   ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
   reader->SetFileName(infname);
   writer->SetFileName(outfname);
 
-  textureFilter->SetInput(reader->GetOutput());
+    // Software Guide : BeginLatex
+//
+// We can now instatiate the filter.
+//
+// Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
+  FilterType::Pointer textureFilter = FilterType::New();
+  // Software Guide : EndCodeSnippet
+  // Software Guide : BeginLatex
+//
+// The texture filter takes 2 parameters: the radius of the
+// neighborhood on which the texture will be computed and the offset
+// used. Texture features are bivariate statistics, that is, they are
+// computed using pair of pixels. Each texture feature is defined for
+// an offset defining the pixel pair.
+//
+// The radius parameter can be passed to the filter as a scalar
+// parameter if the neighborhood is square, or as \code{SizeType} in
+// any case.
+//
+// The offset is always an array of N values, where N is the number of
+// dimensions of the image.  
+//
+// Software Guide : EndLatex
+  // Software Guide : BeginCodeSnippet  
   textureFilter->SetRadius(radius);
+
+  typedef ImageType::OffsetType OffsetType;
   OffsetType offset;
   offset[0] =  xOffset;
   offset[1] =  yOffset;
 
   textureFilter->SetOffset(offset);
+
+  // Software Guide : EndCodeSnippet
+  // Software Guide : BeginLatex
+//
+// We can now plug the pipeline and trigger the execution by calling
+// the \code{Update} method of the writer.
+//
+// Software Guide : EndLatex
+  // Software Guide : BeginCodeSnippet    
+  textureFilter->SetInput(reader->GetOutput());
   writer->SetInput(textureFilter->GetOutput());
 
   writer->Update();
+  // Software Guide : EndCodeSnippet
+
+  //  Software Guide : BeginLatex
+  // Figure~\ref{fig:TEXTUREFUNCTOR} shows the result of applying
+  // the contrast texture computation.
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.40\textwidth]{ADS40RoiSmall.eps}
+  // \includegraphics[width=0.40\textwidth]{pretty_TextureOutput.eps}
+  // \itkcaption[Texture Functor]{Result of applying the
+  // \doxygen{otb}{ContrastTextureFunctor} to an image. From left to right :
+  // original image, contrast.}
+  // \label{fig:TEXTUREFUNCTOR}
+  // \end{figure}
+  //
+  //  Software Guide : EndLatex
 
  // Pretty image creation for printing
 
@@ -180,15 +248,5 @@ int main(int argc, char * argv[])
   prettyOutputWriter->SetInput( outputRescaler->GetOutput() );
 
   prettyOutputWriter->Update();
-
-  outputRescaler->SetInput( reader->GetOutput() );
-  outputRescaler->SetOutputMinimum(0);
-  outputRescaler->SetOutputMaximum(255);
-  prettyOutputWriter->SetFileName( inprettyfname );
-  prettyOutputWriter->SetInput( outputRescaler->GetOutput() );
-
-  prettyOutputWriter->Update();
-
-
   return EXIT_SUCCESS;
 }
