@@ -53,7 +53,7 @@ namespace otb
  * \ingroup IntensityImageFilters Multithreaded
  */
 
-#define epsilon 0.01
+// #define EPSILON_VALUE_CBAMI 0.01
 
 namespace Functor
 {
@@ -92,6 +92,8 @@ public:
   }
 
 protected:
+
+  static const double epsilon = 0.01;
 
   inline void normalizeInPlace(VectorType vx)
   {
