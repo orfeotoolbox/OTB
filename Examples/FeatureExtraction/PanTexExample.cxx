@@ -24,8 +24,8 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUT: {suburb2.jpeg}
-//    OUTPUT: {PanTexOutput.tif}, {pretty_PanTexOutput.png}
+//    INPUT: {ROI_QB_MUL_1.png}
+//    OUTPUT: {PanTexOutput.tif}, {pretty_PanTexInput.png}, {pretty_PanTexOutput.png}
 //  Software Guide : EndCommandLineArgs
 
 #include "itkExceptionObject.h"
@@ -69,7 +69,8 @@ int main(int argc, char * argv[])
 
   const char* infname   = argv[1];
   const char* outfname  = argv[2];
-  const char* outprettyfname  = argv[3];
+  const char* inprettyfname  = argv[3];
+  const char* outprettyfname  = argv[4];
 
 
   typedef double PixelType;
@@ -124,7 +125,7 @@ int main(int argc, char * argv[])
   // the PanTex computation.
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.40\textwidth]{suburb2.eps}
+  // \includegraphics[width=0.40\textwidth]{pretty_PanTexInput.eps}
   // \includegraphics[width=0.40\textwidth]{pretty_PanTexOutput.eps}
   // \itkcaption[PanTex Filter]{Result of applying the
   // \doxygen{otb}{PanTexTextureImageFilter} to an image. From left to right :
@@ -149,5 +150,15 @@ int main(int argc, char * argv[])
   prettyOutputWriter->SetInput( outputRescaler->GetOutput() );
 
   prettyOutputWriter->Update();
+
+  outputRescaler->SetInput( reader->GetOutput() );
+  outputRescaler->SetOutputMinimum(0);
+  outputRescaler->SetOutputMaximum(255);
+  prettyOutputWriter->SetFileName( inprettyfname );
+  prettyOutputWriter->SetInput( outputRescaler->GetOutput() );
+
+  prettyOutputWriter->Update();
+
+
   return EXIT_SUCCESS;
 }
