@@ -37,7 +37,6 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage,TOutputImage,TFunction
 ::UnaryFunctorNeighborhoodWithOffsetImageFilter()
 {
   this->SetNumberOfRequiredInputs( 1 );
-  //m_Radius = 1;
   m_Radius.Fill(1);
   m_Offset.Fill(1);
   m_FunctorList.clear();
