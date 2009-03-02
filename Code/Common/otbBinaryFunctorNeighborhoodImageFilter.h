@@ -21,6 +21,7 @@
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkConstNeighborhoodIterator.h"
+#include "itkSize.h"
 
 namespace otb
 {
@@ -116,9 +117,16 @@ public:
   typedef typename NeighborhoodIteratorType1::RadiusType  RadiusType1;
   typedef typename NeighborhoodIteratorType2::RadiusType  RadiusType2;
 
-  typedef unsigned char RadiusSizeType;
+
+  typedef typename itk::Size<>  RadiusSizeType;
 
   itkSetMacro(Radius, RadiusSizeType);
+
+  /** Set unsigned int radius */
+  void SetRadius(unsigned int radius)
+  {
+    m_Radius.Fill(radius);
+  }
 
 protected:
   BinaryFunctorNeighborhoodImageFilter();

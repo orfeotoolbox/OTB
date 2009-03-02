@@ -37,7 +37,7 @@ UnaryFunctorNeighborhoodImageFilter<TInputImage,TOutputImage,TFunction>
 ::UnaryFunctorNeighborhoodImageFilter()
 {
   this->SetNumberOfRequiredInputs( 1 );
-  m_Radius = 1;
+  m_Radius.Fill(1);
 }
 template <class TInputImage, class TOutputImage, class TFunction  >
 void
@@ -63,6 +63,8 @@ UnaryFunctorNeighborhoodImageFilter<TInputImage,TOutputImage,TFunction>
 
   // pad the input requested region by the operator radius
   inputRequestedRegion.PadByRadius( m_Radius );
+
+
 
   // crop the input requested region at the input's largest possible region
   if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
@@ -108,7 +110,10 @@ UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, TFunction>
   OutputImagePointer outputPtr = this->GetOutput(0);
 
   RadiusType r;
-  r.Fill(m_Radius);
+
+  r[0]=m_Radius[0];
+  r[1]=m_Radius[1];
+
   NeighborhoodIteratorType neighInputIt;
 
   itk::ImageRegionIterator<TOutputImage> outputIt;
