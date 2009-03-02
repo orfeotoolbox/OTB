@@ -102,6 +102,9 @@ TARGET_LINK_LIBRARIES(TextureExample OTBIO OTBCommon OTBFeatureExtraction ITKCom
 ADD_EXECUTABLE(PanTexExample PanTexExample.cxx)
 TARGET_LINK_LIBRARIES(PanTexExample OTBIO OTBCommon OTBFeatureExtraction ITKCommon ITKBasicFilters)
 
+ADD_EXECUTABLE(SFSExample SFSExample.cxx)
+TARGET_LINK_LIBRARIES(SFSExample OTBIO OTBCommon OTBFeatureExtraction ITKCommon ITKBasicFilters)
+
 
 ADD_EXECUTABLE(EdgeDensityExample EdgeDensityExample.cxx)
 TARGET_LINK_LIBRARIES(EdgeDensityExample OTBIO OTBCommon OTBBasicFilters ITKCommon ITKBasicFilters)
