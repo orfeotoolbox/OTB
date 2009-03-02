@@ -39,8 +39,9 @@
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
-// \doxygen{otb}{ContrastTextureFunctor}, and more generally it
-// demonstrates how to compute Haralick's textural features. 
+// \doxygen{otb}{PanTexTextureImageFilter}. This texture parameter was
+// first introduced in \cite{PanTex} and is very useful for urban area
+// detection. 
 // \relatedClasses
 //  \begin{itemize}
 //  \item \doxygen{otb}{ContrastTextureFunctor}
@@ -58,11 +59,10 @@
 int main(int argc, char * argv[])
 {
   // Parse command line parameters
-  if ( argc != 7 )
+  if ( argc != 4 )
   {
     std::cerr << "Usage: " << argv[0] << " <inputImage> ";
     std::cerr << " <outputImage> <outputRescaled> ";
-    std::cerr << " <radius> <xOffset> <yOffset> ";
     std::cerr << std::endl;
     return EXIT_FAILURE;
   }
