@@ -20,14 +20,15 @@
 
 #include "itkImageRegionConstIterator.h"
 #include "otbMacro.h"
+#include "itkTimeProbe.h"
 
 namespace otb
 {
 
 template <class TImage, class TOutputImage>
 ImageLayer<TImage,TOutputImage>
-::ImageLayer() : m_Quicklook(), m_Image(), m_Histogram(), m_RenderingFunction(),
-		 m_NumberOfHistogramBins(20), m_AutoMinMax(true), m_AutoMinMaxUpToDate(false), m_AutoMinMaxQuantile(0.02),
+::ImageLayer() : m_Quicklook(), m_Image(), m_HistogramList(), m_RenderingFunction(),
+		 m_NumberOfHistogramBins(255), m_AutoMinMax(true), m_AutoMinMaxUpToDate(false), m_AutoMinMaxQuantile(0.02),
 		 m_QuicklookRenderingFilter(), m_ExtractRenderingFilter(), m_ScaledExtractRenderingFilter(),
 		 m_ExtractFilter(), m_ScaledExtractFilter()
 {
@@ -91,17 +92,23 @@ ImageLayer<TImage,TOutputImage>
   // Render quicklook
   if(this->GetHasQuicklook())
     {
-    otbMsgDevMacro(<<"ImageLayer::RenderImages(): Regenerating quicklook");
+    itk::TimeProbe probe;
+    probe.Start();
     m_QuicklookRenderingFilter->Update();
     this->SetRenderedQuicklook(m_QuicklookRenderingFilter->GetOutput());
+    probe.Stop();
+    otbMsgDevMacro(<<"ImageLayer::RenderImages():"<<" ("<<this->GetName()<<")"<< " quicklook regenerated ("<<probe.GetMeanTime()<<" s.)");
     }
   // If there are pixels to render
   if(this->GetExtractRegion().GetNumberOfPixels() > 0)
     {
-    otbMsgDevMacro(<<"ImageLayer::RenderImages(): Regenerating extract");
+    itk::TimeProbe probe;
+    probe.Start();
     m_ExtractRenderingFilter->GetOutput()->SetRequestedRegion(this->GetExtractRegion());
     m_ExtractRenderingFilter->Update();
     this->SetRenderedExtract(m_ExtractRenderingFilter->GetOutput());
+    probe.Stop();
+    otbMsgDevMacro(<<"ImageLayer::RenderImages():"<<" ("<<this->GetName()<<")"<< " extract regenerated ("<<probe.GetMeanTime()<<" s.)");
     }
   else
     {
@@ -111,11 +118,14 @@ ImageLayer<TImage,TOutputImage>
   // If there are pixels to render
   if(this->GetScaledExtractRegion().GetNumberOfPixels() > 0)
       {
-      otbMsgDevMacro(<<"ImageLayer::RenderImages(): Regenerating scaled extract");
+      itk::TimeProbe probe;
+      probe.Start();
       m_ScaledExtractRenderingFilter->GetOutput()->SetRequestedRegion(this->GetScaledExtractRegion());
       m_ScaledExtractRenderingFilter->Update();
       this->SetRenderedScaledExtract(m_ScaledExtractRenderingFilter->GetOutput());
       this->SetHasScaledExtract(true);
+      probe.Stop();
+      otbMsgDevMacro(<<"ImageLayer::RenderImages():"<<" ("<<this->GetName()<<")"<< " scaled extract regenerated ("<<probe.GetMeanTime()<<" s.)");
       }
   else
     {
@@ -143,9 +153,9 @@ ImageLayer<TImage,TOutputImage>
     }
 
   // Check if we need to generate the histogram again
-  if( !m_Histogram || (histogramSource->GetUpdateMTime() < histogramSource->GetPipelineMTime()) )
+  if( !m_HistogramList || (histogramSource->GetUpdateMTime() < histogramSource->GetPipelineMTime()) )
     {
-    otbMsgDevMacro(<<"ImageLayer::RenderHistogram(): Regenerating histogram due to pippeline update.");
+    otbMsgDevMacro(<<"ImageLayer::RenderHistogram():"<<" ("<<this->GetName()<<")"<< " Regenerating histogram due to pippeline update.");
     m_AutoMinMaxUpToDate = false;
 
     // Update the histogram source
@@ -167,24 +177,21 @@ ImageLayer<TImage,TOutputImage>
       listSample->PushBack(it.Get());
       ++it;
       }
-    otbMsgDevMacro(<<"ImageLayer::RenderHistogram() Sample list generated ("<<listSample->Size()<<" samples, "<<histogramSource->GetNumberOfComponentsPerPixel()<<" bands)");
+    otbMsgDevMacro(<<"ImageLayer::RenderHistogram()"<<" ("<<this->GetName()<<")"<< " Sample list generated ("<<listSample->Size()<<" samples, "<<histogramSource->GetNumberOfComponentsPerPixel()<<" bands)");
     
     
     // Create the histogram generation filter 
     typename HistogramFilterType::Pointer histogramFilter = HistogramFilterType::New();
     histogramFilter->SetListSample(listSample);
     
-    typename HistogramFilterType::HistogramSizeType binSizes(histogramSource->GetNumberOfComponentsPerPixel());
-    binSizes.Fill(m_NumberOfHistogramBins);
-    
-    histogramFilter->SetNumberOfBins(binSizes);
-    
+    histogramFilter->SetNumberOfBins(m_NumberOfHistogramBins);
+        
     // Generate
     histogramFilter->Update();
-    otbMsgDevMacro(<<"ImageLayer::RenderHistogram() Histogram has been updated");
+    otbMsgDevMacro(<<"ImageLayer::RenderHistogram()"<<" ("<<this->GetName()<<")"<< " Histogram has been updated");
     
     // Retrieve the histogram
-    m_Histogram = histogramFilter->GetOutput();
+    m_HistogramList = histogramFilter->GetOutput();
     }
 }
 
@@ -196,23 +203,23 @@ ImageLayer<TImage,TOutputImage>
   if(!m_AutoMinMaxUpToDate)
     {
     // Check for an existing histogram
-    if(m_Histogram.IsNull())
+    if(m_HistogramList.IsNull())
       {
       itkExceptionMacro(<<"Empty histogram, can not use auto min/max evaluation.");
       }
     
-    otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup(): Updating min/max from histogram");
+    otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup():"<<" ("<<this->GetName()<<")"<< " Updating min/max from histogram");
     
     const unsigned int nbComps = m_Image->GetNumberOfComponentsPerPixel();
     typename RenderingFunctionType::ExtremaVectorType min, max;
-    otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup(): "<<nbComps<<" components, quantile= "<<100*m_AutoMinMaxQuantile<<" %");
+    otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup(): "<<" ("<<this->GetName()<<") "<<nbComps<<" components, quantile= "<<100*m_AutoMinMaxQuantile<<" %");
     // For each components, use the histogram to compute min and max
     for(unsigned int comp = 0; comp < nbComps;++comp)
       {
       // Compute quantiles
-      min.push_back(m_Histogram->Quantile(comp,m_AutoMinMaxQuantile));
-      max.push_back(m_Histogram->Quantile(comp,1.-m_AutoMinMaxQuantile));
-      otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup(): component "<<comp<<", min= "<<min.back()<<", max= "<<max.back());
+      min.push_back(m_HistogramList->GetNthElement(comp)->Quantile(0,m_AutoMinMaxQuantile));
+      max.push_back(m_HistogramList->GetNthElement(comp)->Quantile(0,1-m_AutoMinMaxQuantile));
+      otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup():"<<" ("<<this->GetName()<<")"<< " component "<<comp<<", min= "<<min.back()<<", max= "<<max.back());
       }
     
     // Setup rendering function
