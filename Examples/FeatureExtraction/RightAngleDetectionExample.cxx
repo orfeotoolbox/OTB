@@ -38,11 +38,11 @@
 //
 // This example illustrates the use of the
 // \doxygen{otb}{LineSpatialObjectListToRightAnglePointSetFilter}. 
-// This filter computes a local density of edges on an image and can
-// be useful to detect man made objects or urban areas, for
-// instance. The filter has been implemented in a generic way, so that
-// the way the edges are detected and the way their density is
-// computed can be chosen by the user.
+// This filter detects the right angles in an image by exploiting the
+// output of a line detection algorithm. Typically the
+// \doxygen{otb}{LineSegmentDetector} class will be used. The right
+// angle detection algorithm is described in detail in
+// \cite{RightAngleDetection}. 
 //
 // The first step required to use this filter is to include its header file.
 //
@@ -50,6 +50,7 @@
 
 // Software Guide : BeginCodeSnippet
 #include "otbLineSpatialObjectListToRightAnglePointSetFilter.h"
+// Software Guide : EndCodeSnippet
 
 int main( int argc, char * argv[] )
 {
@@ -61,19 +62,68 @@ int main( int argc, char * argv[] )
   const unsigned int           Dimension = 2;
   typedef float                PixelType;
   
-  /** Typedefs */
   typedef otb::Image<PixelType ,Dimension>   ImageType;
   typedef otb::ImageFileReader<ImageType>    ReaderType;
   typedef otb::ImageFileWriter<ImageType>    WriterType;
 
 
+// Software Guide : BeginLatex
+//
+// After defining, as usual, the types for the input image and the
+// image reader, we define the specific types needed for this
+// example. First of all, we will use a list of line spatial objects
+// to store the detected lines which will be provided by the line
+// segment detector.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet
   typedef otb::LineSpatialObjectList         LinesListType;
+// Software Guide : EndCodeSnippet
+// Software Guide : BeginLatex
+//
+// The right angle detector's output is a pointset where each point
+// gives the coordinate of the detected angle. In the data field of
+// the pointset, the 2 lines which define the right angle are stored
+// in a vector. Therefore we define the 2 following types.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet  
   typedef LinesListType::LineType            LineType;
-  typedef std::vector<LineType*>             VectorLines;
-  typedef itk::PointSet<VectorLines , Dimension>     PointSetType;
+  typedef std::vector<LineType*>             LineVectorType;
+// Software Guide : EndCodeSnippet
+// Software Guide : BeginLatex
+//
+// And we can now define the pointset type for storing all the
+// information related to the detected right angles.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet    
+  typedef itk::PointSet<LineVectorType, Dimension>     PointSetType;
+  // Software Guide : EndCodeSnippet
+// Software Guide : BeginLatex
+//
+// We define the type for the line segment detector. A detailed
+// example for this detector can be found in section \ref{sec:LSD}.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet    
   typedef otb::LineSegmentDetector<ImageType , PixelType>   lsdFilterType;
 
+  // Software Guide : EndCodeSnippet
+// Software Guide : BeginLatex
+//
+// We can finally define the type for the right angle detection
+// filter. This filter is templated over the input image type, the
+// type of the lines provided by the line segment detector, and the
+// outpu pointset type containing the detected right angles.
+//
+// Software Guide : EndLatex
 
+// Software Guide : BeginCodeSnippet    
   typedef otb::LineSpatialObjectListToRightAnglePointSetFilter<ImageType,
                                             LinesListType, PointSetType>
                                                     RightAngleFilterType;
@@ -100,7 +150,7 @@ int main( int argc, char * argv[] )
   /** Print the right angles coordinate in the output file*/
   segmentOrtho = rightAngleFilter->GetOutput();
   PointSetType::PointType   pRight;
-  VectorLines               outputVectorLines;
+  LineVectorType               outputVectorLines;
   LinesListType::Pointer    outputLinesList = LinesListType::New();
   
   for (unsigned int i = 0; i<segmentOrtho->GetNumberOfPoints() ; i++)
