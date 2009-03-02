@@ -31,7 +31,6 @@
 
 #include "itkExceptionObject.h"
 #include "otbImage.h"
-#include "itkVector.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"
