@@ -71,10 +71,6 @@ int main(int argc, char * argv[])
   const char* outfname  = argv[2];
   const char* outprettyfname  = argv[3];
 
-  const unsigned int radius  =  static_cast<unsigned int>(atoi(argv[4]));
-  const unsigned int xOffset =  static_cast<unsigned int>(atoi(argv[5]));
-  const unsigned int yOffset =  static_cast<unsigned int>(atoi(argv[6]));
-
 
   typedef double PixelType;
   const int Dimension = 2;
@@ -83,26 +79,14 @@ int main(int argc, char * argv[])
   // Software Guide : BeginLatex
 //
 // After defining the types for the pixels and the images used in the
-// example, we define the type for the texture functor. It is
-// templated by the input and output pixel types.
+// example, we define the type for the PanTex filter. It is
+// templated by the input and output image types.
 //
 // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::Functor::ContrastTextureFunctor<PixelType, PixelType>
-                                                                FunctorType;
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-//
-// The filter for computing the texture features for a complete image
-// is templated by the input and output image types and, of course,
-// the functor type.
-//
-// Software Guide : EndLatex
+    typedef otb::PanTexTextureImageFilter<ImageType, ImageType> PanTexType;
 
-  // Software Guide : BeginCodeSnippet
-  typedef otb::UnaryFunctorNeighborhoodWithOffsetImageFilter<ImageType,
-                                          ImageType, FunctorType> FilterType;
 
   // Software Guide : EndCodeSnippet
   typedef otb::ImageFileReader<ImageType>  ReaderType;
@@ -121,37 +105,9 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  FilterType::Pointer textureFilter = FilterType::New();
+  PanTexType::Pointer textureFilter = PanTexType::New();
   // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-//
-// The texture filter takes 2 parameters: the radius of the
-// neighborhood on which the texture will be computed and the offset
-// used. Texture features are bivariate statistics, that is, they are
-// computed using pair of pixels. Each texture feature is defined for
-// an offset defining the pixel pair.
-//
-// The radius parameter can be passed to the filter as a scalar
-// parameter if the neighborhood is square, or as \code{SizeType} in
-// any case.
-//
-// The offset is always an array of N values, where N is the number of
-// dimensions of the image.  
-//
-// Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet  
-  textureFilter->SetRadius(radius);
-
-  typedef ImageType::OffsetType OffsetType;
-  OffsetType offset;
-  offset[0] =  xOffset;
-  offset[1] =  yOffset;
-
-  textureFilter->SetOffset(offset);
-
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-//
+  // Software Guide : BeginLatex//
 // We can now plug the pipeline and trigger the execution by calling
 // the \code{Update} method of the writer.
 //
@@ -164,16 +120,16 @@ int main(int argc, char * argv[])
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
-  // Figure~\ref{fig:PANTEXFUNCTOR} shows the result of applying
+  // Figure~\ref{fig:PANTEXFILTER} shows the result of applying
   // the PanTex computation.
   // \begin{figure}
   // \center
   // \includegraphics[width=0.40\textwidth]{suburb2.eps}
   // \includegraphics[width=0.40\textwidth]{pretty_PanTexOutput.eps}
-  // \itkcaption[PanTex Functor]{Result of applying the
-  // \doxygen{otb}{ContrastTextureFunctor} to an image. From left to right :
-  // original image, contrast.}
-  // \label{fig:PANTEXFUNCTOR}
+  // \itkcaption[PanTex Filter]{Result of applying the
+  // \doxygen{otb}{PanTexTextureImageFilter} to an image. From left to right :
+  // original image, PanTex feature.}
+  // \label{fig:PANTEXFILTER}
   // \end{figure}
   //
   //  Software Guide : EndLatex
