@@ -30,8 +30,9 @@ namespace Functor
   template< class TRGBPixel >
   class ITK_EXPORT HSVToRGBFunctor
   {
-//----------------------------------------------------------------------------
     public:
+      HSVToRGBFunctor(){};
+      ~HSVToRGBFunctor(){};
       inline TRGBPixel operator()(double h, double s, double v) const
       {
         const double onethird = 1.0 / 3.0;
