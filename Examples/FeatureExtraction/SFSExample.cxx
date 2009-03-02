@@ -24,7 +24,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract2.tif}
-//    OUTPUTS: {SFSLengthOutput.tif}, {SFSWidthOutput.tif}, {SFSMeanOutput.tif}, {SFSRatioOutput.tif}, {SFSSDOutput.tif}, {SFSPsiOutput.tif}
+//    OUTPUTS: {SFSLengthOutput.tif}, {SFSWidthOutput.tif}, {SFSMeanOutput.tif}, {SFSRatioOutput.tif}, {SFSSDOutput.tif}, {SFSPsiOutput.tif}, {SFSLengthPrettyOutput.tif}, {SFSWidthPrettyOutput.tif}, {SFSMeanPrettyOutput.tif}, {SFSRatioPrettyOutput.tif}, {SFSSDPrettyOutput.tif}, {SFSPsiPrettyOutput.tif}
 //    20 50 8 4 0.6
 //  Software Guide : EndCommandLineArgs
 
