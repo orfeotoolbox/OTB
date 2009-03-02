@@ -23,7 +23,7 @@
 #include "itkRescaleIntensityImageFilter.h"
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {qb_RoadExtract2.tif}
+//    INPUTS: {suburb2.jpeg}
 //    OUTPUTS: {SFSLengthOutput.tif}, {SFSWidthOutput.tif}, {SFSMeanOutput.tif}, {SFSRatioOutput.tif}, {SFSSDOutput.tif}, {SFSPsiOutput.tif}, {SFSLengthPrettyOutput.tif}, {SFSWidthPrettyOutput.tif}, {SFSMeanPrettyOutput.tif}, {SFSRatioPrettyOutput.tif}, {SFSSDPrettyOutput.tif}, {SFSPsiPrettyOutput.tif}
 //    20 50 8 4 0.6
 //  Software Guide : EndCommandLineArgs
@@ -142,12 +142,22 @@ int main(int argc, char * argv[])
 // In order to disable the computation of a feature, the
 // \code{SetFeatureStatus} parameter can be used. The $true$ value
 // enables the feature (default behavior) and the $false$ value
-// disables the computation.
+// disables the computation. Therefore, the following line is useless,
+// but is given here as an example.
 //
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet    
   filter->SetFeatureStatus(SFSFilterType::PSI, true);
+
+  // Software Guide : BeginCodeSnippet    
+// Software Guide : BeginLatex
+//
+// Now, we plug the pipeline using all the writers.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet      
   filter->SetInput( reader->GetOutput() );
 
 
@@ -174,6 +184,29 @@ int main(int argc, char * argv[])
   writerPsi->SetFileName(outNamePsi);
   writerPsi->SetInput( filter->GetPSIOutput() );
   writerPsi->Update();
+  // Software Guide : EndCodeSnippet
+    //  Software Guide : BeginLatex
+  // Figure~\ref{fig:SFS_FILTER} shows the result of applying
+  // the SFS computation to an image
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.25\textwidth]{suburb2.eps}
+  // \includegraphics[width=0.25\textwidth]{SFSLengthPrettyOutput.eps}
+  // \includegraphics[width=0.25\textwidth]{SFSWidthPrettyOutput.eps}
+  // \includegraphics[width=0.25\textwidth]{SFSMeanPrettyOutput.eps}
+  // \includegraphics[width=0.25\textwidth]{SFSRatioPrettyOutput.eps}
+  // \includegraphics[width=0.25\textwidth]{SFSSDPrettyOutput.eps}
+  // \includegraphics[width=0.25\textwidth]{SFSPsiPrettyOutput.eps}
+  // \itkcaption[Right Angle Detection Filter]{Result of applying the
+  // \doxygen{otb}{SFSTexturesImageFilter} to an image. From left to
+  // right and top to bottom: original image, length, width,
+  // $\omega$-mean, ratio, SD and Psi structural features.
+  // original image, .}
+  // \label{fig:SFS_FILTER}
+  // \end{figure}
+  //
+  //  Software Guide : EndLatex
+
 
 
   /************** pretty images for printing *********/
