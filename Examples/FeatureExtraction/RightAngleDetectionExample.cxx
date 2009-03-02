@@ -66,6 +66,9 @@ int main( int argc, char * argv[] )
   typedef otb::ImageFileReader<ImageType>    ReaderType;
   typedef otb::ImageFileWriter<ImageType>    WriterType;
 
+  ReaderType::Pointer            reader            = ReaderType::New();
+  reader->SetFileName(infname);
+  WriterType::Pointer writer = WriterType::New();
 
 // Software Guide : BeginLatex
 //
@@ -131,15 +134,14 @@ int main( int argc, char * argv[] )
 
   RightAngleFilterType::Pointer  rightAngleFilter  =
                                                RightAngleFilterType::New();
-  ReaderType::Pointer            reader            = ReaderType::New();
-  PointSetType::Pointer          segmentOrtho      = PointSetType::New();     
+
   lsdFilterType::Pointer         lsdFilter         = lsdFilterType::New();
 
 
  
 
-  // Begin the process
-  reader->SetFileName(infname);
+
+
   lsdFilter->SetInput(reader->GetOutput());  
   
   rightAngleFilter->SetInputImage(reader->GetOutput());
@@ -148,6 +150,7 @@ int main( int argc, char * argv[] )
 
 
   /** Print the right angles coordinate in the output file*/
+  PointSetType::Pointer          segmentOrtho      = PointSetType::New();     
   segmentOrtho = rightAngleFilter->GetOutput();
   PointSetType::PointType   pRight;
   LineVectorType               outputVectorLines;
@@ -168,7 +171,7 @@ int main( int argc, char * argv[] )
     drawLineFilter->SetInput(reader->GetOutput());
   drawLineFilter->SetInputLineSpatialObjectList(outputLinesList);
 
-  WriterType::Pointer writer = WriterType::New();
+
     writer->SetInput(drawLineFilter->GetOutput());
     writer->SetFileName(outfname);
 
