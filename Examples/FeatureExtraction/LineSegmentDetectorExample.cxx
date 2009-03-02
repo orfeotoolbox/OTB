@@ -152,7 +152,6 @@ int main( int argc, char * argv[] )
 
 // Software Guide : BeginCodeSnippet  
 
-
   reader->GenerateOutputInformation();
   writer->Update();
 
