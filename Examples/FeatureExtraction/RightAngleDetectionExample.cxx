@@ -34,23 +34,25 @@ int main( int argc, char * argv[] )
   const   char * infname   = argv[1];  
   const   char * outfname  = argv[2];
   
-  const unsigned int                                                Dimension = 2;
-  typedef float                                                     PixelType;
+  const unsigned int           Dimension = 2;
+  typedef float                PixelType;
   
   /** Typedefs */
-  typedef otb::Image<PixelType ,Dimension >                         ImageType;
-  typedef otb::ImageFileReader<ImageType>                           ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                           WriterType;
-  typedef otb::LineSpatialObjectList                                LinesListType;
-  typedef LinesListType::LineType                                   LineType;
-  typedef std::vector<LineType*>                                    VectorLines;
-  typedef itk::PointSet<VectorLines , Dimension>                    PointSetType;
-  typedef otb::LineSegmentDetector<ImageType , PixelType>           lsdFilterType;
-  typedef otb::LineSpatialObjectListToRightAnglePointSetFilter<ImageType ,LinesListType, 
-                                                               PointSetType >    RightAngleFilterType;
+  typedef otb::Image<PixelType ,Dimension>   ImageType;
+  typedef otb::ImageFileReader<ImageType>    ReaderType;
+  typedef otb::ImageFileWriter<ImageType>    WriterType;
+  typedef otb::LineSpatialObjectList         LinesListType;
+  typedef LinesListType::LineType            LineType;
+  typedef std::vector<LineType*>             VectorLines;
+  typedef itk::PointSet<VectorLines , Dimension>     PointSetType;
+  typedef otb::LineSegmentDetector<ImageType , PixelType>   lsdFilterType;
+  typedef otb::LineSpatialObjectListToRightAnglePointSetFilter<ImageType,
+                                            LinesListType, PointSetType>
+                                                    RightAngleFilterType;
   
   /** Creatop, of an instance of the filters */
-  RightAngleFilterType::Pointer  rightAngleFilter  = RightAngleFilterType::New();
+  RightAngleFilterType::Pointer  rightAngleFilter  =
+                                               RightAngleFilterType::New();
   ReaderType::Pointer            reader            = ReaderType::New();
   PointSetType::Pointer          segmentOrtho      = PointSetType::New();     
   lsdFilterType::Pointer         lsdFilter         = lsdFilterType::New();
@@ -65,8 +67,6 @@ int main( int argc, char * argv[] )
   rightAngleFilter->SetInputImage(reader->GetOutput());
   rightAngleFilter->SetInput(lsdFilter->GetOutput());
   rightAngleFilter->Update();
-
-  std::cout << "Number of right angles detected  " <<rightAngleFilter->GetOutput()->GetNumberOfPoints() <<std::endl;
 
 
   /** Print the right angles coordinate in the output file*/
