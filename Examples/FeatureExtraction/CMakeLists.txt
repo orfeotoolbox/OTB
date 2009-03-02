@@ -97,6 +97,10 @@ TARGET_LINK_LIBRARIES(CloudDetectionExample OTBIO OTBCommon OTBFeatureExtraction
 ADD_EXECUTABLE(TextureExample TextureExample.cxx)
 TARGET_LINK_LIBRARIES(TextureExample OTBIO OTBCommon OTBFeatureExtraction ITKCommon ITKBasicFilters)
 
+ADD_EXECUTABLE(PanTexExample PanTexExample.cxx)
+TARGET_LINK_LIBRARIES(PanTexExample OTBIO OTBCommon OTBFeatureExtraction ITKCommon ITKBasicFilters)
+
+
 ADD_EXECUTABLE(EdgeDensityExample EdgeDensityExample.cxx)
 TARGET_LINK_LIBRARIES(EdgeDensityExample OTBIO OTBCommon OTBBasicFilters ITKCommon ITKBasicFilters)
 
