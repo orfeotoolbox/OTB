@@ -112,10 +112,10 @@
 int main(int argc, char * argv[])
 {
   // Parse command line parameters
-  if ( argc != 8 )
+  if ( argc != 7 )
   {
     std::cerr << "Usage: " << argv[0] << " <inputImage> ";
-    std::cerr << " <outputImage> <inputRescaled> <outputRescaled> ";
+    std::cerr << " <outputImage> <outputRescaled> ";
     std::cerr << " <radius> <xOffset> <yOffset> ";
     std::cerr << std::endl;
     return EXIT_FAILURE;
