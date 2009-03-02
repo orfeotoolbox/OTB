@@ -21,6 +21,7 @@
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkConstNeighborhoodIterator.h"
+#include "itkSize.h"
 
 namespace otb
 {
@@ -33,6 +34,9 @@ namespace otb
  * operation to be applied.  A Functor style is used.
  *
  * \ingroup IntensityImageFilters   Multithreaded
+ *
+ * \example ChangeDetection/ChangeDetectionFrameworkExample.cxx
+ *
  */
 template <class TInputImage1, class TInputImage2,
 class TOutputImage, class TFunction    >
@@ -113,9 +117,16 @@ public:
   typedef typename NeighborhoodIteratorType1::RadiusType  RadiusType1;
   typedef typename NeighborhoodIteratorType2::RadiusType  RadiusType2;
 
-  typedef unsigned char RadiusSizeType;
+
+  typedef typename itk::Size<>  RadiusSizeType;
 
   itkSetMacro(Radius, RadiusSizeType);
+
+  /** Set unsigned int radius */
+  void SetRadius(unsigned int radius)
+  {
+    m_Radius.Fill(radius);
+  }
 
 protected:
   BinaryFunctorNeighborhoodImageFilter();

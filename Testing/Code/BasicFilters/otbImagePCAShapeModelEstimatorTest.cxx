@@ -174,11 +174,9 @@ int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[] )
   {
     std::cout << eigenValues[ i ] << std::endl;
   }
-  std::cout << "" << std::endl;
-  std::cout << "" << std::endl;
-
 
   //Print the MeanImage
+/*
   OutputImageType::Pointer outImage = applyPCAShapeEstimator->GetOutput( 0 );
   OutputImageIterator outImageIt( outImage, outImage->GetBufferedRegion() );
   outImageIt.GoToBegin();
@@ -190,7 +188,6 @@ int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[] )
     ++outImageIt;
   }
   std::cout << "  " << std::endl;
-
   //Print the largest two eigen vectors
   for (unsigned int j=1; j< NUMLARGESTPC + 1; j++ )
   {
@@ -208,6 +205,7 @@ int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[] )
     std::cout << "  " << std::endl;
 
   }
+*/
 
   return EXIT_SUCCESS;
 }

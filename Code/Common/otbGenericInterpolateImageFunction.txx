@@ -70,20 +70,6 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 }
 
 
-/** Evaluate at image index position */
-template<class TInputImage, class TFunction, class TBoundaryCondition, class TCoordRep>
-void
-GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoordRep>
-::SetInputImage(const InputImageType *image)
-{
-  // Call the parent implementation
-  Superclass::SetInputImage(image);
-  if ( image == NULL )
-  {
-    return;
-  }
-}
-
 template<class TInputImage, class TFunction, class TBoundaryCondition, class TCoordRep>
 void
 GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoordRep>

@@ -57,7 +57,7 @@ int otbWindowedSincInterpolateImageBlackmanFunction(int argc, char * argv[])
   reader->Update();
   interp->SetInputImage(reader->GetOutput());
   interp->SetRadius(atoi(argv[3]));
-
+  interp->Initialize();
 
   std::ofstream file;
   file.open(outfname);
