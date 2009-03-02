@@ -45,9 +45,11 @@ ADD_EXECUTABLE(ExtractSegmentsByStepsExample
 ExtractSegmentsByStepsExample.cxx)
 TARGET_LINK_LIBRARIES(ExtractSegmentsByStepsExample OTBFeatureExtraction OTBCommon OTBIO)
 
-ADD_EXECUTABLE(LineSegmentDetectorExample
-LineSegmentDetectorExample.cxx)
+ADD_EXECUTABLE(LineSegmentDetectorExample LineSegmentDetectorExample.cxx)
 TARGET_LINK_LIBRARIES(LineSegmentDetectorExample OTBFeatureExtraction OTBCommon OTBIO)
+
+ADD_EXECUTABLE(RightAngleDetectionExample RightAngleDetectionExample.cxx)
+TARGET_LINK_LIBRARIES(RightAngleDetectionExample OTBFeatureExtraction OTBCommon OTBIO)
 
 
 ADD_EXECUTABLE(ExtractSegmentsExample

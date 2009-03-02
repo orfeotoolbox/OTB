@@ -16,23 +16,47 @@
 
 =========================================================================*/
 
+#include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
+#include "itkRescaleIntensityImageFilter.h"
+
+#include <iostream>
+#include <fstream>
+
 #include "otbImage.h"
 #include "itkPointSet.h"
-#include "otbLineSpatialObjectListToRightAnglePointSetFilter.h"
 #include "otbLineSpatialObjectList.h"
 #include "otbDrawLineSpatialObjectListFilter.h"
 #include "otbLineSegmentDetector.h"
 
-#include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
+//  Software Guide : BeginCommandLineArgs
+//    INPUTS: {qb_RoadExtract2.tif}
+//    OUTPUTS: {RighAngleOutput.tif}, {PrettyRighAngleInput.png}, {PrettyRighAngleOutput.png}
+//  Software Guide : EndCommandLineArgs
 
-#include <iostream>
-#include <fstream>
+// Software Guide : BeginLatex
+//
+// This example illustrates the use of the
+// \doxygen{otb}{LineSpatialObjectListToRightAnglePointSetFilter}. 
+// This filter computes a local density of edges on an image and can
+// be useful to detect man made objects or urban areas, for
+// instance. The filter has been implemented in a generic way, so that
+// the way the edges are detected and the way their density is
+// computed can be chosen by the user.
+//
+// The first step required to use this filter is to include its header file.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet
+#include "otbLineSpatialObjectListToRightAnglePointSetFilter.h"
 
 int main( int argc, char * argv[] )
 {
   const   char * infname   = argv[1];  
   const   char * outfname  = argv[2];
+  const   char * inprettyfname = argv[3];
+  const   char * outprettyfname  = argv[4];
   
   const unsigned int           Dimension = 2;
   typedef float                PixelType;
@@ -41,16 +65,20 @@ int main( int argc, char * argv[] )
   typedef otb::Image<PixelType ,Dimension>   ImageType;
   typedef otb::ImageFileReader<ImageType>    ReaderType;
   typedef otb::ImageFileWriter<ImageType>    WriterType;
+
+
   typedef otb::LineSpatialObjectList         LinesListType;
   typedef LinesListType::LineType            LineType;
   typedef std::vector<LineType*>             VectorLines;
   typedef itk::PointSet<VectorLines , Dimension>     PointSetType;
   typedef otb::LineSegmentDetector<ImageType , PixelType>   lsdFilterType;
+
+
   typedef otb::LineSpatialObjectListToRightAnglePointSetFilter<ImageType,
                                             LinesListType, PointSetType>
                                                     RightAngleFilterType;
   
-  /** Creatop, of an instance of the filters */
+
   RightAngleFilterType::Pointer  rightAngleFilter  =
                                                RightAngleFilterType::New();
   ReaderType::Pointer            reader            = ReaderType::New();
@@ -98,6 +126,27 @@ int main( int argc, char * argv[] )
   reader->GenerateOutputInformation();
   writer->Update();
 
+  /************** images for printing *********/
+  typedef unsigned char       OutputPixelType;
+
+  typedef otb::Image<OutputPixelType ,Dimension>   OutputImageType;
+  typedef otb::ImageFileWriter<OutputImageType>    OutputWriterType;
+  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescalerType;
+
+  RescalerType::Pointer rescaler = RescalerType::New();
+  OutputWriterType::Pointer outwriter = OutputWriterType::New();
+
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetOutputMaximum(255);
+  outwriter->SetInput( rescaler->GetOutput() );
+
+  rescaler->SetInput( reader->GetOutput() );
+  outwriter->SetFileName( inprettyfname );
+  outwriter->Update();
+  
+  rescaler->SetInput( drawLineFilter->GetOutput() );
+  outwriter->SetFileName( outprettyfname );
+  outwriter->Update();
   
   return EXIT_SUCCESS;
 }
