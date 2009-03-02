@@ -230,7 +230,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/TextureExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/PanTexExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AlignmentsExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/RatioLineDetectorExample.cxx
+  ${OTB_SOURCE_DIR}/Exampgles/FeatureExtraction/RatioLineDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/CorrelationLineDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AssymmetricFusionOfLineDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/LocalHoughExample.cxx
