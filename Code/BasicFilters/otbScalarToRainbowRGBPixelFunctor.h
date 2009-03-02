@@ -38,6 +38,8 @@ namespace Functor
  *  Grayscale image is mapped to a color image where blue represents
  * small values and red represents big values.
  *
+ * \example BasicFilters/DEMToRainbowExample.cxx
+ *
  */
 template< class TScalar >
 class ITK_EXPORT ScalarToRainbowRGBPixelFunctor :
