@@ -20,6 +20,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "itkRescaleIntensityImageFilter.h"
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract2.tif}
@@ -56,11 +57,17 @@ int main(int argc, char * argv[])
   std::string outNameRatio      = argv[5];
   std::string outNameSD         = argv[6];
   std::string outNamePsi         = argv[7];
-  PixelType spectThresh         = atof(argv[8]);
-  unsigned int spatialThresh    = atoi(argv[9]);
-  unsigned int dirNb            = atoi(argv[10]);
-  unsigned int maxConsideration = atoi(argv[11]);
-  double alpha                  = atof(argv[12]);  
+  std::string lengthprettyfname     = argv[8];
+  std::string widthprettyfname      = argv[9];
+  std::string wmeanprettyfname      = argv[10];
+  std::string ratioprettyfname      = argv[11];
+  std::string sdprettyfname         = argv[12];
+  std::string psiprettyfname         = argv[13];
+  PixelType spectThresh         = atof(argv[14]);
+  unsigned int spatialThresh    = atoi(argv[15]);
+  unsigned int dirNb            = atoi(argv[16]);
+  unsigned int maxConsideration = atoi(argv[17]);
+  double alpha                  = atof(argv[18]);  
 
 
   typedef otb::Image<PixelType,Dimension>                   ImageType;
@@ -116,5 +123,41 @@ int main(int argc, char * argv[])
   writerPsi->Update();
 
 
+  /************** pretty images for printing *********/
+  typedef otb::Image< unsigned char, 2> OutputImageType;
+  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescalerType;
+  typedef otb::ImageFileWriter<OutputImageType> OutputWriterType;
+
+  RescalerType::Pointer rescaler = RescalerType::New();
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetOutputMaximum(255);
+
+  OutputWriterType::Pointer outWriter = OutputWriterType::New();
+  outWriter->SetInput( rescaler->GetOutput() );
+
+  rescaler->SetInput( filter->GetLengthOutput() );
+  outWriter->SetFileName( lengthprettyfname );
+  outWriter->Update();
+
+  rescaler->SetInput( filter->GetWidthOutput() );
+  outWriter->SetFileName( widthprettyfname );
+  outWriter->Update();
+
+  rescaler->SetInput( filter->GetWMeanOutput() );
+  outWriter->SetFileName( wmeanprettyfname );
+  outWriter->Update();
+
+  rescaler->SetInput( filter->GetRatioOutput() );
+  outWriter->SetFileName( ratioprettyfname );
+  outWriter->Update();
+
+  rescaler->SetInput( filter->GetSDOutput() );
+  outWriter->SetFileName( sdprettyfname );
+  outWriter->Update();
+
+  rescaler->SetInput( filter->GetPSIOutput() );
+  outWriter->SetFileName( psiprettyfname );
+  outWriter->Update();
+  
   return EXIT_SUCCESS;
 }
