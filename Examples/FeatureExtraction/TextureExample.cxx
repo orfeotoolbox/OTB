@@ -39,9 +39,76 @@
 
 
 
-#include "otbTextureFunctors.h"
-#include "otbUnaryFunctorNeighborhoodWithOffsetImageFilter.h"
+// Software Guide : BeginLatex
+//
+// This example illustrates the use of the
+// \doxygen{otb}{ContrastTextureFunctor}, and more generally it
+// demonstrates how to compute Haralick's textural features. 
+// \relatedClasses
+//  \begin{itemize}
+//  \item \doxygen{otb}{EnergyTextureFunctor}
+//  \item \doxygen{otb}{EntropyTextureFunctor}
+//  \item \doxygen{otb}{InverseDifferenceMomentTextureFunctor}
+//  \item \doxygen{otb}{AngularSecondMomentumTextureFunctor}
+//  \item \doxygen{otb}{VarianceTextureFunctor}
+//  \item \doxygen{otb}{CorrelationTextureFunctor}
+//  \item \doxygen{otb}{SumAverageTextureFunctor}
+//  \item \doxygen{otb}{DifferenceEntropyTextureFunctor}
+//  \item \doxygen{otb}{SumEntropyTextureFunctor}
+//  \item \doxygen{otb}{SumVarianceTextureFunctor}
+//  \item \doxygen{otb}{DifferenceVarianceTextureFunctor}
+//  \item \doxygen{otb}{InformationMeasureOfCorrelation1TextureFunctor}
+//  \item \doxygen{otb}{InformationMeasureOfCorrelation2TextureFunctor}
+//  \item \doxygen{otb}{ClusterShadeTextureFunctor}
+//  \item \doxygen{otb}{ClusterProminenceTextureFunctor}
+//  \item \doxygen{otb}{MeanTextureFunctor}
+//  \end{itemize}
+//
+// The first step required to use this filter is to include its header file.
+//
+// Software Guide : EndLatex
 
+// Software Guide : BeginCodeSnippet
+#include "otbContrastTextureFunctor.h"
+// Software Guide : EndCodeSnippet
+// Software Guide : BeginLatex
+//
+// Although including the individual header file for a texture functor
+// is O.K., OTB provides a single header file which will include all
+// other texture functors. Since often we might want to compute
+// several texture parameters, it is more efficient to use this single
+// header file.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet
+#include "otbTextureFunctors.h"
+// Software Guide : EndCodeSnippet
+// Software Guide : BeginLatex
+//
+// The texture functors compute a texture feature for a given
+// neighborhood. Since we want here to compute the texture features
+// for all pixels ofthe image, we will use a filter which will apply
+// the functor to every pixel in the image. This filter will take care
+// of building the neighborhoods with the needed offsets for texture
+// computation.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet
+#include "otbUnaryFunctorNeighborhoodWithOffsetImageFilter.h"
+// Software Guide : EndCodeSnippet
+// Software Guide : BeginLatex
+//
+// Please note that if you want to compute a single scalar texture
+// feature for the whole image or for a whole image region, the most
+// efficient way to do that is using the
+// \doxygen{otb}{TextureImageFunction} class which provides the
+// \code{Evaluate} and \code{EvaluateAtIndex} methods for this purpose.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet
 
 int main(int argc, char * argv[])
 {
