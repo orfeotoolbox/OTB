@@ -161,7 +161,7 @@ public:
    *  6: SD
    *  Set to 1 means the texture will be computed.
    **/
-  void SetTextureStatus( unsigned int id, bool isSelected )
+  void SetFeatureStatus( unsigned int id, bool isSelected )
     {
       if ( id>this->GetTexturesStatus().size() || id == 0 )
 	  {
