@@ -24,8 +24,8 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUT: {ROI_QB_MUL_1.png}
-//    OUTPUT: {PanTexOutput.tif}, {pretty_PanTexInput.png}, {pretty_PanTexOutput.png}
+//    INPUTS: {ROI_QB_MUL_1.png}
+//    OUTPUTS: {PanTexOutput.tif}, {pretty_PanTexInput.png}, {pretty_PanTexOutput.png}
 //  Software Guide : EndCommandLineArgs
 
 #include "itkExceptionObject.h"
@@ -59,10 +59,10 @@
 int main(int argc, char * argv[])
 {
   // Parse command line parameters
-  if ( argc != 4 )
+  if ( argc != 5 )
   {
     std::cerr << "Usage: " << argv[0] << " <inputImage> ";
-    std::cerr << " <outputImage> <outputRescaled> ";
+    std::cerr << " <outputImage> <inputRescaled> <outputRescaled> ";
     std::cerr << std::endl;
     return EXIT_FAILURE;
   }

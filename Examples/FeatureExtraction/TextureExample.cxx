@@ -24,8 +24,8 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUT: {ADS40RoiSmall.png}
-//    OUTPUT: {TextureOutput.tif}, {pretty_TextureOutput.png}
+//    INPUTS: {ADS40RoiSmall.png}
+//    OUTPUTS: {TextureOutput.tif}, {pretty_TextureOutput.png}
 //    2 1 1
 //  Software Guide : EndCommandLineArgs
 
