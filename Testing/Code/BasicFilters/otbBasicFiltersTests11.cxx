@@ -47,4 +47,6 @@ void RegisterTests()
   REGISTER_TEST(otbInnerProductPCAImageFilter);
   REGISTER_TEST(otbListSampleToVariableDimensionHistogramGeneratorNew);
   REGISTER_TEST(otbListSampleToVariableDimensionHistogramGenerator);
+  REGISTER_TEST(otbListSampleToHistogramListGeneratorNew);
+  REGISTER_TEST(otbListSampleToHistogramListGenerator);
 }

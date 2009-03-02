@@ -1349,6 +1349,21 @@ ADD_TEST(bfTvListSampleToVariableDimensionHistogramGenerator ${BASICFILTERS_TEST
 	10 1
 )
 
+# -------  otb::ListSampleToVariableDimensionHistogramGenerator ----------------------------
+
+ADD_TEST(bfTuListSampleToHistogramListGeneratorNew ${BASICFILTERS_TESTS11}
+	otbListSampleToHistogramListGeneratorNew)
+
+ADD_TEST(bfTvListSampleToHistogramListGenerator ${BASICFILTERS_TESTS11}
+--compare-ascii ${TOL}
+	${BASELINE_FILES}/bfTvListSampleToVariableDimensionHistogramGeneratorOutput.txt
+	${TEMP}/bfTvListSampleToHistogramListGeneratorOutput.txt
+	otbListSampleToHistogramListGenerator
+	${INPUTDATA}/couleurs.tif
+	${TEMP}/bfTvListSampleToHistogramListGeneratorOutput.txt
+	10 1
+)
+
 # A enrichir
 SET(BasicFilters_SRCS1
 otbLeeFilter.cxx
@@ -1534,6 +1549,8 @@ otbInnerProductPCAImageFilter.cxx
 otbInnerProductPCAImageFilterNew.cxx
 otbListSampleToVariableDimensionHistogramGeneratorNew.cxx
 otbListSampleToVariableDimensionHistogramGenerator.cxx
+otbListSampleToHistogramListGeneratorNew.cxx
+otbListSampleToHistogramListGenerator.cxx
 )
 
 
