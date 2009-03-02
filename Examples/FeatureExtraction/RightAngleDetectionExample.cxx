@@ -114,7 +114,7 @@ int main( int argc, char * argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet    
-  typedef otb::LineSegmentDetector<ImageType , PixelType>   lsdFilterType;
+  typedef otb::LineSegmentDetector<ImageType , PixelType>   LsdFilterType;
 
   // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -122,7 +122,7 @@ int main( int argc, char * argv[] )
 // We can finally define the type for the right angle detection
 // filter. This filter is templated over the input image type, the
 // type of the lines provided by the line segment detector, and the
-// outpu pointset type containing the detected right angles.
+// output pointset type containing the detected right angles.
 //
 // Software Guide : EndLatex
 
@@ -131,53 +131,123 @@ int main( int argc, char * argv[] )
                                             LinesListType, PointSetType>
                                                     RightAngleFilterType;
   
+// Software Guide : EndCodeSnippet
+// Software Guide : BeginLatex
+//
+// We instantiate the line segment detector and the right angle detector.
+//
+// Software Guide : EndLatex
 
+// Software Guide : BeginCodeSnippet    
+  LsdFilterType::Pointer         lsdFilter         = LsdFilterType::New();
   RightAngleFilterType::Pointer  rightAngleFilter  =
                                                RightAngleFilterType::New();
 
-  lsdFilterType::Pointer         lsdFilter         = lsdFilterType::New();
 
+// Software Guide : EndCodeSnippet
+// Software Guide : BeginLatex
+//
+// We plug the pipeline. The right angle detector has 2 inputs: the
+// image to be processed and the previously detected lines.
+//
+// Software Guide : EndLatex
 
- 
-
-
+// Software Guide : BeginCodeSnippet    
 
   lsdFilter->SetInput(reader->GetOutput());  
-  
   rightAngleFilter->SetInputImage(reader->GetOutput());
   rightAngleFilter->SetInput(lsdFilter->GetOutput());
   rightAngleFilter->Update();
+// Software Guide : EndCodeSnippet
+// Software Guide : BeginLatex
+//
+// We will now draw the right angles on top of the inout image. For
+// this, we get the output of the right angle detector.
+//
+// Software Guide : EndLatex
 
-
-  /** Print the right angles coordinate in the output file*/
+// Software Guide : BeginCodeSnippet    
   PointSetType::Pointer          segmentOrtho      = PointSetType::New();     
   segmentOrtho = rightAngleFilter->GetOutput();
+  // Software Guide : EndCodeSnippet
+// Software Guide : BeginLatex
+//
+// We will iterate through the pointset and get the lines which define
+// each right angle stored inside each point of the pointset. The
+// lines will be stored into a line list.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet    
   PointSetType::PointType   pRight;
-  LineVectorType               outputVectorLines;
+  LineVectorType            outputVectorLines;
   LinesListType::Pointer    outputLinesList = LinesListType::New();
   
   for (unsigned int i = 0; i<segmentOrtho->GetNumberOfPoints() ; i++)
     {
+      // Software Guide : EndCodeSnippet
+// Software Guide : BeginLatex
+//
+// Even if we do not use it in this example, we show here how to get
+// the coordinates of the right angle.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet    
       segmentOrtho->GetPoint(i, &pRight);
+      // Software Guide : EndCodeSnippet
+// Software Guide : BeginLatex
+//
+// The lines associated to a given angle are obtained using the
+// \code{GetPointData} method of the pointset. Then they are stored
+// into the list of lines.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet          
       segmentOrtho->GetPointData(i, &outputVectorLines);
       outputLinesList->push_back(outputVectorLines[0]);
       outputLinesList->push_back(outputVectorLines[1]);
     }
+      // Software Guide : EndCodeSnippet
+// Software Guide : BeginLatex
+//
+// We will use the \doxygen{otb}{DrawLineSpatialObjectListFilter} to
+// draw the list of lines on top of the input image.
+//
+// Software Guide : EndLatex
 
+// Software Guide : BeginCodeSnippet          
   typedef otb::DrawLineSpatialObjectListFilter< ImageType,
                                        ImageType > DrawLineListType;
   DrawLineListType::Pointer drawLineFilter =   DrawLineListType::New();
 
-    drawLineFilter->SetInput(reader->GetOutput());
+  drawLineFilter->SetInput(reader->GetOutput());
   drawLineFilter->SetInputLineSpatialObjectList(outputLinesList);
 
 
-    writer->SetInput(drawLineFilter->GetOutput());
-    writer->SetFileName(outfname);
+  writer->SetInput(drawLineFilter->GetOutput());
+  writer->SetFileName(outfname);
 
     
   reader->GenerateOutputInformation();
   writer->Update();
+  // Software Guide : EndCodeSnippet
+    //  Software Guide : BeginLatex
+  // Figure~\ref{fig:RIGHTANGLE_FILTER} shows the result of applying
+  // the right angle detection filter to an image.
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.25\textwidth]{PrettyRighAngleInput.eps}
+  // \includegraphics[width=0.25\textwidth]{PrettyRighAngleOutput.eps}
+  // \itkcaption[Right Angle Detection Filter]{Result of applying the
+  // \doxygen{otb}{LineSpatialObjectListToRightAnglePointSetFilter} to an image. From left to right :
+  // original image, detected right angles.}
+  // \label{fig:RIGHTANGLE_FILTER}
+  // \end{figure}
+  //
+  //  Software Guide : EndLatex
+
 
   /************** images for printing *********/
   typedef unsigned char       OutputPixelType;
