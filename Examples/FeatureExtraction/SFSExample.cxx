@@ -108,7 +108,7 @@ int main(int argc, char * argv[])
   WriterType::Pointer writerRatio  = WriterType::New();
   WriterType::Pointer writerSD     = WriterType::New();
   WriterType::Pointer writerPsi    = WriterType::New();
-// Software Guide : BeginCodeSnippet    
+// Software Guide : EndCodeSnippet    
 
   reader->SetFileName(inName);
 
@@ -136,7 +136,7 @@ int main(int argc, char * argv[])
   filter->SetNumberOfDirections(dirNb);
   filter->SetRatioMaxConsiderationNumber(maxConsideration);
   filter->SetAlpha(alpha);
-  // Software Guide : BeginCodeSnippet    
+  // Software Guide : EndCodeSnippet    
 // Software Guide : BeginLatex
 //
 // In order to disable the computation of a feature, the
@@ -150,7 +150,7 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet    
   filter->SetFeatureStatus(SFSFilterType::PSI, true);
 
-  // Software Guide : BeginCodeSnippet    
+  // Software Guide : EndCodeSnippet    
 // Software Guide : BeginLatex
 //
 // Now, we plug the pipeline using all the writers.
