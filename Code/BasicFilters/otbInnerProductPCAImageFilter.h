@@ -19,9 +19,15 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbInnerProductPCAImageFilter_h
 
 #include "itkImageToImageFilter.h"
+#include "otbImage.h"
 #include "otbMacro.h"
 #include "otbEstimateInnerProductPCAImageFilter.h"
 #include "otbNormalizeInnerProductPCAImageFilter.h"
+#include "otbMeanFunctor.h"
+#include "itkUnaryFunctorImageFilter.h"
+#include "otbImageToVectorImageCastFilter.h"
+#include "otbConcatenateVectorImageFilter.h"
+#include "otbImageToVectorImageCastFilter.h"
 
 namespace otb
 {
@@ -78,11 +84,27 @@ public:
   typedef NormalizeInnerProductPCAImageFilter<OutputImageType,OutputImageType> NormalizePCAFilterType;
   typedef typename NormalizePCAFilterType::Pointer NormalizePCAFilterPointer;
 
+  /** Template parameters typedefs for mean component generation */
+  typedef Image< typename InputImageType::InternalPixelType,::itk::GetImageDimension<InputImageType>::ImageDimension > InternalImageType;
+  typedef Functor::MeanFunctor<typename InputImageType::PixelType, typename InternalImageType::PixelType > 
+  MeanFunctorType;
+  typedef itk::UnaryFunctorImageFilter<InputImageType, InternalImageType, MeanFunctorType> MeanFilterType;
+  typedef typename MeanFilterType::Pointer MeanFilterPointer;
+  typedef ImageToVectorImageCastFilter<InternalImageType, OutputImageType>  CastFilterType;
+  typedef typename CastFilterType::Pointer CastFilterPointer;
+  typedef ConcatenateVectorImageFilter< OutputImageType, OutputImageType, OutputImageType > ConcatenateFilterType;
+  typedef typename ConcatenateFilterType::Pointer ConcatenateFilterPointer;
+
   /** Set/Get the number of required largest principal components. The filter produces
    the required number of principal components plus one outputs. Output index 0 represents
    the mean image and the remaining outputs the requested principal components.*/
   itkSetMacro( NumberOfPrincipalComponentsRequired, unsigned int );
   itkGetMacro( NumberOfPrincipalComponentsRequired, unsigned int );
+  
+  /** Enable/Disable the generation of the mean component output */
+  itkSetMacro( GenerateMeanComponent, bool );
+  itkGetMacro( GenerateMeanComponent, bool );
+  itkBooleanMacro(GenerateMeanComponent);
 
 protected:
   /** GenerateData */
@@ -110,11 +132,20 @@ private:
 
   /** The number of largest principal components  */
   unsigned int m_NumberOfPrincipalComponentsRequired;
+
   /** Radius of the structuring element */
   EstimatePCAFilterPointer m_EstimatePCAFilter;
+
   /** Opening filter */
   NormalizePCAFilterPointer m_NormalizePCAFilter;
 
+  /** Flag to specify the generation or not of the mean component output */
+  bool m_GenerateMeanComponent;
+
+  /** Internals filters use to generate mean component output */ 
+  MeanFilterPointer m_MeanFilter;
+  CastFilterPointer m_CastFilter;
+  ConcatenateFilterPointer m_ConcatenateFilter;
 };
 
 }// End namespace otb

@@ -1297,10 +1297,12 @@ ADD_TEST(bfTvInnerProductPCAImageFilter ${BASICFILTERS_TESTS11}
     otbInnerProductPCAImageFilter
     ${INPUTDATA}/poupees_sub_3c.png
     ${TEMP}/bfInnerProductPCAImageFilter.tif
-    3 
+    0 # Flag generate Mean component ?
+    3 # Nb Of Principal Components
     ${TEMP}/bfInnerProductPCAImageFilter_pc1.tif
     ${TEMP}/bfInnerProductPCAImageFilter_pc2.tif
     ${TEMP}/bfInnerProductPCAImageFilter_pc3.tif
+    ${TEMP}/bfInnerProductPCAImageFilter_MEAN.tif
 )
 
 ADD_TEST(bfTvInnerProductPCAImageFilter_PC1 ${BASICFILTERS_TESTS11}
@@ -1310,7 +1312,8 @@ ADD_TEST(bfTvInnerProductPCAImageFilter_PC1 ${BASICFILTERS_TESTS11}
     otbInnerProductPCAImageFilter
     ${INPUTDATA}/poupees_sub_3c.png
     ${TEMP}/bfInnerProductPCAImageFilter_PC1.tif
-    1 
+    0 # Flag generate Mean component ?
+    1 # Nb Of Principal Components
     ${TEMP}/bfInnerProductPCAImageFilter_PC1_1.tif
 )
 ADD_TEST(bfTvInnerProductPCAImageFilter_PC12 ${BASICFILTERS_TESTS11}
@@ -1320,20 +1323,38 @@ ADD_TEST(bfTvInnerProductPCAImageFilter_PC12 ${BASICFILTERS_TESTS11}
     otbInnerProductPCAImageFilter
     ${INPUTDATA}/poupees_sub_3c.png
     ${TEMP}/bfInnerProductPCAImageFilter_PC12.tif
-    2 
+    0 # Flag generate Mean component ?
+    2 # Nb Of Principal Components
     ${TEMP}/bfInnerProductPCAImageFilter_PC12_1.tif
     ${TEMP}/bfInnerProductPCAImageFilter_PC12_2.tif
 )
 
+ADD_TEST(bfTvInnerProductPCAImageFilterAllsOutputs ${BASICFILTERS_TESTS11}
+    --compare-image ${EPSILON}
+    ${BASELINE}/bfInnerProductPCAImageFilterAllsOutputs.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs.tif
+    otbInnerProductPCAImageFilter
+    ${INPUTDATA}/poupees_sub_3c.png
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs.tif
+    1 # Flag generate Mean component ?
+    3 # Nb Of Principal Components
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_pc1.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_pc2.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_pc3.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_MEAN.tif
+)
+
 # -------    Check PCA Implementation with ITK ImagePCAShapeModelEstimator class ----------------------------
 ADD_TEST(bfTvItkImagePCAShapeModelEstimatorTest ${BASICFILTERS_TESTS11}
-    --compare-n-images ${EPSILON} 3
+    --compare-n-images ${EPSILON} 4
     ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors1.tif
-    ${TEMP}/bfInnerProductPCAImageFilter_pc1.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_pc1.tif
     ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors2.tif
-    ${TEMP}/bfInnerProductPCAImageFilter_pc2.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_pc2.tif
     ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors3.tif
-    ${TEMP}/bfInnerProductPCAImageFilter_pc3.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_pc3.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_MEAN.tif
+    ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_mean.tif
     otbImagePCAShapeModelEstimatorTest
     ${INPUTDATA}/poupees_sub_c1.png
     ${INPUTDATA}/poupees_sub_c2.png
