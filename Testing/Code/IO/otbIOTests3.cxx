@@ -34,6 +34,4 @@ void RegisterTests()
   REGISTER_TEST(otbImageFileReaderRGBTest);
   REGISTER_TEST(otbIntImageIOTest);
   REGISTER_TEST(otbShortRGBImageIOTest);
-  REGISTER_TEST(otbImageIORegionNew);
-  REGISTER_TEST(otbImageIORegion);
 }

@@ -386,16 +386,6 @@ ADD_TEST(ioTvImageFileReaderIntHDR2BSQ ${IO_TESTS3}
         ${TEMP}/ioImageFileReaderI4_BSQ2HDR.hdr
         ${TEMP}/ioImageFileReaderI4_HDR2BSQ.hd )
 
-#----------   ImageRegion Typed 
-ADD_TEST(ioTuTypedImageIORegionNew ${IO_TESTS3}
-         otbImageIORegionNew )
-
-ADD_TEST(ioTvTypedImageIORegion ${IO_TESTS3}
-         otbImageIORegion 
-	 1.21 2.33 58.47 59.49  #size et index of the region
-	 0. 0.
- )
-
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1722,9 +1712,8 @@ otbImageFileReaderTest.cxx
 otbImageFileReaderRGBTest.cxx
 otbIntImageIOTest.cxx
 otbShortRGBImageIOTest.cxx
-otbImageIORegionNew.cxx
-otbImageIORegion.cxx	
 )
+
 #SET(BasicIO_SRCS4
 #)
 #CONTAINS THE BasicIO_SRCS2 include
