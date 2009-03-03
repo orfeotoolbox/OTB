@@ -314,6 +314,10 @@ VectorDataExtractROI<TVectorData>
   IndexType       maxId;
   SizeType        size;
 
+  index.Fill(0.);
+  maxId.Fill(0.);
+  size.Fill(0.);
+
   typename VertexListType::ConstIterator it = vertexlist->Begin();
   
   if (vertexlist->Size() > 0 )
