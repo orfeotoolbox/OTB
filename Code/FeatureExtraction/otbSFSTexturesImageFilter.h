@@ -182,9 +182,9 @@ public:
   void InitTextureStatusFalse()
     {
       unsigned int id;
-      for (id=1;id<=6;id++)
+      for (id=0;id<=1;id++)
       {
-        this->SetFeatureStatus(id,false);
+        this->SetFeatureStatus(static_cast<FeatureType>(id),false);
       }
     }
 
