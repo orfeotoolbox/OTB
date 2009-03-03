@@ -20,7 +20,7 @@
 #define __otbAmplitudePhaseToRGBFunctor_h
 
 #include "itkRGBPixel.h"
-#include "otbAmplitudePhaseToRGBFunctor.h"
+#include "otbScalarToRainbowRGBPixelFunctor.h"
 #include "otbMath.h"
 
 namespace otb
@@ -33,7 +33,9 @@ namespace otb
     {
       public:
         typedef TOutput RGBPixelType;
+        typedef typename RGBPixelType::ValueType  RGBComponentType;
         typedef HSVToRGBFunctor<RGBPixelType>  HSVToRGBFunctorType;
+        typedef TInput1 ScalarType;
 
         AmplitudePhaseToRGBFunctor()
         {
