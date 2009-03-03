@@ -19,6 +19,7 @@
 #define __otbVectorDataExtractROI_h
 
 #include "otbVectorDataToVectorDataFilter.h"
+#include "otbCartographicRegion.h"
 #include "itkMacro.h"
 
 namespace otb
@@ -47,32 +48,58 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorDataExtractROI,VectorDataToVectorDataFilter);
 
-  /** Image type information. */
-  typedef TVectorData                                        VectorDataType;
-  typedef typename VectorDataType::DataTreeType               DataTreeType;
-  
-  /** Get/Set Macro for ROI Column size */
-  itkGetMacro(SizeX, unsigned int);
-  itkSetMacro(SizeX, unsigned int);
-  
-  /** Get/Set Macro for ROI Lines size */
-  itkGetMacro(SizeY, unsigned int);
-  itkSetMacro(SizeY, unsigned int);
-  
-  /** Get/Set Macro for ROI Start Point Coordinate */
-  itkGetMacro(StartX, unsigned int);
-  itkSetMacro(StartX, unsigned int);
-  
-  /** Get/Set Macro for  ROI Start Point Abcisse */
-  itkGetMacro(StartY, unsigned int);
-  itkSetMacro(StartY, unsigned int);  
+  /** Image type information*/
+  typedef TVectorData                                                       VectorDataType;
+  typedef typename VectorDataType::DataNodeType                             DataNodeType;
+  typedef typename DataNodeType::Pointer                                    DataNodePointerType;
+  typedef typename VectorDataType::DataTreeType                             DataTreeType;
+  typedef typename DataNodeType::PolygonPointerType                         PolygonPointerType;
+  typedef typename DataNodeType::PolygonType                                PolygonType;
+  typedef typename DataNodeType::LinePointerType                            LinePointerType;
+  typedef typename DataNodeType::PointType                                  PointType;
 
+  /** Need Vertex and Vertex List Type*/
+  typedef typename PolygonType::VertexType                                  VertexType;
+  typedef typename PolygonType::VertexListType                              VertexListType;
+  typedef typename PolygonType::VertexListPointer                           VertexListPointer;
+  
+  
+  /** TO DO : automatize the dimension of the region*/
+  typedef otb::CartographicRegion<typename VertexType::CoordRepType>                RegionType;
+  typedef typename  RegionType::IndexType                                    IndexType;
+  typedef typename  RegionType::SizeType                                     SizeType;
+
+  typedef itk::Point<typename VertexType::CoordRepType ,IndexType::IndexDimension>                       ProjPointType;                         
   
   /** Prototype of the generate data method*/
-  void GenerateData(void );
+  virtual void GenerateData(void );
+  
+  /** Method to check if the polygon Bounding Box ha ve a non-null intersection with the ROI*/
+  virtual  bool IsPolygonIntersectionNotNull(PolygonPointerType polygon);
+  
+   /** Method to check if the line Bounding Box ha ve a non-null intersection with the ROI*/
+  virtual  bool IsLineIntersectionNotNull(LinePointerType line);
 
+  /** Method to Set/Get the Region of intereset*/
+   void SetRegion(RegionType&  region)
+     { 
+       m_ROI = region; 
+     }
   
-  
+   RegionType  GetRegion()
+     {return m_ROI;}
+   
+   /** Method to compare the projection embedded in the cartoRegion And the the InputVectorData*/
+   virtual void CompareInputAndRegionProjection();
+
+   /** Method to project from carto reference to Geo axis*/
+   virtual void ProjectRegionToInputVectorProjection();
+
+   /** Improve the Projected roi*/
+   virtual RegionType ComputeVertexListBoudingRegion(typename VertexListType::ConstPointer vertexlist);
+   
+   /** Method to transform itk::Point to itk::ContinuousIndex*/
+   virtual VertexType  PointToContinuousIndex(ProjPointType  point);
 
 protected:
   VectorDataExtractROI();
@@ -84,16 +111,15 @@ protected:
    * \sa VectorDataExtractROIBase::GenerateOutputInformaton()  */
   //virtual void GenerateOutputInformation();
 
+
 private:
   VectorDataExtractROI(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  unsigned int m_SizeX;
-  unsigned int m_SizeY;
-  unsigned int m_StartX;
-  unsigned int m_StartY;
   
-
+  bool          m_ProjectionNeeded;
+  RegionType    m_ROI;
+  RegionType    m_GeoROI;
 };
 
 
