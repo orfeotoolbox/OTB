@@ -149,22 +149,11 @@ ImageFileReader<TOutputImage>
 
   typedef itk::DefaultConvertPixelTraits< ITK_TYPENAME TOutputImage::IOPixelType >  ConvertPixelTraits;
 
-
-  otbMsgDevMacro(<< "ImageFileReader<TOutputImage>::GenerateData():");
-  otbMsgDevMacro (<< "ioRegion: " << ioRegion);
-  otbMsgDevMacro(<< "   => test conversion Pixel type: compare");
-  otbMsgDevMacro(<< "   compare");
-  otbMsgDevMacro(<< "         this->m_ImageIO->GetComponentTypeInfo(): "<<this->m_ImageIO->GetComponentTypeInfo().name());
-  otbMsgDevMacro(<< "   with  typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType): "<<typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType).name());
-  otbMsgDevMacro(<< "   and   this->m_ImageIO->GetNumberOfComponents(): "<<this->m_ImageIO->GetNumberOfComponents());
-  otbMsgDevMacro(<< "   with  ConvertPixelTraits::GetNumberOfComponents(): "<<ConvertPixelTraits::GetNumberOfComponents());
-
   if ( this->m_ImageIO->GetComponentTypeInfo()
        == typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType)
        && (this->m_ImageIO->GetNumberOfComponents()
            == ConvertPixelTraits::GetNumberOfComponents()))
   {
-    otbMsgDevMacro(<< "No buffer conversion required.");
     // allocate a buffer and have the ImageIO read directly into it
     this->m_ImageIO->Read(buffer);
     return;
@@ -177,13 +166,7 @@ ImageFileReader<TOutputImage>
 
     // Adapte the image size with the region
     std::streamoff nbBytes = (this->m_ImageIO->GetImageSizeInBytes() / this->m_ImageIO->GetImageSizeInPixels()) * static_cast<std::streamoff>(region.GetNumberOfPixels());
-    otbMsgDevMacro(<<"NbBytes for region: "<<nbBytes);
 
-
-    otbMsgDevMacro(<< "Buffer conversion required from: "
-                   << this->m_ImageIO->GetComponentTypeInfo().name()
-                   << " to: "
-                   << typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType).name() << "  NbBytes"<<nbBytes<<"  region.GetNumberOfPixels()"<<region.GetNumberOfPixels());
     char * loadBuffer = new char[nbBytes];
 
     this->m_ImageIO->Read(loadBuffer);
@@ -215,10 +198,6 @@ ImageFileReader<TOutputImage>
       throw itk::ImageFileReaderException(__FILE__, __LINE__,
                                           "Invalid output object type");
     }
-  }
-  else
-  {
-    otbMsgDevMacro( << " Streaming Image Read ");
   }
 }
 
@@ -367,7 +346,6 @@ ImageFileReader<TOutputImage>
 
     // Read OSSIM Keyword List
     bool hasMetaData = handler->getImageGeometry(geom_kwl);
-    otbMsgDevMacro( << " AVANT *geom_kwl : "<<geom_kwl<<std::endl);
 
     if (!hasMetaData)
     {
@@ -376,8 +354,6 @@ ImageFileReader<TOutputImage>
     else
     {
       otbMsgDebugMacro( <<"OSSIM MetaData present ! ");
-
-      otbMsgDevMacro( <<"Image keyword lists are :" << std::endl << geom_kwl);
 
       // Update otb Keywordlist
       ImageKeywordlist otb_kwl;
@@ -408,9 +384,7 @@ ImageFileReader<TOutputImage>
 
     }
     // Free memory
-    otbMsgDevMacro( <<"OSSIM Free Memory ? ");
     delete handler;
-    otbMsgDevMacro( <<"OSSIM Free Memory OK ! ");
   }
 
   //Copy MetaDataDictionary from instantiated reader to output image.

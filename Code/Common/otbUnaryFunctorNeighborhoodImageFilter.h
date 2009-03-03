@@ -67,8 +67,14 @@ public:
   typedef itk::ProcessObject ProcessObjectType;
 
   /**Set/Get the radius of neighborhood.*/
-  itkSetMacro(Radius,unsigned int);
-  itkGetMacro(Radius,unsigned int);
+  itkSetMacro(Radius,InputImageSizeType);
+  itkGetMacro(Radius,InputImageSizeType);
+
+  /** Set unsinged int radius */
+  void SetRadius(unsigned int radius)
+  {
+    m_Radius.Fill(radius);
+  }
 
   /** Get the functor object.  The functor is returned by reference.
    * (Functors do not have to derive from itk::LightObject, so they do
@@ -136,7 +142,7 @@ private:
   UnaryFunctorNeighborhoodImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  unsigned int m_Radius;
+  InputImageSizeType m_Radius;
   FunctorType m_Functor;
 };
 

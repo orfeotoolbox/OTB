@@ -36,7 +36,7 @@ BinaryFunctorNeighborhoodImageFilter<TInputImage1,TInputImage2,TOutputImage,TFun
 ::BinaryFunctorNeighborhoodImageFilter()
 {
   this->SetNumberOfRequiredInputs( 2 );
-  m_Radius = 3;
+  m_Radius.Fill(3);
 }
 
 
@@ -196,11 +196,13 @@ BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, T
 
 
   RadiusType1 r1;
-  r1.Fill(m_Radius);
+  r1[0]=m_Radius[0];
+  r1[1]=m_Radius[1];
   NeighborhoodIteratorType1 neighInputIt1;
 
   RadiusType2 r2;
-  r2.Fill(m_Radius);
+  r2[0]=m_Radius[0];
+  r2[1]=m_Radius[1];
   NeighborhoodIteratorType2 neighInputIt2;
 
   itk::ImageRegionIterator<TOutputImage> outputIt;

@@ -80,6 +80,7 @@ int otbImageViewerEndToEndTwoLayers( int argc, char * argv[] )
   LayerGeneratorType::Pointer generator = LayerGeneratorType::New();
   generator->SetImage(reader->GetOutput());
   generator->GenerateLayer();
+  generator->GetLayer()->SetName("Image");
   
   // Generate the second layer
   PerBandFilterType::Pointer filter = PerBandFilterType::New();
@@ -88,6 +89,7 @@ int otbImageViewerEndToEndTwoLayers( int argc, char * argv[] )
   LayerGeneratorType::Pointer generator2 = LayerGeneratorType::New();
   generator2->SetImage(filter->GetOutput());
   generator2->GenerateLayer();
+  generator2->GetLayer()->SetName("Gradient");
   
    // Add the layer to the model
   model->AddLayer(generator->GetLayer());

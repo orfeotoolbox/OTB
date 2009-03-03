@@ -71,7 +71,7 @@ public:
   itkSetMacro(Radius,InputImageSizeType);
   itkGetMacro(Radius,InputImageSizeType);
 
-  /** Set squared radius */
+  /** Set unsigned int radius */
   void SetRadius(unsigned int radius)
   {
     m_Radius.Fill(radius);
@@ -156,7 +156,6 @@ private:
   UnaryFunctorNeighborhoodWithOffsetImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /* unsigned int m_Radius; */
   InputImageSizeType m_Radius;
 
   FunctorType m_Functor;
