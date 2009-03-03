@@ -32,6 +32,8 @@
 
 #include "itkBinaryFunctorImageFilter.h"
 #include "otbAmplitudePhaseToRGBFunctor.h"
+#include "itkComplexToModulusImageFilter.h"
+#include "itkComplexToPhaseImageFilter.h"
 
 int otbAmplitudePhaseToRGBFunctor(int argc, char * argv[])
 {
@@ -63,17 +65,17 @@ int otbAmplitudePhaseToRGBFunctor(int argc, char * argv[])
   phaseFilter->SetInput(reader->GetOutput());
 
 
-  typedef otb::Functor::AmplitudePhaseToRGBFunctor<PixelType,PixelType,RGBPixelType>
-  ColorMapFunctorType;
-  typedef itk::BinaryFunctorImageFilter<ImageType,
-  RGBImageType, ColorMapFunctorType> ColorMapFilterType;
+  typedef otb::Functor::AmplitudePhaseToRGBFunctor
+      <PixelType,PixelType,RGBPixelType> ColorMapFunctorType;
+  typedef itk::BinaryFunctorImageFilter
+      <ImageType, ImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   colormapper->GetFunctor().SetMaximum(150);
   colormapper->GetFunctor().SetMinimum(70);
 
 
-  colormapper->SetInput1(modulus->GetOutput());
-  colormapper->SetInput2(phase->GetOutput());
+  colormapper->SetInput1(modulusFilter->GetOutput());
+  colormapper->SetInput2(phaseFilter->GetOutput());
 
   writer->SetInput(colormapper->GetOutput());
 

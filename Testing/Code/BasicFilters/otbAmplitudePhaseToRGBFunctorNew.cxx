@@ -28,21 +28,22 @@
 
 #include "otbImage.h"
 
-#include "itkUnaryFunctorImageFilter.h"
+#include "itkBinaryFunctorImageFilter.h"
 #include "otbAmplitudePhaseToRGBFunctor.h"
 
 int otbFunctorNew(int argc, char * argv[])
 {
 
-  typedef unsigned char PixelType;
-  typedef itk::RGBPixel<PixelType> RGBPixelType;
+  typedef double PixelType;
   typedef otb::Image<PixelType, 2> ImageType;
+
+  typedef itk::RGBPixel<unsigned char> RGBPixelType;
   typedef otb::Image<RGBPixelType, 2> RGBImageType;
 
-  typedef otb::Functor::AmplitudePhaseToRGBFunctor<PixelType>
-  ColorMapFunctorType;
-  typedef itk::UnaryFunctorImageFilter<ImageType,
-  RGBImageType, ColorMapFunctorType> ColorMapFilterType;
+  typedef otb::Functor::AmplitudePhaseToRGBFunctor
+      <PixelType,PixelType,RGBPixelType> ColorMapFunctorType;
+  typedef itk::BinaryFunctorImageFilter
+      <ImageType, ImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   colormapper->GetFunctor().SetMaximum(150);
   colormapper->GetFunctor().SetMinimum(70);
