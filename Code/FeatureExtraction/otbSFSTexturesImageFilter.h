@@ -165,7 +165,7 @@ public:
   typedef enum {LENGTH, WIDTH, PSI, WMEAN, RATIO, SD} FeatureType;
   void SetFeatureStatus(FeatureType id, bool isSelected )
     {
-      if ( id>this->GetTexturesStatus().size() || id == 0 )
+      if ( static_cast<unsigned int>(id) > this->GetTexturesStatus().size() || id == 0 )
 	  {
 	    itkExceptionMacro(<<"Invalid texture index "<<id<<", must be in [1;"<<this->GetTexturesStatus().size()<<"]");
 	  }
@@ -174,6 +174,7 @@ public:
 	    this->GetFunctor().SetTextureStatus( id-1, isSelected );
       }
     }
+
   std::vector<bool> GetTexturesStatus()
     {
       return this->GetFunctor().GetTexturesStatus();
