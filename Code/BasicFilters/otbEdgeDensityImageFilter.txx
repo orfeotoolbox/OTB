@@ -56,8 +56,8 @@ EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
 template <class TInputImage , class TOutputImage, class TEdgeDetector, class TDensityCount>
 void
 EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
-//::GenerateData()
-::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId )
+::GenerateData()
+  //::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId )
 {
   typename Superclass::OutputImagePointer      outputImage = this->GetOutput();
   InputImagePointerType ptr = const_cast<InputImageType *>(this->GetInput());
