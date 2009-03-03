@@ -184,7 +184,7 @@ public:
       unsigned int id;
       for (id=1;id<=6;id++)
       {
-        this->SetTextureStatus(id,false);
+        this->SetFeatureStatus(id,false);
       }
     }
 
