@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-#include "otbCartoRegion.h"
+#include "otbCartographicRegion.h"
 
 
 int otbCartoRegion(int argc, char * argv[])
