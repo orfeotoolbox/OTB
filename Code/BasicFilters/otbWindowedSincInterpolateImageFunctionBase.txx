@@ -37,17 +37,6 @@ WindowedSincInterpolateImageFunctionBase<TInputImage, TWindowFunction, TBoundary
 {
 }
 
-// Overload method to add the construction of resampledprofil
-template<class TInputImage, class TWindowFunction, class TBoundaryCondition, class TCoordRep>
-void
-WindowedSincInterpolateImageFunctionBase<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>
-::SetRadius(unsigned int rad)
-{
-  this->ResetOffsetTable();
-  this->Superclass::SetRadius(rad);
-  this->Modified();
-}
-
 template<class TInputImage, class TWindowFunction, class TBoundaryCondition, class TCoordRep>
 void
 WindowedSincInterpolateImageFunctionBase<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>
