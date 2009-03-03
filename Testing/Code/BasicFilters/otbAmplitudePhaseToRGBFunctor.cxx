@@ -70,12 +70,13 @@ int otbAmplitudePhaseToRGBFunctor(int argc, char * argv[])
   typedef itk::BinaryFunctorImageFilter
       <ImageType, ImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
-  colormapper->GetFunctor().SetMaximum(150);
-  colormapper->GetFunctor().SetMinimum(70);
+  colormapper->GetFunctor().SetMaximum(4000);
+  colormapper->GetFunctor().SetMinimum(0);
 
 
   colormapper->SetInput1(modulusFilter->GetOutput());
   colormapper->SetInput2(phaseFilter->GetOutput());
+  colormapper->SetNumberOfThreads(1);
 
   writer->SetInput(colormapper->GetOutput());
 

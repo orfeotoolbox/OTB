@@ -31,7 +31,7 @@
 #include "itkBinaryFunctorImageFilter.h"
 #include "otbAmplitudePhaseToRGBFunctor.h"
 
-int otbFunctorNew(int argc, char * argv[])
+int otbAmplitudePhaseToRGBFunctorNew(int argc, char * argv[])
 {
 
   typedef double PixelType;

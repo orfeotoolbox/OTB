@@ -848,10 +848,10 @@ ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
 
 # -------            otb::ConvolutionImageFilter   ----------------------------
 
-  ADD_TEST(bfTuConvolutionImageFilterNew ${BASICFILTERS_TESTS8}
+ADD_TEST(bfTuConvolutionImageFilterNew ${BASICFILTERS_TESTS8}
          otbConvolutionImageFilterNew)
 
-  ADD_TEST(bfTvConvolutionImageFilter ${BASICFILTERS_TESTS8}
+ADD_TEST(bfTvConvolutionImageFilter ${BASICFILTERS_TESTS8}
 		--compare-image ${EPSILON}
 		    ${BASELINE}/bfTvConvolutionImageFilter.tif
 		    ${TEMP}/bfTvConvolutionImageFilter.tif
@@ -863,10 +863,10 @@ ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
 
 # -------            otb::ScalarToRainbowRGBPixelFunctor  -----------------
 
-  ADD_TEST(bfTuScalarToRainbowRGBPixelFunctorNew ${BASICFILTERS_TESTS8}
-         otbConvolutionImageFilterNew)
+ADD_TEST(bfTuScalarToRainbowRGBPixelFunctorNew ${BASICFILTERS_TESTS8}
+         otbScalarToRainbowRGBPixelFunctorNew)
 
-  ADD_TEST(bfTvScalarToRainbowRGBPixelFunctor ${BASICFILTERS_TESTS8}
+ADD_TEST(bfTvScalarToRainbowRGBPixelFunctor ${BASICFILTERS_TESTS8}
 		--compare-image ${EPSILON}
 		    ${BASELINE}/bfTvScalarToRainbowRGBPixelFunctor.png
 		    ${TEMP}/bfTvScalarToRainbowRGBPixelFunctor.png
@@ -875,6 +875,19 @@ ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
 		    ${TEMP}/bfTvScalarToRainbowRGBPixelFunctor.png
 )
 
+# -------            otb::AmplitudePhaseToRGBFunctor  -----------------
+
+ADD_TEST(bfTuAmplitudePhaseToRGBFunctorNew ${BASICFILTERS_TESTS8}
+         otbAmplitudePhaseToRGBFunctorNew)
+
+ADD_TEST(bfTvAmplitudePhaseToRGBFunctor ${BASICFILTERS_TESTS8}
+		--compare-image ${EPSILON}
+		    ${BASELINE}/bfTvAmplitudePhaseToRGBFunctor.png
+		    ${TEMP}/bfTvAmplitudePhaseToRGBFunctor.png
+		    otbAmplitudePhaseToRGBFunctor
+		    ${INPUTDATA}/RSAT_imagery_HH.tif
+		    ${TEMP}/bfTvAmplitudePhaseToRGBFunctor.png
+)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
