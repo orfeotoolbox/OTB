@@ -28,6 +28,20 @@ namespace otb
 
   namespace Functor
   {
+    /**
+     * \class AmplitudePhaseToRGBFunctor
+     * \brief Function object to compute a color representation of a radar image.
+     *
+     * This class is useful for visualizing radar images with a combination of
+     * the phase and the amplitude at the same time.
+     *
+     * The amplitude is used to represent the intensity of the pixel and the phase
+     * to represent it's hue.
+     *
+     * Amplitude and phase can be obtained using the itk::ComplexToModulusImageFilter
+     * and itk::ComplexToPhaseImageFilter for example.
+     *
+     */
     template< class TInput1, class TInput2=TInput1, class TOutput=TInput1>
         class ITK_EXPORT AmplitudePhaseToRGBFunctor
     {
@@ -56,6 +70,7 @@ namespace otb
 
         inline TOutput operator()( const TInput1 & amplitude, const TInput2 & phase) const
         {
+//           std::cout << amplitude << " - " << phase << std::endl;
           double hinc, sinc, vinc;
           hinc=0.6/(2*M_PI);
           sinc=0.0;
@@ -66,6 +81,15 @@ namespace otb
           hue = 0.6 - (phase+M_PI)*hinc;
           sat = 0.99;
           val = itk::NumericTraits<RGBComponentType>::max()/(m_Maximum-m_Minimum) * (amplitude-m_Minimum);
+
+          if (amplitude < m_Minimum)
+          {
+            val = 0;
+          }
+          if (amplitude > m_Maximum)
+          {
+            val = itk::NumericTraits<RGBComponentType>::max();
+          }
 
           return m_HSVToRGBFunctor(hue, sat, val);
 
