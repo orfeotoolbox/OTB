@@ -24,7 +24,7 @@
 #include "otbRenderingImageFilter.h"
 #include "itkExtractImageFilter.h"
 #include "itkListSample.h"
-#include "otbListSampleToVariableDimensionHistogramGenerator.h"
+#include "otbListSampleToHistogramListGenerator.h"
 #include "otbStandardRenderingFunction.h"
 
 namespace otb
@@ -70,12 +70,13 @@ public:
   typedef itk::VariableLengthVector<InternalPixelType>                SampleType;
   typedef itk::Statistics::ListSample<SampleType>                     ListSampleType;
  
-  typedef otb::ListSampleToVariableDimensionHistogramGenerator
+  typedef otb::ListSampleToHistogramListGenerator
   <ListSampleType,InternalPixelType,DFContainerType>                  HistogramFilterType;
   typedef typename HistogramFilterType::HistogramType                 HistogramType;
   typedef typename HistogramType::Pointer                             HistogramPointerType;
-
-  
+  typedef typename HistogramFilterType::HistogramListType             HistogramListType;
+  typedef typename HistogramListType::Pointer                         HistogramListPointerType;
+    
   /** Rendering part */
   typedef RenderingImageFilter<TImage,TOutputImage>                   RenderingFilterType;
   typedef typename RenderingFilterType::Pointer                       RenderingFilterPointerType;
@@ -110,9 +111,8 @@ public:
   }
   itkGetObjectMacro(Quicklook,ImageType);
 
-  /** Set/Get the histogram list */
-  itkSetObjectMacro(Histogram,HistogramType);
-  itkGetObjectMacro(Histogram,HistogramType);
+  /** Get the histogram list */
+  itkGetObjectMacro(HistogramList,HistogramListType);
 
   /** Set/Get the rendering function */
   void SetRenderingFunction(RenderingFunctionType * function)
@@ -209,7 +209,7 @@ private:
   ImagePointerType             m_Image;
 
   /** Joint Histogram */
-  HistogramPointerType         m_Histogram;
+  HistogramListPointerType     m_HistogramList;
 
   /** Rendering function */
   RenderingFunctionPointerType m_RenderingFunction;

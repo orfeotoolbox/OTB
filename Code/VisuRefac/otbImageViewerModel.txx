@@ -20,6 +20,7 @@
 
 #include "otbImageViewerModel.h"
 #include "otbMacro.h"
+#include "itkTimeProbe.h"
 
 namespace otb
 {
@@ -208,12 +209,10 @@ ImageViewerModel<TOutputImage>
       m_ExtractRegion = this->ConstrainRegion(m_ExtractRegion,it.Get()->GetExtent());
       it.Get()->SetExtractRegion(m_ExtractRegion);
       // Set the scaled extracted region
-      m_ScaledExtractRegion = this->ConstrainRegion(m_ScaledExtractRegion,it.Get()->GetExtent());
+      m_ScaledExtractRegion = this->ConstrainRegion(m_ScaledExtractRegion,m_ExtractRegion);
       it.Get()->SetScaledExtractRegion(m_ScaledExtractRegion);
       // Render it
-
       otbMsgDevMacro(<<"ImageViewerModel::RenderVisibleLayers(): Rendering layer "<<it.Get()->GetName()<<" with regions ("<<m_ExtractRegion.GetIndex()<<" "<<m_ExtractRegion.GetSize()<<") ("<<m_ScaledExtractRegion.GetIndex()<<" "<<m_ScaledExtractRegion.GetSize()<<")");
-
       it.Get()->Render();
       }
     }
@@ -240,14 +239,10 @@ ImageViewerModel<TOutputImage>
 
   BlendingFilterIteratorType qlBlenderIt   = m_QuicklookBlendingFilterList->Begin();
   BlendingFilterIteratorType extBlenderIt  = m_ExtractBlendingFilterList->Begin();
-  BlendingFilterIteratorType scalBlenderIt = m_ExtractBlendingFilterList->Begin(); 
+  BlendingFilterIteratorType scalBlenderIt = m_ScaledExtractBlendingFilterList->Begin(); 
 
 
-  bool visible = it.Get()->GetVisible();
-  ++it;
-  ++qlBlenderIt;
-  ++extBlenderIt;
-  ++scalBlenderIt;
+  bool visible = false;
 
   while(!visible && it != m_Layers->End()
 	&& qlBlenderIt != m_QuicklookBlendingFilterList->End()
@@ -321,13 +316,13 @@ ImageViewerModel<TOutputImage>
     // If a layer is visible
     if(it.Get()->GetVisible())
       {
-      otbMsgDevMacro("ImageViewerModel::RasterizeVisibleLayers(): Rasterizing previous layer with layer "<<it.Get()->GetName());
-
+      itk::TimeProbe probe;
+      probe.Start();
       // If quicklook is activated and available for this layer 
       if(m_HasQuicklook && it.Get()->GetHasQuicklook())
 	{
         // Blend it with the current rasterized quicklook
-	typename BlendingFilterType::Pointer blender = BlendingFilterType::New(); //qlBlenderIt.Get();
+	typename BlendingFilterType::Pointer blender =/** BlendingFilterType::New();*/qlBlenderIt.Get();
 	// Using the blending function of the layer
 	blender->SetBlendingFunction(it.Get()->GetBlendingFunction());
 	blender->SetInput1(m_RasterizedQuicklook);
@@ -341,11 +336,12 @@ ImageViewerModel<TOutputImage>
       if(m_HasExtract && it.Get()->GetHasExtract())
 	{
         // Blend it with the current rasterized extract
-	typename BlendingFilterType::Pointer blender = BlendingFilterType::New(); //extBlenderIt.Get();
+	typename BlendingFilterType::Pointer blender =/** BlendingFilterType::New();*/extBlenderIt.Get();
 	// Using the blending function of the layer
 	blender->SetBlendingFunction(it.Get()->GetBlendingFunction());
 	blender->SetInput1(m_RasterizedExtract);
 	blender->SetInput2(it.Get()->GetRenderedExtract());
+	blender->GetOutput()->SetRequestedRegion(m_ExtractRegion);
 	blender->Update();
 	// Store the result as being the current rasterized extract
 	m_RasterizedExtract = blender->GetOutput();
@@ -355,15 +351,19 @@ ImageViewerModel<TOutputImage>
       if(m_HasScaledExtract && it.Get()->GetHasScaledExtract())
 	{
 	// Blend it with the current rasterized scaledExtract
-	typename BlendingFilterType::Pointer blender = BlendingFilterType::New(); //scalBlenderIt.Get();
+	typename BlendingFilterType::Pointer blender = /**BlendingFilterType::New();*/ scalBlenderIt.Get();
 	// Using the blending function of the layer
 	blender->SetBlendingFunction(it.Get()->GetBlendingFunction());
 	blender->SetInput1(m_RasterizedScaledExtract);
 	blender->SetInput2(it.Get()->GetRenderedScaledExtract());
+	blender->GetOutput()->SetRequestedRegion(m_ScaledExtractRegion);
 	blender->Update();
 	// Store the result as being the current rasterized scaledExtract
 	m_RasterizedScaledExtract = blender->GetOutput();
 	}
+      probe.Stop();
+      otbMsgDevMacro("ImageViewerModel::RasterizeVisibleLayers(): Previous layer rasterized with layer "<<it.Get()->GetName()<<" ( "<<probe.GetMeanTime()<<" s.)");
+
       }
     ++it;
     ++qlBlenderIt;
