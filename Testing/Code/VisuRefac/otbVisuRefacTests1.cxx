@@ -42,6 +42,7 @@ void RegisterTests()
   REGISTER_TEST(otbUniformAlphaBlendingFunctionNew);
   REGISTER_TEST(otbBlendingImageFilterNew);
   REGISTER_TEST(otbBlendingImageFilter);
+  REGISTER_TEST(otbLayerBasedModelNew);
   REGISTER_TEST(otbImageViewerModelNew);
   REGISTER_TEST(otbImageViewerModelSingleLayer);
   REGISTER_TEST(otbImageLayerGeneratorNew);
@@ -51,4 +52,6 @@ void RegisterTests()
   REGISTER_TEST(otbImageViewNew);
   REGISTER_TEST(otbImageViewerEndToEndSingleLayer);
   REGISTER_TEST(otbImageViewerEndToEndTwoLayers);
+  REGISTER_TEST(otbPixelDescriptionModelNew);
+  REGISTER_TEST(otbPixelDescriptionModelSingleLayer);
 }

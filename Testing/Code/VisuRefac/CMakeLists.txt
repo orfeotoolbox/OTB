@@ -156,6 +156,12 @@ ${EXAMPLESDATA}/SpotAfter.png
 ${TEMP}/vrTvBlendingImageFilterOutput.png
 )
 
+#------------ otb::LayerBasedModel ------------
+
+ADD_TEST(vrTuLayerBasedModelNew ${VISUREFAC_TESTS1}
+otbLayerBasedModelNew
+)
+
 #------------ otb::ImageViewerModel ------------
 
 ADD_TEST(vrTuImageViewerModelNew ${VISUREFAC_TESTS1}
@@ -211,6 +217,18 @@ ${INPUTDATA}/couleurs.tif
 200 500 200 0
 )
 
+#------------ otb::PixelDescriptionModel ------------
+
+ADD_TEST(vrTuPixelDescriptionModelNew ${VISUREFAC_TESTS1}
+otbPixelDescriptionModelNew
+)
+
+ADD_TEST(vrTvPixelDescriptionModelSingleLayer ${VISUREFAC_TESTS1}
+otbPixelDescriptionModelSingleLayer
+${INPUTDATA}/couleurs.tif
+)
+
+
 # Testing srcs
 SET(VisuRefac_SRCS1
 otbImageWidgetNew.cxx
@@ -228,6 +246,7 @@ otbImageLayerVector.cxx
 otbUniformAlphaBlendingFunctionNew.cxx
 otbBlendingImageFilterNew.cxx
 otbBlendingImageFilter.cxx
+otbLayerBasedModelNew.cxx
 otbImageViewerModelNew.cxx
 otbImageViewerModelSingleLayer.cxx
 otbImageLayerGeneratorNew.cxx
@@ -238,6 +257,8 @@ otbRenderingImageFilterVectorWithExpNegativeTransfer.cxx
 otbImageViewNew.cxx
 otbImageViewerEndToEndSingleLayer.cxx
 otbImageViewerEndToEndTwoLayers.cxx
+otbPixelDescriptionModelNew.cxx
+otbPixelDescriptionModelSingleLayer.cxx
 )
 
 # Building testing executables
