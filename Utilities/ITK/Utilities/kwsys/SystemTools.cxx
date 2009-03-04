@@ -205,6 +205,10 @@ inline void Realpath(const char *path, kwsys_stl::string & resolved_path)
     resolved_path = fullpath;
     KWSYS_NAMESPACE::SystemTools::ConvertToUnixSlashes(resolved_path);
     }
+  else
+    {
+    resolved_path = path;
+    }
 }
 #else
 #include <sys/types.h>
@@ -237,8 +241,16 @@ inline void Realpath(const char *path, kwsys_stl::string & resolved_path)
 {
   char resolved_name[KWSYS_SYSTEMTOOLS_MAXPATH];
 
-  realpath(path, resolved_name);
-  resolved_path = resolved_name;
+  char *ret = realpath(path, resolved_name);
+  if(ret)
+    {
+    resolved_path = ret;
+    }
+  else
+    {
+    // if path resolution fails, return what was passed in
+    resolved_path = path;
+    }
 }
 #endif
 
@@ -1611,7 +1623,8 @@ kwsys_stl::string SystemTools::ConvertToWindowsOutputPath(const char* path)
 }
 
 bool SystemTools::CopyFileIfDifferent(const char* source,
-                                      const char* destination)
+                                      const char* destination,
+                                      bool copyPermissions)
 {
   // special check for a destination that is a directory
   // FilesDiffer does not handle file to directory compare
@@ -1624,7 +1637,8 @@ bool SystemTools::CopyFileIfDifferent(const char* source,
     new_destination += SystemTools::GetFilenameName(source_name);
     if(SystemTools::FilesDiffer(source, new_destination.c_str()))
       {
-      return SystemTools::CopyFileAlways(source, destination);
+      return SystemTools::CopyFileAlways(source, destination,
+                                         copyPermissions);
       }
     else
       {
@@ -1637,7 +1651,7 @@ bool SystemTools::CopyFileIfDifferent(const char* source,
   // are different
   if(SystemTools::FilesDiffer(source, destination))
     {
-    return SystemTools::CopyFileAlways(source, destination);
+    return SystemTools::CopyFileAlways(source, destination, copyPermissions);
     }
   // at this point the files must be the same so return true
   return true;
@@ -1718,10 +1732,12 @@ bool SystemTools::FilesDiffer(const char* source,
 }
 
 
+//----------------------------------------------------------------------------
 /**
  * Copy a file named by "source" to the file named by "destination".
  */
-bool SystemTools::CopyFileAlways(const char* source, const char* destination)
+bool SystemTools::CopyFileAlways(const char* source, const char* destination,
+                                 bool copyPermissions)
 {
   // If files are the same do not copy
   if ( SystemTools::SameFile(source, destination) )
@@ -1824,7 +1840,7 @@ bool SystemTools::CopyFileAlways(const char* source, const char* destination)
     {
    return false;
     }
-  if ( perms )
+  if ( copyPermissions && perms )
     {
     if ( !SystemTools::SetPermissions(destination, perm) )
       {
@@ -1836,15 +1852,15 @@ bool SystemTools::CopyFileAlways(const char* source, const char* destination)
 
 //----------------------------------------------------------------------------
 bool SystemTools::CopyAFile(const char* source, const char* destination,
-                            bool always)
+                            bool always, bool copyPermissions)
 {
   if(always)
     {
-    return SystemTools::CopyFileAlways(source, destination);
+    return SystemTools::CopyFileAlways(source, destination, copyPermissions);
     }
   else
     {
-    return SystemTools::CopyFileIfDifferent(source, destination);
+    return SystemTools::CopyFileIfDifferent(source, destination, copyPermissions);
     }
 }
 
@@ -1853,7 +1869,7 @@ bool SystemTools::CopyAFile(const char* source, const char* destination,
  * "destination".
  */
 bool SystemTools::CopyADirectory(const char* source, const char* destination,
-                                 bool always)
+                                 bool always, bool copyPermissions)
 {
   Directory dir;
   dir.Load(source);
@@ -1877,14 +1893,16 @@ bool SystemTools::CopyADirectory(const char* source, const char* destination,
         fullDestPath += dir.GetFile(static_cast<unsigned long>(fileNum));
         if (!SystemTools::CopyADirectory(fullPath.c_str(),
                                          fullDestPath.c_str(),
-                                         always))
+                                         always,
+                                         copyPermissions))
           {
           return false;
           }
         }
       else
         {
-        if(!SystemTools::CopyAFile(fullPath.c_str(), destination, always))
+        if(!SystemTools::CopyAFile(fullPath.c_str(), destination, always,
+                                   copyPermissions))
           {
           return false;
           }
@@ -3039,6 +3057,11 @@ kwsys_stl::string SystemTools::GetActualCaseForPath(const char* p)
   if(len == 0 || len > MAX_PATH+1)
     {
     return p;
+    }
+  // Use original path if conversion back to a long path failed.
+  if(longPath == shortPath)
+    {
+    longPath = p;
     }
   // make sure drive letter is always upper case
   if(longPath.size() > 1 && longPath[1] == ':')

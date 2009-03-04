@@ -3,8 +3,8 @@
   Program:   gdcm
   Module:    $RCSfile: gdcmJPEGFragment.cxx,v $
   Language:  C++
-  Date:      $Date: 2006-07-10 20:08:21 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-12-01 10:49:28 $
+  Version:   $Revision: 1.6 $
                                                                                 
   Copyright (c) CREATIS (Centre de Recherche et d'Applications en Traitement de
   l'Image). All rights reserved. See Doc/License.txt or
@@ -53,29 +53,30 @@ JPEGFragment::JPEGFragment()
  * @param nBits      8/12 or 16 bits jpeg
  * @param statesuspension state suspension
  */
-void JPEGFragment::DecompressJPEGFramesFromFile(std::ifstream *fp,
+bool JPEGFragment::DecompressJPEGFramesFromFile(std::ifstream *fp,
                                                 uint8_t *buffer, int nBits, 
                                                 int &statesuspension)
 {
    // First thing need to reset file to proper position:
+   bool b;
    fp->seekg( Offset, std::ios::beg);
 
    if ( nBits == 8 )
    {
       // JPEG Lossy : call to IJG 6b - 8 bits
-      ReadJPEGFile8( fp, buffer, statesuspension);
+      b = ReadJPEGFile8( fp, buffer, statesuspension);
    }
    else if ( nBits <= 12 )
    {
-       assert( nBits >= 8 );
+      assert( nBits >= 8 );
       // JPEG Lossy : call to IJG 6b - 12 bits
-      ReadJPEGFile12 ( fp, buffer, statesuspension);
+      b = ReadJPEGFile12 ( fp, buffer, statesuspension);
    }
    else if ( nBits <= 16 )
    {
        assert( nBits >= 12 );
       // JPEG Lossy : call to IJG 6b - 16 bits
-      ReadJPEGFile16 ( fp, buffer, statesuspension);
+      b = ReadJPEGFile16 ( fp, buffer, statesuspension);
       //gdcmAssertMacro( IsJPEGLossless );
    }
    else
@@ -85,7 +86,9 @@ void JPEGFragment::DecompressJPEGFramesFromFile(std::ifstream *fp,
 
       // other JPEG lossy not supported
       gdcmErrorMacro( "Unknown jpeg lossy compression ");
+      b = false;
    }
+   return b;
 }
 
 //-----------------------------------------------------------------------------

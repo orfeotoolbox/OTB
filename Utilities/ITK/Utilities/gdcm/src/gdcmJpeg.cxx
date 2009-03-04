@@ -3,8 +3,8 @@
   Program:   gdcm
   Module:    $RCSfile: gdcmJpeg.cxx,v $
   Language:  C++
-  Date:      $Date: 2007-09-02 08:13:49 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2008-12-01 10:49:28 $
+  Version:   $Revision: 1.14 $
                                                                                 
   Copyright (c) CREATIS (Centre de Recherche et d'Applications en Traitement de
   l'Image). All rights reserved. See Doc/License.txt or
@@ -294,6 +294,9 @@ bool JPEGFragment::ReadJPEGFile (std::ifstream *fp, void *image_buffer, int &sta
 
    int row_stride;// physical row width in output buffer
   
+  // Now we can initialize the JPEG decompression object.
+  if ( statesuspension == 0 )
+    {
   // We set up the normal JPEG error routines, then override error_exit.
   
   cinfo.err = jpeg_std_error(&jerr.pub);
@@ -310,11 +313,8 @@ bool JPEGFragment::ReadJPEGFile (std::ifstream *fp, void *image_buffer, int &sta
 
     gdcmErrorMacro( "Serious Problem !" );
     jpeg_destroy_decompress(&cinfo);
-    return 0;
+    return false;
   }
-  // Now we can initialize the JPEG decompression object.
-  if ( statesuspension == 0 )
-    {
     jpeg_create_decompress(&cinfo);
     jpeg_stdio_src(&cinfo, fp, this, 1);
     }
@@ -330,6 +330,15 @@ bool JPEGFragment::ReadJPEGFile (std::ifstream *fp, void *image_buffer, int &sta
       {
       // Suspension in jpeg_read_header
       statesuspension = 2; 
+      }
+    // First of all are we using the proper JPEG decoder (correct bit sample):
+    if( jerr.pub.num_warnings )
+      {
+      if ( jerr.pub.msg_code == 130 )
+        {
+        jpeg_destroy_decompress(&cinfo);
+        return false;
+        }
       }
  
       // Step 4: set parameters for decompression
@@ -351,7 +360,7 @@ bool JPEGFragment::ReadJPEGFile (std::ifstream *fp, void *image_buffer, int &sta
       }
 
       // JSAMPLEs per row in output buffer
-      row_stride = cinfo.output_width * cinfo.output_components*2;
+      row_stride = cinfo.output_width * cinfo.output_components*sizeof(JSAMPLE);
   
       // Make a one-row-high sample array that will go away when done with image
       buffer = (*cinfo.mem->alloc_sarray)
@@ -402,6 +411,8 @@ bool JPEGFragment::ReadJPEGFile (std::ifstream *fp, void *image_buffer, int &sta
 
    // At this point you may want to check to see whether any corrupt-data
    // warnings occurred (test whether jerr.pub.num_warnings is nonzero).
+  /* In any case make sure the we reset the internal state suspension */
+  statesuspension = 0;
 
    return true;
 }
