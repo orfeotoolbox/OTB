@@ -82,7 +82,6 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
     {
     FindSampleBound(m_List, m_List->Begin(),
                     m_List->End(), lower, upper) ;
-    
     float margin ;
 
     for ( unsigned int i = 0 ; i < m_List->GetMeasurementVectorSize() ; i++ )

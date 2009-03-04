@@ -23,6 +23,7 @@
 
 #include <exception>
 #include "otbMacro.h"
+#include "itkArray.h"
 
 namespace otb
 {
@@ -62,7 +63,6 @@ ListSampleToHistogramListGenerator< TListSample,
       itkExceptionMacro("Sample list measurement vectors and histogram max have different dimensions !");
       }
     }
-
   typename TListSample::MeasurementVectorType lower(m_List->GetMeasurementVectorSize());
   typename TListSample::MeasurementVectorType upper(m_List->GetMeasurementVectorSize());
 
@@ -78,8 +78,6 @@ ListSampleToHistogramListGenerator< TListSample,
     {
     FindSampleBound(m_List, m_List->Begin(),
                     m_List->End(), lower, upper) ;
-    std::cout<<"lower = "<<lower<<std::endl;
-    std::cout<<"upper = "<<upper<<std::endl;
     float margin ;
 
     for ( unsigned int i = 0 ; i < m_List->GetMeasurementVectorSize() ; i++ )
@@ -125,9 +123,6 @@ ListSampleToHistogramListGenerator< TListSample,
     h_lower = m_HistogramMin;
     h_upper = m_HistogramMax;
     }
-  std::cout<<"hlower = "<<h_lower<<std::endl;
-  std::cout<<"hupper = "<<h_upper<<std::endl;
-  
 
   // Clearing previous histograms
   m_HistogramList->Clear();
