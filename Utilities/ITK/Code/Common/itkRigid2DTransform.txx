@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRigid2DTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2007-04-05 17:02:10 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2008-12-19 16:34:40 $
+  Version:   $Revision: 1.25 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -128,6 +128,7 @@ Translate(const OffsetType &offset, bool)
   OutputVectorType newOffset = this->GetOffset();
   newOffset += offset;
   this->SetOffset(newOffset);
+  this->ComputeTranslation();
 }
 
 

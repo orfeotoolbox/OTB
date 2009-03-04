@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGeodesicActiveContourLevelSetFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2005-04-17 16:59:50 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-12-21 19:13:11 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkGeodesicActiveContourLevelSetFunction_txx_
-#define __itkGeodesicActiveContourLevelSetFunction_txx_
+#ifndef __itkGeodesicActiveContourLevelSetFunction_txx
+#define __itkGeodesicActiveContourLevelSetFunction_txx
 
 #include "itkGeodesicActiveContourLevelSetFunction.h"
 #include "itkImageRegionIterator.h"

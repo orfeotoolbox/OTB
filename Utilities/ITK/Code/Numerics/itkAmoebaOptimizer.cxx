@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAmoebaOptimizer.cxx,v $
   Language:  C++
-  Date:      $Date: 2007-03-22 14:29:13 $
-  Version:   $Revision: 1.28 $
+  Date:      $Date: 2009-01-26 13:33:10 $
+  Version:   $Revision: 1.31 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.

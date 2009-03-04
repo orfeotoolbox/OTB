@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLineSpatialObjectPoint.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-28 19:24:38 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-01-28 20:10:27 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,13 +26,14 @@ namespace itk
 {
 
 /** \class LineSpatialObjectPoint
-* \brief Point used for a line definition
-*
-* This class contains all the functions necessary to define a point
-* that can be used to build lines.
-* This Class derives from SpatialObjectPoint.
-* A LineSpatialObjectPoint has NDimension-1 normals. 
-*/ 
+ * \brief Point used for a line definition
+ *
+ * This class contains all the functions necessary to define a point
+ * that can be used to build lines.
+ * This Class derives from SpatialObjectPoint.
+ * A LineSpatialObjectPoint has NDimension-1 normals. 
+ */ 
+
 template < unsigned int TPointDimension = 3 >
 class LineSpatialObjectPoint 
   : public SpatialObjectPoint<TPointDimension>

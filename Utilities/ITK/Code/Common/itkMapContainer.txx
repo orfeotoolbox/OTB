@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMapContainer.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-17 20:42:22 $
-  Version:   $Revision: 1.35 $
+  Date:      $Date: 2009-02-05 19:05:01 $
+  Version:   $Revision: 1.36 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkMapContainer_txx
-#define _itkMapContainer_txx
+#ifndef __itkMapContainer_txx
+#define __itkMapContainer_txx
 #include "itkMapContainer.h"
 
 namespace itk
@@ -48,8 +48,6 @@ MapContainer< TElementIdentifier , TElement >
 {
   return this->MapType::find(id)->second;
 }
-
-
 
 /**
  * Get a reference to the element at the given index.

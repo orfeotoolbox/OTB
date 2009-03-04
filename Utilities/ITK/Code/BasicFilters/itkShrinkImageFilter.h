@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShrinkImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 20:49:55 $
-  Version:   $Revision: 1.43 $
+  Date:      $Date: 2008-12-17 19:58:02 $
+  Version:   $Revision: 1.44 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -35,9 +35,12 @@ namespace itk
  *
  * outputSize[j] = max( vcl_floor(inputSize[j]/shrinkFactor[j]), 1 ); 
  *
- * Since this filter produces an image which is a different resolution 
- * and with different pixel spacing than its input image, 
- * it needs to override several of the methods defined
+ * NOTE: The physical centers of the input and output will be the
+ * same. Because of this, the Origin of the output may not be the same
+ * as the Origin of the input. 
+ * Since this filter produces an image which is a different
+ * resolution, origin and with different pixel spacing than its input
+ * image, it needs to override several of the methods defined
  * in ProcessObject in order to properly manage the pipeline execution model.
  * In particular, this filter overrides
  * ProcessObject::GenerateInputRequestedRegion() and
@@ -109,7 +112,6 @@ public:
    * pipeline execution model.
    * \sa ProcessObject::GenerateInputRequestedRegion() */
   virtual void GenerateInputRequestedRegion();
-  virtual void EnlargeOutputRequestedRegion(DataObject *output); 
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

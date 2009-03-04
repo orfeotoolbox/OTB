@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkUnsharpMaskLevelSetImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:40 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-01-27 19:30:16 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
      =========================================================================*/
-#ifndef _itkUnsharpMaskLevelSetImageFilter_h_
-#define _itkUnsharpMaskLevelSetImageFilter_h_
+#ifndef __itkUnsharpMaskLevelSetImageFilter_h
+#define __itkUnsharpMaskLevelSetImageFilter_h
 
 #include "itkLevelSetFunctionWithRefitTerm.h"
 #include "itkSparseFieldFourthOrderLevelSetImageFilter.h"
@@ -69,10 +69,10 @@ class ITK_EXPORT UnsharpMaskLevelSetImageFilter
 public:
   /** Standard class typedefs */
   typedef UnsharpMaskLevelSetImageFilter Self;
-  typedef SparseFieldFourthOrderLevelSetImageFilter <TInputImage,
-                                                     TOutputImage> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef SparseFieldFourthOrderLevelSetImageFilter <TInputImage,TOutputImage>
+                                         Superclass;
+  typedef SmartPointer<Self>             Pointer;
+  typedef SmartPointer<const Self>       ConstPointer;
 
   /** Run-time type information (and related methods) */
   itkTypeMacro(UnsharpMaskLevelSetImageFilter,
@@ -107,10 +107,16 @@ protected:
 
   /** This filter halts when the iteration count reaches the specified count. */
   virtual bool Halt()
-  {
-    if (this->GetElapsedIterations()==m_MaxFilterIteration) return true;
-    else return false;
-  }
+    {
+    if (this->GetElapsedIterations() == m_MaxFilterIteration)
+      {
+      return true;
+      }
+    else
+      {
+      return false;
+      }
+    }
 
 private:
   UnsharpMaskLevelSetImageFilter(const Self&);

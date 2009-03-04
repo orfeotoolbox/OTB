@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorThresholdSegmentationLevelSetFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:36:55 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-01-27 19:30:16 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkVectorThresholdSegmentationLevelSetFunction_txx_
-#define __itkVectorThresholdSegmentationLevelSetFunction_txx_
+#ifndef __itkVectorThresholdSegmentationLevelSetFunction_txx
+#define __itkVectorThresholdSegmentationLevelSetFunction_txx
 
 #include "itkVectorThresholdSegmentationLevelSetFunction.h"
 #include "itkImageRegionIterator.h"
@@ -41,7 +41,7 @@ void VectorThresholdSegmentationLevelSetFunction<TImageType, TFeatureImageType>
   for ( fit.GoToBegin(), sit.GoToBegin(); ! fit.IsAtEnd(); ++sit, ++fit)
     {
     threshold = m_Threshold - vcl_sqrt(m_Mahalanobis->Evaluate(fit.Get()));
-      sit.Set( static_cast<ScalarValueType>(threshold) );
+    sit.Set( static_cast<ScalarValueType>(threshold) );
     
     }
  

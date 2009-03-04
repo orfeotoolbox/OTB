@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHistogramAlgorithmBase.txx,v $
   Language:  C++
-  Date:      $Date: 2005-11-26 16:07:36 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2008-12-21 19:13:12 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -36,14 +36,14 @@ HistogramAlgorithmBase< TInputHistogram >
 {
   Superclass::PrintSelf(os,indent);
 
-  os << indent << "Input Histogram: " ;
+  os << indent << "Input Histogram: ";
   if ( m_InputHistogram.IsNotNull() )
     {
     os << m_InputHistogram << std::endl;
     }
   else
     {
-    os << "not set." << std::endl ;
+    os << "not set." << std::endl;
     }
 }
 
@@ -51,4 +51,3 @@ HistogramAlgorithmBase< TInputHistogram >
 } // end of namespace itk
 
 #endif
-

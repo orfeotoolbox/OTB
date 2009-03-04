@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianDerivativeSpatialFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 01:08:45 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-02-05 19:04:56 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -70,7 +70,7 @@ public:
 
   /** Evaluate the function at a given position and return the 
    *  value in the specific direction. SetDirection() should be used
-   *  to set the direction.*/
+   *  to set the direction. */
   OutputType Evaluate(const TInput& position) const;
 
   /** Evaluate the function at a given position and return a vector */

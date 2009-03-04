@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageToVectorImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-12-09 05:06:19 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-01-13 18:32:19 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -37,24 +37,15 @@ ImageToVectorImageFilter< TInputImage >
 template< class TInputImage > 
 void 
 ImageToVectorImageFilter< TInputImage >
-::SetNthInput(unsigned int idx, const InputImageType *image)
-{
-  this->ProcessObject::SetNthInput(idx, const_cast< InputImageType* >(image));
-  this->Modified();
-}
-
-//----------------------------------------------------------------------------
-template< class TInputImage > 
-void 
-ImageToVectorImageFilter< TInputImage >
-::AllocateOutputs()
+::GenerateOutputInformation(void)
 {
   // Override the method in itkImageSource, so we can set the vector length of
   // the output itk::VectorImage
+  
+  this->Superclass::GenerateOutputInformation();
 
   OutputImageType * output = this->GetOutput();
   output->SetVectorLength(this->GetNumberOfInputs());
-  this->Superclass::AllocateOutputs();
 }
 
 //----------------------------------------------------------------------------
@@ -129,15 +120,6 @@ ImageToVectorImageFilter< TInputImage >
     {
     delete inputItContainer[i];
     }
-}
-
-//----------------------------------------------------------------------------
-template< class TInputImage > 
-void
-ImageToVectorImageFilter< TInputImage >
-::PrintSelf(std::ostream& os, Indent indent) const
-{
-  Superclass::PrintSelf(os,indent);
 }
 
 } // end namespace itk

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNeighborhoodOperator.txx,v $
   Language:  C++
-  Date:      $Date: 2007-02-01 14:39:33 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2009-02-06 20:53:13 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkNeighborhoodOperator_txx
-#define _itkNeighborhoodOperator_txx
+#ifndef __itkNeighborhoodOperator_txx
+#define __itkNeighborhoodOperator_txx
 
 #include "itkNeighborhoodOperator.h"
 

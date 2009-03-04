@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkObject.cxx,v $
   Language:  C++
-  Date:      $Date: 2006-05-10 20:27:16 $
-  Version:   $Revision: 1.45 $
+  Date:      $Date: 2009-02-06 20:53:14 $
+  Version:   $Revision: 1.46 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -36,12 +36,12 @@ public:
            unsigned long tag) :m_Command(c),
                                m_Event(event),
                                m_Tag(tag)
-  { }
+    {}
   virtual ~Observer()
-  { delete m_Event; }
-  Command::Pointer m_Command;
+    { delete m_Event; }
+  Command::Pointer    m_Command;
   const EventObject * m_Event;
-  unsigned long m_Tag;
+  unsigned long       m_Tag;
 };
 
 
@@ -462,9 +462,6 @@ Object
     }
 }
 
-
-
-
 bool
 Object
 ::HasObserver( const EventObject & event ) const
@@ -476,8 +473,6 @@ Object
   return false;
 }
 
-
-
 bool
 Object
 ::PrintObservers(std::ostream& os, Indent indent) const
@@ -488,8 +483,6 @@ Object
     }
   return false;
 }
-
-
 
 /**
  * Create an object with Debug turned off and modified time initialized 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMaskImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 18:05:25 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-02-15 17:01:18 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -39,7 +39,7 @@ namespace itk
  *        if pixel_from_mask_image != 0 
  *             pixel_output_image = pixel_input_image
  *        else
- *             pixel_output_image = 0
+ *             pixel_output_image = outside_value
  *
  * The pixel from the input 1 is cast to the pixel type of the output image.
  *
@@ -123,7 +123,7 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
- 
+
   /** Runtime information support. */
   itkTypeMacro(MaskImageFilter, 
                BinaryFunctorImageFilter);

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeshSource.h,v $
   Language:  C++
-  Date:      $Date: 2005-12-01 11:17:00 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2009-02-05 22:04:10 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,9 +44,9 @@ class ITK_EXPORT MeshSource : public ProcessObject
 {
 public:
   /** Standard class typedefs. */
-  typedef MeshSource         Self;
-  typedef ProcessObject  Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef MeshSource                Self;
+  typedef ProcessObject             Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
   
   /** Method for creation through the object factory. */
@@ -56,8 +56,8 @@ public:
   itkTypeMacro(MeshSource,ProcessObject);
 
   /** Some convenient typedefs. */
-  typedef DataObject::Pointer DataObjectPointer;
-  typedef TOutputMesh OutputMeshType;
+  typedef DataObject::Pointer              DataObjectPointer;
+  typedef TOutputMesh                      OutputMeshType;
   typedef typename OutputMeshType::Pointer OutputMeshPointer;
   
   /** Get the mesh output of this process object.  */
@@ -139,7 +139,7 @@ private:
    * by the execute method. Set in the GenerateInputRequestedRegion method. */
   int m_GenerateDataRegion;
   int m_GenerateDataNumberOfRegions;
-  };
+};
 
 } // end namespace itk
 
@@ -148,4 +148,3 @@ private:
 #endif
 
 #endif
-  

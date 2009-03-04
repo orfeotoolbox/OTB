@@ -47,8 +47,8 @@ ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^2\\.4$")
 #-----------------------------------------------------------------------------
 # ITK version number.  An even minor number corresponds to releases.
 SET(ITK_VERSION_MAJOR "3")
-SET(ITK_VERSION_MINOR "10")
-SET(ITK_VERSION_PATCH "2")
+SET(ITK_VERSION_MINOR "12")
+SET(ITK_VERSION_PATCH "0")
 
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
@@ -390,7 +390,7 @@ IF(ITK_USE_SYSTEM_VXL)
   ENDIF(VXL_FOUND)
 ELSE(ITK_USE_SYSTEM_VXL)
   SET(VXL_NETLIB_INCLUDE_DIR ${ITK_SOURCE_DIR}/Utilities/vxl/v3p/netlib)
-  SET(VXL_NUMERICS_LIBRARIES itkvnl itkvnl_algo itkvcl)
+  SET(VXL_NUMERICS_LIBRARIES itkvnl_algo)
 ENDIF(ITK_USE_SYSTEM_VXL)
 
 
@@ -432,12 +432,16 @@ SUBDIRS(Wrapping)
 IF(CMAKE_COMPILER_IS_GNUCXX)
   SET(ITK_REQUIRED_C_FLAGS "${ITK_REQUIRED_C_FLAGS} -Wall -Wno-uninitialized -Wno-unused-parameter")
   SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -ftemplate-depth-50 -Wall")
+  INCLUDE(${ITK_SOURCE_DIR}/CMake/itkCheckCXXAcceptsFlags.cmake)
+  itkCHECK_CXX_ACCEPTS_FLAGS("-Wno-deprecated" CXX_HAS_DEPRECATED_FLAG)
+  IF(CXX_HAS_DEPRECATED_FLAG)    
+    SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -Wno-deprecated")
+  ENDIF(CXX_HAS_DEPRECATED_FLAG)    
   IF(APPLE)
     # -no-cpp-precomp and -Wno-long-double were compiler flags present
     # only in Apple's gcc and not in the FSF gcc. The flags are obsolete
     # and totally removed in gcc 4.2 and later. I believe they are only
     # needed with gcc 3.3 and earlier.
-    INCLUDE(${ITK_SOURCE_DIR}/CMake/itkCheckCXXAcceptsFlags.cmake)
     itkCHECK_CXX_ACCEPTS_FLAGS("-no-cpp-precomp" CXX_HAS_CPP_PRECOMP_FLAG)
     IF(CXX_HAS_CPP_PRECOMP_FLAG)
       SET(ITK_REQUIRED_C_FLAGS "${ITK_REQUIRED_C_FLAGS} -no-cpp-precomp")
@@ -664,6 +668,14 @@ MARK_AS_ADVANCED(ITK_BRAINWEB_DATA_ROOT)
 FIND_PATH(ITK_MRI_UNC_DATABASE_DATA_ROOT LICENSE.txt
   DOC "Directory with data taken from http://public.kitware.com/pub/itk/Data/HealthyVolunteersMRIDatabase/")
 MARK_AS_ADVANCED(ITK_MRI_UNC_DATABASE_DATA_ROOT)
+
+#-----------------------------------------------------------------------------
+# Configure the default ITK_OSIRIX_DATA_ROOT for the location of Data from the Osirix web site.
+# When this data is available, additional DICOM tests are enabled.
+FIND_PATH(ITK_OSIRIX_DATA_ROOT CEREBRIX
+  DOC "Directory with data taken from http://www.osirix-viewer.com/Downloads.html")
+MARK_AS_ADVANCED(ITK_OSIRIX_DATA_ROOT)
+
 
 #-----------------------------------------------------------------------------
 # This flag is used in particular, to enable some tests that require large memory to run.

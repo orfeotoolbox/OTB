@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNumericTraitsVariableLengthVectorPixel.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-10 14:03:14 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-02-06 20:53:13 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkNumericTraitsVariableLengthVector_h
-#define __itkNumericTraitsVariableLengthVector_h
+#ifndef __itkNumericTraitsVariableLengthVectorPixel_h
+#define __itkNumericTraitsVariableLengthVectorPixel_h
 
 #include "itkNumericTraits.h"
 #include "itkVariableLengthVector.h"
@@ -142,8 +142,6 @@ itkNumericTraitsVariableLengthVectorPixelMacro( T );
 
 #endif
 
-
-
 //
 // Finally, to avoid contamination of other files with the symbols defined
 // here, we undefine the helper macros
@@ -155,4 +153,3 @@ itkNumericTraitsVariableLengthVectorPixelMacro( T );
 } // end namespace itk
 
 #endif // __itkNumericTraitsVariableLengthVector_h
-

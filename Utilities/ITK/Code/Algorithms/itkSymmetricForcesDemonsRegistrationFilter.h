@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSymmetricForcesDemonsRegistrationFilter.h,v $
   Language:  C++
-  Date:      $Date: 2004-11-04 20:40:37 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-01-27 19:30:16 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkSymmetricForcesDemonsRegistrationFilter_h_
-#define _itkSymmetricForcesDemonsRegistrationFilter_h_
+#ifndef __itkSymmetricForcesDemonsRegistrationFilter_h
+#define __itkSymmetricForcesDemonsRegistrationFilter_h
 
 #include "itkPDEDeformableRegistrationFilter.h"
 #include "itkSymmetricForcesDemonsRegistrationFunction.h"
@@ -71,11 +71,11 @@ class ITK_EXPORT SymmetricForcesDemonsRegistrationFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef SymmetricForcesDemonsRegistrationFilter    Self;
+  typedef SymmetricForcesDemonsRegistrationFilter Self;
   typedef PDEDeformableRegistrationFilter<
-    TFixedImage, TMovingImage,TDeformationField>    Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+    TFixedImage, TMovingImage,TDeformationField>  Superclass;
+  typedef SmartPointer<Self>                      Pointer;
+  typedef SmartPointer<const Self>                ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -85,11 +85,11 @@ public:
                 PDEDeformableRegistrationFilter );
 
   /** FixedImage image type. */
-  typedef typename Superclass::FixedImageType   FixedImageType;
+  typedef typename Superclass::FixedImageType     FixedImageType;
   typedef typename Superclass::FixedImagePointer  FixedImagePointer;
 
   /** MovingImage image type. */
-  typedef typename Superclass::MovingImageType    MovingImageType;
+  typedef typename Superclass::MovingImageType     MovingImageType;
   typedef typename Superclass::MovingImagePointer  MovingImagePointer;
   
   /** Deformation field type. */

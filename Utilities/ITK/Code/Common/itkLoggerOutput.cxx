@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLoggerOutput.cxx,v $
   Language:  C++
-  Date:      $Date: 2005-11-05 03:49:12 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-02-05 19:05:01 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,9 +27,9 @@ namespace itk
 void LoggerOutput::DisplayText(const char* t)
 {
   if( this->m_Logger )
-  {
+    {
     this->m_Logger->Write(LoggerBase::INFO, t);
-  }
+    }
 }
 
 
@@ -39,9 +39,9 @@ void LoggerOutput::DisplayText(const char* t)
 void LoggerOutput::DisplayErrorText(const char *t)
 {
   if( this->m_Logger )
-  {
+    {
     this->m_Logger->Write(LoggerBase::CRITICAL, t);
-  }
+    }
 }
 
 
@@ -51,9 +51,9 @@ void LoggerOutput::DisplayErrorText(const char *t)
 void LoggerOutput::DisplayWarningText(const char *t)
 {
   if( this->m_Logger )
-  {
+    {
     this->m_Logger->Write(LoggerBase::WARNING, t);
-  }
+    }
 }
 
 
@@ -63,9 +63,9 @@ void LoggerOutput::DisplayWarningText(const char *t)
 void LoggerOutput::DisplayGenericOutputText(const char *t)
 {
   if( this->m_Logger )
-  {
+    {
     this->m_Logger->Write(LoggerBase::INFO, t);
-  }
+    }
 }
 
 
@@ -75,17 +75,15 @@ void LoggerOutput::DisplayGenericOutputText(const char *t)
 void LoggerOutput::DisplayDebugText(const char *t)
 {
   if( this->m_Logger )
-  {
+    {
     this->m_Logger->Write(LoggerBase::DEBUG, t);
-  }
+    }
 }
 
 void LoggerOutput::PrintSelf(std::ostream &os, Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
-  os << indent << "Logger: " << m_Logger << std::endl;;
+  os << indent << "Logger: " << m_Logger << std::endl;
 }
   
 } // end namespace itk
-
-

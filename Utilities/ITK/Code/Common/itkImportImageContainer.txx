@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImportImageContainer.txx,v $
   Language:  C++
-  Date:      $Date: 2008-05-26 02:36:52 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2009-02-05 19:04:57 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkImportImageContainer_txx
-#define _itkImportImageContainer_txx
+#ifndef __itkImportImageContainer_txx
+#define __itkImportImageContainer_txx
 
 #include "itkImportImageContainer.h"
 #include <cstring>

@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkDiscreteGaussianImageFilter.txx,v $
 Language:  C++
-Date:      $Date: 2008-10-14 19:20:33 $
-Version:   $Revision: 1.41 $
+Date:      $Date: 2008-12-10 01:58:48 $
+Version:   $Revision: 1.42 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -121,7 +121,7 @@ DiscreteGaussianImageFilter<TInputImage, TOutputImage>
 
   // Create an internal image to protect the input image's metdata
   // (e.g. RequestedRegion). The StreamingImageFilter changes the
-  // requested region as poart of its normal provessing.
+  // requested region as part of its normal processing.
   typename TInputImage::Pointer localInput = TInputImage::New();
   localInput->Graft(this->GetInput());
 

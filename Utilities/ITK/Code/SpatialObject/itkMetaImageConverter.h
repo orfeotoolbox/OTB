@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMetaImageConverter.h,v $
   Language:  C++
-  Date:      $Date: 2007-08-08 18:56:26 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-01-28 20:10:27 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -39,9 +39,9 @@ public:
 
   typedef itk::ImageSpatialObject<NDimensions,PixelType >  SpatialObjectType;
   typedef typename SpatialObjectType::TransformType        TransformType;
-  typedef itk::ImageMaskSpatialObject<NDimensions>          MaskSpatialObjectType;
+  typedef itk::ImageMaskSpatialObject<NDimensions>         MaskSpatialObjectType;
 
-  typedef typename SpatialObjectType::Pointer SpatialObjectPointer;
+  typedef typename SpatialObjectType::Pointer     SpatialObjectPointer;
   typedef typename MaskSpatialObjectType::Pointer MaskSpatialObjectPointer;
 
   SpatialObjectPointer ReadMeta(const char* name);

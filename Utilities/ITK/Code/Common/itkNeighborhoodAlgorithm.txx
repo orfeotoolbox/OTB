@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNeighborhoodAlgorithm.txx,v $
   Language:  C++
-  Date:      $Date: 2004-09-08 14:50:03 $
-  Version:   $Revision: 1.34 $
+  Date:      $Date: 2009-02-06 20:53:12 $
+  Version:   $Revision: 1.35 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkNeighborhoodAlgorithm_txx
-#define _itkNeighborhoodAlgorithm_txx
+#ifndef __itkNeighborhoodAlgorithm_txx
+#define __itkNeighborhoodAlgorithm_txx
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageRegion.h"
@@ -67,7 +67,7 @@ ImageBoundaryFacesCalculator<TImage>
           fSize[j] = -overlapLow;
           } 
         else                                 // NOTE: this algorithm
-          {                                  // results in duplicate      
+          {                                  // results in duplicate
           fSize[j] = rSize[j];               // pixels at corners between
           }                                  // adjacent faces.  
 
@@ -85,9 +85,9 @@ ImageBoundaryFacesCalculator<TImage>
         }
       else
         {
-        nbSize[i]  -= fSize[i];                  
+        nbSize[i] -= fSize[i];
         }
-      nbStart[i] += -overlapLow;             
+      nbStart[i] += -overlapLow;
       fRegion.SetIndex(fStart);
       fRegion.SetSize(fSize);
       faceList.push_back(fRegion);
@@ -151,10 +151,6 @@ CalculateOutputWrapOffsetModifiers<TImage>
     }
   return ans;
 }
-
-
-
-
 
 } // end namespace NeighborhoodAlgorithm
 } // end namespace itk

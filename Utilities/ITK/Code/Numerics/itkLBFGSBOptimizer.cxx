@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLBFGSBOptimizer.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-04-08 18:01:03 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-01-24 21:04:35 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -47,7 +47,7 @@ public:
   virtual bool report_iter();
 
 private:
-  LBFGSBOptimizer* m_itkObj;
+  LBFGSBOptimizer* m_ItkObj;
 };
 
   
@@ -409,15 +409,12 @@ LBFGSBOptimizer
  *-------------------------------------------------------------------------
  */
 
-
-
-
 /** Create with a reference to the ITK object */
 LBFGSBOptimizerHelper
 ::LBFGSBOptimizerHelper( vnl_cost_function& f,
                          LBFGSBOptimizer* itkObj )
   : vnl_lbfgsb( f ),
-    m_itkObj( itkObj )
+    m_ItkObj( itkObj )
 {
 }
 
@@ -429,15 +426,15 @@ LBFGSBOptimizerHelper
 {
   Superclass::report_iter();
 
-  m_itkObj->m_InfinityNormOfProjectedGradient =
+  m_ItkObj->m_InfinityNormOfProjectedGradient =
     this->get_inf_norm_projected_gradient();
 
-  m_itkObj->InvokeEvent( IterationEvent() );
+  m_ItkObj->InvokeEvent( IterationEvent() );
 
-  m_itkObj->m_CurrentIteration = this->num_iterations_;
+  m_ItkObj->m_CurrentIteration = this->num_iterations_;
 
   // Return true to terminate the optimization loop.
-  if( this->num_iterations_ > m_itkObj->m_MaximumNumberOfIterations )
+  if( this->num_iterations_ > m_ItkObj->m_MaximumNumberOfIterations )
     {
     return true;
     }

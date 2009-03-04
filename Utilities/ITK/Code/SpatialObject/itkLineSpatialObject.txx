@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLineSpatialObject.txx,v $
   Language:  C++
-  Date:      $Date: 2008-06-29 01:56:12 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2009-01-28 20:10:27 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -47,7 +47,7 @@ LineSpatialObject< TDimension >
 { 
 } 
  
-/** Returns a reference to the list of the Line points.*/ 
+/** Returns a reference to the list of the Line points. */ 
 template< unsigned int TDimension >
 typename LineSpatialObject< TDimension > ::PointListType &  
 LineSpatialObject< TDimension > 

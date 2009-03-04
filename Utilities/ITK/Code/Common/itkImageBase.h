@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageBase.h,v $
   Language:  C++
-  Date:      $Date: 2008-11-01 15:28:00 $
-  Version:   $Revision: 1.75 $
+  Date:      $Date: 2009-02-18 17:40:55 $
+  Version:   $Revision: 1.76 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -616,6 +616,12 @@ protected:
    *  to PhysicalPoint coordinates */
   DirectionType       m_IndexToPhysicalPoint;
   DirectionType       m_PhysicalPointToIndex;
+
+  /** Restores the buffered region to it's default state
+   *  This method does not call Modify because Initialization is
+   *  called by ReleaseData and can not modify the MTime 
+   * \sa  ReleaseData, Initialize, SetBufferedRegion */
+  virtual void InitializeBufferedRegion(void);
 
 private:
   ImageBase(const Self&); //purposely not implemented

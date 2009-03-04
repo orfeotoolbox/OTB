@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSymmetricForcesDemonsRegistrationFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004-11-04 20:40:37 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-01-27 19:30:16 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,13 +14,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkSymmetricForcesDemonsRegistrationFilter_txx
-#define _itkSymmetricForcesDemonsRegistrationFilter_txx
+#ifndef __itkSymmetricForcesDemonsRegistrationFilter_txx
+#define __itkSymmetricForcesDemonsRegistrationFilter_txx
 #include "itkSymmetricForcesDemonsRegistrationFilter.h"
 
 namespace itk {
 
-/*
+/**
  * Default constructor
  */
 template <class TFixedImage, class TMovingImage, class TDeformationField>
@@ -75,7 +75,7 @@ SymmetricForcesDemonsRegistrationFilter<TFixedImage,TMovingImage,TDeformationFie
 }
 
 
-/*
+/**
  * Get the metric value from the difference function
  */
 template <class TFixedImage, class TMovingImage, class TDeformationField>
@@ -86,16 +86,15 @@ SymmetricForcesDemonsRegistrationFilter<TFixedImage,TMovingImage,TDeformationFie
  
   DemonsRegistrationFunctionType *drfp = 
     dynamic_cast<DemonsRegistrationFunctionType *>
-      (this->GetDifferenceFunction().GetPointer());
+    (this->GetDifferenceFunction().GetPointer());
  
   if( !drfp )
-   {
-   itkExceptionMacro( << 
-     "Could not cast difference function to SymmetricForcesDemonsRegistrationFunction" );
-   }
+    {
+    itkExceptionMacro( << 
+                       "Could not cast difference function to SymmetricForcesDemonsRegistrationFunction" );
+    }
    
   return drfp->GetMetric();
-
 }
 
 /*
@@ -112,11 +111,11 @@ SymmetricForcesDemonsRegistrationFilter<TFixedImage,TMovingImage,TDeformationFie
       (this->GetDifferenceFunction().GetPointer());
  
   if( !drfp )
-   {
-   itkExceptionMacro( << 
-     "Could not cast difference function to DemonsRegistrationFunction" );
-   }
-   
+    {
+    itkExceptionMacro( << 
+                       "Could not cast difference function to DemonsRegistrationFunction" );
+    }
+  
   return drfp->GetIntensityDifferenceThreshold();
 
 }
@@ -135,10 +134,10 @@ SymmetricForcesDemonsRegistrationFilter<TFixedImage,TMovingImage,TDeformationFie
       (this->GetDifferenceFunction().GetPointer());
  
   if( !drfp )
-   {
-   itkExceptionMacro( << 
-     "Could not cast difference function to SymmetricDemonsRegistrationFunction" );
-   }
+    {
+    itkExceptionMacro( << 
+                       "Could not cast difference function to SymmetricDemonsRegistrationFunction" );
+    }
    
   drfp->SetIntensityDifferenceThreshold(threshold);
 
@@ -158,11 +157,11 @@ SymmetricForcesDemonsRegistrationFilter<TFixedImage,TMovingImage,TDeformationFie
       (this->GetDifferenceFunction().GetPointer());
  
   if( !drfp )
-   {
-   itkExceptionMacro( << 
-     "Could not cast difference function to SymmetricForcesDemonsRegistrationFunction" );
-   }
-   
+    {
+    itkExceptionMacro( << 
+                       "Could not cast difference function to SymmetricForcesDemonsRegistrationFunction" );
+    }
+  
   return drfp->GetRMSChange();
 
 }
@@ -190,10 +189,10 @@ SymmetricForcesDemonsRegistrationFilter<TFixedImage,TMovingImage,TDeformationFie
       (this->GetDifferenceFunction().GetPointer());
  
   if( !drfp )
-   {
-   itkExceptionMacro( << 
-     "Could not cast difference function to DemonsRegistrationFunction" );
-   }
+    {
+    itkExceptionMacro( << 
+                       "Could not cast difference function to DemonsRegistrationFunction" );
+    }
 
   this->SetRMSChange( drfp->GetRMSChange() );
    

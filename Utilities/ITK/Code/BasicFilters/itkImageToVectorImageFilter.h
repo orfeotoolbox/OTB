@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageToVectorImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 16:45:10 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-01-13 18:32:19 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -28,8 +28,8 @@ namespace itk {
  *
  * \par Inputs and Usage
  * \code
- *    filter->SetNthInput( 0, image0 );
- *    filter->SetNthInput( 1, image1 );
+ *    filter->SetInput( 0, image0 );
+ *    filter->SetInput( 1, image1 );
  *    ...
  *    filter->Update();
  *    itk::VectorImage< PixelType, dimension >::Pointer = filter->GetOutput();
@@ -65,8 +65,9 @@ public:
    
   typedef typename Superclass::InputImageRegionType RegionType;
 
-  virtual void SetNthInput(unsigned int idx, const InputImageType *);
-  
+  virtual void SetNthInput(unsigned int idx, const InputImageType * inputImage)
+  { this->SetInput(idx, inputImage); }
+
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
   // Check if the pixeltype is a scalar, (native pixel type).
@@ -75,14 +76,15 @@ public:
 
 protected:
   ImageToVectorImageFilter();
-  ~ImageToVectorImageFilter() {};
-  void PrintSelf(std::ostream& os, Indent indent) const;
 
-  virtual void AllocateOutputs();
+  virtual void GenerateOutputInformation(void);
   virtual void BeforeThreadedGenerateData();
   virtual void ThreadedGenerateData( const RegionType &outputRegionForThread, int);
+  virtual void SetNthInput(unsigned int num, DataObject *input)
+    {
+    Superclass::SetNthInput(num, input);
+    }
 };
-
 }
 
 #ifndef ITK_MANUAL_INSTANTIATION

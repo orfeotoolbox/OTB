@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMGenerateMesh.h,v $
   Language:  C++
-  Date:      $Date: 2005-08-16 18:10:58 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-01-29 21:28:16 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,9 +23,6 @@
 
 namespace itk {
 namespace fem {
-
-
-
 
 /**
  * \function Generate2DRectilinearMesh

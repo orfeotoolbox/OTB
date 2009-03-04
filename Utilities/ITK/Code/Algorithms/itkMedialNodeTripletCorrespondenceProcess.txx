@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMedialNodeTripletCorrespondenceProcess.txx,v $
   Language:  C++
-  Date:      $Date: 2004-12-21 22:47:27 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-01-24 20:03:00 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -219,7 +219,7 @@ MedialNodeTripletCorrespondenceProcess< TSourceImage >
 
   // Get node pointer lists.
   typedef BloxCoreAtomPixel<NDimensions> PixelType;
-  typedef std::vector<PixelType*> NodePointerListType;
+  typedef std::vector<PixelType*>        NodePointerListType;
 
   NodePointerListType NodePointerListA;
   NodePointerListType NodePointerListB;
@@ -280,9 +280,11 @@ MedialNodeTripletCorrespondenceProcess< TSourceImage >
 
           // Iterate through the two corresponding pair lists simultaneously
           // finding every possible pair, and testing for triplet correspondence.
-          for(CorrespondingListIterator1 = SecondaryListIterator1->begin();CorrespondingListIterator1 != SecondaryListIterator1->end();CorrespondingListIterator1++)//iterate through CorrPairList of SecondaryListIterator1
+          //iterate through CorrPairList of SecondaryListIterator1
+          for(CorrespondingListIterator1 = SecondaryListIterator1->begin();CorrespondingListIterator1 != SecondaryListIterator1->end();CorrespondingListIterator1++)
             {
-            for(CorrespondingListIterator2 = SecondaryListIterator2->begin();CorrespondingListIterator2 != SecondaryListIterator2->end();CorrespondingListIterator2++)//iterate through CorrPairList of SecondaryListIterator2
+          //iterate through CorrPairList of SecondaryListIterator2
+            for(CorrespondingListIterator2 = SecondaryListIterator2->begin();CorrespondingListIterator2 != SecondaryListIterator2->end();CorrespondingListIterator2++)
               {
               // Check NodeIndex[0] (base node correspondence) in the corresponding pairs to make sure they are the
               // same node in the corresponding image.

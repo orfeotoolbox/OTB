@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkResourceProbesCollectorBase.h,v $
   Language:  C++
-  Date:      $Date: 2008-11-04 23:45:31 $
-  Version:   $Revision: 1.2.2.1 $
+  Date:      $Date: 2008-11-04 23:42:46 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.

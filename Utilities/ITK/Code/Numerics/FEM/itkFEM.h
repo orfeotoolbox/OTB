@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEM.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:39 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-01-29 21:28:16 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,7 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
+#ifndef __itkFEM_h
+#define __itkFEM_h
 /**
  * \file itkFEM.h
  * \brief Master include file for FEM toolkit.
@@ -41,9 +42,9 @@
 // Perform the initialization of the library when this header is included
 #include "itkFEMInitialization.h"
 
-
-
 /**
  * \namespace itk::fem
  * \brief Contains finite element modeling (FEM) classes and support routines.
  */
+
+#endif

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAnchorErodeDilateLine.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-20 16:32:08 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2008-12-08 22:39:12 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.

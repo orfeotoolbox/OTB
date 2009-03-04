@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDivideByConstantImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-08-11 21:18:10 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-02-24 19:03:15 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -55,7 +55,7 @@ public:
     {
     return other.m_Constant == m_Constant;
     }
-  inline TOutput operator()( const TInput & A )
+  inline TOutput operator()( const TInput & A ) const
     {
     // Because the user has to specify the constant we don't
     // check if the constant is not too small (i.e. almost equal to zero);

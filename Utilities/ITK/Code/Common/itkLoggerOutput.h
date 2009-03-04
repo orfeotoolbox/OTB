@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLoggerOutput.h,v $
   Language:  C++
-  Date:      $Date: 2005-08-10 18:24:24 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-02-05 19:05:01 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,9 +44,9 @@ class ITKCommon_EXPORT LoggerOutput : public OutputWindow
 {
 public:
   /** Standard class typedefs. */
-  typedef LoggerOutput        Self;
-  typedef OutputWindow  Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef LoggerOutput              Self;
+  typedef OutputWindow              Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
   
   /** Run-time type information (and related methods). */
@@ -84,9 +84,9 @@ public:
   itkGetMacro(Logger, LoggerType);
 
   virtual void OverrideITKWindow() 
-  {
+    {
     itk::OutputWindow::SetInstance(this);
-  }
+    }
  
 protected:
   LoggerOutput():m_Logger(0) {}

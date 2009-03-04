@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMElement2DC0QuadraticTriangularStrain.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:40 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-01-28 21:44:35 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,9 +23,6 @@
 
 namespace itk {
 namespace fem {
-
-
-
 
 /**
  * \class Element2DC0QuadraticTriangularStrain
@@ -61,9 +58,6 @@ public:
 }; // class Element2DC0QuadraticTriangularStrain 
 
 FEM_CLASS_INIT(Element2DC0QuadraticTriangularStrain)
-
-
-
 
 }} // end namespace itk::fem
 

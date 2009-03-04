@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConceptChecking.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-13 15:36:31 $
-  Version:   $Revision: 1.31 $
+  Date:      $Date: 2008-12-10 23:24:43 $
+  Version:   $Revision: 1.34 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -433,7 +433,7 @@ struct BracketOperator
       }
     void const_constraints(const T1& d, const T2& e)
       {
-      a = static_cast<T3>(b [ c ]);
+      a = static_cast<T3>(d [ e ]);
       }
     T3 a;
     T1 b;

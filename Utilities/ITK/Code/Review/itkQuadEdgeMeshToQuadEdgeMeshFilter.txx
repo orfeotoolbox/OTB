@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshToQuadEdgeMeshFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-09-27 16:40:11 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-02-07 23:16:29 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -52,31 +52,37 @@ QuadEdgeMeshToQuadEdgeMeshFilter< TInputMesh, TOutputMesh >
     inIt++;
     } 
 
+  // Copy Edge Cells
+  InputCellsContainerConstIterator ecIt = in->GetEdgeCells()->Begin();
+  while( ecIt != in->GetEdgeCells()->End() )
+    {
+    InputEdgeCellType* pe = 
+      dynamic_cast< InputEdgeCellType* >( ecIt.Value());
+    //if( pe )
+      {
+      out->AddEdgeWithSecurePointList( pe->GetQEGeom()->GetOrigin(),
+                                       pe->GetQEGeom()->GetDestination() );
+      }
+    ecIt++;
+    }
+
+
   // Copy cells
   InputCellsContainerConstIterator cIt = in->GetCells()->Begin();
   while( cIt != in->GetCells()->End() )
     {
-    InputEdgeCellType* qe;// = (InputEdgeCellType*)0;
-    InputPolygonCellType* pe;// = (InputPolygonCellType*)0;
-    if( ( qe = dynamic_cast< InputEdgeCellType* >( cIt.Value() ) ) )
+    InputPolygonCellType* pe = 
+      dynamic_cast< InputPolygonCellType* >( cIt.Value());
+    //if( pe )
       {
-      InputQEPrimal* QEGeom = qe->GetQEGeom( );
-      out->AddEdgeWithSecurePointList( QEGeom->GetOrigin(), QEGeom->GetDestination() );
-      }
-    else
-      {
-      pe = dynamic_cast< InputPolygonCellType* >( cIt.Value());
-      if( pe )
+      InputPointIdList points;
+      InputPointsIdInternalIterator pit = pe->InternalPointIdsBegin();
+      while( pit != pe->InternalPointIdsEnd( ) )
         {
-        InputPointIdList points;
-        InputPointsIdInternalIterator pit = pe->InternalPointIdsBegin();
-        while( pit != pe->InternalPointIdsEnd( ) )
-          {
-          points.push_back( ( *pit ) );
-          pit++;
-          }
-        out->AddFaceWithSecurePointList( points );
-        } 
+        points.push_back( ( *pit ) );
+        ++pit;
+        }
+      out->AddFaceWithSecurePointList( points, false );
       }
     cIt++;
     }

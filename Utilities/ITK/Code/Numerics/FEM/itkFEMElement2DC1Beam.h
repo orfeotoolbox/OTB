@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMElement2DC1Beam.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:40 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-01-28 21:57:30 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,17 +25,14 @@
 namespace itk {
 namespace fem {
 
-
-
-
 /**
  * \class Element2DC1Beam
  * \brief 1D Beam (spring that also bends) finite element in 2D space.
  */
 class Element2DC1Beam : public ElementStd<2,2>
 {
-typedef ElementStd<2,2> TemplatedParentClass;
-FEM_CLASS(Element2DC1Beam,TemplatedParentClass)
+  typedef ElementStd<2,2> TemplatedParentClass;
+  FEM_CLASS(Element2DC1Beam,TemplatedParentClass)
 public:
 
   // FIXME: Write this class in the same way as the others - 
@@ -63,8 +60,6 @@ public:
    */
   void Write( std::ostream& f ) const;
 
-
-
 //////////////////////////////////////////////////////////////////////////
   /*
    * Methods related to the physics of the problem.
@@ -77,8 +72,8 @@ public:
   virtual void GetMaterialMatrix( MatrixType& ) const {}
 
 
-//////////////////////////////////////////////////////////////////////////
-  /*
+  //////////////////////////////////////////////////////////////////////////
+  /**
    * Methods related to numeric integration
    */
 
@@ -86,24 +81,21 @@ public:
   virtual void GetIntegrationPointAndWeight( unsigned int i, VectorType& pt, Float& w, unsigned int order=0 ) const;
   virtual unsigned int GetNumberOfIntegrationPoints( unsigned int order ) const;
 
-
-
-
-//////////////////////////////////////////////////////////////////////////
-  /*
+  //////////////////////////////////////////////////////////////////////////
+  /**
    * Methods related to the geometry of an element
    */
 
   virtual VectorType ShapeFunctions( const VectorType& pt ) const;
   virtual void ShapeFunctionDerivatives( const VectorType& pt, MatrixType& shapeD ) const;
   virtual bool GetLocalFromGlobalCoordinates( const VectorType&, VectorType& ) const
-  {
+    {
     return false;
-  }
+    }
   virtual Float JacobianDeterminant( const VectorType& pt, const MatrixType* pJ ) const;
 
   virtual unsigned int GetNumberOfDegreesOfFreedomPerNode( void ) const
-  { return 3; }
+    { return 3; }
 
   /**
    * Draws the element on the specified device context
@@ -126,9 +118,6 @@ public:
 };
 
 FEM_CLASS_INIT(Element2DC1Beam)
-
-
-
 
 }} // end namespace itk::fem
 

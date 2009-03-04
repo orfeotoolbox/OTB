@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVanHerkGilWermanDilateImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-09-30 18:07:03 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-02-24 19:03:15 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -28,7 +28,7 @@ class MaxFunctor
 public:
   MaxFunctor(){}
   ~MaxFunctor(){}
-  inline TPixel operator()(const TPixel &A, const TPixel &B)
+  inline TPixel operator()(const TPixel &A, const TPixel &B) const
     {
     return vnl_math_max(A, B);
     }

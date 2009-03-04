@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkErrorFunctionBase.h,v $
   Language:  C++
-  Date:      $Date: 2007-08-17 13:10:57 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-01-24 21:33:49 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -15,8 +15,8 @@
 
 =========================================================================*/
 
-#ifndef _itkErrorFunctionBase_h
-#define _itkErrorFunctionBase_h
+#ifndef __itkErrorFunctionBase_h
+#define __itkErrorFunctionBase_h
 
 #include "itkFunctionBase.h"
 
@@ -30,10 +30,10 @@ class ErrorFunctionBase : public FunctionBase<TMeasurementVector, TTargetVector>
 {
 public:
   /** Standard class typedefs. */
-  typedef ErrorFunctionBase Self;
+  typedef ErrorFunctionBase                               Self;
   typedef FunctionBase<TMeasurementVector, TTargetVector> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef SmartPointer<Self>                              Pointer;
+  typedef SmartPointer<const Self>                        ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ErrorFunctionBase, FunctionBase);

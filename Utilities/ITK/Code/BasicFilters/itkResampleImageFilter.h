@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkResampleImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-24 16:30:43 $
-  Version:   $Revision: 1.58 $
+  Date:      $Date: 2008-12-18 13:30:38 $
+  Version:   $Revision: 1.59 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -198,6 +198,7 @@ public:
     this->SetOutputOrigin ( Image->GetOrigin() );
     this->SetOutputSpacing ( Image->GetSpacing() );
     this->SetOutputDirection ( Image->GetDirection() );
+    this->SetOutputStartIndex ( Image->GetLargestPossibleRegion().GetIndex() );
     this->SetSize ( Image->GetLargestPossibleRegion().GetSize() );
     }
 
@@ -207,7 +208,7 @@ public:
     this->SetOutputOrigin ( Image->GetOrigin() );
     this->SetOutputSpacing ( Image->GetSpacing() );
     this->SetOutputDirection ( Image->GetDirection() );
-    this->SetSize ( Image->GetLargestPossibleRegion().GetSize() );
+    this->SetOutputStartIndex ( Image->GetLargestPossibleRegion().GetIndex() );    this->SetSize ( Image->GetLargestPossibleRegion().GetSize() );
     }
 
   /** Set the start index of the output largest possible region. 

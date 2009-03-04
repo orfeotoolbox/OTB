@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMElement2DC0LinearTriangularStress.cxx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:40 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-01-28 21:34:49 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -47,17 +47,11 @@ Element2DC0LinearTriangularStress
    * If the material class was incorrect an exception is thrown.
    */
   if( (m_mat=dynamic_cast<const MaterialLinearElasticity*>(&*m_)) == 0 )
-  {
+    {
     throw FEMExceptionWrongClass(__FILE__,__LINE__,"Element2DC0LinearTriangularStress::Element2DC0LinearTriangularStress()");
-  }
+    }
 }
 
-
-
-
 FEM_CLASS_REGISTER(Element2DC0LinearTriangularStress)
-
-
-
 
 }} // end namespace itk::fem

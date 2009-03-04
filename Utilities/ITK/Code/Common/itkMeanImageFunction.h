@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:09 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-02-05 22:04:06 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -48,11 +48,11 @@ class ITK_EXPORT MeanImageFunction :
 {
 public:
   /** Standard class typedefs. */
-  typedef MeanImageFunction Self;
+  typedef MeanImageFunction         Self;
   typedef ImageFunction<TInputImage, 
     ITK_TYPENAME NumericTraits<typename TInputImage::PixelType>::RealType,
-    TCoordRep > Superclass;
-  typedef SmartPointer<Self> Pointer;
+    TCoordRep >                     Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
   
   /** Run-time type information (and related methods). */
@@ -90,16 +90,16 @@ public:
   /** Evaluate the function at non-integer positions */
   virtual RealType Evaluate( const PointType& point ) const
     { 
-      IndexType index;
-      this->ConvertPointToNearestIndex( point, index );
-      return this->EvaluateAtIndex( index ); 
+    IndexType index;
+    this->ConvertPointToNearestIndex( point, index );
+    return this->EvaluateAtIndex( index ); 
     }
   virtual RealType EvaluateAtContinuousIndex( 
     const ContinuousIndexType& cindex ) const
     { 
-      IndexType index;
-      this->ConvertContinuousIndexToNearestIndex( cindex, index );
-      return this->EvaluateAtIndex( index ) ; 
+    IndexType index;
+    this->ConvertContinuousIndexToNearestIndex( cindex, index );
+    return this->EvaluateAtIndex( index ); 
     }
   
   /** Get/Set the radius of the neighborhood over which the
@@ -138,4 +138,3 @@ private:
 #endif
 
 #endif
-

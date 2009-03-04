@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTestDriver.cxx,v $
   Language:  C++
-  Date:      $Date: 2007-03-22 14:28:53 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-11-09 18:18:52 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -187,6 +187,11 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
       rescale->SetInput(diff->GetOutput());
       rescale->Update();
       }
+    catch(const std::exception& e)
+      {
+      std::cerr << "Error during rescale of " << diffName.str() << std::endl;
+      std::cerr << e.what() << "\n";
+      }
     catch (...)
       {
       std::cerr << "Error during rescale of " << diffName.str() << std::endl;
@@ -195,6 +200,11 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
     try
       {
       writer->Update();
+      }
+    catch(const std::exception& e)
+      {
+      std::cerr << "Error during write of " << diffName.str() << std::endl;
+      std::cerr << e.what() << "\n";
       }
     catch (...)
       {
@@ -212,6 +222,11 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
       rescale->SetInput(baselineReader->GetOutput());
       rescale->Update();
       }
+    catch(const std::exception& e)
+      {
+      std::cerr << "Error during rescale of " << baseName.str() << std::endl;
+      std::cerr << e.what() << "\n";
+      }
     catch (...)
       {
       std::cerr << "Error during rescale of " << baseName.str() << std::endl;
@@ -220,6 +235,11 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
       {
       writer->SetFileName(baseName.str().c_str());
       writer->Update();
+      }
+    catch(const std::exception& e)
+      {
+      std::cerr << "Error during write of " << baseName.str() << std::endl;
+      std::cerr << e.what() << "\n";
       }
     catch (...)
       {
@@ -237,15 +257,24 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
       rescale->SetInput(testReader->GetOutput());
       rescale->Update();
       }
+    catch(const std::exception& e)
+      {
+      std::cerr << "Error during rescale of " << testName.str() << std::endl;
+      std::cerr << e.what() << "\n";
+      }
     catch (...)
       {
-      std::cerr << "Error during rescale of " << testName.str()
-                << std::endl;
+      std::cerr << "Error during rescale of " << testName.str() << std::endl;
       }
     try
       {
       writer->SetFileName(testName.str().c_str());
       writer->Update();
+      }
+    catch(const std::exception& e)
+      {
+      std::cerr << "Error during write of " << testName.str() << std::endl;
+      std::cerr << e.what() << "\n";
       }
     catch (...)
       {

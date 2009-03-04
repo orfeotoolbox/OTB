@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLeafTreeIterator.h,v $
   Language:  C++
-  Date:      $Date: 2008-01-29 15:27:42 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-02-05 19:05:00 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -20,14 +20,14 @@
 #include <itkTreeIteratorBase.h>
 #include <itkPreOrderTreeIterator.h>
 
-namespace itk{
+namespace itk {
 
 template <class TTreeType>
 class LeafTreeIterator : public TreeIteratorBase<TTreeType> 
 {
 public:
 
-  /** Typedefs*/
+  /** Typedefs */
   typedef LeafTreeIterator                Self;
   typedef TreeIteratorBase<TTreeType>     Superclass;
   typedef TTreeType                       TreeType;

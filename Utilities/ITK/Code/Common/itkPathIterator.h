@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPathIterator.h,v $
   Language:  C++
-  Date:      $Date: 2004-12-05 00:42:44 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-02-19 19:41:23 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -64,7 +64,7 @@ namespace itk
  * \sa ShapedNeighborhoodIterator  \sa SliceIterator 
  * \sa ImageConstIteratorWithIndex
  *
- * \ingroup PathObjects*/
+ * \ingroup PathObjects */
 template<class TImage, class TPath>
 class ITK_EXPORT PathIterator : public PathConstIterator<TImage, TPath>
 {

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTransformFileWriter.h,v $
   Language:  C++
-  Date:      $Date: 2007-08-10 15:43:28 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-01-16 11:37:58 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -34,6 +34,10 @@
 namespace itk
 {
 
+/** \class TransformFileWriter
+ * 
+ * \brief TODO
+ */
 class TransformFileWriter : public LightProcessObject
 {
 public:

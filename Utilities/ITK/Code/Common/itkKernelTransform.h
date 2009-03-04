@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkKernelTransform.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-20 17:10:46 $
-  Version:   $Revision: 1.46 $
+  Date:      $Date: 2009-02-05 19:04:58 $
+  Version:   $Revision: 1.47 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -66,10 +66,10 @@ class ITK_EXPORT KernelTransform :
 {
 public:
   /** Standard class typedefs. */
-  typedef KernelTransform Self;
-  typedef Transform<TScalarType, NDimensions, NDimensions >   Superclass;
-  typedef SmartPointer<Self>        Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef KernelTransform                                   Self;
+  typedef Transform<TScalarType, NDimensions, NDimensions > Superclass;
+  typedef SmartPointer<Self>                                Pointer;
+  typedef SmartPointer<const Self>                          ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro( KernelTransform, Transform );
@@ -112,7 +112,7 @@ public:
     
   /** VectorSet typedef. */
   typedef itk::VectorContainer<unsigned long,InputVectorType> VectorSetType;
-  typedef typename VectorSetType::Pointer        VectorSetPointer;
+  typedef typename VectorSetType::Pointer                     VectorSetPointer;
   
   /** Get the source landmarks list, which we will denote \f$ p \f$. */
   itkGetObjectMacro( SourceLandmarks, PointSetType);
@@ -328,7 +328,7 @@ protected:
   /** The list of target landmarks, denoted 'q'. */
   PointSetPointer m_TargetLandmarks;
 
- private:
+private:
   KernelTransform(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

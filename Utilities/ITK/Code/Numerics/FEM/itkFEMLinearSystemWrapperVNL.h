@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMLinearSystemWrapperVNL.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:42 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-01-30 21:10:12 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -106,6 +106,4 @@ private:
 
 }} // end namespace itk::fem
 
-#endif // #ifndef __itkFEMLinearSystemWrapperVNL_h
-
-
+#endif

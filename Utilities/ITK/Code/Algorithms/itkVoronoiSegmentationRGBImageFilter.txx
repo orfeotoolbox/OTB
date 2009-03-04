@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkVoronoiSegmentationRGBImageFilter.txx,v $
 Language:  C++
-Date:      $Date: 2007-02-09 15:06:19 $
-Version:   $Revision: 1.35 $
+Date:      $Date: 2009-01-27 19:30:17 $
+Version:   $Revision: 1.36 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkVoronoiSegmentationRGBImageFilter_txx
-#define _itkVoronoiSegmentationRGBImageFilter_txx
+#ifndef __itkVoronoiSegmentationRGBImageFilter_txx
+#define __itkVoronoiSegmentationRGBImageFilter_txx
 #include "itkVoronoiSegmentationRGBImageFilter.h"
 
 #include "itkImageRegionIteratorWithIndex.h"
@@ -129,7 +129,7 @@ VoronoiSegmentationRGBImageFilter <TInputImage,TOutputImage>
   double Z0 = m_MaxValueOfRGB*1.183;
 
   while( !iit.IsAtEnd()) 
-    {    
+    {
     ipixel = iit.Get();
     wpixel[0] = ipixel[0];
     wpixel[1] = ipixel[1];
@@ -251,8 +251,7 @@ TakeAPrior(const BinaryObjectImage* aprior)
         }  
       ++ait;
       }
-    }       
-
+    }
 
   int objnum = 0;
   int bkgnum = 0;
@@ -389,5 +388,3 @@ VoronoiSegmentationRGBImageFilter <TInputImage,TOutputImage>
 } //end namespace
 
 #endif
-
-

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMesh.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-12 22:29:28 $
-  Version:   $Revision: 1.50 $
+  Date:      $Date: 2009-02-07 23:16:29 $
+  Version:   $Revision: 1.53 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -108,6 +108,9 @@ QuadEdgeMesh< TPixel, VDimension, TTraits >
 
   this->m_FreePointIndexes = mesh->m_FreePointIndexes;
   this->m_FreeCellIndexes = mesh->m_FreeCellIndexes;
+  this->m_EdgeCellsContainer = mesh->m_EdgeCellsContainer;
+  this->m_NumberOfFaces = mesh->m_NumberOfFaces;
+  this->m_NumberOfEdges = mesh->m_NumberOfEdges;
 }
 
 /**
@@ -1134,6 +1137,7 @@ typename QuadEdgeMesh< TPixel, VDimension, TTraits >::QEPrimal*
 QuadEdgeMesh< TPixel, VDimension, TTraits >
 ::AddFace( const PointIdList & points )
 {
+#ifndef NDEBUG
   // Check that there are no duplicate points
   for(unsigned int i=0; i < points.size(); i++)
     {
@@ -1165,6 +1169,7 @@ QuadEdgeMesh< TPixel, VDimension, TTraits >
       return (QEPrimal*) NULL;
       }
     }
+#endif
 
   // Check if existing edges have no face on the left.
   for(unsigned int i=0; i < points.size(); i++)
@@ -1188,6 +1193,7 @@ QuadEdgeMesh< TPixel, VDimension, TTraits >
     return AddFaceWithSecurePointList( points );
 }
 
+
 /**
  */
 template< typename TPixel, unsigned int VDimension, typename TTraits >
@@ -1195,17 +1201,28 @@ typename QuadEdgeMesh< TPixel, VDimension, TTraits >::QEPrimal*
 QuadEdgeMesh< TPixel, VDimension, TTraits >
 ::AddFaceWithSecurePointList( const PointIdList& points )
 {
+   return AddFaceWithSecurePointList( points, true );
+}
+
+
+/**
+ */
+template< typename TPixel, unsigned int VDimension, typename TTraits >
+typename QuadEdgeMesh< TPixel, VDimension, TTraits >::QEPrimal*
+QuadEdgeMesh< TPixel, VDimension, TTraits >
+::AddFaceWithSecurePointList( const PointIdList& points, bool CheckEdges )
+{
   typedef std::vector< QEPrimal* >  QEList;
   QEList FaceQEList;
 
-  // Now create edges as needed.
-  for(unsigned int i=0; i < points.size(); i++)
+  // Now create edge list and create missing edges if needed.
+  for( size_t i = 0; i < points.size(); i++)
     {
     PointIdentifier pid0 = points[i];
     PointIdentifier pid1 = points[ (i+1) % points.size() ];
     QEPrimal* edge = this->FindEdge( pid0, pid1 );
 
-    if( !edge )
+    if( !edge && CheckEdges )
       {
       QEPrimal* entry = this->AddEdgeWithSecurePointList( pid0, pid1 );
       if( entry == (QEPrimal*)0 )
@@ -1216,26 +1233,30 @@ QuadEdgeMesh< TPixel, VDimension, TTraits >
       }
     else
       {
+      //FIXME throw exception here if !edge
       FaceQEList.push_back( edge );
       }
     }
 
   // Reorder all Onext rings
   QEPrimal* e1;
-  QEPrimal* e0 = FaceQEList[points.size()-1];
-  for(unsigned int i=0; i < points.size(); i++)
+  QEPrimal* e0 = FaceQEList.back();
+  for( typename QEList::iterator it = FaceQEList.begin();
+      it != FaceQEList.end();
+      ++it )
     {
     e1 = e0->GetSym();
-    e0 = FaceQEList[i];
+    e0 = *it;
 
     e0->ReorderOnextRingBeforeAddFace( e1 );
     }
 
   // all edges are ready to receive a face on the left
-  QEPrimal* entry = FaceQEList[0];
+  QEPrimal* entry = FaceQEList.front();
 
   if( !entry )
     {
+    // FIXME throw exception here instead
     itkDebugMacro("entry == NULL");
     return (QEPrimal*) NULL;
     }

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNeighborhoodOperatorImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2006-02-06 22:01:57 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-02-06 20:53:13 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -54,8 +54,6 @@ NeighborhoodOperatorImageFunction<TInputImage,TOutput>
   
   return smartInnerProduct(bit, m_Operator);
 }
-
-
 
 } // end namespace itk
 

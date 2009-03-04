@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOtsuThresholdImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-08-01 19:16:16 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-26 21:45:56 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkOtsuThresholdImageFilter_txx
-#define _itkOtsuThresholdImageFilter_txx
+#ifndef __itkOtsuThresholdImageFilter_txx
+#define __itkOtsuThresholdImageFilter_txx
 #include "itkOtsuThresholdImageFilter.h"
 
 #include "itkBinaryThresholdImageFilter.h"

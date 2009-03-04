@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHistogramToIntensityImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-10-27 19:51:47 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-17 09:13:59 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -36,13 +36,13 @@ namespace itk
  */
 
 namespace Function {  
-template< class TInput>
+template< class TInput, class TOutput=unsigned long >
 class HistogramIntensityFunction
 {
 public:
   
   //Intensity function returns pixels of unsigned long.. 
-  typedef unsigned long  OutputPixelType   ;
+  typedef TOutput  OutputPixelType   ;
   
   
   HistogramIntensityFunction(): 
@@ -70,15 +70,21 @@ private:
 }; 
 }
 
-template <class THistogram >
+template <class THistogram, class TOutputPixel=unsigned long >
 class ITK_EXPORT HistogramToIntensityImageFilter :
   public HistogramToImageFilter< THistogram, 
-  Function::HistogramIntensityFunction< unsigned long> > 
+  Function::HistogramIntensityFunction< unsigned long, TOutputPixel > > 
 {
 public:
   
   /** Standard class typedefs. */
   typedef HistogramToIntensityImageFilter                  Self;
+
+  /** Standard "Superclass" typedef. */
+  typedef HistogramToImageFilter< THistogram, 
+    Function::HistogramIntensityFunction< unsigned long, TOutputPixel > >
+                                                           Superclass;
+
   //typedef typename Function::HistogramIntensityFunction  FunctorType;
   typedef SmartPointer<Self>                               Pointer;
   typedef SmartPointer<const Self>                         ConstPointer;

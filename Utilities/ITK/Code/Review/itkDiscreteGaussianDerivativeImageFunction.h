@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDiscreteGaussianDerivativeImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-30 18:22:52 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-01-28 18:14:36 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -37,10 +37,10 @@ namespace itk
  * The Initialize() method must be called after setting the parameters and before
  * evaluating the function.
  *
- * \author Iván Macía, VICOMTech, Spain, http://www.vicomtech.es
+ * \author Ivan Macia, VICOMTech, Spain, http://www.vicomtech.es
  *
  * This implementation was taken from the Insight Journal paper:
- * http://hdl.handle.net/1926/179
+ * http://hdl.handle.net/1926/1290
  *
  * \sa NeighborhoodOperator
  * \sa ImageFunction
@@ -54,20 +54,20 @@ public:
   /**Standard "Self" typedef */
   typedef DiscreteGaussianDerivativeImageFunction   Self;
 
-  /** Standard "Superclass" typedef*/
+  /** Standard "Superclass" typedef */
   typedef ImageFunction<TInputImage, TOutput, TOutput>  Superclass;
 
   /** Smart pointer typedef support. */
   typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
-  /** Method for creation through the object factory.*/
+  /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro( DiscreteGaussianDerivativeImageFunction, ImageFunction );
 
-  /** Image dependent types.*/
+  /** Image dependent types. */
   typedef typename Superclass::InputImageType       InputImageType;
   typedef typename Superclass::InputPixelType       InputPixelType;
   typedef typename Superclass::IndexType            IndexType;
@@ -105,13 +105,13 @@ public:
 
 public:
 
-  /** Evalutate the  in the given dimension at specified point */
+  /** Evaluate the function at specified point. */
   virtual OutputType Evaluate(const PointType& point) const;
 
-  /** Evaluate the function at specified Index position*/
+  /** Evaluate the function at specified Index position */
   virtual OutputType EvaluateAtIndex( const IndexType & index ) const;
 
-  /** Evaluate the function at specified ContinousIndex position.*/
+  /** Evaluate the function at specified ContinousIndex position. */
   virtual OutputType EvaluateAtContinuousIndex(
     const ContinuousIndexType & index ) const;
 
@@ -162,7 +162,8 @@ public:
     }
 
   /** Set/Get the flag for calculating scale-space normalized derivatives.
-    * Normalized derivatives are obtained multiplying by the scale parameter t. */
+    * Normalized derivatives are obtained multiplying by the scale
+    * parameter t. */
   itkSetMacro( NormalizeAcrossScale, bool );
   itkGetMacro( NormalizeAcrossScale, bool );
   itkBooleanMacro( NormalizeAcrossScale );
@@ -189,8 +190,9 @@ public:
    * SetInputImage again to update cached values. */
   virtual void SetInputImage( const InputImageType * ptr );
 
-  /** Initialize the Gaussian kernel. Call this method before evaluating the function.
-   * This method MUST be called after any changes to function parameters. */
+  /** Initialize the Gaussian kernel. Call this method before
+   * evaluating the function. This method MUST be called after any
+   * changes to function parameters. */
   virtual void Initialize( ) { RecomputeGaussianKernel(); }
 
 protected:
@@ -204,8 +206,6 @@ protected:
   void PrintSelf(std::ostream& os, Indent indent) const;
 
   void RecomputeGaussianKernel();
- // void RecomputeContinuousGaussianKernel(
-   //        const double* offset) const;
 
 private:
 

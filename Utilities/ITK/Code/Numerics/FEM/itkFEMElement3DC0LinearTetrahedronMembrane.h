@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMElement3DC0LinearTetrahedronMembrane.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:41 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-01-29 20:09:12 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,9 +23,6 @@
 
 namespace itk {
 namespace fem {
-
-
-
 
 /**
  * \class Element3DC0LinearTetrahedronMembrane
@@ -54,9 +51,6 @@ public:
 }; // class Element3DC0LinearTetrahedronMembrane
 
 FEM_CLASS_INIT(Element3DC0LinearTetrahedronMembrane)
-
-
-
 
 }} // end namespace itk::fem
 

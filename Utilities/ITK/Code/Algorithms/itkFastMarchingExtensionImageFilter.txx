@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFastMarchingExtensionImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-06-09 12:27:55 $
-  Version:   $Revision: 1.36 $
+  Date:      $Date: 2008-12-21 19:13:11 $
+  Version:   $Revision: 1.37 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,17 +14,14 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkFastMarchingExtensionImageFilter_txx
-#define _itkFastMarchingExtensionImageFilter_txx
+#ifndef __itkFastMarchingExtensionImageFilter_txx
+#define __itkFastMarchingExtensionImageFilter_txx
 
 #include "itkFastMarchingExtensionImageFilter.h"
 
 namespace itk
 {
 
-/*
- *
- */
 template <class TLevelSet, class TAuxValue, unsigned int VAuxDimension,
           class TSpeedImage>
 FastMarchingExtensionImageFilter<TLevelSet,TAuxValue,VAuxDimension,TSpeedImage>
@@ -45,9 +42,6 @@ FastMarchingExtensionImageFilter<TLevelSet,TAuxValue,VAuxDimension,TSpeedImage>
 }
 
 
-/*
- *
- */
 template <class TLevelSet, class TAuxValue, unsigned int VAuxDimension,
           class TSpeedImage>
 void
@@ -186,7 +180,7 @@ FastMarchingExtensionImageFilter<TLevelSet,TAuxValue,VAuxDimension,TSpeedImage>
     typename Superclass::NodeContainer::ConstIterator pointsIter = (this->GetAlivePoints())->Begin();
     typename Superclass::NodeContainer::ConstIterator pointsEnd = (this->GetAlivePoints())->End();
 
-    for ( ; pointsIter != pointsEnd; ++pointsIter, ++auxIter )
+    for (; pointsIter != pointsEnd; ++pointsIter, ++auxIter )
       {
       node = pointsIter.Value();
       auxVec = auxIter.Value();
@@ -211,7 +205,7 @@ FastMarchingExtensionImageFilter<TLevelSet,TAuxValue,VAuxDimension,TSpeedImage>
     typename Superclass::NodeContainer::ConstIterator pointsIter = (this->GetTrialPoints())->Begin();
     typename Superclass::NodeContainer::ConstIterator pointsEnd = (this->GetTrialPoints())->End();
 
-    for ( ; pointsIter != pointsEnd; ++pointsIter, ++auxIter )
+    for (; pointsIter != pointsEnd; ++pointsIter, ++auxIter )
       {
       node = pointsIter.Value();
       auxVec = auxIter.Value();
@@ -234,9 +228,6 @@ FastMarchingExtensionImageFilter<TLevelSet,TAuxValue,VAuxDimension,TSpeedImage>
 }
 
 
-/*
- *
- */
 template <class TLevelSet, class TAuxValue, unsigned int VAuxDimension, 
           class TSpeedImage>
 double
@@ -270,7 +261,7 @@ FastMarchingExtensionImageFilter<TLevelSet,TAuxValue,VAuxDimension,TSpeedImage>
     for ( unsigned int k = 0; k < VAuxDimension; k++ )
       {
       double numer = 0.0;
-      double denom = 0. ;
+      double denom = 0.;
       AuxValueType auxVal;
 
       for( unsigned int j = 0; j < SetDimension; j++ )
@@ -283,7 +274,7 @@ FastMarchingExtensionImageFilter<TLevelSet,TAuxValue,VAuxDimension,TSpeedImage>
           }
 
         auxVal = this->GetAuxiliaryImage(k)->GetPixel( node.GetIndex() );
-        numer +=  auxVal  *  ( solution - node.GetValue() );
+        numer += auxVal * ( solution - node.GetValue() );
         denom += solution - node.GetValue();
 
         }

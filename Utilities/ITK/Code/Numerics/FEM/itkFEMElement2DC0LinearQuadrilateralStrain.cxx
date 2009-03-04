@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMElement2DC0LinearQuadrilateralStrain.cxx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:39 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-01-28 21:25:49 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,9 +24,6 @@
 
 namespace itk {
 namespace fem {
-
-
-
 
 Element2DC0LinearQuadrilateralStrain
 ::Element2DC0LinearQuadrilateralStrain() : Superclass()
@@ -53,17 +50,10 @@ Element2DC0LinearQuadrilateralStrain
    * If the material class was incorrect an exception is thrown.
    */
   if( (m_mat=dynamic_cast<const MaterialLinearElasticity*>(&*m_)) == 0 )
-  {
+    {
     throw FEMExceptionWrongClass(__FILE__,__LINE__,"Element2DC0LinearQuadrilateralStrain::Element2DC0LinearQuadrilateralStrain()");
-  }
+    }
 }
 
-
-
-
 FEM_CLASS_REGISTER(Element2DC0LinearQuadrilateralStrain)
-
-
-
-
 }} // end namespace itk::fem

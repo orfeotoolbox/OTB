@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMetaImageIO.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-11 12:16:58 $
-  Version:   $Revision: 1.34 $
+  Date:      $Date: 2009-01-30 22:33:53 $
+  Version:   $Revision: 1.36 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -105,18 +105,42 @@ public:
   virtual ImageIORegion 
   GenerateStreamableReadRegionFromRequestedRegion( const ImageIORegion & requested ) const;
 
+  
+  virtual unsigned int 
+  GetActualNumberOfSplitsForWriting(unsigned int numberOfRequestedSplits,
+                                    const ImageIORegion &pasteRegion,
+                                    const ImageIORegion &largestPossibleRegion);
+   
+  virtual ImageIORegion 
+  GetSplitRegionForWriting(unsigned int ithPiece, 
+                           unsigned int numberOfActualSplits,
+                           const ImageIORegion &pasteRegion,
+                           const ImageIORegion &largestPossibleRegion);
+
   /** Determine if the ImageIO can stream reading from this
-   *  file. Default is false. */
+   *  file. Only time cannot stream read/write is if compression is used.
+   *  CanRead must be called prior to this function. */
   virtual bool CanStreamRead()
     {
+    if( m_MetaImage.CompressedData() )
+      {
+      return false;
+      }
     return true;
     }
 
   /** Determine if the ImageIO can stream writing to this
-      file. Default is false. */
+   *  file. Only time cannot stream read/write is if compression is used.
+   *  Assumes file passes a CanRead call and its pixels are of the same
+   *  type as the template of the writer. Can verify by first calling
+   *  CanRead and then CanStreamRead prior to calling CanStreamWrite. */
   virtual bool CanStreamWrite()
     {
-    return false;
+    if( this->GetUseCompression() )
+      {
+      return false;
+      }
+    return true;
     }
 
   /** Determing the subsampling factor in case

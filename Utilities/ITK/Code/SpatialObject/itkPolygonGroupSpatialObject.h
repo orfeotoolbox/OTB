@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPolygonGroupSpatialObject.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-28 19:24:56 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-01-28 20:10:27 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -96,7 +96,7 @@ public:
    *  its constituent Polygons */
   double Volume();
 
-  /** Same as Volume, above.*/
+  /** Same as Volume, above. */
   double MeasureVolume();
 
   /** Test whether a point is inside or outside the object. */ 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGrayscaleMorphologicalClosingImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 16:45:09 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-01-08 16:03:55 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -95,6 +95,12 @@ public:
   itkStaticConstMacro(KernelDimension, unsigned int,
                       TKernel::NeighborhoodDimension);
 
+  /** A safe border is added to input image to avoid borders effects
+   * and remove it once the closing is done */
+  itkSetMacro(SafeBorder, bool);
+  itkGetConstReferenceMacro(SafeBorder, bool);
+  itkBooleanMacro(SafeBorder);
+
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
   itkConceptMacro(SameTypeCheck,
@@ -135,6 +141,9 @@ private:
 
   /** kernel or structuring element to use. */
   KernelType m_Kernel;
+
+  bool m_SafeBorder;
+
 }; // end of class
 
 } // end namespace itk

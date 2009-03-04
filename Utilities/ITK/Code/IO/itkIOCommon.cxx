@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIOCommon.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-05-27 11:43:21 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2009-02-21 20:36:26 $
+  Version:   $Revision: 1.28 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -100,37 +100,37 @@ unsigned int IOCommon
   switch (pixelType)
     {
     case ITK_CHAR:
-      return sizeof(char);
+      return static_cast<unsigned int>( sizeof(char) );
       break;
     case ITK_UCHAR:
-      return sizeof(unsigned char);
+      return static_cast<unsigned int>( sizeof(unsigned char) );
       break;
     case ITK_SHORT:
-      return sizeof(short);
+      return static_cast<unsigned int>( sizeof(short) );
       break;
     case ITK_USHORT:
-      return sizeof(unsigned short);
+      return static_cast<unsigned int>( sizeof(unsigned short) );
       break;
     case ITK_INT:
-      return sizeof(int);
+      return static_cast<unsigned int>( sizeof(int) );
       break;
     case ITK_UINT:
-      return sizeof(unsigned int);
+      return static_cast<unsigned int>( sizeof(unsigned int) );
       break;
     case ITK_LONG:
-      return sizeof(long);
+      return static_cast<unsigned int>( sizeof(long) );
       break;
     case ITK_ULONG:
-      return sizeof(unsigned long);
+      return static_cast<unsigned int>( sizeof(unsigned long) );
       break;
     case ITK_FLOAT:
-      return sizeof(float);
+      return static_cast<unsigned int>( sizeof(float) );
       break;
     case ITK_DOUBLE:
-      return sizeof(double);
+      return static_cast<unsigned int>( sizeof(double) );
       break;
     default:
-      return sizeof(char);
+      return static_cast<unsigned int>( sizeof(char) );
       break;
     }
 }

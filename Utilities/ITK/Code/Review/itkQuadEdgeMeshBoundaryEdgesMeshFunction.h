@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshBoundaryEdgesMeshFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-07-02 21:56:53 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-02-25 21:17:07 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,24 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-// -------------------------------------------------------------------------
-// This code is an implementation of the well known quad edge (QE) data
-// structure in the ITK library. Although the original QE can handle non
-// orientable 2-manifolds and its dual and its mirror, this implementation
-// is specifically dedicated to handle orientable 2-manifolds along with
-// their dual.
-//
-// Any comment, criticism and/or donation is welcome.
-//
-// Please contact any member of the team:
-//
-// - The frog master (Eric Boix)       eboix@ens-lyon.fr
-// - The duck master (Alex Gouaillard) alexandre.gouaillard@sun.com
-// - The cow  master (Leonardo Florez) florez@creatis.insa-lyon.fr
-// -------------------------------------------------------------------------
 #ifndef __itkQuadEdgeMeshBoundaryEdgesMeshFunction_h
 #define __itkQuadEdgeMeshBoundaryEdgesMeshFunction_h
-
 
 #include<itkFunctionBase.h>
 
@@ -71,8 +55,8 @@ public:
   typedef typename MeshType::EdgeCellType EdgeCellType;
   typedef typename MeshType::EdgeListType EdgeListType;
 
-  itkNewMacro( Self );
   itkTypeMacro( QuadEdgeMeshBoundaryEdgesMeshFunction, FunctionBase );
+  itkNewMacro( Self );
 
   virtual OutputType Evaluate( const InputType& mesh ) const;
 

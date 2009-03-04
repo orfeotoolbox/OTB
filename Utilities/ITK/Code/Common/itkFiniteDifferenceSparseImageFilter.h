@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFiniteDifferenceSparseImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 23:25:41 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-02-05 19:04:56 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -116,7 +116,7 @@ protected:
 
   /** This method splits the active pixels of the sparse image into equal size
    *  lists for multi-threading. These lists remain constant throughout the
-   *  operation of this filter.*/
+   *  operation of this filter. */
   virtual void Initialize();
   
   /** This class does not use AllocateUpdateBuffer to allocate memory for its 

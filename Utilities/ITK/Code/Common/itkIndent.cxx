@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIndent.cxx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:13 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-02-05 19:04:58 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -62,7 +62,7 @@ Indent
 std::ostream& 
 operator<<(std::ostream& os, const Indent& ind)
 {
-  os << blanks + (ITK_NUMBER_OF_BLANKS-ind.m_Indent) ;
+  os << blanks + (ITK_NUMBER_OF_BLANKS-ind.m_Indent);
   return os;
 }
 

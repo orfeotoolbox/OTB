@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPCAShapeSignedDistanceFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2006-02-06 22:01:57 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-02-19 19:41:22 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -218,7 +218,7 @@ PCAShapeSignedDistanceFunction<TCoordRep, VSpaceDimension,TImage>
     {
     output += m_Selectors[i+1]->Evaluate(mappedPoint) *
       m_PrincipalComponentStandardDeviations[i] *
-      m_WeightOfPrincipalComponents[i] ;
+      m_WeightOfPrincipalComponents[i];
     }
 
   return output;

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPointSetToSpatialObjectDemonsRegistration.h,v $
   Language:  C++
-  Date:      $Date: 2004-04-18 16:35:25 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-01-26 21:45:56 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -54,9 +54,9 @@ class ITK_EXPORT PointSetToSpatialObjectDemonsRegistration : public ProcessObjec
 public:
   /** Standard class typedefs. */
   typedef PointSetToSpatialObjectDemonsRegistration  Self;
-  typedef ProcessObject  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef ProcessObject                              Superclass;
+  typedef SmartPointer<Self>                         Pointer;
+  typedef SmartPointer<const Self>                   ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -107,6 +107,3 @@ private:
 #endif
 
 #endif
-
-
-

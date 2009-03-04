@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMatrixResizeableDataObject.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:09 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-02-05 22:04:03 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -30,7 +30,7 @@ namespace itk
  * object with the flexibility of being resizable.
  *
  * \ingroup DataProcessing  
- **/
+ */
 
 template<typename TItemType>
 class MatrixResizeableDataObject : public DataObject, public vnl_matrix<TItemType> {
@@ -38,9 +38,9 @@ public:
 
   /** Standard class typedefs. */
   typedef MatrixResizeableDataObject Self;
-  typedef DataObject Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef DataObject                 Superclass;
+  typedef SmartPointer<Self>         Pointer;
+  typedef SmartPointer<const Self>   ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

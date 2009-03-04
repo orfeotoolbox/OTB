@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCollidingFrontsImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-12-08 01:10:41 $
-  Version:   $Revision: 1.2.2.1 $
+  Date:      $Date: 2008-11-07 19:39:43 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.

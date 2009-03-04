@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSharedMorphologyUtilities.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-20 16:32:08 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-02-21 20:42:23 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -265,7 +265,7 @@ void CopyLineToImage(const typename TImage::Pointer output,
 
 template <class TInputImage, class TLine>
 typename TInputImage::RegionType
-MakeEnlargedFace(const typename TInputImage::ConstPointer input,
+MakeEnlargedFace(const typename TInputImage::ConstPointer itkNotUsed( input ),
                const typename TInputImage::RegionType AllImage,
                const TLine line)
 {

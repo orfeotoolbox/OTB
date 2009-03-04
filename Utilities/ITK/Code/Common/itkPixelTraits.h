@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPixelTraits.h,v $
   Language:  C++
-  Date:      $Date: 2007-10-10 11:57:19 $
-  Version:   $Revision: 1.28 $
+  Date:      $Date: 2009-02-19 19:41:23 $
+  Version:   $Revision: 1.29 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -45,96 +45,84 @@ public:
 };
 
 /** Specialization of PixelTraitss for scalar images. */
-template <>
-class PixelTraits<bool>
+template <> class PixelTraits<bool>
 {
 public:
   itkStaticConstMacro(Dimension, unsigned int, 1);
   typedef bool ValueType;
 };
 
-template <>
-class PixelTraits<char>
+template <> class PixelTraits<char>
 {
 public:
   itkStaticConstMacro(Dimension, unsigned int, 1);
   typedef char ValueType;
 };
 
-template <>
-class PixelTraits<signed char>
+template <> class PixelTraits<signed char>
 {
 public:
   itkStaticConstMacro(Dimension, unsigned int, 1);
   typedef char ValueType;
 };
 
-template <>
-class PixelTraits<unsigned char>
+template <> class PixelTraits<unsigned char>
 {
 public:
   itkStaticConstMacro(Dimension, unsigned int, 1);
   typedef unsigned char ValueType;
 };
 
-template <>
-class PixelTraits<short>
+template <> class PixelTraits<short>
 {
 public:
   itkStaticConstMacro(Dimension, unsigned int, 1);
   typedef short ValueType;
 };
 
-template <>
-class PixelTraits<unsigned short>
+template <> class PixelTraits<unsigned short>
 {
 public:
   itkStaticConstMacro(Dimension, unsigned int, 1);
   typedef unsigned short ValueType;
 };
 
-template <>
-class PixelTraits<int>
+template <> class PixelTraits<int>
 {
 public:
   itkStaticConstMacro(Dimension, unsigned int, 1);
   typedef int ValueType;
 };
 
-template <>
-class PixelTraits<unsigned int>
+template <> class PixelTraits<unsigned int>
 {
 public:
   itkStaticConstMacro(Dimension, unsigned int, 1);
   typedef unsigned int ValueType;
 };
 
-template <>
-class PixelTraits<long>
+template <> class PixelTraits<long>
 {
 public:
   itkStaticConstMacro(Dimension, unsigned int, 1);
   typedef long ValueType;
 };
 
-template <>
-class PixelTraits<unsigned long>
+template <> class PixelTraits<unsigned long>
 {
 public:
   itkStaticConstMacro(Dimension, unsigned int, 1);
   typedef unsigned long ValueType;
 };
 
-template <>
-class PixelTraits<float>
+template <> class PixelTraits<float>
 {
 public:
   itkStaticConstMacro(Dimension, unsigned int, 1);
   typedef float ValueType;
 };
 
-template <>
-class PixelTraits<double>
+template <> class PixelTraits<double>
 {
 public:
   itkStaticConstMacro(Dimension, unsigned int, 1);

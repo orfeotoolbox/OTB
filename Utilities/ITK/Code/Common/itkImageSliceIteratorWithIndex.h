@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageSliceIteratorWithIndex.h,v $
   Language:  C++
-  Date:      $Date: 2004-12-11 20:29:18 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-02-05 19:04:57 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -63,13 +63,13 @@ namespace itk
  * \sa NeighborhoodIterator \sa PathConstIterator  \sa PathIterator 
  * \sa ShapedNeighborhoodIterator  \sa SliceIterator 
  * \sa ImageConstIteratorWithIndex
- **/
+ */
 template<typename TImage>
 class ITK_EXPORT ImageSliceIteratorWithIndex : public ImageSliceConstIteratorWithIndex<TImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageSliceIteratorWithIndex Self;
+  typedef ImageSliceIteratorWithIndex               Self;
   typedef ImageSliceConstIteratorWithIndex<TImage>  Superclass;
   
    /** Types inherited from the Superclass */
@@ -129,6 +129,3 @@ protected:
 #endif
 
 #endif 
-
-
-

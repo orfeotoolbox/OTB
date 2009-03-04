@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMElement3DStrain.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:41 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-01-29 20:09:13 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,9 +23,6 @@
 
 namespace itk {
 namespace fem {
-
-
-
 
 /**
  * \class Element3DStrain
@@ -48,7 +45,7 @@ FEM_ABSTRACT_CLASS(Element3DStrain,TBaseClass)
 public:
 
   // Repeat the required typedefs and enums from parent class
-  typedef typename Superclass::Float Float;
+  typedef typename Superclass::Float      Float;
   typedef typename Superclass::MatrixType MatrixType;
   typedef typename Superclass::VectorType VectorType;
 
@@ -67,10 +64,8 @@ public:
    */
   Element3DStrain ();
 
-
-
-//////////////////////////////////////////////////////////////////////////
-  /*
+  //////////////////////////////////////////////////////////////////////////
+  /**
    * Methods related to the physics of the problem.
    */
 
@@ -100,9 +95,6 @@ public:
   virtual void SetMaterial(Material::ConstPointer mat_ ) { m_mat=dynamic_cast<const MaterialLinearElasticity*>(&*mat_); }
 
 }; // class Element3DStrain
-
-
-
 
 #ifdef _MSC_VER
 // Declare a static dummy function to prevent a MSVC 6.0 SP5 from crashing.

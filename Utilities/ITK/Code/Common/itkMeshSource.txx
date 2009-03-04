@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeshSource.txx,v $
   Language:  C++
-  Date:      $Date: 2005-12-01 11:17:00 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2009-02-05 22:04:14 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkMeshSource_txx
-#define _itkMeshSource_txx
+#ifndef __itkMeshSource_txx
+#define __itkMeshSource_txx
 
 #include "itkMeshSource.h"
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkContourSpatialObjectPoint.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-28 19:24:21 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-01-28 20:10:27 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,14 +25,14 @@ namespace itk
 {
 
 /** \class ContourSpatialObjectPoint
-* \brief Point used for a Contour definition
-*
-* This class contains all the functions necessary to define a point
-* that can be used to build surfaces.
-* A surface point has a position and only one normal
-*
-* \sa SpatialObjectPoint 
-*/ 
+ * \brief Point used for a Contour definition
+ *
+ * This class contains all the functions necessary to define a point
+ * that can be used to build surfaces.
+ * A surface point has a position and only one normal
+ *
+ * \sa SpatialObjectPoint 
+ */ 
 template < unsigned int TPointDimension = 3 >
 class ContourSpatialObjectPoint 
   : public SpatialObjectPoint<TPointDimension>

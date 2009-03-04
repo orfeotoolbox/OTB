@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIsotropicFourthOrderLevelSetImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004-12-21 22:47:26 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-01-24 20:02:57 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
      =========================================================================*/
-#ifndef _itkIsotropicFourthOrderLevelSetImageFilter_txx_
-#define _itkIsotropicFourthOrderLevelSetImageFilter_txx_
+#ifndef __itkIsotropicFourthOrderLevelSetImageFilter_txx
+#define __itkIsotropicFourthOrderLevelSetImageFilter_txx
 
 #include "itkIsotropicFourthOrderLevelSetImageFilter.h"
 
@@ -47,8 +47,8 @@ void
 IsotropicFourthOrderLevelSetImageFilter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
-  Superclass::PrintSelf(os, indent);     
-  os << indent << "MaxFilterIteration: " << m_MaxFilterIteration << std::endl;      
+  Superclass::PrintSelf(os, indent);
+  os << indent << "MaxFilterIteration: " << m_MaxFilterIteration << std::endl;
 }
 
 } // end namespace itk

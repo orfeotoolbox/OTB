@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShapeDetectionLevelSetFunction.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:38 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-01-27 19:30:15 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,15 +14,15 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkShapeDetectionLevelSetFunction_h_
-#define __itkShapeDetectionLevelSetFunction_h_
+#ifndef __itkShapeDetectionLevelSetFunction_h
+#define __itkShapeDetectionLevelSetFunction_h
 
 #include "itkSegmentationLevelSetFunction.h"
 
 namespace itk {
 
 /** \class ShapeDetectionLevelSetFunction
- *    
+ *
  * \brief This function is used in the ShapeDetectionLevelSetImageFilter to
  * segment structures in an image based on a user supplied edge potential map.
  *
@@ -73,10 +73,11 @@ class ITK_EXPORT ShapeDetectionLevelSetFunction
 public:
   /** Standard class typedefs. */
   typedef ShapeDetectionLevelSetFunction Self;
-  typedef SegmentationLevelSetFunction<TImageType, TFeatureImageType> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
-  typedef TFeatureImageType FeatureImageType;
+  typedef SegmentationLevelSetFunction<TImageType, TFeatureImageType>
+                                         Superclass;
+  typedef SmartPointer<Self>             Pointer;
+  typedef SmartPointer<const Self>       ConstPointer;
+  typedef TFeatureImageType              FeatureImageType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -85,13 +86,13 @@ public:
   itkTypeMacro( ShapeDetectionLevelSetFunction, SegmentationLevelSetFunction );
 
   /** Extract some parameters from the superclass. */
-  typedef typename Superclass::ImageType ImageType;
-  typedef typename Superclass::NeighborhoodType NeighborhoodType;
-  typedef typename Superclass::ScalarValueType ScalarValueType;
+  typedef typename Superclass::ImageType         ImageType;
+  typedef typename Superclass::NeighborhoodType  NeighborhoodType;
+  typedef typename Superclass::ScalarValueType   ScalarValueType;
   typedef typename Superclass::FeatureScalarType FeatureScalarType;
-  typedef typename Superclass::RadiusType RadiusType;
-  typedef typename Superclass::FloatOffsetType FloatOffsetType;
-  typedef typename Superclass::GlobalDataStruct GlobalDataStruct;
+  typedef typename Superclass::RadiusType        RadiusType;
+  typedef typename Superclass::FloatOffsetType   FloatOffsetType;
+  typedef typename Superclass::GlobalDataStruct  GlobalDataStruct;
 
   /** Extract some parameters from the superclass. */
   itkStaticConstMacro(ImageDimension, unsigned int,
@@ -105,30 +106,25 @@ public:
   { return PropagationSpeed( neighborhood, offset, gd ); }
 
   virtual void Initialize(const RadiusType &r)
-  {
+    {
     Superclass::Initialize(r);
     
     this->SetAdvectionWeight( NumericTraits<ScalarValueType>::Zero );
     this->SetPropagationWeight( NumericTraits<ScalarValueType>::One );
     this->SetCurvatureWeight( NumericTraits<ScalarValueType>::One );
-  }
+    }
   
 protected:
   ShapeDetectionLevelSetFunction()
-  {
+    {
     this->SetAdvectionWeight( NumericTraits<ScalarValueType>::Zero );
     this->SetPropagationWeight( NumericTraits<ScalarValueType>::One );
     this->SetCurvatureWeight( NumericTraits<ScalarValueType>::One );
-  }
+    }
   virtual ~ShapeDetectionLevelSetFunction() {}
 
   ShapeDetectionLevelSetFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
-  void PrintSelf(std::ostream& os, Indent indent) const
-  {
-    Superclass::PrintSelf(os, indent );
-  }
   
 };
   

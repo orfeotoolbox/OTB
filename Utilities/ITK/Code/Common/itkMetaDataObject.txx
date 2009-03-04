@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMetaDataObject.txx,v $
   Language:  C++
-  Date:      $Date: 2005-04-05 19:17:24 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-02-12 04:43:27 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkMetaDataObject_txx
-#define _itkMetaDataObject_txx
+#ifndef __itkMetaDataObject_txx
+#define __itkMetaDataObject_txx
 
 #include "itkMetaDataObject.h"
 
@@ -91,7 +91,8 @@ void
 itk::MetaDataObject<MetaDataObjectType>
 ::Print(std::ostream& os) const
 {
-        //  os << "[UNKNOWN PRINT CHARACTERISTICS]" << std::endl;
-        Superclass::Print(os);
+  //  os << "[UNKNOWN PRINT CHARACTERISTICS]" << std::endl;
+  Superclass::Print(os);
 }
+
 #endif

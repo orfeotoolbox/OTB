@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanSquaredErrorFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2007-08-17 13:10:57 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-24 21:33:49 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -32,7 +32,7 @@ MeanSquaredErrorFunction<TMeasurementVector,ScalarType>
 {
 }
 
-/** Destructor*/
+/** Destructor */
 template<class TMeasurementVector, class ScalarType>
 MeanSquaredErrorFunction <TMeasurementVector,ScalarType>
 ::~MeanSquaredErrorFunction()
@@ -46,10 +46,10 @@ MeanSquaredErrorFunction <TMeasurementVector,ScalarType>
 ::Evaluate(const TMeasurementVector& errors)  const
 {
   vnl_vector <ScalarType> temp(errors.Size());
- for(unsigned int i=0; i<errors.Size(); i++)
- {
+  for(unsigned int i=0; i<errors.Size(); i++)
+    {
     temp[i]=errors[i];
- }
+    }
   return (temp.squared_magnitude() / temp.size());
 }
 

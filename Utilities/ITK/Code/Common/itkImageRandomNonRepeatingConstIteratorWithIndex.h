@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRandomNonRepeatingConstIteratorWithIndex.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-18 21:13:25 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-02-05 19:04:57 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -299,7 +299,7 @@ public:
       of the random selection.  Pixels of the same priority will be
       ordered randomly, but pixels of lower priority value will be
       selected first.
-   **/
+   */
   void SetPriorityImage(const PriorityImageType * priorityImage);
 
   /** Increment (prefix) the selected dimension.

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHistogramImageToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2007-03-31 19:02:16 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2008-12-21 19:13:12 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,7 +38,7 @@ public ImageToImageMetric<TFixedImage, TMovingImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef HistogramImageToImageMetric Self;
+  typedef HistogramImageToImageMetric                   Self;
   typedef ImageToImageMetric<TFixedImage, TMovingImage> Superclass;
   typedef SmartPointer<Self>                            Pointer;
   typedef SmartPointer<const Self>                      ConstPointer;
@@ -51,9 +51,9 @@ public:
   typedef typename Superclass::TransformType              TransformType;
   typedef typename Superclass::TransformPointer           TransformPointer;
   typedef typename Superclass::TransformParametersType
-    TransformParametersType;
+                                                          TransformParametersType;
   typedef typename Superclass::TransformJacobianType
-    TransformJacobianType;
+                                                          TransformJacobianType;
   typedef typename Superclass::GradientPixelType          GradientPixelType;
   typedef typename Superclass::InputPointType             InputPointType;
   typedef typename Superclass::OutputPointType            OutputPointType;
@@ -64,14 +64,14 @@ public:
   typedef typename Superclass::MovingImageType            MovingImageType;
   typedef typename Superclass::MovingImageType::PixelType MovingImagePixelType;
   typedef typename Superclass::FixedImageConstPointer
-    FixedImageConstPointerType;
+                                                          FixedImageConstPointerType;
   typedef typename Superclass::MovingImageConstPointer
-    MovingImageConstPointerType;
+                                                          MovingImageConstPointerType;
 
   /** Typedefs for histogram. This should have been defined as
       Histogram<RealType,2> but a bug in VC++7 produced an internal compiler
       error with such declaration. */
-  typedef Statistics::Histogram<double, 2> HistogramType;
+  typedef Statistics::Histogram<double, 2>               HistogramType;
   typedef typename HistogramType::MeasurementVectorType  MeasurementVectorType;
   typedef typename HistogramType::SizeType               HistogramSizeType;
   typedef typename HistogramType::Pointer                HistogramPointer;
@@ -183,9 +183,7 @@ protected:
                         unsigned int parameter,
                         double step,
                         HistogramType& histogram) const;
-  /** Copies a histogram.
-      \param target The target.
-      \param source The source. */
+  /** Copies a histogram. */
   void CopyHistogram(HistogramType& target, HistogramType& source) const;
 
   /** Evaluates the similarity measure using the given histogram. All

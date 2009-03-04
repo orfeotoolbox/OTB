@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExponentialDeformationFieldImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-04 17:50:23 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-02-20 17:34:50 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -101,6 +101,15 @@ public:
   itkGetMacro( AutomaticNumberOfIterations, bool );
   itkBooleanMacro(AutomaticNumberOfIterations);
 
+  /** If ComputeInverse is on, the filter will compute the exponential
+   * of the opposite (minus) of the input vector field. The output deformation
+   * fields computed with ComputeInverse set to on and off respectively
+   * therefore represent spatial transformations that are inverses of
+   * each other. */
+  itkSetMacro( ComputeInverse, bool );
+  itkGetMacro( ComputeInverse, bool );
+  itkBooleanMacro(ComputeInverse);
+
   /** Image dimension. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TInputImage::ImageDimension);
@@ -169,6 +178,8 @@ private:
 
   bool                       m_AutomaticNumberOfIterations;
   unsigned int               m_MaximumNumberOfIterations;
+
+  bool                       m_ComputeInverse;
 
   DivideByConstantPointer    m_Divider;
   CasterPointer              m_Caster;

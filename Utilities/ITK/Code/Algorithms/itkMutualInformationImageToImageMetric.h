@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMutualInformationImageToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-20 22:17:30 $
-  Version:   $Revision: 1.43 $
+  Date:      $Date: 2009-01-26 21:45:52 $
+  Version:   $Revision: 1.44 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -93,10 +93,10 @@ class ITK_EXPORT MutualInformationImageToImageMetric :
 public:
 
   /** Standard class typedefs. */
-  typedef MutualInformationImageToImageMetric  Self;
+  typedef MutualInformationImageToImageMetric             Self;
   typedef ImageToImageMetric< TFixedImage, TMovingImage > Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                              Pointer;
+  typedef SmartPointer<const Self>                        ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -193,19 +193,20 @@ private:
   MutualInformationImageToImageMetric(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
-  /** A spatial sample consists of the fixed domain point, the fixed image value
-   *   at that point, and the corresponding moving image value. */
+  /** \class SpatialSample
+   * A spatial sample consists of the fixed domain point, the fixed
+   * image value at that point, and the corresponding moving image value. */
   class SpatialSample
-  {
-  public:
+    {
+    public:
     SpatialSample():FixedImageValue(0.0),MovingImageValue(0.0)
-    { FixedImagePointValue.Fill( 0.0 ); }
+      { FixedImagePointValue.Fill( 0.0 ); }
     ~SpatialSample(){};
 
     FixedImagePointType              FixedImagePointValue;
     double                           FixedImageValue;
     double                           MovingImageValue;
-  };
+    };
 
   /** SpatialSampleContainer typedef support. */
   typedef std::vector<SpatialSample>  SpatialSampleContainer;
@@ -256,5 +257,3 @@ private:
 #endif
 
 #endif
-
-

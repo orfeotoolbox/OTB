@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCompose2DCovariantVectorImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-13 18:54:27 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-01-14 18:39:05 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,17 +19,6 @@
 
 #include "itkBinaryFunctorImageFilter.h"
 #include "itkCovariantVector.h"
-
-/** \class Compose2DCovariantVectorImageFilter
- * \brief Implements pixel-wise composition of an 2D covariant vector pixel from two scalar images.
- *
- * This filter receives two scalar images as input. Each image containing
- * one of the 2D covariant vector components. The filter produces as output a
- * 2D covariant vector image in which the two components have been unified. The Component
- * type is preserved from the PixelType of the input images.
- *
- * \ingroup IntensityImageFilters
- */
 
 namespace itk
 {
@@ -61,6 +50,17 @@ public:
     }
 }; 
 }
+
+/** \class Compose2DCovariantVectorImageFilter
+ * \brief Implements pixel-wise composition of an 2D covariant vector pixel from two scalar images.
+ *
+ * This filter receives two scalar images as input. Each image containing
+ * one of the 2D covariant vector components. The filter produces as output a
+ * 2D covariant vector image in which the two components have been unified. The Component
+ * type is preserved from the PixelType of the input images.
+ *
+ * \ingroup IntensityImageFilters
+ */
 
 template <typename TInputImage, 
           typename TOutputImage= 

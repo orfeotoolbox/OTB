@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkParametricPath.txx,v $
   Language:  C++
-  Date:      $Date: 2004-12-04 13:22:44 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-02-19 19:41:22 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -16,8 +16,8 @@
 =========================================================================*/
 
 
-#ifndef _itkParametricPath_txx
-#define _itkParametricPath_txx
+#ifndef __itkParametricPath_txx
+#define __itkParametricPath_txx
 
 #include "itkParametricPath.h"
 
@@ -53,8 +53,6 @@ ParametricPath<VDimension>
   
   return index;
 }
-
-
 
 template<unsigned int VDimension>
 typename ParametricPath<VDimension>::OffsetType

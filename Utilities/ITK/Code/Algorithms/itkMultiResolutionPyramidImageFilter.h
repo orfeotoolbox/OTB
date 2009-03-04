@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiResolutionPyramidImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-04-05 13:59:36 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-02-07 21:41:29 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -85,7 +85,7 @@ namespace itk
  * 
  * To generate each output image, Gaussian smoothing is first performed 
  * using a DiscreteGaussianImageFilter with variance (shrink factor / 2)^2. 
- * The smoothed image is then downsampled using a ShrinkImageFiter.
+ * The smoothed image is then downsampled using a ResampleImageFilter.
  *
  * This class is templated over the input image type and the output image 
  * type.
@@ -109,10 +109,10 @@ class ITK_EXPORT MultiResolutionPyramidImageFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef MultiResolutionPyramidImageFilter  Self;
+  typedef MultiResolutionPyramidImageFilter             Self;
   typedef ImageToImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                            Pointer;
+  typedef SmartPointer<const Self>                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -130,10 +130,10 @@ public:
                       TOutputImage::ImageDimension);
 
   /** Inherit types from Superclass. */
-  typedef typename Superclass::InputImageType InputImageType;
-  typedef typename Superclass::OutputImageType OutputImageType;
-  typedef typename Superclass::InputImagePointer InputImagePointer;
-  typedef typename Superclass::OutputImagePointer OutputImagePointer;
+  typedef typename Superclass::InputImageType         InputImageType;
+  typedef typename Superclass::OutputImageType        OutputImageType;
+  typedef typename Superclass::InputImagePointer      InputImagePointer;
+  typedef typename Superclass::OutputImagePointer     OutputImagePointer;
   typedef typename Superclass::InputImageConstPointer InputImageConstPointer;
 
   /** Set the number of multi-resolution levels. The matrix containing the
@@ -232,5 +232,3 @@ private:
 #endif
 
 #endif
-
-

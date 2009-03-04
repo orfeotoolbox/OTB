@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImagePCAShapeModelEstimator.txx,v $
   Language:  C++
-  Date:      $Date: 2008-02-03 04:05:28 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-01-24 20:02:56 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkImagePCAShapeModelEstimator_txx
-#define _itkImagePCAShapeModelEstimator_txx
+#ifndef __itkImagePCAShapeModelEstimator_txx
+#define __itkImagePCAShapeModelEstimator_txx
 
 #include "itkImagePCAShapeModelEstimator.h"
 
@@ -228,7 +228,7 @@ ImagePCAShapeModelEstimator<TInputImage, TOutputImage>
     }
 
   // Fill extraneous outputs with zero
-  for( ; j < numberOfOutputs; j++ )
+  for(; j < numberOfOutputs; j++ )
     {
     region = this->GetOutput( j )->GetRequestedRegion();
     OutputIterator outIterJ( this->GetOutput( j ), region );
@@ -430,7 +430,7 @@ ImagePCAShapeModelEstimator<TInputImage, TOutputImage>
     {
     for(unsigned int band_y = band_x+1; band_y < m_NumberOfTrainingImages; band_y++)
       {  
-      m_InnerProduct[band_x][band_y] = m_InnerProduct[band_y][band_x];    
+      m_InnerProduct[band_x][band_y] = m_InnerProduct[band_y][band_x];
       }// end band_y loop
     }// end band_x loop
 
@@ -472,7 +472,7 @@ ImagePCAShapeModelEstimator<TInputImage, TOutputImage>
   //to derive the pricipal shapes.
   //--------------------------------------------------------------------
 
-  m_EigenVectors.set_size(m_NumberOfPixels, m_NumberOfTrainingImages);    
+  m_EigenVectors.set_size(m_NumberOfPixels, m_NumberOfTrainingImages);
   m_EigenVectors.fill(0);  
 
   double pix_value;
@@ -495,7 +495,7 @@ ImagePCAShapeModelEstimator<TInputImage, TOutputImage>
 
   m_EigenVectors.normalize_columns();
 
-  m_EigenValues.set_size(m_NumberOfTrainingImages);    
+  m_EigenValues.set_size(m_NumberOfTrainingImages);
 
   //Extract the diagonal elements into the Eigen value vector
   m_EigenValues = (eigenVectors_eigenValues.D).diagonal();

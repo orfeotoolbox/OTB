@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBlobSpatialObject.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-28 19:24:21 $
-  Version:   $Revision: 1.28 $
+  Date:      $Date: 2009-01-28 20:10:26 $
+  Version:   $Revision: 1.29 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,17 +27,17 @@ namespace itk
 {
 
 /** 
-* \class BlobSpatialObject
-* \brief Spatial object representing a potentially amorphous object.
-*
-* The BlobSpatialObject is a discretized representation of a ``blob'',
-* which can be taken to be an arbitrary, possibly amorphous shape.
-* The representation is a list of the points (voxel centers) contained
-* in the object.  This can be thought of as an alternate way to
-* represent a binary image.
-*
-* \sa SpatialObjectPoint
-*/
+ * \class BlobSpatialObject
+ * \brief Spatial object representing a potentially amorphous object.
+ *
+ * The BlobSpatialObject is a discretized representation of a ``blob'',
+ * which can be taken to be an arbitrary, possibly amorphous shape.
+ * The representation is a list of the points (voxel centers) contained
+ * in the object.  This can be thought of as an alternate way to
+ * represent a binary image.
+ *
+ * \sa SpatialObjectPoint
+ */
 
 template < unsigned int TDimension = 3 >
 class BlobSpatialObject 
@@ -72,7 +72,7 @@ public:
   /** Returns a reference to the list of the Blob points. */
   const PointListType & GetPoints( void ) const;
 
-  /** Set the list of Blob points.*/
+  /** Set the list of Blob points. */
   void SetPoints( PointListType & newPoints );
  
   /** Return a point in the list given the index */

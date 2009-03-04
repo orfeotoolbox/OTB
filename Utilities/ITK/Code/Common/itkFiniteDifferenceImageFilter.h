@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFiniteDifferenceImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-21 21:11:16 $
-  Version:   $Revision: 1.39 $
+  Date:      $Date: 2009-02-05 19:04:56 $
+  Version:   $Revision: 1.40 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -330,7 +330,7 @@ protected:
   itkSetMacro(ElapsedIterations, unsigned int);
 
   /** This method is called after the solution has been generated to allow
-   * subclasses to apply some further processing to the output.*/
+   * subclasses to apply some further processing to the output. */
   virtual void PostProcessOutput() {}
 
   /** The maximum number of iterations this filter will run */

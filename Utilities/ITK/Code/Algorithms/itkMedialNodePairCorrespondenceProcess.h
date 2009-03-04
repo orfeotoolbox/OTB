@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMedialNodePairCorrespondenceProcess.h,v $
   Language:  C++
-  Date:      $Date: 2005-11-22 17:45:48 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-24 20:03:00 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -50,10 +50,10 @@ public:
   itkStaticConstMacro(NDimensions, unsigned int, TSourceImage::ImageDimension);
 
   /** Standard class typedefs */
-  typedef MedialNodePairCorrespondenceProcess  Self;
-  typedef ProcessObject  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef MedialNodePairCorrespondenceProcess Self;
+  typedef ProcessObject                       Superclass;
+  typedef SmartPointer<Self>                  Pointer;
+  typedef SmartPointer<const Self>            ConstPointer;
 
   /** Smart Pointer type to a DataObject. */
   typedef DataObject::Pointer DataObjectPointer;
@@ -65,18 +65,18 @@ public:
   itkTypeMacro(MedialNodePairCorrespondenceProcess, ProcessObject);
 
   /** Typedef for core atom image. */
-  typedef TSourceImage CoreAtomImageType;
-  typedef typename CoreAtomImageType::Pointer CoreAtomImagePointer;
-  typedef typename CoreAtomImageType::RegionType CoreAtomImageRegionType; 
-  typedef typename CoreAtomImageType::PixelType CoreAtomImagePixelType; 
+  typedef TSourceImage                             CoreAtomImageType;
+  typedef typename CoreAtomImageType::Pointer      CoreAtomImagePointer;
+  typedef typename CoreAtomImageType::RegionType   CoreAtomImageRegionType; 
+  typedef typename CoreAtomImageType::PixelType    CoreAtomImagePixelType; 
   typedef typename CoreAtomImageType::ConstPointer CoreAtomImageConstPointer;
 
   /** Typedef for distance matrix. */
-  typedef MatrixResizeableDataObject<double> DistanceMatrixType;
+  typedef MatrixResizeableDataObject<double>   DistanceMatrixType;
   typedef typename DistanceMatrixType::Pointer DistanceMatrixPointer;
 
   /** Typedef for correspondence matrix */
-  typedef MatrixResizeableDataObject<double> CorrespondenceMatrixType;
+  typedef MatrixResizeableDataObject<double>         CorrespondenceMatrixType;
   typedef typename CorrespondenceMatrixType::Pointer CorrespondenceMatrixPointer;
 
   /** Typedef for correspondence data structure. (output) */

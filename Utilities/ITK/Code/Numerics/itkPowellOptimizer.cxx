@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPowellOptimizer.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-05-22 08:33:35 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2009-01-24 21:04:35 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -301,7 +301,7 @@ PowellOptimizer
       double q;    /* ted as p/q; division operation*/
       q = (x-v) * (functionValueOfX-functionValueOfW);
 
-       double p;     /* Interpolation step is calcula-*/
+      double p;     /* Interpolation step is calcula-*/
       p = (x-v)*q - (x-w)*t;
 
       q = 2*(q-t);

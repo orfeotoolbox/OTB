@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLaplacianSegmentationLevelSetFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2004-09-27 18:23:10 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-01-24 20:02:57 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkLaplacianSegmentationLevelSetFunction_txx_
-#define __itkLaplacianSegmentationLevelSetFunction_txx_
+#ifndef __itkLaplacianSegmentationLevelSetFunction_txx
+#define __itkLaplacianSegmentationLevelSetFunction_txx
 
 #include "itkLaplacianSegmentationLevelSetFunction.h"
 #include "itkLaplacianImageFilter.h"

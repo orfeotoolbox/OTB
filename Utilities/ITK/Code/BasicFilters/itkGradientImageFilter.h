@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGradientImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-12-08 01:10:42 $
-  Version:   $Revision: 1.17.2.1 $
+  Date:      $Date: 2009-01-24 20:13:36 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -130,7 +130,8 @@ public:
    * flag is OFF.
    * The default value of this flag is the same as the CMAKE option
    * ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE (i.e ON by default when ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE is ON,
-   * and  OFF by default when ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE is OFF).*/
+   * and  OFF by default when ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE is
+   * OFF). */
   itkSetMacro( UseImageDirection, bool );
   itkGetMacro( UseImageDirection, bool );
   itkBooleanMacro( UseImageDirection );

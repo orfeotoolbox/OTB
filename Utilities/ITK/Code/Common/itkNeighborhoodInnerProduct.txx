@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNeighborhoodInnerProduct.txx,v $
   Language:  C++
-  Date:      $Date: 2003-12-17 14:39:39 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-02-06 20:53:12 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkNeighborhoodInnerProduct_txx
-#define _itkNeighborhoodInnerProduct_txx
+#ifndef __itkNeighborhoodInnerProduct_txx
+#define __itkNeighborhoodInnerProduct_txx
 #include "itkNeighborhoodInnerProduct.h"
 
 #include "itkNumericTraits.h"
@@ -73,8 +73,6 @@ NeighborhoodInnerProduct<TImage, TOperator, TComputation>
 
   return sum;
 } 
-
-
 
 }// end namespace itk
 #endif

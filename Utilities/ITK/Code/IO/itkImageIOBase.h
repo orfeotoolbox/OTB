@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageIOBase.h,v $
   Language:  C++
-  Date:      $Date: 2008-06-25 11:30:38 $
-  Version:   $Revision: 1.49 $
+  Date:      $Date: 2009-02-22 05:53:41 $
+  Version:   $Revision: 1.51 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -94,7 +94,7 @@ public:
    * image being read or written. Note this is not necessarily what
    * is written, rather the IORegion controls that. */
   void SetNumberOfDimensions(unsigned int);
-  itkGetMacro(NumberOfDimensions, unsigned int);
+  itkGetConstMacro(NumberOfDimensions, unsigned int);
 
   /** Set/Get the image dimensions in the x, y, z, etc. directions.
    * GetDimensions() is typically used after reading the data; the
@@ -128,6 +128,10 @@ public:
     return m_Direction[i];
     }
 
+  /** Return the directions to be assigned by default to recipient
+   *  images whose dimension is smaller than the image dimension in file.  */
+  virtual std::vector<double> GetDefaultDirection(unsigned int i) const;
+
   /** Specify the region of the image data to either read or
    * write. The IORegion specifies the part of the image to read or
    * write. Regions are defined with an index and a size vector. These
@@ -135,7 +139,7 @@ public:
    * region within the image. Make sure that the IORegion lies within
    * the image. */
   itkSetMacro(IORegion, ImageIORegion);
-  itkGetConstMacro(IORegion, ImageIORegion);
+  itkGetConstReferenceMacro(IORegion, ImageIORegion);
 
   /** Set/Get the type of the pixel. The PixelTypes provides context
    * to the IO mechanisms for data conversions.  PixelTypes can be
@@ -168,18 +172,19 @@ public:
 
   /** Set/Get a boolean to use the compression or not. */
   itkSetMacro(UseCompression,bool);
-  itkGetConstReferenceMacro(UseCompression,bool);
+  itkGetMacro(UseCompression,bool);
   itkBooleanMacro(UseCompression);
 
   /** Set/Get a boolean to use streaming while reading or not. */
   itkSetMacro(UseStreamedReading,bool);
-  itkGetConstReferenceMacro(UseStreamedReading,bool);
+  itkGetMacro(UseStreamedReading,bool);
   itkBooleanMacro(UseStreamedReading);
 
-  /** Set/Get a boolean to use use streaming while writing or not. */
+  /** Set/Get a boolean to use streaming while writing or not. */
   itkSetMacro(UseStreamedWriting,bool);
-  itkGetConstReferenceMacro(UseStreamedWriting,bool);
+  itkGetMacro(UseStreamedWriting,bool);
   itkBooleanMacro(UseStreamedWriting);
+
 
   /** Convenience method returns the IOComponentType as a string. This can be
    * used for writing output files. */
@@ -284,8 +289,11 @@ public:
    * file specified. */
   virtual bool CanWriteFile(const char*)  = 0;
 
-  /** Determine if the ImageIO can stream writing to this
-      file. Default is false. */
+  /** Determine if the ImageIO can stream writing to this file. Default is false. 
+   *
+   * There are two types of non exclusive streaming: pasteing subregions, and iterative
+   * If true then 
+   */
   virtual bool CanStreamWrite()
     {
     return false;
@@ -318,6 +326,35 @@ public:
    * greater or equal to the RequestedRegion */
   virtual ImageIORegion 
   GenerateStreamableReadRegionFromRequestedRegion( const ImageIORegion & requested ) const;
+
+  
+  
+  /** Before this method is called all the configuration will be done,
+   * that is Streaming/PasteRegion/Compression/Filename etc
+   * If pasting is being used the number of requested splits is for that 
+   * region not the largest. The derived ImageIO class should verify that 
+   * the file is capable of being writen with this configuration.
+   * If pasted is enabled and is not support or does not work with the file, 
+   * then an excepetion should be thrown. 
+   *
+   * The default implementation depends on CanStreamWrite. 
+   * If false then 1 is returned (unless pasting is indicated), so that the whole file will be updated in one region.
+   * If true then its assumed that any arbitrary region can be writen to any file. So the users request will be respected. If a derived class has more restictive conditions then they should be checked
+   */
+  virtual unsigned int GetActualNumberOfSplitsForWriting(unsigned int numberOfRequestedSplits,
+                                                         const ImageIORegion &pasteRegion,
+                                                         const ImageIORegion &largestPossibleRegion);
+             
+  /** returns the ith IORegion 
+   * 
+   * numberOfActualSplits should be the value returned from GetActualNumberOfSplitsForWriting with the same parameters
+   *
+   * Derieved classes should overload this method to return a compatible region
+   */
+  virtual ImageIORegion GetSplitRegionForWriting(unsigned int ithPiece, 
+                                                 unsigned int numberOfActualSplits,
+                                                 const ImageIORegion &pasteRegion,
+                                                 const ImageIORegion &largestPossibleRegion);
 
   /** Type for the list of strings to be used for extensions.  */
   typedef  std::vector< std::string >    ArrayOfExtensionsType;
@@ -450,6 +487,17 @@ protected:
 
   /** Insert an extension to the list of supported extensions for writing. */
   void AddSupportedWriteExtension( const char * extension );
+
+  /** an implementation of ImageRegionSplitter:GetNumberOfSplits 
+   */
+  virtual unsigned int GetActualNumberOfSplitsForWritingCanStreamWrite(unsigned int numberOfRequestedSplits,
+                                                                       const ImageIORegion &pasteRegion) const;
+
+  /** an implementation of  ImageRegionSplitter:GetSplit
+   */
+  virtual ImageIORegion GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece, 
+                                                               unsigned int numberOfActualSplits,
+                                                               const ImageIORegion &pasteRegion) const;
 
 private:
   ImageIOBase(const Self&); //purposely not implemented

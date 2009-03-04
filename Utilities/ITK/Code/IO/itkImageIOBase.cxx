@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageIOBase.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-09-15 16:49:32 $
-  Version:   $Revision: 1.80 $
+  Date:      $Date: 2009-02-22 05:53:41 $
+  Version:   $Revision: 1.83 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,6 +27,7 @@
 #include "itkSymmetricSecondRankTensor.h"
 #include "itkDiffusionTensor3D.h"
 #include "itkFixedArray.h"
+#include "itkImageRegionSplitter.h"
 
 namespace itk
 {
@@ -941,6 +942,126 @@ void ImageIOBase::ReadBufferAsASCII(std::istream& is, void *buffer,
 }
 
 
+unsigned int 
+ImageIOBase::GetActualNumberOfSplitsForWritingCanStreamWrite(unsigned int numberOfRequestedSplits,
+                                                             const ImageIORegion &pasteRegion) const
+{  
+  // Code from ImageRegionSplitter:GetNumberOfSplits
+  int splitAxis;
+  const ImageIORegion::SizeType &regionSize = pasteRegion.GetSize();
+  
+  
+  // split on the outermost dimension available
+  splitAxis = pasteRegion.GetImageDimension() - 1;
+  while (regionSize[splitAxis] == 1)
+    {
+    --splitAxis;
+    if (splitAxis < 0)
+      { // cannot split
+      itkDebugMacro("  Cannot Split");
+      return 1;
+      }
+    }
+  
+  // determine the actual number of pieces that will be generated
+  ImageIORegion::SizeType::value_type range = regionSize[splitAxis];
+  int valuesPerPiece = (int)::ceil(range/double(numberOfRequestedSplits));
+  int maxPieceUsed = (int)::ceil(range/double(valuesPerPiece)) - 1;
+  
+  return maxPieceUsed+1;
+}
+
+unsigned int 
+ImageIOBase::GetActualNumberOfSplitsForWriting(unsigned int numberOfRequestedSplits,
+                                               const ImageIORegion &pasteRegion,
+                                               const ImageIORegion &largestPossibleRegion)
+{
+  if (this->CanStreamWrite()) 
+    {
+      return GetActualNumberOfSplitsForWritingCanStreamWrite(numberOfRequestedSplits, pasteRegion);
+    }
+  if (pasteRegion != largestPossibleRegion) 
+    {
+      itkExceptionMacro("Pasting is not supported! Can't write:" << this->GetFileName());
+    }
+  if (numberOfRequestedSplits != 1) 
+    {
+    itkDebugMacro("Requested more then 1 splits for streaming");
+    itkDebugMacro("This IO class does not support streaming!");
+    }
+  return 1;
+}
+
+ImageIORegion 
+ImageIOBase::GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece, 
+                                                               unsigned int numberOfActualSplits,
+                                                               const ImageIORegion &pasteRegion) const 
+{
+    // Code from ImageRegionSplitter:GetSplit
+  int splitAxis;
+  ImageIORegion splitRegion;
+  ImageIORegion::IndexType splitIndex;
+  ImageIORegion::SizeType splitSize, regionSize;
+  
+  // Initialize the splitRegion to the requested region
+  splitRegion = pasteRegion;
+  splitIndex = splitRegion.GetIndex();
+  splitSize = splitRegion.GetSize();
+
+  regionSize = pasteRegion.GetSize();
+  
+  // split on the outermost dimension available
+  splitAxis = pasteRegion.GetImageDimension() - 1;
+  while (regionSize[splitAxis] == 1)
+    {
+    --splitAxis;
+    if (splitAxis < 0)
+      { // cannot split
+      itkDebugMacro("  Cannot Split");
+      return splitRegion;
+      }
+    }
+
+  // determine the actual number of pieces that will be generated
+  ImageIORegion::SizeType::value_type range = regionSize[splitAxis];
+  int valuesPerPiece = (int)::ceil(range/(double)numberOfActualSplits);
+  int maxPieceUsed = (int)::ceil(range/(double)valuesPerPiece) - 1;
+
+  // Split the region
+  if ((int) ithPiece < maxPieceUsed)
+    {
+    splitIndex[splitAxis] += ithPiece*valuesPerPiece;
+    splitSize[splitAxis] = valuesPerPiece;
+    }
+  if ((int) ithPiece == maxPieceUsed)
+    {
+    splitIndex[splitAxis] += ithPiece*valuesPerPiece;
+    // last piece needs to process the "rest" dimension being split
+    splitSize[splitAxis] = splitSize[splitAxis] - ithPiece*valuesPerPiece;
+    }
+  
+  // set the split region ivars
+  splitRegion.SetIndex( splitIndex );
+  splitRegion.SetSize( splitSize );
+
+  itkDebugMacro("  Split Piece: " << splitRegion );
+
+  return splitRegion;
+}
+
+ImageIORegion 
+ImageIOBase::GetSplitRegionForWriting(unsigned int ithPiece, 
+                                      unsigned int numberOfActualSplits,
+                                      const ImageIORegion &pasteRegion,
+                                      const ImageIORegion &largestPossibleRegion)
+{
+   if (this->CanStreamWrite()) 
+    {
+      return GetSplitRegionForWritingCanStreamWrite(ithPiece, numberOfActualSplits, pasteRegion);
+    }
+  return largestPossibleRegion;  
+}
+
 /** Given a requested region, determine what could be the region that we can
  * read from the file. This is called the streamable region, which will be
  * smaller than the LargestPossibleRegion and greater or equal to the
@@ -984,6 +1105,26 @@ ImageIOBase
   return streamableRegion;
 }
 
+/** Return the directions that this particular ImageIO would use by default
+ *  in the case the recipient image dimension is smaller than the dimension
+ *  of the image in file. */
+std::vector<double> 
+ImageIOBase
+::GetDefaultDirection( unsigned int k ) const
+{
+  std::vector<double> axis;
+  axis.resize( this->GetNumberOfDimensions() );
+
+  // Fill up with the equivalent of a line from an Identity matrix
+  for( unsigned int r=0; r<axis.size(); r++ )
+    {
+    axis[r] = 0.0;
+    }
+
+  axis[k] = 1.0; 
+
+  return axis;
+}
 
 void ImageIOBase::PrintSelf(std::ostream& os, Indent indent) const
 {
@@ -1002,6 +1143,12 @@ void ImageIOBase::PrintSelf(std::ostream& os, Indent indent) const
   for (unsigned int i=0; i < m_NumberOfDimensions; i++)
     {
     os << m_Dimensions[i] << " ";
+    }
+  os << ")" << std::endl;
+  os << indent << "Origin: ( ";
+ for (unsigned int i=0; i < m_NumberOfDimensions; i++)
+    {
+    os << m_Origin[i] << " ";
     }
   os << ")" << std::endl;
 

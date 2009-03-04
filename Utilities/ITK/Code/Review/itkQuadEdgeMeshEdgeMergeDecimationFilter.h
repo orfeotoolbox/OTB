@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshEdgeMergeDecimationFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-01 23:23:58 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-02-11 15:05:41 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -89,7 +89,6 @@ protected:
   QuadEdgeMeshEdgeMergeDecimationFilter();
   virtual ~QuadEdgeMeshEdgeMergeDecimationFilter();
 
-  bool m_Verbose;
   bool m_Relocate;
   bool m_CheckOrientation;
 
@@ -122,7 +121,7 @@ protected:
   * \param[in] iEdge
   * \return 
   */
-  bool IsEdgeOKForPopping( OutputQEType* iEdge );
+  bool IsEdgeOKToBeProcessed( OutputQEType* iEdge );
 
   /**
   * \brief Extract the edge to be processed

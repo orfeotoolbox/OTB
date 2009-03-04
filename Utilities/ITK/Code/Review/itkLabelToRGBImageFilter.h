@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelToRGBImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-10-22 12:54:03 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-01-28 18:14:36 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -33,7 +33,7 @@ namespace itk
  * value. In that case, a gray pixel with the same intensity than the background
  * label is produced.
  *
- * \author Gaëtan Lehmann. Biologie du Développement et de la Reproduction, INRA de Jouy-en-Josas, France.
+ * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France.
  * \author Richard Beare. Department of Medicine, Monash University, Melbourne, Australia.
  *
  * \sa ScalarToRGBPixelFunctor LabelOverlayImageFilter

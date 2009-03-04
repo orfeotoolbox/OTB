@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDiffeomorphicDemonsRegistrationFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-12-08 01:10:42 $
-  Version:   $Revision: 1.6.2.1 $
+  Date:      $Date: 2008-11-07 19:39:44 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.

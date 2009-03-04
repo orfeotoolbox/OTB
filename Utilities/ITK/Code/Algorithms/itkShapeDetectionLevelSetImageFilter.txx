@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShapeDetectionLevelSetImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004-04-08 12:04:39 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-01-27 19:30:15 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkShapeDetectionLevelSetImageFilter_txx_
-#define __itkShapeDetectionLevelSetImageFilter_txx_
+#ifndef __itkShapeDetectionLevelSetImageFilter_txx
+#define __itkShapeDetectionLevelSetImageFilter_txx
 
 #include "itkShapeDetectionLevelSetImageFilter.h"
 
@@ -66,8 +66,5 @@ ShapeDetectionLevelSetImageFilter<TInputImage, TFeatureImage, TOutputType>
 }
 
 }// end namespace itk
-
-
-
 
 #endif

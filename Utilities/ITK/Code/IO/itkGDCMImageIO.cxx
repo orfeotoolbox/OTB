@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGDCMImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-10-05 15:18:08 $
-  Version:   $Revision: 1.147 $
+  Date:      $Date: 2009-02-19 01:02:39 $
+  Version:   $Revision: 1.149 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -1573,9 +1573,16 @@ void GDCMImageIO::Write(const void* buffer)
 
   // size is the size of the actual image in memory
   size_t size = static_cast< size_t >( this->GetImageSizeInBytes() );
+  
   // numberOfBytes is the number of bytes the image will hold on disk, most of the time
   // those two are equal
-  size_t numberOfBytes = gfile->ComputeExpectedImageDataSize();
+  size_t numberOfBytes;
+#if GDCM_MAJOR_VERSION <= 1 && GDCM_MINOR_VERSION <= 2 && GDCM_BUILD_VERSION <= 3
+  numberOfBytes = size;
+#else
+  numberOfBytes = gfile->ComputeExpectedImageDataSize();
+#endif
+
   //copy data from buffer to DICOM buffer
   uint8_t* imageData = new uint8_t[numberOfBytes];
 

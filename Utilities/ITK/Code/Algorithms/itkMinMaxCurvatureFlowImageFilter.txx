@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMinMaxCurvatureFlowImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:35 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-01-24 20:03:00 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,7 +24,7 @@
 namespace itk
 {
 
-/*
+/**
  * Constructor
  */
 template <class TInputImage, class TOutputImage>
@@ -76,8 +76,7 @@ MinMaxCurvatureFlowImageFilter<TInputImage, TOutputImage>
     }
 
   f->SetStencilRadius( m_StencilRadius );
-
-  this->Superclass::InitializeIteration();           
+  this->Superclass::InitializeIteration();
   
 }
 

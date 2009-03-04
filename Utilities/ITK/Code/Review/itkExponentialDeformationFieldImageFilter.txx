@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExponentialDeformationFieldImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-12-08 01:10:42 $
-  Version:   $Revision: 1.4.4.1 $
+  Date:      $Date: 2009-02-20 17:45:32 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -34,6 +34,7 @@ ExponentialDeformationFieldImageFilter<TInputImage, TOutputImage>
 {
   m_AutomaticNumberOfIterations = true;
   m_MaximumNumberOfIterations = 20;
+  m_ComputeInverse = false;
   m_Divider = DivideByConstantType::New();
   m_Caster = CasterType::New();
   m_Warper = VectorWarperType::New();
@@ -63,6 +64,8 @@ ExponentialDeformationFieldImageFilter<TInputImage, TOutputImage>
      << m_AutomaticNumberOfIterations << std::endl;
   os << indent << "MaximumNumberOfIterations:   "
      << m_MaximumNumberOfIterations << std::endl;
+  os << indent << "ComputeInverse:   "
+     << (m_ComputeInverse?"On":"Off") << std::endl;
 
   return;
 }
@@ -140,11 +143,27 @@ ExponentialDeformationFieldImageFilter<TInputImage,TOutputImage>
 
   if( numiter == 0 )
     {
-    m_Caster->SetInput(inputPtr);
-    m_Caster->GraftOutput(this->GetOutput());
-    m_Caster->Update();
-    // Region passing stuff
-    this->GraftOutput( m_Caster->GetOutput() );
+    if ( !this->m_ComputeInverse )
+      {
+      m_Caster->SetInput(inputPtr);
+      m_Caster->GraftOutput(this->GetOutput());
+      m_Caster->Update();
+      // Region passing stuff
+      this->GraftOutput( m_Caster->GetOutput() );
+      }
+    else
+      {
+      // We only need the opposite. Here we use the
+      // divider for simplicity. If a filter appears in ITK
+      // to compute the opposite, we should use it.
+      m_Divider->SetInput(inputPtr);
+      m_Divider->SetConstant( static_cast<InputPixelRealValueType>(-1) );
+      m_Divider->GraftOutput(this->GetOutput());
+      m_Divider->Update();
+      // Region passing stuff
+      this->GraftOutput( m_Divider->GetOutput() );
+      }
+
     this->GetOutput()->Modified();
 
     progress.CompletedPixel();
@@ -154,7 +173,14 @@ ExponentialDeformationFieldImageFilter<TInputImage,TOutputImage>
   // Get the first order approximation (division by 2^numiter)
   m_Divider->SetInput(inputPtr);
   m_Divider->GraftOutput( this->GetOutput() );
-  m_Divider->SetConstant( static_cast<InputPixelRealValueType>(1<<numiter) );
+  if ( !this->m_ComputeInverse )
+    {
+    m_Divider->SetConstant( static_cast<InputPixelRealValueType>(1<<numiter) );
+    }
+  else
+    {
+    m_Divider->SetConstant( -static_cast<InputPixelRealValueType>(1<<numiter) );
+    }
 
   m_Divider->Update();
 

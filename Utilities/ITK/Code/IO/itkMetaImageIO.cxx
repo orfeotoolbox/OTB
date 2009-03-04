@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMetaImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-06-25 11:30:38 $
-  Version:   $Revision: 1.87 $
+  Date:      $Date: 2009-02-24 03:54:35 $
+  Version:   $Revision: 1.94 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -362,6 +362,7 @@ void MetaImageIO::ReadImageInformation()
     this->SetSpacing(i, m_MetaImage.ElementSpacing(i)*m_SubSamplingFactor);
     this->SetOrigin(i, m_MetaImage.Position(i));
     } 
+
 
 #if defined(ITKIO_DEPRECATED_METADATA_ORIENTATION)
   itk::MetaDataDictionary & thisMetaDict = this->GetMetaDataDictionary();
@@ -828,22 +829,41 @@ void MetaImageIO::ReadImageInformation()
 
 void MetaImageIO::Read(void* buffer)
 { 
-  // Pass the IO region to the MetaImage library
-  unsigned int nDims = this->GetNumberOfDimensions();
+  const unsigned int nDims = this->GetNumberOfDimensions();
+  const unsigned int ioDims = this->m_IORegion.GetImageDimension();
 
-  if(m_UseStreamedReading)
+  const unsigned int minDimension = ( nDims > ioDims ) ? ioDims : nDims;
+
+  
+  // this is a check to see if we are actually streaming
+  // we initialize with m_IORegion to match dimensions
+  ImageIORegion largestRegion(minDimension);
+  for(unsigned int i=0; i<minDimension; i++)
     {
-    int* indexMin = new int[nDims];
-    int* indexMax = new int[nDims];
-    for(unsigned int i=0;i<nDims;i++)
+    largestRegion.SetIndex(i, 0);
+    largestRegion.SetSize(i, this->GetDimensions(i));
+    }
+  
+  if(largestRegion != m_IORegion)
+    {
+    int* indexMin = new int[minDimension];
+    int* indexMax = new int[minDimension];
+    for(unsigned int i=0;i<minDimension;i++)
       {
       indexMin[i] = m_IORegion.GetIndex()[i];
-      indexMax[i] = indexMin[i] + m_IORegion.GetSize()[i] -1;
+      indexMax[i] = indexMin[i] + m_IORegion.GetSize()[i] - 1;
       }
 
-    m_MetaImage.ReadROI(indexMin, indexMax, 
-                        m_FileName.c_str(), true, buffer,
-                        m_SubSamplingFactor);
+    if (!m_MetaImage.ReadROI(indexMin, indexMax, 
+                             m_FileName.c_str(), true, buffer,
+                             m_SubSamplingFactor))
+      {
+      delete [] indexMin;
+      delete [] indexMax;
+      ExceptionObject exception(__FILE__, __LINE__);
+      exception.SetDescription("File ROI cannot be read");
+      throw exception;
+      }
  
     delete [] indexMin;
     delete [] indexMax;
@@ -1013,17 +1033,8 @@ MetaImageIO
     dSize[i] = this->GetDimensions(i);
     eSpacing[i] = static_cast<float>(this->GetSpacing(i));
     eOrigin[i] = this->GetOrigin(i);
-    } 
-  ImageIORegion::IndexType indx = this->GetIORegion().GetIndex();
-  for(i=0; i<nDims; i++)
-    {
-    unsigned int j;
-    for(j=0; j<nDims; j++)
-      {
-      eOrigin[i] += indx[j] * eSpacing[j] * this->GetDirection(j)[i];
-      }
     }
-
+ 
   m_MetaImage.InitializeEssential(nDims, dSize, eSpacing, eType, nChannels,
                                   const_cast<void *>(buffer));
   m_MetaImage.Position(eOrigin);
@@ -1293,43 +1304,65 @@ MetaImageIO
   double *transformMatrix = 
   static_cast< double *>(malloc(this->GetNumberOfDimensions() * 
                   this->GetNumberOfDimensions() * sizeof(double)));
-  for( unsigned int ii=0; ii < this->GetNumberOfDimensions(); ii++)
+  for( unsigned int ii=0; ii < this->GetNumberOfDimensions(); ii++ )
     {
-    for( unsigned int jj=0; jj < this->GetNumberOfDimensions(); jj++)
+    for( unsigned int jj=0; jj < this->GetNumberOfDimensions(); jj++ )
       {
-      transformMatrix[ii*this->GetNumberOfDimensions() +jj ] =
-                                         this->GetDirection(ii)[jj];
+      transformMatrix[ ii*this->GetNumberOfDimensions() + jj ] =
+                                         this->GetDirection( ii )[ jj ];
       }
     }
   m_MetaImage.TransformMatrix( transformMatrix );
-  free(transformMatrix);
+  free( transformMatrix );
   
-  m_MetaImage.CompressedData(m_UseCompression);
+  m_MetaImage.CompressedData( m_UseCompression );
 
-  if(m_UseCompression && m_UseStreamedWriting)
+  // this is a check to see if we are actually streaming
+  // we initialize with m_IORegion to match dimensions
+  ImageIORegion largestRegion(m_IORegion);
+  for(i=0; i<nDims; i++)
     {
-    std::cout << "Cannot use compression while stream reading" << std::endl;
+    largestRegion.SetIndex(i, 0);
+    largestRegion.SetSize(i, this->GetDimensions(i));
     }
-  else if(m_UseStreamedWriting)
+  
+  if( m_UseCompression && (largestRegion != m_IORegion) )
+    {
+    std::cout << "Compression in use: cannot stream the file writing" << std::endl;
+    }
+  else if(  largestRegion != m_IORegion )
     {
     int* indexMin = new int[nDims];
     int* indexMax = new int[nDims];
-    for(unsigned int k=0;k<nDims;k++)
+    for( unsigned int k=0; k<nDims; k++ )
       {
       indexMin[k] = m_IORegion.GetIndex()[k];
-      indexMax[k] = m_IORegion.GetIndex()[k]+m_IORegion.GetSize()[k];
+      indexMax[k] = m_IORegion.GetIndex()[k] + m_IORegion.GetSize()[k] - 1;
       }
       
-    m_MetaImage.WriteROI(indexMin,indexMax,m_FileName.c_str());
-    
+    if (!m_MetaImage.WriteROI( indexMin, indexMax, m_FileName.c_str() ))
+      {
+      delete [] indexMin;
+      delete [] indexMax;
+      ExceptionObject exception(__FILE__, __LINE__);
+      exception.SetDescription("File ROI cannot be written");
+      throw exception;
+      }
+
     delete [] indexMin;
     delete [] indexMax;
     }
   else
     {
-    m_MetaImage.Write(m_FileName.c_str());
+    if ( !m_MetaImage.Write(  m_FileName.c_str() ) ) 
+      {
+      ExceptionObject exception(__FILE__, __LINE__);
+      exception.SetDescription("File cannot be written");
+      throw exception;
+      }
     }
 
+  // we leak when exceptions are thrown :(
   delete []dSize;
   delete []eSpacing;
   delete []eOrigin;
@@ -1364,6 +1397,127 @@ MetaImageIO
   return streamableRegion;
 }
  
+unsigned int 
+MetaImageIO::GetActualNumberOfSplitsForWriting(unsigned int numberOfRequestedSplits,
+                                               const ImageIORegion &pasteRegion,
+                                               const ImageIORegion &largestPossibleRegion) 
+{ 
+  if (this->GetUseCompression()) 
+    {
+    // we can not stream or paste with compression
+    if (pasteRegion != largestPossibleRegion) 
+      {
+      itkExceptionMacro("Pasting and compression is not supported! Can't write:" << this->GetFileName());
+      }
+    else if (numberOfRequestedSplits != 1)  
+      {
+      itkDebugMacro("Requested streaming and compression");
+      itkDebugMacro("Meta IO is not streaming now!");
+      }
+     return 1;
+    }
 
+  if (!itksys::SystemTools::FileExists( m_FileName.c_str() )) 
+    {
+    // file doesn't exits so we don't have potential problems
+    }
+  else if (pasteRegion != largestPossibleRegion) 
+    {
+    // we are going to be pasting (may be streaming too)
+
+    // need to check to see if the file is compatible
+    std::string errorMessage;
+    Pointer headerImageIOReader = Self::New();
+
+    try 
+      {
+      headerImageIOReader->SetFileName(m_FileName.c_str());
+      headerImageIOReader->ReadImageInformation();
+      }
+    catch (...)
+      {
+      errorMessage = "Unable to read information from file: " + m_FileName;
+      }
+
+    
+    
+    // we now need to check that the following match:
+    // 1)file is not compressed
+    // 2)pixel type
+    // 3)dimensions
+    // 4)size/origin/spacing
+    // 5)direction cosines
+    // 
+
+    if (errorMessage.size()) 
+      {
+      // 0) Can't read file
+      }
+    // 1)file is not compressed
+    else if (headerImageIOReader->m_MetaImage.CompressedData()) 
+      {
+      errorMessage = "File is compressed: " + m_FileName;
+      }
+    // 2)pixel type
+    else if (headerImageIOReader->GetPixelType() != this->GetPixelType() ||
+             headerImageIOReader->GetNumberOfComponents() != this->GetNumberOfComponents() ||
+             headerImageIOReader->GetComponentType() != this->GetComponentType()) 
+      {
+      errorMessage = "Component type does not match in file: " + m_FileName;
+      }
+    // 3)dimensions/size
+    else if (headerImageIOReader->GetNumberOfDimensions() != this->GetNumberOfDimensions()) 
+      {
+      errorMessage = "Dimensions does not match in file: " + m_FileName;
+      }
+    else 
+      {
+      for (unsigned int i = 0; i < this->GetNumberOfDimensions(); ++i) 
+        {
+        // 4)size/origin/spacing
+        if (headerImageIOReader->GetDimensions(i) != this->GetDimensions(i) ||
+            headerImageIOReader->GetSpacing(i) != this->GetSpacing(i) ||
+            headerImageIOReader->GetOrigin(i) != this->GetOrigin(i))
+          {
+          errorMessage = "Size, spacing or origin does not match in file: " + m_FileName;
+          break;
+          }
+        // 5)direction cosines
+        if (headerImageIOReader->GetDirection(i) != this->GetDirection(i)) 
+          {
+          errorMessage = "Direction cosines does not match in file: " + m_FileName;
+          break;
+          }
+        }
+      }
+    
+    if (errorMessage.size()) 
+      {
+      itkExceptionMacro("Unable to paste because pasting file exists and is different. " << errorMessage);
+      }
+    }
+  else if (numberOfRequestedSplits != 1)  
+    {
+    // we are going be streaming
+    
+    // need to remove the file incase the file doesn't match out
+    // current header/meta data information
+    if (!itksys::SystemTools::RemoveFile(m_FileName.c_str()))
+      itkExceptionMacro("Unable to remove file for streaming: " << m_FileName);
+    }
+
+  return GetActualNumberOfSplitsForWritingCanStreamWrite(numberOfRequestedSplits, pasteRegion);
+}
+
+
+ImageIORegion 
+MetaImageIO::GetSplitRegionForWriting(unsigned int ithPiece, 
+                                      unsigned int numberOfActualSplits,
+                                      const ImageIORegion &pasteRegion,
+                                      const ImageIORegion &itkNotUsed(largestPossibleRegion) )
+{
+
+  return GetSplitRegionForWritingCanStreamWrite(ithPiece, numberOfActualSplits, pasteRegion);
+}
 
 } // end namespace itk

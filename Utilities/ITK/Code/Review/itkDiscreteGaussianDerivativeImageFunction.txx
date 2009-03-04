@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDiscreteGaussianDerivativeImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-25 06:00:24 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2008-12-06 13:28:10 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -73,7 +73,7 @@ DiscreteGaussianDerivativeImageFunction<TInputImage,TOutput>
 
 
 /** Recompute the gaussian kernel used to evaluate indexes
- *  This should use a fastest Derivative Gaussian operator*/
+ *  This should use a fastest Derivative Gaussian operator */
 template <class TInputImage, class TOutput>
 void
 DiscreteGaussianDerivativeImageFunction<TInputImage,TOutput>
@@ -102,15 +102,17 @@ DiscreteGaussianDerivativeImageFunction<TInputImage,TOutput>
         }
       }
 
-    // GaussianDerivativeOperator modifies the variance when setting image spacing
+    // GaussianDerivativeOperator modifies the variance when setting
+    // image spacing
     m_OperatorArray[direction].SetVariance( m_Variance[direction] );
     m_OperatorArray[direction].SetOrder( m_Order[direction] );
     m_OperatorArray[direction].SetNormalizeAcrossScale( m_NormalizeAcrossScale );
     m_OperatorArray[direction].CreateDirectional();
     }
 
-  // Now precompute the N-dimensional kernel. This fastest as we don't have to perform
-  // N convolutions for each point we calculate but only one.
+  // Now precompute the N-dimensional kernel. This fastest as we don't
+  // have to perform N convolutions for each point we calculate but
+  // only one.
 
   typedef itk::Image<TOutput,itkGetStaticConstMacro(ImageDimension2)>  KernelImageType;
   typename KernelImageType::Pointer kernelImage = KernelImageType::New();

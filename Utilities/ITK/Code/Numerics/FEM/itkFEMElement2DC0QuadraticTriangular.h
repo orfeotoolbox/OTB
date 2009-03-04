@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMElement2DC0QuadraticTriangular.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:40 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-01-28 21:44:35 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,23 +23,18 @@
 namespace itk {
 namespace fem {
 
-
-
-
 /**
  * \class Element2DC0QuadraticTriangular
  * \brief 3-noded, quadratic, C0 continuous finite element in 2D space.
  */
 class Element2DC0QuadraticTriangular : public ElementStd<6,2>
 {
-typedef ElementStd<3,2> TemplatedParentClass;
-FEM_ABSTRACT_CLASS( Element2DC0QuadraticTriangular, TemplatedParentClass )
+  typedef ElementStd<3,2> TemplatedParentClass;
+  FEM_ABSTRACT_CLASS( Element2DC0QuadraticTriangular, TemplatedParentClass )
 public:
 
-
-
-//////////////////////////////////////////////////////////////////////////
-  /*
+  //////////////////////////////////////////////////////////////////////////
+  /**
    * Methods related to numeric integration
    */
 
@@ -49,10 +44,8 @@ public:
 
   virtual unsigned int GetNumberOfIntegrationPoints(unsigned int order) const;
 
-
-
-//////////////////////////////////////////////////////////////////////////
-  /*
+  //////////////////////////////////////////////////////////////////////////
+  /**
    * Methods related to the geometry of an element
    */
 
@@ -62,10 +55,10 @@ public:
 
   // FIXME: Write a proper implementation
   virtual bool GetLocalFromGlobalCoordinates( const VectorType&, VectorType& ) const
-  { 
+    { 
     throw;
     return false;
-  }
+    }
 
   // Since the Jacobian is not quadratic, we need to provide our
   // own implementation of calculating the determinant and inverse.
@@ -80,9 +73,6 @@ public:
 #endif
 
 };
-
-
-
 
 }} // end namespace itk::fem
 

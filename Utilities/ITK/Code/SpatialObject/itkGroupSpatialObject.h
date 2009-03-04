@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGroupSpatialObject.h,v $
   Language:  C++
-  Date:      $Date: 2006-06-06 15:42:16 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-01-28 20:10:27 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,14 +26,14 @@ namespace itk
 {
 
 /** 
-* \class GroupSpatialObject
-* \brief Representation of a group based on the spatial object classes.
-*
-* A GroupSpatialObject represents a group by serving as the parent of
-* the elements of the group.  Since any itk::SpatialObject can have
-* children (see SpatialObject::GetChildren()), this class needs no
-* additional methods.
-*/
+ * \class GroupSpatialObject
+ * \brief Representation of a group based on the spatial object classes.
+ *
+ * A GroupSpatialObject represents a group by serving as the parent of
+ * the elements of the group.  Since any itk::SpatialObject can have
+ * children (see SpatialObject::GetChildren()), this class needs no
+ * additional methods.
+ */
 
 template < unsigned int TDimension = 3 >
 class GroupSpatialObject 

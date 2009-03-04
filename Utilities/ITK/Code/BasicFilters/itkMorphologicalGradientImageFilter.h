@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMorphologicalGradientImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 19:33:41 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-28 18:14:36 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -49,7 +49,7 @@ namespace itk {
  * Note: This filter produces a scalar image that is the magnitude of
  * the gradient.
  * 
- * \author Gaëtan Lehmann. Biologie du Développement et de la Reproduction, INRA de Jouy-en-Josas, France.
+ * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France.
  *
  * \sa GradientMagnitudeImageFilter
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters

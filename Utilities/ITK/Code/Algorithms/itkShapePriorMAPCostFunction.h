@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShapePriorMAPCostFunction.h,v $
   Language:  C++
-  Date:      $Date: 2004-11-04 20:40:34 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-01-27 19:30:15 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -52,7 +52,8 @@ class ITK_EXPORT ShapePriorMAPCostFunction :
 public:
   /** Standard class typedefs. */
   typedef ShapePriorMAPCostFunction    Self;
-  typedef ShapePriorMAPCostFunctionBase<TFeatureImage,TOutputPixel>  Superclass;
+  typedef ShapePriorMAPCostFunctionBase<TFeatureImage,TOutputPixel>
+                                       Superclass;
   typedef SmartPointer<Self>           Pointer;
   typedef SmartPointer<const Self>     ConstPointer;
 
@@ -101,7 +102,8 @@ public:
 
   /** Set/Get the weights for each term. Default is a vector of all ones. 
    * The weights are applied to terms in the following order:
-   * LogInsideTerm, LogGradientTerm, LogShapePriorTerm and LogPosePriorTerm.*/
+   * LogInsideTerm, LogGradientTerm, LogShapePriorTerm and
+   * LogPosePriorTerm. */
   typedef FixedArray<double,4> WeightsType;
   itkSetMacro( Weights, WeightsType );
   itkGetConstReferenceMacro( Weights, WeightsType );  
@@ -162,6 +164,3 @@ private:
 #endif
 
 #endif
-
-
-

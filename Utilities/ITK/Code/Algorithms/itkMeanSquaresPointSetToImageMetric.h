@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanSquaresPointSetToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2008-02-03 04:05:29 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2009-01-24 20:03:00 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,11 +44,10 @@ class ITK_EXPORT MeanSquaresPointSetToImageMetric :
 public:
 
   /** Standard class typedefs. */
-  typedef MeanSquaresPointSetToImageMetric    Self;
-  typedef PointSetToImageMetric<TFixedPointSet, TMovingImage >  Superclass;
-
-  typedef SmartPointer<Self>         Pointer;
-  typedef SmartPointer<const Self>   ConstPointer;
+  typedef MeanSquaresPointSetToImageMetric                     Self;
+  typedef PointSetToImageMetric<TFixedPointSet, TMovingImage > Superclass;
+  typedef SmartPointer<Self>                                   Pointer;
+  typedef SmartPointer<const Self>                             ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -106,6 +105,3 @@ private:
 #endif
 
 #endif
-
-
-

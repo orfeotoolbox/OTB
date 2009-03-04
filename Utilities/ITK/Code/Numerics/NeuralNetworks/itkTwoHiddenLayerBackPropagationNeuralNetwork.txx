@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTwoHiddenLayerBackPropagationNeuralNetwork.txx,v $
   Language:  C++
-  Date:      $Date: 2007-08-17 13:10:57 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-01-28 21:04:59 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __TwoHiddenLayerBackPropNeuralNetworkBase_txx
-#define __TwoHiddenLayerBackPropNeuralNetworkBase_txx
+#ifndef __itkTwoHiddenLayerBackPropagationNeuralNetwork_txx
+#define __itkTwoHiddenLayerBackPropagationNeuralNetwork_txx
 
 #include "itkTwoHiddenLayerBackPropagationNeuralNetwork.h"
 

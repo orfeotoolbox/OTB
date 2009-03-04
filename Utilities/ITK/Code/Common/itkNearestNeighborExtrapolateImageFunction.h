@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNearestNeighborExtrapolateImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2006-02-06 22:01:57 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-02-06 20:53:10 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -41,10 +41,10 @@ class ITK_EXPORT NearestNeighborExtrapolateImageFunction :
 {
 public:
   /** Standard class typedefs. */
-  typedef NearestNeighborExtrapolateImageFunction Self;
+  typedef NearestNeighborExtrapolateImageFunction         Self;
   typedef ExtrapolateImageFunction<TInputImage,TCoordRep> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                              Pointer;
+  typedef SmartPointer<const Self>                        ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(NearestNeighborExtrapolateImageFunction, 
@@ -77,7 +77,7 @@ public:
    */
   virtual OutputType EvaluateAtContinuousIndex( 
     const ContinuousIndexType & index ) const
-  {
+    {
     typedef typename IndexType::IndexValueType ValueType;
     IndexType nindex;
     for ( unsigned int j = 0; j < ImageDimension; j++ )
@@ -96,7 +96,7 @@ public:
         }
       }
     return static_cast<OutputType>( this->GetInputImage()->GetPixel( nindex ) );
-  }
+    }
 
 
   /** Evaluate the function at a ContinuousIndex position
@@ -108,7 +108,7 @@ public:
    */
   virtual OutputType EvaluateAtIndex( 
     const IndexType & index ) const
-  {
+    {
     IndexType nindex;
     for ( unsigned int j = 0; j < ImageDimension; j++ )
       {
@@ -126,7 +126,7 @@ public:
         }
       }
     return static_cast<OutputType>( this->GetInputImage()->GetPixel( nindex ) );
-  }
+    }
 
 
 protected:

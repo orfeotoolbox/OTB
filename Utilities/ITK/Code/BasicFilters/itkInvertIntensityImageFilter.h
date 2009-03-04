@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkInvertIntensityImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 16:45:11 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-01-28 18:14:36 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -69,7 +69,7 @@ private:
  * type. This filter can be used to invert, for example, a binary
  * image, a distance map, etc.
  *
- * \author Gaëtan Lehmann. Biologie du Développement et de la Reproduction, INRA de Jouy-en-Josas, France.
+ * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France.
  *
  * \sa IntensityWindowingImageFilter ShiftScaleImageFilter
  * \ingroup IntensityImageFilters  Multithreaded

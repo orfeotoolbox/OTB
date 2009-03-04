@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEuclideanDistancePointMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2007-08-17 18:02:38 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2008-12-17 18:52:03 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkEuclideanDistancePointMetric_txx
-#define _itkEuclideanDistancePointMetric_txx
+#ifndef __itkEuclideanDistancePointMetric_txx
+#define __itkEuclideanDistancePointMetric_txx
 
 #include "itkEuclideanDistancePointMetric.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
@@ -41,14 +41,14 @@ unsigned int
 EuclideanDistancePointMetric<TFixedPointSet,TMovingPointSet,TDistanceMap>  
 ::GetNumberOfValues() const
 {
- MovingPointSetConstPointer movingPointSet = this->GetMovingPointSet();
+  MovingPointSetConstPointer movingPointSet = this->GetMovingPointSet();
 
- if( !movingPointSet ) 
+  if( !movingPointSet ) 
     {
     itkExceptionMacro( << "Moving point set has not been assigned" );
     }
 
- return  movingPointSet->GetPoints()->Size();
+  return  movingPointSet->GetPoints()->Size();
 }
 
 

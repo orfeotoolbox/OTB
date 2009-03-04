@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNeighborhoodAlgorithm.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:17 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2009-02-06 20:53:11 $
+  Version:   $Revision: 1.28 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,19 +29,19 @@ namespace itk
 {
   
 namespace NeighborhoodAlgorithm
-{      
+{
 
 /** \class ImageBoundaryFacesCalculator */
 template<class TImage>
 struct ITK_EXPORT ImageBoundaryFacesCalculator
 {
   typedef typename NeighborhoodIterator<TImage>::RadiusType RadiusType;
-  typedef typename TImage::RegionType RegionType;
-  typedef typename TImage::IndexType  IndexType;
-  typedef typename IndexType::IndexValueType  IndexValueType;
-  typedef typename TImage::SizeType   SizeType;
-  typedef typename SizeType::SizeValueType  SizeValueType;
-  typedef std::list<RegionType> FaceListType;
+  typedef typename TImage::RegionType                       RegionType;
+  typedef typename TImage::IndexType                        IndexType;
+  typedef typename IndexType::IndexValueType                IndexValueType;
+  typedef typename TImage::SizeType                         SizeType;
+  typedef typename SizeType::SizeValueType                  SizeValueType;
+  typedef std::list<RegionType>                             FaceListType;
   itkStaticConstMacro(ImageDimension, unsigned int, TImage::ImageDimension);
 
   FaceListType operator()(const TImage *, RegionType, RadiusType);

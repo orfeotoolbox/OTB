@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanSquaresHistogramImageToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:34 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-01-24 20:02:59 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -21,27 +21,27 @@
 
 namespace itk
 {
-  /** \class MeanSquaresHistogramImageToImageMetric
-      \brief Computes mean squared difference similarity measure between two
-      images to be registered.
-
-      This class is templated over the type of the fixed and moving
-      images to be compared.
-
-      This metric computes the similarity measure between pixels in the
-      moving image and pixels in the fixed images using a histogram.
-
-      \ingroup RegistrationMetrics */
+/** \class MeanSquaresHistogramImageToImageMetric
+ * \brief Computes mean squared difference similarity measure between
+ * two images to be registered.
+ *
+ * This class is templated over the type of the fixed and moving
+ * images to be compared.
+ *
+ * This metric computes the similarity measure between pixels in the
+ * moving image and pixels in the fixed images using a histogram. 
+ *
+ *    \ingroup RegistrationMetrics */
 template <class TFixedImage, class TMovingImage>
 class ITK_EXPORT MeanSquaresHistogramImageToImageMetric :
 public HistogramImageToImageMetric<TFixedImage, TMovingImage>
 {
- public:
+public:
   /** Standard class typedefs. */
-  typedef MeanSquaresHistogramImageToImageMetric Self;
+  typedef MeanSquaresHistogramImageToImageMetric                 Self;
   typedef HistogramImageToImageMetric<TFixedImage, TMovingImage> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef SmartPointer<Self>                                     Pointer;
+  typedef SmartPointer<const Self>                               ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

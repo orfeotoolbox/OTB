@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOtsuMultipleThresholdsImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-08-01 19:16:16 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-01-26 21:45:54 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkOtsuMultipleThresholdsImageFilter_txx
-#define _itkOtsuMultipleThresholdsImageFilter_txx
+#ifndef __itkOtsuMultipleThresholdsImageFilter_txx
+#define __itkOtsuMultipleThresholdsImageFilter_txx
 
 #include "itkOtsuMultipleThresholdsImageFilter.h"
 #include "itkThresholdLabelerImageFilter.h"
@@ -58,7 +58,7 @@ OtsuMultipleThresholdsImageFilter<TInputImage, TOutputImage>
   m_Thresholds = otsuThresholdCalculator->GetOutput();
 
   typename ThresholdLabelerImageFilter<TInputImage,TOutputImage>::Pointer threshold = 
-    ThresholdLabelerImageFilter<TInputImage,TOutputImage>::New();;
+    ThresholdLabelerImageFilter<TInputImage,TOutputImage>::New();
   
   progress->RegisterInternalFilter(threshold,.5f);
   threshold->GraftOutput (this->GetOutput());
@@ -91,7 +91,7 @@ OtsuMultipleThresholdsImageFilter<TInputImage,TOutputImage>
 
   os << indent << "NumberOfHistogramBins: " << m_NumberOfHistogramBins << std::endl;
   os << indent << "NumberOfThresholds: " << m_NumberOfThresholds << std::endl;
-  os << indent << "LabelOffset: " << m_LabelOffset << std::endl;;
+  os << indent << "LabelOffset: " << m_LabelOffset << std::endl;
   os << indent << "Thresholds: " << std::endl;
   for (unsigned long j=0; j<m_Thresholds.size(); j++)
     {

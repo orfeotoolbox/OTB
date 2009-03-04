@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRegionalMaximaImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-02-07 15:58:06 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-01-28 18:14:36 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -35,7 +35,7 @@ namespace itk {
  * \author Gaetan Lehmann
  *
  * This class was contributed to the Insight Journal by author Gaetan Lehmann.
- * Biologie du Développement et de la Reproduction, INRA de Jouy-en-Josas,
+ * Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas,
  * France. The paper can be found at
  * http://insight-journal.org/midas/handle.php?handle=1926/153
  *
