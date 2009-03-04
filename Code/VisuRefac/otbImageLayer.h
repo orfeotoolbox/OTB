@@ -60,6 +60,7 @@ public:
   typedef typename ImageType::PixelType                               PixelType;
   typedef typename ImageType::InternalPixelType                       InternalPixelType;
   typedef typename ImageType::RegionType                              RegionType;
+  typedef typename ImageType::IndexType                               IndexType;
   
   /** Output image typedef */
   typedef TOutputImage                                                OutputImageType;
@@ -180,6 +181,9 @@ public:
 
   /** Actually render the image */
   virtual void Render();
+
+  /** Get the pixel description */
+  std::string GetPixelDescription(const IndexType & index);  
 
 protected:
   /** Constructor */

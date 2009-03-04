@@ -19,6 +19,7 @@
 #define __otbImageViewerModel_h
 
 #include "otbMVCModel.h"
+#include "otbLayerBasedModel.h"
 #include "otbLayer.h"
 #include "otbObjectList.h"
 #include "otbImageViewerModelListener.h"
@@ -40,17 +41,17 @@ namespace otb
 
 template <class TOutputImage = otb::Image<itk::RGBPixel<unsigned char>,2 >  > 
 class ImageViewerModel
-  : public MVCModel<ImageViewerModelListener>
+  : public MVCModel<ImageViewerModelListener>, public LayerBasedModel< Layer<TOutputImage> >
 {
 public:
   /** Standard class typedefs */
-  typedef ImageViewerModel                     Self;
-  typedef MVCModel<ImageViewerModelListener>   Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef ImageViewerModel                       Self;
+  typedef LayerBasedModel< Layer<TOutputImage> > Superclass;
+  typedef itk::SmartPointer<Self>                Pointer;
+  typedef itk::SmartPointer<const Self>          ConstPointer;
     
   /** Runtime information */
-  itkTypeMacro(ImageViewerModel,MVCModel);
+  itkTypeMacro(ImageViewerModel,LayerBasedModel);
 
   /** New macro */
   itkNewMacro(Self);
@@ -60,14 +61,14 @@ public:
   typedef typename OutputImageType::Pointer    OutputImagePointerType;
   
   /** Layer typedef */
-  typedef otb::Layer<OutputImageType>          LayerType;
+  typedef typename Superclass::LayerType       LayerType;
   typedef typename LayerType::RegionType       RegionType;
   typedef typename RegionType::IndexType       IndexType;
   
   /** Layer list typedef */
-  typedef otb::ObjectList<LayerType>           LayerListType;
-  typedef typename LayerListType::Pointer      LayerListPointerType;
-  typedef typename LayerListType::Iterator     LayerIteratorType;
+  typedef typename Superclass::LayerListType    LayerListType;
+  typedef typename LayerListType::Pointer       LayerListPointerType;
+  typedef typename LayerListType::ConstIterator LayerIteratorType;
 
   /** Listener typedef */
   typedef ImageViewerModelListener             ListenerType;
@@ -87,25 +88,12 @@ public:
    */
   virtual unsigned int AddLayer(LayerType * layer);
 
-  /** Get the layer at the current index
-   *  \param index The index of the layer to get.
-   *  \return a pointer to the layer or NULL if no layer was found at
-   * this location.
-   */
-  virtual LayerType *  GetLayer(unsigned int index);
-
   /** Remove the layer at the current index
    *  \param index The index of the layer to remove.
    *  \return true if a layer was actually deleted, false otherwise.
    * this location.
    */
   virtual bool         DeleteLayer(unsigned int index);
-
-  /** Returns the first layer whose name matches the given name.
-   *  \param name The name of the layer.
-   *  \return a pointer to the layer or NULL if no layer was found.
-   */
-  virtual LayerType * GetLayerByName(std::string name);
 
   /** Delete the first layer whose name matches the given name.
    *  \param name The name of the layer.
@@ -116,9 +104,6 @@ public:
 
   /** Clear all layers */
   virtual void         ClearLayers(void);
-
-  /** \return The number of layers */
-  virtual unsigned int GetNumberOfLayers(void);
 
   /** Get/Set the viewer name */
   itkGetStringMacro(Name);
@@ -189,9 +174,6 @@ private:
   /** Viewer name */
   std::string m_Name;
   
-  /** Layer list */
-  LayerListPointerType  m_Layers;
-
   /** Rasterized quicklook */
   OutputImagePointerType m_RasterizedQuicklook;
   bool                   m_HasQuicklook;
