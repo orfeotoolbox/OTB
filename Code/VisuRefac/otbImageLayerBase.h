@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLayer_h
-#define __otbLayer_h
+#ifndef __otbImageLayerBase_h
+#define __otbImageLayerBase_h
 
 #include "itkObject.h"
 #include "otbImage.h"
@@ -26,7 +26,7 @@
 
 namespace otb
 {
-/** \class Layer
+/** \class ImageLayerBase
 *   \brief Base class for all layers objects
 *   A layer is something that can be rendered to the screen.
 *   
@@ -34,24 +34,25 @@ namespace otb
 */
 
 template <class TOutputImage = Image<itk::RGBPixel<unsigned char>, 2 > > 
-class Layer
+class ImageLayerBase
   : public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef Layer                                Self;
+  typedef ImageLayerBase                       Self;
   typedef itk::Object                          Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
     
   /** Runtime information */
-  itkTypeMacro(Layer,Object);
+  itkTypeMacro(ImageLayerBase,Object);
 
   /** Output image typedef */
   typedef TOutputImage                           OutputImageType;
   typedef typename OutputImageType::Pointer      OutputImagePointerType;
   typedef typename OutputImageType::RegionType   RegionType;
   typedef typename RegionType::SizeType          SizeType;
+  typedef typename RegionType::IndexType         IndexType;
   typedef typename OutputImageType::PixelType    PixelType;
 
   /** Blending function typedef */
@@ -61,6 +62,9 @@ public:
   /** Actually render the layer */
   virtual void Render() = 0;
 
+  /** Get the pixel description */
+  virtual std::string GetPixelDescription(const IndexType & index) = 0;  
+  
   itkGetObjectMacro(RenderedQuicklook,     OutputImageType);
   itkGetObjectMacro(RenderedExtract,       OutputImageType);
   itkGetObjectMacro(RenderedScaledExtract, OutputImageType);
@@ -114,7 +118,7 @@ public:
 
 protected:
   /** Constructor */
-  Layer() : m_Name("Default"), m_Visible(false), m_Extent(), 
+  ImageLayerBase() : m_Name("Default"), m_Visible(false), m_Extent(), 
 	    m_RenderedQuicklook(), m_HasQuicklook(false), m_QuicklookSize(),  m_QuicklookSubsamplingRate(1),
 	    m_RenderedExtract(),   m_HasExtract(false),   m_ExtractRegion(),
 	    m_RenderedScaledExtract(), m_HasScaledExtract(false), m_ScaledExtractRegion(),
@@ -124,12 +128,12 @@ protected:
     m_BlendingFunction = Function::UniformAlphaBlendingFunction<PixelType>::New();
   }
   /** Destructor */
-  virtual ~Layer(){}
+  virtual ~ImageLayerBase(){}
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os,indent);
-    os<<indent<<"Layer "<<m_Name<<":"<<std::endl;
+    os<<indent<<"ImageLayerBase "<<m_Name<<":"<<std::endl;
     os<<indent<<indent<<"Has a quicklook: "     <<(m_HasQuicklook     ? "true" : "false") << std::endl;
     os<<indent<<indent<<"Has an extract: "      <<(m_HasExtract       ? "true" : "false") << std::endl;
     os<<indent<<indent<<"Has a scaled extract: "<<(m_HasScaledExtract ? "true" : "false") << std::endl;
@@ -141,7 +145,7 @@ protected:
   itkSetObjectMacro(RenderedScaledExtract, OutputImageType);
 
 private:
-  Layer(const Self&);     // purposely not implemented
+  ImageLayerBase(const Self&);     // purposely not implemented
   void operator=(const Self&); // purposely not implemented
 
   /** The layer name */

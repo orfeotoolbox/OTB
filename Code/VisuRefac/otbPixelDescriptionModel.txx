@@ -25,27 +25,27 @@
 namespace otb
 {
 
-template <class TLayer>
-PixelDescriptionModel<TLayer>
+template <class TOutputImage>
+PixelDescriptionModel<TOutputImage>
 ::PixelDescriptionModel() : m_PixelDescription("")
 {
 }
 
-template <class TLayer>
-PixelDescriptionModel<TLayer>
+template <class TOutputImage>
+PixelDescriptionModel<TOutputImage>
 ::~PixelDescriptionModel()
 {}
-template <class TLayer>
+template <class TOutputImage>
 void
-PixelDescriptionModel<TLayer>
+PixelDescriptionModel<TOutputImage>
 ::ClearPixelDescription()
 {
   m_PixelDescription = "";
 }
 
-template <class TLayer>
+template <class TOutputImage>
 void
-PixelDescriptionModel<TLayer>
+PixelDescriptionModel<TOutputImage>
 ::UpdatePixelDescription(const IndexType & index)
 {
   // The output stringstream
@@ -68,17 +68,17 @@ PixelDescriptionModel<TLayer>
   this->NotifyAll();
 }
 
-template <class TLayer>
+template <class TOutputImage>
 void     
-PixelDescriptionModel<TLayer>
+PixelDescriptionModel<TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
 }
 
-template <class TLayer>
+template <class TOutputImage>
 void 
-PixelDescriptionModel<TLayer>
+PixelDescriptionModel<TOutputImage>
 ::Notify(ListenerType * listener)
 {
   listener->PixelDescriptionModelNotify();

@@ -22,8 +22,7 @@ PURPOSE.  See the above copyright notices for more information.
 int otbPixelDescriptionModelNew( int argc, char * argv[] )
 {
   typedef otb::Image<double,2>                  ImageType;
-  typedef otb::ImageLayer<ImageType>            LayerType;
-  typedef otb::PixelDescriptionModel<LayerType> ModelType;
+  typedef otb::PixelDescriptionModel<ImageType> ModelType;
 
   // Instantiation
   ModelType::Pointer model = ModelType::New();

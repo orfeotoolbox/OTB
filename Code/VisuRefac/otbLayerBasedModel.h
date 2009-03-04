@@ -95,6 +95,11 @@ public:
   /** \return The number of layers */
   virtual unsigned int GetNumberOfLayers(void);
 
+  /** Set/Get the layers stack */
+  itkSetObjectMacro(Layers,LayerListType);
+  itkGetObjectMacro(Layers,LayerListType);
+  
+
 protected:
   /** Constructor */
   LayerBasedModel();

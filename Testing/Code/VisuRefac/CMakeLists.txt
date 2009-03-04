@@ -162,25 +162,25 @@ ADD_TEST(vrTuLayerBasedModelNew ${VISUREFAC_TESTS1}
 otbLayerBasedModelNew
 )
 
-#------------ otb::ImageViewerModel ------------
+#------------ otb::ImageLayerRenderingModel ------------
 
-ADD_TEST(vrTuImageViewerModelNew ${VISUREFAC_TESTS1}
-otbImageViewerModelNew
+ADD_TEST(vrTuImageLayerRenderingModelNew ${VISUREFAC_TESTS1}
+otbImageLayerRenderingModelNew
 )
 
-ADD_TEST(vrTvImageViewerModelSingleLayer ${VISUREFAC_TESTS1}
+ADD_TEST(vrTvImageLayerRenderingModelSingleLayer ${VISUREFAC_TESTS1}
 --compare-n-images ${TOL} 3
-${BASELINE}/vrTvImageViewerModelSingleLayerQuicklookOutput.png
-${TEMP}/vrTvImageViewerModelSingleLayerQuicklookOutput.png
-${BASELINE}/vrTvImageViewerModelSingleLayerExtractOutput.png
-${TEMP}/vrTvImageViewerModelSingleLayerExtractOutput.png
-${BASELINE}/vrTvImageViewerModelSingleLayerScaledExtractOutput.png
-${TEMP}/vrTvImageViewerModelSingleLayerScaledExtractOutput.png
-otbImageViewerModelSingleLayer
+${BASELINE}/vrTvImageLayerRenderingModelSingleLayerQuicklookOutput.png
+${TEMP}/vrTvImageLayerRenderingModelSingleLayerQuicklookOutput.png
+${BASELINE}/vrTvImageLayerRenderingModelSingleLayerExtractOutput.png
+${TEMP}/vrTvImageLayerRenderingModelSingleLayerExtractOutput.png
+${BASELINE}/vrTvImageLayerRenderingModelSingleLayerScaledExtractOutput.png
+${TEMP}/vrTvImageLayerRenderingModelSingleLayerScaledExtractOutput.png
+otbImageLayerRenderingModelSingleLayer
 ${INPUTDATA}/couleurs.tif
-${TEMP}/vrTvImageViewerModelSingleLayerQuicklookOutput.png
-${TEMP}/vrTvImageViewerModelSingleLayerExtractOutput.png
-${TEMP}/vrTvImageViewerModelSingleLayerScaledExtractOutput.png
+${TEMP}/vrTvImageLayerRenderingModelSingleLayerQuicklookOutput.png
+${TEMP}/vrTvImageLayerRenderingModelSingleLayerExtractOutput.png
+${TEMP}/vrTvImageLayerRenderingModelSingleLayerScaledExtractOutput.png
 )
 
 #------------ otb::ImageLayerGenerator ------------
@@ -247,8 +247,8 @@ otbUniformAlphaBlendingFunctionNew.cxx
 otbBlendingImageFilterNew.cxx
 otbBlendingImageFilter.cxx
 otbLayerBasedModelNew.cxx
-otbImageViewerModelNew.cxx
-otbImageViewerModelSingleLayer.cxx
+otbImageLayerRenderingModelNew.cxx
+otbImageLayerRenderingModelSingleLayer.cxx
 otbImageLayerGeneratorNew.cxx
 otbImageLayerGeneratorScalar.cxx
 otbImageLayerGeneratorVector.cxx

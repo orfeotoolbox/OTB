@@ -27,7 +27,8 @@ template <class TInputImage>
 ImageWidget<TInputImage>
 ::ImageWidget() : Fl_Gl_Window(0,0,0,0), m_IsotropicZoom(1.0), m_OpenGlBuffer(NULL), m_OpenGlBufferedRegion(),
 		  m_Identifier("Default"), m_UseGlAcceleration(false), m_Rectangle(),m_DisplayRectangle(false),
-		  m_RectangleColor(), m_ImageExtentWidth(0), m_ImageExtentHeight(0), m_ImageExtentX(), m_ImageExtentY()
+		  m_RectangleColor(), m_ImageExtentWidth(0), m_ImageExtentHeight(0), m_ImageExtentX(), m_ImageExtentY(),
+		  m_SubsamplingRate(1)
 {
   #ifdef OTB_GL_USE_ACCEL
   m_UseGlAcceleration = true;
@@ -235,10 +236,10 @@ ImageWidget<TInputImage>
     // UL left in image space is LR in opengl space, so we need to get
     // the real upper left
     index[1]+=m_Rectangle.GetSize()[1];
-    index = RegionIndexToScreenIndex(index);
+    index = ImageIndexToScreenIndex(index);
     
-    size[0]= static_cast<unsigned int>(static_cast<double>(m_Rectangle.GetSize()[0])*m_IsotropicZoom);
-    size[1] = static_cast<unsigned int>(static_cast<double>(m_Rectangle.GetSize()[1])*m_IsotropicZoom);
+    size[0]=  static_cast<unsigned int>(static_cast<double>(m_Rectangle.GetSize()[0]/m_SubsamplingRate)*m_IsotropicZoom);
+    size[1] = static_cast<unsigned int>(static_cast<double>(m_Rectangle.GetSize()[1]/m_SubsamplingRate)*m_IsotropicZoom);
     
 
     glEnable(GL_BLEND);
@@ -319,12 +320,36 @@ template <class TInputImage>
 typename ImageWidget<TInputImage>
 ::IndexType
 ImageWidget<TInputImage>
+::ScreenIndexToImageIndex(const IndexType & index)
+{
+  IndexType resp = ScreenIndexToRegionIndex(index); 
+  resp[0]*=m_SubsamplingRate;
+  resp[1]*=m_SubsamplingRate;
+  return resp;
+}
+
+template <class TInputImage>
+typename ImageWidget<TInputImage>
+::IndexType
+ImageWidget<TInputImage>
 ::RegionIndexToScreenIndex(const IndexType & index)
 {
   IndexType resp;
   resp[0]=static_cast<int>(m_ImageExtentX+(index[0]-m_OpenGlBufferedRegion.GetIndex()[0])*m_IsotropicZoom);
   resp[1]=static_cast<int>(m_ImageExtentY+m_ImageExtentHeight-(index[1]-m_OpenGlBufferedRegion.GetIndex()[1])*m_IsotropicZoom);
    return resp;
+}
+
+template <class TInputImage>
+typename ImageWidget<TInputImage>
+::IndexType
+ImageWidget<TInputImage>
+::ImageIndexToScreenIndex(const IndexType & index)
+{
+  IndexType resp;
+  resp[0]=static_cast<int>(m_ImageExtentX+(index[0]/m_SubsamplingRate-m_OpenGlBufferedRegion.GetIndex()[0])*m_IsotropicZoom);
+  resp[1]=static_cast<int>(m_ImageExtentY+m_ImageExtentHeight-(index[1]/m_SubsamplingRate-m_OpenGlBufferedRegion.GetIndex()[1])*m_IsotropicZoom);
+  return resp;
 }
 
 }

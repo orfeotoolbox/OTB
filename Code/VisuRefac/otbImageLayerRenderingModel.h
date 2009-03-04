@@ -15,19 +15,19 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageViewerModel_h
-#define __otbImageViewerModel_h
+#ifndef __otbImageLayerRenderingModel_h
+#define __otbImageLayerRenderingModel_h
 
-#include "otbMVCModel.h"
+#include "otbMVCModelBase.h"
 #include "otbLayerBasedModel.h"
-#include "otbLayer.h"
+#include "otbImageLayerBase.h"
 #include "otbObjectList.h"
-#include "otbImageViewerModelListener.h"
+#include "otbImageLayerRenderingModelListener.h"
 #include "otbBlendingImageFilter.h"
 
 namespace otb
 {
-/** \class ImageViewerModel
+/** \class ImageLayerRenderingModel
 *   \brief This class is the model for ImageViewer.
 *   It is in charge of rendering to the screen a set of Layer.
 *   Each visible layer is rendered separately, and the resulting
@@ -40,18 +40,18 @@ namespace otb
 */
 
 template <class TOutputImage = otb::Image<itk::RGBPixel<unsigned char>,2 >  > 
-class ImageViewerModel
-  : public MVCModel<ImageViewerModelListener>, public LayerBasedModel< Layer<TOutputImage> >
+class ImageLayerRenderingModel
+  : public MVCModelBase<ImageLayerRenderingModelListener>, public LayerBasedModel< ImageLayerBase<TOutputImage> >
 {
 public:
   /** Standard class typedefs */
-  typedef ImageViewerModel                       Self;
-  typedef LayerBasedModel< Layer<TOutputImage> > Superclass;
-  typedef itk::SmartPointer<Self>                Pointer;
-  typedef itk::SmartPointer<const Self>          ConstPointer;
+  typedef ImageLayerRenderingModel                                 Self;
+  typedef LayerBasedModel< ImageLayerBase <TOutputImage> > Superclass;
+  typedef itk::SmartPointer<Self>                          Pointer;
+  typedef itk::SmartPointer<const Self>                    ConstPointer;
     
   /** Runtime information */
-  itkTypeMacro(ImageViewerModel,LayerBasedModel);
+  itkTypeMacro(ImageLayerRenderingModel,LayerBasedModel);
 
   /** New macro */
   itkNewMacro(Self);
@@ -71,7 +71,7 @@ public:
   typedef typename LayerListType::ConstIterator LayerIteratorType;
 
   /** Listener typedef */
-  typedef ImageViewerModelListener             ListenerType;
+  typedef ImageLayerRenderingModelListener             ListenerType;
 
   /** Blending filter typedef */
   typedef otb::BlendingImageFilter<OutputImageType> BlendingFilterType;
@@ -80,30 +80,6 @@ public:
   typedef otb::ObjectList<BlendingFilterType>      BlendingFilterListType;
   typedef typename BlendingFilterListType::Pointer BlendingFilterListPointerType;
   typedef typename BlendingFilterListType::Iterator BlendingFilterIteratorType;
-
-
-  /** Add a new layer
-   *  \param layer The layer to add.
-   *  \return The location of the added layer.
-   */
-  virtual unsigned int AddLayer(LayerType * layer);
-
-  /** Remove the layer at the current index
-   *  \param index The index of the layer to remove.
-   *  \return true if a layer was actually deleted, false otherwise.
-   * this location.
-   */
-  virtual bool         DeleteLayer(unsigned int index);
-
-  /** Delete the first layer whose name matches the given name.
-   *  \param name The name of the layer.
-   *  \return true if a layer was actually deleted, false otherwise.
-   * this location.
-   */
-  virtual bool         DeleteLayerByName(std::string name);
-
-  /** Clear all layers */
-  virtual void         ClearLayers(void);
 
   /** Get/Set the viewer name */
   itkGetStringMacro(Name);
@@ -118,8 +94,6 @@ public:
   /** Set/Get the Extract Region */
   itkSetMacro(ExtractRegion,RegionType);
   itkGetConstReferenceMacro(ExtractRegion,RegionType);
-  /** Get the extract region in the quicklook space */
-  itkGetConstReferenceMacro(SubsampledExtractRegion,RegionType);
   
   /** Set/Get the Scaled Extract Region */
   itkSetMacro(ScaledExtractRegion,RegionType);
@@ -141,16 +115,15 @@ public:
   /** Change the extract region by giving the center of the
    * region */
   void SetExtractRegionCenter(const IndexType & index);
-
- /** Change the extract region by giving the subsamppled center 
-  *  of the region */
-  void SetExtractRegionSubsampledCenter(const IndexType & index);
+  
+  /** Get the sumbsampling rate */
+  unsigned int GetSubsamplingRate();
 
 protected:
   /** Constructor */
-  ImageViewerModel();
+  ImageLayerRenderingModel();
   /** Destructor */
-  ~ImageViewerModel();
+  ~ImageLayerRenderingModel();
 
   /** Printself method */
   void          PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -168,7 +141,7 @@ protected:
   RegionType    ConstrainRegion(const RegionType & region, const RegionType & largest);
 
 private:
-  ImageViewerModel(const Self&);     // purposely not implemented
+  ImageLayerRenderingModel(const Self&);     // purposely not implemented
   void operator=(const Self&); // purposely not implemented
 
   /** Viewer name */
@@ -182,8 +155,7 @@ private:
   OutputImagePointerType m_RasterizedExtract;
   bool                   m_HasExtract;
   RegionType             m_ExtractRegion;
-  RegionType             m_SubsampledExtractRegion;
-
+  
   /** Rendered scaled extract */
   OutputImagePointerType m_RasterizedScaledExtract;
   bool                   m_HasScaledExtract;
@@ -201,7 +173,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageViewerModel.txx"
+#include "otbImageLayerRenderingModel.txx"
 #endif
 
 #endif

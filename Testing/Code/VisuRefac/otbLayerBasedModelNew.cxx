@@ -15,7 +15,7 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbLayer.h"
+#include "otbImageLayerBase.h"
 #include "otbLayerBasedModel.h"
 #include "otbImage.h"
 #include "itkRGBPixel.h"
@@ -24,7 +24,7 @@ int otbLayerBasedModelNew( int argc, char * argv[] )
 {
   typedef itk::RGBPixel<unsigned char>     RGBPixelType;
   typedef otb::Image<RGBPixelType,2>       ImageType;
-  typedef otb::Layer<ImageType>            LayerType;
+  typedef otb::ImageLayerBase<ImageType>   LayerType;
   typedef otb::LayerBasedModel<LayerType>  ModelType;
 
   // Instantiation
