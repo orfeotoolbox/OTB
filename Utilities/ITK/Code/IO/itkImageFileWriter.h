@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageFileWriter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-12 23:17:56 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2007-03-17 21:02:11 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -139,17 +139,7 @@ public:
   /** Specify the region to write. If left NULL, then the whole image
    * is written. */
   void SetIORegion(const ImageIORegion & region);
-  const ImageIORegion &GetIORegion(void) const 
-    {
-    return m_PasteIORegion;
-    }
-
-
-  /** Set/Get the number of pieces to divide the input.  The upstream pipeline
-   * will try to be executed this many times. */
-  itkSetMacro(NumberOfStreamDivisions,unsigned int);
-  itkGetConstReferenceMacro(NumberOfStreamDivisions,unsigned int);
-
+  itkGetConstReferenceMacro( IORegion, ImageIORegion );
 
   /** Aliased to the Write() method to be consistent with the rest of the
    * pipeline. */
@@ -192,8 +182,7 @@ private:
   bool                 m_UserSpecifiedImageIO; // track whether the ImageIO
                                                 // is user specified
   
-  ImageIORegion m_PasteIORegion;
-  unsigned int  m_NumberOfStreamDivisions;
+  ImageIORegion m_IORegion;
   bool          m_UserSpecifiedIORegion;    // track whether the region
                                             // is user specified
   bool          m_FactorySpecifiedImageIO;  //track whether the factory

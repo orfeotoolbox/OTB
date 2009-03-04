@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageFileWriter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-11 15:37:05 $
-  Version:   $Revision: 1.59 $
+  Date:      $Date: 2008-09-30 22:00:19 $
+  Version:   $Revision: 1.56 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,8 +24,6 @@
 #include "itkCommand.h"
 #include "vnl/vnl_vector.h"
 #include "itkVectorImage.h"
-#include "itkImageRegionConstIterator.h"
-#include "itkImageRegionIterator.h"
 
 namespace itk
 {
@@ -34,15 +32,15 @@ namespace itk
 template <class TInputImage>
 ImageFileWriter<TInputImage>
 ::ImageFileWriter():
-  m_PasteIORegion(TInputImage::ImageDimension)
+  m_FileName(""),
+  m_ImageIO(0), m_UserSpecifiedImageIO(false),
+  m_UserSpecifiedIORegion(false)
 {
   m_UseCompression = false;
   m_UseInputMetaDataDictionary = true;
   m_FactorySpecifiedImageIO = false;
-  m_UserSpecifiedIORegion = false;
-  m_UserSpecifiedImageIO = false;
-  m_NumberOfStreamDivisions = 1;
 }
+
 
 //---------------------------------------------------------
 template <class TInputImage>
@@ -94,9 +92,9 @@ ImageFileWriter<TInputImage>
 ::SetIORegion (const ImageIORegion& region) 
 {
   itkDebugMacro("setting IORegion to " << region );
-  if ( m_PasteIORegion != region)
+  if ( m_IORegion != region)
     {
-    m_PasteIORegion = region;
+    m_IORegion = region;
     this->Modified();
     m_UserSpecifiedIORegion = true;
     }
@@ -173,27 +171,44 @@ ImageFileWriter<TInputImage>
 
   // NOTE: this const_cast<> is due to the lack of const-correctness
   // of the ProcessObject.
-  InputImageType * nonConstInput = const_cast<InputImageType *>(input);
+  InputImageType * nonConstImage = const_cast<InputImageType *>(input);
 
-  // Update the meta data
-  nonConstInput->UpdateOutputInformation();
+  typedef typename TInputImage::RegionType   RegionType;
+
+  if ( ! m_UserSpecifiedIORegion )
+    {
+    // Make sure the data is up-to-date.
+    if( nonConstImage->GetSource() )
+      {
+      nonConstImage->GetSource()->UpdateLargestPossibleRegion();
+      }
+    // Write the whole image
+    ImageIORegion ioRegion(TInputImage::ImageDimension);
+    RegionType region = input->GetLargestPossibleRegion();
+
+    for(unsigned int i=0; i<TInputImage::ImageDimension; i++)
+      {
+      ioRegion.SetSize(i,region.GetSize(i));
+      ioRegion.SetIndex(i,region.GetIndex(i));
+      }
+    m_IORegion = ioRegion; //used by GenerateData
+    }
+  else
+    {
+    nonConstImage->Update();
+    }
 
   // Setup the ImageIO
   //
   m_ImageIO->SetNumberOfDimensions(TInputImage::ImageDimension);
-  InputImageRegionType largestRegion = input->GetLargestPossibleRegion();
+  RegionType region = input->GetLargestPossibleRegion();
   const typename TInputImage::SpacingType& spacing = input->GetSpacing();
+  const typename TInputImage::PointType& origin = input->GetOrigin();
   const typename TInputImage::DirectionType& direction = input->GetDirection();
-  // BUG 8436: Wrong origin when writing a file with non-zero index
-  // origin = input->GetOrigin();
-  const typename TInputImage::IndexType& startIndex = largestRegion.GetIndex();
-  typename TInputImage::PointType origin;  
-  input->TransformIndexToPhysicalPoint(startIndex, origin);
-
 
   for(unsigned int i=0; i<TInputImage::ImageDimension; i++)
     {
-    m_ImageIO->SetDimensions(i,largestRegion.GetSize(i));
+    m_ImageIO->SetDimensions(i,region.GetSize(i));
     m_ImageIO->SetSpacing(i,spacing[i]);
     m_ImageIO->SetOrigin(i,origin[i]);
     vnl_vector< double > axisDirection(TInputImage::ImageDimension);
@@ -205,148 +220,32 @@ ImageFileWriter<TInputImage>
       }
     m_ImageIO->SetDirection( i, axisDirection );
     }
-  
-  // configure compression
-  m_ImageIO->SetUseCompression(m_UseCompression);
+    
+  if(m_UserSpecifiedIORegion)
+    {
+    m_ImageIO->SetUseStreamedWriting(true);
+    }
 
-  // configure meta dictionary
+  m_ImageIO->SetUseCompression(m_UseCompression);
+  m_ImageIO->SetIORegion(m_IORegion);
   if( m_UseInputMetaDataDictionary )
     {
     m_ImageIO->SetMetaDataDictionary(input->GetMetaDataDictionary());
     }
-
-  // Make sure that the image is the right type
-  // confiugure pixel type
-  if( strcmp( input->GetNameOfClass(), "VectorImage" ) == 0 ) 
-    {
-      typedef typename InputImageType::InternalPixelType VectorImageScalarType;
-      m_ImageIO->SetPixelTypeInfo( typeid(VectorImageScalarType) );
-    
-      typedef typename InputImageType::AccessorFunctorType AccessorFunctorType;
-      m_ImageIO->SetNumberOfComponents( AccessorFunctorType::GetVectorLength(input) );
-    }
-  else
-    {
-      // Set the pixel and component type; the number of components.
-      m_ImageIO->SetPixelTypeInfo(typeid(InputImagePixelType));  
-    }
-
-  // Setup the image IO for writing.
-  //
-  m_ImageIO->SetFileName(m_FileName.c_str());
-
   // Notify start event observers
   this->InvokeEvent( StartEvent() );
 
-  if (m_NumberOfStreamDivisions > 1 || m_UserSpecifiedIORegion) 
-    {
-    m_ImageIO->SetUseStreamedWriting(true);
-    }
-  
-  
-
-  ImageIORegion largestIORegion(TInputImage::ImageDimension);
-  ImageIORegionAdaptor<TInputImage::ImageDimension>::
-    Convert(largestRegion, largestIORegion, largestRegion.GetIndex());
-
-  // this pasteIORegion is the region we are going to write
-  ImageIORegion pasteIORegion;  
-  if ( m_UserSpecifiedIORegion ) 
-    {
-    pasteIORegion = m_PasteIORegion;
-    } 
-  else 
-    {
-    pasteIORegion = largestIORegion;
-    }
-
-  
-  // Check whether the paste region is fully contained inside the
-  // largest region or not.
-  if( !largestIORegion.IsInside( pasteIORegion ) )
-    {
-    itkExceptionMacro(
-      << "Largest possible region does not fully contain requested paste IO region"
-      << "Paste IO region: " << pasteIORegion 
-      << "Largest possible region: " << largestRegion);
-    }
-
-  // Determin the actual number of divisions of the input. This is determined
-  // by what the ImageIO can do
-  unsigned int numDivisions;
-  
-  // this may fail and throw an exception if the configuration is not supported
-  numDivisions = m_ImageIO->GetActualNumberOfSplitsForWriting(m_NumberOfStreamDivisions,
-                                                              pasteIORegion,
-                                                              largestIORegion);
-
-  
-  /**
-   * Loop over the number of pieces, execute the upstream pipeline on each
-   * piece, and copy the results into the output image.
-   */
-  unsigned int piece;
-  
-  for (piece = 0;
-       piece < numDivisions && !this->GetAbortGenerateData();
-       piece++)
-    {
-      
-    // get the actual piece to write
-    ImageIORegion streamIORegion = m_ImageIO->GetSplitRegionForWriting(piece, numDivisions,
-                                                                       pasteIORegion, largestIORegion);
-      
-    // Check whether the paste region is fully contained inside the
-    // largest region or not.
-    if( !pasteIORegion.IsInside( streamIORegion ) )
-      {
-      itkExceptionMacro(
-        << "ImageIO returns streamable region that is not fully contain in paste IO region"
-        << "Paste IO region: " << pasteIORegion 
-        << "Streamable region: " << streamIORegion);
-      }
-
-
-    InputImageRegionType streamRegion;
-    ImageIORegionAdaptor<TInputImage::ImageDimension>::
-      Convert(streamIORegion, streamRegion, largestRegion.GetIndex());
-    
-    // execute the the upstream pipeline with the requested 
-    // region for streaming
-    nonConstInput->SetRequestedRegion(streamRegion);
-    nonConstInput->PropagateRequestedRegion();
-    nonConstInput->UpdateOutputData();
-    
-    // check to see if we tried to stream but got the largest possible region
-    if (piece == 0 && streamRegion != largestRegion) 
-      {
-      InputImageRegionType bufferedRegion = input->GetBufferedRegion();
-      if (bufferedRegion == largestRegion) 
-        {
-        // if so, then just write the entire image
-        itkDebugMacro("Requested stream region  matches largest region input filter may not support streaming well.");
-        itkDebugMacro("Writer is not streaming now!");
-        numDivisions = 1;
-        streamRegion = largestRegion;
-        ImageIORegionAdaptor<TInputImage::ImageDimension>::
-          Convert(streamRegion, streamIORegion, largestRegion.GetIndex());
-        }
-      }
-
-    m_ImageIO->SetIORegion(streamIORegion);
-    
-    // write the data
-    this->GenerateData();
-    
-    this->UpdateProgress((float) piece / numDivisions );
-    }
-
+  // Actually do something
+  this->GenerateData();
   
   // Notify end event observers
   this->InvokeEvent( EndEvent() );
 
   // Release upstream data if requested
-  this->ReleaseInputs();
+  if ( input->ShouldIReleaseData() )
+    {
+    nonConstImage->ReleaseData();
+    }
 }
 
 
@@ -356,66 +255,34 @@ void
 ImageFileWriter<TInputImage>
 ::GenerateData(void)
 {
-  const InputImageType * input = this->GetInput();  
-  InputImageRegionType largestRegion = input->GetLargestPossibleRegion();
-  InputImagePointer cacheImage;  
+  const InputImageType * input = this->GetInput();
 
   itkDebugMacro(<<"Writing file: " << m_FileName);
   
-  // now extract the data as a raw buffer pointer
-  const void* dataPtr = (const void*) input->GetBufferPointer();
+  // Make sure that the image is the right type and no more than 
+  // four components.
+  typedef typename InputImageType::PixelType ScalarType;
 
-  // check that the image's buffered region is the same as
-  // ImageIO is expecting and we requested
-  InputImageRegionType ioRegion;
-  ImageIORegionAdaptor<TInputImage::ImageDimension>::
-    Convert(m_ImageIO->GetIORegion(), ioRegion, largestRegion.GetIndex());
-  InputImageRegionType bufferedRegion = input->GetBufferedRegion();
-
-  // before this test, bad stuff would happend when they don't match
-  if (bufferedRegion != ioRegion) 
+  if( strcmp( input->GetNameOfClass(), "VectorImage" ) == 0 ) 
     {
-    if ( m_NumberOfStreamDivisions > 1 || m_UserSpecifiedIORegion) 
-      {
-      itkDebugMacro("Requested stream region does not match generated output");
-      itkDebugMacro("input filter may not support streaming well");
-      
-      cacheImage = InputImageType::New();
-      cacheImage->CopyInformation(input);
-      cacheImage->SetBufferedRegion(ioRegion);
-      cacheImage->Allocate();
-
-      typedef ImageRegionConstIterator<TInputImage> ConstIteratorType;
-      typedef ImageRegionIterator<TInputImage>      IteratorType;
-      
-      ConstIteratorType in(input, ioRegion);
-      IteratorType out(cacheImage, ioRegion);
-     
-      // copy the data into a buffer to match the ioregion
-      for (in.GoToBegin(), out.GoToBegin(); !in.IsAtEnd(); ++in, ++out) 
-        {
-        out.Set(in.Get());
-        }
-      
-      dataPtr = (const void*) cacheImage->GetBufferPointer();
-      
-      } 
-    else 
-      {
-      ImageFileWriterException e(__FILE__, __LINE__);
-      OStringStream msg;
-      msg << "Did not get requested region!" << std::endl;
-      msg << "Requested:" << std::endl;
-      msg << ioRegion;
-      msg << "Actual:" << std::endl;
-      msg << bufferedRegion;
-      e.SetDescription(msg.str().c_str());
-      e.SetLocation(ITK_LOCATION);
-      throw e;
+    typedef typename InputImageType::InternalPixelType VectorImageScalarType;
+    m_ImageIO->SetPixelTypeInfo( typeid(VectorImageScalarType) );
+    
+    typedef typename InputImageType::AccessorFunctorType AccessorFunctorType;
+    m_ImageIO->SetNumberOfComponents( AccessorFunctorType::GetVectorLength(input) );
     }
-  } 
+  else
+    {
+    // Set the pixel and component type; the number of components.
+    m_ImageIO->SetPixelTypeInfo(typeid(ScalarType));  
+    }
 
+  // Setup the image IO for writing.
+  //
+  m_ImageIO->SetFileName(m_FileName.c_str());
 
+  //okay, now extract the data as a raw buffer pointer
+  const void* dataPtr = (const void*) input->GetBufferPointer();
   m_ImageIO->Write(dataPtr);
 
 }
@@ -442,8 +309,8 @@ ImageFileWriter<TInputImage>
     os << m_ImageIO << "\n";
     }
 
-  os << indent << "IO Region: " << m_PasteIORegion << "\n";
-  os << indent << "Number of Stream Divisions: " << m_NumberOfStreamDivisions << "\n";
+  os << indent << "IO Region: " << m_IORegion << "\n";
+
 
   if (m_UseCompression)
     {
