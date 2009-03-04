@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLaplacianOperator.txx,v $
   Language:  C++
-  Date:      $Date: 2004-12-20 00:04:47 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-02-05 19:05:00 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkLaplacianOperator_txx
-#define _itkLaplacianOperator_txx
+#ifndef __itkLaplacianOperator_txx
+#define __itkLaplacianOperator_txx
 #include "itkLaplacianOperator.h"
 
 namespace itk
@@ -94,7 +94,7 @@ LaplacianOperator<TPixel, VDimension, TAllocator>
   double sum = 0.0;
   double hsq;
   long stride;
-  for (i = 0 ; i < 2 * VDimension; i+=2)
+  for (i = 0; i < 2 * VDimension; i+=2)
     {
     stride = static_cast<long>( this->GetStride(i/2) );
 

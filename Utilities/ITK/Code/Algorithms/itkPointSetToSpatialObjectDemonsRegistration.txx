@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPointSetToSpatialObjectDemonsRegistration.txx,v $
   Language:  C++
-  Date:      $Date: 2004-04-18 16:35:25 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-01-26 21:45:56 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkPointSetToSpatialObjectDemonsRegistration_txx
-#define _itkPointSetToSpatialObjectDemonsRegistration_txx
+#ifndef __itkPointSetToSpatialObjectDemonsRegistration_txx
+#define __itkPointSetToSpatialObjectDemonsRegistration_txx
 
 #include "itkPointSetToSpatialObjectDemonsRegistration.h"
 
@@ -23,7 +23,7 @@
 namespace itk
 {
 
-/*
+/**
  * Constructor
  */
 template < typename TFixedPointSet, typename TMovingSpatialObject >
@@ -36,11 +36,7 @@ PointSetToSpatialObjectDemonsRegistration<TFixedPointSet,TMovingSpatialObject>
 
 }
 
-
-
-
-
-/*
+/**
  * Starts the Registration Process
  */
 template < typename TFixedPointSet, typename TMovingSpatialObject >
@@ -51,8 +47,7 @@ PointSetToSpatialObjectDemonsRegistration<TFixedPointSet,TMovingSpatialObject>
   
 }
 
-
-/*
+/**
  * PrintSelf
  */
 template < typename TFixedPointSet, typename TMovingSpatialObject >
@@ -64,9 +59,6 @@ PointSetToSpatialObjectDemonsRegistration<TFixedPointSet,TMovingSpatialObject>
   os << indent << "Fixed PointSet: " << m_FixedPointSet.GetPointer() << std::endl;
   os << indent << "Moving SpatialObject: " << m_MovingSpatialObject.GetPointer() << std::endl;
 }
-
-
-
 
 } // end namespace itk
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOctreeNode.cxx,v $
   Language:  C++
-  Date:      $Date: 2006-10-30 18:33:06 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-02-06 20:53:14 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -99,7 +99,5 @@ void OctreeNode::RemoveChildren(void)
       (&(const_cast<char *>(m_Parent->GetColorTable())[0]));
     }
 }
-
-
 
 } //End of itk Namespace

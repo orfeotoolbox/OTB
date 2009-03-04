@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMItpackSparseMatrix.h,v $
   Language:  C++
-  Date:      $Date: 2006-11-07 23:23:16 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-01-29 21:55:13 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -15,8 +15,8 @@
 
 =========================================================================*/
 
-#ifndef __itkItpackSparseMatrix_h
-#define __itkItpackSparseMatrix_h
+#ifndef __itkFEMItpackSparseMatrix_h
+#define __itkFEMItpackSparseMatrix_h
 
 #include "itkFEMException.h"
 
@@ -185,8 +185,6 @@ private:
   /** finalize matrix form */
   void Finalize();
 
-
-
   /** flag indicating whether the matrix representation has been finalized */
   integer m_MatrixFinalized;
 
@@ -301,4 +299,3 @@ public:
 }} // end namespace itk::fem
 
 #endif
-

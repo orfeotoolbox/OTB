@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMorphologicalWatershedImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-26 15:01:47 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-01-28 18:14:36 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -36,7 +36,7 @@ namespace itk {
  * Chapter 9.2 of Pierre Soille's book "Morphological Image Analysis:
  * Principles and Applications", Second Edition, Springer, 2003.
  *
- * \author Gaëtan Lehmann. Biologie du Développement et de la Reproduction, INRA de Jouy-en-Josas, France.
+ * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France.
  *
  * \sa WatershedImageFilter, MorphologicalWatershedFromMarkersImageFilter
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters

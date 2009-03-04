@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOpeningByReconstructionImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-14 19:56:22 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-28 18:14:36 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,7 +44,7 @@ namespace itk {
  * Soille's book "Morphological Image Analysis: Principles and
  * Applications", Second Edition, Springer, 2003.
  * 
- * \author Gaëtan Lehmann. Biologie du Développement et de la Reproduction, INRA of Jouy-en-Josas, France.
+ * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France.
  *
  * \sa GrayscaleMorphologicalOpeningImageFilter
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters

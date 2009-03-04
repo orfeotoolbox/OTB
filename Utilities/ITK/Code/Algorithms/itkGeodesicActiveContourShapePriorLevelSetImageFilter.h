@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGeodesicActiveContourShapePriorLevelSetImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:31 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2008-12-22 13:42:44 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkGeodesicActiveContourShapePriorLevelSetImageFilter_h_
-#define __itkGeodesicActiveContourShapePriorLevelSetImageFilter_h_
+#ifndef __itkGeodesicActiveContourShapePriorLevelSetImageFilter_h
+#define __itkGeodesicActiveContourShapePriorLevelSetImageFilter_h
 
 #include "itkShapePriorSegmentationLevelSetImageFilter.h"
 #include "itkGeodesicActiveContourShapePriorLevelSetFunction.h"
@@ -114,17 +114,19 @@ class ITK_EXPORT GeodesicActiveContourShapePriorLevelSetImageFilter
 {
 public:
   /** Standard class typedefs */
-  typedef GeodesicActiveContourShapePriorLevelSetImageFilter Self;
+  typedef GeodesicActiveContourShapePriorLevelSetImageFilter
+                                    Self;
   typedef ShapePriorSegmentationLevelSetImageFilter< TInputImage, TFeatureImage, 
-                                           TOutputPixelType > Superclass;
-  typedef SmartPointer<Self>  Pointer;
+                                           TOutputPixelType >
+                                    Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   /** Inherited typedef from the superclass. */
-  typedef typename Superclass::ValueType ValueType;
-  typedef typename Superclass::OutputImageType OutputImageType;
+  typedef typename Superclass::ValueType        ValueType;
+  typedef typename Superclass::OutputImageType  OutputImageType;
   typedef typename Superclass::FeatureImageType FeatureImageType;
-  typedef typename Superclass::OutputPixelType OutputPixelType;
+  typedef typename Superclass::OutputPixelType  OutputPixelType;
   
   /** Type of the segmentation function */
   typedef GeodesicActiveContourShapePriorLevelSetFunction< OutputImageType,
@@ -143,17 +145,17 @@ public:
      
   /** Set the value of sigma used to compute the edge potential map derivatives */
   void SetDerivativeSigma( float value )
-  { 
+    { 
     if ( value != m_GeodesicActiveContourFunction->GetDerivativeSigma() )
       {
       m_GeodesicActiveContourFunction->SetDerivativeSigma( value );
       this->Modified();
       }
-  }
+    }
 
   /** Get the value of sigma used to compute the edge potential map derivatives. */
   float GetDerivativeSigma() const
-  { return m_GeodesicActiveContourFunction->GetDerivativeSigma(); }
+    { return m_GeodesicActiveContourFunction->GetDerivativeSigma(); }
     
 protected:
   ~GeodesicActiveContourShapePriorLevelSetImageFilter() {}
@@ -174,8 +176,6 @@ private:
 };
 
 } // end namespace itk
-
-
 
 #ifndef ITK_MANUAL_INSTANTIATION
 #include "itkGeodesicActiveContourShapePriorLevelSetImageFilter.txx"

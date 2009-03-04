@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNeighborhoodOperator.h,v $
   Language:  C++
-  Date:      $Date: 2007-02-07 13:58:41 $
-  Version:   $Revision: 1.28 $
+  Date:      $Date: 2009-02-06 20:53:13 $
+  Version:   $Revision: 1.29 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -66,7 +66,7 @@ class ITK_EXPORT NeighborhoodOperator
 {
 public:
   /**  Standard class typedefs. */ 
-  typedef NeighborhoodOperator Self;
+  typedef NeighborhoodOperator                         Self;
   typedef Neighborhood<TPixel, VDimension, TAllocator> Superclass;
     
   /** Size object typedef support */
@@ -128,9 +128,9 @@ public:
   /** Prints some debugging information. */
   virtual void PrintSelf(std::ostream& os, Indent i) const
     {
-      os << i << "NeighborhoodOperator { this=" << this
-         << " Direction = " << m_Direction << " }" << std::endl;
-      Superclass::PrintSelf( os, i.GetNextIndent() );
+    os << i << "NeighborhoodOperator { this=" << this
+       << " Direction = " << m_Direction << " }" << std::endl;
+    Superclass::PrintSelf( os, i.GetNextIndent() );
     }
 
   typedef typename NumericTraits< TPixel >::RealType  PixelRealType;
@@ -160,10 +160,12 @@ protected:
 
   /** Initializes all the coefficients in the neighborhood to zero values */
   void InitializeToZero()
-  {
+    {
     for (unsigned int i = 0; i< this->Size(); ++i)
-      { this->operator[](i) = NumericTraits<PixelType>::Zero; }
-  }
+      {
+      this->operator[](i) = NumericTraits<PixelType>::Zero;
+      }
+    }
   
 private:
   /** Direction (dimension number) of the derivative. */
@@ -193,4 +195,3 @@ private:
 #endif
 */
 #endif
-

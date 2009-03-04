@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLightProcessObject.h,v $
   Language:  C++
-  Date:      $Date: 2007-08-17 20:14:56 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-02-05 19:05:00 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -73,9 +73,9 @@ class ITKCommon_EXPORT LightProcessObject : public Object
 public:
   /** Standard class typedefs. */
   typedef LightProcessObject       Self;
-  typedef Object  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef Object                   Superclass;
+  typedef SmartPointer<Self>       Pointer;
+  typedef SmartPointer<const Self> ConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -135,4 +135,3 @@ private:
 } // end namespace itk
 
 #endif
-

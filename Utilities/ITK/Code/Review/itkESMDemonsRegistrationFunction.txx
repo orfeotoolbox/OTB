@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkESMDemonsRegistrationFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-12-08 01:10:42 $
-  Version:   $Revision: 1.4.4.1 $
+  Date:      $Date: 2008-11-10 12:44:44 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.

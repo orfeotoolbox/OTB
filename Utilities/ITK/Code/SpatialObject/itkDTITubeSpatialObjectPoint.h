@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDTITubeSpatialObjectPoint.h,v $
   Language:  C++
-  Date:      $Date: 2007-11-16 15:54:39 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-01-28 20:10:27 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,13 +26,13 @@ namespace itk
 {
 
 /** \class DTITubeSpatialObjectPoint
-* \brief Point used for a tube definition
-*
-* This class contains all the functions necessary to define a point
-* that can be used to build tubes.
-*
-* \sa DTITubeSpatialObject 
-*/ 
+ * \brief Point used for a tube definition
+ *
+ * This class contains all the functions necessary to define a point
+ * that can be used to build tubes.
+ *
+ * \sa DTITubeSpatialObject 
+ */ 
 template < unsigned int TPointDimension = 3 >
 class DTITubeSpatialObjectPoint 
   : public TubeSpatialObjectPoint<TPointDimension>
@@ -83,10 +83,10 @@ public:
   /** Copy one DTITubeSpatialObjectPoint to another */
   Self & operator=(const DTITubeSpatialObjectPoint & rhs);
 
-  /** Add a field to the point list*/
+  /** Add a field to the point list */
   void AddField(const char* name,float value);
 
-  /** Add a field to the point list*/
+  /** Add a field to the point list */
   void AddField(FieldEnumType name,float value);
 
   /** Set a field value */

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNumericTraitsRGBPixel.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-03 22:16:03 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-02-06 20:53:13 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -54,15 +54,31 @@ public: \
  \
   static const RealType max( const Self & a ) \
     {  \
-      RealType b(a.Size());  \
+      RealType b;  \
       b.Fill( NumericTraits< T >::max() ); \
       return b; \
     } \
   static const RealType min( const Self & a ) \
     {  \
-      RealType b(a.Size());  \
+      RealType b;  \
       b.Fill( NumericTraits< T >::min() ); \
       return b; \
+    } \
+  static const Self max() \
+    {  \
+      Self b;  \
+      b.Fill( NumericTraits< T >::max() ); \
+      return b; \
+    } \
+  static const Self min() \
+    {  \
+      Self b;  \
+      b.Fill( NumericTraits< T >::min() ); \
+      return b; \
+    } \
+  static const Self NonpositiveMin() \
+    {  \
+      return NumericTraits< Self >::min(); \
     } \
   static const Self ZeroValue() \
   {  \
@@ -131,8 +147,6 @@ itkNumericTraitsRGBPixelMacro( T );
 
 #endif
 
-
-
 //
 // Finally, to avoid contamination of other files with the symbols defined
 // here, we undefine the helper macros
@@ -144,4 +158,3 @@ itkNumericTraitsRGBPixelMacro( T );
 } // end namespace itk
 
 #endif // __itkNumericTraitsRGBPixel_h
-

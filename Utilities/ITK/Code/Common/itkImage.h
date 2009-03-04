@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImage.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-18 17:19:48 $
-  Version:   $Revision: 1.149 $
+  Date:      $Date: 2009-02-05 19:04:56 $
+  Version:   $Revision: 1.150 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -178,7 +178,7 @@ public:
     this->SetLargestPossibleRegion(region);
     this->SetBufferedRegion(region);
     this->SetRequestedRegion(region);
-    };
+    }
 
   /** Restore the data object to its initial state. This means releasing
    * memory. */

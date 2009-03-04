@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLevelSetVelocityNeighborhoodExtractor.txx,v $
   Language:  C++
-  Date:      $Date: 2005-03-13 23:51:11 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2009-01-24 20:02:59 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkLevelSetVelocityNeighborhoodExtractor_txx
-#define _itkLevelSetVelocityNeighborhoodExtractor_txx
+#ifndef __itkLevelSetVelocityNeighborhoodExtractor_txx
+#define __itkLevelSetVelocityNeighborhoodExtractor_txx
 
 #include "itkLevelSetVelocityNeighborhoodExtractor.h"
 #include "vnl/vnl_math.h"
@@ -24,7 +24,7 @@ namespace itk
 {
 
 
-/*
+/**
  *
  */
 template <class TLevelSet, class TAuxValue, 

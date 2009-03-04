@@ -1,19 +1,19 @@
 /*=========================================================================
-                                                                                
+
   Program:   gdcm
   Module:    $RCSfile: gdcmConfigure.h.in,v $
   Language:  C++
   Date:      $Date: 2008-05-19 06:58:31 $
   Version:   $Revision: 1.14 $
-                                                                                
+
   Copyright (c) CREATIS (Centre de Recherche et d'Applications en Traitement de
   l'Image). All rights reserved. See Doc/License.txt or
   http://www.creatis.insa-lyon.fr/Public/Gdcm/License.html for details.
-                                                                                
+
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
-                                                                                
+
 =========================================================================*/
 
 #ifndef __gdcmConfigure_h
@@ -95,6 +95,7 @@
 #ifndef OPJ_STATIC
 #cmakedefine OPJ_STATIC
 #endif
+
 
 /*--------------------------------------------------------------------------*/
 /* GDCM Versioning                                                          */

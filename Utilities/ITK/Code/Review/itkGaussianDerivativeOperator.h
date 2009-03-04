@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianDerivativeOperator.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-19 18:34:21 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-01-28 18:14:36 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -57,10 +57,10 @@ namespace itk {
  * Primal Sketch. Dissertation. Royal Institute of Technology, Stockholm,
  * Sweden. May 1991.).
  *
- * \author Iván Macía, VICOMTech, Spain, http://www.vicomtech.es
+ * \author Ivan Macia, VICOMTech, Spain, http://www.vicomtech.es
  *
  * This implementation was taken from the Insight Journal paper:
- * http://hdl.handle.net/1926/179
+ * http://hdl.handle.net/1926/1290
  *
  * \sa GaussianOperator
  * \sa NeighborhoodOperator

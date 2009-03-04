@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVoronoiSegmentationImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-09-08 19:08:06 $
-  Version:   $Revision: 1.33 $
+  Date:      $Date: 2009-01-27 19:30:17 $
+  Version:   $Revision: 1.34 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -15,8 +15,8 @@
 
 =========================================================================*/
 
-#ifndef _itkVoronoiSegmentationImageFilter_h
-#define _itkVoronoiSegmentationImageFilter_h
+#ifndef __itkVoronoiSegmentationImageFilter_h
+#define __itkVoronoiSegmentationImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkVoronoiSegmentationImageFilterBase.h"
@@ -59,9 +59,9 @@ public:
   /** Standard class typedefs. */
   typedef VoronoiSegmentationImageFilter       Self;
   typedef VoronoiSegmentationImageFilterBase<TInputImage,TOutputImage
-     ,TBinaryPriorImage> Superclass;
-  typedef SmartPointer <Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+     ,TBinaryPriorImage>                       Superclass;
+  typedef SmartPointer <Self>                  Pointer;
+  typedef SmartPointer<const Self>             ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -72,10 +72,10 @@ public:
 
   /** Convenient typedefs. */
   typedef typename Superclass::BinaryObjectImage BinaryObjectImage;
-  typedef typename Superclass::IndexList IndexList;
-  typedef typename Superclass::IndexType IndexType;
-  typedef typename Superclass::RegionType RegionType;
-  typedef typename Superclass::InputImageType InputImageType;
+  typedef typename Superclass::IndexList         IndexList;
+  typedef typename Superclass::IndexType         IndexType;
+  typedef typename Superclass::RegionType        RegionType;
+  typedef typename Superclass::InputImageType    InputImageType;
 
   /** Set/Get the Estimation of the mean pixel value for the object. */
   itkSetMacro(Mean, double);
@@ -151,7 +151,3 @@ private:
 #endif
 
 #endif
-
-
-
-

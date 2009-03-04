@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPoint.h,v $
   Language:  C++
-  Date:      $Date: 2006-04-20 14:54:10 $
-  Version:   $Revision: 1.65 $
+  Date:      $Date: 2008-11-14 05:09:25 $
+  Version:   $Revision: 1.67 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -60,7 +60,7 @@ public:
   itkStaticConstMacro(PointDimension, unsigned int, NPointDimension);
 
   /** The Array type from which this Vector is derived. */
-  typedef FixedArray<TCoordRep, NPointDimension>         BaseArray;
+  typedef FixedArray<TCoordRep, NPointDimension>    BaseArray;
   typedef typename BaseArray::Iterator              Iterator;
   typedef typename BaseArray::ConstIterator         ConstIterator;
     
@@ -74,8 +74,9 @@ public:
   /** Default constructor has nothing to do. */
   Point() {}
 
-  /** Pass-through constructor for the Array base class. */
-  Point(const Self& r): BaseArray(r) {}
+  /** Pass-through constructors for the Array base class. */
+  template< class TPointValueType >
+  Point(const Point< TPointValueType, NPointDimension>& r): BaseArray(r) {}
   Point(const ValueType r[PointDimension]): BaseArray(r) {}  
     
   /** Pass-through assignment operator for the Array base class. */

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTimeStamp.h,v $
   Language:  C++
-  Date:      $Date: 2007-11-19 16:01:30 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2009-02-23 16:37:20 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -32,7 +32,17 @@ namespace itk
  * executed. This time is guaranteed to be monotonically increasing.
  * Classes use this object to record modified and/or execution time.
  * There is built in support for the binary < and > comparison
- * operators between two TimeStamp objects. 
+ * operators between two TimeStamp objects.
+ *
+ * \warning On most platforms, this class uses a lock-free incremental
+ * counter. The Modified function can safely  be called simultaneously
+ * by multiple threads on different instances of the class. However,
+ * calling the Modified function by different threads on the same
+ * instance of the class can lead to some unexpected behavior. The
+ * global counter will always be correct but the local m_ModifiedTime
+ * might not (see
+ * http://www.itk.org/mailman/private/insight-developers/2009-February/011732.html
+ * for more detail).
  *
  * \ingroup ITKSystemObjects
  */

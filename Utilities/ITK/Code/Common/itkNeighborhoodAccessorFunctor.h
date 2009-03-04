@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNeighborhoodAccessorFunctor.h,v $
   Language:  C++
-  Date:      $Date: 2005-09-07 14:46:28 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-02-06 20:53:11 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -82,8 +82,8 @@ public:
     return boundaryCondition->operator()(point_index, boundary_offset, data);
     }
   
-  void SetVectorLength( VectorLengthType length ) {};
-  VectorLengthType SetVectorLength() { return 0; };
+  void SetVectorLength( VectorLengthType length ) {}
+  VectorLengthType SetVectorLength() { return 0; }
   
 };
 

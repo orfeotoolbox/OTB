@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOctree.txx,v $
   Language:  C++
-  Date:      $Date: 2006-02-05 20:57:46 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-02-19 19:41:22 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -46,32 +46,32 @@ SetTrueDims(const unsigned int Dim0, const unsigned int Dim1,
   this->m_TrueDims[2]=Dim2;
 }
 
-/*This is moving bits to get the values of the 8 octants
-    Possible values are the 3 bits to be set.
-    0   000 Contains origin
-    1   001
-    2   010
-    3   011
-    4   100
-    5   101
-    6   110
-    7   111 Contains extents
-    ....^^^
-    ....|| \This value is 1 if requested X voxel is greater than X 
-    ....    centerline of subcube
-    ....| \This value is 1 if requested Y voxel is greater than Y 
-    .......centerline of subcube
-    ....   \This value is 1 if requested Z voxel is greater than Z centerline 
-    .......of subcube
-    \author Hans J. Johnson, adapted from Vincent A. Magnotta
-    \param VoxX The desired voxel
-    \param VoxY The desired voxel
-    \param VoxZ The desired voxel
-    \param CenterLineX The division line between octants
-    \param CenterLineY The division line between octants
-    \param CenterLineZ The division line between octants
-    \return The octant that the voxel falls into.
-  */
+/** This is moving bits to get the values of the 8 octants
+ *   Possible values are the 3 bits to be set.
+ *   0   000 Contains origin
+ *   1   001
+ *   2   010
+ *   3   011
+ *   4   100
+ *   5   101
+ *   6   110
+ *   7   111 Contains extents
+ *   ....^^^
+ *   ....|| \This value is 1 if requested X voxel is greater than X 
+ *   ....    centerline of subcube
+ *   ....| \This value is 1 if requested Y voxel is greater than Y 
+ *   .......centerline of subcube
+ *   ....   \This value is 1 if requested Z voxel is greater than Z centerline 
+ *   .......of subcube
+ *   \author Hans J. Johnson, adapted from Vincent A. Magnotta
+ *   \param VoxX The desired voxel
+ *   \param VoxY The desired voxel
+ *   \param VoxZ The desired voxel
+ *   \param CenterLineX The division line between octants
+ *   \param CenterLineY The division line between octants
+ *   \param CenterLineZ The division line between octants
+ *   \return The octant that the voxel falls into.
+ */
 inline unsigned int OCTREE_OCTANT(const int VoxX, const int CenterLineX,
                                   const int VoxY, const int CenterLineY,
                                   const int VoxZ, const int CenterLineZ)
@@ -125,7 +125,7 @@ GetValue(const unsigned int Dim0,
   unsigned int halfwidth = this->m_Width; 
 
 
-  while ((CurrentOctreeNode->IsNodeColored())==false)
+  while ((CurrentOctreeNode->IsNodeColored()) == false)
     {
     //NOTE:  halfwidth=halfwidth/2 is the same as halfwidth >> 1
     halfwidth=halfwidth >> 1; 

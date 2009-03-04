@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMMaterialBase.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:43 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-01-30 21:10:19 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,9 +24,6 @@
 namespace itk {
 namespace fem {
 
-
-
-
 /**
  * \class Material
  * \brief Base class for storing all the implicit material and other properties
@@ -44,7 +41,7 @@ namespace fem {
  */
 class Material : public FEMLightObject
 {
-FEM_ABSTRACT_CLASS(Material,FEMLightObject)
+  FEM_ABSTRACT_CLASS(Material,FEMLightObject)
 public:
   /**
    * Array class that holds special pointers to objects of all Material classes
@@ -52,9 +49,6 @@ public:
   typedef FEMPArray<Self> ArrayType;
 
 };
-
-
-
 
 }} // end namespace itk::fem
 

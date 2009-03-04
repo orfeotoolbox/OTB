@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPathToPathFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-02-06 22:01:57 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-02-19 19:41:23 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -58,8 +58,6 @@ PathToPathFilter<TInputPath,TOutputPath>
   this->ProcessObject::SetNthInput(index, 
                                    const_cast< TInputPath *>( path ) );
 }
-
-
 
 /**
  *

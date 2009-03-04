@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMetaSceneConverter.txx,v $
   Language:  C++
-  Date:      $Date: 2007-08-08 18:56:26 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2009-01-28 20:10:27 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -437,8 +437,7 @@ MetaSceneConverter<NDimensions,PixelType,TMeshTraits>
       }
     
     if(!strncmp((*it)->GetTypeName(),"ImageSpatialObject",17)
-      || !strncmp((*it)->GetTypeName(),"ImageMaskSpatialObject",21)
-      )
+       || !strncmp((*it)->GetTypeName(),"ImageMaskSpatialObject",21))
       {
       MetaImage* image;
       if(!strncmp((*it)->GetTypeName(),"ImageMaskSpatialObject",21))

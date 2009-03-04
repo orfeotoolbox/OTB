@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOtsuThresholdImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-04-05 13:59:37 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-01-26 21:45:54 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,10 +44,10 @@ class ITK_EXPORT OtsuThresholdImageFilter :
 {
 public:
   /** Standard Self typedef */
-  typedef OtsuThresholdImageFilter Self;
+  typedef OtsuThresholdImageFilter                      Self;
   typedef ImageToImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef SmartPointer<Self>        Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                            Pointer;
+  typedef SmartPointer<const Self>                      ConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
@@ -57,25 +57,25 @@ public:
   
   /** Image pixel value typedef. */
   typedef typename TInputImage::PixelType   InputPixelType;
-  typedef typename TOutputImage::PixelType   OutputPixelType;
+  typedef typename TOutputImage::PixelType  OutputPixelType;
   
   /** Image related typedefs. */
-  typedef typename TInputImage::Pointer InputImagePointer;
+  typedef typename TInputImage::Pointer  InputImagePointer;
   typedef typename TOutputImage::Pointer OutputImagePointer;
 
-  typedef typename TInputImage::SizeType  InputSizeType;
-  typedef typename TInputImage::IndexType  InputIndexType;
-  typedef typename TInputImage::RegionType InputImageRegionType;
-  typedef typename TOutputImage::SizeType  OutputSizeType;
+  typedef typename TInputImage::SizeType    InputSizeType;
+  typedef typename TInputImage::IndexType   InputIndexType;
+  typedef typename TInputImage::RegionType  InputImageRegionType;
+  typedef typename TOutputImage::SizeType   OutputSizeType;
   typedef typename TOutputImage::IndexType  OutputIndexType;
   typedef typename TOutputImage::RegionType OutputImageRegionType;
 
 
   /** Image related typedefs. */
   itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension ) ;
+                      TInputImage::ImageDimension );
   itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      TOutputImage::ImageDimension ) ;
+                      TOutputImage::ImageDimension );
 
   /** Set the "outside" pixel value. The default value 
    * NumericTraits<OutputPixelType>::Zero. */
@@ -126,7 +126,7 @@ private:
   OutputPixelType     m_OutsideValue;
   unsigned long       m_NumberOfHistogramBins;
 
-} ; // end of class
+}; // end of class
 
 } // end namespace itk
   

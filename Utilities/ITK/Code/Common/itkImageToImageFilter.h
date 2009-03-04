@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageToImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-02-03 04:05:29 $
-  Version:   $Revision: 1.48 $
+  Date:      $Date: 2009-02-05 19:04:57 $
+  Version:   $Revision: 1.49 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -65,10 +65,10 @@ class ITK_EXPORT ImageToImageFilter : public ImageSource<TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageToImageFilter  Self;
+  typedef ImageToImageFilter         Self;
   typedef ImageSource<TOutputImage>  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>         Pointer;
+  typedef SmartPointer<const Self>   ConstPointer;
   
   
   /** Run-time type information (and related methods). */
@@ -79,7 +79,7 @@ public:
   typedef typename Superclass::OutputImagePixelType  OutputImagePixelType;
 
   /** Some convenient typedefs. */
-  typedef TInputImage InputImageType;
+  typedef TInputImage                             InputImageType;
   typedef typename InputImageType::Pointer        InputImagePointer;
   typedef typename InputImageType::ConstPointer   InputImageConstPointer;
   typedef typename InputImageType::RegionType     InputImageRegionType; 
@@ -115,14 +115,14 @@ public:
    * Other uses are also possible. For a single input filter, pushing
    * and popping inputs allow the application to temporarily replace
    * an input to a filter.
-   **/
+   */
   virtual void PushBackInput( const InputImageType *image);
   virtual void PopBackInput();
   virtual void PushFrontInput( const InputImageType *image);
   virtual void PopFrontInput();
   
 
- protected:
+protected:
   ImageToImageFilter();
   ~ImageToImageFilter();
 

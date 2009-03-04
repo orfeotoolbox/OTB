@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageBase.txx,v $
   Language:  C++
-  Date:      $Date: 2008-11-01 15:18:57 $
-  Version:   $Revision: 1.54 $
+  Date:      $Date: 2009-02-18 17:40:55 $
+  Version:   $Revision: 1.55 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -55,8 +55,10 @@ ImageBase<VImageDimension>
 {
   //
   // We don't modify ourselves because the "ReleaseData" methods depend upon
-  // no modification when initialized.
+  // no modification when initialized. Otherwise BUG: 8490 will
+  // reoccur.
   //
+  // DO NOT CALL ANY METHODS WHICH MODIFY OURSELVES
 
   // Call the superclass which should initialize the BufferedRegion ivar.
   Superclass::Initialize();
@@ -65,7 +67,7 @@ ImageBase<VImageDimension>
   memset( m_OffsetTable, 0, (VImageDimension+1)*sizeof(unsigned long) );
 
   // Clear the BufferedRegion ivar
-  this->SetBufferedRegion( RegionType() );
+  this->InitializeBufferedRegion();
 }
 
 
@@ -408,6 +410,24 @@ ImageBase<VImageDimension>
     this->ComputeOffsetTable();
     this->Modified();
     }
+}
+
+
+//----------------------------------------------------------------------------
+template<unsigned int VImageDimension>
+void
+ImageBase<VImageDimension>
+::InitializeBufferedRegion(void)
+{
+  //
+  // We don't modify ourselves because the "ReleaseData" methods depend upon
+  // no modification when initialized.
+  //
+  // Otherwise BUG: 8490 will reoccur
+
+  m_BufferedRegion = RegionType();
+  this->ComputeOffsetTable();
+
 }
 
 

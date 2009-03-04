@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMElements.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:41 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-01-29 21:28:16 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,7 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
+#ifndef __itkFEMElements_h
+#define __itkFEMElements_h
 
 /**
  * \file itkFEMElements.h
@@ -36,3 +37,5 @@
 #include "itkFEMElement3DC0LinearHexahedronStrain.h"
 #include "itkFEMElement2DC0QuadraticTriangularStress.h"
 #include "itkFEMElement2DC0QuadraticTriangularStrain.h"
+
+#endif

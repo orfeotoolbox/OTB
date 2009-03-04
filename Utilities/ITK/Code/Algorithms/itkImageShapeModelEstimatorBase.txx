@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageShapeModelEstimatorBase.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:32 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-24 20:02:56 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkImageShapeModelEstimatorBase_txx
-#define _itkImageShapeModelEstimatorBase_txx
+#ifndef __itkImageShapeModelEstimatorBase_txx
+#define __itkImageShapeModelEstimatorBase_txx
 
 #include "itkImageShapeModelEstimatorBase.h"
 #include "itkCommand.h"
@@ -45,7 +45,7 @@ ImageShapeModelEstimatorBase<TInputImage, TOutputImage>
   this->EstimateShapeModels();
 }
 
-/*
+/**
  * PrintSelf
  */
 template <class TInputImage, class TOutputImage>

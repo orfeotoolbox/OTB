@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMedialNodePairCorrespondenceProcess.txx,v $
   Language:  C++
-  Date:      $Date: 2005-11-24 19:22:33 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-01-24 20:03:00 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -214,7 +214,7 @@ MedialNodePairCorrespondenceProcess< TSourceImage >
   m_Columns = m_CoreAtomImageB->GetMedialNodeCount();
 
   typedef BloxCoreAtomPixel<NDimensions> PixelType;
-  typedef std::vector<PixelType*> NodePointerListType;
+  typedef std::vector<PixelType*>        NodePointerListType;
 
   NodePointerListType NodePointerList1;
   NodePointerListType NodePointerList2;
@@ -425,7 +425,7 @@ MedialNodePairCorrespondenceProcess< TSourceImage >
                     }
                   }
                 }
-              }              
+              }
             }// End dist matrix B for loop
           }// End dist matrix A for loop
         // Add a node (corresponding pair list) to the node pair list

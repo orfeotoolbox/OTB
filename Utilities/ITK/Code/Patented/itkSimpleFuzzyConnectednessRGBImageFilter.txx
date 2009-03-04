@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimpleFuzzyConnectednessRGBImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:37:20 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-02-01 13:08:41 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -22,8 +22,7 @@
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkNumericTraits.h"
 
-namespace itk{
-
+namespace itk {
 
 template <class TInputImage, class TOutputImage>
 SimpleFuzzyConnectednessRGBImageFilter<TInputImage,TOutputImage>
@@ -132,35 +131,37 @@ SimpleFuzzyConnectednessRGBImageFilter<TInputImage,TOutputImage>
     /m_VarianceDet;  
   m_VarianceInverse[2][2]=(m_Variance[0][0]*m_Variance[1][1]-m_Variance[1][0]*m_Variance[0][1])
     /m_VarianceDet;  
-  if((int)(this->GetWeight()*100+0.5) > 1){ //need to use the difference information.
+  if((int)(this->GetWeight()*100+0.5) > 1)
+    {
+    //need to use the difference information.
 
-  m_Diff_VarianceDet = m_Diff_Variance[0][0]*m_Diff_Variance[1][1]*m_Diff_Variance[2][2]
-    +m_Diff_Variance[1][0]*m_Diff_Variance[2][1]*m_Diff_Variance[0][2]
-    +m_Diff_Variance[0][1]*m_Diff_Variance[1][2]*m_Diff_Variance[2][0]
-    -m_Diff_Variance[2][0]*m_Diff_Variance[1][1]*m_Diff_Variance[0][2]
-    -m_Diff_Variance[0][1]*m_Diff_Variance[1][0]*m_Diff_Variance[2][2]
-    -m_Diff_Variance[0][0]*m_Diff_Variance[1][2]*m_Diff_Variance[2][1];
-  m_Diff_VarianceInverse[0][0]=(m_Diff_Variance[1][1]*m_Diff_Variance[2][2]-m_Diff_Variance[2][1]*m_Diff_Variance[1][2])
-    /m_Diff_VarianceDet;  
-  m_Diff_VarianceInverse[0][1]=-(m_Diff_Variance[1][0]*m_Diff_Variance[2][2]-m_Diff_Variance[2][0]*m_Diff_Variance[1][2])
-    /m_Diff_VarianceDet;  
-  m_Diff_VarianceInverse[0][2]=(m_Diff_Variance[1][0]*m_Diff_Variance[2][1]-m_Diff_Variance[2][0]*m_Diff_Variance[1][1])
-    /m_Diff_VarianceDet;  
-  m_Diff_VarianceInverse[1][0]=-(m_Diff_Variance[0][1]*m_Diff_Variance[2][2]-m_Diff_Variance[2][1]*m_Diff_Variance[0][2])
-    /m_Diff_VarianceDet;  
-  m_Diff_VarianceInverse[1][1]=(m_Diff_Variance[0][0]*m_Diff_Variance[2][2]-m_Diff_Variance[2][0]*m_Diff_Variance[0][2])
-    /m_Diff_VarianceDet;  
-  m_Diff_VarianceInverse[1][2]=-(m_Diff_Variance[0][0]*m_Diff_Variance[2][1]-m_Diff_Variance[2][0]*m_Diff_Variance[0][1])
-    /m_Diff_VarianceDet;  
-  m_Diff_VarianceInverse[2][0]=(m_Diff_Variance[0][1]*m_Diff_Variance[1][2]-m_Diff_Variance[1][1]*m_Diff_Variance[0][2])
-    /m_Diff_VarianceDet;  
-  m_Diff_VarianceInverse[2][1]=-(m_Diff_Variance[0][0]*m_Diff_Variance[1][2]-m_Diff_Variance[1][0]*m_Diff_Variance[0][2])
-    /m_Diff_VarianceDet;  
-  m_Diff_VarianceInverse[2][2]=(m_Diff_Variance[0][0]*m_Diff_Variance[1][1]-m_Diff_Variance[1][0]*m_Diff_Variance[0][1])
-    /m_Diff_VarianceDet;  
-  }
+    m_Diff_VarianceDet = m_Diff_Variance[0][0]*m_Diff_Variance[1][1]*m_Diff_Variance[2][2]
+      +m_Diff_Variance[1][0]*m_Diff_Variance[2][1]*m_Diff_Variance[0][2]
+      +m_Diff_Variance[0][1]*m_Diff_Variance[1][2]*m_Diff_Variance[2][0]
+      -m_Diff_Variance[2][0]*m_Diff_Variance[1][1]*m_Diff_Variance[0][2]
+      -m_Diff_Variance[0][1]*m_Diff_Variance[1][0]*m_Diff_Variance[2][2]
+      -m_Diff_Variance[0][0]*m_Diff_Variance[1][2]*m_Diff_Variance[2][1];
+    m_Diff_VarianceInverse[0][0]=(m_Diff_Variance[1][1]*m_Diff_Variance[2][2]-m_Diff_Variance[2][1]*m_Diff_Variance[1][2])
+      /m_Diff_VarianceDet;  
+    m_Diff_VarianceInverse[0][1]=-(m_Diff_Variance[1][0]*m_Diff_Variance[2][2]-m_Diff_Variance[2][0]*m_Diff_Variance[1][2])
+      /m_Diff_VarianceDet;  
+    m_Diff_VarianceInverse[0][2]=(m_Diff_Variance[1][0]*m_Diff_Variance[2][1]-m_Diff_Variance[2][0]*m_Diff_Variance[1][1])
+      /m_Diff_VarianceDet;  
+    m_Diff_VarianceInverse[1][0]=-(m_Diff_Variance[0][1]*m_Diff_Variance[2][2]-m_Diff_Variance[2][1]*m_Diff_Variance[0][2])
+      /m_Diff_VarianceDet;  
+    m_Diff_VarianceInverse[1][1]=(m_Diff_Variance[0][0]*m_Diff_Variance[2][2]-m_Diff_Variance[2][0]*m_Diff_Variance[0][2])
+      /m_Diff_VarianceDet;  
+    m_Diff_VarianceInverse[1][2]=-(m_Diff_Variance[0][0]*m_Diff_Variance[2][1]-m_Diff_Variance[2][0]*m_Diff_Variance[0][1])
+      /m_Diff_VarianceDet;  
+    m_Diff_VarianceInverse[2][0]=(m_Diff_Variance[0][1]*m_Diff_Variance[1][2]-m_Diff_Variance[1][1]*m_Diff_Variance[0][2])
+      /m_Diff_VarianceDet;  
+    m_Diff_VarianceInverse[2][1]=-(m_Diff_Variance[0][0]*m_Diff_Variance[1][2]-m_Diff_Variance[1][0]*m_Diff_Variance[0][2])
+      /m_Diff_VarianceDet;  
+    m_Diff_VarianceInverse[2][2]=(m_Diff_Variance[0][0]*m_Diff_Variance[1][1]-m_Diff_Variance[1][0]*m_Diff_Variance[0][1])
+      /m_Diff_VarianceDet;  
+    }
   
-  Superclass::GenerateData();            
+  Superclass::GenerateData();
 }
 
 template <class TInputImage, class TOutputImage>

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMLinearSystemWrapperItpack.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-23 20:25:28 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-01-30 21:10:11 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,9 +29,9 @@ typedef long      integer;
 typedef double    doublereal;
 
 extern "C" {
-typedef  
+  typedef  
   int (*ItkItpackSolverFunction)(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, 
-       integer *, doublereal *, integer *);
+                                 integer *, doublereal *, integer *);
 }
 
 
@@ -378,7 +378,7 @@ public:
   void ReducedSystemSemiIteration() { m_Method = 6; }
 
 
-  /* -----------------------------------------------------------------
+  /** -----------------------------------------------------------------
    * 
    * Redefine methods defined in LinearSystemWrapper 
    *
@@ -396,7 +396,7 @@ public:
   void ScaleMatrix(Float scale, unsigned int matrixIndex);
 
 
-  /* -----------------------------------------------------------------
+  /** -----------------------------------------------------------------
    * 
    * Functions required by LinearSystemWrapper 
    *
@@ -527,11 +527,6 @@ public:
   itkTypeMacro(FEMExceptionItpackSolver,FEMException);
   
 };
-
-
-
 }} // end namespace itk::fem
 
 #endif // #ifndef __itkFEMLinearSystemWrapperItpack_h
-
-

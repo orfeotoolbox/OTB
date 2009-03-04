@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuickPropLearningRule.h,v $
   Language:  C++
-  Date:      $Date: 2007-08-17 13:10:57 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-01-28 21:04:59 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -39,10 +39,10 @@ class QuickPropLearningRule : public LearningFunctionBase<LayerType, TTargetVect
 {
 public:
 
-  typedef QuickPropLearningRule Self;
+  typedef QuickPropLearningRule                          Self;
   typedef LearningFunctionBase<LayerType, TTargetVector> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef SmartPointer<Self>                             Pointer;
+  typedef SmartPointer<const Self>                       ConstPointer;
 
   /** Method for creation through the object factory. */
   itkTypeMacro(QuickPropLearningRule, LearningFunctionBase);

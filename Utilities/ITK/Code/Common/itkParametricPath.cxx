@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkParametricPath.cxx,v $
   Language:  C++
-  Date:      $Date: 2007-02-01 14:39:08 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-02-19 19:41:22 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -28,4 +28,3 @@ namespace itk
   template class ITKCommon_EXPORT ParametricPath<2>;
 
 } // end namespace itk
-

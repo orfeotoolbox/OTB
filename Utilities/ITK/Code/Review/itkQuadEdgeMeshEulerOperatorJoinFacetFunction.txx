@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshEulerOperatorJoinFacetFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-02-07 05:12:00 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-02-07 17:19:59 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,6 +27,7 @@ template < class TMesh, class TQEType >
   QuadEdgeMeshEulerOperatorJoinFacetFunction< TMesh, TQEType >::
   Evaluate( QEType* e )
 {
+#ifndef NDEBUG
   if( !e )
     {
     itkDebugMacro( "Input is not an edge." );
@@ -38,6 +39,7 @@ template < class TMesh, class TQEType >
     itkDebugMacro( "No mesh present." );
     return( (QEType*) 0 );
     }
+#endif
 
   if(  !e->IsInternal( ) )
     {

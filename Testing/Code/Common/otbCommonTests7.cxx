@@ -37,4 +37,6 @@ void RegisterTests()
   REGISTER_TEST(otbStandardWriterWatcher);
   REGISTER_TEST(otbUnaryFunctorNeighborhoodWithOffsetImageFilterNew);
   REGISTER_TEST(otbUnaryFunctorNeighborhoodWithOffsetImageFilter);
+  REGISTER_TEST(otbCartoRegionNew);
+  REGISTER_TEST(otbCartoRegion);
 }

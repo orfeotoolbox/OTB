@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSPSAOptimizer.h,v $
   Language:  C++
-  Date:      $Date: 2007-03-29 19:37:01 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-26 12:19:14 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -117,12 +117,18 @@ public:
   itkGetConstReferenceMacro( Gradient, DerivativeType);
 
   /** Set/Get a. */
-  itkSetMacro( a, double );
-  itkGetConstMacro( a, double );
-  
+  itkSetMacro( Sa, double );
+  itkGetConstMacro( Sa, double );
+  // For backward compatibility
+  void Seta (double a) { SetSa(a);}
+  double Geta () {return GetSa();}
+
   /** Set/Get c. */
-  itkSetMacro( c, double );
-  itkGetConstMacro( c, double );
+  itkSetMacro( Sc, double );
+  itkGetConstMacro( Sc, double );
+  // For backward compatibility
+  void Setc (double c) {SetSc(c);}
+  double Getc () {return GetSc();}
     
   /** Set/Get A. */
   itkSetMacro( A, double );
@@ -242,8 +248,8 @@ private:
   unsigned long                 m_NumberOfPerturbations;
     
   /** Parameters, as described by Spall.*/
-  double                        m_a;
-  double                        m_c;
+  double                        m_Sa;
+  double                        m_Sc;
   double                        m_A;
   double                        m_Alpha;
   double                        m_Gamma;

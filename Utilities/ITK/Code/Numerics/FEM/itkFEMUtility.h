@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMUtility.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:44 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-01-30 21:53:03 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,17 +23,11 @@
 namespace itk {
 namespace fem {
 
-
-
-
 /**
  * \file itkFEMUtility.h
  * \brief Includes various helper classes and functions used 
           througout the FEM code.
  */
-
-
-
 
 /**
  * \class GaussIntegrate
@@ -51,9 +45,6 @@ public:
   static const double w[110];
   double Integrate(double (*f)(double), double a, double b, int n=3);
 };
-
-
-
 
 }} /* end namespace itk */
 

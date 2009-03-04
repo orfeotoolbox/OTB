@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkErrorBackPropagationLearningWithMomentum.txx,v $
   Language:  C++
-  Date:      $Date: 2007-09-04 00:19:20 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-01-24 21:33:49 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -15,8 +15,8 @@
 
 =========================================================================*/
 
-#ifndef __itkErrorBackPropagationLearningingWithMomentum_txx
-#define __itkErrorBackPropagationLearningingWithMomentum_txx
+#ifndef __itkErrorBackPropagationLearningWithMomentum_txx
+#define __itkErrorBackPropagationLearningWithMomentum_txx
 
 #include "itkErrorBackPropagationLearningWithMomentum.h"
 #include <fstream>

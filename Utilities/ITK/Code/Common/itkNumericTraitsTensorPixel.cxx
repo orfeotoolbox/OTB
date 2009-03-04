@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNumericTraitsTensorPixel.cxx,v $
   Language:  C++
-  Date:      $Date: 2005-06-10 16:54:48 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-02-06 20:53:13 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,4 +23,3 @@ const SymmetricSecondRankTensor<double , 2>
   SymmetricSecondRankTensor<double , 2>( NumericTraits<double >::Zero ); 
 
 } // end namespace itk
-

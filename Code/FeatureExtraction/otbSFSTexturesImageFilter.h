@@ -26,6 +26,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
+
 /** \class SFSTexturesImageFilter
  *  \brief This functor computes the texture describes in the following publication
  *  It is based on line direction estimation.
@@ -153,17 +154,18 @@ public:
     };
 
   /** Texture selection accessors 
-   *  1: length
-   *  2: width
+   *  1: LENGTH
+   *  2: WIDTH
    *  3: PSI
-   *  4: w-mean
-   *  5: ratio
+   *  4: WMEAN
+   *  5: RATIO
    *  6: SD
    *  Set to 1 means the texture will be computed.
    **/
-  void SetTextureStatus( unsigned int id, bool isSelected )
+  typedef enum {LENGTH, WIDTH, PSI, WMEAN, RATIO, SD} FeatureType;
+  void SetFeatureStatus(FeatureType id, bool isSelected )
     {
-      if ( id>this->GetTexturesStatus().size() || id == 0 )
+      if ( static_cast<unsigned int>(id) > this->GetTexturesStatus().size() || id == 0 )
 	  {
 	    itkExceptionMacro(<<"Invalid texture index "<<id<<", must be in [1;"<<this->GetTexturesStatus().size()<<"]");
 	  }
@@ -172,6 +174,7 @@ public:
 	    this->GetFunctor().SetTextureStatus( id-1, isSelected );
       }
     }
+
   std::vector<bool> GetTexturesStatus()
     {
       return this->GetFunctor().GetTexturesStatus();
@@ -180,9 +183,9 @@ public:
   void InitTextureStatusFalse()
     {
       unsigned int id;
-      for (id=1;id<=6;id++)
+      for (id=0;id<=1;id++)
       {
-        this->SetTextureStatus(id,false);
+        this->SetFeatureStatus(static_cast<FeatureType>(id),false);
       }
     }
 

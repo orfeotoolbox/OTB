@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOutputWindow.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:19 $
-  Version:   $Revision: 1.22 $
+  Date:      $Date: 2009-02-19 19:41:22 $
+  Version:   $Revision: 1.23 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -36,9 +36,9 @@ class ITKCommon_EXPORT OutputWindow : public Object
 {
 public:
   /** Standard class typedefs. */
-  typedef OutputWindow        Self;
-  typedef Object  Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef OutputWindow              Self;
+  typedef Object                    Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
   
   /** Run-time type information (and related methods). */
@@ -97,7 +97,7 @@ private:
   OutputWindow(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  bool m_PromptUser;
+  bool           m_PromptUser;
   static Pointer m_Instance;
 };
   

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLogImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:36:59 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-02-05 19:05:01 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -39,7 +39,7 @@ template <class TInternalType, class TExternalType >
 class ITK_EXPORT LogPixelAccessor  
 {
 public:
- /** External typedef. It defines the external aspect
+  /** External typedef. It defines the external aspect
    * that this class will exhibit. */
   typedef TExternalType ExternalType;
 
@@ -75,13 +75,13 @@ class ITK_EXPORT LogImageAdaptor : public
 {
 public:
   /** Standard class typedefs. */
-  typedef LogImageAdaptor  Self;
+  typedef LogImageAdaptor                             Self;
   typedef ImageAdaptor<TImage,
                        Accessor::LogPixelAccessor<
                                  typename TImage::PixelType,
                                  TOutputPixelType> >  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                          Pointer;
+  typedef SmartPointer<const Self>                    ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro( LogImageAdaptor, ImageAdaptor );

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPathAndImageToPathFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:20 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-02-19 19:41:22 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -39,10 +39,10 @@ class ITK_EXPORT PathAndImageToPathFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef PathAndImageToPathFilter  Self;
+  typedef PathAndImageToPathFilter                  Self;
   typedef PathToPathFilter<TInputPath,TOutputPath>  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                        Pointer;
+  typedef SmartPointer<const Self>                  ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

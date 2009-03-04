@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshEulerOperatorFlipEdgeFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-08 16:23:34 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-02-10 05:07:49 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -70,7 +70,7 @@ public:
   /** Evaluate at the specified input position */
   virtual OutputType Evaluate( QEType* h );
 
-  itkGetMacro( EdgeStatus, EdgeStatusType );
+  // itkGetMacro( EdgeStatus, EdgeStatusType );
 
 protected:
   QuadEdgeMeshEulerOperatorFlipEdgeFunction();

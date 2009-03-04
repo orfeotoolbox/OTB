@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPointBasedSpatialObject.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-28 19:24:56 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-01-28 20:10:27 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,13 +25,13 @@ namespace itk
 {
 
 /** 
-* \class PointBasedSpatialObject
-* \brief This class serves as the base class for point-based spatial objects
-*
-* A PointBasedSpatialObject is an abstract class to support 
-* PointBasedSpatialObject filters and algorithms.
-*
-*/
+ * \class PointBasedSpatialObject
+ * \brief This class serves as the base class for point-based spatial objects
+ *
+ * A PointBasedSpatialObject is an abstract class to support 
+ * PointBasedSpatialObject filters and algorithms.
+ *
+ */
 
 template < unsigned int TDimension = 3 >
 class PointBasedSpatialObject 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOtsuThresholdImageCalculator.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-28 23:46:10 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-01-26 21:45:54 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -39,15 +39,15 @@ namespace itk
  *
  * \ingroup Operators
  */
-template <class TInputImage>            
+template <class TInputImage>
 class ITK_EXPORT OtsuThresholdImageCalculator : public Object 
 {
 public:
   /** Standard class typedefs. */
   typedef OtsuThresholdImageCalculator Self;
-  typedef Object  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef Object                       Superclass;
+  typedef SmartPointer<Self>           Pointer;
+  typedef SmartPointer<const Self>     ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

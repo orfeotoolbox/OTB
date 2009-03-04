@@ -27,11 +27,21 @@ namespace otb
 
 namespace Functor
 {
+
+  /**
+   * \class HSVToRGBFunctor
+   * \brief Function object to convert HSV value to RGB.
+   *
+   *
+   * \sa ScalarToRainbowRGBPixelFunctor
+   *
+   */
   template< class TRGBPixel >
   class ITK_EXPORT HSVToRGBFunctor
   {
-//----------------------------------------------------------------------------
     public:
+      HSVToRGBFunctor(){};
+      ~HSVToRGBFunctor(){};
       inline TRGBPixel operator()(double h, double s, double v) const
       {
         const double onethird = 1.0 / 3.0;
@@ -40,7 +50,7 @@ namespace Functor
         const double fivesixth = 5.0 / 6.0;
         double r, g, b;
 
-  // compute RGB from HSV
+        // compute RGB from HSV
         if (h > onesixth && h <= onethird) // green/red
         {
           g = 1.0;
@@ -78,7 +88,7 @@ namespace Functor
           b = 0.0;
         }
 
-  // add Saturation to the equation.
+        // add Saturation to the equation.
         r = (s * r + (1.0 - s));
         g = (s * g + (1.0 - s));
         b = (s * b + (1.0 - s));
@@ -86,6 +96,8 @@ namespace Functor
         r *= v;
         g *= v;
         b *= v;
+
+//         std::cout << h << ", " << s << ", " << v << " -> " << r << ", " << g << ", " << b << std::endl;
 
         TRGBPixel ans;
         typedef typename TRGBPixel::ComponentType RGBComponentType;
@@ -105,9 +117,6 @@ namespace Functor
 /**
  * \class ScalarToRainbowRGBPixelFunctor
  * \brief Function object which maps a scalar value into a rainbow RGB pixel value.
- *
- *  This class is useful for visualizing images which cannot be mapped
- *  succefully into grayscale images.
  *
  *  Grayscale image is mapped to a color image where blue represents
  * small values and red represents big values.

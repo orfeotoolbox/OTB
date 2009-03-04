@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConnectedComponentImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-09-28 11:45:59 $
-  Version:   $Revision: 1.28 $
+  Date:      $Date: 2009-01-14 14:25:11 $
+  Version:   $Revision: 1.31 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -167,7 +167,7 @@ ConnectedComponentImageFilter< TInputImage, TOutputImage, TMaskImage>
       {
       InputPixelType PVal = inLineIt.Get();
       //std::cout << inLineIt.GetIndex() << std::endl;
-      if (PVal != m_BackgroundValue)
+      if (PVal != NumericTraits<InputPixelType>::Zero )
         {
         // We've hit the start of a run
         runLength thisRun;
@@ -178,7 +178,7 @@ ConnectedComponentImageFilter< TInputImage, TOutputImage, TMaskImage>
         ++length;
         ++inLineIt;
         while( !inLineIt.IsAtEndOfLine()
-          && inLineIt.Get() != m_BackgroundValue )
+               && inLineIt.Get() != NumericTraits<InputPixelType>::Zero )
           {
           ++length;
           ++inLineIt;
@@ -605,7 +605,7 @@ ConnectedComponentImageFilter< TInputImage, TOutputImage, TMaskImage>
     unsigned long int L = m_UnionFind[I];
     if (L == I) 
       {
-      if( CLab == m_BackgroundValue )
+      if( CLab == static_cast<unsigned long int>(m_BackgroundValue) )
         {
         ++CLab;
         }

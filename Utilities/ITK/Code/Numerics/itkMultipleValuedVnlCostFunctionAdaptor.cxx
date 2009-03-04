@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultipleValuedVnlCostFunctionAdaptor.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-05-20 13:50:31 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-01-24 21:04:35 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -70,7 +70,7 @@ MultipleValuedVnlCostFunctionAdaptor
     parameters.SetData(const_cast<double*>(inparameters.data_block()));
     }
 
-   measures = this->m_CostFunction->GetValue( parameters );
+  measures = this->m_CostFunction->GetValue( parameters );
 
   // Notify observers. This is used for overcoming the limitaion of VNL
   // optimizers of not providing callbacks per iteration.

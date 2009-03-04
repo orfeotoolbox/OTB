@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkStructHashFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-21 16:50:20 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-01-27 19:30:16 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef itkStructHashFunction_h
-#define itkStructHashFunction_h
+#ifndef __itkStructHashFunction_h
+#define __itkStructHashFunction_h
 
 namespace itk
 {

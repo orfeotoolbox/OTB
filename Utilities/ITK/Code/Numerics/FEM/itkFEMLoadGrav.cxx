@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMLoadGrav.cxx,v $
   Language:  C++
-  Date:      $Date: 2004-12-04 13:17:09 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-01-30 21:10:18 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,9 +24,6 @@
 
 namespace itk {
 namespace fem {
-
-
-
 
 /**
  * Read the LoadGravConst object from input stream
@@ -51,14 +48,11 @@ void LoadGravConst::Read( std::istream& f, void* info )
 out:
 
   if( !f )
-  {
+    {
     throw FEMExceptionIO(__FILE__,__LINE__,"LoadGravConst::Read()","Error reading FEM load!");
-  }
+    }
 
 }
-
-
-
 
 /**
  * Write the LoadGravConst to the output stream
@@ -74,14 +68,11 @@ void LoadGravConst::Write( std::ostream& f ) const
 
   /** check for errors */
   if (!f)
-  {
+    {
     throw FEMExceptionIO(__FILE__,__LINE__,"LoadGravConst::Write()","Error writing FEM load!");
-  }
+    }
 }
 
 FEM_CLASS_REGISTER(LoadGravConst)
-
-
-
 
 }} // end namespace itk::fem

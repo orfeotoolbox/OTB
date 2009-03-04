@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOneWayEquivalencyTable.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-23 17:59:29 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-02-19 19:41:22 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -48,9 +48,9 @@ class ITKCommon_EXPORT OneWayEquivalencyTable : public DataObject
 {
 public:
   /**  Standard typedefs and smart pointer declarations.   */
-  typedef OneWayEquivalencyTable Self;
-  typedef DataObject Superclass;
-  typedef SmartPointer<Self> Pointer;
+  typedef OneWayEquivalencyTable   Self;
+  typedef DataObject               Superclass;
+  typedef SmartPointer<Self>       Pointer;
   typedef SmartPointer<const Self> ConstPointer;
   itkNewMacro(Self);
   itkTypeMacro(OneWayEquivalencyTable, DataObject);
@@ -58,9 +58,9 @@ public:
   /** Define the container type for this table */
   typedef itk::hash_map<unsigned long, unsigned long,
                         itk::hash<unsigned long> > HashTableType;
-  typedef HashTableType::iterator Iterator;
-  typedef HashTableType::const_iterator ConstIterator;
-  typedef HashTableType::value_type ValueType;
+  typedef HashTableType::iterator                  Iterator;
+  typedef HashTableType::const_iterator            ConstIterator;
+  typedef HashTableType::value_type                ValueType;
   
   /** ``Flattens'' the equivalency table by eliminating all redundant
    * and recursive equivalencies.  I.e. the set { 2=1; 3=2; 4=3 } is
@@ -80,11 +80,11 @@ public:
    * table, the method returns its the value of the argument.  Does
    * not recursively descent through equivalencies.  */
   unsigned long Lookup(const unsigned long a) const
-  {
+    {
     ConstIterator result = m_HashMap.find(a);
     if ( result == m_HashMap.end() ) return a;
     else return (*result).second;
-  }
+    }
   
   /** Lookup an equivalency in the table by recursing through all
    * successive equivalencies.  For example, if the follow entries
@@ -95,22 +95,22 @@ public:
   /** Returns TRUE if the label is found in the table and FALSE is the
    * label is not found in the table.  */
   bool IsEntry(const unsigned long a) const
-  {
+    {
     if ( m_HashMap.find(a) == m_HashMap.end() ) return false;
     else return true;
-  }
+    }
   
   /**  Erases the entry with key a.   */
   void Erase(const unsigned long a)
-  {  m_HashMap.erase(a); }
+    {  m_HashMap.erase(a); }
 
   /** Erases all the entries in the table.   */
   void Clear()
-  {      m_HashMap.clear();    }
+    {      m_HashMap.clear();    }
 
   /** Returns TRUE if the table is empty, FALSE if it is not empty.   */
   bool Empty() const
-  {      return m_HashMap.empty();    }
+    {      return m_HashMap.empty();    }
   
   /** Returns an iterator pointing to the first element of the (unordered)
       table.    */
@@ -136,4 +136,3 @@ protected:
 }// end namespace itk
 
 #endif
-

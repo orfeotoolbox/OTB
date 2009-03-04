@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMatchCardinalityImageToImageMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2008-02-03 04:05:28 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-01-24 20:02:59 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkMatchCardinalityImageToImageMetric_txx
-#define _itkMatchCardinalityImageToImageMetric_txx
+#ifndef __itkMatchCardinalityImageToImageMetric_txx
+#define __itkMatchCardinalityImageToImageMetric_txx
 
 // First make sure that the configuration is available.
 // This line can be removed once the optimized versions
@@ -33,7 +33,7 @@
 namespace itk
 {
 
-/*
+/**
  * Constructor
  */
 template <class TFixedImage, class TMovingImage> 
@@ -60,7 +60,7 @@ MatchCardinalityImageToImageMetric<TFixedImage,TMovingImage>
   return const_cast<Self*>(this)->GetNonconstValue(parameters);
 }
 
-/*
+/**
  * Get the match Measure (non const version. spawns threads).
  */
 template <class TFixedImage, class TMovingImage> 
@@ -297,7 +297,7 @@ MatchCardinalityImageToImageMetric<TFixedImage, TMovingImage>
   return ITK_THREAD_RETURN_VALUE;
 }
 
-/*
+/**
  * PrintSelf
  */
 template <class TFixedImage, class TMovingImage> 
@@ -316,4 +316,3 @@ MatchCardinalityImageToImageMetric<TFixedImage,TMovingImage>
 #endif
 
 #endif
-

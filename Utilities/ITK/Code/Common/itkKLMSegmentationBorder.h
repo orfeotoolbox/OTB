@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkKLMSegmentationBorder.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-29 13:14:32 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-02-05 19:04:58 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -137,9 +137,9 @@ class ITKCommon_EXPORT KLMSegmentationBorder : public SegmentationBorder
 
 public:
   /** Standard class typedefs. */
-  typedef KLMSegmentationBorder   Self;
-  typedef SegmentationBorder Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef KLMSegmentationBorder     Self;
+  typedef SegmentationBorder        Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   /** Method for creation through the object factory. */
@@ -185,7 +185,7 @@ private:
   KLMSegmentationBorder(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  double m_Lambda;
+  double                 m_Lambda;
   KLMSegmentationRegion *m_Region1;
   KLMSegmentationRegion *m_Region2;
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSpatialObject.txx,v $
   Language:  C++
-  Date:      $Date: 2008-06-29 13:04:07 $
-  Version:   $Revision: 1.76 $
+  Date:      $Date: 2009-01-28 20:10:27 $
+  Version:   $Revision: 1.77 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -371,7 +371,7 @@ SpatialObject< TDimension >
   return m_AffineGeometryFrame->GetObjectToNodeTransform();
 }
 
-/** Get the local transformation (const)*/
+/** Get the local transformation (const) */
 template< unsigned int TDimension >
 const typename SpatialObject< TDimension >::TransformType *
 SpatialObject< TDimension >
@@ -391,7 +391,7 @@ SpatialObject< TDimension >
   //return m_ObjectToNodeTransform.GetPointer();
 }
 
-/** Get the local transformation (const)*/
+/** Get the local transformation (const) */
 template< unsigned int TDimension >
 const typename SpatialObject< TDimension >::TransformType *
 SpatialObject< TDimension >
@@ -410,7 +410,7 @@ SpatialObject< TDimension >
   return m_AffineGeometryFrame->GetIndexToObjectTransform();
 }
 
-/** Get the local transformation (const)*/
+/** Get the local transformation (const) */
 template< unsigned int TDimension >
 const typename SpatialObject< TDimension >::TransformType *
 SpatialObject< TDimension >

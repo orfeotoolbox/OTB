@@ -27,8 +27,6 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbChangeLabelImageFilterNew);
-  REGISTER_TEST(otbChangeLabelImageFilterTest);
   REGISTER_TEST(otbContinuousMinimumMaximumImageCalculatorNew);
   REGISTER_TEST(otbContinuousMinimumMaximumImageCalculatorTest);
   REGISTER_TEST(otbMeanShiftImageFilterNew);

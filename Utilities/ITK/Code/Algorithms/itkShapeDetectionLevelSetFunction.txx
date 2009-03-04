@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShapeDetectionLevelSetFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:38 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-01-27 19:30:15 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkShapeDetectionLevelSetFunction_txx_
-#define __itkShapeDetectionLevelSetFunction_txx_
+#ifndef __itkShapeDetectionLevelSetFunction_txx
+#define __itkShapeDetectionLevelSetFunction_txx
 
 #include "itkShapeDetectionLevelSetFunction.h"
 #include "itkImageRegionIterator.h"

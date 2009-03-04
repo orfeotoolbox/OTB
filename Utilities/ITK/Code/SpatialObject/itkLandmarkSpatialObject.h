@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLandmarkSpatialObject.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-28 19:24:38 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-01-28 20:10:27 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,13 +27,13 @@ namespace itk
 {
 
 /** 
-* \class LandmarkSpatialObject
-* \brief Representation of a Landmark based on the spatial object classes.
-*
-* The Landmark is basically defined by a set of points with spatial locations.
-*
-* \sa SpatialObjectPoint
-*/
+ * \class LandmarkSpatialObject
+ * \brief Representation of a Landmark based on the spatial object classes.
+ *
+ * The Landmark is basically defined by a set of points with spatial locations.
+ *
+ * \sa SpatialObjectPoint
+ */
 
 template < unsigned int TDimension = 3 >
 class LandmarkSpatialObject 
@@ -68,7 +68,7 @@ public:
   /** Returns a reference to the list of the Landmark points. */
   const PointListType & GetPoints( void ) const;
 
-  /** Set the list of Landmark points.*/
+  /** Set the list of Landmark points. */
   void SetPoints( PointListType & newPoints );
 
   

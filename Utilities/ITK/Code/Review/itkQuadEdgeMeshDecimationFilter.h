@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshDecimationFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-01 18:15:23 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-02-16 20:22:11 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,7 +38,7 @@ public:
 
   /** Run-time type information (and related methods).   */
   itkTypeMacro( QuadEdgeMeshDecimationFilter, QuadEdgeMeshToQuadEdgeMeshFilter );
-    
+
   typedef TInput                                                InputMeshType;
   typedef typename InputMeshType::Pointer                       InputMeshPointer;
 
@@ -67,29 +67,32 @@ protected:
   void GenerateData()
     {
     Superclass::GenerateData();
-    
+
     Initialize();
     FillPriorityQueue();
     m_Iteration = 0;
-    bool topological_change = this->m_Criterion->GetTopologicalChange();
+//     bool topological_change = this->m_Criterion->GetTopologicalChange();
 
     do
       {
+//       std::cout <<m_Iteration <<std::endl;
       Extract();
-      if ( topological_change )
-        {
-        ProcessWithoutAnyTopologicalGuarantee();
-        }
-      else
-        {
+//       if ( topological_change )
+//         {
+//         std::cout <<"ProcessWithoutAnyTopologicalGuarantee" <<std::endl;
+//         ProcessWithoutAnyTopologicalGuarantee();
+//         }
+//       else
+//         {
         if ( ProcessWithTopologicalGuarantee() )
           {
+//           std::cout <<"ProcessWithTopologicalGuarantee" <<std::endl;
           return;
           }
-        }
+//         }
       ++m_Iteration;
       } while ( !IsCriterionSatisfied() );
-    
+
     this->GetOutput()->SqueezePointsIds( );
     }
 

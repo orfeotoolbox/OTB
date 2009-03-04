@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptBSplineInterpolateImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-12-08 01:10:42 $
-  Version:   $Revision: 1.6.6.1 $
+  Date:      $Date: 2009-02-07 16:05:47 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -338,7 +338,6 @@ protected:
 
   BSplineInterpolateImageFunction();
   ~BSplineInterpolateImageFunction();
-  void operator=( const Self& ); //purposely not implemented
   void PrintSelf(std::ostream& os, Indent indent) const;
 
   // These are needed by the smoothing spline routine.
@@ -354,6 +353,8 @@ protected:
 
 private:
   BSplineInterpolateImageFunction( const Self& ); //purposely not implemented
+  void operator=( const Self& ); //purposely not implemented
+
   /** Determines the weights for interpolation of the value x */
   void SetInterpolationWeights( const ContinuousIndexType & x,
                                 const vnl_matrix<long> & EvaluateIndex,

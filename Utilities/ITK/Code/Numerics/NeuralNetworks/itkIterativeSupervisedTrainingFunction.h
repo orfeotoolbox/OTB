@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIterativeSupervisedTrainingFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-08-17 13:10:57 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-01-24 21:33:49 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -31,10 +31,10 @@ class IterativeSupervisedTrainingFunction : public TrainingFunctionBase<TSample,
 {
 public:
 
-  typedef IterativeSupervisedTrainingFunction Self;
+  typedef IterativeSupervisedTrainingFunction                      Self;
   typedef TrainingFunctionBase<TSample, TTargetVector, ScalarType> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef SmartPointer<Self>                                       Pointer;
+  typedef SmartPointer<const Self>                                 ConstPointer;
 
   /** Method for creation through the object factory. */
   itkTypeMacro(IterativeSupervisedTrainingFunction, TrainingFunctionBase);
@@ -42,7 +42,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  typedef typename Superclass::NetworkType NetworkType;
+  typedef typename Superclass::NetworkType        NetworkType;
   typedef typename Superclass::InternalVectorType InternalVectorType;
 
   void SetNumOfIterations(long i);

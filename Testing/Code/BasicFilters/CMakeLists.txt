@@ -848,10 +848,10 @@ ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
 
 # -------            otb::ConvolutionImageFilter   ----------------------------
 
-  ADD_TEST(bfTuConvolutionImageFilterNew ${BASICFILTERS_TESTS8}
+ADD_TEST(bfTuConvolutionImageFilterNew ${BASICFILTERS_TESTS8}
          otbConvolutionImageFilterNew)
 
-  ADD_TEST(bfTvConvolutionImageFilter ${BASICFILTERS_TESTS8}
+ADD_TEST(bfTvConvolutionImageFilter ${BASICFILTERS_TESTS8}
 		--compare-image ${EPSILON}
 		    ${BASELINE}/bfTvConvolutionImageFilter.tif
 		    ${TEMP}/bfTvConvolutionImageFilter.tif
@@ -863,10 +863,10 @@ ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
 
 # -------            otb::ScalarToRainbowRGBPixelFunctor  -----------------
 
-  ADD_TEST(bfTuScalarToRainbowRGBPixelFunctorNew ${BASICFILTERS_TESTS8}
-         otbConvolutionImageFilterNew)
+ADD_TEST(bfTuScalarToRainbowRGBPixelFunctorNew ${BASICFILTERS_TESTS8}
+         otbScalarToRainbowRGBPixelFunctorNew)
 
-  ADD_TEST(bfTvScalarToRainbowRGBPixelFunctor ${BASICFILTERS_TESTS8}
+ADD_TEST(bfTvScalarToRainbowRGBPixelFunctor ${BASICFILTERS_TESTS8}
 		--compare-image ${EPSILON}
 		    ${BASELINE}/bfTvScalarToRainbowRGBPixelFunctor.png
 		    ${TEMP}/bfTvScalarToRainbowRGBPixelFunctor.png
@@ -875,19 +875,24 @@ ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
 		    ${TEMP}/bfTvScalarToRainbowRGBPixelFunctor.png
 )
 
+# -------            otb::AmplitudePhaseToRGBFunctor  -----------------
+
+ADD_TEST(bfTuAmplitudePhaseToRGBFunctorNew ${BASICFILTERS_TESTS8}
+         otbAmplitudePhaseToRGBFunctorNew)
+
+ADD_TEST(bfTvAmplitudePhaseToRGBFunctor ${BASICFILTERS_TESTS8}
+		--compare-image ${EPSILON}
+		    ${BASELINE}/bfTvAmplitudePhaseToRGBFunctor.png
+		    ${TEMP}/bfTvAmplitudePhaseToRGBFunctor.png
+		    otbAmplitudePhaseToRGBFunctor
+		    ${INPUTDATA}/RSAT_imagery_HH.tif
+		    ${TEMP}/bfTvAmplitudePhaseToRGBFunctor.png
+)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests9 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ADD_TEST(bfTuChangeLabelImageFilterNew ${BASICFILTERS_TESTS9}
-	otbChangeLabelImageFilterNew
-)
-
-ADD_TEST(bfTuChangeLabelImageFilter ${BASICFILTERS_TESTS9}
-	otbChangeLabelImageFilterTest
-)
-
 
 ADD_TEST(bfTuContinuousMinimumMaximumImageCalculatorNew ${BASICFILTERS_TESTS9}
         otbContinuousMinimumMaximumImageCalculatorNew
@@ -1016,10 +1021,10 @@ ADD_TEST(bfTuBinaryImageToImageDensityFilterNew  ${BASICFILTERS_TESTS9}
 ADD_TEST(bfTvBinaryImageToDensityImageFilter ${BASICFILTERS_TESTS9}
 	--compare-image ${EPSILON}
 	    ${BASELINE}/bfTvBinaryImageToDensityImageFilterOutputImage.tif
-	    ${TEMP}/bfTvBinaryImageToDensityImageFilterOutputImage.tif 
+	    ${TEMP}/bfTvBinaryImageToDensityImageFilterOutputImage.tif
         otbBinaryImageToDensityImageFilter
 	    ${INPUTDATA}/scene.png
-	    ${TEMP}/bfTvBinaryImageToDensityImageFilterOutputImage.tif 
+	    ${TEMP}/bfTvBinaryImageToDensityImageFilterOutputImage.tif
 	    2 # radius
 )
 
@@ -1037,7 +1042,7 @@ ADD_TEST(bfTvEdgeDensityImageFilter ${BASICFILTERS_TESTS9}
 	    ${TEMP}/bfTvEdgeDensityImageFilterOutputImage.tif
 	    1 # radius
 	    15 3  1. 0.01  #Canny Parameters
-	    
+
 )
 
 
@@ -1218,7 +1223,7 @@ ADD_TEST(bfTvKeyPointDensityImageFilterOutputImage ${BASICFILTERS_TESTS11}
 --compare-image ${TOL}
 	    ${BASELINE}/bfTvKeyPointDensityImageFilterOutputImage.tif
 	    ${TEMP}/bfTvKeyPointDensityImageFilterOutputImage.tif
-	    otbKeyPointDensityImageFilterTest 
+	    otbKeyPointDensityImageFilterTest
 	 ${INPUTDATA}/QB_Suburb.png
 	 ${TEMP}/bfTvKeyPointDensityImageFilterOutputImage.tif
 	 3 5 10
@@ -1516,12 +1521,12 @@ otbConvolutionImageFilterNew.cxx
 otbConvolutionImageFilter.cxx
 otbScalarToRainbowRGBPixelFunctorNew.cxx
 otbScalarToRainbowRGBPixelFunctor.cxx
+otbAmplitudePhaseToRGBFunctorNew.cxx
+otbAmplitudePhaseToRGBFunctor.cxx
 )
 
 # A enrichir
 SET(BasicFilters_SRCS9
-otbChangeLabelImageFilterNew.cxx
-otbChangeLabelImageFilter.cxx
 otbContinuousMinimumMaximumImageCalculatorNew.cxx
 otbContinuousMinimumMaximumImageCalculatorTest.cxx
 otbMeanShiftImageFilterNew.cxx
@@ -1533,9 +1538,9 @@ otbFunctionToImageFilter.cxx
 otbBinaryImageDensityFunctionNew.cxx
 otbBinaryImageDensityFunction.cxx
 otbBinaryImageToDensityImageFilterNew.cxx
-otbBinaryImageToDensityImageFilter.cxx	
+otbBinaryImageToDensityImageFilter.cxx
 otbEdgeDensityImageFilterNew.cxx
-otbEdgeDensityImageFilter.cxx	
+otbEdgeDensityImageFilter.cxx
 )
 
 # A enrichir
@@ -1566,7 +1571,7 @@ otbPointSetFunctionNew.cxx
 otbPointSetDensityFunctionNew.cxx
 otbPointSetDensityFunctionTest.cxx
 otbPointSetToDensityImageFilterNew.cxx
-otbPointSetToDensityImageFilterTest.cxx	
+otbPointSetToDensityImageFilterTest.cxx
 otbKeyPointDensityImageFilterNew.cxx
 otbKeyPointDensityImageFilterTest.cxx
 otbImagePCAShapeModelEstimatorTest.cxx

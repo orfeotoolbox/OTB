@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPlaneSpatialObject.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-28 19:24:56 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-01-28 20:10:27 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -63,7 +63,7 @@ public:
                         unsigned int depth=0, char * name=NULL) const;
      
   /** return ture if the object provides a method to evaluate the value 
-   * at the specified point, else otherwise.*/
+   * at the specified point, else otherwise. */
   virtual bool IsEvaluableAt( const PointType & point,
                               unsigned int depth=0, char * name=NULL) const;
 

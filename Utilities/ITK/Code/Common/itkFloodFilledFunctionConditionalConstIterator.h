@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFloodFilledFunctionConditionalConstIterator.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 23:25:41 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2009-02-05 19:04:56 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -96,7 +96,7 @@ public:
   /** Automatically find a seed pixel and set m_StartIndex. Does nothing
    * if a seed pixel isn't found. A seed pixel is determined by
    * traversing the input image's LargestPossibleRegion and
-   * applying the IsPixelIncluded() test.*/
+   * applying the IsPixelIncluded() test. */
   void FindSeedPixel();
 
   /** Automatically find all seed pixels. */

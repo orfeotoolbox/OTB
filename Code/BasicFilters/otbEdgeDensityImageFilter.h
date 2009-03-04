@@ -107,8 +107,8 @@ protected:
   /**
    * Main computation method.
    */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId );
-  //virtual void GenerateData( );
+  //virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId );
+  virtual void GenerateData( );
 
 private:
 

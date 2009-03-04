@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRegionGrowImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005-11-30 23:19:29 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2009-01-26 21:45:57 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkRegionGrowImageFilter_h
-#define _itkRegionGrowImageFilter_h
+#ifndef __itkRegionGrowImageFilter_h
+#define __itkRegionGrowImageFilter_h
 
 #include "itkObject.h"
 #include "itkImageToImageFilter.h"
@@ -81,10 +81,10 @@ class ITK_EXPORT RegionGrowImageFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef RegionGrowImageFilter   Self;
+  typedef RegionGrowImageFilter                        Self;
   typedef ImageToImageFilter<TInputImage,TOutputImage> Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                           Pointer;
+  typedef SmartPointer<const Self>                     ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(RegionGrowImageFilter,ImageToImageFilter);

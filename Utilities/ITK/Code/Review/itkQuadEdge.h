@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdge.h,v $
   Language:  C++
-  Date:      $Date: 2008-09-30 21:27:47 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2009-02-07 17:19:59 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -358,25 +358,37 @@ public:
 
   /** Inverse operators */
   inline Self * GetInvRot() 
-    { Self * p1 = this->GetRot();
+    {
+#ifdef NDEBUG
+    return( this->GetRot()->GetRot()->GetRot() );
+#else
+    Self * p1 = this->GetRot();
     if( !p1 ) return NULL;
     Self * p2 = p1->GetRot();
     if( !p2 ) return NULL;
     Self * p3 = p2->GetRot();
     if( !p3 ) return NULL;
-    return p3; }
+    return p3;
+#endif
+    }
   inline Self * GetInvOnext() { return this->GetOprev(); }
   inline Self * GetInvLnext() { return this->GetLprev(); }
   inline Self * GetInvRnext() { return this->GetRprev(); }
   inline Self * GetInvDnext() { return this->GetDprev(); }
   inline const Self * GetInvRot() const 
-    { const Self * p1 = this->GetRot();
+    {
+#ifdef NDEBUG
+    return( this->GetRot()->GetRot()->GetRot() );
+#else
+    const Self * p1 = this->GetRot();
     if( !p1 ) return NULL;
     const Self * p2 = p1->GetRot();
     if( !p2 ) return NULL;
     const Self * p3 = p2->GetRot();
     if( !p3 ) return NULL;
-    return p3; }
+    return p3;
+#endif
+    }
   inline const Self * GetInvOnext() const { return this->GetOprev(); }
   inline const Self * GetInvLnext() const { return this->GetLprev(); }
   inline const Self * GetInvRnext() const { return this->GetRprev(); }

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAdaptiveHistogramEqualizationImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 14:49:29 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2008-12-21 19:13:36 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -75,7 +75,7 @@ public:
   typedef AdaptiveHistogramEqualizationImageFilter     Self;
   typedef ImageToImageFilter< TImageType, TImageType > Superclass;
   typedef SmartPointer<Self>                           Pointer;
-  typedef SmartPointer<const Self>                     constPointer;
+  typedef SmartPointer<const Self>                     ConstPointer;
 
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TImageType::ImageDimension );

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGeometricalQuadEdge.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-01 15:45:41 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2009-02-07 17:19:59 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -54,11 +54,13 @@ template< typename TVRef, typename TFRef,
     SetLnextRingWithSameLeftFace( const DualOriginRefType faceGeom,
                                   int maxSize )
 {
+#ifndef NDEBUG
   if( !this->IsLnextSharingSameFace( maxSize ) )
     {
     itkQEDebugMacro( "Lnext() edges do NOT share the same Left()." );
     return( false );
     }
+#endif
 
   IteratorGeom it = this->BeginGeomLnext();
 

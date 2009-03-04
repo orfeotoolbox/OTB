@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeshRegion.cxx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:16 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-02-05 22:04:06 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,4 +38,3 @@ MeshRegion
 }
 
 } // end namespace itk
-

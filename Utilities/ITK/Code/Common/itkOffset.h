@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOffset.h,v $
   Language:  C++
-  Date:      $Date: 2008-08-05 18:41:06 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-02-06 20:53:15 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -66,7 +66,7 @@ public:
 
   /** Compatible offset typedefs. */
   typedef   Offset<VOffsetDimension>  OffsetType;
-  typedef   long OffsetValueType;
+  typedef   long                      OffsetValueType;
     
   /** Lexicographic ordering functor type.  */
   typedef Functor::OffsetLexicographicCompare<VOffsetDimension> LexicographicCompare;

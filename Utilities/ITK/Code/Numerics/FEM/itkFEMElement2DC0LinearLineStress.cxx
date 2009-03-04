@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMElement2DC0LinearLineStress.cxx,v $
   Language:  C++
-  Date:      $Date: 2003-12-15 14:13:20 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-01-28 21:19:16 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,9 +24,6 @@
 
 namespace itk {
 namespace fem {
-
-
-
 
 Element2DC0LinearLineStress
 ::Element2DC0LinearLineStress() : Superclass()
@@ -54,9 +51,6 @@ Element2DC0LinearLineStress
   }
 }
 
-
-
-
 void
 Element2DC0LinearLineStress
 ::GetMassMatrix( MatrixType& Me ) const
@@ -79,12 +73,5 @@ Element2DC0LinearLineStress
 
 }
 
-
-
-
 FEM_CLASS_REGISTER(Element2DC0LinearLineStress)
-
-
-
-
 }} // end namespace itk::fem

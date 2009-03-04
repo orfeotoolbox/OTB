@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLogger.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-08 15:40:08 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-02-05 19:05:01 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,21 +25,21 @@
 namespace itk
 {
 /** \class Logger
-*   \brief Class Logger is meant for logging information during a run.
-*
-* \author Hee-Su Kim, Compute Science Dept. Kyungpook National University,
-*                     ISIS Center, Georgetown University.
-*
-*
+ *   \brief Class Logger is meant for logging information during a run.
+ *
+ * \author Hee-Su Kim, Compute Science Dept. Kyungpook National University,
+ *                     ISIS Center, Georgetown University.
+ *
+ *
  *  \ingroup OSSystemObjects LoggingObjects
-*/
+ */
 
 class ITKCommon_EXPORT Logger : public LoggerBase
 {
 public:
-  typedef Logger  Self;
-  typedef LoggerBase  Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef Logger                    Self;
+  typedef LoggerBase                Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   /** Run-time type information (and related methods). */

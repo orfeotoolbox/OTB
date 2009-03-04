@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLineCell.h,v $
   Language:  C++
-  Date:      $Date: 2007-05-18 14:31:12 $
-  Version:   $Revision: 1.51 $
+  Date:      $Date: 2009-02-05 19:05:01 $
+  Version:   $Revision: 1.52 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -60,7 +60,7 @@ public:
   
   /** Implement the standard CellInterface. */
   virtual CellGeometry GetType(void) const 
-  {return Superclass::LINE_CELL;}
+    {return Superclass::LINE_CELL;}
   virtual void MakeCopy( CellAutoPointer & ) const;
   virtual unsigned int GetDimension(void) const;
   virtual unsigned int GetNumberOfPoints(void) const;
@@ -95,7 +95,7 @@ protected:
   /** Store number of points needed for a line segment. */
   PointIdentifier m_PointIds[NumberOfPoints];
 
- private:
+private:
   LineCell(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 };

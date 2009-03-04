@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNeighborhoodInnerProduct.h,v $
   Language:  C++
-  Date:      $Date: 2007-02-07 13:58:41 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-02-06 20:53:12 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -48,8 +48,8 @@ public:
 
   /** Capture some typedefs from the template parameters. */
   typedef typename TImage::PixelType ImagePixelType;
-  typedef TOperator OperatorPixelType;
-  typedef TComputation OutputPixelType;
+  typedef TOperator                  OperatorPixelType;
+  typedef TComputation               OutputPixelType;
   
   /** Capture some typedefs from the template parameters. */
   itkStaticConstMacro(ImageDimension, unsigned int, TImage::ImageDimension);
@@ -68,7 +68,7 @@ public:
   OutputPixelType operator()(const ConstNeighborhoodIterator<TImage> &it,
                        const OperatorType &op) const
     {
-      return this->operator()(std::slice(0, it.Size(), 1), it, op);
+    return this->operator()(std::slice(0, it.Size(), 1), it, op);
     }
 
 
@@ -79,7 +79,7 @@ public:
   OutputPixelType operator()(const NeighborhoodType &N,
                        const OperatorType &op) const
     {
-      return this->operator()(std::slice(0, N.Size(), 1), N, op);
+    return this->operator()(std::slice(0, N.Size(), 1), N, op);
     }
 
 };

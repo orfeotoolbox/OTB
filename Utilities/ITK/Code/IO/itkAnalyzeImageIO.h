@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAnalyzeImageIO.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-03 13:13:06 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2009-02-22 05:53:41 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -136,6 +136,13 @@ public:
   /** Writes the data to disk from the memory buffer provided. Make sure
        * that the IORegions has been set properly. */
   virtual void Write(const void* buffer);
+
+  /** Return the directions with a correction for the 2D case. */
+  virtual std::vector<double> GetDirection(unsigned int i) const;
+
+  /** Return the directions to be assigned by default to recipient
+   *  images whose dimension is smaller than the image dimension in file.  */
+  virtual std::vector<double> GetDefaultDirection(unsigned int i) const;
 
 
 protected:

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDTITubeSpatialObjectPoint.txx,v $
   Language:  C++
-  Date:      $Date: 2007-10-30 01:19:09 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-01-28 20:10:27 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -78,7 +78,7 @@ DTITubeSpatialObjectPoint< TPointDimension >
   return "";
 }
 
-/** Add a field to the point list*/
+/** Add a field to the point list */
 template< unsigned int TPointDimension >
 void
 DTITubeSpatialObjectPoint< TPointDimension >
@@ -89,7 +89,7 @@ DTITubeSpatialObjectPoint< TPointDimension >
 }
 
 
-/** Set a field value to the point list*/
+/** Set a field value to the point list */
 template< unsigned int TPointDimension >
 void
 DTITubeSpatialObjectPoint< TPointDimension >
@@ -127,7 +127,7 @@ DTITubeSpatialObjectPoint< TPointDimension >
 
 }
 
-/** Add a field to the point list*/
+/** Add a field to the point list */
 template< unsigned int TPointDimension >
 void
 DTITubeSpatialObjectPoint< TPointDimension >

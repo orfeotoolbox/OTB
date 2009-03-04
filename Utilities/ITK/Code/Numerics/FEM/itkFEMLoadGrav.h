@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMLoadGrav.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:42 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-01-30 21:10:18 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,9 +24,6 @@
 namespace itk {
 namespace fem {
 
-
-
-
 /**
  * \class LoadGrav
  * \brief Abstract gravity load class.
@@ -38,15 +35,12 @@ namespace fem {
  */
 class LoadGrav : public LoadElement
 {
-FEM_ABSTRACT_CLASS(LoadGrav,LoadElement)
+  FEM_ABSTRACT_CLASS(LoadGrav,LoadElement)
 public:
 
   virtual vnl_vector<Float> Fg(vnl_vector<Float>) = 0;
 
 };
-
-
-
 
 /**
  * \class LoadGravConst
@@ -57,12 +51,13 @@ public:
  */
 class LoadGravConst : public LoadGrav
 {
-FEM_CLASS(LoadGravConst,LoadGrav)
+  FEM_CLASS(LoadGravConst,LoadGrav)
 public:
   vnl_vector<Float> Fg_value;
-  virtual vnl_vector<Float> Fg(vnl_vector<Float>) {
+  virtual vnl_vector<Float> Fg(vnl_vector<Float>)
+    {
     return Fg_value;
-  };
+    }
 
   /**
    * Read an object from input stream.
@@ -77,9 +72,6 @@ public:
 };
 
 FEM_CLASS_INIT(LoadGravConst)
-
-
-
 
 }} // end namespace itk::fem
 

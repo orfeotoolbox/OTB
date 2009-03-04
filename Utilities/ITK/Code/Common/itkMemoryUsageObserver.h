@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMemoryUsageObserver.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-24 18:11:22 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-02-05 22:04:06 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -108,7 +108,7 @@ public:
 };
 #endif // Sun Solaris
 
-#if !defined(WIN32) && !defined(_WIN32) 
+#if !defined(WIN32) && !defined(_WIN32)
 class ITKCommon_EXPORT SysResourceMemoryUsageObserver:public MemoryUsageObserverBase
 {
 public:
@@ -116,7 +116,7 @@ public:
   virtual ~SysResourceMemoryUsageObserver();
   virtual MemoryLoadType GetMemoryUsage();
 };
-#if !defined(__APPLE__) && !defined(__SUNPRO_CC) && !defined (__sun__)
+#if !defined(__APPLE__) && !defined(__SUNPRO_CC) && !defined (__sun__) && !defined(__FreeBSD__)
 /** \class MallinfoMemoryUsageObserver
  * \brief The MallinfoMemoryUsageObserver
  */
@@ -130,7 +130,13 @@ public:
 #endif // Mallinfo
 #endif // !defined(WIN32) && !defined(_WIN32)
 
-
+/* \class MemoryUsageObserver
+ * The best MemoryUsageObserver has been chosen for each OS.
+ * However, SysResourceMemoryUsageObserver is far from being accurate. Other
+ * way of getting the Memory Usage shall be used.
+ * For FreeBSD, some alternatives would be to parse the output of 
+ * "sysctl vm.vmtotal" or "sysctl -a | grep -i memory"
+*/
 class ITKCommon_EXPORT MemoryUsageObserver:
 #if defined(WIN32) || defined(_WIN32)
   public WindowsMemoryUsageObserver
@@ -140,7 +146,7 @@ class ITKCommon_EXPORT MemoryUsageObserver:
   public SunSolarisMemoryUsageObserver
 #elif defined(__APPLE__) && MAC_OS_X_VERSION >= MAC_OS_X_VERSION_10_2
   public MacOSXMemoryUsageObserver
-#elif defined(__APPLE__)
+#elif defined(__APPLE__) || defined(__FreeBSD__)
   public SysResourceMemoryUsageObserver
 #else
   public MallinfoMemoryUsageObserver

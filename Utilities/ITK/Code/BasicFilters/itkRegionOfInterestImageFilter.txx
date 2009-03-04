@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRegionOfInterestImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 16:30:51 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2008-12-18 17:49:58 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -124,30 +124,7 @@ RegionOfInterestImageFilter<TInputImage,TOutputImage>
   // Correct origin of the extracted region.
   IndexType roiStart( m_RegionOfInterest.GetIndex() );
   typename Superclass::OutputImageType::PointType  outputOrigin;
-  typedef Image< ITK_TYPENAME TInputImage::PixelType,
-    Superclass::InputImageDimension > ImageType;
-  typename ImageType::ConstPointer imagePtr =
-    dynamic_cast< const ImageType * >( inputPtr.GetPointer() );
-  if ( imagePtr )
-    {
-    // Input image supports TransformIndexToContinuousPoint
-    inputPtr->TransformIndexToPhysicalPoint( roiStart, outputOrigin);
-    }
-  else
-    {
-    // Generic type of image
-    const typename Superclass::InputImageType::PointType&
-      inputOrigin = inputPtr->GetOrigin();
-
-    const typename Superclass::InputImageType::SpacingType&
-      spacing = inputPtr->GetSpacing();
- 
-    for( unsigned int i=0; i<ImageDimension; i++)
-      {
-      outputOrigin[i] = inputOrigin[i] + roiStart[i] * spacing[i];
-      }
-    }
-  
+  inputPtr->TransformIndexToPhysicalPoint( roiStart, outputOrigin);
   outputPtr->SetOrigin( outputOrigin );
 
 }

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageSliceConstIteratorWithIndex.h,v $
   Language:  C++
-  Date:      $Date: 2005-08-03 20:20:21 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-02-05 19:04:57 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -78,7 +78,7 @@ namespace itk
  *  \endcode
  *
  * \example  Common/itkImageSliceIteratorTest.cxx
-  *
+ *
  * \par MORE INFORMATION
  * For a complete description of the ITK Image Iterators and their API, please
  * see the Iterators chapter in the ITK Software Guide.  The ITK Software Guide
@@ -113,7 +113,7 @@ class ITK_EXPORT ImageSliceConstIteratorWithIndex : public ImageConstIteratorWit
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageSliceConstIteratorWithIndex Self;
+  typedef ImageSliceConstIteratorWithIndex     Self;
   typedef ImageConstIteratorWithIndex<TImage>  Superclass;
   
   /** Index typedef support. While this was already typdef'ed in the superclass
@@ -134,7 +134,7 @@ public:
   /** PixelContainer typedef support. Used to refer to the container for
    * the pixel data. While this was already typdef'ed in the superclass
    * it needs to be redone here for this subclass to compile properly with gcc. */
-  typedef typename TImage::PixelContainer PixelContainer;
+  typedef typename TImage::PixelContainer  PixelContainer;
   typedef typename PixelContainer::Pointer PixelContainerPointer;
   
   /** Default constructor. Needed since we provide a cast constructor. */
@@ -146,8 +146,8 @@ public:
                       const RegionType & region)
     : ImageConstIteratorWithIndex<TImage>(ptr, region) 
     {
-      m_Direction_A = 0;
-      m_Direction_B = 1;
+    m_Direction_A = 0;
+    m_Direction_B = 1;
     }
 
   /** Constructor that can be used to cast from an ImageIterator to an

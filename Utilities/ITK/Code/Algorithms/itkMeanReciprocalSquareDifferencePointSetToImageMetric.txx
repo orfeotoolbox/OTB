@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanReciprocalSquareDifferencePointSetToImageMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2008-02-03 04:05:28 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-01-24 20:02:59 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkMeanReciprocalSquareDifferencePointSetToImageMetric_txx
-#define _itkMeanReciprocalSquareDifferencePointSetToImageMetric_txx
+#ifndef __itkMeanReciprocalSquareDifferencePointSetToImageMetric_txx
+#define __itkMeanReciprocalSquareDifferencePointSetToImageMetric_txx
 
 #include "itkMeanReciprocalSquareDifferencePointSetToImageMetric.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
@@ -33,7 +33,7 @@ MeanReciprocalSquareDifferencePointSetToImageMetric<TFixedPointSet,TMovingImage>
   m_Lambda = 1.0;
 }
 
-/*
+/**
  * Get the match Measure
  */
 template <class TFixedPointSet, class TMovingImage> 
@@ -181,7 +181,7 @@ MeanReciprocalSquareDifferencePointSetToImageMetric<TFixedPointSet,TMovingImage>
           {
           //Will it be computationally more efficient to instead calculate the
           //derivative using finite differences ?
-          sum -=  jacobian( dim, par ) * 
+          sum -= jacobian( dim, par ) * 
             gradient[dim] / (pow( lambdaSquared + diffSquared , 2));
           }
         derivative[par] += diff * sum;
@@ -315,9 +315,7 @@ MeanReciprocalSquareDifferencePointSetToImageMetric<TFixedPointSet,TMovingImage>
   value = measure;
 }
 
-
-
-/*
+/**
  * PrintSelf
  */
 template <class TFixedPointSet, class TMovingImage> 

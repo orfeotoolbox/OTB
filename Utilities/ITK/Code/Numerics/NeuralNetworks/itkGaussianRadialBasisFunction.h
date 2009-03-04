@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianRadialBasisFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-08-17 13:10:57 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-01-24 21:33:49 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -31,11 +31,11 @@ class GaussianRadialBasisFunction : public RadialBasisFunctionBase<ScalarType>
 public:
 
   /** Standard class typedefs. */
-  typedef GaussianRadialBasisFunction Self;
+  typedef GaussianRadialBasisFunction         Self;
   typedef RadialBasisFunctionBase<ScalarType> Superclass;
-  typedef typename Superclass::ArrayType ArrayType;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef typename Superclass::ArrayType      ArrayType;
+  typedef SmartPointer<Self>                  Pointer;
+  typedef SmartPointer<const Self>            ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(GaussianRadialBasisFunction,RadialBasisFunctionBase);

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOrthogonallyCorrected2DParametricPath.cxx,v $
   Language:  C++
-  Date:      $Date: 2007-12-23 17:59:29 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-02-19 19:41:22 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -74,8 +74,6 @@ OrthogonallyCorrected2DParametricPath
   return output;
 }
 
-
-
 void
 OrthogonallyCorrected2DParametricPath
 ::SetOriginalPath( const OriginalPathType *originalPath )
@@ -90,8 +88,6 @@ OrthogonallyCorrected2DParametricPath
     }
 }
 
-
-
 /**
  * Constructor
  */
@@ -101,8 +97,6 @@ OrthogonallyCorrected2DParametricPath
   m_OriginalPath = NULL;
   m_OrthogonalCorrectionTable = OrthogonalCorrectionTableType::New();
 }
-
-
 
 /**
  * Standard "PrintSelf" method
@@ -115,7 +109,5 @@ OrthogonallyCorrected2DParametricPath
   os << indent << "Original Path:  " << m_OriginalPath << std::endl;
   os << indent << "Correction Table:  " << m_OrthogonalCorrectionTable << std::endl;
 }
-
-
 
 } // end namespaceitk

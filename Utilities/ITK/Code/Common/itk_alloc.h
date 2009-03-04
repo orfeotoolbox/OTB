@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itk_alloc.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:30 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-02-05 19:05:01 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef itk_alloc_h
-#define itk_alloc_h
+#ifndef __itk_alloc_h
+#define __itk_alloc_h
 
 // That is an adaptor for working with any alloc provided below
 template<class T, class Alloc>

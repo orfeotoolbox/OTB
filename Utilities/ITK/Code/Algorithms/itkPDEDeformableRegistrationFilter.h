@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPDEDeformableRegistrationFilter.h,v $
   Language:  C++
-  Date:      $Date: 2004-09-29 14:20:40 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2009-01-26 21:45:56 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkPDEDeformableRegistrationFilter_h_
-#define _itkPDEDeformableRegistrationFilter_h_
+#ifndef __itkPDEDeformableRegistrationFilter_h
+#define __itkPDEDeformableRegistrationFilter_h
 
 #include "itkDenseFiniteDifferenceImageFilter.h"
 #include "itkPDEDeformableRegistrationFunction.h"
@@ -75,9 +75,9 @@ public:
   /** Standard class typedefs. */
   typedef PDEDeformableRegistrationFilter    Self;
   typedef DenseFiniteDifferenceImageFilter<
-    TDeformationField,TDeformationField>    Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+    TDeformationField,TDeformationField>     Superclass;
+  typedef SmartPointer<Self>                 Pointer;
+  typedef SmartPointer<const Self>           ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -87,17 +87,17 @@ public:
                 DenseFiniteDifferenceImageFilter );
 
   /** FixedImage image type. */
-  typedef TFixedImage   FixedImageType;
-  typedef typename FixedImageType::Pointer  FixedImagePointer;
+  typedef TFixedImage                            FixedImageType;
+  typedef typename FixedImageType::Pointer       FixedImagePointer;
   typedef typename FixedImageType::ConstPointer  FixedImageConstPointer;
 
   /** MovingImage image type. */
-  typedef TMovingImage    MovingImageType;
-  typedef typename MovingImageType::Pointer  MovingImagePointer;
-  typedef typename MovingImageType::ConstPointer  MovingImageConstPointer;
+  typedef TMovingImage                           MovingImageType;
+  typedef typename MovingImageType::Pointer      MovingImagePointer;
+  typedef typename MovingImageType::ConstPointer MovingImageConstPointer;
   
   /** Deformation field type. */
-  typedef TDeformationField    DeformationFieldType;
+  typedef TDeformationField                       DeformationFieldType;
   typedef typename DeformationFieldType::Pointer  DeformationFieldPointer;
 
   /** Types inherithed from the superclass */
@@ -133,7 +133,7 @@ public:
 
   /** Get output deformation field. */
   DeformationFieldType * GetDeformationField()
-  { return this->GetOutput(); }
+    { return this->GetOutput(); }
 
   /** Get the number of valid inputs.  For PDEDeformableRegistration,
    * this checks whether the fixed and moving images have been

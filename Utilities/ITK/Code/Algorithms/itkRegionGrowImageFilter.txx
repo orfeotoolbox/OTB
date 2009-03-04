@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRegionGrowImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004-10-27 01:08:44 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-01-26 21:45:57 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkRegionGrowImageFilter_txx
-#define _itkRegionGrowImageFilter_txx
+#ifndef __itkRegionGrowImageFilter_txx
+#define __itkRegionGrowImageFilter_txx
 
 #include "itkRegionGrowImageFilter.h"
 
@@ -37,7 +37,7 @@ RegionGrowImageFilter<TInputImage,TOutputImage>
 
 }
 
-/*
+/**
  * PrintSelf
  */
 template <class TInputImage, class TOutputImage>
@@ -54,8 +54,5 @@ RegionGrowImageFilter<TInputImage,TOutputImage>
 }// end PrintSelf
 
 } // namespace itk
-
-
-
 
 #endif

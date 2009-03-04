@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshEulerOperatorJoinVertexFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-03 21:13:17 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-02-16 20:22:11 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,8 +27,8 @@ namespace itk
 //FIXME http://www.cgal.org/Manual/doc_html/cgal_manual/Polyhedron_ref/Class_Polyhedron_3.html
 /**
  * \class EulerOperatorJoinVertexFunction
- * \ingroup QEMeshModifierFunctions 
- * 
+ * \ingroup QEMeshModifierFunctions
+ *
  * \brief Collapse a given edge by joining its dest and its org.
  *
  * Collapse the argument edge e of \ref Evaluate by joining the two vertices
@@ -48,7 +48,7 @@ namespace itk
  *    and for each such square an added diagonal. No imagine what happens
  *    when one operates JoinVertex on a diagonal edge of a corner square
  *    (and how it differs with feeding JoinVertex with the opposite edge).
- * \sa The operator \ref itkQE::EulerOperatorJoinVertexFunction can be 
+ * \sa The operator \ref itkQE::EulerOperatorJoinVertexFunction can be
  *    seen as the inverse operator.
  */
 template < class TMesh, class TQEType >
@@ -61,7 +61,7 @@ public:
   typedef SmartPointer< Self >                            Pointer;
   typedef SmartPointer< const Self      >                 ConstPointer;
   typedef QuadEdgeMeshFunctionBase< TMesh, TQEType* >     Superclass;
-  
+
   itkNewMacro( Self );
   /** Run-time type information (and related methods). */
   itkTypeMacro( QuadEdgeMeshEulerOperatorJoinVertexFunction, QuadEdgeMeshFunctionBase );
@@ -82,16 +82,16 @@ public:
   enum EdgeStatusType
     {
     STANDARD_CONFIG = 0,
-    EDGE_NULL,
-    MESH_NULL,
-    EDGE_ISOLATED,
-    TOO_MANY_COMMON_VERTICES,
-    TETRAEDRON_CONFIG,
-    QUADEDGE_ISOLATED,
-    FACE_ISOLATED,
-    SAMOSA_CONFIG,
-    EYE_CONFIG,
-    EDGE_JOINING_DIFFERENT_BORDERS
+    EDGE_NULL, //1
+    MESH_NULL, //2
+    EDGE_ISOLATED, //3
+    TOO_MANY_COMMON_VERTICES, //4
+    TETRAHEDRON_CONFIG, //5
+    QUADEDGE_ISOLATED, //6
+    FACE_ISOLATED, //7
+    SAMOSA_CONFIG, //8
+    EYE_CONFIG, //9
+    EDGE_JOINING_DIFFERENT_BORDERS //10
     };
 
   itkGetMacro( OldPointID, PointIdentifier );
@@ -107,7 +107,7 @@ protected:
   EdgeStatusType        m_EdgeStatus;
 
   /**
-   * \brief 
+   * \brief
    * \param[in] e
    * \return The number of common vertices in the 0-ring of e->GetOrigin() and
    * e->GetDestination()
@@ -115,12 +115,12 @@ protected:
   size_t CommonVertexNeighboor( QEType* e );
 
   /**
-   * \brief 
+   * \brief
    * \param[in] e
-   * \return true if it is a tetraedron
+   * \return true if it is a tetrahedron
    * \return false else
    */
-  bool IsTetraedron( QEType* e );
+  bool IsTetrahedron( QEType* e );
 
   /**
    * \brief
@@ -137,12 +137,13 @@ protected:
   bool IsEye( QEType* e );
 
   bool IsEdgeLinkingTwoDifferentBorders( QEType* e );
-  
+
   EdgeStatusType CheckStatus( QEType* e, std::stack< TQEType* >& oToBeDeleted );
 
   QEType* Process( QEType* e );
   QEType* ProcessIsolatedQuadEdge( QEType* e );
-  QEType* ProcessIsolatedFace( QEType* e, std::stack< QEType* > EdgesToBeDeleted );
+  QEType* ProcessIsolatedFace( QEType* e, std::stack< QEType* >& EdgesToBeDeleted
+);
 
 private:
   QuadEdgeMeshEulerOperatorJoinVertexFunction(const Self& ); //purposely not implemented

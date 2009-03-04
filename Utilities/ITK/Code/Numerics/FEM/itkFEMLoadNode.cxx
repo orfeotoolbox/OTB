@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMLoadNode.cxx,v $
   Language:  C++
-  Date:      $Date: 2004-12-04 13:17:09 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-01-30 21:10:18 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,9 +25,6 @@
 namespace itk {
 namespace fem {
 
-
-
-
 /**
  * Read the LoadNode object from input stream
  */
@@ -46,13 +43,13 @@ void LoadNode::Read( std::istream& f, void* info )
   /** read and set pointer to node that we're applying the load to */
   this->SkipWhiteSpace(f); f>>n; if(!f) goto out;
   try
-  {
+    {
     this->m_element=dynamic_cast<const Element*>( &*elements->Find(n));
-  }
+    }
   catch ( FEMExceptionObjectNotFound e )
-  {
+    {
     throw FEMExceptionObjectNotFound(__FILE__,__LINE__,"LoadNode::Read()",e.m_baseClassName,e.m_GN);
-  }
+    }
 
   /* read and set the point number */
   this->SkipWhiteSpace(f); f>>this->m_pt; if(!f) goto out;
@@ -68,14 +65,11 @@ void LoadNode::Read( std::istream& f, void* info )
 out:
 
   if( !f )
-  {
+    {
     throw FEMExceptionIO(__FILE__,__LINE__,"LoadNode::Read()","Error reading FEM load!");
-  }
+    }
 
 }
-
-
-
 
 /**
  * Write the LoadNode to the output stream
@@ -92,15 +86,12 @@ void LoadNode::Write( std::ostream& f ) const {
 
   /** check for errors */
   if (!f)
-  {
+    {
     throw FEMExceptionIO(__FILE__,__LINE__,"LoadNode::Write()","Error writing FEM load!");
-  }
+    }
 
 }
 
 FEM_CLASS_REGISTER(LoadNode)
-
-
-
 
 }} // end namespace itk::fem

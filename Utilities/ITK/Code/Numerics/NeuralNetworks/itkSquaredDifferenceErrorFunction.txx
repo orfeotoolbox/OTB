@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSquaredDifferenceErrorFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2007-08-17 13:10:57 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-28 21:04:59 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -73,7 +73,7 @@ SquaredDifferenceErrorFunction <TMeasurementVector,ScalarType>
       }
     else
       {
-      diff[i]=errors[i];      
+      diff[i]=errors[i];
       }
     }
   return (diff); //(errors);

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeshRegion.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:16 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-02-05 22:04:09 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,7 +44,7 @@ class ITKCommon_EXPORT MeshRegion: public Region
 public:
   /** Standard class typedefs. */
   typedef MeshRegion              Self;
-  typedef Region  Superclass;
+  typedef Region                  Superclass;
   
   /** Standard part of all itk objects. */
   itkTypeMacro(MeshRegion, Region);
@@ -68,16 +68,16 @@ public:
   /** Set the number of regions. */
   void SetNumberOfRegions(unsigned long num)
     { if ((num >= 1) && (num <= NumericTraits<unsigned long>::max()))
-      { m_NumberOfRegions = num; } };
+      { m_NumberOfRegions = num; } }
 
   /** Get the current region. */
   unsigned long GetRegion() const
-    { return m_Region; };
+    { return m_Region; }
 
   /** Set the number of regions. */
   void SetRegion(unsigned long region)
     { if ((region >= 1) && (region <= NumericTraits<unsigned long>::max()))
-      { m_Region = region; } };
+      { m_Region = region; } }
 
 private:
   // The maximum number of regions possible.
@@ -91,4 +91,3 @@ private:
 } // end namespace itk
 
 #endif
-

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMLoadBC.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:42 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-30 21:10:12 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -22,9 +22,6 @@
 namespace itk {
 namespace fem {
 
-
-
-
 /**
  * \class LoadBC
  * \brief Generic essential (Dirichlet) boundary conditions.
@@ -33,18 +30,18 @@ namespace fem {
  */
 class LoadBC : public Load
 {
-FEM_CLASS(LoadBC,Load)
+  FEM_CLASS(LoadBC,Load)
 public:
 
   /**
    * Pointer to an element, which holds the DOF that is affected
    * by boundary condition.
    */
-  Element::ConstPointer m_element;
+Element::ConstPointer m_element;
 
   /**
    * Local DOF number within the Element object.
-   */    
+   */
   unsigned int m_dof;
 
   /**
@@ -69,9 +66,6 @@ public:
 };
 
 FEM_CLASS_INIT(LoadBC)
-
-
-
 
 }} // end namespace itk::fem
 

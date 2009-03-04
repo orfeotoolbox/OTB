@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPointSetToPointSetMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2003-11-08 17:58:32 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-01-26 21:45:56 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkPointSetToPointSetMetric_txx
-#define _itkPointSetToPointSetMetric_txx
+#ifndef __itkPointSetToPointSetMetric_txx
+#define __itkPointSetToPointSetMetric_txx
 
 #include "itkPointSetToPointSetMetric.h"
 
@@ -98,4 +98,3 @@ PointSetToPointSetMetric<TFixedPointSet,TMovingPointSet>
 } // end namespace itk
 
 #endif
-

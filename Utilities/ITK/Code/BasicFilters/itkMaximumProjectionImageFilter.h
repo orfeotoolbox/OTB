@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMaximumProjectionImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-02-08 04:52:21 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-01-28 18:14:36 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,7 +29,7 @@ namespace itk {
  * the original paper can be found at 
  *      http://insight-journal.org/midas/handle.php?handle=1926/164
  *
- * \author Gaetan Lehmann. Biologie du Développement et de la reproduction,
+ * \author Gaetan Lehmann. Biologie du Developpement et de la reproduction,
  *  inra de jouy-en-josas, France.
  *  
  * \sa ProjectionImageFilter

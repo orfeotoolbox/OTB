@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultipleLogOutput.cxx,v $
   Language:  C++
-  Date:      $Date: 2005-05-26 01:53:44 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-02-05 22:04:15 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -31,14 +31,10 @@ MultipleLogOutput::MultipleLogOutput()
   this->m_Output.clear();
 }
 
-
-
 MultipleLogOutput::~MultipleLogOutput()
 {
 //  this->Flush();
 }
-
-
 
 /** Adds an output stream to the MultipleLogOutput for writing. */
 void 
@@ -46,8 +42,6 @@ MultipleLogOutput::AddLogOutput( OutputType * output )
 {
   this->m_Output.insert( output ); // insert the address
 }
-
-
 
 /** The Flush method flushes all the streams. */  
 void 
@@ -63,8 +57,6 @@ MultipleLogOutput::Flush( void )
     }
 }
 
-
-
 /** Write to multiple outputs */
 void MultipleLogOutput::Write( double timestamp )
 {
@@ -77,8 +69,6 @@ void MultipleLogOutput::Write( double timestamp )
     ++itr;
     }
 }
-
-
 
 /** Write to multiple outputs */
 void MultipleLogOutput::Write( const std::string & content )
@@ -93,8 +83,6 @@ void MultipleLogOutput::Write( const std::string & content )
     }
 }
 
-
-
 /** Write to a buffer */
 void MultipleLogOutput::Write( const std::string & content, double timestamp )
 {
@@ -107,7 +95,4 @@ void MultipleLogOutput::Write( const std::string & content, double timestamp )
     ++itr;
     }
 }
-
-
 }
-

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLineConstIterator.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:36:59 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-02-05 19:05:01 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkLineConstIterator_txx
-#define _itkLineConstIterator_txx
+#ifndef __itkLineConstIterator_txx
+#define __itkLineConstIterator_txx
 
 #include "itkLineConstIterator.h"
 

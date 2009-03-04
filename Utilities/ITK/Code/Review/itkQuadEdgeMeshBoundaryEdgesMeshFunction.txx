@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshBoundaryEdgesMeshFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-12 00:10:13 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-02-10 05:07:49 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,21 +14,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-// -------------------------------------------------------------------------
-// This code is an implementation of the well known quad edge (QE) data
-// structure in the ITK library. Although the original QE can handle non
-// orientable 2-manifolds and its dual and its mirror, this implementation
-// is specifically dedicated to handle orientable 2-manifolds along with
-// their dual.
-//
-// Any comment, criticism and/or donation is welcome.
-//
-// Please contact any member of the team:
-//
-// - The frog master (Eric Boix)       eboix@ens-lyon.fr
-// - The duck master (Alex Gouaillard) gouaillard@creatis.insa-lyon.fr
-// - The cow  master (Leonardo Florez) florez@creatis.insa-lyon.fr
-// -------------------------------------------------------------------------
 #ifndef __itkQuadEdgeMeshBoundaryEdgesMeshFunction_txx
 #define __itkQuadEdgeMeshBoundaryEdgesMeshFunction_txx
 
@@ -48,19 +33,21 @@ Evaluate( const InputType& mesh )
   typedef typename MeshType::CellsContainerConstIterator
     CellsContainerConstIterator; 
   EdgeListType boundaryList;
+
   CellsContainerConstIterator cellIterator = mesh.GetEdgeCells()->Begin();
   CellsContainerConstIterator cellEnd      = mesh.GetEdgeCells()->End();
-  while( cellIterator != cellEnd )
+
+  for(; cellIterator != cellEnd; ++cellIterator )
     {
-       if( EdgeCellType* cell = dynamic_cast< EdgeCellType* >( cellIterator.Value( ) ) )
+    if( EdgeCellType* cell =
+        dynamic_cast< EdgeCellType* >( cellIterator.Value( ) ) )
       {
-           QEPrimal* edge = cell->GetQEGeom( );
+      QEPrimal* edge = cell->GetQEGeom( );
       if( !edge->IsInternal( ) )
         {
         boundaryList.push_front( edge );
         }
       }
-    ++cellIterator;
     } 
 
   OutputType ResultList = new EdgeListType;

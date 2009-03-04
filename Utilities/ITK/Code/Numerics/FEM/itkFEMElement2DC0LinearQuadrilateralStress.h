@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMElement2DC0LinearQuadrilateralStress.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:39 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-01-28 21:25:49 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,9 +23,6 @@
 
 namespace itk {
 namespace fem {
-
-
-
 
 /**
  * \class Element2DC0LinearQuadrilateralStress
@@ -57,10 +54,6 @@ public:
 }; // class Element2DC0LinearQuadrilateralStress
 
 FEM_CLASS_INIT(Element2DC0LinearQuadrilateralStress)
-
-
-
-
 }} // end namespace itk::fem
 
 #endif  // #ifndef __itkFEMElement2DC0LinearQuadrilateralStress_h

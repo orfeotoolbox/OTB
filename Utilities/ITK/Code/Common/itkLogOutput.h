@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLogOutput.h,v $
   Language:  C++
-  Date:      $Date: 2006-02-05 20:57:46 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-02-05 19:05:01 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -33,7 +33,7 @@ namespace itk
  *  \author Hee-Su Kim, Compute Science Dept. Kyungpook National University,
  *                      ISIS Center, Georgetown University.
  *
- *  \ingroup OSSystemObjects LoggingObjects                    
+ *  \ingroup OSSystemObjects LoggingObjects
  */
 
 class ITKCommon_EXPORT LogOutput : public Object
@@ -41,9 +41,9 @@ class ITKCommon_EXPORT LogOutput : public Object
 
 public:
 
-  typedef LogOutput Self;
-  typedef Object  Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef LogOutput                 Self;
+  typedef Object                    Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
   
   /** flush a buffer */

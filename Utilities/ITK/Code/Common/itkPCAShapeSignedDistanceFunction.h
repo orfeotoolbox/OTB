@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPCAShapeSignedDistanceFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 23:39:53 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-02-19 19:41:22 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -197,7 +197,7 @@ private:
 
   /** shape and pose parameters */
   ParametersType                m_WeightOfPrincipalComponents;
-  ParametersType                m_TransformParameters;         
+  ParametersType                m_TransformParameters;
 
 };
 

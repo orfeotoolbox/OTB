@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDiscreteHessianGaussianImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-25 06:00:24 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2008-12-06 13:28:10 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -71,7 +71,7 @@ DiscreteHessianGaussianImageFunction<TInputImage,TOutput>
 
 
 /** Recompute the gaussian kernel used to evaluate indexes
- *  This should use a fastest Derivative Gaussian operator*/
+ *  This should use a fastest Derivative Gaussian operator */
 template <class TInputImage, class TOutput>
 void
 DiscreteHessianGaussianImageFunction<TInputImage,TOutput>

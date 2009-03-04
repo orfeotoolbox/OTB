@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMSolver.h,v $
   Language:  C++
-  Date:      $Date: 2004-11-10 19:22:13 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2009-01-30 21:53:03 $
+  Version:   $Revision: 1.28 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -114,9 +114,9 @@ public:
    * Same as InitializeInterpolationGrid(size, {0,0...}, size);
    */
   void InitializeInterpolationGrid(const VectorType& size)
-  {
+    {
     InitializeInterpolationGrid(size, VectorType(size.size(),0.0), size-1.0);
-  }
+    }
 
   /**
    * Returns pointer to interpolation grid, which is an itk::Image of pointers
@@ -186,10 +186,10 @@ public:
    * use it to perform other stuff in derived solver classes.
    */
   virtual void FinalizeMatrixAfterAssembly( void )
-  {
+    {
     // Apply the boundary conditions to the K matrix
     this->ApplyBC();
-  };
+    }
 
   /**
    * Copy the element stiffness matrix into the correct position in the
@@ -249,14 +249,14 @@ public:
   void UpdateDisplacements( void );
 
   Float GetSolution(unsigned int i,unsigned int which=0)
-  {
+    {
     return m_ls->GetSolutionValue(i,which);
-  }
+    }
 
   unsigned int GetNumberOfDegreesOfFreedom( void )
-  {
+    {
     return NGFN;
-  }
+    }
 
   /** Get the total deformation energy using the chosen solution */
   Float GetDeformationEnergy(unsigned int SolutionIndex=0);
@@ -345,9 +345,6 @@ private:
   InterpolationGridType::Pointer m_InterpolationGrid;
 
 };
-
-
-
 
 }} // end namespace itk::fem
 

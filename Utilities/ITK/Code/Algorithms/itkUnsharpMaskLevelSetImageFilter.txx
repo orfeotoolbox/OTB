@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkUnsharpMaskLevelSetImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004-12-21 22:47:29 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-27 19:30:16 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
      =========================================================================*/
-#ifndef _itkUnsharpMaskLevelSetImageFilter_txx_
-#define _itkUnsharpMaskLevelSetImageFilter_txx_
+#ifndef __itkUnsharpMaskLevelSetImageFilter_txx
+#define __itkUnsharpMaskLevelSetImageFilter_txx
 
 #include "itkUnsharpMaskLevelSetImageFilter.h"
 
@@ -49,8 +49,8 @@ void
 UnsharpMaskLevelSetImageFilter <TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
-  Superclass::PrintSelf(os, indent);     
-  os << indent << "MaxFilterIteration: " << m_MaxFilterIteration << std::endl;      
+  Superclass::PrintSelf(os, indent);
+  os << indent << "MaxFilterIteration: " << m_MaxFilterIteration << std::endl;
 }
 
 } // end namespace itk

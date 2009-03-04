@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVTKPolyDataWriter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-10 22:22:06 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-08 00:20:04 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -52,10 +52,11 @@ public:
 
   /** Hold on to the type information specified by the template parameters.
    */
-  typedef TInputMesh                          InputMeshType;
-  typedef typename InputMeshType::PixelType   PixelType;
-  typedef typename InputMeshType::PointType   PointType;
-  typedef typename InputMeshType::CellType    CellType;
+  typedef TInputMesh                              InputMeshType;
+  typedef typename InputMeshType::PixelType       PixelType;
+  typedef typename InputMeshType::PointType       PointType;
+  typedef typename InputMeshType::CellType        CellType;
+  typedef typename InputMeshType::PointIdentifier PointIdentifier;
 
   /** Some convenient typedefs. */
   typedef typename InputMeshType::ConstPointer  InputMeshPointer;

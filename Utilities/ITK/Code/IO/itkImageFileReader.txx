@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageFileReader.txx,v $
   Language:  C++
-  Date:      $Date: 2008-09-16 21:01:10 $
-  Version:   $Revision: 1.80 $
+  Date:      $Date: 2009-02-22 05:53:41 $
+  Version:   $Revision: 1.84 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,7 +38,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   m_ImageIO = 0;
   m_FileName = "";
   m_UserSpecifiedImageIO = false;
-  m_UseStreaming = false;
+  m_UseStreaming = true;
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
@@ -156,11 +156,31 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   double spacing[ TOutputImage::ImageDimension ];
   double origin[ TOutputImage::ImageDimension ];
   typename TOutputImage::DirectionType direction;
+
+  std::vector<std::vector<double> > directionIO;
+
+  const unsigned int numberOfDimensionsIO = m_ImageIO->GetNumberOfDimensions();
+
+  if( numberOfDimensionsIO > TOutputImage::ImageDimension )
+    {
+    for( unsigned int k = 0; k < numberOfDimensionsIO; k++ )
+      {
+      directionIO.push_back( m_ImageIO->GetDefaultDirection(k) );
+      }
+    }
+  else
+    {
+    for( unsigned int k = 0; k < numberOfDimensionsIO; k++ )
+      {
+      directionIO.push_back( m_ImageIO->GetDirection(k) );
+      }
+    }
+
   std::vector<double> axis;
 
   for(unsigned int i=0; i<TOutputImage::ImageDimension; i++)
     {
-    if ( i < m_ImageIO->GetNumberOfDimensions() )
+    if( i < numberOfDimensionsIO )
       {
       dimSize[i] = m_ImageIO->GetDimensions(i);
       spacing[i] = m_ImageIO->GetSpacing(i);
@@ -168,10 +188,10 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 
       // Please note: direction cosines are stored as columns of the
       // direction matrix
-      axis = m_ImageIO->GetDirection(i);
-      for (unsigned j=0; j<TOutputImage::ImageDimension; j++)
+      axis = directionIO[i];
+      for( unsigned j=0; j<TOutputImage::ImageDimension; j++ )
         {
-        if (j < m_ImageIO->GetNumberOfDimensions())
+        if (j < numberOfDimensionsIO )
           {
           direction[j][i] = axis[j];
           }
@@ -202,40 +222,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
         }
       }
     }
-  //
-  // TODO: actually figure out what to do about dir cosines in 2d.
-  // don't allow degenerate direction cosines
-  // This is a pure punt; it will prevent the exception being
-  // thrown, but doesn't do the right thing at all -- replacing e.g
-  // [0, 0, -1] with [0, 1] doesn't make any real sense.
-  // On the other hand, programs that depend on 2D Direction Cosines
-  // are pretty much guaranteed to be disappointed if they expect anything
-  // meaningful in the direction cosines anyway.
-  if(TOutputImage::ImageDimension == 2)
-    {
-    if(direction[0][0] == 0.0 && direction[1][0] == 0)
-      {
-      if(direction[0][1] == 0.0)
-        {
-        direction[0][0] = 1.0;
-        }
-      if(direction[1][1] == 0.0)
-        {
-        direction[1][0] = 1.0;
-        }
-      }
-    else if(direction[0][1] == 0.0 && direction[1][1] == 0)
-      {
-      if(direction[0][0] == 0.0)
-        {
-        direction[1][0] = 1.0;
-        }
-      if(direction[1][0] == 0.0)
-        {
-        direction[1][1] = 1.0;
-        }
-      }
-    }
+
   output->SetSpacing( spacing );     // Set the image spacing
   output->SetOrigin( origin );       // Set the image origin
   output->SetDirection( direction ); // Set the image direction cosines
@@ -305,6 +292,13 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 {
   itkDebugMacro (<< "Starting EnlargeOutputRequestedRegion() ");
   typename TOutputImage::Pointer out = dynamic_cast<TOutputImage*>(output);
+  typename TOutputImage::RegionType largestRegion = out->GetLargestPossibleRegion();
+
+  if (!m_UseStreaming) 
+    {
+    m_ImageIO->SetUseStreamedReading(m_UseStreaming);
+    out->SetRequestedRegionToLargestPossibleRegion();
+    }
 
   // Delegate to the ImageIO the computation of how much the 
   // requested region must be enlarged.
@@ -319,7 +313,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 
   typedef ImageIORegionAdaptor< TOutputImage::ImageDimension >  ImageIOAdaptor;
   
-  ImageIOAdaptor::Convert( imageRequestedRegion, ioRequestedRegion );
+  ImageIOAdaptor::Convert( imageRequestedRegion, ioRequestedRegion, largestRegion.GetIndex() );
 
   // Tell the IO if we should use streaming while reading
   m_ImageIO->SetUseStreamedReading(m_UseStreaming);
@@ -328,7 +322,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     m_ImageIO->GenerateStreamableReadRegionFromRequestedRegion( ioRequestedRegion );
 
 
-  ImageIOAdaptor::Convert( ioStreamableRegion, this->m_StreamableRegion );
+  ImageIOAdaptor::Convert( ioStreamableRegion, this->m_StreamableRegion, largestRegion.GetIndex() );
 
   //
   // Check whether the imageRequestedRegion is fully contained inside the
@@ -342,6 +336,8 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     }
     
   itkDebugMacro (<< "StreamableRegion set to =" << this->m_StreamableRegion );
+
+  out->SetRequestedRegion(this->m_StreamableRegion);
 }
 
 
@@ -350,7 +346,8 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::GenerateData()
 {
 
-  typename TOutputImage::Pointer output = this->GetOutput();
+  typename TOutputImage::Pointer output = this->GetOutput();  
+  typename TOutputImage::RegionType largestRegion = output->GetLargestPossibleRegion();
 
   itkDebugMacro ( << "ImageFileReader::GenerateData() \n" 
      << "Allocating the buffer with the StreamableRegion \n" 
@@ -382,7 +379,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
   typedef ImageIORegionAdaptor< TOutputImage::ImageDimension >  ImageIOAdaptor;
   
   // Convert the m_StreamableRegion from ImageRegion type to ImageIORegion type
-  ImageIOAdaptor::Convert( this->m_StreamableRegion, ioRegion );
+  ImageIOAdaptor::Convert( this->m_StreamableRegion, ioRegion, largestRegion.GetIndex() );
 
   itkDebugMacro (<< "ioRegion: " << ioRegion);
  

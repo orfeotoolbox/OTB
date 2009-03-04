@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGradientMagnitudeRecursiveGaussianImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-31 09:14:57 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2009-02-05 05:36:44 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -213,6 +213,8 @@ GradientMagnitudeRecursiveGaussianImageFilter<TInputImage,TOutputImage >
   cumulativeImage->SetRegions( inputImage->GetBufferedRegion() );
   cumulativeImage->Allocate();
   cumulativeImage->FillBuffer( NumericTraits< InternalRealType >::Zero );
+  // The output's information must match the input's information
+  cumulativeImage->CopyInformation(this->GetInput());
 
   m_DerivativeFilter->SetInput( inputImage );
 
@@ -253,7 +255,6 @@ GradientMagnitudeRecursiveGaussianImageFilter<TInputImage,TOutputImage >
     progress->ResetFilterProgressAndKeepAccumulatedProgress();
 
     }
-
   m_SqrtFilter->SetInput( cumulativeImage );
   m_SqrtFilter->GraftOutput( this->GetOutput() );
   m_SqrtFilter->Update();

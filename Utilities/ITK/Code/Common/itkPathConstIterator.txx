@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPathConstIterator.txx,v $
   Language:  C++
-  Date:      $Date: 2005-01-01 13:59:04 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-02-19 19:41:22 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkPathConstIterator_txx
-#define _itkPathConstIterator_txx
+#ifndef __itkPathConstIterator_txx
+#define __itkPathConstIterator_txx
 
 #include "itkPathConstIterator.h"
 #include "itkOffset.h"        // for operator++

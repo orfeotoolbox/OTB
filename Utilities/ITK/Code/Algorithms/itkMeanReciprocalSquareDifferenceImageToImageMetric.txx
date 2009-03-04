@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanReciprocalSquareDifferenceImageToImageMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2008-02-03 04:05:28 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-01-24 20:02:59 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkMeanReciprocalSquareDifferenceImageToImageMetric_txx
-#define _itkMeanReciprocalSquareDifferenceImageToImageMetric_txx
+#ifndef __itkMeanReciprocalSquareDifferenceImageToImageMetric_txx
+#define __itkMeanReciprocalSquareDifferenceImageToImageMetric_txx
 
 #include "itkMeanReciprocalSquareDifferenceImageToImageMetric.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
@@ -23,7 +23,7 @@
 namespace itk
 {
 
-/*
+/**
  * Constructor
  */
 template <class TFixedImage, class TMovingImage> 
@@ -35,7 +35,7 @@ MeanReciprocalSquareDifferenceImageToImageMetric<TFixedImage,TMovingImage>
 }
 
 
-/*
+/**
  * PrintSelf
  */
 template <class TFixedImage, class TMovingImage> 
@@ -122,11 +122,7 @@ MeanReciprocalSquareDifferenceImageToImageMetric<TFixedImage,TMovingImage>
 
 }
 
-
-
-
-
-/*
+/**
  * Get the Derivative Measure
  */
 template < class TFixedImage, class TMovingImage> 
@@ -156,8 +152,7 @@ MeanReciprocalSquareDifferenceImageToImageMetric<TFixedImage,TMovingImage>
 
 }
 
-
-/*
+/**
  * Get both the match Measure and theDerivative Measure 
  */
 template <class TFixedImage, class TMovingImage> 

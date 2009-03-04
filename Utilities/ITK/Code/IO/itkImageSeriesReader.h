@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageSeriesReader.h,v $
   Language:  C++
-  Date:      $Date: 2007-08-24 13:35:59 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-02-20 23:32:06 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -60,6 +60,9 @@ public:
 
   /** The size of the output image. */
   typedef typename TOutputImage::SizeType  SizeType;
+
+  /** The index of the output image. */
+  typedef typename TOutputImage::IndexType  IndexType;
 
   /** The region of the output image. */
   typedef typename TOutputImage::RegionType  ImageRegionType;
@@ -133,9 +136,14 @@ public:
   
   /** Get access to the Array of MetaDataDictionaries */
   DictionaryArrayRawPointer GetMetaDataDictionaryArray() const;
+
+  /** Set the stream On or Off */
+  itkSetMacro(UseStreaming,bool);
+  itkGetConstReferenceMacro(UseStreaming,bool);
+  itkBooleanMacro(UseStreaming);
   
 protected:
-  ImageSeriesReader() : m_ImageIO(0), m_ReverseOrder(false) {};
+  ImageSeriesReader() : m_ImageIO(0), m_ReverseOrder(false), m_UseStreaming(true) {};
   ~ImageSeriesReader();
   void PrintSelf(std::ostream& os, Indent indent) const;
   
@@ -158,6 +166,8 @@ protected:
   /** Array of MetaDataDictionaries. This allows to hold information from the
    * ImageIO objects after reading every sub image in the series */
   DictionaryArrayType m_MetaDataDictionaryArray;
+
+  bool m_UseStreaming;
 
 private:
   ImageSeriesReader(const Self&); //purposely not implemented

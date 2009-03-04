@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageSource.txx,v $
   Language:  C++
-  Date:      $Date: 2008-08-29 16:39:23 $
-  Version:   $Revision: 1.62 $
+  Date:      $Date: 2009-02-05 19:04:57 $
+  Version:   $Revision: 1.63 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkImageSource_txx
-#define _itkImageSource_txx
+#ifndef __itkImageSource_txx
+#define __itkImageSource_txx
 #include "itkImageSource.h"
 
 #include "vnl/vnl_math.h"
@@ -86,9 +86,6 @@ ImageSource<TOutputImage>
   return static_cast<TOutputImage*>
     (this->ProcessObject::GetOutput(idx));
 }
-
-
-
 
 /**
  * 

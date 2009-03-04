@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMLoadNode.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:43 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-01-30 21:10:18 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,9 +24,6 @@
 namespace itk {
 namespace fem {
 
-
-
-
 /**
  * \class LoadNode
  * \brief This load is applied on a specific point within the system.
@@ -38,7 +35,7 @@ namespace fem {
  * element->GetNumberOfDegreesOfFreedomPerNode() dimensions.
  */
 class LoadNode : public Load {
-FEM_CLASS(LoadNode,Load)
+  FEM_CLASS(LoadNode,Load)
 public:
 
   typedef Node::Float Float;
@@ -76,9 +73,6 @@ public:
 };
 
 FEM_CLASS_INIT(LoadNode)
-
-
-
 
 }} // end namespace itk::fem
 

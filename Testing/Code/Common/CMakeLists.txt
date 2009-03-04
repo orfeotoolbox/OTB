@@ -131,21 +131,15 @@ ADD_TEST(coTvExtractROI_RGB2 ${COMMON_TESTS2}
 ADD_TEST(coTuVectorDataExtractROINew ${COMMON_TESTS2}
 	otbVectorDataExtractROINew)
 
-IF(OTB_DATA_USE_LARGEINPUT)
-
 ADD_TEST(coTvVectorDataExtractROI ${COMMON_TESTS2}
-#  --compare-image ${TOL}   
-#              ${BASELINE}/coVectorDataExtractROIOutput.shp 
-#              ${TEMP}/coVectorDataExtractROIOutput.shp 
+  --compare-binary    
+              ${BASELINE}/coVectorDataExtractROIOutput.shp 
+              ${TEMP}/coVectorDataExtractROIOutput.shp 
 	 otbVectorDataExtractROI	
-        ${LARGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
+	${INPUTDATA}/ToulousePoints-examples.shp   #${LARGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
 	${TEMP}/coVectorDataExtractROIOutput.shp
-	10 10 50 50 
+	1.588 48.2544 1.2222 1.33001 
  )
-
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-
-
 
 # -------            otb::MultiChannelExtractROI   ------------------------------
 
@@ -586,7 +580,16 @@ ADD_TEST(coTvUnaryFunctorNeighborhoodWithOffsetImageFilter ${COMMON_TESTS7}
 )
 
 
+#------------------------ otb::CartoRegion---------------------------------
 
+ADD_TEST(coTuCartoRegionNew ${COMMON_TESTS7}
+                     otbCartoRegionNew )
+
+ADD_TEST(ioTvCartoRegion ${COMMON_TESTS7}
+	 otbCartoRegion
+	 1.21 2.33 58.47 59.49  #size et index of the region
+	 0. 0.                  # Point to check 
+ )
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
@@ -673,6 +676,8 @@ otbShiftScaleImageAdaptor.cxx
 otbStandardWriterWatcher.cxx
 otbUnaryFunctorNeighborhoodWithOffsetImageFilterNew.cxx
 otbUnaryFunctorNeighborhoodWithOffsetImageFilter.cxx
+otbCartoRegionNew.cxx
+otbCartoRegion.cxx
 )
 
 

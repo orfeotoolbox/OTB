@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMorphologicalWatershedFromMarkersImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-03-27 16:05:43 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-01-28 18:14:36 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -62,7 +62,7 @@ namespace itk {
  * Chapter 9.2 of Pierre Soille's book "Morphological Image Analysis:
  * Principles and Applications", Second Edition, Springer, 2003.
  *
- * \author Gaëtan Lehmann. Biologie du Développement et de la Reproduction, INRA de Jouy-en-Josas, France.
+ * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France.
  * \author Richard Beare. Department of Medicine, Monash University, Melbourne, Australia.
  *
  * \sa WatershedImageFilter, MorphologicalWatershedImageFilter
@@ -106,7 +106,7 @@ public:
   
 
    /** Set the marker image */
-  void SetMarkerImage(TLabelImage *input)
+  void SetMarkerImage(const TLabelImage *input)
     {
     // Process object is not const-correct so the const casting is required.
     this->SetNthInput( 1, const_cast<TLabelImage *>(input) );
@@ -120,13 +120,13 @@ public:
     }
 
   /** Set the input image */
-  void SetInput1(TInputImage *input)
+  void SetInput1(const TInputImage *input)
     {
     this->SetInput( input );
     }
 
   /** Set the marker image */
-  void SetInput2(TLabelImage *input)
+  void SetInput2(const TLabelImage *input)
     {
     this->SetMarkerImage( input );
     }

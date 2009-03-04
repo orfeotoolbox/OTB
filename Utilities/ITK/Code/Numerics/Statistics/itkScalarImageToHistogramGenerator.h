@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarImageToHistogramGenerator.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-14 22:01:52 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-01-16 11:37:58 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,6 +26,10 @@
 namespace itk {
 namespace Statistics {
 
+/** \class ScalarImageToHistogramGenerator
+ * 
+ * \brief TODO
+ */
 template< class TImageType >
 class ScalarImageToHistogramGenerator : public Object
 {

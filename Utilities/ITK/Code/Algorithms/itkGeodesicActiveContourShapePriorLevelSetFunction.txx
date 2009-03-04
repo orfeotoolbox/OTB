@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGeodesicActiveContourShapePriorLevelSetFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:31 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2008-12-21 19:13:12 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkGeodesicActiveContourShapePriorLevelSetFunction_txx_
-#define __itkGeodesicActiveContourShapePriorLevelSetFunction_txx_
+#ifndef __itkGeodesicActiveContourShapePriorLevelSetFunction_txx
+#define __itkGeodesicActiveContourShapePriorLevelSetFunction_txx
 
 #include "itkGeodesicActiveContourShapePriorLevelSetFunction.h"
 #include "itkGradientRecursiveGaussianImageFilter.h"

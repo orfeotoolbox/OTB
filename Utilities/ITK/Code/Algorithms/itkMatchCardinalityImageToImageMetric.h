@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMatchCardinalityImageToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2008-02-03 04:05:28 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-01-24 20:02:59 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -74,11 +74,10 @@ class ITK_EXPORT MatchCardinalityImageToImageMetric :
 public:
 
   /** Standard class typedefs. */
-  typedef MatchCardinalityImageToImageMetric    Self;
+  typedef MatchCardinalityImageToImageMetric              Self;
   typedef ImageToImageMetric<TFixedImage, TMovingImage >  Superclass;
-
-  typedef SmartPointer<Self>         Pointer;
-  typedef SmartPointer<const Self>   ConstPointer;
+  typedef SmartPointer<Self>                              Pointer;
+  typedef SmartPointer<const Self>                        ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -110,8 +109,8 @@ public:
   void GetDerivative( const TransformParametersType &,
                       DerivativeType & derivative ) const
     {
-      itkWarningMacro(<< "This metric does not provide metric derivatives.");
-      derivative.Fill( NumericTraits<ITK_TYPENAME DerivativeType::ValueType>::Zero );
+    itkWarningMacro(<< "This metric does not provide metric derivatives.");
+    derivative.Fill( NumericTraits<ITK_TYPENAME DerivativeType::ValueType>::Zero );
     }
 
   /**  Get the value of the metric at a particular parameter
@@ -175,22 +174,22 @@ protected:
 
   /** Internal structure used for passing image data into the threading library */
   struct ThreadStruct
-  {
+    {
     Pointer Metric;
-  };
+    };
 
 private:
   MatchCardinalityImageToImageMetric(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  bool m_MeasureMatches;
-  std::vector<MeasureType> m_ThreadMatches;
+  bool                       m_MeasureMatches;
+  std::vector<MeasureType>   m_ThreadMatches;
   std::vector<unsigned long> m_ThreadCounts;
   
   /** Support processing data in multiple threads. Used by subclasses
    * (e.g., ImageSource). */
   MultiThreader::Pointer m_Threader;
-  int m_NumberOfThreads;
+  int                    m_NumberOfThreads;
 };
 
 
@@ -203,4 +202,3 @@ private:
 #endif
 
 #endif
-

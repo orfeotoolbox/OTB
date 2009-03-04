@@ -297,6 +297,10 @@ ADD_TEST(ioTvStreamingPipeline_TIF2PNG ${IO_TESTS2}
          )
 
 
+
+
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -381,6 +385,7 @@ ADD_TEST(ioTvImageFileReaderIntHDR2BSQ ${IO_TESTS3}
         otbIntImageIOTest
         ${TEMP}/ioImageFileReaderI4_BSQ2HDR.hdr
         ${TEMP}/ioImageFileReaderI4_HDR2BSQ.hd )
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1690,6 +1695,7 @@ otbMWImageIOTestCanWrite.cxx
 otbImageFileReaderTest.cxx
 otbImageFileReaderTestFloat.cxx
 otbShortImageIOTest.cxx
+
 )
 SET(BasicIO_SRCS2
 otbIntImageIOTest.cxx
@@ -1707,6 +1713,7 @@ otbImageFileReaderRGBTest.cxx
 otbIntImageIOTest.cxx
 otbShortRGBImageIOTest.cxx
 )
+
 #SET(BasicIO_SRCS4
 #)
 #CONTAINS THE BasicIO_SRCS2 include

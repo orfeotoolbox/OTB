@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:  $RCSfile: itkSurfaceSpatialObject.h,v $
   Language:  C++
-  Date:    $Date: 2007-01-28 19:24:57 $
-  Version:   $Revision: 1.25 $
+  Date:    $Date: 2009-01-28 20:10:29 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,13 +27,13 @@ namespace itk
 {
 
 /** 
-* \class SurfaceSpatialObject
-* \brief Representation of a Surface based on the spatial object classes.
-*
-* The Surface is basically defined by a set of points. 
-*
-* \sa SurfaceSpatialObjectPoint
-*/
+ * \class SurfaceSpatialObject
+ * \brief Representation of a Surface based on the spatial object classes.
+ *
+ * The Surface is basically defined by a set of points. 
+ *
+ * \sa SurfaceSpatialObjectPoint
+ */
 
 template < unsigned int TDimension = 3 >
 class SurfaceSpatialObject 
@@ -57,7 +57,7 @@ public:
   typedef typename Superclass::BoundingBoxType          BoundingBoxType;
   typedef typename Superclass::CovariantVectorType      CovariantVectorType;
 
-  /** Method for creation through the object factory.*/
+  /** Method for creation through the object factory. */
   itkNewMacro( Self );
 
   /** Method for creation through the object factory. */

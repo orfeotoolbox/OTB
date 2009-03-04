@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNeighborhoodBinaryThresholdImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-02-07 13:58:42 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-02-06 20:53:12 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -43,10 +43,10 @@ class ITK_EXPORT NeighborhoodBinaryThresholdImageFunction :
 {
 public:
   /** Standard class typedefs. */
-  typedef NeighborhoodBinaryThresholdImageFunction Self;
+  typedef NeighborhoodBinaryThresholdImageFunction            Self;
   typedef BinaryThresholdImageFunction<TInputImage,TCoordRep> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                                  Pointer;
+  typedef SmartPointer<const Self>                            ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(NeighborhoodBinaryThresholdImageFunction, BinaryThresholdImageFunction);
@@ -91,16 +91,16 @@ public:
   /** Evaluate the function at non-integer positions */
   virtual bool Evaluate( const PointType& point ) const
     { 
-      IndexType index;
-      this->ConvertPointToNearestIndex( point, index );
-      return this->EvaluateAtIndex( index ); 
+    IndexType index;
+    this->ConvertPointToNearestIndex( point, index );
+    return this->EvaluateAtIndex( index ); 
     }
   virtual bool EvaluateAtContinuousIndex( 
     const ContinuousIndexType& cindex ) const
     { 
-      IndexType index;
-      this->ConvertContinuousIndexToNearestIndex( cindex, index );
-      return this->EvaluateAtIndex( index ) ; 
+    IndexType index;
+    this->ConvertContinuousIndexToNearestIndex( cindex, index );
+    return this->EvaluateAtIndex( index ); 
     }
   
 protected:
@@ -139,4 +139,3 @@ private:
 */
 
 #endif
-
