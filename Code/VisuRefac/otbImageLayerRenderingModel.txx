@@ -112,6 +112,7 @@ ImageLayerRenderingModel<TOutputImage>
   while(!visible && it != this->GetLayers()->End())
     {
     visible = it.Get()->GetVisible();
+    ++it;
     }
 
   if(!visible)
@@ -160,7 +161,7 @@ ImageLayerRenderingModel<TOutputImage>
   ++it;
  
   // Walk the remaining layers
-  unsigned int counter = 0;
+  unsigned int count = 0;
   while(it!=this->GetLayers()->End())
     {
     // Populate Blending filter list if needed
