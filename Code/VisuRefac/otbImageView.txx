@@ -85,7 +85,7 @@ ImageView<TInputImage>
 template < class TInputImage >
 void
 ImageView<TInputImage>
-::ImageViewerNotify()
+::ImageLayerRenderingModelNotify()
 {
   this->Update();
 }

@@ -15,35 +15,35 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageViewerModelListener_h
-#define __otbImageViewerModelListener_h
+#ifndef __otbImageLayerRenderingModelListener_h
+#define __otbImageLayerRenderingModelListener_h
 
 namespace otb
 {
 /**
- * \class ImageViewerModelListener
+ * \class ImageLayerRenderingModelListener
  *
  *  Vectorization view interface specification for the model
  *
  */
 
-class ImageViewerModelListener
+class ImageLayerRenderingModelListener
 {
 public:
   /** Standard class typedefs */
-  typedef ImageViewerModelListener Self;
+  typedef ImageLayerRenderingModelListener Self;
 
   // Update the display
-  virtual void ImageViewerNotify() = 0;
+  virtual void ImageLayerRenderingModelNotify() = 0;
 
 protected:
   /** Constructor */
-  ImageViewerModelListener() {};
+  ImageLayerRenderingModelListener() {};
   /** Destructor */
-  virtual ~ImageViewerModelListener() {};
+  virtual ~ImageLayerRenderingModelListener() {};
 
 private:
-  ImageViewerModelListener(const Self&); //purposely not implemented
+  ImageLayerRenderingModelListener(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 };
 

@@ -15,7 +15,7 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbImageViewerModel.h"
+#include "otbImageLayerRenderingModel.h"
 #include "otbVectorImage.h"
 #include "itkRGBPixel.h"
 #include "otbImageFileReader.h"
@@ -51,7 +51,7 @@ int otbImageViewerEndToEndTwoLayers( int argc, char * argv[] )
   typedef otb::ImageLayer<ImageType>                 LayerType;
   typedef otb::ImageFileReader<ImageType>            ReaderType;
   typedef otb::ImageLayerGenerator<LayerType>        LayerGeneratorType;
-  typedef otb::ImageViewerModel<OutputImageType>     ModelType;
+  typedef otb::ImageLayerRenderingModel<OutputImageType>     ModelType;
   typedef otb::ImageView<ModelType>                  ViewType;
   typedef otb::ImageWidgetController                 ControllerType;
   typedef otb::WidgetResizingActionHandler
