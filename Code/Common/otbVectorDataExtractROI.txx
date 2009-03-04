@@ -89,43 +89,63 @@ VectorDataExtractROI<TVectorData>
   typename DataNodeType::Pointer                  root       = input->GetDataTree()->GetRoot()->Get();
   typename VectorDataType::DataTreeType::Pointer  tree       = output->GetDataTree();
   
-  DataNodePointerType                                         currentContainer;
+  DataNodePointerType  currentContainer;
+  DataNodePointerType  newDataNodeFolder                      = DataNodeType::New();
+  DataNodePointerType  newDataNodeMultiPolygon                = DataNodeType::New();
+  DataNodePointerType  newDataNodeMultiLine                   = DataNodeType::New();
 
   /** Walking trough the input vector data */
   typedef itk::PreOrderTreeIterator<DataTreeType>                 TreeIteratorType;
   TreeIteratorType                                                it(input->GetDataTree());
   it.GoToBegin();
+  bool newFolder       = false ;
+  bool newMultiFeature = false;
+  
+  
 
   while (!it.IsAtEnd())
     {
-      DataNodePointerType  dataNode         =   it.Get();
-      DataNodePointerType  newDataNode = DataNodeType::New();
-      newDataNode->SetNodeType(dataNode->GetNodeType());
-      newDataNode->SetNodeId(dataNode->GetNodeId());
+      DataNodePointerType  dataNode               =   it.Get();
+      DataNodePointerType  newDataNode            = DataNodeType::New();
+
+
       switch (dataNode->GetNodeType())
 	{
 	case ROOT:
 	  {
+	    newDataNode->SetNodeType(dataNode->GetNodeType());
+	    newDataNode->SetNodeId(dataNode->GetNodeId());
 	    tree->SetRoot(newDataNode);
 	    currentContainer = newDataNode;
 	    break;
 	  }
 	case DOCUMENT:
 	  {
+	    newDataNode->SetNodeType(dataNode->GetNodeType());
+	    newDataNode->SetNodeId(dataNode->GetNodeId());
 	    tree->Add(newDataNode,currentContainer);
 	    currentContainer = newDataNode;
 	    break;
 	  }
 	case FOLDER:
 	  {
-	    tree->Add(newDataNode,currentContainer);
-	    currentContainer = newDataNode;
+	    newDataNodeFolder->SetNodeType(dataNode->GetNodeType());
+	    newDataNodeFolder->SetNodeId(dataNode->GetNodeId());
+	    newFolder = true;
 	    break;
 	  }
 	case FEATURE_POINT:
 	  {
 	    if(m_GeoROI.IsInside(this->PointToContinuousIndex(dataNode->GetPoint())))
 	      {
+		if(newFolder)
+		  {
+		    tree->Add(newDataNodeFolder,currentContainer);
+		    currentContainer = newDataNodeFolder;
+		    newFolder = false;
+		  }
+		newDataNode->SetNodeType(dataNode->GetNodeType());
+		newDataNode->SetNodeId(dataNode->GetNodeId());
 		newDataNode->SetPoint(dataNode->GetPoint());
 		tree->Add(newDataNode,currentContainer);
 	      }
@@ -136,6 +156,20 @@ VectorDataExtractROI<TVectorData>
 	  {
 	    if(this->IsLineIntersectionNotNull(dataNode->GetLine()))
 	      {
+		if(newFolder)
+		  {
+		    tree->Add(newDataNodeFolder,currentContainer);
+		    currentContainer = newDataNodeFolder;
+		    newFolder = false;
+		  }
+		if(newMultiFeature)
+		  {
+		    tree->Add(newDataNodeMultiLine,currentContainer);
+		    currentContainer =  newDataNodeMultiLine;
+		    newMultiFeature = false;
+		  }
+		newDataNode->SetNodeType(dataNode->GetNodeType());
+		newDataNode->SetNodeId(dataNode->GetNodeId());
 		newDataNode->SetLine(dataNode->GetLine());
 		tree->Add(newDataNode,currentContainer);
 	      }
@@ -145,6 +179,21 @@ VectorDataExtractROI<TVectorData>
 	  {
 	    if(this->IsPolygonIntersectionNotNull(dataNode->GetPolygonExteriorRing()))
 	      {
+		if(newFolder)
+		  {
+		    tree->Add(newDataNodeFolder,currentContainer);
+		    currentContainer = newDataNodeFolder;
+		    newFolder = false;
+		  }
+		if(newMultiFeature)
+		  {
+		    tree->Add(newDataNodeMultiPolygon,currentContainer);
+		    currentContainer = newDataNodeMultiPolygon; 
+		    newMultiFeature = false;
+		  }
+		
+		newDataNode->SetNodeType(dataNode->GetNodeType());
+		newDataNode->SetNodeId(dataNode->GetNodeId());
 		newDataNode->SetPolygonExteriorRing(dataNode->GetPolygonExteriorRing());
 		newDataNode->SetPolygonInteriorRings(dataNode->GetPolygonInteriorRings());
 		tree->Add(newDataNode,currentContainer);
@@ -153,24 +202,30 @@ VectorDataExtractROI<TVectorData>
 	  }
 	case FEATURE_MULTIPOINT:
 	  {
+	    newDataNode->SetNodeType(dataNode->GetNodeType());
+	    newDataNode->SetNodeId(dataNode->GetNodeId());
 	    tree->Add(newDataNode,currentContainer);
 	    currentContainer = newDataNode;
 	    break;
 	  }
 	case FEATURE_MULTILINE:
 	  {
-	    tree->Add(newDataNode,currentContainer);
-	    currentContainer = newDataNode;
+	    newDataNodeMultiLine->SetNodeType(dataNode->GetNodeType());
+	    newDataNodeMultiLine->SetNodeId(dataNode->GetNodeId());
+	    newMultiFeature = true;
 	    break;
 	  }
 	case FEATURE_MULTIPOLYGON:
 	  {
-	    tree->Add(newDataNode,currentContainer);
-	    currentContainer = newDataNode;
+	    newDataNodeMultiPolygon->SetNodeType(dataNode->GetNodeType());
+	    newDataNodeMultiPolygon->SetNodeId(dataNode->GetNodeId());
+	    newMultiFeature = true;
 	    break;
 	  }
 	case FEATURE_COLLECTION:
 	  {
+	    newDataNode->SetNodeType(dataNode->GetNodeType());
+	    newDataNode->SetNodeId(dataNode->GetNodeId());	    
 	    tree->Add(newDataNode,currentContainer);
 	    currentContainer = newDataNode;
 	    break;
@@ -231,7 +286,7 @@ void
 VectorDataExtractROI<TVectorData>
 ::ProjectRegionToInputVectorProjection()
 {
-  typedef otb::GenericMapProjection<otb::FORWARD>     ForwardMapProjectionType;
+  typedef otb::GenericMapProjection<otb::INVERSE>     ForwardMapProjectionType;
   ForwardMapProjectionType::Pointer mapTransform =    ForwardMapProjectionType::New();
   mapTransform->SetWkt(m_ROI.GetRegionProjection());
   
@@ -259,7 +314,7 @@ VectorDataExtractROI<TVectorData>
   ProjPointType pGeo4 = mapTransform->TransformPoint(point4);
   
   /** INVERSE : From long/lat to InputVectorData projection*/
-  typedef otb::GenericMapProjection<otb::INVERSE>            InverseMapProjectionType;
+  typedef otb::GenericMapProjection<otb::FORWARD>            InverseMapProjectionType;
   InverseMapProjectionType::Pointer mapInverseTransform =    InverseMapProjectionType::New();
   if(this->GetInput()->GetProjectionRef().empty())
     {
