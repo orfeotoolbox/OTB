@@ -183,7 +183,7 @@ public:
   virtual void Render();
 
   /** Get the pixel description */
-  std::string GetPixelDescription(const IndexType & index);  
+  virtual std::string GetPixelDescription(const IndexType & index);  
 
 protected:
   /** Constructor */

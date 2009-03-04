@@ -52,6 +52,7 @@ public:
   typedef typename OutputImageType::Pointer      OutputImagePointerType;
   typedef typename OutputImageType::RegionType   RegionType;
   typedef typename RegionType::SizeType          SizeType;
+  typedef typename RegionType::IndexType         IndexType;
   typedef typename OutputImageType::PixelType    PixelType;
 
   /** Blending function typedef */
@@ -61,6 +62,9 @@ public:
   /** Actually render the layer */
   virtual void Render() = 0;
 
+  /** Get the pixel description */
+  virtual std::string GetPixelDescription(const IndexType & index) = 0;  
+  
   itkGetObjectMacro(RenderedQuicklook,     OutputImageType);
   itkGetObjectMacro(RenderedExtract,       OutputImageType);
   itkGetObjectMacro(RenderedScaledExtract, OutputImageType);
