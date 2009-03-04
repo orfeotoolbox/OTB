@@ -19,32 +19,19 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbMVCModel_h
 
 #include <set>
-#include "itkObject.h"
-#include "itkObjectFactory.h"
 
 namespace otb
 {
 /** \class MVCModel
  *
- * Base class for MVC based modelling. Implements the registration and
+ * Interface class for MVC based modelling. Implements the registration and
  * Unregistration of listeners, as well as the NotifyAll method. A valid listener must
  * implement a Notify() method.
  */
 template <class TListener>
 class MVCModel
-      : public itk::Object
 {
 public:
-  /** Standard class typedefs */
-  typedef MVCModel    Self;
-  typedef itk::Object Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
-
-  /** Standard macros */
-  itkTypeMacro(MVCModel,Object);
-  itkNewMacro(Self);
-
   // Define the listener type
   typedef TListener ListenerType;
 
