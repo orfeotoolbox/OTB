@@ -29,7 +29,7 @@ namespace otb
 *   \sa ImageWidgetActionHandler
 */
 
-template <class TViewerModel, class TPixelDescriptionModel, class TView> 
+template <class TModel, class TView> 
 class PixelDescriptionActionHandler
   : public ImageWidgetActionHandler
 {
@@ -46,89 +46,72 @@ public:
   /** Runtime information */
   itkTypeMacro(PixelDescriptionActionHandler,ImageWidgetActionHandler);
 
-  /** Viewer Model typedefs */
-  typedef TViewerModel                         ViewerModelType;
-  typedef typename ViewerModelType::Pointer    ViewerModelPointerType;
-  typedef typename ViewerModelType::IndexType  IndexType;
+  /** Model typedefs */
+  typedef TModel                         ModelType;
+  typedef typename ModelType::Pointer    ModelPointerType;
+  typedef typename ModelType::IndexType  IndexType;
 
-  /** Pixel description model typedef */
-  
+  /** View typedef */
+  typedef TView                                     ViewType;
+  typedef typename ViewType::Pointer                ViewPointerType;
+  typedef typename ViewType::ImageWidgetPointerType WidgetPointerType;
 
-
-   /** Handle widget resizing
-   * \param widgetId The id of the resized widget
-   * \param x new x location
-   * \param y new y location
-   * \param w new width
-   * \param h new height
+   /** Handle widget event
    */
   virtual bool HandleWidgetEvent(std::string widgetId, int event)
   {
-    if(m_Model.IsNotNull() && m_PixelDescriptionModel.IsNotNull() && m_View.IsNotNull())
+    if(m_Model.IsNotNull() &&  m_View.IsNotNull())
       {
-      // If resizing the scroll widget, nothing has to be done.
+      // Find the source widget
+      WidgetPointerType sourceWidget;
+      bool handle = false;
       if(widgetId == m_View->GetScrollWidget()->GetIdentifier() )
+	{
+	sourceWidget = m_View->GetScrollWidget();
+	handle = true;
+	}
+      else if(widgetId == m_View->GetFullWidget()->GetIdentifier() )
+	{
+	sourceWidget = m_View->GetFullWidget();
+	handle = true;
+	}
+      else if(widgetId == m_View->GetZoomWidget()->GetIdentifier() )
+	{
+	sourceWidget = m_View->GetZoomWidget();
+	handle = true;
+	}
+      if(handle)
 	{
 	switch(event)
 	  {
 	  case FL_ENTER:
 	  {
-	    return true;
-	    break;
+	  return true;
+	  break;
 	  }
 	  case FL_LEAVE:
 	  {
-	    return true,
-	    break;
+	  return true;
+	  break;
 	  }
 	  case FL_MOVE:
 	  {
+	  // Get the hovered index
+	  IndexType index;
+	  index[0]=Fl::event_x();
+	  index[1]=Fl::event_y();
+	  // Convert to image index
+	  index = sourceWidget->ScreenIndexToImageIndex(index);
+	  // Communicate new index to model
+	  m_Model->UpdatePixelDescription(index);
 	  return true;
 	  break;
 	  }
-	  case default:
+	  default:
 	  {
-	  return true;
 	  break;
 	  }
-
-
-
-
-
 	  }
-	otbMsgDevMacro(<<"PixelDescriptionActionHandler::HandleWidgetResize(): handling ("<<widgetId<<", "<<w<<", "<<h<<")");
-	// Nothing has to be acted to the model, juste update the view
-	m_View->Update();
-	return true;
-	}
-      else if(widgetId == m_View->GetFullWidget()->GetIdentifier() )
-	{
-	otbMsgDevMacro(<<"PixelDescriptionActionHandler::HandleWidgetResize(): handling ("<<widgetId<<", "<<w<<", "<<h<<")");
-	// Enlarge the model extract region
-	RegionType region = m_Model->GetExtractRegion();
-	typename RegionType::SizeType size = region.GetSize();
-	size[0] = static_cast<unsigned int>(w);
-	size[1] = static_cast<unsigned int>(h);
-	region.SetSize(size);
-	m_Model->SetExtractRegion(region);
-	// Update the model
-	m_Model->Update();
-	return true;
-	}
-      else if(widgetId ==m_View->GetZoomWidget()->GetIdentifier() )
-	{
-	otbMsgDevMacro(<<"PixelDescriptionActionHandler::HandleWidgetResize(): handling ("<<widgetId<<", "<<w<<", "<<h<<")");
-	// Enlarge the model scaled extract region
-	RegionType region = m_Model->GetScaledExtractRegion();
-	typename RegionType::SizeType size = region.GetSize();
-	size[0] = static_cast<unsigned int>(static_cast<double>(w)/m_View->GetZoomWidget()->GetIsotropicZoom());
-	size[1] = static_cast<unsigned int>(static_cast<double>(h)/m_View->GetZoomWidget()->GetIsotropicZoom());
-	region.SetSize(size);
-	m_Model->SetScaledExtractRegion(region);
-	// Update the model
-	m_Model->Update();
-	return true;
 	}
       }
     return false;
@@ -137,6 +120,10 @@ public:
   /** Set/Get the pointer to the model */
   itkSetObjectMacro(Model,ModelType);
   itkGetObjectMacro(Model,ModelType);
+
+   /** Set/Get the pointer to the view */
+  itkSetObjectMacro(View,ViewType);
+  itkGetObjectMacro(View,ViewType);
 
 protected:
   /** Constructor */
