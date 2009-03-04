@@ -67,7 +67,7 @@ VectorDataExtractROI<TVectorData>
   output->SetProjectionRef(input->GetProjectionRef());
 
   if(!input)
-    std::cout << " Probleme avec la recuperation du input"<<std::endl;
+    return;
 
   /** Need to check if it is necessary to project the roi*/
   this->CompareInputAndRegionProjection();
@@ -76,6 +76,8 @@ VectorDataExtractROI<TVectorData>
   /** If Projection of the region is needed, we project on the vectorData coordinate axis*/
   if(m_ProjectionNeeded)
     this->ProjectRegionToInputVectorProjection();
+  else
+    m_GeoROI = m_ROI;
   
   
   /** Loop in the vectorData file
@@ -122,8 +124,12 @@ VectorDataExtractROI<TVectorData>
 	  }
 	case FEATURE_POINT:
 	  {
-	    newDataNode->SetPoint(dataNode->GetPoint());
-	    tree->Add(newDataNode,currentContainer);
+	    if(m_GeoROI.IsInside(this->PointToContinuousIndex(dataNode->GetPoint())))
+	      {
+		newDataNode->SetPoint(dataNode->GetPoint());
+		tree->Add(newDataNode,currentContainer);
+	      }
+	   
 	    break;
 	  }
 	case FEATURE_LINE:
@@ -143,9 +149,6 @@ VectorDataExtractROI<TVectorData>
 		newDataNode->SetPolygonInteriorRings(dataNode->GetPolygonInteriorRings());
 		tree->Add(newDataNode,currentContainer);
 	      }
-	    else
-	      std::cout << " OUTSIDE The region" <<std::endl;
-	    
 	    break;
 	  }
 	case FEATURE_MULTIPOINT:
@@ -211,10 +214,9 @@ void
 VectorDataExtractROI<TVectorData>
 ::CompareInputAndRegionProjection()
 {
-  /**Traces*/
   std::string regionProjection = m_ROI.GetRegionProjection();
   std::string inputVectorProjection = this->GetInput()->GetProjectionRef();
-    
+  
   if(regionProjection == inputVectorProjection)
     m_ProjectionNeeded = false;
   else
@@ -256,8 +258,8 @@ VectorDataExtractROI<TVectorData>
   ProjPointType pGeo3 = mapTransform->TransformPoint(point3);
   ProjPointType pGeo4 = mapTransform->TransformPoint(point4);
   
-  /** Inverse : From long/lat to InputVectorData projection*/
-  typedef otb::GenericMapProjection<otb::INVERSE>     InverseMapProjectionType;
+  /** INVERSE : From long/lat to InputVectorData projection*/
+  typedef otb::GenericMapProjection<otb::INVERSE>            InverseMapProjectionType;
   InverseMapProjectionType::Pointer mapInverseTransform =    InverseMapProjectionType::New();
   if(this->GetInput()->GetProjectionRef().empty())
     {
@@ -272,13 +274,13 @@ VectorDataExtractROI<TVectorData>
   ProjPointType pCarto2 = mapInverseTransform->TransformPoint(pGeo2);
   ProjPointType pCarto3 = mapInverseTransform->TransformPoint(pGeo3);
   ProjPointType pCarto4 = mapInverseTransform->TransformPoint(pGeo4);
-  
+
   /** Fill the vertex List : First Convert Point To*/
   regionCorners->InsertElement(regionCorners->Size(),this->PointToContinuousIndex(pCarto1));
   regionCorners->InsertElement(regionCorners->Size(),this->PointToContinuousIndex(pCarto2));
   regionCorners->InsertElement(regionCorners->Size(),this->PointToContinuousIndex(pCarto3));
   regionCorners->InsertElement(regionCorners->Size(),this->PointToContinuousIndex(pCarto4));
-  
+
   /** Due to The projection : the Projected ROI can be rotated */
   m_GeoROI = this->ComputeVertexListBoudingRegion(regionCorners.GetPointer());
     
@@ -292,11 +294,12 @@ typename VectorDataExtractROI<TVectorData>
 VectorDataExtractROI<TVectorData>
 ::PointToContinuousIndex(ProjPointType  point)
 {
+
   VertexType vertex;
   
   vertex[0] = point[0];
   vertex[1] = point[1];
-  
+
   return vertex;
 }
 
@@ -326,13 +329,13 @@ VectorDataExtractROI<TVectorData>
       y = static_cast<double>(it.Value()[1]);
       index[0] = x;
       index[1] = y;
-
+      
       ++it;
       while (it != vertexlist->End())
 	{
 	  x = static_cast<double>(it.Value()[0]);
 	  y = static_cast<double>(it.Value()[1]);
-
+	  
 	  // Index search
 	  if ( x < index[0] )
 	    {
