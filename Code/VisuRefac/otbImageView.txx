@@ -120,6 +120,7 @@ ImageView<TInputImage>
     const double hratio = static_cast<double>(m_ScrollWidget->h())/static_cast<double>(qlRegion.GetSize()[1]);
     const double scale = std::min(wratio,hratio);
     m_ScrollWidget->SetIsotropicZoom(scale);
+    m_ScrollWidget->SetSubsamplingRate(m_Model->GetSubsamplingRate());
 
     // Setting widget label
     std::string label = m_ScrollWidget->GetIdentifier();
@@ -131,7 +132,7 @@ ImageView<TInputImage>
     if(m_Model->GetHasExtract())
       {
       m_ScrollWidget->SetDisplayRectangle(true);
-      m_ScrollWidget->SetRectangle(m_Model->GetSubsampledExtractRegion());
+      m_ScrollWidget->SetRectangle(m_Model->GetExtractRegion());
       }
     else
       {

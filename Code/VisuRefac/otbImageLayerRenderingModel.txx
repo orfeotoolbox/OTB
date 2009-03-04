@@ -29,8 +29,9 @@ template <class TOutputImage>
 ImageLayerRenderingModel<TOutputImage>
 ::ImageLayerRenderingModel() : m_Name("Default"), m_RasterizedQuicklook(), 
 		       m_HasQuicklook(false),m_RasterizedExtract(),m_HasExtract(false),
-		       m_ExtractRegion(), m_SubsampledExtractRegion(), m_RasterizedScaledExtract(), m_HasScaledExtract(false),
-		       m_ScaledExtractRegion(), m_QuicklookBlendingFilterList(), m_ExtractBlendingFilterList(), m_ScaledExtractBlendingFilterList()
+		       m_ExtractRegion(), m_RasterizedScaledExtract(), m_HasScaledExtract(false),
+		       m_ScaledExtractRegion(), m_QuicklookBlendingFilterList(), m_ExtractBlendingFilterList(), 
+		       m_ScaledExtractBlendingFilterList()
 
 {
   // Initalize the blending filter list 
@@ -132,17 +133,6 @@ ImageLayerRenderingModel<TOutputImage>
     {
     m_HasQuicklook = true;
     m_RasterizedQuicklook = baseLayer->GetRenderedQuicklook();
-   
-    // Update the subsampled extract region 
-    m_SubsampledExtractRegion = m_ExtractRegion;
-    typename RegionType::SizeType size = m_SubsampledExtractRegion.GetSize();
-    typename RegionType::IndexType index = m_SubsampledExtractRegion.GetIndex();
-    size[0]/=baseLayer->GetQuicklookSubsamplingRate();
-    size[1]/=baseLayer->GetQuicklookSubsamplingRate();
-    index[0]/=baseLayer->GetQuicklookSubsamplingRate();
-    index[1]/=baseLayer->GetQuicklookSubsamplingRate();
-    m_SubsampledExtractRegion.SetIndex(index);
-    m_SubsampledExtractRegion.SetSize(size);
     }
 
   if(baseLayer->GetHasExtract())
@@ -276,26 +266,19 @@ ImageLayerRenderingModel<TOutputImage>
 }
 
 template <class TOutputImage>
-void
+unsigned int
 ImageLayerRenderingModel<TOutputImage>
-::SetExtractRegionSubsampledCenter(const IndexType & index)
+::GetSubsamplingRate()
 {
-// Get the lowest layer
+  if(this->GetNumberOfLayers() < 1)
+    {
+    return 1;
+    }
+  // Get the lowest layer
   LayerIteratorType it = this->GetLayers()->Begin();
   // Base layer
   typename LayerType::Pointer baseLayer = it.Get();
-  // Set compute the upsampled center of the extract region
-  IndexType newIndex = index;
-  newIndex[0]*= baseLayer->GetQuicklookSubsamplingRate();
-  newIndex[1]*= baseLayer->GetQuicklookSubsamplingRate();
-  
-  // Update Scaled extract center as well
-  this->SetScaledExtractRegionCenter(newIndex);
-
-  // Update extract region
-  newIndex[0]-=m_ExtractRegion.GetSize()[0]/2;
-  newIndex[1]-=m_ExtractRegion.GetSize()[1]/2;
-  m_ExtractRegion.SetIndex(newIndex);
+  return baseLayer->GetQuicklookSubsamplingRate();
 }
 
 template <class TOutputImage>

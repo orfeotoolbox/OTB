@@ -94,8 +94,6 @@ public:
   /** Set/Get the Extract Region */
   itkSetMacro(ExtractRegion,RegionType);
   itkGetConstReferenceMacro(ExtractRegion,RegionType);
-  /** Get the extract region in the quicklook space */
-  itkGetConstReferenceMacro(SubsampledExtractRegion,RegionType);
   
   /** Set/Get the Scaled Extract Region */
   itkSetMacro(ScaledExtractRegion,RegionType);
@@ -117,10 +115,9 @@ public:
   /** Change the extract region by giving the center of the
    * region */
   void SetExtractRegionCenter(const IndexType & index);
-
- /** Change the extract region by giving the subsamppled center 
-  *  of the region */
-  void SetExtractRegionSubsampledCenter(const IndexType & index);
+  
+  /** Get the sumbsampling rate */
+  unsigned int GetSubsamplingRate();
 
 protected:
   /** Constructor */
@@ -158,8 +155,7 @@ private:
   OutputImagePointerType m_RasterizedExtract;
   bool                   m_HasExtract;
   RegionType             m_ExtractRegion;
-  RegionType             m_SubsampledExtractRegion;
-
+  
   /** Rendered scaled extract */
   OutputImagePointerType m_RasterizedScaledExtract;
   bool                   m_HasScaledExtract;

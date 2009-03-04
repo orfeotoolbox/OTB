@@ -74,7 +74,7 @@ public:
 	index[0] = Fl::event_x();
 	index[1] = Fl::event_y();
 	// Change scaled extract region center
-	m_Model->SetExtractRegionSubsampledCenter(m_View->GetScrollWidget()->ScreenIndexToRegionIndex(index));
+	m_Model->SetExtractRegionCenter(m_View->GetScrollWidget()->ScreenIndexToImageIndex(index));
 	// Update model
 	m_Model->Update();
 	return true;
