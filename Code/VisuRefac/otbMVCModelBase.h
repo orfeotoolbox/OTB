@@ -15,21 +15,21 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMVCModel_h
-#define __otbMVCModel_h
+#ifndef __otbMVCModelBase_h
+#define __otbMVCModelBase_h
 
 #include <set>
 
 namespace otb
 {
-/** \class MVCModel
+/** \class MVCModelBase
  *
  * Interface class for MVC based modelling. Implements the registration and
  * Unregistration of listeners, as well as the NotifyAll method. A valid listener must
  * implement a Notify() method.
  */
 template <class TListener>
-class MVCModel
+class MVCModelBase
 {
 public:
   // Define the listener type
@@ -71,9 +71,9 @@ public:
 
 protected:
   /** Constructor */
-  MVCModel() {}
+  MVCModelBase() {}
   /** Destructor */
-  ~MVCModel() {}
+  ~MVCModelBase() {}
 
 private:
   /** Registered liteners */

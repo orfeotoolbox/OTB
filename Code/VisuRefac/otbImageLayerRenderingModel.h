@@ -18,7 +18,7 @@
 #ifndef __otbImageLayerRenderingModel_h
 #define __otbImageLayerRenderingModel_h
 
-#include "otbMVCModel.h"
+#include "otbMVCModelBase.h"
 #include "otbLayerBasedModel.h"
 #include "otbImageLayerBase.h"
 #include "otbObjectList.h"
@@ -41,7 +41,7 @@ namespace otb
 
 template <class TOutputImage = otb::Image<itk::RGBPixel<unsigned char>,2 >  > 
 class ImageLayerRenderingModel
-  : public MVCModel<ImageLayerRenderingModelListener>, public LayerBasedModel< ImageLayerBase<TOutputImage> >
+  : public MVCModelBase<ImageLayerRenderingModelListener>, public LayerBasedModel< ImageLayerBase<TOutputImage> >
 {
 public:
   /** Standard class typedefs */

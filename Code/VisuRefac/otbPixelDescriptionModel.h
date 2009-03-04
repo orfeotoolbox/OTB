@@ -18,9 +18,10 @@
 #ifndef __otbPixelDescriptionModel_h
 #define __otbPixelDescriptionModel_h
 
-#include "otbMVCModel.h"
+#include "otbMVCModelBase.h"
 #include "otbLayerBasedModel.h"
 #include "otbPixelDescriptionModelListener.h"
+#include "otbImageLayerBase.h"
 
 namespace otb
 {
@@ -31,16 +32,16 @@ namespace otb
 *
 */
 
-template <class TLayer > 
+template <class TOutputImage > 
 class PixelDescriptionModel
-  : public MVCModel<PixelDescriptionModelListener>, public LayerBasedModel< TLayer >
+  : public MVCModelBase<PixelDescriptionModelListener>, public LayerBasedModel< ImageLayerBase< TOutputImage > >
 {
 public:
   /** Standard class typedefs */
-  typedef PixelDescriptionModel                  Self;
-  typedef LayerBasedModel< TLayer >              Superclass;
-  typedef itk::SmartPointer<Self>                Pointer;
-  typedef itk::SmartPointer<const Self>          ConstPointer;
+  typedef PixelDescriptionModel                            Self;
+  typedef LayerBasedModel< ImageLayerBase<TOutputImage > > Superclass;
+  typedef itk::SmartPointer<Self>                          Pointer;
+  typedef itk::SmartPointer<const Self>                    ConstPointer;
     
   /** Runtime information */
   itkTypeMacro(PixelDescriptionModel,LayerBasedModel);
