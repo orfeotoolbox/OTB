@@ -174,7 +174,11 @@ ImageLayer<TImage,TOutputImage>
     it.GoToBegin();
     while(!it.IsAtEnd())
       {
-      listSample->PushBack(it.Get());
+      SampleType sample(histogramSource->GetNumberOfComponentsPerPixel());
+      // workaround to handle both scalar and vector pixels the same way
+      sample.Fill(itk::NumericTraits<InternalPixelType>::Zero);
+      sample += it.Get();
+      listSample->PushBack(sample);
       ++it;
       }
     otbMsgDevMacro(<<"ImageLayer::RenderHistogram()"<<" ("<<this->GetName()<<")"<< " Sample list generated ("<<listSample->Size()<<" samples, "<<histogramSource->GetNumberOfComponentsPerPixel()<<" bands)");
@@ -232,5 +236,42 @@ ImageLayer<TImage,TOutputImage>
     m_AutoMinMaxUpToDate = true;
     }
 }
+
+template <class TImage, class TOutputImage>
+std::string
+ImageLayer<TImage,TOutputImage>
+::GetPixelDescription(const IndexType & index)
+{
+  // If required, use histogram for auto min/max
+  if(m_AutoMinMax)
+    {
+    this->RenderHistogram();
+    this->AutoMinMaxRenderingFunctionSetup();
+    }
+  // Ensure rendering function intialization
+  m_RenderingFunction->Initialize();
+  // The ouptut stringstream
+  itk::OStringStream oss;
+  oss<<this->GetName();
+  // If we are inside the buffered region
+  if(m_Image->GetBufferedRegion().IsInside(index))
+    {
+    oss<<m_RenderingFunction->Describe(m_Image->GetPixel(index));
+    }
+  else if(m_Quicklook.IsNotNull())
+    // Else we extrapolate the value from the quicklook
+    {
+    IndexType ssindex = index;
+    ssindex[0]/=this->GetQuicklookSubsamplingRate();
+    ssindex[1]/=this->GetQuicklookSubsamplingRate();
+
+    if(m_Quicklook->GetBufferedRegion().IsInside(ssindex))
+      {
+      oss<<" (ql) "<<m_RenderingFunction->Describe(m_Quicklook->GetPixel(ssindex));
+      }
+    }
+  return oss.str();
+}
+
 }
 #endif
