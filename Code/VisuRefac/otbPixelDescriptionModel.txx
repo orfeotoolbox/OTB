@@ -63,6 +63,9 @@ PixelDescriptionModel<TLayer>
       }
     }
   m_PixelDescription = oss.str();
+
+  // Notify all listeners
+  this->NotifyAll();
 }
 
 template <class TLayer>
