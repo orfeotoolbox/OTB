@@ -31,6 +31,9 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbChangeScaleActionHandler.h"
 #include "itkSobelEdgeDetectionImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
+#include "otbPixelDescriptionModel.h"
+#include "otbPixelDescriptionActionHandler.h"
+#include "otbPixelDescriptionView.h"
 
 int otbImageViewerEndToEndTwoLayers( int argc, char * argv[] )
 {
@@ -62,15 +65,21 @@ int otbImageViewerEndToEndTwoLayers( int argc, char * argv[] )
     <ModelType,ViewType>                             ChangeRegionHandlerType;
   typedef otb::ChangeScaleActionHandler
     <ModelType,ViewType>                             ChangeScaleHandlerType;
+  typedef otb::PixelDescriptionModel<OutputImageType> PixelDescriptionModelType;
+  typedef otb::PixelDescriptionActionHandler
+    < PixelDescriptionModelType, ViewType>            PixelDescriptionActionHandlerType;
+  typedef otb::PixelDescriptionView
+    < PixelDescriptionModelType >                     PixelDescriptionViewType;
 
   // Filters for the second layer
   typedef itk::SobelEdgeDetectionImageFilter<ScalarImageType,ScalarImageType> FilterType;
   typedef otb::PerBandVectorImageFilter<ImageType,ImageType,FilterType>
   PerBandFilterType;
 
-
   // Instantiation
   ModelType::Pointer model = ModelType::New();
+  PixelDescriptionModelType::Pointer pixelModel = PixelDescriptionModelType::New();
+  pixelModel->SetLayers(model->GetLayers());
 
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();
@@ -109,7 +118,7 @@ int otbImageViewerEndToEndTwoLayers( int argc, char * argv[] )
   resizingHandler->SetView(view);
   controller->AddActionHandler(resizingHandler);
 
-// Add the change scaled region handler
+  // Add the change scaled region handler
   ChangeScaledRegionHandlerType::Pointer changeScaledHandler =ChangeScaledRegionHandlerType::New();
   changeScaledHandler->SetModel(model);
   changeScaledHandler->SetView(view);
@@ -121,13 +130,33 @@ int otbImageViewerEndToEndTwoLayers( int argc, char * argv[] )
   changeHandler->SetView(view);
   controller->AddActionHandler(changeHandler);
 
-// Add the change scaled handler
+  // Add the change scaled handler
   ChangeScaleHandlerType::Pointer changeScaleHandler =ChangeScaleHandlerType::New();
   changeScaleHandler->SetModel(model);
   changeScaleHandler->SetView(view);
   controller->AddActionHandler(changeScaleHandler);
 
-   Fl_Window scrollWindow(scrollSize,scrollSize);
+  // Add the pixel description action handler
+  PixelDescriptionActionHandlerType::Pointer pixelActionHandler = PixelDescriptionActionHandlerType::New();
+  pixelActionHandler->SetView(view);
+  pixelActionHandler->SetModel(pixelModel);
+  controller->AddActionHandler(pixelActionHandler);
+  
+  // Build a pixel description view
+  PixelDescriptionViewType::Pointer pixelView = PixelDescriptionViewType::New();
+  pixelView->SetModel(pixelModel);
+  
+  Fl_Window pixelWindow(fullSize,50);
+  if(fullSize > 0)
+    {
+    pixelWindow.add(pixelView->GetPixelDescriptionWidget());
+    pixelWindow.resizable(pixelView->GetPixelDescriptionWidget());
+    pixelWindow.show();
+    pixelView->GetPixelDescriptionWidget()->show();
+    pixelView->GetPixelDescriptionWidget()->resize(0,0,fullSize,50);
+    }
+
+  Fl_Window scrollWindow(scrollSize,scrollSize);
   if(scrollSize > 0)
     {
      scrollWindow.add(view->GetScrollWidget());
@@ -169,6 +198,7 @@ int otbImageViewerEndToEndTwoLayers( int argc, char * argv[] )
   zoomWindow.remove(view->GetZoomWidget());
   scrollWindow.remove(view->GetScrollWidget());
   fullWindow.remove(view->GetFullWidget());
-
+  pixelWindow.remove(pixelView->GetPixelDescriptionWidget());
+  
   return EXIT_SUCCESS;
 }
