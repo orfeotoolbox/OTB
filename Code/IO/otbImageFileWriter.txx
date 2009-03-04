@@ -152,7 +152,6 @@ ImageFileWriter<TInputImage>
 
   // Setup the ImageIO
   //
-  this->GetImageIO()->SetFileName(strFileName.c_str());
   this->GetImageIO()->SetNumberOfDimensions(TInputImage::ImageDimension);
   RegionType region = input->GetLargestPossibleRegion();
   const typename TInputImage::SpacingType& spacing = input->GetSpacing();
