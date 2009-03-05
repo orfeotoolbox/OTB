@@ -553,6 +553,8 @@ public:
   static const TheType ITKCommon_EXPORT Zero;
   static const TheType ITKCommon_EXPORT One;
 
+  static TheType min() { return vcl_numeric_limits<ValueType>::min(); }
+  static TheType max() { return vcl_numeric_limits<ValueType>::max(); }
   static TheType min( TheType ) { return vcl_numeric_limits<ValueType>::min(); }
   static TheType max( TheType ) { return vcl_numeric_limits<ValueType>::max(); }
   static TheType NonpositiveMin() {
@@ -591,6 +593,8 @@ public:
   static const TheType ITKCommon_EXPORT Zero;
   static const TheType ITKCommon_EXPORT One;
 
+  static TheType min() { return vcl_numeric_limits<ValueType>::min(); }
+  static TheType max() { return vcl_numeric_limits<ValueType>::max(); }
   static TheType min( TheType ) { return vcl_numeric_limits<ValueType>::min(); }
   static TheType max( TheType ) { return vcl_numeric_limits<ValueType>::max(); }
   static TheType NonpositiveMin() {
