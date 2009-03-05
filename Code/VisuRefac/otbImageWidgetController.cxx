@@ -61,7 +61,7 @@ int ImageWidgetController::HandleWidgetEvent(std::string widgetId, int event)
   // The action handler found
   ActionHandlerType * handler;
 
-  while(!found && it!=m_ActionHandlersList->End())
+  while(it!=m_ActionHandlersList->End())
     {
     // Get the current handler
     handler = it.Get();
@@ -85,18 +85,15 @@ void ImageWidgetController::HandleWidgetResize(std::string widgetId, int w, int 
   // Define an iterator on the action handlers list
   ActionHandlerListType::Iterator it = m_ActionHandlersList->Begin();
   
-  // Found indicates if a handler was found to respond to this event
-  bool found = false;
-
-  // The action handler found
+   // The action handler found
   ActionHandlerType * handler;
 
-  while(!found && it!=m_ActionHandlersList->End())
+  while(it!=m_ActionHandlersList->End())
     {
     // Get the current handler
     handler = it.Get();
     // try to handle the event with the current handler
-    found = handler->HandleWidgetResize(widgetId,w,h);
+    handler->HandleWidgetResize(widgetId,w,h);
     ++it;
     }   
 }
@@ -107,18 +104,15 @@ void ImageWidgetController::HandleWidgetMove(std::string widgetId, int x, int y)
   // Define an iterator on the action handlers list
   ActionHandlerListType::Iterator it = m_ActionHandlersList->Begin();
   
-  // Found indicates if a handler was found to respond to this event
-  bool found = false;
-
   // The action handler found
   ActionHandlerType * handler;
 
-  while(!found && it!=m_ActionHandlersList->End())
+  while(it!=m_ActionHandlersList->End())
     {
     // Get the current handler
     handler = it.Get();
     // Check if it listens to (widget,event)
-    found   = handler->HandleWidgetMove(widgetId,x,y);
+    handler->HandleWidgetMove(widgetId,x,y);
     ++it;
     }
 }

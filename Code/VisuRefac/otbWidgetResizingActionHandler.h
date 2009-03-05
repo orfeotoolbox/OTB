@@ -69,7 +69,7 @@ public:
       // If resizing the scroll widget, nothing has to be done.
       if(widgetId == m_View->GetScrollWidget()->GetIdentifier() )
 	{
-	otbMsgDevMacro(<<"WidgetResizingActionHandler::HandleWidgetResize(): handling ("<<widgetId<<", "<<w<<", "<<h<<")");
+	otbMsgDevMacro(<<"WidgetResizingActionHandler::HandleWidgetResize(): handling ("<<widgetId<<", "<<w<<", "<<h<<") ");
 	// Nothing has to be acted to the model, juste update the view
 	m_View->Update();
 	return true;
