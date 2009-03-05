@@ -185,7 +185,7 @@ public:
       unsigned int id;
       for (id=0;id<=1;id++)
       {
-        this->SetFeatureStatus(static_cast<FeatureType>(id),false);
+        this->SetFeatureStatus(static_cast<FeatureType>(id),true);
       }
     }
 
