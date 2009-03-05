@@ -29,7 +29,8 @@ int otbInnerProductPCAImageFilter( int argc, char* argv[] )
   const char * inputFileName = argv[1];
   const char * outputFilename = argv[2];
   const bool generateMeanComponent(atoi(argv[3]));
-  const unsigned int numberOfPrincipalComponentsRequired(atoi(argv[4]));
+  const bool centerdata = atoi(argv[4]);
+  const unsigned int numberOfPrincipalComponentsRequired(atoi(argv[5]));
 
   typedef otb::Image<PixelType,Dimension> MonoImageType;
   typedef otb::VectorImage<PixelType,Dimension> ImageType;
@@ -47,6 +48,7 @@ int otbInnerProductPCAImageFilter( int argc, char* argv[] )
 
   pcafilter->SetNumberOfPrincipalComponentsRequired(numberOfPrincipalComponentsRequired);
   pcafilter->SetGenerateMeanComponent(generateMeanComponent);
+  pcafilter->SetCenterData(centerdata);
   pcafilter->SetInput(reader->GetOutput());
   writer->SetInput(pcafilter->GetOutput());
   writer->Update();
@@ -55,8 +57,6 @@ int otbInnerProductPCAImageFilter( int argc, char* argv[] )
   unsigned int nbComponents = numberOfPrincipalComponentsRequired;
   if (generateMeanComponent == true) nbComponents += 1;
 
-std::cout <<"numberOfPrincipalComponentsRequired: " <<numberOfPrincipalComponentsRequired<<std::endl;
-std::cout <<"nbComponents: " <<nbComponents<<std::endl;
   for(unsigned int cpt=0 ; cpt < nbComponents ; cpt++)
   {
     ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
@@ -64,12 +64,10 @@ std::cout <<"nbComponents: " <<nbComponents<<std::endl;
     extractROIFilter->SetInput(pcafilter->GetOutput());
     extractROIFilter->SetChannel(cpt+1);
     writer2->SetInput(extractROIFilter->GetOutput());
-std::cout <<"argv[cpt+4]: " <<argv[cpt+5]<<std::endl;
 
-    writer2->SetFileName(argv[cpt+5]);
+    writer2->SetFileName(argv[cpt+6]);
     writer2->Update();
   }
 
-std::cout <<"END" <<std::endl;
   return EXIT_SUCCESS;
 }

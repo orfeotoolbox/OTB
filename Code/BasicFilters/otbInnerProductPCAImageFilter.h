@@ -106,6 +106,11 @@ public:
   itkGetMacro( GenerateMeanComponent, bool );
   itkBooleanMacro(GenerateMeanComponent);
 
+  /** Enable/Disable center data */
+  itkSetMacro( CenterData, bool );
+  itkGetMacro( CenterData, bool );
+  itkBooleanMacro(CenterData);
+
 protected:
   /** GenerateData */
   virtual void GenerateData(void);
@@ -138,6 +143,9 @@ private:
 
   /** Opening filter */
   NormalizePCAFilterPointer m_NormalizePCAFilter;
+
+  /** Enable/Disable center data */
+  bool m_CenterData;
 
   /** Flag to specify the generation or not of the mean component output */
   bool m_GenerateMeanComponent;

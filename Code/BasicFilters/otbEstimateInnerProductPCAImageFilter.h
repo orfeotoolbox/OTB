@@ -67,6 +67,11 @@ public:
   itkSetMacro( NumberOfPrincipalComponentsRequired, unsigned int );
   itkGetMacro( NumberOfPrincipalComponentsRequired, unsigned int );
 
+  /** Enable/Disable center data */
+  itkSetMacro( CenterData, bool );
+  itkGetMacro( CenterData, bool );
+  itkBooleanMacro(CenterData);
+
 protected:
   EstimateInnerProductPCAImageFilter();
   virtual ~EstimateInnerProductPCAImageFilter() {};
@@ -89,8 +94,11 @@ private:
   EstimateInnerProductPCAImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  // The number of output Pricipal Components
+  /** The number of output Pricipal Components */
   unsigned int m_NumberOfPrincipalComponentsRequired;
+
+  /** Enable/Disable center data */
+  bool m_CenterData;
 
   /** Inner Product Matrix pre computed */ 
   MatrixType m_InnerProduct;

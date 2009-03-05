@@ -47,6 +47,8 @@ PersistentInnerProductVectorImageFilter<TInputImage>
   this->itk::ProcessObject::SetNthOutput(0, output1.GetPointer());
   typename MatrixObjectType::Pointer output2 = static_cast<MatrixObjectType*>(this->MakeOutput(1).GetPointer());
   this->itk::ProcessObject::SetNthOutput(1, output2.GetPointer());
+
+  m_CenterData = true;
 }
 
 template<class TInputImage>
@@ -195,12 +197,14 @@ PersistentInnerProductVectorImageFilter<TInputImage>
   /**
    * Grab the input
    */
-    InputImagePointer inputPtr = const_cast< TInputImage * >( this->GetInput() );
-    // support progress methods/callbacks
-    itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-    unsigned int numberOfTrainingImages = inputPtr->GetNumberOfComponentsPerPixel();
+  InputImagePointer inputPtr = const_cast< TInputImage * >( this->GetInput() );
+  // support progress methods/callbacks
+  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+  unsigned int numberOfTrainingImages = inputPtr->GetNumberOfComponentsPerPixel();
 
-    itk::ImageRegionConstIterator<TInputImage> it (inputPtr, outputRegionForThread);
+  itk::ImageRegionConstIterator<TInputImage> it (inputPtr, outputRegionForThread);
+  if( m_CenterData == true)
+  {
     it.GoToBegin();
     // do the work
     while (!it.IsAtEnd())
@@ -225,6 +229,27 @@ PersistentInnerProductVectorImageFilter<TInputImage>
         ++it;
         progress.CompletedPixel();
     }// end: looping through the image
+  }
+  else
+  {
+    it.GoToBegin();
+    // do the work
+    while (!it.IsAtEnd())
+    {
+        PixelType vectorValue = it.Get();
+        // Matrix iteration  
+        for(unsigned int band_x = 0; band_x < numberOfTrainingImages; band_x++)
+        {
+            for(unsigned int band_y = 0; band_y <= band_x; band_y++ )
+            {
+                m_ThreadInnerProduct[threadId][band_x][band_y] += 
+                (static_cast<double>(vectorValue[band_x]) ) * (static_cast<double>(vectorValue[band_y]) );
+            } // end: band_y loop
+        } // end: band_x loop
+        ++it;
+        progress.CompletedPixel();
+    }// end: looping through the image
+  }
 }
 
 template <class TImage>
@@ -233,8 +258,9 @@ PersistentInnerProductVectorImageFilter<TImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
-
+  os << indent << "m_CenterData: " << m_CenterData << std::endl;
   os << indent << "InnerProduct: " << this->GetInnerProductOutput()->Get() << std::endl;
+
 
 }
 
