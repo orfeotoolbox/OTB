@@ -25,6 +25,8 @@
 // This include is needed to get the OTB_GL_USE_ACCEL definition
 #include "otbConfigure.h"
 
+#include "itkFixedArray.h"
+
 #include "otbImageWidgetController.h"
 
 namespace otb
@@ -61,6 +63,9 @@ public:
   typedef otb::ImageWidgetController        ControllerType;
   typedef ControllerType::Pointer           ControllerPointerType;
 
+  /** Color typedef (used to draw the rectangle, 4th channel is alpha) */
+  typedef itk::FixedArray<float,4>          ColorType;
+
   /** Set/Get the Controller */
   itkSetObjectMacro(Controller,ControllerType);
   itkGetObjectMacro(Controller,ControllerType);
@@ -79,6 +84,10 @@ public:
    /** Set/Get the identifier */
   itkSetStringMacro(Identifier);
   itkGetStringMacro(Identifier);
+
+  /** Set/Get the background color */
+  itkSetMacro(BackgroundColor,ColorType);
+  itkGetMacro(BackgroundColor,ColorType);
 
 protected:
   /** Constructor */
@@ -108,6 +117,9 @@ protected:
 
   /** Flag for GlAcceleration */
   bool m_UseGlAcceleration;
+
+  /** The background color */
+  ColorType m_BackgroundColor;
 
 }; // end class
 } // end namespace otb

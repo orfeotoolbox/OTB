@@ -62,7 +62,7 @@ public:
   typedef typename RegionType::IndexType      IndexType;
 
   /** Color typedef (used to draw the rectangle, 4th channel is alpha) */
-  typedef itk::FixedArray<float,4>            ColorType;
+  typedef typename Superclass::ColorType      ColorType;
 
   /** Reads the OpenGl buffer from an image pointer
    *  \param image The image pointer,

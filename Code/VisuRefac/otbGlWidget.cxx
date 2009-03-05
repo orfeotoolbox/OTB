@@ -24,11 +24,14 @@ namespace otb
 {
 
 GlWidget
-::GlWidget() : Fl_Gl_Window(0,0,0,0), m_Identifier("Default"), m_UseGlAcceleration(false)
+::GlWidget() : Fl_Gl_Window(0,0,0,0), m_Identifier("Default"), m_UseGlAcceleration(false),
+	       m_BackgroundColor()
 {
-#ifdef OTB_GL_USE_ACCEL
+  #ifdef OTB_GL_USE_ACCEL
   m_UseGlAcceleration = true;
   #endif
+  // Default background color
+  m_BackgroundColor.Fill(0);
 }
 
 GlWidget::~GlWidget()
@@ -64,6 +67,22 @@ void GlWidget::draw()
     m_UseGlAcceleration=false;
     }
   #endif
+
+  // Set up Gl environement
+  if (!this->valid())
+  {
+    valid(1);
+    glLoadIdentity();
+    glViewport(0,0,w(),h());
+    glClearColor(m_BackgroundColor[0],m_BackgroundColor[1], m_BackgroundColor[2],m_BackgroundColor[3]);
+    glShadeModel(GL_FLAT);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+  }
+  glClear(GL_COLOR_BUFFER_BIT);    //this clears and paints to black
+  glMatrixMode(GL_MODELVIEW);      //clear previous 3D draw params
+  glLoadIdentity();
+  glMatrixMode(GL_PROJECTION);
+  this->ortho();
 }
 
 void GlWidget::resize(int x, int y, int w, int h)

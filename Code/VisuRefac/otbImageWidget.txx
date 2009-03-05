@@ -125,25 +125,9 @@ void
 ImageWidget<TInputImage>
 ::draw()
 {
-  // perform checks from superclass
+  // perform checks from superclass and gl initialisation
   Superclass::draw();
 
-  // Set up Gl environement
-  if (!this->valid())
-  {
-    valid(1);
-    glLoadIdentity();
-    glViewport(0,0,w(),h());
-    glClearColor((float)0.0, (float)0.0, (float)0.0, (float)0.0);
-    glShadeModel(GL_FLAT);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  }
-
-  glClear(GL_COLOR_BUFFER_BIT);    //this clears and paints to black
-  glMatrixMode(GL_MODELVIEW);      //clear previous 3D draw params
-  glLoadIdentity();
-  glMatrixMode(GL_PROJECTION);
-  this->ortho();
   glDisable(GL_BLEND);
   // Check if there is somthing to draw
   if(m_OpenGlBuffer == NULL)
