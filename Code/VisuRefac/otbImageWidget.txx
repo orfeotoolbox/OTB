@@ -25,15 +25,10 @@ namespace otb
 {
 template <class TInputImage>
 ImageWidget<TInputImage>
-::ImageWidget() : Fl_Gl_Window(0,0,0,0), m_IsotropicZoom(1.0), m_OpenGlBuffer(NULL), m_OpenGlBufferedRegion(),
-		  m_Identifier("Default"), m_UseGlAcceleration(false), m_Rectangle(),m_DisplayRectangle(false),
-		  m_RectangleColor(), m_ImageExtentWidth(0), m_ImageExtentHeight(0), m_ImageExtentX(), m_ImageExtentY(),
-		  m_SubsamplingRate(1)
+::ImageWidget() : m_IsotropicZoom(1.0), m_OpenGlBuffer(NULL), m_OpenGlBufferedRegion(),
+		 m_Rectangle(),m_DisplayRectangle(false),m_RectangleColor(), m_ImageExtentWidth(0),
+		  m_ImageExtentHeight(0), m_ImageExtentX(), m_ImageExtentY(), m_SubsamplingRate(1)
 {
-  #ifdef OTB_GL_USE_ACCEL
-  m_UseGlAcceleration = true;
-  #endif
-  
   // Default color for rectangle
   m_RectangleColor.Fill(0.);
   m_RectangleColor[0]=1.0;
@@ -59,20 +54,7 @@ ImageWidget<TInputImage>
 {
   // Call the superclass implementation
   Superclass::PrintSelf(os,indent);
-  // Display information about the widget
-  os<<indent<<"Widget "<<m_Identifier<<": "<<std::endl;
-  #ifndef OTB_GL_USE_ACCEL
-  os<<indent<<indent<<"OpenGl acceleration is not allowed."<<std::endl;
-  #else
-  if(m_UseGlAcceleration)
-    {
-    os<<indent<<indent<<"OpenGl acceleration is allowed and enabled."<<std::endl;
-    }
-  else
-    {
-    os<<indent<<indent<<"OpenGl acceleration is allowed but disabled."<<std::endl;
-    }
-  #endif
+
   if(m_OpenGlBuffer == NULL)
     {
     os<<indent<<indent<<"OpenGl buffer is not allocated."<<std::endl;
@@ -97,14 +79,6 @@ ImageWidget<TInputImage>
     {
     itkExceptionMacro(<<"Region to read is oustside of the buffered region.");
     }
-  // Check if Gl acceleration mode is correct
-  #ifndef OTB_GL_USE_ACCEL
-  if(m_UseGlAcceleration)
-    {
-    itkExceptionMacro(<<"Gl acceleration enabled but not allowed. Consider rebuilding with OTB_USE_GL_ACCEL to ON.");
-    }
-  #endif
-
   // Delete previous buffer if needed
   if(m_OpenGlBuffer != NULL)
     {
@@ -124,7 +98,7 @@ ImageWidget<TInputImage>
     {
     // Fill the buffer
     unsigned int index = 0;
-    if(!m_UseGlAcceleration)
+    if(!this->GetUseGlAcceleration())
       {
       // compute the linear index (buffer is flipped around X axis
       // when gl acceleration is disabled
@@ -151,31 +125,9 @@ void
 ImageWidget<TInputImage>
 ::draw()
 {
-  // Check if Gl acceleration mode is correct
-  #ifndef OTB_GL_USE_ACCEL
-  if(m_UseGlAcceleration)
-    {
-    itkWarningMacro(<<"Gl acceleration enabled but not allowed. Consider rebuilding with OTB_USE_GL_ACCEL to ON. For now, disabling Gl acceleration.");
-    m_UseGlAcceleration=false;
-    }
-  #endif
+  // perform checks from superclass and gl initialisation
+  Superclass::draw();
 
-  // Set up Gl environement
-  if (!this->valid())
-  {
-    valid(1);
-    glLoadIdentity();
-    glViewport(0,0,w(),h());
-    glClearColor((float)0.0, (float)0.0, (float)0.0, (float)0.0);
-    glShadeModel(GL_FLAT);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  }
-
-  glClear(GL_COLOR_BUFFER_BIT);    //this clears and paints to black
-  glMatrixMode(GL_MODELVIEW);      //clear previous 3D draw params
-  glLoadIdentity();
-  glMatrixMode(GL_PROJECTION);
-  this->ortho();
   glDisable(GL_BLEND);
   // Check if there is somthing to draw
   if(m_OpenGlBuffer == NULL)
@@ -189,7 +141,7 @@ ImageWidget<TInputImage>
   m_ImageExtentX = (static_cast<double>(this->w())-m_ImageExtentWidth)/2;
   m_ImageExtentY = (static_cast<double>(this->h())-m_ImageExtentHeight)/2;
 
-  if(!m_UseGlAcceleration)
+  if(!this->GetUseGlAcceleration())
     {
     // Set the pixel Zoom
     glRasterPos2f(m_ImageExtentX,m_ImageExtentY);
@@ -249,58 +201,6 @@ ImageWidget<TInputImage>
     gl_rect(index[0],index[1],size[0],size[1]);
     glEnd();
     glDisable(GL_BLEND);
-    }
-}
-
-template <class TInputImage>
-void
-ImageWidget<TInputImage>
-::resize(int x, int y, int w, int h)
-{
-  // Distinguish between resize, move and not changed events
-  // (The system window manager may generate multiple resizing events,
-  // so we'd rather avoid event flooding here) 
-  bool reportMove   = false;
-  bool reportResize = false;
-  if(this->x() != x || this->y() != y)
-    {
-    reportMove = true;
-    }
-
-  if(this->w() != w || this->h() != h)
-    {
-    reportResize = true;
-    }
-
-  // First call the superclass implementation
-  Fl_Gl_Window::resize(x,y,w,h);
-  // If There is a controller
-  if(m_Controller.IsNotNull())
-    {
-    if(reportMove)
-      {
-      m_Controller->HandleWidgetMove(m_Identifier,x,y);
-      }
-    if(reportResize)
-      {
-      m_Controller->HandleWidgetResize(m_Identifier,w,h);
-      }
-    }
-}
-
-template <class TInputImage>
-int
-ImageWidget<TInputImage>
-::handle(int event)
-{
-  // If there is a controller
-  if(m_Controller.IsNotNull())
-    {
-    return m_Controller->HandleWidgetEvent(m_Identifier,event);
-    }
-  else
-    {
-    return 0;
     }
 }
 

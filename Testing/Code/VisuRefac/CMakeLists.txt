@@ -228,6 +228,15 @@ otbPixelDescriptionModelSingleLayer
 ${INPUTDATA}/couleurs.tif
 )
 
+#------------ otb::Curves2DWidget ------------
+
+ADD_TEST(vrTuCurves2DWidgetNew ${VISUREFAC_TESTS1}
+otbCurves2DWidgetNew
+)
+
+ADD_TEST(vrTvCurves2DWidget ${VISUREFAC_TESTS1}
+otbCurves2DWidget 0 0 100 200 0 0 10 10
+)
 
 # Testing srcs
 SET(VisuRefac_SRCS1
@@ -259,6 +268,8 @@ otbImageViewerEndToEndSingleLayer.cxx
 otbImageViewerEndToEndTwoLayers.cxx
 otbPixelDescriptionModelNew.cxx
 otbPixelDescriptionModelSingleLayer.cxx
+otbCurves2DWidgetNew.cxx
+otbCurves2DWidget.cxx
 )
 
 # Building testing executables
