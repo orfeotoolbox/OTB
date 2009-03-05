@@ -150,6 +150,7 @@ ImageLayer<TImage,TOutputImage>
     {
     // Else use the full image (update the data)
     histogramSource = m_Image;
+    histogramSource->SetRequestedRegion(this->GetExtractRegion());
     }
 
   // Check if we need to generate the histogram again
@@ -162,7 +163,7 @@ ImageLayer<TImage,TOutputImage>
     histogramSource->Update();
     
     // Iterate on the image
-    itk::ImageRegionConstIterator<ImageType> it(histogramSource,histogramSource->GetLargestPossibleRegion());
+    itk::ImageRegionConstIterator<ImageType> it(histogramSource,histogramSource->GetBufferedRegion());
     
     // declare a list to store the samples
     typename ListSampleType::Pointer listSample = ListSampleType::New();
