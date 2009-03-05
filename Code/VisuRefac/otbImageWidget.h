@@ -123,11 +123,23 @@ public:
   itkSetMacro(RectangleColor,ColorType);
   itkGetConstReferenceMacro(RectangleColor,ColorType);
 
+  /** Set/Get the subsampling rate */
+  itkSetMacro(SubsamplingRate,unsigned int);
+  itkGetMacro(SubsamplingRate,unsigned int);
+
   /** Convert a screen index to a buffered region index */
   IndexType ScreenIndexToRegionIndex(const IndexType& index );
   
   /** Convert a buffered region index to a screen index */
   IndexType RegionIndexToScreenIndex(const IndexType& index);
+
+  /** Convert a screen index to an image index (taking into account
+   * subsampling rate) */
+  IndexType ScreenIndexToImageIndex(const IndexType& index );
+  
+  /** Convert an image index to a screen index (taking into account 
+   *  subsamplinh rate) */
+  IndexType ImageIndexToScreenIndex(const IndexType& index);
 
 protected:
   /** Constructor */
@@ -198,6 +210,11 @@ private:
   double m_ImageExtentHeight;
   double m_ImageExtentX;
   double m_ImageExtentY;
+
+  /** If the image is subsampled with respect to the original image,
+   * this indicates the subsampling rate */
+  unsigned int m_SubsamplingRate;
+
 
 }; // end class
 } // end namespace otb

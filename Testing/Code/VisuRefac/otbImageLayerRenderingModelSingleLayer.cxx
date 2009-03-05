@@ -15,7 +15,7 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbImageViewerModel.h"
+#include "otbImageLayerRenderingModel.h"
 #include "otbVectorImage.h"
 #include "itkRGBPixel.h"
 #include "otbImageFileReader.h"
@@ -24,7 +24,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageFileWriter.h"
 #include "otbImageLayer.h"
 
-int otbImageViewerModelSingleLayer( int argc, char * argv[] )
+int otbImageLayerRenderingModelSingleLayer( int argc, char * argv[] )
 {
   // params
   const char * infname = argv[1];
@@ -39,7 +39,7 @@ int otbImageViewerModelSingleLayer( int argc, char * argv[] )
   typedef otb::ImageLayer<ImageType>                 LayerType;
   typedef otb::ImageFileReader<ImageType>            ReaderType;
   typedef otb::ImageLayerGenerator<LayerType>        LayerGeneratorType;
-  typedef otb::ImageViewerModel<OutputImageType>     ModelType;
+  typedef otb::ImageLayerRenderingModel<OutputImageType>     ModelType;
   typedef otb::ImageFileWriter<OutputImageType>      WriterType;
 
   // Instantiation

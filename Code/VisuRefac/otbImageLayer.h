@@ -18,7 +18,7 @@
 #ifndef __otbImageLayer_h
 #define __otbImageLayer_h
 
-#include "otbLayer.h"
+#include "otbImageLayerBase.h"
 #include "itkVariableLengthVector.h"
 #include "itkDenseFrequencyContainer.h"
 #include "otbRenderingImageFilter.h"
@@ -39,12 +39,12 @@ namespace otb
 
 template <class TImage, class TOutputImage = otb::Image<itk::RGBPixel<unsigned char>, 2 > >  
 class ImageLayer
-  : public Layer<TOutputImage>
+  : public ImageLayerBase<TOutputImage>
 {
 public:
   /** Standard class typedefs */
   typedef ImageLayer                        Self;
-  typedef Layer<TOutputImage>               Superclass;
+  typedef ImageLayerBase<TOutputImage>      Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
   
@@ -60,6 +60,7 @@ public:
   typedef typename ImageType::PixelType                               PixelType;
   typedef typename ImageType::InternalPixelType                       InternalPixelType;
   typedef typename ImageType::RegionType                              RegionType;
+  typedef typename ImageType::IndexType                               IndexType;
   
   /** Output image typedef */
   typedef TOutputImage                                                OutputImageType;
@@ -180,6 +181,9 @@ public:
 
   /** Actually render the image */
   virtual void Render();
+
+  /** Get the pixel description */
+  virtual std::string GetPixelDescription(const IndexType & index);  
 
 protected:
   /** Constructor */

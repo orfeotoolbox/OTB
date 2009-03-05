@@ -103,6 +103,9 @@ int otbImageLayerScalar( int argc, char * argv[] )
   // Render the layer
   layer->Render();
 
+  // Report a pixel
+  std::cout<<"Reporting index: "<<index<<" -> "<<layer->GetPixelDescription(index)<<std::endl;
+
   // Write the image views
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(layer->GetRenderedQuicklook());

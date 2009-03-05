@@ -189,7 +189,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
    *   d(P,[Q1Q2]) = |PQ1^PQ2|/|Q1Q2|
    */
   
-  float SegmentLength = (Xq1-Xq2)* (Xq1-Xq2) + (Yq1-Yq2) *(Yq1-Yq2);
+  float SegmentLength = vcl_sqrt((Xq1-Xq2)* (Xq1-Xq2) + (Yq1-Yq2) *(Yq1-Yq2));
   float CrossProduct  =   Xq1*Yq2 - Xq2*Yq1 ;
 
   /** Define a line iterator */

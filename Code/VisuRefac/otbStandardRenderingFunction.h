@@ -19,6 +19,7 @@
 #define __otbStandardRenderingFunction_h
 
 #include "otbRenderingFunction.h"
+#include "otbMacro.h"
 #include <assert.h>
 
 namespace otb
@@ -97,6 +98,26 @@ public:
     resp.SetBlue(Evaluate(m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
     resp.SetGreen(Evaluate(m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
     return resp;
+  }
+
+
+  inline const std::string Describe(ScalarPixelType spixel) const
+  {
+    itk::OStringStream oss;
+    OutputPixelType output = this->Evaluate(spixel);
+    oss<<"Grayscale[value: "<<spixel<<", displayed: "<<output[0]<<"]";
+    return oss.str();
+  }
+
+  inline const std::string Describe(const VectorPixelType & vpixel) const
+  {
+    itk::OStringStream oss;
+    OutputPixelType output = this->Evaluate(vpixel);
+    oss<<"R[chan="  <<m_RedChannelIndex   <<" val="<< vpixel[m_RedChannelIndex]   <<" disp="<<static_cast<unsigned int>(output[0])<<"], ";
+    oss<<"G[chan="<<m_GreenChannelIndex   <<" val="<< vpixel[m_GreenChannelIndex] <<" disp="<<static_cast<unsigned int>(output[1])<<"], ";
+    oss<<"B[chan=" <<m_BlueChannelIndex   <<" val="<< vpixel[m_BlueChannelIndex]  <<" disp="<<static_cast<unsigned int>(output[2])<<"]";
+    return oss.str();
+
   }
 
   /** Get the transfer function for tuning */

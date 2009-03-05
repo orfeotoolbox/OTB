@@ -15,20 +15,17 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbImageLayerRenderingModel.h"
+#include "otbPixelDescriptionModel.h"
 #include "otbImage.h"
-#include "itkRGBPixel.h"
-#include "otbImageView.h"
+#include "otbImageLayer.h"
 
-int otbImageViewNew( int argc, char * argv[] )
+int otbPixelDescriptionModelNew( int argc, char * argv[] )
 {
-  typedef itk::RGBPixel<unsigned char>     RGBPixelType;
-  typedef otb::Image<RGBPixelType,2>       ImageType;
-  typedef otb::ImageLayerRenderingModel<ImageType> ModelType;
-  typedef otb::ImageView<ModelType>        ViewType;
+  typedef otb::Image<double,2>                  ImageType;
+  typedef otb::PixelDescriptionModel<ImageType> ModelType;
 
   // Instantiation
-  ViewType::Pointer model = ViewType::New();
+  ModelType::Pointer model = ModelType::New();
 
   return EXIT_SUCCESS;
 }
