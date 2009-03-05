@@ -30,10 +30,11 @@
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 
-#include "itkBinaryFunctorImageFilter.h"
+#include "itkTernaryFunctorImageFilter.h"
 #include "otbAmplitudePhaseToRGBFunctor.h"
 #include "itkComplexToModulusImageFilter.h"
 #include "itkComplexToPhaseImageFilter.h"
+#include "itkShiftScaleImageFilter.h"
 
 int otbAmplitudePhaseToRGBFunctor(int argc, char * argv[])
 {
@@ -64,18 +65,23 @@ int otbAmplitudePhaseToRGBFunctor(int argc, char * argv[])
   PhaseFilterType::Pointer phaseFilter = PhaseFilterType::New();
   phaseFilter->SetInput(reader->GetOutput());
 
+  typedef itk::ShiftScaleImageFilter<ImageType, ImageType> ConstFilterType;
+  ConstFilterType::Pointer constFilter = ConstFilterType::New();
+  constFilter->SetScale(0.0);
+  constFilter->SetInput(modulusFilter->GetOutput());
 
   typedef otb::Functor::AmplitudePhaseToRGBFunctor
-      <PixelType,PixelType,RGBPixelType> ColorMapFunctorType;
-  typedef itk::BinaryFunctorImageFilter
-      <ImageType, ImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
+      <PixelType,PixelType,PixelType,RGBPixelType> ColorMapFunctorType;
+  typedef itk::TernaryFunctorImageFilter
+      <ImageType, ImageType, ImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   colormapper->GetFunctor().SetMaximum(4000);
   colormapper->GetFunctor().SetMinimum(0);
 
 
   colormapper->SetInput1(modulusFilter->GetOutput());
-  colormapper->SetInput2(phaseFilter->GetOutput());
+  colormapper->SetInput2(constFilter->GetOutput());
+  colormapper->SetInput3(phaseFilter->GetOutput());
   colormapper->SetNumberOfThreads(1);
 
   writer->SetInput(colormapper->GetOutput());

@@ -49,15 +49,15 @@ ResampleImageFilter<TInputImage, TOutputImage,TInterpolatorPrecisionType>
   m_Size.Fill( 0 );
   m_OutputStartIndex.Fill( 0 );
 
-
-  m_Transform = IdentityTransform<TInterpolatorPrecisionType, ImageDimension>::New();
+  typedef double CoordRepType;
+  m_Transform = IdentityTransform<CoordRepType, ImageDimension>::New();
 
   m_InterpolatorIsBSpline = false;
   m_BSplineInterpolator = NULL;
 
   m_InterpolatorIsLinear = true;
   m_LinearInterpolator = LinearInterpolateImageFunction<InputImageType,
-                                  TInterpolatorPrecisionType>::New();
+                                                CoordRepType>::New();
 
   m_Interpolator = dynamic_cast<InterpolatorType *>
                                        ( m_LinearInterpolator.GetPointer() );
@@ -273,7 +273,8 @@ ResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
   PointType outputPoint;         // Coordinates of current output pixel
   PointType inputPoint;          // Coordinates of current input pixel
 
-  typedef ContinuousIndex<TInterpolatorPrecisionType, ImageDimension>
+  typedef double CoordRepType;
+  typedef ContinuousIndex<CoordRepType, ImageDimension>
                                                             ContinuousIndexType;
   ContinuousIndexType inputIndex;
 
@@ -343,18 +344,10 @@ ResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
         const OutputType value = m_BSplineInterpolator
                                    ->EvaluateAtContinuousIndex(inputIndex,
                                                                       threadId);
-        if( value < minOutputValue )
-          {
-          pixval = minValue;
-          }
-        else if( value > maxOutputValue )
-          {
-          pixval = maxValue;
-          }
-        else
-          {
-          pixval = static_cast<PixelType>( value );
-          }
+        pixval = static_cast<PixelType>(
+                 NumericTraits<OutputType>::Clamp(value,minOutputValue,maxOutputValue)
+                                       );
+
         outIt.Set( pixval );
         }
       else
@@ -407,18 +400,10 @@ ResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
         PixelType pixval;
         const OutputType value = m_LinearInterpolator
                                    ->EvaluateAtContinuousIndex(inputIndex);
-        if( value < minOutputValue )
-          {
-          pixval = minValue;
-          }
-        else if( value > maxOutputValue )
-          {
-          pixval = maxValue;
-          }
-        else
-          {
-          pixval = static_cast<PixelType>( value );
-          }
+
+        pixval = static_cast<PixelType>(
+                 NumericTraits<OutputType>::Clamp(value,minOutputValue,maxOutputValue)
+                                       );
         outIt.Set( pixval );
         }
       else
@@ -471,18 +456,10 @@ ResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
         PixelType pixval;
         const OutputType value = m_Interpolator
                                    ->EvaluateAtContinuousIndex(inputIndex);
-        if( value < minOutputValue )
-          {
-          pixval = minValue;
-          }
-        else if( value > maxOutputValue )
-          {
-          pixval = maxValue;
-          }
-        else
-          {
-          pixval = static_cast<PixelType>( value );
-          }
+
+        pixval = static_cast<PixelType>(
+                 NumericTraits<OutputType>::Clamp(value,minOutputValue,maxOutputValue)
+                                       );
         outIt.Set( pixval );
         }
       else
@@ -526,7 +503,8 @@ ResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
   PointType tmpOutputPoint;
   PointType tmpInputPoint;
 
-  typedef ContinuousIndex<TInterpolatorPrecisionType, ImageDimension>
+  typedef double CoordRepType;
+  typedef ContinuousIndex<CoordRepType, ImageDimension>
                                                             ContinuousIndexType;
   ContinuousIndexType inputIndex;
   ContinuousIndexType tmpInputIndex;
@@ -686,18 +664,10 @@ ResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
         {
         value = m_Interpolator->EvaluateAtContinuousIndex(inputIndex);
         }
-      if( value <  minOutputValue )
-        {
-        pixval = minValue;
-        }
-      else if( value > maxOutputValue )
-        {
-        pixval = maxValue;
-        }
-      else
-        {
-        pixval = static_cast<PixelType>( value );
-        }
+
+      pixval = static_cast<PixelType>(
+               NumericTraits<OutputType>::Clamp(value,minOutputValue,maxOutputValue)
+                                     );
       outIt.Set( pixval );
 
       progress.CompletedPixel();
@@ -727,18 +697,10 @@ ResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
           {
           value = m_Interpolator->EvaluateAtContinuousIndex(inputIndex);
           }
-        if( value <  minOutputValue )
-          {
-          pixval = minValue;
-          }
-        else if( value > maxOutputValue )
-          {
-          pixval = maxValue;
-          }
-        else
-          {
-          pixval = static_cast<PixelType>( value );
-          }
+
+        pixval = static_cast<PixelType>(
+                 NumericTraits<OutputType>::Clamp(value,minOutputValue,maxOutputValue)
+                                       );
         outIt.Set( pixval );
         }
       else

@@ -42,7 +42,7 @@ namespace otb
      * and itk::ComplexToPhaseImageFilter for example.
      *
      */
-    template< class TInput1, class TInput2=TInput1, class TOutput=TInput1>
+    template< class TInput1, class TInput2=TInput1, class TInput3=TInput1, class TOutput=TInput1>
         class ITK_EXPORT AmplitudePhaseToRGBFunctor
     {
       public:
@@ -68,7 +68,7 @@ namespace otb
           this->m_Minimum = min;
         }
 
-        inline TOutput operator()( const TInput1 & amplitude, const TInput2 & phase) const
+        inline TOutput operator()( const TInput1 & amplitude, const TInput2 & coherence, const TInput3 & phase) const
         {
 //           std::cout << amplitude << " - " << phase << std::endl;
           double hinc, sinc, vinc;
@@ -79,8 +79,9 @@ namespace otb
           double hue, sat, val;
 
           hue = 0.6 - (phase+M_PI)*hinc;
-          sat = 0.99;
-          val = itk::NumericTraits<RGBComponentType>::max()/(m_Maximum-m_Minimum) * (amplitude-m_Minimum);
+          sat = 0.6*coherence+0.3;
+          val = itk::NumericTraits<RGBComponentType>::max()/2
+              * ( (amplitude-m_Minimum)/(m_Maximum-m_Minimum)+1.0);
 
           if (amplitude < m_Minimum)
           {

@@ -64,10 +64,11 @@ VectorDataExtractROI<TVectorData>
   typename VectorDataType::Pointer        output = this->GetOutput();
 
   /** put this here*/
-  output->SetProjectionRef(input->GetProjectionRef());
+  if(!input->GetProjectionRef().empty())
+    output->SetProjectionRef(input->GetProjectionRef());
 
   if(!input)
-    std::cout << " Probleme avec la recuperation du input"<<std::endl;
+    return;
 
   /** Need to check if it is necessary to project the roi*/
   this->CompareInputAndRegionProjection();
@@ -76,6 +77,8 @@ VectorDataExtractROI<TVectorData>
   /** If Projection of the region is needed, we project on the vectorData coordinate axis*/
   if(m_ProjectionNeeded)
     this->ProjectRegionToInputVectorProjection();
+  else
+    m_GeoROI = m_ROI;
   
   
   /** Loop in the vectorData file
@@ -87,49 +90,95 @@ VectorDataExtractROI<TVectorData>
   typename DataNodeType::Pointer                  root       = input->GetDataTree()->GetRoot()->Get();
   typename VectorDataType::DataTreeType::Pointer  tree       = output->GetDataTree();
   
-  DataNodePointerType                                         currentContainer;
+  DataNodePointerType  currentContainer;
+  DataNodePointerType  newDataNodeFolder                      = DataNodeType::New();
+  DataNodePointerType  newDataNodeMultiPolygon                = DataNodeType::New();
+  DataNodePointerType  newDataNodeMultiLine                   = DataNodeType::New();
+  DataNodePointerType  newDataNodeMultiFeature                = DataNodeType::New();
 
+  
   /** Walking trough the input vector data */
   typedef itk::PreOrderTreeIterator<DataTreeType>                 TreeIteratorType;
   TreeIteratorType                                                it(input->GetDataTree());
   it.GoToBegin();
+  bool newFolder       = false ;
+  bool newMultiFeature = false;
+  
+  
 
   while (!it.IsAtEnd())
     {
-      DataNodePointerType  dataNode         =   it.Get();
-      DataNodePointerType  newDataNode = DataNodeType::New();
-      newDataNode->SetNodeType(dataNode->GetNodeType());
-      newDataNode->SetNodeId(dataNode->GetNodeId());
+      DataNodePointerType  dataNode               =   it.Get();
+      DataNodePointerType  newDataNode            = DataNodeType::New();
+
+
       switch (dataNode->GetNodeType())
 	{
 	case ROOT:
 	  {
+	    newDataNode->SetNodeType(dataNode->GetNodeType());
+	    newDataNode->SetNodeId(dataNode->GetNodeId());
 	    tree->SetRoot(newDataNode);
 	    currentContainer = newDataNode;
 	    break;
 	  }
 	case DOCUMENT:
 	  {
+	    newDataNode->SetNodeType(dataNode->GetNodeType());
+	    newDataNode->SetNodeId(dataNode->GetNodeId());
 	    tree->Add(newDataNode,currentContainer);
 	    currentContainer = newDataNode;
 	    break;
 	  }
 	case FOLDER:
 	  {
-	    tree->Add(newDataNode,currentContainer);
-	    currentContainer = newDataNode;
+	    newDataNodeFolder->SetNodeType(dataNode->GetNodeType());
+	    newDataNodeFolder->SetNodeId(dataNode->GetNodeId());
+	    newFolder = true;
 	    break;
 	  }
 	case FEATURE_POINT:
 	  {
-	    newDataNode->SetPoint(dataNode->GetPoint());
-	    tree->Add(newDataNode,currentContainer);
+	    if(m_GeoROI.IsInside(this->PointToContinuousIndex(dataNode->GetPoint())))
+	      {
+		if(newFolder)
+		  {
+		    tree->Add(newDataNodeFolder,currentContainer);
+		    currentContainer = newDataNodeFolder;
+		    newFolder = false;
+		  }
+		if(newMultiFeature)
+		  {
+		    tree->Add(newDataNodeMultiFeature,currentContainer);
+		    currentContainer =  newDataNodeMultiFeature; 
+		    newMultiFeature = false;
+		  }
+		newDataNode->SetNodeType(dataNode->GetNodeType());
+		newDataNode->SetNodeId(dataNode->GetNodeId());
+		newDataNode->SetPoint(dataNode->GetPoint());
+		tree->Add(newDataNode,currentContainer);
+	      }
+	   
 	    break;
 	  }
 	case FEATURE_LINE:
 	  {
 	    if(this->IsLineIntersectionNotNull(dataNode->GetLine()))
 	      {
+		if(newFolder)
+		  {
+		    tree->Add(newDataNodeFolder,currentContainer);
+		    currentContainer = newDataNodeFolder;
+		    newFolder = false;
+		  }
+		if(newMultiFeature)
+		  {
+		    tree->Add(newDataNodeMultiFeature ,currentContainer);
+		    currentContainer =  newDataNodeMultiFeature ;
+		    newMultiFeature = false;
+		  }
+		newDataNode->SetNodeType(dataNode->GetNodeType());
+		newDataNode->SetNodeId(dataNode->GetNodeId());
 		newDataNode->SetLine(dataNode->GetLine());
 		tree->Add(newDataNode,currentContainer);
 	      }
@@ -139,35 +188,55 @@ VectorDataExtractROI<TVectorData>
 	  {
 	    if(this->IsPolygonIntersectionNotNull(dataNode->GetPolygonExteriorRing()))
 	      {
+		if(newFolder)
+		  {
+		    tree->Add(newDataNodeFolder,currentContainer);
+		    currentContainer = newDataNodeFolder;
+		    newFolder = false;
+		  }
+		
+		if(newMultiFeature)
+		  {
+		    tree->Add(newDataNodeMultiFeature,currentContainer);
+		    currentContainer =  newDataNodeMultiFeature ;
+		    newMultiFeature = false;
+		  }
+		
+		newDataNode->SetNodeType(dataNode->GetNodeType());
+		newDataNode->SetNodeId(dataNode->GetNodeId());
 		newDataNode->SetPolygonExteriorRing(dataNode->GetPolygonExteriorRing());
 		newDataNode->SetPolygonInteriorRings(dataNode->GetPolygonInteriorRings());
 		tree->Add(newDataNode,currentContainer);
 	      }
-	    else
-	      std::cout << " OUTSIDE The region" <<std::endl;
-	    
 	    break;
 	  }
 	case FEATURE_MULTIPOINT:
 	  {
-	    tree->Add(newDataNode,currentContainer);
-	    currentContainer = newDataNode;
+	    newDataNodeMultiFeature->SetNodeType(dataNode->GetNodeType());
+	    newDataNodeMultiFeature ->SetNodeId(dataNode->GetNodeId());
+	    newMultiFeature = true;
+	    
+
 	    break;
 	  }
 	case FEATURE_MULTILINE:
 	  {
-	    tree->Add(newDataNode,currentContainer);
-	    currentContainer = newDataNode;
+	    newDataNodeMultiFeature ->SetNodeType(dataNode->GetNodeType());
+	    newDataNodeMultiFeature ->SetNodeId(dataNode->GetNodeId());
+	    newMultiFeature = true;
 	    break;
 	  }
 	case FEATURE_MULTIPOLYGON:
 	  {
-	    tree->Add(newDataNode,currentContainer);
-	    currentContainer = newDataNode;
+	    newDataNodeMultiFeature  ->SetNodeType(dataNode->GetNodeType());
+	    newDataNodeMultiFeature->SetNodeId(dataNode->GetNodeId());
+	    newMultiFeature = true;
 	    break;
 	  }
 	case FEATURE_COLLECTION:
 	  {
+	    newDataNode->SetNodeType(dataNode->GetNodeType());
+	    newDataNode->SetNodeId(dataNode->GetNodeId());	    
 	    tree->Add(newDataNode,currentContainer);
 	    currentContainer = newDataNode;
 	    break;
@@ -211,10 +280,9 @@ void
 VectorDataExtractROI<TVectorData>
 ::CompareInputAndRegionProjection()
 {
-  /**Traces*/
   std::string regionProjection = m_ROI.GetRegionProjection();
   std::string inputVectorProjection = this->GetInput()->GetProjectionRef();
-    
+  
   if(regionProjection == inputVectorProjection)
     m_ProjectionNeeded = false;
   else
@@ -229,10 +297,10 @@ void
 VectorDataExtractROI<TVectorData>
 ::ProjectRegionToInputVectorProjection()
 {
-  typedef otb::GenericMapProjection<otb::FORWARD>     ForwardMapProjectionType;
+  typedef otb::GenericMapProjection<otb::INVERSE>     ForwardMapProjectionType;
   ForwardMapProjectionType::Pointer mapTransform =    ForwardMapProjectionType::New();
   mapTransform->SetWkt(m_ROI.GetRegionProjection());
-  
+
   /*FORWARD ; From RegionProjection To long/lat Projection */
   typename VertexListType::Pointer  regionCorners = VertexListType::New();
   ProjPointType                          point1, point2 , point3, point4;
@@ -255,30 +323,39 @@ VectorDataExtractROI<TVectorData>
   ProjPointType pGeo2 = mapTransform->TransformPoint(point2);
   ProjPointType pGeo3 = mapTransform->TransformPoint(point3);
   ProjPointType pGeo4 = mapTransform->TransformPoint(point4);
-  
-  /** Inverse : From long/lat to InputVectorData projection*/
-  typedef otb::GenericMapProjection<otb::INVERSE>     InverseMapProjectionType;
+
+  /** INVERSE : From long/lat to InputVectorData projection*/
+  typedef otb::GenericMapProjection<otb::FORWARD>            InverseMapProjectionType;
   InverseMapProjectionType::Pointer mapInverseTransform =    InverseMapProjectionType::New();
-  if(this->GetInput()->GetProjectionRef().empty())
+
+  typedef itk::Transform<double, 2, 2> GenericTransformType;
+  GenericTransformType::Pointer outputTransform ;
+
+  if(!this->GetInput()->GetProjectionRef().empty())
     {
-      std::string inputProjectionRef = "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]]";
-      mapInverseTransform->SetWkt(inputProjectionRef);
+      mapInverseTransform->SetWkt(this->GetInput()->GetProjectionRef());
+      outputTransform = mapInverseTransform.GetPointer();
+
+      //Case of kml
+      if(mapInverseTransform->GetMapProjection() == NULL)
+	outputTransform  =  itk::IdentityTransform< double, 2 >::New();
     }
   else
-    mapInverseTransform->SetWkt(this->GetInput()->GetProjectionRef());
+    outputTransform  =  itk::IdentityTransform< double, 2 >::New();
+
   
   /** Finally  Project the four corners in the InputDataVector Projection*/
-  ProjPointType pCarto1 = mapInverseTransform->TransformPoint(pGeo1);
-  ProjPointType pCarto2 = mapInverseTransform->TransformPoint(pGeo2);
-  ProjPointType pCarto3 = mapInverseTransform->TransformPoint(pGeo3);
-  ProjPointType pCarto4 = mapInverseTransform->TransformPoint(pGeo4);
-  
+  ProjPointType pCarto1 = /*mapInverseTransform*/ outputTransform->TransformPoint(pGeo1);
+  ProjPointType pCarto2 = /*mapInverseTransform*/ outputTransform->TransformPoint(pGeo2);
+  ProjPointType pCarto3 = /*mapInverseTransform*/ outputTransform ->TransformPoint(pGeo3);
+  ProjPointType pCarto4 = /*mapInverseTransform*/ outputTransform->TransformPoint(pGeo4);
+
   /** Fill the vertex List : First Convert Point To*/
   regionCorners->InsertElement(regionCorners->Size(),this->PointToContinuousIndex(pCarto1));
   regionCorners->InsertElement(regionCorners->Size(),this->PointToContinuousIndex(pCarto2));
   regionCorners->InsertElement(regionCorners->Size(),this->PointToContinuousIndex(pCarto3));
   regionCorners->InsertElement(regionCorners->Size(),this->PointToContinuousIndex(pCarto4));
-  
+
   /** Due to The projection : the Projected ROI can be rotated */
   m_GeoROI = this->ComputeVertexListBoudingRegion(regionCorners.GetPointer());
     
@@ -292,11 +369,12 @@ typename VectorDataExtractROI<TVectorData>
 VectorDataExtractROI<TVectorData>
 ::PointToContinuousIndex(ProjPointType  point)
 {
+
   VertexType vertex;
   
   vertex[0] = point[0];
   vertex[1] = point[1];
-  
+
   return vertex;
 }
 
@@ -326,13 +404,13 @@ VectorDataExtractROI<TVectorData>
       y = static_cast<double>(it.Value()[1]);
       index[0] = x;
       index[1] = y;
-
+      
       ++it;
       while (it != vertexlist->End())
 	{
 	  x = static_cast<double>(it.Value()[0]);
 	  y = static_cast<double>(it.Value()[1]);
-
+	  
 	  // Index search
 	  if ( x < index[0] )
 	    {

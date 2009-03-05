@@ -101,26 +101,27 @@ public:
                       TInputImage::ImageDimension);
 
 
-  /** 
+  /**
    *  Transform typedef.
    */
-  typedef Transform<TInterpolatorPrecisionType,
+  typedef double CoordRepType;
+  typedef Transform<CoordRepType,
                     itkGetStaticConstMacro(ImageDimension),
                     itkGetStaticConstMacro(ImageDimension)>       TransformType;
   typedef typename TransformType::ConstPointer             TransformPointerType;
 
   /** Interpolator typedef. */
   typedef InterpolateImageFunction<InputImageType,
-                        TInterpolatorPrecisionType>     InterpolatorType;
+                      CoordRepType>     InterpolatorType;
   typedef typename InterpolatorType::Pointer            InterpolatorPointerType;
 
   typedef LinearInterpolateImageFunction<InputImageType,
-                TInterpolatorPrecisionType>   LinearInterpolatorType;
+                      CoordRepType>   LinearInterpolatorType;
   typedef typename LinearInterpolatorType::Pointer
                                               LinearInterpolatorPointerType;
 
   typedef BSplineInterpolateImageFunction<InputImageType,
-                TInterpolatorPrecisionType>   BSplineInterpolatorType;
+                      CoordRepType>   BSplineInterpolatorType;
   typedef typename BSplineInterpolatorType::Pointer
                                               BSplineInterpolatorPointerType;
 
