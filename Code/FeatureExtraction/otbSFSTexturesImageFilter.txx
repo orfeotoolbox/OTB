@@ -431,8 +431,8 @@ void
 SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::InitFeatureStatus(bool status)
     {
-      unsigned int id;
-      for (id=1;id<=6;id++)
+      for (FeatureType id=LENGTH;id<=SD;
+	   id=static_cast<FeatureType>(id+1))
       {
         this->SetFeatureStatus(static_cast<FeatureType>(id),status);
       }

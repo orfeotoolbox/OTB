@@ -162,7 +162,8 @@ public:
    *  6: SD
    *  Set to 1 means the texture will be computed.
    **/
-  typedef enum {LENGTH, WIDTH, PSI, WMEAN, RATIO, SD} FeatureType;
+  typedef enum {LENGTH=1, WIDTH, PSI, WMEAN, RATIO, SD} FeatureType;
+    
   void SetFeatureStatus(FeatureType id, bool isSelected )
     {
       if ( static_cast<unsigned int>(id) > this->GetTexturesStatus().size() || id == 0 )
