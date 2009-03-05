@@ -180,16 +180,7 @@ public:
       return this->GetFunctor().GetTexturesStatus();
     }
 
-  void InitTextureStatus(bool status)
-    {
-      unsigned int id;
-      for (id=0;id<=1;id++)
-      {
-        this->SetFeatureStatus(static_cast<FeatureType>(id),status);
-      }
-    }
-
-
+  void InitTextureStatus(bool status);
 
   /** Return output length image */
   const OutputImageType * GetLengthOutput() const;
