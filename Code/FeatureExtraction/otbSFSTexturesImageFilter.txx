@@ -427,7 +427,7 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 SFSTexturesImageFilter<TInputImage, TOutputImage>
-::InitTextureStatus(bool status)
+::InitFeatureStatus(bool status)
     {
       unsigned int id;
       for (id=0;id<=1;id++)

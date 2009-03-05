@@ -180,7 +180,7 @@ public:
       return this->GetFunctor().GetTexturesStatus();
     }
 
-  void InitTextureStatus(bool status);
+  void InitFeatureStatus(bool status);
 
   /** Return output length image */
   const OutputImageType * GetLengthOutput() const;
