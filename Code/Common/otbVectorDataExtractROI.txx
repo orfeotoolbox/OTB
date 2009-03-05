@@ -66,8 +66,6 @@ VectorDataExtractROI<TVectorData>
   /** put this here*/
   if(!input->GetProjectionRef().empty())
     output->SetProjectionRef(input->GetProjectionRef());
-  else
-    
 
   if(!input)
     return;
@@ -302,7 +300,7 @@ VectorDataExtractROI<TVectorData>
   typedef otb::GenericMapProjection<otb::INVERSE>     ForwardMapProjectionType;
   ForwardMapProjectionType::Pointer mapTransform =    ForwardMapProjectionType::New();
   mapTransform->SetWkt(m_ROI.GetRegionProjection());
-  
+
   /*FORWARD ; From RegionProjection To long/lat Projection */
   typename VertexListType::Pointer  regionCorners = VertexListType::New();
   ProjPointType                          point1, point2 , point3, point4;
@@ -325,24 +323,32 @@ VectorDataExtractROI<TVectorData>
   ProjPointType pGeo2 = mapTransform->TransformPoint(point2);
   ProjPointType pGeo3 = mapTransform->TransformPoint(point3);
   ProjPointType pGeo4 = mapTransform->TransformPoint(point4);
-  
+
   /** INVERSE : From long/lat to InputVectorData projection*/
   typedef otb::GenericMapProjection<otb::FORWARD>            InverseMapProjectionType;
   InverseMapProjectionType::Pointer mapInverseTransform =    InverseMapProjectionType::New();
 
-  if(this->GetInput()->GetProjectionRef().empty())
+  typedef itk::Transform<double, 2, 2> GenericTransformType;
+  GenericTransformType::Pointer outputTransform ;
+
+  if(!this->GetInput()->GetProjectionRef().empty())
     {
-      std::string inputProjectionRef = "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]]";
-      mapInverseTransform->SetWkt(inputProjectionRef);
+      mapInverseTransform->SetWkt(this->GetInput()->GetProjectionRef());
+      outputTransform = mapInverseTransform.GetPointer();
+
+      //Case of kml
+      if(mapInverseTransform->GetMapProjection() == NULL)
+	outputTransform  =  itk::IdentityTransform< double, 2 >::New();
     }
   else
-    mapInverseTransform->SetWkt(this->GetInput()->GetProjectionRef());
+    outputTransform  =  itk::IdentityTransform< double, 2 >::New();
+
   
   /** Finally  Project the four corners in the InputDataVector Projection*/
-  ProjPointType pCarto1 = mapInverseTransform->TransformPoint(pGeo1);
-  ProjPointType pCarto2 = mapInverseTransform->TransformPoint(pGeo2);
-  ProjPointType pCarto3 = mapInverseTransform->TransformPoint(pGeo3);
-  ProjPointType pCarto4 = mapInverseTransform->TransformPoint(pGeo4);
+  ProjPointType pCarto1 = /*mapInverseTransform*/ outputTransform->TransformPoint(pGeo1);
+  ProjPointType pCarto2 = /*mapInverseTransform*/ outputTransform->TransformPoint(pGeo2);
+  ProjPointType pCarto3 = /*mapInverseTransform*/ outputTransform ->TransformPoint(pGeo3);
+  ProjPointType pCarto4 = /*mapInverseTransform*/ outputTransform->TransformPoint(pGeo4);
 
   /** Fill the vertex List : First Convert Point To*/
   regionCorners->InsertElement(regionCorners->Size(),this->PointToContinuousIndex(pCarto1));
