@@ -138,7 +138,8 @@ ADD_TEST(coTvVectorDataExtractROI ${COMMON_TESTS2}
 	 otbVectorDataExtractROI	
 	${INPUTDATA}/ToulousePoints-examples.shp   #${LARGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
 	${TEMP}/coVectorDataExtractROIOutput.shp
-	1.588 48.2544 1.2222 1.33001 
+	 374369.48850211215904 4828951.58612491376698  # Origin of the CartoRegion 
+         1000.25 25000.2                               # Size of the Cartoregion
  )
 
 # -------            otb::MultiChannelExtractROI   ------------------------------

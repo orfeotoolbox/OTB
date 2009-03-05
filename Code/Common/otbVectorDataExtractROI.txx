@@ -64,7 +64,10 @@ VectorDataExtractROI<TVectorData>
   typename VectorDataType::Pointer        output = this->GetOutput();
 
   /** put this here*/
-  output->SetProjectionRef(input->GetProjectionRef());
+  if(!input->GetProjectionRef().empty())
+    output->SetProjectionRef(input->GetProjectionRef());
+  else
+    
 
   if(!input)
     return;
@@ -93,7 +96,9 @@ VectorDataExtractROI<TVectorData>
   DataNodePointerType  newDataNodeFolder                      = DataNodeType::New();
   DataNodePointerType  newDataNodeMultiPolygon                = DataNodeType::New();
   DataNodePointerType  newDataNodeMultiLine                   = DataNodeType::New();
+  DataNodePointerType  newDataNodeMultiFeature                = DataNodeType::New();
 
+  
   /** Walking trough the input vector data */
   typedef itk::PreOrderTreeIterator<DataTreeType>                 TreeIteratorType;
   TreeIteratorType                                                it(input->GetDataTree());
@@ -144,6 +149,12 @@ VectorDataExtractROI<TVectorData>
 		    currentContainer = newDataNodeFolder;
 		    newFolder = false;
 		  }
+		if(newMultiFeature)
+		  {
+		    tree->Add(newDataNodeMultiFeature,currentContainer);
+		    currentContainer =  newDataNodeMultiFeature; 
+		    newMultiFeature = false;
+		  }
 		newDataNode->SetNodeType(dataNode->GetNodeType());
 		newDataNode->SetNodeId(dataNode->GetNodeId());
 		newDataNode->SetPoint(dataNode->GetPoint());
@@ -164,8 +175,8 @@ VectorDataExtractROI<TVectorData>
 		  }
 		if(newMultiFeature)
 		  {
-		    tree->Add(newDataNodeMultiLine,currentContainer);
-		    currentContainer =  newDataNodeMultiLine;
+		    tree->Add(newDataNodeMultiFeature ,currentContainer);
+		    currentContainer =  newDataNodeMultiFeature ;
 		    newMultiFeature = false;
 		  }
 		newDataNode->SetNodeType(dataNode->GetNodeType());
@@ -185,10 +196,11 @@ VectorDataExtractROI<TVectorData>
 		    currentContainer = newDataNodeFolder;
 		    newFolder = false;
 		  }
+		
 		if(newMultiFeature)
 		  {
-		    tree->Add(newDataNodeMultiPolygon,currentContainer);
-		    currentContainer = newDataNodeMultiPolygon; 
+		    tree->Add(newDataNodeMultiFeature,currentContainer);
+		    currentContainer =  newDataNodeMultiFeature ;
 		    newMultiFeature = false;
 		  }
 		
@@ -202,23 +214,24 @@ VectorDataExtractROI<TVectorData>
 	  }
 	case FEATURE_MULTIPOINT:
 	  {
-	    newDataNode->SetNodeType(dataNode->GetNodeType());
-	    newDataNode->SetNodeId(dataNode->GetNodeId());
-	    tree->Add(newDataNode,currentContainer);
-	    currentContainer = newDataNode;
+	    newDataNodeMultiFeature->SetNodeType(dataNode->GetNodeType());
+	    newDataNodeMultiFeature ->SetNodeId(dataNode->GetNodeId());
+	    newMultiFeature = true;
+	    
+
 	    break;
 	  }
 	case FEATURE_MULTILINE:
 	  {
-	    newDataNodeMultiLine->SetNodeType(dataNode->GetNodeType());
-	    newDataNodeMultiLine->SetNodeId(dataNode->GetNodeId());
+	    newDataNodeMultiFeature ->SetNodeType(dataNode->GetNodeType());
+	    newDataNodeMultiFeature ->SetNodeId(dataNode->GetNodeId());
 	    newMultiFeature = true;
 	    break;
 	  }
 	case FEATURE_MULTIPOLYGON:
 	  {
-	    newDataNodeMultiPolygon->SetNodeType(dataNode->GetNodeType());
-	    newDataNodeMultiPolygon->SetNodeId(dataNode->GetNodeId());
+	    newDataNodeMultiFeature  ->SetNodeType(dataNode->GetNodeType());
+	    newDataNodeMultiFeature->SetNodeId(dataNode->GetNodeId());
 	    newMultiFeature = true;
 	    break;
 	  }
@@ -316,6 +329,7 @@ VectorDataExtractROI<TVectorData>
   /** INVERSE : From long/lat to InputVectorData projection*/
   typedef otb::GenericMapProjection<otb::FORWARD>            InverseMapProjectionType;
   InverseMapProjectionType::Pointer mapInverseTransform =    InverseMapProjectionType::New();
+
   if(this->GetInput()->GetProjectionRef().empty())
     {
       std::string inputProjectionRef = "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]]";
