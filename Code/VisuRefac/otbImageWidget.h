@@ -18,19 +18,13 @@
 #ifndef __otbImageWidget_h
 #define __otbImageWidget_h
 
-// FLTK includes
-#include <FL/gl.h>
-#include "FL/Fl_Gl_Window.H"
+#include "otbGlWidget.h"
 
 // This is included for the default template
 #include "otbImage.h"
 #include "itkRGBPixel.h"
 #include "itkFixedArray.h"
 
-// This include is needed to get the OTB_GL_USE_ACCEL definition
-#include "otbConfigure.h"
-
-#include "otbImageWidgetController.h"
 
 namespace otb
 {
@@ -39,23 +33,18 @@ namespace otb
 *   Rendered data can be loaded using the ReadBuffer() method.
 *   The SetIsotropicZoom() method allows to tune the zooming (zooming
 *   is centered).
-*   The SetUseGlAcceleration() allows you to disable Gl
-*   acceleration. If OTB_USE_GL_ACCEL is OFF, enabling Gl acceleration
-*   will generate an exception.
-*   Using Gl acceleration allows you to have a better rendering when
-*   zooming.
-*  
+*
 *   It is also able to display a rectangle on the displayed image.
 */
 
 template <class TInputImage=otb::Image<itk::RGBPixel<unsigned char>,2 > >
 class ImageWidget
-  : public Fl_Gl_Window, public itk::Object
+  : public GlWidget
 {
 public:
   /** Standard class typedefs */
   typedef ImageWidget                       Self;
-  typedef itk::Object                       Superclass;
+  typedef GlWidget                          Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
 
@@ -63,7 +52,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(ImageWidget,Object);
+  itkTypeMacro(ImageWidget,GlWidget);
   /** Input image typedef */
   typedef TInputImage                         InputImageType;
   /** Image region typedef */
@@ -71,9 +60,6 @@ public:
   /** Region size & index typedef */
   typedef typename RegionType::SizeType       SizeType;
   typedef typename RegionType::IndexType      IndexType;
-  /** Controller typedef */
-  typedef otb::ImageWidgetController          ControllerType;
-  typedef typename ControllerType::Pointer    ControllerPointerType;
 
   /** Color typedef (used to draw the rectangle, 4th channel is alpha) */
   typedef itk::FixedArray<float,4>            ColorType;
@@ -88,25 +74,11 @@ public:
    */
   virtual void ReadBuffer(const InputImageType * image, const RegionType & region);
 
-  /** Set/Get the Controller */
-  itkSetObjectMacro(Controller,ControllerType);
-  itkGetObjectMacro(Controller,ControllerType);
-
-  /** Handle resizing event. This method is used by FLTK routines and
-   *  should not be called on its own.
-   */
-  virtual void resize(int x, int y, int w, int h);
-
   /** Set/Get the Isotropic zoom */
   itkSetMacro(IsotropicZoom,double);
   itkGetMacro(IsotropicZoom,double);
 
-  /** Enable/disable Gl acceleration */
-  itkSetMacro(UseGlAcceleration,bool);
-  itkGetMacro(UseGlAcceleration,bool);
-  itkBooleanMacro(UseGlAcceleration);
-
-  /** Enable/disable rectangle drawing */
+   /** Enable/disable rectangle drawing */
   itkSetMacro(DisplayRectangle,bool);
   itkGetMacro(DisplayRectangle,bool);
   itkBooleanMacro(DisplayRectangle);
@@ -114,10 +86,6 @@ public:
   /** Set/Get the rectangle to display */
   itkSetMacro(Rectangle,RegionType);
   itkGetConstReferenceMacro(Rectangle,RegionType);
-
-  /** Set/Get the identifier */
-  itkSetStringMacro(Identifier);
-  itkGetStringMacro(Identifier);
 
   /** Set/Get the color of the rectangle */
   itkSetMacro(RectangleColor,ColorType);
@@ -148,15 +116,12 @@ protected:
   ~ImageWidget();
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
   /** Actually render the buffer to the screen. This method is
     * used by FLTK routines and should not be called on its own.
     */
   virtual void draw(void);
-  /** Handle the event from the users.  This method is used by FLTK
-    * routines and should not be called on its own.
-    */
-  virtual int  handle(int event);
-
+ 
   /** Compute the linear buffer index according to the 2D region and
    * its 2D index.This method is used when OTB_GL_USE_ACCEL is ON.
    * \param index 2D index
@@ -190,15 +155,6 @@ private:
 
   /** OpenGl buffered region */
   RegionType m_OpenGlBufferedRegion;
-
-  /** Widget identifier */
-  std::string m_Identifier;
-
-  /** Controller */
-  ControllerPointerType m_Controller;
-
-  /** Flag for GlAcceleration */
-  bool m_UseGlAcceleration;
 
   /** Rectangle region */
   RegionType m_Rectangle;
