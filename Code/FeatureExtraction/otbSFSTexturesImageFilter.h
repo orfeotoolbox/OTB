@@ -180,12 +180,12 @@ public:
       return this->GetFunctor().GetTexturesStatus();
     }
 
-  void InitTextureStatusFalse()
+  void InitTextureStatus(bool status)
     {
       unsigned int id;
       for (id=0;id<=1;id++)
       {
-        this->SetFeatureStatus(static_cast<FeatureType>(id),true);
+        this->SetFeatureStatus(static_cast<FeatureType>(id),status);
       }
     }
 
