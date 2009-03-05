@@ -73,7 +73,7 @@ public:
   inline TOutput operator()( const TInput1 & itA,
                              const TInput2 & itB)
   {
-
+    const double epsilon = 0.01;
     VectorType vecA;
     VectorType vecB;
 
@@ -92,8 +92,6 @@ public:
   }
 
 protected:
-
-  static const double epsilon = 0.01;
 
   inline void normalizeInPlace(VectorType vx)
   {
