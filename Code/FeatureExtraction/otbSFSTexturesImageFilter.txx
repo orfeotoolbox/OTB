@@ -46,6 +46,7 @@ SFSTexturesImageFilter<TInputImage,TOutputImage>
 
   m_Radius = this->GetSpatialThreshold();
   m_FunctorList.clear();
+
 }
 /************************************************************
  *
@@ -264,6 +265,7 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
     {
       m_FunctorList.push_back(m_Functor);
     }
+  this->InitFeatureStatus(true);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -430,7 +432,7 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::InitFeatureStatus(bool status)
     {
       unsigned int id;
-      for (id=0;id<=1;id++)
+      for (id=1;id<=6;id++)
       {
         this->SetFeatureStatus(static_cast<FeatureType>(id),status);
       }
