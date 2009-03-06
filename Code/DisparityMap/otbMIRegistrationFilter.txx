@@ -36,8 +36,7 @@ MIRegistrationFilter<TFixedImage,TMovingImage,TDeformationField>
 
   drfp->SetDeformationField( this->GetDeformationField() );
 
-  this->SetDifferenceFunction( static_cast<FiniteDifferenceFunctionType *>(
-                                 drfp.GetPointer() ) );
+  this->SetDifferenceFunction( drfp.GetPointer() );
 
 }
 
