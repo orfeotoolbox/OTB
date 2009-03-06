@@ -228,6 +228,12 @@ otbPixelDescriptionModelSingleLayer
 ${INPUTDATA}/couleurs.tif
 )
 
+#------------ otb::HistogramCurve ------------
+
+ADD_TEST(vrTuHistogramCurveNew ${VISUREFAC_TESTS1}
+otbHistogramCurveNew
+)
+
 #------------ otb::Curves2DWidget ------------
 
 ADD_TEST(vrTuCurves2DWidgetNew ${VISUREFAC_TESTS1}
@@ -235,7 +241,13 @@ otbCurves2DWidgetNew
 )
 
 ADD_TEST(vrTvCurves2DWidget ${VISUREFAC_TESTS1}
-otbCurves2DWidget 0 0 100 200 0 0 10 10
+otbCurves2DWidget 0 0 100 200 0 0 10 10 0
+)
+
+ADD_TEST(vrTvCurves2DWidgetWithHistogram ${VISUREFAC_TESTS1}
+otbCurves2DWidgetWithHistogram 
+${INPUTDATA}/poupees.png
+0
 )
 
 # Testing srcs
@@ -270,6 +282,8 @@ otbPixelDescriptionModelNew.cxx
 otbPixelDescriptionModelSingleLayer.cxx
 otbCurves2DWidgetNew.cxx
 otbCurves2DWidget.cxx
+otbHistogramCurveNew.cxx
+otbCurves2DWidgetWithHistogram.cxx
 )
 
 # Building testing executables

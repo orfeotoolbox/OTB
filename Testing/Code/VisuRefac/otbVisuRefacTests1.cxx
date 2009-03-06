@@ -54,6 +54,8 @@ void RegisterTests()
   REGISTER_TEST(otbImageViewerEndToEndTwoLayers);
   REGISTER_TEST(otbPixelDescriptionModelNew);
   REGISTER_TEST(otbPixelDescriptionModelSingleLayer);
+  REGISTER_TEST(otbHistogramCurveNew);
   REGISTER_TEST(otbCurves2DWidgetNew);
   REGISTER_TEST(otbCurves2DWidget);
+  REGISTER_TEST(otbCurves2DWidgetWithHistogram);
 }

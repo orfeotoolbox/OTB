@@ -19,14 +19,14 @@
 #define __otbCurves2DWidget_h
 
 #include "otbGlWidget.h"
-//#include "otbCurve2D.h"
+#include "otbCurve2D.h"
 #include "otbObjectList.h"
-#include "itkSize.h"
-#include "itkContinuousIndex.h"
 
 namespace otb
 {
 /** \class 2DCurveWidget
+ *
+ *  This widget renders a set of curves to the screen.
  *
  */
 
@@ -42,50 +42,82 @@ public:
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
+  
+  /** Curve typedef */
+  typedef Curve2D                        CurveType;
+  typedef Curve2D::Pointer               CurvePointerType;
+  /** Curve list typedef */
+  typedef ObjectList<CurveType>          CurveListType;
+   typedef CurveListType::Pointer        CurveListPointerType;
 
-//   typedef Curve2D                        CurveType;
-//   typedef ObjectList<CurveType>          CurveListType;
-//   typedef CurveListType::Pointer         CurveListPointerType;
+  /** Color typedef */
+  typedef CurveType::ColorType           ColorType;
+  typedef CurveType::RegionType          RegionType;
+  typedef RegionType::SizeType           SizeType;
+  typedef CurveType::AffineTransformType AffineTransformType;
+  typedef AffineTransformType::Pointer   AffineTransformPointerType;
+  typedef CurveType::PointType           PointType;
+  typedef CurveType::VectorType          VectorType;
 
-  typedef Superclass::ColorType          ColorType;
-
-  typedef itk::Size<2>                   SizeType;
-  typedef itk::ContinuousIndex<double,2> ContinuousIndexType;
-
+  /// Set/Get the label of the x axis
   itkSetStringMacro(XAxisLabel);
   itkGetStringMacro(XAxisLabel);
   
+  /// Set/Get the label of the y axis
   itkSetStringMacro(YAxisLabel);
   itkGetStringMacro(YAxisLabel);
 
+  /// Set/Get the widget margins
   itkSetMacro(Margins,SizeType);
   itkGetConstReferenceMacro(Margins,SizeType);
 
-  itkSetMacro(AxisOrigin,ContinuousIndexType);
-  itkGetConstReferenceMacro(AxisOrigin,ContinuousIndexType);
+  /// Set/Get the axis origin
+  itkSetMacro(AxisOrigin,PointType);
+  itkGetConstReferenceMacro(AxisOrigin,PointType);
 
-  itkSetMacro(AxisLength,ContinuousIndexType);
-  itkGetConstReferenceMacro(AxisLength,ContinuousIndexType);
+  /// Set§get the axis length
+  itkSetMacro(AxisLength,VectorType);
+  itkGetConstReferenceMacro(AxisLength,VectorType);
   
-  itkSetMacro(GridOrigin,ContinuousIndexType);
-  itkGetConstReferenceMacro(GridOrigin,ContinuousIndexType);
+  /// Set/Get the grid origin
+  itkSetMacro(GridOrigin,PointType);
+  itkGetConstReferenceMacro(GridOrigin,PointType);
 
-  itkSetMacro(GridSpacing,ContinuousIndexType);
-  itkGetConstReferenceMacro(GridSpacing,ContinuousIndexType);
+  /// Set/Get the grid spacing
+  itkSetMacro(GridSpacing,VectorType);
+  itkGetConstReferenceMacro(GridSpacing,VectorType);
 
+  /// Set/Get the axis color
   itkSetMacro(AxisColor,ColorType);
   itkGetConstReferenceMacro(AxisColor,ColorType);
 
+  /// Set/Get the grid color
   itkSetMacro(GridColor,ColorType);
   itkGetConstReferenceMacro(GridColor,ColorType);
   
+  /// Should axis cross at zero or at their origin ?
   itkSetMacro(ZeroCrossingAxis,bool);
   itkGetMacro(ZeroCrossingAxis,bool);
   itkBooleanMacro(ZeroCrossingAxis);
-  
-  ContinuousIndexType SpacePositionToScreenPosition(const ContinuousIndexType & pos) const;
-  ContinuousIndexType ScreenPositionToSpacePosition(const ContinuousIndexType & pos) const;
 
+  // Should axis auto scale to best fit the curves ?
+  itkSetMacro(AutoScale,bool);
+  itkGetMacro(AutoScale,bool);
+  itkBooleanMacro(AutoScale);
+  
+  /** Add a new curve to the widget
+   *  \return curve position in the list
+   */
+  unsigned int AddCurve(CurveType * curve);
+
+  /** Remove the curve at the given location if any */
+  void RemoveCurve(unsigned int idx);
+
+  /** Remove all curves */
+  void ClearAllCurves();
+ 
+  /** Get the number of curves */
+ unsigned int GetNumberOfCurves();
 
 protected:
   /** Constructor */
@@ -100,18 +132,19 @@ protected:
     */
   virtual void draw(void);
 
-  /// TODO: Document
-//   AddCurve(CurveType * curve);
+  /** Scale axis and grid according to best curves fit */
+  void AutoScale();
 
-//   RemoveCurve(Curve * curve);
+  /** Update the space to screen transform */
+  void UpdateSpaceToScreenTransform();
 
-//   ClearAllCurves();
- 
- // unsigned int GetNumberOfCurves();
-
-  
+  /** Render the axis */
   void RenderAxis();
+
+  /** Render the grid */
   void RenderGrid();
+
+  /** Render the curves */
   void RenderCurves();
 
 private:
@@ -119,28 +152,35 @@ private:
   void operator=(const Self&); // purposely not implemented
 
   /** List of the curves */
-//   CurveListPointerType  m_Curves;
+  CurveListPointerType  m_Curves;
   // X axis label
   std::string         m_XAxisLabel;
   // Y axis label
   std::string         m_YAxisLabel;
   // Margins around graph
   SizeType            m_Margins;
+  // The extent of the display where curves are drawn
+  RegionType          m_Extent;
   // Axis range start
-  ContinuousIndexType m_AxisOrigin;
+  PointType m_AxisOrigin;
   // Axis range length
-  ContinuousIndexType m_AxisLength;
+  VectorType m_AxisLength;
   // Grid start
-  ContinuousIndexType m_GridOrigin;
+  PointType m_GridOrigin;
   // Grid length
-  ContinuousIndexType m_GridSpacing;
+  VectorType m_GridSpacing;
   // If true, axis will cross in their zeros
   // Else they will be sticked left and lower
   bool                m_ZeroCrossingAxis;
+  // Automatic axis scaling
+  bool                m_AutoScale;
 
   // Colors
   ColorType           m_AxisColor;
   ColorType           m_GridColor;
+
+  // Space to screen transform
+  AffineTransformPointerType m_SpaceToScreenTransform;
   
 }; // end class
 } // end namespace otb

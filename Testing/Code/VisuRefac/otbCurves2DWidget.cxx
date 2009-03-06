@@ -22,13 +22,14 @@ int otbCurves2DWidget( int argc, char * argv[] )
 {
   
   // typedefs
-  typedef otb::Curves2DWidget WidgetType;
-  typedef WidgetType::ContinuousIndexType IndexType;
+  typedef otb::Curves2DWidget    WidgetType;
+  typedef WidgetType::PointType  PointType;
+  typedef WidgetType::VectorType VectorType;
 
-  IndexType origin;
-  IndexType length;
-  IndexType gridOrigin;
-  IndexType gridSpacing;
+  PointType origin;
+  VectorType length;
+  PointType gridOrigin;
+  VectorType gridSpacing;
 
   origin[0]=atof(argv[1]);
   origin[1]=atof(argv[2]);
@@ -38,6 +39,7 @@ int otbCurves2DWidget( int argc, char * argv[] )
   gridOrigin[1]=atof(argv[6]);
   gridSpacing[0]=atof(argv[7]);
   gridSpacing[1]=atof(argv[8]);
+  const bool run = atoi(argv[9]);
   
    // Create a widget
   WidgetType::Pointer widget = WidgetType::New();
@@ -56,7 +58,14 @@ int otbCurves2DWidget( int argc, char * argv[] )
   // Show it
   widget->show();
   // Refresh display
-  Fl::check();
+  if(run)
+    {
+    Fl::run();
+    }
+  else
+    {
+    Fl::check();
+    }
 
   window.remove(widget);
 
