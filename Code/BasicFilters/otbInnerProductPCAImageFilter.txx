@@ -33,6 +33,7 @@ InnerProductPCAImageFilter<TInputImage,TOutputImage>
   this->SetNthOutput(0,OutputImageType::New());
   m_EstimatePCAFilter  = EstimatePCAFilterType::New();
   m_NormalizePCAFilter  = NormalizePCAFilterType::New();
+  m_CenterData = true;
   m_GenerateMeanComponent = false;
   m_MeanFilter = MeanFilterType::New();
   m_CastFilter = CastFilterType::New();
@@ -63,9 +64,11 @@ InnerProductPCAImageFilter<TInputImage,TOutputImage>
 {
   m_EstimatePCAFilter->SetInput(this->GetInput());
   m_EstimatePCAFilter->SetNumberOfPrincipalComponentsRequired(m_NumberOfPrincipalComponentsRequired);
+  m_EstimatePCAFilter->SetCenterData(m_CenterData);
+
   m_NormalizePCAFilter->SetInput(m_EstimatePCAFilter->GetOutput());
 
-  if( m_GenerateMeanComponent == false )
+  if( (m_CenterData == false) || ( (m_CenterData == true) && (m_GenerateMeanComponent == false) ) )
   {
     m_NormalizePCAFilter->GraftOutput(this->GetOutput());
     m_NormalizePCAFilter->Update();

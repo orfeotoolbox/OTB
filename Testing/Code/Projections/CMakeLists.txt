@@ -358,6 +358,8 @@ ADD_TEST(prTvGenericMapProjection ${PROJECTIONS_TESTS3}
         ${TEMP}/prTvGenericMapProjection.txt
 )
 
+ADD_TEST(prTuGenericRSTransformNew ${PROJECTIONS_TESTS3}  otbGenericRSTransformnNew )
+
 ADD_TEST(prTuVectorDataProjectionFilterNew ${PROJECTIONS_TESTS3}  otbVectorDataProjectionFilterNew )
 
 #test points
@@ -471,6 +473,7 @@ otbCompositeTransformNew.cxx
 otbCompositeTransform.cxx
 otbGenericMapProjectionNew.cxx
 otbGenericMapProjection.cxx
+otbGenericRSTransformNew.cxx
 otbVectorDataProjectionFilterNew.cxx
 otbVectorDataProjectionFilter.cxx
 otbVectorDataProjectionFilterFromMapToSensor.cxx

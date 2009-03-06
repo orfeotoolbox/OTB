@@ -88,7 +88,9 @@ StreamingResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType
     vPoints.push_back(indexTmp);
     //otbGenericMsgDebugMacro(<< "indexLL : (" << indexTmp[0] << "," << indexTmp[1] << ")");
 
-    typedef typename Superclass::CoordRepType CoordRepType;
+//     typedef typename Superclass::CoordRepType CoordRepType;
+    typedef double CoordRepType; // to maintain compatibility with ITK
+
     typedef itk::ContinuousIndex<CoordRepType, 2> ContinuousIndexType;
     typename ContinuousIndexType::ValueType minX = itk::NumericTraits<typename ContinuousIndexType::ValueType>::max();
     typename ContinuousIndexType::ValueType maxX = 0;

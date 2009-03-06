@@ -70,6 +70,7 @@ EstimateInnerProductPCAImageFilter<TInputImage,TOutputImage>
   // Instanciation object
   StreamingInnerProductPointer streamingInnerProduct = StreamingInnerProductType::New();
   streamingInnerProduct->SetInput(const_cast<InputImageType*>(this->GetInput()));
+  streamingInnerProduct->SetCenterData(m_CenterData);
   streamingInnerProduct->Update();
   m_InnerProduct = streamingInnerProduct->GetInnerProduct();
 

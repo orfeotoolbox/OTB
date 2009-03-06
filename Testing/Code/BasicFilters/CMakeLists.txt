@@ -1244,6 +1244,16 @@ ADD_TEST(bfTvStreamingInnerProductVectorImageFilter ${BASICFILTERS_TESTS11}
       otbStreamingInnerProductVectorImageFilter
       ${INPUTDATA}/poupees_sub_3c.png
       ${TEMP}/bfStreamingInnerProductVectorImageFilterResults.txt
+      1 #center data
+)
+ADD_TEST(bfTvStreamingInnerProductVectorImageFilterDisableCenterData ${BASICFILTERS_TESTS11}
+      --compare-ascii 0.000001
+      ${BASELINE_FILES}/bfStreamingInnerProductVectorImageFilterResultsDisableCenterData.txt
+      ${TEMP}/bfStreamingInnerProductVectorImageFilterResultsDisableCenterData.txt
+      otbStreamingInnerProductVectorImageFilter
+      ${INPUTDATA}/poupees_sub_3c.png
+      ${TEMP}/bfStreamingInnerProductVectorImageFilterResultsDisableCenterData.txt
+      0 #center data
 )
 
 ADD_TEST(bfTuEstimateInnerProductPCAImageFilterNew ${BASICFILTERS_TESTS11}
@@ -1258,6 +1268,18 @@ ADD_TEST(bfTvEstimateInnerProductPCAImageFilter ${BASICFILTERS_TESTS11}
     ${INPUTDATA}/poupees_sub_3c.png
     ${TEMP}/bfEstimateInnerProductPCAImageFilter.tif
     3
+    1 #center data
+)
+
+ADD_TEST(bfTvEstimateInnerProductPCAImageFilterDisableCenterData ${BASICFILTERS_TESTS11}
+    --compare-image ${EPSILON}
+    ${BASELINE}/bfEstimateInnerProductPCAImageFilterDisableCenterData.tif
+    ${TEMP}/bfEstimateInnerProductPCAImageFilterDisableCenterData.tif
+    otbEstimateInnerProductPCAImageFilter
+    ${INPUTDATA}/poupees_sub_3c.png
+    ${TEMP}/bfEstimateInnerProductPCAImageFilterDisableCenterData.tif
+    3
+    0 #center data
 )
 
 ADD_TEST(bfTvEstimateInnerProductPCAImageFilterCP1 ${BASICFILTERS_TESTS11}
@@ -1268,6 +1290,7 @@ ADD_TEST(bfTvEstimateInnerProductPCAImageFilterCP1 ${BASICFILTERS_TESTS11}
     ${INPUTDATA}/poupees_sub_3c.png
     ${TEMP}/bfEstimateInnerProductPCAImageFilter_CP1.tif
     1
+    1 #center data
 )
 ADD_TEST(bfTvEstimateInnerProductPCAImageFilterCP12 ${BASICFILTERS_TESTS11}
     --compare-image ${EPSILON}
@@ -1277,6 +1300,7 @@ ADD_TEST(bfTvEstimateInnerProductPCAImageFilterCP12 ${BASICFILTERS_TESTS11}
     ${INPUTDATA}/poupees_sub_3c.png
     ${TEMP}/bfEstimateInnerProductPCAImageFilter_CP12.tif
     2
+    1 #center data
 )
 
 ADD_TEST(bfTuNormalizeInnerProductPCAImageFilterNew ${BASICFILTERS_TESTS11}
@@ -1303,11 +1327,26 @@ ADD_TEST(bfTvInnerProductPCAImageFilter ${BASICFILTERS_TESTS11}
     ${INPUTDATA}/poupees_sub_3c.png
     ${TEMP}/bfInnerProductPCAImageFilter.tif
     0 # Flag generate Mean component ?
+    1 #center data
     3 # Nb Of Principal Components
     ${TEMP}/bfInnerProductPCAImageFilter_pc1.tif
     ${TEMP}/bfInnerProductPCAImageFilter_pc2.tif
     ${TEMP}/bfInnerProductPCAImageFilter_pc3.tif
-    ${TEMP}/bfInnerProductPCAImageFilter_MEAN.tif
+)
+
+ADD_TEST(bfTvInnerProductPCAImageFilterDisableCenterData ${BASICFILTERS_TESTS11}
+    --compare-image ${EPSILON}
+    ${BASELINE}/bfInnerProductPCAImageFilterDisableCenterData.tif
+    ${TEMP}/bfInnerProductPCAImageFilterDisableCenterData.tif
+    otbInnerProductPCAImageFilter
+    ${INPUTDATA}/poupees_sub_3c.png
+    ${TEMP}/bfInnerProductPCAImageFilterDisableCenterData.tif
+    0 # Flag generate Mean component ?
+    0 #center data
+    3 # Nb Of Principal Components
+    ${TEMP}/bfInnerProductPCAImageFilterDisableCenterData_pc1.tif
+    ${TEMP}/bfInnerProductPCAImageFilterDisableCenterData_pc2.tif
+    ${TEMP}/bfInnerProductPCAImageFilterDisableCenterData_pc3.tif
 )
 
 ADD_TEST(bfTvInnerProductPCAImageFilter_PC1 ${BASICFILTERS_TESTS11}
@@ -1318,6 +1357,7 @@ ADD_TEST(bfTvInnerProductPCAImageFilter_PC1 ${BASICFILTERS_TESTS11}
     ${INPUTDATA}/poupees_sub_3c.png
     ${TEMP}/bfInnerProductPCAImageFilter_PC1.tif
     0 # Flag generate Mean component ?
+    1 #center data
     1 # Nb Of Principal Components
     ${TEMP}/bfInnerProductPCAImageFilter_PC1_1.tif
 )
@@ -1329,6 +1369,7 @@ ADD_TEST(bfTvInnerProductPCAImageFilter_PC12 ${BASICFILTERS_TESTS11}
     ${INPUTDATA}/poupees_sub_3c.png
     ${TEMP}/bfInnerProductPCAImageFilter_PC12.tif
     0 # Flag generate Mean component ?
+    1 #center data
     2 # Nb Of Principal Components
     ${TEMP}/bfInnerProductPCAImageFilter_PC12_1.tif
     ${TEMP}/bfInnerProductPCAImageFilter_PC12_2.tif
@@ -1342,6 +1383,7 @@ ADD_TEST(bfTvInnerProductPCAImageFilterAllsOutputs ${BASICFILTERS_TESTS11}
     ${INPUTDATA}/poupees_sub_3c.png
     ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs.tif
     1 # Flag generate Mean component ?
+    1 #center data
     3 # Nb Of Principal Components
     ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_pc1.tif
     ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_pc2.tif

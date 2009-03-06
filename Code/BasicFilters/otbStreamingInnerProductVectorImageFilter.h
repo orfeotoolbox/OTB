@@ -113,6 +113,11 @@ public:
   virtual void Synthetize(void);
   virtual void Reset(void);
 
+  /** Enable/Disable center data */
+  itkSetMacro( CenterData, bool );
+  itkGetMacro( CenterData, bool );
+  itkBooleanMacro(CenterData);
+
 protected:
   PersistentInnerProductVectorImageFilter();
   virtual ~PersistentInnerProductVectorImageFilter() {};
@@ -125,6 +130,10 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   ArrayMatrixType    m_ThreadInnerProduct;
+
+  /** Enable/Disable center data */
+  bool m_CenterData;
+
 
 }; // end of class PersistentStatisticsVectorImageFilter
 
@@ -198,6 +207,12 @@ public:
     return this->GetFilter()->GetInnerProductOutput();
   };
 
+  /** Enable/Disable center data */
+  void SetCenterData(bool centerdata )
+  {
+    this->GetFilter()->SetCenterData(centerdata);
+  }
+
 protected:
   /** Constructor */
   StreamingInnerProductVectorImageFilter() {};
@@ -207,6 +222,7 @@ protected:
 private:
   StreamingInnerProductVectorImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+
 };
 
 } // end namespace otb
