@@ -86,16 +86,16 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
  * Instanciate the transformation according to informations
  */
 template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-    bool
-        GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
-  ::InstanciateTransform(void)
+void
+GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
+::InstanciateTransform(void)
 {
-
+  
   m_Transform = TransformType::New();
 
   //If the information was not specified by the user, it is filled from the metadata
-//   InputVectorDataPointer input = this->GetInput();
-//   const itk::MetaDataDictionary & m_InputDictionary = input->GetMetaDataDictionary();
+  //   InputVectorDataPointer input = this->GetInput();
+  //   const itk::MetaDataDictionary & m_InputDictionary = input->GetMetaDataDictionary();
 
   if (m_InputKeywordList.GetSize()  == 0)
   {
