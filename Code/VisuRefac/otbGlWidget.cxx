@@ -83,6 +83,7 @@ void GlWidget::draw()
   glLoadIdentity();
   glMatrixMode(GL_PROJECTION);
   this->ortho();
+  glDisable(GL_BLEND);
 }
 
 void GlWidget::resize(int x, int y, int w, int h)

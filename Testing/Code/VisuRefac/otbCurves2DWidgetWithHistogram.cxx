@@ -75,15 +75,15 @@ int otbCurves2DWidgetWithHistogram( int argc, char * argv[] )
   HistogramCurveType::ColorType red,green,blue;
   red.Fill(0);
   red[0]=1.;
-  red[3]=1.;
+  red[3]=0.5;
 
   green.Fill(0);
   green[1]=1.;
-  green[3]=1.;
+  green[3]=0.5;
 
   blue.Fill(0);
   blue[2]=1.;
-  blue[3]=1.;
+  blue[3]=0.5;
 
   HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
   rhistogram->SetHistogram(generator->GetOutput()->GetNthElement(0));
@@ -103,8 +103,6 @@ int otbCurves2DWidgetWithHistogram( int argc, char * argv[] )
   widget->AddCurve(rhistogram);
   widget->AddCurve(ghistogram);
   widget->AddCurve(bhistogram);
-
-
 
   // Resize it
   Fl_Window window(500,500);
