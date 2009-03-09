@@ -172,7 +172,7 @@ int main( int argc, char * argv[] )
               << "] = " <<
               static_cast<itk::NumericTraits<CalculatorType::MeasurementType>::PrintType>
               (*itNum) << std::endl;
-    // Software Guide : EndCodeSnippet
+
 
     upperThreshold = (*itNum);
     filter->SetLowerThreshold( static_cast<OutputPixelType> (lowerThreshold) );
@@ -182,6 +182,7 @@ int main( int argc, char * argv[] )
 
     writer->SetFileName( argv[2+counter] );
     ++counter;
+    // Software Guide : EndCodeSnippet
     try
     {
       writer->Update();
