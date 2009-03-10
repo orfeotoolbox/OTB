@@ -376,6 +376,10 @@ ADD_TEST(msTvWaveletTransform ${MULTISCALE_TESTS4}
           -out ${TEMP}/msTvWaveletTransform
 )
 
+# -------            otb::WaveletPacketTransform   ----------
+ADD_TEST(msTuWaveletPacketTransformNew ${MULTISCALE_TESTS4}
+         otbWaveletPacketTransformNew)
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicMultiScale_SRCS1
 otbMorphologicalPyramidResamplerNew.cxx
@@ -416,6 +420,7 @@ otbGeodesicMorphologyIterativeDecompositionImageFilter.cxx
 SET(BasicMultiScale_SRCS4
 otbWaveletTransformNew.cxx
 otbWaveletTransform.cxx
+otbWaveletPacketTransformNew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
