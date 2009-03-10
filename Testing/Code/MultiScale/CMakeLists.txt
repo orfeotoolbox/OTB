@@ -356,6 +356,10 @@ ADD_TEST(msTvGeodesicMorphologyIterativeDecompositionImageFilter ${MULTISCALE_TE
          2
 )
 
+# -------            otb::StationaryFilterBankNew   ----------
+ADD_TEST(msTuStationaryFilterBankNew ${MULTISCALE_TESTS4}
+         otbStationaryFilterBankNew)
+
 # -------            otb::WaveletTransform   ----------
 ADD_TEST(msTuWaveletTransformNew ${MULTISCALE_TESTS4}
          otbWaveletTransformNew)
@@ -379,6 +383,8 @@ ADD_TEST(msTvWaveletTransform ${MULTISCALE_TESTS4}
 # -------            otb::WaveletPacketTransform   ----------
 ADD_TEST(msTuWaveletPacketTransformNew ${MULTISCALE_TESTS4}
          otbWaveletPacketTransformNew)
+
+
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicMultiScale_SRCS1
@@ -418,6 +424,7 @@ otbGeodesicMorphologyIterativeDecompositionImageFilterNew.cxx
 otbGeodesicMorphologyIterativeDecompositionImageFilter.cxx
 )
 SET(BasicMultiScale_SRCS4
+otbStationaryFilterBankNew.cxx
 otbWaveletTransformNew.cxx
 otbWaveletTransform.cxx
 otbWaveletPacketTransformNew.cxx

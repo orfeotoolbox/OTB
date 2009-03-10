@@ -45,38 +45,29 @@ template <class TInputImage, class TCoordRep = float >
 class ITK_EXPORT BinaryImageDensityFunction :
   public itk::ImageFunction< TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,TCoordRep >
 {
-public:
+  public:
   /** Standard class typedefs. */
   typedef BinaryImageDensityFunction                   Self;
   typedef itk::ImageFunction<TInputImage,typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
-    TCoordRep >                                        Superclass;
-  typedef itk::SmartPointer<Self>                       Pointer;
-  typedef itk::SmartPointer<const Self>                 ConstPointer;
+  TCoordRep >                                          Superclass;
+  typedef itk::SmartPointer<Self>                      Pointer;
+  typedef itk::SmartPointer<const Self>                ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(BinaryImageDensityFunction, itk::ImageFunction);
-
+  
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-
-  /** InputImageType typedef support. */
-  typedef TInputImage InputImageType;
-
-  /** OutputType typdef support. */
-  typedef typename Superclass::OutputType OutputType;
-
-  /** Index typedef support. */
-  typedef typename Superclass::IndexType IndexType;
   
-  /** ContinuousIndex typedef support. */
+  /** InputImageType typedef support. */
+  typedef TInputImage                              InputImageType;
+  typedef typename InputImageType::SizeType        RadiusType;
+  typedef typename Superclass::OutputType          OutputType;
+  typedef typename Superclass::IndexType           IndexType;
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
-
-  /** Point typedef support. */
-  typedef typename Superclass::PointType PointType;
-
-  /** Dimension of the underlying image. */
-itkStaticConstMacro(ImageDimension, unsigned int,
-		     InputImageType::ImageDimension);
+  typedef typename Superclass::PointType           PointType;
+  
+  itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
   /** Datatype used for the density */
   typedef typename itk::NumericTraits<typename InputImageType::PixelType>::RealType
@@ -102,8 +93,13 @@ itkStaticConstMacro(ImageDimension, unsigned int,
 
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */
-  itkSetMacro( NeighborhoodRadius, unsigned int );
-  itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
+  itkSetMacro( NeighborhoodRadius, RadiusType );
+  itkGetConstReferenceMacro( NeighborhoodRadius, RadiusType );
+  void SetNeighborhoodRadius(unsigned int rad)
+  {
+    m_NeighborhoodRadius.Fill( rad );
+    this->Modified();
+  }
 
  
 protected:
@@ -115,7 +111,7 @@ private:
   BinaryImageDensityFunction( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
 
-  unsigned int m_NeighborhoodRadius;
+  RadiusType m_NeighborhoodRadius;
 
 };
 

@@ -85,10 +85,11 @@ public:
   itkSetMacro( NeighborhoodRadius, unsigned int );
   itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
 
+  /**Set/Get detector */
+  itkSetObjectMacro(Detector, DetectorType);
+  itkGetObjectMacro(Detector, DetectorType);
+  itkGetObjectMacro(DensityImageFilter, DensityImageType);
 
-  /**Set/Get Descriptor from the otbCountmageFunction*/
-  virtual void SetDetector(DetectorType* detector);
-  virtual DetectorType* GetDetector();
 
 protected:
 
@@ -107,7 +108,6 @@ protected:
   /**
    * Main computation method.
    */
-  //virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId );
   virtual void GenerateData( );
 
 private:
@@ -115,9 +115,9 @@ private:
   EdgeDensityImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  DetectorPointerType                m_Detector;
-  DensityImagePointerType            m_DensityImageFilter;
-  unsigned int                       m_NeighborhoodRadius;
+  DetectorPointerType       m_Detector;
+  DensityImagePointerType   m_DensityImageFilter;
+  unsigned int              m_NeighborhoodRadius;
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
