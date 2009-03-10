@@ -35,7 +35,7 @@ template <class TInputImage, class TCoordRep>
 BinaryImageDensityFunction<TInputImage,TCoordRep>
 ::BinaryImageDensityFunction()
 {
-  m_NeighborhoodRadius = 1;
+  m_NeighborhoodRadius.Fill( 1 );
 }
 
 
@@ -77,11 +77,10 @@ BinaryImageDensityFunction<TInputImage,TCoordRep>
      }
 
   // Create an N-d neighborhood kernel, using a zeroflux boundary condition
-   typename InputImageType::SizeType          kernelSize;
-   kernelSize.Fill( m_NeighborhoodRadius );
-  
+   typename InputImageType::SizeType   kernelSize = m_NeighborhoodRadius;
+
    itk::ConstNeighborhoodIterator<InputImageType>
-    it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
+     it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
 
    // Set the iterator at the desired location
    it.SetLocation(index);

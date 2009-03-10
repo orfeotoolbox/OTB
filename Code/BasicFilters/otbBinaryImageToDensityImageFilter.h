@@ -20,6 +20,8 @@
 
 #include "itkImageToImageFilter.h"
 #include "itkDataObject.h"
+#include "itkConstNeighborhoodIterator.h"
+
 
 namespace otb
 {
@@ -48,6 +50,7 @@ public:
   typedef TInputImage                                          InputImageType;
   typedef typename InputImageType::RegionType                  InputImageRegionType;
   typedef typename InputImageType::Pointer                     InputImagePointerType;
+  typedef typename InputImageType::SizeType                    InputImageSizeType;
 
   typedef TOutputImage                                         OutputImageType;
   typedef typename OutputImageType::Pointer                    OutputImagePointerType;
@@ -55,16 +58,24 @@ public:
   typedef TCountFunction                                       CountFunctionType;
   typedef typename CountFunctionType::Pointer                  CountFunctionPointerType;
 
-  /** Shrink factor accessor */
-  itkSetMacro(NeighborhoodRadius,unsigned int);
-  itkGetMacro(NeighborhoodRadius, unsigned int);
+  typedef itk::ConstNeighborhoodIterator<TInputImage>     NeighborhoodIteratorType;
+  typedef typename NeighborhoodIteratorType::RadiusType   RadiusType;
 
+  /** Shrink factor accessor */
+  itkSetMacro(NeighborhoodRadius, RadiusType);
+  itkGetMacro(NeighborhoodRadius, RadiusType);
+
+  void SetNeighborhoodRadius(unsigned int rad)
+    {
+      m_NeighborhoodRadius.Fill(rad);
+      this->Modified();
+    }
 
 
   /** Main computation method */
-
   virtual void ThreadedGenerateData( const InputImageRegionType &outputRegionForThread, int threadId ) ;
-
+  virtual void BeforeThreadedGenerateData();
+  virtual void GenerateInputRequestedRegion();
 
 protected:
   /** Constructor */
@@ -81,7 +92,7 @@ private:
   CountFunctionPointerType    m_CountFunction;
 
   /** The shrink factor */
-  unsigned int m_NeighborhoodRadius;
+  RadiusType m_NeighborhoodRadius;
 
 };
 } // End namespace otb
