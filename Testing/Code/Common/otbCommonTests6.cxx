@@ -37,4 +37,6 @@ void RegisterTests()
   REGISTER_TEST(otbPolygon);
   REGISTER_TEST(otbUnaryFunctorNeighborhoodImageFilterNew);
   REGISTER_TEST(otbUnaryFunctorNeighborhoodImageFilter);
+  REGISTER_TEST(otbRectangleNew);
+  REGISTER_TEST(otbRectangle);
 }

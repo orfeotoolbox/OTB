@@ -503,7 +503,20 @@ ADD_TEST(coTvUnaryFunctorNeighborhoodImageFilter ${COMMON_TESTS6}
 	3
 )
 
+#--------------------otb::Rectangle
+ADD_TEST(coTuRectangleNew ${COMMON_TESTS6}
+          otbRectangleNew)
 
+ADD_TEST(coTvRectangle ${COMMON_TESTS6}
+--compare-ascii ${EPS}
+		${BASELINE_FILES}/otbRectangleTest.txt
+                ${TEMP}/otbRectangleTest.txt
+         otbRectangle
+	        ${TEMP}/otbRectangleTest.txt
+		2.12 2.35 12.54 2.45   3. 0.15  1. 1. 
+	
+	
+)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests7 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -663,6 +676,8 @@ otbPolygonNew.cxx
 otbPolygon.cxx
 otbUnaryFunctorNeighborhoodImageFilterNew.cxx
 otbUnaryFunctorNeighborhoodImageFilter.cxx
+otbRectangleNew.cxx
+otbRectangle.cxx	
 )
 
 SET(BasicCommon_SRCS7
