@@ -137,28 +137,28 @@ Rectangle<TValue>
     RegionType                      region;
     typename RegionType::SizeType   size;
     typename RegionType::IndexType  index;
-    typename RegionType::IndexType maxId;
+    typename RegionType::IndexType  maxId;
     
-    size.Fill(0.);
-    index.Fill(0.);
-    maxId.Fill(0.);
+    size.Fill(0);
+    index.Fill(0);
+    maxId.Fill(0);
 
     VertexListConstIteratorType itCorners = cornersVertex->Begin();
     
-    double  x,y;
+    long int    x = 0,y = 0;
     
     if ( cornersVertex->Size()>0)
       {
-	x = itCorners.Value()[0];
-	y = itCorners.Value()[1];
+	x = static_cast<long int>(itCorners.Value()[0]);
+	y = static_cast<long int>(itCorners.Value()[1]);
 	index[0] = x;
 	index[1] = y;
 	
 	++itCorners;
 	while (itCorners != cornersVertex->End())
 	  {
-	    x = itCorners.Value()[0];
-	    y = itCorners.Value()[1];
+	    x = static_cast<long int>(itCorners.Value()[0]);
+	    y = static_cast<long int>(itCorners.Value()[1]);
 	    
 	    // Index search
 	    if ( x < index[0] )
