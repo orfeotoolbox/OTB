@@ -264,7 +264,10 @@ void Curves2DWidget::RenderCurves()
   for(CurveListType::Iterator it = m_Curves->Begin();
       it!=m_Curves->End(); ++it)
     {
-    it.Get()->Render(m_Extent,m_SpaceToScreenTransform);
+    if(it.Get()->GetVisible())
+      {
+      it.Get()->Render(m_Extent,m_SpaceToScreenTransform);
+      }
     }
 }
 

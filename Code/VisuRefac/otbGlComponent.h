@@ -56,9 +56,14 @@ public:
   /// Render the curve according to display extent and axis characteristics
   virtual void  Render(const RegionType& extent,const AffineTransformType * space2ScreenTransform) = 0;
 
+  /** Set/Get the visible status */
+  itkSetMacro(Visible,bool);
+  itkGetMacro(Visible,bool);
+  itkBooleanMacro(Visible);
+
 protected:
   /** Constructor */
-  GlComponent()
+  GlComponent() : m_Visible(true)
   {}
   /** Destructor */
   virtual ~GlComponent(){}
@@ -71,6 +76,9 @@ protected:
 private:
   GlComponent(const Self&);     // purposely not implemented
   void operator=(const Self&); // purposely not implemented
+
+  /// Is the component visible ?
+  bool m_Visible;
 
 }; // end class 
 } // end namespace otb
