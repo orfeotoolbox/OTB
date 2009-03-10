@@ -47,7 +47,7 @@ namespace otb
    * \ingroup Projection
    *
    **/
-  
+
   template <class TScalarType = double,
     unsigned int NInputDimensions=2,
     unsigned int NOutputDimensions=2>
@@ -75,7 +75,10 @@ namespace otb
       typedef itk::Transform<double, 2, 2> GenericTransformType;
       typedef typename GenericTransformType::Pointer GenericTransformPointerType;
       typedef otb::CompositeTransform<GenericTransformType, GenericTransformType> TransformType;
-      
+
+//       typedef itk::MetaDataDictionary MetaDataDictionary;
+//       typedef itk::SmartPointer<MetaDataDictionary> MetaDataDictionaryPointer;
+//       typedef itk::SmartPointer<const MetaDataDictionary> MetaDataDictionaryConstPointer;
       /** Method for creation through the object factory. */
       itkNewMacro( Self );
 
@@ -100,39 +103,93 @@ namespace otb
       itkGetStringMacro(DEMDirectory);
 
       /** Set/Get Dictionary*/
-      const itk::MetaDataDictionary& GetInputDictionary()
-      {  return this->m_InputDictionary;}
-      
-      void SetInputDictionary(const itk::MetaDataDictionary & dictionary)
-      { 
-	this->m_InputDictionary = dictionary;
-	this->Modified();
-      }
-      
-      const itk::MetaDataDictionary& GetOutputDictionary()
-      {  return this->m_OutputDictionary;}
-      
-      void SetOutputDictionary(const itk::MetaDataDictionary & dictionary)
-      { 
-	this->m_OutputDictionary = dictionary;
-	this->Modified();
-      }
-      
 
-      
+//       itkSetConstObjectMacro(InputDictionary, MetaDataDictionary);
+//       itkGetConstObjectMacro(InputDictionary, MetaDataDictionary);
+//       itkSetObjectMacro(OutputDictionary, MetaDataDictionary);
+//       itkGetObjectMacro(OutputDictionary, MetaDataDictionary);
+
+      const itk::MetaDataDictionary& GetInputDictionary() const
+      {
+        return *m_InputDictionary;
+      }
+
+      void SetInputDictionary(const itk::MetaDataDictionary & dictionary)
+      {
+        if(m_InputDictionary==NULL)
+        {
+          m_InputDictionary=new itk::MetaDataDictionary;
+        }
+        *m_InputDictionary = dictionary;
+        this->Modified();
+      }
+
+      const itk::MetaDataDictionary& GetOutputDictionary() const
+      {
+        return *m_OutputDictionary;
+      }
+
+      void SetOutputDictionary(itk::MetaDataDictionary & dictionary)
+      {
+        if(m_OutputDictionary==NULL)
+          {
+            m_OutputDictionary=new itk::MetaDataDictionary;
+          }
+
+        *m_OutputDictionary = dictionary;
+        this->Modified();
+      }
+
+
+
       itkGetMacro(InputKeywordList,ImageKeywordlist);
       void SetInputKeywordList(ImageKeywordlist kwl)
       {
-	this->m_InputKeywordList = kwl;
-	this->Modified();
+        this->m_InputKeywordList = kwl;
+        this->Modified();
       }
-      
+
       itkGetMacro(OutputKeywordList,ImageKeywordlist);
       void SetOutputKeywordList(ImageKeywordlist kwl)
       {
-	this->m_OutputKeywordList = kwl;
-	this->Modified();
+        this->m_OutputKeywordList = kwl;
+        this->Modified();
       }
+
+      /** Set the origin of the vector data.
+      * \sa GetOrigin() */
+      itkSetMacro(InputOrigin, OriginType);
+      virtual void SetInputOrigin( const double origin[2] );
+      virtual void SetInputOrigin( const float origin[2] );
+
+      itkGetConstReferenceMacro(InputOrigin, OriginType);
+
+
+      /** Set the spacing (size of a pixel) of the vector data.
+        * \sa GetSpacing() */
+      virtual void SetInputSpacing (const SpacingType & spacing);
+      virtual void SetInputSpacing (const double spacing[2]);
+      virtual void SetInputSpacing (const float spacing[2]);
+
+      itkGetConstReferenceMacro(InputSpacing, SpacingType);
+
+
+      /** Set the origin of the vector data.
+      * \sa GetOrigin() */
+      itkSetMacro(OutputOrigin, OriginType);
+      virtual void SetOutputOrigin( const double origin[2] );
+      virtual void SetOutputOrigin( const float origin[2] );
+
+      itkGetConstReferenceMacro(OutputOrigin, OriginType);
+
+
+      /** Set the spacing (size of a pixel) of the vector data.
+      * \sa GetSpacing() */
+      virtual void SetOutputSpacing (const SpacingType & spacing);
+      virtual void SetOutputSpacing (const double spacing[2]);
+      virtual void SetOutputSpacing (const float spacing[2]);
+
+      itkGetConstReferenceMacro(OutputSpacing, SpacingType);
 
       /** Methods prototypes */
       virtual const TransformType* GetTransform() const;
@@ -140,11 +197,15 @@ namespace otb
       OutputPointType TransformPoint(const InputPointType &point) const;
 
       virtual void  InstanciateTransform();
-      
-      
+
+
       protected:
       GenericRSTransform();
-      virtual ~GenericRSTransform(){};
+      virtual ~GenericRSTransform()
+      {
+        delete m_InputDictionary;
+        delete m_OutputDictionary;
+      };
 
       private :
       GenericRSTransform(const Self&); //purposely not implemented
@@ -153,8 +214,8 @@ namespace otb
       ImageKeywordlist m_InputKeywordList;
       ImageKeywordlist m_OutputKeywordList;
 
-      itk::MetaDataDictionary   m_InputDictionary;
-      itk::MetaDataDictionary   m_OutputDictionary;
+      itk::MetaDataDictionary*  m_InputDictionary;
+      itk::MetaDataDictionary*  m_OutputDictionary;
 
       std::string m_InputProjectionRef;
       std::string m_OutputProjectionRef;
@@ -169,7 +230,7 @@ namespace otb
 
       GenericTransformPointerType m_InputTransform;
       GenericTransformPointerType m_OutputTransform;
-      bool reinstanciateTransform;   
+      bool reinstanciateTransform;
     };
 
 

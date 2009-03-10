@@ -43,9 +43,136 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   m_Transform = NULL;
   m_InputTransform = NULL;
   m_OutputTransform = NULL;
+  m_InputDictionary = NULL;
+  m_OutputDictionary = NULL;
   reinstanciateTransform=true;
 }
 
+
+
+//----------------------------------------------------------------------------
+template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+    void
+        GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
+  ::SetInputSpacing(const SpacingType & spacing )
+{
+  itkDebugMacro("setting Spacing to " << spacing);
+  if ( this->m_InputSpacing != spacing )
+  {
+    this->m_InputSpacing = spacing;
+    this->Modified();
+  }
+}
+
+
+//----------------------------------------------------------------------------
+template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+    void
+        GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
+  ::SetInputSpacing(const double spacing[2] )
+{
+  SpacingType s(spacing);
+  this->SetInputSpacing(s);
+}
+
+
+//----------------------------------------------------------------------------
+template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+    void
+        GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
+  ::SetInputSpacing(const float spacing[2] )
+{
+  itk::Vector<float, 2> sf(spacing);
+  SpacingType s;
+  s.CastFrom( sf );
+  this->SetInputSpacing(s);
+}
+
+//----------------------------------------------------------------------------
+template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+    void
+        GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
+  ::SetInputOrigin(const double origin[2] )
+{
+  OriginType p(origin);
+  this->SetInputOrigin( p );
+}
+
+
+//----------------------------------------------------------------------------
+template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+    void
+        GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
+  ::SetInputOrigin(const float origin[2] )
+{
+  itk::Point<float, 2> of(origin);
+  OriginType p;
+  p.CastFrom( of );
+  this->SetInputOrigin( p );
+}
+
+
+
+//----------------------------------------------------------------------------
+template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+    void
+        GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
+  ::SetOutputSpacing(const SpacingType & spacing )
+{
+  itkDebugMacro("setting Spacing to " << spacing);
+  if ( this->m_OutputSpacing != spacing )
+  {
+    this->m_OutputSpacing = spacing;
+    this->Modified();
+  }
+}
+
+
+//----------------------------------------------------------------------------
+template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+    void
+        GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
+  ::SetOutputSpacing(const double spacing[2] )
+{
+  SpacingType s(spacing);
+  this->SetOutputSpacing(s);
+}
+
+
+//----------------------------------------------------------------------------
+template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+    void
+        GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
+  ::SetOutputSpacing(const float spacing[2] )
+{
+  itk::Vector<float, 2> sf(spacing);
+  SpacingType s;
+  s.CastFrom( sf );
+  this->SetOutputSpacing(s);
+}
+
+//----------------------------------------------------------------------------
+template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+    void
+        GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
+  ::SetOutputOrigin(const double origin[2] )
+{
+  OriginType p(origin);
+  this->SetOutputOrigin( p );
+}
+
+
+//----------------------------------------------------------------------------
+template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+    void
+        GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
+  ::SetOutputOrigin(const float origin[2] )
+{
+  itk::Point<float, 2> of(origin);
+  OriginType p;
+  p.CastFrom( of );
+  this->SetOutputOrigin( p );
+}
 
 
 
@@ -90,7 +217,10 @@ void
 GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 ::InstanciateTransform(void)
 {
-  
+
+  assert(m_InputDictionary != NULL);
+  assert(m_OutputDictionary != NULL);
+
   m_Transform = TransformType::New();
 
   //If the information was not specified by the user, it is filled from the metadata
@@ -100,12 +230,12 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   if (m_InputKeywordList.GetSize()  == 0)
   {
     ossimKeywordlist kwl;
-    itk::ExposeMetaData<ossimKeywordlist>(m_InputDictionary, MetaDataKey::OSSIMKeywordlistKey, kwl );
+    itk::ExposeMetaData<ossimKeywordlist>(*m_InputDictionary, MetaDataKey::OSSIMKeywordlistKey, kwl );
     m_InputKeywordList.SetKeywordlist(kwl);
   }
   if (m_InputProjectionRef.empty())
   {
-    itk::ExposeMetaData<std::string>(m_InputDictionary, MetaDataKey::ProjectionRefKey, m_InputProjectionRef );
+    itk::ExposeMetaData<std::string>(*m_InputDictionary, MetaDataKey::ProjectionRefKey, m_InputProjectionRef );
   }
 
 

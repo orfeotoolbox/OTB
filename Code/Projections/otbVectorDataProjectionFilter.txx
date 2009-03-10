@@ -302,119 +302,52 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
 ::InstanciateTransform(void)
 {
 
+  otbMsgDevMacro(<< "Information to instanciate transform (VectorDataProjectionFilter): ");
+  otbMsgDevMacro(<< " * Input Origin: " << m_InputOrigin);
+  otbMsgDevMacro(<< " * Input Spacing: " << m_InputSpacing);
+  otbMsgDevMacro(<< " * Input keyword list: " << m_InputKeywordList);
+  otbMsgDevMacro(<< " * Input projection: " << m_InputProjectionRef);
+  otbMsgDevMacro(<< " * Output keyword list: " << m_OutputKeywordList);
+  otbMsgDevMacro(<< " * Output projection: " << m_OutputProjectionRef);
+  otbMsgDevMacro(<< " * Output Origin: " << m_OutputOrigin);
+  otbMsgDevMacro(<< " * Output Spacing: " << m_OutputSpacing);
+
+
   m_Transform = InternalTransformType::New();
 
-  //If the information was not specified by the user, it is filled from the metadata
+
+
   InputVectorDataPointer input = this->GetInput();
   const itk::MetaDataDictionary & inputDict = input->GetMetaDataDictionary();
 
-  if (m_InputKeywordList.GetSize()  == 0)
-  {
-    ossimKeywordlist kwl;
-    itk::ExposeMetaData<ossimKeywordlist>(inputDict, MetaDataKey::OSSIMKeywordlistKey, kwl );
-    m_InputKeywordList.SetKeywordlist(kwl);
-  }
-  if (m_InputProjectionRef.empty())
-  {
-    itk::ExposeMetaData<std::string>(inputDict, MetaDataKey::ProjectionRefKey, m_InputProjectionRef );
-  }
+  OutputVectorDataPointer output = this->GetOutput();
+  itk::MetaDataDictionary & outputDict = output->GetMetaDataDictionary();
 
 
+//   m_Transform->SetInputDictionary(input->GetMetaDataDictionary());
+  m_Transform->SetInputDictionary(inputDict);
+  m_Transform->SetOutputDictionary(output->GetMetaDataDictionary());
 
+  m_Transform->SetInputProjectionRef(m_InputProjectionRef);
+  m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
+  m_Transform->SetInputKeywordList(m_InputKeywordList);
+  m_Transform->SetOutputKeywordList(m_OutputKeywordList);
+  m_Transform->SetDEMDirectory(m_DEMDirectory);
+  m_Transform->SetInputSpacing(m_InputSpacing);
+  m_Transform->SetInputOrigin(m_InputOrigin);
+  m_Transform->SetOutputSpacing(m_OutputSpacing);
+  m_Transform->SetOutputOrigin(m_OutputOrigin);
 
-  otbMsgDevMacro(<< "Information to instanciate transform: ");
-  otbMsgDevMacro(<< " - Input Origin: " << m_InputOrigin);
-  otbMsgDevMacro(<< " - Input Spacing: " << m_InputSpacing);
-  otbMsgDevMacro(<< " - Input keyword list: " << m_InputKeywordList);
-  otbMsgDevMacro(<< " - Input projection: " << m_InputProjectionRef);
-  otbMsgDevMacro(<< " - Output keyword list: " << m_OutputKeywordList);
-  otbMsgDevMacro(<< " - Output projection: " << m_OutputProjectionRef);
-  otbMsgDevMacro(<< " - Output Origin: " << m_OutputOrigin);
-  otbMsgDevMacro(<< " - Output Spacing: " << m_OutputSpacing);
+  m_Transform->InstanciateTransform();
 
-  bool firstTransformGiveGeo = true;
-
-  //*****************************
-  //Set the input transformation
-  //*****************************
-  if (m_InputKeywordList.GetSize()  > 0)
-  {
-    typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
-    ForwardSensorModelType::Pointer sensorModel = ForwardSensorModelType::New();
-    sensorModel->SetImageGeometry(m_InputKeywordList);
-    if ( !m_DEMDirectory.empty())
-    {
-      sensorModel->SetDEMDirectory(m_DEMDirectory);
-    }
-    m_InputTransform = sensorModel.GetPointer();
-    otbMsgDevMacro(<< "Input projection set to sensor model");
-  }
-
-
-  if ((m_InputTransform.IsNull()) && ( !m_InputProjectionRef.empty() ))//map projection
-  {
-    typedef otb::GenericMapProjection<otb::INVERSE> InverseMapProjectionType;
-    InverseMapProjectionType::Pointer mapTransform = InverseMapProjectionType::New();
-    mapTransform->SetWkt(m_InputProjectionRef);
-    if (mapTransform->GetMapProjection() != NULL)
-    {
-      m_InputTransform = mapTransform.GetPointer();
-      otbMsgDevMacro(<< "Input projection set to map transform: " << m_InputTransform);
-    }
-
-  }
-
-  if (m_InputTransform.IsNull())//default if we didn't manage to instantiate it before
-  {
-    m_InputTransform = itk::IdentityTransform< double, 2 >::New();
-    firstTransformGiveGeo = false;
-    otbMsgDevMacro(<< "Input projection set to identity")
-  }
-
-  //*****************************
-  //Set the output transformation
-  //*****************************
-  if (m_OutputKeywordList.GetSize()  > 0)
-  {
-    typedef otb::InverseSensorModel<double> InverseSensorModelType;
-    InverseSensorModelType::Pointer sensorModel = InverseSensorModelType::New();
-    sensorModel->SetImageGeometry(m_OutputKeywordList);
-    if ( !m_DEMDirectory.empty())
-    {
-      sensorModel->SetDEMDirectory(m_DEMDirectory);
-    }
-    m_OutputTransform = sensorModel.GetPointer();
-    otbMsgDevMacro(<< "Output projection set to sensor model");
-  }
-
-
-  if ((m_OutputTransform.IsNull()) && ( !m_OutputProjectionRef.empty() ))//map projection
-  {
-    typedef otb::GenericMapProjection<otb::FORWARD> ForwardMapProjectionType;
-    ForwardMapProjectionType::Pointer mapTransform = ForwardMapProjectionType::New();
-    mapTransform->SetWkt(m_OutputProjectionRef);
-    if (mapTransform->GetMapProjection() != NULL)
-    {
-      m_OutputTransform = mapTransform.GetPointer();
-      otbMsgDevMacro(<< "Output projection set to map transform: " << m_OutputTransform);
-    }
-
-  }
-
-  if (m_OutputTransform.IsNull())//default if we didn't manage to instantiate it before
-  {
-    m_OutputTransform = itk::IdentityTransform< double, 2 >::New();
-    if (firstTransformGiveGeo)
-    {
-      m_OutputProjectionRef = "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]]";
-    }
-    otbMsgDevMacro(<< "Output projection set to identity");
-  }
+  // retrieve the output projection ref
+  // if it is not specified and end up beeing geographic,
+  // only the m_Transform will know
+  m_OutputProjectionRef = m_Transform->GetOutputProjectionRef();
 
 
   //If the projection information for the output is provided, propagate it
-  OutputVectorDataPointer output = this->GetOutput();
-  itk::MetaDataDictionary & outputDict = output->GetMetaDataDictionary();
+
 
   if (m_OutputKeywordList.GetSize()  != 0)
   {
@@ -427,9 +360,6 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
     itk::EncapsulateMetaData<std::string>(outputDict, MetaDataKey::ProjectionRefKey, m_OutputProjectionRef );
   }
 
-
-  m_Transform->SetFirstTransform(m_InputTransform);
-  m_Transform->SetSecondTransform(m_OutputTransform);
 
 }
 
