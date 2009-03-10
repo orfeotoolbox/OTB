@@ -127,7 +127,7 @@ ImageWidget<TInputImage>
 template <class TInputImage>
 void
 ImageWidget<TInputImage>
-::UpdateImageToScreenTransform()
+::UpdateTransforms()
 {
   assert(m_IsotropicZoom>0 && "Isotropic zoom should be non null positive.");
 
@@ -174,8 +174,8 @@ ImageWidget<TInputImage>
     return;
     }
 
-  // Update the space to screen transform
-  this->UpdateImageToScreenTransform();
+  // Update transforms
+  this->UpdateTransforms();
 
 
   if(!this->GetUseGlAcceleration())

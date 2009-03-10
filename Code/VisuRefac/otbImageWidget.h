@@ -119,7 +119,7 @@ protected:
     */
 
   /** Update the image to screen transform */
-  void UpdateImageToScreenTransform();
+  void UpdateTransforms();
 
   virtual void draw(void);
 
