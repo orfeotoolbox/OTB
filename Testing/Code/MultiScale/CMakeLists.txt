@@ -360,6 +360,22 @@ ADD_TEST(msTvGeodesicMorphologyIterativeDecompositionImageFilter ${MULTISCALE_TE
 ADD_TEST(msTuWaveletTransformNew ${MULTISCALE_TESTS4}
          otbWaveletTransformNew)
 
+ADD_TEST(msTvWaveletTransform ${MULTISCALE_TESTS4}
+        --compare-n-images ${TOL} 4
+              ${BASELINE}/msTvWaveletTransform-0.tif
+              ${TEMP}/msTvWaveletTransform-0.tif
+              ${BASELINE}/msTvWaveletTransform-1.tif
+              ${TEMP}/msTvWaveletTransform-1.tif
+              ${BASELINE}/msTvWaveletTransform-2.tif
+              ${TEMP}/msTvWaveletTransform-2.tif
+              ${BASELINE}/msTvWaveletTransform-3.tif
+              ${TEMP}/msTvWaveletTransform-3.tif
+         otbWaveletTransform
+          -in ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          -l 1
+          -out ${TEMP}/msTvWaveletTransform
+)
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicMultiScale_SRCS1
 otbMorphologicalPyramidResamplerNew.cxx
