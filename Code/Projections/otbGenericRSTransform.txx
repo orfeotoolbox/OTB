@@ -43,9 +43,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   m_Transform = NULL;
   m_InputTransform = NULL;
   m_OutputTransform = NULL;
-  m_InputDictionary = NULL;
-  m_OutputDictionary = NULL;
-  reinstanciateTransform=true;
+  m_TransformUpToDate = false;
 }
 
 
@@ -197,7 +195,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 ::GetTransform() const
 {
   itkDebugMacro("returning MapProjection address " << this->m_Transform );
-  if ((reinstanciateTransform) || (m_Transform == NULL))
+  if ((!m_TransformUpToDate) || (m_Transform.IsNull()))
   {
     itkExceptionMacro(<<"m_Transform not up-to-date, call InstanciateTransform() first");
   }
@@ -217,10 +215,6 @@ void
 GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 ::InstanciateTransform(void)
 {
-
-  assert(m_InputDictionary != NULL);
-  assert(m_OutputDictionary != NULL);
-
   m_Transform = TransformType::New();
 
   //If the information was not specified by the user, it is filled from the metadata
@@ -230,12 +224,12 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   if (m_InputKeywordList.GetSize()  == 0)
   {
     ossimKeywordlist kwl;
-    itk::ExposeMetaData<ossimKeywordlist>(*m_InputDictionary, MetaDataKey::OSSIMKeywordlistKey, kwl );
+    itk::ExposeMetaData<ossimKeywordlist>(m_InputDictionary, MetaDataKey::OSSIMKeywordlistKey, kwl );
     m_InputKeywordList.SetKeywordlist(kwl);
   }
   if (m_InputProjectionRef.empty())
   {
-    itk::ExposeMetaData<std::string>(*m_InputDictionary, MetaDataKey::ProjectionRefKey, m_InputProjectionRef );
+    itk::ExposeMetaData<std::string>(m_InputDictionary, MetaDataKey::ProjectionRefKey, m_InputProjectionRef );
   }
 
 
@@ -350,6 +344,8 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 
   m_Transform->SetFirstTransform(m_InputTransform);
   m_Transform->SetSecondTransform(m_OutputTransform);
+
+  m_TransformUpToDate = true;
 
 }
 
