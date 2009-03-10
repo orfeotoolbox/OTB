@@ -23,6 +23,7 @@
 
 #include "otbGenericMapProjection.h"
 #include "itkIdentityTransform.h"
+#include "otbGenericRSTransform.h"
 
 #include "otbObjectList.h"
 #include "otbMacro.h"
@@ -297,13 +298,20 @@ void
 VectorDataExtractROI<TVectorData>
 ::ProjectRegionToInputVectorProjection()
 {
-  typedef otb::GenericMapProjection<otb::INVERSE>     ForwardMapProjectionType;
-  ForwardMapProjectionType::Pointer mapTransform =    ForwardMapProjectionType::New();
-  mapTransform->SetWkt(m_ROI.GetRegionProjection());
+  /* Use the RS Generic projection */
+  typedef otb::GenericRSTransform<>                   GenericRSTransformType;
+  typename GenericRSTransformType::Pointer genericTransform =  GenericRSTransformType::New();
 
-  /*FORWARD ; From RegionProjection To long/lat Projection */
-  typename VertexListType::Pointer  regionCorners = VertexListType::New();
-  ProjPointType                          point1, point2 , point3, point4;
+  /** We need get the transformation*/
+  const itk::MetaDataDictionary &inputDict = this->GetInput()->GetMetaDataDictionary();
+  genericTransform->SetInputDictionary(inputDict);
+  genericTransform->SetInputProjectionRef( m_ROI.GetRegionProjection());
+  genericTransform->SetOutputProjectionRef(this->GetInput()->GetProjectionRef() ); 
+  genericTransform->InstanciateTransform();
+  
+  
+   typename VertexListType::Pointer  regionCorners = VertexListType::New();
+   ProjPointType                          point1, point2 , point3, point4;
   
   /** Compute the extremities of the region*/
   point1[0] = m_ROI.GetOrigin()[0];
@@ -317,44 +325,12 @@ VectorDataExtractROI<TVectorData>
   
   point4[0] = m_ROI.GetOrigin()[0];
   point4[1] = m_ROI.GetOrigin()[1]+ m_ROI.GetSize()[1];
-  
-  /** Aplly the transformation*/
-  ProjPointType pGeo1 = mapTransform->TransformPoint(point1);
-  ProjPointType pGeo2 = mapTransform->TransformPoint(point2);
-  ProjPointType pGeo3 = mapTransform->TransformPoint(point3);
-  ProjPointType pGeo4 = mapTransform->TransformPoint(point4);
-
-  /** INVERSE : From long/lat to InputVectorData projection*/
-  typedef otb::GenericMapProjection<otb::FORWARD>            InverseMapProjectionType;
-  InverseMapProjectionType::Pointer mapInverseTransform =    InverseMapProjectionType::New();
-
-  typedef itk::Transform<double, 2, 2> GenericTransformType;
-  GenericTransformType::Pointer outputTransform ;
-
-  if(!this->GetInput()->GetProjectionRef().empty())
-    {
-      mapInverseTransform->SetWkt(this->GetInput()->GetProjectionRef());
-      outputTransform = mapInverseTransform.GetPointer();
-
-      //Case of kml
-      if(mapInverseTransform->GetMapProjection() == NULL)
-	outputTransform  =  itk::IdentityTransform< double, 2 >::New();
-    }
-  else
-    outputTransform  =  itk::IdentityTransform< double, 2 >::New();
-
-  
-  /** Finally  Project the four corners in the InputDataVector Projection*/
-  ProjPointType pCarto1 = /*mapInverseTransform*/ outputTransform->TransformPoint(pGeo1);
-  ProjPointType pCarto2 = /*mapInverseTransform*/ outputTransform->TransformPoint(pGeo2);
-  ProjPointType pCarto3 = /*mapInverseTransform*/ outputTransform ->TransformPoint(pGeo3);
-  ProjPointType pCarto4 = /*mapInverseTransform*/ outputTransform->TransformPoint(pGeo4);
 
   /** Fill the vertex List : First Convert Point To*/
-  regionCorners->InsertElement(regionCorners->Size(),this->PointToContinuousIndex(pCarto1));
-  regionCorners->InsertElement(regionCorners->Size(),this->PointToContinuousIndex(pCarto2));
-  regionCorners->InsertElement(regionCorners->Size(),this->PointToContinuousIndex(pCarto3));
-  regionCorners->InsertElement(regionCorners->Size(),this->PointToContinuousIndex(pCarto4));
+  regionCorners->InsertElement(regionCorners->Size(),this->PointToContinuousIndex(genericTransform->TransformPoint(point1)));
+  regionCorners->InsertElement(regionCorners->Size(),this->PointToContinuousIndex(genericTransform->TransformPoint(point2)));
+  regionCorners->InsertElement(regionCorners->Size(),this->PointToContinuousIndex(genericTransform->TransformPoint(point3)));
+  regionCorners->InsertElement(regionCorners->Size(),this->PointToContinuousIndex(genericTransform->TransformPoint(point4)));
 
   /** Due to The projection : the Projected ROI can be rotated */
   m_GeoROI = this->ComputeVertexListBoudingRegion(regionCorners.GetPointer());
