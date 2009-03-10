@@ -75,6 +75,7 @@ namespace otb
       typedef itk::Transform<double, 2, 2> GenericTransformType;
       typedef typename GenericTransformType::Pointer GenericTransformPointerType;
       typedef otb::CompositeTransform<GenericTransformType, GenericTransformType> TransformType;
+      typedef typename TransformType::Pointer                                     TransformPointerType;
 
 //       typedef itk::MetaDataDictionary MetaDataDictionary;
 //       typedef itk::SmartPointer<MetaDataDictionary> MetaDataDictionaryPointer;
@@ -111,46 +112,37 @@ namespace otb
 
       const itk::MetaDataDictionary& GetInputDictionary() const
       {
-        return *m_InputDictionary;
+        return m_InputDictionary;
       }
 
       void SetInputDictionary(const itk::MetaDataDictionary & dictionary)
       {
-        if(m_InputDictionary==NULL)
-        {
-          m_InputDictionary=new itk::MetaDataDictionary;
-        }
-        *m_InputDictionary = dictionary;
+        m_InputDictionary = dictionary;
         this->Modified();
       }
 
       const itk::MetaDataDictionary& GetOutputDictionary() const
       {
-        return *m_OutputDictionary;
+        return m_OutputDictionary;
       }
 
       void SetOutputDictionary(itk::MetaDataDictionary & dictionary)
       {
-        if(m_OutputDictionary==NULL)
-          {
-            m_OutputDictionary=new itk::MetaDataDictionary;
-          }
-
-        *m_OutputDictionary = dictionary;
+        m_OutputDictionary = dictionary;
         this->Modified();
       }
 
 
 
       itkGetMacro(InputKeywordList,ImageKeywordlist);
-      void SetInputKeywordList(ImageKeywordlist kwl)
+      void SetInputKeywordList(const ImageKeywordlist& kwl)
       {
         this->m_InputKeywordList = kwl;
         this->Modified();
       }
 
       itkGetMacro(OutputKeywordList,ImageKeywordlist);
-      void SetOutputKeywordList(ImageKeywordlist kwl)
+      void SetOutputKeywordList(const ImageKeywordlist& kwl)
       {
         this->m_OutputKeywordList = kwl;
         this->Modified();
@@ -192,7 +184,7 @@ namespace otb
       itkGetConstReferenceMacro(OutputSpacing, SpacingType);
 
       /** Methods prototypes */
-      virtual const TransformType* GetTransform() const;
+      virtual const TransformType * GetTransform() const;
 
       OutputPointType TransformPoint(const InputPointType &point) const;
 
@@ -202,10 +194,13 @@ namespace otb
       protected:
       GenericRSTransform();
       virtual ~GenericRSTransform()
+      {};
+
+      virtual void Modified()
       {
-        delete m_InputDictionary;
-        delete m_OutputDictionary;
-      };
+	this->Superclass::Modified();
+	m_TransformUpToDate = false;
+      }
 
       private :
       GenericRSTransform(const Self&); //purposely not implemented
@@ -214,8 +209,8 @@ namespace otb
       ImageKeywordlist m_InputKeywordList;
       ImageKeywordlist m_OutputKeywordList;
 
-      itk::MetaDataDictionary*  m_InputDictionary;
-      itk::MetaDataDictionary*  m_OutputDictionary;
+      itk::MetaDataDictionary  m_InputDictionary;
+      itk::MetaDataDictionary  m_OutputDictionary;
 
       std::string m_InputProjectionRef;
       std::string m_OutputProjectionRef;
@@ -226,11 +221,11 @@ namespace otb
       SpacingType         m_OutputSpacing;
       OriginType          m_OutputOrigin;
 
-      TransformType*      m_Transform;
+      TransformPointerType    m_Transform;
 
       GenericTransformPointerType m_InputTransform;
       GenericTransformPointerType m_OutputTransform;
-      bool reinstanciateTransform;
+      bool                        m_TransformUpToDate;
     };
 
 
