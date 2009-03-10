@@ -26,6 +26,7 @@
 
 void RegisterTests()
 {
+  REGISTER_TEST(otbStationaryFilterBankNew);
   REGISTER_TEST(otbWaveletTransformNew);
   REGISTER_TEST(otbWaveletTransform);
   REGISTER_TEST(otbWaveletPacketTransformNew);
