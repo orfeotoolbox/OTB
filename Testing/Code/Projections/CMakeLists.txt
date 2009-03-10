@@ -358,7 +358,7 @@ ADD_TEST(prTvGenericMapProjection ${PROJECTIONS_TESTS3}
         ${TEMP}/prTvGenericMapProjection.txt
 )
 
-ADD_TEST(prTuGenericRSTransformNew ${PROJECTIONS_TESTS3}  otbGenericRSTransformnNew )
+ADD_TEST(prTuGenericRSTransformNew ${PROJECTIONS_TESTS3}  otbGenericRSTransformNew )
 
 ADD_TEST(prTuVectorDataProjectionFilterNew ${PROJECTIONS_TESTS3}  otbVectorDataProjectionFilterNew )
 
