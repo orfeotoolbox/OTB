@@ -24,6 +24,7 @@
 #include "otbImage.h"
 #include "itkRGBPixel.h"
 #include "itkFixedArray.h"
+#include "otbGlComponent.h"
 
 
 namespace otb
@@ -60,9 +61,15 @@ public:
   /** Region size & index typedef */
   typedef typename RegionType::SizeType       SizeType;
   typedef typename RegionType::IndexType      IndexType;
-
-  /** Color typedef (used to draw the rectangle, 4th channel is alpha) */
-  typedef typename Superclass::ColorType      ColorType;
+  
+  /** GlComponent typedef */
+  typedef GlComponent                                   GlComponentType;
+  typedef typename GlComponentType::Pointer             GlComponentPointerType;
+  typedef typename GlComponentType::ColorType           ColorType;     
+  typedef typename GlComponentType::AffineTransformType AffineTransformType;
+  typedef typename AffineTransformType::Pointer         AffineTransformPointerType;
+  typedef typename GlComponentType::VectorType          VectorType;
+  typedef typename GlComponentType::PointType           PointType;
 
   /** Reads the OpenGl buffer from an image pointer
    *  \param image The image pointer,
@@ -95,19 +102,9 @@ public:
   itkSetMacro(SubsamplingRate,unsigned int);
   itkGetMacro(SubsamplingRate,unsigned int);
 
-  /** Convert a screen index to a buffered region index */
-  IndexType ScreenIndexToRegionIndex(const IndexType& index );
-  
-  /** Convert a buffered region index to a screen index */
-  IndexType RegionIndexToScreenIndex(const IndexType& index);
-
-  /** Convert a screen index to an image index (taking into account
-   * subsampling rate) */
-  IndexType ScreenIndexToImageIndex(const IndexType& index );
-  
-  /** Convert an image index to a screen index (taking into account 
-   *  subsamplinh rate) */
-  IndexType ImageIndexToScreenIndex(const IndexType& index);
+  /** Get the image to screen transform */
+  itkGetObjectMacro(ImageToScreenTransform,AffineTransformType);
+  itkGetObjectMacro(ScreenToImageTransform,AffineTransformType);
 
 protected:
   /** Constructor */
@@ -120,9 +117,13 @@ protected:
   /** Actually render the buffer to the screen. This method is
     * used by FLTK routines and should not be called on its own.
     */
+
+  /** Update the image to screen transform */
+  void UpdateImageToScreenTransform();
+
   virtual void draw(void);
- 
-  /** Compute the linear buffer index according to the 2D region and
+
+   /** Compute the linear buffer index according to the 2D region and
    * its 2D index.This method is used when OTB_GL_USE_ACCEL is ON.
    * \param index 2D index
    * \param region 2D region
@@ -161,16 +162,16 @@ private:
   bool       m_DisplayRectangle;
   ColorType  m_RectangleColor;
   
-  /** Image extent coordinates in the display axis system */
-  double m_ImageExtentWidth;
-  double m_ImageExtentHeight;
-  double m_ImageExtentX;
-  double m_ImageExtentY;
+  /** The display extent */
+  RegionType m_Extent;
 
   /** If the image is subsampled with respect to the original image,
    * this indicates the subsampling rate */
   unsigned int m_SubsamplingRate;
 
+  /** Space to screen transform */
+  AffineTransformPointerType m_ImageToScreenTransform;
+  AffineTransformPointerType m_ScreenToImageTransform;
 
 }; // end class
 } // end namespace otb

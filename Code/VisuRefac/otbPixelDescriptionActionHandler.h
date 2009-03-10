@@ -96,14 +96,22 @@ public:
 	  }
 	  case FL_MOVE:
 	  {
-	  // Get the hovered index
-	  IndexType index;
-	  index[0]=Fl::event_x();
-	  index[1]=Fl::event_y();
-	  // Convert to image index
-	  index = sourceWidget->ScreenIndexToImageIndex(index);
+	  // Get the clicked index
+	  typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
+	  screenPoint[0] = Fl::event_x();
+	  screenPoint[1] = Fl::event_y();
+	  
+	  // Transform to image point
+	  imagePoint = sourceWidget->GetScreenToImageTransform()->TransformPoint(screenPoint);
+	  
+	  // Transform to index
+	  typename ViewType::IndexType index;
+	  index[0]=static_cast<int>(imagePoint[0]);
+	  index[1]=static_cast<int>(imagePoint[1]);
+	  
 	  // Communicate new index to model
 	  m_Model->UpdatePixelDescription(index);
+	  
 	  return true;
 	  break;
 	  }
