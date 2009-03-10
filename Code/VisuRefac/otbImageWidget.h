@@ -88,19 +88,6 @@ public:
   itkSetMacro(IsotropicZoom,double);
   itkGetMacro(IsotropicZoom,double);
 
-   /** Enable/disable rectangle drawing */
-  itkSetMacro(DisplayRectangle,bool);
-  itkGetMacro(DisplayRectangle,bool);
-  itkBooleanMacro(DisplayRectangle);
-  
-  /** Set/Get the rectangle to display */
-  itkSetMacro(Rectangle,RegionType);
-  itkGetConstReferenceMacro(Rectangle,RegionType);
-
-  /** Set/Get the color of the rectangle */
-  itkSetMacro(RectangleColor,ColorType);
-  itkGetConstReferenceMacro(RectangleColor,ColorType);
-
   /** Set/Get the subsampling rate */
   itkSetMacro(SubsamplingRate,unsigned int);
   itkGetMacro(SubsamplingRate,unsigned int);
@@ -111,7 +98,7 @@ public:
 
 
   /** Add a GlComponent */
-  unsigned int AddGlComponent(const GlComponent * glComponent)
+  unsigned int AddGlComponent(GlComponent * glComponent)
   {
     m_GlComponents->PushBack(glComponent);
     return m_GlComponents->Size()-1;
@@ -185,11 +172,6 @@ private:
 
   /** OpenGl buffered region */
   RegionType m_OpenGlBufferedRegion;
-
-  /** Rectangle region */
-  RegionType m_Rectangle;
-  bool       m_DisplayRectangle;
-  ColorType  m_RectangleColor;
   
   /** The display extent */
   RegionType m_Extent;

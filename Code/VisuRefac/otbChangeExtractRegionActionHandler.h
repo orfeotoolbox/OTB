@@ -69,11 +69,11 @@ public:
 	 && event == FL_PUSH)
 	{
 	otbMsgDevMacro(<<"ChangeExtractRegionActionHandler::HandleWidgetEvent(): handling ("<<widgetId<<", "<<event<<")");
+
 	// Get the clicked index
 	typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
-	screenPoint[0] = Fl::event_x();
-	screenPoint[1] = Fl::event_y();
-
+	screenPoint = m_View->GetScrollWidget()->GetMousePosition();
+	
 	// Transform to image point
 	imagePoint = m_View->GetScrollWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
 

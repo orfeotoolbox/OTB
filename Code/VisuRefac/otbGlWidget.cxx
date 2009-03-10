@@ -131,5 +131,16 @@ int GlWidget::handle(int event)
     return 0;
     }
 }
+
+GlWidget::PointType GlWidget::GetMousePosition()
+{
+  // Get the cursor position
+  PointType index;
+  index[0] = Fl::event_x();
+  index[1] = Fl::event_y();
+  // Flip the y axis
+  index[1]= this->h()-index[1];
+  return index;
+}
 }
 #endif

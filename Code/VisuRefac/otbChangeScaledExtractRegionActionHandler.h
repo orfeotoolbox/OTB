@@ -71,8 +71,7 @@ public:
 	otbMsgDevMacro(<<"ChangeScaledExtractRegionActionHandler::HandleWidgetEvent(): handling ("<<widgetId<<", "<<event<<")");
 	// Get the clicked index
 	typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
-	screenPoint[0] = Fl::event_x();
-	screenPoint[1] = Fl::event_y();
+	screenPoint = m_View->GetFullWidget()->GetMousePosition();
 
 	// Transform to image point
 	imagePoint = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);

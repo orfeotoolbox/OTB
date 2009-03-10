@@ -26,15 +26,9 @@ namespace otb
 template <class TInputImage>
 ImageWidget<TInputImage>
 ::ImageWidget() : m_IsotropicZoom(1.0), m_OpenGlBuffer(NULL), m_OpenGlBufferedRegion(),
-		 m_Rectangle(),m_DisplayRectangle(false),m_RectangleColor(), m_Extent(), 
-		  m_SubsamplingRate(1), m_ImageToScreenTransform(),m_ScreenToImageTransform(),
-		  m_GlComponents()
+		  m_Extent(), m_SubsamplingRate(1), m_ImageToScreenTransform(),
+		  m_ScreenToImageTransform(), m_GlComponents()
 {
-  // Default color for rectangle
-  m_RectangleColor.Fill(0.);
-  m_RectangleColor[0]=1.0;
-  m_RectangleColor[3]=1.0;
-  
   // Initialize space to screen transform and inverse
   m_ImageToScreenTransform = AffineTransformType::New();
   m_ScreenToImageTransform = AffineTransformType::New();
@@ -150,17 +144,18 @@ ImageWidget<TInputImage>
   s2iMatrix.Fill(0);
   const double s2iSpacing =(m_SubsamplingRate)/m_IsotropicZoom;
   s2iMatrix(0,0)=s2iSpacing;
-  s2iMatrix(1,1)=s2iSpacing;
+  s2iMatrix(1,1)=-s2iSpacing;
   m_ScreenToImageTransform->SetMatrix(s2iMatrix);
 
   // Image to screen translation
   typename AffineTransformType::OutputVectorType translation;
   translation[0]= m_SubsamplingRate * (m_OpenGlBufferedRegion.GetIndex()[0]-m_Extent.GetIndex()[0]/m_IsotropicZoom);
-  translation[1]= m_SubsamplingRate * (m_OpenGlBufferedRegion.GetIndex()[0]-m_Extent.GetIndex()[0]/m_IsotropicZoom);
+  translation[1]= m_SubsamplingRate * (((m_Extent.GetIndex()[1]+m_Extent.GetSize()[1])/m_IsotropicZoom) + m_OpenGlBufferedRegion.GetIndex()[1]);
   m_ScreenToImageTransform->SetTranslation(translation);
 
   // Compute the inverse transform
-  m_ScreenToImageTransform->GetInverse(m_ImageToScreenTransform);
+  bool couldInvert = m_ScreenToImageTransform->GetInverse(m_ImageToScreenTransform);
+  assert(couldInvert && "Could not invert ScreenToImageTransform");
 }
 
 template <class TInputImage>
@@ -180,7 +175,6 @@ ImageWidget<TInputImage>
 
   // Update transforms
   this->UpdateTransforms();
-
 
   if(!this->GetUseGlAcceleration())
     {
@@ -228,31 +222,6 @@ ImageWidget<TInputImage>
       it.Get()->Render(m_Extent,m_ImageToScreenTransform);
       }
     }
-
-//   // Draw the rectangle if necessary
-//   if(m_DisplayRectangle)
-//     {
-//     typename RegionType::IndexType index;
-//     typename RegionType::SizeType  size;
-
-//     index = m_Rectangle.GetIndex();
-//     // UL left in image space is LR in opengl space, so we need to get
-//     // the real upper left
-//     index[1]+=m_Rectangle.GetSize()[1];
-//     index = ImageIndexToScreenIndex(index);
-    
-//     size[0]=  static_cast<unsigned int>(static_cast<double>(m_Rectangle.GetSize()[0]/m_SubsamplingRate)*m_IsotropicZoom);
-//     size[1] = static_cast<unsigned int>(static_cast<double>(m_Rectangle.GetSize()[1]/m_SubsamplingRate)*m_IsotropicZoom);
-    
-
-//     glEnable(GL_BLEND);
-//     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);   
-//     glColor4f(m_RectangleColor[0],m_RectangleColor[1],m_RectangleColor[2],m_RectangleColor[3]);
-//     glBegin(GL_LINE_LOOP);
-//     gl_rect(index[0],index[1],size[0],size[1]);
-//     glEnd();
-//     glDisable(GL_BLEND);
-//     }
 }
 }
 #endif

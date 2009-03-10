@@ -98,8 +98,7 @@ public:
 	  {
 	  // Get the clicked index
 	  typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
-	  screenPoint[0] = Fl::event_x();
-	  screenPoint[1] = Fl::event_y();
+	  screenPoint = sourceWidget->GetMousePosition();
 	  
 	  // Transform to image point
 	  imagePoint = sourceWidget->GetScreenToImageTransform()->TransformPoint(screenPoint);
