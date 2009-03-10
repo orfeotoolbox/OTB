@@ -27,7 +27,8 @@ template <class TInputImage>
 ImageWidget<TInputImage>
 ::ImageWidget() : m_IsotropicZoom(1.0), m_OpenGlBuffer(NULL), m_OpenGlBufferedRegion(),
 		 m_Rectangle(),m_DisplayRectangle(false),m_RectangleColor(), m_Extent(), 
-		  m_SubsamplingRate(1), m_ImageToScreenTransform(),m_ScreenToImageTransform()
+		  m_SubsamplingRate(1), m_ImageToScreenTransform(),m_ScreenToImageTransform(),
+		  m_GlComponents()
 {
   // Default color for rectangle
   m_RectangleColor.Fill(0.);
@@ -37,6 +38,9 @@ ImageWidget<TInputImage>
   // Initialize space to screen transform and inverse
   m_ImageToScreenTransform = AffineTransformType::New();
   m_ScreenToImageTransform = AffineTransformType::New();
+
+  // Initialize the components list
+  m_GlComponents = GlComponentListType::New();
 }
 
 template <class TInputImage>
@@ -213,6 +217,16 @@ ImageWidget<TInputImage>
     glVertex3f (m_Extent.GetIndex()[0],m_Extent.GetIndex()[1]+m_Extent.GetSize()[1], 0.0);
     glEnd ();
     glDisable(GL_TEXTURE_2D);
+    }
+
+  // Render additionnal GlComponents
+  for(GlComponentIteratorType it = m_GlComponents->Begin();
+      it!=m_GlComponents->End();++it)
+    {
+    if(it.Get()->GetVisible())
+      {
+      it.Get()->Render(m_Extent,m_ImageToScreenTransform);
+      }
     }
 
 //   // Draw the rectangle if necessary

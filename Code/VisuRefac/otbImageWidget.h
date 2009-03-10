@@ -25,7 +25,7 @@
 #include "itkRGBPixel.h"
 #include "itkFixedArray.h"
 #include "otbGlComponent.h"
-
+#include "otbObjectList.h"
 
 namespace otb
 {
@@ -70,6 +70,9 @@ public:
   typedef typename AffineTransformType::Pointer         AffineTransformPointerType;
   typedef typename GlComponentType::VectorType          VectorType;
   typedef typename GlComponentType::PointType           PointType;
+  typedef ObjectList<GlComponentType>                   GlComponentListType;
+  typedef typename GlComponentListType::Pointer        GlComponentListPointerType;
+  typedef typename GlComponentListType::Iterator       GlComponentIteratorType;
 
   /** Reads the OpenGl buffer from an image pointer
    *  \param image The image pointer,
@@ -105,6 +108,32 @@ public:
   /** Get the image to screen transform */
   itkGetObjectMacro(ImageToScreenTransform,AffineTransformType);
   itkGetObjectMacro(ScreenToImageTransform,AffineTransformType);
+
+
+  /** Add a GlComponent */
+  unsigned int AddGlComponent(const GlComponent * glComponent)
+  {
+    m_GlComponents->PushBack(glComponent);
+    return m_GlComponents->Size()-1;
+  }
+
+  /** Remove a GlComponent */
+  void RemoveGlComponent(unsigned int index)
+  {
+    m_GlComponents->Erase(index);
+  }
+
+  /** Clear the GlComponent list */
+  void ClearGlComponents()
+  {
+    m_GlComponents->Clear();
+  }
+
+  /** Get the number of GlComponent */
+  unsigned int GetNumberOfGlComponents()
+  {
+    return m_GlComponents->Size();
+  }
 
 protected:
   /** Constructor */
@@ -172,6 +201,9 @@ private:
   /** Space to screen transform */
   AffineTransformPointerType m_ImageToScreenTransform;
   AffineTransformPointerType m_ScreenToImageTransform;
+
+  /** Addtionnal Gl components */
+  GlComponentListPointerType m_GlComponents;
 
 }; // end class
 } // end namespace otb
