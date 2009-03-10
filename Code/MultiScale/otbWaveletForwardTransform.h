@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,6 +22,7 @@
 #define __otbWaveletForwardTransform_h
 
 #include "itkImageToImageFilter.h"
+#include "otbObjectList.h"
 
 namespace otb {
 
@@ -31,13 +32,13 @@ namespace otb {
  * This class defines the Wavelet Packet transformation of an image
  * by using a (templated) elementary wavelet transform.
  *
- * Here the number of decomposition is given. The output is then given 
+ * Here the number of decomposition is given. The output is then given
  * in the GetOutputs() array.
  *
  * Output image organization depends on the number of Dim on the image
- * In the OuputList, the first image is always the low passed one. Next, 
+ * In the OuputList, the first image is always the low passed one. Next,
  * follow the high Passed images of the lowest decomposition (ask
- * GetFilter(0)->GetNumberOfOutputs() to know the length) and so on until 
+ * GetFilter(0)->GetNumberOfOutputs() to know the length) and so on until
  * the high passed images of the highest decomposition.
  *
  * \sa StationaryFilterBank
