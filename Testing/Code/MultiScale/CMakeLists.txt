@@ -1,4 +1,4 @@
- 
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
@@ -14,16 +14,17 @@ SET(EPSILON 0.00000001)
 SET(MULTISCALE_TESTS1 ${CXX_TEST_PATH}/otbMultiScaleTests1)
 SET(MULTISCALE_TESTS2 ${CXX_TEST_PATH}/otbMultiScaleTests2)
 SET(MULTISCALE_TESTS3 ${CXX_TEST_PATH}/otbMultiScaleTests3)
+SET(MULTISCALE_TESTS4 ${CXX_TEST_PATH}/otbMultiScaleTests4)
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbMULTISCALE_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # -------            otb::MorphologicalPyramidResampler  ----------
 
-ADD_TEST(msTuMorphoPyrResamplerNew ${MULTISCALE_TESTS1} 
+ADD_TEST(msTuMorphoPyrResamplerNew ${MULTISCALE_TESTS1}
          otbMorphologicalPyramidResamplerNew)
 
-ADD_TEST(msTvMorphoPyrResampler ${MULTISCALE_TESTS1} 
+ADD_TEST(msTvMorphoPyrResampler ${MULTISCALE_TESTS1}
   --compare-n-images ${EPSILON} 2
 		   ${BASELINE}/msPyrResampler_IKO_LesHalles_256_2.hdr
 		   ${TEMP}/msPyrResampler_IKO_LesHalles_256_2.hdr
@@ -39,10 +40,10 @@ ADD_TEST(msTvMorphoPyrResampler ${MULTISCALE_TESTS1}
 
 # -------            otb::MorphologicalPyramidAnalysisFilter   ----------
 
-ADD_TEST(msTuMorphoPyrAnalysisFilterNew ${MULTISCALE_TESTS1} 
+ADD_TEST(msTuMorphoPyrAnalysisFilterNew ${MULTISCALE_TESTS1}
          otbMorphologicalPyramidAnalysisFilterNew)
 
-ADD_TEST(msTvMorphoPyrAnalysisFilter ${MULTISCALE_TESTS1} 
+ADD_TEST(msTvMorphoPyrAnalysisFilter ${MULTISCALE_TESTS1}
   --compare-n-images ${TOL} 5
 		   ${BASELINE}/msPyrAn_mire_log_an_2.png
 		   ${TEMP}/msPyrAn_mire_log_an_2.png
@@ -63,11 +64,11 @@ ADD_TEST(msTvMorphoPyrAnalysisFilter ${MULTISCALE_TESTS1}
 
 # -------            otb::MorphologicalPyramidSynthesisFilter   ----------
 
-ADD_TEST(msTuMorphoPyrSynthesisFilterNew ${MULTISCALE_TESTS1} 
+ADD_TEST(msTuMorphoPyrSynthesisFilterNew ${MULTISCALE_TESTS1}
          otbMorphologicalPyramidSynthesisFilterNew)
 
-ADD_TEST(msTvMorphoPyrSynthesisFilter ${MULTISCALE_TESTS1} 
-   --compare-image ${TOL} 
+ADD_TEST(msTvMorphoPyrSynthesisFilter ${MULTISCALE_TESTS1}
+   --compare-image ${TOL}
  		   ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
  		   ${TEMP}/msPyrSynth_IKO_Halles_4_2.tif
          otbMorphologicalPyramidSynthesisFilter
@@ -78,10 +79,10 @@ ADD_TEST(msTvMorphoPyrSynthesisFilter ${MULTISCALE_TESTS1}
 
 # -------            otb::MorphologicalPyramidMRToMSConverter   ----------
 
-ADD_TEST(msTuMorphoPyrMRToMSConverterNew ${MULTISCALE_TESTS1} 
+ADD_TEST(msTuMorphoPyrMRToMSConverterNew ${MULTISCALE_TESTS1}
          otbMorphologicalPyramidMRToMSConverterNew)
 
-ADD_TEST(msTvMorphoPyrMRToMSConverter ${MULTISCALE_TESTS1} 
+ADD_TEST(msTvMorphoPyrMRToMSConverter ${MULTISCALE_TESTS1}
    --compare-n-images ${EPSILON} 3
  		   ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
  		   ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
@@ -100,11 +101,11 @@ ADD_TEST(msTvMorphoPyrMRToMSConverter ${MULTISCALE_TESTS1}
 
 # -------            otb::MorphologicalPyramidSegmenter   ----------
 
-ADD_TEST(msTuMorphoPyrSegmenterNew ${MULTISCALE_TESTS1} 
+ADD_TEST(msTuMorphoPyrSegmenterNew ${MULTISCALE_TESTS1}
          otbMorphologicalPyramidSegmenterNew)
 
-ADD_TEST(msTvMorphoPyrSegmentBright ${MULTISCALE_TESTS1} 
-   --compare-image ${TOL} 
+ADD_TEST(msTvMorphoPyrSegmentBright ${MULTISCALE_TESTS1}
+   --compare-image ${TOL}
  		   ${BASELINE}/msPyrSegmenter_IKO_Halles_4_2_sf.tif
  		   ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_sf.tif
          otbMorphologicalPyramidSegmenter
@@ -117,8 +118,8 @@ ADD_TEST(msTvMorphoPyrSegmentBright ${MULTISCALE_TESTS1}
 	 10
 )
 
-ADD_TEST(msTvMorphoPyrSegmentDark ${MULTISCALE_TESTS1} 
-   --compare-image ${TOL} 
+ADD_TEST(msTvMorphoPyrSegmentDark ${MULTISCALE_TESTS1}
+   --compare-image ${TOL}
  		   ${BASELINE}/msPyrSegmenter_IKO_Halles_4_2_if.tif
  		   ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_if.tif
          otbMorphologicalPyramidSegmenter
@@ -131,18 +132,18 @@ ADD_TEST(msTvMorphoPyrSegmentDark ${MULTISCALE_TESTS1}
 	 10
 )
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbMULTISCALE_TESTS2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -------            otb::MorphologicalPyramidSegmentationFilter   ----------
 
-ADD_TEST(msTuMorphoPyrSegmentationFilterNew ${MULTISCALE_TESTS2} 
+ADD_TEST(msTuMorphoPyrSegmentationFilterNew ${MULTISCALE_TESTS2}
          otbMorphologicalPyramidSegmentationFilterNew)
 
-ADD_TEST(msTvMorphoPyrSegmentationFilter ${MULTISCALE_TESTS2} 
+ADD_TEST(msTvMorphoPyrSegmentationFilter ${MULTISCALE_TESTS2}
    --compare-n-images ${TOL} 4
-		   ${BASELINE}/msPyrSegmentation_IKO_Halles_2.tif	
+		   ${BASELINE}/msPyrSegmentation_IKO_Halles_2.tif
  		   ${TEMP}/msPyrSegmentation_IKO_Halles_2.tif
 		   ${BASELINE}/msPyrSegmentation_IKO_Halles_4.tif
  		   ${TEMP}/msPyrSegmentation_IKO_Halles_4.tif
@@ -162,11 +163,11 @@ ADD_TEST(msTvMorphoPyrSegmentationFilter ${MULTISCALE_TESTS2}
 )
 
 # -------            otb::GeodesicMorphologyDecompositionImageFilter   ----------
- 
-ADD_TEST(msTuGeodesicMorphologyDecompositionImageFilterNew ${MULTISCALE_TESTS2} 
+
+ADD_TEST(msTuGeodesicMorphologyDecompositionImageFilterNew ${MULTISCALE_TESTS2}
          otbGeodesicMorphologyDecompositionImageFilterNew)
 
-ADD_TEST(msTvGeodesicMorphologyDecompositionImageFilter ${MULTISCALE_TESTS2} 
+ADD_TEST(msTvGeodesicMorphologyDecompositionImageFilter ${MULTISCALE_TESTS2}
    --compare-n-images ${TOL} 3
 		   ${BASELINE}/msGeodesicMorphologyDecompositionImageFilterConvexOutput.tif
  		   ${TEMP}/msGeodesicMorphologyDecompositionImageFilterConvexOutput.tif
@@ -183,11 +184,11 @@ ADD_TEST(msTvGeodesicMorphologyDecompositionImageFilter ${MULTISCALE_TESTS2}
 )
 
 # -------            otb::GeodesicMorphologyLevelingFilter   ----------
- 
-ADD_TEST(msTuGeodesicMorphologyLevelingFilterNew ${MULTISCALE_TESTS2} 
+
+ADD_TEST(msTuGeodesicMorphologyLevelingFilterNew ${MULTISCALE_TESTS2}
          otbGeodesicMorphologyLevelingFilterNew)
 
-ADD_TEST(msTvGeodesicMorphologyLevelingFilter ${MULTISCALE_TESTS2} 
+ADD_TEST(msTvGeodesicMorphologyLevelingFilter ${MULTISCALE_TESTS2}
    --compare-image ${TOL}
 		   ${BASELINE}/msGeodesicMorphologyLevelingFilterOutput.tif
  		   ${TEMP}/msGeodesicMorphologyLevelingFilterOutput.tif
@@ -199,11 +200,11 @@ ADD_TEST(msTvGeodesicMorphologyLevelingFilter ${MULTISCALE_TESTS2}
 )
 
 # -------            otb::GeodesicMorphologyLevelingFilter   ----------
- 
-ADD_TEST(msTuConvexOrConcaveClassificationFilterNew ${MULTISCALE_TESTS2} 
+
+ADD_TEST(msTuConvexOrConcaveClassificationFilterNew ${MULTISCALE_TESTS2}
          otbConvexOrConcaveClassificationFilterNew)
 
-ADD_TEST(msTvConvexOrConcaveClassificationFilter ${MULTISCALE_TESTS2} 
+ADD_TEST(msTvConvexOrConcaveClassificationFilter ${MULTISCALE_TESTS2}
    --compare-image ${TOL}
 		   ${BASELINE}/msConvexOrConcaveClassificationFilterOutput.png
  		   ${TEMP}/msConvexOrConcaveClassificationFilterOutput.png
@@ -215,124 +216,124 @@ ADD_TEST(msTvConvexOrConcaveClassificationFilter ${MULTISCALE_TESTS2}
 )
 
 # -------            otb::MorphologicalOpeningProfileFilter   ----------
- 
-ADD_TEST(msTuMorphologicalOpeningProfileFilterNew ${MULTISCALE_TESTS2} 
+
+ADD_TEST(msTuMorphologicalOpeningProfileFilterNew ${MULTISCALE_TESTS2}
          otbMorphologicalOpeningProfileFilterNew)
 
-ADD_TEST(msTvMorphologicalOpeningProfileFilter ${MULTISCALE_TESTS2} 
+ADD_TEST(msTvMorphologicalOpeningProfileFilter ${MULTISCALE_TESTS2}
    --compare-n-images ${TOL} 4
 		   ${BASELINE}/msMorphologicalOpeningProfileFilterOutput1.tif
  		   ${TEMP}/msMorphologicalOpeningProfileFilterOutput1.tif
-		   ${BASELINE}/msMorphologicalOpeningProfileFilterOutput2.tif	
+		   ${BASELINE}/msMorphologicalOpeningProfileFilterOutput2.tif
  		   ${TEMP}/msMorphologicalOpeningProfileFilterOutput2.tif
 		   ${BASELINE}/msMorphologicalOpeningProfileFilterOutput3.tif
  		   ${TEMP}/msMorphologicalOpeningProfileFilterOutput3.tif
 		   ${BASELINE}/msMorphologicalOpeningProfileFilterOutput4.tif
- 		   ${TEMP}/msMorphologicalOpeningProfileFilterOutput4.tif		  
+ 		   ${TEMP}/msMorphologicalOpeningProfileFilterOutput4.tif
          otbMorphologicalOpeningProfileFilter
 	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
 	 ${TEMP}/msMorphologicalOpeningProfileFilterOutput
 	 tif
 	 4
 	 1
-	 1	 
+	 1
 )
 
 # -------            otb::MorphologicalClosingProfileFilter   ----------
- 
-ADD_TEST(msTuMorphologicalClosingProfileFilterNew ${MULTISCALE_TESTS2} 
+
+ADD_TEST(msTuMorphologicalClosingProfileFilterNew ${MULTISCALE_TESTS2}
          otbMorphologicalClosingProfileFilterNew)
 
-ADD_TEST(msTvMorphologicalClosingProfileFilter ${MULTISCALE_TESTS2} 
+ADD_TEST(msTvMorphologicalClosingProfileFilter ${MULTISCALE_TESTS2}
    --compare-n-images ${TOL} 4
 		   ${BASELINE}/msMorphologicalClosingProfileFilterOutput1.tif
  		   ${TEMP}/msMorphologicalClosingProfileFilterOutput1.tif
-		   ${BASELINE}/msMorphologicalClosingProfileFilterOutput2.tif	
+		   ${BASELINE}/msMorphologicalClosingProfileFilterOutput2.tif
  		   ${TEMP}/msMorphologicalClosingProfileFilterOutput2.tif
 		   ${BASELINE}/msMorphologicalClosingProfileFilterOutput3.tif
  		   ${TEMP}/msMorphologicalClosingProfileFilterOutput3.tif
 		   ${BASELINE}/msMorphologicalClosingProfileFilterOutput4.tif
- 		   ${TEMP}/msMorphologicalClosingProfileFilterOutput4.tif		  
+ 		   ${TEMP}/msMorphologicalClosingProfileFilterOutput4.tif
          otbMorphologicalClosingProfileFilter
 	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
 	 ${TEMP}/msMorphologicalClosingProfileFilterOutput
 	 tif
 	 4
 	 1
-	 1	 
+	 1
 )
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbMULTISCALE_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -------            otb::ProfileToProfileDerivativeFilter   ----------
- 
-ADD_TEST(msTuProfileToProfileDerivativeFilterNew ${MULTISCALE_TESTS3} 
+
+ADD_TEST(msTuProfileToProfileDerivativeFilterNew ${MULTISCALE_TESTS3}
          otbProfileToProfileDerivativeFilterNew)
 
-ADD_TEST(msTvProfileToProfileDerivativeFilter ${MULTISCALE_TESTS3} 
+ADD_TEST(msTvProfileToProfileDerivativeFilter ${MULTISCALE_TESTS3}
    --compare-n-images ${TOL} 4
 		   ${BASELINE}/msProfileToProfileDerivativeFilterOutput1.tif
  		   ${TEMP}/msProfileToProfileDerivativeFilterOutput1.tif
-		   ${BASELINE}/msProfileToProfileDerivativeFilterOutput2.tif	
+		   ${BASELINE}/msProfileToProfileDerivativeFilterOutput2.tif
  		   ${TEMP}/msProfileToProfileDerivativeFilterOutput2.tif
 		   ${BASELINE}/msProfileToProfileDerivativeFilterOutput3.tif
  		   ${TEMP}/msProfileToProfileDerivativeFilterOutput3.tif
 		   ${BASELINE}/msProfileToProfileDerivativeFilterOutput4.tif
- 		   ${TEMP}/msProfileToProfileDerivativeFilterOutput4.tif		  
+ 		   ${TEMP}/msProfileToProfileDerivativeFilterOutput4.tif
          otbProfileToProfileDerivativeFilter
 	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
 	 ${TEMP}/msProfileToProfileDerivativeFilterOutput
 	 tif
 	 5
 	 1
-	 1	 
+	 1
 )
 
 # -------            otb::ProfileDerivativeToMultiScaleCharacteristicsFilter   ----------
- 
-ADD_TEST(msTuProfileDerivativeToMultiScaleCharacteristicsFilterNew ${MULTISCALE_TESTS3} 
+
+ADD_TEST(msTuProfileDerivativeToMultiScaleCharacteristicsFilterNew ${MULTISCALE_TESTS3}
          otbProfileDerivativeToMultiScaleCharacteristicsFilterNew)
 
-ADD_TEST(msTvProfileDerivativeToMultiScaleCharacteristicsFilter ${MULTISCALE_TESTS3} 
+ADD_TEST(msTvProfileDerivativeToMultiScaleCharacteristicsFilter ${MULTISCALE_TESTS3}
    --compare-n-images ${TOL} 2
 		   ${BASELINE}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutput.tif
  		   ${TEMP}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutput.tif
-		   ${BASELINE}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutputCharacteristics.tif	
- 		   ${TEMP}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutputCharacteristics.tif		  
+		   ${BASELINE}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutputCharacteristics.tif
+ 		   ${TEMP}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutputCharacteristics.tif
          otbProfileDerivativeToMultiScaleCharacteristicsFilter
 	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
 	 ${TEMP}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutput.tif
 	  ${TEMP}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutputCharacteristics.tif
 	 5
 	 1
-	 1	 
+	 1
 )
 # -------            otb::MultiScaleConvexOrConcaveClassificationFilter   ----------
- 
-ADD_TEST(msTuMultiScaleConvexOrConcaveClassificationFilterNew ${MULTISCALE_TESTS3} 
+
+ADD_TEST(msTuMultiScaleConvexOrConcaveClassificationFilterNew ${MULTISCALE_TESTS3}
          otbMultiScaleConvexOrConcaveClassificationFilterNew)
 
-ADD_TEST(msTvMultiScaleConvexOrConcaveClassificationFilter ${MULTISCALE_TESTS3} 
+ADD_TEST(msTvMultiScaleConvexOrConcaveClassificationFilter ${MULTISCALE_TESTS3}
    --compare-image ${TOL}
 		   ${BASELINE}/msMultiScaleConvexOrConcaveClassificationFilterOutput.tif
- 		   ${TEMP}/msMultiScaleConvexOrConcaveClassificationFilterOutput.tif	  
+ 		   ${TEMP}/msMultiScaleConvexOrConcaveClassificationFilterOutput.tif
          otbMultiScaleConvexOrConcaveClassificationFilter
 	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
 	 ${TEMP}/msMultiScaleConvexOrConcaveClassificationFilterOutput.tif
 	 5
 	 1
 	 1
-	 1.	 
+	 1.
 )
 
 # -------            otb::GeodesicMorphologyIterativeDecompositionImageFilter   ----------
- 
-ADD_TEST(msTuGeodesicMorphologyIterativeDecompositionImageFilterNew ${MULTISCALE_TESTS3} 
+
+ADD_TEST(msTuGeodesicMorphologyIterativeDecompositionImageFilterNew ${MULTISCALE_TESTS3}
          otbGeodesicMorphologyIterativeDecompositionImageFilterNew)
 
-ADD_TEST(msTvGeodesicMorphologyIterativeDecompositionImageFilter ${MULTISCALE_TESTS3} 
+ADD_TEST(msTvGeodesicMorphologyIterativeDecompositionImageFilter ${MULTISCALE_TESTS3}
    --compare-n-images ${TOL} 6
 		   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_concMap_1.tif
  		   ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter_concMap_1.tif
@@ -352,9 +353,12 @@ ADD_TEST(msTvGeodesicMorphologyIterativeDecompositionImageFilter ${MULTISCALE_TE
 	 tif
 	 2
 	 3
-         2	 
+         2
 )
 
+# -------            otb::WaveletTransform   ----------
+ADD_TEST(msTuWaveletTransformNew ${MULTISCALE_TESTS4}
+         otbWaveletTransformNew)
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicMultiScale_SRCS1
@@ -392,7 +396,10 @@ otbMultiScaleConvexOrConcaveClassificationFilterNew.cxx
 otbMultiScaleConvexOrConcaveClassificationFilter.cxx
 otbGeodesicMorphologyIterativeDecompositionImageFilterNew.cxx
 otbGeodesicMorphologyIterativeDecompositionImageFilter.cxx
-
+)
+SET(BasicMultiScale_SRCS4
+otbWaveletTransformNew.cxx
+otbWaveletTransform.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
@@ -403,5 +410,7 @@ ADD_EXECUTABLE(otbMultiScaleTests2 otbMultiScaleTests2.cxx ${BasicMultiScale_SRC
 TARGET_LINK_LIBRARIES(otbMultiScaleTests2 OTBIO OTBMultiScale)
 ADD_EXECUTABLE(otbMultiScaleTests3 otbMultiScaleTests3.cxx ${BasicMultiScale_SRCS3})
 TARGET_LINK_LIBRARIES(otbMultiScaleTests3 OTBIO OTBMultiScale)
+ADD_EXECUTABLE(otbMultiScaleTests4 otbMultiScaleTests4.cxx ${BasicMultiScale_SRCS4})
+TARGET_LINK_LIBRARIES(otbMultiScaleTests4 OTBIO OTBMultiScale OTBVisu)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
