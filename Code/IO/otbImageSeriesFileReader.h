@@ -33,6 +33,13 @@
 
 namespace otb {
 
+/**
+  * \class ImagerSeriesFileReader
+  * \brief Todo
+  *
+  *
+  * \see ImageFileReader
+ */
 template < class TImage, class TInternalImage = TImage >
 class ITK_EXPORT ImageSeriesFileReader
 	: public ImageSeriesFileReaderBase< TImage, TInternalImage >
@@ -130,7 +137,8 @@ class ITK_EXPORT ImageSeriesFileReader
     void operator= ( const Self & );
 }; // end of class
 
-/** ImagerSeriesFileReader
+/**
+ * \class ImagerSeriesFileReader
  * \brief Specific definition for template Images
  *
  * In the case where TImage and TInternalImage stand for otb::Image, the
