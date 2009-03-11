@@ -381,6 +381,22 @@ ADD_TEST(msTvWaveletTransform ${MULTISCALE_TESTS4}
 ADD_TEST(msTuWaveletPacketTransformNew ${MULTISCALE_TESTS4}
          otbWaveletPacketTransformNew)
 
+ADD_TEST(msTvWaveletPacketTransform ${MULTISCALE_TESTS4}
+        --compare-n-images ${TOL} 4
+              ${BASELINE}/msTvWaveletPacketTransform-0.tif
+              ${TEMP}/msTvWaveletPacketTransform-0.tif
+              ${BASELINE}/msTvWaveletPacketTransform-1.tif
+              ${TEMP}/msTvWaveletPacketTransform-1.tif
+              ${BASELINE}/msTvWaveletPacketTransform-2.tif
+              ${TEMP}/msTvWaveletPacketTransform-2.tif
+              ${BASELINE}/msTvWaveletPacketTransform-3.tif
+              ${TEMP}/msTvWaveletPacketTransform-3.tif
+         otbWaveletPacketTransform
+          -in ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          -l 1
+          -out ${TEMP}/msTvWaveletPacketTransform
+)
+
 # -------            otb::StationaryFilterBankNew   ----------
 ADD_TEST(msTuStationaryFilterBankNew ${MULTISCALE_TESTS4}
          otbStationaryFilterBankNew)
@@ -441,6 +457,7 @@ SET(BasicMultiScale_SRCS4
 otbWaveletTransformNew.cxx
 otbWaveletTransform.cxx
 otbWaveletPacketTransformNew.cxx
+otbWaveletPacketTransform.cxx
 otbStationaryFilterBankNew.cxx
 otbStationaryFilterBank.cxx
 )
