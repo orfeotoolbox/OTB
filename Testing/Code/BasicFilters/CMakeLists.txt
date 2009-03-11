@@ -26,6 +26,7 @@ SET(BASICFILTERS_TESTS8 ${CXX_TEST_PATH}/otbBasicFiltersTests8)
 SET(BASICFILTERS_TESTS9 ${CXX_TEST_PATH}/otbBasicFiltersTests9)
 SET(BASICFILTERS_TESTS10 ${CXX_TEST_PATH}/otbBasicFiltersTests10)
 SET(BASICFILTERS_TESTS11 ${CXX_TEST_PATH}/otbBasicFiltersTests11)
+SET(BASICFILTERS_TESTS12 ${CXX_TEST_PATH}/otbBasicFiltersTests12)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1048,7 +1049,7 @@ ADD_TEST(bfTvEdgeDensityImageFilter ${BASICFILTERS_TESTS9}
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests10 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests10 ~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ADD_TEST(bfTuScalarImageTextureFunctorNew ${BASICFILTERS_TESTS10}
         otbScalarImageTextureFunctorNew )
@@ -1154,6 +1155,11 @@ ADD_TEST(bfTvPersistentVectorizationImageFilter ${BASICFILTERS_TESTS10}
 	 ${INPUTDATA}/Seg1InputForRCC8Graph.tif
 	 ${TEMP}/bfTvPersistentVectorizationImageFilterOutput.txt
 )
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests10 ~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -------     Combination ExtractROI and StremingResample   ----------------------------
 
@@ -1442,6 +1448,30 @@ ADD_TEST(bfTvListSampleToHistogramListGenerator ${BASICFILTERS_TESTS11}
 	10 1
 )
 
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests12 ~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# -------     otbEdgeDetectorImageFilter   ----------------------------
+ADD_TEST(bfTvEdgeDetectorImageFilterNew ${BASICFILTERS_TESTS12}
+	 otbEdgeDetectorImageFilterNew
+	 )
+
+ADD_TEST(bfTvEdgeDetectorImageFilter ${BASICFILTERS_TESTS12}
+--compare-image ${TOL}
+	    ${BASELINE}/bfTvEdgeDetectorImageFilter.tif
+	    ${TEMP}/bfTvEdgeDetectorImageFilter.tif
+	 otbEdgeDetectorImageFilter
+	 ${INPUTDATA}/poupees_sub.png
+	 ${TEMP}/bfTvEdgeDetectorImageFilter.tif
+	 50000   # lower threshold
+	 2000000 # upper  threshold
+)
+
+
+
+
 # A enrichir
 SET(BasicFilters_SRCS1
 otbLeeFilter.cxx
@@ -1632,6 +1662,10 @@ otbListSampleToHistogramListGeneratorNew.cxx
 otbListSampleToHistogramListGenerator.cxx
 )
 
+SET(BasicFilters_SRCS12
+otbEdgeDetectorImageFilter.cxx
+otbEdgeDetectorImageFilterNew.cxx
+)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
@@ -1667,5 +1701,8 @@ TARGET_LINK_LIBRARIES(otbBasicFiltersTests10  OTBBasicFilters  OTBIO )
 
 ADD_EXECUTABLE(otbBasicFiltersTests11 otbBasicFiltersTests11.cxx ${BasicFilters_SRCS11})
 TARGET_LINK_LIBRARIES(otbBasicFiltersTests11  OTBBasicFilters ITKAlgorithms OTBIO )
+
+ADD_EXECUTABLE(otbBasicFiltersTests12 otbBasicFiltersTests12.cxx ${BasicFilters_SRCS12})
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests12  OTBBasicFilters ITKAlgorithms OTBIO )
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
