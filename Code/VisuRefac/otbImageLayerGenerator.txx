@@ -122,6 +122,47 @@ ImageLayerGenerator<TImageLayer>
   m_Layer->SetHasExtract(true);
   m_Layer->SetHasScaledExtract(true);
   m_Layer->VisibleOn();
+
+  // Set up rendering function
+  typedef typename ImageLayerType::DefaultRenderingFunctionType RenderingFunctionType;
+  typename RenderingFunctionType::Pointer rfunc = RenderingFunctionType::New();
+
+  // Setup channels
+  switch(m_Image->GetNumberOfComponentsPerPixel())
+    {
+    case 1:
+    {
+    rfunc->SetAllChannels(0);
+    break;
+    }
+    case 2:
+    {
+    rfunc->SetAllChannels(0);
+    }
+    case 3:
+    {
+    rfunc->SetRedChannelIndex(0);
+    rfunc->SetGreenChannelIndex(1);
+    rfunc->SetBlueChannelIndex(2);
+    break;
+    }
+    case 4:
+    {
+    // Handle quickbird like channel order
+    rfunc->SetRedChannelIndex(2);
+    rfunc->SetGreenChannelIndex(1);
+    rfunc->SetBlueChannelIndex(0);
+    break;
+    }
+    default:
+    {
+    //Discard
+    break;
+    }
+    }
+
+  // Set the rendering function
+  m_Layer->SetRenderingFunction(rfunc);
 }
 
 template < class TImageLayer >
