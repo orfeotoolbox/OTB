@@ -73,7 +73,7 @@ public:
 
 
   /** Main computation method */
-  virtual void ThreadedGenerateData( const InputImageRegionType &outputRegionForThread, int threadId ) ;
+  virtual void ThreadedGenerateData( const InputImageRegionType &outputRegionForThread, int threadId );
   virtual void BeforeThreadedGenerateData();
   virtual void GenerateInputRequestedRegion();
 

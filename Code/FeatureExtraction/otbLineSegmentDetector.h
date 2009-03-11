@@ -147,7 +147,7 @@ public:
   Functor::OrientationFunctor<typename GradientOutputImageType::PixelType,TPrecision> > OrientationFilterType;
   typedef typename OrientationFilterType::Pointer OrientationFilterPointerType;
   typedef typename OrientationFilterType::OutputImageType                         OutputImageDirType;
-  typedef typename OutputImageDirType::RegionType                                 OutputImageDirRegionType ;
+  typedef typename OutputImageDirType::RegionType                                 OutputImageDirRegionType;
 
   /** Create an image to store the label USED(1) or notUsed (0)*/
   typedef otb::Image<unsigned char, 2>                              LabelImageType;

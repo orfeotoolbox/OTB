@@ -207,7 +207,7 @@ public:
       {
         double sumMin = 0;
         double sumMax = 0;
-        for(unsigned int t=0; t<m_RatioMaxConsiderationNumber ; t++)
+        for(unsigned int t=0; t<m_RatioMaxConsiderationNumber; t++)
           {
             sumMin += minSorted[t];
             sumMax += maxSorted[t];

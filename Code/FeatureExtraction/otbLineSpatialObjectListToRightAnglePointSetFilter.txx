@@ -190,7 +190,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
    */
   
   float SegmentLength = vcl_sqrt((Xq1-Xq2)* (Xq1-Xq2) + (Yq1-Yq2) *(Yq1-Yq2));
-  float CrossProduct  =   Xq1*Yq2 - Xq2*Yq1 ;
+  float CrossProduct  =   Xq1*Yq2 - Xq2*Yq1;
 
   /** Define a line iterator */
   itk::LineIterator<InputImageType> itLine(this->GetInputImage() , IndexBeginSrc , IndexEndSrc);
@@ -253,8 +253,8 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
   float Yq2 = (*itPointsDst).GetPosition()[1];  //yq2
 
   /** Vectors support computation */
-  float SegmentLengthP = vcl_sqrt( (Xp1-Xp2)* (Xp1-Xp2) + (Yp1-Yp2) *(Yp1-Yp2) ) ;
-  float SegmentLengthQ = vcl_sqrt( (Xq1-Xq2)* (Xq1-Xq2) + (Yq1-Yq2) *(Yq1-Yq2) ) ;
+  float SegmentLengthP = vcl_sqrt( (Xp1-Xp2)* (Xp1-Xp2) + (Yp1-Yp2) *(Yp1-Yp2) );
+  float SegmentLengthQ = vcl_sqrt( (Xq1-Xq2)* (Xq1-Xq2) + (Yq1-Yq2) *(Yq1-Yq2) );
   
   float X = vcl_abs((Xp1 - Xp2)*(Xq1-Xq2));
   float Y = vcl_abs((Yp1 - Yp2)*(Yq1-Yq2));

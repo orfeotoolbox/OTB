@@ -206,7 +206,7 @@ class ITK_EXPORT ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixe
                 /**
                  * Tests the coherency of the Meta File (especifically band selection) with the image types
                  */
-                virtual void TestBandSelection( std::vector<unsigned int> & bands ) ;
+                virtual void TestBandSelection( std::vector<unsigned int> & bands );
 
                 /** GenerateData
                  * This method will be specialised if template definitions follow:
@@ -308,7 +308,7 @@ class ITK_EXPORT ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TIntern
                 /**
                  * Tests the coherency of the Meta File (especifically band selection) with the image types
                  */
-                virtual void TestBandSelection( std::vector<unsigned int> & bands ) ;
+                virtual void TestBandSelection( std::vector<unsigned int> & bands );
 
                 /** GenerateData
                  * This method will be specialised if template definitions follow:

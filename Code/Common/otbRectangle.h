@@ -54,7 +54,7 @@ namespace otb
       itkTypeMacro(Rectangle, itk::Object);
 
       /** Derived typedefs */
-      typedef itk::ContinuousIndex<ValueType,2>             ContinuousIndexType ;                    
+      typedef itk::ContinuousIndex<ValueType,2>             ContinuousIndexType;                    
       typedef ContinuousIndexType                           VertexType;  
       typedef itk::VectorContainer<unsigned, VertexType>    VertexListType;
       typedef typename VertexListType::Pointer              VertexListPointerType;      

@@ -35,8 +35,8 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
                                 TFrequencyContainer >
 ::ListSampleToVariableDimensionHistogramGenerator()
 {
-  m_Histogram = HistogramType::New() ;
-  m_MarginalScale = 100 ;
+  m_Histogram = HistogramType::New();
+  m_MarginalScale = 100;
   m_AutoMinMax = true;
 }  
 
@@ -81,18 +81,18 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
   if( m_AutoMinMax && m_List->Size() != 0 )
     {
     FindSampleBound(m_List, m_List->Begin(),
-                    m_List->End(), lower, upper) ;
-    float margin ;
+                    m_List->End(), lower, upper);
+    float margin;
 
-    for ( unsigned int i = 0 ; i < m_List->GetMeasurementVectorSize() ; i++ )
+    for ( unsigned int i = 0; i < m_List->GetMeasurementVectorSize(); i++ )
       {
       if ( !itk::NumericTraits< THistogramMeasurement >::is_integer )
         {
         margin = 
           ( (THistogramMeasurement)(upper[i] - lower[i]) / 
             (THistogramMeasurement) m_Sizes[i] ) / 
-          (THistogramMeasurement) m_MarginalScale ;
-        h_upper[i] = (THistogramMeasurement) (upper[i] + margin) ;
+          (THistogramMeasurement) m_MarginalScale;
+        h_upper[i] = (THistogramMeasurement) (upper[i] + margin);
         if(h_upper[i] <= upper[i])
           { 
           // an overflow has occurred therefore set upper to upper
@@ -107,7 +107,7 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
       else
         {
         h_upper[i] = ((THistogramMeasurement) upper[i]) + 
-          itk::NumericTraits< THistogramMeasurement >::One ;
+          itk::NumericTraits< THistogramMeasurement >::One;
         if(h_upper[i] <= upper[i])
           { 
           // an overflow has occurred therefore set upper to upper
@@ -119,7 +119,7 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
           // computation and clearly the user intended to include min and max.
           }
         }
-      h_lower[i] = ( THistogramMeasurement) lower[i] ;
+      h_lower[i] = ( THistogramMeasurement) lower[i];
       }
     }
   else
@@ -132,22 +132,22 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
   // the upper and lower bound from the FindSampleBound function
   
   otbMsgDevMacro(<<"ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Intializing histogram with (sizes= "<<m_Sizes<<", lower = "<<h_lower<<", upper = "<<h_upper<<")");
-  m_Histogram->Initialize(m_Sizes, h_lower, h_upper) ;
+  m_Histogram->Initialize(m_Sizes, h_lower, h_upper);
   otbMsgDevMacro(<<"ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Histogram initialized");
-  typename TListSample::ConstIterator iter = m_List->Begin() ;
-  typename TListSample::ConstIterator last = m_List->End() ;
-  typename HistogramType::IndexType index(m_List->GetMeasurementVectorSize()) ;
-  typename TListSample::MeasurementVectorType lvector(m_List->GetMeasurementVectorSize()) ;
-  typename HistogramType::MeasurementVectorType hvector(m_List->GetMeasurementVectorSize()) ;
+  typename TListSample::ConstIterator iter = m_List->Begin();
+  typename TListSample::ConstIterator last = m_List->End();
+  typename HistogramType::IndexType index(m_List->GetMeasurementVectorSize());
+  typename TListSample::MeasurementVectorType lvector(m_List->GetMeasurementVectorSize());
+  typename HistogramType::MeasurementVectorType hvector(m_List->GetMeasurementVectorSize());
   unsigned int i;
   
   otbMsgDevMacro(<<"ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Filling the histogram");
   while (iter != last)
     {
-    lvector = iter.GetMeasurementVector() ;
-    for ( i = 0 ; i < m_List->GetMeasurementVectorSize() ; i++)
+    lvector = iter.GetMeasurementVector();
+    for ( i = 0; i < m_List->GetMeasurementVectorSize(); i++)
       {
-      hvector[i] = (THistogramMeasurement) lvector[i] ;
+      hvector[i] = (THistogramMeasurement) lvector[i];
       }
     m_Histogram->GetIndex(hvector,index);
 
@@ -159,9 +159,9 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
       // bin value.
       // If the index isn't valid, we don't increase the frequency.
       // See the comments in Histogram->GetIndex() for more info.
-      m_Histogram->IncreaseFrequency(index, 1) ;
+      m_Histogram->IncreaseFrequency(index, 1);
       }
-    ++iter ;
+    ++iter;
     }
 
   otbMsgDebugMacro(<<"ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Leaving");

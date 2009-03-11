@@ -59,7 +59,7 @@ FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
 
   }
   m_Function->SetInputImage(inputPtr);
-  for(unsigned int i = 0 ; i<static_cast<unsigned int>(this->GetNumberOfThreads()); i++)
+  for(unsigned int i = 0; i<static_cast<unsigned int>(this->GetNumberOfThreads()); i++)
     {
       FunctionPointerType func = m_Function;
       m_FunctionList.push_back( func );

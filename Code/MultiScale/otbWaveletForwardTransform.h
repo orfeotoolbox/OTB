@@ -81,7 +81,7 @@ public:
   }
 
   itkGetMacro(NumberOfDecompositions,unsigned int);
-  void SetNumberOfDecompositions( unsigned int num ) ;
+  void SetNumberOfDecompositions( unsigned int num );
 
   itkStaticConstMacro(InputImageDimension, unsigned int,TInputImage::ImageDimension);
 

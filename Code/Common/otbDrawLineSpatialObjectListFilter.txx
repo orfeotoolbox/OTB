@@ -83,7 +83,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
   outputIt.GoToBegin();
   inputIt.GoToBegin();
 
-  for (outputIt.GoToBegin(); !outputIt.IsAtEnd()  ; ++outputIt,++inputIt)
+  for (outputIt.GoToBegin(); !outputIt.IsAtEnd() ; ++outputIt,++inputIt)
       outputIt.Set( static_cast<OutputPixelType>(inputIt.Get()) );
   
   /** Draw the lines in the ouput image using lineIterator*/
@@ -179,7 +179,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
  double origin        =  (*otherIndex)[1] - (slope * (*otherIndex)[0]);
 
  (*indexToCrop)[0] = static_cast<unsigned int>(size[0]-1);
- (*indexToCrop)[1] = static_cast<unsigned int>(slope *(*indexToCrop)[0] + origin +0.5) ;
+ (*indexToCrop)[1] = static_cast<unsigned int>(slope *(*indexToCrop)[0] + origin +0.5);
 }
 
 /**

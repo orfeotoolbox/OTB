@@ -85,7 +85,7 @@ Rectangle<TValue>
     double yp = p[1];
     
     double SegmentLength = vcl_sqrt((Xq1-Xq2)* (Xq1-Xq2) + (Yq1-Yq2) *(Yq1-Yq2));
-    double CrossProduct  =   Xq1*Yq2 - Xq2*Yq1 ;
+    double CrossProduct  =   Xq1*Yq2 - Xq2*Yq1;
     double Num   = vcl_abs(xp*(Yq1-Yq2) + yp*(Xq2-Xq1) + CrossProduct);
     
     /** distance from Point P to Segment Q1Q2*/
@@ -117,20 +117,20 @@ Rectangle<TValue>
     VertexListPointerType        cornersVertex = VertexListType::New();
     VertexType                   tempCorner;
     
-    tempCorner[0] =  p1[0] + dy* halfWidth ;
-    tempCorner[1] =  p1[1] - dx* halfWidth ;
+    tempCorner[0] =  p1[0] + dy* halfWidth;
+    tempCorner[1] =  p1[1] - dx* halfWidth;
     cornersVertex->InsertElement(cornersVertex->Size(),tempCorner);
 
-    tempCorner[0] =  p1[0] - dy* halfWidth ;
-    tempCorner[1] =  p1[1] + dx* halfWidth ;
+    tempCorner[0] =  p1[0] - dy* halfWidth;
+    tempCorner[1] =  p1[1] + dx* halfWidth;
     cornersVertex->InsertElement(cornersVertex->Size(),tempCorner);
     
-    tempCorner[0] =  p2[0] + dy* halfWidth ;
-    tempCorner[1] =  p2[1] - dx* halfWidth ;
+    tempCorner[0] =  p2[0] + dy* halfWidth;
+    tempCorner[1] =  p2[1] - dx* halfWidth;
     cornersVertex->InsertElement(cornersVertex->Size(),tempCorner);
     
-    tempCorner[0] =  p2[0] - dy* halfWidth ;
-    tempCorner[1] =  p2[1] + dx* halfWidth ;
+    tempCorner[0] =  p2[0] - dy* halfWidth;
+    tempCorner[1] =  p2[1] + dx* halfWidth;
     cornersVertex->InsertElement(cornersVertex->Size(),tempCorner);
     
     /** Compute the bounding region*/

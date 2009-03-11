@@ -102,7 +102,7 @@ VectorDataExtractROI<TVectorData>
   typedef itk::PreOrderTreeIterator<DataTreeType>                 TreeIteratorType;
   TreeIteratorType                                                it(input->GetDataTree());
   it.GoToBegin();
-  bool newFolder       = false ;
+  bool newFolder       = false;
   bool newMultiFeature = false;
   
   
@@ -175,7 +175,7 @@ VectorDataExtractROI<TVectorData>
                 if(newMultiFeature)
                   {
                     tree->Add(newDataNodeMultiFeature ,currentContainer);
-                    currentContainer =  newDataNodeMultiFeature ;
+                    currentContainer =  newDataNodeMultiFeature;
                     newMultiFeature = false;
                   }
                 newDataNode->SetNodeType(dataNode->GetNodeType());
@@ -199,7 +199,7 @@ VectorDataExtractROI<TVectorData>
                 if(newMultiFeature)
                   {
                     tree->Add(newDataNodeMultiFeature,currentContainer);
-                    currentContainer =  newDataNodeMultiFeature ;
+                    currentContainer =  newDataNodeMultiFeature;
                     newMultiFeature = false;
                   }
                 
