@@ -53,7 +53,7 @@ int main(int argc, char * argv[])
 {
   if (argc != 5)
   {
-    std::cerr << "Usage: " << argv[0] ;
+    std::cerr << "Usage: " << argv[0];
     std::cerr << " InputImage OutputImage octaves scales" << std::endl;
     return 1;
   }

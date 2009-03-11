@@ -268,9 +268,9 @@ int main( int argc, char* argv[] )
 
 
 
-  typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType ;
+  typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType;
 
-  ClassifierType::Pointer classifier = ClassifierType::New() ;
+  ClassifierType::Pointer classifier = ClassifierType::New();
 
 // Software Guide : EndCodeSnippet
 
@@ -285,10 +285,10 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
 
   int numberOfClasses = model->GetNumberOfClasses();
-  classifier->SetNumberOfClasses(numberOfClasses) ;
+  classifier->SetNumberOfClasses(numberOfClasses);
   classifier->SetModel( model );
-  classifier->SetSample(sample.GetPointer()) ;
-  classifier->Update() ;
+  classifier->SetSample(sample.GetPointer());
+  classifier->Update();
 
 // Software Guide : EndCodeSnippet
 
@@ -305,12 +305,12 @@ int main( int argc, char* argv[] )
 
 
   ClassifierType::OutputType* membershipSample =
-    classifier->GetOutput() ;
+    classifier->GetOutput();
 
   ClassifierType::OutputType::ConstIterator m_iter =
-    membershipSample->Begin() ;
+    membershipSample->Begin();
   ClassifierType::OutputType::ConstIterator m_last =
-    membershipSample->End() ;
+    membershipSample->End();
 
 // Software Guide : EndCodeSnippet
 
@@ -370,7 +370,7 @@ int main( int argc, char* argv[] )
 
 
     ++pointId;
-    ++m_iter ;
+    ++m_iter;
   }
 
   std::cout << "Error = " << error/pointId << " % " << std::endl;

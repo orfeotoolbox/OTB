@@ -79,7 +79,7 @@ int main(int argc, char * argv[])
 {
   if (argc != 8)
   {
-    std::cerr << "Usage: " << argv[0] ;
+    std::cerr << "Usage: " << argv[0];
     std::cerr << " InputImage OutputImage OutputSIFTFile octaves scales threshold ratio" << std::endl;
     return 1;
   }
