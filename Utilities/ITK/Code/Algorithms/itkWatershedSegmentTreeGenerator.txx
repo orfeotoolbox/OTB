@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWatershedSegmentTreeGenerator.txx,v $
   Language:  C++
-  Date:      $Date: 2004-11-10 19:22:11 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-01-27 19:30:19 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -433,7 +433,8 @@ void SegmentTreeGenerator<TScalarType>
   if (from_seg == 0 || to_seg == 0)
     {
 
-    itkGenericExceptionMacro ( << "itk::watershed::SegmentTreeGenerator::MergeSegments:: An unexpected and fatal error has occurred. This is probably the result of overthresholding of the input image.");
+    itkGenericExceptionMacro ( <<
+                               "itk::watershed::SegmentTreeGenerator::MergeSegments:: An unexpected and fatal error has occurred. This is probably the result of overthresholding of the input image.");
     }
 
   // Compare the minimum values.

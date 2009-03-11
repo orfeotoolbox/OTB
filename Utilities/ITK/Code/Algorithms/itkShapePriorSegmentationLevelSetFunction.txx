@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShapePriorSegmentationLevelSetFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-03-03 13:58:42 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-01-27 19:30:16 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkShapePriorSegmentationLevelSetFunction_txx_
-#define __itkShapePriorSegmentationLevelSetFunction_txx_
+#ifndef __itkShapePriorSegmentationLevelSetFunction_txx
+#define __itkShapePriorSegmentationLevelSetFunction_txx
 
 #include "itkShapePriorSegmentationLevelSetFunction.h"
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVesselTubeSpatialObject.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-28 19:24:57 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-01-28 20:10:30 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,16 +26,16 @@ namespace itk
 {
 
 /** 
-* \class VesselTubeSpatialObject
-* \brief Representation of a tube based on the spatial object classes.
-*
-* The tube is basically defined by a set of points. Each tube can
-* be connected to a tube network, by using the AddSpatialObject() methods
-* of a VesselTubeSpatialObject Object. 
-* A tube is also identified by an id number when connected to a network.
-*
-* \sa VesselTubeSpatialObjectPoint 
-*/
+ * \class VesselTubeSpatialObject
+ * \brief Representation of a tube based on the spatial object classes.
+ *
+ * The tube is basically defined by a set of points. Each tube can
+ * be connected to a tube network, by using the AddSpatialObject() methods
+ * of a VesselTubeSpatialObject Object. 
+ * A tube is also identified by an id number when connected to a network.
+ *
+ * \sa VesselTubeSpatialObjectPoint 
+ */
 
 template < unsigned int TDimension = 3 >
 class VesselTubeSpatialObject 

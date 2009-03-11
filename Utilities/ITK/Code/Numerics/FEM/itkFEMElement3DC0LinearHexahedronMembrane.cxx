@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMElement3DC0LinearHexahedronMembrane.cxx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:40 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-01-29 20:09:11 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -37,9 +37,10 @@ Element3DC0LinearHexahedronMembrane
       Material::ConstPointer m_) : Superclass()
 {
   // Set the geometrical points
-  for (int k=0; k<8; k++) { 
+  for (int k=0; k<8; k++)
+    { 
     this->SetNode( k, ns_[k] ); 
-  }
+    }
 
   /*
    * Initialize the pointer to material object and check that
@@ -47,17 +48,10 @@ Element3DC0LinearHexahedronMembrane
    * If the material class was incorrect an exception is thrown.
    */
   if( (m_mat=dynamic_cast<const MaterialLinearElasticity*>(&*m_)) == 0 )
-  {
+    {
     throw FEMExceptionWrongClass(__FILE__,__LINE__,"Element3DC0LinearHexahedronMembrane::Element3DC0LinearHexahedronMembrane()");
-  }
+    }
 }
 
-
-
-
 FEM_CLASS_REGISTER(Element3DC0LinearHexahedronMembrane)
-
-
-
-
 }} // end namespace itk::fem

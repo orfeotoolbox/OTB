@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshEulerOperatorFlipEdgeFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-03 21:08:22 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-02-07 17:19:59 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -69,6 +69,7 @@ void
 QuadEdgeMeshEulerOperatorFlipEdgeFunction< TMesh, TQEType >::
 CheckStatus( QEType* h )
 {
+#ifndef NDEBUG
   if( h == (QEType*)0 )
     {
     m_EdgeStatus = EDGE_NULL;
@@ -80,6 +81,7 @@ CheckStatus( QEType* h )
     m_EdgeStatus = MESH_NULL;
     return;
     }
+#endif
    
   if( !h->IsInternal( ) )
     {

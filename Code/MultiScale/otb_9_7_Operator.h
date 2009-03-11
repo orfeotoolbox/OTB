@@ -60,9 +60,9 @@ public:
   itkTypeMacro(LowPass_9_7_Operator, WaveletOperator);
   
   LowPass_9_7_Operator() 
-	{
+        {
     this->SetRadius(4);
-		this->CreateToRadius(4);
+                this->CreateToRadius(4);
   }
 
   LowPass_9_7_Operator(const Self& other)
@@ -157,9 +157,9 @@ public:
   itkTypeMacro(HighPass_9_7_Operator, WaveletOperator);
   
   HighPass_9_7_Operator() 
-	{
+        {
     this->SetRadius(3);
-		this->CreateToRadius(3);
+                this->CreateToRadius(3);
   }
 
   HighPass_9_7_Operator(const Self& other)

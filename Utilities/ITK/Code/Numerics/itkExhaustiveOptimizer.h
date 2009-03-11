@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExhaustiveOptimizer.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-06 09:42:44 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-01-24 21:04:35 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -123,10 +123,6 @@ protected:
   void IncrementIndex( ParametersType & param );
 
   
-private:  
-  ExhaustiveOptimizer(const Self&); //purposely not implemented
-  void operator=(const Self&);//purposely not implemented
-
 protected:
   MeasureType          m_CurrentValue;
   StepsType            m_NumberOfSteps;
@@ -141,6 +137,10 @@ protected:
   ParametersType       m_MinimumMetricValuePosition;
   ParametersType       m_MaximumMetricValuePosition;
   
+private:  
+  ExhaustiveOptimizer(const Self&); //purposely not implemented
+  void operator=(const Self&);//purposely not implemented
+
 };
 
 } // end namespace itk

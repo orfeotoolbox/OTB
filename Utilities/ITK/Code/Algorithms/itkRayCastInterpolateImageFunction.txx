@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkRayCastInterpolateImageFunction.txx,v $
 Language:  C++
-Date:      $Date: 2007-04-26 20:20:40 $
-Version:   $Revision: 1.20 $
+Date:      $Date: 2009-01-26 21:45:56 $
+Version:   $Revision: 1.21 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,7 +25,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 // Put the helper class in an anonymous namespace so that it is not
 // exposed to the user
-namespace {
+namespace
+{
 
 /** \class Helper class to maintain state when casting a ray.
  *  This helper class keeps the RayCastInterpolateImageFunction thread safe.

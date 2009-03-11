@@ -168,14 +168,14 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   //  Since the number of bands of the input image is dynamically set
-  //  at runtime, the \code{Update} method of the reader must be
+  //  at runtime, the \code{UpdateOutputInformation} method of the reader must be
   //  called before using the extractor filter.
   //
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   reader->SetFileName( inputFilename  );
-  reader->Update();
+  reader->UpdateOutputInformation();
   writer->SetFileName( outputFilenameRGB );
   // Software Guide : EndCodeSnippet
 

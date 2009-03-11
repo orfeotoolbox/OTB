@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkObjectStore.txx,v $
   Language:  C++
-  Date:      $Date: 2007-02-14 17:51:19 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-02-06 20:53:14 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -98,8 +98,6 @@ ObjectStore<TObjectType>
   // it?
 }
 
-
-
 template <class TObjectType>
 ::size_t
 ObjectStore<TObjectType>
@@ -164,9 +162,6 @@ ObjectStore<TObjectType>
   os << indent << "Free list capacity: " << static_cast<unsigned long>( m_FreeList.capacity() ) << std::endl;
   os << indent << "Number of blocks in store: " << static_cast<unsigned long>( m_Store.size() ) << std::endl;
 }
-
-
-
 
 } // end namespace itk
 

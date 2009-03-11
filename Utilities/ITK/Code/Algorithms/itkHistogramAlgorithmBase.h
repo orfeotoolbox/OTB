@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHistogramAlgorithmBase.h,v $
   Language:  C++
-  Date:      $Date: 2005-11-26 16:07:36 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2008-12-21 19:13:12 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,39 +38,39 @@ class HistogramAlgorithmBase : public Object
 {
 public:
   /**Standard class typedefs. */
-  typedef HistogramAlgorithmBase Self;
-  typedef Object Superclass ;
-  typedef SmartPointer< Self > Pointer;
+  typedef HistogramAlgorithmBase     Self;
+  typedef Object                     Superclass;
+  typedef SmartPointer< Self >       Pointer;
   typedef SmartPointer< const Self > ConstPointer;
 
   /**Standard Macros */
   itkTypeMacro(HistogramAlgorithmBase, Object);
   
   /** Histogram typedefs alias */
-  typedef TInputHistogram InputHistogramType ;
+  typedef TInputHistogram InputHistogramType;
 
   /** Stores the histogram pointer */
   void SetInputHistogram( const TInputHistogram * histogram ) 
-  {
+    {
     if ( m_InputHistogram != histogram )
       {
-        m_InputHistogram = histogram ;
-        this->Modified() ;
+      m_InputHistogram = histogram;
+      this->Modified();
       }
-  }
+    }
 
   /** Returns the histogram const pointer */
   const TInputHistogram * GetInputHistogram() const
-  { return m_InputHistogram.GetPointer() ; }
+    { return m_InputHistogram.GetPointer(); }
 
   /** dummy function that calls the GenerateData() function to generate
    * output. It exists for future compatibility with ProcessObject 
    * without streaming */
   void Update()
-  { this->GenerateData() ; }
+    { this->GenerateData(); }
     
 protected:
-  HistogramAlgorithmBase() ;
+  HistogramAlgorithmBase();
   virtual ~HistogramAlgorithmBase() {}
   void PrintSelf(std::ostream& os, Indent indent) const;
 
@@ -78,8 +78,8 @@ protected:
 
 private:
   /** Target histogram data pointer */
-  typename TInputHistogram::ConstPointer m_InputHistogram ;
-} ; // end of class
+  typename TInputHistogram::ConstPointer m_InputHistogram;
+}; // end of class
     
 } // end of namespace itk 
 
@@ -88,4 +88,3 @@ private:
 #endif
 
 #endif
-

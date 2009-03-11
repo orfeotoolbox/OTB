@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPeriodicBoundaryCondition.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:09 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-02-19 19:41:23 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,14 +40,14 @@ class ITK_EXPORT  PeriodicBoundaryCondition
 {
 public:
   /** Standard class typedefs. */ 
-  typedef PeriodicBoundaryCondition Self;
+  typedef PeriodicBoundaryCondition      Self;
   typedef ImageBoundaryCondition<TImage> Superclass;
   
   /** Extract information from the image type. */
-  typedef typename Superclass::PixelType PixelType;
+  typedef typename Superclass::PixelType        PixelType;
   typedef typename Superclass::PixelPointerType PixelPointerType;
-  typedef typename Superclass::IndexType IndexType;
-  typedef typename Superclass::OffsetType OffsetType;
+  typedef typename Superclass::IndexType        IndexType;
+  typedef typename Superclass::OffsetType       OffsetType;
   typedef typename Superclass::NeighborhoodType NeighborhoodType;
   
   typedef typename Superclass::NeighborhoodAccessorFunctorType 

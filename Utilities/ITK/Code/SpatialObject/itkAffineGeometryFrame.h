@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAffineGeometryFrame.h,v $
   Language:  C++
-  Date:      $Date: 2007-07-16 23:09:53 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-01-28 20:10:26 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,9 +25,9 @@
 namespace itk 
 {
 
- /** \class AffineGeometryFrame
-  * \brief Describes the geometry of a data object  
-  */
+/** \class AffineGeometryFrame
+ * \brief Describes the geometry of a data object  
+ */
 template <class TScalarType = double, unsigned int NDimensions = 3>
 class AffineGeometryFrame : public itk::Object
 {
@@ -59,7 +59,7 @@ public:
 
   /** Set the bounding box Only possible via the BoundsArray 
    * to make clear that a copy of the bounding-box is stored, 
-   * not a reference to it.*/
+   * not a reference to it. */
   virtual void SetBounds(const BoundsArrayType& bounds);
 
   /** Get the extent of the bounding box */

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMersenneTwisterRandomVariateGenerator.cxx,v $
   Language:  C++
-  Date:      $Date: 2005-10-06 17:39:20 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-02-06 20:53:05 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,41 +17,41 @@
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 
 namespace itk {
-  namespace Statistics {
-    MersenneTwisterRandomVariateGenerator::Pointer MersenneTwisterRandomVariateGenerator::m_Instance = 0;
+namespace Statistics {
+MersenneTwisterRandomVariateGenerator::Pointer MersenneTwisterRandomVariateGenerator::m_Instance = 0;
 
-    /**
+/**
      * This just calls GetInstance
      */
-    MersenneTwisterRandomVariateGenerator::Pointer 
-    MersenneTwisterRandomVariateGenerator::New()
-    { 
-      return GetInstance();
-    }
+MersenneTwisterRandomVariateGenerator::Pointer 
+MersenneTwisterRandomVariateGenerator::New()
+{ 
+  return GetInstance();
+}
 
-    /**
-     * Return the single instance of the MersenneTwisterRandomVariateGenerator
-     */
-    MersenneTwisterRandomVariateGenerator::Pointer
-    MersenneTwisterRandomVariateGenerator
-    ::GetInstance()
+/**
+ * Return the single instance of the MersenneTwisterRandomVariateGenerator
+ */
+MersenneTwisterRandomVariateGenerator::Pointer
+MersenneTwisterRandomVariateGenerator
+::GetInstance()
+{
+  if ( !MersenneTwisterRandomVariateGenerator::m_Instance )
     {
-      if ( !MersenneTwisterRandomVariateGenerator::m_Instance )
-        {
-        // Try the factory first
-        MersenneTwisterRandomVariateGenerator::m_Instance  = ObjectFactory<Self>::Create();
-        // if the factory did not provide one, then create it here
-        if( ! MersenneTwisterRandomVariateGenerator::m_Instance )
-          {
-          MersenneTwisterRandomVariateGenerator::m_Instance = new MersenneTwisterRandomVariateGenerator;
-          // Remove extra reference from construction.
-          MersenneTwisterRandomVariateGenerator::m_Instance->UnRegister();
-          }
-        }
-      /**
-       * return the instance
-       */
-      return MersenneTwisterRandomVariateGenerator::m_Instance;
+    // Try the factory first
+    MersenneTwisterRandomVariateGenerator::m_Instance  = ObjectFactory<Self>::Create();
+    // if the factory did not provide one, then create it here
+    if( ! MersenneTwisterRandomVariateGenerator::m_Instance )
+      {
+      MersenneTwisterRandomVariateGenerator::m_Instance = new MersenneTwisterRandomVariateGenerator;
+      // Remove extra reference from construction.
+      MersenneTwisterRandomVariateGenerator::m_Instance->UnRegister();
+      }
     }
-  }
+  /**
+   * return the instance
+   */
+  return MersenneTwisterRandomVariateGenerator::m_Instance;
+}
+}
 }

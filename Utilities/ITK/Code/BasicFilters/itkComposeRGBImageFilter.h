@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkComposeRGBImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-13 18:54:27 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-01-14 18:39:05 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,17 +19,6 @@
 
 #include "itkTernaryFunctorImageFilter.h"
 #include "itkRGBPixel.h"
-
-/** \class ComposeRGBImageFilter
- * \brief Implements pixel-wise composition of an RGB pixel from three scalar images.
- *
- * This filter receives three scalar images as input. Each image containing
- * one of the RGB components of a color image. The filter produces as output an
- * RGB image in which the three components have been unified. The Component
- * type is preserved from the PixelType of the input images.
- *
- * \ingroup IntensityImageFilters
- */
 
 namespace itk
 {
@@ -61,6 +50,17 @@ public:
     }
 }; 
 }
+
+/** \class ComposeRGBImageFilter
+ * \brief Implements pixel-wise composition of an RGB pixel from three scalar images.
+ *
+ * This filter receives three scalar images as input. Each image containing
+ * one of the RGB components of a color image. The filter produces as output an
+ * RGB image in which the three components have been unified. The Component
+ * type is preserved from the PixelType of the input images.
+ *
+ * \ingroup IntensityImageFilters
+ */
 
 template <typename TInputImage, 
           typename TOutputImage= 

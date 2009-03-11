@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelOverlayFunctor.h,v $
   Language:  C++
-  Date:      $Date: 2007-10-21 11:20:35 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-02-24 19:03:15 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -31,7 +31,7 @@ namespace Functor {
  *
  * This functor class used internally by LabelOverlayImageFilter
  *
- * \author Gaëtan Lehmann. Biologie du Développement et de la Reproduction,
+ * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction,
  * INRA de Jouy-en-Josas, France.  
  *
  * \sa LabelOverlayImageFilter LabelToRGBFunctor
@@ -49,7 +49,7 @@ public:
     m_BackgroundValue = NumericTraits<TLabel>::Zero;
     }
 
-  inline TRGBPixel operator()(  const TInputPixel & p1, const TLabel & p2)
+  inline TRGBPixel operator()(  const TInputPixel & p1, const TLabel & p2) const
     {
     TRGBPixel rgbPixel;
     if( p2 == m_BackgroundValue )

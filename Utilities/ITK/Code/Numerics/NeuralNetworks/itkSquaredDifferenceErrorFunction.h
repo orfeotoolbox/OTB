@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSquaredDifferenceErrorFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-08-17 13:10:57 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-28 21:04:59 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -32,18 +32,19 @@ class SquaredDifferenceErrorFunction : public ErrorFunctionBase<TMeasurementVect
 public:
 
   /** Standard class typedefs. */
-  typedef SquaredDifferenceErrorFunction Self;
+  typedef SquaredDifferenceErrorFunction                    Self;
   typedef ErrorFunctionBase<TMeasurementVector, ScalarType> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
-  typedef typename Superclass::ErrorVectorType ErrorVectorType;
+  typedef SmartPointer<Self>                                Pointer;
+  typedef SmartPointer<const Self>                          ConstPointer;
+
+  typedef typename Superclass::ErrorVectorType    ErrorVectorType;
   typedef typename Superclass::InternalVectorType InternalVectorType;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(SquaredDifferenceErrorFunction, FunctionBase);
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self) ;
+  itkNewMacro(Self);
 
   /** Evaluate at the specified Error position */
   virtual ScalarType Evaluate(const TMeasurementVector& Errors) const;

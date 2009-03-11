@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMUtility.cxx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:44 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-01-30 21:53:03 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,9 +25,6 @@
 namespace itk {
 namespace fem {
 
-
-
-
 /**
  * Numerical integration (Gauss-Legendre formula).
  * Integrates function f(x) from x=a to x=b in n points.
@@ -35,19 +32,19 @@ namespace fem {
 double GaussIntegrate::Integrate(double (*f)(double), double a, double b, int n)
 {
 
-/*
-  This subprogram produces the gauss-legendre numerical
-  integral for
+  /**
+   * This subprogram produces the gauss-legendre numerical
+   * integral for
   
-        b
-    int   f(x)*dx
-        a
-  
-  The number of nodes n must satisfy
-      2 <= n <= 20
-  The following data statements contain the gauss-legendre
-  nodes for the interval [-1,1].
-*/
+   *   b
+   * int   f(x)*dx
+   *    a
+   *
+   * The number of nodes n must satisfy
+   *    2 <= n <= 20
+   * The following data statements contain the gauss-legendre
+   * nodes for the interval [-1,1].
+   */
 
   double scale, t, tl, tu, sum;
   int i, m, ibase;
@@ -56,26 +53,26 @@ double GaussIntegrate::Integrate(double (*f)(double), double a, double b, int n)
   /*  Begin integration  */
       
   scale = (b - a)/two;
-  if ( (n&1)==0 )  
-  {
+  if ( (n&1) == 0 )  
+    {
     m = n/2;
     ibase = m*m;
     sum = zero;
-  }
+    }
   else  
-  {
+    {
     m = (n - 1)/2;
     ibase = (n*n - 1)/4;
     sum = w[ibase+m]*(*f)((a + b)/two);
-  }
+    }
         
   for (i=1; i <= m; i++)  
-  {
+    {
     t = z[ibase + i - 1];
     tl = (a*(one + t) + (one - t)*b)/two;
     tu = (a*(one - t) + (one + t)*b)/two;
     sum = sum + w[ibase + i - 1]*((*f)(tl)  +(*f)(tu));
-  }
+    }
 
   return scale*sum;
 

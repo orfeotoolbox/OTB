@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLevelSetNeighborhoodExtractor.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-18 20:07:32 $
-  Version:   $Revision: 1.30 $
+  Date:      $Date: 2009-01-24 20:02:58 $
+  Version:   $Revision: 1.31 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkLevelSetNeighborhoodExtractor_txx
-#define _itkLevelSetNeighborhoodExtractor_txx
+#ifndef __itkLevelSetNeighborhoodExtractor_txx
+#define __itkLevelSetNeighborhoodExtractor_txx
 
 #include "itkLevelSetNeighborhoodExtractor.h"
 #include "itkImageRegionConstIterator.h"
@@ -28,7 +28,7 @@
 namespace itk
 {
 
-/*
+/**
  *
  */
 template <class TLevelSet>
@@ -87,7 +87,7 @@ LevelSetNeighborhoodExtractor<TLevelSet>
 }
 
 
-/*
+/**
  *
  */
 template <class TLevelSet>
@@ -99,7 +99,7 @@ LevelSetNeighborhoodExtractor<TLevelSet>
 }
 
 
-/*
+/**
  *
  */
 template <class TLevelSet>
@@ -189,7 +189,7 @@ LevelSetNeighborhoodExtractor<TLevelSet>
 
 }
 
-/*
+/**
  *
  */
 template <class TLevelSet>
@@ -235,7 +235,7 @@ LevelSetNeighborhoodExtractor<TLevelSet>
 
 }
 
-/*
+/**
  *
  */
 template <class TLevelSet>
@@ -251,7 +251,7 @@ LevelSetNeighborhoodExtractor<TLevelSet>
   PixelType inputPixel;
 
   inputPixel = m_InputLevelSet->GetPixel( index );
-  centerValue = (double) inputPixel ;
+  centerValue = (double) inputPixel;
   centerValue -= m_LevelSetValue;
 
   NodeType centerNode;

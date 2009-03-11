@@ -24,6 +24,7 @@ int otbStreamingInnerProductVectorImageFilter( int argc, char* argv[] )
 {
   const char * inputFileName = argv[1];
   const char * outfname = argv[2];
+  const bool centerdata = atoi(argv[3]);
 
   typedef double PixelType;
   const unsigned int Dimension = 2;
@@ -40,6 +41,7 @@ int otbStreamingInnerProductVectorImageFilter( int argc, char* argv[] )
   FilterType::Pointer filter = FilterType::New();
 
   filter->GetStreamer()->SetNumberOfStreamDivisions(10);
+  filter->SetCenterData(centerdata);
   filter->SetInput(reader->GetOutput());
   filter->Update();
 

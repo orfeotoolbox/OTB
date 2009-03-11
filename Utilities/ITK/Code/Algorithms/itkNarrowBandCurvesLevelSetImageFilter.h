@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNarrowBandCurvesLevelSetImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-04-05 13:59:36 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-26 21:45:53 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkNarrowBandCurvesLevelSetImageFilter_h_
-#define __itkNarrowBandCurvesLevelSetImageFilter_h_
+#ifndef __itkNarrowBandCurvesLevelSetImageFilter_h
+#define __itkNarrowBandCurvesLevelSetImageFilter_h
 
 #include "itkNarrowBandLevelSetImageFilter.h"
 #include "itkCurvesLevelSetFunction.h"
@@ -104,13 +104,14 @@ class ITK_EXPORT NarrowBandCurvesLevelSetImageFilter
 public:
    /** Standard class typedefs */
   typedef NarrowBandCurvesLevelSetImageFilter Self;
-  typedef  NarrowBandLevelSetImageFilter<TInputImage, TFeatureImage, TOutputPixelType, Image<TOutputPixelType, ::itk::GetImageDimension<TInputImage>::ImageDimension> > Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef  NarrowBandLevelSetImageFilter<TInputImage, TFeatureImage, TOutputPixelType, Image<TOutputPixelType, ::itk::GetImageDimension<TInputImage>::ImageDimension> >
+                                              Superclass;
+  typedef SmartPointer<Self>                  Pointer;
+  typedef SmartPointer<const Self>            ConstPointer;
 
   /** Inherited typedef from the superclass. */
-  typedef typename Superclass::ValueType ValueType;
-  typedef typename Superclass::OutputImageType OutputImageType;
+  typedef typename Superclass::ValueType        ValueType;
+  typedef typename Superclass::OutputImageType  OutputImageType;
   typedef typename Superclass::FeatureImageType FeatureImageType;
   
   /** Type of the segmentation function */
@@ -127,10 +128,12 @@ public:
      
   /** Set the value of sigma used to compute derivatives */
   void SetDerivativeSigma( float value )
-   { m_CurvesFunction->SetDerivativeSigma( value ); 
-     this->Modified(); }
+    {
+    m_CurvesFunction->SetDerivativeSigma( value ); 
+    this->Modified();
+    }
   float GetDerivativeSigma() const
-   { return m_CurvesFunction->GetDerivativeSigma(); }
+    { return m_CurvesFunction->GetDerivativeSigma(); }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -157,8 +160,6 @@ private:
 };
 
 } // end namespace itk
-
-
 
 #ifndef ITK_MANUAL_INSTANTIATION
 #include "itkNarrowBandCurvesLevelSetImageFilter.txx"

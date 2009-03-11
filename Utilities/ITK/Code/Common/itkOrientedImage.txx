@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOrientedImage.txx,v $
   Language:  C++
-  Date:      $Date: 2008-11-01 15:18:04 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-02-19 19:41:22 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkOrientedImage_txx
-#define _itkOrientedImage_txx
+#ifndef __itkOrientedImage_txx
+#define __itkOrientedImage_txx
 #include "itkOrientedImage.h"
 
 namespace itk

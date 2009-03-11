@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkUnaryMedialNodeMetric.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:40 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-01-27 19:30:16 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,7 +42,7 @@ namespace itk
  * Notes in Computer Science (in press), 2003.
  *
  * \ingroup ImageFeatureSimilarityMetrics 
-*/
+ */
 
 template<int VDimensions = 3>
 class UnaryMedialNodeMetric : public LightObject 
@@ -62,9 +62,9 @@ public:
   itkTypeMacro(UnaryMedialNodeMetric, LightObject);
 
   /** Pixel typedef. */
-  typedef BloxCoreAtomPixel<VDimensions> MedialNodeType;
+  typedef BloxCoreAtomPixel<VDimensions>                   MedialNodeType;
   typedef typename BloxCoreAtomPixel<VDimensions>::Pointer MedialNodePointerType;
-  typedef typename MedialNodeType::EigenvalueType EigenvalueType;
+  typedef typename MedialNodeType::EigenvalueType          EigenvalueType;
 
   /** Initialize and compute the Unary Metric. */
   void Initialize(void);
@@ -105,6 +105,3 @@ private:
 #endif
 
 #endif
-
-
-

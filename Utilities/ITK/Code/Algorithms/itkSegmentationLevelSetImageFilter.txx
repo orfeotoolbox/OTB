@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSegmentationLevelSetImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004-12-21 22:47:29 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2009-01-27 19:30:15 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkSegmentationLevelSetImageFilter_txx_
-#define __itkSegmentationLevelSetImageFilter_txx_
+#ifndef __itkSegmentationLevelSetImageFilter_txx
+#define __itkSegmentationLevelSetImageFilter_txx
 
 #include "itkSegmentationLevelSetImageFilter.h"
 
@@ -54,8 +54,8 @@ void
 SegmentationLevelSetImageFilter<TInputImage, TFeatureImage, TOutputPixelType>
 ::GenerateSpeedImage()
 {
-    m_SegmentationFunction->AllocateSpeedImage();
-    m_SegmentationFunction->CalculateSpeedImage();
+  m_SegmentationFunction->AllocateSpeedImage();
+  m_SegmentationFunction->CalculateSpeedImage();
 }
 
 template <class TInputImage, class TFeatureImage, class TOutputPixelType>
@@ -63,8 +63,8 @@ void
 SegmentationLevelSetImageFilter<TInputImage, TFeatureImage, TOutputPixelType>
 ::GenerateAdvectionImage()
 {
-    m_SegmentationFunction->AllocateAdvectionImage();
-    m_SegmentationFunction->CalculateAdvectionImage();
+  m_SegmentationFunction->AllocateAdvectionImage();
+  m_SegmentationFunction->CalculateAdvectionImage();
 }
 
 template <class TInputImage, class TFeatureImage, class TOutputPixelType>

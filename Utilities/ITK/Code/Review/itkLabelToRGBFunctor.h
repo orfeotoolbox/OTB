@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelToRGBFunctor.h,v $
   Language:  C++
-  Date:      $Date: 2007-10-23 14:10:23 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-02-24 19:03:15 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -28,7 +28,7 @@ namespace Functor {
  *
  * This functor class used internally by LabelToRGBImageFilter
  *
- * \author Gaëtan Lehmann. Biologie du Développement et de la Reproduction,
+ * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction,
  * INRA de Jouy-en-Josas, France.  
  *
  * \author Richard Beare. Department of
@@ -99,7 +99,7 @@ public:
     m_BackgroundValue = NumericTraits<TLabel>::Zero;
     }
 
-  inline TRGBPixel operator()( const TLabel & p)
+  inline TRGBPixel operator()( const TLabel & p) const
     {
     // value is background
     // return a gray pixel with the same intensity than the label pixel

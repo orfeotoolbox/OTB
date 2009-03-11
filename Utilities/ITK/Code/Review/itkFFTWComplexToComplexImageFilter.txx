@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFFTWComplexToComplexImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-03 18:41:16 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-02-18 20:51:59 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -81,6 +81,7 @@ GenerateData()
   unsigned int total_size=1;
 
     {
+    // This reinterpret_cast only makes sense if TPixel is float...
     fftwf_complex *dptr = reinterpret_cast<fftwf_complex *>(in);
     fftwf_complex *out = reinterpret_cast<fftwf_complex *>(outputPtr->GetBufferPointer());
 
@@ -198,6 +199,7 @@ GenerateData()
   unsigned int total_size=1;
 
     {
+    // This reinterpret_cast only makes sense if TPixel is double...
     fftw_complex *dptr = reinterpret_cast<fftw_complex *>(in);
     fftw_complex *out  = reinterpret_cast<fftw_complex *>(outputPtr->GetBufferPointer());
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPhilipsRECImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-06-25 22:49:18 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-02-25 03:20:41 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -692,6 +692,7 @@ void PhilipsRECImageIO::ReadImageInformation()
   std::vector<double> dirx(numberOfDimensions,0),
     diry(numberOfDimensions,0),dirz(numberOfDimensions,0),
     dirBlock(numberOfDimensions,0);
+  dirBlock[numberOfDimensions-1] = 1;
   dirx[0] = dir[0][0];
   dirx[1] = dir[1][0];
   dirx[2] = dir[2][0];

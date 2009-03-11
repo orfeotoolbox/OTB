@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptGrayscaleMorphologicalClosingImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-09-30 16:41:10 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-01-08 16:03:55 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -39,7 +39,7 @@ GrayscaleMorphologicalClosingImageFilter<TInputImage, TOutputImage, TKernel>
   m_VanHerkGilWermanErodeFilter = VanHerkGilWermanErodeFilterType::New();
   m_AnchorFilter = AnchorFilterType::New();
   m_Algorithm = HISTO;
-  m_SafeBorder = false;
+  m_SafeBorder = true;
 }
 
 template< class TInputImage, class TOutputImage, class TKernel>

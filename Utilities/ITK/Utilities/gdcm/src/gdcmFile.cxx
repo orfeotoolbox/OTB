@@ -3,8 +3,8 @@
   Program:   gdcm
   Module:    $RCSfile: gdcmFile.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-05-14 12:25:32 $
-  Version:   $Revision: 1.24 $
+  Date:      $Date: 2008-12-11 15:03:30 $
+  Version:   $Revision: 1.26 $
                                                                                 
   Copyright (c) CREATIS (Centre de Recherche et d'Applications en Traitement de
   l'Image). All rights reserved. See Doc/License.txt or
@@ -1165,7 +1165,7 @@ bool File::IsMonochrome1()
 bool File::IsPaletteColor()
 {
    std::string PhotometricInterp = GetEntryValue( 0x0028, 0x0004 );
-   if (   PhotometricInterp == "PALETTE COLOR " )
+   if ( Util::DicomStringEqual(PhotometricInterp, "PALETTE COLOR") )
    {
       return true;
    }
@@ -1205,6 +1205,9 @@ bool File::IsYBRFull()
   */
 bool File::HasLUT()
 {
+   // Some SIEMENS MOSAIC have a RGB LUT but are declared as MONOCHROME2 ...
+   if( !IsPaletteColor() ) return false;
+
    // Check the presence of the LUT Descriptors, and LUT Tables    
    // LutDescriptorRed    
    if ( !GetDocEntry(0x0028,0x1101) )
@@ -1422,9 +1425,7 @@ int File::GetNumberOfScalarComponents()
       return 3;
    }
 
-   std::string strPhotometricInterpretation = GetEntryValue(0x0028,0x0004);
-
-   if ( Util::DicomStringEqual(strPhotometricInterpretation, "PALETTE COLOR") )
+   if( IsPaletteColor() )
    {
       if ( HasLUT() )// PALETTE COLOR is NOT enough
       {
@@ -1436,6 +1437,7 @@ int File::GetNumberOfScalarComponents()
       }
    }
 
+   std::string strPhotometricInterpretation = GetEntryValue( 0x0028, 0x0004 );
    // beware of trailing space at end of string      
    // DICOM tags are never of odd length
    if ( strPhotometricInterpretation == GDCM_UNFOUND   || 

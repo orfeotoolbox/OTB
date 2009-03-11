@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkObjectFactory.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:18 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2009-02-06 20:53:14 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -48,15 +48,12 @@ class ObjectFactory : public ObjectFactoryBase
 {
 public:
   static typename T::Pointer Create()
-  {
+    {
     LightObject::Pointer ret = ObjectFactory::CreateInstance(typeid(T).name());
     return dynamic_cast<T*>(ret.GetPointer());
-  }
+    }
 };
 
 } // end namespace itk
 
 #endif
-
-        
-

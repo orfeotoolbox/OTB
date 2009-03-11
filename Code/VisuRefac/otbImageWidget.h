@@ -18,19 +18,14 @@
 #ifndef __otbImageWidget_h
 #define __otbImageWidget_h
 
-// FLTK includes
-#include <FL/gl.h>
-#include "FL/Fl_Gl_Window.H"
+#include "otbGlWidget.h"
 
 // This is included for the default template
 #include "otbImage.h"
 #include "itkRGBPixel.h"
 #include "itkFixedArray.h"
-
-// This include is needed to get the OTB_GL_USE_ACCEL definition
-#include "otbConfigure.h"
-
-#include "otbImageWidgetController.h"
+#include "otbGlComponent.h"
+#include "otbObjectList.h"
 
 namespace otb
 {
@@ -39,23 +34,18 @@ namespace otb
 *   Rendered data can be loaded using the ReadBuffer() method.
 *   The SetIsotropicZoom() method allows to tune the zooming (zooming
 *   is centered).
-*   The SetUseGlAcceleration() allows you to disable Gl
-*   acceleration. If OTB_USE_GL_ACCEL is OFF, enabling Gl acceleration
-*   will generate an exception.
-*   Using Gl acceleration allows you to have a better rendering when
-*   zooming.
-*  
+*
 *   It is also able to display a rectangle on the displayed image.
 */
 
 template <class TInputImage=otb::Image<itk::RGBPixel<unsigned char>,2 > >
 class ImageWidget
-  : public Fl_Gl_Window, public itk::Object
+  : public GlWidget
 {
 public:
   /** Standard class typedefs */
   typedef ImageWidget                       Self;
-  typedef itk::Object                       Superclass;
+  typedef GlWidget                          Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
 
@@ -63,7 +53,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(ImageWidget,Object);
+  itkTypeMacro(ImageWidget,GlWidget);
   /** Input image typedef */
   typedef TInputImage                         InputImageType;
   /** Image region typedef */
@@ -71,12 +61,18 @@ public:
   /** Region size & index typedef */
   typedef typename RegionType::SizeType       SizeType;
   typedef typename RegionType::IndexType      IndexType;
-  /** Controller typedef */
-  typedef otb::ImageWidgetController          ControllerType;
-  typedef typename ControllerType::Pointer    ControllerPointerType;
-
-  /** Color typedef (used to draw the rectangle, 4th channel is alpha) */
-  typedef itk::FixedArray<float,4>            ColorType;
+  
+  /** GlComponent typedef */
+  typedef GlComponent                                   GlComponentType;
+  typedef typename GlComponentType::Pointer             GlComponentPointerType;
+  typedef typename GlComponentType::ColorType           ColorType;     
+  typedef typename GlComponentType::AffineTransformType AffineTransformType;
+  typedef typename AffineTransformType::Pointer         AffineTransformPointerType;
+  typedef typename GlComponentType::VectorType          VectorType;
+  typedef typename GlComponentType::PointType           PointType;
+  typedef ObjectList<GlComponentType>                   GlComponentListType;
+  typedef typename GlComponentListType::Pointer        GlComponentListPointerType;
+  typedef typename GlComponentListType::Iterator       GlComponentIteratorType;
 
   /** Reads the OpenGl buffer from an image pointer
    *  \param image The image pointer,
@@ -88,46 +84,43 @@ public:
    */
   virtual void ReadBuffer(const InputImageType * image, const RegionType & region);
 
-  /** Set/Get the Controller */
-  itkSetObjectMacro(Controller,ControllerType);
-  itkGetObjectMacro(Controller,ControllerType);
-
-  /** Handle resizing event. This method is used by FLTK routines and
-   *  should not be called on its own.
-   */
-  virtual void resize(int x, int y, int w, int h);
-
   /** Set/Get the Isotropic zoom */
   itkSetMacro(IsotropicZoom,double);
   itkGetMacro(IsotropicZoom,double);
 
-  /** Enable/disable Gl acceleration */
-  itkSetMacro(UseGlAcceleration,bool);
-  itkGetMacro(UseGlAcceleration,bool);
-  itkBooleanMacro(UseGlAcceleration);
+  /** Set/Get the subsampling rate */
+  itkSetMacro(SubsamplingRate,unsigned int);
+  itkGetMacro(SubsamplingRate,unsigned int);
 
-  /** Enable/disable rectangle drawing */
-  itkSetMacro(DisplayRectangle,bool);
-  itkGetMacro(DisplayRectangle,bool);
-  itkBooleanMacro(DisplayRectangle);
-  
-  /** Set/Get the rectangle to display */
-  itkSetMacro(Rectangle,RegionType);
-  itkGetConstReferenceMacro(Rectangle,RegionType);
+  /** Get the image to screen transform */
+  itkGetObjectMacro(ImageToScreenTransform,AffineTransformType);
+  itkGetObjectMacro(ScreenToImageTransform,AffineTransformType);
 
-  /** Set/Get the identifier */
-  itkSetStringMacro(Identifier);
-  itkGetStringMacro(Identifier);
 
-  /** Set/Get the color of the rectangle */
-  itkSetMacro(RectangleColor,ColorType);
-  itkGetConstReferenceMacro(RectangleColor,ColorType);
+  /** Add a GlComponent */
+  unsigned int AddGlComponent(GlComponent * glComponent)
+  {
+    m_GlComponents->PushBack(glComponent);
+    return m_GlComponents->Size()-1;
+  }
 
-  /** Convert a screen index to a buffered region index */
-  IndexType ScreenIndexToRegionIndex(const IndexType& index );
-  
-  /** Convert a buffered region index to a screen index */
-  IndexType RegionIndexToScreenIndex(const IndexType& index);
+  /** Remove a GlComponent */
+  void RemoveGlComponent(unsigned int index)
+  {
+    m_GlComponents->Erase(index);
+  }
+
+  /** Clear the GlComponent list */
+  void ClearGlComponents()
+  {
+    m_GlComponents->Clear();
+  }
+
+  /** Get the number of GlComponent */
+  unsigned int GetNumberOfGlComponents()
+  {
+    return m_GlComponents->Size();
+  }
 
 protected:
   /** Constructor */
@@ -136,16 +129,17 @@ protected:
   ~ImageWidget();
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
   /** Actually render the buffer to the screen. This method is
     * used by FLTK routines and should not be called on its own.
     */
-  virtual void draw(void);
-  /** Handle the event from the users.  This method is used by FLTK
-    * routines and should not be called on its own.
-    */
-  virtual int  handle(int event);
 
-  /** Compute the linear buffer index according to the 2D region and
+  /** Update the image to screen transform */
+  void UpdateTransforms();
+
+  virtual void draw(void);
+
+   /** Compute the linear buffer index according to the 2D region and
    * its 2D index.This method is used when OTB_GL_USE_ACCEL is ON.
    * \param index 2D index
    * \param region 2D region
@@ -178,26 +172,20 @@ private:
 
   /** OpenGl buffered region */
   RegionType m_OpenGlBufferedRegion;
-
-  /** Widget identifier */
-  std::string m_Identifier;
-
-  /** Controller */
-  ControllerPointerType m_Controller;
-
-  /** Flag for GlAcceleration */
-  bool m_UseGlAcceleration;
-
-  /** Rectangle region */
-  RegionType m_Rectangle;
-  bool       m_DisplayRectangle;
-  ColorType  m_RectangleColor;
   
-  /** Image extent coordinates in the display axis system */
-  double m_ImageExtentWidth;
-  double m_ImageExtentHeight;
-  double m_ImageExtentX;
-  double m_ImageExtentY;
+  /** The display extent */
+  RegionType m_Extent;
+
+  /** If the image is subsampled with respect to the original image,
+   * this indicates the subsampling rate */
+  unsigned int m_SubsamplingRate;
+
+  /** Space to screen transform */
+  AffineTransformPointerType m_ImageToScreenTransform;
+  AffineTransformPointerType m_ScreenToImageTransform;
+
+  /** Addtionnal Gl components */
+  GlComponentListPointerType m_GlComponents;
 
 }; // end class
 } // end namespace otb

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPointSetToPointSetMetric.h,v $
   Language:  C++
-  Date:      $Date: 2003-11-08 17:58:32 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-01-26 21:45:56 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -147,4 +147,3 @@ private:
 #endif
 
 #endif
-

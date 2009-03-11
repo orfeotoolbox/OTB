@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSurfaceSpatialObjectPoint.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-28 19:24:57 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-01-28 20:10:29 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,14 +25,15 @@ namespace itk
 {
 
 /** \class SurfaceSpatialObjectPoint
-* \brief Point used for a Surface definition
-*
-* This class contains all the functions necessary to define a point
-* that can be used to build surfaces.
-* A surface point has a position and only one normal
-*
-* \sa SpatialObjectPoint 
-*/ 
+ * \brief Point used for a Surface definition
+ *
+ * This class contains all the functions necessary to define a point
+ * that can be used to build surfaces.
+ * A surface point has a position and only one normal
+ *
+ * \sa SpatialObjectPoint 
+ */ 
+
 template < unsigned int TPointDimension = 3 >
 class SurfaceSpatialObjectPoint 
   : public SpatialObjectPoint<TPointDimension>

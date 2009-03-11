@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCompletelyConnectedWeightSet.h,v $
   Language:  C++
-  Date:      $Date: 2007-08-17 13:10:57 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-01-24 21:33:49 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -30,10 +30,10 @@ class CompletelyConnectedWeightSet : public WeightSetBase<TMeasurementVector, TT
 public:
   #define MAX_SIZE 1000
 
-  typedef CompletelyConnectedWeightSet Self;
+  typedef CompletelyConnectedWeightSet                     Self;
   typedef WeightSetBase<TMeasurementVector, TTargetVector> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef SmartPointer<Self>                               Pointer;
+  typedef SmartPointer<const Self>                         ConstPointer;
 
   itkTypeMacro(CompletelyConnectedWeightSet, WeightSetBase);
   itkNewMacro(Self);

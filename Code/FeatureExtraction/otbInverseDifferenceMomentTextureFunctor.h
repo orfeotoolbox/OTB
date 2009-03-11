@@ -55,15 +55,15 @@ public:
     double areaInv = 1/area;
     double out = 0.;
       for (unsigned r = 0; r<this->GetHisto().size(); r++)
-	{
-	  for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-	    {
-	      double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
-	      double dist = vcl_pow( ( (static_cast<double>(r)+0.5)*this->GetOffsetBinLength())-((static_cast<double>(s)+0.5)*this->GetNeighBinLength()), 2);
+        {
+          for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
+            {
+              double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
+              double dist = vcl_pow( ( (static_cast<double>(r)+0.5)*this->GetOffsetBinLength())-((static_cast<double>(s)+0.5)*this->GetNeighBinLength()), 2);
 
-	      out += ((1/(1+dist)) * p);
-	    }
-	}
+              out += ((1/(1+dist)) * p);
+            }
+        }
       return out;
   }
 

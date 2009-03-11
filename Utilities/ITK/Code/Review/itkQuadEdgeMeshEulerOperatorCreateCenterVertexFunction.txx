@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshEulerOperatorCreateCenterVertexFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-02-07 05:12:00 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-02-07 17:19:59 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,7 +27,7 @@ QuadEdgeMeshEulerOperatorCreateCenterVertexFunction< TMesh, TQEType >::
 Evaluate( QEType* e )
 {
   // Is there any input ?
-  
+#ifndef NDEBUG  
   if( !e )
     {
     itkDebugMacro( "Input is not an edge." );
@@ -46,7 +46,8 @@ Evaluate( QEType* e )
     itkDebugMacro( "Argument edge has no left face." );
     return( (OutputType) 0 );
     }
-   
+#endif
+ 
   // remove left face
   this->m_Mesh->DeleteFace( e->GetLeft( ) );
    

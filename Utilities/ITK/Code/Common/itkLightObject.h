@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLightObject.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-20 22:03:31 $
-  Version:   $Revision: 1.41 $
+  Date:      $Date: 2009-02-05 19:05:00 $
+  Version:   $Revision: 1.42 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,10 +27,10 @@
 #include <typeinfo>
 
 #if defined(_WIN32)
-  // To get LONG defined
+// To get LONG defined
   #include "itkWindows.h"
 #elif defined(__APPLE__)
-  // To get MAC_OS_X_VERSION_MIN_REQUIRED defined
+// To get MAC_OS_X_VERSION_MIN_REQUIRED defined
   #include <AvailabilityMacros.h>
 #endif
 
@@ -55,8 +55,8 @@ class ITKCommon_EXPORT LightObject
 {
 public:
   /** Standard clas typedefs. */
-  typedef LightObject         Self;
-  typedef SmartPointer<Self>  Pointer;
+  typedef LightObject               Self;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
   
   /** Method for creation through the object factory. */

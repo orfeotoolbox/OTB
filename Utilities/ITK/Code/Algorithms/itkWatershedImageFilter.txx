@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWatershedImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004-02-24 20:42:17 $
-  Version:   $Revision: 1.36 $
+  Date:      $Date: 2009-01-27 19:30:18 $
+  Version:   $Revision: 1.37 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkWatershedImageFilter_txx
-#define _itkWatershedImageFilter_txx
+#ifndef __itkWatershedImageFilter_txx
+#define __itkWatershedImageFilter_txx
 #include "itkWatershedImageFilter.h"
 
 namespace itk

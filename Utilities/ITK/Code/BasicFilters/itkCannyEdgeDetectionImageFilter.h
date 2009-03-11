@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCannyEdgeDetectionImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-13 18:54:26 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2008-12-17 14:49:46 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -169,7 +169,7 @@ public:
     {
     for (unsigned int i=0; i < TInputImage::ImageDimension; i++)
       {
-      if (m_Variance[i] != v)
+      if (m_MaximumError[i] != v)
         {
         m_MaximumError.Fill(v);
         this->Modified();

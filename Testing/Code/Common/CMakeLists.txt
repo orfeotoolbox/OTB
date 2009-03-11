@@ -131,21 +131,16 @@ ADD_TEST(coTvExtractROI_RGB2 ${COMMON_TESTS2}
 ADD_TEST(coTuVectorDataExtractROINew ${COMMON_TESTS2}
 	otbVectorDataExtractROINew)
 
-IF(OTB_DATA_USE_LARGEINPUT)
-
 ADD_TEST(coTvVectorDataExtractROI ${COMMON_TESTS2}
-#  --compare-image ${TOL}   
-#              ${BASELINE}/coVectorDataExtractROIOutput.shp 
-#              ${TEMP}/coVectorDataExtractROIOutput.shp 
+  --compare-binary    
+              ${BASELINE}/coVectorDataExtractROIOutput.shp 
+              ${TEMP}/coVectorDataExtractROIOutput.shp 
 	 otbVectorDataExtractROI	
-        ${LARGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
+	${INPUTDATA}/ToulousePoints-examples.shp   #${LARGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
 	${TEMP}/coVectorDataExtractROIOutput.shp
-	10 10 50 50 
+	 374369.48850211215904 4828951.58612491376698  # Origin of the CartoRegion 
+         1000.25 25000.2                               # Size of the Cartoregion
  )
-
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-
-
 
 # -------            otb::MultiChannelExtractROI   ------------------------------
 
@@ -508,7 +503,20 @@ ADD_TEST(coTvUnaryFunctorNeighborhoodImageFilter ${COMMON_TESTS6}
 	3
 )
 
+#--------------------otb::Rectangle
+ADD_TEST(coTuRectangleNew ${COMMON_TESTS6}
+          otbRectangleNew)
 
+ADD_TEST(coTvRectangle ${COMMON_TESTS6}
+--compare-ascii ${EPS}
+		${BASELINE_FILES}/otbRectangleTest.txt
+                ${TEMP}/otbRectangleTest.txt
+         otbRectangle
+	        ${TEMP}/otbRectangleTest.txt
+		2.12 2.35 12.54 2.45   3. 0.15  1. 1. 
+	
+	
+)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests7 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -586,7 +594,16 @@ ADD_TEST(coTvUnaryFunctorNeighborhoodWithOffsetImageFilter ${COMMON_TESTS7}
 )
 
 
+#------------------------ otb::CartoRegion---------------------------------
 
+ADD_TEST(coTuCartoRegionNew ${COMMON_TESTS7}
+                     otbCartoRegionNew )
+
+ADD_TEST(ioTvCartoRegion ${COMMON_TESTS7}
+	 otbCartoRegion
+	 1.21 2.33 58.47 59.49  #size et index of the region
+	 0. 0.                  # Point to check 
+ )
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
@@ -659,6 +676,8 @@ otbPolygonNew.cxx
 otbPolygon.cxx
 otbUnaryFunctorNeighborhoodImageFilterNew.cxx
 otbUnaryFunctorNeighborhoodImageFilter.cxx
+otbRectangleNew.cxx
+otbRectangle.cxx	
 )
 
 SET(BasicCommon_SRCS7
@@ -673,6 +692,8 @@ otbShiftScaleImageAdaptor.cxx
 otbStandardWriterWatcher.cxx
 otbUnaryFunctorNeighborhoodWithOffsetImageFilterNew.cxx
 otbUnaryFunctorNeighborhoodWithOffsetImageFilter.cxx
+otbCartoRegionNew.cxx
+otbCartoRegion.cxx
 )
 
 

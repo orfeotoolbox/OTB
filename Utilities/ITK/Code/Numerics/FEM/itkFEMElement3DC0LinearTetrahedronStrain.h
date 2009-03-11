@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMElement3DC0LinearTetrahedronStrain.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:41 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-01-29 20:09:12 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,9 +23,6 @@
 
 namespace itk {
 namespace fem {
-
-
-
 
 /**
  * \class Element3DC0LinearTetrahedronStrain
@@ -54,9 +51,6 @@ public:
 }; // class Element3DC0LinearTetrahedronStrain
 
 FEM_CLASS_INIT(Element3DC0LinearTetrahedronStrain)
-
-
-
 
 }} // end namespace itk::fem
 

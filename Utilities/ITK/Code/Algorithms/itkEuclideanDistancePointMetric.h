@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEuclideanDistancePointMetric.h,v $
   Language:  C++
-  Date:      $Date: 2006-10-16 00:13:58 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2008-12-17 18:52:03 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -48,7 +48,7 @@ class ITK_EXPORT EuclideanDistancePointMetric :
 public:
 
   /** Standard class typedefs. */
-  typedef EuclideanDistancePointMetric    Self;
+  typedef EuclideanDistancePointMetric                                Self;
   typedef PointSetToPointSetMetric<TFixedPointSet, TMovingPointSet >  Superclass;
 
   typedef SmartPointer<Self>         Pointer;

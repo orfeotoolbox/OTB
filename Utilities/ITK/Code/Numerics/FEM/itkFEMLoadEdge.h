@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMLoadEdge.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:42 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-01-30 21:10:18 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,9 +24,6 @@
 namespace itk {
 namespace fem {
 
-
-
-
 /**
  * \class LoadEdge
  * \brief A generic load that can be applied to an edge of the element.
@@ -38,7 +35,7 @@ namespace fem {
  */
 class LoadEdge : public LoadElement
 {
-FEM_CLASS(LoadEdge,LoadElement)
+  FEM_CLASS(LoadEdge,LoadElement)
 public:
   /** 
    * Read a Load object from input stream.
@@ -79,9 +76,6 @@ public:
 };
 
 FEM_CLASS_INIT(LoadEdge)
-
-
-
 
 }} // end namespace itk::fem
 

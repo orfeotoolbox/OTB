@@ -156,25 +156,31 @@ ${EXAMPLESDATA}/SpotAfter.png
 ${TEMP}/vrTvBlendingImageFilterOutput.png
 )
 
-#------------ otb::ImageViewerModel ------------
+#------------ otb::LayerBasedModel ------------
 
-ADD_TEST(vrTuImageViewerModelNew ${VISUREFAC_TESTS1}
-otbImageViewerModelNew
+ADD_TEST(vrTuLayerBasedModelNew ${VISUREFAC_TESTS1}
+otbLayerBasedModelNew
 )
 
-ADD_TEST(vrTvImageViewerModelSingleLayer ${VISUREFAC_TESTS1}
+#------------ otb::ImageLayerRenderingModel ------------
+
+ADD_TEST(vrTuImageLayerRenderingModelNew ${VISUREFAC_TESTS1}
+otbImageLayerRenderingModelNew
+)
+
+ADD_TEST(vrTvImageLayerRenderingModelSingleLayer ${VISUREFAC_TESTS1}
 --compare-n-images ${TOL} 3
-${BASELINE}/vrTvImageViewerModelSingleLayerQuicklookOutput.png
-${TEMP}/vrTvImageViewerModelSingleLayerQuicklookOutput.png
-${BASELINE}/vrTvImageViewerModelSingleLayerExtractOutput.png
-${TEMP}/vrTvImageViewerModelSingleLayerExtractOutput.png
-${BASELINE}/vrTvImageViewerModelSingleLayerScaledExtractOutput.png
-${TEMP}/vrTvImageViewerModelSingleLayerScaledExtractOutput.png
-otbImageViewerModelSingleLayer
+${BASELINE}/vrTvImageLayerRenderingModelSingleLayerQuicklookOutput.png
+${TEMP}/vrTvImageLayerRenderingModelSingleLayerQuicklookOutput.png
+${BASELINE}/vrTvImageLayerRenderingModelSingleLayerExtractOutput.png
+${TEMP}/vrTvImageLayerRenderingModelSingleLayerExtractOutput.png
+${BASELINE}/vrTvImageLayerRenderingModelSingleLayerScaledExtractOutput.png
+${TEMP}/vrTvImageLayerRenderingModelSingleLayerScaledExtractOutput.png
+otbImageLayerRenderingModelSingleLayer
 ${INPUTDATA}/couleurs.tif
-${TEMP}/vrTvImageViewerModelSingleLayerQuicklookOutput.png
-${TEMP}/vrTvImageViewerModelSingleLayerExtractOutput.png
-${TEMP}/vrTvImageViewerModelSingleLayerScaledExtractOutput.png
+${TEMP}/vrTvImageLayerRenderingModelSingleLayerQuicklookOutput.png
+${TEMP}/vrTvImageLayerRenderingModelSingleLayerExtractOutput.png
+${TEMP}/vrTvImageLayerRenderingModelSingleLayerScaledExtractOutput.png
 )
 
 #------------ otb::ImageLayerGenerator ------------
@@ -211,6 +217,45 @@ ${INPUTDATA}/couleurs.tif
 200 500 200 0
 )
 
+#------------ otb::PixelDescriptionModel ------------
+
+ADD_TEST(vrTuPixelDescriptionModelNew ${VISUREFAC_TESTS1}
+otbPixelDescriptionModelNew
+)
+
+ADD_TEST(vrTvPixelDescriptionModelSingleLayer ${VISUREFAC_TESTS1}
+otbPixelDescriptionModelSingleLayer
+${INPUTDATA}/couleurs.tif
+)
+
+#------------ otb::HistogramCurve ------------
+
+ADD_TEST(vrTuHistogramCurveNew ${VISUREFAC_TESTS1}
+otbHistogramCurveNew
+)
+
+#------------ otb::Curves2DWidget ------------
+
+ADD_TEST(vrTuCurves2DWidgetNew ${VISUREFAC_TESTS1}
+otbCurves2DWidgetNew
+)
+
+ADD_TEST(vrTvCurves2DWidget ${VISUREFAC_TESTS1}
+otbCurves2DWidget 0 0 100 200 0 0 10 10 0
+)
+
+ADD_TEST(vrTvCurves2DWidgetWithHistogram ${VISUREFAC_TESTS1}
+otbCurves2DWidgetWithHistogram
+${INPUTDATA}/poupees.png
+0
+)
+
+#------------ otb::VectorDataGlComponent ------------
+ADD_TEST(vrTuVectorDataGlComponentNew ${VISUREFAC_TESTS1}
+otbVectorDataGlComponentNew
+)
+
+
 # Testing srcs
 SET(VisuRefac_SRCS1
 otbImageWidgetNew.cxx
@@ -228,8 +273,9 @@ otbImageLayerVector.cxx
 otbUniformAlphaBlendingFunctionNew.cxx
 otbBlendingImageFilterNew.cxx
 otbBlendingImageFilter.cxx
-otbImageViewerModelNew.cxx
-otbImageViewerModelSingleLayer.cxx
+otbLayerBasedModelNew.cxx
+otbImageLayerRenderingModelNew.cxx
+otbImageLayerRenderingModelSingleLayer.cxx
 otbImageLayerGeneratorNew.cxx
 otbImageLayerGeneratorScalar.cxx
 otbImageLayerGeneratorVector.cxx
@@ -238,6 +284,13 @@ otbRenderingImageFilterVectorWithExpNegativeTransfer.cxx
 otbImageViewNew.cxx
 otbImageViewerEndToEndSingleLayer.cxx
 otbImageViewerEndToEndTwoLayers.cxx
+otbPixelDescriptionModelNew.cxx
+otbPixelDescriptionModelSingleLayer.cxx
+otbCurves2DWidgetNew.cxx
+otbCurves2DWidget.cxx
+otbHistogramCurveNew.cxx
+otbCurves2DWidgetWithHistogram.cxx
+otbVectorDataGlComponentNew.cxx
 )
 
 # Building testing executables

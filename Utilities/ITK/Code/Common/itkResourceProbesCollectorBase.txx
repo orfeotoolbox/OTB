@@ -3,14 +3,14 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkResourceProbesCollectorBase.txx,v $
   Language:  C++
-  Date:      $Date: 2008-11-04 23:45:31 $
-  Version:   $Revision: 1.2.2.1 $
+  Date:      $Date: 2008-11-10 13:54:35 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -23,6 +23,7 @@
 namespace itk
 {
 
+#if defined(ITKSTATIC) || !(defined(_MSC_VER) && (_MSC_VER <= 1200))
 template <class TProbe>
 ResourceProbesCollectorBase<TProbe>
 ::~ResourceProbesCollectorBase()
@@ -30,16 +31,16 @@ ResourceProbesCollectorBase<TProbe>
 }
 
 template <class TProbe>
-void 
+void
 ResourceProbesCollectorBase<TProbe>
 ::Start(const char * id)
 {
   // if the probe does not exist yet, it is created.
-  this->m_Probes[ id ].Start(); 
+  this->m_Probes[ id ].Start();
 }
 
 template <class TProbe>
-void 
+void
 ResourceProbesCollectorBase<TProbe>
 ::Stop(const char * id)
 {
@@ -55,7 +56,7 @@ ResourceProbesCollectorBase<TProbe>
 
 
 template <class TProbe>
-void 
+void
 ResourceProbesCollectorBase<TProbe>
 ::Report( std::ostream & os ) const
 {
@@ -77,7 +78,7 @@ ResourceProbesCollectorBase<TProbe>
   os.width(15);
   os <<  probe->second.GetType() << " (" << probe->second.GetUnit() << ")";
   os << std::endl;
-  
+
   while( probe != end )
     {
     os.width(20);
@@ -93,17 +94,53 @@ ResourceProbesCollectorBase<TProbe>
     }
 
 }
-    
-   
+
+
 
 template <class TProbe>
-void 
+void
 ResourceProbesCollectorBase<TProbe>
-::Clear(void) 
+::Clear(void)
 {
   this->m_Probes.clear();
 }
+#else
+template <class TProbe>
+ResourceProbesCollectorBase<TProbe>
+::~ResourceProbesCollectorBase()
+{
+}
 
+template <class TProbe>
+void
+ResourceProbesCollectorBase<TProbe>
+::Start(const char * id)
+{
+}
+
+template <class TProbe>
+void
+ResourceProbesCollectorBase<TProbe>
+::Stop(const char * id)
+{
+}
+
+template <class TProbe>
+void
+ResourceProbesCollectorBase<TProbe>
+::Report( std::ostream & os ) const
+{
+  os << "Warning: ResourceProbesCollector's are not supported in shared libraries by the Visual Studio 6 and earlier compilers." << std::endl
+     << "Build with BUILD_SHARED_LIBS OFF if you need this functionality." << std::endl;
+}
+
+template <class TProbe>
+void
+ResourceProbesCollectorBase<TProbe>
+::Clear(void)
+{
+}
+#endif
 
 } // end namespace itk
 

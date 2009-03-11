@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFFTComplexToComplexImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-03 16:22:49 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2008-12-21 19:15:48 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -55,10 +55,10 @@ public:
   typedef Image< std::complex< TPixel > , NDimension > OutputImageType;
 
   /** Standard class typedefs. */
-  typedef FFTComplexToComplexImageFilter                            Self;
-  typedef ImageToImageFilter< InputImageType, OutputImageType >     Superclass;
-  typedef SmartPointer<Self>                                        Pointer;
-  typedef SmartPointer<const Self>                                  constPointer;
+  typedef FFTComplexToComplexImageFilter                        Self;
+  typedef ImageToImageFilter< InputImageType, OutputImageType > Superclass;
+  typedef SmartPointer<Self>                                    Pointer;
+  typedef SmartPointer<const Self>                              ConstPointer;
 
   itkStaticConstMacro(ImageDimension, unsigned int,
                       InputImageType::ImageDimension );

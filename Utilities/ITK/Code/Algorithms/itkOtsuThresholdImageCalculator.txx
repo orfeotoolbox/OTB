@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOtsuThresholdImageCalculator.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-28 23:46:10 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-01-26 21:45:54 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkOtsuThresholdImageCalculator_txx
-#define _itkOtsuThresholdImageCalculator_txx
+#ifndef __itkOtsuThresholdImageCalculator_txx
+#define __itkOtsuThresholdImageCalculator_txx
 
 #include "itkOtsuThresholdImageCalculator.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
@@ -26,7 +26,7 @@
 namespace itk
 { 
     
-/*
+/**
  * Constructor
  */
 template<class TInputImage>

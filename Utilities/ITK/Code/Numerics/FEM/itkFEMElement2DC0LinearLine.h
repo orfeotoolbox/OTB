@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMElement2DC0LinearLine.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:39 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-28 21:19:16 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,35 +23,30 @@
 namespace itk {
 namespace fem {
 
-
-
-
 /**
  * \class Element2DC0LinearLine
  * \brief 2-noded, linear, C0 continuous line element in 2D space.
  */
 class Element2DC0LinearLine : public ElementStd<2,2>
 {
-typedef ElementStd<2,2> TemplatedParentClass;
-FEM_ABSTRACT_CLASS( Element2DC0LinearLine, TemplatedParentClass )
+  typedef ElementStd<2,2> TemplatedParentClass;
+  FEM_ABSTRACT_CLASS( Element2DC0LinearLine, TemplatedParentClass )
 public:
 
-
-//////////////////////////////////////////////////////////////////////////
-  /*
+  
+  //////////////////////////////////////////////////////////////////////////
+  /**
    * Methods related to numeric integration
    */
 
   enum { DefaultIntegrationOrder = 1 };
-
+  
   virtual void GetIntegrationPointAndWeight(unsigned int i, VectorType& pt, Float& w, unsigned int order) const;
 
   virtual unsigned int GetNumberOfIntegrationPoints(unsigned int order) const;
 
-
-
-//////////////////////////////////////////////////////////////////////////
-  /*
+  //////////////////////////////////////////////////////////////////////////
+  /**
    * Methods related to the geometry of an element
    */
 
@@ -81,9 +76,6 @@ public:
 #endif
 
 };
-
-
-
 
 }} // end namespace itk::fem
 

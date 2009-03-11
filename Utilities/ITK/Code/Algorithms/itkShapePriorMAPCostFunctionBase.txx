@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShapePriorMAPCostFunctionBase.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:39 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-01-27 19:30:16 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkShapePriorMAPCostFunctionBase_txx_
-#define __itkShapePriorMAPCostFunctionBase_txx_
+#ifndef __itkShapePriorMAPCostFunctionBase_txx
+#define __itkShapePriorMAPCostFunctionBase_txx
 
 #include "itkShapePriorMAPCostFunctionBase.h"
 
@@ -59,11 +59,10 @@ ShapePriorMAPCostFunctionBase<TFeatureImage,TOutputPixel>
 ::GetValue( const ParametersType & parameters ) const
 {
 
-   return ( this->ComputeLogInsideTerm( parameters ) + 
-            this->ComputeLogGradientTerm( parameters ) +  
-            this->ComputeLogShapePriorTerm( parameters ) + 
-            this->ComputeLogPosePriorTerm( parameters ) );
-
+  return ( this->ComputeLogInsideTerm( parameters ) + 
+           this->ComputeLogGradientTerm( parameters ) +  
+           this->ComputeLogShapePriorTerm( parameters ) + 
+           this->ComputeLogPosePriorTerm( parameters ) );
 }
 
 

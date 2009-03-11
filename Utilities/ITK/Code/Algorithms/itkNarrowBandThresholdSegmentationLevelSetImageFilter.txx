@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNarrowBandThresholdSegmentationLevelSetImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:36 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-01-26 21:45:53 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkNarrowBandThresholdSegmentationLevelSetImageFilter_txx_
-#define __itkNarrowBandThresholdSegmentationLevelSetImageFilter_txx_
+#ifndef __itkNarrowBandThresholdSegmentationLevelSetImageFilter_txx
+#define __itkNarrowBandThresholdSegmentationLevelSetImageFilter_txx
 
 #include "itkNarrowBandThresholdSegmentationLevelSetImageFilter.h"
 

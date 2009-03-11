@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPathToPathFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006-02-06 22:01:57 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-02-19 19:41:23 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,10 +38,10 @@ class ITK_EXPORT PathToPathFilter : public PathSource<TOutputPath>
 {
 public:
   /** Standard class typedefs. */
-  typedef PathToPathFilter  Self;
+  typedef PathToPathFilter         Self;
   typedef PathSource<TOutputPath>  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>       Pointer;
+  typedef SmartPointer<const Self> ConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -50,8 +50,8 @@ public:
   itkTypeMacro(PathToPathFilter,PathSource);
 
   /** Some convenient typedefs. */
-  typedef TInputPath InputPathType;
-  typedef typename InputPathType::Pointer InputPathPointer;
+  typedef TInputPath                           InputPathType;
+  typedef typename InputPathType::Pointer      InputPathPointer;
   typedef typename InputPathType::ConstPointer InputPathConstPointer;
   
   /** Set/Get the path input of this process object.  */

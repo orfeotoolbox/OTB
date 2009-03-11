@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkKernelFunction.h,v $
   Language:  C++
-  Date:      $Date: 2006-02-06 22:01:56 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-02-05 19:04:58 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,10 +40,10 @@ class ITKCommon_EXPORT KernelFunction : public FunctionBase<double,double>
 {
 public:  
   /** Standard class typedefs. */
-  typedef KernelFunction Self;
+  typedef KernelFunction              Self;
   typedef FunctionBase<double,double> Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>          Pointer;
+  typedef SmartPointer<const Self>    ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(KernelFunction, FunctionBase);
@@ -63,4 +63,3 @@ protected:
 } // end namespace itk
 
 #endif
-

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMLoadPoint.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:43 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-01-30 21:10:19 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,9 +24,6 @@
 namespace itk {
 namespace fem {
 
-
-
-
 /**
  * \class LoadPoint
  * \brief This load is applied on a point in an element.
@@ -34,7 +31,7 @@ namespace fem {
  * FIXME: To be implemented. Nothing works yet
  */
 class LoadPoint : public LoadElement {
-FEM_CLASS(LoadPoint,LoadElement)
+  FEM_CLASS(LoadPoint,LoadElement)
 public:
 
   /**
@@ -56,9 +53,6 @@ public:
 };
 
 FEM_CLASS_INIT(LoadPoint)
-
-
-
 
 }} // end namespace itk::fem
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMLoadBase.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:42 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-01-30 21:10:13 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,9 +24,6 @@
 namespace itk {
 namespace fem {
 
-
-
-
 /**
  * \class Load
  * \brief General abstract load base class.
@@ -38,7 +35,7 @@ namespace fem {
  */
 class Load : public FEMLightObject
 {
-FEM_ABSTRACT_CLASS(Load,FEMLightObject)
+  FEM_ABSTRACT_CLASS(Load,FEMLightObject)
 public:
 
   /** Array class that holds special pointers to the load objects */
@@ -60,9 +57,6 @@ public:
   virtual Solution::ConstPointer GetSolution( ) { return 0;}
 
 };
-
-
-
 
 }} // end namespace itk::fem
 

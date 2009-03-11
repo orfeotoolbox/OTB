@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMElement2DC0LinearTriangular.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:39 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-01-28 21:29:04 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,22 +23,19 @@
 namespace itk {
 namespace fem {
 
-
-
-
 /**
  * \class Element2DC0LinearTriangular
  * \brief 3-noded, linear, C0 continuous finite element in 2D space.
  */
 class Element2DC0LinearTriangular : public ElementStd<3,2>
 {
-typedef ElementStd<3,2> TemplatedParentClass;
-FEM_ABSTRACT_CLASS( Element2DC0LinearTriangular, TemplatedParentClass )
+  typedef ElementStd<3,2> TemplatedParentClass;
+  FEM_ABSTRACT_CLASS( Element2DC0LinearTriangular, TemplatedParentClass )
 public:
 
 
-//////////////////////////////////////////////////////////////////////////
-  /*
+  //////////////////////////////////////////////////////////////////////////
+  /**
    * Methods related to numeric integration
    */
 
@@ -48,10 +45,8 @@ public:
 
   virtual unsigned int GetNumberOfIntegrationPoints(unsigned int order) const;
 
-
-
-//////////////////////////////////////////////////////////////////////////
-  /*
+  //////////////////////////////////////////////////////////////////////////
+  /**
    * Methods related to the geometry of an element
    */
 
@@ -86,9 +81,6 @@ public:
   static const unsigned int Nip[6];
 
 };
-
-
-
 
 }} // end namespace itk::fem
 

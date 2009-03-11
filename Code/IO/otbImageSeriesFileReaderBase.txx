@@ -2,7 +2,7 @@
 
   Program:   ORFEO Toolbox
   Language:  C++
-  Date:	  $Date$
+  Date:          $Date$
   Version:   $Revision$
 
 
@@ -12,9 +12,9 @@
   Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
   See ITCopyright.txt for details.
 
-	 This software is distributed WITHOUT ANY WARRANTY; without even 
-	 the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-	 PURPOSE.  See the above copyright notices for more information.
+         This software is distributed WITHOUT ANY WARRANTY; without even 
+         the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+         PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -100,9 +100,9 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
   std::string aLine;
   std::ifstream inputFile ( m_FileName.c_str(), std::ios_base::in );
 
-	inputFile >> aLine;
-	if ( aLine != "ENVI" ) 
-	{
+        inputFile >> aLine;
+        if ( aLine != "ENVI" ) 
+        {
     inputFile.close();
     itk::OStringStream msg;
     msg << "The file " << m_FileName << " is not a \"ENVI META FILE\" format\n";
@@ -112,8 +112,8 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
   }
 
   inputFile >> aLine;
-	if ( aLine != "META" ) 
-	{
+        if ( aLine != "META" ) 
+        {
     inputFile.close();
     itk::OStringStream msg;
     msg << "The file " << m_FileName << " is not a \"ENVI META FILE\" format\n";
@@ -123,8 +123,8 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
   }
   
   inputFile >> aLine;
-	if ( aLine != "FILE" ) 
-	{
+        if ( aLine != "FILE" ) 
+        {
     inputFile.close();
     itk::OStringStream msg;
     msg << "The file " << m_FileName << " is not a \"ENVI META FILE\" format\n";
@@ -134,16 +134,16 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
   }
 
   while ( 1 )
-	{
+        {
     /* 
      * Reading the filenames
      */
     do {
-			inputFile >> aLine;
-			//std::cerr << "-> '" << aLine << "'\n";
-		} while ( aLine != "File" && inputFile.good() );
+                        inputFile >> aLine;
+                        //std::cerr << "-> '" << aLine << "'\n";
+                } while ( aLine != "File" && inputFile.good() );
 
-		if ( inputFile.good() )
+                if ( inputFile.good() )
     {
       do {
         inputFile >> aLine;
@@ -173,15 +173,15 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
     // Or throw an exception when not found nor readable
     TestFileExistanceAndReadability( aLine, kImageFileName );
     m_ListOfFileNames.push_back( aLine );
-		std::string imageFileName = aLine;
+                std::string imageFileName = aLine;
 
     /*
      * Reading the Band number
      */
     do {
-			inputFile >> aLine;
-			//std::cerr << "-> '" << aLine << "'\n";
-		} while ( aLine != "Bands:" && inputFile.good() );
+                        inputFile >> aLine;
+                        //std::cerr << "-> '" << aLine << "'\n";
+                } while ( aLine != "Bands:" && inputFile.good() );
 
     if ( !inputFile.good() )
     {
@@ -223,28 +223,28 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
     }
 
     // Storing band selection
-		try {
-			TestBandSelection( bands );
-		}
-		catch ( ImageSeriesFileReaderException & e )
-		{
-			itk::OStringStream msg;
-			msg << e.GetDescription();
-			msg << "Image FileName             : " << imageFileName << "\n";
-			e.SetDescription( msg.str().c_str() );
-			throw e;
-		}
-		m_ListOfBandSelection.push_back( bands );
+                try {
+                        TestBandSelection( bands );
+                }
+                catch ( ImageSeriesFileReaderException & e )
+                {
+                        itk::OStringStream msg;
+                        msg << e.GetDescription();
+                        msg << "Image FileName             : " << imageFileName << "\n";
+                        e.SetDescription( msg.str().c_str() );
+                        throw e;
+                }
+                m_ListOfBandSelection.push_back( bands );
 
     /*
      * Reading the Region selection
      */
     do {
-			inputFile >> aLine;
-			//std::cerr << "-> '" << aLine << "'\n";
-		} while ( aLine != "Dims" && inputFile.good() );
+                        inputFile >> aLine;
+                        //std::cerr << "-> '" << aLine << "'\n";
+                } while ( aLine != "Dims" && inputFile.good() );
 
-		if ( inputFile.good() )
+                if ( inputFile.good() )
     {
       do {
         inputFile >> aLine;
@@ -316,11 +316,11 @@ void
 ImageSeriesFileReaderBase< TImage, TInternalImage > 
 ::GenerateData( unsigned int idx )
 {
-	itk::OStringStream msg;
-	msg << "Something wrong... Check the template definition of this class in the program...\n";
-	msg << "\"ENVI META FILE\" FileName: " << m_FileName << "\n";
-	ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
-	throw e;
+        itk::OStringStream msg;
+        msg << "Something wrong... Check the template definition of this class in the program...\n";
+        msg << "\"ENVI META FILE\" FileName: " << m_FileName << "\n";
+        ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
+        throw e;
 }
 
 template < class TImage, class TInternalImage >
@@ -340,8 +340,8 @@ typename ImageSeriesFileReaderBase< TImage, TInternalImage >::OutputImageListTyp
 ImageSeriesFileReaderBase< TImage, TInternalImage > 
 ::GenerateOutput()
 {
-	this->Update();
-	return this->GetOutput();
+        this->Update();
+        return this->GetOutput();
 }
 
 template < class TImage, class TInternalImage >
@@ -349,8 +349,8 @@ typename ImageSeriesFileReaderBase< TImage, TInternalImage >::OutputImageType *
 ImageSeriesFileReaderBase< TImage, TInternalImage > 
 ::GenerateOutput( unsigned int idx )
 {
-	this->GenerateData( idx );
-	return this->GetOutput( idx );
+        this->GenerateData( idx );
+        return this->GetOutput( idx );
 }
 
 
@@ -364,7 +364,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
 
   if ( m_ListOfFileNames.size() > 0 )
   {
-		std::vector< std::vector< unsigned int > >::const_iterator bandSelection = m_ListOfBandSelection.begin();
+                std::vector< std::vector< unsigned int > >::const_iterator bandSelection = m_ListOfBandSelection.begin();
     os << indent << "Image File(s) to be read\n";
     for ( unsigned int i = 0; i < GetNumberOfOutputs(); ++i )
     {
@@ -384,7 +384,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
       }
       os << "\n";
 
-			++bandSelection;
+                        ++bandSelection;
     }
   }
 }
@@ -417,7 +417,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
       fullPath.push_back( "/" );
       fullPath.push_back( file );
 
-			std::string fullFileName = itksys::SystemTools::JoinPath( fullPath );
+                        std::string fullFileName = itksys::SystemTools::JoinPath( fullPath );
 
       if ( !itksys::SystemTools::FileExists( fullFileName.c_str() ) )
       {
@@ -426,7 +426,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
         msg << "The image file doesn't exist. \n";
         msg << "ImageFileName     = " << file << "\n";
         msg << "tested path       = " << itksys::SystemTools::GetFilenamePath( m_FileName ) << "\n";
-				msg << "Other Tested File = " << fullFileName << "\n";
+                                msg << "Other Tested File = " << fullFileName << "\n";
         e.SetDescription( msg.str().c_str() );
         throw e;
         return;

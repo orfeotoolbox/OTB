@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkErrorBackPropagationLearningFunctionBase.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-03 21:17:59 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-01-24 21:33:49 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -39,11 +39,12 @@ class ErrorBackPropagationLearningFunctionBase : public LearningFunctionBase<typ
 {
 public:
   typedef ErrorBackPropagationLearningFunctionBase Self;
-  typedef LearningFunctionBase<typename LayerType::LayerInterfaceType, TTargetVector> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef LearningFunctionBase<typename LayerType::LayerInterfaceType, TTargetVector>
+                                                   Superclass;
+  typedef SmartPointer<Self>                       Pointer;
+  typedef SmartPointer<const Self>                 ConstPointer;
 
-  typedef typename Superclass::ValueType ValueType;
+  typedef typename Superclass::ValueType         ValueType;
   typedef typename LayerType::LayerInterfaceType LayerInterfaceType;
 
   /** Method for creation through the object factory. */

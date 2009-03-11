@@ -61,7 +61,7 @@ int main(int argc, char* argv[] )
   if (argc != 4)
   {
     std::cout << "Usage : " << argv[0] << " inputImage modelFile outputImage"
-              << std::endl ;
+              << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -184,10 +184,10 @@ int main(int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
 
-  ClassifierType::Pointer classifier = ClassifierType::New() ;
+  ClassifierType::Pointer classifier = ClassifierType::New();
   classifier->SetSample(sample.GetPointer());
   classifier->SetMap(somreader->GetOutput());
-  classifier->Update() ;
+  classifier->Update();
 
 // Software Guide : EndCodeSnippet
 //
@@ -264,7 +264,7 @@ int main(int argc, char* argv[] )
   while (m_iter != m_last && !outIt.IsAtEnd())
   {
     outIt.Set(m_iter.GetClassLabel());
-    ++m_iter ;
+    ++m_iter;
     ++outIt;
   }
 

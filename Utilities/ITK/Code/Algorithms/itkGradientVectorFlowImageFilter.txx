@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGradientVectorFlowImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004-03-07 01:41:01 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2009-01-11 06:19:50 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkGradientVectorFlowImageFilter_txx
-#define _itkGradientVectorFlowImageFilter_txx
+#ifndef __itkGradientVectorFlowImageFilter_txx
+#define __itkGradientVectorFlowImageFilter_txx
 #include "itkGradientVectorFlowImageFilter.h"
 
 #ifdef _MSC_VER
@@ -24,8 +24,8 @@
 
 namespace itk
 {
-template <class TInputImage, class TOutputImage>
-GradientVectorFlowImageFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage, class TInternalPixel>
+GradientVectorFlowImageFilter<TInputImage, TOutputImage, TInternalPixel>
 ::GradientVectorFlowImageFilter()
 {
   m_TimeStep = 0.001;
@@ -38,9 +38,9 @@ GradientVectorFlowImageFilter<TInputImage, TOutputImage>
     }
 }
 
-template <class TInputImage, class TOutputImage>
+template <class TInputImage, class TOutputImage, class TInternalPixel>
 void
-GradientVectorFlowImageFilter<TInputImage, TOutputImage>
+GradientVectorFlowImageFilter<TInputImage, TOutputImage, TInternalPixel>
 ::GenerateData()
 {
 
@@ -66,9 +66,9 @@ GradientVectorFlowImageFilter<TInputImage, TOutputImage>
 
 }
 
-template <class TInputImage, class TOutputImage>
+template <class TInputImage, class TOutputImage, class TInternalPixel>
 void
-GradientVectorFlowImageFilter<TInputImage, TOutputImage>
+GradientVectorFlowImageFilter<TInputImage, TOutputImage, TInternalPixel>
 ::InitInterImage()
 {
   unsigned int i;
@@ -83,20 +83,20 @@ GradientVectorFlowImageFilter<TInputImage, TOutputImage>
 
   for ( i=0; i<ImageDimension; i++ ) 
     {
-    m_InternalImages[i] = InternalImageType::New() ;
+    m_InternalImages[i] = InternalImageType::New();
     m_InternalImages[i]->SetLargestPossibleRegion( this->GetInput()->GetLargestPossibleRegion() );
     m_InternalImages[i]->SetRequestedRegionToLargestPossibleRegion();
     m_InternalImages[i]->SetBufferedRegion( m_InternalImages[i]->GetRequestedRegion() );
     m_InternalImages[i]->Allocate();
     }
 
-  m_BImage = InternalImageType::New() ;
+  m_BImage = InternalImageType::New();
   m_BImage->SetLargestPossibleRegion( this->GetInput()->GetLargestPossibleRegion() );
   m_BImage->SetRequestedRegionToLargestPossibleRegion();
   m_BImage->SetBufferedRegion( m_BImage->GetRequestedRegion() );
   m_BImage->Allocate();
 
-  m_CImage = InputImageType::New() ;
+  m_CImage = InputImageType::New();
   m_CImage->SetLargestPossibleRegion( this->GetInput()->GetLargestPossibleRegion() );
   m_CImage->SetRequestedRegionToLargestPossibleRegion();
   m_CImage->SetBufferedRegion( m_BImage->GetRequestedRegion() );
@@ -108,23 +108,24 @@ GradientVectorFlowImageFilter<TInputImage, TOutputImage>
   InputImageIterator  intermediateIt(m_IntermediateImage, 
                                      m_IntermediateImage->GetBufferedRegion() );
 
-  for (i=0; i<ImageDimension; i++) {
-  InternalImageIterator  internalIt(m_InternalImages[i], 
-                                    m_InternalImages[i]->GetBufferedRegion() );
-  internalIt.GoToBegin();
-
-  inputIt.GoToBegin();
-  intermediateIt.GoToBegin();
-
-  while ( !inputIt.IsAtEnd() ) 
+  for (i=0; i<ImageDimension; i++)
     {
-    intermediateIt.Set(inputIt.Get());
-    internalIt.Set(inputIt.Get()[i]);
-    ++internalIt;
-    ++intermediateIt;
-    ++inputIt;
+    InternalImageIterator  internalIt(m_InternalImages[i], 
+                                    m_InternalImages[i]->GetBufferedRegion() );
+    internalIt.GoToBegin();
+    
+    inputIt.GoToBegin();
+    intermediateIt.GoToBegin();
+
+    while ( !inputIt.IsAtEnd() ) 
+      {
+      intermediateIt.Set(inputIt.Get());
+      internalIt.Set(inputIt.Get()[i]);
+      ++internalIt;
+      ++intermediateIt;
+      ++inputIt;
+      }
     }
-  }
 
   InternalImageIterator  BIt(m_BImage, 
                              m_BImage->GetBufferedRegion() );
@@ -158,9 +159,9 @@ GradientVectorFlowImageFilter<TInputImage, TOutputImage>
 
 }
 
-template <class TInputImage, class TOutputImage>
+template <class TInputImage, class TOutputImage, class TInternalPixel>
 void
-GradientVectorFlowImageFilter<TInputImage, TOutputImage>
+GradientVectorFlowImageFilter<TInputImage, TOutputImage, TInternalPixel>
 ::UpdateInterImage()
 {
   unsigned int i;
@@ -184,9 +185,9 @@ GradientVectorFlowImageFilter<TInputImage, TOutputImage>
     }
 }
 
-template <class TInputImage, class TOutputImage>
+template <class TInputImage, class TOutputImage, class TInternalPixel>
 void
-GradientVectorFlowImageFilter<TInputImage, TOutputImage>
+GradientVectorFlowImageFilter<TInputImage, TOutputImage, TInternalPixel>
 ::UpdatePixels()
 {
 
@@ -262,9 +263,9 @@ GradientVectorFlowImageFilter<TInputImage, TOutputImage>
     }
 }
 
-template <class TInputImage, class TOutputImage>
+template <class TInputImage, class TOutputImage, class TInternalPixel>
 void
-GradientVectorFlowImageFilter<TInputImage, TOutputImage>
+GradientVectorFlowImageFilter<TInputImage, TOutputImage, TInternalPixel>
 ::PrintSelf( std::ostream& os, Indent indent ) const
 {
   Superclass::PrintSelf(os, indent);
@@ -285,4 +286,3 @@ GradientVectorFlowImageFilter<TInputImage, TOutputImage>
 } // namespace itk
 
 #endif
-

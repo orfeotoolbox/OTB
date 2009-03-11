@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshCleanFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-09-30 22:08:42 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-02-20 16:55:42 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -54,7 +54,7 @@ public:
   typedef typename Superclass::InputQEPrimal                    InputQEPrimal;
   typedef typename Superclass::InputVectorType                  InputVectorType;
 
-  typedef typename Superclass::InputEdgeCellType                InputEdgeCellType; 
+  typedef typename Superclass::InputEdgeCellType                InputEdgeCellType;
   typedef typename Superclass::InputPolygonCellType             InputPolygonCellType;
   typedef typename Superclass::InputPointIdList                 InputPointIdList;
   typedef typename Superclass::InputCellTraits                  InputCellTraits;
@@ -164,35 +164,39 @@ protected:
       ++p_it;
       }
 
-    // Copy cells
-    InputCellsContainerIterator c_it = temp->GetCells()->Begin();
-    InputCellsContainerIterator c_end = temp->GetCells()->End();
+    // Copy Edge Cells
+    InputCellsContainerIterator  c_it = temp->GetEdgeCells()->Begin();
+    InputCellsContainerIterator  c_end = temp->GetEdgeCells()->End();
     InputEdgeCellType* qe;
-    InputPolygonCellType* pe;
     InputQEPrimal* QEGeom;
 
     while( c_it != c_end )
       {
-      if( ( qe = dynamic_cast< InputEdgeCellType* >( c_it.Value() ) ) )
-        {
-        QEGeom = qe->GetQEGeom( );
-        output->AddEdgeWithSecurePointList( QEGeom->GetOrigin(),
-          QEGeom->GetDestination() );
-        }
-      else
-        {
-        pe = dynamic_cast< InputPolygonCellType* >( c_it.Value());
-        if( pe )
-          {
-          InputPointIdList points;
+      qe = dynamic_cast< InputEdgeCellType* >( c_it.Value());
+      QEGeom = qe->GetQEGeom( );
+      output->AddEdgeWithSecurePointList( QEGeom->GetOrigin(),
+                                          QEGeom->GetDestination() );
+      ++c_it;
+      }
 
-          for( InputPointsIdInternalIterator pit = pe->InternalPointIdsBegin();
-               pit != pe->InternalPointIdsEnd( ); ++pit )
-            {
-            points.push_back( ( *pit ) );
-            }
-          output->AddFaceWithSecurePointList( points );
-          } 
+    // Copy cells
+    c_it = temp->GetCells()->Begin();
+    c_end = temp->GetCells()->End();
+    InputPolygonCellType* pe;
+
+    while( c_it != c_end )
+      {
+      pe = dynamic_cast< InputPolygonCellType* >( c_it.Value());
+      if( pe )
+        {
+        InputPointIdList points;
+
+        for( InputPointsIdInternalIterator pit = pe->InternalPointIdsBegin();
+             pit != pe->InternalPointIdsEnd( ); ++pit )
+          {
+          points.push_back( ( *pit ) );
+          }
+        output->AddFaceWithSecurePointList( points );
         }
       ++c_it;
       }

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanReciprocalSquareDifferencePointSetToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2008-02-03 04:05:28 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-01-24 20:02:59 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -49,11 +49,10 @@ class ITK_EXPORT MeanReciprocalSquareDifferencePointSetToImageMetric :
 public:
 
   /** Standard class typedefs. */
-  typedef  MeanReciprocalSquareDifferencePointSetToImageMetric    Self;
+  typedef  MeanReciprocalSquareDifferencePointSetToImageMetric  Self;
   typedef PointSetToImageMetric<TFixedPointSet, TMovingImage >  Superclass;
-
-  typedef SmartPointer<Self>         Pointer;
-  typedef SmartPointer<const Self>   ConstPointer;
+  typedef SmartPointer<Self>                                    Pointer;
+  typedef SmartPointer<const Self>                              ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -120,6 +119,3 @@ private:
 #endif
 
 #endif
-
-
-

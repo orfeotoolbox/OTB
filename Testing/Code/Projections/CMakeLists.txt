@@ -358,6 +358,8 @@ ADD_TEST(prTvGenericMapProjection ${PROJECTIONS_TESTS3}
         ${TEMP}/prTvGenericMapProjection.txt
 )
 
+ADD_TEST(prTuGenericRSTransformNew ${PROJECTIONS_TESTS3}  otbGenericRSTransformNew )
+
 ADD_TEST(prTuVectorDataProjectionFilterNew ${PROJECTIONS_TESTS3}  otbVectorDataProjectionFilterNew )
 
 #test points
@@ -439,7 +441,7 @@ ADD_TEST(prTvVectorDataProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
 ADD_TEST(prTuGeocentricTransformNew ${PROJECTIONS_TESTS3}  otbGeocentricTransformNew )
 
 
-ADD_TEST(prTuGeocentricTransform ${PROJECTIONS_TESTS3}
+ADD_TEST(prTvGeocentricTransform ${PROJECTIONS_TESTS3}
          --compare-ascii ${EPSILON} ${BASELINE_FILES}/prTvGeocentricTransform.txt
         ${TEMP}/prTvGeocentricTransform.txt
         otbGeocentricTransform
@@ -471,6 +473,7 @@ otbCompositeTransformNew.cxx
 otbCompositeTransform.cxx
 otbGenericMapProjectionNew.cxx
 otbGenericMapProjection.cxx
+otbGenericRSTransformNew.cxx
 otbVectorDataProjectionFilterNew.cxx
 otbVectorDataProjectionFilter.cxx
 otbVectorDataProjectionFilterFromMapToSensor.cxx

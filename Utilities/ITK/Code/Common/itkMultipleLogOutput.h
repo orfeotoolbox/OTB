@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultipleLogOutput.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-08 15:40:09 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-02-06 20:53:10 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,15 +42,14 @@ class ITKCommon_EXPORT MultipleLogOutput : public LogOutput
 
 public:
 
-  typedef MultipleLogOutput  Self;
-  typedef LogOutput   Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef MultipleLogOutput         Self;
+  typedef LogOutput                 Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
-  typedef LogOutput               OutputType;
+  typedef LogOutput                 OutputType;
 
   itkTypeMacro(MultipleLogOutput, LogOutput);
-
   itkNewMacro(MultipleLogOutput);
   
 public:

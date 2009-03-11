@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineInterpolateImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-12-08 01:10:42 $
-  Version:   $Revision: 1.20.2.1 $
+  Date:      $Date: 2009-01-28 17:52:26 $
+  Version:   $Revision: 1.23 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -175,7 +175,8 @@ public:
    * flag is OFF.
    * The default value of this flag is the same as the CMAKE option
    * ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE (i.e ON by default when ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE is ON,
-   * and  OFF by default when ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE is OFF).*/
+   * and  OFF by default when ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE is
+   * OFF). */
   itkSetMacro( UseImageDirection, bool );
   itkGetMacro( UseImageDirection, bool );
   itkBooleanMacro( UseImageDirection );
@@ -184,7 +185,6 @@ public:
 protected:
   BSplineInterpolateImageFunction();
   virtual ~BSplineInterpolateImageFunction() {};
-  void operator=( const Self& ); //purposely not implemented
   void PrintSelf(std::ostream& os, Indent indent) const;
 
   // These are needed by the smoothing spline routine.
@@ -196,6 +196,8 @@ protected:
 
 private:
   BSplineInterpolateImageFunction( const Self& ); //purposely not implemented
+  void operator=( const Self& ); //purposely not implemented
+
   /** Determines the weights for interpolation of the value x */
   void SetInterpolationWeights( const ContinuousIndexType & x, 
                                 const vnl_matrix<long> & EvaluateIndex, 

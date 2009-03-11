@@ -121,72 +121,72 @@ public:
  
     for( unsigned int d = 0; d<m_NumberOfDirections; d++ )
       {
-	// Current angle direction
-	angle = m_Alpha*static_cast<double>(d);
+        // Current angle direction
+        angle = m_Alpha*static_cast<double>(d);
 
-	// last offset in the diraction respecting spatial threshold
-	off[0] = static_cast<int>(vcl_floor(SpatialThresholdDouble*vcl_cos( angle ) + 0.5));
-	off[1] = static_cast<int>(vcl_floor(SpatialThresholdDouble*vcl_sin( angle ) + 0.5));
-	// last indices in the diration respecting spectral threshold
-	OffsetType offEnd = this->FindLastOffset( it, off );
-	// computes distance = dist between the 2 segment point. One of them is the center pixel -> (0,0)
-  	dist = vcl_sqrt( vcl_pow(static_cast<double>(offEnd[0]), 2 ) + vcl_pow(static_cast<double>(offEnd[1]), 2 ) );
+        // last offset in the diraction respecting spatial threshold
+        off[0] = static_cast<int>(vcl_floor(SpatialThresholdDouble*vcl_cos( angle ) + 0.5));
+        off[1] = static_cast<int>(vcl_floor(SpatialThresholdDouble*vcl_sin( angle ) + 0.5));
+        // last indices in the diration respecting spectral threshold
+        OffsetType offEnd = this->FindLastOffset( it, off );
+        // computes distance = dist between the 2 segment point. One of them is the center pixel -> (0,0)
+          dist = vcl_sqrt( vcl_pow(static_cast<double>(offEnd[0]), 2 ) + vcl_pow(static_cast<double>(offEnd[1]), 2 ) );
 
-	// for length computation
-	if( m_SelectedTextures[0] == true )
-	  if( dist>length )
-	    length = dist;
+        // for length computation
+        if( m_SelectedTextures[0] == true )
+          if( dist>length )
+            length = dist;
 
-	// for width computation
- 	if( m_SelectedTextures[1] == true )
-	  if( dist<width)
-	    width = dist;
+        // for width computation
+         if( m_SelectedTextures[1] == true )
+          if( dist<width)
+            width = dist;
 
-	// for PSI computation
-	if( m_SelectedTextures[2] == true || m_SelectedTextures[5] == true )
-	  sum += dist;
+        // for PSI computation
+        if( m_SelectedTextures[2] == true || m_SelectedTextures[5] == true )
+          sum += dist;
 
-	// for w-mean computation
-	if( m_SelectedTextures[3] == true )
-	  sdiVal = this->ComputeSDi(it, offEnd);
+        // for w-mean computation
+        if( m_SelectedTextures[3] == true )
+          sdiVal = this->ComputeSDi(it, offEnd);
 
-	// for Ratio computation
-	if( m_SelectedTextures[4] == true )
-	  {
-	    bool doo = false;
-	    itVector = maxSorted.begin();
-	    while( itVector != maxSorted.end() && doo==false )
-	      {
-		if( dist>(*itVector) )
-		  {
-		    maxSorted.insert(itVector, dist);
-		    maxSorted.pop_back();
-		    doo=true;
-		  }
-		++itVector;
-	      }
-	    doo = false;
-	    itVector = minSorted.begin();
-	    while( itVector != minSorted.end() && doo==false )
-	      {
-		if( dist<(*itVector) )
-		  {
-		    minSorted.insert(itVector, dist);
-		    minSorted.pop_back();
-		    doo=true;
-		  }
-		++itVector;
-	      }
-	  }
+        // for Ratio computation
+        if( m_SelectedTextures[4] == true )
+          {
+            bool doo = false;
+            itVector = maxSorted.begin();
+            while( itVector != maxSorted.end() && doo==false )
+              {
+                if( dist>(*itVector) )
+                  {
+                    maxSorted.insert(itVector, dist);
+                    maxSorted.pop_back();
+                    doo=true;
+                  }
+                ++itVector;
+              }
+            doo = false;
+            itVector = minSorted.begin();
+            while( itVector != minSorted.end() && doo==false )
+              {
+                if( dist<(*itVector) )
+                  {
+                    minSorted.insert(itVector, dist);
+                    minSorted.pop_back();
+                    doo=true;
+                  }
+                ++itVector;
+              }
+          }
 
-	di[d] = dist;
-	if( m_SelectedTextures[3] == true )
-	  {
-	    lengthLine[d] = static_cast<unsigned int>(dist);//static_cast<unsigned int>( vcl_sqrt(vcl_pow(static_cast<double>(offEnd[0]), 2) + vcl_pow(static_cast<double>(offEnd[1]), 2)) );
-	    sti[d] = sdiVal;
-	    if(sdiVal!=0.)
-	      sumWMean += (m_Alpha*(dist-1)*dist/*lengthLine[n]*di[n]*/)/sdiVal;
-	  }
+        di[d] = dist;
+        if( m_SelectedTextures[3] == true )
+          {
+            lengthLine[d] = static_cast<unsigned int>(dist);//static_cast<unsigned int>( vcl_sqrt(vcl_pow(static_cast<double>(offEnd[0]), 2) + vcl_pow(static_cast<double>(offEnd[1]), 2)) );
+            sti[d] = sdiVal;
+            if(sdiVal!=0.)
+              sumWMean += (m_Alpha*(dist-1)*dist/*lengthLine[n]*di[n]*/)/sdiVal;
+          }
       }
 
     /////// FILL OUTPUT
@@ -205,25 +205,25 @@ public:
     // ratio
     if( m_SelectedTextures[4] == true )
       {
-	double sumMin = 0;
-	double sumMax = 0;
-	for(unsigned int t=0; t<m_RatioMaxConsiderationNumber ; t++)
-	  {
-	    sumMin += minSorted[t];
-	    sumMax += maxSorted[t];
-	  }
-	if (sumMax != 0.)
-	  out[4] = static_cast<OutputValueType>(vcl_atan(sumMin/sumMax));
-	else if (sumMax == 0. && sumMin == 0.)
-	  out[4] = static_cast<OutputValueType>(1.);
+        double sumMin = 0;
+        double sumMax = 0;
+        for(unsigned int t=0; t<m_RatioMaxConsiderationNumber; t++)
+          {
+            sumMin += minSorted[t];
+            sumMax += maxSorted[t];
+          }
+        if (sumMax != 0.)
+          out[4] = static_cast<OutputValueType>(vcl_atan(sumMin/sumMax));
+        else if (sumMax == 0. && sumMin == 0.)
+          out[4] = static_cast<OutputValueType>(1.);
       }
     // SD
     if( m_SelectedTextures[5] == true )
       {
-	double sumPSI = 0;
-	for(unsigned int n=0; n<di.size(); n++)
-	  sumPSI += vcl_pow(di[n] - sumWMean/NumberOfDirectionsDouble , 2);
-	out[5] = static_cast<OutputValueType>(vcl_sqrt(sumPSI)/(NumberOfDirectionsDouble-1.));
+        double sumPSI = 0;
+        for(unsigned int n=0; n<di.size(); n++)
+          sumPSI += vcl_pow(di[n] - sumWMean/NumberOfDirectionsDouble , 2);
+        out[5] = static_cast<OutputValueType>(vcl_sqrt(sumPSI)/(NumberOfDirectionsDouble-1.));
       }
    
     return out;
@@ -236,7 +236,7 @@ public:
    *  respect the spectral condition.
    */
   OffsetType FindLastOffset( const TIter & it, const OffsetType & stopOffset )
-    {	
+    {        
       bool res = true;
       int signX = this->ComputeStep( stopOffset[0] );
       int signY = this->ComputeStep( stopOffset[1] );
@@ -247,22 +247,22 @@ public:
 
       double slop = 0.;
       if(stopOffset[0]!=0)
-	slop = static_cast<double>(stopOffset[1] / static_cast<double>(stopOffset[0]) );
+        slop = static_cast<double>(stopOffset[1] / static_cast<double>(stopOffset[0]) );
 
       bool isInside = true;
-      while( isInside == true && res == true)	
-	{
-	  this->ComputePointLine( currentOff, slop, signY, stopOffset[0] );
+      while( isInside == true && res == true)        
+        {
+          this->ComputePointLine( currentOff, slop, signY, stopOffset[0] );
 
-	  if( vcl_abs(it.GetPixel(currentOff)-it.GetCenterPixel()) > m_SpectralThreshold )
-	    {
-	      res = false;
-	    }
-	  else
-	    currentOff[0]+=signX;
+          if( vcl_abs(it.GetPixel(currentOff)-it.GetCenterPixel()) > m_SpectralThreshold )
+            {
+              res = false;
+            }
+          else
+            currentOff[0]+=signX;
        
-	  isInside = this->CheckIsInside(signX, signY, currentOff, stopOffset);
-	}
+          isInside = this->CheckIsInside(signX, signY, currentOff, stopOffset);
+        }
 
       return currentOff;
     }
@@ -277,7 +277,7 @@ public:
       double       mean  = 0.;
       double       slop  = 0.;
       if(stopOffset[0] != 0)
-	slop = static_cast<double>(stopOffset[1] / static_cast<double>(stopOffset[0]) );
+        slop = static_cast<double>(stopOffset[1] / static_cast<double>(stopOffset[0]) );
       
       int signX = this->ComputeStep( stopOffset[0] );
       int signY = this->ComputeStep( stopOffset[1] );
@@ -289,19 +289,19 @@ public:
       bool isInside = true;
       // First compute mean
       while( isInside == true && canGo == true )
-	{
-	  this->ComputePointLine( currentOff, slop, signY, stopOffset[0] );
+        {
+          this->ComputePointLine( currentOff, slop, signY, stopOffset[0] );
 
-	  mean += static_cast<double>(it.GetPixel(currentOff));
-	  nbElt++;
+          mean += static_cast<double>(it.GetPixel(currentOff));
+          nbElt++;
 
-	  if( vcl_abs(it.GetPixel(currentOff)-it.GetCenterPixel()) >= m_SpectralThreshold )
-	      canGo = false;
-	  else
-	    currentOff[0]+=signX;
-	  
-	  isInside = this->CheckIsInside(signX, signY, currentOff, stopOffset);
-	}
+          if( vcl_abs(it.GetPixel(currentOff)-it.GetCenterPixel()) >= m_SpectralThreshold )
+              canGo = false;
+          else
+            currentOff[0]+=signX;
+          
+          isInside = this->CheckIsInside(signX, signY, currentOff, stopOffset);
+        }
       
       mean /= static_cast<double>(nbElt);
       currentOff[0] = signX;
@@ -309,18 +309,18 @@ public:
       isInside = true;      
 
       while( isInside == true && canGo == true )
-	{
-	  this->ComputePointLine( currentOff, slop, signY, stopOffset[0] );
+        {
+          this->ComputePointLine( currentOff, slop, signY, stopOffset[0] );
 
-	  SDi += vcl_pow((static_cast<double>(it.GetPixel(currentOff)) - mean), 2);
-	  if( vcl_abs(it.GetPixel(currentOff)-it.GetCenterPixel()) >= m_SpectralThreshold )
-	      canGo = false;
-	  else
-	    currentOff[0]+=signX;
+          SDi += vcl_pow((static_cast<double>(it.GetPixel(currentOff)) - mean), 2);
+          if( vcl_abs(it.GetPixel(currentOff)-it.GetCenterPixel()) >= m_SpectralThreshold )
+              canGo = false;
+          else
+            currentOff[0]+=signX;
 
-	  isInside = this->CheckIsInside(signX, signY, currentOff, stopOffset);
+          isInside = this->CheckIsInside(signX, signY, currentOff, stopOffset);
 
-	}
+        }
       return vcl_sqrt(SDi);
     }
 
@@ -330,9 +330,9 @@ public:
     {
       bool isInside = true;
       if( signX*currentOff[0]>=signX*stopOffset[0] && stopOffset[0]!=0)
-	isInside = false;
+        isInside = false;
       else if( signY*currentOff[1]>=signY*stopOffset[1] && stopOffset[1] != 0 )
-	isInside = false;
+        isInside = false;
 
       return isInside;
     }
@@ -344,9 +344,9 @@ public:
   void ComputePointLine( OffsetType & currentOff, const double & slop, const int & signY, const int & stopOffsetX )
     {
       if(stopOffsetX!=0)
-	currentOff[1] = static_cast<int>( vcl_floor( slop*static_cast<double>(currentOff[0]) + 0.5 ));
+        currentOff[1] = static_cast<int>( vcl_floor( slop*static_cast<double>(currentOff[0]) + 0.5 ));
       else
-	currentOff[1]+=signY;
+        currentOff[1]+=signY;
     }
 
 
@@ -357,7 +357,7 @@ public:
     {
       int sign = 1;
       if(stopOffset<0)
-	sign = -1;
+        sign = -1;
 
       return sign;
     }

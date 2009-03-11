@@ -19,7 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
 #include "otbEdgeDensityImageFilter.h"
-
+#include "otbImageFileWriter.h"
 
 namespace otb
 {
@@ -29,10 +29,10 @@ namespace otb
 template <class TInputImage , class TOutputImage, class TEdgeDetector, class TDensityCount>
 EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
 ::EdgeDensityImageFilter()
-{
+{ 
   this->SetNumberOfRequiredInputs( 1 );
   
-  m_NeighborhoodRadius = 1;
+  m_NeighborhoodRadius.Fill( 1 );
   m_Detector =  DetectorType::New();
   m_DensityImageFilter = DensityImageType::New();
 }
@@ -46,63 +46,25 @@ EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
 ::~EdgeDensityImageFilter()
 {}
 
+
 /**
  * threaded Generate Data
  */
-
-/**
-* ThreadedGenerateData Performs the pixel-wise addition
-*/
 template <class TInputImage , class TOutputImage, class TEdgeDetector, class TDensityCount>
 void
 EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
-//::GenerateData()
-::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId )
+::GenerateData()
 {
-  typename Superclass::OutputImagePointer      outputImage = this->GetOutput();
-  InputImagePointerType ptr = const_cast<InputImageType *>(this->GetInput());
-  if (!ptr)
-    return ;
-
-  /** Apply Canny Detector*/
-  m_Detector->SetInput(ptr);
+  typename ImageFileWriter<TInputImage>::Pointer writer = ImageFileWriter<TInputImage>::New();
+  m_Detector->SetInput( this->GetInput() );
   
-
-  /** Compute density on the binaruzed Image */
-  m_DensityImageFilter->SetInput(m_Detector->GetOutput());
   m_DensityImageFilter->SetNeighborhoodRadius(m_NeighborhoodRadius);
+  m_DensityImageFilter->SetInput( m_Detector->GetOutput() );
 
-  /** updating the output*/
   m_DensityImageFilter->GraftOutput(this->GetOutput());
   m_DensityImageFilter->Update();
   this->GraftOutput(m_DensityImageFilter->GetOutput());
 }
-
-
-/**
- * Set Detector
- */
-template <class TInputImage , class TOutputImage, class TEdgeDetector, class TDensityCount>
-void
-EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
-::SetDetector(DetectorType* detector)
-{
-  m_Detector = detector;
-}
-
-
-/**
- * Get Detector
- */
-template <class TInputImage , class TOutputImage, class TEdgeDetector, class TDensityCount>
-typename EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount> 
-::DetectorType *
-EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount> 
-::GetDetector()
-{
-  return m_Detector;
-}
-
 
 
 /*----------------------------------------------------------------

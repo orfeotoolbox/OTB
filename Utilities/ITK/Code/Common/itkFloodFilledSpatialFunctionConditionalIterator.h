@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFloodFilledSpatialFunctionConditionalIterator.h,v $
   Language:  C++
-  Date:      $Date: 2004-12-11 20:29:18 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2009-02-05 19:04:56 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -78,7 +78,7 @@ public:
   const PixelType & Get(void) const
     { return const_cast<ImageType *>(this->m_Image.GetPointer())->GetPixel(this->m_IndexStack.front() ); }
 
-  /** Get the pixel value, non-const version is sometimes useful*/
+  /** Get the pixel value, non-const version is sometimes useful. */
   PixelType & Get(void)
     { return const_cast<ImageType *>(this->m_Image.GetPointer())->GetPixel(this->m_IndexStack.front() ); }
 

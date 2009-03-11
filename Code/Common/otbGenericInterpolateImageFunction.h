@@ -72,7 +72,6 @@ public:
   /** Dimension underlying input image. */
   itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
 
-  virtual void SetInputImage(const InputImageType *image);
 
   /** Evaluate the function at a ContinuousIndex position
    *
@@ -86,8 +85,8 @@ public:
 
 
   /** Set/Get the window radius*/
-  void SetRadius(unsigned int rad);
-  unsigned int GetRadius() const
+  virtual void SetRadius(unsigned int rad);
+  virtual unsigned int GetRadius() const
   {
     return m_Function.GetRadius();
   };
@@ -98,7 +97,7 @@ public:
   //virtual void SetWindowSize(unsigned int win){ m_WindowSize = win; };
 
   /** Get the functor list */
-  FunctionType& GetFunction(void)
+  virtual FunctionType& GetFunction(void)
   {
     return m_Function;
   }
@@ -114,7 +113,7 @@ public:
 protected:
   GenericInterpolateImageFunction();
   ~GenericInterpolateImageFunction();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Call the superclass implementation and set the TablesHaveBeenGenerated
    * flag to false */

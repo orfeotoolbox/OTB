@@ -28,7 +28,7 @@ namespace otb
 /** \class PanTexTextureImageFilter
   * \brief This filter computes the panchromatic Texture measure.
   *
-  * It is the min vamlue of the contrast in 8 directions.
+  * It is the min value of the contrast in 8 directions.
   *
   * \sa ContrastTextureFunctor
   *

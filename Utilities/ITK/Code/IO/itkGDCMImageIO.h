@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGDCMImageIO.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-01 12:26:11 $
-  Version:   $Revision: 1.35 $
+  Date:      $Date: 2008-11-25 13:32:34 $
+  Version:   $Revision: 1.36 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,18 +38,18 @@ namespace itk
  *    http://www.creatis.insa-lyon.fr
  *
  *  \warning There are several restrictions to this current writer:
- *           *  Basically you always need a DICOM as input to write a proper DICOM image file
+ *           -  Basically you always need a DICOM as input to write a proper DICOM image file
  *              (As of 12/10/2004 this restriction is solved in GDCM CVS repository)
- *           *  Eventhough during the writing process you pass in a DICOM file as input
+ *           -  Eventhough during the writing process you pass in a DICOM file as input
  *              The output file may not contains ALL DICOM field from the input file.
  *              In particular:
  *                             - The SeQuence DICOM field (SQ).
  *                             - Fields from Private Dictionary with unresolved Name (= unknown at runtime)
- *           *  As of 01/15 the binary fields are properly passed.
- *           *  Some very long (>0xfff) binary fields are not loaded (typically 0029|0010), 
+ *           -  As of 01/15 the binary fields are properly passed.
+ *           -  Some very long (>0xfff) binary fields are not loaded (typically 0029|0010), 
  *              you need to explicitely set the maximum length of elements to load to be bigger
  *              (see Get/SetMaxSizeLoadEntry)
- *           * GDCMImageIO was not handling rescale slope/intercept properly. This is fixed as of 11/12/2007
+ *           - GDCMImageIO was not handling rescale slope/intercept properly. This is fixed as of 11/12/2007
  *
  *  \ingroup IOFilters
  *

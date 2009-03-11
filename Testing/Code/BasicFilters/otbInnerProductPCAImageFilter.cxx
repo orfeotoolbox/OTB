@@ -28,7 +28,9 @@ int otbInnerProductPCAImageFilter( int argc, char* argv[] )
   const unsigned int Dimension = 2;
   const char * inputFileName = argv[1];
   const char * outputFilename = argv[2];
-  const unsigned int numberOfPrincipalComponentsRequired(atoi(argv[3]));
+  const bool generateMeanComponent(atoi(argv[3]));
+  const bool centerdata = atoi(argv[4]);
+  const unsigned int numberOfPrincipalComponentsRequired(atoi(argv[5]));
 
   typedef otb::Image<PixelType,Dimension> MonoImageType;
   typedef otb::VectorImage<PixelType,Dimension> ImageType;
@@ -45,26 +47,27 @@ int otbInnerProductPCAImageFilter( int argc, char* argv[] )
   PCAFilterType::Pointer     pcafilter     = PCAFilterType::New();
 
   pcafilter->SetNumberOfPrincipalComponentsRequired(numberOfPrincipalComponentsRequired);
+  pcafilter->SetGenerateMeanComponent(generateMeanComponent);
+  pcafilter->SetCenterData(centerdata);
   pcafilter->SetInput(reader->GetOutput());
   writer->SetInput(pcafilter->GetOutput());
   writer->Update();
 
   typedef otb::MultiToMonoChannelExtractROI< PixelType, PixelType >  ExtractROIFilterType;
+  unsigned int nbComponents = numberOfPrincipalComponentsRequired;
+  if (generateMeanComponent == true) nbComponents += 1;
 
-std::cout <<"numberOfPrincipalComponentsRequired: " <<numberOfPrincipalComponentsRequired<<std::endl;
-  for(unsigned int cpt=0 ; cpt < numberOfPrincipalComponentsRequired ; cpt++)
+  for(unsigned int cpt=0 ; cpt < nbComponents ; cpt++)
   {
     ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
     WriterType2::Pointer     writer2     = WriterType2::New();
     extractROIFilter->SetInput(pcafilter->GetOutput());
     extractROIFilter->SetChannel(cpt+1);
     writer2->SetInput(extractROIFilter->GetOutput());
-std::cout <<"argv[cpt+4]: " <<argv[cpt+4]<<std::endl;
 
-    writer2->SetFileName(argv[cpt+4]);
+    writer2->SetFileName(argv[cpt+6]);
     writer2->Update();
   }
 
-std::cout <<"TTOOOOOOOOOOOOOOO: " <<numberOfPrincipalComponentsRequired<<std::endl;
   return EXIT_SUCCESS;
 }

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNormalizedCorrelationImageToImageMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2008-02-03 04:05:29 $
-  Version:   $Revision: 1.48 $
+  Date:      $Date: 2009-01-26 21:45:54 $
+  Version:   $Revision: 1.49 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkNormalizedCorrelationImageToImageMetric_txx
-#define _itkNormalizedCorrelationImageToImageMetric_txx
+#ifndef __itkNormalizedCorrelationImageToImageMetric_txx
+#define __itkNormalizedCorrelationImageToImageMetric_txx
 
 #include "itkNormalizedCorrelationImageToImageMetric.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
@@ -23,7 +23,7 @@
 namespace itk
 {
 
-/*
+/**
  * Constructor
  */
 template <class TFixedImage, class TMovingImage> 
@@ -33,7 +33,7 @@ NormalizedCorrelationImageToImageMetric<TFixedImage,TMovingImage>
   m_SubtractMean = false;
 }
 
-/*
+/**
  * Get the match Measure
  */
 template <class TFixedImage, class TMovingImage> 
@@ -131,11 +131,7 @@ NormalizedCorrelationImageToImageMetric<TFixedImage,TMovingImage>
 
 }
 
-
-
-
-
-/*
+/**
  * Get the Derivative Measure
  */
 template < class TFixedImage, class TMovingImage> 
@@ -519,9 +515,6 @@ NormalizedCorrelationImageToImageMetric<TFixedImage,TMovingImage>
       }
     value = NumericTraits< MeasureType >::Zero;
     }
-
-
-
 }
 
 template < class TFixedImage, class TMovingImage> 

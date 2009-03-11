@@ -26,6 +26,7 @@ SET(BASICFILTERS_TESTS8 ${CXX_TEST_PATH}/otbBasicFiltersTests8)
 SET(BASICFILTERS_TESTS9 ${CXX_TEST_PATH}/otbBasicFiltersTests9)
 SET(BASICFILTERS_TESTS10 ${CXX_TEST_PATH}/otbBasicFiltersTests10)
 SET(BASICFILTERS_TESTS11 ${CXX_TEST_PATH}/otbBasicFiltersTests11)
+SET(BASICFILTERS_TESTS12 ${CXX_TEST_PATH}/otbBasicFiltersTests12)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -111,6 +112,16 @@ ADD_TEST(bfTvBoundingRegionCalculator ${BASICFILTERS_TESTS1}
 	${INPUTDATA}/rcc8_mire3.png
 	${INPUTDATA}/rcc8_mire4.png
 	)
+
+
+ADD_TEST(bfTvMeanFunctorImageTest ${BASICFILTERS_TESTS1}
+  --compare-image ${TOL}  ${BASELINE}/bfMeanFunctorImage.tif
+                           ${TEMP}/bfMeanFunctorImage.tif
+  otbMeanFunctorImageTest
+  ${INPUTDATA}/couleurs_extrait.png
+  ${TEMP}/bfMeanFunctorImage.tif
+  )
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests2 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -838,10 +849,10 @@ ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
 
 # -------            otb::ConvolutionImageFilter   ----------------------------
 
-  ADD_TEST(bfTuConvolutionImageFilterNew ${BASICFILTERS_TESTS8}
+ADD_TEST(bfTuConvolutionImageFilterNew ${BASICFILTERS_TESTS8}
          otbConvolutionImageFilterNew)
 
-  ADD_TEST(bfTvConvolutionImageFilter ${BASICFILTERS_TESTS8}
+ADD_TEST(bfTvConvolutionImageFilter ${BASICFILTERS_TESTS8}
 		--compare-image ${EPSILON}
 		    ${BASELINE}/bfTvConvolutionImageFilter.tif
 		    ${TEMP}/bfTvConvolutionImageFilter.tif
@@ -853,10 +864,10 @@ ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
 
 # -------            otb::ScalarToRainbowRGBPixelFunctor  -----------------
 
-  ADD_TEST(bfTuScalarToRainbowRGBPixelFunctorNew ${BASICFILTERS_TESTS8}
-         otbConvolutionImageFilterNew)
+ADD_TEST(bfTuScalarToRainbowRGBPixelFunctorNew ${BASICFILTERS_TESTS8}
+         otbScalarToRainbowRGBPixelFunctorNew)
 
-  ADD_TEST(bfTvScalarToRainbowRGBPixelFunctor ${BASICFILTERS_TESTS8}
+ADD_TEST(bfTvScalarToRainbowRGBPixelFunctor ${BASICFILTERS_TESTS8}
 		--compare-image ${EPSILON}
 		    ${BASELINE}/bfTvScalarToRainbowRGBPixelFunctor.png
 		    ${TEMP}/bfTvScalarToRainbowRGBPixelFunctor.png
@@ -865,19 +876,24 @@ ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
 		    ${TEMP}/bfTvScalarToRainbowRGBPixelFunctor.png
 )
 
+# -------            otb::AmplitudePhaseToRGBFunctor  -----------------
+
+ADD_TEST(bfTuAmplitudePhaseToRGBFunctorNew ${BASICFILTERS_TESTS8}
+         otbAmplitudePhaseToRGBFunctorNew)
+
+ADD_TEST(bfTvAmplitudePhaseToRGBFunctor ${BASICFILTERS_TESTS8}
+		--compare-image ${EPSILON}
+		    ${BASELINE}/bfTvAmplitudePhaseToRGBFunctor.png
+		    ${TEMP}/bfTvAmplitudePhaseToRGBFunctor.png
+		    otbAmplitudePhaseToRGBFunctor
+		    ${INPUTDATA}/RSAT_imagery_HH.tif
+		    ${TEMP}/bfTvAmplitudePhaseToRGBFunctor.png
+)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests9 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ADD_TEST(bfTuChangeLabelImageFilterNew ${BASICFILTERS_TESTS9}
-	otbChangeLabelImageFilterNew
-)
-
-ADD_TEST(bfTuChangeLabelImageFilter ${BASICFILTERS_TESTS9}
-	otbChangeLabelImageFilterTest
-)
-
 
 ADD_TEST(bfTuContinuousMinimumMaximumImageCalculatorNew ${BASICFILTERS_TESTS9}
         otbContinuousMinimumMaximumImageCalculatorNew
@@ -1006,10 +1022,10 @@ ADD_TEST(bfTuBinaryImageToImageDensityFilterNew  ${BASICFILTERS_TESTS9}
 ADD_TEST(bfTvBinaryImageToDensityImageFilter ${BASICFILTERS_TESTS9}
 	--compare-image ${EPSILON}
 	    ${BASELINE}/bfTvBinaryImageToDensityImageFilterOutputImage.tif
-	    ${TEMP}/bfTvBinaryImageToDensityImageFilterOutputImage.tif 
+	    ${TEMP}/bfTvBinaryImageToDensityImageFilterOutputImage.tif
         otbBinaryImageToDensityImageFilter
 	    ${INPUTDATA}/scene.png
-	    ${TEMP}/bfTvBinaryImageToDensityImageFilterOutputImage.tif 
+	    ${TEMP}/bfTvBinaryImageToDensityImageFilterOutputImage.tif
 	    2 # radius
 )
 
@@ -1027,13 +1043,13 @@ ADD_TEST(bfTvEdgeDensityImageFilter ${BASICFILTERS_TESTS9}
 	    ${TEMP}/bfTvEdgeDensityImageFilterOutputImage.tif
 	    1 # radius
 	    15 3  1. 0.01  #Canny Parameters
-	    
+
 )
 
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests10 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests10 ~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ADD_TEST(bfTuScalarImageTextureFunctorNew ${BASICFILTERS_TESTS10}
         otbScalarImageTextureFunctorNew )
@@ -1140,6 +1156,11 @@ ADD_TEST(bfTvPersistentVectorizationImageFilter ${BASICFILTERS_TESTS10}
 	 ${TEMP}/bfTvPersistentVectorizationImageFilterOutput.txt
 )
 
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests10 ~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # -------     Combination ExtractROI and StremingResample   ----------------------------
 
 ADD_TEST(bfTvExtractROIResample ${BASICFILTERS_TESTS11}
@@ -1208,7 +1229,7 @@ ADD_TEST(bfTvKeyPointDensityImageFilterOutputImage ${BASICFILTERS_TESTS11}
 --compare-image ${TOL}
 	    ${BASELINE}/bfTvKeyPointDensityImageFilterOutputImage.tif
 	    ${TEMP}/bfTvKeyPointDensityImageFilterOutputImage.tif
-	    otbKeyPointDensityImageFilterTest 
+	    otbKeyPointDensityImageFilterTest
 	 ${INPUTDATA}/QB_Suburb.png
 	 ${TEMP}/bfTvKeyPointDensityImageFilterOutputImage.tif
 	 3 5 10
@@ -1229,6 +1250,16 @@ ADD_TEST(bfTvStreamingInnerProductVectorImageFilter ${BASICFILTERS_TESTS11}
       otbStreamingInnerProductVectorImageFilter
       ${INPUTDATA}/poupees_sub_3c.png
       ${TEMP}/bfStreamingInnerProductVectorImageFilterResults.txt
+      1 #center data
+)
+ADD_TEST(bfTvStreamingInnerProductVectorImageFilterDisableCenterData ${BASICFILTERS_TESTS11}
+      --compare-ascii 0.000001
+      ${BASELINE_FILES}/bfStreamingInnerProductVectorImageFilterResultsDisableCenterData.txt
+      ${TEMP}/bfStreamingInnerProductVectorImageFilterResultsDisableCenterData.txt
+      otbStreamingInnerProductVectorImageFilter
+      ${INPUTDATA}/poupees_sub_3c.png
+      ${TEMP}/bfStreamingInnerProductVectorImageFilterResultsDisableCenterData.txt
+      0 #center data
 )
 
 ADD_TEST(bfTuEstimateInnerProductPCAImageFilterNew ${BASICFILTERS_TESTS11}
@@ -1243,6 +1274,18 @@ ADD_TEST(bfTvEstimateInnerProductPCAImageFilter ${BASICFILTERS_TESTS11}
     ${INPUTDATA}/poupees_sub_3c.png
     ${TEMP}/bfEstimateInnerProductPCAImageFilter.tif
     3
+    1 #center data
+)
+
+ADD_TEST(bfTvEstimateInnerProductPCAImageFilterDisableCenterData ${BASICFILTERS_TESTS11}
+    --compare-image ${EPSILON}
+    ${BASELINE}/bfEstimateInnerProductPCAImageFilterDisableCenterData.tif
+    ${TEMP}/bfEstimateInnerProductPCAImageFilterDisableCenterData.tif
+    otbEstimateInnerProductPCAImageFilter
+    ${INPUTDATA}/poupees_sub_3c.png
+    ${TEMP}/bfEstimateInnerProductPCAImageFilterDisableCenterData.tif
+    3
+    0 #center data
 )
 
 ADD_TEST(bfTvEstimateInnerProductPCAImageFilterCP1 ${BASICFILTERS_TESTS11}
@@ -1253,6 +1296,7 @@ ADD_TEST(bfTvEstimateInnerProductPCAImageFilterCP1 ${BASICFILTERS_TESTS11}
     ${INPUTDATA}/poupees_sub_3c.png
     ${TEMP}/bfEstimateInnerProductPCAImageFilter_CP1.tif
     1
+    1 #center data
 )
 ADD_TEST(bfTvEstimateInnerProductPCAImageFilterCP12 ${BASICFILTERS_TESTS11}
     --compare-image ${EPSILON}
@@ -1262,6 +1306,7 @@ ADD_TEST(bfTvEstimateInnerProductPCAImageFilterCP12 ${BASICFILTERS_TESTS11}
     ${INPUTDATA}/poupees_sub_3c.png
     ${TEMP}/bfEstimateInnerProductPCAImageFilter_CP12.tif
     2
+    1 #center data
 )
 
 ADD_TEST(bfTuNormalizeInnerProductPCAImageFilterNew ${BASICFILTERS_TESTS11}
@@ -1287,10 +1332,27 @@ ADD_TEST(bfTvInnerProductPCAImageFilter ${BASICFILTERS_TESTS11}
     otbInnerProductPCAImageFilter
     ${INPUTDATA}/poupees_sub_3c.png
     ${TEMP}/bfInnerProductPCAImageFilter.tif
-    3 
+    0 # Flag generate Mean component ?
+    1 #center data
+    3 # Nb Of Principal Components
     ${TEMP}/bfInnerProductPCAImageFilter_pc1.tif
     ${TEMP}/bfInnerProductPCAImageFilter_pc2.tif
     ${TEMP}/bfInnerProductPCAImageFilter_pc3.tif
+)
+
+ADD_TEST(bfTvInnerProductPCAImageFilterDisableCenterData ${BASICFILTERS_TESTS11}
+    --compare-image ${EPSILON}
+    ${BASELINE}/bfInnerProductPCAImageFilterDisableCenterData.tif
+    ${TEMP}/bfInnerProductPCAImageFilterDisableCenterData.tif
+    otbInnerProductPCAImageFilter
+    ${INPUTDATA}/poupees_sub_3c.png
+    ${TEMP}/bfInnerProductPCAImageFilterDisableCenterData.tif
+    0 # Flag generate Mean component ?
+    0 #center data
+    3 # Nb Of Principal Components
+    ${TEMP}/bfInnerProductPCAImageFilterDisableCenterData_pc1.tif
+    ${TEMP}/bfInnerProductPCAImageFilterDisableCenterData_pc2.tif
+    ${TEMP}/bfInnerProductPCAImageFilterDisableCenterData_pc3.tif
 )
 
 ADD_TEST(bfTvInnerProductPCAImageFilter_PC1 ${BASICFILTERS_TESTS11}
@@ -1300,7 +1362,9 @@ ADD_TEST(bfTvInnerProductPCAImageFilter_PC1 ${BASICFILTERS_TESTS11}
     otbInnerProductPCAImageFilter
     ${INPUTDATA}/poupees_sub_3c.png
     ${TEMP}/bfInnerProductPCAImageFilter_PC1.tif
-    1 
+    0 # Flag generate Mean component ?
+    1 #center data
+    1 # Nb Of Principal Components
     ${TEMP}/bfInnerProductPCAImageFilter_PC1_1.tif
 )
 ADD_TEST(bfTvInnerProductPCAImageFilter_PC12 ${BASICFILTERS_TESTS11}
@@ -1310,20 +1374,40 @@ ADD_TEST(bfTvInnerProductPCAImageFilter_PC12 ${BASICFILTERS_TESTS11}
     otbInnerProductPCAImageFilter
     ${INPUTDATA}/poupees_sub_3c.png
     ${TEMP}/bfInnerProductPCAImageFilter_PC12.tif
-    2 
+    0 # Flag generate Mean component ?
+    1 #center data
+    2 # Nb Of Principal Components
     ${TEMP}/bfInnerProductPCAImageFilter_PC12_1.tif
     ${TEMP}/bfInnerProductPCAImageFilter_PC12_2.tif
 )
 
+ADD_TEST(bfTvInnerProductPCAImageFilterAllsOutputs ${BASICFILTERS_TESTS11}
+    --compare-image ${EPSILON}
+    ${BASELINE}/bfInnerProductPCAImageFilterAllsOutputs.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs.tif
+    otbInnerProductPCAImageFilter
+    ${INPUTDATA}/poupees_sub_3c.png
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs.tif
+    1 # Flag generate Mean component ?
+    1 #center data
+    3 # Nb Of Principal Components
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_pc1.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_pc2.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_pc3.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_MEAN.tif
+)
+
 # -------    Check PCA Implementation with ITK ImagePCAShapeModelEstimator class ----------------------------
 ADD_TEST(bfTvItkImagePCAShapeModelEstimatorTest ${BASICFILTERS_TESTS11}
-    --compare-n-images ${EPSILON} 3
+    --compare-n-images ${EPSILON} 4
     ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors1.tif
-    ${TEMP}/bfInnerProductPCAImageFilter_pc1.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_pc1.tif
     ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors2.tif
-    ${TEMP}/bfInnerProductPCAImageFilter_pc2.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_pc2.tif
     ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors3.tif
-    ${TEMP}/bfInnerProductPCAImageFilter_pc3.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_pc3.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_MEAN.tif
+    ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_mean.tif
     otbImagePCAShapeModelEstimatorTest
     ${INPUTDATA}/poupees_sub_c1.png
     ${INPUTDATA}/poupees_sub_c2.png
@@ -1349,6 +1433,45 @@ ADD_TEST(bfTvListSampleToVariableDimensionHistogramGenerator ${BASICFILTERS_TEST
 	10 1
 )
 
+# -------  otb::ListSampleToVariableDimensionHistogramGenerator ----------------------------
+
+ADD_TEST(bfTuListSampleToHistogramListGeneratorNew ${BASICFILTERS_TESTS11}
+	otbListSampleToHistogramListGeneratorNew)
+
+ADD_TEST(bfTvListSampleToHistogramListGenerator ${BASICFILTERS_TESTS11}
+--compare-ascii ${TOL}
+	${BASELINE_FILES}/bfTvListSampleToVariableDimensionHistogramGeneratorOutput.txt
+	${TEMP}/bfTvListSampleToHistogramListGeneratorOutput.txt
+	otbListSampleToHistogramListGenerator
+	${INPUTDATA}/couleurs.tif
+	${TEMP}/bfTvListSampleToHistogramListGeneratorOutput.txt
+	10 1
+)
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests12 ~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# -------     otbEdgeDetectorImageFilter   ----------------------------
+ADD_TEST(bfTvEdgeDetectorImageFilterNew ${BASICFILTERS_TESTS12}
+	 otbEdgeDetectorImageFilterNew
+	 )
+
+ADD_TEST(bfTvEdgeDetectorImageFilter ${BASICFILTERS_TESTS12}
+--compare-image ${TOL}
+	    ${BASELINE}/bfTvEdgeDetectorImageFilter.tif
+	    ${TEMP}/bfTvEdgeDetectorImageFilter.tif
+	 otbEdgeDetectorImageFilter
+	 ${INPUTDATA}/poupees_sub_c1.png
+	 ${TEMP}/bfTvEdgeDetectorImageFilter.tif
+	 0   # lower threshold
+	 255 # upper  threshold
+)
+
+
+
+
 # A enrichir
 SET(BasicFilters_SRCS1
 otbLeeFilter.cxx
@@ -1362,6 +1485,7 @@ otbClosingOpeningMorphologicalFilterNew.cxx
 otbClosingOpeningMorphologicalFilter.cxx
 otbBinaryImageMinimalBoundingRegionCalculatorNew.cxx
 otbBinaryImageMinimalBoundingRegionCalculator.cxx
+otbMeanFunctorImageTest.cxx
 )
 
 # A enrichir
@@ -1469,12 +1593,12 @@ otbConvolutionImageFilterNew.cxx
 otbConvolutionImageFilter.cxx
 otbScalarToRainbowRGBPixelFunctorNew.cxx
 otbScalarToRainbowRGBPixelFunctor.cxx
+otbAmplitudePhaseToRGBFunctorNew.cxx
+otbAmplitudePhaseToRGBFunctor.cxx
 )
 
 # A enrichir
 SET(BasicFilters_SRCS9
-otbChangeLabelImageFilterNew.cxx
-otbChangeLabelImageFilter.cxx
 otbContinuousMinimumMaximumImageCalculatorNew.cxx
 otbContinuousMinimumMaximumImageCalculatorTest.cxx
 otbMeanShiftImageFilterNew.cxx
@@ -1486,9 +1610,9 @@ otbFunctionToImageFilter.cxx
 otbBinaryImageDensityFunctionNew.cxx
 otbBinaryImageDensityFunction.cxx
 otbBinaryImageToDensityImageFilterNew.cxx
-otbBinaryImageToDensityImageFilter.cxx	
+otbBinaryImageToDensityImageFilter.cxx
 otbEdgeDensityImageFilterNew.cxx
-otbEdgeDensityImageFilter.cxx	
+otbEdgeDensityImageFilter.cxx
 )
 
 # A enrichir
@@ -1519,7 +1643,7 @@ otbPointSetFunctionNew.cxx
 otbPointSetDensityFunctionNew.cxx
 otbPointSetDensityFunctionTest.cxx
 otbPointSetToDensityImageFilterNew.cxx
-otbPointSetToDensityImageFilterTest.cxx	
+otbPointSetToDensityImageFilterTest.cxx
 otbKeyPointDensityImageFilterNew.cxx
 otbKeyPointDensityImageFilterTest.cxx
 otbImagePCAShapeModelEstimatorTest.cxx
@@ -1534,8 +1658,14 @@ otbInnerProductPCAImageFilter.cxx
 otbInnerProductPCAImageFilterNew.cxx
 otbListSampleToVariableDimensionHistogramGeneratorNew.cxx
 otbListSampleToVariableDimensionHistogramGenerator.cxx
+otbListSampleToHistogramListGeneratorNew.cxx
+otbListSampleToHistogramListGenerator.cxx
 )
 
+SET(BasicFilters_SRCS12
+otbEdgeDetectorImageFilter.cxx
+otbEdgeDetectorImageFilterNew.cxx
+)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
@@ -1571,5 +1701,8 @@ TARGET_LINK_LIBRARIES(otbBasicFiltersTests10  OTBBasicFilters  OTBIO )
 
 ADD_EXECUTABLE(otbBasicFiltersTests11 otbBasicFiltersTests11.cxx ${BasicFilters_SRCS11})
 TARGET_LINK_LIBRARIES(otbBasicFiltersTests11  OTBBasicFilters ITKAlgorithms OTBIO )
+
+ADD_EXECUTABLE(otbBasicFiltersTests12 otbBasicFiltersTests12.cxx ${BasicFilters_SRCS12})
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests12  OTBBasicFilters ITKAlgorithms OTBIO )
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

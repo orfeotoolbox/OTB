@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImagePCADecompositionCalculator.h,v $
   Language:  C++
-  Date:      $Date: 2005-03-21 23:04:03 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-01-24 20:02:56 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -62,9 +62,9 @@ class ITK_EXPORT ImagePCADecompositionCalculator : public Object
 public:
   /** Standard class typedefs. */
   typedef ImagePCADecompositionCalculator Self;
-  typedef Object  Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef Object                          Superclass;
+  typedef SmartPointer<Self>              Pointer;
+  typedef SmartPointer<const Self>        ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -140,15 +140,15 @@ private:
   ImagePCADecompositionCalculator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
-  BasisVectorType m_Projection;
-  BasisVectorType m_ImageAsVector;
+  BasisVectorType          m_Projection;
+  BasisVectorType          m_ImageAsVector;
   BasisImagePointerVector  m_BasisImages;
-  BasisImageConstPointer m_MeanImage;
-  BasisSizeType m_Size;
-  InputImageConstPointer  m_Image;
-  BasisMatrixType  m_BasisMatrix;
-  bool m_BasisMatrixCalculated;
-  unsigned long m_NumPixels;
+  BasisImageConstPointer   m_MeanImage;
+  BasisSizeType            m_Size;
+  InputImageConstPointer   m_Image;
+  BasisMatrixType          m_BasisMatrix;
+  bool                     m_BasisMatrixCalculated;
+  unsigned long            m_NumPixels;
 };
 
 } // end namespace itk

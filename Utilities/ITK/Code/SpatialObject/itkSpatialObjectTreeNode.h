@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSpatialObjectTreeNode.h,v $
   Language:  C++
-  Date:      $Date: 2007-07-16 23:15:51 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-01-28 20:10:29 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,6 +26,9 @@ namespace itk
 
 template <unsigned int TDimension> class SpatialObject;
 
+/** \class SpatialObjectTreeNode
+ * \brief TODO
+ */
 template <unsigned int TDimension>
 class SpatialObjectTreeNode : public TreeNode< SpatialObject<TDimension> * >
 {
@@ -61,7 +64,7 @@ public:
   itkSetObjectMacro(NodeToWorldTransform,TransformType);
   itkGetConstReferenceObjectMacro(NodeToWorldTransform,TransformType);
 
-  /** Compute the NodeToWorld transform based on the parent*/
+  /** Compute the NodeToWorld transform based on the parent */
   void ComputeNodeToWorldTransform();
 
   /** Return a list of children (the list should be deleted by the user */

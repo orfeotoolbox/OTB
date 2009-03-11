@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptWhiteTopHatImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-08-09 23:38:41 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-08 16:03:55 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -31,7 +31,7 @@ template <class TInputImage, class TOutputImage, class TKernel>
 WhiteTopHatImageFilter<TInputImage, TOutputImage, TKernel>
 ::WhiteTopHatImageFilter()
 {
-  m_SafeBorder = false;
+  m_SafeBorder = true;
   m_Algorithm = HISTO;
   m_ForceAlgorithm = false;
 }

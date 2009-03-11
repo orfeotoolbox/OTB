@@ -3,17 +3,19 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMLoads.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:43 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-01-30 21:10:19 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __itkFEMLoads_h
+#define __itkFEMLoads_h
 
 /**
  * \file itkFEMLoads.h
@@ -37,3 +39,5 @@
 
 #include "itkFEMLoadLandmark.h"
 #include "itkFEMLoadImplementationGenericLandmarkLoad.h"
+
+#endif

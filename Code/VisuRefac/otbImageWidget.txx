@@ -25,18 +25,16 @@ namespace otb
 {
 template <class TInputImage>
 ImageWidget<TInputImage>
-::ImageWidget() : Fl_Gl_Window(0,0,0,0), m_IsotropicZoom(1.0), m_OpenGlBuffer(NULL), m_OpenGlBufferedRegion(),
-		  m_Identifier("Default"), m_UseGlAcceleration(false), m_Rectangle(),m_DisplayRectangle(false),
-		  m_RectangleColor(), m_ImageExtentWidth(0), m_ImageExtentHeight(0), m_ImageExtentX(), m_ImageExtentY()
+::ImageWidget() : m_IsotropicZoom(1.0), m_OpenGlBuffer(NULL), m_OpenGlBufferedRegion(),
+                  m_Extent(), m_SubsamplingRate(1), m_ImageToScreenTransform(),
+                  m_ScreenToImageTransform(), m_GlComponents()
 {
-  #ifdef OTB_GL_USE_ACCEL
-  m_UseGlAcceleration = true;
-  #endif
-  
-  // Default color for rectangle
-  m_RectangleColor.Fill(0.);
-  m_RectangleColor[0]=1.0;
-  m_RectangleColor[3]=1.0;
+  // Initialize space to screen transform and inverse
+  m_ImageToScreenTransform = AffineTransformType::New();
+  m_ScreenToImageTransform = AffineTransformType::New();
+
+  // Initialize the components list
+  m_GlComponents = GlComponentListType::New();
 }
 
 template <class TInputImage>
@@ -58,20 +56,7 @@ ImageWidget<TInputImage>
 {
   // Call the superclass implementation
   Superclass::PrintSelf(os,indent);
-  // Display information about the widget
-  os<<indent<<"Widget "<<m_Identifier<<": "<<std::endl;
-  #ifndef OTB_GL_USE_ACCEL
-  os<<indent<<indent<<"OpenGl acceleration is not allowed."<<std::endl;
-  #else
-  if(m_UseGlAcceleration)
-    {
-    os<<indent<<indent<<"OpenGl acceleration is allowed and enabled."<<std::endl;
-    }
-  else
-    {
-    os<<indent<<indent<<"OpenGl acceleration is allowed but disabled."<<std::endl;
-    }
-  #endif
+
   if(m_OpenGlBuffer == NULL)
     {
     os<<indent<<indent<<"OpenGl buffer is not allocated."<<std::endl;
@@ -96,14 +81,6 @@ ImageWidget<TInputImage>
     {
     itkExceptionMacro(<<"Region to read is oustside of the buffered region.");
     }
-  // Check if Gl acceleration mode is correct
-  #ifndef OTB_GL_USE_ACCEL
-  if(m_UseGlAcceleration)
-    {
-    itkExceptionMacro(<<"Gl acceleration enabled but not allowed. Consider rebuilding with OTB_USE_GL_ACCEL to ON.");
-    }
-  #endif
-
   // Delete previous buffer if needed
   if(m_OpenGlBuffer != NULL)
     {
@@ -123,7 +100,7 @@ ImageWidget<TInputImage>
     {
     // Fill the buffer
     unsigned int index = 0;
-    if(!m_UseGlAcceleration)
+    if(!this->GetUseGlAcceleration())
       {
       // compute the linear index (buffer is flipped around X axis
       // when gl acceleration is disabled
@@ -148,33 +125,47 @@ ImageWidget<TInputImage>
 template <class TInputImage>
 void
 ImageWidget<TInputImage>
+::UpdateTransforms()
+{
+  assert(m_IsotropicZoom>0 && "Isotropic zoom should be non null positive.");
+
+  typename RegionType::IndexType index;
+  typename RegionType::SizeType  size;
+  // Update image extent
+  size[0]= static_cast<unsigned int>(m_IsotropicZoom*static_cast<double>(m_OpenGlBufferedRegion.GetSize()[0]));
+  size[1]= static_cast<unsigned int>(m_IsotropicZoom*static_cast<double>(m_OpenGlBufferedRegion.GetSize()[1]));
+  index[0] = (this->w()-size[0])/2;
+  index[1] = (this->h()-size[1])/2;
+  m_Extent.SetIndex(index);
+  m_Extent.SetSize(size);
+
+  // Image to screen matrix
+  typename AffineTransformType::MatrixType s2iMatrix;
+  s2iMatrix.Fill(0);
+  const double s2iSpacing =(m_SubsamplingRate)/m_IsotropicZoom;
+  s2iMatrix(0,0)=s2iSpacing;
+  s2iMatrix(1,1)=-s2iSpacing;
+  m_ScreenToImageTransform->SetMatrix(s2iMatrix);
+
+  // Image to screen translation
+  typename AffineTransformType::OutputVectorType translation;
+  translation[0]= m_SubsamplingRate * (m_OpenGlBufferedRegion.GetIndex()[0]-m_Extent.GetIndex()[0]/m_IsotropicZoom);
+  translation[1]= m_SubsamplingRate * (((m_Extent.GetIndex()[1]+m_Extent.GetSize()[1])/m_IsotropicZoom) + m_OpenGlBufferedRegion.GetIndex()[1]);
+  m_ScreenToImageTransform->SetTranslation(translation);
+
+  // Compute the inverse transform
+  bool couldInvert = m_ScreenToImageTransform->GetInverse(m_ImageToScreenTransform);
+  assert(couldInvert && "Could not invert ScreenToImageTransform");
+}
+
+template <class TInputImage>
+void
+ImageWidget<TInputImage>
 ::draw()
 {
-  // Check if Gl acceleration mode is correct
-  #ifndef OTB_GL_USE_ACCEL
-  if(m_UseGlAcceleration)
-    {
-    itkWarningMacro(<<"Gl acceleration enabled but not allowed. Consider rebuilding with OTB_USE_GL_ACCEL to ON. For now, disabling Gl acceleration.");
-    m_UseGlAcceleration=false;
-    }
-  #endif
+  // perform checks from superclass and gl initialisation
+  Superclass::draw();
 
-  // Set up Gl environement
-  if (!this->valid())
-  {
-    valid(1);
-    glLoadIdentity();
-    glViewport(0,0,w(),h());
-    glClearColor((float)0.0, (float)0.0, (float)0.0, (float)0.0);
-    glShadeModel(GL_FLAT);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  }
-
-  glClear(GL_COLOR_BUFFER_BIT);    //this clears and paints to black
-  glMatrixMode(GL_MODELVIEW);      //clear previous 3D draw params
-  glLoadIdentity();
-  glMatrixMode(GL_PROJECTION);
-  this->ortho();
   glDisable(GL_BLEND);
   // Check if there is somthing to draw
   if(m_OpenGlBuffer == NULL)
@@ -182,24 +173,21 @@ ImageWidget<TInputImage>
     return;
     }
 
-  // Image extent
-  m_ImageExtentWidth = m_IsotropicZoom*static_cast<double>(m_OpenGlBufferedRegion.GetSize()[0]);
-  m_ImageExtentHeight = m_IsotropicZoom*static_cast<double>(m_OpenGlBufferedRegion.GetSize()[1]);
-  m_ImageExtentX = (static_cast<double>(this->w())-m_ImageExtentWidth)/2;
-  m_ImageExtentY = (static_cast<double>(this->h())-m_ImageExtentHeight)/2;
+  // Update transforms
+  this->UpdateTransforms();
 
-  if(!m_UseGlAcceleration)
+  if(!this->GetUseGlAcceleration())
     {
     // Set the pixel Zoom
-    glRasterPos2f(m_ImageExtentX,m_ImageExtentY);
+    glRasterPos2f(m_Extent.GetIndex()[0],m_Extent.GetIndex()[1]);
     glPixelZoom(m_IsotropicZoom,m_IsotropicZoom);
 
     // display the image
     glDrawPixels(m_OpenGlBufferedRegion.GetSize()[0],
-		 m_OpenGlBufferedRegion.GetSize()[1],
-		 GL_RGB,
-		 GL_UNSIGNED_BYTE,
-		 m_OpenGlBuffer);
+                 m_OpenGlBufferedRegion.GetSize()[1],
+                 GL_RGB,
+                 GL_UNSIGNED_BYTE,
+                 m_OpenGlBuffer);
     }
   else
     {
@@ -214,118 +202,26 @@ ImageWidget<TInputImage>
     glBindTexture (GL_TEXTURE_2D, texture);
     glBegin (GL_QUADS);
     glTexCoord2f (0.0, 1.0);
-    glVertex3f (m_ImageExtentX,m_ImageExtentY, 0.0);
+    glVertex3f (m_Extent.GetIndex()[0],m_Extent.GetIndex()[1], 0.0);
     glTexCoord2f (1.0, 1.0);
-    glVertex3f (m_ImageExtentX+m_ImageExtentWidth, m_ImageExtentY, 0.0);
+    glVertex3f (m_Extent.GetIndex()[0]+m_Extent.GetSize()[0], m_Extent.GetIndex()[1], 0.0);
     glTexCoord2f (1.0, 0.0);
-    glVertex3f (m_ImageExtentX+m_ImageExtentWidth,m_ImageExtentY+m_ImageExtentHeight, 0.0);
+    glVertex3f (m_Extent.GetIndex()[0]+m_Extent.GetSize()[0],m_Extent.GetIndex()[1]+m_Extent.GetSize()[1], 0.0);
     glTexCoord2f (0.0, 0.0);
-    glVertex3f (m_ImageExtentX,m_ImageExtentY+m_ImageExtentHeight, 0.0);
+    glVertex3f (m_Extent.GetIndex()[0],m_Extent.GetIndex()[1]+m_Extent.GetSize()[1], 0.0);
     glEnd ();
     glDisable(GL_TEXTURE_2D);
     }
 
-  // Draw the rectangle if necessary
-  if(m_DisplayRectangle)
+  // Render additionnal GlComponents
+  for(GlComponentIteratorType it = m_GlComponents->Begin();
+      it!=m_GlComponents->End();++it)
     {
-    typename RegionType::IndexType index;
-    typename RegionType::SizeType  size;
-
-    index = m_Rectangle.GetIndex();
-    // UL left in image space is LR in opengl space, so we need to get
-    // the real upper left
-    index[1]+=m_Rectangle.GetSize()[1];
-    index = RegionIndexToScreenIndex(index);
-    
-    size[0]= static_cast<unsigned int>(static_cast<double>(m_Rectangle.GetSize()[0])*m_IsotropicZoom);
-    size[1] = static_cast<unsigned int>(static_cast<double>(m_Rectangle.GetSize()[1])*m_IsotropicZoom);
-    
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);   
-    glColor4f(m_RectangleColor[0],m_RectangleColor[1],m_RectangleColor[2],m_RectangleColor[3]);
-    glBegin(GL_LINE_LOOP);
-    gl_rect(index[0],index[1],size[0],size[1]);
-    glEnd();
-    glDisable(GL_BLEND);
-    }
-}
-
-template <class TInputImage>
-void
-ImageWidget<TInputImage>
-::resize(int x, int y, int w, int h)
-{
-  // Distinguish between resize, move and not changed events
-  // (The system window manager may generate multiple resizing events,
-  // so we'd rather avoid event flooding here) 
-  bool reportMove   = false;
-  bool reportResize = false;
-  if(this->x() != x || this->y() != y)
-    {
-    reportMove = true;
-    }
-
-  if(this->w() != w || this->h() != h)
-    {
-    reportResize = true;
-    }
-
-  // First call the superclass implementation
-  Fl_Gl_Window::resize(x,y,w,h);
-  // If There is a controller
-  if(m_Controller.IsNotNull())
-    {
-    if(reportMove)
+    if(it.Get()->GetVisible())
       {
-      m_Controller->HandleWidgetMove(m_Identifier,x,y);
-      }
-    if(reportResize)
-      {
-      m_Controller->HandleWidgetResize(m_Identifier,w,h);
+      it.Get()->Render(m_Extent,m_ImageToScreenTransform);
       }
     }
 }
-
-template <class TInputImage>
-int
-ImageWidget<TInputImage>
-::handle(int event)
-{
-  // If there is a controller
-  if(m_Controller.IsNotNull())
-    {
-    return m_Controller->HandleWidgetEvent(m_Identifier,event);
-    }
-  else
-    {
-    return 0;
-    }
-}
-
-template <class TInputImage>
-typename ImageWidget<TInputImage>
-::IndexType
-ImageWidget<TInputImage>
-::ScreenIndexToRegionIndex(const IndexType & index)
-{
-  IndexType resp; 
-  resp[0] = static_cast<int>(m_OpenGlBufferedRegion.GetIndex()[0]+static_cast<double>(index[0]-m_ImageExtentX)/m_IsotropicZoom);
-  resp[1] = static_cast<int>(m_OpenGlBufferedRegion.GetIndex()[1]+static_cast<double>(index[1]-m_ImageExtentY)/m_IsotropicZoom);
-  return resp;
-}
-
-template <class TInputImage>
-typename ImageWidget<TInputImage>
-::IndexType
-ImageWidget<TInputImage>
-::RegionIndexToScreenIndex(const IndexType & index)
-{
-  IndexType resp;
-  resp[0]=static_cast<int>(m_ImageExtentX+(index[0]-m_OpenGlBufferedRegion.GetIndex()[0])*m_IsotropicZoom);
-  resp[1]=static_cast<int>(m_ImageExtentY+m_ImageExtentHeight-(index[1]-m_OpenGlBufferedRegion.GetIndex()[1])*m_IsotropicZoom);
-   return resp;
-}
-
 }
 #endif

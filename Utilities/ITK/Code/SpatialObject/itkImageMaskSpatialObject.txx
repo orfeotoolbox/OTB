@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageMaskSpatialObject.txx,v $
   Language:  C++
-  Date:      $Date: 2008-11-02 16:03:30 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-01-28 20:10:27 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -201,36 +201,36 @@ ImageMaskSpatialObject< TDimension >
     region.SetSize( size );
     }
   else
-  {
+    {
     //itkExceptionMacro( << "ImageDimension must be 3!" );
     typedef ImageRegionConstIteratorWithIndex<ImageType> IteratorType;
     IteratorType it( image, image->GetRequestedRegion() );
     it.GoToBegin();
 
     for ( unsigned int i = 0; i < ImageType::ImageDimension; ++i )
-    {
+      {
       index[ i ] = image->GetRequestedRegion().GetSize( i );
       size[ i ]  = image->GetRequestedRegion().GetIndex( i );
-    }
+      }
 
     while( !it.IsAtEnd() )
-    {
-      if ( it.Get() != outsideValue )
       {
+      if ( it.Get() != outsideValue )
+        {
         IndexType tmpIndex = it.GetIndex();
         for ( unsigned int i = 0; i < ImageType::ImageDimension; ++i )
-        {
+          {
           index[ i ] = index[ i ] < tmpIndex[ i ] ? index[ i ] : tmpIndex[ i ];
           size[ i ]  = (long)size[ i ]  > tmpIndex[ i ] ? size[ i ]  : tmpIndex[ i ];
+          }
         }
-      }
       ++it;
-    }
+      }
 
     for ( unsigned int i = 0; i < ImageType::ImageDimension; ++i )
-    {
+      {
       size[ i ] = size[ i ] - index[ i ] + 1;
-    }
+      }
     region.SetIndex( index );
     region.SetSize( size );
   } // end else

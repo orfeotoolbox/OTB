@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkInOrderTreeIterator.h,v $
   Language:  C++
-  Date:      $Date: 2008-01-29 15:27:42 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-02-05 19:04:57 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,7 +19,7 @@
 
 #include <itkTreeIteratorBase.h>
 
-namespace itk{
+namespace itk {
 
 template <class TTreeType>
 class InOrderTreeIterator : public TreeIteratorBase<TTreeType> 

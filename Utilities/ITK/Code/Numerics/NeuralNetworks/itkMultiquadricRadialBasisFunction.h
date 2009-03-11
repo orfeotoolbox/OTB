@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiquadricRadialBasisFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-08-17 13:10:57 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-01-28 21:04:59 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -30,16 +30,16 @@ class MultiquadricRadialBasisFunction : public TransferFunctionBase<ScalarType>
 public:
 
   /** Standard class typedefs. */
-  typedef MultiquadricRadialBasisFunction Self;
+  typedef MultiquadricRadialBasisFunction  Self;
   typedef TransferFunctionBase<ScalarType> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef SmartPointer<Self>               Pointer;
+  typedef SmartPointer<const Self>         ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(MultiquadricRadialBasisFunction, TransferFunctionBase);
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self) ;
+  itkNewMacro(Self);
 
   /** Evaluate at the specified input position */
   virtual ScalarType Evaluate(const ScalarType& input) const; //{return 0;};

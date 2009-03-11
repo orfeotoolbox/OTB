@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHistogramMatchingImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-07-31 23:09:16 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2008-12-21 19:13:12 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -63,10 +63,10 @@ class ITK_EXPORT HistogramMatchingImageFilter:
 {
 public:
   /** Standard class typedefs. */
-  typedef HistogramMatchingImageFilter         Self;
+  typedef HistogramMatchingImageFilter                  Self;
   typedef ImageToImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                            Pointer;
+  typedef SmartPointer<const Self>                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
@@ -84,25 +84,25 @@ public:
   typedef typename TOutputImage::RegionType OutputImageRegionType;
 
   /** Inherited typedefs. */
-  typedef typename Superclass::InputImageType InputImageType;
-  typedef typename Superclass::InputImagePointer InputImagePointer;
+  typedef typename Superclass::InputImageType         InputImageType;
+  typedef typename Superclass::InputImagePointer      InputImagePointer;
   typedef typename Superclass::InputImageConstPointer InputImageConstPointer;
-  typedef typename Superclass::OutputImageType OutputImageType;
-  typedef typename Superclass::OutputImagePointer OutputImagePointer;
+  typedef typename Superclass::OutputImageType        OutputImageType;
+  typedef typename Superclass::OutputImagePointer     OutputImagePointer;
   
   /** Pixel related typedefs. */
-  typedef typename InputImageType::PixelType InputPixelType;
+  typedef typename InputImageType::PixelType  InputPixelType;
   typedef typename OutputImageType::PixelType OutputPixelType;
 
   /** Histogram related typedefs. */
   typedef Statistics::Histogram<THistogramMeasurement, 1> HistogramType;
-  typedef typename HistogramType::Pointer HistogramPointer;
+  typedef typename HistogramType::Pointer                 HistogramPointer;
 
   /** Set/Get the source image. */
   void SetSourceImage( const InputImageType * source )
-  { this->SetInput( source ); }
+    { this->SetInput( source ); }
   const InputImageType * GetSourceImage(void)
-  { return this->GetInput(); }
+    { return this->GetInput(); }
 
   /** Set/Get the reference image. */
   void SetReferenceImage( const InputImageType * reference );

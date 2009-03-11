@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIterationReporter.h,v $
   Language:  C++
-  Date:      $Date: 2006-02-06 22:01:56 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-02-05 19:04:58 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -76,9 +76,9 @@ public:
     }
 protected:
   ProcessObject* m_Filter;
-  int m_ThreadId;
-  unsigned long m_StepsPerUpdate;
-  unsigned long m_StepsBeforeUpdate;
+  int            m_ThreadId;
+  unsigned long  m_StepsPerUpdate;
+  unsigned long  m_StepsBeforeUpdate;
 };
 
 } // end namespace itk

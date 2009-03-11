@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPointSetToPointSetRegistrationMethod.txx,v $
   Language:  C++
-  Date:      $Date: 2006-06-08 20:30:47 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-01-26 21:45:56 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkPointSetToPointSetRegistrationMethod_txx
-#define _itkPointSetToPointSetRegistrationMethod_txx
+#ifndef __itkPointSetToPointSetRegistrationMethod_txx
+#define __itkPointSetToPointSetRegistrationMethod_txx
 
 #include "itkPointSetToPointSetRegistrationMethod.h"
 
@@ -23,7 +23,7 @@
 namespace itk
 {
 
-/*
+/**
  * Constructor
  */
 template < typename TFixedPointSet, typename TMovingPointSet >
@@ -65,9 +65,7 @@ PointSetToPointSetRegistrationMethod<TFixedPointSet,TMovingPointSet>
   this->Modified();
 }
 
-
-
-/*
+/**
  * Initialize by setting the interconnects between components. 
  */
 template < typename TFixedPointSet, typename TMovingPointSet >
@@ -195,7 +193,7 @@ PointSetToPointSetRegistrationMethod<TFixedPointSet,TMovingPointSet>
 }
 
 
-/*
+/**
  * PrintSelf
  */
 template < typename TFixedPointSet, typename TMovingPointSet >
@@ -222,9 +220,7 @@ PointSetToPointSetRegistrationMethod<TFixedPointSet,TMovingPointSet>
   this->StartRegistration();
 }
 
-
-
-/*
+/**
  *  Get Output
  */
 template < typename TFixedPointSet, typename TMovingPointSet >
@@ -234,7 +230,6 @@ PointSetToPointSetRegistrationMethod<TFixedPointSet,TMovingPointSet>
 {
   return static_cast< const TransformOutputType * >( this->ProcessObject::GetOutput(0) );
 }
-
 
 
 template < typename TFixedPointSet, typename TMovingPointSet >

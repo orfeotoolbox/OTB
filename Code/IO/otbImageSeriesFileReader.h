@@ -2,7 +2,7 @@
 
   Program:   ORFEO Toolbox
   Language:  C++
-  Date:	  $Date$
+  Date:          $Date$
   Version:   $Revision$
 
 
@@ -12,9 +12,9 @@
   Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-	 This software is distributed WITHOUT ANY WARRANTY; without even
-	 the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-	 PURPOSE.  See the above copyright notices for more information.
+         This software is distributed WITHOUT ANY WARRANTY; without even
+         the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+         PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -33,9 +33,16 @@
 
 namespace otb {
 
+/**
+  * \class ImagerSeriesFileReader
+  * \brief Todo
+  *
+  *
+  * \see ImageFileReader
+ */
 template < class TImage, class TInternalImage = TImage >
 class ITK_EXPORT ImageSeriesFileReader
-	: public ImageSeriesFileReaderBase< TImage, TInternalImage >
+        : public ImageSeriesFileReaderBase< TImage, TInternalImage >
 {
   public:
     /** Standart typedefs */
@@ -51,36 +58,36 @@ class ITK_EXPORT ImageSeriesFileReader
 
     typedef typename Superclass::OutputImageType        OutputImageType;
     typedef typename Superclass::OutputImagePointerType OutputImagePointerType;
-    typedef typename Superclass::PixelType 							PixelType;
-    typedef typename Superclass::ValueType 							ValueType;
-    typedef typename Superclass::IndexType 							IndexType;
-    typedef typename Superclass::SizeType 							SizeType;
-    typedef typename Superclass::RegionType 						RegionType;
+    typedef typename Superclass::PixelType                                                         PixelType;
+    typedef typename Superclass::ValueType                                                         ValueType;
+    typedef typename Superclass::IndexType                                                         IndexType;
+    typedef typename Superclass::SizeType                                                         SizeType;
+    typedef typename Superclass::RegionType                                                 RegionType;
 
-    typedef typename Superclass::OutputImageListType						 OutputImageListType;
-    typedef typename Superclass::OutputImageListPointerType			 OutputImageListPointerType;
+    typedef typename Superclass::OutputImageListType                                                 OutputImageListType;
+    typedef typename Superclass::OutputImageListPointerType                         OutputImageListPointerType;
     typedef typename Superclass::OutputImageListConstPointerType OutputImageListConstPointerType;
 
-    typedef typename Superclass::InternalImageType 				InternalImageType;
+    typedef typename Superclass::InternalImageType                                 InternalImageType;
     typedef typename Superclass::InternalImagePointerType InternalImagePointerType;
-    typedef typename Superclass::InternalPixelType  			InternalPixelType;
-    typedef typename Superclass::InternalValueType 				InternalValueType;
-    typedef typename Superclass::InternalIndexType 				InternalIndexType;
-    typedef typename Superclass::InternalSizeType   			InternalSizeType;
-    typedef typename Superclass::InternalRegionType 			InternalRegionType;
+    typedef typename Superclass::InternalPixelType                          InternalPixelType;
+    typedef typename Superclass::InternalValueType                                 InternalValueType;
+    typedef typename Superclass::InternalIndexType                                 InternalIndexType;
+    typedef typename Superclass::InternalSizeType                           InternalSizeType;
+    typedef typename Superclass::InternalRegionType                         InternalRegionType;
 
     typedef typename Superclass::ReaderType ReaderType;
     typedef typename Superclass::ReaderType ReaderPointerType;
 
-    typedef typename Superclass::ReaderListType 			 ReaderListType;
+    typedef typename Superclass::ReaderListType                          ReaderListType;
     typedef typename Superclass::ReaderListPointerType ReaderListPointerType;
 
     /** This is a generic template definition of the ROI extraction procedure.
-		 * In fact, it will be specialised with:
-		 * - MultiChannelExtractROI if TImage is a VectorImage
-		 * - MultiToMonoChannelExtractROI if TImage is an Image and TInteranalImage is a VectorImage
-		 * - ExtractROI if TImage and TInternalImage are of Image type.
-		 */
+                 * In fact, it will be specialised with:
+                 * - MultiChannelExtractROI if TImage is a VectorImage
+                 * - MultiToMonoChannelExtractROI if TImage is an Image and TInteranalImage is a VectorImage
+                 * - ExtractROI if TImage and TInternalImage are of Image type.
+                 */
     // typedef MultiChannelExtractROI< InternalPixelType, PixelType > ExtractSelectionType;
     // typedef MultiToMonoChannelExtractROI< InternalPixelType, PixelType > ExtractSelectionType;
     // typedef ExtractROI< InternalPixelType, PixelType > ExtractSelectionType;
@@ -90,21 +97,21 @@ class ITK_EXPORT ImageSeriesFileReader
     typedef ObjectList< ExtractSelectionType > ExtractSelectionListType;
     typedef typename ExtractSelectionListType::Pointer ExtractSelectionListPointerType;
 
-	protected:
+        protected:
     ImageSeriesFileReader();
     virtual ~ImageSeriesFileReader () { }
 
-		/**
-		 * Tests the coherency of the Meta File (especifically band selection) with the image types
-		 */
-		virtual void TestBandSelection( std::vector<unsigned int> & bands ) { }
+                /**
+                 * Tests the coherency of the Meta File (especifically band selection) with the image types
+                 */
+                virtual void TestBandSelection( std::vector<unsigned int> & bands ) { }
 
-		/** GenerateData
-		 * This method will be specialised if template definitions follow:
-		 * - TImage is a VectorImage
-		 * - TImage is an Image and TInteranalImage is a VectorImage
-		 * - TImage and TInternalImage are of Image type.
-		 */
+                /** GenerateData
+                 * This method will be specialised if template definitions follow:
+                 * - TImage is a VectorImage
+                 * - TImage is an Image and TInteranalImage is a VectorImage
+                 * - TImage and TInternalImage are of Image type.
+                 */
     virtual void GenerateData ( unsigned int idx );
 
     /**
@@ -116,13 +123,13 @@ class ITK_EXPORT ImageSeriesFileReader
 
     /** PrintSelf method */
     void PrintSelf ( std::ostream& os, itk::Indent indent ) const
-		{
-			return Superclass::PrintSelf( os, indent );
-		}
+                {
+                        return Superclass::PrintSelf( os, indent );
+                }
 
-		/**
-		 * Type of extractor to use
-		 */
+                /**
+                 * Type of extractor to use
+                 */
     ExtractSelectionListPointerType m_ExtractorList;
 
   private:
@@ -130,7 +137,8 @@ class ITK_EXPORT ImageSeriesFileReader
     void operator= ( const Self & );
 }; // end of class
 
-/** ImagerSeriesFileReader
+/**
+ * \class ImagerSeriesFileReader
  * \brief Specific definition for template Images
  *
  * In the case where TImage and TInternalImage stand for otb::Image, the
@@ -142,9 +150,9 @@ class ITK_EXPORT ImageSeriesFileReader
  */
 template < class TPixel, class TInternalPixel >
 class ITK_EXPORT ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixel, 2 > >
-	: public ImageSeriesFileReaderBase< Image< TPixel, 2 >, Image< TInternalPixel, 2 > >
+        : public ImageSeriesFileReaderBase< Image< TPixel, 2 >, Image< TInternalPixel, 2 > >
 {
-	public:
+        public:
     /** Standart typedefs */
     typedef ImageSeriesFileReader Self;
     typedef ImageSeriesFileReaderBase< Image< TPixel, 2 >, Image< TInternalPixel, 2 > > Superclass;
@@ -158,54 +166,54 @@ class ITK_EXPORT ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixe
 
     typedef typename Superclass::OutputImageType        OutputImageType;
     typedef typename Superclass::OutputImagePointerType OutputImagePointerType;
-    typedef typename Superclass::PixelType 							PixelType;
-    typedef typename Superclass::ValueType 							ValueType;
-    typedef typename Superclass::IndexType 							IndexType;
-    typedef typename Superclass::SizeType 							SizeType;
-    typedef typename Superclass::RegionType 						RegionType;
+    typedef typename Superclass::PixelType                                                         PixelType;
+    typedef typename Superclass::ValueType                                                         ValueType;
+    typedef typename Superclass::IndexType                                                         IndexType;
+    typedef typename Superclass::SizeType                                                         SizeType;
+    typedef typename Superclass::RegionType                                                 RegionType;
 
-    typedef typename Superclass::OutputImageListType						 OutputImageListType;
-    typedef typename Superclass::OutputImageListPointerType			 OutputImageListPointerType;
+    typedef typename Superclass::OutputImageListType                                                 OutputImageListType;
+    typedef typename Superclass::OutputImageListPointerType                         OutputImageListPointerType;
     typedef typename Superclass::OutputImageListConstPointerType OutputImageListConstPointerType;
 
-    typedef typename Superclass::InternalImageType 				InternalImageType;
+    typedef typename Superclass::InternalImageType                                 InternalImageType;
     typedef typename Superclass::InternalImagePointerType InternalImagePointerType;
-    typedef typename Superclass::InternalPixelType  			InternalPixelType;
-    typedef typename Superclass::InternalValueType 				InternalValueType;
-    typedef typename Superclass::InternalIndexType 				InternalIndexType;
-    typedef typename Superclass::InternalSizeType   			InternalSizeType;
-    typedef typename Superclass::InternalRegionType 			InternalRegionType;
+    typedef typename Superclass::InternalPixelType                          InternalPixelType;
+    typedef typename Superclass::InternalValueType                                 InternalValueType;
+    typedef typename Superclass::InternalIndexType                                 InternalIndexType;
+    typedef typename Superclass::InternalSizeType                           InternalSizeType;
+    typedef typename Superclass::InternalRegionType                         InternalRegionType;
 
     typedef typename Superclass::ReaderType ReaderType;
     typedef typename Superclass::ReaderType ReaderPointerType;
 
-    typedef typename Superclass::ReaderListType 			 ReaderListType;
+    typedef typename Superclass::ReaderListType                          ReaderListType;
     typedef typename Superclass::ReaderListPointerType ReaderListPointerType;
 
     /** This is a specialised template definition of the ROI extraction procedure.
-		 * Here TExtractSelection is a ExtractROI class since TImage and TInternalImage are of Image type.
-		 */
+                 * Here TExtractSelection is a ExtractROI class since TImage and TInternalImage are of Image type.
+                 */
     typedef ExtractROI< InternalPixelType, PixelType > ExtractSelectionType;
     typedef typename ExtractSelectionType::Pointer ExtractSelectionPointerType;
 
     typedef ObjectList< ExtractSelectionType > ExtractSelectionListType;
     typedef typename ExtractSelectionListType::Pointer ExtractSelectionListPointerType;
 
-	protected:
+        protected:
     ImageSeriesFileReader();
     virtual ~ImageSeriesFileReader () { }
 
-		/**
-		 * Tests the coherency of the Meta File (especifically band selection) with the image types
-		 */
-		virtual void TestBandSelection( std::vector<unsigned int> & bands ) ;
+                /**
+                 * Tests the coherency of the Meta File (especifically band selection) with the image types
+                 */
+                virtual void TestBandSelection( std::vector<unsigned int> & bands );
 
-		/** GenerateData
-		 * This method will be specialised if template definitions follow:
-		 * - TImage is a VectorImage
-		 * - TImage is an Image and TInteranalImage is a VectorImage
-		 * - TImage and TInternalImage are of Image type.
-		 */
+                /** GenerateData
+                 * This method will be specialised if template definitions follow:
+                 * - TImage is a VectorImage
+                 * - TImage is an Image and TInteranalImage is a VectorImage
+                 * - TImage and TInternalImage are of Image type.
+                 */
     virtual void GenerateData ( unsigned int idx );
 
     /**
@@ -217,13 +225,13 @@ class ITK_EXPORT ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixe
 
     /** PrintSelf method */
     void PrintSelf ( std::ostream& os, itk::Indent indent ) const
-		{
-			return Superclass::PrintSelf( os, indent );
-		}
+                {
+                        return Superclass::PrintSelf( os, indent );
+                }
 
-		/**
-		 * Type of extractor to use
-		 */
+                /**
+                 * Type of extractor to use
+                 */
     ExtractSelectionListPointerType m_ExtractorList;
 
   private:
@@ -244,9 +252,9 @@ class ITK_EXPORT ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixe
  */
 template < class TPixel, class TInternalPixel >
 class ITK_EXPORT ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
-	: public ImageSeriesFileReaderBase< Image< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
+        : public ImageSeriesFileReaderBase< Image< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
 {
-	public:
+        public:
     /** Standart typedefs */
     typedef ImageSeriesFileReader Self;
     typedef ImageSeriesFileReaderBase< Image< TPixel, 2 >, VectorImage< TInternalPixel, 2 > > Superclass;
@@ -260,54 +268,54 @@ class ITK_EXPORT ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TIntern
 
     typedef typename Superclass::OutputImageType        OutputImageType;
     typedef typename Superclass::OutputImagePointerType OutputImagePointerType;
-    typedef typename Superclass::PixelType 							PixelType;
-    typedef typename Superclass::ValueType 							ValueType;
-    typedef typename Superclass::IndexType 							IndexType;
-    typedef typename Superclass::SizeType 							SizeType;
-    typedef typename Superclass::RegionType 						RegionType;
+    typedef typename Superclass::PixelType                                                         PixelType;
+    typedef typename Superclass::ValueType                                                         ValueType;
+    typedef typename Superclass::IndexType                                                         IndexType;
+    typedef typename Superclass::SizeType                                                         SizeType;
+    typedef typename Superclass::RegionType                                                 RegionType;
 
-    typedef typename Superclass::OutputImageListType						 OutputImageListType;
-    typedef typename Superclass::OutputImageListPointerType			 OutputImageListPointerType;
+    typedef typename Superclass::OutputImageListType                                                 OutputImageListType;
+    typedef typename Superclass::OutputImageListPointerType                         OutputImageListPointerType;
     typedef typename Superclass::OutputImageListConstPointerType OutputImageListConstPointerType;
 
-    typedef typename Superclass::InternalImageType 				InternalImageType;
+    typedef typename Superclass::InternalImageType                                 InternalImageType;
     typedef typename Superclass::InternalImagePointerType InternalImagePointerType;
-    typedef typename Superclass::InternalPixelType  			InternalPixelType;
-    typedef typename Superclass::InternalValueType 				InternalValueType;
-    typedef typename Superclass::InternalIndexType 				InternalIndexType;
-    typedef typename Superclass::InternalSizeType   			InternalSizeType;
-    typedef typename Superclass::InternalRegionType 			InternalRegionType;
+    typedef typename Superclass::InternalPixelType                          InternalPixelType;
+    typedef typename Superclass::InternalValueType                                 InternalValueType;
+    typedef typename Superclass::InternalIndexType                                 InternalIndexType;
+    typedef typename Superclass::InternalSizeType                           InternalSizeType;
+    typedef typename Superclass::InternalRegionType                         InternalRegionType;
 
     typedef typename Superclass::ReaderType ReaderType;
     typedef typename Superclass::ReaderType ReaderPointerType;
 
-    typedef typename Superclass::ReaderListType 			 ReaderListType;
+    typedef typename Superclass::ReaderListType                          ReaderListType;
     typedef typename Superclass::ReaderListPointerType ReaderListPointerType;
 
     /** This is a specific template definition of the ROI extraction procedure.
-		 * MultiToMonoChannelExtractROI since TImage is an Image and TInteranalImage is a VectorImage
-		 */
+                 * MultiToMonoChannelExtractROI since TImage is an Image and TInteranalImage is a VectorImage
+                 */
     typedef MultiToMonoChannelExtractROI< InternalPixelType, PixelType > ExtractSelectionType;
     typedef typename ExtractSelectionType::Pointer ExtractSelectionPointerType;
 
     typedef ObjectList< ExtractSelectionType > ExtractSelectionListType;
     typedef typename ExtractSelectionListType::Pointer ExtractSelectionListPointerType;
 
-	protected:
+        protected:
     ImageSeriesFileReader();
     virtual ~ImageSeriesFileReader () { }
 
-		/**
-		 * Tests the coherency of the Meta File (especifically band selection) with the image types
-		 */
-		virtual void TestBandSelection( std::vector<unsigned int> & bands ) ;
+                /**
+                 * Tests the coherency of the Meta File (especifically band selection) with the image types
+                 */
+                virtual void TestBandSelection( std::vector<unsigned int> & bands );
 
-		/** GenerateData
-		 * This method will be specialised if template definitions follow:
-		 * - TImage is a VectorImage
-		 * - TImage is an Image and TInteranalImage is a VectorImage
-		 * - TImage and TInternalImage are of Image type.
-		 */
+                /** GenerateData
+                 * This method will be specialised if template definitions follow:
+                 * - TImage is a VectorImage
+                 * - TImage is an Image and TInteranalImage is a VectorImage
+                 * - TImage and TInternalImage are of Image type.
+                 */
     virtual void GenerateData ( unsigned int idx );
 
     /**
@@ -319,13 +327,13 @@ class ITK_EXPORT ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TIntern
 
     /** PrintSelf method */
     void PrintSelf ( std::ostream& os, itk::Indent indent ) const
-		{
-			return Superclass::PrintSelf( os, indent );
-		}
+                {
+                        return Superclass::PrintSelf( os, indent );
+                }
 
-		/**
-		 * Type of extractor to use
-		 */
+                /**
+                 * Type of extractor to use
+                 */
     ExtractSelectionListPointerType m_ExtractorList;
 
   private:
@@ -347,9 +355,9 @@ class ITK_EXPORT ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TIntern
  */
 template < class TPixel, class TInternalPixel >
 class ITK_EXPORT ImageSeriesFileReader< VectorImage< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
-	: public ImageSeriesFileReaderBase< VectorImage< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
+        : public ImageSeriesFileReaderBase< VectorImage< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
 {
-	public:
+        public:
     /** Standart typedefs */
     typedef ImageSeriesFileReader Self;
     typedef ImageSeriesFileReaderBase< VectorImage< TPixel, 2 >, VectorImage< TInternalPixel, 2 > > Superclass;
@@ -363,55 +371,55 @@ class ITK_EXPORT ImageSeriesFileReader< VectorImage< TPixel, 2 >, VectorImage< T
 
     typedef typename Superclass::OutputImageType        OutputImageType;
     typedef typename Superclass::OutputImagePointerType OutputImagePointerType;
-    typedef typename Superclass::PixelType 							PixelType;
-    typedef typename Superclass::ValueType 							ValueType;
-    typedef typename Superclass::IndexType 							IndexType;
-    typedef typename Superclass::SizeType 							SizeType;
-    typedef typename Superclass::RegionType 						RegionType;
+    typedef typename Superclass::PixelType                                                         PixelType;
+    typedef typename Superclass::ValueType                                                         ValueType;
+    typedef typename Superclass::IndexType                                                         IndexType;
+    typedef typename Superclass::SizeType                                                         SizeType;
+    typedef typename Superclass::RegionType                                                 RegionType;
 
-    typedef typename Superclass::OutputImageListType						 OutputImageListType;
-    typedef typename Superclass::OutputImageListPointerType			 OutputImageListPointerType;
+    typedef typename Superclass::OutputImageListType                                                 OutputImageListType;
+    typedef typename Superclass::OutputImageListPointerType                         OutputImageListPointerType;
     typedef typename Superclass::OutputImageListConstPointerType OutputImageListConstPointerType;
 
-    typedef typename Superclass::InternalImageType 				InternalImageType;
+    typedef typename Superclass::InternalImageType                                 InternalImageType;
     typedef typename Superclass::InternalImagePointerType InternalImagePointerType;
-    typedef typename Superclass::InternalPixelType  			InternalPixelType;
-    typedef typename Superclass::InternalValueType 				InternalValueType;
-    typedef typename Superclass::InternalIndexType 				InternalIndexType;
-    typedef typename Superclass::InternalSizeType   			InternalSizeType;
-    typedef typename Superclass::InternalRegionType 			InternalRegionType;
+    typedef typename Superclass::InternalPixelType                          InternalPixelType;
+    typedef typename Superclass::InternalValueType                                 InternalValueType;
+    typedef typename Superclass::InternalIndexType                                 InternalIndexType;
+    typedef typename Superclass::InternalSizeType                           InternalSizeType;
+    typedef typename Superclass::InternalRegionType                         InternalRegionType;
 
     typedef typename Superclass::ReaderType ReaderType;
     typedef typename Superclass::ReaderType ReaderPointerType;
 
-    typedef typename Superclass::ReaderListType 			 ReaderListType;
+    typedef typename Superclass::ReaderListType                          ReaderListType;
     typedef typename Superclass::ReaderListPointerType ReaderListPointerType;
 
     /** This is a specific template definition of the ROI extraction procedure.
-		 * Here, it will be specialised with:
-		 * MultiChannelExtractROI if TImage is a VectorImage
-		 */
+                 * Here, it will be specialised with:
+                 * MultiChannelExtractROI if TImage is a VectorImage
+                 */
     typedef MultiChannelExtractROI< InternalPixelType, PixelType > ExtractSelectionType;
     typedef typename ExtractSelectionType::Pointer ExtractSelectionPointerType;
 
     typedef ObjectList< ExtractSelectionType > ExtractSelectionListType;
     typedef typename ExtractSelectionListType::Pointer ExtractSelectionListPointerType;
 
-	protected:
+        protected:
     ImageSeriesFileReader();
     virtual ~ImageSeriesFileReader () { }
 
-		/**
-		 * Tests the coherency of the Meta File (especifically band selection) with the image types
-		 */
-		virtual void TestBandSelection( std::vector<unsigned int> & bands ){ }
+                /**
+                 * Tests the coherency of the Meta File (especifically band selection) with the image types
+                 */
+                virtual void TestBandSelection( std::vector<unsigned int> & bands ){ }
 
-		/** GenerateData
-		 * This method will be specialised if template definitions follow:
-		 * - TImage is a VectorImage
-		 * - TImage is an Image and TInteranalImage is a VectorImage
-		 * - TImage and TInternalImage are of Image type.
-		 */
+                /** GenerateData
+                 * This method will be specialised if template definitions follow:
+                 * - TImage is a VectorImage
+                 * - TImage is an Image and TInteranalImage is a VectorImage
+                 * - TImage and TInternalImage are of Image type.
+                 */
     virtual void GenerateData ( unsigned int idx );
 
     /**
@@ -423,13 +431,13 @@ class ITK_EXPORT ImageSeriesFileReader< VectorImage< TPixel, 2 >, VectorImage< T
 
     /** PrintSelf method */
     void PrintSelf ( std::ostream& os, itk::Indent indent ) const
-		{
-			return Superclass::PrintSelf( os, indent );
-		}
+                {
+                        return Superclass::PrintSelf( os, indent );
+                }
 
-		/**
-		 * Type of extractor to use
-		 */
+                /**
+                 * Type of extractor to use
+                 */
     ExtractSelectionListPointerType m_ExtractorList;
 
   private:

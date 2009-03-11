@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkComposeRGBAImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-05 10:47:06 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-02-24 19:03:15 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -20,22 +20,6 @@
 #include "itkNaryFunctorImageFilter.h"
 #include "itkRGBAPixel.h"
 #include "itkNumericTraitsRGBAPixel.h"
-
-/** \class ComposeRGBAImageFilter
- * \brief Implements pixel-wise composition of an RGBA pixel from four scalar images.
- *
- * This filter receives four scalar images as input. Each image containing
- * one of the RGBA components of a color image. The filter produces as output an
- * RGBA image in which the four components have been unified. The Component
- * type is preserved from the PixelType of the input images.
- *
- *  \author Dan Mueller, Queensland University of Technology, Brisbane, Australia
- *
- * This implementation was taken from the Insight Journal paper:
- * http://hdl.handle.net/1926/153
- *
- * \ingroup IntensityImageFilters
- */
 
 namespace itk
 {
@@ -57,7 +41,7 @@ public:
     {
     return !(*this != other);
     }
-  inline OutputType operator()(  const std::vector< TInput > & in )
+  inline OutputType operator()(  const std::vector< TInput > & in ) const
     {
     OutputType pixel;
     pixel.Set( in[0], in[1], in[2], in[3] );
@@ -65,6 +49,23 @@ public:
     }
 }; 
 }
+
+
+/** \class ComposeRGBAImageFilter
+ * \brief Implements pixel-wise composition of an RGBA pixel from four scalar images.
+ *
+ * This filter receives four scalar images as input. Each image containing
+ * one of the RGBA components of a color image. The filter produces as output an
+ * RGBA image in which the four components have been unified. The Component
+ * type is preserved from the PixelType of the input images.
+ *
+ *  \author Dan Mueller, Queensland University of Technology, Brisbane, Australia
+ *
+ * This implementation was taken from the Insight Journal paper:
+ * http://hdl.handle.net/1926/153
+ *
+ * \ingroup IntensityImageFilters
+ */
 
 template <typename TInputImage, 
           typename TOutputImage= 

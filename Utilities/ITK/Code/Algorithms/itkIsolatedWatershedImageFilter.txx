@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIsolatedWatershedImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:36:54 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-24 20:02:57 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkIsolatedWatershedImageFilter_txx_
-#define __itkIsolatedWatershedImageFilter_txx_
+#ifndef __itkIsolatedWatershedImageFilter_txx
+#define __itkIsolatedWatershedImageFilter_txx
 
 #include "itkIsolatedWatershedImageFilter.h"
 #include "itkWatershedImageFilter.h"
@@ -105,7 +105,7 @@ IsolatedWatershedImageFilter<TInputImage,TOutputImage>
 {
   InputImageConstPointer inputImage = this->GetInput();
   OutputImagePointer outputImage = this->GetOutput();
-  OutputImageRegionType region = outputImage->GetRequestedRegion() ;
+  OutputImageRegionType region = outputImage->GetRequestedRegion();
 
   // Set up the pipeline
   m_GradientMagnitude->SetInput (inputImage);

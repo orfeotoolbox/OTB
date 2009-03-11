@@ -18,13 +18,13 @@
 #ifndef __otbImageLayer_h
 #define __otbImageLayer_h
 
-#include "otbLayer.h"
+#include "otbImageLayerBase.h"
 #include "itkVariableLengthVector.h"
 #include "itkDenseFrequencyContainer.h"
 #include "otbRenderingImageFilter.h"
 #include "itkExtractImageFilter.h"
 #include "itkListSample.h"
-#include "otbListSampleToVariableDimensionHistogramGenerator.h"
+#include "otbListSampleToHistogramListGenerator.h"
 #include "otbStandardRenderingFunction.h"
 
 namespace otb
@@ -39,12 +39,12 @@ namespace otb
 
 template <class TImage, class TOutputImage = otb::Image<itk::RGBPixel<unsigned char>, 2 > >  
 class ImageLayer
-  : public Layer<TOutputImage>
+  : public ImageLayerBase<TOutputImage>
 {
 public:
   /** Standard class typedefs */
   typedef ImageLayer                        Self;
-  typedef Layer<TOutputImage>               Superclass;
+  typedef ImageLayerBase<TOutputImage>      Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
   
@@ -60,6 +60,7 @@ public:
   typedef typename ImageType::PixelType                               PixelType;
   typedef typename ImageType::InternalPixelType                       InternalPixelType;
   typedef typename ImageType::RegionType                              RegionType;
+  typedef typename ImageType::IndexType                               IndexType;
   
   /** Output image typedef */
   typedef TOutputImage                                                OutputImageType;
@@ -70,19 +71,20 @@ public:
   typedef itk::VariableLengthVector<InternalPixelType>                SampleType;
   typedef itk::Statistics::ListSample<SampleType>                     ListSampleType;
  
-  typedef otb::ListSampleToVariableDimensionHistogramGenerator
+  typedef otb::ListSampleToHistogramListGenerator
   <ListSampleType,InternalPixelType,DFContainerType>                  HistogramFilterType;
   typedef typename HistogramFilterType::HistogramType                 HistogramType;
   typedef typename HistogramType::Pointer                             HistogramPointerType;
-
-  
+  typedef typename HistogramFilterType::HistogramListType             HistogramListType;
+  typedef typename HistogramListType::Pointer                         HistogramListPointerType;
+    
   /** Rendering part */
   typedef RenderingImageFilter<TImage,TOutputImage>                   RenderingFilterType;
   typedef typename RenderingFilterType::Pointer                       RenderingFilterPointerType;
   typedef typename RenderingFilterType::RenderingFunctionType         RenderingFunctionType;
   typedef typename RenderingFunctionType::Pointer                     RenderingFunctionPointerType;
   typedef Function::StandardRenderingFunction<InternalPixelType,
-				    typename TOutputImage::PixelType> DefaultRenderingFunctionType;
+                                    typename TOutputImage::PixelType> DefaultRenderingFunctionType;
   typedef itk::ExtractImageFilter<ImageType,ImageType>                ExtractFilterType;
   typedef typename ExtractFilterType::Pointer                         ExtractFilterPointerType;
 
@@ -110,9 +112,8 @@ public:
   }
   itkGetObjectMacro(Quicklook,ImageType);
 
-  /** Set/Get the histogram list */
-  itkSetObjectMacro(Histogram,HistogramType);
-  itkGetObjectMacro(Histogram,HistogramType);
+  /** Get the histogram list */
+  itkGetObjectMacro(HistogramList,HistogramListType);
 
   /** Set/Get the rendering function */
   void SetRenderingFunction(RenderingFunctionType * function)
@@ -157,9 +158,9 @@ public:
       Superclass::SetExtractRegion(region);
       // SetExtractionRegion throws an exception in case of empty region
       if(region.GetNumberOfPixels() > 0)
-	{
-	m_ExtractFilter->SetExtractionRegion(region);
-	}
+        {
+        m_ExtractFilter->SetExtractionRegion(region);
+        }
       }
   }
   
@@ -172,14 +173,17 @@ public:
       Superclass::SetScaledExtractRegion(region);
       // SetExtractionRegion throws an exception in case of empty region
       if(region.GetNumberOfPixels() > 0)
-	{
-	m_ScaledExtractFilter->SetExtractionRegion(region);
-	}
+        {
+        m_ScaledExtractFilter->SetExtractionRegion(region);
+        }
       }
   }
 
   /** Actually render the image */
   virtual void Render();
+
+  /** Get the pixel description */
+  virtual std::string GetPixelDescription(const IndexType & index);  
 
 protected:
   /** Constructor */
@@ -209,7 +213,7 @@ private:
   ImagePointerType             m_Image;
 
   /** Joint Histogram */
-  HistogramPointerType         m_Histogram;
+  HistogramListPointerType     m_HistogramList;
 
   /** Rendering function */
   RenderingFunctionPointerType m_RenderingFunction;

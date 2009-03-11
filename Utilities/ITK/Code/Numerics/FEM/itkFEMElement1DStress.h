@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMElement1DStress.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:39 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-01-28 21:19:15 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,9 +23,6 @@
 
 namespace itk {
 namespace fem {
-
-
-
 
 /**
  * \class Element1DStress
@@ -48,7 +45,7 @@ FEM_ABSTRACT_CLASS(Element1DStress,TBaseClass)
 public:
 
   // Repeat the required typedefs and enums from parent class
-  typedef typename Superclass::Float Float;
+  typedef typename Superclass::Float      Float;
   typedef typename Superclass::MatrixType MatrixType;
   typedef typename Superclass::VectorType VectorType;
 
@@ -66,9 +63,6 @@ public:
    * Default constructor only clears the internal storage
    */
   Element1DStress();
-
-
-
 
 //////////////////////////////////////////////////////////////////////////
   /*
@@ -100,9 +94,7 @@ public:
    * spatial dimensions.
    */
   virtual unsigned int GetNumberOfDegreesOfFreedomPerNode( void ) const
-  { return 2; }
-
-
+    { return 2; }
 
 public:
 
@@ -112,12 +104,9 @@ public:
   MaterialLinearElasticity::ConstPointer m_mat;
   virtual Material::ConstPointer GetMaterial(void) const { return m_mat; }
   virtual void SetMaterial(Material::ConstPointer mat_ ) { m_mat=dynamic_cast<const MaterialLinearElasticity*>(&*mat_); }
-
+  
 
 }; // class Element1DStress
-
-
-
 
 #ifdef _MSC_VER
 // Declare a static dummy function to prevent a MSVC 6.0 SP5 from crashing.

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHistogramImageToImageMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2008-02-03 04:05:28 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2008-12-21 19:13:12 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -47,9 +47,9 @@ template <class TFixedImage, class TMovingImage>
 void HistogramImageToImageMetric<TFixedImage, TMovingImage>
 ::SetUpperBound( const MeasurementVectorType & bounds )
 {
-   m_UpperBound = bounds;
-   m_UpperBoundSetByUser = true;
-   this->Modified();
+  m_UpperBound = bounds;
+  m_UpperBoundSetByUser = true;
+  this->Modified();
 }
 
 
@@ -57,11 +57,10 @@ template <class TFixedImage, class TMovingImage>
 void HistogramImageToImageMetric<TFixedImage, TMovingImage>
 ::SetLowerBound( const MeasurementVectorType & bounds )
 {
-   m_LowerBound = bounds;
-   m_LowerBoundSetByUser = true;
-   this->Modified();
+  m_LowerBound = bounds;
+  m_LowerBoundSetByUser = true;
+  this->Modified();
 }
-
 
 template <class TFixedImage, class TMovingImage>
 void HistogramImageToImageMetric<TFixedImage, TMovingImage>

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRecursiveMultiResolutionPyramidImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:38 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-01-26 21:45:56 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -61,9 +61,9 @@ public:
   /** Standard class typedefs. */
   typedef RecursiveMultiResolutionPyramidImageFilter  Self;
   typedef MultiResolutionPyramidImageFilter<TInputImage,TOutputImage>  
-  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+                                                      Superclass;
+  typedef SmartPointer<Self>                          Pointer;
+  typedef SmartPointer<const Self>                    ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -77,10 +77,10 @@ public:
                       Superclass::ImageDimension);
 
   /** Inherit types from the superclass.. */
-  typedef typename Superclass::InputImageType InputImageType;
-  typedef typename Superclass::OutputImageType OutputImageType;
-  typedef typename Superclass::InputImagePointer InputImagePointer;
-  typedef typename Superclass::OutputImagePointer OutputImagePointer;
+  typedef typename Superclass::InputImageType         InputImageType;
+  typedef typename Superclass::OutputImageType        OutputImageType;
+  typedef typename Superclass::InputImagePointer      InputImagePointer;
+  typedef typename Superclass::OutputImagePointer     OutputImagePointer;
   typedef typename Superclass::InputImageConstPointer InputImageConstPointer;
 
   /** Given one output whose requested region has been set, 
@@ -120,5 +120,3 @@ private:
 #endif
 
 #endif
-
-

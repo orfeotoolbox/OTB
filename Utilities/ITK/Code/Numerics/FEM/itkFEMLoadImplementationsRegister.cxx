@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMLoadImplementationsRegister.cxx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:43 $
-  Version:   $Revision: 1.29 $
+  Date:      $Date: 2009-01-30 21:10:18 $
+  Version:   $Revision: 1.30 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -46,9 +46,6 @@
 namespace itk {
 namespace fem {
 
-
-
-
 /* This macro makes registering Load implementations easier. */
 #define REGISTER_LOAD_EX(ElementClass,LoadClass,FunctionName) \
   { ElementClass::LoadImplementationFunctionPointer fp=&FunctionName; \
@@ -59,9 +56,6 @@ namespace fem {
 #define REGISTER_LOAD(ElementClass,LoadClass,FunctionName) \
   extern void FunctionName(ElementClass::ConstPointer, ElementClass::LoadPointer, ElementClass::VectorType& ); \
   REGISTER_LOAD_EX(ElementClass,LoadClass,FunctionName)
-
-
-
 
 /**
  * Registers all Load classes in the FEM library with VisitorDispatcher.
@@ -118,8 +112,5 @@ void LoadImplementationsRegister(void)
   // Make sure that the pointer to the visit function is the correct one!!!
 
 }
-
-
-
 
 }} // end namespace itk::fem

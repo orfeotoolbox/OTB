@@ -61,12 +61,12 @@ public:
 
     for (unsigned r = 0; r<this->GetHisto().size(); r++)
       {
-	for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-	  {
-	    double p = this->GetHisto()[r][s]*areaInv;
-	    double sumPixel = (static_cast<double>(s)+0.5)*this->GetNeighBinLength() + (static_cast<double>(r)+0.5)*this->GetOffsetBinLength();
-	    out += vcl_pow( sumPixel - 2*mean, 3) * p;
-	  }
+        for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
+          {
+            double p = this->GetHisto()[r][s]*areaInv;
+            double sumPixel = (static_cast<double>(s)+0.5)*this->GetNeighBinLength() + (static_cast<double>(r)+0.5)*this->GetOffsetBinLength();
+            out += vcl_pow( sumPixel - 2*mean, 3) * p;
+          }
       }
 
     return out;

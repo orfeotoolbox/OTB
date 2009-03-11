@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkStreamingImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-18 16:11:14 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-02-04 16:34:11 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -99,6 +99,13 @@ public:
    * in UpdateOutputData() since it must update a little, execute a little,
    * update some more, execute some more, etc. */
   virtual void UpdateOutputData(DataObject *output);
+  
+  /** Override PropagateRequestedRegion from ProcessObject
+   *  Since inside UpdateOutputData we iterate over streaming pieces
+   *  we don't need to proapage up the pipeline
+   */
+  virtual void PropagateRequestedRegion(DataObject *output);
+
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

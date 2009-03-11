@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVoronoiDiagram2D.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:40 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-01-27 19:30:16 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkVoronoiDiagram2D_txx
-#define _itkVoronoiDiagram2D_txx
+#ifndef __itkVoronoiDiagram2D_txx
+#define __itkVoronoiDiagram2D_txx
 #include "itkVoronoiDiagram2D.h"
 
 
@@ -87,8 +87,8 @@ void
 VoronoiDiagram2D<TCoordRepType>::
 GetPoint(int pId, PointType *answer)
 { 
-  (*answer)[0] = f_VertexList[pId][0];
-  (*answer)[1] = f_VertexList[pId][1];
+  (*answer)[0] = m_VertexList[pId][0];
+  (*answer)[1] = m_VertexList[pId][1];
 }
  
 
@@ -106,8 +106,8 @@ VoronoiDiagram2D<TCoordRepType>::
 GetSeedsIDAroundEdge(VoronoiEdge *task)
 {
   EdgeInfo answer;
-  answer[0]=f_LineList[task->m_LineID][0];
-  answer[1]=f_LineList[task->m_LineID][1];
+  answer[0]=m_LineList[task->m_LineID][0];
+  answer[1]=m_LineList[task->m_LineID][1];
   return (answer);
 }
 
@@ -117,7 +117,7 @@ typename VoronoiDiagram2D<TCoordRepType>::VoronoiEdgeIterator
 VoronoiDiagram2D<TCoordRepType>::
 EdgeBegin(void)
 {
-  return f_EdgeList.begin();
+  return m_EdgeList.begin();
 }
 
 template <typename TCoordRepType>
@@ -125,7 +125,7 @@ typename VoronoiDiagram2D<TCoordRepType>::VoronoiEdgeIterator
 VoronoiDiagram2D<TCoordRepType>::
 EdgeEnd(void)
 {
-  return f_EdgeList.end();
+  return m_EdgeList.end();
 }
 
 template <typename TCoordRepType>
@@ -149,7 +149,7 @@ typename VoronoiDiagram2D<TCoordRepType>::VertexIterator
 VoronoiDiagram2D<TCoordRepType>::
 VertexBegin(void)
 {
-  return f_VertexList.begin();
+  return m_VertexList.begin();
 }
 
 template <typename TCoordRepType>
@@ -157,7 +157,7 @@ typename VoronoiDiagram2D<TCoordRepType>::VertexIterator
 VoronoiDiagram2D<TCoordRepType>::
 VertexEnd(void)
 {
-  return f_VertexList.end();
+  return m_VertexList.end();
 }
 
 template <typename TCoordRepType>

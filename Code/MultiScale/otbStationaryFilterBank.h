@@ -81,28 +81,28 @@ public:
   typedef StationaryFilterBank Self;
   typedef itk::ImageToImageFilter< TInputImage, TOutputImage > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
-	typedef itk::SmartPointer<const Self> ConstPointer;
+        typedef itk::SmartPointer<const Self> ConstPointer;
 
-	/** Type macro */
-	itkNewMacro(Self);
+        /** Type macro */
+        itkNewMacro(Self);
 
-	/** Creation through object factory macro */
-	itkTypeMacro(StationaryFilterBank,ImageToImageFilter);
+        /** Creation through object factory macro */
+        itkTypeMacro(StationaryFilterBank,ImageToImageFilter);
 
   /** Template parameters typedefs */
   typedef TInputImage InputImageType;
-	typedef typename InputImageType::Pointer InputImagePointerType;
-	typedef typename InputImageType::RegionType InputImageRegionType;
-	typedef typename InputImageType::SizeType InputSizeType;
-	typedef typename InputImageType::IndexType InputIndexType;
-	typedef typename InputImageType::PixelType InputPixelType;
+        typedef typename InputImageType::Pointer InputImagePointerType;
+        typedef typename InputImageType::RegionType InputImageRegionType;
+        typedef typename InputImageType::SizeType InputSizeType;
+        typedef typename InputImageType::IndexType InputIndexType;
+        typedef typename InputImageType::PixelType InputPixelType;
 
   typedef TOutputImage OutputImageType;
-	typedef typename OutputImageType::Pointer OutputImagePointerType;
+        typedef typename OutputImageType::Pointer OutputImagePointerType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
   typedef typename OutputImageType::SizeType OutputSizeType;
   typedef typename OutputImageType::IndexType OutputIndexType;
-	typedef typename OutputImageType::PixelType OutputPixelType;
+        typedef typename OutputImageType::PixelType OutputPixelType;
 
   typedef TLowPassOperator LowPassOperatorType;
   typedef THighPassOperator HighPassOperatorType;
@@ -117,8 +117,8 @@ public:
   typedef typename FaceListType::iterator FaceListIterator;
 
   /** Dimension */
-	itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
-	itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
+        itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+        itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /**
    * Set/Get the level of up sampling of the filter used in the A-trou algorithm

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNthElementImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2008-01-13 19:48:38 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-02-06 20:53:13 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,7 +42,7 @@ namespace itk
 template <class TImage, class TOutputPixelType>
 class ITK_EXPORT NthElementImageAdaptorHelper
 {
- public:
+public:
   typedef  NthElementPixelAccessor<
     TOutputPixelType,
     typename TImage::PixelType> PixelAccessor;
@@ -58,10 +58,10 @@ template <class TImage, class TOutputPixelType>
 {
 public:
   /** Standard class typedefs. */
-  typedef NthElementImageAdaptor  Self;
+  typedef NthElementImageAdaptor                                                 Self;
   typedef typename NthElementImageAdaptorHelper<TImage, TOutputPixelType>::Super Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                                                     Pointer;
+  typedef SmartPointer<const Self>                                               ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro( NthElementImageAdaptor, ImageAdaptor );

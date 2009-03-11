@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageToSpatialObjectMetric.h,v $
   Language:  C++
-  Date:      $Date: 2006-04-18 14:50:07 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-01-24 20:02:56 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -60,13 +60,10 @@ class ITK_EXPORT ImageToSpatialObjectMetric
   : public SingleValuedCostFunction
 {
 public:
-  /** Standard "Self" typedef. */
   typedef ImageToSpatialObjectMetric  Self;
-  /** Standard "Superclass" typedef. */
-  typedef SingleValuedCostFunction  Superclass;
-  /** Smart pointer typedef support   */
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SingleValuedCostFunction    Superclass;
+  typedef SmartPointer<Self>          Pointer;
+  typedef SmartPointer<const Self>    ConstPointer;
 
   /** Type of the fixed image */
   typedef TFixedImage          FixedImageType;
@@ -124,14 +121,13 @@ public:
   typedef typename FixedImageType::ConstPointer   FixedImageConstPointer;
   
   /** Const pointer type for the MovingSpatialObject */
-  typedef typename MovingSpatialObjectType::ConstPointer    
-  MovingSpatialObjectConstPointer;
+  typedef typename MovingSpatialObjectType::ConstPointer MovingSpatialObjectConstPointer;
 
   /**  ParametersType typedef.
    *  It defines a position in the optimization search space. */
   typedef Superclass::ParametersType         ParametersType;
 
-  /** Run-time type information (and related methods).*/
+  /** Run-time type information (and related methods). */
   itkTypeMacro(ImageToSpatialObjectMetric, Object);
 
   /** Connect the FixedImage. */
@@ -200,5 +196,3 @@ protected:
 #endif
 
 #endif
-
-

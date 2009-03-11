@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHistogram.txx,v $
   Language:  C++
-  Date:      $Date: 2008-05-27 14:56:18 $
-  Version:   $Revision: 1.50 $
+  Date:      $Date: 2009-01-11 19:20:01 $
+  Version:   $Revision: 1.51 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -298,18 +298,16 @@ Histogram<TMeasurement, VMeasurementVectorSize, TFrequencyContainer>
     return m_Min[dimension][this->m_Size[dimension]-1];
     }
 
-  MeasurementType binMinFromValue = NumericTraits<MeasurementType>::NonpositiveMin();
-  
   for ( unsigned int i=0; i < this->m_Size[dimension]; i++ )
     {
     if (  (value >= this->m_Min[dimension][i])
           && (value <  this->m_Max[dimension][i])  )
       {
-      binMinFromValue = this->m_Min[dimension][i];
+      return this->m_Min[dimension][i];
       }
     }
     
-  return binMinFromValue;
+  return this->m_Min[dimension][0];
 }
 
 template< class TMeasurement, unsigned int VMeasurementVectorSize, 
@@ -333,18 +331,16 @@ Histogram< TMeasurement, VMeasurementVectorSize, TFrequencyContainer >
     return m_Max[dimension][this->m_Size[dimension]-1];
     }
 
-  MeasurementType binMaxFromValue = NumericTraits<MeasurementType>::max();
-  
   for ( unsigned int i = 0 ; i < this->m_Size[dimension]; i++ )
     {
     if (  (value >= this->m_Min[dimension][i])
           && (value <  this->m_Max[dimension][i])  )
       {
-      binMaxFromValue = this->m_Max[dimension][i];
+      return this->m_Max[dimension][i];
       }
     }
   
-  return binMaxFromValue;
+  return this->m_Max[dimension][0];
 }
 
 /*template< class TMeasurement, unsigned int VMeasurementVectorSize, 

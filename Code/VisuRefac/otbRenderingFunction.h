@@ -57,7 +57,13 @@ public:
 
   /** Evaluate method (vector version) */
   virtual const OutputPixelType Evaluate(const VectorPixelType & vpixel) const = 0;
-  
+
+  /** Get a string description of a pixel  (scalar version) */
+  virtual const std::string Describe(ScalarPixelType spixel) const = 0;
+
+  /** Get a string description of a pixel (vector version) */
+  virtual const std::string Describe(const VectorPixelType& vpixel) const = 0;
+
   /** This method is available to allow implementation of
    * preprocessing.
    */

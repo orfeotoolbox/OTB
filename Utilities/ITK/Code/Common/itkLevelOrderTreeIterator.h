@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLevelOrderTreeIterator.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-26 02:36:52 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-02-05 19:05:00 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -21,7 +21,7 @@
 #include <climits>
 #include <itkTreeIteratorBase.h>
 
-namespace itk{
+namespace itk {
 
 template <class TTreeType>
 class LevelOrderTreeIterator : public TreeIteratorBase<TTreeType> 
@@ -42,7 +42,7 @@ public:
   virtual ~LevelOrderTreeIterator() {};
 
   /** Get the type of the iterator */
-  int GetType() const ;
+  int GetType() const;
 
   /** Get the start level */
   int GetStartLevel() const;
@@ -77,10 +77,10 @@ protected:
 private:
 
   const TreeNodeType* FindNextNode() const;
-  const TreeNodeType* FindNextNodeHelp() const ;
+  const TreeNodeType* FindNextNodeHelp() const;
   int GetLevel( const TreeNodeType* node ) const;
-  int m_StartLevel;
-  int m_EndLevel;
+  int                                     m_StartLevel;
+  int                                     m_EndLevel;
   mutable std::queue<const TreeNodeType*> m_Queue;
 
 };
@@ -147,10 +147,10 @@ template <class TTreeType>
 bool 
 LevelOrderTreeIterator<TTreeType>::HasNext() const
 {
- if(const_cast<TreeNodeType*>(FindNextNode()))
-   {
-   return true;
-   }
+  if(const_cast<TreeNodeType*>(FindNextNode()))
+    {
+    return true;
+    }
   return false;
 }
 
@@ -186,7 +186,8 @@ LevelOrderTreeIterator<TTreeType>::FindNextNode() const
   int level;
   const TreeNodeType* node;
 
-  do{
+  do
+    {
     node = FindNextNodeHelp();
     if ( node == NULL )
       {
@@ -197,7 +198,8 @@ LevelOrderTreeIterator<TTreeType>::FindNextNode() const
       {
       return NULL;
       }
-  } while ( level < m_StartLevel );
+    }
+  while ( level < m_StartLevel );
 
   return node;
 }
@@ -286,8 +288,6 @@ TreeIteratorBase<TTreeType>* LevelOrderTreeIterator<TTreeType>::Clone()
   *clone = *this;
   return clone;
 }
-
-
 
 } // end namespace itk
 

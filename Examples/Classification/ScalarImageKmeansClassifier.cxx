@@ -231,7 +231,7 @@ int main( int argc, char * argv [] )
 
   const unsigned int numberOfClasses = estimatedMeans.Size();
 
-  for ( unsigned int i = 0 ; i < numberOfClasses ; ++i )
+  for ( unsigned int i = 0; i < numberOfClasses; ++i )
   {
     std::cout << "cluster[" << i << "] ";
     std::cout << "    estimated mean : " << estimatedMeans[i] << std::endl;

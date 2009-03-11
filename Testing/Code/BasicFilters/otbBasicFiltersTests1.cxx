@@ -38,4 +38,5 @@ void RegisterTests()
   REGISTER_TEST(otbClosingOpeningMorphologicalFilter);
   REGISTER_TEST(otbBinaryImageMinimalBoundingRegionCalculatorNew);
   REGISTER_TEST(otbBinaryImageMinimalBoundingRegionCalculator);
+  REGISTER_TEST(otbMeanFunctorImageTest);
 }

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryThresholdProjectionImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-09 15:31:37 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-01-28 18:14:36 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -31,7 +31,7 @@ namespace itk {
  *          http://insight-journal.org/midas/handle.php?handle=1926/164
  *
  *
- * \author Gaëtan Lehmann. Biologie du Développement et de la Reproduction,
+ * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction,
  * INRA de Jouy-en-Josas, France.
  *    http://hdl.handle.net/1926/164
  *

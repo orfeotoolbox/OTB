@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkInteriorExteriorSpatialFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-31 13:26:05 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-02-05 19:04:58 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -50,10 +50,10 @@ class ITK_EXPORT InteriorExteriorSpatialFunction : public
 {
 public:
   /** Standard class typedefs. */
-  typedef InteriorExteriorSpatialFunction Self;
+  typedef InteriorExteriorSpatialFunction          Self;
   typedef SpatialFunction<bool, VDimension,TInput> Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                       Pointer;
+  typedef SmartPointer<const Self>                 ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(InteriorExteriorSpatialFunction, SpatialFunction);

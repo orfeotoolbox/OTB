@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNormalizedCorrelationImageToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2008-02-03 04:05:29 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2009-01-26 21:45:53 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -45,11 +45,10 @@ class ITK_EXPORT NormalizedCorrelationImageToImageMetric :
 public:
 
   /** Standard class typedefs. */
-  typedef NormalizedCorrelationImageToImageMetric    Self;
+  typedef NormalizedCorrelationImageToImageMetric         Self;
   typedef ImageToImageMetric<TFixedImage, TMovingImage >  Superclass;
-
-  typedef SmartPointer<Self>         Pointer;
-  typedef SmartPointer<const Self>   ConstPointer;
+  typedef SmartPointer<Self>                              Pointer;
+  typedef SmartPointer<const Self>                        ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -115,6 +114,3 @@ private:
 #endif
 
 #endif
-
-
-

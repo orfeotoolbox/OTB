@@ -76,12 +76,12 @@ public:
         offsetOff[1] = offsetOffInit[1];
         offset[0] = l;
         for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
-	  {
-	    offsetOff[1]++;
-	    offset[1] = k;
-	    norm = vcl_pow(static_cast<double>( ( neigh[offset] - neighOff[neighOff.GetCenterNeighborhoodIndex()] ) ), 2);
-	    temp += norm;
-	  }
+          {
+            offsetOff[1]++;
+            offset[1] = k;
+            norm = vcl_pow(static_cast<double>( ( neigh[offset] - neighOff[neighOff.GetCenterNeighborhoodIndex()] ) ), 2);
+            temp += norm;
+          }
       }
     temp /= area;
     return vcl_pow(temp, 2);

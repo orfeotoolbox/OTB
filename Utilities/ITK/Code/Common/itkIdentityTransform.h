@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIdentityTransform.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 01:41:59 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-02-05 19:04:56 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -160,7 +160,7 @@ public:
       \end{array}\right] 
    *
    * \f]
-   * **/
+   */
   virtual const JacobianType & GetJacobian(const InputPointType  & ) const
     { 
     return this->m_Jacobian;

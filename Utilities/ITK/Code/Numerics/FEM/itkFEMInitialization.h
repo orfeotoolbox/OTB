@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMInitialization.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:41 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-01-29 21:28:16 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,9 +29,6 @@
 namespace itk {
 namespace fem {
 
-
-
-
 /**
  * \class FEMInitialization
  * \brief FEM Library initialization and housekeeping.
@@ -49,16 +46,13 @@ public:
   ~FEMInitialization();
 };
 
-/*
+/**
  * Trigger constructor and destructor calls in each compilation unit.
  * Unnamed namespace are used to avoid name collisions.
  */
 namespace {
-  static FEMInitialization FEMInitialization_var; 
+static FEMInitialization FEMInitialization_var; 
 }
-
-
-
 
 }} // end namespace itk::fem
 

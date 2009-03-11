@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMLoadImplementationGenericBodyLoad.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:43 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-01-30 21:10:18 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,8 +23,6 @@
 
 namespace itk {
 namespace fem {
-
-
 
 /**
  * \class LoadImplementationGenericBodyLoad
@@ -56,20 +54,20 @@ public:
    */
   template<class TElementClassConstPointer>
   static void HandleLoad(TElementClassConstPointer e, Element::LoadPointer l, Element::VectorType& Fe)
-  {
+    {
     // Check if we really got a LoadGrav object
     LoadGrav::Pointer l0=dynamic_cast<LoadGrav*>(&*l);
     if ( !l0 )
-    {
+      {
       // Passed load object was not of class LoadGrav!
       throw FEMException(__FILE__, __LINE__, "FEM error");
-    }
+      }
 
     // Statically cast the passed pointer to the element base class and
     // call the real load implementation with the correct pointer types.
     // If cast fails, the passed pointer was of incompatible class.
     Implementation(static_cast<Element::ConstPointer>(e),l0,Fe);
-  }
+    }
 
 private:
   /**
@@ -87,9 +85,6 @@ private:
    */
   LoadImplementationGenericBodyLoad();
 };
-
-
-
 
 #ifdef _MSC_VER 
 // Declare a static dummy function to prevent a MSVC 6.0 SP5 from crashing.

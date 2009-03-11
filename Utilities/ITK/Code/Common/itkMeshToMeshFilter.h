@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeshToMeshFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:16 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-02-05 22:04:14 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,9 +40,9 @@ class ITK_EXPORT MeshToMeshFilter : public MeshSource<TOutputMesh>
 {
 public:
   /** Standard class typedefs. */
-  typedef MeshToMeshFilter  Self;
-  typedef MeshSource<TOutputMesh> Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef MeshToMeshFilter          Self;
+  typedef MeshSource<TOutputMesh>   Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
   
   /** Method for creation through the object factory. */
@@ -52,7 +52,7 @@ public:
   itkTypeMacro(MeshToMeshFilter,MeshSource);
 
   /** Some convenient typedefs. */
-  typedef TInputMesh InputMeshType;
+  typedef TInputMesh                      InputMeshType;
   typedef typename InputMeshType::Pointer InputMeshPointer;
   
   /** Set the mesh input of this process object.  */

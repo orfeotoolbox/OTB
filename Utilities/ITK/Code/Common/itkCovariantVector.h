@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCovariantVector.h,v $
   Language:  C++
-  Date:      $Date: 2007-02-08 20:42:48 $
-  Version:   $Revision: 1.52 $
+  Date:      $Date: 2008-11-14 05:09:25 $
+  Version:   $Revision: 1.55 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -109,13 +109,15 @@ public:
    * \deprecated Use GetVnlVector() instead. */
   vnl_vector<T> Get_vnl_vector( void ) const;
 
-
-  /** Default constructor has nothing to do. */
+  /** Default constructor and copy constructors. */
   CovariantVector(): BaseArray() {}
   CovariantVector(const ValueType& r);
 
-  /** Pass-through constructor for the Array base class. */
-  CovariantVector(const Self& r): BaseArray(r) {}
+  /** Pass-through constructor for the Array base class. Implicit casting is
+   * performed to initialize constructor from any another one of datatype. */
+  template< class TVectorValueType >
+  CovariantVector(const CovariantVector< TVectorValueType, 
+                        NVectorDimension>& r): BaseArray(r) {}
   CovariantVector(const ValueType r[Dimension]): BaseArray(r) {}  
     
   /** Assignment operator with implicit casting from another data type */

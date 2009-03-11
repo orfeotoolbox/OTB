@@ -57,8 +57,8 @@ PanTexTextureImageFilter<TInputImage, TOutputImage>
  
   // Neighborhood+offset iterator
   RadiusType rOff;
-  rOff[0] = this->GetRadius() + vcl_abs(this->GetOffset()[0]);
-  rOff[1] = this->GetRadius() + vcl_abs(this->GetOffset()[1]);
+  rOff[0] = this->GetRadius()[0] + vcl_abs(this->GetOffset()[0]);
+  rOff[1] = this->GetRadius()[1] + vcl_abs(this->GetOffset()[1]);
   NeighborhoodIteratorType neighInputOffIt;
   // Find the data-set boundary "faces"
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::FaceListType faceListOff;

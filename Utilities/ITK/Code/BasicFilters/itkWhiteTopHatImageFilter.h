@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWhiteTopHatImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-14 19:20:34 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-01-28 18:14:36 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,7 +38,7 @@ namespace itk {
  * "Morphological Image Analysis: Principles and Applications", 
  * Second Edition, Springer, 2003.
  * 
- * \author Gaëtan Lehmann. Biologie du Développement et de la Reproduction, INRA of Jouy-en-Josas, France.
+ * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France.
  *
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  */
@@ -88,6 +88,12 @@ public:
   /** Get the kernel (structuring element). */
   itkGetConstReferenceMacro(Kernel, KernelType);
 
+  /** A safe border is added to input image to avoid borders effects
+   * and remove it once the closing is done */
+  itkSetMacro(SafeBorder, bool);
+  itkGetConstReferenceMacro(SafeBorder, bool);
+  itkBooleanMacro(SafeBorder);
+
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
   itkConceptMacro(InputAdditiveOperatorsCheck,
@@ -123,6 +129,8 @@ private:
 
   /** kernel or structuring element to use. */
   KernelType m_Kernel;
+
+  bool m_SafeBorder;
 }; // end of class
 
 } // end namespace itk

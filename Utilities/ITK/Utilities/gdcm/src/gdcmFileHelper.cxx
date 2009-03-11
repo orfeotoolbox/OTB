@@ -4,8 +4,8 @@
   Module:    $RCSfile: gdcmFileHelper.cxx,v $
   Language:  C++
 
-  Date:      $Date: 2008-05-30 11:37:00 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2008-12-19 11:27:17 $
+  Version:   $Revision: 1.29 $
                                                                                 
   Copyright (c) CREATIS (Centre de Recherche et d'Applications en Traitement de
   l'Image). All rights reserved. See Doc/License.txt or
@@ -396,7 +396,7 @@ uint8_t *FileHelper::GetImageData()
       return 0;
    }
 
-   if ( FileInternal->HasLUT() && PixelReadConverter->BuildRGBImage() )
+   if ( (FileInternal->IsPaletteColor() && FileInternal->HasLUT()) && PixelReadConverter->BuildRGBImage() )
    {
       return PixelReadConverter->GetRGB();
    }
@@ -458,7 +458,7 @@ size_t FileHelper::GetImageDataIntoVector (void *destination, size_t maxSize)
       return 0;
    }
 
-   if ( FileInternal->HasLUT() && PixelReadConverter->BuildRGBImage() )
+   if ( (FileInternal->IsPaletteColor() && FileInternal->HasLUT()) && PixelReadConverter->BuildRGBImage() )
    {
       if ( PixelReadConverter->GetRGBSize() > maxSize )
       {
@@ -892,7 +892,7 @@ void FileHelper::SetWriteToRaw()
    else
    {
       ValEntry *photInt = CopyValEntry(0x0028,0x0004);
-      if (FileInternal->HasLUT() )
+      if (FileInternal->IsPaletteColor() && FileInternal->HasLUT() )
       {
          photInt->SetValue("PALETTE COLOR ");
       }
@@ -1479,10 +1479,11 @@ void FileHelper::CheckMandatoryElements()
 
    // 'Media Storage SOP Instance UID'
    CopyMandatoryEntry(0x0002,0x0003,sop);
+   CheckMandatoryEntry(0x0008,0x0018,sop);
 
    // 'Implementation Class UID'
    // $ echo "gdcm" | od -b
-   CopyMandatoryEntry(0x0002,0x0012,"147.144.143.155");
+   CopyMandatoryEntry(0x0002,0x0012, Util::GetRootUID() + ".147.144.143.155." GDCM_VERSION);
 
    // 'Implementation Version Name'
    std::string version = "ITK/GDCM ";
@@ -1649,12 +1650,6 @@ void FileHelper::CheckMandatoryElements()
        e_0008_0016  =  new ValEntry(
          Global::GetDicts()->GetDefaultPubDict()->GetEntry(0x0008, 0x0016) );
        e_0008_0016 ->SetValue( e_0002_0002->GetValue() );
-       ValEntry *e_0008_0018 = FileInternal->GetValEntry(0x0008, 0x0018);
-       if( e_0008_0018 )
-         {
-         e_0008_0018->SetValue(
-           FileInternal->GetValEntry(0x0002,0x0003)->GetValue() );
-         }
        Archive->Push(e_0008_0016);
        }
      else
@@ -1678,7 +1673,6 @@ void FileHelper::CheckMandatoryElements()
    //      Global::GetDicts()->GetDefaultPubDict()->GetEntry(0x0008, 0x0018) );
    //e_0008_0018->SetValue( Util::CreateUniqueUID() );
    //Archive->Push(e_0008_0018);
-   CheckMandatoryEntry(0x0008,0x0018,sop);
 
    // Instance Creation Date
    const std::string &date = Util::GetCurrentDate();

@@ -20,7 +20,8 @@
 
 #include "otbVectorDataToVectorDataFilter.h"
 #include "itkTransform.h"
-#include "otbCompositeTransform.h"
+// #include "otbCompositeTransform.h"
+#include "otbGenericRSTransform.h"
 #include "itkPreOrderTreeIterator.h"
 #include "otbImageKeywordlist.h"
 
@@ -80,7 +81,8 @@ public:
   /** Some typedefs. */
   typedef itk::Transform<double, 2, 2> GenericTransformType;
   typedef typename GenericTransformType::Pointer GenericTransformPointerType;
-  typedef otb::CompositeTransform<GenericTransformType, GenericTransformType, double, 2, 2> InternalTransformType;
+//   typedef otb::CompositeTransform<GenericTransformType, GenericTransformType, double, 2, 2> InternalTransformType;
+  typedef otb::GenericRSTransform<double, 2, 2> InternalTransformType;
   typedef typename InternalTransformType::Pointer InternalTransformPointerType;
 
   typedef itk::Vector<double, 2> SpacingType;
@@ -205,6 +207,7 @@ private:
   OriginType          m_InputOrigin;
   SpacingType         m_OutputSpacing;
   OriginType          m_OutputOrigin;
+
 };
 
 } // end namespace otb

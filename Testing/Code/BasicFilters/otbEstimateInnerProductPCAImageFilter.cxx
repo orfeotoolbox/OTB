@@ -28,6 +28,7 @@ int otbEstimateInnerProductPCAImageFilter( int argc, char* argv[] )
   const char * inputFileName = argv[1];
   const char * outputFilename = argv[2];
   const unsigned int numberOfPrincipalComponentsRequired(atoi(argv[3]));
+  const bool centerdata = atoi(argv[4]);
 
   typedef otb::VectorImage<PixelType,Dimension> ImageType;
   typedef otb::ImageFileReader< ImageType >                     ReaderType;
@@ -43,6 +44,7 @@ int otbEstimateInnerProductPCAImageFilter( int argc, char* argv[] )
 
   // Compute Inner Product raw
   pcafilter->SetNumberOfPrincipalComponentsRequired(numberOfPrincipalComponentsRequired);
+  pcafilter->SetCenterData(centerdata);
   pcafilter->SetInput(reader->GetOutput());
   pcafilter->Update();
 

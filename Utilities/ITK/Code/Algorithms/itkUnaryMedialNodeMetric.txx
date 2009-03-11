@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkUnaryMedialNodeMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:36:55 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-27 19:30:16 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -15,17 +15,17 @@
 
 =========================================================================*/
 
-#ifndef _itkUnaryMedialNodeMetric_txx
-#define _itkUnaryMedialNodeMetric_txx
+#ifndef __itkUnaryMedialNodeMetric_txx
+#define __itkUnaryMedialNodeMetric_txx
 
 #include "itkUnaryMedialNodeMetric.h"
 
 namespace itk
 {
 
-  /**
-   * Constructor.
-   */
+/**
+ * Constructor.
+ */
 template <int VDimensions>
 UnaryMedialNodeMetric<VDimensions>
 ::UnaryMedialNodeMetric()

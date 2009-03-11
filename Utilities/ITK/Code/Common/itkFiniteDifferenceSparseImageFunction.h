@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFiniteDifferenceSparseImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 23:25:41 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-02-05 19:04:56 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -69,7 +69,7 @@ public:
   /** The index type for the sparse image. */
   typedef typename SparseImageType::IndexType   IndexType;
 
-  /** The actual type of nodes stored the sparse image.*/
+  /** The actual type of nodes stored the sparse image. */
   typedef typename SparseImageType::NodeType NodeType;
 
   /** The type for the variables of NodeType. Scalar or vector. */

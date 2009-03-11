@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSpatialObjectReader.h,v $
   Language:  C++
-  Date:      $Date: 2007-03-22 14:28:52 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-01-16 11:37:57 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -28,6 +28,10 @@
 namespace itk
 {
 
+/** \class SpatialObjectReader
+ * 
+ * \brief TODO
+ */
 template <unsigned int NDimensions = 3, 
           typename PixelType = unsigned char,
           typename TMeshTraits = DefaultStaticMeshTraits< PixelType , NDimensions, NDimensions >

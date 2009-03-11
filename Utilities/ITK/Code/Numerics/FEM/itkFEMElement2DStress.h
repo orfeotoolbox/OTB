@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMElement2DStress.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:40 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-01-29 20:09:10 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,9 +23,6 @@
 
 namespace itk {
 namespace fem {
-
-
-
 
 /**
  * \class Element2DStress
@@ -48,7 +45,7 @@ FEM_ABSTRACT_CLASS(Element2DStress,TBaseClass)
 public:
 
   // Repeat the required typedefs and enums from parent class
-  typedef typename Superclass::Float Float;
+  typedef typename Superclass::Float      Float;
   typedef typename Superclass::MatrixType MatrixType;
   typedef typename Superclass::VectorType VectorType;
 
@@ -67,10 +64,7 @@ public:
    */
   Element2DStress();
 
-
-
-
-//////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////
   /*
    * Methods related to the physics of the problem.
    */
@@ -95,9 +89,7 @@ public:
    * 2D stress elements have 2 DOFs per node.
    */
   virtual unsigned int GetNumberOfDegreesOfFreedomPerNode( void ) const
-  { return 2; }
-
-
+    { return 2; }
 
 public:
 
@@ -109,9 +101,6 @@ public:
   virtual void SetMaterial(Material::ConstPointer mat_ ) { m_mat=dynamic_cast<const MaterialLinearElasticity*>(&*mat_); }
 
 }; // class Element2DStress
-
-
-
 
 #ifdef _MSC_VER
 // Declare a static dummy function to prevent a MSVC 6.0 SP5 from crashing.

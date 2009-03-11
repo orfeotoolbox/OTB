@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageToImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-02-09 14:57:22 $
-  Version:   $Revision: 1.36 $
+  Date:      $Date: 2009-02-05 19:04:57 $
+  Version:   $Revision: 1.37 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkImageToImageFilter_txx
-#define _itkImageToImageFilter_txx
+#ifndef __itkImageToImageFilter_txx
+#define __itkImageToImageFilter_txx
 #include "itkImageToImageFilter.h"
 
 
@@ -73,8 +73,6 @@ ImageToImageFilter<TInputImage,TOutputImage>
                                    const_cast< TInputImage *>( image ) );
 }
 
-
-
 /**
  *
  */
@@ -103,8 +101,6 @@ ImageToImageFilter<TInputImage,TOutputImage>
   return static_cast< const TInputImage * >
     (this->ProcessObject::GetInput(idx));
 }
-
-
 
 //-----------------------------------------------------------------------
 //

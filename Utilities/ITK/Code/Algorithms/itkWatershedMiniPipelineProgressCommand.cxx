@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWatershedMiniPipelineProgressCommand.cxx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:41 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-01-27 19:30:18 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -47,14 +47,4 @@ void WatershedMiniPipelineProgressCommand
     }
 }
 
-
-
-
-
-
-
-
-
-
 } // end namespace itk
-

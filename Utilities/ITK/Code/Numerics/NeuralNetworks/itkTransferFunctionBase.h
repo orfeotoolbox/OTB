@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTransferFunctionBase.h,v $
   Language:  C++
-  Date:      $Date: 2007-08-17 13:10:57 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-01-28 21:04:59 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -15,8 +15,8 @@
 
 =========================================================================*/
 
-#ifndef _itkTransferFunctionBase_h
-#define _itkTransferFunctionBase_h
+#ifndef __itkTransferFunctionBase_h
+#define __itkTransferFunctionBase_h
 
 #include "itkFunctionBase.h"
 #include "itkArray.h"
@@ -32,10 +32,10 @@ class TransferFunctionBase : public FunctionBase<ScalarType, ScalarType>
 public:
 
   /** Standard class typedefs. */
-  typedef TransferFunctionBase Self;
+  typedef TransferFunctionBase             Self;
   typedef FunctionBase<ScalarType, double> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef SmartPointer<Self>               Pointer;
+  typedef SmartPointer<const Self>         ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(TransferFunctionBase, FunctionBase);
@@ -44,7 +44,7 @@ public:
   typedef ScalarType InputType;
 
   /** Output type */
-  typedef ScalarType OutputType;
+  typedef ScalarType        OutputType;
   typedef Array<ScalarType> ArrayType;
 
   /** Evaluate at the specified input position */

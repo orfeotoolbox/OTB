@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMesh.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-03 21:21:53 $
-  Version:   $Revision: 1.32 $
+  Date:      $Date: 2009-02-07 23:16:28 $
+  Version:   $Revision: 1.33 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -413,6 +413,8 @@ public:
    * formed by consecutive points in this list. */
   virtual QEPrimal* AddFace( const PointIdList& points );
   virtual QEPrimal* AddFaceWithSecurePointList( const PointIdList& points );
+  virtual QEPrimal* AddFaceWithSecurePointList( const PointIdList& points,
+                                                bool CheckEdges );
 
   /** Adds a triangular face to the Mesh */
   virtual QEPrimal* AddFaceTriangle( const PointIdentifier& aPid,

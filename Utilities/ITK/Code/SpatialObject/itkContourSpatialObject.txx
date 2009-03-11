@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkContourSpatialObject.txx,v $
   Language:  C++
-  Date:      $Date: 2008-06-29 01:56:12 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-01-28 20:10:27 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -61,7 +61,7 @@ ContourSpatialObject< TDimension >
   return m_ControlPoints;
 } 
 
-/** Get the list of control points*/
+/** Get the list of control points */
 template< unsigned int TDimension >
 const typename ContourSpatialObject< TDimension > ::ControlPointListType &  
 ContourSpatialObject< TDimension > 
@@ -100,7 +100,7 @@ ContourSpatialObject< TDimension >
   return m_InterpolatedPoints;
 } 
 
-/** Get the list of interpolated points*/
+/** Get the list of interpolated points */
 template< unsigned int TDimension >
 const typename ContourSpatialObject< TDimension >::InterpolatedPointListType &
 ContourSpatialObject< TDimension > 

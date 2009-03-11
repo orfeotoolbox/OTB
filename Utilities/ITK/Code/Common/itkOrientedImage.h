@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOrientedImage.h,v $
   Language:  C++
-  Date:      $Date: 2008-11-01 15:18:04 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2009-02-19 19:41:22 $
+  Version:   $Revision: 1.28 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -62,7 +62,8 @@ public:
   typedef typename Superclass::AccessorFunctorType AccessorFunctorType;
   typedef typename Superclass::IOPixelType         IOPixelType;
 
-  /** Tyepdef for the functor used to access a neighborhood of pixel pointers.*/
+  /** Typedef for the functor used to access a neighborhood of pixel
+   * pointers. */
   typedef NeighborhoodAccessorFunctor< Self >      NeighborhoodAccessorFunctorType;
 
   /** Return the NeighborhoodAccessor functor. This method is called by the 

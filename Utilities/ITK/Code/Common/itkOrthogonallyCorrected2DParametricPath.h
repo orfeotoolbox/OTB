@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOrthogonallyCorrected2DParametricPath.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-23 17:59:29 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-02-19 19:41:22 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -66,8 +66,8 @@ public:
   
   /** Basic data-structure types used */
   typedef ContinuousIndex<double,2>             ContinuousIndexType; 
-  typedef Index<2>                              IndexType;           
-  typedef Offset<2>                             OffsetType;          
+  typedef Index<2>                              IndexType;
+  typedef Offset<2>                             OffsetType;
   typedef Superclass::VectorType                VectorType;
   typedef ParametricPath<2>                     OriginalPathType;
   typedef OriginalPathType::ConstPointer        OriginalPathConstPointer;

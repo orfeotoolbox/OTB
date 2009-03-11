@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDataObject.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 09:09:39 $
-  Version:   $Revision: 1.69 $
+  Date:      $Date: 2009-02-20 19:59:26 $
+  Version:   $Revision: 1.72 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -303,7 +303,7 @@ public:
    * after being used by a filter.  */
   void SetReleaseDataFlag(bool flag)
     {
-      m_ReleaseDataFlag = flag;
+    m_ReleaseDataFlag = flag;
     }
   itkGetConstReferenceMacro(ReleaseDataFlag,bool);
   itkBooleanMacro(ReleaseDataFlag);
@@ -311,12 +311,12 @@ public:
   /** Turn on/off a flag to control whether every object releases its data
    * after being used by a filter. Being a global flag, it controls the
    * behavior of all DataObjects and ProcessObjects. */
-  static void SetGlobalReleaseDataFlag(const bool val);
+  static void SetGlobalReleaseDataFlag(bool val);
   static bool GetGlobalReleaseDataFlag();
-  void GlobalReleaseDataFlagOn() 
-    {this->SetGlobalReleaseDataFlag(true);}
-  void GlobalReleaseDataFlagOff() 
-    {this->SetGlobalReleaseDataFlag(false);}
+  static void GlobalReleaseDataFlagOn() 
+    {Self::SetGlobalReleaseDataFlag(true);}
+  static void GlobalReleaseDataFlagOff() 
+    {Self::SetGlobalReleaseDataFlag(false);}
   
   /** Release data back to system to conserve memory resource. Used during
    * pipeline execution.  Releasing this data does not make

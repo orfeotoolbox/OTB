@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMException.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:41 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-01-29 21:28:16 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -55,9 +55,6 @@ public:
   itkTypeMacro(FEMException, ExceptionObject);
 };
 
-
-
-
 /**
  * \class FEMExceptionIO
  * \brief Base class for all IO exception's that can occur within FEM classe.
@@ -80,9 +77,6 @@ public:
   /** Type related information. */
   itkTypeMacro(FEMExceptionIO,FEMException);
 };
-
-
-
 
 /**
  * \class FEMExceptionWrongClass
@@ -113,9 +107,6 @@ public:
   itkTypeMacro(FEMExceptionWrongClass,FEMException);
 };
 
-
-
-
 /**
  * \class FEMExceptionObjectNotFound
  * \brief Object not found exception.
@@ -138,12 +129,9 @@ public:
    * Base class of the searched object.
    */
   std::string m_baseClassName;
-  int m_GN;
+  int         m_GN;
 
 };
-
-
-
 
 /**
  * \class FEMExceptionSolution
@@ -169,9 +157,6 @@ public:
   itkTypeMacro(FEMExceptionSolution,FEMException);
   
 };
-
-
-
 
 }} // end namespace itk::fem
 

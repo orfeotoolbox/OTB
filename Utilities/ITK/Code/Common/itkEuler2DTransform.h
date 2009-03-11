@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEuler2DTransform.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-13 15:36:31 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-02-05 19:04:56 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -88,13 +88,13 @@ public:
   /**
    * This method creates and returns a new Euler2DTransform object
    * which is the inverse of self.
-   **/
+   */
   void CloneInverseTo( Pointer & newinverse ) const;
 
   /**
    * This method creates and returns a new Euler2DTransform object
    * which has the same parameters as self.
-   **/
+   */
   void CloneTo( Pointer & clone ) const;
 
   /**

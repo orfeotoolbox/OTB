@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVesselTubeSpatialObjectPoint.h,v $
   Language:  C++
-  Date:      $Date: 2005-05-12 16:19:56 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-28 20:10:30 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,13 +26,14 @@ namespace itk
 {
 
 /** \class VesselTubeSpatialObjectPoint
-* \brief Point used for a tube definition
-*
-* This class contains all the functions necessary to define a point
-* that can be used to build tubes.
-*
-* \sa VesselTubeSpatialObject 
-*/ 
+ * \brief Point used for a tube definition
+ *
+ * This class contains all the functions necessary to define a point
+ * that can be used to build tubes.
+ *
+ * \sa VesselTubeSpatialObject 
+ */ 
+
 template < unsigned int TPointDimension = 3 >
 class VesselTubeSpatialObjectPoint 
   : public TubeSpatialObjectPoint<TPointDimension>

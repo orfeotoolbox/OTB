@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLinearInterpolateImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-13 15:32:37 $
-  Version:   $Revision: 1.34 $
+  Date:      $Date: 2009-02-05 19:05:01 $
+  Version:   $Revision: 1.35 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -54,10 +54,10 @@ class ITK_EXPORT LinearInterpolateImageFunction :
 {
 public:
   /** Standard class typedefs. */
-  typedef LinearInterpolateImageFunction Self;
+  typedef LinearInterpolateImageFunction                  Self;
   typedef InterpolateImageFunction<TInputImage,TCoordRep> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                              Pointer;
+  typedef SmartPointer<const Self>                        ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(LinearInterpolateImageFunction, InterpolateImageFunction);

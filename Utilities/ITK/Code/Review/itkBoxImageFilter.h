@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBoxImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-08-05 11:49:09 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-01-28 18:14:36 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -33,7 +33,7 @@ namespace itk {
  * It also conveniently reimplement the GenerateInputRequestedRegion() so
  * that region is well defined for the provided radius.
  *
- * \author Gaëtan Lehmann. Biologie du Développement et de la Reproduction, INRA de Jouy-en-Josas, France.
+ * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France.
  */
 
 template<class TInputImage, class TOutputImage>

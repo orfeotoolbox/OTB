@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBlackTopHatImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-08-08 15:26:45 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-01-08 16:03:55 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,6 +42,7 @@ BlackTopHatImageFilter<TInputImage, TOutputImage, TKernel>
 ::BlackTopHatImageFilter()
   : m_Kernel()
 {
+  m_SafeBorder = true;
 }
 
 template <class TInputImage, class TOutputImage, class TKernel>
@@ -92,7 +93,8 @@ BlackTopHatImageFilter<TInputImage, TOutputImage, TKernel>
     close = GrayscaleMorphologicalClosingImageFilter<TInputImage, TInputImage, TKernel>::New();
 
   close->SetInput( this->GetInput() );
-  close->SetKernel(this->m_Kernel);
+  close->SetKernel( this->GetKernel() );
+  close->SetSafeBorder( m_SafeBorder );
 
   // Need to subtract the input from the closed image
   typename SubtractImageFilter<TInputImage, TInputImage, TOutputImage>::Pointer
@@ -126,6 +128,7 @@ BlackTopHatImageFilter<TInputImage, TOutputImage, TKernel>
   Superclass::PrintSelf(os, indent);
 
   os << indent << "Kernel: " << m_Kernel << std::endl;
+  os << indent << "SafeBorder: " << m_SafeBorder << std::endl;
 }
 
 }// end namespace itk

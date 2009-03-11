@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkModulusImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 19:33:41 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-01-28 18:14:36 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -63,7 +63,7 @@ private:
  *
  * The input pixel type must support the c++ modulus operator (%).
  *
- * \author Gaëtan Lehmann. Biologie du Développement et de la Reproduction, INRA de Jouy-en-Josas, France.
+ * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France.
  *
  * \ingroup IntensityImageFilters  Multithreaded
  *

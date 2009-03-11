@@ -117,10 +117,20 @@ public:
 
 
   /**
-  * Return the polygon surface.
-  * \return The surface.
+  * Return the polygon area.
+  * \return The area.
   */
-  double GetArea() const;
+  virtual double GetArea() const;
+
+  /**
+   * Return the polygon area.
+   * \return The area.
+   * \deprecated
+   */
+  virtual double GetSurface() const
+  {
+    return this->GetArea();
+  }
 
   /**
   * Return the polygon length (perimeter).

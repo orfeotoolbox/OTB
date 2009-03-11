@@ -1,11 +1,10 @@
-
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNarrowBandCurvesLevelSetImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:36 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-01-26 21:45:53 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -15,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkNarrowBandCurvesLevelSetImageFilter_txx_
-#define __itkNarrowBandCurvesLevelSetImageFilter_txx_
+#ifndef __itkNarrowBandCurvesLevelSetImageFilter_txx
+#define __itkNarrowBandCurvesLevelSetImageFilter_txx
 
 #include "itkNarrowBandCurvesLevelSetImageFilter.h"
 
@@ -67,8 +66,5 @@ NarrowBandCurvesLevelSetImageFilter<TInputImage, TFeatureImage, TOutputType>
 }
 
 }// end namespace itk
-
-
-
 
 #endif

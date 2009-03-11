@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHistogramToLogProbabilityImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-10-27 19:51:47 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-01-17 09:13:59 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,7 +44,7 @@ namespace itk
  */
 
 namespace Function {  
-template< class TInput>
+template< class TInput, class TOutput=double >
 class HistogramLogProbabilityFunction
 {
 public:
@@ -53,7 +53,7 @@ public:
   //   Total Number of occurances. 
   //
   // Returns pixels of float.. 
-  typedef  double  OutputPixelType;
+  typedef  TOutput  OutputPixelType;
   
   
   HistogramLogProbabilityFunction(): 
@@ -91,15 +91,21 @@ private:
 }; 
 }
 
-template <class THistogram >
+template <class THistogram, class TOutputPixel=double >
 class ITK_EXPORT HistogramToLogProbabilityImageFilter :
   public HistogramToImageFilter< THistogram, 
-  Function::HistogramLogProbabilityFunction< unsigned long> > 
+  Function::HistogramLogProbabilityFunction< unsigned long, TOutputPixel > > 
 {
 public:
   
   /** Standard class typedefs. */
   typedef HistogramToLogProbabilityImageFilter Self;
+
+  /** Standard "Superclass" typedef. */
+  typedef HistogramToImageFilter< THistogram, 
+    Function::HistogramLogProbabilityFunction< unsigned long, TOutputPixel > >
+                                               Superclass;
+
   typedef SmartPointer<Self>                   Pointer;
   typedef SmartPointer<const Self>             ConstPointer;
   

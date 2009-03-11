@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNormalizedCorrelationPointSetToImageMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2008-02-03 04:05:29 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2009-01-26 21:45:54 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkNormalizedCorrelationPointSetToImageMetric_txx
-#define _itkNormalizedCorrelationPointSetToImageMetric_txx
+#ifndef __itkNormalizedCorrelationPointSetToImageMetric_txx
+#define __itkNormalizedCorrelationPointSetToImageMetric_txx
 
 #include "itkNormalizedCorrelationPointSetToImageMetric.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
@@ -23,7 +23,7 @@
 namespace itk
 {
 
-/*
+/**
  * Constructor
  */
 template <class TFixedPointSet, class TMovingImage> 
@@ -33,7 +33,7 @@ NormalizedCorrelationPointSetToImageMetric<TFixedPointSet,TMovingImage>
   m_SubtractMean = false;
 }
 
-/*
+/**
  * Get the match Measure
  */
 template <class TFixedPointSet, class TMovingImage> 
@@ -95,7 +95,7 @@ NormalizedCorrelationPointSetToImageMetric<TFixedPointSet,TMovingImage>
     ++pointDataItr;
     }
 
-   if ( this->m_SubtractMean && this->m_NumberOfPixelsCounted > 0 )
+  if ( this->m_SubtractMean && this->m_NumberOfPixelsCounted > 0 )
     {
     sff -= ( sf * sf / this->m_NumberOfPixelsCounted );
     smm -= ( sm * sm / this->m_NumberOfPixelsCounted );
@@ -117,11 +117,7 @@ NormalizedCorrelationPointSetToImageMetric<TFixedPointSet,TMovingImage>
 
 }
 
-
-
-
-
-/*
+/**
  * Get the Derivative Measure
  */
 template < class TFixedPointSet, class TMovingImage> 

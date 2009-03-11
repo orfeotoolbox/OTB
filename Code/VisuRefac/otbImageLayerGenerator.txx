@@ -28,8 +28,8 @@ namespace otb
 template < class TImageLayer >
 ImageLayerGenerator<TImageLayer>
 ::ImageLayerGenerator() : m_Layer(), m_Image(), m_Quicklook(),
-			  m_SubsamplingRate(1), m_GenerateQuicklook(true), 
-			  m_Resampler(), m_ScreenRatio(0.25)
+                          m_SubsamplingRate(1), m_GenerateQuicklook(true), 
+                          m_Resampler(), m_ScreenRatio(0.25)
 {
   // Intialize output layer
   m_Layer = ImageLayerType::New();
@@ -122,6 +122,47 @@ ImageLayerGenerator<TImageLayer>
   m_Layer->SetHasExtract(true);
   m_Layer->SetHasScaledExtract(true);
   m_Layer->VisibleOn();
+
+  // Set up rendering function
+  typedef typename ImageLayerType::DefaultRenderingFunctionType RenderingFunctionType;
+  typename RenderingFunctionType::Pointer rfunc = RenderingFunctionType::New();
+
+  // Setup channels
+  switch(m_Image->GetNumberOfComponentsPerPixel())
+    {
+    case 1:
+    {
+    rfunc->SetAllChannels(0);
+    break;
+    }
+    case 2:
+    {
+    rfunc->SetAllChannels(0);
+    }
+    case 3:
+    {
+    rfunc->SetRedChannelIndex(0);
+    rfunc->SetGreenChannelIndex(1);
+    rfunc->SetBlueChannelIndex(2);
+    break;
+    }
+    case 4:
+    {
+    // Handle quickbird like channel order
+    rfunc->SetRedChannelIndex(2);
+    rfunc->SetGreenChannelIndex(1);
+    rfunc->SetBlueChannelIndex(0);
+    break;
+    }
+    default:
+    {
+    //Discard
+    break;
+    }
+    }
+
+  // Set the rendering function
+  m_Layer->SetRenderingFunction(rfunc);
 }
 
 template < class TImageLayer >
@@ -150,13 +191,13 @@ ImageLayerGenerator<TImageLayer>
       m_Resampler->SetInput(m_Image);
       m_Resampler->SetShrinkFactor(ssrate);
       m_Resampler->Update();
-
       otbMsgDevMacro(<<"ImageLayerGenerator::GenerateQuicklook(): Quicklook generated (ssrate= "<<ssrate<<", size= "<<m_Resampler->GetOutput()->GetLargestPossibleRegion().GetSize()<<")");
-
 
       // Set the quicklook to the layer
       m_Layer->SetQuicklook(m_Resampler->GetOutput());
       m_Layer->SetHasQuicklook(true);
+      // Disconnect pipeline and prepare a new resampler
+      m_Resampler = ResampleFilterType::New();
       }
     }
   else

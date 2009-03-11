@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFiniteCylinderSpatialFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 23:25:41 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-02-05 19:04:56 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,7 +29,7 @@ namespace itk
  * Implements a function that returns 1 for points inside or on the surface
  * of a cylinder and 0 for points outside the cylinder.
  *
- **/
+ */
 
 template <unsigned int VDimension = 3,
           typename TInput = Point<double, VDimension> >

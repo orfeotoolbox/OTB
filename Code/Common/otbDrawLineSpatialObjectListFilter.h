@@ -93,7 +93,7 @@ protected:
   virtual ~DrawLineSpatialObjectListFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  virtual void ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId ) ;
+  virtual void ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId );
   
   /**
    * compute the intersection of the segment to draw with the region

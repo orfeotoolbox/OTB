@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageToSpatialObjectMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2006-04-18 14:22:51 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-24 20:02:57 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _ImageToSpatialObjectMetric_txx
-#define _ImageToSpatialObjectMetric_txx
+#ifndef __itkImageToSpatialObjectMetric_txx
+#define __itkImageToSpatialObjectMetric_txx
 
 #include "itkImageToSpatialObjectMetric.h"
 
@@ -36,7 +36,7 @@ ImageToSpatialObjectMetric<TFixedImage,TMovingSpatialObject>
 }
 
 
-/*
+/**
  * Initialize
  */
 

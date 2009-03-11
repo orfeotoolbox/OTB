@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianRadialBasisFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2006-04-18 11:23:29 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-01-24 21:33:49 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -60,7 +60,7 @@ GaussianRadialBasisFunction< ScalarType>
 ::EvaluateDerivative(const ScalarType& dist,const ArrayType& input,
                           char mode,int element_id) const
 {
-  ScalarType val = 0;;
+  ScalarType val = 0;
   ScalarType radius=Superclass::GetRadius(); 
   ArrayType center = Superclass::GetCenter();
   if(mode=='u') //w.r.t centers
@@ -88,7 +88,5 @@ GaussianRadialBasisFunction<ScalarType>
 
 } // end namespace Statistics
 } // end namespace itk
-
-
 
 #endif
