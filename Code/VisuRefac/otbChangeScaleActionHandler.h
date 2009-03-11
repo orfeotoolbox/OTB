@@ -66,33 +66,33 @@ public:
     if( m_View.IsNotNull() && m_Model.IsNotNull() )
       {
       if(widgetId == m_View->GetZoomWidget()->GetIdentifier()
-	 && event == FL_MOUSEWHEEL)
-	{
-	otbMsgDevMacro(<<"ChangeScaleActionHandler::HandleWidgetEvent(): handling ("<<widgetId<<", "<<event<<")");
+         && event == FL_MOUSEWHEEL)
+        {
+        otbMsgDevMacro(<<"ChangeScaleActionHandler::HandleWidgetEvent(): handling ("<<widgetId<<", "<<event<<")");
         // Get the mousewhell offset
-	int dy = Fl::event_dy();
-	
-	// Compute new scale
-	double newScale = m_View->GetZoomWidget()->GetIsotropicZoom() * vcl_pow(m_ScaleRatio,-dy);
-	if(newScale>=1.0)
-	  {
-	  m_View->GetZoomWidget()->SetIsotropicZoom(newScale);
-	  RegionType region = m_Model->GetScaledExtractRegion();
-	  
-	  typename RegionType::IndexType index = region.GetIndex();
-	  typename RegionType::SizeType size = region.GetSize();
-	  index[0]+=size[0]/2;
-	  index[1]+=size[1]/2;
-	  size[0] = static_cast<unsigned int>(m_View->GetZoomWidget()->w()/m_View->GetZoomWidget()->GetIsotropicZoom());
-	  size[1] = static_cast<unsigned int>(m_View->GetZoomWidget()->h()/m_View->GetZoomWidget()->GetIsotropicZoom());
-	  region.SetSize(size);
-	  m_Model->SetScaledExtractRegion(region);
-	  m_Model->SetScaledExtractRegionCenter(index);
-	  // Update the model
-	  m_Model->Update();
-	  }
-	return true;
-	}
+        int dy = Fl::event_dy();
+        
+        // Compute new scale
+        double newScale = m_View->GetZoomWidget()->GetIsotropicZoom() * vcl_pow(m_ScaleRatio,-dy);
+        if(newScale>=1.0)
+          {
+          m_View->GetZoomWidget()->SetIsotropicZoom(newScale);
+          RegionType region = m_Model->GetScaledExtractRegion();
+          
+          typename RegionType::IndexType index = region.GetIndex();
+          typename RegionType::SizeType size = region.GetSize();
+          index[0]+=size[0]/2;
+          index[1]+=size[1]/2;
+          size[0] = static_cast<unsigned int>(m_View->GetZoomWidget()->w()/m_View->GetZoomWidget()->GetIsotropicZoom());
+          size[1] = static_cast<unsigned int>(m_View->GetZoomWidget()->h()/m_View->GetZoomWidget()->GetIsotropicZoom());
+          region.SetSize(size);
+          m_Model->SetScaledExtractRegion(region);
+          m_Model->SetScaledExtractRegionCenter(index);
+          // Update the model
+          m_Model->Update();
+          }
+        return true;
+        }
       }
     return false;
   }

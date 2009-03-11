@@ -198,8 +198,8 @@ namespace otb
 
       virtual void Modified()
       {
-	this->Superclass::Modified();
-	m_TransformUpToDate = false;
+        this->Superclass::Modified();
+        m_TransformUpToDate = false;
       }
 
       private :

@@ -96,7 +96,7 @@ namespace otb
       /** Constructor */
       Rectangle()
       {
-	m_VertexList = VertexListType::New();
+        m_VertexList = VertexListType::New();
       };
 
       /** Destructor */

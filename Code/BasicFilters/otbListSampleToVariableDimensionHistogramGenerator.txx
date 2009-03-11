@@ -89,9 +89,9 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
       if ( !itk::NumericTraits< THistogramMeasurement >::is_integer )
         {
         margin = 
-	  ( (THistogramMeasurement)(upper[i] - lower[i]) / 
-	    (THistogramMeasurement) m_Sizes[i] ) / 
-	  (THistogramMeasurement) m_MarginalScale ;
+          ( (THistogramMeasurement)(upper[i] - lower[i]) / 
+            (THistogramMeasurement) m_Sizes[i] ) / 
+          (THistogramMeasurement) m_MarginalScale ;
         h_upper[i] = (THistogramMeasurement) (upper[i] + margin) ;
         if(h_upper[i] <= upper[i])
           { 

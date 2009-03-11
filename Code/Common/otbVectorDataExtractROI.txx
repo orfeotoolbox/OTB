@@ -114,135 +114,135 @@ VectorDataExtractROI<TVectorData>
 
 
       switch (dataNode->GetNodeType())
-	{
-	case ROOT:
-	  {
-	    newDataNode->SetNodeType(dataNode->GetNodeType());
-	    newDataNode->SetNodeId(dataNode->GetNodeId());
-	    tree->SetRoot(newDataNode);
-	    currentContainer = newDataNode;
-	    break;
-	  }
-	case DOCUMENT:
-	  {
-	    newDataNode->SetNodeType(dataNode->GetNodeType());
-	    newDataNode->SetNodeId(dataNode->GetNodeId());
-	    tree->Add(newDataNode,currentContainer);
-	    currentContainer = newDataNode;
-	    break;
-	  }
-	case FOLDER:
-	  {
-	    newDataNodeFolder->SetNodeType(dataNode->GetNodeType());
-	    newDataNodeFolder->SetNodeId(dataNode->GetNodeId());
-	    newFolder = true;
-	    break;
-	  }
-	case FEATURE_POINT:
-	  {
-	    if(m_GeoROI.IsInside(this->PointToContinuousIndex(dataNode->GetPoint())))
-	      {
-		if(newFolder)
-		  {
-		    tree->Add(newDataNodeFolder,currentContainer);
-		    currentContainer = newDataNodeFolder;
-		    newFolder = false;
-		  }
-		if(newMultiFeature)
-		  {
-		    tree->Add(newDataNodeMultiFeature,currentContainer);
-		    currentContainer =  newDataNodeMultiFeature; 
-		    newMultiFeature = false;
-		  }
-		newDataNode->SetNodeType(dataNode->GetNodeType());
-		newDataNode->SetNodeId(dataNode->GetNodeId());
-		newDataNode->SetPoint(dataNode->GetPoint());
-		tree->Add(newDataNode,currentContainer);
-	      }
-	   
-	    break;
-	  }
-	case FEATURE_LINE:
-	  {
-	    if(this->IsLineIntersectionNotNull(dataNode->GetLine()))
-	      {
-		if(newFolder)
-		  {
-		    tree->Add(newDataNodeFolder,currentContainer);
-		    currentContainer = newDataNodeFolder;
-		    newFolder = false;
-		  }
-		if(newMultiFeature)
-		  {
-		    tree->Add(newDataNodeMultiFeature ,currentContainer);
-		    currentContainer =  newDataNodeMultiFeature ;
-		    newMultiFeature = false;
-		  }
-		newDataNode->SetNodeType(dataNode->GetNodeType());
-		newDataNode->SetNodeId(dataNode->GetNodeId());
-		newDataNode->SetLine(dataNode->GetLine());
-		tree->Add(newDataNode,currentContainer);
-	      }
-	    break;
-	  }
-	case FEATURE_POLYGON:
-	  {
-	    if(this->IsPolygonIntersectionNotNull(dataNode->GetPolygonExteriorRing()))
-	      {
-		if(newFolder)
-		  {
-		    tree->Add(newDataNodeFolder,currentContainer);
-		    currentContainer = newDataNodeFolder;
-		    newFolder = false;
-		  }
-		
-		if(newMultiFeature)
-		  {
-		    tree->Add(newDataNodeMultiFeature,currentContainer);
-		    currentContainer =  newDataNodeMultiFeature ;
-		    newMultiFeature = false;
-		  }
-		
-		newDataNode->SetNodeType(dataNode->GetNodeType());
-		newDataNode->SetNodeId(dataNode->GetNodeId());
-		newDataNode->SetPolygonExteriorRing(dataNode->GetPolygonExteriorRing());
-		newDataNode->SetPolygonInteriorRings(dataNode->GetPolygonInteriorRings());
-		tree->Add(newDataNode,currentContainer);
-	      }
-	    break;
-	  }
-	case FEATURE_MULTIPOINT:
-	  {
-	    newDataNodeMultiFeature->SetNodeType(dataNode->GetNodeType());
-	    newDataNodeMultiFeature ->SetNodeId(dataNode->GetNodeId());
-	    newMultiFeature = true;
-	    
+        {
+        case ROOT:
+          {
+            newDataNode->SetNodeType(dataNode->GetNodeType());
+            newDataNode->SetNodeId(dataNode->GetNodeId());
+            tree->SetRoot(newDataNode);
+            currentContainer = newDataNode;
+            break;
+          }
+        case DOCUMENT:
+          {
+            newDataNode->SetNodeType(dataNode->GetNodeType());
+            newDataNode->SetNodeId(dataNode->GetNodeId());
+            tree->Add(newDataNode,currentContainer);
+            currentContainer = newDataNode;
+            break;
+          }
+        case FOLDER:
+          {
+            newDataNodeFolder->SetNodeType(dataNode->GetNodeType());
+            newDataNodeFolder->SetNodeId(dataNode->GetNodeId());
+            newFolder = true;
+            break;
+          }
+        case FEATURE_POINT:
+          {
+            if(m_GeoROI.IsInside(this->PointToContinuousIndex(dataNode->GetPoint())))
+              {
+                if(newFolder)
+                  {
+                    tree->Add(newDataNodeFolder,currentContainer);
+                    currentContainer = newDataNodeFolder;
+                    newFolder = false;
+                  }
+                if(newMultiFeature)
+                  {
+                    tree->Add(newDataNodeMultiFeature,currentContainer);
+                    currentContainer =  newDataNodeMultiFeature; 
+                    newMultiFeature = false;
+                  }
+                newDataNode->SetNodeType(dataNode->GetNodeType());
+                newDataNode->SetNodeId(dataNode->GetNodeId());
+                newDataNode->SetPoint(dataNode->GetPoint());
+                tree->Add(newDataNode,currentContainer);
+              }
+           
+            break;
+          }
+        case FEATURE_LINE:
+          {
+            if(this->IsLineIntersectionNotNull(dataNode->GetLine()))
+              {
+                if(newFolder)
+                  {
+                    tree->Add(newDataNodeFolder,currentContainer);
+                    currentContainer = newDataNodeFolder;
+                    newFolder = false;
+                  }
+                if(newMultiFeature)
+                  {
+                    tree->Add(newDataNodeMultiFeature ,currentContainer);
+                    currentContainer =  newDataNodeMultiFeature ;
+                    newMultiFeature = false;
+                  }
+                newDataNode->SetNodeType(dataNode->GetNodeType());
+                newDataNode->SetNodeId(dataNode->GetNodeId());
+                newDataNode->SetLine(dataNode->GetLine());
+                tree->Add(newDataNode,currentContainer);
+              }
+            break;
+          }
+        case FEATURE_POLYGON:
+          {
+            if(this->IsPolygonIntersectionNotNull(dataNode->GetPolygonExteriorRing()))
+              {
+                if(newFolder)
+                  {
+                    tree->Add(newDataNodeFolder,currentContainer);
+                    currentContainer = newDataNodeFolder;
+                    newFolder = false;
+                  }
+                
+                if(newMultiFeature)
+                  {
+                    tree->Add(newDataNodeMultiFeature,currentContainer);
+                    currentContainer =  newDataNodeMultiFeature ;
+                    newMultiFeature = false;
+                  }
+                
+                newDataNode->SetNodeType(dataNode->GetNodeType());
+                newDataNode->SetNodeId(dataNode->GetNodeId());
+                newDataNode->SetPolygonExteriorRing(dataNode->GetPolygonExteriorRing());
+                newDataNode->SetPolygonInteriorRings(dataNode->GetPolygonInteriorRings());
+                tree->Add(newDataNode,currentContainer);
+              }
+            break;
+          }
+        case FEATURE_MULTIPOINT:
+          {
+            newDataNodeMultiFeature->SetNodeType(dataNode->GetNodeType());
+            newDataNodeMultiFeature ->SetNodeId(dataNode->GetNodeId());
+            newMultiFeature = true;
+            
 
-	    break;
-	  }
-	case FEATURE_MULTILINE:
-	  {
-	    newDataNodeMultiFeature ->SetNodeType(dataNode->GetNodeType());
-	    newDataNodeMultiFeature ->SetNodeId(dataNode->GetNodeId());
-	    newMultiFeature = true;
-	    break;
-	  }
-	case FEATURE_MULTIPOLYGON:
-	  {
-	    newDataNodeMultiFeature  ->SetNodeType(dataNode->GetNodeType());
-	    newDataNodeMultiFeature->SetNodeId(dataNode->GetNodeId());
-	    newMultiFeature = true;
-	    break;
-	  }
-	case FEATURE_COLLECTION:
-	  {
-	    newDataNode->SetNodeType(dataNode->GetNodeType());
-	    newDataNode->SetNodeId(dataNode->GetNodeId());	    
-	    tree->Add(newDataNode,currentContainer);
-	    currentContainer = newDataNode;
-	    break;
-	  }
-	}
+            break;
+          }
+        case FEATURE_MULTILINE:
+          {
+            newDataNodeMultiFeature ->SetNodeType(dataNode->GetNodeType());
+            newDataNodeMultiFeature ->SetNodeId(dataNode->GetNodeId());
+            newMultiFeature = true;
+            break;
+          }
+        case FEATURE_MULTIPOLYGON:
+          {
+            newDataNodeMultiFeature  ->SetNodeType(dataNode->GetNodeType());
+            newDataNodeMultiFeature->SetNodeId(dataNode->GetNodeId());
+            newMultiFeature = true;
+            break;
+          }
+        case FEATURE_COLLECTION:
+          {
+            newDataNode->SetNodeType(dataNode->GetNodeType());
+            newDataNode->SetNodeId(dataNode->GetNodeId());            
+            tree->Add(newDataNode,currentContainer);
+            currentContainer = newDataNode;
+            break;
+          }
+        }
       
       ++it;
     }
@@ -383,31 +383,31 @@ VectorDataExtractROI<TVectorData>
       
       ++it;
       while (it != vertexlist->End())
-	{
-	  x = static_cast<double>(it.Value()[0]);
-	  y = static_cast<double>(it.Value()[1]);
-	  
-	  // Index search
-	  if ( x < index[0] )
-	    {
-	      index[0] = x;
-	    }
-	  if ( y < index[1] )
-	    {
-	      index[1] = y;
-	    }
-	  // Max Id search for size computation
-	  if ( x > maxId[0] )
-	    {
-	      maxId[0] = x;
-	    }
-	  if ( y > maxId[1] )
-	    {
-	      maxId[1] = y;
-	    }
+        {
+          x = static_cast<double>(it.Value()[0]);
+          y = static_cast<double>(it.Value()[1]);
+          
+          // Index search
+          if ( x < index[0] )
+            {
+              index[0] = x;
+            }
+          if ( y < index[1] )
+            {
+              index[1] = y;
+            }
+          // Max Id search for size computation
+          if ( x > maxId[0] )
+            {
+              maxId[0] = x;
+            }
+          if ( y > maxId[1] )
+            {
+              maxId[1] = y;
+            }
 
-	  ++it;
-	}
+          ++it;
+        }
 
       size[0] = maxId[0] - index[0];
       size[1] = maxId[1] - index[1];

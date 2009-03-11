@@ -56,13 +56,13 @@ public:
   typedef WaveletPacketForwardTransform Self;
   typedef ImageToImageListFilter< TInputImage, TOutputImage > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
-	typedef itk::SmartPointer<const Self> ConstPointer;
+        typedef itk::SmartPointer<const Self> ConstPointer;
 
-	/** Type macro */
-	itkNewMacro(Self);
+        /** Type macro */
+        itkNewMacro(Self);
 
-	/** Creation through object factory macro */
-	itkTypeMacro(WaveletPacketForwardTransform,ImageToImageListFilter);
+        /** Creation through object factory macro */
+        itkTypeMacro(WaveletPacketForwardTransform,ImageToImageListFilter);
 
   typedef          TInputImage                  InputImageType;
   typedef typename InputImageType::Pointer      InputImagePointerType;

@@ -42,11 +42,11 @@ namespace Functor
       class MagnitudeFunctor
       {
       public:
-	
-	inline TOutputPixel operator()(const TInputPixel& input)
-	  {
-	    return static_cast<TOutputPixel>(2*vcl_sqrt(input[0]*input[0] + input[1]*input[1] ));
-	  }
+        
+        inline TOutputPixel operator()(const TInputPixel& input)
+          {
+            return static_cast<TOutputPixel>(2*vcl_sqrt(input[0]*input[0] + input[1]*input[1] ));
+          }
       };
     
     /** \class OrientationFunctor
@@ -57,18 +57,18 @@ namespace Functor
       class OrientationFunctor
       {
       public:
-	
-	inline TOutputPixel operator()(const TInputPixel& input)
-	  {
-	    TOutputPixel resp = static_cast<TOutputPixel>(vcl_atan2(input[0],-input[1]));
-	    
- 	    if (resp< itk::NumericTraits<TOutputPixel>::Zero)
- 	      {
- 		resp = -resp;
- 	      }
-	    
-	    return resp;
-	  }
+        
+        inline TOutputPixel operator()(const TInputPixel& input)
+          {
+            TOutputPixel resp = static_cast<TOutputPixel>(vcl_atan2(input[0],-input[1]));
+            
+             if (resp< itk::NumericTraits<TOutputPixel>::Zero)
+               {
+                 resp = -resp;
+               }
+            
+            return resp;
+          }
       };
   }// end namespace Functor
 

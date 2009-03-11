@@ -149,41 +149,41 @@ Rectangle<TValue>
     
     if ( cornersVertex->Size()>0)
       {
-	x = static_cast<long int>(itCorners.Value()[0]);
-	y = static_cast<long int>(itCorners.Value()[1]);
-	index[0] = x;
-	index[1] = y;
-	
-	++itCorners;
-	while (itCorners != cornersVertex->End())
-	  {
-	    x = static_cast<long int>(itCorners.Value()[0]);
-	    y = static_cast<long int>(itCorners.Value()[1]);
-	    
-	    // Index search
-	    if ( x < index[0] )
-	      {
-		index[0] = x;
-	      }
-	    if ( y < index[1] )
-	      {
-		index[1] = y;
-	      }
-	    // Max Id search for size computation
-	    if ( x > maxId[0] )
-	      {
-		maxId[0] = x;
-	      }
-	    if ( y > maxId[1] )
-	      {
-		maxId[1] = y;
-	      }
-	    
-	    ++itCorners;
+        x = static_cast<long int>(itCorners.Value()[0]);
+        y = static_cast<long int>(itCorners.Value()[1]);
+        index[0] = x;
+        index[1] = y;
+        
+        ++itCorners;
+        while (itCorners != cornersVertex->End())
+          {
+            x = static_cast<long int>(itCorners.Value()[0]);
+            y = static_cast<long int>(itCorners.Value()[1]);
+            
+            // Index search
+            if ( x < index[0] )
+              {
+                index[0] = x;
+              }
+            if ( y < index[1] )
+              {
+                index[1] = y;
+              }
+            // Max Id search for size computation
+            if ( x > maxId[0] )
+              {
+                maxId[0] = x;
+              }
+            if ( y > maxId[1] )
+              {
+                maxId[1] = y;
+              }
+            
+            ++itCorners;
     }
-	
-	size[0] = maxId[0] - index[0];
-	size[1] = maxId[1] - index[1];
+        
+        size[0] = maxId[0] - index[0];
+        size[1] = maxId[1] - index[1];
       }
     region.SetSize(size);
     region.SetIndex(index);

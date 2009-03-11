@@ -120,41 +120,41 @@ public:
       
       offsetOff = offsetOffInit;
       for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
-	{
-	  offsetOff[0]++;
-	  offsetOff[1] = offsetOffInit[1];
-	  offset[0] = l;
-	  for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
-	    {
-	      offsetOff[1]++;
-	      offset[1] = k;
-	      m_Mean += static_cast<double>(neigh[offset]);
-	      m_MeanOff += static_cast<double>(neighOff[offsetOff]);
-	    
-	      m_Mini    = std::min(static_cast<double>(neigh[offset]),      m_Mini);
-	      m_Maxi    = std::max(static_cast<double>(neigh[offset]),      m_Maxi);
-	      m_MiniOff = std::min(static_cast<double>(neighOff[offsetOff]),m_MiniOff);
-	      m_MaxiOff = std::max(static_cast<double>(neighOff[offsetOff]),m_MaxiOff);
-	    }
-	}
+        {
+          offsetOff[0]++;
+          offsetOff[1] = offsetOffInit[1];
+          offset[0] = l;
+          for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+            {
+              offsetOff[1]++;
+              offset[1] = k;
+              m_Mean += static_cast<double>(neigh[offset]);
+              m_MeanOff += static_cast<double>(neighOff[offsetOff]);
+            
+              m_Mini    = std::min(static_cast<double>(neigh[offset]),      m_Mini);
+              m_Maxi    = std::max(static_cast<double>(neigh[offset]),      m_Maxi);
+              m_MiniOff = std::min(static_cast<double>(neighOff[offsetOff]),m_MiniOff);
+              m_MaxiOff = std::max(static_cast<double>(neighOff[offsetOff]),m_MaxiOff);
+            }
+        }
       m_Mean *= areaInv;
       m_MeanOff *= areaInv;
     
       offsetOff = offsetOffInit;
  
       for( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
-	{
-	  offsetOff[0]++;
-	  offsetOff[1] = offsetOffInit[1];  
-	  offset[0] = l;
-	  for( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
-	    {
-	      offsetOff[1]++;
-	      offset[1] = k;
-	      binLength += vcl_pow( (m_Mean-static_cast<double>(neigh[offset])), 2);
-	      binLengthOff += vcl_pow( (m_MeanOff-static_cast<double>(neighOff[offsetOff])), 2);
-	    }
-	}
+        {
+          offsetOff[0]++;
+          offsetOff[1] = offsetOffInit[1];  
+          offset[0] = l;
+          for( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+            {
+              offsetOff[1]++;
+              offset[1] = k;
+              binLength += vcl_pow( (m_Mean-static_cast<double>(neigh[offset])), 2);
+              binLengthOff += vcl_pow( (m_MeanOff-static_cast<double>(neighOff[offsetOff])), 2);
+            }
+        }
     
       binLength *= areaInv;
       binLength = vcl_sqrt( binLength );
@@ -187,23 +187,23 @@ inline OutputScalarType operator()(const NeighborhoodType &neigh)
     // Extract the neighborhood area 
     for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
       {
-	offset[0] = l;
-	for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
-	  {
-	    offset[1] = k;
-	    inNeigh[offset] =  neigh[offset];//neigh.GetPixel(offset);
-	  }
+        offset[0] = l;
+        for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+          {
+            offset[1] = k;
+            inNeigh[offset] =  neigh[offset];//neigh.GetPixel(offset);
+          }
       }
     // Extract the offset area
     offset.Fill(0);
     for ( int l = -static_cast<int>(radiusOff[0]); l <= static_cast<int>(radiusOff[0]); l++ )
       {
-	offset[0] = l;
-	for ( int k = -static_cast<int>(radiusOff[1]); k <= static_cast<int>(radiusOff[1]); k++)
-	  {
-	    offset[1] = k;
-	    offNeigh[offset] =  neigh[offset];//neigh.GetPixel(offset);
-	  }
+        offset[0] = l;
+        for ( int k = -static_cast<int>(radiusOff[1]); k <= static_cast<int>(radiusOff[1]); k++)
+          {
+            offset[1] = k;
+            offNeigh[offset] =  neigh[offset];//neigh.GetPixel(offset);
+          }
       }
     OutputScalarType outPix = static_cast<OutputScalarType>( this->ComputeOverSingleChannel(inNeigh, offNeigh) );
     
@@ -225,34 +225,34 @@ inline OutputScalarType operator()(const NeighborhoodType &neigh)
   
       // For each channel
       for ( unsigned int i=0; i<neigh.GetCenterValue/*Pixel*/().GetSize(); i++ )
-	{
-	  NeighborhoodType inNeigh;
-	  inNeigh.SetRadius(radius);
-	  NeighborhoodType offNeigh;
-	  offNeigh.SetRadius(radiusOff);
-	  // Extract the neighborhood area 
-	  for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
-	    {
-	      offset[0] = l;
-	      for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
-		{
-		  offset[1] = k;
-		  inNeigh[offset] = neigh[offset][i];//neigh.GetPixel(offset)[i];
-		}
-	    }
-	  // Extract the offset area
-	  offset.Fill(0);
-	  for ( int l = -static_cast<int>(radiusOff[0]); l <= static_cast<int>(radiusOff[0]); l++ )
-	    {
-	      offset[0] = l;
-	      for ( int k = -static_cast<int>(radiusOff[1]); k <= static_cast<int>(radiusOff[1]); k++)
-		{
-		  offset[1] = k;
-		  offNeigh[offset] = neigh[offset][i];
-		}
-	    }
-	  outPix[i] = static_cast<OutputScalarType>( this->ComputeOverSingleChannel(inNeigh, offNeigh) );
-	}
+        {
+          NeighborhoodType inNeigh;
+          inNeigh.SetRadius(radius);
+          NeighborhoodType offNeigh;
+          offNeigh.SetRadius(radiusOff);
+          // Extract the neighborhood area 
+          for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
+            {
+              offset[0] = l;
+              for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+                {
+                  offset[1] = k;
+                  inNeigh[offset] = neigh[offset][i];//neigh.GetPixel(offset)[i];
+                }
+            }
+          // Extract the offset area
+          offset.Fill(0);
+          for ( int l = -static_cast<int>(radiusOff[0]); l <= static_cast<int>(radiusOff[0]); l++ )
+            {
+              offset[0] = l;
+              for ( int k = -static_cast<int>(radiusOff[1]); k <= static_cast<int>(radiusOff[1]); k++)
+                {
+                  offset[1] = k;
+                  offNeigh[offset] = neigh[offset][i];
+                }
+            }
+          outPix[i] = static_cast<OutputScalarType>( this->ComputeOverSingleChannel(inNeigh, offNeigh) );
+        }
       return outPix;
     }
 
@@ -274,36 +274,36 @@ inline OutputScalarType operator()(const NeighborhoodType &neigh)
           
       IntVectorType histoTemp;
       if (m_NeighBinLength != 0)
-	histoTemp = IntVectorType( static_cast<unsigned int>(vcl_floor( static_cast<double>(this->GetMaxi()-this->GetMini())/m_NeighBinLength)+1.), 0);
+        histoTemp = IntVectorType( static_cast<unsigned int>(vcl_floor( static_cast<double>(this->GetMaxi()-this->GetMini())/m_NeighBinLength)+1.), 0);
       else
-	histoTemp = IntVectorType( 1, 0 );
+        histoTemp = IntVectorType( 1, 0 );
       
       if (m_OffsetBinLength != 0)
         m_Histo = IntVectorVectorType( static_cast<unsigned int>(vcl_floor(static_cast<double>(this->GetMaxiOff()-this->GetMiniOff())/m_OffsetBinLength)+1.), histoTemp );
       else
-	m_Histo = IntVectorVectorType( 1, histoTemp );
+        m_Histo = IntVectorVectorType( 1, histoTemp );
       
       offsetOff = offsetOffInit;
       for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
-	{
-	  offsetOff[0]++;
-	  offsetOff[1] = offsetOffInit[1];
-	  offset[0] = l;
-	  for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
-	    {
-	      offsetOff[1]++;
-	      offset[1] = k;
-	      histoIdX = 0;
-	      histoIdY = 0;
-	      if ( m_OffsetBinLength != 0)
-		histoIdX = static_cast<int>(vcl_floor( (static_cast<double>(neighOff[offsetOff])-this->GetMiniOff()) / static_cast<double>(m_OffsetBinLength) ));
-	      if ( m_NeighBinLength !=0 )
-		histoIdY = static_cast<int>(vcl_floor( (static_cast<double>(neigh[offset])-this->GetMini()) /static_cast<double>( m_NeighBinLength) ));
-	      
-	      m_Histo[histoIdX][histoIdY]++;
-	      
-	    }
-	}
+        {
+          offsetOff[0]++;
+          offsetOff[1] = offsetOffInit[1];
+          offset[0] = l;
+          for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+            {
+              offsetOff[1]++;
+              offset[1] = k;
+              histoIdX = 0;
+              histoIdY = 0;
+              if ( m_OffsetBinLength != 0)
+                histoIdX = static_cast<int>(vcl_floor( (static_cast<double>(neighOff[offsetOff])-this->GetMiniOff()) / static_cast<double>(m_OffsetBinLength) ));
+              if ( m_NeighBinLength !=0 )
+                histoIdY = static_cast<int>(vcl_floor( (static_cast<double>(neigh[offset])-this->GetMini()) /static_cast<double>( m_NeighBinLength) ));
+              
+              m_Histo[histoIdX][histoIdY]++;
+              
+            }
+        }
     }
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff) = 0;

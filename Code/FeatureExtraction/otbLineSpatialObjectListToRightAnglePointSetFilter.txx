@@ -98,39 +98,39 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
       InputLinesListTypeIterator            itLinesListCurEnd   = inputLinesList->end();
       
       while(itLinesListCur != itLinesListCurEnd )
-	{
-	  /** Check If segments are already computed */
- 	  if( segmentsUsedMatrix[counterTest][counterCur]== 0 && segmentsUsedMatrix[counterCur][counterTest] == 0 )
- 	    {
-	      /** Set the segments to USED (== 1)*/
-	      segmentsUsedMatrix[counterTest][counterCur] = 1;
-	      segmentsUsedMatrix[counterCur][counterTest] = 1;
-	      
-	      /** Compute the distance from CurLine to DstLine*/
-	      float SegmentDist = this->ComputeDistanceBetweenSegments(*itLinesListTest , *itLinesListCur);
-		 
-	      /** Check if the distance separating the segments is under the threshold*/
-	      if(SegmentDist < m_ThresholdDistance /* Threshold : 5 Pixels*/)
-		{
-		  /** Compute the angle formed by the two segments */
-		  float Angle = this->ComputeAngleFormedBySegments(*itLinesListTest, *itLinesListCur);
-		  				  
-		  /** Check if the angle is a right one */
-		  if(vcl_abs(Angle - M_PI/2.) <= m_ThresholdAngle ) 
-		    {
-		      /** Right angle coordinate*/
-		      PointType              RightAngleCoordinate;
-		      RightAngleCoordinate = this->ComputeAngleRightCoordinate(*itLinesListTest, *itLinesListCur);
-		      
-		      /** If Right Angle:  Add it to the pointSet*/
-		      this->AddRightAngleToPointSet(RightAngleCoordinate , *itLinesListTest , *itLinesListCur );
-		      
-		    }
-		}
-	    }
-	  counterCur++;
-	  ++itLinesListCur;
-	}
+        {
+          /** Check If segments are already computed */
+           if( segmentsUsedMatrix[counterTest][counterCur]== 0 && segmentsUsedMatrix[counterCur][counterTest] == 0 )
+             {
+              /** Set the segments to USED (== 1)*/
+              segmentsUsedMatrix[counterTest][counterCur] = 1;
+              segmentsUsedMatrix[counterCur][counterTest] = 1;
+              
+              /** Compute the distance from CurLine to DstLine*/
+              float SegmentDist = this->ComputeDistanceBetweenSegments(*itLinesListTest , *itLinesListCur);
+                 
+              /** Check if the distance separating the segments is under the threshold*/
+              if(SegmentDist < m_ThresholdDistance /* Threshold : 5 Pixels*/)
+                {
+                  /** Compute the angle formed by the two segments */
+                  float Angle = this->ComputeAngleFormedBySegments(*itLinesListTest, *itLinesListCur);
+                                                    
+                  /** Check if the angle is a right one */
+                  if(vcl_abs(Angle - M_PI/2.) <= m_ThresholdAngle ) 
+                    {
+                      /** Right angle coordinate*/
+                      PointType              RightAngleCoordinate;
+                      RightAngleCoordinate = this->ComputeAngleRightCoordinate(*itLinesListTest, *itLinesListCur);
+                      
+                      /** If Right Angle:  Add it to the pointSet*/
+                      this->AddRightAngleToPointSet(RightAngleCoordinate , *itLinesListTest , *itLinesListCur );
+                      
+                    }
+                }
+            }
+          counterCur++;
+          ++itLinesListCur;
+        }
       counterTest++;
       ++itLinesListTest;
     }
@@ -203,20 +203,20 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
       InputIndexType IndexCur = itLine.GetIndex();
       
       if(this->GetInputImage()->GetRequestedRegion().IsInside(IndexCur) )
-	{
-	  float xp = static_cast<float>(itLine.GetIndex()[0]);
-	  float yp = static_cast<float>(itLine.GetIndex()[1]);
-	  float Num   = vcl_abs(xp*(Yq1-Yq2) + yp*(Xq2-Xq1) + CrossProduct);
-	  
-	  /** distance from Point P to Segment Q1Q2*/
-	  float CurDistance = Num/SegmentLength;
+        {
+          float xp = static_cast<float>(itLine.GetIndex()[0]);
+          float yp = static_cast<float>(itLine.GetIndex()[1]);
+          float Num   = vcl_abs(xp*(Yq1-Yq2) + yp*(Xq2-Xq1) + CrossProduct);
+          
+          /** distance from Point P to Segment Q1Q2*/
+          float CurDistance = Num/SegmentLength;
 
-	  if(CurDistance <  MinDistance )
-	    MinDistance = CurDistance;
+          if(CurDistance <  MinDistance )
+            MinDistance = CurDistance;
 
-	  if(MinDistance < 1e-50)  //MinDistance supposed to be positive
-	  return 0.;
-	}
+          if(MinDistance < 1e-50)  //MinDistance supposed to be positive
+          return 0.;
+        }
       ++itLine;
     }
   

@@ -32,8 +32,8 @@ template< class TListSample,
           class THistogramMeasurement, 
           class TFrequencyContainer>
 ListSampleToHistogramListGenerator< TListSample, 
-				    THistogramMeasurement, 
-				    TFrequencyContainer >
+                                    THistogramMeasurement, 
+                                    TFrequencyContainer >
 ::ListSampleToHistogramListGenerator() : m_List(), m_Size(), m_MarginalScale(100), m_HistogramMin(), m_HistogramMax(), m_AutoMinMax(true), m_HistogramList()
 {
   m_HistogramList = HistogramListType::New() ;
@@ -46,8 +46,8 @@ template< class TListSample,
           class TFrequencyContainer >
 void
 ListSampleToHistogramListGenerator< TListSample, 
-				    THistogramMeasurement, 
-				    TFrequencyContainer >
+                                    THistogramMeasurement, 
+                                    TFrequencyContainer >
 ::GenerateData()
 {
   otbMsgDebugMacro(<<"ListSampleToHistogramListGenerator::GenerateData(): Entering");
@@ -85,9 +85,9 @@ ListSampleToHistogramListGenerator< TListSample,
       if ( !itk::NumericTraits< THistogramMeasurement >::is_integer )
         {
         margin = 
-	  ( (THistogramMeasurement)(upper[i] - lower[i]) / 
-	    (THistogramMeasurement) m_Size[0] ) / 
-	  (THistogramMeasurement) m_MarginalScale ;
+          ( (THistogramMeasurement)(upper[i] - lower[i]) / 
+            (THistogramMeasurement) m_Size[0] ) / 
+          (THistogramMeasurement) m_MarginalScale ;
         h_upper[i] = (THistogramMeasurement) (upper[i] + margin) ;
         if(h_upper[i] <= upper[i])
           { 
@@ -154,15 +154,15 @@ ListSampleToHistogramListGenerator< TListSample,
       m_HistogramList->Back()->GetIndex(hvector,index);
 
       if (!m_HistogramList->Back()->IsIndexOutOfBounds(index))
-	{
-	// if the measurement vector is out of bound then
-	// the GetIndex method has returned an index set to the max size of
-	// the invalid dimension - even if the hvector is less than the minimum
-	// bin value.
-	// If the index isn't valid, we don't increase the frequency.
-	// See the comments in Histogram->GetIndex() for more info.
-	m_HistogramList->Back()->IncreaseFrequency(index, 1) ;
-	}
+        {
+        // if the measurement vector is out of bound then
+        // the GetIndex method has returned an index set to the max size of
+        // the invalid dimension - even if the hvector is less than the minimum
+        // bin value.
+        // If the index isn't valid, we don't increase the frequency.
+        // See the comments in Histogram->GetIndex() for more info.
+        m_HistogramList->Back()->IncreaseFrequency(index, 1) ;
+        }
       ++iter ;
       }
     }
@@ -174,8 +174,8 @@ template< class TListSample,
           class TFrequencyContainer >
 void
 ListSampleToHistogramListGenerator< TListSample, 
-				    THistogramMeasurement, 
-				    TFrequencyContainer >
+                                    THistogramMeasurement, 
+                                    TFrequencyContainer >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);

@@ -56,9 +56,9 @@ public:
   itkTypeMacro(LowPassHaarOperator, WaveletOperator);
   
   LowPassHaarOperator() 
-	{
+        {
     this->SetRadius(1);
-		this->CreateToRadius(1);
+                this->CreateToRadius(1);
   }
 
   LowPassHaarOperator(const Self& other)
@@ -147,9 +147,9 @@ public:
   itkTypeMacro(HighPassHaarOperator, WaveletOperator);
   
   HighPassHaarOperator() 
-	{
+        {
     this->SetRadius(1);
-		this->CreateToRadius(1);
+                this->CreateToRadius(1);
   }
 
   HighPassHaarOperator(const Self& other)
