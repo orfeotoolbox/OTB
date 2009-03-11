@@ -49,7 +49,6 @@ int main(int argc, char* argv[])
    std::string releaseVersion = "0";
    std::string::size_type pos1 = std::string::npos;
    std::string::size_type pos2 = std::string::npos;
-   std::string::size_type pos3 = std::string::npos;
 
    pos1 = versionNumber.find(".", 0);
    if(pos1 != std::string::npos)
