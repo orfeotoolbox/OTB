@@ -58,7 +58,7 @@ int main(int argc, char** argv)
 {
   if (argc < 4 )
   {
-    std::cerr << "Usage: " << argv[0] ;
+    std::cerr << "Usage: " << argv[0];
     std::cerr << "outputImage image1 image2 ... " << std::endl;
   }
 

@@ -145,7 +145,7 @@ int main(int argc, char* argv[])
 
 //  SoftwareGuide: BeginCodeSnippet
 
-  for (unsigned int GCPnum = 0 ; GCPnum < GCPCount ; GCPnum++ )
+  for (unsigned int GCPnum = 0; GCPnum < GCPCount; GCPnum++ )
   {
     file << "GCP[" << GCPnum << "] Id " << image->GetGCPId(GCPnum) << std::endl;
     file << "GCP[" << GCPnum << "] Info " << image->GetGCPInfo(GCPnum) << std::endl;
@@ -170,7 +170,7 @@ int main(int argc, char* argv[])
   InputImageType::VectorType tab = image->GetGeoTransform();
 
   file << "Geo Transform " << std::endl;
-  for (unsigned int i = 0 ; i < tab.size() ; i++ )
+  for (unsigned int i = 0; i < tab.size(); i++ )
   {
     file << " " <<i<<" -> "<<tab[i]<< std::endl;
   }
@@ -178,28 +178,28 @@ int main(int argc, char* argv[])
 
   tab = image->GetUpperLeftCorner();
   file << "Corners " << std::endl;
-  for (unsigned int i = 0 ; i < tab.size() ; i++ )
+  for (unsigned int i = 0; i < tab.size(); i++ )
   {
     file << " UL[" <<i<<"] -> "<<tab[i]<< std::endl;
   }
   tab.clear();
 
   tab = image->GetUpperRightCorner();
-  for (unsigned int i = 0 ; i < tab.size() ; i++ )
+  for (unsigned int i = 0; i < tab.size(); i++ )
   {
     file << " UR[" <<i<<"] -> "<<tab[i]<< std::endl;
   }
   tab.clear();
 
   tab = image->GetLowerLeftCorner();
-  for (unsigned int i = 0 ; i < tab.size() ; i++ )
+  for (unsigned int i = 0; i < tab.size(); i++ )
   {
     file << " LL[" <<i<<"] -> "<<tab[i]<< std::endl;
   }
   tab.clear();
 
   tab = image->GetLowerRightCorner();
-  for (unsigned int i = 0 ; i < tab.size() ; i++ )
+  for (unsigned int i = 0; i < tab.size(); i++ )
   {
     file << " LR[" <<i<<"] -> "<<tab[i]<< std::endl;
   }

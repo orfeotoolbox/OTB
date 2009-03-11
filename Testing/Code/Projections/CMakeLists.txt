@@ -441,7 +441,7 @@ ADD_TEST(prTvVectorDataProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
 ADD_TEST(prTuGeocentricTransformNew ${PROJECTIONS_TESTS3}  otbGeocentricTransformNew )
 
 
-ADD_TEST(prTuGeocentricTransform ${PROJECTIONS_TESTS3}
+ADD_TEST(prTvGeocentricTransform ${PROJECTIONS_TESTS3}
          --compare-ascii ${EPSILON} ${BASELINE_FILES}/prTvGeocentricTransform.txt
         ${TEMP}/prTvGeocentricTransform.txt
         otbGeocentricTransform

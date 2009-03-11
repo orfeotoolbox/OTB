@@ -66,53 +66,60 @@ public:
       WidgetPointerType sourceWidget;
       bool handle = false;
       if(widgetId == m_View->GetScrollWidget()->GetIdentifier() )
-	{
-	sourceWidget = m_View->GetScrollWidget();
-	handle = true;
-	}
+        {
+        sourceWidget = m_View->GetScrollWidget();
+        handle = true;
+        }
       else if(widgetId == m_View->GetFullWidget()->GetIdentifier() )
-	{
-	sourceWidget = m_View->GetFullWidget();
-	handle = true;
-	}
+        {
+        sourceWidget = m_View->GetFullWidget();
+        handle = true;
+        }
       else if(widgetId == m_View->GetZoomWidget()->GetIdentifier() )
-	{
-	sourceWidget = m_View->GetZoomWidget();
-	handle = true;
-	}
+        {
+        sourceWidget = m_View->GetZoomWidget();
+        handle = true;
+        }
       if(handle)
-	{
-	switch(event)
-	  {
-	  case FL_ENTER:
-	  {
-	  return true;
-	  break;
-	  }
-	  case FL_LEAVE:
-	  {
-	  return true;
-	  break;
-	  }
-	  case FL_MOVE:
-	  {
-	  // Get the hovered index
-	  IndexType index;
-	  index[0]=Fl::event_x();
-	  index[1]=Fl::event_y();
-	  // Convert to image index
-	  index = sourceWidget->ScreenIndexToImageIndex(index);
-	  // Communicate new index to model
-	  m_Model->UpdatePixelDescription(index);
-	  return true;
-	  break;
-	  }
-	  default:
-	  {
-	  break;
-	  }
-	  }
-	}
+        {
+        switch(event)
+          {
+          case FL_ENTER:
+          {
+          return true;
+          break;
+          }
+          case FL_LEAVE:
+          {
+          return true;
+          break;
+          }
+          case FL_MOVE:
+          {
+          // Get the clicked index
+          typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
+          screenPoint = sourceWidget->GetMousePosition();
+          
+          // Transform to image point
+          imagePoint = sourceWidget->GetScreenToImageTransform()->TransformPoint(screenPoint);
+          
+          // Transform to index
+          typename ViewType::IndexType index;
+          index[0]=static_cast<int>(imagePoint[0]);
+          index[1]=static_cast<int>(imagePoint[1]);
+          
+          // Communicate new index to model
+          m_Model->UpdatePixelDescription(index);
+          
+          return true;
+          break;
+          }
+          default:
+          {
+          break;
+          }
+          }
+        }
       }
     return false;
   }

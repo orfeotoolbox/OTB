@@ -54,17 +54,17 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ListSampleToHistogramListGenerator, Object) ;
+  itkTypeMacro(ListSampleToHistogramListGenerator, Object);
   
   /** Method for creation through the object factory. */
-  itkNewMacro(Self) ;
+  itkNewMacro(Self);
 
    /** Type needed for defining the limits of the histogram bins */
   typedef typename itk::NumericTraits
   < THistogramMeasurement >::RealType                    HistogramMeasurementRealType;
   typedef itk::Statistics::Histogram< HistogramMeasurementRealType,1,
-                     TFrequencyContainer >               HistogramType ;
-  typedef typename HistogramType::SizeType               HistogramSizeType ;
+                     TFrequencyContainer >               HistogramType;
+  typedef typename HistogramType::SizeType               HistogramSizeType;
   typedef typename TListSample::MeasurementVectorType    MeasurementVectorType;
   typedef ObjectList<HistogramType>                      HistogramListType;
   typedef typename HistogramListType::Pointer            HistogramListPointerType;
@@ -72,11 +72,11 @@ public:
   /** plug in the ListSample object */
   void SetListSample(const TListSample* list)
     { 
-     m_List = list ; 
+     m_List = list; 
     }
 
   void SetMarginalScale(float scale)
-  { m_MarginalScale = scale ; }
+  { m_MarginalScale = scale; }
 
   void SetNumberOfBins(unsigned int size)
   {
@@ -84,10 +84,10 @@ public:
   }
 
   HistogramListType* GetOutput() const
-  { return m_HistogramList ; }
+  { return m_HistogramList; }
 
   void Update() 
-  { this->GenerateData() ; }
+  { this->GenerateData(); }
 
   itkSetMacro(AutoMinMax,bool);
   itkGetConstReferenceMacro(AutoMinMax,bool);
@@ -106,21 +106,21 @@ public:
 
 
 protected:
-  ListSampleToHistogramListGenerator() ;
+  ListSampleToHistogramListGenerator();
   virtual ~ListSampleToHistogramListGenerator() {}
-  void GenerateData() ;
+  void GenerateData();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  const TListSample* m_List ;
+  const TListSample* m_List;
   HistogramSizeType m_Size;
-  float m_MarginalScale ;
+  float m_MarginalScale;
   MeasurementVectorType m_HistogramMin;
   MeasurementVectorType m_HistogramMax;
   bool m_AutoMinMax;
   HistogramListPointerType m_HistogramList;
 
-} ; // end of class
+}; // end of class
 
 } // end of namespace itk 
 

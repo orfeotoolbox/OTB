@@ -58,4 +58,5 @@ void RegisterTests()
   REGISTER_TEST(otbCurves2DWidgetNew);
   REGISTER_TEST(otbCurves2DWidget);
   REGISTER_TEST(otbCurves2DWidgetWithHistogram);
+  REGISTER_TEST(otbVectorDataGlComponentNew);
 }

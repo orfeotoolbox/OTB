@@ -258,8 +258,8 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
   if(this->GetSpatialThreshold() < this->GetRatioMaxConsiderationNumber())
     {
       itkExceptionMacro(<<"Spatial Threshold ("<<this->GetSpatialThreshold()
-			<<") is lower than Ration Max Consideration Number ("
-			<<this->GetRatioMaxConsiderationNumber()<<") what is not allowed.");
+                        <<") is lower than Ration Max Consideration Number ("
+                        <<this->GetRatioMaxConsiderationNumber()<<") what is not allowed.");
     }
   for (int i =0; i<this->GetNumberOfThreads(); i++)
     {
@@ -402,7 +402,7 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
     
     for(unsigned int i = 0; i<outItList.size(); i++)
       {
-	(*outItList[i]).GoToBegin();
+        (*outItList[i]).GoToBegin();
       }
     
     while ( !outputIt1.IsAtEnd() )
@@ -410,16 +410,16 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
 
       outputFunctor = m_FunctorList[threadId]( neighInputIt);    
       for(unsigned int i = 0; i<outItList.size(); i++)
-	{
-	  if( textStatus[i]==true )
-	    (*outItList[i]).Set( outputFunctor[i] );
-	}	
+        {
+          if( textStatus[i]==true )
+            (*outItList[i]).Set( outputFunctor[i] );
+        }        
       
       ++neighInputIt;
       for(unsigned int i = 0; i<outItList.size(); i++)
-	{
-	  ++(*outItList[i]);
-	}
+        {
+          ++(*outItList[i]);
+        }
       
       progress.CompletedPixel();
     }
@@ -432,7 +432,7 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::InitFeatureStatus(bool status)
     {
       for (FeatureType id=LENGTH;id<=SD;
-	   id=static_cast<FeatureType>(id+1))
+           id=static_cast<FeatureType>(id+1))
       {
         this->SetFeatureStatus(static_cast<FeatureType>(id),status);
       }

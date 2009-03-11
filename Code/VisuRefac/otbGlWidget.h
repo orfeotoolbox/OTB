@@ -20,12 +20,14 @@
 
 // FLTK includes
 #include <FL/gl.h>
+#include <FL/Fl.H>
 #include "FL/Fl_Gl_Window.H"
 
 // This include is needed to get the OTB_GL_USE_ACCEL definition
 #include "otbConfigure.h"
 
 #include "itkFixedArray.h"
+#include "itkPoint.h"
 
 #include "otbImageWidgetController.h"
 
@@ -58,10 +60,13 @@ public:
 
   /** Runtime information */
   itkTypeMacro(GlWidget,Object);
-  
+
   /** Controller typedef */
   typedef otb::ImageWidgetController        ControllerType;
   typedef ControllerType::Pointer           ControllerPointerType;
+
+  /** Index typedef */
+  typedef itk::Point<double,2>              PointType;
 
   /** Color typedef (used to draw the rectangle, 4th channel is alpha) */
   typedef itk::FixedArray<float,4>          ColorType;
@@ -75,7 +80,7 @@ public:
    */
   virtual void resize(int x, int y, int w, int h);
 
-  
+
   /** Enable/disable Gl acceleration */
   itkSetMacro(UseGlAcceleration,bool);
   itkGetMacro(UseGlAcceleration,bool);
@@ -88,6 +93,11 @@ public:
   /** Set/Get the background color */
   itkSetMacro(BackgroundColor,ColorType);
   itkGetMacro(BackgroundColor,ColorType);
+
+
+  /** Fltk y axis is flipped, therefore we use this function to get
+   *  the cursor position using gl axis */
+  PointType GetMousePosition();
 
 protected:
   /** Constructor */

@@ -28,10 +28,10 @@ namespace otb
 template <class TOutputImage>
 ImageLayerRenderingModel<TOutputImage>
 ::ImageLayerRenderingModel() : m_Name("Default"), m_RasterizedQuicklook(), 
-		       m_HasQuicklook(false),m_RasterizedExtract(),m_HasExtract(false),
-		       m_ExtractRegion(), m_RasterizedScaledExtract(), m_HasScaledExtract(false),
-		       m_ScaledExtractRegion(), m_QuicklookBlendingFilterList(), m_ExtractBlendingFilterList(), 
-		       m_ScaledExtractBlendingFilterList()
+                       m_HasQuicklook(false),m_RasterizedExtract(),m_HasExtract(false),
+                       m_ExtractRegion(), m_RasterizedScaledExtract(), m_HasScaledExtract(false),
+                       m_ScaledExtractRegion(), m_QuicklookBlendingFilterList(), m_ExtractBlendingFilterList(), 
+                       m_ScaledExtractBlendingFilterList()
 
 {
   // Initalize the blending filter list 
@@ -175,47 +175,47 @@ ImageLayerRenderingModel<TOutputImage>
       probe.Start();
       // If quicklook is activated and available for this layer 
       if(m_HasQuicklook && it.Get()->GetHasQuicklook())
-	{
+        {
         // Blend it with the current rasterized quicklook
-	typename BlendingFilterType::Pointer blender = m_QuicklookBlendingFilterList->GetNthElement(count);
-	// Using the blending function of the layer
-	blender->SetBlendingFunction(it.Get()->GetBlendingFunction());
-	blender->SetInput1(m_RasterizedQuicklook);
-	blender->SetInput2(it.Get()->GetRenderedQuicklook());
-	blender->Update();
-	// Store the result as being the current rasterized quicklook
-	m_RasterizedQuicklook = blender->GetOutput();
-	}
+        typename BlendingFilterType::Pointer blender = m_QuicklookBlendingFilterList->GetNthElement(count);
+        // Using the blending function of the layer
+        blender->SetBlendingFunction(it.Get()->GetBlendingFunction());
+        blender->SetInput1(m_RasterizedQuicklook);
+        blender->SetInput2(it.Get()->GetRenderedQuicklook());
+        blender->Update();
+        // Store the result as being the current rasterized quicklook
+        m_RasterizedQuicklook = blender->GetOutput();
+        }
       
       // If extract is activated and available for this layer 
       if(m_HasExtract && it.Get()->GetHasExtract())
-	{
+        {
         // Blend it with the current rasterized extract
-	typename BlendingFilterType::Pointer blender =  m_ExtractBlendingFilterList->GetNthElement(count);
-	// Using the blending function of the layer
-	blender->SetBlendingFunction(it.Get()->GetBlendingFunction());
-	blender->SetInput1(m_RasterizedExtract);
-	blender->SetInput2(it.Get()->GetRenderedExtract());
-	blender->GetOutput()->SetRequestedRegion(m_ExtractRegion);
-	blender->Update();
-	// Store the result as being the current rasterized extract
-	m_RasterizedExtract = blender->GetOutput();
-	}
+        typename BlendingFilterType::Pointer blender =  m_ExtractBlendingFilterList->GetNthElement(count);
+        // Using the blending function of the layer
+        blender->SetBlendingFunction(it.Get()->GetBlendingFunction());
+        blender->SetInput1(m_RasterizedExtract);
+        blender->SetInput2(it.Get()->GetRenderedExtract());
+        blender->GetOutput()->SetRequestedRegion(m_ExtractRegion);
+        blender->Update();
+        // Store the result as being the current rasterized extract
+        m_RasterizedExtract = blender->GetOutput();
+        }
 
       // If scaledExtract is activated and available for this layer 
       if(m_HasScaledExtract && it.Get()->GetHasScaledExtract())
-	{
-	// Blend it with the current rasterized scaledExtract
-	typename BlendingFilterType::Pointer blender =  m_ScaledExtractBlendingFilterList->GetNthElement(count);
-	// Using the blending function of the layer
-	blender->SetBlendingFunction(it.Get()->GetBlendingFunction());
-	blender->SetInput1(m_RasterizedScaledExtract);
-	blender->SetInput2(it.Get()->GetRenderedScaledExtract());
-	blender->GetOutput()->SetRequestedRegion(m_ScaledExtractRegion);
-	blender->Update();
-	// Store the result as being the current rasterized scaledExtract
-	m_RasterizedScaledExtract = blender->GetOutput();
-	}
+        {
+        // Blend it with the current rasterized scaledExtract
+        typename BlendingFilterType::Pointer blender =  m_ScaledExtractBlendingFilterList->GetNthElement(count);
+        // Using the blending function of the layer
+        blender->SetBlendingFunction(it.Get()->GetBlendingFunction());
+        blender->SetInput1(m_RasterizedScaledExtract);
+        blender->SetInput2(it.Get()->GetRenderedScaledExtract());
+        blender->GetOutput()->SetRequestedRegion(m_ScaledExtractRegion);
+        blender->Update();
+        // Store the result as being the current rasterized scaledExtract
+        m_RasterizedScaledExtract = blender->GetOutput();
+        }
       probe.Stop();
       otbMsgDevMacro("ImageLayerRenderingModel::RasterizeVisibleLayers(): Previous layer rasterized with layer "<<it.Get()->GetName()<<" ( "<<probe.GetMeanTime()<<" s.)");
 
@@ -305,14 +305,14 @@ ImageLayerRenderingModel<TOutputImage>
       {
       // push left if necessary
       if (small.GetIndex()[dim]<big.GetIndex()[dim])
-	{
-	index[dim]=big.GetIndex()[dim];
-	}
+        {
+        index[dim]=big.GetIndex()[dim];
+        }
       // push right if necessary
       if (index[dim]+size[dim]>=big.GetIndex()[dim]+big.GetSize()[dim])
-	{
-	index[dim]=big.GetIndex()[dim]+big.GetSize()[dim]-size[dim];
-	}
+        {
+        index[dim]=big.GetIndex()[dim]+big.GetSize()[dim]-size[dim];
+        }
       }
     resp.SetSize(size);
     resp.SetIndex(index);

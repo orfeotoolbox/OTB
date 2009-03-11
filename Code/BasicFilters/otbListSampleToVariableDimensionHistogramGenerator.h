@@ -59,38 +59,38 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ListSampleToVariableDimensionHistogramGenerator, Object) ;
+  itkTypeMacro(ListSampleToVariableDimensionHistogramGenerator, Object);
   
   /** Method for creation through the object factory. */
-  itkNewMacro(Self) ;
+  itkNewMacro(Self);
 
    /** Type needed for defining the limits of the histogram bins */
   typedef typename itk::NumericTraits< THistogramMeasurement >::RealType 
                                                  HistogramMeasurementRealType;
 
   typedef itk::Statistics::VariableDimensionHistogram< HistogramMeasurementRealType,
-                     TFrequencyContainer > HistogramType ;
+                     TFrequencyContainer > HistogramType;
 
-  typedef typename HistogramType::SizeType               HistogramSizeType ;
+  typedef typename HistogramType::SizeType               HistogramSizeType;
   typedef typename HistogramType::MeasurementVectorType  MeasurementVectorType;
 
   /** plug in the ListSample object */
   void SetListSample(const TListSample* list)
     { 
-     m_List = list ; 
+     m_List = list; 
     }
 
   void SetMarginalScale(float scale)
-  { m_MarginalScale = scale ; }
+  { m_MarginalScale = scale; }
 
   void SetNumberOfBins(HistogramSizeType sizes)
-  { m_Sizes = sizes ; }
+  { m_Sizes = sizes; }
 
   HistogramType* GetOutput() const
-  { return m_Histogram ; }
+  { return m_Histogram; }
 
   void Update() 
-  { this->GenerateData() ; }
+  { this->GenerateData(); }
 
   itkSetMacro(AutoMinMax,bool);
   itkGetConstReferenceMacro(AutoMinMax,bool);
@@ -109,21 +109,21 @@ public:
 
 
 protected:
-  ListSampleToVariableDimensionHistogramGenerator() ;
+  ListSampleToVariableDimensionHistogramGenerator();
   virtual ~ListSampleToVariableDimensionHistogramGenerator() {}
-  void GenerateData() ;
+  void GenerateData();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  const TListSample* m_List ;
-  typename HistogramType::Pointer m_Histogram ;
-  HistogramSizeType m_Sizes ;
-  float m_MarginalScale ;
+  const TListSample* m_List;
+  typename HistogramType::Pointer m_Histogram;
+  HistogramSizeType m_Sizes;
+  float m_MarginalScale;
   MeasurementVectorType m_HistogramMin;
   MeasurementVectorType m_HistogramMax;
   bool m_AutoMinMax;
 
-} ; // end of class
+}; // end of class
 
 } // end of namespace itk 
 

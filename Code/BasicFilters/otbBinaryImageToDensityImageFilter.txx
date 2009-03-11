@@ -143,18 +143,18 @@ BinaryImageToDensityImageFilter<TInputImage, TOutputImage, TCountFunction>
       it.GoToBegin();
       
       while(!itOut.IsAtEnd())
-	{
-	  index = it.GetIndex();
-	  
-	  if(outputRegionForThread.IsInside(index))
-	    {
-	      itOut.Set(m_CountFunction->EvaluateAtIndex(index));
-	    }
-	  
-	  ++itOut;
-	  ++it;
-	  progress.CompletedPixel(); // potential exception thrown here
-	}
+        {
+          index = it.GetIndex();
+          
+          if(outputRegionForThread.IsInside(index))
+            {
+              itOut.Set(m_CountFunction->EvaluateAtIndex(index));
+            }
+          
+          ++itOut;
+          ++it;
+          progress.CompletedPixel(); // potential exception thrown here
+        }
     }
 }
 

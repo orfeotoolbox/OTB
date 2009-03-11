@@ -245,10 +245,16 @@ otbCurves2DWidget 0 0 100 200 0 0 10 10 0
 )
 
 ADD_TEST(vrTvCurves2DWidgetWithHistogram ${VISUREFAC_TESTS1}
-otbCurves2DWidgetWithHistogram 
+otbCurves2DWidgetWithHistogram
 ${INPUTDATA}/poupees.png
 0
 )
+
+#------------ otb::VectorDataGlComponent ------------
+ADD_TEST(vrTuVectorDataGlComponentNew ${VISUREFAC_TESTS1}
+otbVectorDataGlComponentNew
+)
+
 
 # Testing srcs
 SET(VisuRefac_SRCS1
@@ -284,6 +290,7 @@ otbCurves2DWidgetNew.cxx
 otbCurves2DWidget.cxx
 otbHistogramCurveNew.cxx
 otbCurves2DWidgetWithHistogram.cxx
+otbVectorDataGlComponentNew.cxx
 )
 
 # Building testing executables

@@ -161,7 +161,7 @@ int main( int argc, char* argv[] )
   typedef otb::ImageFileWriter< OutputImageType >  WriterType2;
   typedef itk::RescaleIntensityImageFilter< MonoImageType, OutputImageType> RescalerType;
   
-  for(unsigned int cpt=0 ; cpt < numberOfPrincipalComponentsRequired ; cpt++)
+  for(unsigned int cpt=0; cpt < numberOfPrincipalComponentsRequired; cpt++)
   {
     ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
     RescalerType::Pointer rescaler = RescalerType::New();

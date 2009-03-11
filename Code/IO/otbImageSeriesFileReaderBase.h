@@ -2,7 +2,7 @@
 
   Program:   ORFEO Toolbox
   Language:  C++
-  Date:	  $Date$
+  Date:          $Date$
   Version:   $Revision$
 
 
@@ -12,9 +12,9 @@
   Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-	 This software is distributed WITHOUT ANY WARRANTY; without even
-	 the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-	 PURPOSE.  See the above copyright notices for more information.
+         This software is distributed WITHOUT ANY WARRANTY; without even
+         the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+         PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -121,7 +121,7 @@ class ITK_EXPORT ImageSeriesFileReaderBase : public ImageListSource< TImage >
     virtual OutputImageListType * GenerateOutput (void);
     virtual OutputImageType * GenerateOutput ( unsigned int idx );
 
-	protected:
+        protected:
     ImageSeriesFileReaderBase();
     virtual ~ImageSeriesFileReaderBase () { }
 
@@ -132,16 +132,16 @@ class ITK_EXPORT ImageSeriesFileReaderBase : public ImageListSource< TImage >
      * order to add the appropriated path
      */
     virtual void TestFileExistanceAndReadability( std::string & file, FileType fileType );
-		virtual void TestBandSelection( std::vector<unsigned int> & bands ) { }
+                virtual void TestBandSelection( std::vector<unsigned int> & bands ) { }
 
     virtual void GenerateData ( void );
 
-		/** GenerateData
-		 * This method will be specialised if template definitions follow:
-		 * - TImage is a VectorImage
-		 * - TImage is an Image and TInteranalImage is a VectorImage
-		 * - TImage and TInternalImage are of Image type.
-		 */
+                /** GenerateData
+                 * This method will be specialised if template definitions follow:
+                 * - TImage is a VectorImage
+                 * - TImage is an Image and TInteranalImage is a VectorImage
+                 * - TImage and TInternalImage are of Image type.
+                 */
     virtual void GenerateData ( unsigned int idx );
 
     /**
@@ -167,7 +167,7 @@ class ITK_EXPORT ImageSeriesFileReaderBase : public ImageListSource< TImage >
 
     ReaderListPointerType m_ImageFileReaderList;
 
-	private:
+        private:
     ImageSeriesFileReaderBase ( const Self & );
     void operator= ( const Self & );
 }; // end of class

@@ -68,7 +68,7 @@ int main(int argc, char * argv[])
 
   if ( argc != 3 )
   {
-    std::cerr << "Usage: " << argv[0] ;
+    std::cerr << "Usage: " << argv[0];
     std::cerr << "inputFile outputFile" << std::endl;
     return EXIT_FAILURE;
   }

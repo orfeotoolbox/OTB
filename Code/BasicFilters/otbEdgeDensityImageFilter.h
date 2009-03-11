@@ -45,7 +45,7 @@ public:
 
   /** Standard class typedefs. */
   typedef EdgeDensityImageFilter                                      Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputImage>           Superclass ;
+  typedef itk::ImageToImageFilter<TInputImage,TOutputImage>           Superclass;
   typedef itk::SmartPointer<Self>                                     Pointer;
   typedef itk::SmartPointer<const Self>                               ConstPointer;
 

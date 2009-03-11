@@ -180,14 +180,14 @@ int main( int argc, char* argv[] )
 
   std::cout << "Classification for " << numberOfClasses << " classes " << std::endl;
 
-  typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType ;
+  typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType;
 
-  ClassifierType::Pointer classifier = ClassifierType::New() ;
+  ClassifierType::Pointer classifier = ClassifierType::New();
 
-  classifier->SetNumberOfClasses(numberOfClasses) ;
+  classifier->SetNumberOfClasses(numberOfClasses);
   classifier->SetModel( model );
-  classifier->SetSample(sample.GetPointer()) ;
-  classifier->Update() ;
+  classifier->SetSample(sample.GetPointer());
+  classifier->Update();
 
   /* Build the class map */
   std::cout << "Output image creation" << std::endl;
@@ -195,12 +195,12 @@ int main( int argc, char* argv[] )
 
   std::cout << "classifier get output" << std::endl;
   ClassifierType::OutputType* membershipSample =
-    classifier->GetOutput() ;
+    classifier->GetOutput();
   std::cout << "Sample iterators" << std::endl;
   ClassifierType::OutputType::ConstIterator m_iter =
-    membershipSample->Begin() ;
+    membershipSample->Begin();
   ClassifierType::OutputType::ConstIterator m_last =
-    membershipSample->End() ;
+    membershipSample->End();
 
 
   double error = 0.0;
@@ -228,7 +228,7 @@ int main( int argc, char* argv[] )
 
 
     ++pointId;
-    ++m_iter ;
+    ++m_iter;
   }
 
   std::cout << "Error = " << error/pointId << std::endl;

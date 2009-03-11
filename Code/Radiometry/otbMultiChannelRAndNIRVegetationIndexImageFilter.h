@@ -37,9 +37,9 @@ namespace otb
    * \ingroup Radiometry
  */
 template <class TInputImage, class TOutputImage,
-	  class TFunction = Functor::NDVI< typename TInputImage::InternalPixelType,
-					   typename TInputImage::InternalPixelType,
-					   typename TOutputImage::PixelType>  >
+          class TFunction = Functor::NDVI< typename TInputImage::InternalPixelType,
+                                           typename TInputImage::InternalPixelType,
+                                           typename TOutputImage::PixelType>  >
 class ITK_EXPORT MultiChannelRAndNIRVegetationIndexImageFilter
   : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
 {
