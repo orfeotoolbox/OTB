@@ -184,7 +184,7 @@ int main( int argc, char *argv[] )
   std::ifstream fin;
   fin.open(argv[3]);
   double dalpha(0.), dbeta(0.);
-  for ( unsigned int i=0 ; i < nbOfComponent ; i++)
+  for ( unsigned int i=0; i < nbOfComponent; i++)
   {
     fin >> dalpha;
     fin >> dbeta;
@@ -244,7 +244,7 @@ int main( int argc, char *argv[] )
 
   fin.open(argv[4]);
   double dsolarIllumination(0.);
-  for ( unsigned int i=0 ; i < nbOfComponent ; i++)
+  for ( unsigned int i=0; i < nbOfComponent; i++)
   {
     fin >> dsolarIllumination;
     solarIllumination[i] = dsolarIllumination;
@@ -318,7 +318,7 @@ int main( int argc, char *argv[] )
 
   fin.open(argv[5]);
   fin >> nbBands;
-  for (unsigned int i=0 ; i<nbBands ; i++)
+  for (unsigned int i=0; i<nbBands; i++)
   {
     vector.clear();
     fin >> sString;
@@ -326,7 +326,7 @@ int main( int argc, char *argv[] )
     fin >> maxSpectralValue;
     fin >> userStep;
     fin >> nbValuesPerBand;
-    for ( unsigned int j=0 ; j < nbValuesPerBand ; j++)
+    for ( unsigned int j=0; j < nbValuesPerBand; j++)
     {
       fin >> value;
       vector.push_back(value);

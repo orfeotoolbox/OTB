@@ -55,7 +55,7 @@ namespace otb {
 template<class TPixel, unsigned int VDimension,
   class TAllocator = itk::NeighborhoodAllocator< TPixel > >
 class ITK_EXPORT WaveletOperator
-	: public itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>
+        : public itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>
 {
 public:
   /** Standard typedefs */

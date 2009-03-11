@@ -37,7 +37,7 @@ StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOper
 
   unsigned int numOfOutput = 1<<InputImageType::ImageDimension;
 
-	this->SetNumberOfOutputs( numOfOutput );
+        this->SetNumberOfOutputs( numOfOutput );
   for ( unsigned i = 1; i < numOfOutput; i++ )
   {
     this->SetNthOutput(i,OutputImageType::New());
@@ -79,7 +79,7 @@ StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOper
   if ( outputHighPass == 0 )
   {
     itk::OStringStream msg;
-		msg << "Sortie 1<<" << idx << " = " << (1<<idx) << " nulle\n";
+                msg << "Sortie 1<<" << idx << " = " << (1<<idx) << " nulle\n";
     msg << "Nombre de sortie attendue " << this->GetNumberOfOutputs() << "\n";
     throw itk::ExceptionObject( __FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION );
   }

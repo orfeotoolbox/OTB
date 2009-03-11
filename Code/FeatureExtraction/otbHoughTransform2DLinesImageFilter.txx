@@ -321,8 +321,8 @@ HoughTransform2DLinesImageFilter< TInputPixelType, TOutputPixelType>
         // Create the line
         LineType::PointListType list; // insert two points per line
 
-        double radius = this->GetDistanceValue(it_input.GetIndex()[0]) ;
-        double teta   = this->GetAngleValue(it_input.GetIndex()[1]) ;
+        double radius = this->GetDistanceValue(it_input.GetIndex()[0]);
+        double teta   = this->GetAngleValue(it_input.GetIndex()[1]);
         double Vx = radius*vcl_cos(teta );
         double Vy = radius*vcl_sin(teta );
         double norm = vcl_sqrt(Vx*Vx+Vy*Vy);
@@ -362,7 +362,7 @@ HoughTransform2DLinesImageFilter< TInputPixelType, TOutputPixelType>
         m_LinesList.push_back(Line);
 
         // Remove a black disc from the hough space domain
-        for (double angle = m_AngleAxisMinimum; angle <= m_AngleAxisMaximum ; angle += m_AngleAxisIncrement)
+        for (double angle = m_AngleAxisMinimum; angle <= m_AngleAxisMaximum; angle += m_AngleAxisIncrement)
         {
           for (double length = 0; length < m_DiscRadius;length += 1)
           {

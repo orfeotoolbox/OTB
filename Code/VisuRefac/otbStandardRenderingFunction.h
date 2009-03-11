@@ -228,21 +228,21 @@ public:
       m_TransferedMaximum.clear();
       
       while(minIt != this->m_Minimum.end() && maxIt != this->m_Maximum.end())
-	{
-	const double v1 = m_TransferFunction(*minIt);
-	const double v2 = m_TransferFunction(*maxIt);
-	m_TransferedMinimum.push_back(std::min(v1,v2));
-	m_TransferedMaximum.push_back(std::max(v1,v2));
-	++minIt;
-	++maxIt;
-	}
+        {
+        const double v1 = m_TransferFunction(*minIt);
+        const double v2 = m_TransferFunction(*maxIt);
+        m_TransferedMinimum.push_back(std::min(v1,v2));
+        m_TransferedMaximum.push_back(std::max(v1,v2));
+        ++minIt;
+        ++maxIt;
+        }
       }
   }
      
 protected:
   /** Constructor */
   StandardRenderingFunction() : m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2), m_TransferFunction(),
-				m_UserDefinedTransferedMinMax(false), 	m_TransferedMinimum(), m_TransferedMaximum()
+                                m_UserDefinedTransferedMinMax(false),         m_TransferedMinimum(), m_TransferedMaximum()
   {}
   /** Destructor */
   ~StandardRenderingFunction() {}
@@ -262,7 +262,7 @@ protected:
     else
       {
       return static_cast<OutputValueType>(vcl_floor(255.*(static_cast<double>(input)-static_cast<double>(min))
-						    /(static_cast<double>(max)-static_cast<double>(min))+0.5));
+                                                    /(static_cast<double>(max)-static_cast<double>(min))+0.5));
       }
   }
 

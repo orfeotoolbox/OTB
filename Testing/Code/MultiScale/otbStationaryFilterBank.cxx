@@ -26,7 +26,6 @@
 #include "otbImageFileWriter.h"
 
 #include "otbStationaryFilterBank.h"
-#include "otbWaveletForwardTransform.h"
 
 #include "otbHaarOperator.h"
 #include "otb_9_7_Operator.h"
@@ -34,12 +33,13 @@
 #include "otbCommandLineArgumentParser.h"
 #include "otbCommandProgressUpdate.h"
 
-int otbWaveletTransform( int argc, char ** argv )
+int otbStationaryFilterBank( int argc, char ** argv )
 {
   typedef otb::CommandLineArgumentParser ParserType;
   ParserType::Pointer parser = ParserType::New();
   parser->AddInputImage() ;
-  parser->AddOption( "--Level", "Decomposition level through the low pass branch (def. 1)", "-l", 1, false );
+  //parser->AddOption( "--Level", "Decomposition level through the low pass branch (def. 1)", "-l", 1, false );
+        //parser->AddOutputImage();
   parser->AddOption( "--Output", "Output filename prefix", "-out", 1, true );
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
@@ -50,7 +50,7 @@ int otbWaveletTransform( int argc, char ** argv )
   }
   catch( itk::ExceptionObject & err )
   {
-    std::cerr << "Test foward wavelet transform \n";
+    std::cerr << "Test undecimated wavelet transform through inner products\n";
     std::string descriptionException = err.GetDescription();
     if ( descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos )
       return EXIT_SUCCESS;
@@ -60,8 +60,9 @@ int otbWaveletTransform( int argc, char ** argv )
   }
 
   const char * inputFileName = parseResult->GetInputImage().c_str();
-  unsigned int level = parseResult->IsOptionPresent("--Level" ) ?
-      parseResult->GetParameterUInt("--Level") : 1;
+        //const char * outputFileName = parseResult->GetOutputImage().c_str();
+        //unsigned int level = parseResult->IsOptionPresent("--Level" ) ?
+        //        parseResult->GetParameterUInt("--Level") : 1;
 
   const int Dimension = 2;
   typedef double PixelType;
@@ -78,11 +79,10 @@ int otbWaveletTransform( int argc, char ** argv )
   typedef otb::LowPass_9_7_Operator< PixelType, Dimension > LowPassOperator;
   typedef otb::HighPass_9_7_Operator< PixelType, Dimension > HighPassOperator;
 
-  typedef otb::StationaryFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator > WaveletFilterType;
-  typedef otb::WaveletForwardTransform< ImageType, ImageType, WaveletFilterType > FilterType;
+  typedef otb::StationaryFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator >
+      FilterType;
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );
-  filter->SetNumberOfDecompositions( level );
 
   /* Observer */
   typedef otb::CommandProgressUpdate< FilterType > CommandType;
@@ -106,9 +106,11 @@ int otbWaveletTransform( int argc, char ** argv )
     writer->Update();
 
   }
-
   return EXIT_SUCCESS;
 }
+
+
+
 
 
 

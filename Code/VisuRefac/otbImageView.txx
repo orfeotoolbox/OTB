@@ -25,7 +25,7 @@ namespace otb
 template < class TInputImage >
 ImageView<TInputImage>
 ::ImageView() : m_ScrollWidget(), m_FullWidget(), m_ZoomWidget(),
-		m_Model(), m_Controller(), m_ExtractRegionGlComponent(), m_ScaledExtractRegionGlComponent()
+                m_Model(), m_Controller(), m_ExtractRegionGlComponent(), m_ScaledExtractRegionGlComponent()
 {
   // Initializing the widgets
   m_ScrollWidget = ImageWidgetType::New();
@@ -162,7 +162,7 @@ ImageView<TInputImage>
     {
     otbMsgDevMacro(<<"ImageView::UpdateFullWidget(): redrawing full widget");
     m_FullWidget->ReadBuffer(m_Model->GetRasterizedExtract(),m_Model->GetRasterizedExtract()
-			     ->GetLargestPossibleRegion());
+                             ->GetLargestPossibleRegion());
 
    // Setting widget label
     std::string label = m_FullWidget->GetIdentifier();
@@ -194,7 +194,7 @@ ImageView<TInputImage>
     {
     otbMsgDevMacro(<<"ImageView::UpdateZoomWidget(): redrawing zoom widget");
     m_ZoomWidget->ReadBuffer(m_Model->GetRasterizedScaledExtract(),m_Model->GetRasterizedScaledExtract()
-			     ->GetLargestPossibleRegion());
+                             ->GetLargestPossibleRegion());
 
     // Setting widget label
     std::string label = m_ZoomWidget->GetIdentifier();

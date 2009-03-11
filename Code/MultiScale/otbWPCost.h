@@ -43,13 +43,13 @@ public:
   typedef FullyDecomposedWaveletPacketCost Self;
   typedef itk::Object Superclass;
   typedef itk::SmartPointer<Self> Pointer;
-	typedef itk::SmartPointer<const Self> ConstPointer;
+        typedef itk::SmartPointer<const Self> ConstPointer;
 
-	/** Type macro */
-	itkNewMacro(Self);
+        /** Type macro */
+        itkNewMacro(Self);
 
-	/** Creation through object factory macro */
-	itkTypeMacro(FullyDecomposedWaveletPacketCost,Object);
+        /** Creation through object factory macro */
+        itkTypeMacro(FullyDecomposedWaveletPacketCost,Object);
 
   typedef TImage ImageType;
 

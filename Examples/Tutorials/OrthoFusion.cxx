@@ -123,7 +123,7 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
 
 
-  typedef otb::UtmInverseProjection utmMapProjectionType ;
+  typedef otb::UtmInverseProjection utmMapProjectionType;
   utmMapProjectionType::Pointer utmMapProjection =
     utmMapProjectionType::New();
   utmMapProjection->SetZone(atoi(argv[4]));
@@ -165,7 +165,7 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::OrthoRectificationFilter<ImageType, DoubleImageType,
-  utmMapProjectionType> OrthoRectifFilterType ;
+  utmMapProjectionType> OrthoRectifFilterType;
 
   OrthoRectifFilterType::Pointer  orthoRectifPAN =
     OrthoRectifFilterType::New();

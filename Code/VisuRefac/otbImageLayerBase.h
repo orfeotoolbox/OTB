@@ -119,10 +119,10 @@ public:
 protected:
   /** Constructor */
   ImageLayerBase() : m_Name("Default"), m_Visible(false), m_Extent(), 
-	    m_RenderedQuicklook(), m_HasQuicklook(false), m_QuicklookSize(),  m_QuicklookSubsamplingRate(1),
-	    m_RenderedExtract(),   m_HasExtract(false),   m_ExtractRegion(),
-	    m_RenderedScaledExtract(), m_HasScaledExtract(false), m_ScaledExtractRegion(),
-	    m_BlendingFunction()
+            m_RenderedQuicklook(), m_HasQuicklook(false), m_QuicklookSize(),  m_QuicklookSubsamplingRate(1),
+            m_RenderedExtract(),   m_HasExtract(false),   m_ExtractRegion(),
+            m_RenderedScaledExtract(), m_HasScaledExtract(false), m_ScaledExtractRegion(),
+            m_BlendingFunction()
   {
     // Default blending function
     m_BlendingFunction = Function::UniformAlphaBlendingFunction<PixelType>::New();

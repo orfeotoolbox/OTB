@@ -83,7 +83,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
   outputIt.GoToBegin();
   inputIt.GoToBegin();
 
-  for (outputIt.GoToBegin(); !outputIt.IsAtEnd()  ; ++outputIt,++inputIt)
+  for (outputIt.GoToBegin(); !outputIt.IsAtEnd() ; ++outputIt,++inputIt)
       outputIt.Set( static_cast<OutputPixelType>(inputIt.Get()) );
   
   /** Draw the lines in the ouput image using lineIterator*/
@@ -114,43 +114,43 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
       /** Crop the segment if it is outside the region in the left*/
       
       if( !(this->IsColumnOutsideOfTheRegion(&indexBeginLine,&indexEndLine,&outputRegionForThread) && this->IsColumnOutsideOfTheRegion(&indexEndLine,&indexBeginLine,&outputRegionForThread)))
-	{
-	  if(indexEndLine[0] >=static_cast< int>(size[0]))
-	    this->CropRightSegment(&indexEndLine,&indexBeginLine, &outputRegionForThread);
-	  
-	  if( indexBeginLine[0] >= static_cast< int>(size[0]) )
-	    this->CropRightSegment(&indexBeginLine,&indexEndLine, &outputRegionForThread);
-	}
+        {
+          if(indexEndLine[0] >=static_cast< int>(size[0]))
+            this->CropRightSegment(&indexEndLine,&indexBeginLine, &outputRegionForThread);
+          
+          if( indexBeginLine[0] >= static_cast< int>(size[0]) )
+            this->CropRightSegment(&indexBeginLine,&indexEndLine, &outputRegionForThread);
+        }
 
       /** 
        * If an extremity is under the region 
        * Technically, the X component of the index is inside the image 
        */
       if(this->IsDownsideTheImage(&indexBeginLine)  && input->GetLargestPossibleRegion().IsInside(indexEndLine))
-	this->CropSegment(&indexBeginLine,&indexEndLine, &outputRegionForThread);
+        this->CropSegment(&indexBeginLine,&indexEndLine, &outputRegionForThread);
       
       if(this->IsDownsideTheImage(&indexEndLine) && input->GetLargestPossibleRegion().IsInside(indexBeginLine))
-	this->CropSegment(&indexEndLine,&indexBeginLine, &outputRegionForThread);
+        this->CropSegment(&indexEndLine,&indexBeginLine, &outputRegionForThread);
     
 
       /** If the segments are not in the region (upside or downside the region)*/
       if(!(this->IsUpsideTheRegion(&indexBeginLine,&outputRegionForThread)   && this->IsUpsideTheRegion(&indexEndLine,&outputRegionForThread)) &&
-	 !(this->IsDownsideTheRegion(&indexBeginLine,&outputRegionForThread) && this->IsDownsideTheRegion(&indexEndLine,&outputRegionForThread)) &&
-	 !(this->IsColumnOutsideOfTheRegion(&indexBeginLine,&indexEndLine, &outputRegionForThread) && this->IsColumnOutsideOfTheRegion(&indexEndLine,&indexBeginLine,&outputRegionForThread)) 
-	 )
-	{
+         !(this->IsDownsideTheRegion(&indexBeginLine,&outputRegionForThread) && this->IsDownsideTheRegion(&indexEndLine,&outputRegionForThread)) &&
+         !(this->IsColumnOutsideOfTheRegion(&indexBeginLine,&indexEndLine, &outputRegionForThread) && this->IsColumnOutsideOfTheRegion(&indexEndLine,&indexBeginLine,&outputRegionForThread)) 
+         )
+        {
 
-	  /** Instanciation of the line iterator with begin and ending index*/
-	  LineIteratorFilter   itLine(output,indexBeginLine ,indexEndLine  );
+          /** Instanciation of the line iterator with begin and ending index*/
+          LineIteratorFilter   itLine(output,indexBeginLine ,indexEndLine  );
       
-	  /** Iteration over the line and writing white lines */
-	  while(!itLine.IsAtEnd())
-	    {
-	      if(outputRegionForThread.IsInside(itLine.GetIndex()))
-		itLine.Set(m_Value);
-	      ++itLine;
-	    }
-	}
+          /** Iteration over the line and writing white lines */
+          while(!itLine.IsAtEnd())
+            {
+              if(outputRegionForThread.IsInside(itLine.GetIndex()))
+                itLine.Set(m_Value);
+              ++itLine;
+            }
+        }
    
       ++itList;
     }
@@ -179,7 +179,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
  double origin        =  (*otherIndex)[1] - (slope * (*otherIndex)[0]);
 
  (*indexToCrop)[0] = static_cast<unsigned int>(size[0]-1);
- (*indexToCrop)[1] = static_cast<unsigned int>(slope *(*indexToCrop)[0] + origin +0.5) ;
+ (*indexToCrop)[1] = static_cast<unsigned int>(slope *(*indexToCrop)[0] + origin +0.5);
 }
 
 /**

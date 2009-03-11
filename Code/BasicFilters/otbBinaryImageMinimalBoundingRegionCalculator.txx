@@ -70,7 +70,7 @@ BinaryImageMinimalBoundingRegionCalculator<TInputImage>
     fit.SetFirstDirection( !axis );
     fit.SetSecondDirection( axis );
     fit.GoToBegin();
-    ;
+   ;
     // Walk through the two images line by line
     while (!fit.IsAtEnd())
     {

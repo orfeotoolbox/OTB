@@ -217,7 +217,7 @@ int main(int argc, char * argv[])
     for (unsigned int x=0; x < size[0]; x++)
     {
       const double dx = static_cast<double>( x ) - static_cast<double>(size[0])/2.0;
-      const double d2 = dx*dx + dy*dy ;
+      const double d2 = dx*dx + dy*dy;
       PixelType pTmp = ( d2 < radius2 ) ? 255 : 0;
       for (unsigned int nbBandsTmp=0; nbBandsTmp<numberOfBands; nbBandsTmp++)
         *it++ = pTmp;

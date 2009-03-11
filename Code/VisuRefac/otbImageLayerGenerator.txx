@@ -28,8 +28,8 @@ namespace otb
 template < class TImageLayer >
 ImageLayerGenerator<TImageLayer>
 ::ImageLayerGenerator() : m_Layer(), m_Image(), m_Quicklook(),
-			  m_SubsamplingRate(1), m_GenerateQuicklook(true), 
-			  m_Resampler(), m_ScreenRatio(0.25)
+                          m_SubsamplingRate(1), m_GenerateQuicklook(true), 
+                          m_Resampler(), m_ScreenRatio(0.25)
 {
   // Intialize output layer
   m_Layer = ImageLayerType::New();

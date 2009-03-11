@@ -78,7 +78,7 @@ int main ( int argc, char * argv[] )
       std::cerr << "Unsupervised Image Segmentation with SEM approach\n";
       std::cerr << argv[0] << " imageIn imgClassif num_of_class ";
       std::cerr << "nbIteration size_of_the_neighborhood\n";
-      return EXIT_FAILURE ;
+      return EXIT_FAILURE;
     }
 
 // Software Guide : BeginLatex
@@ -131,7 +131,7 @@ int main ( int argc, char * argv[] )
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginCodeSnippet
-    classifier->SetNumberOfClasses( numberOfClasses ) ;
+    classifier->SetNumberOfClasses( numberOfClasses );
     classifier->SetMaximumIteration( numberOfIteration );
     classifier->SetNeighborhood( neighborhood );
     classifier->SetTerminationThreshold( terminationThreshold );
@@ -187,7 +187,7 @@ int main ( int argc, char * argv[] )
 //  Software Guide : BeginCodeSnippet
     try
     {
-      classifier->Update() ;
+      classifier->Update();
     }
 //  Software Guide : EndCodeSnippet
 

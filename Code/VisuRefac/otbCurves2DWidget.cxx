@@ -23,9 +23,9 @@
 namespace otb
 {
 Curves2DWidget::Curves2DWidget() : m_Curves(), m_XAxisLabel("X axis"), m_YAxisLabel("Y axis"), m_Margins(),
-				 m_Extent(), m_AxisOrigin(), m_AxisLength(),
-				 m_GridOrigin(), m_GridSpacing(), m_ZeroCrossingAxis(true),
-				   m_AutoScale(true),m_AxisColor(), m_GridColor(), m_SpaceToScreenTransform()
+                                 m_Extent(), m_AxisOrigin(), m_AxisLength(),
+                                 m_GridOrigin(), m_GridSpacing(), m_ZeroCrossingAxis(true),
+                                   m_AutoScale(true),m_AxisColor(), m_GridColor(), m_SpaceToScreenTransform()
 {
   // Build the curves list
   m_Curves = CurveListType::New();

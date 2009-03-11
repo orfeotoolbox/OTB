@@ -40,7 +40,7 @@ public:
   {
     double value(0.);
     if( inPix.Size() <= 0) return static_cast<TOutputValue> (0.);
-    for (unsigned int i = 0 ; i <inPix.Size() ; i++)
+    for (unsigned int i = 0; i <inPix.Size(); i++)
     {
       value += static_cast<double>(inPix[i]);
     }

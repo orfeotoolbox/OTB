@@ -27,6 +27,9 @@
 #include "otbPolygon.h"
 #include "itkCastImageFilter.h"
 
+#include "otbRectangle.h"
+#include "otbCartographicRegion.h"
+
 #include "otbMath.h"
 
 #include "itkMatrix.h"
@@ -62,6 +65,9 @@ LineSegmentDetector<TInputImage,TPrecision >
 
   /** A Line List : This is the output*/
   LineSpatialObjectListType::Pointer m_LineList = LineSpatialObjectListType::New();
+
+  m_Length = 0;
+  m_Width  = 0;
 }
 
 
@@ -89,7 +95,7 @@ LineSegmentDetector<TInputImage,TPrecision >
   
   /** Compute the modulus and the orientation gradient image*/
   m_GradientFilter->SetInput(castFilter->GetOutput());
-  m_GradientFilter->SetSigma(1.1);
+  m_GradientFilter->SetSigma(1.3);
   m_MagnitudeFilter->SetInput(m_GradientFilter->GetOutput());
   m_OrientationFilter->SetInput(m_GradientFilter->GetOutput());
   
@@ -127,6 +133,8 @@ LineSegmentDetector<TInputImage,TPrecision >
   SizeType     SizeInput = this->GetInput()->GetRequestedRegion().GetSize();
   m_Width  = SizeInput[0];
   m_Length = SizeInput[1];
+  
+  //std::cout <<" m_Width"<<m_Width << " m_Length"<< m_Length << std::endl;
   m_NumberOfImagePixels  = m_Length * m_Width;
 
   /** 
@@ -246,7 +254,8 @@ LineSegmentDetector<TInputImage, TPrecision>
   RectangleListTypeIterator            itRec = m_RectangleList.begin();
   while(itRec != m_RectangleList.end())
     {
-      double NFA = this->ImproveRectangle(&(*itRec) );
+      //double NFA = this->ImproveRectangle(&(*itRec) );
+      double NFA = this->ComputeRectNFA((*itRec));
       /**
        * Here we start building the OUTPUT :a LineSpatialObjectList. 
        */
@@ -327,7 +336,11 @@ LineSegmentDetector<TInputImage, TPrecision>
 	  CopyRectangle(rec ,&r );
 	}
     }
+  
+
   if( NFA > 0. ) return NFA;
+
+  
   
   /*Try to improve the width of the rectangle*/
   CopyRectangle(&r ,rec );
@@ -400,7 +413,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 	}
     }
   if( NFA > 0. ) return NFA;
-  
+
   return NFA;
 
 }
@@ -512,7 +525,7 @@ LineSegmentDetector<TInputImage, TPrecision>
     }/** End Searching loop*/
     
   /** Store the region*/
-  if(reg.size()> m_MinimumRegionSize && reg.size() < static_cast<unsigned int>(m_NumberOfImagePixels/2))
+  if(reg.size()> m_MinimumRegionSize && reg.size() < static_cast<unsigned int>(m_NumberOfImagePixels/4))
   {
       m_RegionList.push_back(reg);
       m_DirectionVector.push_back(regionAngle);
@@ -650,18 +663,22 @@ LineSegmentDetector<TInputImage, TPrecision>
    *  vec[7] = p =  1/8
    */
   
-  RectangleType          rec(8 ,0.);     // Definition of a rectangle : 8 components
-  rec[0] = (x + lb*dx >0)?x + lb*dx:0.;
-  rec[1] = (y + lb*dy >0)?y + lb*dy:0.;
-  rec[2] = (x + lf*dx >0)?x + lf*dx:0.;
-  rec[3] = (y + lf*dy >0)?y + lf*dy:0;
-  rec[4] = wl - wr;
-  rec[5] = theta;
-  rec[6] = m_Prec;
-  rec[7] = m_DirectionsAllowed;
-  
-  if(rec[4] - 1. <1e-10) rec[4] = 1.;
-  m_RectangleList.push_back(rec);
+
+  if(vcl_abs(wl - wr) - vcl_sqrt(m_Length*m_Length + m_Width*m_Width) < 1e-10)
+    {
+      RectangleType          rec(8 ,0.);     // Definition of a rectangle : 8 components
+      rec[0] = (x + lb*dx >0)?x + lb*dx:0.;
+      rec[1] = (y + lb*dy >0)?y + lb*dy:0.;
+      rec[2] = (x + lf*dx >0)?x + lf*dx:0.;
+      rec[3] = (y + lf*dy >0)?y + lf*dy:0;
+      rec[4] = wl - wr;
+      rec[5] = theta;
+      rec[6] = m_Prec;
+      rec[7] = m_DirectionsAllowed;
+      
+      if(rec[4] - 1. <1e-10) rec[4] = 1.;
+      m_RectangleList.push_back(rec);
+    }
 }
 
 /**************************************************************************************************************/
@@ -756,9 +773,9 @@ LineSegmentDetector<TInputImage, TPrecision>
   int NbAligned = 0;
   double nfa_val = 0.;
   
-  double dx = vcl_cos(rec[5]);
-  double dy = vcl_sin(rec[5]);
-  double halfWidth = rec[4]/2;
+  //double dx = vcl_cos(rec[5]);
+  //double dy = vcl_sin(rec[5]);
+  //double halfWidth = rec[4]/2;
   
   /** Determine the four corners of the rectangle*/
   /** Remember : 
@@ -772,16 +789,16 @@ LineSegmentDetector<TInputImage, TPrecision>
    *  vec[7] = p =  1/8
    */
 
-  RectangleType        X(4,0.) , Y(4,0.);
+//   RectangleType        X(4,0.) , Y(4,0.);
   
-  X[0] = rec[0] + dy* halfWidth ;
-  Y[0] = rec[1] - dx* halfWidth ;
-  X[1] = rec[0] - dy* halfWidth ;
-  Y[1] = rec[1] + dx* halfWidth ;
-  X[2] = rec[2] + dy* halfWidth ;
-  Y[2] = rec[3] - dx* halfWidth ;
-  X[3] = rec[2] - dy* halfWidth ;
-  Y[3] = rec[3] + dx* halfWidth ;
+//   X[0] = rec[0] + dy* halfWidth ;
+//   Y[0] = rec[1] - dx* halfWidth ;
+//   X[1] = rec[0] - dy* halfWidth ;
+//   Y[1] = rec[1] + dx* halfWidth ;
+//   X[2] = rec[2] + dy* halfWidth ;
+//   Y[2] = rec[3] - dx* halfWidth ;
+//   X[3] = rec[2] - dy* halfWidth ;
+//   Y[3] = rec[3] + dx* halfWidth ;
 
 
   /** Compute the NFA of the rectangle  
@@ -790,20 +807,24 @@ LineSegmentDetector<TInputImage, TPrecision>
    */
   
   /**  Compute the number of points aligned */
-  typedef otb::Polygon<double>       PolygonType;
-  PolygonType::Pointer  rectangle = PolygonType::New();
-
+  typedef otb::Rectangle<double>       RectangleType;
+  RectangleType::Pointer  rectangle =  RectangleType::New();
+  
   /** Fill the rectangle with the points*/
-  for (int i = 0; i<static_cast<int>(X.size());  i++)
+  for (int i = 0; i<2;  i++)
     {
-      OutputIndexType   vertex;
-      vertex[0] = static_cast<long int>(X[i]); 
-      vertex[1] = static_cast<long int>(Y[i]);
+      typename RectangleType::VertexType   vertex;
+      vertex[0] = rec[2*i]; 
+      vertex[1] = rec[2*i+1];
       rectangle->AddVertex(vertex);
     }
+  rectangle->SetWidth(rec[4]);
+  rectangle->SetOrientation(rec[5]);
+
+
   
   /** Get The Bounding Region*/
-  OutputImageDirRegionType   region = rectangle->GetBoundingRegion();
+  OutputImageDirRegionType    region = rectangle->GetBoundingRegion();
   
   itk::ImageRegionIterator<OutputImageDirType> it(m_OrientationFilter->GetOutput(), region/*m_OrientationFilter->GetOutput()->GetRequestedRegion()*/);
   it.GoToBegin();
@@ -875,8 +896,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 /**************************************************************************************************************/
 /*
   rutines betacf, gammln, betai, and factln
-  taken from "Numerical Recipes in C", Second Edtion, 1992 by
-  W.H. Press, S.A. Teukolsky, W.T.Vetterling and B.P. Flannery
+  Taken from http://sd-www.jhupal.edu/IMP/data/spec_req/NR/Code
 */
 /**************************************************************************************************************/
 /**************************************************************************************************************/

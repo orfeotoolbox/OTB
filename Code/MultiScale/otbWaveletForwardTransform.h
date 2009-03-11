@@ -54,13 +54,13 @@ public:
   typedef WaveletForwardTransform Self;
   typedef itk::ImageToImageFilter< TInputImage, TOutputImage > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
-	typedef itk::SmartPointer<const Self> ConstPointer;
+        typedef itk::SmartPointer<const Self> ConstPointer;
 
-	/** Type macro */
-	itkNewMacro(Self);
+        /** Type macro */
+        itkNewMacro(Self);
 
-	/** Creation through object factory macro */
-	itkTypeMacro(WaveletForwardTransform,ImageToImageFilter);
+        /** Creation through object factory macro */
+        itkTypeMacro(WaveletForwardTransform,ImageToImageFilter);
 
   typedef TInputImage InputImageType;
   typedef typename InputImageType::Pointer InputImagePointer;
@@ -81,7 +81,7 @@ public:
   }
 
   itkGetMacro(NumberOfDecompositions,unsigned int);
-  void SetNumberOfDecompositions( unsigned int num ) ;
+  void SetNumberOfDecompositions( unsigned int num );
 
   itkStaticConstMacro(InputImageDimension, unsigned int,TInputImage::ImageDimension);
 

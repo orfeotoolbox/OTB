@@ -127,7 +127,7 @@ int main( int,  char *[])
 
   typedef itk::Statistics::Subsample< SampleType > ClassSampleType;
   std::vector< ClassSampleType::Pointer > classSamples;
-  for ( unsigned int i = 0 ; i < 2 ; ++i )
+  for ( unsigned int i = 0; i < 2; ++i )
   {
     classSamples.push_back( ClassSampleType::New() );
     classSamples[i]->SetSample( sample );
@@ -163,7 +163,7 @@ int main( int,  char *[])
   double mean = 100;
   double standardDeviation = 30;
   SampleType::InstanceIdentifier id = 0UL;
-  for ( unsigned int i = 0 ; i < 100 ; ++i )
+  for ( unsigned int i = 0; i < 100; ++i )
   {
     mv.Fill( (normalGenerator->GetVariate() * standardDeviation ) + mean);
     sample->PushBack( mv );
@@ -174,7 +174,7 @@ int main( int,  char *[])
   normalGenerator->Initialize( 3024 );
   mean = 200;
   standardDeviation = 30;
-  for ( unsigned int i = 0 ; i < 100 ; ++i )
+  for ( unsigned int i = 0; i < 100; ++i )
   {
     mv.Fill( (normalGenerator->GetVariate() * standardDeviation ) + mean);
     sample->PushBack( mv );
@@ -201,7 +201,7 @@ int main( int,  char *[])
   std::vector< MeanEstimatorType::Pointer > meanEstimators;
   std::vector< CovarianceEstimatorType::Pointer > covarianceEstimators;
 
-  for ( unsigned int i = 0 ; i < 2 ; ++i )
+  for ( unsigned int i = 0; i < 2; ++i )
   {
     meanEstimators.push_back( MeanEstimatorType::New() );
     meanEstimators[i]->SetInputSample( classSamples[i] );
@@ -221,7 +221,7 @@ int main( int,  char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  for ( unsigned int i = 0 ; i < 2 ; ++i )
+  for ( unsigned int i = 0; i < 2; ++i )
   {
     std::cout << "class[" << i << "] " << std::endl;
     std::cout << "    estimated mean : "
@@ -267,9 +267,9 @@ int main( int,  char *[])
 
   DecisionRuleType::APrioriVectorType aPrioris;
   aPrioris.push_back( classSamples[0]->GetTotalFrequency()
-                      / sample->GetTotalFrequency() ) ;
+                      / sample->GetTotalFrequency() );
   aPrioris.push_back( classSamples[1]->GetTotalFrequency()
-                      / sample->GetTotalFrequency() ) ;
+                      / sample->GetTotalFrequency() );
   decisionRule->SetAPriori( aPrioris );
 
   typedef itk::Statistics::SampleClassifier< SampleType > ClassifierType;
@@ -303,7 +303,7 @@ int main( int,  char *[])
 
   // Software Guide : BeginCodeSnippet
   std::vector< MembershipFunctionType::Pointer > membershipFunctions;
-  for ( unsigned int i = 0 ; i < 2 ; i++ )
+  for ( unsigned int i = 0; i < 2; i++ )
   {
     membershipFunctions.push_back(MembershipFunctionType::New());
     membershipFunctions[i]->SetMean( meanEstimators[i]->GetOutput() );

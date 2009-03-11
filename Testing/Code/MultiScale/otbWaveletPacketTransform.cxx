@@ -26,7 +26,8 @@
 #include "otbImageFileWriter.h"
 
 #include "otbStationaryFilterBank.h"
-#include "otbWaveletForwardTransform.h"
+#include "otbWaveletPacketForwardTransform.h"
+#include "otbWPCost.h"
 
 #include "otbHaarOperator.h"
 #include "otb_9_7_Operator.h"
@@ -34,12 +35,12 @@
 #include "otbCommandLineArgumentParser.h"
 #include "otbCommandProgressUpdate.h"
 
-int otbWaveletTransform( int argc, char ** argv )
+int otbWaveletPacketTransform( int argc, char ** argv )
 {
   typedef otb::CommandLineArgumentParser ParserType;
   ParserType::Pointer parser = ParserType::New();
   parser->AddInputImage() ;
-  parser->AddOption( "--Level", "Decomposition level through the low pass branch (def. 1)", "-l", 1, false );
+  parser->AddOption( "--Level", "Decomposition level of the wavelet packet (def. 1)", "-l", 1, false );
   parser->AddOption( "--Output", "Output filename prefix", "-out", 1, true );
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
@@ -50,7 +51,7 @@ int otbWaveletTransform( int argc, char ** argv )
   }
   catch( itk::ExceptionObject & err )
   {
-    std::cerr << "Test foward wavelet transform \n";
+    std::cerr << "Test foward wavelet packet transform \n";
     std::string descriptionException = err.GetDescription();
     if ( descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos )
       return EXIT_SUCCESS;
@@ -78,11 +79,15 @@ int otbWaveletTransform( int argc, char ** argv )
   typedef otb::LowPass_9_7_Operator< PixelType, Dimension > LowPassOperator;
   typedef otb::HighPass_9_7_Operator< PixelType, Dimension > HighPassOperator;
 
-  typedef otb::StationaryFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator > WaveletFilterType;
-  typedef otb::WaveletForwardTransform< ImageType, ImageType, WaveletFilterType > FilterType;
+  typedef otb::StationaryFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator >
+      WaveletFilterType;
+  typedef otb::FullyDecomposedWaveletPacketCost< ImageType > CostType;
+
+  typedef otb::WaveletPacketForwardTransform< ImageType, ImageType, WaveletFilterType, CostType >
+      FilterType;
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );
-  filter->SetNumberOfDecompositions( level );
+  filter->GetCost()->SetNumberOfAllowedDecompositions( level );
 
   /* Observer */
   typedef otb::CommandProgressUpdate< FilterType > CommandType;
@@ -93,7 +98,7 @@ int otbWaveletTransform( int argc, char ** argv )
 
 
   std::string prefix = parseResult->GetParameterString("--Output");
-  for ( unsigned int i = 0; i < filter->GetNumberOfOutputs(); i++ )
+  for ( unsigned int i = 0; i < filter->GetOutput()->Size(); i++ )
   {
     std::stringstream filename;
     filename << prefix;
@@ -102,11 +107,10 @@ int otbWaveletTransform( int argc, char ** argv )
     typedef otb::ImageFileWriter<ImageType> WriterType;
     WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(filename.str());
-    writer->SetInput(filter->GetOutput(i));
+    writer->SetInput(filter->GetOutput()->GetNthElement(i));
     writer->Update();
 
   }
-
   return EXIT_SUCCESS;
 }
 

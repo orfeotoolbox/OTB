@@ -19,7 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
 #include "otbEdgeDensityImageFilter.h"
-
+#include "otbImageFileWriter.h"
 
 namespace otb
 {
@@ -32,7 +32,7 @@ EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
 { 
   this->SetNumberOfRequiredInputs( 1 );
   
-  m_NeighborhoodRadius = 1;
+  m_NeighborhoodRadius.Fill( 1 );
   m_Detector =  DetectorType::New();
   m_DensityImageFilter = DensityImageType::New();
 }
@@ -55,19 +55,11 @@ void
 EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
 ::GenerateData()
 {
+  typename ImageFileWriter<TInputImage>::Pointer writer = ImageFileWriter<TInputImage>::New();
   m_Detector->SetInput( this->GetInput() );
-
-  std::cout<<"###"<<this->GetInput()->GetLargestPossibleRegion()<<std::endl; 
-  m_Detector->Update();
-  m_Detector->UpdateOutputInformation();
-  //m_Detector->SetRequestedRegionToLargestPossibleRegion();
-  std::cout<<"~~~"<<m_Detector->GetOutput()->GetLargestPossibleRegion()<<std::endl;
-
+  
   m_DensityImageFilter->SetNeighborhoodRadius(m_NeighborhoodRadius);
-  m_DensityImageFilter->SetInput(m_Detector->GetOutput());
-
-  m_DensityImageFilter->UpdateOutputInformation();
-  std::cout<<"***"<<m_DensityImageFilter->GetOutput()->GetLargestPossibleRegion()<<std::endl;
+  m_DensityImageFilter->SetInput( m_Detector->GetOutput() );
 
   m_DensityImageFilter->GraftOutput(this->GetOutput());
   m_DensityImageFilter->Update();

@@ -26,8 +26,8 @@ namespace otb
 template <class TInputImage>
 ImageWidget<TInputImage>
 ::ImageWidget() : m_IsotropicZoom(1.0), m_OpenGlBuffer(NULL), m_OpenGlBufferedRegion(),
-		  m_Extent(), m_SubsamplingRate(1), m_ImageToScreenTransform(),
-		  m_ScreenToImageTransform(), m_GlComponents()
+                  m_Extent(), m_SubsamplingRate(1), m_ImageToScreenTransform(),
+                  m_ScreenToImageTransform(), m_GlComponents()
 {
   // Initialize space to screen transform and inverse
   m_ImageToScreenTransform = AffineTransformType::New();
@@ -184,10 +184,10 @@ ImageWidget<TInputImage>
 
     // display the image
     glDrawPixels(m_OpenGlBufferedRegion.GetSize()[0],
-		 m_OpenGlBufferedRegion.GetSize()[1],
-		 GL_RGB,
-		 GL_UNSIGNED_BYTE,
-		 m_OpenGlBuffer);
+                 m_OpenGlBufferedRegion.GetSize()[1],
+                 GL_RGB,
+                 GL_UNSIGNED_BYTE,
+                 m_OpenGlBuffer);
     }
   else
     {
