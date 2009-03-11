@@ -20,7 +20,7 @@
 
 // FLTK includes
 #include <FL/gl.h>
-#include <FL/Fl.h>
+#include <FL/Fl.H>
 #include "FL/Fl_Gl_Window.H"
 
 // This include is needed to get the OTB_GL_USE_ACCEL definition
@@ -60,11 +60,11 @@ public:
 
   /** Runtime information */
   itkTypeMacro(GlWidget,Object);
-  
+
   /** Controller typedef */
   typedef otb::ImageWidgetController        ControllerType;
   typedef ControllerType::Pointer           ControllerPointerType;
-  
+
   /** Index typedef */
   typedef itk::Point<double,2>              PointType;
 
@@ -80,7 +80,7 @@ public:
    */
   virtual void resize(int x, int y, int w, int h);
 
-  
+
   /** Enable/disable Gl acceleration */
   itkSetMacro(UseGlAcceleration,bool);
   itkGetMacro(UseGlAcceleration,bool);
