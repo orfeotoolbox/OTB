@@ -1463,10 +1463,10 @@ ADD_TEST(bfTvEdgeDetectorImageFilter ${BASICFILTERS_TESTS12}
 	    ${BASELINE}/bfTvEdgeDetectorImageFilter.tif
 	    ${TEMP}/bfTvEdgeDetectorImageFilter.tif
 	 otbEdgeDetectorImageFilter
-	 ${INPUTDATA}/poupees_sub.png
+	 ${INPUTDATA}/poupees_sub_c1.png
 	 ${TEMP}/bfTvEdgeDetectorImageFilter.tif
-	 50000   # lower threshold
-	 2000000 # upper  threshold
+	 0   # lower threshold
+	 255 # upper  threshold
 )
 
 

@@ -22,9 +22,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "itkImageToImageFilter.h"
 #include "otbBinaryImageToDensityImageFilter.h"
-
 #include "itkProcessObject.h"
-
 #include "itkNumericTraits.h"
 
 
@@ -59,6 +57,8 @@ public:
   /** Template parameters typedefs*/
   typedef TInputImage                                    InputImageType;
   typedef typename InputImageType::Pointer               InputImagePointerType;
+  typedef typename InputImageType::PixelType             InputImagePixelType;
+  typedef typename InputImageType::SizeType              InputImageSizeType;
 
   /** OutputImageType typedef support*/
   typedef TOutputImage                                   OutputImageType;
@@ -71,7 +71,6 @@ public:
 
   /** Count Density Function typedef support*/
   typedef TDensityCount                                  DensityCountFunctionType;
-  
 
   /** PointSetToDensityImageFilter support*/
   typedef otb::BinaryImageToDensityImageFilter<InputImageType, 
@@ -82,15 +81,19 @@ public:
   
   /** Get/Set the radius of the neighborhood over which the
   statistics are evaluated */
-  itkSetMacro( NeighborhoodRadius, unsigned int );
-  itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
+  itkSetMacro( NeighborhoodRadius, InputImageSizeType );
+  itkGetConstReferenceMacro( NeighborhoodRadius, InputImageSizeType );
+  void SetNeighborhoodRadius( unsigned int rad)
+    {
+      m_NeighborhoodRadius.Fill(rad);
+      this->Modified();
+    }
 
   /**Set/Get detector */
   itkSetObjectMacro(Detector, DetectorType);
   itkGetObjectMacro(Detector, DetectorType);
   itkGetObjectMacro(DensityImageFilter, DensityImageType);
-
-
+ 
 protected:
 
   /**
@@ -115,9 +118,9 @@ private:
   EdgeDensityImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  DetectorPointerType       m_Detector;
-  DensityImagePointerType   m_DensityImageFilter;
-  unsigned int              m_NeighborhoodRadius;
+  DetectorPointerType     m_Detector;
+  DensityImagePointerType m_DensityImageFilter;
+  InputImageSizeType      m_NeighborhoodRadius;
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION

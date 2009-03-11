@@ -33,10 +33,10 @@ EdgeDetectorImageFilter<TInputImage, TOutputImage, TEdgeDetection>
   
   m_Detector =  DetectionType::New();
   m_BinaryFilter = BinaryFilterType::New();
-  m_BinaryFilter->SetInsideValue( static_cast<OutputImagePixelType>(1.) );
-  m_BinaryFilter->SetOutsideValue( static_cast<OutputImagePixelType>(0.) );
-  m_BinaryFilter->SetUpperThreshold( itk::NumericTraits<InputImagePixelType>::max() );
-  m_BinaryFilter->SetLowerThreshold( itk::NumericTraits<InputImagePixelType>::min() );
+  m_BinaryFilter->SetInsideValue( static_cast<OutputImagePixelType>(0.) );
+  m_BinaryFilter->SetOutsideValue( static_cast<OutputImagePixelType>(1.) );
+  m_BinaryFilter->SetUpperThreshold( static_cast<InputImagePixelType>(255) );
+  m_BinaryFilter->SetLowerThreshold( static_cast<InputImagePixelType>(0) );
 }
 
 
@@ -63,11 +63,6 @@ EdgeDetectorImageFilter<TInputImage, TOutputImage, TEdgeDetection>
   m_BinaryFilter->GraftOutput(this->GetOutput());
   m_BinaryFilter->Update();
   this->GraftOutput(m_BinaryFilter->GetOutput());
-  /*
- m_Detector->GraftOutput(this->GetOutput());
-  m_Detector->Update();
-  this->GraftOutput(m_Detector->GetOutput());
-  */
 }
 
 

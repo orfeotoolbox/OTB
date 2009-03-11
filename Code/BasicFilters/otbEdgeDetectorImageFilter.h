@@ -94,7 +94,18 @@ public:
       m_BinaryFilter->SetUpperThreshold(val);
       this->Modified();
     }
-  
+  /** Set Inside value. */
+  void SetInsideValue(InputImagePixelType val)
+    {
+      m_BinaryFilter->SetInsideValue(val);
+      this->Modified();
+    }
+  /** Set Outside value. */
+  void SetOutsideValue(InputImagePixelType val)
+    {
+      m_BinaryFilter->SetOutsideValue(val);
+      this->Modified();
+    }
  protected:
 
   EdgeDetectorImageFilter();

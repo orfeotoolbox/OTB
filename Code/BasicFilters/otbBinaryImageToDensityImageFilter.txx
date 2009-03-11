@@ -51,6 +51,7 @@ void
 BinaryImageToDensityImageFilter<TInputImage, TOutputImage, TCountFunction>
 ::GenerateInputRequestedRegion()
 {
+  std::cout<<"GenerateInputRequestedRegion"<<std::endl;
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
 
