@@ -66,19 +66,28 @@ public:
     if( m_View.IsNotNull() && m_Model.IsNotNull() )
       {
       if(widgetId == m_View->GetScrollWidget()->GetIdentifier()
-	 && event == FL_PUSH)
-	{
-	otbMsgDevMacro(<<"ChangeExtractRegionActionHandler::HandleWidgetEvent(): handling ("<<widgetId<<", "<<event<<")");
-	// Get the clicked index
-	typename ViewType::IndexType index;
-	index[0] = Fl::event_x();
-	index[1] = Fl::event_y();
-	// Change scaled extract region center
-	m_Model->SetExtractRegionCenter(m_View->GetScrollWidget()->ScreenIndexToImageIndex(index));
-	// Update model
-	m_Model->Update();
-	return true;
-	}
+         && event == FL_PUSH)
+        {
+        otbMsgDevMacro(<<"ChangeExtractRegionActionHandler::HandleWidgetEvent(): handling ("<<widgetId<<", "<<event<<")");
+
+        // Get the clicked index
+        typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
+        screenPoint = m_View->GetScrollWidget()->GetMousePosition();
+        
+        // Transform to image point
+        imagePoint = m_View->GetScrollWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
+
+        // Transform to index
+        typename ViewType::IndexType index;
+        index[0]=static_cast<int>(imagePoint[0]);
+        index[1]=static_cast<int>(imagePoint[1]);
+
+        // Change scaled extract region center
+        m_Model->SetExtractRegionCenter(index);
+        // Update model
+        m_Model->Update();
+        return true;
+        }
       }
     return false;
   }

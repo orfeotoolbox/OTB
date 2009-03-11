@@ -24,7 +24,6 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbImageViewer.h"
 
 #include "otbStationaryFilterBank.h"
 #include "otbWaveletForwardTransform.h"
@@ -92,8 +91,6 @@ int otbWaveletTransform( int argc, char ** argv )
 
   filter->Update();
 
-
-  typedef otb::ImageViewer< PixelType > ViewerType;
 
   std::string prefix = parseResult->GetParameterString("--Output");
   for ( unsigned int i = 0; i < filter->GetNumberOfOutputs(); i++ )

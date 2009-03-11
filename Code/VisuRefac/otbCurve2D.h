@@ -18,10 +18,7 @@
 #ifndef __otbCurve2D_h
 #define __otbCurve2D_h
 
-#include "itkObject.h"
-#include "itkImageRegion.h"
-#include "itkAffineTransform.h"
-#include "itkFixedArray.h"
+#include "otbGlComponent.h"
 
 // FLTK includes
 #include <FL/gl.h>
@@ -32,31 +29,28 @@ namespace otb
 /** \class Curve2D
 *   \brief Base class Curves to be rendered in Curves2DWidget.
 *   
-*   \sa ImageViewerModel
+*   \sa Curves2DWidget
 */
 
 class Curve2D
-  : public itk::Object
+  : public  GlComponent
 {
 public:
   /** Standard class typedefs */
   typedef Curve2D                              Self;
-  typedef itk::Object                          Superclass;
+  typedef GlComponent                          Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
   typedef itk::ImageRegion<2>                  RegionType;
  
   // affine transform
-  typedef itk::AffineTransform<double,2>       AffineTransformType;
-  typedef AffineTransformType::InputPointType  PointType;
-  typedef AffineTransformType::InputVectorType VectorType;
-  typedef itk::FixedArray<double,4>             ColorType;
+  typedef Superclass::AffineTransformType      AffineTransformType;
+  typedef Superclass::PointType                PointType;
+  typedef Superclass::VectorType               VectorType;
+  typedef Superclass::ColorType                ColorType;
     
   /** Runtime information */
-  itkTypeMacro(Curve2D,Object);
-
-  /// Render the curve according to display extent and axis characteristics
-  virtual void  Render(const RegionType& extent,const AffineTransformType * space2ScreenTransform) = 0;
+  itkTypeMacro(Curve2D,GlComponent);
 
   /// This method is provided to do some computation before rendering
   virtual void BeforeRendering() {};

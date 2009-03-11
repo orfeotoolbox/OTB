@@ -21,6 +21,7 @@
 #include "otbImageWidget.h"
 #include "otbImageLayerRenderingModelListener.h"
 #include "otbImageWidgetController.h"
+#include "otbRegionGlComponent.h"
 
 namespace otb
 {
@@ -66,6 +67,10 @@ public:
   /** Image widget */
   typedef otb::ImageWidget<ImageType>          ImageWidgetType;
   typedef typename ImageWidgetType::Pointer    ImageWidgetPointerType;
+
+  /** Region gl component typedef */
+  typedef RegionGlComponent                       RegionGlComponentType;
+  typedef typename RegionGlComponentType::Pointer RegionGlComponentPointerType;
 
   /**
    * This method unregister with previous model if any, and 
@@ -122,6 +127,11 @@ private:
 
   /** Controller pointer */
   ControllerPointerType  m_Controller;
+
+  /** Viewed region gl components */
+  RegionGlComponentPointerType m_ExtractRegionGlComponent;
+  RegionGlComponentPointerType m_ScaledExtractRegionGlComponent;
+  
 
 }; // end class
 } // end namespace otb

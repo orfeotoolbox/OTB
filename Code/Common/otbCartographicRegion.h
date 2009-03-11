@@ -199,53 +199,53 @@ public:
 
       // Can we crop?
       for (unsigned int i = 0; i < IndexType::IndexDimension && cropPossible; i++)
-	{
-	  // Is left edge of current region to the right of the right edge
-	  // of the region to crop with? (if so, we cannot crop)
-	  if (m_Index[i] >= region.GetOrigin()[i]
-	      + static_cast<Type>(region.GetSize()[i]))
-	    {
-	      cropPossible = false;
-	    }
-	  // If right edge of the current region to the left of the left
-	  // edge of the region to crop with? (if so, we cannot crop)
-	  if (m_Index[i] + static_cast<Type>(m_Size[i]) <= region.GetOrigin()[i])
-	    {
-	      cropPossible = false;
-	    }
-	}
+        {
+          // Is left edge of current region to the right of the right edge
+          // of the region to crop with? (if so, we cannot crop)
+          if (m_Index[i] >= region.GetOrigin()[i]
+              + static_cast<Type>(region.GetSize()[i]))
+            {
+              cropPossible = false;
+            }
+          // If right edge of the current region to the left of the left
+          // edge of the region to crop with? (if so, we cannot crop)
+          if (m_Index[i] + static_cast<Type>(m_Size[i]) <= region.GetOrigin()[i])
+            {
+              cropPossible = false;
+            }
+        }
 
       // if we cannot crop, return without changing anythin
       if (!cropPossible)
-	{
-	  return cropPossible;
-	}
+        {
+          return cropPossible;
+        }
 
       // we can crop, so crop
       for (unsigned int i=0; i <  IndexType::IndexDimension; i++)
-	{
-	  // first check the start index
-	  if (m_Index[i] < region.GetOrigin()[i])
-	    {
-	      // how much do we need to adjust
-	      crop = region.GetOrigin()[i] - m_Index[i];
+        {
+          // first check the start index
+          if (m_Index[i] < region.GetOrigin()[i])
+            {
+              // how much do we need to adjust
+              crop = region.GetOrigin()[i] - m_Index[i];
 
-	      // adjust the start index and the size of the current region
-	      m_Index[i] += crop;
-	      m_Size[i] -= static_cast<Type>(crop);
-	    }
-	  // now check the final size
-	  if (m_Index[i] + static_cast<Type>(m_Size[i])
-	      > region.GetOrigin()[i] + static_cast<Type>(region.GetSize()[i]))
-	    {
-	      // how much do we need to adjust
-	      crop = m_Index[i] + static_cast<Type>(m_Size[i])
-		- region.GetOrigin()[i] - static_cast<Type>(region.GetSize()[i]);
+              // adjust the start index and the size of the current region
+              m_Index[i] += crop;
+              m_Size[i] -= static_cast<Type>(crop);
+            }
+          // now check the final size
+          if (m_Index[i] + static_cast<Type>(m_Size[i])
+              > region.GetOrigin()[i] + static_cast<Type>(region.GetSize()[i]))
+            {
+              // how much do we need to adjust
+              crop = m_Index[i] + static_cast<Type>(m_Size[i])
+                - region.GetOrigin()[i] - static_cast<Type>(region.GetSize()[i]);
 
-	      // adjust the size
-	      m_Size[i] -= static_cast<Type>(crop);
-	    }
-	}
+              // adjust the size
+              m_Size[i] -= static_cast<Type>(crop);
+            }
+        }
 
       return cropPossible;
     }

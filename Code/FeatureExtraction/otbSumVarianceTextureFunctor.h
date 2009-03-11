@@ -58,27 +58,27 @@ public:
     double out = 0.;
     for (unsigned sB = 0; sB<this->GetHisto()[0].size(); sB++)
       {
-	double nCeil = (static_cast<double>(sB)+0.5)*this->GetNeighBinLength();
-	double nCeil2 = (static_cast<double>(sB)+this->GetHisto()[0].size()+0.5)*this->GetNeighBinLength();
-	double Px_y = 0.;
-	double Px_y2 = 0.;
-	for (unsigned r = 0; r<this->GetHisto().size(); r++)
-	  {
-	    double rVal = (static_cast<double>(r)+0.5)*this->GetOffsetBinLength();
-	    for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-	      {
-		double sVal = (static_cast<double>(s)+0.5)*this->GetNeighBinLength();
-		if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(this->GetNeighBinLength()) )
-		  {
-		    Px_y +=  static_cast<double>(this->GetHisto()[r][s])*areaInv;
-		  }
-		if( vcl_abs(rVal + sVal - nCeil2) < vcl_abs(this->GetNeighBinLength()) )
-		  {
-		    Px_y2 +=  static_cast<double>(this->GetHisto()[r][s])*areaInv;
-		  }
-	      }
-	  }
-	out += vcl_pow((nCeil-f6), 2)*Px_y + vcl_pow((nCeil2-f6), 2)*Px_y2;
+        double nCeil = (static_cast<double>(sB)+0.5)*this->GetNeighBinLength();
+        double nCeil2 = (static_cast<double>(sB)+this->GetHisto()[0].size()+0.5)*this->GetNeighBinLength();
+        double Px_y = 0.;
+        double Px_y2 = 0.;
+        for (unsigned r = 0; r<this->GetHisto().size(); r++)
+          {
+            double rVal = (static_cast<double>(r)+0.5)*this->GetOffsetBinLength();
+            for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
+              {
+                double sVal = (static_cast<double>(s)+0.5)*this->GetNeighBinLength();
+                if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(this->GetNeighBinLength()) )
+                  {
+                    Px_y +=  static_cast<double>(this->GetHisto()[r][s])*areaInv;
+                  }
+                if( vcl_abs(rVal + sVal - nCeil2) < vcl_abs(this->GetNeighBinLength()) )
+                  {
+                    Px_y2 +=  static_cast<double>(this->GetHisto()[r][s])*areaInv;
+                  }
+              }
+          }
+        out += vcl_pow((nCeil-f6), 2)*Px_y + vcl_pow((nCeil2-f6), 2)*Px_y2;
       }
 
     return out;

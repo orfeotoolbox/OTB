@@ -1676,9 +1676,9 @@ ADD_TEST(ioTvPointSetFileReader ${IO_TESTS16}
 
 ADD_TEST(ioTvImageSeriesFileReader ${IO_TESTS17}
         --compare-n-images ${TOL} 2
-            ${EXAMPLEDATA}/GomaAvant.png
+            ${BASELINE}/ioTvImageSeries-0.png
             ${TEMP}/ioTvImageSeries-0.png
-            ${EXAMPLEDATA}/GomaApres.png
+            ${BASELINE}/ioTvImageSeries-1.png
             ${TEMP}/ioTvImageSeries-1.png
         otbImageSeriesFileReader
             -in ${EXAMPLEDATA}/GomaAvantApres

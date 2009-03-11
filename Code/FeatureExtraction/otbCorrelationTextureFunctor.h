@@ -61,13 +61,13 @@ public:
     double sumProb = 0.;
     for (unsigned r = 0; r<this->GetHisto().size(); r++)
       {
-	for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-	  {
-	    double p =  static_cast<double>(this->GetHisto()[r][s])*areaInv;
-	    sumProb += p;
-	    double pixProd = ( (static_cast<double>(r)+0.5)*this->GetOffsetBinLength() ) * ( (static_cast<double>(s)+0.5)*this->GetNeighBinLength() );
-	    out += pixProd * p;
-	  }
+        for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
+          {
+            double p =  static_cast<double>(this->GetHisto()[r][s])*areaInv;
+            sumProb += p;
+            double pixProd = ( (static_cast<double>(r)+0.5)*this->GetOffsetBinLength() ) * ( (static_cast<double>(s)+0.5)*this->GetNeighBinLength() );
+            out += pixProd * p;
+          }
     }
 
     double meanPOff = sumProb/static_cast<double>(this->GetHisto().size());
@@ -77,12 +77,12 @@ public:
     double stdPOff = 0.;
     for (unsigned r = 0; r<this->GetHisto().size(); r++)
       {
-	double sumTemp = 0.;
-	for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-	  {
-	    sumTemp += this->GetHisto()[r][s]*areaInv;
-	  }
-	stdPOff +=  vcl_pow( (meanPOff-sumTemp), 2);
+        double sumTemp = 0.;
+        for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
+          {
+            sumTemp += this->GetHisto()[r][s]*areaInv;
+          }
+        stdPOff +=  vcl_pow( (meanPOff-sumTemp), 2);
       }
     stdPOff /= this->GetHisto().size();
     stdPOff = vcl_sqrt(stdPOff);
@@ -91,19 +91,19 @@ public:
     double stdPNeigh = 0.;
     for (unsigned r = 0; r<this->GetHisto()[0].size(); r++)
       {
-	double sumTemp = 0.;
-	for (unsigned s = 0; s<this->GetHisto().size(); s++)
-	  {
-	    sumTemp += this->GetHisto()[s][r]*areaInv;
-	  }
-	stdPNeigh +=  vcl_pow( (meanPNeigh-sumTemp), 2);
+        double sumTemp = 0.;
+        for (unsigned s = 0; s<this->GetHisto().size(); s++)
+          {
+            sumTemp += this->GetHisto()[s][r]*areaInv;
+          }
+        stdPNeigh +=  vcl_pow( (meanPNeigh-sumTemp), 2);
       }
     stdPNeigh /= this->GetHisto()[0].size();
     stdPNeigh = vcl_sqrt(stdPNeigh);
 
 
     if(stdPOff*stdPNeigh != 0)
-     	out = (out - meanPOff*meanPNeigh) / (stdPOff*stdPNeigh);
+             out = (out - meanPOff*meanPNeigh) / (stdPOff*stdPNeigh);
 
     return out;
   }

@@ -60,12 +60,12 @@ public:
     double out = 0.;
     for (unsigned r = 0; r<this->GetHisto().size(); r++)
       {
-	for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-	  {
-	    double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
-	    double square = vcl_pow( ( ( (static_cast<double>(s)+0.5)*this->GetNeighBinLength() ) - mean), 2);
-	    out += square*p;
-	  }
+        for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
+          {
+            double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
+            double square = vcl_pow( ( ( (static_cast<double>(s)+0.5)*this->GetNeighBinLength() ) - mean), 2);
+            out += square*p;
+          }
       }
 
     return out;

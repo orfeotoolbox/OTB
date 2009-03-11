@@ -60,7 +60,7 @@ public:
       lCurPixNorm += inPix[i]*inPix[i];
     }
     lCurPixNorm = vcl_sqrt(static_cast<double>(lCurPixNorm));
-    lGaussianCoef = vcl_exp(- vcl_pow((lCurPixNorm-m_RefNorm),2) / m_Denom ) ;
+    lGaussianCoef = vcl_exp(- vcl_pow((lCurPixNorm-m_RefNorm),2) / m_Denom );
 
     // Reverse the SpectralAngle values and set them between [0;1]
     lRes =  lGaussianCoef * ((M_PI-m_SpectralAngleFunctor(inPix)) / M_PI);

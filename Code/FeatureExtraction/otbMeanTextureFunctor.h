@@ -55,13 +55,13 @@ public:
     double areaInv = 1/area;
     double out = 0.;
       for (unsigned r = 0; r<this->GetHisto().size(); r++)
-	{
-	  for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-	    {
-	      double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
-	      out += (static_cast<double>(s)+0.5)*this->GetNeighBinLength() * p;
-	    }
-	}
+        {
+          for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
+            {
+              double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
+              out += (static_cast<double>(s)+0.5)*this->GetNeighBinLength() * p;
+            }
+        }
 
       return out;
   }

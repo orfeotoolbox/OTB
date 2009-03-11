@@ -66,14 +66,14 @@ public:
     double HX = 0.;
     for (unsigned r = 0; r<this->GetHisto()[0].size(); r++)
       {
-	double sumTemp = 0.;
-	for (unsigned s = 0; s<this->GetHisto().size(); s++)
-	  {
-	    sumTemp += this->GetHisto()[s][r]*areaInv;
-	  }
-	PxVector.push_back( sumTemp );
-	if(sumTemp != 0. )
-	  HX +=  sumTemp * vcl_log( sumTemp );
+        double sumTemp = 0.;
+        for (unsigned s = 0; s<this->GetHisto().size(); s++)
+          {
+            sumTemp += this->GetHisto()[s][r]*areaInv;
+          }
+        PxVector.push_back( sumTemp );
+        if(sumTemp != 0. )
+          HX +=  sumTemp * vcl_log( sumTemp );
       }
     if ( HX != 0. )
       HX = -HX;
@@ -83,14 +83,14 @@ public:
     double HY = 0.;
     for (unsigned r = 0; r<this->GetHisto().size(); r++)
       {
-	double sumTemp = 0.;
-	for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-	  {
-	    sumTemp += this->GetHisto()[r][s]*areaInv;
-	  }
-	PyVector.push_back( sumTemp );
-	if(sumTemp != 0. )
-	  HY +=  sumTemp * vcl_log( sumTemp );
+        double sumTemp = 0.;
+        for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
+          {
+            sumTemp += this->GetHisto()[r][s]*areaInv;
+          }
+        PyVector.push_back( sumTemp );
+        if(sumTemp != 0. )
+          HY +=  sumTemp * vcl_log( sumTemp );
       }
     if ( HY != 0. )
       HY = -HY;
@@ -100,15 +100,15 @@ public:
     double HXY1 = 0.;
     for (unsigned r = 0; r<this->GetHisto().size(); r++)
       {
-	for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
-	  {
-	    if( PyVector[r]*PxVector[s] != 0. )
-	      {
-		double p = this->GetHisto()[r][s]*areaInv;
-		HXY1 += p * vcl_log( PyVector[r]*PxVector[s] );
-	      }
+        for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
+          {
+            if( PyVector[r]*PxVector[s] != 0. )
+              {
+                double p = this->GetHisto()[r][s]*areaInv;
+                HXY1 += p * vcl_log( PyVector[r]*PxVector[s] );
+              }
 
-	  }
+          }
       }
     if ( HXY1 != 0. )
       HXY1 = -HXY1;

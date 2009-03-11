@@ -167,12 +167,12 @@ public:
   void SetFeatureStatus(FeatureType id, bool isSelected )
     {
       if ( static_cast<unsigned int>(id) > this->GetTexturesStatus().size() || id == 0 )
-	  {
-	    itkExceptionMacro(<<"Invalid texture index "<<id<<", must be in [1;"<<this->GetTexturesStatus().size()<<"]");
-	  }
+          {
+            itkExceptionMacro(<<"Invalid texture index "<<id<<", must be in [1;"<<this->GetTexturesStatus().size()<<"]");
+          }
       else
-	  {
-	    this->GetFunctor().SetTextureStatus( id-1, isSelected );
+          {
+            this->GetFunctor().SetTextureStatus( id-1, isSelected );
       }
     }
 

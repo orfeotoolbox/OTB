@@ -25,12 +25,20 @@ namespace otb
 template < class TInputImage >
 ImageView<TInputImage>
 ::ImageView() : m_ScrollWidget(), m_FullWidget(), m_ZoomWidget(),
-		  m_Model(), m_Controller()
+                m_Model(), m_Controller(), m_ExtractRegionGlComponent(), m_ScaledExtractRegionGlComponent()
 {
   // Initializing the widgets
   m_ScrollWidget = ImageWidgetType::New();
   m_FullWidget   = ImageWidgetType::New();
   m_ZoomWidget   = ImageWidgetType::New();
+
+  // Extract regions gl components
+  m_ExtractRegionGlComponent = RegionGlComponentType::New();
+  m_ScaledExtractRegionGlComponent = RegionGlComponentType::New();
+  m_ExtractRegionGlComponent->SetVisible(false);
+  m_ScaledExtractRegionGlComponent->SetVisible(false);
+  m_ScrollWidget->AddGlComponent(m_ExtractRegionGlComponent);
+  m_FullWidget->AddGlComponent(m_ScaledExtractRegionGlComponent);
 
   // Set the widget identifiers
   m_ScrollWidget->SetIdentifier("Scroll");
@@ -131,12 +139,12 @@ ImageView<TInputImage>
     // display the zoom rectangle if necessary
     if(m_Model->GetHasExtract())
       {
-      m_ScrollWidget->SetDisplayRectangle(true);
-      m_ScrollWidget->SetRectangle(m_Model->GetExtractRegion());
+      m_ExtractRegionGlComponent->SetVisible(true);
+      m_ExtractRegionGlComponent->SetRegion(m_Model->GetExtractRegion());
       }
     else
       {
-      m_ScrollWidget->SetDisplayRectangle(false);
+      m_ExtractRegionGlComponent->SetVisible(false);
       }
     }
 
@@ -154,7 +162,7 @@ ImageView<TInputImage>
     {
     otbMsgDevMacro(<<"ImageView::UpdateFullWidget(): redrawing full widget");
     m_FullWidget->ReadBuffer(m_Model->GetRasterizedExtract(),m_Model->GetRasterizedExtract()
-			     ->GetLargestPossibleRegion());
+                             ->GetLargestPossibleRegion());
 
    // Setting widget label
     std::string label = m_FullWidget->GetIdentifier();
@@ -165,12 +173,12 @@ ImageView<TInputImage>
     // display the zoom rectangle if necessary
     if(m_Model->GetHasScaledExtract())
       {
-      m_FullWidget->SetDisplayRectangle(true);
-      m_FullWidget->SetRectangle(m_Model->GetScaledExtractRegion());
+      m_ScaledExtractRegionGlComponent->SetVisible(true);
+      m_ScaledExtractRegionGlComponent->SetRegion(m_Model->GetScaledExtractRegion());
       }
     else
       {
-      m_FullWidget->SetDisplayRectangle(false);
+      m_ScaledExtractRegionGlComponent->SetVisible(false);
       }
     // redraw the widget
     m_FullWidget->redraw();
@@ -186,7 +194,7 @@ ImageView<TInputImage>
     {
     otbMsgDevMacro(<<"ImageView::UpdateZoomWidget(): redrawing zoom widget");
     m_ZoomWidget->ReadBuffer(m_Model->GetRasterizedScaledExtract(),m_Model->GetRasterizedScaledExtract()
-			     ->GetLargestPossibleRegion());
+                             ->GetLargestPossibleRegion());
 
     // Setting widget label
     std::string label = m_ZoomWidget->GetIdentifier();

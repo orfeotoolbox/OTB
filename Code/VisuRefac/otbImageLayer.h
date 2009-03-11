@@ -84,7 +84,7 @@ public:
   typedef typename RenderingFilterType::RenderingFunctionType         RenderingFunctionType;
   typedef typename RenderingFunctionType::Pointer                     RenderingFunctionPointerType;
   typedef Function::StandardRenderingFunction<InternalPixelType,
-				    typename TOutputImage::PixelType> DefaultRenderingFunctionType;
+                                    typename TOutputImage::PixelType> DefaultRenderingFunctionType;
   typedef itk::ExtractImageFilter<ImageType,ImageType>                ExtractFilterType;
   typedef typename ExtractFilterType::Pointer                         ExtractFilterPointerType;
 
@@ -158,9 +158,9 @@ public:
       Superclass::SetExtractRegion(region);
       // SetExtractionRegion throws an exception in case of empty region
       if(region.GetNumberOfPixels() > 0)
-	{
-	m_ExtractFilter->SetExtractionRegion(region);
-	}
+        {
+        m_ExtractFilter->SetExtractionRegion(region);
+        }
       }
   }
   
@@ -173,9 +173,9 @@ public:
       Superclass::SetScaledExtractRegion(region);
       // SetExtractionRegion throws an exception in case of empty region
       if(region.GetNumberOfPixels() > 0)
-	{
-	m_ScaledExtractFilter->SetExtractionRegion(region);
-	}
+        {
+        m_ScaledExtractFilter->SetExtractionRegion(region);
+        }
       }
   }
 

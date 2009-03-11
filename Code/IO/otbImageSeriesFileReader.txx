@@ -2,7 +2,7 @@
 
   Program:   ORFEO Toolbox
   Language:  C++
-  Date:	  $Date$
+  Date:          $Date$
   Version:   $Revision$
 
 
@@ -12,9 +12,9 @@
   Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
   See ITCopyright.txt for details.
 
-	 This software is distributed WITHOUT ANY WARRANTY; without even 
-	 the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-	 PURPOSE.  See the above copyright notices for more information.
+         This software is distributed WITHOUT ANY WARRANTY; without even 
+         the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+         PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -52,11 +52,11 @@ void
 ImageSeriesFileReader< TImage, TInternalImage > 
 ::GenerateData( unsigned int idx )
 {
-	itk::OStringStream msg;
-	msg << "Something wrong... Check the template definition of this class in the program...\n";
-	msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
-	ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
-	throw e;
+        itk::OStringStream msg;
+        msg << "Something wrong... Check the template definition of this class in the program...\n";
+        msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
+        ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
+        throw e;
 }
 
 /* **********************************************************
@@ -98,24 +98,24 @@ void
 ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixel, 2 > >
 ::TestBandSelection ( std::vector<unsigned int> & bands )
 {
-	if (  bands.size() != 1 )
-	{
-		itk::OStringStream msg;
-		msg << "Unable to handle multicomponent file from Image<> class\n";
-		msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
-		ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
-		throw e;
-	}
+        if (  bands.size() != 1 )
+        {
+                itk::OStringStream msg;
+                msg << "Unable to handle multicomponent file from Image<> class\n";
+                msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
+                ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
+                throw e;
+        }
 
-	if ( bands[0] != 1 )
-	{
-		itk::OStringStream msg;
-		msg << "Unable to handle given band reading from multicomponent file with Image<> class\n";
-		msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
-		ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
-		throw e;
-	}
-	return;
+        if ( bands[0] != 1 )
+        {
+                itk::OStringStream msg;
+                msg << "Unable to handle given band reading from multicomponent file with Image<> class\n";
+                msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
+                ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
+                throw e;
+        }
+        return;
 }
 
 /**
@@ -186,15 +186,15 @@ void
 ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
 ::TestBandSelection ( std::vector<unsigned int> & bands )
 {
-	if (  bands.size() != 1 )
-	{
-		itk::OStringStream msg;
-		msg << "Unable to handle multicomponent file from Image<> class as output\n";
-		msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
-		ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
-		throw e;
-	}
-	return;
+        if (  bands.size() != 1 )
+        {
+                itk::OStringStream msg;
+                msg << "Unable to handle multicomponent file from Image<> class as output\n";
+                msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
+                ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
+                throw e;
+        }
+        return;
 }
 
 /**
@@ -214,7 +214,7 @@ ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
     = static_cast<ExtractSelectionType*>( this->m_ExtractorList->GetNthElement( idx ) );
 
   selection->SetExtractionRegion( this->m_ListOfRegionSelection[ idx ] );
-	selection->SetChannel(  this->m_ListOfBandSelection[ idx ][0] );
+        selection->SetChannel(  this->m_ListOfBandSelection[ idx ][0] );
 
   selection->SetInput( reader->GetOutput() );
   selection->GraftOutput(  this->m_OutputList->GetNthElement( idx ) );
@@ -274,12 +274,12 @@ ImageSeriesFileReader< VectorImage< TPixel, 2 >, VectorImage< TInternalPixel, 2 
 
   selection->SetExtractionRegion( this->m_ListOfRegionSelection[ idx ] );
 
-	for ( std::vector<unsigned int>::iterator band = this->m_ListOfBandSelection[ idx ].begin();
-		band != this->m_ListOfBandSelection[ idx ].end();
-		++band )
-	{
-		selection->SetChannel( *band );
-	}
+        for ( std::vector<unsigned int>::iterator band = this->m_ListOfBandSelection[ idx ].begin();
+                band != this->m_ListOfBandSelection[ idx ].end();
+                ++band )
+        {
+                selection->SetChannel( *band );
+        }
 
   selection->SetInput( reader->GetOutput() );
   selection->GraftOutput(  this->m_OutputList->GetNthElement( idx ) );

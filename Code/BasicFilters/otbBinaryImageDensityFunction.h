@@ -88,7 +88,7 @@ class ITK_EXPORT BinaryImageDensityFunction :
     { 
       IndexType index;
       this->ConvertContinuousIndexToNearestIndex( cindex, index );
-      return this->EvaluateAtIndex( index ) ; 
+      return this->EvaluateAtIndex( index ); 
     }
 
   /** Get/Set the radius of the neighborhood over which the
