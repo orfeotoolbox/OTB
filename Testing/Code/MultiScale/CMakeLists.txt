@@ -356,9 +356,6 @@ ADD_TEST(msTvGeodesicMorphologyIterativeDecompositionImageFilter ${MULTISCALE_TE
          2
 )
 
-# -------            otb::StationaryFilterBankNew   ----------
-ADD_TEST(msTuStationaryFilterBankNew ${MULTISCALE_TESTS4}
-         otbStationaryFilterBankNew)
 
 # -------            otb::WaveletTransform   ----------
 ADD_TEST(msTuWaveletTransformNew ${MULTISCALE_TESTS4}
@@ -384,7 +381,24 @@ ADD_TEST(msTvWaveletTransform ${MULTISCALE_TESTS4}
 ADD_TEST(msTuWaveletPacketTransformNew ${MULTISCALE_TESTS4}
          otbWaveletPacketTransformNew)
 
+# -------            otb::StationaryFilterBankNew   ----------
+ADD_TEST(msTuStationaryFilterBankNew ${MULTISCALE_TESTS4}
+         otbStationaryFilterBankNew)
 
+ADD_TEST(msTvStationaryFilterBank ${MULTISCALE_TESTS4}
+        --compare-n-images ${TOL} 4
+              ${BASELINE}/msTvStationaryFilterBank-0.tif
+              ${TEMP}/msTvStationaryFilterBank-0.tif
+              ${BASELINE}/msTvStationaryFilterBank-1.tif
+              ${TEMP}/msTvStationaryFilterBank-1.tif
+              ${BASELINE}/msTvStationaryFilterBank-2.tif
+              ${TEMP}/msTvStationaryFilterBank-2.tif
+              ${BASELINE}/msTvStationaryFilterBank-3.tif
+              ${TEMP}/msTvStationaryFilterBank-3.tif
+         otbStationaryFilterBank
+          -in ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          -out ${TEMP}/msTvStationaryFilterBank
+)
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicMultiScale_SRCS1
@@ -424,10 +438,11 @@ otbGeodesicMorphologyIterativeDecompositionImageFilterNew.cxx
 otbGeodesicMorphologyIterativeDecompositionImageFilter.cxx
 )
 SET(BasicMultiScale_SRCS4
-otbStationaryFilterBankNew.cxx
 otbWaveletTransformNew.cxx
 otbWaveletTransform.cxx
 otbWaveletPacketTransformNew.cxx
+otbStationaryFilterBankNew.cxx
+otbStationaryFilterBank.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
@@ -439,6 +454,6 @@ TARGET_LINK_LIBRARIES(otbMultiScaleTests2 OTBIO OTBMultiScale)
 ADD_EXECUTABLE(otbMultiScaleTests3 otbMultiScaleTests3.cxx ${BasicMultiScale_SRCS3})
 TARGET_LINK_LIBRARIES(otbMultiScaleTests3 OTBIO OTBMultiScale)
 ADD_EXECUTABLE(otbMultiScaleTests4 otbMultiScaleTests4.cxx ${BasicMultiScale_SRCS4})
-TARGET_LINK_LIBRARIES(otbMultiScaleTests4 OTBIO OTBMultiScale OTBVisu)
+TARGET_LINK_LIBRARIES(otbMultiScaleTests4 OTBIO OTBMultiScale)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
