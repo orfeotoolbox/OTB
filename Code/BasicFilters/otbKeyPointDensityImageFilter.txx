@@ -62,7 +62,7 @@ KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector >
   typename Superclass::OutputImagePointer      outputImage = this->GetOutput();
   InputImagePointerType ptr = const_cast<InputImageType *>(this->GetInput());
   if (!ptr)
-    return ;
+    return;
 
   /** Detector*/
   m_Detector->SetInput(ptr);

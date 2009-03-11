@@ -183,7 +183,7 @@ int main( int argc, char * argv[] )
   LineVectorType            outputVectorLines;
   LinesListType::Pointer    outputLinesList = LinesListType::New();
   
-  for (unsigned int i = 0; i<segmentOrtho->GetNumberOfPoints() ; i++)
+  for (unsigned int i = 0; i<segmentOrtho->GetNumberOfPoints(); i++)
     {
       // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex

@@ -121,17 +121,17 @@ private:
 template <class TInputImage,class TOutputImage = Image<itk::RGBPixel<unsigned char>, 2 > >
 class RenderingImageFilter
   : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,
-				        Functor::RenderingFunctor
-					< typename TInputImage ::InternalPixelType,
-					  typename TOutputImage::PixelType > >
+                                        Functor::RenderingFunctor
+                                        < typename TInputImage ::InternalPixelType,
+                                          typename TOutputImage::PixelType > >
 {
 public:
   /** Standard typedefs */
   typedef RenderingImageFilter                                   Self;
   typedef itk::UnaryFunctorImageFilter
   <TInputImage,TOutputImage, Functor::RenderingFunctor
-		 < typename TInputImage ::InternalPixelType,
-		   typename TOutputImage::PixelType > >          Superclass;
+                 < typename TInputImage ::InternalPixelType,
+                   typename TOutputImage::PixelType > >          Superclass;
   typedef itk::SmartPointer<Self>                                Pointer;
   typedef itk::SmartPointer<const Self>                          ConstPointer;
 

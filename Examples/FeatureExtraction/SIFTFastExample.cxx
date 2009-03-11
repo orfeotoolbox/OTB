@@ -57,7 +57,7 @@ int main(int argc, char * argv[])
 {
   if (argc != 4)
   {
-    std::cerr << "Usage: " << argv[0] ;
+    std::cerr << "Usage: " << argv[0];
     std::cerr << " InputImage OutputImage scales" << std::endl;
     return 1;
   }

@@ -25,7 +25,7 @@ namespace otb
 
 GlWidget
 ::GlWidget() : Fl_Gl_Window(0,0,0,0), m_Identifier("Default"), m_UseGlAcceleration(false),
-	       m_BackgroundColor()
+               m_BackgroundColor()
 {
   #ifdef OTB_GL_USE_ACCEL
   m_UseGlAcceleration = true;

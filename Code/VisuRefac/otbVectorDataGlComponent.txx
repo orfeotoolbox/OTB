@@ -55,7 +55,7 @@ VectorDataGlComponent<TVectorData>
       case FEATURE_POINT:
       {
       this->RenderPoint(node->GetPoint(),extent,space2ScreenTransform);
-	break;
+        break;
 
       }
       case FEATURE_LINE:
@@ -66,7 +66,7 @@ VectorDataGlComponent<TVectorData>
       case FEATURE_POLYGON:
       {
       this->RenderPolygon(node->GetPolygonExteriorRing(),node->GetPolygonInteriorRings(),
-			  extent,space2ScreenTransform);
+                          extent,space2ScreenTransform);
       break;
       }
       default:

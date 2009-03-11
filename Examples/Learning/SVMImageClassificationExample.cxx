@@ -67,12 +67,12 @@
 int main(int argc, char* argv[] )
 {
 
-  namespace stat = itk::Statistics ;
+  namespace stat = itk::Statistics;
 
   if (argc != 4)
   {
     std::cout << "Usage : " << argv[0] << " inputImage outputImage modelFile "
-              << std::endl ;
+              << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -213,9 +213,9 @@ int main(int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
 
 
-  typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType ;
+  typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType;
 
-  ClassifierType::Pointer classifier = ClassifierType::New() ;
+  ClassifierType::Pointer classifier = ClassifierType::New();
 
 // Software Guide : EndCodeSnippet
 
@@ -230,10 +230,10 @@ int main(int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
 
   int numberOfClasses = model->GetNumberOfClasses();
-  classifier->SetNumberOfClasses(numberOfClasses) ;
+  classifier->SetNumberOfClasses(numberOfClasses);
   classifier->SetModel( model );
-  classifier->SetSample(sample.GetPointer()) ;
-  classifier->Update() ;
+  classifier->SetSample(sample.GetPointer());
+  classifier->Update();
 
 // Software Guide : EndCodeSnippet
 
@@ -303,11 +303,11 @@ int main(int argc, char* argv[] )
 
 
   ClassifierType::OutputType* membershipSample =
-    classifier->GetOutput() ;
+    classifier->GetOutput();
   ClassifierType::OutputType::ConstIterator m_iter =
-    membershipSample->Begin() ;
+    membershipSample->Begin();
   ClassifierType::OutputType::ConstIterator m_last =
-    membershipSample->End() ;
+    membershipSample->End();
 
   typedef itk::ImageRegionIterator< OutputImageType>  OutputIteratorType;
   OutputIteratorType  outIt( outputImage,
@@ -332,7 +332,7 @@ int main(int argc, char* argv[] )
   while (m_iter != m_last && !outIt.IsAtEnd())
   {
     outIt.Set(m_iter.GetClassLabel());
-    ++m_iter ;
+    ++m_iter;
     ++outIt;
   }
 

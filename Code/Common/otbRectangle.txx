@@ -85,7 +85,7 @@ Rectangle<TValue>
     double yp = p[1];
     
     double SegmentLength = vcl_sqrt((Xq1-Xq2)* (Xq1-Xq2) + (Yq1-Yq2) *(Yq1-Yq2));
-    double CrossProduct  =   Xq1*Yq2 - Xq2*Yq1 ;
+    double CrossProduct  =   Xq1*Yq2 - Xq2*Yq1;
     double Num   = vcl_abs(xp*(Yq1-Yq2) + yp*(Xq2-Xq1) + CrossProduct);
     
     /** distance from Point P to Segment Q1Q2*/
@@ -117,20 +117,20 @@ Rectangle<TValue>
     VertexListPointerType        cornersVertex = VertexListType::New();
     VertexType                   tempCorner;
     
-    tempCorner[0] =  p1[0] + dy* halfWidth ;
-    tempCorner[1] =  p1[1] - dx* halfWidth ;
+    tempCorner[0] =  p1[0] + dy* halfWidth;
+    tempCorner[1] =  p1[1] - dx* halfWidth;
     cornersVertex->InsertElement(cornersVertex->Size(),tempCorner);
 
-    tempCorner[0] =  p1[0] - dy* halfWidth ;
-    tempCorner[1] =  p1[1] + dx* halfWidth ;
+    tempCorner[0] =  p1[0] - dy* halfWidth;
+    tempCorner[1] =  p1[1] + dx* halfWidth;
     cornersVertex->InsertElement(cornersVertex->Size(),tempCorner);
     
-    tempCorner[0] =  p2[0] + dy* halfWidth ;
-    tempCorner[1] =  p2[1] - dx* halfWidth ;
+    tempCorner[0] =  p2[0] + dy* halfWidth;
+    tempCorner[1] =  p2[1] - dx* halfWidth;
     cornersVertex->InsertElement(cornersVertex->Size(),tempCorner);
     
-    tempCorner[0] =  p2[0] - dy* halfWidth ;
-    tempCorner[1] =  p2[1] + dx* halfWidth ;
+    tempCorner[0] =  p2[0] - dy* halfWidth;
+    tempCorner[1] =  p2[1] + dx* halfWidth;
     cornersVertex->InsertElement(cornersVertex->Size(),tempCorner);
     
     /** Compute the bounding region*/
@@ -149,41 +149,41 @@ Rectangle<TValue>
     
     if ( cornersVertex->Size()>0)
       {
-	x = static_cast<long int>(itCorners.Value()[0]);
-	y = static_cast<long int>(itCorners.Value()[1]);
-	index[0] = x;
-	index[1] = y;
-	
-	++itCorners;
-	while (itCorners != cornersVertex->End())
-	  {
-	    x = static_cast<long int>(itCorners.Value()[0]);
-	    y = static_cast<long int>(itCorners.Value()[1]);
-	    
-	    // Index search
-	    if ( x < index[0] )
-	      {
-		index[0] = x;
-	      }
-	    if ( y < index[1] )
-	      {
-		index[1] = y;
-	      }
-	    // Max Id search for size computation
-	    if ( x > maxId[0] )
-	      {
-		maxId[0] = x;
-	      }
-	    if ( y > maxId[1] )
-	      {
-		maxId[1] = y;
-	      }
-	    
-	    ++itCorners;
+        x = static_cast<long int>(itCorners.Value()[0]);
+        y = static_cast<long int>(itCorners.Value()[1]);
+        index[0] = x;
+        index[1] = y;
+        
+        ++itCorners;
+        while (itCorners != cornersVertex->End())
+          {
+            x = static_cast<long int>(itCorners.Value()[0]);
+            y = static_cast<long int>(itCorners.Value()[1]);
+            
+            // Index search
+            if ( x < index[0] )
+              {
+                index[0] = x;
+              }
+            if ( y < index[1] )
+              {
+                index[1] = y;
+              }
+            // Max Id search for size computation
+            if ( x > maxId[0] )
+              {
+                maxId[0] = x;
+              }
+            if ( y > maxId[1] )
+              {
+                maxId[1] = y;
+              }
+            
+            ++itCorners;
     }
-	
-	size[0] = maxId[0] - index[0];
-	size[1] = maxId[1] - index[1];
+        
+        size[0] = maxId[0] - index[0];
+        size[1] = maxId[1] - index[1];
       }
     region.SetSize(size);
     region.SetIndex(index);

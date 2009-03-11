@@ -92,7 +92,7 @@ PointSetToDensityImageFilter<  TInputPointSet ,  TOutputImage>
   }
 
   typename OutputImageType::RegionType region;
-  IndexType start ;
+  IndexType start;
   start.Fill(0);
 
   region.SetSize(this->GetSize());
