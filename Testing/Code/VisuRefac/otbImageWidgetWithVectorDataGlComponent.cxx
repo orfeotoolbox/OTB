@@ -147,7 +147,7 @@ int otbImageWidgetWithVectorDataGlComponent( int argc, char * argv[] )
 
   widget->AddGlComponent(vdgl);
   widget->redraw();
-  Fl::check();
+  Fl::run();
 
   
 

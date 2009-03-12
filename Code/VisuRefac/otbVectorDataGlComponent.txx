@@ -47,9 +47,9 @@ VectorDataGlComponent<TVectorData>
   // Setting up the tesselator callbacks
   gluTessCallback(m_GluTesselator,GLU_TESS_BEGIN,  (FunctionPointerType) glBegin);
   gluTessCallback(m_GluTesselator,GLU_TESS_END,    (FunctionPointerType) glEnd);
-  gluTessCallback(m_GluTesselator,GLU_TESS_ERROR,  (FunctionPointerType) VectorDataGlComponent<TVectorData>::TesselationErrorCallback);
-  gluTessCallback(m_GluTesselator,GLU_TESS_VERTEX, (FunctionPointerType) glVertex2dv);
-  gluTessCallback(m_GluTesselator,GLU_TESS_COMBINE,(FunctionPointerType) VectorDataGlComponent<TVectorData>::TesselationCombineCallback);
+  gluTessCallback(m_GluTesselator,GLU_TESS_ERROR,  (FunctionPointerType) TesselationErrorCallback);
+  gluTessCallback(m_GluTesselator,GLU_TESS_VERTEX, (FunctionPointerType) glVertex3dv);
+  gluTessCallback(m_GluTesselator,GLU_TESS_COMBINE,(FunctionPointerType) TesselationCombineCallback);
 }
 
 template <class TVectorData> 
@@ -118,6 +118,7 @@ VectorDataGlComponent<TVectorData>
     }
   glDisable(GL_LINE_SMOOTH);
   glDisable(GL_BLEND);
+  glLineWidth(1);
 }
    template <class TVectorData>   
 void 
@@ -204,9 +205,10 @@ VectorDataGlComponent<TVectorData>
     PointType screenPoint = transform->TransformPoint(spacePoint);
     
     // Convert to double array
-    GLdouble * glp = new GLdouble[2];
+    GLdouble * glp = new GLdouble[3];
     glp[0]=screenPoint[0];
     glp[1]=screenPoint[1];
+    glp[2]=0.;
     vertexBuffer.push_back(glp);
 
     // Add a point to the outer boundary
@@ -242,9 +244,10 @@ VectorDataGlComponent<TVectorData>
        PointType screenPoint = transform->TransformPoint(spacePoint);
        
        // Convert to double array
-       GLdouble * glp = new GLdouble[2];
+       GLdouble * glp = new GLdouble[3];
        glp[0]=screenPoint[0];
        glp[1]=screenPoint[1];
+       glp[2]=0.;
        vertexBuffer.push_back(glp);
 
        // Add a point to the outer boundary
@@ -260,7 +263,7 @@ VectorDataGlComponent<TVectorData>
   // End the polygon
   gluTessEndPolygon(m_GluTesselator);
 
-  // Do not forget to free all the vertex
+  // // Do not forget to free all the vertex
   for(typename VertexVectorType::iterator it = vertexBuffer.begin();
       it!=vertexBuffer.end();++it)
     {

@@ -24,9 +24,11 @@ namespace otb
 {
 
 GlWidget
-::GlWidget() : Fl_Gl_Window(0,0,0,0), m_Identifier("Default"), m_UseGlAcceleration(false),
+::GlWidget() : Fl_Gl_Window(0,0,0,0), m_Identifier(), m_UseGlAcceleration(false),
                m_BackgroundColor()
 {
+  m_Identifier = "Default";
+
   #ifdef OTB_GL_USE_ACCEL
   m_UseGlAcceleration = true;
   #endif

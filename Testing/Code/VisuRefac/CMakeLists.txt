@@ -260,6 +260,17 @@ otbImageWidgetWithVectorDataGlComponent
 ${INPUTDATA}/poupees.png 0
 )
 
+IF(OTB_DATA_USE_LARGEINPUT)
+
+ADD_TEST(vrTvImageViewerEndToEndWithVectorData ${VISUREFAC_TESTS1}
+otbImageViewerEndToEndWithVectorData
+${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+${INPUTDATA}/ToulouseRoad-examples.shp
+${INPUTDATA}/DEM/srtm_directory
+200 500 200 0
+)
+
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # Testing srcs
 SET(VisuRefac_SRCS1
@@ -297,6 +308,7 @@ otbHistogramCurveNew.cxx
 otbCurves2DWidgetWithHistogram.cxx
 otbVectorDataGlComponentNew.cxx
 otbImageWidgetWithVectorDataGlComponent.cxx
+otbImageViewerEndToEndWithVectorData.cxx
 )
 
 # Building testing executables

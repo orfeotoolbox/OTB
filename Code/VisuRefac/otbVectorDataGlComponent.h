@@ -132,11 +132,12 @@ private:
   typedef void (CALLBACK * FunctionPointerType)();
   
   // Static Combine callback for tesselation
-  static void TesselationCombineCallback(GLdouble coords[2],GLdouble * data[4], GLfloat weights[4],GLdouble **dataOut)
+  static void TesselationCombineCallback(GLdouble coords[3],GLdouble * data[4], GLfloat weights[4],GLdouble **dataOut)
   {
-    GLdouble * vertex = new GLdouble[2];
+    GLdouble * vertex = new GLdouble[3];
     vertex[0] = coords[0];
     vertex[1] = coords[1];
+    vertex[2] = coords[2];
     *dataOut = vertex;
   }
 

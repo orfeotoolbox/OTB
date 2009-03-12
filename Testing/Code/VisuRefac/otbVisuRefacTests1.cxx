@@ -60,4 +60,5 @@ void RegisterTests()
   REGISTER_TEST(otbCurves2DWidgetWithHistogram);
   REGISTER_TEST(otbVectorDataGlComponentNew);
   REGISTER_TEST(otbImageWidgetWithVectorDataGlComponent);
+  REGISTER_TEST(otbImageViewerEndToEndWithVectorData);
 }
