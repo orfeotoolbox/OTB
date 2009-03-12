@@ -61,6 +61,7 @@ GluPolygonDrawingHelper::GluPolygonDrawingHelper()
   // Instantiation of the tesselator object
   m_PointVector.clear();
   m_GluTesselator = gluNewTess();
+
   // Color
   m_Color[0]=0;
   m_Color[1]=0;

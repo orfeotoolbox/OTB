@@ -21,6 +21,23 @@
 #include "otbGlComponent.h"
 #include "itkPreOrderTreeIterator.h"
 
+#  ifdef __APPLE__
+#    include <OpenGL/glu.h>
+#  else
+#    include <GL/glu.h>
+#  endif
+
+// There are function prototype conflits under cygwin between standard w32 API
+// and standard C ones
+#ifndef CALLBACK
+#if defined(__CYGWIN__)
+#define CALLBACK __stdcall
+#else
+#define CALLBACK
+#endif
+#endif
+
+
 namespace otb
 {
 /** \class VectorDataGlComponent
@@ -81,27 +98,55 @@ public:
   itkSetObjectMacro(VectorData,VectorDataType);
   itkGetObjectMacro(VectorData,VectorDataType);
 
+  /** Set/Get the color */
+  itkSetMacro(Color,ColorType);
+  itkGetConstReferenceMacro(Color,ColorType);
+
 protected:
   /** Constructor */
   VectorDataGlComponent();
   /** Destructor */
-  virtual ~VectorDataGlComponent(){}
+  virtual ~VectorDataGlComponent();
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os,indent);
   }
   
-  // Render a point
+  /// Render a point
   void RenderPoint(const PointType & p, const RegionType & extent, const AffineTransformType * transform);
-  // Render a polyline
+  /// Render a polyline
   void RenderLine(const LineType * l, const RegionType & extent, const AffineTransformType * transform);
   // Render a complex polygon (with holes)
   void RenderPolygon(const PolygonType * extRing, const PolygonListType * intRings, const RegionType & extent, const AffineTransformType * transform);
 
+  /// Frame a given point using the frame width and color (point
+  /// should be in gl screen coordinates)
+  void FramePoint(const PointType & p);
+
 private:
   VectorDataGlComponent(const Self&); // purposely not implemented
   void operator=(const Self&);        // purposely not implemented
+
+  // Function pointer typedef
+  typedef void (CALLBACK * FunctionPointerType)();
+  
+  // Static Combine callback for tesselation
+  static void TesselationCombineCallback(GLdouble coords[2],GLdouble * data[4], GLfloat weights[4],GLdouble **dataOut)
+  {
+    GLdouble * vertex = new GLdouble[2];
+    vertex[0] = coords[0];
+    vertex[1] = coords[1];
+    *dataOut = vertex;
+  }
+
+  // Static error callback fir tesselation
+  static void TesselationErrorCallback(GLenum errorCode)
+  {
+    const GLubyte * estring = gluErrorString(errorCode);
+    itkGenericExceptionMacro(<<"Glu Tesselation error: "<<estring);
+  }
+
 
   /// Pointer to the vector data to render
   VectorDataPointerType m_VectorData;
@@ -111,6 +156,12 @@ private:
   
   /// Origin of the image
   PointType  m_Origin;
+
+  /// The GluTesselator object to render complex polygons
+  GLUtesselator * m_GluTesselator;
+
+  /// Color of the vector layer
+  ColorType m_Color;
 
 }; // end class 
 } // end namespace otb

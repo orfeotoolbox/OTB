@@ -255,6 +255,11 @@ ADD_TEST(vrTuVectorDataGlComponentNew ${VISUREFAC_TESTS1}
 otbVectorDataGlComponentNew
 )
 
+ADD_TEST(vrTvImageWidgetWithVectorDataGlComponent ${VISUREFAC_TESTS1}
+otbImageWidgetWithVectorDataGlComponent
+${INPUTDATA}/poupees.png 0
+)
+
 
 # Testing srcs
 SET(VisuRefac_SRCS1
@@ -291,6 +296,7 @@ otbCurves2DWidget.cxx
 otbHistogramCurveNew.cxx
 otbCurves2DWidgetWithHistogram.cxx
 otbVectorDataGlComponentNew.cxx
+otbImageWidgetWithVectorDataGlComponent.cxx
 )
 
 # Building testing executables

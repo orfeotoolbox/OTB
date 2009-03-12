@@ -126,6 +126,7 @@ private:
   GLUtesselator * m_GluTesselator;
   /** Color of the polygon */
   GLdouble m_Color[4];
+
 };
 } // end namespace otb
 #endif
