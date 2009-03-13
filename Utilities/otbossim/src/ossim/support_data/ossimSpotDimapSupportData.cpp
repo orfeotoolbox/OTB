@@ -169,6 +169,7 @@ ossimObject* ossimSpotDimapSupportData::dup()const
 void ossimSpotDimapSupportData::clearFields()
 {
    clearErrorStatus();
+   theSensorID="Spot 5";
    theMetadataVersion = OSSIM_SPOT_METADATA_VERSION_UNKNOWN;
    theImageID = "";
    theMetadataFile = "";
@@ -847,6 +848,11 @@ void ossimSpotDimapSupportData::printInfo(ostream& os) const
       << "\n"
       << "\n---------------------------------------------------------"
       << "\n  " << std::endl;
+}
+
+ossimString ossimSpotDimapSupportData::getSensorID() const
+{
+  return theSensorID;
 }
 
 ossimString   ossimSpotDimapSupportData::getMetadataVersionString() const
@@ -2087,6 +2093,31 @@ bool ossimSpotDimapSupportData::parsePart3(
    }
 
    return true;
+}
+bool ossimSpotDimapSupportData::parsePart4(
+                                           ossimRefPtr<ossimXmlDocument> xmlDocument)
+{
+  ossimString xpath;
+  std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+  std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
+  std::vector<ossimRefPtr<ossimXmlNode> >::iterator node;
+
+   //---
+   // Fetch the mission index (Spot 4 or 5):
+   //---
+  xml_nodes.clear();
+  xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/MISSION_INDEX";
+  xmlDocument->findNodes(xpath, xml_nodes);
+  if (xml_nodes.size() != 0)
+  {
+    if (xml_nodes[0]->getText() == "4")
+      theSensorID = "Spot 4";
+    if (xml_nodes[0]->getText() == "4")
+      theSensorID = "Spot 5";
+  }
+
+
+  return true;
 }
 
 bool ossimSpotDimapSupportData::initMetadataVersion(ossimRefPtr<ossimXmlDocument> xmlDocument)

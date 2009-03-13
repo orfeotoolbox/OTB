@@ -5,10 +5,10 @@
 //
 // Author:  Oscar Kramer (ossim port by D. Burken)
 //
-// Description:  
+// Description:
 //
 // Contains declaration of class ossimSpotDimapSupportData.
-// 
+//
 //*****************************************************************************
 // $Id: ossimSpotDimapSupportData.h 12101 2007-12-01 19:15:28Z dburken $
 #ifndef ossimSpotDimapSupportData_HEADER
@@ -45,7 +45,7 @@ public:
       OSSIM_SPOT_METADATA_VERSION_1_0 = 1,
       OSSIM_SPOT_METADATA_VERSION_1_1 = 2
    };
-   
+
    ossimSpotDimapSupportData();
 
 
@@ -60,19 +60,20 @@ public:
    bool loadXmlFile(const ossimFilename& file,
                     bool processSwir=false);
 
+   ossimString   getSensorID()                            const;
    ossimString   getMetadataVersionString()               const;
    ossimString   getAcquisitionDate()                     const;
    ossimString   getImageID()                             const;
    ossimFilename getMetadataFile()                        const;
    void          getSunAzimuth(ossim_float64& az)         const;
    void          getSunElevation(ossim_float64& el)       const;
-   void          getImageSize(ossimDpt& sz)               const; 
+   void          getImageSize(ossimDpt& sz)               const;
    void          getLineSamplingPeriod(ossim_float64& pe) const;
    void          getIncidenceAngle(ossim_float64& ia)     const;
    ossim_uint32  getNumberOfBands()                       const;
    bool          isStarTrackerUsed()                      const;
    bool          isSwirDataUsed()                         const;
-   
+
    //---
    // Image center point:
    //---
@@ -90,7 +91,7 @@ public:
 
    /** Zero based image rectangle, sub image if there is one. */
    void getImageRect(ossimDrect& rect)const;
-   
+
    //---
    // Sub image offset:
    //---
@@ -104,9 +105,9 @@ public:
    void getVelocityEcf(ossim_uint32 sample, ossimEcefPoint& ve) const;
    void getVelocityEcf(const ossim_float64& time, ossimEcefPoint& ve) const;
    void getEphSampTime(ossim_uint32 sample, ossim_float64& et) const;
-   
+
    ossim_uint32 getNumEphSamples() const;
-   
+
    //---
    // Attitude Angles in RADIANS:
    //---
@@ -114,7 +115,7 @@ public:
    void getAttitude(const ossim_float64& time, ossimDpt3d& at) const;
    void getAttSampTime(ossim_uint32 sample, ossim_float64& at)  const;
    ossim_uint32 getNumAttSamples() const;
-   
+
    //---
    // Pixel Pointing/Mirror tilt  Angles in RADIANS:
    //---
@@ -124,7 +125,7 @@ public:
    void getPixelLookAngleY (ossim_uint32 sample, ossim_float64& pa) const;
    void getPixelLookAngleY (const ossim_float64& sample,
                             ossim_float64& pa) const;
-   
+
    //---
    // Geoposition points provided in the file (most likely just corner points):
    //---
@@ -162,7 +163,7 @@ private:
    void getInterpolatedLookAngle(const ossim_float64& p,
                                  const std::vector<ossim_float64>& angles,
                                  ossim_float64& la) const;
-   
+
    ossim_float64 convertTimeStamp(const ossimString& time_stamp) const;
 
    void convertTimeStamp(const ossimString& time_stamp,
@@ -194,7 +195,7 @@ private:
 
    /**
     * Frame points:
-    * 
+    *
     * From xml section:
     * /Dimap_Document/Dataset_Frame/
     *
@@ -211,6 +212,7 @@ private:
     */
    bool initFramePoints(ossimRefPtr<ossimXmlDocument> xmlDocument);
 
+   ossimString                 theSensorID;
    ossimSpotMetadataVersion    theMetadataVersion;
    ossimString                 theImageID;
    ossimFilename               theMetadataFile;
@@ -220,7 +222,7 @@ private:
     * /Dimap_Document/Dataset_Sources/Source_Information/
     * Scene_Source
     */
-   ossim_float64               theSunAzimuth;  
+   ossim_float64               theSunAzimuth;
    ossim_float64               theSunElevation;
    ossim_float64               theIncidenceAngle;
 
@@ -231,7 +233,7 @@ private:
 
    /** Zero based center of frame. */
    ossimDpt                    theRefImagePoint;
-   
+
    ossimDpt                    theSubImageOffset;
 
    /** relative to full image */
@@ -239,11 +241,11 @@ private:
 
    /** relative to full image */
    ossim_float64               theRefLineTimeLine;
-   
+
    ossim_float64               theLineSamplingPeriod;
 
    /** holds the size of thePixelLookAngleX/Y */
-   ossim_uint32                theDetectorCount; 
+   ossim_uint32                theDetectorCount;
    std::vector<ossim_float64>  thePixelLookAngleX;
    std::vector<ossim_float64>  thePixelLookAngleY;
    std::vector<ossimDpt3d>     theAttitudeSamples; // x=pitch, y=roll, z=yaw
@@ -275,7 +277,7 @@ private:
 
    /**
     * Private parse methods called by loadXml.
-    * 
+    *
     * These "parse" methods were made simply to split the loadXmlMethod
     * into pieces.  This was an attempt to troubleshoot what was thought to
     * be a compiler issue, which turned out to be changed metadata and bad
@@ -286,6 +288,7 @@ private:
    bool parsePart1(ossimRefPtr<ossimXmlDocument> xmlDocument);
    bool parsePart2(ossimRefPtr<ossimXmlDocument> xmlDocument);
    bool parsePart3(ossimRefPtr<ossimXmlDocument> xmlDocument);
+   bool parsePart4(ossimRefPtr<ossimXmlDocument> xmlDocument);
 };
 
 #endif /* #ifndef ossimSpotDimapSupportData_HEADER */
