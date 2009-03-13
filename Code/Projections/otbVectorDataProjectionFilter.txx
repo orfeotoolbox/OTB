@@ -359,7 +359,8 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
   {
     itk::EncapsulateMetaData<std::string>(outputDict, MetaDataKey::ProjectionRefKey, m_OutputProjectionRef );
   }
-
+  output->SetSpacing(m_OutputSpacing);
+  output->SetOrigin(m_OutputOrigin);
 
 }
 
