@@ -25,13 +25,13 @@ namespace otb
 {
 /** \class LayerBasedModel
 *   \brief Base class providing layer stack model
-* 
+*
 * \sa Layer, ImageLayer
 * \sa BlendingFunction
 *
 */
 
-template <class TLayer > 
+template <class TLayer >
 class LayerBasedModel
   : public itk::Object
 {
@@ -41,7 +41,7 @@ public:
   typedef itk::Object                          Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
-    
+
   /** Runtime information */
   itkTypeMacro(LayerBasedModel,Object);
 
@@ -50,7 +50,7 @@ public:
 
   /** Layer typedef */
   typedef TLayer                               LayerType;
-  
+
   /** Layer list typedef */
   typedef otb::ObjectList<LayerType>            LayerListType;
   typedef typename LayerListType::Pointer       LayerListPointerType;
@@ -98,13 +98,13 @@ public:
   /** Set/Get the layers stack */
   itkSetObjectMacro(Layers,LayerListType);
   itkGetObjectMacro(Layers,LayerListType);
-  
+
 
 protected:
   /** Constructor */
   LayerBasedModel();
   /** Destructor */
-  ~LayerBasedModel();
+  virtual ~LayerBasedModel();
 
   /** Printself method */
   void          PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -118,8 +118,8 @@ private:
 
   /** Layer list */
   LayerListPointerType  m_Layers;
- 
-}; // end class 
+
+}; // end class
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
