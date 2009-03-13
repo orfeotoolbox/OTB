@@ -67,5 +67,6 @@ REGISTER_TEST(kmlhellokmz);
 REGISTER_TEST(kmlhelloregion);
 REGISTER_TEST(kmlprettykml);
 REGISTER_TEST(SiftFast);
+REGISTER_TEST(ijObjectLabelAttributeValues); 
 }
 
