@@ -29,6 +29,8 @@
 #include "otbImageMetadataInterface.h"
 #include "otbImageKeywordlist.h"
 
+#include "otbMacro.h"
+
 namespace otb
 {
 
@@ -303,74 +305,100 @@ const ImageMetadataInterface::ImageKeywordlistType ImageMetadataInterface::GetIm
 ImageMetadataInterface::VariableLengthVectorType
     ImageMetadataInterface::GetPhysicalBias( const MetaDataDictionaryType & dict ) const
 {
-  ImageKeywordlistType ImageKeywordlist;
+  ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
   {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
   ossimKeywordlist kwl;
-  ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key= "physical_bias";
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "support_data.physical_bias";
   ossimString keywordString = kwl.find(key.c_str());
   ossimString separatorList = " ";
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
-  VariableLengthVectorType outputValues;
-  outputValues.SetSize(keywordStrings.size());
+  std::vector<double> outputValues;
   for (int i=0; i < keywordStrings.size(); ++i)
   {
-    outputValues[i]=keywordStrings[i].toDouble();
+    if (!keywordStrings[i].empty())
+    {
+      outputValues.push_back(keywordStrings[i].toDouble());
+    }
   }
 
+  VariableLengthVectorType outputValuesVariableLengthVector;
+  outputValuesVariableLengthVector.SetSize(outputValues.size());
+  outputValuesVariableLengthVector.Fill(0);
   //In the case of SPOT, the bands are in a different order:
   // XS3, XS2. XS1, SWIR in the tif file.
   if(IsSpot(dict))
   {
-    assert(outputValues.GetSize() == 4);//Valid for Spot 4 and 5
-    VariableLengthVectorType::ValueType tmp;
-    tmp = outputValues[0];
-    outputValues[0]=outputValues[2];
-    outputValues[2]=tmp;
+    assert(outputValues.size() == 4);//Valid for Spot 4 and 5
+    outputValuesVariableLengthVector[0]=outputValues[2];
+    outputValuesVariableLengthVector[1]=outputValues[1];
+    outputValuesVariableLengthVector[2]=outputValues[0];
+    outputValuesVariableLengthVector[3]=outputValues[3];
+  }
+  else
+  {
+    for(int i=0; i<outputValues.size(); ++i)
+    {
+      outputValuesVariableLengthVector[i]=outputValues[i];
+    }
   }
 
-  return outputValues;
-
+  return outputValuesVariableLengthVector;
 }
 
 ImageMetadataInterface::VariableLengthVectorType
     ImageMetadataInterface::GetPhysicalGain( const MetaDataDictionaryType & dict ) const
 {
-  ImageKeywordlistType ImageKeywordlist;
+  ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
   {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
+
+//   otbMsgDevMacro( << "  --- ImageKeywordlist: " << imageKeywordlist);
   ossimKeywordlist kwl;
-  ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key= "physical_gain";
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+//   otbMsgDevMaquitcro( << "  --- ossimKeywordlist: " << kwl);
+  std::string key= "support_data.physical_gain";
   ossimString keywordString = kwl.find(key.c_str());
   ossimString separatorList = " ";
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
-  VariableLengthVectorType outputValues;
-  outputValues.SetSize(keywordStrings.size());
+  std::vector<double> outputValues;
   for (int i=0; i < keywordStrings.size(); ++i)
   {
-    outputValues[i]=keywordStrings[i].toDouble();
+    if (!keywordStrings[i].empty())
+    {
+      outputValues.push_back(keywordStrings[i].toDouble());
+    }
   }
 
+  VariableLengthVectorType outputValuesVariableLengthVector;
+  outputValuesVariableLengthVector.SetSize(outputValues.size());
+  outputValuesVariableLengthVector.Fill(0);
   //In the case of SPOT, the bands are in a different order:
   // XS3, XS2. XS1, SWIR in the tif file.
   if(IsSpot(dict))
   {
-    assert(outputValues.GetSize() == 4);//Valid for Spot 4 and 5
-    VariableLengthVectorType::ValueType tmp;
-    tmp = outputValues[0];
-    outputValues[0]=outputValues[2];
-    outputValues[2]=tmp;
+    assert(outputValues.size() == 4);//Valid for Spot 4 and 5
+    outputValuesVariableLengthVector[0]=outputValues[2];
+    outputValuesVariableLengthVector[1]=outputValues[1];
+    outputValuesVariableLengthVector[2]=outputValues[0];
+    outputValuesVariableLengthVector[3]=outputValues[3];
+  }
+  else
+  {
+    for(int i=0; i<outputValues.size(); ++i)
+    {
+      outputValuesVariableLengthVector[i]=outputValues[i];
+    }
   }
 
-  return outputValues;
+  return outputValuesVariableLengthVector;
 
 }
 
