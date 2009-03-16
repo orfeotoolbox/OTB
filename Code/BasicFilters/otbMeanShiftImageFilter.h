@@ -68,7 +68,7 @@ public:
  *
  * Mean shift can be used for edge-preserving smoothing, or for clustering. The GetOutput() method will allow
  * you to get the smoothed image, whereas the
- * GetClusteredOuptut() methods returns the clustered output. The GetLabeledClusteredOutput() returns
+ * GetClusteredOutput() methods returns the clustered output. The GetLabeledClusteredOutput() returns
  * a labeled clustered image, and the GetClusterBoundariesOutput()
  * an image of the cluster boundaries.
  *
