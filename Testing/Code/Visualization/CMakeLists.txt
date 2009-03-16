@@ -15,7 +15,7 @@ SET(TOL 0.0)
 SET(EPSILON 0.000001)
 
 # Test programs
-SET(VISUREFAC_TESTS1 ${CXX_TEST_PATH}/otbVisuRefacTests1)
+SET(VISUREFAC_TESTS1 ${CXX_TEST_PATH}/otbVisualizationTests1)
 
 #------------ otb::ImageWidget -------------------------
 
@@ -273,7 +273,7 @@ ${INPUTDATA}/DEM/srtm_directory
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # Testing srcs
-SET(VisuRefac_SRCS1
+SET(Visualization_SRCS1
 otbImageWidgetNew.cxx
 otbImageWidget.cxx
 otbImageWidgetActionHandlerNew.cxx
@@ -312,7 +312,7 @@ otbImageViewerEndToEndWithVectorData.cxx
 )
 
 # Building testing executables
-ADD_EXECUTABLE(otbVisuRefacTests1 otbVisuRefacTests1.cxx ${VisuRefac_SRCS1})
-TARGET_LINK_LIBRARIES(otbVisuRefacTests1 OTBVisuRefac OTBIO)
+ADD_EXECUTABLE(otbVisualizationTests1 otbVisualizationTests1.cxx ${Visualization_SRCS1})
+TARGET_LINK_LIBRARIES(otbVisualizationTests1 OTBVisualization OTBIO)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

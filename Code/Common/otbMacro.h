@@ -29,6 +29,16 @@
 #include "itkMacro.h"
 #include "otbConfigure.h"
 
+/**
+ * \namespace otb
+ * \brief The "otb" namespace contains all Orfeo Toolbox (OTB) classes
+ * There are several nested namespaces withing the otb:: namespace.
+ */
+namespace otb
+{
+} // end namespace otb - this is here for documentation purposes
+
+
 /** This macro is used to print debug (or other information). They are
  * also used to catch errors, etc. Example usage looks like:
  * itkDebugMacro(<< "this is debug info" << this->SomeVariable); */

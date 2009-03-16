@@ -35,21 +35,21 @@ int otbImageWidgetWithVectorDataGlComponent( int argc, char * argv[] )
   typedef otb::ImageFileReader<ImageType> ReaderType;
 
 
-  // VectorData component typedef 
+  // VectorData component typedef
   typedef otb::VectorData<double,2> VectorDataType;
   typedef otb::VectorDataGlComponent<VectorDataType> VectorDataGlComponentType;
   typedef VectorDataType::DataNodeType DataNodeType;
   typedef DataNodeType::PointType PointType;
   typedef DataNodeType::LineType LineType;
   typedef DataNodeType::PolygonType PolygonType;
-  
+
   // Reading the input image
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
   reader->Update();
   ImageType::RegionType region = reader->GetOutput()->GetLargestPossibleRegion();
 
-  // Create a VectorData 
+  // Create a VectorData
   VectorDataType::Pointer data = VectorDataType::New();
   DataNodeType::Pointer document = DataNodeType::New();
   DataNodeType::Pointer folder = DataNodeType::New();
@@ -62,7 +62,7 @@ int otbImageWidgetWithVectorDataGlComponent( int argc, char * argv[] )
   point->SetNodeId("FEATURE_POINT");
   line->SetNodeId("FEATURE_LINE");
   polygon->SetNodeId("FEATURE_POLYGON");
-  
+
 
   // Create a point on the first quarter of the image
   PointType p;
@@ -82,7 +82,7 @@ int otbImageWidgetWithVectorDataGlComponent( int argc, char * argv[] )
   line->SetLine(l);
 
   // Create a complex polygon shape on the remaning of the image
-  
+
   // Outer ring
   PolygonType::Pointer outer = PolygonType::New();
   cindex[0] = region.GetIndex()[0]+region.GetSize()[0]/16;
@@ -100,7 +100,7 @@ int otbImageWidgetWithVectorDataGlComponent( int argc, char * argv[] )
   polygon->SetPolygonExteriorRing(outer);
 
   // Inner ring
-  PolygonType::Pointer inner = PolygonType::New(); 
+  PolygonType::Pointer inner = PolygonType::New();
   cindex[0] = region.GetIndex()[0]+2*region.GetSize()[0]/16;
   cindex[1] = region.GetIndex()[1]+10*region.GetSize()[1]/16;
   inner->AddVertex(cindex);
@@ -140,16 +140,16 @@ int otbImageWidgetWithVectorDataGlComponent( int argc, char * argv[] )
   widget->redraw();
   // Refresh display
   Fl::check();
- 
+
   // Create the VectorDataGlComponent
   VectorDataGlComponentType::Pointer vdgl = VectorDataGlComponentType::New();
   vdgl->SetVectorData(data);
 
   widget->AddGlComponent(vdgl);
   widget->redraw();
-  Fl::run();
+  Fl::check();
 
-  
+
 
   return EXIT_SUCCESS;
 }

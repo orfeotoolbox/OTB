@@ -25,7 +25,7 @@ int otbCartoRegionNew(int argc, char * argv[])
   typedef   double                                Type;
   typedef   otb::CartographicRegion<Type>                TypedRegion;
   
-  TypedRegion                     Cartoregion();
+  TypedRegion                     Cartoregion;
   
   return EXIT_SUCCESS;
 }

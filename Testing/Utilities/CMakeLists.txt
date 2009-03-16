@@ -432,7 +432,9 @@ ADD_TEST( utKmlprintgeometry   ${UTILITIES_TESTS}
 #        ${TEMP}/utkmlprintgeometry.txt
         )
 
-
+ADD_TEST(ijObjectLabelAttributeValuesTest ${UTILITIES_TESTS}
+                ijObjectLabelAttributeValuesTest
+)
 # -------       Fichiers sources CXX -----------------------------------
 SET(UtilitiesTests_SRCS
 ossimIntegrationTest.cxx
@@ -463,6 +465,7 @@ kmlprintgeometry.cc
 kmlhellofeatures.cc
 kmlprint.cc
 siftfast.cpp
+ijObjectLabelAttributeValuesTest.cxx
 )
 
 IF(OTB_COMPILE_JPEG2000)
@@ -559,5 +562,8 @@ ENDIF(UNIX)
 #     IF(UNIX)
 #         TARGET_LINK_LIBRARIES (otb6SMainWithCallFunction m)
 #     ENDIF(UNIX)
+
+#--- ijObjectLabel --#
+
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

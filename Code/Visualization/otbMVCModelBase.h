@@ -73,7 +73,7 @@ protected:
   /** Constructor */
   MVCModelBase() {}
   /** Destructor */
-  ~MVCModelBase() {}
+  virtual ~MVCModelBase() {}
 
 private:
   /** Registered liteners */

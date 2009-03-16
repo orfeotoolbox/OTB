@@ -36,9 +36,15 @@ namespace otb
  * The internal tree can be walked with itk::TreeIteratorBase subclasses.
  *
  * The three templates indicate
- * - the precision of the points coordinates (default double)
- * - the number of dimensions of the space (default 2)
- * - the precision of the value associated with objects such as line or polygons (default double)
+ * - the precision of the points coordinates (by default: double)
+ * - the number of dimensions of the space (by default: 2)
+ * - the precision of the value associated with objects such as line or
+ * polygons (by default: double)
+ *
+ * The elements in the VectorData have their coordinates in the projection
+ * specified by the Wkt string. This class also offer the possibility to store
+ * the coordinates directly into an image coordinate system, using the origin and
+ * spacing in a similar way as the corresponding image.
  *
  * \sa DataNode
  * \sa VectorDataFileReader
@@ -70,6 +76,10 @@ public:
   typedef typename DataNodeType::Pointer DataNodePointerType;
   typedef itk::TreeContainer<DataNodePointerType> DataTreeType;
   typedef typename DataTreeType::Pointer DataTreePointerType;
+  typedef typename DataNodeType::PointType PointType;
+
+  typedef itk::Vector<double, 2> SpacingType;
+  typedef itk::Point<double, 2> OriginType;
 
   itkGetObjectMacro(DataTree,DataTreeType);
   itkGetConstObjectMacro(DataTree,DataTreeType);
@@ -77,11 +87,37 @@ public:
   virtual void SetProjectionRef(std::string projectionRef);
   virtual std::string GetProjectionRef() const;
 
+  /** Set the origin of the vector data to put it in the corresponding
+   * image coordinates
+    * \sa GetOrigin() */
+  itkSetMacro(Origin, OriginType);
+  virtual void SetOrigin( const double origin[2] );
+  virtual void SetOrigin( const float origin[2] );
+
+  itkGetConstReferenceMacro(Origin, OriginType);
+
+
+  /** Set the spacing of the vector data to put it in the corresponding
+   * image coordinates
+   * \sa GetSpacing() */
+  virtual void SetSpacing( const SpacingType & spacing );
+  virtual void SetSpacing( const double spacing[2] );
+  virtual void SetSpacing( const float spacing[2] );
+
+  itkGetConstReferenceMacro(Spacing, SpacingType);
+
+
   /** Clear the vector data  */
   virtual bool Clear();
 
   /** Return the number of element in the tree */
   virtual int Size() const;
+
+  void TransformPointToPhysicalPoint(const PointType& point, PointType& physicalPoint) const
+  {
+    physicalPoint[0] = point[0] * m_Spacing[0] + m_Origin[0];
+    physicalPoint[1] = point[1] * m_Spacing[1] + m_Origin[1];
+  }
 
 protected:
   /** Constructor */
@@ -95,10 +131,12 @@ private:
   VectorData(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-
   /** Data tree */
   DataTreePointerType m_DataTree;
 
+
+  SpacingType         m_Spacing;
+  OriginType          m_Origin;
 };
 }// end namespace otb
 

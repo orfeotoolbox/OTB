@@ -27,6 +27,7 @@
 #include "otbVectorImage.h"
 #include "itkNumericTraits.h"
 #include "itkVariableLengthVector.h"
+#include "otbMacro.h"
 
 #include <fstream>
 
@@ -139,6 +140,7 @@ public:
 
   /** Set the absolute calibration gains. */
   itkSetMacro(Alpha, VectorType);
+
   /** Give the absolute calibration gains. */
   itkGetConstReferenceMacro(Alpha, VectorType);
 
@@ -152,15 +154,40 @@ protected:
 
   ImageToLuminanceImageFilter()
   {
-    m_Alpha.SetSize(1);
-    m_Beta.SetSize(1);
-    m_Alpha.Fill(1);
-    m_Beta.Fill(0);
+//     m_Alpha.SetSize(1);
+//     m_Beta.SetSize(1);
+//     m_Alpha.Fill(1);
+//     m_Beta.Fill(0);
+    m_Alpha.SetSize(0);
+    m_Beta.SetSize(0);
   };
   virtual ~ImageToLuminanceImageFilter() {};
 
   virtual void BeforeThreadedGenerateData(void)
   {
+
+    if(m_Alpha.GetSize() == 0)
+    {
+      ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
+      m_Alpha = imageMetadataInterface->GetPhysicalGain(this->GetInput()->GetMetaDataDictionary());
+    }
+
+    if(m_Beta.GetSize() == 0)
+    {
+      ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
+      m_Beta = imageMetadataInterface->GetPhysicalBias(this->GetInput()->GetMetaDataDictionary());
+    }
+
+    if ((m_Alpha.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel())
+      || (m_Beta.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel()))
+    {
+      itkExceptionMacro(<<"Alpha and Beta parameters should have the same size as the number of bands");
+    }
+
+    otbMsgDevMacro( << "Using correction parameters: ");
+    otbMsgDevMacro( << "Alpha (gain): " << m_Alpha);
+    otbMsgDevMacro( << "Beta (bias):  " << m_Beta);
+
     this->GetFunctorVector().clear();
     for (unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
     {
@@ -176,6 +203,7 @@ private:
   /** Ponderation declaration*/
   VectorType m_Alpha;
   VectorType m_Beta;
+  typename ImageMetadataInterface::Pointer m_ImageMetadataInterface;
 };
 
 } // end namespace otb

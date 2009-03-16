@@ -55,6 +55,7 @@ public:
   typedef itk::MetaDataDictionary   MetaDataDictionaryType;
 
   typedef MetaDataKey::VectorType  VectorType;
+  typedef MetaDataKey::VariableLengthVectorType  VariableLengthVectorType;
 
   typedef ImageKeywordlist              ImageKeywordlistType;
 
@@ -101,12 +102,24 @@ public:
   ImageKeywordlistType GetImageKeywordlist( MetaDataDictionaryType & dict );
   const ImageKeywordlistType GetImageKeywordlist(const MetaDataDictionaryType & dict ) const;
 
+  /** Get the radiometric bias from the ossim metadata */
+  VariableLengthVectorType GetPhysicalBias( const MetaDataDictionaryType & dict ) const;
+
+  /** Get the radiometric gain from the ossim metadata */
+  VariableLengthVectorType GetPhysicalGain( const MetaDataDictionaryType & dict ) const;
+
+  /** Get the sensor ID from the ossim metadata */
+  std::string GetSensorID(const MetaDataDictionaryType & dict ) const;
+
+
   void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const;
 
 
 protected:
   ImageMetadataInterface();
   virtual ~ImageMetadataInterface() {};
+
+  bool IsSpot( const MetaDataDictionaryType & dict) const;
 
 private:
   ImageMetadataInterface(const Self&); //purposely not implemented
