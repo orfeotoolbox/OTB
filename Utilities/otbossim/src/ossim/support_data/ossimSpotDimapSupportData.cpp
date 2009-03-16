@@ -371,6 +371,16 @@ bool ossimSpotDimapSupportData::loadXmlFile(const ossimFilename& file,
       return false;
    }
 
+   if (parsePart4(xmlDocument) == false)
+   {
+     ossimNotify(ossimNotifyLevel_FATAL)
+         << MODULE << " DEBUG:"
+         << "ossimSpotDimapSupportData::loadXmlFile:"
+         << "\nPart 4 initialization failed.  Returning false"
+         << std::endl;
+     return false;
+   }
+
    if (traceDebug())
    {
       printInfo(ossimNotify(ossimNotifyLevel_DEBUG));
@@ -2112,7 +2122,7 @@ bool ossimSpotDimapSupportData::parsePart4(
   {
     if (xml_nodes[0]->getText() == "4")
       theSensorID = "Spot 4";
-    if (xml_nodes[0]->getText() == "4")
+    if (xml_nodes[0]->getText() == "5")
       theSensorID = "Spot 5";
   }
 
