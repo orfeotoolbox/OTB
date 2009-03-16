@@ -275,6 +275,11 @@ private:
    ossimGpt createGround(const ossimString& s)const;
    ossimDpt createDpt(const ossimString& s)const;
 
+   /** callibration information for radiometric corrections*/
+
+   std::vector<ossim_float64> theBandsBias;
+   std::vector<ossim_float64> theBandsGain;
+
    /**
     * Private parse methods called by loadXml.
     *

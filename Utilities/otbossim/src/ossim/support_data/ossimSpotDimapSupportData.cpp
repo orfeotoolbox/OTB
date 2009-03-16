@@ -26,6 +26,7 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <sstream>
+#include <cassert>
 
 // Define Trace flags for use within this file:
 static ossimTrace traceDebug ("ossimSpotDimapSupportData:debug");
@@ -1239,6 +1240,26 @@ bool ossimSpotDimapSupportData::saveState(ossimKeywordlist& kwl,
            theLlCorner.datum()->code(),
            true);
 
+   tempString = "";
+   for(idx = 0; idx < theBandsBias.size(); ++idx)
+   {
+     tempString += (ossimString::toString(theBandsBias[idx]) + " ");
+   }
+   kwl.add(prefix,
+           "physical_bias",
+           tempString,
+           true);
+
+   tempString = "";
+   for(idx = 0; idx < theBandsGain.size(); ++idx)
+   {
+     tempString += (ossimString::toString(theBandsGain[idx]) + " ");
+   }
+   kwl.add(prefix,
+           "physical_gain",
+           tempString,
+           true);
+
    return true;
 }
 
@@ -2112,9 +2133,9 @@ bool ossimSpotDimapSupportData::parsePart4(
   std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
   std::vector<ossimRefPtr<ossimXmlNode> >::iterator node;
 
-   //---
-   // Fetch the mission index (Spot 4 or 5):
-   //---
+  //---
+  // Fetch the mission index (Spot 4 or 5):
+  //---
   xml_nodes.clear();
   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/MISSION_INDEX";
   xmlDocument->findNodes(xpath, xml_nodes);
@@ -2124,6 +2145,54 @@ bool ossimSpotDimapSupportData::parsePart4(
       theSensorID = "Spot 4";
     if (xml_nodes[0]->getText() == "5")
       theSensorID = "Spot 5";
+  }
+
+  //---
+  // Fetch the gain and bias for each spectral band:
+  //---
+
+  theBandsGain.assign(theNumBands, 1.000);
+  theBandsBias.assign(theNumBands, 0.000);
+
+  xml_nodes.clear();
+  xpath = "/Dimap_Document/Image_Interpretation/Spectral_Band_Info";
+  xmlDocument->findNodes(xpath, xml_nodes);
+  node = xml_nodes.begin();
+  while (node != xml_nodes.end())
+  {
+    sub_nodes.clear();
+    xpath = "BAND_INDEX";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      setErrorStatus();
+      return false;
+    }
+    int bandIndex = sub_nodes[0]->getText().toInt() - 1;
+
+    assert(bandIndex < theNumBands);
+
+    sub_nodes.clear();
+    xpath = "PHYSICAL_BIAS";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      setErrorStatus();
+      return false;
+    }
+    theBandsBias[bandIndex] = sub_nodes[0]->getText().toDouble();
+
+    sub_nodes.clear();
+    xpath = "PHYSICAL_GAIN";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      setErrorStatus();
+      return false;
+    }
+    theBandsGain[bandIndex] = sub_nodes[0]->getText().toDouble();
+
+    ++node;
   }
 
 
