@@ -272,6 +272,11 @@ ${INPUTDATA}/DEM/srtm_directory
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+#------------ otb::StandardImageViewer ------------
+ADD_TEST(vrTuStandardImageViewerNew ${VISUREFAC_TESTS1}
+otbStandardImageViewerNew
+)
+
 # Testing srcs
 SET(Visualization_SRCS1
 otbImageWidgetNew.cxx
@@ -309,6 +314,7 @@ otbCurves2DWidgetWithHistogram.cxx
 otbVectorDataGlComponentNew.cxx
 otbImageWidgetWithVectorDataGlComponent.cxx
 otbImageViewerEndToEndWithVectorData.cxx
+otbStandardImageViewerNew.cxx
 )
 
 # Building testing executables

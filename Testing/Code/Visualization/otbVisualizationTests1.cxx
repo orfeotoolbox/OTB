@@ -61,4 +61,5 @@ void RegisterTests()
   REGISTER_TEST(otbVectorDataGlComponentNew);
   REGISTER_TEST(otbImageWidgetWithVectorDataGlComponent);
   REGISTER_TEST(otbImageViewerEndToEndWithVectorData);
+  REGISTER_TEST(otbStandardImageViewerNew);
 }
