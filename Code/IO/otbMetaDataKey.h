@@ -26,6 +26,8 @@
 #include <vector>
 
 #include "itkDataObject.h"
+#include "itkVariableLengthVector.h"
+
 #include "gdal.h"
 
 
@@ -106,6 +108,7 @@ public:
   KeyType GetKeyType(std::string name);
 
   typedef std::vector<double> VectorType;
+  typedef itk::VariableLengthVector<double> VariableLengthVectorType;
 
 private:
   MetaDataKey(const Self&); //purposely not implemented

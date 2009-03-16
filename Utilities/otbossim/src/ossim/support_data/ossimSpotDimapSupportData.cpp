@@ -1241,9 +1241,9 @@ bool ossimSpotDimapSupportData::saveState(ossimKeywordlist& kwl,
            true);
 
    tempString = "";
-   for(idx = 0; idx < theBandsBias.size(); ++idx)
+   for(idx = 0; idx < thePhysicalBias.size(); ++idx)
    {
-     tempString += (ossimString::toString(theBandsBias[idx]) + " ");
+     tempString += (ossimString::toString(thePhysicalBias[idx]) + " ");
    }
    kwl.add(prefix,
            "physical_bias",
@@ -1251,9 +1251,9 @@ bool ossimSpotDimapSupportData::saveState(ossimKeywordlist& kwl,
            true);
 
    tempString = "";
-   for(idx = 0; idx < theBandsGain.size(); ++idx)
+   for(idx = 0; idx < thePhysicalGain.size(); ++idx)
    {
-     tempString += (ossimString::toString(theBandsGain[idx]) + " ");
+     tempString += (ossimString::toString(thePhysicalGain[idx]) + " ");
    }
    kwl.add(prefix,
            "physical_gain",
@@ -2151,8 +2151,8 @@ bool ossimSpotDimapSupportData::parsePart4(
   // Fetch the gain and bias for each spectral band:
   //---
 
-  theBandsGain.assign(theNumBands, 1.000);
-  theBandsBias.assign(theNumBands, 0.000);
+  thePhysicalGain.assign(theNumBands, 1.000);
+  thePhysicalBias.assign(theNumBands, 0.000);
 
   xml_nodes.clear();
   xpath = "/Dimap_Document/Image_Interpretation/Spectral_Band_Info";
@@ -2180,7 +2180,7 @@ bool ossimSpotDimapSupportData::parsePart4(
       setErrorStatus();
       return false;
     }
-    theBandsBias[bandIndex] = sub_nodes[0]->getText().toDouble();
+    thePhysicalBias[bandIndex] = sub_nodes[0]->getText().toDouble();
 
     sub_nodes.clear();
     xpath = "PHYSICAL_GAIN";
@@ -2190,7 +2190,7 @@ bool ossimSpotDimapSupportData::parsePart4(
       setErrorStatus();
       return false;
     }
-    theBandsGain[bandIndex] = sub_nodes[0]->getText().toDouble();
+    thePhysicalGain[bandIndex] = sub_nodes[0]->getText().toDouble();
 
     ++node;
   }

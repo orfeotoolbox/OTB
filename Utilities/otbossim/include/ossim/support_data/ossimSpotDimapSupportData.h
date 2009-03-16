@@ -277,8 +277,8 @@ private:
 
    /** callibration information for radiometric corrections*/
 
-   std::vector<ossim_float64> theBandsBias;
-   std::vector<ossim_float64> theBandsGain;
+   std::vector<ossim_float64> thePhysicalBias;
+   std::vector<ossim_float64> thePhysicalGain;
 
    /**
     * Private parse methods called by loadXml.
