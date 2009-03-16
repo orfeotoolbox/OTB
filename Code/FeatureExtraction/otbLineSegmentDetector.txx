@@ -664,7 +664,7 @@ LineSegmentDetector<TInputImage, TPrecision>
    */
   
 
-  if(vcl_abs(wl - wr) - vcl_sqrt(m_Length*m_Length + m_Width*m_Width) < 1e-10)
+  if(vcl_abs(wl - wr) - vcl_sqrt(static_cast<double>(m_Length*m_Length + m_Width*m_Width)) < 1e-10)
     {
       RectangleType          rec(8 ,0.);     // Definition of a rectangle : 8 components
       rec[0] = (x + lb*dx >0)?x + lb*dx:0.;
