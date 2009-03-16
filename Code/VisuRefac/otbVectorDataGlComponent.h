@@ -102,6 +102,19 @@ public:
   itkSetMacro(Color,ColorType);
   itkGetConstReferenceMacro(Color,ColorType);
 
+  /** Set/Get the line width */
+  itkSetMacro(LineWidth,double);
+  itkGetMacro(LineWidth,double);
+
+  /** Set/Get the cross width */
+  itkSetMacro(CrossWidth,double);
+  itkGetMacro(CrossWidth,double);
+
+  /** Should we render only polygons boundaries ? */
+  itkSetMacro(RenderPolygonBoundariesOnly,bool);
+  itkGetMacro(RenderPolygonBoundariesOnly,bool);
+  itkBooleanMacro(RenderPolygonBoundariesOnly);
+
 protected:
   /** Constructor */
   VectorDataGlComponent();
@@ -122,7 +135,7 @@ protected:
 
   /// Frame a given point using the frame width and color (point
   /// should be in gl screen coordinates)
-  void FramePoint(const PointType & p);
+  //void FramePoint(const PointType & p);
 
 private:
   VectorDataGlComponent(const Self&); // purposely not implemented
@@ -148,7 +161,6 @@ private:
     itkGenericExceptionMacro(<<"Glu Tesselation error: "<<estring);
   }
 
-
   /// Pointer to the vector data to render
   VectorDataPointerType m_VectorData;
 
@@ -161,8 +173,20 @@ private:
   /// The GluTesselator object to render complex polygons
   GLUtesselator * m_GluTesselator;
 
+//   /// The Quadric rendering object
+//   GLUQuadricObject * m_GluQuadrics;
+
   /// Color of the vector layer
   ColorType m_Color;
+
+  /** The line width */
+  double m_LineWidth;
+
+  /** The cross width for points */
+  double m_CrossWidth;
+
+  /** Do we need to render only polygon boundaries ? */
+  bool m_RenderPolygonBoundariesOnly;
 
 }; // end class 
 } // end namespace otb

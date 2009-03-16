@@ -27,7 +27,8 @@ namespace otb
 {
 template <class TVectorData> 
 VectorDataGlComponent<TVectorData>
-::VectorDataGlComponent() : m_VectorData(),m_Spacing(), m_Origin(), m_GluTesselator(), m_Color()
+::VectorDataGlComponent() : m_VectorData(),m_Spacing(), m_Origin(), m_GluTesselator(), m_Color(),
+			    m_LineWidth(2),m_CrossWidth(10),m_RenderPolygonBoundariesOnly(false)
 {
   // Default color is red
   m_Color.Fill(0);
@@ -76,7 +77,15 @@ VectorDataGlComponent<TVectorData>
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glColor4d(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
-  glLineWidth(2);
+  
+  // Set up line width
+  double previousWidth = 0.;
+  glGetDoublev(GL_LINE_WIDTH,&previousWidth);
+  glLineWidth(m_LineWidth);
+
+  // Do we need to render boundaries only (for polygons)
+  gluTessProperty(m_GluTesselator,GLU_TESS_BOUNDARY_ONLY,m_RenderPolygonBoundariesOnly);
+
 
   // Enabling line antialiasing
   glEnable(GL_LINE_SMOOTH);
@@ -118,7 +127,7 @@ VectorDataGlComponent<TVectorData>
     }
   glDisable(GL_LINE_SMOOTH);
   glDisable(GL_BLEND);
-  glLineWidth(1);
+  glLineWidth(previousWidth);
 }
    template <class TVectorData>   
 void 
@@ -137,10 +146,10 @@ VectorDataGlComponent<TVectorData>
     
   glBegin(GL_LINES);
   // Draw a cross
-  glVertex2d(screenPoint[0]-10,screenPoint[1]);
-  glVertex2d(screenPoint[0]+10,screenPoint[1]);
-  glVertex2d(screenPoint[0],screenPoint[1]-10);
-  glVertex2d(screenPoint[0],screenPoint[1]+10);
+  glVertex2d(screenPoint[0]-m_CrossWidth,screenPoint[1]);
+  glVertex2d(screenPoint[0]+m_CrossWidth,screenPoint[1]);
+  glVertex2d(screenPoint[0],screenPoint[1]-m_CrossWidth);
+  glVertex2d(screenPoint[0],screenPoint[1]+m_CrossWidth);
   glEnd();
 }
 
@@ -271,25 +280,25 @@ VectorDataGlComponent<TVectorData>
     }
 }
 
-template <class TVectorData>   
-void 
-VectorDataGlComponent<TVectorData>
-::FramePoint(const PointType & point)
-{
-  // Set the frame color
-  glColor4d(0,0,1,1);
+// template <class TVectorData>   
+// void 
+// VectorDataGlComponent<TVectorData>
+// ::FramePoint(const PointType & point)
+// {
+//   // Set the frame color
+//   glColor4d(0,0,1,1);
 
-  glBegin(GL_LINE_LOOP);
-  glVertex2d(point[0]-5,point[1]-5);
-  glVertex2d(point[0]-5,point[1]+5);
-  glVertex2d(point[0]+5,point[1]+5);
-  glVertex2d(point[0]+5,point[1]-5);
-  glEnd();
+//   glBegin(GL_LINE_LOOP);
+//   glVertex2d(point[0]-5,point[1]-5);
+//   glVertex2d(point[0]-5,point[1]+5);
+//   glVertex2d(point[0]+5,point[1]+5);
+//   glVertex2d(point[0]+5,point[1]-5);
+//   glEnd();
   
-  // Set back the drawing color
-  glColor4d(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
+//   // Set back the drawing color
+//   glColor4d(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
 
-}
+// }
 }
 #endif
 
