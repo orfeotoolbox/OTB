@@ -288,35 +288,38 @@ ImageLayerRenderingModel<TOutputImage>
 ::ConstrainRegion(const RegionType & small, const RegionType & big)
 {
   RegionType resp = small;
-// If not small is larger than big, then crop
-  if (small.GetSize()[0]>big.GetSize()[0]
-      ||small.GetSize()[1]>big.GetSize()[1])
-    {
-    resp.Crop(big);
-    }
-  else
-    {
-    // Else we can constrain it
-    IndexType index = resp.GetIndex();
-    typename RegionType::SizeType size = resp.GetSize();
 
-    // For each dimension
-    for(unsigned int dim = 0; dim < RegionType::ImageDimension; ++dim)
-      {
-      // push left if necessary
-      if (small.GetIndex()[dim]<big.GetIndex()[dim])
-        {
-        index[dim]=big.GetIndex()[dim];
-        }
-      // push right if necessary
-      if (index[dim]+size[dim]>=big.GetIndex()[dim]+big.GetSize()[dim])
-        {
-        index[dim]=big.GetIndex()[dim]+big.GetSize()[dim]-size[dim];
-        }
-      }
-    resp.SetSize(size);
-    resp.SetIndex(index);
+  // Else we can constrain it
+  IndexType index = resp.GetIndex();
+  typename RegionType::SizeType size = resp.GetSize();
+
+// If small is larger than big, then crop
+  if (small.GetSize()[0]>big.GetSize()[0])
+    {
+    size[0] = big.GetSize()[0];
     }
+  if (small.GetSize()[1]>big.GetSize()[1])
+    {
+    size[1] = big.GetSize()[1];
+    }
+
+  // Else we can constrain it
+  // For each dimension
+  for(unsigned int dim = 0; dim < RegionType::ImageDimension; ++dim)
+    {
+    // push left if necessary
+    if (small.GetIndex()[dim]<big.GetIndex()[dim])
+      {
+      index[dim]=big.GetIndex()[dim];
+      }
+    // push right if necessary
+    if (index[dim]+size[dim]>=big.GetIndex()[dim]+big.GetSize()[dim])
+      {
+      index[dim]=big.GetIndex()[dim]+big.GetSize()[dim]-size[dim];
+      }
+    }
+  resp.SetSize(size);
+  resp.SetIndex(index);
   return resp;
 }
 
