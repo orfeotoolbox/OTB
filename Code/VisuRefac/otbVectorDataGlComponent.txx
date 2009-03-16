@@ -27,8 +27,8 @@ namespace otb
 {
 template <class TVectorData> 
 VectorDataGlComponent<TVectorData>
-::VectorDataGlComponent() : m_VectorData(),m_Spacing(), m_Origin(), m_GluTesselator(), m_Color(),
-			    m_LineWidth(2),m_CrossWidth(10),m_RenderPolygonBoundariesOnly(false)
+::VectorDataGlComponent() : m_VectorData(),m_Spacing(), m_Origin(), m_GluTesselator(),
+			    m_Color(), m_LineWidth(2),m_CrossWidth(10),m_RenderPolygonBoundariesOnly(false)
 {
   // Default color is red
   m_Color.Fill(0);
@@ -41,9 +41,6 @@ VectorDataGlComponent<TVectorData>
   
   // Create the tesselator
   m_GluTesselator = gluNewTess();
-  
-  // Set the winding rule
-//   gluTessProperty(m_GluTesselator,GLU_TESS_WINDING_RULE,GLU_TESS_WINDING_ODD);
 
   // Setting up the tesselator callbacks
   gluTessCallback(m_GluTesselator,GLU_TESS_BEGIN,  (FunctionPointerType) glBegin);
@@ -58,7 +55,7 @@ VectorDataGlComponent<TVectorData>
 ::~VectorDataGlComponent() 
 {
   // Delete the tesselator
-  m_GluTesselator = gluNewTess();
+  gluDeleteTess(m_GluTesselator);
 }
 
 template <class TVectorData>   
@@ -279,26 +276,6 @@ VectorDataGlComponent<TVectorData>
     delete [] (*it);
     }
 }
-
-// template <class TVectorData>   
-// void 
-// VectorDataGlComponent<TVectorData>
-// ::FramePoint(const PointType & point)
-// {
-//   // Set the frame color
-//   glColor4d(0,0,1,1);
-
-//   glBegin(GL_LINE_LOOP);
-//   glVertex2d(point[0]-5,point[1]-5);
-//   glVertex2d(point[0]-5,point[1]+5);
-//   glVertex2d(point[0]+5,point[1]+5);
-//   glVertex2d(point[0]+5,point[1]-5);
-//   glEnd();
-  
-//   // Set back the drawing color
-//   glColor4d(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
-
-// }
 }
 #endif
 

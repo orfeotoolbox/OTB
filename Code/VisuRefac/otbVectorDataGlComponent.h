@@ -173,9 +173,6 @@ private:
   /// The GluTesselator object to render complex polygons
   GLUtesselator * m_GluTesselator;
 
-//   /// The Quadric rendering object
-//   GLUQuadricObject * m_GluQuadrics;
-
   /// Color of the vector layer
   ColorType m_Color;
 
