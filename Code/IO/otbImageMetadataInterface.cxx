@@ -22,6 +22,7 @@
 #endif
 
 #include <typeinfo>
+#include <cassert>
 
 #include "itkMetaDataObject.h"
 
@@ -297,6 +298,107 @@ const ImageMetadataInterface::ImageKeywordlistType ImageMetadataInterface::GetIm
   }
   return ( ImageKeywordlist );
 }
+
+
+ImageMetadataInterface::VariableLengthVectorType
+    ImageMetadataInterface::GetPhysicalBias( const MetaDataDictionaryType & dict ) const
+{
+  ImageKeywordlistType ImageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
+  }
+  ossimKeywordlist kwl;
+  ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "physical_bias";
+  ossimString keywordString = kwl.find(key.c_str());
+  ossimString separatorList = " ";
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  VariableLengthVectorType outputValues;
+  outputValues.SetSize(keywordStrings.size());
+  for (int i=0; i < keywordStrings.size(); ++i)
+  {
+    outputValues[i]=keywordStrings[i].toDouble();
+  }
+
+  //In the case of SPOT, the bands are in a different order:
+  // XS3, XS2. XS1, SWIR in the tif file.
+  if(IsSpot(dict))
+  {
+    assert(outputValues.GetSize() == 4);//Valid for Spot 4 and 5
+    VariableLengthVectorType::ValueType tmp;
+    tmp = outputValues[0];
+    outputValues[0]=outputValues[2];
+    outputValues[2]=tmp;
+  }
+
+  return outputValues;
+
+}
+
+ImageMetadataInterface::VariableLengthVectorType
+    ImageMetadataInterface::GetPhysicalGain( const MetaDataDictionaryType & dict ) const
+{
+  ImageKeywordlistType ImageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
+  }
+  ossimKeywordlist kwl;
+  ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "physical_gain";
+  ossimString keywordString = kwl.find(key.c_str());
+  ossimString separatorList = " ";
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  VariableLengthVectorType outputValues;
+  outputValues.SetSize(keywordStrings.size());
+  for (int i=0; i < keywordStrings.size(); ++i)
+  {
+    outputValues[i]=keywordStrings[i].toDouble();
+  }
+
+  //In the case of SPOT, the bands are in a different order:
+  // XS3, XS2. XS1, SWIR in the tif file.
+  if(IsSpot(dict))
+  {
+    assert(outputValues.GetSize() == 4);//Valid for Spot 4 and 5
+    VariableLengthVectorType::ValueType tmp;
+    tmp = outputValues[0];
+    outputValues[0]=outputValues[2];
+    outputValues[2]=tmp;
+  }
+
+  return outputValues;
+
+}
+
+std::string ImageMetadataInterface::GetSensorID( const MetaDataDictionaryType & dict ) const
+{
+  ImageKeywordlistType ImageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
+  }
+  ossimKeywordlist kwl;
+  ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "sensor";
+  ossimString keywordString = kwl.find(key.c_str());
+  std::string output(keywordString.chars());
+  return output;
+}
+
+bool ImageMetadataInterface::IsSpot( const MetaDataDictionaryType & dict ) const
+{
+  std::string sensorID = GetSensorID(dict);
+  if (sensorID.find("Spot") != std::string::npos)
+    return true;
+  else
+    return false;
+}
+
 
 void
 ImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const
