@@ -33,6 +33,7 @@ void RegisterTests()
   REGISTER_TEST(otbMultiChannelRAndBAndNIRVegetationIndexImageFilter);
   REGISTER_TEST(otbImageToLuminanceImageFilterNew);
   REGISTER_TEST(otbImageToLuminanceImageFilter);
+  REGISTER_TEST(otbImageToLuminanceImageFilterAuto);
   REGISTER_TEST(otbLuminanceToReflectanceImageFilter);
   REGISTER_TEST(otbLuminanceToReflectanceImageFilterNew);
   REGISTER_TEST(otbImageToReflectanceImageFilter);
