@@ -28,7 +28,7 @@
 #include "otbMath.h"
 #include "itkNumericTraits.h"
 #include "itkVariableLengthVector.h"
-
+#include "otbMacro.h"
 
 namespace otb
 {
