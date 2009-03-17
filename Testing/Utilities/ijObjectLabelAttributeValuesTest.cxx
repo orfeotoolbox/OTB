@@ -10,12 +10,12 @@ bool eq( double a, double b, double precision=0.00001 )
   }
 
 
-int ijObjectLabelAttributeValues(int argc, char * argv[])
+int ijObjectLabelAttributeValuesTest(int argc, char * argv[])
 {
   const int dim = 3;
   typedef unsigned char PixelType;
   typedef itk::Image< PixelType, dim >    ImageType;
-  
+
   if( argc != 3)
     {
     std::cerr << "usage: " << argv[0] << " input1 input2" << std::endl;
@@ -26,10 +26,10 @@ int ijObjectLabelAttributeValues(int argc, char * argv[])
   typedef itk::ImageFileReader< ImageType > ReaderType;
   ReaderType::Pointer reader1 = ReaderType::New();
   reader1->SetFileName( argv[1] );
-  
+
   ReaderType::Pointer reader2 = ReaderType::New();
   reader2->SetFileName( argv[2] );
-  
+
   typedef itk::LabelImageToStatisticsLabelMapFilter< ImageType, ImageType > ConverterType;
   ConverterType::Pointer converter = ConverterType::New();
   converter->SetInput( reader1->GetOutput() );
@@ -45,7 +45,7 @@ int ijObjectLabelAttributeValues(int argc, char * argv[])
 
   typedef LabelMapType::LabelObjectType LabelObjectType;
   const LabelObjectType * ball = labelMap->GetLabelObject( 1 );
-  
+
   assert( eq(3.0, ball->GetCentroid()[0]) );
   assert( eq(3.0, ball->GetCentroid()[1]) );
   assert( eq(6.0, ball->GetCentroid()[2]) );
@@ -83,18 +83,18 @@ int ijObjectLabelAttributeValues(int argc, char * argv[])
 //   assert( eq(0.577199, ball->GetBinaryPrincipalAxes()[0][0]) );
 //   assert( eq(0.816603, ball->GetBinaryPrincipalAxes()[0][1]) );
 //   assert( eq(3.52768e-12, ball->GetBinaryPrincipalAxes()[0][2]) );
-// 
+//
 //   assert( eq(-0.816603, ball->GetBinaryPrincipalAxes()[1][0]) );
 //   assert( eq(0.577199, ball->GetBinaryPrincipalAxes()[1][1]) );
 //   assert( eq(6.73715e-14, ball->GetBinaryPrincipalAxes()[1][2]) );
-// 
+//
 //   assert( eq(-1.98116e-12, ball->GetBinaryPrincipalAxes()[2][0]) );
 //   assert( eq(-2.9196e-12, ball->GetBinaryPrincipalAxes()[2][1]) );
 //   assert( eq(1.0, ball->GetBinaryPrincipalAxes()[2][2]) );
 
 
   const LabelObjectType * ellipsoid = labelMap->GetLabelObject( 2 );
-  
+
   assert( eq(3.0, ellipsoid->GetCentroid()[0]) );
   assert( eq(3.0, ellipsoid->GetCentroid()[1]) );
   assert( eq(22.0, ellipsoid->GetCentroid()[2]) );
@@ -132,11 +132,11 @@ int ijObjectLabelAttributeValues(int argc, char * argv[])
 //   assert( eq(0.821007, ellipsoid->GetBinaryPrincipalAxes()[0][0]) );
 //   assert( eq(-0.570918, ellipsoid->GetBinaryPrincipalAxes()[0][1]) );
 //   assert( eq(5.49736e-14, ellipsoid->GetBinaryPrincipalAxes()[0][2]) );
-// 
+//
 //   assert( eq(-0.570918, ellipsoid->GetBinaryPrincipalAxes()[1][0]) );
 //   assert( eq(-0.821007, ellipsoid->GetBinaryPrincipalAxes()[1][1]) );
 //   assert( eq(-2.5511e-13, ellipsoid->GetBinaryPrincipalAxes()[1][2]) );
-// 
+//
 //   assert( eq(1.9078e-13, ellipsoid->GetBinaryPrincipalAxes()[2][0]) );
 //   assert( eq(1.78062e-13, ellipsoid->GetBinaryPrincipalAxes()[2][1]) );
 //   assert( eq(-1.0, ellipsoid->GetBinaryPrincipalAxes()[2][2]) );
@@ -144,7 +144,7 @@ int ijObjectLabelAttributeValues(int argc, char * argv[])
 
 
   const LabelObjectType * disk = labelMap->GetLabelObject( 3 );
-  
+
   assert( eq(3.0, disk->GetCentroid()[0]) );
   assert( eq(11.0, disk->GetCentroid()[1]) );
   assert( eq(22.0, disk->GetCentroid()[2]) );
@@ -193,13 +193,13 @@ int ijObjectLabelAttributeValues(int argc, char * argv[])
 
 
 //  assert( eq(, ball->Get()) );
-// 
+//
 //   assert( eq(, ball->Get()[0]) );
 //   assert( eq(, ball->Get()[1]) );
 //   assert( eq(, ball->Get()[2]) );
 
 //  std::cout << ball->GetBinaryPrincipalAxes() << std::endl;
-  
+
   return 0;
 }
 
