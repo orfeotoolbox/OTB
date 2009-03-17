@@ -213,8 +213,8 @@ protected:
     m_ZenithalSolarAngle(120.),//invalid value which will lead to negative radiometry
     m_FluxNormalizationCoefficient(1.),
     m_IsSetFluxNormalizationCoefficient(false),
-    m_Day(-1),
-    m_Month(-1)
+    m_Day(0),
+    m_Month(0)
   {
     m_Alpha.SetSize(0);
     m_Beta.SetSize(0);
@@ -239,12 +239,12 @@ protected:
       m_Beta = imageMetadataInterface->GetPhysicalBias(this->GetInput()->GetMetaDataDictionary());
     }
 
-    if (m_Day == -1)
+    if (m_Day == 0)
     {
       m_Day = imageMetadataInterface->GetDay(this->GetInput()->GetMetaDataDictionary());
     }
 
-    if (m_Month == -1)
+    if (m_Month == 0)
     {
       m_Month = imageMetadataInterface->GetMonth(this->GetInput()->GetMetaDataDictionary());
     }

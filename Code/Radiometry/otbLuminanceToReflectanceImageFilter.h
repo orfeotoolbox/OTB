@@ -192,8 +192,8 @@ protected:
   LuminanceToReflectanceImageFilter():
     m_ZenithalSolarAngle(120.0),//invalid value which will lead to negative radiometry
     m_FluxNormalizationCoefficient(1.),
-    m_Month(-1),
-    m_Day(-1),
+    m_Day(0),
+    m_Month(0),
     m_IsSetFluxNormalizationCoefficient(false)
   {
     m_SolarIllumination.SetSize(0);
@@ -206,12 +206,12 @@ protected:
   virtual void BeforeThreadedGenerateData(void)
   {
     ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
-    if (m_Day == -1)
+    if (m_Day == 0)
     {
       m_Day = imageMetadataInterface->GetDay(this->GetInput()->GetMetaDataDictionary());
     }
 
-    if (m_Month == -1)
+    if (m_Month == 0)
     {
       m_Month = imageMetadataInterface->GetMonth(this->GetInput()->GetMetaDataDictionary());
     }
