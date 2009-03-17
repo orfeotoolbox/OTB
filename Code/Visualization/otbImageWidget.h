@@ -84,6 +84,9 @@ public:
    */
   virtual void ReadBuffer(const InputImageType * image, const RegionType & region);
 
+  /** Clear the OpenGl buffer */
+  void ClearBuffer();
+
   /** Set/Get the Isotropic zoom */
   itkSetMacro(IsotropicZoom,double);
   itkGetMacro(IsotropicZoom,double);

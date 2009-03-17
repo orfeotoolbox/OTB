@@ -93,6 +93,9 @@ public:
   itkGetObjectMacro(FullWidget,ImageWidgetType);
   itkGetObjectMacro(ZoomWidget,ImageWidgetType);
 
+  /** Clear the widgets buffers  */
+  void ClearBuffer();
+
  protected:
   /** Constructor */
   ImageView();

@@ -41,12 +41,7 @@ template <class TInputImage>
 ImageWidget<TInputImage>
 ::~ImageWidget()
 {
-  // Delete OpenGl buffer if needed
-  if(m_OpenGlBuffer!=NULL)
-    {
-    delete [] m_OpenGlBuffer;
-    m_OpenGlBuffer = NULL;
-    }
+  this->ClearBuffer();
 }
 
 template <class TInputImage>
@@ -82,11 +77,8 @@ ImageWidget<TInputImage>
     itkExceptionMacro(<<"Region to read is oustside of the buffered region.");
     }
   // Delete previous buffer if needed
-  if(m_OpenGlBuffer != NULL)
-    {
-    delete [] m_OpenGlBuffer;
-    m_OpenGlBuffer = NULL;
-    }
+  this->ClearBuffer();
+
   // Allocate new memory
   m_OpenGlBuffer = new unsigned char[3*region.GetNumberOfPixels()];
 
@@ -120,6 +112,31 @@ ImageWidget<TInputImage>
     }
   // Last, updating buffer size
   m_OpenGlBufferedRegion = region;
+}
+
+template <class TInputImage>
+void
+ImageWidget<TInputImage>
+::ClearBuffer()
+{
+  // Delete previous buffer if needed
+  if(m_OpenGlBuffer != NULL)
+    {
+    delete [] m_OpenGlBuffer;
+    m_OpenGlBuffer = NULL;
+    }
+
+  RegionType region;
+  typename RegionType::IndexType index;
+  typename RegionType::SizeType  size;
+  size.Fill(0);
+  index.Fill(0);
+  region.SetIndex(index);
+  region.SetSize(size);
+
+  // Last, updating buffer size
+  m_OpenGlBufferedRegion = region;
+
 }
 
 template <class TInputImage>
