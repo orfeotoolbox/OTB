@@ -318,7 +318,7 @@ ImageMetadataInterface::VariableLengthVectorType
   ossimString separatorList = " ";
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
   std::vector<double> outputValues;
-  for (int i=0; i < keywordStrings.size(); ++i)
+  for (unsigned int i=0; i < keywordStrings.size(); ++i)
   {
     if (!keywordStrings[i].empty())
     {
@@ -341,7 +341,7 @@ ImageMetadataInterface::VariableLengthVectorType
   }
   else
   {
-    for(int i=0; i<outputValues.size(); ++i)
+    for(unsigned int i=0; i<outputValues.size(); ++i)
     {
       outputValuesVariableLengthVector[i]=outputValues[i];
     }
@@ -369,7 +369,7 @@ ImageMetadataInterface::VariableLengthVectorType
   ossimString separatorList = " ";
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
   std::vector<double> outputValues;
-  for (int i=0; i < keywordStrings.size(); ++i)
+  for (unsigned int i=0; i < keywordStrings.size(); ++i)
   {
     if (!keywordStrings[i].empty())
     {
@@ -392,7 +392,7 @@ ImageMetadataInterface::VariableLengthVectorType
   }
   else
   {
-    for(int i=0; i<outputValues.size(); ++i)
+    for(unsigned int i=0; i<outputValues.size(); ++i)
     {
       outputValuesVariableLengthVector[i]=outputValues[i];
     }
@@ -420,7 +420,7 @@ ImageMetadataInterface::VariableLengthVectorType
   ossimString separatorList = " ";
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
   std::vector<double> outputValues;
-  for (int i=0; i < keywordStrings.size(); ++i)
+  for (unsigned int i=0; i < keywordStrings.size(); ++i)
   {
     if (!keywordStrings[i].empty())
     {
@@ -443,7 +443,7 @@ ImageMetadataInterface::VariableLengthVectorType
   }
   else
   {
-    for(int i=0; i<outputValues.size(); ++i)
+    for(unsigned int i=0; i<outputValues.size(); ++i)
     {
       outputValuesVariableLengthVector[i]=outputValues[i];
     }
