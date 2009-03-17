@@ -39,5 +39,6 @@ void RegisterTests()
   REGISTER_TEST(otbLuminanceToReflectanceImageFilterAuto);
   REGISTER_TEST(otbImageToReflectanceImageFilterNew);
   REGISTER_TEST(otbImageToReflectanceImageFilter);
+  REGISTER_TEST(otbImageToReflectanceImageFilterAuto);
 }
 

@@ -311,6 +311,16 @@ ADD_TEST(raTvImageToReflectanceImageFilterDayMounth ${RADIOMETRY_TESTS2}
 	5   #mounth
        )
 
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(raTvImageToReflectanceImageFilterAuto ${RADIOMETRY_TESTS2}
+  --compare-image ${EPSILON}  ${BASELINE}/raTvImageToReflectanceImageFilterAuto.tif
+                          ${TEMP}/raTvImageToReflectanceImageFilterAuto.tif
+        otbImageToReflectanceImageFilterAuto
+	${LARGEINPUT}/SPOT5_SCENE01/IMAGERY.TIF
+	${TEMP}/raTvImageToReflectanceImageFilterAuto.tif
+         )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -932,6 +942,7 @@ otbLuminanceToReflectanceImageFilter.cxx
 otbLuminanceToReflectanceImageFilterAuto.cxx
 otbImageToReflectanceImageFilterNew.cxx
 otbImageToReflectanceImageFilter.cxx
+otbImageToReflectanceImageFilterAuto.cxx
 )
 SET(Radiometry_SRCS3
 otbDEMCaracteristicsExtractorNew.cxx
