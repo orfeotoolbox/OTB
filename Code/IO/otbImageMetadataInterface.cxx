@@ -402,6 +402,121 @@ ImageMetadataInterface::VariableLengthVectorType
 
 }
 
+
+ImageMetadataInterface::VariableLengthVectorType
+    ImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryType & dict ) const
+{
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "support_data.solar_irradiance";
+  ossimString keywordString = kwl.find(key.c_str());
+  ossimString separatorList = " ";
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  std::vector<double> outputValues;
+  for (int i=0; i < keywordStrings.size(); ++i)
+  {
+    if (!keywordStrings[i].empty())
+    {
+      outputValues.push_back(keywordStrings[i].toDouble());
+    }
+  }
+
+  VariableLengthVectorType outputValuesVariableLengthVector;
+  outputValuesVariableLengthVector.SetSize(outputValues.size());
+  outputValuesVariableLengthVector.Fill(0);
+  //In the case of SPOT, the bands are in a different order:
+  // XS3, XS2. XS1, SWIR in the tif file.
+  if(IsSpot(dict))
+  {
+    assert(outputValues.size() == 4);//Valid for Spot 4 and 5
+    outputValuesVariableLengthVector[0]=outputValues[2];
+    outputValuesVariableLengthVector[1]=outputValues[1];
+    outputValuesVariableLengthVector[2]=outputValues[0];
+    outputValuesVariableLengthVector[3]=outputValues[3];
+  }
+  else
+  {
+    for(int i=0; i<outputValues.size(); ++i)
+    {
+      outputValuesVariableLengthVector[i]=outputValues[i];
+    }
+  }
+
+  return outputValuesVariableLengthVector;
+
+}
+
+double ImageMetadataInterface::GetSunElevation( const MetaDataDictionaryType & dict ) const
+{
+  //The image date in the ossim metadata has the form: 2007-10-03T03:17:16.973000
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "support_data.elevation_angle";
+  ossimString keywordString = kwl.find(key.c_str());
+
+  return keywordString.toDouble();
+}
+
+int ImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) const
+{
+  //The image date in the ossim metadata has the form: 2007-10-03T03:17:16.973000
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "support_data.image_date";
+  ossimString keywordString = kwl.find(key.c_str());
+  ossimString separatorList = "-T";
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+
+  assert(keywordStrings.size() > 2);
+
+  return keywordStrings[2].toInt();
+}
+
+
+int ImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) const
+{
+  //The image date in the ossim metadata has the form: 2007-10-03T03:17:16.973000
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "support_data.image_date";
+  ossimString keywordString = kwl.find(key.c_str());
+  ossimString separatorList = "-T";
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+
+  assert(keywordStrings.size() > 2);
+
+  return keywordStrings[1].toInt();
+}
+
+
 std::string ImageMetadataInterface::GetSensorID( const MetaDataDictionaryType & dict ) const
 {
   ImageKeywordlistType ImageKeywordlist;
