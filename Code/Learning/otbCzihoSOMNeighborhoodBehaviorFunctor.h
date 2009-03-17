@@ -58,7 +58,7 @@ public :
   template < unsigned int VDimension >
   itk::Size<VDimension> operator() ( unsigned int currentIteration,
                                      unsigned int numberOfIterations,
-                                     const itk::Size<VDimension> & sizeInit )
+                                     const itk::Size<VDimension> & sizeInit ) const
   {
     itk::Size<VDimension> theSize;
     double weightening = ::vcl_pow( 1.0

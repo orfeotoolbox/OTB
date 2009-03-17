@@ -91,7 +91,7 @@ public :
   /** Functor */
   virtual double operator() ( unsigned int currentIteration,
                               unsigned int numberOfIterations,
-                              double betaInit, double betaEnd )
+                              double betaInit, double betaEnd ) const
   {
     if ( currentIteration < m_IterationThreshold )
     {
