@@ -165,16 +165,14 @@ protected:
 
   virtual void BeforeThreadedGenerateData(void)
   {
-
+    ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
     if(m_Alpha.GetSize() == 0)
     {
-      ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
       m_Alpha = imageMetadataInterface->GetPhysicalGain(this->GetInput()->GetMetaDataDictionary());
     }
 
     if(m_Beta.GetSize() == 0)
     {
-      ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
       m_Beta = imageMetadataInterface->GetPhysicalBias(this->GetInput()->GetMetaDataDictionary());
     }
 
