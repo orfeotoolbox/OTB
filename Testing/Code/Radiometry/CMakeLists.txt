@@ -228,7 +228,15 @@ ADD_TEST(raTvLuminanceToReflectanceImageFilterDayMonth ${RADIOMETRY_TESTS2}
 	5   #mounth
         )
 
-
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(raTvLuminanceToReflectanceImageFilterAuto ${RADIOMETRY_TESTS2}
+  --compare-image ${EPSILON}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAuto.tif
+                          ${TEMP}/raTvLuminanceToReflectanceImageFilterAuto.tif
+        otbLuminanceToReflectanceImageFilterAuto
+	${LARGEINPUT}/SPOT5_SCENE01/IMAGERY.TIF
+	${TEMP}/raTvLuminanceToReflectanceImageFilterAuto.tif
+         )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # -------            otb::ImageToReflectanceImageFilter   ------------------------------
 ADD_TEST(raTuImageToReflectanceImageFilterNew ${RADIOMETRY_TESTS2}
@@ -921,6 +929,7 @@ otbImageToLuminanceImageFilter.cxx
 otbImageToLuminanceImageFilterAuto.cxx
 otbLuminanceToReflectanceImageFilterNew.cxx
 otbLuminanceToReflectanceImageFilter.cxx
+otbLuminanceToReflectanceImageFilterAuto.cxx
 otbImageToReflectanceImageFilterNew.cxx
 otbImageToReflectanceImageFilter.cxx
 )
