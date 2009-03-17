@@ -239,12 +239,12 @@ protected:
       m_Beta = imageMetadataInterface->GetPhysicalBias(this->GetInput()->GetMetaDataDictionary());
     }
 
-    if (m_Day == 0)
+    if ((m_Day == 0) && (!m_IsSetFluxNormalizationCoefficient))
     {
       m_Day = imageMetadataInterface->GetDay(this->GetInput()->GetMetaDataDictionary());
     }
 
-    if (m_Month == 0)
+    if ((m_Month == 0) && (!m_IsSetFluxNormalizationCoefficient))
     {
       m_Month = imageMetadataInterface->GetMonth(this->GetInput()->GetMetaDataDictionary());
     }
@@ -286,9 +286,9 @@ protected:
         {
           otb_6s_doublereal dsol = 0.;
           otb_6s_integer day = static_cast<otb_6s_integer>(m_Day);
-          otb_6s_integer mounth = static_cast<otb_6s_integer>(m_Month);
+          otb_6s_integer month = static_cast<otb_6s_integer>(m_Month);
           int cr(0);
-          cr = otb_6s_varsol_(&day, &mounth, &dsol);
+          cr = otb_6s_varsol_(&day, &month, &dsol);
           coefTemp = vcl_cos(m_ZenithalSolarAngle*M_PI/180.)*static_cast<double>(dsol);
         }
         else

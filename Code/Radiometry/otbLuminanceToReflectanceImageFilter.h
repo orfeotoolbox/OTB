@@ -206,12 +206,12 @@ protected:
   virtual void BeforeThreadedGenerateData(void)
   {
     ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
-    if (m_Day == 0)
+    if ((m_Day == 0) && (!m_IsSetFluxNormalizationCoefficient))
     {
       m_Day = imageMetadataInterface->GetDay(this->GetInput()->GetMetaDataDictionary());
     }
 
-    if (m_Month == 0)
+    if ((m_Month == 0) && (!m_IsSetFluxNormalizationCoefficient))
     {
       m_Month = imageMetadataInterface->GetMonth(this->GetInput()->GetMetaDataDictionary());
     }
