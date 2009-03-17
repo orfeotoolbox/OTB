@@ -29,6 +29,14 @@
 #include "otbChangeScaledExtractRegionActionHandler.h"
 #include "otbChangeExtractRegionActionHandler.h"
 #include "otbChangeScaleActionHandler.h"
+#include "otbCurves2DWidget.h"
+#include "otbHistogramCurve.h"
+#include "otbPixelDescriptionModel.h"
+#include "otbPixelDescriptionActionHandler.h"
+#include "otbPixelDescriptionView.h"
+
+#include <Fl/Fl_Tile.H>
+#include <Fl/Fl_Group.H>
 
 namespace otb
 {
@@ -61,11 +69,12 @@ public:
 
   /** Output image type */
   typedef itk::RGBPixel<unsigned char>              RGBPixelType;
-  typedef otb::Image<RGBPixelType,2>                OutputImageType;
+  typedef Image<RGBPixelType,2>                     OutputImageType;
   
   /** Image layer type */
   typedef ImageLayer<ImageType>                     ImageLayerType;
   typedef typename ImageLayerType::Pointer          ImageLayerPointerType;
+  typedef typename ImageLayerType::HistogramType    HistogramType;
   
   /** Image layer generator type */
   typedef ImageLayerGenerator<ImageLayerType>       ImageLayerGeneratorType;
@@ -76,13 +85,19 @@ public:
   typedef typename RenderingModelType::Pointer      RenderingModelPointerType;
   
   /** View type */
-  typedef otb::ImageView<RenderingModelType>        ViewType;
+  typedef ImageView<RenderingModelType>             ViewType;
   typedef typename ViewType::Pointer                ViewPointerType;
 
   /** Widget controller */
-  typedef otb::ImageWidgetController                WidgetControllerType;
+  typedef ImageWidgetController                     WidgetControllerType;
   typedef typename WidgetControllerType::Pointer    WidgetControllerPointerType;
   
+  /** Curves 2D widget */
+  typedef Curves2DWidget                            CurvesWidgetType;
+  typedef typename CurvesWidgetType::Pointer        CurvesWidgetPointerType;
+  typedef HistogramCurve<HistogramType>             HistogramCurveType;
+  typedef typename HistogramCurveType::Pointer      HistogramCurvePointerType;
+
   /** Standard action handlers */
   typedef otb::WidgetResizingActionHandler
   <RenderingModelType,ViewType>                     ResizingHandlerType;
@@ -92,6 +107,15 @@ public:
   <RenderingModelType,ViewType>                     ChangeRegionHandlerType;
   typedef otb::ChangeScaleActionHandler
   <RenderingModelType,ViewType>                     ChangeScaleHandlerType;
+
+  /** Pixel description */
+  typedef PixelDescriptionModel<OutputImageType>    PixelDescriptionModelType;
+  typedef typename PixelDescriptionModelType::Pointer PixelDescriptionModelPointerType;
+  typedef PixelDescriptionActionHandler
+    < PixelDescriptionModelType, ViewType>          PixelDescriptionActionHandlerType;
+  typedef otb::PixelDescriptionView
+    < PixelDescriptionModelType >                   PixelDescriptionViewType;
+  typedef typename PixelDescriptionViewType::Pointer PixelDescriptionViewPointerType;
 
   /** Set/Get the image to render */
   itkSetObjectMacro(Image,ImageType);
@@ -121,15 +145,30 @@ private:
 
   /** The rendering model */
   RenderingModelPointerType   m_RenderingModel;
+
+  /** The pixel description model */
+  PixelDescriptionModelPointerType m_PixelDescriptionModel;
   
   /** The view */
   ViewPointerType             m_View;
+
+  /** The pixel description view */
+  PixelDescriptionViewPointerType m_PixelDescriptionView;
+
+  /** Curve widget */
+  CurvesWidgetPointerType     m_CurveWidget;
 
   /** The widget controller */
   WidgetControllerPointerType m_Controller;
 
   /** The window */
   Fl_Window * m_Window;
+
+  Fl_Group *  m_FullGroup;
+
+   Fl_Group *  m_SideGroup;
+
+  Fl_Tile  *  m_Tile;
 
   /** Intial sizes */
   int m_Width;

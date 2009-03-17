@@ -113,8 +113,8 @@ public:
   {
     itk::OStringStream oss;
     OutputPixelType output = this->Evaluate(vpixel);
-    oss<<"R[chan="  <<m_RedChannelIndex   <<" val="<< vpixel[m_RedChannelIndex]   <<" disp="<<static_cast<unsigned int>(output[0])<<"], ";
-    oss<<"G[chan="<<m_GreenChannelIndex   <<" val="<< vpixel[m_GreenChannelIndex] <<" disp="<<static_cast<unsigned int>(output[1])<<"], ";
+    oss<<"R[chan="  <<m_RedChannelIndex   <<" val="<< vpixel[m_RedChannelIndex]   <<" disp="<<static_cast<unsigned int>(output[0])<<"]\n";
+    oss<<"G[chan="<<m_GreenChannelIndex   <<" val="<< vpixel[m_GreenChannelIndex] <<" disp="<<static_cast<unsigned int>(output[1])<<"]\n";
     oss<<"B[chan=" <<m_BlueChannelIndex   <<" val="<< vpixel[m_BlueChannelIndex]  <<" disp="<<static_cast<unsigned int>(output[2])<<"]";
     return oss.str();
 

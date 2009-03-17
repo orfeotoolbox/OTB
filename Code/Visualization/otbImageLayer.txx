@@ -253,11 +253,11 @@ ImageLayer<TImage,TOutputImage>
   m_RenderingFunction->Initialize();
   // The ouptut stringstream
   itk::OStringStream oss;
-  oss<<this->GetName();
+  oss<<"Layer: "<<this->GetName();
   // If we are inside the buffered region
   if(m_Image->GetBufferedRegion().IsInside(index))
     {
-    oss<<" "<<m_RenderingFunction->Describe(m_Image->GetPixel(index));
+    oss<<std::endl<<m_RenderingFunction->Describe(m_Image->GetPixel(index));
     }
   else if(m_Quicklook.IsNotNull())
     // Else we extrapolate the value from the quicklook
@@ -268,7 +268,7 @@ ImageLayer<TImage,TOutputImage>
 
     if(m_Quicklook->GetBufferedRegion().IsInside(ssindex))
       {
-      oss<<" (ql) "<<m_RenderingFunction->Describe(m_Quicklook->GetPixel(ssindex));
+      oss<<" (ql)"<<std::endl<<m_RenderingFunction->Describe(m_Quicklook->GetPixel(ssindex));
       }
     }
   return oss.str();

@@ -57,6 +57,10 @@ ADD_TEST(vrTuImageLayerNew ${VISUREFAC_TESTS1}
 otbImageLayerNew
 )
 
+ADD_TEST(vrTvImageLayer ${VISUREFAC_TESTS1}
+otbImageLayer
+)
+
 ADD_TEST(vrTvImageLayerScalar ${VISUREFAC_TESTS1}
 --compare-n-images ${TOL} 3
 ${BASELINE}/vrTvImageLayerScalarQuicklookOutput.png
@@ -277,6 +281,11 @@ ADD_TEST(vrTuStandardImageViewerNew ${VISUREFAC_TESTS1}
 otbStandardImageViewerNew
 )
 
+ADD_TEST(vrTvStandardImageViewer ${VISUREFAC_TESTS1}
+otbStandardImageViewer
+${INPUTDATA}/couleurs.tif 0
+)
+
 # Testing srcs
 SET(Visualization_SRCS1
 otbImageWidgetNew.cxx
@@ -315,6 +324,7 @@ otbVectorDataGlComponentNew.cxx
 otbImageWidgetWithVectorDataGlComponent.cxx
 otbImageViewerEndToEndWithVectorData.cxx
 otbStandardImageViewerNew.cxx
+otbStandardImageViewer.cxx
 )
 
 # Building testing executables
