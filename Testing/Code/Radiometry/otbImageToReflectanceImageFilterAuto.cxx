@@ -43,7 +43,7 @@ int otbImageToReflectanceImageFilterAuto(int argc, char * argv[])
   WriterType::Pointer writer = WriterType::New();
   reader->SetFileName(inputFileName);
   writer->SetFileName(outputFileName);
-  reader->GenerateOutputInformation();
+  reader->UpdateOutputInformation();
 
   // Instantiating object
   ImageToReflectanceImageFilterType::Pointer filter = ImageToReflectanceImageFilterType::New();

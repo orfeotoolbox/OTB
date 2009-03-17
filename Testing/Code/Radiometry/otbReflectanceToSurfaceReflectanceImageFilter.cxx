@@ -45,7 +45,7 @@ int otbReflectanceToSurfaceReflectanceImageFilter(int argc, char * argv[])
   reader->SetFileName(inputFileName);
   writer->SetFileName(outputFileName);
 
-  reader->GenerateOutputInformation();
+  reader->UpdateOutputInformation();
   unsigned int nbChannel = reader->GetOutput()->GetNumberOfComponentsPerPixel();
 
   DataVectorType intrinsic;

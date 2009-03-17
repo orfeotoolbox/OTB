@@ -63,7 +63,7 @@ int otbAtmosphericCorrectionSequencementTest( int argc, char *argv[] )
   ReaderType::Pointer reader  = ReaderType::New();
   reader->SetFileName(argv[1]);
 
-  reader->GenerateOutputInformation();
+  reader->UpdateOutputInformation();
 
   unsigned int nbOfComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
 
