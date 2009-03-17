@@ -38,7 +38,11 @@ namespace Functor
    * \class LuminanceToReflectanceImageFunctor
    * \brief Compupute reflectance from the luminance value
    *
-   *  Multiply by Pi and by an illumination correction coefficient the quotient between the input and the given solar illumination.
+   *  Multiply by Pi and by an illumination correction coefficient the
+   *  quotient between the input and the given solar illumination.
+   *
+   *
+   * \sa LuminanceToReflectanceImageFilter
    *
    * \ingroup Functor
    * \ingroup Radiometry
@@ -47,11 +51,11 @@ template <class TInput, class TOutput>
 class LuminanceToReflectanceImageFunctor
 {
 public:
-  LuminanceToReflectanceImageFunctor()
-  {
-    m_SolarIllumination = 1.;
-    m_IlluminationCorrectionCoefficient = 1.;
-  };
+  LuminanceToReflectanceImageFunctor() :
+    m_SolarIllumination(1.0),
+    m_IlluminationCorrectionCoefficient(1.0)
+  {};
+
   ~LuminanceToReflectanceImageFunctor() {};
 
   void SetSolarIllumination(double solarIllumination)
@@ -72,7 +76,7 @@ public:
     return m_IlluminationCorrectionCoefficient;
   };
 
-  inline TOutput operator() (const TInput & inPixel)
+  inline TOutput operator() (const TInput & inPixel) const
   {
     TOutput outPixel;
     double temp;
@@ -91,8 +95,14 @@ private:
 }
 
 /** \class LuminanceToReflectanceImageFilter
- *  \brief Transform a luminance image into the reflectance. For this it uses the functor LuminanceToReflectanceImageFunctor
- *   calling for each component of each pixel.
+ *  \brief Convert luminance value into reflectance value
+ *
+ * Transform a luminance image into the reflectance. For this it uses the
+ * functor LuminanceToReflectanceImageFunctor calling for each component of each pixel.
+ *
+ *
+ * For Spot image in the dimap format, the correction parameters are
+ * retrieved automatically from the metadata
  *
  * \ingroup ImageToLuminanceImageFunctor
  * \ingroup Radiometry
@@ -179,19 +189,20 @@ public:
 
 protected:
   /** Constructor */
-  LuminanceToReflectanceImageFilter()
+  LuminanceToReflectanceImageFilter():
+    m_ZenithalSolarAngle(120.0),//invalid value which will lead to negative radiometry
+    m_FluxNormalizationCoefficient(1.),
+    m_Month(-1),
+    m_Day(-1),
+    m_IsSetFluxNormalizationCoefficient(false)
   {
-    m_ZenithalSolarAngle = 120.0;//invalid value which will lead to negative radiometry
-    m_FluxNormalizationCoefficient = 1.;
     m_SolarIllumination.SetSize(0);
-    m_Month = -1;
-    m_Day = -1;
-    m_IsSetFluxNormalizationCoefficient = false;
   };
+
   /** Destructor */
   virtual ~LuminanceToReflectanceImageFilter() {};
 
-  /** Update the functor list */
+  /** Update the functor list and input parameters */
   virtual void BeforeThreadedGenerateData(void)
   {
     ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
@@ -266,9 +277,9 @@ private:
   double m_ZenithalSolarAngle;
   /** Flux normalization coefficient. */
   double m_FluxNormalizationCoefficient;
-  /* Acquisition day. */
+  /** Acquisition day. */
   int m_Day;
-  /* Acquisition mounth. */
+  /** Acquisition mounth. */
   int m_Month;
   /** Solar illumination value. */
   VectorType m_SolarIllumination;

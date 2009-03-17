@@ -37,6 +37,9 @@ namespace Functor
 /** \class ImageToReflectanceImageFunctor
    *  \brief Call the ImageToLuminanceFunctor over the input and the LuminanceToReflectanceFunctor to this result.
    *
+   *
+   * \sa ImageToReflectanceImageFilter
+   *
    * \ingroup Functor
    * \ingroup ImageToLuminanceFunctor
    * \ingroup LuminanceToReflectanceFunctor
@@ -86,7 +89,7 @@ public:
     return m_LumToReflecFunctor.GetIlluminationCorrectionCoefficient();
   };
 
-  inline TOutput operator() (const TInput & inPixel)
+  inline TOutput operator() (const TInput & inPixel) const
   {
     TOutput outPixel;
     TOutput tempPix;
@@ -105,12 +108,16 @@ private:
 }
 
 /** \class ImageToReflectanceImageFilter
- *  \brief Transform a classical image into the reflectance image. For this it uses the functor ImageToReflectanceFunctor calling for each component of each pixel.
+ *  \brief Convert a raw value into a reflectance value
  *
  *  Transform a classical image into the reflectance image. For this it uses the functor ImageToReflectanceFunctor calling for each component of each pixel.
  *  The flux normalization coefficient (that is the ratio solar distance over mean solar distance) can be directly set or the user can
  *  give the day and the mounth of the observation and the class will used a coefficient given by a 6S routine that will give the corresponding coefficient.
  *  To note that in the case, 6S gives the square of the distances ratio.
+ *
+ *
+ * For Spot image in the dimap format, the correction parameters are
+ * retrieved automatically from the metadata
  *
  * \ingroup ImageToReflectanceImageFunctor
  * \ingroup ImageToLuminanceImageFilter
@@ -201,20 +208,23 @@ public:
 
 
 protected:
-  ImageToReflectanceImageFilter()
+  /** Constructor */
+  ImageToReflectanceImageFilter():
+    m_ZenithalSolarAngle(120.),//invalid value which will lead to negative radiometry
+    m_FluxNormalizationCoefficient(1.),
+    m_IsSetFluxNormalizationCoefficient(false),
+    m_Day(-1),
+    m_Month(-1)
   {
     m_Alpha.SetSize(0);
     m_Beta.SetSize(0);
-    m_ZenithalSolarAngle = 120.;//invalid value which will lead to negative radiometry
-    m_FluxNormalizationCoefficient = 1.;
     m_SolarIllumination.SetSize(0);
-    m_IsSetFluxNormalizationCoefficient = false;
-    m_Day = -1;
-    m_Month = -1;
-
   };
+
+  /** Destructor */
   virtual ~ImageToReflectanceImageFilter() {};
 
+  /** Update the functor list and input parameters */
   virtual void BeforeThreadedGenerateData(void)
   {
 
