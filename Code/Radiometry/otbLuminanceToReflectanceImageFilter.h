@@ -184,7 +184,6 @@ protected:
     m_ZenithalSolarAngle = 120.0;//invalid value which will lead to negative radiometry
     m_FluxNormalizationCoefficient = 1.;
     m_SolarIllumination.SetSize(0);
-//     m_SolarIllumination.Fill(1.);
     m_Month = -1;
     m_Day = -1;
     m_IsSetFluxNormalizationCoefficient = false;
@@ -222,6 +221,11 @@ protected:
     otbMsgDevMacro( << "Month:             " << m_Month);
     otbMsgDevMacro( << "Solar irradiance:  " << m_SolarIllumination);
     otbMsgDevMacro( << "Zenithal angle:    " << m_ZenithalSolarAngle);
+
+    if ((m_SolarIllumination.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel()))
+    {
+      itkExceptionMacro(<<"SolarIllumination parameter should have the same size as the number of bands");
+    }
 
     this->GetFunctorVector().clear();
 

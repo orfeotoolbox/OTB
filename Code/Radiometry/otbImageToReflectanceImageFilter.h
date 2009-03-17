@@ -203,22 +203,68 @@ public:
 protected:
   ImageToReflectanceImageFilter()
   {
-    m_Alpha.SetSize(1);
-    m_Alpha.Fill(0);
-    m_Beta.SetSize(1);
-    m_Beta.Fill(0);
-    m_ZenithalSolarAngle = 1.;
+    m_Alpha.SetSize(0);
+    m_Beta.SetSize(0);
+    m_ZenithalSolarAngle = 120.;//invalid value which will lead to negative radiometry
     m_FluxNormalizationCoefficient = 1.;
-    m_SolarIllumination.Fill(1.);
+    m_SolarIllumination.SetSize(0);
     m_IsSetFluxNormalizationCoefficient = false;
-    m_Day = 1;
-    m_Month = 1;
+    m_Day = -1;
+    m_Month = -1;
 
   };
   virtual ~ImageToReflectanceImageFilter() {};
 
   virtual void BeforeThreadedGenerateData(void)
   {
+
+    ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
+    if(m_Alpha.GetSize() == 0)
+    {
+      m_Alpha = imageMetadataInterface->GetPhysicalGain(this->GetInput()->GetMetaDataDictionary());
+    }
+
+    if(m_Beta.GetSize() == 0)
+    {
+      m_Beta = imageMetadataInterface->GetPhysicalBias(this->GetInput()->GetMetaDataDictionary());
+    }
+
+    if (m_Day == -1)
+    {
+      m_Day = imageMetadataInterface->GetDay(this->GetInput()->GetMetaDataDictionary());
+    }
+
+    if (m_Month == -1)
+    {
+      m_Month = imageMetadataInterface->GetMonth(this->GetInput()->GetMetaDataDictionary());
+    }
+
+    if(m_SolarIllumination.GetSize() == 0)
+    {
+      m_SolarIllumination = imageMetadataInterface->GetSolarIrradiance(this->GetInput()->GetMetaDataDictionary());
+    }
+
+    if(m_ZenithalSolarAngle == 120.0)
+    {
+      //the zenithal angle is the complementary of the elevation angle
+      m_ZenithalSolarAngle = 90.0-imageMetadataInterface->GetSunElevation(this->GetInput()->GetMetaDataDictionary());
+    }
+
+    otbMsgDevMacro( << "Using correction parameters: ");
+    otbMsgDevMacro( << "Alpha (gain): " << m_Alpha);
+    otbMsgDevMacro( << "Beta (bias):  " << m_Beta);
+    otbMsgDevMacro( << "Day:               " << m_Day);
+    otbMsgDevMacro( << "Month:             " << m_Month);
+    otbMsgDevMacro( << "Solar irradiance:  " << m_SolarIllumination);
+    otbMsgDevMacro( << "Zenithal angle:    " << m_ZenithalSolarAngle);
+
+    if ((m_Alpha.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel())
+         || (m_Beta.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel())
+         || (m_SolarIllumination.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel()))
+    {
+      itkExceptionMacro(<<"Alpha, Beta and SolarIllumination parameters should have the same size as the number of bands");
+    }
+
     this->GetFunctorVector().clear();
     for (unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
     {
