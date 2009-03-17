@@ -1260,6 +1260,16 @@ bool ossimSpotDimapSupportData::saveState(ossimKeywordlist& kwl,
            tempString,
            true);
 
+   tempString = "";
+   for(idx = 0; idx < theSolarIrradiance.size(); ++idx)
+   {
+     tempString += (ossimString::toString(theSolarIrradiance[idx]) + " ");
+   }
+   kwl.add(prefix,
+           "solar_irradiance",
+           tempString,
+           true);
+
    return true;
 }
 
@@ -1420,6 +1430,45 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    theLrCorner =createGround( kwl.find(prefix, "lr_ground_point"));
    theLlCorner =createGround( kwl.find(prefix, "ll_ground_point"));
 
+
+   thePhysicalBias.resize(theNumBands);
+   tempString = kwl.find(prefix,"physical_bias");
+   if(tempString != "")
+   {
+     std::istringstream in(tempString);
+     ossimString tempValue;
+     for(idx = 0; idx < thePhysicalBias.size();++idx)
+     {
+       in >> tempValue;
+       thePhysicalBias[idx] = tempValue.toDouble();
+     }
+   }
+
+   thePhysicalGain.resize(theNumBands);
+   tempString = kwl.find(prefix,"physical_gain");
+   if(tempString != "")
+   {
+     std::istringstream in(tempString);
+     ossimString tempValue;
+     for(idx = 0; idx < thePhysicalGain.size();++idx)
+     {
+       in >> tempValue;
+       thePhysicalGain[idx] = tempValue.toDouble();
+     }
+   }
+
+   theSolarIrradiance.resize(theNumBands);
+   tempString = kwl.find(prefix,"solar_irradiance");
+   if(tempString != "")
+   {
+     std::istringstream in(tempString);
+     ossimString tempValue;
+     for(idx = 0; idx < theSolarIrradiance.size();++idx)
+     {
+       in >> tempValue;
+       theSolarIrradiance[idx] = tempValue.toInt();
+     }
+   }
 
    return true;
 }
@@ -2191,6 +2240,38 @@ bool ossimSpotDimapSupportData::parsePart4(
       return false;
     }
     thePhysicalGain[bandIndex] = sub_nodes[0]->getText().toDouble();
+
+    ++node;
+  }
+
+  theSolarIrradiance.assign(theNumBands, 0.000);
+  xml_nodes.clear();
+  xpath = "/Dimap_Document/Data_Strip/Sensor_Calibration/Solar_Irradiance/Band_Solar_Irradiance";
+  xmlDocument->findNodes(xpath, xml_nodes);
+  node = xml_nodes.begin();
+  while (node != xml_nodes.end())
+  {
+    sub_nodes.clear();
+    xpath = "BAND_INDEX";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      setErrorStatus();
+      return false;
+    }
+    int bandIndex = sub_nodes[0]->getText().toInt() - 1;
+
+    assert(bandIndex < theNumBands);
+
+    sub_nodes.clear();
+    xpath = "SOLAR_IRRADIANCE_VALUE";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      setErrorStatus();
+      return false;
+    }
+    theSolarIrradiance[bandIndex] = sub_nodes[0]->getText().toInt();
 
     ++node;
   }

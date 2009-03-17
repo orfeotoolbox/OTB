@@ -280,6 +280,8 @@ private:
    std::vector<ossim_float64> thePhysicalBias;
    std::vector<ossim_float64> thePhysicalGain;
 
+   std::vector<ossim_uint32> theSolarIrradiance;
+
    /**
     * Private parse methods called by loadXml.
     *
