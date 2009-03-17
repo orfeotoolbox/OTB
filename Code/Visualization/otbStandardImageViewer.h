@@ -34,6 +34,10 @@
 #include "otbPixelDescriptionModel.h"
 #include "otbPixelDescriptionActionHandler.h"
 #include "otbPixelDescriptionView.h"
+#include "otbStandardRenderingFunction.h"
+#include "otbVectorData.h"
+#include "otbVectorDataProjectionFilter.h"
+#include "otbVectorDataGlComponent.h"
 
 #include <Fl/Fl_Tile.H>
 #include <Fl/Fl_Group.H>
@@ -46,7 +50,7 @@ namespace otb
 *  
 */
 
-template <class TImage>  
+template <class TImage, class TVectorData = VectorData<double> >  
 class StandardImageViewer
   : public itk::Object
 {
@@ -66,6 +70,11 @@ public:
   /** Input image type */
   typedef TImage                                    ImageType;
   typedef typename ImageType::Pointer               ImagePointerType;
+  typedef typename ImageType::InternalPixelType     InternalPixelType;
+
+  /** VectorData typedef */
+  typedef TVectorData                               VectorDataType;
+  typedef typename VectorDataType::Pointer          VectorDataPointerType;
 
   /** Output image type */
   typedef itk::RGBPixel<unsigned char>              RGBPixelType;
@@ -108,6 +117,11 @@ public:
   typedef otb::ChangeScaleActionHandler
   <RenderingModelType,ViewType>                     ChangeScaleHandlerType;
 
+  /** Rendering function */
+  typedef typename ImageLayerGeneratorType::RenderingFunctionType StandardRenderingFunctionType;
+  typedef typename StandardRenderingFunctionType::Pointer StandardRenderingFunctionPointerType;
+
+
   /** Pixel description */
   typedef PixelDescriptionModel<OutputImageType>    PixelDescriptionModelType;
   typedef typename PixelDescriptionModelType::Pointer PixelDescriptionModelPointerType;
@@ -117,9 +131,26 @@ public:
     < PixelDescriptionModelType >                   PixelDescriptionViewType;
   typedef typename PixelDescriptionViewType::Pointer PixelDescriptionViewPointerType;
 
+  /** VectorData overlay */
+  typedef VectorDataProjectionFilter
+  <VectorDataType,VectorDataType>                    VectorDataProjectionFilterType;
+  typedef VectorDataGlComponent<VectorDataType>      VectorDataGlComponentType;
+
   /** Set/Get the image to render */
   itkSetObjectMacro(Image,ImageType);
   itkGetObjectMacro(Image,ImageType);
+
+  /** Set/Get the VectorData to render */
+  itkSetObjectMacro(VectorData,VectorDataType);
+  itkGetObjectMacro(VectorData,VectorDataType);
+
+  /** Set/Get the DEM directory */
+  itkSetStringMacro(DEMDirectory);
+  itkGetStringMacro(DEMDirectory);
+
+  /** Set/Get the Label */
+  itkSetStringMacro(Label);
+  itkGetStringMacro(Label);
 
   /** Update and show the widget (you should call Fl::run() to hold to
    * display */
@@ -137,9 +168,15 @@ private:
   StandardImageViewer(const Self&);     // purposely not implemented
   void operator=(const Self&); // purposely not implemented
 
+  /** Label of the viewer */
+  std::string m_Label;
+
   /** Pointer to the image */
   ImagePointerType            m_Image;
   
+  /** Pointer to the VectorData */
+  VectorDataPointerType       m_VectorData;
+
   /** The image layer */
   ImageLayerPointerType       m_ImageLayer;
 
@@ -160,6 +197,12 @@ private:
 
   /** The widget controller */
   WidgetControllerPointerType m_Controller;
+
+  /** StandardRenderingFunction */
+  StandardRenderingFunctionPointerType m_RenderingFunction;
+
+  /** Path to the DEMDirectory (used if a VectorData is rendered */
+  std::string m_DEMDirectory;
 
   /** The window */
   Fl_Window * m_Window;

@@ -154,7 +154,7 @@ HistogramCurve<THistogram>
     }
   mean/=nbSamples;
   squaremean/=nbSamples;
-  m_Maximum[1] = mean + vcl_sqrt(squaremean - mean*mean); 
+  m_Maximum[1] = mean + 6*vcl_sqrt(squaremean - mean*mean); 
   m_BinWidth = (last-first)/(nbSamples);
 }
 

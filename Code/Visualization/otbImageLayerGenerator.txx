@@ -27,7 +27,7 @@ namespace otb
 
 template < class TImageLayer >
 ImageLayerGenerator<TImageLayer>
-::ImageLayerGenerator() : m_Layer(), m_Image(), m_Quicklook(),
+::ImageLayerGenerator() : m_Layer(), m_DefaultRenderingFunction(), m_Image(), m_Quicklook(),
                           m_SubsamplingRate(1), m_GenerateQuicklook(true), 
                           m_Resampler(), m_ScreenRatio(0.25)
 {
@@ -35,6 +35,8 @@ ImageLayerGenerator<TImageLayer>
   m_Layer = ImageLayerType::New();
   // Resampler
   m_Resampler = ResampleFilterType::New();
+  // Rendering function
+  m_DefaultRenderingFunction = RenderingFunctionType::New();
 }
 
 template < class TImageLayer >
@@ -123,35 +125,31 @@ ImageLayerGenerator<TImageLayer>
   m_Layer->SetHasScaledExtract(true);
   m_Layer->VisibleOn();
 
-  // Set up rendering function
-  typedef typename ImageLayerType::DefaultRenderingFunctionType RenderingFunctionType;
-  typename RenderingFunctionType::Pointer rfunc = RenderingFunctionType::New();
-
   // Setup channels
   switch(m_Image->GetNumberOfComponentsPerPixel())
     {
     case 1:
     {
-    rfunc->SetAllChannels(0);
+    m_DefaultRenderingFunction->SetAllChannels(0);
     break;
     }
     case 2:
     {
-    rfunc->SetAllChannels(0);
+    m_DefaultRenderingFunction->SetAllChannels(0);
     }
     case 3:
     {
-    rfunc->SetRedChannelIndex(0);
-    rfunc->SetGreenChannelIndex(1);
-    rfunc->SetBlueChannelIndex(2);
+    m_DefaultRenderingFunction->SetRedChannelIndex(0);
+    m_DefaultRenderingFunction->SetGreenChannelIndex(1);
+    m_DefaultRenderingFunction->SetBlueChannelIndex(2);
     break;
     }
     case 4:
     {
     // Handle quickbird like channel order
-    rfunc->SetRedChannelIndex(2);
-    rfunc->SetGreenChannelIndex(1);
-    rfunc->SetBlueChannelIndex(0);
+    m_DefaultRenderingFunction->SetRedChannelIndex(2);
+    m_DefaultRenderingFunction->SetGreenChannelIndex(1);
+    m_DefaultRenderingFunction->SetBlueChannelIndex(0);
     break;
     }
     default:
@@ -162,7 +160,7 @@ ImageLayerGenerator<TImageLayer>
     }
 
   // Set the rendering function
-  m_Layer->SetRenderingFunction(rfunc);
+  m_Layer->SetRenderingFunction(m_DefaultRenderingFunction);
 }
 
 template < class TImageLayer >

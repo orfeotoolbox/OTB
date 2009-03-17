@@ -74,6 +74,10 @@ public:
   <ImageType,ImageType>                        ResampleFilterType;
   typedef typename ResampleFilterType::Pointer ResampleFilterPointerType;
   
+  /** Rendering function typedef */
+  typedef typename ImageLayerType::DefaultRenderingFunctionType RenderingFunctionType;
+  typedef typename RenderingFunctionType::Pointer RenderingFunctionPointerType;
+
   /** Get the generated layer */
   itkGetObjectMacro(Layer,ImageLayerType);
 
@@ -108,6 +112,9 @@ public:
   itkSetMacro(ScreenRatio,double);
   itkGetMacro(ScreenRatio,double);
 
+  /** Get the generated default rendering function */
+  itkGetObjectMacro(DefaultRenderingFunction,RenderingFunctionType);
+
 protected:
   /** Constructor */
   ImageLayerGenerator();
@@ -130,6 +137,9 @@ private:
 
   /** The generated image layer */
   ImageLayerPointerType m_Layer;
+
+  /** The default rendering function */
+  RenderingFunctionPointerType m_DefaultRenderingFunction;
 
   /** The input image */
   ImagePointerType      m_Image;

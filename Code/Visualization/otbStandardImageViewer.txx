@@ -23,9 +23,10 @@
 namespace otb
 {
 
-template <class TImage>  
-StandardImageViewer<TImage>
-::StandardImageViewer() : m_Image(), m_ImageLayer(), m_RenderingModel(),m_PixelDescriptionModel(), m_View(), m_PixelDescriptionView(), m_CurveWidget(), m_Controller(), m_Window(),
+template <class TImage,class TVectorData>  
+StandardImageViewer<TImage,TVectorData>
+::StandardImageViewer() : m_Label("Default label"), m_Image(), m_VectorData(), m_ImageLayer(), m_RenderingModel(),m_PixelDescriptionModel(), 
+			  m_View(), m_PixelDescriptionView(), m_CurveWidget(), m_Controller(), m_RenderingFunction(), m_Window(),
 			  m_FullGroup(),m_SideGroup(),m_Tile(),m_Width(800),m_Height(600), m_SideBarWidth(200)
 {
   // Build a new rendering model
@@ -48,7 +49,7 @@ StandardImageViewer<TImage>
   m_View->SetController(m_Controller);
   m_PixelDescriptionView->SetModel(m_PixelDescriptionModel);
 
-   // Add the resizing handler
+  // Add the resizing handler
   ResizingHandlerType::Pointer resizingHandler = ResizingHandlerType::New();
   resizingHandler->SetModel(m_RenderingModel);
   resizingHandler->SetView(m_View);
@@ -100,8 +101,8 @@ StandardImageViewer<TImage>
   m_PixelDescriptionView->GetPixelDescriptionWidget()->resize(m_Width-m_SideBarWidth,3*m_Height/4,m_SideBarWidth,m_Height/4);
 }
 
-template <class TImage>  
-StandardImageViewer<TImage>
+template <class TImage,class TVectorData>  
+StandardImageViewer<TImage,TVectorData>
 ::~StandardImageViewer()
 {
   m_Tile->remove(m_View->GetScrollWidget());
@@ -112,38 +113,67 @@ StandardImageViewer<TImage>
   delete m_Window;
 }
 
-template <class TImage>  
+template <class TImage,class TVectorData>  
 void
-StandardImageViewer<TImage>
+StandardImageViewer<TImage,TVectorData>
 ::Update()
 {
+  // First check if there is actually an input image
   if(m_Image.IsNull())
     {
     itkExceptionMacro(<<"The image pointer is null, there is nothing to display. You probably forget to set the image.");
     }
 
-  // TODO: Add a real label here
-  m_Window->label("The label");
+  // Update image info for further use
+  m_Image->UpdateOutputInformation();
+  
+  // If there is a VectorData
+  if(m_VectorData.IsNotNull())
+    {
+    // Reproject VectorData in image projection
+     typename VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
+     vproj->SetInput(m_VectorData);
+     vproj->SetOutputKeywordList(m_Image->GetImageKeywordlist());
+     vproj->SetOutputOrigin(m_Image->GetOrigin());
+     vproj->SetOutputSpacing(m_Image->GetSpacing());
+     vproj->SetDEMDirectory(m_DEMDirectory);
+     vproj->Update();
+     
+     // Create a VectorData gl component
+     typename VectorDataGlComponentType::Pointer vgl = VectorDataGlComponentType::New();
+     vgl->SetVectorData(vproj->GetOutput());
+
+     // Add it to the image view
+      m_View->GetScrollWidget()->AddGlComponent(vgl);
+      m_View->GetFullWidget()->AddGlComponent(vgl);
+      m_View->GetZoomWidget()->AddGlComponent(vgl);
+    }
 
   // Generate the layer
  ImageLayerGeneratorPointerType generator = ImageLayerGeneratorType::New();
   generator->SetImage(m_Image);
   generator->GenerateLayer();
-  
   m_ImageLayer = generator->GetLayer();
+  m_RenderingFunction = generator->GetDefaultRenderingFunction();
 
+  // Set the window and layer label
+  m_Window->label(m_Label.c_str());
+  m_ImageLayer->SetName(m_Label);
+
+  // Add the generated layer to the rendering model
   m_RenderingModel->AddLayer(generator->GetLayer());
 
+  // Show everything
   m_Window->show();
-
   m_View->GetScrollWidget()->show();
   m_View->GetFullWidget()->show();
   m_View->GetZoomWidget()->show();
   m_CurveWidget->show();
   
+  // Update the rendering model
   m_RenderingModel->Update();
 
-  // adding histograms
+  // adding histograms rendering
   typename HistogramCurveType::ColorType red,green,blue, gray;
   red.Fill(0);
   red[0]=1.;
@@ -160,17 +190,17 @@ StandardImageViewer<TImage>
   gray.Fill(0.5);
 
   typename HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
-  rhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(0));
+  rhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(m_RenderingFunction->GetRedChannelIndex()));
   rhistogram->SetHistogramColor(red);
   rhistogram->SetLabelColor(red);
   
   typename HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
-  ghistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(1));
+  ghistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(m_RenderingFunction->GetGreenChannelIndex()));
   ghistogram->SetHistogramColor(green);
   ghistogram->SetLabelColor(green);
 
   typename HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
-  bhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(2));
+  bhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(m_RenderingFunction->GetBlueChannelIndex()));
   bhistogram->SetHistogramColor(blue);
   bhistogram->SetLabelColor(blue);
   m_CurveWidget->AddCurve(rhistogram);
@@ -178,8 +208,6 @@ StandardImageViewer<TImage>
   m_CurveWidget->AddCurve(bhistogram);
   m_CurveWidget->SetXAxisLabel("Pixels");
   m_CurveWidget->SetYAxisLabel("Amount");
-
-
 }
 }
 #endif

@@ -18,6 +18,9 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbStandardImageViewer.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
+#include "otbVectorData.h"
+#include "otbVectorDataFileReader.h"
+
 
 int otbStandardImageViewer( int argc, char * argv[] )
 {
@@ -26,13 +29,32 @@ int otbStandardImageViewer( int argc, char * argv[] )
   typedef otb::VectorImage<double,2> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::StandardImageViewer<ImageType> ViewerType;
+  typedef otb::VectorData<double>             VectorDataType;
+  typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
 
+  VectorDataFileReaderType::Pointer vreader = VectorDataFileReaderType::New();
   ReaderType::Pointer reader = ReaderType::New();
   ViewerType::Pointer viewer = ViewerType::New();
+  VectorDataFileReaderType::Pointer vdreader = VectorDataFileReaderType::New();
 
   reader->SetFileName(argv[1]);
-
   viewer->SetImage(reader->GetOutput());
+
+  if(argc>3)
+    {
+    std::cout<<"Adding a vector layer from file "<<argv[3]<<std::endl;
+    vdreader->SetFileName(argv[3]);
+    viewer->SetVectorData(vdreader->GetOutput());
+    }
+
+  if(argc>4)
+    {
+    std::cout<<"Reprojecting using DEM "<<argv[4]<<std::endl;
+    viewer->SetDEMDirectory(argv[4]);
+    }
+
+  viewer->SetLabel("Testing standard viewer");
+
   viewer->Update();
   
   if(run)
