@@ -18,14 +18,14 @@
 #include "itkExceptionObject.h"
 
 #include "otbImageToLuminanceImageFilter.h"
+#include "otbLuminanceToReflectanceImageFilter.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkVariableLengthVector.h"
 #include "otbMultiChannelExtractROI.h"
 
-//Test the retrieval of parameters from the image metadata
-int otbImageToLuminanceImageFilterAuto(int argc, char * argv[])
+int otbLuminanceToReflectanceImageFilterAuto(int argc, char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
@@ -37,6 +37,7 @@ int otbImageToLuminanceImageFilterAuto(int argc, char * argv[])
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef otb::ImageToLuminanceImageFilter<InputImageType,OutputImageType> ImageToLuminanceImageFilterType;
+  typedef otb::LuminanceToReflectanceImageFilter<OutputImageType,OutputImageType> LuminanceToReflectanceImageFilterType;
   typedef ImageToLuminanceImageFilterType::VectorType VectorType;
   typedef otb::MultiChannelExtractROI<PixelType,PixelType> RoiFilterType;
 
@@ -47,20 +48,21 @@ int otbImageToLuminanceImageFilterAuto(int argc, char * argv[])
   reader->UpdateOutputInformation();
 
   // Instantiating object
-  ImageToLuminanceImageFilterType::Pointer filter = ImageToLuminanceImageFilterType::New();
-  filter->SetInput(reader->GetOutput());
+  ImageToLuminanceImageFilterType::Pointer filterToLuminance = ImageToLuminanceImageFilterType::New();
+  filterToLuminance->SetInput(reader->GetOutput());
+
+  LuminanceToReflectanceImageFilterType::Pointer filterToReflectance = LuminanceToReflectanceImageFilterType::New();
+  filterToReflectance->SetInput(filterToLuminance->GetOutput());
 
   RoiFilterType::Pointer roiFilter = RoiFilterType::New();
   roiFilter->SetStartX(1000);
   roiFilter->SetStartY(1000);
   roiFilter->SetSizeX(100);
   roiFilter->SetSizeY(100);
-  roiFilter->SetInput(filter->GetOutput());
+  roiFilter->SetInput(filterToReflectance->GetOutput());
 
   writer->SetInput(roiFilter->GetOutput());
   writer->Update();
-
-
 
   return EXIT_SUCCESS;
 }

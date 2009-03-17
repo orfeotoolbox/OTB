@@ -56,7 +56,7 @@ int otbImageToReflectanceImageFilter(int argc, char * argv[])
   WriterType::Pointer writer = WriterType::New();
   reader->SetFileName(inputFileName);
   writer->SetFileName(outputFileName);
-  reader->GenerateOutputInformation();
+  reader->UpdateOutputInformation();
 
   unsigned int nbOfComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
 

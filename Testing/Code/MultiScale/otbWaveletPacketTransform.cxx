@@ -35,7 +35,7 @@
 #include "otbCommandLineArgumentParser.h"
 #include "otbCommandProgressUpdate.h"
 
-int otbWaveletPacketTransform( int argc, char ** argv )
+int otbWaveletPacketTransform( int argc, char * argv[] )
 {
   typedef otb::CommandLineArgumentParser ParserType;
   ParserType::Pointer parser = ParserType::New();

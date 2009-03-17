@@ -108,6 +108,18 @@ public:
   /** Get the radiometric gain from the ossim metadata */
   VariableLengthVectorType GetPhysicalGain( const MetaDataDictionaryType & dict ) const;
 
+  /** Get the solar irradiance from the ossim metadata */
+  VariableLengthVectorType GetSolarIrradiance( const MetaDataDictionaryType & dict ) const;
+
+  /** Get the sun elevation from the ossim metadata */
+  double GetSunElevation( const MetaDataDictionaryType & dict ) const;
+
+  /** Get the imaging day from the ossim metadata */
+  int GetDay( const MetaDataDictionaryType & dict ) const;
+
+  /** Get the imaging month from the ossim metadata */
+  int GetMonth( const MetaDataDictionaryType & dict ) const;
+
   /** Get the sensor ID from the ossim metadata */
   std::string GetSensorID(const MetaDataDictionaryType & dict ) const;
 

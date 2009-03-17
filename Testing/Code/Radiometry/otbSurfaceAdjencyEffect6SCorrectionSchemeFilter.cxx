@@ -68,7 +68,7 @@ int otbSurfaceAdjencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
   WriterType::Pointer writer = WriterType::New();
   reader->SetFileName(inputFileName);
   writer->SetFileName(outputFileName);
-  reader->GenerateOutputInformation();
+  reader->UpdateOutputInformation();
   std::vector<const char *> wavelenghFiles;
   unsigned int nbChannel = reader->GetOutput()->GetNumberOfComponentsPerPixel();
   for (unsigned int i=0; i<nbChannel; i++)

@@ -51,7 +51,7 @@ public :
   /** Functor */
   virtual double operator() ( unsigned int currentIteration,
                               unsigned int numberOfIterations,
-                              double betaInit, double betaEnd )
+                              double betaInit, double betaEnd ) const
   {
     return betaInit + ( betaEnd - betaInit )
            * static_cast<double>( currentIteration )

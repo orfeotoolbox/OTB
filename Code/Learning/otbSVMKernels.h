@@ -38,7 +38,7 @@ public:
   };
   virtual ~CustomKernelFunctor() {};
 
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
     return ( dot(x, x) - 2.0 * dot( x, y) + dot(y, y) );
   }
@@ -57,7 +57,7 @@ public:
   };
   virtual ~InvMultiQuadricKernelFunctor() {};
 
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
     CustomKernelFunctor custom;
     double mq = this->GetValue<double>("const_coef") + custom(x, y, param );
@@ -82,7 +82,7 @@ public:
   };
   virtual ~KModKernelFunctor() {};
 
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
     CustomKernelFunctor custom;
     double mq = this->GetValue<double>("const_coef") + custom(x, y, param);
@@ -107,7 +107,7 @@ public:
   };
   virtual ~SAMKernelFunctor() {};
 
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
     double den = dot(x, x) * dot(y, y);
     if ( den <= 0. )
@@ -131,7 +131,7 @@ public:
   };
   virtual ~RadialSAMKernelFunctor() {};
 
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
     SAMKernelFunctor sam;
     return vcl_exp( - param.gamma * sam( x, y, param ) );
@@ -150,7 +150,7 @@ public:
   };
   virtual ~InverseCosSAMKernelFunctor() {};
 
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
     SAMKernelFunctor sam;
     return 1.0 - vcl_cos( sam( x, y, param ) );
@@ -172,7 +172,7 @@ public:
   };
   virtual ~InvMultiQuadraticSAMKernelFunctor() {};
 
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
     SAMKernelFunctor sam;
     double mq = this->GetValue<double>("const_coef") + sam( x, y, param );
@@ -198,7 +198,7 @@ public:
   };
   virtual ~KModSAMKernelFunctor() {};
 
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
     SAMKernelFunctor sam;
     double mq = this->GetValue<double>("const_coef") + sam( x, y, param );
@@ -224,7 +224,7 @@ public:
   };
   virtual ~RBFKernelFunctor() {};
 
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
     CustomKernelFunctor custom;
     double res = this->GetValue<double>("gamma_coef") * custom( x, y, param );
@@ -232,7 +232,7 @@ public:
     return vcl_exp(-res);
   }
 
-  virtual double derivative(const svm_node *x, const svm_node *y, const svm_parameter& param, int degree, int index, bool isAtEnd, double constValue)const
+  virtual double derivative(const svm_node *x, const svm_node *y, const svm_parameter& param, int degree, int index, bool isAtEnd, double constValue) const
   {
     double gamma = this->GetValue<double>("gamma_coef");
     double kernelValue = 0.;
@@ -315,7 +315,7 @@ public:
   };
   virtual ~RBFRBFSAMKernelFunctor() {};
 
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
     CustomKernelFunctor    custom;
     RadialSAMKernelFunctor radialSam;
@@ -338,7 +338,7 @@ public:
   };
   virtual ~PolyRBFSAMKernelFunctor() {};
 
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
     RadialSAMKernelFunctor radialSam;
     return this->GetValue<double>("const_lin") * vcl_pow( dot(x, y)+this->GetValue<double>("const_coef") , param.degree)
@@ -359,7 +359,7 @@ public:
   };
   virtual ~RBFDiffKernelFunctor() {};
 
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
 
     double total = 0.;
@@ -400,7 +400,7 @@ public:
   };
   virtual ~CustomLinearKernelFunctor() {};
 
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
     CustomKernelFunctor custom;
     return( vcl_exp(-param.gamma*custom(x, y, param)) );
@@ -419,7 +419,7 @@ public:
   };
   virtual ~GroupedRBFKernelFunctor() {};
 
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
     const char *parameters = param.custom;
     const char * twoPoints = ":";
@@ -591,7 +591,7 @@ public:
   };
   virtual ~GroupingAdaptiveKernelFunctor() {};
 
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
     const char * parameters = param.custom;
     const char * twoPoints = ":";

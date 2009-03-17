@@ -39,6 +39,7 @@ namespace Functor
    * \class ImageToLuminanceImageFunctor
    * \brief Add beta to the quotient Input over alpha.
    *
+   * \sa ImageToLuminanceImageFilter
    * \ingroup Functor
    * \ingroup Radiometry
  */
@@ -47,11 +48,11 @@ template <class TInput, class TOutput>
 class ImageToLuminanceImageFunctor
 {
 public:
-  ImageToLuminanceImageFunctor()
-  {
-    m_Alpha = 1.;
-    m_Beta = 0.;
-  };
+  ImageToLuminanceImageFunctor():
+    m_Alpha(1.),
+    m_Beta(0.)
+  {};
+
   ~ImageToLuminanceImageFunctor() {};
 
   void SetAlpha(double alpha)
@@ -72,7 +73,7 @@ public:
   };
 
 
-  inline TOutput operator() (const TInput & inPixel)
+  inline TOutput operator() (const TInput & inPixel) const
   {
     TOutput outPixel;
     double temp;
@@ -88,7 +89,14 @@ private:
 }
 
 /** \class ImageToLuminanceImageFilter
- *  \brief Transform a classical image into the luminance image. For this it uses the functor ImageToLuminanceImageFunctor calling for each component of each pixel.
+ *  \brief Convert a raw value into a luminance value
+ *
+ * Transform a classical image into the luminance image. For this it
+ * uses the functor ImageToLuminanceImageFunctor calling for each component of each pixel.
+ *
+ *
+ * For Spot image in the dimap format, the correction parameters are
+ * retrieved automatically from the metadata
  *
  * \ingroup ImageToLuminanceImageFunctor
  * \ingroup Radiometry
@@ -151,30 +159,27 @@ public:
 
 
 protected:
-
+  /** Constructor */
   ImageToLuminanceImageFilter()
   {
-//     m_Alpha.SetSize(1);
-//     m_Beta.SetSize(1);
-//     m_Alpha.Fill(1);
-//     m_Beta.Fill(0);
     m_Alpha.SetSize(0);
     m_Beta.SetSize(0);
   };
+
+  /** Destructor */
   virtual ~ImageToLuminanceImageFilter() {};
 
+  /** Update the functor list and input parameters */
   virtual void BeforeThreadedGenerateData(void)
   {
-
+    ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
     if(m_Alpha.GetSize() == 0)
     {
-      ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
       m_Alpha = imageMetadataInterface->GetPhysicalGain(this->GetInput()->GetMetaDataDictionary());
     }
 
     if(m_Beta.GetSize() == 0)
     {
-      ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
       m_Beta = imageMetadataInterface->GetPhysicalBias(this->GetInput()->GetMetaDataDictionary());
     }
 

@@ -228,7 +228,15 @@ ADD_TEST(raTvLuminanceToReflectanceImageFilterDayMonth ${RADIOMETRY_TESTS2}
 	5   #mounth
         )
 
-
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(raTvLuminanceToReflectanceImageFilterAuto ${RADIOMETRY_TESTS2}
+  --compare-image ${EPSILON}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAuto.tif
+                          ${TEMP}/raTvLuminanceToReflectanceImageFilterAuto.tif
+        otbLuminanceToReflectanceImageFilterAuto
+	${LARGEINPUT}/SPOT5_SCENE01/IMAGERY.TIF
+	${TEMP}/raTvLuminanceToReflectanceImageFilterAuto.tif
+         )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # -------            otb::ImageToReflectanceImageFilter   ------------------------------
 ADD_TEST(raTuImageToReflectanceImageFilterNew ${RADIOMETRY_TESTS2}
@@ -302,6 +310,16 @@ ADD_TEST(raTvImageToReflectanceImageFilterDayMounth ${RADIOMETRY_TESTS2}
 	3   #day
 	5   #mounth
        )
+
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(raTvImageToReflectanceImageFilterAuto ${RADIOMETRY_TESTS2}
+  --compare-image ${EPSILON}  ${BASELINE}/raTvImageToReflectanceImageFilterAuto.tif
+                          ${TEMP}/raTvImageToReflectanceImageFilterAuto.tif
+        otbImageToReflectanceImageFilterAuto
+	${LARGEINPUT}/SPOT5_SCENE01/IMAGERY.TIF
+	${TEMP}/raTvImageToReflectanceImageFilterAuto.tif
+         )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -921,8 +939,10 @@ otbImageToLuminanceImageFilter.cxx
 otbImageToLuminanceImageFilterAuto.cxx
 otbLuminanceToReflectanceImageFilterNew.cxx
 otbLuminanceToReflectanceImageFilter.cxx
+otbLuminanceToReflectanceImageFilterAuto.cxx
 otbImageToReflectanceImageFilterNew.cxx
 otbImageToReflectanceImageFilter.cxx
+otbImageToReflectanceImageFilterAuto.cxx
 )
 SET(Radiometry_SRCS3
 otbDEMCaracteristicsExtractorNew.cxx
