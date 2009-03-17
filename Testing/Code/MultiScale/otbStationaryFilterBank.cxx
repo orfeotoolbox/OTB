@@ -33,7 +33,7 @@
 #include "otbCommandLineArgumentParser.h"
 #include "otbCommandProgressUpdate.h"
 
-int otbStationaryFilterBank( int argc, char ** argv )
+int otbStationaryFilterBank( int argc, char * argv[] )
 {
   typedef otb::CommandLineArgumentParser ParserType;
   ParserType::Pointer parser = ParserType::New();
