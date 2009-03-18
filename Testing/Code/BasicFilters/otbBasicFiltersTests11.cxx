@@ -28,7 +28,7 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbExtractROIResample);
-  REGISTER_TEST(otbPointSetFunctionNew);
+  //REGISTER_TEST(otbPointSetFunctionNew);
   REGISTER_TEST(otbPointSetDensityFunctionNew);
   REGISTER_TEST(otbPointSetDensityFunctionTest);
   REGISTER_TEST(otbPointSetToDensityImageFilterNew);
