@@ -39,6 +39,9 @@
 #include "otbVectorData.h"
 #include "otbVectorDataProjectionFilter.h"
 #include "otbVectorDataGlComponent.h"
+#include "otbVectorDataExtractROI.h"
+#include "otbCartographicRegion.h"
+
 
 #include <Fl/Fl_Tile.H>
 #include <Fl/Fl_Group.H>
@@ -136,7 +139,10 @@ public:
   /** VectorData overlay */
   typedef VectorDataProjectionFilter
   <VectorDataType,VectorDataType>                    VectorDataProjectionFilterType;
+  typedef VectorDataExtractROI<VectorDataType>       VectorDataExtractROIType;
+  typedef typename VectorDataExtractROIType::RegionType CartographicRegionType;
   typedef VectorDataGlComponent<VectorDataType>      VectorDataGlComponentType;
+
 
   /** Set/Get the image to render */
   itkSetObjectMacro(Image,ImageType);

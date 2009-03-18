@@ -21,7 +21,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
 
-
 int otbStandardImageViewer( int argc, char * argv[] )
 {
   bool run = atoi(argv[2]);
@@ -44,6 +43,8 @@ int otbStandardImageViewer( int argc, char * argv[] )
     {
     std::cout<<"Adding a vector layer from file "<<argv[3]<<std::endl;
     vdreader->SetFileName(argv[3]);
+    vdreader->Update();
+    std::cout<<"VectorData loaded."<<std::endl;
     viewer->SetVectorData(vdreader->GetOutput());
     }
 

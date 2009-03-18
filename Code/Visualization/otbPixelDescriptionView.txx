@@ -28,6 +28,7 @@ PixelDescriptionView<TInputPixelDescription>
 {
   // build a widget with a default size
   m_PixelDescriptionWidget = new Fl_Multiline_Output(0,0,200,40);
+  m_PixelDescriptionWidget->deactivate();
 }
 
 template < class TInputPixelDescription >

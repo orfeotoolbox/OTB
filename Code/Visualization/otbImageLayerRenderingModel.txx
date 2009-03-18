@@ -218,7 +218,6 @@ ImageLayerRenderingModel<TOutputImage>
         }
       probe.Stop();
       otbMsgDevMacro("ImageLayerRenderingModel::RasterizeVisibleLayers(): Previous layer rasterized with layer "<<it.Get()->GetName()<<" ( "<<probe.GetMeanTime()<<" s.)");
-
       }
     ++it;
     ++count;
