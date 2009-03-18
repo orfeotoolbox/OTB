@@ -18,7 +18,7 @@
 
 //  Software Guide : BeginLatex
 //
-//  Now, we are going to illustrate the use of the \doxygen{otb}{ImageViewer}
+//  Now, we are going to illustrate the use of the \doxygen{otb}{StandardImageViewer}
 // to display an image or the result of an algorithm without saving the image.
 //
 // We include the required header including the header
@@ -31,7 +31,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "itkGradientMagnitudeImageFilter.h"
-#include "otbImageViewer.h"
+#include "otbStandardImageViewer.h"
 
 int main( int argc, char * argv[] )
 {
@@ -69,14 +69,14 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginLatex
   //
-  // Unlike most OTB filters,  the  \doxygen{otb}{ImageViewer} is
-  // templated over the input pixel type instead of the image
-  // type. This will allow to use it with scalar and vector images.
+  // The \doxygen{otb}{StandardImageViewer} is the new, highly versatile
+  // component to display images in OTB. There is a system of plugins to
+  // fully customize its behavior. But we'll keep it simple for now.
   //
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageViewer<PixelType> ViewerType;
+  typedef otb::StandardImageViewer<ImageType> ViewerType;
   ViewerType::Pointer viewer = ViewerType::New();
   // Software Guide : EndCodeSnippet
 
@@ -108,12 +108,12 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   // We trigger the pipeline execution and the image display
-  // with the \code{Show()} method of the viewer.
+  // with the \code{Update()} method of the viewer.
   //
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  viewer->Show();
+  viewer->Update();
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

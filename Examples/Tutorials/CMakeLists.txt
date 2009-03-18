@@ -21,7 +21,7 @@ TARGET_LINK_LIBRARIES(SmarterFilteringPipeline OTBCommon OTBIO)
 
 IF(OTB_USE_VISU_GUI)
   ADD_EXECUTABLE(SimpleViewer SimpleViewer.cxx )
-  TARGET_LINK_LIBRARIES(SimpleViewer OTBCommon OTBIO OTBGui OTBVisu ${OTB_VISU_GUI_LIBRARIES})
+  TARGET_LINK_LIBRARIES(SimpleViewer OTBCommon OTBIO OTBGui OTBVisualization ${OTB_VISU_GUI_LIBRARIES})
 ENDIF(OTB_USE_VISU_GUI)
 
 ADD_EXECUTABLE(OrthoFusion OrthoFusion.cxx )
@@ -50,7 +50,7 @@ ADD_TEST( TutorialsPipelineTest ${EXE_TESTS}
         ${INPUTDATA}/QB_Suburb.png
         ${TEMP}/TutorialsPipelineOutput.png
         )
-        
+
 ADD_TEST( TutorialsFilteringPipelineTest ${EXE_TESTS}
         --compare-image ${TOL}          ${BASELINE}/TutorialsFilteringPipelineOutput.png
                                         ${TEMP}/TutorialsFilteringPipelineOutput.png
@@ -58,7 +58,7 @@ ADD_TEST( TutorialsFilteringPipelineTest ${EXE_TESTS}
         ${INPUTDATA}/QB_Suburb.png
         ${TEMP}/TutorialsFilteringPipelineOutput.png
         )
-        
+
 ADD_TEST( TutorialsScalingPipelineTest ${EXE_TESTS}
         --compare-image ${TOL}          ${BASELINE}/TutorialsScalingPipelineOutput.png
                                         ${TEMP}/TutorialsScalingPipelineOutput.png
@@ -66,7 +66,7 @@ ADD_TEST( TutorialsScalingPipelineTest ${EXE_TESTS}
         ${INPUTDATA}/QB_Suburb.png
         ${TEMP}/TutorialsScalingPipelineOutput.png
         )
-        
+
 ADD_TEST( TutorialsMultispectralTest ${EXE_TESTS}
         --compare-n-images ${TOL} 2      ${BASELINE}/MultispectralOutput1.tif
                                         ${TEMP}/MultispectralOutput1.tif
@@ -76,8 +76,8 @@ ADD_TEST( TutorialsMultispectralTest ${EXE_TESTS}
         ${INPUTDATA}/qb_RoadExtract.tif
         ${TEMP}/MultispectralOutput1.tif
         ${TEMP}/MultispectralOutput2.tif
-        )        
-        
+        )
+
 
 ADD_TEST( TutorialsSmarterFilteringPipelineTest ${EXE_TESTS}
         --compare-image ${TOL}          ${BASELINE}/TutorialsSmarterFilteringPipelineOutput.png
@@ -85,8 +85,8 @@ ADD_TEST( TutorialsSmarterFilteringPipelineTest ${EXE_TESTS}
         TutorialsSmarterFilteringPipelineTest
         -in ${INPUTDATA}/QB_Suburb.png
         -out ${TEMP}/TutorialsSmarterFilteringPipelineOutput.png
-        -d 1.5 
-        -i 2 
+        -d 1.5
+        -i 2
         -a 0.1
         )
 
@@ -100,11 +100,11 @@ ADD_TEST( TutorialsOrthoFusionTest ${EXE_TESTS}
         ${TEMP}/TutorialsOrthoFusionOutput.tif
         31
         N
-        375000 
-	4828100 
-	500 
-	500 
-	0.6 
+        375000
+	4828100
+	500
+	500
+	0.6
 	-0.6
         )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
