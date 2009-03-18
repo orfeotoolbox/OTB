@@ -46,7 +46,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageFileWriter.h"
 #include "itkPointSet.h"
 #include "itkVariableLengthVector.h"
-#include "otbRationalQuotientResampleImageFilter.h"
 #include "itkRGBPixel.h"
 #include "itkImageRegionIterator.h"
 
