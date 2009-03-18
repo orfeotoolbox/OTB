@@ -28,6 +28,9 @@
 #include "otbObjectList.h"
 #include "otbMacro.h"
 
+#include "itkProgressReporter.h"
+
+
 namespace otb
 {
 
@@ -105,7 +108,7 @@ VectorDataExtractROI<TVectorData>
   bool newFolder       = false;
   bool newMultiFeature = false;
   
-  
+  itk::ProgressReporter progress(this, 0,input->Size());
 
   while (!it.IsAtEnd())
     {
@@ -243,7 +246,7 @@ VectorDataExtractROI<TVectorData>
             break;
           }
         }
-      
+      progress.CompletedPixel();
       ++it;
     }
   
