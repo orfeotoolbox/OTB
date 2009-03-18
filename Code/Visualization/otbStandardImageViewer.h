@@ -47,10 +47,10 @@ namespace otb
 /** \class StandardImageViewer
 *   \brief This class implements a standard visualization tool to be
 *   plugged at the end of a pipeline.
-*  
+*
 */
 
-template <class TImage, class TVectorData = VectorData<double> >  
+template <class TImage, class TVectorData = VectorData<double> >
 class StandardImageViewer
   : public itk::Object
 {
@@ -60,10 +60,10 @@ public:
   typedef itk::Object                       Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(StandardImageViewer,Object);
 
@@ -79,12 +79,12 @@ public:
   /** Output image type */
   typedef itk::RGBPixel<unsigned char>              RGBPixelType;
   typedef Image<RGBPixelType,2>                     OutputImageType;
-  
+
   /** Image layer type */
   typedef ImageLayer<ImageType>                     ImageLayerType;
   typedef typename ImageLayerType::Pointer          ImageLayerPointerType;
   typedef typename ImageLayerType::HistogramType    HistogramType;
-  
+
   /** Image layer generator type */
   typedef ImageLayerGenerator<ImageLayerType>       ImageLayerGeneratorType;
   typedef typename ImageLayerGeneratorType::Pointer ImageLayerGeneratorPointerType;
@@ -92,7 +92,7 @@ public:
   /** Rendering model type */
   typedef ImageLayerRenderingModel<OutputImageType> RenderingModelType;
   typedef typename RenderingModelType::Pointer      RenderingModelPointerType;
-  
+
   /** View type */
   typedef ImageView<RenderingModelType>             ViewType;
   typedef typename ViewType::Pointer                ViewPointerType;
@@ -100,7 +100,7 @@ public:
   /** Widget controller */
   typedef ImageWidgetController                     WidgetControllerType;
   typedef typename WidgetControllerType::Pointer    WidgetControllerPointerType;
-  
+
   /** Curves 2D widget */
   typedef Curves2DWidget                            CurvesWidgetType;
   typedef typename CurvesWidgetType::Pointer        CurvesWidgetPointerType;
@@ -163,7 +163,7 @@ protected:
   ~StandardImageViewer();
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const {};
- 
+
 private:
   StandardImageViewer(const Self&);     // purposely not implemented
   void operator=(const Self&); // purposely not implemented
@@ -173,7 +173,7 @@ private:
 
   /** Pointer to the image */
   ImagePointerType            m_Image;
-  
+
   /** Pointer to the VectorData */
   VectorDataPointerType       m_VectorData;
 
@@ -185,7 +185,7 @@ private:
 
   /** The pixel description model */
   PixelDescriptionModelPointerType m_PixelDescriptionModel;
-  
+
   /** The view */
   ViewPointerType             m_View;
 
@@ -215,12 +215,14 @@ private:
 
   /** Intial sizes */
   int m_Width;
-  
+
   int m_Height;
 
   int m_SideBarWidth;
 
-}; // end class 
+  int m_BottomBarHeight;
+
+}; // end class
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
