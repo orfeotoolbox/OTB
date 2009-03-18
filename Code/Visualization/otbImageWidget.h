@@ -98,9 +98,13 @@ public:
   /** Get the image to screen transform */
   itkGetObjectMacro(ImageToScreenTransform,AffineTransformType);
   itkGetObjectMacro(ScreenToImageTransform,AffineTransformType);
-
-  /** Get the Extent region */
+  
+ /** Get The GlBuffered Region*/ 
+  itkGetMacro(OpenGlBufferedRegion, RegionType);
+ 
+/** Get the Extent region */
   itkGetMacro(Extent, RegionType);
+
 
   /** Add a GlComponent */
   unsigned int AddGlComponent(GlComponent * glComponent)

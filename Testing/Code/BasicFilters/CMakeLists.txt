@@ -1183,9 +1183,9 @@ ADD_TEST(bfTvExtractROIResample2 ${BASICFILTERS_TESTS11}
 	 1
 )
 # -------    otbPointSetFunction   ----------------------------
-ADD_TEST(bfTuPointSetFunctionNew ${BASICFILTERS_TESTS11}
-	 otbPointSetFunctionNew
-	 )
+#ADD_TEST(bfTuPointSetFunctionNew ${BASICFILTERS_TESTS11}
+#	 otbPointSetFunctionNew
+#	 )
 
 
 
@@ -1639,7 +1639,7 @@ ENDIF(USE_FFTWD)
 
 SET(BasicFilters_SRCS11
 otbExtractROIResample.cxx
-otbPointSetFunctionNew.cxx
+#otbPointSetFunctionNew.cxx
 otbPointSetDensityFunctionNew.cxx
 otbPointSetDensityFunctionTest.cxx
 otbPointSetToDensityImageFilterNew.cxx
