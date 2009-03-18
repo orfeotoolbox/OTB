@@ -199,12 +199,12 @@ StandardImageViewer<TImage,TVectorData>
     // Set the cartographic region to the extract roi filter
    //     FltkFilterWatcher w1(vdextract,0,0,200,30,"VectorData ROI extraction");
     vdextract->SetRegion(cartographicRegion);
-//     vdextract->Update();
+    vdextract->Update();
     std::cout<<"Extraction done."<<std::endl;
 
     // Reproject VectorData in image projection
      typename VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
-     vproj->SetInput(m_VectorData);
+     vproj->SetInput(vdextract->GetOutput());
      vproj->SetOutputKeywordList(m_Image->GetImageKeywordlist());
      vproj->SetOutputOrigin(m_Image->GetOrigin());
      vproj->SetOutputSpacing(m_Image->GetSpacing());
