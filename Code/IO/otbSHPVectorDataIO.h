@@ -56,6 +56,7 @@ public:
   /** Data typedef */
   typedef TData VectorDataType;
   typedef typename VectorDataType::DataTreeType  DataTreeType;
+  typedef typename DataTreeType::TreeNodeType    InternalTreeNodeType;
   typedef typename DataTreeType::Pointer         DataTreePointerType;
   typedef typename DataTreeType::ConstPointer    DataTreeConstPointerType;
   typedef typename VectorDataType::DataNodeType  DataNodeType;
@@ -130,7 +131,7 @@ protected:
 
   DataNodePointerType ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry) const;
 
-  DataNodePointerType  ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry) const;
+  DataNodePointerType ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry) const;
 
   DataNodePointerType ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry) const;
 
