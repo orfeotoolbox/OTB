@@ -24,12 +24,12 @@ namespace otb
 {
 /** \class PixelDescriptionActionHandler
 *   \brief Implements pixel reporting capabilities.
-* 
+*
 *   \sa ImageWidgetController
 *   \sa ImageWidgetActionHandler
 */
 
-template <class TModel, class TView> 
+template <class TModel, class TView>
 class PixelDescriptionActionHandler
   : public ImageWidgetActionHandler
 {
@@ -39,10 +39,10 @@ public:
   typedef ImageWidgetActionHandler          Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(PixelDescriptionActionHandler,ImageWidgetActionHandler);
 
@@ -99,18 +99,18 @@ public:
           // Get the clicked index
           typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
           screenPoint = sourceWidget->GetMousePosition();
-          
+
           // Transform to image point
           imagePoint = sourceWidget->GetScreenToImageTransform()->TransformPoint(screenPoint);
-          
+
           // Transform to index
           typename ViewType::IndexType index;
           index[0]=static_cast<int>(imagePoint[0]);
           index[1]=static_cast<int>(imagePoint[1]);
-          
+
           // Communicate new index to model
           m_Model->UpdatePixelDescription(index);
-          
+
           return true;
           break;
           }
@@ -123,7 +123,7 @@ public:
       }
     return false;
   }
-  
+
   /** Set/Get the pointer to the model */
   itkSetObjectMacro(Model,ModelType);
   itkGetObjectMacro(Model,ModelType);
@@ -144,18 +144,18 @@ protected:
   {
     Superclass::PrintSelf(os,indent);
   }
- 
+
 private:
   PixelDescriptionActionHandler(const Self&);    // purposely not implemented
   void operator=(const Self&); // purposely not implemented
 
   // Pointer to the view
   ViewPointerType m_View;
-  
+
   // Pointer to the model
   ModelPointerType m_Model;
-  
-}; // end class 
+
+}; // end class
 } // end namespace otb
 #endif
 

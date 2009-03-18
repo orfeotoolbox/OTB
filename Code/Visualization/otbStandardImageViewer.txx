@@ -83,6 +83,11 @@ StandardImageViewer<TImage,TVectorData>
   pixelActionHandler->SetModel(m_PixelDescriptionModel);
   m_Controller->AddActionHandler(pixelActionHandler);
 
+  // Add the action handler for the arrow key
+  ArrowKeyMoveActionHandlerType::Pointer arrowKeyMoveHandler = ArrowKeyMoveActionHandlerType::New();
+  arrowKeyMoveHandler->SetModel(m_RenderingModel);
+  arrowKeyMoveHandler->SetView(m_View);
+  m_Controller->AddActionHandler(arrowKeyMoveHandler);
 
   // Build the window
   m_Window = new Fl_Window(0,0,m_Width,m_Height);

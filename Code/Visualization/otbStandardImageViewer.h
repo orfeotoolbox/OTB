@@ -26,6 +26,7 @@
 #include "otbImageWidgetController.h"
 #include "otbImageLayerGenerator.h"
 #include "otbWidgetResizingActionHandler.h"
+#include "otbArrowKeyMoveActionHandler.h"
 #include "otbChangeScaledExtractRegionActionHandler.h"
 #include "otbChangeExtractRegionActionHandler.h"
 #include "otbChangeScaleActionHandler.h"
@@ -116,7 +117,8 @@ public:
   <RenderingModelType,ViewType>                     ChangeRegionHandlerType;
   typedef otb::ChangeScaleActionHandler
   <RenderingModelType,ViewType>                     ChangeScaleHandlerType;
-
+  typedef otb::ArrowKeyMoveActionHandler
+  <RenderingModelType,ViewType>                     ArrowKeyMoveActionHandlerType;
   /** Rendering function */
   typedef typename ImageLayerGeneratorType::RenderingFunctionType StandardRenderingFunctionType;
   typedef typename StandardRenderingFunctionType::Pointer StandardRenderingFunctionPointerType;
