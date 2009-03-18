@@ -61,11 +61,11 @@ public:
   /** Region size & index typedef */
   typedef typename RegionType::SizeType       SizeType;
   typedef typename RegionType::IndexType      IndexType;
-  
+
   /** GlComponent typedef */
   typedef GlComponent                                   GlComponentType;
   typedef typename GlComponentType::Pointer             GlComponentPointerType;
-  typedef typename GlComponentType::ColorType           ColorType;     
+  typedef typename GlComponentType::ColorType           ColorType;
   typedef typename GlComponentType::AffineTransformType AffineTransformType;
   typedef typename AffineTransformType::Pointer         AffineTransformPointerType;
   typedef typename GlComponentType::VectorType          VectorType;
@@ -99,6 +99,8 @@ public:
   itkGetObjectMacro(ImageToScreenTransform,AffineTransformType);
   itkGetObjectMacro(ScreenToImageTransform,AffineTransformType);
 
+  /** Get the Extent region */
+  itkGetMacro(Extent, RegionType);
 
   /** Add a GlComponent */
   unsigned int AddGlComponent(GlComponent * glComponent)
@@ -175,7 +177,7 @@ private:
 
   /** OpenGl buffered region */
   RegionType m_OpenGlBufferedRegion;
-  
+
   /** The display extent */
   RegionType m_Extent;
 
