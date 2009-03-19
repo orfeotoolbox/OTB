@@ -77,14 +77,16 @@ VectorDataExtractROI<TVectorData>
   /** Need to check if it is necessary to project the roi*/
   this->CompareInputAndRegionProjection();
 
-  
+
   /** If Projection of the region is needed, we project on the vectorData coordinate axis*/
   if(m_ProjectionNeeded)
     this->ProjectRegionToInputVectorProjection();
   else
     m_GeoROI = m_ROI;
-  
-  
+
+  otbMsgDevMacro( << "ROI: " << this->m_ROI);
+  otbMsgDevMacro( << "GeoROI: " << this->m_GeoROI);
+
   /** Loop in the vectorData file
     * If There is a non null intersection between Bounding Boxes
     * and ROI, keep this feature.
@@ -93,21 +95,21 @@ VectorDataExtractROI<TVectorData>
   typename DataNodeType::Pointer                  document   = DataNodeType::New();
   typename DataNodeType::Pointer                  root       = input->GetDataTree()->GetRoot()->Get();
   typename VectorDataType::DataTreeType::Pointer  tree       = output->GetDataTree();
-  
+
   DataNodePointerType  currentContainer;
   DataNodePointerType  newDataNodeFolder                      = DataNodeType::New();
   DataNodePointerType  newDataNodeMultiPolygon                = DataNodeType::New();
   DataNodePointerType  newDataNodeMultiLine                   = DataNodeType::New();
   DataNodePointerType  newDataNodeMultiFeature                = DataNodeType::New();
 
-  
+
   /** Walking trough the input vector data */
   typedef itk::PreOrderTreeIterator<DataTreeType>                 TreeIteratorType;
   TreeIteratorType                                                it(input->GetDataTree());
   it.GoToBegin();
   bool newFolder       = false;
   bool newMultiFeature = false;
-  
+
   itk::ProgressReporter progress(this, 0,input->Size());
 
   while (!it.IsAtEnd())
@@ -154,7 +156,7 @@ VectorDataExtractROI<TVectorData>
                 if(newMultiFeature)
                   {
                     tree->Add(newDataNodeMultiFeature,currentContainer);
-                    currentContainer =  newDataNodeMultiFeature; 
+                    currentContainer =  newDataNodeMultiFeature;
                     newMultiFeature = false;
                   }
                 newDataNode->SetNodeType(dataNode->GetNodeType());
@@ -162,7 +164,7 @@ VectorDataExtractROI<TVectorData>
                 newDataNode->SetPoint(dataNode->GetPoint());
                 tree->Add(newDataNode,currentContainer);
               }
-           
+
             break;
           }
         case FEATURE_LINE:
@@ -198,14 +200,14 @@ VectorDataExtractROI<TVectorData>
                     currentContainer = newDataNodeFolder;
                     newFolder = false;
                   }
-                
+
                 if(newMultiFeature)
                   {
                     tree->Add(newDataNodeMultiFeature,currentContainer);
                     currentContainer =  newDataNodeMultiFeature;
                     newMultiFeature = false;
                   }
-                
+
                 newDataNode->SetNodeType(dataNode->GetNodeType());
                 newDataNode->SetNodeId(dataNode->GetNodeId());
                 newDataNode->SetPolygonExteriorRing(dataNode->GetPolygonExteriorRing());
@@ -219,7 +221,7 @@ VectorDataExtractROI<TVectorData>
             newDataNodeMultiFeature->SetNodeType(dataNode->GetNodeType());
             newDataNodeMultiFeature ->SetNodeId(dataNode->GetNodeId());
             newMultiFeature = true;
-            
+
 
             break;
           }
@@ -240,7 +242,7 @@ VectorDataExtractROI<TVectorData>
         case FEATURE_COLLECTION:
           {
             newDataNode->SetNodeType(dataNode->GetNodeType());
-            newDataNode->SetNodeId(dataNode->GetNodeId());            
+            newDataNode->SetNodeId(dataNode->GetNodeId());
             tree->Add(newDataNode,currentContainer);
             currentContainer = newDataNode;
             break;
@@ -249,7 +251,7 @@ VectorDataExtractROI<TVectorData>
       progress.CompletedPixel();
       ++it;
     }
-  
+
 }/*End GenerateData()*/
 
 /**
@@ -286,7 +288,7 @@ VectorDataExtractROI<TVectorData>
 {
   std::string regionProjection = m_ROI.GetRegionProjection();
   std::string inputVectorProjection = this->GetInput()->GetProjectionRef();
-  
+
   if(regionProjection == inputVectorProjection)
     m_ProjectionNeeded = false;
   else
@@ -309,23 +311,23 @@ VectorDataExtractROI<TVectorData>
   const itk::MetaDataDictionary &inputDict = this->GetInput()->GetMetaDataDictionary();
   genericTransform->SetInputDictionary(inputDict);
   genericTransform->SetInputProjectionRef( m_ROI.GetRegionProjection());
-  genericTransform->SetOutputProjectionRef(this->GetInput()->GetProjectionRef() ); 
+  genericTransform->SetOutputProjectionRef(this->GetInput()->GetProjectionRef() );
   genericTransform->InstanciateTransform();
-  
-  
+
+
    typename VertexListType::Pointer  regionCorners = VertexListType::New();
    ProjPointType                          point1, point2 , point3, point4;
-  
+
   /** Compute the extremities of the region*/
   point1[0] = m_ROI.GetOrigin()[0];
   point1[1] = m_ROI.GetOrigin()[1];
 
   point2[0] = m_ROI.GetOrigin()[0]+ m_ROI.GetSize()[0];
   point2[1] = m_ROI.GetOrigin()[1];
-  
+
   point3[0] = m_ROI.GetOrigin()[0]+ m_ROI.GetSize()[0];
   point3[1] = m_ROI.GetOrigin()[1]+ m_ROI.GetSize()[0];
-  
+
   point4[0] = m_ROI.GetOrigin()[0];
   point4[1] = m_ROI.GetOrigin()[1]+ m_ROI.GetSize()[1];
 
@@ -337,7 +339,7 @@ VectorDataExtractROI<TVectorData>
 
   /** Due to The projection : the Projected ROI can be rotated */
   m_GeoROI = this->ComputeVertexListBoudingRegion(regionCorners.GetPointer());
-    
+
 }
 /**
  * itk::Point to ContinuousIndex
@@ -350,7 +352,7 @@ VectorDataExtractROI<TVectorData>
 {
 
   VertexType vertex;
-  
+
   vertex[0] = point[0];
   vertex[1] = point[1];
 
@@ -376,20 +378,20 @@ VectorDataExtractROI<TVectorData>
   size.Fill(0.);
 
   typename VertexListType::ConstIterator it = vertexlist->Begin();
-  
+
   if (vertexlist->Size() > 0 )
     {
       x = static_cast<double>(it.Value()[0]);
       y = static_cast<double>(it.Value()[1]);
       index[0] = x;
       index[1] = y;
-      
+
       ++it;
       while (it != vertexlist->End())
         {
           x = static_cast<double>(it.Value()[0]);
           y = static_cast<double>(it.Value()[1]);
-          
+
           // Index search
           if ( x < index[0] )
             {
@@ -415,11 +417,11 @@ VectorDataExtractROI<TVectorData>
       size[0] = maxId[0] - index[0];
       size[1] = maxId[1] - index[1];
    }
-  
+
   RegionType                      region;
   region.SetSize(size);
   region.SetOrigin(index);
-  
+
   return region;
 }
 
