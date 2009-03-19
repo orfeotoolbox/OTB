@@ -385,7 +385,8 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
   InputTreeIteratorType it(inputPtr->GetDataTree());
   OutputDataTreePointerType tree = outputPtr->GetDataTree();
 
-  OutputDataNodePointerType currentContainer;
+  typename InternalTreeNodeType::Pointer currentContainer;
+  typename InternalTreeNodeType::Pointer newContainer;
 
   while (!it.IsAtEnd())//FIXME this VectorData tree processing would better be in a generic class
   {
@@ -397,63 +398,83 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
     {
     case ROOT:
     {
-      tree->SetRoot(newDataNode);
-      currentContainer = newDataNode;
+      newContainer = InternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      tree->SetRoot(newContainer);
+      currentContainer = newContainer;
       break;
     }
     case DOCUMENT:
     {
-      tree->Add(newDataNode,currentContainer);
-      currentContainer = newDataNode;
+      newContainer = InternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      currentContainer->AddChild(newContainer);
+      currentContainer = newContainer;
       break;
     }
     case FOLDER:
     {
-      tree->Add(newDataNode,currentContainer);
-      currentContainer = newDataNode;
+      newContainer = InternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      currentContainer->AddChild(newContainer);
+      currentContainer = newContainer;
       break;
     }
     case FEATURE_POINT:
     {
       newDataNode->SetPoint(this->ReprojectPoint(dataNode->GetPoint()));
-      tree->Add(newDataNode,currentContainer);
+      newContainer = InternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      currentContainer->AddChild(newContainer);
       break;
     }
     case FEATURE_LINE:
     {
       newDataNode->SetLine(this->ReprojectLine(dataNode->GetLine()));
-      tree->Add(newDataNode,currentContainer);
+      newContainer = InternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      currentContainer->AddChild(newContainer);
       break;
     }
     case FEATURE_POLYGON:
     {
       newDataNode->SetPolygonExteriorRing(this->ReprojectPolygon(dataNode->GetPolygonExteriorRing()));
       newDataNode->SetPolygonInteriorRings(this->ReprojectPolygonList(dataNode->GetPolygonInteriorRings()));
-      tree->Add(newDataNode,currentContainer);
+      newContainer = InternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      currentContainer->AddChild(newContainer);
       break;
     }
     case FEATURE_MULTIPOINT:
     {
-      tree->Add(newDataNode,currentContainer);
-      currentContainer = newDataNode;
+      newContainer = InternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      currentContainer->AddChild(newContainer);
+      currentContainer = newContainer;
       break;
     }
     case FEATURE_MULTILINE:
     {
-      tree->Add(newDataNode,currentContainer);
-      currentContainer = newDataNode;
+      newContainer = InternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      currentContainer->AddChild(newContainer);
+      currentContainer = newContainer;
       break;
     }
     case FEATURE_MULTIPOLYGON:
     {
-      tree->Add(newDataNode,currentContainer);
-      currentContainer = newDataNode;
+      newContainer = InternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      currentContainer->AddChild(newContainer);
+      currentContainer = newContainer;
       break;
     }
     case FEATURE_COLLECTION:
     {
-      tree->Add(newDataNode,currentContainer);
-      currentContainer = newDataNode;
+      newContainer = InternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      currentContainer->AddChild(newContainer);
+      currentContainer = newContainer;
       break;
     }
     }

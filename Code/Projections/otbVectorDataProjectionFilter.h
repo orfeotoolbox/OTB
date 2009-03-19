@@ -94,6 +94,9 @@ public:
   typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
   typedef typename OutputVectorDataType::DataTreePointerType OutputDataTreePointerType;
 
+
+  typedef typename OutputVectorDataType::DataTreeType::TreeNodeType    InternalTreeNodeType;
+
   typedef typename OutputDataNodeType::PointType PointType;
 
   typedef typename OutputDataNodeType::LineType LineType;
