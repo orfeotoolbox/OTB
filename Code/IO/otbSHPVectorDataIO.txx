@@ -137,7 +137,7 @@ SHPVectorDataIO<TData>
     }
   else
     {
-    otbMsgDevMacro(<< "Projection information unavailable");
+    otbMsgDevMacro(<< "Projection information unavailable: assuming WGS84");
     }
 
   // For each layer
@@ -186,7 +186,7 @@ SHPVectorDataIO<TData>
       DataNodePointerType folder = DataNodeType::New();
       folder->SetNodeType(FOLDER);
       folder->SetNodeId(feature->GetDefnRef()->GetName());
-    
+
       // Reading fields
       for (int fieldIndex = 0; fieldIndex<dfn->GetFieldCount();++fieldIndex)
 	{
@@ -200,7 +200,7 @@ SHPVectorDataIO<TData>
       typename InternalTreeNodeType::Pointer folderPtr = InternalTreeNodeType::New();
       folderPtr->Set(folder);
       documentPtr->AddChild(folderPtr);
-    
+
       // A pointer to the current multi-geometry
       InternalTreeNodeType * multiPtr;
 
@@ -255,13 +255,13 @@ SHPVectorDataIO<TData>
 	  }
 	  case wkbMultiPoint:
 	  {
-	
+
           DataNodePointerType multi = DataNodeType::New();
           multi->SetNodeType(FEATURE_MULTIPOINT);
 	  multiPtr = InternalTreeNodeType::New();
 	  multiPtr->Set(multi);
           folderPtr->AddChild(multiPtr);
-	  
+
           OGRMultiPoint * ogrMulti = (OGRMultiPoint *) geometry;
 
           for (int geoIndex = 0;geoIndex<ogrMulti->getNumGeometries();++geoIndex)
