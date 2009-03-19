@@ -74,48 +74,48 @@ ELSE("${ITK_VERSION_MAJOR}" GREATER 0.0)
 ### The last section is concerned with installing the binaries and making distributions.
 INCLUDE(InstallRequiredSystemLibraries)
 
-SET(CPACK_PACKAGE_NAME "NIFTI")
-
-SET(CPACK_SOURCE_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-dev")
-SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Niftilib is a set of i/o libraries for reading and writing files in the nifti-1 data format. nifti-1 is a binary file format for storing medical image data, e.g. magnetic resonance image (MRI) and functional MRI (fMRI) brain images.")
-SET(CPACK_PACKAGE_DESCRIPTION_FILE "${NIFTI_SOURCE_DIR}/README")
-#SET(CPACK_RESOURCE_FILE_LICENSE "${NIFTI_SOURCE_DIR}/Copyright.txt")
-SET(CPACK_RESOURCE_FILE_LICENSE "${NIFTI_SOURCE_DIR}/README")
-
-SET(CPACK_PACKAGE_DEFAULT_LOCATION "/opt/${CPACK_PACKAGE_NAME}")
-#SET(CPACK_PACKAGE_INSTALL_DIRECTORY "NIFTI ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}")
-SET(CPACK_PACKAGE_INSTALL_DIRECTORY "${NIFTI}")
-SET(CPACK_PACKAGING_INSTALL_PREFIX "/")
-SET(CPACK_SET_DESTDIR ON)
-
-SET(CPACK_PACKAGE_VENDOR "NIFTI DFWG")
-
-SET(CPACK_SOURCE_GENERATOR "TGZ;TZ")
-#SET(CPACK_SOURCE_IGNORE_FILES "/CVS/;/\\.svn/;\\.swp$;\\.#;/#;\\.*~")
-SET(CPACK_SOURCE_IGNORE_FILES "")
-SET(CPACK_PACKAGE_EXECUTABLES "NIFTI";"A program for registering medical
-images with mutual information.")
-
-IF(WIN32 AND NOT UNIX)
-  SET(CPACK_PACKAGE_INSTALL_REGISTRY_KEY
-"${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
-  # There is a bug in NSI that does not handle full unix paths properly. Make
-  # sure there is at least one set of four (4) backlasshes.
-  SET(CPACK_PACKAGE_ICON
-"${CMake_SOURCE_DIR}/Utilities/Release\\\\InstallIcon.bmp")
-  SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\MyExecutable.exe")
-  SET(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_INSTALL_DIRECTORY} My Famous
-Project")
-  SET(CPACK_NSIS_HELP_LINK "http:\\\\\\\\www.nitrc.org")
-  SET(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.nitrc.org")
-  SET(CPACK_NSIS_CONTACT "xyz@domain.edu")
-  SET(CPACK_NSIS_MODIFY_PATH ON)
-ELSE(WIN32 AND NOT UNIX)
-  SET(CPACK_STRIP_FILES OFF)
-  SET(CPACK_SOURCE_STRIP_FILES OFF)
-ENDIF(WIN32 AND NOT UNIX)
-
-INCLUDE(CPack)
+# SET(CPACK_PACKAGE_NAME "NIFTI")
+#
+# SET(CPACK_SOURCE_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-dev")
+# SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Niftilib is a set of i/o libraries for reading and writing files in the nifti-1 data format. nifti-1 is a binary file format for storing medical image data, e.g. magnetic resonance image (MRI) and functional MRI (fMRI) brain images.")
+# SET(CPACK_PACKAGE_DESCRIPTION_FILE "${NIFTI_SOURCE_DIR}/README")
+# #SET(CPACK_RESOURCE_FILE_LICENSE "${NIFTI_SOURCE_DIR}/Copyright.txt")
+# SET(CPACK_RESOURCE_FILE_LICENSE "${NIFTI_SOURCE_DIR}/README")
+#
+# SET(CPACK_PACKAGE_DEFAULT_LOCATION "/opt/${CPACK_PACKAGE_NAME}")
+# #SET(CPACK_PACKAGE_INSTALL_DIRECTORY "NIFTI ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}")
+# SET(CPACK_PACKAGE_INSTALL_DIRECTORY "${NIFTI}")
+# SET(CPACK_PACKAGING_INSTALL_PREFIX "/")
+# SET(CPACK_SET_DESTDIR ON)
+#
+# SET(CPACK_PACKAGE_VENDOR "NIFTI DFWG")
+#
+# SET(CPACK_SOURCE_GENERATOR "TGZ;TZ")
+# #SET(CPACK_SOURCE_IGNORE_FILES "/CVS/;/\\.svn/;\\.swp$;\\.#;/#;\\.*~")
+# SET(CPACK_SOURCE_IGNORE_FILES "")
+# SET(CPACK_PACKAGE_EXECUTABLES "NIFTI";"A program for registering medical
+# images with mutual information.")
+#
+# IF(WIN32 AND NOT UNIX)
+#   SET(CPACK_PACKAGE_INSTALL_REGISTRY_KEY
+# "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
+#   # There is a bug in NSI that does not handle full unix paths properly. Make
+#   # sure there is at least one set of four (4) backlasshes.
+#   SET(CPACK_PACKAGE_ICON
+# "${CMake_SOURCE_DIR}/Utilities/Release\\\\InstallIcon.bmp")
+#   SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\MyExecutable.exe")
+#   SET(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_INSTALL_DIRECTORY} My Famous
+# Project")
+#   SET(CPACK_NSIS_HELP_LINK "http:\\\\\\\\www.nitrc.org")
+#   SET(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.nitrc.org")
+#   SET(CPACK_NSIS_CONTACT "xyz@domain.edu")
+#   SET(CPACK_NSIS_MODIFY_PATH ON)
+# ELSE(WIN32 AND NOT UNIX)
+#   SET(CPACK_STRIP_FILES OFF)
+#   SET(CPACK_SOURCE_STRIP_FILES OFF)
+# ENDIF(WIN32 AND NOT UNIX)
+#
+# INCLUDE(CPack)
 
 
 ENDIF("${ITK_VERSION_MAJOR}" GREATER 0.0)
