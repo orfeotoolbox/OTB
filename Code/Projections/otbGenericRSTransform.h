@@ -126,7 +126,7 @@ namespace otb
         return m_OutputDictionary;
       }
 
-      void SetOutputDictionary(itk::MetaDataDictionary & dictionary)
+      void SetOutputDictionary(const itk::MetaDataDictionary & dictionary)
       {
         m_OutputDictionary = dictionary;
         this->Modified();
@@ -200,6 +200,14 @@ namespace otb
       {
         this->Superclass::Modified();
         m_TransformUpToDate = false;
+      }
+
+       void PrintSelf(std::ostream& os, itk::Indent indent) const
+      {
+	Superclass::PrintSelf(os,indent);
+	os<<indent<<"Up to date: "<<m_TransformUpToDate<<std::endl;
+	os<<indent<<"Input transform: "<<m_InputTransform<<std::endl;
+	os<<indent<<"Output transform: "<<m_OutputTransform<<std::endl;
       }
 
       private :
