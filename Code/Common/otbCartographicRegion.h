@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,7 +33,7 @@ namespace otb
  * piece of an Image. The CartographicRegion is represented with an index and
  * a size in each of the n-dimensions of the image. (The index is the
  * corner of the image, the size is the lengths of the image in each of
- * the topological directions.) 
+ * the topological directions.)
  *
  * \sa Index
  * \sa Size
@@ -53,24 +53,25 @@ public:
 
   /** Typedef Support*/
   typedef TType                                   Type;
-  
+
 
   /** Index typedef support. An index is used to access pixel values. */
   typedef itk::ContinuousIndex<Type>           IndexType;
 
   /** Size typedef support. A size is used to define region bounds. */
   typedef itk::ContinuousIndex<Type>  SizeType;
+  typedef itk::Size<2> StandardSizeType;
 
 
   /** Constructor. CartographicRegion is a lightweight object that is not reference
    * counted, so the constructor is public. */
   CartographicRegion(unsigned int dimension)
     {
-    m_InputProjectionRef = "";  
+    m_InputProjectionRef = "";
     m_Size.Fill(0.);
     m_Index.Fill(0.);
     }
-  
+
   /** Constructor. CartographicRegion is a lightweight object that is not reference
    * counted, so the constructor is public.  Default dimension is 2. */
   CartographicRegion()
@@ -79,7 +80,7 @@ public:
       m_Size.Fill(0.);
       m_Index.Fill(0.);
     }
-  
+
   /** Destructor. CartographicRegion is a lightweight object that is not reference
    * counted, so the destructor is public. */
   virtual ~CartographicRegion(){};
@@ -87,15 +88,15 @@ public:
 
   /** operator=. CartographicRegion is a lightweight object that is not reference
    * counted, so operator= is public. */
-  void operator=(const Self& region) 
+  void operator=(const Self& region)
     {
-    m_Index = region.m_Index;  
+    m_Index = region.m_Index;
     m_Size = region.m_Size;
     m_InputProjectionRef = region.m_InputProjectionRef;
     }
 
   /** Set the index defining the corner of the region. */
-  void SetOrigin(const IndexType &index) 
+  void SetOrigin(const IndexType &index)
     {
     m_Index = index;
     }
@@ -105,12 +106,18 @@ public:
     {
     return m_Index;
     }
-  
+
   /** Set the size of the region. This plus the index determines the
    * rectangular shape, or extent, of the region. */
   void SetSize(const SizeType &size)
     {
     m_Size = size;
+    }
+
+  void SetSize(const StandardSizeType &size)
+    {
+      m_Size[0] = size[0];
+      m_Size[1] = size[1];
     }
 
   /** Get the size of the region. */
@@ -158,25 +165,25 @@ public:
     same = same && (m_Size == region.m_Size);
     return !same;
     }
- 
+
   /** Test if an index is inside */
   bool
   IsInside(const IndexType &index) const
     {
     for(unsigned int i=0; i<IndexType::IndexDimension; i++)
       {
-      if( index[i] < m_Index[i] ) 
+      if( index[i] < m_Index[i] )
         {
         return false;
         }
-      if( index[i] >= m_Index[i] + m_Size[i] ) 
+      if( index[i] >= m_Index[i] + m_Size[i] )
         {
         return false;
         }
       }
     return true;
     }
- 
+
 
   /**Get/Set InputProjectionRef  std::string*/
   void SetRegionProjection(std::string  projection)
@@ -187,9 +194,9 @@ public:
     {
       return m_InputProjectionRef;
     }
-    
-  /** 
-   * Crop 
+
+  /**
+   * Crop
    */
   bool
     Crop(const Self & region)
@@ -249,7 +256,7 @@ public:
 
       return cropPossible;
     }
-  
+
 
 protected:
 
@@ -257,10 +264,10 @@ private:
 
   IndexType m_Index;
   SizeType  m_Size;
-  
+
   std::string  m_InputProjectionRef;
 };
-//extern std::ostream & operator<<(std::ostream &os, const CartographicRegion &region); 
+//extern std::ostream & operator<<(std::ostream &os, const CartographicRegion &region);
 } // end namespace otb
 
 #endif

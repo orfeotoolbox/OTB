@@ -62,33 +62,33 @@ public:
   typedef typename PolygonType::VertexType                                  VertexType;
   typedef typename PolygonType::VertexListType                              VertexListType;
   typedef typename PolygonType::VertexListPointer                           VertexListPointer;
-  
-  
-  /** TO DO : automatize the dimension of the region*/
+
+
+  /** TODO : automatize the dimension of the region*/
   typedef otb::CartographicRegion<typename VertexType::CoordRepType>                RegionType;
   typedef typename  RegionType::IndexType                                    IndexType;
   typedef typename  RegionType::SizeType                                     SizeType;
 
-  typedef itk::Point<typename VertexType::CoordRepType ,IndexType::IndexDimension>                       ProjPointType;                         
-  
+  typedef itk::Point<typename VertexType::CoordRepType ,IndexType::IndexDimension>                       ProjPointType;
+
   /** Prototype of the generate data method*/
   virtual void GenerateData(void );
-  
+
   /** Method to check if the polygon Bounding Box ha ve a non-null intersection with the ROI*/
   virtual  bool IsPolygonIntersectionNotNull(PolygonPointerType polygon);
-  
+
    /** Method to check if the line Bounding Box ha ve a non-null intersection with the ROI*/
   virtual  bool IsLineIntersectionNotNull(LinePointerType line);
 
   /** Method to Set/Get the Region of intereset*/
    void SetRegion(RegionType&  region)
-     { 
-       m_ROI = region; 
+     {
+       m_ROI = region;
      }
-  
+
    RegionType  GetRegion()
      {return m_ROI;}
-   
+
    /** Method to compare the projection embedded in the cartoRegion And the the InputVectorData*/
    virtual void CompareInputAndRegionProjection();
 
@@ -97,7 +97,7 @@ public:
 
    /** Improve the Projected roi*/
    virtual RegionType ComputeVertexListBoudingRegion(typename VertexListType::ConstPointer vertexlist);
-   
+
    /** Method to transform itk::Point to itk::ContinuousIndex*/
    virtual VertexType  PointToContinuousIndex(ProjPointType  point);
 
@@ -116,7 +116,7 @@ private:
   VectorDataExtractROI(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  
+
   bool          m_ProjectionNeeded;
   RegionType    m_ROI;
   RegionType    m_GeoROI;
