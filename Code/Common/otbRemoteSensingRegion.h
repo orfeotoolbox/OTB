@@ -36,9 +36,12 @@ namespace otb
  * corner of the image, the size is the lengths of the image in each of
  * the topological directions.)
  *
- * \sa Index
- * \sa Size
-
+ * To be flexible enough, the region also contain information about the projection
+ * in which this information is given. It can be a cartographic projection, but also
+ * a sensor model projection (hence making it useful also with non-orthorectified
+ * images).
+ *
+ * \sa VectorDataExtractROI
  */
 
 template <class TType>

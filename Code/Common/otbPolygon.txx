@@ -529,6 +529,14 @@ double Polygon<TValue>
   return length;
 }
 
+template <class TValue>
+    void
+        Polygon<TValue>
+  ::Modified()
+{
+  Superclass::Modified();
+  m_AreaIsValid=false;
+}
 
 /**
  * PrintSelf Method

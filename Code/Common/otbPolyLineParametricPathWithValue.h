@@ -97,8 +97,8 @@ template < class TValue,unsigned int VDimension=2>
    * Compute the path bounding region.
    * \return The region.
    */
-  RegionType GetBoundingRegion(void);
-  
+  RegionType GetBoundingRegion(void) const;
+
 protected:
   /** Constructor */
   PolyLineParametricPathWithValue();
@@ -109,13 +109,18 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   virtual void ComputeLength() const;
-  
+  virtual void ComputeBoundingRegion() const;
+  virtual void Modified();
+
 private:
   PolyLineParametricPathWithValue(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   std::string m_Key;
   mutable double m_Length;
   mutable bool m_LengthIsValid;
+  mutable RegionType m_BoundingRegion;
+  mutable bool m_BoundingRegionIsValid;
+
 };
 }// End namespace otb
 

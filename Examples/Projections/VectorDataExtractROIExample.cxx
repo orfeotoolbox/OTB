@@ -95,6 +95,8 @@ int main( int argc, char* argv[] )
   otb::ImageMetadataInterface::Pointer imageMetadataInterface = otb::ImageMetadataInterface::New();
   region.SetRegionProjection(imageMetadataInterface->GetProjectionRef(imageReader->GetOutput()->GetMetaDataDictionary()));
 
+  region.SetKeywordList(imageReader->GetOutput()->GetImageKeywordlist());
+
   reader->SetFileName(inVectorName);
 
   filter->SetInput(reader->GetOutput());
