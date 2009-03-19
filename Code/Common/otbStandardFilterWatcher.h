@@ -30,9 +30,9 @@ namespace otb
  *  \brief This class shows the percentage progress execution
  *         of the pipeline filtering process
  *
- *  This class is based on oberservers desgin patter
+ *  This class is based on Observer design patter
  *  Abstract class ProcessObject is the subject
- *  Event are oberservers
+ *  Event are observers
  *
  *  Usage example:
  *
