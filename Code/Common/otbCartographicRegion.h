@@ -21,7 +21,7 @@
 #include "itkObjectFactory.h"
 
 #include "itkContinuousIndex.h"
-
+#include "itkRegion.h"
 
 namespace otb
 {
@@ -41,15 +41,17 @@ namespace otb
  */
 
 template <class TType>
-  class ITK_EXPORT CartographicRegion
+  class ITK_EXPORT CartographicRegion : public itk::Region
 {
 public:
   /** Standard class typedefs. */
   typedef otb::CartographicRegion<TType>           Self;
-
+  typedef itk::Region                              Superclass;
+  typedef itk::SmartPointer<Self>                  Pointer;
+  typedef itk::SmartPointer<const Self>            ConstPointer;
 
   /** Standard part of all itk objects. */
-  //itkTypeMacro(CartographicRegion, itk:Region);
+  itkTypeMacro(CartographicRegion, itk:Region);
 
   /** Typedef Support*/
   typedef TType                                   Type;
@@ -62,6 +64,8 @@ public:
   typedef itk::ContinuousIndex<Type>  SizeType;
   typedef itk::Size<2> StandardSizeType;
 
+  virtual typename Superclass::RegionType GetRegionType() const
+  {return Superclass::ITK_STRUCTURED_REGION;}
 
   /** Constructor. CartographicRegion is a lightweight object that is not reference
    * counted, so the constructor is public. */
@@ -260,6 +264,16 @@ public:
 
 protected:
 
+  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  {
+    os << indent << "CartographicRegion" << std::endl;
+    os << indent << "Index:" << this->m_Index << std::endl;
+    os << indent << "Size:" << this->m_Size << std::endl;
+    os << indent << "Projection:" << this->m_InputProjectionRef << std::endl;
+  }
+
+
+
 private:
 
   IndexType m_Index;
@@ -268,6 +282,14 @@ private:
   std::string  m_InputProjectionRef;
 };
 //extern std::ostream & operator<<(std::ostream &os, const CartographicRegion &region);
+
+template<class TType>
+    std::ostream & operator<<(std::ostream &os, const CartographicRegion<TType> &region)
+{
+  region.Print(os);
+  return os;
+}
+
 } // end namespace otb
 
 #endif
