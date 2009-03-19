@@ -27,13 +27,12 @@ namespace otb
  */
 template < class TValue,unsigned int VDimension>
 PolyLineParametricPathWithValue<TValue,VDimension>
-::PolyLineParametricPathWithValue()
+::PolyLineParametricPathWithValue() :
+    m_Key("Value"),m_Length(-1.0),m_LengthIsValid(false),
+    m_BoundingRegion(),m_BoundingRegionIsValid(false)
 {
   itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
-  m_Key = "Value";
   itk::EncapsulateMetaData<ValueType>(dict,m_Key,0);
-  m_LengthIsValid = false;
-  m_Length = -1.0;
 }
 
 template < class TValue,unsigned int VDimension>
@@ -41,7 +40,7 @@ void PolyLineParametricPathWithValue<TValue,VDimension>
 ::AddVertex(const ContinuousIndexType &vertex)
 {
   Superclass::AddVertex(vertex);
-  m_LengthIsValid=false;
+  this->Modified();
 }
 
 template < class TValue,unsigned int VDimension>
@@ -56,7 +55,7 @@ double PolyLineParametricPathWithValue<TValue,VDimension>
 }
 
 template < class TValue,unsigned int VDimension>
-void 
+void
 PolyLineParametricPathWithValue<TValue,VDimension>
 ::ComputeLength() const
 {
@@ -113,16 +112,27 @@ PolyLineParametricPathWithValue<TValue,VDimension>
   os << std::endl;
 }
 
+template < class TValue,unsigned int VDimension>
+typename PolyLineParametricPathWithValue<TValue,VDimension>
+  ::RegionType
+PolyLineParametricPathWithValue<TValue,VDimension>
+  ::GetBoundingRegion() const
+{
+  if (!m_BoundingRegionIsValid)
+  {
+    ComputeBoundingRegion();
+  }
+  return m_BoundingRegion;
+}
+
 /**
  * Bounding Box computation
  */
 template < class TValue,unsigned int VDimension>
-typename PolyLineParametricPathWithValue<TValue,VDimension>
-::RegionType
-PolyLineParametricPathWithValue<TValue,VDimension> 
-::GetBoundingRegion()
+void
+PolyLineParametricPathWithValue<TValue,VDimension>
+::ComputeBoundingRegion() const
 {
-  RegionType region;
   SizeType size;
   IndexType index;
 
@@ -174,9 +184,18 @@ PolyLineParametricPathWithValue<TValue,VDimension>
     size[0] = maxId[0] - index[0];
     size[1] = maxId[1] - index[1];
   }
-  region.SetSize(size);
-  region.SetIndex(index);
-  return region;
+  m_BoundingRegion.SetSize(size);
+  m_BoundingRegion.SetIndex(index);
+  m_BoundingRegionIsValid = true;
+}
+
+template < class TValue,unsigned int VDimension>
+    void
+        PolyLineParametricPathWithValue<TValue,VDimension>
+  ::Modified()
+{
+  m_LengthIsValid=false;
+  m_BoundingRegionIsValid=false;
 }
 
 } // end namespace otb
