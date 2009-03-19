@@ -148,15 +148,9 @@ StandardImageViewer<TImage,TVectorData>
 
     // Find the geographic region of interest
 
-    // First build an appropriate sensor model
-    typedef otb::ForwardSensorModel<double> SensorModelType;
-    typename SensorModelType::Pointer sensor = SensorModelType::New();
-    typename SensorModelType::InputPointType pul, pur, pll, plr, gul, gur, gll, glr, gmin, gmax;
-    sensor->SetImageGeometry(m_Image->GetImageKeywordlist());
-    sensor->SetDEMDirectory(m_DEMDirectory);
-
     // Ge the index of the corner of the image
     typename ImageType::IndexType ul, ur, ll, lr;
+    typename ImageType::PointType pul,pur,pll,plr;
     ul = m_Image->GetLargestPossibleRegion().GetIndex();
     ur = ul;
     ll = ul;
@@ -171,36 +165,29 @@ StandardImageViewer<TImage,TVectorData>
     m_Image->TransformIndexToPhysicalPoint(ur,pur);
     m_Image->TransformIndexToPhysicalPoint(ll,pll);
     m_Image->TransformIndexToPhysicalPoint(lr,plr);
-
-    // Transform to geographical points
-    gul = sensor->TransformPoint(pul);
-    gur = sensor->TransformPoint(pur);
-    gll = sensor->TransformPoint(pll);
-    glr = sensor->TransformPoint(plr);
-
-    // Find the bounding box
-    gmin[0] = (gul[0],min(gur[0],min(gll[0],glr[0])));
-    gmin[1] = (gul[1],min(gur[1],min(gll[1],glr[1])));
-    gmax[0] = (gul[0],max(gur[0],max(gll[0],glr[0])));
-    gmax[1] = (gul[1],max(gur[1],max(gll[1],glr[1])));
     
     // Build the cartographic region
-    RemoteSensingRegionType cartographicRegion;
-    typename RemoteSensingRegionType::IndexType cartographicOrigin;
-    typename RemoteSensingRegionType::SizeType  cartographicSize;
-    cartographicOrigin[0]=gmin[0];
-    cartographicOrigin[1]=gmin[1];
-    cartographicSize[0] = gmax[0] - gmin[0];
-    cartographicSize[1] = gmax[1] - gmin[1];
-    cartographicRegion.SetOrigin(cartographicOrigin);
-    cartographicRegion.SetSize(cartographicSize);
-    cartographicRegion.SetRegionProjection("GEOGCS[\"GCS_WGS_1984\",DATUM[\"WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]]");
-    
+    RemoteSensingRegionType rsRegion;
+    typename RemoteSensingRegionType::IndexType rsOrigin;
+    typename RemoteSensingRegionType::SizeType  rsSize;
+    rsOrigin[0]= min(pul[0],plr[0]);
+    rsOrigin[1]= min(pul[1],plr[1]);
+    rsSize[0]=vcl_abs(pul[0]-plr[0]);
+    rsSize[1]=vcl_abs(pul[1]-plr[1]);
+
+//     rsOrigin[0]=1940;
+//     rsOrigin[1]=1120;
+//     rsSize[0]=640;
+//     rsSize[1]=580;
+
+    rsRegion.SetOrigin(rsOrigin);
+    rsRegion.SetSize(rsSize);
+    rsRegion.SetRegionProjection(m_Image->GetProjectionRef());
+    rsRegion.SetKeywordList(m_Image->GetImageKeywordlist());
+
     // Set the cartographic region to the extract roi filter
-   //     FltkFilterWatcher w1(vdextract,0,0,200,30,"VectorData ROI extraction");
-    vdextract->SetRegion(cartographicRegion);
-    vdextract->Update();
-    std::cout<<"Extraction done."<<std::endl;
+    vdextract->SetRegion(rsRegion);
+    vdextract->SetDEMDirectory(m_DEMDirectory);
 
     // Reproject VectorData in image projection
      typename VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
@@ -209,7 +196,6 @@ StandardImageViewer<TImage,TVectorData>
      vproj->SetOutputOrigin(m_Image->GetOrigin());
      vproj->SetOutputSpacing(m_Image->GetSpacing());
      vproj->SetDEMDirectory(m_DEMDirectory);
-//      FltkFilterWatcher w2(vproj,0,0,200,30,"VectorData reprojection");
      vproj->Update();
 
      // Create a VectorData gl component
