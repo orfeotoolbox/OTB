@@ -380,12 +380,12 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
   for (LabelType label = 0; label < numRegions;++label)
   {
     OutputPixelType pixel;
-    TBufferConverter::FloatArrayToPixel(modes,label*clusteredOutputPtr->GetNumberOfComponentsPerPixel(),
+    TBufferConverter::FloatArrayToPixel(modes,static_cast<unsigned int>(label*clusteredOutputPtr->GetNumberOfComponentsPerPixel()),
                                         pixel,clusteredOutputPtr->GetNumberOfComponentsPerPixel(),invScale);
     // Filling the modes map
     m_Modes[label]=pixel;
-    regionIndeces = regionList->GetRegionIndeces(label);
-    for (int i = 0; i<regionList->GetRegionCount(label); ++i)
+    regionIndeces = regionList->GetRegionIndeces(static_cast<int>(label));
+    for (int i = 0; i<regionList->GetRegionCount(static_cast<int>(label)); ++i)
     {
       boundIndex[0]= regionIndeces[i] % clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0];
       boundIndex[1]= regionIndeces[i] / clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0];
