@@ -19,7 +19,7 @@
 #include "otbRemoteSensingRegion.h"
 
 
-int otbCartoRegion(int argc, char * argv[])
+int otbRemoteSensingRegion(int argc, char * argv[])
 {
 
   typedef   double                                Type;

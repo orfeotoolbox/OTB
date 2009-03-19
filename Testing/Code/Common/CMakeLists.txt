@@ -138,7 +138,7 @@ ADD_TEST(coTvVectorDataExtractROI ${COMMON_TESTS2}
 	 otbVectorDataExtractROI	
 	${INPUTDATA}/ToulousePoints-examples.shp   #${LARGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
 	${TEMP}/coVectorDataExtractROIOutput.shp
-	 374369.48850211215904 4828951.58612491376698  # Origin of the CartoRegion 
+	 374369.48850211215904 4828951.58612491376698  # Origin of the RemoteSensingRegion 
          1000.25 25000.2                               # Size of the Cartoregion
  )
 
@@ -594,13 +594,13 @@ ADD_TEST(coTvUnaryFunctorNeighborhoodWithOffsetImageFilter ${COMMON_TESTS7}
 )
 
 
-#------------------------ otb::CartoRegion---------------------------------
+#------------------------ otb::RemoteSensingRegion---------------------------------
 
-ADD_TEST(coTuCartoRegionNew ${COMMON_TESTS7}
-                     otbCartoRegionNew )
+ADD_TEST(coTuRemoteSensingRegionNew ${COMMON_TESTS7}
+                     otbRemoteSensingRegionNew )
 
-ADD_TEST(ioTvCartoRegion ${COMMON_TESTS7}
-	 otbCartoRegion
+ADD_TEST(ioTvRemoteSensingRegion ${COMMON_TESTS7}
+	 otbRemoteSensingRegion
 	 1.21 2.33 58.47 59.49  #size et index of the region
 	 0. 0.                  # Point to check 
  )
@@ -692,8 +692,8 @@ otbShiftScaleImageAdaptor.cxx
 otbStandardWriterWatcher.cxx
 otbUnaryFunctorNeighborhoodWithOffsetImageFilterNew.cxx
 otbUnaryFunctorNeighborhoodWithOffsetImageFilter.cxx
-otbCartoRegionNew.cxx
-otbCartoRegion.cxx
+otbRemoteSensingRegionNew.cxx
+otbRemoteSensingRegion.cxx
 )
 
 
