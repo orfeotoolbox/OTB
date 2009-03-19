@@ -20,6 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageFileReader.h"
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
+#include "itkTimeProbe.h"
 
 int otbStandardImageViewer( int argc, char * argv[] )
 {
@@ -42,9 +43,12 @@ int otbStandardImageViewer( int argc, char * argv[] )
   if(argc>3)
     {
     std::cout<<"Adding a vector layer from file "<<argv[3]<<std::endl;
+    itk::TimeProbe chrono;
+    chrono.Start();
     vdreader->SetFileName(argv[3]);
     vdreader->Update();
-    std::cout<<"VectorData loaded."<<std::endl;
+    chrono.Stop();
+    std::cout<<"VectorData loaded in "<<chrono.GetMeanTime()<<" s."<<std::endl;
     viewer->SetVectorData(vdreader->GetOutput());
     }
 

@@ -286,6 +286,16 @@ otbStandardImageViewer
 ${INPUTDATA}/couleurs.tif 0
 )
 
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(vrTvStandardImageViewerToulouseWithWaterwaysShp ${VISUREFAC_TESTS1}
+otbStandardImageViewer
+${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF 
+0
+${INPUTDATA}/waterways.shp
+${INPUTDATA}/DEM/srtm_directory
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 # Testing srcs
 SET(Visualization_SRCS1
 otbImageWidgetNew.cxx
