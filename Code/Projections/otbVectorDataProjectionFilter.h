@@ -95,7 +95,10 @@ public:
   typedef typename OutputVectorDataType::DataTreePointerType OutputDataTreePointerType;
 
 
-  typedef typename OutputVectorDataType::DataTreeType::TreeNodeType    InternalTreeNodeType;
+  typedef typename InputVectorDataType::DataTreeType::TreeNodeType    InputInternalTreeNodeType;
+  typedef typename OutputVectorDataType::DataTreeType::TreeNodeType   OutputInternalTreeNodeType;
+  typedef typename InputInternalTreeNodeType::ChildrenListType        InputChildrenListType;
+
 
   typedef typename OutputDataNodeType::PointType PointType;
 
@@ -192,6 +195,8 @@ protected:
 
   void GenerateOutputInformation(void);
   void GenerateData(void);
+
+  void ProcessNode(InputInternalTreeNodeType * source, OutputInternalTreeNodeType * destination);
 
 private:
   VectorDataProjectionFilter(const Self&); //purposely not implemented

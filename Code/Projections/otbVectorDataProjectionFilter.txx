@@ -27,6 +27,7 @@
 #include "otbForwardSensorModel.h"
 #include "otbInverseSensorModel.h"
 #include "otbDataNode.h"
+#include "itkTimeProbe.h"
 
 namespace otb
 {
@@ -380,109 +381,140 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
   //Instanciate the transform
   this->InstanciateTransform();
 
-  itk::ProgressReporter progress(this, 0, inputPtr->Size());
-
-  InputTreeIteratorType it(inputPtr->GetDataTree());
   OutputDataTreePointerType tree = outputPtr->GetDataTree();
 
-  typename InternalTreeNodeType::Pointer currentContainer;
-  typename InternalTreeNodeType::Pointer newContainer;
 
-  while (!it.IsAtEnd())//FIXME this VectorData tree processing would better be in a generic class
-  {
-    InputDataNodePointerType dataNode = it.Get();
-    OutputDataNodePointerType newDataNode = OutputDataNodeType::New();
+// Get the input tree root
+  InputInternalTreeNodeType * inputRoot = const_cast<InputInternalTreeNodeType *>(inputPtr->GetDataTree()->GetRoot());
+
+  // Create the output tree root
+  OutputDataNodePointerType newDataNode = OutputDataNodeType::New();
+  newDataNode->SetNodeType(inputRoot->Get()->GetNodeType());
+  newDataNode->SetNodeId(inputRoot->Get()->GetNodeId());
+  typename OutputInternalTreeNodeType::Pointer outputRoot = OutputInternalTreeNodeType::New();
+  outputRoot->Set(newDataNode);
+  tree->SetRoot(outputRoot);
+
+  // Start recursive processing
+  itk::TimeProbe chrono;
+  chrono.Start();
+  ProcessNode(inputRoot,outputRoot);
+  chrono.Stop();
+  std::cout<<"VectoDataProjectionFilter: features Processed in "<<chrono.GetMeanTime()<<" seconds."<<std::endl;
+}
+
+
+template <class TInputVectorData, class TOutputVectorData >
+void
+VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
+::ProcessNode(InputInternalTreeNodeType * source, OutputInternalTreeNodeType * destination)
+{
+  // Get the children list from the input node
+  InputChildrenListType children = source->GetChildrenList();
+  
+  // For each child
+  for(typename InputChildrenListType::iterator it = children.begin(); it!=children.end();++it)
+    {
+    typename OutputInternalTreeNodeType::Pointer newContainer;
+
+    // Copy input DataNode info
+    InputDataNodePointerType dataNode = (*it)->Get();
+    OutputDataNodePointerType newDataNode   = OutputDataNodeType::New();
     newDataNode->SetNodeType(dataNode->GetNodeType());
     newDataNode->SetNodeId(dataNode->GetNodeId());
-    switch (dataNode->GetNodeType())
+
+    switch(dataNode->GetNodeType())
     {
     case ROOT:
     {
-      newContainer = InternalTreeNodeType::New();
+      newContainer = OutputInternalTreeNodeType::New();
       newContainer->Set(newDataNode);
-      tree->SetRoot(newContainer);
-      currentContainer = newContainer;
+      destination->AddChild(newContainer);
+      ProcessNode((*it),newContainer);
       break;
     }
     case DOCUMENT:
     {
-      newContainer = InternalTreeNodeType::New();
+      newContainer = OutputInternalTreeNodeType::New();
       newContainer->Set(newDataNode);
-      currentContainer->AddChild(newContainer);
-      currentContainer = newContainer;
+      destination->AddChild(newContainer);
+      ProcessNode((*it),newContainer);
       break;
     }
     case FOLDER:
     {
-      newContainer = InternalTreeNodeType::New();
+      newContainer = OutputInternalTreeNodeType::New();
       newContainer->Set(newDataNode);
-      currentContainer->AddChild(newContainer);
-      currentContainer = newContainer;
+      destination->AddChild(newContainer);
+      ProcessNode((*it),newContainer);
       break;
     }
     case FEATURE_POINT:
     {
-      newDataNode->SetPoint(this->ReprojectPoint(dataNode->GetPoint()));
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      currentContainer->AddChild(newContainer);
-      break;
+    newDataNode->SetPoint(this->ReprojectPoint(dataNode->GetPoint()));
+    newContainer = OutputInternalTreeNodeType::New();
+    newContainer->Set(newDataNode);
+    destination->AddChild(newContainer);
+    ProcessNode((*it),newContainer);
+    break;
     }
     case FEATURE_LINE:
     {
-      newDataNode->SetLine(this->ReprojectLine(dataNode->GetLine()));
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      currentContainer->AddChild(newContainer);
-      break;
+   
+    newDataNode->SetLine(this->ReprojectLine(dataNode->GetLine()));
+    newContainer = OutputInternalTreeNodeType::New();
+    newContainer->Set(newDataNode);
+    destination->AddChild(newContainer);
+    ProcessNode((*it),newContainer);
+    break;
     }
+    
     case FEATURE_POLYGON:
     {
-      newDataNode->SetPolygonExteriorRing(this->ReprojectPolygon(dataNode->GetPolygonExteriorRing()));
-      newDataNode->SetPolygonInteriorRings(this->ReprojectPolygonList(dataNode->GetPolygonInteriorRings()));
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      currentContainer->AddChild(newContainer);
-      break;
+    newDataNode->SetPolygonExteriorRing(this->ReprojectPolygon(dataNode->GetPolygonExteriorRing()));
+    newDataNode->SetPolygonInteriorRings(this->ReprojectPolygonList(dataNode->GetPolygonInteriorRings()));
+    newContainer = OutputInternalTreeNodeType::New();
+    newContainer->Set(newDataNode);
+    destination->AddChild(newContainer);
+    ProcessNode((*it),newContainer);
+    break;
     }
     case FEATURE_MULTIPOINT:
     {
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      currentContainer->AddChild(newContainer);
-      currentContainer = newContainer;
-      break;
+    newContainer = OutputInternalTreeNodeType::New();
+    newContainer->Set(newDataNode);
+    destination->AddChild(newContainer);
+    ProcessNode((*it),newContainer);
+    break;
     }
     case FEATURE_MULTILINE:
     {
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      currentContainer->AddChild(newContainer);
-      currentContainer = newContainer;
-      break;
+    newContainer = OutputInternalTreeNodeType::New();
+    newContainer->Set(newDataNode);
+    destination->AddChild(newContainer);
+    ProcessNode((*it),newContainer);
+    break;
     }
     case FEATURE_MULTIPOLYGON:
     {
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      currentContainer->AddChild(newContainer);
-      currentContainer = newContainer;
-      break;
+    newContainer = OutputInternalTreeNodeType::New();
+    newContainer->Set(newDataNode);
+    destination->AddChild(newContainer);
+    ProcessNode((*it),newContainer);
+    break;
     }
     case FEATURE_COLLECTION:
     {
-      newContainer = InternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      currentContainer->AddChild(newContainer);
-      currentContainer = newContainer;
-      break;
+    newContainer = OutputInternalTreeNodeType::New();
+    newContainer->Set(newDataNode);
+    destination->AddChild(newContainer);
+    ProcessNode((*it),newContainer);
+    break;
     }
     }
-    progress.CompletedPixel();
-    ++it;
-  }
-
+    }
 }
+
 
 } // end namespace otb
 

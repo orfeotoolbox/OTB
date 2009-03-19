@@ -71,23 +71,27 @@ public:
 
   typedef itk::Point<typename VertexType::CoordRepType ,IndexType::IndexDimension>                       ProjPointType;
 
-  /** Prototype of the generate data method*/
-  virtual void GenerateData(void );
+  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> InputTreeIteratorType;
+  typedef typename VectorDataType::DataTreeType::TreeNodeType InternalTreeNodeType;
+  typedef typename InternalTreeNodeType::ChildrenListType     ChildrenListType;
 
-  /** Method to check if the polygon Bounding Box ha ve a non-null intersection with the ROI*/
-  virtual  bool IsPolygonIntersectionNotNull(PolygonPointerType polygon);
-
-   /** Method to check if the line Bounding Box ha ve a non-null intersection with the ROI*/
-  virtual  bool IsLineIntersectionNotNull(LinePointerType line);
 
   /** Method to Set/Get the Region of intereset*/
-   void SetRegion(RegionType&  region)
+   void SetRegion(const RegionType&  region)
      {
        m_ROI = region;
      }
 
-   RegionType  GetRegion()
+   const RegionType & GetRegion()
      {return m_ROI;}
+
+  itkSetStringMacro(DEMDirectory);
+  itkGetStringMacro(DEMDirectory);
+ 
+protected:
+  VectorDataExtractROI();
+  ~VectorDataExtractROI() {};
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
    /** Method to compare the projection embedded in the cartoRegion And the the InputVectorData*/
    virtual void CompareInputAndRegionProjection();
@@ -101,16 +105,17 @@ public:
    /** Method to transform itk::Point to itk::ContinuousIndex*/
    virtual VertexType  PointToContinuousIndex(ProjPointType  point);
 
-protected:
-  VectorDataExtractROI();
-  ~VectorDataExtractROI() {};
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  /** Prototype of the generate data method*/
+  virtual void GenerateData(void );
 
-  /** VectorDataExtractROI
-   *
-   * \sa VectorDataExtractROIBase::GenerateOutputInformaton()  */
-  //virtual void GenerateOutputInformation();
+  /** Method to check if the polygon Bounding Box ha ve a non-null intersection with the ROI*/
+  virtual  bool IsPolygonIntersectionNotNull(PolygonPointerType polygon);
 
+   /** Method to check if the line Bounding Box ha ve a non-null intersection with the ROI*/
+  virtual  bool IsLineIntersectionNotNull(LinePointerType line);
+
+
+  virtual void ProcessNode(InternalTreeNodeType * source, InternalTreeNodeType * destination);
 
 private:
   VectorDataExtractROI(const Self&); //purposely not implemented
@@ -120,6 +125,10 @@ private:
   bool          m_ProjectionNeeded;
   RegionType    m_ROI;
   RegionType    m_GeoROI;
+  std::string   m_DEMDirectory;
+
+  unsigned int m_Kept;
+
 };
 
 

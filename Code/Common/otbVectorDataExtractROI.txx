@@ -19,7 +19,6 @@
 #define __otbVectorDataExtractROI_txx
 
 #include "otbVectorDataExtractROI.h"
-#include "itkPreOrderTreeIterator.h"
 
 #include "otbGenericMapProjection.h"
 #include "itkIdentityTransform.h"
@@ -29,6 +28,7 @@
 #include "otbMacro.h"
 
 #include "itkProgressReporter.h"
+#include "itkTimeProbe.h"
 
 
 namespace otb
@@ -42,6 +42,7 @@ VectorDataExtractROI<TVectorData>
 ::VectorDataExtractROI()
 {
   m_ProjectionNeeded = false;
+  m_DEMDirectory = "";
 }
 
 /**
@@ -63,196 +64,182 @@ void
 VectorDataExtractROI<TVectorData>
 ::GenerateData(void)
 {
-  /** Get The input and the outptut*/
-  typename VectorDataType::ConstPointer   input  = this->GetInput();
-  typename VectorDataType::Pointer        output = this->GetOutput();
+  this->AllocateOutputs();
+  typename VectorDataType::ConstPointer inputPtr = this->GetInput();
+  typename VectorDataType::Pointer      outputPtr = this->GetOutput();
 
-  /** put this here*/
-  if(!input->GetProjectionRef().empty())
-    output->SetProjectionRef(input->GetProjectionRef());
-
-  if(!input)
-    return;
+  
+  // Find out the projection needed
+  if(!inputPtr->GetProjectionRef().empty())
+    outputPtr->SetProjectionRef(inputPtr->GetProjectionRef());
 
   /** Need to check if it is necessary to project the roi*/
   this->CompareInputAndRegionProjection();
 
-
   /** If Projection of the region is needed, we project on the vectorData coordinate axis*/
   if(m_ProjectionNeeded)
+    {
     this->ProjectRegionToInputVectorProjection();
+    }
   else
+    {
     m_GeoROI = m_ROI;
+    }
 
   otbMsgDevMacro( << "ROI: " << this->m_ROI);
   otbMsgDevMacro( << "GeoROI: " << this->m_GeoROI);
 
-  /** Loop in the vectorData file
-    * If There is a non null intersection between Bounding Boxes
-    * and ROI, keep this feature.
-    */
-  /** Fill the document and the root of the vector data*/
-  typename DataNodeType::Pointer                  document   = DataNodeType::New();
-  typename DataNodeType::Pointer                  root       = input->GetDataTree()->GetRoot()->Get();
-  typename VectorDataType::DataTreeType::Pointer  tree       = output->GetDataTree();
+  // Retrieve the output tree
+  typename VectorDataType::DataTreePointerType tree = outputPtr->GetDataTree();
 
-  DataNodePointerType  currentContainer;
-  DataNodePointerType  newDataNodeFolder                      = DataNodeType::New();
-  DataNodePointerType  newDataNodeMultiPolygon                = DataNodeType::New();
-  DataNodePointerType  newDataNodeMultiLine                   = DataNodeType::New();
-  DataNodePointerType  newDataNodeMultiFeature                = DataNodeType::New();
+  // Get the input tree root
+  InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(inputPtr->GetDataTree()->GetRoot());
 
+  // Create the output tree root
+  DataNodePointerType newDataNode = DataNodeType::New();
+  newDataNode->SetNodeType(inputRoot->Get()->GetNodeType());
+  newDataNode->SetNodeId(inputRoot->Get()->GetNodeId());
+  typename InternalTreeNodeType::Pointer outputRoot = InternalTreeNodeType::New();
+  outputRoot->Set(newDataNode);
+  tree->SetRoot(outputRoot);
 
-  /** Walking trough the input vector data */
-  typedef itk::PreOrderTreeIterator<DataTreeType>                 TreeIteratorType;
-  TreeIteratorType                                                it(input->GetDataTree());
-  it.GoToBegin();
-  bool newFolder       = false;
-  bool newMultiFeature = false;
+  m_Kept  = 0;
 
-  itk::ProgressReporter progress(this, 0,input->Size());
-
-  while (!it.IsAtEnd())
-    {
-      DataNodePointerType  dataNode               =   it.Get();
-      DataNodePointerType  newDataNode            = DataNodeType::New();
-
-
-      switch (dataNode->GetNodeType())
-        {
-        case ROOT:
-          {
-            newDataNode->SetNodeType(dataNode->GetNodeType());
-            newDataNode->SetNodeId(dataNode->GetNodeId());
-            tree->SetRoot(newDataNode);
-            currentContainer = newDataNode;
-            break;
-          }
-        case DOCUMENT:
-          {
-            newDataNode->SetNodeType(dataNode->GetNodeType());
-            newDataNode->SetNodeId(dataNode->GetNodeId());
-            tree->Add(newDataNode,currentContainer);
-            currentContainer = newDataNode;
-            break;
-          }
-        case FOLDER:
-          {
-            newDataNodeFolder->SetNodeType(dataNode->GetNodeType());
-            newDataNodeFolder->SetNodeId(dataNode->GetNodeId());
-            newFolder = true;
-            break;
-          }
-        case FEATURE_POINT:
-          {
-            if(m_GeoROI.IsInside(this->PointToContinuousIndex(dataNode->GetPoint())))
-              {
-                if(newFolder)
-                  {
-                    tree->Add(newDataNodeFolder,currentContainer);
-                    currentContainer = newDataNodeFolder;
-                    newFolder = false;
-                  }
-                if(newMultiFeature)
-                  {
-                    tree->Add(newDataNodeMultiFeature,currentContainer);
-                    currentContainer =  newDataNodeMultiFeature;
-                    newMultiFeature = false;
-                  }
-                newDataNode->SetNodeType(dataNode->GetNodeType());
-                newDataNode->SetNodeId(dataNode->GetNodeId());
-                newDataNode->SetPoint(dataNode->GetPoint());
-                tree->Add(newDataNode,currentContainer);
-              }
-
-            break;
-          }
-        case FEATURE_LINE:
-          {
-            if(this->IsLineIntersectionNotNull(dataNode->GetLine()))
-              {
-                if(newFolder)
-                  {
-                    tree->Add(newDataNodeFolder,currentContainer);
-                    currentContainer = newDataNodeFolder;
-                    newFolder = false;
-                  }
-                if(newMultiFeature)
-                  {
-                    tree->Add(newDataNodeMultiFeature ,currentContainer);
-                    currentContainer =  newDataNodeMultiFeature;
-                    newMultiFeature = false;
-                  }
-                newDataNode->SetNodeType(dataNode->GetNodeType());
-                newDataNode->SetNodeId(dataNode->GetNodeId());
-                newDataNode->SetLine(dataNode->GetLine());
-                tree->Add(newDataNode,currentContainer);
-              }
-            break;
-          }
-        case FEATURE_POLYGON:
-          {
-            if(this->IsPolygonIntersectionNotNull(dataNode->GetPolygonExteriorRing()))
-              {
-                if(newFolder)
-                  {
-                    tree->Add(newDataNodeFolder,currentContainer);
-                    currentContainer = newDataNodeFolder;
-                    newFolder = false;
-                  }
-
-                if(newMultiFeature)
-                  {
-                    tree->Add(newDataNodeMultiFeature,currentContainer);
-                    currentContainer =  newDataNodeMultiFeature;
-                    newMultiFeature = false;
-                  }
-
-                newDataNode->SetNodeType(dataNode->GetNodeType());
-                newDataNode->SetNodeId(dataNode->GetNodeId());
-                newDataNode->SetPolygonExteriorRing(dataNode->GetPolygonExteriorRing());
-                newDataNode->SetPolygonInteriorRings(dataNode->GetPolygonInteriorRings());
-                tree->Add(newDataNode,currentContainer);
-              }
-            break;
-          }
-        case FEATURE_MULTIPOINT:
-          {
-            newDataNodeMultiFeature->SetNodeType(dataNode->GetNodeType());
-            newDataNodeMultiFeature ->SetNodeId(dataNode->GetNodeId());
-            newMultiFeature = true;
-
-
-            break;
-          }
-        case FEATURE_MULTILINE:
-          {
-            newDataNodeMultiFeature ->SetNodeType(dataNode->GetNodeType());
-            newDataNodeMultiFeature ->SetNodeId(dataNode->GetNodeId());
-            newMultiFeature = true;
-            break;
-          }
-        case FEATURE_MULTIPOLYGON:
-          {
-            newDataNodeMultiFeature  ->SetNodeType(dataNode->GetNodeType());
-            newDataNodeMultiFeature->SetNodeId(dataNode->GetNodeId());
-            newMultiFeature = true;
-            break;
-          }
-        case FEATURE_COLLECTION:
-          {
-            newDataNode->SetNodeType(dataNode->GetNodeType());
-            newDataNode->SetNodeId(dataNode->GetNodeId());
-            tree->Add(newDataNode,currentContainer);
-            currentContainer = newDataNode;
-            break;
-          }
-        }
-      progress.CompletedPixel();
-      ++it;
-    }
-
+  // Start recursive processing
+  itk::TimeProbe chrono;
+  chrono.Start();
+  ProcessNode(inputRoot,outputRoot);
+  chrono.Stop();
+  std::cout<<"VectorDataExtractROI: "<<m_Kept<<" Features processed in "<<chrono.GetMeanTime()<<" seconds."<<std::endl;
 }/*End GenerateData()*/
+
+
+
+template <class TVectorData>
+void
+VectorDataExtractROI<TVectorData>
+::ProcessNode(InternalTreeNodeType * source, InternalTreeNodeType * destination)
+{
+  // Get the children list from the input node
+  ChildrenListType children = source->GetChildrenList();
+  // For each child
+  for(typename ChildrenListType::iterator it = children.begin(); it!=children.end();++it)
+    {
+    typename InternalTreeNodeType::Pointer newContainer;
+
+    DataNodePointerType dataNode = (*it)->Get();
+    DataNodePointerType newDataNode   = DataNodeType::New();
+    newDataNode->SetNodeType(dataNode->GetNodeType());
+    newDataNode->SetNodeId(dataNode->GetNodeId());
+
+    switch(dataNode->GetNodeType())
+    {
+    case ROOT:
+    {
+      newContainer = InternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      destination->AddChild(newContainer);
+      ProcessNode((*it),newContainer);
+      ++m_Kept;
+      break;
+    }
+    case DOCUMENT:
+    {
+      newContainer = InternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      destination->AddChild(newContainer);
+      ++m_Kept;
+      ProcessNode((*it),newContainer);
+      break;
+    }
+    case FOLDER:
+    {
+      newContainer = InternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      destination->AddChild(newContainer);
+      ++m_Kept;
+      ProcessNode((*it),newContainer);
+      break;
+    }
+    case FEATURE_POINT:
+    {
+    if(m_GeoROI.IsInside(this->PointToContinuousIndex(dataNode->GetPoint())))
+      {
+      newDataNode->SetPoint(dataNode->GetPoint());
+      newContainer = InternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      destination->AddChild(newContainer);
+      ++m_Kept;
+      ProcessNode((*it),newContainer);
+      }
+      break;
+    }
+    case FEATURE_LINE:
+    {
+    if(this->IsLineIntersectionNotNull(dataNode->GetLine()))
+      {
+      newDataNode->SetLine(dataNode->GetLine());
+      newContainer = InternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      destination->AddChild(newContainer);
+      ++m_Kept;
+      ProcessNode((*it),newContainer);
+      }
+      break;
+    }
+    case FEATURE_POLYGON:
+    {
+    if(this->IsPolygonIntersectionNotNull(dataNode->GetPolygonExteriorRing()))
+      {
+      newDataNode->SetPolygonExteriorRing(dataNode->GetPolygonExteriorRing());
+      newDataNode->SetPolygonInteriorRings(dataNode->GetPolygonInteriorRings());
+      newContainer = InternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      destination->AddChild(newContainer);
+      ++m_Kept;
+      ProcessNode((*it),newContainer);
+      }
+      break;
+    }
+    case FEATURE_MULTIPOINT:
+    {
+      newContainer = InternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      destination->AddChild(newContainer);
+      ++m_Kept;
+      ProcessNode((*it),newContainer);
+      break;
+    }
+    case FEATURE_MULTILINE:
+    {
+      newContainer = InternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      destination->AddChild(newContainer);
+      ++m_Kept;
+      ProcessNode((*it),newContainer);
+      break;
+    }
+    case FEATURE_MULTIPOLYGON:
+    {
+      newContainer = InternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      destination->AddChild(newContainer);
+      ++m_Kept;
+      ProcessNode((*it),newContainer);
+      break;
+    }
+    case FEATURE_COLLECTION:
+    {
+      newContainer = InternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      destination->AddChild(newContainer);
+      ++m_Kept;
+      ProcessNode((*it),newContainer);
+      break;
+    }
+    }
+    }
+}
 
 /**
  *
@@ -304,16 +291,20 @@ VectorDataExtractROI<TVectorData>
 ::ProjectRegionToInputVectorProjection()
 {
   /* Use the RS Generic projection */
-  typedef otb::GenericRSTransform<>                   GenericRSTransformType;
+  typedef otb::GenericRSTransform<>                            GenericRSTransformType;
   typename GenericRSTransformType::Pointer genericTransform =  GenericRSTransformType::New();
 
   /** We need get the transformation*/
-  const itk::MetaDataDictionary &inputDict = this->GetInput()->GetMetaDataDictionary();
-  genericTransform->SetInputDictionary(inputDict);
   genericTransform->SetInputProjectionRef( m_ROI.GetRegionProjection());
-  genericTransform->SetOutputProjectionRef(this->GetInput()->GetProjectionRef() );
-  genericTransform->InstanciateTransform();
 
+  genericTransform->SetInputKeywordList(m_ROI.GetKeywordList());
+  genericTransform->SetOutputProjectionRef(this->GetInput()->GetProjectionRef() );
+  const itk::MetaDataDictionary &inputDict = this->GetInput()->GetMetaDataDictionary();
+  genericTransform->SetOutputDictionary(inputDict);
+
+  genericTransform->SetDEMDirectory(m_DEMDirectory);
+
+  genericTransform->InstanciateTransform();
 
    typename VertexListType::Pointer  regionCorners = VertexListType::New();
    ProjPointType                          point1, point2 , point3, point4;
@@ -339,7 +330,7 @@ VectorDataExtractROI<TVectorData>
 
   /** Due to The projection : the Projected ROI can be rotated */
   m_GeoROI = this->ComputeVertexListBoudingRegion(regionCorners.GetPointer());
-
+  m_GeoROI.SetRegionProjection(this->GetInput()->GetProjectionRef());
 }
 /**
  * itk::Point to ContinuousIndex
