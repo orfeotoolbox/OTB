@@ -22,6 +22,7 @@
 
 #include "itkContinuousIndex.h"
 #include "itkRegion.h"
+#include "otbImageKeywordlist.h"
 
 namespace otb
 {
@@ -148,6 +149,17 @@ public:
   void SetOrigin(const  unsigned int i,  Type idx)
     {
     m_Index[i] = idx;
+    }
+
+
+    ImageKeywordlist GetKeywordList() const
+    {
+      return m_KeywordList;
+    }
+
+    void SetKeywordList(ImageKeywordlist kwl)
+    {
+      this->m_KeywordList = kwl;
     }
 
   /** Compare two regions. */
@@ -280,6 +292,7 @@ private:
   SizeType  m_Size;
 
   std::string  m_InputProjectionRef;
+  ImageKeywordlist m_KeywordList; //if we want to specify the region in term of sensor geometry
 };
 //extern std::ostream & operator<<(std::ostream &os, const RemoteSensingRegion &region);
 
