@@ -306,6 +306,8 @@ VectorDataExtractROI<TVectorData>
 
   genericTransform->InstanciateTransform();
 
+  std::cout<<genericTransform<<std::endl;
+
    typename VertexListType::Pointer  regionCorners = VertexListType::New();
    ProjPointType                          point1, point2 , point3, point4;
 

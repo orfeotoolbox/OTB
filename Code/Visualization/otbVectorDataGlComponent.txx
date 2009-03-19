@@ -22,6 +22,7 @@
 
 // We need this include to get NodeType enum right.
 #include "otbDataNode.h"
+#include "itkTimeProbe.h"
 
 namespace otb
 {
@@ -87,41 +88,15 @@ VectorDataGlComponent<TVectorData>
   // Enabling line antialiasing
   glEnable(GL_LINE_SMOOTH);
 
-  // Iterate on the data tree
-  TreeIteratorType it(m_VectorData->GetDataTree());
-  it.GoToBegin();
+  // Trigger recursive rendering
+  InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(m_VectorData->GetDataTree()->GetRoot());
+  
+  itk::TimeProbe chrono;
+  chrono.Start();
+  this->Render(inputRoot,extent,space2ScreenTransform);
+  chrono.Stop();
+  std::cout<<"VectorData component rendered in "<<chrono.GetMeanTime()<<" s."<<std::endl;
 
-  while(!it.IsAtEnd())
-    {
-    DataNodePointerType node = it.Get();
-
-    switch(node->GetNodeType())
-      {
-      case FEATURE_POINT:
-      {
-      this->RenderPoint(node->GetPoint(),extent,space2ScreenTransform);
-        break;
-
-      }
-      case FEATURE_LINE:
-      {
-      this->RenderLine(node->GetLine(),extent,space2ScreenTransform);
-      break;
-      }
-      case FEATURE_POLYGON:
-      {
-      this->RenderPolygon(node->GetPolygonExteriorRing(),node->GetPolygonInteriorRings(),
-                          extent,space2ScreenTransform);
-      break;
-      }
-      default:
-      {
-      // discard
-      break;
-      }
-      }
-    ++it;
-    }
   glDisable(GL_LINE_SMOOTH);
   glDisable(GL_BLEND);
   glLineWidth(previousWidth);
@@ -276,6 +251,49 @@ VectorDataGlComponent<TVectorData>
     delete [] (*it);
     }
 }
+
+template <class TVectorData>   
+void 
+VectorDataGlComponent<TVectorData>
+::Render(InternalTreeNodeType * node, const RegionType & extent, const AffineTransformType * space2ScreenTransform)
+{
+  // Render the current node
+  switch(node->Get()->GetNodeType())
+    {
+    case FEATURE_POINT:
+    {
+    this->RenderPoint(node->Get()->GetPoint(),extent,space2ScreenTransform);
+    break;
+    
+    }
+    case FEATURE_LINE:
+    {
+    this->RenderLine(node->Get()->GetLine(),extent,space2ScreenTransform);
+    break;
+    }
+    case FEATURE_POLYGON:
+    {
+    this->RenderPolygon(node->Get()->GetPolygonExteriorRing(),node->Get()->GetPolygonInteriorRings(),
+			extent,space2ScreenTransform);
+    break;
+    }
+    default:
+    {
+    // discard
+    break;
+    }
+    }
+
+  // Get the children list from the input node
+  ChildrenListType children = node->GetChildrenList();
+ 
+  // Render each child
+  for(typename ChildrenListType::iterator it = children.begin(); it!=children.end();++it)
+    {
+    this->Render(*it,extent,space2ScreenTransform);
+    }
+}
+
 }
 #endif
 

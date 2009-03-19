@@ -72,10 +72,11 @@ public:
   typedef typename VectorDataType::DataNodeType   DataNodeType;
   typedef typename DataNodeType::Pointer          DataNodePointerType;
   typedef typename VectorDataType::DataTreeType   DataTreeType;
-  typedef itk::PreOrderTreeIterator<DataTreeType> TreeIteratorType;
   typedef typename DataNodeType::LineType         LineType;
   typedef typename DataNodeType::PolygonType      PolygonType;
   typedef typename DataNodeType::PolygonListType  PolygonListType;
+  typedef typename DataTreeType::TreeNodeType     InternalTreeNodeType;
+  typedef typename InternalTreeNodeType::ChildrenListType ChildrenListType;
 
   /** Runtime information */
   itkTypeMacro(VectorDataGlComponent,GlComponent);
@@ -132,6 +133,9 @@ protected:
   void RenderLine(const LineType * l, const RegionType & extent, const AffineTransformType * transform);
   // Render a complex polygon (with holes)
   void RenderPolygon(const PolygonType * extRing, const PolygonListType * intRings, const RegionType & extent, const AffineTransformType * transform);
+
+  // Recursive rendering method
+  void Render(InternalTreeNodeType * node, const RegionType & extent, const AffineTransformType * space2ScreenTransform);
 
   /// Frame a given point using the frame width and color (point
   /// should be in gl screen coordinates)
