@@ -98,6 +98,7 @@ public:
     m_Index = region.m_Index;
     m_Size = region.m_Size;
     m_InputProjectionRef = region.m_InputProjectionRef;
+    m_KeywordList        = region.m_KeywordList;
     }
 
   /** Set the index defining the corner of the region. */
@@ -152,12 +153,12 @@ public:
     }
 
 
-    ImageKeywordlist GetKeywordList() const
+    const ImageKeywordlist & GetKeywordList() const
     {
       return m_KeywordList;
     }
 
-    void SetKeywordList(ImageKeywordlist kwl)
+    void SetKeywordList(const ImageKeywordlist& kwl)
     {
       this->m_KeywordList = kwl;
     }
@@ -282,6 +283,7 @@ protected:
     os << indent << "Index:" << this->m_Index << std::endl;
     os << indent << "Size:" << this->m_Size << std::endl;
     os << indent << "Projection:" << this->m_InputProjectionRef << std::endl;
+    os << indent << "Keywordlist: "<<this->m_KeywordList<<std::endl;
   }
 
 
