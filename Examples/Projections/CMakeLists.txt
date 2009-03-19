@@ -27,6 +27,10 @@ ENDIF( OTB_USE_CURL )
 ADD_EXECUTABLE(VectorDataProjectionExample VectorDataProjectionExample.cxx )
 TARGET_LINK_LIBRARIES(VectorDataProjectionExample OTBProjections OTBCommon OTBIO)
 
+ADD_EXECUTABLE(VectorDataExtractROIExample VectorDataExtractROIExample.cxx )
+TARGET_LINK_LIBRARIES(VectorDataExtractROIExample OTBProjections OTBCommon OTBIO)
+
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Projections)

@@ -47,7 +47,7 @@
 int main( int argc, char* argv[] )
 {
 
-  if (argc < 3  )
+  if (argc < 4  )
   {
     std::cout << argv[0] <<" <input vector filename> <input image name> <output vector filename> "  << std::endl;
 
