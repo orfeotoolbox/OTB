@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-#include "otbCartographicRegion.h"
+#include "otbRemoteSensingRegion.h"
 
 
 int otbCartoRegion(int argc, char * argv[])
@@ -33,7 +33,7 @@ int otbCartoRegion(int argc, char * argv[])
   const Type  pointY = atof(argv[6]);
   
 
-  typedef   otb::CartographicRegion<Type>              TypedRegion;
+  typedef   otb::RemoteSensingRegion<Type>              TypedRegion;
  
 
 

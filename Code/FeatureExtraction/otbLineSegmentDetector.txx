@@ -28,7 +28,7 @@
 #include "itkCastImageFilter.h"
 
 #include "otbRectangle.h"
-#include "otbCartographicRegion.h"
+#include "otbRemoteSensingRegion.h"
 
 #include "otbMath.h"
 

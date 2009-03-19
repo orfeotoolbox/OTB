@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "otbVectorData.h"
 #include "otbVectorDataExtractROI.h"
-#include "otbCartographicRegion.h"
+#include "otbRemoteSensingRegion.h"
 
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
@@ -39,7 +39,7 @@ int otbVectorDataExtractROI( int argc, char * argv[] )
   typedef otb::VectorDataFileReader<VectorDataType>          VectorDataFileReaderType;
   typedef otb::VectorDataFileWriter<VectorDataType>          VectorDataWriterType;
   
-  typedef   otb::CartographicRegion<Type>                           TypedRegion;
+  typedef   otb::RemoteSensingRegion<Type>                           TypedRegion;
 
   /** Instanciation of pointer objects*/
   FilterType::Pointer               filter = FilterType::New();

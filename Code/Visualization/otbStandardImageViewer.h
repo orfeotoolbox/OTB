@@ -40,7 +40,7 @@
 #include "otbVectorDataProjectionFilter.h"
 #include "otbVectorDataGlComponent.h"
 #include "otbVectorDataExtractROI.h"
-#include "otbCartographicRegion.h"
+#include "otbRemoteSensingRegion.h"
 
 
 #include <Fl/Fl_Tile.H>
@@ -140,7 +140,7 @@ public:
   typedef VectorDataProjectionFilter
   <VectorDataType,VectorDataType>                    VectorDataProjectionFilterType;
   typedef VectorDataExtractROI<VectorDataType>       VectorDataExtractROIType;
-  typedef typename VectorDataExtractROIType::RegionType CartographicRegionType;
+  typedef typename VectorDataExtractROIType::RegionType RemoteSensingRegionType;
   typedef VectorDataGlComponent<VectorDataType>      VectorDataGlComponentType;
 
 

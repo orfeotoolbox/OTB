@@ -185,9 +185,9 @@ StandardImageViewer<TImage,TVectorData>
     gmax[1] = (gul[1],max(gur[1],max(gll[1],glr[1])));
     
     // Build the cartographic region
-    CartographicRegionType cartographicRegion;
-    typename CartographicRegionType::IndexType cartographicOrigin;
-    typename CartographicRegionType::SizeType  cartographicSize;
+    RemoteSensingRegionType cartographicRegion;
+    typename RemoteSensingRegionType::IndexType cartographicOrigin;
+    typename RemoteSensingRegionType::SizeType  cartographicSize;
     cartographicOrigin[0]=gmin[0];
     cartographicOrigin[1]=gmin[1];
     cartographicSize[0] = gmax[0] - gmin[0];

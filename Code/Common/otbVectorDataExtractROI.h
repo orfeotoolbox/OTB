@@ -19,7 +19,7 @@
 #define __otbVectorDataExtractROI_h
 
 #include "otbVectorDataToVectorDataFilter.h"
-#include "otbCartographicRegion.h"
+#include "otbRemoteSensingRegion.h"
 #include "itkMacro.h"
 
 namespace otb
@@ -65,7 +65,7 @@ public:
 
 
   /** TODO : automatize the dimension of the region*/
-  typedef otb::CartographicRegion<typename VertexType::CoordRepType>                RegionType;
+  typedef otb::RemoteSensingRegion<typename VertexType::CoordRepType>                RegionType;
   typedef typename  RegionType::IndexType                                    IndexType;
   typedef typename  RegionType::SizeType                                     SizeType;
 

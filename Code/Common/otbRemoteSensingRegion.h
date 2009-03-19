@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCartographicRegion_h
-#define __otbCartographicRegion_h
+#ifndef __otbRemoteSensingRegion_h
+#define __otbRemoteSensingRegion_h
 
 #include <algorithm>
 #include "itkObjectFactory.h"
@@ -26,11 +26,11 @@
 namespace otb
 {
 
-/** \class CartographicRegion
- * \brief An CartographicRegion represents a structured region of data.
+/** \class RemoteSensingRegion
+ * \brief An RemoteSensingRegion represents a structured region of data.
  *
- * CartographicRegion is an class that represents some structured portion or
- * piece of an Image. The CartographicRegion is represented with an index and
+ * RemoteSensingRegion is an class that represents some structured portion or
+ * piece of an Image. The RemoteSensingRegion is represented with an index and
  * a size in each of the n-dimensions of the image. (The index is the
  * corner of the image, the size is the lengths of the image in each of
  * the topological directions.)
@@ -41,17 +41,17 @@ namespace otb
  */
 
 template <class TType>
-  class ITK_EXPORT CartographicRegion : public itk::Region
+  class ITK_EXPORT RemoteSensingRegion : public itk::Region
 {
 public:
   /** Standard class typedefs. */
-  typedef otb::CartographicRegion<TType>           Self;
+  typedef otb::RemoteSensingRegion<TType>           Self;
   typedef itk::Region                              Superclass;
   typedef itk::SmartPointer<Self>                  Pointer;
   typedef itk::SmartPointer<const Self>            ConstPointer;
 
   /** Standard part of all itk objects. */
-  itkTypeMacro(CartographicRegion, itk:Region);
+  itkTypeMacro(RemoteSensingRegion, itk:Region);
 
   /** Typedef Support*/
   typedef TType                                   Type;
@@ -67,30 +67,30 @@ public:
   virtual typename Superclass::RegionType GetRegionType() const
   {return Superclass::ITK_STRUCTURED_REGION;}
 
-  /** Constructor. CartographicRegion is a lightweight object that is not reference
+  /** Constructor. RemoteSensingRegion is a lightweight object that is not reference
    * counted, so the constructor is public. */
-  CartographicRegion(unsigned int dimension)
+  RemoteSensingRegion(unsigned int dimension)
     {
     m_InputProjectionRef = "";
     m_Size.Fill(0.);
     m_Index.Fill(0.);
     }
 
-  /** Constructor. CartographicRegion is a lightweight object that is not reference
+  /** Constructor. RemoteSensingRegion is a lightweight object that is not reference
    * counted, so the constructor is public.  Default dimension is 2. */
-  CartographicRegion()
+  RemoteSensingRegion()
     {
       m_InputProjectionRef = "";
       m_Size.Fill(0.);
       m_Index.Fill(0.);
     }
 
-  /** Destructor. CartographicRegion is a lightweight object that is not reference
+  /** Destructor. RemoteSensingRegion is a lightweight object that is not reference
    * counted, so the destructor is public. */
-  virtual ~CartographicRegion(){};
+  virtual ~RemoteSensingRegion(){};
 
 
-  /** operator=. CartographicRegion is a lightweight object that is not reference
+  /** operator=. RemoteSensingRegion is a lightweight object that is not reference
    * counted, so operator= is public. */
   void operator=(const Self& region)
     {
@@ -266,7 +266,7 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    os << indent << "CartographicRegion" << std::endl;
+    os << indent << "RemoteSensingRegion" << std::endl;
     os << indent << "Index:" << this->m_Index << std::endl;
     os << indent << "Size:" << this->m_Size << std::endl;
     os << indent << "Projection:" << this->m_InputProjectionRef << std::endl;
@@ -281,10 +281,10 @@ private:
 
   std::string  m_InputProjectionRef;
 };
-//extern std::ostream & operator<<(std::ostream &os, const CartographicRegion &region);
+//extern std::ostream & operator<<(std::ostream &os, const RemoteSensingRegion &region);
 
 template<class TType>
-    std::ostream & operator<<(std::ostream &os, const CartographicRegion<TType> &region)
+    std::ostream & operator<<(std::ostream &os, const RemoteSensingRegion<TType> &region)
 {
   region.Print(os);
   return os;
