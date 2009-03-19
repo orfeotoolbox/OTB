@@ -104,12 +104,13 @@ ImageLayer<TImage,TOutputImage>
     {
     itk::TimeProbe probe;
     probe.Start();
-    std::cout<<"Extent: "<<this->GetExtent()<<" Largest: "<<m_Image->GetLargestPossibleRegion()<<" ExtractRegion: "<<this->GetExtractRegion()<<std::endl;
+    //std::cout<<"Extent: "<<this->GetExtent()<<" Largest: "<<m_Image->GetLargestPossibleRegion()<<" ExtractRegion: "<<this->GetExtractRegion()<<std::endl;
     m_ExtractRenderingFilter->GetOutput()->SetRequestedRegion(this->GetExtractRegion());
     m_ExtractRenderingFilter->Update();
     this->SetRenderedExtract(m_ExtractRenderingFilter->GetOutput());
     probe.Stop();
     otbMsgDevMacro(<<"ImageLayer::RenderImages():"<<" ("<<this->GetName()<<")"<< " extract regenerated ("<<probe.GetMeanTime()<<" s.)");
+    this->SetHasExtract(true);
     }
   else
     {
