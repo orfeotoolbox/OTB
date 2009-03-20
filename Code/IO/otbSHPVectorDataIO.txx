@@ -847,36 +847,46 @@ template<class TData>
         ProcessNodeWrite(*it, ogrCollection, ogrCurrentLayer, oSRS);
         break;
       }
-//       case FEATURE_POINT:
-//       {
-//         OGRPoint ogrPoint;
-//         ogrPoint.setX(dataNode->GetPoint()[0]);
-//         ogrPoint.setY(dataNode->GetPoint()[1]);
-//
-//
-//         if (DataNodeType::Dimension>2)
-//         {
-//           ogrPoint.setZ(dataNode->GetPoint()[2]);
-//         }
-//
-//         if (ogrCollection == NULL)
-//         {
-//           if (ogrFeatures.empty())
-//           {
-//             itkExceptionMacro(<<"Problem while creating FEATURE_POINT: ogrFeatures is not initialized.");
-//           }
-//           ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbPoint);
-//           ogrFeatures.back()->SetGeometry(&ogrPoint);
-//         }
-//         else
-//         {
-//           ogrCollection->addGeometry(&ogrPoint);
-//         }
-//
-//         break;
-//       }
+      case FEATURE_POINT:
+      {
+        //Build the ogrObject
+        OGRPoint ogrPoint;
+        ogrPoint.setX(dataNode->GetPoint()[0]);
+        ogrPoint.setY(dataNode->GetPoint()[1]);
+
+
+        if (DataNodeType::Dimension>2)
+        {
+          ogrPoint.setZ(dataNode->GetPoint()[2]);
+        }
+
+        //Save it in the structure
+        if (ogrCollection == NULL)
+        {
+          OGRFeature *ogrFeature;
+
+          ogrFeature = OGRFeature::CreateFeature( ogrCurrentLayer->GetLayerDefn() );
+          ogrFeature->SetField("Name",dataNode->GetNodeId());
+          ogrFeature->SetGeometry( &ogrPoint );
+
+          if( ogrCurrentLayer->CreateFeature( ogrFeature ) != OGRERR_NONE )
+          {
+            printf( "Failed to create feature in shapefile.\n" );
+            exit( 1 );
+          }
+
+          OGRFeature::DestroyFeature( ogrFeature );
+        }
+        else
+        {
+          ogrCollection->addGeometry(&ogrPoint);
+        }
+
+        break;
+      }
       case FEATURE_LINE:
       {
+        //Build the ogrObject
         OGRLineString ogrLine;
         VertexListConstPointerType vertexList = dataNode->GetLine()->GetVertexList();
 
@@ -895,12 +905,9 @@ template<class TData>
           ++vIt;
         }
 
+        //Save it in the structure
         if (ogrCollection == NULL)
         {
-//           if (ogrFeatures.empty())
-//           {
-//             itkExceptionMacro(<<"Problem while creating FEATURE_LINE: ogrFeatures is not initialized.");
-//           }
           OGRFeature *ogrFeature;
 
           ogrFeature = OGRFeature::CreateFeature( ogrCurrentLayer->GetLayerDefn() );
@@ -915,9 +922,6 @@ template<class TData>
 
           OGRFeature::DestroyFeature( ogrFeature );
 
-
-//           ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbLineString);
-//           ogrFeatures.back()->SetGeometry(&ogrLine);
         }
         else
         {
@@ -926,70 +930,81 @@ template<class TData>
 
         break;
       }
-//       case FEATURE_POLYGON:
-//       {
-//         OGRPolygon * ogrPolygon = new OGRPolygon();
-//         OGRLinearRing * ogrExternalRing = new OGRLinearRing();
-//         VertexListConstPointerType vertexList = dataNode->GetPolygonExteriorRing()->GetVertexList();
-//
-//         typename VertexListType::ConstIterator vIt = vertexList->Begin();
-//
-//         while (vIt != vertexList->End())
-//         {
-//           OGRPoint ogrPoint;
-//           ogrPoint.setX(vIt.Value()[0]);
-//           ogrPoint.setY(vIt.Value()[1]);
-//           if (DataNodeType::Dimension>2)
-//           {
-//             ogrPoint.setZ(vIt.Value()[2]);
-//           }
-//
-//           ogrExternalRing->addPoint(&ogrPoint);
-//           ++vIt;
-//         }
-//         ogrPolygon->addRing(ogrExternalRing);
-//         delete ogrExternalRing;
-//
-//       // Retrieving internal rings as well
-//         for (typename PolygonListType::Iterator pIt = dataNode->GetPolygonInteriorRings()->Begin();
-//              pIt!=dataNode->GetPolygonInteriorRings()->End();++pIt)
-//         {
-//           OGRLinearRing * ogrInternalRing = new OGRLinearRing();
-//           vertexList = pIt.Get()->GetVertexList();
-//           vIt = vertexList->Begin();
-//
-//           while (vIt != vertexList->End())
-//           {
-//             OGRPoint ogrPoint;
-//             ogrPoint.setX(vIt.Value()[0]);
-//             ogrPoint.setY(vIt.Value()[1]);
-//             if (DataNodeType::Dimension>2)
-//             {
-//               ogrPoint.setZ(vIt.Value()[2]);
-//             }
-//             ogrInternalRing->addPoint(&ogrPoint);
-//             ++vIt;
-//           }
-//           ogrPolygon->addRing(ogrInternalRing);
-//           delete ogrInternalRing;
-//         }
-//         if (ogrCollection == NULL)
-//         {
-//           if (ogrFeatures.empty())
-//           {
-//             itkExceptionMacro(<<"Problem while creating FEATURE_POLYGON: ogrFeatures is not initialized.");
-//           }
-//           ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbPolygon);
-//           ogrFeatures.back()->SetGeometry(ogrPolygon);
-//         }
-//         else
-//         {
-//           ogrCollection->addGeometry(ogrPolygon);
-//         }
-//
-//         delete ogrPolygon;
-//         break;
-//       }
+      case FEATURE_POLYGON:
+      {
+        //Build the ogrObject
+        OGRPolygon * ogrPolygon = new OGRPolygon();
+        OGRLinearRing * ogrExternalRing = new OGRLinearRing();
+        VertexListConstPointerType vertexList = dataNode->GetPolygonExteriorRing()->GetVertexList();
+
+        typename VertexListType::ConstIterator vIt = vertexList->Begin();
+
+        while (vIt != vertexList->End())
+        {
+          OGRPoint ogrPoint;
+          ogrPoint.setX(vIt.Value()[0]);
+          ogrPoint.setY(vIt.Value()[1]);
+          if (DataNodeType::Dimension>2)
+          {
+            ogrPoint.setZ(vIt.Value()[2]);
+          }
+
+          ogrExternalRing->addPoint(&ogrPoint);
+          ++vIt;
+        }
+        ogrPolygon->addRing(ogrExternalRing);
+        delete ogrExternalRing;
+
+      // Retrieving internal rings as well
+        for (typename PolygonListType::Iterator pIt = dataNode->GetPolygonInteriorRings()->Begin();
+             pIt!=dataNode->GetPolygonInteriorRings()->End();++pIt)
+        {
+          OGRLinearRing * ogrInternalRing = new OGRLinearRing();
+          vertexList = pIt.Get()->GetVertexList();
+          vIt = vertexList->Begin();
+
+          while (vIt != vertexList->End())
+          {
+            OGRPoint ogrPoint;
+            ogrPoint.setX(vIt.Value()[0]);
+            ogrPoint.setY(vIt.Value()[1]);
+            if (DataNodeType::Dimension>2)
+            {
+              ogrPoint.setZ(vIt.Value()[2]);
+            }
+            ogrInternalRing->addPoint(&ogrPoint);
+            ++vIt;
+          }
+          ogrPolygon->addRing(ogrInternalRing);
+          delete ogrInternalRing;
+        }
+
+        //Save it in the structure
+        if (ogrCollection == NULL)
+        {
+          OGRFeature *ogrFeature;
+
+          ogrFeature = OGRFeature::CreateFeature( ogrCurrentLayer->GetLayerDefn() );
+          ogrFeature->SetField("Name",dataNode->GetNodeId());
+          ogrFeature->SetGeometry( ogrPolygon );
+
+          if( ogrCurrentLayer->CreateFeature( ogrFeature ) != OGRERR_NONE )
+          {
+            printf( "Failed to create feature in shapefile.\n" );
+            exit( 1 );
+          }
+
+          OGRFeature::DestroyFeature( ogrFeature );
+
+        }
+        else
+        {
+          ogrCollection->addGeometry(ogrPolygon);
+        }
+
+        delete ogrPolygon;
+        break;
+      }
 //       case FEATURE_MULTIPOINT:
 //       {
 //         if (ogrCollection != NULL || ogrFeatures.empty())
