@@ -455,7 +455,6 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
         newContainer = OutputInternalTreeNodeType::New();
         newContainer->Set(newDataNode);
         destination->AddChild(newContainer);
-        ProcessNode((*it),newContainer);
         break;
       }
       case FEATURE_LINE:
@@ -464,7 +463,6 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
         newContainer = OutputInternalTreeNodeType::New();
         newContainer->Set(newDataNode);
         destination->AddChild(newContainer);
-        ProcessNode((*it),newContainer);
         break;
       }
       case FEATURE_POLYGON:
@@ -474,7 +472,6 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
         newContainer = OutputInternalTreeNodeType::New();
         newContainer->Set(newDataNode);
         destination->AddChild(newContainer);
-        ProcessNode((*it),newContainer);
         break;
       }
       case FEATURE_MULTIPOINT:

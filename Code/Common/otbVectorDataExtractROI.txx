@@ -170,7 +170,6 @@ VectorDataExtractROI<TVectorData>
       newContainer->Set(newDataNode);
       destination->AddChild(newContainer);
       ++m_Kept;
-      ProcessNode((*it),newContainer);
       }
       break;
     }
@@ -183,7 +182,6 @@ VectorDataExtractROI<TVectorData>
       newContainer->Set(newDataNode);
       destination->AddChild(newContainer);
       ++m_Kept;
-      ProcessNode((*it),newContainer);
       }
       break;
     }
@@ -197,7 +195,6 @@ VectorDataExtractROI<TVectorData>
       newContainer->Set(newDataNode);
       destination->AddChild(newContainer);
       ++m_Kept;
-      ProcessNode((*it),newContainer);
       }
       break;
     }
