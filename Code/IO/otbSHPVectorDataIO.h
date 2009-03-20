@@ -57,6 +57,7 @@ public:
   typedef TData VectorDataType;
   typedef typename VectorDataType::DataTreeType  DataTreeType;
   typedef typename DataTreeType::TreeNodeType    InternalTreeNodeType;
+  typedef typename InternalTreeNodeType::ChildrenListType        ChildrenListType;
   typedef typename DataTreeType::Pointer         DataTreePointerType;
   typedef typename DataTreeType::ConstPointer    DataTreeConstPointerType;
   typedef typename VectorDataType::DataNodeType  DataNodeType;
@@ -73,8 +74,9 @@ public:
   typedef typename VectorDataType::Pointer       VectorDataPointerType;
   typedef typename VectorDataType::ConstPointer  VectorDataConstPointerType;
   typedef typename Superclass::SpacingType       SpacingType;
-  typedef typename Superclass::PointType       OriginType;
+  typedef typename Superclass::PointType         OriginType;
 
+  typedef std::vector<OGRFeature *>              OGRFeatureVectorType;
   /** */
 
 
@@ -137,12 +139,15 @@ protected:
 
   /** end conversion tools */
 
+  void ProcessNodeWrite(InternalTreeNodeType * source, OGRGeometryCollection * ogrCollection, OGRLayer * ogrCurrentLayer, OGRSpatialReference * oSRS);
+
 private:
   SHPVectorDataIO(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   OGRDataSource * m_DataSource;
 
+  unsigned int m_Kept;
 
   /** Is this necessary ? */
 
