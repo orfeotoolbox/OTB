@@ -414,7 +414,7 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
 
   // For each child
   for(typename InputChildrenListType::iterator it = children.begin(); it!=children.end();++it)
-    {
+  {
     typename OutputInternalTreeNodeType::Pointer newContainer;
 
     // Copy input DataNode info
@@ -425,94 +425,92 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
 
     switch(dataNode->GetNodeType())
     {
-    case ROOT:
-    {
-      newContainer = OutputInternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
-      ProcessNode((*it),newContainer);
-      break;
+      case ROOT:
+      {
+        newContainer = OutputInternalTreeNodeType::New();
+        newContainer->Set(newDataNode);
+        destination->AddChild(newContainer);
+        ProcessNode((*it),newContainer);
+        break;
+      }
+      case DOCUMENT:
+      {
+        newContainer = OutputInternalTreeNodeType::New();
+        newContainer->Set(newDataNode);
+        destination->AddChild(newContainer);
+        ProcessNode((*it),newContainer);
+        break;
+      }
+      case FOLDER:
+      {
+        newContainer = OutputInternalTreeNodeType::New();
+        newContainer->Set(newDataNode);
+        destination->AddChild(newContainer);
+        ProcessNode((*it),newContainer);
+        break;
+      }
+      case FEATURE_POINT:
+      {
+        newDataNode->SetPoint(this->ReprojectPoint(dataNode->GetPoint()));
+        newContainer = OutputInternalTreeNodeType::New();
+        newContainer->Set(newDataNode);
+        destination->AddChild(newContainer);
+        ProcessNode((*it),newContainer);
+        break;
+      }
+      case FEATURE_LINE:
+      {
+        newDataNode->SetLine(this->ReprojectLine(dataNode->GetLine()));
+        newContainer = OutputInternalTreeNodeType::New();
+        newContainer->Set(newDataNode);
+        destination->AddChild(newContainer);
+        ProcessNode((*it),newContainer);
+        break;
+      }
+      case FEATURE_POLYGON:
+      {
+        newDataNode->SetPolygonExteriorRing(this->ReprojectPolygon(dataNode->GetPolygonExteriorRing()));
+        newDataNode->SetPolygonInteriorRings(this->ReprojectPolygonList(dataNode->GetPolygonInteriorRings()));
+        newContainer = OutputInternalTreeNodeType::New();
+        newContainer->Set(newDataNode);
+        destination->AddChild(newContainer);
+        ProcessNode((*it),newContainer);
+        break;
+      }
+      case FEATURE_MULTIPOINT:
+      {
+        newContainer = OutputInternalTreeNodeType::New();
+        newContainer->Set(newDataNode);
+        destination->AddChild(newContainer);
+        ProcessNode((*it),newContainer);
+        break;
+      }
+      case FEATURE_MULTILINE:
+      {
+        newContainer = OutputInternalTreeNodeType::New();
+        newContainer->Set(newDataNode);
+        destination->AddChild(newContainer);
+        ProcessNode((*it),newContainer);
+        break;
+      }
+      case FEATURE_MULTIPOLYGON:
+      {
+        newContainer = OutputInternalTreeNodeType::New();
+        newContainer->Set(newDataNode);
+        destination->AddChild(newContainer);
+        ProcessNode((*it),newContainer);
+        break;
+      }
+      case FEATURE_COLLECTION:
+      {
+        newContainer = OutputInternalTreeNodeType::New();
+        newContainer->Set(newDataNode);
+        destination->AddChild(newContainer);
+        ProcessNode((*it),newContainer);
+        break;
+      }
     }
-    case DOCUMENT:
-    {
-      newContainer = OutputInternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
-      ProcessNode((*it),newContainer);
-      break;
-    }
-    case FOLDER:
-    {
-      newContainer = OutputInternalTreeNodeType::New();
-      newContainer->Set(newDataNode);
-      destination->AddChild(newContainer);
-      ProcessNode((*it),newContainer);
-      break;
-    }
-    case FEATURE_POINT:
-    {
-    newDataNode->SetPoint(this->ReprojectPoint(dataNode->GetPoint()));
-    newContainer = OutputInternalTreeNodeType::New();
-    newContainer->Set(newDataNode);
-    destination->AddChild(newContainer);
-    ProcessNode((*it),newContainer);
-    break;
-    }
-    case FEATURE_LINE:
-    {
-
-    newDataNode->SetLine(this->ReprojectLine(dataNode->GetLine()));
-    newContainer = OutputInternalTreeNodeType::New();
-    newContainer->Set(newDataNode);
-    destination->AddChild(newContainer);
-    ProcessNode((*it),newContainer);
-    break;
-    }
-
-    case FEATURE_POLYGON:
-    {
-    newDataNode->SetPolygonExteriorRing(this->ReprojectPolygon(dataNode->GetPolygonExteriorRing()));
-    newDataNode->SetPolygonInteriorRings(this->ReprojectPolygonList(dataNode->GetPolygonInteriorRings()));
-    newContainer = OutputInternalTreeNodeType::New();
-    newContainer->Set(newDataNode);
-    destination->AddChild(newContainer);
-    ProcessNode((*it),newContainer);
-    break;
-    }
-    case FEATURE_MULTIPOINT:
-    {
-    newContainer = OutputInternalTreeNodeType::New();
-    newContainer->Set(newDataNode);
-    destination->AddChild(newContainer);
-    ProcessNode((*it),newContainer);
-    break;
-    }
-    case FEATURE_MULTILINE:
-    {
-    newContainer = OutputInternalTreeNodeType::New();
-    newContainer->Set(newDataNode);
-    destination->AddChild(newContainer);
-    ProcessNode((*it),newContainer);
-    break;
-    }
-    case FEATURE_MULTIPOLYGON:
-    {
-    newContainer = OutputInternalTreeNodeType::New();
-    newContainer->Set(newDataNode);
-    destination->AddChild(newContainer);
-    ProcessNode((*it),newContainer);
-    break;
-    }
-    case FEATURE_COLLECTION:
-    {
-    newContainer = OutputInternalTreeNodeType::New();
-    newContainer->Set(newDataNode);
-    destination->AddChild(newContainer);
-    ProcessNode((*it),newContainer);
-    break;
-    }
-    }
-    }
+  }
 }
 
 
