@@ -775,6 +775,9 @@ void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
 //     }
 //   ogrFeatures.clear();
 
+  OGRDataSource::DestroyDataSource( m_DataSource );
+
+
   chrono.Stop();
   std::cout<<"SHP VectorDataIO: file saved in "<<chrono.GetMeanTime()<<" seconds. (" << m_Kept << " elements)"<<std::endl;
 
@@ -1005,50 +1008,102 @@ template<class TData>
         delete ogrPolygon;
         break;
       }
-//       case FEATURE_MULTIPOINT:
-//       {
-//         if (ogrCollection != NULL || ogrFeatures.empty())
-//         {
-//           itkExceptionMacro(<<"Problem while creating multipoint.");
-//         }
-//         ogrCollection = new OGRMultiPoint();
-//         ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbMultiPoint);
-//         ProcessNodeWrite(*it, ogrCollection, ogrCurrentLayer, oSRS);
-//         break;
-//       }
-//       case FEATURE_MULTILINE:
-//       {
-//         if (ogrCollection != NULL || ogrFeatures.empty())
-//         {
-//           itkExceptionMacro(<<"Problem while creating multiline.");
-//         }
-//         ogrCollection = new OGRMultiLineString();
-//         ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbMultiLineString);
-//         ProcessNodeWrite(*it, ogrCollection, ogrCurrentLayer, oSRS);
-//         break;
-//       }
-//       case FEATURE_MULTIPOLYGON:
-//       {
-//         if (ogrCollection != NULL || ogrFeatures.empty())
-//         {
-//           itkExceptionMacro(<<"Problem while creating multipolygon.");
-//         }
-//         ogrCollection = new OGRMultiPolygon();
-//         ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbMultiPolygon);
-//         ProcessNodeWrite(*it, ogrCollection, ogrCurrentLayer, oSRS);
-//         break;
-//       }
-//       case FEATURE_COLLECTION:
-//       {
-//         if (ogrCollection != NULL || ogrFeatures.empty())
-//         {
-//           itkExceptionMacro(<<"Problem while creating collection.");
-//         }
-//         ogrCollection = new OGRMultiPoint();
-//         ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbGeometryCollection);
-//         ProcessNodeWrite(*it, ogrCollection, ogrCurrentLayer, oSRS);
-//         break;
-//       }
+      case FEATURE_MULTIPOINT:
+      {
+        if (ogrCollection != NULL)
+        {
+          itkExceptionMacro(<<"Problem while creating multipoint.");
+        }
+        ogrCollection = new OGRMultiPoint();
+
+        OGRFeature *ogrFeature;
+
+        ogrFeature = OGRFeature::CreateFeature( ogrCurrentLayer->GetLayerDefn() );
+        ogrFeature->SetField("Name",dataNode->GetNodeId());
+        ogrFeature->GetDefnRef()->SetGeomType(wkbMultiPoint);
+        ogrFeature->SetGeometry(ogrCollection  );
+
+        if( ogrCurrentLayer->CreateFeature( ogrFeature ) != OGRERR_NONE )
+        {
+          printf( "Failed to create feature in shapefile.\n" );
+          exit( 1 );
+        }
+
+        ProcessNodeWrite(*it, ogrCollection, ogrCurrentLayer, oSRS);
+        break;
+      }
+      case FEATURE_MULTILINE:
+      {
+        if (ogrCollection != NULL)
+        {
+          itkExceptionMacro(<<"Problem while creating multiline.");
+        }
+        ogrCollection = new OGRMultiLineString();
+
+        OGRFeature *ogrFeature;
+
+        ogrFeature = OGRFeature::CreateFeature( ogrCurrentLayer->GetLayerDefn() );
+        ogrFeature->SetField("Name",dataNode->GetNodeId());
+        ogrFeature->GetDefnRef()->SetGeomType(wkbMultiLineString);
+        ogrFeature->SetGeometry(ogrCollection  );
+
+        if( ogrCurrentLayer->CreateFeature( ogrFeature ) != OGRERR_NONE )
+        {
+          printf( "Failed to create feature in shapefile.\n" );
+          exit( 1 );
+        }
+
+        ProcessNodeWrite(*it, ogrCollection, ogrCurrentLayer, oSRS);
+        break;
+      }
+      case FEATURE_MULTIPOLYGON:
+      {
+        if (ogrCollection != NULL)
+        {
+          itkExceptionMacro(<<"Problem while creating multipolygon.");
+        }
+        ogrCollection = new OGRMultiPolygon();
+
+        OGRFeature *ogrFeature;
+
+        ogrFeature = OGRFeature::CreateFeature( ogrCurrentLayer->GetLayerDefn() );
+        ogrFeature->SetField("Name",dataNode->GetNodeId());
+        ogrFeature->GetDefnRef()->SetGeomType(wkbMultiPolygon);
+        ogrFeature->SetGeometry(ogrCollection  );
+
+        if( ogrCurrentLayer->CreateFeature( ogrFeature ) != OGRERR_NONE )
+        {
+          printf( "Failed to create feature in shapefile.\n" );
+          exit( 1 );
+        }
+
+        ProcessNodeWrite(*it, ogrCollection, ogrCurrentLayer, oSRS);
+        break;
+      }
+      case FEATURE_COLLECTION:
+      {
+        if (ogrCollection != NULL)
+        {
+          itkExceptionMacro(<<"Problem while creating collection.");
+        }
+        ogrCollection = new OGRMultiPoint();//Why is is a multipoint?
+
+        OGRFeature *ogrFeature;
+
+        ogrFeature = OGRFeature::CreateFeature( ogrCurrentLayer->GetLayerDefn() );
+        ogrFeature->SetField("Name",dataNode->GetNodeId());
+        ogrFeature->GetDefnRef()->SetGeomType(wkbGeometryCollection);
+        ogrFeature->SetGeometry(ogrCollection  );
+
+        if( ogrCurrentLayer->CreateFeature( ogrFeature ) != OGRERR_NONE )
+        {
+          printf( "Failed to create feature in shapefile.\n" );
+          exit( 1 );
+        }
+
+        ProcessNodeWrite(*it, ogrCollection, ogrCurrentLayer, oSRS);
+        break;
+      }
     }
   }
 }
