@@ -76,7 +76,6 @@ public:
   typedef typename Superclass::SpacingType       SpacingType;
   typedef typename Superclass::PointType         OriginType;
 
-  typedef std::vector<OGRFeature *>              OGRFeatureVectorType;
   /** */
 
 

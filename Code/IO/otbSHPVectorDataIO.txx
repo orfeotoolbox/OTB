@@ -745,8 +745,8 @@ void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
   OGRGeometryCollection * ogrCollection = NULL;
   // OGRGeometry * ogrCurrentGeometry = NULL;
 
-  TreeIteratorType it(tree);
-  it.GoToBegin();
+//   TreeIteratorType it(tree);
+//   it.GoToBegin();
   // Get the input tree root
   InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(tree->GetRoot());
   ProcessNodeWrite(inputRoot, ogrCollection, ogrCurrentLayer, oSRS);
@@ -779,7 +779,7 @@ void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
 
 
   chrono.Stop();
-  std::cout<<"SHP VectorDataIO: file saved in "<<chrono.GetMeanTime()<<" seconds. (" << m_Kept << " elements)"<<std::endl;
+  std::cout<<"SHPVectorDataIO: file saved in "<<chrono.GetMeanTime()<<" seconds. (" << m_Kept << " elements)"<<std::endl;
 
   otbMsgDevMacro( <<" SHPVectorDataIO::Write()  ");
 }
