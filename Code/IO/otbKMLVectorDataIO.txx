@@ -36,6 +36,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "ossimOgcWktTranslator.h"
 #include "otbMetaDataKey.h"
 
+#include "itkTimeProbe.h"
+
 #include "ogrsf_frmts.h"
 
 using kmldom::ElementPtr;
@@ -546,7 +548,8 @@ bool KMLVectorDataIO<TData>::CanWriteFile( const char* filename )
 template<class TData>
 void KMLVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
 {
-
+  itk::TimeProbe chrono;
+  chrono.Start();
   // Retrieve data required for georeferencing
 
   std::string projectionRefWkt = data->GetProjectionRef();
@@ -559,6 +562,8 @@ void KMLVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
                     << "\n We assume that you know what you're doing and proceed to save the KML file.");
   }
   delete oSRS;
+
+  m_Kept = 0;
 
   //Create the factory
   KmlFactory* factory = KmlFactory::GetFactory();
@@ -581,96 +586,78 @@ void KMLVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
   DocumentPtr currentDocument = NULL;
   FolderPtr currentFolder = NULL;
   MultiGeometryPtr currentMultiGeometry = NULL;
-  PolygonPtr currentPolygon = NULL;
-  OuterBoundaryIsPtr outerboundaryis = NULL;
-  InnerBoundaryIsPtr innerboundaryis = NULL;
 
 
-  // Note that we force a precise structure when we write a kml file.
+  InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(tree->GetRoot());
+  ProcessNodeWrite(inputRoot, factory, kml, currentDocument, currentFolder, currentMultiGeometry);
+
+  // Serialize to XML
+  std::string xml = kmldom::SerializePretty(kml);
+
+  // Write it
+  kmlbase::File::WriteStringToFile(xml,this->m_FileName);
+
+  // Eventually print it
+  //std::cout << xml;
+
+  chrono.Stop();
+  std::cout<<"KMLVectorDataIO: file saved in "<<chrono.GetMeanTime()<<" seconds. (" << m_Kept << " elements)"<<std::endl;
+
+  otbMsgDevMacro( <<" KMLVectorDataIO::Write()  ");
+
+}
+
+template<class TData>
+    void KMLVectorDataIO<TData>::ProcessNodeWrite(InternalTreeNodeType * source, KmlFactory* factory, KmlPtr kml, DocumentPtr currentDocument, FolderPtr currentFolder, MultiGeometryPtr currentMultiGeometry)
+{
+   // Note that we force a precise structure when we write a kml file.
   // We will necessary have a <document> that will contain a <folder>.
   // And in a folder there automatically will be one or several <placemark>.
-  while (!it.IsAtEnd())
+   // Get the children list from the input node
+  ChildrenListType children = source->GetChildrenList();
+//   std::cout << "Found " <<  children.size() << " children" << std::endl;
+
+  // For each child
+  for(typename ChildrenListType::iterator it = children.begin(); it!=children.end(); ++it)
   {
-    switch (it.Get()->GetNodeType())
-    {
-    case ROOT:
-    {
-      break;
-    }
-    case DOCUMENT:
-    {
-      DocumentPtr document = factory->CreateDocument();
-      if (it.Get()->HasField("name"))
-      {
-        std::string fieldname = it.Get()->GetField("name");
-        document->set_name(fieldname);
-      }
-      kml->set_feature(document);
-      currentDocument = document;
-      break;
-    }
-    case FOLDER:
-    {
-      FolderPtr folder = factory->CreateFolder();
-      std::string fieldname = it.Get()->GetField("name");
-      folder->set_name(fieldname);
-      currentDocument->add_feature(folder);
-      currentFolder = folder;
-      break;
-    }
-    case FEATURE_POINT:
-    {
-      // Create <coordinates>
-      CoordinatesPtr coordinates = factory->CreateCoordinates();
-      PointType pointCoord = it.Get()->GetPoint();
-      if (DataNodeType::Dimension>2)
-      {
-        coordinates->add_latlngalt(pointCoord[1],pointCoord[0],pointCoord[2]);
-      }
-      else
-      {
-        coordinates->add_latlng(pointCoord[1],pointCoord[0]);
-      }
+    DataNodePointerType dataNode = (*it)->Get();
+//     std::cout << "Processing " << dataNode->GetNodeType() << " with Id: " << dataNode->GetNodeId() << std::endl;
 
-      // Create <Point> and give it <coordinates>.
-      PointPtr point = factory->CreatePoint();
-      point->set_coordinates(coordinates);
-
-      if (currentMultiGeometry != NULL)
+    ++m_Kept;
+    switch (dataNode->GetNodeType())
+    {
+      case ROOT:
       {
-        currentMultiGeometry->add_geometry(point);
+        break;
       }
-      else
+      case DOCUMENT:
       {
-
-        PlacemarkPtr placemark = factory->CreatePlacemark();
-        placemark->set_geometry(point);
-        if (currentFolder!= NULL)
+        DocumentPtr document = factory->CreateDocument();
+        if (dataNode->HasField("name"))
         {
-          currentFolder->add_feature(placemark);
+          std::string fieldname = dataNode->GetField("name");
+          document->set_name(fieldname);
         }
-        else
-        {
-          currentDocument->add_feature(placemark);
-        }
-
+        kml->set_feature(document);
+        currentDocument = document;
+        ProcessNodeWrite(*it, factory, kml, currentDocument, currentFolder, currentMultiGeometry);
+        break;
       }
-      break;
-    }
-    case FEATURE_LINE:
-    {
-
-      VertexListConstPointerType vertexList = it.Get()->GetLine()->GetVertexList();
-
-      // Create <coordinates>
-      CoordinatesPtr coordinates = factory->CreateCoordinates();
-      LineStringPtr line = factory->CreateLineString();
-
-      typename VertexListType::ConstIterator vIt = vertexList->Begin();
-
-      while (vIt != vertexList->End())
+      case FOLDER:
       {
-        VertexType pointCoord = vIt.Value();
+        FolderPtr folder = factory->CreateFolder();
+        std::string fieldname = dataNode->GetField("name");
+        folder->set_name(fieldname);
+        currentDocument->add_feature(folder);
+        currentFolder = folder;
+        ProcessNodeWrite(*it, factory, kml, currentDocument, currentFolder, currentMultiGeometry);
+        break;
+      }
+      case FEATURE_POINT:
+      {
+      // Create <coordinates>
+        CoordinatesPtr coordinates = factory->CreateCoordinates();
+        PointType pointCoord = dataNode->GetPoint();
         if (DataNodeType::Dimension>2)
         {
           coordinates->add_latlngalt(pointCoord[1],pointCoord[0],pointCoord[2]);
@@ -679,94 +666,102 @@ void KMLVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
         {
           coordinates->add_latlng(pointCoord[1],pointCoord[0]);
         }
-        line->set_coordinates(coordinates);
-        ++vIt;
-      }
 
-      if (currentMultiGeometry != NULL)
-      {
-        currentMultiGeometry->add_geometry(line);
-      }
-      else
-      {
-        PlacemarkPtr placemark = factory->CreatePlacemark();
-        placemark->set_geometry(line);
-        if (currentFolder!= NULL)
+      // Create <Point> and give it <coordinates>.
+        PointPtr point = factory->CreatePoint();
+        point->set_coordinates(coordinates);
+
+        if (currentMultiGeometry != NULL)
         {
-          currentFolder->add_feature(placemark);
+          currentMultiGeometry->add_geometry(point);
         }
         else
         {
-          currentDocument->add_feature(placemark);
+
+          PlacemarkPtr placemark = factory->CreatePlacemark();
+          placemark->set_geometry(point);
+          if (currentFolder!= NULL)
+          {
+            currentFolder->add_feature(placemark);
+          }
+          else
+          {
+            currentDocument->add_feature(placemark);
+          }
+
         }
+        break;
       }
-      break;
-    }
-    case FEATURE_POLYGON:
-    {//TODO refine the solution of drawing the polygon 1m above the ground
-      // In a polygon we just can find any LinearRings
-      LinearRingPtr line = factory->CreateLinearRing();
-      PolygonPtr polygon = factory->CreatePolygon();
-
-      polygon->set_extrude(true);
-      polygon->set_altitudemode(1);//ALTITUDEMODE_RELATIVETOGROUND
-
-      CoordinatesPtr coordinates = factory->CreateCoordinates();
-      OuterBoundaryIsPtr outerboundaryis = factory->CreateOuterBoundaryIs();
-      InnerBoundaryIsPtr innerboundaryis = factory->CreateInnerBoundaryIs();
-
-      VertexListConstPointerType vertexList = it.Get()->GetPolygonExteriorRing()->GetVertexList();
-
-      typename VertexListType::ConstIterator vIt = vertexList->Begin();
-
-      if (vIt == vertexList->End())
-      {
-        itkExceptionMacro(<<"Polygon is empty");
-      }
-
-      while (vIt != vertexList->End())
-      {
-        VertexType pointCoord = vIt.Value();
-        if (DataNodeType::Dimension>2)
-        {
-          coordinates->add_latlngalt(pointCoord[1],pointCoord[0],pointCoord[2]+1);//Drawing polygon 1m above ground to avoid z-buffer issues
-        }
-        else
-        {
-          coordinates->add_latlngalt(pointCoord[1],pointCoord[0],1);//Drawing polygon 1m above ground to avoid z-buffer issues
-        }
-
-        line->set_coordinates(coordinates);
-        ++vIt;
-      }
-
-      //Adding the first point again to close the polygon
-      vIt = vertexList->Begin();
-      VertexType pointCoord = vIt.Value();
-      if (DataNodeType::Dimension>2)
-      {
-        coordinates->add_latlngalt(pointCoord[1],pointCoord[0],pointCoord[2]+1);//Drawing polygon 1m above ground to avoid z-buffer issues
-      }
-      else
-      {
-        coordinates->add_latlngalt(pointCoord[1],pointCoord[0],1);//Drawing polygon 1m above ground to avoid z-buffer issues
-      }
-      line->set_coordinates(coordinates);
-
-      outerboundaryis->set_linearring(line);
-      polygon->set_outerboundaryis(outerboundaryis);
-
-      // Retrieving internal rings as well
-      for (typename PolygonListType::Iterator pIt = it.Get()->GetPolygonInteriorRings()->Begin();
-           pIt!=it.Get()->GetPolygonInteriorRings()->End();++pIt)
+      case FEATURE_LINE:
       {
 
-        vertexList = pIt.Get()->GetVertexList();
-        vIt = vertexList->Begin();
+        VertexListConstPointerType vertexList = dataNode->GetLine()->GetVertexList();
+
+      // Create <coordinates>
+        CoordinatesPtr coordinates = factory->CreateCoordinates();
+        LineStringPtr line = factory->CreateLineString();
+
+        typename VertexListType::ConstIterator vIt = vertexList->Begin();
 
         while (vIt != vertexList->End())
         {
-          vIt = vertexList->Begin();
+          VertexType pointCoord = vIt.Value();
+          if (DataNodeType::Dimension>2)
+          {
+            coordinates->add_latlngalt(pointCoord[1],pointCoord[0],pointCoord[2]);
+          }
+          else
+          {
+            coordinates->add_latlng(pointCoord[1],pointCoord[0]);
+          }
+          line->set_coordinates(coordinates);
+          ++vIt;
+        }
+
+        if (currentMultiGeometry != NULL)
+        {
+          currentMultiGeometry->add_geometry(line);
+        }
+        else
+        {
+          PlacemarkPtr placemark = factory->CreatePlacemark();
+          placemark->set_geometry(line);
+          if (currentFolder!= NULL)
+          {
+            currentFolder->add_feature(placemark);
+          }
+          else
+          {
+            currentDocument->add_feature(placemark);
+          }
+        }
+        break;
+      }
+      case FEATURE_POLYGON:
+      {//TODO refine the solution of drawing the polygon 1m above the ground
+      // In a polygon we just can find any LinearRings
+
+        LinearRingPtr line = factory->CreateLinearRing();
+        PolygonPtr polygon = factory->CreatePolygon();
+
+        polygon->set_extrude(true);
+        polygon->set_altitudemode(1);//ALTITUDEMODE_RELATIVETOGROUND
+
+        CoordinatesPtr coordinates = factory->CreateCoordinates();
+        OuterBoundaryIsPtr outerboundaryis = factory->CreateOuterBoundaryIs();
+        InnerBoundaryIsPtr innerboundaryis = factory->CreateInnerBoundaryIs();
+
+        VertexListConstPointerType vertexList = dataNode->GetPolygonExteriorRing()->GetVertexList();
+
+        typename VertexListType::ConstIterator vIt = vertexList->Begin();
+
+        if (vIt == vertexList->End())
+        {
+          itkExceptionMacro(<<"Polygon is empty");
+        }
+
+        while (vIt != vertexList->End())
+        {
           VertexType pointCoord = vIt.Value();
           if (DataNodeType::Dimension>2)
           {
@@ -781,7 +776,7 @@ void KMLVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
           ++vIt;
         }
 
-        //Adding the first point again to close the polygon
+      //Adding the first point again to close the polygon
         vIt = vertexList->Begin();
         VertexType pointCoord = vIt.Value();
         if (DataNodeType::Dimension>2)
@@ -792,25 +787,84 @@ void KMLVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
         {
           coordinates->add_latlngalt(pointCoord[1],pointCoord[0],1);//Drawing polygon 1m above ground to avoid z-buffer issues
         }
-
         line->set_coordinates(coordinates);
-        ++vIt;
+
+        outerboundaryis->set_linearring(line);
+        polygon->set_outerboundaryis(outerboundaryis);
+
+      // Retrieving internal rings as well
+        for (typename PolygonListType::Iterator pIt = dataNode->GetPolygonInteriorRings()->Begin();
+             pIt!=dataNode->GetPolygonInteriorRings()->End();++pIt)
+        {
+
+          vertexList = pIt.Get()->GetVertexList();
+          vIt = vertexList->Begin();
+
+          while (vIt != vertexList->End())
+          {
+            vIt = vertexList->Begin();
+            VertexType pointCoord = vIt.Value();
+            if (DataNodeType::Dimension>2)
+            {
+              coordinates->add_latlngalt(pointCoord[1],pointCoord[0],pointCoord[2]+1);//Drawing polygon 1m above ground to avoid z-buffer issues
+            }
+            else
+            {
+              coordinates->add_latlngalt(pointCoord[1],pointCoord[0],1);//Drawing polygon 1m above ground to avoid z-buffer issues
+            }
+
+            line->set_coordinates(coordinates);
+            ++vIt;
+          }
+
+        //Adding the first point again to close the polygon
+          vIt = vertexList->Begin();
+          VertexType pointCoord = vIt.Value();
+          if (DataNodeType::Dimension>2)
+          {
+            coordinates->add_latlngalt(pointCoord[1],pointCoord[0],pointCoord[2]+1);//Drawing polygon 1m above ground to avoid z-buffer issues
+          }
+          else
+          {
+            coordinates->add_latlngalt(pointCoord[1],pointCoord[0],1);//Drawing polygon 1m above ground to avoid z-buffer issues
+          }
+
+          line->set_coordinates(coordinates);
+          ++vIt;
 
 
-        innerboundaryis->set_linearring(line);
-        polygon->add_innerboundaryis(innerboundaryis);
-        innerboundaryis->clear_linearring();
+          innerboundaryis->set_linearring(line);
+          polygon->add_innerboundaryis(innerboundaryis);
+          innerboundaryis->clear_linearring();
+        }
+
+
+        if (currentMultiGeometry != NULL)
+        {
+          currentMultiGeometry->add_geometry(polygon);
+        }
+        else
+        {
+          PlacemarkPtr placemark = factory->CreatePlacemark();
+          placemark->set_geometry(polygon);
+          if (currentFolder!= NULL)
+          {
+            currentFolder->add_feature(placemark);
+          }
+          else
+          {
+            currentDocument->add_feature(placemark);
+          }
+        }
+        break;
       }
-
-
-      if (currentMultiGeometry != NULL)
+    // MultiGeometry
+      case FEATURE_COLLECTION:
       {
-        currentMultiGeometry->add_geometry(polygon);
-      }
-      else
-      {
+        MultiGeometryPtr multi = factory->CreateMultiGeometry();
+        currentMultiGeometry = multi;
         PlacemarkPtr placemark = factory->CreatePlacemark();
-        placemark->set_geometry(polygon);
+        placemark->set_geometry(multi);
         if (currentFolder!= NULL)
         {
           currentFolder->add_feature(placemark);
@@ -819,45 +873,17 @@ void KMLVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
         {
           currentDocument->add_feature(placemark);
         }
+        ProcessNodeWrite(*it, factory, kml, currentDocument, currentFolder, currentMultiGeometry);
+        break;
       }
-      break;
-    }
-    // MultiGeometry
-    case FEATURE_COLLECTION:
-    {
-      MultiGeometryPtr multi = factory->CreateMultiGeometry();
-      currentMultiGeometry = multi;
-      PlacemarkPtr placemark = factory->CreatePlacemark();
-      placemark->set_geometry(multi);
-      if (currentFolder!= NULL)
-      {
-        currentFolder->add_feature(placemark);
-      }
-      else
-      {
-        currentDocument->add_feature(placemark);
-      }
-      break;
-    }
-    default :
-      break;
+      default :
+        break;
 
     } // end switch
-    ++it;
-  } // end while
-
-  // Serialize to XML
-  std::string xml = kmldom::SerializePretty(kml);
-
-  // Write it
-  kmlbase::File::WriteStringToFile(xml,this->m_FileName);
-
-  // Eventually print it
-  //std::cout << xml;
-
-  otbMsgDevMacro( <<" KMLVectorDataIO::Write()  ");
+  } // end for
 
 }
+
 
 } // end namespace otb
 
