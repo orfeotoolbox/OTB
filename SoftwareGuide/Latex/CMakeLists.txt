@@ -157,8 +157,8 @@ IF(LATEX_COMPILER)
     IF (TEX4HT_COMPILER)
       CONFIGURE_FILE(${SoftwareGuide_SOURCE_DIR}/Tex4htWrapper.sh.in
                    ${SoftwareGuide_BINARY_DIR}/Tex4htWrapper.sh)
-      SET (LATEX_WRAPPER1 ${SoftwareGuide_BINARY_DIR}/Tex4htWrapper.sh)
-      SET (LATEX_WRAPPER2 "")
+      SET (TEX4HT_WRAPPER1 ${SoftwareGuide_BINARY_DIR}/Tex4htWrapper.sh)
+      SET (TEX4HT_WRAPPER2 "")
     ENDIF (TEX4HT_COMPILER)
   ENDIF (NOT UNIX)
 
