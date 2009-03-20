@@ -115,6 +115,10 @@ public:
   /** Get the generated default rendering function */
   itkGetObjectMacro(DefaultRenderingFunction,RenderingFunctionType);
 
+
+  /** Get a hook on the resample filter to report progress */
+  itkGetObjectMacro(Resampler,ResampleFilterType);
+
 protected:
   /** Constructor */
   ImageLayerGenerator();
@@ -125,7 +129,7 @@ protected:
 
   /** Generate the layer information */
   virtual void GenerateLayerInformation();
- 
+
   /** Generate the quicklook (this method is only called if
    * QuicklookGeneration is on).
    */

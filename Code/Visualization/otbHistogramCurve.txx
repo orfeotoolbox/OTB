@@ -123,8 +123,8 @@ HistogramCurve<THistogram>
   m_Minimum[0] = it.GetMeasurementVector()[0];
   m_Minimum[1] = it.GetFrequency();
   m_Maximum = m_Minimum;
-
-  double mean  = it.GetFrequency();
+  
+  double mean= it.GetFrequency();
   double squaremean = it.GetFrequency()*it.GetFrequency();
   unsigned int nbSamples = 1;
   double first = it.GetMeasurementVector()[0];

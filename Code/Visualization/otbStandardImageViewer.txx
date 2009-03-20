@@ -30,10 +30,7 @@ StandardImageViewer<TImage,TVectorData>
 ::StandardImageViewer() : m_Label("Default label"), m_Image(), m_VectorData(),
                        m_ImageLayer(), m_RenderingModel(),m_PixelDescriptionModel(),
                        m_View(), m_PixelDescriptionView(), m_CurveWidget(),
-                       m_Controller(), m_RenderingFunction(), m_Window(),
-                       m_FullGroup(), m_SideGroup(), m_Tile(),
-                       m_Width(800), m_Height(600),
-                       m_SideBarWidth(200), m_BottomBarHeight(50)
+                       m_Controller(), m_RenderingFunction()
 {
   // Build a new rendering model
   m_RenderingModel = RenderingModelType::New();
@@ -91,38 +88,25 @@ StandardImageViewer<TImage,TVectorData>
   arrowKeyMoveHandler->SetView(m_View);
   m_Controller->AddActionHandler(arrowKeyMoveHandler);
 
-  // Build the window
-  m_Window = new Fl_Window(0,0,m_Width,m_Height);
-  m_Tile = new Fl_Tile(0,0,m_Width,m_Height);
-  m_Window->add(m_Tile);
-  m_Window->resizable(m_Tile);
+  
+  m_FullGroup->add(m_View->GetFullWidget());
 
-  m_Tile->add(m_View->GetFullWidget());
-  //   m_Tile->resizable(m_View->GetFullWidget());
+  m_QuicklookGroup->add(m_View->GetScrollWidget());
+  m_ZoomGroup->add(m_View->GetZoomWidget());
+  m_HistogramsGroup->add(m_CurveWidget);
+  m_PixelInformationGroup->add(m_PixelDescriptionView->GetPixelDescriptionWidget());
 
-  m_Tile->add(m_View->GetScrollWidget());
-  m_Tile->add(m_View->GetZoomWidget());
-  m_Tile->add(m_CurveWidget);
-  m_Tile->add(m_PixelDescriptionView->GetPixelDescriptionWidget());
-
-  m_View->GetZoomWidget()->resize(m_Width-m_SideBarWidth,(m_Height-m_BottomBarHeight)/3,m_SideBarWidth,(m_Height-m_BottomBarHeight)/3);
-  m_View->GetFullWidget()->resize(0,0,m_Width-m_SideBarWidth,m_Height-m_BottomBarHeight);
-  m_View->GetScrollWidget()->resize(m_Width-m_SideBarWidth,0,m_SideBarWidth,(m_Height-m_BottomBarHeight)/3);
-  m_CurveWidget->resize(m_Width-m_SideBarWidth,(m_Height-m_BottomBarHeight)*2/3,m_SideBarWidth,(m_Height-m_BottomBarHeight)/3);
-  m_PixelDescriptionView->GetPixelDescriptionWidget()->resize(0,m_Height-m_BottomBarHeight,m_Width,m_BottomBarHeight);
+  m_View->GetZoomWidget()->resize(m_ZoomGroup->x(),m_ZoomGroup->y(),m_ZoomGroup->w(),m_ZoomGroup->h());
+  m_View->GetFullWidget()->resize(m_FullGroup->x(),m_FullGroup->y(),m_FullGroup->w(),m_FullGroup->h());
+  m_View->GetScrollWidget()->resize(m_QuicklookGroup->x(),m_QuicklookGroup->y(),m_QuicklookGroup->w(),m_QuicklookGroup->h());
+  m_CurveWidget->resize(m_HistogramsGroup->x(),m_HistogramsGroup->y(),m_HistogramsGroup->w(),m_HistogramsGroup->h());
+  m_PixelDescriptionView->GetPixelDescriptionWidget()->resize(m_PixelInformationGroup->x(),m_PixelInformationGroup->y(),m_PixelInformationGroup->w(),m_PixelInformationGroup->h());
 }
 
 template <class TImage,class TVectorData>
 StandardImageViewer<TImage,TVectorData>
 ::~StandardImageViewer()
-{
-  m_Tile->remove(m_View->GetScrollWidget());
-  m_Tile->remove(m_View->GetFullWidget());
-  m_Tile->remove(m_View->GetZoomWidget());
-  m_Tile->remove(m_CurveWidget);
-  m_Tile->remove(m_PixelDescriptionView->GetPixelDescriptionWidget());
-  delete m_Window;
-}
+{}
 
 template <class TImage,class TVectorData>
 void
@@ -138,12 +122,31 @@ StandardImageViewer<TImage,TVectorData>
   // Update image info for further use
   m_Image->UpdateOutputInformation();
 
+
+  typename VectorDataProjectionFilterType::Pointer vproj;
+  typename VectorDataExtractROIType::Pointer vdextract;
+
+  // Colors
+  typename HistogramCurveType::ColorType red,green,blue;
+  red.Fill(0);
+  red[0]=1.;
+  red[3]=0.5;
+
+  green.Fill(0);
+  green[1]=1.;
+  green[3]=0.5;
+
+  blue.Fill(0);
+  blue[2]=1.;
+  blue[3]=0.5;
+
+
   // If there is a VectorData
   if(m_VectorData.IsNotNull())
     {
     // Extract The part of the VectorData that actually overlaps with
     // the image extent
-    typename VectorDataExtractROIType::Pointer vdextract = VectorDataExtractROIType::New();
+    vdextract = VectorDataExtractROIType::New();
     vdextract->SetInput(m_VectorData);
 
     // Find the geographic region of interest
@@ -175,11 +178,6 @@ StandardImageViewer<TImage,TVectorData>
     rsSize[0]=vcl_abs(pul[0]-plr[0]);
     rsSize[1]=vcl_abs(pul[1]-plr[1]);
 
-//     rsOrigin[0]=1940;
-//     rsOrigin[1]=1120;
-//     rsSize[0]=640;
-//     rsSize[1]=580;
-
     rsRegion.SetOrigin(rsOrigin);
     rsRegion.SetSize(rsSize);
     rsRegion.SetRegionProjection(m_Image->GetProjectionRef());
@@ -190,27 +188,28 @@ StandardImageViewer<TImage,TVectorData>
     vdextract->SetDEMDirectory(m_DEMDirectory);
 
     // Reproject VectorData in image projection
-     typename VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
-     vproj->SetInput(vdextract->GetOutput());
-     vproj->SetOutputKeywordList(m_Image->GetImageKeywordlist());
-     vproj->SetOutputOrigin(m_Image->GetOrigin());
-     vproj->SetOutputSpacing(m_Image->GetSpacing());
-     vproj->SetDEMDirectory(m_DEMDirectory);
-     vproj->Update();
-
+    vproj = VectorDataProjectionFilterType::New();
+    vproj->SetInput(vdextract->GetOutput());
+    vproj->SetOutputKeywordList(m_Image->GetImageKeywordlist());
+    vproj->SetOutputOrigin(m_Image->GetOrigin());
+    vproj->SetOutputSpacing(m_Image->GetSpacing());
+    vproj->SetDEMDirectory(m_DEMDirectory);
+    vproj->Update();
+    
      // Create a VectorData gl component
      typename VectorDataGlComponentType::Pointer vgl = VectorDataGlComponentType::New();
      vgl->SetVectorData(vproj->GetOutput());
-
+     vgl->SetColor(blue);
      // Add it to the image view
       m_View->GetScrollWidget()->AddGlComponent(vgl);
       m_View->GetFullWidget()->AddGlComponent(vgl);
       m_View->GetZoomWidget()->AddGlComponent(vgl);
     }
-
+  
   // Generate the layer
  ImageLayerGeneratorPointerType generator = ImageLayerGeneratorType::New();
   generator->SetImage(m_Image);
+  FltkFilterWatcher qlwatcher(generator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
   generator->GenerateLayer();
   m_ImageLayer = generator->GetLayer();
   m_RenderingFunction = generator->GetDefaultRenderingFunction();
@@ -233,19 +232,6 @@ StandardImageViewer<TImage,TVectorData>
   m_RenderingModel->Update();
 
   // adding histograms rendering
-  typename HistogramCurveType::ColorType red,green,blue;
-  red.Fill(0);
-  red[0]=1.;
-  red[3]=0.5;
-
-  green.Fill(0);
-  green[1]=1.;
-  green[3]=0.5;
-
-  blue.Fill(0);
-  blue[2]=1.;
-  blue[3]=0.5;
-
   typename HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
   rhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(m_RenderingFunction->GetRedChannelIndex()));
   rhistogram->SetHistogramColor(red);

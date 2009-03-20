@@ -42,9 +42,7 @@
 #include "otbVectorDataExtractROI.h"
 #include "otbRemoteSensingRegion.h"
 
-
-#include <Fl/Fl_Tile.H>
-#include <Fl/Fl_Group.H>
+#include "otbImageWidgetPackedManager.h"
 
 namespace otb
 {
@@ -56,7 +54,7 @@ namespace otb
 
 template <class TImage, class TVectorData = VectorData<double> >
 class StandardImageViewer
-  : public itk::Object
+  : public itk::Object, public ImageWidgetPackedManager
 {
 public:
   /** Standard class typedefs */
@@ -211,25 +209,6 @@ private:
 
   /** Path to the DEMDirectory (used if a VectorData is rendered */
   std::string m_DEMDirectory;
-
-  /** The window */
-  Fl_Window * m_Window;
-
-  Fl_Group *  m_FullGroup;
-
-   Fl_Group *  m_SideGroup;
-
-  Fl_Tile  *  m_Tile;
-
-  /** Intial sizes */
-  int m_Width;
-
-  int m_Height;
-
-  int m_SideBarWidth;
-
-  int m_BottomBarHeight;
-
 }; // end class
 } // end namespace otb
 

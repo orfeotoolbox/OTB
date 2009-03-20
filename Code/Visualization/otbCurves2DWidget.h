@@ -174,7 +174,6 @@ private:
   bool                m_ZeroCrossingAxis;
   // Automatic axis scaling
   bool                m_AutoScale;
-
   // Colors
   ColorType           m_AxisColor;
   ColorType           m_GridColor;

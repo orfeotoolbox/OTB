@@ -37,7 +37,6 @@ FltkFilterWatcher
   m_Progress->minimum(0);
   m_Progress->maximum(1);
   m_Window->end();
-
 }
 
 FltkFilterWatcher

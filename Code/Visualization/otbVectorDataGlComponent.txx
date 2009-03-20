@@ -29,7 +29,7 @@ namespace otb
 template <class TVectorData> 
 VectorDataGlComponent<TVectorData>
 ::VectorDataGlComponent() : m_VectorData(),m_Spacing(), m_Origin(), m_GluTesselator(),
-			    m_Color(), m_LineWidth(2),m_CrossWidth(10),m_RenderPolygonBoundariesOnly(false)
+			    m_Color(), m_LineWidth(1.5),m_CrossWidth(10),m_RenderPolygonBoundariesOnly(false)
 {
   // Default color is red
   m_Color.Fill(0);
@@ -79,8 +79,12 @@ VectorDataGlComponent<TVectorData>
   // Set up line width
   double previousWidth = 0.;
   glGetDoublev(GL_LINE_WIDTH,&previousWidth);
-  glLineWidth(m_LineWidth);
 
+  // convert line width to screen line width
+  VectorType imageLineWidth;
+  imageLineWidth.Fill(m_LineWidth);
+  VectorType screenLineWidth = space2ScreenTransform->TransformVector(imageLineWidth);
+  glLineWidth(screenLineWidth[0]);
   // Do we need to render boundaries only (for polygons)
   gluTessProperty(m_GluTesselator,GLU_TESS_BOUNDARY_ONLY,m_RenderPolygonBoundariesOnly);
 

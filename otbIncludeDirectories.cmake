@@ -48,7 +48,8 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otbedison/segm
   ${OTB_SOURCE_DIR}/Utilities/otbedison/prompt
   ${OTB_SOURCE_DIR}/Utilities/otbedison/edge
-  ${OTB_SOURCE_DIR}/Utilities/otbsiftfast		
+  ${OTB_SOURCE_DIR}/Utilities/otbsiftfast
+  ${OTB_BINARY_DIR}/Code/Visualization
 
 )
 IF(OTB_COMPILE_JPEG2000)
