@@ -85,16 +85,16 @@ SHPVectorDataIO<TData>
 {
   // Destroy previous opened data source
   if (m_DataSource != NULL)
-    {
+  {
     OGRDataSource::DestroyDataSource(m_DataSource);
-    }
+  }
 
   m_DataSource = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), FALSE);
 
   if (m_DataSource == NULL)
-    {
+  {
     itkExceptionMacro(<<"Failed to open data file "<<this->m_FileName);
-    }
+  }
 
   otbMsgDebugMacro( <<"Driver to read: OGR");
   otbMsgDebugMacro( <<"Reading  file: "<< this->m_FileName);
@@ -111,18 +111,18 @@ SHPVectorDataIO<TData>
   oSRS = m_DataSource->GetLayer(0)->GetSpatialRef();
 
   if (oSRS != NULL)
-    {
+  {
     char * projectionRefChar;
     oSRS->exportToWkt(&projectionRefChar);
     std::string projectionRef = projectionRefChar;
     OGRFree(projectionRefChar);
     itk::MetaDataDictionary & dict = data->GetMetaDataDictionary();
     itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef );
-    }
+  }
   else
-    {
+  {
     otbMsgDevMacro(<< "Can't retrieve the OGRSpatialReference from the shapefile");
-    }
+  }
 
 
 
@@ -132,17 +132,17 @@ SHPVectorDataIO<TData>
   bool projectionInformationAvailable = !projectionRefWkt.empty();
 
   if (projectionInformationAvailable)
-    {
+  {
     otbMsgDevMacro(<< "Projection information : " << projectionRefWkt);
-    }
+  }
   else
-    {
+  {
     otbMsgDevMacro(<< "Projection information unavailable: assuming WGS84");
-    }
+  }
 
   // For each layer
   for (int layerIndex = 0; layerIndex < m_DataSource->GetLayerCount(); ++layerIndex)
-    {
+  {
     /** retrieving layer and property */
     OGRLayer * layer = m_DataSource->GetLayer(layerIndex);
     otbMsgDevMacro(<<"Number of features: " << layer->GetFeatureCount());
@@ -157,11 +157,11 @@ SHPVectorDataIO<TData>
     /** Retrieving the fields types */
     OGRFieldDefn * field;
     for (int fieldIndex = 0; fieldIndex<dfn->GetFieldCount();++fieldIndex)
-      {
+    {
       field  = dfn->GetFieldDefn(fieldIndex);
       document->SetField(field->GetNameRef(),OGRFieldDefn::GetFieldTypeName(field->GetType()));
       // std::cout<<"Document "<<document->GetNodeId()<<": Adding field "<<field->GetNameRef()<<" "<<OGRFieldDefn::GetFieldTypeName(field->GetType())<<std::endl;
-      }
+    }
 
     /** Adding the layer to the data tree */
     tree->Add(document,root);
@@ -179,7 +179,7 @@ SHPVectorDataIO<TData>
     itk::TimeProbe chrono;
 
     while ((feature = layer->GetNextFeature())!=NULL)
-      {
+    {
       chrono.Start();
 
       // Creating a new folder
@@ -189,11 +189,11 @@ SHPVectorDataIO<TData>
 
       // Reading fields
       for (int fieldIndex = 0; fieldIndex<dfn->GetFieldCount();++fieldIndex)
-	{
+      {
         OGRFieldDefn * field  = dfn->GetFieldDefn(fieldIndex);
         folder->SetField(field->GetNameRef(),feature->GetFieldAsString(fieldIndex));
         //  std::cout<<"Folder "<<folder->GetNodeId()<<": Adding field "<<field->GetNameRef()<<" "<<feature->GetFieldAsString(fieldIndex)<<std::endl;
-	}
+      }
 
 
       // Add the folder to the document
@@ -208,312 +208,312 @@ SHPVectorDataIO<TData>
       OGRGeometry * geometry = feature->GetGeometryRef();
 
       if (geometry != NULL)
-	{
+      {
         switch (geometry->getGeometryType())
-	  {
-	  case wkbPoint:
-	  {
-	  typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	  newNode->Set(ConvertGeometryToPointNode(geometry));
-          folderPtr->AddChild(newNode);
-          break;
-	  }
-	  case wkbPoint25D:
-	  {
-	  typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	  newNode->Set(ConvertGeometryToPointNode(geometry));
-          folderPtr->AddChild(newNode);
-          break;
-	  }
-	  case wkbLineString:
-	  {
-	  typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	  newNode->Set(ConvertGeometryToLineNode(geometry));
-          folderPtr->AddChild(newNode);
-          break;
-	  }
-	  case wkbLineString25D:
-	  {
-	  typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	  newNode->Set(ConvertGeometryToLineNode(geometry));
-          folderPtr->AddChild(newNode);
-          break;
-	  }
-	  case wkbPolygon:
-	  {
-	  typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	  newNode->Set(ConvertGeometryToPolygonNode(geometry));
-          folderPtr->AddChild(newNode);
-          break;
-	  }
-	  case wkbPolygon25D:
-	  {
-	  typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	  newNode->Set(ConvertGeometryToPolygonNode(geometry));
-          folderPtr->AddChild(newNode);
-          break;
-	  }
-	  case wkbMultiPoint:
-	  {
+        {
+          case wkbPoint:
+          {
+            typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+            newNode->Set(ConvertGeometryToPointNode(geometry));
+            folderPtr->AddChild(newNode);
+            break;
+          }
+          case wkbPoint25D:
+          {
+            typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+            newNode->Set(ConvertGeometryToPointNode(geometry));
+            folderPtr->AddChild(newNode);
+            break;
+          }
+          case wkbLineString:
+          {
+            typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+            newNode->Set(ConvertGeometryToLineNode(geometry));
+            folderPtr->AddChild(newNode);
+            break;
+          }
+          case wkbLineString25D:
+          {
+            typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+            newNode->Set(ConvertGeometryToLineNode(geometry));
+            folderPtr->AddChild(newNode);
+            break;
+          }
+          case wkbPolygon:
+          {
+            typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+            newNode->Set(ConvertGeometryToPolygonNode(geometry));
+            folderPtr->AddChild(newNode);
+            break;
+          }
+          case wkbPolygon25D:
+          {
+            typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+            newNode->Set(ConvertGeometryToPolygonNode(geometry));
+            folderPtr->AddChild(newNode);
+            break;
+          }
+          case wkbMultiPoint:
+          {
 
-          DataNodePointerType multi = DataNodeType::New();
-          multi->SetNodeType(FEATURE_MULTIPOINT);
-	  multiPtr = InternalTreeNodeType::New();
-	  multiPtr->Set(multi);
-          folderPtr->AddChild(multiPtr);
+            DataNodePointerType multi = DataNodeType::New();
+            multi->SetNodeType(FEATURE_MULTIPOINT);
+            multiPtr = InternalTreeNodeType::New();
+            multiPtr->Set(multi);
+            folderPtr->AddChild(multiPtr);
 
-          OGRMultiPoint * ogrMulti = (OGRMultiPoint *) geometry;
+            OGRMultiPoint * ogrMulti = (OGRMultiPoint *) geometry;
 
-          for (int geoIndex = 0;geoIndex<ogrMulti->getNumGeometries();++geoIndex)
-	    {
-	    typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	    newNode->Set(ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex)));
-            multiPtr->AddChild(newNode);
-	    }
-          break;
-	  }
-	  case wkbMultiPoint25D:
-	  {
-          DataNodePointerType multi = DataNodeType::New();
-          multi->SetNodeType(FEATURE_MULTIPOINT);
-
-	  multiPtr = InternalTreeNodeType::New();
-	  multiPtr->Set(multi);
-          folderPtr->AddChild(multiPtr);
-
-          OGRMultiPoint * ogrMulti = (OGRMultiPoint *) geometry;
-
-          for (int geoIndex = 0;geoIndex<ogrMulti->getNumGeometries();++geoIndex)
-	    {
-	    typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	    newNode->Set(ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex)));
-            multiPtr->AddChild(newNode);
-	    }
-          break;
-	  }
-	  case wkbMultiLineString:
-	  {
-          DataNodePointerType multi = DataNodeType::New();
-          multi->SetNodeType(FEATURE_MULTILINE);
-
-	  multiPtr = InternalTreeNodeType::New();
-	  multiPtr->Set(multi);
-          folderPtr->AddChild(multiPtr);
-
-          OGRMultiLineString * ogrMulti = (OGRMultiLineString *) geometry;
-
-          for (int geoIndex = 0;geoIndex<ogrMulti->getNumGeometries();++geoIndex)
-	    {
-	    typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	    newNode->Set(ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex)));
-	    multiPtr->AddChild(newNode);
-	    }
-          break;
-	  }
-	  case wkbMultiLineString25D:
-	  {
-          DataNodePointerType multi = DataNodeType::New();
-          multi->SetNodeType(FEATURE_MULTILINE);
-
-
-	  multiPtr = InternalTreeNodeType::New();
-	  multiPtr->Set(multi);
-          folderPtr->AddChild(multiPtr);
-
-          OGRMultiLineString * ogrMulti = (OGRMultiLineString *) geometry;
-
-          for (int geoIndex = 0;geoIndex<ogrMulti->getNumGeometries();++geoIndex)
-	    {
-	    typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	    newNode->Set(ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex)));
-            multiPtr->AddChild(newNode);
-	    }
-          break;
-	  }
-	  case wkbMultiPolygon:
-	  {
-          DataNodePointerType multi = DataNodeType::New();
-          multi->SetNodeType(FEATURE_MULTIPOLYGON);
-
-	  multiPtr = InternalTreeNodeType::New();
-	  multiPtr->Set(multi);
-          folderPtr->AddChild(multiPtr);
-
-          OGRMultiPolygon * ogrMulti = (OGRMultiPolygon *) geometry;
-
-          for (int geoIndex = 0;geoIndex<ogrMulti->getNumGeometries();++geoIndex)
-	    {
-	    typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	    newNode->Set(ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex)));
-            multiPtr->AddChild(newNode);
-	    }
-          break;
-	  }
-	  case wkbMultiPolygon25D:
-	  {
-          DataNodePointerType multi = DataNodeType::New();
-          multi->SetNodeType(FEATURE_MULTIPOLYGON);
-
-	  multiPtr = InternalTreeNodeType::New();
-	  multiPtr->Set(multi);
-          folderPtr->AddChild(multiPtr);
-
-          OGRMultiPolygon * ogrMulti = (OGRMultiPolygon *) geometry;
-
-          for (int geoIndex = 0;geoIndex<ogrMulti->getNumGeometries();++geoIndex)
-	    {
-	    typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	    newNode->Set(ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex)));
-            multiPtr->AddChild(newNode);
-	    }
-          break;
-	  }
-	  case wkbGeometryCollection:
-	  {
-          DataNodePointerType multi = DataNodeType::New();
-          multi->SetNodeType(FEATURE_COLLECTION);
-
-	  multiPtr = InternalTreeNodeType::New();
-	  multiPtr->Set(multi);
-          folderPtr->AddChild(multiPtr);
-
-          OGRGeometryCollection * ogrMulti = (OGRGeometryCollection *) geometry;
-
-          for (int geoIndex = 0;geoIndex<ogrMulti->getNumGeometries();++geoIndex)
-	    {
-            switch (ogrMulti->getGeometryRef(geoIndex)->getGeometryType())
-	      {
-	      case wkbPoint:
-	      {
-	      typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	      newNode->Set(ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex)));
+            for (int geoIndex = 0;geoIndex<ogrMulti->getNumGeometries();++geoIndex)
+            {
+              typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+              newNode->Set(ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex)));
               multiPtr->AddChild(newNode);
-              break;
-	      }
-	      case wkbPoint25D:
-	      {
-	      typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	      newNode->Set(ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex)));
-              multiPtr->AddChild(newNode);
-              break;
-	      }
-	      case wkbLineString:
-	      {
-	      typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	      newNode->Set(ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex)));
-              multiPtr->AddChild(newNode);
-              break;
-	      }
-	      case wkbLineString25D:
-	      {
-	      typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	      newNode->Set(ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex)));
-              multiPtr->AddChild(newNode);
-              break;
-	      }
-	      case wkbPolygon:
-	      {
-	      typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	      newNode->Set(ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex)));
-              multiPtr->AddChild(newNode);
-              break;
-	      }
-	      case wkbPolygon25D:
-	      {
-	      typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	      newNode->Set(ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex)));
-              multiPtr->AddChild(newNode);
-              break;
-	      }
-	      default:
-	      {
-              std::cout<<"Geometry type not found: "<<ogrMulti->getGeometryRef(geoIndex)->getGeometryType()<<std::endl;
-              break;
-	      }
-	      }
-	    }
-          break;
-	  }
-	  case wkbGeometryCollection25D:
-	  {
-          DataNodePointerType multi = DataNodeType::New();
-          multi->SetNodeType(FEATURE_COLLECTION);
+            }
+            break;
+          }
+          case wkbMultiPoint25D:
+          {
+            DataNodePointerType multi = DataNodeType::New();
+            multi->SetNodeType(FEATURE_MULTIPOINT);
 
-	  multiPtr = InternalTreeNodeType::New();
-	  multiPtr->Set(multi);
-          folderPtr->AddChild(multiPtr);
+            multiPtr = InternalTreeNodeType::New();
+            multiPtr->Set(multi);
+            folderPtr->AddChild(multiPtr);
 
-          OGRGeometryCollection * ogrMulti = (OGRGeometryCollection *) geometry;
+            OGRMultiPoint * ogrMulti = (OGRMultiPoint *) geometry;
 
-          for (int geoIndex = 0;geoIndex<ogrMulti->getNumGeometries();++geoIndex)
-	    {
-            switch (ogrMulti->getGeometryRef(geoIndex)->getGeometryType())
-	      {
-	      case wkbPoint:
-	      {
-	      typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	      newNode->Set(ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex)));
+            for (int geoIndex = 0;geoIndex<ogrMulti->getNumGeometries();++geoIndex)
+            {
+              typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+              newNode->Set(ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex)));
               multiPtr->AddChild(newNode);
-              break;
-	      }
-	      case wkbPoint25D:
-	      {
-	      typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	      newNode->Set(ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex)));
-              multiPtr->AddChild(newNode);
-              break;
-	      }
-	      case wkbLineString:
-	      {
-	      typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	      newNode->Set(ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex)));
-              multiPtr->AddChild(newNode);
-              break;
-	      }
-	      case wkbLineString25D:
-	      {
-	      typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	      newNode->Set(ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex)));
-              multiPtr->AddChild(newNode);
-              break;
-	      }
-	      case wkbPolygon:
-	      {
-	      typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	      newNode->Set(ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex)));
-              multiPtr->AddChild(newNode);
-              break;
-	      }
-	      case wkbPolygon25D:
-	      {
-	      typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-	      newNode->Set(ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex)));
-              multiPtr->AddChild(newNode);
-              break;
-	      }
-	      default:
-	      {
-              std::cout<<"Geometry type not found: "<<ogrMulti->getGeometryRef(geoIndex)->getGeometryType()<<std::endl;
-              break;
-	      }
-	      }
-	    }
-          break;
-	  }
-	  default:
-	  {
-          std::cout<<"Geometry not handled: "<<geometry->getGeometryName()<<std::endl;
-          break;
-	  }
-	  }
+            }
+            break;
+          }
+          case wkbMultiLineString:
+          {
+            DataNodePointerType multi = DataNodeType::New();
+            multi->SetNodeType(FEATURE_MULTILINE);
 
-	}
+            multiPtr = InternalTreeNodeType::New();
+            multiPtr->Set(multi);
+            folderPtr->AddChild(multiPtr);
+
+            OGRMultiLineString * ogrMulti = (OGRMultiLineString *) geometry;
+
+            for (int geoIndex = 0;geoIndex<ogrMulti->getNumGeometries();++geoIndex)
+            {
+              typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+              newNode->Set(ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex)));
+              multiPtr->AddChild(newNode);
+            }
+            break;
+          }
+          case wkbMultiLineString25D:
+          {
+            DataNodePointerType multi = DataNodeType::New();
+            multi->SetNodeType(FEATURE_MULTILINE);
+
+
+            multiPtr = InternalTreeNodeType::New();
+            multiPtr->Set(multi);
+            folderPtr->AddChild(multiPtr);
+
+            OGRMultiLineString * ogrMulti = (OGRMultiLineString *) geometry;
+
+            for (int geoIndex = 0;geoIndex<ogrMulti->getNumGeometries();++geoIndex)
+            {
+              typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+              newNode->Set(ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex)));
+              multiPtr->AddChild(newNode);
+            }
+            break;
+          }
+          case wkbMultiPolygon:
+          {
+            DataNodePointerType multi = DataNodeType::New();
+            multi->SetNodeType(FEATURE_MULTIPOLYGON);
+
+            multiPtr = InternalTreeNodeType::New();
+            multiPtr->Set(multi);
+            folderPtr->AddChild(multiPtr);
+
+            OGRMultiPolygon * ogrMulti = (OGRMultiPolygon *) geometry;
+
+            for (int geoIndex = 0;geoIndex<ogrMulti->getNumGeometries();++geoIndex)
+            {
+              typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+              newNode->Set(ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex)));
+              multiPtr->AddChild(newNode);
+            }
+            break;
+          }
+          case wkbMultiPolygon25D:
+          {
+            DataNodePointerType multi = DataNodeType::New();
+            multi->SetNodeType(FEATURE_MULTIPOLYGON);
+
+            multiPtr = InternalTreeNodeType::New();
+            multiPtr->Set(multi);
+            folderPtr->AddChild(multiPtr);
+
+            OGRMultiPolygon * ogrMulti = (OGRMultiPolygon *) geometry;
+
+            for (int geoIndex = 0;geoIndex<ogrMulti->getNumGeometries();++geoIndex)
+            {
+              typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+              newNode->Set(ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex)));
+              multiPtr->AddChild(newNode);
+            }
+            break;
+          }
+          case wkbGeometryCollection:
+          {
+            DataNodePointerType multi = DataNodeType::New();
+            multi->SetNodeType(FEATURE_COLLECTION);
+
+            multiPtr = InternalTreeNodeType::New();
+            multiPtr->Set(multi);
+            folderPtr->AddChild(multiPtr);
+
+            OGRGeometryCollection * ogrMulti = (OGRGeometryCollection *) geometry;
+
+            for (int geoIndex = 0;geoIndex<ogrMulti->getNumGeometries();++geoIndex)
+            {
+              switch (ogrMulti->getGeometryRef(geoIndex)->getGeometryType())
+              {
+                case wkbPoint:
+                {
+                  typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+                  newNode->Set(ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex)));
+                  multiPtr->AddChild(newNode);
+                  break;
+                }
+                case wkbPoint25D:
+                {
+                  typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+                  newNode->Set(ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex)));
+                  multiPtr->AddChild(newNode);
+                  break;
+                }
+                case wkbLineString:
+                {
+                  typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+                  newNode->Set(ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex)));
+                  multiPtr->AddChild(newNode);
+                  break;
+                }
+                case wkbLineString25D:
+                {
+                  typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+                  newNode->Set(ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex)));
+                  multiPtr->AddChild(newNode);
+                  break;
+                }
+                case wkbPolygon:
+                {
+                  typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+                  newNode->Set(ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex)));
+                  multiPtr->AddChild(newNode);
+                  break;
+                }
+                case wkbPolygon25D:
+                {
+                  typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+                  newNode->Set(ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex)));
+                  multiPtr->AddChild(newNode);
+                  break;
+                }
+                default:
+                {
+                  std::cout<<"Geometry type not found: "<<ogrMulti->getGeometryRef(geoIndex)->getGeometryType()<<std::endl;
+                  break;
+                }
+              }
+            }
+            break;
+          }
+          case wkbGeometryCollection25D:
+          {
+            DataNodePointerType multi = DataNodeType::New();
+            multi->SetNodeType(FEATURE_COLLECTION);
+
+            multiPtr = InternalTreeNodeType::New();
+            multiPtr->Set(multi);
+            folderPtr->AddChild(multiPtr);
+
+            OGRGeometryCollection * ogrMulti = (OGRGeometryCollection *) geometry;
+
+            for (int geoIndex = 0;geoIndex<ogrMulti->getNumGeometries();++geoIndex)
+            {
+              switch (ogrMulti->getGeometryRef(geoIndex)->getGeometryType())
+              {
+                case wkbPoint:
+                {
+                  typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+                  newNode->Set(ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex)));
+                  multiPtr->AddChild(newNode);
+                  break;
+                }
+                case wkbPoint25D:
+                {
+                  typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+                  newNode->Set(ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex)));
+                  multiPtr->AddChild(newNode);
+                  break;
+                }
+                case wkbLineString:
+                {
+                  typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+                  newNode->Set(ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex)));
+                  multiPtr->AddChild(newNode);
+                  break;
+                }
+                case wkbLineString25D:
+                {
+                  typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+                  newNode->Set(ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex)));
+                  multiPtr->AddChild(newNode);
+                  break;
+                }
+                case wkbPolygon:
+                {
+                  typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+                  newNode->Set(ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex)));
+                  multiPtr->AddChild(newNode);
+                  break;
+                }
+                case wkbPolygon25D:
+                {
+                  typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+                  newNode->Set(ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex)));
+                  multiPtr->AddChild(newNode);
+                  break;
+                }
+                default:
+                {
+                  std::cout<<"Geometry type not found: "<<ogrMulti->getGeometryRef(geoIndex)->getGeometryType()<<std::endl;
+                  break;
+                }
+              }
+            }
+            break;
+          }
+          default:
+          {
+            std::cout<<"Geometry not handled: "<<geometry->getGeometryName()<<std::endl;
+            break;
+          }
+        }
+
+      }
       OGRFeature::DestroyFeature( feature );
       chrono.Stop();
       ++counter;
-      }//end While feature
+    }//end While feature
     otbMsgDevMacro(<<layer->GetFeatureCount()<<" features read, average insertion time "<<chrono.GetMeanTime()<<" s");
-    }// end For each layer
+  }// end For each layer
 }
 
 
