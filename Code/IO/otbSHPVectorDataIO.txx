@@ -776,7 +776,7 @@ void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
 //   ogrFeatures.clear();
 
   OGRDataSource::DestroyDataSource( m_DataSource );
-
+  m_DataSource = NULL;
 
   chrono.Stop();
   std::cout<<"SHPVectorDataIO: file saved in "<<chrono.GetMeanTime()<<" seconds. (" << m_Kept << " elements)"<<std::endl;
