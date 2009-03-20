@@ -22,8 +22,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-template < class TInputImage >
-ImageView<TInputImage>
+template < class TViewerModel >
+ImageView<TViewerModel>
 ::ImageView() : m_ScrollWidget(), m_FullWidget(), m_ZoomWidget(),
                 m_Model(), m_Controller(), m_ExtractRegionGlComponent(), m_ScaledExtractRegionGlComponent()
 {
@@ -46,16 +46,16 @@ ImageView<TInputImage>
   m_ZoomWidget->SetIdentifier("Zoom");
 }
 
-template < class TInputImage >
-ImageView<TInputImage>
+template < class TViewerModel >
+ImageView<TViewerModel>
 ::~ImageView()
 {
   
 }
 
-template < class TInputImage >
+template < class TViewerModel >
 void
-ImageView<TInputImage>
+ImageView<TViewerModel>
 ::SetModel(ModelType * model)
 {
   // Unregister from previous model if nay
@@ -69,9 +69,9 @@ ImageView<TInputImage>
   m_Model->RegisterListener(this);
 }
 
-template < class TInputImage >
+template < class TViewerModel >
 void
-ImageView<TInputImage>
+ImageView<TViewerModel>
 ::SetController(ControllerType * controller)
 {
   m_Controller = controller;
@@ -80,9 +80,9 @@ ImageView<TInputImage>
   m_ZoomWidget->SetController(m_Controller);
 }
 
-template < class TInputImage>
+template < class TViewerModel>
 void
-ImageView<TInputImage>
+ImageView<TViewerModel>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call the superclass implementation
@@ -90,17 +90,17 @@ ImageView<TInputImage>
 }
 
 
-template < class TInputImage >
+template < class TViewerModel >
 void
-ImageView<TInputImage>
+ImageView<TViewerModel>
 ::ImageLayerRenderingModelNotify()
 {
   this->Update();
 }
 
-template < class TInputImage >
+template < class TViewerModel >
 void
-ImageView<TInputImage>
+ImageView<TViewerModel>
 ::Update()
 {
   this->UpdateScrollWidget();
@@ -108,15 +108,15 @@ ImageView<TInputImage>
   this->UpdateZoomWidget();
 }
 
-template < class TInputImage >
+template < class TViewerModel >
 void
-ImageView<TInputImage>
+ImageView<TViewerModel>
 ::UpdateScrollWidget()
 {
   // If the model has a quicklook
   if(m_Model->GetHasQuicklook())
     {
-    otbMsgDevMacro(<<"ImageView::UpdateScrollWidget(): redrawing scroll widget");
+      otbMsgDevMacro(<<"ImageView::UpdateScrollWidget(): redrawing scroll widget");
 
     // Read the buffer
     const RegionType qlRegion =  m_Model->GetRasterizedQuicklook()
@@ -153,9 +153,9 @@ ImageView<TInputImage>
 }
 
 
-template < class TInputImage >
+template < class TViewerModel >
 void
-ImageView<TInputImage>
+ImageView<TViewerModel>
 ::UpdateFullWidget()
 {
   if(m_Model->GetHasExtract())
@@ -185,9 +185,9 @@ ImageView<TInputImage>
     }
  }
 
-template < class TInputImage >
+template < class TViewerModel >
 void
-ImageView<TInputImage>
+ImageView<TViewerModel>
 ::UpdateZoomWidget()
 {
   if(m_Model->GetHasScaledExtract())

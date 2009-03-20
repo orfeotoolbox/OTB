@@ -51,6 +51,7 @@ void RegisterTests()
   REGISTER_TEST(otbMultiplyBlendingFunctionNew);
   REGISTER_TEST(otbImageViewNew);
   REGISTER_TEST(otbImageViewerEndToEndSingleLayer);
+  REGISTER_TEST(otbImageViewerEndToEndSingleLayerWithSelectAreaHandler);
   REGISTER_TEST(otbImageViewerEndToEndTwoLayers);
   REGISTER_TEST(otbPixelDescriptionModelNew);
   REGISTER_TEST(otbPixelDescriptionModelSingleLayer);

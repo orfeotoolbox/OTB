@@ -214,6 +214,11 @@ otbImageViewerEndToEndSingleLayer
 ${INPUTDATA}/couleurs.tif
 200 500 200 0
 )
+ADD_TEST(vrTvImageViewerEndToEndSingleLayerWithSelectAreaHandler ${VISUREFAC_TESTS1}
+otbImageViewerEndToEndSingleLayerWithSelectAreaHandler
+${INPUTDATA}/couleurs.tif
+200 500 200 0
+)
 
 ADD_TEST(vrTvImageViewerEndToEndTwoLayers ${VISUREFAC_TESTS1}
 otbImageViewerEndToEndTwoLayers
@@ -323,6 +328,7 @@ otbMultiplyBlendingFunctionNew.cxx
 otbRenderingImageFilterVectorWithExpNegativeTransfer.cxx
 otbImageViewNew.cxx
 otbImageViewerEndToEndSingleLayer.cxx
+otbImageViewerEndToEndSingleLayerWithSelectAreaHandler.cxx
 otbImageViewerEndToEndTwoLayers.cxx
 otbPixelDescriptionModelNew.cxx
 otbPixelDescriptionModelSingleLayer.cxx

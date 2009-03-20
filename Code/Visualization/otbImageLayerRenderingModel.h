@@ -64,6 +64,7 @@ public:
   typedef typename Superclass::LayerType       LayerType;
   typedef typename LayerType::RegionType       RegionType;
   typedef typename RegionType::IndexType       IndexType;
+  typedef typename RegionType::SizeType        SizeType;
   
   /** Layer list typedef */
   typedef typename Superclass::LayerListType    LayerListType;
@@ -116,6 +117,10 @@ public:
    * region */
   void SetExtractRegionCenter(const IndexType & index);
   
+  /** Change the extract region by giving the 2 points of the
+   * region */
+  void SetExtractRegionByIndex(const IndexType & startIndex, const IndexType & stopIndex );
+
   /** Get the sumbsampling rate */
   unsigned int GetSubsamplingRate();
 
@@ -160,6 +165,7 @@ private:
   OutputImagePointerType m_RasterizedScaledExtract;
   bool                   m_HasScaledExtract;
   RegionType             m_ScaledExtractRegion;
+
 
   /** Wether the model is currently updating or not */
   bool                   m_Updating;

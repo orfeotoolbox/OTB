@@ -264,6 +264,35 @@ ImageLayerRenderingModel<TOutputImage>
   m_ExtractRegion.SetIndex(newIndex);
 }
 
+
+template <class TOutputImage>
+void
+ImageLayerRenderingModel<TOutputImage>
+::SetExtractRegionByIndex( const IndexType & startIndex, const IndexType & stopIndex )
+{
+ RegionType lImageRegion;
+        lImageRegion = this->GetLayer(0)->GetExtent();
+
+        SizeType lSize;
+        lSize[0] = vcl_abs(stopIndex[0]-startIndex[0]);
+        lSize[1] = vcl_abs(stopIndex[1]-startIndex[1]);
+
+        IndexType lIndex;
+        lIndex[0] = std::min(startIndex[0],stopIndex[0]);
+        lIndex[1] = std::min(startIndex[1],stopIndex[1]);
+
+        RegionType lRegion;
+        lRegion.SetIndex(lIndex);
+        lRegion.SetSize(lSize);
+
+std::cout<<"OH OUIIIIIIIIi"<<std::endl;
+
+  if(lRegion.Crop(lImageRegion))
+{
+  m_ExtractRegion = lRegion;
+}
+}
+
 template <class TOutputImage>
 unsigned int
 ImageLayerRenderingModel<TOutputImage>
