@@ -64,6 +64,8 @@ public:
   /** Data typedef */
   typedef TData VectorDataType;
   typedef typename VectorDataType::DataTreeType  DataTreeType;
+  typedef typename DataTreeType::TreeNodeType    InternalTreeNodeType;
+  typedef typename InternalTreeNodeType::ChildrenListType        ChildrenListType;
   typedef typename DataTreeType::Pointer         DataTreePointerType;
   typedef typename DataTreeType::ConstPointer    DataTreeConstPointerType;
   typedef typename VectorDataType::DataNodeType  DataNodeType;
@@ -147,12 +149,22 @@ protected:
   DataNodePointerType ConvertGeometryToPolygonNode(const GeometryPtr& geometry);
   /** end conversion tools */
 
+  typedef kmldom::KmlPtr KmlPtr;
+  typedef kmldom::KmlFactory KmlFactory;
+  typedef kmldom::DocumentPtr DocumentPtr;
+  typedef kmldom::FolderPtr FolderPtr;
+  typedef kmldom::MultiGeometryPtr MultiGeometryPtr;
+  void ProcessNodeWrite(InternalTreeNodeType * source, KmlFactory* factory,
+                        KmlPtr kml, DocumentPtr currentDocument, FolderPtr currentFolder,
+                        MultiGeometryPtr currentMultiGeometry);
+
 private:
   KMLVectorDataIO(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   DataTreePointerType m_Tree;
 
+  unsigned int m_Kept;
 };
 
 } // end namespace otb
