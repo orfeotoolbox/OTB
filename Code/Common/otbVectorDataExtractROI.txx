@@ -68,7 +68,7 @@ VectorDataExtractROI<TVectorData>
   typename VectorDataType::ConstPointer inputPtr = this->GetInput();
   typename VectorDataType::Pointer      outputPtr = this->GetOutput();
 
-  
+
   // Find out the projection needed
   if(!inputPtr->GetProjectionRef().empty())
     outputPtr->SetProjectionRef(inputPtr->GetProjectionRef());
@@ -306,7 +306,7 @@ VectorDataExtractROI<TVectorData>
 
   genericTransform->InstanciateTransform();
 
-  std::cout<<genericTransform<<std::endl;
+  otbMsgDevMacro( << genericTransform );
 
    typename VertexListType::Pointer  regionCorners = VertexListType::New();
    ProjPointType                          point1, point2 , point3, point4;

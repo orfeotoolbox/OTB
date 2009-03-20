@@ -411,7 +411,7 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
 {
   // Get the children list from the input node
   InputChildrenListType children = source->GetChildrenList();
-  
+
   // For each child
   for(typename InputChildrenListType::iterator it = children.begin(); it!=children.end();++it)
     {
@@ -460,7 +460,7 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
     }
     case FEATURE_LINE:
     {
-   
+
     newDataNode->SetLine(this->ReprojectLine(dataNode->GetLine()));
     newContainer = OutputInternalTreeNodeType::New();
     newContainer->Set(newDataNode);
@@ -468,7 +468,7 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
     ProcessNode((*it),newContainer);
     break;
     }
-    
+
     case FEATURE_POLYGON:
     {
     newDataNode->SetPolygonExteriorRing(this->ReprojectPolygon(dataNode->GetPolygonExteriorRing()));
