@@ -23,6 +23,7 @@
 #include "itkContinuousIndex.h"
 #include "itkRegion.h"
 #include "otbImageKeywordlist.h"
+#include "itkImageRegion.h"
 
 namespace otb
 {
@@ -36,6 +37,9 @@ namespace otb
  * corner of the image, the size is the lengths of the image in each of
  * the topological directions.)
  *
+ * As the size and origin can be given in various system coordinates, they contain
+ * double values (through the use of an itk::ContinuousIndex).
+ *
  * To be flexible enough, the region also contain information about the projection
  * in which this information is given. It can be a cartographic projection, but also
  * a sensor model projection (hence making it useful also with non-orthorectified
@@ -45,7 +49,7 @@ namespace otb
  */
 
 template <class TType>
-  class ITK_EXPORT RemoteSensingRegion : public itk::Region
+  class ITK_EXPORT RemoteSensingRegion : public itk::ImageRegion<2>
 {
 public:
   /** Standard class typedefs. */
@@ -87,6 +91,18 @@ public:
       m_InputProjectionRef = "";
       m_Size.Fill(0.);
       m_Index.Fill(0.);
+    }
+
+
+    /** Constructor. RemoteSensingRegion is a lightweight object that is not reference
+      * counted, so the constructor is public.  Default dimension is 2. */
+    RemoteSensingRegion(const itk::ImageRegion<2>& region)
+    {
+      m_InputProjectionRef = "";
+      m_Size[0] = region.GetSize()[0];
+      m_Size[1] = region.GetSize()[1];
+      m_Index[0] = region.GetIndex()[0];
+      m_Index[1] = region.GetIndex()[1];
     }
 
   /** Destructor. RemoteSensingRegion is a lightweight object that is not reference
