@@ -57,10 +57,6 @@ ADD_TEST(vrTuImageLayerNew ${VISUREFAC_TESTS1}
 otbImageLayerNew
 )
 
-ADD_TEST(vrTvImageLayer ${VISUREFAC_TESTS1}
-otbImageLayer
-)
-
 ADD_TEST(vrTvImageLayerScalar ${VISUREFAC_TESTS1}
 --compare-n-images ${TOL} 3
 ${BASELINE}/vrTvImageLayerScalarQuicklookOutput.png
@@ -90,7 +86,7 @@ ${INPUTDATA}/couleurs.tif
 ${TEMP}/vrTvImageLayerVectorQuicklookOutput.png
 ${TEMP}/vrTvImageLayerVectorExtractOutput.png
 ${TEMP}/vrTvImageLayerVectorScaledExtractOutput.png
-2 50 50 50 200 200 200
+10 50 50 50 200 200 200
 )
 
 #------------ otb::StandardRenderingFunction ------------

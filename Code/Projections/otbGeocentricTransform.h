@@ -25,6 +25,11 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
+  /** \class GeocentricTransform
+   *
+   * \brief Convert coordinates from geocentric (X,Y,Z) to geographic (lon, lat, h)
+   *
+   */
   template <InverseOrForwardTransformationEnum TDirectionOfMapping,
   class TScalarType = double,
   unsigned int NInputDimensions=3,

@@ -26,10 +26,11 @@ namespace otb
 {
 
 /** \class VectorDataExtractROI
- * \brief Extract a subset of a Vector Data.
+ * \brief Extract a subset of a Vector Data based on location
  *
  * \note Parameter to this class for input and outputs are vectorData
  *
+ * \example Projections/VectorDataExtractROIExample.cxx
  */
 template <class TVectorData>
 class ITK_EXPORT VectorDataExtractROI:
@@ -87,7 +88,7 @@ public:
 
   itkSetStringMacro(DEMDirectory);
   itkGetStringMacro(DEMDirectory);
- 
+
 protected:
   VectorDataExtractROI();
   ~VectorDataExtractROI() {};

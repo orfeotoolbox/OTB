@@ -246,7 +246,8 @@ bool
 VectorDataExtractROI<TVectorData>
 ::IsPolygonIntersectionNotNull(PolygonPointerType polygon)
 {
-  RegionType region = ComputeVertexListBoudingRegion(polygon->GetVertexList());
+//   RegionType region = ComputeVertexListBoudingRegion(polygon->GetVertexList());
+  RegionType region(polygon->GetBoundingRegion());
   return region.Crop(m_GeoROI);
 }
 
@@ -258,7 +259,8 @@ bool
 VectorDataExtractROI<TVectorData>
 ::IsLineIntersectionNotNull(LinePointerType line)
 {
-  RegionType region = ComputeVertexListBoudingRegion(line->GetVertexList());
+//   RegionType region = ComputeVertexListBoudingRegion(line->GetVertexList());
+  RegionType region(line->GetBoundingRegion());
   return region.Crop(m_GeoROI);
 }
 

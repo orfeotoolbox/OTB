@@ -62,8 +62,8 @@ int otbImageLayerRenderingModelSingleLayer( int argc, char * argv[] )
   ImageType::RegionType::IndexType index;
   ImageType::RegionType::SizeType  size;
 
-  size[0]=lregion.GetSize()[0]/2;
-  size[1]=lregion.GetSize()[1]/2;
+  size[0]=100;
+  size[1]=100;
 
   index[0] = lregion.GetSize()[0]/4;
   index[1] = lregion.GetSize()[1]/4;
@@ -72,8 +72,8 @@ int otbImageLayerRenderingModelSingleLayer( int argc, char * argv[] )
   extractRegion.SetSize(size);
   extractRegion.SetIndex(index);
   
-  size[0]=lregion.GetSize()[0]/4;
-  size[1]=lregion.GetSize()[1]/4;
+  size[0]=25;
+  size[1]=25;
 
   index[0] = 3 * lregion.GetSize()[0]/8;
   index[1] = 3 * lregion.GetSize()[1]/8;
