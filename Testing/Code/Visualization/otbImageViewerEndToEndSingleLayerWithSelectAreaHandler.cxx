@@ -58,8 +58,6 @@ int otbImageViewerEndToEndSingleLayerWithSelectAreaHandler( int argc, char * arg
     <ModelType,ViewType>                             ResizingHandlerType;
   typedef otb::ChangeScaledExtractRegionActionHandler
     <ModelType,ViewType>                             ChangeScaledRegionHandlerType;
-//   typedef otb::ChangeExtractRegionActionHandler
-//     <ModelType,ViewType>                             ChangeRegionHandlerType;
   typedef otb::ChangeScaleActionHandler
     <ModelType,ViewType>                             ChangeScaleHandlerType;
   typedef otb::PixelDescriptionModel<OutputImageType> PixelDescriptionModelType;
@@ -68,7 +66,7 @@ int otbImageViewerEndToEndSingleLayerWithSelectAreaHandler( int argc, char * arg
   typedef otb::PixelDescriptionView
     < PixelDescriptionModelType >                     PixelDescriptionViewType;
   typedef otb::SelectAreaActionHandler
-    <ModelType,ViewType>                             ChangeRegionHandlerType;
+    <ModelType,ViewType::ImageWidgetType>             ChangeRegionHandlerType;
  
   // Instantiation
   ModelType::Pointer model = ModelType::New();
@@ -123,8 +121,9 @@ int otbImageViewerEndToEndSingleLayerWithSelectAreaHandler( int argc, char * arg
 
    // Add the change extract region handler
   ChangeRegionHandlerType::Pointer changeHandler =ChangeRegionHandlerType::New();
-  changeHandler->SetModel(model);
-  changeHandler->SetView(view);
+  changeHandler->SetModel( model );
+  changeHandler->SetWidget( view->GetScrollWidget() );
+  changeHandler->SetRegionGlComponent( view->GetExtractRegionGlComponent() );
   controller->AddActionHandler(changeHandler);
 
  
