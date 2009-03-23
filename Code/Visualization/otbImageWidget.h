@@ -72,7 +72,7 @@ public:
   typedef typename GlComponentType::PointType           PointType;
   typedef ObjectList<GlComponentType>                   GlComponentListType;
   typedef typename GlComponentListType::Pointer         GlComponentListPointerType;
-  typedef typename GlComponentListType::Iterator        GlComponentIteratorType;
+  typedef typename GlComponentListType::ReverseIterator GlComponentIteratorType;
 
   /** Reads the OpenGl buffer from an image pointer
    *  \param image The image pointer,

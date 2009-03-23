@@ -231,8 +231,8 @@ ImageWidget<TInputImage>
     }
 
   // Render additionnal GlComponents
-  for(GlComponentIteratorType it = m_GlComponents->Begin();
-      it!=m_GlComponents->End();++it)
+  for(GlComponentIteratorType it = m_GlComponents->ReverseBegin();
+      it!=m_GlComponents->ReverseEnd();++it)
     {
     if(it.Get()->GetVisible())
       {
