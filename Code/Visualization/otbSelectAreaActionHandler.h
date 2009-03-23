@@ -19,7 +19,7 @@
 #define __otbSelectAreaActionHandler_h
 
 #include "otbImageWidgetActionHandler.h"
-
+#include "otbRegionGlComponent.h"
 
 namespace otb
 {
@@ -30,7 +30,7 @@ namespace otb
 *   \sa ImageWidgetActionHandler
 */
 
-template <class TModel, class TView> 
+template <class TModel, class TWidget> 
 class SelectAreaActionHandler
   : public ImageWidgetActionHandler
 {
@@ -48,15 +48,18 @@ public:
   itkTypeMacro(SelectAreaActionHandler,ImageWidgetActionHandler);
 
   /** Model typedefs */
-  typedef TModel                         ModelType;
-  typedef typename ModelType::Pointer    ModelPointerType;
-  typedef typename ModelType::RegionType RegionType;
+  typedef TModel                                  ModelType;
+  typedef typename ModelType::Pointer             ModelPointerType;
+  typedef typename ModelType::RegionType          RegionType;
 
   /** View typedefs */
-  typedef TView                          ViewType;
-  typedef typename ViewType::Pointer     ViewPointerType;
-  typedef typename ViewType::IndexType   IndexType;
+  typedef TWidget                                 WidgetType;
+  typedef typename WidgetType::Pointer            WidgetPointerType;
+  typedef typename WidgetType::IndexType          IndexType;
 
+  /** RegionGlComponent View */
+  typedef RegionGlComponent                       RegionGlComponentType;
+  typedef typename RegionGlComponentType::Pointer RegionGlComponentPointerType;
 
 
   /** Handle widget event
@@ -66,74 +69,79 @@ public:
    */
   virtual bool HandleWidgetEvent(std::string widgetId, int event)
   {
-    if( m_View.IsNotNull() && m_Model.IsNotNull() )
+    // if left mouse button pressed
+    if ( Fl::event_button() != FL_LEFT_MOUSE)
       {
-    if(widgetId == m_View->GetScrollWidget()->GetIdentifier() )
-      {
-        //otbMsgDevMacro(<<"SelectArea PixelClickedActionHandler::HandleWidgetEvent(): handling ("<<widgetId<<", "<<event<<")");
-        
-        // Get the clicked index
-        //typename ImageViewType::ImageWidgetType::PointType screenPoint, imagePoint;
-        typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;/*, lScreenSizePoint, lImageSizePoint;*/
-        screenPoint = m_View->GetScrollWidget()->GetMousePosition();
-        
-        // Transform to image point
-        imagePoint = m_View->GetScrollWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
-
-        // Transform to index
-        IndexType lIndex;
-        lIndex[0]=static_cast<long int>(imagePoint[0]);
-        lIndex[1]=static_cast<long int>(imagePoint[1]);
-
-       
-        switch (event)
-        {
-          case FL_PUSH:
-          {
-              m_FirstPush = false;
-              m_StartIndex = lIndex;
-            
-            break;
-          }
-          case FL_RELEASE:
-          {
-            m_FirstPush = true;
-            m_StopIndex = lIndex;
-            m_Model->SetExtractRegionByIndex(m_StartIndex,m_StopIndex);
-           m_Model->Update();
-            //m_Model->UpdateSecondScroll();
-            break;
-          }
-          case FL_DRAG:
-          {
-            m_StopIndex = lIndex;
-            m_Model->SetExtractRegionByIndex(m_StartIndex,m_StopIndex);
-            m_Model->Update();
-            break;
-          }
-          default:
-          {
-          }
-        }
-        return true;
+	return true;
       }
+
+    if( m_Model.IsNotNull() )
+      {
+	if(widgetId == m_Widget->GetIdentifier() )
+	  {      
+	    // Get the clicked index
+	    typename WidgetType::PointType screenPoint, imagePoint;/*, lScreenSizePoint, lImageSizePoint;*/
+	    screenPoint = m_Widget->GetMousePosition();
+	    
+	    // Transform to image point
+	    imagePoint = m_Widget->GetScreenToImageTransform()->TransformPoint(screenPoint);
+
+	    // Transform to index
+	    IndexType lIndex;
+	    lIndex[0]=static_cast<long int>(imagePoint[0]);
+	    lIndex[1]=static_cast<long int>(imagePoint[1]);
+
+	    switch (event)
+	      {
+	      case FL_PUSH:
+		{
+		  m_FirstPush = false;
+		  m_StartIndex = lIndex;
+		  break;
+		}
+	      case FL_RELEASE:
+		{
+		  m_FirstPush = true;
+		  m_StopIndex = lIndex;
+		  m_Model->SetExtractRegionByIndex(m_StartIndex,m_StopIndex);
+		  m_Model->Update();
+		  break;
+		}
+	      case FL_DRAG:
+		{
+		  // onmy redraw the red box in the widget
+		  m_StopIndex = lIndex;
+		  m_Model->SetExtractRegionByIndex(m_StartIndex,m_StopIndex);
+		  m_RegionGlComponent->SetRegion(m_Model->GetExtractRegion());
+		  m_Widget->redraw();
+		  break;
+		}
+	      default:
+		{
+		}
+	      }
+	    return true;
+	  }
       }
     return false;
  
-}
+  }
   
   /** Set/Get the pointer to the view */
-  itkSetObjectMacro(View,ViewType);
-  itkGetObjectMacro(View,ViewType);
+  itkSetObjectMacro(Widget,WidgetType);
+  itkGetObjectMacro(Widget,WidgetType);
 
   /** Set/Get the pointer to the model */
   itkSetObjectMacro(Model,ModelType);
   itkGetObjectMacro(Model,ModelType);
 
+  /** Set/Get the pointer to the component */
+  itkSetObjectMacro(RegionGlComponent,RegionGlComponentType);
+  itkGetObjectMacro(RegionGlComponent,RegionGlComponentType);
 
 protected:
   /** Constructor */
-  SelectAreaActionHandler() : m_View(), m_Model()
+  SelectAreaActionHandler() : m_Widget(), m_Model(), m_RegionGlComponent()
   {
     m_FirstPush = true;
     m_StartIndex.Fill(0);
@@ -152,11 +160,12 @@ private:
   SelectAreaActionHandler(const Self&);    // purposely not implemented
   void operator=(const Self&); // purposely not implemented
 
-  // Pointer to the view
-  ViewPointerType m_View;
-
+  // Pointer to the widget
+  WidgetPointerType m_Widget;
   // Pointer to the model
   ModelPointerType m_Model;
+  // Pointer to the GlComponent
+  RegionGlComponentPointerType m_RegionGlComponent;
 
   bool m_FirstPush;
 

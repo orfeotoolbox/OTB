@@ -92,7 +92,7 @@ public:
   itkGetObjectMacro(ScrollWidget,ImageWidgetType);
   itkGetObjectMacro(FullWidget,ImageWidgetType);
   itkGetObjectMacro(ZoomWidget,ImageWidgetType);
-
+  itkGetObjectMacro(ExtractRegionGlComponent,RegionGlComponentType);
   itkGetObjectMacro(Model,ModelType);
 
   /** Clear the widgets buffers  */
