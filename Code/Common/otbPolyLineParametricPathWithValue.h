@@ -21,6 +21,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkPolyLineParametricPath.h"
 #include "itkMetaDataObject.h"
 #include "itkImageRegion.h"
+#include "otbRemoteSensingRegion.h"
 #include "otbMacro.h"
 
 namespace otb
@@ -58,7 +59,8 @@ template < class TValue,unsigned int VDimension=2>
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename VertexListType::ConstIterator   VertexListConstIteratorType;
 
-  typedef itk::ImageRegion<2>                       RegionType;
+//   typedef itk::ImageRegion<2>                       RegionType;
+  typedef otb::RemoteSensingRegion<double>         RegionType;
   typedef typename RegionType::SizeType            SizeType;
   typedef typename RegionType::IndexType           IndexType;
 

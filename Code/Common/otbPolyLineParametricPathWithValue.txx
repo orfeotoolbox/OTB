@@ -144,20 +144,21 @@ PolyLineParametricPathWithValue<TValue,VDimension>
 
   VertexListConstIteratorType it =  this->GetVertexList()->Begin();
 
-  long int x,y;
+  double x = 0.0;
+  double y = 0.0;
 
   if (this->GetVertexList()->Size()>0)
   {
-    x = static_cast<long int>(it.Value()[0]);
-    y = static_cast<long int>(it.Value()[1]);
+    x = static_cast<double>(it.Value()[0]);
+    y = static_cast<double>(it.Value()[1]);
     index[0] = x;
     index[1] = y;
 
     ++it;
     while (it != this->GetVertexList()->End())
     {
-      x = static_cast<long int>(it.Value()[0]);
-      y = static_cast<long int>(it.Value()[1]);
+      x = static_cast<double>(it.Value()[0]);
+      y = static_cast<double>(it.Value()[1]);
 
       // Index search
       if ( x < index[0] )
@@ -185,7 +186,7 @@ PolyLineParametricPathWithValue<TValue,VDimension>
     size[1] = maxId[1] - index[1];
   }
   m_BoundingRegion.SetSize(size);
-  m_BoundingRegion.SetIndex(index);
+  m_BoundingRegion.SetOrigin(index);
   m_BoundingRegionIsValid = true;
 }
 
