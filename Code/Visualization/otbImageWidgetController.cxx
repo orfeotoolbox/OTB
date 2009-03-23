@@ -66,7 +66,8 @@ int ImageWidgetController::HandleWidgetEvent(std::string widgetId, int event)
     // Get the current handler
     handler = it.Get();
     // Check if it listens to (widget,event)
-    found   =  found || handler->HandleWidgetEvent(widgetId,event);
+    bool newFound = handler->HandleWidgetEvent(widgetId,event);
+    found   =  found || newFound;
     ++it;
     }
   // If an handler was found, use it
