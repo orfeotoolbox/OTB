@@ -202,7 +202,7 @@ SHPVectorDataIO<TData>
       documentPtr->AddChild(folderPtr);
 
       // A pointer to the current multi-geometry
-      InternalTreeNodeType * multiPtr;
+      typename InternalTreeNodeType::Pointer multiPtr;
 
       /** Temporary geometry container */
       OGRGeometry * geometry = feature->GetGeometryRef();
