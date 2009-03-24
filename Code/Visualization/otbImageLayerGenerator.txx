@@ -132,6 +132,7 @@ ImageLayerGenerator<TImageLayer>
     case 2:
     {
     m_DefaultRenderingFunction->SetAllChannels(0);
+    break;
     }
     case 3:
     {
