@@ -181,6 +181,7 @@ ${INPUTDATA}/couleurs.tif
 ${TEMP}/vrTvImageLayerRenderingModelSingleLayerQuicklookOutput.png
 ${TEMP}/vrTvImageLayerRenderingModelSingleLayerExtractOutput.png
 ${TEMP}/vrTvImageLayerRenderingModelSingleLayerScaledExtractOutput.png
+10
 )
 
 #------------ otb::ImageLayerGenerator ------------
