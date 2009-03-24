@@ -35,7 +35,8 @@ namespace otb
  * piece of an Image. The RemoteSensingRegion is represented with an index and
  * a size in each of the n-dimensions of the image. (The index is the
  * corner of the image, the size is the lengths of the image in each of
- * the topological directions.)
+ * the topological directions. <b>For this class, the notion of index and origin
+ * are the same.</b>)
  *
  * As the size and origin can be given in various system coordinates, they contain
  * double values (through the use of an itk::ContinuousIndex).
@@ -131,6 +132,18 @@ public:
     {
     return m_Index;
     }
+
+  /** Set the index defining the corner of the region. */
+  void SetIndex(const IndexType &index)
+  {
+    m_Index = index;
+  }
+
+  /** Get index defining the corner of the region. */
+  const IndexType& GetIndex() const
+  {
+    return m_Index;
+  }
 
   /** Set the size of the region. This plus the index determines the
    * rectangular shape, or extent, of the region. */

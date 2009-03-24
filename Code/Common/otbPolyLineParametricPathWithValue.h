@@ -93,13 +93,13 @@ template < class TValue,unsigned int VDimension=2>
    */
   virtual double GetLength() const;
 
-  void  AddVertex (const ContinuousIndexType &vertex);
+  virtual void  AddVertex (const ContinuousIndexType &vertex);
 
     /**
    * Compute the path bounding region.
    * \return The region.
    */
-  RegionType GetBoundingRegion(void) const;
+  virtual RegionType GetBoundingRegion(void) const;
 
 protected:
   /** Constructor */
