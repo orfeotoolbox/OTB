@@ -1540,22 +1540,49 @@ FILE(REMOVE ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp)
 
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvVectorDataFileReaderWriter ${IO_TESTS15}
+        --compare-n-binary 4
+            ${BASELINE_FILES}/ioTvVectorDataFileReaderWriterOutput.shp
+            ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp
+            ${BASELINE_FILES}/ioTvVectorDataFileReaderWriterOutput.shx
+            ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shx
+            ${BASELINE_FILES}/ioTvVectorDataFileReaderWriterOutput.dbf
+            ${TEMP}/ioTvVectorDataFileReaderWriterOutput.dbf
+            ${BASELINE_FILES}/ioTvVectorDataFileReaderWriterOutput.prj
+            ${TEMP}/ioTvVectorDataFileReaderWriterOutput.prj
         otbVectorDataFileReaderWriter
-	${LARGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
-	${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp
+            ${LARGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
+            ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp
 	)
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(ioTvVectorDataFileGeoReaderWriter ${IO_TESTS15}
+        --compare-n-binary 4
+            ${BASELINE_FILES}/ioTvVectorDataFileGeoReaderWriterOutput.shp
+            ${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput.shp
+            ${BASELINE_FILES}/ioTvVectorDataFileGeoReaderWriterOutput.shx
+            ${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput.shx
+            ${BASELINE_FILES}/ioTvVectorDataFileGeoReaderWriterOutput.dbf
+            ${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput.dbf
+            ${BASELINE_FILES}/ioTvVectorDataFileGeoReaderWriterOutput.prj
+            ${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput.prj
         otbVectorDataFileGeoReaderWriter
-	${INPUTDATA}/ToulouseRoad-examples.shp
-	${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput.shp
+            ${INPUTDATA}/ToulouseRoad-examples.shp
+            ${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput.shp
 	)
 
 ADD_TEST(ioTvVectorDataFileGeoReaderWriter2 ${IO_TESTS15}
+        --compare-n-binary 4
+            ${BASELINE_FILES}/ioTvVectorDataFileGeoReaderWriterOutput2.shp
+            ${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput2.shp
+            ${BASELINE_FILES}/ioTvVectorDataFileGeoReaderWriterOutput2.shx
+            ${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput2.shx
+            ${BASELINE_FILES}/ioTvVectorDataFileGeoReaderWriterOutput2.dbf
+            ${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput2.dbf
+            ${BASELINE_FILES}/ioTvVectorDataFileGeoReaderWriterOutput2.prj
+            ${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput2.prj
         otbVectorDataFileGeoReaderWriter
-	${INPUTDATA}/Capitole-Shadows.kml
-	${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput2.shp
+            ${INPUTDATA}/Capitole-Shadows.kml
+            ${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput2.shp
 	)
 
 ADD_TEST(ioTuKMLVectorDataIO ${IO_TESTS15}
