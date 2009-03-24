@@ -153,11 +153,8 @@ public:
    */
   void SetRenderingFunction(RenderingFunctionType * function)
   {
-    if(function != this->GetFunctor().GetFunction())
-      {
-      this->GetFunctor().SetFunction(function);
-      this->Modified();
-      }
+    this->GetFunctor().SetFunction(function);
+    this->Modified();
   }
 
   /**
