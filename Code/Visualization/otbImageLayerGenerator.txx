@@ -64,12 +64,8 @@ ImageLayerGenerator<TImageLayer>
   // Generate layer information
   this->GenerateLayerInformation();
 
-  // If we need to generate the quicklook
-  if(m_GenerateQuicklook)
-    {
-    // Generate it
-    this->GenerateQuicklook();
-    }
+  // Generate the quicklook
+  this->GenerateQuicklook();
 }
 
 template < class TImageLayer >
