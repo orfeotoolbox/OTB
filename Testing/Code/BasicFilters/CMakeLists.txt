@@ -760,22 +760,6 @@ ${INPUTDATA}/poupees.tif
 ${TEMP}/bfTvVectorImageToAmplitudeImageFilterOutput.tif
 )
 
-
-# -------    otb::RationalQuotientResampleImageFilter  --------------------------
-
-ADD_TEST(bfTuRationalQuotientResampleImageFilterNew ${BASICFILTERS_TESTS7}
-         otbRationalQuotientResampleImageFilterNew)
-
-ADD_TEST(bfTvRationalQuotientResampleImageFilter ${BASICFILTERS_TESTS7}
-	--compare-image ${EPSILON}
-			${BASELINE}/bfTvRationalQuotientResampleImageFilterOutput.tif
-			${TEMP}/bfTvRationalQuotientResampleImageFilterOutput.tif
-        otbRationalQuotientResampleImageFilter
-		${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-		${TEMP}/bfTvRationalQuotientResampleImageFilterOutput.tif
-		2 3
-)
-
 # -------            otb::VectorImageToIntensityImageFilter   ----------------------------
 
   ADD_TEST(bfTuVectorImageToIntensityImageFilterNew ${BASICFILTERS_TESTS7}
@@ -1573,8 +1557,6 @@ otbWindowedSincInterpolateImageBlackmanFunction.cxx
 otbProlateValidationTest.cxx
 otbVectorImageToAmplitudeImageFilterNew.cxx
 otbVectorImageToAmplitudeImageFilter.cxx
-otbRationalQuotientResampleImageFilterNew.cxx
-otbRationalQuotientResampleImageFilter.cxx
 otbVectorImageToIntensityImageFilterNew.cxx
 otbVectorImageToIntensityImageFilter.cxx
 )

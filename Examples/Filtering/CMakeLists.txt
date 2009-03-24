@@ -409,7 +409,7 @@ ADD_TEST(LaplacianRecursiveGaussianImageFilter1Test ${EXE_TESTS}
 	${INPUTDATA}/ROISpot5.png
 	${TEMP}/LaplacianRecursiveGaussianImageFilteroutput5.mha
         5
-	${TEMP}/LaplacianRecursiveGaussianImageFilterOutput5.png	
+	${TEMP}/LaplacianRecursiveGaussianImageFilterOutput5.png
 )
 
 # ------- LaplacianRecursiveGaussianImageFilter2Test----------
@@ -503,19 +503,6 @@ ADD_TEST(DerivativeImageFilterTest ${EXE_TESTS}
 	${TEMP}/DerivativeImageFilterOutput.png
     1 0
 )
-
-# ------- RationalQuotientResampleImageFilterTest----------
-
-ADD_TEST(RationalQuotientResampleImageFilterTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/RationalQuotientResampleImageFilterOutput.tif
-	${TEMP}/RationalQuotientResampleImageFilterOutput.tif
-	RationalQuotientResampleImageFilterTest
-	${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	${TEMP}/RationalQuotientResampleImageFilterOutput.tif
-	2 3
-)
-
 
 ADD_EXECUTABLE(otbFilteringExamplesTests otbFilteringExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbFilteringExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)

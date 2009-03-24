@@ -38,8 +38,6 @@ void RegisterTests()
   REGISTER_TEST(otbProlateValidationTest);
   REGISTER_TEST(otbVectorImageToAmplitudeImageFilterNew);
   REGISTER_TEST(otbVectorImageToAmplitudeImageFilter);
-  REGISTER_TEST(otbRationalQuotientResampleImageFilterNew);
-  REGISTER_TEST(otbRationalQuotientResampleImageFilter);
   REGISTER_TEST(otbVectorImageToIntensityImageFilterNew);
   REGISTER_TEST(otbVectorImageToIntensityImageFilter);
 }

@@ -40,7 +40,6 @@ void RegisterTests()
   REGISTER_TEST(MedianImageFilterTest);
   REGISTER_TEST(BinaryThresholdImageFilterTest);
   REGISTER_TEST(DerivativeImageFilterTest);
-  REGISTER_TEST(RationalQuotientResampleImageFilterTest);
 }
 
 #undef main
@@ -102,8 +101,4 @@ void RegisterTests()
 #undef main
 #define main DerivativeImageFilterTest
 #include "DerivativeImageFilter.cxx"
-
-#undef main
-#define main RationalQuotientResampleImageFilterTest
-#include "RationalQuotientResampleImageFilter.cxx"
 
