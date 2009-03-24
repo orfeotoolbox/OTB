@@ -119,6 +119,7 @@ public:
   void SetRenderingFunction(RenderingFunctionType * function)
   {
     m_RenderingFunction = function;
+    m_AutoMinMaxUpToDate = false;
     m_QuicklookRenderingFilter->SetRenderingFunction(m_RenderingFunction);
     m_ExtractRenderingFilter->SetRenderingFunction(m_RenderingFunction);
     m_ScaledExtractRenderingFilter->SetRenderingFunction(m_RenderingFunction);
@@ -191,7 +192,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
  
   /** Update the histogram */
-  virtual void RenderHistogram();
+virtual void RenderHistogram();
 
   /** Update the images */
   virtual void RenderImages();
