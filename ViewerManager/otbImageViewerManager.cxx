@@ -15,49 +15,62 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbImageViewerManager.h"
+#include "otbImageViewerManagerViewGUI.h"
+#include "otbImageViewerManagerModel.h"
+#include "otbImageViewerManagerController.h"
+#include "otbCommandLineArgumentParser.h"
+#include "otbMsgReporter.h"
+
 
 int main(int argc, char* argv[])
 {
+  
+  // Parse command line parameters
+  typedef otb::CommandLineArgumentParser ParserType;
+  ParserType::Pointer parser = ParserType::New();
+
+  parser->AddInputImage(false); //Optionnal parameter
+
+  typedef otb::CommandLineArgumentParseResult ParserResultType;
+  ParserResultType::Pointer  parseResult = ParserResultType::New();
+
   try
   {
-    typedef double PixelType;
-    typedef otb::ImageViewerManager<PixelType> ManagerType;
-    ManagerType::Pointer manager = ManagerType::New();
-    manager->Show();
-    std::string strTest("--OTBTesting");
-    bool bFlRun(true);
-
-    for (int i = 1; i<argc;++i)
-    {
-      if ( strTest.compare(argv[i])==0 )
-      {
-        std::cout << "--OTBTesting option. No FL::run() call !" << std::endl;
-        bFlRun=false;
-      }
-      else
-      {
-        manager->OpenImage(argv[i]);
-        Fl::check();
-      }
-    }
-    if ( bFlRun==true) return Fl::run();
+    parser->ParseCommandLine(argc,argv,parseResult);
   }
   catch ( itk::ExceptionObject & err )
   {
-    std::cout << "Following otbException catch :" << std::endl;
-    std::cout << err << std::endl;
+    std::string descriptionException = err.GetDescription();
+    if (descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
+    {
+      std::cout << "WARNING : output file pixels are converted in 'unsigned char'" << std::endl;
+      return EXIT_SUCCESS;
+    }
+    if (descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
+    {
+      return EXIT_SUCCESS;
+    }
     return EXIT_FAILURE;
   }
-  catch ( std::bad_alloc & err )
-  {
-    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl;
-    return EXIT_FAILURE;
-  }
-  catch ( ... )
-  {
-    std::cout << "Unknown Exception found !" << std::endl;
-    return EXIT_FAILURE;
-  }
-  return EXIT_SUCCESS;
+  
+  typedef otb::ImageViewerManagerController ControllerType;
+  typedef otb::ImageViewerManagerViewGUI ViewType;
+
+  ControllerType::Pointer controller = ControllerType::New();
+  ViewType::Pointer view = ViewType::New();
+  controller->SetView(view);
+  view->SetImageViewerManagerController(controller);
+  //otb::MsgReporter::GetInstance()->SetTitle("Image Viewer Manager application");
+  
+  //
+  view->Show();
+
+  if ( parseResult->IsOptionInputImagePresent() )
+    view->GetImageViewerManagerController()->OpenInputImage(parseResult->GetInputImage().c_str());
+
+  Fl::check();
+
+  otbGenericMsgDebugMacro(<<"Running GUI ...");
+  Fl::run();
+
 }
