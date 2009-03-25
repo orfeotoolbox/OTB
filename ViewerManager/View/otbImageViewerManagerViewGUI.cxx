@@ -71,8 +71,8 @@ ImageViewerManagerViewGUI
   
   
   //
-  m_CurveWidget->resize(0,0,300,200);
-  m_HistogramWindow->add(m_CurveWidget);
+  //m_CurveWidget->resize(0,0,300,200);
+  //m_HistogramWindow->add(m_CurveWidget);
   m_HistogramWindow->resize(0,0,300,200);
   m_Bhistogram          = HistogramCurveType::New();
   m_Rhistogram          = HistogramCurveType::New();
@@ -337,12 +337,7 @@ ImageViewerManagerViewGUI
   //- Get the view stored in the model 
   //- Build the widgets 
   
-  //First get the histogram list
-  m_pRenderingFuntion = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
-  m_Rhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(m_pRenderingFuntion->GetRedChannelIndex()));
-  m_Ghistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(m_pRenderingFuntion->GetGreenChannelIndex()));
-  m_Bhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(m_pRenderingFuntion->GetBlueChannelIndex()));
-  
+
   //build the 
   VisuViewPointerType currentVisuView = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pVisuView;
   m_PixelView->SetModel(m_ImageViewerManagerModel->GetPixelModel());
@@ -352,7 +347,16 @@ ImageViewerManagerViewGUI
   m_PackedWindow->RegisterScrollWidget(currentVisuView->GetScrollWidget());
   m_PackedWindow->RegisterZoomWidget(currentVisuView->GetZoomWidget());
   m_PackedWindow->RegisterPixelInformationWidget(m_PixelView->GetPixelDescriptionWidget());
-  //m_PackedWindow->RegisterHistogramWidget(m_CurveWidget);
+
+  //First get the histogram list
+  m_pRenderingFuntion = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
+  m_Rhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(m_pRenderingFuntion->GetRedChannelIndex()));
+  m_Ghistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(m_pRenderingFuntion->GetGreenChannelIndex()));
+  m_Bhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(m_pRenderingFuntion->GetBlueChannelIndex()));
+  
+  m_PackedWindow->RegisterHistogramWidget(m_CurveWidget);
+  
+
   m_PackedWindow->Show();
 
   

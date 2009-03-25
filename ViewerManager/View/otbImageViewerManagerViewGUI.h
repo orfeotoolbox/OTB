@@ -213,14 +213,12 @@ private:
   Fl_Window*                                     m_PixelWindow;
   Fl_Window*                                     m_HistogramWindow;
 
+  
   PackedWidgetManagerType::Pointer               m_PackedWindow;
-
-  //Packed View
-  //ImageWidgetPackedManagerType *                 packedWindow;
   //WidgetManagerList                              m_DisplayedWidgetList;
   
   /** Curve widget */
-  CurvesWidgetPointerType                        m_CurveWidget;
+  CurvesWidgetPointerType                              m_CurveWidget;
   HistogramCurveType::Pointer                    m_Bhistogram;
   HistogramCurveType::Pointer                    m_Ghistogram;
   HistogramCurveType::Pointer                    m_Rhistogram;
