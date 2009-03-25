@@ -42,7 +42,8 @@
 #include "otbVectorDataExtractROI.h"
 #include "otbRemoteSensingRegion.h"
 
-#include "otbImageWidgetPackedManager.h"
+//#include "otbImageWidgetPackedManager.h"
+#include "otbPackedWidgetManager.h"
 
 namespace otb
 {
@@ -52,9 +53,9 @@ namespace otb
 *
 */
 
-template <class TImage, class TVectorData = VectorData<double> >
+template <class TImage, class TVectorData = VectorData<double> , class TWidgetManager = otb::PackedWidgetManager>
 class StandardImageViewer
-  : public itk::Object, public ImageWidgetPackedManager
+  : public itk::Object//, public ImageWidgetPackedManager
 {
 public:
   /** Standard class typedefs */
@@ -77,6 +78,10 @@ public:
   /** VectorData typedef */
   typedef TVectorData                               VectorDataType;
   typedef typename VectorDataType::Pointer          VectorDataPointerType;
+
+  /** PackedWidgetManager */
+  typedef TWidgetManager                            WidgetManagerType;
+  typedef typename WidgetManagerType::Pointer       WidgetManagerPointerType;
 
   /** Output image type */
   typedef itk::RGBPixel<unsigned char>              RGBPixelType;
@@ -209,6 +214,9 @@ private:
 
   /** Path to the DEMDirectory (used if a VectorData is rendered */
   std::string m_DEMDirectory;
+
+  /** */
+  WidgetManagerPointerType   m_DisplayWindow;
 }; // end class
 } // end namespace otb
 
