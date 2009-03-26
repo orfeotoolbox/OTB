@@ -176,7 +176,7 @@ int main( int argc, char * argv[] )
     }
 
     while(polygon < OutputPolyList->Size()){
-      PolygonRegionType polygonRegion = OutputPolyList->GetNthElement(polygon)->GetBoundingRegion();
+      PolygonRegionType polygonRegion = OutputPolyList->GetNthElement(polygon)->GetBoundingRegion().GetImageRegion();
       if (OutputPolyList->GetNthElement(polygon)->GetArea() < minSize)
       {
         minSize = OutputPolyList->GetNthElement(polygon)->GetArea();
@@ -247,7 +247,7 @@ int main( int argc, char * argv[] )
     // erase small polygon
     for(unsigned int i = 0; i < OutputPolyList->Size(); i++){
       std::cout << "polygon "<< i << std::endl;
-      PolygonRegionType polygonRegion = OutputPolyList->GetNthElement(i)->GetBoundingRegion();
+      PolygonRegionType polygonRegion = OutputPolyList->GetNthElement(i)->GetBoundingRegion().GetImageRegion();
 
       IteratorType  outputIt(outputImage,polygonRegion);
 
