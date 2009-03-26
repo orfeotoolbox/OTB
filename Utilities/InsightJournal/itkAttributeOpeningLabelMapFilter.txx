@@ -42,8 +42,6 @@ AttributeOpeningLabelMapFilter<TImage, TAttributeAccessor>
 
   ImageType * output = this->GetOutput();
 
-  AttributeAccessorType accessor;
-
   const typename ImageType::LabelObjectContainerType & labelObjectContainer = output->GetLabelObjectContainer();
 
   ProgressReporter progress( this, 0, labelObjectContainer.size() );
@@ -55,8 +53,8 @@ AttributeOpeningLabelMapFilter<TImage, TAttributeAccessor>
     typename LabelObjectType::LabelType label = it->first;
     LabelObjectType * labelObject = it->second;
 
-    if( ( !m_ReverseOrdering && accessor( labelObject ) < m_Lambda )
-      || ( m_ReverseOrdering && accessor( labelObject ) > m_Lambda ) )
+    if( ( !m_ReverseOrdering && m_Accessor( labelObject ) < m_Lambda )
+      || ( m_ReverseOrdering && m_Accessor( labelObject ) > m_Lambda ) )
       {
       // must increment the iterator before removing the object to avoid invalidating the iterator
       it++;
