@@ -94,6 +94,17 @@ public:
   itkSetMacro( ReverseOrdering, bool );
   itkBooleanMacro( ReverseOrdering );
 
+  AttributeAccessorType & GetAccessor()
+  {
+    return m_Accessor;
+  }
+
+  void SetAccessor(const AttributeAccessorType& accessor)
+  {
+    m_Accessor = accessor;
+    this->Modified();
+  }
+
 protected:
   AttributeOpeningLabelMapFilter();
   ~AttributeOpeningLabelMapFilter() {};
@@ -108,6 +119,7 @@ private:
 
   AttributeValueType m_Lambda;
   bool m_ReverseOrdering;
+  AttributeAccessorType m_Accessor;
 
 } ; // end of class
 
