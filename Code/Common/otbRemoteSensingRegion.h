@@ -23,7 +23,7 @@
 #include "itkContinuousIndex.h"
 #include "itkRegion.h"
 #include "otbImageKeywordlist.h"
-#include "itkImageRegion.h"
+#include "itkRegion.h"
 
 namespace otb
 {
@@ -50,11 +50,11 @@ namespace otb
  */
 
 template <class TType>
-  class ITK_EXPORT RemoteSensingRegion : public itk::ImageRegion<2>
+  class ITK_EXPORT RemoteSensingRegion : public itk::Region
 {
 public:
   /** Standard class typedefs. */
-  typedef otb::RemoteSensingRegion<TType>           Self;
+  typedef otb::RemoteSensingRegion<TType>          Self;
   typedef itk::Region                              Superclass;
   typedef itk::SmartPointer<Self>                  Pointer;
   typedef itk::SmartPointer<const Self>            ConstPointer;
@@ -63,15 +63,17 @@ public:
   itkTypeMacro(RemoteSensingRegion, itk:Region);
 
   /** Typedef Support*/
-  typedef TType                                   Type;
-
+  typedef TType                                Type;
 
   /** Index typedef support. An index is used to access pixel values. */
   typedef itk::ContinuousIndex<Type>           IndexType;
 
   /** Size typedef support. A size is used to define region bounds. */
-  typedef itk::ContinuousIndex<Type>  SizeType;
-  typedef itk::Size<2> StandardSizeType;
+  typedef itk::ContinuousIndex<Type>           SizeType;
+  typedef itk::Size<2>                         StandardSizeType;
+
+  /** ImageRegion typedef needed by the GetImageRegion() method */
+  typedef itk::ImageRegion<2>                  ImageRegionType;
 
   virtual typename Superclass::RegionType GetRegionType() const
   {return Superclass::ITK_STRUCTURED_REGION;}
@@ -120,6 +122,27 @@ public:
     m_InputProjectionRef = region.m_InputProjectionRef;
     m_KeywordList        = region.m_KeywordList;
     }
+
+  /** This method provides explicit conversion to itk::ImageRegion<2>,
+   * so as to allow to use RemoteSensingRegion to specify requested
+   * region for images or images iterators.
+   */
+  const ImageRegionType GetImageRegion()
+  {
+    ImageRegionType imageRegion;
+    typename ImageRegionType::IndexType irIndex;
+    typename ImageRegionType::SizeType  irSize;
+  
+    irIndex[0]=static_cast<unsigned long>(vcl_floor(m_Index[0]));
+    irIndex[1]=static_cast<unsigned long>(vcl_floor(m_Index[1]));
+    irSize[0] =static_cast<unsigned long>(vcl_ceil(m_Size[0]));
+    irSize[1] =static_cast<unsigned long>(vcl_ceil(m_Size[1]));
+
+    imageRegion.SetIndex(irIndex);
+    imageRegion.SetSize(irSize);
+    
+    return imageRegion;
+  }
 
   /** Set the index defining the corner of the region. */
   void SetOrigin(const IndexType &index)
