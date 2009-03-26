@@ -25,12 +25,12 @@
 namespace otb
 {
 
-template <class TImage,class TVectorData>
-StandardImageViewer<TImage,TVectorData>
+template <class TImage,class TVectorData,class TWidgetManager>
+StandardImageViewer<TImage,TVectorData,TWidgetManager>
 ::StandardImageViewer() : m_Label("Default label"), m_Image(), m_VectorData(),
-                       m_ImageLayer(), m_RenderingModel(),m_PixelDescriptionModel(),
-                       m_View(), m_PixelDescriptionView(), m_CurveWidget(),
-                       m_Controller(), m_RenderingFunction()
+			  m_ImageLayer(), m_RenderingModel(),m_PixelDescriptionModel(),
+			  m_View(), m_PixelDescriptionView(), m_CurveWidget(),
+			  m_Controller(), m_RenderingFunction(), m_DisplayWindow()
 {
   // Build a new rendering model
   m_RenderingModel = RenderingModelType::New();
@@ -88,29 +88,35 @@ StandardImageViewer<TImage,TVectorData>
   arrowKeyMoveHandler->SetView(m_View);
   m_Controller->AddActionHandler(arrowKeyMoveHandler);
 
-  
-  m_FullGroup->add(m_View->GetFullWidget());
+  /** Display Window*/
+  m_DisplayWindow   = WidgetManagerType::New();
+  m_DisplayWindow->RegisterFullWidget(m_View->GetFullWidget());
+  m_DisplayWindow->RegisterScrollWidget(m_View->GetScrollWidget());
+  m_DisplayWindow->RegisterZoomWidget(m_View->GetZoomWidget());
+  m_DisplayWindow->RegisterPixelInformationWidget(m_PixelDescriptionView->GetPixelDescriptionWidget());
+  m_DisplayWindow->RegisterHistogramWidget(m_CurveWidget);
 
-  m_QuicklookGroup->add(m_View->GetScrollWidget());
-  m_ZoomGroup->add(m_View->GetZoomWidget());
-  m_HistogramsGroup->add(m_CurveWidget);
-  m_PixelInformationGroup->add(m_PixelDescriptionView->GetPixelDescriptionWidget());
+  //m_FullGroup->add(m_View->GetFullWidget());
+  //m_QuicklookGroup->add(m_View->GetScrollWidget());
+  //m_ZoomGroup->add(m_View->GetZoomWidget());
+  //m_HistogramsGroup->add(m_CurveWidget);
+  //m_PixelInformationGroup->add(m_PixelDescriptionView->GetPixelDescriptionWidget());
 
-  m_View->GetZoomWidget()->resize(m_ZoomGroup->x(),m_ZoomGroup->y(),m_ZoomGroup->w(),m_ZoomGroup->h());
-  m_View->GetFullWidget()->resize(m_FullGroup->x(),m_FullGroup->y(),m_FullGroup->w(),m_FullGroup->h());
-  m_View->GetScrollWidget()->resize(m_QuicklookGroup->x(),m_QuicklookGroup->y(),m_QuicklookGroup->w(),m_QuicklookGroup->h());
-  m_CurveWidget->resize(m_HistogramsGroup->x(),m_HistogramsGroup->y(),m_HistogramsGroup->w(),m_HistogramsGroup->h());
-  m_PixelDescriptionView->GetPixelDescriptionWidget()->resize(m_PixelInformationGroup->x(),m_PixelInformationGroup->y(),m_PixelInformationGroup->w(),m_PixelInformationGroup->h());
+  //m_View->GetZoomWidget()->resize(m_ZoomGroup->x(),m_ZoomGroup->y(),m_ZoomGroup->w(),m_ZoomGroup->h());
+  //m_View->GetFullWidget()->resize(m_FullGroup->x(),m_FullGroup->y(),m_FullGroup->w(),m_FullGroup->h());
+  //m_View->GetScrollWidget()->resize(m_QuicklookGroup->x(),m_QuicklookGroup->y(),m_QuicklookGroup->w(),m_QuicklookGroup->h());
+  //m_CurveWidget->resize(m_HistogramsGroup->x(),m_HistogramsGroup->y(),m_HistogramsGroup->w(),m_HistogramsGroup->h());
+  //m_PixelDescriptionView->GetPixelDescriptionWidget()->resize(m_PixelInformationGroup->x(),m_PixelInformationGroup->y(),m_PixelInformationGroup->w(),m_PixelInformationGroup->h());
 }
 
-template <class TImage,class TVectorData>
-StandardImageViewer<TImage,TVectorData>
+template <class TImage,class TVectorData,class TWidgetManager>
+StandardImageViewer<TImage,TVectorData,TWidgetManager>
 ::~StandardImageViewer()
 {}
 
-template <class TImage,class TVectorData>
+template <class TImage,class TVectorData,class TWidgetManager>
 void
-StandardImageViewer<TImage,TVectorData>
+StandardImageViewer<TImage,TVectorData,TWidgetManager>
 ::Update()
 {
   // First check if there is actually an input image
@@ -207,7 +213,7 @@ StandardImageViewer<TImage,TVectorData>
     }
   
   // Generate the layer
- ImageLayerGeneratorPointerType generator = ImageLayerGeneratorType::New();
+  ImageLayerGeneratorPointerType generator = ImageLayerGeneratorType::New();
   generator->SetImage(m_Image);
   FltkFilterWatcher qlwatcher(generator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
   generator->GenerateLayer();
@@ -215,18 +221,19 @@ StandardImageViewer<TImage,TVectorData>
   m_RenderingFunction = generator->GetDefaultRenderingFunction();
 
   // Set the window and layer label
-  m_Window->label(m_Label.c_str());
+  //m_Window->label(m_Label.c_str());
   m_ImageLayer->SetName(m_Label);
 
   // Add the generated layer to the rendering model
   m_RenderingModel->AddLayer(generator->GetLayer());
 
   // Show everything
-  m_Window->show();
-  m_View->GetScrollWidget()->show();
-  m_View->GetFullWidget()->show();
-  m_View->GetZoomWidget()->show();
-  m_CurveWidget->show();
+//   m_Window->show();
+//   m_View->GetScrollWidget()->show();
+//   m_View->GetFullWidget()->show();
+//   m_View->GetZoomWidget()->show();
+//   m_CurveWidget->show();
+  m_DisplayWindow->Show();
 
   // Update the rendering model
   m_RenderingModel->Update();

@@ -25,8 +25,12 @@ IF(NOT OTB_USE_EXTERNAL_EXPAT)
 	SUBDIRS( otbexpat )
 ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
 
+IF(NOT OTB_USE_EXTERNAL_BOOST)
+  SUBDIRS(BGL)
+ENDIF(NOT OTB_USE_EXTERNAL_BOOST)
 
-SUBDIRS(BGL otbsvm dxflib InsightJournal otbossim otbossimplugins otb6S tinyXMLlib otbkml otbliblas otbedison otbsiftfast)
+
+SUBDIRS(otbsvm dxflib InsightJournal otbossim otbossimplugins otb6S tinyXMLlib otbkml otbliblas otbedison otbsiftfast)
 
 IF(BUILD_TESTING)
         SUBDIRS( Dart )
