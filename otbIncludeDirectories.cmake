@@ -26,8 +26,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/Radiometry
   ${OTB_SOURCE_DIR}/Code/SARPolarimetry
   ${OTB_SOURCE_DIR}/Code/Markov
-  ${OTB_SOURCE_DIR}/Utilities/BGL
-  ${OTB_SOURCE_DIR}/Utilities/BGL/boost
+
   ${OTB_SOURCE_DIR}/Utilities/otbsvm
   ${OTB_SOURCE_DIR}/Utilities/otbossim
   ${OTB_SOURCE_DIR}/Utilities/otbossim/include
@@ -101,6 +100,15 @@ ELSE(OTB_USE_EXTERNAL_ITK)
 	${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/v3p/netlib/opt)
 ENDIF(OTB_USE_EXTERNAL_ITK)
 
+# Include directories from the CURL build tree.
+IF(OTB_USE_EXTERNAL_BOOST)
+  SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+  	${Boost_INCLUDE_DIR} )
+ELSE(OTB_USE_EXTERNAL_BOOST)
+  SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+    ${OTB_SOURCE_DIR}/Utilities/BGL
+    ${OTB_SOURCE_DIR}/Utilities/BGL/boost)
+ENDIF(OTB_USE_EXTERNAL_BOOST)
 
 #-----------------------------------------------------------------------------
 # Include directories needed for .cxx files in OTB.  These include
@@ -200,8 +208,7 @@ SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
   ${OTB_INSTALL_INCLUDE_DIR}/Fusion
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/ITK
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/BGL
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/BGL/boost
+
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbsvm
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include
@@ -251,6 +258,10 @@ ENDIF(OTB_USE_CURL)
 IF(OTB_USE_BOOST)
   SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
   	${Boost_INCLUDE_DIR} )
+ELSE(OTB_USE_BOOST)
+  SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
+        ${OTB_INSTALL_INCLUDE_DIR}/Utilities/BGL
+        ${OTB_INSTALL_INCLUDE_DIR}/Utilities/BGL/boost)
 ENDIF(OTB_USE_BOOST)
 
 # For OpentTreads  header file
