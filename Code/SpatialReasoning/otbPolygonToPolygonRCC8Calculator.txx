@@ -53,8 +53,8 @@ PolygonToPolygonRCC8Calculator<TInputPolygon>
 ::Compute(void)
 {
   // First check if bounding regions are disjoints
-  RegionType region1 = m_Polygon1->GetBoundingRegion();
-  RegionType region2 = m_Polygon2->GetBoundingRegion();
+  RegionType region1 = m_Polygon1->GetBoundingRegion().GetImageRegion();
+  RegionType region2 = m_Polygon2->GetBoundingRegion().GetImageRegion();
 
   // If intersection is not null, we have to do the computation
   if (!RegionsIntersectionIsNull(region1,region2))
