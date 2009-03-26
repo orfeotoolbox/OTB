@@ -313,6 +313,19 @@ IF(OTB_USE_CURL)
 ENDIF(OTB_USE_CURL)
 
 #-------------------------------
+# Boost Library
+#-------------------------------
+
+# Option for internal/external BOOST
+OPTION(OTB_USE_EXTERNAL_BOOST "Use an outside build of Boost." OFF)
+MARK_AS_ADVANCED(OTB_USE_EXTERNAL_BOOST)
+
+IF(OTB_USE_EXTERNAL_BOOST)
+  FIND_PACKAGE(Boost)
+  INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+ENDIF(OTB_USE_EXTERNAL_BOOST)
+
+#-------------------------------
 # GDAL Library
 #-------------------------------
 
