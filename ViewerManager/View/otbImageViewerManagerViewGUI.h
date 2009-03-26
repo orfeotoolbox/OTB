@@ -43,6 +43,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbHistogramCurve.h"
 
 #include "otbPackedWidgetManager.h"
+#include "otbSplittedWidgetManager.h"
 
 #include "otbObjectList.h"
 #include "otbFixedSizeFullImageWidget.h"
@@ -82,18 +83,14 @@ public:
   
   typedef ImageView<VisuModelType>                                VisuViewType;
   typedef VisuViewType::Pointer                                   VisuViewPointerType;
-
-  typedef PixelDescriptionView<PixelDescriptionModelType>         PixelDescriptionViewType;
-
-  typedef ObjectList<VisuViewType>                                VisuViewListType;
-  typedef VisuViewListType::Pointer                               VisuViewListPointerType;
-
-  //typedef ImageWidgetPackedManager                                ImageWidgetPackedManagerType;
-  //typedef std::vector<ImageWidgetPackedManagerType*>            WidgetManagerList; 
   
-  // 
+  
+
+  /* Method to display the Widget : Packed or Splitted */ 
   typedef PackedWidgetManager                                     PackedWidgetManagerType;
   typedef PackedWidgetManagerType::Pointer                        PackedWidgetManagerPointerType;
+  typedef SplittedWidgetManager                                   SplittedWidgetManagerType;
+  typedef SplittedWidgetManagerType::Pointer                      SplittedWidgetManagerPointerType;
   
   /** Widget for the preview*/
   typedef ImageWidget<>                                           ImageWidgetType;
@@ -101,15 +98,21 @@ public:
   typedef ImageWidgetType::Pointer                                ImageWidgetPointerType;
 
   /** Curves 2D widget */
-  typedef Curves2DWidget                            CurvesWidgetType;
-  typedef CurvesWidgetType::Pointer                 CurvesWidgetPointerType;
-  typedef HistogramCurve<HistogramType>             HistogramCurveType;
-  typedef HistogramCurveType::Pointer               HistogramCurvePointerType;
-
+  typedef Curves2DWidget                                           CurvesWidgetType;
+  typedef CurvesWidgetType::Pointer                                CurvesWidgetPointerType;
+  typedef HistogramCurve<HistogramType>                            HistogramCurveType;
+  typedef HistogramCurveType::Pointer                              HistogramCurvePointerType;
+  
+  /** Pixel Description View*/
+  typedef PixelDescriptionView<PixelDescriptionModelType>         PixelDescriptionViewType;
+  
   /** vector to store the status of images : diplayed or not displayed*/
   typedef std::vector<bool>                                       BoolVector;
   
-  typedef ObjectList<VisuViewType>                                VisuViewShowedList;
+  /** list in order to store the diplay manager*/
+  typedef ObjectList<PackedWidgetManagerType>                     PackedManagerList;
+  typedef ObjectList<SplittedWidgetManagerType>                   SplittedManagerList;
+
 
   
   /** Method to set the controller*/
@@ -121,11 +124,9 @@ public:
     m_VisuView->SetController(m_ImageViewerManagerController->GetVisuController());
     m_PreviewWidget->SetController(m_ImageViewerManagerController->GetPreviewVisuController());
   }
-    
-
-  /** VisuModel */
+  
+  // Visu  
   itkGetMacro(VisuView,VisuViewPointerType);
-  //itkGetMacro(VisuViewList,VisuViewListPointerType );
   
   itkGetMacro(PreviewWidget,ImageWidgetPointerType );
   
@@ -135,9 +136,8 @@ public:
    // Update the display
   virtual void ImageViewerManagerNotify();
   
-  /// Inherited methods
+  // 
   virtual void OpenImage();
-  //virtual VisuViewPointerType  AddView(VisuModelPointerType renderingLayer);
   
 protected:
   virtual void   CloseImage(); 
@@ -161,7 +161,6 @@ protected:
   virtual void   GrayScaleSet(); 
   virtual void   RGBSet(); 
   virtual void   ComplexSet(); 
-  /*   virtual void ZoomSmallImagesHook(); */
   /*   virtual void Diaporama(); */
   /*   virtual void DiaporamaPrevious(); */
   /*   virtual void DiaporamaNext(); */
@@ -179,14 +178,7 @@ protected:
   /** Constructor */
   ImageViewerManagerViewGUI();
   /** Destructor */
-  virtual ~ImageViewerManagerViewGUI()
-    {
-      
-      delete        m_FullWindow;
-      delete        m_ScrollWindow;
-      delete        m_ZoomWindow;
-      delete        m_PixelWindow;
-    };
+  virtual ~ImageViewerManagerViewGUI(){};
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -195,53 +187,48 @@ private:
   void operator=(const Self&); //purposely not implemented
   
   /** Pointer to the model */
-  
   ImageViewerManagerModel::Pointer               m_ImageViewerManagerModel;
+  
   /** Pointer to the controller */
   ImageViewerManagerControllerInterface::Pointer m_ImageViewerManagerController;
   
+  //
   BoolVector                                     m_DisplayStatusList;
   std::string                                    m_TemplateViewerName ;
   std::string                                    m_DisplayedLabel;
   std::string                                    m_UndisplayedLabel ;
-  VisuViewShowedList::Pointer                    m_VisuViewShowedList;
+  //VisuViewShowedList::Pointer                    m_VisuViewShowedList;
   
-  /** FL_Windows*/
-  Fl_Window*                                     m_FullWindow;
-  Fl_Window*                                     m_ScrollWindow;
-  Fl_Window*                                     m_ZoomWindow;
-  Fl_Window*                                     m_PixelWindow;
-  Fl_Window*                                     m_HistogramWindow;
-
-  
+  //Widget Manager
   PackedWidgetManagerType::Pointer               m_PackedWindow;
-  //WidgetManagerList                              m_DisplayedWidgetList;
+  SplittedWidgetManagerType::Pointer             m_SplittedWindow;
+  SplittedManagerList::Pointer                   m_SplittedManagerList;                
+  PackedManagerList::Pointer                     m_PackedManagerList;                
   
   /** Curve widget */
-  CurvesWidgetPointerType                              m_CurveWidget;
+  CurvesWidgetPointerType                        m_CurveWidget;
   HistogramCurveType::Pointer                    m_Bhistogram;
   HistogramCurveType::Pointer                    m_Ghistogram;
   HistogramCurveType::Pointer                    m_Rhistogram;
 
-  unsigned int                                   m_NbComponent;
+
   /** NewVisu */
   VisuViewPointerType                            m_VisuView;
   
   /**ImageWidget for my preview*/
   ImageWidgetPointerType                         m_PreviewWidget;
 
-  /**view associated to the pixelDescription*/
+  /** view associated to the pixelDescription*/
   PixelDescriptionViewType::Pointer             m_PixelView ;
 
-
-
-  //Histogram 
-  StandardRenderingFunctionType::Pointer  m_pRenderingFuntion;
-  HistogramCurveType::ColorType    m_Red;
-  HistogramCurveType::ColorType    m_Green;
-  HistogramCurveType::ColorType    m_Blue;
+  /** Histogram */
+  StandardRenderingFunctionType::Pointer        m_pRenderingFuntion;
+  HistogramCurveType::ColorType                 m_Red;
+  HistogramCurveType::ColorType                 m_Green;
+  HistogramCurveType::ColorType                 m_Blue;
   
-  
+  /** Store the component number of a pixel*/
+  unsigned int                                   m_NbComponent;
 
 };
 }// End namespace otb

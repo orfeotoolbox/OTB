@@ -34,13 +34,14 @@ ImageViewerManagerViewGUI
 			      m_UndisplayedLabel("- ")
 {
 
-  //
-  m_VisuViewShowedList =  VisuViewShowedList::New();
-  m_VisuView           =  VisuViewType::New();
-  m_PreviewWidget      =  ImageWidgetType::New();
-  m_pRenderingFuntion  = StandardRenderingFunctionType::New();
-  m_PixelView          =  PixelDescriptionViewType::New();
-  m_CurveWidget        =  CurvesWidgetType::New();
+  m_VisuView            =  VisuViewType::New();
+  m_PreviewWidget       =  ImageWidgetType::New();
+  m_pRenderingFuntion   =  StandardRenderingFunctionType::New();
+  m_PackedWindow        =  PackedWidgetManagerType::New(); 
+  m_SplittedWindow      =  SplittedWidgetManagerType::New(); 
+  m_SplittedManagerList =  SplittedManagerList::New();
+  m_PixelView           =  PixelDescriptionViewType::New();
+  m_CurveWidget         =  CurvesWidgetType::New();
 
   //Get an instance of the model
   m_ImageViewerManagerModel = ImageViewerManagerModel::GetInstance();
@@ -60,20 +61,8 @@ ImageViewerManagerViewGUI
   gPreviewWindow->resizable(gPreviewWindow);
   m_PreviewWidget->resize(gPreviewWindow->x(), gPreviewWindow->y(), gPreviewWindow->w(), gPreviewWindow->h() );
   
-  // Init the widgets : PixelDescription, Full, Scroll, Zoom & Histogram 
-  m_FullWindow       = new Fl_Window(500,500);
-  m_ScrollWindow     = new Fl_Window(200,200);
-  m_ZoomWindow       = new Fl_Window(200,200);
-  m_PixelWindow      = new Fl_Window(200,200);
-  m_HistogramWindow  = new Fl_Window(300,200);
 
-
-  
-  
-  //
-  //m_CurveWidget->resize(0,0,300,200);
-  //m_HistogramWindow->add(m_CurveWidget);
-  m_HistogramWindow->resize(0,0,300,200);
+  //Histogram 
   m_Bhistogram          = HistogramCurveType::New();
   m_Rhistogram          = HistogramCurveType::New();
   m_Ghistogram          = HistogramCurveType::New();
@@ -99,11 +88,8 @@ ImageViewerManagerViewGUI
   m_CurveWidget->SetXAxisLabel("Pixels");
   m_CurveWidget->SetYAxisLabel("Frequency");
     
-  //Add a widget once
-  m_PixelWindow->add(m_PixelView->GetPixelDescriptionWidget());
+  //Widget Manager
 
-  //
-  m_PackedWindow =  PackedWidgetManagerType::New(); 
 }
   
   /**
@@ -163,9 +149,7 @@ ImageViewerManagerViewGUI
       if(m_DisplayStatusList[selectedItem-1])
 	{
 	  this->Display(selectedItem);
-	  m_FullWindow->redraw();
-	  m_ScrollWindow->redraw();
-	  m_ZoomWindow->redraw();
+	  m_SplittedWindow->Refresh();
 	}
 
       //Update Information
@@ -335,105 +319,34 @@ ImageViewerManagerViewGUI
 ::Display(unsigned int selectedItem)
 {
   //- Get the view stored in the model 
-  //- Build the widgets 
-  
-
-  //build the 
   VisuViewPointerType currentVisuView = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pVisuView;
   m_PixelView->SetModel(m_ImageViewerManagerModel->GetPixelModel());
   
-  
-  m_PackedWindow->RegisterFullWidget(currentVisuView->GetFullWidget());
-  m_PackedWindow->RegisterScrollWidget(currentVisuView->GetScrollWidget());
-  m_PackedWindow->RegisterZoomWidget(currentVisuView->GetZoomWidget());
-  m_PackedWindow->RegisterPixelInformationWidget(m_PixelView->GetPixelDescriptionWidget());
-
   //First get the histogram list
-  m_pRenderingFuntion = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
-  m_Rhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(m_pRenderingFuntion->GetRedChannelIndex()));
-  m_Ghistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(m_pRenderingFuntion->GetGreenChannelIndex()));
-  m_Bhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(m_pRenderingFuntion->GetBlueChannelIndex()));
+  StandardRenderingFunctionType::Pointer pRenderingFuntion = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
+  m_Rhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(pRenderingFuntion->GetRedChannelIndex()));
+  m_Ghistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(pRenderingFuntion->GetGreenChannelIndex()));
+  m_Bhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(pRenderingFuntion->GetBlueChannelIndex()));
   
-  m_PackedWindow->RegisterHistogramWidget(m_CurveWidget);
+  //Edit the Widget Manager : Packed Windows
+  // m_PackedWindow->RegisterFullWidget(currentVisuView->GetFullWidget());
+  // m_PackedWindow->RegisterScrollWidget(currentVisuView->GetScrollWidget());
+  // m_PackedWindow->RegisterZoomWidget(currentVisuView->GetZoomWidget());
+  // m_PackedWindow->RegisterPixelInformationWidget(m_PixelView->GetPixelDescriptionWidget());
+  // m_PackedWindow->RegisterHistogramWidget(m_CurveWidget);
+  // m_PackedWindow->Show();
+
+  //Edit the Widget Manager : Splitted Windows
+  m_SplittedWindow->UnRegisterAll();
+  m_SplittedWindow->RegisterFullWidget(currentVisuView->GetFullWidget());
+  m_SplittedWindow->RegisterScrollWidget(currentVisuView->GetScrollWidget());
+  m_SplittedWindow->RegisterZoomWidget(currentVisuView->GetZoomWidget());
+  m_SplittedWindow->RegisterPixelInformationWidget(m_PixelView->GetPixelDescriptionWidget());
+  m_SplittedWindow->RegisterHistogramWidget(m_CurveWidget);
+  m_SplittedWindow->SetLabel("SplittedView");
+  m_SplittedWindow->Show();
+  m_SplittedWindow->Refresh();
   
-
-  m_PackedWindow->Show();
-
-  
-  
-//   currentVisuView->GetFullWidget()->show();
-//   //m_PixelView->GetPixelDescriptionWidget()->show();
-//   currentVisuView->GetScrollWidget()->show();
-//   currentVisuView->GetZoomWidget()->show();
-
-    
-//   //   //Pixel Description
-
-//    //   m_PixelWindow->label("Pixel Description");
-//    //   m_PixelWindow->resizable(m_PixelView->GetPixelDescriptionWidget());
-//    //   m_PixelWindow->show();
-//     m_PackedWindow->m_PixelInformationGroup->resizable(m_PixelView->GetPixelDescriptionWidget());
-//     m_PixelView->GetPixelDescriptionWidget()->resize(m_PackedWindow->m_PixelInformationGroup->x(), m_PackedWindow->m_PixelInformationGroup->y(),
-// 						     m_PackedWindow->m_PixelInformationGroup->w(),m_PackedWindow->m_PixelInformationGroup->h());
-    
-//     //   //FullWidget
-//     //   m_FullWindow->label("Full Window");
-//     //   m_FullWindow->add(currentVisuView->GetFullWidget());
-//     //   m_FullWindow->resizable(currentVisuView->GetFullWidget());
-//     //   m_FullWindow->show(); 
-    
-//     m_PackedWindow->m_FullGroup->add(currentVisuView->GetFullWidget());
-//     m_PackedWindow->m_FullGroup->resizable(currentVisuView->GetFullWidget());
-//     currentVisuView->GetFullWidget()->resize(m_PackedWindow->m_FullGroup->x(), m_PackedWindow->m_FullGroup->y(),
-// 					     m_PackedWindow->m_FullGroup->w(),m_PackedWindow->m_FullGroup->h());
-    
-//     //   m_FullWindow->redraw();
-    
-//     //   //ScrollWidget
-//     //   m_ScrollWindow->label("Scroll Window");
-//     //   m_ScrollWindow->add((currentVisuView->GetScrollWidget()));
-//     //   m_ScrollWindow->resizable(currentVisuView->GetScrollWidget());
-//     //   m_ScrollWindow->show();
-//     m_PackedWindow->m_QuicklookGroup->add(currentVisuView->GetScrollWidget());
-//     m_PackedWindow->m_QuicklookGroup->resizable(currentVisuView->GetScrollWidget());
-//     currentVisuView->GetScrollWidget()->resize(m_PackedWindow->m_QuicklookGroup->x(),m_PackedWindow->m_QuicklookGroup->y(),
-// 					       m_PackedWindow->m_QuicklookGroup->w(),m_PackedWindow->m_QuicklookGroup->h());
-//     //   m_ScrollWindow->redraw();
-    
-//     //   //Zoom Widget
-//     //   m_ZoomWindow->label("Zoom Window");
-//     //   m_ZoomWindow->add(currentVisuView->GetZoomWidget());
-//     //   m_ZoomWindow->resizable(currentVisuView->GetZoomWidget());
-//     //   m_ZoomWindow->show();
-    
-//     m_PackedWindow->m_ZoomGroup->add(currentVisuView->GetZoomWidget());
-//     m_PackedWindow->m_ZoomGroup->resizable(currentVisuView->GetZoomWidget());
-//     currentVisuView->GetZoomWidget()->resize(m_PackedWindow->m_ZoomGroup->x(),m_PackedWindow->m_ZoomGroup->y(),
-// 					    m_PackedWindow->m_ZoomGroup->w(),m_PackedWindow->m_ZoomGroup->h());
-    
-//     //   m_ZoomWindow->redraw();
-    
-//     // adding histograms rendering
-//     // Get the renderingFunction  
-
-    
-  
-  //     // m_HistogramWindow->show();
-//     m_PackedWindow->m_HistogramsGroup->add(m_CurveWidget);
-//     m_CurveWidget->resize(m_PackedWindow->m_HistogramsGroup->x(),m_PackedWindow->m_HistogramsGroup->y(),
-// 			 m_PackedWindow->m_HistogramsGroup->w(),m_PackedWindow->m_HistogramsGroup->h());
-    
-//     //   m_CurveWidget->redraw();
-    
-    //Display Everything
-  
-
-  //currentVisuView->GetFullWidget()->show();
-  //m_PixelView->GetPixelDescriptionWidget()->show();
-  //currentVisuView->GetScrollWidget()->show();
-  //currentVisuView->GetZoomWidget()->show();
-  //m_CurveWidget->show();
-    
 }
 
 /**
@@ -463,14 +376,8 @@ void
 ImageViewerManagerViewGUI
 ::Undisplay(unsigned int selectedItem)
 {
-  //   m_FullWindow->hide();
-  //   m_ScrollWindow->hide(); 
-  //   m_ZoomWindow->hide();
-  //   m_PixelWindow->hide(); 
-  //   m_HistogramWindow->hide();
-
-
-  //m_PackedWindow->m_Window->hide();
+  //m_PackedWindow->Hide();
+  m_SplittedWindow->Hide();
 }
 /**
  * Hide all the widget opened
@@ -489,17 +396,11 @@ ImageViewerManagerViewGUI
 	  m_DisplayStatusList[i] = false;
 	}
     }
+ 
   // Close the opened widget
-
-  //packeduWindow->m_Window->hide();
-
-  
-//   m_FullWindow->hide();
-//   m_ScrollWindow->hide(); 
-//   m_ZoomWindow->hide();
-//   m_PixelWindow->hide();
-//   m_HistogramWindow->hide();
-}
+  //m_PackedWindow->Hide();
+  m_SplittedWindow->Hide();
+ }
 
 /**
  * Quit GUI
@@ -508,11 +409,9 @@ void
 ImageViewerManagerViewGUI
 ::Quit()
 {
-  m_FullWindow->hide();
-  m_ScrollWindow->hide(); 
-  m_ZoomWindow->hide();
-  m_PixelWindow->hide();
   guiMainWindow->hide();
+  //m_PackedWindow->Hide();
+  m_SplittedWindow->Hide();
 }
 
 /**
