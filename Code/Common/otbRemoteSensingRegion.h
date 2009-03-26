@@ -23,7 +23,7 @@
 #include "itkContinuousIndex.h"
 #include "itkRegion.h"
 #include "otbImageKeywordlist.h"
-#include "itkRegion.h"
+#include "itkImageRegion.h"
 
 namespace otb
 {
