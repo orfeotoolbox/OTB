@@ -156,7 +156,7 @@ int main(int argc, char * argv[])
   projection->SetInput(reader->GetOutput());
   projection->Update();
 
-  mapnik::datasource_cache::instance()->register_datasources( "/home/christop/opensource/mapnik/plugins/input/shape");
+//   mapnik::datasource_cache::instance()->register_datasources( "/home/christop/opensource/mapnik/plugins/input/shape");
 //   mapnik::datasource_cache::instance()->register_datasources( "/usr/lib/mapnik/0.5/input");
   mapnik::freetype_engine::register_font("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");
   mapnik::Map m(800,600);
@@ -180,6 +180,15 @@ int main(int argc, char * argv[])
     style.add_rule(rule);
     m.insert_style("coast-poly",style);
   }
+  {
+    mapnik::feature_type_style style;
+    mapnik::rule_type rule;
+    rule.set_max_scale(600000);
+    rule.append(mapnik::line_symbolizer(mapnik::color("#e46d71")));
+//     rule.append(mapnik::polygon_symbolizer(mapnik::Color(242,239,233)));
+    style.add_rule(rule);
+    m.insert_style("coast-poly",style);
+  }
 
 
   datasource_ptr mDatasource = datasource_ptr(new mapnik::memory_datasource);
@@ -193,9 +202,9 @@ int main(int argc, char * argv[])
   std::cout << "Datasource size: " << mDatasource->size() << std::endl;
 
 
-  mapnik::parameters p;
-  p["type"]="shape";
-  p["file"]="world_borders";
+//   mapnik::parameters p;
+//   p["type"]="shape";
+//   p["file"]="world_borders";
 
   mapnik::Layer lyr("world");
 //   lyr.set_datasource(mapnik::datasource_cache::instance()->create(p));
