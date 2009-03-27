@@ -65,7 +65,7 @@ int main( int argc, char * argv[] )
   typedef PolygonType::ContinuousIndexType   PolygonIndexType;
   typedef otb::ObjectList<PolygonType>       PolygonListType;
   typedef PolygonListType::Pointer           PolygonListPointerType;
-  typedef itk::ImageRegion<2>                PolygonRegionType;
+  typedef itk::ImageRegion<2>                ImageRegionType;
 
   typedef otb::PersistentVectorizationImageFilter<LabeledImageType,PolygonType> PersistentVectorizationFilterType;
   typedef itk::RelabelComponentImageFilter<LabeledImageType,LabeledImageType>   RelabelFilterType;
@@ -176,7 +176,7 @@ int main( int argc, char * argv[] )
     }
 
     while(polygon < OutputPolyList->Size()){
-      PolygonRegionType polygonRegion = OutputPolyList->GetNthElement(polygon)->GetBoundingRegion().GetImageRegion();
+      ImageRegionType polygonRegion = OutputPolyList->GetNthElement(polygon)->GetBoundingRegion().GetImageRegion();
       if (OutputPolyList->GetNthElement(polygon)->GetArea() < minSize)
       {
         minSize = OutputPolyList->GetNthElement(polygon)->GetArea();
@@ -247,7 +247,7 @@ int main( int argc, char * argv[] )
     // erase small polygon
     for(unsigned int i = 0; i < OutputPolyList->Size(); i++){
       std::cout << "polygon "<< i << std::endl;
-      PolygonRegionType polygonRegion = OutputPolyList->GetNthElement(i)->GetBoundingRegion().GetImageRegion();
+      ImageRegionType polygonRegion = OutputPolyList->GetNthElement(i)->GetBoundingRegion().GetImageRegion();
 
       IteratorType  outputIt(outputImage,polygonRegion);
 
