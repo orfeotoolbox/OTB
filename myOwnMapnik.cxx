@@ -82,8 +82,8 @@ int main ( int argc , char** argv)
   p["file"]="world_borders";
 
   Layer lyr("world");
-  lyr.set_datasource(datasource_cache::instance()->create(p));
-//   lyr.set_datasource(mDatasource);
+//   lyr.set_datasource(datasource_cache::instance()->create(p));
+  lyr.set_datasource(mDatasource);
   lyr.add_style("world");
   m.addLayer(lyr);
 
