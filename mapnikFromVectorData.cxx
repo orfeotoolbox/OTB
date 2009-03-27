@@ -156,7 +156,8 @@ int main(int argc, char * argv[])
   projection->SetInput(reader->GetOutput());
   projection->Update();
 
-  mapnik::datasource_cache::instance()->register_datasources( "/usr/lib/mapnik/0.5/input");
+  mapnik::datasource_cache::instance()->register_datasources( "/home/christop/opensource/mapnik/plugins/input/shape");
+//   mapnik::datasource_cache::instance()->register_datasources( "/usr/lib/mapnik/0.5/input");
   mapnik::freetype_engine::register_font("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");
   mapnik::Map m(800,600);
   m.set_background(mapnik::color_factory::from_string("cadetblue"));
@@ -165,8 +166,8 @@ int main(int argc, char * argv[])
     mapnik::rule_type rule;
     rule.set_max_scale(250000000000LLU);
     rule.set_min_scale(600000);
-//     rule.append(polygon_symbolizer(color("#f2efe9")));
-    rule.append(mapnik::polygon_symbolizer(mapnik::Color(242,239,233)));
+    rule.append(mapnik::line_symbolizer(mapnik::color("#f2efe9")));
+//     rule.append(mapnik::polygon_symbolizer(mapnik::Color(242,239,233)));
     style.add_rule(rule);
     m.insert_style("world",style);
   }
@@ -174,8 +175,8 @@ int main(int argc, char * argv[])
     mapnik::feature_type_style style;
     mapnik::rule_type rule;
     rule.set_max_scale(600000);
-//     rule.append(polygon_symbolizer(color("#f2efe9")));
-    rule.append(mapnik::polygon_symbolizer(mapnik::Color(242,239,233)));
+    rule.append(mapnik::line_symbolizer(mapnik::color("#f2efe9")));
+//     rule.append(mapnik::polygon_symbolizer(mapnik::Color(242,239,233)));
     style.add_rule(rule);
     m.insert_style("coast-poly",style);
   }
@@ -188,6 +189,7 @@ int main(int argc, char * argv[])
 
   ProcessNode(inputRoot,mDatasource);
 
+
   std::cout << "Datasource size: " << mDatasource->size() << std::endl;
 
 
@@ -196,9 +198,9 @@ int main(int argc, char * argv[])
   p["file"]="world_borders";
 
   mapnik::Layer lyr("world");
-  lyr.set_datasource(mapnik::datasource_cache::instance()->create(p));
-//   lyr.set_datasource(mDatasource);
-  lyr.add_style("world");
+//   lyr.set_datasource(mapnik::datasource_cache::instance()->create(p));
+  lyr.set_datasource(mDatasource);
+  lyr.add_style("coast-poly");
   m.addLayer(lyr);
 
 

@@ -11,12 +11,10 @@
 #include <mapnik/memory_datasource.hpp>
 #include <iostream>
 
-
 int main ( int argc , char** argv)
 {
   using namespace mapnik;
-  mapnik::datasource_cache::instance()->register_datasources( "/usr/lib/mapnik/0.5/input");
-//   datasource_cache::instance()->register_datasources( "/home/christop/opensource/mapnik/plugins/input/shape");
+  datasource_cache::instance()->register_datasources( "/home/christop/opensource/mapnik/plugins/input/shape");
   freetype_engine::register_font("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");
 
 
@@ -37,8 +35,7 @@ int main ( int argc , char** argv)
     rule_type rule;
     rule.set_max_scale(250000000000LLU);
     rule.set_min_scale(600000);
-//     rule.append(polygon_symbolizer(color("#f2efe9")));
-    rule.append(polygon_symbolizer(Color(242,239,233)));
+    rule.append(polygon_symbolizer(color("#f2efe9")));
     style.add_rule(rule);
     m.insert_style("world",style);
   }
@@ -46,8 +43,7 @@ int main ( int argc , char** argv)
     feature_type_style style;
     rule_type rule;
     rule.set_max_scale(600000);
-//     rule.append(polygon_symbolizer(color("#f2efe9")));
-    rule.append(polygon_symbolizer(Color(242,239,233)));
+    rule.append(polygon_symbolizer(color("#f2efe9")));
     style.add_rule(rule);
     m.insert_style("coast-poly",style);
   }
@@ -63,6 +59,7 @@ int main ( int argc , char** argv)
   line->line_to(45,45);
   line->line_to(50,30);
   line->line_to(0,-30);
+  line->line_to(-50,-50);
   std::cout << line->num_points() << std::endl;
 
   typedef boost::shared_ptr<raster> raster_ptr;
@@ -85,6 +82,7 @@ int main ( int argc , char** argv)
 //   lyr.set_datasource(datasource_cache::instance()->create(p));
   lyr.set_datasource(mDatasource);
   lyr.add_style("world");
+//   lyr.add_style("coast-poly");
   m.addLayer(lyr);
 
 
