@@ -65,7 +65,7 @@
 //       }
       case otb::FEATURE_LINE:
       {
-        std::cout << " ** Inserting new line **" << std::endl;
+        std::cout << std::setprecision(15)  << " ** Inserting new line **" << std::endl;
         typedef mapnik::vertex<double,2> vertex2d;
         typedef mapnik::line_string<vertex2d,mapnik::vertex_vector2> line2d;
         typedef boost::shared_ptr<line2d> line_ptr;
@@ -80,7 +80,7 @@
           ++itVertex;
         }
 
-
+        std::cout << "Num points: " << line->num_points() << std::endl;
 
 
         typedef boost::shared_ptr<mapnik::raster> raster_ptr;
@@ -149,13 +149,14 @@ int main(int argc, char * argv[])
   VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
 
   reader->SetFileName(argv[1]);
-  reader->Update();
+//   reader->Update();
 
   typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> ProjectionFilterType;
   ProjectionFilterType::Pointer projection = ProjectionFilterType::New();
   projection->SetInput(reader->GetOutput());
+  projection->Update();
 
-  mapnik::datasource_cache::instance()->register_datasources( "/home/christop/opensource/mapnik/plugins/input/shape");
+  mapnik::datasource_cache::instance()->register_datasources( "/usr/lib/mapnik/0.5/input");
   mapnik::freetype_engine::register_font("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");
   mapnik::Map m(800,600);
   m.set_background(mapnik::color_factory::from_string("cadetblue"));
@@ -187,14 +188,16 @@ int main(int argc, char * argv[])
 
   ProcessNode(inputRoot,mDatasource);
 
+  std::cout << "Datasource size: " << mDatasource->size() << std::endl;
+
 
   mapnik::parameters p;
   p["type"]="shape";
   p["file"]="world_borders";
 
   mapnik::Layer lyr("world");
-//   lyr.set_datasource(datasource_cache::instance()->create(p));
-  lyr.set_datasource(mDatasource);
+  lyr.set_datasource(mapnik::datasource_cache::instance()->create(p));
+//   lyr.set_datasource(mDatasource);
   lyr.add_style("world");
   m.addLayer(lyr);
 

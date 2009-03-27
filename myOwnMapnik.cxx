@@ -15,7 +15,8 @@
 int main ( int argc , char** argv)
 {
   using namespace mapnik;
-  datasource_cache::instance()->register_datasources( "/home/christop/opensource/mapnik/plugins/input/shape");
+  mapnik::datasource_cache::instance()->register_datasources( "/usr/lib/mapnik/0.5/input");
+//   datasource_cache::instance()->register_datasources( "/home/christop/opensource/mapnik/plugins/input/shape");
   freetype_engine::register_font("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");
 
 
@@ -81,8 +82,8 @@ int main ( int argc , char** argv)
   p["file"]="world_borders";
 
   Layer lyr("world");
-//   lyr.set_datasource(datasource_cache::instance()->create(p));
-  lyr.set_datasource(mDatasource);
+  lyr.set_datasource(datasource_cache::instance()->create(p));
+//   lyr.set_datasource(mDatasource);
   lyr.add_style("world");
   m.addLayer(lyr);
 
