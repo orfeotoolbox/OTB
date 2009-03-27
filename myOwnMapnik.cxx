@@ -11,6 +11,7 @@
 #include <mapnik/memory_datasource.hpp>
 #include <iostream>
 
+
 int main ( int argc , char** argv)
 {
   using namespace mapnik;
@@ -35,7 +36,8 @@ int main ( int argc , char** argv)
     rule_type rule;
     rule.set_max_scale(250000000000LLU);
     rule.set_min_scale(600000);
-    rule.append(polygon_symbolizer(color("#f2efe9")));
+//     rule.append(polygon_symbolizer(color("#f2efe9")));
+    rule.append(polygon_symbolizer(Color(242,239,233)));
     style.add_rule(rule);
     m.insert_style("world",style);
   }
@@ -43,7 +45,8 @@ int main ( int argc , char** argv)
     feature_type_style style;
     rule_type rule;
     rule.set_max_scale(600000);
-    rule.append(polygon_symbolizer(color("#f2efe9")));
+//     rule.append(polygon_symbolizer(color("#f2efe9")));
+    rule.append(polygon_symbolizer(Color(242,239,233)));
     style.add_rule(rule);
     m.insert_style("coast-poly",style);
   }
