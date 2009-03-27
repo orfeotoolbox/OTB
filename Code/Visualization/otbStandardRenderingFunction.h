@@ -105,7 +105,7 @@ public:
   {
     itk::OStringStream oss;
     OutputPixelType output = this->Evaluate(spixel);
-    oss<<"Grayscale[value: "<<spixel<<", displayed: "<<output[0]<<"]";
+    oss<<"Grayscale[value: "<< static_cast<typename itk::NumericTraits<ScalarPixelType>::PrintType>(spixel)<<", displayed: "<<output[0]<<"]";
     return oss.str();
   }
 
@@ -113,9 +113,9 @@ public:
   {
     itk::OStringStream oss;
     OutputPixelType output = this->Evaluate(vpixel);
-    oss<<"R[chan="  <<m_RedChannelIndex   <<" val="<< vpixel[m_RedChannelIndex]   <<" disp="<<static_cast<unsigned int>(output[0])<<"]\n";
-    oss<<"G[chan="<<m_GreenChannelIndex   <<" val="<< vpixel[m_GreenChannelIndex] <<" disp="<<static_cast<unsigned int>(output[1])<<"]\n";
-    oss<<"B[chan=" <<m_BlueChannelIndex   <<" val="<< vpixel[m_BlueChannelIndex]  <<" disp="<<static_cast<unsigned int>(output[2])<<"]";
+    oss<<"R[chan="  <<m_RedChannelIndex   <<" val="<< static_cast<typename itk::NumericTraits<ScalarPixelType>::PrintType>(vpixel[m_RedChannelIndex])   <<" disp="<<static_cast<unsigned int>(output[0])<<"]\n";
+    oss<<"G[chan="<<m_GreenChannelIndex   <<" val="<< static_cast<typename itk::NumericTraits<ScalarPixelType>::PrintType>(vpixel[m_GreenChannelIndex]) <<" disp="<<static_cast<unsigned int>(output[1])<<"]\n";
+    oss<<"B[chan=" <<m_BlueChannelIndex   <<" val="<< static_cast<typename itk::NumericTraits<ScalarPixelType>::PrintType>(vpixel[m_BlueChannelIndex])  <<" disp="<<static_cast<unsigned int>(output[2])<<"]";
     return oss.str();
 
   }
