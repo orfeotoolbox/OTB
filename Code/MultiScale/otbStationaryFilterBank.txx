@@ -37,7 +37,7 @@ StationaryFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOper
 
   unsigned int numOfOutput = 1<<InputImageType::ImageDimension;
 
-        this->SetNumberOfOutputs( numOfOutput );
+  this->SetNumberOfOutputs( numOfOutput );
   for ( unsigned i = 1; i < numOfOutput; i++ )
   {
     this->SetNthOutput(i,OutputImageType::New());

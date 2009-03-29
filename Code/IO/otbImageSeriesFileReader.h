@@ -58,36 +58,36 @@ class ITK_EXPORT ImageSeriesFileReader
 
     typedef typename Superclass::OutputImageType        OutputImageType;
     typedef typename Superclass::OutputImagePointerType OutputImagePointerType;
-    typedef typename Superclass::PixelType                                                         PixelType;
-    typedef typename Superclass::ValueType                                                         ValueType;
-    typedef typename Superclass::IndexType                                                         IndexType;
-    typedef typename Superclass::SizeType                                                         SizeType;
-    typedef typename Superclass::RegionType                                                 RegionType;
+    typedef typename Superclass::PixelType              PixelType;
+    typedef typename Superclass::ValueType              ValueType;
+    typedef typename Superclass::IndexType              IndexType;
+    typedef typename Superclass::SizeType               SizeType;
+    typedef typename Superclass::RegionType             RegionType;
 
-    typedef typename Superclass::OutputImageListType                                                 OutputImageListType;
-    typedef typename Superclass::OutputImageListPointerType                         OutputImageListPointerType;
+    typedef typename Superclass::OutputImageListType             OutputImageListType;
+    typedef typename Superclass::OutputImageListPointerType      OutputImageListPointerType;
     typedef typename Superclass::OutputImageListConstPointerType OutputImageListConstPointerType;
 
-    typedef typename Superclass::InternalImageType                                 InternalImageType;
-    typedef typename Superclass::InternalImagePointerType InternalImagePointerType;
-    typedef typename Superclass::InternalPixelType                          InternalPixelType;
-    typedef typename Superclass::InternalValueType                                 InternalValueType;
-    typedef typename Superclass::InternalIndexType                                 InternalIndexType;
-    typedef typename Superclass::InternalSizeType                           InternalSizeType;
-    typedef typename Superclass::InternalRegionType                         InternalRegionType;
+    typedef typename Superclass::InternalImageType               InternalImageType;
+    typedef typename Superclass::InternalImagePointerType        InternalImagePointerType;
+    typedef typename Superclass::InternalPixelType               InternalPixelType;
+    typedef typename Superclass::InternalValueType               InternalValueType;
+    typedef typename Superclass::InternalIndexType               InternalIndexType;
+    typedef typename Superclass::InternalSizeType                InternalSizeType;
+    typedef typename Superclass::InternalRegionType              InternalRegionType;
 
     typedef typename Superclass::ReaderType ReaderType;
     typedef typename Superclass::ReaderType ReaderPointerType;
 
-    typedef typename Superclass::ReaderListType                          ReaderListType;
+    typedef typename Superclass::ReaderListType        ReaderListType;
     typedef typename Superclass::ReaderListPointerType ReaderListPointerType;
 
     /** This is a generic template definition of the ROI extraction procedure.
-                 * In fact, it will be specialised with:
-                 * - MultiChannelExtractROI if TImage is a VectorImage
-                 * - MultiToMonoChannelExtractROI if TImage is an Image and TInteranalImage is a VectorImage
-                 * - ExtractROI if TImage and TInternalImage are of Image type.
-                 */
+     * In fact, it will be specialised with:
+     * - MultiChannelExtractROI if TImage is a VectorImage
+     * - MultiToMonoChannelExtractROI if TImage is an Image and TInteranalImage is a VectorImage
+     * - ExtractROI if TImage and TInternalImage are of Image type.
+     */
     // typedef MultiChannelExtractROI< InternalPixelType, PixelType > ExtractSelectionType;
     // typedef MultiToMonoChannelExtractROI< InternalPixelType, PixelType > ExtractSelectionType;
     // typedef ExtractROI< InternalPixelType, PixelType > ExtractSelectionType;
@@ -97,21 +97,21 @@ class ITK_EXPORT ImageSeriesFileReader
     typedef ObjectList< ExtractSelectionType > ExtractSelectionListType;
     typedef typename ExtractSelectionListType::Pointer ExtractSelectionListPointerType;
 
-        protected:
+  protected:
     ImageSeriesFileReader();
     virtual ~ImageSeriesFileReader () { }
 
-                /**
-                 * Tests the coherency of the Meta File (especifically band selection) with the image types
-                 */
-                virtual void TestBandSelection( std::vector<unsigned int> & bands ) { }
+    /**
+     * Tests the coherency of the Meta File (especifically band selection) with the image types
+     */
+    virtual void TestBandSelection( std::vector<unsigned int> & bands ) { }
 
-                /** GenerateData
-                 * This method will be specialised if template definitions follow:
-                 * - TImage is a VectorImage
-                 * - TImage is an Image and TInteranalImage is a VectorImage
-                 * - TImage and TInternalImage are of Image type.
-                 */
+    /** GenerateData
+     * This method will be specialised if template definitions follow:
+     * - TImage is a VectorImage
+     * - TImage is an Image and TInteranalImage is a VectorImage
+     * - TImage and TInternalImage are of Image type.
+     */
     virtual void GenerateData ( unsigned int idx );
 
     /**
@@ -123,13 +123,13 @@ class ITK_EXPORT ImageSeriesFileReader
 
     /** PrintSelf method */
     void PrintSelf ( std::ostream& os, itk::Indent indent ) const
-                {
-                        return Superclass::PrintSelf( os, indent );
-                }
+    {
+            return Superclass::PrintSelf( os, indent );
+    }
 
-                /**
-                 * Type of extractor to use
-                 */
+    /**
+     * Type of extractor to use
+     */
     ExtractSelectionListPointerType m_ExtractorList;
 
   private:

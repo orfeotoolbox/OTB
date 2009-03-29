@@ -121,7 +121,13 @@ class ITK_EXPORT ImageSeriesFileReaderBase : public ImageListSource< TImage >
     virtual OutputImageListType * GenerateOutput (void);
     virtual OutputImageType * GenerateOutput ( unsigned int idx );
 
-        protected:
+    /** Synchronization */
+    void Update ()
+    {
+      this->GenerateData();
+    }
+
+  protected:
     ImageSeriesFileReaderBase();
     virtual ~ImageSeriesFileReaderBase () { }
 
@@ -136,12 +142,12 @@ class ITK_EXPORT ImageSeriesFileReaderBase : public ImageListSource< TImage >
 
     virtual void GenerateData ( void );
 
-                /** GenerateData
-                 * This method will be specialised if template definitions follow:
-                 * - TImage is a VectorImage
-                 * - TImage is an Image and TInteranalImage is a VectorImage
-                 * - TImage and TInternalImage are of Image type.
-                 */
+    /** GenerateData
+     * This method will be specialised if template definitions follow:
+     * - TImage is a VectorImage
+     * - TImage is an Image and TInteranalImage is a VectorImage
+     * - TImage and TInternalImage are of Image type.
+     */
     virtual void GenerateData ( unsigned int idx );
 
     /**
