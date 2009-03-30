@@ -65,5 +65,6 @@ void RegisterTests()
   REGISTER_TEST(otbStandardImageViewerNew);
   REGISTER_TEST(otbStandardImageViewer);
   REGISTER_TEST(otbPackedWidgetManagerNew);
+  REGISTER_TEST(otbSplittedWidgetManagerNew);
 }
 

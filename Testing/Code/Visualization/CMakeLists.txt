@@ -298,9 +298,13 @@ ${INPUTDATA}/DEM/srtm_directory
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-#---------- otb::PackedWidget--------
+#---------- otb::WidgetManager and Sons--------
 ADD_TEST(vrTuPackedWidgetManagerNew ${VISUREFAC_TESTS1}
 otbPackedWidgetManagerNew
+)
+
+ADD_TEST(vrTuSplittedWidgetManagerNew ${VISUREFAC_TESTS1}
+otbSplittedWidgetManagerNew
 )
 
 # Testing srcs
@@ -344,6 +348,7 @@ otbImageViewerEndToEndWithVectorData.cxx
 otbStandardImageViewerNew.cxx
 otbStandardImageViewer.cxx
 otbPackedWidgetManagerNew.cxx
+otbSplittedWidgetManagerNew.cxx
 )
 
 # Building testing executables

@@ -15,14 +15,14 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbPackedWidgetManager.h"
+#include "otbSplittedWidgetManager.h"
 
-int otbPackedWidgetManagerNew( int argc, char * argv[] )
+int otbSplittedWidgetManagerNew( int argc, char * argv[] )
 {
 
-  typedef otb::PackedWidgetManager         PackedWidgetManagerType;
+  typedef otb::SplittedWidgetManager         SplittedWidgetManagerType;
 
-  PackedWidgetManagerType::Pointer WidgetManager = PackedWidgetManagerType::New();
+  SplittedWidgetManagerType::Pointer widgetManager = SplittedWidgetManagerType::New();
 
   return EXIT_SUCCESS;
 }
