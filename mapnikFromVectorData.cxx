@@ -18,6 +18,9 @@
 #include <mapnik/config_error.hpp>
 #include <mapnik/memory_datasource.hpp>
 
+
+// ./mapnikFromVectorData  ~/OTB/trunk/OTB-Data/Input/ToulouseRoad-examples.shp
+
   typedef otb::VectorData<> VectorDataType;
   typedef otb::DataNode<double,2,double> DataNodeType;
   typedef DataNodeType::Pointer DataNodePointerType;
@@ -160,7 +163,8 @@ int main(int argc, char * argv[])
 //   mapnik::datasource_cache::instance()->register_datasources( "/usr/lib/mapnik/0.5/input");
   mapnik::freetype_engine::register_font("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");
   mapnik::Map m(800,600);
-  m.set_background(mapnik::color_factory::from_string("cadetblue"));
+//   m.set_background(mapnik::color_factory::from_string("cadetblue"));
+  m.set_background(mapnik::color("#f2efe9"));
   {
     mapnik::feature_type_style style;
     mapnik::rule_type rule;
@@ -189,7 +193,22 @@ int main(int argc, char * argv[])
     style.add_rule(rule);
     m.insert_style("coast-poly",style);
   }
-
+  {
+    mapnik::feature_type_style style;
+    mapnik::rule_type rule;
+    rule.set_max_scale(1000000);
+//     rule.set_min_scale(500000);
+    rule.append(mapnik::line_symbolizer(mapnik::color("#809bc0"),8.0));
+    style.add_rule(rule);
+    m.insert_style("roads",style);
+  }
+//   <Filter>[highway] = 'motorway' or [highway] = 'motorway_link'</Filter>
+//       <MaxScaleDenominator>1000000</MaxScaleDenominator>
+//       <MinScaleDenominator>500000</MinScaleDenominator>
+//       <LineSymbolizer>
+//       <CssParameter name="stroke">#809bc0</CssParameter>
+//       <CssParameter name="stroke-width">3</CssParameter>
+//       </LineSymbolizer>
 
   datasource_ptr mDatasource = datasource_ptr(new mapnik::memory_datasource);
 
@@ -209,7 +228,7 @@ int main(int argc, char * argv[])
   mapnik::Layer lyr("world");
 //   lyr.set_datasource(mapnik::datasource_cache::instance()->create(p));
   lyr.set_datasource(mDatasource);
-  lyr.add_style("coast-poly");
+  lyr.add_style("roads");
   m.addLayer(lyr);
 
 
