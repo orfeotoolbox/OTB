@@ -57,6 +57,10 @@ public:
   virtual void RegisterPixelInformationWidget(Fl_Output * pixelWidget) = 0 ;
   virtual void Show() = 0;
   virtual void Hide() = 0;
+  virtual void Refresh() = 0;
+  virtual void SetLabel(const char * label) = 0;
+  virtual void UnRegisterAll() = 0;
+  
   
 protected:
   /** Constructor */

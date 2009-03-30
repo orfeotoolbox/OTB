@@ -15,23 +15,21 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPackedWidgetManager_h
-#define __otbPackedWidgetManager_h
+#ifndef __otbSplittedWidgetManager_h
+#define __otbSplittedWidgetManager_h
 
 #include "otbWidgetManager.h"
-#include "otbImageWidgetPackedManager.h"
-
-#include <FL/Fl_Double_Window.H>
+#include "otbImageWidgetSplittedManager.h"
 
 
 namespace otb
 {
-class  PackedWidgetManager
+class  SplittedWidgetManager
     : public WidgetManager
 {
  public: 
   /** Standard class typedefs */
-  typedef PackedWidgetManager                        Self;
+  typedef SplittedWidgetManager                      Self;
   typedef WidgetManager                              Superclass;
   typedef itk::SmartPointer<Self>                    Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
@@ -40,10 +38,10 @@ class  PackedWidgetManager
   itkNewMacro(Self);
   
   /** Runtime information */
-  itkTypeMacro(PackedWidgetManager,WidgetManager);
+  itkTypeMacro(SplittedWidgetManager,WidgetManager);
   
   /** typedef of the fltk file defining all the widget needed*/
-  typedef ImageWidgetPackedManager                  ImageWidgetPackedManagerType;
+  typedef ImageWidgetSplittedManager                 ImageWidgetSplittedManagerType;
   
   /** Register Wigets*/
   virtual void RegisterFullWidget(WidgetType* fullWidget);
@@ -54,15 +52,16 @@ class  PackedWidgetManager
   virtual void Show();
   virtual void Hide();
   virtual void Refresh();
-  virtual void SetLabel(const char * label){};
+  virtual void SetLabel(const char * label);
   virtual void UnRegisterAll();
+
 
  protected:
   /** Constructor */
-  PackedWidgetManager(); 
+  SplittedWidgetManager(); 
   
   /** Destructor */
-  virtual ~PackedWidgetManager();
+  virtual ~SplittedWidgetManager();
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
@@ -71,10 +70,10 @@ class  PackedWidgetManager
 
   
  private:
-  PackedWidgetManager(const Self&);     // purposely not implemented
+  SplittedWidgetManager(const Self&);     // purposely not implemented
   void operator=(const Self&); // purposely not implemented
 
-  ImageWidgetPackedManagerType*    m_PackedWidget;
+  ImageWidgetSplittedManagerType*    m_SplittedWidget;
 
 };
 }

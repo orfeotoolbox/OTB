@@ -1,0 +1,157 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+#ifndef __otbSplittedWidgetManager_cxx
+#define __otbSplittedWidgetManager_cxx
+
+#include "otbSplittedWidgetManager.h"
+
+
+
+namespace otb
+{
+
+SplittedWidgetManager
+::SplittedWidgetManager() 
+{
+  m_SplittedWidget = new ImageWidgetSplittedManagerType();
+}
+
+SplittedWidgetManager
+::~SplittedWidgetManager() 
+{
+  delete m_SplittedWidget;
+}
+
+
+void 
+SplittedWidgetManager
+::RegisterFullWidget(WidgetType* fullWidget)
+{
+  m_InternalFullWidget = fullWidget;
+  m_SplittedWidget->m_FullGroup->add(fullWidget);
+  m_SplittedWidget->m_FullGroup->resizable(fullWidget);
+  fullWidget->resize(0,0, m_SplittedWidget->m_FullGroup->w(),m_SplittedWidget->m_FullGroup->h());
+}
+
+
+void 
+SplittedWidgetManager
+::RegisterScrollWidget(WidgetType* scrollWidget) 
+{
+  m_InternalScrollWidget = scrollWidget;
+  m_SplittedWidget->m_QuicklookGroup->add(scrollWidget);
+  m_SplittedWidget->m_QuicklookGroup->resizable(scrollWidget);
+  scrollWidget->resize(0,0, m_SplittedWidget->m_QuicklookGroup->w(),m_SplittedWidget->m_QuicklookGroup->h());
+
+}
+
+void 
+SplittedWidgetManager
+::RegisterZoomWidget(WidgetType* zoomWidget)
+{
+  m_InternalZoomWidget = zoomWidget;
+  m_SplittedWidget->m_ZoomGroup->add(zoomWidget);
+  m_SplittedWidget->m_ZoomGroup->resizable(zoomWidget);
+  zoomWidget->resize(0,0,m_SplittedWidget->m_ZoomGroup->w(),m_SplittedWidget->m_ZoomGroup->h());
+}
+void 
+SplittedWidgetManager
+::RegisterPixelInformationWidget(Fl_Output * pixelWidget)
+{
+  m_IntenalPixelWidget = pixelWidget;
+  m_SplittedWidget->m_PixelInformationGroup->add(pixelWidget);
+  m_SplittedWidget->m_PixelInformationGroup->resizable(pixelWidget);
+  pixelWidget->resize(0,0, m_SplittedWidget->m_PixelInformationGroup->w(),m_SplittedWidget->m_PixelInformationGroup->h());
+
+}
+
+void 
+SplittedWidgetManager
+::RegisterHistogramWidget(WidgetType* curveWidget)
+{
+  m_InternalCurveWidget = curveWidget;
+  m_SplittedWidget->m_HistogramsGroup->add(curveWidget);
+  m_SplittedWidget->m_HistogramsGroup->resizable(curveWidget);
+  curveWidget->resize(0,0,m_SplittedWidget->m_HistogramsGroup->w(),m_SplittedWidget->m_HistogramsGroup->h());
+ }
+
+void 
+SplittedWidgetManager
+::Show()
+{
+  m_SplittedWidget->m_FullGroup->show();
+  m_SplittedWidget->m_ZoomGroup->show();
+  m_SplittedWidget->m_PixelInformationGroup->show();
+  m_SplittedWidget->m_QuicklookGroup->show();
+  m_SplittedWidget->m_HistogramsGroup->show();
+  
+  m_InternalCurveWidget->show();
+  m_IntenalPixelWidget->show();
+  m_InternalFullWidget->show();
+  m_InternalScrollWidget->show();
+  m_InternalZoomWidget->show();
+}
+
+void 
+SplittedWidgetManager
+::Hide()
+{
+  m_SplittedWidget->m_FullGroup->hide();
+  m_SplittedWidget->m_ZoomGroup->hide();
+  m_SplittedWidget->m_PixelInformationGroup->hide();
+  m_SplittedWidget->m_QuicklookGroup->hide();
+  m_SplittedWidget->m_HistogramsGroup->hide();
+}
+
+void 
+SplittedWidgetManager
+::Refresh()
+{
+ m_InternalScrollWidget ->redraw();
+ m_InternalScrollWidget ->redraw();
+ m_InternalZoomWidget->redraw();
+ m_IntenalPixelWidget->redraw();
+ m_InternalCurveWidget->redraw();
+}
+
+void 
+SplittedWidgetManager
+::SetLabel(const char * label)
+{
+  m_SplittedWidget->m_FullGroup->label(label);
+  m_SplittedWidget->m_ZoomGroup->label(label);
+  m_SplittedWidget->m_PixelInformationGroup->label(label);
+  m_SplittedWidget->m_QuicklookGroup->label(label);
+  m_SplittedWidget->m_HistogramsGroup->label(label);
+}
+
+void 
+SplittedWidgetManager
+::UnRegisterAll()
+{
+  m_SplittedWidget->m_FullGroup->remove(m_InternalFullWidget);
+  m_SplittedWidget->m_ZoomGroup->remove(m_InternalZoomWidget);
+  m_SplittedWidget->m_PixelInformationGroup->remove(m_IntenalPixelWidget);
+  m_SplittedWidget->m_QuicklookGroup->remove(m_InternalScrollWidget);
+  m_SplittedWidget->m_HistogramsGroup->remove(m_InternalCurveWidget);
+}
+
+
+
+}
+#endif

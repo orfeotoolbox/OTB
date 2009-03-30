@@ -9,7 +9,7 @@ IF(APPLE AND BUILD_SHARED_LIBS)
       ENDFOREACH(c)
 ENDIF(APPLE AND BUILD_SHARED_LIBS)
 
-FLTK_WRAP_UI(OTBVisualization otbImageWidgetPackedManager.fl)
+FLTK_WRAP_UI(OTBVisualization otbImageWidgetPackedManager.fl otbImageWidgetSplittedManager.fl)
 
 ADD_LIBRARY(OTBVisualization ${OTBVisualization_SRCS} ${OTBVisualization_FLTK_UI_SRCS})
 TARGET_LINK_LIBRARIES (OTBVisualization OTBGui OTBCommon ${FLTK_LIBRARIES} ${OPENGL_LIBRARIES})

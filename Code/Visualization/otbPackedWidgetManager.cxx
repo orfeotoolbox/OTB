@@ -112,10 +112,29 @@ PackedWidgetManager
 ::Hide()
 {
   m_PackedWidget->m_Window->hide();
-
 }
 
+void 
+PackedWidgetManager
+::Refresh()
+{
+ m_InternalScrollWidget ->redraw();
+ m_InternalScrollWidget ->redraw();
+ m_InternalZoomWidget->redraw();
+ m_IntenalPixelWidget->redraw();
+ m_InternalCurveWidget->redraw();
+}
 
+void 
+PackedWidgetManager
+::UnRegisterAll()
+{
+  m_PackedWidget->m_FullGroup->remove(m_InternalFullWidget);
+  m_PackedWidget->m_ZoomGroup->remove(m_InternalZoomWidget);
+  m_PackedWidget->m_PixelInformationGroup->remove(m_IntenalPixelWidget);
+  m_PackedWidget->m_QuicklookGroup->remove(m_InternalScrollWidget);
+  m_PackedWidget->m_HistogramsGroup->remove(m_InternalCurveWidget);
+}
 
 
 
