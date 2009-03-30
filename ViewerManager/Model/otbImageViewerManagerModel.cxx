@@ -113,7 +113,6 @@ ImageViewerManagerModel
 
   /** Add the the struct in the list*/
   m_ObjectTrackedList.push_back(currentComponent);
-  std::cout << "Size of the component Struct is " << m_ObjectTrackedList.size() << std::endl;
   
   m_HasImageOpened = true;
   this->NotifyAll();

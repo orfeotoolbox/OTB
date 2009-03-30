@@ -62,7 +62,6 @@ ImageViewerManagerController
 {
   try
   {
-    std::cout << "CONTROLLER : CloseImage()" << std::endl;
     m_Model->CloseImage( selectedItem );
   }
   catch (itk::ExceptionObject & err)

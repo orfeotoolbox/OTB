@@ -419,7 +419,6 @@ ImageViewerManagerViewGUI
     }
   
   //If already displayed : update the view mode and display the new viewMode
-  std::cout << "Displaying the Packed Mode" << std::endl;
   if(m_DisplayStatusList[selectedItem-1].first /*&& m_DisplayStatusList[selectedItem-1].second*/ )
     {
       PackedWidgetManagerType::Pointer widgetManager  =  PackedWidgetManagerType::New();
@@ -428,7 +427,6 @@ ImageViewerManagerViewGUI
       m_DisplayStatusList[selectedItem-1].second = false;
       this->Display(selectedItem);
     }
-  std::cout << "Displaying the Packed Mode" << std::endl;
 }
 
 /**
@@ -473,7 +471,6 @@ ImageViewerManagerViewGUI
     {
       if(m_DisplayStatusList[i].first)
 	{
-	  std::cout << "cest le " << i+1 << " qui est affiche  "<< std::endl; 
 	  this->UpdateImageListShowed(i+1, m_UndisplayedLabel);
 	  m_DisplayStatusList[i].first = false;
 	  m_WidgetManagerList->GetNthElement(i)->Hide();
@@ -546,7 +543,6 @@ ImageViewerManagerViewGUI
   
   ImageViewerManagerModelType::ReaderPointerType reader = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pReader;
   unsigned int nbComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
-  std::cout <<" NOMBRE  NbComponent  " << nbComponent  << std::endl;
 
   itk::OStringStream oss;
   oss.str("");
@@ -787,11 +783,6 @@ void
 ImageViewerManagerViewGUI
 ::DisplayDiaporama()
 {
-  std::cout << "m_DiaporamaCurrentIndex  : " << m_DiaporamaCurrentIndex<< std::endl;
-  //guiDiapoDisplay->clear();
-  
-  //PackedWidgetManagerType::Pointer  m_WidgetManager     =   PackedWidgetManagerType::New(); 
-  
   //Get the view stored in the model 
   CurvesWidgetType::Pointer         curveWidget         =  m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pCurveWidget;
   VisuViewPointerType               currentVisuView     =  m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pVisuView;
