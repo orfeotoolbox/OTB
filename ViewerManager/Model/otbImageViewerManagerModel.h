@@ -39,8 +39,11 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbModulusRenderingFunction.h"
 #include "otbPhaseRenderingFunction.h"
 
+
 #include "otbPixelDescriptionModel.h"
+#include "otbPixelDescriptionView.h"
 #include "otbPixelDescriptionActionHandler.h"
+#include "otbCurves2DWidget.h"
 
 
 #include "otbImageView.h" 
@@ -72,25 +75,25 @@ public:
   typedef double                                                          PixelType;
   
   /**  Image Type*/
-  typedef VectorImage<PixelType , 2>                                      ImageType;
-  typedef itk::RGBPixel<unsigned char>                                    RGBPixelType; 
-  typedef Image<RGBPixelType,2>                                           ViewerImageType;
-  typedef ImageType::Pointer                                              ImagePointerType;
+  typedef VectorImage<PixelType , 2>                                                ImageType;
+  typedef itk::RGBPixel<unsigned char>                                              RGBPixelType; 
+  typedef Image<RGBPixelType,2>                                                     ViewerImageType;
+  typedef ImageType::Pointer                                                        ImagePointerType;
 
   /** typedef support for layers */
-  typedef otb::ImageLayer<ImageType>                                      LayerType;
-  typedef LayerType::Pointer                                              LayerPointerType;   
+  typedef otb::ImageLayer<ImageType>                                                 LayerType;
+  typedef LayerType::Pointer                                                         LayerPointerType;   
   
-  typedef otb::ImageLayerGenerator<LayerType>                             LayerGeneratorType;
-  typedef LayerGeneratorType::Pointer                                     LayerGeneratorPointerType;
-  typedef LayerGeneratorType::RenderingFunctionType                       StandardRenderingFunctionType;
+  typedef otb::ImageLayerGenerator<LayerType>                                        LayerGeneratorType;
+  typedef LayerGeneratorType::Pointer                                                LayerGeneratorPointerType;
+  typedef LayerGeneratorType::RenderingFunctionType                                  StandardRenderingFunctionType;
 
   typedef Function::ModulusRenderingFunction<ImageType::InternalPixelType, RGBPixelType>    ModulusRenderingFunction;
   typedef Function::PhaseRenderingFunction<ImageType::InternalPixelType, RGBPixelType>      PhaseRenderingFunction;
   
   /** typedef support for reader*/
-  typedef ImageFileReader<ImageType>                                      ReaderType;
-  typedef ReaderType::Pointer                                             ReaderPointerType;
+  typedef ImageFileReader<ImageType>                                                  ReaderType;
+  typedef ReaderType::Pointer                                                         ReaderPointerType;
     
   /** Typedef support for rendering image*/
   typedef otb::ImageLayerRenderingModel<ViewerImageType>                              VisuModelType;
@@ -108,10 +111,13 @@ public:
   typedef otb::ChangeScaledExtractRegionActionHandler<VisuModelType,VisuViewType>     ChangeScaledRegionHandlerType;
   typedef otb::ChangeExtractRegionActionHandler<VisuModelType,VisuViewType>           ChangeRegionHandlerType;
   typedef otb::ChangeScaleActionHandler<VisuModelType,VisuViewType>                   ChangeScaleHandlerType;
-  
+   
   typedef otb::PixelDescriptionModel<ViewerImageType>                                 PixelDescriptionModelType;
-  typedef otb::PixelDescriptionActionHandler<PixelDescriptionModelType,VisuViewType> PixelDescriptionActionHandlerType;
+  typedef PixelDescriptionModelType::Pointer                                          PixelDescriptionModelPointerType;
+  typedef PixelDescriptionView<PixelDescriptionModelType>                             PixelDescriptionViewType;
+  typedef otb::PixelDescriptionActionHandler<PixelDescriptionModelType,VisuViewType>  PixelDescriptionActionHandlerType;
 
+  typedef Curves2DWidget                                                              CurvesWidgetType;
   
   /** 
    * Struct embedded in the model
@@ -124,8 +130,9 @@ public:
     WidgetControllerPointerType            pWidgetController;
     VisuViewPointerType                    pVisuView;
     StandardRenderingFunctionType::Pointer pRenderFuntion;
+    PixelDescriptionViewType::Pointer      pPixelView;
+    CurvesWidgetType::Pointer              pCurveWidget;      
     std::string                            fileName;
-    
   };
   
   typedef struct _ObjectsTracked                                          ObjectsTracked;
@@ -151,10 +158,7 @@ public:
     {
       return m_ObjectTrackedList;
     }
-
-   /** Get the pixel description model */
-   itkGetObjectMacro(PixelModel,PixelDescriptionModelType);
-   
+      
    /** Boolean Flags */
    itkGetMacro(HasImageOpened,bool);
    itkGetMacro(HasChangedChannelOrder,bool);
@@ -172,7 +176,7 @@ protected:
 
   /** Built Visu & Controller*/
   virtual VisuViewPointerType BuiltVisu(VisuModelPointerType pRendering);
-  virtual WidgetControllerPointerType BuiltController(VisuModelPointerType modelRenderingLayer, VisuViewPointerType visuView);
+  virtual WidgetControllerPointerType BuiltController(VisuModelPointerType modelRenderingLayer, VisuViewPointerType visuView , PixelDescriptionModelType::Pointer pixelModel);
   
     
 private:
@@ -184,17 +188,10 @@ private:
   
   /** The instance singleton */
   static Pointer Instance;
-
-  /**Temporary Flags*/
-  PixelDescriptionModelType::Pointer         m_PixelModel;
-  
   
   /** Boolean flags*/
   bool   m_HasImageOpened;
   bool   m_HasChangedChannelOrder;
-
-  /* Layer Generator Smart Pointer*/
-  LayerGeneratorPointerType                  m_VisuGenerator;
 
   /** The manipuleted list*/
   ObjectTrackedList                          m_ObjectTrackedList;

@@ -32,15 +32,9 @@ ImageViewerManagerModel::Pointer ImageViewerManagerModel::Instance = NULL;
 
 ImageViewerManagerModel::ImageViewerManagerModel()
 {
-  /* Generate image layers*/
-  m_VisuGenerator = LayerGeneratorType::New();
-
-  m_PixelModel = PixelDescriptionModelType::New();
-  
   //Set all the boolean to false
   m_HasChangedChannelOrder = false;
   m_HasImageOpened = false;
-  
 }
 
 ImageViewerManagerModel
@@ -76,35 +70,46 @@ ImageViewerManagerModel
   reader->GenerateOutputInformation();
       
   /** Generate the layer*/
-  m_VisuGenerator->SetImage(reader->GetOutput());
-  m_VisuGenerator->GenerateLayer();
-  StandardRenderingFunctionType::Pointer  rendrerFuntion  = m_VisuGenerator->GetDefaultRenderingFunction();
-  
-  
+  LayerGeneratorPointerType visuGenerator = LayerGeneratorType::New();
+  visuGenerator->SetImage(reader->GetOutput());
+  visuGenerator->GenerateLayer();
+  StandardRenderingFunctionType::Pointer  rendrerFuntion  = visuGenerator->GetDefaultRenderingFunction();
+    
   /** Rendering image*/
   VisuModelPointerType rendering = VisuModelType::New();
-  rendering->AddLayer(m_VisuGenerator->GetLayer());
+  rendering->AddLayer(visuGenerator->GetLayer());
   rendering->Update();
 
   /** View*/
   VisuViewPointerType visuView = this->BuiltVisu(rendering);
+
+  /** Build the pixelDescription View*/
+  PixelDescriptionViewType::Pointer pixelView = PixelDescriptionViewType::New();
+  PixelDescriptionModelPointerType pixelModel = PixelDescriptionModelType::New();
+  pixelModel->SetLayers(rendering->GetLayers());
+  pixelView->SetModel(pixelModel);
   
   /** Controller*/
-  WidgetControllerPointerType controller = this->BuiltController(rendering, visuView);
+  WidgetControllerPointerType controller = this->BuiltController(rendering, visuView ,pixelModel );
 
-  /** Finish Cuilting the visu*/
+  /** Finish Builting the visu*/
   visuView->SetController(controller);
+    
+  /** Build the curve Widget */
+  CurvesWidgetType::Pointer   curveWidget = CurvesWidgetType::New();
 
   /** Store all the information in the structure*/
   ObjectsTracked currentComponent;
 
   currentComponent.fileName   = filename;
-  currentComponent.pLayer     = m_VisuGenerator->GetLayer();
+  currentComponent.pLayer     = visuGenerator->GetLayer();
   currentComponent.pReader    = reader;
   currentComponent.pRendering = rendering;
   currentComponent.pVisuView  = visuView;
   currentComponent.pWidgetController = controller;
   currentComponent.pRenderFuntion  = rendrerFuntion;
+  currentComponent.pPixelView   = pixelView;
+  currentComponent.pCurveWidget = curveWidget;
 
   /** Add the the struct in the list*/
   m_ObjectTrackedList.push_back(currentComponent);
@@ -135,7 +140,7 @@ ImageViewerManagerModel
 ImageViewerManagerModel
 ::WidgetControllerPointerType
 ImageViewerManagerModel
-::BuiltController(VisuModelPointerType modelRenderingLayer, VisuViewPointerType visuView)
+::BuiltController(VisuModelPointerType modelRenderingLayer, VisuViewPointerType visuView, PixelDescriptionModelPointerType pixelModel)
 {
   WidgetControllerPointerType controller = WidgetControllerType::New();
   
@@ -164,13 +169,11 @@ ImageViewerManagerModel
   controller->AddActionHandler(changeScaleHandler);
 
   //Pixel Description Handling
-  m_PixelModel->SetLayers(modelRenderingLayer->GetLayers());
   PixelDescriptionActionHandlerType::Pointer pixelActionHandler = PixelDescriptionActionHandlerType::New();
   pixelActionHandler->SetView(visuView);
-  pixelActionHandler->SetModel(m_PixelModel);
+  pixelActionHandler->SetModel(pixelModel);
   controller->AddActionHandler(pixelActionHandler);
   
-
   return controller;
 }
 

@@ -7,8 +7,8 @@ class ImageViewerManagerViewGroup {open
   Function {CreateGUI()} {open return_type void
   } {
     Fl_Window guiMainWindow {
-      label otbImageViewerManagerView open selected
-      xywh {495 250 610 460} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
+      label otbImageViewerManagerView open
+      xywh {833 76 610 460} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 hide resizable
     } {
       Fl_Text_Display guiViewerInformation {
         label Information
@@ -23,7 +23,7 @@ class ImageViewerManagerViewGroup {open
         xywh {280 38 195 189} resizable
       } {}
       Fl_Group gBottom {open
-        xywh {260 244 225 60}
+        xywh {260 231 225 73}
       } {
         Fl_Button guiShowHide {
           label {Show / Hide}
@@ -38,6 +38,26 @@ class ImageViewerManagerViewGroup {open
         Fl_Group gBlanck1 {open
           xywh {475 254 10 41} resizable
         } {}
+        Fl_Round_Button bPacked {
+          label {Packed View}
+          callback {PackedViewMode();
+//bPacked->value(1);
+//if(bSplitted->value())
+// bPacked->deactivate();
+//else
+// bPacked->value(1);}
+          tooltip {Toggle Packed  mode} xywh {380 238 105 15} type Radio down_box ROUND_DOWN_BOX value 1 labelcolor 187 deactivate
+        }
+        Fl_Round_Button bSplitted {
+          label {Splitted View}
+          callback {SplittedViewMode();
+//bSplitted->value(1);
+//if(bPacked->value())
+// bSplitted->deactivate();
+//else
+// bSplitted->value(1);} selected
+          tooltip {Toggle Splitted mode} xywh {275 237 105 15} type Radio down_box ROUND_DOWN_BOX labelcolor 187 deactivate
+        }
       }
       Fl_Group gRight {open
         xywh {480 31 115 277}
@@ -78,8 +98,8 @@ class ImageViewerManagerViewGroup {open
       }
     }
     Fl_Window guiViewerSetupWindow {
-      label {Viewer setup} open
-      xywh {885 215 705 230} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 visible
+      label {Viewer setup}
+      xywh {885 215 705 230} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 hide
     } {
       Fl_Round_Button guiViewerSetupGrayscaleMode {
         label {Grayscale mode}
@@ -147,7 +167,7 @@ class ImageViewerManagerViewGroup {open
     }
     Fl_Window guiLinkSetupWindow {
       label {Link setup}
-      xywh {888 755 440 220} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 visible
+      xywh {888 755 440 220} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 hide
     } {
       Fl_Input_Choice guiLinkChoice {
         label {Link to viewer: } open
@@ -189,7 +209,7 @@ class ImageViewerManagerViewGroup {open
     }
     Fl_Window guiDiaporama {
       label Slideshow
-      xywh {1142 721 390 90} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 visible
+      xywh {652 599 390 90} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 visible
     } {
       Fl_Progress guiDiaporamaProgressBar {
         label Progress
@@ -258,5 +278,9 @@ class ImageViewerManagerViewGroup {open
   Function {HideAll()} {open return_type {virtual void}
   } {}
   Function {ComplexSet()} {open return_type {virtual void}
+  } {}
+  Function {SplittedViewMode()} {open return_type {virtual void}
+  } {}
+  Function {PackedViewMode()} {open return_type {virtual void}
   } {}
 } 

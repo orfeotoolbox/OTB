@@ -42,6 +42,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbCurves2DWidget.h"
 #include "otbHistogramCurve.h"
 
+#include "otbWidgetManager.h"
 #include "otbPackedWidgetManager.h"
 #include "otbSplittedWidgetManager.h"
 
@@ -84,8 +85,6 @@ public:
   typedef ImageView<VisuModelType>                                VisuViewType;
   typedef VisuViewType::Pointer                                   VisuViewPointerType;
   
-  
-
   /* Method to display the Widget : Packed or Splitted */ 
   typedef PackedWidgetManager                                     PackedWidgetManagerType;
   typedef PackedWidgetManagerType::Pointer                        PackedWidgetManagerPointerType;
@@ -107,11 +106,13 @@ public:
   typedef PixelDescriptionView<PixelDescriptionModelType>         PixelDescriptionViewType;
   
   /** vector to store the status of images : diplayed or not displayed*/
-  typedef std::vector<bool>                                       BoolVector;
+  //---> Note : f the packed view is selected : 2nd boolean : false, Splitted view : 2nd boolean true;
+  typedef std::pair<bool, bool>                                   PairType;
+  typedef std::vector<PairType>                                  BoolVector;
   
   /** list in order to store the diplay manager*/
-  typedef ObjectList<PackedWidgetManagerType>                     PackedManagerList;
-  typedef ObjectList<SplittedWidgetManagerType>                   SplittedManagerList;
+  typedef WidgetManager                                           WidgetManagerType;
+  typedef ObjectList<WidgetManagerType>                           WidgetManagerList;
 
 
   
@@ -144,11 +145,11 @@ protected:
   virtual void   ViewerSetup();
   virtual void   ViewerSetupOk(); 
   virtual void   ViewerSetupCancel(); 
-  /*   virtual void LinkSetup(); */
-  /*   virtual void LinkSetupRemove(); */
-  /*   virtual void LinkSetupClear(); */
-  /*   virtual void LinkSetupOk(); */
-  /*   virtual void LinkSetupSave(); */
+  /* virtual void LinkSetup(); */
+  /* virtual void LinkSetupRemove(); */
+  /* virtual void LinkSetupClear(); */
+  /* virtual void LinkSetupOk(); */
+  /* virtual void LinkSetupSave(); */
   virtual void   AddImageListName();
   virtual void   Quit(); 
   virtual void   SelectAction(); 
@@ -161,20 +162,23 @@ protected:
   virtual void   GrayScaleSet(); 
   virtual void   RGBSet(); 
   virtual void   ComplexSet(); 
-  /*   virtual void Diaporama(); */
-  /*   virtual void DiaporamaPrevious(); */
-  /*   virtual void DiaporamaNext(); */
-  /*   virtual void DiaporamaQuit(); */
+  virtual void Diaporama(); 
+  virtual void DisplayDiaporama(); 
+  virtual void DiaporamaNext();   
+  virtual void DiaporamaPrevious(); 
+  virtual void DiaporamaQuit(); 
   
   virtual void UpdateInformation(unsigned int selectedItem); 
   virtual void UpdateViewerSetupWindow(unsigned int selectedItem); 
   virtual void DisplayPreviewWidget(unsigned int selectedItem);
+  virtual void SplittedViewMode();
+  virtual void PackedViewMode();
+  virtual void UpdateDiaporamaProgressBar(); 
   
   /*   virtual void UpdateLinkSetupWindow(unsigned int selectedItem); */
   /*   virtual void UpdatePreviewWindow(unsigned int selectedItem); */
-  /*   virtual void UpdateDiaporamaProgressBar(); */
   
-
+  
   /** Constructor */
   ImageViewerManagerViewGUI();
   /** Destructor */
@@ -194,32 +198,21 @@ private:
   
   //
   BoolVector                                     m_DisplayStatusList;
-  std::string                                    m_TemplateViewerName ;
+  std::string                                    m_TemplateViewerName;
   std::string                                    m_DisplayedLabel;
   std::string                                    m_UndisplayedLabel ;
-  //VisuViewShowedList::Pointer                    m_VisuViewShowedList;
   
   //Widget Manager
-  PackedWidgetManagerType::Pointer               m_PackedWindow;
-  SplittedWidgetManagerType::Pointer             m_SplittedWindow;
-  SplittedManagerList::Pointer                   m_SplittedManagerList;                
-  PackedManagerList::Pointer                     m_PackedManagerList;                
-  
-  /** Curve widget */
-  CurvesWidgetPointerType                        m_CurveWidget;
-  HistogramCurveType::Pointer                    m_Bhistogram;
-  HistogramCurveType::Pointer                    m_Ghistogram;
-  HistogramCurveType::Pointer                    m_Rhistogram;
+  WidgetManagerList::Pointer                     m_WidgetManagerList;  
 
+  //SlideShow widget Manager
+  PackedWidgetManagerType::Pointer               m_WidgetManager;
 
-  /** NewVisu */
   VisuViewPointerType                            m_VisuView;
   
   /**ImageWidget for my preview*/
   ImageWidgetPointerType                         m_PreviewWidget;
 
-  /** view associated to the pixelDescription*/
-  PixelDescriptionViewType::Pointer             m_PixelView ;
 
   /** Histogram */
   StandardRenderingFunctionType::Pointer        m_pRenderingFuntion;
@@ -228,7 +221,7 @@ private:
   HistogramCurveType::ColorType                 m_Blue;
   
   /** Store the component number of a pixel*/
-  unsigned int                                   m_NbComponent;
+  unsigned int                                  m_DiaporamaCurrentIndex;
 
 };
 }// End namespace otb
