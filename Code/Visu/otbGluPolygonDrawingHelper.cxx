@@ -26,7 +26,7 @@ PURPOSE.  See the above copyright notices for more information.
 // There are function prototype conflits under cygwin between standard w32 API
 // and standard C ones
 #ifndef CALLBACK
-#if defined(__CYGWIN__)
+#if defined(_WINDOWS) || defined(__CYGWIN__)
 #define CALLBACK __stdcall
 #else
 #define CALLBACK
@@ -37,7 +37,7 @@ extern "C"
 {
   typedef void (CALLBACK * FunctionPointerType)();
 
-  void CombineCallback(GLdouble coords[3],GLdouble * data[4], GLfloat weights[4],GLdouble **dataOut)
+  void __stdcall CombineCallback(GLdouble coords[3],GLdouble * data[4], GLfloat weights[4],GLdouble **dataOut)
   {
     GLdouble * vertex = new GLdouble[3];
     vertex[0] = coords[0];
@@ -46,11 +46,26 @@ extern "C"
     *dataOut = vertex;
   }
 
-  void ErrorCallback(GLenum errorCode)
+  void CALLBACK ErrorCallback(GLenum errorCode)
   {
     const GLubyte * estring = gluErrorString(errorCode);
     std::cout<<"Glu Tesselation error: "<<estring<<std::endl;
   }
+
+  void CALLBACK BeginCallback(GLenum prim)
+  {
+    glBegin(prim);
+  }
+  void CALLBACK EndCallback()
+  {
+    glEnd();
+  }
+
+  void CALLBACK VertexCallback(void * data)
+  {
+    glVertex3dv((GLdouble*)data);
+  }
+
 } // end extern C
 
 namespace otb
@@ -69,10 +84,10 @@ GluPolygonDrawingHelper::GluPolygonDrawingHelper()
   m_Color[3]=0;
 
   // Setting up the tesselator callbacks
-  gluTessCallback(m_GluTesselator,GLU_TESS_BEGIN,(FunctionPointerType)glBegin);
-  gluTessCallback(m_GluTesselator,GLU_TESS_END,(FunctionPointerType)glEnd);
+  gluTessCallback(m_GluTesselator,GLU_TESS_BEGIN,(FunctionPointerType)BeginCallback);
+  gluTessCallback(m_GluTesselator,GLU_TESS_END,(FunctionPointerType)EndCallback);
   gluTessCallback(m_GluTesselator,GLU_TESS_ERROR,(FunctionPointerType)ErrorCallback);
-  gluTessCallback(m_GluTesselator,GLU_TESS_VERTEX,(FunctionPointerType)glVertex3dv);
+  gluTessCallback(m_GluTesselator,GLU_TESS_VERTEX,(FunctionPointerType)VertexCallback);
   gluTessCallback(m_GluTesselator,GLU_TESS_COMBINE,(FunctionPointerType)CombineCallback);
 }
 
