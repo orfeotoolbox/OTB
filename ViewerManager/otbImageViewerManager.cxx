@@ -29,7 +29,8 @@ int main(int argc, char* argv[])
   typedef otb::CommandLineArgumentParser ParserType;
   ParserType::Pointer parser = ParserType::New();
 
-  parser->AddInputImage(false); //Optionnal parameter
+  //parser->AddInputImage(false); //Optionnal parameter
+  parser->AddOptionNParams("--InputImage","Input Images","-in",false);
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
@@ -66,8 +67,12 @@ int main(int argc, char* argv[])
   view->Show();
 
   if ( parseResult->IsOptionInputImagePresent() )
-    view->GetImageViewerManagerController()->OpenInputImage(parseResult->GetInputImage().c_str());
-
+    {
+      for(int i = 0; i<parseResult->GetNumberOfParameters("--InputImage") ; i++ )
+	{
+	  view->OpenImage(parseResult->GetParameterString("--InputImage",i).c_str());
+	}
+    }
   Fl::check();
 
   otbGenericMsgDebugMacro(<<"Running GUI ...");

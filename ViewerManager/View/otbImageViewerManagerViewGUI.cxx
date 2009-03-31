@@ -72,8 +72,19 @@ ImageViewerManagerViewGUI
 }
   
   /**
-   * 
+   *
    */
+void
+ImageViewerManagerViewGUI
+::OpenImage(const char * inputFileName)
+{
+  //Initialize
+  this->Initialize(inputFileName);
+}
+
+/**
+ * 
+ */
 void
 ImageViewerManagerViewGUI
 ::OpenImage()
@@ -90,7 +101,19 @@ ImageViewerManagerViewGUI
   
   Fl::check();
   guiMainWindow->redraw();
-  
+
+  //Initialize 
+  this->Initialize(cfname);
+}
+
+
+/**
+ * 
+ */
+void
+ImageViewerManagerViewGUI
+::Initialize(const char * cfname)
+{
   //Initialise the boolean pair
   PairType      pair(false,false); //Not displayed , Packed View
   
@@ -243,6 +266,9 @@ ImageViewerManagerViewGUI
   
   //Udpate the ViewerGUISetup
   this->UpdateViewerSetupWindow(selectedItem);
+
+  //LINK SETUP
+  this->UpdateLinkSetupWindow();
 }
 /**
  * Quit GUI
@@ -329,6 +355,7 @@ ImageViewerManagerViewGUI
   HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
   HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
   HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
+
   
   ghistogram->SetHistogramColor(m_Green);
   ghistogram->SetLabelColor(m_Green);
@@ -350,7 +377,7 @@ ImageViewerManagerViewGUI
   
   //Get the pixelView 
   PixelDescriptionViewType::Pointer pixelView = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pPixelView;
-
+  
   //Edit the Widget Manager 
   m_WidgetManagerList->GetNthElement(selectedItem-1)->UnRegisterAll();
   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterFullWidget(currentVisuView->GetFullWidget());
@@ -358,7 +385,7 @@ ImageViewerManagerViewGUI
   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterZoomWidget(currentVisuView->GetZoomWidget());
   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterPixelInformationWidget(pixelView->GetPixelDescriptionWidget());
   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterHistogramWidget(curveWidget);
-  m_WidgetManagerList->GetNthElement(selectedItem-1)->SetLabel("SplittedView");
+  m_WidgetManagerList->GetNthElement(selectedItem-1)->SetLabel(this->CutFileName(selectedItem-1));
   m_WidgetManagerList->GetNthElement(selectedItem-1)->Show();
 }
 
@@ -588,7 +615,7 @@ ImageViewerManagerViewGUI
     break;
   }
   
-  guiViewerSetupName->value(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).fileName.c_str());
+  guiViewerSetupName->value(this->CutFileName(selectedItem-1));
   
 }
 
@@ -779,6 +806,21 @@ ImageViewerManagerViewGUI
    UpdateDiaporamaProgressBar();
 }
 
+
+/**
+ * Cut a path to get only the imageName
+ */
+const char *
+ImageViewerManagerViewGUI
+::CutFileName(unsigned int selectedItem)
+{
+  std::string fileName     = m_ImageViewerManagerModel->GetObjectList().at(selectedItem).fileName;
+  int slashIndex           =  fileName.find_last_of("/",fileName.size());
+  std::string  fileNameCut = fileName.substr(slashIndex+1,fileName.size());
+
+  return fileNameCut.c_str();
+}
+
 void
 ImageViewerManagerViewGUI
 ::DisplayDiaporama()
@@ -794,12 +836,23 @@ ImageViewerManagerViewGUI
   HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
   HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
   
-  ghistogram->SetHistogramColor(m_Green);
-  ghistogram->SetLabelColor(m_Green);
-  bhistogram->SetHistogramColor(m_Blue);
-  bhistogram->SetLabelColor(m_Blue);
-  rhistogram->SetHistogramColor(m_Red);
-  rhistogram->SetLabelColor(m_Red);
+  //Color Definition    
+  HistogramCurveType::ColorType                 Red;
+  HistogramCurveType::ColorType                 Green;
+  HistogramCurveType::ColorType                 Blue;
+  Red.Fill(0);
+  Green.Fill(0);
+  Blue.Fill(0);
+  Red[0]  = 1.;   Red[3]   = 0.5;
+  Green[1]= 1.;   Green[3] = 0.5;
+  Blue[2] = 1.;   Blue[3]  = 0.5;
+
+  ghistogram->SetHistogramColor(Green);
+  ghistogram->SetLabelColor(Green);
+  bhistogram->SetHistogramColor(Blue);
+  bhistogram->SetLabelColor(Blue);
+  rhistogram->SetHistogramColor(Red);
+  rhistogram->SetLabelColor(Red);
   
   rhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(pRenderingFuntion->GetRedChannelIndex()));
   ghistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(pRenderingFuntion->GetGreenChannelIndex()));
@@ -816,13 +869,13 @@ ImageViewerManagerViewGUI
   PixelDescriptionViewType::Pointer pixelView = m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pPixelView;
   
   //Edit the Widget Manager 
-  m_WidgetManager->UnRegisterAll();
+  //m_WidgetManager->UnRegisterAll();
   m_WidgetManager->RegisterFullWidget(currentVisuView->GetFullWidget());
   m_WidgetManager->RegisterScrollWidget(currentVisuView->GetScrollWidget());
   m_WidgetManager->RegisterZoomWidget(currentVisuView->GetZoomWidget());
   m_WidgetManager->RegisterPixelInformationWidget(pixelView->GetPixelDescriptionWidget());
   m_WidgetManager->RegisterHistogramWidget(curveWidget);
-  
+  m_WidgetManager->SetLabel(this->CutFileName(m_DiaporamaCurrentIndex));
   m_WidgetManager->Refresh();
   m_WidgetManager->Show();
 }
@@ -866,8 +919,68 @@ void
 ImageViewerManagerViewGUI
 ::DiaporamaQuit()
 {
-  //guiDiaporama->set_non_modal();
-    guiDiaporama->hide();
+  guiDiaporama->hide();
+  m_WidgetManager->Hide();
+}
+
+/**
+ *
+ */
+
+void
+ImageViewerManagerViewGUI
+::LinkSetup()
+{
+  unsigned int selectedItem = guiImageList->value();
+  if (selectedItem == 0)
+  {
+    // no image selected, return
+    return;
+  }
+  guiLinkSetupWindow->show();
+}
+
+/**
+ *
+ */
+void
+ImageViewerManagerViewGUI
+::UpdateLinkSetupWindow()
+{
+  itk::OStringStream oss;
+  oss.str("");
+  m_PossibleLinkList.clear();
+  m_AlreadyLinkList.clear();
+  m_AlreadyLinkOffsetList.clear();
+  guiLinkChoice->clear();
+  guiLinkList->clear();
+  guiLinkList->value(0);
+  
+  //Fill the link choice 
+  int sizeImageList = guiImageList->size();
+  for (int i = 0 ; i < sizeImageList ; i++)
+    {
+    oss.str("");
+    oss<<this->CutFileName(i);
+    guiLinkChoice->add(oss.str().c_str());
+  }
+
+  //Fill the guiLinkList
+  for (int i = 0 ; i < sizeImageList ; i++)
+    {
+      if(strcmp(guiLinkChoice->value(),this->CutFileName(i)) != 0 )
+	{
+	  oss.str("");
+	  oss<<this->CutFileName(i);
+	  guiLinkList->add(oss.str().c_str());
+	}
+    }
+
+  guiLinkXOffset->value("0");
+  guiLinkYOffset->value("0");
+
+  guiLinkChoice->redraw();
+  guiLinkList->redraw();
 }
 
 /**

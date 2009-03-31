@@ -80,6 +80,7 @@ public:
   typedef ImageViewerManagerModelType::VisuModelPointerType       VisuModelPointerType;  //rendreing Image
   typedef ImageViewerManagerModelType::PixelDescriptionModelType  PixelDescriptionModelType;  //rendreing Image
   typedef ImageViewerManagerModelType::LayerType::HistogramType   HistogramType;        
+  typedef ImageViewerManagerModelType::ImageType::OffsetType      OffsetType;
   typedef ImageViewerManagerModelType::StandardRenderingFunctionType StandardRenderingFunctionType;
   
   typedef ImageView<VisuModelType>                                VisuViewType;
@@ -113,6 +114,10 @@ public:
   /** list in order to store the diplay manager*/
   typedef WidgetManager                                           WidgetManagerType;
   typedef ObjectList<WidgetManagerType>                           WidgetManagerList;
+  
+  //Necessary Lists for link 
+   typedef std::vector<unsigned int>                              IntVectorType;
+   typedef std::vector<OffsetType>                                OffsetListType;
 
 
   
@@ -140,12 +145,16 @@ public:
   // 
   virtual void OpenImage();
   
+  //
+  virtual void OpenImage(const char * inputFileName);
+  
 protected:
+  virtual void   Initialize(const char * cfname);
   virtual void   CloseImage(); 
   virtual void   ViewerSetup();
   virtual void   ViewerSetupOk(); 
   virtual void   ViewerSetupCancel(); 
-  /* virtual void LinkSetup(); */
+
   /* virtual void LinkSetupRemove(); */
   /* virtual void LinkSetupClear(); */
   /* virtual void LinkSetupOk(); */
@@ -174,8 +183,11 @@ protected:
   virtual void SplittedViewMode();
   virtual void PackedViewMode();
   virtual void UpdateDiaporamaProgressBar(); 
+
+  virtual const char * CutFileName(unsigned int selectedItem);
   
-  /*   virtual void UpdateLinkSetupWindow(unsigned int selectedItem); */
+  virtual void LinkSetup(); 
+  virtual void UpdateLinkSetupWindow(); 
   /*   virtual void UpdatePreviewWindow(unsigned int selectedItem); */
   
   
@@ -219,6 +231,11 @@ private:
   HistogramCurveType::ColorType                 m_Red;
   HistogramCurveType::ColorType                 m_Green;
   HistogramCurveType::ColorType                 m_Blue;
+
+  /** Link Attributes */
+  IntVectorType                                 m_PossibleLinkList;
+  IntVectorType                                 m_AlreadyLinkList;
+  OffsetListType                                m_AlreadyLinkOffsetList;
   
   /** Store the component number of a pixel*/
   unsigned int                                  m_DiaporamaCurrentIndex;
