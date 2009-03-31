@@ -95,18 +95,6 @@ StandardImageViewer<TImage,TVectorData,TWidgetManager>
   m_DisplayWindow->RegisterZoomWidget(m_View->GetZoomWidget());
   m_DisplayWindow->RegisterPixelInformationWidget(m_PixelDescriptionView->GetPixelDescriptionWidget());
   m_DisplayWindow->RegisterHistogramWidget(m_CurveWidget);
-
-  //m_FullGroup->add(m_View->GetFullWidget());
-  //m_QuicklookGroup->add(m_View->GetScrollWidget());
-  //m_ZoomGroup->add(m_View->GetZoomWidget());
-  //m_HistogramsGroup->add(m_CurveWidget);
-  //m_PixelInformationGroup->add(m_PixelDescriptionView->GetPixelDescriptionWidget());
-
-  //m_View->GetZoomWidget()->resize(m_ZoomGroup->x(),m_ZoomGroup->y(),m_ZoomGroup->w(),m_ZoomGroup->h());
-  //m_View->GetFullWidget()->resize(m_FullGroup->x(),m_FullGroup->y(),m_FullGroup->w(),m_FullGroup->h());
-  //m_View->GetScrollWidget()->resize(m_QuicklookGroup->x(),m_QuicklookGroup->y(),m_QuicklookGroup->w(),m_QuicklookGroup->h());
-  //m_CurveWidget->resize(m_HistogramsGroup->x(),m_HistogramsGroup->y(),m_HistogramsGroup->w(),m_HistogramsGroup->h());
-  //m_PixelDescriptionView->GetPixelDescriptionWidget()->resize(m_PixelInformationGroup->x(),m_PixelInformationGroup->y(),m_PixelInformationGroup->w(),m_PixelInformationGroup->h());
 }
 
 template <class TImage,class TVectorData,class TWidgetManager>
@@ -221,18 +209,13 @@ StandardImageViewer<TImage,TVectorData,TWidgetManager>
   m_RenderingFunction = generator->GetDefaultRenderingFunction();
 
   // Set the window and layer label
-  //m_Window->label(m_Label.c_str());
+  m_DisplayWindow->SetLabel(m_Label.c_str());
   m_ImageLayer->SetName(m_Label);
 
   // Add the generated layer to the rendering model
   m_RenderingModel->AddLayer(generator->GetLayer());
 
   // Show everything
-//   m_Window->show();
-//   m_View->GetScrollWidget()->show();
-//   m_View->GetFullWidget()->show();
-//   m_View->GetZoomWidget()->show();
-//   m_CurveWidget->show();
   m_DisplayWindow->Show();
 
   // Update the rendering model
