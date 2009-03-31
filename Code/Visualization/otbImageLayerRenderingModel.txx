@@ -76,15 +76,15 @@ ImageLayerRenderingModel<TOutputImage>
     // If the layer is visible
     if(it.Get()->GetVisible())
       {
-      // Set the extracted region
-      m_ExtractRegion = this->ConstrainRegion(m_ExtractRegion,it.Get()->GetExtent());
-      it.Get()->SetExtractRegion(m_ExtractRegion);
-      // Set the scaled extracted region
-      m_ScaledExtractRegion = this->ConstrainRegion(m_ScaledExtractRegion,m_ExtractRegion);
-      it.Get()->SetScaledExtractRegion(m_ScaledExtractRegion);
-      // Render it
-      otbMsgDevMacro(<<"ImageLayerRenderingModel::RenderVisibleLayers(): Rendering layer "<<it.Get()->GetName()<<" with regions ("<<m_ExtractRegion.GetIndex()<<" "<<m_ExtractRegion.GetSize()<<") ("<<m_ScaledExtractRegion.GetIndex()<<" "<<m_ScaledExtractRegion.GetSize()<<")");
-      it.Get()->Render();
+	// Set the extracted region
+	m_ExtractRegion = this->ConstrainRegion(m_ExtractRegion,it.Get()->GetExtent());
+	it.Get()->SetExtractRegion(m_ExtractRegion);
+	// Set the scaled extracted region
+	m_ScaledExtractRegion = this->ConstrainRegion(m_ScaledExtractRegion,m_ExtractRegion);
+	it.Get()->SetScaledExtractRegion(m_ScaledExtractRegion);
+	// Render it
+	otbMsgDevMacro(<<"ImageLayerRenderingModel::RenderVisibleLayers(): Rendering layer "<<it.Get()->GetName()<<" with regions ("<<m_ExtractRegion.GetIndex()<<" "<<m_ExtractRegion.GetSize()<<") ("<<m_ScaledExtractRegion.GetIndex()<<" "<<m_ScaledExtractRegion.GetSize()<<")");
+	it.Get()->Render();
       }
     }
 }
@@ -97,12 +97,12 @@ ImageLayerRenderingModel<TOutputImage>
   // If there are no layer to render
   if(this->GetNumberOfLayers() == 0)
     {
-    // Ensure nothing is available
-    m_HasQuicklook     = false;
-    m_HasExtract       = false;
-    m_HasScaledExtract = false;
-    // and return without doing anything
-    return;
+      // Ensure nothing is available
+      m_HasQuicklook     = false;
+      m_HasExtract       = false;
+      m_HasScaledExtract = false;
+      // and return without doing anything
+      return;
     }
   
   // Get the lowest layer
@@ -112,14 +112,14 @@ ImageLayerRenderingModel<TOutputImage>
 
   while(!visible && it != this->GetLayers()->End())
     {
-    visible = it.Get()->GetVisible();
-    ++it;
+      visible = it.Get()->GetVisible();
+      ++it;
     }
 
   if(!visible)
     {
-    // no visible layers, returning
-    return;
+      // no visible layers, returning
+      return;
     }
   --it;
   
@@ -131,8 +131,8 @@ ImageLayerRenderingModel<TOutputImage>
   // Configure base layer rasterization
   if(baseLayer->GetHasQuicklook())
     {
-    m_HasQuicklook = true;
-    m_RasterizedQuicklook = baseLayer->GetRenderedQuicklook();
+      m_HasQuicklook = true;
+      m_RasterizedQuicklook = baseLayer->GetRenderedQuicklook();
     }
 
   if(baseLayer->GetHasExtract())

@@ -109,7 +109,7 @@ public:
 		}
 	      case FL_DRAG:
 		{
-		  // onmy redraw the red box in the widget
+		  // only redraw the red box in the widget
 		  m_StopIndex = lIndex;
 		  m_Model->SetExtractRegionByIndex(m_StartIndex,m_StopIndex);
 		  m_RegionGlComponent->SetRegion(m_Model->GetExtractRegion());

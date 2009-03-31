@@ -45,7 +45,7 @@ class ImageLayerRenderingModel
 {
 public:
   /** Standard class typedefs */
-  typedef ImageLayerRenderingModel                                 Self;
+  typedef ImageLayerRenderingModel                         Self;
   typedef LayerBasedModel< ImageLayerBase <TOutputImage> > Superclass;
   typedef itk::SmartPointer<Self>                          Pointer;
   typedef itk::SmartPointer<const Self>                    ConstPointer;
@@ -57,14 +57,14 @@ public:
   itkNewMacro(Self);
 
   /** Output image typedef */
-  typedef TOutputImage                         OutputImageType;
-  typedef typename OutputImageType::Pointer    OutputImagePointerType;
+  typedef TOutputImage                          OutputImageType;
+  typedef typename OutputImageType::Pointer     OutputImagePointerType;
   
   /** Layer typedef */
-  typedef typename Superclass::LayerType       LayerType;
-  typedef typename LayerType::RegionType       RegionType;
-  typedef typename RegionType::IndexType       IndexType;
-  typedef typename RegionType::SizeType        SizeType;
+  typedef typename Superclass::LayerType        LayerType;
+  typedef typename LayerType::RegionType        RegionType;
+  typedef typename RegionType::IndexType        IndexType;
+  typedef typename RegionType::SizeType         SizeType;
   
   /** Layer list typedef */
   typedef typename Superclass::LayerListType    LayerListType;
@@ -72,14 +72,14 @@ public:
   typedef typename LayerListType::ConstIterator LayerIteratorType;
 
   /** Listener typedef */
-  typedef ImageLayerRenderingModelListener             ListenerType;
+  typedef ImageLayerRenderingModelListener          ListenerType;
 
   /** Blending filter typedef */
   typedef otb::BlendingImageFilter<OutputImageType> BlendingFilterType;
 
   /** Blending filter typedef */
-  typedef otb::ObjectList<BlendingFilterType>      BlendingFilterListType;
-  typedef typename BlendingFilterListType::Pointer BlendingFilterListPointerType;
+  typedef otb::ObjectList<BlendingFilterType>       BlendingFilterListType;
+  typedef typename BlendingFilterListType::Pointer  BlendingFilterListPointerType;
   typedef typename BlendingFilterListType::Iterator BlendingFilterIteratorType;
 
   /** Get/Set the viewer name */
