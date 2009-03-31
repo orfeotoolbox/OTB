@@ -1466,7 +1466,7 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
      for(idx = 0; idx < theSolarIrradiance.size();++idx)
      {
        in >> tempValue;
-       theSolarIrradiance[idx] = tempValue.toInt();
+       theSolarIrradiance[idx] = tempValue.toDouble();
      }
    }
 
@@ -2271,7 +2271,7 @@ bool ossimSpotDimapSupportData::parsePart4(
       setErrorStatus();
       return false;
     }
-    theSolarIrradiance[bandIndex] = sub_nodes[0]->getText().toInt();
+    theSolarIrradiance[bandIndex] = sub_nodes[0]->getText().toDouble();
 
     ++node;
   }
