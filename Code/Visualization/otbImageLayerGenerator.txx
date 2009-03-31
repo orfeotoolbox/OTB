@@ -19,6 +19,7 @@
 #define __otbImageLayerGenerator_txx
 
 #include "otbImageLayerGenerator.h"
+#include "otbImageMetadataInterface.h"
 
 #include <FL/Fl.H>
 
@@ -28,7 +29,7 @@ namespace otb
 template < class TImageLayer >
 ImageLayerGenerator<TImageLayer>
 ::ImageLayerGenerator() : m_Layer(), m_DefaultRenderingFunction(), m_Image(), m_Quicklook(),
-                          m_SubsamplingRate(1), m_GenerateQuicklook(true), 
+                          m_SubsamplingRate(1), m_GenerateQuicklook(true),
                           m_Resampler(), m_ScreenRatio(0.25)
 {
   // Intialize output layer
@@ -143,10 +144,23 @@ ImageLayerGenerator<TImageLayer>
     }
     case 4:
     {
-    // Handle quickbird like channel order
-    m_DefaultRenderingFunction->SetRedChannelIndex(2);
-    m_DefaultRenderingFunction->SetGreenChannelIndex(1);
-    m_DefaultRenderingFunction->SetBlueChannelIndex(0);
+      // Get the sensor ID
+      ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
+      std::string sensorID = imageMetadataInterface->GetSensorID(m_Image->GetMetaDataDictionary());
+      if (sensorID.find("Spot") != std::string::npos)
+      {
+        // Handle Spot like channel order
+        m_DefaultRenderingFunction->SetRedChannelIndex(0);//XS3
+        m_DefaultRenderingFunction->SetGreenChannelIndex(1);//XS2
+        m_DefaultRenderingFunction->SetBlueChannelIndex(2);//XS1
+      }
+      else
+      {
+        // Handle quickbird like channel order (wavelenght order)
+        m_DefaultRenderingFunction->SetRedChannelIndex(2);
+        m_DefaultRenderingFunction->SetGreenChannelIndex(1);
+        m_DefaultRenderingFunction->SetBlueChannelIndex(0);
+      }
     break;
     }
     default:

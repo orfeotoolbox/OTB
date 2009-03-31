@@ -54,7 +54,7 @@ class  PackedWidgetManager
   virtual void Show();
   virtual void Hide();
   virtual void Refresh();
-  virtual void SetLabel(const char * label){};
+  virtual void SetLabel(const char * label);
   virtual void UnRegisterAll();
 
  protected:
