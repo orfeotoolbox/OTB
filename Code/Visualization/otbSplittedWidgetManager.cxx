@@ -133,11 +133,34 @@ void
 SplittedWidgetManager
 ::SetLabel(const char * label)
 {
-  m_SplittedWidget->m_FullGroup->label(label);
-  m_SplittedWidget->m_ZoomGroup->label(label);
-  m_SplittedWidget->m_PixelInformationGroup->label(label);
-  m_SplittedWidget->m_QuicklookGroup->label(label);
-  m_SplittedWidget->m_HistogramsGroup->label(label);
+  itk::OStringStream oss1;
+  oss1.str("");
+  oss1 << "Full Widget - "<< label;
+  m_SplittedWidget->m_FullGroup->copy_label(oss1.str().c_str());
+  
+  itk::OStringStream oss2;
+  oss2.str("");
+  oss2 << "Zoom Widget - " << label;
+  std::cout <<" label " << label << std::endl;
+  m_SplittedWidget->m_ZoomGroup->copy_label(oss2.str().c_str());
+  
+  itk::OStringStream oss3;
+  oss3.str("");
+  oss3 << "Pixel Information Widget - "<< label;
+  std::cout <<" label " << label << std::endl;
+  m_SplittedWidget->m_PixelInformationGroup->copy_label(oss3.str().c_str());
+
+  itk::OStringStream oss4;
+  oss4.str("");
+  oss4 << "Scroll Widget - "<< label;
+  std::cout <<" label " << label << std::endl;
+  m_SplittedWidget->m_QuicklookGroup->copy_label(oss4.str().c_str());
+  
+  itk::OStringStream oss5;
+  oss5.str("");
+  oss5 << "Histogram Widget - "<< label;
+  std::cout <<" label " << label << std::endl;
+  m_SplittedWidget->m_HistogramsGroup->copy_label(oss5.str().c_str());
 }
 
 void 

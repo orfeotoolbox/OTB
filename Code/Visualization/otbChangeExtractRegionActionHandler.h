@@ -54,6 +54,7 @@ public:
   /** View typedefs */
   typedef TView                          ViewType;
   typedef typename ViewType::Pointer     ViewPointerType;
+  typedef typename ViewType::OffsetType  OffsetType;
 
 
   /** Handle widget event
@@ -81,7 +82,10 @@ public:
         typename ViewType::IndexType index;
         index[0]=static_cast<int>(imagePoint[0]);
         index[1]=static_cast<int>(imagePoint[1]);
-
+	
+	//Add Offset 
+	index += m_Offset;
+	
         // Change scaled extract region center
         m_Model->SetExtractRegionCenter(index);
         // Update model
@@ -100,10 +104,17 @@ public:
   itkSetObjectMacro(Model,ModelType);
   itkGetObjectMacro(Model,ModelType);
 
+  /** Set/Get Offset */
+  itkSetMacro(Offset,OffsetType);
+  itkGetMacro(Offset,OffsetType);
+  
+
 protected:
   /** Constructor */
   ChangeExtractRegionActionHandler() : m_View(), m_Model()
-  {}
+  {
+    m_Offset.Fill(0);
+  }
 
   /** Destructor */
   virtual ~ChangeExtractRegionActionHandler(){}
@@ -116,6 +127,9 @@ protected:
 private:
   ChangeExtractRegionActionHandler(const Self&);    // purposely not implemented
   void operator=(const Self&); // purposely not implemented
+  
+  //Offset 
+  OffsetType      m_Offset;
 
   // Pointer to the view
   ViewPointerType m_View;

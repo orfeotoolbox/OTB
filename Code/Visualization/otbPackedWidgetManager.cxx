@@ -136,6 +136,13 @@ PackedWidgetManager
   m_PackedWidget->m_HistogramsGroup->remove(m_InternalCurveWidget);
 }
 
+void 
+PackedWidgetManager
+::SetLabel(const char * label)
+{
+  m_PackedWidget->m_Window->copy_label(label);
+}
+
 
 
 }

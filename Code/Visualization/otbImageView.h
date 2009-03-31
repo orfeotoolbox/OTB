@@ -63,6 +63,10 @@ public:
   /** Region size & index typedef */
   typedef typename RegionType::SizeType        SizeType;
   typedef typename RegionType::IndexType       IndexType;
+  
+  /** Offset typedef */
+  typedef typename ImageType::OffsetType       OffsetType;
+  
 
   /** Image widget */
   typedef otb::ImageWidget<ImageType>          ImageWidgetType;
