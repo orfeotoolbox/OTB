@@ -23,6 +23,7 @@ SET(COMMON_TESTS4 ${CXX_TEST_PATH}/otbCommonTests4)
 SET(COMMON_TESTS5 ${CXX_TEST_PATH}/otbCommonTests5)
 SET(COMMON_TESTS6 ${CXX_TEST_PATH}/otbCommonTests6)
 SET(COMMON_TESTS7 ${CXX_TEST_PATH}/otbCommonTests7)
+SET(COMMON_TESTS8 ${CXX_TEST_PATH}/otbCommonTests8)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -605,6 +606,32 @@ ADD_TEST(ioTvRemoteSensingRegion ${COMMON_TESTS7}
 	 0. 0.                  # Point to check 
  )
 
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests8 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# -------------  otb::QuickLookImageGenerator ----------------------------
+ADD_TEST(coTvQuickLookImageGeneratorNew ${COMMON_TESTS8}
+otbQuickLookImageGeneratorNew
+)
+
+ADD_TEST(coTuQuickLookImageGenerator ${COMMON_TESTS8}
+     --compare-image ${TOL}
+	   	     ${BASELINE}/coTuQuickLookImageGenerator.tif
+                     ${TEMP}/coTuQuickLookImageGenerator.tif
+   otbQuickLookImageGenerator
+        ${INPUTDATA}/qb_RoadExtract.img.hdr
+	${TEMP}/coTuQuickLookImageGenerator.tif
+	10 # sr
+	2 # variance
+	0.5 # max error
+	4 # max kernel width 
+	1 # usespacing
+)
+
+
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
 otbSystemTest.cxx
@@ -696,6 +723,10 @@ otbRemoteSensingRegionNew.cxx
 otbRemoteSensingRegion.cxx
 )
 
+SET(BasicCommon_SRCS8
+otbQuickLookImageGeneratorNew.cxx
+otbQuickLookImageGenerator.cxx
+)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
@@ -722,5 +753,7 @@ TARGET_LINK_LIBRARIES(otbCommonTests6 OTBIO)
 ADD_EXECUTABLE(otbCommonTests7 otbCommonTests7.cxx ${BasicCommon_SRCS7})
 TARGET_LINK_LIBRARIES(otbCommonTests7 OTBIO)
 
+ADD_EXECUTABLE(otbCommonTests8 otbCommonTests8.cxx ${BasicCommon_SRCS8})
+TARGET_LINK_LIBRARIES(otbCommonTests8 OTBIO)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
