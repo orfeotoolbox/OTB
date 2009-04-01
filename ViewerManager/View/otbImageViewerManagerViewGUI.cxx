@@ -245,7 +245,7 @@ ImageViewerManagerViewGUI
 }
 
 /**
- * Quit GUI
+ *
  */
 void
 ImageViewerManagerViewGUI
@@ -283,7 +283,7 @@ ImageViewerManagerViewGUI
   this->UpdateLinkSetupWindow();
 }
 /**
- * Quit GUI
+ *
  */
 void
 ImageViewerManagerViewGUI
@@ -427,22 +427,28 @@ ImageViewerManagerViewGUI
   m_WidgetManagerList->GetNthElement(selectedItem-1)->Hide();
   m_WidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
   
-  //Update the view mode
-  if(!m_DisplayStatusList[selectedItem-1].first)
+  //Update the list link
+  m_LinkWidgetManagerList->GetNthElement(selectedItem-1)->Hide();
+  m_LinkWidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
+  
+  if(m_LinkedDisplayStatusList[selectedItem-1])
+    {
+      this->Display(m_LinkWidgetManagerList, selectedItem);
+    }
+  
+  
+  //Update the view mode if the link mode is not updated
+  if(!m_DisplayStatusList[selectedItem-1].first && !m_LinkedDisplayStatusList[selectedItem-1])
     {
       m_DisplayStatusList[selectedItem-1].second = true;
     }
     
   //If already displayed : update the view mode and display the new viewMode
-  if(m_DisplayStatusList[selectedItem-1].first /*&& !m_DisplayStatusList[selectedItem-1].second*/ )
+  if(m_DisplayStatusList[selectedItem-1].first && !m_LinkedDisplayStatusList[selectedItem-1] )
     {
       m_DisplayStatusList[selectedItem-1].second = true;
       this->Display(m_WidgetManagerList, selectedItem);
     }
-
-  //Update the list link
-  m_LinkWidgetManagerList->GetNthElement(selectedItem-1)->Hide();
-  m_LinkWidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
 }
 
 /**
@@ -463,23 +469,23 @@ ImageViewerManagerViewGUI
   PackedWidgetManagerType::Pointer widgetManager  =  PackedWidgetManagerType::New();
   m_WidgetManagerList->GetNthElement(selectedItem-1)->Hide();
   m_WidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
+
+  //Update the link list 
+  m_LinkWidgetManagerList->GetNthElement(selectedItem-1)->Hide();
+  m_LinkWidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
   
   //Update the view mode
-  if(!m_DisplayStatusList[selectedItem-1].first)
+  if(!m_DisplayStatusList[selectedItem-1].first && !m_LinkedDisplayStatusList[selectedItem-1])
     {
       m_DisplayStatusList[selectedItem-1].second = false;
     }
   
   //If already displayed : update the view mode and display the new viewMode
-  if(m_DisplayStatusList[selectedItem-1].first /*&& m_DisplayStatusList[selectedItem-1].second*/ )
+  if(m_DisplayStatusList[selectedItem-1].first && !m_LinkedDisplayStatusList[selectedItem-1] )
     {
       m_DisplayStatusList[selectedItem-1].second = false;
       this->Display(m_WidgetManagerList, selectedItem);
     }
-  
-  //Update the link list 
-  m_LinkWidgetManagerList->GetNthElement(selectedItem-1)->Hide();
-  m_LinkWidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
 }
 
 /**
@@ -574,6 +580,14 @@ ImageViewerManagerViewGUI
 	m_WidgetManagerList->GetNthElement(i)->Hide();
 	m_WidgetManagerList->GetNthElement(i)->UnRegisterAll();
       }
+
+  //Quit the Diaporama if shown
+  if(guiDiaporama->shown() != 0 )
+    guiDiaporama->hide();
+
+  //Hide the linkSetupWindow
+  if(guiLinkSetupWindow->shown() != 0)
+    guiLinkSetupWindow->hide();
 }
 
 /**
@@ -851,8 +865,7 @@ ImageViewerManagerViewGUI
     return;
   }
    guiDiaporama->show();
-   guiDiaporamaProgressBar->minimum(1);
-   guiDiaporamaProgressBar->maximum(static_cast<float>(guiImageList->size()));
+
    
    //Close the showed image without clearing the ShowedList
    this->CloseAllDisplayedImages(false);
@@ -925,7 +938,7 @@ ImageViewerManagerViewGUI
   PixelDescriptionViewType::Pointer pixelView = m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pPixelView;
   
   //Edit the Widget Manager 
-  m_WidgetManager->UnRegisterAll();
+  //m_WidgetManager->UnRegisterAll();
   m_WidgetManager->RegisterFullWidget(currentVisuView->GetFullWidget());
   m_WidgetManager->RegisterScrollWidget(currentVisuView->GetScrollWidget());
   m_WidgetManager->RegisterZoomWidget(currentVisuView->GetZoomWidget());
@@ -968,6 +981,8 @@ ImageViewerManagerViewGUI
   oss.str("");
   oss<<m_DiaporamaCurrentIndex+1<<"/"<<guiImageList->size();
   guiDiaporamaProgressBar->copy_label(oss.str().c_str());
+  guiDiaporamaProgressBar->minimum(1);
+  guiDiaporamaProgressBar->maximum(static_cast<float>(guiImageList->size()));
   guiDiaporamaProgressBar->value(static_cast<float>(m_DiaporamaCurrentIndex));
 }
 
@@ -1008,8 +1023,6 @@ ImageViewerManagerViewGUI
 {
   itk::OStringStream oss;
   oss.str("");
-  m_PossibleLinkList.clear();
-  m_AlreadyLinkList.clear();
   m_AlreadyLinkOffsetList.clear();
   guiLinkListLeft->clear();
   guiLinkListRight->clear();
@@ -1051,16 +1064,17 @@ ImageViewerManagerViewGUI
       //Call the controller
       this->m_ImageViewerManagerController->Link(leftChoice, rightChoice);
       
-      //Close the temporary Showed images
+      //Close the temporary Showed images without clearing the 
       this->CloseAllDisplayedImages(false);
+      
+      //Add the linked to the list
+      std::cout <<" leftChoice "<< leftChoice   << " rightChoice " << rightChoice << std::endl;
+      m_LinkedDisplayStatusList[leftChoice-1] = true;
+      m_LinkedDisplayStatusList[rightChoice-1] = true;
       
       //Diplay the Linked images
       this->Display(m_LinkWidgetManagerList, leftChoice);
       this->Display(m_LinkWidgetManagerList, rightChoice);
-      
-      //Add the linked to the list
-      m_LinkedDisplayStatusList[leftChoice] = true;
-      m_LinkedDisplayStatusList[rightChoice] = true;
     }
 }
 
@@ -1074,9 +1088,19 @@ ImageViewerManagerViewGUI
   guiLinkSetupWindow->hide();
   
   //Close the  displays linked
+  
+  for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size() ; i++)
+    if(m_LinkedDisplayStatusList[i]) 
+      std::cout << "Display  " << i  << " is showed " <<std::endl;	
+    else
+      std::cout << "Display  " << i  << " is UNDISLAYED " <<std::endl;	
+  
   for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size() ; i++)
     if(m_LinkedDisplayStatusList[i])
+      {
 	m_LinkWidgetManagerList->GetNthElement(i)->Hide(); 
+	m_LinkedDisplayStatusList[i] = false;
+      }
   
   //Display temporary closed displays if any
   this->ShowTemporaryClosedDisplay();

@@ -116,7 +116,6 @@ public:
   typedef ObjectList<WidgetManagerType>                           WidgetManagerList;
   
   //Necessary Lists for link 
-   typedef std::vector<unsigned int>                              IntVectorType;
    typedef std::vector<OffsetType>                                OffsetListType;
 
 
@@ -151,11 +150,7 @@ protected:
   virtual void   ViewerSetup();
   virtual void   ViewerSetupOk(); 
   virtual void   ViewerSetupCancel(); 
-
-  /* virtual void LinkSetupRemove(); */
-  /* virtual void LinkSetupClear(); */
-  //virtual void LinkSetupOk(); 
-  virtual void   LinkSetupSave(); 
+  
   virtual void   AddImageListName();
   virtual void   Quit(); 
   virtual void   SelectAction(); 
@@ -186,6 +181,7 @@ protected:
   virtual const char * CutFileName(unsigned int selectedItem);
   
   virtual void LinkSetup(); 
+  virtual void LinkSetupSave(); 
   virtual void UpdateLinkSetupWindow(); 
   virtual void LinkSetupOk();
   /*   virtual void UpdatePreviewWindow(unsigned int selectedItem); */
@@ -236,8 +232,6 @@ private:
   HistogramCurveType::ColorType                 m_Blue;
 
   /** Link Attributes */
-  IntVectorType                                 m_PossibleLinkList;
-  IntVectorType                                 m_AlreadyLinkList;
   OffsetListType                                m_AlreadyLinkOffsetList;
   
   /** Store the component number of a pixel*/

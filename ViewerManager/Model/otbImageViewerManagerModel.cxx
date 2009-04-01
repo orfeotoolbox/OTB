@@ -345,18 +345,6 @@ ImageViewerManagerModel
 
 }
 
-/**
- *
- */
-void
-ImageViewerManagerModel
-::AddLinkActionHandler(unsigned int choice)
-{
-  
-}
-
-
-
 }
 
 
