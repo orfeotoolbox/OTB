@@ -69,7 +69,9 @@ VectorDataGlComponent<TVectorData>
     // nothing to render, return
     return;
     }
-
+  
+  m_Spacing = m_VectorData->GetSpacing();
+  m_Origin  = m_VectorData->GetOrigin();
 
   // Set up blending and color
   glEnable(GL_BLEND);
@@ -91,7 +93,6 @@ VectorDataGlComponent<TVectorData>
 
   // Enabling line antialiasing
   glEnable(GL_LINE_SMOOTH);
-
   // Trigger recursive rendering
   InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(m_VectorData->GetDataTree()->GetRoot());
   
@@ -99,7 +100,7 @@ VectorDataGlComponent<TVectorData>
   chrono.Start();
   this->Render(inputRoot,extent,space2ScreenTransform);
   chrono.Stop();
-  std::cout<<"VectorData component rendered in "<<chrono.GetMeanTime()<<" s."<<std::endl;
+  otbMsgDevMacro(<<"VectorData component rendered in "<<chrono.GetMeanTime()<<" s.");
 
   glDisable(GL_LINE_SMOOTH);
   glDisable(GL_BLEND);
@@ -114,8 +115,8 @@ VectorDataGlComponent<TVectorData>
   PointType spacePoint = p;
   spacePoint[0]*= m_Spacing[0];
   spacePoint[1]*= m_Spacing[1];
-  spacePoint[0]-= m_Origin[0];
-  spacePoint[1]-=m_Origin[1];
+  spacePoint[0]+= m_Origin[0];
+  spacePoint[1]+=m_Origin[1];
 
   // Transform to a screen point
   PointType screenPoint = transform->TransformPoint(spacePoint);
@@ -145,8 +146,8 @@ VectorDataGlComponent<TVectorData>
     PointType spacePoint = vIt.Value();
     spacePoint[0]*= m_Spacing[0];
     spacePoint[1]*= m_Spacing[1];
-    spacePoint[0]-= m_Origin[0];
-    spacePoint[1]-= m_Origin[1];
+    spacePoint[0]+= m_Origin[0];
+    spacePoint[1]+= m_Origin[1];
     
     // Transform to a screen point
     PointType screenPoint = transform->TransformPoint(spacePoint);
@@ -183,8 +184,8 @@ VectorDataGlComponent<TVectorData>
     PointType spacePoint = vIt.Value();
     spacePoint[0]*= m_Spacing[0];
     spacePoint[1]*= m_Spacing[1];
-    spacePoint[0]-= m_Origin[0];
-    spacePoint[1]-= m_Origin[1];
+    spacePoint[0]+= m_Origin[0];
+    spacePoint[1]+= m_Origin[1];
     
     // Transform to a screen point
     PointType screenPoint = transform->TransformPoint(spacePoint);
@@ -222,8 +223,8 @@ VectorDataGlComponent<TVectorData>
        PointType spacePoint = vIt.Value();
        spacePoint[0]*= m_Spacing[0];
        spacePoint[1]*= m_Spacing[1];
-       spacePoint[0]-= m_Origin[0];
-       spacePoint[1]-= m_Origin[1];
+       spacePoint[0]+= m_Origin[0];
+       spacePoint[1]+= m_Origin[1];
        
        // Transform to a screen point
        PointType screenPoint = transform->TransformPoint(spacePoint);
