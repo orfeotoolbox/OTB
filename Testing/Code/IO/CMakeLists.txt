@@ -1538,6 +1538,17 @@ ADD_TEST(ioTvVectorDataFileWriterTwice ${IO_TESTS15}
 # If the file exists, try remove it to prevent test failure
 FILE(REMOVE ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp)
 
+
+ADD_TEST(ioTvVectorDataFileWriterPolygons ${IO_TESTS15}
+        otbVectorDataFileWriterPolygons
+    ${TEMP}/ioTvVectorDataFileWriterOutput.shp
+    )
+
+# If the file exists, try remove it to prevent test failure
+FILE(REMOVE ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp)
+
+
+
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvVectorDataFileReaderWriter ${IO_TESTS15}
         --compare-n-binary 4
@@ -1824,6 +1835,7 @@ otbVectorDataFileReaderNew.cxx
 otbVectorDataFileReader.cxx
 otbVectorDataFileWriterNew.cxx
 otbVectorDataFileWriter.cxx
+otbVectorDataFileWriterPolygons.cxx
 otbVectorDataFileReaderWriter.cxx
 otbVectorDataFileGeoReaderWriter.cxx
 otbSHPVectorDataIONew.cxx
