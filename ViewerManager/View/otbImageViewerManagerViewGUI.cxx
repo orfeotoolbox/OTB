@@ -1068,7 +1068,6 @@ ImageViewerManagerViewGUI
       this->CloseAllDisplayedImages(false);
       
       //Add the linked to the list
-      std::cout <<" leftChoice "<< leftChoice   << " rightChoice " << rightChoice << std::endl;
       m_LinkedDisplayStatusList[leftChoice-1] = true;
       m_LinkedDisplayStatusList[rightChoice-1] = true;
       
@@ -1088,13 +1087,6 @@ ImageViewerManagerViewGUI
   guiLinkSetupWindow->hide();
   
   //Close the  displays linked
-  
-  for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size() ; i++)
-    if(m_LinkedDisplayStatusList[i]) 
-      std::cout << "Display  " << i  << " is showed " <<std::endl;	
-    else
-      std::cout << "Display  " << i  << " is UNDISLAYED " <<std::endl;	
-  
   for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size() ; i++)
     if(m_LinkedDisplayStatusList[i])
       {
