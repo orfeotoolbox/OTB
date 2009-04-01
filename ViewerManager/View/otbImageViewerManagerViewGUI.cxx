@@ -333,21 +333,21 @@ ImageViewerManagerViewGUI
       // no image selected, return
       return;
     }
-  
-  //check what to do
-  if(!m_DisplayStatusList[selectedItem-1].first)
-    {
-      //New Display 
-      m_DisplayStatusList[selectedItem-1].first = true;
-      this->UpdateImageListShowed(selectedItem, m_DisplayedLabel);
-      this->Display(m_WidgetManagerList,selectedItem);
-    }
-  else
-    {
-      m_DisplayStatusList[selectedItem-1].first = false;
-      this->UpdateImageListShowed(selectedItem, m_UndisplayedLabel);
-      this->Undisplay(selectedItem);
-    }
+  if(guiDiaporama->shown() == 0 && guiLinkSetupWindow->shown() == 0)
+    //check what to do
+    if(!m_DisplayStatusList[selectedItem-1].first)
+      {
+	//New Display 
+	m_DisplayStatusList[selectedItem-1].first = true;
+	this->UpdateImageListShowed(selectedItem, m_DisplayedLabel);
+	this->Display(m_WidgetManagerList,selectedItem);
+      }
+    else
+      {
+	m_DisplayStatusList[selectedItem-1].first = false;
+	this->UpdateImageListShowed(selectedItem, m_UndisplayedLabel);
+	this->Undisplay(selectedItem);
+      }
 }
 
 /**
@@ -474,6 +474,11 @@ ImageViewerManagerViewGUI
   m_LinkWidgetManagerList->GetNthElement(selectedItem-1)->Hide();
   m_LinkWidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
   
+  if(m_LinkedDisplayStatusList[selectedItem-1])
+    {
+      this->Display(m_LinkWidgetManagerList, selectedItem);
+    }
+  
   //Update the view mode
   if(!m_DisplayStatusList[selectedItem-1].first && !m_LinkedDisplayStatusList[selectedItem-1])
     {
@@ -525,7 +530,9 @@ void
 ImageViewerManagerViewGUI
 ::HideAll()
 {
-  this->CloseAllDisplayedImages(true);
+  //Hide all only if the diaporama and link window are not displayed
+  if(guiDiaporama->shown() == 0 && guiLinkSetupWindow->shown() == 0)
+    this->CloseAllDisplayedImages(true);
 }
 
 /**
