@@ -159,7 +159,7 @@ ImageView<TViewerModel>
 ::UpdateFullWidget()
 {
   if(m_Model->GetHasExtract())
-    {
+    { 
     otbMsgDevMacro(<<"ImageView::UpdateFullWidget(): redrawing full widget");
     m_FullWidget->ReadBuffer(m_Model->GetRasterizedExtract(),m_Model->GetRasterizedExtract()
                              ->GetLargestPossibleRegion());
