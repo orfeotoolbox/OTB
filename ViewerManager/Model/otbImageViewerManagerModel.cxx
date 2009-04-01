@@ -109,6 +109,7 @@ ImageViewerManagerModel
   currentComponent.pWidgetController = controller;
   currentComponent.pRenderFuntion  = rendrerFuntion;
   currentComponent.pPixelView   = pixelView;
+  currentComponent.pPixelModel  = pixelModel;
   currentComponent.pCurveWidget = curveWidget;
 
   /** Add the the struct in the list*/
@@ -257,6 +258,103 @@ ImageViewerManagerModel
   this->NotifyAll();
   m_HasChangedChannelOrder = false;
 }
+
+/**
+ *
+ */
+void
+ImageViewerManagerModel
+::Link(unsigned int leftChoice, unsigned int rightChoice)
+{
+
+  //Get the controllers of the selected images
+  WidgetControllerPointerType rightController = m_ObjectTrackedList.at(rightChoice-1).pWidgetController;
+  WidgetControllerPointerType leftController = m_ObjectTrackedList.at(leftChoice-1).pWidgetController;
+
+  //Get the models related to the choosen images
+  VisuModelPointerType rightRenderModel       = m_ObjectTrackedList.at(rightChoice-1).pRendering;
+  VisuModelPointerType leftRenderModel       = m_ObjectTrackedList.at(leftChoice-1).pRendering;
+  
+  //Get the views related to the choosen images
+  VisuViewPointerType  pRightVisuView         = m_ObjectTrackedList.at(rightChoice-1).pVisuView;; 
+  VisuViewPointerType  pLeftVisuView          = m_ObjectTrackedList.at(leftChoice-1).pVisuView;
+
+  //Pixel View
+  PixelDescriptionModelPointerType rightPixelModel = m_ObjectTrackedList.at(rightChoice-1).pPixelModel;
+  PixelDescriptionModelPointerType leftPixelModel  = m_ObjectTrackedList.at(leftChoice-1).pPixelModel;
+    
+  // Add the resizing handler
+  ResizingHandlerType::Pointer rightResizingHandler = ResizingHandlerType::New();
+  rightResizingHandler->SetModel(rightRenderModel);
+  rightResizingHandler->SetView(pLeftVisuView);
+
+  ResizingHandlerType::Pointer leftResizingHandler = ResizingHandlerType::New();
+  leftResizingHandler->SetModel(leftRenderModel);
+  leftResizingHandler->SetView(pRightVisuView);
+  
+  rightController->AddActionHandler( leftResizingHandler);
+  leftController->AddActionHandler(rightResizingHandler);
+  
+  // Add the change scaled region handler
+  ChangeScaledRegionHandlerType::Pointer rightChangeScaledHandler =ChangeScaledRegionHandlerType::New();
+  rightChangeScaledHandler->SetModel(rightRenderModel);
+  rightChangeScaledHandler->SetView(pLeftVisuView);
+
+  ChangeScaledRegionHandlerType::Pointer leftChangeScaledHandler =ChangeScaledRegionHandlerType::New();
+  leftChangeScaledHandler->SetModel(leftRenderModel);
+  leftChangeScaledHandler->SetView(pRightVisuView);
+  
+  rightController->AddActionHandler(leftChangeScaledHandler);
+  leftController->AddActionHandler( rightChangeScaledHandler);
+  
+  // Add the change extract region handler
+  ChangeRegionHandlerType::Pointer rightChangeHandler =ChangeRegionHandlerType::New();
+  rightChangeHandler->SetModel(rightRenderModel);
+  rightChangeHandler->SetView(pLeftVisuView);
+    
+  ChangeRegionHandlerType::Pointer leftChangeHandler =ChangeRegionHandlerType::New();
+  leftChangeHandler->SetModel(leftRenderModel);
+  leftChangeHandler->SetView(pRightVisuView);
+  
+  rightController->AddActionHandler( leftChangeHandler);
+  leftController->AddActionHandler(rightChangeHandler);
+
+  // Add the change scaled handler
+  ChangeScaleHandlerType::Pointer rightChangeScaleHandler =ChangeScaleHandlerType::New();
+  rightChangeScaleHandler->SetModel(rightRenderModel );
+  rightChangeScaleHandler->SetView(pLeftVisuView);
+
+  ChangeScaleHandlerType::Pointer leftChangeScaleHandler =ChangeScaleHandlerType::New();
+  leftChangeScaleHandler->SetModel(leftRenderModel );
+  leftChangeScaleHandler->SetView(pRightVisuView);
+
+  rightController->AddActionHandler( leftChangeScaleHandler);
+  leftController->AddActionHandler(rightChangeScaleHandler);
+
+ //Pixel Description Handling
+  PixelDescriptionActionHandlerType::Pointer rightPixelActionHandler = PixelDescriptionActionHandlerType::New();
+  rightPixelActionHandler->SetView(pLeftVisuView );
+  rightPixelActionHandler->SetModel(rightPixelModel);
+  
+  PixelDescriptionActionHandlerType::Pointer leftPixelActionHandler = PixelDescriptionActionHandlerType::New();
+  leftPixelActionHandler->SetView(pRightVisuView);
+  leftPixelActionHandler->SetModel(leftPixelModel);
+
+  rightController->AddActionHandler(leftPixelActionHandler );
+  leftController->AddActionHandler(rightPixelActionHandler);
+
+}
+
+/**
+ *
+ */
+void
+ImageViewerManagerModel
+::AddLinkActionHandler(unsigned int choice)
+{
+  
+}
+
 
 
 }

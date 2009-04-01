@@ -73,7 +73,7 @@ public:
   virtual void UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem) = 0; 
   virtual void UpdateModulusChannelOrder(int realChoice , int imChoice,unsigned int selectedItem) = 0; 
   virtual void UpdatePhaseChannelOrder(int realChoice , int imChoice, unsigned int selectedItem) = 0; 
-
+  virtual void Link(unsigned int leftChoice, unsigned int rightChoice) = 0;
   /** NewVisu */
   virtual VisuControllerPointerType GetVisuController()=0;
   virtual VisuControllerPointerType GetPreviewVisuController() = 0;

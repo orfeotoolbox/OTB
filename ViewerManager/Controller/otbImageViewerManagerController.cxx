@@ -128,5 +128,19 @@ ImageViewerManagerController
     }
 }
 
+void
+ImageViewerManagerController
+::Link(unsigned int leftChoice, unsigned int rightChoice)
+{
+  try
+    {
+      m_Model->Link(leftChoice,rightChoice);
+    }
+  catch (itk::ExceptionObject & err)
+    {
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
+    }
+}
+
 } // end namespace otb
 
