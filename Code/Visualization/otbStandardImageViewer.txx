@@ -184,7 +184,9 @@ StandardImageViewer<TImage,TVectorData,TWidgetManager>
     // Reproject VectorData in image projection
     vproj = VectorDataProjectionFilterType::New();
     vproj->SetInput(vdextract->GetOutput());
+    vproj->SetInputProjectionRef(m_VectorData->GetProjectionRef());
     vproj->SetOutputKeywordList(m_Image->GetImageKeywordlist());
+    vproj->SetOutputProjectionRef(m_Image->GetProjectionRef());
     vproj->SetOutputOrigin(m_Image->GetOrigin());
     vproj->SetOutputSpacing(m_Image->GetSpacing());
     vproj->SetDEMDirectory(m_DEMDirectory);
