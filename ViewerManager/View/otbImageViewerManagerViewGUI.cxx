@@ -34,10 +34,11 @@ ImageViewerManagerViewGUI
 			      m_UndisplayedLabel("- "),m_DiaporamaCurrentIndex(0)
 {
 
-  m_VisuView            =  VisuViewType::New();
-  m_PreviewWidget       =  ImageWidgetType::New();
-  m_pRenderingFuntion   =  StandardRenderingFunctionType::New();
-  m_WidgetManagerList   =  WidgetManagerList::New();
+  m_VisuView               =  VisuViewType::New();
+  m_PreviewWidget          =  ImageWidgetType::New();
+  m_pRenderingFuntion      =  StandardRenderingFunctionType::New();
+  m_WidgetManagerList      =  WidgetManagerList::New();
+  m_LinkWidgetManagerList  =  WidgetManagerList::New();
 
   //Get an instance of the model
   m_ImageViewerManagerModel = ImageViewerManagerModel::GetInstance();
@@ -115,29 +116,38 @@ ImageViewerManagerViewGUI
 ::Initialize(const char * cfname)
 {
   //Initialise the boolean pair
-  PairType      pair(false,false); //Not displayed , Packed View
+  PairType      pair(false,false); //(Not displayed , Packed View)
   
   //Put a new WidgetManager in the list
   if(bSplitted->value() && !bPacked->value())
     {
-      SplittedWidgetManagerType::Pointer widgetManager  =  SplittedWidgetManagerType::New(); 
+      SplittedWidgetManagerType::Pointer widgetManager      =  SplittedWidgetManagerType::New(); 
+      SplittedWidgetManagerType::Pointer linkwidgetManager  =  SplittedWidgetManagerType::New(); 
+      
       m_WidgetManagerList->PushBack(widgetManager);
+      m_LinkWidgetManagerList->PushBack(linkwidgetManager);
       pair.second = true;
     }
   else
     {
-      PackedWidgetManagerType::Pointer widgetManager     =   PackedWidgetManagerType::New(); 
+      PackedWidgetManagerType::Pointer widgetManager         =   PackedWidgetManagerType::New(); 
+      PackedWidgetManagerType::Pointer linkwidgetManager     =   PackedWidgetManagerType::New(); 
       m_WidgetManagerList->PushBack(widgetManager);
+      m_LinkWidgetManagerList->PushBack(linkwidgetManager);
     }
   
   //Put the status of the last added image
   m_DisplayStatusList.push_back(pair);
+  m_LinkedDisplayStatusList.push_back(false);
   
   // Call the Controller
   m_ImageViewerManagerController->OpenInputImage(cfname);
 
   //Update the Progress Bar 
   this->UpdateDiaporamaProgressBar();
+
+  //Update the Link Setup
+  this->UpdateLinkSetupWindow();
 }
 
 /**
@@ -165,7 +175,7 @@ ImageViewerManagerViewGUI
 	{
 	  //m_CurveWidget->ClearAllCurves();//hide();
 	  m_WidgetManagerList->GetNthElement(selectedItem-1)->Refresh();
-	  this->Display(selectedItem);
+	  this->Display(m_WidgetManagerList,selectedItem);
 	  
 	}
 
@@ -200,7 +210,9 @@ ImageViewerManagerViewGUI
   
   //Erase from the lists
   m_DisplayStatusList.erase( m_DisplayStatusList.begin()+(selectedItem-1));
+  m_LinkedDisplayStatusList.erase( m_LinkedDisplayStatusList.begin()+(selectedItem-1));
   m_WidgetManagerList->Erase(selectedItem-1);
+  m_LinkWidgetManagerList->Erase(selectedItem-1);
   
 }
 /**
@@ -328,7 +340,7 @@ ImageViewerManagerViewGUI
       //New Display 
       m_DisplayStatusList[selectedItem-1].first = true;
       this->UpdateImageListShowed(selectedItem, m_DisplayedLabel);
-      this->Display(selectedItem);
+      this->Display(m_WidgetManagerList,selectedItem);
     }
   else
     {
@@ -343,7 +355,7 @@ ImageViewerManagerViewGUI
  */
 void
 ImageViewerManagerViewGUI
-::Display(unsigned int selectedItem)
+::Display(WidgetManagerList::Pointer  widgetList, unsigned int selectedItem)
 {
   //Get the view stored in the model 
   CurvesWidgetType::Pointer         curveWidget         =  m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pCurveWidget;
@@ -378,15 +390,24 @@ ImageViewerManagerViewGUI
   //Get the pixelView 
   PixelDescriptionViewType::Pointer pixelView = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pPixelView;
   
-  //Edit the Widget Manager 
-  m_WidgetManagerList->GetNthElement(selectedItem-1)->UnRegisterAll();
-  m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterFullWidget(currentVisuView->GetFullWidget());
-  m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterScrollWidget(currentVisuView->GetScrollWidget());
-  m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterZoomWidget(currentVisuView->GetZoomWidget());
-  m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterPixelInformationWidget(pixelView->GetPixelDescriptionWidget());
-  m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterHistogramWidget(curveWidget);
-  m_WidgetManagerList->GetNthElement(selectedItem-1)->SetLabel(this->CutFileName(selectedItem-1));
-  m_WidgetManagerList->GetNthElement(selectedItem-1)->Show();
+//   //Edit the Widget Manager 
+//   m_WidgetManagerList->GetNthElement(selectedItem-1)->UnRegisterAll();
+//   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterFullWidget(currentVisuView->GetFullWidget());
+//   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterScrollWidget(currentVisuView->GetScrollWidget());
+//   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterZoomWidget(currentVisuView->GetZoomWidget());
+//   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterPixelInformationWidget(pixelView->GetPixelDescriptionWidget());
+//   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterHistogramWidget(curveWidget);
+//   m_WidgetManagerList->GetNthElement(selectedItem-1)->SetLabel(this->CutFileName(selectedItem-1));
+//   m_WidgetManagerList->GetNthElement(selectedItem-1)->Show();
+
+  //widgetList->GetNthElement(selectedItem-1)->UnRegisterAll();
+  widgetList->GetNthElement(selectedItem-1)->RegisterFullWidget(currentVisuView->GetFullWidget());
+  widgetList->GetNthElement(selectedItem-1)->RegisterScrollWidget(currentVisuView->GetScrollWidget());
+  widgetList->GetNthElement(selectedItem-1)->RegisterZoomWidget(currentVisuView->GetZoomWidget());
+  widgetList->GetNthElement(selectedItem-1)->RegisterPixelInformationWidget(pixelView->GetPixelDescriptionWidget());
+  widgetList->GetNthElement(selectedItem-1)->RegisterHistogramWidget(curveWidget);
+  widgetList->GetNthElement(selectedItem-1)->SetLabel(this->CutFileName(selectedItem-1));
+  widgetList->GetNthElement(selectedItem-1)->Show();
 }
 
 /**
@@ -401,25 +422,27 @@ ImageViewerManagerViewGUI
       // no image selected, return
       return;
     }
+ 
+  SplittedWidgetManagerType::Pointer widgetManager  =  SplittedWidgetManagerType::New();
+  m_WidgetManagerList->GetNthElement(selectedItem-1)->Hide();
+  m_WidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
   
   //Update the view mode
   if(!m_DisplayStatusList[selectedItem-1].first)
     {
-      SplittedWidgetManagerType::Pointer widgetManager  =  SplittedWidgetManagerType::New();
-      m_WidgetManagerList->GetNthElement(selectedItem-1)->Hide();
-      m_WidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
       m_DisplayStatusList[selectedItem-1].second = true;
     }
     
   //If already displayed : update the view mode and display the new viewMode
   if(m_DisplayStatusList[selectedItem-1].first /*&& !m_DisplayStatusList[selectedItem-1].second*/ )
     {
-      SplittedWidgetManagerType::Pointer widgetManager  =  SplittedWidgetManagerType::New();
-      m_WidgetManagerList->GetNthElement(selectedItem-1)->Hide();
-      m_WidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
       m_DisplayStatusList[selectedItem-1].second = true;
-      this->Display(selectedItem);
+      this->Display(m_WidgetManagerList, selectedItem);
     }
+
+  //Update the list link
+  m_LinkWidgetManagerList->GetNthElement(selectedItem-1)->Hide();
+  m_LinkWidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
 }
 
 /**
@@ -435,25 +458,28 @@ ImageViewerManagerViewGUI
       // no image selected, return
       return;
     }
+
+  //
+  PackedWidgetManagerType::Pointer widgetManager  =  PackedWidgetManagerType::New();
+  m_WidgetManagerList->GetNthElement(selectedItem-1)->Hide();
+  m_WidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
   
   //Update the view mode
   if(!m_DisplayStatusList[selectedItem-1].first)
     {
-      PackedWidgetManagerType::Pointer widgetManager  =  PackedWidgetManagerType::New();
-      m_WidgetManagerList->GetNthElement(selectedItem-1)->Hide();
-      m_WidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
       m_DisplayStatusList[selectedItem-1].second = false;
     }
   
   //If already displayed : update the view mode and display the new viewMode
   if(m_DisplayStatusList[selectedItem-1].first /*&& m_DisplayStatusList[selectedItem-1].second*/ )
     {
-      PackedWidgetManagerType::Pointer widgetManager  =  PackedWidgetManagerType::New();
-      m_WidgetManagerList->GetNthElement(selectedItem-1)->Hide();
-      m_WidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
       m_DisplayStatusList[selectedItem-1].second = false;
-      this->Display(selectedItem);
+      this->Display(m_WidgetManagerList, selectedItem);
     }
+  
+  //Update the link list 
+  m_LinkWidgetManagerList->GetNthElement(selectedItem-1)->Hide();
+  m_LinkWidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
 }
 
 /**
@@ -464,7 +490,6 @@ void
 ImageViewerManagerViewGUI
 ::UpdateImageListShowed(unsigned int selectedItem, std::string status)
 {
-
   /* Update the ImageList using the status label "+" or "-" */
   std::string fileName = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).fileName;
   int slashIndex = fileName.find_last_of("/",fileName.size());
@@ -486,6 +511,7 @@ ImageViewerManagerViewGUI
   m_WidgetManagerList->GetNthElement(selectedItem-1)->Hide(); 
   m_WidgetManagerList->GetNthElement(selectedItem-1)->UnRegisterAll();
 }
+
 /**
  * Hide all the widget opened
  */
@@ -493,18 +519,45 @@ void
 ImageViewerManagerViewGUI
 ::HideAll()
 {
+  this->CloseAllDisplayedImages(true);
+}
+
+/**
+ * Close all the displayed images: 
+ * showHideEvent : if true clear the showedlist else don't clear.
+ */
+void
+ImageViewerManagerViewGUI
+::CloseAllDisplayedImages(bool showHideEvent)
+{
   // Set the display Label to undislayed
   for(unsigned int i = 0; i<m_DisplayStatusList.size() ; i++)    
     {
       if(m_DisplayStatusList[i].first)
 	{
-	  this->UpdateImageListShowed(i+1, m_UndisplayedLabel);
-	  m_DisplayStatusList[i].first = false;
+	  if(showHideEvent)
+	    {
+	      this->UpdateImageListShowed(i+1, m_UndisplayedLabel);
+	      m_DisplayStatusList[i].first = false;
+	    }
 	  m_WidgetManagerList->GetNthElement(i)->Hide();
 	  m_WidgetManagerList->GetNthElement(i)->UnRegisterAll();
 	}
     }
- }
+}
+
+/**
+ *
+ */
+void
+ImageViewerManagerViewGUI
+::ShowTemporaryClosedDisplay()
+{
+  for(unsigned int i = 0; i<m_DisplayStatusList.size() ; i++)
+    if(m_DisplayStatusList[i].first)
+      this->Display(m_WidgetManagerList,i+1);
+}
+
 
 /**
  * Quit GUI
@@ -798,10 +851,13 @@ ImageViewerManagerViewGUI
     return;
   }
    guiDiaporama->show();
-   //guiDiaporama->set_modal();
    guiDiaporamaProgressBar->minimum(1);
    guiDiaporamaProgressBar->maximum(static_cast<float>(guiImageList->size()));
    
+   //Close the showed image without clearing the ShowedList
+   this->CloseAllDisplayedImages(false);
+
+   //Show the diaporama widget
    this->DisplayDiaporama();
    UpdateDiaporamaProgressBar();
 }
@@ -869,7 +925,7 @@ ImageViewerManagerViewGUI
   PixelDescriptionViewType::Pointer pixelView = m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pPixelView;
   
   //Edit the Widget Manager 
-  //m_WidgetManager->UnRegisterAll();
+  m_WidgetManager->UnRegisterAll();
   m_WidgetManager->RegisterFullWidget(currentVisuView->GetFullWidget());
   m_WidgetManager->RegisterScrollWidget(currentVisuView->GetScrollWidget());
   m_WidgetManager->RegisterZoomWidget(currentVisuView->GetZoomWidget());
@@ -921,6 +977,8 @@ ImageViewerManagerViewGUI
 {
   guiDiaporama->hide();
   m_WidgetManager->Hide();
+  m_WidgetManager->UnRegisterAll();
+  this->ShowTemporaryClosedDisplay();
 }
 
 /**
@@ -940,6 +998,7 @@ ImageViewerManagerViewGUI
   guiLinkSetupWindow->show();
 }
 
+
 /**
  *
  */
@@ -952,41 +1011,82 @@ ImageViewerManagerViewGUI
   m_PossibleLinkList.clear();
   m_AlreadyLinkList.clear();
   m_AlreadyLinkOffsetList.clear();
-  guiLinkChoice->clear();
-  guiLinkList->clear();
-  guiLinkList->value(0);
-  
-  //Fill the link choice 
-  int sizeImageList = guiImageList->size();
-  for (int i = 0 ; i < sizeImageList ; i++)
-    {
-    oss.str("");
-    oss<<this->CutFileName(i);
-    guiLinkChoice->add(oss.str().c_str());
-  }
+  guiLinkListLeft->clear();
+  guiLinkListRight->clear();
+  guiLinkListLeft->value(0);
+  guiLinkListRight->value(0);
 
+  
   //Fill the guiLinkList
-  for (int i = 0 ; i < sizeImageList ; i++)
+  
+  for (int i = 0 ; i < guiImageList->size() ; i++)
     {
-      if(strcmp(guiLinkChoice->value(),this->CutFileName(i)) != 0 )
-	{
-	  oss.str("");
-	  oss<<this->CutFileName(i);
-	  guiLinkList->add(oss.str().c_str());
-	}
+      oss.str("");
+      oss<<this->CutFileName(i);
+      guiLinkListRight->add(oss.str().c_str());
+      guiLinkListLeft->add(oss.str().c_str());
     }
 
   guiLinkXOffset->value("0");
   guiLinkYOffset->value("0");
 
-  guiLinkChoice->redraw();
-  guiLinkList->redraw();
+  guiLinkListLeft->redraw();
+  guiLinkListRight->redraw();
 }
+
+/**
+*
+*/
+void
+ImageViewerManagerViewGUI
+::LinkSetupSave()
+{
+  unsigned int leftChoice = guiLinkListLeft->value();
+  unsigned int rightChoice = guiLinkListRight->value();
+  
+  if(leftChoice == 0 || rightChoice == 0)
+    return;
+  else
+    {
+      //Call the controller
+      this->m_ImageViewerManagerController->Link(leftChoice, rightChoice);
+      
+      //Close the temporary Showed images
+      this->CloseAllDisplayedImages(false);
+      
+      //Diplay the Linked images
+      this->Display(m_LinkWidgetManagerList, leftChoice);
+      this->Display(m_LinkWidgetManagerList, rightChoice);
+      
+      //Add the linked to the list
+      m_LinkedDisplayStatusList[leftChoice] = true;
+      m_LinkedDisplayStatusList[rightChoice] = true;
+    }
+}
+
+/**
+*
+*/
+void
+ImageViewerManagerViewGUI
+::LinkSetupOk()
+{
+  guiLinkSetupWindow->hide();
+  
+  //Close the  displays linked
+  for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size() ; i++)
+    if(m_LinkedDisplayStatusList[i])
+	m_LinkWidgetManagerList->GetNthElement(i)->Hide(); 
+  
+  //Display temporary closed displays if any
+  this->ShowTemporaryClosedDisplay();
+}
+
+
 
 /**
  * PrintSelf Method
  */
-
 void
 ImageViewerManagerViewGUI
 ::PrintSelf(std::ostream& os, itk::Indent indent) const

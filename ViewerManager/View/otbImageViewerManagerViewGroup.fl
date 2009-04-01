@@ -55,7 +55,7 @@ class ImageViewerManagerViewGroup {open
 //if(bPacked->value())
 // bSplitted->deactivate();
 //else
-// bSplitted->value(1);} selected
+// bSplitted->value(1);}
           tooltip {Toggle Splitted mode} xywh {275 237 105 15} type Radio down_box ROUND_DOWN_BOX labelcolor 187 deactivate
         }
       }
@@ -166,50 +166,49 @@ class ImageViewerManagerViewGroup {open
       }
     }
     Fl_Window guiLinkSetupWindow {
-      label {Link setup}
-      xywh {888 755 440 220} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 hide
+      label {Link Images} open
+      xywh {738 336 560 220} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 visible
     } {
-      Fl_Input_Choice guiLinkChoice {
-        label {Link to viewer: } open
-        tooltip {Select the viewer to link with} xywh {115 26 185 24} box EMBOSSED_BOX color 54 selection_color 55 labelcolor 187
-      } {}
       Fl_Input guiLinkXOffset {
         label {X offset}
-        tooltip {Set the x offset of the link} xywh {379 16 35 23} box EMBOSSED_BOX selection_color 55 labelcolor 186 textcolor 187
+        tooltip {Set the x offset of the link} xywh {210 127 35 23} box EMBOSSED_BOX selection_color 55 labelcolor 186 textcolor 187
       }
       Fl_Input guiLinkYOffset {
         label {Y offset}
-        tooltip {Set the Y offset of the link} xywh {379 41 35 23} box EMBOSSED_BOX selection_color 55 labelcolor 186 textcolor 187
+        tooltip {Set the Y offset of the link} xywh {320 127 35 23} box EMBOSSED_BOX selection_color 55 labelcolor 186 textcolor 187
       }
       Fl_Button guiSaveLink {
         label Apply
         callback {LinkSetupSave();}
-        tooltip {Save the current link} xywh {15 175 90 30} box ROUND_UP_BOX color 23 selection_color 23 labelcolor 186
+        tooltip {Save the current link} xywh {84 175 90 30} box ROUND_UP_BOX color 23 selection_color 23 labelcolor 186
       }
-      Fl_Browser guiLinkList {
-        label {Existing links}
-        tooltip {List of image viewers already linked with the selected image viewer} xywh {15 88 405 75} type Hold box EMBOSSED_BOX color 54 selection_color 20 labelcolor 186 align 1 textcolor 187
+      Fl_Browser guiLinkListLeft {
+        label {First Image}
+        tooltip {List of image viewers already linked with the selected image viewer} xywh {10 25 235 75} type Hold box EMBOSSED_BOX color 54 selection_color 20 labelcolor 186 align 1 textcolor 187
       }
       Fl_Button guiLinkRemove {
         label Remove
         callback {LinkSetupRemove();}
-        tooltip {Remove the selected link} xywh {121 175 90 30} box ROUND_UP_BOX down_box ROUND_DOWN_BOX color 23 selection_color 23 labelcolor 186
+        tooltip {Remove the selected link} xywh {190 175 90 30} box ROUND_UP_BOX down_box ROUND_DOWN_BOX color 23 selection_color 23 labelcolor 186
       }
       Fl_Button guiLinkClear {
         label Clear
         callback {LinkSetupClear();}
-        tooltip {Clear all links for the selected image viewer} xywh {225 175 90 30} box ROUND_UP_BOX down_box ROUND_DOWN_BOX color 23 selection_color 23 labelcolor 186
+        tooltip {Clear all links for the selected image viewer} xywh {294 175 90 30} box ROUND_UP_BOX down_box ROUND_DOWN_BOX color 23 selection_color 23 labelcolor 186
       }
       Fl_Return_Button guiLinkOk {
         label Quit
-        callback {LinkSetupOk();}
-        tooltip {Leave the link set up interface} xywh {331 175 90 30} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0xff0d color 23 selection_color 23 labelcolor 186
-        code0 {guiLinkSetupWindow->hide();}
+        callback {LinkSetupOk();} selected
+        tooltip {Leave the link set up interface} xywh {400 175 90 30} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0xff0d color 23 selection_color 23 labelcolor 186
+      }
+      Fl_Browser guiLinkListRight {
+        label SecondImage
+        tooltip {List of image viewers already linked with the selected image viewer} xywh {307 25 235 75} type Hold box EMBOSSED_BOX color 54 selection_color 20 labelcolor 186 align 1 textcolor 187
       }
     }
     Fl_Window guiDiaporama {
       label Slideshow
-      xywh {652 599 390 90} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 visible
+      xywh {652 599 390 90} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 hide
     } {
       Fl_Progress guiDiaporamaProgressBar {
         label Progress

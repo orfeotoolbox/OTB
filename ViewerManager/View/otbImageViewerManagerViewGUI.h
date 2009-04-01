@@ -109,7 +109,7 @@ public:
   /** vector to store the status of images : diplayed or not displayed*/
   //---> Note : f the packed view is selected : 2nd boolean : false, Splitted view : 2nd boolean true;
   typedef std::pair<bool, bool>                                   PairType;
-  typedef std::vector<PairType>                                  BoolVector;
+  typedef std::vector<PairType>                                   BoolVector;
   
   /** list in order to store the diplay manager*/
   typedef WidgetManager                                           WidgetManagerType;
@@ -133,22 +133,19 @@ public:
   
   // Visu  
   itkGetMacro(VisuView,VisuViewPointerType);
-  
   itkGetMacro(PreviewWidget,ImageWidgetPointerType );
   
-  /// Show()
+  // Show()
   virtual void Show();
 
-   // Update the display
+  // Update the display
   virtual void ImageViewerManagerNotify();
-  
-  // 
-  virtual void OpenImage();
   
   //
   virtual void OpenImage(const char * inputFileName);
   
 protected:
+  virtual void   OpenImage();
   virtual void   Initialize(const char * cfname);
   virtual void   CloseImage(); 
   virtual void   ViewerSetup();
@@ -157,25 +154,27 @@ protected:
 
   /* virtual void LinkSetupRemove(); */
   /* virtual void LinkSetupClear(); */
-  /* virtual void LinkSetupOk(); */
-  /* virtual void LinkSetupSave(); */
+  //virtual void LinkSetupOk(); 
+  virtual void   LinkSetupSave(); 
   virtual void   AddImageListName();
   virtual void   Quit(); 
   virtual void   SelectAction(); 
   virtual double UpdatePreviewWidgetIsotropicZoom(SizeType size);
   virtual void   ShowHide(); 
+  virtual void   CloseAllDisplayedImages(bool showHideEvent);
+  virtual void   ShowTemporaryClosedDisplay();
   virtual void   HideAll(); 
-  virtual void   Display(unsigned int selectedItem);
+  virtual void   Display(WidgetManagerList::Pointer  widgetList, unsigned int selectedItem);
   virtual void   Undisplay(unsigned int selectedItem); 
   virtual void   UpdateImageListShowed(unsigned int selectedItem, std::string status);
   virtual void   GrayScaleSet(); 
   virtual void   RGBSet(); 
   virtual void   ComplexSet(); 
-  virtual void Diaporama(); 
-  virtual void DisplayDiaporama(); 
-  virtual void DiaporamaNext();   
-  virtual void DiaporamaPrevious(); 
-  virtual void DiaporamaQuit(); 
+  virtual void   Diaporama(); 
+  virtual void   DisplayDiaporama(); 
+  virtual void   DiaporamaNext();   
+  virtual void   DiaporamaPrevious(); 
+  virtual void   DiaporamaQuit(); 
   
   virtual void UpdateInformation(unsigned int selectedItem); 
   virtual void UpdateViewerSetupWindow(unsigned int selectedItem); 
@@ -188,6 +187,7 @@ protected:
   
   virtual void LinkSetup(); 
   virtual void UpdateLinkSetupWindow(); 
+  virtual void LinkSetupOk();
   /*   virtual void UpdatePreviewWindow(unsigned int selectedItem); */
   
   
@@ -210,12 +210,15 @@ private:
   
   //
   BoolVector                                     m_DisplayStatusList;
+  std::vector<bool>                              m_LinkedDisplayStatusList;
+  
   std::string                                    m_TemplateViewerName;
   std::string                                    m_DisplayedLabel;
   std::string                                    m_UndisplayedLabel ;
   
   //Widget Manager
   WidgetManagerList::Pointer                     m_WidgetManagerList;  
+  WidgetManagerList::Pointer                     m_LinkWidgetManagerList;  
 
   //SlideShow widget Manager
   PackedWidgetManagerType::Pointer               m_WidgetManager;
