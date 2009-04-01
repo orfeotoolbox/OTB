@@ -54,6 +54,7 @@ public:
   /** View typedef */
   typedef TView                                     ViewType;
   typedef typename ViewType::Pointer                ViewPointerType;
+  typedef typename ViewType::OffsetType             OffsetType;
   typedef typename ViewType::ImageWidgetPointerType WidgetPointerType;
 
    /** Handle widget event
@@ -108,6 +109,9 @@ public:
           index[0]=static_cast<int>(imagePoint[0]);
           index[1]=static_cast<int>(imagePoint[1]);
 
+	  //Add the offset 
+	  index += m_Offset;
+
           // Communicate new index to model
           m_Model->UpdatePixelDescription(index);
 
@@ -132,10 +136,16 @@ public:
   itkSetObjectMacro(View,ViewType);
   itkGetObjectMacro(View,ViewType);
 
+  /** Set/Get Offset */
+  itkSetMacro(Offset,OffsetType);
+  itkGetMacro(Offset,OffsetType);
+
 protected:
   /** Constructor */
   PixelDescriptionActionHandler() : m_View(), m_Model()
-  {}
+  {
+    m_Offset.Fill(0);
+  }
 
   /** Destructor */
   virtual ~PixelDescriptionActionHandler(){}
@@ -148,7 +158,10 @@ protected:
 private:
   PixelDescriptionActionHandler(const Self&);    // purposely not implemented
   void operator=(const Self&); // purposely not implemented
-
+  
+  //Offset 
+  OffsetType      m_Offset;
+  
   // Pointer to the view
   ViewPointerType m_View;
 
