@@ -7,8 +7,9 @@ class ImageViewerManagerViewGroup {open
   Function {CreateGUI()} {open return_type void
   } {
     Fl_Window guiMainWindow {
-      label otbImageViewerManagerView open
-      xywh {833 76 610 460} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 hide resizable
+      label otbImageViewerManagerView
+      callback {this->Quit()} open
+      xywh {833 76 610 460} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
     } {
       Fl_Text_Display guiViewerInformation {
         label Information
@@ -74,7 +75,7 @@ class ImageViewerManagerViewGroup {open
         }
         Fl_Button guiViewerSetup {
           label {Viewer setup}
-          callback {ViewerSetup();}
+          callback {ViewerSetup();} selected
           tooltip {Set up the selected viewer} xywh {489 129 95 25} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0x76 color 23 selection_color 23 labelcolor 186
         }
         Fl_Button guiLinkSetup {
@@ -198,7 +199,7 @@ class ImageViewerManagerViewGroup {open
       }
       Fl_Return_Button guiLinkOk {
         label Quit
-        callback {LinkSetupOk();} selected
+        callback {LinkSetupOk();}
         tooltip {Leave the link set up interface} xywh {400 175 90 30} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0xff0d color 23 selection_color 23 labelcolor 186
       }
       Fl_Browser guiLinkListRight {
