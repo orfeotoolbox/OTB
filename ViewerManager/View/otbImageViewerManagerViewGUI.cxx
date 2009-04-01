@@ -436,18 +436,21 @@ ImageViewerManagerViewGUI
       this->Display(m_LinkWidgetManagerList, selectedItem);
     }
   
-  
-  //Update the view mode if the link mode is not updated
-  if(!m_DisplayStatusList[selectedItem-1].first && !m_LinkedDisplayStatusList[selectedItem-1])
+  //If the guilink or te guiDiapo is opened don't display and don't change the view mode
+  if(guiDiaporama->shown() == 0 && guiLinkSetupWindow->shown() == 0)
     {
-      m_DisplayStatusList[selectedItem-1].second = true;
-    }
+      //Update the view mode if the link mode is not updated
+      if(!m_DisplayStatusList[selectedItem-1].first && !m_LinkedDisplayStatusList[selectedItem-1])
+	{
+	  m_DisplayStatusList[selectedItem-1].second = true;
+	}
     
-  //If already displayed : update the view mode and display the new viewMode
-  if(m_DisplayStatusList[selectedItem-1].first && !m_LinkedDisplayStatusList[selectedItem-1] )
-    {
-      m_DisplayStatusList[selectedItem-1].second = true;
-      this->Display(m_WidgetManagerList, selectedItem);
+      //If already displayed : update the view mode and display the new viewMode
+      if(m_DisplayStatusList[selectedItem-1].first && !m_LinkedDisplayStatusList[selectedItem-1] )
+	{
+	  m_DisplayStatusList[selectedItem-1].second = true;
+	  this->Display(m_WidgetManagerList, selectedItem);
+	}
     }
 }
 
@@ -479,17 +482,22 @@ ImageViewerManagerViewGUI
       this->Display(m_LinkWidgetManagerList, selectedItem);
     }
   
-  //Update the view mode
-  if(!m_DisplayStatusList[selectedItem-1].first && !m_LinkedDisplayStatusList[selectedItem-1])
-    {
-      m_DisplayStatusList[selectedItem-1].second = false;
-    }
   
-  //If already displayed : update the view mode and display the new viewMode
-  if(m_DisplayStatusList[selectedItem-1].first && !m_LinkedDisplayStatusList[selectedItem-1] )
+  //If the guilink or te guiDiapo is opened don't display and don't change the view mode
+  if(guiDiaporama->shown() == 0 && guiLinkSetupWindow->shown() == 0)
     {
-      m_DisplayStatusList[selectedItem-1].second = false;
-      this->Display(m_WidgetManagerList, selectedItem);
+      //Update the view mode
+      if(!m_DisplayStatusList[selectedItem-1].first && !m_LinkedDisplayStatusList[selectedItem-1])
+	{
+	  m_DisplayStatusList[selectedItem-1].second = false;
+	}
+  
+      //If already displayed : update the view mode and display the new viewMode
+      if(m_DisplayStatusList[selectedItem-1].first && !m_LinkedDisplayStatusList[selectedItem-1] )
+	{
+	  m_DisplayStatusList[selectedItem-1].second = false;
+	  this->Display(m_WidgetManagerList, selectedItem);
+	}
     }
 }
 
@@ -988,7 +996,7 @@ ImageViewerManagerViewGUI
   oss.str("");
   oss<<m_DiaporamaCurrentIndex+1<<"/"<<guiImageList->size();
   guiDiaporamaProgressBar->copy_label(oss.str().c_str());
-  guiDiaporamaProgressBar->minimum(1);
+  guiDiaporamaProgressBar->minimum(1.);
   guiDiaporamaProgressBar->maximum(static_cast<float>(guiImageList->size()));
   guiDiaporamaProgressBar->value(static_cast<float>(m_DiaporamaCurrentIndex));
 }
@@ -1030,12 +1038,10 @@ ImageViewerManagerViewGUI
 {
   itk::OStringStream oss;
   oss.str("");
-  m_AlreadyLinkOffsetList.clear();
   guiLinkListLeft->clear();
   guiLinkListRight->clear();
   guiLinkListLeft->value(0);
   guiLinkListRight->value(0);
-
   
   //Fill the guiLinkList
   
@@ -1068,19 +1074,28 @@ ImageViewerManagerViewGUI
     return;
   else
     {
-      //Call the controller
-      this->m_ImageViewerManagerController->Link(leftChoice, rightChoice);
       
-      //Close the temporary Showed images without clearing the 
+      //Fill the offset 
+      OffsetType                      offSet;
+      offSet[0] = atoi(guiLinkXOffset->value());
+      offSet[1] = atoi(guiLinkYOffset->value());
+      
+      //Call the controller
+      this->m_ImageViewerManagerController->Link(leftChoice, rightChoice,offSet);
+      
+      //Close the temporary Showed images without clearing the showed list
       this->CloseAllDisplayedImages(false);
       
-      //Add the linked to the list
+      //Add the linked image to the list
       m_LinkedDisplayStatusList[leftChoice-1] = true;
       m_LinkedDisplayStatusList[rightChoice-1] = true;
       
       //Diplay the Linked images
       this->Display(m_LinkWidgetManagerList, leftChoice);
       this->Display(m_LinkWidgetManagerList, rightChoice);
+
+      //Print the link offset
+      std::cout <<"XOffset " << guiLinkXOffset->value() << " YIOffset " << guiLinkYOffset->value() << std::endl;
     }
 }
 

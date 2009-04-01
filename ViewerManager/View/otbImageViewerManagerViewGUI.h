@@ -107,7 +107,7 @@ public:
   typedef PixelDescriptionView<PixelDescriptionModelType>         PixelDescriptionViewType;
   
   /** vector to store the status of images : diplayed or not displayed*/
-  //---> Note : f the packed view is selected : 2nd boolean : false, Splitted view : 2nd boolean true;
+  //---> Note : if the packed view is selected : 2nd boolean false, Splitted view : 2nd boolean true;
   typedef std::pair<bool, bool>                                   PairType;
   typedef std::vector<PairType>                                   BoolVector;
   
@@ -115,10 +115,6 @@ public:
   typedef WidgetManager                                           WidgetManagerType;
   typedef ObjectList<WidgetManagerType>                           WidgetManagerList;
   
-  //Necessary Lists for link 
-   typedef std::vector<OffsetType>                                OffsetListType;
-
-
   
   /** Method to set the controller*/
   itkGetObjectMacro(ImageViewerManagerController,ImageViewerManagerControllerInterface);
@@ -232,7 +228,7 @@ private:
   HistogramCurveType::ColorType                 m_Blue;
 
   /** Link Attributes */
-  OffsetListType                                m_AlreadyLinkOffsetList;
+  OffsetType                                    m_OffSet;
   
   /** Store the component number of a pixel*/
   unsigned int                                  m_DiaporamaCurrentIndex;

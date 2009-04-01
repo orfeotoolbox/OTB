@@ -130,11 +130,11 @@ ImageViewerManagerController
 
 void
 ImageViewerManagerController
-::Link(unsigned int leftChoice, unsigned int rightChoice)
+::Link(unsigned int leftChoice, unsigned int rightChoice, OffsetType offset)
 {
   try
     {
-      m_Model->Link(leftChoice,rightChoice);
+      m_Model->Link(leftChoice,rightChoice,offset);
     }
   catch (itk::ExceptionObject & err)
     {

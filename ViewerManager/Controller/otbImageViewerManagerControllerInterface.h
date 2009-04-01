@@ -48,6 +48,7 @@ public:
   typedef ModelType::VisuModelPointerType           VisuModelPointerType;
   typedef ModelType::ImageType                      ImageType;
   typedef ModelType::ImagePointerType               ImagePointerType;
+  typedef ImageType::OffsetType                     OffsetType;
 
 
 /** NewVisu */
@@ -73,7 +74,7 @@ public:
   virtual void UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem) = 0; 
   virtual void UpdateModulusChannelOrder(int realChoice , int imChoice,unsigned int selectedItem) = 0; 
   virtual void UpdatePhaseChannelOrder(int realChoice , int imChoice, unsigned int selectedItem) = 0; 
-  virtual void Link(unsigned int leftChoice, unsigned int rightChoice) = 0;
+  virtual void Link(unsigned int leftChoice, unsigned int rightChoice , OffsetType offset) = 0;
   /** NewVisu */
   virtual VisuControllerPointerType GetVisuController()=0;
   virtual VisuControllerPointerType GetPreviewVisuController() = 0;

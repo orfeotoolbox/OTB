@@ -264,7 +264,7 @@ ImageViewerManagerModel
  */
 void
 ImageViewerManagerModel
-::Link(unsigned int leftChoice, unsigned int rightChoice)
+::Link(unsigned int leftChoice, unsigned int rightChoice, OffsetType offset)
 {
 
   //Get the controllers of the selected images

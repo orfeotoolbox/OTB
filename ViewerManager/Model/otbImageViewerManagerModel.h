@@ -76,6 +76,7 @@ public:
   
   /**  Image Type*/
   typedef VectorImage<PixelType , 2>                                                ImageType;
+  typedef ImageType::OffsetType                                                     OffsetType;
   typedef itk::RGBPixel<unsigned char>                                              RGBPixelType; 
   typedef Image<RGBPixelType,2>                                                     ViewerImageType;
   typedef ImageType::Pointer                                                        ImagePointerType;
@@ -153,7 +154,7 @@ public:
   virtual void UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem);
   virtual void UpdateModulusChannelOrder(int realChoice , int imChoice,unsigned int selectedItem );
   virtual void UpdatePhaseChannelOrder(int realChoice , int imChoice,unsigned int selectedItem );
-  virtual void Link(unsigned int leftChoice, unsigned int rightChoice);
+  virtual void Link(unsigned int leftChoice, unsigned int rightChoice, OffsetType offset);
   
   /** Method needed to Get the list of componenets stored*/
    ObjectTrackedList GetObjectList()
@@ -164,7 +165,6 @@ public:
    /** Boolean Flags */
    itkGetMacro(HasImageOpened,bool);
    itkGetMacro(HasChangedChannelOrder,bool);
-   itkGetMacro(HasNewLink,bool);
 
 protected:
   /** This is protected for the singleton. Use GetInstance() instead. */
@@ -194,7 +194,6 @@ private:
   /** Boolean flags*/
   bool   m_HasImageOpened;
   bool   m_HasChangedChannelOrder;
-  bool   m_HasNewLink;
 
   /** The manipuleted list*/
   ObjectTrackedList                          m_ObjectTrackedList;
