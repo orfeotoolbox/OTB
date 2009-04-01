@@ -97,14 +97,19 @@ public:
 		{
 		  m_FirstPush = false;
 		  m_StartIndex = lIndex;
+          // ImageView.txx hide the GlComponent when Update
+          m_RegionGlComponent->SetVisible(true);
 		  break;
 		}
 	      case FL_RELEASE:
 		{
-		  m_FirstPush = true;
-		  m_StopIndex = lIndex;
-		  m_Model->SetExtractRegionByIndex(m_StartIndex,m_StopIndex);
-		  m_Model->Update();
+          if(m_StartIndex[0] != lIndex[0] && m_StartIndex[1] != lIndex[1])
+          {
+                    m_FirstPush = true;
+                    m_StopIndex = lIndex;
+                    m_Model->SetExtractRegionByIndex(m_StartIndex,m_StopIndex);
+                    m_Model->Update();
+          }
 		  break;
 		}
 	      case FL_DRAG:
