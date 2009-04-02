@@ -70,9 +70,6 @@ VectorDataGlComponent<TVectorData>
     return;
     }
   
-  m_Spacing = m_VectorData->GetSpacing();
-  m_Origin  = m_VectorData->GetOrigin();
-
   // Set up blending and color
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
