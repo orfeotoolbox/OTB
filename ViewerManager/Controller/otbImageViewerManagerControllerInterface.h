@@ -48,7 +48,7 @@ public:
   typedef ModelType::VisuModelPointerType           VisuModelPointerType;
   typedef ModelType::ImageType                      ImageType;
   typedef ModelType::ImagePointerType               ImagePointerType;
-  typedef ImageType::OffsetType                     OffsetType;
+  typedef ModelType::OffsetType                     OffsetType;
 
 
 /** NewVisu */

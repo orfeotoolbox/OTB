@@ -22,6 +22,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbMacro.h"
 
 #include "otbImageFileWriter.h"
+#include "otbFltkFilterWatcher.h"
 
 
 namespace otb
@@ -72,12 +73,14 @@ ImageViewerManagerModel
   /** Generate the layer*/
   LayerGeneratorPointerType visuGenerator = LayerGeneratorType::New();
   visuGenerator->SetImage(reader->GetOutput());
+  FltkFilterWatcher qlwatcher(visuGenerator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
   visuGenerator->GenerateLayer();
   StandardRenderingFunctionType::Pointer  rendrerFuntion  = visuGenerator->GetDefaultRenderingFunction();
     
   /** Rendering image*/
   VisuModelPointerType rendering = VisuModelType::New();
   rendering->AddLayer(visuGenerator->GetLayer());
+ 
   rendering->Update();
 
   /** View*/
@@ -267,13 +270,17 @@ ImageViewerManagerModel
 ::Link(unsigned int leftChoice, unsigned int rightChoice, OffsetType offset)
 {
 
+  //Create A null offset
+  OffsetType nullOffset;
+  nullOffset.Fill(0);
+  
   //Get the controllers of the selected images
   WidgetControllerPointerType rightController = m_ObjectTrackedList.at(rightChoice-1).pWidgetController;
   WidgetControllerPointerType leftController = m_ObjectTrackedList.at(leftChoice-1).pWidgetController;
 
   //Get the models related to the choosen images
   VisuModelPointerType rightRenderModel       = m_ObjectTrackedList.at(rightChoice-1).pRendering;
-  VisuModelPointerType leftRenderModel       = m_ObjectTrackedList.at(leftChoice-1).pRendering;
+  VisuModelPointerType leftRenderModel        = m_ObjectTrackedList.at(leftChoice-1).pRendering;
   
   //Get the views related to the choosen images
   VisuViewPointerType  pRightVisuView         = m_ObjectTrackedList.at(rightChoice-1).pVisuView;; 
@@ -295,26 +302,30 @@ ImageViewerManagerModel
   rightController->AddActionHandler( leftResizingHandler);
   leftController->AddActionHandler(rightResizingHandler);
   
-  // Add the change scaled region handler
+  // Add the change scaled region handler--
   ChangeScaledRegionHandlerType::Pointer rightChangeScaledHandler =ChangeScaledRegionHandlerType::New();
   rightChangeScaledHandler->SetModel(rightRenderModel);
   rightChangeScaledHandler->SetView(pLeftVisuView);
+  rightChangeScaledHandler->SetOffset(nullOffset-offset);
 
   ChangeScaledRegionHandlerType::Pointer leftChangeScaledHandler =ChangeScaledRegionHandlerType::New();
   leftChangeScaledHandler->SetModel(leftRenderModel);
   leftChangeScaledHandler->SetView(pRightVisuView);
+  leftChangeScaledHandler->SetOffset(offset);
   
   rightController->AddActionHandler(leftChangeScaledHandler);
   leftController->AddActionHandler( rightChangeScaledHandler);
   
-  // Add the change extract region handler
+  // Add the change extract region handler--
   ChangeRegionHandlerType::Pointer rightChangeHandler =ChangeRegionHandlerType::New();
   rightChangeHandler->SetModel(rightRenderModel);
   rightChangeHandler->SetView(pLeftVisuView);
-    
+  rightChangeHandler->SetOffset(nullOffset-offset);
+
   ChangeRegionHandlerType::Pointer leftChangeHandler =ChangeRegionHandlerType::New();
   leftChangeHandler->SetModel(leftRenderModel);
   leftChangeHandler->SetView(pRightVisuView);
+  leftChangeHandler->SetOffset(offset);
   
   rightController->AddActionHandler( leftChangeHandler);
   leftController->AddActionHandler(rightChangeHandler);
@@ -331,14 +342,16 @@ ImageViewerManagerModel
   rightController->AddActionHandler( leftChangeScaleHandler);
   leftController->AddActionHandler(rightChangeScaleHandler);
 
- //Pixel Description Handling
+ //Pixel Description Handling--
   PixelDescriptionActionHandlerType::Pointer rightPixelActionHandler = PixelDescriptionActionHandlerType::New();
   rightPixelActionHandler->SetView(pLeftVisuView );
   rightPixelActionHandler->SetModel(rightPixelModel);
-  
+  rightPixelActionHandler->SetOffset(nullOffset-offset);
+
   PixelDescriptionActionHandlerType::Pointer leftPixelActionHandler = PixelDescriptionActionHandlerType::New();
   leftPixelActionHandler->SetView(pRightVisuView);
   leftPixelActionHandler->SetModel(leftPixelModel);
+  leftPixelActionHandler->SetOffset(offset);
 
   rightController->AddActionHandler(leftPixelActionHandler );
   leftController->AddActionHandler(rightPixelActionHandler);

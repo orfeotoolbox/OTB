@@ -76,7 +76,6 @@ public:
   
   /**  Image Type*/
   typedef VectorImage<PixelType , 2>                                                ImageType;
-  typedef ImageType::OffsetType                                                     OffsetType;
   typedef itk::RGBPixel<unsigned char>                                              RGBPixelType; 
   typedef Image<RGBPixelType,2>                                                     ViewerImageType;
   typedef ImageType::Pointer                                                        ImagePointerType;
@@ -102,6 +101,7 @@ public:
   
   /** NewVisu */
   typedef ImageView<VisuModelType>                                                    VisuViewType;
+  typedef VisuViewType::OffsetType                                                    OffsetType;
   typedef VisuViewType::Pointer                                                       VisuViewPointerType;
   
   typedef ImageWidgetController                                                       WidgetControllerType;

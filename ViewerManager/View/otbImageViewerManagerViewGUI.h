@@ -80,7 +80,7 @@ public:
   typedef ImageViewerManagerModelType::VisuModelPointerType       VisuModelPointerType;  //rendreing Image
   typedef ImageViewerManagerModelType::PixelDescriptionModelType  PixelDescriptionModelType;  //rendreing Image
   typedef ImageViewerManagerModelType::LayerType::HistogramType   HistogramType;        
-  typedef ImageViewerManagerModelType::ImageType::OffsetType      OffsetType;
+  typedef ImageViewerManagerModelType::OffsetType                 OffsetType;
   typedef ImageViewerManagerModelType::StandardRenderingFunctionType StandardRenderingFunctionType;
   
   typedef ImageView<VisuModelType>                                VisuViewType;
@@ -167,12 +167,12 @@ protected:
   virtual void   DiaporamaPrevious(); 
   virtual void   DiaporamaQuit(); 
   
-  virtual void UpdateInformation(unsigned int selectedItem); 
-  virtual void UpdateViewerSetupWindow(unsigned int selectedItem); 
-  virtual void DisplayPreviewWidget(unsigned int selectedItem);
-  virtual void SplittedViewMode();
-  virtual void PackedViewMode();
-  virtual void UpdateDiaporamaProgressBar(); 
+  virtual void   UpdateInformation(unsigned int selectedItem); 
+  virtual void   UpdateViewerSetupWindow(unsigned int selectedItem); 
+  virtual void   DisplayPreviewWidget(unsigned int selectedItem);
+  virtual void   SplittedViewMode();
+  virtual void   PackedViewMode();
+  virtual void   UpdateDiaporamaProgressBar(); 
 
   virtual const char * CutFileName(unsigned int selectedItem);
   
@@ -180,6 +180,7 @@ protected:
   virtual void LinkSetupSave(); 
   virtual void UpdateLinkSetupWindow(); 
   virtual void LinkSetupOk();
+  virtual void LinkSetupRemove();
   /*   virtual void UpdatePreviewWindow(unsigned int selectedItem); */
   
   
@@ -226,9 +227,6 @@ private:
   HistogramCurveType::ColorType                 m_Red;
   HistogramCurveType::ColorType                 m_Green;
   HistogramCurveType::ColorType                 m_Blue;
-
-  /** Link Attributes */
-  OffsetType                                    m_OffSet;
   
   /** Store the component number of a pixel*/
   unsigned int                                  m_DiaporamaCurrentIndex;
