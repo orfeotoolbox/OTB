@@ -198,18 +198,24 @@ ImageViewerManagerViewGUI
       this->Undisplay(selectedItem);
     }
   
-
   //Check if the closed image is linked and showed
   // if it is the case : undisplay it and update the linkSetup
-  if(m_LinkedDisplayStatusList[selectedItem-1])
-    for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size() ; i++)
-      if(m_LinkedDisplayStatusList[i])
-	{
-	  m_LinkWidgetManagerList->GetNthElement(i)->Hide(); 
-	  m_LinkedDisplayStatusList[i] = false;
-	}
+  if(guiImageList->size() > 1)
+    {
+      if(m_LinkedDisplayStatusList[selectedItem-1])
+	for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size() ; i++)
+	  if(m_LinkedDisplayStatusList[i])
+	    {
+	      m_LinkWidgetManagerList->GetNthElement(i)->Hide(); 
+	      m_LinkedDisplayStatusList[i] = false;
+	    }
+    }
+  else
+    {
+      this->LinkSetupOk();
+    }
   
-
+  
   
   //Erase from the lists
   m_DisplayStatusList.erase( m_DisplayStatusList.begin()+(selectedItem-1));
