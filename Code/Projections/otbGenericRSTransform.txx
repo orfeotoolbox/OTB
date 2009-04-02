@@ -250,18 +250,26 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   //*****************************
   //Set the input transformation
   //*****************************
-  if (m_InputKeywordList.GetSize()  > 0)
-  {
-    typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
-    ForwardSensorModelType::Pointer sensorModel = ForwardSensorModelType::New();
-    sensorModel->SetImageGeometry(m_InputKeywordList);
-    if ( !m_DEMDirectory.empty())
+
+  try
     {
-      sensorModel->SetDEMDirectory(m_DEMDirectory);
+    if (m_InputKeywordList.GetSize()  > 0)
+      {
+      typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
+      ForwardSensorModelType::Pointer sensorModel = ForwardSensorModelType::New();
+      sensorModel->SetImageGeometry(m_InputKeywordList);
+      if ( !m_DEMDirectory.empty())
+	{
+	sensorModel->SetDEMDirectory(m_DEMDirectory);
+	}
+      m_InputTransform = sensorModel.GetPointer();
+      otbMsgDevMacro(<< "Input projection set to sensor model.");
+      }
     }
-    m_InputTransform = sensorModel.GetPointer();
-    otbMsgDevMacro(<< "Input projection set to sensor model");
-  }
+  catch(itk::ExceptionObject &err)
+    {
+    otbMsgDevMacro(<<" Input keyword list does not describe a sensor model.");
+    }
 
 
   if ((m_InputTransform.IsNull()) && ( !m_InputProjectionRef.empty() ))//map projection
@@ -287,18 +295,25 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   //*****************************
   //Set the output transformation
   //*****************************
-  if (m_OutputKeywordList.GetSize()  > 0)
-  {
-    typedef otb::InverseSensorModel<double> InverseSensorModelType;
-    InverseSensorModelType::Pointer sensorModel = InverseSensorModelType::New();
-    sensorModel->SetImageGeometry(m_OutputKeywordList);
-    if ( !m_DEMDirectory.empty())
+  try
     {
-      sensorModel->SetDEMDirectory(m_DEMDirectory);
+    if (m_OutputKeywordList.GetSize()  > 0)
+      {
+      typedef otb::InverseSensorModel<double> InverseSensorModelType;
+      InverseSensorModelType::Pointer sensorModel = InverseSensorModelType::New();
+      sensorModel->SetImageGeometry(m_OutputKeywordList);
+      if ( !m_DEMDirectory.empty())
+	{
+	sensorModel->SetDEMDirectory(m_DEMDirectory);
+	}
+      m_OutputTransform = sensorModel.GetPointer();
+      otbMsgDevMacro(<< "Output projection set to sensor model");
+      }
     }
-    m_OutputTransform = sensorModel.GetPointer();
-    otbMsgDevMacro(<< "Output projection set to sensor model");
-  }
+  catch(itk::ExceptionObject &err)
+    {
+    otbMsgDevMacro(<<" Output keyword list does not describe a sensor model.");
+    }
 
 
   if ((m_OutputTransform.IsNull()) && ( !m_OutputProjectionRef.empty() ))//map projection
@@ -355,11 +370,19 @@ typename GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::O
 GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 ::TransformPoint(const InputPointType & point) const
 {
+  InputPointType inputPoint = point;
+
+  // Apply input origin/spacing
+  inputPoint[0] = inputPoint[0] * m_InputSpacing[0] + m_InputOrigin[0];
+  inputPoint[1] = inputPoint[1] * m_InputSpacing[1] + m_InputOrigin[1];
+  
+  // Transform point
   OutputPointType outputPoint;
+  outputPoint = this->GetTransform()->TransformPoint(inputPoint);
 
-
-  outputPoint = this->GetTransform()->TransformPoint(point);
-
+  // Apply output origin/spacing
+  outputPoint[0] = (outputPoint[0] - m_OutputOrigin[0]) / m_OutputSpacing[0];
+  outputPoint[1] = (outputPoint[1] - m_OutputOrigin[1]) / m_OutputSpacing[1];
 
   return outputPoint;
 }
