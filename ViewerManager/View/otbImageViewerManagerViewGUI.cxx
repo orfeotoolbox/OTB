@@ -334,20 +334,22 @@ ImageViewerManagerViewGUI
       return;
     }
   if(guiDiaporama->shown() == 0 && guiLinkSetupWindow->shown() == 0)
-    //check what to do
-    if(!m_DisplayStatusList[selectedItem-1].first)
-      {
-	//New Display 
-	m_DisplayStatusList[selectedItem-1].first = true;
-	this->UpdateImageListShowed(selectedItem, m_DisplayedLabel);
-	this->Display(m_WidgetManagerList,selectedItem);
-      }
-    else
-      {
-	m_DisplayStatusList[selectedItem-1].first = false;
-	this->UpdateImageListShowed(selectedItem, m_UndisplayedLabel);
-	this->Undisplay(selectedItem);
-      }
+    {
+      //check what to do
+      if(!m_DisplayStatusList[selectedItem-1].first)
+	{
+	  //New Display 
+	  m_DisplayStatusList[selectedItem-1].first = true;
+	  this->UpdateImageListShowed(selectedItem, m_DisplayedLabel);
+	  this->Display(m_WidgetManagerList,selectedItem);
+	}
+      else
+	{
+	  m_DisplayStatusList[selectedItem-1].first = false;
+	  this->UpdateImageListShowed(selectedItem, m_UndisplayedLabel);
+	  this->Undisplay(selectedItem);
+	}
+    }
 }
 
 /**
