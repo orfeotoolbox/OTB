@@ -293,14 +293,14 @@ VectorDataExtractROI<TVectorData>
   typedef otb::GenericRSTransform<>                            GenericRSTransformType;
   typename GenericRSTransformType::Pointer genericTransform =  GenericRSTransformType::New();
 
-  /** We need get the transformation*/
+  /** Set up the projection */
   genericTransform->SetInputProjectionRef( m_ROI.GetRegionProjection());
-
   genericTransform->SetInputKeywordList(m_ROI.GetKeywordList());
   genericTransform->SetOutputProjectionRef(this->GetInput()->GetProjectionRef() );
   const itk::MetaDataDictionary &inputDict = this->GetInput()->GetMetaDataDictionary();
   genericTransform->SetOutputDictionary(inputDict);
-
+  genericTransform->SetOutputOrigin(this->GetInput()->GetOrigin());
+  genericTransform->SetOutputSpacing(this->GetInput()->GetSpacing());
   genericTransform->SetDEMDirectory(m_DEMDirectory);
 
   genericTransform->InstanciateTransform();
@@ -318,7 +318,7 @@ VectorDataExtractROI<TVectorData>
   point2[1] = m_ROI.GetOrigin()[1];
 
   point3[0] = m_ROI.GetOrigin()[0]+ m_ROI.GetSize()[0];
-  point3[1] = m_ROI.GetOrigin()[1]+ m_ROI.GetSize()[0];
+  point3[1] = m_ROI.GetOrigin()[1]+ m_ROI.GetSize()[1];
 
   point4[0] = m_ROI.GetOrigin()[0];
   point4[1] = m_ROI.GetOrigin()[1]+ m_ROI.GetSize()[1];
