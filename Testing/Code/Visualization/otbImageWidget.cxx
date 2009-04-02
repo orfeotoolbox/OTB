@@ -29,7 +29,7 @@ int otbImageWidget( int argc, char * argv[] )
   typedef otb::ImageWidget<> WidgetType;
   typedef WidgetType::InputImageType ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  
+
   // Reading the input image
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
@@ -47,12 +47,14 @@ int otbImageWidget( int argc, char * argv[] )
   widget->show();
   // Refresh display
   Fl::check();
+
   // Read the OpenGl buffer
   widget->ReadBuffer(reader->GetOutput(),region);
   // Redraw it
   widget->redraw();
   // Refresh display
   Fl::check();
+
   // Read only a quater of the image
   ImageType::RegionType::SizeType size = region.GetSize();
   size[0]/=2;
@@ -63,6 +65,7 @@ int otbImageWidget( int argc, char * argv[] )
   widget->redraw();
   // Refresh display
   Fl::check();
+
   // Adding an offset
   ImageType::RegionType::IndexType index = region.GetIndex();
   index[0]+=size[0];
@@ -73,6 +76,7 @@ int otbImageWidget( int argc, char * argv[] )
   widget->redraw();
   // Refresh display
   Fl::check();
+
   // Reading full image, but in half window
   region = reader->GetOutput()->GetLargestPossibleRegion();
   widget->resize(0,0,region.GetSize()[0],region.GetSize()[1]/2);
@@ -82,6 +86,7 @@ int otbImageWidget( int argc, char * argv[] )
   widget->redraw();
   // Refresh display
   Fl::check();
+
   // Reading full image, but in zoomed in widget
   widget->resize(0,0,region.GetSize()[0],region.GetSize()[1]);
   widget->SetIsotropicZoom(2.);
@@ -91,6 +96,7 @@ int otbImageWidget( int argc, char * argv[] )
   widget->redraw();
   // Refresh display
   Fl::check();
+
   // Reading full image, but in zoomed out widget
   widget->resize(0,0,region.GetSize()[0],region.GetSize()[1]);
   widget->SetIsotropicZoom(0.5);
@@ -100,6 +106,31 @@ int otbImageWidget( int argc, char * argv[] )
   widget->redraw();
   // Refresh display
   Fl::check();
+
+  // Use nearest neighbor interpolation
+//   widget->resize(0,0,region.GetSize()[0],region.GetSize()[1]);
+  widget->SetIsotropicZoom(10.0);
+  size = region.GetSize();
+  size[0]/=10;
+  size[1]/=10;
+  region.SetSize(size);
+  index = region.GetIndex();
+  index[0]+=100;
+  region.SetIndex(index);
+  widget->ReadBuffer(reader->GetOutput(),region);
+  widget->LinearInterpolationOff();
+  // Redraw it
+  widget->redraw();
+  // Refresh display
+  Fl::check();
+
+    // Use nearest neighbor interpolation
+  widget->LinearInterpolationOn();
+  // Redraw it
+  widget->redraw();
+  // Refresh display
+  Fl::check();
+
   // Print out widget status
   std::cout<<widget<<std::endl;
 

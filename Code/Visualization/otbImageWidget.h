@@ -91,6 +91,19 @@ public:
   itkSetMacro(IsotropicZoom,double);
   itkGetMacro(IsotropicZoom,double);
 
+  /** Linear interpolation on or off*/
+  void LinearInterpolationOn()
+  {
+    m_InterpolationMethod = GL_LINEAR;
+    this->Modified();
+  }
+
+  void LinearInterpolationOff()
+  {
+    m_InterpolationMethod = GL_NEAREST;
+    this->Modified();
+  }
+
   /** Set/Get the subsampling rate */
   itkSetMacro(SubsamplingRate,unsigned int);
   itkGetMacro(SubsamplingRate,unsigned int);
@@ -98,10 +111,10 @@ public:
   /** Get the image to screen transform */
   itkGetObjectMacro(ImageToScreenTransform,AffineTransformType);
   itkGetObjectMacro(ScreenToImageTransform,AffineTransformType);
-  
- /** Get The GlBuffered Region*/ 
+
+ /** Get The GlBuffered Region*/
   itkGetMacro(OpenGlBufferedRegion, RegionType);
- 
+
 /** Get the Extent region */
   itkGetMacro(Extent, RegionType);
 
@@ -175,6 +188,9 @@ private:
 
   /** OpenGl zoom factor */
   double m_IsotropicZoom;
+
+  /** The interpolation method */
+  GLint m_InterpolationMethod;
 
   /** OpenGl buffer      */
   unsigned char * m_OpenGlBuffer;

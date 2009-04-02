@@ -25,7 +25,8 @@ namespace otb
 {
 template <class TInputImage>
 ImageWidget<TInputImage>
-::ImageWidget() : m_IsotropicZoom(1.0), m_OpenGlBuffer(NULL), m_OpenGlBufferedRegion(),
+  ::ImageWidget() : m_IsotropicZoom(1.0), m_InterpolationMethod(GL_LINEAR),
+                  m_OpenGlBuffer(NULL), m_OpenGlBufferedRegion(),
                   m_Extent(), m_SubsamplingRate(1), m_ImageToScreenTransform(),
                   m_ScreenToImageTransform(), m_GlComponents()
 {
@@ -186,15 +187,15 @@ ImageWidget<TInputImage>
   glDisable(GL_BLEND);
   // Check if there is somthing to draw
   if(m_OpenGlBuffer == NULL)
-    {
+  {
     return;
-    }
+  }
 
   // Update transforms
   this->UpdateTransforms();
 
   if(!this->GetUseGlAcceleration())
-    {
+  {
     // Set the pixel Zoom
     glRasterPos2f(m_Extent.GetIndex()[0],m_Extent.GetIndex()[1]);
     glPixelZoom(m_IsotropicZoom,m_IsotropicZoom);
@@ -202,20 +203,20 @@ ImageWidget<TInputImage>
     // display the image
     glDrawPixels(m_OpenGlBufferedRegion.GetSize()[0],
                  m_OpenGlBufferedRegion.GetSize()[1],
-                 GL_RGB,
-                 GL_UNSIGNED_BYTE,
-                 m_OpenGlBuffer);
-    }
+                     GL_RGB,
+                     GL_UNSIGNED_BYTE,
+                     m_OpenGlBuffer);
+  }
   else
-    {
+  {
     glEnable(GL_TEXTURE_2D);
     glColor4f(1.0,1.0,1.0,0.0);
     GLuint texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
     glTexImage2D(GL_TEXTURE_2D, 0, 3, m_OpenGlBufferedRegion.GetSize()[0], m_OpenGlBufferedRegion.GetSize()[1], 0, GL_RGB, GL_UNSIGNED_BYTE, m_OpenGlBuffer);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);  // Linear Filtering
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);  // Linear Filtering
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,m_InterpolationMethod);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,m_InterpolationMethod);
     glBindTexture (GL_TEXTURE_2D, texture);
     glBegin (GL_QUADS);
     glTexCoord2f (0.0, 1.0);
@@ -228,17 +229,17 @@ ImageWidget<TInputImage>
     glVertex3f (m_Extent.GetIndex()[0],m_Extent.GetIndex()[1]+m_Extent.GetSize()[1], 0.0);
     glEnd ();
     glDisable(GL_TEXTURE_2D);
-    }
+  }
 
   // Render additionnal GlComponents
   for(GlComponentIteratorType it = m_GlComponents->ReverseBegin();
       it!=m_GlComponents->ReverseEnd();++it)
-    {
+  {
     if(it.Get()->GetVisible())
-      {
+    {
       it.Get()->Render(m_Extent,m_ImageToScreenTransform);
-      }
     }
+  }
 }
 }
 #endif
