@@ -83,7 +83,7 @@ public :
   ossimProjection* GetOssimModel(void);
 
   /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
-  virtual void SetImageGeometry(const ImageKeywordlist image_kwl);
+  virtual void SetImageGeometry(const ImageKeywordlist &image_kwl);
 
   /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
   virtual void SetImageGeometry(const ossimKeywordlist &geom_kwl);

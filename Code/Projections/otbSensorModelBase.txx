@@ -110,7 +110,7 @@ unsigned int NOutputDimensions,
 unsigned int NParametersDimensions >
 void
 SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
-::SetImageGeometry(const ImageKeywordlist image_kwl)
+::SetImageGeometry(const ImageKeywordlist & image_kwl)
 {
   m_ImageKeywordlist = image_kwl;
   CreateProjection(m_ImageKeywordlist);
@@ -145,7 +145,6 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimen
   image_kwl.convertToOSSIMKeywordlist(geom);
   otbMsgDevMacro(<< "CreateProjection(): ossimKeywordlist: " << geom);
 
-//   m_Model = ossimProjectionFactoryRegistry::instance()->createProjection(geom);
   m_Model = ossimSensorModelFactory::instance()->createProjection(geom);
   if ( m_Model == NULL)
   {
