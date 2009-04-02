@@ -145,7 +145,8 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimen
   image_kwl.convertToOSSIMKeywordlist(geom);
   otbMsgDevMacro(<< "CreateProjection(): ossimKeywordlist: " << geom);
 
-  m_Model = ossimProjectionFactoryRegistry::instance()->createProjection(geom);
+//   m_Model = ossimProjectionFactoryRegistry::instance()->createProjection(geom);
+  m_Model = ossimSensorModelFactory::instance()->createProjection(geom);
   if ( m_Model == NULL)
   {
     itkExceptionMacro(<< "Invalid Model pointer m_Model == NULL !\n The ossim keywordlist is bad!");
