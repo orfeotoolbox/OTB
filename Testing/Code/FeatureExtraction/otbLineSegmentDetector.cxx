@@ -105,7 +105,7 @@ int otbLineSegmentDetector( int argc, char * argv[] )
   writer->SetInput(drawLineFilter->GetOutput());
   writer->Update();
 
-  std::cout << " lsdFilter Ouput Size" << lsdFilter->GetOutput()->size() <<std::endl;
+  std::cout << " lsdFilter Output Size" << lsdFilter->GetOutput()->size() <<std::endl;
   
   
   return EXIT_SUCCESS;
