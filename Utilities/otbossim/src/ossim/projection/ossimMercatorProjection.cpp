@@ -7,7 +7,7 @@
 //
 // Description:
 //
-// Calls Geotrans Mercator projection code.  
+// Calls Geotrans Mercator projection code.
 //*******************************************************************
 //  $Id: ossimMercatorProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
 
@@ -22,7 +22,7 @@ RTTI_DEF1(ossimMercatorProjection, "ossimMercatorProjection", ossimMapProjection
  */
 
 #define PI         3.14159265358979323e0  /* PI                            */
-#define PI_OVER_2  ( PI / 2.0e0)  
+#define PI_OVER_2  ( PI / 2.0e0)
 #define MAX_LAT    ( (PI * 89.5) / 180.0 )  /* 89.5 degrees in radians         */
 
 #define MERC_NO_ERROR           0x0000
@@ -62,7 +62,7 @@ ossimMercatorProjection::ossimMercatorProjection(const ossimEllipsoid& ellipsoid
 
 void ossimMercatorProjection::update()
 {
-   
+
    Set_Mercator_Parameters(theEllipsoid.getA(),
                            theEllipsoid.getFlattening(),
                            theOrigin.latr(),
@@ -110,12 +110,14 @@ void ossimMercatorProjection::setParameters(double falseEasting,
    Merc_False_Easting  = falseEasting;
    Merc_False_Northing = falseNorthing;
    Merc_Scale_Factor   = scaleFactor;
-   
-   update(); 
+
+   update();
 }
 
 void ossimMercatorProjection::setDefaults()
 {
+   Merc_False_Easting = 0.0;
+   Merc_False_Northing = 0.0;
    Merc_Delta_Easting  = 20237883.0;
    Merc_Delta_Northing = 23421740.0;
    Merc_Scale_Factor   = 1.0;
@@ -125,13 +127,13 @@ ossimGpt ossimMercatorProjection::inverse(const ossimDpt &eastingNorthing)const
 {
    double lat = 0.0;
    double lon = 0.0;
-   
+
    Convert_Mercator_To_Geodetic(eastingNorthing.x,
                                 eastingNorthing.y,
                                 &lat,
                                 &lon);
-   
-   return ossimGpt(lat*DEG_PER_RAD, lon*DEG_PER_RAD, 0.0, theDatum);  
+
+   return ossimGpt(lat*DEG_PER_RAD, lon*DEG_PER_RAD, 0.0, theDatum);
 }
 
 ossimDpt ossimMercatorProjection::forward(const ossimGpt &latLon)const
@@ -139,7 +141,7 @@ ossimDpt ossimMercatorProjection::forward(const ossimGpt &latLon)const
    double easting  = 0.0;
    double northing = 0.0;
    ossimGpt gpt = latLon;
-   
+
    if (theDatum)
    {
       if (theDatum->code() != latLon.datum()->code())
@@ -147,12 +149,12 @@ ossimDpt ossimMercatorProjection::forward(const ossimGpt &latLon)const
          gpt.changeDatum(theDatum); // Shift to our datum.
       }
    }
-   
+
    Convert_Geodetic_To_Mercator(gpt.latr(),
                                 gpt.lonr(),
                                 &easting,
                                 &northing);
-   
+
    return ossimDpt(easting, northing);
 }
 
@@ -174,7 +176,7 @@ bool ossimMercatorProjection::loadState(const ossimKeywordlist& kwl,
 
    const char* type          = kwl.find(prefix, ossimKeywordNames::TYPE_KW);
    const char* scaleFactor   = kwl.find(prefix, ossimKeywordNames::SCALE_FACTOR_KW);
-   
+
    setDefaults();
 
    if(ossimString(type) == STATIC_TYPE_NAME(ossimMercatorProjection))
@@ -188,18 +190,18 @@ bool ossimMercatorProjection::loadState(const ossimKeywordlist& kwl,
       }
    }
    update();
-   
+
    return flag;
 }
 
 
 /***************************************************************************/
 /*
- *                              FUNCTIONS     
+ *                              FUNCTIONS
  */
 
 
-long ossimMercatorProjection::Set_Mercator_Parameters(double a,      
+long ossimMercatorProjection::Set_Mercator_Parameters(double a,
                                                       double f,
                                                       double Origin_Latitude,
                                                       double Central_Meridian,
@@ -209,7 +211,7 @@ long ossimMercatorProjection::Set_Mercator_Parameters(double a,
 { /* BEGIN Set_Mercator_Parameters */
 /*
  * The function Set_Mercator_Parameters receives the ellipsoid parameters and
- * Mercator projection parameters as inputs, and sets the corresponding state 
+ * Mercator projection parameters as inputs, and sets the corresponding state
  * variables.  It calculates and returns the scale factor.  If any errors
  * occur, the error code(s) are returned by the function, otherwise Merc_NO_ERROR
  * is returned.
@@ -224,7 +226,7 @@ long ossimMercatorProjection::Set_Mercator_Parameters(double a,
  *                          central meridian of the projection.     (input)
  *    False_Northing    : A coordinate value in meters assigned to the
  *                          origin latitude of the projection       (input)
- *    Scale_Factor      : Multiplier which reduces distances in the 
+ *    Scale_Factor      : Multiplier which reduces distances in the
  *                          projection to the actual distance on the
  *                          ellipsoid                               (output)
  */
@@ -265,19 +267,19 @@ long ossimMercatorProjection::Set_Mercator_Parameters(double a,
     Merc_es = 2 * Merc_f - Merc_f * Merc_f;
     Merc_e = sqrt(Merc_es);
     sin_olat = sin(Origin_Latitude);
-    Merc_Scale_Factor = 1.0 / ( sqrt(1.e0 - Merc_es * sin_olat * sin_olat) 
+    Merc_Scale_Factor = 1.0 / ( sqrt(1.e0 - Merc_es * sin_olat * sin_olat)
                                 / cos(Origin_Latitude) );
     es2 = Merc_es * Merc_es;
     es3 = es2 * Merc_es;
     es4 = es3 * Merc_es;
     Merc_ab = Merc_es / 2.e0 + 5.e0 * es2 / 24.e0 + es3 / 12.e0
               + 13.e0 * es4 / 360.e0;
-    Merc_bb = 7.e0 * es2 / 48.e0 + 29.e0 * es3 / 240.e0 
+    Merc_bb = 7.e0 * es2 / 48.e0 + 29.e0 * es3 / 240.e0
               + 811.e0 * es4 / 11520.e0;
     Merc_cb = 7.e0 * es3 / 120.e0 + 81.e0 * es4 / 1120.e0;
     Merc_db = 4279.e0 * es4 / 161280.e0;
     *Scale_Factor = Merc_Scale_Factor;
-    Convert_Geodetic_To_Mercator( MAX_LAT, (Merc_Origin_Long + PI),                                           
+    Convert_Geodetic_To_Mercator( MAX_LAT, (Merc_Origin_Long + PI),
                                   &Merc_Delta_Easting, &Merc_Delta_Northing);
     if (Merc_Delta_Easting < 0)
       Merc_Delta_Easting = -Merc_Delta_Easting;
@@ -312,7 +314,7 @@ void ossimMercatorProjection::Get_Mercator_Parameters(double *a,
  *                          central meridian of the projection.     (output)
  *    False_Northing    : A coordinate value in meters assigned to the
  *                          origin latitude of the projection       (output)
- *    Scale_Factor      : Multiplier which reduces distances in the 
+ *    Scale_Factor      : Multiplier which reduces distances in the
  *                          projection to the actual distance on the
  *                          ellipsoid                               (output)
  */
@@ -324,7 +326,7 @@ void ossimMercatorProjection::Get_Mercator_Parameters(double *a,
   *False_Easting = Merc_False_Easting;
   *False_Northing = Merc_False_Northing;
   *Scale_Factor = Merc_Scale_Factor;
-  
+
   return;
 } /* END OF Get_Mercator_Parameters */
 
@@ -423,7 +425,7 @@ long ossimMercatorProjection::Convert_Mercator_To_Geodetic(double Easting,
     dy = Northing - Merc_False_Northing;
     dx = Easting - Merc_False_Easting;
     *Longitude = Merc_Origin_Long + dx / (Merc_Scale_Factor * Merc_a);
-    xphi = PI / 2.e0 
+    xphi = PI / 2.e0
            - 2.e0 * atan(1.e0 / exp(dy / (Merc_Scale_Factor * Merc_a)));
     *Latitude = xphi + Merc_ab * sin(2.e0 * xphi) + Merc_bb * sin(4.e0 * xphi)
                 + Merc_cb * sin(6.e0 * xphi) + Merc_db * sin(8.e0 * xphi);
