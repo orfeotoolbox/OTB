@@ -12,6 +12,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
 SET(EPSILON 0.000000000001)
+SET(EPSILON_10e4 0.0001)
 SET(EPSILON_10e6 0.000001)
 SET(EPSILON_10e10 0.0000000001)
 SET(RADIOMETRY_TESTS1 ${CXX_TEST_PATH}/otbRadiometryTests1)
@@ -376,7 +377,7 @@ ADD_TEST(raTvFilterFunctionValuesTest ${RADIOMETRY_TESTS3}
 
 ##########           otb::SIXSTraits -------------------
 ADD_TEST(raTvSIXSTraitsComputeAtmosphericParametersTest ${RADIOMETRY_TESTS3}
-    --compare-ascii ${EPSILON_10e6} ${BASELINE_FILES}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
+    --compare-ascii ${EPSILON_10e4} ${BASELINE_FILES}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
                            ${TEMP}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
         otbSIXSTraitsComputeAtmosphericParametersTest
 	${INPUTDATA}/in6S_otb
@@ -455,7 +456,7 @@ ADD_TEST(raTuAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew ${R
         otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew)
 
 ADD_TEST(raTvAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms ${RADIOMETRY_TESTS4}
---compare-ascii ${EPSILON_10e6}
+--compare-ascii ${EPSILON_10e4}
 		${BASELINE_FILES}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
                 ${TEMP}/raTvCorrectionTo6SRadiative.txt
         otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
