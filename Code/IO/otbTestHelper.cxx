@@ -355,7 +355,7 @@ namespace otb
     int nbdiff(0);
     std::ifstream fluxfiletest(testBinaryFileName,std::ifstream::binary);
     std::ifstream fluxfileref(baselineBinaryFileName,std::ifstream::binary);
-    while ( !fluxfiletest.eof() && !fluxfileref.eof() )
+    while ( fluxfiletest.good() && fluxfileref.good() )
     {
       if ( fluxfiletest.get() != fluxfileref.get() )
       {
