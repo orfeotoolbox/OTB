@@ -1522,8 +1522,6 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTuVectorDataFileWriterNew ${IO_TESTS15}
         otbVectorDataFileWriterNew )
 
-# If the file exists, try remove it to prevent test failure
-FILE(REMOVE ${TEMP}/ioTvVectorDataFileWriterOutput.shp)
 
 ADD_TEST(ioTvVectorDataFileWriter ${IO_TESTS15}
         otbVectorDataFileWriter
@@ -1535,18 +1533,11 @@ ADD_TEST(ioTvVectorDataFileWriterTwice ${IO_TESTS15}
 	${TEMP}/ioTvVectorDataFileWriterOutput.shp
 	)
 
-# If the file exists, try remove it to prevent test failure
-FILE(REMOVE ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp)
-
 
 ADD_TEST(ioTvVectorDataFileWriterPolygons ${IO_TESTS15}
         otbVectorDataFileWriterPolygons
     ${TEMP}/ioTvVectorDataFileWriterOutput.shp
     )
-
-# If the file exists, try remove it to prevent test failure
-FILE(REMOVE ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp)
-
 
 
 IF(OTB_DATA_USE_LARGEINPUT)
