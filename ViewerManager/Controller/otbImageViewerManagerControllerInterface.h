@@ -75,6 +75,7 @@ public:
   virtual void UpdateModulusChannelOrder(int realChoice , int imChoice,unsigned int selectedItem) = 0; 
   virtual void UpdatePhaseChannelOrder(int realChoice , int imChoice, unsigned int selectedItem) = 0; 
   virtual void Link(unsigned int leftChoice, unsigned int rightChoice , OffsetType offset) = 0;
+  virtual void UdapteImageViewController(unsigned int selectedItem) = 0;
   /** NewVisu */
   virtual VisuControllerPointerType GetVisuController()=0;
   virtual VisuControllerPointerType GetPreviewVisuController() = 0;

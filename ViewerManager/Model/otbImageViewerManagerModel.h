@@ -155,6 +155,7 @@ public:
   virtual void UpdateModulusChannelOrder(int realChoice , int imChoice,unsigned int selectedItem );
   virtual void UpdatePhaseChannelOrder(int realChoice , int imChoice,unsigned int selectedItem );
   virtual void Link(unsigned int leftChoice, unsigned int rightChoice, OffsetType offset);
+  virtual void InitializeImageViewController(unsigned int selectedItem);
   
   /** Method needed to Get the list of componenets stored*/
    ObjectTrackedList GetObjectList()

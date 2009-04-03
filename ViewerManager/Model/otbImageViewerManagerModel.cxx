@@ -123,6 +123,7 @@ ImageViewerManagerModel
   m_HasImageOpened = false;
   
 }
+
 /**
  * Built a part of the visu, create a pointer and add a model to the visu
  */
@@ -356,6 +357,21 @@ ImageViewerManagerModel
   rightController->AddActionHandler(leftPixelActionHandler );
   leftController->AddActionHandler(rightPixelActionHandler);
 
+}
+
+/**
+ *
+ */
+void
+ImageViewerManagerModel
+::InitializeImageViewController(unsigned int selectedItem)
+{
+  VisuModelPointerType  render = m_ObjectTrackedList.at(selectedItem-1).pRendering;
+  VisuViewPointerType   view   = m_ObjectTrackedList.at(selectedItem-1).pVisuView;
+  PixelDescriptionModelPointerType pixelModel = m_ObjectTrackedList.at(selectedItem-1).pPixelModel;
+  
+  m_ObjectTrackedList.at(selectedItem-1).pWidgetController = this->BuiltController(render,view,pixelModel);
+  m_ObjectTrackedList.at(selectedItem-1).pVisuView->SetController(m_ObjectTrackedList.at(selectedItem-1).pWidgetController);
 }
 
 }

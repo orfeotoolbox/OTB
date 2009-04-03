@@ -142,5 +142,20 @@ ImageViewerManagerController
     }
 }
 
+void
+ImageViewerManagerController
+::UdapteImageViewController(unsigned int selectedItem)
+{
+  try
+    {
+      m_Model->InitializeImageViewController(selectedItem);
+    }
+  catch (itk::ExceptionObject & err)
+    {
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
+    }
+}
+
+
 } // end namespace otb
 

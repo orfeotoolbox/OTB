@@ -107,21 +107,7 @@ public:
   virtual void UpdateModulusChannelOrder(int realChoice , int imChoice ,unsigned int selectedItem );
   virtual void UpdatePhaseChannelOrder(int realChoice , int imChoice, unsigned int selectedItem);
   virtual void Link(unsigned int leftChoice, unsigned int rightChoice , OffsetType offset);
-
-  
-  
-/*   virtual void SaveOutput(); */
-/*   virtual void ResetModel(); */
-/*   virtual void ClearFeatures(); */
-/*   virtual void CreateFeature(FeatureType featureType); */
-/*   virtual void ClearSelectedChannels(); */
-/*   virtual void SetOutputFileName( const char * name ); */
-/*   virtual void AddInputChannels(std::vector<unsigned int> list); */
-/*   virtual void ChangeFilterStatus(int id); */
-/*   virtual void ViewedRegionChanged(); */
-/*   virtual void PixelClicked(const IndexType & index); */
-/*   virtual void AddToOutputListOrder(int id); */
-/*   virtual void RemoveFromOutputListOrder(int id); */
+  virtual void UdapteImageViewController(unsigned int selectedItem);
 
 
 protected:
