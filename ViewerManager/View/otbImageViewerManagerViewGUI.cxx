@@ -274,14 +274,18 @@ ImageViewerManagerViewGUI
 	}
     }
 
+    //
+    //Udpate the controller of the image linked with the suppressed one 
+    if(guiImageList->size() > 0)
+    this->InitializeImageController(selectedItem);
+
   //Call the controller
   m_ImageViewerManagerController->CloseImage(selectedItem);
   
   //Update the Link Setup
   this->UpdateLinkSetupWindow();
   
-  //Udpate the controller of the image linked with the suppressed one 
-  this->InitializeImageController(selectedItem);
+
     
  }
 
@@ -1237,14 +1241,32 @@ void
 ImageViewerManagerViewGUI
 ::InitializeImageController(unsigned int selectedItem)
 {
+  std::vector<unsigned int>  tempElementToRemove;
+    
   for(unsigned int i = 0 ; i< m_LinkedImageList.size(); i++ )
     {
       if(m_LinkedImageList[i].first == selectedItem || m_LinkedImageList[i].second == selectedItem)
-	{
-	  m_ImageViewerManagerController->UpdateImageViewController(i+1);
+	{ 
+	
+	  if(m_LinkedImageList[i].first == selectedItem )
+	    m_ImageViewerManagerController->UpdateImageViewController(m_LinkedImageList[i].second);
+		  
+	  if(m_LinkedImageList[i].second == selectedItem)
+	    m_ImageViewerManagerController->UpdateImageViewController(m_LinkedImageList[i].first);
+	  
+	  tempElementToRemove.push_back(i);
 	}
     }
+
+  //Remove element from the list 
+  unsigned counter = 0;
+  for(unsigned int p = 0; p < tempElementToRemove.size() ; p ++ )
+    {
+      m_LinkedImageList.erase(m_LinkedImageList.begin()+tempElementToRemove[p] - counter); // counter because the size of the list is decreasing after each iteration
+      counter++;
+    }
   
+  m_LinkedImageList.clear();
 }
 
 
