@@ -1551,15 +1551,13 @@ FILE(REMOVE ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp)
 
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvVectorDataFileReaderWriter ${IO_TESTS15}
-        --compare-n-binary 4
+        --compare-n-binary 3
             ${BASELINE_FILES}/ioTvVectorDataFileReaderWriterOutput.shp
             ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp
             ${BASELINE_FILES}/ioTvVectorDataFileReaderWriterOutput.shx
             ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shx
             ${BASELINE_FILES}/ioTvVectorDataFileReaderWriterOutput.dbf
             ${TEMP}/ioTvVectorDataFileReaderWriterOutput.dbf
-            ${BASELINE_FILES}/ioTvVectorDataFileReaderWriterOutput.prj
-            ${TEMP}/ioTvVectorDataFileReaderWriterOutput.prj
         otbVectorDataFileReaderWriter
             ${LARGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
             ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp
