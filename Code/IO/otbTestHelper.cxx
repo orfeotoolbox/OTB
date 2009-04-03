@@ -148,7 +148,10 @@ namespace otb
                   nbdiff++;
 
                 }
-                else if ( (strRef != strTest) && (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str())) > epsilon) )
+                else if ( (strRef != strTest)
+                           && (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str()))
+                           > epsilon*vcl_abs(atof(strRef.c_str()))
+                              ) )//epsilon as relative error
                 {
                   if ( reportErrors )
                   {
@@ -205,7 +208,10 @@ namespace otb
                   else if ((etatCour==ETAT_CHAR)&&(etatPrec==ETAT_NUM))
                   {
 
-                    if ( (strNumRef != strNumTest) && (vcl_abs(atof(strNumRef.c_str())-atof(strNumTest.c_str())) > epsilon) )
+                    if ( (strNumRef != strNumTest)
+                          && (vcl_abs(atof(strNumRef.c_str())-atof(strNumTest.c_str()))
+                          > epsilon*vcl_abs(atof(strNumRef.c_str()))
+                             ) ) //epsilon as relative error
                     {
                       if ( reportErrors )
                       {
@@ -247,7 +253,10 @@ namespace otb
                   if (isNumeric(strRef))
                   {
 
-                    if ( ( strRef != strTest) && (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str())) > epsilon))
+                    if ( ( strRef != strTest)
+                           && (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str()))
+                           > epsilon*vcl_abs(atof(strRef.c_str()))
+                              )) //epsilon as relative error
                     {
                       if ( reportErrors )
                       {
