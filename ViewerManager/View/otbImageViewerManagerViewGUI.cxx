@@ -200,34 +200,37 @@ ImageViewerManagerViewGUI
   
   //Check if the closed image is linked and showed
   // if it is the case : undisplay it and update the linkSetup
-  if(guiImageList->size() > 1)
-    {
-      if(m_LinkedDisplayStatusList[selectedItem-1])
-	for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size() ; i++)
-	  if(m_LinkedDisplayStatusList[i])
-	    {
-	      m_LinkWidgetManagerList->GetNthElement(i)->Hide(); 
-	      m_LinkedDisplayStatusList[i] = false;
-	    }
+  if(guiLinkSetupWindow->shown() != 0)
+    {  
+      if(guiImageList->size() > 1)
+	{
+	  if(m_LinkedDisplayStatusList[selectedItem-1])
+	    for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size() ; i++)
+	      if(m_LinkedDisplayStatusList[i])
+		{
+		  m_LinkWidgetManagerList->GetNthElement(i)->Hide(); 
+		  m_LinkedDisplayStatusList[i] = false;
+		}
+	}
     }
-  else
-    {
-      this->LinkSetupOk();
-    }
   
   
-  
+  //Erase the item selected
+  m_PreviewWidget->hide();
+  guiImageList->remove(selectedItem);
+
+  //Link when all images are closed
+  if(guiLinkSetupWindow->shown() != 0)
+      if(guiImageList->size()  == 0)
+	this->LinkSetupOk();
+
   //Erase from the lists
   m_DisplayStatusList.erase( m_DisplayStatusList.begin()+(selectedItem-1));
   m_LinkedDisplayStatusList.erase( m_LinkedDisplayStatusList.begin()+(selectedItem-1));
   m_WidgetManagerList->Erase(selectedItem-1);
   m_LinkWidgetManagerList->Erase(selectedItem-1);
-
-  //Erase the item selected
-  m_PreviewWidget->hide();
-  guiImageList->remove(selectedItem);
-
-
+  
+  
   //Diaporama
   if(guiDiaporama->shown() != 0)
     {
@@ -254,21 +257,27 @@ ImageViewerManagerViewGUI
 	    {
 	      if(selectedItem < m_DiaporamaCurrentIndex+1)
 		{
-		  --m_DiaporamaCurrentIndex;         //Increment because an image before the one displayed is removed 
+		  --m_DiaporamaCurrentIndex;         //Increment the current index because an image before the one displayed is removed 
 		}
 	      this->UpdateDiaporamaProgressBar();
 	    }
 	}
-      else
+    }
+
+    //Case all Images closed
+    if(guiDiaporama->shown() != 0)
+    {
+      if(m_DisplayStatusList.size() == 0)
 	{
+	  m_DiaporamaCurrentIndex=0;
 	  this->DiaporamaQuit();          //If no image to display anymore : quit the diaporamaGUI
 	}
     }
 
-
-  
   //Call the controller
   m_ImageViewerManagerController->CloseImage(selectedItem);
+
+
   
   //Update the Link Setup
   this->UpdateLinkSetupWindow();
@@ -637,7 +646,7 @@ ImageViewerManagerViewGUI
  ::ShowTemporaryClosedDisplay()
  {
    for(unsigned int i = 0; i<m_DisplayStatusList.size() ; i++)
-     if(m_DisplayStatusList[i].first)
+     if(m_DisplayStatusList[i].first && guiImageList->size()>0) // the second condition is mandatory cause in the close image 
        this->Display(m_WidgetManagerList,i+1);
  }
 
@@ -1158,6 +1167,8 @@ ImageViewerManagerViewGUI
       OffsetType                      offSet;
       offSet[0] = atoi(guiLinkXOffset->value());
       offSet[1] = atoi(guiLinkYOffset->value());
+
+      //Update a list to 
       
       //Call the controller
       this->m_ImageViewerManagerController->Link(leftChoice, rightChoice,offSet);
@@ -1186,14 +1197,16 @@ ImageViewerManagerViewGUI
   
   //Close the  displays linked
   for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size() ; i++)
-    if(m_LinkedDisplayStatusList[i])
-      {
-	m_LinkWidgetManagerList->GetNthElement(i)->Hide(); 
-	m_LinkedDisplayStatusList[i] = false;
-      }
-  
+    {
+      if(m_LinkedDisplayStatusList[i])
+	{
+	  m_LinkWidgetManagerList->GetNthElement(i)->Hide(); 
+	  m_LinkedDisplayStatusList[i] = false;
+	}
+    }
   //Display temporary closed displays if any
-  this->ShowTemporaryClosedDisplay();
+  if(m_LinkedDisplayStatusList.size()  > 0)
+    this->ShowTemporaryClosedDisplay();
 }
 
 /**
