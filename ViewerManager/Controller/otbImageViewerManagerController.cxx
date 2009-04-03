@@ -144,7 +144,7 @@ ImageViewerManagerController
 
 void
 ImageViewerManagerController
-::UdapteImageViewController(unsigned int selectedItem)
+::UpdateImageViewController(unsigned int selectedItem)
 {
   try
     {

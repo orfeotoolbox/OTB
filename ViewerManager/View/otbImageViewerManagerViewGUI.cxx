@@ -276,11 +276,12 @@ ImageViewerManagerViewGUI
 
   //Call the controller
   m_ImageViewerManagerController->CloseImage(selectedItem);
-
-
   
   //Update the Link Setup
   this->UpdateLinkSetupWindow();
+  
+  //Udpate the controller of the image linked with the suppressed one 
+  this->InitializeImageController(selectedItem);
     
  }
 
@@ -646,7 +647,7 @@ ImageViewerManagerViewGUI
  ::ShowTemporaryClosedDisplay()
  {
    for(unsigned int i = 0; i<m_DisplayStatusList.size() ; i++)
-     if(m_DisplayStatusList[i].first && guiImageList->size()>0) // the second condition is mandatory cause in the close image 
+     if(m_DisplayStatusList[i].first )
        this->Display(m_WidgetManagerList,i+1);
  }
 
@@ -1180,6 +1181,10 @@ ImageViewerManagerViewGUI
       m_LinkedDisplayStatusList[leftChoice-1] = true;
       m_LinkedDisplayStatusList[rightChoice-1] = true;
       
+      //store  the images linked together
+      UIntPairType        linkPair(leftChoice,rightChoice);
+      m_LinkedImageList.push_back(linkPair);
+
       //Diplay the Linked images
       this->Display(m_LinkWidgetManagerList, leftChoice);
       this->Display(m_LinkWidgetManagerList, rightChoice);
@@ -1205,7 +1210,7 @@ ImageViewerManagerViewGUI
 	}
     }
   //Display temporary closed displays if any
-  if(m_LinkedDisplayStatusList.size()  > 0)
+  if(guiImageList->size()>0)
     this->ShowTemporaryClosedDisplay();
 }
 
@@ -1223,6 +1228,23 @@ ImageViewerManagerViewGUI
 	m_LinkWidgetManagerList->GetNthElement(i)->Hide(); 
 	m_LinkedDisplayStatusList[i] = false;
       }
+}
+
+/**
+ *
+ */
+void
+ImageViewerManagerViewGUI
+::InitializeImageController(unsigned int selectedItem)
+{
+  for(unsigned int i = 0 ; i< m_LinkedImageList.size(); i++ )
+    {
+      if(m_LinkedImageList[i].first == selectedItem || m_LinkedImageList[i].second == selectedItem)
+	{
+	  m_ImageViewerManagerController->UpdateImageViewController(i+1);
+	}
+    }
+  
 }
 
 

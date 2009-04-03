@@ -107,9 +107,11 @@ public:
   typedef PixelDescriptionView<PixelDescriptionModelType>         PixelDescriptionViewType;
   
   /** vector to store the status of images : diplayed or not displayed*/
-  //---> Note : if the packed view is selected : 2nd boolean false, Splitted view : 2nd boolean true;
+  //---> Note : if the packed view is selected : 2nd boolean false, Splitted view : 2nd boolean true
   typedef std::pair<bool, bool>                                   PairType;
+  typedef std::pair<unsigned int ,unsigned int>                   UIntPairType;
   typedef std::vector<PairType>                                   BoolVector;
+  typedef std::vector<UIntPairType>                               UIntPairVector;
   
   /** list in order to store the diplay manager*/
   typedef WidgetManager                                           WidgetManagerType;
@@ -181,9 +183,8 @@ protected:
   virtual void UpdateLinkSetupWindow(); 
   virtual void LinkSetupOk();
   virtual void LinkSetupRemove();
-  /*   virtual void UpdatePreviewWindow(unsigned int selectedItem); */
-  
-  
+  virtual void InitializeImageController(unsigned int selectedItem );
+    
   /** Constructor */
   ImageViewerManagerViewGUI();
   /** Destructor */
@@ -204,7 +205,7 @@ private:
   //
   BoolVector                                     m_DisplayStatusList;
   std::vector<bool>                              m_LinkedDisplayStatusList;
-  
+  UIntPairVector                                 m_LinkedImageList;
   std::string                                    m_TemplateViewerName;
   std::string                                    m_DisplayedLabel;
   std::string                                    m_UndisplayedLabel ;
