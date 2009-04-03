@@ -607,41 +607,41 @@ SHPVectorDataIO<TData>
   PolygonPointerType extRing = PolygonType::New();
 
   for (int pIndex = 0;pIndex<ogrRing->getNumPoints();++pIndex)
-    {
+  {
     ogrRing->getPoint(pIndex,ogrTmpPoint);
     typename PolygonType::VertexType vertex;
     vertex[0] = ogrTmpPoint->getX();
     vertex[1] = ogrTmpPoint->getY();
 
     if (DataNodeType::Dimension > 2)
-      {
+    {
       vertex[2]= ogrTmpPoint->getZ();
-      }
+    }
 
     extRing->AddVertex(vertex);
-    }
+  }
 
   PolygonListPointerType intRings = PolygonListType::New();
 
   for (int intRingIndex = 0;intRingIndex<ogrPolygon->getNumInteriorRings();++intRingIndex)
-    {
+  {
     PolygonPointerType ring = PolygonType::New();
     ogrRing = ogrPolygon->getInteriorRing(intRingIndex);
     for (int pIndex = 0;pIndex<ogrRing->getNumPoints();++pIndex)
-      {
+    {
       ogrRing->getPoint(pIndex,ogrTmpPoint);
       typename PolygonType::VertexType vertex;
 
       vertex[0] = ogrTmpPoint->getX();
       vertex[1] = ogrTmpPoint->getY();
       if (DataNodeType::Dimension > 2)
-	{
+      {
         vertex[2]= ogrTmpPoint->getZ();
-	}
-      ring->AddVertex(vertex);
       }
-    intRings->PushBack(ring);
+      ring->AddVertex(vertex);
     }
+    intRings->PushBack(ring);
+  }
 
   delete ogrTmpPoint;
 
@@ -874,8 +874,7 @@ template<class TData>
 
           if( ogrCurrentLayer->CreateFeature( ogrFeature ) != OGRERR_NONE )
           {
-            printf( "Failed to create feature in shapefile.\n" );
-            exit( 1 );
+            itkExceptionMacro(<<"Failed to create feature in shapefile.");
           }
 
           OGRFeature::DestroyFeature( ogrFeature );
@@ -919,8 +918,7 @@ template<class TData>
 
           if( ogrCurrentLayer->CreateFeature( ogrFeature ) != OGRERR_NONE )
           {
-            printf( "Failed to create feature in shapefile.\n" );
-            exit( 1 );
+            itkExceptionMacro(<<"Failed to create feature in shapefile.");
           }
 
           OGRFeature::DestroyFeature( ogrFeature );
@@ -993,8 +991,7 @@ template<class TData>
 
           if( ogrCurrentLayer->CreateFeature( ogrFeature ) != OGRERR_NONE )
           {
-            printf( "Failed to create feature in shapefile.\n" );
-            exit( 1 );
+            itkExceptionMacro(<<"Failed to create feature in shapefile.");
           }
 
           OGRFeature::DestroyFeature( ogrFeature );
@@ -1025,8 +1022,7 @@ template<class TData>
 
         if( ogrCurrentLayer->CreateFeature( ogrFeature ) != OGRERR_NONE )
         {
-          printf( "Failed to create feature in shapefile.\n" );
-          exit( 1 );
+          itkExceptionMacro(<<"Failed to create feature in shapefile.");
         }
 
         ProcessNodeWrite(*it, ogrCollection, ogrCurrentLayer, oSRS);
@@ -1049,8 +1045,7 @@ template<class TData>
 
         if( ogrCurrentLayer->CreateFeature( ogrFeature ) != OGRERR_NONE )
         {
-          printf( "Failed to create feature in shapefile.\n" );
-          exit( 1 );
+          itkExceptionMacro(<<"Failed to create feature in shapefile.");
         }
 
         ProcessNodeWrite(*it, ogrCollection, ogrCurrentLayer, oSRS);
@@ -1073,8 +1068,7 @@ template<class TData>
 
         if( ogrCurrentLayer->CreateFeature( ogrFeature ) != OGRERR_NONE )
         {
-          printf( "Failed to create feature in shapefile.\n" );
-          exit( 1 );
+          itkExceptionMacro(<<"Failed to create feature in shapefile.");
         }
 
         ProcessNodeWrite(*it, ogrCollection, ogrCurrentLayer, oSRS);
@@ -1097,8 +1091,7 @@ template<class TData>
 
         if( ogrCurrentLayer->CreateFeature( ogrFeature ) != OGRERR_NONE )
         {
-          printf( "Failed to create feature in shapefile.\n" );
-          exit( 1 );
+          itkExceptionMacro(<<"Failed to create feature in shapefile.");
         }
 
         ProcessNodeWrite(*it, ogrCollection, ogrCurrentLayer, oSRS);
