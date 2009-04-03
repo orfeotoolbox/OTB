@@ -131,7 +131,7 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
     fin >> minSpectralValue;//wlinf;
     fin >> maxSpectralValue;//wlsup;
 
-    while (!fin.eof() && fin.good())
+    while (fin.good())
     {
       fin >> value;
       vect.push_back(value);

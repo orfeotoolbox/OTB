@@ -91,7 +91,7 @@ int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms(int argc, ch
   fin >> maxSpectralValue;//wlsup;
 
   //fin.open(wavelenghFiles[i]);
-  while (!fin.eof() && fin.good())
+  while (fin.good())
   {
     fin >> value;
     vect.push_back(value);

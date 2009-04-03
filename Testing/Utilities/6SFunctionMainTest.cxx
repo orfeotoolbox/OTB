@@ -73,7 +73,7 @@ int SIXSFunctionMainOtbTest( int argc, char *argv[] )
         fin >> wlinf;
         fin >> wlsup;
 
-        while (!fin.eof() && fin.good())
+        while (fin.good())
         {
                 fin >> value;
                 vector_wavelenght.push_back(value);
