@@ -86,7 +86,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
   for (outputIt.GoToBegin(); !outputIt.IsAtEnd() ; ++outputIt,++inputIt)
       outputIt.Set( static_cast<OutputPixelType>(inputIt.Get()) );
   
-  /** Draw the lines in the ouput image using lineIterator*/
+  /** Draw the lines in the output image using lineIterator*/
   typedef itk::LineIterator<OutputImageType>       LineIteratorFilter;
   OutputIndexType                                  indexBeginLine, indexEndLine;
   LineListIterator                                 itList = list->begin();

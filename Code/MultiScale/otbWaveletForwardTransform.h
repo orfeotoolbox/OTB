@@ -36,7 +36,7 @@ namespace otb {
  * in the GetOutputs() array.
  *
  * Output image organization depends on the number of Dim on the image
- * In the OuputList, the first image is always the low passed one. Next,
+ * In the OutputList, the first image is always the low passed one. Next,
  * follow the high Passed images of the lowest decomposition (ask
  * GetFilter(0)->GetNumberOfOutputs() to know the length) and so on until
  * the high passed images of the highest decomposition.
