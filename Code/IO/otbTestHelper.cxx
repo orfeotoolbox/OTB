@@ -355,6 +355,14 @@ namespace otb
     int nbdiff(0);
     std::ifstream fluxfiletest(testBinaryFileName,std::ifstream::binary);
     std::ifstream fluxfileref(baselineBinaryFileName,std::ifstream::binary);
+    if (fluxfiletest.fail())
+    {
+      itkGenericExceptionMacro(<<"Impossible to open the test binary file <" << testBinaryFileName << ">.");
+    }
+    if (!fluxfileref)
+    {
+      itkGenericExceptionMacro(<< "Impossible to open the baseline binary file <" << baselineBinaryFileName << ">.");
+    }
     while ( fluxfiletest.good() && fluxfileref.good() )
     {
       if ( fluxfiletest.get() != fluxfileref.get() )
