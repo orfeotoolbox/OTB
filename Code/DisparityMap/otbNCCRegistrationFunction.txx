@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbNCCRegistrationFunction_txx
-#define _otbNCCRegistrationFunction_txx
+#ifndef __otbNCCRegistrationFunction_txx
+#define __otbNCCRegistrationFunction_txx
 
 #include "otbNCCRegistrationFunction.h"
 #include "itkExceptionObject.h"

@@ -18,8 +18,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
-#ifndef _otbImageToHessianDeterminantImageFilter_txx
-#define _otbImageToHessianDeterminantImageFilter_txx
+#ifndef __otbImageToHessianDeterminantImageFilter_txx
+#define __otbImageToHessianDeterminantImageFilter_txx
 
 #include "otbImageToHessianDeterminantImageFilter.h"
 
