@@ -113,11 +113,54 @@ public:
   {
     itk::OStringStream oss;
     OutputPixelType output = this->Evaluate(vpixel);
-    oss<<"R[chan="  <<m_RedChannelIndex   <<" val="<< static_cast<typename itk::NumericTraits<ScalarPixelType>::PrintType>(vpixel[m_RedChannelIndex])   <<" disp="<<static_cast<unsigned int>(output[0])<<"]\n";
-    oss<<"G[chan="<<m_GreenChannelIndex   <<" val="<< static_cast<typename itk::NumericTraits<ScalarPixelType>::PrintType>(vpixel[m_GreenChannelIndex]) <<" disp="<<static_cast<unsigned int>(output[1])<<"]\n";
-    oss<<"B[chan=" <<m_BlueChannelIndex   <<" val="<< static_cast<typename itk::NumericTraits<ScalarPixelType>::PrintType>(vpixel[m_BlueChannelIndex])  <<" disp="<<static_cast<unsigned int>(output[2])<<"]";
-    return oss.str();
 
+    for(unsigned int channel = 0; channel < vpixel.Size();++channel)
+      {
+      if(channel == m_RedChannelIndex)
+	{
+	oss<<"c= "<<channel<<", R= "<<(int)output[0];
+	if(output[0]<100)
+	  {
+	  oss<<" ";
+	  }
+	if(output[0]<10)
+	  {
+	  oss<<" ";
+	  }
+	oss<<", v= "<<static_cast<typename itk::NumericTraits<ScalarPixelType>::PrintType>(vpixel[channel])<<std::endl;
+	}
+      else if(channel == m_BlueChannelIndex)
+	{
+	oss<<"c= "<<channel<<", G= "<<(int)output[1]; 
+	if(output[1]<100)
+	  {
+	  oss<<" ";
+	  }
+	if(output[1]<10)
+	  {
+	  oss<<" ";
+	  }
+	oss<<", v= "<<static_cast<typename itk::NumericTraits<ScalarPixelType>::PrintType>(vpixel[channel])<<std::endl;
+	}
+      else if(channel == m_GreenChannelIndex)
+	{
+	oss<<"c= "<<channel<<", B= "<<(int)output[2]; 
+	if(output[2]<100)
+	  {
+	  oss<<" ";
+	  }
+	if(output[2]<10)
+	  {
+	  oss<<" ";
+	  }
+	oss<<", v= "<<static_cast<typename itk::NumericTraits<ScalarPixelType>::PrintType>(vpixel[channel])<<std::endl;
+	}
+      else
+	{
+	oss<<"c= "<<channel<<",         v= "<<static_cast<typename itk::NumericTraits<ScalarPixelType>::PrintType>(vpixel[channel])<<std::endl; 
+	}
+      }
+    return oss.str();
   }
 
   /** Get the transfer function for tuning */
