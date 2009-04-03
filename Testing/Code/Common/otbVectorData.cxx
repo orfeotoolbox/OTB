@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
-
+#include <fstream>
 #include "otbVectorData.h"
 
 int otbVectorData(int argc, char * argv[])
@@ -70,7 +70,20 @@ int otbVectorData(int argc, char * argv[])
   data->GetDataTree()->Add(line,folder);
   data->GetDataTree()->Add(polygon,folder);
 
-  std::cout<<data<<std::endl;
+  if (argc < 2)
+  {
+    std::cout << data << std::endl;
+  }
+  else
+  {
+    const char * outfile = argv[1];
+    std::ofstream file;
+    file.open(outfile);
+
+    file << data << std::endl;
+    file.close();
+
+  }
 
   return EXIT_SUCCESS;
 }

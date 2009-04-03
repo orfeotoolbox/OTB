@@ -133,13 +133,13 @@ ADD_TEST(coTuVectorDataExtractROINew ${COMMON_TESTS2}
 	otbVectorDataExtractROINew)
 
 ADD_TEST(coTvVectorDataExtractROI ${COMMON_TESTS2}
-  --compare-binary    
-              ${BASELINE}/coVectorDataExtractROIOutput.shp 
-              ${TEMP}/coVectorDataExtractROIOutput.shp 
-	 otbVectorDataExtractROI	
+  --compare-binary
+              ${BASELINE}/coVectorDataExtractROIOutput.shp
+              ${TEMP}/coVectorDataExtractROIOutput.shp
+	 otbVectorDataExtractROI
 	${INPUTDATA}/ToulousePoints-examples.shp   #${LARGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
 	${TEMP}/coVectorDataExtractROIOutput.shp
-	 374369.48850211215904 4828951.58612491376698  # Origin of the RemoteSensingRegion 
+	 374369.48850211215904 4828951.58612491376698  # Origin of the RemoteSensingRegion
          1000.25 25000.2                               # Size of the Cartoregion
  )
 
@@ -514,9 +514,9 @@ ADD_TEST(coTvRectangle ${COMMON_TESTS6}
                 ${TEMP}/otbRectangleTest.txt
          otbRectangle
 	        ${TEMP}/otbRectangleTest.txt
-		2.12 2.35 12.54 2.45   3. 0.15  1. 1. 
-	
-	
+		2.12 2.35 12.54 2.45   3. 0.15  1. 1.
+
+
 )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -552,7 +552,11 @@ ADD_TEST(coTuVectorData ${COMMON_TESTS7}
 )
 
 ADD_TEST(coTvVectorData ${COMMON_TESTS7}
+      --compare-ascii ${EPS}
+            ${BASELINE_FILES}/coTvVectorData.txt
+            ${TEMP}/coTvVectorData.txt
      otbVectorData
+       ${TEMP}/coTvVectorData.txt
 )
 
 ADD_TEST(coTuShiftScaleImageAdaptorNew ${COMMON_TESTS7}
@@ -603,7 +607,7 @@ ADD_TEST(coTuRemoteSensingRegionNew ${COMMON_TESTS7}
 ADD_TEST(ioTvRemoteSensingRegion ${COMMON_TESTS7}
 	 otbRemoteSensingRegion
 	 1.21 2.33 58.47 59.49  #size et index of the region
-	 0. 0.                  # Point to check 
+	 0. 0.                  # Point to check
  )
 
 
@@ -626,7 +630,7 @@ ADD_TEST(coTuQuickLookImageGenerator ${COMMON_TESTS8}
 	10 # sr
 	2 # variance
 	0.5 # max error
-	4 # max kernel width 
+	4 # max kernel width
 	1 # usespacing
 )
 
@@ -651,7 +655,7 @@ otbMultiChannelExtractROI.cxx
 otbMultiChannelExtractROINew.cxx
 otbTestMultiExtractMultiUpdate.cxx
 otbVectorDataExtractROINew.cxx
-otbVectorDataExtractROI.cxx	
+otbVectorDataExtractROI.cxx
 )
 SET(BasicCommon_SRCS3
 otbMultiToMonoChannelExtractROI.cxx
@@ -704,7 +708,7 @@ otbPolygon.cxx
 otbUnaryFunctorNeighborhoodImageFilterNew.cxx
 otbUnaryFunctorNeighborhoodImageFilter.cxx
 otbRectangleNew.cxx
-otbRectangle.cxx	
+otbRectangle.cxx
 )
 
 SET(BasicCommon_SRCS7
