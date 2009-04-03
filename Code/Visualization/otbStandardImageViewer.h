@@ -37,6 +37,7 @@
 #include "otbPixelDescriptionView.h"
 #include "otbStandardRenderingFunction.h"
 #include "otbVectorData.h"
+#include "otbVectorDataFileReader.h"
 #include "otbVectorDataProjectionFilter.h"
 #include "otbVectorDataGlComponent.h"
 #include "otbVectorDataExtractROI.h"
@@ -145,7 +146,7 @@ public:
   typedef VectorDataExtractROI<VectorDataType>       VectorDataExtractROIType;
   typedef typename VectorDataExtractROIType::RegionType RemoteSensingRegionType;
   typedef VectorDataGlComponent<VectorDataType>      VectorDataGlComponentType;
-
+  typedef VectorDataFileReader<VectorDataType>       VectorDataFileReaderType;
 
   /** Set/Get the image to render */
   itkSetObjectMacro(Image,ImageType);
