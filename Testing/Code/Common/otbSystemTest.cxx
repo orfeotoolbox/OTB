@@ -34,6 +34,12 @@ int otbSystemTest( int argc, char* argv[] )
   const char * inputDirName   = argv[2];
   itk::OStringStream msg;
 
+  // Check instanciation test
+  otb::System * var(NULL);
+  var = new otb::System();
+  delete var;
+  var = NULL;
+
   if ( otb::System::IsAFileName( inputFileName ) == false )
   {
     itkGenericExceptionMacro( <<"System::IsAFileName() error : the filename "<<inputFileName<<" is not detected.");
