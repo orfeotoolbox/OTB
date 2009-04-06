@@ -41,4 +41,6 @@ void RegisterTests()
   REGISTER_TEST(otbScalarToRainbowRGBPixelFunctor);
   REGISTER_TEST(otbAmplitudePhaseToRGBFunctorNew);
   REGISTER_TEST(otbAmplitudePhaseToRGBFunctor);
+  REGISTER_TEST(otbVarianceImageFilterNew);
+  REGISTER_TEST(otbVarianceImageFilter);
 }
