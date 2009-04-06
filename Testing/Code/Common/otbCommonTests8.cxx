@@ -28,4 +28,6 @@ void RegisterTests()
 {
 REGISTER_TEST(otbQuickLookImageGeneratorNew);
 REGISTER_TEST(otbQuickLookImageGenerator);
+REGISTER_TEST(otbImageRegionTileMapSplitterNew);
+REGISTER_TEST(otbImageRegionTileMapSplitter);
 }
