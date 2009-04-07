@@ -28,10 +28,10 @@ namespace otb
 template <class TOutputImage>
 ImageLayerRenderingModel<TOutputImage>
 ::ImageLayerRenderingModel() : m_Name("Default"), m_RasterizedQuicklook(), 
-                       m_HasQuicklook(false),m_RasterizedExtract(),m_HasExtract(false),
-                       m_ExtractRegion(), m_RasterizedScaledExtract(), m_HasScaledExtract(false),
-                       m_ScaledExtractRegion(), m_QuicklookBlendingFilterList(), m_ExtractBlendingFilterList(), 
-                       m_ScaledExtractBlendingFilterList()
+			       m_HasQuicklook(false),m_RasterizedExtract(),m_HasExtract(false),
+			       m_ExtractRegion(), m_RasterizedScaledExtract(), m_HasScaledExtract(false),
+			       m_ScaledExtractRegion(), m_Updating(false), m_QuicklookBlendingFilterList(), 
+			       m_ExtractBlendingFilterList(), m_ScaledExtractBlendingFilterList()
 
 {
   // Initalize the blending filter list 
