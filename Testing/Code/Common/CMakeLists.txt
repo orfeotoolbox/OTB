@@ -616,22 +616,39 @@ ADD_TEST(ioTvRemoteSensingRegion ${COMMON_TESTS7}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -------------  otb::QuickLookImageGenerator ----------------------------
-ADD_TEST(coTvQuickLookImageGeneratorNew ${COMMON_TESTS8}
+ADD_TEST(coTuQuickLookImageGeneratorNew ${COMMON_TESTS8}
 otbQuickLookImageGeneratorNew
 )
 
-ADD_TEST(coTuQuickLookImageGenerator ${COMMON_TESTS8}
+ADD_TEST(coTvQuickLookImageGenerator ${COMMON_TESTS8}
      --compare-image ${TOL}
-	   	     ${BASELINE}/coTuQuickLookImageGenerator.tif
-                     ${TEMP}/coTuQuickLookImageGenerator.tif
+	   	     ${BASELINE}/coQuickLookImageGenerator.tif
+                     ${TEMP}/coQuickLookImageGenerator.tif
    otbQuickLookImageGenerator
         ${INPUTDATA}/qb_RoadExtract.img.hdr
-	${TEMP}/coTuQuickLookImageGenerator.tif
+	${TEMP}/coQuickLookImageGenerator.tif
 	10 # sr
 	2 # variance
 	0.5 # max error
 	4 # max kernel width
 	1 # usespacing
+)
+
+# -------------  otb::ImageRegionTileMapSplitter ----------------------------
+ADD_TEST(coTuImageRegionTileMapSplitterNew ${COMMON_TESTS8}
+otbImageRegionTileMapSplitterNew
+)
+
+ADD_TEST(coTvImageRegionTileMapSplitter ${COMMON_TESTS8}
+    --compare-ascii ${TOL}
+        ${BASELINE_FILES}/coImageRegionTileMapSplitter.txt
+                ${TEMP}/coImageRegionTileMapSplitter.txt
+    otbImageRegionTileMapSplitter
+    45 45      # Index
+    1000 1500  # Size
+    10         # Nb split
+    2          # Number of slipt
+    ${TEMP}/coImageRegionTileMapSplitter.txt
 )
 
 
@@ -730,6 +747,8 @@ otbRemoteSensingRegion.cxx
 SET(BasicCommon_SRCS8
 otbQuickLookImageGeneratorNew.cxx
 otbQuickLookImageGenerator.cxx
+otbImageRegionTileMapSplitterNew.cxx
+otbImageRegionTileMapSplitter.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

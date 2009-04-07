@@ -874,6 +874,19 @@ ADD_TEST(bfTvAmplitudePhaseToRGBFunctor ${BASICFILTERS_TESTS8}
 		    ${TEMP}/bfTvAmplitudePhaseToRGBFunctor.png
 )
 
+# -------            otb::VarianceImageFilter  -----------------
+
+ADD_TEST(bfTuVarianceImageFilterNew ${BASICFILTERS_TESTS8}
+         otbVarianceImageFilterNew)
+
+ADD_TEST(bfTvVarianceImageFilter ${BASICFILTERS_TESTS8}
+    --compare-image ${EPSILON}
+        ${BASELINE}/bfVarianceImageFilter.tif
+        ${TEMP}/bfVarianceImageFilter.tif
+        otbVarianceImageFilter
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+        ${TEMP}/bfVarianceImageFilter.tif
+)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests9 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1577,6 +1590,8 @@ otbScalarToRainbowRGBPixelFunctorNew.cxx
 otbScalarToRainbowRGBPixelFunctor.cxx
 otbAmplitudePhaseToRGBFunctorNew.cxx
 otbAmplitudePhaseToRGBFunctor.cxx
+otbVarianceImageFilterNew.cxx
+otbVarianceImageFilter.cxx
 )
 
 # A enrichir

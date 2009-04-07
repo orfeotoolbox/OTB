@@ -16,18 +16,12 @@
 
 =========================================================================*/
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+#include "otbSIXSTraits.h"
 
-#include "otbTestMain.h"
-
-void RegisterTests()
+int otbSIXSTraitsTest(int argc, char * argv[])
 {
-REGISTER_TEST(otbQuickLookImageGeneratorNew);
-REGISTER_TEST(otbQuickLookImageGenerator);
-REGISTER_TEST(otbImageRegionTileMapSplitterNew);
-REGISTER_TEST(otbImageRegionTileMapSplitter);
+  otb::SIXSTraits *var(NULL);
+  var = new otb::SIXSTraits();
+  delete var;
+  return EXIT_SUCCESS;
 }

@@ -937,7 +937,7 @@ namespace otb
            (str[str.size()-1]==41) &&
            (str[1]==48) &&
            (str[2]==120) &&
-           (str.size()==11))
+           (  (str.size()==11)||(str.size()==16)) )
     {
       result = true;
       start = 3;
@@ -947,7 +947,7 @@ namespace otb
     else if (
              (str[0]==48) &&
              (str[1]==120) &&
-             (str.size()==9))
+             ( (str.size()==9)||(str.size()==14)) )
     {
       result = true;
       start = 2;

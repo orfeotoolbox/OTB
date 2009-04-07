@@ -145,7 +145,10 @@ void
 ImageWidget<TInputImage>
 ::UpdateTransforms()
 {
-  assert(m_IsotropicZoom>0 && "Isotropic zoom should be non null positive.");
+  if(m_IsotropicZoom<=0)
+  {
+    itkExceptionMacro(<<"Internal error: Isotropic zoom should be non null positive.");
+  }
 
   typename RegionType::IndexType index;
   typename RegionType::SizeType  size;
@@ -173,7 +176,10 @@ ImageWidget<TInputImage>
 
   // Compute the inverse transform
   bool couldInvert = m_ScreenToImageTransform->GetInverse(m_ImageToScreenTransform);
-  assert(couldInvert && "Could not invert ScreenToImageTransform");
+  if( couldInvert == false)
+  {
+    itkExceptionMacro(<<"Internal error: Could not invert ScreenToImageTransform.");
+  }
 }
 
 template <class TInputImage>

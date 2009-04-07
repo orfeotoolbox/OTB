@@ -22,6 +22,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkObject.h"
 #include "itkRegion.h"
 #include "itkImageRegion.h"
+#include "itkImageRegionSplitter.h"
 #include "itkObjectFactory.h"
 #include "itkIndex.h"
 #include "itkSize.h"
@@ -130,16 +131,7 @@ private:
 };
 
 
-} // end namespace itk
-
-// Define instantiation macro for this template.
-// #define ITK_TEMPLATE_ImageRegionTileMapSplitter(_, EXPORT, x, y) namespace itk { \
-//   _(1(class EXPORT ImageRegionTileMapSplitter< ITK_TEMPLATE_1 x >)) \
-//   namespace Templates { typedef ImageRegionTileMapSplitter< ITK_TEMPLATE_1 x > ImageRegionTileMapSplitter##y; } \
-//   }
-
-
-
+} // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 # include "otbImageRegionTileMapSplitter.txx"
