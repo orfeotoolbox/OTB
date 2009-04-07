@@ -20,6 +20,9 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include <iostream>
+#include <iomanip>
+#include <fstream>
 #include "itkExceptionObject.h"
 #include "itkImage.h"
 
@@ -29,6 +32,7 @@
 int otbFlusserImage( int argc, char * argv[] )
 {
   const char * inputFilename  = argv[1];
+  const char * outputFilename  = argv[2];
   unsigned int  Number = 1;
 
   typedef unsigned char                                   InputPixelType;
@@ -68,6 +72,9 @@ int otbFlusserImage( int argc, char * argv[] )
 
   RealType Result;
 
+  std::ofstream outputStream(outputFilename);
+  outputStream <<std::setprecision(10)<<"Flusser Image moments: [12]"<<std::endl;
+
   for (Number = 1 ;Number<12;Number++)
   {
     //OTB-FA-00024-CS
@@ -75,9 +82,10 @@ int otbFlusserImage( int argc, char * argv[] )
     //OTB-FA-00025-CS
     function->SetNeighborhoodRadius(3);
     Result = function->EvaluateAtIndex( index );
-    std::cout << "Flusser("<<Number<<") = "<< Result <<std::endl;
+    outputStream << "Flusser("<<Number<<") = "<< Result <<std::endl;
   }
 
+  outputStream.close();
 
 
   return EXIT_SUCCESS;

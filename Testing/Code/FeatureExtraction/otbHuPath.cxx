@@ -20,6 +20,10 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+
 #include "otbHuPathFunction.h"
 #include "itkPolyLineParametricPath.h"
 #include "itkExceptionObject.h"
@@ -28,12 +32,13 @@ int otbHuPath( int argc, char * argv[] )
 {
   unsigned int              Number;
   const   unsigned int      Dimension = 2;
+  const char * outputFilename  = argv[1];
   typedef itk::PolyLineParametricPath< Dimension >     PathType;
   typedef otb::HuPathFunction<PathType>                FunctionType;
   typedef FunctionType::RealType                       RealType;
 
 
-  // Dessiner un carré:
+  // Dessiner un carre:
   PathType::ContinuousIndexType cindex;
   PathType::Pointer pathElt = PathType::New();
 
@@ -57,13 +62,17 @@ int otbHuPath( int argc, char * argv[] )
   RealType Result;
   function->SetInputPath( pathElt );
 
+  std::ofstream outputStream(outputFilename);
+  outputStream << std::setprecision(10) << "Hu Path moments: [8]"<<std::endl;
+
   for (Number = 1 ;Number<8;Number++)
   {
     //OTB-FA-00024-CS
     function->SetMomentNumber(Number);
     Result = function->Evaluate();
-    std::cout << "Hu("<<Number<<") = "<< Result <<std::endl;
+    outputStream << "Hu("<<Number<<") = "<< Result <<std::endl;
   }
+  outputStream.close();
 
   return EXIT_SUCCESS;
 }
