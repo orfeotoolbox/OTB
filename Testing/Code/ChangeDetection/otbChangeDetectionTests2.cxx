@@ -26,4 +26,10 @@
 
 void RegisterTests()
 {
+  REGISTER_TEST(otbKullbackLeiblerDistanceImageFilterNew);
+  REGISTER_TEST(otbKullbackLeiblerDistanceImageFilter);
+  REGISTER_TEST(otbKullbackLeiblerProfileImageFilterNew);
+  REGISTER_TEST(otbKullbackLeiblerProfileImageFilter);
+  REGISTER_TEST(otbKullbackLeiblerSupervizedDistanceImageFilterNew);
+  REGISTER_TEST(otbKullbackLeiblerSupervizedDistanceImageFilter);
 }
