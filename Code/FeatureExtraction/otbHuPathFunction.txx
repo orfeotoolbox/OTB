@@ -63,7 +63,6 @@ HuPathFunction<TInputPath, TOutput, TPrecision  >
 
   typename FunctionType::Pointer function =FunctionType::New();
 
-  function->SetStep( this->GetStep() );
   function->SetInputPath( this->GetInputPath() );
 
   switch (m_MomentNumber)

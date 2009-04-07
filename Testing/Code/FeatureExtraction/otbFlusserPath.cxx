@@ -52,7 +52,6 @@ int otbFlusserPath( int argc, char * argv[] )
   pathElt->AddVertex(cindex);
 
   FunctionType::Pointer function =FunctionType::New();
-  function->SetStep(2.0);
   //OTB-FA-00022-CS
   function->SetInputPath( pathElt );
 
