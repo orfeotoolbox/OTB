@@ -90,45 +90,80 @@ TOutput,TPrecision>::OutputType
 ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
 ::Evaluate(const PathType& path) const
 {
-  PathConstPointer                    Path;
-  VertexListPointer                   vertexList;
-  VertexType                          cindex;
-  VertexType                          IndexOut;
-  int                                 nbPath;
-  ComplexType                   Value;
-
-  Value = static_cast<ComplexType>(0.0);
-
-  vertexList = path.GetVertexList();
-  nbPath = vertexList->Size();
-
-  if (nbPath >1)
-  {
-    for (int i =0; i<nbPath-1;i++)
+  // Retrieve the vertex list
+  VertexListPointer vertexList =  path.GetVertexList();
+  // Get the number of vertices in the path
+  unsigned int pathSize        = vertexList->Size();
+  
+  // value will store the result
+  ComplexType value = static_cast<ComplexType>(0.0);
+ 
+  // Check if we there are enough vertices in the path to actually
+  // compute something
+  if(pathSize < 2)
     {
-      cindex = vertexList->GetElement(i);
-      PrecisionType x1 = cindex[0];
-      PrecisionType y1 = cindex[1];
-      cindex = vertexList->GetElement(i+1);
-      PrecisionType x2 = cindex[0];
-      PrecisionType y2 = cindex[1];
+    return value;
+    }
+  
+  // First, we compute the centroid of the path so as to center the moment
+  typename VertexListType::ConstIterator it = vertexList->Begin();
+  VertexType centroid = it.Value();
+  ++it;
 
-      PrecisionType Theta;
-      PrecisionType Norm;
+  // Cumulate points
+  while(it!=vertexList->End())
+    {
+    centroid[0]+=it.Value()[0];
+    centroid[1]+=it.Value()[1];
+    ++it;
+    }
+  
+  // Normalize
+  centroid[0]/=static_cast<PrecisionType>(pathSize);
+  centroid[1]/=static_cast<PrecisionType>(pathSize);
 
-      Theta = vcl_atan2(y2-y1,x2-x1);
-      Norm  = vcl_sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) );
+  // Second, we integrate along the edge
+  it = vertexList->Begin();
 
-      for (RealType k = 0; k <=Norm; k+=m_Step)
-      {
-        IndexOut[0] = x1 + k * vcl_cos(Theta);
-        IndexOut[1] = y1 + k * vcl_sin(Theta);
+  VertexType source = it.Value();
+  source[0]-= centroid[0];
+  source[1]-= centroid[1];
+  ++it;
 
-        Value += EvaluateComplexMomentAtIndex(IndexOut );
-      }
-    } // FOR loop
-  } // IF loop
-  return (static_cast<OutputType>(Value) );
+  PrecisionType ds;
+  VertexType dest;
+
+  // This variable will be used to normalize the moment 
+  PrecisionType norm = 0.;
+
+  while(it!=vertexList->End())
+    {
+    dest = it.Value();
+    
+    // Get source and destination coordinates
+    dest[0]  -= centroid[0];
+    dest[1]  -= centroid[1];
+  
+    // Don't forget the ds part of the integration process
+    ds = vcl_sqrt(vcl_pow(dest[0]-source[0],2.)+vcl_pow(dest[1]-source[1],2.)); 
+    norm+=ds;
+    value += EvaluateComplexMomentAtIndex(source)*ds;
+    source=dest;
+    ++it;
+    }
+  // Close the loop
+  dest = vertexList->Begin().Value();  
+  dest[0]  -= centroid[0];
+  dest[1]  -= centroid[1];
+  ds = vcl_sqrt(vcl_pow(dest[0]-source[0],2.)+vcl_pow(dest[1]-source[1],2.)); 
+  norm+=ds;
+  value += EvaluateComplexMomentAtIndex(source)*ds;
+  norm = vcl_pow(norm,((double)m_P+(double)m_Q)/2.);
+
+  // Normalize with edge perimeter
+  value/=norm;
+  
+  return static_cast<OutputType>(value);
 
 }
 
