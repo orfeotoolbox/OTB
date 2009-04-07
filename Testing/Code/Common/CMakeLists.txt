@@ -651,7 +651,21 @@ ADD_TEST(coTvImageRegionTileMapSplitter ${COMMON_TESTS8}
     ${TEMP}/coImageRegionTileMapSplitter.txt
 )
 
+# -------------  otb::ImageOfVectorsToMonoChannelExtractROI ----------------------------
+ADD_TEST(coTuImageOfVectorsToMonoChannelExtractROINew ${COMMON_TESTS8}
+otbImageOfVectorsToMonoChannelExtractROINew
+)
 
+ADD_TEST(coTvImageOfVectorsToMonoChannelExtractROI ${COMMON_TESTS8}
+  --compare-image ${TOL}   ${BASELINE}/coImageOfVectorsToMonoChannelExtractROI.png
+                           ${TEMP}/coImageOfVectorsToMonoChannelExtractROI.png
+        otbImageOfVectorsToMonoChannelExtractROI
+        ${INPUTDATA}/couleurs_extrait.png
+        300 10  # Start X Y
+        250 50  # Size X Y
+        1       # Channel
+        ${TEMP}/coImageOfVectorsToMonoChannelExtractROI.png
+)
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
@@ -749,6 +763,8 @@ otbQuickLookImageGeneratorNew.cxx
 otbQuickLookImageGenerator.cxx
 otbImageRegionTileMapSplitterNew.cxx
 otbImageRegionTileMapSplitter.cxx
+otbImageOfVectorsToMonoChannelExtractROINew.cxx
+otbImageOfVectorsToMonoChannelExtractROI.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
