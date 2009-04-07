@@ -37,7 +37,6 @@ ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
 {
   m_P    = 0;
   m_Q    = 0;
-  m_Step = 1.0;
 }
 
 /**
@@ -55,7 +54,7 @@ ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
 
 
 template < class TInputPath, class TOutput, class TPrecision>
-typename ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>::ComplexType
+typename ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>::ComplexPrecisionType
 ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
 ::EvaluateComplexMomentAtIndex(VertexType index) const
 {
@@ -80,7 +79,7 @@ ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
   }
 
   Result = ValP * ValQ * ComplexPrecisionType( static_cast<PrecisionType>(PixelValue), 0.0);
-  return ( static_cast<ComplexType>(Result) );
+  return Result;
 }
 
 
@@ -96,13 +95,13 @@ ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
   unsigned int pathSize        = vertexList->Size();
   
   // value will store the result
-  ComplexType value = static_cast<ComplexType>(0.0);
+  ComplexPrecisionType value = static_cast<ComplexPrecisionType>(0.0);
  
   // Check if we there are enough vertices in the path to actually
   // compute something
   if(pathSize < 2)
     {
-    return value;
+    return static_cast<OutputType>(value);
     }
   
   // First, we compute the centroid of the path so as to center the moment
@@ -147,7 +146,7 @@ ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
     // Don't forget the ds part of the integration process
     ds = vcl_sqrt(vcl_pow(dest[0]-source[0],2.)+vcl_pow(dest[1]-source[1],2.)); 
     norm+=ds;
-    value += EvaluateComplexMomentAtIndex(source)*ds;
+    value += ds * EvaluateComplexMomentAtIndex(source);
     source=dest;
     ++it;
     }
@@ -158,7 +157,7 @@ ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
   ds = vcl_sqrt(vcl_pow(dest[0]-source[0],2.)+vcl_pow(dest[1]-source[1],2.)); 
   norm+=ds;
   value += EvaluateComplexMomentAtIndex(source)*ds;
-  norm = vcl_pow(norm,((double)m_P+(double)m_Q)/2.);
+  norm = vcl_pow(norm,((PrecisionType)m_P+(PrecisionType)m_Q)/2.);
 
   // Normalize with edge perimeter
   value/=norm;

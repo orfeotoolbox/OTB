@@ -61,15 +61,9 @@ public:
   /** OutputType typedef support. */
   typedef typename Superclass::OutputType               RealType;
 
-
-  itkSetMacro(Step, float);
-  itkGetConstReferenceMacro(Step, float);
-
 protected:
   RealMomentPathFunction()
-  {
-    m_Step = 1.0;
-  }
+  {}
   ~RealMomentPathFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
@@ -79,9 +73,6 @@ protected:
 private:
   RealMomentPathFunction( const Self& ); //purposely not implemented
   void operator=( const Self& );               //purposely not implemented
-
-  float        m_Step;
-
 };
 
 } // namespace otb
