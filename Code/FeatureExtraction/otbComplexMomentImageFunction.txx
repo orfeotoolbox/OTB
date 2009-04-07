@@ -62,6 +62,7 @@ ComplexMomentImageFunction<TInput,TOutput,TPrecision,TCoordRep>
   ComplexPrecisionType                Sum;
   ComplexPrecisionType                ValP;
   ComplexPrecisionType                ValQ;
+  PrecisionType                       Norm;
   IndexType                           IndexValue;
   IndexType                           indexPos = index;
   typename TInput::SizeType           kernelSize;
@@ -94,6 +95,7 @@ ComplexMomentImageFunction<TInput,TOutput,TPrecision,TCoordRep>
   // Set the iterator at the desired location
   it.SetLocation(indexPos);
   Sum = ComplexPrecisionType(0.0,0.0);
+  Norm = 0;
 
   const unsigned int size = it.Size();
   for (unsigned int i = 0; i < size; ++i)
@@ -104,23 +106,23 @@ ComplexMomentImageFunction<TInput,TOutput,TPrecision,TCoordRep>
     unsigned int p  = m_P;
     while (p>0)
     {
-      ValP *= ComplexPrecisionType(IndexValue[0], IndexValue[1]);
+      ValP *= ComplexPrecisionType(IndexValue[0]-indexPos[0], IndexValue[1]-indexPos[1]);
       --p;
     }
     unsigned int q  = m_Q;
     while (q>0)
     {
-      ValQ *= ComplexPrecisionType(IndexValue[0], -IndexValue[1]);
+      ValQ *= ComplexPrecisionType(IndexValue[0]-indexPos[0], -IndexValue[1]-indexPos[1]);
       --q;
     }
 
     Sum += ( ValP * ValQ * ComplexPrecisionType(static_cast<PrecisionType>(it.GetPixel(i)),0.0) );
-
+    Norm+=it.GetPixel(i);
   }
 
-  return (static_cast<ComplexType>(Sum) );
+  Norm = vcl_pow(Norm,((PrecisionType)m_P+(PrecisionType)m_Q)/2.);
 
-
+  return (static_cast<ComplexType>(Sum/Norm));
 }
 
 

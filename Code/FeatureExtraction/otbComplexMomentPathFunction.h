@@ -26,17 +26,17 @@ namespace otb
 
 /**
  * \class ComplexMomentPathFunction
- * \brief Calculate the complex moment value over a path list.
+ * \brief Calculate the complex moment value over a path.
  *
  * The implemented equation is:
  *
- *  \f[  c_{p,q}=\int\int_{D} (x+iy)^{p} \cdot (x-iy)^{q} \cdot f(x,y) \cdot
+ *  \f[  c_{p,q}=\int\int_{D} (x+iy)^{p} \cdot (x-iy)^{q} \cdot
  dx \cdot dy \f]
  *
  * With:
  *
  *   - \f$ (x,y) \f$ pixel localization;
- *   - \f$ f(x,y) \f$  the pixel value over the \f$(x,y) \f$ coordinate.
+ *   - \f$ D \f$ the contour domain.
  *
  * This class is templated over :
  *   - the input image type
@@ -95,8 +95,6 @@ public:
   itkGetConstReferenceMacro(P, unsigned int);
   itkSetMacro(Q, unsigned int);
   itkGetConstReferenceMacro(Q, unsigned int);
-  itkSetMacro(Step, RealType);
-  itkGetConstReferenceMacro(Step, RealType);
 
 protected:
   ComplexMomentPathFunction();
@@ -106,12 +104,10 @@ protected:
 private:
   ComplexMomentPathFunction( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
-  ComplexType EvaluateComplexMomentAtIndex(VertexType index) const;
+  ComplexPrecisionType EvaluateComplexMomentAtIndex(VertexType index) const;
 
   unsigned int    m_P;
   unsigned int    m_Q;
-  RealType        m_Step;
-
 };
 
 } // namespace otb
