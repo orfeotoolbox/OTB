@@ -26,6 +26,9 @@
 #include <vector>
 #include "otbMetaDataKey.h"
 
+// OGR Headers files
+#include "ogrsf_frmts.h"
+
 namespace otb
 {
   class /*ITK_EXPORT*/ TestHelper
@@ -36,6 +39,7 @@ namespace otb
 
       std::map<std::string,int> RegressionTestbaselines (char *baselineFilename) const;
       int RegressionTestImage (int, const char *, const char *, int, const double) const;
+      int RegressionTestOgrFile (const char *, const char *, int, const double) const;
       int RegressionTestBinaryFile(const char *, const char *, int) const;
       int RegressionTestAsciiFile(const char *, const char *, int, const double, std::vector<std::string> ignoredLines) const;
       int RegressionTestMetaData(const char *, const char *,int,const double) const;
@@ -49,6 +53,13 @@ namespace otb
       bool isScientificNumeric(std::string str) const;
       bool isHexaPointerAddress(std::string str) const;
       std::string VectorToString(otb::MetaDataKey::VectorType vector) const;
+
+      void ogrReportOnLayer( OGRLayer *, const char *, OGRGeometry * ) const;
+      void ogrReportOnLayer( 
+        OGRLayer * ref_poLayer,   const char *ref_pszWHERE,   OGRGeometry *ref_poSpatialFilter,
+        OGRLayer * test_poLayer,  const char *test_pszWHERE,  OGRGeometry *test_poSpatialFilter,
+                           int & nbdiff, int bVerbose ) const;
+
 
   };
 }
