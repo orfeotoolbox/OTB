@@ -364,15 +364,9 @@ ADD_TEST(prTuVectorDataProjectionFilterNew ${PROJECTIONS_TESTS3}  otbVectorDataP
 
 #test points
 ADD_TEST(prTvVectorDataProjectionFilterPoints ${PROJECTIONS_TESTS3}
-        --compare-n-binary 4
-        ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.shp
-        ${TEMP}/prTvVectorDataProjectionFilterPoints.shp
-        ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.shx
-        ${TEMP}/prTvVectorDataProjectionFilterPoints.shx
-        ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.dbf
-        ${TEMP}/prTvVectorDataProjectionFilterPoints.dbf
-        ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.prj
-        ${TEMP}/prTvVectorDataProjectionFilterPoints.prj
+        --compare-ogr ${TOL}
+            ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.shp
+            ${TEMP}/prTvVectorDataProjectionFilterPoints.shp
         otbVectorDataProjectionFilter
         ${INPUTDATA}/ToulousePoints-examples.shp
         ${TEMP}/prTvVectorDataProjectionFilterPoints.shp
@@ -380,15 +374,9 @@ ADD_TEST(prTvVectorDataProjectionFilterPoints ${PROJECTIONS_TESTS3}
 
 #test lines
 ADD_TEST(prTvVectorDataProjectionFilterLines ${PROJECTIONS_TESTS3}
-        --compare-n-binary 4
-        ${BASELINE_FILES}/prTvVectorDataProjectionFilterLines.shp
-        ${TEMP}/prTvVectorDataProjectionFilterLines.shp
-        ${BASELINE_FILES}/prTvVectorDataProjectionFilterLines.shx
-        ${TEMP}/prTvVectorDataProjectionFilterLines.shx
-        ${BASELINE_FILES}/prTvVectorDataProjectionFilterLines.dbf
-        ${TEMP}/prTvVectorDataProjectionFilterLines.dbf
-        ${BASELINE_FILES}/prTvVectorDataProjectionFilterLines.prj
-        ${TEMP}/prTvVectorDataProjectionFilterLines.prj
+        --compare-ogr ${TOL}
+            ${BASELINE_FILES}/prTvVectorDataProjectionFilterLines.shp
+            ${TEMP}/prTvVectorDataProjectionFilterLines.shp
         otbVectorDataProjectionFilter
         ${INPUTDATA}/ToulouseRoad-examples.shp
         ${TEMP}/prTvVectorDataProjectionFilterLines.shp
@@ -396,15 +384,9 @@ ADD_TEST(prTvVectorDataProjectionFilterLines ${PROJECTIONS_TESTS3}
 
 # test polygons
 ADD_TEST(prTvVectorDataProjectionFilterPolygons ${PROJECTIONS_TESTS3}
-        --compare-n-binary 4
-        ${BASELINE_FILES}/prTvVectorDataProjectionFilterPolygons.shp
-        ${TEMP}/prTvVectorDataProjectionFilterPolygons.shp
-        ${BASELINE_FILES}/prTvVectorDataProjectionFilterPolygons.shx
-        ${TEMP}/prTvVectorDataProjectionFilterPolygons.shx
-        ${BASELINE_FILES}/prTvVectorDataProjectionFilterPolygons.dbf
-        ${TEMP}/prTvVectorDataProjectionFilterPolygons.dbf
-        ${BASELINE_FILES}/prTvVectorDataProjectionFilterPolygons.prj
-        ${TEMP}/prTvVectorDataProjectionFilterPolygons.prj
+        --compare-ogr  ${TOL}
+            ${BASELINE_FILES}/prTvVectorDataProjectionFilterPolygons.shp
+            ${TEMP}/prTvVectorDataProjectionFilterPolygons.shp
         otbVectorDataProjectionFilter
         ${INPUTDATA}/Capitole-Shadows.shp
         ${TEMP}/prTvVectorDataProjectionFilterPolygons.shp
@@ -415,13 +397,9 @@ ADD_TEST(prTvVectorDataProjectionFilterPolygons ${PROJECTIONS_TESTS3}
 # NB: no prj file here as it is in sensor geometry
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(prTvVectorDataProjectionFilterFromMapToSensor ${PROJECTIONS_TESTS3}
-        --compare-n-binary 3
-        ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
-        ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
-        ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shx
-        ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shx
-        ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.dbf
-        ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.dbf
+        --compare-ogr  ${TOL}
+            ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
+            ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
         otbVectorDataProjectionFilterFromMapToSensor
         ${INPUTDATA}/ToulousePoints-examples.shp
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF

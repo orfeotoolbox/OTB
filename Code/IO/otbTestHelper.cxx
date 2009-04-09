@@ -944,7 +944,7 @@ namespace otb
     std::string strTestName(test_poDS->GetName());
     if( strRefName != strTestName)
     {
-        otbPrintDiff("WARNING: INFO: Internal data source name poDS->GetName() were different",strRefName,strTestName);
+        if(!bVerbose) otbPrintDiff("WARNING: INFO: Internal data source name poDS->GetName() were different",strRefName,strTestName);
     } 
 
 /* -------------------------------------------------------------------- */

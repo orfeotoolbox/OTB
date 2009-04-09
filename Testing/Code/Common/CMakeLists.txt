@@ -133,8 +133,8 @@ ADD_TEST(coTuVectorDataExtractROINew ${COMMON_TESTS2}
 	otbVectorDataExtractROINew)
 
 ADD_TEST(coTvVectorDataExtractROI ${COMMON_TESTS2}
-  --compare-binary
-              ${BASELINE}/coVectorDataExtractROIOutput.shp
+  --compare-ogr ${TOL}
+              ${BASELINE_FILES}/coVectorDataExtractROIOutput.shp
               ${TEMP}/coVectorDataExtractROIOutput.shp
 	 otbVectorDataExtractROI
 	${INPUTDATA}/ToulousePoints-examples.shp   #${LARGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
