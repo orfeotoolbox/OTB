@@ -667,6 +667,23 @@ ADD_TEST(coTvImageOfVectorsToMonoChannelExtractROI ${COMMON_TESTS8}
         ${TEMP}/coImageOfVectorsToMonoChannelExtractROI.png
 )
 
+# -------------  otb::ImageRegionNonUniformMultidimensionalSplitter ----------------------------
+ADD_TEST(coTuImageRegionNonUniformMultidimensionalSplitterNew ${COMMON_TESTS8}
+otbImageRegionNonUniformMultidimensionalSplitterNew
+)
+
+ADD_TEST(coTvImageRegionNonUniformMultidimensionalSplitter ${COMMON_TESTS8}
+    --compare-ascii ${TOL}
+        ${BASELINE_FILES}/coImageRegionNonUniformMultidimensionalSplitter.txt
+                ${TEMP}/coImageRegionNonUniformMultidimensionalSplitter.txt
+    otbImageRegionNonUniformMultidimensionalSplitter
+    45 45      # Index
+    1000 1500  # Size
+    10         # Nb split
+    2          # Number of slipt
+    ${TEMP}/coImageRegionNonUniformMultidimensionalSplitter.txt
+)
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
 otbSystemTest.cxx
@@ -765,6 +782,8 @@ otbImageRegionTileMapSplitterNew.cxx
 otbImageRegionTileMapSplitter.cxx
 otbImageOfVectorsToMonoChannelExtractROINew.cxx
 otbImageOfVectorsToMonoChannelExtractROI.cxx
+otbImageRegionNonUniformMultidimensionalSplitterNew.cxx
+otbImageRegionNonUniformMultidimensionalSplitter.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

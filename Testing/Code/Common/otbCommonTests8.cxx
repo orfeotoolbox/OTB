@@ -32,4 +32,6 @@ REGISTER_TEST(otbImageRegionTileMapSplitterNew);
 REGISTER_TEST(otbImageRegionTileMapSplitter);
 REGISTER_TEST(otbImageOfVectorsToMonoChannelExtractROINew);
 REGISTER_TEST(otbImageOfVectorsToMonoChannelExtractROI);
+REGISTER_TEST(otbImageRegionNonUniformMultidimensionalSplitterNew);
+REGISTER_TEST(otbImageRegionNonUniformMultidimensionalSplitter);
 }
