@@ -278,7 +278,7 @@ IF(OTB_USE_VISU_GUI)
                 #----------------------------------------------------------------
                 # RESUME Alls VISU GUI libraries use by OTB in a single VARIABLE
                 SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES} ")
-		SET(FLTK_FLUID_EXECUTABLE ${OTB_BINARY_DIR}/bin/fluid)
+                SET(FLTK_FLUID_EXECUTABLE ${FLUID_COMMAND})
 
         ENDIF(OTB_USE_EXTERNAL_FLTK)
 
