@@ -117,7 +117,15 @@ ADD_TEST(cdTuKullbackLeiblerSupervizedDistanceImageFilterNew ${CHANGEDETECTION_T
          otbKullbackLeiblerSupervizedDistanceImageFilterNew)
 
 ADD_TEST(cdTvKullbackLeiblerSupervizedDistanceImageFilter ${CHANGEDETECTION_TESTS2}
-         otbKullbackLeiblerSupervizedDistanceImageFilter)
+         --compare-image ${TOL}
+             ${BASELINE}/cdTVKullbackLeiblerSupervizedDistanceImageFilterOutput.png 
+			 ${TEMP}/cdTVKullbackLeiblerSupervizedDistanceImageFilterOutput.png
+         otbKullbackLeiblerSupervizedDistanceImageFilter
+             ${INPUTDATA}/ERSBefore.png
+             ${INPUTDATA}/ERSAfter.png
+             ${INPUTDATA}/ERS_ROI.png
+             35
+             ${TEMP}/cdTVKullbackLeiblerSupervizedDistanceImageFilterOutput.png)
 
 
 # -------       Fichiers sources CXX -----------------------------------

@@ -19,15 +19,13 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "itkRescaleIntensityImageFilter.h"
 #include "otbKullbackLeiblerSupervizedDistanceImageFilter.h"
 #include "otbCommandProgressUpdate.h"
 
 int otbKullbackLeiblerSupervizedDistanceImageFilter(int argc, char * argv[])
 {
     const unsigned int Dimension = 2;
-
-    std::cout << "En attente des explications de Gregoire, pour définir l'image de Training !!!";
-    return EXIT_FAILURE;
 
     typedef double InputPixelType;
     typedef unsigned char TrainingPixelType;
@@ -85,10 +83,19 @@ int otbKullbackLeiblerSupervizedDistanceImageFilter(int argc, char * argv[])
     CommandType::Pointer observer = CommandType::New();
     changeDetector->AddObserver( itk::ProgressEvent(), observer );
 
-    typedef otb::ImageFileWriter< ImageType > WriterType;
+    typedef unsigned char OutputPixelType;
+    typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
+    typedef itk::RescaleIntensityImageFilter< ImageType, OutputImageType >    
+      RescalerType;
+    RescalerType::Pointer rescaler = RescalerType::New();
+    rescaler->SetOutputMinimum(0);
+    rescaler->SetOutputMaximum(255);
+    rescaler->SetInput( changeDetector->GetOutput() );
+
+    typedef otb::ImageFileWriter< OutputImageType > WriterType;
     WriterType::Pointer writer = WriterType::New();
     writer->SetFileName( outputImageFileName );
-    writer->SetInput( changeDetector->GetOutput() );
+    writer->SetInput( rescaler->GetOutput() );
 
     writer->Update();
 
