@@ -18,6 +18,8 @@
 #ifndef __itkBinaryImageToLabelMapFilter_h
 #define __itkBinaryImageToLabelMapFilter_h
 
+#include "itkLabelMap.h"
+#include "itkLabelObject.h"
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
 #include "itkConceptChecking.h"

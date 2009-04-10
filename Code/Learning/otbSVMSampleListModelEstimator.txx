@@ -26,8 +26,8 @@
 namespace otb
 {
 template<class TInputSampleList,
-class TTrainingSampleList>
-SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList>
+class TTrainingSampleList, class TMeasurementFunctor>
+SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementFunctor>
 ::SVMSampleListModelEstimator(void):  SVMModelEstimator<ITK_TYPENAME TInputSampleList::MeasurementType,
     ITK_TYPENAME TTrainingSampleList::MeasurementType>()
 
@@ -38,8 +38,8 @@ SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList>
 
 
 template<class TInputSampleList,
-class TTrainingSampleList>
-SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList>
+class TTrainingSampleList, class TMeasurementFunctor>
+SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementFunctor>
 ::~SVMSampleListModelEstimator(void)
 {
 }
@@ -48,9 +48,9 @@ SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList>
  * PrintSelf
  */
 template<class TInputSampleList,
-class TTrainingSampleList>
+class TTrainingSampleList, class TMeasurementFunctor>
 void
-SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList>
+SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementFunctor>
 ::PrintSelf( std::ostream& os, itk::Indent indent ) const
 {
   // FIXME : print useful SVM information
@@ -72,9 +72,9 @@ SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList>
 
 
 template<class TInputSampleList,
-class TTrainingSampleList>
+class TTrainingSampleList, class TMeasurementFunctor>
 void
-SVMSampleListModelEstimator<TInputSampleList,  TTrainingSampleList>
+SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementFunctor>
 ::BuildProblem()
 {
 
@@ -113,6 +113,8 @@ SVMSampleListModelEstimator<TInputSampleList,  TTrainingSampleList>
 
 //  otbMsgDebugMacro(  << " Before while " );
 
+  MeasurementFunctorType mfunctor;
+
   while (inIt!=inEnd && trIt!=trEnd)
   {
 
@@ -128,18 +130,9 @@ SVMSampleListModelEstimator<TInputSampleList,  TTrainingSampleList>
     typename TInputSampleList::MeasurementVectorType value =
       inIt.GetMeasurementVector();
 
-    typename Superclass::MeasurementVectorType v;
+ 
 
-    typename TInputSampleList::MeasurementVectorType::ConstIterator pIt = value.Begin();
-    typename TInputSampleList::MeasurementVectorType::ConstIterator pEnd = value.End();
-
-    while (pIt!=pEnd)
-    {
-      v.push_back(*pIt);
-      ++pIt;
-    }
-
-    this->m_Measures.push_back(v);
+    this->m_Measures.push_back(mfunctor(value));
 
     ++inIt;
     ++trIt;
