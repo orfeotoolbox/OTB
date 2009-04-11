@@ -15,21 +15,16 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "otbImageRegionNonUniformMultidimensionalSplitter.h"
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
-
-#include "otbTestMain.h"
-
-void RegisterTests()
+int otbImageRegionNonUniformMultidimensionalSplitterNew( int argc, char * argv[] )
 {
-  REGISTER_TEST(otbCBAMIChangeDetectionTest );
-  REGISTER_TEST(otbCorrelChangeDetectionTest );
-  REGISTER_TEST(otbMeanDiffChangeDetectionTest );
-  REGISTER_TEST(otbMeanRatioChangeDetectionTest );
-  REGISTER_TEST(otbLHMIChangeDetectionTest );
-  REGISTER_TEST(otbJHMIChangeDetectionTest );
+  const int Dimension = 2;
+  typedef otb::ImageRegionNonUniformMultidimensionalSplitter< Dimension >  FilterType;
+
+  FilterType::Pointer filter = FilterType::New();
+
+  return EXIT_SUCCESS;
 }
+
+

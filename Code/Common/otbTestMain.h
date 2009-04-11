@@ -56,13 +56,15 @@ void PrintAvailableTests()
 int main(int ac, char* av[] )
 {
   bool lFlagRegression(false);
-  double lToleranceDiffPixelImage(0);
+  double lToleranceDiffValue(0);
   double lEpsilon(0);
 
   std::vector<std::string> baselineFilenamesBinary;
   std::vector<std::string> testFilenamesBinary;
   std::vector<std::string> baselineFilenamesMetaData;
   std::vector<std::string> testFilenamesMetaData;
+  std::vector<std::string> baselineFilenamesOgr;
+  std::vector<std::string> testFilenamesOgr;
 
   std::vector<std::string> baselineFilenamesImage;
   std::vector<std::string> testFilenamesImage;
@@ -118,7 +120,7 @@ int main(int ac, char* av[] )
     if (strcmp(av[1], "--compare-image") == 0)
     {
       lFlagRegression = true;
-      lToleranceDiffPixelImage = (double)(::atof(av[2]));
+      lToleranceDiffValue = (double)(::atof(av[2]));
       baselineFilenamesImage.reserve(1);
       testFilenamesImage.reserve(1);
       baselineFilenamesImage.push_back(av[3]);
@@ -129,7 +131,7 @@ int main(int ac, char* av[] )
     else if (strcmp(av[1], "--compare-n-images") == 0)
     {
       lFlagRegression = true;
-      lToleranceDiffPixelImage = (double)(::atof(av[2]));
+      lToleranceDiffValue = (double)(::atof(av[2]));
       // Number of comparisons to do
       unsigned int nbComparisons=(unsigned int)(::atoi(av[3]));
       baselineFilenamesImage.reserve(nbComparisons);
@@ -221,11 +223,22 @@ int main(int ac, char* av[] )
     else if (strcmp(av[1], "--compare-metadata") == 0)
     {
       lFlagRegression = true;
-      lToleranceDiffPixelImage = (double)(::atof(av[2]));
+      lToleranceDiffValue = (double)(::atof(av[2]));
       baselineFilenamesMetaData.reserve(1);
       testFilenamesMetaData.reserve(1);
       baselineFilenamesMetaData.push_back(av[3]);
       testFilenamesMetaData.push_back(av[4]);
+      av += 4;
+      ac -= 4;
+    }
+    else if (strcmp(av[1], "--compare-ogr") == 0)
+    {
+      lFlagRegression = true;
+      lToleranceDiffValue = (double)(::atof(av[2]));
+      baselineFilenamesOgr.reserve(1);
+      testFilenamesOgr.reserve(1);
+      baselineFilenamesOgr.push_back(av[3]);
+      testFilenamesOgr.push_back(av[4]);
       av += 4;
       ac -= 4;
     }
@@ -313,7 +326,7 @@ int main(int ac, char* av[] )
                 baseline->second = testHelper.RegressionTestImage(cpt,testFilenameImage.c_str(),
                                                        (baseline->first).c_str(),
                                                        0,
-                                                       lToleranceDiffPixelImage);
+                                                       lToleranceDiffValue);
 
                 multiResult = baseline->second;
                 ++baseline;
@@ -325,7 +338,7 @@ int main(int ac, char* av[] )
                     = testHelper.RegressionTestImage(cpt,testFilenameImage.c_str(),
                                       (baseline->first).c_str(),
                                       1,
-                                      lToleranceDiffPixelImage);
+                                      lToleranceDiffValue);
               }
               cpt++;
               result += multiResult;
@@ -357,7 +370,7 @@ int main(int ac, char* av[] )
                 baseline->second = testHelper.RegressionTestMetaData(testFilenameImage.c_str(),
                                    (baseline->first).c_str(),
                                    0,
-                                   lToleranceDiffPixelImage);
+                                   lToleranceDiffValue);
 
                 multiResult = baseline->second;
                 ++baseline;
@@ -369,7 +382,7 @@ int main(int ac, char* av[] )
                     = testHelper.RegressionTestMetaData(testFilenameImage.c_str(),
                                          (baseline->first).c_str(),
                                          1,
-                                         lToleranceDiffPixelImage);
+                                         lToleranceDiffValue);
               }
               result += multiResult;
             }
@@ -467,6 +480,47 @@ int main(int ac, char* av[] )
                     = testHelper.RegressionTestBinaryFile(testFilenameBinary.c_str(),
                                            (baseline->first).c_str(),
                                            1);
+              }
+              result += multiResult;
+            }
+          }
+          // Non regression test for OGR files
+          if ((baselineFilenamesOgr.size()>0) && (testFilenamesOgr.size()>0))
+          {
+            // Creates iterators on baseline filenames vector and test filenames vector
+            std::vector<std::string>::iterator itbaselineFilenames = baselineFilenamesOgr.begin();
+            std::vector<std::string>::iterator itTestFilenames = testFilenamesOgr.begin();
+            // For each couple of baseline and test file, do the comparison
+            for (;(itbaselineFilenames != baselineFilenamesOgr.end())
+                 &&(itTestFilenames != testFilenamesOgr.end());
+                 ++itbaselineFilenames,++itTestFilenames)
+            {
+              std::string baselineFilenameOgr = (*itbaselineFilenames);
+              std::string testFilenameOgr = (*itTestFilenames);
+
+              std::map<std::string,int> baselines = testHelper.RegressionTestbaselines(const_cast<char*>(baselineFilenameOgr.c_str()));
+              std::map<std::string,int>::reverse_iterator baseline = baselines.rbegin();
+              multiResult = 1;
+              std::cout<<"Number of baseline OGR files: "<<baselines.size()<<std::endl;
+              while (baseline!=baselines.rend() && (multiResult!=0))
+              {
+                std::cout<<"Testing non-regression on OGR file: "<<(baseline->first).c_str()<<std::endl;
+                baseline->second = testHelper.RegressionTestOgrFile(testFilenameOgr.c_str(),
+                                    (baseline->first).c_str(),
+                                    0,
+                                    lToleranceDiffValue);
+
+                multiResult = baseline->second;
+                ++baseline;
+              }
+              if (multiResult != 0)
+              {
+                baseline = baselines.rbegin();
+                baseline->second
+                    = testHelper.RegressionTestOgrFile(testFilenameOgr.c_str(),
+                                            (baseline->first).c_str(),
+                                            1,
+                                            lToleranceDiffValue);
               }
               result += multiResult;
             }

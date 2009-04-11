@@ -15,24 +15,22 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
-
-#include "otbCAIImageIO.h"
 #include "itkExceptionObject.h"
-#include <iostream>
+#include "otbImage.h"
+#include "otbKullbackLeiblerSupervizedDistanceImageFilter.h"
 
-int otbCAIImageIOTestCanWrite(int argc, char* argv[])
+
+int otbKullbackLeiblerSupervizedDistanceImageFilterNew(int argc, char * argv[])
 {
-  otb::CAIImageIO::Pointer lCAIImageIO = otb::CAIImageIO::New();
-  bool lCanRead = lCAIImageIO->CanWriteFile(argv[1]);
-  if ( lCanRead == false)
-  {
-    std::cerr << "Erreur otb::CAIImageIO : impossible de creer l'image "<<argv[1]<<"."<<std::endl;
-    return EXIT_FAILURE;
-  }
+  const unsigned int Dimension = 2;
+  typedef double PixelType;
+  typedef unsigned char TrainingPixelType;
+
+  typedef otb::Image<PixelType,Dimension> ImageType;
+  typedef otb::Image< TrainingPixelType, Dimension > TrainingImageType;
+  typedef otb::KullbackLeiblerSupervizedDistanceImageFilter<ImageType,ImageType,TrainingImageType,ImageType> FilterType;
+
+  FilterType::Pointer filter = FilterType::New();
 
   return EXIT_SUCCESS;
 }

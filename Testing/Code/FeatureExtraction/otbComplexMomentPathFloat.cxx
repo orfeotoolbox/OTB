@@ -20,6 +20,9 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include <iostream>
+#include <iomanip>
+#include <fstream>
 #include "otbImageFileReader.h"
 #include "otbComplexMomentPathFunction.h"
 #include "itkExceptionObject.h"
@@ -29,6 +32,7 @@ int otbComplexMomentPathFloat( int argc, char * argv[] )
 {
   unsigned int  p((unsigned int)::atoi(argv[1]));
   unsigned int  q((unsigned int)::atoi(argv[2]));
+  const char * outputFilename  = argv[3];
 
   const   unsigned int      Dimension = 2;
 
@@ -37,7 +41,7 @@ int otbComplexMomentPathFloat( int argc, char * argv[] )
   typedef otb::ComplexMomentPathFunction< PathType,ComplexType >  CMType;
 
 
-  // Dessiner un carré:
+  // Dessiner un carrï¿½:
   PathType::ContinuousIndexType cindex;
   PathType::Pointer pathElt = PathType::New();
 
@@ -63,9 +67,11 @@ int otbComplexMomentPathFloat( int argc, char * argv[] )
 
   ComplexType Result;
 
+  std::ofstream outputStream(outputFilename);
   Result = function->Evaluate( *pathElt);
-  std::cout << "function->Evaluate(Path)"<< Result << std::endl;
+  outputStream << std::setprecision(10) << "function->Evaluate(Path)"<< Result << std::endl;
 
+  outputStream.close();
 
   return EXIT_SUCCESS;
 }

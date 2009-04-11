@@ -18,8 +18,9 @@ PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #ifndef __otbImageRegionTileMapSplitter_txx
 #define __otbImageRegionTileMapSplitter_txx
+
 #include "otbImageRegionTileMapSplitter.h"
-#include <math.h>
+#include "otbMath.h"
 
 namespace otb
 {
@@ -49,8 +50,8 @@ ImageRegionTileMapSplitter<VImageDimension>
 
   // determine the actual number of pieces that will be generated
   SizeValueType range = regionSize[splitAxis];
-  int valuesPerPiece = ((int)::ceil(range/((double)requestedNumber*256))) * 256;
-  int maxPieceUsed = (int)::ceil(range/(double)valuesPerPiece);
+  int valuesPerPiece = static_cast<int>(vcl_ceil(static_cast<double>(range/((double)requestedNumber*256)) ) ) * 256;
+  int maxPieceUsed = static_cast<int>(vcl_ceil(static_cast<double>(range/(double)valuesPerPiece)));
 
   return maxPieceUsed + 1;
 }
@@ -90,8 +91,8 @@ ImageRegionTileMapSplitter<VImageDimension>
 
   // determine the actual number of pieces that will be generated
   SizeValueType range = regionSize[splitAxis];
-  int valuesPerPiece = ((int)::ceil(range/((double)numberOfPieces*256))) * 256;
-  int maxPieceUsed = (int)::ceil(range/(double)valuesPerPiece);
+  int valuesPerPiece = static_cast<int>((int)vcl_ceil(static_cast<double>(range/((double)numberOfPieces*256)))) * 256;
+  int maxPieceUsed = static_cast<int>(vcl_ceil(static_cast<double>(range/(double)valuesPerPiece)));
 
   // Split the region
   if ((int) i == maxPieceUsed-1)
@@ -105,7 +106,7 @@ ImageRegionTileMapSplitter<VImageDimension>
   {
     //First piece may not contain a whole piece
     //splitIndex stay at splitRegion.GetIndex();
-    splitSize[splitAxis] = (((int)::floor(splitIndex[splitAxis]/valuesPerPiece))+1)
+    splitSize[splitAxis] = ((static_cast<int>(vcl_floor(static_cast<double>(splitIndex[splitAxis]/valuesPerPiece))))+1)
                            *valuesPerPiece - splitIndex[splitAxis];
   }
   if ((int) i < maxPieceUsed-1)

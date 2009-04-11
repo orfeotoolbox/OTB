@@ -133,8 +133,8 @@ ADD_TEST(coTuVectorDataExtractROINew ${COMMON_TESTS2}
 	otbVectorDataExtractROINew)
 
 ADD_TEST(coTvVectorDataExtractROI ${COMMON_TESTS2}
-  --compare-binary
-              ${BASELINE}/coVectorDataExtractROIOutput.shp
+  --compare-ogr ${TOL}
+              ${BASELINE_FILES}/coVectorDataExtractROIOutput.shp
               ${TEMP}/coVectorDataExtractROIOutput.shp
 	 otbVectorDataExtractROI
 	${INPUTDATA}/ToulousePoints-examples.shp   #${LARGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
@@ -616,17 +616,17 @@ ADD_TEST(ioTvRemoteSensingRegion ${COMMON_TESTS7}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -------------  otb::QuickLookImageGenerator ----------------------------
-ADD_TEST(coTvQuickLookImageGeneratorNew ${COMMON_TESTS8}
+ADD_TEST(coTuQuickLookImageGeneratorNew ${COMMON_TESTS8}
 otbQuickLookImageGeneratorNew
 )
 
-ADD_TEST(coTuQuickLookImageGenerator ${COMMON_TESTS8}
+ADD_TEST(coTvQuickLookImageGenerator ${COMMON_TESTS8}
      --compare-image ${TOL}
-	   	     ${BASELINE}/coTuQuickLookImageGenerator.tif
-                     ${TEMP}/coTuQuickLookImageGenerator.tif
+	   	     ${BASELINE}/coQuickLookImageGenerator.tif
+                     ${TEMP}/coQuickLookImageGenerator.tif
    otbQuickLookImageGenerator
         ${INPUTDATA}/qb_RoadExtract.img.hdr
-	${TEMP}/coTuQuickLookImageGenerator.tif
+	${TEMP}/coQuickLookImageGenerator.tif
 	10 # sr
 	2 # variance
 	0.5 # max error
@@ -634,7 +634,55 @@ ADD_TEST(coTuQuickLookImageGenerator ${COMMON_TESTS8}
 	1 # usespacing
 )
 
+# -------------  otb::ImageRegionTileMapSplitter ----------------------------
+ADD_TEST(coTuImageRegionTileMapSplitterNew ${COMMON_TESTS8}
+otbImageRegionTileMapSplitterNew
+)
 
+ADD_TEST(coTvImageRegionTileMapSplitter ${COMMON_TESTS8}
+    --compare-ascii ${TOL}
+        ${BASELINE_FILES}/coImageRegionTileMapSplitter.txt
+                ${TEMP}/coImageRegionTileMapSplitter.txt
+    otbImageRegionTileMapSplitter
+    45 45      # Index
+    1000 1500  # Size
+    10         # Nb split
+    2          # Number of slipt
+    ${TEMP}/coImageRegionTileMapSplitter.txt
+)
+
+# -------------  otb::ImageOfVectorsToMonoChannelExtractROI ----------------------------
+ADD_TEST(coTuImageOfVectorsToMonoChannelExtractROINew ${COMMON_TESTS8}
+otbImageOfVectorsToMonoChannelExtractROINew
+)
+
+ADD_TEST(coTvImageOfVectorsToMonoChannelExtractROI ${COMMON_TESTS8}
+  --compare-image ${TOL}   ${BASELINE}/coImageOfVectorsToMonoChannelExtractROI.png
+                           ${TEMP}/coImageOfVectorsToMonoChannelExtractROI.png
+        otbImageOfVectorsToMonoChannelExtractROI
+        ${INPUTDATA}/couleurs_extrait.png
+        300 10  # Start X Y
+        250 50  # Size X Y
+        1       # Channel
+        ${TEMP}/coImageOfVectorsToMonoChannelExtractROI.png
+)
+
+# -------------  otb::ImageRegionNonUniformMultidimensionalSplitter ----------------------------
+ADD_TEST(coTuImageRegionNonUniformMultidimensionalSplitterNew ${COMMON_TESTS8}
+otbImageRegionNonUniformMultidimensionalSplitterNew
+)
+
+ADD_TEST(coTvImageRegionNonUniformMultidimensionalSplitter ${COMMON_TESTS8}
+    --compare-ascii ${TOL}
+        ${BASELINE_FILES}/coImageRegionNonUniformMultidimensionalSplitter.txt
+                ${TEMP}/coImageRegionNonUniformMultidimensionalSplitter.txt
+    otbImageRegionNonUniformMultidimensionalSplitter
+    45 45      # Index
+    1000 1500  # Size
+    10         # Nb split
+    2          # Number of slipt
+    ${TEMP}/coImageRegionNonUniformMultidimensionalSplitter.txt
+)
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
@@ -730,6 +778,12 @@ otbRemoteSensingRegion.cxx
 SET(BasicCommon_SRCS8
 otbQuickLookImageGeneratorNew.cxx
 otbQuickLookImageGenerator.cxx
+otbImageRegionTileMapSplitterNew.cxx
+otbImageRegionTileMapSplitter.cxx
+otbImageOfVectorsToMonoChannelExtractROINew.cxx
+otbImageOfVectorsToMonoChannelExtractROI.cxx
+otbImageRegionNonUniformMultidimensionalSplitterNew.cxx
+otbImageRegionNonUniformMultidimensionalSplitter.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

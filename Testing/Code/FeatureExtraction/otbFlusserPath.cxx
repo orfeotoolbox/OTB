@@ -20,6 +20,9 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include <iostream>
+#include <iomanip>
+#include <fstream>
 #include "otbFlusserPathFunction.h"
 #include "itkPolyLineParametricPath.h"
 #include "itkExceptionObject.h"
@@ -28,11 +31,12 @@ int otbFlusserPath( int argc, char * argv[] )
 {
   unsigned int                                           Number;
   const   unsigned int                                   Dimension = 2;
+  const char * outputFilename  = argv[1];
   typedef itk::PolyLineParametricPath< Dimension >       PathType;
   typedef otb::FlusserPathFunction<PathType>             FunctionType;
   typedef FunctionType::RealType                         RealType;
 
-  // Dessiner un carré:
+  // Dessiner un carrï¿½:
   PathType::ContinuousIndexType cindex;
   PathType::Pointer pathElt = PathType::New();
 
@@ -52,9 +56,12 @@ int otbFlusserPath( int argc, char * argv[] )
   pathElt->AddVertex(cindex);
 
   FunctionType::Pointer function =FunctionType::New();
-  function->SetStep(2.0);
   //OTB-FA-00022-CS
   function->SetInputPath( pathElt );
+
+  std::ofstream outputStream(outputFilename);
+
+  outputStream << std::setprecision(10) << "Flusser Path moments: [12]"<<std::endl;
 
   RealType Result;
 
@@ -63,9 +70,10 @@ int otbFlusserPath( int argc, char * argv[] )
     //OTB-FA-00024-CS
     function->SetMomentNumber(Number);
     Result = function->Evaluate( );
-    std::cout << "Flusser("<<Number<<") = "<< Result <<std::endl;
+    outputStream << "Flusser("<<Number<<") = "<< Result <<std::endl;
   }
 
+  outputStream.close();
 
   return EXIT_SUCCESS;
 }

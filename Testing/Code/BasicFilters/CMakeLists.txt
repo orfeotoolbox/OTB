@@ -1451,7 +1451,7 @@ ADD_TEST(bfTvListSampleToHistogramListGenerator ${BASICFILTERS_TESTS11}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -------     otbEdgeDetectorImageFilter   ----------------------------
-ADD_TEST(bfTvEdgeDetectorImageFilterNew ${BASICFILTERS_TESTS12}
+ADD_TEST(bfTuEdgeDetectorImageFilterNew ${BASICFILTERS_TESTS12}
 	 otbEdgeDetectorImageFilterNew
 	 )
 
@@ -1466,6 +1466,23 @@ ADD_TEST(bfTvEdgeDetectorImageFilter ${BASICFILTERS_TESTS12}
 	 255 # upper  threshold
 )
 
+# -------     otbChangeLabelImageFilter   ----------------------------
+ADD_TEST(bfTuChangeLabelImageFilterNew ${BASICFILTERS_TESTS12}
+   otbChangeLabelImageFilterNew
+   )
+
+ADD_TEST(bfTvChangeLabelImageFilter ${BASICFILTERS_TESTS12}
+--compare-image ${TOL}
+      ${BASELINE}/bfChangeLabelImageFilter.tif
+      ${TEMP}/bfChangeLabelImageFilter.tif
+   otbChangeLabelImageFilter
+ ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+ #  ${INPUTDATA}/poupees_sub_c1.png
+  ${TEMP}/bfChangeLabelImageFilter.tif
+  255   # Mask value
+  100   # lower threshold
+  200   # upper  threshold
+)
 
 
 
@@ -1662,6 +1679,8 @@ otbListSampleToHistogramListGenerator.cxx
 SET(BasicFilters_SRCS12
 otbEdgeDetectorImageFilter.cxx
 otbEdgeDetectorImageFilterNew.cxx
+otbChangeLabelImageFilterNew.cxx
+otbChangeLabelImageFilter.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

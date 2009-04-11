@@ -41,7 +41,7 @@ ImageRegionNonUniformMultidimensionalSplitter<VImageDimension>
 //     ::ceil( vcl_pow((double) requestedNumber, 1.0/(double) VImageDimension));
 
   unsigned int numberOfPiecesLeft=requestedNumber;
-  unsigned int i, j, numPieces;
+  unsigned int j, numPieces;
   numPieces = 1;
 
   for (j=VImageDimension;j>0;--j)

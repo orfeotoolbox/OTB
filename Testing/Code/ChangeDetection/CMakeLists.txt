@@ -14,6 +14,10 @@ SET(EPSILON 0.0000000001)
 SET(CHANGEDETECTION_TESTS1 ${CXX_TEST_PATH}/otbChangeDetectionTests1)
 SET(CHANGEDETECTION_TESTS2 ${CXX_TEST_PATH}/otbChangeDetectionTests2)
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CHANGEDETECTION_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # -------            otb::CBAMI   ------------------------------
 
 ADD_TEST(cdTvCBAMI ${CHANGEDETECTION_TESTS1}  
@@ -78,10 +82,14 @@ ADD_TEST(cdTvJHMI ${CHANGEDETECTION_TESTS1}
 	 ${TEMP}/cdJHMIImage.png 
 	 )
 
-ADD_TEST(cdTuKullbackLeiblerDistanceImageFilterNew ${CHANGEDETECTION_TESTS1}
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CHANGEDETECTION_TESTS2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ADD_TEST(cdTuKullbackLeiblerDistanceImageFilterNew ${CHANGEDETECTION_TESTS2}
          otbKullbackLeiblerDistanceImageFilterNew)
 
-ADD_TEST(cdTvKullbackLeiblerDistanceImageFilter ${CHANGEDETECTION_TESTS1}
+ADD_TEST(cdTvKullbackLeiblerDistanceImageFilter ${CHANGEDETECTION_TESTS2}
          --compare-image ${EPSILON}
 			 ${BASELINE}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
 			 ${TEMP}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
@@ -91,10 +99,10 @@ ADD_TEST(cdTvKullbackLeiblerDistanceImageFilter ${CHANGEDETECTION_TESTS1}
 			${TEMP}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
 			35)
 
-ADD_TEST(cdTuKullbackLeiblerProfileImageFilterNew ${CHANGEDETECTION_TESTS1}
+ADD_TEST(cdTuKullbackLeiblerProfileImageFilterNew ${CHANGEDETECTION_TESTS2}
          otbKullbackLeiblerProfileImageFilterNew)
 
-ADD_TEST(cdTvKullbackLeiblerProfileImageFilter ${CHANGEDETECTION_TESTS1}
+ADD_TEST(cdTvKullbackLeiblerProfileImageFilter ${CHANGEDETECTION_TESTS2}
          --compare-image ${EPSILON}
 			 ${BASELINE}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
 			 ${TEMP}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
@@ -105,6 +113,21 @@ ADD_TEST(cdTvKullbackLeiblerProfileImageFilter ${CHANGEDETECTION_TESTS1}
 			5 51)
 
 
+ADD_TEST(cdTuKullbackLeiblerSupervizedDistanceImageFilterNew ${CHANGEDETECTION_TESTS2}
+         otbKullbackLeiblerSupervizedDistanceImageFilterNew)
+
+ADD_TEST(cdTvKullbackLeiblerSupervizedDistanceImageFilter ${CHANGEDETECTION_TESTS2}
+         --compare-image ${TOL}
+             ${BASELINE}/cdTVKullbackLeiblerSupervizedDistanceImageFilterOutput.png 
+			 ${TEMP}/cdTVKullbackLeiblerSupervizedDistanceImageFilterOutput.png
+         otbKullbackLeiblerSupervizedDistanceImageFilter
+             ${INPUTDATA}/ERSBefore.png
+             ${INPUTDATA}/ERSAfter.png
+             ${INPUTDATA}/ERS_ROI.png
+             35
+             ${TEMP}/cdTVKullbackLeiblerSupervizedDistanceImageFilterOutput.png)
+
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicChangeDetection_SRCS1
 otbCBAMIChangeDetectionTest.cxx
@@ -113,14 +136,16 @@ otbMeanDiffChangeDetectionTest.cxx
 otbMeanRatioChangeDetectionTest.cxx
 otbLHMIChangeDetectionTest.cxx
 otbJHMIChangeDetectionTest.cxx
-otbKullbackLeiblerDistanceImageFilterNew.cxx
-otbKullbackLeiblerDistanceImageFilter.cxx
-otbKullbackLeiblerProfileImageFilterNew.cxx
-otbKullbackLeiblerProfileImageFilter.cxx
 )
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicChangeDetection_SRCS2
+otbKullbackLeiblerDistanceImageFilterNew.cxx
+otbKullbackLeiblerDistanceImageFilter.cxx
+otbKullbackLeiblerProfileImageFilterNew.cxx
+otbKullbackLeiblerProfileImageFilter.cxx
+otbKullbackLeiblerSupervizedDistanceImageFilterNew.cxx
+otbKullbackLeiblerSupervizedDistanceImageFilter.cxx
 )
 
 

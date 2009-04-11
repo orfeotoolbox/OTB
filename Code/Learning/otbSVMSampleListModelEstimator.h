@@ -25,6 +25,63 @@
 
 namespace otb
 {
+namespace Functor
+{
+/** \class VectorToMeasurementVectorFunctor
+*   \brief Helper class to convert itk::Vector and itk::FixedArray samples to internal
+*   training vector type.
+*   \sa Vector
+*   \sa FixedArray
+*/
+template <class TVector>
+class VectorToMeasurementVectorFunctor
+{
+public:
+  typedef TVector             VectorType;
+  typedef std::vector<typename VectorType::ValueType> MeasurementVectorType;
+
+  inline MeasurementVectorType operator()(const VectorType & value) const
+  {
+    MeasurementVectorType output;
+
+    typename VectorType::ConstIterator pIt =  value.Begin();
+    typename VectorType::ConstIterator pEnd = value.End();
+
+    while (pIt!=pEnd)
+    {
+      output.push_back(*pIt);
+      ++pIt;
+    }
+    return output;
+  }
+};
+
+/** \class VariableLengthVectorToMeasurementVectorFunctor
+*   \brief Helper class to convert itk::VariableLengthVector samples to internal
+*   training vector type.
+*   \sa VariableLengthVector
+*/
+template <class TVector>
+class VariableLengthVectorToMeasurementVectorFunctor
+{
+public:
+  typedef TVector             VectorType;
+  typedef std::vector<typename VectorType::ValueType> MeasurementVectorType;
+
+  inline MeasurementVectorType operator()(const VectorType & value) const
+  {
+    MeasurementVectorType output;
+    
+    for(unsigned int i = 0; i < value.GetNumberOfElements(); ++i)
+      {
+      output.push_back(value.GetElement(i));
+      }
+   
+    return output;
+  }
+};
+
+}
 
 /** \class SVMSampleListModelEstimator
 
@@ -48,7 +105,7 @@ namespace otb
  * \ingroup ClassificationFilters
  */
 template <class TInputSampleList,
-class TTrainingSampleList>
+class TTrainingSampleList, class TMeasurementFunctor = Functor::VectorToMeasurementVectorFunctor<typename TInputSampleList::MeasurementVectorType > >
 class ITK_EXPORT SVMSampleListModelEstimator:
       public SVMModelEstimator<typename TInputSampleList::MeasurementType, typename TTrainingSampleList::MeasurementType>
 {
@@ -88,6 +145,9 @@ public:
   TInputSampleList::ConstIterator  InputSampleListIteratorType;
   typedef typename
   TTrainingSampleList::ConstIterator TrainingSampleListIteratorType;
+
+  /** Measurement functor typedef */
+  typedef TMeasurementFunctor MeasurementFunctorType;
 
   /** Set the input image. */
   itkSetObjectMacro(InputSampleList,TInputSampleList);

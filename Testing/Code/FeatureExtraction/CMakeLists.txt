@@ -58,32 +58,56 @@ ADD_TEST(feTvDrawPathTestAlign ${FEATUREEXTRACTION_TESTS1}
 	${INPUTDATA}/DeuxTraits.png
 	${TEMP}/feDrawPathAlignDeuxTraits.png)
 
-ADD_TEST(feTuComplexMomentImage ${FEATUREEXTRACTION_TESTS1}
+ADD_TEST(feTvComplexMomentImage ${FEATUREEXTRACTION_TESTS1}
+   --compare-ascii ${TOL}     ${BASELINE_FILES}/feComplexMomentImage.txt
+                        ${TEMP}/feComplexMomentImage.txt
         otbComplexMomentImage
-	${INPUTDATA}/TeteAToto.png 1 1)
+	${INPUTDATA}/TeteAToto.png 
+  1
+  1
+  ${TEMP}/feComplexMomentImage.txt)
 
-ADD_TEST(feTuHuImage ${FEATUREEXTRACTION_TESTS1}
+ADD_TEST(feTvHuImage ${FEATUREEXTRACTION_TESTS1}
+   --compare-ascii ${TOL}     ${BASELINE_FILES}/feHuImage.txt
+                        ${TEMP}/feHuImage.txt
         otbHuImage
-	${INPUTDATA}/TeteAToto.png)
+	${INPUTDATA}/TeteAToto.png
+  ${TEMP}/feHuImage.txt)
 
 ADD_TEST(feTuFlusserImage ${FEATUREEXTRACTION_TESTS1}
+   --compare-ascii ${TOL}     ${BASELINE_FILES}/feFlusserImage.txt
+                        ${TEMP}/feFlusserImage.txt
         otbFlusserImage
-	${INPUTDATA}/TeteAToto.png)
+	${INPUTDATA}/TeteAToto.png
+  ${TEMP}/feFlusserImage.txt)
 
 ADD_TEST(feTuComplexMomentPathNew ${FEATUREEXTRACTION_TESTS1}
         otbComplexMomentPathNew)
 
-ADD_TEST(feTuComplexMomentPath ${FEATUREEXTRACTION_TESTS1}
-        otbComplexMomentPath 1 1)
+ADD_TEST(feTvComplexMomentPath ${FEATUREEXTRACTION_TESTS1}
+   --compare-ascii ${TOL}     ${BASELINE_FILES}/feComplexMomentPath.txt
+                        ${TEMP}/feComplexMomentPath.txt
+        otbComplexMomentPath 
+  1
+  1
+  ${TEMP}/feComplexMomentPath.txt)
 
-ADD_TEST(feTuComplexMomentPathFloat ${FEATUREEXTRACTION_TESTS1}
-        otbComplexMomentPathFloat 1 1)
+ADD_TEST(feTvComplexMomentPathFloat ${FEATUREEXTRACTION_TESTS1}
+   --compare-ascii ${TOL}     ${BASELINE_FILES}/feComplexMomentPathFloat.txt
+                        ${TEMP}/feComplexMomentPathFloat.txt
+        otbComplexMomentPathFloat
+  1
+  1
+  ${TEMP}/feComplexMomentPathFloat.txt)
 
 ADD_TEST(feTuHuPathNew ${FEATUREEXTRACTION_TESTS1}
         otbHuPathNew)
 
-ADD_TEST(feTuHuPath ${FEATUREEXTRACTION_TESTS1}
-        otbHuPath)
+ADD_TEST(feTvHuPath ${FEATUREEXTRACTION_TESTS1}
+   --compare-ascii ${TOL}     ${BASELINE_FILES}/feHuPath.txt
+                        ${TEMP}/feHuPath.txt
+        otbHuPath
+  ${TEMP}/feHuPath.txt)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests2 ~~~~~~~~~~~~~~~~~~~~~
@@ -92,8 +116,12 @@ ADD_TEST(feTuHuPath ${FEATUREEXTRACTION_TESTS1}
 ADD_TEST(feTuFlusserPathNew ${FEATUREEXTRACTION_TESTS2}
         otbFlusserPathNew)
 
-ADD_TEST(feTuFlusserPath ${FEATUREEXTRACTION_TESTS2}
-        otbFlusserPath)
+ADD_TEST(feTvFlusserPath ${FEATUREEXTRACTION_TESTS2}
+   --compare-ascii ${TOL}     ${BASELINE_FILES}/feFlusserPath.txt
+                        ${TEMP}/feFlusserPath.txt
+        otbFlusserPath
+  ${TEMP}/feFlusserPath.txt)
+
 
 # -------            otb::OrientationPathFunction   ------------------------
 

@@ -20,6 +20,9 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include <iostream>
+#include <iomanip>
+#include <fstream>
 #include "itkExceptionObject.h"
 #include "itkImage.h"
 
@@ -31,6 +34,7 @@ int otbComplexMomentImage( int argc, char * argv[] )
   const char * inputFilename  = argv[1];
   unsigned int  p((unsigned int)::atoi(argv[2]));
   unsigned int  q((unsigned int)::atoi(argv[3]));
+  const char * outputFilename  = argv[4];
 
   typedef unsigned char                                   InputPixelType;
   const   unsigned int                                  Dimension = 2;
@@ -59,16 +63,18 @@ int otbComplexMomentImage( int argc, char * argv[] )
 
   ComplexType Result;
 
-  Result = function->EvaluateAtIndex( index );
-  std::cout << "function->EvaluateAtIndex( index ): " << Result << std::endl;
+  std::ofstream outputStream(outputFilename);
 
-  std::cout << " Traitement local:" << std::endl;
+  Result = function->EvaluateAtIndex( index );
+  outputStream << std::setprecision(10) << "function->EvaluateAtIndex( index ): " << Result << std::endl;
+
+  outputStream << " With NeighborhoodRadius(3):" << std::endl;
 
   function->SetNeighborhoodRadius(3);
   Result = function->EvaluateAtIndex( index );
-  std::cout << "function->EvaluateAtIndex( index ): " << Result << std::endl;
+  outputStream << "function->EvaluateAtIndex( index ): " << Result << std::endl;
 
-
+  outputStream.close();
 
   return EXIT_SUCCESS;
 }

@@ -15,25 +15,21 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "otbImageOfVectorsToMonoChannelExtractROI.h"
+#include "otbImage.h"
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
-
-#include "otbCAIImageIO.h"
-#include "itkExceptionObject.h"
-#include <iostream>
-
-int otbCAIImageIOTestCanRead(int argc, char* argv[])
+int otbImageOfVectorsToMonoChannelExtractROINew(int argc, char * argv[])
 {
-  otb::CAIImageIO::Pointer lCAIImageIO = otb::CAIImageIO::New();
-  bool lCanRead = lCAIImageIO->CanReadFile(argv[1]);
-  if ( lCanRead == false)
-  {
-    std::cerr << "Erreur otb::CAIImageIO : impossible d'ouvrir l'image "<<argv[1]<<"."<<std::endl;
-    return EXIT_FAILURE;
-  }
+  const int Dimension = 2;
+  typedef unsigned char ScalarPixelType;
+  typedef itk::Vector<double,Dimension>    VectorPixelType;
 
+  typedef otb::Image<ScalarPixelType,Dimension> ScalarImageType;
+  typedef otb::Image<VectorPixelType,Dimension> VectorImageType;
+  typedef otb::ImageOfVectorsToMonoChannelExtractROI<VectorImageType, ScalarImageType> FilterType;
+
+  // Instantiating object
+  FilterType::Pointer object = FilterType::New();
 
   return EXIT_SUCCESS;
 }
