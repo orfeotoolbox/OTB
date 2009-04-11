@@ -69,12 +69,10 @@ namespace otb {
  * TODO: At present version, there is not consideration on meta data information that can be transmited
  * from the input(s) to the output(s)...
  *
- * TODO: In the case of multiresolution decomposition, take care of the size of outputRegionForThread...
- *
  * \sa LowPassHaarOperator
  * \sa HighPassHaarOperator
- * \sa LowPass_9_7_Operator
- * \sa HighPass_9_7_Operator
+ * \sa LowPassSplineBiOrthogonalOperator
+ * \sa HighPassSplineBiOrthogonalOperator
  *
  * \ingroup Streamed
  */
@@ -150,7 +148,7 @@ public:
 
 protected:
   StationaryFilterBank();
-  virtual ~StationaryFilterBank() { }
+  virtual ~StationaryFilterBank();
 
   /** GenerateOutputInformation 
 	 * Set the size of the output image depending on the decimation factor
@@ -194,12 +192,14 @@ protected:
   virtual void ThreadedInverseGenerateData ( itk::ProgressReporter & reporter,
                                               const OutputImageRegionType& outputRegionForThread, int threadId );
 
-  unsigned int m_UpSampleFilterFactor;
-  unsigned int m_SubSampleImageFactor;
-
 private:
   StationaryFilterBank( const Self & );
   void operator=( const Self & );
+
+  unsigned int m_UpSampleFilterFactor;
+  unsigned int m_SubSampleImageFactor;
+
+  std::vector< InputImagePointerType > m_SubsampledInputImages;
 
 }; // end of class
   

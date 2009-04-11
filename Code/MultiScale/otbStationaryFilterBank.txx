@@ -24,6 +24,7 @@
 #include "otbStationaryFilterBank.h"
 
 #include "otbMacro.h"
+#include "otbSubsampledImageRegionConstIterator.h"
 
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkZeroFluxNeumannBoundaryCondition.h"
@@ -59,6 +60,11 @@ StationaryFilterBank< TInputImage, TOutputImage,
     {
       this->SetNumberOfRequiredOutputs(1);
       this->SetNumberOfInputs( 1 << InputImageType::ImageDimension );
+
+      m_SubsampledInputImages.resize( this->GetNumberOfInputs() );
+      for ( unsigned int i = 0; i < this->GetNumberOfInputs(); i++ )
+        m_SubsampledInputImages.push_back( InputImageType::New() );
+
       break;
     }
     default:
@@ -97,16 +103,16 @@ StationaryFilterBank< TInputImage, TOutputImage,
     {
       otbGenericMsgDebugMacro( << " down sampling output regions by a factor of " << GetSubSampleImageFactor() );
 
-      this->GetOutput()->CopyInformation( this->GetInput() );
-      this->GetOutput()->SetRegions( this->GetInput()->GetLargestPossibleRegion() );
+      this->GetOutput()->CopyInformation( this->GetInput(0) );
+      this->GetOutput()->SetRegions( this->GetInput(0)->GetLargestPossibleRegion() );
 
       if ( GetSubSampleImageFactor() > 1 )
       {
-        for ( unsigned int i = 0; i < ImageDimension; i++ )
-        {
-          this->GetOutput()->GetRegion().GetIndex()[i] /= GetSubSampleImageFactor();
-          this->GetOutput()->GetRegion().GetSize()[i] /= GetSubSampleImageFactor();
-        }
+        SubsampleImageRegionConstIterator< InputImageType > subsamplingIterator 
+          ( this->GetInput(0), this->GetInput(0)->GetLargestPossibleRegion() );
+        subsamplingIterator.SetSubsampleFactor( GetSubSampleImageFactor() );
+
+        this->GetOutput()->SetRegions( subsamplingIterator.GetNewRegion() );
       }
       break;
     }
@@ -129,9 +135,34 @@ StationaryFilterBank< TInputImage, TOutputImage,
 {
   if ( static_cast<int>( DirectionOfTransformation ) == INVERSE )
   {
-    otbGenericMsgDebugMacro(<<"Subsample inputs by a factor of " << GetSubSampleImageFactor() );
+    if ( GetSubSampleImageFactor() > 1 )
+    {
+      otbGenericMsgDebugMacro(<<"Subsample the " << this->GetNumberOfInputs() 
+        << " inputs by a factor of " << GetSubSampleImageFactor() );
+      
+      for ( unsigned int i = 0; i < this->GetNumberOfInputs(); i++ )
+      {
+        SubsampleImageRegionConstIterator< InputImageType > subsamplingIterator 
+          ( this->GetInput(i), this->GetInput(i)->GetLargestPossibleRegion() );
+        subsamplingIterator.SetSubsampleFactor( GetSubSampleImageFactor() );
+        subsamplingIterator.GoToBegin();
 
-    // Sub sample inputs
+        m_SubsampledInputImages[i]->SetRegions( subsamplingIterator.GetNewRegion() );
+        m_SubsampledInputImages[i]->Allocate();
+
+        itk::ImageRegionIterator< InputImageType > iter 
+          ( m_SubsampledInputImages[i], m_SubsampledInputImages[i]->GetLargestPossibleRegion() );
+        iter.GoToBegin();
+
+        while ( !subsamplingIterator.IsAtEnd() && !iter.IsAtEnd() )
+        {
+          iter.Set( subsamplingIterator.Get() );
+
+          ++iter;
+          ++subsamplingIterator;
+        }
+      }
+    }
   }
 }
 
