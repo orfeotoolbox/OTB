@@ -23,6 +23,9 @@
 #include "itkExceptionObject.h"
 #include "itkNeighborhoodOperator.h"
 
+// This include is needed to define InverseOrForwardTransformationEnum only...
+#include "otbGenericMapProjection.h"
+
 namespace otb {
 
 /**
@@ -65,15 +68,16 @@ public:
   itkTypeMacro(WaveletOperator,NeighborhoodOperator);
 
   /** Construction */
-  WaveletOperator() 
-  {
-    m_UpSampleFactor = 0;
-  }
+  WaveletOperator() :
+    m_UpSampleFactor( 0 ), m_Wavelet( "Unknown" )
+  { }
+
   /** Construction by copy */
   WaveletOperator( const Self & other ) 
     : itk::NeighborhoodOperator<TPixel, VDimension, TAllocator> (other)
   {
     m_UpSampleFactor = other.GetUpSampleFactor();
+    m_Wavelet = other.m_Wavelet;
   }
   virtual ~WaveletOperator() {}
 
@@ -82,6 +86,7 @@ public:
   {
     Superclass::operator=(other);
     m_UpSampleFactor = other.GetUpSampleFactor();
+    m_Wavelet = other.m_Wavelet;
     return *this;
   }
   /**
@@ -91,6 +96,7 @@ public:
   { 
     Superclass::PrintSelf(os, i.GetNextIndent());
     os << i << "Up-Sampling factor " << this->m_UpSampleFactor << "\n";
+    os << i << "Wavelet kind : " << GetWavelet() << std::endl;
   }
 
   /**
@@ -104,6 +110,19 @@ public:
   {
     this->m_UpSampleFactor = upSampleFactor;
   }
+
+  /**
+   * Set/Get the name of the wavelet when necessary
+   */
+  virtual void SetWavelet ( const std::string & str ) {
+    this->m_Wavelet = str;
+  }
+
+  virtual void SetWavelet ( const char * str ) {
+    this->m_Wavelet = str; }
+
+  virtual const char * GetWavelet () const {
+    return this->m_Wavelet.c_str(); }
 
 protected:
   /**
@@ -141,7 +160,85 @@ protected:
     return coeff;
   }
 
+  /** 
+   * Performs the definition of synthesis filter from analysis one.
+   * Input is the forward low pass filter coefficients.
+   * It performs \f$ {\tilde G}(z) = -H(-z) \f$.
+   */
+  CoefficientVector GetInverseHighPassFilterFromForwardLowPassFilter ( CoefficientVector & coeff ) 
+  {
+    unsigned long radius = static_cast<unsigned long>( coeff.size() );
+    this->SetRadius( radius );
+
+    unsigned long medianPosition = radius/2;
+
+    CoefficientVector highPassedCoeff;
+    highPassedCoeff = coeff;
+
+    for ( unsigned int i = 0; i < medianPosition; i+=2 )
+    {
+      highPassedCoeff[medianPosition + i] = - coeff[ medianPosition + i ];
+      highPassedCoeff[medianPosition - i] = - coeff[ medianPosition - i ];
+    }
+
+    coeff = highPassedCoeff;
+    return  coeff;
+  }
+
+  /** 
+   * Performs the definition of synthesis filter from analysis one.
+   * Input is the forward high pass filter coefficients.
+   * It performs \f$ {\tilde H}(z) = G(-z) \f$.
+   */
+  CoefficientVector GetInverseLowPassFilterFromForwardHighPassFilter ( CoefficientVector & coeff ) 
+  {
+    unsigned long radius = static_cast<unsigned long>( coeff.size() );
+    this->SetRadius( radius );
+
+    unsigned long medianPosition = radius/2;
+
+    CoefficientVector lowPassedCoeff;
+    lowPassedCoeff = coeff;
+
+    for ( unsigned int i = 1; i < medianPosition; i+=2 )
+    {
+      lowPassedCoeff[medianPosition + i] = - coeff[ medianPosition + i ];
+      lowPassedCoeff[medianPosition - i] = - coeff[ medianPosition - i ];
+    }
+
+    coeff = lowPassedCoeff;
+    return  coeff;
+  }
+
+  /** 
+   * Performs the definition of high pass filter from the low pass one
+   * in a Quadrature mirror filter bank framework. It is then valid to
+   * define high pass filters from orthogonal wavelets...
+   * Input is the forward low pass filter coefficients.
+   * It performs \f$ G(z) = H(-z) \f$.
+   */
+  CoefficientVector GetHighPassFilterFromLowPassFilter ( CoefficientVector & coeff ) 
+  {
+    unsigned long radius = static_cast<unsigned long>( coeff.size() );
+    this->SetRadius( radius );
+
+    unsigned long medianPosition = radius/2;
+
+    CoefficientVector highPassedCoeff;
+    highPassedCoeff = coeff;
+
+    for ( unsigned int i = 1; i < medianPosition; i+=2 )
+    {
+      highPassedCoeff[medianPosition + i] = - coeff[ medianPosition + i ];
+      highPassedCoeff[medianPosition - i] = - coeff[ medianPosition - i ];
+    }
+
+    coeff = highPassedCoeff;
+    return  coeff;
+  }
+
   unsigned int m_UpSampleFactor;
+  std::string m_Wavelet;
 };
 
 } // end of namespace otb

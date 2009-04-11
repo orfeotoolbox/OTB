@@ -38,7 +38,8 @@ namespace otb {
  * (ie. convolution-like operation).
  *
  * the inner operator are supposed to be defined through 1D filters. Then, the
- * transformation yields \f$ 2^Dim \f$ output images.
+ * forward transformation yields \f$ 2^{\test{Dim}} \f$ output images, while the inverse 
+ * transformation requires \f$ 2^{\text{Dim}} \f$ input image for one output.
  *
  * In case of 1D, GetOutput(0) -> LowPass
  *
@@ -63,7 +64,12 @@ namespace otb {
  *
  *  ->  x_(n-1)     x_(n-2)     x_(n-3)           x_1    x_0
  *    
+ * And conversely in the inverse transformation.
  *
+ * TODO: At present version, there is not consideration on meta data information that can be transmited
+ * from the input(s) to the output(s)...
+ *
+ * TODO: In the case of multiresolution decomposition, take care of the size of outputRegionForThread...
  *
  * \sa LowPassHaarOperator
  * \sa HighPassHaarOperator
@@ -72,7 +78,9 @@ namespace otb {
  *
  * \ingroup Streamed
  */
-template < class TInputImage, class TOutputImage, class TLowPassOperator, class THighPassOperator >
+template < class TInputImage, class TOutputImage, 
+            class TLowPassOperator, class THighPassOperator, 
+            InverseOrForwardTransformationEnum TDirectionOfTransformation >
 class ITK_EXPORT StationaryFilterBank
   : public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
@@ -81,68 +89,113 @@ public:
   typedef StationaryFilterBank Self;
   typedef itk::ImageToImageFilter< TInputImage, TOutputImage > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
-        typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-        /** Type macro */
-        itkNewMacro(Self);
+  /** Type macro */
+  itkNewMacro(Self);
 
-        /** Creation through object factory macro */
-        itkTypeMacro(StationaryFilterBank,ImageToImageFilter);
+  /** Creation through object factory macro */
+  itkTypeMacro(StationaryFilterBank,ImageToImageFilter);
 
   /** Template parameters typedefs */
   typedef TInputImage InputImageType;
-        typedef typename InputImageType::Pointer InputImagePointerType;
-        typedef typename InputImageType::RegionType InputImageRegionType;
-        typedef typename InputImageType::SizeType InputSizeType;
-        typedef typename InputImageType::IndexType InputIndexType;
-        typedef typename InputImageType::PixelType InputPixelType;
+  typedef typename InputImageType::Pointer InputImagePointerType;
+  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename InputImageType::SizeType InputSizeType;
+  typedef typename InputImageType::IndexType InputIndexType;
+  typedef typename InputImageType::PixelType InputPixelType;
 
   typedef TOutputImage OutputImageType;
-        typedef typename OutputImageType::Pointer OutputImagePointerType;
+  typedef typename OutputImageType::Pointer OutputImagePointerType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
   typedef typename OutputImageType::SizeType OutputSizeType;
   typedef typename OutputImageType::IndexType OutputIndexType;
-        typedef typename OutputImageType::PixelType OutputPixelType;
+  typedef typename OutputImageType::PixelType OutputPixelType;
 
   typedef TLowPassOperator LowPassOperatorType;
   typedef THighPassOperator HighPassOperatorType;
 
+  typedef InverseOrForwardTransformationEnum DirectionOfTransformationEnumType;
+  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,TDirectionOfTransformation);
+
   /** Inner product iterators */
-  typedef itk::ConstNeighborhoodIterator< OutputImageType > NeighborhoodIteratorType;
-  typedef itk::NeighborhoodInnerProduct< OutputImageType > InnerProductType;
-  typedef itk::ImageRegionIterator< OutputImageType > IteratorType;
+  typedef itk::ConstNeighborhoodIterator< InputImageType > NeighborhoodIteratorType;
+  typedef itk::NeighborhoodInnerProduct< InputImageType > InnerProductType;
+  typedef itk::ImageRegionIterator< InputImageType > IteratorType;
   typedef typename itk::NeighborhoodAlgorithm  
-    ::ImageBoundaryFacesCalculator< OutputImageType > FaceCalculatorType;
+    ::ImageBoundaryFacesCalculator< InputImageType > FaceCalculatorType;
   typedef typename FaceCalculatorType::FaceListType FaceListType;
   typedef typename FaceListType::iterator FaceListIterator;
 
   /** Dimension */
-        itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
-        itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /**
-   * Set/Get the level of up sampling of the filter used in the A-trou algorithm
+   * Set/Get the level of up sampling of the filter used in the A-trou algorithm.
    */
-  itkGetMacro(UpSampleFactor,unsigned int);
-  itkSetMacro(UpSampleFactor,unsigned int);
+  itkGetMacro(UpSampleFilterFactor,unsigned int);
+  itkSetMacro(UpSampleFilterFactor,unsigned int);
+
+  /**
+   * Set/Get the level of down sampling of the image used in forward algorithm. 
+   * (or upsampling in the inverse case)
+   *
+   * In this implementation, we are dealing with M-band decomposition then m_SubSampleImageFactor
+   * is most likely to be 1 or 2... but in any case integer and not real...
+   */
+  itkGetMacro(SubSampleImageFactor,unsigned int);
+  itkSetMacro(SubSampleImageFactor,unsigned int);
+
 
 protected:
   StationaryFilterBank();
   virtual ~StationaryFilterBank() { }
 
+  /** GenerateOutputInformation 
+	 * Set the size of the output image depending on the decimation factor
+	 * Copy informations from the input image if existing.
+	 **/
+	virtual void GenerateOutputInformation();
+
+  /** BeforeThreadedGenerateData
+   * If SubSampleImageFactor neq 1, it is necessary to up sample input images in the INVERSE mode
+   */
+  virtual void BeforeThreadedGenerateData ();
+
+  /** AfterThreadedGenerateData
+   * If SubSampleImageFactor neq 1, it is necessary to down sample output images in the FORWARD mode
+   */
+  virtual void AfterThreadedGenerateData ();
+
   /** Generate data redefinition */
   virtual void ThreadedGenerateData ( const OutputImageRegionType& outputRegionForThread, int threadId );
 
-  /** Specific case applied on the input image */
-  virtual void ThreadedGenerateData ( itk::ProgressReporter & reporter,
-                                        const OutputImageRegionType& outputRegionForThread, int threadId );
+  /** Specification-like in the case where DirectionOfTransformation stands for FORWARD or INVERSE */
+  virtual void ThreadedForwardGenerateData ( const OutputImageRegionType& outputRegionForThread, int threadId );
+  virtual void ThreadedInverseGenerateData ( const OutputImageRegionType& outputRegionForThread, int threadId );
 
-  /** Iterative call to the filter bank at each dimension */
-  virtual void ThreadedGenerateData ( unsigned int idx, unsigned int direction, 
-                                        itk::ProgressReporter & reporter,
-                                        const OutputImageRegionType& outputRegionForThread, int threadId );
+  /** Specific case applied on the input image in forward transformation */
+  virtual void ThreadedForwardGenerateData ( itk::ProgressReporter & reporter,
+                                              const OutputImageRegionType& outputRegionForThread, int threadId );
 
-  unsigned int m_UpSampleFactor;
+  /** Iterative call to the forward filter bank at each dimension */
+  virtual void ThreadedForwardGenerateData ( unsigned int idx, unsigned int direction, 
+                                              itk::ProgressReporter & reporter,
+                                              const OutputImageRegionType& outputRegionForThread, int threadId );
+
+  /** Iterative call to the inverse filter bank at each dimension */
+  virtual void ThreadedInverseGenerateData ( unsigned int idx, unsigned int direction, 
+                                              InputImagePointerType & outputImage,
+                                              itk::ProgressReporter & reporter,
+                                              const InputImageRegionType& inputRegionForThread, int threadId );
+  
+  /** Specific  case applied on the last reconstruction in inverse transformation */
+  virtual void ThreadedInverseGenerateData ( itk::ProgressReporter & reporter,
+                                              const OutputImageRegionType& outputRegionForThread, int threadId );
+
+  unsigned int m_UpSampleFilterFactor;
+  unsigned int m_SubSampleImageFactor;
 
 private:
   StationaryFilterBank( const Self & );

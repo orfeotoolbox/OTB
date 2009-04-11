@@ -43,7 +43,8 @@ namespace otb {
  * 
  * \ingroup Operators
  */
-template<class TPixel, unsigned int VDimension,
+template < InverseOrForwardTransformationEnum TDirectionOfTransformation,
+  class TPixel, unsigned int VDimension,
   class TAllocator = itk::NeighborhoodAllocator< TPixel > >
 class ITK_EXPORT LowPassHaarOperator
   : public WaveletOperator<TPixel, VDimension, TAllocator>
@@ -55,16 +56,20 @@ public:
 
   itkTypeMacro(LowPassHaarOperator, WaveletOperator);
   
+  typedef InverseOrForwardTransformationEnum DirectionOfTransformationEnumType;
+  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,TDirectionOfTransformation);
+
   LowPassHaarOperator() 
-        {
+  {
     this->SetRadius(1);
-                this->CreateToRadius(1);
+    this->CreateToRadius(1);
+    this->SetWavelet( "Haar" );
   }
 
   LowPassHaarOperator(const Self& other)
     : WaveletOperator<TPixel, VDimension, TAllocator>(other) 
   {
-    /* ... */
+    this->SetWavelet( "Haar" );
   }
 
   /**
@@ -105,6 +110,17 @@ protected:
     // stands for z^1
     coeff.push_back(0.0);  
 
+#if 0
+  std::cerr << "Coeff H(" << this->GetWavelet();
+  if ( (int) DirectionOfTransformation == (int) FORWARD )
+    std::cerr << " Forward ) = ";
+  else
+    std::cerr << " Inverse ) = ";
+  for ( typename CoefficientVector::const_iterator iter = coeff.begin(); iter < coeff.end(); ++iter )
+    std::cerr << *iter << " ";
+  std::cerr << "\n";
+#endif
+
     return Superclass::UpSamplingCoefficients( coeff );
   }
 
@@ -134,7 +150,8 @@ protected:
  * 
  * \ingroup Operators
  */
-template<class TPixel, unsigned int VDimension,
+template< InverseOrForwardTransformationEnum TDirectionOfTransformation,
+  class TPixel, unsigned int VDimension,
   class TAllocator = itk::NeighborhoodAllocator< TPixel > >
 class ITK_EXPORT HighPassHaarOperator
   : public WaveletOperator<TPixel, VDimension, TAllocator>
@@ -146,16 +163,20 @@ public:
 
   itkTypeMacro(HighPassHaarOperator, WaveletOperator);
   
+  typedef InverseOrForwardTransformationEnum DirectionOfTransformationEnumType;
+  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,TDirectionOfTransformation);
+
   HighPassHaarOperator() 
-        {
+  {
     this->SetRadius(1);
-                this->CreateToRadius(1);
+    this->CreateToRadius(1);
+    this->SetWavelet( "Haar" );
   }
 
   HighPassHaarOperator(const Self& other)
     : WaveletOperator<TPixel, VDimension, TAllocator>(other) 
   {
-    /* ... */
+    this->SetWavelet( "Haar" );
   }
 
   /**
@@ -185,13 +206,49 @@ protected:
 
   /**
    * Set operator coefficients.
+   * Due to the number of template parameter, we cannot specialized it with regard
+   * to the TDirectionOfTransformation value...
    */
   CoefficientVector GenerateCoefficients()
   {
     CoefficientVector coeff;
-    coeff.push_back(-0.5);  
-    coeff.push_back(0.5);  
-    coeff.push_back(0.0);  
+
+    typedef LowPassHaarOperator< FORWARD, TPixel, VDimension, TAllocator >
+      LowPassOperatorType;
+    LowPassOperatorType lowPassOperator;
+    lowPassOperator.SetDirection(0);
+    lowPassOperator.CreateDirectional();
+
+    CoefficientVector lowPassCoeff;
+    lowPassCoeff.resize( lowPassOperator.GetSize()[0] );
+
+    for ( typename LowPassOperatorType::ConstIterator iter = lowPassOperator.Begin();
+        iter != lowPassOperator.End(); ++iter )
+      lowPassCoeff.push_back( *iter );
+        
+    switch ( DirectionOfTransformation )
+    {
+      case FORWARD:
+        coeff = this->GetHighPassFilterFromLowPassFilter( lowPassCoeff );
+        break;
+      case INVERSE:
+        coeff = this->GetInverseHighPassFilterFromForwardLowPassFilter( lowPassCoeff );
+        break;
+      default:
+        itkExceptionMacro(<<"Wavelet operator has to be INVERSE or FORWARD only!!");
+        break;
+    }
+
+#if 1
+    std::cerr << "Coeff G(" << this->GetWavelet();
+    if ( (int) DirectionOfTransformation == (int) FORWARD )
+      std::cerr << " Forward ) = ";
+    else
+      std::cerr << " Inverse ) = ";
+    for ( typename CoefficientVector::const_iterator iter = coeff.begin(); iter < coeff.end(); ++iter )
+      std::cerr << *iter << " ";
+    std::cerr << "\n";
+#endif
 
     return Superclass::UpSamplingCoefficients( coeff );
   }
@@ -202,7 +259,6 @@ protected:
     this->FillCenteredDirectional(coeff);  
   }
 };
-
 
 } // end of namespace otb
 
