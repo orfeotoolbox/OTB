@@ -73,11 +73,8 @@ SubsampledImageRegionConstIterator< TImage >
 ::Decrement ()
 {
   // Get the index of the first pixel on the span (row)
-  typename itk::ImageIterator<TImage>::IndexType
-    ind = this->m_Image->ComputeIndex( static_cast<IndexValueType>(this->m_Offset) );
-
-  const typename itk::ImageIterator<TImage>::IndexType&
-    startIndex = this->m_Region.GetIndex();
+  IndexType ind = this->m_Image->ComputeIndex( static_cast<IndexValueType>(this->m_Offset) );
+  IndexType& startIndex = this->m_Region.GetIndex();
 
   // Deccrement along a row, then wrap at the beginning of the region row.
   bool done;

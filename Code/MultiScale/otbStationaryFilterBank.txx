@@ -49,9 +49,12 @@ StationaryFilterBank< TInputImage, TOutputImage,
       unsigned int numOfOutputs = 1<<InputImageType::ImageDimension;
 
       this->SetNumberOfOutputs( numOfOutputs );
+      m_InternalImages.resize( numOfOutputs );
+
       for ( unsigned i = 1; i < numOfOutputs; i++ )
       {
         this->SetNthOutput(i,OutputImageType::New());
+        m_InternalImages.push_back( OutputImageType::New() )
       }
       
       break;
@@ -61,9 +64,12 @@ StationaryFilterBank< TInputImage, TOutputImage,
       this->SetNumberOfRequiredOutputs(1);
       this->SetNumberOfInputs( 1 << InputImageType::ImageDimension );
 
-      m_SubsampledInputImages.resize( this->GetNumberOfInputs() );
+      m_InternalImages.resize( this->GetNumberOfInputs() );
+
       for ( unsigned int i = 0; i < this->GetNumberOfInputs(); i++ )
-        m_SubsampledInputImages.push_back( InputImageType::New() );
+      {
+        m_InternalImages.push_back( OutputImageType::New() );
+      }
 
       break;
     }
@@ -89,31 +95,33 @@ StationaryFilterBank< TInputImage, TOutputImage,
 {
   Superclass::GenerateOutputInformation();
 
+  if ( GetSubSampleImageFactor() == 1 )
+    return;
+
   switch ( DirectionOfTransformation )
   {
     case FORWARD:
     {
-      /**
-       * If necessary, we do not say to the filter, at this
-       * step, that we will down sample the output images...
-       */
+      otbGenericMsgDebugMacro( << " up sampling output regions by a factor of " << GetSubSampleImageFactor() );
+
+      OutputImageRegionType newRegion;
+      this->CallCopyInputRegionToOutputRegion( newRegion, this->GetInput()->GetLargestPossibleRegion() );
+
+      for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); i++ )
+      {
+        this->GetOutput(i)->SetRegions( newRegion );
+      }
+
       break;
     }
     case INVERSE:
     {
       otbGenericMsgDebugMacro( << " down sampling output regions by a factor of " << GetSubSampleImageFactor() );
 
-      this->GetOutput()->CopyInformation( this->GetInput(0) );
-      this->GetOutput()->SetRegions( this->GetInput(0)->GetLargestPossibleRegion() );
-
-      if ( GetSubSampleImageFactor() > 1 )
-      {
-        SubsampleImageRegionConstIterator< InputImageType > subsamplingIterator 
-          ( this->GetInput(0), this->GetInput(0)->GetLargestPossibleRegion() );
-        subsamplingIterator.SetSubsampleFactor( GetSubSampleImageFactor() );
-
-        this->GetOutput()->SetRegions( subsamplingIterator.GetNewRegion() );
-      }
+      OutputImageRegionType newRegion;
+      this->CallCopyInputRegionToOutputRegion( newRegion, this->GetInput(0)->GetLargestPossibleRegion() );
+      this->GetOutput()->SetRegions( newRegion );
+      
       break;
     }
     default:
@@ -121,6 +129,134 @@ StationaryFilterBank< TInputImage, TOutputImage,
       itkExceptionMacro(<<"FilterBank transformation may be FORWARD or INVERSE only!!");
       break;
     }
+  }
+}
+
+template < class TInputImage, class TOutputImage, 
+            class TLowPassOperator, class THighPassOperator,
+            InverseOrForwardTransformationEnum TDirectionOfTransformation >
+void
+StationaryFilterBank< TInputImage, TOutputImage, 
+                      TLowPassOperator, THighPassOperator, 
+                      TDirectionOfTransformation >
+::CallCopyOutputRegionToInputRegion 
+( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion )
+{
+  Superclass::CallCopyOutputRegionToInputRegion( destRegion, srcRegion );
+
+  if ( GetSubSampleImageFactor() > 1 )
+  {
+    switch ( DirectionOfTransformation )
+    {
+      case FORWARD:
+      {
+        EnlargeRegion( destRegion, srcRegion );
+        break;
+      }
+      case INVERSE:
+      {
+        ReduceRegion( destRegion, srcRegion );
+        break;
+      }
+      default:
+      {
+        itkExceptionMacro(<<"FilterBank transformation may be FORWARD or INVERSE only!!");
+        break;
+      }
+    }
+  }
+}
+
+template < class TInputImage, class TOutputImage,
+            class TLowPassOperator, class THighPassOperator,
+            InverseOrForwardTransformationEnum TDirectionOfTransformation >
+void
+StationaryFilterBank< TInputImage, TOutputImage, 
+                      TLowPassOperator, THighPassOperator, 
+                      TDirectionOfTransformation >
+::CallCopyInputRegionToOutputRegion
+( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )	 
+{
+  Superclass::CallCopyInputRegionToOutputRegion( destRegion, srcRegion );
+
+  if ( GetSubSampleImageFactor() > 1 )
+  {
+     switch ( DirectionOfTransformation )
+    {
+      case FORWARD:
+      {
+        ReduceRegion( destRegion, srcRegion );
+        break;
+      }
+      case INVERSE:
+      {
+        EnlargeRegion( destRegion, srcRegion );
+        break;
+      }
+      default:
+      {
+        itkExceptionMacro(<<"FilterBank transformation may be FORWARD or INVERSE only!!");
+        break;
+      }
+    }
+  }
+}
+
+template < class TInputImage, class TOutputImage,
+            class TLowPassOperator, class THighPassOperator,
+            InverseOrForwardTransformationEnum TDirectionOfTransformation >
+void
+StationaryFilterBank< TInputImage, TOutputImage, 
+                      TLowPassOperator, THighPassOperator, 
+                      TDirectionOfTransformation >
+::EnlargeRegion
+( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )
+{
+    OutputIndexType srcIndex = srcRegion.GetIndex();
+    OutputSizeType srcSize = srcRegion.GetSize();
+
+    InputIndexType destIndex;
+    InputSizeType destSize;
+
+    for ( unsigned int i = 0; i < InputImageDimension; i++ )
+    {
+      destIndex[i] = srcIndex[i] * GetSubsampleImageFactor();
+      destSize[i] = ( srcSize[i] - 1 ) * GetSubsampleImageFactor() + 1;
+    }
+
+    destRegion.SetIndex( destIndex );
+    destRegion.SetSize( destSize );
+  }
+}
+
+template < class TInputImage, class TOutputImage, 
+            class TLowPassOperator, class THighPassOperator,
+            InverseOrForwardTransformationEnum TDirectionOfTransformation >
+void
+StationaryFilterBank< TInputImage, TOutputImage, 
+                      TLowPassOperator, THighPassOperator, 
+                      TDirectionOfTransformation >
+::CallCopyInputRegionToOutputRegion
+( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )	 
+{
+  Superclass::CallCopyInputRegionToOutputRegion( destRegion, srcRegion );
+
+  if ( GetSubSampleImageFactor() > 1 )
+  {
+    typename InputImageRegionType::IndexType srcIndex = srcRegion.GetIndex();
+    typename InputImageRegionType::SizeType srcSize = srcRegion.GetSize();
+
+    typename OutputImageRegionType::IndexType destIndex;
+    typename OutputImageRegionType::SizeType destSize;
+
+    for ( unsigned int i = 0; i < InputImageDimension; i++ )
+    {
+      destIndex[i] = srcIndex[i] / GetSubsampleImageFactor();
+      destSize[i] = ( srcSize[i] - 1 ) / GetSubsampleImageFactor() + 1;
+    }
+
+    destRegion.SetIndex( destIndex );
+    destRegion.SetSize( destSize );
   }
 }
 

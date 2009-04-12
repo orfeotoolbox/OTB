@@ -69,6 +69,9 @@ namespace otb {
  * TODO: At present version, there is not consideration on meta data information that can be transmited
  * from the input(s) to the output(s)...
  *
+ * At this step, it would have been interesting to implements a DirectionalInnerProductImageFilter to synchronize
+ * the pipeline through a composite filter
+ * 
  * \sa LowPassHaarOperator
  * \sa HighPassHaarOperator
  * \sa LowPassSplineBiOrthogonalOperator
@@ -116,15 +119,6 @@ public:
   typedef InverseOrForwardTransformationEnum DirectionOfTransformationEnumType;
   itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,TDirectionOfTransformation);
 
-  /** Inner product iterators */
-  typedef itk::ConstNeighborhoodIterator< InputImageType > NeighborhoodIteratorType;
-  typedef itk::NeighborhoodInnerProduct< InputImageType > InnerProductType;
-  typedef itk::ImageRegionIterator< InputImageType > IteratorType;
-  typedef typename itk::NeighborhoodAlgorithm  
-    ::ImageBoundaryFacesCalculator< InputImageType > FaceCalculatorType;
-  typedef typename FaceCalculatorType::FaceListType FaceListType;
-  typedef typename FaceListType::iterator FaceListIterator;
-
   /** Dimension */
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
   itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
@@ -155,6 +149,19 @@ protected:
 	 * Copy informations from the input image if existing.
 	 **/
 	virtual void GenerateOutputInformation();
+
+  /** CallCopyOutputRegionToInputRegion
+   * Since input and output image may be of different size when a 
+   * subsampling factor has tp be applied, Region estimation 
+   * functions has to be reimplemented
+   */
+  virtual void CallCopyOutputRegionToInputRegion 
+    ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion );
+  virtual void CallCopyInputRegionToOutputRegion
+    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );	 
+
+  virtual void EnlargeRegion ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion );
+  virtual void ReduceRegion ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion );
 
   /** BeforeThreadedGenerateData
    * If SubSampleImageFactor neq 1, it is necessary to up sample input images in the INVERSE mode
@@ -192,6 +199,18 @@ protected:
   virtual void ThreadedInverseGenerateData ( itk::ProgressReporter & reporter,
                                               const OutputImageRegionType& outputRegionForThread, int threadId );
 
+  /** Inner product iterators */
+  typedef itk::ConstNeighborhoodIterator< InputImageType > NeighborhoodIteratorType;
+  typedef itk::NeighborhoodInnerProduct< InputImageType > InnerProductType;
+  typedef itk::ImageRegionIterator< InputImageType > IteratorType;
+  typedef typename itk::NeighborhoodAlgorithm  
+    ::ImageBoundaryFacesCalculator< InputImageType > FaceCalculatorType;
+  typedef typename FaceCalculatorType::FaceListType FaceListType;
+  typedef typename FaceListType::iterator FaceListIterator;
+
+  /** Subsampling filtering */
+  typedef SubSampleImageFilter< OutputImageType, OutputImageType > SubSampleImageFilter;
+
 private:
   StationaryFilterBank( const Self & );
   void operator=( const Self & );
@@ -199,7 +218,11 @@ private:
   unsigned int m_UpSampleFilterFactor;
   unsigned int m_SubSampleImageFactor;
 
-  std::vector< InputImagePointerType > m_SubsampledInputImages;
+  /** The internal images vector store intermediate images before or after resampling */
+  std::vector< OutputImagePointerType > m_InternalImages;
+
+  /** Subsampling filters are required here to keep the pipeline synchronised */
+  std::vector< typename SubsampleFilterType::Pointer > m_SubsampleFilter;
 
 }; // end of class
   

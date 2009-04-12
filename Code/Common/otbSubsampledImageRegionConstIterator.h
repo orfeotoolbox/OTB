@@ -65,10 +65,14 @@ public:
   /** Region typedef support. */
   typedef typename Superclass::RegionType   RegionType;
 
-
   /** Image typedef support. While this was already typdef'ed in the superclass
    * it needs to be redone here for this subclass to compile properly with gcc. */
   typedef typename Superclass::ImageType ImageType;
+
+  /** Offset typedef support. This explicit redefinition allows to Set/Get 
+   * the location of the iterator. */
+  typedef typename Superclass::OffsetType OffsetType;
+
 
   /** PixelContainer typedef support. Used to refer to the container for
    * the pixel data. While this was already typdef'ed in the superclass
@@ -184,16 +188,7 @@ public:
     }
 
     m_SubSampledEndOffset = this->m_Image->ComputeOffset( m_LastUsableIndex ) + 1;
-
-    otbGenericMsgDebugMacro(<<"m_EndOffset=" << this->m_EndOffset);
-    otbGenericMsgDebugMacro(<<"m_SubSampledEndOffset="<< m_SubSampledEndOffset);
-
-    for ( unsigned int i = 0; i < ImageIteratorDimension; i++ )
-    {
-      otbGenericMsgDebugMacro(<<"m_LastUsableIndex[" << i << "] = " << m_LastUsableIndex[i]);
-    }
-
-}
+  }
 
   unsigned int GetSubsampleFactor () const
   {
@@ -301,6 +296,42 @@ public:
     return *this;
   }
 
+  /** This iterator give the possibility to Set/Get the current location if scanning.
+   * No Bound checking is performed when setting the position.
+   */
+  void SetLocation ( const OffsetType & location )
+  {
+    this->m_Offset = location;
+
+    const SizeType& size = this->m_Region.GetSize();
+    this->m_SpanEndOffset = this->m_Offset 
+                            + static_cast<IndexValueType>( m_SubsampleFactor * ((size[0]-1) / m_SubsampleFactor) )
+                            + 1;
+    this->m_SpanBeginOffset = this->m_Offset;
+  }
+
+  void SetLocation ( const IndexType & location )
+  {
+    this->m_Offset = this->m_Image->ComputeOffset( location );
+
+    const SizeType& size = this->m_Region.GetSize();
+    this->m_SpanEndOffset = this->m_Offset 
+                            + static_cast<IndexValueType>( m_SubsampleFactor * ((size[0]-1) / m_SubsampleFactor) )
+                            + 1;
+    this->m_SpanBeginOffset = this->m_Offset;
+  }
+
+  const OffsetType & GetLocationOffset() const
+  {
+    return this->m_Offset;
+  }
+
+  IndexType GetLocationIndex() const
+  {
+    IndexType ind = this->m_Image->ComputeIndex( static_cast<IndexValueType>(this->m_Offset) );
+    return ind;
+  }
+
   /** In order to help copy into a new Image, give the new region parameters
    */
   RegionType GetNewRegion () const
@@ -338,7 +369,6 @@ private:
   void Increment(); // jump in a direction other than the fastest moving
   void Decrement(); // go back in a direction other than the fastest moving
 };
-
 
 } // end of namespace otb
 

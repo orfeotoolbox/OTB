@@ -18,39 +18,30 @@
 
 =========================================================================*/
 
-#ifndef __otbSubsampleImageFilter_h
-#define __otbSubsampleImageFilter_h
+#ifndef __otbDecimateImageFilter_h
+#define __otbDecimateImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
 
-// This include is needed to define InverseOrForwardTransformationEnum only...
-#include "otbGenericMapProjection.h"
-
 namespace otb {
 
-/** \class SubsampleImageFilter
+/** \class DecimateImageFilter
  * \brief Performs a down sampling of an image
  *
- * The third template is a FORWARD/INVERSE InverseOrForwardTransformationEnum 
- * enumeration type. With FORWARD, the output image is of the same size of the one of 
- * the input image. But the output image contains only co-located subsample, the reset being 0.
- * When INVERSE is used, the input image is considered to as the sub-sampled. then, the output
- * image is larger. Inital pixel values are preserved but the output image is interleaved with
- * 0.
+ * This class performs a basic down sampling of an image. On the contrary to 
+ * itk::ResampleImageFilter, it does not perform any interpolation.
  *
  * \sa ResampleImageFilter
  * \sa SubsampleImageRegionConstIterator
- * \sa DecimateIMageFilter
  */
-template < class TInputImage, class TOutputImage, 
-            InverseOrForwardTransformationEnum TDirectionOfTransformation >
-class ITK_EXPORT SubsampleImageFilter :
+template < class TInputImage, class TOutputImage >
+class ITK_EXPORT DecimateImageFilter :
   public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
   /** Standard class typedefs. */
-  typedef SubsampleImageFilter Self;
+  typedef DecimateImageFilter Self;
   typedef itk::ImageToImageFilter< TInputImage, TOutputImage > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -59,7 +50,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SubsampleImageFilter, ImageToImageFilter);
+  itkTypeMacro(DecimateImageFilter, ImageToImageFilter);
 
   /** Extract dimension from input and output image. */
   itkStaticConstMacro(InputImageDimension, unsigned int,
@@ -67,31 +58,24 @@ public:
   itkStaticConstMacro(OutputImageDimension, unsigned int,
                       TOutputImage::ImageDimension);
 
-  /** Direction definition */
-  typedef InverseOrForwardTransformationEnum DirectionOfTransformationEnumType;
-  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,TDirectionOfTransformation);
-
   /** Image typedef support. */
   typedef TInputImage InputImageType;
   typedef typename InputImageType::RegionType InputImageRegionType;
-  typedef typename InputImageType::IndexType InputImageIndexType;
 
   typedef TOutputImage OutputImageType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename OutputImageType::SizeType OutputImageSizeType;
-  typedef typename OutputImageType::IndexType OutputImageIndexType;
   typedef typename OutputImageType::PixelType OutputPixelType;
 
-  /** Set/Get the SubsampleFactor */
-  itkGetMacro(SubsampleFactor,unsigned int);
-  itkSetMacro(SubsampleFactor,unsigned int);
+  /** Set/Get the DecimateFactor */
+  itkGetMacro(DecimationFactor,unsigned int);
+  itkSetMacro(DecimationFactor,unsigned int);
 
 protected:
-  SubsampleImageFilter ()
+  DecimateImageFilter ()
   {
-    m_SubsampleFactor = 1;
+    m_DecimationFactor = 1;
   }
-  virtual ~SubsampleImageFilter() {}
+  virtual ~DecimateImageFilter() {}
 
   /** Since input and output image are very likely to be of different size. 
    * Region estimation functions has to be reimplemented
@@ -113,16 +97,17 @@ protected:
   virtual void PrintSelf( std::ostream & os, itk::Indent indent ) const;
 
 private:
-  SubsampleImageFilter ( const Self & ); // purposely not implemented
+  DecimateImageFilter ( const Self & ); // purposely not implemented
   void operator= ( const Self & ); // purposely not implemented
 
-  unsigned int m_SubsampleFactor;
+  unsigned int m_DecimationFactor;
 }; // end of class 
+
 
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSubsampleImageFilter.txx"
+#include "otbDecimateImageFilter.txx"
 #endif
 
 
