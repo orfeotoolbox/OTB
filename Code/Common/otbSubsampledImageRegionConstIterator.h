@@ -71,7 +71,8 @@ public:
 
   /** Offset typedef support. This explicit redefinition allows to Set/Get 
    * the location of the iterator. */
-  typedef typename Superclass::OffsetType OffsetType;
+  //typedef typename Superclass::OffsetType OffsetType;
+  typedef unsigned long OffsetType;
 
 
   /** PixelContainer typedef support. Used to refer to the container for
@@ -104,8 +105,7 @@ public:
 
     for ( unsigned int i = 0; i < ImageIteratorDimension; i++ )
     {
-      m_LastUsableIndex[i] = startIndex[i] 
-        + static_cast<IndexValueType>( m_SubsampleFactor * ((size[i]-1) / m_SubsampleFactor) );
+      m_LastUsableIndex[i] = startIndex[i] + static_cast<IndexValueType>( size[i]-1 );
     }
   }
 
@@ -123,8 +123,7 @@ public:
 
     for ( unsigned int i = 0; i < ImageIteratorDimension; i++ )
     {
-      m_LastUsableIndex[i] = startIndex[i] 
-        + static_cast<IndexValueType>( m_SubsampleFactor * ((size[i]-1) / m_SubsampleFactor) );
+      m_LastUsableIndex[i] = startIndex[i] + static_cast<IndexValueType>( size[i]-1 );
     }
   }
 
@@ -145,8 +144,7 @@ public:
 
     for ( unsigned int i = 0; i < ImageIteratorDimension; i++ )
     {
-      m_LastUsableIndex[i] = startIndex[i] 
-        + static_cast<IndexValueType>( m_SubsampleFactor * ((size[i]-1) / m_SubsampleFactor) );
+      m_LastUsableIndex[i] = startIndex[i] + static_cast<IndexValueType>( size[i]-1 );
     }
   }
 
@@ -166,10 +164,10 @@ public:
 
     for ( unsigned int i = 0; i < ImageIteratorDimension; i++ )
     {
-      m_LastUsableIndex[i] = startIndex[i] 
-        + static_cast<IndexValueType>( m_SubsampleFactor * ((size[i]-1) / m_SubsampleFactor) );
+      m_LastUsableIndex[i] = startIndex[i] + static_cast<IndexValueType>( size[i]-1 );
     }
 
+    m_SubSampledEndOffset = this->m_Image->ComputeOffset( m_LastUsableIndex ) + 1;
   }
 
   /** Set / Get the subsample factor */

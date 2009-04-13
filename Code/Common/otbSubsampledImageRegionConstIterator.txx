@@ -25,6 +25,7 @@
 
 namespace otb {
 
+
 template < class TImage >
 void
 SubsampledImageRegionConstIterator< TImage >

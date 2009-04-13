@@ -127,14 +127,58 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
   SubsampledImageRegionConstIterator< InputImageType > inputIter 
     ( this->GetInput(), inputRegionForThread );
-  if ( static_cast<int>( DirectionOfTransformation ) == FORWARD )
-    inputIter.SetSubsampleFactor( GetSubsampleFactor() );
+  inputIter.SetSubsampleFactor( static_cast<int>( DirectionOfTransformation ) == FORWARD ?
+    GetSubsampleFactor() : 1 );
   inputIter.GoToBegin();
 
   SubsampledImageRegionIterator< OutputImageType > outputIter
     ( this->GetOutput(), outputRegionForThread );
-  //outputIter.SetSubsampleFactor(1);
+  outputIter.SetSubsampleFactor(1);
   outputIter.GoToBegin();
+
+  switch ( DirectionOfTransformation )
+  {
+    case FORWARD:
+    {
+      inputIter.SetSubsampleFactor( GetSubsampleFactor() );
+      inputIter.GoToBegin();
+
+      while ( !inputIter.IsAtEnd() && !outputIter.IsAtEnd() )
+      {
+        outputIter.SetLocation( static_cast< typename SubsampledImageRegionIterator< OutputImageType >::OffsetType >
+                            ( inputIter.GetLocationOffset() ) );
+        outputIter.Set( static_cast< OutputPixelType >( inputIter.Get() ) );
+        ++inputIter;
+      }
+
+      break;
+    }
+    case INVERSE:
+    {
+      inputIter.SetSubsampleFactor( 1 );
+      inputIter.GoToBegin();
+
+      while ( !inputIter.IsAtEnd() && !outputIter.IsAtEnd() )
+      {
+        InputImageIndexType inputIndex = inputIter.GetLocationIndex();
+        OutputImageIndexType outputIndex;
+        for ( unsigned int i = 0; i < OutputImageDimension; i++ )
+        {
+          outputIndex[i] = inputIndex[i] * GetSubsampleFactor();
+        }
+        outputIter.SetLocation( outputIndex );
+        outputIter.Set( static_cast< OutputPixelType >( inputIter.Get() ) );
+        ++inputIter;
+      }
+
+      break;
+    }
+    default:
+    {
+      itkExceptionMacro(<<"otb::SubsampleImageFilter have to be FORWARD or INVERSE only!!");
+      break;
+    }
+  }
 
   std::cerr << "thread=" << threadId 
     << " inputRegionIndex=[" << inputRegionForThread.GetIndex()[0] << "," << inputRegionForThread.GetIndex()[1] 
@@ -142,22 +186,6 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     << "]\n\toutputRegionIndex=[" << outputRegionForThread.GetIndex()[0] << "," << outputRegionForThread.GetIndex()[1]
     << "] outputRegionSize=[" << outputRegionForThread.GetSize()[0] << "," << outputRegionForThread.GetSize()[1]
     << "]\n";
-
-  while ( !inputIter.IsAtEnd() && !outputIter.IsAtEnd() )
-  {
-    InputImageIndexType inputIndex = inputIter.GetLocationIndex();
-    OutputImageIndexType outputIndex;
-    for ( unsigned int i = 0; i < OutputImageDimension; i++ )
-    {
-      outputIndex[i] = inputIndex[i] * GetSubsampleFactor();
-    }
-
-    outputIter.SetLocation( outputIndex );
-
-    outputIter.Set( static_cast< OutputPixelType >( inputIter.Get() ) );
-
-    ++inputIter;
-  }
 }
 
 
