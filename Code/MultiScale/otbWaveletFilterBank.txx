@@ -18,10 +18,10 @@
 
 =========================================================================*/
 
-#ifndef __otbStationaryFilterBank_txx
-#define __otbStationaryFilterBank_txx
+#ifndef __otbWaveletFilterBank_txx
+#define __otbWaveletFilterBank_txx
 
-#include "otbStationaryFilterBank.h"
+#include "otbWaveletFilterBank.h"
 
 #include "otbMacro.h"
 #include "otbSubsampledImageRegionConstIterator.h"
@@ -32,13 +32,536 @@
 
 namespace otb {
 
+/**
+ * Template Specialisation for the FORWARD case
+ */
+
+template < class TInputImage, class TOutputImage, 
+            class TLowPassOperator, class THighPassOperator >
+WaveletFilterBank< TInputImage, TOutputImage, 
+                      TLowPassOperator, THighPassOperator, 
+                      FORWARD >
+::WaveletFilterBank ()
+{
+  this->SetNumberOfRequiredInputs(1);
+
+  unsigned int numOfOutputs = 1<<InputImageType::ImageDimension;
+
+  this->SetNumberOfOutputs( numOfOutputs );
+  // Internal images will be used only if m_SubsampledInputImages != 1
+  m_InternalImages.resize( numOfOutputs );
+  for ( unsigned int i = 0; i < numOfOutputs; i++ )
+  {
+    this->SetNthOutput(i,OutputImageType::New());
+    m_InternalImages.push_back( OutputImageType::New() );
+  }
+      
+  m_UpSampleFilterFactor = 0;
+  m_SubsampleImageFactor = 1;
+}
+
+template < class TInputImage, class TOutputImage, 
+            class TLowPassOperator, class THighPassOperator >
+void
+WaveletFilterBank< TInputImage, TOutputImage, 
+                      TLowPassOperator, THighPassOperator, 
+                      FORWARD >
+::GenerateOutputInformation()
+{
+  Superclass::GenerateOutputInformation();
+
+  if ( GetSubsampleImageFactor() == 1 )
+    return;
+
+  otbGenericMsgDebugMacro( << " down sampling output regions by a factor of " << GetSubsampleImageFactor() );
+
+  OutputImageRegionType newRegion;
+  this->CallCopyInputRegionToOutputRegion( newRegion, this->GetInput()->GetLargestPossibleRegion() );
+
+  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); i++ )
+  {
+    this->GetOutput(i)->SetRegions( newRegion );
+  }
+
+  otbGenericMsgDebugMacro( << "initial region    " << this->GetInput()->GetLargestPossibleRegion().GetSize()[0]
+    << "," << this->GetInput()->GetLargestPossibleRegion().GetSize()[1] );
+  otbGenericMsgDebugMacro( << "new region output " << newRegion.GetSize()[0] << "," << newRegion.GetSize()[1] );
+}
+
+template < class TInputImage, class TOutputImage, 
+            class TLowPassOperator, class THighPassOperator >
+void
+WaveletFilterBank< TInputImage, TOutputImage, 
+                      TLowPassOperator, THighPassOperator, 
+                      FORWARD >
+::AllocateOutputs ()
+{
+  Superclass::AllocateOutputs();
+
+  if ( m_SubsampleImageFactor > 1 && InputImageDimension > 1 )
+  {
+    unsigned int dir = 0;
+    
+    OutputImageRegionType intermediateRegion;
+    this->CallCopyInputRegionToOutputRegion( dir, intermediateRegion, this->GetInput()->GetLargestPossibleRegion() );
+
+    m_InternalImages[0] = OutputImageType::New();
+    m_InternalImages[0]->SetRegions( intermediateRegion );
+    m_InternalImages[0]->Allocate();
+
+    m_InternalImages[1<<dir] = OutputImageType::New();
+    m_InternalImages[1<<dir]->SetRegions( intermediateRegion );
+    m_InternalImages[1<<dir]->Allocate();
+
+    AllocateInternalData( 0, dir-1, intermediateRegion );
+    AllocateInternalData( 1<<dir, dir-1, intermediateRegion );
+  }
+}
+
+template < class TInputImage, class TOutputImage, 
+            class TLowPassOperator, class THighPassOperator >
+void
+WaveletFilterBank< TInputImage, TOutputImage, 
+                      TLowPassOperator, THighPassOperator, 
+                      FORWARD >
+::AllocateInternalData ( unsigned int idx, unsigned int direction, 
+                          const OutputImageRegionType& outputRegion )
+{
+  // FIXME: to be verified at least in 3D...
+  if ( direction != 0 )
+  {
+    OutputImageRegionType intermediateRegion;
+    this->CallCopyInputRegionToOutputRegion( direction, intermediateRegion, outputRegion );
+
+    m_InternalImages[ idx ] = OutputImageType::New();
+    m_InternalImages[ idx ]->SetRegions( intermediateRegion );
+    m_InternalImages[ idx ]->Allocate();
+
+    AllocateInternalData( idx, direction-1, intermediateRegion );
+    AllocateInternalData( idx, 1<<direction, intermediateRegion );
+  }
+}
+
+template < class TInputImage, class TOutputImage, 
+            class TLowPassOperator, class THighPassOperator >
+void
+WaveletFilterBank< TInputImage, TOutputImage, 
+                      TLowPassOperator, THighPassOperator, 
+                      FORWARD >
+::CallCopyOutputRegionToInputRegion 
+( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion )
+{
+  Superclass::CallCopyOutputRegionToInputRegion( destRegion, srcRegion );
+
+  if ( GetSubsampleImageFactor() > 1 )
+  {
+    OutputIndexType srcIndex = srcRegion.GetIndex();
+    OutputSizeType srcSize = srcRegion.GetSize();
+
+    InputIndexType destIndex;
+    InputSizeType destSize;
+
+    for ( unsigned int i = 0; i < InputImageDimension; i++ )
+    {
+      destIndex[i] = srcIndex[i] * GetSubsampleImageFactor();
+      destSize[i] = ( srcSize[i] - 1 ) * GetSubsampleImageFactor() + 1;
+    }
+
+    destRegion.SetIndex( destIndex );
+    destRegion.SetSize( destSize );
+
+  }
+}
+
+template < class TInputImage, class TOutputImage, 
+            class TLowPassOperator, class THighPassOperator >
+void
+WaveletFilterBank< TInputImage, TOutputImage, 
+                      TLowPassOperator, THighPassOperator, 
+                      FORWARD >
+::CallCopyOutputRegionToInputRegion 
+( unsigned int direction,
+  InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion )
+{
+  Superclass::CallCopyOutputRegionToInputRegion( destRegion, srcRegion );
+
+  if ( GetSubsampleImageFactor() > 1 )
+  {
+    OutputIndexType srcIndex = srcRegion.GetIndex();
+    OutputSizeType srcSize = srcRegion.GetSize();
+
+    InputIndexType destIndex;
+    InputSizeType destSize;
+
+    for ( unsigned int i = 0; i < InputImageDimension; i++ )
+    {
+      if ( i == direction )
+      {
+        destIndex[i] = srcIndex[i] * GetSubsampleImageFactor();
+        destSize[i] = ( srcSize[i] - 1 ) * GetSubsampleImageFactor() + 1;
+      }
+      else
+      {
+        destIndex[i] = srcIndex[i] ;
+        destSize[i] = srcSize[i] ;
+      }
+    }
+
+    destRegion.SetIndex( destIndex );
+    destRegion.SetSize( destSize );
+
+  }
+}
+
+template < class TInputImage, class TOutputImage, 
+            class TLowPassOperator, class THighPassOperator >
+void
+WaveletFilterBank< TInputImage, TOutputImage, 
+                      TLowPassOperator, THighPassOperator, 
+                      FORWARD >
+::CallCopyInputRegionToOutputRegion
+( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )	 
+{
+  Superclass::CallCopyInputRegionToOutputRegion( destRegion, srcRegion );
+
+  if ( GetSubsampleImageFactor() > 1 )
+  {
+    typename InputImageRegionType::IndexType srcIndex = srcRegion.GetIndex();
+    typename InputImageRegionType::SizeType srcSize = srcRegion.GetSize();
+
+    typename OutputImageRegionType::IndexType destIndex;
+    typename OutputImageRegionType::SizeType destSize;
+
+    for ( unsigned int i = 0; i < InputImageDimension; i++ )
+    {
+      destIndex[i] = srcIndex[i] / GetSubsampleImageFactor();
+      destSize[i] = ( srcSize[i] - 1 ) / GetSubsampleImageFactor() + 1;
+    }
+
+    destRegion.SetIndex( destIndex );
+    destRegion.SetSize( destSize );
+  }
+}
+
+template < class TInputImage, class TOutputImage, 
+            class TLowPassOperator, class THighPassOperator >
+void
+WaveletFilterBank< TInputImage, TOutputImage, 
+                      TLowPassOperator, THighPassOperator, 
+                      FORWARD >
+::CallCopyInputRegionToOutputRegion
+( unsigned int direction,
+  OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )	 
+{
+  Superclass::CallCopyInputRegionToOutputRegion( destRegion, srcRegion );
+
+  if ( GetSubsampleImageFactor() > 1 )
+  {
+    typename InputImageRegionType::IndexType srcIndex = srcRegion.GetIndex();
+    typename InputImageRegionType::SizeType srcSize = srcRegion.GetSize();
+
+    typename OutputImageRegionType::IndexType destIndex;
+    typename OutputImageRegionType::SizeType destSize;
+
+    for ( unsigned int i = 0; i < InputImageDimension; i++ )
+    {
+      if ( i == direction )
+      {
+        destIndex[i] = srcIndex[i] / GetSubsampleImageFactor();
+        destSize[i] = ( srcSize[i] - 1 ) / GetSubsampleImageFactor() + 1;
+      }
+      else
+      {
+        destIndex[i] = srcIndex[i] ;
+        destSize[i] = srcSize[i] ;
+      }
+    }
+
+    destRegion.SetIndex( destIndex );
+    destRegion.SetSize( destSize );
+  }
+}
+
+template < class TInputImage, class TOutputImage, 
+            class TLowPassOperator, class THighPassOperator >
+void
+WaveletFilterBank< TInputImage, TOutputImage, 
+                      TLowPassOperator, THighPassOperator, 
+                      FORWARD >
+::ThreadedGenerateData ( const OutputImageRegionType& outputRegionForThread, int threadId )
+{
+  itk::ProgressReporter reporter ( this, threadId, 
+    outputRegionForThread.GetNumberOfPixels() * this->GetNumberOfOutputs() );
+
+  const InputImageType * input = this->GetInput();
+  InputImageRegionType inputRegionForThread;
+  this->CallCopyOutputRegionToInputRegion( inputRegionForThread, outputRegionForThread );
+
+  unsigned int dir = InputImageType::ImageDimension-1;
+
+  OutputImageType * outputLowPass = this->GetOutput( 0 );
+  OutputImageType * outputHighPass = this->GetOutput( 1<<dir );
+
+  if ( outputLowPass == 0 )
+  {
+    throw itk::ExceptionObject( __FILE__, __LINE__, "Sortie 0 nulle", ITK_LOCATION );
+  }
+
+  if ( outputHighPass == 0 )
+  {
+    itk::OStringStream msg;
+    msg << "Output number 1<<" << dir << " = " << (1<<dir) << " null\n";
+    msg << "Number of excpected outputs " << this->GetNumberOfOutputs() << "\n";
+    throw itk::ExceptionObject( __FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION );
+  }
+
+  // On  multidimensional case, if m_SubsampleImageFactor != 1, we need internal images of different size
+  if ( dir != 0 && m_SubsampleImageFactor > 1 )
+  {
+    outputLowPass = m_InternalImages[0];
+    outputHighPass = m_InternalImages[ 1<<dir ];
+  }
+
+  // typedef for the iterations over the input image
+  typedef itk::ConstNeighborhoodIterator< InputImageType > NeighborhoodIteratorType;
+  typedef itk::NeighborhoodInnerProduct< InputImageType > InnerProductType;
+  typedef itk::ImageRegionIterator< OutputImageType > IteratorType;
+  typedef typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator< InputImageType > FaceCalculatorType;
+  typedef typename FaceCalculatorType::FaceListType FaceListType;
+  typedef typename FaceListType::iterator FaceListIterator;
+
+  // Prepare the subsampling image factor, if any.
+  typedef SubsampledImageRegionConstIterator< InputImageType > SubsampleIteratorType;
+  typename SubsampleIteratorType::IndexType subsampling;
+  subsampling.Fill(1);
+  subsampling[dir] = GetSubsampleImageFactor();
+
+  // Inner product
+  InnerProductType innerProduct;
+  FaceCalculatorType faceCalculator;  
+  FaceListType faceList;
+
+  // High pass part calculation
+  HighPassOperatorType highPassOperator;
+  highPassOperator.SetDirection(dir);
+  highPassOperator.SetUpSampleFactor( this->GetUpSampleFilterFactor() );
+  highPassOperator.CreateDirectional();
+
+  faceList = faceCalculator( input, inputRegionForThread, highPassOperator.GetRadius() );
+
+  for ( FaceListIterator faceIt = faceList.begin(); faceIt != faceList.end(); ++faceIt )
+  {
+    SubsampleIteratorType subIt ( input, *faceIt );
+    subIt.SetSubsampleFactor( subsampling );
+    subIt.GoToBegin();
+
+    NeighborhoodIteratorType it ( highPassOperator.GetRadius(), input, *faceIt );
+
+    OutputImageRegionType outputImageRegion;
+    this->CallCopyInputRegionToOutputRegion( dir, outputImageRegion, *faceIt );
+    IteratorType out ( outputHighPass, outputImageRegion );
+    out.GoToBegin();
+
+    while ( !subIt.IsAtEnd() && !out.IsAtEnd() )
+    {
+      it.SetLocation( subIt.GetLocationIndex() );
+      out.Set( innerProduct( it, highPassOperator ) );
+
+      ++subIt;
+      ++out;
+
+      reporter.CompletedPixel();
+    }
+  }
+
+  // Low pass part calculation
+  LowPassOperatorType lowPassOperator;
+  lowPassOperator.SetDirection(dir);
+  lowPassOperator.SetUpSampleFactor( this->GetUpSampleFilterFactor() );
+  lowPassOperator.CreateDirectional();
+
+  faceList = faceCalculator( input, inputRegionForThread, lowPassOperator.GetRadius() );
+
+  for ( FaceListIterator faceIt = faceList.begin(); faceIt != faceList.end(); ++faceIt )
+  {
+    SubsampleIteratorType subIt ( input, *faceIt );
+    subIt.SetSubsampleFactor( subsampling );
+    subIt.GoToBegin();
+
+    NeighborhoodIteratorType it ( lowPassOperator.GetRadius(), input, *faceIt );
+
+    OutputImageRegionType outputImageRegion;
+    this->CallCopyInputRegionToOutputRegion( dir, outputImageRegion, *faceIt );
+    IteratorType out ( outputLowPass, outputImageRegion );
+    out.GoToBegin();
+
+    while ( !subIt.IsAtEnd() && !out.IsAtEnd() )
+    {
+      it.SetLocation( subIt.GetLocationIndex() );
+      out.Set( innerProduct( it, lowPassOperator ) );
+
+      ++subIt;
+      ++out;
+
+      reporter.CompletedPixel();
+    }
+  }
+
+  if ( dir > 0 )
+  { 
+    // Note that outputRegionForThread correspond to the actual region of (local) input !
+    OutputImageRegionType outputImageRegion;
+    this->CallCopyInputRegionToOutputRegion( dir, outputImageRegion, inputRegionForThread );
+
+    ThreadedGenerateDataAtDimensionN( 0, dir-1, reporter, outputImageRegion, threadId );
+    ThreadedGenerateDataAtDimensionN( 1<<dir, dir-1, reporter, outputImageRegion, threadId );
+  }
+}
+
+template < class TInputImage, class TOutputImage, 
+            class TLowPassOperator, class THighPassOperator >
+void
+WaveletFilterBank< TInputImage, TOutputImage, 
+                      TLowPassOperator, THighPassOperator, 
+                      FORWARD >
+::ThreadedGenerateDataAtDimensionN
+( unsigned int idx, unsigned int direction, itk::ProgressReporter & reporter,
+  const OutputImageRegionType& outputRegionForThread, int threadId )
+{
+  // Note that outputRegionForThread correspond to the actual region of input !
+  OutputImageType * input = this->GetOutput( idx );
+  OutputImageType * outputHighPass = this->GetOutput( idx + (1<<direction) );
+
+  if ( direction == 0 && m_SubsampleImageFactor > 1 )
+  {
+    input = m_InternalImages[ idx ];
+    outputHighPass = m_InternalImages[ idx + (1<<direction) ];
+  }
+
+  OutputImageRegionType outputImageRegion;
+  this->CallCopyInputRegionToOutputRegion( direction, outputImageRegion, outputRegionForThread );
+
+  OutputImagePointerType outputLowPass = OutputImageType::New();
+  outputLowPass->SetRegions( outputImageRegion );
+  outputLowPass->Allocate();
+
+  /** Inner product iterators */
+  typedef itk::ConstNeighborhoodIterator< OutputImageType > NeighborhoodIteratorType;
+  typedef itk::NeighborhoodInnerProduct< OutputImageType > InnerProductType;
+  typedef itk::ImageRegionIterator< OutputImageType > IteratorType;
+  typedef typename itk::NeighborhoodAlgorithm  
+    ::ImageBoundaryFacesCalculator< OutputImageType > FaceCalculatorType;
+  typedef typename FaceCalculatorType::FaceListType FaceListType;
+  typedef typename FaceListType::iterator FaceListIterator;
+
+  // Prepare the subsampling image factor, if any.
+  typedef SubsampledImageRegionConstIterator< InputImageType > SubsampleIteratorType;
+  typename SubsampleIteratorType::IndexType subsampling;
+  subsampling.Fill(1);
+  subsampling[ direction ] = GetSubsampleImageFactor();
+
+  // Inner products
+  InnerProductType innerProduct;
+  FaceCalculatorType faceCalculator;  
+  FaceListType faceList;
+
+  // High pass part calculation
+  HighPassOperatorType highPassOperator;
+  highPassOperator.SetDirection(direction);
+  highPassOperator.SetUpSampleFactor( this->GetUpSampleFilterFactor() );
+  highPassOperator.CreateDirectional();
+
+  faceList = faceCalculator( input, outputRegionForThread, highPassOperator.GetRadius() );
+
+  for ( FaceListIterator faceIt = faceList.begin(); faceIt != faceList.end(); ++faceIt )
+  {
+    SubsampleIteratorType subIt ( input, *faceIt );
+    subIt.SetSubsampleFactor( subsampling );
+    subIt.GoToBegin();
+
+    NeighborhoodIteratorType it ( highPassOperator.GetRadius(), input, *faceIt );
+    
+    OutputImageRegionType localOutputRegion;
+    this->CallCopyInputRegionToOutputRegion( direction, localOutputRegion, *faceIt );
+    IteratorType out ( outputHighPass, localOutputRegion );
+    out.GoToBegin();
+
+    while ( !subIt.IsAtEnd() && !out.IsAtEnd() )
+    {
+      it.SetLocation( subIt.GetLocationIndex() );
+      out.Set( innerProduct( it, highPassOperator ) );
+
+      ++subIt;
+      ++out;
+
+      reporter.CompletedPixel();
+    }
+  }
+
+  // Low pass part calculation
+  LowPassOperatorType lowPassOperator;
+  lowPassOperator.SetDirection(direction);
+  lowPassOperator.SetUpSampleFactor( this->GetUpSampleFilterFactor() );
+  lowPassOperator.CreateDirectional();
+
+  faceList = faceCalculator( input, outputRegionForThread, lowPassOperator.GetRadius() );
+
+  for ( FaceListIterator faceIt = faceList.begin(); faceIt != faceList.end(); ++faceIt )
+  {
+    SubsampleIteratorType subIt ( input, *faceIt );
+    subIt.SetSubsampleFactor( subsampling );
+    subIt.GoToBegin();
+
+    NeighborhoodIteratorType it ( lowPassOperator.GetRadius(), input, *faceIt );
+
+    OutputImageRegionType localOutputRegion;
+    this->CallCopyInputRegionToOutputRegion( direction, localOutputRegion, *faceIt );
+    IteratorType out ( outputLowPass, localOutputRegion );
+    out.GoToBegin();
+
+    while ( !subIt.IsAtEnd() && !out.IsAtEnd() )
+    {
+      it.SetLocation( subIt.GetLocationIndex() );
+      out.Set( innerProduct( it, lowPassOperator ) );
+
+      ++subIt;
+      ++out;
+
+      reporter.CompletedPixel();
+    }
+  }
+
+  // Swap input and lowPassOutput
+  itk::ImageRegionConstIterator< OutputImageType > inIt ( outputLowPass, outputImageRegion );
+  IteratorType outIt ( ( direction != 0 && m_SubsampleImageFactor > 1 ) ? 
+                         static_cast<OutputImageType*>( m_InternalImages[ idx ] ) : this->GetOutput( idx ), 
+                        outputImageRegion );
+
+  for ( inIt.GoToBegin(), outIt.GoToBegin(); !inIt.IsAtEnd(); ++inIt, ++outIt )
+  {
+    outIt.Set( inIt.Get() );
+  }
+
+  if ( direction != 0 )
+  {
+    ThreadedGenerateDataAtDimensionN( idx, direction-1, reporter, outputImageRegion, threadId );
+    ThreadedGenerateDataAtDimensionN( idx + (1<<direction), direction-1, reporter, outputImageRegion, threadId );
+  }
+}
+
+
+#if 0
+/**
+ * Template Specialisation for the INVERSE case
+ */
+
 template < class TInputImage, class TOutputImage, 
             class TLowPassOperator, class THighPassOperator,
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
-StationaryFilterBank< TInputImage, TOutputImage, 
+WaveletFilterBank< TInputImage, TOutputImage, 
                       TLowPassOperator, THighPassOperator, 
                       TDirectionOfTransformation >
-::StationaryFilterBank ()
+::WaveletFilterBank ()
 {
   switch ( DirectionOfTransformation )
   {
@@ -80,7 +603,7 @@ StationaryFilterBank< TInputImage, TOutputImage,
     }
   }
   m_UpSampleFilterFactor = 0;
-  m_SubSampleImageFactor = 1;
+  m_SubsampleImageFactor = 1;
 }
 
 
@@ -88,21 +611,21 @@ template < class TInputImage, class TOutputImage,
             class TLowPassOperator, class THighPassOperator,
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
 void
-StationaryFilterBank< TInputImage, TOutputImage, 
+WaveletFilterBank< TInputImage, TOutputImage, 
                       TLowPassOperator, THighPassOperator, 
                       TDirectionOfTransformation >
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
 
-  if ( GetSubSampleImageFactor() == 1 )
+  if ( GetSubsampleImageFactor() == 1 )
     return;
 
   switch ( DirectionOfTransformation )
   {
     case FORWARD:
     {
-      otbGenericMsgDebugMacro( << " up sampling output regions by a factor of " << GetSubSampleImageFactor() );
+      otbGenericMsgDebugMacro( << " up sampling output regions by a factor of " << GetSubsampleImageFactor() );
 
       OutputImageRegionType newRegion;
       this->CallCopyInputRegionToOutputRegion( newRegion, this->GetInput()->GetLargestPossibleRegion() );
@@ -116,7 +639,7 @@ StationaryFilterBank< TInputImage, TOutputImage,
     }
     case INVERSE:
     {
-      otbGenericMsgDebugMacro( << " down sampling output regions by a factor of " << GetSubSampleImageFactor() );
+      otbGenericMsgDebugMacro( << " down sampling output regions by a factor of " << GetSubsampleImageFactor() );
 
       OutputImageRegionType newRegion;
       this->CallCopyInputRegionToOutputRegion( newRegion, this->GetInput(0)->GetLargestPossibleRegion() );
@@ -136,7 +659,7 @@ template < class TInputImage, class TOutputImage,
             class TLowPassOperator, class THighPassOperator,
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
 void
-StationaryFilterBank< TInputImage, TOutputImage, 
+WaveletFilterBank< TInputImage, TOutputImage, 
                       TLowPassOperator, THighPassOperator, 
                       TDirectionOfTransformation >
 ::CallCopyOutputRegionToInputRegion 
@@ -144,7 +667,7 @@ StationaryFilterBank< TInputImage, TOutputImage,
 {
   Superclass::CallCopyOutputRegionToInputRegion( destRegion, srcRegion );
 
-  if ( GetSubSampleImageFactor() > 1 )
+  if ( GetSubsampleImageFactor() > 1 )
   {
     switch ( DirectionOfTransformation )
     {
@@ -171,7 +694,7 @@ template < class TInputImage, class TOutputImage,
             class TLowPassOperator, class THighPassOperator,
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
 void
-StationaryFilterBank< TInputImage, TOutputImage, 
+WaveletFilterBank< TInputImage, TOutputImage, 
                       TLowPassOperator, THighPassOperator, 
                       TDirectionOfTransformation >
 ::CallCopyInputRegionToOutputRegion
@@ -179,7 +702,7 @@ StationaryFilterBank< TInputImage, TOutputImage,
 {
   Superclass::CallCopyInputRegionToOutputRegion( destRegion, srcRegion );
 
-  if ( GetSubSampleImageFactor() > 1 )
+  if ( GetSubsampleImageFactor() > 1 )
   {
      switch ( DirectionOfTransformation )
     {
@@ -206,7 +729,7 @@ template < class TInputImage, class TOutputImage,
             class TLowPassOperator, class THighPassOperator,
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
 void
-StationaryFilterBank< TInputImage, TOutputImage, 
+WaveletFilterBank< TInputImage, TOutputImage, 
                       TLowPassOperator, THighPassOperator, 
                       TDirectionOfTransformation >
 ::EnlargeRegion
@@ -233,7 +756,7 @@ template < class TInputImage, class TOutputImage,
             class TLowPassOperator, class THighPassOperator,
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
 void
-StationaryFilterBank< TInputImage, TOutputImage, 
+WaveletFilterBank< TInputImage, TOutputImage, 
                       TLowPassOperator, THighPassOperator, 
                       TDirectionOfTransformation >
 ::CallCopyInputRegionToOutputRegion
@@ -241,7 +764,7 @@ StationaryFilterBank< TInputImage, TOutputImage,
 {
   Superclass::CallCopyInputRegionToOutputRegion( destRegion, srcRegion );
 
-  if ( GetSubSampleImageFactor() > 1 )
+  if ( GetSubsampleImageFactor() > 1 )
   {
     typename InputImageRegionType::IndexType srcIndex = srcRegion.GetIndex();
     typename InputImageRegionType::SizeType srcSize = srcRegion.GetSize();
@@ -264,23 +787,23 @@ template < class TInputImage, class TOutputImage,
             class TLowPassOperator, class THighPassOperator,
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
 void
-StationaryFilterBank< TInputImage, TOutputImage, 
+WaveletFilterBank< TInputImage, TOutputImage, 
                       TLowPassOperator, THighPassOperator, 
                       TDirectionOfTransformation >
 ::BeforeThreadedGenerateData ()
 {
   if ( static_cast<int>( DirectionOfTransformation ) == INVERSE )
   {
-    if ( GetSubSampleImageFactor() > 1 )
+    if ( GetSubsampleImageFactor() > 1 )
     {
       otbGenericMsgDebugMacro(<<"Subsample the " << this->GetNumberOfInputs() 
-        << " inputs by a factor of " << GetSubSampleImageFactor() );
+        << " inputs by a factor of " << GetSubsampleImageFactor() );
       
       for ( unsigned int i = 0; i < this->GetNumberOfInputs(); i++ )
       {
         SubsampleImageRegionConstIterator< InputImageType > subsamplingIterator 
           ( this->GetInput(i), this->GetInput(i)->GetLargestPossibleRegion() );
-        subsamplingIterator.SetSubsampleFactor( GetSubSampleImageFactor() );
+        subsamplingIterator.SetSubsampleFactor( GetSubsampleImageFactor() );
         subsamplingIterator.GoToBegin();
 
         m_SubsampledInputImages[i]->SetRegions( subsamplingIterator.GetNewRegion() );
@@ -306,14 +829,14 @@ template < class TInputImage, class TOutputImage,
             class TLowPassOperator, class THighPassOperator,
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
 void
-StationaryFilterBank< TInputImage, TOutputImage, 
+WaveletFilterBank< TInputImage, TOutputImage, 
                       TLowPassOperator, THighPassOperator, 
                       TDirectionOfTransformation >
 ::AfterThreadedGenerateData ()
 {
   if ( static_cast<int>( DirectionOfTransformation ) == FORWARD )
   {
-    otbGenericMsgDebugMacro(<<"Downsample outputs by a factor of " << GetSubSampleImageFactor() );
+    otbGenericMsgDebugMacro(<<"Downsample outputs by a factor of " << GetSubsampleImageFactor() );
 
     // Down sample inputs
   }
@@ -324,7 +847,7 @@ template < class TInputImage, class TOutputImage,
             class TLowPassOperator, class THighPassOperator,
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
 void
-StationaryFilterBank< TInputImage, TOutputImage, 
+WaveletFilterBank< TInputImage, TOutputImage, 
                       TLowPassOperator, THighPassOperator, 
                       TDirectionOfTransformation >
 ::ThreadedGenerateData ( const OutputImageRegionType& outputRegionForThread, int threadId )
@@ -347,7 +870,7 @@ template < class TInputImage, class TOutputImage,
             class TLowPassOperator, class THighPassOperator,
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
 void
-StationaryFilterBank< TInputImage, TOutputImage, 
+WaveletFilterBank< TInputImage, TOutputImage, 
                       TLowPassOperator, THighPassOperator, 
                       TDirectionOfTransformation >
 ::ThreadedForwardGenerateData ( const OutputImageRegionType& outputRegionForThread, int threadId )
@@ -363,7 +886,7 @@ template < class TInputImage, class TOutputImage,
             class TLowPassOperator, class THighPassOperator,
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
 void
-StationaryFilterBank< TInputImage, TOutputImage, 
+WaveletFilterBank< TInputImage, TOutputImage, 
                       TLowPassOperator, THighPassOperator, 
                       TDirectionOfTransformation >
 ::ThreadedForwardGenerateData 
@@ -451,7 +974,7 @@ template < class TInputImage, class TOutputImage,
             class TLowPassOperator, class THighPassOperator,
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
 void
-StationaryFilterBank< TInputImage, TOutputImage, 
+WaveletFilterBank< TInputImage, TOutputImage, 
                       TLowPassOperator, THighPassOperator, 
                       TDirectionOfTransformation >
 ::ThreadedForwardGenerateData 
@@ -529,7 +1052,7 @@ template < class TInputImage, class TOutputImage,
             class TLowPassOperator, class THighPassOperator,
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
 void
-StationaryFilterBank< TInputImage, TOutputImage, 
+WaveletFilterBank< TInputImage, TOutputImage, 
                       TLowPassOperator, THighPassOperator, 
                       TDirectionOfTransformation >
 ::ThreadedInverseGenerateData ( const OutputImageRegionType& outputRegionForThread, int threadId )
@@ -544,7 +1067,7 @@ template < class TInputImage, class TOutputImage,
             class TLowPassOperator, class THighPassOperator,
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
 void
-StationaryFilterBank< TInputImage, TOutputImage, 
+WaveletFilterBank< TInputImage, TOutputImage, 
                       TLowPassOperator, THighPassOperator, 
                       TDirectionOfTransformation >
 ::ThreadedInverseGenerateData 
@@ -637,7 +1160,7 @@ template < class TInputImage, class TOutputImage,
             class TLowPassOperator, class THighPassOperator,
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
 void
-StationaryFilterBank< TInputImage, TOutputImage, 
+WaveletFilterBank< TInputImage, TOutputImage, 
                       TLowPassOperator, THighPassOperator, 
                       TDirectionOfTransformation >
 ::ThreadedInverseGenerateData 
@@ -722,7 +1245,7 @@ StationaryFilterBank< TInputImage, TOutputImage,
   }
 }
 
-
+#endif // Dbg
 
 
 } // end of namespace

@@ -196,13 +196,6 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       break;
     }
   }
-
-  std::cerr << "thread=" << threadId 
-    << " inputRegionIndex=[" << inputRegionForThread.GetIndex()[0] << "," << inputRegionForThread.GetIndex()[1] 
-    << "] inputRegionSize=[" << inputRegionForThread.GetSize()[0] << "," << inputRegionForThread.GetSize()[1]
-    << "]\n\toutputRegionIndex=[" << outputRegionForThread.GetIndex()[0] << "," << outputRegionForThread.GetIndex()[1]
-    << "] outputRegionSize=[" << outputRegionForThread.GetSize()[0] << "," << outputRegionForThread.GetSize()[1]
-    << "]\n";
 }
 
 

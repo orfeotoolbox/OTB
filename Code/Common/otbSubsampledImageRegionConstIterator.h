@@ -35,7 +35,7 @@ namespace otb {
  * Specific value of the subsample factor may be given for each dimension.
  *
  * \ingroup ImageIterator
- * \sa StationaryFilterBank
+ * \sa WaveletFilterBank
  */
 template < class TImage >
 class ITK_EXPORT SubsampledImageRegionConstIterator 

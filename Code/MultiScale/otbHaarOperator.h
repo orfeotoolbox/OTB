@@ -239,7 +239,7 @@ protected:
         break;
     }
 
-#if 1
+#if 0
     std::cerr << "Coeff G(" << this->GetWavelet();
     if ( (int) DirectionOfTransformation == (int) FORWARD )
       std::cerr << " Forward ) = ";
