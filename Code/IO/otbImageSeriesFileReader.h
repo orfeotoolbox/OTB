@@ -35,7 +35,11 @@ namespace otb {
 
 /**
   * \class ImagerSeriesFileReader
-  * \brief Todo
+  * \brief Reader class dedicated to image series reading
+  *
+  * Actually, this class is mostly dedicated to read ENVI META FILE. Specialisations
+  * of the template are given relatively to the king of image (or vector image) used 
+  * in input and/or output.
   *
   *
   * \see ImageFileReader

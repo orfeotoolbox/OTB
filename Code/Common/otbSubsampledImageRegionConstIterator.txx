@@ -42,7 +42,7 @@ SubsampledImageRegionConstIterator< TImage >
 
   // Check to see if we are past the last pixel in the region
   // Note that ++ind[0] moves to the next pixel along the row.
-  ind[0] += static_cast<IndexValueType>(m_SubsampleFactor);
+  ind[0] += m_SubsampleFactor[0];
   bool done = (ind[0] > m_LastUsableIndex[0] );
   for (unsigned int i=1; done && i < ImageIteratorDimension; i++)
   {
@@ -58,12 +58,13 @@ SubsampledImageRegionConstIterator< TImage >
       && (ind[dim] > m_LastUsableIndex[dim]) )
     {
       ind[dim] = startIndex[dim];
-      ind[++dim] += static_cast<IndexValueType>(m_SubsampleFactor);
+      dim++;
+      ind[dim] += m_SubsampleFactor[dim];
     }
   }
   this->m_Offset = this->m_Image->ComputeOffset( ind );
   this->m_SpanEndOffset = this->m_Offset 
-                            + static_cast<IndexValueType>( m_SubsampleFactor * ((size[0]-1) / m_SubsampleFactor) )
+                            + static_cast<IndexValueType>( m_SubsampleFactor[0] * ((size[0]-1) / m_SubsampleFactor[0]) )
                             + 1;
   this->m_SpanBeginOffset = this->m_Offset;
 }
@@ -83,7 +84,7 @@ SubsampledImageRegionConstIterator< TImage >
 
   // Check to see if we are past the first pixel in the region
   // Note that --ind[0] moves to the previous pixel along the row.
-  ind[0] -= static_cast< IndexValueType >( m_SubsampleFactor );
+  ind[0] -= m_SubsampleFactor[0];
   done = (ind[0] <= startIndex[0] - 1);
   for (unsigned int i=1; done && i < ImageIteratorDimension; i++)
   {
@@ -99,7 +100,8 @@ SubsampledImageRegionConstIterator< TImage >
             && (ind[dim] < startIndex[dim]) )
     {
       ind[dim] = m_LastUsableIndex[dim];
-      ind[++dim] -= static_cast<IndexValueType>( m_SubsampleFactor );
+      dim++;
+      ind[dim] -= m_SubsampleFactor[dim];
     }
   }
   this->m_Offset = this->m_Image->ComputeOffset( ind );

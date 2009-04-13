@@ -75,6 +75,7 @@ public:
   typedef TInputImage InputImageType;
   typedef typename InputImageType::RegionType InputImageRegionType;
   typedef typename InputImageType::IndexType InputImageIndexType;
+  typedef typename InputImageIndexType::IndexValueType InputImageIndexValueType;
 
   typedef TOutputImage OutputImageType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
@@ -83,15 +84,24 @@ public:
   typedef typename OutputImageType::PixelType OutputPixelType;
 
   /** Set/Get the SubsampleFactor */
-  itkGetMacro(SubsampleFactor,unsigned int);
-  itkSetMacro(SubsampleFactor,unsigned int);
+  itkGetMacro(SubsampleFactor,const InputImageIndexType &);
+  itkSetMacro(SubsampleFactor,InputImageIndexType &);
+  void SetSubSampleFactor( InputImageIndexValueType factor )
+  {
+    InputImageIndexType indexFactor;
+    indexFactor.Fill( factor );
+    SetSubSampleFactor( indexFactor );
+  }
 
 protected:
   SubsampleImageFilter ()
   {
-    m_SubsampleFactor = 1;
+    m_SubsampleFactor.Fill( 1 );
   }
   virtual ~SubsampleImageFilter() {}
+
+  /** Internal test function to check if there is any direction to subsample */
+  bool IsSubsampleFactorOne () const;
 
   /** Since input and output image are very likely to be of different size. 
    * Region estimation functions has to be reimplemented
@@ -116,7 +126,7 @@ private:
   SubsampleImageFilter ( const Self & ); // purposely not implemented
   void operator= ( const Self & ); // purposely not implemented
 
-  unsigned int m_SubsampleFactor;
+  InputImageIndexType m_SubsampleFactor;
 }; // end of class 
 
 } // end of namespace otb

@@ -32,6 +32,8 @@ namespace otb {
  * scan over an image. It runs one pixel over X (in row, line, slice... dimensions), 
  * if X is the (integer) value of the SubsampleFactor.
  *
+ * Specific value of the subsample factor may be given for each dimension.
+ *
  * \ingroup ImageIterator
  * \sa StationaryFilterBank
  */
@@ -97,7 +99,7 @@ public:
   /** Default constructor. Needed since we provide a cast constructor. */
   SubsampledImageRegionConstIterator() : itk::ImageRegionConstIterator<TImage> ()
   {
-    m_SubsampleFactor = 1;
+    m_SubsampleFactor.Fill(1);
     m_SubSampledEndOffset = this->m_EndOffset;
 
     const IndexType& startIndex = this->m_Region.GetIndex();
@@ -115,7 +117,7 @@ public:
                                         const RegionType &region)
     : itk::ImageRegionConstIterator< TImage > ( ptr, region )
   {
-    m_SubsampleFactor = 1;
+    m_SubsampleFactor.Fill( 1 );
     m_SubSampledEndOffset = this->m_EndOffset;
 
     const IndexType& startIndex = this->m_Region.GetIndex();
@@ -136,7 +138,7 @@ public:
   SubsampledImageRegionConstIterator( const itk::ImageIterator<TImage> &it )
     : itk::ImageRegionConstIterator< TImage >( it )
   {
-    m_SubsampleFactor = 1;
+    m_SubsampleFactor.Fill( 1 );
     m_SubSampledEndOffset = this->m_EndOffset;
 
     const IndexType& startIndex = this->m_Region.GetIndex();
@@ -157,7 +159,7 @@ public:
   SubsampledImageRegionConstIterator( const itk::ImageConstIterator<TImage> &it)
     : itk::ImageRegionConstIterator< TImage >( it )
   {
-    m_SubsampleFactor = 1;
+    m_SubsampleFactor.Fill( 1 );
 
     const IndexType& startIndex = this->m_Region.GetIndex();
     const SizeType& size = this->m_Region.GetSize();
@@ -170,8 +172,16 @@ public:
     m_SubSampledEndOffset = this->m_Image->ComputeOffset( m_LastUsableIndex ) + 1;
   }
 
+  /** Set an isotropic subsampling factor */
+  void SetSubsampleFactor ( typename IndexType::IndexValueType factor )
+  {
+    IndexType index;
+    index.Fill( factor );
+    SetSubsampleFactor( index );
+  }
+
   /** Set / Get the subsample factor */
-  void SetSubsampleFactor ( unsigned int factor )
+  void SetSubsampleFactor ( const IndexType & factor )
   {
     this->m_SubsampleFactor = factor;
 
@@ -182,13 +192,13 @@ public:
     for ( unsigned int i = 0; i < ImageIteratorDimension; i++ )
     {
       m_LastUsableIndex[i] = startIndex[i]
-        + static_cast<IndexValueType>( m_SubsampleFactor * ( (size[i]-1) / m_SubsampleFactor ) );
+        + static_cast<IndexValueType>( m_SubsampleFactor[i] * ( (size[i]-1) / m_SubsampleFactor[i] ) );
     }
 
     m_SubSampledEndOffset = this->m_Image->ComputeOffset( m_LastUsableIndex ) + 1;
   }
 
-  unsigned int GetSubsampleFactor () const
+  const IndexType & GetSubsampleFactor () const
   {
     return this->m_SubsampleFactor;
   }
@@ -203,7 +213,7 @@ public:
 
     this->m_SpanBeginOffset = this->m_Offset;
     this->m_SpanEndOffset = this->m_Offset 
-                            + static_cast<IndexValueType>( m_SubsampleFactor * ((size[0]-1) / m_SubsampleFactor) )
+                            + static_cast<IndexValueType>( m_SubsampleFactor[0] * ((size[0]-1) / m_SubsampleFactor[0]) )
                             + 1;
   }
 
@@ -259,14 +269,14 @@ public:
   {
     // On the contrary to itk::ImageRegionConstIterator, m_Offset to
     // not incremented before the test
-    if( this->m_Offset + m_SubsampleFactor >= this->m_SpanEndOffset )
+    if( this->m_Offset + m_SubsampleFactor[0] >= this->m_SpanEndOffset )
     {
       this->Increment();
     }
     else
     {
       // Now, the increment is performed
-      this->m_Offset += m_SubsampleFactor;
+      this->m_Offset += m_SubsampleFactor[0];
     }
     return *this;
   }
@@ -282,14 +292,14 @@ public:
   {
     // On the contrary to itk::ImageRegionConstIterator, m_Offset
     // is not decremented here (it may become negative!)
-    if ( this->m_Offset < this->m_SpanBeginOffset + m_SubsampleFactor ) 
+    if ( this->m_Offset < this->m_SpanBeginOffset + m_SubsampleFactor[0] ) 
     {
       this->Decrement();
     }
     else
     {
       // Now we can
-      this->m_Offset -= m_SubsampleFactor;
+      this->m_Offset -= m_SubsampleFactor[0];
     }
     return *this;
   }
@@ -303,7 +313,7 @@ public:
 
     const SizeType& size = this->m_Region.GetSize();
     this->m_SpanEndOffset = this->m_Offset 
-                            + static_cast<IndexValueType>( m_SubsampleFactor * ((size[0]-1) / m_SubsampleFactor) )
+                            + static_cast<IndexValueType>( m_SubsampleFactor[0] * ((size[0]-1) / m_SubsampleFactor[0]) )
                             + 1;
     this->m_SpanBeginOffset = this->m_Offset;
   }
@@ -314,7 +324,7 @@ public:
 
     const SizeType& size = this->m_Region.GetSize();
     this->m_SpanEndOffset = this->m_Offset 
-                            + static_cast<IndexValueType>( m_SubsampleFactor * ((size[0]-1) / m_SubsampleFactor) )
+                            + static_cast<IndexValueType>( m_SubsampleFactor[0] * ((size[0]-1) / m_SubsampleFactor[0]) )
                             + 1;
     this->m_SpanBeginOffset = this->m_Offset;
   }
@@ -339,9 +349,9 @@ public:
 
     for ( unsigned int i = 0; i < ImageIteratorDimension; i++ )
     {
-      startIndex[i] /= m_SubsampleFactor;
+      startIndex[i] /= m_SubsampleFactor[i];
       --size[i];
-      size[i] /= m_SubsampleFactor;
+      size[i] /= m_SubsampleFactor[i];
       ++size[i];
     }
 
@@ -359,7 +369,7 @@ public:
   }
 
 protected:
-  unsigned int m_SubsampleFactor;
+  IndexType m_SubsampleFactor;
   unsigned long m_SubSampledEndOffset;
   IndexType m_LastUsableIndex;
 

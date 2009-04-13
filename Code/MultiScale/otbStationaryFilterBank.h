@@ -72,6 +72,9 @@ namespace otb {
  * At this step, it would have been interesting to implements a DirectionalInnerProductImageFilter to synchronize
  * the pipeline through a composite filter
  * 
+ * The two choice (FORWARD/INVERSE) yield specific implementation of the templates (header redeclaration
+ * is given at bottom of of otbFilterBank.h
+ *
  * \sa LowPassHaarOperator
  * \sa HighPassHaarOperator
  * \sa LowPassSplineBiOrthogonalOperator

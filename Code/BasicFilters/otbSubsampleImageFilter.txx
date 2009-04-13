@@ -40,7 +40,27 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::PrintSelf( std::ostream & os, itk::Indent indent ) const
 {
   Superclass::PrintSelf( os, indent );
-  os << indent << "SubsampleFactor = " << m_SubsampleFactor << "\n";
+  os << indent << "SubsampleFactor = [" << m_SubsampleFactor[0];
+  for ( unsigned int i = 1; i < InputImageDimension; i++ )
+  {
+    os << ", " << m_SubsampleFactor[i];
+  }
+  os << "]\n";
+}
+
+template < class TInputImage, class TOutputImage,
+            InverseOrForwardTransformationEnum TDirectionOfTransformation >
+bool
+SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
+::IsSubsampleFactorOne () const
+{
+  for ( unsigned int i = 0; i < InputImageDimension; i++ )
+  {
+    if ( m_SubsampleFactor[i] != 1 )
+      return false;
+  }
+
+  return true;
 }
 
 template < class TInputImage, class TOutputImage,
@@ -51,7 +71,7 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 {
   Superclass::GenerateOutputInformation();
 
-  if ( GetSubsampleFactor() > 1 )
+  if ( !IsSubsampleFactorOne() )
   {
     OutputImageRegionType newRegion;
     this->CallCopyInputRegionToOutputRegion( newRegion, this->GetInput()->GetLargestPossibleRegion() );
@@ -78,8 +98,8 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
     for ( unsigned int i = 0; i < InputImageDimension; i++ )
     {
-      destIndex[i] = srcIndex[i] / GetSubsampleFactor();
-      destSize[i] = ( srcSize[i] - 1 ) / GetSubsampleFactor() + 1;
+      destIndex[i] = srcIndex[i] / m_SubsampleFactor[i];
+      destSize[i] = ( srcSize[i] - 1 ) / m_SubsampleFactor[i] + 1;
     }
 
     destRegion.SetIndex( destIndex );
@@ -106,8 +126,8 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
     for ( unsigned int i = 0; i < InputImageDimension; i++ )
     {
-      destIndex[i] = srcIndex[i] * GetSubsampleFactor();
-      destSize[i] = ( srcSize[i] - 1 ) * GetSubsampleFactor() + 1;
+      destIndex[i] = srcIndex[i] * m_SubsampleFactor[i];
+      destSize[i] = ( srcSize[i] - 1 ) * m_SubsampleFactor[i] + 1;
     }
 
     destRegion.SetIndex( destIndex );
@@ -122,19 +142,16 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId)
 {
+  SubsampledImageRegionIterator< OutputImageType > outputIter
+    ( this->GetOutput(), outputRegionForThread );
+  outputIter.SetSubsampleFactor(1);
+  outputIter.GoToBegin();
+
   InputImageRegionType inputRegionForThread;
 	this->CallCopyOutputRegionToInputRegion( inputRegionForThread, outputRegionForThread );
 
   SubsampledImageRegionConstIterator< InputImageType > inputIter 
     ( this->GetInput(), inputRegionForThread );
-  inputIter.SetSubsampleFactor( static_cast<int>( DirectionOfTransformation ) == FORWARD ?
-    GetSubsampleFactor() : 1 );
-  inputIter.GoToBegin();
-
-  SubsampledImageRegionIterator< OutputImageType > outputIter
-    ( this->GetOutput(), outputRegionForThread );
-  outputIter.SetSubsampleFactor(1);
-  outputIter.GoToBegin();
 
   switch ( DirectionOfTransformation )
   {
@@ -164,7 +181,7 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
         OutputImageIndexType outputIndex;
         for ( unsigned int i = 0; i < OutputImageDimension; i++ )
         {
-          outputIndex[i] = inputIndex[i] * GetSubsampleFactor();
+          outputIndex[i] = inputIndex[i] * m_SubsampleFactor[i];
         }
         outputIter.SetLocation( outputIndex );
         outputIter.Set( static_cast< OutputPixelType >( inputIter.Get() ) );
