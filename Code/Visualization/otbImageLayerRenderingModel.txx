@@ -37,7 +37,7 @@ ImageLayerRenderingModel<TOutputImage>
   // Initalize the blending filter list 
   m_QuicklookBlendingFilterList = BlendingFilterListType::New();
   m_ExtractBlendingFilterList = BlendingFilterListType::New();
-  m_ScaledExtractBlendingFilterList = BlendingFilterListType::New();  
+  m_ScaledExtractBlendingFilterList = BlendingFilterListType::New();
 }
 
 template <class TOutputImage>
@@ -63,6 +63,22 @@ ImageLayerRenderingModel<TOutputImage>
     m_Updating = false;
     }
 }
+
+
+template <class TOutputImage>
+void
+ImageLayerRenderingModel<TOutputImage>
+::Init()
+{
+  m_QuicklookBlendingFilterList = BlendingFilterListType::New();
+  m_ExtractBlendingFilterList = BlendingFilterListType::New();
+  m_ScaledExtractBlendingFilterList = BlendingFilterListType::New();
+  m_RasterizedQuicklook = OutputImageType::New();
+  m_RasterizedExtract = OutputImageType::New();
+  m_RasterizedScaledExtract = OutputImageType::New();
+}
+
+
 
 template <class TOutputImage>
 void

@@ -124,6 +124,9 @@ public:
   /** Get the sumbsampling rate */
   unsigned int GetSubsamplingRate();
 
+  /** Filters Initialisation. */
+  void Init();
+
 protected:
   /** Constructor */
   ImageLayerRenderingModel();
