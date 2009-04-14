@@ -74,12 +74,12 @@ int otbWaveletFilterBank( int argc, char * argv[] )
   reader->SetFileName( inputFileName );
 
   /* Transformation */
-  //typedef otb::LowPassHaarOperator< PixelType, Dimension > LowPassOperator;
-  //typedef otb::HighPassHaarOperator< PixelType, Dimension > HighPassOperator;
+  //typedef otb::LowPassHaarOperator<otb::FORWARD, PixelType, Dimension > LowPassOperator;
+  //typedef otb::HighPassHaarOperator<otb::FORWARD, PixelType, Dimension > HighPassOperator;
   typedef otb::LowPass_9_7_Operator< PixelType, Dimension > LowPassOperator;
   typedef otb::HighPass_9_7_Operator< PixelType, Dimension > HighPassOperator;
 
-  typedef otb::WaveletFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator >
+  typedef otb::WaveletFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator, otb::FORWARD >
       FilterType;
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );

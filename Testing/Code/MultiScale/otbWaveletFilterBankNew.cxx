@@ -27,7 +27,7 @@ int otbWaveletFilterBankNew(int argc, char * argv[])
   typedef otb::Image< PixelType, Dimension >  ImageType;
   typedef otb::LowPass_9_7_Operator< PixelType, Dimension > LowPassOperator;
   typedef otb::HighPass_9_7_Operator< PixelType, Dimension > HighPassOperator;
-  typedef otb::WaveletFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator > FilterType;
+  typedef otb::WaveletFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator, otb::FORWARD > FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
