@@ -25,7 +25,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-#include "otbStationaryFilterBank.h"
+#include "otbWaveletFilterBank.h"
 #include "otbWaveletPacketForwardTransform.h"
 #include "otbWPCost.h"
 
@@ -79,7 +79,7 @@ int otbWaveletPacketTransform( int argc, char * argv[] )
   typedef otb::LowPass_9_7_Operator< PixelType, Dimension > LowPassOperator;
   typedef otb::HighPass_9_7_Operator< PixelType, Dimension > HighPassOperator;
 
-  typedef otb::StationaryFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator >
+  typedef otb::WaveletFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator >
       WaveletFilterType;
   typedef otb::FullyDecomposedWaveletPacketCost< ImageType > CostType;
 

@@ -25,7 +25,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-#include "otbStationaryFilterBank.h"
+#include "otbWaveletFilterBank.h"
 
 #include "otbHaarOperator.h"
 #include "otb_9_7_Operator.h"
@@ -33,7 +33,7 @@
 #include "otbCommandLineArgumentParser.h"
 #include "otbCommandProgressUpdate.h"
 
-int otbStationaryFilterBank( int argc, char * argv[] )
+int otbWaveletFilterBank( int argc, char * argv[] )
 {
   typedef otb::CommandLineArgumentParser ParserType;
   ParserType::Pointer parser = ParserType::New();
@@ -79,7 +79,7 @@ int otbStationaryFilterBank( int argc, char * argv[] )
   typedef otb::LowPass_9_7_Operator< PixelType, Dimension > LowPassOperator;
   typedef otb::HighPass_9_7_Operator< PixelType, Dimension > HighPassOperator;
 
-  typedef otb::StationaryFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator >
+  typedef otb::WaveletFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator >
       FilterType;
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );

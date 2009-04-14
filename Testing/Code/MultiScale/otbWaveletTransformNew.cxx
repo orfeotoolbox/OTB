@@ -19,7 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImage.h"
 #include "otbWaveletForwardTransform.h"
 #include "otbHaarOperator.h"
-#include "otbStationaryFilterBank.h"
+#include "otbWaveletFilterBank.h"
 
 int otbWaveletTransformNew(int argc, char * argv[])
 {
@@ -28,7 +28,7 @@ int otbWaveletTransformNew(int argc, char * argv[])
   typedef otb::Image< PixelType, Dimension >  ImageType;
   typedef otb::LowPassHaarOperator< PixelType, Dimension > LowPassOperator;
   typedef otb::HighPassHaarOperator< PixelType, Dimension > HighPassOperator;
-  typedef otb::StationaryFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator > WaveletFilterType;
+  typedef otb::WaveletFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator > WaveletFilterType;
   typedef otb::WaveletForwardTransform< ImageType, ImageType, WaveletFilterType > FilterType;
 
 

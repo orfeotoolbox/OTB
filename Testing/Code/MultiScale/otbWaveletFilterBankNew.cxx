@@ -18,16 +18,16 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbImage.h"
 #include "otb_9_7_Operator.h"
-#include "otbStationaryFilterBank.h"
+#include "otbWaveletFilterBank.h"
 
-int otbStationaryFilterBankNew(int argc, char * argv[])
+int otbWaveletFilterBankNew(int argc, char * argv[])
 {
   const int Dimension = 2;
   typedef double PixelType;
   typedef otb::Image< PixelType, Dimension >  ImageType;
   typedef otb::LowPass_9_7_Operator< PixelType, Dimension > LowPassOperator;
   typedef otb::HighPass_9_7_Operator< PixelType, Dimension > HighPassOperator;
-  typedef otb::StationaryFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator > FilterType;
+  typedef otb::WaveletFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator > FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 

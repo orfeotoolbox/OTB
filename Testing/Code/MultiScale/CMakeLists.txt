@@ -397,23 +397,23 @@ ADD_TEST(msTvWaveletPacketTransform ${MULTISCALE_TESTS4}
           -out ${TEMP}/msTvWaveletPacketTransform
 )
 
-# -------            otb::StationaryFilterBankNew   ----------
-ADD_TEST(msTuStationaryFilterBankNew ${MULTISCALE_TESTS4}
-         otbStationaryFilterBankNew)
+# -------            otb::WaveletFilterBankNew   ----------
+ADD_TEST(msTuWaveletFilterBankNew ${MULTISCALE_TESTS4}
+         otbWaveletFilterBankNew)
 
-ADD_TEST(msTvStationaryFilterBank ${MULTISCALE_TESTS4}
+ADD_TEST(msTvWaveletFilterBank ${MULTISCALE_TESTS4}
         --compare-n-images ${TOL} 4
-              ${BASELINE}/msTvStationaryFilterBank-0.tif
-              ${TEMP}/msTvStationaryFilterBank-0.tif
-              ${BASELINE}/msTvStationaryFilterBank-1.tif
-              ${TEMP}/msTvStationaryFilterBank-1.tif
-              ${BASELINE}/msTvStationaryFilterBank-2.tif
-              ${TEMP}/msTvStationaryFilterBank-2.tif
-              ${BASELINE}/msTvStationaryFilterBank-3.tif
-              ${TEMP}/msTvStationaryFilterBank-3.tif
-         otbStationaryFilterBank
+              ${BASELINE}/msTvWaveletFilterBank-0.tif
+              ${TEMP}/msTvWaveletFilterBank-0.tif
+              ${BASELINE}/msTvWaveletFilterBank-1.tif
+              ${TEMP}/msTvWaveletFilterBank-1.tif
+              ${BASELINE}/msTvWaveletFilterBank-2.tif
+              ${TEMP}/msTvWaveletFilterBank-2.tif
+              ${BASELINE}/msTvWaveletFilterBank-3.tif
+              ${TEMP}/msTvWaveletFilterBank-3.tif
+         otbWaveletFilterBank
           -in ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-          -out ${TEMP}/msTvStationaryFilterBank
+          -out ${TEMP}/msTvWaveletFilterBank
 )
 
 # -------       Fichiers sources CXX -----------------------------------
@@ -458,8 +458,8 @@ otbWaveletTransformNew.cxx
 otbWaveletTransform.cxx
 otbWaveletPacketTransformNew.cxx
 otbWaveletPacketTransform.cxx
-otbStationaryFilterBankNew.cxx
-otbStationaryFilterBank.cxx
+otbWaveletFilterBankNew.cxx
+otbWaveletFilterBank.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
