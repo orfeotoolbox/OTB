@@ -26,9 +26,9 @@ int otbWaveletTransformNew(int argc, char * argv[])
   const int Dimension = 2;
   typedef double PixelType;
   typedef otb::Image< PixelType, Dimension >  ImageType;
-  typedef otb::LowPassHaarOperator< PixelType, Dimension > LowPassOperator;
-  typedef otb::HighPassHaarOperator< PixelType, Dimension > HighPassOperator;
-  typedef otb::WaveletFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator > WaveletFilterType;
+  typedef otb::LowPassHaarOperator<otb::FORWARD, PixelType, Dimension > LowPassOperator;
+  typedef otb::HighPassHaarOperator<otb::FORWARD, PixelType, Dimension > HighPassOperator;
+  typedef otb::WaveletFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator, otb::FORWARD > WaveletFilterType;
   typedef otb::WaveletForwardTransform< ImageType, ImageType, WaveletFilterType > FilterType;
 
 
