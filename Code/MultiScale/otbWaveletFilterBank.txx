@@ -485,18 +485,22 @@ WaveletFilterBank< TInputImage, TOutputImage,
   OutputImageRegionType outputImageRegion;
   this->CallCopyInputRegionToOutputRegion( direction, outputImageRegion, outputRegionForThread );
 
-  if ( direction != 0 && m_SubsampleImageFactor > 1 )
+  if ( m_SubsampleImageFactor > 1 )
   {
     std::cerr << "Using input images [" << direction << "][" << ( idx / (1<<(direction+1)) ) << "] ";
     input = m_InternalImages[direction][ idx / (1<<(direction+1))];
 
-    std::cerr << "out LP [" << direction-1 << "][" << ( idx / (1<<direction) ) << "] ";
-    outputLowPass = m_InternalImages[direction-1][ idx / (1<<direction) ];
+    if ( direction != 0 )
+    {
+      std::cerr << "out LP [" << direction-1 << "][" << ( idx / (1<<direction) ) << "] ";
+      outputLowPass = m_InternalImages[direction-1][ idx / (1<<direction) ];
 
-    std::cerr << "and HP [" << direction-1 << "][" << ( idx / (1<<direction) +1 ) << "]\n";
-    outputHighPass = m_InternalImages[direction-1][ idx / (1<<direction) + 1];
+      std::cerr << "and HP [" << direction-1 << "][" << ( idx / (1<<direction) +1 ) << "]\n";
+      outputHighPass = m_InternalImages[direction-1][ idx / (1<<direction) + 1];
+    }
   }
-  else
+
+  if ( direction == 0 )
   {
     // The output image has to be allocated
     outputLowPass->SetRegions( outputImageRegion );
