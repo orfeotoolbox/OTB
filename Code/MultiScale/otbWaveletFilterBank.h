@@ -160,7 +160,8 @@ private:
  */
 template < class TInputImage, class TOutputImage, 
             class TLowPassOperator, class THighPassOperator >
-  class ITK_EXPORT WaveletFilterBank< TInputImage, TOutputImage, TLowPassOperator, THighPassOperator, FORWARD >
+  class ITK_EXPORT WaveletFilterBank< TInputImage, TOutputImage, 
+            TLowPassOperator, THighPassOperator, FORWARD >
   : public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -228,14 +229,21 @@ protected:
 	virtual void GenerateOutputInformation();
 
 
-  virtual void AllocateOutputs();
+  /** BeforeThreadedGenerateData.
+   * It allocates also internal images
+   */
+  virtual void BeforeThreadedGenerateData ();
 
   /** Internal Data Allocation 
    * If m_SubsampleImageFactor != 1, internal data with progressive region size
-   * subsampling if required... It follows the use of ThreadedGenerateDataAtDimensionN
+   * subsampling if required... 
    */
-  void AllocateInternalData ( unsigned int idx, unsigned int direction, 
-      const OutputImageRegionType& outputRegion );
+  virtual void AllocateInternalData ( const OutputImageRegionType& outputRegion );
+
+  /** AfterThreadedGenerateData.
+   * It enforce memory destruction of internal images
+   */
+  virtual void AfterThreadedGenerateData ();
 
   /** CallCopyOutputRegionToInputRegion
    * Since input and output image may be of different size when a 
@@ -271,7 +279,13 @@ private:
   unsigned int m_UpSampleFilterFactor;
   unsigned int m_SubsampleImageFactor;
 
-  std::vector< OutputImagePointerType > m_InternalImages;
+  /** the easiest way to store internal images is to keep track of the splits
+   * at each direction. Then, std::vector< InternalImagesTabular > is a tab of 
+   * size ImageDimension-1 and each InternalImagesTabular contains intermediate 
+   * images
+   */
+  typedef std::vector< OutputImagePointerType > InternalImagesTabular ;
+  std::vector< InternalImagesTabular > m_InternalImages;
 }; // end of class
   
 

@@ -30,6 +30,9 @@
 #include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkProgressReporter.h"
 
+// FIXME
+#include "otbImageViewer.h" 
+
 namespace otb {
 
 /**
@@ -48,14 +51,11 @@ WaveletFilterBank< TInputImage, TOutputImage,
   unsigned int numOfOutputs = 1<<InputImageType::ImageDimension;
 
   this->SetNumberOfOutputs( numOfOutputs );
-  // Internal images will be used only if m_SubsampledInputImages != 1
-  m_InternalImages.resize( numOfOutputs );
   for ( unsigned int i = 0; i < numOfOutputs; i++ )
   {
     this->SetNthOutput(i,OutputImageType::New());
-    m_InternalImages.push_back( OutputImageType::New() );
   }
-      
+  
   m_UpSampleFilterFactor = 0;
   m_SubsampleImageFactor = 1;
 }
@@ -94,27 +94,24 @@ void
 WaveletFilterBank< TInputImage, TOutputImage, 
                       TLowPassOperator, THighPassOperator, 
                       FORWARD >
-::AllocateOutputs ()
+::BeforeThreadedGenerateData ()
 {
-  Superclass::AllocateOutputs();
-
   if ( m_SubsampleImageFactor > 1 && InputImageDimension > 1 )
   {
-    unsigned int dir = 0;
-    
+    // Internal images will be used only if m_SubsampledInputImages != 1
+      std::cerr << "Allocating  m_InternalImages with size " << (InputImageType::ImageDimension-1) << " \n";
+    m_InternalImages.resize( InputImageType::ImageDimension-1 );
+    for ( unsigned int i = 0; i < m_InternalImages.size(); i++ )
+    {
+      // the size is liked to the SubsampleImageFactor that is assume to be 2!!!
+      std::cerr << "Allocating  m_InternalImages[" << i << "] with size " << (1<<(i+1)) << " \n";
+      m_InternalImages[InputImageType::ImageDimension-2-i].resize( 1<<(i+1) );
+    }
+
     OutputImageRegionType intermediateRegion;
-    this->CallCopyInputRegionToOutputRegion( dir, intermediateRegion, this->GetInput()->GetLargestPossibleRegion() );
+    Superclass::CallCopyInputRegionToOutputRegion( intermediateRegion, this->GetInput()->GetLargestPossibleRegion() );
 
-    m_InternalImages[0] = OutputImageType::New();
-    m_InternalImages[0]->SetRegions( intermediateRegion );
-    m_InternalImages[0]->Allocate();
-
-    m_InternalImages[1<<dir] = OutputImageType::New();
-    m_InternalImages[1<<dir]->SetRegions( intermediateRegion );
-    m_InternalImages[1<<dir]->Allocate();
-
-    AllocateInternalData( 0, dir-1, intermediateRegion );
-    AllocateInternalData( 1<<dir, dir-1, intermediateRegion );
+    AllocateInternalData( intermediateRegion );
   }
 }
 
@@ -124,21 +121,41 @@ void
 WaveletFilterBank< TInputImage, TOutputImage, 
                       TLowPassOperator, THighPassOperator, 
                       FORWARD >
-::AllocateInternalData ( unsigned int idx, unsigned int direction, 
-                          const OutputImageRegionType& outputRegion )
+::AllocateInternalData ( const OutputImageRegionType& outputRegion )
 {
-  // FIXME: to be verified at least in 3D...
-  if ( direction != 0 )
+  OutputImageRegionType smallerRegion, largerRegion = outputRegion;
+
+  for ( unsigned int direction = 0; direction < InputImageType::ImageDimension-1; direction++ )
   {
-    OutputImageRegionType intermediateRegion;
-    this->CallCopyInputRegionToOutputRegion( direction, intermediateRegion, outputRegion );
+    this->CallCopyInputRegionToOutputRegion( InputImageType::ImageDimension-1-direction, 
+        smallerRegion, largerRegion );
 
-    m_InternalImages[ idx ] = OutputImageType::New();
-    m_InternalImages[ idx ]->SetRegions( intermediateRegion );
-    m_InternalImages[ idx ]->Allocate();
+    for ( unsigned int i = 0; 
+        i < m_InternalImages[direction].size(); 
+        ++i )
+    {
+      std::cerr << "SetRegion at m_InternalImages[" << (direction) << "][" << i << "]\n";
 
-    AllocateInternalData( idx, direction-1, intermediateRegion );
-    AllocateInternalData( idx, 1<<direction, intermediateRegion );
+      m_InternalImages[InputImageType::ImageDimension-2-direction][i] = OutputImageType::New();
+      m_InternalImages[InputImageType::ImageDimension-2-direction][i]->SetRegions( smallerRegion );
+      m_InternalImages[InputImageType::ImageDimension-2-direction][i]->Allocate();
+    }
+
+    largerRegion = smallerRegion;
+  }
+}
+
+template < class TInputImage, class TOutputImage, 
+            class TLowPassOperator, class THighPassOperator >
+void
+WaveletFilterBank< TInputImage, TOutputImage, 
+                      TLowPassOperator, THighPassOperator, 
+                      FORWARD >
+::AfterThreadedGenerateData ()
+{
+  if ( m_SubsampleImageFactor > 1 && InputImageDimension > 1 )
+  {
+    m_InternalImages.clear();
   }
 }
 
@@ -209,7 +226,6 @@ WaveletFilterBank< TInputImage, TOutputImage,
 
     destRegion.SetIndex( destIndex );
     destRegion.SetSize( destSize );
-
   }
 }
 
@@ -304,13 +320,13 @@ WaveletFilterBank< TInputImage, TOutputImage,
 
   if ( outputLowPass == 0 )
   {
-    throw itk::ExceptionObject( __FILE__, __LINE__, "Sortie 0 nulle", ITK_LOCATION );
+    throw itk::ExceptionObject( __FILE__, __LINE__, "Output(0) not allocated", ITK_LOCATION );
   }
 
   if ( outputHighPass == 0 )
   {
     itk::OStringStream msg;
-    msg << "Output number 1<<" << dir << " = " << (1<<dir) << " null\n";
+    msg << "Output number 1<<" << dir << " = " << (1<<dir) << " not allocated\n";
     msg << "Number of excpected outputs " << this->GetNumberOfOutputs() << "\n";
     throw itk::ExceptionObject( __FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION );
   }
@@ -318,9 +334,14 @@ WaveletFilterBank< TInputImage, TOutputImage,
   // On  multidimensional case, if m_SubsampleImageFactor != 1, we need internal images of different size
   if ( dir != 0 && m_SubsampleImageFactor > 1 )
   {
-    outputLowPass = m_InternalImages[0];
-    outputHighPass = m_InternalImages[ 1<<dir ];
+    std::cerr << "Using internal images [" << dir-1 << "][0] and [" << dir-1 << "][1] at thread " << threadId << "\n";
+    outputLowPass = m_InternalImages[dir-1][0];
+    outputHighPass = m_InternalImages[dir-1][1];
   }
+
+  std::cerr << "InputRegion  [" << inputRegionForThread.GetSize()[0] << "," << inputRegionForThread.GetSize()[1] << "]\n";
+  std::cerr << "OutputLowPass[" << outputLowPass->GetRequestedRegion().GetSize()[0] << "," << outputLowPass->GetRequestedRegion().GetSize()[1] << "]\n";
+  std::cerr << "OutputHighPass[" << outputHighPass->GetRequestedRegion().GetSize()[0] << "," << outputHighPass->GetRequestedRegion().GetSize()[1] << "]\n";
 
   // typedef for the iterations over the input image
   typedef itk::ConstNeighborhoodIterator< InputImageType > NeighborhoodIteratorType;
@@ -374,6 +395,17 @@ WaveletFilterBank< TInputImage, TOutputImage,
     }
   }
 
+  // FIXME
+  {
+    typedef otb::ImageViewer< OutputPixelType > ViewerType;
+    typename ViewerType::Pointer  lViewer = ViewerType::New();
+    lViewer->SetLabel( "highPass 0" );
+    lViewer->SetImage( outputHighPass );
+    lViewer->Show();
+
+    Fl::run();
+  }
+
   // Low pass part calculation
   LowPassOperatorType lowPassOperator;
   lowPassOperator.SetDirection(dir);
@@ -407,6 +439,17 @@ WaveletFilterBank< TInputImage, TOutputImage,
     }
   }
 
+  // FIXME
+  {
+    typedef otb::ImageViewer< OutputPixelType > ViewerType;
+    typename ViewerType::Pointer  lViewer = ViewerType::New();
+    lViewer->SetLabel( "LowPass 0" );
+    lViewer->SetImage( outputLowPass );
+    lViewer->Show();
+
+    Fl::run();
+  }
+
   if ( dir > 0 )
   { 
     // Note that outputRegionForThread correspond to the actual region of (local) input !
@@ -428,22 +471,45 @@ WaveletFilterBank< TInputImage, TOutputImage,
 ( unsigned int idx, unsigned int direction, itk::ProgressReporter & reporter,
   const OutputImageRegionType& outputRegionForThread, int threadId )
 {
+  std::cerr << "-> idx = " << idx << ", direction = " << direction << "\n";
+
   // Note that outputRegionForThread correspond to the actual region of input !
   OutputImageType * input = this->GetOutput( idx );
   OutputImageType * outputHighPass = this->GetOutput( idx + (1<<direction) );
-
-  if ( direction == 0 && m_SubsampleImageFactor > 1 )
-  {
-    input = m_InternalImages[ idx ];
-    outputHighPass = m_InternalImages[ idx + (1<<direction) ];
-  }
+  OutputImagePointerType outputLowPass = OutputImageType::New();
 
   OutputImageRegionType outputImageRegion;
   this->CallCopyInputRegionToOutputRegion( direction, outputImageRegion, outputRegionForThread );
 
-  OutputImagePointerType outputLowPass = OutputImageType::New();
-  outputLowPass->SetRegions( outputImageRegion );
-  outputLowPass->Allocate();
+  if ( direction != 0 && m_SubsampleImageFactor > 1 )
+  {
+    std::cerr << "Using input images [" << direction << "][" << ( idx / (1<<(direction+1)) ) << "] ";
+    input = m_InternalImages[direction][ idx / (1<<(direction+1))];
+
+    std::cerr << "out LP [" << direction-1 << "][" << ( idx / (1<<direction) ) << "] ";
+    outputLowPass = m_InternalImages[direction-1][ idx / (1<<direction) ];
+
+    std::cerr << "and HP [" << direction-1 << "][" << ( idx / (1<<direction) +1 ) << "]\n";
+    outputHighPass = m_InternalImages[direction-1][ idx / (1<<direction) + 1];
+  }
+  else
+  {
+    // The output image has to be allocated
+    outputLowPass->SetRegions( outputImageRegion );
+    outputLowPass->Allocate();
+  }
+
+
+  // FIXME
+  {
+    typedef otb::ImageViewer< OutputPixelType > ViewerType;
+    typename ViewerType::Pointer  lViewer = ViewerType::New();
+    lViewer->SetLabel( "input" );
+    lViewer->SetImage( input );
+    lViewer->Show();
+
+    Fl::run();
+  }
 
   /** Inner product iterators */
   typedef itk::ConstNeighborhoodIterator< OutputImageType > NeighborhoodIteratorType;
@@ -489,7 +555,11 @@ WaveletFilterBank< TInputImage, TOutputImage,
     while ( !subIt.IsAtEnd() && !out.IsAtEnd() )
     {
       it.SetLocation( subIt.GetLocationIndex() );
-      out.Set( innerProduct( it, highPassOperator ) );
+        //std::cerr << "Iterateur a l'index = [" << subIt.GetLocationIndex()[0];
+        //std::cerr << ", " <<  subIt.GetLocationIndex()[1] << "]\n";
+
+      OutputPixelType tmp =  innerProduct( it, highPassOperator );
+      out.Set( tmp /*innerProduct( it, highPassOperator ) */ );
 
       ++subIt;
       ++out;
@@ -531,10 +601,16 @@ WaveletFilterBank< TInputImage, TOutputImage,
     }
   }
 
+  if ( direction != 0 && m_SubsampleImageFactor > 1 )
+  {
+    std::cerr << "Using tem image at [" << (direction-2) << "][" << (idx/(1<<(direction-1))) << "\n";
+  }
+
   // Swap input and lowPassOutput
   itk::ImageRegionConstIterator< OutputImageType > inIt ( outputLowPass, outputImageRegion );
   IteratorType outIt ( ( direction != 0 && m_SubsampleImageFactor > 1 ) ? 
-                         static_cast<OutputImageType*>( m_InternalImages[ idx ] ) : this->GetOutput( idx ), 
+                         static_cast<OutputImageType*>( m_InternalImages[direction-2][idx/(1<<(direction-1))] ) 
+                          : this->GetOutput( idx ), 
                         outputImageRegion );
 
   for ( inIt.GoToBegin(), outIt.GoToBegin(); !inIt.IsAtEnd(); ++inIt, ++outIt )
