@@ -177,7 +177,7 @@ void
 ExtractROIBase<TInputImage,TOutputImage>
 ::GenerateOutputInformation()
 {
-  // Compute the area to extract
+    // Compute the area to extract
   // If SizeX/Y == 0, then set SizeX/Y to image size
   typename Superclass::InputImageConstPointer  inputPtr  = this->GetInput();
 
@@ -186,7 +186,8 @@ ExtractROIBase<TInputImage,TOutputImage>
   {
     return;
   }
-
+  Superclass::GenerateOutputInformation();
+  
   // Get the input image
   //const InputImageRegionType& inputRegion = inputPtr->GetRequestedRegion();
   const InputImageRegionType& inputRegion = inputPtr->GetLargestPossibleRegion();
