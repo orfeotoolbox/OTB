@@ -70,8 +70,8 @@ SET(OTB_VERSION_PATCH "0")
 SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
 
-# => Comment for OTB 2.6.0
-OPTION(BUILD_TESTING "Build testing." OFF)
+# => Comment for OTB 3.0.0
+#OPTION(BUILD_TESTING "Build testing." OFF)
 
 #-----------------------------------------------------------------------------
 # OTB build configuration options.
@@ -83,6 +83,16 @@ ELSE(WIN32)
 OPTION(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 ENDIF(WIN32)
 SET(OTB_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
+
+IF(NOT OTB_NO_LIBRARY_VERSION)
+  # This setting of SOVERSION assumes that any API change
+  # will increment either the minor or major version number of OTB.
+  SET(OTB_LIBRARY_PROPERTIES 
+      VERSION   "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}"
+      SOVERSION "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}"
+     )
+ENDIF(NOT OTB_NO_LIBRARY_VERSION)
+
 
 #-----------------------------------------------------------------------------
 
@@ -456,6 +466,90 @@ ENDIF(GDAL_HAS_OGR)
 # End connections whith external libraries
 #-------------------------------
 
+#-----------------------------------------------------------------------------
+# Installation vars.
+# OTB_INSTALL_BIN_DIR          - binary dir (executables)
+# OTB_INSTALL_LIB_DIR          - library dir (libs)
+# OTB_INSTALL_DATA_DIR         - share dir (say, examples, data, etc)
+# OTB_INSTALL_INCLUDE_DIR      - include dir (headers)
+# OTB_INSTALL_PACKAGE_DIR      - package/export configuration files
+# OTB_INSTALL_NO_DEVELOPMENT   - do not install development files
+# OTB_INSTALL_NO_RUNTIME       - do not install runtime files
+# OTB_INSTALL_NO_DOCUMENTATION - do not install documentation files
+
+IF(NOT OTB_INSTALL_BIN_DIR)
+  SET(OTB_INSTALL_BIN_DIR "/bin")
+ENDIF(NOT OTB_INSTALL_BIN_DIR)
+
+IF(NOT OTB_INSTALL_LIB_DIR)
+  SET(OTB_INSTALL_LIB_DIR "/lib/otb")
+ENDIF(NOT OTB_INSTALL_LIB_DIR)
+
+IF(NOT OTB_INSTALL_DATA_DIR)
+  SET(OTB_INSTALL_DATA_DIR "/share/otb")
+ENDIF(NOT OTB_INSTALL_DATA_DIR)
+
+IF(NOT OTB_INSTALL_INCLUDE_DIR)
+  SET(OTB_INSTALL_INCLUDE_DIR "/include/otb")
+ENDIF(NOT OTB_INSTALL_INCLUDE_DIR)
+
+IF(NOT OTB_INSTALL_PACKAGE_DIR)
+  SET(OTB_INSTALL_PACKAGE_DIR ${OTB_INSTALL_LIB_DIR}
+    CACHE INTERNAL "")
+ENDIF(NOT OTB_INSTALL_PACKAGE_DIR)
+
+IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+  SET(OTB_INSTALL_NO_DEVELOPMENT 0)
+ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+
+IF(NOT OTB_INSTALL_NO_RUNTIME)
+  SET(OTB_INSTALL_NO_RUNTIME 0)
+ENDIF(NOT OTB_INSTALL_NO_RUNTIME)
+
+IF(NOT OTB_INSTALL_NO_DOCUMENTATION)
+  SET(OTB_INSTALL_NO_DOCUMENTATION 0)
+ENDIF(NOT OTB_INSTALL_NO_DOCUMENTATION)
+
+SET(OTB_INSTALL_NO_LIBRARIES)
+IF(OTB_BUILD_SHARED_LIBS)
+  IF(OTB_INSTALL_NO_RUNTIME AND OTB_INSTALL_NO_DEVELOPMENT)
+    SET(OTB_INSTALL_NO_LIBRARIES 1)
+  ENDIF(OTB_INSTALL_NO_RUNTIME AND OTB_INSTALL_NO_DEVELOPMENT)
+ELSE(OTB_BUILD_SHARED_LIBS)
+  IF(OTB_INSTALL_NO_DEVELOPMENT)
+    SET(OTB_INSTALL_NO_LIBRARIES 1)
+  ENDIF(OTB_INSTALL_NO_DEVELOPMENT)
+ENDIF(OTB_BUILD_SHARED_LIBS)
+
+# Because INSTALL_* commands require a leading / and because INSTALL (cmake 2.4
+# and newer) requires no leading / to install under INSTALL_PREFIX, we
+# are stripping the leading /. In the future, there should be no leading
+# / in any install directory variables
+STRING(REGEX REPLACE "^/" "" OTB_INSTALL_LIB_DIR_CM24 "${OTB_INSTALL_LIB_DIR}")
+STRING(REGEX REPLACE "^/" "" OTB_INSTALL_BIN_DIR_CM24 "${OTB_INSTALL_BIN_DIR}")
+STRING(REGEX REPLACE "^/" "" OTB_INSTALL_INCLUDE_DIR_CM24 "${OTB_INSTALL_INCLUDE_DIR}")
+STRING(REGEX REPLACE "^/" "" OTB_INSTALL_PACKAGE_DIR_CM24 "${OTB_INSTALL_PACKAGE_DIR}")
+STRING(REGEX REPLACE "^/" "" OTB_INSTALL_DOXYGEN_DIR_CM24 "${OTB_INSTALL_DOXYGEN_DIR}")
+STRING(REGEX REPLACE "^/" "" OTB_INSTALL_TCL_DIR_CM24 "${OTB_INSTALL_TCL_DIR}")
+STRING(REGEX REPLACE "^/" "" OTB_INSTALL_JAVA_DIR_CM24 "${OTB_INSTALL_JAVA_DIR}")
+
+# Make sure the user does not try to install on top of the build tree.
+IF(WIN32 OR APPLE OR UNIX)
+  STRING(TOLOWER "${CMAKE_INSTALL_PREFIX}" _PREFIX)
+  STRING(TOLOWER "${OTB_BINARY_DIR}" _BUILD)
+ELSE(WIN32 OR APPLE OR UNIX)
+  SET(_PREFIX "${CMAKE_INSTALL_PREFIX}")
+  SET(_BUILD "${OTB_BINARY_DIR}")
+ENDIF(WIN32 OR APPLE OR UNIX)
+IF("${_PREFIX}" STREQUAL "${_BUILD}")
+  MESSAGE(FATAL_ERROR
+    "The current CMAKE_INSTALL_PREFIX points at the build tree:\n"
+    "  ${CMAKE_INSTALL_PREFIX}\n"
+    "This is not supported."
+    )
+ENDIF("${_PREFIX}" STREQUAL "${_BUILD}")
+
+
 # The fluid-generated fltk sources have many warnings.  This macro
 # will disable warnings for the generated files on some compilers.
 MACRO(OTB_DISABLE_FLTK_GENERATED_WARNINGS files)
@@ -520,8 +614,8 @@ INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityCXX.cmake)
 # MESSAGE(FATAL_ERROR ...) commands are invoked.
 INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
 MARK_AS_ADVANCED(TCL_TCLSH DART_ROOT)
+ENABLE_TESTING()
 IF(BUILD_TESTING)
-  ENABLE_TESTING()
   SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
   MARK_AS_ADVANCED(BUILDNAME)
 ENDIF(BUILD_TESTING)
@@ -740,13 +834,13 @@ INCLUDE_DIRECTORIES(
 
 #-----------------------------------------------------------------------------
 # Uninstall cmake use to uninstall OTB.
-CONFIGURE_FILE(
-  "${CMAKE_CURRENT_SOURCE_DIR}/CMake/cmake_uninstall.cmake.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-  IMMEDIATE @ONLY)
+#    CONFIGURE_FILE(
+#      "${CMAKE_CURRENT_SOURCE_DIR}/CMake/cmake_uninstall.cmake.in"
+#      "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+#      IMMEDIATE @ONLY)
 
-ADD_CUSTOM_TARGET(uninstall
-  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
+#    ADD_CUSTOM_TARGET(uninstall
+#      "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 
 #-----------------------------------------------------------------------------
 # Help other projects use OTB.
@@ -755,10 +849,21 @@ ADD_CUSTOM_TARGET(uninstall
 CONFIGURE_FILE(${OTB_SOURCE_DIR}/UseOTB.cmake.in
                ${OTB_BINARY_DIR}/UseOTB.cmake COPYONLY IMMEDIATE)
 
+
 # Save the compiler settings so another project can import them.
 INCLUDE(${CMAKE_ROOT}/Modules/CMakeExportBuildSettings.cmake)
 CMAKE_EXPORT_BUILD_SETTINGS(${OTB_BINARY_DIR}/OTBBuildSettings.cmake)
-INSTALL_FILES(/lib/otb .cmake OTBBuildSettings)
+#INSTALL_FILES(/lib/otb .cmake OTBBuildSettings)
+
+IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+  INSTALL(FILES
+    ${OTB_BINARY_DIR}/OTBBuildSettings.cmake
+    ${OTB_BINARY_DIR}/OTBLibraryDepends.cmake
+    ${OTB_BINARY_DIR}/UseOTB.cmake
+    DESTINATION ${OTB_INSTALL_PACKAGE_DIR_CM24}
+    COMPONENT Development
+    )
+ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
 
 # Save library dependencies.
 EXPORT_LIBRARY_DEPENDENCIES(${OTB_BINARY_DIR}/OTBLibraryDepends.cmake)
@@ -766,9 +871,15 @@ EXPORT_LIBRARY_DEPENDENCIES(${OTB_BINARY_DIR}/OTBLibraryDepends.cmake)
 # Create the OTBConfig.cmake file containing the OTB configuration.
 INCLUDE (${OTB_SOURCE_DIR}/otbGenerateOTBConfig.cmake)
 
-# Install some files.
-INSTALL_FILES(/include/otb .h otbConfigure)
-INSTALL_FILES(/lib/otb .cmake UseOTB OTBLibraryDepends OTBConfig )
+IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+  INSTALL(FILES ${OTB_BINARY_DIR}/otbConfigure.h
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}
+    COMPONENT Development)
+ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+
+
+#INSTALL_FILES(/include/otb .h otbConfigure)
+#INSTALL_FILES(/lib/otb .cmake UseOTB OTBLibraryDepends OTBConfig )
 
 #-----------------------------------------------------------------------------
 # Add compiler flags OTB needs to work on this platform.  This must be
@@ -784,8 +895,7 @@ SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${OTB_REQUIRED_LINK_
 # Set up CPack support, to be able to distribute OTB binary packages. It will
 # be particulary useful to distributed prebuilt OTB.
 #
-
-#INCLUDE(InstallRequiredSystemLibraries)
+INCLUDE(InstallRequiredSystemLibraries)
 
 SET(CPACK_PACKAGE_NAME "OTB" CACHE STRING "Package name")
 MARK_AS_ADVANCED(CPACK_PACKAGE_NAME)

@@ -1,3 +1,7 @@
+
+IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+
+
 FILE(GLOB ossim_base_HDRS "ossim/base/*.h")
 FILE(GLOB ossim_elevation_HDRS "ossim/elevation/*.h")
 FILE(GLOB ossim_font_HDRS "ossim/font/*.h")
@@ -13,48 +17,49 @@ FILE(GLOB ossim_vec_HDRS "ossim/vec/*.h")
 FILE(GLOB ossim_vpfutil_HDRS "ossim/vpfutil/*.h")
 
 INSTALL(FILES ${ossim_base_HDRS}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim/base
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/base
     COMPONENT Development)
 INSTALL(FILES ${ossim_elevation_HDRS}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim/elevation
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/elevation
     COMPONENT Development)
 INSTALL(FILES ${ossim_font_HDRS}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim/font
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/font
     COMPONENT Development)
 INSTALL(FILES ${ossim_imaging_HDRS}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim/imaging
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/imaging
     COMPONENT Development)
 INSTALL(FILES ${ossim_init_HDRS}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim/init
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/init
     COMPONENT Development)
 INSTALL(FILES ${ossim_kbool_HDRS}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim/kbool
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/kbool
     COMPONENT Development)
 INSTALL(FILES ${ossim_matrix_HDRS}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim/matrix
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/matrix
     COMPONENT Development)
 INSTALL(FILES ${ossim_parallel_HDRS}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim/parallel
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/parallel
     COMPONENT Development)
 INSTALL(FILES ${ossim_plugin_HDRS}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim/plugin
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/plugin
     COMPONENT Development)
 INSTALL(FILES ${ossim_projection_HDRS}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim/projection
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/projection
     COMPONENT Development)
 INSTALL(FILES ${ossim_support_data_HDRS}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim/support_data
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/support_data
     COMPONENT Development)
 INSTALL(FILES ${ossim_vec_HDRS}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim/vec
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/vec
     COMPONENT Development)
 INSTALL(FILES ${ossim_vpfutil_HDRS}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim/vpfutil
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/vpfutil
     COMPONENT Development)
 
 SET(ossim_config_HDR "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimConfig.h" )
 
 INSTALL(FILES ${ossim_config_HDR}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim
     COMPONENT Development)
 
+ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
