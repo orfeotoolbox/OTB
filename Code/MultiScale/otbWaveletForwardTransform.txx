@@ -103,7 +103,7 @@ WaveletForwardTransform< TInputImage, TOutputImage, TFilter >
       GetFilter(nbDecomp)->GraftNthOutput( idx, this->GetOutput( outputIdxForGraft-- ) );
 
     if ( m_UseSubSampleImage == false )
-      GetFilter(nbDecomp)->SetUpSampleFactor( ++subSampleFactor );
+      GetFilter(nbDecomp)->SetUpSampleFilterFactor( ++subSampleFactor );
 
     GetFilter( nbDecomp )->Update();
 
@@ -128,7 +128,7 @@ WaveletForwardTransform< TInputImage, TOutputImage, TFilter >
     GetFilter(nbDecomp)->GraftNthOutput( idx, this->GetOutput( outputIdxForGraft-- ) );
 
   if ( m_UseSubSampleImage == false )
-      GetFilter(nbDecomp)->SetUpSampleFactor( ++subSampleFactor );
+      GetFilter(nbDecomp)->SetUpSampleFilterFactor( ++subSampleFactor );
 
   GetFilter( nbDecomp )->Update();
 

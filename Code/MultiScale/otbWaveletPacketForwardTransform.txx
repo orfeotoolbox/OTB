@@ -72,7 +72,7 @@ WaveletPacketForwardTransform< TInputImage, TOutputImage, TFilter, TCost >
     this->GetFilterList()->PushBack( FilterType::New() );
     FilterType * filter = this->GetFilterList()->GetNthElement( this->GetFilterList()->Size()-1 );
     filter->SetInput( outputIt.Get() );
-    filter->SetUpSampleFactor( depth );
+    filter->SetUpSampleFilterFactor( depth );
     filter->Update();
 
     depth++;

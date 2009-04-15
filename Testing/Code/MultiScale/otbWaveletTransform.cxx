@@ -25,11 +25,11 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-#include "otbStationaryFilterBank.h"
+#include "otbWaveletFilterBank.h"
 #include "otbWaveletForwardTransform.h"
 
 #include "otbHaarOperator.h"
-#include "otb_9_7_Operator.h"
+#include "otbSplineBiOrthogonalOperator.h"
 
 #include "otbCommandLineArgumentParser.h"
 #include "otbCommandProgressUpdate.h"
@@ -73,12 +73,13 @@ int otbWaveletTransform( int argc, char * argv[] )
   reader->SetFileName( inputFileName );
 
   /* Transformation */
-  //typedef otb::LowPassHaarOperator< PixelType, Dimension > LowPassOperator;
-  //typedef otb::HighPassHaarOperator< PixelType, Dimension > HighPassOperator;
-  typedef otb::LowPass_9_7_Operator< PixelType, Dimension > LowPassOperator;
-  typedef otb::HighPass_9_7_Operator< PixelType, Dimension > HighPassOperator;
+  //typedef otb::LowPassHaarOperator< otb::FORWARD, PixelType, Dimension > LowPassOperator;
+  //typedef otb::HighPassHaarOperator< otb::FORWARD, PixelType, Dimension > HighPassOperator;
+  typedef otb::LowPassSplineBiOrthogonalOperator< otb::FORWARD, PixelType, Dimension > LowPassOperator;
+  typedef otb::HighPassSplineBiOrthogonalOperator< otb::FORWARD, PixelType, Dimension > HighPassOperator;
 
-  typedef otb::StationaryFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator > WaveletFilterType;
+  typedef otb::WaveletFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator, otb::FORWARD >
+    WaveletFilterType;
   typedef otb::WaveletForwardTransform< ImageType, ImageType, WaveletFilterType > FilterType;
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );

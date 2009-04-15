@@ -266,7 +266,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
       otbMsgDevMacro(<< "Input projection set to sensor model.");
       }
     }
-  catch(itk::ExceptionObject &err)
+  catch(itk::ExceptionObject &)
     {
     otbMsgDevMacro(<<" Input keyword list does not describe a sensor model.");
     }
@@ -310,7 +310,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
       otbMsgDevMacro(<< "Output projection set to sensor model");
       }
     }
-  catch(itk::ExceptionObject &err)
+  catch(itk::ExceptionObject &)
     {
     otbMsgDevMacro(<<" Output keyword list does not describe a sensor model.");
     }
