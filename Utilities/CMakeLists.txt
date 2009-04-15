@@ -39,4 +39,8 @@ ENDIF(BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
 # Install the UseOTB.cmake file configured from the top-level.
-INSTALL_FILES(/lib/otb ".cmake" "OTBConfig")
+IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+  INSTALL(FILES ${OTB_BINARY_DIR}/Utilities/OTBConfig.cmake
+    DESTINATION ${OTB_INSTALL_PACKAGE_DIR_CM24}
+    COMPONENT Development)
+ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)

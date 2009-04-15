@@ -46,16 +46,15 @@ CONFIGURE_FILE(${OTB_SOURCE_DIR}/OTBConfig.cmake.in
 #-----------------------------------------------------------------------------
 # Settings specific to the install tree.
 
-# The "use" file.
-SET(OTB_USE_FILE ${CMAKE_INSTALL_PREFIX}/lib/otb/UseOTB.cmake)
-
 # The library dependencies file.
-SET(OTB_LIBRARY_DEPENDS_FILE
-    ${CMAKE_INSTALL_PREFIX}/lib/otb/OTBLibraryDepends.cmake)
+SET(OTB_LIBRARY_DEPENDS_FILE "\${OTB_INSTALL_PREFIX}${OTB_INSTALL_PACKAGE_DIR}/OTBLibraryDepends.cmake")
+
+# The "use" file.
+SET(OTB_USE_FILE \${OTB_INSTALL_PREFIX}${OTB_INSTALL_PACKAGE_DIR}/UseOTB.cmake)
 
 # The build settings file.
-SET(OTB_BUILD_SETTINGS_FILE
-    ${CMAKE_INSTALL_PREFIX}/lib/otb/OTBBuildSettings.cmake)
+SET(OTB_BUILD_SETTINGS_FILE \${OTB_INSTALL_PREFIX}${OTB_INSTALL_PACKAGE_DIR}/OTBBuildSettings.cmake)
+
 
 # Include directories.
 SET(OTB_INCLUDE_DIRS_CONFIG 
@@ -64,8 +63,7 @@ SET(OTB_INCLUDE_DIRS_CONFIG
 )
 
 # Link directories.
-SET(OTB_LIBRARY_DIRS_CONFIG ${CMAKE_INSTALL_PREFIX}/lib/otb)
-
+SET(OTB_LIBRARY_DIRS_CONFIG "\${OTB_INSTALL_PREFIX}${OTB_INSTALL_LIB_DIR}")
 SET(OTB_LIBRARY_DIRS_CONFIG ${OTB_LIBRARY_DIRS_CONFIG} ${GDAL_LIBRARY_DIRS} ${ITK_LIBRARY_DIRS} ${FLTK_LIBRARY_DIRS})
 
 # Install Configure FLTK commands and directories

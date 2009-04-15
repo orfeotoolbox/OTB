@@ -238,92 +238,105 @@ IF( OTB_USE_EXTERNAL_EXPAT )
 ELSE( OTB_USE_EXTERNAL_EXPAT  )
         TARGET_LINK_LIBRARIES(otbkml otbexpat)
 ENDIF( OTB_USE_EXTERNAL_EXPAT )
+IF(OTB_LIBRARY_PROPERTIES)
+  SET_TARGET_PROPERTIES(otbkml PROPERTIES ${OTB_LIBRARY_PROPERTIES})
+ENDIF(OTB_LIBRARY_PROPERTIES)
+
+IF(NOT OTB_INSTALL_NO_LIBRARIES)
+  INSTALL(TARGETS otbkml
+    RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR_CM24} COMPONENT RuntimeLibraries
+    LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR_CM24} COMPONENT RuntimeLibraries
+    ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR_CM24} COMPONENT Development)
+ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
 
 
-INSTALL(TARGETS otbkml
-RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
-LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
-ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
+IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+
+  INSTALL(FILES ${__files1} ${__files2}
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/BasicFilters
+    COMPONENT Development)
 
 FILE(GLOB __files0 "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/*.h")
 INSTALL(FILES ${__files0} 
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/kml
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/kml
     COMPONENT Development)
 
 FILE(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/dom/*.h")
 INSTALL(FILES ${__files1} 
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/kml/dom
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/kml/dom
     COMPONENT Development)
 
 FILE(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/base/*.h")
 INSTALL(FILES ${__files2} 
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/kml/base
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/kml/base
     COMPONENT Development)
 
 FILE(GLOB __files3 "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/convenience/*.h")
 INSTALL(FILES ${__files3} 
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/kml/convenience
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/kml/convenience
     COMPONENT Development)
 
 FILE(GLOB __files4 "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/engine/*.h")
 INSTALL(FILES ${__files4} 
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/kml/engine
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/kml/engine
     COMPONENT Development)
 
 FILE(GLOB __files5 "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/regionator/*.h")
 INSTALL(FILES ${__files5} 
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/kml/regionator
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/kml/regionator
     COMPONENT Development)
 
 FILE(GLOB __files6 "${CMAKE_CURRENT_SOURCE_DIR}/third_party/uriparser-0.7.1/include/uriparser/*.h")
 INSTALL(FILES ${__files6} 
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/uriparser-0.7.1/include/uriparser
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/third_party/uriparser-0.7.1/include/uriparser
     COMPONENT Development)
 
 FILE(GLOB __files70 "${CMAKE_CURRENT_SOURCE_DIR}/third_party/boost_1_34_1/boost/*.hpp")
 INSTALL(FILES ${__files70} 
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/boost_1_34_1/boost
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/third_party/boost_1_34_1/boost
     COMPONENT Development)
 FILE(GLOB __files7 "${CMAKE_CURRENT_SOURCE_DIR}/third_party/boost_1_34_1/boost/detail/*.hpp")
 INSTALL(FILES ${__files7} 
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/boost_1_34_1/boost/detail
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/third_party/boost_1_34_1/boost/detail
     COMPONENT Development)
 FILE(GLOB __files8 "${CMAKE_CURRENT_SOURCE_DIR}/third_party/boost_1_34_1/boost/config/*.hpp")
 INSTALL(FILES ${__files8} 
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/boost_1_34_1/boost/config
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/third_party/boost_1_34_1/boost/config
     COMPONENT Development)
 FILE(GLOB __files9 "${CMAKE_CURRENT_SOURCE_DIR}/third_party/boost_1_34_1/boost/config/no_tr1/*.hpp")
 INSTALL(FILES ${__files9} 
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/boost_1_34_1/boost/config/no_tr1
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/third_party/boost_1_34_1/boost/config/no_tr1
     COMPONENT Development)
 FILE(GLOB __files10 "${CMAKE_CURRENT_SOURCE_DIR}/third_party/boost_1_34_1/boost/config/stdlib/*.hpp")
 INSTALL(FILES ${__files10} 
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/boost_1_34_1/boost/config/stdlib
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/third_party/boost_1_34_1/boost/config/stdlib
     COMPONENT Development)
 
 FILE(GLOB __files11 "${CMAKE_CURRENT_SOURCE_DIR}/third_party/boost_1_34_1/boost/config/platform/*.hpp")
 INSTALL(FILES ${__files11} 
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/boost_1_34_1/boost/config/platform
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/third_party/boost_1_34_1/boost/config/platform
     COMPONENT Development)
 
 FILE(GLOB __files12 "${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3/*.h")
 INSTALL(FILES ${__files12} 
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/third_party/zlib-1.2.3
     COMPONENT Development)
 FILE(GLOB __files13 "${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3/contrib/*.h")
 INSTALL(FILES ${__files13} 
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3/contrib
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/third_party/zlib-1.2.3/contrib
     COMPONENT Development)
 FILE(GLOB __files14 "${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3/contrib/minizip/*.h")
 INSTALL(FILES ${__files14} 
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3/contrib/minizip
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/third_party/zlib-1.2.3/contrib/minizip
     COMPONENT Development)
 
 FILE(GLOB __files15 "${CMAKE_CURRENT_SOURCE_DIR}/third_party/boost_1_34_1/boost/config/compiler/*.hpp")
 INSTALL(FILES ${__files15} 
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/boost_1_34_1/boost/config/compiler
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/third_party/boost_1_34_1/boost/config/compiler
     COMPONENT Development)
 FILE(GLOB __files16 "${CMAKE_CURRENT_SOURCE_DIR}/third_party/boost_1_34_1/boost/config/abi/*.hpp")
 INSTALL(FILES ${__files16} 
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/boost_1_34_1/boost/config/abi
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/third_party/boost_1_34_1/boost/config/abi
     COMPONENT Development)
+
+ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)

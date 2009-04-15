@@ -395,6 +395,7 @@ WaveletFilterBank< TInputImage, TOutputImage,
     }
   }
 
+#if 0
   // FIXME
   {
     typedef otb::ImageViewer< OutputPixelType > ViewerType;
@@ -405,6 +406,7 @@ WaveletFilterBank< TInputImage, TOutputImage,
 
     Fl::run();
   }
+#endif
 
   // Low pass part calculation
   LowPassOperatorType lowPassOperator;
@@ -439,6 +441,7 @@ WaveletFilterBank< TInputImage, TOutputImage,
     }
   }
 
+#if 0
   // FIXME
   {
     typedef otb::ImageViewer< OutputPixelType > ViewerType;
@@ -449,6 +452,7 @@ WaveletFilterBank< TInputImage, TOutputImage,
 
     Fl::run();
   }
+#endif
 
   if ( dir > 0 )
   { 
@@ -499,7 +503,7 @@ WaveletFilterBank< TInputImage, TOutputImage,
     outputLowPass->Allocate();
   }
 
-
+#if 0
   // FIXME
   {
     typedef otb::ImageViewer< OutputPixelType > ViewerType;
@@ -510,6 +514,7 @@ WaveletFilterBank< TInputImage, TOutputImage,
 
     Fl::run();
   }
+#endif
 
   /** Inner product iterators */
   typedef itk::ConstNeighborhoodIterator< OutputImageType > NeighborhoodIteratorType;

@@ -141,7 +141,9 @@ IF(CYGWIN OR MINGW)
   ADD_DEFINITIONS(-DWIN32)
 ENDIF(CYGWIN OR MINGW)
 
+IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
 # Install OTB specifics includes files
-INSTALL(FILES otb_openjpeg.h otb_openjpeg_mangle.h
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbopenjpeg
+  INSTALL(FILES otb_openjpeg.h otb_openjpeg_mangle.h
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbopenjpeg
     COMPONENT Development)
+ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
