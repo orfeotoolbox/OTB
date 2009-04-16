@@ -110,6 +110,16 @@ ELSE(OTB_USE_EXTERNAL_ITK)
 	${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/v3p/netlib/opt)
 ENDIF(OTB_USE_EXTERNAL_ITK)
 
+#For FLTK header file
+IF(OTB_USE_EXTERNAL_FLTK)
+        SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+      ${FLTK_INCLUDE_DIRS} )
+ELSE(OTB_USE_EXTERNAL_FLTK)
+        SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+                ${OTB_SOURCE_DIR}/Utilities/FLTK
+            ${OTB_SOURCE_DIR}/Utilities/FLTK/src
+            ${OTB_BINARY_DIR}/Utilities/FLTK )
+ENDIF(OTB_USE_EXTERNAL_FLTK)
 
 
 #-----------------------------------------------------------------------------
@@ -135,21 +145,9 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE_CXX ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX} )
 
 
 
-
-
 #-----------------------------------------------------------------------------
 # Include directories from libraries build tree.
 
-#For FLTK header file
-IF(OTB_USE_EXTERNAL_FLTK)
-        SET(OTB_INCLUDE_DIRS_BUILD_TREE_CXX ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
-  		${FLTK_INCLUDE_DIRS} )
-ELSE(OTB_USE_EXTERNAL_FLTK)
-        SET(OTB_INCLUDE_DIRS_BUILD_TREE_CXX ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
-                ${OTB_SOURCE_DIR}/Utilities/FLTK
-  	        ${OTB_SOURCE_DIR}/Utilities/FLTK/src
-  	        ${OTB_BINARY_DIR}/Utilities/FLTK )
-ENDIF(OTB_USE_EXTERNAL_FLTK)
 
 #For GLU header file
 SET(OTB_INCLUDE_DIRS_BUILD_TREE_CXX ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
