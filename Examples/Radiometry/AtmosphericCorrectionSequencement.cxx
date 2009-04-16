@@ -91,7 +91,7 @@ int main( int argc, char *argv[] )
   {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0]<< std::endl;
-    std::cerr << " inputImage outputImage atmosphericCorrectionSequencement_alpha_beta.txt atmosphericCorrectionSequencement_solar_illumination.txt atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt azimuth day month AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms (9 parameters) SurfaceAdjencyEffect6SCorrectionSchemeFilter (2 parameters                )"<< std::endl;
+    std::cerr << " inputImage outputImage atmosphericCorrectionSequencement_alpha_beta.txt atmosphericCorrectionSequencement_solar_illumination.txt atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt SolarZenithalAngle day month SolarAzimuthalAngle ViewingZenithalAngle ViewingAzimuthalAngle AtmosphericPresure WaterVaporAmount OzoneAmount AerosolModel AerosolOpticalThickness WindowRadiusForAdjacencyCorrection PixelSpacing"<< std::endl;
     std::cerr << std::endl;
     return 1;
   }
