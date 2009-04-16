@@ -134,9 +134,11 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE_CXX ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX} )
 #ENDIF(NOT OTB_USE_EXTERNAL_FLTK)
 
 
+
+
+
 #-----------------------------------------------------------------------------
 # Include directories from libraries build tree.
-
 
 #For FLTK header file
 IF(OTB_USE_EXTERNAL_FLTK)
@@ -184,132 +186,147 @@ ELSE(OTB_USE_EXTERNAL_ITK)
    			${ITK_INCLUDE_DIRS_BUILD_TREE_CXX} 	)
 ENDIF(OTB_USE_EXTERNAL_ITK)
 
+
+
+
+
+
+
 #-----------------------------------------------------------------------------
 # Include directories from the install tree.
-SET(OTB_INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib/otb")
-SET(OTB_INSTALL_BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin")
-SET(OTB_INSTALL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include/otb")
+SET(OTB_INSTALL_INCLUDE_PATH "${CMAKE_INSTALL_PREFIX}${OTB_INSTALL_INCLUDE_DIR}")
+#           SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS} )
+
+#           SET(OTB_INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib/otb")
+#           SET(OTB_INSTALL_BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin")
+#           SET(OTB_INSTALL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include/otb")
 
 
 #For BOOST header file
 IF(OTB_USE_EXTERNAL_BOOST)
-  SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
+  SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   	${Boost_INCLUDE_DIR} )
 ELSE(OTB_USE_EXTERNAL_BOOST)
-  SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
-        ${OTB_INSTALL_INCLUDE_DIR}/Utilities/BGL
-        ${OTB_INSTALL_INCLUDE_DIR}/Utilities/BGL/boost)
+  SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
+        Utilities/BGL
+        Utilities/BGL/boost)
 ENDIF(OTB_USE_EXTERNAL_BOOST)
 
 
-SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
-  ${OTB_INSTALL_INCLUDE_DIR}
-  ${OTB_INSTALL_INCLUDE_DIR}/Common
-  ${OTB_INSTALL_INCLUDE_DIR}/BasicFilters
-  ${OTB_INSTALL_INCLUDE_DIR}/IO
-  ${OTB_INSTALL_INCLUDE_DIR}/ChangeDetection
-  ${OTB_INSTALL_INCLUDE_DIR}/FeatureExtraction
-  ${OTB_INSTALL_INCLUDE_DIR}/Learning
-  ${OTB_INSTALL_INCLUDE_DIR}/MultiScale
-  ${OTB_INSTALL_INCLUDE_DIR}/SpatialReasoning
-  ${OTB_INSTALL_INCLUDE_DIR}/DisparityMap
-  ${OTB_INSTALL_INCLUDE_DIR}/Visu
-  ${OTB_INSTALL_INCLUDE_DIR}/Visualization
-  ${OTB_INSTALL_INCLUDE_DIR}/Gui
-  ${OTB_INSTALL_INCLUDE_DIR}/Projections
-  ${OTB_INSTALL_INCLUDE_DIR}/Radiometry
-  ${OTB_INSTALL_INCLUDE_DIR}/SARPolarimetry
-  ${OTB_INSTALL_INCLUDE_DIR}/Markov
-  ${OTB_INSTALL_INCLUDE_DIR}/Fusion
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/ITK
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbsvm
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossimplugins
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/InsightJournal
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otb6S
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/tinyXMLlib
-#  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbgalib
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/src
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/boost_1_34_1
-# ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3
-# ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3/contrib
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbliblas/include
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbedison
-  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbsiftfast
+SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
+  Common
+  BasicFilters
+  IO
+  ChangeDetection
+  FeatureExtraction
+  Learning
+  MultiScale
+  SpatialReasoning
+  DisparityMap
+  Visu
+  Visualization
+  Gui
+  Projections
+  Radiometry
+  SARPolarimetry
+  Markov
+  Fusion
+  Utilities
+  Utilities/ITK
+  Utilities/otbsvm
+  Utilities/otbossim
+  Utilities/otbossim/include
+  Utilities/otbossim/include/ossim
+  Utilities/otbossimplugins
+  Utilities/InsightJournal
+  Utilities/otb6S
+  Utilities/tinyXMLlib
+#  Utilities/otbgalib
+  Utilities/otbkml
+  Utilities/otbkml/src
+  Utilities/otbkml/third_party
+  Utilities/otbkml/third_party/boost_1_34_1
+# Utilities/otbkml/third_party/zlib-1.2.3
+# Utilities/otbkml/third_party/zlib-1.2.3/contrib
+  Utilities/otbliblas/include
+  Utilities/otbedison
+  Utilities/otbsiftfast
 )
 
 IF(OTB_COMPILE_JPEG2000)
-  SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
-        ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbopenjpeg
-        ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbopenjpeg/libopenjpeg)
+  SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
+        Utilities/otbopenjpeg
+        Utilities/otbopenjpeg/libopenjpeg)
 ENDIF(OTB_COMPILE_JPEG2000)
 
 #For GDAL header file
-SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
+SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   		${GDAL_INCLUDE_DIRS} )
 
 #For EXPAT header file
 IF(OTB_USE_EXTERNAL_EXPAT)
-        SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
+        SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   	        ${EXPAT_INCLUDE_DIR} )
 ELSE(OTB_USE_EXTERNAL_EXPAT)
-        SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
-                ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbexpat)
+        SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
+                Utilities/otbexpat)
 ENDIF(OTB_USE_EXTERNAL_EXPAT)
 
 #For CURL header file
 IF(OTB_USE_CURL)
-  SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
+  SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   	${CURL_INCLUDE_DIR} )
 ENDIF(OTB_USE_CURL)
 
 # For OpentTreads  header file
 IF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
-        SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
-                ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbopenthreads/OpenThreads/include)
+        SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
+                Utilities/otbopenthreads/OpenThreads/include)
 ENDIF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
 
 #For FLTK header file
 IF(OTB_USE_EXTERNAL_FLTK)
-        SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
+        SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   		        ${FLTK_INCLUDE_DIRS})
 ELSE(OTB_USE_EXTERNAL_FLTK)
-        SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
-  		        ${OTB_INSTALL_INCLUDE_DIR}/Utilities/FLTK)
+        SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
+  		        Utilities/FLTK)
 ENDIF(OTB_USE_EXTERNAL_FLTK)
 
 #For GLU header file
-SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
+SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   		${OTB_GLU_INCLUDE_PATH} )
 
 #For ITK header file
 IF(OTB_USE_EXTERNAL_ITK)
-	SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
+	SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
    			${ITK_INCLUDE_DIRS} )
 #   			${ITK_INCLUDE_DIRS_INSTALL_TREE} 	)
 ELSE(OTB_USE_EXTERNAL_ITK)
 
+    #Add prefix path "Utilities/ITK" For ITK_INCLUDE_RELATIVE_DIRS paths
+    FOREACH(DIR ${ITK_INCLUDE_RELATIVE_DIRS})
+        LIST(APPEND OTB_INCLUDE_RELATIVE_DIRS Utilities/ITK/${DIR})
+    ENDFOREACH(DIR)
+
+
 # JULIEN Seems that ITK_INCLUDE_DIRS_CONFIG replaces ITK_INCLUDE_DIRS_INSTALL_TREE
-SET(ITK_INCLUDE_DIRS  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/ITK/)
-FOREACH(DIR ${ITK_INCLUDE_RELATIVE_DIRS})
-  LIST(APPEND ITK_INCLUDE_DIRS ${OTB_INSTALL_INCLUDE_DIR}/Utilities/ITK/${DIR})
-ENDFOREACH(DIR)
-IF(ITK_INCLUDE_DIRS_SYSTEM)
-  LIST(APPEND ITK_INCLUDE_DIR ${ITK_INCLUDE_DIRS_SYSTEM})
-ENDIF(ITK_INCLUDE_DIRS_SYSTEM)
+#             SET(ITK_INCLUDE_DIRS  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/ITK/)
+#             FOREACH(DIR ${ITK_INCLUDE_RELATIVE_DIRS})
+#               LIST(APPEND ITK_INCLUDE_DIRS ${OTB_INSTALL_INCLUDE_DIR}/Utilities/ITK/${DIR})
+#             ENDFOREACH(DIR)
+#             IF(ITK_INCLUDE_DIRS_SYSTEM)
+#               LIST(APPEND ITK_INCLUDE_DIR ${ITK_INCLUDE_DIRS_SYSTEM})
+#             ENDIF(ITK_INCLUDE_DIRS_SYSTEM)
 
 
 #THOMAS
-	SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
-			${ITK_INCLUDE_DIRS_INSTALL_TREE}
+#                SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
+#           			${ITK_INCLUDE_DIRS_INSTALL_TREE}
 #JULIEN
-			${ITK_INCLUDE_DIRS}
-			 )
+#           			${ITK_INCLUDE_DIRS}
+#           )
 #			${ITK_INCLUDE_DIRS_BUILD_TREE}
 #			${ITK_INCLUDE_DIRS_BUILD_TREE_CXX} )
+
 ENDIF(OTB_USE_EXTERNAL_ITK)

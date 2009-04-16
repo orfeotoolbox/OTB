@@ -5,6 +5,10 @@
 # This file is configured by OTB and used by the UseOTB.cmake module
 # to load OTB's settings for an external project.
 
+# This file is configured by OTB and used by the UseOTB.cmake module
+# to load OTB's settings for an external project.
+@OTB_CONFIG_CODE@
+
 
 # Option use external ITK.
 SET(OTB_USE_EXTERNAL_ITK "@OTB_USE_EXTERNAL_ITK@")
