@@ -43,7 +43,7 @@ ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
 
 IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
   INSTALL(FILES ${OpenThreads_PUBLIC_HEADERS}
-              DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbopenthreads/OpenThreads/include
+              DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbopenthreads/OpenThreads/include/OpenThreads
               COMPONENT Development)
 ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
 
