@@ -24,10 +24,15 @@
 
 namespace otb
 {
+    /** \class SplittedWidgetManager
+   *   \brief todo
+   *
+   *  \ingroup Visualization
+     */
 class  SplittedWidgetManager
     : public WidgetManager
 {
- public: 
+ public:
   /** Standard class typedefs */
   typedef SplittedWidgetManager                      Self;
   typedef WidgetManager                              Superclass;
@@ -36,13 +41,13 @@ class  SplittedWidgetManager
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(SplittedWidgetManager,WidgetManager);
-  
+
   /** typedef of the fltk file defining all the widget needed*/
   typedef ImageWidgetSplittedManager                 ImageWidgetSplittedManagerType;
-  
+
   /** Register Wigets*/
   virtual void RegisterFullWidget(WidgetType* fullWidget);
   virtual void RegisterScrollWidget(WidgetType* scrollWidget);
@@ -58,8 +63,8 @@ class  SplittedWidgetManager
 
  protected:
   /** Constructor */
-  SplittedWidgetManager(); 
-  
+  SplittedWidgetManager();
+
   /** Destructor */
   virtual ~SplittedWidgetManager();
   /** Printself method */
@@ -68,7 +73,7 @@ class  SplittedWidgetManager
     Superclass::PrintSelf(os,indent);
   }
 
-  
+
  private:
   SplittedWidgetManager(const Self&);     // purposely not implemented
   void operator=(const Self&); // purposely not implemented

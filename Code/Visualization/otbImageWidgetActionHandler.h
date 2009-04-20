@@ -29,10 +29,11 @@ namespace otb
 *   To implement a new action handler, derive this class and implement
 *   the ListenTo*() and the HandleWidget*() methods. Then register an
 *   instance of your handler in the ImageWidgetController.
-* 
+*
 *   \sa ImageWidgetController
 *   \sa ImageWidget
-*/
+*  \ingroup Visualization
+ */
 
 class ImageWidgetActionHandler
   : public itk::Object
@@ -43,10 +44,10 @@ public:
   typedef itk::Object                       Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(ImageWidgetActionHandler,Object);
 
@@ -81,7 +82,7 @@ public:
   {
     return false;
   }
-  
+
 protected:
   /** Constructor */
   ImageWidgetActionHandler(){}
@@ -92,11 +93,11 @@ protected:
   {
     Superclass::PrintSelf(os,indent);
   }
- 
+
 private:
   ImageWidgetActionHandler(const Self&);    // purposely not implemented
   void operator=(const Self&); // purposely not implemented
-}; // end class 
+}; // end class
 } // end namespace otb
 #endif
 

@@ -29,7 +29,8 @@ namespace otb
 * \sa Layer, ImageLayer
 * \sa BlendingFunction
 *
-*/
+*  \ingroup Visualization
+ */
 
 template <class TLayer >
 class LayerBasedModel

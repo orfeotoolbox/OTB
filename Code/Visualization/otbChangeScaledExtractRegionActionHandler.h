@@ -24,12 +24,13 @@ namespace otb
 {
 /** \class ChangeScaledExtractRegionActionHandler
 *   \brief Implements basic Scroll, Full and Zoom  widgets resizing.
-* 
+*
 *   \sa ImageWidgetController
 *   \sa ImageWidgetActionHandler
-*/
+*  \ingroup Visualization
+ */
 
-template <class TModel, class TView> 
+template <class TModel, class TView>
 class ChangeScaledExtractRegionActionHandler
   : public ImageWidgetActionHandler
 {
@@ -39,10 +40,10 @@ public:
   typedef ImageWidgetActionHandler               Superclass;
   typedef itk::SmartPointer<Self>                Pointer;
   typedef itk::SmartPointer<const Self>          ConstPointer;
-  
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(ChangeScaledExtractRegionActionHandler,ImageWidgetActionHandler);
 
@@ -93,7 +94,7 @@ public:
       }
     return false;
   }
-  
+
   /** Set/Get the pointer to the view */
   itkSetObjectMacro(View,ViewType);
   itkGetObjectMacro(View,ViewType);
@@ -101,7 +102,7 @@ public:
   /** Set/Get the pointer to the model */
   itkSetObjectMacro(Model,ModelType);
   itkGetObjectMacro(Model,ModelType);
-  
+
   /** Set/Get Offset */
   itkSetMacro(Offset,OffsetType);
   itkGetMacro(Offset,OffsetType);
@@ -120,21 +121,21 @@ protected:
   {
     Superclass::PrintSelf(os,indent);
   }
- 
+
 private:
   ChangeScaledExtractRegionActionHandler(const Self&);    // purposely not implemented
   void operator=(const Self&); // purposely not implemented
-  
-  //Offset 
+
+  //Offset
   OffsetType      m_Offset;
-  
+
   // Pointer to the view
   ViewPointerType m_View;
-  
+
   // Pointer to the model
   ModelPointerType m_Model;
-  
-}; // end class 
+
+}; // end class
 } // end namespace otb
 #endif
 

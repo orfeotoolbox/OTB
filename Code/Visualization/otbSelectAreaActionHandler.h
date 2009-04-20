@@ -25,12 +25,13 @@ namespace otb
 {
 /** \class SelectAreaActionHandler
 *   \brief Implements basic Scroll, Full and Zoom  widgets resizing.
-* 
+*
 *   \sa ImageWidgetController
 *   \sa ImageWidgetActionHandler
-*/
+*  \ingroup Visualization
+ */
 
-template <class TModel, class TWidget> 
+template <class TModel, class TWidget>
 class SelectAreaActionHandler
   : public ImageWidgetActionHandler
 {
@@ -40,10 +41,10 @@ public:
   typedef ImageWidgetActionHandler               Superclass;
   typedef itk::SmartPointer<Self>                Pointer;
   typedef itk::SmartPointer<const Self>          ConstPointer;
-  
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(SelectAreaActionHandler,ImageWidgetActionHandler);
 
@@ -78,11 +79,11 @@ public:
     if( m_Model.IsNotNull() )
       {
 	if(widgetId == m_Widget->GetIdentifier() )
-	  {      
+	  {
 	    // Get the clicked index
 	    typename WidgetType::PointType screenPoint, imagePoint;/*, lScreenSizePoint, lImageSizePoint;*/
 	    screenPoint = m_Widget->GetMousePosition();
-	    
+
 	    // Transform to image point
 	    imagePoint = m_Widget->GetScreenToImageTransform()->TransformPoint(screenPoint);
 
@@ -129,9 +130,9 @@ public:
 	  }
       }
     return false;
- 
+
   }
-  
+
   /** Set/Get the pointer to the view */
   itkSetObjectMacro(Widget,WidgetType);
   itkGetObjectMacro(Widget,WidgetType);
@@ -160,7 +161,7 @@ protected:
   {
     Superclass::PrintSelf(os,indent);
   }
- 
+
 private:
   SelectAreaActionHandler(const Self&);    // purposely not implemented
   void operator=(const Self&); // purposely not implemented
@@ -178,7 +179,7 @@ private:
   IndexType m_StartIndex;
   IndexType m_StopIndex;
 
-}; // end class 
+}; // end class
 } // end namespace otb
 #endif
 

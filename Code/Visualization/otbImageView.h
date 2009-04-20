@@ -27,9 +27,10 @@ namespace otb
 {
 
 /** \class ImageView
-*   \brief 
+*   \brief todo
 *   \Todo: Rename ImageViewer when refactoring will be completed.
-*/
+*  \ingroup Visualization
+ */
 
 template <class TViewerModel >
 class ImageView
@@ -52,21 +53,21 @@ public:
   typedef TViewerModel                         ModelType;
   typedef typename ModelType::Pointer          ModelPointerType;
   typedef typename ModelType::OutputImageType  ImageType;
-  
+
   /** Controller typedef */
   typedef ImageWidgetController                ControllerType;
   typedef typename ControllerType::Pointer     ControllerPointerType;
 
  /** Image region typedef */
   typedef typename ImageType::RegionType       RegionType;
-  
+
   /** Region size & index typedef */
   typedef typename RegionType::SizeType        SizeType;
   typedef typename RegionType::IndexType       IndexType;
-  
+
   /** Offset typedef */
   typedef typename ImageType::OffsetType       OffsetType;
-  
+
 
   /** Image widget */
   typedef otb::ImageWidget<ImageType>          ImageWidgetType;
@@ -77,16 +78,16 @@ public:
   typedef typename RegionGlComponentType::Pointer RegionGlComponentPointerType;
 
   /**
-   * This method unregister with previous model if any, and 
+   * This method unregister with previous model if any, and
    * register with the new one.
    */
   void SetModel(ModelType * model);
-  
+
   /**
    * This method sets the controller and passes it to the widgets.
    */
   void SetController(ControllerType * controller);
- 
+
   /**
    * Manually trigger a refresh
    */
@@ -121,7 +122,7 @@ public:
 
   /** Handle notification from the viewer */
   virtual void ImageLayerRenderingModelNotify();
-  
+
 private:
   ImageView(const Self&);      // purposely not implemented
   void operator=(const Self&); // purposely not implemented
@@ -140,7 +141,7 @@ private:
   /** Viewed region gl components */
   RegionGlComponentPointerType m_ExtractRegionGlComponent;
   RegionGlComponentPointerType m_ScaledExtractRegionGlComponent;
-  
+
 
 }; // end class
 } // end namespace otb

@@ -27,12 +27,13 @@ namespace otb
 {
 namespace Functor
 {
-/**\class BlendingFunctor
- * \brief
+/** \class BlendingFunctor
+ * \brief todo
  *
  * \sa ImageLayer
  * \sa BlendingImageFilter
  * \sa BlendingFunction
+ *  \ingroup Visualization
  */
 template <class TInputPixel1, class TInputPixel2, class TOutputPixel>
 class BlendingFunctor

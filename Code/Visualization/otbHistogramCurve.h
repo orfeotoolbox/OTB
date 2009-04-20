@@ -25,11 +25,12 @@ namespace otb
 {
 /** \class HistogramCurve
 *   \brief Class for histogram rendering.
-*   
+*
 *   \sa ImageViewerModel
-*/
+*  \ingroup Visualization
+ */
 
-template <class THistogram> 
+template <class THistogram>
 class HistogramCurve
   : public Curve2D
 {
@@ -43,7 +44,7 @@ public:
   // Standard class macros
   itkNewMacro(Self);
   itkTypeMacro(HistogramCurve,Curve2D);
- 
+
   /// Superclass typedefs
   typedef typename Superclass::AffineTransformType AffineTransformType;
   typedef typename Superclass::RegionType          RegionType;
@@ -59,11 +60,11 @@ public:
 
   /// Render the curve according to display extent and axis characteristics
   virtual void  Render(const RegionType& extent,const AffineTransformType * space2ScreenTransform);
-  
+
   /// Pre-computation
   virtual void BeforeRendering();
 
-  /// Get the min for each axis from the data available 
+  /// Get the min for each axis from the data available
   virtual PointType GetMinimum();
 
   /// Get the max for each axis from the data available
@@ -72,7 +73,7 @@ public:
   /** Set/Get the histogram */
   itkSetObjectMacro(Histogram,HistogramType);
   itkGetObjectMacro(Histogram,HistogramType);
-  
+
   /** Set/Get the histogram color */
   itkSetMacro(HistogramColor,ColorType);
   itkGetMacro(HistogramColor,ColorType);
@@ -94,7 +95,7 @@ private:
 
   // The histogram to render
   HistogramPointerType m_Histogram;
-  
+
   // The histogram color
   ColorType            m_HistogramColor;
 
@@ -102,7 +103,7 @@ private:
   PointType            m_Maximum;
   double               m_BinWidth;
 
-}; // end class 
+}; // end class
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

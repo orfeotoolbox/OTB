@@ -20,7 +20,7 @@
 
 #include "itkObject.h"
 #include "otbMacro.h"
-#include "otbGlWidget.h" 
+#include "otbGlWidget.h"
 #include <FL/Fl_Output.H>
 
 
@@ -28,8 +28,9 @@ namespace otb
 {
 /** \class WidgetManager
 *   \brief  Base class for displays
-*   
-*/
+*
+*  \ingroup Visualization
+ */
 
 class  WidgetManager
   : public itk::Object
@@ -40,15 +41,15 @@ public:
   typedef itk::Object                          Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
-    
+
   /** Runtime information */
   itkTypeMacro(WidgetManager,Object);
-  
+
 
   /** Image widget */
   typedef otb::GlWidget                                             WidgetType;
   typedef WidgetType::Pointer                                       WidgetPointerType;
-  
+
   /** Register Wigets*/
   virtual void RegisterFullWidget(WidgetType* fullWidget) = 0 ;
   virtual void RegisterScrollWidget(WidgetType* scrollWidget) = 0 ;
@@ -60,8 +61,8 @@ public:
   virtual void Refresh() = 0;
   virtual void SetLabel(const char * label) = 0;
   virtual void UnRegisterAll() = 0;
-  
-  
+
+
 protected:
   /** Constructor */
   WidgetManager() {};
@@ -72,7 +73,7 @@ protected:
   {
     Superclass::PrintSelf(os,indent);
   }
-  
+
   WidgetType*   m_InternalFullWidget;
   WidgetType*   m_InternalScrollWidget;
   WidgetType*   m_InternalZoomWidget;
@@ -84,9 +85,9 @@ private:
   void operator=(const Self&); // purposely not implemented
 
 
-  
-  
-}; // end class 
+
+
+}; // end class
 } // end namespace otb
 
 #endif

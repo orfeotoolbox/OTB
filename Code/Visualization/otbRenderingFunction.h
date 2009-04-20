@@ -30,6 +30,7 @@ namespace Function
  * \brief Base class for rendering functions.
  *  Please note that this class is pure virtual, and should be
  *  subclassed.
+ *  \ingroup Visualization
  */
 template <class TPixelPrecision, class TRGBPixel>
 class RenderingFunction
@@ -51,7 +52,7 @@ public:
   typedef itk::VariableLengthVector<ScalarPixelType> VectorPixelType;
   /** Extrema vector */
   typedef std::vector<ScalarPixelType>               ExtremaVectorType;
-  
+
   /** Evaluate method (scalar version) */
   virtual const OutputPixelType Evaluate(ScalarPixelType spixel) const = 0;
 
@@ -75,14 +76,14 @@ public:
     m_Minimum.clear();
     m_Minimum.push_back(spixel);
   }
-  
+
   /** Set the maximum (scalar version) */
   virtual void SetMaximum(ScalarPixelType spixel)
   {
     m_Maximum.clear();
     m_Maximum.push_back(spixel);
   }
-  
+
  /** Set minimum (vector version) */
   virtual void SetMinimum(const VectorPixelType & vpixel)
   {
@@ -92,7 +93,7 @@ public:
       m_Minimum.push_back(vpixel[i]);
       }
   }
-  
+
   /** Set maximum (vector version) */
   virtual void SetMaximum(const VectorPixelType & vpixel)
   {

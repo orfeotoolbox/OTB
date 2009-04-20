@@ -27,12 +27,13 @@ namespace otb
 {
 /** \class PixelDescriptionModel
 *   \brief This class is a layer based model reporting pixel  information
-*  
+*
 *   \sa ImageLayer
 *
-*/
+*  \ingroup Visualization
+ */
 
-template <class TOutputImage > 
+template <class TOutputImage >
 class PixelDescriptionModel
   : public MVCModelBase<PixelDescriptionModelListener>, public LayerBasedModel< ImageLayerBase< TOutputImage > >
 {
@@ -42,7 +43,7 @@ public:
   typedef LayerBasedModel< ImageLayerBase<TOutputImage > > Superclass;
   typedef itk::SmartPointer<Self>                          Pointer;
   typedef itk::SmartPointer<const Self>                    ConstPointer;
-    
+
   /** Runtime information */
   itkTypeMacro(PixelDescriptionModel,LayerBasedModel);
 
@@ -54,16 +55,16 @@ public:
 
   /** We assume that TLayer is has an IndexType definition */
   typedef typename LayerType::IndexType  IndexType;
-   
+
     /** Listener typedef */
   typedef PixelDescriptionModelListener  ListenerType;
 
   /** Get/Set the viewer name */
   itkGetStringMacro(PixelDescription);
-  
+
   /** Clear the pixel description */
   void ClearPixelDescription();
-  
+
   /** Update the pixel description */
   void UpdatePixelDescription(const IndexType & index);
 
@@ -86,7 +87,7 @@ private:
   /** The pixel description */
   std::string m_PixelDescription;
 
-}; // end class 
+}; // end class
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

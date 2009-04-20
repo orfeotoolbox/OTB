@@ -28,9 +28,10 @@ namespace otb
 {
 
 /** \class PixelDescriptionView
-*   \brief 
+*   \brief todo
 *   \Todo: Rename PixelDescriptioner when refactoring will be completed.
-*/
+*  \ingroup Visualization
+ */
 
 template <class TModel >
 class PixelDescriptionView
@@ -52,16 +53,16 @@ public:
   /** Model typedef */
   typedef TModel                               ModelType;
   typedef typename ModelType::Pointer          ModelPointerType;
-  
+
   /** Pixel description widget typedef */
   typedef Fl_Multiline_Output                  PixelDescriptionWidgetType;
 
   /**
-   * This method unregister with previous model if any, and 
+   * This method unregister with previous model if any, and
    * register with the new one.
    */
   void SetModel(ModelType * model);
-  
+
   /**
    * Manually trigger a refresh
    */
@@ -78,10 +79,10 @@ public:
   PixelDescriptionView();
   /** Destructor */
   ~PixelDescriptionView();
- 
+
   /** Handle notification from the viewer */
   virtual void PixelDescriptionModelNotify();
-  
+
 private:
   PixelDescriptionView(const Self&);      // purposely not implemented
   void operator=(const Self&);             // purposely not implemented

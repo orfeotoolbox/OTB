@@ -27,7 +27,8 @@ namespace otb
 *
 *   \sa ImageWidgetController
 *   \sa ImageWidgetActionHandler
-*/
+*  \ingroup Visualization
+ */
 
 template <class TModel, class TView>
 class PixelDescriptionActionHandler
@@ -109,7 +110,7 @@ public:
           index[0]=static_cast<int>(imagePoint[0]);
           index[1]=static_cast<int>(imagePoint[1]);
 
-	  //Add the offset 
+	  //Add the offset
 	  index += m_Offset;
 
           // Communicate new index to model
@@ -158,10 +159,10 @@ protected:
 private:
   PixelDescriptionActionHandler(const Self&);    // purposely not implemented
   void operator=(const Self&); // purposely not implemented
-  
-  //Offset 
+
+  //Offset
   OffsetType      m_Offset;
-  
+
   // Pointer to the view
   ViewPointerType m_View;
 

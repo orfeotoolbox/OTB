@@ -26,8 +26,9 @@ namespace otb
 {
 /** \class 2DCurveWidget
  *
- *  This widget renders a set of curves to the screen.
+ *  \brief This widget renders a set of curves to the screen.
  *
+ *  \ingroup Visualization
  */
 
 class Curves2DWidget
@@ -42,7 +43,7 @@ public:
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Curve typedef */
   typedef Curve2D                        CurveType;
   typedef Curve2D::Pointer               CurvePointerType;
@@ -62,7 +63,7 @@ public:
   /// Set/Get the label of the x axis
   itkSetStringMacro(XAxisLabel);
   itkGetStringMacro(XAxisLabel);
-  
+
   /// Set/Get the label of the y axis
   itkSetStringMacro(YAxisLabel);
   itkGetStringMacro(YAxisLabel);
@@ -78,7 +79,7 @@ public:
   /// Set§get the axis length
   itkSetMacro(AxisLength,VectorType);
   itkGetConstReferenceMacro(AxisLength,VectorType);
-  
+
   /// Set/Get the grid origin
   itkSetMacro(GridOrigin,PointType);
   itkGetConstReferenceMacro(GridOrigin,PointType);
@@ -94,7 +95,7 @@ public:
   /// Set/Get the grid color
   itkSetMacro(GridColor,ColorType);
   itkGetConstReferenceMacro(GridColor,ColorType);
-  
+
   /// Should axis cross at zero or at their origin ?
   itkSetMacro(ZeroCrossingAxis,bool);
   itkGetMacro(ZeroCrossingAxis,bool);
@@ -104,7 +105,7 @@ public:
   itkSetMacro(AutoScale,bool);
   itkGetMacro(AutoScale,bool);
   itkBooleanMacro(AutoScale);
-  
+
   /** Add a new curve to the widget
    *  \return curve position in the list
    */
@@ -115,7 +116,7 @@ public:
 
   /** Remove all curves */
   void ClearAllCurves();
- 
+
   /** Get the number of curves */
  unsigned int GetNumberOfCurves();
 
@@ -180,7 +181,7 @@ private:
 
   // Space to screen transform
   AffineTransformPointerType m_SpaceToScreenTransform;
-  
+
 }; // end class
 } // end namespace otb
 

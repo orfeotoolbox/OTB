@@ -25,6 +25,7 @@ namespace otb
  *
  *  Vectorization view interface specification for the model
  *
+ *  \ingroup Visualization
  */
 
 class ImageLayerRenderingModelListener

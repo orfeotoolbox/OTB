@@ -27,6 +27,7 @@ namespace otb
    *
    *   \sa ImageWidgetController
    *   \sa ImageWidgetActionHandler
+   *  \ingroup Visualization
  */
 
 template <class TModel, class TView>

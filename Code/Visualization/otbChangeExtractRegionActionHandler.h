@@ -24,12 +24,13 @@ namespace otb
 {
 /** \class ChangeExtractRegionActionHandler
 *   \brief Implements basic Scroll, Full and Zoom  widgets resizing.
-* 
+*
 *   \sa ImageWidgetController
 *   \sa ImageWidgetActionHandler
-*/
+*  \ingroup Visualization
+ */
 
-template <class TModel, class TView> 
+template <class TModel, class TView>
 class ChangeExtractRegionActionHandler
   : public ImageWidgetActionHandler
 {
@@ -39,10 +40,10 @@ public:
   typedef ImageWidgetActionHandler               Superclass;
   typedef itk::SmartPointer<Self>                Pointer;
   typedef itk::SmartPointer<const Self>          ConstPointer;
-  
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(ChangeExtractRegionActionHandler,ImageWidgetActionHandler);
 
@@ -74,7 +75,7 @@ public:
         // Get the clicked index
         typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
         screenPoint = m_View->GetScrollWidget()->GetMousePosition();
-        
+
         // Transform to image point
         imagePoint = m_View->GetScrollWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
 
@@ -82,10 +83,10 @@ public:
         typename ViewType::IndexType index;
         index[0]=static_cast<int>(imagePoint[0]);
         index[1]=static_cast<int>(imagePoint[1]);
-	
-	//Add Offset 
+
+	//Add Offset
 	index += m_Offset;
-	
+
         // Change scaled extract region center
         m_Model->SetExtractRegionCenter(index);
         // Update model
@@ -95,7 +96,7 @@ public:
       }
     return false;
   }
-  
+
   /** Set/Get the pointer to the view */
   itkSetObjectMacro(View,ViewType);
   itkGetObjectMacro(View,ViewType);
@@ -107,7 +108,7 @@ public:
   /** Set/Get Offset */
   itkSetMacro(Offset,OffsetType);
   itkGetMacro(Offset,OffsetType);
-  
+
 
 protected:
   /** Constructor */
@@ -123,21 +124,21 @@ protected:
   {
     Superclass::PrintSelf(os,indent);
   }
- 
+
 private:
   ChangeExtractRegionActionHandler(const Self&);    // purposely not implemented
   void operator=(const Self&); // purposely not implemented
-  
-  //Offset 
+
+  //Offset
   OffsetType      m_Offset;
 
   // Pointer to the view
   ViewPointerType m_View;
-  
+
   // Pointer to the model
   ModelPointerType m_Model;
-  
-}; // end class 
+
+}; // end class
 } // end namespace otb
 #endif
 

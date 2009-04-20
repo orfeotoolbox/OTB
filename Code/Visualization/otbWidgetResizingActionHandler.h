@@ -24,12 +24,13 @@ namespace otb
 {
 /** \class WidgetResizingActionHandler
 *   \brief Implements basic Scroll, Full and Zoom  widgets resizing.
-* 
+*
 *   \sa ImageWidgetController
 *   \sa ImageWidgetActionHandler
-*/
+*  \ingroup Visualization
+ */
 
-template <class TModel, class TView> 
+template <class TModel, class TView>
 class WidgetResizingActionHandler
   : public ImageWidgetActionHandler
 {
@@ -39,10 +40,10 @@ public:
   typedef ImageWidgetActionHandler          Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(WidgetResizingActionHandler,ImageWidgetActionHandler);
 
@@ -105,7 +106,7 @@ public:
       }
     return false;
   }
-  
+
   /** Set/Get the pointer to the view */
   itkSetObjectMacro(View,ViewType);
   itkGetObjectMacro(View,ViewType);
@@ -126,18 +127,18 @@ protected:
   {
     Superclass::PrintSelf(os,indent);
   }
- 
+
 private:
   WidgetResizingActionHandler(const Self&);    // purposely not implemented
   void operator=(const Self&); // purposely not implemented
 
   // Pointer to the view
   ViewPointerType m_View;
-  
+
   // Pointer to the model
   ModelPointerType m_Model;
-  
-}; // end class 
+
+}; // end class
 } // end namespace otb
 #endif
 

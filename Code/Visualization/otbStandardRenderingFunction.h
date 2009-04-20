@@ -28,7 +28,8 @@ namespace Function
 {
 /** \class Identiy
 * \brief Default math functor parameter for rendering function.
-*/
+*  \ingroup Visualization
+ */
 template <class TInputPixel, class TOutputPixel>
 class Identity
 {
@@ -50,12 +51,13 @@ public:
   }
 };
 
-/**\class StandardRenderingFunction
+/** \class StandardRenderingFunction
  * \brief Standard rendering.
  * If the input image is an Image, the function
- * renders it with R, G and B channels all equals. 
+ * renders it with R, G and B channels all equals.
  * If it is a VectorImage, the function renders
  * the selected channels.
+ *  \ingroup Visualization
  */
 template <class TPixelPrecision, class TRGBPixel, class TTransferFunction = Identity<TPixelPrecision,TPixelPrecision> >
 class StandardRenderingFunction
@@ -85,7 +87,7 @@ public:
 
   /** Evaluate method (scalar version) */
   inline virtual const OutputPixelType Evaluate(ScalarPixelType spixel) const
-  {    
+  {
     OutputPixelType resp;
     resp.Fill(this->Evaluate(m_TransferFunction(spixel),m_TransferedMinimum[0],m_TransferedMaximum[0]));
     return resp;
@@ -131,7 +133,7 @@ public:
 	}
       else if(channel == m_BlueChannelIndex)
 	{
-	oss<<"c= "<<channel<<", G= "<<(int)output[1]; 
+	oss<<"c= "<<channel<<", G= "<<(int)output[1];
 	if(output[1]<100)
 	  {
 	  oss<<" ";
@@ -144,7 +146,7 @@ public:
 	}
       else if(channel == m_GreenChannelIndex)
 	{
-	oss<<"c= "<<channel<<", B= "<<(int)output[2]; 
+	oss<<"c= "<<channel<<", B= "<<(int)output[2];
 	if(output[2]<100)
 	  {
 	  oss<<" ";
@@ -157,7 +159,7 @@ public:
 	}
       else
 	{
-	oss<<"c= "<<channel<<",         v= "<<static_cast<typename itk::NumericTraits<ScalarPixelType>::PrintType>(vpixel[channel])<<std::endl; 
+	oss<<"c= "<<channel<<",         v= "<<static_cast<typename itk::NumericTraits<ScalarPixelType>::PrintType>(vpixel[channel])<<std::endl;
 	}
       }
     return oss.str();
@@ -174,7 +176,7 @@ public:
   {
     m_RedChannelIndex = index;
   }
-  
+
   /** Get the red channel index (vector mode only) */
   unsigned int GetRedChannelIndex(void)
   {
@@ -186,7 +188,7 @@ public:
   {
     m_BlueChannelIndex = index;
   }
-  
+
   /** Get the blue channel index (vector mode only) */
   unsigned int GetBlueChannelIndex(void)
   {
@@ -198,19 +200,19 @@ public:
   {
     m_GreenChannelIndex = index;
   }
-  
+
   /** Get the green channel index (vector mode only) */
   unsigned int GetGreenChannelIndex(void)
   {
     return m_GreenChannelIndex;
   }
-  
+
   /** Set all channels (grayscale mode) */
   void SetAllChannels(unsigned int index)
   {
     m_RedChannelIndex   = index;
     m_BlueChannelIndex  = index;
-    m_GreenChannelIndex = index; 
+    m_GreenChannelIndex = index;
   }
 
   /** Togle the UserDefinedTransferedMinMax mode */
@@ -231,7 +233,7 @@ public:
     m_TransferedMinimum.clear();
     m_TransferedMinimum.push_back(spixel);
   }
-  
+
   /** Set the transfered maximum (scalar version) */
   virtual void SetTransferedMaximum(ScalarPixelType spixel)
   {
@@ -266,10 +268,10 @@ public:
       {
       typename ExtremaVectorType::const_iterator minIt = this->m_Minimum.begin();
       typename ExtremaVectorType::const_iterator maxIt = this->m_Maximum.begin();
-      
+
       m_TransferedMinimum.clear();
       m_TransferedMaximum.clear();
-      
+
       while(minIt != this->m_Minimum.end() && maxIt != this->m_Maximum.end())
         {
         const double v1 = m_TransferFunction(*minIt);
@@ -281,7 +283,7 @@ public:
         }
       }
   }
-     
+
 protected:
   /** Constructor */
   StandardRenderingFunction() : m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2), m_TransferFunction(),
@@ -320,7 +322,7 @@ private:
   unsigned int m_GreenChannelIndex;
   unsigned int m_BlueChannelIndex;
 
-  /** Transfer function 
+  /** Transfer function
    *  \note This member is declared mutable because some functors that
    * can be used as a transfer function but are not const correct.
    *  Since a const reference is passed to the functor anyway, it is

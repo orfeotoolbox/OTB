@@ -52,7 +52,8 @@ namespace otb
 *   \brief This class implements a standard visualization tool to be
 *   plugged at the end of a pipeline.
 *
-*/
+*  \ingroup Visualization
+ */
 
 template <class TImage, class TVectorData = VectorData<double> , class TWidgetManager = otb::PackedWidgetManager>
 class StandardImageViewer

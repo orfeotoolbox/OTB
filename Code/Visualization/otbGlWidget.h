@@ -43,7 +43,8 @@ namespace otb
 *   zooming.
 *
 *  \sa ImageWidget
-*/
+*  \ingroup Visualization
+ */
 
 class GlWidget
   : public Fl_Gl_Window, public itk::Object

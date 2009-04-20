@@ -44,11 +44,12 @@ namespace otb
 *   \brief This Gl Component to render a VectorData.
 *   No checking is done upon the adequation between the VectorData
 *   projection and the underlying image projection.
-*  
+*
 *   Origin and Spacing allows to fit to the image axis.
-*/
+*  \ingroup Visualization
+ */
 
-template <class TVectorData> 
+template <class TVectorData>
 class VectorDataGlComponent
   : public GlComponent
 {
@@ -59,7 +60,7 @@ public:
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
   typedef typename Superclass::RegionType       RegionType;
- 
+
   // affine transform
   typedef Superclass::AffineTransformType       AffineTransformType;
   typedef AffineTransformType::InputPointType   PointType;
@@ -86,11 +87,11 @@ public:
 
   /// Render the vector data
   virtual void  Render(const RegionType& extent,const AffineTransformType * space2ScreenTransform);
-   
+
   /** Set/Get the grid spacing */
   itkSetMacro(Spacing,VectorType);
   itkGetConstReferenceMacro(Spacing,VectorType);
-  
+
   /** Set/Get the grid origin */
   itkSetMacro(Origin,PointType);
   itkGetConstReferenceMacro(Origin,PointType);
@@ -126,7 +127,7 @@ protected:
   {
     Superclass::PrintSelf(os,indent);
   }
-  
+
   /// Render a point
   void RenderPoint(const PointType & p, const RegionType & extent, const AffineTransformType * transform);
   /// Render a polyline
@@ -147,7 +148,7 @@ private:
 
   // Function pointer typedef
   typedef void (CALLBACK * FunctionPointerType)();
-  
+
   // Static Combine callback for tesselation
   static void TesselationCombineCallback(GLdouble coords[3],GLdouble * data[4], GLfloat weights[4],GLdouble **dataOut)
   {
@@ -170,7 +171,7 @@ private:
 
   /// Spacing of the image grid
   VectorType m_Spacing;
-  
+
   /// Origin of the image
   PointType  m_Origin;
 
@@ -189,11 +190,11 @@ private:
   /** Do we need to render only polygon boundaries ? */
   bool m_RenderPolygonBoundariesOnly;
 
-}; // end class 
+}; // end class
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataGlComponent.txx" 
+#include "otbVectorDataGlComponent.txx"
 #endif
 
 #endif

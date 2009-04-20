@@ -24,12 +24,13 @@ namespace otb
 {
 /** \class ChangeScaleActionHandler
 *   \brief Implements basic Scroll, Full and Zoom  widgets resizing.
-* 
+*
 *   \sa ImageWidgetController
 *   \sa ImageWidgetActionHandler
-*/
+*  \ingroup Visualization
+ */
 
-template <class TModel, class TView> 
+template <class TModel, class TView>
 class ChangeScaleActionHandler
   : public ImageWidgetActionHandler
 {
@@ -39,10 +40,10 @@ public:
   typedef ImageWidgetActionHandler               Superclass;
   typedef itk::SmartPointer<Self>                Pointer;
   typedef itk::SmartPointer<const Self>          ConstPointer;
-  
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(ChangeScaleActionHandler,ImageWidgetActionHandler);
 
@@ -71,14 +72,14 @@ public:
         otbMsgDevMacro(<<"ChangeScaleActionHandler::HandleWidgetEvent(): handling ("<<widgetId<<", "<<event<<")");
         // Get the mousewhell offset
         int dy = Fl::event_dy();
-        
+
         // Compute new scale
         double newScale = m_View->GetZoomWidget()->GetIsotropicZoom() * vcl_pow(m_ScaleRatio,-dy);
         if(newScale>=1.0)
           {
           m_View->GetZoomWidget()->SetIsotropicZoom(newScale);
           RegionType region = m_Model->GetScaledExtractRegion();
-          
+
           typename RegionType::IndexType index = region.GetIndex();
           typename RegionType::SizeType size = region.GetSize();
           index[0]+=size[0]/2;
@@ -96,7 +97,7 @@ public:
       }
     return false;
   }
-  
+
   /** Set/Get the pointer to the view */
   itkSetObjectMacro(View,ViewType);
   itkGetObjectMacro(View,ViewType);
@@ -121,21 +122,21 @@ protected:
   {
     Superclass::PrintSelf(os,indent);
   }
- 
+
 private:
   ChangeScaleActionHandler(const Self&);    // purposely not implemented
   void operator=(const Self&); // purposely not implemented
 
   // Pointer to the view
   ViewPointerType m_View;
-  
+
   // Pointer to the model
   ModelPointerType m_Model;
-  
+
   /** Scale Ratio */
   double m_ScaleRatio;
 
-}; // end class 
+}; // end class
 } // end namespace otb
 #endif
 

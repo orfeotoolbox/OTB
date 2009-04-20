@@ -31,7 +31,8 @@ namespace otb
 {
 /** \class GlComponent
 *   \brief Base class for openGl rendered components.
-*/
+*  \ingroup Visualization
+ */
 
 class GlComponent
   : public itk::Object
@@ -43,13 +44,13 @@ public:
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
   typedef itk::ImageRegion<2>                  RegionType;
- 
+
   // affine transform
   typedef itk::AffineTransform<double,2>       AffineTransformType;
   typedef AffineTransformType::InputPointType  PointType;
   typedef AffineTransformType::InputVectorType VectorType;
   typedef itk::FixedArray<double,4>             ColorType;
-    
+
   /** Runtime information */
   itkTypeMacro(GlComponent,Object);
 
@@ -80,7 +81,7 @@ private:
   /// Is the component visible ?
   bool m_Visible;
 
-}; // end class 
+}; // end class
 } // end namespace otb
 
 #endif

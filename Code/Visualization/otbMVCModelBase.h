@@ -23,10 +23,11 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class MVCModelBase
- *
- * Interface class for MVC based modelling. Implements the registration and
+ * \brief Interface class for MVC based modelling.
+ *  Implements the registration and
  * Unregistration of listeners, as well as the NotifyAll method. A valid listener must
  * implement a Notify() method.
+ *  \ingroup Visualization
  */
 template <class TListener>
 class MVCModelBase

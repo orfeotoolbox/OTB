@@ -27,7 +27,7 @@ namespace otb
 {
 namespace Functor
 {
-/**\class RenderingFunctor
+/** \class RenderingFunctor
  * \brief This functor renders the input pixel.
  * This functor renders the input pixel to a printable format
  * (unsigned char RGB).
@@ -42,6 +42,7 @@ namespace Functor
  * \sa ImageLayer
  * \sa RenderingImageFilter
  * \sa RenderingFunction
+ *  \ingroup Visualization
  */
 template <class TPixelPrecision, class TRGBPixel>
 class RenderingFunctor
@@ -173,7 +174,7 @@ public:
   {
     // Call the superclass implementation
     Superclass::BeforeThreadedGenerateData();
-    
+
     // Initialize the rendering function
     this->GetFunctor().InitializeFunction();
   }

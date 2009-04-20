@@ -28,9 +28,10 @@ namespace otb
 {
 /** \class Curve2D
 *   \brief Base class Curves to be rendered in Curves2DWidget.
-*   
+*
 *   \sa Curves2DWidget
-*/
+*  \ingroup Visualization
+ */
 
 class Curve2D
   : public  GlComponent
@@ -42,20 +43,20 @@ public:
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
   typedef itk::ImageRegion<2>                  RegionType;
- 
+
   // affine transform
   typedef Superclass::AffineTransformType      AffineTransformType;
   typedef Superclass::PointType                PointType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::ColorType                ColorType;
-    
+
   /** Runtime information */
   itkTypeMacro(Curve2D,GlComponent);
 
   /// This method is provided to do some computation before rendering
   virtual void BeforeRendering() {};
-  
-  /// Get the min for each axis from the data available 
+
+  /// Get the min for each axis from the data available
   virtual PointType GetMinimum() = 0;
 
   /// Get the max for each axis from the data available
@@ -94,7 +95,7 @@ private:
   /// The curve label color
   ColorType   m_LabelColor;
 
-}; // end class 
+}; // end class
 } // end namespace otb
 
 #endif

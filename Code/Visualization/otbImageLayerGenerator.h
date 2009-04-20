@@ -31,20 +31,21 @@ namespace otb
 *   optionnaly quicklook.
 *
 *   It ca also suggest a subsampling rate if a user want to generate
-*   the quicklook by itself. 
+*   the quicklook by itself.
 *
 *   The output layer can be passed to the AddLayer() method of the
 *   ImageViewerModel.
 *
 *   It can also be tuned afterward.
-
-*   Also it is quite a heavy thing to do, an image layer can still be 
+*
+*   Also it is quite a heavy thing to do, an image layer can still be
 *   built by hands.
-*   
+*
 *   \sa ImageViewerModel
 *   \sa ImageLayer
-*/
-template < class TImageLayer >  
+*  \ingroup Visualization
+ */
+template < class TImageLayer >
 class ImageLayerGenerator
   : public itk::Object
 {
@@ -54,10 +55,10 @@ public:
   typedef itk::Object                        Superclass;
   typedef itk::SmartPointer<Self>            Pointer;
   typedef itk::SmartPointer<const Self>      ConstPointer;
-  
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(ImageLayerGenerator,Object);
 
@@ -73,7 +74,7 @@ public:
   typedef otb::StreamingShrinkImageFilter
   <ImageType,ImageType>                        ResampleFilterType;
   typedef typename ResampleFilterType::Pointer ResampleFilterPointerType;
-  
+
   /** Rendering function typedef */
   typedef typename ImageLayerType::DefaultRenderingFunctionType RenderingFunctionType;
   typedef typename RenderingFunctionType::Pointer RenderingFunctionPointerType;
@@ -107,7 +108,7 @@ public:
   /** Activate/deactivate quicklook generation */
   itkSetMacro(GenerateQuicklook,bool);
   itkBooleanMacro(GenerateQuicklook);
-  
+
   /** Set/Get the screen ratio */
   itkSetMacro(ScreenRatio,double);
   itkGetMacro(ScreenRatio,double);
@@ -155,7 +156,7 @@ private:
    * GenerateQuicklook is on)
    */
   unsigned int          m_SubsamplingRate;
-  
+
   /** if true, the generator will also generate the quicklook */
   bool                  m_GenerateQuicklook;
 
@@ -165,7 +166,7 @@ private:
   /** Which ratio of the screen size the quicklook size should be */
   double m_ScreenRatio;
 
-}; // end class 
+}; // end class
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

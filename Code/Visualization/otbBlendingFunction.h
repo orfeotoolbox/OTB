@@ -25,10 +25,11 @@ namespace otb
 {
 namespace Function
 {
-/**\class BlendingFunction
+/** \class BlendingFunction
  * \brief Base class for blending functions.
  *  Please note that this class is pure virtual, and should be
  *  subclassed.
+ *  \ingroup Visualization
  */
 template <class TInputRGBPixel1, class TInputRGBPixel2 = TInputRGBPixel1, class TOutputRGBPixel = TInputRGBPixel1>
 class BlendingFunction
@@ -51,7 +52,7 @@ public:
 
   /** Evaluate method  */
   virtual const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type & input2) = 0;
-    
+
 protected:
   /** Constructor */
   BlendingFunction()  {}

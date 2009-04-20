@@ -30,6 +30,7 @@ namespace Function
  * \brief Implements simple blending
  * For each channel the blending function is as follows:
  * \f[ P_{o} = \alpha P_{i1} + (1 - \alpha) P_{i2} \f]
+ *  \ingroup Visualization
  */
 template <class TInputRGBPixel1, class TInputRGBPixel2 = TInputRGBPixel1, class TOutputRGBPixel = TInputRGBPixel1>
 class UniformAlphaBlendingFunction

@@ -22,7 +22,9 @@ namespace otb
 {
 /**
  * \class PixelDescriptionModelListener
+ * \brief todo
  *
+ *  \ingroup Visualization
  */
 
 class PixelDescriptionModelListener

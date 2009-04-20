@@ -32,12 +32,13 @@ namespace otb
 /** \class ImageLayer
 *   \brief This class is a layer container.
 *   It contains everything related to a layer in the viewer model.
-*   
+*
 *   \sa ImageViewerModel
 *   \sa Layer
-*/
+*  \ingroup Visualization
+ */
 
-template <class TImage, class TOutputImage = otb::Image<itk::RGBPixel<unsigned char>, 2 > >  
+template <class TImage, class TOutputImage = otb::Image<itk::RGBPixel<unsigned char>, 2 > >
 class ImageLayer
   : public ImageLayerBase<TOutputImage>
 {
@@ -47,10 +48,10 @@ public:
   typedef ImageLayerBase<TOutputImage>      Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
-  
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(ImageLayer,Layer);
 
@@ -61,23 +62,23 @@ public:
   typedef typename ImageType::InternalPixelType                       InternalPixelType;
   typedef typename ImageType::RegionType                              RegionType;
   typedef typename ImageType::IndexType                               IndexType;
-  
+
   /** Output image typedef */
   typedef TOutputImage                                                OutputImageType;
 
   /** Histogram typedef */
    typedef itk::Statistics::DenseFrequencyContainer                   DFContainerType;
-  
+
   typedef itk::VariableLengthVector<InternalPixelType>                SampleType;
   typedef itk::Statistics::ListSample<SampleType>                     ListSampleType;
- 
+
   typedef otb::ListSampleToHistogramListGenerator
   <ListSampleType,InternalPixelType,DFContainerType>                  HistogramFilterType;
   typedef typename HistogramFilterType::HistogramType                 HistogramType;
   typedef typename HistogramType::Pointer                             HistogramPointerType;
   typedef typename HistogramFilterType::HistogramListType             HistogramListType;
   typedef typename HistogramListType::Pointer                         HistogramListPointerType;
-    
+
   /** Rendering part */
   typedef RenderingImageFilter<TImage,TOutputImage>                   RenderingFilterType;
   typedef typename RenderingFilterType::Pointer                       RenderingFilterPointerType;
@@ -108,7 +109,7 @@ public:
       m_Quicklook = ql;
       m_QuicklookRenderingFilter->SetInput(m_Quicklook);
       }
-    
+
   }
   itkGetObjectMacro(Quicklook,ImageType);
 
@@ -161,10 +162,10 @@ public:
         }
       }
   }
-  
+
  /** Reimplemented to pass the parameter to the extract filter */
   virtual void SetScaledExtractRegion(const RegionType & region)
-  {    
+  {
     // This check should be done in the itk::ExtractImageFilter
     if(this->GetScaledExtractRegion() != region)
       {
@@ -181,7 +182,7 @@ public:
   virtual void Render();
 
   /** Get the pixel description */
-  virtual std::string GetPixelDescription(const IndexType & index);  
+  virtual std::string GetPixelDescription(const IndexType & index);
 
 protected:
   /** Constructor */
@@ -190,13 +191,13 @@ protected:
   ~ImageLayer();
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
- 
+
   /** Update the histogram */
 virtual void RenderHistogram();
 
   /** Update the images */
   virtual void RenderImages();
-  
+
   /** Auto min/max rendering function setup */
   virtual void AutoMinMaxRenderingFunctionSetup();
 
@@ -206,7 +207,7 @@ private:
 
   /** Pointer to the quicklook */
   ImagePointerType             m_Quicklook;
-  
+
   /** Pointer to the image */
   ImagePointerType             m_Image;
 
@@ -215,7 +216,7 @@ private:
 
   /** Rendering function */
   RenderingFunctionPointerType m_RenderingFunction;
-  
+
   /** Number of bins for histograms generation */
   unsigned int                 m_NumberOfHistogramBins;
 
@@ -235,7 +236,7 @@ private:
   ExtractFilterPointerType    m_ExtractFilter;
   ExtractFilterPointerType    m_ScaledExtractFilter;
 
-}; // end class 
+}; // end class
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

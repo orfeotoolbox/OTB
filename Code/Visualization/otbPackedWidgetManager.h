@@ -26,10 +26,15 @@
 
 namespace otb
 {
+  /** \class PackedWidgetManager
+   *   \brief todo
+   *
+   *  \ingroup Visualization
+   */
 class  PackedWidgetManager
     : public WidgetManager
 {
- public: 
+ public:
   /** Standard class typedefs */
   typedef PackedWidgetManager                        Self;
   typedef WidgetManager                              Superclass;
@@ -38,13 +43,13 @@ class  PackedWidgetManager
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(PackedWidgetManager,WidgetManager);
-  
+
   /** typedef of the fltk file defining all the widget needed*/
   typedef ImageWidgetPackedManager                  ImageWidgetPackedManagerType;
-  
+
   /** Register Wigets*/
   virtual void RegisterFullWidget(WidgetType* fullWidget);
   virtual void RegisterScrollWidget(WidgetType* scrollWidget);
@@ -59,8 +64,8 @@ class  PackedWidgetManager
 
  protected:
   /** Constructor */
-  PackedWidgetManager(); 
-  
+  PackedWidgetManager();
+
   /** Destructor */
   virtual ~PackedWidgetManager();
   /** Printself method */
@@ -69,7 +74,7 @@ class  PackedWidgetManager
     Superclass::PrintSelf(os,indent);
   }
 
-  
+
  private:
   PackedWidgetManager(const Self&);     // purposely not implemented
   void operator=(const Self&); // purposely not implemented

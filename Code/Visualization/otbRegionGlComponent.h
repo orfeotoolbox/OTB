@@ -25,7 +25,8 @@ namespace otb
 {
 /** \class RegionGlComponent
 *   \brief This Gl Component represents a region.
-*/
+*  \ingroup Visualization
+ */
 
 class RegionGlComponent
   : public GlComponent
@@ -37,13 +38,13 @@ public:
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
   typedef itk::ImageRegion<2>                  RegionType;
- 
+
   // affine transform
   typedef Superclass::AffineTransformType      AffineTransformType;
   typedef AffineTransformType::InputPointType  PointType;
   typedef AffineTransformType::InputVectorType VectorType;
   typedef Superclass::ColorType                ColorType;
-    
+
   /** Runtime information */
   itkTypeMacro(RegionGlComponent,GlComponent);
 
@@ -79,7 +80,7 @@ public:
 
     glDisable(GL_BLEND);
   }
-  
+
   /** Set/Get the region to render */
   itkSetMacro(Region,RegionType);
   itkGetConstReferenceMacro(Region,RegionType);
@@ -114,7 +115,7 @@ private:
   // The color of the region to render
   ColorType  m_Color;
 
-}; // end class 
+}; // end class
 } // end namespace otb
 
 #endif

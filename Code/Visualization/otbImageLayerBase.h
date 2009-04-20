@@ -29,11 +29,12 @@ namespace otb
 /** \class ImageLayerBase
 *   \brief Base class for all layers objects
 *   A layer is something that can be rendered to the screen.
-*   
+*
 *   \sa ImageViewerModel
-*/
+*  \ingroup Visualization
+ */
 
-template <class TOutputImage = Image<itk::RGBPixel<unsigned char>, 2 > > 
+template <class TOutputImage = Image<itk::RGBPixel<unsigned char>, 2 > >
 class ImageLayerBase
   : public itk::Object
 {
@@ -43,7 +44,7 @@ public:
   typedef itk::Object                          Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
-    
+
   /** Runtime information */
   itkTypeMacro(ImageLayerBase,Object);
 
@@ -63,8 +64,8 @@ public:
   virtual void Render() = 0;
 
   /** Get the pixel description */
-  virtual std::string GetPixelDescription(const IndexType & index) = 0;  
-  
+  virtual std::string GetPixelDescription(const IndexType & index) = 0;
+
   itkGetObjectMacro(RenderedQuicklook,     OutputImageType);
   itkGetObjectMacro(RenderedExtract,       OutputImageType);
   itkGetObjectMacro(RenderedScaledExtract, OutputImageType);
@@ -118,7 +119,7 @@ public:
 
 protected:
   /** Constructor */
-  ImageLayerBase() : m_Name("Default"), m_Visible(false), m_Extent(), 
+  ImageLayerBase() : m_Name("Default"), m_Visible(false), m_Extent(),
             m_RenderedQuicklook(), m_HasQuicklook(false), m_QuicklookSize(),  m_QuicklookSubsamplingRate(1),
             m_RenderedExtract(),   m_HasExtract(false),   m_ExtractRegion(),
             m_RenderedScaledExtract(), m_HasScaledExtract(false), m_ScaledExtractRegion(),
@@ -153,7 +154,7 @@ private:
 
   /** Is the layer visible ? */
   bool                   m_Visible;
-  
+
   /** Data extent */
   RegionType             m_Extent;
 
@@ -176,7 +177,7 @@ private:
   /** Pointer to the blending function */
   BlendingFunctionPointerType m_BlendingFunction;
 
-}; // end class 
+}; // end class
 } // end namespace otb
 
 #endif

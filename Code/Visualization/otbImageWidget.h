@@ -36,7 +36,8 @@ namespace otb
 *   is centered).
 *
 *   It is also able to display a rectangle on the displayed image.
-*/
+*  \ingroup Visualization
+ */
 
 template <class TInputImage=otb::Image<itk::RGBPixel<unsigned char>,2 > >
 class ImageWidget
