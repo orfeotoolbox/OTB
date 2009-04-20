@@ -41,4 +41,5 @@ void RegisterTests()
   REGISTER_TEST(otbKMLVectorDataIOTestCanRead);
   REGISTER_TEST(otbKMLVectorDataIOTestCanWrite);
   REGISTER_TEST(otbKMLVectorDataIOTestFileReader);
+  REGISTER_TEST(otbVectorDataMetaDataNew);
 }
