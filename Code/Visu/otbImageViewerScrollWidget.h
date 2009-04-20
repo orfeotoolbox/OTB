@@ -29,9 +29,12 @@ namespace otb
 template <class TPixel, class TLabel> class ImageViewerBase;
 
 /** \class ImageViewerScrollWidget
- * \brief Custom scroll image widget.
+ * \brief DEPRECATED: Custom scroll image widget.
  *
  * This class derives from otb::FixedSizeFullImageWidget, and implements behaviours specific to the image viewer.
+ *
+ *  \deprecated use the new Visualization framework instead.
+ * \sa StandardImageViewer
  *
  * \sa ImageViewer, FixedSizeFullImageWidget
  *

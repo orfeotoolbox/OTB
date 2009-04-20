@@ -28,9 +28,11 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class HistogramAndTransferFunctionWidget
- *  \brief
+   *  \brief DEPRECATED
  *
- * \ingroup Visu
+   *  \deprecated use the new Visualization framework instead.
+   * \sa StandardImageViewer
+   *
  */
 template <class THistogram, class TPixel>
 class ITK_EXPORT HistogramAndTransferFunctionWidget

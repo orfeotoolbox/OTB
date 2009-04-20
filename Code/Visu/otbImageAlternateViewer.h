@@ -34,9 +34,11 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class ImageAlternateViewer
- *  \brief
+   *  \brief DEPRECATED
  *
- * \ingroup Visu
+   *  \deprecated use the new Visualization framework instead.
+   * \sa StandardImageViewer
+   *
  */
 template <class TPixel>
 class ITK_EXPORT ImageAlternateViewer

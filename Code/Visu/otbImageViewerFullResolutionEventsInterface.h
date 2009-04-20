@@ -24,6 +24,14 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
+  /**
+   *\class ImageViewerFullResolutionEventsInterface
+   * \brief DEPRECATED
+   *
+   *  \deprecated use the new Visualization framework instead.
+   * \sa StandardImageViewer
+   *
+   */
 class ImageViewerFullResolutionEventsInterface
       : public itk::Object
 {

@@ -31,9 +31,12 @@ template <class TPixel, class TLabel> class ImageViewerBase;
 /**
  * \class ImageViewerFullWidget
  *
- * \brief Custom full image widget.
+ * \brief DEPRECATED: Custom full image widget.
  *
  * This class derives from otb::FullResolutionImageWidget, and implements behaviours specific to the image viewer.
+ *
+ *  \deprecated use the new Visualization framework instead.
+ * \sa StandardImageViewer
  *
  * \sa ImageViewer, FullResolutionImageWidget
  *

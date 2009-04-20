@@ -31,8 +31,11 @@
 namespace otb
 {
 /** \class ImageWidgetPolygonForm
-   * \brief Widget to draw polygons on the viewer
- *
+   * \brief DEPRECATED: Widget to draw polygons on the viewer
+   *
+   * \deprecated use the new Visualization framework instead.
+   * \sa StandardImageViewer
+   *
  */
 template<class TValue = double>
 class ITK_EXPORT ImageWidgetPolygonForm

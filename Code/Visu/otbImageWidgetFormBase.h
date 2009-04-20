@@ -28,7 +28,10 @@
 namespace otb
 {
 /** \class ImageWidgetFormBase
- * \brief
+   * \brief DEPRECATED
+ *
+ *  \deprecated use the new Visualization framework instead.
+ * \sa StandardImageViewer
  *
  */
 class ITK_EXPORT ImageWidgetFormBase

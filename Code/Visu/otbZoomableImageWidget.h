@@ -23,7 +23,10 @@
 namespace otb
 {
 /** \class ZoomableImageWidget
- * \brief Widget for the zoom window in viewer.
+   * \brief DEPRECATED: Widget for the zoom window in viewer.
+ *
+ *  \deprecated use the new Visualization framework instead.
+ * \sa StandardImageViewer
  *
  */
 template <class TPixel>

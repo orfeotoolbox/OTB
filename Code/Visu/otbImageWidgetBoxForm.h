@@ -25,7 +25,10 @@
 namespace otb
 {
 /** \class ImageWidgetBoxForm
- * \brief Widget to draw boxes on the viewer
+   * \brief DEPRECATED: Widget to draw boxes on the viewer
+ *
+ *  \deprecated use the new Visualization framework instead.
+ * \sa StandardImageViewer
  *
  */
 class ImageWidgetBoxForm

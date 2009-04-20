@@ -25,7 +25,11 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class ImageWidgetTransferFunction
- *  \brief Base class for visualisation transfer functions.
+ *  \brief DEPRECATED: Base class for visualisation transfer functions.
+ *
+ *  \deprecated use the new Visualization framework instead.
+ * \sa StandardImageViewer
+ *
  */
 template <class TPixel>
 class ITK_EXPORT ImageWidgetTransferFunction

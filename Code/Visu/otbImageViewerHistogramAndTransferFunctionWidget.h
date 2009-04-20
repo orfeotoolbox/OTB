@@ -26,10 +26,13 @@ template <class TPixel, class TLabel> class ImageViewerBase;
 /**
  * \class ImageViewerHistogramAndTransferFunctionWidget
  *
- * \brief Custom histogram widget for the image viewer.
+ * \brief DEPRECATED: Custom histogram widget for the image viewer.
  *
  * This class derives from otb::HistogramAndTransferFunctionWidget,
  * and implements behaviours specific to the image viewer.
+ *
+ *  \deprecated use the new Visualization framework instead.
+ * \sa StandardImageViewer
  *
  * \sa ImageViewer, HistogramAndTransferFunctionWidget
  *

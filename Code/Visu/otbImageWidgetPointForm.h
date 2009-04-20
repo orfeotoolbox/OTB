@@ -24,7 +24,10 @@
 namespace otb
 {
 /** \class ImageWidgetPointForm
- * \brief
+   * \brief DEPRECATED
+ *
+ *  \deprecated use the new Visualization framework instead.
+ * \sa StandardImageViewer
  *
  */
 class ImageWidgetPointForm

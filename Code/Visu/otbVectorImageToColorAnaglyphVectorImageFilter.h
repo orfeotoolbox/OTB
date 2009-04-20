@@ -26,7 +26,7 @@ namespace otb
 namespace Functor
 {
 /** \class ColorAnaglyphFunctor
- *  \brief This functor implements the pixel-wise color anaglyph composition.
+   *  \brief DEPRECATED: This functor implements the pixel-wise color anaglyph composition.
  *  The output pixel is a vector pixel of size 3, where the first component contains the
  *  value of the first component from the second input pixel, the second component contains
  *  the value of the second component from the first input pixel, and the third component
@@ -34,6 +34,10 @@ namespace Functor
  *
  *  the channels indices for the composition can be changed to fit the channel order from
  *  a specific sensor.
+ *
+ *  \deprecated use the new Visualization framework instead.
+ * \sa StandardImageViewer
+ *
  */
 template <class TInputPixel1,class TInputPixel2,class TOutputPixel>
 class ColorAnaglyphFunctor

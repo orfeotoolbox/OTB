@@ -25,7 +25,10 @@
 namespace otb
 {
 /** \class ImageWidgetCircleForm
- * \brief
+   * \brief DEPRECATED
+ *
+ * \deprecated use the new Visualization framework instead.
+ * \sa StandardImageViewer
  *
  */
 class ITK_EXPORT ImageWidgetCircleForm

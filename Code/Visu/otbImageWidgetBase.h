@@ -29,7 +29,10 @@
 namespace otb
 {
 /** \class ImageWidgetBase
- *  \brief Base class for ImageWidget
+   *  \brief DEPRECATED: Base class for ImageWidget
+ *
+ *  \deprecated use the new Visualization framework instead.
+ * \sa StandardImageViewer
  *
  */
 template <class TPixel>

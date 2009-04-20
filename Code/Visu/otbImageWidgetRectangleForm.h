@@ -24,8 +24,11 @@
 namespace otb
 {
 /** \class ImageWidgetRectangleForm
- * \brief
+ * \brief DEPRECATED
  *
+   *  \deprecated use the new Visualization framework instead.
+   * \sa StandardImageViewer
+   *
  */
 class ImageWidgetRectangleForm
       : public ImageWidgetFormBase

@@ -26,8 +26,11 @@
 namespace otb
 {
 /** \class ImageWidgetPolylineForm
- * \brief
+   * \brief DEPRECATED
  *
+   *  \deprecated use the new Visualization framework instead.
+   * \sa StandardImageViewer
+   *
  */
 template<class TValue = double>
 class ITK_EXPORT ImageWidgetPolylineForm

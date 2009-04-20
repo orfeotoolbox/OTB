@@ -33,9 +33,13 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class GluPolygonDrawingHelper
- *  \brief This class is a short helper class to render complex polygons in openGl.
+   *  \brief DEPRECATED: This class is a short helper class to render complex polygons in openGl.
  *
  *  It uses the glu tesselator functionality.
+ *
+  *  \deprecated use the new Visualization framework instead.
+  * \sa StandardImageViewer
+  *
  */
 class ITK_EXPORT GluPolygonDrawingHelper
       : public itk::Object

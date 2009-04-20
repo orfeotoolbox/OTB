@@ -43,7 +43,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class ImageViewerBase
- * \brief Simple image viewer base class.
+   * \brief DEPRECATED: Simple image viewer base class.
  *
  * This class is a simple image viewer using fltk gui and opengl drawing.
  * It is divided into four parts :
@@ -63,6 +63,9 @@ namespace otb
  * Unkike most OTB filters, ImageViewerBase is templated over the input pixel type and will take as input an otb::VectorImage<PixelType>.
  * Be aware of that.
  *
+   *  \deprecated use the new Visualization framework instead.
+   * \sa StandardImageViewer
+   *
  * \sa ImageViewerFullWidget, ImageViewerScrollWidget, ImageViewerZoomWidget
  */
 template <class TPixel, class TLabel = double>
