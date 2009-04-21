@@ -30,7 +30,7 @@
 // There are function prototype conflits under cygwin between standard w32 API
 // and standard C ones
 #ifndef CALLBACK
-#if defined(__CYGWIN__)
+#if defined(_WINDOWS) || defined(__CYGWIN__)
 #define CALLBACK __stdcall
 #else
 #define CALLBACK
