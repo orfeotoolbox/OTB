@@ -44,10 +44,10 @@ VectorDataGlComponent<TVectorData>
   m_GluTesselator = gluNewTess();
 
   // Setting up the tesselator callbacks
-  gluTessCallback(m_GluTesselator,GLU_TESS_BEGIN,  (FunctionPointerType) glBegin);
-  gluTessCallback(m_GluTesselator,GLU_TESS_END,    (FunctionPointerType) glEnd);
+  gluTessCallback(m_GluTesselator,GLU_TESS_BEGIN,  (FunctionPointerType) BeginCallback);
+  gluTessCallback(m_GluTesselator,GLU_TESS_END,    (FunctionPointerType) EndCallback);
   gluTessCallback(m_GluTesselator,GLU_TESS_ERROR,  (FunctionPointerType) TesselationErrorCallback);
-  gluTessCallback(m_GluTesselator,GLU_TESS_VERTEX, (FunctionPointerType) glVertex3dv);
+  gluTessCallback(m_GluTesselator,GLU_TESS_VERTEX, (FunctionPointerType) VertexCallback);
   gluTessCallback(m_GluTesselator,GLU_TESS_COMBINE,(FunctionPointerType) TesselationCombineCallback);
 }
 
