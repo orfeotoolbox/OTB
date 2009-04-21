@@ -68,7 +68,7 @@ public:
     if( m_View.IsNotNull() && m_Model.IsNotNull() )
       {
       if(widgetId == m_View->GetScrollWidget()->GetIdentifier()
-         && event == FL_PUSH)
+         && event == FL_PUSH && Fl::event_button() == m_MouseButton)
         {
         otbMsgDevMacro(<<"ChangeExtractRegionActionHandler::HandleWidgetEvent(): handling ("<<widgetId<<", "<<event<<")");
 
@@ -109,10 +109,13 @@ public:
   itkSetMacro(Offset,OffsetType);
   itkGetMacro(Offset,OffsetType);
 
+  /** Set the mouse button used */
+  itkSetClampMacro(MouseButton, int,1,3);
+  itkGetMacro(MouseButton, int);
 
 protected:
   /** Constructor */
-  ChangeExtractRegionActionHandler() : m_View(), m_Model()
+  ChangeExtractRegionActionHandler() : m_Offset(), m_View(), m_Model(), m_MouseButton(1)
   {
     m_Offset.Fill(0);
   }
@@ -137,6 +140,9 @@ private:
 
   // Pointer to the model
   ModelPointerType m_Model;
+
+  // Mouse button
+  int m_MouseButton;
 
 }; // end class
 } // end namespace otb
