@@ -37,6 +37,7 @@ namespace Functor
  *  \sa TextureFunctorBase
  *  \ingroup Functor
  *  \ingroup Statistics
+   * \ingroup Textures
  */
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
@@ -46,7 +47,7 @@ public MeanTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType>
 public:
   ClusterProminenceTextureFunctor(){};
   virtual ~ClusterProminenceTextureFunctor(){};
- 
+
   typedef MeanTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
   typedef typename Superclass::NeighborhoodType  NeighborhoodType;
 

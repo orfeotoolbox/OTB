@@ -928,6 +928,9 @@ ADD_TEST(raTvNDWI_WaterIndexImageFilter ${RADIOMETRY_TESTS8}
 
 
 
+
+
+
 # A enrichir
 SET(Radiometry_SRCS1
 otbMultiChannelRAndNIRVegetationIndexImageFilterNew.cxx
@@ -1002,8 +1005,8 @@ otbNDBITM4AndTM5IndexImageFilter.cxx
 otbNDBIMultiChannelTM4AndTM5IndexImageFilter.cxx
 otbISURAndNIRIndexImageFilter.cxx
 otbISUMultiChannelRAndNIRIndexImageFilter.cxx
-otbNDWIMultiChannelWaterIndexImageFilter
-otbNDWIWaterIndexImageFilter
+otbNDWIMultiChannelWaterIndexImageFilter.cxx
+otbNDWIWaterIndexImageFilter.cxx
 )
 
 

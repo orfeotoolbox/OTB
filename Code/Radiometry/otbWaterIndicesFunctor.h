@@ -186,7 +186,7 @@ public:
   /// Get Index NIR
   unsigned int GetNIRIndex()
   {
-    return this->GetIndex1;
+    return this->GetIndex1();
   }
   /// Set Index MIR
   void SetMIRIndex(unsigned int channel)
@@ -196,7 +196,7 @@ public:
   /// Get Index MIR
   unsigned int GetMIRIndex()
   {
-    return this->GetIndex2;
+    return this->GetIndex2();
   }
 
 protected:
@@ -239,7 +239,7 @@ public:
   /// Get Index G
   unsigned int GetGIndex()
   {
-    return this->GetIndex1;
+    return this->GetIndex1();
   }
   /// Set Index NIR
   void SetNIRIndex(unsigned int channel)
@@ -249,7 +249,7 @@ public:
   /// Get Index NIR
   unsigned int GetNIRIndex()
   {
-    return this->GetIndex2;
+    return this->GetIndex2();
   }
 
 protected:
@@ -291,7 +291,7 @@ public:
   /// Get Index G
   unsigned int GetGIndex()
   {
-    return this->GetIndex1;
+    return this->GetIndex1();
   }
   /// Set Index MIR
   void SetMIRIndex(unsigned int channel)
@@ -301,7 +301,7 @@ public:
   /// Get Index MIR
   unsigned int GetMIRIndex()
   {
-    return this->GetIndex2;
+    return this->GetIndex2();
   }
 
 protected:
@@ -344,7 +344,7 @@ public:
   /// Get Index MIR
   unsigned int GetMIRIndex()
   {
-    return this->GetIndex1;
+    return this->GetIndex1();
   }
  /// Set Index G
   void SetGIndex(unsigned int channel)
@@ -354,7 +354,7 @@ public:
   /// Get Index G
   unsigned int GetGIndex()
   {
-    return this->GetIndex2;
+    return this->GetIndex2();
   }
 
 protected:
@@ -397,7 +397,7 @@ public:
   /// Get Index R
   unsigned int GetRIndex()
   {
-    return this->GetIndex1;
+    return this->GetIndex1();
   }
  /// Set Index G
   void SetGIndex(unsigned int channel)
@@ -407,7 +407,7 @@ public:
   /// Get Index G
   unsigned int GetGIndex()
   {
-    return this->GetIndex2;
+    return this->GetIndex2();
   }
 
 protected:

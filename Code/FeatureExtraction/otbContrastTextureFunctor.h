@@ -35,6 +35,7 @@ namespace Functor
  *  \sa TextureFunctorBase
  *  \ingroup Functor
  *  \ingroup Statistics
+   * \ingroup Textures
  */
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
@@ -44,7 +45,7 @@ public TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType>
 public:
   ContrastTextureFunctor(){};
   virtual ~ContrastTextureFunctor(){};
- 
+
   typedef TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
   typedef typename Superclass::NeighborhoodType                             NeighborhoodType;
 

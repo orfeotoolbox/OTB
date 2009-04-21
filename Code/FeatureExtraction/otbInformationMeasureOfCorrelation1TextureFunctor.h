@@ -38,6 +38,7 @@ namespace Functor
  *  \sa TextureFunctorBase
  *  \ingroup Functor
  *  \ingroup Statistics
+   * \ingroup Textures
  */
 
 template  <class TScalarInputPixelType, class TScalarOutputPixelType>
@@ -47,7 +48,7 @@ public EntropyTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType>
 public:
   InformationMeasureOfCorrelation1TextureFunctor(){};
   virtual ~InformationMeasureOfCorrelation1TextureFunctor(){};
- 
+
   typedef EntropyTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
   typedef typename Superclass::NeighborhoodType                                NeighborhoodType;
 
