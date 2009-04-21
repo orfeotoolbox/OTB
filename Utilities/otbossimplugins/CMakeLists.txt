@@ -2,13 +2,13 @@ PROJECT(ossimplugins)
 
 SET(ossimplugins_VERSION_MAJOR "1")
 SET(ossimplugins_VERSION_MINOR "7")
-SET(ossimplugins_VERSION_PATCH "9")
+SET(ossimplugins_VERSION_PATCH "15")
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 SET(ossimplugins_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 SET(ossimplugins_SOURCES
-  ${ossimplugins_SOURCES_DIR}/ossimOgcWktTranslator.cpp
+  ${ossimplugins_SOURCES_DIR}/gdal/ossimOgcWktTranslator.cpp
 )
 
 
@@ -28,8 +28,8 @@ IF(NOT OTB_INSTALL_NO_LIBRARIES)
 ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
 
 IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
-  FILE(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+  FILE(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/gdal/*.h")
   INSTALL(FILES ${__files1}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossimplugins/
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossimplugins/gdal
     COMPONENT Development)
 ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
