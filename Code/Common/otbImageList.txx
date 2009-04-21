@@ -46,7 +46,7 @@ ImageList<TImage>
 template <class TImage>
 void
 ImageList<TImage>
-::PropagateRequestedRegion() throw (itk::InvalidRequestedRegionError)
+::PropagateRequestedRegion()
 {
   Superclass::PropagateRequestedRegion();
   for (ConstIterator it = this->Begin(); it!=this->End();++it)
