@@ -1700,6 +1700,23 @@ ADD_TEST(feTvSFSTexturesImageFilterTest ${FEATUREEXTRACTION_TESTS14}
     # PSI is disable for texture selection test
 )
 
+# -------            otb::UrbanAreaDetectionImageFilter ------------------------------
+ADD_TEST(raTuUrbanAreaDetectionImageFilterNew ${RADIOMETRY_TESTS8}
+        otbUrbanAreaDetectionImageFilterNew
+)
+
+ADD_TEST(raTvUrbanAreaDetectionImageFilter ${RADIOMETRY_TESTS8}
+#  --compare-image ${EPSILON}   ${BASELINE}/raWaterIndex_NDWI_verySmallFSATSW.tif
+#                    ${TEMP}/raWaterIndex_NDWI_verySmallFSATSW.tif
+        otbUrbanAreaDetectionImageFilter
+        ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
+        ${TEMP}/raTvUrbanAreaDetection.tif
+        3   # red
+        2   # green
+        4   # nir
+        0.5 # threshold
+)
+
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -1854,6 +1871,8 @@ otbPanTexTextureImageFunctionFilterNew.cxx
 otbPanTexTextureImageFunctionFilter.cxx
 otbSFSTexturesImageFilterNew.cxx
 otbSFSTexturesImageFilterTest.cxx
+otbUrbanAreaDetectionImageFilterNew.cxx
+otbUrbanAreaDetectionImageFilter.cxx
 )
 
 

@@ -71,12 +71,12 @@ public:
 
 protected:
   /// Constructor
-  MultiChannelRAndGAndNIRIndexImageFilter(): m_RedIndex(3),m_GreenIndex(1),m_NIRIndex(4) {};
+  MultiChannelRAndGAndNIRIndexImageFilter(): m_RedIndex(3),m_GreenIndex(2),m_NIRIndex(4) {};
   /// Destructor
   virtual ~MultiChannelRAndGAndNIRIndexImageFilter() {};
   /// Before generating data, set functor parameters
   virtual void BeforeThreadedGenerateData()
-  {
+  {std::cout<<"je passe pas!!"<<std::endl;
     unsigned int lNbChan = this->GetInput()->GetNumberOfComponentsPerPixel();
     if(m_RedIndex < 1 || m_GreenIndex < 1 || m_NIRIndex < 1 ||
        m_RedIndex > lNbChan || m_GreenIndex > lNbChan || m_NIRIndex > lNbChan)
@@ -86,6 +86,8 @@ protected:
     this->GetFunctor().SetRedIndex(m_RedIndex);
     this->GetFunctor().SetGreenIndex(m_GreenIndex);
     this->GetFunctor().SetNIRIndex(m_NIRIndex);
+std::cout<<m_GreenIndex<<" -> "<<this->GetFunctor().GetGreenIndex()<<std::endl;
+
   }
   /// PrintSelf
   void PrintSelf(std::ostream& os, itk::Indent indent) const

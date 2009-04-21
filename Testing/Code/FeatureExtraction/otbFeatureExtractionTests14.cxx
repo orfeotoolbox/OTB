@@ -33,4 +33,6 @@ REGISTER_TEST(otbPanTexTextureImageFunctionFilterNew);
 REGISTER_TEST(otbPanTexTextureImageFunctionFilter);
 REGISTER_TEST(otbSFSTexturesImageFilterNew);
 REGISTER_TEST(otbSFSTexturesImageFilterTest);
+REGISTER_TEST(otbUrbanAreaDetectionImageFilterNew);
+REGISTER_TEST(otbUrbanAreaDetectionImageFilter);
 }
