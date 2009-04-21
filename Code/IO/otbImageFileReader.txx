@@ -32,6 +32,8 @@
 #include "imaging/ossimImageHandler.h"
 #include "init/ossimInit.h"
 #include "base/ossimKeywordlist.h"
+// #include "ossim/projection/ossimProjectionFactoryRegistry.h"
+// #include "ossim/ossimPluginProjectionFactory.h"
 
 #include <itksys/SystemTools.hxx>
 #include <fstream>
@@ -332,6 +334,8 @@ ImageFileReader<TOutputImage>
 
   // Add the radar factory
   ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
+
+
   ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(lFileNameOssimKeywordlist.c_str()));
 
   if (!handler)
