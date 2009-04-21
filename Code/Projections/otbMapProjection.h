@@ -31,7 +31,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "base/ossimEllipsoid.h"
 #include "base/ossimEllipsoidFactory.h"
 #include "base/ossimString.h"
-#include "ossimOgcWktTranslator.h"
+#include "gdal/ossimOgcWktTranslator.h"
 #include "otbGenericMapProjection.h"
 
 namespace otb

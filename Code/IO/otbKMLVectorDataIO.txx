@@ -33,7 +33,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "projection/ossimProjection.h"
 #include "projection/ossimMapProjection.h"
 #include "projection/ossimMapProjectionFactory.h"
-#include "ossimOgcWktTranslator.h"
+#include "gdal/ossimOgcWktTranslator.h"
 #include "otbMetaDataKey.h"
 
 #include "itkTimeProbe.h"
