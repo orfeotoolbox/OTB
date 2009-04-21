@@ -60,7 +60,7 @@ int otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter(int argc, char * ar
 {
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<unsigned char,Dimension> InputImageType;
-  typedef otb::Image<float,Dimension> OutputImageType;
+  typedef otb::Image<double,Dimension> OutputImageType;
 
   std::string strArgv(argv[1]);
   argc--;

@@ -71,7 +71,7 @@ int otbRAndBAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   typedef otb::Image<PixelType,Dimension> InputRImageType;
   typedef otb::Image<PixelType,Dimension> InputBImageType;
   typedef otb::Image<PixelType,Dimension> InputNIRImageType;
-  typedef otb::Image<float,Dimension> OutputImageType;
+  typedef otb::Image<double,Dimension> OutputImageType;
 
   std::string strArgv(argv[1]);
   argc--;
