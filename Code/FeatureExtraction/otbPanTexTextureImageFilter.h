@@ -32,6 +32,7 @@ namespace otb
   *
   * \sa ContrastTextureFunctor
   *
+   * \ingroup Textures
   */
 
 template <class TInputImage, class TOutputImage>

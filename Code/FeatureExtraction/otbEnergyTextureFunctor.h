@@ -36,6 +36,7 @@ namespace Functor
  *  \sa TextureFunctorBase
  *  \ingroup Functor
  *  \ingroup Statistics
+   * \ingroup Textures
  */
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT EnergyTextureFunctor :
@@ -51,7 +52,7 @@ public:
   typedef typename Superclass::OffsetType        OffsetType;
   typedef typename Superclass::RadiusType        RadiusType;
   typedef typename Superclass::NeighborhoodType  NeighborhoodType;
- 
+
 
   double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {

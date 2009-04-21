@@ -38,6 +38,7 @@ namespace Functor
  *  \sa TextureFunctorBase
  *  \ingroup Functor
  *  \ingroup Statistics
+   * \ingroup Textures
  */
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>

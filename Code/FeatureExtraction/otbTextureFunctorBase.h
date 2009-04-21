@@ -34,14 +34,15 @@ namespace Functor
 /** \class TextureFunctorBase
  *  \brief This functor is the base for all texture functors.
  *
- *  It uses a neighborhood iterator which radius is the one of the considered 
+ *  It uses a neighborhood iterator which radius is the one of the considered
  *  neighborhood plsu an offset (m_Offset) to compute texture.
  *  It computes the mean, standard deviation of the two areas and the joint histogram using
  *  Scott formula for the bins lengths computation.
  *  TIterInput is an iterator, TOutput is a PixelType.
  *
- *  \ingroup Functor 
+ *  \ingroup Functor
  *  \ingroup Statistics
+   * \ingroup Textures
  */
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
@@ -109,15 +110,15 @@ public:
       double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
       double areaInv = 1/area;
       double scottCoef =  3.5 /(vcl_pow(area, 1/3) );
-      
+
       OffsetType offset;
       offset.Fill(0);
       OffsetType offsetOff;
       OffsetType offsetOffInit;
-      
+
       offsetOffInit[0] = -radius[0]+this->GetOffset()[0]-1;
       offsetOffInit[1] = -radius[1]+this->GetOffset()[1]-1;
-      
+
       offsetOff = offsetOffInit;
       for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
         {
@@ -130,7 +131,7 @@ public:
               offset[1] = k;
               m_Mean += static_cast<double>(neigh[offset]);
               m_MeanOff += static_cast<double>(neighOff[offsetOff]);
-            
+
               m_Mini    = std::min(static_cast<double>(neigh[offset]),      m_Mini);
               m_Maxi    = std::max(static_cast<double>(neigh[offset]),      m_Maxi);
               m_MiniOff = std::min(static_cast<double>(neighOff[offsetOff]),m_MiniOff);
@@ -139,13 +140,13 @@ public:
         }
       m_Mean *= areaInv;
       m_MeanOff *= areaInv;
-    
+
       offsetOff = offsetOffInit;
- 
+
       for( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
         {
           offsetOff[0]++;
-          offsetOff[1] = offsetOffInit[1];  
+          offsetOff[1] = offsetOffInit[1];
           offset[0] = l;
           for( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
             {
@@ -155,7 +156,7 @@ public:
               binLengthOff += vcl_pow( (m_MeanOff-static_cast<double>(neighOff[offsetOff])), 2);
             }
         }
-    
+
       binLength *= areaInv;
       binLength = vcl_sqrt( binLength );
       binLengthOff *= areaInv;
@@ -164,7 +165,7 @@ public:
       m_StdOff = binLengthOff;
 
       m_NeighBinLength = scottCoef*binLength;
-      m_OffsetBinLength = scottCoef*binLengthOff;     
+      m_OffsetBinLength = scottCoef*binLengthOff;
     }
 
 inline OutputScalarType operator()(const NeighborhoodType &neigh)
@@ -179,12 +180,12 @@ inline OutputScalarType operator()(const NeighborhoodType &neigh)
     RadiusType radius;
     radius[0] = static_cast<unsigned int>( 0.5*( static_cast<double>(neigh.GetSize()[0] - 1) ) - static_cast<double>( vcl_abs(m_Offset[0])) );
     radius[1] = static_cast<unsigned int>( 0.5*( static_cast<double>(neigh.GetSize()[1] - 1) ) - static_cast<double>( vcl_abs(m_Offset[1])) );
-    
+
     NeighborhoodType inNeigh;
     inNeigh.SetRadius(radius);
     NeighborhoodType offNeigh;
     offNeigh.SetRadius(radiusOff);
-    // Extract the neighborhood area 
+    // Extract the neighborhood area
     for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
       {
         offset[0] = l;
@@ -206,12 +207,12 @@ inline OutputScalarType operator()(const NeighborhoodType &neigh)
           }
       }
     OutputScalarType outPix = static_cast<OutputScalarType>( this->ComputeOverSingleChannel(inNeigh, offNeigh) );
-    
+
     return outPix;
   }
 
   inline OutputVectorType operator()(const NeighborhoodVectorType &neigh)
-    { 
+    {
       RadiusType radiusOff = neigh.GetRadius();
       OutputVectorType outPix;
       outPix.SetSize( neigh.GetCenterValue/*Pixel*/().GetSize() );
@@ -222,7 +223,7 @@ inline OutputScalarType operator()(const NeighborhoodType &neigh)
       RadiusType radius;
       radius[0] = static_cast<unsigned int>( 0.5*( static_cast<double>(neigh.GetSize()[0] - 1) ) - static_cast<double>( vcl_abs(m_Offset[0])) );
       radius[1] = static_cast<unsigned int>( 0.5*( static_cast<double>(neigh.GetSize()[1] - 1) ) - static_cast<double>( vcl_abs(m_Offset[1])) );
-  
+
       // For each channel
       for ( unsigned int i=0; i<neigh.GetCenterValue/*Pixel*/().GetSize(); i++ )
         {
@@ -230,7 +231,7 @@ inline OutputScalarType operator()(const NeighborhoodType &neigh)
           inNeigh.SetRadius(radius);
           NeighborhoodType offNeigh;
           offNeigh.SetRadius(radiusOff);
-          // Extract the neighborhood area 
+          // Extract the neighborhood area
           for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
             {
               offset[0] = l;
@@ -259,30 +260,30 @@ inline OutputScalarType operator()(const NeighborhoodType &neigh)
   void ComputeJointHistogram(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
     {
       this->StatComputation(neigh, neighOff);
-      
+
       RadiusType radius = neigh.GetRadius();
       OffsetType offset;
       offset.Fill(0);
       OffsetType offsetOff;
       OffsetType offsetOffInit;
-      
+
       offsetOffInit[0] = -radius[0]+this->GetOffset()[0]-1;
       offsetOffInit[1] = -radius[1]+this->GetOffset()[1]-1;
-      
+
       int histoIdX = 0;
       int histoIdY = 0;
-          
+
       IntVectorType histoTemp;
       if (m_NeighBinLength != 0)
         histoTemp = IntVectorType( static_cast<unsigned int>(vcl_floor( static_cast<double>(this->GetMaxi()-this->GetMini())/m_NeighBinLength)+1.), 0);
       else
         histoTemp = IntVectorType( 1, 0 );
-      
+
       if (m_OffsetBinLength != 0)
         m_Histo = IntVectorVectorType( static_cast<unsigned int>(vcl_floor(static_cast<double>(this->GetMaxiOff()-this->GetMiniOff())/m_OffsetBinLength)+1.), histoTemp );
       else
         m_Histo = IntVectorVectorType( 1, histoTemp );
-      
+
       offsetOff = offsetOffInit;
       for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
         {
@@ -299,15 +300,15 @@ inline OutputScalarType operator()(const NeighborhoodType &neigh)
                 histoIdX = static_cast<int>(vcl_floor( (static_cast<double>(neighOff[offsetOff])-this->GetMiniOff()) / static_cast<double>(m_OffsetBinLength) ));
               if ( m_NeighBinLength !=0 )
                 histoIdY = static_cast<int>(vcl_floor( (static_cast<double>(neigh[offset])-this->GetMini()) /static_cast<double>( m_NeighBinLength) ));
-              
+
               m_Histo[histoIdX][histoIdY]++;
-              
+
             }
         }
     }
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff) = 0;
- 
+
  private:
   OffsetType m_Offset;
   /** Stores min/max neighborhood area values */

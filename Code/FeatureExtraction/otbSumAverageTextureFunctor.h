@@ -35,6 +35,7 @@ namespace Functor
  *  \sa TextureFunctorBase
  *  \ingroup Functor
  *  \ingroup Statistics
+   * \ingroup Textures
  */
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT SumAverageTextureFunctor :
@@ -43,7 +44,7 @@ public TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType>
 public:
   SumAverageTextureFunctor(){};
   virtual ~SumAverageTextureFunctor(){};
- 
+
   typedef TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
   typedef typename Superclass::NeighborhoodType                             NeighborhoodType;
 

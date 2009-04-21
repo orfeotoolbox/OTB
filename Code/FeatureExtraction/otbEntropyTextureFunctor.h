@@ -35,6 +35,7 @@ namespace Functor
  *
  *  \ingroup Functor
  *  \ingroup Statistics
+   * \ingroup Textures
  */
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>

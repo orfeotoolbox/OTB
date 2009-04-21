@@ -35,6 +35,7 @@ namespace Functor
  *  \sa TextureFunctorBase
  *  \ingroup Functor
  *  \ingroup Statistics
+   * \ingroup Textures
  */
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
@@ -47,7 +48,7 @@ public:
 
   typedef TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
   typedef typename Superclass::NeighborhoodType                             NeighborhoodType;
- 
+
  virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
     this->ComputeJointHistogram(neigh, neighOff);

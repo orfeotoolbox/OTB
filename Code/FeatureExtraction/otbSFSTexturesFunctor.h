@@ -27,7 +27,7 @@ namespace otb
 {
 /** \class SFSTexturesFunctor
  *  \brief This functor computes textures based on line direction analysis through the central pixel.
- * 
+ *
  *  Directions are computed using NumberOfDirection, used to compute a constant step angle.
  *  A direction is defined as : $\mathit{d_{i} = \sqrt{(m^{e1}-m{e2})^{2}+(n^{e1}-n{e2})^{2}}}$
  *  From  $\mathit{d_{i}}, histograms are defined :
@@ -45,6 +45,8 @@ namespace otb
  *  Using High-Resolution Multispectral Imagery.
  *  IEEE Geoscience and Remote Sensing Letters,
  *  vol. 4, n. 2, 2007, pp 260-264
+ *
+   * \ingroup Textures
  */
 
 
@@ -71,28 +73,28 @@ public:
   typedef typename TIter::OffsetType        OffsetType;
   typedef TOutputValue                      OutputValueType;
   typedef std::vector<OutputValueType>      OutputType;
- 
+
   void SetSpatialThreshold( unsigned int thresh ){ m_SpatialThreshold=thresh; };
   void SetSpectralThreshold( InternalPixelType thresh ){ m_SpectralThreshold=thresh; };
   void SetRatioMaxConsiderationNumber( unsigned int value ){ m_RatioMaxConsiderationNumber=value; };
   void SetAlpha( double alpha ){ m_Alpha=alpha; };
   void SetNumberOfDirections( unsigned int D )
-    { 
+    {
       m_NumberOfDirections = D;
       m_DirectionStep = 2*M_PI/static_cast<double>(D);
     };
   void SetDirectionStep( double step ){ m_DirectionStep = step; };
   void SetSelectedTextures( std::vector<bool> vect )
-    { 
+    {
       m_SelectedTextures.clear();
       m_SelectedTextures = vect;
     };
   void SetTextureStatus( unsigned int id, bool isSelected ){ m_SelectedTextures[id] = isSelected; };
 
   unsigned int GetSpatialThreshold(){ return m_SpatialThreshold; };
-  InternalPixelType GetSpectralThreshold(){ return m_SpectralThreshold; };  
-  unsigned int GetRatioMaxConsiderationNumber(){ return m_RatioMaxConsiderationNumber; }; 
-  double  GetAlpha(){ return m_Alpha; }; 
+  InternalPixelType GetSpectralThreshold(){ return m_SpectralThreshold; };
+  unsigned int GetRatioMaxConsiderationNumber(){ return m_RatioMaxConsiderationNumber; };
+  double  GetAlpha(){ return m_Alpha; };
   unsigned int GetNumberOfDirections(){ return m_NumberOfDirections(); };
   std::vector<bool> GetTexturesStatus(){ return m_SelectedTextures; };
 
@@ -115,10 +117,10 @@ public:
 
     std::vector<double>::iterator itVector;
     OutputType out(6, 0);
-  
+
     OffsetType off;
     off.Fill(0);
- 
+
     for( unsigned int d = 0; d<m_NumberOfDirections; d++ )
       {
         // Current angle direction
@@ -225,24 +227,24 @@ public:
           sumPSI += vcl_pow(di[n] - sumWMean/NumberOfDirectionsDouble , 2);
         out[5] = static_cast<OutputValueType>(vcl_sqrt(sumPSI)/(NumberOfDirectionsDouble-1.));
       }
-   
+
     return out;
 
   }
 
 
-  /** Checks spectral threshold condition 
-   *  the last point in the directiuon is the first that doesn't 
+  /** Checks spectral threshold condition
+   *  the last point in the directiuon is the first that doesn't
    *  respect the spectral condition.
    */
   OffsetType FindLastOffset( const TIter & it, const OffsetType & stopOffset )
-    {        
+    {
       bool res = true;
       int signX = this->ComputeStep( stopOffset[0] );
       int signY = this->ComputeStep( stopOffset[1] );
-      
+
       OffsetType currentOff;
-      currentOff.Fill(0);       
+      currentOff.Fill(0);
       currentOff[0]=signX;
 
       double slop = 0.;
@@ -250,7 +252,7 @@ public:
         slop = static_cast<double>(stopOffset[1] / static_cast<double>(stopOffset[0]) );
 
       bool isInside = true;
-      while( isInside == true && res == true)        
+      while( isInside == true && res == true)
         {
           this->ComputePointLine( currentOff, slop, signY, stopOffset[0] );
 
@@ -260,7 +262,7 @@ public:
             }
           else
             currentOff[0]+=signX;
-       
+
           isInside = this->CheckIsInside(signX, signY, currentOff, stopOffset);
         }
 
@@ -273,17 +275,17 @@ public:
     {
       bool         canGo = true;
       unsigned int nbElt = 0;
-      double       SDi   = 0.;  
+      double       SDi   = 0.;
       double       mean  = 0.;
       double       slop  = 0.;
       if(stopOffset[0] != 0)
         slop = static_cast<double>(stopOffset[1] / static_cast<double>(stopOffset[0]) );
-      
+
       int signX = this->ComputeStep( stopOffset[0] );
       int signY = this->ComputeStep( stopOffset[1] );
-      
+
       OffsetType currentOff;
-      currentOff.Fill(0);   
+      currentOff.Fill(0);
       currentOff[0]=signX;
 
       bool isInside = true;
@@ -299,14 +301,14 @@ public:
               canGo = false;
           else
             currentOff[0]+=signX;
-          
+
           isInside = this->CheckIsInside(signX, signY, currentOff, stopOffset);
         }
-      
+
       mean /= static_cast<double>(nbElt);
       currentOff[0] = signX;
       currentOff[1] = 0;
-      isInside = true;      
+      isInside = true;
 
       while( isInside == true && canGo == true )
         {
