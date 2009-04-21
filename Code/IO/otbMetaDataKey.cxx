@@ -23,7 +23,7 @@
 
 #include "otbMetaDataKey.h"
 
-#define NBKEYS  15
+#define NBKEYS  19
 
 namespace otb
 {
@@ -53,6 +53,9 @@ const std::string MetaDataKey::ColorEntryAsRGBKey = "ColorEntryAsRGB";
 
 const std::string MetaDataKey::OSSIMKeywordlistKey = "OSSIMKeywordlist";
 const std::string MetaDataKey::OSSIMKeywordlistDelimiterKey = "OSSIMKeywordlistDelimiter";
+
+const std::string MetaDataKey::VectorDataKeywordlistKey = "VectorDataKeywordlist";
+const std::string MetaDataKey::VectorDataKeywordlistDelimiterKey = "VectorDataKeywordlistDelimiter";
 
 /*const MetaDataKey::KeyTypeDef Types[] =
   {
@@ -92,7 +95,9 @@ const MetaDataKey::KeyTypeDef Types[] =
   MetaDataKey::KeyTypeDef(MetaDataKey::ColorEntryCountKey,     MetaDataKey::TENTIER),
   MetaDataKey::KeyTypeDef(MetaDataKey::ColorEntryAsRGBKey,      MetaDataKey::TVECTOR),
   MetaDataKey::KeyTypeDef(MetaDataKey::OSSIMKeywordlistKey,    MetaDataKey::TOSSIMKEYWORDLIST),
-  MetaDataKey::KeyTypeDef(MetaDataKey::OSSIMKeywordlistDelimiterKey,MetaDataKey::TSTRING)
+  MetaDataKey::KeyTypeDef(MetaDataKey::OSSIMKeywordlistDelimiterKey,MetaDataKey::TSTRING),
+  MetaDataKey::KeyTypeDef(MetaDataKey::VectorDataKeywordlistKey,    MetaDataKey::TVECTORDATAKEYWORDLIST),
+  MetaDataKey::KeyTypeDef(MetaDataKey::VectorDataKeywordlistDelimiterKey,MetaDataKey::TSTRING)
 };
 
 

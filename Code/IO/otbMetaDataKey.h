@@ -74,6 +74,9 @@ public:
   static const std::string OSSIMKeywordlistKey;
   static const std::string OSSIMKeywordlistDelimiterKey;
 
+  static const std::string VectorDataKeywordlistKey;
+  static const std::string VectorDataKeywordlistDelimiterKey;
+
   enum  KeyType
   {
     TSTRING,
@@ -82,6 +85,7 @@ public:
     TOTB_GCP,
     TVECTOR,
     TOSSIMKEYWORDLIST,
+    TVECTORDATAKEYWORDLIST,
   };
   /*
   typedef struct

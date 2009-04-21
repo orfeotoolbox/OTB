@@ -24,12 +24,14 @@
 #include <typeinfo>
 #include <cassert>
 
+#include "otbMacro.h"
+
 #include "itkMetaDataObject.h"
 
 #include "otbImageMetadataInterface.h"
 #include "otbImageKeywordlist.h"
+#include "otbVectorDataKeywordlist.h"
 
-#include "otbMacro.h"
 
 namespace otb
 {
@@ -554,6 +556,7 @@ ImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent, const Me
   double dvalue = 0.;
   OTB_GCP gcpvalue;
   ImageKeywordlist ossimvalue;
+//   VectorDataKeywordlist vectorDataMetaDataValue;
   unsigned int i(0);
 
   // Copy of the const metadata dictionary in a metadata dictionary to be used
@@ -607,6 +610,12 @@ ImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent, const Me
       ossimvalue.Print(os);
       // ossimvalue.Print(os);
       break;
+//     case MetaDataKey::TVECTORDATAKEYWORDLIST:
+//       itk::ExposeMetaData<ImageKeywordlist>(dict2, keys[itkey], vectorDataMetaDataValue);
+//
+//       os << indent << "---> " << keys[itkey] << std::endl;
+//       vectorDataMetaDataValue.Print(os);
+//       break;
     }
 
   }
