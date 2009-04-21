@@ -127,6 +127,12 @@ public:
     return m_GlComponents->Size()-1;
   }
 
+  /** Get the nth GlComponent */
+  GlComponent * GetNthGlComponent(unsigned int index)
+  {
+    return m_GlComponents->GetNthElement(index);
+  }
+
   /** Remove a GlComponent */
   void RemoveGlComponent(unsigned int index)
   {
