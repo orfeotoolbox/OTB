@@ -30,6 +30,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbMetaDataKey.h"
 #include "otbFileName.h"
 #include "itkTimeProbe.h"
+#include "otbVectorDataKeywordlist.h"
 
 namespace otb
 {
