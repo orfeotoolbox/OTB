@@ -75,7 +75,7 @@ class ImageViewerManagerViewGroup {open
         }
         Fl_Button guiViewerSetup {
           label {Viewer setup}
-          callback {ViewerSetup();} selected
+          callback {ViewerSetup();}
           tooltip {Set up the selected viewer} xywh {489 129 95 25} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0x76 color 23 selection_color 23 labelcolor 186
         }
         Fl_Button guiLinkSetup {
@@ -93,7 +93,7 @@ class ImageViewerManagerViewGroup {open
           callback {Diaporama();}
           tooltip {Launch the slideshow mode} xywh {490 215 95 25} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0x64 color 23 selection_color 23 labelcolor 186
         }
-        Fl_Group gBlanck2 {open
+        Fl_Group gBlanck2 {open selected
           xywh {500 288 75 12} resizable
         } {}
       }
@@ -168,7 +168,7 @@ class ImageViewerManagerViewGroup {open
     }
     Fl_Window guiLinkSetupWindow {
       label {Link Images} open
-      xywh {738 336 560 220} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 visible
+      xywh {738 336 560 220} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
     } {
       Fl_Input guiLinkXOffset {
         label {X offset}
