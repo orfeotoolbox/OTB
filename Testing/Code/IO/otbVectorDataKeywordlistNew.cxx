@@ -16,12 +16,12 @@
 
 =========================================================================*/
 
-#include "otbVectorDataMetaData.h"
+#include "otbVectorDataKeywordlist.h"
 
-int otbVectorDataMetaDataNew(int argc, char * argv[])
+int otbVectorDataKeywordlistNew(int argc, char * argv[])
 {
 
-  otb::VectorDataMetaData::Pointer object = otb::VectorDataMetaData::New();
+  otb::VectorDataKeywordlist::Pointer object = otb::VectorDataKeywordlist::New();
 
   return EXIT_SUCCESS;
 }

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataMetaData_h
-#define __otbVectorDataMetaData_h
+#ifndef __otbVectorDataKeywordlist_h
+#define __otbVectorDataKeywordlist_h
 
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
@@ -26,16 +26,16 @@
 
 namespace otb
 {
-/** \class VectorDataMetaData
+/** \class VectorDataKeywordlist
    * \brief this class represents the metadata of vector data.
    *
  */
 
-class VectorDataMetaData : public itk::LightObject
+class VectorDataKeywordlist : public itk::LightObject
 {
   public:
     /** Smart pointer typedef support. */
-    typedef VectorDataMetaData        Self;
+    typedef VectorDataKeywordlist        Self;
     typedef itk::LightObject               Superclass;
     typedef itk::SmartPointer<Self>        Pointer;
     typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -44,7 +44,7 @@ class VectorDataMetaData : public itk::LightObject
     itkNewMacro(Self);
 
     /** Run-time type information (and related methods). */
-    itkTypeMacro(VectorDataMetaData, LightObject);
+    itkTypeMacro(VectorDataKeywordlist, LightObject);
 
 
     typedef std::vector<OGRFieldDefn> FeatureListType;
@@ -54,11 +54,11 @@ class VectorDataMetaData : public itk::LightObject
 
   protected:
 
-    VectorDataMetaData();
-    virtual ~VectorDataMetaData();
+    VectorDataKeywordlist();
+    virtual ~VectorDataKeywordlist();
 
   private:
-    VectorDataMetaData(const Self &);//purposely not implemented
+    VectorDataKeywordlist(const Self &);//purposely not implemented
     void operator=(const Self&); //purposely not implemented
 
     FeatureListType m_FeatureList;

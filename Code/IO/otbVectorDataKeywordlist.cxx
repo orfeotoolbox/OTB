@@ -16,23 +16,23 @@
 
 =========================================================================*/
 
-#include "otbVectorDataMetaData.h"
+#include "otbVectorDataKeywordlist.h"
 
 void
-otb::VectorDataMetaData
+otb::VectorDataKeywordlist
   ::Print(std::ostream& os) const
 {
   os << "[UNKNOWN_PRINT_CHARACTERISTICS]" << std::endl;
 }
 
-otb::VectorDataMetaData
-  ::VectorDataMetaData()
+otb::VectorDataKeywordlist
+  ::VectorDataKeywordlist()
 {
   //Nothing to do here
 }
 
-otb::VectorDataMetaData
-  ::~VectorDataMetaData()
+otb::VectorDataKeywordlist
+  ::~VectorDataKeywordlist()
 {
   //Nothing to do here
 }
