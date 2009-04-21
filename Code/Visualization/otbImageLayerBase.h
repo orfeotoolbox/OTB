@@ -54,10 +54,10 @@ public:
   typedef typename OutputImageType::RegionType   RegionType;
   typedef typename RegionType::SizeType          SizeType;
   typedef typename RegionType::IndexType         IndexType;
-  typedef typename OutputImageType::PixelType    PixelType;
+  typedef typename OutputImageType::PixelType    OutputPixelType;
 
   /** Blending function typedef */
-  typedef Function::BlendingFunction<PixelType>  BlendingFunctionType;
+  typedef Function::BlendingFunction<OutputPixelType>  BlendingFunctionType;
   typedef typename BlendingFunctionType::Pointer BlendingFunctionPointerType;
 
   /** Actually render the layer */
@@ -126,7 +126,7 @@ protected:
             m_BlendingFunction()
   {
     // Default blending function
-    m_BlendingFunction = Function::UniformAlphaBlendingFunction<PixelType>::New();
+    m_BlendingFunction = Function::UniformAlphaBlendingFunction<OutputPixelType>::New();
   }
   /** Destructor */
   virtual ~ImageLayerBase(){}
