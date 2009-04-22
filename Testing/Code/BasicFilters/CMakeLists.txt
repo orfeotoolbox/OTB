@@ -1479,9 +1479,9 @@ ADD_TEST(bfTvChangeLabelImageFilter ${BASICFILTERS_TESTS12}
  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
  #  ${INPUTDATA}/poupees_sub_c1.png
   ${TEMP}/bfChangeLabelImageFilter.tif
-  255   # Mask value
-  100   # lower threshold
-  200   # upper  threshold
+ # 255   # Mask value
+  150   # lower threshold
+  255   # upper  threshold
 )
 
 

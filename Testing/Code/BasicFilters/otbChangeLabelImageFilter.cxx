@@ -52,14 +52,16 @@ int otbChangeLabelImageFilter(int argc, char * argv[])
 
   reader->SetFileName( inputFilename  );
   writer->SetFileName( outFilename );
-  PixelType maskValue =  static_cast<PixelType>(atoi(argv[3]));
-  InputPixelType lower = static_cast<PixelType>(atoi(argv[4]));
-  InputPixelType upper = static_cast<PixelType>(atoi(argv[5]));
+  InputPixelType lower = static_cast<PixelType>(atoi(argv[3]));
+  InputPixelType upper = static_cast<PixelType>(atoi(argv[4]));
 
   filter->SetNumberOfComponentsPerPixel(3);
   OutputPixelType background;
   background.SetSize( filter->GetNumberOfComponentsPerPixel() );
-  background.Fill(maskValue);
+  background[0] = itk::NumericTraits<PixelType>::max();
+  background[1] = itk::NumericTraits<PixelType>::max();
+  background[2] = 0;
+
 
   filter->SetChange( 0,0 );
   for (InputPixelType i = lower; i <= upper; i++)

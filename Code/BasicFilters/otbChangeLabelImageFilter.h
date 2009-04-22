@@ -18,57 +18,160 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbChangeLabelImageFilter_h
 #define __otbChangeLabelImageFilter_h
 
-#include "itkChangeLabelImageFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
+#include "itkConceptChecking.h"
+#include "itkSimpleDataObjectDecorator.h"
+
+#include <map>
 
 namespace otb
 {
+  
 /** \class ChangeLabelImageFilter
- *  \brief VectorImage compliant version of the itk::ChangeLabelImageFilter.
  *
+ * \brief Change Sets of Labels
+ *
+ * Adapt the itkChangeLabelImageFilter for multichannel images.
+ * 
  */
-template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ChangeLabelImageFilter
-      : public itk::ChangeLabelImageFilter<TInputImage,TOutputImage>
+
+
+
+namespace Functor {  
+  
+template< class TInput, class TOutput>
+class VectorChangeLabel
 {
 public:
-  /** Standard typedefs */
-  typedef ChangeLabelImageFilter            Self;
-  typedef itk::ChangeLabelImageFilter<TInputImage,TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef typename TOutput::ValueType ValueType;
 
-  /** Type macro */
+  VectorChangeLabel() {};
+  ~VectorChangeLabel() {};
+
+  typedef std::map<TInput, TOutput> ChangeMapType;
+
+
+  void SetNumberOfComponentsPerPixel(unsigned int nb)
+    {
+      m_NumberOfComponentsPerPixel = nb;
+    }
+  unsigned int GetNumberOfComponentsPerPixel()
+    {
+      return m_NumberOfComponentsPerPixel;
+    }
+  bool operator!=( const VectorChangeLabel & other ) const
+    {
+    if (m_ChangeMap != other.m_ChangeMap)
+      {
+      return true;
+      }
+    return false;
+    }
+  bool operator==( const VectorChangeLabel & other ) const
+    {
+    return !(*this != other);
+    }
+  TOutput GetChange( const TInput & original )
+    {  
+    return m_ChangeMap[original]; 
+    }
+
+  void SetChange( const TInput & original, const TOutput & result )
+    { 
+    m_ChangeMap[original] = result; 
+    }
+  
+  void SetChangeMap( const ChangeMapType & changeMap )
+    { 
+    m_ChangeMap = changeMap; 
+    }
+
+  void ClearChangeMap( )
+    { 
+    m_ChangeMap.clear(); 
+    }
+
+  inline TOutput operator()( const TInput & A )
+    {
+      TOutput out;
+      out.SetSize(m_NumberOfComponentsPerPixel);
+      
+      if ( m_ChangeMap.find(A) != m_ChangeMap.end() )
+	{
+	  out = m_ChangeMap[A];
+	}
+      else
+	{
+	  out.Fill(static_cast<ValueType>(A));
+	}
+      return out;
+    }
+
+private:
+  ChangeMapType m_ChangeMap;
+  unsigned int m_NumberOfComponentsPerPixel;
+};
+}
+
+
+
+
+template <class TInputImage, class TOutputImage>
+class ITK_EXPORT ChangeLabelImageFilter :
+    public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, 
+                                        Functor::VectorChangeLabel< typename TInputImage::PixelType, 
+                                                                    typename TOutputImage::PixelType> >
+{
+public:
+  /** Standard class typedefs. */
+  typedef ChangeLabelImageFilter   Self;
+  typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, 
+    Functor::VectorChangeLabel< 
+    typename TInputImage::PixelType, 
+    typename TOutputImage::PixelType>   
+  >                                Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Creation through object factory macro */
-  itkTypeMacro(ChangeLabelImageFilter,ChangeLabelImageFilter);
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(ChangeLabelImageFilter, itk::UnaryFunctorImageFilter);
+
+  /** Pixel types. */
+  typedef typename TInputImage::PixelType  InputPixelType;
+  typedef typename TOutputImage::PixelType OutputPixelType;
+
+  /** Type of the change map to use for change requests */
+  typedef std::map<InputPixelType, OutputPixelType> ChangeMapType;
+
+  /** Set up a change of a single label */
+  void SetChange( const InputPixelType & original, const OutputPixelType & result );
+  
+  /** Set the entire change map */
+  void SetChangeMap( const ChangeMapType & changeMap );
+  
+  /** Clears the entire change map */
+  void ClearChangeMap( );
 
   /** Set/Get the number of components per pixel */
-  itkSetMacro(NumberOfComponentsPerPixel,unsigned int);
+  void SetNumberOfComponentsPerPixel(unsigned int nb)
+    {
+      m_NumberOfComponentsPerPixel = nb;
+      this->GetFunctor().SetNumberOfComponentsPerPixel(m_NumberOfComponentsPerPixel);
+      this->Modified();
+    }
   itkGetMacro(NumberOfComponentsPerPixel,unsigned int);
 
 
 protected:
-  /** Constructor */
-  ChangeLabelImageFilter()
-  {
-    m_NumberOfComponentsPerPixel = 1;
-  }
-  /** Generate the output information missing */
-  void GenerateOutputInformation()
-  {
-    Superclass::GenerateOutputInformation();
-
-    this->GetOutput()->SetNumberOfComponentsPerPixel(m_NumberOfComponentsPerPixel);
-  }
-  /** Destructor */
+  ChangeLabelImageFilter();
   virtual ~ChangeLabelImageFilter() {};
-  /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
-  {
-    Superclass::PrintSelf(os,indent);
-    os<<indent<<"Number of components per pixel: "<<m_NumberOfComponentsPerPixel;
-  }
+  /** Generate the output information missing */
+  virtual void GenerateOutputInformation();
+
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
   ChangeLabelImageFilter(const Self&); //purposely not implemented
@@ -77,6 +180,91 @@ private:
   /// Number of components per pixel
   unsigned int m_NumberOfComponentsPerPixel;
 };
-}// End namespace otb
+
+} // end namespace otb
+
+#ifndef ITK_MANUAL_INSTANTIATION
+#include "otbChangeLabelImageFilter.txx"
+#endif
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#ifndef __otbChangeLabelImageFilter_h
+#define __otbChangeLabelImageFilter_h
+
+#include "itkChangeLabelImageFilter.h"
+
+namespace otb
+{
+namespace Functor {  
+  
+template< class TInput, class TOutput>
+  class VectorChangeLabel : public ChangeLabel
+{
+public:
+  VectorChangeLabel() {m_NumberOfComponents=1;};
+  ~VectorChangeLabel() {};
+
+
+  void SetNumberOfComponents(unsigned int nb)
+    {
+      m_NumberOfComponents = nb;
+    }
+  unsigned int GetNumberOfComponents()
+    {
+      return m_NumberOfComponents;
+    }
+
+  inline TOutput operator()( const TInput & A )
+    {
+      TOutput out;
+      out.SetSize(m_NumberOfComponents);
+      
+      if ( m_ChangeMap.find(A) != m_ChangeMap.end() )
+	{
+	  return m_ChangeMap[A];
+	}
+      else
+	{
+	  out.Fill(static_cast<TOutput::ValueType>(A));
+	}
+    }
+
+private:
+  unsigned int m_NumberOfComponents;
+
+};
+}
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbChangeLabelImageFilter.txx"
+#endif
+
+#endif
+
+
