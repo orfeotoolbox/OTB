@@ -252,6 +252,11 @@ public:
     m_ThresholdValue = pThreshold;
     m_UrbanAreaExtractionFilter->GetFunctor().SetLowerThreshold( m_ThresholdValue );
   }
+  itkGetMacro(ThresholdValue2, double);
+  void SetThresholdDensity(double pThreshold)
+  {
+    m_ThresholdValue2 = pThreshold;
+  }
 
   /** Methods */
   virtual void GenerateData();

@@ -39,7 +39,7 @@ UrbanAreaDetectionImageFilter<TInputImage, TOutputImage, TFunction>
   m_MaskImageFilter = MaskImageFilterType::New();
 
   m_ThresholdValue = 0.5;
-  m_ThresholdValue2 = 0.05;
+  m_ThresholdValue2 = 0.1;
 }
 
 /**
@@ -62,8 +62,8 @@ UrbanAreaDetectionImageFilter<TInputImage, TOutputImage, TFunction>
   lSobelFilter->SetLowerThreshold(-200.0);
   lSobelFilter->SetUpperThreshold(200.0);
   SizeType lSize;
-  lSize[0] = static_cast<unsigned int>(4);
-  lSize[1] = static_cast<unsigned int>(4);
+  lSize[0] = static_cast<unsigned int>(10);
+  lSize[1] = static_cast<unsigned int>(10);
   lEdgeDetectorFilter->SetInput(lIntensityFilter->GetOutput());
   lEdgeDetectorFilter->SetDetector(lSobelFilter);
   lEdgeDetectorFilter->SetNeighborhoodRadius(lSize);
@@ -79,26 +79,37 @@ UrbanAreaDetectionImageFilter<TInputImage, TOutputImage, TFunction>
   //lThresholder->Update();
 
 // TEST 
-  typedef otb::ImageFileWriter<BinaryImageType>       BinaryWriterType;
-  BinaryWriterType::Pointer writer = BinaryWriterType::New();
-  writer->SetFileName("mask1.tif");
-  writer->SetInput(lThresholder->GetOutput());
-  writer->Update();
+//   typedef otb::ImageFileWriter<BinaryImageType>       BinaryWriterType;
+//   BinaryWriterType::Pointer writer = BinaryWriterType::New();
+//   writer->SetFileName("mask1.tif");
+//   writer->SetInput(lThresholder->GetOutput());
+//   writer->Update();
 
-  // FIRST MASK : NON WEAK DENSITY AREAS
+  // FIRST MASK : HIGH EDGE DENSITY AREAS
 
   // Appli the mask on the input image
   m_MaskImageFilter->SetOutsideValue(0);
   m_MaskImageFilter->SetInput1(this->GetInput());
   m_MaskImageFilter->SetInput2(lThresholder->GetOutput());
-  m_MaskImageFilter->Update();
+  //m_MaskImageFilter->Update();
 
   // Parameters for the UrbanAreaExtractionFilter
   m_UrbanAreaExtractionFilter->SetInput(this->GetInput());
   this->SetThreshold(m_ThresholdValue);
+  //m_UrbanAreaExtractionFilter->Update();
+
+
+//   BinaryWriterType::Pointer writer2 = BinaryWriterType::New();
+//   writer2->SetFileName("mask2.tif");
+//   writer2->SetInput(m_UrbanAreaExtractionFilter->GetOutput());
+//   writer2->Update();
+
+
+  m_UrbanAreaExtractionFilter->SetInput(m_MaskImageFilter->GetOutput());
+  this->SetThreshold(m_ThresholdValue);
   m_UrbanAreaExtractionFilter->Update();
 
-//   // Erode/Dilate 2 times
+  // Erode/Dilate 2 times
 //   StructuringElementType  structuringElement;
 //   structuringElement.SetRadius( 1 );  // 3x3 structuring element
 //   structuringElement.CreateStructuringElement();
@@ -110,6 +121,7 @@ UrbanAreaDetectionImageFilter<TInputImage, TOutputImage, TFunction>
 //   m_ErodeFilter->SetInput(m_DilateFilter->GetOutput());
 //   m_ErodeFilter->SetErodeValue(1);
 //   m_ErodeFilter->SetKernel(  structuringElement );
+//   m_ErodeFilter->Update();
 // 
 //   m_ErodeFilter2->SetInput(m_ErodeFilter->GetOutput());
 //   m_ErodeFilter2->SetErodeValue(1);
@@ -119,16 +131,6 @@ UrbanAreaDetectionImageFilter<TInputImage, TOutputImage, TFunction>
 //   m_DilateFilter2->SetDilateValue(1);
 //   m_DilateFilter2->SetKernel( structuringElement );
 //   m_DilateFilter2->Update();
-
-
-  BinaryWriterType::Pointer writer2 = BinaryWriterType::New();
-  writer2->SetFileName("mask2.tif");
-  writer2->SetInput(m_UrbanAreaExtractionFilter->GetOutput());
-  writer2->Update();
-
-  m_UrbanAreaExtractionFilter->SetInput(m_MaskImageFilter->GetOutput());
-  this->SetThreshold(m_ThresholdValue);
-  m_UrbanAreaExtractionFilter->Update();
 
   // SECOND MASK : NON WATER, NON VEGETATION
 

@@ -1711,10 +1711,11 @@ ADD_TEST(raTvUrbanAreaDetectionImageFilter ${FEATUREEXTRACTION_TESTS14}
         otbUrbanAreaDetectionImageFilter
         ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
         ${TEMP}/raTvUrbanAreaDetection.png
-        3   # red
-        2   # green
-        4   # nir
-        0.8 # threshold
+        3    # red
+        2    # green
+        4    # nir
+        0.8  # threshold NDVI+NDWI
+        0.005 # threshold EdgeDensity
 )
 
 
