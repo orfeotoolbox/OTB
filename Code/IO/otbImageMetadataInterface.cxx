@@ -616,6 +616,8 @@ ImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent, const Me
       os << indent << "---> " << keys[itkey] << std::endl;
       vectorDataKeywordlistValue.Print(os);
       break;
+    default:
+      break;
     }
 
   }
