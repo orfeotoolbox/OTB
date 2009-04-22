@@ -27,7 +27,7 @@ int otbUrbanAreaDetectionImageFilterNew(int argc, char * argv[])
   const unsigned int                                  Dimension = 2;
   typedef double                                      PixelType;
   typedef otb::VectorImage<PixelType,Dimension>       InputVectorImageType;
-  typedef otb::Image<double,Dimension>                OutputImageType;
+  typedef otb::Image<unsigned char,Dimension>                OutputImageType;
 
   typedef otb::UrbanAreaDetectionImageFilter< InputVectorImageType,
                                               OutputImageType > UrbanAreaDetectionFilterType;

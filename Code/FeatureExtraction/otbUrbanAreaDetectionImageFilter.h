@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRadiometryNonWaterNonVegetationDetectionImageFilter_h
-#define __otbRadiometryNonWaterNonVegetationDetectionImageFilter_h
+#ifndef __otbRadiometricNonWaterNonVegetationDetectionImageFilter_h
+#define __otbRadiometricNonWaterNonVegetationDetectionImageFilter_h
 
 #include "otbMath.h"
 #include "otbImage.h"
@@ -25,6 +25,21 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbMultiChannelRAndGAndNIRIndexImageFilter.h"
 #include "itkBinaryThresholdImageFilter.h"
 #include "itkImageToImageFilter.h"
+#include "itkBinaryErodeImageFilter.h"
+#include "itkBinaryDilateImageFilter.h"
+#include "itkBinaryBallStructuringElement.h"
+#include "itkMaskImageFilter.h"
+
+#include "itkSobelEdgeDetectionImageFilter.h"
+#include "otbEdgeDetectorImageFilter.h"
+#include "otbEdgeDensityImageFilter.h"
+#include "otbBinaryImageDensityFunction.h"
+#include "otbVectorImageToIntensityImageFilter.h"
+#include "itkBinaryThresholdImageFilter.h"
+
+// POUR TEST
+#include "otbStreamingImageFileWriter.h"
+
 
 namespace otb
 {
@@ -32,14 +47,13 @@ namespace otb
 namespace Functor
 {
 
-/** TODO A Mettre dans BuiltUpIndices */
 
-  /** \class RadiometryNonWaterNonVegetationIndexFunctor
+  /** \class RadiometricNonWaterNonVegetationIndexFunctor
    *  \brief This functor computes ndwi and ndvi of an image
    *  \brief in order to find urban areas and generate a grayscale image
    */
-template<class TInput,class TOutput>
-class RadiometryNonWaterNonVegetationIndexFunctor
+template<class TInput,class TOutput=double>
+class RadiometricNonWaterNonVegetationIndexFunctor
 {
  public:
   typedef Functor::NDVI< double, double, double>            VegetationFunctorType;
@@ -55,8 +69,8 @@ class RadiometryNonWaterNonVegetationIndexFunctor
                             m_WaterFunctor.SetNIRIndex(id); };
   unsigned int GetGreenIndex(){ return m_WaterFunctor.GetGIndex(); };
 
-  RadiometryNonWaterNonVegetationIndexFunctor(){}
-  ~RadiometryNonWaterNonVegetationIndexFunctor(){};
+  RadiometricNonWaterNonVegetationIndexFunctor(){}
+  ~RadiometricNonWaterNonVegetationIndexFunctor(){};
   
   inline TOutput operator()(const TInput& pInPix)
     {
@@ -66,21 +80,30 @@ class RadiometryNonWaterNonVegetationIndexFunctor
 
       lWIval = static_cast<ValueType>(m_WaterFunctor(pInPix));
 
-      lOutPix = 1. - ((1+lVIval)/2. * (1+lWIval)/2);
 */
       lVIval = static_cast<ValueType>(std::max(0.,m_VegetationFunctor(pInPix)));
 
       lWIval = static_cast<ValueType>(std::max(0.,m_WaterFunctor(pInPix)));
 
-      //lOutPix = vcl_sqrt((1-lVIval)*(1-lWIval)); //sqrt : PAS MAL DU TOUT 
-      //lOutPix = vcl_sqrt(vcl_abs(1-lVIval)*vcl_abs(1-lWIval)); //sqrt2 : pareil que sqrt 
+      lOutPix = vcl_sqrt(vcl_abs((1-lVIval)*(1-lWIval))); //sqrt : PAS MAL DU TOUT 
+
+// OU
       //lOutPix = vcl_sqrt((1-lVIval)*(1-lVIval)+(1-lWIval)*(1-lWIval)); // eucl : bof bof
+// OU
       //lOutPix = 1-vcl_sqrt((lVIval)*(lVIval)+(lWIval)*(lWIval)); // eucl2 : pas mal, un peu effet de flou par rappart a sqrt
+
+
+      //lOutPix = vcl_sqrt(vcl_abs(1-lVIval)*vcl_abs(1-lWIval)); //sqrt2 : pareil que sqrt 
       //lOutPix = 1-vcl_sqrt(vcl_abs(lVIval)*vcl_abs(lWIval)); //sqrt2 : NUUUUUUL
       //lOutPix = 1. - (vcl_abs(lVIval)+vcl_abs(lWIval)/2.);//Div : PAS MAL
       //lOutPix = 1 - std::max(lVIval,lWIval); //MAX : PAS MAL DU TOUT
 
-      lOutPix = 1 / ( lVIval*lWIval + 1 ); //Jordy's formula
+/* Tester avec le log
+      if(lVIval*lWIval)
+        lOutPix = 1 - 1 / ( lVIval*lWIval + 1 ); //Jordy's formula
+      else 
+        lOutPix = 0;
+*/
 
       return lOutPix;
     }
@@ -93,33 +116,40 @@ class RadiometryNonWaterNonVegetationIndexFunctor
 
 
 
-  /** \class RadiometryNonWaterNonVegetationDetectionFunctor
-   *  \brief This functor uses computes RadiometryNonWaterNonVegetationIndexFunctor
+  /** \class RadiometricNonWaterNonVegetationDetectionFunctor
+   *  \brief This functor uses computes RadiometricNonWaterNonVegetationIndexFunctor
    *  \brief and appli a threshold to produce a binary image
    */
 template<class TInput,class TOutput>
-class RadiometryNonWaterNonVegetationDetectionFunctor
+class RadiometricNonWaterNonVegetationDetectionFunctor
 {
 public:
-  typedef RadiometryNonWaterNonVegetationIndexFunctor<TInput, TOutput> RadiometryNonWaterNonVegetationIndexFunctorType;
+  // utilise template double parsk sinon cast un truc entre 0 et 1 en unsigned char ce qui donne toujours 1... donc image constante a 1 a la sortie du filtre!!!!
+  typedef RadiometricNonWaterNonVegetationIndexFunctor<TInput /*, TOutput*/> RadiometricNonWaterNonVegetationIndexFunctorType;
 
-  RadiometryNonWaterNonVegetationDetectionFunctor()
+  RadiometricNonWaterNonVegetationDetectionFunctor()
   {
     m_LowerThreshold = 0.0;
     m_UpperThreshold = 1.0;
   };
 
-  ~RadiometryNonWaterNonVegetationDetectionFunctor() {};
+  ~RadiometricNonWaterNonVegetationDetectionFunctor() {};
   inline TOutput operator()(const TInput& inPix)
   {
-    if ( (m_RadiometryNonWaterNonVegetationIndexFunctor(inPix) > m_LowerThreshold) && 
-         (m_RadiometryNonWaterNonVegetationIndexFunctor(inPix) <= m_UpperThreshold)  )
+
+    // The vegetation and water areas are put to 0.
+    double indexesVal = static_cast<double>(m_RadiometricNonWaterNonVegetationIndexFunctor(inPix));
+
+// if(indexesVal>1e6)
+// std::cout<<indexesVal<<std::endl;
+
+    if ( (indexesVal > m_LowerThreshold) && (indexesVal <= m_UpperThreshold)  )
     {
-      return 1;
+      return static_cast<TOutput>(1);
     }
     else
     {
-      return 0;
+      return static_cast<TOutput>(0);
     }
   }
 
@@ -128,13 +158,15 @@ public:
   double GetLowerThreshold(){ return m_LowerThreshold; };
   double GetUpperThreshold(){ return m_UpperThreshold; };
 
-  void SetRedIndex(int id){ m_RadiometryNonWaterNonVegetationIndexFunctor.SetRedIndex(id); };
-  void SetGreenIndex(int id){ m_RadiometryNonWaterNonVegetationIndexFunctor.SetGreenIndex(id); };
-  void SetNIRIndex(int id){ m_RadiometryNonWaterNonVegetationIndexFunctor.SetNIRIndex(id); };
+  void SetRedIndex(int id){ m_RadiometricNonWaterNonVegetationIndexFunctor.SetRedIndex(id); };
+  void SetGreenIndex(int id){ m_RadiometricNonWaterNonVegetationIndexFunctor.SetGreenIndex(id); };
+  void SetNIRIndex(int id){ m_RadiometricNonWaterNonVegetationIndexFunctor.SetNIRIndex(id); };
+
+  unsigned int GetGreenIndex(){ return m_RadiometricNonWaterNonVegetationIndexFunctor.GetGreenIndex(); };
 
 
 protected:
-  RadiometryNonWaterNonVegetationIndexFunctorType m_RadiometryNonWaterNonVegetationIndexFunctor;
+  RadiometricNonWaterNonVegetationIndexFunctorType m_RadiometricNonWaterNonVegetationIndexFunctor;
   double m_LowerThreshold;
   double m_UpperThreshold;
 
@@ -149,7 +181,7 @@ protected:
    *  \brief where the white areas represents the urban areas.
    */
 template <class TInputImage, class TOutputImage,
-          class TFunction = Functor::RadiometryNonWaterNonVegetationDetectionFunctor< 
+          class TFunction = Functor::RadiometricNonWaterNonVegetationIndexFunctor< 
                                                                  typename TInputImage::PixelType,
                                                                  typename TOutputImage::PixelType> >
 class ITK_EXPORT UrbanAreaDetectionImageFilter :
@@ -173,17 +205,36 @@ public:
   typedef TOutputImage                                          OutputImageType;
   typedef double                                                SingleImagePixelType;
   typedef Image<SingleImagePixelType, 2>                        SingleImageType;
+  typedef SingleImageType::SizeType                             SizeType;
   typedef unsigned char                                         BinaryImagePixelType;
   typedef Image<BinaryImagePixelType, 2>                        BinaryImageType;
   typedef typename VectorImageType::PixelType                   VectorImagePixelType;
   typedef typename OutputImageType::PixelType                   OutputPixelType;
 
   /** Filters typedefs */
-  typedef Functor::RadiometryNonWaterNonVegetationIndexFunctor< VectorImagePixelType, SingleImagePixelType > FunctorType;
-  //typedef Functor::RadiometryNonWaterNonVegetationDetectionFunctor< VectorImagePixelType, BinaryImageType > FunctorType;
-  typedef MultiChannelRAndGAndNIRIndexImageFilter < VectorImageType,SingleImageType, FunctorType >
-                                                                                UrbanAreaExtractionFilterType;
-  typedef typename UrbanAreaExtractionFilterType::Pointer                       UrbanAreaExtrationFilterPointerType;
+  // NonVegetationNonWaterIndexFilter
+  typedef Functor::RadiometricNonWaterNonVegetationDetectionFunctor< VectorImagePixelType, BinaryImagePixelType > FunctorType;
+  typedef MultiChannelRAndGAndNIRIndexImageFilter < VectorImageType,BinaryImageType, FunctorType >       UrbanAreaExtractionFilterType;
+  typedef typename UrbanAreaExtractionFilterType::Pointer                                                UrbanAreaExtrationFilterPointerType;
+  // Erode/Dilate Filters
+  typedef typename itk::BinaryBallStructuringElement< BinaryImagePixelType, 2  >                         StructuringElementType;
+  typedef typename itk::BinaryErodeImageFilter<BinaryImageType,BinaryImageType,StructuringElementType>   ErodeFilterType;
+  typedef typename itk::BinaryDilateImageFilter<BinaryImageType,BinaryImageType,StructuringElementType>  DilateFilterType;
+  // MaskImageFilter
+  typedef typename itk::MaskImageFilter<VectorImageType,BinaryImageType>                                 MaskImageFilterType;
+  typedef typename MaskImageFilterType::Pointer                                                          MaskImageFilterPointerType;
+  // Intensity
+  typedef VectorImageToIntensityImageFilter<VectorImageType, SingleImageType>                            IntensityFilterType;
+  typedef typename IntensityFilterType::Pointer                                                          IntensityFilterPointerType;
+  // EdgeDensityFilter
+  typedef BinaryImageDensityFunction<SingleImageType>                                                    CountFunctionType;
+  typedef itk::SobelEdgeDetectionImageFilter<SingleImageType , SingleImageType>                          SobelType;
+  typedef EdgeDetectorImageFilter<SingleImageType, SingleImageType, SobelType>                           SobelDetectorType;
+  typedef EdgeDensityImageFilter<SingleImageType, SingleImageType, SobelDetectorType, CountFunctionType> EdgeDensityFilterType;
+  typedef typename EdgeDensityFilterType::Pointer                                                        EdgeDensityFilterPointerType;
+  // Threshold
+  typedef itk::BinaryThresholdImageFilter<SingleImageType,BinaryImageType>                               ThresholdFilterType;
+  typedef ThresholdFilterType::Pointer                                                                   ThresholdFilterPointerType;
 
 
 
@@ -199,7 +250,7 @@ public:
   void SetThreshold(double pThreshold)
   {
     m_ThresholdValue = pThreshold;
-  //  m_UrbanAreaExtractionFilter->GetFunctor().SetUpperThreshold( m_ThresholdValue );
+    m_UrbanAreaExtractionFilter->GetFunctor().SetLowerThreshold( m_ThresholdValue );
   }
 
   /** Methods */
@@ -215,11 +266,18 @@ private:
 
   /** Filters */
   UrbanAreaExtrationFilterPointerType m_UrbanAreaExtractionFilter;
+  MaskImageFilterPointerType          m_MaskImageFilter;
+  ErodeFilterType::Pointer            m_ErodeFilter;
+  DilateFilterType::Pointer           m_DilateFilter;
+  ErodeFilterType::Pointer            m_ErodeFilter2;
+  DilateFilterType::Pointer           m_DilateFilter2;
+
 
   /** MaxThreshold */
   double m_ThresholdValue;
+  double m_ThresholdValue2;
 
-}; // end class RadiometryNonWaterNonVegetationDetectionImageFilter
+}; // end class RadiometricNonWaterNonVegetationDetectionImageFilter
 
 } // end namespace otb
 
