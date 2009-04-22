@@ -556,7 +556,7 @@ ImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent, const Me
   double dvalue = 0.;
   OTB_GCP gcpvalue;
   ImageKeywordlist ossimvalue;
-//   VectorDataKeywordlist vectorDataMetaDataValue;
+  VectorDataKeywordlist vectorDataKeywordlistValue;
   unsigned int i(0);
 
   // Copy of the const metadata dictionary in a metadata dictionary to be used
@@ -610,12 +610,12 @@ ImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent, const Me
       ossimvalue.Print(os);
       // ossimvalue.Print(os);
       break;
-//     case MetaDataKey::TVECTORDATAKEYWORDLIST:
-//       itk::ExposeMetaData<ImageKeywordlist>(dict2, keys[itkey], vectorDataMetaDataValue);
-//
-//       os << indent << "---> " << keys[itkey] << std::endl;
-//       vectorDataMetaDataValue.Print(os);
-//       break;
+    case MetaDataKey::TVECTORDATAKEYWORDLIST:
+      itk::ExposeMetaData<VectorDataKeywordlist>(dict2, keys[itkey], vectorDataKeywordlistValue);
+
+      os << indent << "---> " << keys[itkey] << std::endl;
+      vectorDataKeywordlistValue.Print(os);
+      break;
     }
 
   }

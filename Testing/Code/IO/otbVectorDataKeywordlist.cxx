@@ -18,10 +18,12 @@
 
 #include "otbVectorDataKeywordlist.h"
 
-int otbVectorDataKeywordlistNew(int argc, char * argv[])
+int otbVectorDataKeywordlist(int argc, char * argv[])
 {
 
-  otb::VectorDataKeywordlist::Pointer object = otb::VectorDataKeywordlist::New();
+  otb::VectorDataKeywordlist kwl;
+
+  //TODO test methods
 
   return EXIT_SUCCESS;
 }

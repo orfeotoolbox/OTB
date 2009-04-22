@@ -31,37 +31,45 @@ namespace otb
    *
  */
 
-class VectorDataKeywordlist : public itk::LightObject
+class VectorDataKeywordlist
 {
   public:
     /** Smart pointer typedef support. */
     typedef VectorDataKeywordlist        Self;
-    typedef itk::LightObject               Superclass;
-    typedef itk::SmartPointer<Self>        Pointer;
-    typedef itk::SmartPointer<const Self>  ConstPointer;
+//     typedef itk::LightObject               Superclass;
+//     typedef itk::SmartPointer<Self>        Pointer;
+//     typedef itk::SmartPointer<const Self>  ConstPointer;
+//
+//     /** Method for creation through the object factory. */
+//     itkNewMacro(Self);
+//
+//     /** Run-time type information (and related methods). */
+//     itkTypeMacro(VectorDataKeywordlist, LightObject);
 
-    /** Method for creation through the object factory. */
-    itkNewMacro(Self);
 
-    /** Run-time type information (and related methods). */
-    itkTypeMacro(VectorDataKeywordlist, LightObject);
-
-
-    typedef std::vector<OGRFieldDefn> FeatureListType;
+    typedef std::vector<OGRFieldDefn> FieldListType;
 
 
     virtual void Print(std::ostream& os) const;
 
-  protected:
+    void AddField(OGRFieldDefn* field)
+    {
+      //Fill up
+    };
 
     VectorDataKeywordlist();
     virtual ~VectorDataKeywordlist();
 
-  private:
-    VectorDataKeywordlist(const Self &);//purposely not implemented
-    void operator=(const Self&); //purposely not implemented
+    VectorDataKeywordlist(const Self&);
+    void operator=(const Self&);
 
-    FeatureListType m_FeatureList;
+  protected:
+
+
+
+  private:
+
+    FieldListType m_FieldList;
 
 
 };
