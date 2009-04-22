@@ -1607,7 +1607,7 @@ ADD_TEST(ioTvKMLVectorDataIOFileReaderLines ${IO_TESTS15}
         ${TEMP}/lines.kml)
 
 ADD_TEST(ioTuVectorDataKeywordlist ${IO_TESTS15}
-        otbVectorDataKeywordlistNew )
+        otbVectorDataKeywordlist )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS16 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1823,7 +1823,7 @@ otbKMLVectorDataIONew.cxx
 otbKMLVectorDataIOTestCanRead.cxx
 otbKMLVectorDataIOTestCanWrite.cxx
 otbKMLVectorDataIOTestFileReader.cxx
-otbVectorDataKeywordlistNew.cxx
+otbVectorDataKeywordlist.cxx
 )
 
 SET(BasicIO_SRCS16
