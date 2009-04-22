@@ -1701,20 +1701,20 @@ ADD_TEST(feTvSFSTexturesImageFilterTest ${FEATUREEXTRACTION_TESTS14}
 )
 
 # -------            otb::UrbanAreaDetectionImageFilter ------------------------------
-ADD_TEST(raTuUrbanAreaDetectionImageFilterNew ${RADIOMETRY_TESTS8}
+ADD_TEST(raTuUrbanAreaDetectionImageFilterNew ${FEATUREEXTRACTION_TESTS14}
         otbUrbanAreaDetectionImageFilterNew
 )
 
-ADD_TEST(raTvUrbanAreaDetectionImageFilter ${RADIOMETRY_TESTS8}
+ADD_TEST(raTvUrbanAreaDetectionImageFilter ${FEATUREEXTRACTION_TESTS14}
 #  --compare-image ${EPSILON}   ${BASELINE}/raWaterIndex_NDWI_verySmallFSATSW.tif
 #                    ${TEMP}/raWaterIndex_NDWI_verySmallFSATSW.tif
         otbUrbanAreaDetectionImageFilter
         ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
-        ${TEMP}/raTvUrbanAreaDetection.tif
+        ${TEMP}/raTvUrbanAreaDetection.png
         3   # red
         2   # green
         4   # nir
-        0.5 # threshold
+        0.8 # threshold
 )
 
 

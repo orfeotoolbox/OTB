@@ -20,7 +20,7 @@
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
+#include "otbStreamingImageFileWriter.h"
 #include "otbUrbanAreaDetectionImageFilter.h"
 
 
@@ -30,7 +30,10 @@ int otbUrbanAreaDetectionImageFilter(int argc, char * argv[])
   const unsigned int                                  Dimension = 2;
   typedef double                                      PixelType;
   typedef otb::VectorImage<PixelType,Dimension>       InputVectorImageType;
-  typedef otb::Image<PixelType,Dimension>             OutputImageType;
+  typedef otb::Image<unsigned char,Dimension>         OutputImageType;
+
+  typedef otb::Image<double,Dimension>                SingleImageType;
+
 
   typedef otb::ImageFileReader<InputVectorImageType>  ReaderType;
 
@@ -47,12 +50,8 @@ int otbUrbanAreaDetectionImageFilter(int argc, char * argv[])
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-std::cout<< "DEBUG-1" << std::endl;
-
   reader->SetFileName( inputFilename );
   writer->SetFileName( outputFilename  );
-
-std::cout<< "DEBUG-2" << std::endl;
 
   filter->SetInput( reader->GetOutput() );
   filter->SetRedIndex( ::atoi(argv[3]));
@@ -60,7 +59,6 @@ std::cout<< "DEBUG-2" << std::endl;
   filter->SetNIRIndex( ::atoi(argv[5]));
   filter->SetThreshold( ::atof(argv[6]));
 
-std::cout<< "DEBUG-3" << std::endl;
   writer->SetInput( filter->GetOutput() );
   writer->Update();
 
