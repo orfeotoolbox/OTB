@@ -15,48 +15,45 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbChangeExtractRegionActionHandler_h
-#define __otbChangeExtractRegionActionHandler_h
+#ifndef __otbMouseClickActionHandler_h
+#define __otbMouseClickActionHandler_h
 
 #include "otbImageWidgetActionHandler.h"
 
 namespace otb
 {
-/** \class ChangeExtractRegionActionHandler
-*   \brief Implements basic Scroll, Full and Zoom  widgets resizing.
-*
+/** \class MouseClickActionHandler
+*   \brief Implements clicking on widgets
+*   Triggers the IndexClicked(); methods on the destination.
+* 
 *   \sa ImageWidgetController
 *   \sa ImageWidgetActionHandler
-*  \ingroup Visualization
- */
+*/
 
-template <class TModel, class TView>
-class ChangeExtractRegionActionHandler
+template <class TModel,class TView> 
+class MouseClickActionHandler
   : public ImageWidgetActionHandler
 {
 public:
   /** Standard class typedefs */
-  typedef ChangeExtractRegionActionHandler Self;
+  typedef MouseClickActionHandler Self;
   typedef ImageWidgetActionHandler               Superclass;
   typedef itk::SmartPointer<Self>                Pointer;
   typedef itk::SmartPointer<const Self>          ConstPointer;
-
+  
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-
+  
   /** Runtime information */
-  itkTypeMacro(ChangeExtractRegionActionHandler,ImageWidgetActionHandler);
+  itkTypeMacro(MouseClickActionHandler,ImageWidgetActionHandler);
 
   /** Model typedefs */
   typedef TModel                         ModelType;
   typedef typename ModelType::Pointer    ModelPointerType;
-  typedef typename ModelType::RegionType RegionType;
 
   /** View typedefs */
   typedef TView                          ViewType;
   typedef typename ViewType::Pointer     ViewPointerType;
-  typedef typename ViewType::OffsetType  OffsetType;
-
 
   /** Handle widget event
    * \param widgetId The id of the moved widget
@@ -67,84 +64,99 @@ public:
   {
     if( m_View.IsNotNull() && m_Model.IsNotNull() )
       {
-      if(widgetId == m_View->GetScrollWidget()->GetIdentifier()
-         && event == FL_PUSH && Fl::event_button() == m_MouseButton)
+      typename ViewType::ImageWidgetType::Pointer source;
+
+      if(m_ActiveOnScrollWidget && widgetId == m_View->GetScrollWidget()->GetIdentifier() )
+	{
+	source = m_View->GetScrollWidget();
+	}
+      else if(m_ActiveOnFullWidget && widgetId == m_View->GetFullWidget()->GetIdentifier() )
+	{
+	source = m_View->GetFullWidget();
+	}
+      else if(m_ActiveOnZoomWidget && widgetId == m_View->GetZoomWidget()->GetIdentifier() )
+	 {
+	 source = m_View->GetZoomWidget();
+	 }
+
+      if(source.IsNotNull() && event == FL_PUSH && Fl::event_button() == m_MouseButton)
         {
-        otbMsgDevMacro(<<"ChangeExtractRegionActionHandler::HandleWidgetEvent(): handling ("<<widgetId<<", "<<event<<")");
-
-        // Get the clicked index
+	// Get the clicked index
         typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
-        screenPoint = m_View->GetScrollWidget()->GetMousePosition();
-
+        screenPoint = source->GetMousePosition();
+        
         // Transform to image point
-        imagePoint = m_View->GetScrollWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
+        imagePoint = source->GetScreenToImageTransform()->TransformPoint(screenPoint);
 
         // Transform to index
         typename ViewType::IndexType index;
         index[0]=static_cast<int>(imagePoint[0]);
         index[1]=static_cast<int>(imagePoint[1]);
-
-	//Add Offset
-	index += m_Offset;
-
+	
         // Change scaled extract region center
-        m_Model->SetExtractRegionCenter(index);
-        // Update model
-        m_Model->Update();
+        m_Model->IndexClicked(index);
         return true;
         }
       }
     return false;
   }
+  
+  /** Set/Get the pointer to the model */
+  itkSetObjectMacro(Model,ModelType);
+  itkGetObjectMacro(Model,ModelType);
 
   /** Set/Get the pointer to the view */
   itkSetObjectMacro(View,ViewType);
   itkGetObjectMacro(View,ViewType);
 
-  /** Set/Get the pointer to the model */
-  itkSetObjectMacro(Model,ModelType);
-  itkGetObjectMacro(Model,ModelType);
+  /** Set the mouse button used (1 = left, 2 = center, 3 = right) */
+  itkSetClampMacro(MouseButton,int,1,3);
+  itkGetMacro(MouseButton,int);
 
-  /** Set/Get Offset */
-  itkSetMacro(Offset,OffsetType);
-  itkGetMacro(Offset,OffsetType);
+  itkSetMacro(ActiveOnScrollWidget,bool);
+  itkGetMacro(ActiveOnScrollWidget,bool);
+  itkBooleanMacro(ActiveOnScrollWidget);
 
-  /** Set the mouse button used */
-  itkSetClampMacro(MouseButton, int,1,3);
-  itkGetMacro(MouseButton, int);
+  itkSetMacro(ActiveOnFullWidget,bool);
+  itkGetMacro(ActiveOnFullWidget,bool);
+  itkBooleanMacro(ActiveOnFullWidget);
+
+  itkSetMacro(ActiveOnZoomWidget,bool);
+  itkGetMacro(ActiveOnZoomWidget,bool);
+  itkBooleanMacro(ActiveOnZoomWidget);
 
 protected:
   /** Constructor */
-  ChangeExtractRegionActionHandler() : m_Offset(), m_View(), m_Model(), m_MouseButton(1)
+  MouseClickActionHandler() : m_View(), m_Model(), m_ActiveOnScrollWidget(true), m_ActiveOnFullWidget(true), m_ActiveOnZoomWidget(true), m_MouseButton(1)
   {
-    m_Offset.Fill(0);
   }
 
   /** Destructor */
-  virtual ~ChangeExtractRegionActionHandler(){}
+  virtual ~MouseClickActionHandler(){}
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os,indent);
   }
-
+ 
 private:
-  ChangeExtractRegionActionHandler(const Self&);    // purposely not implemented
+  MouseClickActionHandler(const Self&);    // purposely not implemented
   void operator=(const Self&); // purposely not implemented
-
-  //Offset
-  OffsetType      m_Offset;
-
+  
   // Pointer to the view
   ViewPointerType m_View;
-
+  
   // Pointer to the model
   ModelPointerType m_Model;
 
-  // Mouse button
+  // ClickOnScroll
+  bool m_ActiveOnScrollWidget;
+  bool m_ActiveOnFullWidget;
+  bool m_ActiveOnZoomWidget;
+
   int m_MouseButton;
 
-}; // end class
+}; // end class 
 } // end namespace otb
 #endif
 

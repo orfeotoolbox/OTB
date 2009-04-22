@@ -210,6 +210,12 @@ SHPVectorDataIO<TData>
 
       if (geometry != NULL)
       {
+        otb::VectorDataKeywordlist kwl;
+        for (int fieldNum=0; fieldNum< feature->GetFieldCount(); ++fieldNum)
+        {
+          kwl.AddField(feature->GetFieldDefnRef(fieldNum));
+        }
+
         switch (geometry->getGeometryType())
         {
           case wkbPoint:

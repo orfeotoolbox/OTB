@@ -1,4 +1,4 @@
-PROJECT(liblas)
+PROJECT(otbliblas)
 
 SET(liblas_VERSION_MAJOR "1")
 SET(liblas_VERSION_MINOR "0")
@@ -7,31 +7,12 @@ SET(liblas_VERSION_PATCH "0")
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 SET(liblas_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
-SET(liblas_SOURCES 
-  ${liblas_SOURCES_DIR}/las_c_api.cpp
-  ${liblas_SOURCES_DIR}/lasfile.cpp
-  ${liblas_SOURCES_DIR}/laspoint.cpp
-  ${liblas_SOURCES_DIR}/lasrecordheader.cpp
-  ${liblas_SOURCES_DIR}/laserror.cpp
-  ${liblas_SOURCES_DIR}/lasheader.cpp
-  ${liblas_SOURCES_DIR}/lasreader.cpp
-  ${liblas_SOURCES_DIR}/laswriter.cpp
-  ${liblas_SOURCES_DIR}/detail/file.cpp
-  ${liblas_SOURCES_DIR}/detail/reader10.cpp
-  ${liblas_SOURCES_DIR}/detail/reader11.cpp
-  ${liblas_SOURCES_DIR}/detail/reader.cpp
-  ${liblas_SOURCES_DIR}/detail/writer10.cpp
-  ${liblas_SOURCES_DIR}/detail/writer11.cpp
-  ${liblas_SOURCES_DIR}/detail/writer.cpp
-)
+FILE(GLOB_RECURSE liblas_SRCS "${liblas_SOURCES_DIR}/*.cpp" )
 
-#IF(CMAKE_COMPILER_IS_GNUCXX)
-#  FOREACH(f ${liblas_SOURCES} )
-#        SET_SOURCE_FILES_PROPERTIES( ${f} PROPERTIES COMPILE_FLAGS "-Wno-long-long -pedantic -std=c++98" )
-#  ENDFOREACH(f)
-#ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
-ADD_LIBRARY(otbliblas ${liblas_SOURCES} )
+IF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
+
+ADD_LIBRARY(otbliblas ${liblas_SRCS} )
 IF(OTB_LIBRARY_PROPERTIES)
   SET_TARGET_PROPERTIES(otbliblas PROPERTIES ${OTB_LIBRARY_PROPERTIES})
 ENDIF(OTB_LIBRARY_PROPERTIES)
@@ -45,7 +26,9 @@ ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
 
 IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
   FILE(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/include/liblas/*.hpp")
-  INSTALL(FILES ${__files1} 
+  INSTALL(FILES ${__files1}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbliblas/include/liblas
     COMPONENT Development)
 ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+
+ENDIF(NOT OTB_DISABLE_UTILITIES_COMPILATION)

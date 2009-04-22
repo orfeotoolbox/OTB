@@ -18,8 +18,11 @@
 
 #include "otbVectorDataKeywordlist.h"
 
+namespace otb
+{
+
 void
-otb::VectorDataKeywordlist
+VectorDataKeywordlist
   ::Print(std::ostream& os) const
 {
   os << "[UNKNOWN_PRINT_CHARACTERISTICS]" << std::endl;
@@ -31,8 +34,17 @@ otb::VectorDataKeywordlist
   //Nothing to do here
 }
 
-otb::VectorDataKeywordlist
+VectorDataKeywordlist
   ::~VectorDataKeywordlist()
 {
   //Nothing to do here
+}
+
+void
+VectorDataKeywordlist::
+    operator=(const Self& p)
+{
+  m_FieldList = p.m_FieldList;
+}
+
 }

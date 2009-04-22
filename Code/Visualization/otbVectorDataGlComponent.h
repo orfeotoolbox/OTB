@@ -30,7 +30,7 @@
 // There are function prototype conflits under cygwin between standard w32 API
 // and standard C ones
 #ifndef CALLBACK
-#if defined(__CYGWIN__)
+#if defined(_WINDOWS) || defined(__CYGWIN__)
 #define CALLBACK __stdcall
 #else
 #define CALLBACK
@@ -150,7 +150,7 @@ private:
   typedef void (CALLBACK * FunctionPointerType)();
 
   // Static Combine callback for tesselation
-  static void TesselationCombineCallback(GLdouble coords[3],GLdouble * data[4], GLfloat weights[4],GLdouble **dataOut)
+  static void CALLBACK TesselationCombineCallback(GLdouble coords[3],GLdouble * data[4], GLfloat weights[4],GLdouble **dataOut)
   {
     GLdouble * vertex = new GLdouble[3];
     vertex[0] = coords[0];
@@ -160,11 +160,30 @@ private:
   }
 
   // Static error callback fir tesselation
-  static void TesselationErrorCallback(GLenum errorCode)
+  static void CALLBACK TesselationErrorCallback(GLenum errorCode)
   {
     const GLubyte * estring = gluErrorString(errorCode);
     itkGenericExceptionMacro(<<"Glu Tesselation error: "<<estring);
   }
+  
+  // Static begin callback for tesselation
+  static void CALLBACK BeginCallback(GLenum prim)
+  {
+    glBegin(prim);
+  }
+  
+  // Static end callback for tesselation
+  static void CALLBACK EndCallback()
+  {
+    glEnd();
+  }
+
+  // static vertex callback for tesselation
+  static void CALLBACK VertexCallback(void * data)
+  {
+    glVertex3dv((GLdouble*)data);
+  }
+
 
   /// Pointer to the vector data to render
   VectorDataPointerType m_VectorData;
