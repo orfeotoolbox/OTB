@@ -41,7 +41,10 @@ ENDIF(OTB_COMPILE_JPEG2000)
 SET(IO_TESTS14    ${CXX_TEST_PATH}/otbIOTests14)
 SET(IO_TESTS15    ${CXX_TEST_PATH}/otbIOTests15)
 SET(IO_TESTS16    ${CXX_TEST_PATH}/otbIOTests16)
-SET(IO_TESTS17    ${CXX_TEST_PATH}/otbIOTests17)
+
+IF(OTB_USE_LIBLAS)
+  SET(IO_TESTS17    ${CXX_TEST_PATH}/otbIOTests17)
+ENDIF(OTB_USE_LIBLAS)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COMMON_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1679,20 +1682,7 @@ ADD_TEST(ioTvImageFileReaderTIF2RADCI4 ${IO_TESTS16}
 #        ${INPUTDATA}/rcc8_mire1.png
 #        ${TEMP}/ioImageFileReaderPNG2RADPHA.rad )
 
-
-ADD_TEST(ioTuPointSetFileReaderNew ${IO_TESTS16}
-        otbPointSetFileReaderNew )
-
-ADD_TEST(ioTvPointSetFileReader ${IO_TESTS16}
-        --compare-ascii ${TOL}  ${BASELINE_FILES}/ioPointSetFileReader.txt
-                        ${TEMP}/ioPointSetFileReader.txt
-        otbPointSetFileReader
-  ${INPUTDATA}/srs.las
-  ${TEMP}/ioPointSetFileReader.txt)
-
-
-
-ADD_TEST(ioTvImageSeriesFileReader ${IO_TESTS17}
+ADD_TEST(ioTvImageSeriesFileReader ${IO_TESTS16}
         --compare-n-images ${TOL} 2
             ${BASELINE}/ioTvImageSeries-0.png
             ${TEMP}/ioTvImageSeries-0.png
@@ -1702,6 +1692,21 @@ ADD_TEST(ioTvImageSeriesFileReader ${IO_TESTS17}
             -in ${EXAMPLEDATA}/GomaAvantApres
             -out ${TEMP}/ioTvImageSeries.png
 )
+
+IF(OTB_USE_LIBLAS)
+ADD_TEST(ioTuPointSetFileReaderNew ${IO_TESTS17}
+        otbPointSetFileReaderNew )
+
+ADD_TEST(ioTvPointSetFileReader ${IO_TESTS17}
+        --compare-ascii ${TOL}  ${BASELINE_FILES}/ioPointSetFileReader.txt
+                        ${TEMP}/ioPointSetFileReader.txt
+        otbPointSetFileReader
+  ${INPUTDATA}/srs.las
+  ${TEMP}/ioPointSetFileReader.txt)
+ENDIF(OTB_USE_LIBLAS)
+
+
+
 
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
@@ -1835,12 +1840,12 @@ otbImageFileReaderRADComplexInt.cxx
 otbImageFileReaderRADComplexFloat.cxx
 otbImageFileReaderRADComplexFloatExtract.cxx
 otbImageFileReaderRADComplexDouble.cxx
-otbPointSetFileReaderNew.cxx
-otbPointSetFileReader.cxx
+otbImageSeriesFileReader.cxx
 )
 
 SET(BasicIO_SRCS17
-otbImageSeriesFileReader.cxx
+otbPointSetFileReaderNew.cxx
+otbPointSetFileReader.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
@@ -1901,8 +1906,10 @@ TARGET_LINK_LIBRARIES(otbIOTests15 OTBIO )
 ADD_EXECUTABLE(otbIOTests16 otbIOTests16.cxx ${BasicIO_SRCS16})
 TARGET_LINK_LIBRARIES(otbIOTests16 OTBIO  )
 
+IF(OTB_USE_LIBLAS)
 ADD_EXECUTABLE(otbIOTests17 otbIOTests17.cxx ${BasicIO_SRCS17})
 TARGET_LINK_LIBRARIES(otbIOTests17 OTBIO )
+ENDIF(OTB_USE_LIBLAS)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 

@@ -50,7 +50,7 @@ ADD_EXECUTABLE(MetadataExample MetadataExample.cxx )
 TARGET_LINK_LIBRARIES(MetadataExample OTBCommon OTBIO)
 
 ADD_EXECUTABLE(DXFReaderExample DXFReaderExample.cxx )
-TARGET_LINK_LIBRARIES(DXFReaderExample OTBCommon OTBIO  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+TARGET_LINK_LIBRARIES(DXFReaderExample OTBCommon OTBIO)
 
 ADD_EXECUTABLE(VectorDataIOExample VectorDataIOExample.cxx )
 TARGET_LINK_LIBRARIES(VectorDataIOExample OTBCommon OTBIO)
@@ -61,13 +61,15 @@ TARGET_LINK_LIBRARIES(DEMToImageGenerator OTBProjections OTBIO OTBCommon )
 ADD_EXECUTABLE(DEMToOrthoImageGenerator DEMToOrthoImageGenerator.cxx )
 TARGET_LINK_LIBRARIES(DEMToOrthoImageGenerator OTBProjections OTBIO OTBCommon )
 
-ADD_EXECUTABLE(LidarReaderExample LidarReaderExample.cxx )
-TARGET_LINK_LIBRARIES(LidarReaderExample OTBIO OTBCommon )
+IF(OTB_USE_LIBLAS)
+  ADD_EXECUTABLE(LidarReaderExample LidarReaderExample.cxx )
+  TARGET_LINK_LIBRARIES(LidarReaderExample OTBIO OTBCommon )
 
-IF(ITK_USE_REVIEW)
-  ADD_EXECUTABLE(LidarToImageExample LidarToImageExample.cxx )
-  TARGET_LINK_LIBRARIES(LidarToImageExample OTBIO OTBCommon )
-ENDIF(ITK_USE_REVIEW)
+  IF(ITK_USE_REVIEW)
+    ADD_EXECUTABLE(LidarToImageExample LidarToImageExample.cxx )
+    TARGET_LINK_LIBRARIES(LidarToImageExample OTBIO OTBCommon )
+  ENDIF(ITK_USE_REVIEW)
+ENDIF(OTB_USE_LIBLAS)
 
 IF( OTB_USE_CURL )
   ADD_EXECUTABLE(TileMapImageIOExample TileMapImageIOExample.cxx)
@@ -161,6 +163,7 @@ ADD_TEST(DEMToImageGeneratorTest ${EXE_TESTS1}
 	  ${INPUTDATA}/DEM_srtm
          )
 
+IF(OTB_USE_LIBLAS)
 IF(ITK_USE_REVIEW)
 ADD_TEST(LidarToImageExampleTest ${EXE_TESTS1}
 --compare-image ${TOL}  ${BASELINE}/lidar-image-4.hdr
@@ -185,6 +188,7 @@ ADD_TEST(LidarToImageExample2Test ${EXE_TESTS1}
          8
          )
 ENDIF(ITK_USE_REVIEW)
+ENDIFIF(OTB_USE_LIBLAS)
 
 IF( OTB_USE_CURL )
 ADD_TEST(TileMapImageIOExampleTest ${EXE_TESTS2}

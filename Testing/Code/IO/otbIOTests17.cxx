@@ -28,5 +28,6 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbImageSeriesFileReader);
+  REGISTER_TEST(otbPointSetFileReaderNew);
+  REGISTER_TEST(otbPointSetFileReader);
 }
