@@ -31,19 +31,38 @@ template <class TInputImage, class TOutputImage, class TFunction>
 UrbanAreaDetectionImageFilter<TInputImage, TOutputImage, TFunction>
 ::UrbanAreaDetectionImageFilter()
 {
-  m_UrbanAreaExtractionFilter = UrbanAreaExtractionFilterType::New();
-  m_ErodeFilter = ErodeFilterType::New();
-  m_DilateFilter = DilateFilterType::New();
-  m_ErodeFilter2 = ErodeFilterType::New();
-  m_DilateFilter2 = DilateFilterType::New();
+
+//   m_ErodeFilter = ErodeFilterType::New();
+//   m_DilateFilter = DilateFilterType::New();
+//   m_ErodeFilter2 = ErodeFilterType::New();
+//   m_DilateFilter2 = DilateFilterType::New();
+  m_IntensityFilter = IntensityFilterType::New();
+  m_EdgeDetectorFilter = EdgeDensityFilterType::New();
+  m_SobelFilter = SobelDetectorType::New();
+  m_Thresholder = ThresholdFilterType::New();
   m_MaskImageFilter = MaskImageFilterType::New();
+  m_UrbanAreaExtractionFilter = UrbanAreaExtractionFilterType::New();
+
+  /** Init the Pipeline */
+  // Intensity Image of the input image
+//   m_IntensityFilter->SetInput(this->GetInput());
+  // EdgeDensity
+  m_EdgeDetectorFilter->SetInput(m_IntensityFilter->GetOutput());
+  m_EdgeDetectorFilter->SetDetector(m_SobelFilter);
+  // Threshold
+  m_Thresholder->SetInput(m_EdgeDetectorFilter->GetOutput());
+  // Mask Image
+//   m_MaskImageFilter->SetInput1(this->GetInput());
+  m_MaskImageFilter->SetInput2(m_Thresholder->GetOutput());
+  // NonVegetationNonWaterIndex
+  m_UrbanAreaExtractionFilter->SetInput(m_MaskImageFilter->GetOutput());
 
   m_ThresholdValue = 0.5;
-  m_ThresholdValue2 = 0.1;
+  m_ThresholdDensity = 0.1;
 }
 
 /**
- * Init the pipeline
+ * Parameters the filters of the pipeline
  */
 template <class TInputImage, class TOutputImage, class TFunction>
 void
@@ -51,63 +70,30 @@ UrbanAreaDetectionImageFilter<TInputImage, TOutputImage, TFunction>
 ::GenerateData()
 {
 
+  m_IntensityFilter->SetInput(this->GetInput());
+  m_MaskImageFilter->SetInput1(this->GetInput());
 
-  // Intensity Image of the input image
-  IntensityFilterPointerType lIntensityFilter = IntensityFilterType::New();
-  lIntensityFilter->SetInput(this->GetInput());
 
   // Edge Density
-  EdgeDensityFilterType::Pointer lEdgeDetectorFilter = EdgeDensityFilterType::New();
-  SobelDetectorType::Pointer lSobelFilter = SobelDetectorType::New();
-  lSobelFilter->SetLowerThreshold(-200.0);
-  lSobelFilter->SetUpperThreshold(200.0);
+  m_SobelFilter->SetLowerThreshold(-100.0);
+  m_SobelFilter->SetUpperThreshold(100.0);
   SizeType lSize;
   lSize[0] = static_cast<unsigned int>(10);
   lSize[1] = static_cast<unsigned int>(10);
-  lEdgeDetectorFilter->SetInput(lIntensityFilter->GetOutput());
-  lEdgeDetectorFilter->SetDetector(lSobelFilter);
-  lEdgeDetectorFilter->SetNeighborhoodRadius(lSize);
-  //lEdgeDetectorFilter->Update();
+  m_EdgeDetectorFilter->SetNeighborhoodRadius(lSize);
 
   // Threshold
-  ThresholdFilterPointerType lThresholder = ThresholdFilterType::New();
-  lThresholder->SetInput(lEdgeDetectorFilter->GetOutput());
-  lThresholder->SetInsideValue(0);
-  lThresholder->SetOutsideValue(1);
-  lThresholder->SetLowerThreshold( 0. );
-  lThresholder->SetUpperThreshold( m_ThresholdValue2 );
-  //lThresholder->Update();
-
-// TEST 
-//   typedef otb::ImageFileWriter<BinaryImageType>       BinaryWriterType;
-//   BinaryWriterType::Pointer writer = BinaryWriterType::New();
-//   writer->SetFileName("mask1.tif");
-//   writer->SetInput(lThresholder->GetOutput());
-//   writer->Update();
-
-  // FIRST MASK : HIGH EDGE DENSITY AREAS
+  m_Thresholder->SetInsideValue(0);
+  m_Thresholder->SetOutsideValue(1);
+  m_Thresholder->SetLowerThreshold( 0. );
+  m_Thresholder->SetUpperThreshold( m_ThresholdDensity );
 
   // Appli the mask on the input image
   m_MaskImageFilter->SetOutsideValue(0);
-  m_MaskImageFilter->SetInput1(this->GetInput());
-  m_MaskImageFilter->SetInput2(lThresholder->GetOutput());
-  //m_MaskImageFilter->Update();
 
-  // Parameters for the UrbanAreaExtractionFilter
-  m_UrbanAreaExtractionFilter->SetInput(this->GetInput());
-  this->SetThreshold(m_ThresholdValue);
-  //m_UrbanAreaExtractionFilter->Update();
+  // Give a threshold to urbanAreaFilter
+  m_UrbanAreaExtractionFilter->GetFunctor().SetLowerThreshold( m_ThresholdValue );  
 
-
-//   BinaryWriterType::Pointer writer2 = BinaryWriterType::New();
-//   writer2->SetFileName("mask2.tif");
-//   writer2->SetInput(m_UrbanAreaExtractionFilter->GetOutput());
-//   writer2->Update();
-
-
-  m_UrbanAreaExtractionFilter->SetInput(m_MaskImageFilter->GetOutput());
-  this->SetThreshold(m_ThresholdValue);
-  m_UrbanAreaExtractionFilter->Update();
 
   // Erode/Dilate 2 times
 //   StructuringElementType  structuringElement;
@@ -132,10 +118,10 @@ UrbanAreaDetectionImageFilter<TInputImage, TOutputImage, TFunction>
 //   m_DilateFilter2->SetKernel( structuringElement );
 //   m_DilateFilter2->Update();
 
-  // SECOND MASK : NON WATER, NON VEGETATION
-
 
   /** GraftOutput */
+  m_UrbanAreaExtractionFilter->GraftOutput(this->GetOutput());
+  m_UrbanAreaExtractionFilter->Update();
   this->GraftOutput(m_UrbanAreaExtractionFilter->GetOutput());
 
 }
