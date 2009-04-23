@@ -171,39 +171,6 @@ ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS2}
         31
         N
         )
-#=======================================================================================
-#ADD_TEST(prTvSensorImageDEMToCartoToulouse ${PROJECTIONS_TESTS2}
-#  --compare-image ${TOL}  ${BASELINE}/prTvSensorImageDEMToCartoToulouse_UTM.tif
-#                          ${TEMP}/prTvSensorImageDEMToCartoToulouse_UTM.tif
-#        otbSensorImageDEMToCarto
-#        ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-#        ${TEMP}/prTvSensorImageDEMToCartoToulouse_UTM.tif
-#        374100.8
-#        4829184.8
-#        500
-#				500
-#				220
-#        ${INPUTDATA}/DEM/srtm_directory/
-#				0.5
-#				-0.5
-#        )
-
-#ADD_TEST(prTvSensorImageDEMToCartoCevennes ${PROJECTIONS_TESTS2}
-#  --compare-image ${TOL}  ${BASELINE}/prTvSensorImageDEMToCartoCevennes_UTM.tif
-#                          ${TEMP}/prTvSensorImageDEMToCartoCevennes_UTM.tif
-#        otbSensorImageDEMToCarto
-#        ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
-#        ${TEMP}/prTvSensorImageDEMToCartoCevennes_UTM.tif
-#        556046
-#        4.881e+06
-#        500
-#        500
-#        200
-#        ${INPUTDATA}/DEM/srtm_directory/
-#				0.5
-#				-0.5
-#        )
-#=======================================================================================
 
 ADD_TEST(prTvOrthoRectificationToulouseWithDEM ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
@@ -416,7 +383,6 @@ otbOrthoRectificationFilter.cxx
 otbOrthoRectificationFilterWithDEM.cxx
 otbOrthoRectificationMonoThreadFilter.cxx
 #otbSensorImageToCarto.cxx
-#otbSensorImageDEMToCarto.cxx
 )
 SET(Projections_SRCS3
 otbCompositeTransformNew.cxx
