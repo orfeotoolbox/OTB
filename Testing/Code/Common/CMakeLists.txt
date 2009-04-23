@@ -689,6 +689,12 @@ ADD_TEST(coTvImageRegionNonUniformMultidimensionalSplitter ${COMMON_TESTS8}
     ${TEMP}/coImageRegionNonUniformMultidimensionalSplitter.txt
 )
 
+# ------------- otb::VectorImageToASImageAdaptor ----------------------------
+ADD_TEST(coTuVectorImageToASImageAdaptorNew ${COMMON_TESTS8}
+    otbVectorImageToASImageAdaptorNew
+)
+
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
 otbSystemTest.cxx
@@ -790,6 +796,7 @@ otbImageOfVectorsToMonoChannelExtractROINew.cxx
 otbImageOfVectorsToMonoChannelExtractROI.cxx
 otbImageRegionNonUniformMultidimensionalSplitterNew.cxx
 otbImageRegionNonUniformMultidimensionalSplitter.cxx
+otbVectorImageToASImageAdaptorNew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

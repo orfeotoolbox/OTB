@@ -70,6 +70,6 @@ private:
 
 };
 
-} // end namespace itk
+} // end namespace otb
 
 #endif
