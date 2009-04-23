@@ -65,34 +65,7 @@ ADD_TEST(prTvTestCreateInverseForwardSensorModel_Cevennes ${PROJECTIONS_TESTS1}
         otbCreateInverseForwardSensorModel
         ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         )
-#=======================================================================================
-#   ADD_TEST(prTvRegionProjectionToulouse ${PROJECTIONS_TESTS1}
-#     --compare-image ${TOL}  ${BASELINE}/prTvRegionProjectionToulouse.tif
-#                             ${TEMP}/prTvRegionProjectionToulouse.tif
-#           otbRegionProjection
-#           ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-#           ${TEMP}/prTvRegionProjectionToulouse.tif
-#   				1.44 43.6050 # Long/Lat of Toulouse, Capitole
-#           500
-#           500
-#           10
-#   				0.00001
-#   				-0.00001
-#           )
-#   ADD_TEST(prTvRegionProjectionCevennes ${PROJECTIONS_TESTS1}
-#     --compare-image ${TOL}  ${BASELINE}/prTvRegionProjectionCevennes.tif
-#                             ${TEMP}/prTvRegionProjectionCevennes.tif
-#           otbRegionProjection
-#           ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
-#           ${TEMP}/prTvRegionProjectionCevennes.tif
-#           3.7 44.08
-#           500
-#   				500
-#   				10
-#   				0.00001
-#   				-0.00001
-#           )
-#=======================================================================================
+
 ADD_TEST(prTvRegionProjectionResamplerToulouse ${PROJECTIONS_TESTS1}
   --compare-image ${EPSILON}  ${BASELINE}/prTvRegionProjectionResamplerToulouse.tif
                           ${TEMP}/prTvRegionProjectionResamplerToulouse.tif
@@ -435,7 +408,6 @@ otbSensorModelsNew.cxx
 otbCreateProjectionWithOSSIM.cxx
 otbCreateProjectionWithOTB.cxx
 otbCreateInverseForwardSensorModel.cxx
-#otbRegionProjection.cxx
 otbRegionProjectionResampler.cxx
 )
 SET(Projections_SRCS2
