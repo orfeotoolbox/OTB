@@ -667,6 +667,8 @@ ADD_TEST(feTvBreakAngularPathListFilter ${FEATUREEXTRACTION_TESTS7}
          1 1  31 1 41 1
          )
 
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests8 ~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1718,6 +1720,9 @@ ADD_TEST(raTvUrbanAreaDetectionImageFilter ${FEATUREEXTRACTION_TESTS14}
         0.005 # threshold EdgeDensity
 )
 
+# -------      otb::RegionImageToRectangularPathListFilter   -------------
+ADD_TEST(feTuRegionImageToRectangularPathListFilterNew ${FEATUREEXTRACTION_TESTS14}
+         otbRegionImageToRectangularPathListFilterNew)
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -1874,6 +1879,7 @@ otbSFSTexturesImageFilterNew.cxx
 otbSFSTexturesImageFilterTest.cxx
 otbUrbanAreaDetectionImageFilterNew.cxx
 otbUrbanAreaDetectionImageFilter.cxx
+otbRegionImageToRectangularPathListFilterNew.cxx
 )
 
 
