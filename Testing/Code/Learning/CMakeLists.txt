@@ -64,14 +64,6 @@ ADD_TEST(leTvSVMModelKernelTypeGenericLoadSave ${LEARNING_TESTS1}
 	${INPUTDATA}/svm_model_image_generic_kernel
 	${TEMP}/leTvsvmmodel_image_generic_kernel_test)		
 
-# -------            otb::SVMembershipFunction   --------------------
-
-#ADD_TEST(leTuSVMMembershipFunctionNew ${LEARNING_TESTS1}  
-#        otbSVMMembershipFunctionNew)
-
-#ADD_TEST(leTuSVMMembershipFunctionLoadModel ${LEARNING_TESTS1}  
-#        otbSVMMembershipFunctionLoadModel
-#	${INPUTDATA}/svm_model)
 
 # -------            otb::SVMImageModelEstimator   --------------------	
 
@@ -371,8 +363,6 @@ otbSVMModelLoad.cxx
 otbSVMModelAccessor.cxx
 otbSVMModelLoadSave.cxx
 otbSVMModelGenericKernelLoadSave.cxx
-#otbSVMMembershipFunctionNew.cxx
-#otbSVMMembershipFunctionLoadModel.cxx
 otbSVMImageModelEstimatorNew.cxx
 otbSVMImageModelEstimatorTrain.cxx
 otbSVMImageModelEstimatorTrainOneClass.cxx
