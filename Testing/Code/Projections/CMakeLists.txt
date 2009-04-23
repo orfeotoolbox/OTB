@@ -93,44 +93,13 @@ ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS1}
 				0.00001
 				-0.00001
         )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbPROJECTIONS_TESTS2 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#=======================================================================================
-#ADD_TEST(prTvSensorImageToCartoToulouse ${PROJECTIONS_TESTS2}
-#  --compare-image ${TOL}  ${BASELINE}/prTvSensorImageToCartoToulouse_UTM.tif
-#                          ${TEMP}/prTvSensorImageToCartoToulouse_UTM.tif
-#				   otbSensorImageToCarto
-#	   ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-#           ${TEMP}/prTvSensorImageToCartoToulouse_UTM.tif
-#	   374100.8
-#	   4829184.8
-#	   500
-#	   500
-#	   220
-#	   0.5
-#	   -0.5
-#           )
 
-#ADD_TEST(prTvSensorImageToCartoCevennes ${PROJECTIONS_TESTS2}
-#  --compare-image ${TOL}  ${BASELINE}/prTvSensorImageToCartoCevennes_UTM.tif
-#                          ${TEMP}/prTvSensorImageToCartoCevennes_UTM.tif
-#				   otbSensorImageToCarto
-#           ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
-#           ${TEMP}/prTvSensorImageToCartoCevennes_UTM.tif
-#	   			 556046
-#           4.881e+06
-#           500
-#           500
-#           220
-#	   			 0.5
-#	   			 -0.5
-#           )
-#=======================================================================================
-
-ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # TU pour otb::OrthoRectificationFilterBase otb::OrthoRectificationFilter
 ADD_TEST(prTuOrthoRectificationFilterNew ${PROJECTIONS_TESTS2}
@@ -382,7 +351,6 @@ otbOrthoRectificationFilterNew.cxx
 otbOrthoRectificationFilter.cxx
 otbOrthoRectificationFilterWithDEM.cxx
 otbOrthoRectificationMonoThreadFilter.cxx
-#otbSensorImageToCarto.cxx
 )
 SET(Projections_SRCS3
 otbCompositeTransformNew.cxx
