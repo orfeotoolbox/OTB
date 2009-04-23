@@ -61,6 +61,8 @@ protected:
    ossim_float64               theSunAzimuth;
    ossim_float64               theSunElevation;
 
+   ossimString                 theBandName;
+
    TYPE_DATA
 };
 

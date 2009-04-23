@@ -453,13 +453,35 @@ bool ossimIkonosRpcModel::parseHdrData(const ossimFilename& data_file)
    char* strptr;
    // char linebuf[80];
    char dummy[80];
-   // , name[80];
+   char name[80];
 
    //***
    // Read the file into a buffer:
    //***
    char filebuf[5000];
    fread(filebuf, 1, 5000, fptr);
+
+
+   //***
+   // Band name:
+   //***
+   strptr = strstr(filebuf, "\nBand:");
+   if (!strptr)
+   {
+     if(traceDebug())
+     {
+       ossimNotify(ossimNotifyLevel_WARN)
+           << "ossimIkonosRpcModel::parseHdrData(data_file):"
+           << "\n\tAborting construction. Error encountered parsing "
+           << "presumed hdr file." << endl;
+     }
+
+     return false;
+   }
+
+   sscanf(strptr, "%6c %s", dummy, name);
+   theBandName = name;
+   std::cout << "***************** theBandName: " << theBandName << std::endl;
 
    //***
    // GSD:
@@ -779,6 +801,11 @@ bool ossimIkonosRpcModel::saveState(ossimKeywordlist& kwl,
   kwl.add(prefix,
           ossimKeywordNames::ELEVATION_ANGLE_KW,
           theSunElevation,
+          true);
+
+  kwl.add(prefix,
+          "band_name",
+          theBandName,
           true);
 
   // this model just sets the base class values so
