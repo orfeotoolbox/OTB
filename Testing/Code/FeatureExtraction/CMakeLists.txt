@@ -1673,7 +1673,7 @@ ADD_TEST(feTuSFSTexturesImageFilterNew ${FEATUREEXTRACTION_TESTS14}
     otbSFSTexturesImageFilterNew)
 
 ADD_TEST(feTvSFSTexturesImageFilterTest ${FEATUREEXTRACTION_TESTS14} 
---compare-n-images 0 #${EPS}
+--compare-n-images ${EPS}
 		   5
                    ${BASELINE}/feTvSFSTexturesLengthImageFilterTest.tif
 		   ${TEMP}/feTvSFSTexturesLengthImageFilterTest.tif
