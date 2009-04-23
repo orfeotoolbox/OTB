@@ -1,10 +1,10 @@
 //*******************************************************************
 //
 // License:  See top level LICENSE.txt file.
-// 
+//
 // AUTHOR: Oscar Kramer
 //
-// DESCRIPTION: Contains declaration of class ossimIkonosRpcModel. This 
+// DESCRIPTION: Contains declaration of class ossimIkonosRpcModel. This
 //    derived class implements the capability of reading Ikonos RPC support
 //    data.
 //
@@ -44,7 +44,7 @@ public:
    static void writeGeomTemplate(ostream& os);
 
    virtual bool parseFile(const ossimFilename& file);
-   
+
 protected:
    void finishConstruction();
    void parseMetaData(const ossimFilename& metadata);
@@ -54,6 +54,12 @@ protected:
    bool parseTiffFile(const ossimFilename& filename);
 /*    bool parseNitfFile(const ossimFilename& geom_file); */
    bool parseHdrData(const ossimFilename& data_file);
+
+   //***
+   // Additional information:
+   //***
+   ossim_float64               theSunAzimuth;
+   ossim_float64               theSunElevation;
 
    TYPE_DATA
 };
