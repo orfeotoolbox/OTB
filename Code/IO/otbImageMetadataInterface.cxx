@@ -551,10 +551,35 @@ std::string ImageMetadataInterface::GetSensorID( const MetaDataDictionaryType & 
   return output;
 }
 
+std::string ImageMetadataInterface::GetBandName( const MetaDataDictionaryType & dict ) const
+{
+  ImageKeywordlistType ImageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
+  }
+  ossimKeywordlist kwl;
+  ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "band_name";
+  ossimString keywordString = kwl.find(key.c_str());
+  std::string output(keywordString.chars());
+  return output;
+}
+
 bool ImageMetadataInterface::IsSpot( const MetaDataDictionaryType & dict ) const
 {
   std::string sensorID = GetSensorID(dict);
   if (sensorID.find("Spot") != std::string::npos)
+    return true;
+  else
+    return false;
+}
+
+bool ImageMetadataInterface::IsIkonos( const MetaDataDictionaryType & dict ) const
+{
+  std::string sensorID = GetSensorID(dict);
+  if (sensorID.find("IKONOS") != std::string::npos)
     return true;
   else
     return false;

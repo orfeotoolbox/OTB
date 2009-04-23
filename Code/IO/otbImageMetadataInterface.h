@@ -126,6 +126,8 @@ public:
   /** Get the sensor ID from the ossim metadata */
   std::string GetSensorID(const MetaDataDictionaryType & dict ) const;
 
+  /** Get the band name from the ossim metadata */
+  std::string GetBandName(const MetaDataDictionaryType & dict ) const;
 
   void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const;
 
@@ -135,6 +137,8 @@ protected:
   virtual ~ImageMetadataInterface() {};
 
   bool IsSpot( const MetaDataDictionaryType & dict) const;
+
+  bool IsIkonos( const MetaDataDictionaryType & dict) const;
 
 private:
   ImageMetadataInterface(const Self&); //purposely not implemented
