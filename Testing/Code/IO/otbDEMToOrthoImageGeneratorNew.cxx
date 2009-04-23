@@ -15,22 +15,21 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "itkExceptionObject.h"
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+#include "otbDEMToOrthoImageGenerator.h"
+#include "otbMapProjections.h"
+#include "otbImage.h"
 
-
-#include "otbTestMain.h"
-
-
-void RegisterTests()
+int otbDEMToOrthoImageGeneratorNew(int argc, char * argv[])
 {
-REGISTER_TEST(otbPointSetFileReaderNew);
-REGISTER_TEST(otbPointSetFileReader);
-REGISTER_TEST(otbImageIOFactoryNew);
-REGISTER_TEST(otbDEMToOrthoImageGeneratorNew);
-REGISTER_TEST(otbDEMToOrthoImageGeneratorTest);
+  const unsigned int Dimension = 2;
+  typedef otb::Image<unsigned char,Dimension>      ImageType;
+  typedef otb::DEMToOrthoImageGenerator<ImageType, otb::UtmForwardProjection> DEMToImageGeneratorType;
+
+  // Instantiating object
+  DEMToImageGeneratorType::Pointer object = DEMToImageGeneratorType::New();
+
+
+  return EXIT_SUCCESS;
 }

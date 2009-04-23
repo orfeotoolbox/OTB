@@ -1612,6 +1612,8 @@ ADD_TEST(ioTvKMLVectorDataIOFileReaderLines ${IO_TESTS15}
 ADD_TEST(ioTuVectorDataKeywordlist ${IO_TESTS15}
         otbVectorDataKeywordlist )
 
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS16 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1693,6 +1695,11 @@ ADD_TEST(ioTvImageSeriesFileReader ${IO_TESTS16}
             -out ${TEMP}/ioTvImageSeries.png
 )
 
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS17 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 IF(OTB_USE_LIBLAS)
 ADD_TEST(ioTuPointSetFileReaderNew ${IO_TESTS17}
         otbPointSetFileReaderNew )
@@ -1709,6 +1716,27 @@ ENDIF(OTB_USE_LIBLAS)
 #-------------  otbImageIOFactoryNew
 ADD_TEST(ioTuImageIOFactoryNew ${IO_TESTS17}
         otbImageIOFactoryNew )
+
+# ---  otb::DEMToOrthoImageGenerator ---
+ADD_TEST(ioTuDEMToOrthoImageGeneratorNew ${IO_TESTS17} 
+      otbDEMToOrthoImageGeneratorNew )
+
+ADD_TEST(ioTvDEMToOrthoImageGeneratorTest ${IO_TESTS17}
+--compare-image ${TOL}  ${BASELINE}/ioTvDEMToOrthoImageGenerator.tif
+                        ${TEMP}/ioTvDEMToOrthoImageGenerator.tif
+        otbDEMToOrthoImageGeneratorTest
+         ${INPUTDATA}/DEM/srtm_directory
+         ${TEMP}/ioTvDEMToOrthoImageGenerator.tif
+        6.5
+        44.5
+        500
+        500
+        0.002
+        0.002
+	31 # utm zone
+        N # hemisphere
+        )
+
 
 
 #----------------------------------------------------------------------------------
@@ -1850,6 +1878,8 @@ SET(BasicIO_SRCS17
 otbPointSetFileReaderNew.cxx
 otbPointSetFileReader.cxx
 otbImageIOFactoryNew.cxx
+otbDEMToOrthoImageGeneratorNew.cxx
+otbDEMToOrthoImageGeneratorTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
