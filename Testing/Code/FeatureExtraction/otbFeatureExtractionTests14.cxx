@@ -35,4 +35,6 @@ REGISTER_TEST(otbSFSTexturesImageFilterNew);
 REGISTER_TEST(otbSFSTexturesImageFilterTest);
 REGISTER_TEST(otbUrbanAreaDetectionImageFilterNew);
 REGISTER_TEST(otbUrbanAreaDetectionImageFilter);
+REGISTER_TEST(otbRegionImageToRectangularPathListFilterNew);
+REGISTER_TEST(otbRegionImageToRectangularPathListFilter);  
 }

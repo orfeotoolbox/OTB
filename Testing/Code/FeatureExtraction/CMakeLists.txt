@@ -667,6 +667,8 @@ ADD_TEST(feTvBreakAngularPathListFilter ${FEATUREEXTRACTION_TESTS7}
          1 1  31 1 41 1
          )
 
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests8 ~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1673,7 +1675,7 @@ ADD_TEST(feTuSFSTexturesImageFilterNew ${FEATUREEXTRACTION_TESTS14}
     otbSFSTexturesImageFilterNew)
 
 ADD_TEST(feTvSFSTexturesImageFilterTest ${FEATUREEXTRACTION_TESTS14} 
---compare-n-images 0 #${EPS}
+--compare-n-images ${EPSILON}
 		   5
                    ${BASELINE}/feTvSFSTexturesLengthImageFilterTest.tif
 		   ${TEMP}/feTvSFSTexturesLengthImageFilterTest.tif
@@ -1717,6 +1719,19 @@ ADD_TEST(raTvUrbanAreaDetectionImageFilter ${FEATUREEXTRACTION_TESTS14}
         0.8  # threshold NDVI+NDWI
         0.005 # threshold EdgeDensity
 )
+
+# -------      otb::RegionImageToRectangularPathListFilter   -------------
+ADD_TEST(feTuRegionImageToRectangularPathListFilterNew ${FEATUREEXTRACTION_TESTS14}
+         otbRegionImageToRectangularPathListFilterNew)
+
+ADD_TEST(feTvRegionImageToRectangularPathListFilter ${FEATUREEXTRACTION_TESTS14}
+   --compare-ascii ${EPS}     ${BASELINE_FILES}/feRectangle.txt
+                        ${TEMP}/feRectangle.txt
+        otbRegionImageToRectangularPathListFilter
+	${INPUTDATA}/rectangle.png
+	${TEMP}/feRectangle.txt
+        0.9 #fit score
+	10)  #minimum size
 
 
 # A enrichir
@@ -1874,6 +1889,8 @@ otbSFSTexturesImageFilterNew.cxx
 otbSFSTexturesImageFilterTest.cxx
 otbUrbanAreaDetectionImageFilterNew.cxx
 otbUrbanAreaDetectionImageFilter.cxx
+otbRegionImageToRectangularPathListFilterNew.cxx
+otbRegionImageToRectangularPathListFilter.cxx
 )
 
 

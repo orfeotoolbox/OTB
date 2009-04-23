@@ -57,7 +57,7 @@ int otbUrbanAreaDetectionImageFilter(int argc, char * argv[])
   filter->SetRedIndex( ::atoi(argv[3]));
   filter->SetGreenIndex( ::atoi(argv[4]));
   filter->SetNIRIndex( ::atoi(argv[5]));
-  filter->SetThreshold( ::atof(argv[6]));
+  filter->SetThresholdValue( ::atof(argv[6]));
   filter->SetThresholdDensity( ::atof(argv[7]));
 
   writer->SetInput( filter->GetOutput() );
