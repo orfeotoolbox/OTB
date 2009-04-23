@@ -1,6 +1,8 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 // 
 // AUTHOR: Oscar Kramer
 //
@@ -11,7 +13,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimIkonosRpcModel.cpp 13006 2008-06-08 20:29:37Z dburken $
+//  $Id: ossimIkonosRpcModel.cpp 14384 2009-04-21 13:22:16Z dburken $
 
 #include <cstdlib>
 #include <ossim/projection/ossimIkonosRpcModel.h>
@@ -841,15 +843,11 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
    }
 
    //convert file to rpc filename and hdr filename so we can get some info
-   ossimString drive, path, file, ext;
-   filename.split(drive,path,file,ext);
+   ossimFilename rpcfile = filename.noExtension();
+   rpcfile += "_rpc.txt";
    
-   ossimFilename rpcfile = drive + path + "/" + file + "_rpc.txt";
-   
-   //file.resize(file.rfind("_"));
-   //file.resize(file.rfind("_"));
-   //file += "_metadata.txt";
-   ossimFilename hdrfile = drive + path + "/" + file + ".hdr";
+   ossimFilename hdrfile = filename;
+   hdrfile.setExtension(ossimString("hdr"));
 
    if(!parseHdrData(hdrfile))
    {
