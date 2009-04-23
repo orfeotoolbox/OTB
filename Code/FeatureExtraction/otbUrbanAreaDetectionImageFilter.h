@@ -245,18 +245,12 @@ public:
   unsigned int GetRedIndex(){ return m_UrbanAreaExtractionFilter->GetRedIndex(); };
   unsigned int GetGreenIndex(){ return m_UrbanAreaExtractionFilter->GetGreenIndex(); };
   unsigned int GetNIRIndex(){ return m_UrbanAreaExtractionFilter->GetNIRIndex(); };
-  /** Get/Set threshold value */
+  /** Get/Set threshold values */
   itkGetMacro(ThresholdValue, double);
-  void SetThreshold(double pThreshold)
-  {
-    m_ThresholdValue = pThreshold;
-    m_UrbanAreaExtractionFilter->GetFunctor().SetLowerThreshold( m_ThresholdValue );
-  }
-  itkGetMacro(ThresholdValue2, double);
-  void SetThresholdDensity(double pThreshold)
-  {
-    m_ThresholdValue2 = pThreshold;
-  }
+  itkSetMacro(ThresholdValue, double);
+  itkSetMacro(ThresholdDensity, double);
+  itkGetMacro(ThresholdDensity, double);
+
 
   /** Methods */
   virtual void GenerateData();
@@ -270,17 +264,22 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   /** Filters */
+  IntensityFilterPointerType          m_IntensityFilter;
+  EdgeDensityFilterType::Pointer      m_EdgeDetectorFilter;
+  SobelDetectorType::Pointer          m_SobelFilter;
+  ThresholdFilterPointerType          m_Thresholder;
   UrbanAreaExtrationFilterPointerType m_UrbanAreaExtractionFilter;
   MaskImageFilterPointerType          m_MaskImageFilter;
-  ErodeFilterType::Pointer            m_ErodeFilter;
-  DilateFilterType::Pointer           m_DilateFilter;
-  ErodeFilterType::Pointer            m_ErodeFilter2;
-  DilateFilterType::Pointer           m_DilateFilter2;
+//   ErodeFilterType::Pointer            m_ErodeFilter;
+//   DilateFilterType::Pointer           m_DilateFilter;
+//   ErodeFilterType::Pointer            m_ErodeFilter2;
+//   DilateFilterType::Pointer           m_DilateFilter2;
+
 
 
   /** MaxThreshold */
   double m_ThresholdValue;
-  double m_ThresholdValue2;
+  double m_ThresholdDensity;
 
 }; // end class RadiometricNonWaterNonVegetationDetectionImageFilter
 
