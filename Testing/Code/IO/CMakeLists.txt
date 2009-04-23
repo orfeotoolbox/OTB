@@ -1706,6 +1706,9 @@ ADD_TEST(ioTvPointSetFileReader ${IO_TESTS17}
 ENDIF(OTB_USE_LIBLAS)
 
 
+#-------------  otbImageIOFactoryNew
+ADD_TEST(ioTuImageIOFactoryNew ${IO_TESTS17}
+        otbImageIOFactoryNew )
 
 
 #----------------------------------------------------------------------------------
@@ -1846,6 +1849,7 @@ otbImageSeriesFileReader.cxx
 SET(BasicIO_SRCS17
 otbPointSetFileReaderNew.cxx
 otbPointSetFileReader.cxx
+otbImageIOFactoryNew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
