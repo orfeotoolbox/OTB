@@ -457,7 +457,6 @@ ImageMetadataInterface::VariableLengthVectorType
 
 double ImageMetadataInterface::GetSunElevation( const MetaDataDictionaryType & dict ) const
 {
-  //The image date in the ossim metadata has the form: 2007-10-03T03:17:16.973000
   ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
@@ -468,6 +467,23 @@ double ImageMetadataInterface::GetSunElevation( const MetaDataDictionaryType & d
   ossimKeywordlist kwl;
   imageKeywordlist.convertToOSSIMKeywordlist(kwl);
   std::string key= "support_data.elevation_angle";
+  ossimString keywordString = kwl.find(key.c_str());
+
+  return keywordString.toDouble();
+}
+
+double ImageMetadataInterface::GetSunAzimuth( const MetaDataDictionaryType & dict ) const
+{
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "support_data.azimuth_angle";
   ossimString keywordString = kwl.find(key.c_str());
 
   return keywordString.toDouble();

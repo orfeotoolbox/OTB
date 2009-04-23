@@ -114,6 +114,9 @@ public:
   /** Get the sun elevation from the ossim metadata */
   double GetSunElevation( const MetaDataDictionaryType & dict ) const;
 
+  /** Get the sun azimuth from the ossim metadata */
+  double GetSunAzimuth( const MetaDataDictionaryType & dict ) const;
+
   /** Get the imaging day from the ossim metadata */
   int GetDay( const MetaDataDictionaryType & dict ) const;
 
