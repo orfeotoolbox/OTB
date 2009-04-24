@@ -898,21 +898,23 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
      ossimNotify(ossimNotifyLevel_DEBUG)
          << "DEBUG ossimIkonosRpcModel parseTiffFile: Ikonos filename non standard" << std::endl;
    }
-   ossimFilename metadatafile = filenameparts[0];
-   metadatafile += "_";
-   metadatafile += filenameparts[1];
-   metadatafile += "_metadata.txt";
-
-   metadatafile.setPath(filename.path());
-
-   parseMetaData (metadatafile);
-   if (getErrorStatus()) //check for errors in parsing metadata file
+   else
    {
-     ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG ossimIkonosRpcModel parseTiffFile: errors parsing metadata" << std::endl;
-     //failed to read metadata, but don't abord here.
-   }
+     ossimFilename metadatafile = filenameparts[0];
+     metadatafile += "_";
+     metadatafile += filenameparts[1];
+     metadatafile += "_metadata.txt";
 
+     metadatafile.setPath(filename.path());
+
+     parseMetaData (metadatafile);
+     if (getErrorStatus()) //check for errors in parsing metadata file
+     {
+       ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG ossimIkonosRpcModel parseTiffFile: errors parsing metadata" << std::endl;
+       //failed to read metadata, but don't abord here.
+     }
+   }
 
    //convert file to rpc filename and hdr filename so we can get some info
 
