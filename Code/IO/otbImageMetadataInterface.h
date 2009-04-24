@@ -129,6 +129,9 @@ public:
   /** Get the sensor ID from the ossim metadata */
   std::string GetSensorID(const MetaDataDictionaryType & dict ) const;
 
+  /** Get the number of bands from the ossim metadata */
+  unsigned int GetNumberOfBands(const MetaDataDictionaryType & dict ) const;
+
   /** Get the band name from the ossim metadata */
   std::vector<std::string> GetBandName(const MetaDataDictionaryType & dict ) const;
 

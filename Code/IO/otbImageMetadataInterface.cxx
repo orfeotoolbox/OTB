@@ -509,6 +509,21 @@ std::string ImageMetadataInterface::GetSensorID( const MetaDataDictionaryType & 
   return output;
 }
 
+unsigned int ImageMetadataInterface::GetNumberOfBands( const MetaDataDictionaryType & dict ) const
+{
+  ImageKeywordlistType ImageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
+  }
+  ossimKeywordlist kwl;
+  ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "support_data.number_bands";
+  ossimString keywordString = kwl.find(key.c_str());
+  return keywordString.toUInt32();
+}
+
 std::vector<std::string> ImageMetadataInterface::GetBandName( const MetaDataDictionaryType & dict ) const
 {
   ImageKeywordlistType ImageKeywordlist;
@@ -645,7 +660,7 @@ ImageMetadataInterface::VariableLengthVectorType
     ImageMetadataInterface::GetIkonosPhysicalBias( const MetaDataDictionaryType & dict ) const
 {
   VariableLengthVectorType outputValuesVariableLengthVector;
-  outputValuesVariableLengthVector.SetSize(1);//FIXME
+  outputValuesVariableLengthVector.SetSize(GetNumberOfBands(dict));
   outputValuesVariableLengthVector.Fill(0.0);
 
   return outputValuesVariableLengthVector;
@@ -654,33 +669,85 @@ ImageMetadataInterface::VariableLengthVectorType
 ImageMetadataInterface::VariableLengthVectorType
     ImageMetadataInterface::GetIkonosPhysicalGain( const MetaDataDictionaryType & dict ) const
 {
-  //Value computed from
-  // http://www.geoeye.com/CorpSite/assets/docs/technical-papers/2009/IKONOS_Esun_Calculations.pdf
-  // to get the equivalent of the SPOT alpha
 
-  VariableLengthVectorType gainPre20010122;
-  gainPre20010122.SetSize(5);
-  gainPre20010122[0] = 6.48830;//Pan
-  gainPre20010122[1] = 4.51329;//Blue
-  gainPre20010122[2] = 5.75014;//Green
-  gainPre20010122[3] = 5.52720;//Red
-  gainPre20010122[4] = 7.11684;//NIR
-
-  VariableLengthVectorType gainPost20010122;
-  gainPost20010122.SetSize(5);
-  gainPost20010122[0] = 6.48830;//Pan
-  gainPost20010122[1] = 5.19064;//Blue
-  gainPost20010122[2] = 6.44122;//Green
-  gainPost20010122[3] = 6.24442;//Red
-  gainPost20010122[4] = 8.04222;//NIR
 
   //Values are different pre/post 2001-01-22 production date, find out where we are
+  ImageKeywordlistType ImageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
+  }
+  ossimKeywordlist kwl;
+  ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "production_date";
+  ossimString keywordString = kwl.find(key.c_str());
+  std::string output(keywordString.chars());
+
+  //The Ikonos production date has the format MM/DD/YY
+  ossimString separatorList = "/";
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  assert(keywordStrings.size() > 2);
+
+  int productionYear = keywordStrings[2].toInt();
+  int productionMonth = keywordStrings[0].toInt();
+  int productionDay = keywordStrings[1].toInt();
+  bool isPost20010122 = false;
+  if ((productionYear > 2) || (productionYear < 99)) isPost20010122 = true;
+  else
+  {
+    if (productionYear == 2)
+    {
+      if (productionMonth > 1) isPost20010122 = true;
+      else
+        if (productionDay >= 22) isPost20010122 = true;
+    }
+  }
+
+    //Value computed from
+  // http://www.geoeye.com/CorpSite/assets/docs/technical-papers/2009/IKONOS_Esun_Calculations.pdf
+  // to get the equivalent of the SPOT alpha
+  VariableLengthVectorType gain;
+  gain.SetSize(5);
+  if (isPost20010122)
+  {
+    gain[0] = 6.48830;//Pan
+    gain[1] = 5.19064;//Blue
+    gain[2] = 6.44122;//Green
+    gain[3] = 6.24442;//Red
+    gain[4] = 8.04222;//NIR
+  }
+  else
+  {
+    gain[0] = 6.48830;//Pan
+    gain[1] = 4.51329;//Blue
+    gain[2] = 5.75014;//Green
+    gain[3] = 5.52720;//Red
+    gain[4] = 7.11684;//NIR
+  }
+
+
+  std::vector<std::string> bandName = GetBandName(dict);
 
   VariableLengthVectorType outputValuesVariableLengthVector;
-  outputValuesVariableLengthVector.SetSize(1);//FIXME
-  outputValuesVariableLengthVector.Fill(1.0);
+  unsigned int numBands = GetNumberOfBands(dict);
+  outputValuesVariableLengthVector.SetSize(numBands);
+  for(unsigned int i=0; i<numBands; ++i)
+  {
+    if (bandName[i].find("Pan") != std::string::npos)
+      outputValuesVariableLengthVector[i]=gain[0];
+    if (bandName[i].find("Blue") != std::string::npos)
+      outputValuesVariableLengthVector[i]=gain[1];
+    if (bandName[i].find("Green") != std::string::npos)
+      outputValuesVariableLengthVector[i]=gain[2];
+    if (bandName[i].find("Red") != std::string::npos)
+      outputValuesVariableLengthVector[i]=gain[3];
+    if (bandName[i].find("NIR") != std::string::npos)
+      outputValuesVariableLengthVector[i]=gain[4];
+  }
 
-    //TODO
+
+
   return outputValuesVariableLengthVector;
 }
 
