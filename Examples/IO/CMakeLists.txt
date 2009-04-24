@@ -1,3 +1,4 @@
+
 PROJECT(IOExamples)
 
 ADD_EXECUTABLE(ImageReadWrite ImageReadWrite.cxx )
@@ -188,7 +189,7 @@ ADD_TEST(LidarToImageExample2Test ${EXE_TESTS1}
          8
          )
 ENDIF(ITK_USE_REVIEW)
-ENDIFIF(OTB_USE_LIBLAS)
+ENDIF(OTB_USE_LIBLAS)
 
 IF( OTB_USE_CURL )
 ADD_TEST(TileMapImageIOExampleTest ${EXE_TESTS2}
