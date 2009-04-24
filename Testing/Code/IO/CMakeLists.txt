@@ -1313,6 +1313,18 @@ ADD_TEST(ioTvOSSIMImageERS2MetaDataReader ${IO_TESTS12}
 	 ${TEMP}/ioOSSIMImageERS2MetaDataReader.txt
 	 ${TEMP}/ioOSSIMVectorImageERS2MetaDataReader.txt
          )
+
+# ---  SPOT4 Metadata ---
+ADD_TEST(ioTvOSSIMImageSPOT4MetaDataReader ${IO_TESTS12}
+#   --compare-n-ascii ${EPS} 2           ${BASELINE_FILES}/ioOSSIMImageSPOT4MetaDataReader.txt
+#                                        ${TEMP}/ioOSSIMImageSPOT4MetaDataReader.txt
+#                                        ${BASELINE_FILES}/ioOSSIMImageSPOT4MetaDataReader.txt
+#                                        ${TEMP}/ioOSSIMVectorImageSPOT4MetaDataReader.txt
+         otbOSSIMImageMetaDataReaderTest
+         ${LARGEDATA}/SPOT4_SCENE01/IMAG_01.DAT
+	 ${TEMP}/ioOSSIMImageSPOT4MetaDataReader.txt
+	 ${TEMP}/ioOSSIMVectorImageSPOT4MetaDataReader.txt
+         )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # ---  otb::DEMHandler ---
@@ -1727,15 +1739,15 @@ ADD_TEST(ioTvDEMToOrthoImageGeneratorTest ${IO_TESTS17}
         otbDEMToOrthoImageGeneratorTest
          ${INPUTDATA}/DEM/srtm_directory
          ${TEMP}/ioTvDEMToOrthoImageGenerator.tif
-        1.463789 #6.5
-        43.565926 #44.5
-        500
-        500
-        0.002
-        0.002
-	31 # utm zone
-        N # hemisphere
-        )
+         6.5
+         44.5
+         500
+         500
+         0.002
+         0.002
+	 31 # utm zone
+         N # hemisphere
+)
 
 
 

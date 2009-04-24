@@ -62,6 +62,11 @@ int otbOSSIMImageMetaDataReaderTest (int argc, char* argv[])
 
   otb_tmp_image = image_reader->GetOutput()->GetImageKeywordlist();
 
+  if(otb_tmp_image.GetSize()==0)
+    {
+      return EXIT_FAILURE;
+    }
+
   ossimKeywordlist ossim_kwl_image;
   otb_tmp_image.convertToOSSIMKeywordlist(ossim_kwl_image);
 
