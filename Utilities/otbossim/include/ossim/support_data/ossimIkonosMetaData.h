@@ -34,7 +34,8 @@ class OSSIMDLLEXPORT ossimIkonosMetaData : public ossimObject,
 {
 public:
    ossimIkonosMetaData();
-   ossimIkonosMetaData(const char* metaDataFile);
+   ossimIkonosMetaData(const ossimFilename& imageFile);
+   ossimIkonosMetaData(const ossimFilename& metadataFile, const ossimFilename& hdrFile, const ossimFilename& rpcFile);
    virtual ~ossimIkonosMetaData();
 
    void clearFields();
@@ -53,6 +54,7 @@ public:
  private:
    bool parseMetaData(const ossimFilename& metadata);
    bool parseHdrData(const ossimFilename& data_file);
+   bool parseRpcData(const ossimFilename& data_file);
 
    ossim_float64               theSunAzimuth;
    ossim_float64               theSunElevation;

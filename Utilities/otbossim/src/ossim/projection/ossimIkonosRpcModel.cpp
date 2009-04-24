@@ -22,6 +22,7 @@
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/base/ossimTrace.h>
+#include <ossim/support_data/ossimIkonosMetaData.h>
 
 RTTI_DEF1(ossimIkonosRpcModel, "ossimIkonosRpcModel", ossimRpcModel);
 
@@ -53,7 +54,8 @@ static const char* SAMP_DEN_COEFF_KW = "SAMP_DEN_COEFF_";
 
 
 ossimIkonosRpcModel::ossimIkonosRpcModel()
-  :ossimRpcModel()
+  :ossimRpcModel(),
+  theSupportData(NULL)
 {
 }
 //*****************************************************************************
@@ -64,7 +66,8 @@ ossimIkonosRpcModel::ossimIkonosRpcModel()
 //
 //*****************************************************************************
 ossimIkonosRpcModel::ossimIkonosRpcModel(const ossimFilename& geom_file)
-   :  ossimRpcModel()
+  :  ossimRpcModel(),
+  theSupportData(NULL)
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimIkonosRpcModel Constructor #1: entering..." << std::endl;
 
@@ -143,7 +146,8 @@ ossimIkonosRpcModel::ossimIkonosRpcModel(const ossimFilename& geom_file)
 ossimIkonosRpcModel::ossimIkonosRpcModel(const ossimFilename& metadata,
                                          const ossimFilename& rpcdata)
    :
-      ossimRpcModel()
+    ossimRpcModel(),
+    theSupportData(NULL)
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimIkonosRpcModel Constructor #2: entering..." << std::endl;
 
@@ -174,6 +178,24 @@ ossimIkonosRpcModel::ossimIkonosRpcModel(const ossimFilename& metadata,
 
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimIkonosRpcModel Constructor #2: returning..." << std::endl;
 }
+
+//*****************************************************************************
+//  DESTRUCTOR: ~ossimIkonosRpcModel()
+//
+//*****************************************************************************
+ossimIkonosRpcModel::~ossimIkonosRpcModel()
+{
+  if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG DESTRUCTOR: ~ossimIkonosRpcModel(): entering..." << std::endl;
+
+  if (theSupportData)
+  {
+    delete theSupportData;
+    theSupportData = NULL;
+  }
+
+  if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG DESTRUCTOR: ~ossimIkonosRpcModel(): returning..." << std::endl;
+}
+
 
 //*****************************************************************************
 //  METHOD: ossimIkonosRpcModel::finishConstruction()
@@ -721,6 +743,13 @@ void ossimIkonosRpcModel::writeGeomTemplate(ostream& os)
 bool ossimIkonosRpcModel::saveState(ossimKeywordlist& kwl,
 				    const char* prefix)const
 {
+
+  if(theSupportData)
+  {
+    ossimString supportPrefix = ossimString(prefix) + "support_data.";
+    theSupportData->saveState(kwl, supportPrefix);
+  }
+
   ossimRpcModel::saveState(kwl, prefix);
 
   // this model just sets the base class values so
@@ -739,6 +768,7 @@ bool ossimIkonosRpcModel::saveState(ossimKeywordlist& kwl,
 
 bool ossimIkonosRpcModel::parseFile(const ossimFilename& file)
 {
+
 //    if (!ossimRpcModel::ossimParseFile(file))
 //    {
       return parseTiffFile(file);
@@ -848,31 +878,7 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
       return false;
    }
 
-   //retrieve information from the metadata file
-   //if the ikonos tif is po_2619900_pan_0000000.tif
-   //the metadata file will be po_2619900_metadata.txt
-   std::cout << "Parsing metadata..." << std::endl;
-   ossimString separator("_");
-   ossimString filenamebase = filename.noExtension();
-   std::vector< ossimString > filenameparts = filenamebase.split(separator);
-
-   if(filenameparts.size() < 2)
-   {
-     ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG ossimIkonosRpcModel parseTiffFile: Ikonos filename non standard" << std::endl;
-   }
-   ossimFilename metadatafile = filenameparts[0];
-   metadatafile += "_";
-   metadatafile += filenameparts[1];
-   metadatafile += "_metadata.txt";
-
-   parseMetaData (metadatafile);
-   if (getErrorStatus()) //check for errors in parsing metadata file
-   {
-     ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG ossimIkonosRpcModel parseTiffFile: errors parsing metadata" << std::endl;
-     return false;
-   }
+   theSupportData = new ossimIkonosMetaData(filename);
 
    //convert file to rpc filename and hdr filename so we can get some info
 

@@ -26,11 +26,71 @@ static ossimTrace traceDebug ("ossimIkonosMetaData:debug");
 RTTI_DEF2(ossimIkonosMetaData, "ossimIkonosMetaData", ossimObject, ossimErrorStatusInterface);
 
 ossimIkonosMetaData::ossimIkonosMetaData()
+  :
+  theSunAzimuth(0.0),
+  theSunElevation(0.0),
+  theBandName ("Unknown")
 {
 }
 
-ossimIkonosMetaData::ossimIkonosMetaData(const char* metaDataFile)
+ossimIkonosMetaData::ossimIkonosMetaData(const ossimFilename& imageFilename)
+  :
+  theSunAzimuth(0.0),
+  theSunElevation(0.0),
+  theBandName ("Unknown")
 {
+   //retrieve information from the metadata file
+   //if the ikonos tif is po_2619900_pan_0000000.tif
+   //the metadata file will be po_2619900_metadata.txt
+  std::cout << "Parsing metadata..." << std::endl;
+  ossimString separator("_");
+  ossimString filenamebase = imageFilename.noExtension();
+  std::vector< ossimString > filenameparts = filenamebase.split(separator);
+
+  if(filenameparts.size() < 2)
+  {
+    ossimNotify(ossimNotifyLevel_DEBUG)
+        << "DEBUG ossimIkonosRpcModel parseTiffFile: Ikonos filename non standard" << std::endl;
+  }
+  ossimFilename metadatafile = filenameparts[0];
+  metadatafile += "_";
+  metadatafile += filenameparts[1];
+  metadatafile += "_metadata.txt";
+
+  if(! parseMetaData(metadatafile))
+  {
+    ossimNotify(ossimNotifyLevel_DEBUG)
+        << "DEBUG ossimIkonosRpcModel parseTiffFile: errors parsing metadata" << std::endl;
+  }
+
+  ossimFilename hdrfile = imageFilename;
+  hdrfile.setExtension(ossimString("hdr"));
+  if(!parseHdrData(hdrfile))
+  {
+    ossimNotify(ossimNotifyLevel_DEBUG)
+        << "DEBUG ossimIkonosRpcModel parseTiffFile: errors parsing hdr" << std::endl;
+  }
+
+  ossimFilename rpcfile = imageFilename.noExtension();
+  rpcfile += "_rpc.txt";
+  parseRpcData (rpcfile);
+  if (getErrorStatus()) //check for errors in parsing rpc data
+  {
+    ossimNotify(ossimNotifyLevel_DEBUG)
+        << "DEBUG ossimIkonosRpcModel parseTiffFile: errors parsing rpc" << std::endl;
+  }
+
+}
+
+ossimIkonosMetaData::ossimIkonosMetaData(const ossimFilename& metadataFile, const ossimFilename& hdrFile, const ossimFilename& rpcFile)
+  :
+  theSunAzimuth(0.0),
+  theSunElevation(0.0),
+  theBandName ("Unknown")
+{
+  parseMetaData(metadataFile);
+  parseHdrData(hdrFile);
+  parseRpcData(rpcFile);
 }
 
 ossimIkonosMetaData::~ossimIkonosMetaData()
@@ -144,7 +204,7 @@ bool ossimIkonosMetaData::parseMetaData(const ossimFilename& data_file)
     //***
    // Sun Azimuth:
    //***
-  strptr = strstr(strptr, "\nSun Angle Azimuth:");
+  strptr = strstr(filebuf, "\nSun Angle Azimuth:");
   if (!strptr)
   {
     if(traceDebug())
@@ -264,3 +324,13 @@ bool ossimIkonosMetaData::parseHdrData(const ossimFilename& data_file)
   return true;
 }
 
+//*****************************************************************************
+// PROTECTED METHOD: ossimIkonosMetaData::parseRpcData()
+//
+//  Parses the Ikonos rpc file.
+//
+//*****************************************************************************
+bool ossimIkonosMetaData::parseRpcData(const ossimFilename& data_file)
+{
+  return true;
+}
