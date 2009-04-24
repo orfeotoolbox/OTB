@@ -55,14 +55,6 @@ protected:
 /*    bool parseNitfFile(const ossimFilename& geom_file); */
    bool parseHdrData(const ossimFilename& data_file);
 
-   //***
-   // Additional information:
-   //***
-   ossim_float64               theSunAzimuth;
-   ossim_float64               theSunElevation;
-
-   ossimString                 theBandName;
-
    TYPE_DATA
 };
 

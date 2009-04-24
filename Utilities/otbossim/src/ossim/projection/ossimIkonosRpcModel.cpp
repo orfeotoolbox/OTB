@@ -53,9 +53,7 @@ static const char* SAMP_DEN_COEFF_KW = "SAMP_DEN_COEFF_";
 
 
 ossimIkonosRpcModel::ossimIkonosRpcModel()
-  :ossimRpcModel(),
-    theSunAzimuth(0.0),
-    theSunElevation(0.0)
+  :ossimRpcModel()
 {
 }
 //*****************************************************************************
@@ -66,9 +64,7 @@ ossimIkonosRpcModel::ossimIkonosRpcModel()
 //
 //*****************************************************************************
 ossimIkonosRpcModel::ossimIkonosRpcModel(const ossimFilename& geom_file)
-   :  ossimRpcModel(),
-    theSunAzimuth(0.0),
-    theSunElevation(0.0)
+   :  ossimRpcModel()
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimIkonosRpcModel Constructor #1: entering..." << std::endl;
 
@@ -219,10 +215,6 @@ void ossimIkonosRpcModel::finishConstruction()
    theBoundGndPolygon
       = ossimPolygon (ossimDpt(v0), ossimDpt(v1), ossimDpt(v2), ossimDpt(v3));
 
-   //***
-   // Assign the gain parameters:
-   //***
-
 
 
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimIkonosRpcModel finishConstruction(): returning..." << std::endl;
@@ -306,46 +298,6 @@ void ossimIkonosRpcModel::parseMetaData(const ossimFilename& data_file)
    sscanf(strptr, "%8c %s", dummy, name);
    theSensorID = name;
 
-
-   //***
-   // Sun Azimuth:
-   //***
-   strptr = strstr(strptr, "\nSun Angle Azimuth:");
-   if (!strptr)
-   {
-     if(traceDebug())
-     {
-       ossimNotify(ossimNotifyLevel_FATAL)
-           << "FATAL ossimIkonosRpcModel::parseMetaData(data_file): "
-           << "\n\tAborting construction. Error encountered parsing "
-           << "presumed meta-data file." << endl;
-
-       return;
-     }
-   }
-
-   sscanf(strptr, "%19c %lf %s", dummy, &value, dummy);
-   theSunAzimuth = value;
-
-   //***
-   // Sun Elevation:
-   //***
-   strptr = strstr(strptr, "\nSun Angle Elevation:");
-   if (!strptr)
-   {
-     if(traceDebug())
-     {
-       ossimNotify(ossimNotifyLevel_FATAL)
-           << "FATAL ossimIkonosRpcModel::parseMetaData(data_file): "
-           << "\n\tAborting construction. Error encountered parsing "
-           << "presumed meta-data file." << endl;
-
-       return;
-     }
-   }
-
-   sscanf(strptr, "%21c %lf %s", dummy, &value, name);
-   theSunElevation = value;
 
    //***
    // GSD:
@@ -453,35 +405,13 @@ bool ossimIkonosRpcModel::parseHdrData(const ossimFilename& data_file)
    char* strptr;
    // char linebuf[80];
    char dummy[80];
-   char name[80];
+   // , name[80];
 
    //***
    // Read the file into a buffer:
    //***
    char filebuf[5000];
    fread(filebuf, 1, 5000, fptr);
-
-
-   //***
-   // Band name:
-   //***
-   strptr = strstr(filebuf, "\nBand:");
-   if (!strptr)
-   {
-     if(traceDebug())
-     {
-       ossimNotify(ossimNotifyLevel_WARN)
-           << "ossimIkonosRpcModel::parseHdrData(data_file):"
-           << "\n\tAborting construction. Error encountered parsing "
-           << "presumed hdr file." << endl;
-     }
-
-     return false;
-   }
-
-   sscanf(strptr, "%6c %s", dummy, name);
-   theBandName = name;
-   std::cout << "***************** theBandName: " << theBandName << std::endl;
 
    //***
    // GSD:
@@ -793,29 +723,14 @@ bool ossimIkonosRpcModel::saveState(ossimKeywordlist& kwl,
 {
   ossimRpcModel::saveState(kwl, prefix);
 
-  kwl.add(prefix,
-          ossimKeywordNames::AZIMUTH_ANGLE_KW,
-          theSunAzimuth,
-          true);
-
-  kwl.add(prefix,
-          ossimKeywordNames::ELEVATION_ANGLE_KW,
-          theSunElevation,
-          true);
-
-  kwl.add(prefix,
-          "band_name",
-          theBandName,
-          true);
-
   // this model just sets the base class values so
   // we do not need to re-construct this model so
   // specify the type as the base class type
   //
-//   kwl.add(prefix,
-// 	  ossimKeywordNames::TYPE_KW,
-// 	  STATIC_TYPE_NAME(ossimRpcModel),
-// 	  true);
+  kwl.add(prefix,
+	  ossimKeywordNames::TYPE_KW,
+	  STATIC_TYPE_NAME(ossimRpcModel),
+	  true);
 
 
 
@@ -962,29 +877,23 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
    //convert file to rpc filename and hdr filename so we can get some info
 
 
-   std::cout << "Parsing hdr..." << std::endl;
    ossimFilename hdrfile = filename;
    hdrfile.setExtension(ossimString("hdr"));
-   bool hdrdataok = true;
    if(!parseHdrData(hdrfile))
    {
-     hdrdataok = false;
      ossimNotify(ossimNotifyLevel_DEBUG)
          << "DEBUG ossimIkonosRpcModel parseTiffFile: errors parsing hdr" << std::endl;
-//       return false;
+      return false;
    }
 
-   std::cout << "Parsing rpc..." << std::endl;
    ossimFilename rpcfile = filename.noExtension();
    rpcfile += "_rpc.txt";
-   bool rpcdataok = true;
    parseRpcData (rpcfile);
    if (getErrorStatus()) //check for errors in parsing rpc data
    {
-     rpcdataok = false;
      ossimNotify(ossimNotifyLevel_DEBUG)
          << "DEBUG ossimIkonosRpcModel parseTiffFile: errors parsing rpc" << std::endl;
-//       return false;
+      return false;
    }
 
    finishConstruction();
@@ -1013,7 +922,7 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
 
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimIkonosRpcModel parseTiffFile: returning..." << std::endl;
 
-   return (hdrdataok && rpcdataok);
+   return true;
 }
 
 bool ossimIkonosRpcModel::isNitf(const ossimFilename& filename)
