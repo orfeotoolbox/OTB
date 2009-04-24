@@ -18,7 +18,7 @@
 #ifndef __otbMultiChannelRAndGAndNIRVegetationIndexImageFilter_h
 #define __otbMultiChannelRAndGAndNIRVegetationIndexImageFilter_h
 
-#include "otbMultiChannelRAndGAndNIRVegetationIndexImageFilter.h"
+#include "otbMultiChannelRAndGAndNIRIndexImageFilter.h"
 
 namespace otb
 {
@@ -30,6 +30,7 @@ namespace otb
    * the type of the output image.  It is also parameterized by the
    * operation to be applied, using a Functor style.
    *
+   * \deprecated use otbMultiChannelRAndGAndNIRIndexImageFilter
    * \sa UnaryFunctorImageFilter
    * \ingroup Radiometry
  */
