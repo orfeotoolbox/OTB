@@ -48,7 +48,7 @@ ossimIkonosMetaData::ossimIkonosMetaData(const ossimFilename& imageFilename)
    //the metadata file will be po_2619900_metadata.txt
   std::cout << "Parsing metadata..." << std::endl;
   ossimString separator("_");
-  ossimString filenamebase = imageFilename.noExtension();
+  ossimString filenamebase = imageFilename.fileNoExtension();
   std::vector< ossimString > filenameparts = filenamebase.split(separator);
 
   if(filenameparts.size() < 2)
@@ -61,6 +61,8 @@ ossimIkonosMetaData::ossimIkonosMetaData(const ossimFilename& imageFilename)
   metadatafile += "_";
   metadatafile += filenameparts[1];
   metadatafile += "_metadata.txt";
+
+  metadatafile.setPath(imageFilename.path());
 
   if(! parseMetaData(metadatafile))
   {
