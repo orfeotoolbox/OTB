@@ -29,6 +29,7 @@ ossimIkonosMetaData::ossimIkonosMetaData()
   :
   theSunAzimuth(0.0),
   theSunElevation(0.0),
+  theNumBands(0),
   theBandName("Unknown"),
   theProductionDate("Unknown")
 {
@@ -38,6 +39,7 @@ ossimIkonosMetaData::ossimIkonosMetaData(const ossimFilename& imageFilename)
   :
   theSunAzimuth(0.0),
   theSunElevation(0.0),
+  theNumBands(0),
   theBandName ("Unknown"),
   theProductionDate("Unknown")
 {
@@ -89,7 +91,9 @@ ossimIkonosMetaData::ossimIkonosMetaData(const ossimFilename& metadataFile, cons
   :
   theSunAzimuth(0.0),
   theSunElevation(0.0),
-  theBandName ("Unknown")
+  theNumBands(0),
+  theBandName("Unknown"),
+  theProductionDate("Unknown")
 {
   parseMetaData(metadataFile);
   parseHdrData(hdrFile);
@@ -105,7 +109,9 @@ void ossimIkonosMetaData::clearFields()
   clearErrorStatus();
   theSunAzimuth = 0.0;
   theSunElevation = 0.0;
+  theNumBands = 0;
   theBandName = "Unknown";
+  theProductionDate = "Unknown";
 }
 
 void ossimIkonosMetaData::printInfo(ostream& os) const
@@ -115,6 +121,9 @@ void ossimIkonosMetaData::printInfo(ostream& os) const
       << "\n  "
       << "\n  Sun Azimuth:    " << theSunAzimuth
       << "\n  Sun Elevation:   " << theSunElevation
+      << "\n  Number of bands:   " << theNumBands
+      << "\n  Band name:   " << theBandName
+      << "\n  Production date:   " << theProductionDate
       << "\n"
       << "\n---------------------------------------------------------"
       << "\n  " << std::endl;
@@ -137,6 +146,11 @@ bool ossimIkonosMetaData::saveState(ossimKeywordlist& kwl,
   kwl.add(prefix,
           ossimKeywordNames::ELEVATION_ANGLE_KW,
           theSunElevation,
+          true);
+
+  kwl.add(prefix,
+          ossimKeywordNames::NUMBER_BANDS_KW,
+          theNumBands,
           true);
 
   kwl.add(prefix,
@@ -164,8 +178,11 @@ bool ossimIkonosMetaData::loadState(const ossimKeywordlist& kwl,
     return false;
   }
 
-  theSunAzimuth   = ossimString(kwl.find(prefix, ossimKeywordNames::AZIMUTH_ANGLE_KW)).toDouble();
-  theSunElevation = ossimString(kwl.find(prefix, ossimKeywordNames::ELEVATION_ANGLE_KW)).toDouble();
+  theSunAzimuth     = ossimString(kwl.find(prefix, ossimKeywordNames::AZIMUTH_ANGLE_KW)).toDouble();
+  theSunElevation   = ossimString(kwl.find(prefix, ossimKeywordNames::ELEVATION_ANGLE_KW)).toDouble();
+  theNumBands       = ossimString(kwl.find(prefix, ossimKeywordNames::NUMBER_BANDS_KW)).toUInt32();
+  theBandName       = ossimString(kwl.find(prefix, "band_name")).toDouble();
+  theProductionDate = ossimString(kwl.find(prefix, "production_date")).toDouble();
 
   return true;
 }
@@ -315,6 +332,7 @@ bool ossimIkonosMetaData::parseHdrData(const ossimFilename& data_file)
    // char linebuf[80];
   char dummy[80];
   char name[80];
+  int value=0;
 
    //***
    // Read the file into a buffer:
@@ -342,6 +360,26 @@ bool ossimIkonosMetaData::parseHdrData(const ossimFilename& data_file)
 
   sscanf(strptr, "%6c %s", dummy, name);
   theBandName = name;
+
+   //***
+   // Number of Bands:
+   //***
+  strptr = strstr(filebuf, "\nNumber of Bands:");
+  if (!strptr)
+  {
+    if(traceDebug())
+    {
+      ossimNotify(ossimNotifyLevel_WARN)
+          << "ossimIkonosRpcModel::parseHdrData(data_file):"
+          << "\n\tAborting construction. Error encountered parsing "
+          << "presumed hdr file." << endl;
+    }
+
+    return false;
+  }
+
+  sscanf(strptr, "%17c %d", dummy, &value);
+  theNumBands = value;
 
   if (traceExec())
   {

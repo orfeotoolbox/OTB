@@ -882,6 +882,36 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
 
    theSupportData = new ossimIkonosMetaData(filename);
 
+
+   //NB: Parsing the metadata file at this level is useful to
+   // retrieve the sensor name.
+   //retrieve information from the metadata file
+   //if the ikonos tif is po_2619900_pan_0000000.tif
+   //the metadata file will be po_2619900_metadata.txt
+   std::cout << "Parsing metadata..." << std::endl;
+   ossimString separator("_");
+   ossimString filenamebase = filename.noExtension();
+   std::vector< ossimString > filenameparts = filenamebase.split(separator);
+
+   if(filenameparts.size() < 2)
+   {
+     ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG ossimIkonosRpcModel parseTiffFile: Ikonos filename non standard" << std::endl;
+   }
+   ossimFilename metadatafile = filenameparts[0];
+   metadatafile += "_";
+   metadatafile += filenameparts[1];
+   metadatafile += "_metadata.txt";
+
+   parseMetaData (metadatafile);
+   if (getErrorStatus()) //check for errors in parsing metadata file
+   {
+     ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG ossimIkonosRpcModel parseTiffFile: errors parsing metadata" << std::endl;
+     //failed to read metadata, but don't abord here.
+   }
+
+
    //convert file to rpc filename and hdr filename so we can get some info
 
 
