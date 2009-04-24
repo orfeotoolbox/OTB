@@ -60,6 +60,7 @@ public:
    ossim_float64               theSunElevation;
 
    ossimString                 theBandName;
+   ossimString                 theProductionDate;
 
 TYPE_DATA
 };

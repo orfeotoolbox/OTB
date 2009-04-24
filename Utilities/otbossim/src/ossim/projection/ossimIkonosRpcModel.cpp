@@ -281,6 +281,7 @@ void ossimIkonosRpcModel::parseMetaData(const ossimFilename& data_file)
    //***
    char filebuf[5000];
    fread(filebuf, 1, 5000, fptr);
+   fclose(fptr);
 
    //***
    // Image ID:
@@ -434,6 +435,7 @@ bool ossimIkonosRpcModel::parseHdrData(const ossimFilename& data_file)
    //***
    char filebuf[5000];
    fread(filebuf, 1, 5000, fptr);
+   fclose(fptr);
 
    //***
    // GSD:
@@ -887,8 +889,6 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
    hdrfile.setExtension(ossimString("hdr"));
    if(!parseHdrData(hdrfile))
    {
-     ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG ossimIkonosRpcModel parseTiffFile: errors parsing hdr" << std::endl;
       return false;
    }
 
@@ -897,8 +897,6 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
    parseRpcData (rpcfile);
    if (getErrorStatus()) //check for errors in parsing rpc data
    {
-     ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG ossimIkonosRpcModel parseTiffFile: errors parsing rpc" << std::endl;
       return false;
    }
 
