@@ -680,14 +680,17 @@ ImageMetadataInterface::VariableLengthVectorType
   }
   ossimKeywordlist kwl;
   ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key= "production_date";
+  std::string key= "support_data.production_date";
   ossimString keywordString = kwl.find(key.c_str());
   std::string output(keywordString.chars());
 
   //The Ikonos production date has the format MM/DD/YY
   ossimString separatorList = "/";
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
-  assert(keywordStrings.size() > 2);
+  if (keywordStrings.size() < 3)
+  {
+    itkGenericExceptionMacro(<<"Could not retrieve the production date for Ikonos");
+  }
 
   int productionYear = keywordStrings[2].toInt();
   int productionMonth = keywordStrings[0].toInt();
