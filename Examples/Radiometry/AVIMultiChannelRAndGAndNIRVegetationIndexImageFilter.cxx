@@ -34,8 +34,8 @@
 
 // Software Guide : BeginLatex
 //
-// \index{otb::MultiChannelRAndGAndNIRVegetationIndexImageFilter}
-// \index{otb::MultiChannelRAndGAndNIRVegetationIndexImageFilter!header}
+// \index{otb::MultiChannelRAndGAndNIRIndexImageFilter}
+// \index{otb::MultiChannelRAndGAndNIRIndexImageFilter!header}
 // \index{otb::VegetationIndex}
 // \index{otb::VegetationIndex!header}
 //
@@ -63,18 +63,18 @@
 // For more details, refer to Plummer work \cite{AVI}.
 //
 // With the
-// \doxygen{otb}{MultiChannelRAndGAndNIRVegetationIndexImageFilter}
+// \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
 // class the input has to be a multi channel image and the user has to
 // specify the channel index of the red, green and NIR channel.
 //
 // Let's look at the minimal code required to use this
 // algorithm. First, the following header defining the
-// \doxygen{otb}{MultiChannelRAndGAndNIRVegetationIndexImageFilter}
+// \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
 // class must be included.
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbMultiChannelRAndGAndNIRVegetationIndexImageFilter.h"
+#include "otbMultiChannelRAndGAndNIRIndexImageFilter.h"
 // Software Guide : EndCodeSnippet
 
 
@@ -136,19 +136,19 @@ int main( int argc, char *argv[] )
   //  Software Guide : BeginLatex
   //
   // The
-  // \doxygen{otb}{MultiChannelRAndGAndNIRVegetationIndexImageFilter}
+  // \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
   // type is defined using the image types and the AVI functor as
   // template parameters. We then instantiate the filter itself.
   //
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::MultiChannelRAndGAndNIRVegetationIndexImageFilter
-                           <InputImageType, OutputImageType,FunctorType>
-                      MultiChannelRAndGAndNIRVegetationIndexImageFilterType;
+  typedef otb::MultiChannelRAndGAndNIRIndexImageFilter
+    <InputImageType, OutputImageType,FunctorType>
+                      MultiChannelRAndGAndNIRIndexImageFilterType;
 
-  MultiChannelRAndGAndNIRVegetationIndexImageFilterType::Pointer
-  filter = MultiChannelRAndGAndNIRVegetationIndexImageFilterType::New();
+  MultiChannelRAndGAndNIRIndexImageFilterType::Pointer
+  filter = MultiChannelRAndGAndNIRIndexImageFilterType::New();
   // Software Guide : EndCodeSnippet
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -181,7 +181,7 @@ int main( int argc, char *argv[] )
   //  Software Guide : BeginLatex
   //
   // The $\lambda$ R,G and NIR parameters are set. The
-  // \doxygen{otb}{MultiChannelRAndGAndNIRVegetationIndexImageFilter}
+  // \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
   // class sets the default values of $\lambda$ to $660$, $560$ and 
   // $830$. 
   //
@@ -310,7 +310,7 @@ int main( int argc, char *argv[] )
   // \includegraphics[width=0.24\textwidth]{pretty_FSATSW.eps}
   // \includegraphics[width=0.24\textwidth]{pretty_AVIMultiChannelRAndGAndNIRVegetationIndex.eps}
   // \itkcaption[AVI Example]{AVI result on the right with the left image in input.}
-  // \label{fig:AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter}
+  // \label{fig:AVIMultiChannelRAndGAndNIRIndexImageFilter}
   // \end{figure}
   //
   //  Software Guide : EndLatex

@@ -34,10 +34,10 @@
 
 // Software Guide : BeginLatex
 //
-// \index{otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter}
-// \index{otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter!header}
-// \index{otb::VegetationIndex}
-// \index{otb::VegetationIndex!header}
+// \index{otb::MultiChannelRAndBAndNIRIndexImageFilter}
+// \index{otb::MultiChannelRAndBAndNIRIndexImageFilter!header}
+// \index{otb::VegetationIndices}
+// \index{otb::VegetationIndices!header}
 //
 //
 // The following example illustrates the use of the
@@ -79,17 +79,17 @@
 //  \item \subdoxygen{otb}{Functor}{EVI}
 //  \end{itemize}
 
-// With the \doxygen{otb}{MultiChannelRAndBAndNIRVegetationIndexImageFilter} class the
+// With the \doxygen{otb}{MultiChannelRAndBAndNIRIndexImageFilter} class the
 // input has to be a multi channel image and the user has to specify index channel
 // of the red, blue and NIR channel.
 //
 // Let's look at the minimal code required to use this algorithm. First, the following header
-// defining the \doxygen{otb}{MultiChannelRAndBAndNIRVegetationIndexImageFilter}
+// defining the \doxygen{otb}{MultiChannelRAndBAndNIRIndexImageFilter}
 // class must be included.
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbMultiChannelRAndBAndNIRVegetationIndexImageFilter.h"
+#include "otbMultiChannelRAndBAndNIRIndexImageFilter.h"
 // Software Guide : EndCodeSnippet
 
 
@@ -154,21 +154,21 @@ int main( int argc, char *argv[] )
   //  Software Guide : BeginLatex
   //
   // The
-  // \doxygen{otb}{MultiChannelRAndBAndNIRVegetationIndexImageFilter}
+  // \doxygen{otb}{MultiChannelRAndBAndNIRIndexImageFilter}
   // type is defined using the image types and the ARVI functor as
   // template parameters. We then instantiate the filter itself.
   //
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter
+  typedef otb::MultiChannelRAndBAndNIRIndexImageFilter
   <InputImageType,
   OutputImageType,
   FunctorType      >
-  MultiChannelRAndBAndNIRVegetationIndexImageFilterType;
+  MultiChannelRAndBAndNIRIndexImageFilterType;
 
-  MultiChannelRAndBAndNIRVegetationIndexImageFilterType::Pointer
-  filter = MultiChannelRAndBAndNIRVegetationIndexImageFilterType::New();
+  MultiChannelRAndBAndNIRIndexImageFilterType::Pointer
+  filter = MultiChannelRAndBAndNIRIndexImageFilterType::New();
   // Software Guide : EndCodeSnippet
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -200,7 +200,7 @@ int main( int argc, char *argv[] )
   //  Software Guide : BeginLatex
   //
   // The $\gamma$ parameter is set. The
-  // \doxygen{otb}{MultiChannelRAndBAndNIRVegetationIndexImageFilter}
+  // \doxygen{otb}{MultiChannelRAndBAndNIRIndexImageFilter}
   // class sets the default value of $\gamma$ to $0.5$.  This parameter
   // is used to reduce the atmospheric effect on a global scale.
   //
@@ -328,7 +328,7 @@ int main( int argc, char *argv[] )
   // \includegraphics[width=0.24\textwidth]{pretty_VegetationIndex.eps}
   // \includegraphics[width=0.24\textwidth]{pretty_ARVIMultiChannelRAndBAndNIRVegetationIndex.eps}
   // \itkcaption[ARVI Example]{ARVI result on the right with the left image in input.}
-  // \label{fig:ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter}
+  // \label{fig:ARVIMultiChannelRAndBAndNIRIndexImageFilter}
   // \end{figure}
   //
   //  Software Guide : EndLatex

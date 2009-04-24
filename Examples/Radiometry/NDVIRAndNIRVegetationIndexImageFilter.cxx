@@ -32,12 +32,12 @@
 
 // Software Guide : BeginLatex
 //
-// \index{otb::RAndNIRVegetationIndexImageFilter}
-// \index{otb::VegetationIndex}
-// \index{otb::VegetationIndex!header}
+// \index{otb::RAndNIRIndexImageFilter}
+// \index{otb::VegetationIndicesFunctor}
+// \index{otb::VegetationIndicesFunctor!header}
 //
 // The following example illustrates the use of the
-// \doxygen{otb}{RAndNIRVegetationIndexImageFilter} with the use of the Normalized
+// \doxygen{otb}{RAndNIRIndexImageFilter} with the use of the Normalized
 // Difference Vegatation Index (NDVI).
 // NDVI computes the difference between the NIR channel, noted $L_{NIR}$, and the red channel,
 // noted $L_{r}$ radiances reflected from the surface and transmitted through the atmosphere:
@@ -59,17 +59,17 @@
 //  \item \subdoxygen{otb}{Functor}{TNDVI}
 //  \end{itemize}
 
-// With the \doxygen{otb}{RAndNIRVegetationIndexImageFilter} class the filter
+// With the \doxygen{otb}{RAndNIRIndexImageFilter} class the filter
 // inputs are one channel images: one inmage represents the NIR channel, the
 // the other the NIR channel.
 //
 // Let's look at the minimal code required to use this algorithm. First, the following header
-// defining the \doxygen{otb}{RAndNIRVegetationIndexImageFilter}
+// defining the \doxygen{otb}{RAndNIRIndexImageFilter}
 // class must be included.
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbRAndNIRVegetationIndexImageFilter.h"
+#include "otbRAndNIRIndexImageFilter.h"
 // Software Guide : EndCodeSnippet
 
 
@@ -115,7 +115,7 @@ int main( int argc, char *argv[] )
   // The NDVI (Normalized Difference Vegetation Index) is instantiated using
   // the images pixel type as template parameters. It is
   // implemented as a functor class which will be passed as a
-  // parameter to an \doxygen{otb}{RAndNIRVegetationIndexImageFilter}.
+  // parameter to an \doxygen{otb}{RAndNIRIndexImageFilter}.
   //
   //  Software Guide : EndLatex
 
@@ -127,25 +127,25 @@ int main( int argc, char *argv[] )
 
   //  Software Guide : BeginLatex
   //
-  // The \doxygen{otb}{RAndNIRVegetationIndexImageFilter} type is instantiated using the images
+  // The \doxygen{otb}{RAndNIRIndexImageFilter} type is instantiated using the images
   // types and the NDVI functor as template parameters.
   //
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::RAndNIRVegetationIndexImageFilter<InputRImageType,
+  typedef otb::RAndNIRIndexImageFilter<InputRImageType,
   InputNIRImageType,
   OutputImageType,
   FunctorType>
-  RAndNIRVegetationIndexImageFilterType;
+  RAndNIRIndexImageFilterType;
   // Software Guide : EndCodeSnippet
 
 
   // Instantiating object
-  RAndNIRVegetationIndexImageFilterType::Pointer filter    = RAndNIRVegetationIndexImageFilterType::New();
-  RReaderType::Pointer                           readerR   = RReaderType::New();
-  NIRReaderType::Pointer                         readerNIR = NIRReaderType::New();
-  WriterType::Pointer                            writer    = WriterType::New();
+  RAndNIRIndexImageFilterType::Pointer filter    = RAndNIRIndexImageFilterType::New();
+  RReaderType::Pointer                 readerR   = RReaderType::New();
+  NIRReaderType::Pointer               readerNIR = NIRReaderType::New();
+  WriterType::Pointer                  writer    = WriterType::New();
 
   //  Software Guide : BeginLatex
   //
@@ -202,11 +202,11 @@ int main( int argc, char *argv[] )
   }
 
   // Pretty image creation for the printing
-  typedef otb::Image<unsigned char, Dimension>                                                  OutputPrettyImageType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>                                           WriterPrettyType;
-  typedef itk::RescaleIntensityImageFilter< OutputImageType, OutputPrettyImageType>             RescalerType;
-  typedef itk::RescaleIntensityImageFilter< InputRImageType, OutputPrettyImageType>             RescalerRType;
-  typedef itk::RescaleIntensityImageFilter< InputNIRImageType, OutputPrettyImageType>           RescalerNIRType;
+  typedef otb::Image<unsigned char, Dimension>                                        OutputPrettyImageType;
+  typedef otb::ImageFileWriter<OutputPrettyImageType>                                 WriterPrettyType;
+  typedef itk::RescaleIntensityImageFilter< OutputImageType, OutputPrettyImageType>   RescalerType;
+  typedef itk::RescaleIntensityImageFilter< InputRImageType, OutputPrettyImageType>   RescalerRType;
+  typedef itk::RescaleIntensityImageFilter< InputNIRImageType, OutputPrettyImageType> RescalerNIRType;
 
 
   RescalerType::Pointer     rescaler     = RescalerType::New();
@@ -217,9 +217,9 @@ int main( int argc, char *argv[] )
   prettyWriter->SetFileName( argv[6] );
   prettyWriter->SetInput( rescaler->GetOutput() );
 
-  RescalerRType::Pointer     rescalerR     = RescalerRType::New();
-  RescalerNIRType::Pointer     rescalerNIR     = RescalerNIRType::New();
-  WriterPrettyType::Pointer prettyWriterR = WriterPrettyType::New();
+  RescalerRType::Pointer     rescalerR      = RescalerRType::New();
+  RescalerNIRType::Pointer     rescalerNIR  = RescalerNIRType::New();
+  WriterPrettyType::Pointer prettyWriterR   = WriterPrettyType::New();
   WriterPrettyType::Pointer prettyWriterNIR = WriterPrettyType::New();
   rescalerR->SetInput( readerR->GetOutput() );
   rescalerR->SetOutputMinimum(0);
@@ -264,7 +264,7 @@ int main( int argc, char *argv[] )
   // \includegraphics[width=0.24\textwidth]{pretty_NIR.eps}
   // \includegraphics[width=0.24\textwidth]{pretty_NDVIRAndNIRVegetationIndex.eps}
   // \itkcaption[ARVI Example]{NDVI input images on the left (Red channel and NIR channel), on the right the result of the algorithm.}
-  // \label{fig:NDVIRAndNIRVegetationIndex}
+  // \label{fig:NDVIRAndNIRIndex}
   // \end{figure}
   //
   // Software Guide : EndLatex
