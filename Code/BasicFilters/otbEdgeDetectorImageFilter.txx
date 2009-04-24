@@ -58,8 +58,9 @@ EdgeDetectorImageFilter<TInputImage, TOutputImage, TEdgeDetection>
 ::GenerateData()
 {
   m_Detector->SetInput( this->GetInput() );
-  m_BinaryFilter->SetInput( m_Detector->GetOutput() );
+m_Detector->Update();
   
+  m_BinaryFilter->SetInput( m_Detector->GetOutput() );
   m_BinaryFilter->GraftOutput(this->GetOutput());
   m_BinaryFilter->Update();
   this->GraftOutput(m_BinaryFilter->GetOutput());
