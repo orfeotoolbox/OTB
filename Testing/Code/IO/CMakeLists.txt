@@ -1727,7 +1727,7 @@ ADD_TEST(ioTvDEMToOrthoImageGeneratorTest ${IO_TESTS17}
         otbDEMToOrthoImageGeneratorTest
          ${INPUTDATA}/DEM/srtm_directory
          ${TEMP}/ioTvDEMToOrthoImageGenerator.tif
-        6.5
+        1.46046 #6.5
         44.5
         500
         500

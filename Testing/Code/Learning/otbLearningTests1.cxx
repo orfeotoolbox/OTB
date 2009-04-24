@@ -33,7 +33,7 @@ void RegisterTests()
   REGISTER_TEST(otbSVMModelLoad);
   REGISTER_TEST(otbSVMModelAccessor);
   REGISTER_TEST(otbSVMModelLoadSave);
-  REGISTER_TEST(otbSVMMembershipFunctionLoadModel);
+  REGISTER_TEST(otbSVMModelGenericKernelLoadSave);
   REGISTER_TEST(otbSVMImageModelEstimatorNew);
   REGISTER_TEST(otbSVMImageModelEstimatorTrain);
   REGISTER_TEST(otbSVMImageModelEstimatorTrainOneClass);
