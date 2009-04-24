@@ -81,11 +81,20 @@ class RadiometricNonWaterNonVegetationIndexFunctor
       lWIval = static_cast<ValueType>(m_WaterFunctor(pInPix));
 
 */
+TInput zero = pInPix;
+zero.Fill(0);
+if(pInPix!=zero)
+{
       lVIval = static_cast<ValueType>(std::max(0.,m_VegetationFunctor(pInPix)));
 
       lWIval = static_cast<ValueType>(std::max(0.,m_WaterFunctor(pInPix)));
 
       lOutPix = vcl_sqrt(vcl_abs((1-lVIval)*(1-lWIval))); //sqrt
+}
+else
+  lOutPix = 0;
+
+//std::cout<< " lOutPix "<<lOutPix<<std::endl;
 
 // OU
       //lOutPix = vcl_sqrt((1-lVIval)*(1-lVIval)+(1-lWIval)*(1-lWIval)); // eucl : bof bof

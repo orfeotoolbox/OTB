@@ -94,11 +94,11 @@ typedef StreamingImageFileWriter<VectorImageType> WriterType3;
   lSize[1] = static_cast<unsigned int>(10);
   m_EdgeDensityFilter->SetNeighborhoodRadius(lSize);
 
-/*
-WriterType::Pointer writer2 = WriterType::New();
-writer2->SetInput(m_EdgeDensityFilter->GetOutput());
-writer2->SetFileName("Edge.tif");
-writer2->Update();*/
+
+// WriterType::Pointer writer2 = WriterType::New();
+// writer2->SetInput(m_EdgeDensityFilter->GetOutput());
+// writer2->SetFileName("Edge.tif");
+// writer2->Update();
 
   // Threshold
   m_Thresholder->SetInsideValue(0);
@@ -120,15 +120,14 @@ m_MultiplyFilter->SetInput1(this->GetInput());
   //lVectorZero.Fill(0);
   //m_MaskImageFilter->SetOutsideValue(lVectorZero);
 
-// BIBI THERE THERE TESTER MULTIPLI !!!!!!!!!!   
-
-// typename WriterType3::Pointer writer4 = WriterType3::New();
-// writer4->SetInput(m_MultiplyFilter->GetOutput());
-// writer4->SetFileName("Mask.tif");
-// writer4->Update();
+/*
+typename WriterType3::Pointer writer4 = WriterType3::New();
+writer4->SetInput(m_MultiplyFilter->GetOutput());
+writer4->SetFileName("Mask.tif");
+writer4->Update();*/
 
   // Give a threshold to urbanAreaFilter
-  m_UrbanAreaExtractionFilter->GetFunctor().SetLowerThreshold( m_ThresholdValue );  
+  m_UrbanAreaExtractionFilter->GetFunctor().SetLowerThreshold( m_ThresholdValue );
 
 
 // typename WriterType2::Pointer writer5 = WriterType2::New();
