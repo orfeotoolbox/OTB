@@ -25,15 +25,12 @@ int otbPolyLineImageConstIteratorNew(int argc, char * argv[])
 {
   const unsigned int Dimension =2;
   typedef unsigned char PixelType;
-  typedef itk::PolyLineParametricPath<Dimension> PathType;
-  typededef otb::Image<PixelType,Dimension> ImageType;
+  typedef otb::Image<PixelType,Dimension>                     ImageType;
+  typedef itk::PolyLineParametricPath<Dimension>              PathType;
   typedef otb::PolyLineImageConstIterator<ImageType,PathType> ConstIteratorType;
 
-  PathType::Pointer path = PathType::New();
-  ImageType::Pointer image = ImageType::New();
-
   // Instantiating object
-  ConstIteratorType it(image,path);
+  ConstIteratorType it();
 
 
   return EXIT_SUCCESS;

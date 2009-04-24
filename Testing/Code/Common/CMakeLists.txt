@@ -440,7 +440,12 @@ ADD_TEST(coTvPolygon ${COMMON_TESTS6}
 
 #-------- otb::PolyLineImageIterator -----------------------------------------
 
- ADD_TEST(coTvPolyLineImageIterator ${COMMON_TESTS6}
+ ADD_TEST(coTuPolyLineImageConstIteratorNew ${COMMON_TESTS6}
+         otbPolyLineImageConstIteratorNew
+	        ${INPUTDATA}/poupees_sub_c1.png
+)
+
+ADD_TEST(coTvPolyLineImageIterator ${COMMON_TESTS6}
 --compare-image ${TOL}
 		${BASELINE}/coTvPolyLineImageIterator.png
 		${TEMP}/coTvPolyLineImageIterator.png
@@ -684,6 +689,12 @@ ADD_TEST(coTvImageRegionNonUniformMultidimensionalSplitter ${COMMON_TESTS8}
     ${TEMP}/coImageRegionNonUniformMultidimensionalSplitter.txt
 )
 
+# ------------- otb::VectorImageToASImageAdaptor ----------------------------
+ADD_TEST(coTuVectorImageToASImageAdaptorNew ${COMMON_TESTS8}
+    otbVectorImageToASImageAdaptorNew
+)
+
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
 otbSystemTest.cxx
@@ -744,6 +755,7 @@ otbArcSpatialObjectNew.cxx
 otbPathListToPathListFilterNew.cxx
 )
 SET(BasicCommon_SRCS6
+otbPolyLineImageConstIteratorNew.cxx
 otbPolyLineImageIterator.cxx
 otbDrawPathFilterNew.cxx
 otbDrawPathFilter.cxx
@@ -784,6 +796,7 @@ otbImageOfVectorsToMonoChannelExtractROINew.cxx
 otbImageOfVectorsToMonoChannelExtractROI.cxx
 otbImageRegionNonUniformMultidimensionalSplitterNew.cxx
 otbImageRegionNonUniformMultidimensionalSplitter.cxx
+otbVectorImageToASImageAdaptorNew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

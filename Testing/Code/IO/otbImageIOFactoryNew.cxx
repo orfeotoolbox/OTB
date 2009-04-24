@@ -10,9 +10,9 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+  PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -20,21 +20,13 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include "otbImageIOFactory.h"
 #include "itkExceptionObject.h"
 #include <iostream>
 
-#include "otbSVMMembershipFunction.h"
-
-
-int otbSVMMembershipFunctionNew( int argc, char* argv[] )
+int otbImageIOFactoryNew(int argc, char* argv [])
 {
-  typedef std::vector<double>   VectorType;
-
-  typedef otb::SVMMembershipFunction< VectorType >   FunctionType;
-
-  FunctionType::Pointer membershipFunction = FunctionType::New();
+  otb::ImageIOFactory * lImageIOFactory;
 
   return EXIT_SUCCESS;
 }
-
-

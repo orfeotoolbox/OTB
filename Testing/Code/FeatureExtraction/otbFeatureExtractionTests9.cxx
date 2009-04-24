@@ -33,8 +33,6 @@ void RegisterTests()
   REGISTER_TEST(otbImageToSIFTKeyPointSetFilterOutputImage);
   REGISTER_TEST(otbImageToSIFTKeyPointSetFilterOutputInterestPointAscii);
   REGISTER_TEST(otbImageToSIFTKeyPointSetFilterOutputDescriptorAscii);
-// This test is only used to make validation image from sift code
-//REGISTER_TEST(otbImageToSIFTKeyPointSetFilterValid);
   REGISTER_TEST(otbImageToHessianDeterminantImageFilterNew);
   REGISTER_TEST(otbImageToHessianDeterminantImageFilter);
   REGISTER_TEST(otbImageFittingPolygonListFilter);

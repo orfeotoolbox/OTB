@@ -34,6 +34,5 @@ void RegisterTests()
   REGISTER_TEST(otbCreateProjectionWithOSSIM);
   REGISTER_TEST(otbCreateProjectionWithOTB);
   REGISTER_TEST(otbCreateInverseForwardSensorModel);
-//REGISTER_TEST(otbRegionProjection);
   REGISTER_TEST(otbRegionProjectionResampler);
 }

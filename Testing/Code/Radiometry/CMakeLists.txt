@@ -673,9 +673,9 @@ ADD_TEST(raTvTSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}
 ADD_TEST(raTuRAndGAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS6}
         otbRAndGAndNIRVegetationIndexImageFilterNew )
 
-# -------            otb::MultiChannelRAndGAndNIRVegetationIndexImageFilter   ------------------------------
-ADD_TEST(raTuMultiChannelRAndGAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS6}
-        otbMultiChannelRAndGAndNIRVegetationIndexImageFilterNew )
+# -------            otb::MultiChannelRAndGAndNIRIndexImageFilter   ------------------------------
+ADD_TEST(raTuMultiChannelRAndGAndNIRIndexImageFilterNew ${RADIOMETRY_TESTS6}
+        otbMultiChannelRAndGAndNIRIndexImageFilterNew )
 
 ADD_TEST(raTvPVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS6}
   --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_PVI_verySmallFSATSWcRcNir.tif
@@ -984,7 +984,7 @@ SET(Radiometry_SRCS6
 otbSetASetBRAndNIRVegetationIndexImageFilter.cxx
 otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter.cxx
 otbRAndGAndNIRVegetationIndexImageFilterNew.cxx
-otbMultiChannelRAndGAndNIRVegetationIndexImageFilterNew.cxx
+otbMultiChannelRAndGAndNIRIndexImageFilterNew.cxx
 otbAVIRAndGAndNIRVegetationIndexImageFilter.cxx
 otbAVIMultiChannelRAndGAndNIRVegetationIndexImageFilter.cxx
 otbWDVIRAndNIRVegetationIndexImageFilter.cxx

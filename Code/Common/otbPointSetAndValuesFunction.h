@@ -71,7 +71,7 @@ public:
    * Get the point set.
    * \return the point set
    */
-  const PointSetType * GetPointSe() const
+  const PointSetType * GetPointSet() const
   {
     return m_PointSet.GetPointer();
   }

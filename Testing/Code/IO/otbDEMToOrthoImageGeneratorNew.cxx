@@ -15,18 +15,21 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
-
-#include "otbImageIOFactory.h"
 #include "itkExceptionObject.h"
-#include <iostream>
 
-int otbImageIOFactoryTest(int argc, char* argv [])
+#include "otbDEMToOrthoImageGenerator.h"
+#include "otbMapProjections.h"
+#include "otbImage.h"
+
+int otbDEMToOrthoImageGeneratorNew(int argc, char * argv[])
 {
-  otb::ImageIOFactory * lImageIOFactory;
+  const unsigned int Dimension = 2;
+  typedef otb::Image<unsigned char,Dimension>      ImageType;
+  typedef otb::DEMToOrthoImageGenerator<ImageType, otb::UtmForwardProjection> DEMToImageGeneratorType;
+
+  // Instantiating object
+  DEMToImageGeneratorType::Pointer object = DEMToImageGeneratorType::New();
+
 
   return EXIT_SUCCESS;
 }
