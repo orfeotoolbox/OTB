@@ -37,25 +37,27 @@ UrbanAreaDetectionImageFilter<TInputImage, TOutputImage, TFunction>
 //   m_ErodeFilter2 = ErodeFilterType::New();
 //   m_DilateFilter2 = DilateFilterType::New();
   m_IntensityFilter = IntensityFilterType::New();
-  m_EdgeDetectorFilter = EdgeDensityFilterType::New();
+  m_EdgeDensityFilter = EdgeDensityFilterType::New();
   m_SobelFilter = SobelDetectorType::New();
   m_Thresholder = ThresholdFilterType::New();
   m_MaskImageFilter = MaskImageFilterType::New();
   m_UrbanAreaExtractionFilter = UrbanAreaExtractionFilterType::New();
 
+  m_MultiplyFilter = MultiplyImageFilterType::New();
+
   /** Init the Pipeline */
-  // Intensity Image of the input image
-//   m_IntensityFilter->SetInput(this->GetInput());
   // EdgeDensity
-  m_EdgeDetectorFilter->SetInput(m_IntensityFilter->GetOutput());
-  m_EdgeDetectorFilter->SetDetector(m_SobelFilter);
+  m_EdgeDensityFilter->SetInput(m_IntensityFilter->GetOutput());
+  m_EdgeDensityFilter->SetDetector(m_SobelFilter);
   // Threshold
-  m_Thresholder->SetInput(m_EdgeDetectorFilter->GetOutput());
+  m_Thresholder->SetInput(m_EdgeDensityFilter->GetOutput());
   // Mask Image
-//   m_MaskImageFilter->SetInput1(this->GetInput());
-  m_MaskImageFilter->SetInput2(m_Thresholder->GetOutput());
+ // m_MaskImageFilter->SetInput2(m_Thresholder->GetOutput());
+
+m_MultiplyFilter->SetInput2(m_Thresholder->GetOutput());
   // NonVegetationNonWaterIndex
-  m_UrbanAreaExtractionFilter->SetInput(m_MaskImageFilter->GetOutput());
+  //m_UrbanAreaExtractionFilter->SetInput(m_MaskImageFilter->GetOutput());
+m_UrbanAreaExtractionFilter->SetInput(m_MultiplyFilter->GetOutput());
 
   m_ThresholdValue = 0.5;
   m_ThresholdDensity = 0.1;
@@ -70,17 +72,33 @@ UrbanAreaDetectionImageFilter<TInputImage, TOutputImage, TFunction>
 ::GenerateData()
 {
 
+
+typedef StreamingImageFileWriter<SingleImageType> WriterType;
+typedef StreamingImageFileWriter<OutputImageType> WriterType2;
+typedef StreamingImageFileWriter<VectorImageType> WriterType3;
+
+  // Intensity
   m_IntensityFilter->SetInput(this->GetInput());
-  m_MaskImageFilter->SetInput1(this->GetInput());
+
+// WriterType::Pointer writer = WriterType::New();
+// writer->SetInput(m_IntensityFilter->GetOutput());
+// writer->SetFileName("Intensity.tif");
+// writer->Update();
 
 
   // Edge Density
   m_SobelFilter->SetLowerThreshold(-100.0);
-  m_SobelFilter->SetUpperThreshold(100.0);
+  m_SobelFilter->SetUpperThreshold(200.0);
   SizeType lSize;
   lSize[0] = static_cast<unsigned int>(10);
   lSize[1] = static_cast<unsigned int>(10);
-  m_EdgeDetectorFilter->SetNeighborhoodRadius(lSize);
+  m_EdgeDensityFilter->SetNeighborhoodRadius(lSize);
+
+/*
+WriterType::Pointer writer2 = WriterType::New();
+writer2->SetInput(m_EdgeDensityFilter->GetOutput());
+writer2->SetFileName("Edge.tif");
+writer2->Update();*/
 
   // Threshold
   m_Thresholder->SetInsideValue(0);
@@ -88,12 +106,35 @@ UrbanAreaDetectionImageFilter<TInputImage, TOutputImage, TFunction>
   m_Thresholder->SetLowerThreshold( 0. );
   m_Thresholder->SetUpperThreshold( m_ThresholdDensity );
 
-  // Appli the mask on the input image
-  m_MaskImageFilter->SetOutsideValue(0);
+
+// typename WriterType2::Pointer writer3 = WriterType2::New();
+// writer3->SetInput(m_Thresholder->GetOutput());
+// writer3->SetFileName("Thresh.tif");
+// writer3->Update();
+
+  // Apply the mask on the input image
+m_MultiplyFilter->SetInput1(this->GetInput());
+  //m_MaskImageFilter->SetInput1(this->GetInput());
+
+  //VectorImagePixelType lVectorZero;
+  //lVectorZero.Fill(0);
+  //m_MaskImageFilter->SetOutsideValue(lVectorZero);
+
+// BIBI THERE THERE TESTER MULTIPLI !!!!!!!!!!   
+
+// typename WriterType3::Pointer writer4 = WriterType3::New();
+// writer4->SetInput(m_MultiplyFilter->GetOutput());
+// writer4->SetFileName("Mask.tif");
+// writer4->Update();
 
   // Give a threshold to urbanAreaFilter
   m_UrbanAreaExtractionFilter->GetFunctor().SetLowerThreshold( m_ThresholdValue );  
 
+
+// typename WriterType2::Pointer writer5 = WriterType2::New();
+// writer5->SetInput(m_UrbanAreaExtractionFilter->GetOutput());
+// writer5->SetFileName("Last.tif");
+// writer5->Update();
 
   // Erode/Dilate 2 times
 //   StructuringElementType  structuringElement;

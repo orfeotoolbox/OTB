@@ -39,6 +39,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 // POUR TEST
 #include "otbStreamingImageFileWriter.h"
+#include "itkMultiplyImageFilter.h"
 
 
 namespace otb
@@ -67,7 +68,6 @@ class RadiometricNonWaterNonVegetationIndexFunctor
   void SetGreenIndex(int id){ m_WaterFunctor.SetGIndex(id); };
   void SetNIRIndex(int id){ m_VegetationFunctor.SetNIRIndex(id);
                             m_WaterFunctor.SetNIRIndex(id); };
-  unsigned int GetGreenIndex(){ return m_WaterFunctor.GetGIndex(); };
 
   RadiometricNonWaterNonVegetationIndexFunctor(){}
   ~RadiometricNonWaterNonVegetationIndexFunctor(){};
@@ -85,7 +85,7 @@ class RadiometricNonWaterNonVegetationIndexFunctor
 
       lWIval = static_cast<ValueType>(std::max(0.,m_WaterFunctor(pInPix)));
 
-      lOutPix = vcl_sqrt(vcl_abs((1-lVIval)*(1-lWIval))); //sqrt : PAS MAL DU TOUT 
+      lOutPix = vcl_sqrt(vcl_abs((1-lVIval)*(1-lWIval))); //sqrt
 
 // OU
       //lOutPix = vcl_sqrt((1-lVIval)*(1-lVIval)+(1-lWIval)*(1-lWIval)); // eucl : bof bof
@@ -96,7 +96,10 @@ class RadiometricNonWaterNonVegetationIndexFunctor
       //lOutPix = vcl_sqrt(vcl_abs(1-lVIval)*vcl_abs(1-lWIval)); //sqrt2 : pareil que sqrt 
       //lOutPix = 1-vcl_sqrt(vcl_abs(lVIval)*vcl_abs(lWIval)); //sqrt2 : NUUUUUUL
       //lOutPix = 1. - (vcl_abs(lVIval)+vcl_abs(lWIval)/2.);//Div : PAS MAL
-      //lOutPix = 1 - std::max(lVIval,lWIval); //MAX : PAS MAL DU TOUT
+//       if( lVIval || lWIval )
+//       {
+//           lOutPix = 1 - std::max(lVIval,lWIval); //MAX : PAS MAL DU TOUT
+//       }
 
 /* Tester avec le log
       if(lVIval*lWIval)
@@ -124,8 +127,7 @@ template<class TInput,class TOutput>
 class RadiometricNonWaterNonVegetationDetectionFunctor
 {
 public:
-  // utilise template double parsk sinon cast un truc entre 0 et 1 en unsigned char ce qui donne toujours 1... donc image constante a 1 a la sortie du filtre!!!!
-  typedef RadiometricNonWaterNonVegetationIndexFunctor<TInput /*, TOutput*/> RadiometricNonWaterNonVegetationIndexFunctorType;
+  typedef RadiometricNonWaterNonVegetationIndexFunctor<TInput> RadiometricNonWaterNonVegetationIndexFunctorType;
 
   RadiometricNonWaterNonVegetationDetectionFunctor()
   {
@@ -136,12 +138,8 @@ public:
   ~RadiometricNonWaterNonVegetationDetectionFunctor() {};
   inline TOutput operator()(const TInput& inPix)
   {
-
     // The vegetation and water areas are put to 0.
     double indexesVal = static_cast<double>(m_RadiometricNonWaterNonVegetationIndexFunctor(inPix));
-
-// if(indexesVal>1e6)
-// std::cout<<indexesVal<<std::endl;
 
     if ( (indexesVal > m_LowerThreshold) && (indexesVal <= m_UpperThreshold)  )
     {
@@ -161,8 +159,6 @@ public:
   void SetRedIndex(int id){ m_RadiometricNonWaterNonVegetationIndexFunctor.SetRedIndex(id); };
   void SetGreenIndex(int id){ m_RadiometricNonWaterNonVegetationIndexFunctor.SetGreenIndex(id); };
   void SetNIRIndex(int id){ m_RadiometricNonWaterNonVegetationIndexFunctor.SetNIRIndex(id); };
-
-  unsigned int GetGreenIndex(){ return m_RadiometricNonWaterNonVegetationIndexFunctor.GetGreenIndex(); };
 
 
 protected:
@@ -206,22 +202,23 @@ public:
   typedef double                                                SingleImagePixelType;
   typedef Image<SingleImagePixelType, 2>                        SingleImageType;
   typedef SingleImageType::SizeType                             SizeType;
-  typedef unsigned char                                         BinaryImagePixelType;
-  typedef Image<BinaryImagePixelType, 2>                        BinaryImageType;
+  typedef typename OutputImageType::PixelType                   OutputImagePixelType;
   typedef typename VectorImageType::PixelType                   VectorImagePixelType;
-  typedef typename OutputImageType::PixelType                   OutputPixelType;
+
 
   /** Filters typedefs */
   // NonVegetationNonWaterIndexFilter
-  typedef Functor::RadiometricNonWaterNonVegetationDetectionFunctor< VectorImagePixelType, BinaryImagePixelType > FunctorType;
-  typedef MultiChannelRAndGAndNIRIndexImageFilter < VectorImageType,BinaryImageType, FunctorType >       UrbanAreaExtractionFilterType;
+  typedef Functor::RadiometricNonWaterNonVegetationDetectionFunctor< VectorImagePixelType, OutputImagePixelType > FunctorType;
+  //typedef Functor::RadiometricNonWaterNonVegetationIndexFunctor< VectorImagePixelType, OutputImagePixelType > FunctorType;
+  typedef MultiChannelRAndGAndNIRIndexImageFilter < VectorImageType,OutputImageType, FunctorType >       UrbanAreaExtractionFilterType;
+
   typedef typename UrbanAreaExtractionFilterType::Pointer                                                UrbanAreaExtrationFilterPointerType;
   // Erode/Dilate Filters
-  typedef typename itk::BinaryBallStructuringElement< BinaryImagePixelType, 2  >                         StructuringElementType;
-  typedef typename itk::BinaryErodeImageFilter<BinaryImageType,BinaryImageType,StructuringElementType>   ErodeFilterType;
-  typedef typename itk::BinaryDilateImageFilter<BinaryImageType,BinaryImageType,StructuringElementType>  DilateFilterType;
+  typedef typename itk::BinaryBallStructuringElement< OutputImagePixelType, 2  >                         StructuringElementType;
+  typedef typename itk::BinaryErodeImageFilter<OutputImageType,OutputImageType,StructuringElementType>   ErodeFilterType;
+  typedef typename itk::BinaryDilateImageFilter<OutputImageType,OutputImageType,StructuringElementType>  DilateFilterType;
   // MaskImageFilter
-  typedef typename itk::MaskImageFilter<VectorImageType,BinaryImageType>                                 MaskImageFilterType;
+  typedef typename itk::MaskImageFilter<VectorImageType,OutputImageType>                                 MaskImageFilterType;
   typedef typename MaskImageFilterType::Pointer                                                          MaskImageFilterPointerType;
   // Intensity
   typedef VectorImageToIntensityImageFilter<VectorImageType, SingleImageType>                            IntensityFilterType;
@@ -233,13 +230,14 @@ public:
   typedef EdgeDensityImageFilter<SingleImageType, SingleImageType, SobelDetectorType, CountFunctionType> EdgeDensityFilterType;
   typedef typename EdgeDensityFilterType::Pointer                                                        EdgeDensityFilterPointerType;
   // Threshold
-  typedef itk::BinaryThresholdImageFilter<SingleImageType,BinaryImageType>                               ThresholdFilterType;
-  typedef ThresholdFilterType::Pointer                                                                   ThresholdFilterPointerType;
-
-
+  typedef itk::BinaryThresholdImageFilter<SingleImageType,OutputImageType>                               ThresholdFilterType;
+  typedef typename ThresholdFilterType::Pointer                                                          ThresholdFilterPointerType;
+  // Multiply
+  typedef itk::MultiplyImageFilter<VectorImageType,OutputImageType,VectorImageType>                      MultiplyImageFilterType;
+  typedef typename MultiplyImageFilterType::Pointer                                                      MultiplyImageFilterPointerType;
 
   /** Get/Set indices */
-  void SetRedIndex(int id){ m_UrbanAreaExtractionFilter->SetRedIndex( id ); }; /*GetFunctor().*/
+  void SetRedIndex(int id){ m_UrbanAreaExtractionFilter->SetRedIndex( id ); };
   void SetGreenIndex(int id){ m_UrbanAreaExtractionFilter->SetGreenIndex( id ); };
   void SetNIRIndex(int id){ m_UrbanAreaExtractionFilter->SetNIRIndex( id ); };
   unsigned int GetRedIndex(){ return m_UrbanAreaExtractionFilter->GetRedIndex(); };
@@ -248,9 +246,8 @@ public:
   /** Get/Set threshold values */
   itkGetMacro(ThresholdValue, double);
   itkSetMacro(ThresholdValue, double);
-  itkSetMacro(ThresholdDensity, double);
   itkGetMacro(ThresholdDensity, double);
-
+  itkSetMacro(ThresholdDensity, double);
 
   /** Methods */
   virtual void GenerateData();
@@ -265,7 +262,7 @@ private:
 
   /** Filters */
   IntensityFilterPointerType          m_IntensityFilter;
-  EdgeDensityFilterType::Pointer      m_EdgeDetectorFilter;
+  EdgeDensityFilterType::Pointer      m_EdgeDensityFilter;
   SobelDetectorType::Pointer          m_SobelFilter;
   ThresholdFilterPointerType          m_Thresholder;
   UrbanAreaExtrationFilterPointerType m_UrbanAreaExtractionFilter;
@@ -274,10 +271,11 @@ private:
 //   DilateFilterType::Pointer           m_DilateFilter;
 //   ErodeFilterType::Pointer            m_ErodeFilter2;
 //   DilateFilterType::Pointer           m_DilateFilter2;
+  MultiplyImageFilterPointerType      m_MultiplyFilter;
 
 
 
-  /** MaxThreshold */
+  /** Thresholds */
   double m_ThresholdValue;
   double m_ThresholdDensity;
 
