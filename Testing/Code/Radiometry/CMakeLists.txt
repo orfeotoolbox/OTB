@@ -186,12 +186,22 @@ ADD_TEST(raTvImageToLuminanceImageFilter ${RADIOMETRY_TESTS2}
          )
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(raTvImageToLuminanceImageFilterAuto ${RADIOMETRY_TESTS2}
-  --compare-image ${EPSILON}  ${BASELINE}/raTvImageToLuminanceImageFilterAuto.tif
-                          ${TEMP}/raTvImageToLuminanceImageFilterAuto.tif
+ADD_TEST(raTvImageToLuminanceImageFilterAutoSpot5 ${RADIOMETRY_TESTS2}
+  --compare-image ${EPSILON}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoSpot5.tif
+                          ${TEMP}/raTvImageToLuminanceImageFilterAutoSpot5.tif
         otbImageToLuminanceImageFilterAuto
 	${LARGEINPUT}/SPOT5_SCENE01/IMAGERY.TIF
-	${TEMP}/raTvImageToLuminanceImageFilterAuto.tif
+	${TEMP}/raTvImageToLuminanceImageFilterAutoSpot5.tif
+         )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(raTvImageToLuminanceImageFilterAutoIkonos ${RADIOMETRY_TESTS2}
+  --compare-image ${EPSILON}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoIkonos.tif
+                          ${TEMP}/raTvImageToLuminanceImageFilterAutoIkonos.tif
+        otbImageToLuminanceImageFilterAuto
+	${LARGEINPUT}/IKONOS_BLOSSEVILLE/po_2619900_pan_0000000.tif
+	${TEMP}/raTvImageToLuminanceImageFilterAutoIkonos.tif
          )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 

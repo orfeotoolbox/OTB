@@ -59,7 +59,9 @@ public:
    ossim_float64               theSunAzimuth;
    ossim_float64               theSunElevation;
 
+   ossim_uint32                theNumBands;
    ossimString                 theBandName;
+   ossimString                 theProductionDate;
 
 TYPE_DATA
 };

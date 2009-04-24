@@ -73,7 +73,7 @@ SpatialObjectDXFReader<TSpatialObject>
   {
     itk::ImageFileReaderException e(__FILE__, __LINE__);
     itk::OStringStream msg;
-    msg <<"The file doesn't exists. "
+    msg <<"The file doesn't exist. "
     << std::endl << "Filename = " << this->m_FileName
     << std::endl;
     e.SetDescription(msg.str().c_str());

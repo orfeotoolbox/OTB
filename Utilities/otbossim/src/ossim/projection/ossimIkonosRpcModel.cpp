@@ -281,6 +281,7 @@ void ossimIkonosRpcModel::parseMetaData(const ossimFilename& data_file)
    //***
    char filebuf[5000];
    fread(filebuf, 1, 5000, fptr);
+   fclose(fptr);
 
    //***
    // Image ID:
@@ -434,6 +435,7 @@ bool ossimIkonosRpcModel::parseHdrData(const ossimFilename& data_file)
    //***
    char filebuf[5000];
    fread(filebuf, 1, 5000, fptr);
+   fclose(fptr);
 
    //***
    // GSD:
@@ -880,6 +882,38 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
 
    theSupportData = new ossimIkonosMetaData(filename);
 
+
+   //NB: Parsing the metadata file at this level is useful to
+   // retrieve the sensor name.
+   //retrieve information from the metadata file
+   //if the ikonos tif is po_2619900_pan_0000000.tif
+   //the metadata file will be po_2619900_metadata.txt
+   std::cout << "Parsing metadata..." << std::endl;
+   ossimString separator("_");
+   ossimString filenamebase = filename.fileNoExtension();
+   std::vector< ossimString > filenameparts = filenamebase.split(separator);
+
+   if(filenameparts.size() < 2)
+   {
+     ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG ossimIkonosRpcModel parseTiffFile: Ikonos filename non standard" << std::endl;
+   }
+   ossimFilename metadatafile = filenameparts[0];
+   metadatafile += "_";
+   metadatafile += filenameparts[1];
+   metadatafile += "_metadata.txt";
+
+   metadatafile.setPath(filename.path());
+
+   parseMetaData (metadatafile);
+   if (getErrorStatus()) //check for errors in parsing metadata file
+   {
+     ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG ossimIkonosRpcModel parseTiffFile: errors parsing metadata" << std::endl;
+     //failed to read metadata, but don't abord here.
+   }
+
+
    //convert file to rpc filename and hdr filename so we can get some info
 
 
@@ -887,8 +921,6 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
    hdrfile.setExtension(ossimString("hdr"));
    if(!parseHdrData(hdrfile))
    {
-     ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG ossimIkonosRpcModel parseTiffFile: errors parsing hdr" << std::endl;
       return false;
    }
 
@@ -897,8 +929,6 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
    parseRpcData (rpcfile);
    if (getErrorStatus()) //check for errors in parsing rpc data
    {
-     ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG ossimIkonosRpcModel parseTiffFile: errors parsing rpc" << std::endl;
       return false;
    }
 
