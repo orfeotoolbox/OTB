@@ -20,6 +20,7 @@
 #include <ossim/projection/ossimRpcModel.h>
 
 class ossimFilename;
+class ossimIkonosMetaData;
 
 /*!****************************************************************************
  *
@@ -30,10 +31,12 @@ class OSSIM_DLL ossimIkonosRpcModel : public ossimRpcModel
 {
 public:
   ossimIkonosRpcModel();
-   ossimIkonosRpcModel(const ossimFilename& geom_file);
+  ossimIkonosRpcModel(const ossimFilename& geom_file);
 
-   ossimIkonosRpcModel(const ossimFilename& metadata,
+  ossimIkonosRpcModel(const ossimFilename& metadata,
                        const ossimFilename& rpcdata);
+
+  virtual ~ossimIkonosRpcModel();
 
   virtual bool saveState(ossimKeywordlist& kwl,
 			 const char* prefix=0)const;
@@ -55,13 +58,7 @@ protected:
 /*    bool parseNitfFile(const ossimFilename& geom_file); */
    bool parseHdrData(const ossimFilename& data_file);
 
-   //***
-   // Additional information:
-   //***
-   ossim_float64               theSunAzimuth;
-   ossim_float64               theSunElevation;
-
-   ossimString                 theBandName;
+   ossimIkonosMetaData* theSupportData;
 
    TYPE_DATA
 };
