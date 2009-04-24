@@ -22,7 +22,7 @@
 #include "otbVectorImage.h"
 
 
-int otbMultiChannelRAndGAndNIRVegetationIndexImageFilterNew(int argc, char * argv[])
+int otbMultiChannelRAndGAndNIRIndexImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<unsigned char,Dimension> InputImageType;

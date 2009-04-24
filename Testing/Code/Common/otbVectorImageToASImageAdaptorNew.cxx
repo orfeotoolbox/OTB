@@ -15,22 +15,20 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "itkExceptionObject.h"
+#include <cstdlib>
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+#include "otbVectorImageToASImageAdaptor.h"
+#include "otbVectorImage.h"
 
-
-#include "otbTestMain.h"
-
-
-void RegisterTests()
+int otbVectorImageToASImageAdaptorNew(int argc, char * argv[])
 {
-REGISTER_TEST(otbPointSetFileReaderNew);
-REGISTER_TEST(otbPointSetFileReader);
-REGISTER_TEST(otbImageIOFactoryNew);
-REGISTER_TEST(otbDEMToOrthoImageGeneratorNew);
-REGISTER_TEST(otbDEMToOrthoImageGeneratorTest);
+  typedef otb::VectorImage<double, 2>                 ImageType;
+  typedef otb::VectorImageToASImageAdaptor<ImageType> FilterType;
+
+  // Instantiating object
+  FilterType::Pointer object = FilterType::New();
+
+
+  return EXIT_SUCCESS;
 }

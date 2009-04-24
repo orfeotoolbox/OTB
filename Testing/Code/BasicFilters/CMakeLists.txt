@@ -1235,6 +1235,15 @@ ADD_TEST(bfTvKeyPointDensityImageFilterOutputImage ${BASICFILTERS_TESTS11}
 ADD_TEST(bfTvFunctionWithNeighborhoodToImageFilterNew ${BASICFILTERS_TESTS11}
         otbFunctionWithNeighborhoodToImageFilterNew
 )
+ADD_TEST(bfTvFunctionWithNeighborhoodToImageFilter ${BASICFILTERS_TESTS11}
+      --compare-image 0
+         ${INPUTDATA}/poupees_sub_c1.png
+         ${TEMP}/bfFunctionWithNeighborhoodToImageFilter.tif
+      otbFunctionWithNeighborhoodToImageFilter
+	 ${INPUTDATA}/poupees_sub_c1.png
+         ${TEMP}/bfFunctionWithNeighborhoodToImageFilter.tif
+)
+
 
 ADD_TEST(bfTuStreamingInnerProductVectorImageFilterNew ${BASICFILTERS_TESTS11}
         otbStreamingInnerProductVectorImageFilterNew
@@ -1662,6 +1671,7 @@ otbKeyPointDensityImageFilterNew.cxx
 otbKeyPointDensityImageFilterTest.cxx
 otbImagePCAShapeModelEstimatorTest.cxx
 otbFunctionWithNeighborhoodToImageFilterNew.cxx
+otbFunctionWithNeighborhoodToImageFilter.cxx
 otbStreamingInnerProductVectorImageFilterNew.cxx
 otbStreamingInnerProductVectorImageFilter.cxx
 otbEstimateInnerProductPCAImageFilterNew.cxx

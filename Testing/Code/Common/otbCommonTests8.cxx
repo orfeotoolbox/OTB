@@ -34,4 +34,5 @@ REGISTER_TEST(otbImageOfVectorsToMonoChannelExtractROINew);
 REGISTER_TEST(otbImageOfVectorsToMonoChannelExtractROI);
 REGISTER_TEST(otbImageRegionNonUniformMultidimensionalSplitterNew);
 REGISTER_TEST(otbImageRegionNonUniformMultidimensionalSplitter);
+REGISTER_TEST(otbVectorImageToASImageAdaptorNew);
 }

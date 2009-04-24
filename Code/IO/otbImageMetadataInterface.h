@@ -114,15 +114,26 @@ public:
   /** Get the sun elevation from the ossim metadata */
   double GetSunElevation( const MetaDataDictionaryType & dict ) const;
 
+  /** Get the sun azimuth from the ossim metadata */
+  double GetSunAzimuth( const MetaDataDictionaryType & dict ) const;
+
   /** Get the imaging day from the ossim metadata */
   int GetDay( const MetaDataDictionaryType & dict ) const;
 
   /** Get the imaging month from the ossim metadata */
   int GetMonth( const MetaDataDictionaryType & dict ) const;
 
+  /** Get the imaging month from the ossim metadata */
+  int GetYear( const MetaDataDictionaryType & dict ) const;
+
   /** Get the sensor ID from the ossim metadata */
   std::string GetSensorID(const MetaDataDictionaryType & dict ) const;
 
+  /** Get the number of bands from the ossim metadata */
+  unsigned int GetNumberOfBands(const MetaDataDictionaryType & dict ) const;
+
+  /** Get the band name from the ossim metadata */
+  std::vector<std::string> GetBandName(const MetaDataDictionaryType & dict ) const;
 
   void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const;
 
@@ -133,7 +144,16 @@ protected:
 
   bool IsSpot( const MetaDataDictionaryType & dict) const;
 
+  bool IsIkonos( const MetaDataDictionaryType & dict) const;
+
+  VariableLengthVectorType GetSpotPhysicalBias( const MetaDataDictionaryType & dict ) const;
+  VariableLengthVectorType GetSpotPhysicalGain( const MetaDataDictionaryType & dict ) const;
+
+  VariableLengthVectorType GetIkonosPhysicalBias( const MetaDataDictionaryType & dict ) const;
+  VariableLengthVectorType GetIkonosPhysicalGain( const MetaDataDictionaryType & dict ) const;
+
 private:
+
   ImageMetadataInterface(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

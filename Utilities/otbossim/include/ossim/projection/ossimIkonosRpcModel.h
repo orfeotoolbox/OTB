@@ -1,10 +1,10 @@
 //*******************************************************************
 //
 // License:  See top level LICENSE.txt file.
-// 
+//
 // AUTHOR: Oscar Kramer
 //
-// DESCRIPTION: Contains declaration of class ossimIkonosRpcModel. This 
+// DESCRIPTION: Contains declaration of class ossimIkonosRpcModel. This
 //    derived class implements the capability of reading Ikonos RPC support
 //    data.
 //
@@ -20,6 +20,7 @@
 #include <ossim/projection/ossimRpcModel.h>
 
 class ossimFilename;
+class ossimIkonosMetaData;
 
 /*!****************************************************************************
  *
@@ -30,10 +31,12 @@ class OSSIM_DLL ossimIkonosRpcModel : public ossimRpcModel
 {
 public:
   ossimIkonosRpcModel();
-   ossimIkonosRpcModel(const ossimFilename& geom_file);
+  ossimIkonosRpcModel(const ossimFilename& geom_file);
 
-   ossimIkonosRpcModel(const ossimFilename& metadata,
+  ossimIkonosRpcModel(const ossimFilename& metadata,
                        const ossimFilename& rpcdata);
+
+  virtual ~ossimIkonosRpcModel();
 
   virtual bool saveState(ossimKeywordlist& kwl,
 			 const char* prefix=0)const;
@@ -44,7 +47,7 @@ public:
    static void writeGeomTemplate(ostream& os);
 
    virtual bool parseFile(const ossimFilename& file);
-   
+
 protected:
    void finishConstruction();
    void parseMetaData(const ossimFilename& metadata);
@@ -54,6 +57,8 @@ protected:
    bool parseTiffFile(const ossimFilename& filename);
 /*    bool parseNitfFile(const ossimFilename& geom_file); */
    bool parseHdrData(const ossimFilename& data_file);
+
+   ossimIkonosMetaData* theSupportData;
 
    TYPE_DATA
 };
