@@ -30,7 +30,7 @@ namespace otb
  *
  *   The matching criteria is that the ratio between the distance to the first nearest neighbor and the
  *   second nearest neighbor is lower than the distance threshold. The distance used can be set via the TDistance
- *   template parameters. It has to implement the Evaluate() method (see \doxygen{EuclideanDistance} for more details).
+ *   template parameters. It has to implement the Evaluate() method (see EuclideanDistance for more details).
  *
  *   By default, the algorithm tries to match points from pointset 1 to points from pointset 2. If back matching is activated,
  *   it will aslo try to match points from pointset 2 to points from pointset 2, and discard matches that do not appear both in

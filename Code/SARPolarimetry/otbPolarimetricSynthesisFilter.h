@@ -33,22 +33,22 @@ namespace otb
  * This class compute the polarimetric synthesis from two to four radar images,
  * depening on the polarimetric architecture:
  *
- *    - HH_HV : two channels are available: $S_{HH}$ and $S_{HV}$.
- *                  Emit polarisation is fixed to horizontal orientation: $\psi_{i}=0$ and $\chi_{i}=0$.
- *    - VV_VH : two channels are available: $S_{VV}$ and $S_{VH}$.
- *                  Emit polarisation is fixed to vertical orientation: $\psi_{i}=90^\circ$ and $\chi_{i}=0$.
- *    - HH_HV_VV : three channels are available: $S_{HH}$, $S_{HV}$ and $S_{VV}$.
- *                     we make the assumption that cross polarisation are reciprocal ($S_{HV} =  S_{VH}$).
- *    - HH_HV_VH_VV: four channels are available $S_{HH}$, $S_{HV}$, $S_{VH}$ and $S_{VV}$.
+ *    - HH_HV : two channels are available: \f$ S_{HH} \f$  and  \f$ S_{HV} \f$ .
+ *                  Emit polarisation is fixed to horizontal orientation:  \f$ \psi_{i}=0 \f$  and  \f$ \chi_{i}=0 \f$ .
+ *    - VV_VH : two channels are available:  \f$ S_{VV} \f$  and  \f$ S_{VH} \f$ .
+ *                  Emit polarisation is fixed to vertical orientation:  \f$ \psi_{i}=90^\circ \f$  and  \f$ \chi_{i}=0 \f$ .
+ *    - HH_HV_VV : three channels are available:  \f$ S_{HH} \f$ ,  \f$ S_{HV} \f$  and  \f$ S_{VV} \f$ .
+ *                     we make the assumption that cross polarisation are reciprocal ( \f$ S_{HV} =  S_{VH} \f$ ).
+ *    - HH_HV_VH_VV: four channels are available  \f$ S_{HH} \f$ ,  \f$ S_{HV} \f$ ,  \f$ S_{VH} \f$  and  \f$ S_{VV} \f$ .
  *
- * To resolve the synthesis, four parameters are required: $\psi_{i}$ , $\chi_{i}$, $\psi_{r}$ and $\chi_{r}$.
+ * To resolve the synthesis, four parameters are required:  \f$ \psi_{i} \f$  ,  \f$ \chi_{i} \f$ ,  \f$ \psi_{r} \f$  and  \f$ \chi_{r} \f$ .
  * These parameters depend on the polarimetric architecture describe below.
  *
  * The result of the synthesis is a scalar image. Three modes are available:
  *
  *     - none: set the four parameters;
- *     - co: $\psi_{r} = \psi_{i}$ and $\chi_{r} = \chi_{i}$
- *     - cross: $\psi_{r} = \psi_{i} + 90^\circ$ and $\chi_{r} = -\chi_{i}$
+ *     - co:  \f$ \psi_{r} = \psi_{i} \f$  and  \f$ \chi_{r} = \chi_{i} \f$
+ *     - cross:  \f$ \psi_{r} = \psi_{i} + 90^\circ \f$  and  \f$ \chi_{r} = -\chi_{i} \f$
  *
  * This class is parameterized over the type of the input images and
  * the type of the output image.  It is also parameterized by the

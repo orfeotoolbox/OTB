@@ -29,7 +29,7 @@ namespace otb
 
 /** \class PixelDescriptionView
 *   \brief todo
-*   \Todo: Rename PixelDescriptioner when refactoring will be completed.
+*   \todo: Rename PixelDescriptioner when refactoring will be completed.
 *  \ingroup Visualization
  */
 

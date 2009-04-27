@@ -28,7 +28,7 @@ namespace otb
 
 /** \class ImageView
 *   \brief todo
-*   \Todo: Rename ImageViewer when refactoring will be completed.
+*   \todo: Rename ImageViewer when refactoring will be completed.
 *  \ingroup Visualization
  */
 

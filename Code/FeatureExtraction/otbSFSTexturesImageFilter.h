@@ -38,10 +38,10 @@ namespace otb
  * vol. 4, n. 2, 2007, pp 260-264
  *
  * The texture is computated for each pixel using its neighborhood.
- * User can set the spatial threshold taht is the max line length, the spectral threshold
+ * User can set the spatial threshold that is the max line length, the spectral threshold
  * that is the max difference authorized between a pixel of the line and the center pixel
- * of the current neighborhood. Alpha and RationMaxConsideration are used to compute
- * the \omega -mean value. Finally, The number of direction can be precised with
+ * of the current neighborhood. Alpha and RatioMaxConsideration are used to compute
+ * the \f$ \omega \f$ - mean value. Finally, The number of direction can be precised with
  * NumberOfDirections.
  * You can choose the computed textures using SetTextureStatus method (1:length, 2:width,
  * 3:PSI, 4:w-mean, 5:ratio, 6:SD).

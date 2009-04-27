@@ -230,7 +230,7 @@ protected:
 
   /** Compute differenec of gaussian
    *
-   *  \param input, current input in process
+   *  \param input current input in process
    */
   void ComputeDifferenceOfGaussian(InputImagePointerType input);
 
@@ -258,7 +258,7 @@ protected:
    *  \param currentScale iterator
    *  \param previousScale iterator
    *  \param nextScale iterator
-   *  \param offset pixel location
+   *  \param solution
    *
    *  \return true if key point is accepted, false otherwise
    */

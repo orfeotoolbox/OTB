@@ -29,16 +29,16 @@ namespace otb
  *  \brief This functor computes textures based on line direction analysis through the central pixel.
  *
  *  Directions are computed using NumberOfDirection, used to compute a constant step angle.
- *  A direction is defined as : $\mathit{d_{i} = \sqrt{(m^{e1}-m{e2})^{2}+(n^{e1}-n{e2})^{2}}}$
- *  From  $\mathit{d_{i}}, histograms are defined :
- *  $\mathit{H(c) : \{c \in I \mid \lbrack d_{1}(c), \ldots , d_{i}(c), \ldots , d_{D}(c)\rbrack  \}}$
+ *  A direction is defined as : \f$ \mathit{d_{i} = \sqrt{(m^{e1}-m{e2})^{2}+(n^{e1}-n{e2})^{2}}} \f$
+ *  From  \f$ \mathit{d_{i}} \f$, histograms are defined :
+ *  \f$ \mathit{H(c) : \{c \in I \mid \lbrack d_{1}(c), \ldots , d_{i}(c), \ldots , d_{D}(c)\rbrack  \}} \f$
  *  Thus, 6 textures are defined :
- *  $\mathit{length = \max_{i \in \lbrack1;D\rbrack}(d_{i}(c)}$
- *  $\mathit{width = \min_{i \in \lbrack1;D\rbrack}(d_{i}(c)}$
- *  $\mathit{PSI = \frac{1}{D}\sum_{1=1}^{D}d_{i}(c)}$
- *  $\mathit{\omega-mean = \frac{1}{D}\sum_{1=1}^{D}\frac{\alpha.(k_{i}-1)}{st_{i}}d_{i}(c)}$
- *  $\mathit{ratio = \arctan{\frac{\sum_{j=1}^{n}{sort_{min}^{j}(H(c))}}{\sum_{j=1}^{n}{sort_{max}^{j}(H(c))}}}}$
- *  $\mathit{SD = \frac{1}{D-1}\sqrt{\sum_{1=1}^{D}(d_{i}(c)-PSI)^{2}}}$
+ *  \f$ \mathit{length = \max_{i \in \lbrack1;D\rbrack}(d_{i}(c)} \f$
+ *  \f$ \mathit{width = \min_{i \in \lbrack1;D\rbrack}(d_{i}(c)} \f$
+ *  \f$ \mathit{PSI = \frac{1}{D}\sum_{1=1}^{D}d_{i}(c)} \f$
+ *  \f$ \mathit{\omega-mean = \frac{1}{D}\sum_{1=1}^{D}\frac{\alpha.(k_{i}-1)}{st_{i}}d_{i}(c)} \f$
+ *  \f$ \mathit{ratio = \arctan{\frac{\sum_{j=1}^{n}{sort_{min}^{j}(H(c))}}{\sum_{j=1}^{n}{sort_{max}^{j}(H(c))}}}} \f$
+ *  \f$ \mathit{SD = \frac{1}{D-1}\sqrt{\sum_{1=1}^{D}(d_{i}(c)-PSI)^{2}}} \f$
  *
  *  For more details, please refer to refer to Xin Huang, Liangpei Zhang and Pingxiang Li publication,
  *  Classification and Extraction of Spatial Features in Urban Areas
@@ -46,7 +46,7 @@ namespace otb
  *  IEEE Geoscience and Remote Sensing Letters,
  *  vol. 4, n. 2, 2007, pp 260-264
  *
-   * \ingroup Textures
+ * \ingroup Textures
  */
 
 
