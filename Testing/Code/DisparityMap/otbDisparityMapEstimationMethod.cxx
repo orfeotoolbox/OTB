@@ -133,9 +133,10 @@ int otbDisparityMapEstimationMethod(int argc, char* argv[])
   //     unsigned int idData=0;
   PointDataIteratorType itData = pointSet->GetPointData()->Begin();
   std::cout<<"Point data size: "<<pointSet->GetPointData()->Size()<<std::endl;
-  for (;it!=pointSet->GetPoints()->End()
-       &&itData!=pointSet->GetPointData()->End()
-;++it,++itData)
+  for (;
+        it!=pointSet->GetPoints()->End()
+       &&itData!=pointSet->GetPointData()->End();
+       ++it,++itData)
   {
     out<<"Point "<<it.Value()<<" -> transform parameters: ";
     out<<itData.Value();
