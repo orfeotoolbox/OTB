@@ -15,15 +15,19 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "itkExceptionObject.h"
+#include "otbPrepareSRTMDirectory.h"
 
-#include "otbVectorDataKeywordlist.h"
 
-int otbVectorDataKeywordlist(int argc, char * argv[])
+int otbPrepareSRTMDirectoryNew(int argc, char * argv[])
 {
 
-  otb::VectorDataKeywordlist kwl;
+ typedef otb::PrepareSRTMDirectory PrepareSRTMDirectoryType;
 
-  //TODO test methods
+  PrepareSRTMDirectoryType::Pointer prepareSRTM = PrepareSRTMDirectoryType::New();
+
 
   return EXIT_SUCCESS;
 }
+
+

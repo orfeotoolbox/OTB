@@ -15,11 +15,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPrepareSRTMDirectory_txx
-#define __otbPrepareSRTMDirectory_txx
 
 #include "otbPrepareSRTMDirectory.h"
-
+#include <iostream>
+#include <iomanip>
+#include "otbMath.h"
 
 namespace otb
 {
@@ -58,11 +58,10 @@ PrepareSRTMDirectory
 
 bool PrepareSRTMDirectory::Evaluate()
 {
-
-  int startX = static_cast<int>(floor(m_ULLon));
-  int endX = static_cast<int>(ceil(m_LRLon));
-  int startY = static_cast<int>(floor(m_LRLat));
-  int endY = static_cast<int>(ceil(m_ULLat));
+  int startX = static_cast<int>(vcl_floor(m_ULLon));
+  int endX = static_cast<int>(vcl_ceil(m_LRLon));
+  int startY = static_cast<int>(vcl_floor(m_LRLat));
+  int endY = static_cast<int>(vcl_ceil(m_ULLat));
 
   std::cout << startX << std::endl;
   std::cout << endX << std::endl;
@@ -84,30 +83,30 @@ bool PrepareSRTMDirectory::Evaluate()
       if (j >= 0)
       {
         inputfilename << "N";
-        inputfilename << setfill('0') << setw(2) << j;
+        inputfilename << std::setfill('0') << std::setw(2) << j;
         outputfilename << "N";
-        outputfilename << setfill('0') << setw(2) << j;
+        outputfilename << std::setfill('0') << std::setw(2) << j;
       }
       else
       {
         inputfilename << "S";
-        inputfilename << setfill('0') << setw(2) << -j;
+        inputfilename << std::setfill('0') << std::setw(2) << -j;
         outputfilename << "S";
-        outputfilename << setfill('0') << setw(2) << -j;
+        outputfilename << std::setfill('0') << std::setw(2) << -j;
       }
       if (i >= 0)
       {
         inputfilename << "E";
-        inputfilename << setfill('0') << setw(3) << i;
+        inputfilename << std::setfill('0') << std::setw(3) << i;
         outputfilename << "E";
-        outputfilename << setfill('0') << setw(3) << i;
+        outputfilename << std::setfill('0') << std::setw(3) << i;
       }
       else
       {
         inputfilename << "W";
-        inputfilename << setfill('0') << setw(3) << -i;
+        inputfilename << std::setfill('0') << std::setw(3) << -i;
         outputfilename << "W";
-        outputfilename << setfill('0') << setw(3) << -i;
+        outputfilename << std::setfill('0') << std::setw(3) << -i;
       }
 
       inputfilename << ".hgt";
@@ -129,4 +128,3 @@ bool PrepareSRTMDirectory::Evaluate()
 
 } // namespace otb
 
-#endif

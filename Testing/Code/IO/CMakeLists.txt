@@ -1758,7 +1758,12 @@ ADD_TEST(ioTvDEMToOrthoImageGeneratorTest ${IO_TESTS17}
          N # hemisphere
 )
 
+# ---  otb::PrepareSRTMDirectory ---
+ADD_TEST(ioTuPrepareSRTMDirectoryNew ${IO_TESTS17}
+      otbPrepareSRTMDirectoryNew )
 
+#ADD_TEST(ioTuPrepareSRTMDirectoryTest ${IO_TESTS17}
+#      otbPrepareSRTMDirectoryTest )
 
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
@@ -1901,6 +1906,8 @@ otbPointSetFileReader.cxx
 otbImageIOFactoryNew.cxx
 otbDEMToOrthoImageGeneratorNew.cxx
 otbDEMToOrthoImageGeneratorTest.cxx
+otbPrepareSRTMDirectoryNew.cxx
+#otbPrepareSRTMDirectoryTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
