@@ -79,7 +79,8 @@ DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
 
   if (!m_MapProjection)
   {
-    itkExceptionMacro( << "Please set map projection!" );
+    itkExceptionMacro( <<
+                       "Please set map projection!" );
   }
 
   DEMImagePointerType  DEMImage = this->GetOutput();

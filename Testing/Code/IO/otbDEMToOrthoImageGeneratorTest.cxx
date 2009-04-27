@@ -26,7 +26,7 @@ int otbDEMToOrthoImageGeneratorTest(int argc, char * argv[])
 {
   if (argc<9)
   {
-    std::cout << argv[0] <<" folder path , output filename , Longitude Output Orign point , Latitude Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing"  << std::endl;
+    std::cout << argv[0] <<" DEM folder path , output filename , Easting Output Orign point , Northing Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing"  << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -59,6 +59,7 @@ int otbDEMToOrthoImageGeneratorTest(int argc, char * argv[])
   SpacingType spacing;
   spacing[0] = ::atof(argv[7]);
   spacing[1] = ::atof(argv[8]);
+  std::cout<<atoi(argv[9])<<std::endl;
 
   mapProj->SetZone(::atoi(argv[9]));
   mapProj->SetHemisphere(argv[10][0]);
