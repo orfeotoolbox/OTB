@@ -33,14 +33,16 @@ VectorDataKeywordlist
 {
   for (unsigned int i = 0; i < m_FieldList.size(); ++i)
   {
-    delete(m_FieldList[i]);
+    delete(m_FieldList[i].first);
   }
 }
 
 void VectorDataKeywordlist::
-    AddField(OGRFieldDefn* field)
+    AddField(OGRFieldDefn* fieldDefn, OGRField* field)
 {
-  OGRFieldDefn* newField = new OGRFieldDefn(field);//this ogr construction does a clone
+  FieldType newField;
+  newField.first = new OGRFieldDefn(fieldDefn);
+  newField.second = *field;
   m_FieldList.push_back(newField);
 };
 
@@ -50,7 +52,9 @@ VectorDataKeywordlist::
 {
   for (unsigned int i = 0; i < p.m_FieldList.size(); ++i)
   {
-    OGRFieldDefn* newField = new OGRFieldDefn(p.m_FieldList[i]);//this ogr construction does a clone
+    FieldType newField;
+    newField.first = new OGRFieldDefn(p.m_FieldList[i].first);
+    newField.second = p.m_FieldList[i].second;
     m_FieldList.push_back(newField);
   }
 }
@@ -66,13 +70,87 @@ void
 VectorDataKeywordlist::
     PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  os << indent << " VectorData Keyword list:"<<std::endl;
-  os << indent << "  - Size: " << m_FieldList.size() << std::endl;
+  os << indent << " VectorData Keyword list: ";
+  os << indent << " - Size: " << m_FieldList.size() << std::endl;
   for (unsigned int i = 0; i < m_FieldList.size(); ++i)
   {
-    os << indent << "    " << m_FieldList[i]->GetNameRef ();
-    os << " : " << (*(m_FieldList[i]->GetDefaultRef())).Integer;
+    os << indent << "    " << PrintField(m_FieldList[i]);
   }
+}
+
+std::string
+VectorDataKeywordlist::
+    PrintField(FieldType field) const
+{
+  std::stringstream output;
+  output << field.first->GetNameRef() << " (";
+  output << field.first->GetFieldTypeName(field.first->GetType()) << "): ";
+  switch(field.first->GetType())
+  {
+    case OFTInteger:
+    {
+      output << field.second.Integer;
+      break;
+    }
+    case OFTIntegerList:
+    {
+      output << "Type not handled for printing";
+      break;
+    }
+    case OFTReal:
+    {
+      output << field.second.Real;
+      break;
+    }
+    case OFTRealList:
+    {
+      output << "Type not handled for printing";
+      break;
+    }
+    case OFTString:
+    {
+      output << field.second.String;
+      break;
+    }
+    case OFTStringList:
+    {
+      output << "Type not handled for printing";
+      break;
+    }
+    case OFTWideString:
+    {
+      output << "Type not handled for printing";
+      break;
+    }
+    case OFTWideStringList:
+    {
+      output << "Type not handled for printing";
+      break;
+    }
+    case OFTBinary:
+    {
+      output << "Type not handled for printing";
+      break;
+    }
+    case OFTDate:
+    {
+      output << field.second.Date.Year << field.second.Date.Month << field.second.Date.Day;
+      break;
+    }
+    case OFTTime:
+    {
+      output << field.second.Date.Hour << field.second.Date.Minute << field.second.Date.Second;
+      break;
+    }
+    case OFTDateTime:
+    {
+      output << field.second.Date.Year << field.second.Date.Month << field.second.Date.Day << "-"
+          << field.second.Date.Hour << field.second.Date.Minute << field.second.Date.Second;
+      break;
+    }
+  }
+  output << std::endl;
+  return output.str();
 }
 
 std::ostream &

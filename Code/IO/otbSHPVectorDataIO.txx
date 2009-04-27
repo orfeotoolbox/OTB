@@ -214,7 +214,7 @@ SHPVectorDataIO<TData>
         std::cout << "Inserting " << feature->GetFieldCount() << " fields." << std::endl;
         for (int fieldNum=0; fieldNum< feature->GetFieldCount(); ++fieldNum)
         {
-          kwl.AddField(feature->GetFieldDefnRef((fieldNum), feature->GetRawFieldRef((fieldNum));
+          kwl.AddField(feature->GetFieldDefnRef(fieldNum), feature->GetRawFieldRef(fieldNum));
         }
 
 

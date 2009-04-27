@@ -227,11 +227,7 @@ DataNode<TPrecision,VDimension,TValuePrecision>
   {
     VectorDataKeywordlist kwl;
     itk::ExposeMetaData<VectorDataKeywordlist>(GetMetaDataDictionary(), MetaDataKey::VectorDataKeywordlistKey, kwl);
-    oss<< "  -> Metadata: " << kwl;
-  }
-  else
-  {
-    oss<< "  -> No metadata";
+    oss<< "\n  -> Metadata: " << kwl;
   }
   return oss.str();
 }
