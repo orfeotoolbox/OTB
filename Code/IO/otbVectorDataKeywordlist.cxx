@@ -17,6 +17,7 @@
 =========================================================================*/
 
 #include "otbVectorDataKeywordlist.h"
+#include <iomanip>
 
 namespace otb
 {
@@ -42,7 +43,7 @@ void VectorDataKeywordlist::
 {
   FieldType newField;
   newField.first = new OGRFieldDefn(fieldDefn);
-  newField.second = *field;
+  newField.second = *field; //FIXME this is only a shallow copy
   m_FieldList.push_back(newField);
 };
 
@@ -54,7 +55,7 @@ VectorDataKeywordlist::
   {
     FieldType newField;
     newField.first = new OGRFieldDefn(p.m_FieldList[i].first);
-    newField.second = p.m_FieldList[i].second;
+    newField.second = p.m_FieldList[i].second; //FIXME this is only a shallow copy
     m_FieldList.push_back(newField);
   }
 }
@@ -83,6 +84,7 @@ VectorDataKeywordlist::
     PrintField(FieldType field) const
 {
   std::stringstream output;
+  output << std::setprecision(15);
   output << field.first->GetNameRef() << " (";
   output << field.first->GetFieldTypeName(field.first->GetType()) << "): ";
   switch(field.first->GetType())
@@ -109,7 +111,10 @@ VectorDataKeywordlist::
     }
     case OFTString:
     {
-      output << field.second.String;
+      if (field.second.String != NULL)
+      {
+        output << field.second.String;
+      }
       break;
     }
     case OFTStringList:
