@@ -17,6 +17,7 @@ SET(EPSILON 0.0001)
 SET(PROJECTIONS_TESTS1 ${CXX_TEST_PATH}/otbProjectionsTests1)
 SET(PROJECTIONS_TESTS2 ${CXX_TEST_PATH}/otbProjectionsTests2)
 SET(PROJECTIONS_TESTS3 ${CXX_TEST_PATH}/otbProjectionsTests3)
+SET(PROJECTIONS_TESTS4 ${CXX_TEST_PATH}/otbProjectionsTests4)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbPROJECTIONS_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -335,6 +336,24 @@ ADD_TEST(prTvGeocentricTransform ${PROJECTIONS_TESTS3}
         ${TEMP}/prTvGeocentricTransform.txt
 )
 
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbPROJECTIONS_TESTS4 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ADD_TEST(prTuPrepareSRTMDirectoryNew ${PROJECTIONS_TESTS4}  
+        otbPrepareSRTMDirectoryNew )
+
+
+
+
+
+
+
+
+
+
+
 #=======================================================================================
 SET(Projections_SRCS1
 otbProjectionBaseNew.cxx
@@ -365,7 +384,9 @@ otbVectorDataProjectionFilterFromMapToGeo.cxx
 otbGeocentricTransformNew.cxx
 otbGeocentricTransform.cxx
 )
-
+SET(Projections_SRCS4
+otbPrepareSRTMDirectoryNew.cxx
+)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
@@ -375,5 +396,7 @@ ADD_EXECUTABLE(otbProjectionsTests2 otbProjectionsTests2.cxx ${Projections_SRCS2
 TARGET_LINK_LIBRARIES(otbProjectionsTests2  OTBProjections OTBIO)
 ADD_EXECUTABLE(otbProjectionsTests3 otbProjectionsTests3.cxx ${Projections_SRCS3})
 TARGET_LINK_LIBRARIES(otbProjectionsTests3  OTBProjections OTBIO)
+ADD_EXECUTABLE(otbProjectionsTests4 otbProjectionsTests4.cxx ${Projections_SRCS4})
+TARGET_LINK_LIBRARIES(otbProjectionsTests4  OTBProjections OTBIO)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

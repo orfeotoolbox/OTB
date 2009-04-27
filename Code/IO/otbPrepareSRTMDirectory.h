@@ -22,6 +22,8 @@
 #include "itkObjectFactory.h"
 #include "base/ossimFilename.h"
 
+
+
 namespace otb
 {
 
@@ -43,30 +45,30 @@ class ITK_EXPORT PrepareSRTMDirectory : public itk::Object
 {
 public:
   /** Standard class typedefs. */
-  typedef PrepareSRTMDirectory                                      Self;
-  typedef itk::SmartPointer<Self>                                Pointer;
-  typedef itk::SmartPointer<const Self>                          ConstPointer;
+  typedef PrepareSRTMDirectory          Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-
-  typedef itk::Object Superclass;
-
-  itkTypeMacro(PrepareSRTMDirectory, Object);
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
+
+  itkTypeMacro(PrepareSRTMDirectory, itk::Object);
+
 
   itkGetMacro( ULLon, double );
   itkGetMacro( ULLat, double );
   itkGetMacro( LRLon, double );
   itkGetMacro( LRLat, double );
-  itkGetMacro( FullDEMDirectoryPath, string );
-  itkGetMacro( DEMDirectoryPath, string );
+  itkGetMacro( FullDEMDirectoryPath, std::string );
+  itkGetMacro( DEMDirectoryPath, std::string );
 
   itkSetMacro( ULLon, double );
   itkSetMacro( ULLat, double );
   itkSetMacro( LRLon, double );
   itkSetMacro( LRLat, double );
-  itkSetMacro( FullDEMDirectoryPath, string );
-  itkSetMacro( DEMDirectoryPath, string );
+  itkSetMacro( FullDEMDirectoryPath, std::string );
+  itkSetMacro( DEMDirectoryPath, std::string );
 
 
   virtual bool Evaluate();
@@ -84,14 +86,11 @@ private:
   double m_ULLat;
   double m_LRLon;
   double m_LRLat;
-  string m_FullDEMDirectoryPath;
-  string m_DEMDirectoryPath;
+  std::string m_FullDEMDirectoryPath;
+  std::string m_DEMDirectoryPath;
 };
 
 } // namespace otb
 
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPrepareSRTMDirectory.txx"
-#endif
 
 #endif
