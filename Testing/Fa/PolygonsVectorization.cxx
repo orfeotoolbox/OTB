@@ -72,7 +72,7 @@ int main( int argc, char * argv[] )
   typedef itk::ConnectedComponentImageFilter<LabeledImageType,LabeledImageType> ConnectedFilterType;
   typedef itk::RescaleIntensityImageFilter<LabeledImageType,OutputImageType>    RescalerType;
 /*
-  typedef itk::BinaryBallStructuringElement< LabelPixelType, 2 >	StructuringElementType;
+  typedef itk::BinaryBallStructuringElement< LabelPixelType, 2 >        StructuringElementType;
   typedef itk::BinaryErodeImageFilter<LabeledImageType,LabeledImageType,StructuringElementType>   ErodeFilterType;
   typedef itk::BinaryDilateImageFilter<LabeledImageType,LabeledImageType,StructuringElementType>  DilateFilterType;
   typedef itk::MedianImageFilter<LabeledImageType,LabeledImageType> MedianFilterType;
@@ -105,14 +105,14 @@ int main( int argc, char * argv[] )
     {
       std::string descriptionException = err.GetDescription();
       if(descriptionException.find("ParseCommandLine(): Help Parser")
-	 != std::string::npos)
+         != std::string::npos)
       {
-	return EXIT_SUCCESS;
+        return EXIT_SUCCESS;
       }
       if(descriptionException.find("ParseCommandLine(): Version Parser")
-	 != std::string::npos)
+         != std::string::npos)
       {
-	return EXIT_SUCCESS;
+        return EXIT_SUCCESS;
       }
       return EXIT_FAILURE;
     }
@@ -195,10 +195,10 @@ int main( int argc, char * argv[] )
       {
       std::cout << "polygon " << polygon << "\tnPoints="
           << OutputPolyList->GetNthElement(polygon)->GetVertexList()->Size() << "\tsurface="
-	      << OutputPolyList->GetNthElement(polygon)->GetArea()<< "\tlength="
-	      << OutputPolyList->GetNthElement(polygon)->GetLength() << "\tregion size="
-	      << polygonRegion.GetSize() <<"\tregion nb pixel="
-	      << polygonRegion.GetNumberOfPixels() << std::endl;
+              << OutputPolyList->GetNthElement(polygon)->GetArea()<< "\tlength="
+              << OutputPolyList->GetNthElement(polygon)->GetLength() << "\tregion size="
+              << polygonRegion.GetSize() <<"\tregion nb pixel="
+              << polygonRegion.GetNumberOfPixels() << std::endl;
 //       std::cout << OutputPolyList->GetNthElement(polygon)<< std::endl << std::endl;
       }
       polygon++;
@@ -254,8 +254,8 @@ int main( int argc, char * argv[] )
       outputIt.GoToBegin();
       while(!outputIt.IsAtEnd())
       {
-	outputIt.Set(0);
-	++outputIt;
+        outputIt.Set(0);
+        ++outputIt;
       }
 
     }
@@ -276,14 +276,14 @@ int main( int argc, char * argv[] )
 
     try
     {
-	  otb::StandardWriterWatcher watcher(writer, "Remove small object");
-	  writer->Update();
+          otb::StandardWriterWatcher watcher(writer, "Remove small object");
+          writer->Update();
     }
     catch ( itk::ExceptionObject &err)
     {
-	    std::cout << "ExceptionObject caught !" << std::endl;
-	    std::cout << err << std::endl;
-	    return EXIT_FAILURE;
+            std::cout << "ExceptionObject caught !" << std::endl;
+            std::cout << err << std::endl;
+            return EXIT_FAILURE;
     }
 
     if (minSize == 0)

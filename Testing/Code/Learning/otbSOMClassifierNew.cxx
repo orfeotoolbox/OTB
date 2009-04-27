@@ -39,7 +39,7 @@ int otbSOMClassifierNew(int argc, char* argv[] )
   typedef itk::Statistics::ListSample< PixelType > SampleType;
   typedef otb::SOMClassifier<SampleType,SOMMapType,LabelPixelType> ClassifierType;
 
-  ClassifierType::Pointer classifier = ClassifierType::New() ;
+  ClassifierType::Pointer classifier = ClassifierType::New();
 
 
   return EXIT_SUCCESS;

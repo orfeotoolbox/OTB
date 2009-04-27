@@ -76,7 +76,7 @@ int otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii( int ar
   LinesListType::Pointer    outputLinesList = LinesListType::New();
   
   std::ofstream outfile(outfname);
-  for (unsigned int i = 0; i<segmentOrtho->GetNumberOfPoints() ; i++)
+  for (unsigned int i = 0; i<segmentOrtho->GetNumberOfPoints(); i++)
     {
       segmentOrtho->GetPoint(i, &pRight);
       outfile << " Right Angle found in point : " <<  pRight << std::endl;

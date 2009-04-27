@@ -74,7 +74,7 @@ int otbHuImage( int argc, char * argv[] )
 
   std::ofstream outputStream(outputFilename);
   outputStream << std::setprecision(10) << "Hu Image moments: [10]"<<std::endl;
-  for (Number = 1 ;Number<10;Number++)
+  for (Number = 1;Number<10;Number++)
   {
     //OTB-FA-00024-CS
     function->SetMomentNumber(Number);

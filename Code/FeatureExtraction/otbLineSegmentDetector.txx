@@ -165,24 +165,24 @@ LineSegmentDetector<TInputImage,TPrecision >
 
   /** Computing the length of the bins*/  
   unsigned int NbBin = 10;  
-  double lengthBin = static_cast<double>((max - min))/static_cast<double>(NbBin-1) ;
+  double lengthBin = static_cast<double>((max - min))/static_cast<double>(NbBin-1);
   CoordinateHistogramType  tempHisto(NbBin);  /** Initializing the histogram */
 
   
   itk::ImageRegionIterator<OutputImageType> it(modulusImage, 
-					       modulusImage->GetRequestedRegion());
+                                               modulusImage->GetRequestedRegion());
 
   it.GoToBegin();
   while(!it.IsAtEnd())
     {
       OutputIndexType index = it.GetIndex();
       if(static_cast<int>(index[0]) > 0 && static_cast<int>(index[0]) < m_Width-1 
-	 && static_cast<int>(index[1]) >0 && static_cast<int>(index[1]) < m_Length-1 )
-	{
-	  unsigned int bin = static_cast<unsigned int> (it.Value()/lengthBin);
-	  if( it.Value()- m_Threshold >1e-10 )
-	    tempHisto[NbBin-bin-1].push_back(it.GetIndex());
-	}
+         && static_cast<int>(index[1]) >0 && static_cast<int>(index[1]) < m_Length-1 )
+        {
+          unsigned int bin = static_cast<unsigned int> (it.Value()/lengthBin);
+          if( it.Value()- m_Threshold >1e-10 )
+            tempHisto[NbBin-bin-1].push_back(it.GetIndex());
+        }
       ++it;
     }
  
@@ -207,16 +207,16 @@ LineSegmentDetector<TInputImage, TPrecision>
     {
       typename IndexVectorType::iterator   ItIndexVector = (*ItCoordinateList).begin(); 
       while(ItIndexVector != (*ItCoordinateList).end())
-	{
-	  InputIndexType index = *ItIndexVector;
-	  
-	  /** If the point is not yet computed */
-	  if(!this->IsUsed(index))
-	  {
-	    this->GrowRegion(index); 
-	  }
-	  ++ItIndexVector;
-	}
+        {
+          InputIndexType index = *ItIndexVector;
+          
+          /** If the point is not yet computed */
+          if(!this->IsUsed(index))
+          {
+            this->GrowRegion(index); 
+          }
+          ++ItIndexVector;
+        }
       ++ItCoordinateList;
     }
 
@@ -260,23 +260,23 @@ LineSegmentDetector<TInputImage, TPrecision>
        * Here we start building the OUTPUT :a LineSpatialObjectList. 
        */
       if(NFA > 0./** eps */)
-	{
-	  //std::cout << (*itRec)[0] << " " << (*itRec)[1] << " " << (*itRec)[2] << " " << (*itRec)[3]<<std::endl;
-	  PointListType pointList;
-	  PointType     point;
-	  
-	  point.SetPosition(static_cast<TPrecision>((*itRec)[0]),static_cast<TPrecision>((*itRec)[1]));
-	  pointList.push_back(point);
-	  point.SetPosition(static_cast<TPrecision>((*itRec)[2]),static_cast<TPrecision>((*itRec)[3]));
-	  pointList.push_back(point);
-	  
-	  typename LineSpatialObjectType::Pointer line = LineSpatialObjectType::New();
-	  line->SetId(0);
-	  line->SetPoints( pointList );
-	  line->ComputeBoundingBox();
-	  m_LineList->push_back(line);
-	  pointList.clear();
-	}
+        {
+          //std::cout << (*itRec)[0] << " " << (*itRec)[1] << " " << (*itRec)[2] << " " << (*itRec)[3]<<std::endl;
+          PointListType pointList;
+          PointType     point;
+          
+          point.SetPosition(static_cast<TPrecision>((*itRec)[0]),static_cast<TPrecision>((*itRec)[1]));
+          pointList.push_back(point);
+          point.SetPosition(static_cast<TPrecision>((*itRec)[2]),static_cast<TPrecision>((*itRec)[3]));
+          pointList.push_back(point);
+          
+          typename LineSpatialObjectType::Pointer line = LineSpatialObjectType::New();
+          line->SetId(0);
+          line->SetPoints( pointList );
+          line->ComputeBoundingBox();
+          m_LineList->push_back(line);
+          pointList.clear();
+        }
       
       ++itRec;
     }
@@ -333,8 +333,8 @@ LineSegmentDetector<TInputImage, TPrecision>
       if( nfa_new > NFA )
         {
           NFA = nfa_new;
-	  CopyRectangle(rec ,&r );
-	}
+          CopyRectangle(rec ,&r );
+        }
     }
   
 
@@ -351,8 +351,8 @@ LineSegmentDetector<TInputImage, TPrecision>
       if( nfa_new > NFA )
         {
           NFA = nfa_new;
-	  CopyRectangle(rec ,&r );
-	}
+          CopyRectangle(rec ,&r );
+        }
     }
   if( NFA > 0. ) return NFA;
   
@@ -362,19 +362,19 @@ LineSegmentDetector<TInputImage, TPrecision>
     {
       if( (r[4] - delta) >= 0.5 )
         {
-	  r[0] += -vcl_sin(r[5]) * delta_2;
-	  r[1] +=  vcl_cos(r[5])* delta_2;
-	  r[2] += -vcl_sin(r[5])* delta_2;
-	  r[3] +=  vcl_cos(r[5])* delta_2;
-	  r[4] -= delta;
-	  
-	  nfa_new = this->ComputeRectNFA(r);
-	  if( nfa_new > NFA )
-	    {
-	      NFA = nfa_new;
-	      CopyRectangle(rec ,&r );
-	    }
-	}
+          r[0] += -vcl_sin(r[5]) * delta_2;
+          r[1] +=  vcl_cos(r[5])* delta_2;
+          r[2] += -vcl_sin(r[5])* delta_2;
+          r[3] +=  vcl_cos(r[5])* delta_2;
+          r[4] -= delta;
+          
+          nfa_new = this->ComputeRectNFA(r);
+          if( nfa_new > NFA )
+            {
+              NFA = nfa_new;
+              CopyRectangle(rec ,&r );
+            }
+        }
     }
   if( NFA > 0. ) return NFA;
   
@@ -383,19 +383,19 @@ LineSegmentDetector<TInputImage, TPrecision>
     {
       if( (r[4] - delta) >= 0.5 )
         {
-	  r[0] -= -vcl_sin(r[5]) * delta_2;
-	  r[1] -=  vcl_cos(r[5])* delta_2;
-	  r[2] -= -vcl_sin(r[5])* delta_2;
-	  r[3] -=  vcl_cos(r[5])* delta_2;
-	  r[4] -= delta;
-	  
-	  nfa_new = this->ComputeRectNFA(r);
-	  if( nfa_new > NFA )
-	    {
-	      NFA = nfa_new;
-	      CopyRectangle(rec ,&r );
-	    }
-	}
+          r[0] -= -vcl_sin(r[5]) * delta_2;
+          r[1] -=  vcl_cos(r[5])* delta_2;
+          r[2] -= -vcl_sin(r[5])* delta_2;
+          r[3] -=  vcl_cos(r[5])* delta_2;
+          r[4] -= delta;
+          
+          nfa_new = this->ComputeRectNFA(r);
+          if( nfa_new > NFA )
+            {
+              NFA = nfa_new;
+              CopyRectangle(rec ,&r );
+            }
+        }
     }
   if( NFA > 0. ) return NFA;
   
@@ -408,9 +408,9 @@ LineSegmentDetector<TInputImage, TPrecision>
       nfa_new = this->ComputeRectNFA(r);
       if( nfa_new > NFA )
         {
-	  NFA = nfa_new;
-	  CopyRectangle(rec ,&r );
-	}
+          NFA = nfa_new;
+          CopyRectangle(rec ,&r );
+        }
     }
   if( NFA > 0. ) return NFA;
 
@@ -433,7 +433,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   typename NeighborhoodLabelIteratorType::SizeType    radiusLabel;
   radiusLabel.Fill(0);
   NeighborhoodLabelIteratorType                       itLabel(radiusLabel,m_UsedPointImage,
-							      m_UsedPointImage->GetRequestedRegion());
+                                                              m_UsedPointImage->GetRequestedRegion());
   
   itLabel.SetLocation(index);
   if(*(itLabel.GetCenterValue()) == 1)
@@ -456,7 +456,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   typename NeighborhoodLabelIteratorType::SizeType    radiusLabel;
   radiusLabel.Fill(0);
   NeighborhoodLabelIteratorType                       itLabel(radiusLabel,m_UsedPointImage,
-							      m_UsedPointImage->GetRequestedRegion());
+                                                              m_UsedPointImage->GetRequestedRegion());
   itLabel.SetLocation(index);
   itLabel.SetCenterPixel(1);     // 1 : Set the point status to : Used Point
 }
@@ -479,9 +479,9 @@ LineSegmentDetector<TInputImage, TPrecision>
   typename NeighborhoodIteratorType::SizeType             radius;
   radius.Fill(1);
   NeighborhoodIteratorType                                itNeigh(radius,m_MagnitudeFilter->GetOutput(),
-								  m_MagnitudeFilter->GetOutput()->GetRequestedRegion());
+                                                                  m_MagnitudeFilter->GetOutput()->GetRequestedRegion());
   NeighborhoodIteratorType                                itNeighDir(radius,m_OrientationFilter->GetOutput() ,
-								     m_OrientationFilter->GetOutput()->GetRequestedRegion());
+                                                                     m_OrientationFilter->GetOutput()->GetRequestedRegion());
   
   /** Vector where to store the point belonging to the current region*/
   unsigned int neighSize  = itNeigh.GetSize()[0]*itNeigh.GetSize()[1];
@@ -498,7 +498,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   /** 
    * Loop for searching regions 
    */
-  for (unsigned int cpt = 0; cpt < reg.size() ; cpt++ )
+  for (unsigned int cpt = 0; cpt < reg.size(); cpt++ )
     {
       itNeigh.SetLocation(reg[cpt]);
       itNeighDir.SetLocation(reg[cpt]);
@@ -508,20 +508,20 @@ LineSegmentDetector<TInputImage, TPrecision>
       
       unsigned int s = 0;
       while(s < neighSize )
-	{
-	  InputIndexType NeighIndex = itNeigh.GetIndex(s);
-	  double angleComp =   itNeighDir.GetPixel(s);
+        {
+          InputIndexType NeighIndex = itNeigh.GetIndex(s);
+          double angleComp =   itNeighDir.GetPixel(s);
 
-	  if( !this->IsUsed(NeighIndex) && this->IsAligned(angleComp, regionAngle, m_Prec) )
-	    {
-	      if(this->GetInput()->GetRequestedRegion().IsInside(NeighIndex))  /** Check if the index is inside the image*/
-		{
-		  this->SetPixelToUsed(NeighIndex);
-		  reg.push_back(NeighIndex);
-		}
-	    }
-	  s++;
-	}
+          if( !this->IsUsed(NeighIndex) && this->IsAligned(angleComp, regionAngle, m_Prec) )
+            {
+              if(this->GetInput()->GetRequestedRegion().IsInside(NeighIndex))  /** Check if the index is inside the image*/
+                {
+                  this->SetPixelToUsed(NeighIndex);
+                  reg.push_back(NeighIndex);
+                }
+            }
+          s++;
+        }
     }/** End Searching loop*/
     
   /** Store the region*/
@@ -572,7 +572,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   typename NeighborhoodIteratorType::SizeType             radius;
   radius.Fill(0);
   NeighborhoodIteratorType                                itNeigh(radius,m_MagnitudeFilter->GetOutput(),
-								  m_MagnitudeFilter->GetOutput()->GetRequestedRegion());
+                                                                  m_MagnitudeFilter->GetOutput()->GetRequestedRegion());
 
   /** Computing the center of the rectangle*/
   IndexVectorIteratorType    it = region.begin();
@@ -591,8 +591,8 @@ LineSegmentDetector<TInputImage, TPrecision>
     }
   else
     {
-      x/= sumWeight ;
-      y/= sumWeight ;
+      x/= sumWeight;
+      y/= sumWeight;
     }
   
   /** Compute the orientation of the region*/
@@ -632,7 +632,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   double s = 0.;
   int i = 0;
   
-  for( s=0.0,i = static_cast<int>(l_min); s<sum_th && i<=static_cast<int>(l_max) ; i++) 
+  for( s=0.0,i = static_cast<int>(l_min); s<sum_th && i<=static_cast<int>(l_max); i++) 
     s += sum_l[ Diagonal + i];
   
   double lb = (static_cast<double>(i-1) - 0.5 );
@@ -703,7 +703,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   typename NeighborhoodIteratorType::SizeType             radius;
   radius.Fill(0);
   NeighborhoodIteratorType                                itNeigh(radius,m_MagnitudeFilter->GetOutput(),
-								  m_MagnitudeFilter->GetOutput()->GetRequestedRegion());
+                                                                  m_MagnitudeFilter->GetOutput()->GetRequestedRegion());
   
   /** Computing the center iof the rectangle*/
   IndexVectorIteratorType    it = region.begin();
@@ -732,7 +732,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   Inertie[1][0] =Ixy;
   
   typedef itk::SymmetricEigenAnalysis<MatrixType,MatrixEigenType>   EigenAnalysisType;
-  EigenAnalysisType eigenFilter(2) ;
+  EigenAnalysisType eigenFilter(2);
   eigenFilter.ComputeEigenValuesAndVectors(Inertie,eigenMatrix,eigenVector  );
   theta = vcl_atan2(eigenVector[1][1], -eigenVector[1][0]);
   
@@ -791,14 +791,14 @@ LineSegmentDetector<TInputImage, TPrecision>
 
 //   RectangleType        X(4,0.) , Y(4,0.);
   
-//   X[0] = rec[0] + dy* halfWidth ;
-//   Y[0] = rec[1] - dx* halfWidth ;
-//   X[1] = rec[0] - dy* halfWidth ;
-//   Y[1] = rec[1] + dx* halfWidth ;
-//   X[2] = rec[2] + dy* halfWidth ;
-//   Y[2] = rec[3] - dx* halfWidth ;
-//   X[3] = rec[2] - dy* halfWidth ;
-//   Y[3] = rec[3] + dx* halfWidth ;
+//   X[0] = rec[0] + dy* halfWidth;
+//   Y[0] = rec[1] - dx* halfWidth;
+//   X[1] = rec[0] - dy* halfWidth;
+//   Y[1] = rec[1] + dx* halfWidth;
+//   X[2] = rec[2] + dy* halfWidth;
+//   Y[2] = rec[3] - dx* halfWidth;
+//   X[3] = rec[2] - dy* halfWidth;
+//   Y[3] = rec[3] + dx* halfWidth;
 
 
   /** Compute the NFA of the rectangle  
@@ -834,12 +834,12 @@ LineSegmentDetector<TInputImage, TPrecision>
   while(!it.IsAtEnd())
     {
       if( rectangle->IsInside( it.GetIndex()) && m_OrientationFilter->GetOutput()->GetRequestedRegion().IsInside( it.GetIndex()) )
-	{
-	  pts++;
+        {
+          pts++;
 
-	  if(this->IsAligned(it.Get(), rec[5] /*theta*/ ,rec[6] /*Prec*/))
-	    NbAligned++;
-	}
+          if(this->IsAligned(it.Get(), rec[5] /*theta*/ ,rec[6] /*Prec*/))
+            NbAligned++;
+        }
       ++it;
     }
   
@@ -946,8 +946,8 @@ LineSegmentDetector<TInputImage, TPrecision>
 {
   double x,y,tmp,ser;
   static double cof[6]={76.18009172947146,-86.50532032941677,
-			24.01409824083091,-1.231739572450155,
-			0.1208650973866179e-2,-0.5395239384953e-5};
+                        24.01409824083091,-1.231739572450155,
+                        0.1208650973866179e-2,-0.5395239384953e-5};
   int j;
 
   y=x=xx;

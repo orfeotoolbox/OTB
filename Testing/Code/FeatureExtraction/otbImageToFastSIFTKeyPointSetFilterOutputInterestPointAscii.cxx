@@ -104,7 +104,7 @@ int otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii(int argc, char *
   }
 
   //Sorting the vectors
-  ImageDataType::iterator itData ;
+  ImageDataType::iterator itData;
   sort(imageData.begin() , imageData.end(),CMP);
 
   itData = imageData.begin();

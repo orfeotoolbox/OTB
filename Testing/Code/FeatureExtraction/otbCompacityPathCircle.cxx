@@ -50,7 +50,7 @@ int otbCompacityPathCircle( int argc, char * argv[] )
 
   pathElt->Initialize();
 
-  for (unsigned int noTheta = 0 ; noTheta < NbOfPoints ; noTheta++)
+  for (unsigned int noTheta = 0; noTheta < NbOfPoints; noTheta++)
   {
     RealType Theta = deltaTheta * static_cast<RealType>(noTheta);
 

@@ -48,7 +48,7 @@ int otbDEMHandlerTest(int argc, char * argv[])
   std::ofstream file;
   file.open(outputfilename);
   file << "--- HEIGHT ABOVE MSL TEST ---" << std::endl;
-  file << " geoPoint: "<<geoPoint[1]<<" ; "<<geoPoint[0]<< std::endl;
+  file << " geoPoint: "<<geoPoint[1]<<"; "<<geoPoint[0]<< std::endl;
   file << " -> Height: "<<height<< std::endl;
   file.close();
 

@@ -78,13 +78,13 @@ int otbBSplinesInterpolateTransformDeformationFieldGenerator(int argc, char * ar
   pd4[0] = 0.91;
   pd4[1] = 0;
   pd4[2] = 0;
-  pd4[3] = 0.03925  ;
+  pd4[3] = 0.03925;
   pd4[4] = -5;
   pd4[5] = 5;
   pd5[0] = 0.91;
   pd5[1] = 0;
   pd5[2] = 0;
-  pd5[3] = -0.03925  ;
+  pd5[3] = -0.03925;
   pd5[4] = -5;
   pd5[5] = -5;
 

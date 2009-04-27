@@ -69,7 +69,7 @@ public:
   typedef InverseOrForwardTransformationEnum DirectionOfTransformationEnumType;
   itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,TDirectionOfTransformation);
 
-  LowPassSplineBiOrthogonalOperator() ;
+  LowPassSplineBiOrthogonalOperator();
   LowPassSplineBiOrthogonalOperator(const Self& other);
 
   /**
@@ -80,7 +80,7 @@ public:
   /**
    * Prints some debugging information
    */
-  virtual void PrintSelf(std::ostream &os, itk::Indent i) const ; 
+  virtual void PrintSelf(std::ostream &os, itk::Indent i) const; 
 
 protected:
   /**
@@ -137,7 +137,7 @@ public:
   typedef InverseOrForwardTransformationEnum DirectionOfTransformationEnumType;
   itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,TDirectionOfTransformation);
 
-  HighPassSplineBiOrthogonalOperator () ;
+  HighPassSplineBiOrthogonalOperator ();
   HighPassSplineBiOrthogonalOperator(const Self& other);
 
   /**
@@ -148,7 +148,7 @@ public:
   /**
    * Prints some debugging information
    */
-  virtual void PrintSelf(std::ostream &os, itk::Indent i) const ;
+  virtual void PrintSelf(std::ostream &os, itk::Indent i) const;
 
 protected:
   /**

@@ -27,7 +27,7 @@ namespace otb
 /** \class ImageFittingPolygonListFilter
  *  \brief Slightly deform polygon to reach higher enery from the image
  *
- * <br>Limitations:</br> This filter is currently working with integer position
+ * <b>Limitations:</b> This filter is currently working with integer position
  * for the polygon vertices. It should be optimized for continuous positions.
  *
  */

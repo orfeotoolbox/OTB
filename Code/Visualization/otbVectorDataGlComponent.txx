@@ -29,7 +29,7 @@ namespace otb
 template <class TVectorData> 
 VectorDataGlComponent<TVectorData>
 ::VectorDataGlComponent() : m_VectorData(),m_Spacing(), m_Origin(), m_GluTesselator(),
-			    m_Color(), m_LineWidth(1.5),m_CrossWidth(10),m_RenderPolygonBoundariesOnly(false)
+                            m_Color(), m_LineWidth(1.5),m_CrossWidth(10),m_RenderPolygonBoundariesOnly(false)
 {
   // Default color is red
   m_Color.Fill(0);
@@ -276,7 +276,7 @@ VectorDataGlComponent<TVectorData>
     case FEATURE_POLYGON:
     {
     this->RenderPolygon(node->Get()->GetPolygonExteriorRing(),node->Get()->GetPolygonInteriorRings(),
-			extent,space2ScreenTransform);
+                        extent,space2ScreenTransform);
     break;
     }
     default:

@@ -65,7 +65,7 @@ int otbHuPath( int argc, char * argv[] )
   std::ofstream outputStream(outputFilename);
   outputStream << std::setprecision(10) << "Hu Path moments: [8]"<<std::endl;
 
-  for (Number = 1 ;Number<8;Number++)
+  for (Number = 1;Number<8;Number++)
   {
     //OTB-FA-00024-CS
     function->SetMomentNumber(Number);

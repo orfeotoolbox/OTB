@@ -94,7 +94,7 @@ BinaryImageDensityFunction<TInputImage,TCoordRep>
      }
 
    const RealType  num = static_cast<RealType>( size );
-   var =  sum/num  ;
+   var =  sum/num;
   
    return var;
 }

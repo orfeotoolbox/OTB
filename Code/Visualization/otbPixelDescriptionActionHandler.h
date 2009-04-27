@@ -110,8 +110,8 @@ public:
           index[0]=static_cast<int>(imagePoint[0]);
           index[1]=static_cast<int>(imagePoint[1]);
 
-	  //Add the offset
-	  index += m_Offset;
+          //Add the offset
+          index += m_Offset;
 
           // Communicate new index to model
           m_Model->UpdatePixelDescription(index);

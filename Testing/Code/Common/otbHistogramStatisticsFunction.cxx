@@ -27,19 +27,19 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
 {
   unsigned int  NbOfBins((unsigned int)::atoi(argv[1]));
 
-  typedef float MeasurementType ;
-  typedef itk::Statistics::Histogram< MeasurementType, 1 > HistogramType ;
-  HistogramType::Pointer histogram = HistogramType::New() ;
+  typedef float MeasurementType;
+  typedef itk::Statistics::Histogram< MeasurementType, 1 > HistogramType;
+  HistogramType::Pointer histogram = HistogramType::New();
 
   // initialize histogram
   HistogramType::SizeType size;
-  size.Fill(NbOfBins) ;
-  HistogramType::MeasurementVectorType lowerBound ;
-  HistogramType::MeasurementVectorType upperBound ;
-  lowerBound[0] = 0.0 ;
-  upperBound[0] = NbOfBins ;
+  size.Fill(NbOfBins);
+  HistogramType::MeasurementVectorType lowerBound;
+  HistogramType::MeasurementVectorType upperBound;
+  lowerBound[0] = 0.0;
+  upperBound[0] = NbOfBins;
 
-  histogram->Initialize(size, lowerBound, upperBound ) ;
+  histogram->Initialize(size, lowerBound, upperBound );
 
 
   // create histogram with same value for each frequency

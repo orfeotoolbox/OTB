@@ -73,37 +73,37 @@ public:
     // if left mouse button pressed
     if ( Fl::event_button() != FL_LEFT_MOUSE)
       {
-	return true;
+        return true;
       }
 
     if( m_Model.IsNotNull() )
       {
-	if(widgetId == m_Widget->GetIdentifier() )
-	  {
-	    // Get the clicked index
-	    typename WidgetType::PointType screenPoint, imagePoint;/*, lScreenSizePoint, lImageSizePoint;*/
-	    screenPoint = m_Widget->GetMousePosition();
+        if(widgetId == m_Widget->GetIdentifier() )
+          {
+            // Get the clicked index
+            typename WidgetType::PointType screenPoint, imagePoint;/*, lScreenSizePoint, lImageSizePoint;*/
+            screenPoint = m_Widget->GetMousePosition();
 
-	    // Transform to image point
-	    imagePoint = m_Widget->GetScreenToImageTransform()->TransformPoint(screenPoint);
+            // Transform to image point
+            imagePoint = m_Widget->GetScreenToImageTransform()->TransformPoint(screenPoint);
 
-	    // Transform to index
-	    IndexType lIndex;
-	    lIndex[0]=static_cast<long int>(imagePoint[0]);
-	    lIndex[1]=static_cast<long int>(imagePoint[1]);
+            // Transform to index
+            IndexType lIndex;
+            lIndex[0]=static_cast<long int>(imagePoint[0]);
+            lIndex[1]=static_cast<long int>(imagePoint[1]);
 
-	    switch (event)
-	      {
-	      case FL_PUSH:
-		{
-		  m_FirstPush = false;
-		  m_StartIndex = lIndex;
+            switch (event)
+              {
+              case FL_PUSH:
+                {
+                  m_FirstPush = false;
+                  m_StartIndex = lIndex;
           // ImageView.txx hide the GlComponent when Update
           m_RegionGlComponent->SetVisible(true);
-		  break;
-		}
-	      case FL_RELEASE:
-		{
+                  break;
+                }
+              case FL_RELEASE:
+                {
           if(m_StartIndex[0] != lIndex[0] && m_StartIndex[1] != lIndex[1])
           {
                     m_FirstPush = true;
@@ -111,23 +111,23 @@ public:
                     m_Model->SetExtractRegionByIndex(m_StartIndex,m_StopIndex);
                     m_Model->Update();
           }
-		  break;
-		}
-	      case FL_DRAG:
-		{
-		  // only redraw the red box in the widget
-		  m_StopIndex = lIndex;
-		  m_Model->SetExtractRegionByIndex(m_StartIndex,m_StopIndex);
-		  m_RegionGlComponent->SetRegion(m_Model->GetExtractRegion());
-		  m_Widget->redraw();
-		  break;
-		}
-	      default:
-		{
-		}
-	      }
-	    return true;
-	  }
+                  break;
+                }
+              case FL_DRAG:
+                {
+                  // only redraw the red box in the widget
+                  m_StopIndex = lIndex;
+                  m_Model->SetExtractRegionByIndex(m_StartIndex,m_StopIndex);
+                  m_RegionGlComponent->SetRegion(m_Model->GetExtractRegion());
+                  m_Widget->redraw();
+                  break;
+                }
+              default:
+                {
+                }
+              }
+            return true;
+          }
       }
     return false;
 

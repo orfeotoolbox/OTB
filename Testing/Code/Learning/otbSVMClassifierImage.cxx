@@ -62,12 +62,12 @@ public:
 
 int otbSVMClassifierImage(int argc, char* argv[] )
 {
-  namespace stat = itk::Statistics ;
+  namespace stat = itk::Statistics;
 
   if (argc != 4)
   {
     std::cout << "Usage : " << argv[0] << " inputImage modelFile outputImage"
-              << std::endl ;
+              << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -108,14 +108,14 @@ int otbSVMClassifierImage(int argc, char* argv[] )
 
   int numberOfClasses = model->GetNumberOfClasses();
 
-  typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType ;
+  typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType;
 
-  ClassifierType::Pointer classifier = ClassifierType::New() ;
+  ClassifierType::Pointer classifier = ClassifierType::New();
 
-  classifier->SetNumberOfClasses(numberOfClasses) ;
+  classifier->SetNumberOfClasses(numberOfClasses);
   classifier->SetModel( model );
-  classifier->SetSample(sample.GetPointer()) ;
-  classifier->Update() ;
+  classifier->SetSample(sample.GetPointer());
+  classifier->Update();
 
   /* Build the class map */
   otbGenericMsgDebugMacro( << "Output image creation" );
@@ -148,12 +148,12 @@ int otbSVMClassifierImage(int argc, char* argv[] )
 
   otbGenericMsgDebugMacro( << "classifier get output" );
   ClassifierType::OutputType* membershipSample =
-    classifier->GetOutput() ;
+    classifier->GetOutput();
   otbGenericMsgDebugMacro( << "Sample iterators" );
   ClassifierType::OutputType::ConstIterator m_iter =
-    membershipSample->Begin() ;
+    membershipSample->Begin();
   ClassifierType::OutputType::ConstIterator m_last =
-    membershipSample->End() ;
+    membershipSample->End();
 
   otbGenericMsgDebugMacro( << "Image iterator" );
   typedef itk::ImageRegionIterator< OutputImageType>  OutputIteratorType;
@@ -168,7 +168,7 @@ int otbSVMClassifierImage(int argc, char* argv[] )
   while (m_iter != m_last && !outIt.IsAtEnd())
   {
     outIt.Set(m_iter.GetClassLabel());
-    ++m_iter ;
+    ++m_iter;
     ++outIt;
   }
 

@@ -46,7 +46,7 @@ PackedWidgetManager
   m_PackedWidget->m_FullGroup->add(fullWidget);
   m_PackedWidget->m_FullGroup->resizable(fullWidget);
   fullWidget->resize(m_PackedWidget->m_FullGroup->x(),m_PackedWidget->m_FullGroup->y(),
-		     m_PackedWidget->m_FullGroup->w(),m_PackedWidget->m_FullGroup->h());
+                     m_PackedWidget->m_FullGroup->w(),m_PackedWidget->m_FullGroup->h());
 }
 
 
@@ -58,7 +58,7 @@ PackedWidgetManager
   m_PackedWidget->m_QuicklookGroup->add(scrollWidget);
   m_PackedWidget->m_QuicklookGroup->resizable(scrollWidget);
   scrollWidget->resize(m_PackedWidget->m_QuicklookGroup->x(),m_PackedWidget->m_QuicklookGroup->y(),
-		       m_PackedWidget->m_QuicklookGroup->w(),m_PackedWidget->m_QuicklookGroup->h());
+                       m_PackedWidget->m_QuicklookGroup->w(),m_PackedWidget->m_QuicklookGroup->h());
 
 }
 
@@ -70,7 +70,7 @@ PackedWidgetManager
   m_PackedWidget->m_ZoomGroup->add(zoomWidget);
   m_PackedWidget->m_ZoomGroup->resizable(zoomWidget);
   zoomWidget->resize(m_PackedWidget->m_ZoomGroup->x(),m_PackedWidget->m_ZoomGroup->y(),
-		     m_PackedWidget->m_ZoomGroup->w(),m_PackedWidget->m_ZoomGroup->h());
+                     m_PackedWidget->m_ZoomGroup->w(),m_PackedWidget->m_ZoomGroup->h());
 }
 void 
 PackedWidgetManager
@@ -80,7 +80,7 @@ PackedWidgetManager
   m_PackedWidget->m_PixelInformationGroup->add(pixelWidget);
   m_PackedWidget->m_PixelInformationGroup->resizable(pixelWidget);
   pixelWidget->resize(m_PackedWidget->m_PixelInformationGroup->x(),m_PackedWidget->m_PixelInformationGroup->y(),
-		      m_PackedWidget->m_PixelInformationGroup->w(),m_PackedWidget->m_PixelInformationGroup->h());
+                      m_PackedWidget->m_PixelInformationGroup->w(),m_PackedWidget->m_PixelInformationGroup->h());
 
 }
 
@@ -92,7 +92,7 @@ PackedWidgetManager
   m_PackedWidget->m_HistogramsGroup->add(curveWidget);
   m_PackedWidget->m_HistogramsGroup->resizable(curveWidget);
  curveWidget->resize(m_PackedWidget->m_HistogramsGroup->x(),m_PackedWidget->m_HistogramsGroup->y(),
-					    m_PackedWidget->m_HistogramsGroup->w(),m_PackedWidget->m_HistogramsGroup->h());
+                                            m_PackedWidget->m_HistogramsGroup->w(),m_PackedWidget->m_HistogramsGroup->h());
  }
 
 void 

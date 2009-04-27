@@ -75,7 +75,7 @@ int otbFlusserImage( int argc, char * argv[] )
   std::ofstream outputStream(outputFilename);
   outputStream <<std::setprecision(10)<<"Flusser Image moments: [12]"<<std::endl;
 
-  for (Number = 1 ;Number<12;Number++)
+  for (Number = 1;Number<12;Number++)
   {
     //OTB-FA-00024-CS
     function->SetMomentNumber(Number);

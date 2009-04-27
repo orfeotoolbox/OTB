@@ -107,9 +107,9 @@ protected:
   virtual void GenerateOutputInformation(){}; // do nothing
   virtual void GenerateData();
   
-  double	m_MinimumFit;
-  double	m_MinimumSize;
-  int		m_CrossTermFormula;
+  double        m_MinimumFit;
+  double        m_MinimumSize;
+  int                m_CrossTermFormula;
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

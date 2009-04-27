@@ -40,7 +40,7 @@ int otbSEMClassifierNew( int argc, char* argv[] )
   typedef itk::Statistics::ListSample< ImageType::PixelType > SampleType;
   typedef itk::Statistics::Subsample< SampleType > ClassSampleType;
 
-  typedef otb::Statistics::ModelComponentBase< ClassSampleType > ComponentType ;
+  typedef otb::Statistics::ModelComponentBase< ClassSampleType > ComponentType;
 
   ClassifType::Pointer classifier = ClassifType::New();
   ComponentType::Pointer component = ComponentType::New();

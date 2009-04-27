@@ -28,10 +28,10 @@ namespace otb
 template <class TOutputImage>
 ImageLayerRenderingModel<TOutputImage>
 ::ImageLayerRenderingModel() : m_Name("Default"), m_RasterizedQuicklook(), 
-			       m_HasQuicklook(false),m_RasterizedExtract(),m_HasExtract(false),
-			       m_ExtractRegion(), m_RasterizedScaledExtract(), m_HasScaledExtract(false),
-			       m_ScaledExtractRegion(), m_Updating(false), m_QuicklookBlendingFilterList(), 
-			       m_ExtractBlendingFilterList(), m_ScaledExtractBlendingFilterList()
+                               m_HasQuicklook(false),m_RasterizedExtract(),m_HasExtract(false),
+                               m_ExtractRegion(), m_RasterizedScaledExtract(), m_HasScaledExtract(false),
+                               m_ScaledExtractRegion(), m_Updating(false), m_QuicklookBlendingFilterList(), 
+                               m_ExtractBlendingFilterList(), m_ScaledExtractBlendingFilterList()
 
 {
   // Initalize the blending filter list 
@@ -92,15 +92,15 @@ ImageLayerRenderingModel<TOutputImage>
     // If the layer is visible
     if(it.Get()->GetVisible())
       {
-	// Set the extracted region
-	m_ExtractRegion = this->ConstrainRegion(m_ExtractRegion,it.Get()->GetExtent());
-	it.Get()->SetExtractRegion(m_ExtractRegion);
-	// Set the scaled extracted region
-	m_ScaledExtractRegion = this->ConstrainRegion(m_ScaledExtractRegion,m_ExtractRegion);
-	it.Get()->SetScaledExtractRegion(m_ScaledExtractRegion);
-	// Render it
-	otbMsgDevMacro(<<"ImageLayerRenderingModel::RenderVisibleLayers(): Rendering layer "<<it.Get()->GetName()<<" with regions ("<<m_ExtractRegion.GetIndex()<<" "<<m_ExtractRegion.GetSize()<<") ("<<m_ScaledExtractRegion.GetIndex()<<" "<<m_ScaledExtractRegion.GetSize()<<")");
-	it.Get()->Render();
+        // Set the extracted region
+        m_ExtractRegion = this->ConstrainRegion(m_ExtractRegion,it.Get()->GetExtent());
+        it.Get()->SetExtractRegion(m_ExtractRegion);
+        // Set the scaled extracted region
+        m_ScaledExtractRegion = this->ConstrainRegion(m_ScaledExtractRegion,m_ExtractRegion);
+        it.Get()->SetScaledExtractRegion(m_ScaledExtractRegion);
+        // Render it
+        otbMsgDevMacro(<<"ImageLayerRenderingModel::RenderVisibleLayers(): Rendering layer "<<it.Get()->GetName()<<" with regions ("<<m_ExtractRegion.GetIndex()<<" "<<m_ExtractRegion.GetSize()<<") ("<<m_ScaledExtractRegion.GetIndex()<<" "<<m_ScaledExtractRegion.GetSize()<<")");
+        it.Get()->Render();
       }
     }
 }

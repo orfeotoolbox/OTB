@@ -25,6 +25,6 @@ int otbHistogramCurveNew( int argc, char * argv[] )
    itk::Statistics::DenseFrequencyContainer >  HistogramType;
  typedef otb::HistogramCurve<HistogramType>    HistogramCurveType;
  HistogramCurveType::Pointer curve = HistogramCurveType::New();
-								
+                                                                
   return EXIT_SUCCESS;
 }

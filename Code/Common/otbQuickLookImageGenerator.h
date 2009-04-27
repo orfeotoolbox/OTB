@@ -71,9 +71,9 @@ public:
     {
       m_UseImageSpacing = boo;
       if (boo)
-	m_GaussianFilter->SetUseImageSpacingOn();
+        m_GaussianFilter->SetUseImageSpacingOn();
       else
-	m_GaussianFilter->SetUseImageSpacingOff();
+        m_GaussianFilter->SetUseImageSpacingOff();
     
       this->Modified();
     }

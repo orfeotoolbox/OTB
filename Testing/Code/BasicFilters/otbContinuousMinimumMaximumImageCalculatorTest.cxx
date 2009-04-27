@@ -95,7 +95,7 @@ otbContinuousMinimumMaximumImageCalculatorTest(int ,char *[] )
 
   if (minimumResult != minimum)
   {
-    std::cout << "Minimum Value is wrong : " << minimumResult ;
+    std::cout << "Minimum Value is wrong : " << minimumResult;
     std::cout << " != " << minimum << std::endl;
     flag = 1;
   }
@@ -107,7 +107,7 @@ otbContinuousMinimumMaximumImageCalculatorTest(int ,char *[] )
 
   if (maximumResult != maximum)
   {
-    std::cout << "Maximum Value is wrong : " << maximumResult ;
+    std::cout << "Maximum Value is wrong : " << maximumResult;
     std::cout << " != " << maximum << std::endl;
     flag = 2;
   }

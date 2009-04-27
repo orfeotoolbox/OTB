@@ -67,21 +67,21 @@ public:
       typename ViewType::ImageWidgetType::Pointer source;
 
       if(m_ActiveOnScrollWidget && widgetId == m_View->GetScrollWidget()->GetIdentifier() )
-	{
-	source = m_View->GetScrollWidget();
-	}
+        {
+        source = m_View->GetScrollWidget();
+        }
       else if(m_ActiveOnFullWidget && widgetId == m_View->GetFullWidget()->GetIdentifier() )
-	{
-	source = m_View->GetFullWidget();
-	}
+        {
+        source = m_View->GetFullWidget();
+        }
       else if(m_ActiveOnZoomWidget && widgetId == m_View->GetZoomWidget()->GetIdentifier() )
-	 {
-	 source = m_View->GetZoomWidget();
-	 }
+         {
+         source = m_View->GetZoomWidget();
+         }
 
       if(source.IsNotNull() && event == FL_PUSH && Fl::event_button() == m_MouseButton)
         {
-	// Get the clicked index
+        // Get the clicked index
         typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
         screenPoint = source->GetMousePosition();
         
@@ -92,7 +92,7 @@ public:
         typename ViewType::IndexType index;
         index[0]=static_cast<int>(imagePoint[0]);
         index[1]=static_cast<int>(imagePoint[1]);
-	
+        
         // Change scaled extract region center
         m_Model->IndexClicked(index);
         return true;

@@ -105,7 +105,7 @@ KullbackLeiblerSupervizedDistance< TInput1, TInput2, TInputROIImage, TOutput >
 /**
  *  Connect the training area to build the reference pdfs,
  *  with parameters to be hold by
- *  \doxygen{Functor}{KullbackLeiblerSupervizedDistance}.
+ *  Functor::KullbackLeiblerSupervizedDistance.
  *
  *  Images 1 & 2 are supposed to be already connected.
  */

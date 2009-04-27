@@ -28,9 +28,9 @@ namespace otb
 template <class TImage,class TVectorData,class TWidgetManager>
 StandardImageViewer<TImage,TVectorData,TWidgetManager>
 ::StandardImageViewer() : m_Label("Default label"), m_Image(), m_VectorData(),
-			  m_ImageLayer(), m_RenderingModel(),m_PixelDescriptionModel(),
-			  m_View(), m_PixelDescriptionView(), m_CurveWidget(),
-			  m_Controller(), m_RenderingFunction(), m_DisplayWindow()
+                          m_ImageLayer(), m_RenderingModel(),m_PixelDescriptionModel(),
+                          m_View(), m_PixelDescriptionView(), m_CurveWidget(),
+                          m_Controller(), m_RenderingFunction(), m_DisplayWindow()
 {
   // Build a new rendering model
   m_RenderingModel = RenderingModelType::New();

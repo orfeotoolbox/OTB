@@ -112,7 +112,7 @@ template <class TInputImage, class TOutputImage,
 void 
 SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::CallCopyInputRegionToOutputRegion
-( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )	 
+( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )         
 {
   Superclass::CallCopyInputRegionToOutputRegion( destRegion, srcRegion );
 
@@ -148,7 +148,7 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   outputIter.GoToBegin();
 
   InputImageRegionType inputRegionForThread;
-	this->CallCopyOutputRegionToInputRegion( inputRegionForThread, outputRegionForThread );
+        this->CallCopyOutputRegionToInputRegion( inputRegionForThread, outputRegionForThread );
 
   SubsampledImageRegionConstIterator< InputImageType > inputIter 
     ( this->GetInput(), inputRegionForThread );
