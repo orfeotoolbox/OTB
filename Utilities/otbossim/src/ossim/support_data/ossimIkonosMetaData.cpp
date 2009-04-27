@@ -46,7 +46,6 @@ ossimIkonosMetaData::ossimIkonosMetaData(const ossimFilename& imageFilename)
    //retrieve information from the metadata file
    //if the ikonos tif is po_2619900_pan_0000000.tif
    //the metadata file will be po_2619900_metadata.txt
-  std::cout << "Parsing metadata..." << std::endl;
   ossimString separator("_");
   ossimString filenamebase = imageFilename.fileNoExtension();
   std::vector< ossimString > filenameparts = filenamebase.split(separator);
