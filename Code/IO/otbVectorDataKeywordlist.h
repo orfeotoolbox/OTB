@@ -27,8 +27,16 @@
 namespace otb
 {
 /** \class VectorDataKeywordlist
-   * \brief this class represents the metadata of vector data.
-   *
+ * \brief this class handle the metadata of vector data.
+ *
+ * This class is used internaly to handle the information associated with
+ * a vector object. This information is retrieved from the input file (a
+ * shapefile for example) and propagated along the pipeline with the object.
+ *
+ * This is the equivalent of the otbOssimKeywordlist class but for OGR information.
+ *
+ * \todo add the accessor to enable modifying/updating the data.
+ *
  */
 
 class VectorDataKeywordlist
@@ -67,6 +75,7 @@ class VectorDataKeywordlist
   private:
 
     std::string PrintField(FieldType field) const;
+    FieldType CopyOgrField(FieldType field);
     FieldListType m_FieldList;
 
 

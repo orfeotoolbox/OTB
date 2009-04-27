@@ -42,9 +42,9 @@ void VectorDataKeywordlist::
     AddField(OGRFieldDefn* fieldDefn, OGRField* field)
 {
   FieldType newField;
-  newField.first = new OGRFieldDefn(fieldDefn);
-  newField.second = *field; //FIXME this is only a shallow copy
-  m_FieldList.push_back(newField);
+  newField.first = fieldDefn;
+  newField.second = *field;
+  m_FieldList.push_back(CopyOgrField(newField));
 };
 
 void
@@ -53,10 +53,7 @@ VectorDataKeywordlist::
 {
   for (unsigned int i = 0; i < p.m_FieldList.size(); ++i)
   {
-    FieldType newField;
-    newField.first = new OGRFieldDefn(p.m_FieldList[i].first);
-    newField.second = p.m_FieldList[i].second; //FIXME this is only a shallow copy
-    m_FieldList.push_back(newField);
+    m_FieldList.push_back(CopyOgrField(p.m_FieldList[i]));
   }
 }
 
@@ -157,6 +154,93 @@ VectorDataKeywordlist::
   output << std::endl;
   return output.str();
 }
+
+
+VectorDataKeywordlist::FieldType
+VectorDataKeywordlist::
+    CopyOgrField(FieldType field)
+{
+  FieldType outField;
+  outField.first = new OGRFieldDefn(field.first);
+  switch(field.first->GetType())
+  {
+    case OFTInteger:
+    {
+      outField.second.Integer = field.second.Integer;
+      break;
+    }
+    case OFTIntegerList:
+    {
+      std::cerr  << "OGR type not handled" << std::endl;
+      break;
+    }
+    case OFTReal:
+    {
+      outField.second.Real = field.second.Real;
+      break;
+    }
+    case OFTRealList:
+    {
+      std::cerr << "OGR type not handled" << std::endl;
+      break;
+    }
+    case OFTString:
+    {
+      if (field.second.String != NULL)
+      {
+        CPLFree( outField.second.String );
+        outField.second.String = CPLStrdup( field.second.String );
+      }
+      break;
+    }
+    case OFTStringList:
+    {
+      std::cerr << "OGR type not handled" << std::endl;
+      break;
+    }
+    case OFTWideString:
+    {
+      std::cerr << "OGR type not handled" << std::endl;
+      break;
+    }
+    case OFTWideStringList:
+    {
+      std::cerr << "OGR type not handled" << std::endl;
+      break;
+    }
+    case OFTBinary:
+    {
+      std::cerr << "OGR type not handled" << std::endl;
+      break;
+    }
+    case OFTDate:
+    {
+      outField.second.Date.Year = field.second.Date.Year;
+      outField.second.Date.Month = field.second.Date.Month;
+      outField.second.Date.Day = field.second.Date.Day;
+      break;
+    }
+    case OFTTime:
+    {
+      outField.second.Date.Hour = field.second.Date.Hour;
+      outField.second.Date.Minute = field.second.Date.Minute;
+      outField.second.Date.Second = field.second.Date.Second;
+      break;
+    }
+    case OFTDateTime:
+    {
+      outField.second.Date.Year = field.second.Date.Year;
+      outField.second.Date.Month = field.second.Date.Month;
+      outField.second.Date.Day = field.second.Date.Day;
+      outField.second.Date.Hour = field.second.Date.Hour;
+      outField.second.Date.Minute = field.second.Date.Minute;
+      outField.second.Date.Second = field.second.Date.Second;
+      break;
+    }
+  }
+  return outField;
+}
+
 
 std::ostream &
     operator<<(std::ostream &os, const VectorDataKeywordlist &kwl)

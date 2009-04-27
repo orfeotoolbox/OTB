@@ -211,10 +211,12 @@ SHPVectorDataIO<TData>
       if (geometry != NULL)
       {
         otb::VectorDataKeywordlist kwl;
-        std::cout << "Inserting " << feature->GetFieldCount() << " fields." << std::endl;
         for (int fieldNum=0; fieldNum< feature->GetFieldCount(); ++fieldNum)
         {
-          kwl.AddField(feature->GetFieldDefnRef(fieldNum), feature->GetRawFieldRef(fieldNum));
+          if (feature->IsFieldSet(fieldNum))
+          {
+            kwl.AddField(feature->GetFieldDefnRef(fieldNum), feature->GetRawFieldRef(fieldNum));
+          }
         }
 
 
