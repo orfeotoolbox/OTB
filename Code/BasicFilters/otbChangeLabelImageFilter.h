@@ -97,13 +97,13 @@ public:
       out.SetSize(m_NumberOfComponentsPerPixel);
       
       if ( m_ChangeMap.find(A) != m_ChangeMap.end() )
-	{
-	  out = m_ChangeMap[A];
-	}
+        {
+          out = m_ChangeMap[A];
+        }
       else
-	{
-	  out.Fill(static_cast<ValueType>(A));
-	}
+        {
+          out.Fill(static_cast<ValueType>(A));
+        }
       return out;
     }
 
@@ -246,13 +246,13 @@ public:
       out.SetSize(m_NumberOfComponents);
       
       if ( m_ChangeMap.find(A) != m_ChangeMap.end() )
-	{
-	  return m_ChangeMap[A];
-	}
+        {
+          return m_ChangeMap[A];
+        }
       else
-	{
-	  out.Fill(static_cast<TOutput::ValueType>(A));
-	}
+        {
+          out.Fill(static_cast<TOutput::ValueType>(A));
+        }
     }
 
 private:

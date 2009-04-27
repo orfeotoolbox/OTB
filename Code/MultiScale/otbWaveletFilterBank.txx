@@ -236,7 +236,7 @@ WaveletFilterBank< TInputImage, TOutputImage,
                       TLowPassOperator, THighPassOperator, 
                       FORWARD >
 ::CallCopyInputRegionToOutputRegion
-( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )	 
+( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )         
 {
   Superclass::CallCopyInputRegionToOutputRegion( destRegion, srcRegion );
 
@@ -267,7 +267,7 @@ WaveletFilterBank< TInputImage, TOutputImage,
                       FORWARD >
 ::CallCopyInputRegionToOutputRegion
 ( unsigned int direction,
-  OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )	 
+  OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )         
 {
   Superclass::CallCopyInputRegionToOutputRegion( destRegion, srcRegion );
 
@@ -783,7 +783,7 @@ WaveletFilterBank< TInputImage, TOutputImage,
                       TLowPassOperator, THighPassOperator, 
                       TDirectionOfTransformation >
 ::CallCopyInputRegionToOutputRegion
-( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )	 
+( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )         
 {
   Superclass::CallCopyInputRegionToOutputRegion( destRegion, srcRegion );
 
@@ -845,7 +845,7 @@ WaveletFilterBank< TInputImage, TOutputImage,
                       TLowPassOperator, THighPassOperator, 
                       TDirectionOfTransformation >
 ::CallCopyInputRegionToOutputRegion
-( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )	 
+( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )         
 {
   Superclass::CallCopyInputRegionToOutputRegion( destRegion, srcRegion );
 
@@ -1160,7 +1160,7 @@ WaveletFilterBank< TInputImage, TOutputImage,
   const OutputImageRegionType& outputRegionForThread, int threadId )
 {
   InputImageRegionType inputRegionForThread;
-	this->CallCopyOutputRegionToInputRegion( inputRegionForThread, outputRegionForThread );
+        this->CallCopyOutputRegionToInputRegion( inputRegionForThread, outputRegionForThread );
   
   unsigned int idx = InputImageType::ImageDimension-1;
 

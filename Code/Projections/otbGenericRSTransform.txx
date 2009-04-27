@@ -259,9 +259,9 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
       ForwardSensorModelType::Pointer sensorModel = ForwardSensorModelType::New();
       sensorModel->SetImageGeometry(m_InputKeywordList);
       if ( !m_DEMDirectory.empty())
-	{
-	sensorModel->SetDEMDirectory(m_DEMDirectory);
-	}
+        {
+        sensorModel->SetDEMDirectory(m_DEMDirectory);
+        }
       m_InputTransform = sensorModel.GetPointer();
       otbMsgDevMacro(<< "Input projection set to sensor model.");
       }
@@ -303,9 +303,9 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
       InverseSensorModelType::Pointer sensorModel = InverseSensorModelType::New();
       sensorModel->SetImageGeometry(m_OutputKeywordList);
       if ( !m_DEMDirectory.empty())
-	{
-	sensorModel->SetDEMDirectory(m_DEMDirectory);
-	}
+        {
+        sensorModel->SetDEMDirectory(m_DEMDirectory);
+        }
       m_OutputTransform = sensorModel.GetPointer();
       otbMsgDevMacro(<< "Output projection set to sensor model");
       }

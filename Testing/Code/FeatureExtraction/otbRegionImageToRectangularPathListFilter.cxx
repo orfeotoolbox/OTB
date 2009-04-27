@@ -37,9 +37,9 @@ int otbRegionImageToRectangularPathListFilter(int argc, char * argv[])
        
 
   typedef unsigned short                                InputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  const   unsigned int                                        Dimension = 2;
 
-  typedef otb::Image< InputPixelType,  Dimension >	InputImageType;
+  typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -79,13 +79,13 @@ int otbRegionImageToRectangularPathListFilter(int argc, char * argv[])
     {
 
       for (PathType::VertexListType::ConstIterator vit  = listIt.Get()->GetVertexList()->Begin();
-	   vit != listIt.Get()->GetVertexList()->End();++vit)
-	{
-	  double x = vit.Value()[0];
-	  double y = vit.Value()[1];
-	  fprintf(file,"%8.3f %8.3f\n",x,y);
-	     
-	}
+           vit != listIt.Get()->GetVertexList()->End();++vit)
+        {
+          double x = vit.Value()[0];
+          double y = vit.Value()[1];
+          fprintf(file,"%8.3f %8.3f\n",x,y);
+             
+        }
 
       double score = listIt.Get()->GetValue();
       fprintf(file,"%8.3f\n",score);

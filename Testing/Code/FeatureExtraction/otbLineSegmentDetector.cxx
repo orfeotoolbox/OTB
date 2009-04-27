@@ -89,11 +89,11 @@ int otbLineSegmentDetector( int argc, char * argv[] )
 //       LineIteratorFilter   itLine(reader->GetOutput(),IndexBegin,  IndexEnd);
 //       itLine.GoToBegin();
 //       while(!itLine.IsAtEnd())
-// 	{
-// 	  if(reader->GetOutput()->GetRequestedRegion().IsInside(itLine.GetIndex()))
-// 	    itLine.Set(255.);
-// 	  ++itLine;
-// 	}
+//         {
+//           if(reader->GetOutput()->GetRequestedRegion().IsInside(itLine.GetIndex()))
+//             itLine.Set(255.);
+//           ++itLine;
+//         }
 //       ++it;
 //     }
 

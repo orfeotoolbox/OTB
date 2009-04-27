@@ -109,7 +109,7 @@ protected:
   virtual void CallCopyOutputRegionToInputRegion 
     ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion );
   virtual void CallCopyInputRegionToOutputRegion
-    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );	 
+    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );         
 
   /** Output image region size is not of the same dimension as the input.
    * That is why GenerateOutputInformation has to be redefined.

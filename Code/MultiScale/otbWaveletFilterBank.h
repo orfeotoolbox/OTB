@@ -223,10 +223,10 @@ protected:
   virtual ~WaveletFilterBank() {}
 
   /** GenerateOutputInformation 
-	 * Set the size of the output image depending on the decimation factor
-	 * Copy informations from the input image if existing.
-	 **/
-	virtual void GenerateOutputInformation();
+         * Set the size of the output image depending on the decimation factor
+         * Copy informations from the input image if existing.
+         **/
+        virtual void GenerateOutputInformation();
 
 
   /** BeforeThreadedGenerateData.
@@ -253,7 +253,7 @@ protected:
   virtual void CallCopyOutputRegionToInputRegion 
     ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion );
   virtual void CallCopyInputRegionToOutputRegion
-    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );	 
+    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );         
 
   /** CallCopyOutputRegionToInputRegion
    * This function is also redefined in order to adapt the shape of the regions with 
@@ -358,10 +358,10 @@ protected:
   virtual ~WaveletFilterBank();
 
   /** GenerateOutputInformation 
-	 * Set the size of the output image depending on the decimation factor
-	 * Copy informations from the input image if existing.
-	 **/
-	virtual void GenerateOutputInformation();
+         * Set the size of the output image depending on the decimation factor
+         * Copy informations from the input image if existing.
+         **/
+        virtual void GenerateOutputInformation();
 
   /** CallCopyOutputRegionToInputRegion
    * Since input and output image may be of different size when a 
@@ -371,7 +371,7 @@ protected:
   virtual void CallCopyOutputRegionToInputRegion 
     ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion );
   virtual void CallCopyInputRegionToOutputRegion
-    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );	 
+    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );         
 
   virtual void EnlargeRegion ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion );
   virtual void ReduceRegion ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion );

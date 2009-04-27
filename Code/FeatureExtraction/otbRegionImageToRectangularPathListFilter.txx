@@ -159,30 +159,30 @@ RegionImageToRectangularPathListFilter<TInputImage,TOutputPath>
       }
       // Collect all pixels in same region (same value), reachable in 4-connectivity
       for (regionIterator = regionContainer.begin(); regionIterator != /*<*/ regionContainer.end(); ++regionIterator /* regionContainer grows within loop */) {
-	// add neighbors not yet processed, until whole region has been collected (no "new" neighbor)
-	explorerIndex = *regionIterator;
-	nit2.SetLocation(explorerIndex);
-	if (pixelCount <= pixelDebugNumber)
-	  std::cout << "Exploring neighbors of " << explorerIndex << std::endl;
+        // add neighbors not yet processed, until whole region has been collected (no "new" neighbor)
+        explorerIndex = *regionIterator;
+        nit2.SetLocation(explorerIndex);
+        if (pixelCount <= pixelDebugNumber)
+          std::cout << "Exploring neighbors of " << explorerIndex << std::endl;
 
-      	for (neighbor = 1; neighbor <= 7; neighbor += 2)
-	  if (nit2.GetPixel(neighbor) == regionValue) { // ZZ and not yet processed...
-	    mit.SetIndex(nit2.GetIndex(neighbor));
-	    if (mit.Get() == maxValue) { // pixel not yet processed
-	      mit.Set(zeroValue);
-	      regionContainer.push_back(nit2.GetIndex(neighbor));
-	      if (pixelCount <= pixelDebugNumber) {
-	        std::cout << "Adding " << nit2.GetIndex(neighbor) << std::endl;
-	        std::cout << "Added " << regionContainer.back() << std::endl;
-	      }
-	    }
-	  }
+              for (neighbor = 1; neighbor <= 7; neighbor += 2)
+          if (nit2.GetPixel(neighbor) == regionValue) { // ZZ and not yet processed...
+            mit.SetIndex(nit2.GetIndex(neighbor));
+            if (mit.Get() == maxValue) { // pixel not yet processed
+              mit.Set(zeroValue);
+              regionContainer.push_back(nit2.GetIndex(neighbor));
+              if (pixelCount <= pixelDebugNumber) {
+                std::cout << "Adding " << nit2.GetIndex(neighbor) << std::endl;
+                std::cout << "Added " << regionContainer.back() << std::endl;
+              }
+            }
+          }
       }
       if (pixelCount <= pixelDebugNumber) {
         std::cout << "Region queue (" << regionContainer.size() << " elements) : " << std::endl;
-	for (regionIterator = regionContainer.begin(); regionIterator != regionContainer.end(); ++regionIterator)
-	  std::cout << *regionIterator;
-	std::cout << std::endl;
+        for (regionIterator = regionContainer.begin(); regionIterator != regionContainer.end(); ++regionIterator)
+          std::cout << *regionIterator;
+        std::cout << std::endl;
       }
 
       // Compute variance-covariance matrix of x-y coordinates of region pixels
@@ -221,61 +221,61 @@ RegionImageToRectangularPathListFilter<TInputImage,TOutputPath>
 
       // Compute eigenvalues and eigenvectors of variance-covariance matrix (for DIRECTION)
       double delta, 
-	l1, l2, /* eigenvalues */ 
-	y1, y2, /* eigenvectors y coordinate, for x = 1*/
-	x1 = 1, /* first eigenvector x coordinate */
-	x2 = 1, /* second eigenvector x coordinate, 1 except in special case when covarXY == 0 */
-	alpha /* main direction */ ;
+        l1, l2, /* eigenvalues */ 
+        y1, y2, /* eigenvectors y coordinate, for x = 1*/
+        x1 = 1, /* first eigenvector x coordinate */
+        x2 = 1, /* second eigenvector x coordinate, 1 except in special case when covarXY == 0 */
+        alpha /* main direction */ ;
       delta = (varX - varY) * (varX - varY) + 4 * covarXY * covarXY;
       l1 = (varX + varY + vcl_sqrt(delta)) / 2;
       l2 = (varX + varY - vcl_sqrt(delta)) / 2;
-      if (covarXY != 0.0) {	// ZZ or larger than a small epsilon ? (eg 10^(-15)...)
+      if (covarXY != 0.0) {        // ZZ or larger than a small epsilon ? (eg 10^(-15)...)
         y1 = (l1 - varX) / covarXY; // for x1 = 1
         y2 = (l2 - varX) / covarXY; // for x2 = 1
       } else { // matrix was already diagonal
-	y1 = 0;
-	x2 = 0;
-	y2 = 1;
+        y1 = 0;
+        x2 = 0;
+        y2 = 1;
       }
 
       // Compute eigenvalues and eigenvectors of absolute mean deviation matrix (for PROPORTIONS)
       double adelta, 
-	al1, al2, /* eigenvalues */ 
-	ay1, ay2, /* eigenvectors y coordinate, for x = 1*/
-	ax1 = 1, /* first eigenvector x coordinate */
-	ax2 = 1; /* second eigenvector x coordinate, 1 except in special case when covarXY == 0 */
+        al1, al2, /* eigenvalues */ 
+        ay1, ay2, /* eigenvectors y coordinate, for x = 1*/
+        ax1 = 1, /* first eigenvector x coordinate */
+        ax2 = 1; /* second eigenvector x coordinate, 1 except in special case when covarXY == 0 */
       adelta = (adevX - adevY) * (adevX - adevY) + 4 * adevXY * adevXY;
       al1 = (adevX + adevY + vcl_sqrt(adelta)) / 2;
       al2 = (adevX + adevY - vcl_sqrt(adelta)) / 2;
-      if (adevXY != 0.0) {	// ZZ or larger than a small epsilon ? (eg 10^(-15)...)
+      if (adevXY != 0.0) {        // ZZ or larger than a small epsilon ? (eg 10^(-15)...)
         ay1 = (al1 - adevX) / adevXY; // for x1 = 1
         ay2 = (al2 - adevX) / adevXY; // for x2 = 1
       } else { // matrix was already diagonal
-	ay1 = 0;
-	ax2 = 0;
-	ay2 = 1;
+        ay1 = 0;
+        ax2 = 0;
+        ay2 = 1;
       }
 
       if (y1 != 0)
         alpha = vcl_atan(1 / y1) * 180 / vnl_math::pi;
       else
-	alpha = 90;
+        alpha = 90;
       if (alpha < 0)
-	alpha += 180; // Conventionnaly given as a value between 0 and 180°
+        alpha += 180; // Conventionnaly given as a value between 0 and 180°
 
       // Compute equivalent length and width (based on equal area criterion)
       double length, width;
       if (al2 != 0) {
-	length = vcl_sqrt(vcl_fabs(al1 / al2) * n);
-	//length = vcl_sqrt(l1 / l2 * n);
+        length = vcl_sqrt(vcl_fabs(al1 / al2) * n);
+        //length = vcl_sqrt(l1 / l2 * n);
         if (al1 != 0)
-	  width = vcl_fabs(al2 / al1) * length;
-	else { // l1 == 0 and l2 == 0
-	  length = width = vcl_sqrt(n); // should happen only when n == 1 anyway
-	}
+          width = vcl_fabs(al2 / al1) * length;
+        else { // l1 == 0 and l2 == 0
+          length = width = vcl_sqrt(n); // should happen only when n == 1 anyway
+        }
       } else {
-	length = n;  // Arbitrary representation for degenerate case
-	width = 1;
+        length = n;  // Arbitrary representation for degenerate case
+        width = 1;
       }
 
       // Normalize eigenvectors (for following tests)
@@ -314,27 +314,27 @@ RegionImageToRectangularPathListFilter<TInputImage,TOutputPath>
       int countWithin = 0; // number of pixels contained within rectangle
       for (regionIterator = regionContainer.begin(); regionIterator != regionContainer.end(); ++regionIterator) {
         explorerIndex = *regionIterator;
-	vx = explorerIndex[0] - avgX;
-	vy = explorerIndex[1] - avgY;
-	if (vcl_fabs(vx * x1 + vy * y1) <= halfLength
-	 && vcl_fabs(vx * x2 + vy * y2) <= halfWidth)
-	  countWithin ++;
+        vx = explorerIndex[0] - avgX;
+        vy = explorerIndex[1] - avgY;
+        if (vcl_fabs(vx * x1 + vy * y1) <= halfLength
+         && vcl_fabs(vx * x2 + vy * y2) <= halfWidth)
+          countWithin ++;
       }
 
       if (regionCount <= regionDebugNumber) {
-	std::cout << std::endl << "Region " << regionCount << " (area = " << n << " pixels)" << std::endl;
+        std::cout << std::endl << "Region " << regionCount << " (area = " << n << " pixels)" << std::endl;
         std::cout << "sumX = " << sumX << " ; sumY = " << sumY << " ; sumX2 = " << sumX2 << " ; sumY2 = " << sumY2 << " ; sumXY = " << sumXY << std::endl;
         std::cout << "avgX = " << avgX << " ; avgY = " << avgY << std::endl;
         std::cout << "varX = " << varX << " ; varY = " << varY << " ; covarXY = " << covarXY << std::endl;
         std::cout << "adevX = " << adevX << " ; adevY = " << adevY << " ; adevXY = " << adevXY << std::endl;
         std::cout << "crossTermAXY = " << crossTermAXY << std::endl;
         std::cout << "eigenvalue 1 = " << l1 << " ; eigenvalue 2 = " << l2 << std::endl;
-	std::cout << "eigenvector 1 = [" << x1 << ", " << y1 << "] ; eigenvector 2 = [" << x2 << ", " << y2 << "]" << std::endl;
+        std::cout << "eigenvector 1 = [" << x1 << ", " << y1 << "] ; eigenvector 2 = [" << x2 << ", " << y2 << "]" << std::endl;
         std::cout << "A-eigenvalue 1 = " << al1 << " ; A-eigenvalue 2 = " << al2 << std::endl;
-	std::cout << "A-eigenvector 1 = [" << ax1 << ", " << ay1 << "] ; A-eigenvector 2 = [" << ax2 << ", " << ay2 << "]" << std::endl;
+        std::cout << "A-eigenvector 1 = [" << ax1 << ", " << ay1 << "] ; A-eigenvector 2 = [" << ax2 << ", " << ay2 << "]" << std::endl;
         std::cout << "length = " << length << " ; width = " << width << std::endl;
-	std::cout << "main direction = " << alpha << "°" << std::endl;
-	std::cout << "rectangular fit = " << (float) countWithin / n << std::endl;
+        std::cout << "main direction = " << alpha << "°" << std::endl;
+        std::cout << "rectangular fit = " << (float) countWithin / n << std::endl;
       }
 
   
@@ -350,22 +350,22 @@ RegionImageToRectangularPathListFilter<TInputImage,TOutputPath>
       point[1] = (avgY + y1 * halfLength + y2 * halfWidth) * spacing[1] + origin[1];
       path->AddVertex(point);
       if (regionCount <= regionDebugNumber)
-	std::cout << "corner 1 : [" << point[0] << ", " << point[1] << "]" << std::endl;
+        std::cout << "corner 1 : [" << point[0] << ", " << point[1] << "]" << std::endl;
       point[0] = (avgX - x1 * halfLength + x2 * halfWidth) * spacing[0] + origin[0];
       point[1] = (avgY - y1 * halfLength + y2 * halfWidth) * spacing[1] + origin[1];
       path->AddVertex(point);
       if (regionCount <= regionDebugNumber)
-	std::cout << "corner 2 : [" << point[0] << ", " << point[1] << "]" << std::endl;
+        std::cout << "corner 2 : [" << point[0] << ", " << point[1] << "]" << std::endl;
       point[0] = (avgX - x1 * halfLength - x2 * halfWidth) * spacing[0] + origin[0];
       point[1] = (avgY - y1 * halfLength - y2 * halfWidth) * spacing[1] + origin[1];
       path->AddVertex(point);
       if (regionCount <= regionDebugNumber)
-	std::cout << "corner 3 : [" << point[0] << ", " << point[1] << "]" << std::endl;
+        std::cout << "corner 3 : [" << point[0] << ", " << point[1] << "]" << std::endl;
       point[0] = (avgX + x1 * halfLength - x2 * halfWidth) * spacing[0] + origin[0];
       point[1] = (avgY + y1 * halfLength - y2 * halfWidth) * spacing[1] + origin[1];
       path->AddVertex(point);
      if (regionCount <= regionDebugNumber)
-	std::cout << "corner 4 : [" << point[0] << ", " << point[1] << "]" << std::endl;
+        std::cout << "corner 4 : [" << point[0] << ", " << point[1] << "]" << std::endl;
       point[0] = (avgX + x1 * halfLength + x2 * halfWidth) * spacing[0] + origin[0];
       point[1] = (avgY + y1 * halfLength + y2 * halfWidth) * spacing[1] + origin[1];
       path->AddVertex(point);
@@ -373,9 +373,9 @@ RegionImageToRectangularPathListFilter<TInputImage,TOutputPath>
       path->SetValue((double) countWithin / n);
    
       if ((float) countWithin / n >= m_MinimumFit // keep only rectangles with fit larger than minimumFit
-	  && n >= m_MinimumSize) {		  // and size larger than minimumSize
+          && n >= m_MinimumSize) {                  // and size larger than minimumSize
         OutputPath->PushBack(path);
-	selectedRegionCount ++;
+        selectedRegionCount ++;
       }
     }
   }

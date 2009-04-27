@@ -39,11 +39,11 @@ namespace otb {
  */
 template < class TImage >
 class ITK_EXPORT SubsampledImageRegionIterator 
-	: public SubsampledImageRegionConstIterator< TImage >
+        : public SubsampledImageRegionConstIterator< TImage >
 {
 public:
   /** Standard typedef. */
-  typedef SubsampledImageRegionIterator	Self;
+  typedef SubsampledImageRegionIterator        Self;
   typedef SubsampledImageRegionConstIterator< TImage > Superclass;
 
   /** Run-time type information (and related methods). */

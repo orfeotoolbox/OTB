@@ -773,9 +773,9 @@ void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
 //     while (fIt!=ogrFeatures.end())
 //       {
 //       if (ogrCurrentLayer->CreateFeature(*fIt) != OGRERR_NONE)
-// 	{
+//         {
 //         itkExceptionMacro(<<"Failed to create ogr feature in file "<<this->m_FileName);
-// 	}
+//         }
 //       OGRFeature::DestroyFeature(*fIt);
 //       ++fIt;
 //       }

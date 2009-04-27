@@ -84,8 +84,8 @@ public:
         index[0]=static_cast<int>(imagePoint[0]);
         index[1]=static_cast<int>(imagePoint[1]);
 
-	//Add Offset
-	index += m_Offset;
+        //Add Offset
+        index += m_Offset;
 
         // Change scaled extract region center
         m_Model->SetExtractRegionCenter(index);

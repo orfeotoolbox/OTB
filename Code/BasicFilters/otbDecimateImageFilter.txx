@@ -90,7 +90,7 @@ template <class TInputImage, class TOutputImage>
 void 
 DecimateImageFilter< TInputImage, TOutputImage >
 ::CallCopyInputRegionToOutputRegion
-( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )	 
+( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )         
 {
   Superclass::CallCopyInputRegionToOutputRegion( destRegion, srcRegion );
 
@@ -117,7 +117,7 @@ DecimateImageFilter< TInputImage, TOutputImage >
                        int threadId)
 {
   InputImageRegionType inputRegionForThread;
-	this->CallCopyOutputRegionToInputRegion( inputRegionForThread, outputRegionForThread );
+        this->CallCopyOutputRegionToInputRegion( inputRegionForThread, outputRegionForThread );
 
   SubsampledImageRegionConstIterator< InputImageType > decimationIterator 
     ( this->GetInput(), inputRegionForThread );

@@ -23,9 +23,9 @@
 int otbRegionImageToRectangularPathListFilterNew(int argc, char * argv[])
 {
   typedef unsigned short                                InputPixelType;
-  const   unsigned int        	                        Dimension = 2;
+  const   unsigned int                                        Dimension = 2;
 
-  typedef otb::Image< InputPixelType,  Dimension >	InputImageType;
+  typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
   
   typedef otb::PolyLineParametricPathWithValue< double, Dimension >   PathType;
   typedef otb::RegionImageToRectangularPathListFilter<InputImageType,PathType>
