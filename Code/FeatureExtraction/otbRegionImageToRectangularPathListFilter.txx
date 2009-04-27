@@ -271,7 +271,7 @@ RegionImageToRectangularPathListFilter<TInputImage,TOutputPath>
         if (al1 != 0)
           width = vcl_fabs(al2 / al1) * length;
         else { // l1 == 0 and l2 == 0
-          length = width = vcl_sqrt(n); // should happen only when n == 1 anyway
+          length = width = vcl_sqrt(static_cast<double>(n)); // should happen only when n == 1 anyway
         }
       } else {
         length = n;  // Arbitrary representation for degenerate case
