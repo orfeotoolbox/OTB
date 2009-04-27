@@ -34,5 +34,5 @@ REGISTER_TEST(otbImageIOFactoryNew);
 REGISTER_TEST(otbDEMToOrthoImageGeneratorNew);
 REGISTER_TEST(otbDEMToOrthoImageGeneratorTest);
 REGISTER_TEST(otbPrepareSRTMDirectoryNew);
-//REGISTER_TEST(otbPrepareSRTMDirectoryTest);
+REGISTER_TEST(otbPrepareSRTMDirectoryTest);
 }

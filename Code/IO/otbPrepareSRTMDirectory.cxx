@@ -58,19 +58,43 @@ PrepareSRTMDirectory
 
 bool PrepareSRTMDirectory::Evaluate()
 {
+  // Check directories
+    //
+  ossimFilename fullDir(m_FullDEMDirectoryPath.c_str());
+  if( !fullDir.exists() || !fullDir.isDir() )
+    {
+      itkExceptionMacro(<<"Invalid FullDEMDirectoryPath: "<<m_FullDEMDirectoryPath);
+    }
+  
+  ossimFilename DEMDir(m_DEMDirectoryPath.c_str());
+  if( !DEMDir.exists() )
+    {
+      DEMDir.createDirectory();
+    }
+
+  // Check input points
   int startX = static_cast<int>(vcl_floor(m_ULLon));
   int endX = static_cast<int>(vcl_ceil(m_LRLon));
   int startY = static_cast<int>(vcl_floor(m_LRLat));
   int endY = static_cast<int>(vcl_ceil(m_ULLat));
+  
+  if( startX>endX || startY>endY  )
+    {
+      itkExceptionMacro(<<"Invalid boundariy points");
+    }
+  if(startX<-180 || startX>180 || endX<-180 || endX>180)
+    {
+      itkExceptionMacro(<<"Invalid longitude coordinates, must be in [-180; 180].");
+    }
+  if(startY<-90 || startY>90 || endY<-90 || endY>90)
+    {
+       itkExceptionMacro(<<"Invalid latitude coordinates, must be in [-90; 90]");
+    }
 
-  std::cout << startX << std::endl;
-  std::cout << endX << std::endl;
-  std::cout << startY << std::endl;
-  std::cout << endY << std::endl;
-
-  for (int j=startY; j<endY; j++)
+ 
+  for (int j=startY; j<= endY; j++)
   {
-    for (int i=startX; i< endX; i++)
+    for (int i=startX; i<= endX; i++)
     {
       std::ostringstream inputfilename;
       inputfilename << m_FullDEMDirectoryPath;
@@ -78,36 +102,37 @@ bool PrepareSRTMDirectory::Evaluate()
 
       std::ostringstream outputfilename;
       outputfilename << m_DEMDirectoryPath;
+
       outputfilename << "/";
 
+      // Build the file name
       if (j >= 0)
       {
         inputfilename << "N";
-        inputfilename << std::setfill('0') << std::setw(2) << j;
         outputfilename << "N";
-        outputfilename << std::setfill('0') << std::setw(2) << j;
       }
       else
       {
         inputfilename << "S";
-        inputfilename << std::setfill('0') << std::setw(2) << -j;
-        outputfilename << "S";
-        outputfilename << std::setfill('0') << std::setw(2) << -j;
+	outputfilename << "S";
       }
+      
+      inputfilename << std::setfill('0') << std::setw(2) << vcl_abs(j);
+      outputfilename << std::setfill('0') << std::setw(2) << vcl_abs(j);
+
       if (i >= 0)
       {
         inputfilename << "E";
-        inputfilename << std::setfill('0') << std::setw(3) << i;
         outputfilename << "E";
-        outputfilename << std::setfill('0') << std::setw(3) << i;
       }
       else
       {
         inputfilename << "W";
-        inputfilename << std::setfill('0') << std::setw(3) << -i;
         outputfilename << "W";
-        outputfilename << std::setfill('0') << std::setw(3) << -i;
       }
+      
+      inputfilename << std::setfill('0') << std::setw(3) << vcl_abs(i);
+      outputfilename << std::setfill('0') << std::setw(3) << vcl_abs(i);
 
       inputfilename << ".hgt";
       outputfilename << ".hgt";
@@ -117,6 +142,10 @@ bool PrepareSRTMDirectory::Evaluate()
       //copy input file to output file
       ossimFilename inputFile(inputfilename.str().c_str());
       ossimFilename outputFile(outputfilename.str().c_str());
+      if(!inputFile.exists())
+	{
+	  itkExceptionMacro(<<"ERROR, can't find file "<<inputFile);
+	}
       inputFile.copyFileTo(outputFile);
 
 

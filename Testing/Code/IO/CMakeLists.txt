@@ -1762,8 +1762,22 @@ ADD_TEST(ioTvDEMToOrthoImageGeneratorTest ${IO_TESTS17}
 ADD_TEST(ioTuPrepareSRTMDirectoryNew ${IO_TESTS17}
       otbPrepareSRTMDirectoryNew )
 
-#ADD_TEST(ioTuPrepareSRTMDirectoryTest ${IO_TESTS17}
-#      otbPrepareSRTMDirectoryTest )
+ADD_TEST(ioTuPrepareSRTMDirectoryTest ${IO_TESTS17}
+  --compare-n-ascii ${TOL} 3
+		    ${INPUTDATA}/DEM/srtm_directory/N44E007.hgt
+		    ${TEMP}/ioTuPrepareSRTMDirectoryTest/N44E007.hgt
+		    ${INPUTDATA}/DEM/srtm_directory/N46E007.hgt
+		    ${TEMP}/ioTuPrepareSRTMDirectoryTest/N46E007.hgt
+		    ${INPUTDATA}/DEM/srtm_directory/N45E007.hgt
+		    ${TEMP}/ioTuPrepareSRTMDirectoryTest/N45E007.hgt
+  otbPrepareSRTMDirectoryTest 
+      ${INPUTDATA}/DEM/srtm_directory
+      ${TEMP}/ioTuPrepareSRTMDirectoryTest
+      7.2
+      45.2
+      6.1
+      44.6
+)
 
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
@@ -1907,7 +1921,7 @@ otbImageIOFactoryNew.cxx
 otbDEMToOrthoImageGeneratorNew.cxx
 otbDEMToOrthoImageGeneratorTest.cxx
 otbPrepareSRTMDirectoryNew.cxx
-#otbPrepareSRTMDirectoryTest.cxx
+otbPrepareSRTMDirectoryTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
