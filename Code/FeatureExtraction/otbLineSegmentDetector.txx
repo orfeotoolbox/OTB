@@ -165,7 +165,7 @@ LineSegmentDetector<TInputImage,TPrecision >
 
   /** Computing the length of the bins*/  
   unsigned int NbBin = 10;  
-  double lengthBin = static_cast<double>((max - min))/static_cast<double>(NbBin-1) ;
+  double lengthBin = static_cast<double>((max - min))/static_cast<double>(NbBin-1);
   CoordinateHistogramType  tempHisto(NbBin);  /** Initializing the histogram */
 
   
@@ -498,7 +498,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   /** 
    * Loop for searching regions 
    */
-  for (unsigned int cpt = 0; cpt < reg.size() ; cpt++ )
+  for (unsigned int cpt = 0; cpt < reg.size(); cpt++ )
     {
       itNeigh.SetLocation(reg[cpt]);
       itNeighDir.SetLocation(reg[cpt]);
@@ -591,8 +591,8 @@ LineSegmentDetector<TInputImage, TPrecision>
     }
   else
     {
-      x/= sumWeight ;
-      y/= sumWeight ;
+      x/= sumWeight;
+      y/= sumWeight;
     }
   
   /** Compute the orientation of the region*/
@@ -632,7 +632,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   double s = 0.;
   int i = 0;
   
-  for( s=0.0,i = static_cast<int>(l_min); s<sum_th && i<=static_cast<int>(l_max) ; i++) 
+  for( s=0.0,i = static_cast<int>(l_min); s<sum_th && i<=static_cast<int>(l_max); i++) 
     s += sum_l[ Diagonal + i];
   
   double lb = (static_cast<double>(i-1) - 0.5 );
@@ -732,7 +732,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   Inertie[1][0] =Ixy;
   
   typedef itk::SymmetricEigenAnalysis<MatrixType,MatrixEigenType>   EigenAnalysisType;
-  EigenAnalysisType eigenFilter(2) ;
+  EigenAnalysisType eigenFilter(2);
   eigenFilter.ComputeEigenValuesAndVectors(Inertie,eigenMatrix,eigenVector  );
   theta = vcl_atan2(eigenVector[1][1], -eigenVector[1][0]);
   
@@ -791,14 +791,14 @@ LineSegmentDetector<TInputImage, TPrecision>
 
 //   RectangleType        X(4,0.) , Y(4,0.);
   
-//   X[0] = rec[0] + dy* halfWidth ;
-//   Y[0] = rec[1] - dx* halfWidth ;
-//   X[1] = rec[0] - dy* halfWidth ;
-//   Y[1] = rec[1] + dx* halfWidth ;
-//   X[2] = rec[2] + dy* halfWidth ;
-//   Y[2] = rec[3] - dx* halfWidth ;
-//   X[3] = rec[2] - dy* halfWidth ;
-//   Y[3] = rec[3] + dx* halfWidth ;
+//   X[0] = rec[0] + dy* halfWidth;
+//   Y[0] = rec[1] - dx* halfWidth;
+//   X[1] = rec[0] - dy* halfWidth;
+//   Y[1] = rec[1] + dx* halfWidth;
+//   X[2] = rec[2] + dy* halfWidth;
+//   Y[2] = rec[3] - dx* halfWidth;
+//   X[3] = rec[2] - dy* halfWidth;
+//   Y[3] = rec[3] + dx* halfWidth;
 
 
   /** Compute the NFA of the rectangle  

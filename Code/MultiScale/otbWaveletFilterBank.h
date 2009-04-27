@@ -284,7 +284,7 @@ private:
    * size ImageDimension-1 and each InternalImagesTabular contains intermediate 
    * images
    */
-  typedef std::vector< OutputImagePointerType > InternalImagesTabular ;
+  typedef std::vector< OutputImagePointerType > InternalImagesTabular;
   std::vector< InternalImagesTabular > m_InternalImages;
 }; // end of class
   

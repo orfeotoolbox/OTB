@@ -63,12 +63,12 @@ int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[] )
       std::vector<std::string> imagesfilenames;
       std::vector<std::string> outputimagesfilenames;
       int cpt(3);
-      for(; cpt<(numberOfTrainingImages+3) ; cpt++)
+      for(; cpt<(numberOfTrainingImages+3); cpt++)
       {
           imagesfilenames.push_back(argv[cpt]);
       }
       int cpt2(cpt);
-      for(; cpt<(numberOfPrincipalComponentsRequired+cpt2) ; cpt++)
+      for(; cpt<(numberOfPrincipalComponentsRequired+cpt2); cpt++)
       {
           outputimagesfilenames.push_back(argv[cpt]);
       }

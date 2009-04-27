@@ -37,7 +37,7 @@ int otbPolygonCompacityFunctor( int argc, char * argv[] )
 
   if (argc !=3 )
   {
-    std::cout << "Usage: " << argv[0] ;
+    std::cout << "Usage: " << argv[0];
     std::cout << " inputImage outputFile" << std::endl;
     return 1;
   }

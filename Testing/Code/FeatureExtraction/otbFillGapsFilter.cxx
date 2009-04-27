@@ -62,7 +62,7 @@ int otbFillGapsFilter( int argc, char * argv[] )
   FillGapsFilterType::Pointer fillgaps = FillGapsFilterType::New();
 
   LinesListType::Pointer   linesListBeforeFillGaps = LinesListType::New();
-  const LinesListType *linesListAfterFillGaps ;
+  const LinesListType *linesListAfterFillGaps;
 
   LineType::PointListType  pointList;
   LineType::LinePointType  point;

@@ -98,7 +98,7 @@ int otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii(int argc, char * ar
   }
 
   //Sorting the vectors
-  ImageDataType::iterator itData ;
+  ImageDataType::iterator itData;
   sort(imageData.begin() , imageData.end(),CMPData);
 
   itData = imageData.begin();
@@ -108,7 +108,7 @@ int otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii(int argc, char * ar
     int itDescriptor = 0;
     while (itDescriptor < static_cast<int> (pDataIt.Value().Size() ))
     {
-      outfile << "[" << std::fixed << std::setprecision(3) << (*itData)[itDescriptor+2] << " " ;
+      outfile << "[" << std::fixed << std::setprecision(3) << (*itData)[itDescriptor+2] << " ";
       itDescriptor++;
     }
     outfile << "]" << std::endl;

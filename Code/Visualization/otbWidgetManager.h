@@ -51,11 +51,11 @@ public:
   typedef WidgetType::Pointer                                       WidgetPointerType;
 
   /** Register Wigets*/
-  virtual void RegisterFullWidget(WidgetType* fullWidget) = 0 ;
-  virtual void RegisterScrollWidget(WidgetType* scrollWidget) = 0 ;
-  virtual void RegisterZoomWidget(WidgetType* zoomWidget) = 0 ;
-  virtual void RegisterHistogramWidget(WidgetType* curveWidget) = 0 ;
-  virtual void RegisterPixelInformationWidget(Fl_Output * pixelWidget) = 0 ;
+  virtual void RegisterFullWidget(WidgetType* fullWidget) = 0;
+  virtual void RegisterScrollWidget(WidgetType* scrollWidget) = 0;
+  virtual void RegisterZoomWidget(WidgetType* zoomWidget) = 0;
+  virtual void RegisterHistogramWidget(WidgetType* curveWidget) = 0;
+  virtual void RegisterPixelInformationWidget(Fl_Output * pixelWidget) = 0;
   virtual void Show() = 0;
   virtual void Hide() = 0;
   virtual void Refresh() = 0;

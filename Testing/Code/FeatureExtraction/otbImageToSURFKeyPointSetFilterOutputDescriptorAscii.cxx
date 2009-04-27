@@ -81,7 +81,7 @@ int otbImageToSURFKeyPointSetFilterOutputDescriptorAscii(int argc, char * argv[]
 
   while ( pIt!=filter->GetOutput()->GetPoints()->End() )
   {
-    outfile << "[" ;
+    outfile << "[";
     unsigned int lIterDesc=0;
     while (lIterDesc < pDataIt.Value().Size())
     {

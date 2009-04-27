@@ -59,7 +59,7 @@ int otbListSampleToHistogramListGenerator(int argc, char * argv[])
   for(unsigned int comp = 0; comp<reader->GetOutput()->GetNumberOfComponentsPerPixel();++comp)
     {
     ofs<<"Channel: "<<comp<<" histogram: "<<std::endl;
-    for(unsigned int bin = 0; bin <nbBins ;++bin)
+    for(unsigned int bin = 0; bin <nbBins;++bin)
       {
       ofs<<generator->GetOutput()->GetNthElement(comp)->GetFrequency(bin)<<"\t";
       }

@@ -71,12 +71,12 @@ int otbLikelihoodPathListFilter(int argc, char * argv[])
   PathListType::Pointer InputPathList = PathListType::New();
 
   //Generate PathList
-  for (PointsMatrixType::iterator listpos=MatricePoints.begin() ; listpos != MatricePoints.end() ; ++listpos)
+  for (PointsMatrixType::iterator listpos=MatricePoints.begin(); listpos != MatricePoints.end(); ++listpos)
   {
     PathType::Pointer path = PathType::New();
     //Generate PathList
     std::cout << "List "<<std::endl;
-    for (PointsVectorType::iterator it=(*listpos).begin() ; it != (*listpos).end() ; ++it)
+    for (PointsVectorType::iterator it=(*listpos).begin(); it != (*listpos).end(); ++it)
     {
       cindex[0] = *it;
       ++it;

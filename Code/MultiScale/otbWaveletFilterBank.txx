@@ -219,8 +219,8 @@ WaveletFilterBank< TInputImage, TOutputImage,
       }
       else
       {
-        destIndex[i] = srcIndex[i] ;
-        destSize[i] = srcSize[i] ;
+        destIndex[i] = srcIndex[i];
+        destSize[i] = srcSize[i];
       }
     }
 
@@ -288,8 +288,8 @@ WaveletFilterBank< TInputImage, TOutputImage,
       }
       else
       {
-        destIndex[i] = srcIndex[i] ;
-        destSize[i] = srcSize[i] ;
+        destIndex[i] = srcIndex[i];
+        destSize[i] = srcSize[i];
       }
     }
 

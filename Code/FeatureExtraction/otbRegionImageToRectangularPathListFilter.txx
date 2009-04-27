@@ -140,7 +140,7 @@ RegionImageToRectangularPathListFilter<TInputImage,TOutputPath>
   try {
   OutputPath->Clear();
 
-  for (nit.GoToBegin(), pixelCount = 0; ! nit.IsAtEnd() ; ++nit) {
+  for (nit.GoToBegin(), pixelCount = 0; ! nit.IsAtEnd(); ++nit) {
     pixelCount++;
     if (pixelCount <= pixelDebugNumber) {
       std::cout << "Pixel #" << pixelCount << " : " << nit.GetCenterPixel() << std::endl;
@@ -225,7 +225,7 @@ RegionImageToRectangularPathListFilter<TInputImage,TOutputPath>
         y1, y2, /* eigenvectors y coordinate, for x = 1*/
         x1 = 1, /* first eigenvector x coordinate */
         x2 = 1, /* second eigenvector x coordinate, 1 except in special case when covarXY == 0 */
-        alpha /* main direction */ ;
+        alpha /* main direction */;
       delta = (varX - varY) * (varX - varY) + 4 * covarXY * covarXY;
       l1 = (varX + varY + vcl_sqrt(delta)) / 2;
       l2 = (varX + varY - vcl_sqrt(delta)) / 2;
@@ -323,16 +323,16 @@ RegionImageToRectangularPathListFilter<TInputImage,TOutputPath>
 
       if (regionCount <= regionDebugNumber) {
         std::cout << std::endl << "Region " << regionCount << " (area = " << n << " pixels)" << std::endl;
-        std::cout << "sumX = " << sumX << " ; sumY = " << sumY << " ; sumX2 = " << sumX2 << " ; sumY2 = " << sumY2 << " ; sumXY = " << sumXY << std::endl;
-        std::cout << "avgX = " << avgX << " ; avgY = " << avgY << std::endl;
-        std::cout << "varX = " << varX << " ; varY = " << varY << " ; covarXY = " << covarXY << std::endl;
-        std::cout << "adevX = " << adevX << " ; adevY = " << adevY << " ; adevXY = " << adevXY << std::endl;
+        std::cout << "sumX = " << sumX << "; sumY = " << sumY << "; sumX2 = " << sumX2 << "; sumY2 = " << sumY2 << "; sumXY = " << sumXY << std::endl;
+        std::cout << "avgX = " << avgX << "; avgY = " << avgY << std::endl;
+        std::cout << "varX = " << varX << "; varY = " << varY << "; covarXY = " << covarXY << std::endl;
+        std::cout << "adevX = " << adevX << "; adevY = " << adevY << "; adevXY = " << adevXY << std::endl;
         std::cout << "crossTermAXY = " << crossTermAXY << std::endl;
-        std::cout << "eigenvalue 1 = " << l1 << " ; eigenvalue 2 = " << l2 << std::endl;
-        std::cout << "eigenvector 1 = [" << x1 << ", " << y1 << "] ; eigenvector 2 = [" << x2 << ", " << y2 << "]" << std::endl;
-        std::cout << "A-eigenvalue 1 = " << al1 << " ; A-eigenvalue 2 = " << al2 << std::endl;
-        std::cout << "A-eigenvector 1 = [" << ax1 << ", " << ay1 << "] ; A-eigenvector 2 = [" << ax2 << ", " << ay2 << "]" << std::endl;
-        std::cout << "length = " << length << " ; width = " << width << std::endl;
+        std::cout << "eigenvalue 1 = " << l1 << "; eigenvalue 2 = " << l2 << std::endl;
+        std::cout << "eigenvector 1 = [" << x1 << ", " << y1 << "]; eigenvector 2 = [" << x2 << ", " << y2 << "]" << std::endl;
+        std::cout << "A-eigenvalue 1 = " << al1 << "; A-eigenvalue 2 = " << al2 << std::endl;
+        std::cout << "A-eigenvector 1 = [" << ax1 << ", " << ay1 << "]; A-eigenvector 2 = [" << ax2 << ", " << ay2 << "]" << std::endl;
+        std::cout << "length = " << length << "; width = " << width << std::endl;
         std::cout << "main direction = " << alpha << "°" << std::endl;
         std::cout << "rectangular fit = " << (float) countWithin / n << std::endl;
       }

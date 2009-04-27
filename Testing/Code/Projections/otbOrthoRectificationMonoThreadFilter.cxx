@@ -52,8 +52,8 @@ int otbOrthoRectificationMonoThreadFilter( int argc, char* argv[] )
   typedef otb::Image<double, 2>     ImageType;
   typedef otb::ImageFileReader<ImageType>  ReaderType;
   typedef otb::StreamingImageFileWriter<ImageType>  WriterType;
-  typedef otb::UtmInverseProjection UtmMapProjectionType ;
-  typedef otb::OrthoRectificationFilter<ImageType, ImageType, UtmMapProjectionType> OrthoRectifFilterType ;
+  typedef otb::UtmInverseProjection UtmMapProjectionType;
+  typedef otb::OrthoRectificationFilter<ImageType, ImageType, UtmMapProjectionType> OrthoRectifFilterType;
 
   //Allocate pointer
   ReaderType::Pointer             reader = ReaderType::New();

@@ -38,7 +38,7 @@ int otbTestCommandLineArgumentParserWithError( int argc, char * argv[] )
   try
   {
 
-    parser->ParseCommandLine(argc,argv,parseResult) ;
+    parser->ParseCommandLine(argc,argv,parseResult);
 
 
     std::cout << "Image : "<<parseResult->GetParameterString("-image")<<std::endl;

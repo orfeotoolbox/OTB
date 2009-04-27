@@ -46,16 +46,16 @@ int otbPointSetDensityFunctionTest(int argc, char* argv[] )
   PointSetType::PointIdentifier count = 0;
 
   PointSetType::PointType  pDst ,pSrc;
-  pDst[0] = 12.78 ;
-  pDst[1] = 18.76 ;
+  pDst[0] = 12.78;
+  pDst[1] = 18.76;
   pointSet->SetPoint(count++,pDst);
 
-  pDst[0] = 15.78 ;
-  pDst[1] = 23.76 ;
+  pDst[0] = 15.78;
+  pDst[1] = 23.76;
   pointSet->SetPoint(count++,pDst);
 
-  pDst[0] = 9.78 ;
-  pDst[1] = 5.76 ;
+  pDst[0] = 9.78;
+  pDst[1] = 5.76;
   pointSet->SetPoint(count++,pDst);
 
 

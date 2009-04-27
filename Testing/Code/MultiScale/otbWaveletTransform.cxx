@@ -38,7 +38,7 @@ int otbWaveletTransform( int argc, char * argv[] )
 {
   typedef otb::CommandLineArgumentParser ParserType;
   ParserType::Pointer parser = ParserType::New();
-  parser->AddInputImage() ;
+  parser->AddInputImage();
   parser->AddOption( "--Level", "Decomposition level through the low pass branch (def. 1)", "-l", 1, false );
   parser->AddOption( "--Output", "Output filename prefix", "-out", 1, true );
   typedef otb::CommandLineArgumentParseResult ParserResultType;
