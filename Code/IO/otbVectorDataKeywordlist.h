@@ -46,16 +46,13 @@ class VectorDataKeywordlist
 //     /** Run-time type information (and related methods). */
 //     itkTypeMacro(VectorDataKeywordlist, LightObject);
 
+    typedef std::pair<OGRFieldDefn*,OGRField> FieldType;
+    typedef std::vector< FieldType > FieldListType;
 
-    typedef std::vector<OGRFieldDefn> FieldListType;
 
+    void AddField(OGRFieldDefn* fieldDefn, OGRField* field);
 
-    virtual void Print(std::ostream& os) const;
-
-    void AddField(OGRFieldDefn* field)
-    {
-      //Fill up
-    };
+    virtual void Print(std::ostream& os, itk::Indent indent=0) const;
 
     VectorDataKeywordlist();
     virtual ~VectorDataKeywordlist();
@@ -65,14 +62,17 @@ class VectorDataKeywordlist
 
   protected:
 
-
+    virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   private:
 
+    std::string PrintField(FieldType field) const;
     FieldListType m_FieldList;
 
 
 };
+
+extern std::ostream & operator<<(std::ostream &os, const VectorDataKeywordlist &kwl);
 
 }
 

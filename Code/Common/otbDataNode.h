@@ -22,6 +22,7 @@
 #include "otbPolyLineParametricPathWithValue.h"
 #include "otbPolygon.h"
 #include "otbObjectList.h"
+#include "otbVectorDataKeywordlist.h"
 
 #include <iostream>
 
@@ -266,6 +267,7 @@ private:
 
   /** The fields map */
   FieldMapType         m_FieldMap;
+
 };
 } // end namespace
 

@@ -1531,8 +1531,17 @@ ADD_TEST(ioTvSHPVectorDataFileReader ${IO_TESTS15}
                         ${TEMP}/ioSHPVectorDataFileReader.txt
         otbVectorDataFileReader
 	${LARGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
-	${TEMP}/ioSHPVectorDataFileReader.txt)
+	${TEMP}/ioSHPVectorDataFileReader.txt
+)
 ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+ADD_TEST(ioTvSHPVectorDataFileReader2 ${IO_TESTS15}
+        --compare-ascii ${TOL}  ${BASELINE_FILES}/ioSHPVectorDataFileReader2.txt
+                        ${TEMP}/ioSHPVectorDataFileReader2.txt
+        otbVectorDataFileReader
+	${INPUTDATA}/ToulouseRoad-examples.shp
+	${TEMP}/ioSHPVectorDataFileReader2.txt
+)
 
 ADD_TEST(ioTuVectorDataFileWriterNew ${IO_TESTS15}
         otbVectorDataFileWriterNew )
@@ -1730,7 +1739,7 @@ ADD_TEST(ioTuImageIOFactoryNew ${IO_TESTS17}
         otbImageIOFactoryNew )
 
 # ---  otb::DEMToOrthoImageGenerator ---
-ADD_TEST(ioTuDEMToOrthoImageGeneratorNew ${IO_TESTS17} 
+ADD_TEST(ioTuDEMToOrthoImageGeneratorNew ${IO_TESTS17}
       otbDEMToOrthoImageGeneratorNew )
 
 ADD_TEST(ioTvDEMToOrthoImageGeneratorTest ${IO_TESTS17}
