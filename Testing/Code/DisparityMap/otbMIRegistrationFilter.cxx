@@ -93,9 +93,11 @@ int otbMIRegistrationFilter(int argc, char* argv [])
   DFWriterType::Pointer dfWriter = DFWriterType::New();
   dfWriter->SetFileName(argv[3]);
   dfWriter->SetInput( registrator->GetOutput() );
+
+  std::cout<<"UPDATE"<<std::endl;
   dfWriter->Update();
+  std::cout<<"UPDATE"<<std::endl;
 
   return EXIT_SUCCESS;
-
 }
 
