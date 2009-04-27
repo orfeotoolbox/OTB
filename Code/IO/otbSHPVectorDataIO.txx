@@ -211,10 +211,12 @@ SHPVectorDataIO<TData>
       if (geometry != NULL)
       {
         otb::VectorDataKeywordlist kwl;
+        std::cout << "Inserting " << feature->GetFieldCount() << " fields." << std::endl;
         for (int fieldNum=0; fieldNum< feature->GetFieldCount(); ++fieldNum)
         {
-          kwl.AddField(feature->GetFieldDefnRef(fieldNum));
+          kwl.AddField(feature->GetFieldDefnRef((fieldNum), feature->GetRawFieldRef((fieldNum));
         }
+
 
         switch (geometry->getGeometryType())
         {
@@ -222,6 +224,11 @@ SHPVectorDataIO<TData>
           {
             typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
             newNode->Set(ConvertGeometryToPointNode(geometry));
+            //Reach the DataNode inside the tree node
+            itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+            itk::EncapsulateMetaData< VectorDataKeywordlist >(dict,
+                MetaDataKey::VectorDataKeywordlistKey,
+                kwl);
             folderPtr->AddChild(newNode);
             break;
           }
@@ -229,6 +236,11 @@ SHPVectorDataIO<TData>
           {
             typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
             newNode->Set(ConvertGeometryToPointNode(geometry));
+            //Reach the DataNode inside the tree node
+            itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+            itk::EncapsulateMetaData< VectorDataKeywordlist >(dict,
+                MetaDataKey::VectorDataKeywordlistKey,
+                kwl);
             folderPtr->AddChild(newNode);
             break;
           }
@@ -236,6 +248,11 @@ SHPVectorDataIO<TData>
           {
             typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
             newNode->Set(ConvertGeometryToLineNode(geometry));
+            //Reach the DataNode inside the tree node
+            itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+            itk::EncapsulateMetaData< VectorDataKeywordlist >(dict,
+                MetaDataKey::VectorDataKeywordlistKey,
+                kwl);
             folderPtr->AddChild(newNode);
             break;
           }
@@ -243,6 +260,11 @@ SHPVectorDataIO<TData>
           {
             typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
             newNode->Set(ConvertGeometryToLineNode(geometry));
+            //Reach the DataNode inside the tree node
+            itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+            itk::EncapsulateMetaData< VectorDataKeywordlist >(dict,
+                MetaDataKey::VectorDataKeywordlistKey,
+                kwl);
             folderPtr->AddChild(newNode);
             break;
           }
@@ -250,6 +272,11 @@ SHPVectorDataIO<TData>
           {
             typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
             newNode->Set(ConvertGeometryToPolygonNode(geometry));
+            //Reach the DataNode inside the tree node
+            itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+            itk::EncapsulateMetaData< VectorDataKeywordlist >(dict,
+                MetaDataKey::VectorDataKeywordlistKey,
+                kwl);
             folderPtr->AddChild(newNode);
             break;
           }
@@ -257,6 +284,11 @@ SHPVectorDataIO<TData>
           {
             typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
             newNode->Set(ConvertGeometryToPolygonNode(geometry));
+            //Reach the DataNode inside the tree node
+            itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+            itk::EncapsulateMetaData< VectorDataKeywordlist >(dict,
+                MetaDataKey::VectorDataKeywordlistKey,
+                kwl);
             folderPtr->AddChild(newNode);
             break;
           }

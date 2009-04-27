@@ -19,6 +19,8 @@
 #define __otbDataNode_txx
 
 #include "otbDataNode.h"
+#include "otbMetaDataKey.h"
+#include "otbVectorDataKeywordlist.h"
 
 namespace otb
 {
@@ -170,56 +172,66 @@ DataNode<TPrecision,VDimension,TValuePrecision>
   itk::OStringStream oss;
   switch (m_NodeType)
   {
-  case ROOT:
-  {
-    oss<<"Root ("<<m_NodeId<<")";
-    break;
+    case ROOT:
+    {
+      oss<<"Root ("<<m_NodeId<<")";
+      break;
+    }
+    case DOCUMENT:
+    {
+      oss<<"Document ("<<m_NodeId<<")";
+      break;
+    }
+    case FOLDER:
+    {
+      oss<<"Folder ("<<m_NodeId<<")";
+      break;
+    }
+    case FEATURE_POINT:
+    {
+      oss<<"Point ("<<m_NodeId<<") "<<m_Data.point;
+      break;
+    }
+    case FEATURE_LINE:
+    {
+      oss<<"Line ("<<m_NodeId<<") "<<m_Data.line->GetVertexList()->Size()<<" points";
+      break;
+    }
+    case FEATURE_POLYGON:
+    {
+      oss<<"Polygon ("<<m_NodeId<<") "<<this->GetPolygonExteriorRing()->GetVertexList()->Size()<<" points, "<<this->GetPolygonInteriorRings()->Size()<<" interior rings";
+      break;
+    }
+    case FEATURE_MULTIPOINT:
+    {
+      oss<<"MultiPoint ("<<m_NodeId<<")";
+      break;
+    }
+    case FEATURE_MULTILINE:
+    {
+      oss<<"MultiLine ("<<m_NodeId<<")";
+      break;
+    }
+    case FEATURE_MULTIPOLYGON:
+    {
+      oss<<"MultiPolygon ("<<m_NodeId<<")";
+      break;
+    }
+    case FEATURE_COLLECTION:
+    {
+      oss<<"Collection ("<<m_NodeId<<")";
+      break;
+    }
   }
-  case DOCUMENT:
+  if(GetMetaDataDictionary().HasKey(MetaDataKey::VectorDataKeywordlistKey))
   {
-    oss<<"Document ("<<m_NodeId<<")";
-    break;
+    VectorDataKeywordlist kwl;
+    itk::ExposeMetaData<VectorDataKeywordlist>(GetMetaDataDictionary(), MetaDataKey::VectorDataKeywordlistKey, kwl);
+    oss<< "  -> Metadata: " << kwl;
   }
-  case FOLDER:
+  else
   {
-    oss<<"Folder ("<<m_NodeId<<")";
-    break;
-  }
-  case FEATURE_POINT:
-  {
-    oss<<"Point ("<<m_NodeId<<") "<<m_Data.point;
-    break;
-  }
-  case FEATURE_LINE:
-  {
-    oss<<"Line ("<<m_NodeId<<") "<<m_Data.line->GetVertexList()->Size()<<" points";
-    break;
-  }
-  case FEATURE_POLYGON:
-  {
-    oss<<"Polygon ("<<m_NodeId<<") "<<this->GetPolygonExteriorRing()->GetVertexList()->Size()<<" points, "<<this->GetPolygonInteriorRings()->Size()<<" interior rings";
-    break;
-  }
-  case FEATURE_MULTIPOINT:
-  {
-    oss<<"MultiPoint ("<<m_NodeId<<")";
-    break;
-  }
-  case FEATURE_MULTILINE:
-  {
-    oss<<"MultiLine ("<<m_NodeId<<")";
-    break;
-  }
-  case FEATURE_MULTIPOLYGON:
-  {
-    oss<<"MultiPolygon ("<<m_NodeId<<")";
-    break;
-  }
-  case FEATURE_COLLECTION:
-  {
-    oss<<"Collection ("<<m_NodeId<<")";
-    break;
-  }
+    oss<< "  -> No metadata";
   }
   return oss.str();
 }

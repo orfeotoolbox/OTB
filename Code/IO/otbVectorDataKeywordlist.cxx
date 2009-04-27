@@ -21,14 +21,8 @@
 namespace otb
 {
 
-void
-VectorDataKeywordlist
-  ::Print(std::ostream& os) const
-{
-  os << "[UNKNOWN_PRINT_CHARACTERISTICS]" << std::endl;
-}
 
-otb::VectorDataKeywordlist
+VectorDataKeywordlist
   ::VectorDataKeywordlist()
 {
   //Nothing to do here
@@ -37,14 +31,55 @@ otb::VectorDataKeywordlist
 VectorDataKeywordlist
   ::~VectorDataKeywordlist()
 {
-  //Nothing to do here
+  for (unsigned int i = 0; i < m_FieldList.size(); ++i)
+  {
+    delete(m_FieldList[i]);
+  }
 }
+
+void VectorDataKeywordlist::
+    AddField(OGRFieldDefn* field)
+{
+  OGRFieldDefn* newField = new OGRFieldDefn(field);//this ogr construction does a clone
+  m_FieldList.push_back(newField);
+};
 
 void
 VectorDataKeywordlist::
     operator=(const Self& p)
 {
-  m_FieldList = p.m_FieldList;
+  for (unsigned int i = 0; i < p.m_FieldList.size(); ++i)
+  {
+    OGRFieldDefn* newField = new OGRFieldDefn(p.m_FieldList[i]);//this ogr construction does a clone
+    m_FieldList.push_back(newField);
+  }
+}
+
+void
+VectorDataKeywordlist::
+    Print(std::ostream& os, itk::Indent indent) const
+{
+  this->PrintSelf(os, indent.GetNextIndent());
+}
+
+void
+VectorDataKeywordlist::
+    PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  os << indent << " VectorData Keyword list:"<<std::endl;
+  os << indent << "  - Size: " << m_FieldList.size() << std::endl;
+  for (unsigned int i = 0; i < m_FieldList.size(); ++i)
+  {
+    os << indent << "    " << m_FieldList[i]->GetNameRef ();
+    os << " : " << (*(m_FieldList[i]->GetDefaultRef())).Integer;
+  }
+}
+
+std::ostream &
+    operator<<(std::ostream &os, const VectorDataKeywordlist &kwl)
+{
+  kwl.Print(os);
+  return os;
 }
 
 }
