@@ -34,6 +34,10 @@ VectorDataKeywordlist
 {
   for (unsigned int i = 0; i < m_FieldList.size(); ++i)
   {
+    if (m_FieldList[i].first->GetType() == OFTString)
+    {
+      CPLFree( m_FieldList[i].second.String );
+    }
     delete(m_FieldList[i].first);
   }
 }
@@ -46,7 +50,8 @@ void VectorDataKeywordlist::
   newField.second = *field;
   //TODO: evaluate performance impact of fieldDefn copy
   // the object itself could be handle at the VectorData level
-  // keeping only pointer here.
+  // keeping only pointer here. (but it does not seem
+  // necessary so far...)
   m_FieldList.push_back(CopyOgrField(newField));
 };
 

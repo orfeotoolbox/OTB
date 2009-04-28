@@ -44,15 +44,6 @@ class VectorDataKeywordlist
   public:
     /** Smart pointer typedef support. */
     typedef VectorDataKeywordlist        Self;
-//     typedef itk::LightObject               Superclass;
-//     typedef itk::SmartPointer<Self>        Pointer;
-//     typedef itk::SmartPointer<const Self>  ConstPointer;
-//
-//     /** Method for creation through the object factory. */
-//     itkNewMacro(Self);
-//
-//     /** Run-time type information (and related methods). */
-//     itkTypeMacro(VectorDataKeywordlist, LightObject);
 
     typedef std::pair<OGRFieldDefn*,OGRField> FieldType;
     typedef std::vector< FieldType > FieldListType;
@@ -65,7 +56,10 @@ class VectorDataKeywordlist
     VectorDataKeywordlist();
     virtual ~VectorDataKeywordlist();
 
+    /** Constructor by copy (deep copy)*/
     VectorDataKeywordlist(const Self&);
+
+    /** Deep copy operator*/
     void operator=(const Self&);
 
   protected:
