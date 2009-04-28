@@ -44,6 +44,9 @@ public:
   /** Standard class typedefs. */
   typedef ImageKeywordlist         Self;
 
+  virtual const char *GetNameOfClass() const
+  {return "ImageKeywordlist";}
+
   typedef std::map<ossimString, ossimString> KeywordlistMap;
 
   void SetKeywordlist(const ossimKeywordlist& kwl)

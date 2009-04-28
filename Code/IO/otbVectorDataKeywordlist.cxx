@@ -42,8 +42,9 @@ VectorDataKeywordlist
   }
 }
 
-void VectorDataKeywordlist::
-    AddField(OGRFieldDefn* fieldDefn, OGRField* field)
+void
+VectorDataKeywordlist
+  ::AddField(OGRFieldDefn* fieldDefn, OGRField* field)
 {
   FieldType newField;
   newField.first = fieldDefn;
@@ -55,9 +56,55 @@ void VectorDataKeywordlist::
   m_FieldList.push_back(CopyOgrField(newField));
 };
 
+std::string
+VectorDataKeywordlist
+  ::GetFieldAsString(std::string key) const
+{
+  for (unsigned int i = 0; i < m_FieldList.size(); ++i)
+  {
+    if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
+    {
+      return m_FieldList[i].second.String;
+    }
+  }
+  return "";
+}
+
+bool
+VectorDataKeywordlist
+  ::HasField(std::string key) const
+{
+  for (unsigned int i = 0; i < m_FieldList.size(); ++i)
+  {
+    if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+VectorDataKeywordlist::FieldType
+VectorDataKeywordlist
+  ::GetNthField(unsigned int index) const
+{
+  if (index > m_FieldList.size())
+  {
+    itkExceptionMacro(<<" Accessing out-of-range metadata ");
+  }
+  return m_FieldList[index];
+}
+
+unsigned int
+VectorDataKeywordlist
+  ::GetNumberOfFields() const
+{
+  return m_FieldList.size();
+}
+
 void
-VectorDataKeywordlist::
-    operator=(const Self& p)
+VectorDataKeywordlist
+  ::operator=(const Self& p)
 {
   for (unsigned int i = 0; i < p.m_FieldList.size(); ++i)
   {
@@ -66,15 +113,15 @@ VectorDataKeywordlist::
 }
 
 void
-VectorDataKeywordlist::
-    Print(std::ostream& os, itk::Indent indent) const
+VectorDataKeywordlist
+  ::Print(std::ostream& os, itk::Indent indent) const
 {
   this->PrintSelf(os, indent.GetNextIndent());
 }
 
 void
-VectorDataKeywordlist::
-    PrintSelf(std::ostream& os, itk::Indent indent) const
+VectorDataKeywordlist
+  ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   os << indent << " VectorData Keyword list: ";
   os << indent << " - Size: " << m_FieldList.size() << std::endl;
@@ -85,8 +132,8 @@ VectorDataKeywordlist::
 }
 
 std::string
-VectorDataKeywordlist::
-    PrintField(FieldType field) const
+VectorDataKeywordlist
+  ::PrintField(FieldType field) const
 {
   std::stringstream output;
   output << std::setprecision(15);
@@ -165,8 +212,8 @@ VectorDataKeywordlist::
 
 
 VectorDataKeywordlist::FieldType
-VectorDataKeywordlist::
-    CopyOgrField(FieldType field)
+VectorDataKeywordlist
+  ::CopyOgrField(FieldType field)
 {
   FieldType outField;
   outField.first = new OGRFieldDefn(field.first);

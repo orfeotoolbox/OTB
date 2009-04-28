@@ -33,7 +33,7 @@ namespace otb
  * a vector object. This information is retrieved from the input file (a
  * shapefile for example) and propagated along the pipeline with the object.
  *
- * This is the equivalent of the otbOssimKeywordlist class but for OGR information.
+ * This is the equivalent of the otbImageKeywordlist class but for OGR information.
  *
  * \todo add the accessor to enable modifying/updating the data.
  *
@@ -48,12 +48,44 @@ class VectorDataKeywordlist
     typedef std::pair<OGRFieldDefn*,OGRField> FieldType;
     typedef std::vector< FieldType > FieldListType;
 
+    virtual const char *GetNameOfClass() const
+    {return "VectorDataKeywordlist";}
+
 
     void AddField(OGRFieldDefn* fieldDefn, OGRField* field);
 
+  /**
+    * Returns the value associated with a field name.
+    * \param key The name of the field.
+    * \return The value of the field. A default value is retuned if the key was not found.
+    */
+    std::string GetFieldAsString(std::string key) const;
+
+  /**
+    * \return True if the node contains the field named after the given key.
+    * \param key The name of the field.
+    */
+    bool HasField(std::string key) const;
+
+  /**
+    * \return the nth field of the node as a std::pair of (key,value).
+    * \param index the index of the field to return.
+    */
+    FieldType GetNthField(unsigned int index) const;
+
+  /**
+    * \return the number of fields in the node.
+    */
+    unsigned int GetNumberOfFields() const;
+
+    /**
+     * Print the keyword list
+     */
     virtual void Print(std::ostream& os, itk::Indent indent=0) const;
 
+    /** Constructor */
     VectorDataKeywordlist();
+    /** Destructor */
     virtual ~VectorDataKeywordlist();
 
     /** Constructor by copy (deep copy)*/
