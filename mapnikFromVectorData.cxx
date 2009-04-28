@@ -102,10 +102,13 @@
 //         mfeature->properties().insert(make_pair(std::string("name"),
 //                                         std::string("test")));
 
-        boost::put(*mfeature, "name", mapnik::value("test"));
+//         boost::put(*mfeature, "name", mapnik::value("test"));
+        mapnik::transcoder tr("ISO-8859");
+        boost::put(*mfeature, "name", tr.transcode("test"));
+        boost::put(*mfeature, "name2", 10);
         std::cout << mfeature->props().size() << std::endl;
-        std::cout << (*mfeature)["name"] << std::endl;
-
+        std::cout << " -> " << (*mfeature)["name"] << std::endl;
+        std::cout << " -> " << (*mfeature)["name2"] << std::endl;
 
         mDatasource->push(mfeature);
 
