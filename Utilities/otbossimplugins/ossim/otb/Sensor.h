@@ -34,7 +34,7 @@ public:
 	/**
 	 * @brief Destructor
 	 */
-	~Sensor();
+	virtual ~Sensor();
 	
 	/**
 	 * @brief This function is able to convert image coordinates into geodetic world coordinates using a sensor model

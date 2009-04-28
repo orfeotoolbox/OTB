@@ -28,7 +28,7 @@ public:
 	/**
 	  * @brief Destructor
 	  */
-	~Ephemeris();
+	virtual ~Ephemeris();
 	
 	/**
 	 * @brief Constructor with initialisations
