@@ -1642,7 +1642,13 @@ ADD_TEST(ioTvKMLVectorDataIOFileReaderLines ${IO_TESTS15}
         ${TEMP}/lines.kml)
 
 ADD_TEST(ioTuVectorDataKeywordlist ${IO_TESTS15}
-        otbVectorDataKeywordlist )
+        --compare-ascii ${TOL}
+            ${BASELINE_FILES}/ioTuVectorDataKeywordlist.txt
+            ${TEMP}/ioTuVectorDataKeywordlist.txt
+        otbVectorDataKeywordlist
+            ${INPUTDATA}/waterways.shp
+            ${TEMP}/ioTuVectorDataKeywordlist.txt
+         )
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
