@@ -1543,6 +1543,17 @@ ADD_TEST(ioTvSHPVectorDataFileReader2 ${IO_TESTS15}
 	${TEMP}/ioSHPVectorDataFileReader2.txt
 )
 
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(ioTvSHPVectorDataFileReader3 ${IO_TESTS15}
+        --compare-ascii ${TOL}  ${BASELINE_FILES}/ioSHPVectorDataFileReader3.txt
+                        ${TEMP}/ioSHPVectorDataFileReader3.txt
+        otbVectorDataFileReader
+	${LARGEDATA}/VECTOR/MidiPyrenees/roads.shp
+	${TEMP}/ioSHPVectorDataFileReader3.txt
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
 ADD_TEST(ioTuVectorDataFileWriterNew ${IO_TESTS15}
         otbVectorDataFileWriterNew )
 
@@ -1770,7 +1781,7 @@ ADD_TEST(ioTuPrepareSRTMDirectoryTest ${IO_TESTS17}
 		    ${TEMP}/ioTuPrepareSRTMDirectoryTest/N46E007.hgt
 		    ${INPUTDATA}/DEM/srtm_directory/N45E007.hgt
 		    ${TEMP}/ioTuPrepareSRTMDirectoryTest/N45E007.hgt
-  otbPrepareSRTMDirectoryTest 
+  otbPrepareSRTMDirectoryTest
       ${INPUTDATA}/DEM/srtm_directory
       ${TEMP}/ioTuPrepareSRTMDirectoryTest
       7.2
