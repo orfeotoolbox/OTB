@@ -29,7 +29,7 @@ public:
 	/**
 	  * @brief Destructor
 	  */
-	virtual ~GeographicEphemeris();
+	~GeographicEphemeris();
 	
 	/**
 	 * @brief Constructor with initialisations

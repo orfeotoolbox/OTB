@@ -447,47 +447,6 @@ bool ossimRadarSat2ProductDoc::initImageSize(const ossimXmlDocument* xdoc,
    return result;
 }
 
-bool ossimRadarSat2ProductDoc::initGsd(const ossimXmlDocument* xdoc,
-                                       ossimDpt& gsd) const
-{
-   bool result = true;
-
-   if (xdoc)
-   {
-      ossimString s;
-      if ( getSampledPixelSpacing(xdoc, s) )
-      {
-         gsd.x = s.toFloat64();
-      }
-      else
-      {
-         result = false;
-      }
-      if ( getSampledLineSpacing(xdoc, s) )
-      {
-         gsd.y = s.toFloat64(s);
-      }
-      else
-      {
-         result = false;
-      }
-   }
-   else
-   {
-      result = false;
-   }
-      
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimRadarSat2ProductDoc::initGsd DEBUG:\ngsd: " << gsd
-         << "\nexit status = " << (result?"true":"false")
-         << std::endl;
-   }
-   
-   return result;
-}
-
 bool ossimRadarSat2ProductDoc::initTiePoints(const ossimXmlDocument* xdoc,
                                              std::list<ossimGpt>& gcp,
                                              std::list<ossimDpt>& icp) const

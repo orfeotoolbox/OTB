@@ -30,6 +30,8 @@ ossimPluginProjectionFactory* ossimPluginProjectionFactory::instance()
 ossimProjection* ossimPluginProjectionFactory::createProjection(const ossimFilename& filename,
                                                                 ossim_uint32 entryIdx)const
 {
+   cout << "a..." << endl;
+   
    ossimProjection* result = 0;
    
    ossimRadarSat2Model* model = new ossimRadarSat2Model();
@@ -79,6 +81,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
 ossimProjection* ossimPluginProjectionFactory::createProjection(
    const ossimKeywordlist& kwl, const char* prefix)const
 {
+   cout << "b..." << endl;
    ossimProjection* result = 0;
 
    const char* lookup = kwl.find(prefix, ossimKeywordNames::TYPE_KW);
@@ -100,15 +103,16 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    return result;
 }
 
-ossimObject* ossimPluginProjectionFactory::createObject(
-   const ossimString& typeName)const
+ossimObject* ossimPluginProjectionFactory::createObject(const ossimString& typeName)const
 {
+   cout << "c..." << endl;
    return createProjection(typeName);
 }
 
-ossimObject* ossimPluginProjectionFactory::createObject(
-   const ossimKeywordlist& kwl, const char* prefix)const
+ossimObject* ossimPluginProjectionFactory::createObject(const ossimKeywordlist& kwl,
+                                                        const char* prefix)const
 {
+   cout << "d..." << endl;    
    return createProjection(kwl, prefix);
 }
 
