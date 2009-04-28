@@ -123,7 +123,7 @@ public:
     * (from ground to image) than inverse(from image to ground)
     * @remark This function always return false
     */
-   inline virtual bool useForward()const {return false;};
+   inline virtual bool useForward() const {return false;}
 
    /**
     * @brief Method to save object state to a keyword list.
@@ -140,14 +140,20 @@ public:
     * @return true if load OK, false on error
     */
    virtual bool loadState (const ossimKeywordlist &kwl, const char *prefix=0);
+
+   /*!
+    * METHOD: print()
+    * Fulfills base-class pure virtual. Dumps contents of object to ostream.
+    */
+   virtual std::ostream& print(std::ostream& out) const; 
 	
    /**
     * @brief Accessors to the optimization parameters.
     */
-   double get_optimizationFactorX() { return _optimizationFactorX; }; 
-   double get_optimizationFactorY() { return _optimizationFactorY; } ; 
-   double get_optimizationBiasX() { return _optimizationBiasX; } ; 
-   double get_optimizationBiasY() { return _optimizationBiasY; } ;
+   double get_optimizationFactorX() const { return _optimizationFactorX; } 
+   double get_optimizationFactorY() const { return _optimizationFactorY; }
+   double get_optimizationBiasX()   const { return _optimizationBiasX; }
+   double get_optimizationBiasY()   const { return _optimizationBiasY; }
 
 protected:
 

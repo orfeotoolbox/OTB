@@ -153,15 +153,6 @@ private:
                          const std::list<ossimDpt>& imageGcpCoordinates);
 
    /**
-    * @brief Number of columns
-    */
-   double _nbCol;
-   /**
-    * @brief Pixel spacing
-    */
-   double _pixel_spacing;
-
-   /**
     * @brief Slant Range FOR EACH Ground Range (SRGR) number of coefficients
     * sets
     */

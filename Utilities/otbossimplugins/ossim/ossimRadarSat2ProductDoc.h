@@ -76,6 +76,17 @@ public:
     */
    bool initImageSize(const ossimXmlDocument* xdoc,
                       ossimIpt& imageSize) const;
+
+   /**
+    * @brief Method to initialize gsd from
+    * RadarSat "product.xml" file.
+    * @param xdoc Opened product.xml file.
+    * @param gsd The point to initialize.
+    * @return true on success, false on error.
+    */
+   bool initGsd(const ossimXmlDocument* xdoc,
+                ossimDpt& gsd) const;
+   
    /**
     * @brief Method to initialize image tie points from
     * RadarSat "product.xml" file.

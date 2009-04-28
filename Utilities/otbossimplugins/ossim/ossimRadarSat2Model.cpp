@@ -32,18 +32,23 @@
 #include <otb/RefPoint.h>
 #include <otb/SarSensor.h>
 
+// Keyword constants:
+static const char NUMBER_SRGR_COEFFICIENTS_KW[] = "sr_gr_coeffs_count";
+static const char LOAD_FROM_PRODUCT_FILE_KW[] = "load_from_product_file_flag";
+static const char PRODUCT_XML_FILE_KW[] = "product_xml_filename";
+
 // Static trace for debugging
 static ossimTrace traceDebug("ossimRadarSat2Model:debug");
 
-// Keyword constants:
-static std::string PRODUCT_XML_FILE_KW = "product_xml_filename";
+
+
 
 RTTI_DEF1(ossimRadarSat2Model, "ossimRadarSat2Model", ossimGeometricSarSensorModel);
 
 
-ossimRadarSat2Model::ossimRadarSat2Model():
-   _nbCol(0.0),
-   _pixel_spacing(0.0),
+ossimRadarSat2Model::ossimRadarSat2Model()
+   :
+   ossimGeometricSarSensorModel(),
    _n_srgr(0),
    _srgr_update(),
    _SrGr_R0(),
@@ -54,8 +59,6 @@ ossimRadarSat2Model::ossimRadarSat2Model():
 ossimRadarSat2Model::ossimRadarSat2Model(const ossimRadarSat2Model& rhs)
    :
    ossimGeometricSarSensorModel(rhs),
-   _nbCol(rhs._nbCol),
-   _pixel_spacing(rhs._pixel_spacing),
    _n_srgr(rhs._n_srgr),
    _srgr_update(rhs._srgr_update),
    _SrGr_R0(rhs._SrGr_R0),
@@ -80,7 +83,7 @@ double ossimRadarSat2Model::getSlantRangeFromGeoreferenced(double col) const
    
    // in the case of Georeferenced images, _refPoint->get_distance()
    // contains the ground range
-   relativeGroundRange = _refPoint->get_distance() + _sensor->get_col_direction() * (col-_refPoint->get_pix_col())* _pixel_spacing ; 
+   relativeGroundRange = _refPoint->get_distance() + _sensor->get_col_direction() * (col-_refPoint->get_pix_col())* theGSD.x; 
    
    int numSet = FindSRGRSetNumber((_refPoint->get_ephemeris())->get_date()) ;
    /** 
@@ -121,7 +124,7 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "xmlFile: " << xmlFile << "\n";
+         << "product xml file: " << xmlFile << "\n";
    }
 
    if ( xmlFile.exists() )
@@ -171,29 +174,12 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
                result = rsDoc.getSatellite(xdoc, theSensorID);
             }
 
-            // Set the gsd x direction.  tmp drb compute later.
-            ossimString s;
+            // Set the base class gsd:
+            result = rsDoc.initGsd(xdoc, theGSD);
             if (result)
             {
-               result = rsDoc.getSampledPixelSpacing(xdoc, s);
-               if (result)
-               {
-                  theGSD.x = s.toFloat64();
-               }
+               theMeanGSD = (theGSD.x + theGSD.y)/2.0;
             }
-
-            // Set the gsd y direction.  tmp drb
-            if (result)
-            {
-               result = rsDoc.getSampledLineSpacing(xdoc, s);
-               if (result)
-               {
-                  theGSD.y = s.toFloat64(s);
-               }
-            }
-
-            // Set the mean gsd.
-            theMeanGSD = (theGSD.x + theGSD.y)/2.0;
 
             if (result)
             {
@@ -232,14 +218,6 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
       theProductDotXmlFile = ossimFilename::NIL;
    }
 
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "PRODUCT_XML_FILE_KW: " << theProductDotXmlFile << "\n"
-         << MODULE << " exit status = " << (result?"true":"false\n")
-         << std::endl;
-   }
-
    if (result)
    {
       theProductDotXmlFile = xmlFile;
@@ -249,12 +227,65 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
       theProductDotXmlFile = ossimFilename::NIL;
    }
    
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << MODULE << " exit status = " << (result?"true":"false\n")
+         << std::endl;
+   }
+   
    return result;
 }
 
 std::ostream& ossimRadarSat2Model::print(std::ostream& out) const
 {
-   cout << "ossimRadarSat2Model::print entered..." << endl;
+   // Capture the original flags.
+   std::ios_base::fmtflags f = out.flags();
+   
+   out << setprecision(15) << setiosflags(ios::fixed)
+       << "\nossimRadarSat2Model class data members:\n"
+       << "_n_srgr: " << _n_srgr << "\n";
+
+   ossim_uint32 idx = 0;
+   std::vector<double>::const_iterator i = _srgr_update.begin();
+   while ( i !=  _srgr_update.end() )
+   {
+      out << "sr_gr_update_" << idx << ": " << (*i) << "\n";
+      ++i;
+      ++idx;
+   }
+
+   idx = 0;
+   i = _SrGr_R0.begin();
+   while ( i !=  _SrGr_R0.end() )
+   {
+      out << "sr_gr_r0_" << idx << ": " << (*i) << "\n";
+      ++i;
+      ++idx;
+   }
+
+   idx = 0;
+   std::vector< std::vector<double> >::const_iterator i2 =
+      _SrGr_coeffs.begin();
+   while ( i2 !=  _SrGr_coeffs.end() )
+   {
+      ossim_uint32 idx2 = 0;
+      i = (*i2).begin();
+      while ( i != (*i2).end() )
+      {
+         out << "sr_gr_coeffs_" << idx << "_" << idx2 << ": " << (*i) << "\n";
+         ++i;
+         ++idx2;
+      }
+      ++i2;
+      ++idx;
+   }
+   
+   ossimGeometricSarSensorModel::print(out);
+   
+   // Reset flags.
+   out.setf(f);
+
    return out;
 }
 
@@ -466,7 +497,7 @@ bool ossimRadarSat2Model::InitRefPoint(const ossimKeywordlist &kwl,
       }
       else
       {
-         distance += _nbCol * _pixel_spacing;
+         distance += theImageSize.x * theGSD.x;
       }
    }
 
@@ -515,13 +546,13 @@ bool ossimRadarSat2Model::InitSRGR(const ossimKeywordlist &kwl,
 
    _isProductGeoreferenced = (productType != "SLC") ;
 
-   // Pixel spacing
-   const char* pixel_spacing_str = kwl.find(prefix,"pixel_spacing_mean");
-   _pixel_spacing = atof(pixel_spacing_str);
+//    // Pixel spacing
+//    const char* pixel_spacing_str = kwl.find(prefix,"pixel_spacing_mean");
+//    _pixel_spacing = atof(pixel_spacing_str);
 
-   // Number of columns
-   const char* nbCol_str = kwl.find(prefix,"nbCol");
-   _nbCol = atoi(nbCol_str);
+//    // Number of columns
+//    const char* nbCol_str = kwl.find(prefix,"nbCol");
+//    _nbCol = atoi(nbCol_str);
 
    // number of SRGR coefficient sets
    const char* SrGr_coeffs_number_str = kwl.find(prefix,"SrGr_coeffs_number");
@@ -595,26 +626,6 @@ bool ossimRadarSat2Model::initSRGR(const ossimXmlDocument* xdoc,
    if ( rsDoc.getProductType(xdoc, s) )
    {
       _isProductGeoreferenced = (s != "SLC");
-   }
-   else
-   {
-      result = false;
-   }
-
-   // Get the pixel spacing.
-   if ( rsDoc.getSampledPixelSpacing(xdoc, s) )
-   {
-      _pixel_spacing = s.toDouble();
-   }
-   else
-   {
-      result = false;
-   }
-
-   // Number of columns
-   if ( rsDoc.getNumberOfSamplesPerLine(xdoc, s) )
-   {
-      _nbCol = s.toInt32();
    }
    else
    {
@@ -869,7 +880,7 @@ bool ossimRadarSat2Model::initRefPoint(const ossimXmlDocument* xdoc,
       }
       else
       {
-         distance += _nbCol * _pixel_spacing;
+         distance += theImageSize.x * theGSD.x;
       }
    }
 
@@ -893,86 +904,69 @@ bool ossimRadarSat2Model::saveState(ossimKeywordlist& kwl,
 {
    static const char MODULE[] = "ossimRadarSat2Model::saveState";
 
-   bool result = false;
-
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
    }
 
-   //---
-   // Temporary until we get a good saveState.
-   // drb
-   //---
-   if (theProductDotXmlFile != ossimFilename::NIL)
-   {      
+   bool result = true;
+
+   // Save our state:
+   kwl.add(prefix, PRODUCT_XML_FILE_KW, theProductDotXmlFile.c_str());
+   kwl.add(prefix, NUMBER_SRGR_COEFFICIENTS_KW, _n_srgr);
    
-      // Call base:
-      ossimGeometricSarSensorModel::saveState(kwl, prefix);
-      // ossimSensorModel::saveState(kwl, prefix);
-
-      kwl.add(prefix, "nbCol", _nbCol);
-      kwl.add(prefix, "pixel_spacing_mean", _pixel_spacing);
-      kwl.add(prefix, "SrGr_coeffs_number", _n_srgr);
-
-      // Make sure all the arrays are equal in size.
-      const ossim_uint32 COUNT = static_cast<ossim_uint32>(_n_srgr);
-
-      cout << "srgr_update.size(): " << _srgr_update.size()
-           << "\n_SrGr_R0.size(): " << _SrGr_R0.size()
-           << "\n_SrGr_coeffs.size(): " << _SrGr_coeffs.size()
-           << endl;
+   // Make sure all the arrays are equal in size.
+   const ossim_uint32 COUNT = static_cast<ossim_uint32>(_n_srgr);
+   
+   if ( (_srgr_update.size() == COUNT) &&
+        (_SrGr_R0.size()     == COUNT) &&
+        (_SrGr_coeffs.size() == COUNT) )
+   {
+      ossimString kw1 = "sr_gr_update_";
+      ossimString kw2 = "sr_gr_r0_";
+      ossimString kw3 = "sr_gr_coeffs_";
       
-      if ( (_srgr_update.size() == COUNT) &&
-           (_SrGr_R0.size()     == COUNT) &&
-           (_SrGr_coeffs.size() == COUNT) )
+      for(ossim_uint32 i = 0; i < COUNT; ++i)
       {
-         ossimString kw1 = "SrGr_update_";
-         ossimString kw2 = "SrGr_R0_";
-         ossimString kw3 = "SrGr_coeffs_";
+         ossimString iStr = ossimString::toString(i);
          
-         for(ossim_uint32 i = 0; i < COUNT; ++i)
+         ossimString kw = kw1;
+         kw += iStr;
+         kwl.add(prefix, kw, _srgr_update[i]);
+         
+         kw = kw2;
+         kw += iStr;
+         kwl.add(prefix, kw, _SrGr_R0[i]);
+         
+         for (ossim_uint32 j = 0; j < _SrGr_coeffs[i].size(); ++j)
          {
-            ossimString iStr = ossimString::toString(i);
-            
-            ossimString kw = kw1;
+            ossimString jStr = ossimString::toString(j);
+            kw = kw3;
             kw += iStr;
-            cout << "kw: " << kw << endl;
-            cout << "iStr: " << iStr << endl;
-            cout << "i: " << i << endl;
-            
-            kwl.add(prefix, kw, _srgr_update[i]);
-
-            kw = kw2;
-            kw += iStr;
-            cout << "kw: " << kw << endl;
-            kwl.add(prefix, kw, _SrGr_R0[i]);
-
-            cout << "_SrGr_coeffs[i].size()" << _SrGr_coeffs[i].size() << endl;
-            for (ossim_uint32 j = 0; j < _SrGr_coeffs[i].size(); ++j)
-            {
-               ossimString jStr = ossimString::toString(j);
-               kw = kw3;
-               kw += iStr;
-               kw += "_";
-               kw += jStr;
-               cout << "kw: " << kw << endl;
-               kwl.add(prefix, kw,_SrGr_coeffs[i][j]);
-            }
+            kw += "_";
+            kw += jStr;
+            kwl.add(prefix, kw,_SrGr_coeffs[i][j]);
          }
       }
-      else
-      {
-         // do something...
-      }
-      
-      kwl.add(prefix,
-              PRODUCT_XML_FILE_KW.c_str(),
-              theProductDotXmlFile.c_str());
-      result = true;
+   }
+   else
+   {
+      result = false;
    }
 
-   cout << "saveState kwl:\n" << kwl << endl;
+   if (result)
+   {
+      // Call base save state:
+      result = ossimGeometricSarSensorModel::saveState(kwl, prefix);
+   }
+
+   //---
+   // Uncomment to force load from product file instead of loadState.
+   //---
+   //if (result)
+   //{
+   // kwl.add(prefix, LOAD_FROM_PRODUCT_FILE_KW, "true");
+   //}
    
    if (traceDebug())
    {
@@ -988,31 +982,169 @@ bool ossimRadarSat2Model::loadState (const ossimKeywordlist &kwl,
                                      const char *prefix)
 {
    static const char MODULE[] = "ossimRadarSat2Model::loadState";
-   
-
 
    if (traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << MODULE << " entered...\n"
-         << kwl << "\n"; 
+      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
    }
 
-   bool result = true;
-   
-   // bool result = ossimSensorModel::loadState(kwl, prefix);
-   if (result)
+   const char* lookup = 0;
+   ossimString s;  
+
+   // Get the product.xml file name.
+   lookup = kwl.find(prefix, PRODUCT_XML_FILE_KW);
+   if (lookup)
    {
-      //---
-      // Temporary until we get a good saveState.
-      // drb
-      //---
-      const char* lookup = kwl.find(prefix, PRODUCT_XML_FILE_KW.c_str());
+      theProductDotXmlFile = lookup;
+
+      // See if caller wants to load from xml vice keyword list.
+      lookup = kwl.find(prefix, LOAD_FROM_PRODUCT_FILE_KW);
       if (lookup)
       {
-         result = open(ossimFilename(lookup));
+         s = lookup;
+         if ( s.toBool() )
+         {
+            // Loading from product.xml file.
+            return open(theProductDotXmlFile);
+         }
       }
    }
+   
+   // Load the base class.
+   bool result = ossimGeometricSarSensorModel::loadState(kwl, prefix);
+
+   //---
+   // Temp:  This must be cleared or you end up with a bounding rect of all
+   // zero's.
+   //---
+   theBoundGndPolygon.clear();
+
+   if (result)
+   {
+      lookup = kwl.find(prefix, NUMBER_SRGR_COEFFICIENTS_KW);
+      if (lookup)
+      {
+         s = lookup;
+         _n_srgr = s.toInt();
+      }
+      else
+      {
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE
+               << "\nRequired keyword not found: "
+               << NUMBER_SRGR_COEFFICIENTS_KW << "\n";
+         } 
+         result = false;
+      }
+      
+      if (result && _n_srgr)
+      {
+         const ossim_uint32 COUNT = static_cast<ossim_uint32>(_n_srgr);
+         
+         _srgr_update.resize(COUNT);
+         _SrGr_R0.resize(COUNT);
+         _SrGr_coeffs.resize(COUNT);
+         
+         ossimString kw1 = "sr_gr_update_";
+         ossimString kw2 = "sr_gr_r0_";
+         ossimString kw3 = "sr_gr_coeffs_";
+         
+         for(ossim_uint32 i = 0; i < COUNT; ++i)
+         {
+            ossimString kw;
+            ossimString iStr = ossimString::toString(i);
+            
+            // Get the _srgr_update's.
+            kw = kw1;
+            kw += iStr;
+            
+            lookup = kwl.find(prefix, kw);
+            if (lookup)
+            {
+               s = lookup;
+               _srgr_update[i] = s.toDouble();
+            }
+            else
+            {
+               if (traceDebug())
+               {
+                  ossimNotify(ossimNotifyLevel_WARN)
+                     << MODULE
+                     << "\nRequired keyword not found: "
+                     << kw << "\n";
+               } 
+               result = false;
+            }
+            
+            // Get the sr_gr_r0_'s.
+            kw = kw2;
+            kw += iStr;
+            lookup = kwl.find(prefix, kw);
+            if (lookup)
+            {
+               s = lookup;
+               _SrGr_R0[i] = s.toDouble();
+            }
+            else
+            {
+               if (traceDebug())
+               {
+                  ossimNotify(ossimNotifyLevel_WARN)
+                     << MODULE
+                     << "\nRequired keyword not found: "
+                     << kw << "\n";
+               } 
+               result = false;
+            }
+            
+            //---
+            // Get the _SrGr_coeffs.
+            // Note we are assuming a count of 6.
+            //---
+            const ossim_uint32 COEFFS_COUNT = 6;
+            _SrGr_coeffs[i].resize(COEFFS_COUNT);
+            
+            for (ossim_uint32 j = 0; j < COEFFS_COUNT; ++j)
+            {
+               ossimString jStr = ossimString::toString(j);
+               kw = kw3;
+               kw += iStr;
+               kw += "_";
+               kw += jStr;
+               lookup = kwl.find(prefix, kw);
+               if (lookup)
+               {
+                  s = lookup;
+                  _SrGr_coeffs[i][j] = s.toDouble();
+               }
+               else
+               {
+                  if (traceDebug())
+                  {
+                     ossimNotify(ossimNotifyLevel_WARN)
+                        << MODULE
+                        << "\nRequired keyword not found: "
+                        << kw << "\n";
+                  }             
+                  result = false;
+               }
+            }
+            
+         } // matches: for(ossim_uint32 i = 0; i < COUNT; ++i) 
+
+      } // matches:  if (_n_srgr)
+      else
+      {
+         result = false;
+      }
+      
+   } // matches: if (result)
+
+   // Load the base class.
+   // ossimGeometricSarSensorModel::loadState(kwl, prefix);
+
       
    if (traceDebug())
    {

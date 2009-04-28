@@ -59,12 +59,12 @@ public:
 	void set_julianDate(double julianDate)
 	{
 		_julianDate = julianDate;
-	};
+	}
 	
-	double get_julianDate()
+	double get_julianDate() const
 	{
 		return _julianDate;
-	};
+	}
 	
 	/**
 	 * @brief This function converts the current JulianDate in JSDDateTime
