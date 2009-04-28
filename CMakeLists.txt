@@ -71,7 +71,7 @@ SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_
 
 
 # => Comment for OTB 3.0.0
-#OPTION(BUILD_TESTING "Build testing." OFF)
+OPTION(BUILD_TESTING "Build testing." OFF)
 
 #-----------------------------------------------------------------------------
 # OTB build configuration options.
