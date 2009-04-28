@@ -1,4 +1,5 @@
-#define BOOST_SPIRIT_THREADSAFE
+// #define BOOST_SPIRIT_THREADSAFE
+// #define BOOST_DISABLE_ASSERTS 1
 
 #include <mapnik/map.hpp>
 #include <mapnik/datasource_cache.hpp>
@@ -10,6 +11,7 @@
 #include <mapnik/config_error.hpp>
 #include <mapnik/memory_datasource.hpp>
 #include <iostream>
+
 
 int main ( int argc , char** argv)
 {

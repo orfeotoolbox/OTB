@@ -18,6 +18,7 @@
 #include <mapnik/config_error.hpp>
 #include <mapnik/memory_datasource.hpp>
 
+#include <mapnik/value.hpp>
 
 // ./mapnikFromVectorData  ~/OTB/trunk/OTB-Data/Input/ToulouseRoad-examples.shp
 
@@ -89,8 +90,21 @@
         typedef boost::shared_ptr<mapnik::raster> raster_ptr;
         typedef mapnik::feature<mapnik::geometry2d,raster_ptr> Feature;
         typedef boost::shared_ptr<Feature> feature_ptr;
+
+//         typedef std::map<std::string,mapnik::value> mapType;
+//         mapType myMap;
+//         myMap["name"] = mapnik::value("test");
+//         std::cout << myMap.size() << std::endl;
+
         feature_ptr mfeature = feature_ptr(new Feature(1));
+//         feature_ptr mfeature = feature_ptr(new Feature(myMap));
         mfeature->add_geometry(line);
+//         mfeature->properties().insert(make_pair(std::string("name"),
+//                                         std::string("test")));
+
+        boost::put(*mfeature, "name", mapnik::value("test"));
+        std::cout << mfeature->props().size() << std::endl;
+        std::cout << (*mfeature)["name"] << std::endl;
 
 
         mDatasource->push(mfeature);
@@ -199,6 +213,10 @@ int main(int argc, char * argv[])
     rule.set_max_scale(1000000);
 //     rule.set_min_scale(500000);
     rule.append(mapnik::line_symbolizer(mapnik::color("#809bc0"),8.0));
+//     TextSymbolizer name="name" face_name="DejaVu Sans Book" size="9" fill="#000" halo_radius="1"  placement="line"
+//     text_symbolizer (std::string const &name, std::string const &face_name, unsigned size, color const &fill)
+//     text_symbolizer (std::string const &name, unsigned size, color const &fill)
+    rule.append(mapnik::text_symbolizer("name", "DejaVu Sans Book", 9, mapnik::color("#000")));
     style.add_rule(rule);
     m.insert_style("roads",style);
   }
