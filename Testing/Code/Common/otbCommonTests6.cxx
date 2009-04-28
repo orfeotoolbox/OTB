@@ -30,7 +30,7 @@ void RegisterTests()
   REGISTER_TEST(otbDrawPathListFilter);
   REGISTER_TEST(otbDrawPathListFilterWithValue);
   REGISTER_TEST(otbPolyLineParametricPathWithValueNew);
-  REGISTER_TEST(otbPolyLineImageConstIteratorNew);
+  REGISTER_TEST(otbPolyLineImageConstIterator);
   REGISTER_TEST(otbPolyLineImageIterator);
   REGISTER_TEST(otbDrawPathFilterNew);
   REGISTER_TEST(otbDrawPathFilter);
