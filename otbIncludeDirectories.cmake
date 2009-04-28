@@ -15,8 +15,11 @@ IF(OTB_USE_EXTERNAL_BOOST)
 ELSE(OTB_USE_EXTERNAL_BOOST)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
     ${OTB_SOURCE_DIR}/Utilities/BGL
-    ${OTB_SOURCE_DIR}/Utilities/BGL/boost)
+    ${OTB_SOURCE_DIR}/Utilities/BGL/boost
+)
 ENDIF(OTB_USE_EXTERNAL_BOOST)
+
+
 
 # These directories are always needed.
 SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
@@ -49,8 +52,8 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
 #  ${OTB_SOURCE_DIR}/Utilities/otbgalib
   ${OTB_SOURCE_DIR}/Utilities/otbkml
   ${OTB_SOURCE_DIR}/Utilities/otbkml/src
-  ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party
-  ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party/boost_1_34_1
+#   ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party
+#   ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party/boost_1_34_1
 #  ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3
 #  ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3/contrib
   ${OTB_SOURCE_DIR}/Utilities/otbliblas/include
