@@ -44,6 +44,9 @@ void VectorDataKeywordlist::
   FieldType newField;
   newField.first = fieldDefn;
   newField.second = *field;
+  //TODO: evaluate performance impact of fieldDefn copy
+  // the object itself could be handle at the VectorData level
+  // keeping only pointer here.
   m_FieldList.push_back(CopyOgrField(newField));
 };
 
