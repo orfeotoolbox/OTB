@@ -55,7 +55,7 @@ int otbPolyLineImageConstIterator(int argc, char * argv[])
   ImageType::Pointer image = ImageType::New();
   image->SetRegions(region);
   image->Allocate();
-  image->FillBuffer(0);
+  image->FillBuffer(255);
 
   PathType::Pointer path = PathType::New();
 
@@ -80,14 +80,6 @@ int otbPolyLineImageConstIterator(int argc, char * argv[])
     path->AddVertex(vertex2);
   }
 
-  IteratorType it(image,path);
-
-  for (it.GoToBegin();!it.IsAtEnd();++it)
-  {
-    it.Set(255);
-    // std::cout<<it.GetIndex()<<std::endl;
-  }
-
   image->Update();
 
   ConstIteratorType cit((const ImageType*)image,(const PathType*)path);
@@ -96,7 +88,7 @@ int otbPolyLineImageConstIterator(int argc, char * argv[])
   
   for (cit.GoToBegin();!cit.IsAtEnd();++cit)
   {
-    flux <<cit.GetIndex()<<":  "<<cit.Get()<<std::endl;
+    flux <<cit.GetIndex()<<std::endl;
   }
   flux.close();
 

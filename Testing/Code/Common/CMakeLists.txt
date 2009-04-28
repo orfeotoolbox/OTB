@@ -441,8 +441,11 @@ ADD_TEST(coTvPolygon ${COMMON_TESTS6}
 #-------- otb::PolyLineImageIterator -----------------------------------------
 
  ADD_TEST(coTvPolyLineImageConstIterator ${COMMON_TESTS6}
+    --compare-ascii ${TOL}
+		${BASELINE_FILES}/coTvPolyLineImageConstIterator.txt
+		 ${TEMP}/coTvPolyLineImageConstIterator.txt
          otbPolyLineImageConstIterator
-		 10 10 35
+		 512 512 20
 		 ${TEMP}/coTvPolyLineImageConstIterator.txt
 )
 
@@ -756,7 +759,7 @@ otbArcSpatialObjectNew.cxx
 otbPathListToPathListFilterNew.cxx
 )
 SET(BasicCommon_SRCS6
-otbPolyLineImageConstIteratorNew.cxx
+otbPolyLineImageConstIterator.cxx
 otbPolyLineImageIterator.cxx
 otbDrawPathFilterNew.cxx
 otbDrawPathFilter.cxx
