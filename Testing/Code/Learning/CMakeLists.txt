@@ -4,7 +4,6 @@ IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-SET(EXAMPLESDATA ${OTB_DATA_ROOT}/Examples)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 
@@ -368,7 +367,7 @@ ADD_TEST(leTuROIdataConversionNew ${LEARNING_TESTS4}
 
 ADD_TEST(leTuROIdataConversion ${LEARNING_TESTS4}
  --compare-ascii ${TOL}
-	${BASELINE}/leTuROIdataConversion.txt
+	${BASELINE_FILES}/leTuROIdataConversion.txt
 	${TEMP}/leTuROIdataConversion.txt
         otbROIdataConversion
 	${INPUTDATA}/ImageLineDir.bsq.hdr
