@@ -4,6 +4,7 @@ IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
+SET(EXAMPLESDATA ${OTB_DATA_ROOT}/Examples)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 
@@ -19,6 +20,7 @@ SET(EPSILON_10e4 0.0001)
 SET(LEARNING_TESTS1 ${CXX_TEST_PATH}/otbLearningTests1)
 SET(LEARNING_TESTS2 ${CXX_TEST_PATH}/otbLearningTests2)
 SET(LEARNING_TESTS3 ${CXX_TEST_PATH}/otbLearningTests3)
+SET(LEARNING_TESTS4 ${CXX_TEST_PATH}/otbLearningTests4)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -355,6 +357,30 @@ ADD_TEST(leTuSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest ${LE
 	${TEMP}/leTvsvm_model_image_one_class)
       
 
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS4 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# -------            otb::RoidataConversion   -----------------------------	
+ADD_TEST(leTuROIdataConversionNew ${LEARNING_TESTS4}  
+        otbROIdataConversionNew)
+
+ADD_TEST(leTuROIdataConversion ${LEARNING_TESTS4}
+# --compare-image ${TOL}
+#	${BASELINE}/leSOMPoupeesClassified.hdr
+#	${TEMP}/leTuROIdataConversion.tif
+        otbROIdataConversion
+	${INPUTDATA}/ImageLineDir.bsq.hdr
+	${INPUTDATA}/ImageLine.bsq.hdr
+	${TEMP}/leTuROIdataConversion.txt
+)
+
+
+
+
+
+
 # A enrichir
 SET(BasicLearning_SRCS1
 otbSVMModelNew.cxx
@@ -402,6 +428,12 @@ otbSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest.cxx
 )
 
 
+SET(BasicLearning_SRCS4
+otbROIdataConversionNew.cxx
+otbROIdataConversion.cxx
+)
+
+
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbLearningTests1 otbLearningTests1.cxx ${BasicLearning_SRCS1})
@@ -410,6 +442,8 @@ ADD_EXECUTABLE(otbLearningTests2 otbLearningTests2.cxx ${BasicLearning_SRCS2})
 TARGET_LINK_LIBRARIES(otbLearningTests2 OTBLearning OTBIO)
 ADD_EXECUTABLE(otbLearningTests3 otbLearningTests3.cxx ${BasicLearning_SRCS3})
 TARGET_LINK_LIBRARIES(otbLearningTests3 OTBLearning OTBIO)
+ADD_EXECUTABLE(otbLearningTests4 otbLearningTests4.cxx ${BasicLearning_SRCS4})
+TARGET_LINK_LIBRARIES(otbLearningTests4 OTBLearning OTBIO)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 

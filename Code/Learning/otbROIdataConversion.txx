@@ -25,6 +25,9 @@
 #include <itkVector.h>
 
 #include "otbROIdataConversion.h"
+#include "itkImageRegionConstIterator.h"
+#include "itkImageRegionIterator.h"
+
 
 namespace otb
 {
@@ -35,8 +38,8 @@ ROIdataConversion< TInputImage, TInputROIImage >
 {
   this->SetNumberOfInputs(2);
   this->SetNumberOfRequiredInputs(2);
-//   this->SetNumberOfOutputs(1);
 }
+
 
 template < class TInputImage, class TInputROIImage >
 void
@@ -44,11 +47,13 @@ ROIdataConversion< TInputImage, TInputROIImage >
 ::GenerateOutputInformation(void)
 {
   typename OutputImageType::Pointer outputPtr = this->GetOutput();
-  typename OutputImageType::SizeType outputSize
-  = outputPtr->GetRequestedRegion().GetSize();
+  typename OutputImageType::SizeType outputSize = outputPtr->GetRequestedRegion().GetSize();
   outputSize[0] = GetNumberOfSample();
   outputPtr->SetRegions( outputSize );
 }
+
+
+
 template < class TInputImage, class TInputROIImage >
 void
 ROIdataConversion< TInputImage, TInputROIImage >
@@ -58,7 +63,6 @@ ROIdataConversion< TInputImage, TInputROIImage >
   typename InputROIImageType::Pointer inputROIPtr = this->GetROIImage();
   inputImagePtr->SetRequestedRegion(inputImagePtr->GetLargestPossibleRegion());
   inputROIPtr->SetRequestedRegion(inputROIPtr->GetLargestPossibleRegion());
-
 }
 
 template <class TInputImage, class TInputROIImage >
@@ -66,12 +70,16 @@ void
 ROIdataConversion< TInputImage, TInputROIImage >
 ::GenerateData ()
 {
-  typename OutputImageType::Pointer outputPtr = this->GetOutput();
-  outputPtr->Allocate();
-  outputPtr->FillBuffer(0);
-
   typename InputImageType::Pointer inputImagePtr = const_cast<InputImageType *>(this->GetInputImage());
   typename InputROIImageType::ConstPointer inputROIPtr = this->GetROIImage();
+  typename OutputImageType::Pointer outputPtr = this->GetOutput();
+  
+  outputPtr->Allocate();
+  typename InputImageType::PixelType defaultPix;
+  defaultPix.SetSize(inputImagePtr->GetNumberOfComponentsPerPixel());
+  defaultPix.Fill(0);
+  outputPtr->FillBuffer(defaultPix);
+
 
   itk::ImageRegionConstIterator< InputImageType > inputIter
   ( inputImagePtr, inputImagePtr->GetRequestedRegion() );
@@ -95,7 +103,6 @@ ROIdataConversion< TInputImage, TInputROIImage >
     ++inputIter;
     ++trainingIter;
   }
-
 }
 
 template < class TInputImage, class TInputROIImage >
@@ -104,11 +111,10 @@ ROIdataConversion< TInputImage, TInputROIImage >
 ::GetNumberOfSample ()
 {
   InputROIImagePointerType inputROIPtr = GetROIImage();
-  itk::ImageRegionConstIterator< InputROIImageType > trainingIter
-  ( inputROIPtr, inputROIPtr->GetRequestedRegion() );
-
+  itk::ImageRegionConstIterator< InputROIImageType > trainingIter( inputROIPtr, inputROIPtr->GetRequestedRegion() );
+  
   trainingIter.GoToBegin();
-
+  
   SizeValueType count = 0L;
   while ( !trainingIter.IsAtEnd() )
   {
