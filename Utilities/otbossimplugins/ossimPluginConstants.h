@@ -14,7 +14,12 @@
 #ifndef ossimPluginConstants_HEADER
 #define ossimPluginConstants_HEADER
 
-#if defined(__MINGW32__) || defined(__CYGWIN__) || defined(_MSC_VER) || defined(__VISUALC__) || defined(__BORLANDC__) || defined(__WATCOMC__)
+/**
+ * DLL IMPORT/EXORT SECTION
+ */
+#if defined(OSSIM_STATIC)
+# define OSSIM_PLUGINS_DLL
+#elif defined(__MINGW32__) || defined(__CYGWIN__) || defined(_MSC_VER) || defined(__VISUALC__) || defined(__BORLANDC__) || defined(__WATCOMC__)
 #  define OSSIM_PLUGINS_DLL __declspec(dllexport)
 #else
 # define OSSIM_PLUGINS_DLL
