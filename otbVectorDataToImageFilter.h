@@ -69,6 +69,12 @@ template <class TVectorData, class TImage>
     virtual void SetInput( const VectorDataType *input);
     const VectorDataType * GetInput(void);
 
+    /** Set the size of the output image. */
+    itkSetMacro( Size, SizeType );
+
+    /** Get the size of the output image. */
+    itkGetConstReferenceMacro( Size, SizeType );
+
       /** Set the origin of the vector data.
        * \sa GetOrigin() */
     itkSetMacro(Origin, OriginType);

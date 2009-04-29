@@ -33,6 +33,10 @@ int main(int argc, char * argv[])
   typedef otb::VectorDataToImageFilter<VectorDataType, ImageType> VectorDataToImageFilterType;
   VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();
   vectorDataRendering->SetInput(projection->GetOutput());
+  ImageType::SizeType size;
+  size[0]=100;
+  size[1]=100;
+  vectorDataRendering->SetSize(size);
 
 
   //Save the image in a file

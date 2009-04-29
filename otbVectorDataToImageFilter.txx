@@ -32,6 +32,11 @@ namespace otb
   ::VectorDataToImageFilter()
   {
     this->SetNumberOfRequiredInputs( 1 );
+    m_Spacing.Fill(1.0);
+    m_Origin.Fill(0.0);
+    m_Direction.SetIdentity();
+    m_Size.Fill( 0 );
+    m_StartIndex.Fill( 0 );
   }
 
 
@@ -130,26 +135,29 @@ namespace otb
           VectorDataToImageFilter<TVectorData, TImage>
   ::GenerateOutputInformation()
   {
-  // call the superclass' implementation of this method
-    Superclass::GenerateOutputInformation();
 
-  // get pointers to the input and output
+    // we can't call the superclass method here.
+
+    // get pointers to the input and output
     ImagePointer outputPtr = this->GetOutput();
     if ( !outputPtr )
     {
       return;
     }
 
-  // Set the size of the output region
+    // Set the size of the output region
     typename TImage::RegionType outputLargestPossibleRegion;
     outputLargestPossibleRegion.SetSize( m_Size );
     outputLargestPossibleRegion.SetIndex( m_StartIndex );
     outputPtr->SetLargestPossibleRegion( outputLargestPossibleRegion );
 
-  // Set spacing and origin
+    // Set spacing and origin
     outputPtr->SetSpacing( m_Spacing );
     outputPtr->SetOrigin( m_Origin );
     outputPtr->SetDirection( m_Direction );
+
+
+    //TODO update or check the projection information
 
     return;
   }
