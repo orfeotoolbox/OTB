@@ -22,8 +22,8 @@
 #include "itkRGBPixel.h"
 #include "itkRGBAPixel.h"
 
-#include <gdal.h>
-#include <gdal_priv.h>
+#include "gdal.h"
+#include "gdal_priv.h"
 //#include <iostream.h>
 #include <string.h>
 #include <list>
