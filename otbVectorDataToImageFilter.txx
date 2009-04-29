@@ -248,6 +248,52 @@ namespace otb
     m_Map.resize(m_Size[0],m_Size[1]);
 
     m_Map.set_background(mapnik::color("#f2efe9"));//TODO set to transparent later
+
+
+    //TODO the code bellow will be in another class later on
+    {
+      mapnik::feature_type_style style;
+      mapnik::rule_type rule;
+      rule.set_max_scale(250000000000LLU);
+      rule.set_min_scale(600000);
+      rule.append(mapnik::line_symbolizer(mapnik::color("#f2efe9")));
+//     rule.append(mapnik::polygon_symbolizer(mapnik::Color(242,239,233)));
+      style.add_rule(rule);
+      m_Map.insert_style("world",style);
+    }
+    {
+      mapnik::feature_type_style style;
+      mapnik::rule_type rule;
+      rule.set_max_scale(600000);
+      rule.append(mapnik::line_symbolizer(mapnik::color("#f2efe9")));
+//     rule.append(mapnik::polygon_symbolizer(mapnik::Color(242,239,233)));
+      style.add_rule(rule);
+      m_Map.insert_style("coast-poly",style);
+    }
+    {
+      mapnik::feature_type_style style;
+      mapnik::rule_type rule;
+      rule.set_max_scale(600000);
+      rule.append(mapnik::line_symbolizer(mapnik::color("#e46d71")));
+//     rule.append(mapnik::polygon_symbolizer(mapnik::Color(242,239,233)));
+      style.add_rule(rule);
+      m_Map.insert_style("coast-poly",style);
+    }
+    {
+      mapnik::feature_type_style style;
+      mapnik::rule_type rule;
+      rule.set_max_scale(1000000);
+//     rule.set_min_scale(500000);
+      rule.append(mapnik::line_symbolizer(mapnik::color("#809bc0"),8.0));
+//     TextSymbolizer name="name" face_name="DejaVu Sans Book" size="9" fill="#000" halo_radius="1"  placement="line"
+//     text_symbolizer (std::string const &name, std::string const &face_name, unsigned size, color const &fill)
+//     text_symbolizer (std::string const &name, unsigned size, color const &fill)
+      mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 9, mapnik::color("#000"));
+      textSymb.set_label_placement(mapnik::LINE_PLACEMENT);
+      rule.append(textSymb);
+      style.add_rule(rule);
+      m_Map.insert_style("roads",style);
+    }
   }
 
   template <class TVectorData, class TImage>

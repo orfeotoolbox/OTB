@@ -10,6 +10,7 @@
 #include "otbVectorDataToImageFilter.h"
 
 //  ./mapnikOTBClasses /home/christop/OTB/trunk/OTB-Data/Input/waterways.shp output.png
+//  ./mapnikOTBClasses ~/OTB/trunk/OTB-Data/Input/ToulouseRoad-examples.shp output.png
 
 int main(int argc, char * argv[])
 {
