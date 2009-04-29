@@ -1,4 +1,5 @@
 #include "otbVectorDataFileReader.h"
+#include "otbImageFileWriter.h"
 #include "otbVectorData.h"
 #include "otbVectorDataProjectionFilter.h"
 #include <fstream>
@@ -12,6 +13,7 @@ int main(int argc, char * argv[])
 {
 
   //Read the vector data
+  typedef otb::VectorData<> VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
   VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
 
@@ -25,7 +27,7 @@ int main(int argc, char * argv[])
 
   //Convert the vector data into an image
   typedef itk::RGBAPixel< unsigned char > PixelType;
-  typedef otb::Image<PixelType> ImageType;
+  typedef otb::Image<PixelType,2> ImageType;
   typedef otb::VectorDataToImageFilter<VectorDataType, ImageType> VectorDataToImageFilterType;
   VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();
   vectorDataRendering->SetInput(projection->GetOutput());
