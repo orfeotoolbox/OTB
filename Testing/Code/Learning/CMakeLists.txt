@@ -367,9 +367,9 @@ ADD_TEST(leTuROIdataConversionNew ${LEARNING_TESTS4}
         otbROIdataConversionNew)
 
 ADD_TEST(leTuROIdataConversion ${LEARNING_TESTS4}
-# --compare-image ${TOL}
-#	${BASELINE}/leSOMPoupeesClassified.hdr
-#	${TEMP}/leTuROIdataConversion.tif
+ --compare-ascii ${TOL}
+	${BASELINE}/leTuROIdataConversion.txt
+	${TEMP}/leTuROIdataConversion.txt
         otbROIdataConversion
 	${INPUTDATA}/ImageLineDir.bsq.hdr
 	${INPUTDATA}/ImageLine.bsq.hdr
