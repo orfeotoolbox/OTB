@@ -219,7 +219,9 @@ int main(int argc, char * argv[])
 //     TextSymbolizer name="name" face_name="DejaVu Sans Book" size="9" fill="#000" halo_radius="1"  placement="line"
 //     text_symbolizer (std::string const &name, std::string const &face_name, unsigned size, color const &fill)
 //     text_symbolizer (std::string const &name, unsigned size, color const &fill)
-    rule.append(mapnik::text_symbolizer("name", "DejaVu Sans Book", 9, mapnik::color("#000")));
+    mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 9, mapnik::color("#000"));
+    textSymb.set_label_placement(mapnik::LINE_PLACEMENT);
+    rule.append(textSymb);
     style.add_rule(rule);
     m.insert_style("roads",style);
   }
