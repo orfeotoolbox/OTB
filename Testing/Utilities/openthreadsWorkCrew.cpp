@@ -44,7 +44,7 @@
 #include <OpenThreads/Condition>
 #include <OpenThreads/Barrier>
 
-extern int errno;
+//extern int errno;
 
 #ifdef DEBUG
 # define DPRINTF(arg) printf arg
@@ -313,7 +313,8 @@ int crew_start(Crew *crew) {
     //
     status = crew->mutex.lock();
     if(status != 0) {
-	DPRINTF(("Lock Error: %s\n", strerror(errno)));
+// OTB Modif	DPRINTF(("Lock Error: %s\n", strerror(errno)));
+	DPRINTF(("Lock Error !\n"));
     }
     assert(status == 0); 
 

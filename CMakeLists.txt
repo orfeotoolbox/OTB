@@ -71,7 +71,7 @@ SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_
 
 
 # => Comment for OTB 3.0.0
-#OPTION(BUILD_TESTING "Build testing." OFF)
+OPTION(BUILD_TESTING "Build testing." OFF)
 
 #-----------------------------------------------------------------------------
 # OTB build configuration options.
@@ -324,6 +324,35 @@ IF(OTB_USE_CURL)
         INCLUDE_DIRECTORIES(${CURL_INCLUDE_DIR})
 
 ENDIF(OTB_USE_CURL)
+
+#-------------------------------
+# Mapnik Library
+#-------------------------------
+OPTION(OTB_USE_MAPNIK "Use mapnik library." OFF)
+MARK_AS_ADVANCED(OTB_USE_MAPNIK)
+IF(OTB_USE_MAPNIK)
+
+        FIND_PATH(MAPNIK_INCLUDE_DIR mapnik/map.hpp PATHS)
+        MARK_AS_ADVANCED(MAPNIK_INCLUDE_DIR)
+        IF (NOT MAPNIK_INCLUDE_DIR)
+                MESSAGE(FATAL_ERROR
+                        "Cannot find MAPNIK include directory. Please set MAPNIK_INCLUDE_DIR or SET OTB_USE_MAPNIK OFF.")
+        ENDIF (NOT MAPNIK_INCLUDE_DIR)
+
+        FIND_LIBRARY(MAPNIK_LIBRARY mapnik )
+        MARK_AS_ADVANCED(MAPNIK_LIBRARY)
+        IF (NOT MAPNIK_LIBRARY)
+                MESSAGE(FATAL_ERROR
+                        "Cannot find MAPNIK library. Please set MAPNIK_LIBRARY or SET OTB_USE_MAPNIK OFF.")
+        ENDIF (NOT MAPNIK_LIBRARY)
+
+# Add compiler option
+        ADD_DEFINITIONS(-DOTB_USE_MAPNIK)
+
+        INCLUDE_DIRECTORIES(${MAPNIK_INCLUDE_DIR})
+
+ENDIF(OTB_USE_MAPNIK)
+
 
 #-------------------------------
 # Boost Library

@@ -16,7 +16,7 @@
 //  $Id: ossimOgcWktTranslator.cpp 12031 2007-11-13 18:03:57Z gpotts $
 
 #include <cstdio>
-#include <gdal.h>
+#include "gdal.h"
 
 #include "ossimOgcWktTranslator.h"
 #include <ogr_spatialref.h>

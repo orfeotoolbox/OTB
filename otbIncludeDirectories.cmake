@@ -15,8 +15,11 @@ IF(OTB_USE_EXTERNAL_BOOST)
 ELSE(OTB_USE_EXTERNAL_BOOST)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
     ${OTB_SOURCE_DIR}/Utilities/BGL
-    ${OTB_SOURCE_DIR}/Utilities/BGL/boost)
+    ${OTB_SOURCE_DIR}/Utilities/BGL/boost
+)
 ENDIF(OTB_USE_EXTERNAL_BOOST)
+
+
 
 # These directories are always needed.
 SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
@@ -50,7 +53,6 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otbkml
   ${OTB_SOURCE_DIR}/Utilities/otbkml/src
   ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party
-  ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party/boost_1_34_1
 #  ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3
 #  ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3/contrib
   ${OTB_SOURCE_DIR}/Utilities/otbliblas/include
@@ -61,6 +63,12 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_BINARY_DIR}/Code/Visualization
 
 )
+
+IF(NOT OTB_USE_EXTERNAL_BOOST)
+  SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+    ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party/boost_1_34_1)
+ENDIF(NOT OTB_USE_EXTERNAL_BOOST)
+
 IF(OTB_COMPILE_JPEG2000)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
         ${OTB_SOURCE_DIR}/Utilities/otbopenjpeg
@@ -84,6 +92,13 @@ IF(OTB_USE_CURL)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   	${CURL_INCLUDE_DIR} )
 ENDIF(OTB_USE_CURL)
+
+#-----------------------------------------------------------------------------
+# Include directories from the MAPNIK build tree.
+IF(OTB_USE_MAPNIK)
+  SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+  	${MAPNIK_INCLUDE_DIR} )
+ENDIF(OTB_USE_MAPNIK)
 
 #-----------------------------------------------------------------------------
 # Include directories from the ITK build tree.
@@ -278,6 +293,12 @@ IF(OTB_USE_CURL)
   SET(OTB_INCLUDE_ABSOLUE_DIRS ${OTB_INCLUDE_ABSOLUE_DIRS}
   	${CURL_INCLUDE_DIR} )
 ENDIF(OTB_USE_CURL)
+
+#For MAPNIK header file
+IF(OTB_USE_MAPNIK)
+  SET(OTB_INCLUDE_ABSOLUE_DIRS ${OTB_INCLUDE_ABSOLUE_DIRS}
+  	${MAPNIK_INCLUDE_DIR} )
+ENDIF(OTB_USE_MAPNIK)
 
 # For OpentTreads  header file
 IF(OTB_USE_EXTERNAL_OPENTHREADS)
