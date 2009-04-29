@@ -20,6 +20,18 @@
 #define __otbVectorDataToImageFilter_txx
 
 #include "otbVectorDataToImageFilter.h"
+#include "itkImageRegionIterator.h"
+
+#include <mapnik/datasource_cache.hpp>
+#include <mapnik/font_engine_freetype.hpp>
+#include <mapnik/agg_renderer.hpp>
+#include <mapnik/filter_factory.hpp>
+#include <mapnik/color_factory.hpp>
+#include <mapnik/image_util.hpp>
+#include <mapnik/config_error.hpp>
+#include <mapnik/memory_datasource.hpp>
+
+#include <mapnik/value.hpp>
 
 namespace otb
 {
@@ -37,6 +49,7 @@ namespace otb
     m_Direction.SetIdentity();
     m_Size.Fill( 0 );
     m_StartIndex.Fill( 0 );
+    m_Map = mapnik::Map();
   }
 
 
@@ -174,6 +187,52 @@ namespace otb
 
     this->BeforeThreadedGenerateData();
 
+    datasource_ptr mDatasource = datasource_ptr(new mapnik::memory_datasource);
+
+    VectorDataConstPointer input = this->GetInput();
+    InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(input->GetDataTree()->GetRoot());
+
+    ProcessNode(inputRoot,mDatasource);
+
+
+    std::cout << "Datasource size: " << mDatasource->size() << std::endl;
+
+    mapnik::Layer lyr("world");
+    lyr.set_datasource(mDatasource);
+    lyr.add_style("roads");
+    m_Map.addLayer(lyr);
+
+
+    m_Map.zoomToBox(lyr.envelope());//FIXME: use the Origin/Spacing to calculate this
+    std::cout << "Envelope: " << lyr.envelope() << std::endl;
+
+    mapnik::Image32 buf(m_Map.getWidth(),m_Map.getHeight());
+    mapnik::agg_renderer<mapnik::Image32> ren(m_Map,buf);
+    ren.apply();
+
+    const unsigned char * src = buf.raw_data();
+
+    ImagePointer output = this->GetOutput();
+//     unsigned char * dst = output->GetBufferPointer();
+
+//     unsigned int size = 4*m_Size[0]*m_Size[1];//FIXME: lot of assumption here: RGBA, 2 dimensions
+//     memcpy(dst, src, size);
+
+    itk::ImageRegionIterator<ImageType> it(output, output->GetLargestPossibleRegion());
+
+    for (it.GoToBegin(); !it.IsAtEnd(); ++it)
+    {
+      itk::RGBAPixel<unsigned char> pix;
+      pix[0] = *src;
+      ++src;
+      pix[1] = *src;
+      ++src;
+      pix[2] = *src;
+      ++src;
+      pix[3] = *src;
+      ++src;
+      it.Set(pix);
+    }
 
 
     this->AfterThreadedGenerateData();
@@ -185,9 +244,147 @@ namespace otb
   ::BeforeThreadedGenerateData(void)
   {
     Superclass::BeforeThreadedGenerateData();
+    mapnik::freetype_engine::register_font("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");
+    m_Map.resize(m_Size[0],m_Size[1]);
 
+    m_Map.set_background(mapnik::color("#f2efe9"));//TODO set to transparent later
   }
 
+  template <class TVectorData, class TImage>
+      void
+          VectorDataToImageFilter<TVectorData, TImage>
+  ::ProcessNode(InternalTreeNodeType * source, datasource_ptr mDatasource)
+  {
+
+    typedef otb::DataNode<double,2,double> DataNodeType; //FIXME check if it should be infered from the input type
+    typedef typename DataNodeType::Pointer DataNodePointerType;
+
+  // Get the children list from the input node
+    ChildrenListType children = source->GetChildrenList();
+
+  // For each child
+    for(typename ChildrenListType::iterator it = children.begin(); it!=children.end();++it)
+    {
+    // Copy input DataNode info
+      DataNodePointerType dataNode = (*it)->Get();
+
+      switch(dataNode->GetNodeType())
+      {
+        case otb::ROOT:
+        {
+          ProcessNode((*it),mDatasource);
+          break;
+        }
+        case otb::DOCUMENT:
+        {
+          ProcessNode((*it),mDatasource);
+          break;
+        }
+        case otb::FOLDER:
+        {
+          ProcessNode((*it),mDatasource);
+          break;
+        }
+//       case FEATURE_POINT:
+//       {
+//         newDataNode->SetPoint(this->ReprojectPoint(dataNode->GetPoint()));
+//         newContainer = OutputInternalTreeNodeType::New();
+//         newContainer->Set(newDataNode);
+//         destination->AddChild(newContainer);
+//         break;
+//       }
+        case otb::FEATURE_LINE:
+        {
+          std::cout << std::setprecision(15)  << " ** Inserting new line **" << std::endl;
+          typedef mapnik::vertex<double,2> vertex2d;
+          typedef mapnik::line_string<vertex2d,mapnik::vertex_vector2> line2d;
+          typedef boost::shared_ptr<line2d> line_ptr;
+          mapnik::geometry2d * line = new line2d;
+
+          typedef DataNodeType::LineType::VertexListConstIteratorType VertexIterator;
+          VertexIterator itVertex = dataNode->GetLine()->GetVertexList()->Begin();
+          while (itVertex != dataNode->GetLine()->GetVertexList()->End())
+          {
+            std::cout << itVertex.Value()[0] << ", " << itVertex.Value()[1] << std::endl;
+            line->line_to(itVertex.Value()[0],itVertex.Value()[1]);
+            ++itVertex;
+          }
+
+          std::cout << "Num points: " << line->num_points() << std::endl;
+
+
+          typedef boost::shared_ptr<mapnik::raster> raster_ptr;
+          typedef mapnik::feature<mapnik::geometry2d,raster_ptr> Feature;
+          typedef boost::shared_ptr<Feature> feature_ptr;
+
+//         typedef std::map<std::string,mapnik::value> mapType;
+//         mapType myMap;
+//         myMap["name"] = mapnik::value("test");
+//         std::cout << myMap.size() << std::endl;
+
+          feature_ptr mfeature = feature_ptr(new Feature(1));
+//         feature_ptr mfeature = feature_ptr(new Feature(myMap));
+          mfeature->add_geometry(line);
+//         mfeature->properties().insert(make_pair(std::string("name"),
+//                                         std::string("test")));
+
+//         boost::put(*mfeature, "name", mapnik::value("test"));
+          mapnik::transcoder tr("ISO-8859");
+          boost::put(*mfeature, "name", tr.transcode("test"));
+          boost::put(*mfeature, "name2", 10);
+          std::cout << mfeature->props().size() << std::endl;
+          std::cout << " -> " << (*mfeature)["name"] << std::endl;
+          std::cout << " -> " << (*mfeature)["name2"] << std::endl;
+
+          mDatasource->push(mfeature);
+
+
+          break;
+        }
+//       case FEATURE_POLYGON:
+//       {
+//         newDataNode->SetPolygonExteriorRing(this->ReprojectPolygon(dataNode->GetPolygonExteriorRing()));
+//         newDataNode->SetPolygonInteriorRings(this->ReprojectPolygonList(dataNode->GetPolygonInteriorRings()));
+//         newContainer = OutputInternalTreeNodeType::New();
+//         newContainer->Set(newDataNode);
+//         destination->AddChild(newContainer);
+//         break;
+//       }
+//       case FEATURE_MULTIPOINT:
+//       {
+//         newContainer = OutputInternalTreeNodeType::New();
+//         newContainer->Set(newDataNode);
+//         destination->AddChild(newContainer);
+//         ProcessNode((*it),newContainer);
+//         break;
+//       }
+//       case FEATURE_MULTILINE:
+//       {
+//         newContainer = OutputInternalTreeNodeType::New();
+//         newContainer->Set(newDataNode);
+//         destination->AddChild(newContainer);
+//         ProcessNode((*it),newContainer);
+//         break;
+//       }
+//       case FEATURE_MULTIPOLYGON:
+//       {
+//         newContainer = OutputInternalTreeNodeType::New();
+//         newContainer->Set(newDataNode);
+//         destination->AddChild(newContainer);
+//         ProcessNode((*it),newContainer);
+//         break;
+//       }
+//       case FEATURE_COLLECTION:
+//       {
+//         newContainer = OutputInternalTreeNodeType::New();
+//         newContainer->Set(newDataNode);
+//         destination->AddChild(newContainer);
+//         ProcessNode((*it),newContainer);
+//         break;
+//       }
+      }
+    }
+  }
 
   /**
    * PrintSelf Method

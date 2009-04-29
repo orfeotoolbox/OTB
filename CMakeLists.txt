@@ -25,4 +25,4 @@ ADD_EXECUTABLE(mapnikFromVectorData mapnikFromVectorData.cxx)
 TARGET_LINK_LIBRARIES(mapnikFromVectorData OTBCommon OTBIO mapnik)
 
 ADD_EXECUTABLE(mapnikOTBClasses mapnikOTBClasses.cxx)
-TARGET_LINK_LIBRARIES(mapnikOTBClasses OTBCommon OTBIO)
+TARGET_LINK_LIBRARIES(mapnikOTBClasses OTBCommon OTBIO mapnik)

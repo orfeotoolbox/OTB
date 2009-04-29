@@ -21,6 +21,9 @@
 
 #include "itkImageSource.h"
 
+#include <mapnik/memory_datasource.hpp>
+#include <mapnik/map.hpp>
+
 namespace otb
 {
 /** \class VectorDataToImageFilter
@@ -49,6 +52,9 @@ template <class TVectorData, class TImage>
     typedef TVectorData VectorDataType;
     typedef TImage ImageType;
     typedef typename ImageType::Pointer ImagePointer;
+    typedef typename VectorDataType::ConstPointer VectorDataConstPointer;
+    typedef typename VectorDataType::DataTreeType::TreeNodeType    InternalTreeNodeType;
+    typedef typename InternalTreeNodeType::ChildrenListType        ChildrenListType;
 
     /** Number of dimensions. */
     itkStaticConstMacro(ImageDimension, unsigned int,
@@ -65,6 +71,9 @@ template <class TVectorData, class TImage>
     typedef typename TImage::PointType     OriginType;
     typedef typename TImage::DirectionType DirectionType;
 
+    /** typedef specific to mapnik */
+    typedef boost::shared_ptr<mapnik::memory_datasource> datasource_ptr;
+
 
     virtual void SetInput( const VectorDataType *input);
     const VectorDataType * GetInput(void);
@@ -75,8 +84,8 @@ template <class TVectorData, class TImage>
     /** Get the size of the output image. */
     itkGetConstReferenceMacro( Size, SizeType );
 
-      /** Set the origin of the vector data.
-       * \sa GetOrigin() */
+    /** Set the origin of the vector data.
+     * \sa GetOrigin() */
     itkSetMacro(Origin, OriginType);
     virtual void SetOrigin( const double origin[2] );
     virtual void SetOrigin( const float origin[2] );
@@ -84,8 +93,8 @@ template <class TVectorData, class TImage>
     itkGetConstReferenceMacro(Origin, OriginType);
 
 
-  /** Set the spacing (size of a pixel) of the vector data.
-   * \sa GetSpacing() */
+    /** Set the spacing (size of a pixel) of the vector data.
+    * \sa GetSpacing() */
     virtual void SetSpacing (const SpacingType & spacing);
     virtual void SetSpacing (const double spacing[2]);
     virtual void SetSpacing (const float spacing[2]);
@@ -111,11 +120,15 @@ template <class TVectorData, class TImage>
     VectorDataToImageFilter(const Self&); //purposely not implemented
     void operator=(const Self&); //purposely not implemented
 
+    void ProcessNode(InternalTreeNodeType * source, datasource_ptr mDatasource);
+
     SpacingType         m_Spacing;
     OriginType          m_Origin;
     SizeType            m_Size;
     IndexType           m_StartIndex;
     DirectionType       m_Direction;
+
+    mapnik::Map m_Map;
 
 }; // end class
 } // end namespace otb
