@@ -75,10 +75,7 @@ ROIdataConversion< TInputImage, TInputROIImage >
   typename OutputImageType::Pointer outputPtr = this->GetOutput();
   
   outputPtr->Allocate();
-  typename InputImageType::PixelType defaultPix;
-  defaultPix.SetSize(inputImagePtr->GetNumberOfComponentsPerPixel());
-  defaultPix.Fill(0);
-  outputPtr->FillBuffer(defaultPix);
+  outputPtr->FillBuffer(static_cast<typename InputImageType::PixelType>(0));
 
 
   itk::ImageRegionConstIterator< InputImageType > inputIter

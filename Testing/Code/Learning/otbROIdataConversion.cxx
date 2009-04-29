@@ -30,20 +30,18 @@
 
 int otbROIdataConversion( int argc, char* argv[] )
 {
-  typedef double                                                    PixelType;
-  const   unsigned int                                              Dimension = 2;
-  typedef otb::VectorImage< PixelType,  Dimension >                 InputImageType;
-  typedef otb::Image< PixelType,  Dimension >                       InputROIImageType;
-  typedef otb::ROIdataConversion<InputImageType, InputROIImageType> ConvertorType;
-  typedef ConvertorType::OutputImageType                            OutputImageType;
+  typedef double                                                 PixelType;
+  const   unsigned int                                           Dimension = 2;
+  typedef otb::Image< PixelType,  Dimension >                    InputImageType;
+  typedef otb::ROIdataConversion<InputImageType, InputImageType> ConvertorType;
+  typedef ConvertorType::OutputImageType                         OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>    ReaderType;
-  typedef otb::ImageFileReader<InputROIImageType> ReaderROIType;
   typedef otb::ImageFileWriter<OutputImageType>   WriterType;
 
   ConvertorType::Pointer convertor = ConvertorType::New();
   ReaderType::Pointer readerIm = ReaderType::New();
-  ReaderROIType::Pointer readerTr = ReaderROIType::New();
+  ReaderType::Pointer readerTr = ReaderType::New();
 
   readerIm->SetFileName(argv[1]);
   readerTr->SetFileName(argv[2]);
