@@ -9,6 +9,8 @@
 #include "otbImage.h"
 #include "otbVectorDataToImageFilter.h"
 
+//  ./mapnikOTBClasses /home/christop/OTB/trunk/OTB-Data/Input/waterways.shp output.png
+
 int main(int argc, char * argv[])
 {
 
@@ -31,6 +33,7 @@ int main(int argc, char * argv[])
   typedef otb::VectorDataToImageFilter<VectorDataType, ImageType> VectorDataToImageFilterType;
   VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();
   vectorDataRendering->SetInput(projection->GetOutput());
+
 
   //Save the image in a file
   typedef otb::ImageFileWriter<ImageType> WriterType;

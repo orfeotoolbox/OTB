@@ -61,6 +61,99 @@ namespace otb
 
 
 
+//----------------------------------------------------------------------------
+  template <class TVectorData, class TImage>
+      void
+          VectorDataToImageFilter<TVectorData, TImage>
+  ::SetSpacing(const SpacingType & spacing )
+  {
+    itkDebugMacro("setting Spacing to " << spacing);
+    if ( this->m_Spacing != spacing )
+    {
+      this->m_Spacing = spacing;
+      this->Modified();
+    }
+  }
+
+
+//----------------------------------------------------------------------------
+  template <class TVectorData, class TImage>
+      void
+          VectorDataToImageFilter<TVectorData, TImage>
+  ::SetSpacing(const double spacing[2] )
+  {
+    SpacingType s(spacing);
+    this->SetSpacing(s);
+  }
+
+
+//----------------------------------------------------------------------------
+  template <class TVectorData, class TImage>
+      void
+          VectorDataToImageFilter<TVectorData, TImage>
+  ::SetSpacing(const float spacing[2] )
+  {
+    itk::Vector<float, 2> sf(spacing);
+    SpacingType s;
+    s.CastFrom( sf );
+    this->SetSpacing(s);
+  }
+
+//----------------------------------------------------------------------------
+  template <class TVectorData, class TImage>
+      void
+          VectorDataToImageFilter<TVectorData, TImage>
+  ::SetOrigin(const double origin[2] )
+  {
+    OriginType p(origin);
+    this->SetOrigin( p );
+  }
+
+
+//----------------------------------------------------------------------------
+  template <class TVectorData, class TImage>
+      void
+          VectorDataToImageFilter<TVectorData, TImage>
+  ::SetOrigin(const float origin[2] )
+  {
+    itk::Point<float, 2> of(origin);
+    OriginType p;
+    p.CastFrom( of );
+    this->SetOrigin( p );
+  }
+
+/**
+   * Inform pipeline of required output region
+ */
+  template <class TVectorData, class TImage>
+      void
+          VectorDataToImageFilter<TVectorData, TImage>
+  ::GenerateOutputInformation()
+  {
+  // call the superclass' implementation of this method
+    Superclass::GenerateOutputInformation();
+
+  // get pointers to the input and output
+    ImagePointer outputPtr = this->GetOutput();
+    if ( !outputPtr )
+    {
+      return;
+    }
+
+  // Set the size of the output region
+    typename TImage::RegionType outputLargestPossibleRegion;
+    outputLargestPossibleRegion.SetSize( m_Size );
+    outputLargestPossibleRegion.SetIndex( m_StartIndex );
+    outputPtr->SetLargestPossibleRegion( outputLargestPossibleRegion );
+
+  // Set spacing and origin
+    outputPtr->SetSpacing( m_Spacing );
+    outputPtr->SetOrigin( m_Origin );
+    outputPtr->SetDirection( m_Direction );
+
+    return;
+  }
+
   /**
    * Generate Data
    */
@@ -69,10 +162,23 @@ namespace otb
           VectorDataToImageFilter<TVectorData, TImage>
   ::GenerateData(void)
   {
+    this->AllocateOutputs();
 
+    this->BeforeThreadedGenerateData();
+
+
+
+    this->AfterThreadedGenerateData();
   }
 
+  template <class TVectorData, class TImage>
+      void
+          VectorDataToImageFilter<TVectorData, TImage>
+  ::BeforeThreadedGenerateData(void)
+  {
+    Superclass::BeforeThreadedGenerateData();
 
+  }
 
 
   /**
