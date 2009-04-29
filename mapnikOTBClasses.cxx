@@ -35,7 +35,7 @@ int main(int argc, char * argv[])
   //Save the image in a file
   typedef otb::ImageFileWriter<ImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
-  writer->SetInput(vectorDataRendering);
+  writer->SetInput(vectorDataRendering->GetOutput());
   writer->SetFileName(argv[2]);
   writer->Update();
 

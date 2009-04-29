@@ -14,7 +14,7 @@ ENDIF(OTB_FOUND)
 
 INCLUDE_DIRECTORIES("/home/christop/slash/include" )
 INCLUDE_DIRECTORIES("/usr/include/freetype2" )
-LINK_DIRECTORIES("/home/christop/slash/lib64")
+LINK_DIRECTORIES("/home/christop/slash/lib")
 
 
 
