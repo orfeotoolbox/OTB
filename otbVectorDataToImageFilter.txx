@@ -175,6 +175,24 @@ namespace otb
     return;
   }
 
+  template <class TVectorData, class TImage>
+      void
+          VectorDataToImageFilter<TVectorData, TImage>
+  ::BeforeThreadedGenerateData(void)
+  {
+    Superclass::BeforeThreadedGenerateData();
+    mapnik::freetype_engine::register_font("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");
+    m_Map.resize(m_Size[0],m_Size[1]);
+
+//     m_Map.set_background(mapnik::color("#f2efe9"));
+    m_Map.set_background(mapnik::color(255,255,255,0));
+
+    otb::VectorDataStyle::Pointer styleLoader = otb::VectorDataStyle::New();
+    styleLoader->LoadOSMStyle(m_Map);
+
+
+  }
+
   /**
    * Generate Data
    */
@@ -239,23 +257,7 @@ namespace otb
     this->AfterThreadedGenerateData();
   }
 
-  template <class TVectorData, class TImage>
-      void
-          VectorDataToImageFilter<TVectorData, TImage>
-  ::BeforeThreadedGenerateData(void)
-  {
-    Superclass::BeforeThreadedGenerateData();
-    mapnik::freetype_engine::register_font("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");
-    m_Map.resize(m_Size[0],m_Size[1]);
 
-    m_Map.set_background(mapnik::color("#f2efe9"));//TODO set to transparent later
-
-
-    otb::VectorDataStyle::Pointer styleLoader = otb::VectorDataStyle::New();
-    styleLoader->LoadOSMStyle(m_Map);
-
-
-  }
 
   template <class TVectorData, class TImage>
       void
