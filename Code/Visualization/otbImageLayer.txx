@@ -221,11 +221,12 @@ ImageLayer<TImage,TOutputImage>
     typename RenderingFunctionType::ExtremaVectorType min, max;
     otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup(): "<<" ("<<this->GetName()<<") "<<nbComps<<" components, quantile= "<<100*m_AutoMinMaxQuantile<<" %");
     // For each components, use the histogram to compute min and max
+    typedef RenderingFunctionType::ScalarPixelType  RenderingFunctionScalarPixelType;
     for(unsigned int comp = 0; comp < nbComps;++comp)
       {
       // Compute quantiles
-      min.push_back(m_HistogramList->GetNthElement(comp)->Quantile(0,m_AutoMinMaxQuantile));
-      max.push_back(m_HistogramList->GetNthElement(comp)->Quantile(0,1-m_AutoMinMaxQuantile));
+      min.push_back(static_cast<RenderingFunctionScalarPixelType>( m_HistogramList->GetNthElement(comp)->Quantile(0,m_AutoMinMaxQuantile)));
+      max.push_back(static_cast<RenderingFunctionScalarPixelType>(m_HistogramList->GetNthElement(comp)->Quantile(0,1-m_AutoMinMaxQuantile)));
       otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup():"<<" ("<<this->GetName()<<")"<< " component "<<comp<<", min= "<<min.back()<<", max= "<<max.back());
       }
     
