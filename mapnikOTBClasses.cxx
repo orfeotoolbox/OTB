@@ -11,6 +11,7 @@
 
 //  ./mapnikOTBClasses /home/christop/OTB/trunk/OTB-Data/Input/waterways.shp output.png
 //  ./mapnikOTBClasses ~/OTB/trunk/OTB-Data/Input/ToulouseRoad-examples.shp output.png
+//  ./mapnikOTBClasses ~/OTB/trunk/OTB-Data/LargeInput/VECTOR/MidiPyrenees/roads.shp output.png
 
 int main(int argc, char * argv[])
 {
@@ -35,9 +36,17 @@ int main(int argc, char * argv[])
   VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();
   vectorDataRendering->SetInput(projection->GetOutput());
   ImageType::SizeType size;
-  size[0]=1000;
-  size[1]=1000;
+  size[0] = 1000;
+  size[1] = 1000;
   vectorDataRendering->SetSize(size);
+  ImageType::PointType origin;
+  origin[0] = 1.;//UL lon
+  origin[1] = 44;//UL lat
+  vectorDataRendering->SetOrigin(origin);
+  ImageType::SpacingType spacing;
+  spacing[0] = 0.001;
+  spacing[1] = -0.001;
+  vectorDataRendering->SetSpacing(spacing);
 
 
   //Save the image in a file

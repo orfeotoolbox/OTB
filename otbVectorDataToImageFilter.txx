@@ -221,9 +221,14 @@ namespace otb
 //     lyr.add_style("roads");
     m_Map.addLayer(lyr);
 
-
-    m_Map.zoomToBox(lyr.envelope());//FIXME: use the Origin/Spacing to calculate this
-    std::cout << "Envelope: " << lyr.envelope() << std::endl;
+    mapnik::Envelope<double> envelope(m_Origin[0],
+                                     m_Origin[1]+m_Spacing[1]*m_Size[1],
+                                     m_Origin[0]+m_Spacing[0]*m_Size[0],
+                                     m_Origin[1]);
+//     m_Map.zoomToBox(lyr.envelope());//FIXME: use the Origin/Spacing to calculate this
+    m_Map.zoomToBox(envelope);
+//     std::cout << "Envelope: " << lyr.envelope() << std::endl;
+    std::cout << "Envelope: " << envelope << std::endl;
 
     mapnik::Image32 buf(m_Map.getWidth(),m_Map.getHeight());
     mapnik::agg_renderer<mapnik::Image32> ren(m_Map,buf);
