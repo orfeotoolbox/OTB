@@ -27,6 +27,6 @@
 int otbImageIOFactoryNew(int argc, char* argv [])
 {
   otb::ImageIOFactory * lImageIOFactory;
-
+  lImageIOFactory = NULL;
   return EXIT_SUCCESS;
 }
