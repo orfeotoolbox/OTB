@@ -56,6 +56,25 @@ VectorDataKeywordlist
   m_FieldList.push_back(CopyOgrField(newField));
 };
 
+
+void
+    VectorDataKeywordlist
+  ::AddField(std::string key,std::string value)
+{
+  FieldType newField;
+
+  OGRFieldDefn* fieldDefn =  new OGRFieldDefn(key.c_str(), OFTString);
+
+  OGRField field;
+  char * cstr = new char[value.length() + 1];
+  strcpy(cstr, value.c_str());
+  field.String = cstr;
+
+  newField.first=fieldDefn;
+  newField.second=field;
+  m_FieldList.push_back(newField);
+}
+
 std::string
 VectorDataKeywordlist
   ::GetFieldAsString(std::string key) const

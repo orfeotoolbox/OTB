@@ -163,7 +163,7 @@ KMLVectorDataIO<TData>::WalkContainer(const ContainerPtr& container, DataNodePoi
       document->SetNodeId(feature->get_id());
       if (feature->has_name())
       {
-        document->SetField("name",feature->get_name());
+        document->SetFieldAsString("name",feature->get_name());
       }
       m_Tree->Add(document,father);
       WalkFeature(feature,document);
@@ -176,7 +176,7 @@ KMLVectorDataIO<TData>::WalkContainer(const ContainerPtr& container, DataNodePoi
       folder->SetNodeId(feature->get_id());
       if (feature->has_name())
       {
-        folder->SetField("name",feature->get_name());
+        folder->SetFieldAsString("name",feature->get_name());
       }
       m_Tree->Add(folder,father);
       WalkFeature(feature,folder);
@@ -635,7 +635,7 @@ template<class TData>
         DocumentPtr document = factory->CreateDocument();
         if (dataNode->HasField("name"))
         {
-          std::string fieldname = dataNode->GetField("name");
+          std::string fieldname = dataNode->GetFieldAsString("name");
           document->set_name(fieldname);
         }
         kml->set_feature(document);
@@ -646,7 +646,7 @@ template<class TData>
       case FOLDER:
       {
         FolderPtr folder = factory->CreateFolder();
-        std::string fieldname = dataNode->GetField("name");
+        std::string fieldname = dataNode->GetFieldAsString("name");
         folder->set_name(fieldname);
         currentDocument->add_feature(folder);
         currentFolder = folder;

@@ -156,13 +156,13 @@ SHPVectorDataIO<TData>
     document->SetNodeId(dfn->GetName());
 
     /** Retrieving the fields types */
-    OGRFieldDefn * field;
-    for (int fieldIndex = 0; fieldIndex<dfn->GetFieldCount();++fieldIndex)
-    {
-      field  = dfn->GetFieldDefn(fieldIndex);
-      document->SetField(field->GetNameRef(),OGRFieldDefn::GetFieldTypeName(field->GetType()));
-      // std::cout<<"Document "<<document->GetNodeId()<<": Adding field "<<field->GetNameRef()<<" "<<OGRFieldDefn::GetFieldTypeName(field->GetType())<<std::endl;
-    }
+//     OGRFieldDefn * field;
+//     for (int fieldIndex = 0; fieldIndex<dfn->GetFieldCount();++fieldIndex)
+//     {
+//       field  = dfn->GetFieldDefn(fieldIndex);
+//       document->SetField(field->GetNameRef(),OGRFieldDefn::GetFieldTypeName(field->GetType()));
+//       // std::cout<<"Document "<<document->GetNodeId()<<": Adding field "<<field->GetNameRef()<<" "<<OGRFieldDefn::GetFieldTypeName(field->GetType())<<std::endl;
+//     }
 
     /** Adding the layer to the data tree */
     tree->Add(document,root);
@@ -189,12 +189,12 @@ SHPVectorDataIO<TData>
       folder->SetNodeId(feature->GetDefnRef()->GetName());
 
       // Reading fields
-      for (int fieldIndex = 0; fieldIndex<dfn->GetFieldCount();++fieldIndex)
-      {
-        OGRFieldDefn * field  = dfn->GetFieldDefn(fieldIndex);
-        folder->SetField(field->GetNameRef(),feature->GetFieldAsString(fieldIndex));
-        //  std::cout<<"Folder "<<folder->GetNodeId()<<": Adding field "<<field->GetNameRef()<<" "<<feature->GetFieldAsString(fieldIndex)<<std::endl;
-      }
+//       for (int fieldIndex = 0; fieldIndex<dfn->GetFieldCount();++fieldIndex)
+//       {
+//         OGRFieldDefn * field  = dfn->GetFieldDefn(fieldIndex);
+//         folder->SetField(field->GetNameRef(),feature->GetFieldAsString(fieldIndex));
+//         //  std::cout<<"Folder "<<folder->GetNodeId()<<": Adding field "<<field->GetNameRef()<<" "<<feature->GetFieldAsString(fieldIndex)<<std::endl;
+//       }
 
 
       // Add the folder to the document

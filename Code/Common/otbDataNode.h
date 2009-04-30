@@ -99,8 +99,8 @@ public:
   typedef typename PolygonListType::ConstPointer     PolygonListConstPointerType;
 
   /** Fields typedef */
-  typedef std::map<std::string,std::string>          FieldMapType;
-  typedef std::pair<std::string,std::string>         FieldType;
+//   typedef std::map<std::string,std::string>          FieldMapType;
+//   typedef std::pair<std::string,std::string>         FieldType;
 
   /** Accessors */
   itkGetMacro(NodeType,NodeType);
@@ -203,18 +203,18 @@ public:
    * \param key The name of the field.
    * \param value The value of the field.
    */
-  void SetField(std::string key, std::string value);
+  void SetFieldAsString(std::string key, std::string value);
   /**
    * Returns the value associated with a field name.
    * \param key The name of the field.
-   * \return The value of the field. A default value is retuned if the key was not found.
+   * \return The value of the field. A default value is returned if the key was not found.
    */
-  std::string GetField(std::string key) const;
+   std::string GetFieldAsString(std::string key) const;
   /**
    * Remove the field associated with the given key, if possible.
    * \param key The name of the field.
    */
-  void RemoveField(std::string key);
+//   void RemoveField(std::string key);
   /**
    * \return True if the node contains the field named after the given key.
    * \param key The name of the field.
@@ -224,15 +224,15 @@ public:
    * \return the nth field of the node as a std::pair of (key,value).
    * \param index the index of the field to return.
    */
-  FieldType GetNthField(unsigned int index) const;
+//   FieldType GetNthField(unsigned int index) const;
   /**
    * \return the number of fields in the node.
    */
-  unsigned int GetNumberOfFields() const;
+//   unsigned int GetNumberOfFields() const;
   /**
    * Clear all fields.
    */
-  void ClearFields();
+//   void ClearFields();
 
 protected:
   /** Constructor */
@@ -266,7 +266,7 @@ private:
   DataType             m_Data;
 
   /** The fields map */
-  FieldMapType         m_FieldMap;
+//   FieldMapType         m_FieldMap;
 
 };
 } // end namespace
