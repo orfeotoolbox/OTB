@@ -53,6 +53,7 @@ class VectorDataKeywordlist
 
 
     void AddField(OGRFieldDefn* fieldDefn, OGRField* field);
+    void AddField(std::string key,std::string value);
 
   /**
     * Returns the value associated with a field name.
