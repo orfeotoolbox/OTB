@@ -406,6 +406,7 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
     OutputDataNodePointerType newDataNode   = OutputDataNodeType::New();
     newDataNode->SetNodeType(dataNode->GetNodeType());
     newDataNode->SetNodeId(dataNode->GetNodeId());
+    newDataNode->SetMetaDataDictionary(dataNode->GetMetaDataDictionary());
 
     switch(dataNode->GetNodeType())
     {
