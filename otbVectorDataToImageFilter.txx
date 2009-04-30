@@ -85,7 +85,6 @@ namespace otb
           VectorDataToImageFilter<TVectorData, TImage>
   ::SetSpacing(const SpacingType & spacing )
   {
-    itkDebugMacro("setting Spacing to " << spacing);
     if ( this->m_Spacing != spacing )
     {
       this->m_Spacing = spacing;
@@ -199,7 +198,8 @@ namespace otb
 
     mapnik::Layer lyr("world");
     lyr.set_datasource(mDatasource);
-    lyr.add_style("roads");
+    lyr.add_style("river");
+//     lyr.add_style("roads");
     m_Map.addLayer(lyr);
 
 
@@ -282,17 +282,29 @@ namespace otb
     {
       mapnik::feature_type_style style;
       mapnik::rule_type rule;
-      rule.set_max_scale(1000000);
+      rule.set_max_scale(100000000);
+//       rule.set_max_scale(1000000);
 //     rule.set_min_scale(500000);
-      rule.append(mapnik::line_symbolizer(mapnik::color("#809bc0"),8.0));
-//     TextSymbolizer name="name" face_name="DejaVu Sans Book" size="9" fill="#000" halo_radius="1"  placement="line"
-//     text_symbolizer (std::string const &name, std::string const &face_name, unsigned size, color const &fill)
-//     text_symbolizer (std::string const &name, unsigned size, color const &fill)
+//       rule.append(mapnik::line_symbolizer(mapnik::color("#809bc0"),8.0));
+      rule.append(mapnik::line_symbolizer(mapnik::color("#80c09b"),8.0));
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 9, mapnik::color("#000"));
       textSymb.set_label_placement(mapnik::LINE_PLACEMENT);
       rule.append(textSymb);
       style.add_rule(rule);
       m_Map.insert_style("roads",style);
+    }
+    {
+      mapnik::feature_type_style style;
+      mapnik::rule_type rule;
+      rule.set_max_scale(100000000);
+//       rule.set_max_scale(1000000);
+//     rule.set_min_scale(500000);
+      rule.append(mapnik::line_symbolizer(mapnik::color("#b5d0d0"),10));
+      mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 10, mapnik::color("#6699cc"));
+      textSymb.set_label_placement(mapnik::LINE_PLACEMENT);
+      rule.append(textSymb);
+      style.add_rule(rule);
+      m_Map.insert_style("river",style);
     }
   }
 
@@ -351,7 +363,7 @@ namespace otb
           VertexIterator itVertex = dataNode->GetLine()->GetVertexList()->Begin();
           while (itVertex != dataNode->GetLine()->GetVertexList()->End())
           {
-            std::cout << itVertex.Value()[0] << ", " << itVertex.Value()[1] << std::endl;
+//             std::cout << itVertex.Value()[0] << ", " << itVertex.Value()[1] << std::endl;
             line->line_to(itVertex.Value()[0],itVertex.Value()[1]);
             ++itVertex;
           }
@@ -370,17 +382,19 @@ namespace otb
 
           feature_ptr mfeature = feature_ptr(new Feature(1));
 //         feature_ptr mfeature = feature_ptr(new Feature(myMap));
-          mfeature->add_geometry(line);
+           mfeature->add_geometry(line);
 //         mfeature->properties().insert(make_pair(std::string("name"),
 //                                         std::string("test")));
 
 //         boost::put(*mfeature, "name", mapnik::value("test"));
           mapnik::transcoder tr("ISO-8859");
-          boost::put(*mfeature, "name", tr.transcode("test"));
-          boost::put(*mfeature, "name2", 10);
+//           std::cout << dataNode->GetNodeTypeAsString() << std::endl;
+//           std::cout << "Name: " << dataNode->GetFieldAsString("name") << std::endl;
+          boost::put(*mfeature, "name", tr.transcode((dataNode->GetFieldAsString("name")).c_str()));
+//           boost::put(*mfeature, "name2", 10);
           std::cout << mfeature->props().size() << std::endl;
           std::cout << " -> " << (*mfeature)["name"] << std::endl;
-          std::cout << " -> " << (*mfeature)["name2"] << std::endl;
+//           std::cout << " -> " << (*mfeature)["name2"] << std::endl;
 
           mDatasource->push(mfeature);
 

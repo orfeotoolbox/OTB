@@ -35,8 +35,8 @@ int main(int argc, char * argv[])
   VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();
   vectorDataRendering->SetInput(projection->GetOutput());
   ImageType::SizeType size;
-  size[0]=100;
-  size[1]=100;
+  size[0]=1000;
+  size[1]=1000;
   vectorDataRendering->SetSize(size);
 
 
