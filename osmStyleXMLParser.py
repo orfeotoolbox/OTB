@@ -27,7 +27,7 @@ def start_element(name, attrs):
       fout.write("rule.set_min_scale(")
       writeNextCharData=1
     if (name == 'LineSymbolizer'):
-      fout.write("{\ngeom = mapnik::line_symbolizer();\n")
+      fout.write("{\nmapnik::line_symbolizer geom = mapnik::line_symbolizer();\n")
     if (name == 'CssParameter'):
       global isStroke
       global isStrokeWidth
