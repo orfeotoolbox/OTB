@@ -2,7 +2,7 @@ import xml.parsers.expat
 
 fout= open("osm-style-in-c.c", 'w')
 writeNextCharData = 0
-currentStyleName = ""#continue here...
+currentStyleName = ""
 isStroke=0
 isStrokeWidth=0
 isStrokeOpacity=0
@@ -14,10 +14,12 @@ strokeColor=""
 def start_element(name, attrs):
     print 'Start element:', name, attrs
     global writeNextCharData
+    global currentStyleName
+    if (name == 'Style'):
+      currentStyleName = attrs['name']
+      fout.write("{\nmapnik::feature_type_style style;\n")
     if (name == 'Rule'):
-      fout.write("{\n")
-      fout.write("mapnik::feature_type_style style;\n")
-      fout.write("mapnik::rule_type rule;\n")
+      fout.write("{\nmapnik::rule_type rule;\n")
     if (name == 'MaxScaleDenominator'):
       fout.write("rule.set_max_scale(")
       writeNextCharData=1
@@ -33,15 +35,24 @@ def start_element(name, attrs):
       if (attrs['name'] == 'stroke'):
         isStroke=1
       if (attrs['name'] == 'stroke-width'):
-        isStroke=1
+        isStrokeWidth=1
       if (attrs['name'] == 'stroke-opacity'):
-        isStroke=1
-
+        isStrokeOpacity=1
+    if (name == 'TextSymbolizer'):
+      fout.write("mapnik::text_symbolizer textSymb(\""+attrs['name']+"\", \""+attrs['face_name']+"\", "+attrs['size']+", mapnik::color(\""+attrs['fill']+"\"));\n")
+      #continue here
 def end_element(name):
     print 'End element:', name
     global writeNextCharData
+    global strokeColor
+    global strokeWidth
+    global strokeOpacity
+    global currentStyleName
+    if (name == 'Style'):
+      fout.write("mapnikMap.insert_style(\""+currentStyleName+"\",style);\n}\n")
+      currentStyleName = ""
     if (name == 'Rule'):
-      fout.write("}\n")
+      fout.write("style.add_rule(rule);\n}\n")
     if (name == 'MaxScaleDenominator'):
       fout.write("LLU);\n");
       writeNextCharData=0
@@ -49,7 +60,8 @@ def end_element(name):
       fout.write("LLU);\n");
       writeNextCharData=0
     if (name == 'LineSymbolizer'):
-      fout.write("mapnik::stroke stroke = mapnik::stroke();\n")
+      fout.write("mapnik::stroke stroke = mapnik::stroke(mapnik::color(\""+strokeColor+"\"), "+strokeWidth+");\n")
+      fout.write("stroke.set_opacity ("+strokeOpacity+");\n")
       fout.write("geom.set_stroke(stroke);\n")
       fout.write("rule.append(geom);\n}\n")
       strokeWidth, strokeOpacity,strokeColor ="","",""
@@ -64,7 +76,11 @@ def end_element(name):
       if (isStrokeOpacity):
         isStrokeOpacity=0
 
+
 def char_data(data):
+    global strokeColor
+    global strokeWidth
+    global strokeOpacity
     print 'Character data:', repr(data)
     if(writeNextCharData):
       fout.write(data)
