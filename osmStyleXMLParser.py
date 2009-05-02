@@ -60,11 +60,15 @@ def end_element(name):
       fout.write("LLU);\n");
       writeNextCharData=0
     if (name == 'LineSymbolizer'):
-      fout.write("mapnik::stroke stroke = mapnik::stroke(mapnik::color(\""+strokeColor+"\"), "+strokeWidth+");\n")
-      fout.write("stroke.set_opacity ("+strokeOpacity+");\n")
+      if (strokeWidth != ""):
+        fout.write("mapnik::stroke stroke = mapnik::stroke(mapnik::color(\""+strokeColor+"\"), "+strokeWidth+");\n")
+      else:
+        fout.write("mapnik::stroke stroke = mapnik::stroke(mapnik::color(\""+strokeColor+"\"));\n")
+      if (strokeOpacity != ""):
+        fout.write("stroke.set_opacity ("+strokeOpacity+");\n")
       fout.write("geom.set_stroke(stroke);\n")
       fout.write("rule.append(geom);\n}\n")
-      strokeWidth, strokeOpacity,strokeColor ="","",""
+      strokeWidth, strokeOpacity, strokeColor = "", "", ""
     if (name == 'CssParameter'):
       global isStroke
       global isStrokeWidth
