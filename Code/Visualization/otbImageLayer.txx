@@ -34,16 +34,16 @@ ImageLayer<TImage,TOutputImage>
 {
  // Rendering filters
   m_QuicklookRenderingFilter = RenderingFilterType::New();
-  m_ExtractRenderingFilter = RenderingFilterType::New(); 
+  m_ExtractRenderingFilter = RenderingFilterType::New();
   m_ScaledExtractRenderingFilter = RenderingFilterType::New();
- 
+
   // Default rendering function
   m_RenderingFunction = DefaultRenderingFunctionType::New();
   m_QuicklookRenderingFilter->SetRenderingFunction(m_RenderingFunction);
   m_ExtractRenderingFilter->SetRenderingFunction(m_RenderingFunction);
   m_ScaledExtractRenderingFilter->SetRenderingFunction(m_RenderingFunction);
-  
-  // Extract filters 
+
+  // Extract filters
   m_ExtractFilter = ExtractFilterType::New();
   m_ScaledExtractFilter = ExtractFilterType::New();
 
@@ -73,7 +73,7 @@ ImageLayer<TImage,TOutputImage>
 {
   // Render the histogram
   this->RenderHistogram();
-  
+
   // If required, use histogram for auto min/max
   if(m_AutoMinMax)
     {
@@ -163,16 +163,16 @@ ImageLayer<TImage,TOutputImage>
 
     // Update the histogram source
     histogramSource->Update();
-    
+
     // Iterate on the image
     itk::ImageRegionConstIterator<ImageType> it(histogramSource,histogramSource->GetBufferedRegion());
-    
+
     // declare a list to store the samples
     typename ListSampleType::Pointer listSample = ListSampleType::New();
-    
+
     // Set the measurement vector size
     listSample->SetMeasurementVectorSize(histogramSource->GetNumberOfComponentsPerPixel());
-    
+
     // Fill the samples list
     it.GoToBegin();
     while(!it.IsAtEnd())
@@ -185,18 +185,18 @@ ImageLayer<TImage,TOutputImage>
       ++it;
       }
     otbMsgDevMacro(<<"ImageLayer::RenderHistogram()"<<" ("<<this->GetName()<<")"<< " Sample list generated ("<<listSample->Size()<<" samples, "<<histogramSource->GetNumberOfComponentsPerPixel()<<" bands)");
-    
-    
-    // Create the histogram generation filter 
+
+
+    // Create the histogram generation filter
     typename HistogramFilterType::Pointer histogramFilter = HistogramFilterType::New();
     histogramFilter->SetListSample(listSample);
-    
+
     histogramFilter->SetNumberOfBins(m_NumberOfHistogramBins);
-        
+
     // Generate
     histogramFilter->Update();
     otbMsgDevMacro(<<"ImageLayer::RenderHistogram()"<<" ("<<this->GetName()<<")"<< " Histogram has been updated");
-    
+
     // Retrieve the histogram
     m_HistogramList = histogramFilter->GetOutput();
     }
@@ -214,14 +214,14 @@ ImageLayer<TImage,TOutputImage>
       {
       itkExceptionMacro(<<"Empty histogram, can not use auto min/max evaluation.");
       }
-    
+
     otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup():"<<" ("<<this->GetName()<<")"<< " Updating min/max from histogram");
-    
+
     const unsigned int nbComps = m_Image->GetNumberOfComponentsPerPixel();
     typename RenderingFunctionType::ExtremaVectorType min, max;
     otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup(): "<<" ("<<this->GetName()<<") "<<nbComps<<" components, quantile= "<<100*m_AutoMinMaxQuantile<<" %");
     // For each components, use the histogram to compute min and max
-    typedef RenderingFunctionType::ScalarPixelType  RenderingFunctionScalarPixelType;
+    typedef typename RenderingFunctionType::ScalarPixelType  RenderingFunctionScalarPixelType;
     for(unsigned int comp = 0; comp < nbComps;++comp)
       {
       // Compute quantiles
@@ -229,11 +229,11 @@ ImageLayer<TImage,TOutputImage>
       max.push_back(static_cast<RenderingFunctionScalarPixelType>(m_HistogramList->GetNthElement(comp)->Quantile(0,1-m_AutoMinMaxQuantile)));
       otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup():"<<" ("<<this->GetName()<<")"<< " component "<<comp<<", min= "<<min.back()<<", max= "<<max.back());
       }
-    
+
     // Setup rendering function
     m_RenderingFunction->SetMinimum(min);
     m_RenderingFunction->SetMaximum(max);
-    
+
     m_QuicklookRenderingFilter->Modified();
     m_ExtractRenderingFilter->Modified();
     m_ScaledExtractRenderingFilter->Modified();
