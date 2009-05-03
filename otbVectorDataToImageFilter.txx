@@ -217,8 +217,8 @@ namespace otb
 
     mapnik::Layer lyr("world");
     lyr.set_datasource(mDatasource);
-    lyr.add_style("river");
-//     lyr.add_style("roads");
+//     lyr.add_style("river");
+    lyr.add_style("roads");
     m_Map.addLayer(lyr);
 
     mapnik::Envelope<double> envelope(m_Origin[0],
@@ -351,6 +351,8 @@ namespace otb
           std::cout << mfeature->props().size() << std::endl;
           std::cout << " -> " << (*mfeature)["name"] << std::endl;
 //           std::cout << " -> " << (*mfeature)["name2"] << std::endl;
+
+          std::cout << "Type: " << dataNode->GetFieldAsString("type") << std::endl;
 
           mDatasource->push(mfeature);
 
