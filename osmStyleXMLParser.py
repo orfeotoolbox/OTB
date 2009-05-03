@@ -20,6 +20,9 @@ def start_element(name, attrs):
       fout.write("{\nmapnik::feature_type_style style;\n")
     if (name == 'Rule'):
       fout.write("{\nmapnik::rule_type rule;\n")
+    if (name == 'Filter'):
+      fout.write("mapnik::filter_ptr filt = mapnik::create_filter(\"")
+      writeNextCharData=1
     if (name == 'MaxScaleDenominator'):
       fout.write("rule.set_max_scale(")
       writeNextCharData=1
@@ -53,6 +56,10 @@ def end_element(name):
       currentStyleName = ""
     if (name == 'Rule'):
       fout.write("style.add_rule(rule);\n}\n")
+    if (name == 'Filter'):
+      fout.write("\");\n")
+      fout.write("rule.set_filter(filt);\n")
+      writeNextCharData=0
     if (name == 'MaxScaleDenominator'):
       fout.write("LLU);\n");
       writeNextCharData=0
