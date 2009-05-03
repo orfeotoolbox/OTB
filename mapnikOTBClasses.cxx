@@ -40,12 +40,12 @@ int main(int argc, char * argv[])
   size[1] = 1000;
   vectorDataRendering->SetSize(size);
   ImageType::PointType origin;
-  origin[0] = 1.;//UL lon
-  origin[1] = 44;//UL lat
+  origin[0] = 1.5;//UL lon
+  origin[1] = 43.5;//UL lat
   vectorDataRendering->SetOrigin(origin);
   ImageType::SpacingType spacing;
-  spacing[0] = 0.001;
-  spacing[1] = -0.001;
+  spacing[0] = 0.0001;
+  spacing[1] = -0.0001;
   vectorDataRendering->SetSpacing(spacing);
 
 
