@@ -353,6 +353,7 @@ namespace otb
 //           std::cout << " -> " << (*mfeature)["name2"] << std::endl;
 
           std::cout << "Type: " << dataNode->GetFieldAsString("type") << std::endl;
+          boost::put(*mfeature, "highway", tr.transcode((dataNode->GetFieldAsString("type")).c_str()));
 
           mDatasource->push(mfeature);
 
