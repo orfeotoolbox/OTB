@@ -219,6 +219,9 @@ namespace otb
     lyr.set_datasource(mDatasource);
 //     lyr.add_style("river");
     lyr.add_style("roads");
+    lyr.add_style("minor-roads-casing");
+    lyr.add_style("minor-roads");
+    lyr.add_style("roads-text");
     m_Map.addLayer(lyr);
 
     mapnik::Envelope<double> envelope(m_Origin[0],
