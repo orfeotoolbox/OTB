@@ -44,8 +44,8 @@ int main(int argc, char * argv[])
   origin[1] = 44.;//UL lat
   vectorDataRendering->SetOrigin(origin);
   ImageType::SpacingType spacing;
-  spacing[0] = 0.001;
-  spacing[1] = -0.001;
+  spacing[0] = 0.0005;
+  spacing[1] = -0.0005;
   vectorDataRendering->SetSpacing(spacing);
 
 

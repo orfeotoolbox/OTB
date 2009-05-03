@@ -230,6 +230,7 @@ namespace otb
 //     std::cout << "Envelope: " << lyr.envelope() << std::endl;
     std::cout << "Envelope: " << envelope << std::endl;
 
+    std::cout << "Map scale: " << m_Map.scale_denominator() << std::endl;
     mapnik::Image32 buf(m_Map.getWidth(),m_Map.getHeight());
     mapnik::agg_renderer<mapnik::Image32> ren(m_Map,buf);
     ren.apply();
