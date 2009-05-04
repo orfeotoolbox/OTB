@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,23 +31,23 @@ namespace otb {
 /**
  * \class WaveletOperator
  *
- * \brief A NeighborhoodOperator wavelet base class
+ * \brief <b>EXPERIMENTAL FEATURE</b> A NeighborhoodOperator wavelet base class
  *
  * This class is the mother class for any wavelet operator that requires
- * "a-trou" approach for shift-invariant wavelet transform. This class has 
+ * "a-trou" approach for shift-invariant wavelet transform. This class has
  * to be derived, it cannot be used directly.
  *
  * Any wavelet operator that inherits from WaveletOperator is to be used
- * as a NeighborhoodOperator that should be applied to a 
+ * as a NeighborhoodOperator that should be applied to a
  * NeighborhoodIterator using the NeighborhoodInnerProduct method.
  *
  * It is assumed that any wavelet is directional.
  *
- * Set the level of up-sampling though SetUpSampleFactor() before calling 
- * CreateDirectional(). Each class that inherits from WaveletOperator has 
+ * Set the level of up-sampling though SetUpSampleFactor() before calling
+ * CreateDirectional(). Each class that inherits from WaveletOperator has
  * to re-implement GenerateCoefficients(). It has to end by:
  * return this->UpSamplingCoefficients( coeff ) to perform the up-sampling
- *  
+ *
  * \sa LowPassHaarOperator
  * \sa HighPassHaarOperator
  * \sa NeighborhoodOperator
@@ -73,7 +73,7 @@ public:
   { }
 
   /** Construction by copy */
-  WaveletOperator( const Self & other ) 
+  WaveletOperator( const Self & other )
     : itk::NeighborhoodOperator<TPixel, VDimension, TAllocator> (other)
   {
     m_UpSampleFactor = other.GetUpSampleFactor();
@@ -92,8 +92,8 @@ public:
   /**
    * Prints some debugging information
    */
-  virtual void PrintSelf(std::ostream &os, itk::Indent i) const  
-  { 
+  virtual void PrintSelf(std::ostream &os, itk::Indent i) const
+  {
     Superclass::PrintSelf(os, i.GetNextIndent());
     os << i << "Up-Sampling factor " << this->m_UpSampleFactor << "\n";
     os << i << "Wavelet kind : " << GetWavelet() << std::endl;
@@ -102,7 +102,7 @@ public:
   /**
    * Set/Get the level of up sampling of the filter
    */
-  unsigned int GetUpSampleFactor () const 
+  unsigned int GetUpSampleFactor () const
   {
     return this->m_UpSampleFactor;
   }
@@ -132,11 +132,11 @@ protected:
   typedef typename Superclass::CoefficientVector CoefficientVector;
   typedef typename Superclass::PixelType PixelType;
 
-  /** 
+  /**
    * Perform the "a-trou" algorithm for shift-invariant transformation.
    * It transforms the filter \f$ H(z) \f$ into \f$ H(z^2) \f$.
    */
-  CoefficientVector UpSamplingCoefficients ( CoefficientVector & coeff ) 
+  CoefficientVector UpSamplingCoefficients ( CoefficientVector & coeff )
   {
     if ( m_UpSampleFactor == 0 )
       return coeff;
@@ -160,12 +160,12 @@ protected:
     return coeff;
   }
 
-  /** 
+  /**
    * Performs the definition of synthesis filter from analysis one.
    * Input is the forward low pass filter coefficients.
    * It performs \f$ {\tilde G}(z) = -H(-z) \f$.
    */
-  CoefficientVector GetInverseHighPassFilterFromForwardLowPassFilter ( CoefficientVector & coeff ) 
+  CoefficientVector GetInverseHighPassFilterFromForwardLowPassFilter ( CoefficientVector & coeff )
   {
     unsigned long radius = static_cast<unsigned long>( coeff.size() );
     this->SetRadius( radius );
@@ -185,12 +185,12 @@ protected:
     return  coeff;
   }
 
-  /** 
+  /**
    * Performs the definition of synthesis filter from analysis one.
    * Input is the forward high pass filter coefficients.
    * It performs \f$ {\tilde H}(z) = G(-z) \f$.
    */
-  CoefficientVector GetInverseLowPassFilterFromForwardHighPassFilter ( CoefficientVector & coeff ) 
+  CoefficientVector GetInverseLowPassFilterFromForwardHighPassFilter ( CoefficientVector & coeff )
   {
     unsigned long radius = static_cast<unsigned long>( coeff.size() );
     this->SetRadius( radius );
@@ -210,14 +210,14 @@ protected:
     return  coeff;
   }
 
-  /** 
+  /**
    * Performs the definition of high pass filter from the low pass one
    * in a Quadrature mirror filter bank framework. It is then valid to
    * define high pass filters from orthogonal wavelets...
    * Input is the forward low pass filter coefficients.
    * It performs \f$ G(z) = H(-z) \f$.
    */
-  CoefficientVector GetHighPassFilterFromLowPassFilter ( CoefficientVector & coeff ) 
+  CoefficientVector GetHighPassFilterFromLowPassFilter ( CoefficientVector & coeff )
   {
     unsigned long radius = static_cast<unsigned long>( coeff.size() );
     this->SetRadius( radius );

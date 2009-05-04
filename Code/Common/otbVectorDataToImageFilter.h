@@ -27,9 +27,12 @@
 namespace otb
 {
 /** \class VectorDataToImageFilter
-   *   \brief Render a vector data into an image
+   *   \brief <b>EXPERIMENTAL FEATURE</b> Render a vector data into an image
    *
- */
+   * To use this class, you need to compile the library with the option OTB_USE_MAPNIK
+   * to ON. You also need to install mapnik on your machine (http://www.mapnik.org)
+   *
+   */
 
 
 template <class TVectorData, class TImage>

@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,15 +30,15 @@ namespace otb {
 /**
  * \class LowPassSplineBiOrthogonalOperator
  *
- * \brief A NeighborhoodOperator for performing a Spline Bi-Orthogonal-based filtering
+ * \brief <b>EXPERIMENTAL FEATURE</b> A NeighborhoodOperator for performing a Spline Bi-Orthogonal-based filtering
  * at a pixel location.
  *
- * It may be configure with many filter orders. AT present time, so-called "9/7" filter is 
+ * It may be configure with many filter orders. AT present time, so-called "9/7" filter is
  * implemented. It may be fixed with SetWavelet method
- * 
- * The LowPassSplineBiOrthogonalOperator is a NeighborhoodOperator that should be applied a 
- * NeighborhoodIterator using the NeighborhoodInnerProduct method. 
- * The 9/7 Operator is defiend in 1D as 
+ *
+ * The LowPassSplineBiOrthogonalOperator is a NeighborhoodOperator that should be applied a
+ * NeighborhoodIterator using the NeighborhoodInnerProduct method.
+ * The 9/7 Operator is defiend in 1D as
  * \f$ H(z) = 0.026748757411 z^{-4} -0.016864118443 z^{-3} -0.078223266529 z^{-2}
  *           + 0.266864118443 z^{-1} + 0.602949018236 + 0.266864118443 z
  *           -0.078223266529 z^2 -0.016864118443 z^3 + 0.026748757411 z^4 \f$.
@@ -50,7 +50,7 @@ namespace otb {
  * \sa Neighborhood
  * \sa ForwardDifferenceOperator
  * \sa BackwardDifferenceOperator
- * 
+ *
  * \ingroup Operators
  */
 template < InverseOrForwardTransformationEnum TDirectionOfTransformation,
@@ -80,7 +80,7 @@ public:
   /**
    * Prints some debugging information
    */
-  virtual void PrintSelf(std::ostream &os, itk::Indent i) const; 
+  virtual void PrintSelf(std::ostream &os, itk::Indent i) const;
 
 protected:
   /**
@@ -104,10 +104,10 @@ protected:
  *
  * \brief A NeighborhoodOperator for performing a Spline Bi-Orthogonal-based filtering
  * at a pixel location.
- * 
- * HighPassSplineBiOrthogonalOperator is a NeighborhoodOperator that should be applied a 
- * NeighborhoodIterator using the NeighborhoodInnerProduct method. 
- * The 9/7 Operator is defiend in 1D as 
+ *
+ * HighPassSplineBiOrthogonalOperator is a NeighborhoodOperator that should be applied a
+ * NeighborhoodIterator using the NeighborhoodInnerProduct method.
+ * The 9/7 Operator is defiend in 1D as
  * \f$ H(z) = 0.045635881557 z^{-3} -0.028771763114 z^{-2} -0.295635881557 z^{-1}
  *            + 0.557543526229  - 0.295635881557 z -0.028771763114 z^2 + 0.045635881557 z^3 \f$.
  *
@@ -118,7 +118,7 @@ protected:
  * \sa Neighborhood
  * \sa ForwardDifferenceOperator
  * \sa BackwardDifferenceOperator
- * 
+ *
  * \ingroup Operators
  */
 template < InverseOrForwardTransformationEnum TDirectionOfTransformation,
@@ -133,7 +133,7 @@ public:
   typedef WaveletOperator<TPixel, VDimension, TAllocator>  Superclass;
 
   itkTypeMacro(HighPassSplineBiOrthogonalOperator, WaveletOperator);
-  
+
   typedef InverseOrForwardTransformationEnum DirectionOfTransformationEnumType;
   itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,TDirectionOfTransformation);
 

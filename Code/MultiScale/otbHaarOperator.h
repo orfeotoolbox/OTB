@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,11 +27,11 @@ namespace otb {
 /**
  * \class LowPassHaarOperator
  *
- * \brief A NeighborhoodOperator for performing a Haar based filtering
+ * \brief <b>EXPERIMENTAL FEATURE</b> A NeighborhoodOperator for performing a Haar based filtering
  * at a pixel location.
- * 
- * LowPassHaarOperator is a NeighborhoodOperator that should be applied to a 
- * NeighborhoodIterator using the NeighborhoodInnerProduct method. 
+ *
+ * LowPassHaarOperator is a NeighborhoodOperator that should be applied to a
+ * NeighborhoodIterator using the NeighborhoodInnerProduct method.
  * The Haar Operator is defiend in 1D as \f$ H(z) = ( 1 + z^{-1} ) / 2 \f$.
  * In N dimensions, the operator is directional
  *
@@ -40,7 +40,7 @@ namespace otb {
  * \sa Neighborhood
  * \sa ForwardDifferenceOperator
  * \sa BackwardDifferenceOperator
- * 
+ *
  * \ingroup Operators
  */
 template < InverseOrForwardTransformationEnum TDirectionOfTransformation,
@@ -55,11 +55,11 @@ public:
   typedef WaveletOperator<TPixel, VDimension, TAllocator>  Superclass;
 
   itkTypeMacro(LowPassHaarOperator, WaveletOperator);
-  
+
   typedef InverseOrForwardTransformationEnum DirectionOfTransformationEnumType;
   itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,TDirectionOfTransformation);
 
-  LowPassHaarOperator() 
+  LowPassHaarOperator()
   {
     this->SetRadius(1);
     this->CreateToRadius(1);
@@ -67,7 +67,7 @@ public:
   }
 
   LowPassHaarOperator(const Self& other)
-    : WaveletOperator<TPixel, VDimension, TAllocator>(other) 
+    : WaveletOperator<TPixel, VDimension, TAllocator>(other)
   {
     this->SetWavelet( "Haar" );
   }
@@ -83,8 +83,8 @@ public:
   /**
    * Prints some debugging information
    */
-  virtual void PrintSelf(std::ostream &os, itk::Indent i) const  
-  { 
+  virtual void PrintSelf(std::ostream &os, itk::Indent i) const
+  {
     Superclass::PrintSelf(os, i.GetNextIndent());
     os << i << "LowPassHaarOperator {this=" << this << "}" << std::endl;
   }
@@ -104,11 +104,11 @@ protected:
   {
     CoefficientVector coeff;
     // stands for z^{-1}
-    coeff.push_back(0.5); 
+    coeff.push_back(0.5);
     // stands for z^0
     coeff.push_back(0.5);
     // stands for z^1
-    coeff.push_back(0.0);  
+    coeff.push_back(0.0);
 
 #if 0
   std::cerr << "Coeff H(" << this->GetWavelet();
@@ -126,8 +126,8 @@ protected:
 
   /** Arranges coefficients spatially in the memory buffer. */
   void Fill(const CoefficientVector& coeff)
-  {    
-    this->FillCenteredDirectional(coeff);  
+  {
+    this->FillCenteredDirectional(coeff);
   }
 };
 
@@ -136,9 +136,9 @@ protected:
  *
  * \brief A NeighborhoodOperator for performing a Haar based filtering
  * at a pixel location.
- * 
- * HighPassHaarOperator is a NeighborhoodOperator that should be applied a 
- * NeighborhoodIterator using the NeighborhoodInnerProduct method. 
+ *
+ * HighPassHaarOperator is a NeighborhoodOperator that should be applied a
+ * NeighborhoodIterator using the NeighborhoodInnerProduct method.
  * The Haar Operator is defiend in 1D as \f$ G(z) = ( 1 - z^{-1} ) / 2 \f$.
  * In N dimensions, the operator is directional
  *
@@ -147,7 +147,7 @@ protected:
  * \sa Neighborhood
  * \sa ForwardDifferenceOperator
  * \sa BackwardDifferenceOperator
- * 
+ *
  * \ingroup Operators
  */
 template< InverseOrForwardTransformationEnum TDirectionOfTransformation,
@@ -162,11 +162,11 @@ public:
   typedef WaveletOperator<TPixel, VDimension, TAllocator>  Superclass;
 
   itkTypeMacro(HighPassHaarOperator, WaveletOperator);
-  
+
   typedef InverseOrForwardTransformationEnum DirectionOfTransformationEnumType;
   itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,TDirectionOfTransformation);
 
-  HighPassHaarOperator() 
+  HighPassHaarOperator()
   {
     this->SetRadius(1);
     this->CreateToRadius(1);
@@ -174,7 +174,7 @@ public:
   }
 
   HighPassHaarOperator(const Self& other)
-    : WaveletOperator<TPixel, VDimension, TAllocator>(other) 
+    : WaveletOperator<TPixel, VDimension, TAllocator>(other)
   {
     this->SetWavelet( "Haar" );
   }
@@ -190,8 +190,8 @@ public:
   /**
    * Prints some debugging information
    */
-  virtual void PrintSelf(std::ostream &os, itk::Indent i) const  
-  { 
+  virtual void PrintSelf(std::ostream &os, itk::Indent i) const
+  {
     Superclass::PrintSelf(os, i.GetNextIndent());
     os << i << "HighPassHaarOperator {this=" << this << "}" << std::endl;
   }
@@ -225,7 +225,7 @@ protected:
     for ( typename LowPassOperatorType::ConstIterator iter = lowPassOperator.Begin();
         iter != lowPassOperator.End(); ++iter )
       lowPassCoeff.push_back( *iter );
-        
+
     switch ( DirectionOfTransformation )
     {
       case FORWARD:
@@ -255,8 +255,8 @@ protected:
 
   /** Arranges coefficients spatially in the memory buffer. */
   void Fill(const CoefficientVector& coeff)
-  {    
-    this->FillCenteredDirectional(coeff);  
+  {
+    this->FillCenteredDirectional(coeff);
   }
 };
 
