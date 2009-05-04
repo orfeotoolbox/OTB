@@ -71,6 +71,23 @@ LineSegmentDetector<TInputImage,TPrecision >
 }
 
 
+template <class TInputImage, class TPrecision >
+void
+LineSegmentDetector<TInputImage,TPrecision >
+::BeforeGenerateData()
+{
+  if( this->GetInput()->GetRequestedRegion() != this->GetInput()->GetLargestPossibleRegion() )
+    {
+      itkExceptionMacro(<<"No stremed filer. ERROR : requested region is not the largest possible region.");
+    }
+  
+  /** Allocate memory for the temporary label Image*/
+  m_UsedPointImage->SetRegions(this->GetInput()->GetLargestPossibleRegion());
+  m_UsedPointImage->Allocate();
+  m_UsedPointImage->FillBuffer(0);
+}
+
+
 /**
  *
  */
@@ -80,13 +97,15 @@ void
 LineSegmentDetector<TInputImage,TPrecision >
 ::GenerateData()
 {
+  this->BeforeGenerateData();
+
   /** The Output*/
   m_LineList = this->GetOutput();
   
   /** Allocate memory for the temporary label Image*/
-  m_UsedPointImage->SetRegions(this->GetInput()->GetRequestedRegion());
-  m_UsedPointImage->Allocate();
-  m_UsedPointImage->FillBuffer(0);
+  //m_UsedPointImage->SetRegions(this->GetInput()->GetLargestPossbileRegion());
+  //m_UsedPointImage->Allocate();
+  //m_UsedPointImage->FillBuffer(0);
 
   /** Cast the MagnitudeOutput Image in */
   typedef itk::CastImageFilter<InputImageType, OutputImageType>      castFilerType;

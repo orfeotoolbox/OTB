@@ -30,6 +30,7 @@ SET(FEATUREEXTRACTION_TESTS11 ${CXX_TEST_PATH}/otbFeatureExtractionTests11)
 SET(FEATUREEXTRACTION_TESTS12 ${CXX_TEST_PATH}/otbFeatureExtractionTests12)
 SET(FEATUREEXTRACTION_TESTS13 ${CXX_TEST_PATH}/otbFeatureExtractionTests13)
 SET(FEATUREEXTRACTION_TESTS14 ${CXX_TEST_PATH}/otbFeatureExtractionTests14)
+SET(FEATUREEXTRACTION_TESTS15 ${CXX_TEST_PATH}/otbFeatureExtractionTests15)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests1 ~~~~~~~~~~~~~~~~~~~~~
@@ -1734,6 +1735,25 @@ ADD_TEST(feTvRegionImageToRectangularPathListFilter ${FEATUREEXTRACTION_TESTS14}
 	10)  #minimum size
 
 
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests15 ~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# -------            otb::ImageToLineSegmentVectorData   -------------
+ADD_TEST(feTuImageToLineSegmentVectorDataNew ${FEATUREEXTRACTION_TESTS15} 
+    otbImageToLineSegmentVectorDataNew)
+
+ADD_TEST(feTvImageToLineSegmentVectorData ${FEATUREEXTRACTION_TESTS15} 
+--compare-ogr ${EPS}
+     ${BASELINE}/feTvImageToLineSegmentVectorData.shp
+     ${TEMP}/feTvImageToLineSegmentVectorData.shp
+    otbImageToLineSegmentVectorData
+      ${INPUTDATA}/scene.png  #prison_toulouse.tif 
+      ${TEMP}/feTvImageToLineSegmentVectorData.shp
+)
+
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
 otbAlignImageToPath.cxx
@@ -1893,6 +1913,10 @@ otbRegionImageToRectangularPathListFilterNew.cxx
 otbRegionImageToRectangularPathListFilter.cxx
 )
 
+SET(BasicFeatureExtraction_SRCS15
+otbImageToLineSegmentVectorDataNew.cxx
+otbImageToLineSegmentVectorData.cxx
+)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
@@ -1924,6 +1948,8 @@ ADD_EXECUTABLE(otbFeatureExtractionTests13 otbFeatureExtractionTests13.cxx ${Bas
 TARGET_LINK_LIBRARIES(otbFeatureExtractionTests13  OTBFeatureExtraction OTBIO)
 ADD_EXECUTABLE(otbFeatureExtractionTests14 otbFeatureExtractionTests14.cxx ${BasicFeatureExtraction_SRCS14})
 TARGET_LINK_LIBRARIES(otbFeatureExtractionTests14  OTBFeatureExtraction OTBIO)
+ADD_EXECUTABLE(otbFeatureExtractionTests15 otbFeatureExtractionTests15.cxx ${BasicFeatureExtraction_SRCS15})
+TARGET_LINK_LIBRARIES(otbFeatureExtractionTests15  OTBFeatureExtraction OTBIO)
 
 
 # ADD_EXECUTABLE(roadDetect roadDetect.cxx)

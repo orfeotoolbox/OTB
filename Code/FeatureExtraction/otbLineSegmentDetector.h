@@ -28,7 +28,6 @@
 #include "itkGradientRecursiveGaussianImageFilter.h"
 #include "itkGradientImageFilter.h"
 
-#include "otbImageFileWriter.h"
 
 namespace otb
 {
@@ -164,9 +163,11 @@ protected:
   LineSegmentDetector();
   virtual ~LineSegmentDetector() {};
 
+  /** Before Generate Data method*/
+  virtual void BeforeGenerateData();
   /** Generate Data method*/
   virtual void GenerateData();
-  
+
   /** Sort the image and store the coordinates in a histogram
    *  this method is used to determine the seeds where to begin the search segments
    *  Points with large gradient modulus are more able to belong to a segment
