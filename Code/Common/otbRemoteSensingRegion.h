@@ -67,6 +67,7 @@ public:
 
   /** Index typedef support. An index is used to access pixel values. */
   typedef itk::ContinuousIndex<Type>           IndexType;
+  typedef itk::Point<Type, 2>                  PointType;
 
   /** Size typedef support. A size is used to define region bounds. */
   typedef itk::ContinuousIndex<Type>           SizeType;
@@ -132,7 +133,7 @@ public:
     ImageRegionType imageRegion;
     typename ImageRegionType::IndexType irIndex;
     typename ImageRegionType::SizeType  irSize;
-  
+
     irIndex[0]=static_cast<unsigned long>(vcl_floor(m_Index[0]));
     irIndex[1]=static_cast<unsigned long>(vcl_floor(m_Index[1]));
     irSize[0] =static_cast<unsigned long>(vcl_ceil(m_Size[0]));
@@ -140,7 +141,7 @@ public:
 
     imageRegion.SetIndex(irIndex);
     imageRegion.SetSize(irSize);
-    
+
     return imageRegion;
   }
 
@@ -148,6 +149,13 @@ public:
   void SetOrigin(const IndexType &index)
     {
     m_Index = index;
+    }
+
+  /** Set the index defining the corner of the region. */
+  void SetOrigin(const PointType &index)
+    {
+      m_Index[0] = index[0];
+      m_Index[1] = index[1];
     }
 
   /** Get index defining the corner of the region. */
