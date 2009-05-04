@@ -218,10 +218,11 @@ namespace otb
     mapnik::Layer lyr("world");
     lyr.set_datasource(mDatasource);
 //     lyr.add_style("river");
-    lyr.add_style("roads");
     lyr.add_style("minor-roads-casing");
     lyr.add_style("minor-roads");
+    lyr.add_style("roads");
     lyr.add_style("roads-text");
+
     m_Map.addLayer(lyr);
 
     mapnik::Envelope<double> envelope(m_Origin[0],
@@ -347,7 +348,7 @@ namespace otb
 //                                         std::string("test")));
 
 //         boost::put(*mfeature, "name", mapnik::value("test"));
-          mapnik::transcoder tr("ISO-8859");
+          mapnik::transcoder tr("ISO-8859-15");
 //           std::cout << dataNode->GetNodeTypeAsString() << std::endl;
 //           std::cout << "Name: " << dataNode->GetFieldAsString("name") << std::endl;
           boost::put(*mfeature, "name", tr.transcode((dataNode->GetFieldAsString("name")).c_str()));
