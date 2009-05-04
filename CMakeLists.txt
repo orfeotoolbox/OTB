@@ -328,7 +328,7 @@ ENDIF(OTB_USE_CURL)
 #-------------------------------
 # Mapnik Library
 #-------------------------------
-OPTION(OTB_USE_MAPNIK "Use mapnik library." OFF)
+OPTION(OTB_USE_MAPNIK "Use mapnik library (EXPERIMENTAL)." OFF)
 MARK_AS_ADVANCED(OTB_USE_MAPNIK)
 IF(OTB_USE_MAPNIK)
 
