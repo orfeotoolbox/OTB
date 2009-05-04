@@ -210,6 +210,11 @@ namespace otb
     VectorDataConstPointer input = this->GetInput();
     InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(input->GetDataTree()->GetRoot());
 
+    std::string vectorDataProjection;
+//     itk::ExposeMetaData<std::string>(input->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey,  vectorDataProjection);
+    vectorDataProjection = "+proj=utm +zone=31 +ellps=WGS84";
+    m_Map.set_srs(vectorDataProjection);
+
     ProcessNode(inputRoot,mDatasource);
 
 
@@ -314,7 +319,8 @@ namespace otb
 //       }
         case otb::FEATURE_LINE:
         {
-          std::cout << std::setprecision(15)  << " ** Inserting new line **" << std::endl;
+          std::cout << std::setprecision(15);
+//           std::cout << " ** Inserting new line **" << std::endl;
           typedef mapnik::vertex<double,2> vertex2d;
           typedef mapnik::line_string<vertex2d,mapnik::vertex_vector2> line2d;
           typedef boost::shared_ptr<line2d> line_ptr;
@@ -329,35 +335,23 @@ namespace otb
             ++itVertex;
           }
 
-          std::cout << "Num points: " << line->num_points() << std::endl;
+//           std::cout << "Num points: " << line->num_points() << std::endl;
 
 
           typedef boost::shared_ptr<mapnik::raster> raster_ptr;
           typedef mapnik::feature<mapnik::geometry2d,raster_ptr> Feature;
           typedef boost::shared_ptr<Feature> feature_ptr;
 
-//         typedef std::map<std::string,mapnik::value> mapType;
-//         mapType myMap;
-//         myMap["name"] = mapnik::value("test");
-//         std::cout << myMap.size() << std::endl;
-
           feature_ptr mfeature = feature_ptr(new Feature(1));
-//         feature_ptr mfeature = feature_ptr(new Feature(myMap));
            mfeature->add_geometry(line);
-//         mfeature->properties().insert(make_pair(std::string("name"),
-//                                         std::string("test")));
 
-//         boost::put(*mfeature, "name", mapnik::value("test"));
           mapnik::transcoder tr("ISO-8859-15");
-//           std::cout << dataNode->GetNodeTypeAsString() << std::endl;
-//           std::cout << "Name: " << dataNode->GetFieldAsString("name") << std::endl;
           boost::put(*mfeature, "name", tr.transcode((dataNode->GetFieldAsString("name")).c_str()));
-//           boost::put(*mfeature, "name2", 10);
-          std::cout << mfeature->props().size() << std::endl;
-          std::cout << " -> " << (*mfeature)["name"] << std::endl;
-//           std::cout << " -> " << (*mfeature)["name2"] << std::endl;
 
-          std::cout << "Type: " << dataNode->GetFieldAsString("type") << std::endl;
+//           std::cout << mfeature->props().size() << std::endl;
+//           std::cout << " -> " << (*mfeature)["name"] << std::endl;
+
+//           std::cout << "Type: " << dataNode->GetFieldAsString("type") << std::endl;
           boost::put(*mfeature, "highway", tr.transcode((dataNode->GetFieldAsString("type")).c_str()));
 
           mDatasource->push(mfeature);
