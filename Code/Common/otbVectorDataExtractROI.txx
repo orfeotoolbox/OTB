@@ -39,10 +39,13 @@ namespace otb
  */
 template <class TVectorData>
 VectorDataExtractROI<TVectorData>
-::VectorDataExtractROI()
+::VectorDataExtractROI() :
+    m_ProjectionNeeded(false),
+    m_ROI(),
+    m_GeoROI(),
+    m_DEMDirectory(""),
+    m_Kept(0)
 {
-  m_ProjectionNeeded = false;
-  m_DEMDirectory = "";
 }
 
 /**
