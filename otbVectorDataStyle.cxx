@@ -136,6 +136,9 @@ void
       rule.set_max_scale(50000000LLU);
       rule.set_min_scale(10000000LLU);
       mapnik::text_symbolizer textSymb("place_name", "DejaVu Sans Book", 10, mapnik::color("#444"));
+      textSymb.set_halo_radius(1);
+      textSymb.set_wrap_width (0);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     mapnikMap.insert_style("places",style);
@@ -144,11 +147,14 @@ void
     mapnik::feature_type_style style;
     {
       mapnik::rule_type rule;
-//       rule.set_filter(        mapnik::create_filter("[NAME_EN] = 'Ontario'"));
       rule.set_filter(mapnik::create_filter("[place] = 'city'"));
       rule.set_max_scale(10000000LLU);
       rule.set_min_scale(2000000LLU);
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 10, mapnik::color("#000"));
+      textSymb.set_halo_radius(1);
+      textSymb.set_wrap_width (0);
+      textSymb.set_displacement(0.0,0);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -157,6 +163,10 @@ void
       rule.set_max_scale(2000000LLU);
       rule.set_min_scale(20000LLU);
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 14, mapnik::color("#000"));
+      textSymb.set_halo_radius(2);
+      textSymb.set_wrap_width (0);
+      textSymb.set_displacement(0.0,0);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -165,6 +175,9 @@ void
       rule.set_max_scale(2000000LLU);
       rule.set_min_scale(50000LLU);
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 11, mapnik::color("#000"));
+      textSymb.set_halo_radius(2);
+      textSymb.set_wrap_width (20);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -172,6 +185,9 @@ void
       rule.set_filter(mapnik::create_filter("[place] = 'town'"));
       rule.set_max_scale(50000LLU);
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 14, mapnik::color("#777777"));
+      textSymb.set_halo_radius(1);
+      textSymb.set_wrap_width (20);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -180,6 +196,9 @@ void
       rule.set_max_scale(250000LLU);
       rule.set_min_scale(50000LLU);
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 8, mapnik::color("#000"));
+      textSymb.set_halo_radius(2);
+      textSymb.set_wrap_width (0);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -187,6 +206,9 @@ void
       rule.set_filter(mapnik::create_filter("[place] = 'village'"));
       rule.set_max_scale(50000LLU);
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 11, mapnik::color("#777777"));
+      textSymb.set_halo_radius(1);
+      textSymb.set_wrap_width (0);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -194,6 +216,9 @@ void
       rule.set_filter(mapnik::create_filter("[place] = 'hamlet'"));
       rule.set_max_scale(125000LLU);
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 8, mapnik::color("#000"));
+      textSymb.set_halo_radius(1);
+      textSymb.set_wrap_width (0);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -201,6 +226,10 @@ void
       rule.set_filter(mapnik::create_filter("[amenity] = 'pub'"));
       rule.set_max_scale(5000LLU);
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Bold", 10, mapnik::color("brown"));
+      textSymb.set_halo_radius(1);
+      textSymb.set_wrap_width (0);
+      textSymb.set_displacement(0.0,16);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -208,6 +237,10 @@ void
       rule.set_filter(mapnik::create_filter("[amenity] = 'place_of_worship'"));
       rule.set_max_scale(5000LLU);
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 10, mapnik::color("#000033"));
+      textSymb.set_halo_radius(1);
+      textSymb.set_wrap_width (20);
+      textSymb.set_displacement(0.0,12);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -215,6 +248,9 @@ void
       rule.set_filter(mapnik::create_filter("[leisure] <> '' or [landuse] <> '' "));
       rule.set_max_scale(20000LLU);
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 10, mapnik::color("#000"));
+      textSymb.set_halo_radius(2);
+      textSymb.set_wrap_width (10);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -222,6 +258,9 @@ void
       rule.set_filter(mapnik::create_filter("[natural] = 'wood'"));
       rule.set_max_scale(20000LLU);
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 10, mapnik::color("#000"));
+      textSymb.set_halo_radius(2);
+      textSymb.set_wrap_width (10);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -229,6 +268,10 @@ void
       rule.set_filter(mapnik::create_filter("[natural] = 'peak'"));
       rule.set_max_scale(100000LLU);
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 10, mapnik::color("brown"));
+      textSymb.set_halo_radius(1);
+      textSymb.set_wrap_width (20);
+      textSymb.set_displacement(0.0,10);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -236,6 +279,9 @@ void
       rule.set_filter(mapnik::create_filter("[natural] = 'water' or [natural] = 'lake' or [landuse] = 'reservoir'"));
       rule.set_max_scale(20000LLU);
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 10, mapnik::color("#6699cc"));
+      textSymb.set_halo_radius(1);
+      textSymb.set_wrap_width (20);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -243,6 +289,9 @@ void
       rule.set_filter(mapnik::create_filter("[tourism] <> ''"));
       rule.set_max_scale(10000LLU);
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 10, mapnik::color("#660033"));
+      textSymb.set_halo_radius(2);
+      textSymb.set_wrap_width (10);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -250,6 +299,9 @@ void
       rule.set_filter(mapnik::create_filter("[amenity] = 'school' or [amenity] = 'university'"));
       rule.set_max_scale(25000LLU);
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 8, mapnik::color("#000033"));
+      textSymb.set_halo_radius(2);
+      textSymb.set_wrap_width (12);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -257,6 +309,10 @@ void
       rule.set_filter(mapnik::create_filter("[amenity] = 'hospital'"));
       rule.set_max_scale(25000LLU);
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 8, mapnik::color("#000033"));
+      textSymb.set_halo_radius(2);
+      textSymb.set_wrap_width (12);
+      textSymb.set_displacement(0.0,12);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     mapnikMap.insert_style("text",style);
@@ -289,6 +345,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#b5d0d0"), 2);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -302,6 +360,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#b5d0d0"), 3);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -315,10 +375,15 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#b5d0d0"), 4);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 8, mapnik::color("#6699cc"));
+      textSymb.set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb.set_halo_radius(1);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -341,10 +406,15 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#b5d0d0"), 10);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 10, mapnik::color("#6699cc"));
+      textSymb.set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb.set_halo_radius(1);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -355,10 +425,15 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#b5d0d0"), 7);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 9, mapnik::color("#6699cc"));
+      textSymb.set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb.set_halo_radius(1);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -372,6 +447,9 @@ void
         rule.append(geom);
       }
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 8, mapnik::color("#6699cc"));
+      textSymb.set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb.set_halo_radius(1);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     mapnikMap.insert_style("water",style);
@@ -386,6 +464,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#506077"), 4);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -399,6 +479,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#506077"), 7);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -412,6 +494,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#506077"), 14);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -425,6 +509,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#506077"), 17);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -438,6 +524,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#477147"), 4);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -451,6 +539,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#477147"), 11);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -464,6 +554,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#477147"), 14);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -477,6 +569,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#477147"), 17);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -490,6 +584,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#8d4346"), 4);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -503,6 +599,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#8d4346"), 10);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -516,6 +614,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#8d4346"), 12);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -529,6 +629,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#8d4346"), 17);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -542,6 +644,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#a37b48"), 4);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -555,6 +659,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#a37b48"), 10);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -568,6 +674,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#a37b48"), 12);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -581,6 +689,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#a37b48"), 17);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -594,6 +704,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#999"), 7);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -607,6 +719,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#999"), 3);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -620,6 +734,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#999"), 9);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -633,6 +749,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#999"), 4.5);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -646,6 +764,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#999"), 11);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -659,6 +779,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#999"), 16);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -672,6 +794,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#999"), 3);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -685,6 +809,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#999"), 8);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -715,6 +841,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#809bc0"), 8);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -728,6 +856,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#809bc0"), 12);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -741,6 +871,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#809bc0"), 14);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -754,6 +886,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#7fc97f"), 8);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -767,6 +901,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#7fc97f"), 10);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -780,6 +916,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#7fc97f"), 14);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -793,6 +931,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#e46d71"), 8);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -806,6 +946,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#e46d71"), 10);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -819,6 +961,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#e46d71"), 14);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -832,6 +976,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#fdbf6f"), 2);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -845,6 +991,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#fdbf6f"), 8);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -858,6 +1006,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#fdbf6f"), 10);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -871,6 +1021,8 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#fdbf6f"), 14);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -897,6 +1049,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#777"), 2);
+        stroke.add_dash(6,2);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -910,6 +1063,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#ccc"), 1);
+        stroke.add_dash(6,2);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -923,6 +1077,9 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#fff"), 2);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
+        stroke.add_dash(6,2);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -936,6 +1093,9 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#fff"), 3);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
+        stroke.add_dash(6,2);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -949,6 +1109,9 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#fff"), 9.4);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
+        stroke.add_dash(6,2);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -962,6 +1125,9 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#fff"), 13);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
+        stroke.add_dash(6,2);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -975,6 +1141,9 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#ffffcc"), 5);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
+        stroke.add_dash(6,2);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -988,6 +1157,9 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#ffffcc"), 7);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
+        stroke.add_dash(6,2);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1001,6 +1173,9 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#ffffcc"), 9.4);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
+        stroke.add_dash(6,2);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1014,6 +1189,9 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#ffffcc"), 13);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
+        stroke.add_dash(6,2);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1027,6 +1205,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#bbbbbb"), 1);
+        stroke.add_dash(6,2);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1040,6 +1219,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("white"), 2);
+        stroke.add_dash(6,2);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1053,6 +1233,9 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("white"), 6);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
+        stroke.add_dash(6,2);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1066,12 +1249,16 @@ void
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#fff"), 4);
         stroke.set_opacity (0.4);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
+        stroke.add_dash(6,2);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("green"), 1.5);
+        stroke.add_dash(4,2);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1085,12 +1272,18 @@ void
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#fff"), 6);
         stroke.set_opacity (0.4);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
+        stroke.add_dash(4,2);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("salmon"), 2.0);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
+        stroke.add_dash(1,3);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1104,12 +1297,18 @@ void
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("white"), 4);
         stroke.set_opacity (0.4);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
+        stroke.add_dash(1,3);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("green"), 1.5);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
+        stroke.add_dash(1,3);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1123,12 +1322,18 @@ void
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("white"), 6);
         stroke.set_opacity (0.4);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
+        stroke.add_dash(1,3);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("salmon"), 2.0);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
+        stroke.add_dash(4,2);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1141,12 +1346,14 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("grey"), 5);
+        stroke.add_dash(4,2);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#ededed"), 4);
+        stroke.add_dash(4,2);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1160,12 +1367,18 @@ void
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#fff"), 6);
         stroke.set_opacity (0.4);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
+        stroke.add_dash(4,2);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#ffc000"), 2.0);
+        stroke.set_line_join(mapnik::ROUND_JOIN);
+        stroke.set_line_cap(mapnik::ROUND_CAP);
+        stroke.add_dash(4,4);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1178,6 +1391,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("navy"), 0.8);
+        stroke.add_dash(6,6);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1191,6 +1405,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#bbc"), 2);
+        stroke.add_dash(6,6);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1204,6 +1419,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#bbc"), 7);
+        stroke.add_dash(6,6);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1216,6 +1432,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#bbc"), 18);
+        stroke.add_dash(6,6);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1229,6 +1446,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#bbc"), 1);
+        stroke.add_dash(6,6);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1242,6 +1460,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#bbc"), 4);
+        stroke.add_dash(6,6);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1254,6 +1473,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#bbc"), 6);
+        stroke.add_dash(6,6);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1271,6 +1491,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#809bc0"), 1);
+        stroke.add_dash(6,6);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1284,6 +1505,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#809bc0"), 2);
+        stroke.add_dash(6,6);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1297,6 +1519,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#809bc0"), 3);
+        stroke.add_dash(6,6);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1310,6 +1533,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#7fc97f"), 1);
+        stroke.add_dash(6,6);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1323,6 +1547,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#7fc97f"), 2);
+        stroke.add_dash(6,6);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1336,6 +1561,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#7fc97f"), 3);
+        stroke.add_dash(6,6);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1349,6 +1575,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#e46d71"), 0.7);
+        stroke.add_dash(6,6);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1362,6 +1589,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#e46d71"), 2.0);
+        stroke.add_dash(6,6);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1375,6 +1603,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#e46d71"), 3);
+        stroke.add_dash(6,6);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1388,6 +1617,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#fdbf6f"), 1);
+        stroke.add_dash(6,6);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1401,6 +1631,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#fdbf6f"), 2);
+        stroke.add_dash(6,6);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1414,6 +1645,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#777"), 1);
+        stroke.add_dash(6,6);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1427,6 +1659,7 @@ void
       {
         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
         mapnik::stroke stroke = mapnik::stroke(mapnik::color("#777"), 2);
+        stroke.add_dash(6,6);
         geom.set_stroke(stroke);
         rule.append(geom);
       }
@@ -1449,6 +1682,9 @@ void
       rule.set_max_scale(75000LLU);
       rule.set_min_scale(50000LLU);
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 8, mapnik::color("black"));
+      textSymb.set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb.set_halo_radius(0);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -1457,6 +1693,9 @@ void
       rule.set_max_scale(50000LLU);
       rule.set_min_scale(1000LLU);
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 10, mapnik::color("black"));
+      textSymb.set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb.set_halo_radius(0);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -1464,6 +1703,9 @@ void
       rule.set_max_scale(25000LLU);
       rule.set_min_scale(5000LLU);
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 9, mapnik::color("#000"));
+      textSymb.set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb.set_halo_radius(1);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     {
@@ -1471,6 +1713,9 @@ void
       rule.set_max_scale(5000LLU);
       rule.set_min_scale(100LLU);
       mapnik::text_symbolizer textSymb("name", "DejaVu Sans Book", 11, mapnik::color("#000"));
+      textSymb.set_label_placement(mapnik::LINE_PLACEMENT);
+      textSymb.set_halo_radius(1);
+      rule.append(textSymb);
       style.add_rule(rule);
     }
     mapnikMap.insert_style("roads-text",style);
