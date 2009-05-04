@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,7 +26,7 @@
 namespace otb {
 
 /** \class WaveletPacketForwardTransform
- * \brief Wavelet packet transformation framework
+ * \brief <b>EXPERIMENTAL FEATURE</b> Wavelet packet transformation framework
  *
  * This class defines the Wavelet Packet transformation of an image
  * by using a (templated) elementary wavelet transform and (templated)
@@ -34,12 +34,12 @@ namespace otb {
  *
  * It yields a list of images...
  *
- * TODO: this class implements the decomposition only. But there is no storage 
+ * TODO: this class implements the decomposition only. But there is no storage
  * of the way of decomposition. It should be added before implementing backward
  * transformation.
  *
- * the user is supposed to initialize Cost properly (through GetCost() macro) 
- * depending on its type before calling an Update(). The Cost class has to contain 
+ * the user is supposed to initialize Cost properly (through GetCost() macro)
+ * depending on its type before calling an Update(). The Cost class has to contain
  * a New() and Evaluate() function.
  *
  * \sa FullyDecomposedWaveletPacketCost
@@ -90,7 +90,7 @@ public:
   typedef typename CostType::Pointer CostPointerType;
 
   itkGetObjectMacro(Cost,CostType);
- 
+
   itkStaticConstMacro(InputImageDimension, unsigned int,TInputImage::ImageDimension);
 
 protected:

@@ -97,7 +97,7 @@ ENDIF(OTB_USE_CURL)
 # Include directories from the MAPNIK build tree.
 IF(OTB_USE_MAPNIK)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-  	${MAPNIK_INCLUDE_DIR} )
+  	${MAPNIK_INCLUDE_DIR} ${FREETYPE2_INCLUDE_DIR})
 ENDIF(OTB_USE_MAPNIK)
 
 #-----------------------------------------------------------------------------

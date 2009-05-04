@@ -27,7 +27,7 @@
 namespace otb {
 
 /** \class WaveletForwardTransform
- * \brief Wavelet transformation framework
+ * \brief <b>EXPERIMENTAL FEATURE</b> Wavelet transformation framework
  *
  * This class defines the Wavelet Packet transformation of an image
  * by using a (templated) elementary wavelet transform.

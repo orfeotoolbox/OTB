@@ -24,6 +24,9 @@ SET(COMMON_TESTS5 ${CXX_TEST_PATH}/otbCommonTests5)
 SET(COMMON_TESTS6 ${CXX_TEST_PATH}/otbCommonTests6)
 SET(COMMON_TESTS7 ${CXX_TEST_PATH}/otbCommonTests7)
 SET(COMMON_TESTS8 ${CXX_TEST_PATH}/otbCommonTests8)
+IF(OTB_USE_MAPNIK)
+  SET(COMMON_TESTS9 ${CXX_TEST_PATH}/otbCommonTests9)
+ENDIF(OTB_USE_MAPNIK)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -699,6 +702,31 @@ ADD_TEST(coTuVectorImageToASImageAdaptorNew ${COMMON_TESTS8}
 )
 
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests9 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+IF(OTB_USE_MAPNIK)
+
+# -------------  otb::QuickLookImageGenerator ----------------------------
+ADD_TEST(coTuVectorDataToImageFilterNew ${COMMON_TESTS9}
+otbVectorDataToImageFilterNew
+)
+
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(coTvVectorDataToImageFilter ${COMMON_TESTS9}
+     --compare-image ${TOL}
+	   	     ${BASELINE}/coTvVectorDataToImageFilter.png
+                     ${TEMP}/coTvVectorDataToImageFilter.png
+   otbVectorDataToImageFilter
+        ${LARGEDATA}/VECTOR/MidiPyrenees/roads.shp
+	${TEMP}/coTvVectorDataToImageFilter.png
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
+ENDIF(OTB_USE_MAPNIK)
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
 otbSystemTest.cxx
@@ -803,6 +831,14 @@ otbImageRegionNonUniformMultidimensionalSplitter.cxx
 otbVectorImageToASImageAdaptorNew.cxx
 )
 
+IF(OTB_USE_MAPNIK)
+SET(BasicCommon_SRCS9
+otbVectorDataToImageFilterNew.cxx
+otbVectorDataToImageFilter.cxx
+)
+ENDIF(OTB_USE_MAPNIK)
+
+
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 # ${TIFF_LIBRARY}
@@ -830,5 +866,11 @@ TARGET_LINK_LIBRARIES(otbCommonTests7 OTBIO)
 
 ADD_EXECUTABLE(otbCommonTests8 otbCommonTests8.cxx ${BasicCommon_SRCS8})
 TARGET_LINK_LIBRARIES(otbCommonTests8 OTBIO)
+
+IF(OTB_USE_MAPNIK)
+ADD_EXECUTABLE(otbCommonTests9 otbCommonTests9.cxx ${BasicCommon_SRCS9})
+#TODO this line should be refined when we will like to have this capability with windows
+TARGET_LINK_LIBRARIES(otbCommonTests9 OTBIO ${MAPNIK_LIBRARY}/libmapnik.so)
+ENDIF(OTB_USE_MAPNIK)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

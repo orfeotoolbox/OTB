@@ -35,7 +35,7 @@
 namespace otb {
 
 /** \class WaveletFilterBank
- * \brief One level stationary wavelet transform
+ * \brief <b>EXPERIMENTAL FEATURE</b> One level stationary wavelet transform
  *
  * This implementation performs a low-pass / high-pass wavelet transformation
  * of an image. The wavelet transformation is defined by a inner product
