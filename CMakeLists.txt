@@ -339,6 +339,13 @@ IF(OTB_USE_MAPNIK)
                         "Cannot find MAPNIK include directory. Please set MAPNIK_INCLUDE_DIR or SET OTB_USE_MAPNIK OFF.")
         ENDIF (NOT MAPNIK_INCLUDE_DIR)
 
+        FIND_PATH(FREETYPE2_INCLUDE_DIR freetype/freetype.h PATHS /usr/include/freetype2)
+        MARK_AS_ADVANCED(FREETYPE2_INCLUDE_DIR)
+        IF (NOT FREETYPE2_INCLUDE_DIR)
+                MESSAGE(FATAL_ERROR
+                        "Cannot find FREETYPE2 include directory. Please set  or SET OTB_USE_MAPNIK OFF.")
+        ENDIF (NOT FREETYPE2_INCLUDE_DIR)
+
         FIND_LIBRARY(MAPNIK_LIBRARY mapnik )
         MARK_AS_ADVANCED(MAPNIK_LIBRARY)
         IF (NOT MAPNIK_LIBRARY)
