@@ -1624,10 +1624,10 @@ ADD_TEST(ioTvVectorDataFileWriterTwice ${IO_TESTS15}
 
 ADD_TEST(ioTvVectorDataFileWriterPolygons ${IO_TESTS15}
         --compare-ogr  ${TOL}
-            ${BASELINE_FILES}/ioTvVectorDataFileWriterOutput.shp
-            ${TEMP}/ioTvVectorDataFileWriterOutput.shp
+            ${BASELINE_FILES}/ioTvVectorDataFileWriterPolygonsOutput.shp
+            ${TEMP}/ioTvVectorDataFileWriterPolygonsOutput.shp
         otbVectorDataFileWriterPolygons
-    ${TEMP}/ioTvVectorDataFileWriterOutput.shp
+    ${TEMP}/ioTvVectorDataFileWriterPolygonsOutput.shp
     )
 
 
