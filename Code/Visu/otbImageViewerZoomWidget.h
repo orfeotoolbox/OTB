@@ -30,7 +30,7 @@ template <class TPixel, class TLabel> class ImageViewerBase;
 /**
  * \class ImageViewerZoomWidget
  *
- * \brief DEPRECATED: Custom scroll image widget.
+ * \brief <b>DEPRECATED</b>: Custom scroll image widget.
  *
  * This class derives from otb::ZoomableImageWidget, and implements behaviours specific to the image viewer.
  *

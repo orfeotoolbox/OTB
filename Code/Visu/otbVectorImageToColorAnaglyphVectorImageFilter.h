@@ -26,7 +26,7 @@ namespace otb
 namespace Functor
 {
 /** \class ColorAnaglyphFunctor
-   *  \brief DEPRECATED: This functor implements the pixel-wise color anaglyph composition.
+   *  \brief <b>DEPRECATED</b>: This functor implements the pixel-wise color anaglyph composition.
  *  The output pixel is a vector pixel of size 3, where the first component contains the
  *  value of the first component from the second input pixel, the second component contains
  *  the value of the second component from the first input pixel, and the third component

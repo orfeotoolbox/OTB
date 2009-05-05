@@ -26,7 +26,7 @@
 namespace otb
 {
 /** \class ImageWidgetPolylineForm
-   * \brief DEPRECATED
+   * \brief <b>DEPRECATED</b>
  *
    *  \deprecated use the new Visualization framework instead.
    * \sa StandardImageViewer

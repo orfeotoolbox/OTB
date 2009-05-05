@@ -23,7 +23,7 @@
 namespace otb
 {
 /** \class FullResolutionImageWidget
-   * \brief DEPRECATED: Widget for the full resolution window in viewer.
+   * \brief <b>DEPRECATED</b>: Widget for the full resolution window in viewer.
  *
  * \deprecated use the new Visualization framework instead.
  * \sa StandardImageViewer

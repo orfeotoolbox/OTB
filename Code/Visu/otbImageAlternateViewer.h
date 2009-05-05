@@ -34,7 +34,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class ImageAlternateViewer
-   *  \brief DEPRECATED
+   *  \brief <b>DEPRECATED</b>
  *
    *  \deprecated use the new Visualization framework instead.
    * \sa StandardImageViewer

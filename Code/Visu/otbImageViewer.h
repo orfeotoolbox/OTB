@@ -26,7 +26,7 @@ namespace otb
 /**
  * \class ImageViewer
  *
-   * \brief DEPRECATED: Simple image viewer.
+   * \brief <b>DEPRECATED</b>: Simple image viewer.
  *
  * This class is a simple image viewer using fltk gui and opengl drawing.
  * It is divided into four parts :

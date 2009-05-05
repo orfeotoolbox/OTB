@@ -26,7 +26,7 @@ namespace otb
 namespace Functor
 {
 /** \class GrayscaleAnaglyphFunctor
-   *  \brief DEPRECATED: This functor implements the pixel-wise grayscale anaglyph composition.
+   *  \brief <b>DEPRECATED</b>: This functor implements the pixel-wise grayscale anaglyph composition.
  *  The output pixel is a vector pixel of size 3, where the first component contains the
  *  value of the first input pixel, and the two last components contain the value of the
  *  second input pixel.
