@@ -82,10 +82,12 @@ VectorDataExtractROI<TVectorData>
   /** If Projection of the region is needed, we project on the vectorData coordinate axis*/
   if(m_ProjectionNeeded)
     {
+    otbMsgDevMacro( << "Reprojecting region in vector data projection");
     this->ProjectRegionToInputVectorProjection();
     }
   else
     {
+    otbMsgDevMacro( << "Region and vector data projection are similar");
     m_GeoROI = m_ROI;
     }
 
@@ -288,7 +290,7 @@ VectorDataExtractROI<TVectorData>
 }
 
 /**
- * CompareInputAndRegionProjection
+ * ProjectRegionToInputVectorProjection
  */
 template <class TVectorData>
 void
@@ -358,7 +360,7 @@ VectorDataExtractROI<TVectorData>
 }
 
 /**
- * CompareInputAndRegionProjection
+ * ComputeVertexListBoudingRegion
  */
 template <class TVectorData>
 typename VectorDataExtractROI<TVectorData>
