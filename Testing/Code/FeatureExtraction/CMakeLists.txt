@@ -10,7 +10,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 SET(NOTOL 0.0)
 
 #Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
-SET(EPS 0.001)
+SET(EPSILON_3 0.001)
 
 #Tolerance sur diff pixel image
 #EPSILON est different de 0.0 pour les tests multiplateformes avec différentes options de compilation.
