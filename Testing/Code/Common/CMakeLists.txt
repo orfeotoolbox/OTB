@@ -7,7 +7,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Remote sensing images (large images )
 IF(OTB_DATA_USE_LARGEINPUT)
-  SET(LARGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
+  SET(LARGEINPUT ${OTB_DATA_LARGEINPUT_ROOT} )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #Tolerance sur diff pixel image
@@ -141,7 +141,7 @@ ADD_TEST(coTvVectorDataExtractROI ${COMMON_TESTS2}
               ${BASELINE_FILES}/coVectorDataExtractROIOutput.shp
               ${TEMP}/coVectorDataExtractROIOutput.shp
 	 otbVectorDataExtractROI
-	${INPUTDATA}/ToulousePoints-examples.shp   #${LARGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
+	${INPUTDATA}/ToulousePoints-examples.shp   #${LARGEINPUT}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
 	${TEMP}/coVectorDataExtractROIOutput.shp
 	 374369.48850211215904 4828951.58612491376698  # Origin of the RemoteSensingRegion
          1000.25 25000.2                               # Size of the Cartoregion
@@ -720,11 +720,23 @@ ADD_TEST(coTvVectorDataToImageFilter ${COMMON_TESTS9}
 	   	     ${BASELINE}/coTvVectorDataToImageFilter.png
                      ${TEMP}/coTvVectorDataToImageFilter.png
    otbVectorDataToImageFilter
-        ${LARGEDATA}/VECTOR/MidiPyrenees/roads.shp
+        ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
 	${TEMP}/coTvVectorDataToImageFilter.png
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(coTvVectorDataToImageFilterSensorModel ${COMMON_TESTS9}
+     --compare-image ${NOTOL}
+	   	     ${BASELINE}/coTvVectorDataToImageFilterSensorModel.png
+                     ${TEMP}/coTvVectorDataToImageFilterSensorModel.png
+   otbVectorDataToImageFilterSensorModel
+        ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+        ${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+	${TEMP}/coTvVectorDataToImageFilterSensorModel.png
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ENDIF(OTB_USE_MAPNIK)
 
@@ -836,6 +848,7 @@ IF(OTB_USE_MAPNIK)
 SET(BasicCommon_SRCS9
 otbVectorDataToImageFilterNew.cxx
 otbVectorDataToImageFilter.cxx
+otbVectorDataToImageFilterSensorModel.cxx
 )
 ENDIF(OTB_USE_MAPNIK)
 

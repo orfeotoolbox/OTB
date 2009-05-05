@@ -216,16 +216,24 @@ namespace otb
     //Converting the projection string to the porj.4 format
     std::string vectorDataProjectionWKT;
     itk::ExposeMetaData<std::string>(input->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey,  vectorDataProjectionWKT);
-//     OGRSpatialReference oSRS;
-//     oSRS.importFromWkt(vectorDataProjectionWKT.c_str());
-//     std::cout << "WKT -> " << vectorDataProjectionWKT << std::endl;
-    OGRSpatialReference oSRS(vectorDataProjectionWKT.c_str());
-    char * pszProj4;
-    oSRS.exportToProj4(&pszProj4);
-    std::string vectorDataProjectionProj4(pszProj4);
-    CPLFree(pszProj4);
-
-//     std::cout << "Proj.4 -> " << vectorDataProjectionProj4 << std::endl;
+    std::cout << "WKT -> " << vectorDataProjectionWKT << std::endl;
+    std::string vectorDataProjectionProj4;
+    if (vectorDataProjectionWKT == "")
+    {
+      //We assume that it is an image in sensor model geometry
+      //and tell mapnik that this is utm
+      //(with a resolution of 1m per unit)
+      vectorDataProjectionProj4 = "+proj=utm +zone=31 +ellps=WGS84";
+    }
+    else
+    {
+      OGRSpatialReference oSRS(vectorDataProjectionWKT.c_str());
+      char * pszProj4;
+      oSRS.exportToProj4(&pszProj4);
+      vectorDataProjectionProj4 = pszProj4;
+      CPLFree(pszProj4);
+    }
+    std::cout << "Proj.4 -> " << vectorDataProjectionProj4 << std::endl;
 
 //      std::string   vectorDataProjectionProj4 = "+proj=utm +zone=31 +ellps=WGS84";
     m_Map.set_srs(vectorDataProjectionProj4);
