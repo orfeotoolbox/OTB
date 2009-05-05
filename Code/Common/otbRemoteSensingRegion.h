@@ -18,6 +18,8 @@
 #define __otbRemoteSensingRegion_h
 
 #include <algorithm>
+#include <iomanip>
+
 #include "itkObjectFactory.h"
 
 #include "itkContinuousIndex.h"
@@ -302,7 +304,7 @@ public:
             }
         }
 
-      // if we cannot crop, return without changing anythin
+      // if we cannot crop, return without changing anything
       if (!cropPossible)
         {
           return cropPossible;
@@ -342,6 +344,7 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
+    os << std::setprecision(15);
     os << indent << "RemoteSensingRegion" << std::endl;
     os << indent << "Index:" << this->m_Index << std::endl;
     os << indent << "Size:" << this->m_Size << std::endl;
