@@ -52,9 +52,18 @@ PersistentLineSegmentDetector<TInputImage, TPrecision>
   m_LineSpatialObjectList->Resize(nbThread);
   m_RegionList = RegionListType(nbThread);
   m_Extractor->Clear();
-  m_Extractor->Resize(nbThread);
   m_LineDetector->Clear();
-  m_LineDetector->Resize(nbThread);
+  //m_Extractor->Resize(nbThread);
+  //m_LineDetector->Resize(nbThread);
+
+  for(unsigned int p=0; p<nbThread; p++)
+    {
+      m_Extractor->PushBack( ExtractorType::New() );
+      m_LineDetector->PushBack( LineDetectorType::New() );
+    }
+
+
+ 
 }
 
 template<class TInputImage, class TPrecision>
@@ -126,7 +135,7 @@ PersistentLineSegmentDetector<TInputImage, TPrecision>
   m_Extractor->GetNthElement(threadId)->SetExtractionRegion(outputRegionForThread/*this->GetInput()->GetRequestedRegion()*/);
   m_Extractor->GetNthElement(threadId)->UpdateOutputInformation();
 
-  m_LineDetector->GetNthElement(threadId)->SetInput(extractor->GetOutput());
+  m_LineDetector->GetNthElement(threadId)->SetInput(m_Extractor->GetNthElement(threadId)->GetOutput());
   m_LineDetector->GetNthElement(threadId)->Update();
 
   /*

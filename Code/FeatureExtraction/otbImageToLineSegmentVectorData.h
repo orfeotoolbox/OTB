@@ -113,13 +113,13 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   // line detector filter
-  LineDetectorPointerType m_LineDetector;
+  //LineDetectorPointerType m_LineDetector;
   // Region extractor.
   LineSpatialObjectListPointerType m_LineSpatialObjectList;
   // Store requested region for each threads
   RegionListType m_RegionList;
-  ExtractorListType::Pointer m_Extractor;
-  LineDetectorListType::Pointer m_LineDetector;
+  typename ExtractorListType::Pointer m_Extractor;
+  typename LineDetectorListType::Pointer m_LineDetector;
 
 }; // end of class
 // end of class PersistentLineSegmentDetector
