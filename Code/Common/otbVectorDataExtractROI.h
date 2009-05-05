@@ -28,7 +28,19 @@ namespace otb
 /** \class VectorDataExtractROI
  * \brief Extract a subset of a Vector Data based on location
  *
+ * The region to extract is specified by a otb::RemoteSensingRegion
+ * object. This region contains its own projection reference that may be
+ * different from the projection of the vector data.
+ *
+ * The projection of the vector data will not be modified by this filter
+ * if you need to change the projection, refer to otb::VectorDataProjectionFilter
+ *
  * \note Parameter to this class for input and outputs are vectorData
+ *
+ * \sa RemoteSensingRegion
+ * \sa VectorDataProjectionFilter
+ *
+ * \ingroup VectorDataFilter
  *
  * \example Projections/VectorDataExtractROIExample.cxx
  */
