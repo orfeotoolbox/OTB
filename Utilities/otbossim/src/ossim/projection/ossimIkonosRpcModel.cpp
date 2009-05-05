@@ -894,8 +894,8 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
 
    if(filenameparts.size() < 2)
    {
-     ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG ossimIkonosRpcModel parseTiffFile: Ikonos filename non standard" << std::endl;
+//      ossimNotify(ossimNotifyLevel_DEBUG)
+//          << "DEBUG ossimIkonosRpcModel parseTiffFile: Ikonos filename non standard" << std::endl;
    }
    else
    {
