@@ -23,7 +23,7 @@
 namespace otb
 {
 /** \class ZoomableImageWidget
-   * \brief DEPRECATED: Widget for the zoom window in viewer.
+   * \brief <b>DEPRECATED</b>: Widget for the zoom window in viewer.
  *
  *  \deprecated use the new Visualization framework instead.
  * \sa StandardImageViewer

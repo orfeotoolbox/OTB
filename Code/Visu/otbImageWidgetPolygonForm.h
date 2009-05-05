@@ -31,7 +31,7 @@
 namespace otb
 {
 /** \class ImageWidgetPolygonForm
-   * \brief DEPRECATED: Widget to draw polygons on the viewer
+   * \brief <b>DEPRECATED</b>: Widget to draw polygons on the viewer
    *
    * \deprecated use the new Visualization framework instead.
    * \sa StandardImageViewer

@@ -23,7 +23,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class FixedSizeFullImageWidget
-   * \brief DEPRECATED: FixedSizeFullImageWidget
+   * \brief <b>DEPRECATED</b>: FixedSizeFullImageWidget
  *
  * \deprecated use the new Visualization framework instead.
  * \sa StandardImageViewer

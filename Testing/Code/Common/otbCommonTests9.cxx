@@ -28,4 +28,5 @@ void RegisterTests()
 {
 REGISTER_TEST(otbVectorDataToImageFilterNew);
 REGISTER_TEST(otbVectorDataToImageFilter);
+REGISTER_TEST(otbVectorDataToImageFilterSensorModel);
 }

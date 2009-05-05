@@ -184,9 +184,9 @@ SHPVectorDataIO<TData>
       chrono.Start();
 
       // Creating a new folder
-      DataNodePointerType folder = DataNodeType::New();
-      folder->SetNodeType(FOLDER);
-      folder->SetNodeId(feature->GetDefnRef()->GetName());
+//       DataNodePointerType folder = DataNodeType::New();
+//       folder->SetNodeType(FOLDER);
+//       folder->SetNodeId(feature->GetDefnRef()->GetName());
 
       // Reading fields
 //       for (int fieldIndex = 0; fieldIndex<dfn->GetFieldCount();++fieldIndex)
@@ -198,9 +198,10 @@ SHPVectorDataIO<TData>
 
 
       // Add the folder to the document
-      typename InternalTreeNodeType::Pointer folderPtr = InternalTreeNodeType::New();
-      folderPtr->Set(folder);
-      documentPtr->AddChild(folderPtr);
+//       typename InternalTreeNodeType::Pointer folderPtr = InternalTreeNodeType::New();
+//       folderPtr->Set(folder);
+//       documentPtr->AddChild(folderPtr);
+      typename InternalTreeNodeType::Pointer folderPtr = documentPtr;//TODO: clean references to folder and replace by documentPtr
 
       // A pointer to the current multi-geometry
       typename InternalTreeNodeType::Pointer multiPtr;

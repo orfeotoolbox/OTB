@@ -18,6 +18,8 @@
 #define __otbRemoteSensingRegion_h
 
 #include <algorithm>
+#include <iomanip>
+
 #include "itkObjectFactory.h"
 
 #include "itkContinuousIndex.h"
@@ -287,25 +289,24 @@ public:
       // Can we crop?
       for (unsigned int i = 0; i < IndexType::IndexDimension && cropPossible; i++)
         {
-          // Is left edge of current region to the right of the right edge
-          // of the region to crop with? (if so, we cannot crop)
-          if (m_Index[i] >= region.GetOrigin()[i]
-              + static_cast<Type>(region.GetSize()[i]))
-            {
-              cropPossible = false;
-            }
-          // If right edge of the current region to the left of the left
-          // edge of the region to crop with? (if so, we cannot crop)
-          if (m_Index[i] + static_cast<Type>(m_Size[i]) <= region.GetOrigin()[i])
-            {
-              cropPossible = false;
-            }
-        }
 
-      // if we cannot crop, return without changing anythin
-      if (!cropPossible)
-        {
-          return cropPossible;
+            if (
+            ((region.GetOrigin()[i] <= m_Index[i])
+               && (region.GetOrigin()[i] <= m_Index[i] + static_cast<Type>(m_Size[i]))
+               && ((region.GetOrigin()[i]+ static_cast<Type>(region.GetSize()[i])) <=  m_Index[i])
+               && ((region.GetOrigin()[i]+ static_cast<Type>(region.GetSize()[i])) <= m_Index[i] + static_cast<Type>(m_Size[i]))
+            )
+                ||
+            ((region.GetOrigin()[i] >= m_Index[i])
+                && (region.GetOrigin()[i] >= m_Index[i] + static_cast<Type>(m_Size[i]))
+                && ((region.GetOrigin()[i]+ static_cast<Type>(region.GetSize()[i])) >=  m_Index[i])
+                && ((region.GetOrigin()[i]+ static_cast<Type>(region.GetSize()[i])) >= m_Index[i] + static_cast<Type>(m_Size[i]))
+                )
+               )
+            {
+              return false;
+            }
+
         }
 
       // we can crop, so crop
@@ -342,6 +343,7 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
+    os << std::setprecision(15);
     os << indent << "RemoteSensingRegion" << std::endl;
     os << indent << "Index:" << this->m_Index << std::endl;
     os << indent << "Size:" << this->m_Size << std::endl;

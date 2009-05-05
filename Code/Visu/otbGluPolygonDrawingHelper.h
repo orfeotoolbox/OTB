@@ -33,7 +33,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class GluPolygonDrawingHelper
-   *  \brief DEPRECATED: This class is a short helper class to render complex polygons in openGl.
+   *  \brief <b>DEPRECATED</b>: This class is a short helper class to render complex polygons in openGl.
  *
  *  It uses the glu tesselator functionality.
  *

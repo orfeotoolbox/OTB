@@ -52,8 +52,8 @@ ossimIkonosMetaData::ossimIkonosMetaData(const ossimFilename& imageFilename)
 
   if(filenameparts.size() < 2)
   {
-    ossimNotify(ossimNotifyLevel_DEBUG)
-        << "DEBUG ossimIkonosMetaData constructor#2: Ikonos filename non standard" << std::endl;
+//     ossimNotify(ossimNotifyLevel_DEBUG)
+//         << "DEBUG ossimIkonosMetaData constructor#2: Ikonos filename non standard" << std::endl;
     return;
   }
   ossimFilename metadatafile = filenameparts[0];

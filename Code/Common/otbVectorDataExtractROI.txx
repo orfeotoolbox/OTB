@@ -82,10 +82,12 @@ VectorDataExtractROI<TVectorData>
   /** If Projection of the region is needed, we project on the vectorData coordinate axis*/
   if(m_ProjectionNeeded)
     {
+    otbMsgDevMacro( << "Reprojecting region in vector data projection");
     this->ProjectRegionToInputVectorProjection();
     }
   else
     {
+    otbMsgDevMacro( << "Region and vector data projection are similar");
     m_GeoROI = m_ROI;
     }
 
@@ -252,7 +254,7 @@ bool
 VectorDataExtractROI<TVectorData>
 ::IsPolygonIntersectionNotNull(PolygonPointerType polygon)
 {
-//   RegionType region = ComputeVertexListBoudingRegion(polygon->GetVertexList());
+//   RegionType region = ComputeVertexListBoundingRegion(polygon->GetVertexList());
   RegionType region(polygon->GetBoundingRegion());
   return region.Crop(m_GeoROI);
 }
@@ -265,7 +267,7 @@ bool
 VectorDataExtractROI<TVectorData>
 ::IsLineIntersectionNotNull(LinePointerType line)
 {
-//   RegionType region = ComputeVertexListBoudingRegion(line->GetVertexList());
+//   RegionType region = ComputeVertexListBoundingRegion(line->GetVertexList());
   RegionType region(line->GetBoundingRegion());
   return region.Crop(m_GeoROI);
 }
@@ -288,7 +290,7 @@ VectorDataExtractROI<TVectorData>
 }
 
 /**
- * CompareInputAndRegionProjection
+ * ProjectRegionToInputVectorProjection
  */
 template <class TVectorData>
 void
@@ -336,7 +338,7 @@ VectorDataExtractROI<TVectorData>
   regionCorners->InsertElement(regionCorners->Size(),this->PointToContinuousIndex(genericTransform->TransformPoint(point4)));
 
   /** Due to The projection : the Projected ROI can be rotated */
-  m_GeoROI = this->ComputeVertexListBoudingRegion(regionCorners.GetPointer());
+  m_GeoROI = this->ComputeVertexListBoundingRegion(regionCorners.GetPointer());
   m_GeoROI.SetRegionProjection(this->GetInput()->GetProjectionRef());
 }
 /**
@@ -358,13 +360,13 @@ VectorDataExtractROI<TVectorData>
 }
 
 /**
- * CompareInputAndRegionProjection
+ * ComputeVertexListBoundingRegion
  */
 template <class TVectorData>
 typename VectorDataExtractROI<TVectorData>
 ::RegionType
 VectorDataExtractROI<TVectorData>
-::ComputeVertexListBoudingRegion(typename VertexListType::ConstPointer vertexlist)
+::ComputeVertexListBoundingRegion(typename VertexListType::ConstPointer vertexlist)
 {
   double x = 0.,y = 0.;
   IndexType       index;
@@ -383,6 +385,8 @@ VectorDataExtractROI<TVectorData>
       y = static_cast<double>(it.Value()[1]);
       index[0] = x;
       index[1] = y;
+      maxId[0] = x;
+      maxId[1] = y;
 
       ++it;
       while (it != vertexlist->End())
@@ -395,7 +399,7 @@ VectorDataExtractROI<TVectorData>
             {
               index[0] = x;
             }
-          if ( y < index[1] )
+          if ( y > index[1] )
             {
               index[1] = y;
             }
@@ -404,7 +408,7 @@ VectorDataExtractROI<TVectorData>
             {
               maxId[0] = x;
             }
-          if ( y > maxId[1] )
+          if ( y < maxId[1] )
             {
               maxId[1] = y;
             }

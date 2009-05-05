@@ -91,7 +91,7 @@ int main( int argc, char* argv[] )
 {
 // Software Guide : EndCodeSnippet
 
-  if ( argc < 4 )
+  if ( argc < 7 )
   {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];

@@ -29,7 +29,7 @@
 namespace otb
 {
 /** \class ImageWidgetBase
-   *  \brief DEPRECATED: Base class for ImageWidget
+   *  \brief <b>DEPRECATED</b>: Base class for ImageWidget
  *
  *  \deprecated use the new Visualization framework instead.
  * \sa StandardImageViewer

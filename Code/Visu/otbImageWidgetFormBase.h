@@ -28,7 +28,7 @@
 namespace otb
 {
 /** \class ImageWidgetFormBase
-   * \brief DEPRECATED
+   * \brief <b>DEPRECATED</b>
  *
  *  \deprecated use the new Visualization framework instead.
  * \sa StandardImageViewer

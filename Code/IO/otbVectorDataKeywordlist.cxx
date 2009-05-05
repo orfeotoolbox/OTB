@@ -83,7 +83,17 @@ VectorDataKeywordlist
   {
     if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
     {
-      return m_FieldList[i].second.String;
+      if (m_FieldList[i].first->GetType() == OFTString )
+      {
+        return m_FieldList[i].second.String;
+      }
+      if (m_FieldList[i].first->GetType() == OFTReal )
+      {
+        std::ostringstream ss;
+        ss << std::setprecision(15) << m_FieldList[i].second.Real;
+        return ss.str();
+      }
+      itkExceptionMacro(<<"This type is not handle (yet) by GetFieldAsString(), please request for it");
     }
   }
   return "";

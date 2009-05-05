@@ -17,26 +17,16 @@
 =========================================================================*/
 
 #include "otbVectorDataFileReader.h"
-#include "otbImageFileWriter.h"
+#include "otbImage.h"
 #include "otbVectorData.h"
 #include "otbVectorDataProjectionFilter.h"
 #include "otbVectorDataExtractROI.h"
 #include <fstream>
 #include <iostream>
 
-#include "itkRGBAPixel.h"
-#include "otbImage.h"
-#include "otbVectorDataToImageFilter.h"
 
-int otbVectorDataToImageFilter(int argc, char * argv[])
+int otbVectorDataExtractROIandProjection(int argc, char * argv[])
 {
-
-  if (argc < 3  )
-  {
-    std::cout << argv[0] <<" <input vector filename> <input image filename>"  << std::endl;
-
-    return EXIT_FAILURE;
-  }
 
   //Read the vector data
   typedef otb::VectorData<> VectorDataType;
@@ -49,7 +39,7 @@ int otbVectorDataToImageFilter(int argc, char * argv[])
   typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> ProjectionFilterType;
   ProjectionFilterType::Pointer projection = ProjectionFilterType::New();
   projection->SetInput(reader->GetOutput());
-
+//   projection->Update();
   std::string projectionRefWkt ="PROJCS[\"UTM Zone 31, Northern Hemisphere\",GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9108\"]],AXIS[\"Lat\",NORTH],AXIS[\"Long\",EAST],AUTHORITY[\"EPSG\",\"4326\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",3],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"Meter\",1]]";
 
   projection->SetOutputProjectionRef(projectionRefWkt);
@@ -58,8 +48,7 @@ int otbVectorDataToImageFilter(int argc, char * argv[])
 
 
   //Convert the vector data into an image
-  typedef itk::RGBAPixel< unsigned char > PixelType;
-  typedef otb::Image<PixelType,2> ImageType;
+  typedef otb::Image<unsigned int,2> ImageType;
 
   ImageType::SizeType size;
   size[0] = 500;
@@ -86,21 +75,23 @@ int otbVectorDataToImageFilter(int argc, char * argv[])
   ExtractROIType::Pointer extractROI = ExtractROIType::New();
   extractROI->SetRegion(region);
   extractROI->SetInput(projection->GetOutput());
+  extractROI->Update();
 
-  typedef otb::VectorDataToImageFilter<VectorDataType, ImageType> VectorDataToImageFilterType;
-  VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();
-  vectorDataRendering->SetInput(extractROI->GetOutput());
 
-  vectorDataRendering->SetSize(size);
-  vectorDataRendering->SetOrigin(origin);
-  vectorDataRendering->SetSpacing(spacing);
+  unsigned int elementsKeptAfterProj = extractROI->GetOutput()->Size();
+  std::cout << "After projection: kept " << elementsKeptAfterProj << " features." << std::endl;
 
-  //Save the image in a file
-  typedef otb::ImageFileWriter<ImageType> WriterType;
-  WriterType::Pointer writer = WriterType::New();
-  writer->SetInput(vectorDataRendering->GetOutput());
-  writer->SetFileName(argv[2]);
-  writer->Update();
+  extractROI->SetInput(reader->GetOutput());
+  extractROI->Update();
+
+  unsigned int elementsKeptAfterReader = extractROI->GetOutput()->Size();
+  std::cout << "Directly from reader: kept " << elementsKeptAfterReader << " features." << std::endl;
+
+
+  if (elementsKeptAfterProj != elementsKeptAfterReader)
+  {
+    return EXIT_FAILURE;
+  }
 
   return EXIT_SUCCESS;
 }
