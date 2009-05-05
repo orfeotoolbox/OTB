@@ -289,19 +289,6 @@ public:
       // Can we crop?
       for (unsigned int i = 0; i < IndexType::IndexDimension && cropPossible; i++)
         {
-// // //           // Is left edge of current region to the right of the right edge
-// // //           // of the region to crop with? (if so, we cannot crop)
-// // //           if (m_Index[i] >= region.GetOrigin()[i]
-// // //               + static_cast<Type>(region.GetSize()[i]))
-// // //             {
-// // //               cropPossible = false;
-// // //             }
-// // //           // If right edge of the current region to the left of the left
-// // //           // edge of the region to crop with? (if so, we cannot crop)
-// // //           if (m_Index[i] + static_cast<Type>(m_Size[i]) <= region.GetOrigin()[i])
-// // //             {
-// // //               cropPossible = false;
-// // //             }
 
             if (
             ((region.GetOrigin()[i] <= m_Index[i])
@@ -320,15 +307,7 @@ public:
               return false;
             }
 
-
         }
-
-
-      // if we cannot crop, return without changing anything
-// // //       if (!cropPossible)
-// // //         {
-// // //           return cropPossible;
-// // //         }
 
       // we can crop, so crop
       for (unsigned int i=0; i <  IndexType::IndexDimension; i++)
