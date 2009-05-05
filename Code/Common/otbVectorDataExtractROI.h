@@ -113,7 +113,7 @@ protected:
    virtual void ProjectRegionToInputVectorProjection();
 
    /** Improve the Projected roi*/
-   virtual RegionType ComputeVertexListBoudingRegion(typename VertexListType::ConstPointer vertexlist);
+   virtual RegionType ComputeVertexListBoundingRegion(typename VertexListType::ConstPointer vertexlist);
 
    /** Method to transform itk::Point to itk::ContinuousIndex*/
    virtual VertexType  PointToContinuousIndex(ProjPointType  point);

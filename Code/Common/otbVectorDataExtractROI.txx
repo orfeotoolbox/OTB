@@ -254,7 +254,7 @@ bool
 VectorDataExtractROI<TVectorData>
 ::IsPolygonIntersectionNotNull(PolygonPointerType polygon)
 {
-//   RegionType region = ComputeVertexListBoudingRegion(polygon->GetVertexList());
+//   RegionType region = ComputeVertexListBoundingRegion(polygon->GetVertexList());
   RegionType region(polygon->GetBoundingRegion());
   return region.Crop(m_GeoROI);
 }
@@ -267,7 +267,7 @@ bool
 VectorDataExtractROI<TVectorData>
 ::IsLineIntersectionNotNull(LinePointerType line)
 {
-//   RegionType region = ComputeVertexListBoudingRegion(line->GetVertexList());
+//   RegionType region = ComputeVertexListBoundingRegion(line->GetVertexList());
   RegionType region(line->GetBoundingRegion());
   return region.Crop(m_GeoROI);
 }
@@ -338,7 +338,7 @@ VectorDataExtractROI<TVectorData>
   regionCorners->InsertElement(regionCorners->Size(),this->PointToContinuousIndex(genericTransform->TransformPoint(point4)));
 
   /** Due to The projection : the Projected ROI can be rotated */
-  m_GeoROI = this->ComputeVertexListBoudingRegion(regionCorners.GetPointer());
+  m_GeoROI = this->ComputeVertexListBoundingRegion(regionCorners.GetPointer());
   m_GeoROI.SetRegionProjection(this->GetInput()->GetProjectionRef());
 }
 /**
@@ -360,13 +360,13 @@ VectorDataExtractROI<TVectorData>
 }
 
 /**
- * ComputeVertexListBoudingRegion
+ * ComputeVertexListBoundingRegion
  */
 template <class TVectorData>
 typename VectorDataExtractROI<TVectorData>
 ::RegionType
 VectorDataExtractROI<TVectorData>
-::ComputeVertexListBoudingRegion(typename VertexListType::ConstPointer vertexlist)
+::ComputeVertexListBoundingRegion(typename VertexListType::ConstPointer vertexlist)
 {
   double x = 0.,y = 0.;
   IndexType       index;
