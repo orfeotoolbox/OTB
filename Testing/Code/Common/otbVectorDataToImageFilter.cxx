@@ -88,7 +88,7 @@ int otbVectorDataToImageFilter(int argc, char * argv[])
   typedef otb::VectorDataExtractROI<VectorDataType> ExtractROIType;
   ExtractROIType::Pointer extractROI = ExtractROIType::New();
   extractROI->SetRegion(region);
-  extractROI->SetInput(reader->GetOutput());
+  extractROI->SetInput(projection->GetOutput());
 
   typedef otb::VectorDataToImageFilter<VectorDataType, ImageType> VectorDataToImageFilterType;
   VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();

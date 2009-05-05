@@ -34,6 +34,8 @@
 
 #include <mapnik/value.hpp>
 
+#include "ogr_spatialref.h"
+
 namespace otb
 {
 
@@ -210,10 +212,23 @@ namespace otb
     VectorDataConstPointer input = this->GetInput();
     InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(input->GetDataTree()->GetRoot());
 
-    std::string vectorDataProjection;
-//     itk::ExposeMetaData<std::string>(input->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey,  vectorDataProjection);
-    vectorDataProjection = "+proj=utm +zone=31 +ellps=WGS84";
-    m_Map.set_srs(vectorDataProjection);
+
+    //Converting the projection string to the porj.4 format
+    std::string vectorDataProjectionWKT;
+    itk::ExposeMetaData<std::string>(input->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey,  vectorDataProjectionWKT);
+//     OGRSpatialReference oSRS;
+//     oSRS.importFromWkt(vectorDataProjectionWKT.c_str());
+//     std::cout << "WKT -> " << vectorDataProjectionWKT << std::endl;
+    OGRSpatialReference oSRS(vectorDataProjectionWKT.c_str());
+    char * pszProj4;
+    oSRS.exportToProj4(&pszProj4);
+    std::string vectorDataProjectionProj4(pszProj4);
+    CPLFree(pszProj4);
+
+//     std::cout << "Proj.4 -> " << vectorDataProjectionProj4 << std::endl;
+
+//      std::string   vectorDataProjectionProj4 = "+proj=utm +zone=31 +ellps=WGS84";
+    m_Map.set_srs(vectorDataProjectionProj4);
 
     ProcessNode(inputRoot,mDatasource);
 
@@ -221,6 +236,7 @@ namespace otb
     std::cout << "Datasource size: " << mDatasource->size() << std::endl;
 
     mapnik::Layer lyr("world");
+    lyr.set_srs(vectorDataProjectionProj4);
     lyr.set_datasource(mDatasource);
 //     lyr.add_style("river");
     lyr.add_style("minor-roads-casing");
@@ -352,6 +368,7 @@ namespace otb
 //           std::cout << " -> " << (*mfeature)["name"] << std::endl;
 
 //           std::cout << "Type: " << dataNode->GetFieldAsString("type") << std::endl;
+//           std::cout << "OSM ID: " << dataNode->GetFieldAsString("osm_id") << std::endl;
           boost::put(*mfeature, "highway", tr.transcode((dataNode->GetFieldAsString("type")).c_str()));
 
           mDatasource->push(mfeature);
