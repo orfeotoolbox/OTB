@@ -25,14 +25,9 @@
 
 #include "otbTestMain.h"
 
-
+//Use only if OTB_USE_LIBLAS is on
 void RegisterTests()
 {
 REGISTER_TEST(otbPointSetFileReaderNew);
 REGISTER_TEST(otbPointSetFileReader);
-REGISTER_TEST(otbImageIOFactoryNew);
-REGISTER_TEST(otbDEMToOrthoImageGeneratorNew);
-REGISTER_TEST(otbDEMToOrthoImageGeneratorTest);
-REGISTER_TEST(otbPrepareSRTMDirectoryNew);
-REGISTER_TEST(otbPrepareSRTMDirectoryTest);
 }

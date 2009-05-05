@@ -206,6 +206,11 @@ ADD_TEST(ioTvImageFileReaderTIF2MW ${IO_TESTS1}
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
         ${TEMP}/ioImageFileReaderTIF2MW.mw )
 
+
+#-------------  otbImageIOFactoryNew
+ADD_TEST(ioTuImageIOFactoryNew ${IO_TESTS1}
+        otbImageIOFactoryNew )
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1386,6 +1391,51 @@ ADD_TEST(ioTvossimElevManagerTest2 ${IO_TESTS12}
 	500
          )
 
+
+
+# ---  otb::DEMToOrthoImageGenerator ---
+ADD_TEST(ioTuDEMToOrthoImageGeneratorNew ${IO_TESTS12}
+      otbDEMToOrthoImageGeneratorNew )
+
+ADD_TEST(ioTvDEMToOrthoImageGeneratorTest ${IO_TESTS12}
+--compare-image ${TOL}  ${BASELINE}/ioTvDEMToOrthoImageGenerator.tif
+                        ${TEMP}/ioTvDEMToOrthoImageGenerator.tif
+        otbDEMToOrthoImageGeneratorTest
+         ${INPUTDATA}/DEM/srtm_directory
+         ${TEMP}/ioTvDEMToOrthoImageGenerator.tif
+         773441 #6.5
+         5044457 #44.5
+         500
+         500
+         200 #0.002
+         -200 #0.002
+	 48 #31 # utm zone
+         N # hemisphere
+)
+
+# ---  otb::PrepareSRTMDirectory ---
+ADD_TEST(ioTuPrepareSRTMDirectoryNew ${IO_TESTS12}
+      otbPrepareSRTMDirectoryNew )
+
+ADD_TEST(ioTuPrepareSRTMDirectoryTest ${IO_TESTS12}
+  --compare-n-ascii ${TOL} 3
+		    ${INPUTDATA}/DEM/srtm_directory/N44E007.hgt
+		    ${TEMP}/ioTuPrepareSRTMDirectoryTest/N44E007.hgt
+		    ${INPUTDATA}/DEM/srtm_directory/N46E007.hgt
+		    ${TEMP}/ioTuPrepareSRTMDirectoryTest/N46E007.hgt
+		    ${INPUTDATA}/DEM/srtm_directory/N45E007.hgt
+		    ${TEMP}/ioTuPrepareSRTMDirectoryTest/N45E007.hgt
+  otbPrepareSRTMDirectoryTest
+      ${INPUTDATA}/DEM/srtm_directory
+      ${TEMP}/ioTuPrepareSRTMDirectoryTest
+      7.2
+      45.2
+      6.1
+      44.6
+)
+
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #----------------------------------------------------------------------------------
@@ -1751,50 +1801,7 @@ ADD_TEST(ioTvPointSetFileReader ${IO_TESTS17}
 ENDIF(OTB_USE_LIBLAS)
 
 
-#-------------  otbImageIOFactoryNew
-ADD_TEST(ioTuImageIOFactoryNew ${IO_TESTS17}
-        otbImageIOFactoryNew )
 
-# ---  otb::DEMToOrthoImageGenerator ---
-ADD_TEST(ioTuDEMToOrthoImageGeneratorNew ${IO_TESTS17}
-      otbDEMToOrthoImageGeneratorNew )
-
-ADD_TEST(ioTvDEMToOrthoImageGeneratorTest ${IO_TESTS17}
---compare-image ${TOL}  ${BASELINE}/ioTvDEMToOrthoImageGenerator.tif
-                        ${TEMP}/ioTvDEMToOrthoImageGenerator.tif
-        otbDEMToOrthoImageGeneratorTest
-         ${INPUTDATA}/DEM/srtm_directory
-         ${TEMP}/ioTvDEMToOrthoImageGenerator.tif
-         773441 #6.5
-         5044457 #44.5
-         500
-         500
-         200 #0.002
-         -200 #0.002
-	 48 #31 # utm zone
-         N # hemisphere
-)
-
-# ---  otb::PrepareSRTMDirectory ---
-ADD_TEST(ioTuPrepareSRTMDirectoryNew ${IO_TESTS17}
-      otbPrepareSRTMDirectoryNew )
-
-ADD_TEST(ioTuPrepareSRTMDirectoryTest ${IO_TESTS17}
-  --compare-n-ascii ${TOL} 3
-		    ${INPUTDATA}/DEM/srtm_directory/N44E007.hgt
-		    ${TEMP}/ioTuPrepareSRTMDirectoryTest/N44E007.hgt
-		    ${INPUTDATA}/DEM/srtm_directory/N46E007.hgt
-		    ${TEMP}/ioTuPrepareSRTMDirectoryTest/N46E007.hgt
-		    ${INPUTDATA}/DEM/srtm_directory/N45E007.hgt
-		    ${TEMP}/ioTuPrepareSRTMDirectoryTest/N45E007.hgt
-  otbPrepareSRTMDirectoryTest
-      ${INPUTDATA}/DEM/srtm_directory
-      ${TEMP}/ioTuPrepareSRTMDirectoryTest
-      7.2
-      45.2
-      6.1
-      44.6
-)
 
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
@@ -1806,7 +1813,7 @@ otbMWImageIOTestCanWrite.cxx
 otbImageFileReaderTest.cxx
 otbImageFileReaderTestFloat.cxx
 otbShortImageIOTest.cxx
-
+otbImageIOFactoryNew.cxx
 )
 SET(BasicIO_SRCS2
 otbIntImageIOTest.cxx
@@ -1883,6 +1890,10 @@ otbDEMToImageGeneratorTest.cxx
 otbImageGeometryHandlerNew.cxx
 otbOssimElevManagerTest.cxx
 otbOssimElevManagerTest2.cxx
+otbDEMToOrthoImageGeneratorNew.cxx
+otbDEMToOrthoImageGeneratorTest.cxx
+otbPrepareSRTMDirectoryNew.cxx
+otbPrepareSRTMDirectoryTest.cxx
 )
 
 
@@ -1934,11 +1945,6 @@ otbImageSeriesFileReader.cxx
 SET(BasicIO_SRCS17
 otbPointSetFileReaderNew.cxx
 otbPointSetFileReader.cxx
-otbImageIOFactoryNew.cxx
-otbDEMToOrthoImageGeneratorNew.cxx
-otbDEMToOrthoImageGeneratorTest.cxx
-otbPrepareSRTMDirectoryNew.cxx
-otbPrepareSRTMDirectoryTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
