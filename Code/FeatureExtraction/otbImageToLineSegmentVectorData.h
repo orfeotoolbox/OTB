@@ -80,39 +80,33 @@ public PersistentImageFilter<TInputImage, TInputImage>
   typedef itk::ExtractImageFilter<ImageType, ImageType>        ExtractorType;
   typedef typename ExtractorType::Pointer                      ExtractorPointerType;
 
+  typedef ObjectList<ExtractorType>                            ExtractorListType; 
+  typedef ObjectList<LineDetectorType>                         LineDetectorListType;
+
+  // Vector of region 
+  typedef std::vector<RegionType>                              RegionListType;
+
   virtual void Reset(void);
   virtual void Synthetize(void);
 
   itkGetObjectMacro(LineSpatialObjectList,LineSpatialObjectListType);
+  RegionListType GetRegionList()
+  {
+    return m_RegionList;
+  }
 
   void AllocateOutputs(){};
   void GenerateOutputInformation();
   // Override since the filter needs all the data for the algorithm
   virtual void GenerateInputRequestedRegion();
 
-  /*
-  void SetInput(const ImageType *input)
-  {
-    this->SetInput(0, input );
-  };
-
-  const ImageType* GetInput()
-  {
-    if ( this->GetNumberOfInputs() < 1 )
-    {
-      return 0;
-    }
-    else
-      return( static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(0)) );
-  }
-  */
 
 protected:
   PersistentLineSegmentDetector();
   ~PersistentLineSegmentDetector() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   virtual void  ThreadedGenerateData (const RegionType& outputRegionForThread,int threadId);
-  //virtual void GenerateData();
+
 
 private:
   PersistentLineSegmentDetector(const Self&); //purposely not implemented
@@ -122,6 +116,10 @@ private:
   LineDetectorPointerType m_LineDetector;
   // Region extractor.
   LineSpatialObjectListPointerType m_LineSpatialObjectList;
+  // Store requested region for each threads
+  RegionListType m_RegionList;
+  ExtractorListType::Pointer m_Extractor;
+  LineDetectorListType::Pointer m_LineDetector;
 
 }; // end of class
 // end of class PersistentLineSegmentDetector
@@ -166,12 +164,15 @@ class ITK_EXPORT ImageToLineSegmentVectorData :
   /** Creation through object factory macro */
   itkTypeMacro(ImageToLineSegmentVectorData,PersistentFilterStreamingDecorator);
 
-  typedef TInputImage InputImageType;
-  typedef typename Superclass::FilterType LSDFilterType;
+  typedef TInputImage                                       InputImageType;
+  typedef typename TInputImage::SizeType                    SizeType;
+
+  typedef typename Superclass::FilterType                   LSDFilterType;
   /** Type of DataObjects used for scalar outputs */
   typedef typename LSDFilterType::LineSpatialObjectListType LineSpatialObjectListType;
   typedef typename LineSpatialObjectListType::Pointer       LineSpatialObjectListPointerType;
   typedef typename LSDFilterType::LineSpatialObjectType     LineSpatialObjectType;
+  typedef typename LSDFilterType::RegionListType            RegionListType;
 
   typedef VectorData<TPrecision>                            VectorDataType;
   typedef typename VectorDataType::Pointer                  VectorDataPointerType;
@@ -194,7 +195,11 @@ class ITK_EXPORT ImageToLineSegmentVectorData :
   {
     return this->GetFilter()->GetLineSpatialObjectList();
   };
-  
+  RegionListType GetRegionList()
+  {
+    return this->GetFilter()->GetRegionList();
+  }
+
   /** Transform the linespatialobject list into vector data*/
   VectorDataPointerType GetOutputVectorData();
 

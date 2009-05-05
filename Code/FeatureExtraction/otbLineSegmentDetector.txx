@@ -134,7 +134,7 @@ LineSegmentDetector<TInputImage,TPrecision >
    *       - A Line List m_LineList 
    */
   this->ComputeRectangles();
-
+  std::cout<<"UPUPUP"<<std::endl;
 }
 
 /**************************************************************************************************************/
