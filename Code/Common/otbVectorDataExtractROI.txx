@@ -385,6 +385,8 @@ VectorDataExtractROI<TVectorData>
       y = static_cast<double>(it.Value()[1]);
       index[0] = x;
       index[1] = y;
+      maxId[0] = x;
+      maxId[1] = y;
 
       ++it;
       while (it != vertexlist->End())
@@ -397,7 +399,7 @@ VectorDataExtractROI<TVectorData>
             {
               index[0] = x;
             }
-          if ( y < index[1] )
+          if ( y > index[1] )
             {
               index[1] = y;
             }
@@ -406,7 +408,7 @@ VectorDataExtractROI<TVectorData>
             {
               maxId[0] = x;
             }
-          if ( y > maxId[1] )
+          if ( y < maxId[1] )
             {
               maxId[1] = y;
             }
