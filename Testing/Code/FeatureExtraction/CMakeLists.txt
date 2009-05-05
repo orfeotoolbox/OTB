@@ -1747,7 +1747,7 @@ ADD_TEST(feTuImageToLineSegmentVectorDataNew ${FEATUREEXTRACTION_TESTS15}
 
 ADD_TEST(feTvImageToLineSegmentVectorData ${FEATUREEXTRACTION_TESTS15} 
 --compare-ogr ${EPS}
-     ${BASELINE}/feTvImageToLineSegmentVectorData.shp
+     ${BASELINE_FILES}/feTvImageToLineSegmentVectorData.shp
      ${TEMP}/feTvImageToLineSegmentVectorData.shp
     otbImageToLineSegmentVectorData
       ${INPUTDATA}/scene.png  #prison_toulouse.tif 
