@@ -1403,13 +1403,13 @@ ADD_TEST(ioTvDEMToOrthoImageGeneratorTest ${IO_TESTS12}
         otbDEMToOrthoImageGeneratorTest
          ${INPUTDATA}/DEM/srtm_directory
          ${TEMP}/ioTvDEMToOrthoImageGenerator.tif
-         773441 #6.5
-         5044457 #44.5
+         778245.3501 #6.5
+         4933369.633 #44.5
          500
          500
-         200 #0.002
-         -200 #0.002
-	 48 #31 # utm zone
+         30 #resolution in m
+         -30 #resolution in m
+	 31 # utm zone
          N # hemisphere
 )
 

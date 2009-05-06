@@ -35,8 +35,8 @@ int otbDEMToOrthoImageGeneratorTest(int argc, char * argv[])
 
   const unsigned int Dimension = 2;
   typedef otb::Image<double, Dimension>                                       ImageType;
-  typedef otb::UtmForwardProjection                                           MapProjectionType;
-  typedef otb::DEMToOrthoImageGenerator<ImageType, otb::UtmForwardProjection> DEMToImageGeneratorType;
+  typedef otb::UtmInverseProjection                                           MapProjectionType;
+  typedef otb::DEMToOrthoImageGenerator<ImageType, MapProjectionType> DEMToImageGeneratorType;
   typedef DEMToImageGeneratorType::DEMHandlerType                             DEMHandlerType;
   typedef DEMHandlerType::PointType                                           PointType;
   typedef DEMToImageGeneratorType::SizeType                                   SizeType;
