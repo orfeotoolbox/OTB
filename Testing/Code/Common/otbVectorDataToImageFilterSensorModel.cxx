@@ -73,16 +73,20 @@ int otbVectorDataToImageFilterSensorModel(int argc, char * argv[])
   size[1] = 500;
 
   ImageType::PointType origin;
-  origin[0] = imageReader->GetOutput()->GetOrigin()[0];
-  origin[1] = imageReader->GetOutput()->GetOrigin()[1];
+//   origin[0] = imageReader->GetOutput()->GetOrigin()[0];
+//   origin[1] = imageReader->GetOutput()->GetOrigin()[1];
+  origin[0] = 11052;
+  origin[1] = 7585;
 
   ImageType::SpacingType spacing;
-//   spacing[0] = imageReader->GetOutput()->GetSpacing()[0];
-//   spacing[1] = imageReader->GetOutput()->GetSpacing()[1];
-  spacing[0] = imageReader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]/static_cast<double>(size[0]);
-//                     /imageReader->GetOutput()->GetSpacing()[0];
-  spacing[1] = imageReader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]/static_cast<double>(size[1]);
-//                     /imageReader->GetOutput()->GetSpacing()[1];
+//   spacing[0] = imageReader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]/static_cast<double>(size[0]);
+//   spacing[1] = imageReader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]/static_cast<double>(size[1]);
+  spacing[0] = 500/static_cast<double>(size[0]);
+  spacing[1] = 500/static_cast<double>(size[1]);
+
+  std::cout << "Size: " << size <<std::endl;
+  std::cout << "Origin: " << origin <<std::endl;
+  std::cout << "Spacing: " << spacing <<std::endl;
 
   typedef otb::VectorDataToImageFilter<VectorDataType, ImageType> VectorDataToImageFilterType;
   VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();

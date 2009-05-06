@@ -62,7 +62,7 @@ PersistentLineSegmentDetector<TInputImage, TPrecision>
     }
 
 
- 
+
 }
 
 template<class TInputImage, class TPrecision>
@@ -113,7 +113,7 @@ PersistentLineSegmentDetector<TInputImage, TPrecision>
 {
   ImagePointer inputPtr = const_cast< TInputImage * >( this->GetInput() );
   ImagePointer outputPtr = const_cast< TInputImage * >( this->GetOutput() );
-  
+
   inputPtr->SetRequestedRegion(outputRegionForThread);
   inputPtr->PropagateRequestedRegion();
   inputPtr->UpdateOutputData();
@@ -173,12 +173,12 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
     {
       itkExceptionMacro(<<"No LineSpatialObject to vectorize");
     }
-  
+
   VectorDataPointerType vlines = VectorDataType::New();
   DataNodePointerType document = DataNodeType::New();
   DataNodePointerType folder   = DataNodeType::New();
   DataNodePointerType root     = vlines->GetDataTree()->GetRoot()->Get();
-  
+
   document->SetNodeType(otb::DOCUMENT);
   folder->SetNodeType(otb::FOLDER);
   vlines->GetDataTree()->Add(document,root);
@@ -193,7 +193,7 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
   std::vector<DoubleVertexType> vertexList, vertexNewList;
 
   for(unsigned int i = 0; i<listSize; i++ )
-    {  
+    {
       typename LineSpatialObjectType::const_iterator  it    = this->GetLines()->GetNthElement(i)->begin();
       typename LineSpatialObjectType::const_iterator  itEnd = this->GetLines()->GetNthElement(i)->end();
    
@@ -208,7 +208,7 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
 	  itPoints++;
 	  p2[0] =(*itPoints).GetPosition()[0];     //Second Vertex
 	  p2[1] =(*itPoints).GetPosition()[1];
-	  
+
 	  bool go = false;
 	  // horizontal line
 	  if( vcl_abs(p1[1]-whereAmI[1])<m_ThreadDistanceThreshold && vcl_abs(p2[1]-whereAmI[1])<m_ThreadDistanceThreshold )
@@ -287,23 +287,23 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
 	  {
 	      l->AddVertex(p1);
 	      l->AddVertex(p2);
-	 
+
 	      DataNodePointerType node = DataNodeType::New();
 	      node->SetNodeType(otb::FEATURE_LINE);
 	      node->SetLine(l);
 	      vlines->GetDataTree()->Add(node,folder);
 	    }
-	  
+
 	  ++it;
 	}  // End while(it != itEnd) loop
-	
+
       // write the false alarm in vertexList (those that don't have a continuation in the next thread)
       for(unsigned int k=0; k<vertexList.size(); k++)
 	{
 	  typename LineType::Pointer l = LineType::New();
 	  l->AddVertex(vertexList[k][0]);
 	  l->AddVertex(vertexList[k][1]);
-	  
+
 	  DataNodePointerType node = DataNodeType::New();
 	  node->SetNodeType(otb::FEATURE_LINE);
 	  node->SetLine(l);

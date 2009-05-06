@@ -26,8 +26,9 @@
 namespace otb
 {
 /** \class VectorDataStyle
-   *   \brief Load style into a mapnik::Map
-   *
+ *   \brief Load style into a mapnik::Map
+ *
+ * \sa VectorDataToImageFilter
  */
 
 
@@ -48,9 +49,20 @@ class ITK_EXPORT VectorDataStyle : public itk::LightObject
 
     void LoadOSMStyle(mapnik::Map& mapnikMap) const;
 
+    /** Get/Set the size of the scale factor. */
+    double GeScaleFactor() const
+    {
+      return m_ScaleFactor;
+    }
+    void SetScaleFactor( double scale )
+    {
+      m_ScaleFactor = scale;
+    }
+
   protected:
     /** Constructor */
-    VectorDataStyle() {};
+    VectorDataStyle():
+      m_ScaleFactor(1.0){};
     /** Destructor */
     virtual ~VectorDataStyle() {};
     /**PrintSelf method */
@@ -59,6 +71,10 @@ class ITK_EXPORT VectorDataStyle : public itk::LightObject
   private:
     VectorDataStyle(const Self&); //purposely not implemented
     void operator=(const Self&); //purposely not implemented
+
+    //this parameter is used only in the case of sensor geometry
+    //to adjust the scale
+    double m_ScaleFactor;
 
 }; // end class
 } // end namespace otb

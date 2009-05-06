@@ -21,6 +21,7 @@
 
 #include "otbVectorDataToImageFilter.h"
 #include "itkImageRegionIterator.h"
+#include "itkImageIteratorWithIndex.h"
 #include "otbVectorDataStyle.h"
 
 #include <mapnik/datasource_cache.hpp>
@@ -53,6 +54,7 @@ namespace otb
     m_Size.Fill( 0 );
     m_StartIndex.Fill( 0 );
     m_Map = mapnik::Map();
+    m_SensorModelFlip = 1;
   }
 
 
@@ -218,12 +220,15 @@ namespace otb
     itk::ExposeMetaData<std::string>(input->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey,  vectorDataProjectionWKT);
     std::cout << "WKT -> " << vectorDataProjectionWKT << std::endl;
     std::string vectorDataProjectionProj4;
+    m_SensorModelFlip = 1;
+
     if (vectorDataProjectionWKT == "")
     {
       //We assume that it is an image in sensor model geometry
       //and tell mapnik that this is utm
       //(with a resolution of 1m per unit)
       vectorDataProjectionProj4 = "+proj=utm +zone=31 +ellps=WGS84";
+      m_SensorModelFlip =  -1;
     }
     else
     {
@@ -232,6 +237,7 @@ namespace otb
       oSRS.exportToProj4(&pszProj4);
       vectorDataProjectionProj4 = pszProj4;
       CPLFree(pszProj4);
+      m_SensorModelFlip =  1;
     }
     std::cout << "Proj.4 -> " << vectorDataProjectionProj4 << std::endl;
 
@@ -254,10 +260,12 @@ namespace otb
 
     m_Map.addLayer(lyr);
 
+    assert( (m_SensorModelFlip == 1)||(m_SensorModelFlip == -1) );
     mapnik::Envelope<double> envelope(m_Origin[0],
-                                     m_Origin[1]+m_Spacing[1]*m_Size[1],
-                                     m_Origin[0]+m_Spacing[0]*m_Size[0],
-                                     m_Origin[1]);
+                                      m_SensorModelFlip*(m_Origin[1]+m_Spacing[1]*m_Size[1]),
+                                        m_Origin[0]+m_Spacing[0]*m_Size[0],
+                                        m_SensorModelFlip*m_Origin[1]);
+
 //     m_Map.zoomToBox(lyr.envelope());//FIXME: use the Origin/Spacing to calculate this
     m_Map.zoomToBox(envelope);
 //     std::cout << "Envelope: " << lyr.envelope() << std::endl;
@@ -276,22 +284,23 @@ namespace otb
 //     unsigned int size = 4*m_Size[0]*m_Size[1];//FIXME: lot of assumption here: RGBA, 2 dimensions
 //     memcpy(dst, src, size);
 
-    itk::ImageRegionIterator<ImageType> it(output, output->GetLargestPossibleRegion());
+//     if (m_SensorModelFlip == false)
+//     {
+      itk::ImageRegionIterator<ImageType> it(output, output->GetLargestPossibleRegion());
 
-    for (it.GoToBegin(); !it.IsAtEnd(); ++it)
-    {
-      itk::RGBAPixel<unsigned char> pix;
-      pix[0] = *src;
-      ++src;
-      pix[1] = *src;
-      ++src;
-      pix[2] = *src;
-      ++src;
-      pix[3] = *src;
-      ++src;
-      it.Set(pix);
-    }
-
+      for (it.GoToBegin(); !it.IsAtEnd(); ++it)
+      {
+        itk::RGBAPixel<unsigned char> pix;
+        pix[0] = *src;
+        ++src;
+        pix[1] = *src;
+        ++src;
+        pix[2] = *src;
+        ++src;
+        pix[3] = *src;
+        ++src;
+        it.Set(pix);
+      }
 
     this->AfterThreadedGenerateData();
   }
@@ -333,14 +342,10 @@ namespace otb
           ProcessNode((*it),mDatasource);
           break;
         }
-//       case FEATURE_POINT:
-//       {
-//         newDataNode->SetPoint(this->ReprojectPoint(dataNode->GetPoint()));
-//         newContainer = OutputInternalTreeNodeType::New();
-//         newContainer->Set(newDataNode);
-//         destination->AddChild(newContainer);
-//         break;
-//       }
+      case FEATURE_POINT:
+      {
+        itkExceptionMacro(<<"This type (FEATURE_POINT) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+      }
         case otb::FEATURE_LINE:
         {
           std::cout << std::setprecision(15);
@@ -355,7 +360,7 @@ namespace otb
           while (itVertex != dataNode->GetLine()->GetVertexList()->End())
           {
 //             std::cout << itVertex.Value()[0] << ", " << itVertex.Value()[1] << std::endl;
-            line->line_to(itVertex.Value()[0],itVertex.Value()[1]);
+            line->line_to(itVertex.Value()[0],m_SensorModelFlip*itVertex.Value()[1]);
             ++itVertex;
           }
 
@@ -381,50 +386,28 @@ namespace otb
 
           mDatasource->push(mfeature);
 
-
           break;
         }
-//       case FEATURE_POLYGON:
-//       {
-//         newDataNode->SetPolygonExteriorRing(this->ReprojectPolygon(dataNode->GetPolygonExteriorRing()));
-//         newDataNode->SetPolygonInteriorRings(this->ReprojectPolygonList(dataNode->GetPolygonInteriorRings()));
-//         newContainer = OutputInternalTreeNodeType::New();
-//         newContainer->Set(newDataNode);
-//         destination->AddChild(newContainer);
-//         break;
-//       }
-//       case FEATURE_MULTIPOINT:
-//       {
-//         newContainer = OutputInternalTreeNodeType::New();
-//         newContainer->Set(newDataNode);
-//         destination->AddChild(newContainer);
-//         ProcessNode((*it),newContainer);
-//         break;
-//       }
-//       case FEATURE_MULTILINE:
-//       {
-//         newContainer = OutputInternalTreeNodeType::New();
-//         newContainer->Set(newDataNode);
-//         destination->AddChild(newContainer);
-//         ProcessNode((*it),newContainer);
-//         break;
-//       }
-//       case FEATURE_MULTIPOLYGON:
-//       {
-//         newContainer = OutputInternalTreeNodeType::New();
-//         newContainer->Set(newDataNode);
-//         destination->AddChild(newContainer);
-//         ProcessNode((*it),newContainer);
-//         break;
-//       }
-//       case FEATURE_COLLECTION:
-//       {
-//         newContainer = OutputInternalTreeNodeType::New();
-//         newContainer->Set(newDataNode);
-//         destination->AddChild(newContainer);
-//         ProcessNode((*it),newContainer);
-//         break;
-//       }
+      case FEATURE_POLYGON:
+      {
+        itkExceptionMacro(<<"This type (FEATURE_POLYGON) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+      }
+      case FEATURE_MULTIPOINT:
+      {
+        itkExceptionMacro(<<"This type (FEATURE_MULTIPOINT) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+      }
+      case FEATURE_MULTILINE:
+      {
+        itkExceptionMacro(<<"This type (FEATURE_MULTILINE) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+      }
+      case FEATURE_MULTIPOLYGON:
+      {
+        itkExceptionMacro(<<"This type (FEATURE_MULTIPOLYGON) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+      }
+      case FEATURE_COLLECTION:
+      {
+        itkExceptionMacro(<<"This type (FEATURE_COLLECTION) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+      }
       }
     }
   }

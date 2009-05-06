@@ -133,6 +133,10 @@ template <class TVectorData, class TImage>
 
     mapnik::Map m_Map;
 
+    //This factor is used to flip the data on the Y axis when using a
+    //sensor model geometry (where the Y coordinate increases top-down)
+    int m_SensorModelFlip;
+
 }; // end class
 } // end namespace otb
 

@@ -283,6 +283,8 @@ VectorDataExtractROI<TVectorData>
   std::string regionProjection = m_ROI.GetRegionProjection();
   std::string inputVectorProjection = this->GetInput()->GetProjectionRef();
 
+  //FIXME: the string comparison is not sufficient to say that two
+  //projections are different
   if(regionProjection == inputVectorProjection)
     m_ProjectionNeeded = false;
   else

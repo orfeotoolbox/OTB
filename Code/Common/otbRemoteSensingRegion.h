@@ -73,7 +73,7 @@ public:
 
   /** Size typedef support. A size is used to define region bounds. */
   typedef itk::ContinuousIndex<Type>           SizeType;
-  typedef itk::Size<2>                         StandardSizeType;
+//   typedef itk::Size<2>                         StandardSizeType;
 
   /** ImageRegion typedef needed by the GetImageRegion() method */
   typedef itk::ImageRegion<2>                  ImageRegionType;
@@ -185,11 +185,11 @@ public:
     m_Size = size;
     }
 
-  void SetSize(const StandardSizeType &size)
-    {
-      m_Size[0] = size[0];
-      m_Size[1] = size[1];
-    }
+//   void SetSize(const StandardSizeType &size)
+//     {
+//       m_Size[0] = size[0];
+//       m_Size[1] = size[1];
+//     }
 
   /** Get the size of the region. */
   const SizeType& GetSize() const
@@ -254,11 +254,13 @@ public:
     {
     for(unsigned int i=0; i<IndexType::IndexDimension; i++)
       {
-      if( index[i] < m_Index[i] )
+      if(( index[i] < m_Index[i] )
+           && (index[i] < m_Index[i] + m_Size[i]))
         {
         return false;
         }
-      if( index[i] >= m_Index[i] + m_Size[i] )
+      if(( index[i] >= m_Index[i] )
+          && (index[i] >= m_Index[i] + m_Size[i] ))
         {
         return false;
         }
