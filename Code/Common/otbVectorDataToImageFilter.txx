@@ -54,6 +54,7 @@ namespace otb
     m_Size.Fill( 0 );
     m_StartIndex.Fill( 0 );
     m_Map = mapnik::Map();
+    m_SensorModelFlip = 1;
   }
 
 
@@ -219,7 +220,7 @@ namespace otb
     itk::ExposeMetaData<std::string>(input->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey,  vectorDataProjectionWKT);
     std::cout << "WKT -> " << vectorDataProjectionWKT << std::endl;
     std::string vectorDataProjectionProj4;
-    bool processingInSensorModelGeometry = false;
+    m_SensorModelFlip = 1;
 
     if (vectorDataProjectionWKT == "")
     {
@@ -227,7 +228,7 @@ namespace otb
       //and tell mapnik that this is utm
       //(with a resolution of 1m per unit)
       vectorDataProjectionProj4 = "+proj=utm +zone=31 +ellps=WGS84";
-      processingInSensorModelGeometry =  true;
+      m_SensorModelFlip =  -1;
     }
     else
     {
@@ -236,7 +237,7 @@ namespace otb
       oSRS.exportToProj4(&pszProj4);
       vectorDataProjectionProj4 = pszProj4;
       CPLFree(pszProj4);
-      processingInSensorModelGeometry =  false;
+      m_SensorModelFlip =  1;
     }
     std::cout << "Proj.4 -> " << vectorDataProjectionProj4 << std::endl;
 
@@ -259,15 +260,12 @@ namespace otb
 
     m_Map.addLayer(lyr);
 
-    std::cout << "Envelope (param): " << m_Origin[0] << ", "
-       << m_Origin[1]+m_Spacing[1]*m_Size[1] << ", "
-       << m_Origin[0]+m_Spacing[0]*m_Size[0] << ", "
-       << m_Origin[1] << std::endl;
-
+    assert( (m_SensorModelFlip == 1)||(m_SensorModelFlip == -1) );
     mapnik::Envelope<double> envelope(m_Origin[0],
-                                     m_Origin[1]+m_Spacing[1]*m_Size[1],
-                                     m_Origin[0]+m_Spacing[0]*m_Size[0],
-                                     m_Origin[1]);
+                                      m_SensorModelFlip*(m_Origin[1]+m_Spacing[1]*m_Size[1]),
+                                        m_Origin[0]+m_Spacing[0]*m_Size[0],
+                                        m_SensorModelFlip*m_Origin[1]);
+
 //     m_Map.zoomToBox(lyr.envelope());//FIXME: use the Origin/Spacing to calculate this
     m_Map.zoomToBox(envelope);
 //     std::cout << "Envelope: " << lyr.envelope() << std::endl;
@@ -286,8 +284,8 @@ namespace otb
 //     unsigned int size = 4*m_Size[0]*m_Size[1];//FIXME: lot of assumption here: RGBA, 2 dimensions
 //     memcpy(dst, src, size);
 
-    if (processingInSensorModelGeometry == false)
-    {
+//     if (m_SensorModelFlip == false)
+//     {
       itk::ImageRegionIterator<ImageType> it(output, output->GetLargestPossibleRegion());
 
       for (it.GoToBegin(); !it.IsAtEnd(); ++it)
@@ -303,33 +301,6 @@ namespace otb
         ++src;
         it.Set(pix);
       }
-    }
-    else
-    {//in sensor geometry, we need to flip the Y axis (Note: check validity for some SAR sensor)
-      itk::ImageIteratorWithIndex<ImageType> it(output, output->GetLargestPossibleRegion());
-      typename itk::ImageIteratorWithIndex<ImageType>::IndexType index;
-      for (int yIndex = m_Size[1]-1; yIndex >= 0; --yIndex)
-      {
-        for (int xIndex = 0; xIndex < m_Size[0]; ++xIndex)
-        {
-          itk::RGBAPixel<unsigned char> pix;
-          pix[0] = *src;
-          ++src;
-          pix[1] = *src;
-          ++src;
-          pix[2] = *src;
-          ++src;
-          pix[3] = *src;
-          ++src;
-          index[0] = xIndex;
-          index[1] = yIndex;
-          it.SetIndex(index);
-          it.Set(pix);
-        }
-      }
-
-    }
-
 
     this->AfterThreadedGenerateData();
   }
@@ -389,7 +360,7 @@ namespace otb
           while (itVertex != dataNode->GetLine()->GetVertexList()->End())
           {
 //             std::cout << itVertex.Value()[0] << ", " << itVertex.Value()[1] << std::endl;
-            line->line_to(itVertex.Value()[0],itVertex.Value()[1]);
+            line->line_to(itVertex.Value()[0],m_SensorModelFlip*itVertex.Value()[1]);
             ++itVertex;
           }
 
