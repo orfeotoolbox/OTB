@@ -141,8 +141,23 @@ ADD_TEST(coTvVectorDataExtractROI ${COMMON_TESTS2}
               ${BASELINE_FILES}/coVectorDataExtractROIOutput.shp
               ${TEMP}/coVectorDataExtractROIOutput.shp
 	 otbVectorDataExtractROI
-	${INPUTDATA}/ToulousePoints-examples.shp   #${LARGEINPUT}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
+	${INPUTDATA}/ToulousePoints-examples.shp
 	${TEMP}/coVectorDataExtractROIOutput.shp
+	 374369.48850211215904 4853951.786124914  # Origin of the RemoteSensingRegion
+         1000.25 -25000.2                               # Size of the Cartoregion
+ )
+
+# This test is almost the same as the previous one and should return the
+# same output.
+# This is to check that region can also be passed with origin
+# at the south-west corner
+ADD_TEST(coTvVectorDataExtractROI2 ${COMMON_TESTS2}
+  --compare-ogr ${NOTOL}
+              ${BASELINE_FILES}/coVectorDataExtractROIOutput2.shp
+              ${TEMP}/coVectorDataExtractROIOutput2.shp
+	 otbVectorDataExtractROI
+	${INPUTDATA}/ToulousePoints-examples.shp
+	${TEMP}/coVectorDataExtractROIOutput2.shp
 	 374369.48850211215904 4828951.58612491376698  # Origin of the RemoteSensingRegion
          1000.25 25000.2                               # Size of the Cartoregion
  )
