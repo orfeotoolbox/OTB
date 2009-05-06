@@ -21,6 +21,7 @@
 
 #include "otbVectorDataToImageFilter.h"
 #include "itkImageRegionIterator.h"
+#include "itkImageIteratorWithIndex.h"
 #include "otbVectorDataStyle.h"
 
 #include <mapnik/datasource_cache.hpp>
@@ -218,12 +219,15 @@ namespace otb
     itk::ExposeMetaData<std::string>(input->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey,  vectorDataProjectionWKT);
     std::cout << "WKT -> " << vectorDataProjectionWKT << std::endl;
     std::string vectorDataProjectionProj4;
+    bool processingInSensorModelGeometry = false;
+
     if (vectorDataProjectionWKT == "")
     {
       //We assume that it is an image in sensor model geometry
       //and tell mapnik that this is utm
       //(with a resolution of 1m per unit)
       vectorDataProjectionProj4 = "+proj=utm +zone=31 +ellps=WGS84";
+      processingInSensorModelGeometry =  true;
     }
     else
     {
@@ -232,6 +236,7 @@ namespace otb
       oSRS.exportToProj4(&pszProj4);
       vectorDataProjectionProj4 = pszProj4;
       CPLFree(pszProj4);
+      processingInSensorModelGeometry =  false;
     }
     std::cout << "Proj.4 -> " << vectorDataProjectionProj4 << std::endl;
 
@@ -253,6 +258,11 @@ namespace otb
     lyr.add_style("roads-text");
 
     m_Map.addLayer(lyr);
+
+    std::cout << "Envelope (param): " << m_Origin[0] << ", "
+       << m_Origin[1]+m_Spacing[1]*m_Size[1] << ", "
+       << m_Origin[0]+m_Spacing[0]*m_Size[0] << ", "
+       << m_Origin[1] << std::endl;
 
     mapnik::Envelope<double> envelope(m_Origin[0],
                                      m_Origin[1]+m_Spacing[1]*m_Size[1],
@@ -276,20 +286,48 @@ namespace otb
 //     unsigned int size = 4*m_Size[0]*m_Size[1];//FIXME: lot of assumption here: RGBA, 2 dimensions
 //     memcpy(dst, src, size);
 
-    itk::ImageRegionIterator<ImageType> it(output, output->GetLargestPossibleRegion());
-
-    for (it.GoToBegin(); !it.IsAtEnd(); ++it)
+    if (processingInSensorModelGeometry == false)
     {
-      itk::RGBAPixel<unsigned char> pix;
-      pix[0] = *src;
-      ++src;
-      pix[1] = *src;
-      ++src;
-      pix[2] = *src;
-      ++src;
-      pix[3] = *src;
-      ++src;
-      it.Set(pix);
+      itk::ImageRegionIterator<ImageType> it(output, output->GetLargestPossibleRegion());
+
+      for (it.GoToBegin(); !it.IsAtEnd(); ++it)
+      {
+        itk::RGBAPixel<unsigned char> pix;
+        pix[0] = *src;
+        ++src;
+        pix[1] = *src;
+        ++src;
+        pix[2] = *src;
+        ++src;
+        pix[3] = *src;
+        ++src;
+        it.Set(pix);
+      }
+    }
+    else
+    {//in sensor geometry, we need to flip the Y axis (Note: check validity for some SAR sensor)
+      itk::ImageIteratorWithIndex<ImageType> it(output, output->GetLargestPossibleRegion());
+      typename itk::ImageIteratorWithIndex<ImageType>::IndexType index;
+      for (int yIndex = m_Size[1]-1; yIndex >= 0; --yIndex)
+      {
+        for (int xIndex = 0; xIndex < m_Size[0]; ++xIndex)
+        {
+          itk::RGBAPixel<unsigned char> pix;
+          pix[0] = *src;
+          ++src;
+          pix[1] = *src;
+          ++src;
+          pix[2] = *src;
+          ++src;
+          pix[3] = *src;
+          ++src;
+          index[0] = xIndex;
+          index[1] = yIndex;
+          it.SetIndex(index);
+          it.Set(pix);
+        }
+      }
+
     }
 
 

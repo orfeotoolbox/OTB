@@ -84,6 +84,10 @@ int otbVectorDataToImageFilterSensorModel(int argc, char * argv[])
   spacing[1] = imageReader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]/static_cast<double>(size[1]);
 //                     /imageReader->GetOutput()->GetSpacing()[1];
 
+  std::cout << "Size: " << size <<std::endl;
+  std::cout << "Origin: " << origin <<std::endl;
+  std::cout << "Spacing: " << spacing <<std::endl;
+
   typedef otb::VectorDataToImageFilter<VectorDataType, ImageType> VectorDataToImageFilterType;
   VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();
   vectorDataRendering->SetInput(projection->GetOutput());
