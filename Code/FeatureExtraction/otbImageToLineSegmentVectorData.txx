@@ -56,14 +56,14 @@ PersistentLineSegmentDetector<TInputImage, TPrecision>
   //m_Extractor->Resize(nbThread);
   //m_LineDetector->Resize(nbThread);
 
-  for(unsigned int p=0; p<nbThread; p++)
+  for(int p=0; p<nbThread; p++)
     {
       m_Extractor->PushBack( ExtractorType::New() );
       m_LineDetector->PushBack( LineDetectorType::New() );
     }
 
 
- 
+
 }
 
 template<class TInputImage, class TPrecision>
@@ -116,14 +116,14 @@ PersistentLineSegmentDetector<TInputImage, TPrecision>
 
   ImagePointer inputPtr = const_cast< TInputImage * >( this->GetInput() );
   ImagePointer outputPtr = const_cast< TInputImage * >( this->GetOutput() );
-  
+
   inputPtr->SetRequestedRegion(outputRegionForThread);
   inputPtr->PropagateRequestedRegion();
   inputPtr->UpdateOutputData();
   /*
   LineDetectorPointerType lineDetector = LineDetectorType::New();
   ExtractorPointerType extractor = ExtractorType::New();
-  
+
   extractor->SetInput(this->GetInput());
   extractor->SetExtractionRegion(outputRegionForThread);//this->GetInput()->GetRequestedRegion());
   extractor->UpdateOutputInformation();
@@ -176,12 +176,12 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
     {
       itkExceptionMacro(<<"No LineSpatialObject to vectorize");
     }
-  
+
   VectorDataPointerType vlines = VectorDataType::New();
   DataNodePointerType document = DataNodeType::New();
   DataNodePointerType folder   = DataNodeType::New();
   DataNodePointerType root     = vlines->GetDataTree()->GetRoot()->Get();
-  
+
   document->SetNodeType(otb::DOCUMENT);
   folder->SetNodeType(otb::FOLDER);
   vlines->GetDataTree()->Add(document,root);
@@ -197,7 +197,7 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
 
 
   for(unsigned int i = 0; i<listSize; i++ )
-    {  
+    {
       typename LineSpatialObjectType::const_iterator  it    = this->GetLines()->GetNthElement(i)->begin();
       typename LineSpatialObjectType::const_iterator  itEnd = this->GetLines()->GetNthElement(i)->end();
       std::cout<<i<<" / "<<listSize<<" : "<<regionList[i].GetSize()<<", "<<regionList[i].GetIndex()<<std::endl;
@@ -213,14 +213,14 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
 	  itPoints++;
 	  p2[0] =(*itPoints).GetPosition()[0];     //Second Vertex
 	  p2[1] =(*itPoints).GetPosition()[1];
-	  
+
 	  std::cout<<p1<<" - "<<p2<<std::endl;
-	  
+
 
 
 	  l->AddVertex(p1);
 	  l->AddVertex(p2);
-	 
+
 	  DataNodePointerType node = DataNodeType::New();
 	  node->SetNodeType(otb::FEATURE_LINE);
 	  node->SetLine(l);
@@ -264,7 +264,7 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
 		    {
 		      vert.push_back(p2);
 		      // p1 is the same as p1Old -> keep p2Old
-		      if( vcl_abs(p1[0]-p1Old[0]) && vcl_abs(p1[1]-p1Old[1]) ) 
+		      if( vcl_abs(p1[0]-p1Old[0]) && vcl_abs(p1[1]-p1Old[1]) )
 			vert.push_back(p2Old);
 		      else
 			vert.push_back(p1Old);
@@ -274,7 +274,7 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
 		    {
 		      vert.push_back(p1);
 		      // p2 is the same as p1Old -> keep p1Old
-		      if( vcl_abs(p2[0]-p2Old[0]) && vcl_abs(p2[1]-p2Old[1]) ) 
+		      if( vcl_abs(p2[0]-p2Old[0]) && vcl_abs(p2[1]-p2Old[1]) )
 			vert.push_back(p1Old);
 		      else
 			vert.push_back(p2Old);
@@ -295,23 +295,23 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
 	  {
 	      l->AddVertex(p1);
 	      l->AddVertex(p2);
-	 
+
 	      DataNodePointerType node = DataNodeType::New();
 	      node->SetNodeType(otb::FEATURE_LINE);
 	      node->SetLine(l);
 	      vlines->GetDataTree()->Add(node,folder);
 	    }
-	  
+
 	  ++it;
 	}  // End while(it != itEnd) loop
-	
+
       // write the false alarm in vertexList (those that don't have a continuation in the next thread)
       for(unsigned int k=0; k<vertexList.size(); k++)
 	{
 	  typename LineType::Pointer l = LineType::New();
 	  l->AddVertex(vertexList[k][0]);
 	  l->AddVertex(vertexList[k][1]);
-	  
+
 	  DataNodePointerType node = DataNodeType::New();
 	  node->SetNodeType(otb::FEATURE_LINE);
 	  node->SetLine(l);
