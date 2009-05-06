@@ -75,6 +75,8 @@ namespace Functor
  *  \brief this class implement a fast line detector with false detection control using 
  *         the a contrario method
  *  
+ *  \sa ImageLineSegmentDetector (streamed version)
+ *
  *  See Publication : " LSD: A line segment detector ", R. Grompone, J.Jackubowicz, J-M.Morel, G.Randall 
  * 
  */
@@ -83,7 +85,7 @@ template <class TInputImage,class TPrecision = double>
 class ITK_EXPORT LineSegmentDetector :
       public otb::ImageToLineSpatialObjectListFilter< TInputImage >
 {
-public:
+  public:
   
   /** typedef for the classes standards. */
   typedef LineSegmentDetector                               Self;
@@ -159,6 +161,9 @@ public:
   typedef typename RectangleListType::iterator                      RectangleListTypeIterator; 
 
 
+  itkSetMacro(ImageSize, SizeType);
+  itkGetMacro(ImageSize, SizeType);
+
 protected:
   LineSegmentDetector();
   virtual ~LineSegmentDetector() {};
@@ -224,6 +229,8 @@ protected:
   /** Printself method*/
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+
+
 private:
   LineSegmentDetector(const Self&);  //purposely not implemented
   void operator=(const Self&);      //purposely not implemented
@@ -239,8 +246,10 @@ private:
   unsigned int                       m_MinimumRegionSize;
   unsigned int                       m_NumberOfImagePixels;
 
-  int                                m_Length;
-  int                                m_Width;
+  /** The image size has to be the LargestPosssibleRegion in the case
+   * (streaming uses (streaming decorator).
+   */
+  SizeType                           m_ImageSize;
   
   /** Gradient filter */
   GradientFilterPointerType m_GradientFilter;

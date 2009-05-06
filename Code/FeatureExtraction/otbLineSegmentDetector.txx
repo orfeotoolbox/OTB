@@ -66,8 +66,7 @@ LineSegmentDetector<TInputImage,TPrecision >
   /** A Line List : This is the output*/
   LineSpatialObjectListType::Pointer m_LineList = LineSpatialObjectListType::New();
 
-  m_Length = 0;
-  m_Width  = 0;
+  m_ImageSize.Fill(0);
 }
 
 
@@ -102,11 +101,6 @@ LineSegmentDetector<TInputImage,TPrecision >
   /** The Output*/
   m_LineList = this->GetOutput();
   
-  /** Allocate memory for the temporary label Image*/
-  //m_UsedPointImage->SetRegions(this->GetInput()->GetLargestPossbileRegion());
-  //m_UsedPointImage->Allocate();
-  //m_UsedPointImage->FillBuffer(0);
-
   /** Cast the MagnitudeOutput Image in */
   typedef itk::CastImageFilter<InputImageType, OutputImageType>      castFilerType;
   typename castFilerType::Pointer  castFilter =  castFilerType::New();
@@ -134,7 +128,6 @@ LineSegmentDetector<TInputImage,TPrecision >
    *       - A Line List m_LineList 
    */
   this->ComputeRectangles();
-  std::cout<<"UPUPUP"<<std::endl;
 }
 
 /**************************************************************************************************************/
@@ -148,26 +141,23 @@ typename LineSegmentDetector<TInputImage,TPrecision >
 LineSegmentDetector<TInputImage,TPrecision >
 ::SortImageByModulusValue(OutputImageType * modulusImage)
 {
-  /* Size of the images **/
-  SizeType     SizeInput = this->GetInput()->GetRequestedRegion().GetSize();
-  m_Width  = SizeInput[0];
-  m_Length = SizeInput[1];
+  if(m_ImageSize[0]==0 && m_ImageSize[1]==0)
+    m_ImageSize = this->GetInput()->GetLargestPossibleRegion().GetSize();
   
-  //std::cout <<" m_Width"<<m_Width << " m_Length"<< m_Length << std::endl;
-  m_NumberOfImagePixels  = m_Length * m_Width;
+  m_NumberOfImagePixels  = static_cast<unsigned int>(m_ImageSize[1] * m_ImageSize[0]);
 
   /** 
    *  Compute the minimum region size 
    */
-  double logNT = 5.*(vcl_log10(static_cast<double>(m_Width)) + vcl_log10(static_cast<double>(m_Length)))/2.;
+  double logNT = 5.*(vcl_log10(static_cast<double>(m_ImageSize[0])) + vcl_log10(static_cast<double>(m_ImageSize[1])))/2.;
   double log1_p = vcl_log10(m_DirectionsAllowed);
   double rapport = logNT/log1_p;
   m_MinimumRegionSize = -1*static_cast<unsigned  int>(rapport);
 
   
   /** Definition of the min & the max of an image*/
-  OutputPixelType   min = itk::NumericTraits</*MagnitudePixelType*/TPrecision>::Zero;
-  OutputPixelType   max = itk::NumericTraits</*MagnitudePixelType*/TPrecision>::Zero;
+  OutputPixelType   min = itk::NumericTraits<TPrecision>::Zero;
+  OutputPixelType   max = itk::NumericTraits<TPrecision>::Zero;
   
   /** Computing the min & max of the image*/
   typedef  itk::MinimumMaximumImageCalculator<OutputImageType>  MinMaxCalculatorFilter;
@@ -195,8 +185,8 @@ LineSegmentDetector<TInputImage,TPrecision >
   while(!it.IsAtEnd())
     {
       OutputIndexType index = it.GetIndex();
-      if(static_cast<int>(index[0]) > 0 && static_cast<int>(index[0]) < m_Width-1 
-         && static_cast<int>(index[1]) >0 && static_cast<int>(index[1]) < m_Length-1 )
+      if(static_cast<int>(index[0]) > 0 && static_cast<int>(index[0]) < static_cast<int>(m_ImageSize[0])-1 
+         && static_cast<int>(index[1]) >0 && static_cast<int>(index[1]) < static_cast<int>(m_ImageSize[1])-1 )
         {
           unsigned int bin = static_cast<unsigned int> (it.Value()/lengthBin);
           if( it.Value()- m_Threshold >1e-10 )
@@ -273,14 +263,12 @@ LineSegmentDetector<TInputImage, TPrecision>
   RectangleListTypeIterator            itRec = m_RectangleList.begin();
   while(itRec != m_RectangleList.end())
     {
-      //double NFA = this->ImproveRectangle(&(*itRec) );
       double NFA = this->ComputeRectNFA((*itRec));
       /**
        * Here we start building the OUTPUT :a LineSpatialObjectList. 
        */
-      if(NFA > 0./** eps */)
+      if(NFA > 0.)
         {
-          //std::cout << (*itRec)[0] << " " << (*itRec)[1] << " " << (*itRec)[2] << " " << (*itRec)[3]<<std::endl;
           PointListType pointList;
           PointType     point;
           
@@ -621,7 +609,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   
   typedef std::vector<MagnitudePixelType>                          MagnitudeVector;
 
-  unsigned int Diagonal =  static_cast< unsigned int>(vnl_math_hypot(m_Length ,m_Width)) + 2;
+  unsigned int Diagonal =  static_cast< unsigned int>(vnl_math_hypot(static_cast<double>(m_ImageSize[1]) ,static_cast<double>(m_ImageSize[0])) + 2);
   MagnitudeVector sum_l( 2*Diagonal, itk::NumericTraits<MagnitudePixelType>::Zero);
   MagnitudeVector sum_w( 2*Diagonal, itk::NumericTraits<MagnitudePixelType>::Zero);
   
@@ -683,7 +671,7 @@ LineSegmentDetector<TInputImage, TPrecision>
    */
   
 
-  if(vcl_abs(wl - wr) - vcl_sqrt(static_cast<double>(m_Length*m_Length + m_Width*m_Width)) < 1e-10)
+  if(vcl_abs(wl - wr) - vcl_sqrt(static_cast<double>(m_ImageSize[1]*m_ImageSize[1] + m_ImageSize[0]*m_ImageSize[0])) < 1e-10)
     {
       RectangleType          rec(8 ,0.);     // Definition of a rectangle : 8 components
       rec[0] = (x + lb*dx >0)?x + lb*dx:0.;
@@ -792,34 +780,6 @@ LineSegmentDetector<TInputImage, TPrecision>
   int NbAligned = 0;
   double nfa_val = 0.;
   
-  //double dx = vcl_cos(rec[5]);
-  //double dy = vcl_sin(rec[5]);
-  //double halfWidth = rec[4]/2;
-  
-  /** Determine the four corners of the rectangle*/
-  /** Remember : 
-   *  vec[0] = x1 
-   *  vec[1] = y1
-   *  vec[2] = x2 
-   *  vec[3] = y2
-   *  vec[4] = width
-   *  vec[5] = theta
-   *  vec[6] = prec = Pi/8
-   *  vec[7] = p =  1/8
-   */
-
-//   RectangleType        X(4,0.) , Y(4,0.);
-  
-//   X[0] = rec[0] + dy* halfWidth;
-//   Y[0] = rec[1] - dx* halfWidth;
-//   X[1] = rec[0] - dy* halfWidth;
-//   Y[1] = rec[1] + dx* halfWidth;
-//   X[2] = rec[2] + dy* halfWidth;
-//   Y[2] = rec[3] - dx* halfWidth;
-//   X[3] = rec[2] - dy* halfWidth;
-//   Y[3] = rec[3] + dx* halfWidth;
-
-
   /** Compute the NFA of the rectangle  
    *  We Need : The number of : Points in the rec  (Area of the rectangle)
    *                            Aligned points  with theta in the rectangle
@@ -863,7 +823,7 @@ LineSegmentDetector<TInputImage, TPrecision>
     }
   
   /** Compute the NFA from the rectangle computed below*/
-  double logNT = 5.*(vcl_log10(static_cast<double>(m_Length)) + vcl_log10(static_cast<double>(m_Width)))/2.;
+  double logNT = 5.*(vcl_log10(static_cast<double>(m_ImageSize[1])) + vcl_log10(static_cast<double>(m_ImageSize[0])))/2.;
   
   nfa_val = NFA(pts,NbAligned ,m_DirectionsAllowed,logNT);
   

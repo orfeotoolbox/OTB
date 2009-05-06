@@ -43,6 +43,7 @@ int otbImageToLineSegmentVectorData( int argc, char * argv[] )
   reader->SetFileName(argv[1]);
   reader->GenerateOutputInformation();
   lsdFilter->SetInput( reader->GetOutput() );
+  lsdFilter->SetThreadDistanceThreshold( 10. );
   lsdFilter->Update();
 
   writer->SetFileName(argv[2]);

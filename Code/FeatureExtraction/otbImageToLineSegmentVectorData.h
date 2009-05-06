@@ -203,6 +203,8 @@ class ITK_EXPORT ImageToLineSegmentVectorData :
   /** Transform the linespatialobject list into vector data*/
   VectorDataPointerType GetOutputVectorData();
 
+  itkSetMacro(ThreadDistanceThreshold, double);
+  itkGetMacro(ThreadDistanceThreshold, double);
 
 protected:
   /** Constructor */
@@ -214,6 +216,8 @@ private:
   ImageToLineSegmentVectorData(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  /** tolerance to fuse 2 lines in 2 threads. */
+  double m_ThreadDistanceThreshold;
 };
 
 } // end namespace otb
