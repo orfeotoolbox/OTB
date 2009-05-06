@@ -333,14 +333,10 @@ namespace otb
           ProcessNode((*it),mDatasource);
           break;
         }
-//       case FEATURE_POINT:
-//       {
-//         newDataNode->SetPoint(this->ReprojectPoint(dataNode->GetPoint()));
-//         newContainer = OutputInternalTreeNodeType::New();
-//         newContainer->Set(newDataNode);
-//         destination->AddChild(newContainer);
-//         break;
-//       }
+      case FEATURE_POINT:
+      {
+        itkExceptionMacro(<<"This type (FEATURE_POINT) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+      }
         case otb::FEATURE_LINE:
         {
           std::cout << std::setprecision(15);
@@ -381,50 +377,28 @@ namespace otb
 
           mDatasource->push(mfeature);
 
-
           break;
         }
-//       case FEATURE_POLYGON:
-//       {
-//         newDataNode->SetPolygonExteriorRing(this->ReprojectPolygon(dataNode->GetPolygonExteriorRing()));
-//         newDataNode->SetPolygonInteriorRings(this->ReprojectPolygonList(dataNode->GetPolygonInteriorRings()));
-//         newContainer = OutputInternalTreeNodeType::New();
-//         newContainer->Set(newDataNode);
-//         destination->AddChild(newContainer);
-//         break;
-//       }
-//       case FEATURE_MULTIPOINT:
-//       {
-//         newContainer = OutputInternalTreeNodeType::New();
-//         newContainer->Set(newDataNode);
-//         destination->AddChild(newContainer);
-//         ProcessNode((*it),newContainer);
-//         break;
-//       }
-//       case FEATURE_MULTILINE:
-//       {
-//         newContainer = OutputInternalTreeNodeType::New();
-//         newContainer->Set(newDataNode);
-//         destination->AddChild(newContainer);
-//         ProcessNode((*it),newContainer);
-//         break;
-//       }
-//       case FEATURE_MULTIPOLYGON:
-//       {
-//         newContainer = OutputInternalTreeNodeType::New();
-//         newContainer->Set(newDataNode);
-//         destination->AddChild(newContainer);
-//         ProcessNode((*it),newContainer);
-//         break;
-//       }
-//       case FEATURE_COLLECTION:
-//       {
-//         newContainer = OutputInternalTreeNodeType::New();
-//         newContainer->Set(newDataNode);
-//         destination->AddChild(newContainer);
-//         ProcessNode((*it),newContainer);
-//         break;
-//       }
+      case FEATURE_POLYGON:
+      {
+        itkExceptionMacro(<<"This type (FEATURE_POLYGON) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+      }
+      case FEATURE_MULTIPOINT:
+      {
+        itkExceptionMacro(<<"This type (FEATURE_MULTIPOINT) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+      }
+      case FEATURE_MULTILINE:
+      {
+        itkExceptionMacro(<<"This type (FEATURE_MULTILINE) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+      }
+      case FEATURE_MULTIPOLYGON:
+      {
+        itkExceptionMacro(<<"This type (FEATURE_MULTIPOLYGON) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+      }
+      case FEATURE_COLLECTION:
+      {
+        itkExceptionMacro(<<"This type (FEATURE_COLLECTION) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+      }
       }
     }
   }
