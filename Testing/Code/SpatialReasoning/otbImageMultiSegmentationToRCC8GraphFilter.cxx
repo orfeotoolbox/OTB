@@ -55,7 +55,7 @@ int otbImageMultiSegmentationToRCC8GraphFilter(int argc, char* argv[])
     inputList->PushBack(reader->GetOutput());
   }
   std::cout<<"Input image loaded into images list."<<std::endl;
-  // Instanatiation
+  // Instantiation
   RCC8GraphFilterType::Pointer filter = RCC8GraphFilterType::New();
   filter->SetInput(inputList);
   filter->SetOptimisation(useOptimisation>0);

@@ -30,7 +30,7 @@ int otbRenderingImageFilterScalar( int argc, char * argv[] )
   typedef otb::ImageFileReader<ImageType>                   ReaderType;
   typedef otb::StreamingImageFileWriter<RGBImageType>       WriterType;
 
-  // Instanatiation
+  // Instantiation
   ReaderType::Pointer          reader    = ReaderType::New();
   RenderingFilterType::Pointer rendering = RenderingFilterType::New();
   WriterType::Pointer          writer    = WriterType::New();

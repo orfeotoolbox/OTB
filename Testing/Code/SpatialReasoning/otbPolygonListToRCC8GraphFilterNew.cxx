@@ -32,7 +32,7 @@ int otbPolygonListToRCC8GraphFilterNew(int argc, char* argv[])
   typedef otb::PolygonListToRCC8GraphFilter<PolygonListType,RCC8GraphType>
   RCC8GraphFilterType;
 
-  // Instanatiation
+  // Instantiation
   RCC8GraphFilterType::Pointer filter = RCC8GraphFilterType::New();
 
   return EXIT_SUCCESS;
