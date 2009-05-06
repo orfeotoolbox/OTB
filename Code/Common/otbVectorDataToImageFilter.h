@@ -74,6 +74,9 @@ template <class TVectorData, class TImage>
     typedef typename TImage::PointType     OriginType;
     typedef typename TImage::DirectionType DirectionType;
 
+    /** Region typedef */
+    typedef typename TImage::RegionType RegionType;
+
     /** typedef specific to mapnik */
     typedef boost::shared_ptr<mapnik::memory_datasource> datasource_ptr;
 

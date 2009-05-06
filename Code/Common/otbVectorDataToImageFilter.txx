@@ -209,6 +209,8 @@ namespace otb
 
     this->BeforeThreadedGenerateData();
 
+    ImagePointer output = this->GetOutput();
+
     datasource_ptr mDatasource = datasource_ptr(new mapnik::memory_datasource);
 
     VectorDataConstPointer input = this->GetInput();
@@ -261,12 +263,15 @@ namespace otb
     m_Map.addLayer(lyr);
 
     assert( (m_SensorModelFlip == 1)||(m_SensorModelFlip == -1) );
-    mapnik::Envelope<double> envelope(m_Origin[0],
-                                      m_SensorModelFlip*(m_Origin[1]+m_Spacing[1]*m_Size[1]),
-                                        m_Origin[0]+m_Spacing[0]*m_Size[0],
-                                        m_SensorModelFlip*m_Origin[1]);
+    RegionType requestedRegion = output->GetRequestedRegion();
 
-//     m_Map.zoomToBox(lyr.envelope());//FIXME: use the Origin/Spacing to calculate this
+    mapnik::Envelope<double> envelope(
+            m_Origin[0]+requestedRegion.GetIndex()[0]*m_Spacing[0],
+        m_SensorModelFlip*(m_Origin[1]+requestedRegion.GetIndex()[1]*m_Spacing[1]+m_Spacing[1]*requestedRegion.GetSize()[1]),
+                           m_Origin[0]+requestedRegion.GetIndex()[0]*m_Spacing[0]+m_Spacing[0]*requestedRegion.GetSize()[0],
+            m_SensorModelFlip*(m_Origin[1]+requestedRegion.GetIndex()[1]*m_Spacing[1])
+                                     );
+
     m_Map.zoomToBox(envelope);
 //     std::cout << "Envelope: " << lyr.envelope() << std::endl;
     std::cout << "Envelope: " << envelope << std::endl;
@@ -278,29 +283,22 @@ namespace otb
 
     const unsigned char * src = buf.raw_data();
 
-    ImagePointer output = this->GetOutput();
-//     unsigned char * dst = output->GetBufferPointer();
 
-//     unsigned int size = 4*m_Size[0]*m_Size[1];//FIXME: lot of assumption here: RGBA, 2 dimensions
-//     memcpy(dst, src, size);
+    itk::ImageRegionIterator<ImageType> it(output, output->GetRequestedRegion());
 
-//     if (m_SensorModelFlip == false)
-//     {
-      itk::ImageRegionIterator<ImageType> it(output, output->GetLargestPossibleRegion());
-
-      for (it.GoToBegin(); !it.IsAtEnd(); ++it)
-      {
-        itk::RGBAPixel<unsigned char> pix;
-        pix[0] = *src;
-        ++src;
-        pix[1] = *src;
-        ++src;
-        pix[2] = *src;
-        ++src;
-        pix[3] = *src;
-        ++src;
-        it.Set(pix);
-      }
+    for (it.GoToBegin(); !it.IsAtEnd(); ++it)
+    {
+      itk::RGBAPixel<unsigned char> pix;
+      pix[0] = *src;
+      ++src;
+      pix[1] = *src;
+      ++src;
+      pix[2] = *src;
+      ++src;
+      pix[3] = *src;
+      ++src;
+      it.Set(pix);
+    }
 
     this->AfterThreadedGenerateData();
   }
