@@ -69,18 +69,18 @@ ImageViewerManagerModel
   ReaderPointerType  reader = ReaderType::New();
   reader->SetFileName(filename);
   reader->GenerateOutputInformation();
-      
+
   /** Generate the layer*/
   LayerGeneratorPointerType visuGenerator = LayerGeneratorType::New();
   visuGenerator->SetImage(reader->GetOutput());
   FltkFilterWatcher qlwatcher(visuGenerator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
   visuGenerator->GenerateLayer();
   StandardRenderingFunctionType::Pointer  rendrerFuntion  = visuGenerator->GetDefaultRenderingFunction();
-    
+
   /** Rendering image*/
   VisuModelPointerType rendering = VisuModelType::New();
   rendering->AddLayer(visuGenerator->GetLayer());
- 
+
   rendering->Update();
 
   /** View*/
@@ -91,13 +91,13 @@ ImageViewerManagerModel
   PixelDescriptionModelPointerType pixelModel = PixelDescriptionModelType::New();
   pixelModel->SetLayers(rendering->GetLayers());
   pixelView->SetModel(pixelModel);
-  
+
   /** Controller*/
   WidgetControllerPointerType controller = this->BuiltController(rendering, visuView ,pixelModel );
 
   /** Finish Builting the visu*/
   visuView->SetController(controller);
-    
+
   /** Build the curve Widget */
   CurvesWidgetType::Pointer   curveWidget = CurvesWidgetType::New();
 
@@ -117,11 +117,11 @@ ImageViewerManagerModel
 
   /** Add the the struct in the list*/
   m_ObjectTrackedList.push_back(currentComponent);
-  
+
   m_HasImageOpened = true;
   this->NotifyAll();
   m_HasImageOpened = false;
-  
+
 }
 
 /**
@@ -134,7 +134,7 @@ ImageViewerManagerModel
 {
   VisuViewPointerType visuView = VisuViewType::New();
   visuView->SetModel(pRendering);
-  
+
   return visuView;
 }
 
@@ -147,13 +147,13 @@ ImageViewerManagerModel
 ::BuiltController(VisuModelPointerType modelRenderingLayer, VisuViewPointerType visuView, PixelDescriptionModelPointerType pixelModel)
 {
   WidgetControllerPointerType controller = WidgetControllerType::New();
-  
+
   // Add the resizing handler
   ResizingHandlerType::Pointer resizingHandler = ResizingHandlerType::New();
   resizingHandler->SetModel(modelRenderingLayer);
   resizingHandler->SetView(visuView);
   controller->AddActionHandler(resizingHandler);
-  
+
     // Add the change scaled region handler
   ChangeScaledRegionHandlerType::Pointer changeScaledHandler =ChangeScaledRegionHandlerType::New();
   changeScaledHandler->SetModel(modelRenderingLayer);
@@ -177,7 +177,13 @@ ImageViewerManagerModel
   pixelActionHandler->SetView(visuView);
   pixelActionHandler->SetModel(pixelModel);
   controller->AddActionHandler(pixelActionHandler);
-  
+
+  // Add the action handler for the arrow key
+  ArrowKeyMoveActionHandlerType::Pointer arrowKeyMoveHandler = ArrowKeyMoveActionHandlerType::New();
+  arrowKeyMoveHandler->SetModel(modelRenderingLayer);
+  arrowKeyMoveHandler->SetView(visuView);
+  controller->AddActionHandler(arrowKeyMoveHandler);
+
   return controller;
 }
 
@@ -196,11 +202,11 @@ ImageViewerManagerModel
   renderFunction->SetRedChannelIndex(redChoice);
   renderFunction->SetGreenChannelIndex(greenChoice);
   renderFunction->SetBlueChannelIndex(BlueChoice);
-  
+
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(renderFunction);
   m_ObjectTrackedList.at(selectedItem-1).pRendering->Update();
-  
+
   //Notify
   m_HasChangedChannelOrder = true;
   this->NotifyAll();
@@ -213,11 +219,11 @@ ImageViewerManagerModel
 {
   StandardRenderingFunctionType::Pointer renderFunction = m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion;
   renderFunction->SetAllChannels(choice);
-  
+
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(renderFunction);
   m_ObjectTrackedList.at(selectedItem-1).pRendering->Update();
-  
+
   //Notify
   m_HasChangedChannelOrder = true;
   this->NotifyAll();
@@ -232,11 +238,11 @@ ImageViewerManagerModel
   modulusFunction->SetRedChannelIndex(realChoice);
   modulusFunction->SetGreenChannelIndex(imChoice);
   modulusFunction->Initialize();
-  
+
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(modulusFunction);
   m_ObjectTrackedList.at(selectedItem-1).pRendering->Update();
-  
+
   //Notify
   m_HasChangedChannelOrder = true;
   this->NotifyAll();
@@ -252,11 +258,11 @@ ImageViewerManagerModel
   phaseFunction->SetRedChannelIndex(realChoice);
   phaseFunction->SetGreenChannelIndex(imChoice);
   phaseFunction->Initialize();
-  
+
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(phaseFunction);
   m_ObjectTrackedList.at(selectedItem-1).pRendering->Update();
-  
+
   //Notify
   m_HasChangedChannelOrder = true;
   this->NotifyAll();
@@ -274,7 +280,7 @@ ImageViewerManagerModel
   //Create A null offset
   OffsetType nullOffset;
   nullOffset.Fill(0);
-  
+
   //Get the controllers of the selected images
   WidgetControllerPointerType rightController = m_ObjectTrackedList.at(rightChoice-1).pWidgetController;
   WidgetControllerPointerType leftController = m_ObjectTrackedList.at(leftChoice-1).pWidgetController;
@@ -282,15 +288,15 @@ ImageViewerManagerModel
   //Get the models related to the choosen images
   VisuModelPointerType rightRenderModel       = m_ObjectTrackedList.at(rightChoice-1).pRendering;
   VisuModelPointerType leftRenderModel        = m_ObjectTrackedList.at(leftChoice-1).pRendering;
-  
+
   //Get the views related to the choosen images
-  VisuViewPointerType  pRightVisuView         = m_ObjectTrackedList.at(rightChoice-1).pVisuView;; 
+  VisuViewPointerType  pRightVisuView         = m_ObjectTrackedList.at(rightChoice-1).pVisuView;;
   VisuViewPointerType  pLeftVisuView          = m_ObjectTrackedList.at(leftChoice-1).pVisuView;
 
   //Pixel View
   PixelDescriptionModelPointerType rightPixelModel = m_ObjectTrackedList.at(rightChoice-1).pPixelModel;
   PixelDescriptionModelPointerType leftPixelModel  = m_ObjectTrackedList.at(leftChoice-1).pPixelModel;
-    
+
   // Add the resizing handler
   ResizingHandlerType::Pointer rightResizingHandler = ResizingHandlerType::New();
   rightResizingHandler->SetModel(rightRenderModel);
@@ -299,10 +305,10 @@ ImageViewerManagerModel
   ResizingHandlerType::Pointer leftResizingHandler = ResizingHandlerType::New();
   leftResizingHandler->SetModel(leftRenderModel);
   leftResizingHandler->SetView(pRightVisuView);
-  
+
   rightController->AddActionHandler( leftResizingHandler);
   leftController->AddActionHandler(rightResizingHandler);
-  
+
   // Add the change scaled region handler--
   ChangeScaledRegionHandlerType::Pointer rightChangeScaledHandler =ChangeScaledRegionHandlerType::New();
   rightChangeScaledHandler->SetModel(rightRenderModel);
@@ -313,10 +319,10 @@ ImageViewerManagerModel
   leftChangeScaledHandler->SetModel(leftRenderModel);
   leftChangeScaledHandler->SetView(pRightVisuView);
   leftChangeScaledHandler->SetOffset(offset);
-  
+
   rightController->AddActionHandler(leftChangeScaledHandler);
   leftController->AddActionHandler( rightChangeScaledHandler);
-  
+
   // Add the change extract region handler--
   ChangeRegionHandlerType::Pointer rightChangeHandler =ChangeRegionHandlerType::New();
   rightChangeHandler->SetModel(rightRenderModel);
@@ -327,7 +333,7 @@ ImageViewerManagerModel
   leftChangeHandler->SetModel(leftRenderModel);
   leftChangeHandler->SetView(pRightVisuView);
   leftChangeHandler->SetOffset(offset);
-  
+
   rightController->AddActionHandler( leftChangeHandler);
   leftController->AddActionHandler(rightChangeHandler);
 
@@ -369,7 +375,7 @@ ImageViewerManagerModel
   VisuModelPointerType  render = m_ObjectTrackedList.at(selectedItem-1).pRendering;
   VisuViewPointerType   view   = m_ObjectTrackedList.at(selectedItem-1).pVisuView;
   PixelDescriptionModelPointerType pixelModel = m_ObjectTrackedList.at(selectedItem-1).pPixelModel;
-  
+
   m_ObjectTrackedList.at(selectedItem-1).pWidgetController = this->BuiltController(render,view,pixelModel);
   m_ObjectTrackedList.at(selectedItem-1).pVisuView->SetController(m_ObjectTrackedList.at(selectedItem-1).pWidgetController);
 }
