@@ -38,7 +38,7 @@ int otbRenderingImageFilterVectorWithExpNegativeTransfer( int argc, char * argv[
     itk::RGBPixel<unsigned char>,ExpNegativeFunctionType >  RenderingFunctionType;
 
 
-  // Instanatiation
+  // Instantiation
   ReaderType::Pointer          reader    = ReaderType::New();
   RenderingFilterType::Pointer rendering = RenderingFilterType::New();
   WriterType::Pointer          writer    = WriterType::New();

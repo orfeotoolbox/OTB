@@ -33,7 +33,7 @@ int otbImageListToRCC8GraphFilterNew(int argc, char* argv[])
   typedef otb::ImageListToRCC8GraphFilter<LabelImageType,RCC8GraphType>
   ImageListToRCC8GraphFilterType;
 
-  // Instanatiation
+  // Instantiation
   ImageListToRCC8GraphFilterType::Pointer filter = ImageListToRCC8GraphFilterType::New();
 
 

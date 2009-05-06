@@ -35,7 +35,7 @@ int otbRenderingImageFilterVector( int argc, char * argv[] )
   typedef otb::Function::StandardRenderingFunction<PixelType,itk::RGBPixel<unsigned char> > RenderingFunctionType;
 
 
-  // Instanatiation
+  // Instantiation
   ReaderType::Pointer          reader    = ReaderType::New();
   RenderingFilterType::Pointer rendering = RenderingFilterType::New();
   WriterType::Pointer          writer    = WriterType::New();

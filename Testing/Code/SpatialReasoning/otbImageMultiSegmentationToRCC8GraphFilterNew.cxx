@@ -33,7 +33,7 @@ int otbImageMultiSegmentationToRCC8GraphFilterNew(int argc, char* argv[])
   typedef otb::ImageMultiSegmentationToRCC8GraphFilter<LabelImageType,RCC8GraphType>
   RCC8GraphFilterType;
 
-  // Instanatiation
+  // Instantiation
   RCC8GraphFilterType::Pointer filter = RCC8GraphFilterType::New();
 
 
