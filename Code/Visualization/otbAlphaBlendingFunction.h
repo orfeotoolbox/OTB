@@ -29,8 +29,12 @@ namespace Function
  * \class AlphaBlendingFunction
  * \brief Implements simple blending
  * For each channel the blending function is as follows:
- * \f[ P_{o} = \alpha P_{i1} + (1 - \alpha) P_{i2} \f]
- * \alpha is retrieved from the second pixel RGBA
+ * \f[ P_{o} = (1 - \alpha) P_{i1} + \alpha P_{i2} \f]
+ * with
+ * \f[ \alpha = \alpha_{pix} * \alpha_{glo} \f]
+ * \f$ \alpha_{pix} \f$ is retrieved from the second pixel RGBA
+ * \f$ \alpha_{glo} \f$ is provided by the SetAlpha() method (1.0 by default)
+ *
  *  \ingroup Visualization
  */
 template <class TInputRGBPixel1, class TInputRGBAPixel2, class TOutputRGBPixel = TInputRGBPixel1>
@@ -62,7 +66,7 @@ public:
   inline virtual const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type & input2)
   {
     OutputRGBPixelType resp;
-    double alpha = static_cast<double>(input2.GetAlpha())/255.0;
+    double alpha = static_cast<double>(input2.GetAlpha())/255.0 * m_Alpha;
 
     resp.SetRed(  static_cast<OutputValueType>(vcl_floor((1-alpha) * static_cast<double>(input1.GetRed())   +alpha*static_cast<double>(input2.GetRed())  +0.5)));
     resp.SetGreen(static_cast<OutputValueType>(vcl_floor((1-alpha) * static_cast<double>(input1.GetGreen()) +alpha*static_cast<double>(input2.GetGreen())+0.5)));
@@ -70,14 +74,21 @@ public:
     return resp;
   }
 
+  /** Set/Get the alpha value */
+  itkSetClampMacro(Alpha,double,0.,1.);
+  itkGetMacro(Alpha,double);
+
 protected:
   /** Constructor */
-  AlphaBlendingFunction() {}
+  AlphaBlendingFunction() : m_Alpha(1.0) {}
   /** Destructor */
   ~AlphaBlendingFunction() {}
 private:
   AlphaBlendingFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+
+  /** Alpha value for blending (should be in the range [0,1] */
+  double m_Alpha;
 
 };
 } // end namespace Functor
