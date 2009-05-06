@@ -75,47 +75,18 @@ class RadiometricNonWaterNonVegetationIndexFunctor
   inline TOutput operator()(const TInput& pInPix)
     {
       TOutput lVIval,lWIval,lOutPix;
-/*
-      lVIval = static_cast<ValueType>(m_VegetationFunctor(pInPix));
 
-      lWIval = static_cast<ValueType>(m_WaterFunctor(pInPix));
+      TInput zero = pInPix;
+      zero.Fill(0);
+      if(pInPix!=zero)
+      {
+            lVIval = static_cast<ValueType>(std::max(0.,m_VegetationFunctor(pInPix)));
+            lWIval = static_cast<ValueType>(std::max(0.,m_WaterFunctor(pInPix)));
 
-*/
-TInput zero = pInPix;
-zero.Fill(0);
-if(pInPix!=zero)
-{
-      lVIval = static_cast<ValueType>(std::max(0.,m_VegetationFunctor(pInPix)));
-
-      lWIval = static_cast<ValueType>(std::max(0.,m_WaterFunctor(pInPix)));
-
-      lOutPix = vcl_sqrt(vcl_abs((1-lVIval)*(1-lWIval))); //sqrt
-}
-else
-  lOutPix = 0;
-
-//std::cout<< " lOutPix "<<lOutPix<<std::endl;
-
-// OU
-      //lOutPix = vcl_sqrt((1-lVIval)*(1-lVIval)+(1-lWIval)*(1-lWIval)); // eucl : bof bof
-// OU
-      //lOutPix = 1-vcl_sqrt((lVIval)*(lVIval)+(lWIval)*(lWIval)); // eucl2 : pas mal, un peu effet de flou par rappart a sqrt
-
-
-      //lOutPix = vcl_sqrt(vcl_abs(1-lVIval)*vcl_abs(1-lWIval)); //sqrt2 : pareil que sqrt 
-      //lOutPix = 1-vcl_sqrt(vcl_abs(lVIval)*vcl_abs(lWIval)); //sqrt2 : NUUUUUUL
-      //lOutPix = 1. - (vcl_abs(lVIval)+vcl_abs(lWIval)/2.);//Div : PAS MAL
-//       if( lVIval || lWIval )
-//       {
-//           lOutPix = 1 - std::max(lVIval,lWIval); //MAX : PAS MAL DU TOUT
-//       }
-
-/* Tester avec le log
-      if(lVIval*lWIval)
-        lOutPix = 1 - 1 / ( lVIval*lWIval + 1 ); //Jordy's formula
-      else 
+            lOutPix = vcl_sqrt(vcl_abs((1-lVIval)*(1-lWIval)));
+      }
+      else
         lOutPix = 0;
-*/
 
       return lOutPix;
     }
@@ -218,9 +189,7 @@ public:
   /** Filters typedefs */
   // NonVegetationNonWaterIndexFilter
   typedef Functor::RadiometricNonWaterNonVegetationDetectionFunctor< VectorImagePixelType, OutputImagePixelType > FunctorType;
-  //typedef Functor::RadiometricNonWaterNonVegetationIndexFunctor< VectorImagePixelType, OutputImagePixelType > FunctorType;
   typedef MultiChannelRAndGAndNIRIndexImageFilter < VectorImageType,OutputImageType, FunctorType >       UrbanAreaExtractionFilterType;
-
   typedef typename UrbanAreaExtractionFilterType::Pointer                                                UrbanAreaExtrationFilterPointerType;
   // Erode/Dilate Filters
   typedef typename itk::BinaryBallStructuringElement< OutputImagePixelType, 2  >                         StructuringElementType;
@@ -276,10 +245,6 @@ private:
   ThresholdFilterPointerType          m_Thresholder;
   UrbanAreaExtrationFilterPointerType m_UrbanAreaExtractionFilter;
   MaskImageFilterPointerType          m_MaskImageFilter;
-//   ErodeFilterType::Pointer            m_ErodeFilter;
-//   DilateFilterType::Pointer           m_DilateFilter;
-//   ErodeFilterType::Pointer            m_ErodeFilter2;
-//   DilateFilterType::Pointer           m_DilateFilter2;
   MultiplyImageFilterPointerType      m_MultiplyFilter;
 
 
