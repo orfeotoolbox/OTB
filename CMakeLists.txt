@@ -60,8 +60,8 @@ ADD_DEFINITIONS(
 
 #-----------------------------------------------------------------------------
 # OTB version number.  An even minor number corresponds to releases.
-SET(OTB_VERSION_MAJOR "2")
-SET(OTB_VERSION_MINOR "9")
+SET(OTB_VERSION_MAJOR "3")
+SET(OTB_VERSION_MINOR "0")
 SET(OTB_VERSION_PATCH "0")
 
 
