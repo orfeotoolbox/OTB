@@ -123,7 +123,7 @@ ADD_TEST(cdTvKullbackLeiblerSupervizedDistanceImageFilter ${CHANGEDETECTION_TEST
          otbKullbackLeiblerSupervizedDistanceImageFilter
              ${INPUTDATA}/ERSBefore.png
              ${INPUTDATA}/ERSAfter.png
-             ${INPUTDATA}/ERS_ROI.png
+             ${INPUTDATA}/ROI_ERS.png
              35
              ${TEMP}/cdTVKullbackLeiblerSupervizedDistanceImageFilterOutput.png)
 
