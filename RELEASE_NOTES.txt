@@ -1,3 +1,18 @@
+OTB-v.3.0.0 - Changes since version 2.8.0 (2009/05/11)
+-----------------------------------------
+
+* Applications
+
+
+* Library
+  - Fixed some problems under Visual and Cygwin platforms.
+
+* Distribution
+  - Distribution of Windows binaries packages installation for OTB (OTB-3.0.0-win32.exe) and 
+    OTB-Application (OTB-Applciations-3.0.0-win32.exe) 
+  - Distribution of Windows binaries packages for gdal 1.6.0 for MSVC V71 and MSVC V80 compiler
+    (http://www.orfeo-toolbox.org/packages) 
+
 OTB-v.2.8.0 - Changes since version 2.6.0 (2009/01/15)
 -----------------------------------------
  
