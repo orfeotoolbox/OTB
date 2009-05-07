@@ -21,7 +21,7 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "otbStandardRenderingFunction.h"
 #include "otbImage.h"
-#include "itkRGBPixel.h"
+#include "itkRGBAPixel.h"
 
 namespace otb
 {
@@ -119,7 +119,7 @@ private:
 *   \sa RenderingFunction
 *
 */
-template <class TInputImage,class TOutputImage = Image<itk::RGBPixel<unsigned char>, 2 > >
+template <class TInputImage,class TOutputImage = Image<itk::RGBAPixel<unsigned char>, 2 > >
 class RenderingImageFilter
   : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,
                                         Functor::RenderingFunctor

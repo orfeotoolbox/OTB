@@ -19,7 +19,7 @@
 #define __otbStandardImageViewer_h
 
 #include "otbImage.h"
-#include "itkRGBPixel.h"
+#include "itkRGBAPixel.h"
 #include "otbImageLayer.h"
 #include "otbImageLayerRenderingModel.h"
 #include "otbImageView.h"
@@ -86,7 +86,7 @@ public:
   typedef typename WidgetManagerType::Pointer       WidgetManagerPointerType;
 
   /** Output image type */
-  typedef itk::RGBPixel<unsigned char>              RGBPixelType;
+  typedef itk::RGBAPixel<unsigned char>              RGBPixelType;
   typedef Image<RGBPixelType,2>                     OutputImageType;
 
   /** Image layer type */

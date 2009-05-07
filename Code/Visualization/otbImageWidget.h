@@ -22,7 +22,7 @@
 
 // This is included for the default template
 #include "otbImage.h"
-#include "itkRGBPixel.h"
+#include "itkRGBAPixel.h"
 #include "itkFixedArray.h"
 #include "otbGlComponent.h"
 #include "otbObjectList.h"
@@ -39,7 +39,7 @@ namespace otb
 *  \ingroup Visualization
  */
 
-template <class TInputImage=otb::Image<itk::RGBPixel<unsigned char>,2 > >
+template <class TInputImage=otb::Image<itk::RGBAPixel<unsigned char>,2 > >
 class ImageWidget
   : public GlWidget
 {

@@ -20,7 +20,7 @@
 
 #include "itkObject.h"
 #include "otbImage.h"
-#include "itkRGBPixel.h"
+#include "itkRGBAPixel.h"
 #include "otbBlendingFunction.h"
 #include "otbUniformAlphaBlendingFunction.h"
 
@@ -34,7 +34,7 @@ namespace otb
 *  \ingroup Visualization
  */
 
-template <class TOutputImage = Image<itk::RGBPixel<unsigned char>, 2 > >
+template <class TOutputImage = Image<itk::RGBAPixel<unsigned char>, 2 > >
 class ImageLayerBase
   : public itk::Object
 {

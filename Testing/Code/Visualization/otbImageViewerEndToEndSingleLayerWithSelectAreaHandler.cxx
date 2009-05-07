@@ -48,7 +48,7 @@ int otbImageViewerEndToEndSingleLayerWithSelectAreaHandler( int argc, char * arg
   typedef itk::RGBPixel<unsigned char>               RGBPixelType;
   typedef otb::Image<RGBPixelType,2>                 OutputImageType;
   typedef otb::VectorImage<PixelType,2>              ImageType;
-  typedef otb::ImageLayer<ImageType>                 LayerType;
+  typedef otb::ImageLayer<ImageType, OutputImageType>  LayerType;
   typedef otb::ImageFileReader<ImageType>            ReaderType;
   typedef otb::ImageLayerGenerator<LayerType>        LayerGeneratorType;
   typedef otb::ImageLayerRenderingModel<OutputImageType>     ModelType;

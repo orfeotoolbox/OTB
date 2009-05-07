@@ -17,7 +17,7 @@ PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #include "otbImageLayerRenderingModel.h"
 #include "otbVectorImage.h"
-#include "itkRGBPixel.h"
+#include "itkRGBAPixel.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImageLayerGenerator.h"
@@ -47,7 +47,7 @@ int otbImageViewerEndToEndTwoLayers( int argc, char * argv[] )
 
   // typedefs 
   typedef double                                     PixelType;
-  typedef itk::RGBPixel<unsigned char>               RGBPixelType;
+  typedef itk::RGBAPixel<unsigned char>               RGBPixelType;
   typedef otb::Image<RGBPixelType,2>                 OutputImageType;
   typedef otb::VectorImage<PixelType,2>              ImageType;
   typedef otb::Image<PixelType,2>                    ScalarImageType;
