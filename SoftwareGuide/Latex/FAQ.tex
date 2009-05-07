@@ -147,12 +147,13 @@ A simple \texttt{make} in your OTB binary directory will be enough to update the
 OTB is a multi-platform library. It has successfully been installed on
 the following platforms:
 \begin{itemize}
-  \item Linux/Unix with GCC (2.95.X, 3.3.X, 4.1.X, 4.2.X, 4.3.X).
-  \item Windows with Microsoft Visual Studio C++ 7.1 .NET 2003.
-  \item Windows with Microsoft Visual Studio C++ 8.0 .NET 2005.
-  \item Windows with MinGW. (mingw + msys at \url{http://www.mingw.org})
-  \item Cygwin. (\url{http://www.cygwin.com})
+  \item Linux/Unix with GCC (2.95.X, 3.3.X, 4.1.X, 4.2.X, 4.3.X)
+  \item Windows with Microsoft Visual Studio C++ 7.1 .NET 2003
+  \item Windows with Microsoft Visual Studio C++ 8.0 .NET 2005
+  \item Windows with MinGW (mingw + msys at \url{http://www.mingw.org})
+  \item Cygwin (\url{http://www.cygwin.com})
   \item MacOS
+  \item Open Solaris
 \end{itemize}
 
 Support for the following platforms is planned:
@@ -251,11 +252,11 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 \item Install OTB
   \begin{verbatim}
       cd INSTALL_DIR
-      gunzip OrfeoToolbox-2.8.0.tgz
-      tar xvf OrfeoToolbox-2.8.0.tar
+      gunzip OrfeoToolbox-3.0.0.tgz
+      tar xvf OrfeoToolbox-3.0.0.tar
       mkdir OTB-Binary
       cd OTB-Binary
-      ccmake ../OrfeoToolbox-2.8.0
+      ccmake ../OrfeoToolbox-3.0.0
       --> follow the CMake instructions, in particular:
 	  --> set BUILD_EXAMPLES to ON within CMake
 	  --> set BUILD_SHARED_LIBS to ON within CMake
@@ -277,7 +278,7 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
   with that, you can set \texttt{BUILD\_SHARED\_LIBS} to \texttt{OFF} but the
   built size might reach 1~GB.
 
-  After these steps, you have the source of OTB in \texttt{INSTALL\_DIR/OrfeoToolbox-2.8.0}
+  After these steps, you have the source of OTB in \texttt{INSTALL\_DIR/OrfeoToolbox-3.0.0}
   and the compiled binaries and libraries in \texttt{INSTALL\_DIR/OTB-Binary}. Keeping
   the sources is important as most programs you will designed will need an access
   to the \texttt{.txx} files during compilation. However, the binaries directory knows were
@@ -428,6 +429,8 @@ system (gtar).
 If you used the official gdal package version 1.4.0, the library is named
 \texttt{libgdal1.4.0.so} so you have to create a simlink named
 \texttt{libgdal.so}: \texttt{ln -s /usr/lib/libgdal1.4.0.so /usr/lib/libgdal.so}.
+This should be fixed in OTB 3.0.0 which is now smart enough to find the correct library.
+If it does not work for you, let us know!
 
 \subsubsection{Cygwin}
 Due to an unknown bug, Fltk can't compile on some versions of Cygwin (OpenGL problems).
@@ -441,6 +444,11 @@ Execution errors can appear on some platforms, using GDAL compiled with MSVC++ 8
 
 This problem can be solved by downloading GDAL binaries for Windows
 at \url{http://vterrain.org/Distrib/gdal.html}.
+
+\subsubsection{Open Solaris}
+Apparently, there are some issues on Open Solaris with libLAS (library included
+in OTB to process LIDAR data). You will need to desactivate it: set the
+OTB\_USE\_LIBLAS option to OFF.
 
 \section{Using OTB}
 
@@ -590,8 +598,8 @@ bugfixes.
 
 The first version was 1.0.0 in July 2006. Version 1.2.0, 1.4.0 and 1.6.0 were
 released in between. The 2.0.0 major version  was released in December 2007.
-The 2.2.0, 2.4.0 and 2.6.0 in June, July and November 2008 respectively.
-The current one is 2.8.0.
+The 2.2.0, 2.4.0 and 2.6.0 in June, July and November 2008 respectively. The
+2.8.0 came out in January 2009. The current one is 3.0.0.
 
 \subsubsection{What is a major version?}
 A major version of the library implies the addition of high-level
