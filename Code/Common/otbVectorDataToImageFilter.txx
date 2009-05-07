@@ -185,13 +185,16 @@ namespace otb
   ::BeforeThreadedGenerateData(void)
   {
     Superclass::BeforeThreadedGenerateData();
+
+
     mapnik::freetype_engine::register_font("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");
-    m_Map.resize(m_Size[0],m_Size[1]);
+
 
 //     m_Map.set_background(mapnik::color("#f2efe9"));
     m_Map.set_background(mapnik::color(255,255,255,0));
 
     otb::VectorDataStyle::Pointer styleLoader = otb::VectorDataStyle::New();
+    styleLoader->SetScaleFactor(m_ScaleFactor);
     styleLoader->LoadOSMStyle(m_Map);
 
 
@@ -210,6 +213,8 @@ namespace otb
     this->BeforeThreadedGenerateData();
 
     ImagePointer output = this->GetOutput();
+    RegionType requestedRegion = output->GetRequestedRegion();
+    std::cerr << "requestedRegion: " << requestedRegion << std::endl;
 
     datasource_ptr mDatasource = datasource_ptr(new mapnik::memory_datasource);
 
@@ -244,6 +249,15 @@ namespace otb
     std::cout << "Proj.4 -> " << vectorDataProjectionProj4 << std::endl;
 
 //      std::string   vectorDataProjectionProj4 = "+proj=utm +zone=31 +ellps=WGS84";
+    if ((requestedRegion.GetSize()[0] > (16LU << 10)) || (requestedRegion.GetSize()[1] > (16LU << 10)))
+    {
+      //Limitation in mapnik/map.hpp, where we have
+      // static const unsigned MIN_MAPSIZE=16;
+      // static const unsigned MAX_MAPSIZE=MIN_MAPSIZE<<11;
+      itkExceptionMacro(<<"Mapnik does not support the generation of tiles bigger than 16 384");
+    }
+
+    m_Map.resize(requestedRegion.GetSize()[0],requestedRegion.GetSize()[1]);
     m_Map.set_srs(vectorDataProjectionProj4);
 
     ProcessNode(inputRoot,mDatasource);
@@ -263,7 +277,7 @@ namespace otb
     m_Map.addLayer(lyr);
 
     assert( (m_SensorModelFlip == 1)||(m_SensorModelFlip == -1) );
-    RegionType requestedRegion = output->GetRequestedRegion();
+
 
     mapnik::Envelope<double> envelope(
             m_Origin[0]+requestedRegion.GetIndex()[0]*m_Spacing[0],

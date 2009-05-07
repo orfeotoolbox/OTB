@@ -43,25 +43,25 @@ void
       rule.set_filter(mapnik::create_filter("[mapnik:geometry] = 1"));
       style.add_rule(rule);
     }
-    {
-      mapnik::rule_type rule;
-      rule.set_filter(mapnik::create_filter("[mapnik:geometry] = 2"));
-      {
-        mapnik::line_symbolizer geom = mapnik::line_symbolizer();
-        mapnik::stroke stroke = mapnik::stroke(mapnik::color("red"), 6);
-        stroke.set_opacity (0.5);
-        geom.set_stroke(stroke);
-        rule.append(geom);
-      }
-      {
-        mapnik::line_symbolizer geom = mapnik::line_symbolizer();
-        mapnik::stroke stroke = mapnik::stroke(mapnik::color("yellow"), 2);
-        stroke.set_opacity (1.0);
-        geom.set_stroke(stroke);
-        rule.append(geom);
-      }
-      style.add_rule(rule);
-    }
+//     {
+//       mapnik::rule_type rule;
+//       rule.set_filter(mapnik::create_filter("[mapnik:geometry] = 2"));
+//       {
+//         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
+//         mapnik::stroke stroke = mapnik::stroke(mapnik::color("red"), 6);
+//         stroke.set_opacity (0.5);
+//         geom.set_stroke(stroke);
+//         rule.append(geom);
+//       }
+//       {
+//         mapnik::line_symbolizer geom = mapnik::line_symbolizer();
+//         mapnik::stroke stroke = mapnik::stroke(mapnik::color("yellow"), 2);
+//         stroke.set_opacity (1.0);
+//         geom.set_stroke(stroke);
+//         rule.append(geom);
+//       }
+//       style.add_rule(rule);
+//     }
     {
       mapnik::rule_type rule;
       rule.set_filter(mapnik::create_filter("[mapnik:geometry] = 3"));
