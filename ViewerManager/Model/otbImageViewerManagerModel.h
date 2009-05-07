@@ -22,7 +22,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageViewerManagerEventsListener.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
-#include "itkRGBPixel.h"
+#include "itkRGBAPixel.h"
 #include "otbImageFileReader.h"
 #include "otbObjectList.h"
 
@@ -77,7 +77,7 @@ public:
 
   /**  Image Type*/
   typedef VectorImage<PixelType , 2>                                                ImageType;
-  typedef itk::RGBPixel<unsigned char>                                              RGBPixelType;
+  typedef itk::RGBAPixel<unsigned char>                                              RGBPixelType;
   typedef Image<RGBPixelType,2>                                                     ViewerImageType;
   typedef ImageType::Pointer                                                        ImagePointerType;
 
