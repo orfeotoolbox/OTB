@@ -89,16 +89,21 @@ public:
   inline virtual const OutputPixelType Evaluate(ScalarPixelType spixel) const
   {
     OutputPixelType resp;
-    resp.Fill(this->Evaluate(m_TransferFunction(spixel),m_TransferedMinimum[0],m_TransferedMaximum[0]));
+    resp.Fill(itk::NumericTraits<ScalarPixelType>::max());
+    OutputValueType value = this->Evaluate(m_TransferFunction(spixel),m_TransferedMinimum[0],m_TransferedMaximum[0]);
+    resp.SetRed(value);
+    resp.SetGreen(value);
+    resp.SetBlue(value);
     return resp;
   }
   /** Evaluate method (vector version) */
   inline virtual const OutputPixelType Evaluate(const VectorPixelType & vpixel) const
   {
     OutputPixelType resp;
+    resp.Fill(itk::NumericTraits<ScalarPixelType>::max());
     resp.SetRed(Evaluate(m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
-    resp.SetBlue(Evaluate(m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
     resp.SetGreen(Evaluate(m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
+    resp.SetBlue(Evaluate(m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
     return resp;
   }
 

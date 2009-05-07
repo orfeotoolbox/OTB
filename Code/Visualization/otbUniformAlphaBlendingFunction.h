@@ -20,6 +20,7 @@
 
 #include "otbBlendingFunction.h"
 #include "otbMath.h"
+#include "itkNumericTraits.h"
 
 namespace otb
 {
@@ -61,6 +62,7 @@ public:
   inline virtual const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type & input2)
   {
     OutputRGBPixelType resp;
+    resp.Fill(itk::NumericTraits<OutputValueType>::max());
     resp.SetRed(  static_cast<OutputValueType>(vcl_floor(m_Alpha * static_cast<double>(input1.GetRed())   +(1-m_Alpha)*static_cast<double>(input2.GetRed())  +0.5)));
     resp.SetGreen(static_cast<OutputValueType>(vcl_floor(m_Alpha * static_cast<double>(input1.GetGreen()) +(1-m_Alpha)*static_cast<double>(input2.GetGreen())+0.5)));
     resp.SetBlue( static_cast<OutputValueType>(vcl_floor(m_Alpha * static_cast<double>(input1.GetBlue())  +(1-m_Alpha)*static_cast<double>(input2.GetBlue()) +0.5)));
