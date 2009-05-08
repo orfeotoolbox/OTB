@@ -171,7 +171,10 @@ ImageLayer<TImage,TOutputImage>
     typename ListSampleType::Pointer listSample = ListSampleType::New();
 
     // Set the measurement vector size
-    listSample->SetMeasurementVectorSize(histogramSource->GetNumberOfComponentsPerPixel());
+//     listSample->SetMeasurementVectorSize(histogramSource->GetNumberOfComponentsPerPixel());
+
+    //Note: The GetBufferPointer is just used for overloading resolution
+    listSample->SetMeasurementVectorSize(PixelSize(histogramSource, histogramSource->GetBufferPointer()));
 
     // Fill the samples list
     it.GoToBegin();
@@ -278,18 +281,51 @@ ImageLayer<TImage,TOutputImage>
 }
 
 
+//Find out the histogram size from the pixel
+template <class TImage, class TOutputImage>
+    unsigned int
+        ImageLayer<TImage,TOutputImage>
+  ::PixelSize(ImagePointerType image, ScalarType* v) const
+{
+  return 1;
+}
+template <class TImage, class TOutputImage>
+    unsigned int
+        ImageLayer<TImage,TOutputImage>
+  ::PixelSize(ImagePointerType image, VectorPixelType* v) const
+{
+  return image->GetNumberOfComponentsPerPixel();
+}
+template <class TImage, class TOutputImage>
+    unsigned int
+        ImageLayer<TImage,TOutputImage>
+  ::PixelSize(ImagePointerType image, RGBPixelType* v) const
+{
+  return 3;
+}
+template <class TImage, class TOutputImage>
+    unsigned int
+        ImageLayer<TImage,TOutputImage>
+  ::PixelSize(ImagePointerType image, RGBAPixelType* v) const
+{
+  return 3;//We don't really want to normalize the Alpha value
 }
 
+}
+
+
+//This is needed to create the histogram as a VariableLengthVector
+//from a RGBPixel or RGBAPixel image.
 namespace itk
 {
  template< class T > inline VariableLengthVector<T> operator+
      ( const VariableLengthVector<T> &lhs, const RGBPixel< T > &rhs )
 {
-  if( lhs.Size() != rhs.Size() )
-  {
-  itkGenericExceptionMacro( << "Cannot add VariableLengthVector of length "
-      <<  lhs.Size() << " and " << rhs.Size() );
-  }
+//   if( lhs.Size() != rhs.Size() )
+//   {
+//   itkGenericExceptionMacro( << "Cannot add VariableLengthVector of length "
+//       <<  lhs.Size() << " and " << rhs.Size() );
+//   }
   VariableLengthVector<T> out(lhs);
   for( typename VariableLengthVector<T>::ElementIdentifier i=0; i< rhs.Size(); i++ )
   {
@@ -300,11 +336,11 @@ namespace itk
  template< class T > inline VariableLengthVector<T> operator+
      ( const VariableLengthVector<T> &lhs, const RGBAPixel< T > &rhs )
 {
-  if( lhs.Size() != rhs.Size() )
-  {
-    itkGenericExceptionMacro( << "Cannot add VariableLengthVector of length "
-        <<  lhs.Size() << " and " << rhs.Size() );
-  }
+//   if( lhs.Size() != rhs.Size() )
+//   {
+//     itkGenericExceptionMacro( << "Cannot add VariableLengthVector of length "
+//         <<  lhs.Size() << " and " << rhs.Size() );
+//   }
   VariableLengthVector<T> out(lhs);
   for( typename VariableLengthVector<T>::ElementIdentifier i=0; i< rhs.Size(); i++ )
   {

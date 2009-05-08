@@ -60,7 +60,10 @@ public:
   typedef typename ImageType::Pointer                                 ImagePointerType;
   typedef typename ImageType::PixelType                               PixelType;
   typedef typename ImageType::InternalPixelType                       InternalPixelType;
-  typedef typename itk::NumericTraits<InternalPixelType>::ValueType ScalarType;
+  typedef typename itk::NumericTraits<InternalPixelType>::ValueType   ScalarType;
+  typedef itk::VariableLengthVector<ScalarType>                       VectorPixelType;
+  typedef itk::RGBPixel<ScalarType>                                   RGBPixelType;
+  typedef itk::RGBAPixel<ScalarType>                                  RGBAPixelType;
   typedef typename ImageType::RegionType                              RegionType;
   typedef typename ImageType::IndexType                               IndexType;
 
@@ -201,6 +204,12 @@ virtual void RenderHistogram();
 
   /** Auto min/max rendering function setup */
   virtual void AutoMinMaxRenderingFunctionSetup();
+
+  /** Find out the histogram size from the pixel */
+  unsigned int PixelSize(ImagePointerType image, ScalarType* v) const;
+  unsigned int PixelSize(ImagePointerType image, VectorPixelType* v) const;
+  unsigned int PixelSize(ImagePointerType image, RGBPixelType* v) const;
+  unsigned int PixelSize(ImagePointerType image, RGBAPixelType* v) const;
 
 private:
   ImageLayer(const Self&);     // purposely not implemented
