@@ -346,6 +346,7 @@ otbVectorDataGlComponentNew.cxx
 otbImageWidgetWithVectorDataGlComponent.cxx
 otbImageViewerEndToEndWithVectorData.cxx
 otbStandardImageViewerNew.cxx
+otbStandardImageViewerRGBNew.cxx
 otbStandardImageViewer.cxx
 otbPackedWidgetManagerNew.cxx
 otbSplittedWidgetManagerNew.cxx
