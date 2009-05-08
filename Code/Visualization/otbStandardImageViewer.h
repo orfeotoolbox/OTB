@@ -76,6 +76,8 @@ public:
   typedef TImage                                    ImageType;
   typedef typename ImageType::Pointer               ImagePointerType;
   typedef typename ImageType::InternalPixelType     InternalPixelType;
+  typedef typename itk::NumericTraits<InternalPixelType>::ValueType ScalarType;
+
 
   /** VectorData typedef */
   typedef TVectorData                               VectorDataType;
@@ -86,7 +88,7 @@ public:
   typedef typename WidgetManagerType::Pointer       WidgetManagerPointerType;
 
   /** Output image type */
-  typedef itk::RGBAPixel<unsigned char>              RGBPixelType;
+  typedef itk::RGBAPixel<unsigned char>             RGBPixelType;
   typedef Image<RGBPixelType,2>                     OutputImageType;
 
   /** Image layer type */

@@ -60,6 +60,7 @@ public:
   typedef typename ImageType::Pointer                                 ImagePointerType;
   typedef typename ImageType::PixelType                               PixelType;
   typedef typename ImageType::InternalPixelType                       InternalPixelType;
+  typedef typename itk::NumericTraits<InternalPixelType>::ValueType ScalarType;
   typedef typename ImageType::RegionType                              RegionType;
   typedef typename ImageType::IndexType                               IndexType;
 
@@ -69,11 +70,11 @@ public:
   /** Histogram typedef */
    typedef itk::Statistics::DenseFrequencyContainer                   DFContainerType;
 
-  typedef itk::VariableLengthVector<InternalPixelType>                SampleType;
+  typedef itk::VariableLengthVector<ScalarType>                       SampleType;
   typedef itk::Statistics::ListSample<SampleType>                     ListSampleType;
 
   typedef otb::ListSampleToHistogramListGenerator
-  <ListSampleType,InternalPixelType,DFContainerType>                  HistogramFilterType;
+      <ListSampleType,ScalarType,DFContainerType>                         HistogramFilterType;
   typedef typename HistogramFilterType::HistogramType                 HistogramType;
   typedef typename HistogramType::Pointer                             HistogramPointerType;
   typedef typename HistogramFilterType::HistogramListType             HistogramListType;

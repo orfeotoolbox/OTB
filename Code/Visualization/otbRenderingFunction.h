@@ -21,6 +21,8 @@
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 #include "itkVariableLengthVector.h"
+#include "itkRGBPixel.h"
+#include "itkRGBAPixel.h"
 
 namespace otb
 {
@@ -48,19 +50,29 @@ public:
 
   /** PixelType macros */
   typedef TRGBPixel                                  OutputPixelType;
-  typedef TPixelPrecision                            ScalarPixelType;
-  typedef itk::VariableLengthVector<ScalarPixelType> VectorPixelType;
+  typedef TPixelPrecision                            PixelType;
+  typedef typename itk::NumericTraits<PixelType>::ValueType ScalarType;
+  typedef itk::VariableLengthVector<ScalarType>       VectorPixelType;
+  typedef itk::RGBPixel<ScalarType> RGBPixelType;
+  typedef itk::RGBAPixel<ScalarType> RGBAPixelType;
+
   /** Extrema vector */
-  typedef std::vector<ScalarPixelType>               ExtremaVectorType;
+  typedef std::vector<ScalarType>               ExtremaVectorType;
 
   /** Evaluate method (scalar version) */
-  virtual const OutputPixelType Evaluate(ScalarPixelType spixel) const = 0;
+  virtual const OutputPixelType Evaluate(ScalarType spixel) const = 0;
 
   /** Evaluate method (vector version) */
   virtual const OutputPixelType Evaluate(const VectorPixelType & vpixel) const = 0;
 
+  /** Evaluate method (RGB pixel version) */
+  virtual const OutputPixelType Evaluate(const RGBPixelType & vpixel) const = 0;
+
+  /** Evaluate method (RGBA pixel version) */
+  virtual const OutputPixelType Evaluate(const RGBAPixelType & vpixel) const = 0;
+
   /** Get a string description of a pixel  (scalar version) */
-  virtual const std::string Describe(ScalarPixelType spixel) const = 0;
+  virtual const std::string Describe(PixelType spixel) const = 0;
 
   /** Get a string description of a pixel (vector version) */
   virtual const std::string Describe(const VectorPixelType& vpixel) const = 0;
@@ -71,14 +83,14 @@ public:
   virtual void Initialize() = 0;
 
   /** Set the minimum (scalar version) */
-  virtual void SetMinimum(ScalarPixelType spixel)
+  virtual void SetMinimum(ScalarType spixel)
   {
     m_Minimum.clear();
     m_Minimum.push_back(spixel);
   }
 
   /** Set the maximum (scalar version) */
-  virtual void SetMaximum(ScalarPixelType spixel)
+  virtual void SetMaximum(ScalarType spixel)
   {
     m_Maximum.clear();
     m_Maximum.push_back(spixel);

@@ -179,8 +179,8 @@ ImageLayer<TImage,TOutputImage>
       {
       SampleType sample(histogramSource->GetNumberOfComponentsPerPixel());
       // workaround to handle both scalar and vector pixels the same way
-      sample.Fill(itk::NumericTraits<InternalPixelType>::Zero);
-      sample += it.Get();
+      sample.Fill(itk::NumericTraits<ScalarType>::Zero);
+      sample = sample + it.Get();
       listSample->PushBack(sample);
       ++it;
       }
@@ -221,7 +221,7 @@ ImageLayer<TImage,TOutputImage>
     typename RenderingFunctionType::ExtremaVectorType min, max;
     otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup(): "<<" ("<<this->GetName()<<") "<<nbComps<<" components, quantile= "<<100*m_AutoMinMaxQuantile<<" %");
     // For each components, use the histogram to compute min and max
-    typedef typename RenderingFunctionType::ScalarPixelType  RenderingFunctionScalarPixelType;
+    typedef typename RenderingFunctionType::ScalarType  RenderingFunctionScalarPixelType;
     for(unsigned int comp = 0; comp < nbComps;++comp)
       {
       // Compute quantiles
@@ -277,5 +277,42 @@ ImageLayer<TImage,TOutputImage>
   return oss.str();
 }
 
+
 }
+
+namespace itk
+{
+ template< class T > inline VariableLengthVector<T> operator+
+     ( const VariableLengthVector<T> &lhs, const RGBPixel< T > &rhs )
+{
+  if( lhs.Size() != rhs.Size() )
+  {
+  itkGenericExceptionMacro( << "Cannot add VariableLengthVector of length "
+      <<  lhs.Size() << " and " << rhs.Size() );
+  }
+  VariableLengthVector<T> out(lhs);
+  for( typename VariableLengthVector<T>::ElementIdentifier i=0; i< rhs.Size(); i++ )
+  {
+    out[i] += rhs[i];
+  }
+  return out;
+}
+ template< class T > inline VariableLengthVector<T> operator+
+     ( const VariableLengthVector<T> &lhs, const RGBAPixel< T > &rhs )
+{
+  if( lhs.Size() != rhs.Size() )
+  {
+    itkGenericExceptionMacro( << "Cannot add VariableLengthVector of length "
+        <<  lhs.Size() << " and " << rhs.Size() );
+  }
+  VariableLengthVector<T> out(lhs);
+  for( typename VariableLengthVector<T>::ElementIdentifier i=0; i< rhs.Size(); i++ )
+  {
+    out[i] += rhs[i];
+  }
+  return out;
+}
+
+}
+
 #endif
