@@ -87,14 +87,14 @@ ImportVectorImageFilter<TOutputImage>
   os << indent << "Filter manages memory: " << (m_FilterManageMemory ? "true" : "false") << std::endl;
 
   os << indent << "Spacing: [";
-  for (i=0; i < static_cast<int>(TOutputImage::ImageDimension) - 1; i++)
+  for (i=0; i < static_cast<int>(TOutputImage::ImageDimension) - 1; ++i)
   {
     os << m_Spacing[i] << ", ";
   }
   os << m_Spacing[i] << "]" << std::endl;
 
   os << indent << "Origin: [";
-  for (i=0; i < static_cast<int>(TOutputImage::ImageDimension) - 1; i++)
+  for (i=0; i < static_cast<int>(TOutputImage::ImageDimension) - 1; ++i)
   {
     os << m_Origin[i] << ", ";
   }
@@ -229,7 +229,7 @@ ImportVectorImageFilter<TOutputImage>
 ::SetSpacing( const SpacingType & spacing )
 {
   double dspacing[TOutputImage::ImageDimension];
-  for (unsigned int i=0; i<TOutputImage::ImageDimension; i++)
+  for (unsigned int i=0; i<TOutputImage::ImageDimension; ++i)
   {
     dspacing[i] = spacing[i];
   }
@@ -246,7 +246,7 @@ ImportVectorImageFilter<TOutputImage>
 ::SetOrigin( const OriginType & origin )
 {
   double dorigin[TOutputImage::ImageDimension];
-  for (unsigned int i=0; i<TOutputImage::ImageDimension; i++)
+  for (unsigned int i=0; i<TOutputImage::ImageDimension; ++i)
   {
     dorigin[i] = origin[i];
   }
@@ -260,9 +260,9 @@ ImportVectorImageFilter<TOutputImage>
 ::SetDirection(const DirectionType direction )
 {
   bool modified = false;
-  for (unsigned int r = 0; r < TOutputImage::ImageDimension; r++)
+  for (unsigned int r = 0; r < TOutputImage::ImageDimension; ++r)
   {
-    for (unsigned int c = 0; c < TOutputImage::ImageDimension; c++)
+    for (unsigned int c = 0; c < TOutputImage::ImageDimension; ++c)
     {
       if (m_Direction[r][c] != direction[r][c])
       {

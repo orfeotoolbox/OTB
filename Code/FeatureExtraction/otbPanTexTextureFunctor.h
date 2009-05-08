@@ -93,7 +93,7 @@ public:
       // Loop over each offset
       double out = itk::NumericTraits<double>::max();
       Superclass contrast;
-      for(unsigned int k=0; k<m_OffsetList.size(); k++)
+      for(unsigned int k=0; k<m_OffsetList.size(); ++k)
         {
           contrast.SetOffset( m_OffsetList[k] );
           double res = contrast.ComputeOverSingleChannel(neigh, neighOff);

@@ -50,7 +50,7 @@ void
 RCC8Graph<TVertex>
 ::Initialize( unsigned int num)
 {
-  for (unsigned int i = boost::num_vertices(m_Graph); i<=num;i++)
+  for (unsigned int i = boost::num_vertices(m_Graph); i<=num;++i)
   {
     VertexDescriptorType id = boost::add_vertex(m_Graph);
     VertexPointerType vertex = VertexType::New();

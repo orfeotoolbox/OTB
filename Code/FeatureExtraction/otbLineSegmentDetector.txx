@@ -332,7 +332,7 @@ LineSegmentDetector<TInputImage, TPrecision>
  
   /*Try to improve the precison of the oriented */
   CopyRectangle(&r ,rec );
-  for(n=0; n<5; n++)
+  for(n=0; n<5; ++n)
     {
       r[7] /= 2.0;
       r[6] = M_PI * r[7];              // prec = rec[6]
@@ -351,7 +351,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   
   /*Try to improve the width of the rectangle*/
   CopyRectangle(&r ,rec );
-  for(n=0; n<5; n++)
+  for(n=0; n<5; ++n)
     {
       r[4] -= delta;   //r[4] is stored as the width
       nfa_new = this->ComputeRectNFA(r);
@@ -365,7 +365,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   
   /*Try to improve the extremity of the segments*/
   CopyRectangle(&r ,rec );
-  for(n=0; n<5; n++)
+  for(n=0; n<5; ++n)
     {
       if( (r[4] - delta) >= 0.5 )
         {
@@ -386,7 +386,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   if( NFA > 0. ) return NFA;
   
   CopyRectangle(&r ,rec );
-  for(n=0; n<5; n++)
+  for(n=0; n<5; ++n)
     {
       if( (r[4] - delta) >= 0.5 )
         {
@@ -408,7 +408,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   
   /*Try to improve the precision again */
   CopyRectangle(&r ,rec );
-  for(n=0; n<5; n++)
+  for(n=0; n<5; ++n)
     {
       r[7] /= 2.0;
       r[6] = M_PI * r[7];              // prec = rec[]
@@ -527,7 +527,7 @@ LineSegmentDetector<TInputImage, TPrecision>
                   reg.push_back(NeighIndex);
                 }
             }
-          s++;
+          ++s;
         }
     }/** End Searching loop*/
     
@@ -639,7 +639,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   double s = 0.;
   int i = 0;
   
-  for( s=0.0,i = static_cast<int>(l_min); s<sum_th && i<=static_cast<int>(l_max); i++) 
+  for( s=0.0,i = static_cast<int>(l_min); s<sum_th && i<=static_cast<int>(l_max); ++i) 
     s += sum_l[ Diagonal + i];
   
   double lb = (static_cast<double>(i-1) - 0.5 );
@@ -648,7 +648,7 @@ LineSegmentDetector<TInputImage, TPrecision>
     s += sum_l[ Diagonal  + i];
   double lf =  (static_cast<double>(i+1) + 0.5 ); 
 
-  for(s=0.0,i=static_cast<int>(w_min); s<sum_th && i<=static_cast<int>(w_max); i++) 
+  for(s=0.0,i=static_cast<int>(w_min); s<sum_th && i<=static_cast<int>(w_max); ++i) 
     s += sum_w[ Diagonal + i];
   
   double wr = (static_cast<double>(i-1) - 0.5);  
@@ -790,7 +790,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   RectangleType::Pointer  rectangle =  RectangleType::New();
   
   /** Fill the rectangle with the points*/
-  for (int i = 0; i<2;  i++)
+  for (int i = 0; i<2;  ++i)
     {
       typename RectangleType::VertexType   vertex;
       vertex[0] = rec[2*i]; 
@@ -814,7 +814,7 @@ LineSegmentDetector<TInputImage, TPrecision>
     {
       if( rectangle->IsInside( it.GetIndex()) && m_OrientationFilter->GetOutput()->GetRequestedRegion().IsInside( it.GetIndex()) )
         {
-          pts++;
+          ++pts;
 
           if(this->IsAligned(it.Get(), rec[5] /*theta*/ ,rec[6] /*Prec*/))
             NbAligned++;
@@ -933,7 +933,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   tmp=x+5.5;
   tmp -= (x+0.5)*log(tmp);
   ser=1.000000000190015;
-  for (j=0;j<=5;j++) ser += cof[j]/++y;
+  for (j=0;j<=5;++j) ser += cof[j]/++y;
   return -tmp+log(2.5066282746310005*ser/x);
 }
 

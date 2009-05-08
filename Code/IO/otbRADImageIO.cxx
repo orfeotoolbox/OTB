@@ -77,7 +77,7 @@ RADImageIO::~RADImageIO()
   }
   if ( m_ChannelsFile !=  NULL)
   {
-    for (unsigned int numChannel = 0; numChannel< m_NbOfChannels; numChannel++)
+    for (unsigned int numChannel = 0; numChannel< m_NbOfChannels; ++numChannel)
     {
       if ( m_ChannelsFile[numChannel].is_open() )
       {
@@ -168,7 +168,7 @@ void RADImageIO::Read(void* buffer)
   otbMsgDevMacro( <<" sizeof(size_t)        : "<<sizeof(size_t));
   otbMsgDevMacro( <<" sizeof(unsigned long) : "<<sizeof(unsigned long));
 
-  for (unsigned int numChannel = 0; numChannel < m_NbOfChannels; numChannel++)
+  for (unsigned int numChannel = 0; numChannel < m_NbOfChannels; ++numChannel)
   {
     cpt = (unsigned long )(numChannel)* (unsigned long)(m_NbOctetPixel);
     //Read region of the channel
@@ -451,7 +451,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string & file_name, st
   // Read FileName information
   std::string lPathName = System::GetPathName( file_name );
   m_ChannelsFileName.clear();
-  for (unsigned int i=0; i<m_NbOfChannels; i++)
+  for (unsigned int i=0; i<m_NbOfChannels; ++i)
   {
     file >> lString;
     ::itk::OStringStream lStream;
@@ -464,7 +464,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string & file_name, st
   m_ChannelsFile = new std::fstream[m_NbOfChannels];
 
   // Try to open channels file
-  for (unsigned int channels = 0; channels<m_ChannelsFileName.size(); channels++)
+  for (unsigned int channels = 0; channels<m_ChannelsFileName.size(); ++channels)
   {
 
     m_ChannelsFile[channels].open( m_ChannelsFileName[channels].c_str(), std::ios::in | std::ios::binary );
@@ -552,7 +552,7 @@ void RADImageIO::Write(const void* buffer)
     return;
   }
 
-  for (unsigned int numChannel = 0; numChannel < m_NbOfChannels; numChannel++)
+  for (unsigned int numChannel = 0; numChannel < m_NbOfChannels; ++numChannel)
   {
     cpt = (unsigned long )(numChannel)* (unsigned long)(m_NbOctetPixel);
     //Read region of the channel
@@ -723,14 +723,14 @@ void RADImageIO::WriteImageInformation()
   //Define channels file name
   std::string lRootName = System::GetRootName( m_FileName );
   m_ChannelsFileName.clear();
-  for (unsigned int i=0; i<m_NbOfChannels; i++)
+  for (unsigned int i=0; i<m_NbOfChannels; ++i)
   {
     ::itk::OStringStream lStream;
     lStream << lRootName <<"_"<< i+1 << lExtension;
     m_ChannelsFileName.push_back(lStream.str());
   }
 
-  for (unsigned int i=0;i<m_NbOfChannels;i++)
+  for (unsigned int i=0;i<m_NbOfChannels;++i)
   {
     m_HeaderFile << System::GetShortFileName(this->m_ChannelsFileName[i].c_str()) << std::endl;
   }
@@ -743,7 +743,7 @@ void RADImageIO::WriteImageInformation()
   m_ChannelsFile = new std::fstream[m_NbOfChannels];
 
   //Try to open channels file
-  for (unsigned int channels = 0; channels<m_ChannelsFileName.size(); channels++)
+  for (unsigned int channels = 0; channels<m_ChannelsFileName.size(); ++channels)
   {
     m_ChannelsFile[channels].open( m_ChannelsFileName[channels].c_str(),  std::ios::out | std::ios::trunc | std::ios::binary );
     if ( m_ChannelsFile[channels].fail() )
@@ -758,7 +758,7 @@ void RADImageIO::WriteImageInformation()
   unsigned long numberOfBytesPerLines = m_NbOctetPixel * m_Dimensions[0];
   char* value = new char[numberOfBytesPerLines];
 
-  for (unsigned int channels = 0; channels<m_ChannelsFileName.size(); channels++)
+  for (unsigned int channels = 0; channels<m_ChannelsFileName.size(); ++channels)
   {
     m_ChannelsFile[channels].seekp(0, std::ios::beg );
     //Write Header line and all file (whitout information)

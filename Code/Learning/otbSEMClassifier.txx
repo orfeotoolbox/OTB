@@ -45,7 +45,7 @@ SEMClassifier< TInputImage, TOutputImage >
 {
   Superclass::PrintSelf(os, indent);
 
-  for ( int componentIndex = 0; componentIndex < m_NbClasses; componentIndex++ )
+  for ( int componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex )
   {
     os << indent << "Component num " << componentIndex;
     os << " (prop " << m_Proportions[componentIndex] << ") ";
@@ -377,7 +377,7 @@ SEMClassifier< TInputImage, TOutputImage >
         sample = double( rand() ) / ( double( RAND_MAX) + 1.0 );
 
         *labelIter = m_NbClasses-1;
-        for ( int componentIndex = 0; componentIndex < m_NbClasses; componentIndex++ )
+        for ( int componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex )
         {
           if ( cumulativeProportion <= sample
                && sample < cumulativeProportion + m_InitialProportions[componentIndex] )
@@ -394,7 +394,7 @@ SEMClassifier< TInputImage, TOutputImage >
 
   m_Proportions.resize( m_NbClasses );
   m_Proba.resize( m_NbClasses );
-  for ( int i = 0; i < m_NbClasses; i++ )
+  for ( int i = 0; i < m_NbClasses; ++i )
     m_Proba[i].resize( m_NbSamples );
 
   if ( !m_ComponentDeclared )
@@ -403,7 +403,7 @@ SEMClassifier< TInputImage, TOutputImage >
                       << " Gaussian components" );
     typedef otb::Statistics::GaussianModelComponent< ClassSampleType > GaussianType;
 
-    for ( int componentIndex = 0; componentIndex < m_NbClasses; componentIndex++ )
+    for ( int componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex )
       AddComponent( componentIndex, GaussianType::New() );
   }
 
@@ -431,7 +431,7 @@ SEMClassifier< TInputImage, TOutputImage >
     x = double( rand() ) / ( double(RAND_MAX) + 1.0 );
     z = 0.0;
 
-    for ( int componentIndex = 0; componentIndex < m_NbClasses; componentIndex++ )
+    for ( int componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex )
     {
       y = z;
       z += m_Proba[componentIndex][posSample];
@@ -466,12 +466,12 @@ SEMClassifier< TInputImage, TOutputImage >
 ::PerformExpectationProcess()
 {
   int componentIndex;
-  for ( componentIndex = 0; componentIndex < m_NbClasses; componentIndex++ )
+  for ( componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex )
     m_Proportions[componentIndex] = 0.0;
 
   std::vector< typename ClassSampleType::Pointer > coeffByClass;
 
-  for ( componentIndex = 0; componentIndex < m_NbClasses; componentIndex++ )
+  for ( componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex )
   {
     coeffByClass.push_back( ClassSampleType::New() );
     coeffByClass[ componentIndex ]->SetMeasurementVectorSize(
@@ -495,7 +495,7 @@ SEMClassifier< TInputImage, TOutputImage >
   }
   while ( ++iterSample != lastSample && ++iterLabel != lastLabel );
 
-  for ( componentIndex = 0; componentIndex < m_NbClasses; componentIndex++ )
+  for ( componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex )
   {
     if ( m_Proportions[ componentIndex ] == 0.0 )
     {
@@ -509,7 +509,7 @@ SEMClassifier< TInputImage, TOutputImage >
     m_ComponentVector[ componentIndex ]->Update();
   }
 
-  for ( componentIndex = 0; componentIndex < m_NbClasses; componentIndex++ )
+  for ( componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex )
     m_Proportions[componentIndex] /= static_cast<double> ( m_NbSamples );
 
 }
@@ -544,7 +544,7 @@ SEMClassifier< TInputImage, TOutputImage >
   {
     id = iterSample.GetInstanceIdentifier();
 
-    for ( componentIndex = 0; componentIndex < m_NbClasses; componentIndex++ )
+    for ( componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex )
       localCount[ componentIndex ] = 0.0;
 
     i = id / cols;
@@ -562,12 +562,12 @@ SEMClassifier< TInputImage, TOutputImage >
         localCount[ m_ClassLabels[ a*cols+b ] ] += 1.0;
       }
 
-    for ( componentIndex = 0; componentIndex < m_NbClasses; componentIndex++ )
+    for ( componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex )
       localWeight[ componentIndex ] = localCount[ componentIndex ]
                                       / neighborhoodWeight;
 
     sumPdf = 0.0;
-    for ( componentIndex = 0; componentIndex < m_NbClasses; componentIndex++ )
+    for ( componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex )
     {
       measurementVector = iterSample.GetMeasurementVector();
       aPdf = localWeight[ componentIndex ]
@@ -576,7 +576,7 @@ SEMClassifier< TInputImage, TOutputImage >
       pdf[componentIndex] = aPdf;
     }
 
-    for ( componentIndex = 0; componentIndex < m_NbClasses; componentIndex++ )
+    for ( componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex )
     {
       if ( sumPdf == 0.0 )
         m_Proba[componentIndex][iterSample.GetInstanceIdentifier()] = 0.0;
@@ -624,7 +624,7 @@ SEMClassifier< TInputImage, TOutputImage >
   do
   {
     cluster = 0;
-    for ( componentIndex = 1; componentIndex < m_NbClasses; componentIndex++ )
+    for ( componentIndex = 1; componentIndex < m_NbClasses; ++componentIndex )
     {
       if ( m_Proba[componentIndex][sampleIter.GetInstanceIdentifier()]
            > m_Proba[cluster][sampleIter.GetInstanceIdentifier()] )

@@ -38,7 +38,7 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
 
   RadiusType r;
   unsigned int j;
-  for ( j = 0; j < ImageDimension; j++ )
+  for ( j = 0; j < ImageDimension; ++j )
   {
     r[j] = 1;
   }
@@ -155,7 +155,7 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
 
   double derivativeF[ImageDimension];
   double derivativeM[ImageDimension];
-  for (j=0; j<ImageDimension;j++)
+  for (j=0; j<ImageDimension;++j)
   {
     derivativeF[j]=0;
     derivativeM[j]=0;
@@ -190,7 +190,7 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
       fixedValue = (double) this->m_FixedImage->GetPixel( index );
 
       fixedGradient = m_FixedImageGradientCalculator->EvaluateAtIndex( index );
-      for ( j = 0; j < ImageDimension; j++ )
+      for ( j = 0; j < ImageDimension; ++j )
       {
         fixedGradientSquaredMagnitude += vnl_math_sqr( fixedGradient[j] ) * m_FixedImageSpacing[j];
       }
@@ -210,7 +210,7 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
       }
       // End Edited by OTB developpers
 
-      for ( j = 0; j < ImageDimension; j++ )
+      for ( j = 0; j < ImageDimension; ++j )
       {
         mappedPoint[j] = double( index[j] ) * m_FixedImageSpacing[j] +
                          m_FixedImageOrigin[j];
@@ -229,7 +229,7 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
       smm+=movingValue*movingValue;
       sfm+=fixedValue*movingValue;
 
-      for (unsigned int dim=0; dim<ImageDimension; dim++)
+      for (unsigned int dim=0; dim<ImageDimension; ++dim)
       {
         double differential = fixedGradient[dim];
         derivativeF[dim]+= fixedValue  * differential;
@@ -243,7 +243,7 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
   if ( (sff*smm) != 0.0)
   {
     double factor = 1.0 / vcl_sqrt(sff * smm );
-    for (unsigned int i=0; i<ImageDimension; i++)
+    for (unsigned int i=0; i<ImageDimension; ++i)
     {
       update[i] = factor * ( derivativeF[i] - (sfm/smm)*derivativeM[i]);
       updatenorm+=(update[i]*update[i]);
@@ -254,7 +254,7 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
   }
   else
   {
-    for (unsigned int i=0; i<ImageDimension; i++)
+    for (unsigned int i=0; i<ImageDimension; ++i)
     {
       update[i] = 0.0;
     }

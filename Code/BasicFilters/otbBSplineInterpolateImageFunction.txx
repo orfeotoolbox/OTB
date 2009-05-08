@@ -114,7 +114,7 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
 
   //this->SetPoles();
   m_MaxNumberInterpolationPoints = 1;
-  for (unsigned int n=0; n < ImageDimension; n++)
+  for (unsigned int n=0; n < ImageDimension; ++n)
   {
     m_MaxNumberInterpolationPoints *= ( m_SplineOrder + 1);
   }
@@ -152,13 +152,13 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
   double interpolated = 0.0;
   IndexType coefficientIndex;
   // Step through eachpoint in the N-dimensional interpolation cube.
-  for (unsigned int p = 0; p < m_MaxNumberInterpolationPoints; p++)
+  for (unsigned int p = 0; p < m_MaxNumberInterpolationPoints; ++p)
   {
     // translate each step into the N-dimensional index.
     //      IndexType pointIndex = PointToIndex( p );
 
     double w = 1.0;
-    for (unsigned int n = 0; n < ImageDimension; n++ )
+    for (unsigned int n = 0; n < ImageDimension; ++n )
     {
       w *= weights[n][ m_PointsToIndex[p][n] ];
       coefficientIndex[n] = EvaluateIndex[n][m_PointsToIndex[p][n]];  // Build up ND index for coefficients.
@@ -173,7 +173,7 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
   /*  double interpolated = 0.0;
     IndexType coefficientIndex;
     // Step through eachpoint in the N-dimensional interpolation cube.
-    for (unsigned int sp = 0; sp <= m_SplineOrder; sp++)
+    for (unsigned int sp = 0; sp <= m_SplineOrder; ++sp)
       {
       for (unsigned int sp1=0; sp1 <= m_SplineOrder; sp1++)
         {
@@ -222,10 +222,10 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
   CovariantVectorType derivativeValue;
   double tempValue;
   IndexType coefficientIndex;
-  for (unsigned int n = 0; n < ImageDimension; n++)
+  for (unsigned int n = 0; n < ImageDimension; ++n)
   {
     derivativeValue[n] = 0.0;
-    for (unsigned int p = 0; p < m_MaxNumberInterpolationPoints; p++)
+    for (unsigned int p = 0; p < m_MaxNumberInterpolationPoints; ++p)
     {
       tempValue = 1.0;
       for (unsigned int n1 = 0; n1 < ImageDimension; n1++)
@@ -267,7 +267,7 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
   switch (splineOrder)
   {
   case 3:
-    for (unsigned int n = 0; n < ImageDimension; n++)
+    for (unsigned int n = 0; n < ImageDimension; ++n)
     {
       w = x[n] - (double) EvaluateIndex[n][1];
       weights[n][3] = (1.0 / 6.0) * w * w * w;
@@ -277,13 +277,13 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
     }
     break;
   case 0:
-    for (unsigned int n = 0; n < ImageDimension; n++)
+    for (unsigned int n = 0; n < ImageDimension; ++n)
     {
       weights[n][0] = 1; // implements nearest neighbor
     }
     break;
   case 1:
-    for (unsigned int n = 0; n < ImageDimension; n++)
+    for (unsigned int n = 0; n < ImageDimension; ++n)
     {
       w = x[n] - (double) EvaluateIndex[n][0];
       weights[n][1] = w;
@@ -291,7 +291,7 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
     }
     break;
   case 2:
-    for (unsigned int n = 0; n < ImageDimension; n++)
+    for (unsigned int n = 0; n < ImageDimension; ++n)
     {
       /* x */
       w = x[n] - (double)EvaluateIndex[n][1];
@@ -301,7 +301,7 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
     }
     break;
   case 4:
-    for (unsigned int n = 0; n < ImageDimension; n++)
+    for (unsigned int n = 0; n < ImageDimension; ++n)
     {
       /* x */
       w = x[n] - (double)EvaluateIndex[n][2];
@@ -319,7 +319,7 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
     }
     break;
   case 5:
-    for (unsigned int n = 0; n < ImageDimension; n++)
+    for (unsigned int n = 0; n < ImageDimension; ++n)
     {
       /* x */
       w = x[n] - (double)EvaluateIndex[n][2];
@@ -371,20 +371,20 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
     // Calculates B(splineOrder) ( (x + 1/2) - xi) - B(splineOrder -1) ( (x - 1/2) - xi)
   case -1:
     // Why would we want to do this?
-    for (unsigned int n = 0; n < ImageDimension; n++)
+    for (unsigned int n = 0; n < ImageDimension; ++n)
     {
       weights[n][0] = 0.0;
     }
     break;
   case 0:
-    for (unsigned int n = 0; n < ImageDimension; n++)
+    for (unsigned int n = 0; n < ImageDimension; ++n)
     {
       weights[n][0] = -1.0;
       weights[n][1] =  1.0;
     }
     break;
   case 1:
-    for (unsigned int n = 0; n < ImageDimension; n++)
+    for (unsigned int n = 0; n < ImageDimension; ++n)
     {
       w = x[n] + 0.5 - (double)EvaluateIndex[n][1];
       // w2 = w;
@@ -397,7 +397,7 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
     break;
   case 2:
 
-    for (unsigned int n = 0; n < ImageDimension; n++)
+    for (unsigned int n = 0; n < ImageDimension; ++n)
     {
       w = x[n] + .5 - (double)EvaluateIndex[n][2];
       w2 = 0.75 - w * w;
@@ -412,7 +412,7 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
     break;
   case 3:
 
-    for (unsigned int n = 0; n < ImageDimension; n++)
+    for (unsigned int n = 0; n < ImageDimension; ++n)
     {
       w = x[n] + 0.5 - (double)EvaluateIndex[n][2];
       w4 = (1.0 / 6.0) * w * w * w;
@@ -428,7 +428,7 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
     }
     break;
   case 4:
-    for (unsigned int n = 0; n < ImageDimension; n++)
+    for (unsigned int n = 0; n < ImageDimension; ++n)
     {
       w = x[n] + .5 - (double)EvaluateIndex[n][3];
       t2 = w * w;
@@ -473,12 +473,12 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
   // m_PointsToIndex is used to convert a sequential location to an N-dimension
   // index vector.  This is precomputed to save time during the interpolation routine.
   m_PointsToIndex.resize(m_MaxNumberInterpolationPoints);
-  for (unsigned int p = 0; p < m_MaxNumberInterpolationPoints; p++)
+  for (unsigned int p = 0; p < m_MaxNumberInterpolationPoints; ++p)
   {
     int pp = p;
     unsigned long indexFactor[ImageDimension];
     indexFactor[0] = 1;
-    for (int j=1; j< static_cast<int>(ImageDimension); j++)
+    for (int j=1; j< static_cast<int>(ImageDimension); ++j)
     {
       indexFactor[j] = indexFactor[j-1] * ( m_SplineOrder + 1 );
     }
@@ -500,7 +500,7 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
   long indx;
 
 // compute the interpolation indexes
-  for (unsigned int n = 0; n< ImageDimension; n++)
+  for (unsigned int n = 0; n< ImageDimension; ++n)
   {
     if (splineOrder & 1)     // Use this index calculation for odd splineOrder
     {
@@ -508,9 +508,9 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
       //std::cout<<"x: "<<x<<std::endl;
       //std::cout<<"splineOrder: "<<splineOrder<<std::endl;
       //std::cout<<"indx: "<<indx<<std::endl;
-      for (unsigned int k = 0; k <= splineOrder; k++)
+      for (unsigned int k = 0; k <= splineOrder; ++k)
       {
-        evaluateIndex[n][k] = indx++;
+        evaluateIndex[n][k] = ++indx;
       }
     }
     else                       // Use this index calculation for even splineOrder
@@ -520,9 +520,9 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
       //std::cout<<"x: "<<x<<std::endl;
       //std::cout<<"splineOrder: "<<splineOrder<<std::endl;
       //std::cout<<"indx: "<<indx<<std::endl;
-      for (unsigned int k = 0; k <= splineOrder; k++)
+      for (unsigned int k = 0; k <= splineOrder; ++k)
       {
-        evaluateIndex[n][k] = indx++;
+        evaluateIndex[n][k] = ++indx;
       }
     }
   }
@@ -535,7 +535,7 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
                                 unsigned int splineOrder) const
 {
 
-  for (unsigned int n = 0; n < ImageDimension; n++)
+  for (unsigned int n = 0; n < ImageDimension; ++n)
   {
     long dataLength =  m_DataLength[n];
     long dataOffset = m_CurrentBufferedRegion.GetIndex()[n];
@@ -544,14 +544,14 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
     // TODO:  We could implement other boundary options beside mirror
     if (m_DataLength[n] == 1)
     {
-      for (unsigned int k = 0; k <= splineOrder; k++)
+      for (unsigned int k = 0; k <= splineOrder; ++k)
       {
         evaluateIndex[n][k] = 0;
       }
     }
     else
     {
-      for (unsigned int k = 0; k <= splineOrder; k++)
+      for (unsigned int k = 0; k <= splineOrder; ++k)
       {
         // btw - Think about this couldn't this be replaced with a more elagent modulus method?
         evaluateIndex[n][k] = (evaluateIndex[n][k] < dataOffset) ? (dataOffset+(dataOffset-evaluateIndex[n][k])%dataLength)

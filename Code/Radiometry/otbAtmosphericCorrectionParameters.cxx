@@ -39,12 +39,12 @@ FilterFunctionValues
   os << indent << "Maximum spectral value: " << m_MaxSpectralValue << std::endl;
   os << indent << "User Step between each wavelenght spectral band values: " << m_UserStep << std::endl;
   os << indent << "Filter function Vector Values: " << std::endl;
-  for (unsigned int i=0; i<m_FilterFunctionValues.size(); i++)
+  for (unsigned int i=0; i<m_FilterFunctionValues.size(); ++i)
   {
     os << indent << m_FilterFunctionValues[i] <<std::endl;
   }
   os << indent << "Filter function Vector Values 6S: " << std::endl;
-  for (unsigned int i=0; i<m_FilterFunctionValues6S.size(); i++)
+  for (unsigned int i=0; i<m_FilterFunctionValues6S.size(); ++i)
   {
     os << indent << m_FilterFunctionValues6S[i] <<std::endl;
   }
@@ -82,7 +82,7 @@ AtmosphericCorrectionParameters
 
   // Function values print :
   os << indent << "Filter function Values: " << std::endl;
-  for (unsigned int i=0; i<m_WavelenghtSpectralBand.size(); i++)
+  for (unsigned int i=0; i<m_WavelenghtSpectralBand.size(); ++i)
   {
     os << indent << "Channel : "<< i+1 <<" : " << std::endl;
     os << indent << m_WavelenghtSpectralBand[i]<< std::endl;

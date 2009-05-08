@@ -66,7 +66,7 @@ VectorImageToIntensityImageFilter<TInputImage,TOutputImage>
   {
     double sum=0.0;
     InputPixelType pixel = inputIt.Get();
-    for (unsigned int i=0; i<pixel.Size(); i++)
+    for (unsigned int i=0; i<pixel.Size(); ++i)
     {
       sum += pixel[i];
     }

@@ -85,7 +85,7 @@ public:
     outPixel.SetSize(it.GetCenterPixel().Size());
 
     // Loop over each component
-    for (unsigned int j=0; j<outPixel.GetSize(); j++)
+    for (unsigned int j=0; j<outPixel.GetSize(); ++j)
     {
       contribution = 0;
       // Load the current channel ponderation value matrix

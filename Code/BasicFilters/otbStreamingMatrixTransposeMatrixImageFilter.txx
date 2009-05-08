@@ -209,9 +209,9 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
      * To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
      * resultMatrix += m_ThreadSum[thread];
      **/
-    for (unsigned int i=0; i<resultMatrix.Rows(); i++)
+    for (unsigned int i=0; i<resultMatrix.Rows(); ++i)
     {
-      for (unsigned int j=0; j<resultMatrix.Cols(); j++)
+      for (unsigned int j=0; j<resultMatrix.Cols(); ++j)
       {
         resultMatrix(i, j) += m_ThreadSum[thread](i, j);
       }
@@ -257,7 +257,7 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
     {
       PixelType vectortemp1(vectorValue1.Size()+1);
       vectortemp1[0] = 1;
-      for (unsigned int n=0; n<vectorValue1.Size(); n++)
+      for (unsigned int n=0; n<vectorValue1.Size(); ++n)
       {
         vectortemp1[n+1] = vectorValue1[n];
 
@@ -279,9 +279,9 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
       vectorValue2 = vectortemp2;
     }
 
-    for (unsigned int i=0; i<vectorValue1.Size(); i++)
+    for (unsigned int i=0; i<vectorValue1.Size(); ++i)
     {
-      for (unsigned int j=0; j<vectorValue2.Size(); j++)
+      for (unsigned int j=0; j<vectorValue2.Size(); ++j)
       {
         m_ThreadSum[threadId](i, j) += static_cast<RealType>(vectorValue1[i])*static_cast<RealType>(vectorValue2[j]);
       }

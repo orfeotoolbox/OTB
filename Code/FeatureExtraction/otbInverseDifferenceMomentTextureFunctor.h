@@ -55,9 +55,9 @@ public:
     double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
     double areaInv = 1/area;
     double out = 0.;
-      for (unsigned r = 0; r<this->GetHisto().size(); r++)
+      for (unsigned r = 0; r<this->GetHisto().size(); ++r)
         {
-          for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
+          for (unsigned s = 0; s<this->GetHisto()[r].size(); ++s)
             {
               double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
               double dist = vcl_pow( ( (static_cast<double>(r)+0.5)*this->GetOffsetBinLength())-((static_cast<double>(s)+0.5)*this->GetNeighBinLength()), 2);

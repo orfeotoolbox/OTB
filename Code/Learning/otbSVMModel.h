@@ -446,7 +446,7 @@ public:
   /** Set the number of SV per classes */
   void SetNumberOfSVPerClasse( int * vect)
   {
-    for (int i=0;i<m_Model->nr_class;i++)
+    for (int i=0;i<m_Model->nr_class;++i)
       m_Model->nSV[i] = vect[i];
     this->Modified();
   }

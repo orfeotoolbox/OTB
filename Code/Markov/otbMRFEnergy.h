@@ -102,7 +102,7 @@ public:
         if (isInside)
         {
           result += GetSingleValue(value1, value2);
-          insideNeighbors++;
+          ++insideNeighbors;
         }
       }
     }
@@ -124,7 +124,7 @@ public:
         if (isInside)
         {
           result += GetSingleValue(value1, value2);
-          insideNeighbors++;
+          ++insideNeighbors;
         }
       }
     }
@@ -210,7 +210,7 @@ public:
         if (isInside)
         {
           result += GetSingleValue(value1, value2);
-          insideNeighbors++;
+          ++insideNeighbors;
         }
       }
     }

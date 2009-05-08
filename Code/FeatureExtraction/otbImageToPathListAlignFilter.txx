@@ -52,7 +52,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   m_MinGradNorm=2.0;
   m_Eps=0.0;
 
-  for (unsigned int i = 0; i < InputImageDimension; i++)
+  for (unsigned int i = 0; i < InputImageDimension; ++i)
   {
     // Set an image spacing for the user
     m_Spacing[i] = 1.0;
@@ -78,7 +78,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 ::SetSpacing(const double* spacing)
 {
   unsigned int i;
-  for (i=0; i<InputImageDimension; i++)
+  for (i=0; i<InputImageDimension; ++i)
   {
     if ( spacing[i] != m_Spacing[i] )
     {
@@ -87,7 +87,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   }
   if ( i < InputImageDimension )
   {
-    for (i=0; i<InputImageDimension; i++)
+    for (i=0; i<InputImageDimension; ++i)
     {
       m_Spacing[i] = spacing[i];
     }
@@ -101,7 +101,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 ::SetSpacing(const float* spacing)
 {
   unsigned int i;
-  for (i=0; i<InputImageDimension; i++)
+  for (i=0; i<InputImageDimension; ++i)
   {
     if ( (double)spacing[i] != m_Spacing[i] )
     {
@@ -110,7 +110,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   }
   if ( i < InputImageDimension )
   {
-    for (i=0; i<InputImageDimension; i++)
+    for (i=0; i<InputImageDimension; ++i)
     {
       m_Spacing[i] = spacing[i];
     }
@@ -133,7 +133,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 ::SetOrigin(const double* origin)
 {
   unsigned int i;
-  for (i=0; i<InputImageDimension; i++)
+  for (i=0; i<InputImageDimension; ++i)
   {
     if ( origin[i] != m_Origin[i] )
     {
@@ -142,7 +142,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   }
   if ( i < InputImageDimension )
   {
-    for (i=0; i<InputImageDimension; i++)
+    for (i=0; i<InputImageDimension; ++i)
     {
       m_Origin[i] = origin[i];
     }
@@ -155,7 +155,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 ::SetOrigin(const float* origin)
 {
   unsigned int i;
-  for (i=0; i<InputImageDimension; i++)
+  for (i=0; i<InputImageDimension; ++i)
   {
     if ( (double)origin[i] != m_Origin[i] )
     {
@@ -164,7 +164,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   }
   if ( i < InputImageDimension )
   {
-    for (i=0; i<InputImageDimension; i++)
+    for (i=0; i<InputImageDimension; ++i)
     {
       m_Origin[i] = origin[i];
     }
@@ -197,17 +197,17 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 
   /*** compute proba (=x among y) ***/
   out[0] = 1.0;
-  for (y=1,adr2=0;y<=n;y++)
+  for (y=1,adr2=0;y<=n;++y)
   {
     adr1 = adr2;
     adr2 += n+1;
     out[adr2] = q*out[adr1];
-    for (x=1;x<=y;x++)
+    for (x=1;x<=y;++x)
       out[adr2+x] = p*out[adr1+x-1] + q*out[adr1+x];
   }
 
   /*** sum to obtain proba (>=k among y) ***/
-  for (y=1,adr1=n+1;y<=n;y++,adr1+=n+1)
+  for (y=1,adr1=n+1;y<=n;++y,adr1+=n+1)
     for (x=y-1;x>=0;x--)
       out[adr1+x] += out[adr1+x+1];
 
@@ -250,14 +250,14 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 
   typename InputImageType::IndexType idx;
 
-  for (x=0;x<p;x++)
+  for (x=0;x<p;++x)
   {
     idx[0] = (n-1);
     idx[1] = x;
 //     indice = (n-1)*p +x
     m_AngleImage->SetPixel(idx,static_cast<RealType>(-1000.0));
   }
-  for (y=0;y<n;y++)
+  for (y=0;y<n;++y)
   {
     idx[0] = y;
     idx[1] = p-1;
@@ -269,8 +269,8 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   RealType PixelA,PixelB,PixelC,PixelD;
   RealType com1,com2,gx,gy,norm;
 
-  for (x=0;x<p-1;x++)
-    for (y=0;y<n-1;y++)
+  for (x=0;x<p-1;++x)
+    for (y=0;y<n-1;++y)
     {
 // indice = y*p+x
       adr[0] = y;
@@ -411,7 +411,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
       dy = (double)vcl_sin((double)theta);
 
       /*** third loop : start positions ***/
-      for (pos=0;pos<posmax;pos++)
+      for (pos=0;pos<posmax;++pos)
       {
 
         /* clear segment array */
@@ -446,7 +446,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
               if (error<0.0) error = -error;
               if (error<prec)
               {
-                cur++;
+                ++cur;
                 if (!inbloc)
                 {
                   startbloc[nblocs]=l;
@@ -458,7 +458,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
                 if (inbloc)
                 {
                   endbloc[nblocs] = l-1;
-                  nblocs++;
+                  ++nblocs;
                   count[nblocs] = cur;
                 }
                 inbloc=0;
@@ -471,8 +471,8 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
           }
 
           /*** detect meaningful segments ***/
-          for (i=0;i<nblocs;i++)
-            for (j=i;j<nblocs;j++)
+          for (i=0;i<nblocs;++i)
+            for (j=i;j<nblocs;++j)
               if ((nfa = test[count[j+1]-count[i]
                               +(n+1)*(1+endbloc[j]-startbloc[i])]) < max_nfa)
               {
@@ -495,8 +495,8 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 
         /*** remove non-maximal segments ***/
         if (!m_isMeaningfulSegment)
-          for (i=0;i<iseg;i++)
-            for (j=0;j<iseg;j++)
+          for (i=0;i<iseg;++i)
+            for (j=0;j<iseg;++j)
               if (i!=j)
 
                 /* seg[i] is included in seg[j] ? */
@@ -510,7 +510,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
                 }
 
         /*** store detected segments ***/
-        for (i=0;i<iseg;i++)
+        for (i=0;i<iseg;++i)
           if (seg[i].ok)
           {
             seglist[iseglist*5  ]=(double)(ox+pos*mx)+dx*(double)(seg[i].start);
@@ -553,7 +553,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   typename InputImageType::PointType point;
 
   ContinuousIndexType cindex;
-  for (i=0;i<iseglist;i++)
+  for (i=0;i<iseglist;++i)
   {
 
     OutputPathPointerType path = OutputPathType::New();

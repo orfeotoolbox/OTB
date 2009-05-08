@@ -187,7 +187,7 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
   double* Theta = new double[NB_DIR];
 
   // La rotation nulle correspond a un contour horizontal -> 0 !!
-  for (unsigned int i=0; i<NB_DIR; i++)
+  for (unsigned int i=0; i<NB_DIR; ++i)
   {
     Theta[i] = (M_PI*(i/double(NB_DIR)));
     /*    if(Theta[i]>M_PI)
@@ -275,7 +275,7 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
         tempImage->SetRegions(tempRegion);
         tempImage->Allocate();
 
-        for (unsigned int p = 0; p<=2*m_FaceList[0];p++)
+        for (unsigned int p = 0; p<=2*m_FaceList[0];++p)
         {
           for (unsigned int q = 0; q<=2*m_FaceList[1];q++)
           {
@@ -301,15 +301,15 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
       // ROMAIN
       std::vector<double>** PixelValues = NULL;
       PixelValues = new std::vector<double>*[NB_DIR];
-      for (unsigned int i=0; i<NB_DIR; i++)
+      for (unsigned int i=0; i<NB_DIR; ++i)
       {
         PixelValues[i] = NULL;
         PixelValues[i] = new std::vector<double>[NB_ZONE];
       }
       //otbMsgDevMacro( << "\tCentre Xc/Yc="<<Xc<<" "<<Yc<<" Yc12/Yc13="<<Yc12<<" "<<Yc13);
       // Loop on the region
-      for (unsigned int i = 0; i < m_Radius[0]; i++)
-        for (unsigned int j = 0; j < m_Radius[1]; j++)
+      for (unsigned int i = 0; i < m_Radius[0]; ++i)
+        for (unsigned int j = 0; j < m_Radius[1]; ++j)
         {
 
           off[0]=i-m_Radius[0]/2;
@@ -330,7 +330,7 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
             continue;
           //otbMsgDevMacro( << "\t\tPoint traite (i,j)=("<<i<<","<<j<<") -> X,Y="<<X<<","<<Y<<"  zone="<<zone);
           // Loop on the directions
-          for (unsigned int dir=0; dir<NB_DIR; dir++ )
+          for (unsigned int dir=0; dir<NB_DIR; ++dir )
           {
             //ROTATION( (X-Xc), (Y-Yc), Theta[dir], xout, yout);
 
@@ -350,7 +350,7 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
       // Loop on the 4 directions
 
 
-      for (unsigned int dir=0; dir<NB_DIR; dir++ )
+      for (unsigned int dir=0; dir<NB_DIR; ++dir )
       {
 
 
@@ -389,7 +389,7 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
       progress.CompletedPixel();
 
       // ROMAIN
-      for (unsigned int i=0; i<NB_DIR; i++)
+      for (unsigned int i=0; i<NB_DIR; ++i)
       {
         delete[] PixelValues[i];
         PixelValues[i] = NULL;

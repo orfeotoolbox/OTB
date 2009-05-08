@@ -329,7 +329,7 @@ KMLVectorDataIO<TData>
   int array_size = coords->get_coordinates_array_size();
 
   LinePointerType line = LineType::New();
-  for (int i=0;i<array_size;i++)
+  for (int i=0;i<array_size;++i)
   {
     typename LineType::VertexType vertex;
     vertex[0] = coords->get_coordinates_array_at(i).get_longitude();
@@ -365,7 +365,7 @@ KMLVectorDataIO<TData>
   int array_size = coords->get_coordinates_array_size();
 
   LinePointerType line = LineType::New();
-  for (int i=0;i<array_size;i++)
+  for (int i=0;i<array_size;++i)
   {
     typename LineType::VertexType vertex;
     vertex[0] = coords->get_coordinates_array_at(i).get_longitude();
@@ -412,7 +412,7 @@ KMLVectorDataIO<TData>
       int array_size = coords->get_coordinates_array_size();
 
 
-      for (int i=0;i<array_size;i++)
+      for (int i=0;i<array_size;++i)
       {
         typename PolygonType::VertexType vertex;
         vertex[0] = coords->get_coordinates_array_at(i).get_longitude();
@@ -428,7 +428,7 @@ KMLVectorDataIO<TData>
   }
 
   // Read the innerboundaryis of the polygon
-  for (unsigned int intRingIndex=0;intRingIndex<polygonKml->get_innerboundaryis_array_size();intRingIndex++)
+  for (unsigned int intRingIndex=0;intRingIndex<polygonKml->get_innerboundaryis_array_size();++intRingIndex)
   {
     const InnerBoundaryIsPtr innerboundaryis = polygonKml->get_innerboundaryis_array_at(intRingIndex);
     if (innerboundaryis->has_linearring())
@@ -438,7 +438,7 @@ KMLVectorDataIO<TData>
       int array_size = coords->get_coordinates_array_size();
       PolygonPointerType ring = PolygonType::New();
 
-      for (int pIndex=0;pIndex<array_size;pIndex++)
+      for (int pIndex=0;pIndex<array_size;++pIndex)
       {
         typename PolygonType::VertexType vertex;
         vertex[0] = coords->get_coordinates_array_at(pIndex).get_longitude();

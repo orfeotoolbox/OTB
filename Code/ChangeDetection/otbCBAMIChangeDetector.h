@@ -100,7 +100,7 @@ protected:
 
     IteratorType itx;
 
-    for ( itx = vx.begin(); itx < vx.end(); itx++)
+    for ( itx = vx.begin(); itx < vx.end(); ++itx)
     {
       Ex  += (*itx);
     }
@@ -109,14 +109,14 @@ protected:
 
     TOutput Vx = 0.0;
 
-    for ( itx = vx.begin(); itx < vx.end(); itx++)
+    for ( itx = vx.begin(); itx < vx.end(); ++itx)
     {
       Vx  += vcl_pow((*itx)-Ex,2);
     }
 
     Vx /= (vx.size());
 
-    for ( itx = vx.begin(); itx < vx.end(); itx++)
+    for ( itx = vx.begin(); itx < vx.end(); ++itx)
     {
       (*itx) = ((*itx)-Ex)/vcl_sqrt(Vx);
     }
@@ -133,7 +133,7 @@ protected:
     IteratorType itx;
     IteratorType ity;
 
-    for ( itx = vx.begin(), ity = vy.begin(); itx < vx.end(); itx++, ity++)
+    for ( itx = vx.begin(), ity = vy.begin(); itx < vx.end(); ++itx, ++ity)
     {
       //Ex  += (*itx);
       //Ey  += (*ity);
@@ -181,8 +181,8 @@ protected:
           itz = vz.begin(),
           itt = vt.begin();
           itx < vx.end();
-          itx++,
-          ity++,
+          ++itx,
+          ++ity,
           itz++,
           itt++)
     {
@@ -280,13 +280,13 @@ protected:
     TOutput termeR = 0.0;
     TOutput termeQ = 0.0;
 
-    for ( iti = donnees.begin(); iti < donnees.end(); iti++ )
-      for ( itj = donnees.begin(); itj < donnees.end(); itj++ )
+    for ( iti = donnees.begin(); iti < donnees.end(); ++iti )
+      for ( itj = donnees.begin(); itj < donnees.end(); ++itj )
       {
         if (iti != itj)
           termeR += vcl_pow(Rxy((*iti),(*itj)),2);
 
-        for ( itk = donnees.begin(); itk < donnees.end(); itk++ )
+        for ( itk = donnees.begin(); itk < donnees.end(); ++itk )
           for ( itl = donnees.begin(); itl < donnees.end(); itl++ )
           {
             if ((iti != itj) || (iti != itk) || (iti != itl))

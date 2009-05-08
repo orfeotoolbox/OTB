@@ -170,7 +170,7 @@ SVMClassifier< TSample, TLabel >
 
     measurements = iter.GetMeasurementVector();
     // otbMsgDevMacro(  << "Loop on components " << svm_type );
-    for (i=0; i<numberOfComponentsPerSample; i++)
+    for (i=0; i<numberOfComponentsPerSample; ++i)
     {
       x[i].index = i+1;
       x[i].value = measurements[i];

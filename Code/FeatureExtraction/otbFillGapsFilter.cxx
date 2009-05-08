@@ -111,7 +111,7 @@ FillGapsFilter
     x1 = (*itPoints).GetPosition()[0];
     y1 = (*itPoints).GetPosition()[1];
 
-    itPoints++;
+    ++itPoints;
     x2 = (*itPoints).GetPosition()[0];
     y2 = (*itPoints).GetPosition()[1];
 
@@ -138,7 +138,7 @@ FillGapsFilter
       x3 = (*itPoints).GetPosition()[0];
       y3 = (*itPoints).GetPosition()[1];
 
-      itPoints++;
+      ++itPoints;
       x4 = (*itPoints).GetPosition()[0];
       y4 = (*itPoints).GetPosition()[1];
 

@@ -73,7 +73,7 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
 
 
   /* Computation loop over octaves*/
-  for (int i = 0; i < m_OctavesNumber; i++ )
+  for (int i = 0; i < m_OctavesNumber; ++i )
   {
 
     sigma_in = 2.;
@@ -108,7 +108,7 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
 
     }
 
-    for (int j = 0; j < m_ScalesNumber; j++ )
+    for (int j = 0; j < m_ScalesNumber; ++j )
     {
       /** Incrementation of the gaussian width
        *  the width of the gaussian have to be doubled for
@@ -147,7 +147,7 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
     /*           extremum  Search over octave's scales    */
     /*----------------------------------------------------*/
 
-    for (int jj = 1; jj < (int)(m_ImageList->Size() - 1 ); jj++)
+    for (int jj = 1; jj < (int)(m_ImageList->Size() - 1 ); ++jj)
     {
       m_ImageCurrent = m_ImageList->GetNthElement(jj);
       m_ImageMovedPrev = m_ImageList->GetNthElement(jj-1);
@@ -236,12 +236,12 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
           while (itDescriptor != descriptor.end())
           {
             data.SetElement(IndDescriptor, *itDescriptor);
-            IndDescriptor++;
-            itDescriptor++;
+            ++IndDescriptor;
+            ++itDescriptor;
           }
           outputPointSet->SetPointData(m_NumberOfPoints, data);
 
-          m_NumberOfPoints++;
+          ++m_NumberOfPoints;
         }
         ++it;
         ++itNeighPrev;
@@ -513,14 +513,14 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
         }
       }
     }
-    i++;
+    ++i;
   }
 
   double accu = 0;
-  for (int i = 0; i < 64;  i++)
+  for (int i = 0; i < 64;  ++i)
     accu += descriptorVector[i]*descriptorVector[i];
 
-  for (int j = 0; j < 64;  j++)
+  for (int j = 0; j < 64;  ++j)
     descriptorVector[j] /= vcl_sqrt(accu);
 
   return descriptorVector;

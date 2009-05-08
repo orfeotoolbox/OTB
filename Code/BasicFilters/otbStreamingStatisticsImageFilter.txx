@@ -249,7 +249,7 @@ PersistentStatisticsImageFilter<TInputImage>
   // sum of squares
   minimum = itk::NumericTraits<PixelType>::max();
   maximum = itk::NumericTraits<PixelType>::NonpositiveMin();
-  for ( i = 0; i < numberOfThreads; i++)
+  for ( i = 0; i < numberOfThreads; ++i)
   {
     count += m_Count[i];
     sum += m_ThreadSum[i];

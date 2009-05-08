@@ -55,7 +55,7 @@ LinePointResearch(LineIterator itLines, InputImageType *image, IndexType origin)
   double u[2];
   u[0] = (*itPoints).GetPosition()[0];
   u[1] = (*itPoints).GetPosition()[1];
-  itPoints++;
+  ++itPoints;
   double v[2];
   v[0] = u[0]-(*itPoints).GetPosition()[0];
   v[1] = u[1]-(*itPoints).GetPosition()[1];
@@ -81,7 +81,7 @@ LinePointResearch(LineIterator itLines, InputImageType *image, IndexType origin)
 
   // Loop on the largest distance to be sure to cover all the image
   // whatever the position of the origin u
-  for (int i=static_cast<int>(-diag); i<static_cast<int>(diag); i++)
+  for (int i=static_cast<int>(-diag); i<static_cast<int>(diag); ++i)
   {
 
     previousIndex[0] = static_cast<long>(u[0]+(i-1)*v[0]);
@@ -272,7 +272,7 @@ LocalHoughFilter<TInputImage>
         if (line->GetNumberOfPoints() != 0)
           list->push_back(line);
 
-        itLines++;
+        ++itLines;
 
       }
 

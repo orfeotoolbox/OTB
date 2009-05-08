@@ -109,7 +109,7 @@ ImageFileReader<TOutputImage>
 
   /* Init IORegion with size or streaming size */
   SizeType dimSize;
-  for (unsigned int i=0; i<TOutputImage::ImageDimension; i++)
+  for (unsigned int i=0; i<TOutputImage::ImageDimension; ++i)
   {
     if (i < this->m_ImageIO->GetNumberOfDimensions())
     {
@@ -282,7 +282,7 @@ ImageFileReader<TOutputImage>
   typename TOutputImage::DirectionType direction;
   std::vector<double> axis;
 
-  for (unsigned int i=0; i<TOutputImage::ImageDimension; i++)
+  for (unsigned int i=0; i<TOutputImage::ImageDimension; ++i)
   {
     if ( i < this->m_ImageIO->GetNumberOfDimensions() )
     {
@@ -292,7 +292,7 @@ ImageFileReader<TOutputImage>
 // Please note: direction cosines are stored as columns of the
 // direction matrix
       axis = this->m_ImageIO->GetDirection(i);
-      for (unsigned j=0; j<TOutputImage::ImageDimension; j++)
+      for (unsigned j=0; j<TOutputImage::ImageDimension; ++j)
       {
         if (j < this->m_ImageIO->GetNumberOfDimensions())
         {
@@ -312,7 +312,7 @@ ImageFileReader<TOutputImage>
       dimSize[i] = 1;
       spacing[i] = 1.0;
       origin[i] = 0.0;
-      for (unsigned j = 0; j < TOutputImage::ImageDimension; j++)
+      for (unsigned j = 0; j < TOutputImage::ImageDimension; ++j)
       {
         if (i == j)
         {
@@ -483,7 +483,7 @@ ImageFileReader<TOutputImage>
     while ( (cpt < listFileFind.size()) && (fic_trouve==false) )
     {
       str_FileName = std::string(listFileFind[cpt]);
-      for (unsigned int i = 0; i < listFileSearch.size(); i++)
+      for (unsigned int i = 0; i < listFileSearch.size(); ++i)
       {
         if (str_FileName.compare(listFileSearch[i]) == 0)
         {

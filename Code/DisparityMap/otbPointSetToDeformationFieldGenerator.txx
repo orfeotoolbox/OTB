@@ -123,7 +123,7 @@ PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
   // building output vector
   unsigned int nbElements = (n<indexVector.size() ? n : indexVector.size());
   IndexVectorType output;
-  for (i=0;i<nbElements;i++)
+  for (i=0;i<nbElements;++i)
   {
     output.push_back(indexVector[sortVector[i]]);
   }

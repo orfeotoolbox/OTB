@@ -80,7 +80,7 @@ ListSampleToHistogramListGenerator< TListSample,
                     m_List->End(), lower, upper);
     float margin;
 
-    for ( unsigned int i = 0; i < m_List->GetMeasurementVectorSize(); i++ )
+    for ( unsigned int i = 0; i < m_List->GetMeasurementVectorSize(); ++i )
       {
       if ( !itk::NumericTraits< THistogramMeasurement >::is_integer )
         {

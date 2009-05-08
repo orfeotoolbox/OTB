@@ -63,7 +63,7 @@ BinaryImageMinimalBoundingRegionCalculator<TInputImage>
   min[1]=0;
   max[1]=0;
   max[1]=0;
-  for ( unsigned int axis = 0; axis < InputImageType::ImageDimension; axis++ )
+  for ( unsigned int axis = 0; axis < InputImageType::ImageDimension; ++axis )
   { // Create the forward iterator to find lower bound
     SliceIteratorType fit(image,image->GetLargestPossibleRegion());
 
@@ -124,7 +124,7 @@ BinaryImageMinimalBoundingRegionCalculator<TInputImage>
   typename InputImageType::SizeType size;
   typename InputImageType::IndexType index;
 
-  for (int i=0;i<InputImageType::ImageDimension;i++)
+  for (int i=0;i<InputImageType::ImageDimension;++i)
   {
     size[i]=max[i]-min[i]+1;
     index[i]=min[i];

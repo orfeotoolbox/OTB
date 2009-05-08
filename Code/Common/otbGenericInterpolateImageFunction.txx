@@ -60,7 +60,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
   // Clear the weights tales
   if (m_WeightOffsetTable!=NULL)
   {
-    for (unsigned int i=0; i < m_OffsetTableSize; i++)
+    for (unsigned int i=0; i < m_OffsetTableSize; ++i)
     {
       delete [] m_WeightOffsetTable[i];
     }
@@ -99,7 +99,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 {
   // Compute the offset table size
   m_OffsetTableSize = 1;
-  for (unsigned dim=0;dim<ImageDimension;dim++)
+  for (unsigned dim=0;dim<ImageDimension;++dim)
   {
     m_OffsetTableSize *= m_WindowSize;
   }
@@ -109,7 +109,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 
   // Allocate the weights tables
   m_WeightOffsetTable = new unsigned int *[m_OffsetTableSize];
-  for (unsigned int i=0;i<m_OffsetTableSize;i++)
+  for (unsigned int i=0;i<m_OffsetTableSize;++i)
   {
     m_WeightOffsetTable[i] = new unsigned int[ImageDimension];
   }
@@ -132,14 +132,14 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
     unsigned int iOffset = 0;
     int empty = static_cast<int>(this->GetRadius());
 
-    for (unsigned int iPos = 0; iPos < it.Size(); iPos++)
+    for (unsigned int iPos = 0; iPos < it.Size(); ++iPos)
     {
       // Get the offset (index)
       typename IteratorType::OffsetType off = it.GetOffset(iPos);
 
       // Check if the offset has zero weights
       bool nonzero = true;
-      for (unsigned int dim = 0; dim < ImageDimension; dim++)
+      for (unsigned int dim = 0; dim < ImageDimension; ++dim)
       {
         if (off[dim] == -empty)
         {
@@ -154,7 +154,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
         m_OffsetTable[iOffset] = iPos;
 
         // Set the weight table indices
-        for (unsigned int dim = 0; dim < ImageDimension; dim++)
+        for (unsigned int dim = 0; dim < ImageDimension; ++dim)
         {
           m_WeightOffsetTable[iOffset][dim] = off[dim] + this->GetRadius() - 1;
         }
@@ -201,7 +201,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 
   // Compute the integer index based on the continuous one by
   // 'flooring' the index
-  for ( unsigned int dim = 0; dim < ImageDimension; dim++ )
+  for ( unsigned int dim = 0; dim < ImageDimension; ++dim )
   {
     // The following "if" block is equivalent to the following line without
     // having to call floor.
@@ -238,7 +238,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
     xWeight[cpt].resize(twiceRadius);
   }
 
-  for ( unsigned int dim = 0; dim < ImageDimension; dim++ )
+  for ( unsigned int dim = 0; dim < ImageDimension; ++dim )
   {
     // x is the offset, hence the parameter of the kernel
     double x = distance[dim] + this->GetRadius();
@@ -248,7 +248,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
     /*
     if(distance[dim] == 0.0)
     {
-    for( unsigned int i = 0; i < m_WindowSize; i++)
+    for( unsigned int i = 0; i < m_WindowSize; ++i)
       {
     xWeight[dim][i] = static_cast<int>(i) == (static_cast<int>(this->GetRadius()) - 1) ? 1. : 0.;
       }
@@ -257,7 +257,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
     {
     */
     // i is the relative offset in dimension dim.
-    for ( unsigned int i = 0; i < m_WindowSize; i++)
+    for ( unsigned int i = 0; i < m_WindowSize; ++i)
     {
       // Increment the offset, taking it through the range
       // (dist + rad - 1, ..., dist - rad), i.e. all x
@@ -270,18 +270,18 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
   }
   if (m_NormalizeWeight == true)
   {
-    for ( unsigned int dim = 0; dim < ImageDimension; dim++ )
+    for ( unsigned int dim = 0; dim < ImageDimension; ++dim )
     {
       double sum = 0.;
       // Compute the weights sum
-      for ( unsigned int i = 0; i < m_WindowSize; i++)
+      for ( unsigned int i = 0; i < m_WindowSize; ++i)
       {
         sum += xWeight[dim][i];
       }
       if (sum != 1.)
       {
         // Normalize the weights
-        for ( unsigned int i = 0; i < m_WindowSize; i++)
+        for ( unsigned int i = 0; i < m_WindowSize; ++i)
         {
           xWeight[dim][i] =  xWeight[dim][i]/sum;
         }
@@ -294,7 +294,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
   // Iterate over the neighborhood, taking the correct set
   // of weights in each dimension
   double xPixelValue = 0.0;
-  for (unsigned int j = 0; j < m_OffsetTableSize; j++)
+  for (unsigned int j = 0; j < m_OffsetTableSize; ++j)
   {
     // Get the offset for this neighbor
     unsigned int off = m_OffsetTable[j];
@@ -304,7 +304,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 
     // Multiply the intensity by each of the weights. Gotta hope
     // that the compiler will unwrap this loop and pipeline this!
-    for (unsigned int dim = 0; dim < ImageDimension; dim++)
+    for (unsigned int dim = 0; dim < ImageDimension; ++dim)
     {
       xVal *= xWeight[ dim ][ m_WeightOffsetTable[j][dim] ];
     }

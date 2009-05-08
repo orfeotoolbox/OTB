@@ -43,7 +43,7 @@ EuclideanDistanceWithMissingValue< TVector >
 
   double temp, distance = itk::NumericTraits< double >::Zero;
 
-  for (unsigned int i = 0; i < x1.Size(); i++ )
+  for (unsigned int i = 0; i < x1.Size(); ++i )
   {
     if ( !IsMissingValue( x1[i] ) && !IsMissingValue( x2[i] ) )
     {
@@ -71,7 +71,7 @@ EuclideanDistanceWithMissingValue< TVector >
 
   double temp, distance = itk::NumericTraits< double >::Zero;
 
-  for (unsigned int i = 0; i < measurementVectorSize; i++ )
+  for (unsigned int i = 0; i < measurementVectorSize; ++i )
   {
     if ( !IsMissingValue( this->GetOrigin()[i] ) && !IsMissingValue( x[i] ) )
     {

@@ -60,12 +60,12 @@ GaussianModelComponent< TSample >
   unsigned int i,j;
   os << indent << "Gaussian model component : \n";
   os << indent << "Mean : ";
-  for ( i = 0; i < m_Mean.Size(); i++ )
+  for ( i = 0; i < m_Mean.Size(); ++i )
     os << m_Mean[i] << "\t";
   os << "\n" << indent << "Covariance : ";
-  for ( i = 0; i < m_Mean.Size(); i++ )
+  for ( i = 0; i < m_Mean.Size(); ++i )
   {
-    for ( j = 0; j < m_Mean.Size(); j++ )
+    for ( j = 0; j < m_Mean.Size(); ++j )
       os << m_Covariance(i,j) << "\t";
     os << "\n" << indent << "              ";
   }
@@ -122,15 +122,15 @@ GaussianModelComponent< TSample >
   = this->GetSample()->GetMeasurementVectorSize();
 
   m_Mean.SetSize ( measurementVectorSize );
-  for ( i = 0; i < measurementVectorSize; i++)
+  for ( i = 0; i < measurementVectorSize; ++i)
   {
     m_Mean[i] = parameters[paramIndex];
     ++paramIndex;
   }
 
   m_Covariance.SetSize( measurementVectorSize, measurementVectorSize );
-  for ( i = 0; i < measurementVectorSize; i++ )
-    for ( j = 0; j < measurementVectorSize; j++ )
+  for ( i = 0; i < measurementVectorSize; ++i )
+    for ( j = 0; j < measurementVectorSize; ++j )
     {
       m_Covariance(i, j) = parameters[paramIndex];
       ++paramIndex;
@@ -159,7 +159,7 @@ GaussianModelComponent< TSample >
   // m_Mean.SetSize( m_MeanEstimator->GetOutput()->GetSize() );
 
   MeanType * mean = m_MeanEstimator->GetOutput();
-  for ( i = 0; i < measurementVectorSize; i++)
+  for ( i = 0; i < measurementVectorSize; ++i)
   {
     this->m_Parameters[paramIndex] = m_Mean[i] = mean->GetElement(i);
     ++paramIndex;
@@ -172,8 +172,8 @@ GaussianModelComponent< TSample >
 
   const CovarianceType * covariance = m_CovarianceEstimator->GetOutput();
 
-  for ( i = 0; i < measurementVectorSize; i++ )
-    for ( j = 0; j < measurementVectorSize; j++ )
+  for ( i = 0; i < measurementVectorSize; ++i )
+    for ( j = 0; j < measurementVectorSize; ++j )
     {
       this->m_Parameters[paramIndex]
       = m_Covariance(i,j)

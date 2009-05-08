@@ -133,11 +133,11 @@ CumulantsForEdgeworthProfile<TInput>
   fMu.resize( mask.size() );
   std::vector< itk::Array2D<int> >::iterator iter = mask.begin();
 
-  if ( InitSumAndMoments ( input, (*iter++) ) )
+  if ( InitSumAndMoments ( input, (*++iter) ) )
     return 1;
 
   for (unsigned int level = 1; level < mask.size(); level++ )
-    if ( ReInitSumAndMoments( input, (*iter++), level ) )
+    if ( ReInitSumAndMoments( input, (*++iter), level ) )
       return 1;
 
   return 0;
@@ -159,10 +159,10 @@ CumulantsForEdgeworthProfile<TInput>
   unsigned long k = 0;
   double pixel,pixel_2;
 
-  // for ( unsigned long i = 0; i < input.Size(); i++ )
-  for (i = 0; i < mask.rows(); i++ )
+  // for ( unsigned long i = 0; i < input.Size(); ++i )
+  for (i = 0; i < mask.rows(); ++i )
   {
-    for ( j = 0; j < mask.cols(); j++ )
+    for ( j = 0; j < mask.cols(); ++j )
     {
       // std::cerr << "(" << i << "," << j << ") k=" << k << " ";
       if ( mask.get(i,j) == 1 )
@@ -177,7 +177,7 @@ CumulantsForEdgeworthProfile<TInput>
         fSum4 += pixel_2 * pixel_2;
         // std::cerr << "*\n";
       }
-      k++;
+      ++k;
     }
   }
   if ( fSum0 == 0.0 )
@@ -195,28 +195,28 @@ CumulantsForEdgeworthProfile<TInput>
 
   itk::VariableLengthVector<double> tab ( input.Size() );
   double * x = const_cast<double *> ( tab.GetDataPointer() );
-  for ( unsigned long cp = 0; cp < input.Size(); cp++ )
-    *x++ = ( static_cast<double> ( input.GetPixel(cp) ) - mu1 ) / sigma;
+  for ( unsigned long cp = 0; cp < input.Size(); ++cp )
+    *++x = ( static_cast<double> ( input.GetPixel(cp) ) - mu1 ) / sigma;
 
   double mu3 = 0.0;
   double mu4 = 0.0;
   x = const_cast<double *> ( tab.GetDataPointer() );
 
-  // for ( unsigned long i = 0; i < input.Size(); i++ )
-  for ( i = 0; i < mask.rows(); i++ )
+  // for ( unsigned long i = 0; i < input.Size(); ++i )
+  for ( i = 0; i < mask.rows(); ++i )
   {
-    for ( j = 0; j < mask.cols(); j++ )
+    for ( j = 0; j < mask.cols(); ++j )
     {
       if ( mask.get(i,j) == 1 )
       {
-        pixel = *x++;
+        pixel = *++x;
         pixel_2 = pixel * pixel;
 
         mu3 += pixel * pixel_2;
         mu4 += pixel_2 * pixel_2;
       }
       else
-        x++;
+        ++x;
     }
   }
 
@@ -255,10 +255,10 @@ CumulantsForEdgeworthProfile<TInput>
   unsigned int i,j;
   unsigned long k = 0L;
 
-  // for ( unsigned long i = 0; i < input.Size(); i++ )
-  for ( i = 0; i < mask.rows(); i++ )
+  // for ( unsigned long i = 0; i < input.Size(); ++i )
+  for ( i = 0; i < mask.rows(); ++i )
   {
-    for ( j = 0; j < mask.cols(); j++ )
+    for ( j = 0; j < mask.cols(); ++j )
     {
       if ( mask.get(i,j) == 1 )
       {
@@ -271,7 +271,7 @@ CumulantsForEdgeworthProfile<TInput>
         sum3 += pixel * pixel_2;
         sum4 += pixel_2 * pixel_2;
       }
-      k++;
+      ++k;
     }
   }
 
@@ -313,7 +313,7 @@ CumulantsForEdgeworthProfile<TInput>
   fCum.resize( fMu.size() );
   fCum = fMu;
 
-  for ( unsigned int i = 0; i < fCum.size(); i++ )
+  for ( unsigned int i = 0; i < fCum.size(); ++i )
     fCum[i][3] -= 3.0;
 
   return 0;
@@ -381,20 +381,20 @@ KullbackLeiblerProfile<TInput1,TInput2,TOutput>
   std::vector< itk::Array2D<int> >::iterator outer_iter = m_mask.begin();
   (*outer_iter).SetSize( lenMax, lenMax );
   (*outer_iter).fill(0);
-  for ( i = middle - m_RadiusMin; i <= middle + m_RadiusMin; i++ )
-    for ( j = middle - m_RadiusMin; j <= middle + m_RadiusMin; j++ )
+  for ( i = middle - m_RadiusMin; i <= middle + m_RadiusMin; ++i )
+    for ( j = middle - m_RadiusMin; j <= middle + m_RadiusMin; ++j )
       (*outer_iter).put(i,j,1);
 
   // std::cerr << "outerIter = " << (*outer_iter) << std::endl;
 
   // let's continue with increasing neighborhoods
-  outer_iter++;
-  for ( int radius = m_RadiusMin+1; radius <= m_RadiusMax; radius++ )
+  ++outer_iter;
+  for ( int radius = m_RadiusMin+1; radius <= m_RadiusMax; ++radius )
   {
     (*outer_iter).SetSize( lenMax, lenMax );
     (*outer_iter).fill(0);
 
-    for ( i = middle - radius; i <= middle + radius; i++ )
+    for ( i = middle - radius; i <= middle + radius; ++i )
     {
       (*outer_iter).put( i, middle-radius, 1 );
       (*outer_iter).put( i, middle+radius, 1 );
@@ -403,7 +403,7 @@ KullbackLeiblerProfile<TInput1,TInput2,TOutput>
     }
 
     // std::cerr << "outerIter = " << (*outer_iter) << std::endl;
-    outer_iter++;
+    ++outer_iter;
   }
 }
 

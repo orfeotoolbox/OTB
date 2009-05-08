@@ -88,7 +88,7 @@ ModelComponentBase< TSample >
 ::ShowParameters ( std::ostream& os, itk::Indent indent) const
 {
   os << indent << "Generic class of model-component. Parameters :\n";
-  for ( unsigned int i = 0; i < m_Parameters.Size(); i++ )
+  for ( unsigned int i = 0; i < m_Parameters.Size(); ++i )
     os << indent << m_Parameters[i] << "\n";
 }
 

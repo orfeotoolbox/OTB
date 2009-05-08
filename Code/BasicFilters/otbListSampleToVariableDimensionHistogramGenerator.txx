@@ -84,7 +84,7 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
                     m_List->End(), lower, upper);
     float margin;
 
-    for ( unsigned int i = 0; i < m_List->GetMeasurementVectorSize(); i++ )
+    for ( unsigned int i = 0; i < m_List->GetMeasurementVectorSize(); ++i )
       {
       if ( !itk::NumericTraits< THistogramMeasurement >::is_integer )
         {
@@ -145,7 +145,7 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
   while (iter != last)
     {
     lvector = iter.GetMeasurementVector();
-    for ( i = 0; i < m_List->GetMeasurementVectorSize(); i++)
+    for ( i = 0; i < m_List->GetMeasurementVectorSize(); ++i)
       {
       hvector[i] = (THistogramMeasurement) lvector[i];
       }

@@ -64,10 +64,10 @@ public:
     std::vector<double> PyVector;
 
     // Computes HX
-    for (unsigned r = 0; r<this->GetHisto()[0].size(); r++)
+    for (unsigned r = 0; r<this->GetHisto()[0].size(); ++r)
       {
         double sumTemp = 0.;
-        for (unsigned s = 0; s<this->GetHisto().size(); s++)
+        for (unsigned s = 0; s<this->GetHisto().size(); ++s)
           {
             sumTemp += this->GetHisto()[s][r]*areaInv;
           }
@@ -75,10 +75,10 @@ public:
       }
 
     // Computes HY
-    for (unsigned r = 0; r<this->GetHisto().size(); r++)
+    for (unsigned r = 0; r<this->GetHisto().size(); ++r)
       {
         double sumTemp = 0.;
-        for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
+        for (unsigned s = 0; s<this->GetHisto()[r].size(); ++s)
           {
             sumTemp += this->GetHisto()[r][s]*areaInv;
           }
@@ -87,9 +87,9 @@ public:
 
     // Computes HXY2
     double HXY2 = 0.;
-    for (unsigned r = 0; r<this->GetHisto().size(); r++)
+    for (unsigned r = 0; r<this->GetHisto().size(); ++r)
       {
-        for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
+        for (unsigned s = 0; s<this->GetHisto()[r].size(); ++s)
           {
             double PxPy = PyVector[r]*PxVector[s];
             if( PxPy != 0. )

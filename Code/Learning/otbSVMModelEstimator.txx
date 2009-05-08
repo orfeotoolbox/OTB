@@ -203,7 +203,7 @@ SVMModelEstimator< InputPixelType, LabelPixelType >
     }
     if (j>=1 && x_space[j-1].index > max_index)
       max_index = x_space[j-1].index;
-    x_space[j++].index = -1;
+    x_space[++j].index = -1;
     ++i;
 
     ++measIt;

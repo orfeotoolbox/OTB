@@ -265,7 +265,7 @@ Shapes::allocate_pixels(int* tabNbOfProperPixels)
       pShape->pixels = &tabPixelsOfRoot[i];
       iIndex = pShape - the_shapes;
       i += tabNbOfProperPixels[iIndex];
-      tabpShapesOfStack[iSizeOfStack++] = pShape; /* Push */
+      tabpShapesOfStack[++iSizeOfStack] = pShape; /* Push */
       pShape = pShape->child;
     }
     else
@@ -495,8 +495,8 @@ Shapes::initial_point_border(Point_plane *pDualPoint,int *cDirection,Shape *pSha
   otbMsgDevMacro( << " Direction  (WEST) :" << int(*cDirection)  );
   x = iWidth-1;
   y = 0;
-  if (point_in_shape(x, y++, pShape))
-    while (y < iHeight && point_in_shape(x, y++, pShape));
+  if (point_in_shape(x, ++y, pShape))
+    while (y < iHeight && point_in_shape(x, ++y, pShape));
   while (y < iHeight && ! point_in_shape(x, y, pShape))
     ++ y;
   if (y < iHeight)
@@ -509,8 +509,8 @@ Shapes::initial_point_border(Point_plane *pDualPoint,int *cDirection,Shape *pSha
   *cDirection = SOUTH;
   x = 0;
   y = 0;
-  if (point_in_shape(x++, y, pShape))
-    while (x < iWidth && point_in_shape(x++, y, pShape));
+  if (point_in_shape(++x, y, pShape))
+    while (x < iWidth && point_in_shape(++x, y, pShape));
   while (x < iWidth && ! point_in_shape(x, y, pShape))
     ++ x;
   if (x < iWidth)

@@ -76,7 +76,7 @@ public:
         offsetOff[0]++;
         offsetOff[1] = offsetOffInit[1];
         offset[0] = l;
-        for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+        for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); ++k)
           {
             offsetOff[1]++;
             offset[1] = k;

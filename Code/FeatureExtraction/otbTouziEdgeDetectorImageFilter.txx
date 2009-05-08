@@ -216,7 +216,7 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
       yc = bitIndex[1];
 
       // Initializations
-      for (int dir=0; dir<NB_DIR; dir++)
+      for (int dir=0; dir<NB_DIR; ++dir)
       {
         for (int m=0; m<NB_REGION; m++)
           Sum[dir][m] = 0.;
@@ -267,7 +267,7 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
 
 
       // Loop on the 4 directions
-      for ( int dir=0; dir<NB_DIR; dir++ )
+      for ( int dir=0; dir<NB_DIR; ++dir )
       {
         // Calculation of the mean of the 2 regions
         M1 = Sum[dir][0] / static_cast<double>(m_Radius[0]*(2*m_Radius[0]+1));

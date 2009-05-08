@@ -55,7 +55,7 @@ ArcSpatialObject< VDimension >
 
   PointType transformedPoint = this->GetInternalInverseTransform()->TransformPoint(point);
   double r = 0;
-  for (unsigned int i=0;i<VDimension;i++)
+  for (unsigned int i=0;i<VDimension;++i)
   {
     if (m_Radius!=0.0)
     {

@@ -154,7 +154,7 @@ public:
     TOutput jointEntropy = itk::NumericTraits<TOutput>::Zero;
     HistogramFrequencyType totalFreq = histogram->GetTotalFrequency();
 
-    for (unsigned int i = 0; i < histogram->GetSize()[0]; i++)
+    for (unsigned int i = 0; i < histogram->GetSize()[0]; ++i)
     {
       HistogramFrequencyType freq = histogram->GetFrequency(i, 0);
       if (freq > 0)
@@ -165,7 +165,7 @@ public:
 
     entropyX = -entropyX/static_cast<TOutput>(totalFreq) + vcl_log(totalFreq);
 
-    for (unsigned int i = 0; i < histogram->GetSize()[1]; i++)
+    for (unsigned int i = 0; i < histogram->GetSize()[1]; ++i)
     {
       HistogramFrequencyType freq = histogram->GetFrequency(i, 1);
       if (freq > 0)

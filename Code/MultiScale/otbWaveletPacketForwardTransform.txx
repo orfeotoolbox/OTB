@@ -48,7 +48,7 @@ WaveletPacketForwardTransform< TInputImage, TOutputImage, TFilter, TCost >
   FilterType * filter = this->GetFilterList()->GetNthElement( 0 );
   filter->SetInput( this->GetInput() );
   filter->Update();
-  for ( unsigned int idx = 0; idx < filter->GetNumberOfOutputs(); idx++ )
+  for ( unsigned int idx = 0; idx < filter->GetNumberOfOutputs(); ++idx )
     this->GetOutput()->PushBack( filter->GetOutput( idx ) );
 
   /**
@@ -79,7 +79,7 @@ WaveletPacketForwardTransform< TInputImage, TOutputImage, TFilter, TCost >
     outputIt.Set( filter->GetOutput(0) );
     PerformDecomposition( depth, outputIt );
 
-    for ( unsigned int idx = 1; idx < filter->GetNumberOfOutputs(); idx++ )
+    for ( unsigned int idx = 1; idx < filter->GetNumberOfOutputs(); ++idx )
     {
       ++outputIt;
       outputIt = this->GetOutput()->Insert( outputIt, filter->GetOutput( idx ) );

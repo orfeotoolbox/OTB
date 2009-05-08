@@ -35,7 +35,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   m_ChildrenDepth = 1;
   m_Size.Fill(0);
 
-  for (unsigned int i = 0; i < OutputImageDimension; i++)
+  for (unsigned int i = 0; i < OutputImageDimension; ++i)
   {
     m_Spacing[i] = 1.0;
     m_Origin[i] = 0.;
@@ -113,7 +113,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 ::SetSpacing(const SpacingType& spacing )
 {
   unsigned int i;
-  for (i=0; i<TOutputImage::ImageDimension; i++)
+  for (i=0; i<TOutputImage::ImageDimension; ++i)
   {
     if ( (double)spacing[i] != m_Spacing[i] )
     {
@@ -122,7 +122,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   }
   if ( i < TOutputImage::ImageDimension )
   {
-    for (i=0; i<TOutputImage::ImageDimension; i++)
+    for (i=0; i<TOutputImage::ImageDimension; ++i)
     {
       m_Spacing[i] = spacing[i];
     }
@@ -137,7 +137,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 ::SetSpacing(const double* spacing)
 {
   unsigned int i;
-  for (i=0; i<OutputImageDimension; i++)
+  for (i=0; i<OutputImageDimension; ++i)
   {
     if ( spacing[i] != m_Spacing[i] )
     {
@@ -146,7 +146,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   }
   if ( i < OutputImageDimension )
   {
-    for (i=0; i<OutputImageDimension; i++)
+    for (i=0; i<OutputImageDimension; ++i)
     {
       m_Spacing[i] = spacing[i];
     }
@@ -159,7 +159,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 ::SetSpacing(const float* spacing)
 {
   unsigned int i;
-  for (i=0; i<OutputImageDimension; i++)
+  for (i=0; i<OutputImageDimension; ++i)
   {
     if ( (double)spacing[i] != m_Spacing[i] )
     {
@@ -168,7 +168,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   }
   if ( i < OutputImageDimension )
   {
-    for (i=0; i<OutputImageDimension; i++)
+    for (i=0; i<OutputImageDimension; ++i)
     {
       m_Spacing[i] = spacing[i];
     }
@@ -191,7 +191,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 ::SetOrigin(const PointType& origin)
 {
   unsigned int i;
-  for (i=0; i<TOutputImage::ImageDimension; i++)
+  for (i=0; i<TOutputImage::ImageDimension; ++i)
   {
     if ( (double)origin[i] != m_Origin[i] )
     {
@@ -200,7 +200,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   }
   if ( i < TOutputImage::ImageDimension )
   {
-    for (i=0; i<TOutputImage::ImageDimension; i++)
+    for (i=0; i<TOutputImage::ImageDimension; ++i)
     {
       m_Origin[i] = origin[i];
     }
@@ -215,7 +215,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 ::SetOrigin(const double* origin)
 {
   unsigned int i;
-  for (i=0; i<OutputImageDimension; i++)
+  for (i=0; i<OutputImageDimension; ++i)
   {
     if ( origin[i] != m_Origin[i] )
     {
@@ -224,7 +224,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   }
   if ( i < OutputImageDimension )
   {
-    for (i=0; i<OutputImageDimension; i++)
+    for (i=0; i<OutputImageDimension; ++i)
     {
       m_Origin[i] = origin[i];
     }
@@ -238,7 +238,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 ::SetOrigin(const float* origin)
 {
   unsigned int i;
-  for (i=0; i<OutputImageDimension; i++)
+  for (i=0; i<OutputImageDimension; ++i)
   {
     if ( (double)origin[i] != m_Origin[i] )
     {
@@ -247,7 +247,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   }
   if ( i < OutputImageDimension )
   {
-    for (i=0; i<OutputImageDimension; i++)
+    for (i=0; i<OutputImageDimension; ++i)
     {
       m_Origin[i] = origin[i];
     }
@@ -293,7 +293,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
     double minimum[ObjectDimension];
 
     (*iter)->ComputeBoundingBox();
-    for (i=0;i<ObjectDimension;i++)
+    for (i=0;i<ObjectDimension;++i)
     {
       minimum[i]=(*iter)->GetBoundingBox()->GetMinimum()[i];
     }
@@ -301,17 +301,17 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
     while (iter != end)
     {
       (*iter)->ComputeBoundingBox();
-      for (i=0;i<ObjectDimension;i++)
+      for (i=0;i<ObjectDimension;++i)
       {
         if ((*iter)->GetBoundingBox()->GetMinimum()[i] < minimum[i])
         {
           minimum[i]=(*iter)->GetBoundingBox()->GetMinimum()[i];
         }
       }
-      iter++;
+      ++iter;
     }
 
-    for (i=0;i<ObjectDimension;i++)
+    for (i=0;i<ObjectDimension;++i)
     {
       size[i] = (long unsigned int) (InputObject->GetBoundingBox()->GetMaximum()[i] - minimum[i])+1;
       origine[i]=(long int) minimum[i];
@@ -327,7 +327,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   else
   {
 
-    for (i=0;i<ObjectDimension;i++)
+    for (i=0;i<ObjectDimension;++i)
     {
       size[i] = (long int)(InputObject->GetBoundingBox()->GetMaximum()[i]
                            - InputObject->GetBoundingBox()->GetMinimum()[i]);
@@ -344,7 +344,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   // object's bounding box will be used as default.
 
   bool specified = false;
-  for (i = 0; i < OutputImageDimension; i++)
+  for (i = 0; i < OutputImageDimension; ++i)
   {
     if (m_Size[i] != 0)
     {
@@ -371,7 +371,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   // the spatial object is used as default.
 
   specified = false;
-  for (i = 0; i < OutputImageDimension; i++)
+  for (i = 0; i < OutputImageDimension; ++i)
   {
     if (m_Spacing[i] != 0)
     {
@@ -407,7 +407,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   {
 
     // ValueAt requires the point to be in physical coordinate i.e
-    for (unsigned int i=0;i<ObjectDimension;i++)
+    for (unsigned int i=0;i<ObjectDimension;++i)
     {
       point[i]=(int) (it.GetIndex()[i]*m_Spacing[i])+m_Origin[i];
     }

@@ -98,7 +98,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
     {
       outputSpacing[i] = inputSpacing[i];
       outputOrigin[i] = inputOrigin[i];
-      for (j=0; j < Superclass::OutputImageDimension; j++)
+      for (j=0; j < Superclass::OutputImageDimension; ++j)
       {
         if (j < Superclass::InputImageDimension)
         {
@@ -114,7 +114,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
     {
       outputSpacing[i] = 1.0;
       outputOrigin[i] = 0.0;
-      for (j=0; j < Superclass::OutputImageDimension; j++)
+      for (j=0; j < Superclass::OutputImageDimension; ++j)
       {
         if (j == i)
         {

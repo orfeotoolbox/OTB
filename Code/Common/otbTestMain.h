@@ -137,7 +137,7 @@ int main(int ac, char* av[] )
       baselineFilenamesImage.reserve(nbComparisons);
       testFilenamesImage.reserve(nbComparisons);
       // Retrieve all the file names
-      for (unsigned int i = 0; i<nbComparisons;i++)
+      for (unsigned int i = 0; i<nbComparisons;++i)
       {
         baselineFilenamesImage.push_back(av[4+2*i]);
         testFilenamesImage.push_back(av[5+2*i]);
@@ -162,7 +162,7 @@ int main(int ac, char* av[] )
       baselineFilenamesBinary.reserve(nbComparisons);
       testFilenamesBinary.reserve(nbComparisons);
       // Retrieve all the file names
-      for (unsigned int i = 0; i<nbComparisons;i++)
+      for (unsigned int i = 0; i<nbComparisons;++i)
       {
         baselineFilenamesBinary.push_back(av[3+2*i]);
         testFilenamesBinary.push_back(av[4+2*i]);
@@ -184,7 +184,7 @@ int main(int ac, char* av[] )
         if (strcmp(av[5], "--ignore-lines-with") == 0)
         {
           unsigned int nbIgnoredLines=(unsigned int)(::atoi(av[6]));
-          for (unsigned int  i=0; i<nbIgnoredLines; i++ )
+          for (unsigned int  i=0; i<nbIgnoredLines; ++i )
           {
             ignoredLines.push_back(av[7+i]);
           }
@@ -212,7 +212,7 @@ int main(int ac, char* av[] )
       baselineFilenamesAscii.reserve(nbComparisons);
       testFilenamesAscii.reserve(nbComparisons);
       // Retrieve all the file names
-      for (unsigned int i = 0; i<nbComparisons;i++)
+      for (unsigned int i = 0; i<nbComparisons;++i)
       {
         baselineFilenamesAscii.push_back(av[4+2*i]);
         testFilenamesAscii.push_back(av[5+2*i]);
@@ -401,7 +401,7 @@ int main(int ac, char* av[] )
             if (ignoredLines.size() > 0 )
             {
               std::cout << "The lines containing the expressions ";
-              for (;itIgnoredLines!=ignoredLines.end();itIgnoredLines++)
+              for (;itIgnoredLines!=ignoredLines.end();++itIgnoredLines)
               {
                 std::cout << (*itIgnoredLines) <<" ";
               }

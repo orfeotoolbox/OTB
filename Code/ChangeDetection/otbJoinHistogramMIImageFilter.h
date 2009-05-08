@@ -79,7 +79,7 @@ public:
 
         entropyX = -entropyX/static_cast<TOutput>(totalFreq) + vcl_log(totalFreq);
 
-        for (unsigned int i = 0; i < this->GetHistogramSize()[1]; i++)
+        for (unsigned int i = 0; i < this->GetHistogramSize()[1]; ++i)
         {
           HistogramFrequencyType freq = histogram.GetFrequency(i, 1);
           if (freq > 0)

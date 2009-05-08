@@ -138,7 +138,7 @@ ImageFileWriter<TInputImage>
     itk::ImageIORegion ioRegion(TInputImage::ImageDimension);
     RegionType region = input->GetLargestPossibleRegion();
 
-    for (unsigned int i=0; i<TInputImage::ImageDimension; i++)
+    for (unsigned int i=0; i<TInputImage::ImageDimension; ++i)
     {
       ioRegion.SetSize(i,region.GetSize(i));
       ioRegion.SetIndex(i,region.GetIndex(i));
@@ -158,7 +158,7 @@ ImageFileWriter<TInputImage>
   const typename TInputImage::PointType& origin = input->GetOrigin();
   const typename TInputImage::DirectionType& direction = input->GetDirection();
 
-  for (unsigned int i=0; i<TInputImage::ImageDimension; i++)
+  for (unsigned int i=0; i<TInputImage::ImageDimension; ++i)
   {
     this->GetImageIO()->SetDimensions(i,region.GetSize(i));
     this->GetImageIO()->SetSpacing(i,spacing[i]);
@@ -166,7 +166,7 @@ ImageFileWriter<TInputImage>
     vnl_vector< double > axisDirection(TInputImage::ImageDimension);
 // Please note: direction cosines are stored as columns of the
 // direction matrix
-    for (unsigned int j=0; j<TInputImage::ImageDimension; j++)
+    for (unsigned int j=0; j<TInputImage::ImageDimension; ++j)
     {
       axisDirection[j] = direction[j][i];
     }

@@ -106,7 +106,7 @@ ProlateFunction<TInput, TOutput>
   vnl_vector<vcl_complex<double> > resampledProfile(1024);
   resampledProfile.fill(0);
 
-  for (unsigned int i = 0; i<m_Radius+1; i++)
+  for (unsigned int i = 0; i<m_Radius+1; ++i)
   {
     unsigned int ival = static_cast<unsigned int>(static_cast<double>(m_OriginalProfileSize*i)/static_cast<double>(m_Radius+1));
     resampledProfile[i] = m_OriginalProfile[ival];
@@ -119,7 +119,7 @@ ProlateFunction<TInput, TOutput>
 
   double energy = 0.;
   // First part of spectrum
-  for (unsigned int j = 0; j<sampleNb+1; j++)
+  for (unsigned int j = 0; j<sampleNb+1; ++j)
   {
     energy += std::abs(resampledProfile[j])*std::abs(resampledProfile[j]);
   }
@@ -131,7 +131,7 @@ ProlateFunction<TInput, TOutput>
 
   double totalEnergy = energy;
   // Middle part
-  for (unsigned int j = sampleNb+1; j<1023-sampleNb+1; j++)
+  for (unsigned int j = sampleNb+1; j<1023-sampleNb+1; ++j)
   {
     totalEnergy += std::abs(resampledProfile[j])*std::abs(resampledProfile[j]);
   }

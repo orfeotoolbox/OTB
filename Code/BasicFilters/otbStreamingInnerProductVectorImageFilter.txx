@@ -168,9 +168,9 @@ PersistentInnerProductVectorImageFilter<TInputImage>
     //--------------------------------------------------------------------- 
     // Fill the rest of the inner product matrix and make it symmetric
     //---------------------------------------------------------------------
-    for(unsigned int band_x = 0; band_x < (numberOfTrainingImages - 1); band_x++)
+    for(unsigned int band_x = 0; band_x < (numberOfTrainingImages - 1); ++band_x)
     {
-        for(unsigned int band_y = band_x+1; band_y < numberOfTrainingImages; band_y++)
+        for(unsigned int band_y = band_x+1; band_y < numberOfTrainingImages; ++band_y)
         {  
             innerProduct[band_x][band_y] = innerProduct[band_y][band_x];    
         }// end band_y loop
@@ -211,16 +211,16 @@ PersistentInnerProductVectorImageFilter<TInputImage>
     {
         PixelType vectorValue = it.Get();
         double mean(0.);
-        for (unsigned int i=0; i<vectorValue.GetSize(); i++)
+        for (unsigned int i=0; i<vectorValue.GetSize(); ++i)
         {
             mean += static_cast<double>(vectorValue[i]);
         }
         mean /= static_cast<double>(vectorValue.GetSize());
 
         // Matrix iteration  
-        for(unsigned int band_x = 0; band_x < numberOfTrainingImages; band_x++)
+        for(unsigned int band_x = 0; band_x < numberOfTrainingImages; ++band_x)
         {
-            for(unsigned int band_y = 0; band_y <= band_x; band_y++ )
+            for(unsigned int band_y = 0; band_y <= band_x; ++band_y )
             {
                 m_ThreadInnerProduct[threadId][band_x][band_y] += 
                 (static_cast<double>(vectorValue[band_x]) - mean) * (static_cast<double>(vectorValue[band_y]) - mean);
@@ -238,9 +238,9 @@ PersistentInnerProductVectorImageFilter<TInputImage>
     {
         PixelType vectorValue = it.Get();
         // Matrix iteration  
-        for(unsigned int band_x = 0; band_x < numberOfTrainingImages; band_x++)
+        for(unsigned int band_x = 0; band_x < numberOfTrainingImages; ++band_x)
         {
-            for(unsigned int band_y = 0; band_y <= band_x; band_y++ )
+            for(unsigned int band_y = 0; band_y <= band_x; ++band_y )
             {
                 m_ThreadInnerProduct[threadId][band_x][band_y] += 
                 (static_cast<double>(vectorValue[band_x]) ) * (static_cast<double>(vectorValue[band_y]) );
