@@ -180,14 +180,15 @@ ImageLayer<TImage,TOutputImage>
     it.GoToBegin();
     while(!it.IsAtEnd())
       {
-      SampleType sample(histogramSource->GetNumberOfComponentsPerPixel());
+//       SampleType sample(histogramSource->GetNumberOfComponentsPerPixel());
+      SampleType sample(PixelSize(histogramSource, histogramSource->GetBufferPointer()));
       // workaround to handle both scalar and vector pixels the same way
       sample.Fill(itk::NumericTraits<ScalarType>::Zero);
       sample = sample + it.Get();
       listSample->PushBack(sample);
       ++it;
       }
-    otbMsgDevMacro(<<"ImageLayer::RenderHistogram()"<<" ("<<this->GetName()<<")"<< " Sample list generated ("<<listSample->Size()<<" samples, "<<histogramSource->GetNumberOfComponentsPerPixel()<<" bands)");
+      otbMsgDevMacro(<<"ImageLayer::RenderHistogram()"<<" ("<<this->GetName()<<")"<< " Sample list generated ("<<listSample->Size()<<" samples, "<< PixelSize(histogramSource, histogramSource->GetBufferPointer())<<" bands)");
 
 
     // Create the histogram generation filter
@@ -220,7 +221,8 @@ ImageLayer<TImage,TOutputImage>
 
     otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup():"<<" ("<<this->GetName()<<")"<< " Updating min/max from histogram");
 
-    const unsigned int nbComps = m_Image->GetNumberOfComponentsPerPixel();
+//     const unsigned int nbComps = m_Image->GetNumberOfComponentsPerPixel();
+    const unsigned int nbComps = PixelSize(m_Image, m_Image->GetBufferPointer());
     typename RenderingFunctionType::ExtremaVectorType min, max;
     otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup(): "<<" ("<<this->GetName()<<") "<<nbComps<<" components, quantile= "<<100*m_AutoMinMaxQuantile<<" %");
     // For each components, use the histogram to compute min and max
