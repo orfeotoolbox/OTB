@@ -121,7 +121,8 @@ public:
   {
     itk::OStringStream oss;
     OutputPixelType output = this->Evaluate(spixel);
-    oss<<"Grayscale[value: "<<spixel<<", displayed: "<<output[0]<<"]";
+    oss<<"Grayscale[value: "<<static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel)
+        <<", displayed: "<<static_cast<unsigned int>(output[0])<<"]";
     return oss.str();
   }
 
