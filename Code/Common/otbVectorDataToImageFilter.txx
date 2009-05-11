@@ -55,6 +55,7 @@ namespace otb
     m_StartIndex.Fill( 0 );
     m_Map = mapnik::Map();
     m_SensorModelFlip = 1;
+    m_ScaleFactor = 1.0;
   }
 
 
