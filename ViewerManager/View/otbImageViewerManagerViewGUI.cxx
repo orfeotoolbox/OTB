@@ -749,7 +749,7 @@ ImageViewerManagerViewGUI
    guiRedChannelChoice->clear();
    guiGreenChannelChoice->clear();
    guiBlueChannelChoice->clear();
-   guiGrayscaleChannelChoice->clear();
+   //guiGrayscaleChannelChoice->clear();
    guiRealChannelChoice->clear();
    guiImaginaryChannelChoice->clear();
 
@@ -766,7 +766,7 @@ ImageViewerManagerViewGUI
      guiImaginaryChannelChoice->add(oss.str().c_str());
    }
    guiViewerSetupWindow->redraw();
-   guiGrayscaleChannelChoice->redraw();
+   //guiGrayscaleChannelChoice->redraw();
 
    switch(nbComponent){
    case 1 :
