@@ -223,7 +223,7 @@ namespace otb
     InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(input->GetDataTree()->GetRoot());
 
 
-    //Converting the projection string to the porj.4 format
+    //Converting the projection string to the proj.4 format
     std::string vectorDataProjectionWKT;
     itk::ExposeMetaData<std::string>(input->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey,  vectorDataProjectionWKT);
     std::cout << "WKT -> " << vectorDataProjectionWKT << std::endl;
@@ -237,6 +237,7 @@ namespace otb
       //(with a resolution of 1m per unit)
       vectorDataProjectionProj4 = "+proj=utm +zone=31 +ellps=WGS84";
       m_SensorModelFlip =  -1;
+      otbMsgDevMacro(<<"The output map will be in sensor geometry");
     }
     else
     {
@@ -246,6 +247,7 @@ namespace otb
       vectorDataProjectionProj4 = pszProj4;
       CPLFree(pszProj4);
       m_SensorModelFlip =  1;
+      otbMsgDevMacro(<<"The output map will be carto/geo geometry");
     }
     std::cout << "Proj.4 -> " << vectorDataProjectionProj4 << std::endl;
 
