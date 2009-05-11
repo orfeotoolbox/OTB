@@ -123,11 +123,11 @@ protected:
   /**
    * Distance between segments computation
    */
-  virtual float ComputeDistanceBetweenSegments(LineType * lineDst , LineType * lineSrc);
+  virtual double ComputeDistanceBetweenSegments(LineType * lineDst , LineType * lineSrc);
   /**
    * Angle computation
    */
-  virtual float ComputeAngleFormedBySegments(LineType * lineDst , LineType * lineSrc);
+  virtual double ComputeAngleFormedBySegments(LineType * lineDst , LineType * lineSrc);
   /**
    *  When we find a right angle, one compute the coordinate of the segments intersection
    */
@@ -136,6 +136,12 @@ protected:
    * AddRightAngleToPointSet
    */
   virtual void AddRightAngleToPointSet(PointType rAngle  , LineType * LineDst , LineType* LineCur );
+
+  /**
+   * Compute the orienation of a segment
+   */
+  virtual double ComputeOrientation(LineType* line);
+  
 
 
 private:
