@@ -139,6 +139,7 @@ int main( int argc, char * argv[] )
 
   drawLineFilter->SetInput(reader->GetOutput());
   drawLineFilter->SetInputLineSpatialObjectList(lsdFilter->GetOutput());
+  drawLineFilter->SetValue(1000);
 
   // Software Guide : EndCodeSnippet    
 // Software Guide : BeginLatex
