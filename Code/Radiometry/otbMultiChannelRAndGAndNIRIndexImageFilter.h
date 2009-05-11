@@ -78,7 +78,6 @@ protected:
   virtual void BeforeThreadedGenerateData()
   {
 
-std::cout<<" MultichanR&G&NIR beforeThreaded" << m_RedIndex << std::endl;
     unsigned int lNbChan = this->GetInput()->GetNumberOfComponentsPerPixel();
     if(m_RedIndex < 1 || m_GreenIndex < 1 || m_NIRIndex < 1 ||
        m_RedIndex > lNbChan || m_GreenIndex > lNbChan || m_NIRIndex > lNbChan)
