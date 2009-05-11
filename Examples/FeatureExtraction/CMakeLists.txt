@@ -337,6 +337,21 @@ ADD_TEST(CloudDetectionExampleTest ${EXE_TESTS2}
         553 467 734 581 0.4 0.6 1.0
 )
 
+# ------- Right Angle Detection test----------
+
+ADD_TEST(RightAngleDetectionExample  ${EXE_TESTS2}
+        --compare-image ${TOL}	     
+        ${BASELINE}/RightAngleOutput.png
+        ${TEMP}/PrettyRightAngleOutput.png
+       RightAngleDetectionExample 
+	${INPUTDATA}/qb_RoadExtract2.tif
+	${TEMP}/RighAngleOutput.tif
+	${TEMP}/PrettyRightAngleInput.png	
+	${TEMP}/PrettyRightAngleOutput.png
+	0.09
+	20.
+)
+
 ADD_EXECUTABLE(otbFeatureExtractionExamplesTests1 otbFeatureExtractionExamplesTests1.cxx)
 TARGET_LINK_LIBRARIES(otbFeatureExtractionExamplesTests1  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 
