@@ -32,7 +32,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract2.tif}
-//    OUTPUTS: {RighAngleOutput.tif}, {PrettyRighAngleInput.png}, {PrettyRighAngleOutput.png}
+//    OUTPUTS: {RighAngleOutput.tif}, {PrettyRighAngleInput.png},  {PrettyRighAngleOutput.png}
+//  0.09 20
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
