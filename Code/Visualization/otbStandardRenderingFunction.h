@@ -131,7 +131,7 @@ public:
           }
         oss<<", v= "<<static_cast<typename itk::NumericTraits<ScalarPixelType>::PrintType>(vpixel[channel])<<std::endl;
         }
-      else if(channel == m_BlueChannelIndex)
+      else if(channel == m_GreenChannelIndex)
         {
         oss<<"c= "<<channel<<", G= "<<(int)output[1];
         if(output[1]<100)
@@ -144,7 +144,7 @@ public:
           }
         oss<<", v= "<<static_cast<typename itk::NumericTraits<ScalarPixelType>::PrintType>(vpixel[channel])<<std::endl;
         }
-      else if(channel == m_GreenChannelIndex)
+      else if(channel == m_BlueChannelIndex)
         {
         oss<<"c= "<<channel<<", B= "<<(int)output[2];
         if(output[2]<100)

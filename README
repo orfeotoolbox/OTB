@@ -27,18 +27,18 @@ NB: On some linux plateforms, you may (and should) use the official distribution
 
 1. Install GDAL (or use your distribution package):
       cd INSTALL_DIR
-      gunzip gdal.1.5.2.tar.gz
-      tar xvf gdal.1.5.2.tar
-      cd gdal.1.5.2
+      gunzip gdal.1.6.0.tar.gz
+      tar xvf gdal.1.6.0.tar
+      cd gdal.1.6.0
       ./configure --prefix=INSTALL_DIR
       make
       make install
 
 2. Install CMake (or use your distribution package):
       cd INSTALL_DIR
-      gunzip cmake-2.6.0.tar.gz
-      tar xvf cmake-2.6.0.tar
-      cd cmake-2.6.0
+      gunzip cmake-3.0.0.tar.gz
+      tar xvf cmake-3.0.0.tar
+      cd cmake-3.0.0
       ./configure --prefix=INSTALL_DIR
       make
       make install
@@ -67,18 +67,18 @@ NB: On some linux plateforms, you may (and should) use the official distribution
 4. Install OTB
 
       cd INSTALL_DIR
-      gunzip OrfeoToolbox-2.6.0.tgz
-      tar xvf OrfeoToolbox-2.6.0.tar
+      gunzip OrfeoToolbox-3.0.0.tgz
+      tar xvf OrfeoToolbox-3.0.0.tar
       mkdir OTB-Binary
       cd OTB-Binary
-      ccmake ../OrfeoToolbox-2.6.0
+      ccmake ../OrfeoToolbox-3.0.0
       --> follow the CMake instructions, in particular:
 	  --> set BUILD_EXAMPLES to ON within CMake
 	  --> set BUILD_SHARED_LIBS to OFF within CMake
 	  --> set BUILD_TESTING to OFF within CMake
 	  --> set CMAKE_INSTALL_PREFIX to INSTALL_DIR within CMake
 	  --> set GDAL_INCLUDE_DIRS to INSTALL_DIR/include within CMake
-	  --> set GDAL_LIBRARY_DIRS to INSTALL_DIR/lib within CMake
+	  --> set GDAL_LIBRARY to INSTALL_DIR/lib/ gdal library within CMake
 	  --> set OTB_USE_EXTERNAL_ITK to OFF within CMake
 	  --> set FLTK_DIR to INSTALL_DIR/Fltk-Binary within CMake
 	  --> generate the configuration with 'g'
@@ -96,6 +96,9 @@ Installation on Microsoft Visual Studio .NET 2003 (7.1)
 	Then, unzip it to your GDAL folder, and it will create a folder (named "VisualStudio").
 	Load the solution (.sln file) and build the gdal project.
 	More details can be found at http://vterrain.org/Distrib/gdal.html.
+
+  Moreover, ORFEO Toolbox projet provided for you binaries windows distribution of gdal1.6.0 library. These files can 
+  be downloaded at http://www.orfeo-toolbox.org/packages
 
 2. Install Fltk
 
@@ -218,5 +221,5 @@ Some bugs can appear while compiling GDAL with JPEG2000 files : disable this for
 Execution errors can appear on some platforms, using GDAL compiled with MSVC++ 8.0.
 
 This problem can be resolved by downloading GDAL binaries for Windows
-at http://vterrain.org/Distrib/gdal.html.
+at http://vterrain.org/Distrib/gdal.html or at http://www.orfeo-toolbox.org/packages.
 
