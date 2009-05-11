@@ -48,14 +48,14 @@ UrbanAreaDetectionImageFilter<TInputImage, TOutputImage, TFunction>
   // Threshold
   m_Thresholder->SetInput(m_EdgeDensityFilter->GetOutput());
   // Mask Image
-  // m_MaskImageFilter->SetInput2(m_Thresholder->GetOutput());
   m_MultiplyFilter->SetInput2(m_Thresholder->GetOutput());
   // NonVegetationNonWaterIndex
-  //m_UrbanAreaExtractionFilter->SetInput(m_MaskImageFilter->GetOutput());
   m_UrbanAreaExtractionFilter->SetInput(m_MultiplyFilter->GetOutput());
 
   m_ThresholdValue = 0.5;
   m_ThresholdDensity = 0.1;
+  m_SobelLowerThreshold = -100.0;
+  m_SobelUpperThreshold = 200.0;
 }
 
 /**
@@ -71,8 +71,8 @@ UrbanAreaDetectionImageFilter<TInputImage, TOutputImage, TFunction>
   m_IntensityFilter->SetInput(this->GetInput());
 
   // Edge Density
-  m_SobelFilter->SetLowerThreshold(-100.0);
-  m_SobelFilter->SetUpperThreshold(200.0);
+  m_SobelFilter->SetLowerThreshold(m_SobelLowerThreshold);
+  m_SobelFilter->SetUpperThreshold(m_SobelUpperThreshold);
   SizeType lSize;
   lSize[0] = static_cast<unsigned int>(10);
   lSize[1] = static_cast<unsigned int>(10);
@@ -86,10 +86,6 @@ UrbanAreaDetectionImageFilter<TInputImage, TOutputImage, TFunction>
 
   // Apply the mask on the input image
   m_MultiplyFilter->SetInput1(this->GetInput());
-  //m_MaskImageFilter->SetInput1(this->GetInput());
-  //VectorImagePixelType lVectorZero;
-  //lVectorZero.Fill(0);
-  //m_MaskImageFilter->SetOutsideValue(lVectorZero);
 
   // Give a threshold to urbanAreaFilter
   m_UrbanAreaExtractionFilter->GetFunctor().SetLowerThreshold( m_ThresholdValue );

@@ -1,3 +1,4 @@
+
 /*=========================================================================
 
 Program:   ORFEO Toolbox
@@ -226,6 +227,10 @@ public:
   itkSetMacro(ThresholdValue, double);
   itkGetMacro(ThresholdDensity, double);
   itkSetMacro(ThresholdDensity, double);
+  itkGetMacro(SobelLowerThreshold, double);
+  itkSetMacro(SobelLowerThreshold, double);
+  itkGetMacro(SobelUpperThreshold, double);
+  itkSetMacro(SobelUpperThreshold, double);
 
   /** Methods */
   virtual void GenerateData();
@@ -252,6 +257,9 @@ private:
   /** Thresholds */
   double m_ThresholdValue;
   double m_ThresholdDensity;
+
+  double m_SobelLowerThreshold;
+  double m_SobelUpperThreshold;
 
 }; // end class RadiometricNonWaterNonVegetationDetectionImageFilter
 
