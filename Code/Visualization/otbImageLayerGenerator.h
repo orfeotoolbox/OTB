@@ -79,6 +79,12 @@ public:
   typedef typename ImageLayerType::DefaultRenderingFunctionType RenderingFunctionType;
   typedef typename RenderingFunctionType::Pointer RenderingFunctionPointerType;
 
+  /** PixelType typedef */
+  typedef typename ImageLayerType::ScalarType        ScalarType;
+  typedef typename ImageLayerType::VectorPixelType   VectorPixelType;
+  typedef typename ImageLayerType::RGBPixelType      RGBPixelType;
+  typedef typename ImageLayerType::RGBAPixelType     RGBAPixelType;
+
   /** Get the generated layer */
   itkGetObjectMacro(Layer,ImageLayerType);
 
@@ -135,6 +141,12 @@ protected:
    * QuicklookGeneration is on).
    */
   virtual void GenerateQuicklook();
+
+  /** Find out the component size from the pixel */
+  unsigned int PixelSize(ImagePointerType image, ScalarType* v) const;
+  unsigned int PixelSize(ImagePointerType image, VectorPixelType* v) const;
+  unsigned int PixelSize(ImagePointerType image, RGBPixelType* v) const;
+  unsigned int PixelSize(ImagePointerType image, RGBAPixelType* v) const;
 
 private:
   ImageLayerGenerator(const Self&);     // purposely not implemented

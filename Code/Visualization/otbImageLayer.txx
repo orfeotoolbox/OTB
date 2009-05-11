@@ -284,6 +284,7 @@ ImageLayer<TImage,TOutputImage>
 
 
 //Find out the histogram size from the pixel
+//FIXME duplication in ImageLayerGenerator
 template <class TImage, class TOutputImage>
     unsigned int
         ImageLayer<TImage,TOutputImage>

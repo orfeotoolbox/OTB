@@ -123,7 +123,8 @@ ImageLayerGenerator<TImageLayer>
   m_Layer->VisibleOn();
 
   // Setup channels
-  switch(m_Image->GetNumberOfComponentsPerPixel())
+//   switch(m_Image->GetNumberOfComponentsPerPixel())
+  switch( PixelSize(m_Image, m_Image->GetBufferPointer()) )
     {
     case 1:
     {
@@ -234,6 +235,40 @@ ImageLayerGenerator<TImageLayer>
 {
   Superclass::PrintSelf(os,indent);
 }
+
+
+//Find out the histogram size from the pixel
+//FIXME duplication in ImageLayer
+template < class TImageLayer >
+    unsigned int
+    ImageLayerGenerator<TImageLayer>
+  ::PixelSize(ImagePointerType image, ScalarType* v) const
+{
+  return 1;
+}
+template < class TImageLayer >
+    unsigned int
+    ImageLayerGenerator<TImageLayer>
+  ::PixelSize(ImagePointerType image, VectorPixelType* v) const
+{
+  return image->GetNumberOfComponentsPerPixel();
+}
+template < class TImageLayer >
+    unsigned int
+    ImageLayerGenerator<TImageLayer>
+  ::PixelSize(ImagePointerType image, RGBPixelType* v) const
+{
+  return 3;
+}
+template < class TImageLayer >
+    unsigned int
+    ImageLayerGenerator<TImageLayer>
+  ::PixelSize(ImagePointerType image, RGBAPixelType* v) const
+{
+  return 3;//We don't really want to normalize the Alpha value
+}
+
+
 } // end namespace otb
 
 #endif
