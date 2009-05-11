@@ -131,7 +131,7 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
   // initialize the Histogram object using the sizes and
   // the upper and lower bound from the FindSampleBound function
   
-  otbMsgDevMacro(<<"ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Intializing histogram with (sizes= "<<m_Sizes<<", lower = "<<h_lower<<", upper = "<<h_upper<<")");
+  otbMsgDevMacro(<<"ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Initializing histogram with (sizes= "<<m_Sizes<<", lower = "<<h_lower<<", upper = "<<h_upper<<")");
   m_Histogram->Initialize(m_Sizes, h_lower, h_upper);
   otbMsgDevMacro(<<"ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Histogram initialized");
   typename TListSample::ConstIterator iter = m_List->Begin();

@@ -30,7 +30,7 @@ LayerBasedModel<TLayer>
 ::LayerBasedModel() :  m_Layers()
 
 {
-  // Intializing the layer list
+  // Initializing the layer list
   m_Layers = LayerListType::New();
 }
 
