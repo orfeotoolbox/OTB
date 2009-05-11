@@ -2,13 +2,11 @@ OTB-v.3.0.0 - Changes since version 2.8.0 (2009/05/11)
 -----------------------------------------
 
 * Applications
-  - Urban area extraction (Pléaides, CSK, QB, Ikonos, TSX, SPOT5) For more details, see the README file
-  - Image to Data Base registration (Pléiades/QB to BDTopo) For more details, see the README file 
+  - Urban area extraction (Pléaides, QB, Ikonos, SPOT5). For more details, see the README file
+  - Image to Data Base registration (Pléiades, QB). For more details, see the README file 
 
-  - Improve Feature Extraction: add new textures, new radiometric indexes and add MeanShift capabilities 
-  - Improve Land Cover Map: add textures and radiometric indexes
+  - Feature Extraction: add new textures, new radiometric indexes and add MeanShift capabilities 
 
-  - Previous Application Visualisation Refactoring: FeatureExtraction, ImageViewer.
  
 * Library
   The library includes these additions
