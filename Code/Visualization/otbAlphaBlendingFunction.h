@@ -37,15 +37,15 @@ namespace Function
  *
  *  \ingroup Visualization
  */
-template <class TInputRGBPixel1, class TInputRGBAPixel2, class TOutputRGBPixel = TInputRGBPixel1>
+template <class TInputRGBPixel1, class TInputRGBPixel2, class TOutputRGBPixel = TInputRGBPixel1>
 class AlphaBlendingFunction
-  : public BlendingFunction<TInputRGBPixel1,TInputRGBAPixel2,TOutputRGBPixel>
+  : public BlendingFunction<TInputRGBPixel1,TInputRGBPixel2,TOutputRGBPixel>
 {
 public:
   /** Standard class typedefs */
   typedef AlphaBlendingFunction                 Self;
   typedef BlendingFunction<TInputRGBPixel1,
-                           TInputRGBAPixel2,
+                           TInputRGBPixel2,
                            TOutputRGBPixel>            Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
@@ -57,8 +57,8 @@ public:
   itkNewMacro(Self);
 
   /** PixelType macros */
-  typedef TInputRGBPixel1                        InputPixel1Type;
-  typedef TInputRGBAPixel2                       InputPixel2Type;
+  typedef TInputRGBPixel1                       InputPixel1Type;
+  typedef TInputRGBPixel2                        InputPixel2Type;
   typedef TOutputRGBPixel                        OutputRGBPixelType;
   typedef typename OutputRGBPixelType::ValueType OutputValueType;
 
@@ -68,7 +68,6 @@ public:
     OutputRGBPixelType resp;
     resp.Fill(itk::NumericTraits<OutputValueType>::max());
     double alpha = static_cast<double>(input2.GetAlpha())/255.0 * m_Alpha;
-
     resp.SetRed(  static_cast<OutputValueType>(vcl_floor((1-alpha) * static_cast<double>(input1.GetRed())   +alpha*static_cast<double>(input2.GetRed())  +0.5)));
     resp.SetGreen(static_cast<OutputValueType>(vcl_floor((1-alpha) * static_cast<double>(input1.GetGreen()) +alpha*static_cast<double>(input2.GetGreen())+0.5)));
     resp.SetBlue( static_cast<OutputValueType>(vcl_floor((1-alpha) * static_cast<double>(input1.GetBlue())  +alpha*static_cast<double>(input2.GetBlue()) +0.5)));

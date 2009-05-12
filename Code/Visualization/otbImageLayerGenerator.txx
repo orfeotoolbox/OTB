@@ -38,6 +38,8 @@ ImageLayerGenerator<TImageLayer>
   m_Resampler = ResampleFilterType::New();
   // Rendering function
   m_DefaultRenderingFunction = RenderingFunctionType::New();
+  // Default blending function
+  m_BlendingFunction = Function::UniformAlphaBlendingFunction<OutputPixelType>::New();
 }
 
 template < class TImageLayer >
@@ -169,6 +171,10 @@ ImageLayerGenerator<TImageLayer>
 
   // Set the rendering function
   m_Layer->SetRenderingFunction(m_DefaultRenderingFunction);
+
+  //Set the blending function
+  m_Layer->SetBlendingFunction(m_BlendingFunction);
+
 }
 
 template < class TImageLayer >

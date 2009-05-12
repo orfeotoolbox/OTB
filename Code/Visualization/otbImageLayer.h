@@ -69,6 +69,8 @@ public:
 
   /** Output image typedef */
   typedef TOutputImage                                                OutputImageType;
+  typedef typename OutputImageType::PixelType                         OutputPixelType;
+
 
   /** Histogram typedef */
    typedef itk::Statistics::DenseFrequencyContainer                   DFContainerType;

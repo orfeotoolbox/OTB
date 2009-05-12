@@ -79,6 +79,11 @@ public:
   typedef typename ImageLayerType::DefaultRenderingFunctionType RenderingFunctionType;
   typedef typename RenderingFunctionType::Pointer RenderingFunctionPointerType;
 
+  /** Blending function typedef */
+  typedef typename ImageLayerType::OutputPixelType     OutputPixelType;
+  typedef Function::BlendingFunction<OutputPixelType>  BlendingFunctionType;
+  typedef typename BlendingFunctionType::Pointer       BlendingFunctionPointerType;
+
   /** PixelType typedef */
   typedef typename ImageLayerType::ScalarType        ScalarType;
   typedef typename ImageLayerType::VectorPixelType   VectorPixelType;
@@ -122,6 +127,9 @@ public:
   /** Get the generated default rendering function */
   itkGetObjectMacro(DefaultRenderingFunction,RenderingFunctionType);
 
+  /** Set/Get the blending function */
+  itkSetObjectMacro(BlendingFunction,BlendingFunctionType);
+  itkGetObjectMacro(BlendingFunction,BlendingFunctionType);
 
   /** Get a hook on the resample filter to report progress */
   itkGetObjectMacro(Resampler,ResampleFilterType);
@@ -157,6 +165,9 @@ private:
 
   /** The default rendering function */
   RenderingFunctionPointerType m_DefaultRenderingFunction;
+
+  /** Pointer to the blending function */
+  BlendingFunctionPointerType m_BlendingFunction;
 
   /** The input image */
   ImagePointerType      m_Image;
