@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 #include <cstring>
+#include <cstdio>
 #include <cmath>
 #include <cctype>
 
@@ -25,7 +26,7 @@ ossimGeoref::ossimGeoref(const ossimString &georefString,
                          long precision)
 {
    double lat, lon;
-   
+
    long result = Convert_GEOREF_To_Geodetic(const_cast<char*>(georefString.c_str()),
                                             &lat,
                                             &lon);
@@ -48,7 +49,7 @@ ossimGeoref::ossimGeoref()
 ossimString ossimGeoref::toString(long precision)
 {
    char resultString[100];
-   
+
    long result = Convert_Geodetic_To_GEOREF(thePt.latr(),
                                             thePt.lonr(),
                                             precision,
@@ -93,7 +94,7 @@ ossimString ossimGeoref::toString(long precision)
 
 /***************************************************************************/
 /*
- *                              FUNCTIONS     
+ *                              FUNCTIONS
  */
 
 
@@ -101,8 +102,8 @@ long Extract_Degrees (char *georef,
                       double *latitude,
                       double *longitude)
 { /* BEGIN Extract_Degrees */
-/*    
- *  This function extracts the latitude and longitude degree parts of the 
+/*
+ *  This function extracts the latitude and longitude degree parts of the
  *  GEOREF string.  The latitude and longitude degree parts are the first four
  *  characters.
  *
@@ -153,7 +154,7 @@ long Extract_Minutes (char *georef,
                       long ERROR_TYPE,
                       double *minutes)
 { /* BEGIN Extract_Minutes */
-/*    
+/*
  *  This function extracts the minutes from the GEOREF string.  The minutes
  *  part begins at position start and has length length.  The ERROR_TYPE is
  *  to allow this function to work with both latitude and longitude minutes.
@@ -206,7 +207,7 @@ void Convert_Minutes_To_String(double minutes,
                                long precision,
                                char *str)
 { /* BEGIN Convert_Minutes_To_String */
-/*    
+/*
  *  This function converts minutes to a string of length precision.
  *
  *    minutes       : Minutes to be converted                  (input)
@@ -227,7 +228,7 @@ void Convert_Minutes_To_String(double minutes,
 
 
 long ossimGeoref::Convert_GEOREF_To_Geodetic (char *georef,
-                                              double *latitude, 
+                                              double *latitude,
                                               double *longitude)
 { /* BEGIN Convert_GEOREF_To_Geodetic */
 /*
@@ -255,7 +256,7 @@ long ossimGeoref::Convert_GEOREF_To_Geodetic (char *georef,
   origin_long = (double)LONGITUDE_LOW;
   origin_lat = (double)LATITUDE_LOW;
   georef_length = strlen(georef);
-  if ((georef_length < GEOREF_MINIMUM) || (georef_length > GEOREF_MAXIMUM) 
+  if ((georef_length < GEOREF_MINIMUM) || (georef_length > GEOREF_MAXIMUM)
       || ((georef_length % 2) != 0))
   {
     error_code |= GEOREF_STR_ERROR;
@@ -267,7 +268,7 @@ long ossimGeoref::Convert_GEOREF_To_Geodetic (char *georef,
     minutes_length = (georef_length - start) / 2;
     if (!error_code)
     {
-      error_code |= Extract_Minutes(georef, start, minutes_length, 
+      error_code |= Extract_Minutes(georef, start, minutes_length,
                                     GEOREF_STR_LON_MIN_ERROR, &long_minutes);
       if (!error_code)
       {
@@ -289,7 +290,7 @@ long ossimGeoref::Convert_Geodetic_To_GEOREF (double latitude,
                                               long precision,
                                               char *georef)
 { /* BEGIN Convert_Geodetic_To_GEOREF */
-/*   
+/*
  *  This function converts Geodetic (latitude and longitude in radians)
  *  coordinates to a GEOREF coordinate string.  Precision specifies the
  *  number of digits in the GEOREF string for latitude and longitude:
@@ -322,10 +323,10 @@ long ossimGeoref::Convert_Geodetic_To_GEOREF (double latitude,
 
   latitude = latitude * RADIAN_TO_DEGREE;
   longitude = longitude * RADIAN_TO_DEGREE;
-  if ((latitude < (double)LATITUDE_LOW) 
+  if ((latitude < (double)LATITUDE_LOW)
       || (latitude > (double)LATITUDE_HIGH))
     error_code |= GEOREF_LAT_ERROR;
-  if ((longitude < (double)LONGITUDE_LOW) 
+  if ((longitude < (double)LONGITUDE_LOW)
       || (longitude > (double)LONGITUDE_HIGH))
     error_code |= GEOREF_LON_ERROR;
   if ((precision < 0) || (precision > MAX_PRECISION))

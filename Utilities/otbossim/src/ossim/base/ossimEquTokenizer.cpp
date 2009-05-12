@@ -25,6 +25,7 @@
 
 #include <stdlib.h>
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 /* Use prototypes in function declarations. */
@@ -657,21 +658,21 @@ YY_RULE_SETUP
 case 6:
 YY_RULE_SETUP
 #line 33 "ossimEquTokenizer.l"
-{ 
+{
                return OSSIM_EQU_TOKEN_OR_BAR;
            }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 37 "ossimEquTokenizer.l"
-{ 
+{
                return OSSIM_EQU_TOKEN_AMPERSAND;
            }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 40 "ossimEquTokenizer.l"
-{ 
+{
                return OSSIM_EQU_TOKEN_TILDE;
            }
 	YY_BREAK
@@ -771,7 +772,7 @@ YY_RULE_SETUP
 #line 84 "ossimEquTokenizer.l"
 {
                return OSSIM_EQU_TOKEN_EXP;
-           } 
+           }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
