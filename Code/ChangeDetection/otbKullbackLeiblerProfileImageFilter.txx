@@ -122,7 +122,7 @@ CumulantsForEdgeworthProfile<TInput>
   return resu < 0.0 ? 0.0 : resu;
 }
 
-/* ====== Estimation des moments à partir de voisinnages emboités ==== */
+/* ====== Estimation des moments ï¿½ partir de voisinnages emboitï¿½s ==== */
 
 template <class TInput>
 int
@@ -133,18 +133,18 @@ CumulantsForEdgeworthProfile<TInput>
   fMu.resize( mask.size() );
   std::vector< itk::Array2D<int> >::iterator iter = mask.begin();
 
-  if ( InitSumAndMoments ( input, (*++iter) ) )
+  if ( InitSumAndMoments ( input, (*iter++) ) )
     return 1;
 
   for (unsigned int level = 1; level < mask.size(); level++ )
-    if ( ReInitSumAndMoments( input, (*++iter), level ) )
+    if ( ReInitSumAndMoments( input, (*iter++), level ) )
       return 1;
 
   return 0;
 }
 
 /* ===================== Estimation des moments ====================== */
-/* =============== à partir de la petite taille de fenetre =========== */
+/* =============== ï¿½ partir de la petite taille de fenetre =========== */
 
 template <class TInput>
 int
@@ -196,7 +196,7 @@ CumulantsForEdgeworthProfile<TInput>
   itk::VariableLengthVector<double> tab ( input.Size() );
   double * x = const_cast<double *> ( tab.GetDataPointer() );
   for ( unsigned long cp = 0; cp < input.Size(); ++cp )
-    *++x = ( static_cast<double> ( input.GetPixel(cp) ) - mu1 ) / sigma;
+    *x++ = ( static_cast<double> ( input.GetPixel(cp) ) - mu1 ) / sigma;
 
   double mu3 = 0.0;
   double mu4 = 0.0;
@@ -209,7 +209,7 @@ CumulantsForEdgeworthProfile<TInput>
     {
       if ( mask.get(i,j) == 1 )
       {
-        pixel = *++x;
+        pixel = *x++;
         pixel_2 = pixel * pixel;
 
         mu3 += pixel * pixel_2;

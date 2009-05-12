@@ -145,13 +145,13 @@ CumulantsForEdgeworth< TInput >
   itk::VariableLengthVector<double> tab ( input.Size() );
   double * x = const_cast<double *> ( tab.GetDataPointer() );
   for ( unsigned long i = 0; i < input.Size(); ++i )
-    *++x = ( static_cast<double> ( input.GetPixel(i) ) - fMu1 ) / sigma;
+    *x++ = ( static_cast<double> ( input.GetPixel(i) ) - fMu1 ) / sigma;
 
   fMu3 = fMu4 = 0.0;
   x = const_cast<double *> ( tab.GetDataPointer() );
   for ( unsigned long i = 0; i < input.Size(); ++i )
   {
-    pixel = *++x;
+    pixel = *x++;
     pixel_2 = pixel * pixel;
 
     fMu3 += pixel * pixel_2;
