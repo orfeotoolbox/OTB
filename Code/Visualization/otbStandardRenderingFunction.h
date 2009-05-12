@@ -128,7 +128,11 @@ public:
   inline virtual const OutputPixelType Evaluate(const RGBAPixelType & vpixel) const
   {
     OutputPixelType resp;
-    resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
+//     resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
+    if (OutputPixelType::Length == 4)
+    {//Propagate the alpha channel
+      resp[3] = vpixel[3];
+    }
     resp.SetRed(Evaluate(m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
     resp.SetGreen(Evaluate(m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
     resp.SetBlue(Evaluate(m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
