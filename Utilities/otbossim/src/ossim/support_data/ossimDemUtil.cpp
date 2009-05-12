@@ -1,5 +1,5 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
+// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  LGPL
 //
@@ -15,6 +15,7 @@
 
 #include <stdlib.h>
 #include <iostream>
+#include <fstream>
 
 #include <ossim/support_data/ossimDemUtil.h>
 
@@ -44,7 +45,7 @@ ossimDemUtil::getRecord(istream& s, char* buf, long reclength)
 
    long curpos = 0;
    buf[curpos] = s.get();
-   while ((buf[curpos] != EOF) && 
+   while ((buf[curpos] != EOF) &&
           (buf[curpos] != '\n') &&
           (curpos < reclength-1))
    {

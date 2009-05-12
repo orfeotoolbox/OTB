@@ -1,4 +1,4 @@
- 
+
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
 //
@@ -116,12 +116,13 @@
 //
 
 #include <cstring>
+#include <cstdio>
 #include <ossim/base/ossimRegExp.h>
 
 // ossimRegExp -- Copies the given regular expression.
 
 ossimRegExp::ossimRegExp (const ossimRegExp& rxp) {
-  int ind; 
+  int ind;
   this->progsize = rxp.progsize;		// Copy regular expression size
   this->program = new char[this->progsize];	// Allocate storage
   for(ind=this->progsize; ind-- != 0;)		// Copy regular expresion
@@ -153,10 +154,10 @@ bool ossimRegExp::operator== (const ossimRegExp& rxp) const {
     if (ind != rxp.progsize)			// If different size regexp
       return false;				// Return failure
     while(ind-- != 0)				// Else while still characters
-      if(this->program[ind] != rxp.program[ind]) // If regexp are different    
-	return false;				 // Return failure             
+      if(this->program[ind] != rxp.program[ind]) // If regexp are different
+	return false;				 // Return failure
   }
-  return true;					// Else same, return success  
+  return true;					// Else same, return success
 }
 
 
@@ -168,18 +169,18 @@ bool ossimRegExp::deep_equal (const ossimRegExp& rxp) const {
   if (ind != rxp.progsize)			// If different size regexp
     return false;				// Return failure
   while(ind-- != 0)		 		// Else while still characters
-    if(this->program[ind] != rxp.program[ind])	// If regexp are different    
-      return false;				// Return failure             
+    if(this->program[ind] != rxp.program[ind])	// If regexp are different
+      return false;				// Return failure
   return (this->startp[0] == rxp.startp[0] && 	// Else if same start/end ptrs,
 	  this->endp[0] == rxp.endp[0]);	// Return true
-}   
+}
 
 // The remaining code in this file is derived from the  regular expression code
 // whose  copyright statement appears  below.  It has been  changed to work
 // with the class concepts of C++ and COOL.
 
 /*
- * compile and find 
+ * compile and find
  *
  *	Copyright (c) 1986 by University of Toronto.
  *	Written by Henry Spencer.  Not derived from licensed software.
@@ -404,23 +405,23 @@ void ossimRegExp::compile (const char* exp) {
       }
     this->startp[0] = this->endp[0] = this->searchstring = NULL;
 
-    // Small enough for pointer-storage convention? 
-    if (regsize >= 32767L) {	// Probably could be 65535L. 
+    // Small enough for pointer-storage convention?
+    if (regsize >= 32767L) {	// Probably could be 65535L.
       //RAISE Error, SYM(ossimRegExp), SYM(Expr_Too_Big),
       printf ("ossimRegExp::compile(): Expression too big.\n");
       return;
     }
 
-    // Allocate space. 
+    // Allocate space.
 //#ifndef WIN32
-    if (this->program != NULL) delete [] this->program;  
+    if (this->program != NULL) delete [] this->program;
 //#endif
     this->program = new char[regsize];
     this->progsize = (int) regsize;
 
     if (this->program == NULL) {
       //RAISE Error, SYM(ossimRegExp), SYM(Out_Of_Memory),
-      printf ("ossimRegExp::compile(): Out of memory.\n"); 
+      printf ("ossimRegExp::compile(): Out of memory.\n");
       return;
     }
 
@@ -452,7 +453,7 @@ void ossimRegExp::compile (const char* exp) {
 	 // ties in favor of later strings, since the regstart check works
 	 // with the beginning of the r.e. and avoiding duplication
 	 // strengthens checking.  Not a strong reason, but sufficient in the
-	 // absence of others. 
+	 // absence of others.
 	 //
 	if (flags & SPSTART) {
 	    longest = NULL;
@@ -889,9 +890,9 @@ void ossimRegExp::regoptail (char* p, const char* val) {
 
 
 ////////////////////////////////////////////////////////////////////////
-// 
+//
 //  find and friends
-// 
+//
 ////////////////////////////////////////////////////////////////////////
 
 
@@ -934,7 +935,7 @@ bool ossimRegExp::find (const char* string) {
         printf ("ossimRegExp::find(): Compiled regular expression corrupted.\n");
         return 0;
     }
-    
+
     // If there is a "must appear" string, look for it.
     if (this->regmust != NULL) {
 	s = string;
@@ -946,14 +947,14 @@ bool ossimRegExp::find (const char* string) {
 	if (s == NULL)		// Not present.
 	    return (0);
     }
-     
+
     // Mark beginning of line for ^ .
     regbol = string;
 
     // Simplest case:  anchored match need be tried only once.
     if (this->reganch)
 	return (regtry(string, this->startp, this->endp, this->program));
-    
+
     // Messy cases:  unanchored match.
     s = string;
     if (this->regstart != '\0')
@@ -962,7 +963,7 @@ bool ossimRegExp::find (const char* string) {
 	    if (regtry(s, this->startp, this->endp, this->program))
 		return (1);
 	    s++;
-	  
+
 	}
     else
 	// We don't -- general case.
@@ -970,7 +971,7 @@ bool ossimRegExp::find (const char* string) {
 	    if (regtry(s, this->startp, this->endp, this->program))
 		return (1);
 	} while (*s++ != '\0');
-    
+
     // Failure.
     return (0);
 }
@@ -1088,7 +1089,7 @@ int ossimRegExp::regmatch (const char* prog) {
 
 			//
 			// Don't set startp if some later invocation of the
-			// same parentheses already has. 
+			// same parentheses already has.
 			//
 			if (regstartp[no] == NULL)
 			    regstartp[no] = save;
@@ -1117,7 +1118,7 @@ int ossimRegExp::regmatch (const char* prog) {
 
 			//
 			// Don't set endp if some later invocation of the
-			// same parentheses already has. 
+			// same parentheses already has.
 			//
 			if (regendp[no] == NULL)
 			    regendp[no] = save;
@@ -1128,7 +1129,7 @@ int ossimRegExp::regmatch (const char* prog) {
 		}
 //		break;
 	    case BRANCH:{
-	      
+
 	      register const char* save;
 
 		    if (OP(next) != BRANCH)	// No choice.
@@ -1155,7 +1156,7 @@ int ossimRegExp::regmatch (const char* prog) {
 
 		    //
 		    // Lookahead to avoid useless match attempts when we know
-		    // what character comes next. 
+		    // what character comes next.
 		    //
 		    nextch = '\0';
 		    if (OP(next) == EXACTLY)
@@ -1186,10 +1187,10 @@ int ossimRegExp::regmatch (const char* prog) {
 	scan = next;
     }
 
-    // 
+    //
     //  We get here only if there's trouble -- normally "case END" is the
-    //  terminating point. 
-    // 
+    //  terminating point.
+    //
     //RAISE Error, SYM(ossimRegExp), SYM(Internal_Error),
     printf ("ossimRegExp::find(): Internal error -- corrupted pointers.\n");
     return (0);
