@@ -348,8 +348,8 @@ ADD_TEST(RightAngleDetectionExample  ${EXE_TESTS2}
 	${TEMP}/RighAngleOutput.tif
 	${TEMP}/PrettyRightAngleInput.png	
 	${TEMP}/PrettyRightAngleOutput.png
-	0.09
-	20.
+	0.1
+	35.
 )
 
 ADD_EXECUTABLE(otbFeatureExtractionExamplesTests1 otbFeatureExtractionExamplesTests1.cxx)
