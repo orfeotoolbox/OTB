@@ -31,9 +31,9 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkMinimumMaximumImageCalculator.h"
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {qb_RoadExtract2.tif}
+//    INPUTS: {QB_Toulouse_Ortho_PAN.tif}
 //    OUTPUTS: {RighAngleOutput.tif}, {PrettyRighAngleInput.png},  {PrettyRighAngleOutput.png}
-//  0.09 20
+//  0.1 20
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
