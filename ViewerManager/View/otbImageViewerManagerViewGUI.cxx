@@ -471,7 +471,7 @@ ImageViewerManagerViewGUI
  //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterFullWidget(currentVisuView->GetFullWidget());
  //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterScrollWidget(currentVisuView->GetScrollWidget());
  //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterZoomWidget(currentVisuView->GetZoomWidget());
- //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterPixelInformationWidget(pixelView->GetPixelDescriptionWidget());
+ //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterPixelDescriptionWidget(pixelView->GetPixelDescriptionWidget());
  //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterHistogramWidget(curveWidget);
  //   m_WidgetManagerList->GetNthElement(selectedItem-1)->SetLabel(this->CutFileName(selectedItem-1));
  //   m_WidgetManagerList->GetNthElement(selectedItem-1)->Show();
@@ -480,7 +480,7 @@ ImageViewerManagerViewGUI
    widgetList->GetNthElement(selectedItem-1)->RegisterFullWidget(currentVisuView->GetFullWidget());
    widgetList->GetNthElement(selectedItem-1)->RegisterScrollWidget(currentVisuView->GetScrollWidget());
    widgetList->GetNthElement(selectedItem-1)->RegisterZoomWidget(currentVisuView->GetZoomWidget());
-   widgetList->GetNthElement(selectedItem-1)->RegisterPixelInformationWidget(pixelView->GetPixelDescriptionWidget());
+   widgetList->GetNthElement(selectedItem-1)->RegisterPixelDescriptionWidget(pixelView->GetPixelDescriptionWidget());
    widgetList->GetNthElement(selectedItem-1)->RegisterHistogramWidget(curveWidget);
    widgetList->GetNthElement(selectedItem-1)->SetLabel(this->CutFileName(selectedItem-1));
    widgetList->GetNthElement(selectedItem-1)->Show();
@@ -1049,7 +1049,7 @@ ImageViewerManagerViewGUI
   m_WidgetManager->RegisterFullWidget(currentVisuView->GetFullWidget());
   m_WidgetManager->RegisterScrollWidget(currentVisuView->GetScrollWidget());
   m_WidgetManager->RegisterZoomWidget(currentVisuView->GetZoomWidget());
-  m_WidgetManager->RegisterPixelInformationWidget(pixelView->GetPixelDescriptionWidget());
+  m_WidgetManager->RegisterPixelDescriptionWidget(pixelView->GetPixelDescriptionWidget());
   m_WidgetManager->RegisterHistogramWidget(curveWidget);
   m_WidgetManager->SetLabel(this->CutFileName(m_DiaporamaCurrentIndex));
   m_WidgetManager->Refresh();
