@@ -93,7 +93,7 @@ StandardImageViewer<TImage,TVectorData,TWidgetManager>
   m_DisplayWindow->RegisterFullWidget(m_View->GetFullWidget());
   m_DisplayWindow->RegisterScrollWidget(m_View->GetScrollWidget());
   m_DisplayWindow->RegisterZoomWidget(m_View->GetZoomWidget());
-  m_DisplayWindow->RegisterPixelInformationWidget(m_PixelDescriptionView->GetPixelDescriptionWidget());
+  m_DisplayWindow->RegisterPixelDescriptionWidget(m_PixelDescriptionView->GetPixelDescriptionWidget());
   m_DisplayWindow->RegisterHistogramWidget(m_CurveWidget);
 }
 

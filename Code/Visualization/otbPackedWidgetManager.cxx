@@ -74,13 +74,13 @@ PackedWidgetManager
 }
 void 
 PackedWidgetManager
-::RegisterPixelInformationWidget(Fl_Output * pixelWidget)
+::RegisterPixelDescriptionWidget(Fl_Output * pixelWidget)
 {
   m_IntenalPixelWidget = pixelWidget;
-  m_PackedWidget->m_PixelInformationGroup->add(pixelWidget);
-  m_PackedWidget->m_PixelInformationGroup->resizable(pixelWidget);
-  pixelWidget->resize(m_PackedWidget->m_PixelInformationGroup->x(),m_PackedWidget->m_PixelInformationGroup->y(),
-                      m_PackedWidget->m_PixelInformationGroup->w(),m_PackedWidget->m_PixelInformationGroup->h());
+  m_PackedWidget->m_PixelDescriptionGroup->add(pixelWidget);
+  m_PackedWidget->m_PixelDescriptionGroup->resizable(pixelWidget);
+  pixelWidget->resize(m_PackedWidget->m_PixelDescriptionGroup->x(),m_PackedWidget->m_PixelDescriptionGroup->y(),
+                      m_PackedWidget->m_PixelDescriptionGroup->w(),m_PackedWidget->m_PixelDescriptionGroup->h());
 
 }
 
@@ -131,7 +131,7 @@ PackedWidgetManager
 {
   m_PackedWidget->m_FullGroup->remove(m_InternalFullWidget);
   m_PackedWidget->m_ZoomGroup->remove(m_InternalZoomWidget);
-  m_PackedWidget->m_PixelInformationGroup->remove(m_IntenalPixelWidget);
+  m_PackedWidget->m_PixelDescriptionGroup->remove(m_IntenalPixelWidget);
   m_PackedWidget->m_QuicklookGroup->remove(m_InternalScrollWidget);
   m_PackedWidget->m_HistogramsGroup->remove(m_InternalCurveWidget);
 }
