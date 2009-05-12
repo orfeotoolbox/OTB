@@ -81,7 +81,7 @@ public:
 
   /** Blending function typedef */
   typedef typename ImageLayerType::OutputPixelType     OutputPixelType;
-  typedef Function::BlendingFunction<OutputPixelType>  BlendingFunctionType;
+  typedef typename ImageLayerType::BlendingFunctionType         BlendingFunctionType;
   typedef typename BlendingFunctionType::Pointer       BlendingFunctionPointerType;
 
   /** PixelType typedef */
