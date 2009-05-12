@@ -397,7 +397,9 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
   InputChildrenListType children = source->GetChildrenList();
 
   // For each child
-  for(typename InputChildrenListType::iterator it = children.begin(); it!=children.end();++it)
+typename InputChildrenListType::iterator it = children.begin();
+while(it!=children.end())
+//for(typename InputChildrenListType::iterator it = children.begin(); it!=children.end();++it)
   {
     typename OutputInternalTreeNodeType::Pointer newContainer;
 
@@ -492,6 +494,7 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
         break;
       }
     }
+++it;
   }
 }
 
