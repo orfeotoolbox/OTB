@@ -55,7 +55,7 @@ public:
   virtual void RegisterScrollWidget(WidgetType* scrollWidget) = 0;
   virtual void RegisterZoomWidget(WidgetType* zoomWidget) = 0;
   virtual void RegisterHistogramWidget(WidgetType* curveWidget) = 0;
-  virtual void RegisterPixelInformationWidget(Fl_Output * pixelWidget) = 0;
+  virtual void RegisterPixelDescriptionWidget(Fl_Output * pixelWidget) = 0;
   virtual void Show() = 0;
   virtual void Hide() = 0;
   virtual void Refresh() = 0;
