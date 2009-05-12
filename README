@@ -36,9 +36,9 @@ NB: On some linux plateforms, you may (and should) use the official distribution
 
 2. Install CMake (or use your distribution package):
       cd INSTALL_DIR
-      gunzip cmake-3.0.0.tar.gz
-      tar xvf cmake-3.0.0.tar
-      cd cmake-3.0.0
+      gunzip cmake-2.6.4.tar.gz
+      tar xvf cmake-2.6.4.tar
+      cd cmake-2.6.4
       ./configure --prefix=INSTALL_DIR
       make
       make install
