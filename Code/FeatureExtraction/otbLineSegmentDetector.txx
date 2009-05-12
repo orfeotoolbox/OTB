@@ -249,7 +249,6 @@ LineSegmentDetector<TInputImage, TPrecision>
   /** Compute the rectangle*/
   CoordinateHistogramIteratorType     ItRegion = m_RegionList.begin();
   DirectionVectorIteratorType         ItDir    =  m_DirectionVector.begin();
-  std::cout << " NB DE REGIONS : "<< m_RegionList.size()<< std::endl;
   
   while(ItRegion != m_RegionList.end() && ItDir !=m_DirectionVector.end() )
     {

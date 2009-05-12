@@ -1709,8 +1709,8 @@ ADD_TEST(raTuUrbanAreaDetectionImageFilterNew ${FEATUREEXTRACTION_TESTS14}
 )
 
 ADD_TEST(raTvUrbanAreaDetectionImageFilter ${FEATUREEXTRACTION_TESTS14}
-#  --compare-image ${EPSILON_8}   ${BASELINE}/raWaterIndex_NDWI_verySmallFSATSW.tif
-#                    ${TEMP}/raWaterIndex_NDWI_verySmallFSATSW.tif
+   --compare-image ${EPSILON_8}   ${BASELINE}/raTvUrbanAreaDetection.png
+                     ${TEMP}/raTvUrbanAreaDetection.png
         otbUrbanAreaDetectionImageFilter
         ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
         ${TEMP}/raTvUrbanAreaDetection.png

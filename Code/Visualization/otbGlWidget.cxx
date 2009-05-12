@@ -37,7 +37,10 @@ GlWidget
 }
 
 GlWidget::~GlWidget()
-{}
+{
+  // Clear registered controller
+  m_Controller = NULL;
+}
 
 void GlWidget::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
@@ -123,15 +126,17 @@ void GlWidget::resize(int x, int y, int w, int h)
 
 int GlWidget::handle(int event)
 {
-  // If there is a controller
-  if(m_Controller.IsNotNull())
+  // Call superclass implementation
+  int resp = Fl_Widget::handle(event);
+  
+  // Check if there is a controller
+  // Avoid processing hide events, since it causes segfault (the
+  // destructor of the Fl class generates hide events).
+  if(m_Controller.IsNotNull() && event != FL_HIDE)
     {
-    return m_Controller->HandleWidgetEvent(m_Identifier,event);
+    resp = m_Controller->HandleWidgetEvent(m_Identifier,event);
     }
-  else
-    {
-    return 0;
-    }
+  return resp;
 }
 
 GlWidget::PointType GlWidget::GetMousePosition()

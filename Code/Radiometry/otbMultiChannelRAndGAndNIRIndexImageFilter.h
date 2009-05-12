@@ -77,6 +77,7 @@ protected:
   /// Before generating data, set functor parameters
   virtual void BeforeThreadedGenerateData()
   {
+
     unsigned int lNbChan = this->GetInput()->GetNumberOfComponentsPerPixel();
     if(m_RedIndex < 1 || m_GreenIndex < 1 || m_NIRIndex < 1 ||
        m_RedIndex > lNbChan || m_GreenIndex > lNbChan || m_NIRIndex > lNbChan)
