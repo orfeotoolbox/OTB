@@ -290,15 +290,16 @@ template <class TImage, class TOutputImage>
         ImageLayer<TImage,TOutputImage>
   ::PixelSize(ImagePointerType image, ScalarType* v) const
 {
-  return 1;
-}
-template <class TImage, class TOutputImage>
-    unsigned int
-        ImageLayer<TImage,TOutputImage>
-  ::PixelSize(ImagePointerType image, VectorPixelType* v) const
-{
   return image->GetNumberOfComponentsPerPixel();
 }
+//Match is done according to InternalPixelType which is scalar also for VectorImage
+// template <class TImage, class TOutputImage>
+//     unsigned int
+//         ImageLayer<TImage,TOutputImage>
+//   ::PixelSize(ImagePointerType image, VectorPixelType* v) const
+// {
+//   return image->GetNumberOfComponentsPerPixel();
+// }
 template <class TImage, class TOutputImage>
     unsigned int
         ImageLayer<TImage,TOutputImage>

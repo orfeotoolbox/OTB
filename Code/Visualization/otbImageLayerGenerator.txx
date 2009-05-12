@@ -55,12 +55,8 @@ ImageLayerGenerator<TImageLayer>
     {
     return;
     }
-
   // Update image information
   m_Image->UpdateOutputInformation();
-
-  // Build a new layer
-  m_Layer = ImageLayerType::New();
 
   // Generate layer information
   this->GenerateLayerInformation();
@@ -125,23 +121,23 @@ ImageLayerGenerator<TImageLayer>
   // Setup channels
 //   switch(m_Image->GetNumberOfComponentsPerPixel())
   switch( PixelSize(m_Image, m_Image->GetBufferPointer()) )
-    {
+  {
     case 1:
     {
-    m_DefaultRenderingFunction->SetAllChannels(0);
-    break;
+      m_DefaultRenderingFunction->SetAllChannels(0);
+      break;
     }
     case 2:
     {
-    m_DefaultRenderingFunction->SetAllChannels(0);
-    break;
+      m_DefaultRenderingFunction->SetAllChannels(0);
+      break;
     }
     case 3:
     {
-    m_DefaultRenderingFunction->SetRedChannelIndex(0);
-    m_DefaultRenderingFunction->SetGreenChannelIndex(1);
-    m_DefaultRenderingFunction->SetBlueChannelIndex(2);
-    break;
+      m_DefaultRenderingFunction->SetRedChannelIndex(0);
+      m_DefaultRenderingFunction->SetGreenChannelIndex(1);
+      m_DefaultRenderingFunction->SetBlueChannelIndex(2);
+      break;
     }
     case 4:
     {
@@ -162,14 +158,14 @@ ImageLayerGenerator<TImageLayer>
         m_DefaultRenderingFunction->SetGreenChannelIndex(1);
         m_DefaultRenderingFunction->SetBlueChannelIndex(0);
       }
-    break;
+      break;
     }
     default:
     {
     //Discard
-    break;
+      break;
     }
-    }
+  }
 
   // Set the rendering function
   m_Layer->SetRenderingFunction(m_DefaultRenderingFunction);
@@ -244,15 +240,17 @@ template < class TImageLayer >
     ImageLayerGenerator<TImageLayer>
   ::PixelSize(ImagePointerType image, ScalarType* v) const
 {
-  return 1;
-}
-template < class TImageLayer >
-    unsigned int
-    ImageLayerGenerator<TImageLayer>
-  ::PixelSize(ImagePointerType image, VectorPixelType* v) const
-{
   return image->GetNumberOfComponentsPerPixel();
 }
+//Match is done according to InternalPixelType which is scalar also for VectorImage
+// template < class TImageLayer >
+//     unsigned int
+//     ImageLayerGenerator<TImageLayer>
+//   ::PixelSize(ImagePointerType image, VectorPixelType* v) const
+// {
+//   std::cout << "Match on vector" << std::endl;
+//   return image->GetNumberOfComponentsPerPixel();
+// }
 template < class TImageLayer >
     unsigned int
     ImageLayerGenerator<TImageLayer>

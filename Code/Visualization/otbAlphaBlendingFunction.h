@@ -58,7 +58,7 @@ public:
 
   /** PixelType macros */
   typedef TInputRGBPixel1                        InputPixel1Type;
-  typedef TInputRGBAPixel2                        InputPixel2Type;
+  typedef TInputRGBAPixel2                       InputPixel2Type;
   typedef TOutputRGBPixel                        OutputRGBPixelType;
   typedef typename OutputRGBPixelType::ValueType OutputValueType;
 
@@ -66,6 +66,7 @@ public:
   inline virtual const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type & input2)
   {
     OutputRGBPixelType resp;
+    resp.Fill(itk::NumericTraits<OutputValueType>::max());
     double alpha = static_cast<double>(input2.GetAlpha())/255.0 * m_Alpha;
 
     resp.SetRed(  static_cast<OutputValueType>(vcl_floor((1-alpha) * static_cast<double>(input1.GetRed())   +alpha*static_cast<double>(input2.GetRed())  +0.5)));

@@ -60,7 +60,7 @@ public:
   typedef typename ImageType::Pointer                                 ImagePointerType;
   typedef typename ImageType::PixelType                               PixelType;
   typedef typename ImageType::InternalPixelType                       InternalPixelType;
-  typedef typename itk::NumericTraits<InternalPixelType>::ValueType   ScalarType;
+  typedef typename itk::NumericTraits<PixelType>::ValueType           ScalarType;
   typedef itk::VariableLengthVector<ScalarType>                       VectorPixelType;
   typedef itk::RGBPixel<ScalarType>                                   RGBPixelType;
   typedef itk::RGBAPixel<ScalarType>                                  RGBAPixelType;
@@ -77,7 +77,7 @@ public:
   typedef itk::Statistics::ListSample<SampleType>                     ListSampleType;
 
   typedef otb::ListSampleToHistogramListGenerator
-      <ListSampleType,ScalarType,DFContainerType>                         HistogramFilterType;
+      <ListSampleType,ScalarType,DFContainerType>                     HistogramFilterType;
   typedef typename HistogramFilterType::HistogramType                 HistogramType;
   typedef typename HistogramType::Pointer                             HistogramPointerType;
   typedef typename HistogramFilterType::HistogramListType             HistogramListType;

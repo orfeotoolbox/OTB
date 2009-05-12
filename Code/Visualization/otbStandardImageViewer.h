@@ -75,8 +75,9 @@ public:
   /** Input image type */
   typedef TImage                                    ImageType;
   typedef typename ImageType::Pointer               ImagePointerType;
+  typedef typename ImageType::PixelType             PixelType;
   typedef typename ImageType::InternalPixelType     InternalPixelType;
-  typedef typename itk::NumericTraits<InternalPixelType>::ValueType ScalarType;
+  typedef typename itk::NumericTraits<PixelType>::ValueType ScalarType;
 
 
   /** VectorData typedef */
