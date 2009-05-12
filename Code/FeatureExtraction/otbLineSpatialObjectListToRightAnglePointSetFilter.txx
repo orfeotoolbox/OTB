@@ -111,21 +111,18 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
 	      /** Check if the angle is a right one */
 	      if(vcl_abs(Angle - M_PI/2.) < m_ThresholdAngle ) 
 		{
-		  /** Compute the distance from CurLine to DstLine*/
-		  double SegmentDist = this->ComputeDistanceBetweenSegments(*itLinesListTest , *itLinesListCur);
+		  /** Right angle coordinate*/
+		  PointType              RightAngleCoordinate;
+		  RightAngleCoordinate = this->ComputeAngleRightCoordinate(*itLinesListTest, *itLinesListCur);
 		  
-		  /** Check if the distance separating the segments is under the threshold*/
-		  if(SegmentDist < m_ThresholdDistance )
-                    {
-		      /** Right angle coordinate*/
-                      PointType              RightAngleCoordinate;
-                      RightAngleCoordinate = this->ComputeAngleRightCoordinate(*itLinesListTest, *itLinesListCur);
-                      
-                      /** If Right Angle:  Add it to the pointSet*/
-                      this->AddRightAngleToPointSet(RightAngleCoordinate , *itLinesListTest , *itLinesListCur );
-		                            
-                    }
-                }
+		  /** Compute the distance between the two segments and the right angle formed by this segments*/
+		  if(this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListTest) <m_ThresholdDistance &&
+		     this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListCur) <m_ThresholdDistance)
+		    {
+		      /** If Right Angle & not so far from segments:  Add it to the pointSet*/
+		      this->AddRightAngleToPointSet(RightAngleCoordinate , *itLinesListTest , *itLinesListCur );
+		    }
+		}
             }
           counterCur++;
           ++itLinesListCur;
@@ -136,75 +133,27 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
 }
 
 /**
- * Method : ComputeDistanceBetweenSegments 
+ * Method : Compute Distance between a point and a segment
+ * 
  */
 template <class TImage, class TLinesList , class TPointSet>
 double
 LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
-::ComputeDistanceBetweenSegments(LineType * lineDst , LineType * lineSrc)
+::ComputeDistanceFromPointToSegment(PointType rAngle ,LineType * line)
 {
-  /** Local variable*/
-  InputIndexType IndexBeginSrc, IndexEndSrc;  
-  
-  /** Extract Indexes from the Src line for segment distance computation*/
-  typename LineType::PointListType & pointsList = lineSrc->GetPoints();
-  typename LineType::PointListType::const_iterator itPoints = pointsList.begin();
-  
-  IndexBeginSrc[0] = static_cast<unsigned int>((*itPoints).GetPosition()[0]);  
-  IndexBeginSrc[1] = static_cast<unsigned int>((*itPoints).GetPosition()[1]);  
-  ++itPoints;
-  IndexEndSrc[0] = static_cast<unsigned int>((*itPoints).GetPosition()[0]);  
-  IndexEndSrc[1] = static_cast<unsigned int>((*itPoints).GetPosition()[1]);  
-  
-  /** Verify if the indexes of the line are inside the region*/
-  typename InputImageType::SizeType size = this->GetInputImage()->GetRequestedRegion().GetSize();
- 
   /** Extract Indexes from the Dst line to instantiate the line iterator*/
-  typename LineType::PointListType &pointsListDst = lineDst->GetPoints();
+  typename LineType::PointListType &pointsListDst = line->GetPoints();
   typename LineType::PointListType::const_iterator itPointsDst = pointsListDst.begin();
-
-  float Xq1 = (*itPointsDst).GetPosition()[0];  //xq1
-  float Yq1 = (*itPointsDst).GetPosition()[1];  //yq1
+  double X1 = (*itPointsDst).GetPosition()[0];  //xq1
+  double Y1 = (*itPointsDst).GetPosition()[1];  //yq1
   ++itPointsDst;
-  float Xq2 = (*itPointsDst).GetPosition()[0];  //xq2
-  float Yq2 = (*itPointsDst).GetPosition()[1];  //yq2
+  double X2 = (*itPointsDst).GetPosition()[0];  //xq2
+  double Y2 = (*itPointsDst).GetPosition()[1];  //yq2
   
-  /**  Those constants are used in the loop :  compute them once
-   *   d(P,[Q1Q2]) = |PQ1^PQ2|/|Q1Q2|
-   */
-  
-  float SegmentLength = vcl_sqrt((Xq1-Xq2)* (Xq1-Xq2) + (Yq1-Yq2) *(Yq1-Yq2));
-  float CrossProduct  =   Xq1*Yq2 - Xq2*Yq1;
+  double dist1 = vcl_sqrt((X1-rAngle[0])*(X1-rAngle[0]) + (Y1-rAngle[1])*(Y1-rAngle[1])) ;
+  double dist2 = vcl_sqrt((X2-rAngle[0])*(X2-rAngle[0]) + (Y2-rAngle[1])*(Y2-rAngle[1])) ;
 
-  /** Define a line iterator */
-  itk::LineIterator<InputImageType> itLine(this->GetInputImage() , IndexBeginSrc , IndexEndSrc);
-  itLine.GoToBegin();
-  
-  double MinDistance = 10000.;
-
-  while(!itLine.IsAtEnd())
-    {
-      InputIndexType IndexCur = itLine.GetIndex();
-      
-      if(this->GetInputImage()->GetRequestedRegion().IsInside(IndexCur) )
-        {
-          double xp = static_cast<float>(itLine.GetIndex()[0]);
-          double yp = static_cast<float>(itLine.GetIndex()[1]);
-          double Num   = vcl_abs(xp*(Yq1-Yq2) + yp*(Xq2-Xq1) + CrossProduct);
-          
-          /** distance from Point P to Segment Q1Q2*/
-          double CurDistance = Num/SegmentLength;
-
-          if(CurDistance <  MinDistance )
-            MinDistance = CurDistance;
-
-          if(MinDistance < 1e-50)  //MinDistance supposed to be positive
-          return 0.;
-        }
-      ++itLine;
-    }
-  
-  return MinDistance;
+  return std::min(dist1,dist2);
 }
 
 /**
@@ -232,11 +181,12 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
 {
   typename LineType::PointListType & pointsList = line->GetPoints();
   typename LineType::PointListType::const_iterator itPoints = pointsList.begin();
-  float Xp1 = (*itPoints).GetPosition()[0];  
-  float Yp1 = (*itPoints).GetPosition()[1];  
+  double Xp1 = (*itPoints).GetPosition()[0];  
+  double Yp1 = (*itPoints).GetPosition()[1]; 
+  
   ++itPoints;
-  float Xp2 = (*itPoints).GetPosition()[0];  
-  float Yp2 = (*itPoints).GetPosition()[1];
+  double Xp2 = (*itPoints).GetPosition()[0];  
+  double Yp2 = (*itPoints).GetPosition()[1];
 
   //Compute the orientation
   double dx = Xp1 - Xp2;
@@ -264,28 +214,28 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
   typename LineType::PointListType & pointsList = lineSrc->GetPoints();
   typename LineType::PointListType::const_iterator itPoints = pointsList.begin();
   
-  float Xp1 = (*itPoints).GetPosition()[0];  
-  float Yp1 = (*itPoints).GetPosition()[1];  
+  double Xp1 = (*itPoints).GetPosition()[0];  
+  double Yp1 = (*itPoints).GetPosition()[1];  
   ++itPoints;
-  float Xp2 = (*itPoints).GetPosition()[0];  
-  float Yp2 = (*itPoints).GetPosition()[1];  
+  double Xp2 = (*itPoints).GetPosition()[0];  
+  double Yp2 = (*itPoints).GetPosition()[1];  
  
   /** Extract Indexes from the Dst line to instantiate the line iterator*/
   typename LineType::PointListType &pointsListDst = lineDst->GetPoints();
   typename LineType::PointListType::const_iterator itPointsDst = pointsListDst.begin();
   
-  float Xq1 = (*itPointsDst).GetPosition()[0];  //xq1
-  float Yq1 = (*itPointsDst).GetPosition()[1];  //yq1
+  double Xq1 = (*itPointsDst).GetPosition()[0];  //xq1
+  double Yq1 = (*itPointsDst).GetPosition()[1];  //yq1
   ++itPointsDst;
-  float Xq2 = (*itPointsDst).GetPosition()[0];  //xq2
-  float Yq2 = (*itPointsDst).GetPosition()[1];  //yq2
+  double Xq2 = (*itPointsDst).GetPosition()[0];  //xq2
+  double Yq2 = (*itPointsDst).GetPosition()[1];  //yq2
 
   
   /** Compute the equation of the lines A and B  which are support of the segments Src & Dst*/
   // - Line 1 : slope and origin
-  float originA = 0. , slopeA = 0.;
-  float originB = 0. , slopeB = 0.;
-  float LengthSegmentAy = 0., lengthSegmentBy = 0.;
+  double originA = 0. , slopeA = 0.;
+  double originB = 0. , slopeB = 0.;
+  double LengthSegmentAy = 0., lengthSegmentBy = 0.;
 
   /** Equation of the first Line*/
   if(vcl_abs(Xp2 - Xp1) <1e-10)
@@ -312,7 +262,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
   originB = Yq1 - (slopeB * Xq1);
 
   /** Avoid the case of parallel lines*/
-  float denum = 0.;
+  double denum = 0.;
   if(vcl_abs(slopeA - slopeB ) < 1e-5)
     denum = 0.001;
   else
@@ -320,7 +270,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
  
   /** Compute the coordinate of the intersection point Y =AX+B*/
   P[0] =  (originB - originA)/denum;
-  P[1] =  slopeA * static_cast<float>(P[0]) + originA;
+  P[1] =  slopeA * static_cast<double>(P[0]) + originA;
 
   return P;
 }
@@ -342,7 +292,6 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
   vectorLine.push_back(LineDst);
   vectorLine.push_back(LineCur);
   m_OutputPointSet->SetPointData(CurrentPos , vectorLine); 
-
 }
 
 /**
@@ -354,7 +303,6 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
-
 }
 
 
