@@ -390,14 +390,24 @@ namespace otb
            mfeature->add_geometry(line);
 
           mapnik::transcoder tr("ISO-8859-15");
-          boost::put(*mfeature, "name", tr.transcode((dataNode->GetFieldAsString("name")).c_str()));
+
+          if (dataNode->HasField("name"))
+            boost::put(*mfeature, "name", tr.transcode((dataNode->GetFieldAsString("name")).c_str()));
+          if (dataNode->HasField("NAME"))
+            boost::put(*mfeature, "name", tr.transcode((dataNode->GetFieldAsString("NAME")).c_str()));
 
 //           std::cout << mfeature->props().size() << std::endl;
 //           std::cout << " -> " << (*mfeature)["name"] << std::endl;
 
-//           std::cout << "Type: " << dataNode->GetFieldAsString("type") << std::endl;
+//           std::cout << "Name: " << dataNode->GetFieldAsString("NAME") << std::endl;
+//           std::cout << "Type: " << dataNode->GetFieldAsString("TYPE") << std::endl;
 //           std::cout << "OSM ID: " << dataNode->GetFieldAsString("osm_id") << std::endl;
-          boost::put(*mfeature, "highway", tr.transcode((dataNode->GetFieldAsString("type")).c_str()));
+
+          if (dataNode->HasField("type"))
+            boost::put(*mfeature, "highway", tr.transcode((dataNode->GetFieldAsString("type")).c_str()));
+          if (dataNode->HasField("TYPE"))
+            boost::put(*mfeature, "highway", tr.transcode((dataNode->GetFieldAsString("TYPE")).c_str()));
+
 
           mDatasource->push(mfeature);
 
