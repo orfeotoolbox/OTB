@@ -288,15 +288,17 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
 ::InstanciateTransform(void)
 {
 
-  otbMsgDevMacro(<< "Information to instanciate transform (VectorDataProjectionFilter): ");
-  otbMsgDevMacro(<< " * Input Origin: " << m_InputOrigin);
-  otbMsgDevMacro(<< " * Input Spacing: " << m_InputSpacing);
-  otbMsgDevMacro(<< " * Input keyword list: " << m_InputKeywordList);
-  otbMsgDevMacro(<< " * Input projection: " << m_InputProjectionRef);
-  otbMsgDevMacro(<< " * Output keyword list: " << m_OutputKeywordList);
-  otbMsgDevMacro(<< " * Output projection: " << m_OutputProjectionRef);
-  otbMsgDevMacro(<< " * Output Origin: " << m_OutputOrigin);
-  otbMsgDevMacro(<< " * Output Spacing: " << m_OutputSpacing);
+//   otbMsgDevMacro(<< "Information to instanciate transform (VectorDataProjectionFilter): ");
+//   otbMsgDevMacro(<< " * Input Origin: " << m_InputOrigin);
+//   otbMsgDevMacro(<< " * Input Spacing: " << m_InputSpacing);
+//   otbMsgDevMacro(<< " * Input keyword list: "
+//       << ((m_InputKeywordList.GetSize() == 0)?"Empty":"Full"));
+//   otbMsgDevMacro(<< " * Input projection: " << m_InputProjectionRef);
+//   otbMsgDevMacro(<< " * Output keyword list: "
+//       << ((m_OutputKeywordList.GetSize() == 0)?"Empty":"Full"));
+//   otbMsgDevMacro(<< " * Output projection: " << m_OutputProjectionRef);
+//   otbMsgDevMacro(<< " * Output Origin: " << m_OutputOrigin);
+//   otbMsgDevMacro(<< " * Output Spacing: " << m_OutputSpacing);
 
 
   m_Transform = InternalTransformType::New();

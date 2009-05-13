@@ -236,14 +236,16 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 
 
   otbMsgDevMacro(<< "Information to instanciate transform: ");
-  otbMsgDevMacro(<< " - Input Origin: " << m_InputOrigin);
-  otbMsgDevMacro(<< " - Input Spacing: " << m_InputSpacing);
-  otbMsgDevMacro(<< " - Input keyword list: " << m_InputKeywordList);
-  otbMsgDevMacro(<< " - Input projection: " << m_InputProjectionRef);
-  otbMsgDevMacro(<< " - Output keyword list: " << m_OutputKeywordList);
-  otbMsgDevMacro(<< " - Output projection: " << m_OutputProjectionRef);
-  otbMsgDevMacro(<< " - Output Origin: " << m_OutputOrigin);
-  otbMsgDevMacro(<< " - Output Spacing: " << m_OutputSpacing);
+  otbMsgDevMacro(<< " * Input Origin: " << m_InputOrigin);
+  otbMsgDevMacro(<< " * Input Spacing: " << m_InputSpacing);
+  otbMsgDevMacro(<< " * Input keyword list: "
+      << ((m_InputKeywordList.GetSize() == 0)?"Empty":"Full"));
+  otbMsgDevMacro(<< " * Input projection: " << m_InputProjectionRef);
+  otbMsgDevMacro(<< " * Output keyword list: "
+      << ((m_OutputKeywordList.GetSize() == 0)?"Empty":"Full"));
+  otbMsgDevMacro(<< " * Output projection: " << m_OutputProjectionRef);
+  otbMsgDevMacro(<< " * Output Origin: " << m_OutputOrigin);
+  otbMsgDevMacro(<< " * Output Spacing: " << m_OutputSpacing);
 
   bool firstTransformGiveGeo = true;
 
@@ -375,7 +377,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   // Apply input origin/spacing
   inputPoint[0] = inputPoint[0] * m_InputSpacing[0] + m_InputOrigin[0];
   inputPoint[1] = inputPoint[1] * m_InputSpacing[1] + m_InputOrigin[1];
-  
+
   // Transform point
   OutputPointType outputPoint;
   outputPoint = this->GetTransform()->TransformPoint(inputPoint);

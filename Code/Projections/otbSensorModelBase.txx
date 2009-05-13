@@ -143,7 +143,8 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimen
   ossimKeywordlist geom;
 
   image_kwl.convertToOSSIMKeywordlist(geom);
-  otbMsgDevMacro(<< "CreateProjection(): ossimKeywordlist: " << geom);
+  otbMsgDevMacro(<< "CreateProjection()");
+  otbMsgDevMacro(<< "* type: " << geom.find("type"));
 
   m_Model = ossimSensorModelFactory::instance()->createProjection(geom);
   if ( m_Model == NULL)
