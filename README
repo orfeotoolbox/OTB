@@ -97,7 +97,7 @@ Installation on Microsoft Visual Studio .NET 2003 (7.1)
 	Load the solution (.sln file) and build the gdal project.
 	More details can be found at http://vterrain.org/Distrib/gdal.html.
 
-  Moreover, ORFEO Toolbox projet provided for you binaries windows distribution of gdal1.6.0 library. These files can 
+  Moreover, ORFEO Toolbox project provides for you windows binaries for gdal1.6.0 library. These files can 
   be downloaded at http://www.orfeo-toolbox.org/packages
 
 2. Install Fltk
