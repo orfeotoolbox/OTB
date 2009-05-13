@@ -87,7 +87,8 @@ public:
 
   typedef otb::ImageLayerGenerator<LayerType>                                        LayerGeneratorType;
   typedef LayerGeneratorType::Pointer                                                LayerGeneratorPointerType;
-  typedef LayerGeneratorType::RenderingFunctionType                                  StandardRenderingFunctionType;
+  typedef LayerGeneratorType::RenderingFunctionType                                  RenderingFunctionType;
+  typedef LayerGeneratorType::DefaultRenderingFunctionType                           StandardRenderingFunctionType;
 
   typedef Function::ModulusRenderingFunction<ImageType::InternalPixelType, RGBPixelType>    ModulusRenderingFunction;
   typedef Function::PhaseRenderingFunction<ImageType::InternalPixelType, RGBPixelType>      PhaseRenderingFunction;
@@ -132,7 +133,7 @@ public:
     VisuModelPointerType                   pRendering;
     WidgetControllerPointerType            pWidgetController;
     VisuViewPointerType                    pVisuView;
-    StandardRenderingFunctionType::Pointer pRenderFuntion;
+    RenderingFunctionType::Pointer         pRenderFuntion;
     PixelDescriptionViewType::Pointer      pPixelView;
     PixelDescriptionModelPointerType       pPixelModel;
     CurvesWidgetType::Pointer              pCurveWidget;

@@ -75,7 +75,7 @@ ImageViewerManagerModel
   visuGenerator->SetImage(reader->GetOutput());
   FltkFilterWatcher qlwatcher(visuGenerator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
   visuGenerator->GenerateLayer();
-  StandardRenderingFunctionType::Pointer  rendrerFuntion  = visuGenerator->GetDefaultRenderingFunction();
+  RenderingFunctionType::Pointer  rendrerFuntion  = visuGenerator->GetRenderingFunction();
 
   /** Rendering image*/
   VisuModelPointerType rendering = VisuModelType::New();
@@ -198,7 +198,7 @@ void
 ImageViewerManagerModel
 ::UpdateRGBChannelOrder(int redChoice , int greenChoice, int BlueChoice, unsigned int selectedItem)
 {
-  StandardRenderingFunctionType::Pointer renderFunction = m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion;
+  RenderingFunctionType::Pointer renderFunction = m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion;
   renderFunction->SetRedChannelIndex(redChoice);
   renderFunction->SetGreenChannelIndex(greenChoice);
   renderFunction->SetBlueChannelIndex(BlueChoice);
@@ -217,7 +217,7 @@ void
 ImageViewerManagerModel
 ::UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem)
 {
-  StandardRenderingFunctionType::Pointer renderFunction = m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion;
+  RenderingFunctionType::Pointer renderFunction = m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion;
   renderFunction->SetAllChannels(choice);
 
   //Update the layer
@@ -234,7 +234,8 @@ void
 ImageViewerManagerModel
 ::UpdateModulusChannelOrder(int realChoice , int imChoice, unsigned int selectedItem )
 {
-  ModulusRenderingFunction::Pointer modulusFunction = ModulusRenderingFunction::New();
+  RenderingFunctionType::Pointer modulusFunction;
+  modulusFunction = ModulusRenderingFunction::New();
   modulusFunction->SetRedChannelIndex(realChoice);
   modulusFunction->SetGreenChannelIndex(imChoice);
   modulusFunction->Initialize();
@@ -254,7 +255,8 @@ void
 ImageViewerManagerModel
 ::UpdatePhaseChannelOrder(int realChoice , int imChoice, unsigned int selectedItem )
 {
-  PhaseRenderingFunction::Pointer phaseFunction = PhaseRenderingFunction::New();
+  RenderingFunctionType::Pointer phaseFunction;
+  phaseFunction = PhaseRenderingFunction::New();
   phaseFunction->SetRedChannelIndex(realChoice);
   phaseFunction->SetGreenChannelIndex(imChoice);
   phaseFunction->Initialize();

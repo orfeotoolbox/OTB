@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageViewerManagerViewGUI_h 
-#define __otbImageViewerManagerViewGUI_h 
+#ifndef __otbImageViewerManagerViewGUI_h
+#define __otbImageViewerManagerViewGUI_h
 
 #include "otbImageViewerManagerEventsListener.h"
 
@@ -73,25 +73,26 @@ public:
 
   /** Controller */
   typedef ImageViewerManagerControllerInterface::Pointer  ImageViewerManagerControllerInterfacePointerType;
-  
+
   /** Model*/
   typedef ImageViewerManagerModel                                 ImageViewerManagerModelType;
   typedef ImageViewerManagerModelType::VisuModelType              VisuModelType;  //rendreing Image
   typedef ImageViewerManagerModelType::VisuModelPointerType       VisuModelPointerType;  //rendreing Image
   typedef ImageViewerManagerModelType::PixelDescriptionModelType  PixelDescriptionModelType;  //rendreing Image
-  typedef ImageViewerManagerModelType::LayerType::HistogramType   HistogramType;        
+  typedef ImageViewerManagerModelType::LayerType::HistogramType   HistogramType;
   typedef ImageViewerManagerModelType::OffsetType                 OffsetType;
+  typedef ImageViewerManagerModelType::RenderingFunctionType      RenderingFunctionType;
   typedef ImageViewerManagerModelType::StandardRenderingFunctionType StandardRenderingFunctionType;
-  
+
   typedef ImageView<VisuModelType>                                VisuViewType;
   typedef VisuViewType::Pointer                                   VisuViewPointerType;
-  
-  /* Method to display the Widget : Packed or Splitted */ 
+
+  /* Method to display the Widget : Packed or Splitted */
   typedef PackedWidgetManager                                     PackedWidgetManagerType;
   typedef PackedWidgetManagerType::Pointer                        PackedWidgetManagerPointerType;
   typedef SplittedWidgetManager                                   SplittedWidgetManagerType;
   typedef SplittedWidgetManagerType::Pointer                      SplittedWidgetManagerPointerType;
-  
+
   /** Widget for the preview*/
   typedef ImageWidget<>                                           ImageWidgetType;
   typedef ImageWidgetType::SizeType                               SizeType;
@@ -102,22 +103,22 @@ public:
   typedef CurvesWidgetType::Pointer                                CurvesWidgetPointerType;
   typedef HistogramCurve<HistogramType>                            HistogramCurveType;
   typedef HistogramCurveType::Pointer                              HistogramCurvePointerType;
-  
+
   /** Pixel Description View*/
   typedef PixelDescriptionView<PixelDescriptionModelType>         PixelDescriptionViewType;
-  
+
   /** vector to store the status of images : diplayed or not displayed*/
   //---> Note : if the packed view is selected : 2nd boolean false, Splitted view : 2nd boolean true
   typedef std::pair<bool, bool>                                   PairType;
   typedef std::pair<unsigned int ,unsigned int>                   UIntPairType;
   typedef std::vector<PairType>                                   BoolVector;
   typedef std::vector<UIntPairType>                               UIntPairVector;
-  
+
   /** list in order to store the diplay manager*/
   typedef WidgetManager                                           WidgetManagerType;
   typedef ObjectList<WidgetManagerType>                           WidgetManagerList;
-  
-  
+
+
   /** Method to set the controller*/
   itkGetObjectMacro(ImageViewerManagerController,ImageViewerManagerControllerInterface);
 
@@ -127,64 +128,64 @@ public:
     m_VisuView->SetController(m_ImageViewerManagerController->GetVisuController());
     m_PreviewWidget->SetController(m_ImageViewerManagerController->GetPreviewVisuController());
   }
-  
-  // Visu  
+
+  // Visu
   itkGetMacro(VisuView,VisuViewPointerType);
   itkGetMacro(PreviewWidget,ImageWidgetPointerType );
-  
+
   // Show()
   virtual void Show();
 
   // Update the display
   virtual void ImageViewerManagerNotify();
-  
+
   //
   virtual void OpenImage(const char * inputFileName);
-  
+
 protected:
   virtual void   OpenImage();
   virtual void   Initialize(const char * cfname);
-  virtual void   CloseImage(); 
+  virtual void   CloseImage();
   virtual void   ViewerSetup();
-  virtual void   ViewerSetupOk(); 
-  virtual void   ViewerSetupCancel(); 
-  
+  virtual void   ViewerSetupOk();
+  virtual void   ViewerSetupCancel();
+
   virtual void   AddImageListName();
-  virtual void   Quit(); 
-  virtual void   SelectAction(); 
+  virtual void   Quit();
+  virtual void   SelectAction();
   virtual double UpdatePreviewWidgetIsotropicZoom(SizeType size);
-  virtual void   ShowHide(); 
+  virtual void   ShowHide();
   virtual void   CloseAllDisplayedImages(bool showHideEvent);
   virtual void   ShowTemporaryClosedDisplay();
-  virtual void   HideAll(); 
+  virtual void   HideAll();
   virtual void   Display(WidgetManagerList::Pointer  widgetList, unsigned int selectedItem);
-  virtual void   Undisplay(unsigned int selectedItem); 
+  virtual void   Undisplay(unsigned int selectedItem);
   virtual void   UpdateImageListShowed(unsigned int selectedItem, std::string status);
-  virtual void   GrayScaleSet(); 
-  virtual void   RGBSet(); 
-  virtual void   ComplexSet(); 
-  virtual void   Diaporama(); 
-  virtual void   DisplayDiaporama(); 
-  virtual void   DiaporamaNext();   
-  virtual void   DiaporamaPrevious(); 
-  virtual void   DiaporamaQuit(); 
-  
-  virtual void   UpdateInformation(unsigned int selectedItem); 
-  virtual void   UpdateViewerSetupWindow(unsigned int selectedItem); 
+  virtual void   GrayScaleSet();
+  virtual void   RGBSet();
+  virtual void   ComplexSet();
+  virtual void   Diaporama();
+  virtual void   DisplayDiaporama();
+  virtual void   DiaporamaNext();
+  virtual void   DiaporamaPrevious();
+  virtual void   DiaporamaQuit();
+
+  virtual void   UpdateInformation(unsigned int selectedItem);
+  virtual void   UpdateViewerSetupWindow(unsigned int selectedItem);
   virtual void   DisplayPreviewWidget(unsigned int selectedItem);
   virtual void   SplittedViewMode();
   virtual void   PackedViewMode();
-  virtual void   UpdateDiaporamaProgressBar(); 
+  virtual void   UpdateDiaporamaProgressBar();
 
   virtual const char * CutFileName(unsigned int selectedItem);
-  
-  virtual void LinkSetup(); 
-  virtual void LinkSetupSave(); 
-  virtual void UpdateLinkSetupWindow(); 
+
+  virtual void LinkSetup();
+  virtual void LinkSetupSave();
+  virtual void UpdateLinkSetupWindow();
   virtual void LinkSetupOk();
   virtual void LinkSetupRemove();
   virtual void InitializeImageController(unsigned int selectedItem );
-    
+
   /** Constructor */
   ImageViewerManagerViewGUI();
   /** Destructor */
@@ -195,13 +196,13 @@ protected:
 private:
   ImageViewerManagerViewGUI(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   /** Pointer to the model */
   ImageViewerManagerModel::Pointer               m_ImageViewerManagerModel;
-  
+
   /** Pointer to the controller */
   ImageViewerManagerControllerInterface::Pointer m_ImageViewerManagerController;
-  
+
   //
   BoolVector                                     m_DisplayStatusList;
   std::vector<bool>                              m_LinkedDisplayStatusList;
@@ -209,16 +210,16 @@ private:
   std::string                                    m_TemplateViewerName;
   std::string                                    m_DisplayedLabel;
   std::string                                    m_UndisplayedLabel ;
-  
+
   //Widget Manager
-  WidgetManagerList::Pointer                     m_WidgetManagerList;  
-  WidgetManagerList::Pointer                     m_LinkWidgetManagerList;  
+  WidgetManagerList::Pointer                     m_WidgetManagerList;
+  WidgetManagerList::Pointer                     m_LinkWidgetManagerList;
 
   //SlideShow widget Manager
   PackedWidgetManagerType::Pointer               m_WidgetManager;
 
   VisuViewPointerType                            m_VisuView;
-  
+
   /**ImageWidget for my preview*/
   ImageWidgetPointerType                         m_PreviewWidget;
 
@@ -228,7 +229,7 @@ private:
   HistogramCurveType::ColorType                 m_Red;
   HistogramCurveType::ColorType                 m_Green;
   HistogramCurveType::ColorType                 m_Blue;
-  
+
   /** Store the component number of a pixel*/
   unsigned int                                  m_DiaporamaCurrentIndex;
 

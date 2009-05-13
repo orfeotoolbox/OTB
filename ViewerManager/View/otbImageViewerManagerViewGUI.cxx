@@ -48,19 +48,19 @@ ImageViewerManagerViewGUI
   this->CreateGUI();
   bSplitted->activate();
   bPacked->activate();
-  
+
   //Create buffer for the guiViewerInformation
   Fl_Text_Buffer * buffer = new Fl_Text_Buffer();
   this->guiViewerInformation->buffer(buffer);
-  
+
   //init the previewWindow
   m_PreviewWidget->label("PreviewWidget");
   gPreviewWindow->add(m_PreviewWidget);
   gPreviewWindow->box(FL_NO_BOX);
   gPreviewWindow->resizable(gPreviewWindow);
   m_PreviewWidget->resize(gPreviewWindow->x(), gPreviewWindow->y(), gPreviewWindow->w(), gPreviewWindow->h() );
-  
-  //Color Definition    
+
+  //Color Definition
   m_Red.Fill(0);
   m_Green.Fill(0);
   m_Blue.Fill(0);
@@ -68,10 +68,10 @@ ImageViewerManagerViewGUI
   m_Green[1]= 1.;   m_Green[3] = 0.5;
   m_Blue[2] = 1.;   m_Blue[3]  = 0.5;
 
-  //Slide Show 
+  //Slide Show
   m_WidgetManager  =  PackedWidgetManagerType::New();
 }
-  
+
   /**
    *
    */
@@ -84,7 +84,7 @@ ImageViewerManagerViewGUI
 }
 
 /**
- * 
+ *
  */
 void
 ImageViewerManagerViewGUI
@@ -93,23 +93,23 @@ ImageViewerManagerViewGUI
   std::string pikedFileName="";
   char * cfname ;
   cfname = fl_file_chooser("Pick an image file", "*.*",pikedFileName.c_str());
-  
+
   if (cfname == NULL || strlen(cfname)<1)
     {
       otbMsgDebugMacro(<<"Empty file name!");
       return ;
     }
-  
+
   Fl::check();
   guiMainWindow->redraw();
 
-  //Initialize 
+  //Initialize
   this->Initialize(cfname);
 }
 
 
 /**
- * 
+ *
  */
 void
 ImageViewerManagerViewGUI
@@ -117,33 +117,33 @@ ImageViewerManagerViewGUI
 {
   //Initialise the boolean pair
   PairType      pair(false,false); //(Not displayed , Packed View)
-  
+
   //Put a new WidgetManager in the list
   if(bSplitted->value() && !bPacked->value())
     {
-      SplittedWidgetManagerType::Pointer widgetManager      =  SplittedWidgetManagerType::New(); 
-      SplittedWidgetManagerType::Pointer linkwidgetManager  =  SplittedWidgetManagerType::New(); 
-      
+      SplittedWidgetManagerType::Pointer widgetManager      =  SplittedWidgetManagerType::New();
+      SplittedWidgetManagerType::Pointer linkwidgetManager  =  SplittedWidgetManagerType::New();
+
       m_WidgetManagerList->PushBack(widgetManager);
       m_LinkWidgetManagerList->PushBack(linkwidgetManager);
       pair.second = true;
     }
   else
     {
-      PackedWidgetManagerType::Pointer widgetManager         =   PackedWidgetManagerType::New(); 
-      PackedWidgetManagerType::Pointer linkwidgetManager     =   PackedWidgetManagerType::New(); 
+      PackedWidgetManagerType::Pointer widgetManager         =   PackedWidgetManagerType::New();
+      PackedWidgetManagerType::Pointer linkwidgetManager     =   PackedWidgetManagerType::New();
       m_WidgetManagerList->PushBack(widgetManager);
       m_LinkWidgetManagerList->PushBack(linkwidgetManager);
     }
-  
+
   //Put the status of the last added image
   m_DisplayStatusList.push_back(pair);
   m_LinkedDisplayStatusList.push_back(false);
-  
+
   // Call the Controller
   m_ImageViewerManagerController->OpenInputImage(cfname);
 
-  //Update the Progress Bar 
+  //Update the Progress Bar
   this->UpdateDiaporamaProgressBar();
 
   //Update the Link Setup
@@ -159,7 +159,7 @@ ImageViewerManagerViewGUI
 {
   if(m_ImageViewerManagerModel->GetHasImageOpened())
     this->AddImageListName();
-  
+
   //Update the widget when channel order modified
   if(m_ImageViewerManagerModel->GetHasChangedChannelOrder())
     {
@@ -169,7 +169,7 @@ ImageViewerManagerViewGUI
 
       //DipalyPreviewWidget
       this->DisplayPreviewWidget(selectedItem);
-                
+
       //Update the widget dispalyed
       if(m_DisplayStatusList[selectedItem-1].first)
 	{
@@ -197,24 +197,24 @@ ImageViewerManagerViewGUI
     {
       this->Undisplay(selectedItem);
     }
-  
+
   //Check if the closed image is linked and showed
   // if it is the case : undisplay it and update the linkSetup
   if(guiLinkSetupWindow->shown() != 0)
-    {  
+    {
       if(guiImageList->size() > 1)
 	{
 	  if(m_LinkedDisplayStatusList[selectedItem-1])
 	    for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size() ; i++)
 	      if(m_LinkedDisplayStatusList[i])
 		{
-		  m_LinkWidgetManagerList->GetNthElement(i)->Hide(); 
+		  m_LinkWidgetManagerList->GetNthElement(i)->Hide();
 		  m_LinkedDisplayStatusList[i] = false;
 		}
 	}
     }
-  
-  
+
+
   //Erase the item selected
   m_PreviewWidget->hide();
   guiImageList->remove(selectedItem);
@@ -229,8 +229,8 @@ ImageViewerManagerViewGUI
   m_LinkedDisplayStatusList.erase( m_LinkedDisplayStatusList.begin()+(selectedItem-1));
   m_WidgetManagerList->Erase(selectedItem-1);
   m_LinkWidgetManagerList->Erase(selectedItem-1);
-  
-  
+
+
   //Diaporama
   if(guiDiaporama->shown() != 0)
     {
@@ -244,11 +244,11 @@ ImageViewerManagerViewGUI
 		{
 		  this->DiaporamaPrevious();
 		}
-	      else 
+	      else
 		{
 		  //if the closed image is the first one : show the next one
 		  this->UpdateDiaporamaProgressBar();
-		  ++m_DiaporamaCurrentIndex;            //Increment to show the next image 
+		  ++m_DiaporamaCurrentIndex;            //Increment to show the next image
 		  this->DisplayDiaporama();
 		  --m_DiaporamaCurrentIndex;            //Decrement because we remove the first image, so the current display become the first
 		}
@@ -257,7 +257,7 @@ ImageViewerManagerViewGUI
 	    {
 	      if(selectedItem < m_DiaporamaCurrentIndex+1)
 		{
-		  --m_DiaporamaCurrentIndex;         //Increment the current index because an image before the one displayed is removed 
+		  --m_DiaporamaCurrentIndex;         //Increment the current index because an image before the one displayed is removed
 		}
 	      this->UpdateDiaporamaProgressBar();
 	    }
@@ -275,22 +275,22 @@ ImageViewerManagerViewGUI
     }
 
     //
-    //Udpate the controller of the image linked with the suppressed one 
+    //Udpate the controller of the image linked with the suppressed one
     if(guiImageList->size() > 0)
     this->InitializeImageController(selectedItem);
 
   //Call the controller
   m_ImageViewerManagerController->CloseImage(selectedItem);
-  
+
   //Update the Link Setup
   this->UpdateLinkSetupWindow();
-  
 
-    
+
+
  }
 
  /**
-  * Show the mainWindow 
+  * Show the mainWindow
   */
  void
  ImageViewerManagerViewGUI
@@ -332,7 +332,7 @@ ImageViewerManagerViewGUI
        return;
      }
 
-   //Update the radio button 
+   //Update the radio button
    if( m_DisplayStatusList[selectedItem-1].second)
      {
        bSplitted->value(true);
@@ -347,7 +347,7 @@ ImageViewerManagerViewGUI
    //DipalyPreviewWidget
    this->DisplayPreviewWidget(selectedItem);
 
-   //Update SelectedImageInformation 
+   //Update SelectedImageInformation
    this->UpdateInformation(selectedItem);
 
    //Udpate the ViewerGUISetup
@@ -370,7 +370,7 @@ ImageViewerManagerViewGUI
    ImageViewerManagerModelType::ViewerImageType * quickLook = rendering->GetRasterizedQuicklook();
    m_PreviewWidget->ReadBuffer(quickLook, quickLook->GetLargestPossibleRegion());
 
-   double newIsotropicZoom = this->UpdatePreviewWidgetIsotropicZoom(quickLook->GetLargestPossibleRegion().GetSize());  
+   double newIsotropicZoom = this->UpdatePreviewWidgetIsotropicZoom(quickLook->GetLargestPossibleRegion().GetSize());
    m_PreviewWidget->SetIsotropicZoom(newIsotropicZoom);
    m_PreviewWidget ->show();
    m_PreviewWidget->redraw();
@@ -379,7 +379,7 @@ ImageViewerManagerViewGUI
 
 
  /**
-  * Compute the size of the 
+  * Compute the size of the
   */
  double
  ImageViewerManagerViewGUI
@@ -412,7 +412,7 @@ ImageViewerManagerViewGUI
        //check what to do
        if(!m_DisplayStatusList[selectedItem-1].first)
 	 {
-	   //New Display 
+	   //New Display
 	   m_DisplayStatusList[selectedItem-1].first = true;
 	   this->UpdateImageListShowed(selectedItem, m_DisplayedLabel);
 	   this->Display(m_WidgetManagerList,selectedItem);
@@ -433,12 +433,12 @@ ImageViewerManagerViewGUI
  ImageViewerManagerViewGUI
  ::Display(WidgetManagerList::Pointer  widgetList, unsigned int selectedItem)
  {
-   //Get the view stored in the model 
+   //Get the view stored in the model
    CurvesWidgetType::Pointer         curveWidget         =  m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pCurveWidget;
    VisuViewPointerType               currentVisuView     =  m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pVisuView;
 
    //First get the histogram list
-   StandardRenderingFunctionType::Pointer pRenderingFuntion = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
+   RenderingFunctionType::Pointer pRenderingFuntion = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
 
    HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
    HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
@@ -463,10 +463,10 @@ ImageViewerManagerViewGUI
    curveWidget->SetXAxisLabel("Pixels");
    curveWidget->SetYAxisLabel("Frequency");
 
-   //Get the pixelView 
+   //Get the pixelView
    PixelDescriptionViewType::Pointer pixelView = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pPixelView;
 
- //   //Edit the Widget Manager 
+ //   //Edit the Widget Manager
  //   m_WidgetManagerList->GetNthElement(selectedItem-1)->UnRegisterAll();
  //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterFullWidget(currentVisuView->GetFullWidget());
  //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterScrollWidget(currentVisuView->GetScrollWidget());
@@ -549,7 +549,7 @@ ImageViewerManagerViewGUI
    m_WidgetManagerList->GetNthElement(selectedItem-1)->Hide();
    m_WidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
 
-   //Update the link list 
+   //Update the link list
    m_LinkWidgetManagerList->GetNthElement(selectedItem-1)->Hide();
    m_LinkWidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
 
@@ -603,7 +603,7 @@ ImageViewerManagerViewGUI
  ImageViewerManagerViewGUI
  ::Undisplay(unsigned int selectedItem)
  {
-   m_WidgetManagerList->GetNthElement(selectedItem-1)->Hide(); 
+   m_WidgetManagerList->GetNthElement(selectedItem-1)->Hide();
    m_WidgetManagerList->GetNthElement(selectedItem-1)->UnRegisterAll();
  }
 
@@ -620,7 +620,7 @@ ImageViewerManagerViewGUI
  }
 
  /**
-  * Close all the displayed images: 
+  * Close all the displayed images:
   * showHideEvent : if true clear the showedlist else don't clear.
   */
  void
@@ -628,7 +628,7 @@ ImageViewerManagerViewGUI
  ::CloseAllDisplayedImages(bool showHideEvent)
  {
    // Set the display Label to undislayed
-   for(unsigned int i = 0; i<m_DisplayStatusList.size() ; i++)    
+   for(unsigned int i = 0; i<m_DisplayStatusList.size() ; i++)
      {
        if(m_DisplayStatusList[i].first)
 	 {
@@ -665,7 +665,7 @@ ImageViewerManagerViewGUI
  {
    guiMainWindow->hide();
 
-   for(unsigned int i = 0; i<m_DisplayStatusList.size() ; i++)    
+   for(unsigned int i = 0; i<m_DisplayStatusList.size() ; i++)
      if(m_DisplayStatusList[i].first)
        {
 	 m_WidgetManagerList->GetNthElement(i)->Hide();
@@ -687,7 +687,7 @@ ImageViewerManagerViewGUI
        for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size() ; i++)
 	 if(m_LinkedDisplayStatusList[i])
 	   {
-	     m_LinkWidgetManagerList->GetNthElement(i)->Hide(); 
+	     m_LinkWidgetManagerList->GetNthElement(i)->Hide();
 	   }
      }
 
@@ -772,16 +772,16 @@ ImageViewerManagerViewGUI
    case 1 :
      this->GrayScaleSet();
      break;
-   case 4 : 
+   case 4 :
      this->RGBSet();
      break;
-   case 3 : 
+   case 3 :
      this->RGBSet();
-     break;    
+     break;
    case 2:
      this->ComplexSet();
      break;
-   default : 
+   default :
      break;
    }
 
@@ -792,7 +792,7 @@ ImageViewerManagerViewGUI
  /**
   * RGBSet();
   */
- void 
+ void
  ImageViewerManagerViewGUI
  ::RGBSet()
  {
@@ -806,7 +806,7 @@ ImageViewerManagerViewGUI
    ImageViewerManagerModelType::ReaderPointerType reader = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pReader;
    unsigned int nbComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
 
-   StandardRenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
+   RenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
 
    guiViewerSetupColorMode->set();
    guiViewerSetupComplexMode->clear();
@@ -830,7 +830,7 @@ ImageViewerManagerViewGUI
  /**
   * GrayScale();
   */
- void 
+ void
  ImageViewerManagerViewGUI
  ::GrayScaleSet()
  {
@@ -843,7 +843,7 @@ ImageViewerManagerViewGUI
    ImageViewerManagerModelType::ReaderPointerType reader = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pReader;
    unsigned int nbComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
 
-   StandardRenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
+   RenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
 
    guiViewerSetupGrayscaleMode->set();
    guiViewerSetupComplexMode->clear();
@@ -875,7 +875,7 @@ ImageViewerManagerViewGUI
    ImageViewerManagerModelType::ReaderPointerType reader = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pReader;
    unsigned int nbComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
 
-   StandardRenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
+   RenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
 
    guiViewerSetupComplexMode->set();
    guiViewerSetupColorMode->clear();
@@ -896,7 +896,7 @@ ImageViewerManagerViewGUI
  /**
   * ViewerSetup();
   */
- void 
+ void
  ImageViewerManagerViewGUI
  ::ViewerSetup()
  {
@@ -909,7 +909,7 @@ ImageViewerManagerViewGUI
    guiViewerSetupWindow->show();
  }
 
- void 
+ void
  ImageViewerManagerViewGUI
  ::ViewerSetupOk()
  {
@@ -949,7 +949,7 @@ ImageViewerManagerViewGUI
      }
  }
 
- void 
+ void
  ImageViewerManagerViewGUI
  ::ViewerSetupCancel()
  {
@@ -1001,18 +1001,18 @@ ImageViewerManagerViewGUI
  ImageViewerManagerViewGUI
  ::DisplayDiaporama()
  {
-   //Get the view stored in the model 
+   //Get the view stored in the model
   CurvesWidgetType::Pointer         curveWidget         =  m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pCurveWidget;
   VisuViewPointerType               currentVisuView     =  m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pVisuView;
-  
+
   //First get the histogram list
-  StandardRenderingFunctionType::Pointer pRenderingFuntion = m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pRenderFuntion;
-  
+  RenderingFunctionType::Pointer pRenderingFuntion = m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pRenderFuntion;
+
   HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
   HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
   HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
-  
-  //Color Definition    
+
+  //Color Definition
   HistogramCurveType::ColorType                 Red;
   HistogramCurveType::ColorType                 Green;
   HistogramCurveType::ColorType                 Blue;
@@ -1029,21 +1029,21 @@ ImageViewerManagerViewGUI
   bhistogram->SetLabelColor(Blue);
   rhistogram->SetHistogramColor(Red);
   rhistogram->SetLabelColor(Red);
-  
+
   rhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(pRenderingFuntion->GetRedChannelIndex()));
   ghistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(pRenderingFuntion->GetGreenChannelIndex()));
   bhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(pRenderingFuntion->GetBlueChannelIndex()));
-  
+
   curveWidget->ClearAllCurves();
   curveWidget->AddCurve(bhistogram);
   curveWidget->AddCurve(ghistogram);
   curveWidget->AddCurve(rhistogram);
   curveWidget->SetXAxisLabel("Pixels");
   curveWidget->SetYAxisLabel("Frequency");
-  
-  //Get the pixelView 
+
+  //Get the pixelView
   PixelDescriptionViewType::Pointer pixelView = m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pPixelView;
-  
+
   //Edit the Widget Manager
   m_WidgetManager->UnRegisterAll();
   m_WidgetManager->RegisterFullWidget(currentVisuView->GetFullWidget());
@@ -1136,9 +1136,9 @@ ImageViewerManagerViewGUI
   guiLinkListRight->clear();
   guiLinkListLeft->value(0);
   guiLinkListRight->value(0);
-  
+
   //Fill the guiLinkList
-  
+
   for (int i = 0 ; i < guiImageList->size() ; i++)
     {
       oss.str("");
@@ -1163,28 +1163,28 @@ ImageViewerManagerViewGUI
 {
   unsigned int leftChoice = guiLinkListLeft->value();
   unsigned int rightChoice = guiLinkListRight->value();
-  
+
   if(leftChoice == 0 || rightChoice == 0)
     return;
   else
     {
-      //Fill the offset 
+      //Fill the offset
       OffsetType                      offSet;
       offSet[0] = atoi(guiLinkXOffset->value());
       offSet[1] = atoi(guiLinkYOffset->value());
 
-      //Update a list to 
-      
+      //Update a list to
+
       //Call the controller
       this->m_ImageViewerManagerController->Link(leftChoice, rightChoice,offSet);
-      
+
       //Close the temporary Showed images without clearing the showed list
       this->CloseAllDisplayedImages(false);
-      
+
       //Add the linked image to the list
       m_LinkedDisplayStatusList[leftChoice-1] = true;
       m_LinkedDisplayStatusList[rightChoice-1] = true;
-      
+
       //store  the images linked together
       UIntPairType        linkPair(leftChoice,rightChoice);
       m_LinkedImageList.push_back(linkPair);
@@ -1203,13 +1203,13 @@ ImageViewerManagerViewGUI
 ::LinkSetupOk()
 {
   guiLinkSetupWindow->hide();
-  
+
   //Close the  displays linked
   for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size() ; i++)
     {
       if(m_LinkedDisplayStatusList[i])
 	{
-	  m_LinkWidgetManagerList->GetNthElement(i)->Hide(); 
+	  m_LinkWidgetManagerList->GetNthElement(i)->Hide();
 	  m_LinkedDisplayStatusList[i] = false;
 	}
     }
@@ -1219,7 +1219,7 @@ ImageViewerManagerViewGUI
 }
 
 /**
- * 
+ *
  */
 void
 ImageViewerManagerViewGUI
@@ -1229,7 +1229,7 @@ ImageViewerManagerViewGUI
   for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size() ; i++)
     if(m_LinkedDisplayStatusList[i])
       {
-	m_LinkWidgetManagerList->GetNthElement(i)->Hide(); 
+	m_LinkWidgetManagerList->GetNthElement(i)->Hide();
 	m_LinkedDisplayStatusList[i] = false;
       }
 }
@@ -1242,30 +1242,30 @@ ImageViewerManagerViewGUI
 ::InitializeImageController(unsigned int selectedItem)
 {
   std::vector<unsigned int>  tempElementToRemove;
-    
+
   for(unsigned int i = 0 ; i< m_LinkedImageList.size(); i++ )
     {
       if(m_LinkedImageList[i].first == selectedItem || m_LinkedImageList[i].second == selectedItem)
-	{ 
-	
+	{
+
 	  if(m_LinkedImageList[i].first == selectedItem )
 	    m_ImageViewerManagerController->UpdateImageViewController(m_LinkedImageList[i].second);
-		  
+
 	  if(m_LinkedImageList[i].second == selectedItem)
 	    m_ImageViewerManagerController->UpdateImageViewController(m_LinkedImageList[i].first);
-	  
+
 	  tempElementToRemove.push_back(i);
 	}
     }
 
-  //Remove element from the list 
+  //Remove element from the list
   unsigned counter = 0;
   for(unsigned int p = 0; p < tempElementToRemove.size() ; p ++ )
     {
       m_LinkedImageList.erase(m_LinkedImageList.begin()+tempElementToRemove[p] - counter); // counter because the size of the list is decreasing after each iteration
       counter++;
     }
-  
+
   m_LinkedImageList.clear();
 }
 
