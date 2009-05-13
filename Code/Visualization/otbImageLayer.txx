@@ -232,7 +232,9 @@ ImageLayer<TImage,TOutputImage>
       // Compute quantiles
       min.push_back(static_cast<RenderingFunctionScalarPixelType>( m_HistogramList->GetNthElement(comp)->Quantile(0,m_AutoMinMaxQuantile)));
       max.push_back(static_cast<RenderingFunctionScalarPixelType>(m_HistogramList->GetNthElement(comp)->Quantile(0,1-m_AutoMinMaxQuantile)));
-      otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup():"<<" ("<<this->GetName()<<")"<< " component "<<comp<<", min= "<<min.back()<<", max= "<<max.back());
+      otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup():"<<" ("<<this->GetName()<<")"<< " component "<<comp
+          <<", min= "<< static_cast< typename itk::NumericTraits<typename RenderingFunctionType::ScalarType >::PrintType>(min.back())
+          <<", max= "<<static_cast< typename itk::NumericTraits<typename RenderingFunctionType::ScalarType >::PrintType>(max.back()));
       }
 
     // Setup rendering function

@@ -78,10 +78,10 @@ public:
   virtual const std::string Describe(const VectorPixelType & vpixel) const = 0;
 
   /** Get a string description of a pixel  (RGB pixel version) */
-  virtual const std::string Describe(const RGBPixelType & spixel) const = 0;
+  virtual const std::string Describe(const RGBPixelType & spixel) const = 0;//FIXME should it provide a default implementation?
 
   /** Get a string description of a pixel (RGBA pixel version) */
-  virtual const std::string Describe(const RGBAPixelType & vpixel) const = 0;
+  virtual const std::string Describe(const RGBAPixelType & vpixel) const = 0;//FIXME should it provide a default implementation?
 
   /** This method is available to allow implementation of
    * preprocessing.

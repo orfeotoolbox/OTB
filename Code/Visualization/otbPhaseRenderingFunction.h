@@ -136,6 +136,32 @@ public:
     return oss.str();
   }
 
+  inline const std::string Describe(const RGBPixelType & spixel) const
+  {
+    itk::OStringStream oss;
+    OutputPixelType output = this->Evaluate(spixel);
+    oss<<"RGB value: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[0])
+        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[1])
+        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[2])
+        << std::endl;
+    oss <<"   displayed: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[0])
+        <<std::endl;
+    return oss.str();
+  }
+
+  inline const std::string Describe(const RGBAPixelType & spixel) const
+  {
+    itk::OStringStream oss;
+    OutputPixelType output = this->Evaluate(spixel);
+    oss<<"RGBA value: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[0])
+        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[1])
+        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[2])
+        << " alpha: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[3])
+        << std::endl;
+    oss <<"   displayed: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[0])
+        <<std::endl;
+    return oss.str();
+  }
   /** Get the transfer function for tuning */
   TransferFunctionType & GetTransferFunction()
   {
