@@ -28,7 +28,7 @@ class ImageWidgetPackedManager {open
             label Histograms open
             xywh {10 348 180 109} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelcolor 187
           } {}
-          Fl_Group m_PixelInformationGroup {
+          Fl_Group m_PixelDescriptionGroup {
             label {Pixel Information} open
             xywh {10 473 180 121} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelcolor 187
           } {}

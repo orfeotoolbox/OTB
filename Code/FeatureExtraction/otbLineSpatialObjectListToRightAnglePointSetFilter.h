@@ -85,11 +85,11 @@ public:
 
 
   /** Set/Get the thresholds*/
-  itkGetMacro(ThresholdDistance, float);
-  itkSetMacro(ThresholdDistance, float);
+  itkGetMacro(ThresholdDistance, double);
+  itkSetMacro(ThresholdDistance, double);
   
-  itkGetMacro(ThresholdAngle, float);
-  itkSetMacro(ThresholdAngle, float);
+  itkGetMacro(ThresholdAngle, double);
+  itkSetMacro(ThresholdAngle, double);
 
 protected:
 
@@ -121,10 +121,6 @@ protected:
    */
   virtual void  GenerateData();
   /**
-   * Distance between segments computation
-   */
-  virtual double ComputeDistanceBetweenSegments(LineType * lineDst , LineType * lineSrc);
-  /**
    * Angle computation
    */
   virtual double ComputeAngleFormedBySegments(LineType * lineDst , LineType * lineSrc);
@@ -136,13 +132,14 @@ protected:
    * AddRightAngleToPointSet
    */
   virtual void AddRightAngleToPointSet(PointType rAngle  , LineType * LineDst , LineType* LineCur );
-
   /**
    * Compute the orienation of a segment
    */
   virtual double ComputeOrientation(LineType* line);
-  
-
+  /**
+   * Distance From a point rAngle to a segment line
+   */
+  virtual double ComputeDistanceFromPointToSegment(PointType rAngle ,LineType * line);
 
 private:
 
@@ -152,8 +149,8 @@ private:
   /** Smart pointer on the output PointSet*/
   OutputPointSetPointerType     m_OutputPointSet;
 
-  float m_ThresholdDistance;
-  float m_ThresholdAngle;
+  double m_ThresholdDistance;
+  double m_ThresholdAngle;
     
 };
 }

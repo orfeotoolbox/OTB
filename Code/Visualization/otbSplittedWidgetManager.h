@@ -53,7 +53,7 @@ class  SplittedWidgetManager
   virtual void RegisterScrollWidget(WidgetType* scrollWidget);
   virtual void RegisterZoomWidget(WidgetType* zoomWidget);
   virtual void RegisterHistogramWidget(WidgetType* curveWidget);
-  virtual void RegisterPixelInformationWidget(Fl_Output * pixelWidget);
+  virtual void RegisterPixelDescriptionWidget(Fl_Output * pixelWidget);
   virtual void Show();
   virtual void Hide();
   virtual void Refresh();

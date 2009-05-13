@@ -71,12 +71,12 @@ SplittedWidgetManager
 }
 void 
 SplittedWidgetManager
-::RegisterPixelInformationWidget(Fl_Output * pixelWidget)
+::RegisterPixelDescriptionWidget(Fl_Output * pixelWidget)
 {
   m_IntenalPixelWidget = pixelWidget;
-  m_SplittedWidget->m_PixelInformationGroup->add(pixelWidget);
-  m_SplittedWidget->m_PixelInformationGroup->resizable(pixelWidget);
-  pixelWidget->resize(0,0, m_SplittedWidget->m_PixelInformationGroup->w(),m_SplittedWidget->m_PixelInformationGroup->h());
+  m_SplittedWidget->m_PixelDescriptionGroup->add(pixelWidget);
+  m_SplittedWidget->m_PixelDescriptionGroup->resizable(pixelWidget);
+  pixelWidget->resize(0,0, m_SplittedWidget->m_PixelDescriptionGroup->w(),m_SplittedWidget->m_PixelDescriptionGroup->h());
 
 }
 
@@ -96,7 +96,7 @@ SplittedWidgetManager
 {
   m_SplittedWidget->m_FullGroup->show();
   m_SplittedWidget->m_ZoomGroup->show();
-  m_SplittedWidget->m_PixelInformationGroup->show();
+  m_SplittedWidget->m_PixelDescriptionGroup->show();
   m_SplittedWidget->m_QuicklookGroup->show();
   m_SplittedWidget->m_HistogramsGroup->show();
   
@@ -113,7 +113,7 @@ SplittedWidgetManager
 {
   m_SplittedWidget->m_FullGroup->hide();
   m_SplittedWidget->m_ZoomGroup->hide();
-  m_SplittedWidget->m_PixelInformationGroup->hide();
+  m_SplittedWidget->m_PixelDescriptionGroup->hide();
   m_SplittedWidget->m_QuicklookGroup->hide();
   m_SplittedWidget->m_HistogramsGroup->hide();
 }
@@ -146,7 +146,7 @@ SplittedWidgetManager
   itk::OStringStream oss3;
   oss3.str("");
   oss3 << "Pixel Information Widget - "<< label;
-  m_SplittedWidget->m_PixelInformationGroup->copy_label(oss3.str().c_str());
+  m_SplittedWidget->m_PixelDescriptionGroup->copy_label(oss3.str().c_str());
 
   itk::OStringStream oss4;
   oss4.str("");
@@ -165,7 +165,7 @@ SplittedWidgetManager
 {
   m_SplittedWidget->m_FullGroup->remove(m_InternalFullWidget);
   m_SplittedWidget->m_ZoomGroup->remove(m_InternalZoomWidget);
-  m_SplittedWidget->m_PixelInformationGroup->remove(m_IntenalPixelWidget);
+  m_SplittedWidget->m_PixelDescriptionGroup->remove(m_IntenalPixelWidget);
   m_SplittedWidget->m_QuicklookGroup->remove(m_InternalScrollWidget);
   m_SplittedWidget->m_HistogramsGroup->remove(m_InternalCurveWidget);
 }

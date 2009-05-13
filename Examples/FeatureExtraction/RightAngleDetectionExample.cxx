@@ -31,9 +31,9 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkMinimumMaximumImageCalculator.h"
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {qb_RoadExtract2.tif}
+//    INPUTS: {QB_Toulouse_Ortho_PAN.tif}
 //    OUTPUTS: {RighAngleOutput.tif}, {PrettyRighAngleInput.png},  {PrettyRighAngleOutput.png}
-//  0.09 20
+//  0.1 20
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -169,20 +169,21 @@ int main( int argc, char * argv[] )
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
-  // You can qualify how far the right angle must the segments be, and the tolerance 
+  // You can choose how far the right angle segments can be, and the tolerance 
   // to consider an angle between two segments as an right one.
   //
-  rightAngleFilter->SetThresholdAngle(angleThreshold);
-  rightAngleFilter->SetThresholdDistance(distanceThreshold);
-  //
+    //
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet  
+
+  rightAngleFilter->SetThresholdAngle(angleThreshold);
+  rightAngleFilter->SetThresholdDistance(distanceThreshold);
   
   rightAngleFilter->Update();
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
-  // We will now draw the right angles on top of the inout image. For
+  // We will now draw the right angles on top of the input image. For
   // this, we get the output of the right angle detector.
   //
   // Software Guide : EndLatex

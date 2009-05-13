@@ -22,8 +22,8 @@ class ImageWidgetSplittedManager {open
       label {Histogram Window}
       xywh {387 234 280 160} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
     } {}
-    Fl_Window m_PixelInformationGroup {
-      label {Pixel Information Window}
+    Fl_Window m_PixelDescriptionGroup {
+      label {Pixel Description Window}
       xywh {1309 633 215 160} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
     } {}
   }
