@@ -76,7 +76,8 @@ public:
   typedef typename ResampleFilterType::Pointer ResampleFilterPointerType;
 
   /** Rendering function typedef */
-  typedef typename ImageLayerType::DefaultRenderingFunctionType RenderingFunctionType;
+  typedef typename ImageLayerType::RenderingFunctionType RenderingFunctionType;
+  typedef typename ImageLayerType::DefaultRenderingFunctionType DefaultRenderingFunctionType;
   typedef typename RenderingFunctionType::Pointer RenderingFunctionPointerType;
 
   /** Blending function typedef */
@@ -125,7 +126,8 @@ public:
   itkGetMacro(ScreenRatio,double);
 
   /** Get the generated default rendering function */
-  itkGetObjectMacro(DefaultRenderingFunction,RenderingFunctionType);
+  itkSetObjectMacro(RenderingFunction,RenderingFunctionType);
+  itkGetObjectMacro(RenderingFunction,RenderingFunctionType);
 
   /** Set/Get the blending function */
   itkSetObjectMacro(BlendingFunction,BlendingFunctionType);
@@ -164,7 +166,7 @@ private:
   ImageLayerPointerType m_Layer;
 
   /** The default rendering function */
-  RenderingFunctionPointerType m_DefaultRenderingFunction;
+  RenderingFunctionPointerType m_RenderingFunction;
 
   /** Pointer to the blending function */
   BlendingFunctionPointerType m_BlendingFunction;

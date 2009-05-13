@@ -68,9 +68,19 @@ public:
     OutputRGBPixelType resp;
     resp.Fill(itk::NumericTraits<OutputValueType>::max());
     double alpha = static_cast<double>(input2.GetAlpha())/255.0 * m_Alpha;
-    resp.SetRed(  static_cast<OutputValueType>(vcl_floor((1-alpha) * static_cast<double>(input1.GetRed())   +alpha*static_cast<double>(input2.GetRed())  +0.5)));
-    resp.SetGreen(static_cast<OutputValueType>(vcl_floor((1-alpha) * static_cast<double>(input1.GetGreen()) +alpha*static_cast<double>(input2.GetGreen())+0.5)));
-    resp.SetBlue( static_cast<OutputValueType>(vcl_floor((1-alpha) * static_cast<double>(input1.GetBlue())  +alpha*static_cast<double>(input2.GetBlue()) +0.5)));
+
+    resp.SetRed(  static_cast<OutputValueType>(vcl_floor(0.5+
+                  (1.0-alpha) * static_cast<double>(input1.GetRed())
+                 + alpha * static_cast<double>(input2.GetRed())
+                                                        )));
+    resp.SetGreen(static_cast<OutputValueType>(vcl_floor(0.5+
+                  (1.0-alpha) * static_cast<double>(input1.GetGreen())
+                 + alpha * static_cast<double>(input2.GetGreen())
+                                                        )));
+    resp.SetBlue( static_cast<OutputValueType>(vcl_floor(0.5+
+                  (1.0-alpha) * static_cast<double>(input1.GetBlue())
+                 + alpha * static_cast<double>(input2.GetBlue())
+                                                        )));
     return resp;
   }
 

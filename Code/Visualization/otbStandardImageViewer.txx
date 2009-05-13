@@ -162,7 +162,7 @@ StandardImageViewer<TImage,TVectorData,TWidgetManager>
     m_Image->TransformIndexToPhysicalPoint(ur,pur);
     m_Image->TransformIndexToPhysicalPoint(ll,pll);
     m_Image->TransformIndexToPhysicalPoint(lr,plr);
-    
+
     // Build the cartographic region
     RemoteSensingRegionType rsRegion;
     typename RemoteSensingRegionType::IndexType rsOrigin;
@@ -191,7 +191,7 @@ StandardImageViewer<TImage,TVectorData,TWidgetManager>
     vproj->SetOutputSpacing(m_Image->GetSpacing());
     vproj->SetDEMDirectory(m_DEMDirectory);
     vproj->Update();
-    
+
      // Create a VectorData gl component
      typename VectorDataGlComponentType::Pointer vgl = VectorDataGlComponentType::New();
      vgl->SetVectorData(vproj->GetOutput());
@@ -201,14 +201,14 @@ StandardImageViewer<TImage,TVectorData,TWidgetManager>
       m_View->GetFullWidget()->AddGlComponent(vgl);
       m_View->GetZoomWidget()->AddGlComponent(vgl);
     }
-  
+
   // Generate the layer
   ImageLayerGeneratorPointerType generator = ImageLayerGeneratorType::New();
   generator->SetImage(m_Image);
   FltkFilterWatcher qlwatcher(generator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
   generator->GenerateLayer();
   m_ImageLayer = generator->GetLayer();
-  m_RenderingFunction = generator->GetDefaultRenderingFunction();
+  m_RenderingFunction = generator->GetRenderingFunction();
 
   // Set the window and layer label
   m_DisplayWindow->SetLabel(m_Label.c_str());

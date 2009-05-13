@@ -139,11 +139,11 @@ public:
     return resp;
   }
 
-  inline const std::string Describe(PixelType spixel) const
+  inline const std::string Describe(ScalarType spixel) const
   {
     itk::OStringStream oss;
     OutputPixelType output = this->Evaluate(spixel);
-    oss<<"Grayscale[value: "<< static_cast<typename itk::NumericTraits<PixelType>::PrintType>(spixel)<<", displayed: "<< static_cast<unsigned int>(output[0])<<"]";
+    oss<<"Grayscale [value: "<< static_cast<typename itk::NumericTraits<PixelType>::PrintType>(spixel)<<", displayed: "<< static_cast<unsigned int>(output[0])<<"]";
     return oss.str();
   }
 
@@ -198,6 +198,38 @@ public:
         oss<<"c= "<<channel<<",         v= "<<static_cast<typename itk::NumericTraits<PixelType>::PrintType>(vpixel[channel])<<std::endl;
         }
       }
+    return oss.str();
+  }
+
+  inline const std::string Describe(const RGBPixelType & spixel) const
+  {
+    itk::OStringStream oss;
+    OutputPixelType output = this->Evaluate(spixel);
+    oss<<"RGB value: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[0])
+        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[1])
+        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[2])
+        << std::endl;
+    oss <<"   displayed: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[0])
+        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[1])
+        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[2])
+        <<std::endl;
+    return oss.str();
+  }
+
+  inline const std::string Describe(const RGBAPixelType & spixel) const
+  {
+    itk::OStringStream oss;
+    OutputPixelType output = this->Evaluate(spixel);
+    oss<<"RGBA value: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[0])
+        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[1])
+        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[2])
+        << " alpha: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[3])
+        << std::endl;
+    oss <<"   displayed: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[0])
+        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[1])
+        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[2])
+        << " alpha: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[3])
+        <<std::endl;
     return oss.str();
   }
 
