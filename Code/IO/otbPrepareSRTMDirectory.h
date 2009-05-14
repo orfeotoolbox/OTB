@@ -29,7 +29,7 @@ namespace otb
 
 /**
    * \class PrepareSRTMDirectory
-   * \brief Prepare SRTM directory for Ossim from a full archive
+   * \brief <b>Deprecated</b> Prepare SRTM directory for Ossim from a full archive
    *
    *  As ossim has some issue with directories containing too many SRTM tiles
    * (>5000) this class enable to copy only the required tiles from
@@ -37,7 +37,8 @@ namespace otb
    * that will be passed as the argument of the SetDEMDirectoryPath() of
    * the otb::DEMToImageGenerator for example
    *
-   *
+   * <b>Note (2009/05/14):</b> this is apparently no longer needed with the recent
+ * versions of ossim. If you need to use it, please let us know the situation.
  */
 
 
