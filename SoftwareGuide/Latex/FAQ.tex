@@ -150,16 +150,11 @@ the following platforms:
   \item Linux/Unix with GCC (2.95.X, 3.3.X, 4.1.X, 4.2.X, 4.3.X)
   \item Windows with Microsoft Visual Studio C++ 7.1 .NET 2003
   \item Windows with Microsoft Visual Studio C++ 8.0 .NET 2005
-  \item Windows with MinGW (mingw + msys at \url{http://www.mingw.org})
+  \item Windows with Microsoft Visual Express 2005
+  \item Windows with Microsoft Visual Express 2008
   \item Cygwin (\url{http://www.cygwin.com})
   \item MacOS
   \item Open Solaris
-\end{itemize}
-
-Support for the following platforms is planned:
-\begin{itemize}
-  \item Windows with Microsoft Visual Express 2005.
-  \item Windows with Microsoft Visual Express 2008.
 \end{itemize}
 
 \subsection{Which libraries/packages are needed before installing
@@ -176,7 +171,7 @@ In order to install OTB on your system follow these steps (in the
 given order):
 \begin{enumerate}
   \item Install CMake (binary packages are available for most platforms).
-  \item Install GDAL (binary packages are available for most platforms).
+  \item Install GDAL (binary packages are available for most platforms, some are available on \url{http://www.orfeo-toolbox.org/packages}).
   \item Install OTB using CMake for the configuration.
 \end{enumerate}
 
@@ -296,16 +291,16 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 
 \end{enumerate}
 
-\subsubsection{Microsoft Visual Studio C++ 7.1}
+\subsubsection{Microsoft Visual Studio (7.1 .NET 2003/8.0 .NET 2005/Express 2005/Express 2008)}
 \begin{enumerate}
 \item Install GDAL
 
-	Get the binary package from \url{http://www.gdal.org/} and follow the instruction to install. If it fail, proceed to the installation from the source.
+	Get the binary package from \url{http://www.gdal.org/} and follow the instruction to install. If it fails, proceed to the installation from the source.
 
 
         From source:
 
-	MSVC++ 7.1 project files are needed to compile GDAL.
+	MSVC++ project files are needed to compile GDAL.
 
 	These files can be downloaded at \url{http://vterrain.org/dist/gdal151-vc71.zip}.
 
@@ -315,80 +310,36 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 
 	More details can be found at \url{http://vterrain.org/Distrib/gdal.html}.
 
+    Binary packages are also available from \url{http://www.orfeo-toolbox.org/packages}.
 
-\item Install OTB
+\item Install OTB with CMake (Example for release mode, with internal FLTK and ITK)
 
-	Use CMake on Windows to generate MSVC++ 7.1 project files from otb sources.
+    First give the path where the source code is and where to build the binaries.
 
-	Set the \texttt{OTB\_USE\_EXTERNAL\_FLTK} option to \texttt{OFF}
+    Then press the "Configure" button and choose the genrator for your project. For example, Visual Studio 9 2008.
 
-	Open the solution and build the otb project.
+    Select the option "Advanced View".
 
-\end{enumerate}
+    Then set the option \texttt{USE\_EXTERNAL\_FLTK} to \texttt{OFF}. (or uncheck the button).
 
-\subsubsection{Microsoft Visual Studio C++ 8.0}
-\begin{enumerate}
-\item Install GDAL (from source)
+    Select the value \texttt{Release} for the option \texttt{CMAKE\_CONFIGURATION\_TYPES}
 
-	Get the binary package from \url{http://www.gdal.org/} and follow the instruction to install. If it fail, proceed to the installation from the source.
+    Press the "Configure" button and you will be asked to set the following variables :
 
+        \texttt{GDAL\_INCLUDE\_DIR = \"D:/ORFEO/OTB\_OUTILS/GDAL/include/\"}
+        \texttt{GDAL\_LIBRARY\_DIR = \"D:/ORFEO/OTB\_OUTILS/GDAL/lib/gdal.lib\"}
 
+    Press the "Configure" button, and follow the last instructions if any.
 
-        From source:
-
-        Open a MS-DOS prompt.
-
-        Run the VCVARS32.bat script that comes with the compiler (it can be found in
-        Microsoft Visual Studio 8/VC/bin).
-
-        Then, go to the GDAL root directory, and tape :
-        \begin{verbatim}
-                nmake /f makefile.vc
-        \end{verbatim}
-
-        Once the build is successful, tape this line to install GDAL :
-        \begin{verbatim}
-                nmake /f makefile.vc install
-        \end{verbatim}
-
-        More details about this install can be found at \url{http://www.gdal.org/gdal_building.html}.
+    Finaly, press "Generate".
 
 
+\item Compile OTB with Microsoft Visual Studio
 
-\item Install OTB
-
-	Use CMake on Windows to generate MSVC++ 8.0 project files from otb sources.
-
-	Set the \texttt{OTB\_USE\_EXTERNAL\_FLTK} option to \texttt{OFF}
-
-	Open the solution and build the otb project.
+	When the MSVC++ project is generated, you can open the solution and build the otb project.
 
 \end{enumerate}
 
-\subsubsection{MinGW on Windows platform}
-\begin{enumerate}
-
-\item Download the lastest version of mingw and msys at \url{http://www.mingw.org} and install those
-	two programs.
-
-	Then, launch MinGW : a prompt appears (similar to Linux one).
-
-\item Install GDAL
-
-	To compile GDAL, at configure step, use these options :
-\begin{verbatim}
-	./configure -prefix=INSTALL_DIR --host=mingw32 --without-libtool
-	--without-python --with-png=internal --with-libtiff=internal
-	--with-jpeg=internal
-\end{verbatim}
-	Then the usual make and make install.
-
-
-\item Install OTB
-
-	Similar to fltk install.
-
-\end{enumerate}
 
 \subsubsection{Cygwin}
 \begin{enumerate}
