@@ -268,7 +268,9 @@ namespace otb
 
     std::cout << "Datasource size: " << mDatasource->size() << std::endl;
 
-    mapnik::Layer lyr("world");
+
+
+    mapnik::Layer lyr("data");
     lyr.set_srs(vectorDataProjectionProj4);
     lyr.set_datasource(mDatasource);
 //     lyr.add_style("river");
@@ -278,6 +280,13 @@ namespace otb
     lyr.add_style("roads-text");
 
     m_Map.addLayer(lyr);
+
+//     mapnik::Layer lyr2("text");
+//     lyr2.set_srs(vectorDataProjectionProj4);
+//     lyr2.set_datasource(mDatasource);
+//     lyr2.add_style("roads-text");
+//
+//     m_Map.addLayer(lyr2);
 
     assert( (m_SensorModelFlip == 1)||(m_SensorModelFlip == -1) );
 
