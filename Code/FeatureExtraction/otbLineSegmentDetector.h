@@ -180,7 +180,7 @@ protected:
   virtual  CoordinateHistogramType SortImageByModulusValue(OutputImageType * modulusImage);
 
   /** */
-  virtual void LineSegmentDetection(CoordinateHistogramType * CoordinateHistogram);
+  virtual void LineSegmentDetection(CoordinateHistogramType & CoordinateHistogram);
   
   /** */
   virtual bool IsUsed(InputIndexType  index);
@@ -208,16 +208,16 @@ protected:
   virtual double angle_diff(double a, double b);
 
   /**  Compute the Number Of False Alarm for a rectangle*/
-  virtual double ComputeRectNFA(RectangleType  rec);
+  virtual double ComputeRectNFA(RectangleType & rec);
 
   /** */
-  virtual double ImproveRectangle(RectangleType  * rec);
+  virtual double ImproveRectangle(RectangleType  & rec);
 
   /** NFA For a rectangle*/
   virtual double NFA(int n, int k, double p, double logNT);
   
   /** Create a copy of a rectangle*/
-  virtual void CopyRectangle(RectangleType * rDst , RectangleType  *rSrc );
+  virtual void CopyRectangle(RectangleType & rDst , RectangleType  & rSrc );
   
 
   /** Rutines from numerical recipes*/
