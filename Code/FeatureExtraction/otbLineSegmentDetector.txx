@@ -23,6 +23,7 @@
 #include "itkNumericTraits.h"
 #include "itkMinimumMaximumImageCalculator.h"
 #include "itkConstNeighborhoodIterator.h"
+#include "itkImageConstIterator.h"
 #include "itkNeighborhoodIterator.h"
 #include "otbPolygon.h"
 #include "itkCastImageFilter.h"
@@ -139,7 +140,7 @@ template <class TInputImage, class TPrecision >
 typename LineSegmentDetector<TInputImage,TPrecision >
 ::CoordinateHistogramType
 LineSegmentDetector<TInputImage,TPrecision >
-::SortImageByModulusValue(OutputImageType * modulusImage)
+::SortImageByModulusValue(MagnitudeImagePointerType modulusImage)
 {
   if(m_ImageSize[0]==0 && m_ImageSize[1]==0)
     m_ImageSize = this->GetInput()->GetLargestPossibleRegion().GetSize();
@@ -178,17 +179,19 @@ LineSegmentDetector<TInputImage,TPrecision >
   CoordinateHistogramType  tempHisto(NbBin);  /** Initializing the histogram */
 
   
-  itk::ImageRegionIterator<OutputImageType> it(modulusImage, 
-                                               modulusImage->GetRequestedRegion());
+  itk::ImageRegionIterator<OutputImageType> it(modulusImage, modulusImage->GetLargestPossibleRegion()); //modulusImage->GetRequestedRegion());
 
+  InputIndexType indexRef = this->GetInput()->GetLargestPossibleRegion().GetIndex();
+  
   it.GoToBegin();
   while(!it.IsAtEnd())
     {
       OutputIndexType index = it.GetIndex();
-      if(static_cast<int>(index[0]) > 0 && static_cast<int>(index[0]) < static_cast<int>(m_ImageSize[0])-1 
-         && static_cast<int>(index[1]) >0 && static_cast<int>(index[1]) < static_cast<int>(m_ImageSize[1])-1 )
+      // don't work with image boundaries
+      if(static_cast<int>(index[0]) > indexRef[0] && static_cast<int>(index[0]) < static_cast<int>(m_ImageSize[0]+indexRef[0])-1 &&
+         static_cast<int>(index[1]) > indexRef[1] && static_cast<int>(index[1]) < static_cast<int>(m_ImageSize[1]+indexRef[1])-1 )
         {
-          unsigned int bin = static_cast<unsigned int> (it.Value()/lengthBin);
+          unsigned int bin = static_cast<unsigned int> (static_cast<double>(it.Value())/lengthBin);
           if( it.Value()- m_Threshold >1e-10 )
             tempHisto[NbBin-bin-1].push_back(it.GetIndex());
         }
@@ -211,24 +214,23 @@ LineSegmentDetector<TInputImage, TPrecision>
     
   /** Begin the search of the segments*/
   CoordinateHistogramIteratorType  ItCoordinateList = CoordinateHistogram.begin();
-
+  
   while(ItCoordinateList != CoordinateHistogram.end())
     {
       typename IndexVectorType::iterator   ItIndexVector = (*ItCoordinateList).begin(); 
       while(ItIndexVector != (*ItCoordinateList).end())
         {
           InputIndexType index = *(ItIndexVector);
-          
+
           /** If the point is not yet computed */
           if(!this->IsUsed(index))
-          {
-            this->GrowRegion(index); 
-          }
+	    {
+	      this->GrowRegion(index); 
+	    }
           ++ItIndexVector;
         }
       ++ItCoordinateList;
     }
-
 }
 
 /**************************************************************************************************************/
@@ -431,19 +433,26 @@ LineSegmentDetector<TInputImage, TPrecision>
 template <class TInputImage, class TPrecision  >
 bool
 LineSegmentDetector<TInputImage, TPrecision>
-::IsUsed(InputIndexType  index) 
+::IsUsed(InputIndexType & index) 
 {
   bool isUsed = false;
-  
-  typedef itk::NeighborhoodIterator<LabelImageType>   NeighborhoodLabelIteratorType;
-  typename NeighborhoodLabelIteratorType::SizeType    radiusLabel;
-  radiusLabel.Fill(0);
-  NeighborhoodLabelIteratorType                       itLabel(radiusLabel,m_UsedPointImage,
-                                                              m_UsedPointImage->GetRequestedRegion());
-  
-  itLabel.SetLocation(index);
-  if(*(itLabel.GetCenterValue()) == 1)
-    isUsed = true;
+
+  typedef itk::ImageConstIterator<LabelImageType>   ImageIteratorType;
+  RegionType region = m_UsedPointImage->GetLargestPossibleRegion();
+  InputIndexType indexRef = region.GetIndex();
+  ImageIteratorType itLabel(m_UsedPointImage,region);
+  itLabel.GoToBegin();
+
+  if( m_UsedPointImage->GetLargestPossibleRegion().IsInside(index) )
+    {
+      itLabel.SetIndex(index);
+      if( itLabel.Get() == 1 )
+	isUsed = true;
+    }
+  else
+    {
+      itkExceptionMacro(<<"Can't access to index "<<index<<", outside the image largest region ("<<region.GetIndex()<<", "<<region.GetSize()<<")");
+    }
   
   return isUsed;
 }
@@ -501,6 +510,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   double sumX = 0.;
   double sumY = 0.;
   
+
   /** 
    * Loop for searching regions 
    */
@@ -518,14 +528,16 @@ LineSegmentDetector<TInputImage, TPrecision>
           InputIndexType NeighIndex = itNeigh.GetIndex(s);
           double angleComp =   itNeighDir.GetPixel(s);
 
-          if( !this->IsUsed(NeighIndex) && this->IsAligned(angleComp, regionAngle, m_Prec) )
-            {
-              if(this->GetInput()->GetRequestedRegion().IsInside(NeighIndex))  /** Check if the index is inside the image*/
-                {
-                  this->SetPixelToUsed(NeighIndex);
-                  reg.push_back(NeighIndex);
-                }
-            }
+	  if(this->GetInput()->GetLargestPossibleRegion().IsInside(NeighIndex))  /** Check if the index is inside the image*/
+	    {
+	      if( !this->IsUsed(NeighIndex) && this->IsAligned(angleComp, regionAngle, m_Prec) )
+		{
+		  
+		  this->SetPixelToUsed(NeighIndex);
+		  reg.push_back(NeighIndex);
+		}
+	    }
+	      //}
           s++;
         }
     }/** End Searching loop*/

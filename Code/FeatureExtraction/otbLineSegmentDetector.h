@@ -104,6 +104,7 @@ class ITK_EXPORT LineSegmentDetector :
   typedef typename InputImageType::PixelType                            InputPixelType;
   typedef typename InputImageType::IndexType                            InputIndexType;
   typedef typename InputImageType::SizeType                             SizeType;
+  typedef typename InputImageType::RegionType                           RegionType;
 
   /** Definition of the list of lines. */
   typedef LineSpatialObjectList                                         LineSpatialObjectListType;
@@ -140,15 +141,16 @@ class ITK_EXPORT LineSegmentDetector :
 
   typedef itk::UnaryFunctorImageFilter<GradientOutputImageType,OutputImageType,
   Functor::MagnitudeFunctor<typename GradientOutputImageType::PixelType,TPrecision> > MagnitudeFilterType;
-  typedef typename MagnitudeFilterType::Pointer                                   MagnitudeFilterPointerType;
-  typedef typename MagnitudeFilterType::OutputImageType::PixelType                MagnitudePixelType;
-  typedef typename MagnitudeFilterType::OutputImageType                           MagnitudeImageType;
+  typedef typename MagnitudeFilterType::Pointer                                       MagnitudeFilterPointerType;
+  typedef typename MagnitudeFilterType::OutputImageType::PixelType                    MagnitudePixelType;
+  typedef typename MagnitudeFilterType::OutputImageType                               MagnitudeImageType;
+  typedef typename MagnitudeImageType::Pointer                                        MagnitudeImagePointerType;
             
   typedef itk::UnaryFunctorImageFilter<GradientOutputImageType,OutputImageType,
   Functor::OrientationFunctor<typename GradientOutputImageType::PixelType,TPrecision> > OrientationFilterType;
-  typedef typename OrientationFilterType::Pointer OrientationFilterPointerType;
-  typedef typename OrientationFilterType::OutputImageType                         OutputImageDirType;
-  typedef typename OutputImageDirType::RegionType                                 OutputImageDirRegionType;
+  typedef typename OrientationFilterType::Pointer                                       OrientationFilterPointerType;
+  typedef typename OrientationFilterType::OutputImageType                               OutputImageDirType;
+  typedef typename OutputImageDirType::RegionType                                       OutputImageDirRegionType;
 
   /** Create an image to store the label USED(1) or notUsed (0)*/
   typedef otb::Image<unsigned char, 2>                              LabelImageType;
@@ -177,13 +179,13 @@ protected:
    *  this method is used to determine the seeds where to begin the search segments
    *  Points with large gradient modulus are more able to belong to a segment
    */
-  virtual  CoordinateHistogramType SortImageByModulusValue(OutputImageType * modulusImage);
+  virtual  CoordinateHistogramType SortImageByModulusValue(MagnitudeImagePointerType modulusImage);
 
   /** */
   virtual void LineSegmentDetection(CoordinateHistogramType & CoordinateHistogram);
   
   /** */
-  virtual bool IsUsed(InputIndexType  index);
+  virtual bool IsUsed(InputIndexType & index);
   
    /** Set Pixel flag to USED*/
   virtual void SetPixelToUsed(InputIndexType  index);
