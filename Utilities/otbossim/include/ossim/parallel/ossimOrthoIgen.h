@@ -1,4 +1,4 @@
-// $Id: ossimOrthoIgen.h 10692 2007-04-11 02:23:27Z gpotts $
+// $Id: ossimOrthoIgen.h 14021 2009-02-06 02:08:19Z gpotts $
 #ifndef ossimOrthoIgen_HEADER
 #define ossimOrthoIgen_HEADER
 #include <ossim/base/ossimObject.h>
@@ -7,6 +7,7 @@
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimFilename.h>
+#include <map>
 class ossimConnectableObject;
 class OSSIM_DLL ossimOrthoIgen : public ossimReferenced
 {
@@ -47,6 +48,8 @@ public:
       ossimFilename theFilename;
       ossim_int32  theEntry;
    };
+   typedef std::map<ossimString,ossimString> PropertyMap;
+   
    ossimOrthoIgen();
 
    /**
@@ -126,9 +129,10 @@ protected:
    ossim_float64 theHighPercentClip;
    bool          theUseAutoMinMaxFlag;
    bool          theScaleToEightBitFlag;
+   PropertyMap theWriterProperties;
    
    std::vector<ossimOrthoIgenFilename> theFilenames;
-
+   
    bool setupTiling(ossimKeywordlist& kwl);
    
    ossimRefPtr<ossimConnectableObject> setupCutter(ossimKeywordlist& kwl,

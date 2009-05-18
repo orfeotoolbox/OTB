@@ -10,17 +10,19 @@
 // Contains class declaration for ossimBandSelector.
 // 
 //*******************************************************************
-//  $Id: ossimBandSelector.cpp 13493 2008-08-23 17:10:23Z dburken $
+//  $Id: ossimBandSelector.cpp 14193 2009-03-30 11:38:10Z gpotts $
 
 #include <iostream>
 #include <algorithm>
 
 #include <ossim/imaging/ossimBandSelector.h>
+#include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/base/ossimStringProperty.h>
+static ossimTrace traceDebug("ossimBandSelector:debug");
 
 RTTI_DEF1(ossimBandSelector,"ossimBandSelector", ossimImageSourceFilter)
 
@@ -350,9 +352,12 @@ bool ossimBandSelector::isOrderedCorrectly() const
    }
    else
    {
-      ossimNotify(ossimNotifyLevel_WARN)
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
          << "ossimBandSelector::isOrderedCorrectly() ERROR:"
          << "Method called prior to initialization!\n";
+      }
    }
 
    return result;

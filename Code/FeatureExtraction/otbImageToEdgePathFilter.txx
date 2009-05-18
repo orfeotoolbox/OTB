@@ -191,7 +191,7 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
       else
       {
         // else
-        for (int i=0;i<8;i++)
+        for (int i=0;i<8;++i)
         {
           // If we came back near our starting pointer after a sufficient number of moves
           if ((it.GetIndex(rotation[i])==start)&&(nbMove>=2))

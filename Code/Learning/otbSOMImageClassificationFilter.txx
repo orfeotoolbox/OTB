@@ -108,7 +108,7 @@ SOMImageClassificationFilter<TInputImage,TOutputImage,TSOMMap,TMaskImage>
       SampleType sample;
       sample.SetSize(sampleSize);
       sample.Fill(itk::NumericTraits<ValueType>::ZeroValue());
-      for (unsigned int i=0;i<sampleSize;i++)
+      for (unsigned int i=0;i<sampleSize;++i)
       {
         sample[i]=inIt.Get()[i];
       }

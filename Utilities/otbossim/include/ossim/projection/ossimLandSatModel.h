@@ -11,7 +11,7 @@
 //              Modified selection of adjustable parameters..
 //
 //*****************************************************************************
-//  $Id: ossimLandSatModel.h 10384 2007-01-26 20:32:12Z gpotts $
+//  $Id: ossimLandSatModel.h 14049 2009-03-03 02:25:27Z gpotts $
 
 #ifndef ossimLandSatModel_HEADER
 #define ossimLandSatModel_HEADER
@@ -47,7 +47,7 @@ public:
    ossimLandSatModel(const ossimFilename& init_file);
    ossimLandSatModel(const ossimKeywordlist& geom_kwl);
    ossimLandSatModel(const ossimLandSatModel& rhs);
-   
+   virtual ossimObject* dup()const;
    virtual ~ossimLandSatModel();
 
    enum ProjectionType
@@ -72,10 +72,6 @@ public:
       NUM_ADJUSTABLE_PARAMS // not an index
    };
    
-   /*!
-    * Returns pointer to a new instance, copy of this.
-    */
-   virtual ossimObject* dup() const { return 0; } // TBR
    
    /*!
     * Extends base-class implementation. Dumps contents of object to ostream.

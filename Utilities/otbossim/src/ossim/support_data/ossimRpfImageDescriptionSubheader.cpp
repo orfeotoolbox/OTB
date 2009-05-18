@@ -1,22 +1,26 @@
 //*******************************************************************
-// License:  See top level LICENSE.txt file.
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 // 
 // Description: This class extends the stl's string class.
 //
 //********************************************************************
-// $Id: ossimRpfImageDescriptionSubheader.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimRpfImageDescriptionSubheader.cpp 14241 2009-04-07 19:59:23Z dburken $
+
+#include <istream>
+#include <ostream>
 #include <ossim/support_data/ossimRpfImageDescriptionSubheader.h>
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimErrorCodes.h>
 
-ostream& operator <<(ostream& out,
-                     const ossimRpfImageDescriptionSubheader& data)
+std::ostream& operator <<(std::ostream& out,
+                          const ossimRpfImageDescriptionSubheader& data)
 {
-   data.print(out);
-
-   return out;
+   return data.print(out);
 }
 
 ossimRpfImageDescriptionSubheader::ossimRpfImageDescriptionSubheader()
@@ -24,7 +28,8 @@ ossimRpfImageDescriptionSubheader::ossimRpfImageDescriptionSubheader()
    clearFields();
 }
 
-ossimErrorCode ossimRpfImageDescriptionSubheader::parseStream(istream& in, ossimByteOrder byteOrder)
+ossimErrorCode ossimRpfImageDescriptionSubheader::parseStream(
+   std::istream& in, ossimByteOrder byteOrder)
 {
    if(in)
    {
@@ -65,18 +70,30 @@ ossimErrorCode ossimRpfImageDescriptionSubheader::parseStream(istream& in, ossim
    return ossimErrorCodes::OSSIM_OK;
 }
 
-void ossimRpfImageDescriptionSubheader::print(ostream& out)const
+std::ostream& ossimRpfImageDescriptionSubheader::print(
+   std::ostream& out, const std::string& prefix) const
 {
-   out << "theNumberOfSpectralGroups:               " << theNumberOfSpectralGroups << endl
-       << "theNumberOfSubframeTables:               " << theNumberOfSubframeTables << endl
-       << "theNumberOfSpectralBandTables:           " << theNumberOfSpectralBandTables << endl
-       << "theNumberOfSpectralBandLinesPerImageRow: " << theNumberOfSpectralBandLinesPerImageRow << endl
-       << "theNumberOfSubframesHorizontal:          " << theNumberOfSubframesHorizontal << endl
-       << "theNumberOfSubframesVertical:            " << theNumberOfSubframesVertical << endl
-       << "theNumberOfOutputColumnsPerSubframe:     " << theNumberOfOutputColumnsPerSubframe << endl
-       << "theNumberOfOutputRowsPerSubframe:        " << theNumberOfOutputRowsPerSubframe << endl
-       << "theSubframeMaskTableOffset:              " << theSubframeMaskTableOffset << endl
-       << "theTransparencyMaskTableOffset:          " << theTransparencyMaskTableOffset;
+   out << prefix << "NumberOfSpectralGroups: "
+       << theNumberOfSpectralGroups << "\n"
+       << prefix << "NumberOfSubframeTables: "
+       << theNumberOfSubframeTables << "\n"
+       << prefix << "NumberOfSpectralBandTables: "
+       << theNumberOfSpectralBandTables << "\n"
+       << prefix << "NumberOfSpectralBandLinesPerImageRow: "
+       << theNumberOfSpectralBandLinesPerImageRow << "\n"
+       << prefix << "NumberOfSubframesHorizontal: "
+       << theNumberOfSubframesHorizontal << "\n"
+       << prefix << "NumberOfSubframesVertical: "
+       << theNumberOfSubframesVertical << "\n"
+       << prefix << "NumberOfOutputColumnsPerSubframe: "
+       << theNumberOfOutputColumnsPerSubframe << "\n"
+       << prefix << "NumberOfOutputRowsPerSubframe: "
+       << theNumberOfOutputRowsPerSubframe << "\n"
+       << prefix << "SubframeMaskTableOffset: "
+       << theSubframeMaskTableOffset << "\n"
+       << prefix << "TransparencyMaskTableOffset: "
+       << theTransparencyMaskTableOffset << std::endl;
+   return out;
 }
 
 void ossimRpfImageDescriptionSubheader::clearFields()

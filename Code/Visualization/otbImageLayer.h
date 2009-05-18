@@ -38,7 +38,7 @@ namespace otb
 *  \ingroup Visualization
  */
 
-template <class TImage, class TOutputImage = otb::Image<itk::RGBPixel<unsigned char>, 2 > >
+template <class TImage, class TOutputImage = otb::Image<itk::RGBAPixel<unsigned char>, 2 > >
 class ImageLayer
   : public ImageLayerBase<TOutputImage>
 {
@@ -60,20 +60,26 @@ public:
   typedef typename ImageType::Pointer                                 ImagePointerType;
   typedef typename ImageType::PixelType                               PixelType;
   typedef typename ImageType::InternalPixelType                       InternalPixelType;
+  typedef typename itk::NumericTraits<PixelType>::ValueType           ScalarType;
+  typedef itk::VariableLengthVector<ScalarType>                       VectorPixelType;
+  typedef itk::RGBPixel<ScalarType>                                   RGBPixelType;
+  typedef itk::RGBAPixel<ScalarType>                                  RGBAPixelType;
   typedef typename ImageType::RegionType                              RegionType;
   typedef typename ImageType::IndexType                               IndexType;
 
   /** Output image typedef */
   typedef TOutputImage                                                OutputImageType;
+  typedef typename OutputImageType::PixelType                         OutputPixelType;
+
 
   /** Histogram typedef */
    typedef itk::Statistics::DenseFrequencyContainer                   DFContainerType;
 
-  typedef itk::VariableLengthVector<InternalPixelType>                SampleType;
+  typedef itk::VariableLengthVector<ScalarType>                       SampleType;
   typedef itk::Statistics::ListSample<SampleType>                     ListSampleType;
 
   typedef otb::ListSampleToHistogramListGenerator
-  <ListSampleType,InternalPixelType,DFContainerType>                  HistogramFilterType;
+      <ListSampleType,ScalarType,DFContainerType>                     HistogramFilterType;
   typedef typename HistogramFilterType::HistogramType                 HistogramType;
   typedef typename HistogramType::Pointer                             HistogramPointerType;
   typedef typename HistogramFilterType::HistogramListType             HistogramListType;
@@ -200,6 +206,12 @@ virtual void RenderHistogram();
 
   /** Auto min/max rendering function setup */
   virtual void AutoMinMaxRenderingFunctionSetup();
+
+  /** Find out the histogram size from the pixel */
+  unsigned int PixelSize(ImagePointerType image, ScalarType* v) const;
+  unsigned int PixelSize(ImagePointerType image, VectorPixelType* v) const;
+  unsigned int PixelSize(ImagePointerType image, RGBPixelType* v) const;
+  unsigned int PixelSize(ImagePointerType image, RGBAPixelType* v) const;
 
 private:
   ImageLayer(const Self&);     // purposely not implemented

@@ -202,7 +202,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
       inputFile >> aBand;
       if ( oldBand != -1 )
       {
-        for ( int i = oldBand; i <= aBand; i++ )
+        for ( int i = oldBand; i <= aBand; ++i )
           bands.push_back( i );
         oldBand = -1;
       }
@@ -301,7 +301,7 @@ void
 ImageSeriesFileReaderBase< TImage, TInternalImage > 
 ::AllocateListOfComponents ()
 {
-  for ( unsigned int i = 0; i < GetNumberOfOutputs(); i++ )
+  for ( unsigned int i = 0; i < GetNumberOfOutputs(); ++i )
   {
     m_ImageFileReaderList->PushBack( ReaderType::New() );
     m_OutputList->PushBack( OutputImageType::New() );
@@ -328,7 +328,7 @@ void
 ImageSeriesFileReaderBase< TImage, TInternalImage > 
 ::GenerateData( )
 {
-  for ( unsigned int i = 0; i < GetNumberOfOutputs(); i++ )
+  for ( unsigned int i = 0; i < GetNumberOfOutputs(); ++i )
     GenerateData( i );
 }
 

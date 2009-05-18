@@ -76,8 +76,20 @@ public:
   typedef typename ResampleFilterType::Pointer ResampleFilterPointerType;
 
   /** Rendering function typedef */
-  typedef typename ImageLayerType::DefaultRenderingFunctionType RenderingFunctionType;
+  typedef typename ImageLayerType::RenderingFunctionType RenderingFunctionType;
+  typedef typename ImageLayerType::DefaultRenderingFunctionType DefaultRenderingFunctionType;
   typedef typename RenderingFunctionType::Pointer RenderingFunctionPointerType;
+
+  /** Blending function typedef */
+  typedef typename ImageLayerType::OutputPixelType     OutputPixelType;
+  typedef typename ImageLayerType::BlendingFunctionType         BlendingFunctionType;
+  typedef typename BlendingFunctionType::Pointer       BlendingFunctionPointerType;
+
+  /** PixelType typedef */
+  typedef typename ImageLayerType::ScalarType        ScalarType;
+  typedef typename ImageLayerType::VectorPixelType   VectorPixelType;
+  typedef typename ImageLayerType::RGBPixelType      RGBPixelType;
+  typedef typename ImageLayerType::RGBAPixelType     RGBAPixelType;
 
   /** Get the generated layer */
   itkGetObjectMacro(Layer,ImageLayerType);
@@ -114,8 +126,12 @@ public:
   itkGetMacro(ScreenRatio,double);
 
   /** Get the generated default rendering function */
-  itkGetObjectMacro(DefaultRenderingFunction,RenderingFunctionType);
+  itkSetObjectMacro(RenderingFunction,RenderingFunctionType);
+  itkGetObjectMacro(RenderingFunction,RenderingFunctionType);
 
+  /** Set/Get the blending function */
+  itkSetObjectMacro(BlendingFunction,BlendingFunctionType);
+  itkGetObjectMacro(BlendingFunction,BlendingFunctionType);
 
   /** Get a hook on the resample filter to report progress */
   itkGetObjectMacro(Resampler,ResampleFilterType);
@@ -136,6 +152,12 @@ protected:
    */
   virtual void GenerateQuicklook();
 
+  /** Find out the component size from the pixel */
+  unsigned int PixelSize(ImagePointerType image, ScalarType* v) const;
+  unsigned int PixelSize(ImagePointerType image, VectorPixelType* v) const;
+  unsigned int PixelSize(ImagePointerType image, RGBPixelType* v) const;
+  unsigned int PixelSize(ImagePointerType image, RGBAPixelType* v) const;
+
 private:
   ImageLayerGenerator(const Self&);     // purposely not implemented
   void operator=(const Self&);          // purposely not implemented
@@ -144,7 +166,10 @@ private:
   ImageLayerPointerType m_Layer;
 
   /** The default rendering function */
-  RenderingFunctionPointerType m_DefaultRenderingFunction;
+  RenderingFunctionPointerType m_RenderingFunction;
+
+  /** Pointer to the blending function */
+  BlendingFunctionPointerType m_BlendingFunction;
 
   /** The input image */
   ImagePointerType      m_Image;

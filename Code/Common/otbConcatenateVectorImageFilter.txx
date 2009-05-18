@@ -140,13 +140,13 @@ ConcatenateVectorImageFilter<TInputImage1,TInputImage2,TOutputImage>
     // Set the output pixel size
     output.SetSize(l1+l2);
     // Loop through each band of the first image
-    for (unsigned int i=0;i<l1;i++)
+    for (unsigned int i=0;i<l1;++i)
     {
       // Fill the output pixel
       output[i]=static_cast<typename OutputImageType::InternalPixelType>(input1It.Get()[i]);
     }
     // Loop though each band of the second image
-    for (unsigned int i = 0;i<l2;i++)
+    for (unsigned int i = 0;i<l2;++i)
     {
       // Fill the output pixel
       output[i+l1]=static_cast<typename OutputImageType::InternalPixelType>(input2It.Get()[i]);

@@ -39,7 +39,7 @@ void
 ImageSeriesFileReader< TImage, TInternalImage > 
 ::AllocateListOfComponents ()
 {
-  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); i++ )
+  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i )
   {
     this->m_ImageFileReaderList->PushBack( ReaderType::New() );
     this->m_OutputList->PushBack( OutputImageType::New() );
@@ -81,7 +81,7 @@ void
 ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixel, 2 > >
 ::AllocateListOfComponents ()
 {
-  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); i++ )
+  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i )
   {
     this->m_ImageFileReaderList->PushBack( ReaderType::New() );
     this->m_OutputList->PushBack( OutputImageType::New() );
@@ -169,7 +169,7 @@ void
 ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
 ::AllocateListOfComponents ()
 {
-  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); i++ )
+  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i )
   {
     this->m_ImageFileReaderList->PushBack( ReaderType::New() );
     this->m_OutputList->PushBack( OutputImageType::New() );
@@ -248,7 +248,7 @@ void
 ImageSeriesFileReader< VectorImage< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
 ::AllocateListOfComponents ()
 {
-  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); i++ )
+  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i )
   {
     this->m_ImageFileReaderList->PushBack( ReaderType::New() );
     this->m_OutputList->PushBack( OutputImageType::New() );

@@ -123,7 +123,7 @@ HistogramStatisticsFunction< TInputHistogram, TOutput>
   for ( unsigned int noDim = 0; noDim < NumberOfDimension; noDim++ )
   {
     MeasurementType mean = itk::NumericTraits<MeasurementType>::Zero;
-    for (unsigned int i = 0; i < histogram->GetSize()[noDim]; i++)
+    for (unsigned int i = 0; i < histogram->GetSize()[noDim]; ++i)
     {
       MeasurementType val  = histogram->GetMeasurement(i, noDim);
       FrequencyType freq = histogram->GetFrequency(i, noDim);
@@ -155,8 +155,8 @@ HistogramStatisticsFunction< TInputHistogram, TOutput>
     for ( unsigned int noDimY = 0; noDimY < NumberOfDimension; noDimY++ )
     {
       MeasurementType covariance = itk::NumericTraits<MeasurementType>::Zero;
-      for (unsigned int i = 0; i < histogram->GetSize()[noDimX]; i++)
-        for (unsigned int j = 0; j < histogram->GetSize()[noDimY]; j++)
+      for (unsigned int i = 0; i < histogram->GetSize()[noDimX]; ++i)
+        for (unsigned int j = 0; j < histogram->GetSize()[noDimY]; ++j)
         {
           MeasurementType valX  = histogram->GetMeasurement(i, noDimX);
           MeasurementType valY  = histogram->GetMeasurement(j, noDimY);

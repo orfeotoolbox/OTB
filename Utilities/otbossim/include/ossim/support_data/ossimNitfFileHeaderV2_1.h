@@ -1,17 +1,19 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// LICENSE: LGPL see top level directory for more details.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
+//
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_1.h 11058 2007-05-29 11:55:02Z gpotts $
+// $Id: ossimNitfFileHeaderV2_1.h 14241 2009-04-07 19:59:23Z dburken $
 #ifndef ossimNitfFileHeaderV2_1_HEADER
 #define ossimNitfFileHeaderV2_1_HEADER
 
-#include <stdexcept>
+#include <iosfwd>
 
 #include <ossim/support_data/ossimNitfFileHeaderV2_X.h>
 #include <ossim/base/ossimDate.h>
@@ -119,7 +121,6 @@ public:
    virtual ~ossimNitfFileHeaderV2_1();
    virtual void parseStream(std::istream &in);
    virtual void writeStream(std::ostream &out);
-   virtual std::ostream& print(std::ostream& out)const;
    virtual bool isEncrypted()const;
    virtual ossim_int32 getNumberOfImages()const;
    virtual ossim_int32 getNumberOfLabels()const;
@@ -226,6 +227,13 @@ public:
    static const ossimString FBKGC_KW;
    
    void clearFields();
+
+   /**
+    * @brief print method that outputs a key/value type format adding prefix
+    * to keys.
+    */
+   virtual std::ostream& print(std::ostream& out,
+                               const std::string& prefix=std::string()) const;
    
 private:
    /**

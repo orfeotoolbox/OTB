@@ -8,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_1.h 13618 2008-09-29 19:08:10Z gpotts $
+// $Id: ossimNitfImageHeaderV2_1.h 14241 2009-04-07 19:59:23Z dburken $
 
 #ifndef ossimNitfImageHeaderV2_1_HEADER
 #define ossimNitfImageHeaderV2_1_HEADER
@@ -27,8 +27,13 @@ public:
    virtual void parseStream(std::istream &in);
    virtual void writeStream(std::ostream &out);
 
-   virtual std::ostream& print(std::ostream &out)const;
-
+   /**
+    * @brief print method that outputs a key/value type format adding prefix
+    * to keys.
+    */
+   virtual std::ostream& print(std::ostream& out,
+                               const std::string& prefix) const;
+   
    virtual ossimDrect  getImageRect()const;   
    virtual ossimDrect  getBlockImageRect()const;   
    virtual bool        isCompressed()const;

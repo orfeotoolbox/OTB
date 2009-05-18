@@ -28,7 +28,7 @@ ossimTerraSarTileSource::ossimTerraSarTileSource():
 	_annotation(NULL)
 {
 }
-	
+
 ossimTerraSarTileSource::~ossimTerraSarTileSource()
 {
 	if(_annotation != NULL)
@@ -46,12 +46,12 @@ ossimString ossimTerraSarTileSource::getShortName()const
 {
 	return ossimString("TerraSar Image Handler");
 }
-   
+
 bool ossimTerraSarTileSource::saveState(ossimKeywordlist& kwl, const char* prefix)const
 {
 	return false;
 }
-   
+
 bool ossimTerraSarTileSource::loadState(const ossimKeywordlist& kwl,  const char* prefix)
 {
 	return false;
@@ -87,11 +87,11 @@ bool ossimTerraSarTileSource::open()
 	if ((annotationFilename.ext()).downcase() != "xml") {
 		// search for a XML file in the same directory, beginning by "TSX"
 		ossimDirectory currentDir(annotationFilename.path());
-		std::vector<ossimFilename> searchRes ; 
-		ossimString searchedPattern("^(TSX)+[^(xml)]*(xml)+") ; 
-		currentDir.findAllFilesThatMatch(searchRes, searchedPattern) ; 
+		std::vector<ossimFilename> searchRes ;
+		ossimString searchedPattern("^(TSX)+[^(xml)]*(xml)+") ;
+		currentDir.findAllFilesThatMatch(searchRes, searchedPattern) ;
 		if (searchRes.size() == 1) {
-			annotationFilename = searchRes[0] ; 
+			annotationFilename = searchRes[0] ;
 		} else if (searchRes.size() > 1) {
 			if(traceDebug())
 			{
@@ -101,13 +101,13 @@ bool ossimTerraSarTileSource::open()
 			return false;
 		} else if (searchRes.size() == 0) {
 			// search for a XML file in the parent directory, beginning by "TSX"
-			ossimString parentDirPath = annotationFilename.path() ; 
-			parentDirPath += annotationFilename.thePathSeparator ; 
-			parentDirPath += ".." ; 
+			ossimString parentDirPath = annotationFilename.path() ;
+			parentDirPath += annotationFilename.thePathSeparator ;
+			parentDirPath += ".." ;
 			ossimDirectory parentDir(parentDirPath);
-			parentDir.findAllFilesThatMatch(searchRes, searchedPattern) ; 
+			parentDir.findAllFilesThatMatch(searchRes, searchedPattern) ;
 			if (searchRes.size() == 1) {
-				annotationFilename = searchRes[0] ; 
+				annotationFilename = searchRes[0] ;
 			} else if (searchRes.size() == 0) {
 				if(traceDebug())
 				{
@@ -125,7 +125,7 @@ bool ossimTerraSarTileSource::open()
 			}
 		}
 	}
-				
+
 	if (annotationFilename.exists())
 	{
 		if(traceDebug())
@@ -137,12 +137,12 @@ bool ossimTerraSarTileSource::open()
 		/*
 		 * Checks whether the XML file corresponds to a Level1B TerraSar product
 		 */
-		ossimXmlDocument docXML(annotationFilename) ; 
-		
+		ossimXmlDocument docXML(annotationFilename) ;
+
 		ossimString xpathTest("/level1Product") ;
-		std::vector<ossimRefPtr<ossimXmlNode> > listeResultat ; 
-		docXML.findNodes(xpathTest, listeResultat) ; 
-		if (listeResultat.size() != 1 ) 
+		std::vector<ossimRefPtr<ossimXmlNode> > listeResultat ;
+		docXML.findNodes(xpathTest, listeResultat) ;
+		if (listeResultat.size() != 1 )
 		{
 			if(traceDebug())
 			{
@@ -179,7 +179,7 @@ bool ossimTerraSarTileSource::open()
 	{
 		retValue = false;
 	}
-	
+
 
 	if(traceDebug())
 	{
@@ -205,7 +205,7 @@ bool ossimTerraSarTileSource::getImageGeometry(ossimKeywordlist& kwl,const char*
 	/*
 	 * Insertion of data related to the sensor model acquisition parameters into the keywordlist
 	 */
-	
+
 	kwl.add(prefix, "imageDataStartWith",_annotation->get_imageDataStartWith().c_str(),true);
 	kwl.add(prefix, "orbitDirection",_annotation->get_orbitDirection().c_str(),true);
 	kwl.add(prefix, "lookDirection",_annotation->get_lookDirection().c_str(),true);
@@ -236,7 +236,7 @@ bool ossimTerraSarTileSource::getImageGeometry(ossimKeywordlist& kwl,const char*
 
 	kwl.add(prefix, "n_azilok",_annotation->get_n_azilok(),true);
 	kwl.add(prefix, "n_rnglok",_annotation->get_n_rnglok(),true);
-	
+
 	kwl.add(prefix, "rangeProjectionType",(_annotation->get_rangeProjectionType()).c_str(),true);
 
 	kwl.add(prefix, "SrToGr_R0",_annotation->get_SrToGr_R0(),true);
@@ -247,7 +247,7 @@ bool ossimTerraSarTileSource::getImageGeometry(ossimKeywordlist& kwl,const char*
 	kwl.add(prefix, "pixel_spacing_near",_annotation->get_pixel_spacing_near(),true);
 	kwl.add(prefix, "pixel_spacing_far",_annotation->get_pixel_spacing_far(),true);
 
-	int nbCoeffs = (_annotation->get_SrToGr_coeffs()).size() ; 
+	int nbCoeffs = (_annotation->get_SrToGr_coeffs()).size() ;
 
 	kwl.add(prefix, "SrToGr_coeffs_number",nbCoeffs,true);
 

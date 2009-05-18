@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------
 //
 // License:  LGPL
-// 
+//
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
@@ -41,9 +41,9 @@ ossimImageHandlerSarFactory* ossimImageHandlerSarFactory::instance()
 
 ossimImageHandler* ossimImageHandlerSarFactory::open(const ossimFilename& fileName)const
 {
-   
+
    ossimFilename copyFilename = fileName;
-   
+
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -87,7 +87,7 @@ ossimImageHandler* ossimImageHandlerSarFactory::open(const ossimFilename& fileNa
       return result;
    }
    delete result;
-  
+
    // Envisat ASAR
    if(traceDebug())
    {
@@ -101,7 +101,7 @@ ossimImageHandler* ossimImageHandlerSarFactory::open(const ossimFilename& fileNa
       return result;
    }
    delete result;
-   
+
    // Radarsat 2
 	if(traceDebug())
    {
@@ -129,7 +129,7 @@ ossimImageHandler* ossimImageHandlerSarFactory::open(const ossimFilename& fileNa
       return result;
    }
    delete result;
-   
+
    //// Cosmo Skymed
    //if(traceDebug())
    //{

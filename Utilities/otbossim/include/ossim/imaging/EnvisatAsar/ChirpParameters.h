@@ -5,7 +5,7 @@
 #include <ossim/imaging/EnvisatAsar/EnvisatAsarRecord.h>
 /**
  * @ingroup ChirpParametersRecord
- * @brief This class is able to read the ASAR ChirpParameters record 
+ * @brief This class is able to read the ASAR ChirpParameters record
  * @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 23-11-07
@@ -76,104 +76,104 @@ public:
 	};
 
 
-	/**				
-	* @brief zero_doppler_time	
-	*/				
-	std::string   get_zero_doppler_time()	
-	{						
-		return _zero_doppler_time;		
-	}; 
-	/**				
-	* @brief attach_flag	
-	*/				
-	bool   get_attach_flag()	
-	{						
-		return _attach_flag;		
-	}; 
-	/**				
-	* @brief swath	
-	*/				
-	std::string   get_swath()	
-	{						
-		return _swath;		
-	}; 
-	/**				
-	* @brief polar	
-	*/				
-	std::string   get_polar()	
-	{						
-		return _polar;		
-	}; 
-	/**				
-	* @brief chirp_width	
-	*/				
-	float   get_chirp_width()	
-	{						
-		return _chirp_width;		
-	}; 
-	/**				
-	* @brief chirp_sidelobe	
-	*/				
-	float   get_chirp_sidelobe()	
-	{						
-		return _chirp_sidelobe;		
-	}; 
-	/**				
-	* @brief chirp_islr	
-	*/				
-	float   get_chirp_islr()	
-	{						
-		return _chirp_islr;		
-	}; 
-	/**				
-	* @brief chirp_peak_loc	
-	*/				
-	float   get_chirp_peak_loc()	
-	{						
-		return _chirp_peak_loc;		
-	}; 
-	/**				
-	* @brief re_chirp_power	
-	*/				
-	float   get_re_chirp_power()	
-	{						
-		return _re_chirp_power;		
-	}; 
-	/**				
-	* @brief elev_chirp_power	
-	*/				
-	float   get_elev_chirp_power()	
-	{						
-		return _elev_chirp_power;		
-	}; 
-	/**				
-	* @brief chirp_quality_flag	
-	*/				
-	bool   get_chirp_quality_flag()	
-	{						
-		return _chirp_quality_flag;		
-	}; 
-	/**				
-	* @brief ref_chirp_power	
-	*/				
-	float   get_ref_chirp_power()	
-	{						
-		return _ref_chirp_power;		
-	}; 
-	/**				
-	* @brief normalisation_source	
-	*/				
-	std::string   get_normalisation_source()	
-	{						
-		return _normalisation_source;		
-	}; 
-	/**				
-	* @brief cal_pulse_info[352]	
-	*/				
-	float*   get_cal_pulse_info()	
-	{						
-		return _cal_pulse_info;		
-	}; 
+	/**
+	* @brief zero_doppler_time
+	*/
+	std::string   get_zero_doppler_time()
+	{
+		return _zero_doppler_time;
+	};
+	/**
+	* @brief attach_flag
+	*/
+	bool   get_attach_flag()
+	{
+		return _attach_flag;
+	};
+	/**
+	* @brief swath
+	*/
+	std::string   get_swath()
+	{
+		return _swath;
+	};
+	/**
+	* @brief polar
+	*/
+	std::string   get_polar()
+	{
+		return _polar;
+	};
+	/**
+	* @brief chirp_width
+	*/
+	float   get_chirp_width()
+	{
+		return _chirp_width;
+	};
+	/**
+	* @brief chirp_sidelobe
+	*/
+	float   get_chirp_sidelobe()
+	{
+		return _chirp_sidelobe;
+	};
+	/**
+	* @brief chirp_islr
+	*/
+	float   get_chirp_islr()
+	{
+		return _chirp_islr;
+	};
+	/**
+	* @brief chirp_peak_loc
+	*/
+	float   get_chirp_peak_loc()
+	{
+		return _chirp_peak_loc;
+	};
+	/**
+	* @brief re_chirp_power
+	*/
+	float   get_re_chirp_power()
+	{
+		return _re_chirp_power;
+	};
+	/**
+	* @brief elev_chirp_power
+	*/
+	float   get_elev_chirp_power()
+	{
+		return _elev_chirp_power;
+	};
+	/**
+	* @brief chirp_quality_flag
+	*/
+	bool   get_chirp_quality_flag()
+	{
+		return _chirp_quality_flag;
+	};
+	/**
+	* @brief ref_chirp_power
+	*/
+	float   get_ref_chirp_power()
+	{
+		return _ref_chirp_power;
+	};
+	/**
+	* @brief normalisation_source
+	*/
+	std::string   get_normalisation_source()
+	{
+		return _normalisation_source;
+	};
+	/**
+	* @brief cal_pulse_info[352]
+	*/
+	float*   get_cal_pulse_info()
+	{
+		return _cal_pulse_info;
+	};
 
 
 	/**

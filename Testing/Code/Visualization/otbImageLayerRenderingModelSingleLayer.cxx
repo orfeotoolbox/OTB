@@ -17,7 +17,7 @@ PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #include "otbImageLayerRenderingModel.h"
 #include "otbVectorImage.h"
-#include "itkRGBPixel.h"
+#include "itkRGBAPixel.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImageLayerGenerator.h"
@@ -33,7 +33,7 @@ int otbImageLayerRenderingModelSingleLayer( int argc, char * argv[] )
   const char * sextoutfname = argv[4];
 
   // typedefs 
-  typedef itk::RGBPixel<unsigned char>               RGBPixelType;
+  typedef itk::RGBAPixel<unsigned char>               RGBPixelType;
   typedef otb::Image<RGBPixelType,2>                 OutputImageType;
   typedef otb::VectorImage<double,2>                 ImageType;
   typedef otb::ImageLayer<ImageType>                 LayerType;

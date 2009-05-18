@@ -61,7 +61,7 @@ ossimRadarSatTileSource::ossimRadarSatTileSource():
 	_leader(NULL)
 {
 }
-	
+
 ossimRadarSatTileSource::~ossimRadarSatTileSource()
 {
 	if (_data != NULL)
@@ -83,12 +83,12 @@ ossimString ossimRadarSatTileSource::getShortName()const
 {
 	return ossimString("RadarSat Image Handler");
 }
-   
+
 bool ossimRadarSatTileSource::saveState(ossimKeywordlist& kwl, const char* prefix)const
 {
-	return false; 
+	return false;
 }
-   
+
 bool ossimRadarSatTileSource::loadState(const ossimKeywordlist& kwl,  const char* prefix)
 {
 	return false;
@@ -208,7 +208,7 @@ bool ossimRadarSatTileSource::open()
 						ossimNotify(ossimNotifyLevel_DEBUG)
 						<< "End reading Leader file" << std::endl;
 					}
-				}	
+				}
 			}
 			else
 			{
@@ -257,7 +257,7 @@ bool ossimRadarSatTileSource::getImageGeometry(ossimKeywordlist& kwl,const char*
 	}
 
 	/*
-	 * Ajout des données nécessaires au modèle de capteur dans la liste des mots clefs
+	 * Ajout des donnï¿½es nï¿½cessaires au modï¿½le de capteur dans la liste des mots clefs
 	 */
 	DataSetSummary * datasetSummary = _leader->get_DataSetSummary();
 	if(datasetSummary != NULL)
@@ -317,7 +317,7 @@ bool ossimRadarSatTileSource::getImageGeometry(ossimKeywordlist& kwl,const char*
 	}
 
 	/*
-	 * Ajout des données nécessaires au modèle de capteur dans la liste des mots clefs
+	 * Ajout des donnï¿½es nï¿½cessaires au modï¿½le de capteur dans la liste des mots clefs
 	 */
 	ProcessingParameters * processingParameters = _leader->get_ProcessingParameters();
 	if(processingParameters != NULL)
@@ -344,7 +344,7 @@ bool ossimRadarSatTileSource::getImageGeometry(ossimKeywordlist& kwl,const char*
 		}
 
 		kwl.add(prefix, "pixel_spacing",processingParameters->get_pixel_spacing(),true);
-		
+
 		kwl.add(prefix, "lookDirection",(processingParameters->get_sens_orient()).c_str(),true);
 	}
 	else
@@ -353,7 +353,7 @@ bool ossimRadarSatTileSource::getImageGeometry(ossimKeywordlist& kwl,const char*
 	}
 
 	/*
-	 * Ajout des données nécessaires au modèle de capteur dans la liste des mots clefs
+	 * Ajout des donnï¿½es nï¿½cessaires au modï¿½le de capteur dans la liste des mots clefs
 	 */
 	PlatformPositionData * platformPositionData = _leader->get_PlatformPositionData();
 	if(platformPositionData != NULL)

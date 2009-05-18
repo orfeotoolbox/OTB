@@ -1,3 +1,12 @@
+//----------------------------------------------------------------------------
+//
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
+// 
+//----------------------------------------------------------------------------
+// $Id: ossimRpfAttributes.cpp 14241 2009-04-07 19:59:23Z dburken $
+
 #include <iostream>
  
 #include <ossim/support_data/ossimRpfAttributes.h>
@@ -18,49 +27,51 @@ ossimRpfAttributes::~ossimRpfAttributes()
 {
 }
 
-void ossimRpfAttributes::print(std::ostream& out)const
+std::ostream& ossimRpfAttributes::print(std::ostream& out,
+                                        const std::string& prefix) const
 {
-   out << "theCurrencyDate:                     " << theCurrencyDate << std::endl;
-   out << "theProductionDate:                   " << theProductionDate << std::endl;
-   out << "theSignificantDate:                  " << theSignificantDate << std::endl;
-   out << "theChartSeriesCode:                  " << theChartSeriesCode << std::endl;
-   out << "theMapDesignationCode:               " << theMapDesignationCode << std::endl;
-   out << "theOldHorDatum:                      " << theOldHorDatum << std::endl;
-   out << "theEdition:                          " << theEdition << std::endl;
-   out << "theProjectionCode:                   " << theProjectionCode << std::endl;
-   out << "theProjectionA:                      " << theProjectionA << std::endl;
-   out << "theProjectionB:                      " << theProjectionB << std::endl;
-   out << "theProjectionC:                      " << theProjectionC << std::endl;
-   out << "theProjectionD:                      " << theProjectionD << std::endl;
-   out << "theVertDatumCode:                    " << theVertDatumCode<< std::endl;
-   out << "theHorDatumCode:                     " << theHorDatumCode << std::endl;
-   out << "theVertAbsAccuracy:                  " << theVertAbsAccuracy << std::endl;
-   out << "theVertAbsUnits:                     " << theVertAbsUnits << std::endl;
-   out << "theHorAbsAccuracy:                   " << theHorAbsAccuracy << std::endl;
-   out << "theHorAbsUnits:                      " << theHorAbsUnits << std::endl;
-   out << "theVertRelAccuracy:                  " << theVertRelAccuracy << std::endl;
-   out << "theVertRelUnits:                     " << theVertRelUnits << std::endl;
-   out << "theHorRelAccuracy:                   " << theHorRelAccuracy << std::endl;
-   out << "theHorRelUnits:                      " << theHorRelUnits << std::endl;
-   out << "ellipsoidCode:                       " << ellipsoidCode << std::endl;
-   out << "theSoundingDatumCode:                " << theSoundingDatumCode << std::endl;
-   out << "theNavSystemCode:                    " << theNavSystemCode << std::endl;
-   out << "theGridCode:                         " << theGridCode << std::endl;
-   out << "theEeasterlyMagChange:               " << theEeasterlyMagChange << std::endl;
-   out << "theEasterlyMagChangeUnits:           " << theEasterlyMagChangeUnits << std::endl;
-   out << "theWesterlyMagChange:                " << theWesterlyMagChange << std::endl;
-   out << "theWesterlyMagChangeUnits:           " << theWesterlyMagChangeUnits << std::endl;
-   out << "theMagAngle:                         " << theMagAngle << std::endl;
-   out << "theGridConver:                       " << theGridConver << std::endl;
-   out << "theGridConverUnits:                  " << theGridConverUnits << std::endl;
-   out << "theHighElevation:                    " << theHighElevation << std::endl;
-   out << "theHighElevationUnits:               " << theHighElevationUnits << std::endl;
-   out << "theHighLat:                          " << theHighLat << std::endl;
-   out << "theHighLon:                          " << theHighLon << std::endl;
-   out << "theLegendFileName:                   " << theLegendFileName << std::endl;
-   out << "theDataSource:                       " << theDataSource << std::endl;
-   out << "theGsd:                              " << theGsd << std::endl;
-   out << "theDataLevel:                        " << theDataLevel << std::endl;
+   out << prefix << "CurrencyDate: " << theCurrencyDate << "\n"
+       << prefix << "ProductionDate: " << theProductionDate << "\n"
+       << prefix << "SignificantDate: " << theSignificantDate << "\n"
+       << prefix << "ChartSeriesCode: " << theChartSeriesCode << "\n"
+       << prefix << "MapDesignationCode: " << theMapDesignationCode << "\n"
+       << prefix << "OldHorDatum: " << theOldHorDatum << "\n"
+       << prefix << "Edition: " << theEdition << "\n"
+       << prefix << "ProjectionCode: " << theProjectionCode << "\n"
+       << prefix << "ProjectionA: " << theProjectionA << "\n"
+       << prefix << "ProjectionB: " << theProjectionB << "\n"
+       << prefix << "ProjectionC: " << theProjectionC << "\n"
+       << prefix << "ProjectionD: " << theProjectionD << "\n"
+       << prefix << "VertDatumCode: " << theVertDatumCode<< "\n"
+       << prefix << "HorDatumCode: " << theHorDatumCode << "\n"
+       << prefix << "VertAbsAccuracy: " << theVertAbsAccuracy << "\n"
+       << prefix << "VertAbsUnits: " << theVertAbsUnits << "\n"
+       << prefix << "HorAbsAccuracy: " << theHorAbsAccuracy << "\n"
+       << prefix << "HorAbsUnits: " << theHorAbsUnits << "\n"
+       << prefix << "VertRelAccuracy: " << theVertRelAccuracy << "\n"
+       << prefix << "VertRelUnits: " << theVertRelUnits << "\n"
+       << prefix << "HorRelAccuracy: " << theHorRelAccuracy << "\n"
+       << prefix << "HorRelUnits: " << theHorRelUnits << "\n"
+       << prefix << "ellipsoidCode: " << ellipsoidCode << "\n"
+       << prefix << "SoundingDatumCode: " << theSoundingDatumCode << "\n"
+       << prefix << "NavSystemCode: " << theNavSystemCode << "\n"
+       << prefix << "GridCode: " << theGridCode << "\n"
+       << prefix << "EeasterlyMagChange: " << theEeasterlyMagChange << "\n"
+       << prefix << "EasterlyMagChangeUnits: " << theEasterlyMagChangeUnits << "\n"
+       << prefix << "WesterlyMagChange: " << theWesterlyMagChange << "\n"
+       << prefix << "WesterlyMagChangeUnits: " << theWesterlyMagChangeUnits << "\n"
+       << prefix << "MagAngle: " << theMagAngle << "\n"
+       << prefix << "GridConver: " << theGridConver << "\n"
+       << prefix << "GridConverUnits: " << theGridConverUnits << "\n"
+       << prefix << "HighElevation: " << theHighElevation << "\n"
+       << prefix << "HighElevationUnits: " << theHighElevationUnits << "\n"
+       << prefix << "HighLat: " << theHighLat << "\n"
+       << prefix << "HighLon: " << theHighLon << "\n"
+       << prefix << "LegendFileName: " << theLegendFileName << "\n"
+       << prefix << "DataSource: " << theDataSource << "\n"
+       << prefix << "gsd: " << theGsd << "\n"
+       << prefix << "DataLevel: " << theDataLevel << std::endl;
+   return out;
 }
 
 bool ossimRpfAttributes::isEmpty()const

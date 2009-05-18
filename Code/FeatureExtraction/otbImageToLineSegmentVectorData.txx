@@ -54,7 +54,7 @@ PersistentLineSegmentDetector<TInputImage, TPrecision>
   m_Extractor->Clear();
   m_LineDetector->Clear();
 
-  for(int p=0; p<nbThread; p++)
+  for(int p=0; p<nbThread; ++p)
     {
       m_Extractor->PushBack( ExtractorType::New() );
       m_LineDetector->PushBack( LineDetectorType::New() );
@@ -192,7 +192,7 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
   typedef std::vector<VertexType> DoubleVertexType;
   std::vector<DoubleVertexType> vertexList, vertexNewList;
 
-  for(unsigned int i = 0; i<listSize; i++ )
+  for(unsigned int i = 0; i<listSize; ++i )
     {
       typename LineSpatialObjectType::const_iterator  it    = this->GetLines()->GetNthElement(i)->begin();
       typename LineSpatialObjectType::const_iterator  itEnd = this->GetLines()->GetNthElement(i)->end();
@@ -205,7 +205,7 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
 	  typename LineSpatialObjectType::LineType::PointListType::const_iterator itPoints = pointsList.begin();
 	  p1[0] =(*itPoints).GetPosition()[0];     //First Vertex
 	  p1[1] =(*itPoints).GetPosition()[1];
-	  itPoints++;
+	  ++itPoints;
 	  p2[0] =(*itPoints).GetPosition()[0];     //Second Vertex
 	  p2[1] =(*itPoints).GetPosition()[1];
 
@@ -236,7 +236,7 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
 		    {
 		      done = true;
 		    }
-		  j++;
+		  ++j;
 		}
 	      if(done==true && j!=0)
 		{
@@ -263,7 +263,7 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
 			vert.push_back(p2Old);
 		    }
 		  vertexNewList.push_back(vert);
-		  // j-1 because of the j++ at the end of the while
+		  // j-1 because of the ++j at the end of the while
 		  vertexList.erase(vertexList.begin()+(j-1));
 		}
 	      else if(j==0)
@@ -298,7 +298,7 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
 	}  // End while(it != itEnd) loop
 
       // write the false alarm in vertexList (those that don't have a continuation in the next thread)
-      for(unsigned int k=0; k<vertexList.size(); k++)
+      for(unsigned int k=0; k<vertexList.size(); ++k)
 	{
 	  typename LineType::Pointer l = LineType::New();
 	  l->AddVertex(vertexList[k][0]);

@@ -205,7 +205,7 @@ void GDALImageIO::Read(void* buffer)
     // Mise a jour du step
     step = step * static_cast<std::streamoff>(m_NbOctetPixel);
 
-    for (unsigned int nbComponents = 0; nbComponents < this->GetNumberOfComponents(); nbComponents++)
+    for (unsigned int nbComponents = 0; nbComponents < this->GetNumberOfComponents(); ++nbComponents)
     {
       lCrGdal = m_poBands[nbComponents]->RasterIO( GF_Read,lFirstColumn,lFirstLine,lNbColumns, lNbLines, value , lNbColumns, lNbLines, m_PxType,0, 0 );
       if (lCrGdal == CE_Failure)
@@ -325,7 +325,7 @@ void GDALImageIO::InternalReadImageInformation()
       itkExceptionMacro(<<"Memory allocation error for the 'rasterBands'");
       return;
     }
-    for (i=0; i<m_NbBands; i++)
+    for (i=0; i<m_NbBands; ++i)
       m_poBands[i] = m_poDataset->GetRasterBand(i+1);
 
     // Get Data Type
@@ -659,7 +659,7 @@ void GDALImageIO::InternalReadImageInformation()
 
       itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::ColorEntryCountKey, ColorEntryCount);
 
-      for (int i = 0; i < GDALGetColorEntryCount( hTable ); i++ )
+      for (int i = 0; i < GDALGetColorEntryCount( hTable ); ++i )
       {
         GDALColorEntry  sEntry;
         VectorType VColorEntry;
@@ -755,7 +755,7 @@ void GDALImageIO::Write(const void* buffer)
   CPLErr lCrGdal;
 
 
-  for (unsigned int nbComponents = 0; nbComponents < this->GetNumberOfComponents(); nbComponents++)
+  for (unsigned int nbComponents = 0; nbComponents < this->GetNumberOfComponents(); ++nbComponents)
   {
     cpt = static_cast<std::streamoff>(nbComponents)* static_cast<std::streamoff>(m_NbOctetPixel);
 
@@ -881,7 +881,7 @@ void GDALImageIO::InternalWriteImageInformation()
   {
     itkExceptionMacro(<<"Memory allocation error for 'rasterBands'");
   }
-  for (int i=0; i<m_NbBands; i++)
+  for (int i=0; i<m_NbBands; ++i)
   {
     m_poBands[i] = m_poDataset->GetRasterBand(i+1);
   }
@@ -981,7 +981,7 @@ void GDALImageIO::InternalWriteImageInformation()
   std::vector<std::string> keys = dict.GetKeys();
   MetaDataKey key;
 
-  for (unsigned int itkey=0; itkey<keys.size(); itkey++)
+  for (unsigned int itkey=0; itkey<keys.size(); ++itkey)
   {
     if (keys[itkey].compare(0,key.MetadataKey.length(),key.MetadataKey)==0)
     {

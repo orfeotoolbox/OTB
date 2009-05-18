@@ -1,11 +1,13 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 // 
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRpfToc.h 12912 2008-05-28 15:05:54Z gpotts $
+// $Id: ossimRpfToc.h 14241 2009-04-07 19:59:23Z dburken $
 #ifndef osimRpfToc_HEADER
 #define osimRpfToc_HEADER
 
@@ -20,6 +22,7 @@
 class ossimRpfHeader;
 class ossimRpfBoundaryRectTable;
 class ossimRpfTocEntry;
+class ossimRpfFrameEntry;
 
 class OSSIM_DLL ossimRpfToc
 {
@@ -27,10 +30,21 @@ public:
    friend OSSIM_DLL std::ostream& operator <<(std::ostream& out,
                                               const ossimRpfToc& data);
    ossimRpfToc();
-   virtual ~ossimRpfToc();
+   ~ossimRpfToc();
 
    ossimErrorCode parseFile(const ossimFilename &fileName);
-   void print(std::ostream& out)const;
+
+   /**
+    * @brief print method that outputs a key/value type format adding prefix
+    * to keys.
+    * @param out String to output to.
+    * @param prefix This will be prepended to key.
+    * e.g. Where prefix = "nitf." and key is "file_name" key becomes:
+    * "nitf.file_name:"
+    * @return output stream.
+    */
+   std::ostream& print(std::ostream& out,
+                       const std::string& prefix=std::string()) const;
    
    unsigned long getNumberOfEntries()const{return (ossim_uint32)theTocEntryList.size();}
    const ossimRpfTocEntry* getTocEntry(unsigned long index)const;
@@ -48,6 +62,16 @@ private:
    void buildTocEntryList(ossimRpfHeader* rpfHeader);
    void allocateTocEntryList(unsigned long numberOfEntries);
 
+   /**
+    * @brief Method to get the root directory from the a.toc file name.
+    * @param dir This initializes dir.
+    */
+   void getRootDirectory(ossimFilename& dir) const;
+
+   /** @brief Walks through frames to find the first entry that exists... */
+   void getFirstEntry(const ossimRpfTocEntry* rpfTocEntry,
+                      ossimRpfFrameEntry& frameEntry) const;
+
    /*!
     * This will hold a list of table of content entries.  There is one entry
     * per directory.  Each entry will have its geographic coverage.
@@ -61,7 +85,7 @@ private:
     */
    ossimFilename theFilename;
 
-   ossimRpfHeader*                          theRpfHeader;
+   ossimRpfHeader* theRpfHeader;
 };
 
 #endif

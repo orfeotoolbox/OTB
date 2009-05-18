@@ -7,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_1.cpp 13931 2008-12-15 23:44:40Z dburken $
+// $Id: ossimNitfImageHeaderV2_1.cpp 14247 2009-04-08 17:51:25Z dburken $
 #include <sstream>
 #include <iomanip>
 #include <cstring> // for memset
@@ -429,82 +429,144 @@ void ossimNitfImageHeaderV2_1::writeStream(std::ostream &out)
    }
 }
 
-std::ostream& ossimNitfImageHeaderV2_1::print(std::ostream& out)const
+std::ostream& ossimNitfImageHeaderV2_1::print(std::ostream& out,
+                                              const std::string& prefix) const
 {
-   out << setiosflags(ios::left) << "ossimNitfImageHeaderV2_1::print"
-       << setw(24) << "\nIM:"     << theType
-       << setw(24) << "\nIID1:"   << theImageId
-       << setw(24) << "\nIDATIM:" << theDateTime
-       << setw(24) << "\nTGTID:"  << theTargetId
-       << setw(24) << "\nIID2:"   << theTitle
-       << setw(24) << "\nISCLAS:" << theSecurityClassification
-       << setw(24) << "\nISCLSY:" << theSecurityClassificationSys
-       << setw(24) << "\nISCODE:" << theCodewords
-       << setw(24) << "\nISCTLH:" << theControlAndHandling
-       << setw(24) << "\nISREL:"  << theReleasingInstructions
-       << setw(24) << "\nISDCTP:" << theDeclassificationType
-       << setw(24) << "\nISDCDT:" << theDeclassificationDate
-       << setw(24) << "\nISDCXM:" << theDeclassificationExempt
-       << setw(24) << "\nISDG:"   << theDowngrade
-       << setw(24) << "\nISDGDT:" << theDowngradeDate
-       << setw(24) << "\nISCLTX:" << theClassificationText
-       << setw(24) << "\nISCATP:" << theClassificationAuthType
-       << setw(24) << "\nISCAUT:" << theClassificationAuthority
-       << setw(24) << "\nISCRSN:" << theClassificationReason
-       << setw(24) << "\nISSRDT:" << theSecuritySourceDate
-       << setw(24) << "\nISCTLN:" << theSecurityControlNumber
-       << setw(24) << "\nENCRYP:" << theEncryption
-       << setw(24) << "\nISORCE:" << theImageSource
-       << setw(24) << "\nNROWS:"  << theSignificantRows
-       << setw(24) << "\nNCOLS:"  << theSignificantCols
-       << setw(24) << "\nPVTYPE:" << thePixelValueType
-       << setw(24) << "\nIREP:"   << theRepresentation
-       << setw(24) << "\nICAT:"   << theCategory
-       << setw(24) << "\nABPP:"   << theActualBitsPerPixelPerBand
-       << setw(24) << "\nPJUST:"  << theJustification
-       << setw(24) << "\nICORDS:" << theCoordinateSystem
-       << setw(24) << "\nIGEOLO:" << theGeographicLocation
-       << setw(24) << "\nNICOM:"  << theNumberOfComments
-       << setw(24) << "\nIC:"     << theCompression
-       << setw(24) << "\nCOMRAT:" << theCompressionRateCode
-       << setw(24) << "\nNBANDS:" << theNumberOfBands
-       << setw(24) << "\nXBANDS:" << theNumberOfMultispectralBands;
+   out << setiosflags(ios::left)
+       << prefix << setw(24)
+       << "IM:"     << theType << "\n"
+       << prefix << setw(24)
+       << "IID1:"   << theImageId << "\n"
+       << prefix << setw(24)
+       << "IDATIM:" << theDateTime << "\n"
+       << prefix << setw(24)
+       << "TGTID:"  << theTargetId << "\n"
+       << prefix << setw(24)
+       << "IID2:"   << theTitle << "\n"
+       << prefix << setw(24)
+       << "ISCLAS:" << theSecurityClassification << "\n"
+       << prefix << setw(24)
+       << "ISCLSY:" << theSecurityClassificationSys << "\n"
+       << prefix << setw(24)
+       << "ISCODE:" << theCodewords << "\n"
+       << prefix << setw(24)
+       << "ISCTLH:" << theControlAndHandling << "\n"
+       << prefix << setw(24)
+       << "ISREL:"  << theReleasingInstructions << "\n"
+       << prefix << setw(24)
+       << "ISDCTP:" << theDeclassificationType << "\n"
+       << prefix << setw(24)
+       << "ISDCDT:" << theDeclassificationDate << "\n"
+       << prefix << setw(24)
+       << "ISDCXM:" << theDeclassificationExempt << "\n"
+       << prefix << setw(24)
+       << "ISDG:"   << theDowngrade << "\n"
+       << prefix << setw(24)
+       << "ISDGDT:" << theDowngradeDate << "\n"
+       << prefix << setw(24)
+       << "ISCLTX:" << theClassificationText << "\n"
+       << prefix << setw(24)
+       << "ISCATP:" << theClassificationAuthType << "\n"
+       << prefix << setw(24)
+       << "ISCAUT:" << theClassificationAuthority << "\n"
+       << prefix << setw(24)
+       << "ISCRSN:" << theClassificationReason << "\n"
+       << prefix << setw(24)
+       << "ISSRDT:" << theSecuritySourceDate << "\n"
+       << prefix << setw(24)
+       << "ISCTLN:" << theSecurityControlNumber << "\n"
+       << prefix << setw(24)
+       << "ENCRYP:" << theEncryption << "\n"
+       << prefix << setw(24)
+       << "ISORCE:" << theImageSource << "\n"
+       << prefix << setw(24)
+       << "NROWS:"  << theSignificantRows << "\n"
+       << prefix << setw(24)
+       << "NCOLS:"  << theSignificantCols << "\n"
+       << prefix << setw(24)
+       << "PVTYPE:" << thePixelValueType << "\n"
+       << prefix << setw(24)
+       << "IREP:"   << theRepresentation << "\n"
+       << prefix << setw(24)
+       << "ICAT:"   << theCategory << "\n"
+       << prefix << setw(24)
+       << "ABPP:"   << theActualBitsPerPixelPerBand << "\n"
+       << prefix << setw(24)
+       << "PJUST:"  << theJustification << "\n"
+       << prefix << setw(24)
+       << "ICORDS:" << theCoordinateSystem << "\n"
+       << prefix << setw(24)
+       << "IGEOLO:" << theGeographicLocation << "\n"
+       << prefix << setw(24)
+       << "NICOM:"  << theNumberOfComments << "\n"
+       << prefix << setw(24)
+       << "IC:"     << theCompression << "\n"
+       << prefix << setw(24)
+       << "COMRAT:" << theCompressionRateCode << "\n"
+       << prefix << setw(24)
+       << "NBANDS:" << theNumberOfBands << "\n"
+       << prefix << setw(24)
+       << "XBANDS:" << theNumberOfMultispectralBands << "\n";
    
    ossim_uint32 idx = 0;
    for(idx = 0; idx < theImageBands.size(); ++idx)
    {
       if(theImageBands[idx].valid())
       {
-         theImageBands[idx]->print(out, idx); 
+         theImageBands[idx]->print(out, prefix, idx); 
       }
    }
 
-   out << setw(24) << "\nISYNC:"     << theImageSyncCode
-       << setw(24) << "\nIMODE:"     << theImageMode
-       << setw(24) << "\nNBPR:"      << theNumberOfBlocksPerRow
-       << setw(24) << "\nNBPC:"      << theNumberOfBlocksPerCol
-       << setw(24) << "\nNPPBH:"     << theNumberOfPixelsPerBlockHoriz
-       << setw(24) << "\nNPPBV:"     << theNumberOfPixelsPerBlockVert
-       << setw(24) << "\nNBPP:"      << theNumberOfBitsPerPixelPerBand
-       << setw(24) << "\nIDLVL:"     << theDisplayLevel
-       << setw(24) << "\nIALVL:"     << theAttachmentLevel
-       << setw(24) << "\nILOC:"      << theImageLocation
-       << setw(24) << "\nIMAG:"      << theImageMagnification
-       << setw(24) << "\nUDIDL:"     << theUserDefinedImageDataLength
-       << setw(24) << "\nUDOFL:"     << theUserDefinedOverflow
-       << setw(24) << "\nIXSHDL:"    << theExtendedSubheaderDataLen
-       << setw(24) << "\nIXSOFL:"    << theExtendedSubheaderOverflow
-       << setw(24) << "\nIMDATOFF:"  << theBlockedImageDataOffset
-       << setw(24) << "\nBMRLNTH:"   << theBlockMaskRecordLength
-       << setw(24) << "\nTMRLNTH:"   << thePadPixelMaskRecordLength
-       << setw(24) << "\nTPXCDLNTH:" << theTransparentOutputPixelCodeLength
-       << setw(24) << "\nTPXCD:"     << thePadOutputPixelCode
-       << setw(24) << "\ntheDataLocation:" << theDataLocation
-       << std::endl;
-      
-   printTags(out);
-   
-   return out;
+   out << prefix << setw(24)
+       << "ISYNC:"     << theImageSyncCode << "\n"
+       << prefix << setw(24)
+       << "IMODE:"     << theImageMode << "\n"
+       << prefix << setw(24)
+       << "NBPR:"      << theNumberOfBlocksPerRow << "\n"
+       << prefix << setw(24)
+       << "NBPC:"      << theNumberOfBlocksPerCol << "\n"
+       << prefix << setw(24)
+       << "NPPBH:"     << theNumberOfPixelsPerBlockHoriz << "\n"
+       << prefix << setw(24)
+       << "NPPBV:"     << theNumberOfPixelsPerBlockVert << "\n"
+       << prefix << setw(24)
+       << "NBPP:"      << theNumberOfBitsPerPixelPerBand << "\n"
+       << prefix << setw(24)
+       << "IDLVL:"     << theDisplayLevel << "\n"
+       << prefix << setw(24)
+       << "IALVL:"     << theAttachmentLevel << "\n"
+       << prefix << setw(24)
+       << "ILOC:"      << theImageLocation << "\n"
+       << prefix << setw(24)
+       << "IMAG:"      << theImageMagnification << "\n"
+       << prefix << setw(24)
+       << "UDIDL:"     << theUserDefinedImageDataLength << "\n"
+       << prefix << setw(24)
+       << "UDOFL:"     << theUserDefinedOverflow << "\n"
+       << prefix << setw(24)
+       << "IXSHDL:"    << theExtendedSubheaderDataLen << "\n"
+       << prefix << setw(24)
+       << "IXSOFL:"    << theExtendedSubheaderOverflow << "\n"
+       << prefix << setw(24)
+       << "IMDATOFF:"  << theBlockedImageDataOffset << "\n"
+       << prefix << setw(24)
+       << "BMRLNTH:"   << theBlockMaskRecordLength << "\n"
+       << prefix << setw(24)
+       << "TMRLNTH:"   << thePadPixelMaskRecordLength << "\n"
+       << prefix << setw(24)
+       << "TPXCDLNTH:" << theTransparentOutputPixelCodeLength << "\n"
+       << prefix << setw(24)
+       << "TPXCD:"     << thePadOutputPixelCode << "\n";
+
+   if ( traceDebug() )
+   {
+      out << prefix << setw(24)
+          << "theDataLocation:" << theDataLocation << "\n";
+   }
+
+   out << std::endl;
+
+   return printTags(out, prefix);
 }
 
 bool ossimNitfImageHeaderV2_1::isCompressed()const
@@ -1220,7 +1282,7 @@ ossimRefPtr<ossimProperty> ossimNitfImageHeaderV2_1::getProperty(const ossimStri
    }
    else
    {
-      return ossimNitfImageHeader::getProperty(name);
+      return ossimNitfImageHeaderV2_X::getProperty(name);
    }
    
    return property;
@@ -1228,7 +1290,7 @@ ossimRefPtr<ossimProperty> ossimNitfImageHeaderV2_1::getProperty(const ossimStri
 
 void ossimNitfImageHeaderV2_1::getPropertyNames(std::vector<ossimString>& propertyNames)const
 {
-   ossimNitfImageHeader::getPropertyNames(propertyNames);
+   ossimNitfImageHeaderV2_X::getPropertyNames(propertyNames);
 
    propertyNames.push_back(ISCLSY_KW);
    propertyNames.push_back(ISCODE_KW);

@@ -351,7 +351,7 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
   m_TotalNumberOfPixelsInInputImage = 1;
   m_TotalNumberOfValidPixelsInOutputImage = 1;
 
-  for ( unsigned int i=0; i < InputImageDimension; i++ )
+  for ( unsigned int i=0; i < InputImageDimension; ++i )
   {
     m_TotalNumberOfPixelsInInputImage *= static_cast<int>(inputImageSize[i]);
 

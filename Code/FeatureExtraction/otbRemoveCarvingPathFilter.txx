@@ -201,7 +201,7 @@ RemoveCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
   typename TOutputImage::SizeType         outputSize;
   typename TOutputImage::IndexType        outputStartIndex;
 
-  for (unsigned int i = 0; i < TOutputImage::ImageDimension; i++)
+  for (unsigned int i = 0; i < TOutputImage::ImageDimension; ++i)
   {
     outputSpacing[i] = inputSpacing[i];
     outputSize[i] = (unsigned int) (inputSize[i]);

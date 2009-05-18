@@ -323,7 +323,7 @@ void JPEG2000ImageIO::Read(void* buffer)
           buffer_pos = buffer_skip + comp*m_NbOctetPixel + line*buffer_line_size + buffer_offset_begin;
           tile_pos   = comp *tile_component_size + tile_skip + line*tile_line_size + tile_offset_begin;
 
-          for (int cols = 0;cols<line_size;cols++)
+          for (int cols = 0;cols<line_size;++cols)
           {
             for (unsigned int octet = 0;octet<m_NbOctetPixel;++octet)
             {

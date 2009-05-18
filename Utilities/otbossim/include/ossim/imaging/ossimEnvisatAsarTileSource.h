@@ -18,19 +18,19 @@ class OSSIMDLLEXPORT ossimEnvisatAsarTileSource : public ossimImageHandler
 {
 public:
 	ossimEnvisatAsarTileSource();
-	
+
    virtual ~ossimEnvisatAsarTileSource();
 
    virtual ossimString getLongName()  const;
    virtual ossimString getShortName() const;
-   
+
    /*!
     * Method to save the state of an object to a keyword list.
     * Return true if ok or false on error.
     */
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix=0)const;
-   
+
    /*!
     * Method to the load (recreate) the state of an object from a keyword
     * list.  Returns true if ok or false on error.
@@ -68,7 +68,7 @@ public:
    {
 	   return 0;
    };
-   
+
    /*!
     * Returns the height of the output tile.
     */
@@ -84,7 +84,7 @@ public:
    {
 	   return 0;
    };
-   
+
    /**
 	* @brief Populates the keyword list with image geometry information
 	*

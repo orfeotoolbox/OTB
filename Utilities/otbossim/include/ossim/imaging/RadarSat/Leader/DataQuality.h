@@ -241,7 +241,7 @@ public:
 		return _ori_err;
 	};
 	/**
-	 * @brief Misregistration error  
+	 * @brief Misregistration error
 	 */
 	MisregistrationRecord* get_misreg()
 	{
@@ -365,7 +365,7 @@ protected:
 	 */
 	double   _ori_err;
 	/**
-	 * @brief Misregistration error  
+	 * @brief Misregistration error
 	 */
 	MisregistrationRecord _misreg[16];
     /**

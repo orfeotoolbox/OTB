@@ -83,7 +83,7 @@ public:
 	{
 		return _ascii_flag;
 	};
-    
+
     /**
 	 * @brief Format control document
 	 */
@@ -189,7 +189,7 @@ public:
 	{
 		return _rlen_len;
 	};
-    
+
     /**
 	 * @brief Number of SAR data records
 	 */
@@ -204,7 +204,7 @@ public:
 	{
 		return _l_dataset;
 	};
-    
+
     /**
 	 * @brief Number of bits per sample
 	 */
@@ -324,7 +324,7 @@ public:
 	{
 		return _n_suffix;
 	};
-    
+
     /**
 	 * @brief Line number locator
 	 */
@@ -367,7 +367,7 @@ public:
 	{
 		return _pad_ind;
 	};
-    
+
     /**
 	 * @brief Quality code locator
 	 */
@@ -431,13 +431,13 @@ public:
 	{
 		return _pix_rng;
 	};
-	
+
 protected:
 	/**
 	 * @brief ASCII flag
 	 */
 	std::string   _ascii_flag;
-    
+
     /**
 	 * @brief Format control document
 	 */
@@ -498,8 +498,8 @@ protected:
 	 * @brief Record length length
 	 */
 	int   _rlen_len;
-    
-    
+
+
     /**
 	 * @brief Number of SAR data records
 	 */
@@ -508,7 +508,7 @@ protected:
 	 * @brief SAR data record length
 	 */
 	int   _l_dataset;
-    
+
     /**
 	 * @brief Number of bits per sample
 	 */
@@ -577,7 +577,7 @@ protected:
 	 * @brief Number of bytes of suffix data per record
 	 */
 	int   _n_suffix;
-   
+
     /**
 	 * @brief Line number locator
 	 */
@@ -602,7 +602,7 @@ protected:
 	 * @brief Pad pixel indicator
 	 */
 	std::string   _pad_ind;
-    
+
     /**
 	 * @brief Quality code locator
 	 */
@@ -639,7 +639,7 @@ protected:
 	 * @brief Maximum data range of pixel
 	 */
 	int   _pix_rng;
-	
+
 private:
 };
 #endif

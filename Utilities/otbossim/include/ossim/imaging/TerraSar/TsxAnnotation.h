@@ -95,7 +95,7 @@ public:
 	{
 		return _ellip_min;
 	};
-	 
+
     /**
 	 * @brief Average terrain height, km
 	 */
@@ -117,8 +117,8 @@ public:
 	{
 		return _sc_pix;
 	};
-      
-   
+
+
     /**
 	 * @brief Radar central frequency
 	 */
@@ -126,7 +126,7 @@ public:
 	{
 		return _central_freq;
 	};
-       
+
     /**
 	 * @brief Range sampling rate
 	 */
@@ -148,7 +148,7 @@ public:
 	{
 		return _rng_gate_end;
 	};
-    
+
 	 /**
 	 * @brief Azimuth start time
 	 */
@@ -167,11 +167,11 @@ public:
 	/**
 	 * @brief Scene center range time
 	 */
-    double  get_sceneCenterRangeTime() 
+    double  get_sceneCenterRangeTime()
 	{
 		return _sceneCenterRangeTime;
 	};
-	 
+
     /**
 	 * @brief Nominal PRF, Hz
 	 */
@@ -179,7 +179,7 @@ public:
 	{
 		return _fa;
 	};
-    
+
     /**
 	 * @brief Number of azimuth looks
 	 */
@@ -187,7 +187,7 @@ public:
 	{
 		return _n_azilok;
 	};
-    
+
 	/**
 	 * @brief Number of range looks
 	 */
@@ -195,7 +195,7 @@ public:
 	{
 		return _n_rnglok;
 	};
-    
+
     /**
 	 * @brief Along track Doppler frequency terms
 	 */
@@ -203,7 +203,7 @@ public:
 	{
 		return _alt_dopcen;
 	};
-    
+
     /**
 	 * @brief Cross track Doppler frequency terms
 	 */
@@ -226,7 +226,7 @@ public:
 	{
 		return _ndata;
 	};
-	
+
 	/**
 	 * @brief State vector data point date, position, velocity
 	 */
@@ -488,12 +488,12 @@ protected:
 	* @brief Data point position/velocity
 	*/
 	std::vector<std::string> _eph_date;
-	std::vector<double> _posX; 
-	std::vector<double> _posY; 
-	std::vector<double> _posZ; 
-	std::vector<double> _velX; 
-	std::vector<double> _velY; 
-	std::vector<double> _velZ; 
+	std::vector<double> _posX;
+	std::vector<double> _posY;
+	std::vector<double> _posZ;
+	std::vector<double> _velX;
+	std::vector<double> _velY;
+	std::vector<double> _velZ;
 
 	/**
 	 * @brief Scene corners + scene center longitudes

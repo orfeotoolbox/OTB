@@ -12,8 +12,8 @@
  * @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 23-11-07
- * @warning There is an error in the documentation for the spare at the end of the record. 
- *			They say 3 bytes (A3) but they also say that the spare is on the bytes 16917, 16918, 16919 and 16920. 
+ * @warning There is an error in the documentation for the spare at the end of the record.
+ *			They say 3 bytes (A3) but they also say that the spare is on the bytes 16917, 16918, 16919 and 16920.
  *			In the data files I have, I need to use a spare of 4 bytes.
  */
 class DataHistogramProcessedData : public RadarSatRecord

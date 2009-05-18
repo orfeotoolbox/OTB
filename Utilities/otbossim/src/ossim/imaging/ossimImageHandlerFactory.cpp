@@ -3,7 +3,7 @@
 // License:  See top level LICENSE.txt file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimImageHandlerFactory.cpp 13910 2008-12-03 21:13:09Z gpotts $
+// $Id: ossimImageHandlerFactory.cpp 14056 2009-03-04 20:32:58Z gpotts $
 #include <ossim/imaging/ossimImageHandlerFactory.h>
 #include <ossim/imaging/ossimAdrgTileSource.h>
 #include <ossim/imaging/ossimCcfTileSource.h>
@@ -72,6 +72,11 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
       return result;
    }
 
+   // for all of our imagehandlers the filename must exist.
+   // if we have any imagehandlers that require an encoded string and is contrlled in this factory then
+   // we need to move this.
+   if(!copyFilename.exists()) return 0;
+   
    if(copyFilename.ext() == "gz")
    {
       copyFilename = copyFilename.setExtension("");
@@ -88,34 +93,6 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    }
    delete result;
    
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying adrg" << std::endl;
-   }
-
-   // test if ADRG
-   result  = new ossimAdrgTileSource();
-
-   if(result->open(copyFilename))
-   {
-      return result;
-   }
-   delete result;
-
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying ccf" << std::endl;
-   }
-   // test if ccf
-   result = new ossimCcfTileSource();
-   if(result->open(copyFilename))
-   {
-      return result;
-   }
-
-   delete result;
 
    // test if TileMap
    if(traceDebug())
@@ -251,7 +228,6 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    }
    delete result;
 
-
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -329,6 +305,34 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    }
    delete result;
 
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+      << "trying adrg" << std::endl;
+   }
+   
+   // test if ADRG
+   result  = new ossimAdrgTileSource();
+   
+   if(result->open(copyFilename))
+   {
+      return result;
+   }
+   delete result;
+   
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+      << "trying ccf" << std::endl;
+   }
+   // test if ccf
+   result = new ossimCcfTileSource();
+   if(result->open(copyFilename))
+   {
+      return result;
+   }
+   
+   delete result;
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -461,7 +465,7 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    {
       return result;
    }
-   
+
    delete result;
 
       // RadarSat
@@ -476,7 +480,7 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    {
       return result;
    }
-   
+
    delete result;
 
       // TerraSAR
@@ -491,7 +495,7 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    {
       return result;
    }
-   
+
    delete result;
 
    // Must be before tiff...

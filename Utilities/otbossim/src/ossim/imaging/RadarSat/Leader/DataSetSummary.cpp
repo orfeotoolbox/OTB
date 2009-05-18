@@ -9,25 +9,25 @@ DataSetSummary::~DataSetSummary()
 }
 
 std::ostream& operator<<(std::ostream& os, const DataSetSummary& data)
-{	
+{
 	os<<"seq_num:"<<data._seq_num<<std::endl;
-    
+
 	os<<"sar_chn:"<<data._sar_chn<<std::endl;
 
 	os<<"scene_id:"<<data._scene_id.c_str()<<std::endl;
 
 	os<<"scene_des:"<<data._scene_des.c_str()<<std::endl;
-	
+
 	os<<"inp_sctim:"<<data._inp_sctim.c_str()<<std::endl;
 
 	os<<"asc_des:"<<data._asc_des.c_str()<<std::endl;
 
 	os<<"pro_lat:"<<data._pro_lat<<std::endl;
-	
+
     os<<"pro_long:"<<data._pro_long<<std::endl;
 
     os<<"pro_head:"<<data._pro_head<<std::endl;
-	
+
 	os<<"ellip_des:"<<data._ellip_des.c_str()<<std::endl;
 
 	os<<"ellip_maj:"<<data._ellip_maj<<std::endl;
@@ -51,18 +51,18 @@ std::ostream& operator<<(std::ostream& os, const DataSetSummary& data)
 	os<<"plat_lat:"<<data._plat_lat<<std::endl;
 
     os<<"plat_long:"<<data._plat_long<<std::endl;
-    
+
     os<<"plat_head:"<<data._plat_head<<std::endl;
 
     os<<"clock_ang:"<<data._clock_ang<<std::endl;
 
     os<<"incident_ang:"<<data._incident_ang<<std::endl;
-   
+
 
     os<<"wave_length:"<<data._wave_length<<std::endl;
-    
+
 	os<<"motion_comp:"<<data._motion_comp.c_str()<<std::endl;
-    
+
 	os<<"pulse_code:"<<data._pulse_code.c_str()<<std::endl;
 
 	for (int i=0;i<5;i++)
@@ -78,15 +78,15 @@ std::ostream& operator<<(std::ostream& os, const DataSetSummary& data)
 	os<<"chirp_ext_ind:"<<data._chirp_ext_ind<<std::endl;
 
 	os<<"fr:"<<data._fr<<std::endl;
-    
+
     os<<"rng_gate:"<<data._rng_gate<<std::endl;
-    
+
     os<<"rng_length:"<<data._rng_length<<std::endl;
 
     os<<"baseband_f:"<<data._baseband_f.c_str()<<std::endl;
 
     os<<"rngcmp_f:"<<data._rngcmp_f.c_str()<<std::endl;
-    
+
 	os<<"gn_polar:"<<data._gn_polar <<std::endl;
 
     os<<"gn_cross:"<<data._gn_cross <<std::endl;
@@ -102,9 +102,9 @@ std::ostream& operator<<(std::ostream& os, const DataSetSummary& data)
     os<<"iq_ratio:"<<data._iq_ratio<<std::endl;
 
     os<<"ele_sight:"<<data._ele_sight<<std::endl;
-   
+
     os<<"mech_sight:"<<data._mech_sight<<std::endl;
-    
+
     os<<"echo_track:"<<data._echo_track.c_str()<<std::endl;
 
     os<<"fa:"<<data._fa<<std::endl;
@@ -167,7 +167,7 @@ std::ostream& operator<<(std::ostream& os, const DataSetSummary& data)
 	os<<"crt_dopcen[2]:"<<data._crt_dopcen[2]<<std::endl;
 
     os<<"time_dir_pix:"<<data._time_dir_pix.c_str()<<std::endl;
-   
+
 	os<<"time_dir_lin:"<<data._time_dir_lin.c_str()<<std::endl;
 
     os<<"alt_rate[0]:"<<data._alt_rate[0]<<std::endl;
@@ -207,7 +207,7 @@ std::istream& operator>>(std::istream& is, DataSetSummary& data)
 
 	is.read(buf4,4);
 	data._seq_num = atoi(buf4);
-    
+
 	is.read(buf4,4);
 	data._sar_chn = atoi(buf4);
 
@@ -216,7 +216,7 @@ std::istream& operator>>(std::istream& is, DataSetSummary& data)
 
 	is.read(buf32,32);
 	data._scene_des = buf32;
-	
+
 	is.read(buf32,32);
 	data._inp_sctim = buf32;
 
@@ -225,13 +225,13 @@ std::istream& operator>>(std::istream& is, DataSetSummary& data)
 
 	is.read(buf16,16);
 	data._pro_lat = atof(buf16);
-	
+
     is.read(buf16,16);
 	data._pro_long = atof(buf16);
 
     is.read(buf16,16);
 	data._pro_head = atof(buf16);
-	
+
 	is.read(buf16,16);
 	data._ellip_des = buf16;
 
@@ -246,7 +246,7 @@ std::istream& operator>>(std::istream& is, DataSetSummary& data)
 
     is.read(buf16,16);
 	data._grav_const = atof(buf16);
-   
+
 	is.read(buf16,16);
 	data._ellip_j[0] = atof(buf16);
 	is.read(buf16,16);
@@ -258,32 +258,32 @@ std::istream& operator>>(std::istream& is, DataSetSummary& data)
 
     is.read(buf16,16);
 	data._terrain_h = atof(buf16);
-    
+
 	is.read(buf8,8);
 	data._sc_lin = atoi(buf8);
-    
+
 	is.read(buf8,8);
 	data._sc_pix = atoi(buf8);
-    
+
 	is.read(buf16,16);
 	data._scene_len = atof(buf16);
-    
+
 	is.read(buf16,16);
 	data._scene_wid = atof(buf16);
-    
+
 	is.read(buf16,16);
-	
+
 	is.read(buf4,4);
 	data._nchn = atoi(buf4);
-    
+
 	is.read(buf4,4);
-	
+
 	is.read(buf16,16);
 	data._mission_id = buf16;
-	
+
 	is.read(buf32,32);
 	data._sensor_id = buf32;
-	
+
 	is.read(buf8,8);
 	data._orbit_num = buf8;
 
@@ -292,7 +292,7 @@ std::istream& operator>>(std::istream& is, DataSetSummary& data)
 
     is.read(buf8,8);
 	data._plat_long = atof(buf8);
-    
+
     is.read(buf8,8);
 	data._plat_head = atof(buf8);
 
@@ -301,16 +301,16 @@ std::istream& operator>>(std::istream& is, DataSetSummary& data)
 
     is.read(buf8,8);
 	data._incident_ang = atof(buf8);
-   
+
     is.read(buf8,8);
 
 	is.read(buf16,16);
 	data._wave_length = atof(buf16);
-    
+
 	is.read(buf8,2);
 	buf8[2] = '\0';
 	data._motion_comp = buf8;
-    
+
 	is.read(buf16,16);
 	data._pulse_code = buf16;
 
@@ -333,10 +333,10 @@ std::istream& operator>>(std::istream& is, DataSetSummary& data)
 
     is.read(buf16,16);
 	data._fr = atof(buf16);
-    
+
     is.read(buf16,16);
 	data._rng_gate = atof(buf16);
-    
+
     is.read(buf16,16);
 	data._rng_length = atof(buf16);
 
@@ -347,7 +347,7 @@ std::istream& operator>>(std::istream& is, DataSetSummary& data)
     is.read(buf8,4);
 	buf8[4] = '\0';
 	data._rngcmp_f = buf8;
-    
+
 	is.read(buf16,16);
 	data._gn_polar = atof(buf16);
 
@@ -376,10 +376,10 @@ std::istream& operator>>(std::istream& is, DataSetSummary& data)
 
     is.read(buf16,16);
 	data._ele_sight = atof(buf16);
-   
+
     is.read(buf16,16);
 	data._mech_sight = atof(buf16);
-    
+
     is.read(buf4,4);
 	data._echo_track = buf4;
 
@@ -480,7 +480,7 @@ std::istream& operator>>(std::istream& is, DataSetSummary& data)
 
     is.read(buf8,8);
 	data._time_dir_pix = buf8;
-   
+
 	is.read(buf8,8);
 	data._time_dir_lin = buf8;
 

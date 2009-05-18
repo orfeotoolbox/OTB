@@ -34,7 +34,7 @@ public:
     *
     * @param in Stream to parse.
     *
-    * @note Marker is not read.
+    * @note SIZ Marker (0xff51) is not read.
     */
    void parseStream(std::istream& in);
 

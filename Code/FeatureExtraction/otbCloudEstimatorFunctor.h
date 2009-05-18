@@ -55,7 +55,7 @@ public:
     double lGaussianCoef = 1.0;
 
     // Compute the Gaussian Coef
-    for (unsigned int i=0; i<std::min(inPix.Size(),m_ReferencePixel.Size()); i++)
+    for (unsigned int i=0; i<std::min(inPix.Size(),m_ReferencePixel.Size()); ++i)
     {
       lCurPixNorm += inPix[i]*inPix[i];
     }
@@ -75,7 +75,7 @@ public:
     m_ReferencePixel = ref;
     m_SpectralAngleFunctor.SetReferencePixel(ref);
     m_RefNorm = 0.0;
-    for (unsigned int i = 0; i<ref.Size(); i++)
+    for (unsigned int i = 0; i<ref.Size(); ++i)
     {
       m_RefNorm += ref[i]*ref[i];
     }

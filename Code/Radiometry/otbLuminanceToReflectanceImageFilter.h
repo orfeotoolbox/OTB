@@ -162,6 +162,22 @@ public:
   /** Give the zenithal solar angle. */
   itkGetConstReferenceMacro(ZenithalSolarAngle, double);
 
+  /** Set/Get the sun elevation angle (internally handled by the zenithal angle)*/
+  virtual void SetElevationSolarAngle(double elevationAngle)
+  {
+    double zenithalAngle = 90.0 - elevationAngle;
+    if (this->m_ZenithalSolarAngle != zenithalAngle)
+    {
+      this->m_ZenithalSolarAngle = zenithalAngle;
+      this->Modified();
+    }
+  }
+
+  virtual double GetElevationSolarAngle() const
+  {
+    return 90.0 - this->m_ZenithalSolarAngle;
+  }
+
   /** Set the day. */
   itkSetClampMacro(Day, int, 1, 31);
   /** Give the day. */

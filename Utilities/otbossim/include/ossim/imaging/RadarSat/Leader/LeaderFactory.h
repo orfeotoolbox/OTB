@@ -23,7 +23,7 @@ public:
 	 */
 	~LeaderFactory();
 
-	
+
 protected:
 
 

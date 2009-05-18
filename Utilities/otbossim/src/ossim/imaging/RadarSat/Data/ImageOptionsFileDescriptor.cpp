@@ -16,7 +16,7 @@ std::ostream& operator<<(std::ostream& os, const ImageOptionsFileDescriptor& dat
     os<<"format_doc:"<<data._format_doc.c_str()<<std::endl;
 
     os<<"format_rev:"<<data._format_rev.c_str()<<std::endl;
-	
+
 	os<<"design_rev:"<<data._design_rev.c_str()<<std::endl;
 
     os<<"software_id:"<<data._software_id.c_str()<<std::endl;
@@ -64,7 +64,7 @@ std::ostream& operator<<(std::ostream& os, const ImageOptionsFileDescriptor& dat
     os<<"ngrp:"<<data._ngrp<<std::endl;
 
     os<<"nright:"<<data._nright<<std::endl;
-    
+
 	os<<"ntop:"<<data._ntop<<std::endl;
 
     os<<"nbott:"<<data._nbott<<std::endl;
@@ -100,7 +100,7 @@ std::ostream& operator<<(std::ostream& os, const ImageOptionsFileDescriptor& dat
     os<<"gain_loc:"<<data._gain_loc.c_str()<<std::endl;
 
     os<<"bias_loc:"<<data._bias_loc.c_str()<<std::endl;
-    
+
 	os<<"type_id:"<<data._type_id.c_str()<<std::endl;
 
 	os<<"type_code:"<<data._type_code.c_str()<<std::endl;
@@ -132,7 +132,7 @@ std::istream& operator>>(std::istream& is, ImageOptionsFileDescriptor& data)
     is.read(buf,2);
 	buf[2] = '\0';
 	data._format_rev = buf;
-	
+
 	is.read(buf,2);
 	buf[2] = '\0';
 	data._design_rev = buf;
@@ -237,7 +237,7 @@ std::istream& operator>>(std::istream& is, ImageOptionsFileDescriptor& data)
     is.read(buf,4);
 	buf[4] = '\0';
 	data._nright = atoi(buf);
-    
+
 	is.read(buf,4);
 	buf[4] = '\0';
 	data._ntop = atoi(buf);
@@ -313,7 +313,7 @@ std::istream& operator>>(std::istream& is, ImageOptionsFileDescriptor& data)
     is.read(buf,8);
 	buf[8] = '\0';
 	data._bias_loc = buf;
-    
+
 	is.read(buf,28);
 	buf[28] = '\0';
 	data._type_id = buf;

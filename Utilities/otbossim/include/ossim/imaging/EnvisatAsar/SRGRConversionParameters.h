@@ -5,7 +5,7 @@
 #include <ossim/imaging/EnvisatAsar/EnvisatAsarRecord.h>
 /**
  * @ingroup SRGRConversionParametersRecord
- * @brief This class is able to read the ASAR SRGRConversionParameters record 
+ * @brief This class is able to read the ASAR SRGRConversionParameters record
  * @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 23-11-07
@@ -76,55 +76,55 @@ public:
 	};
 
 
-	/**				
+	/**
 	* @brief first_zero_doppler_time day
-	*/				
-	int  get_first_zero_doppler_time_day()	
-	{						
-		return _first_zero_doppler_time_day;		
-	}; 
-	/**				
+	*/
+	int  get_first_zero_doppler_time_day()
+	{
+		return _first_zero_doppler_time_day;
+	};
+	/**
 	* @brief first_zero_doppler_time second
-	*/				
-	unsigned int  get_first_zero_doppler_time_sec()	
-	{						
-		return _first_zero_doppler_time_sec;		
-	}; 
-	/**				
-	* @brief first_zero_doppler_time micro sec	
-	*/				
-	unsigned int  get_first_zero_doppler_time_microsec()	
-	{						
-		return _first_zero_doppler_time_microsec;		
-	}; 
-	/**				
-	* @brief attach_flag	
-	*/				
-	bool   get_attach_flag()	
-	{						
-		return _attach_flag;		
-	}; 
-	/**				
-	* @brief input_mean_flag	
-	*/				
-	float   get_slant_range_time()	
-	{						
-		return _slant_range_time;		
-	}; 
-	/**				
-	* @brief input_std_dev_flag	
-	*/				
-	float	get_ground_range_origin()	
-	{						
-		return _ground_range_origin;		
-	}; 
-	/**				
-	* @brief input_gaps_flag	
-	*/				
-	float*	get_srgr_coef()	
-	{						
-		return _srgr_coef;		
-	}; 
+	*/
+	unsigned int  get_first_zero_doppler_time_sec()
+	{
+		return _first_zero_doppler_time_sec;
+	};
+	/**
+	* @brief first_zero_doppler_time micro sec
+	*/
+	unsigned int  get_first_zero_doppler_time_microsec()
+	{
+		return _first_zero_doppler_time_microsec;
+	};
+	/**
+	* @brief attach_flag
+	*/
+	bool   get_attach_flag()
+	{
+		return _attach_flag;
+	};
+	/**
+	* @brief input_mean_flag
+	*/
+	float   get_slant_range_time()
+	{
+		return _slant_range_time;
+	};
+	/**
+	* @brief input_std_dev_flag
+	*/
+	float	get_ground_range_origin()
+	{
+		return _ground_range_origin;
+	};
+	/**
+	* @brief input_gaps_flag
+	*/
+	float*	get_srgr_coef()
+	{
+		return _srgr_coef;
+	};
 
 	/**
 	* @brief first_zero_doppler_time day
@@ -155,7 +155,7 @@ public:
 	 */
 	float   _srgr_coef[5];
 
-	
+
 private:
 
 };

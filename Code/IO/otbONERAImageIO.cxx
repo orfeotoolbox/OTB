@@ -169,7 +169,7 @@ void ONERAImageIO::Read(void* buffer)
   unsigned int       dim;
   const unsigned int dimensions = this->GetNumberOfDimensions();
   unsigned long        numberOfPixels = 1;
-  for (dim=0; dim< dimensions; dim++ )
+  for (dim=0; dim< dimensions; ++dim )
   {
     numberOfPixels *= m_Dimensions[ dim ];
   }
@@ -584,7 +584,7 @@ void ONERAImageIO::WriteImageInformation()
   m_Datafile.write((char*)(&magicNumber),4);
 
   char * tab = new char[ByteSizeCol];
-  for ( int i = 0; i < (NbRow + 1); i++)
+  for ( int i = 0; i < (NbRow + 1); ++i)
   {
     m_Datafile.write((char*)(tab),ByteSizeCol);
   }

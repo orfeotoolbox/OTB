@@ -1,12 +1,15 @@
 //*******************************************************************
 //
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 // License:  See top level LICENSE.txt file.
 // 
 // Author: Garrett Potts
 // Description: This file contains the cache algorithm
 //
 //***********************************
-// $Id: ossimTileCache.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimTileCache.h 14370 2009-04-20 21:40:03Z dburken $
 
 #ifndef DataCache_HEADER
 #define DataCache_HEADER
@@ -15,7 +18,9 @@
 using namespace std;
 
 #include <ossim/base/ossimConstants.h>
+#include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimDpt3d.h>
+
 class ossimDataObject;
 class ossimTileCache
 {
@@ -73,8 +78,8 @@ protected:
             return out;
          }
       ossimTileInformation(ossimDataObject* aTile,
-                      const ossimDpt3d &origin = ossimDpt(0,0),
-                      unsigned long resLevel = 0)
+                           const ossimDpt3d &origin = ossimDpt(0,0),
+                           unsigned long resLevel = 0)
          : theCachedTile(aTile),
            theOrigin(origin),
            theResLevel(resLevel)

@@ -1,25 +1,36 @@
+//*******************************************************************
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
+// 
+// Author: Garrett Potts
+//
+//*************************************************************************
+// $Id: ossimRpfTocEntry.cpp 14241 2009-04-07 19:59:23Z dburken $
+
+#include <istream>
+#include <ostream>
+#include <iterator>
 #include <ossim/support_data/ossimRpfTocEntry.h>
+#include <ossim/support_data/ossimRpfFrameEntry.h>
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimErrorCodes.h>
-#ifndef NULL
-#include <stddef.h>
-#endif
 
-ostream& operator <<(ostream& out,
-                     const ossimRpfTocEntry& data)
+std::ostream& operator <<(std::ostream& out,
+                          const ossimRpfTocEntry& data)
 {
    data.print(out);
-
    return out;
 }
-
 
 ossimRpfTocEntry::ossimRpfTocEntry()
 {
    
 }
 
-ossimErrorCode ossimRpfTocEntry::parseStream(istream &in, ossimByteOrder byteOrder)
+ossimErrorCode ossimRpfTocEntry::parseStream(
+   std::istream &in, ossimByteOrder byteOrder)
 {
    ossimErrorCode result = ossimErrorCodes::OSSIM_OK;
    
@@ -32,29 +43,34 @@ ossimErrorCode ossimRpfTocEntry::parseStream(istream &in, ossimByteOrder byteOrd
    return result;
 }
 
-void ossimRpfTocEntry::print(ostream& out)const
+std::ostream& ossimRpfTocEntry::print(std::ostream& out,
+                                      const std::string& prefix) const
 {
-   out << theBoundaryInformation << endl;
+   theBoundaryInformation.print(out, prefix);
 
    vector< vector<ossimRpfFrameEntry> >::const_iterator frameEntry =
-                                          theFrameEntryArray.begin();
+      theFrameEntryArray.begin();
 
-   while(frameEntry != theFrameEntryArray.end())
+   while( frameEntry != theFrameEntryArray.end() )
    {
-      copy((*frameEntry).begin(),
-           (*frameEntry).end(),
-           ostream_iterator<ossimRpfFrameEntry>(out, "\n"));
-      
+      std::vector<ossimRpfFrameEntry>::const_iterator i =
+         (*frameEntry).begin();
+      while ( i != (*frameEntry).end() ) 
+      {
+         (*i).print(out, prefix);
+         ++i;
+      }
       ++frameEntry;
    }
+   return out;
 }
 
-unsigned long ossimRpfTocEntry::getNumberOfFramesHorizontal()const
+ossim_uint32 ossimRpfTocEntry::getNumberOfFramesHorizontal()const
 {
    return theBoundaryInformation.getNumberOfFramesHorizontal();
 }
 
-unsigned long ossimRpfTocEntry::getNumberOfFramesVertical()const
+ossim_uint32 ossimRpfTocEntry::getNumberOfFramesVertical()const
 {
    return theBoundaryInformation.getNumberOfFramesVertical();
 }
@@ -124,9 +140,9 @@ bool ossimRpfTocEntry::isEmpty()const
 void ossimRpfTocEntry::allocateFrameEntryArray()
 {
    theFrameEntryArray.resize(theBoundaryInformation.getNumberOfFramesVertical());
-   unsigned long horizontalSize = theBoundaryInformation.getNumberOfFramesHorizontal();
+   ossim_uint32 horizontalSize = theBoundaryInformation.getNumberOfFramesHorizontal();
 
-   for(unsigned long index = 0; index < theFrameEntryArray.size(); index++)
+   for(ossim_uint32 index = 0; index < theFrameEntryArray.size(); index++)
    {
       theFrameEntryArray[index].resize(horizontalSize);
    }

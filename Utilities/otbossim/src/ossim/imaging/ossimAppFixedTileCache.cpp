@@ -1,13 +1,15 @@
 //******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 // 
 // Description: This file contains the Application cache algorithm
 //
 //***********************************
-// $Id: ossimAppFixedTileCache.cpp 13676 2008-10-03 17:35:02Z gpotts $
+// $Id: ossimAppFixedTileCache.cpp 14481 2009-05-11 12:09:33Z dburken $
 #include <algorithm>
 #include <sstream>
 #include <ossim/imaging/ossimAppFixedTileCache.h>
@@ -117,55 +119,61 @@ ossimAppFixedTileCache *ossimAppFixedTileCache::instance(ossim_uint32  maxSize)
 
 void ossimAppFixedTileCache::setMaxCacheSize(ossim_uint32 cacheSize)
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
-   theMaxGlobalCacheSize = cacheSize;
-   theMaxCacheSize = cacheSize;
+   {
+      OpenThreads::ScopedWriteLock lock(theMutex);
+      theMaxGlobalCacheSize = cacheSize;
+      theMaxCacheSize = cacheSize;
+   }
    //   theMaxCacheSize      = (ossim_uint32)(theMaxGlobalCacheSize*.2);
 }
 
 void ossimAppFixedTileCache::flush()
 {
-OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
-   std::map<ossimAppFixedCacheId, ossimFixedTileCache*>::iterator currentIter = theAppCacheMap.begin();
-
-   while(currentIter != theAppCacheMap.end())
    {
-      (*currentIter).second->flush();
-      ++currentIter;
+      OpenThreads::ScopedWriteLock lock(theMutex);
+      std::map<ossimAppFixedCacheId, ossimFixedTileCache*>::iterator currentIter = theAppCacheMap.begin();
+      
+      while(currentIter != theAppCacheMap.end())
+      {
+         (*currentIter).second->flush();
+         ++currentIter;
+      }
+      theCurrentCacheSize = 0;
    }
-   theCurrentCacheSize = 0;
 }
 
 void ossimAppFixedTileCache::flush(ossimAppFixedCacheId cacheId)
 {
-OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    ossimFixedTileCache* cache = getCache(cacheId);
-
-   if(cache)
    {
-      theCurrentCacheSize -= cache->getCacheSize();
-      cache->flush();
+      OpenThreads::ScopedWriteLock lock(theMutex);
+      if(cache)
+      {
+         theCurrentCacheSize -= cache->getCacheSize();
+         cache->flush();
+      }
    }
 }
 
 void ossimAppFixedTileCache::deleteCache(ossimAppFixedCacheId cacheId)
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    ossimFixedTileCache* cache = getCache(cacheId);
-   std::map<ossimAppFixedCacheId, ossimFixedTileCache*>::iterator iter = theAppCacheMap.find(cacheId);
-
-   if(cache)
    {
-      theAppCacheMap.erase(iter);
-      theCurrentCacheSize -= cache->getCacheSize();
-      delete cache;
+      OpenThreads::ScopedWriteLock lock(theMutex);
+      std::map<ossimAppFixedCacheId, ossimFixedTileCache*>::iterator iter = theAppCacheMap.find(cacheId);
+      
+      if(cache)
+      {
+         theAppCacheMap.erase(iter);
+         theCurrentCacheSize -= cache->getCacheSize();
+         delete cache;
+      }
    }
 }
 
 ossimAppFixedTileCache::ossimAppFixedCacheId ossimAppFixedTileCache::newTileCache(const ossimIrect& tileBoundaryRect,
                                                                                   const ossimIpt& tileSize)
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    ossimAppFixedCacheId result = theUniqueAppIdCounter;
    ossimFixedTileCache* newCache = new ossimFixedTileCache;
    if(tileSize.x == 0 ||
@@ -179,21 +187,25 @@ ossimAppFixedTileCache::ossimAppFixedCacheId ossimAppFixedTileCache::newTileCach
    {
       newCache->setRect(tileBoundaryRect, tileSize);
    }
-   
-   theAppCacheMap.insert(std::make_pair(result, newCache));
-   ++theUniqueAppIdCounter;
+   {
+      OpenThreads::ScopedWriteLock lock(theMutex);
+      theAppCacheMap.insert(std::make_pair(result, newCache));
+      ++theUniqueAppIdCounter;
+   }
    
    return result;
 }
 
 ossimAppFixedTileCache::ossimAppFixedCacheId ossimAppFixedTileCache::newTileCache()
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    ossimAppFixedCacheId result = theUniqueAppIdCounter;
    ossimFixedTileCache* newCache = new ossimFixedTileCache;
    
-   theAppCacheMap.insert(std::make_pair(result, newCache));
-   ++theUniqueAppIdCounter;
+   {
+      OpenThreads::ScopedWriteLock lock(theMutex);
+      theAppCacheMap.insert(std::make_pair(result, newCache));
+      ++theUniqueAppIdCounter;
+   }
    
    return result;
    
@@ -205,7 +217,7 @@ void ossimAppFixedTileCache::setRect(ossimAppFixedCacheId cacheId,
    ossimFixedTileCache* cache = getCache(cacheId);
    if(cache)
    {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
+      OpenThreads::ScopedWriteLock lock(theMutex);
       
       ossim_uint32 cacheSize = cache->getCacheSize();
       // cache->setRect(boundaryTileRect, theTileSize);
@@ -221,7 +233,7 @@ void ossimAppFixedTileCache::setTileSize(ossimAppFixedCacheId cacheId,
    ossimFixedTileCache* cache = getCache(cacheId);
    if(cache)
    {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
+      OpenThreads::ScopedWriteLock lock(theMutex);
       ossim_uint32 cacheSize = cache->getCacheSize();
       cache->setRect(cache->getTileBoundaryRect(), tileSize);
       theCurrentCacheSize += (cache->getCacheSize() - cacheSize);
@@ -233,11 +245,11 @@ ossimRefPtr<ossimImageData> ossimAppFixedTileCache::getTile(
    ossimAppFixedCacheId cacheId,
    const ossimIpt& origin)
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    ossimRefPtr<ossimImageData> result = 0;
    ossimFixedTileCache* cache = getCache(cacheId);
    if(cache)
    {
+      OpenThreads::ScopedWriteLock lock(theMutex);
       result = cache->getTile(origin);
    }
 
@@ -249,7 +261,6 @@ ossimRefPtr<ossimImageData> ossimAppFixedTileCache::addTile(
    ossimAppFixedCacheId cacheId,
    ossimRefPtr<ossimImageData> data)
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    ossimRefPtr<ossimImageData> result = 0;
    ossimFixedTileCache *aCache = this->getCache(cacheId);
    if(!aCache)
@@ -263,7 +274,11 @@ ossimRefPtr<ossimImageData> ossimAppFixedTileCache::addTile(
       shrinkGlobalCacheSize((ossim_int32)(theMaxGlobalCacheSize*0.1));
    }
 
-   ossim_uint32 cacheSize = aCache->getCacheSize();
+   ossim_uint32 cacheSize = 0;
+   {
+      OpenThreads::ScopedWriteLock lock(theMutex);
+      cacheSize = aCache->getCacheSize();
+   }
    if(cacheSize > theMaxCacheSize)
    {
 //       shrinkCacheSize(aCache,
@@ -271,16 +286,20 @@ ossimRefPtr<ossimImageData> ossimAppFixedTileCache::addTile(
       shrinkCacheSize(aCache,
                       (ossim_int32)(1024*1024));
    }
-   cacheSize = aCache->getCacheSize();
-   aCache->addTile(data);
-   theCurrentCacheSize += (aCache->getCacheSize() - cacheSize);
+   {
+      OpenThreads::ScopedWriteLock lock(theMutex);
+      cacheSize = aCache->getCacheSize();
+      aCache->addTile(data);
+   
+      theCurrentCacheSize += (aCache->getCacheSize() - cacheSize);
+   }
    
    return result;
 }
 
 void ossimAppFixedTileCache::deleteAll()
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
+   OpenThreads::ScopedWriteLock lock(theMutex);
    std::map<ossimAppFixedCacheId, ossimFixedTileCache*>::iterator iter = theAppCacheMap.begin();
    theCurrentCacheSize = 0;
 
@@ -300,12 +319,12 @@ ossimRefPtr<ossimImageData> ossimAppFixedTileCache::removeTile(
    ossimAppFixedCacheId cacheId,
    const ossimIpt& origin)
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    ossimRefPtr<ossimImageData> result = 0;
    
    ossimFixedTileCache* cache = getCache(cacheId);
    if(cache)
    {
+      OpenThreads::ScopedWriteLock lock(theMutex);
       ossim_uint32 cacheSize = cache->getCacheSize();
       result = cache->removeTile(origin);
       theCurrentCacheSize += (cache->getCacheSize() - cacheSize);
@@ -317,20 +336,23 @@ ossimRefPtr<ossimImageData> ossimAppFixedTileCache::removeTile(
 void ossimAppFixedTileCache::deleteTile(ossimAppFixedCacheId cacheId,
                                         const ossimIpt& origin)
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    ossimFixedTileCache* cache = getCache(cacheId);
    if(cache)
    {
+      OpenThreads::ScopedWriteLock lock(theMutex);
       ossim_uint32 cacheSize = cache->getCacheSize();
       cache->deleteTile(origin);
       theCurrentCacheSize += (cache->getCacheSize() - cacheSize);
    }
 }
 
-ossimFixedTileCache* ossimAppFixedTileCache::getCache(ossimAppFixedCacheId cacheId)
+ossimFixedTileCache* ossimAppFixedTileCache::getCache(
+   ossimAppFixedCacheId cacheId)
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
-   std::map<ossimAppFixedCacheId, ossimFixedTileCache*>::iterator currentIter = theAppCacheMap.find(cacheId);
+   OpenThreads::ScopedWriteLock lock(theMutex);
+   
+   std::map<ossimAppFixedCacheId, ossimFixedTileCache*>::const_iterator
+      currentIter = theAppCacheMap.find(cacheId);
    ossimFixedTileCache* result = 0;
    
    if(currentIter != theAppCacheMap.end())
@@ -343,7 +365,6 @@ ossimFixedTileCache* ossimAppFixedTileCache::getCache(ossimAppFixedCacheId cache
 
 void ossimAppFixedTileCache::shrinkGlobalCacheSize(ossim_int32 byteCount)
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    if(static_cast<ossim_uint32>(byteCount) >= theCurrentCacheSize)
    {
       flush();
@@ -358,14 +379,15 @@ void ossimAppFixedTileCache::shrinkGlobalCacheSize(ossim_int32 byteCount)
             ossimFixedTileCache* cache = getCache((*iter).first);
             if(cache)
             {
+               OpenThreads::ScopedWriteLock lock(theMutex);
                ossim_uint32 before = cache->getCacheSize();
                cache->deleteTile();
                ossim_uint32 after = cache->getCacheSize();
                ossim_uint32 delta = (before - after);
                byteCount -= delta;
                theCurrentCacheSize -= (delta);
-               ++iter;
             }
+            ++iter;
          }
       }
    }
@@ -374,7 +396,6 @@ void ossimAppFixedTileCache::shrinkGlobalCacheSize(ossim_int32 byteCount)
 void ossimAppFixedTileCache::shrinkCacheSize(ossimAppFixedCacheId id,
                                              ossim_int32 byteCount)
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    ossimFixedTileCache* cache = getCache(id);
 
    if(cache)
@@ -386,7 +407,7 @@ void ossimAppFixedTileCache::shrinkCacheSize(ossimAppFixedCacheId id,
 void ossimAppFixedTileCache::shrinkCacheSize(ossimFixedTileCache* cache,
                                              ossim_int32 byteCount)
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
+   OpenThreads::ScopedWriteLock lock(theMutex);
    if(cache)
    {
       ossim_int32 cacheSize = cache->getCacheSize();
@@ -418,7 +439,6 @@ void ossimAppFixedTileCache::shrinkCacheSize(ossimFixedTileCache* cache,
 
 const ossimIpt& ossimAppFixedTileCache::getTileSize(ossimAppFixedCacheId cacheId)
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    ossimFixedTileCache* cache = getCache(cacheId);
    if(cache)
    {

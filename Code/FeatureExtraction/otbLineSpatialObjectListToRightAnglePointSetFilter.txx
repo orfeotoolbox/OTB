@@ -38,7 +38,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
   this->SetNumberOfRequiredOutputs(1);
 
   m_ThresholdDistance = 20.;
-  m_ThresholdAngle = M_PI/36.;  //36 cause we want 5 degrees threshold
+  m_ThresholdAngle = M_PI/30.;  //36 cause we want 6 degrees threshold
 }
 
 /**
@@ -109,25 +109,32 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
 	      double Angle = this->ComputeAngleFormedBySegments(*itLinesListTest, *itLinesListCur);
 
 	      /** Check if the angle is a right one */
-	      if(vcl_abs(Angle - M_PI/2.) < m_ThresholdAngle ) 
+                  if(vcl_abs(Angle - M_PI/2.) <= m_ThresholdAngle )
 		{
 		  /** Right angle coordinate*/
 		  PointType              RightAngleCoordinate;
 		  RightAngleCoordinate = this->ComputeAngleRightCoordinate(*itLinesListTest, *itLinesListCur);
 		  
 		  /** Compute the distance between the two segments and the right angle formed by this segments*/
-		  if(this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListTest) <m_ThresholdDistance &&
-		     this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListCur) <m_ThresholdDistance)
+		  double dist1 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListTest);
+		  double dist2 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListCur) ;
+		  
+		  /** Use Pythagore to compute the distance between the two segments*/
+		  double SegmentDistance = vcl_sqrt(dist1*dist1 + dist2*dist2);
+		  
+// 		  if(this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListTest) <m_ThresholdDistance &&
+// 		     this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListCur) <m_ThresholdDistance)
+		  if(SegmentDistance < m_ThresholdDistance)
 		    {
 		      /** If Right Angle & not so far from segments:  Add it to the pointSet*/
 		      this->AddRightAngleToPointSet(RightAngleCoordinate , *itLinesListTest , *itLinesListCur );
 		    }
 		}
             }
-          counterCur++;
+          ++counterCur;
           ++itLinesListCur;
         }
-      counterTest++;
+      ++counterTest;
       ++itLinesListTest;
     }
 }

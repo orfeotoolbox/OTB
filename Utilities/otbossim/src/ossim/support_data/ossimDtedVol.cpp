@@ -8,13 +8,15 @@
 //               (VOL) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedVol.cpp 10261 2007-01-14 18:52:50Z dburken $
+// $Id: ossimDtedVol.cpp 14248 2009-04-08 19:38:11Z dburken $
 
 #include <iostream>
 #include <fstream>
+#include <string>
 
 #include <ossim/support_data/ossimDtedVol.h>
-#include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimNotify.h>
+#include <ossim/base/ossimProperty.h>
 
 //**************************************************************************
 // CONSTRUCTOR
@@ -132,7 +134,20 @@ void ossimDtedVol::parse(std::istream& in)
    theStopOffset = theStartOffset + VOL_LENGTH;
 }
 
-ossimString ossimDtedVol::getRecoginitionSentinel() const
+ossimRefPtr<ossimProperty> ossimDtedVol::getProperty(
+   const ossimString& name) const
+{
+   ossimRefPtr<ossimProperty> result = 0;
+   return result;
+}
+
+void ossimDtedVol::getPropertyNames(
+   std::vector<ossimString>& propertyNames) const
+{
+   propertyNames.push_back(ossimString("dted_vol_record"));
+}
+
+ossimString ossimDtedVol::getRecognitionSentinel() const
 {
    return ossimString(theRecSen);
 }
@@ -157,24 +172,31 @@ ossim_int32 ossimDtedVol::stopOffset() const
    return theStopOffset;
 }
 
+std::ostream& ossimDtedVol::print(std::ostream& out,
+                                  const std::string& prefix) const
+{
+   std::string pfx = prefix;
+   pfx += "vol.";
+   
+   out << pfx << "recognition_sentinel: " << theRecSen << "\n"
+       << pfx << "field2:                " << theField2 << "\n"
+       << pfx << "reel_number:           " << theReelNumber << "\n"
+       << pfx << "field4:                " << theField4 << "\n"
+       << pfx << "field5:                " << theField5 << "\n"
+       << pfx << "account_number:        " << theAccountNumber << "\n"
+       << pfx << "field7:                " << theField7 << "\n"
+       << pfx << "field8:                " << theField8 << "\n"
+       << std::endl;
+   return out;
+}
+
 //**************************************************************************
 // operator <<
 //**************************************************************************
-std::ostream& operator<<( std::ostream& os, const ossimDtedVol& vol)
+std::ostream& operator<<( std::ostream& out, const ossimDtedVol& vol)
 {
-   os << "\nDTED Header (VOL):"
-      << "\n-------------------------------"
-      << "\nRecoginition Sentinel: " << vol.theRecSen
-      << "\nField 2:               " << vol.theField2
-      << "\ntheReelNumber:         " << vol.theReelNumber
-      << "\nField 4:               " << vol.theField4
-      << "\nField 5:               " << vol.theField5
-      << "\ntheAccountNumber:      " << vol.theAccountNumber
-      << "\nField 7:               " << vol.theField7
-      << "\nField 8:               " << vol.theField8
-      << std::endl;
-   
-   return os;
+   std::string prefix;
+   return vol.print(out, prefix);
 }
 
 ossimDtedVol::ossimDtedVol(const ossimDtedVol& source)

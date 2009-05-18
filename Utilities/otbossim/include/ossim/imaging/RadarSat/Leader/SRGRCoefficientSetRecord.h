@@ -53,7 +53,7 @@ public:
 	}
 
     /**
-	 * @brief SRGR coefficients 
+	 * @brief SRGR coefficients
 	 */
 	double*   get_srgr_coef()
 	{
@@ -67,7 +67,7 @@ protected:
 	std::string   _srgr_update;
 
     /**
-	 * @brief SRGR coefficients 
+	 * @brief SRGR coefficients
 	 */
 	double   _srgr_coef[6];
 private:

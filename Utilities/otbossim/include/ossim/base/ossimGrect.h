@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGrect.h 13357 2008-07-31 12:45:29Z gpotts $
+// $Id: ossimGrect.h 14465 2009-05-07 18:48:02Z gpotts $
 #ifndef ossimGrect_HEADER
 #define ossimGrect_HEADER
 #include <vector>
@@ -242,12 +242,12 @@ inline bool ossimGrect::pointWithin(const ossimGpt& gpt) const
 
 inline ossim_float64 ossimGrect::height() const
 {
-   return fabs(theLlCorner.latd() - theUlCorner.latd()) + 1.0;
+   return fabs(theLlCorner.latd() - theUlCorner.latd());
 }
 
 inline ossim_float64 ossimGrect::width() const
 {
-   return fabs(theLrCorner.lond() - theLlCorner.lond()) + 1.0;
+   return fabs(theLrCorner.lond() - theLlCorner.lond());
 }
 
 inline const ossimGpt& ossimGrect::ul() const

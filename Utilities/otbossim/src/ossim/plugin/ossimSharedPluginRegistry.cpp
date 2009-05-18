@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimSharedPluginRegistry.cpp 13508 2008-08-27 15:51:38Z gpotts $
+// $Id: ossimSharedPluginRegistry.cpp 14046 2009-03-03 02:23:38Z gpotts $
 #include <algorithm>
 #include <iterator>
 #include <ossim/plugin/ossimSharedPluginRegistry.h>
@@ -129,7 +129,7 @@ ossimPluginLibrary* ossimSharedPluginRegistry::getPlugin(const ossimFilename& fi
 
    for(idx = 0; idx < theLibraryList.size();++idx)
    {
-      if(filename == ossimFilename(theLibraryList[idx]->getName()).file())
+      if(fileOnly == ossimFilename(theLibraryList[idx]->getName()).file())
       {
          return theLibraryList[idx].get();
       }
@@ -186,6 +186,7 @@ ossim_uint32 ossimSharedPluginRegistry::getNumberOfPlugins()const
 bool ossimSharedPluginRegistry::isLoaded(const ossimFilename& filename) const
    
 {
+   ossimFilename fileOnly = filename.file();
    bool result = false;
    ossim_uint32 count = getNumberOfPlugins();
    for (ossim_uint32 i = 0; i < count; ++i)
@@ -193,7 +194,7 @@ bool ossimSharedPluginRegistry::isLoaded(const ossimFilename& filename) const
       const ossimPluginLibrary* pi = getPlugin(i);
       if (pi)
       {
-         if (filename == pi->getName())
+         if (fileOnly == ossimFilename(pi->getName()).file())
          {
             result = true;
             break;

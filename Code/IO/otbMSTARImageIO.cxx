@@ -421,7 +421,7 @@ void MSTARImageIO::Read(void* buffer)
     case LSB_FIRST: /* Little-endian..do byteswap */
 
       otbMsgDevMacro(<<"Performing auto-byteswap...\n");
-      for (i = 0; i < totchunks; i++)
+      for (i = 0; i < totchunks; ++i)
       {
         fread(bigfloatbuf, sizeof(char), 4, MSTARfp);
         littlefloatval = byteswap_SR_IR(bigfloatbuf);
@@ -443,7 +443,7 @@ void MSTARImageIO::Read(void* buffer)
 
     // Recopie dans le buffer
 
-    for (int ci=0; ci<nchunks; ci++)
+    for (int ci=0; ci<nchunks; ++ci)
     {
       p[ci*2]=CHIPdata[ci]; //magnitude
       p[ci*2+1]=CHIPdata[nchunks+ci]; //phase
@@ -470,7 +470,7 @@ void MSTARImageIO::Read(void* buffer)
     {
     case LSB_FIRST: /* Little-endian..do byteswap */
       otbMsgDevMacro(<<"Performing auto-byteswap...");
-      for (i = 0; i < nchunks; i++)
+      for (i = 0; i < nchunks; ++i)
       {
         fread(bigushortbuf, sizeof(char), 2, MSTARfp);
         littleushortval = byteswap_SUS_IUS(bigushortbuf);
@@ -485,7 +485,7 @@ void MSTARImageIO::Read(void* buffer)
 
     otbMsgDevMacro(<<"Writing MSTAR fullscene magnitude data to ["<<RAWname<<"].");
     //n = fwrite(FSCENEdata, sizeof(short), nchunks, RAWfp);
-    for ( int nbComponents = 0; nbComponents < 1; nbComponents++)
+    for ( int nbComponents = 0; nbComponents < 1; ++nbComponents)
     {
       // Recopie dans le buffer
 
@@ -512,7 +512,7 @@ void MSTARImageIO::Read(void* buffer)
     {
     case LSB_FIRST: /* Little-endian..do byteswap */
       otbMsgDevMacro(<<"Performing auto-byteswap...");
-      for (i = 0; i < nchunks; i++)
+      for (i = 0; i < nchunks; ++i)
       {
         fread(bigushortbuf, sizeof(char), 2, MSTARfp);
         littleushortval = byteswap_SUS_IUS(bigushortbuf);
@@ -527,7 +527,7 @@ void MSTARImageIO::Read(void* buffer)
 
     otbMsgDevMacro(<<"Writing MSTAR fullscene phase data to ["<<RAWname<<"].");
 //     n = fwrite(FSCENEdata, sizeof(short), nchunks, RAWfp);
-    for ( unsigned int nbComponents = 1; nbComponents < this->GetNumberOfComponents(); nbComponents++)
+    for ( unsigned int nbComponents = 1; nbComponents < this->GetNumberOfComponents(); ++nbComponents)
     {
       // Recopie dans le buffer
 

@@ -44,7 +44,7 @@ SubsampledImageRegionConstIterator< TImage >
   // Note that ++ind[0] moves to the next pixel along the row.
   ind[0] += m_SubsampleFactor[0];
   bool done = (ind[0] > m_LastUsableIndex[0] );
-  for (unsigned int i=1; done && i < ImageIteratorDimension; i++)
+  for (unsigned int i=1; done && i < ImageIteratorDimension; ++i)
   {
     done = (ind[i] >= m_LastUsableIndex[i]);
   }
@@ -58,7 +58,7 @@ SubsampledImageRegionConstIterator< TImage >
       && (ind[dim] > m_LastUsableIndex[dim]) )
     {
       ind[dim] = startIndex[dim];
-      dim++;
+      ++dim;
       ind[dim] += m_SubsampleFactor[dim];
     }
   }
@@ -86,7 +86,7 @@ SubsampledImageRegionConstIterator< TImage >
   // Note that --ind[0] moves to the previous pixel along the row.
   ind[0] -= m_SubsampleFactor[0];
   done = (ind[0] <= startIndex[0] - 1);
-  for (unsigned int i=1; done && i < ImageIteratorDimension; i++)
+  for (unsigned int i=1; done && i < ImageIteratorDimension; ++i)
   {
     done = (ind[i] <= startIndex[i]);
   }
@@ -100,7 +100,7 @@ SubsampledImageRegionConstIterator< TImage >
             && (ind[dim] < startIndex[dim]) )
     {
       ind[dim] = m_LastUsableIndex[dim];
-      dim++;
+      ++dim;
       ind[dim] -= m_SubsampleFactor[dim];
     }
   }

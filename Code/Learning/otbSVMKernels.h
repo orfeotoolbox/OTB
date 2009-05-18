@@ -440,7 +440,7 @@ public:
     std::vector<int> end;
     end.resize(numberOfGroups);
 
-    for (i = 0; i < numberOfGroups; i++)
+    for (i = 0; i < numberOfGroups; ++i)
     {
       begin[i] = atoi(parameters);
       position = strpbrk (parameters, twoPoints);
@@ -481,7 +481,7 @@ public:
     {
       svm_node* xGroup = new svm_node[sizeX];
       svm_node* yGroup = new svm_node[sizeY];
-      for (j = 0; j < numberOfGroups; j++)
+      for (j = 0; j < numberOfGroups; ++j)
       {
         xTemp = x;
         yTemp = y;
@@ -522,7 +522,7 @@ public:
       svm_node* xGroup = new svm_node[sizeX];
       svm_node* yGroup = new svm_node[sizeY];
 
-      for (j = 0; j < numberOfGroups; j++)
+      for (j = 0; j < numberOfGroups; ++j)
       {
         xTemp = x;
         index = 0;
@@ -613,7 +613,7 @@ public:
     std::vector<int> end;
     end.resize(numberOfGroups);
 
-    for (i = 0; i < numberOfGroups; i++)
+    for (i = 0; i < numberOfGroups; ++i)
     {
       begin[i] = atoi(parameters);
       position = strpbrk (parameters, twoPoints);
@@ -655,7 +655,7 @@ public:
       svm_node* xGroup = new svm_node[sizeX];
       svm_node* yGroup = new svm_node[sizeY];
 
-      for (j = 0; j < numberOfGroups; j++)
+      for (j = 0; j < numberOfGroups; ++j)
       {
         xTemp = x;
         yTemp = y;
@@ -695,7 +695,7 @@ public:
       svm_node* xGroup = new svm_node[sizeX];
       svm_node* yGroup = new svm_node[sizeY];
 
-      for (j = 0; j < numberOfGroups; j++)
+      for (j = 0; j < numberOfGroups; ++j)
       {
         xTemp = x;
         index = 0;

@@ -12,7 +12,7 @@ CompensationDataRecord::~CompensationDataRecord()
 std::ostream& operator<<(std::ostream& os, const CompensationDataRecord& data)
 {
 	os<<"comp_desig:"<<data._comp_desig.c_str()<<std::endl;
-    
+
 	os<<"comp_descr:"<<data._comp_descr.c_str()<<std::endl;
 
     os<<"n_comp_rec:"<<data._n_comp_rec<<std::endl;
@@ -38,12 +38,12 @@ std::istream& operator>>(std::istream& is, CompensationDataRecord& data)
 {
 	char buf[33];
 	buf[32] = '\0';
-	
+
 
 	is.read(buf,8);
 	buf[8] = '\0';
 	data._comp_desig = buf;
-    
+
 	is.read(buf,32);
 	buf[32] = '\0';
 	data._comp_descr = buf;
@@ -85,7 +85,7 @@ std::istream& operator>>(std::istream& is, CompensationDataRecord& data)
 CompensationDataRecord::CompensationDataRecord(const CompensationDataRecord& rhs)
 {
 	_comp_desig = rhs._comp_desig;
-    
+
 	_comp_descr = rhs._comp_descr;
 
     _n_comp_rec = rhs._n_comp_rec;
@@ -109,7 +109,7 @@ CompensationDataRecord::CompensationDataRecord(const CompensationDataRecord& rhs
 CompensationDataRecord& CompensationDataRecord::operator=(const CompensationDataRecord& rhs)
 {
 	_comp_desig = rhs._comp_desig;
-    
+
 	_comp_descr = rhs._comp_descr;
 
     _n_comp_rec = rhs._n_comp_rec;

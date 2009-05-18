@@ -40,7 +40,7 @@ namespace otb
 *  \ingroup Visualization
  */
 
-template <class TOutputImage = otb::Image<itk::RGBPixel<unsigned char>,2 >  >
+template <class TOutputImage = otb::Image<itk::RGBAPixel<unsigned char>,2 >  >
 class ImageLayerRenderingModel
   : public MVCModelBase<ImageLayerRenderingModelListener>, public LayerBasedModel< ImageLayerBase<TOutputImage> >
 {

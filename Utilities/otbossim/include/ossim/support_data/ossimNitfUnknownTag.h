@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //
@@ -10,12 +12,11 @@
 // the tag factories.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfUnknownTag.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfUnknownTag.h 14241 2009-04-07 19:59:23Z dburken $
 #ifndef ossimNitfUnknownTag_HEADER
 #define ossimNitfUnknownTag_HEADER
-#include <ossim/support_data/ossimNitfRegisteredTag.h>
 
-class ossimDpt;
+#include <ossim/support_data/ossimNitfRegisteredTag.h>
 
 class OSSIM_DLL ossimNitfUnknownTag : public ossimNitfRegisteredTag
 {
@@ -61,15 +62,13 @@ public:
    virtual void clearFields();
    
    /**
-    * Print method.
-    *
-    * @param out Stream to print to.
-    * 
-    * @return std::ostream&
+    * @brief print method that outputs a key/value type format adding prefix
+    * to keys.
     */
-   virtual std::ostream& print(std::ostream& out) const;
+   virtual std::ostream& print(std::ostream& out,
+                               const std::string& prefix=std::string()) const;
 
-   /**
+      /**
     * @param tagName Name of tag.
     *
     * @note Users should set tag name as this is an unknown tag.

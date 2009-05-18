@@ -29,23 +29,23 @@ double ossimRadarSatModel::getSlantRangeFromGeoreferenced(double col) const
 {
 	if (_n_srgr==0) return(-1) ;
 
-	double relativeGroundRange ; 
+	double relativeGroundRange ;
 
 	// in the case of Georeferenced images, _refPoint->get_distance() contains the ground range
-	relativeGroundRange = _refPoint->get_distance() + _sensor->get_col_direction() * (col-_refPoint->get_pix_col())* _pixel_spacing ; 
+	relativeGroundRange = _refPoint->get_distance() + _sensor->get_col_direction() * (col-_refPoint->get_pix_col())* _pixel_spacing ;
 
 	int numSet = FindSRGRSetNumber((_refPoint->get_ephemeris())->get_date()) ;
-	/** 
+	/**
 	 * @todo : could be improved (date choice)
 	 */
 
-	double slantRange = _srgr_coefset[numSet][0] 
-							+ _srgr_coefset[numSet][1]*relativeGroundRange 
+	double slantRange = _srgr_coefset[numSet][0]
+							+ _srgr_coefset[numSet][1]*relativeGroundRange
 							+ _srgr_coefset[numSet][2]*pow(relativeGroundRange,2)
-							+ _srgr_coefset[numSet][3]*pow(relativeGroundRange,3) 
-							+ _srgr_coefset[numSet][4]*pow(relativeGroundRange,4) 
+							+ _srgr_coefset[numSet][3]*pow(relativeGroundRange,3)
+							+ _srgr_coefset[numSet][4]*pow(relativeGroundRange,4)
 							+ _srgr_coefset[numSet][5]*pow(relativeGroundRange,5);
-	
+
 	return  slantRange ;
 }
 
@@ -58,13 +58,13 @@ bool ossimRadarSatModel::InitSensorParams(const ossimKeywordlist &kwl, const cha
 	const char* fa_str = kwl.find(prefix,"fa");
 	double fa = atof(fa_str);
 
-	/* //number of different looks 
+	/* //number of different looks
 	const char* n_azilok_str = kwl.find(prefix,"n_azilok");
 	double n_azilok = atof(n_azilok_str);
 	const char* n_rnglok_str = kwl.find(prefix,"n_rnglok");
 	double n_rnglok = atof(n_rnglok_str);
 	*/
-	
+
 	// look bandwidth rate (for localisation purpose)
 	const char* bnd_azilok_str = kwl.find(prefix,"bnd_azilok");
 	double bnd_azilok = atof(bnd_azilok_str);
@@ -111,7 +111,7 @@ bool ossimRadarSatModel::InitSensorParams(const ossimKeywordlist &kwl, const cha
 	{
 		_sensor->set_lin_direction(-1);
 	}
-	
+
 	const char* lookDirection_str = kwl.find(prefix,"lookDirection");
 	ossimString lookDirection(lookDirection_str) ;
 	lookDirection.trim(" ") ; // eliminates trailing blanks
@@ -124,8 +124,8 @@ bool ossimRadarSatModel::InitSensorParams(const ossimKeywordlist &kwl, const cha
 	_sensor->set_nAzimuthLook(n_azilok);
 	_sensor->set_nRangeLook(n_rnglok);
 
-	_sensor->set_semiMajorAxis(ellip_maj) ; 
-	_sensor->set_semiMinorAxis(ellip_min) ; 
+	_sensor->set_semiMajorAxis(ellip_maj) ;
+	_sensor->set_semiMinorAxis(ellip_min) ;
 
 	return true;
 }
@@ -154,7 +154,7 @@ bool ossimRadarSatModel::InitPlatformPosition(const ossimKeywordlist &kwl, const
 
 
 	JSDDateTime ref_jsd_date(ref_civil_date);
-	
+
 	const char* eph_int_str = kwl.find(prefix, "eph_int");
 	double eph_int = atof(eph_int_str);
 	/*
@@ -172,7 +172,7 @@ bool ossimRadarSatModel::InitPlatformPosition(const ossimKeywordlist &kwl, const
 	greenwich_mha_ref2000->set_origine(GMSTDateTime::AN2000);
 	ref_civil_date.AsGMSTDateTime(greenwich_mha_ref2000);
 
-	/* 
+	/*
 	 * Ephemerisis retrieval
 	 */
 	for (int i=0;i<neph;i++)
@@ -181,7 +181,7 @@ bool ossimRadarSatModel::InitPlatformPosition(const ossimKeywordlist &kwl, const
 		double vit[3];
 		char name[64];
 
-	
+
 		sprintf(name,"eph%i_posX",i);
 		const char* px_str = kwl.find(prefix,name);
 		pos[0] = atof(px_str);
@@ -229,14 +229,14 @@ bool ossimRadarSatModel::InitPlatformPosition(const ossimKeywordlist &kwl, const
 		 */
 		GalileanEphemeris * tmpEphemeris = new GalileanEphemeris(date,pos,vit);
 		GeographicEphemeris* eph = new GeographicEphemeris();
-		
+
 		tmpEphemeris->ToGeographic(angle,eph);
 		ephemeris[i] = eph;
-		
+
 		delete tmpEphemeris;
 
 	}
-	
+
 	/*
 	 * Antenna position interpolator creation
 	 */
@@ -338,11 +338,11 @@ bool ossimRadarSatModel::InitRefPoint(const ossimKeywordlist &kwl, const char *p
 
 
 	CivilDateTime date(year, month, day, hour * 3600 + min * 60 + sec, mili/1000.0);
-	
+
 	if(_platformPosition != NULL)
 	{
 		Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)date);
-		if (ephemeris == NULL) return false ; 
+		if (ephemeris == NULL) return false ;
 
 		_refPoint->set_ephemeris(ephemeris);
 
@@ -356,12 +356,12 @@ bool ossimRadarSatModel::InitRefPoint(const ossimKeywordlist &kwl, const char *p
 	double c = 2.99792458e+8;
 
 	double distance = (rng_gate + ((double)sc_pix)*_sensor->get_nRangeLook()/_sensor->get_sf()) * (c/2.0);
-	
+
 	// in the case of Georeferenced images, the "relative" ground range is stored in place of the slant range
 	// (used for SlantRange computation relative to reference point, necessary for optimization)
 	// here, the pixelDirection is ignored since the RDS reference point is always at the scene centre
 	if (_isProductGeoreferenced) {
-		distance = _refPoint->get_pix_col() * _pixel_spacing ; 
+		distance = _refPoint->get_pix_col() * _pixel_spacing ;
 	}
 
 	_refPoint->set_distance(distance);
@@ -370,13 +370,13 @@ bool ossimRadarSatModel::InitRefPoint(const ossimKeywordlist &kwl, const char *p
 //// essai : line spacing et vitesse satellite
 //	const char* line_spacing_str = kwl.find(prefix,"line_spacing");
 //	double line_spacing = atof(line_spacing_str);
-//	Ephemeris * ephemeris = _refPoint->get_ephemeris() ; 
-//	double velSat = sqrt(pow(ephemeris->get_vitesse()[0], 2)+ pow(ephemeris->get_vitesse()[1], 2)+ pow(ephemeris->get_vitesse()[2], 2)); 
-//	double prfeq = velSat / line_spacing ; 
+//	Ephemeris * ephemeris = _refPoint->get_ephemeris() ;
+//	double velSat = sqrt(pow(ephemeris->get_vitesse()[0], 2)+ pow(ephemeris->get_vitesse()[1], 2)+ pow(ephemeris->get_vitesse()[2], 2));
+//	double prfeq = velSat / line_spacing ;
 //	_sensor->set_prf(prfeq);
 //	_sensor->set_nAzimuthLook(1.0);
 ///**
-// * @todo : effacer 
+// * @todo : effacer
 // */
 
 	// in order to use ossimSensorModel::lineSampleToWorld
@@ -394,12 +394,12 @@ bool ossimRadarSatModel::InitRefPoint(const ossimKeywordlist &kwl, const char *p
 		double acq_msec_last = atof(acq_msec_last_str);
 
 		double actualPRF = 1000.0*theImageSize.y/(acq_msec_last-acq_msec_first) ;
-		_sensor->set_nAzimuthLook(_sensor->get_prf()/actualPRF); 
+		_sensor->set_nAzimuthLook(_sensor->get_prf()/actualPRF);
 	}
 
 	// Ground Control Points extracted from the model : scene center
-	std::list<ossimGpt> groundGcpCoordinates ; 
-	std::list<ossimDpt> imageGcpCoordinates ; 
+	std::list<ossimGpt> groundGcpCoordinates ;
+	std::list<ossimDpt> imageGcpCoordinates ;
 	const char* lon_str = kwl.find("pro_long");
 	double lon = atof(lon_str);
 	const char* lat_str = kwl.find("pro_lat");
@@ -409,40 +409,40 @@ bool ossimRadarSatModel::InitRefPoint(const ossimKeywordlist &kwl, const char *p
 
 	ossimDpt imageGCP(sc_pix,sc_lin);
 	ossimGpt groundGCP(lat, lon, height);
-	groundGcpCoordinates.push_back(groundGCP) ; 
+	groundGcpCoordinates.push_back(groundGCP) ;
 	imageGcpCoordinates.push_back(imageGCP) ;
 
 	// Ground Control Points extracted from the model : scene corners
 	// upper left corner
-	lon = atof(kwl.find("cornersLon0")); 
+	lon = atof(kwl.find("cornersLon0"));
 	lat = atof(kwl.find("cornersLat0"));
 	ossimDpt imageGCP0(0,0);
 	ossimGpt groundGCP0(lat, lon, height);
-	groundGcpCoordinates.push_back(groundGCP0) ; 
+	groundGcpCoordinates.push_back(groundGCP0) ;
 	imageGcpCoordinates.push_back(imageGCP0) ;
 	// upper right corner
-	lon = atof(kwl.find("cornersLon1")); 
+	lon = atof(kwl.find("cornersLon1"));
 	lat = atof(kwl.find("cornersLat1"));
 	ossimDpt imageGCP1(theImageSize.x-1,0);
 	ossimGpt groundGCP1(lat, lon, height);
-	groundGcpCoordinates.push_back(groundGCP1) ; 
+	groundGcpCoordinates.push_back(groundGCP1) ;
 	imageGcpCoordinates.push_back(imageGCP1) ;
 	// lower left corner
-	lon = atof(kwl.find("cornersLon2")); 
+	lon = atof(kwl.find("cornersLon2"));
 	lat = atof(kwl.find("cornersLat2"));
 	ossimDpt imageGCP2(0,theImageSize.y-1);
 	ossimGpt groundGCP2(lat, lon, height);
-	groundGcpCoordinates.push_back(groundGCP2) ; 
+	groundGcpCoordinates.push_back(groundGCP2) ;
 	imageGcpCoordinates.push_back(imageGCP2) ;
 	// lower right corner
-	lon = atof(kwl.find("cornersLon3")); 
+	lon = atof(kwl.find("cornersLon3"));
 	lat = atof(kwl.find("cornersLat3"));
 	ossimDpt imageGCP3(theImageSize.x-1,theImageSize.y-1);
 	ossimGpt groundGCP3(lat, lon, height);
-	groundGcpCoordinates.push_back(groundGCP3) ; 
+	groundGcpCoordinates.push_back(groundGCP3) ;
 	imageGcpCoordinates.push_back(imageGCP3) ;
 
-	// Default optimization 
+	// Default optimization
 	optimizeModel(groundGcpCoordinates, imageGcpCoordinates) ;
 
 	return true;
@@ -477,7 +477,7 @@ bool ossimRadarSatModel::InitSRGR(const ossimKeywordlist &kwl, const char *prefi
 		// SRGR update time, format : YYYY-DDD-HH:MM:SS.SSS
 		sprintf(name,"srgr_update%i",i);
 		const char* srgr_update_str = kwl.find(prefix,name);
-		
+
 		// years and days are ignored in the following (conversion from CivilDate to JSDDate requires a YYYY-MM-DD format)
 		// could be improved
 		char hour_str[3];
@@ -543,12 +543,12 @@ int ossimRadarSatModel::FindSRGRSetNumber(JSDDateTime date) const
 
 	double delays[20];
 	for (int i=0;i<_n_srgr;i++)
-	{	
-		delays[i] = fabs(date.get_second()+date.get_decimal()-_srgr_update[i]) ;   
+	{
+		delays[i] = fabs(date.get_second()+date.get_decimal()-_srgr_update[i]) ;
 	}
-	
-	int setNumber = 0 ; 
-	double min_delay = delays[0] ; 
+
+	int setNumber = 0 ;
+	double min_delay = delays[0] ;
 	for (int i=1;i<_n_srgr;i++)
 	{
 		if (delays[i]<min_delay) {

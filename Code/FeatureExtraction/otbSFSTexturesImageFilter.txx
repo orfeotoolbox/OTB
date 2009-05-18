@@ -261,7 +261,7 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
                         <<") is lower than Ration Max Consideration Number ("
                         <<this->GetRatioMaxConsiderationNumber()<<") what is not allowed.");
     }
-  for (int i =0; i<this->GetNumberOfThreads(); i++)
+  for (int i =0; i<this->GetNumberOfThreads(); ++i)
     {
       m_FunctorList.push_back(m_Functor);
     }
@@ -400,7 +400,7 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
     neighInputIt.OverrideBoundaryCondition(&nbc);
     neighInputIt.GoToBegin();
     
-    for(unsigned int i = 0; i<outItList.size(); i++)
+    for(unsigned int i = 0; i<outItList.size(); ++i)
       {
         (*outItList[i]).GoToBegin();
       }
@@ -409,14 +409,14 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
     {
 
       outputFunctor = m_FunctorList[threadId]( neighInputIt);    
-      for(unsigned int i = 0; i<outItList.size(); i++)
+      for(unsigned int i = 0; i<outItList.size(); ++i)
         {
           if( textStatus[i]==true )
             (*outItList[i]).Set( outputFunctor[i] );
         }        
       
       ++neighInputIt;
-      for(unsigned int i = 0; i<outItList.size(); i++)
+      for(unsigned int i = 0; i<outItList.size(); ++i)
         {
           ++(*outItList[i]);
         }

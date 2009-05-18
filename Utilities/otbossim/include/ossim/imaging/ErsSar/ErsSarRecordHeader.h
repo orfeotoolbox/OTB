@@ -75,7 +75,7 @@ public:
 		return _rec_sub2;
 	};
 
-	/** 
+	/**
 	 * @brief Third record sub-type code
 	 */
     unsigned char   get_rec_sub3()
@@ -113,7 +113,7 @@ protected:
 	 * @brief Second record sub-type code
 	 */
     unsigned char   _rec_sub2;
-	/** 
+	/**
 	 * @brief Third record sub-type code
 	 */
     unsigned char   _rec_sub3;

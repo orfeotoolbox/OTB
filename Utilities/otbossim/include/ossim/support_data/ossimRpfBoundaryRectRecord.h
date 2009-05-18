@@ -6,7 +6,7 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfBoundaryRectRecord.h 9967 2006-11-29 02:01:23Z gpotts $
+// $Id: ossimRpfBoundaryRectRecord.h 14183 2009-03-27 21:13:33Z dburken $
 #ifndef ossimRpfBoundaryRectRecord_HEADER
 #define ossimRpfBoundaryRectRecord_HEADER
 #include <iostream>
@@ -35,6 +35,14 @@ public:
 
    const ossimRpfCoverageSection& getCoverage()const{return theCoverage;}
    char getZone()const{return theZone;}
+
+   /**
+    * @brief prints to out.
+    * @param out Stream to print to.
+    * @param prefix If not empty will be prepended onto the keyword.
+    */
+   std::ostream& print(std::ostream& out,
+                       ossimString prefix) const;
 
 private:
    /*!

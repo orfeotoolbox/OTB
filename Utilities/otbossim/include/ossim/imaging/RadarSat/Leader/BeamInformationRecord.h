@@ -62,7 +62,7 @@ public:
 	};
 
     /**
-	 * @brief Applied elevation beam look angle (deg) 
+	 * @brief Applied elevation beam look angle (deg)
 	 */
 	double   get_beam_look_ang()
 	{
@@ -89,12 +89,12 @@ protected:
 	std::string  _beam_look_src;
 
     /**
-	 * @brief Applied elevation beam look angle (deg) 
+	 * @brief Applied elevation beam look angle (deg)
 	 */
 	double   _beam_look_ang;
 
 	/**
-	 * @brief Actual PRF (Hz) 
+	 * @brief Actual PRF (Hz)
 	 */
 	double   _prf;
 private:

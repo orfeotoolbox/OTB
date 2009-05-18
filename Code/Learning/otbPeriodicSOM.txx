@@ -67,19 +67,19 @@ PeriodicSOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehavio
   // Iterate over the neighborhood ot the winner neuron
   it.SetLocation( position );
 
-  for ( i = 0; i < it.Size(); i++ )
+  for ( i = 0; i < it.Size(); ++i )
   {
     typename NeighborhoodIteratorType::OffsetType offset = it.GetOffset(i);
 
     // The neighborhood is of elliptic shape
     double theDistance = itk::NumericTraits< double >::Zero;
-    for ( j = 0; j < MapType::ImageDimension; j++ )
+    for ( j = 0; j < MapType::ImageDimension; ++j )
       theDistance += pow( static_cast<double>( offset[j] ), 2.0 )
                      / pow( static_cast<double>( radius[j] ), 2.0 );
 
     if ( theDistance <= 1.0 )
     {
-      for ( j = 0; j < MapType::ImageDimension; j++ )
+      for ( j = 0; j < MapType::ImageDimension; ++j )
       {
         int pos = offset[j] + position[j];
         positionToUpdate[j] = ( pos >= 0 ) ?
@@ -93,7 +93,7 @@ PeriodicSOM<TListSample,TMap,TSOMLearningBehaviorFunctor,TSOMNeighborhoodBehavio
       NeuronType newNeuron ( tempNeuron );
 
       double tempBeta = beta / ( 1.0 + theDistance );
-      for ( j = 0; j < newNeuron.Size(); j++ )
+      for ( j = 0; j < newNeuron.Size(); ++j )
       {
         newNeuron[j] += static_cast<typename NeuronType::ValueType>(
                           ( sample[j] - tempNeuron[j] ) * tempBeta );

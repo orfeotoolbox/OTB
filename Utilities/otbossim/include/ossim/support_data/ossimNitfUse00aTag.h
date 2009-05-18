@@ -1,8 +1,8 @@
 //*******************************************************************
 //
-// LICENSE: LGPL
+// License:  LGPL
 //
-// see top level LICENSE.txt
+// See LICENSE.txt file in the top level directory for more details.
 // 
 // Author: Walt Bunch
 //
@@ -10,9 +10,10 @@
 // Exploitation Usability extension.
 // 
 //********************************************************************
-// $Id: ossimNitfUse00aTag.h 10173 2007-01-03 18:21:26Z gpotts $
+// $Id: ossimNitfUse00aTag.h 14241 2009-04-07 19:59:23Z dburken $
 #ifndef ossimNitfUse00aTag_HEADER
 #define ossimNitfUse00aTag_HEADER
+
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
 
 class OSSIM_DLL ossimNitfUse00aTag : public ossimNitfRegisteredTag
@@ -117,13 +118,13 @@ public:
    ossimString getSunAz()const;
 
    /**
-    * Print method.
-    *
-    * @param out Stream to print to.
-    * 
-    * @return std::ostream&
+    * @brief Print method that outputs a key/value type format
+    * adding prefix to keys.
+    * @param out Stream to output to.
+    * @param prefix Prefix added to key like "image0.";
     */
-   virtual std::ostream& print(std::ostream& out) const;
+   virtual std::ostream& print(std::ostream& out,
+                               const std::string& prefix=std::string()) const;
    
    virtual void setProperty(ossimRefPtr<ossimProperty> property);
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;

@@ -100,7 +100,7 @@ Resampler<TInputImage,TOutputImage>
   const typename InputImageType::IndexType&   inputStartIndex = inputPtr->GetLargestPossibleRegion().GetIndex();
   typename OutputImageType::IndexType   outputStartIndex;
   typename OutputImageType::SpacingType spacing;
-  for (i = 0; i < OutputImageType::ImageDimension; i++)
+  for (i = 0; i < OutputImageType::ImageDimension; ++i)
   {
     outputStartIndex[i] =  inputStartIndex[i];
   }

@@ -21,7 +21,7 @@ std::ostream& operator<<(std::ostream& os, const DataHistogramSignalData& data)
 	os<<"ltab:"<<data._ltab<<std::endl;
 
 	os<<data._histogram<<std::endl;
-  
+
 	return os;
 }
 
@@ -56,7 +56,7 @@ std::istream& operator>>(std::istream& is, DataHistogramSignalData& data)
 	return is;
 }
 
-DataHistogramSignalData::DataHistogramSignalData(const DataHistogramSignalData& rhs) : 
+DataHistogramSignalData::DataHistogramSignalData(const DataHistogramSignalData& rhs) :
 	RadarSatRecord(rhs),
 	_histogram(rhs._histogram),
 	_sar_chn(rhs._sar_chn),

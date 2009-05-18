@@ -8,7 +8,7 @@ class GMSTDateTime;
 class JulianDate;
 
 /**
- * @brief This class represents a date 
+ * @brief This class represents a date
  * @author @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 10-01-08
@@ -28,22 +28,22 @@ public:
 	 * @brief Copy constructor
 	 */
 	JSDDateTime(const JSDDateTime& rhs);
-	
+
 	/**
 	 * @brief Constructor with date initialisation
 	 */
 	JSDDateTime(JulianDate day0hTU, double second, double decimal);
-	
+
 	/**
 	 * @brief Constructor with date initialisation using a CivilDateTime
 	 */
 	JSDDateTime(CivilDateTime& rhs);
-	
+
 	/**
 	 * @brief Constructor with date initialisation using a CivilDateTime
 	 */
 	JSDDateTime(JulianDate& rhs);
-	
+
 	/**
 	 * @brief Constructor with date initialisation using a MJDDateTime (Modified Julian Date - Used for ENVISAT)
 	 */
@@ -53,37 +53,37 @@ public:
 	 * @brief Affectation operator
 	 */
 	JSDDateTime& operator=(const JSDDateTime& rhs);
-	
+
 	JulianDate get_day0hTU()
 	{
 		return _day0hTU;
 	};
-	
+
 	double get_second()
 	{
 		return _second;
 	};
-	
+
 	double get_decimal()
 	{
 		return _decimal;
 	};
-	
+
 	void set_day0hTU(JulianDate  day)
 	{
 		_day0hTU = day;
 	};
-	
+
 	void set_second(double second)
 	{
 		_second = second;
 	};
-	
+
 	void set_decimal(double decimal)
 	{
 		_decimal = decimal;
 	};
-	
+
 	void NormDate() ;
 
 	/**
@@ -111,8 +111,8 @@ protected:
 	JulianDate _day0hTU;
 	double _second;
 	double _decimal;
-	
-	
+
+
 private:
 };
 #endif

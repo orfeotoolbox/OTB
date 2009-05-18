@@ -289,7 +289,7 @@ PersistentStatisticsVectorImageFilter<TInputImage>
 
   // Find the min/max over all threads and accumulate count, sum and
   // sum of squares
-  for ( i = 0; i < numberOfThreads; i++)
+  for ( i = 0; i < numberOfThreads; ++i)
   {
     count += m_Count[i];
     /** TODO
@@ -303,16 +303,16 @@ PersistentStatisticsVectorImageFilter<TInputImage>
                          crossedMatrix.Rows() << "," << crossedMatrix.Cols() );
     }
 
-    for ( unsigned int r=0; r<m_XX[i].Rows(); r++)
+    for ( unsigned int r=0; r<m_XX[i].Rows(); ++r)
     {
-      for ( unsigned int c=0; c<m_XX[i].Cols(); c++ )
+      for ( unsigned int c=0; c<m_XX[i].Cols(); ++c )
       {
         crossedMatrix(r,c) += m_XX[i](r,c);
       }
     }
     //**** END TODO ****
 
-    for (unsigned int j=0; j<numberOfComponent; j++)
+    for (unsigned int j=0; j<numberOfComponent; ++j)
     {
       sumVector[j] += m_ThreadSum[i][j];
       if (m_ThreadMin[i][j] < minimumVector[j])
@@ -324,9 +324,9 @@ PersistentStatisticsVectorImageFilter<TInputImage>
         maximumVector[j] = m_ThreadMax[i][j];
       }
     }
-  } // end for( i = 0; i < numberOfThreads; i++)
+  } // end for( i = 0; i < numberOfThreads; ++i)
 
-  for (unsigned int j=0; j<numberOfComponent; j++)
+  for (unsigned int j=0; j<numberOfComponent; ++j)
   {
     // compute statistics
     meanVector[j] = sumVector[j] / static_cast<RealType>(count);
@@ -336,7 +336,7 @@ PersistentStatisticsVectorImageFilter<TInputImage>
   MatrixType pixelSumMatrix;
   pixelSumMatrix.SetSize(static_cast<unsigned int>(numberOfComponent), 1);
   pixelSumMatrix.Fill(itk::NumericTraits<RealType>::Zero);
-  for ( unsigned int j = 0; j < numberOfComponent; j++)
+  for ( unsigned int j = 0; j < numberOfComponent; ++j)
   {
     pixelSumMatrix(j, 0) = sumVector[j];
   }
@@ -361,9 +361,9 @@ PersistentStatisticsVectorImageFilter<TInputImage>
                        covMatrixTemp.Rows() << "," << covMatrixTemp.Cols() );
   }
 
-  for ( unsigned int r=0; r<covMatrix.Rows(); r++)
+  for ( unsigned int r=0; r<covMatrix.Rows(); ++r)
   {
-    for ( unsigned int c=0; c<covMatrix.Cols(); c++ )
+    for ( unsigned int c=0; c<covMatrix.Cols(); ++c )
     {
       covMatrix(r,c) -= covMatrixTemp(r,c);
     }
@@ -410,7 +410,7 @@ PersistentStatisticsVectorImageFilter<TInputImage>
   {
     IndexType index = it.GetIndex();
     PixelType vectorValue = it.Get();
-    for (unsigned int j=0; j<vectorValue.GetSize(); j++)
+    for (unsigned int j=0; j<vectorValue.GetSize(); ++j)
     {
       InternalPixelType value = vectorValue[j];
 
@@ -442,9 +442,9 @@ PersistentStatisticsVectorImageFilter<TInputImage>
                          tempMatrix.Rows() << "," << tempMatrix.Cols() );
     }
 
-    for ( unsigned int r=0; r<m_XX[threadId].Rows(); r++)
+    for ( unsigned int r=0; r<m_XX[threadId].Rows(); ++r)
     {
-      for ( unsigned int c=0; c<m_XX[threadId].Cols(); c++ )
+      for ( unsigned int c=0; c<m_XX[threadId].Cols(); ++c )
       {
         m_XX[threadId](r,c) += tempMatrix(r,c);
       }

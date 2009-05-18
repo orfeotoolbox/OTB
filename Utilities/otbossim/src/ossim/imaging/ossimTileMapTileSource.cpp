@@ -78,10 +78,10 @@ bool ossimTileMapTileSource::open()
      return true;
      }
    return false;
-   
+
 //    ossimFilename tempFilename = theImageFile;
 //    // See if the file passed in is a header file.
-   
+
 //    openHeader(theImageFile);
 
 //    if (!theFfHdr) return false;
@@ -96,7 +96,7 @@ bool ossimTileMapTileSource::open()
 //    // is assuming that all files in the directory have the same case.
 //    //***
 //    vector<ossimFilename> fileList;
-   
+
 //    for (ossim_uint32 i=0; i<theFfHdr->getBandCount(); ++i)
 //    {
 //       bool addFile = false;
@@ -106,7 +106,7 @@ bool ossimTileMapTileSource::open()
 //          // Make the file name.
 //          ossimFilename f2 = theImageFile.path();
 //          f2 = f2.dirCat(f1);
-         
+
 //          if (f2.exists())
 //          {
 //             addFile = true;
@@ -133,7 +133,7 @@ bool ossimTileMapTileSource::open()
 //                }
 //             }
 //          }
-         
+
 //          if (addFile)
 //          {
 //             if (traceDebug())
@@ -142,7 +142,7 @@ bool ossimTileMapTileSource::open()
 //             }
 //             fileList.push_back(f2);
 //          }
-//          else 
+//          else
 //          {
 //             if (traceDebug())
 //             {
@@ -155,13 +155,13 @@ bool ossimTileMapTileSource::open()
 //          }
 //       }
 //    }
-   
+
 //    if(fileList.size() == 0)
 //    {
 //       close();
 //       return false;
 //    }
-   
+
 //    ossimGeneralRasterInfo generalRasterInfo(fileList,
 // 					    OSSIM_UINT8,
 // 					    OSSIM_BSQ_MULTI_FILE,
@@ -185,12 +185,12 @@ bool ossimTileMapTileSource::open()
 //    }
 //    theMetaData.clear();
 //    theMetaData.setScalarType(OSSIM_UINT8);
-//    theMetaData.setNumberOfBands(fileList.size());   
+//    theMetaData.setNumberOfBands(fileList.size());
 //    theImageData = generalRasterInfo;
 //    if(initializeHandler())
 //    {
 //       theImageFile = tempFilename;
-      
+
 //       completeOpen();
 //    }
 //    else
@@ -198,12 +198,12 @@ bool ossimTileMapTileSource::open()
 //       if (traceDebug()) CLOG << " Exited..." << std::endl;
 //       return false;
 //    }
-   
+
 //    if (traceDebug()) CLOG << " Exited..." << std::endl;
-   
+
 //    return true;
 }
-   
+
 void ossimTileMapTileSource::openHeader(const ossimFilename& file)
 {
    //***
@@ -218,7 +218,7 @@ void ossimTileMapTileSource::openHeader(const ossimFilename& file)
    hdr.downcase();
    if ( hdr.contains("hpn") || hdr.contains("hrf") || hdr.contains("htm") )
    {
-      theFfHdr = new ossimFfL7(file.c_str());      
+      theFfHdr = new ossimFfL7(file.c_str());
    } else if (hdr.contains("header.dat"))
    {
       theFfHdr = new ossimFfL5(file.c_str());
@@ -253,7 +253,7 @@ void ossimTileMapTileSource::openHeader(const ossimFilename& file)
          return;
       }
    }
-   
+
    char substr[4];
    const char* f = hdr.c_str();
    strncpy(substr, (f+22), 3);
@@ -296,12 +296,12 @@ void ossimTileMapTileSource::openHeader(const ossimFilename& file)
       hdr.upcase();
 
       // Header files alway start with "L71"
-      hdr = hdr.substitute(ossimString("L72"), ossimString("L71"));  
+      hdr = hdr.substitute(ossimString("L72"), ossimString("L71"));
    }
    else
    {
       // Header files alway start with "l71"
-      hdr = hdr.substitute(ossimString("l72"), ossimString("l71")); 
+      hdr = hdr.substitute(ossimString("l72"), ossimString("l71"));
    }
 
    // Make the hdr file name.
@@ -319,7 +319,7 @@ void ossimTileMapTileSource::openHeader(const ossimFilename& file)
    }
 #endif
 }
-   
+
 bool ossimTileMapTileSource::getImageGeometry(ossimKeywordlist& kwl,
                                               const char* prefix)
 {
@@ -328,7 +328,7 @@ bool ossimTileMapTileSource::getImageGeometry(ossimKeywordlist& kwl,
    {
       return true;
    }
-   
+
 //   if (!theFfHdr) return false;
 
    // Make a model
@@ -336,7 +336,7 @@ bool ossimTileMapTileSource::getImageGeometry(ossimKeywordlist& kwl,
 
    if (model.getErrorStatus() != ossimErrorCodes::OSSIM_OK)
    {
-   
+
       return false;
    }
 
@@ -407,7 +407,7 @@ ossimString ossimTileMapTileSource::getShortName() const
 {
    return ossimString("TileMap");
 }
-   
+
 ossimString ossimTileMapTileSource::getLongName() const
 {
    return ossimString("TileMap reader");
@@ -417,7 +417,7 @@ ossimString  ossimTileMapTileSource::className() const
 {
    return ossimString("ossimTileMapTileSource");
 }
- 
+
 double ossimTileMapTileSource::getNullPixelValue(ossim_uint32)const
 {
    return 0.0;
@@ -479,14 +479,14 @@ ossimFilename ossimTileMapTileSource::getBandFilename(ossim_uint32 idx)const
    {
       return file;
    }
-   
+
    // Try upcase name.
    file = path.dirCat(filename.upcase());
    if (file.exists())
    {
       return file;
    }
-   
+
    return ossimFilename();
 }
 
@@ -504,4 +504,4 @@ bool ossimTileMapTileSource::isTm()const
 {
    return (getNumberOfInputBands() == 2);
 }
-   
+

@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //
@@ -13,7 +15,7 @@
 // http://164.214.2.51/ntb/baseline/docs/stdi0002/final.pdf
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfPiaimcTag.cpp 11423 2007-07-27 16:59:22Z dburken $
+// $Id: ossimNitfPiaimcTag.cpp 14291 2009-04-13 22:40:32Z dburken $
 
 #include <cstring> /* for memcpy */
 #include <iostream>
@@ -154,29 +156,35 @@ void ossimNitfPiaimcTag::clearFields()
    theSattrack[SATTRACK_SIZE]     = '\0';
 }
 
-std::ostream& ossimNitfPiaimcTag::print(std::ostream& out) const
+std::ostream& ossimNitfPiaimcTag::print(std::ostream& out,
+                                        const std::string& prefix) const
 {
-   out << setiosflags(std::ios::left) << "ossimNitfPiaimcTag::print"
-       << std::setw(24) << "\nCLOUDCVR:"  << theCloudcvr
-       << std::setw(24) << "\nSRP"        << theSrp
-       << std::setw(24) << "\nSENSMODE"   << thesSensmode
-       << std::setw(24) << "\nSENSNAME"   << theSensname
-       << std::setw(24) << "\nSOURCE"     << theSource
-       << std::setw(24) << "\nCOMGEN"     << theComgen
-       << std::setw(24) << "\nSUBQUAL"    << theSubqual
-       << std::setw(24) << "\nPIAMSNNUM"  << thePiamsnnum
-       << std::setw(24) << "\nCAMSPECS"   << theCamspecs
-       << std::setw(24) << "\nPROJID"     << theProjid
-       << std::setw(24) << "\nGENERATION" << theGeneration
-       << std::setw(24) << "\nESD"        << theEsd
-       << std::setw(24) << "\nOTHERCOND"  << theOthercond
-       << std::setw(24) << "\nMEANGSD"    << theMeanGsd
-       << std::setw(24) << "\nIDATUM"     << theIdatum
-       << std::setw(24) << "\nIELLIP"     << theIellip
-       << std::setw(24) << "\nPREPROC"    << thePreproc
-       << std::setw(24) << "\nIPROJ"     << theIproj
-       << std::setw(24) << "\nSATTRACK"  << theSattrack
-       << std::endl;
+   std::string pfx = prefix;
+   pfx += getRegisterTagName();
+   pfx += ".";
+   
+   out << setiosflags(std::ios::left)
+       << pfx << std::setw(24) << "CETAG:" << getRegisterTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"   << getSizeInBytes() << "\n"
+       << pfx << std::setw(24) << "CLOUDCVR:"  << theCloudcvr << "\n"
+       << pfx << std::setw(24) << "SRP:"       << theSrp << "\n"
+       << pfx << std::setw(24) << "SENSMODE:"   << thesSensmode << "\n"
+       << pfx << std::setw(24) << "SENSNAME:"   << theSensname << "\n"
+       << pfx << std::setw(24) << "SOURCE:"     << theSource << "\n"
+       << pfx << std::setw(24) << "COMGEN:"     << theComgen << "\n"
+       << pfx << std::setw(24) << "SUBQUAL:"    << theSubqual << "\n"
+       << pfx << std::setw(24) << "PIAMSNNUM:"  << thePiamsnnum << "\n"
+       << pfx << std::setw(24) << "CAMSPECS:"   << theCamspecs << "\n"
+       << pfx << std::setw(24) << "PROJID:"     << theProjid << "\n"
+       << pfx << std::setw(24) << "GENERATION:" << theGeneration << "\n"
+       << pfx << std::setw(24) << "ESD:"        << theEsd << "\n"
+       << pfx << std::setw(24) << "OTHERCOND:"  << theOthercond << "\n"
+       << pfx << std::setw(24) << "MEANGSD:"    << theMeanGsd << "\n"
+       << pfx << std::setw(24) << "IDATUM:"     << theIdatum << "\n"
+       << pfx << std::setw(24) << "IELLIP:"     << theIellip << "\n"
+       << pfx << std::setw(24) << "PREPROC:"    << thePreproc << "\n"
+       << pfx << std::setw(24) << "IPROJ:"     << theIproj << "\n"
+       << pfx << std::setw(24) << "SATTRACK:"  << theSattrack << "\n";
 
    return out;
 }

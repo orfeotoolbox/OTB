@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //
@@ -11,7 +13,7 @@
 // http://164.214.2.51/ntb/baseline/docs/stdi0002/final.pdf
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfBlockaTag.h 10148 2006-12-27 16:10:37Z dburken $
+// $Id: ossimNitfBlockaTag.h 14241 2009-04-07 19:59:23Z dburken $
 #ifndef ossimNitfBlockaTag_HEADER
 #define ossimNitfBlockaTag_HEADER
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
@@ -65,15 +67,15 @@ public:
     * Clears all string fields within the record to some default nothingness.
     */
    virtual void clearFields();
-   
+
    /**
-    * Print method.
-    *
-    * @param out Stream to print to.
-    * 
-    * @return std::ostream&
+    * @brief Print method that outputs a key/value type format
+    * adding prefix to keys.
+    * @param out Stream to output to.
+    * @param prefix Prefix added to key like "image0.";
     */
-   virtual std::ostream& print(std::ostream& out) const;
+   virtual std::ostream& print(std::ostream& out,
+                               const std::string& prefix) const;
 
    /** @param block number to set block instance to.  Valid range 01 to 99. */
    void setBlockInstance(ossim_uint32 block);

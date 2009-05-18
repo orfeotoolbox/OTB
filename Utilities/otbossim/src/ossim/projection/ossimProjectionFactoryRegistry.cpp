@@ -4,7 +4,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimProjectionFactoryRegistry.cpp 13508 2008-08-27 15:51:38Z gpotts $
+// $Id: ossimProjectionFactoryRegistry.cpp 14012 2009-01-24 15:35:56Z dburken $
 #include <algorithm>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimProjectionFactoryBase.h>
@@ -118,9 +118,15 @@ ossimProjection* ossimProjectionFactoryRegistry::createProjection(
       // ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
       //
       // It will fail because the factory doesn't know it has a prefix.
+      //
+      // ESH 01/2009: I've changed the following so that not just the first
+      // line is checked for "image" and ".".  If the image_info .geom file
+      // was created with the -m (metadata) option, the first lines of the
+      // file will not have the expected structure.
       //---
+      bool bFoundImageLine = false;
       ossimKeywordlist::KeywordMap::const_iterator i = kwl.getMap().begin();
-      if ( i != kwl.getMap().end() )
+      while ( (i != kwl.getMap().end()) && (bFoundImageLine == false) )
       {
          ossimString s1 = (*i).first;
          if ( s1.size() )
@@ -131,6 +137,7 @@ ossimProjection* ossimProjectionFactoryRegistry::createProjection(
             {
                if ( v[0].contains("image") )
                {
+                  bFoundImageLine = true;
                   ossimString s2 = v[0];
                   s2 += ".";
                   factory = theFactoryList.begin();
@@ -146,6 +153,9 @@ ossimProjection* ossimProjectionFactoryRegistry::createProjection(
                }
             }
          }
+
+         // Go to the next line of the .geom file
+         ++i;
       }
    }
 

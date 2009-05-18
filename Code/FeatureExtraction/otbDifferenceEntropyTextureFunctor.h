@@ -62,10 +62,10 @@ public:
       {
         double Px_y = 0.;
         double nCeil = (static_cast<double>(sB)+0.5)*this->GetNeighBinLength();
-        for (unsigned r = 0; r<this->GetHisto().size(); r++)
+        for (unsigned r = 0; r<this->GetHisto().size(); ++r)
           {
             double rVal = (static_cast<double>(r)+0.5)*this->GetOffsetBinLength();
-            for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
+            for (unsigned s = 0; s<this->GetHisto()[r].size(); ++s)
               {
                 if( vcl_abs((static_cast<double>(s)+0.5)*this->GetNeighBinLength() - rVal - nCeil) < vcl_abs(this->GetNeighBinLength()) )
                   {

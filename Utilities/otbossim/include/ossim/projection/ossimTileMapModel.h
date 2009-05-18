@@ -1,7 +1,7 @@
 //*******************************************************************
 //
 // License:  See top level LICENSE.txt file.
-// 
+//
 // DESCRIPTION: Contains declaration of TileMap sensor model class.
 //
 // SOFTWARE HISTORY:
@@ -45,7 +45,7 @@ public:
    ossimTileMapModel(const ossimFilename& init_file);
    ossimTileMapModel(const ossimKeywordlist& geom_kwl);
    ossimTileMapModel(const ossimTileMapModel& rhs);
-   
+
    virtual ~ossimTileMapModel();
 
    enum ProjectionType
@@ -56,7 +56,7 @@ public:
       SOM_MAP,
       SOM_ORBIT
    };
-   
+
    enum AdjustParamIndex
    {
       INTRACK_OFFSET = 0,
@@ -69,33 +69,33 @@ public:
       MAP_ROTATION,
       NUM_ADJUSTABLE_PARAMS // not an index
    };
-   
+
    /*!
     * Returns pointer to a new instance, copy of this.
     */
    virtual ossimObject* dup() const { return 0; } // TBR
-   
+
    /*!
     * Extends base-class implementation. Dumps contents of object to ostream.
     */
    virtual std::ostream& print(std::ostream& out) const;
-   
+
    /*!
     * Fulfills ossimObject base-class pure virtuals. Loads and saves geometry
     * KWL files. Returns true if successful.
     */
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix=0) const;
-   
+
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
-   
+
    /*!
     * Writes a template of geom keywords processed by loadState and saveState
     * to output stream.
     */
    static void writeGeomTemplate(ostream& os);
-   
+
    //***
    // Overrides base class pure virtual.
    //***
@@ -118,7 +118,7 @@ public:
   {
     return qDepth;
   }
-   
+
    /*!
     * Given an image point, returns a ray originating at some arbitrarily high
     * point (ideally at the sensor position) and pointing towards the target.
@@ -145,51 +145,51 @@ protected:
     * Initializes the model given a fast format header.
     */
    void initFromHeader(const ossimFfL7& head);
-   
+
    virtual void initAdjustableParameters();
    void initMapProjection();
 
    //***
    // Image constant parameters:
    //***
-   double           theIllumAzimuth;  
+   double           theIllumAzimuth;
    double           theIllumElevation;
    double           theOrbitAltitude;
    double           theOrbitInclination;
    int              theMapZone;
    ossimDpt         theMapOffset;
    int              theWrsPathNumber;
-   int              theWrsRowNumber;    
-   double           theMeridianalAngle;   
+   int              theWrsRowNumber;
+   double           theMeridianalAngle;
    double           thePositionError;
 
    ProjectionType       theProjectionType;
    ossimRefPtr<ossimMapProjection>  theMapProjection;
 
-   double           theMapAzimAngle; 
-   double           theMapAzimCos;    
+   double           theMapAzimAngle;
+   double           theMapAzimCos;
    double           theMapAzimSin;
    double           theMap2IcRotAngle;
    double           theMap2IcRotCos;
    double           theMap2IcRotSin;
-   
+
    //***
    // Adjustable parameters:
    //***
    double           theIntrackOffset;
    double           theCrtrackOffset;
-   double           theLineGsdCorr;   
-   double           theSampGsdCorr;   
+   double           theLineGsdCorr;
+   double           theSampGsdCorr;
    double           theRollOffset;
-   double           theYawOffset; 
-   double           theYawRate; 
-   double           theMapRotation; 
+   double           theYawOffset;
+   double           theYawRate;
+   double           theMapRotation;
 
    //***
    // Quantities derived from the adjustable parameters:
    //***
    NEWMAT::Matrix   theRollRotMat;
-   
+
    TYPE_DATA
 
    unsigned char qDepth;

@@ -425,7 +425,7 @@ StreamingImageFileWriter<TInputImage>
   const typename TInputImage::PointType& origin = outputPtr->GetOrigin();
   const typename TInputImage::DirectionType& direction = outputPtr->GetDirection();
 
-  for (unsigned int i=0; i<TInputImage::ImageDimension; i++)
+  for (unsigned int i=0; i<TInputImage::ImageDimension; ++i)
   {
 // Final image size
     m_ImageIO->SetDimensions(i,outputRegion.GetSize(i));
@@ -434,7 +434,7 @@ StreamingImageFileWriter<TInputImage>
     vnl_vector< double > axisDirection(TInputImage::ImageDimension);
 // Please note: direction cosines are stored as columns of the
 // direction matrix
-    for (unsigned int j=0; j<TInputImage::ImageDimension; j++)
+    for (unsigned int j=0; j<TInputImage::ImageDimension; ++j)
     {
       axisDirection[j] = direction[j][i];
     }
@@ -484,7 +484,7 @@ StreamingImageFileWriter<TInputImage>
 
     // Write the whole image
     itk::ImageIORegion ioRegion(TInputImage::ImageDimension);
-    for (unsigned int i=0; i<TInputImage::ImageDimension; i++)
+    for (unsigned int i=0; i<TInputImage::ImageDimension; ++i)
     {
       ioRegion.SetSize(i,streamRegion.GetSize(i));
       ioRegion.SetIndex(i,streamRegion.GetIndex(i));

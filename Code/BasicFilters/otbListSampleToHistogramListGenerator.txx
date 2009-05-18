@@ -80,7 +80,7 @@ ListSampleToHistogramListGenerator< TListSample,
                     m_List->End(), lower, upper);
     float margin;
 
-    for ( unsigned int i = 0; i < m_List->GetMeasurementVectorSize(); i++ )
+    for ( unsigned int i = 0; i < m_List->GetMeasurementVectorSize(); ++i )
       {
       if ( !itk::NumericTraits< THistogramMeasurement >::is_integer )
         {
@@ -136,7 +136,7 @@ ListSampleToHistogramListGenerator< TListSample,
     comp_lower[0] = h_lower[comp];
     comp_upper[0] = h_upper[comp];
 
-    otbMsgDevMacro(<<"ListSampleToHistogramListGenerator::GenerateData(): Intializing histogram "<<comp<<" with (size= "<<m_Size<<", lower = "<<comp_lower<<", upper = "<<comp_upper<<")");
+    otbMsgDevMacro(<<"ListSampleToHistogramListGenerator::GenerateData(): Initializing histogram "<<comp<<" with (size= "<<m_Size<<", lower = "<<comp_lower<<", upper = "<<comp_upper<<")");
 
     // Create a new histogrma for this component
     m_HistogramList->PushBack(HistogramType::New());

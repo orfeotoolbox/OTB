@@ -27,6 +27,7 @@
 #endif
 
 #include <cstdlib>
+#include <cstdio>
 #include <assert.h>
 
 using namespace std;
@@ -139,7 +140,7 @@ int SiftFast(int argc, char *argv[])
         for(int i = 0; i < 128; ++i) {
             int intdesc = (int)(key->descrip[i]*512.0f);
             assert( intdesc >= 0 );
-            
+
             if( intdesc > 255 )
                 intdesc = 255;
             cout << intdesc << " ";

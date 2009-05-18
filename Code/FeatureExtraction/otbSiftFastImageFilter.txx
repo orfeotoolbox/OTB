@@ -94,7 +94,7 @@ SiftFastImageFilter<TInputImage,TOutputPointSet>
     outputPointSet->SetPointData(numkeys,data);
 
     // go to next key
-    numkeys++;
+    ++numkeys;
     key = key->next;
   }
   FreeKeypoints(keypts);

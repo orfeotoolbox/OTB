@@ -55,7 +55,7 @@ DecimateImageFilter< TInputImage, TOutputImage >
     this->CallCopyInputRegionToOutputRegion( newRegion, this->GetInput()->GetLargestPossibleRegion() );
     this->GetOutput()->SetRegions( newRegion );
 
-    for ( unsigned int i = 0; i < OutputImageDimension; i++ )
+    for ( unsigned int i = 0; i < OutputImageDimension; ++i )
     {
       otbGenericMsgDebugMacro( << "Image Output size [" << i << "] = " << newRegion.GetSize(i) );
     }
@@ -76,7 +76,7 @@ DecimateImageFilter< TInputImage, TOutputImage >
   typename InputImageRegionType::IndexType destIndex;
   typename InputImageRegionType::SizeType destSize;
 
-  for ( unsigned int i = 0; i < InputImageDimension; i++ )
+  for ( unsigned int i = 0; i < InputImageDimension; ++i )
   {
     destIndex[i] = srcIndex[i] * GetDecimationFactor();
     destSize[i] = ( srcSize[i] - 1 ) * GetDecimationFactor() + 1;
@@ -100,7 +100,7 @@ DecimateImageFilter< TInputImage, TOutputImage >
   typename OutputImageRegionType::IndexType destIndex;
   typename OutputImageRegionType::SizeType destSize;
 
-  for ( unsigned int i = 0; i < InputImageDimension; i++ )
+  for ( unsigned int i = 0; i < InputImageDimension; ++i )
   {
     destIndex[i] = srcIndex[i] / GetDecimationFactor();
     destSize[i] = ( srcSize[i] - 1 ) / GetDecimationFactor() + 1;

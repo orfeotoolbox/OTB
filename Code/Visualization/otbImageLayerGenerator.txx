@@ -28,7 +28,7 @@ namespace otb
 
 template < class TImageLayer >
 ImageLayerGenerator<TImageLayer>
-::ImageLayerGenerator() : m_Layer(), m_DefaultRenderingFunction(), m_Image(), m_Quicklook(),
+::ImageLayerGenerator() : m_Layer(), m_RenderingFunction(), m_Image(), m_Quicklook(),
                           m_SubsamplingRate(1), m_GenerateQuicklook(true),
                           m_Resampler(), m_ScreenRatio(0.25)
 {
@@ -37,7 +37,9 @@ ImageLayerGenerator<TImageLayer>
   // Resampler
   m_Resampler = ResampleFilterType::New();
   // Rendering function
-  m_DefaultRenderingFunction = RenderingFunctionType::New();
+  m_RenderingFunction = DefaultRenderingFunctionType::New();
+  // Default blending function
+  m_BlendingFunction = m_Layer->GetBlendingFunction();
 }
 
 template < class TImageLayer >
@@ -55,12 +57,8 @@ ImageLayerGenerator<TImageLayer>
     {
     return;
     }
-
   // Update image information
   m_Image->UpdateOutputInformation();
-
-  // Build a new layer
-  m_Layer = ImageLayerType::New();
 
   // Generate layer information
   this->GenerateLayerInformation();
@@ -123,24 +121,25 @@ ImageLayerGenerator<TImageLayer>
   m_Layer->VisibleOn();
 
   // Setup channels
-  switch(m_Image->GetNumberOfComponentsPerPixel())
-    {
+//   switch(m_Image->GetNumberOfComponentsPerPixel())
+  switch( PixelSize(m_Image, m_Image->GetBufferPointer()) )
+  {
     case 1:
     {
-    m_DefaultRenderingFunction->SetAllChannels(0);
-    break;
+      m_RenderingFunction->SetAllChannels(0);
+      break;
     }
     case 2:
     {
-    m_DefaultRenderingFunction->SetAllChannels(0);
-    break;
+      m_RenderingFunction->SetAllChannels(0);
+      break;
     }
     case 3:
     {
-    m_DefaultRenderingFunction->SetRedChannelIndex(0);
-    m_DefaultRenderingFunction->SetGreenChannelIndex(1);
-    m_DefaultRenderingFunction->SetBlueChannelIndex(2);
-    break;
+      m_RenderingFunction->SetRedChannelIndex(0);
+      m_RenderingFunction->SetGreenChannelIndex(1);
+      m_RenderingFunction->SetBlueChannelIndex(2);
+      break;
     }
     case 4:
     {
@@ -150,28 +149,32 @@ ImageLayerGenerator<TImageLayer>
       if (sensorID.find("Spot") != std::string::npos)
       {
         // Handle Spot like channel order
-        m_DefaultRenderingFunction->SetRedChannelIndex(0);//XS3
-        m_DefaultRenderingFunction->SetGreenChannelIndex(1);//XS2
-        m_DefaultRenderingFunction->SetBlueChannelIndex(2);//XS1
+        m_RenderingFunction->SetRedChannelIndex(0);//XS3
+        m_RenderingFunction->SetGreenChannelIndex(1);//XS2
+        m_RenderingFunction->SetBlueChannelIndex(2);//XS1
       }
       else
       {
         // Handle quickbird like channel order (wavelenght order)
-        m_DefaultRenderingFunction->SetRedChannelIndex(2);
-        m_DefaultRenderingFunction->SetGreenChannelIndex(1);
-        m_DefaultRenderingFunction->SetBlueChannelIndex(0);
+        m_RenderingFunction->SetRedChannelIndex(2);
+        m_RenderingFunction->SetGreenChannelIndex(1);
+        m_RenderingFunction->SetBlueChannelIndex(0);
       }
-    break;
+      break;
     }
     default:
     {
     //Discard
-    break;
+      break;
     }
-    }
+  }
 
   // Set the rendering function
-  m_Layer->SetRenderingFunction(m_DefaultRenderingFunction);
+  m_Layer->SetRenderingFunction(m_RenderingFunction);
+
+  //Set the blending function
+  m_Layer->SetBlendingFunction(m_BlendingFunction);
+
 }
 
 template < class TImageLayer >
@@ -234,6 +237,42 @@ ImageLayerGenerator<TImageLayer>
 {
   Superclass::PrintSelf(os,indent);
 }
+
+
+//Find out the histogram size from the pixel
+//FIXME duplication in ImageLayer
+template < class TImageLayer >
+    unsigned int
+    ImageLayerGenerator<TImageLayer>
+  ::PixelSize(ImagePointerType image, ScalarType* v) const
+{
+  return image->GetNumberOfComponentsPerPixel();
+}
+//Match is done according to InternalPixelType which is scalar also for VectorImage
+// template < class TImageLayer >
+//     unsigned int
+//     ImageLayerGenerator<TImageLayer>
+//   ::PixelSize(ImagePointerType image, VectorPixelType* v) const
+// {
+//   std::cout << "Match on vector" << std::endl;
+//   return image->GetNumberOfComponentsPerPixel();
+// }
+template < class TImageLayer >
+    unsigned int
+    ImageLayerGenerator<TImageLayer>
+  ::PixelSize(ImagePointerType image, RGBPixelType* v) const
+{
+  return 3;
+}
+template < class TImageLayer >
+    unsigned int
+    ImageLayerGenerator<TImageLayer>
+  ::PixelSize(ImagePointerType image, RGBAPixelType* v) const
+{
+  return 3;//We don't really want to normalize the Alpha value
+}
+
+
 } // end namespace otb
 
 #endif

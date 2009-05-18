@@ -19,7 +19,7 @@
 #define __otbStandardImageViewer_h
 
 #include "otbImage.h"
-#include "itkRGBPixel.h"
+#include "itkRGBAPixel.h"
 #include "otbImageLayer.h"
 #include "otbImageLayerRenderingModel.h"
 #include "otbImageView.h"
@@ -75,7 +75,10 @@ public:
   /** Input image type */
   typedef TImage                                    ImageType;
   typedef typename ImageType::Pointer               ImagePointerType;
+  typedef typename ImageType::PixelType             PixelType;
   typedef typename ImageType::InternalPixelType     InternalPixelType;
+  typedef typename itk::NumericTraits<PixelType>::ValueType ScalarType;
+
 
   /** VectorData typedef */
   typedef TVectorData                               VectorDataType;
@@ -86,7 +89,7 @@ public:
   typedef typename WidgetManagerType::Pointer       WidgetManagerPointerType;
 
   /** Output image type */
-  typedef itk::RGBPixel<unsigned char>              RGBPixelType;
+  typedef itk::RGBAPixel<unsigned char>             RGBPixelType;
   typedef Image<RGBPixelType,2>                     OutputImageType;
 
   /** Image layer type */

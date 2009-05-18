@@ -125,7 +125,7 @@ public:
           offsetOff[0]++;
           offsetOff[1] = offsetOffInit[1];
           offset[0] = l;
-          for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+          for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); ++k)
             {
               offsetOff[1]++;
               offset[1] = k;
@@ -148,7 +148,7 @@ public:
           offsetOff[0]++;
           offsetOff[1] = offsetOffInit[1];
           offset[0] = l;
-          for( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+          for( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); ++k)
             {
               offsetOff[1]++;
               offset[1] = k;
@@ -189,7 +189,7 @@ inline OutputScalarType operator()(const NeighborhoodType &neigh)
     for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
       {
         offset[0] = l;
-        for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+        for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); ++k)
           {
             offset[1] = k;
             inNeigh[offset] =  neigh[offset];//neigh.GetPixel(offset);
@@ -200,7 +200,7 @@ inline OutputScalarType operator()(const NeighborhoodType &neigh)
     for ( int l = -static_cast<int>(radiusOff[0]); l <= static_cast<int>(radiusOff[0]); l++ )
       {
         offset[0] = l;
-        for ( int k = -static_cast<int>(radiusOff[1]); k <= static_cast<int>(radiusOff[1]); k++)
+        for ( int k = -static_cast<int>(radiusOff[1]); k <= static_cast<int>(radiusOff[1]); ++k)
           {
             offset[1] = k;
             offNeigh[offset] =  neigh[offset];//neigh.GetPixel(offset);
@@ -225,7 +225,7 @@ inline OutputScalarType operator()(const NeighborhoodType &neigh)
       radius[1] = static_cast<unsigned int>( 0.5*( static_cast<double>(neigh.GetSize()[1] - 1) ) - static_cast<double>( vcl_abs(m_Offset[1])) );
 
       // For each channel
-      for ( unsigned int i=0; i<neigh.GetCenterValue/*Pixel*/().GetSize(); i++ )
+      for ( unsigned int i=0; i<neigh.GetCenterValue/*Pixel*/().GetSize(); ++i )
         {
           NeighborhoodType inNeigh;
           inNeigh.SetRadius(radius);
@@ -235,7 +235,7 @@ inline OutputScalarType operator()(const NeighborhoodType &neigh)
           for ( int l = -static_cast<int>(radius[0]); l <= static_cast<int>(radius[0]); l++ )
             {
               offset[0] = l;
-              for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+              for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); ++k)
                 {
                   offset[1] = k;
                   inNeigh[offset] = neigh[offset][i];//neigh.GetPixel(offset)[i];
@@ -246,7 +246,7 @@ inline OutputScalarType operator()(const NeighborhoodType &neigh)
           for ( int l = -static_cast<int>(radiusOff[0]); l <= static_cast<int>(radiusOff[0]); l++ )
             {
               offset[0] = l;
-              for ( int k = -static_cast<int>(radiusOff[1]); k <= static_cast<int>(radiusOff[1]); k++)
+              for ( int k = -static_cast<int>(radiusOff[1]); k <= static_cast<int>(radiusOff[1]); ++k)
                 {
                   offset[1] = k;
                   offNeigh[offset] = neigh[offset][i];
@@ -290,7 +290,7 @@ inline OutputScalarType operator()(const NeighborhoodType &neigh)
           offsetOff[0]++;
           offsetOff[1] = offsetOffInit[1];
           offset[0] = l;
-          for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); k++)
+          for ( int k = -static_cast<int>(radius[1]); k <= static_cast<int>(radius[1]); ++k)
             {
               offsetOff[1]++;
               offset[1] = k;

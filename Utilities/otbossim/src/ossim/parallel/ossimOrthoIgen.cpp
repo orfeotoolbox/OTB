@@ -1,4 +1,4 @@
-// $Id: ossimOrthoIgen.cpp 13706 2008-10-13 18:46:27Z gpotts $
+// $Id: ossimOrthoIgen.cpp 14069 2009-03-08 21:25:47Z dburken $
 #include <sstream>
 #include <ossim/parallel/ossimOrthoIgen.h>
 #include <ossim/parallel/ossimIgen.h>
@@ -128,6 +128,7 @@ void ossimOrthoIgen::addArguments(ossimArgumentParser& argumentParser)
    argumentParser.getApplicationUsage()->addCommandLineOption("--hist-auto-minmax","uses the automatic search for the best min and max clip values");
 
    argumentParser.getApplicationUsage()->addCommandLineOption("--scale-to-8-bit","Scales output to eight bits if not already.");
+   argumentParser.getApplicationUsage()->addCommandLineOption("--writer-prop","Passes a name=value pair to the writer for setting it's property.  Any number of these can appear on the line.");
 }
 
 void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
@@ -170,6 +171,18 @@ void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
       theThumbnailRes  = tempString;
       theThumbnailFlag = true;
    }
+   theWriterProperties.clear();
+   
+   while(argumentParser.read("--writer-prop", stringParam))
+   {
+      std::vector<ossimString> splitArray;
+      tempString.split(splitArray, "=");
+      if(splitArray.size() == 2)
+      {
+         theWriterProperties.insert(std::make_pair(splitArray[0], splitArray[1]));
+      }
+   }
+         
    if(argumentParser.read("--slave-buffers", stringParam))
    {
       theSlaveBuffers = tempString;
@@ -656,8 +669,7 @@ bool ossimOrthoIgen::setupIgenKwl(ossimKeywordlist& kwl)
                      }
                      else
                      {
-                        histRemapper->setStretchMode(ossimHistogramRemapper::LINEAR_AUTO_MIN_MAX);
-                        histRemapper->buildTable();
+                        histRemapper->setStretchMode(ossimHistogramRemapper::LINEAR_AUTO_MIN_MAX, true);
                      }
                   }
                   else
@@ -962,6 +974,14 @@ bool ossimOrthoIgen::setupWriter(ossimKeywordlist& kwl, ossimConnectableObject* 
          }
          
          writer->connectMyInputTo(0, input);
+         
+         ossimPropertyInterface* propInterface = (ossimPropertyInterface*)writer;
+         PropertyMap::iterator iter = theWriterProperties.begin();
+         while(iter != theWriterProperties.end())
+         {
+            propInterface->setProperty(iter->first, iter->second);
+            ++iter;
+         }
          writer->saveState(kwl, "object2.");
       }
       kwl.add("object2.",
@@ -983,6 +1003,7 @@ bool ossimOrthoIgen::setupWriter(ossimKeywordlist& kwl, ossimConnectableObject* 
 
       kwlTemp.addFile(theWriterTemplate);
       outputObj = ossimImageWriterFactoryRegistry::instance()->createWriter(kwlTemp);
+      writer = dynamic_cast<ossimImageFileWriter*>(outputObj.get());
       if(!outputObj.valid())
       {
          outputObj = ossimImageWriterFactoryRegistry::instance()->createWriter(kwlTemp, "object2.");
@@ -991,11 +1012,21 @@ bool ossimOrthoIgen::setupWriter(ossimKeywordlist& kwl, ossimConnectableObject* 
       {
          outputObj->setFilename(outputFilename);
 
-         if(theScaleToEightBitFlag)
+         if(theScaleToEightBitFlag&&writer)
          {
             writer->setScaleToEightBitFlag(theScaleToEightBitFlag);
          }
+         ossimPropertyInterface* propInterface = (ossimPropertyInterface*)writer;
          
+         if(propInterface)
+         {
+            PropertyMap::iterator iter = theWriterProperties.begin();
+            while(iter != theWriterProperties.end())
+            {
+               propInterface->setProperty(iter->first, iter->second);
+               ++iter;
+            }
+         }
          outputObj->connectMyInputTo(0, input);
          outputObj->saveState(kwl, "object2.");
          kwl.add("object2.",

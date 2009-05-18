@@ -55,6 +55,7 @@ namespace otb
     m_StartIndex.Fill( 0 );
     m_Map = mapnik::Map();
     m_SensorModelFlip = 1;
+    m_ScaleFactor = 1.0;
   }
 
 
@@ -185,13 +186,16 @@ namespace otb
   ::BeforeThreadedGenerateData(void)
   {
     Superclass::BeforeThreadedGenerateData();
+
+
     mapnik::freetype_engine::register_font("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");
-    m_Map.resize(m_Size[0],m_Size[1]);
+
 
 //     m_Map.set_background(mapnik::color("#f2efe9"));
     m_Map.set_background(mapnik::color(255,255,255,0));
 
     otb::VectorDataStyle::Pointer styleLoader = otb::VectorDataStyle::New();
+    styleLoader->SetScaleFactor(m_ScaleFactor);
     styleLoader->LoadOSMStyle(m_Map);
 
 
@@ -209,13 +213,17 @@ namespace otb
 
     this->BeforeThreadedGenerateData();
 
+    ImagePointer output = this->GetOutput();
+    RegionType requestedRegion = output->GetRequestedRegion();
+    std::cerr << "requestedRegion: " << requestedRegion << std::endl;
+
     datasource_ptr mDatasource = datasource_ptr(new mapnik::memory_datasource);
 
     VectorDataConstPointer input = this->GetInput();
     InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(input->GetDataTree()->GetRoot());
 
 
-    //Converting the projection string to the porj.4 format
+    //Converting the projection string to the proj.4 format
     std::string vectorDataProjectionWKT;
     itk::ExposeMetaData<std::string>(input->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey,  vectorDataProjectionWKT);
     std::cout << "WKT -> " << vectorDataProjectionWKT << std::endl;
@@ -229,6 +237,7 @@ namespace otb
       //(with a resolution of 1m per unit)
       vectorDataProjectionProj4 = "+proj=utm +zone=31 +ellps=WGS84";
       m_SensorModelFlip =  -1;
+      otbMsgDevMacro(<<"The output map will be in sensor geometry");
     }
     else
     {
@@ -238,10 +247,20 @@ namespace otb
       vectorDataProjectionProj4 = pszProj4;
       CPLFree(pszProj4);
       m_SensorModelFlip =  1;
+      otbMsgDevMacro(<<"The output map will be carto/geo geometry");
     }
     std::cout << "Proj.4 -> " << vectorDataProjectionProj4 << std::endl;
 
 //      std::string   vectorDataProjectionProj4 = "+proj=utm +zone=31 +ellps=WGS84";
+    if ((requestedRegion.GetSize()[0] > (16LU << 10)) || (requestedRegion.GetSize()[1] > (16LU << 10)))
+    {
+      //Limitation in mapnik/map.hpp, where we have
+      // static const unsigned MIN_MAPSIZE=16;
+      // static const unsigned MAX_MAPSIZE=MIN_MAPSIZE<<11;
+      itkExceptionMacro(<<"Mapnik does not support the generation of tiles bigger than 16 384");
+    }
+
+    m_Map.resize(requestedRegion.GetSize()[0],requestedRegion.GetSize()[1]);
     m_Map.set_srs(vectorDataProjectionProj4);
 
     ProcessNode(inputRoot,mDatasource);
@@ -249,7 +268,9 @@ namespace otb
 
     std::cout << "Datasource size: " << mDatasource->size() << std::endl;
 
-    mapnik::Layer lyr("world");
+
+
+    mapnik::Layer lyr("data");
     lyr.set_srs(vectorDataProjectionProj4);
     lyr.set_datasource(mDatasource);
 //     lyr.add_style("river");
@@ -260,13 +281,23 @@ namespace otb
 
     m_Map.addLayer(lyr);
 
-    assert( (m_SensorModelFlip == 1)||(m_SensorModelFlip == -1) );
-    mapnik::Envelope<double> envelope(m_Origin[0],
-                                      m_SensorModelFlip*(m_Origin[1]+m_Spacing[1]*m_Size[1]),
-                                        m_Origin[0]+m_Spacing[0]*m_Size[0],
-                                        m_SensorModelFlip*m_Origin[1]);
+//     mapnik::Layer lyr2("text");
+//     lyr2.set_srs(vectorDataProjectionProj4);
+//     lyr2.set_datasource(mDatasource);
+//     lyr2.add_style("roads-text");
+//
+//     m_Map.addLayer(lyr2);
 
-//     m_Map.zoomToBox(lyr.envelope());//FIXME: use the Origin/Spacing to calculate this
+    assert( (m_SensorModelFlip == 1)||(m_SensorModelFlip == -1) );
+
+
+    mapnik::Envelope<double> envelope(
+            m_Origin[0]+requestedRegion.GetIndex()[0]*m_Spacing[0],
+        m_SensorModelFlip*(m_Origin[1]+requestedRegion.GetIndex()[1]*m_Spacing[1]+m_Spacing[1]*requestedRegion.GetSize()[1]),
+                           m_Origin[0]+requestedRegion.GetIndex()[0]*m_Spacing[0]+m_Spacing[0]*requestedRegion.GetSize()[0],
+            m_SensorModelFlip*(m_Origin[1]+requestedRegion.GetIndex()[1]*m_Spacing[1])
+                                     );
+
     m_Map.zoomToBox(envelope);
 //     std::cout << "Envelope: " << lyr.envelope() << std::endl;
     std::cout << "Envelope: " << envelope << std::endl;
@@ -278,29 +309,22 @@ namespace otb
 
     const unsigned char * src = buf.raw_data();
 
-    ImagePointer output = this->GetOutput();
-//     unsigned char * dst = output->GetBufferPointer();
 
-//     unsigned int size = 4*m_Size[0]*m_Size[1];//FIXME: lot of assumption here: RGBA, 2 dimensions
-//     memcpy(dst, src, size);
+    itk::ImageRegionIterator<ImageType> it(output, output->GetRequestedRegion());
 
-//     if (m_SensorModelFlip == false)
-//     {
-      itk::ImageRegionIterator<ImageType> it(output, output->GetLargestPossibleRegion());
-
-      for (it.GoToBegin(); !it.IsAtEnd(); ++it)
-      {
-        itk::RGBAPixel<unsigned char> pix;
-        pix[0] = *src;
-        ++src;
-        pix[1] = *src;
-        ++src;
-        pix[2] = *src;
-        ++src;
-        pix[3] = *src;
-        ++src;
-        it.Set(pix);
-      }
+    for (it.GoToBegin(); !it.IsAtEnd(); ++it)
+    {
+      itk::RGBAPixel<unsigned char> pix;
+      pix[0] = *src;
+      ++src;
+      pix[1] = *src;
+      ++src;
+      pix[2] = *src;
+      ++src;
+      pix[3] = *src;
+      ++src;
+      it.Set(pix);
+    }
 
     this->AfterThreadedGenerateData();
   }
@@ -375,14 +399,24 @@ namespace otb
            mfeature->add_geometry(line);
 
           mapnik::transcoder tr("ISO-8859-15");
-          boost::put(*mfeature, "name", tr.transcode((dataNode->GetFieldAsString("name")).c_str()));
+
+          if (dataNode->HasField("name"))
+            boost::put(*mfeature, "name", tr.transcode((dataNode->GetFieldAsString("name")).c_str()));
+          if (dataNode->HasField("NAME"))
+            boost::put(*mfeature, "name", tr.transcode((dataNode->GetFieldAsString("NAME")).c_str()));
 
 //           std::cout << mfeature->props().size() << std::endl;
 //           std::cout << " -> " << (*mfeature)["name"] << std::endl;
 
-//           std::cout << "Type: " << dataNode->GetFieldAsString("type") << std::endl;
+//           std::cout << "Name: " << dataNode->GetFieldAsString("NAME") << std::endl;
+//           std::cout << "Type: " << dataNode->GetFieldAsString("TYPE") << std::endl;
 //           std::cout << "OSM ID: " << dataNode->GetFieldAsString("osm_id") << std::endl;
-          boost::put(*mfeature, "highway", tr.transcode((dataNode->GetFieldAsString("type")).c_str()));
+
+          if (dataNode->HasField("type"))
+            boost::put(*mfeature, "highway", tr.transcode((dataNode->GetFieldAsString("type")).c_str()));
+          if (dataNode->HasField("TYPE"))
+            boost::put(*mfeature, "highway", tr.transcode((dataNode->GetFieldAsString("TYPE")).c_str()));
+
 
           mDatasource->push(mfeature);
 

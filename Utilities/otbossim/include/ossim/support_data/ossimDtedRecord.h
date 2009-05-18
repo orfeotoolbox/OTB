@@ -1,6 +1,8 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Ken Melero
 // 
@@ -17,7 +19,7 @@
 //         User Header Label (UHL) in South to North profile sequence.
 //
 //********************************************************************
-// $Id: ossimDtedRecord.h 11548 2007-08-09 19:39:20Z dburken $
+// $Id: ossimDtedRecord.h 14248 2009-04-08 19:38:11Z dburken $
 #ifndef ossimDtedRecord_H
 #define ossimDtedRecord_H
 #include <iosfwd>
@@ -60,8 +62,8 @@ public:
       DATA_BYTES_PER_POINT = 2,
    };
 
-   // The Recoginition Sentinel signifies if the Data Record exists.
-   ossimString recoginitionSentinel() const;
+   // The Recognition Sentinel signifies if the Data Record exists.
+   ossimString recognitionSentinel() const;
 
    ossim_int32  dataBlockCount()   const;
    ossim_int32  lonCount()         const;

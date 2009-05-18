@@ -121,7 +121,7 @@ NParametersDimensions>
 
       diffHeight = fabs(heightTmp - height);
 
-      nbIter++;
+      ++nbIter;
     }
 
     ossimGPoint = ossimGPointRef;

@@ -28,7 +28,7 @@
 //   but is provided for convenience.
 //   
 //*************************************************************************
-// $Id: ossimHistogramRemapper.h 13912 2008-12-04 19:15:51Z gpotts $
+// $Id: ossimHistogramRemapper.h 14075 2009-03-08 22:56:29Z gpotts $
 #ifndef ossimHistogramRemapper_HEADER
 #define ossimHistogramRemapper_HEADER
 
@@ -71,14 +71,29 @@ public:
    void reset();
    
    /**
-    * Sets remap mode to mode.
+    * Sets remap mode to mode.  If rebuildTableFlag is true, the table will
+    * be built at this time; else just the dirty flag is set.
+    *
+    * @param mode The stretch mode.
+    * 
+    * @param rebuildTableFlag If the true the table will be rebuilt; else,
+    * just the dirty flag will be set.
     */
-   void setStretchMode(StretchMode mode);
+   void setStretchMode(StretchMode mode, bool rebuildTableFlag=false);
 
    /**
-    * Stretch mode values can be linear_one_piece, linear_1std_from_mean, linear_2std_from_mean, linear_3std_from_mean, linear_auto_min_max
+    * Stretch mode values can be linear_one_piece, linear_1std_from_mean,
+    * linear_2std_from_mean, linear_3std_from_mean, linear_auto_min_max,
+    * If rebuildTableFlag is true, the table will
+    * be built at this time; else just the dirty flag is set.
+    *
+    * @param mode The stretch mode.
+    * 
+    * @param rebuildTableFlag If the true the table will be rebuilt; else,
+    * just the dirty flag will be set.
     */
-   void setStretchModeAsString(const ossimString& mode);
+   void setStretchModeAsString(const ossimString& mode,
+                               bool rebuildTableFlag=false);
    
    /**
     * Returns the current enumerated node.
@@ -498,6 +513,12 @@ private:
     */
    ossim_uint32 getHistogramBand(ossim_uint32 input_band) const;
 
+   /**
+    * Sets theBypassFlag.  If the start changes from bypassed to not bypassed
+    * this will set theDirtyFlag to true.
+    */
+   void setBypassFlag(bool flag);
+
 
    StretchMode                   theStretchMode;
    bool                          theDirtyFlag;
@@ -510,8 +531,9 @@ private:
 
    // Maps zero based band to histogram band.
    vector<ossim_uint32>          theBandList;
-   
-   bool theByPassFlag;
+
+   // Internally bypassed flag.
+   bool theBypassFlag;
    
    TYPE_DATA
 };

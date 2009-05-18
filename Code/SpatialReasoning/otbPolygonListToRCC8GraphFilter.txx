@@ -210,7 +210,7 @@ PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
 
     while (segIndex < m_SegmentationRanges.size() && (nbVertices<m_SegmentationRanges[segIndex-1] || nbVertices >= m_SegmentationRanges[segIndex]))
     {
-      segIndex++;
+      ++segIndex;
     }
 
     vertex->SetSegmentationLevel(segIndex-1);

@@ -10,7 +10,7 @@ DataQuality::~DataQuality()
 }
 
 std::ostream& operator<<(std::ostream& os, const DataQuality& data)
-{	
+{
 
 	os<<"rec_seq:"<<data._rec_seq<<std::endl;
 
@@ -43,7 +43,7 @@ std::ostream& operator<<(std::ostream& os, const DataQuality& data)
     os<<"rad_unc_db:"<<data._rad_unc_db<<std::endl;
 
     os<<"rad_unc_deg:"<<data._rad_unc_deg<<std::endl;
-	
+
 	for (int i=0;i<16;i++)
 	{
 		os<<"rad_unc:"<<data._rad_unc[i]<<std::endl;
@@ -65,11 +65,11 @@ std::ostream& operator<<(std::ostream& os, const DataQuality& data)
 	{
 		os<<"misreg:"<<data._misreg[i]<<std::endl;
 	}
-	
+
 	os<<"nesz:"<<data._nesz<<std::endl;
 
     os<<"enl:"<<data._enl<<std::endl;
-	
+
     os<<"tb_update:"<<data._tb_update.c_str()<<std::endl;
 
 
@@ -145,7 +145,7 @@ std::istream& operator>>(std::istream& is, DataQuality& data)
     is.read(buf,16);
 	buf[16] = '\0';
 	data._rad_unc_deg = atof(buf);
-	
+
 	for (int i=0;i<16;i++)
 	{
 		is>>data._rad_unc[i];
@@ -179,7 +179,7 @@ std::istream& operator>>(std::istream& is, DataQuality& data)
 	{
 		is>>data._misreg[i];
 	}
-	
+
 	is.read(buf,16);
 	buf[16] = '\0';
 	data._nesz = atof(buf);
@@ -187,7 +187,7 @@ std::istream& operator>>(std::istream& is, DataQuality& data)
     is.read(buf,16);
 	buf[16] = '\0';
 	data._enl = atof(buf);
-	
+
     is.read(buf,8);
 	buf[8] = '\0';
 	data._tb_update = buf;
@@ -221,7 +221,7 @@ DataQuality::DataQuality(const DataQuality& rhs):
     _alt_scale(rhs._alt_scale),
     _crt_scale(rhs._crt_scale),
     _dis_skew(rhs._dis_skew),
-    _ori_err(rhs._ori_err),	
+    _ori_err(rhs._ori_err),
 	_nesz(rhs._nesz),
     _enl(rhs._enl),
     _tb_update(rhs._tb_update)
@@ -254,7 +254,7 @@ DataQuality& DataQuality::operator=(const DataQuality& rhs)
     _dyn_rng = rhs._dyn_rng;
     _rad_unc_db = rhs._rad_unc_db;
     _rad_unc_deg = rhs._rad_unc_deg;
-	
+
 	for (int i=0;i<16;i++)
 	{
 		_rad_unc[i] = rhs._rad_unc[i];
@@ -271,7 +271,7 @@ DataQuality& DataQuality::operator=(const DataQuality& rhs)
 	{
 		_misreg[i] = rhs._misreg[i];
 	}
-	
+
 	_nesz = rhs._nesz;
     _enl = rhs._enl;
     _tb_update = rhs._tb_update;

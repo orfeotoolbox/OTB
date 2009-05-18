@@ -75,7 +75,7 @@ PolyLineParametricPathWithValue<TValue,VDimension>
       pt1=pt2;
       pt2 = it.Value();
       double accum=0.0;
-      for (unsigned int i=0; i<VDimension; i++)
+      for (unsigned int i=0; i<VDimension; ++i)
       {
         accum += (pt1[i]-pt2[i])*(pt1[i]-pt2[i]);
       }

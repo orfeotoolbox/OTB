@@ -252,7 +252,7 @@ public:
   bool
   IsInside(const IndexType &index) const
     {
-    for(unsigned int i=0; i<IndexType::IndexDimension; i++)
+    for(unsigned int i=0; i<IndexType::IndexDimension; ++i)
       {
       if(( index[i] < m_Index[i] )
            && (index[i] < m_Index[i] + m_Size[i]))
@@ -289,7 +289,7 @@ public:
       bool cropPossible = true;
 
       // Can we crop?
-      for (unsigned int i = 0; i < IndexType::IndexDimension && cropPossible; i++)
+      for (unsigned int i = 0; i < IndexType::IndexDimension && cropPossible; ++i)
         {
 
             if (
@@ -312,7 +312,7 @@ public:
         }
 
       // we can crop, so crop
-      for (unsigned int i=0; i <  IndexType::IndexDimension; i++)
+      for (unsigned int i=0; i <  IndexType::IndexDimension; ++i)
         {
           // first check the start index
           if (m_Index[i] < region.GetOrigin()[i])

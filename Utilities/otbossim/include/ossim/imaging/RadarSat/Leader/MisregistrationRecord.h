@@ -51,7 +51,7 @@ public:
 		return _alt_m;
 	};
     /**
-	 * @brief Nominal cross track misregistration 
+	 * @brief Nominal cross track misregistration
 	 */
 	double   get_crt_m()
 	{
@@ -64,7 +64,7 @@ protected:
 	 */
 	double   _alt_m;
     /**
-	 * @brief Nominal cross track misregistration 
+	 * @brief Nominal cross track misregistration
 	 */
 	double   _crt_m;
 private:

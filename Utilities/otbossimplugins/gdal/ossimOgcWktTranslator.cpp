@@ -13,10 +13,10 @@
 // accomplish the translation.
 //
 //*******************************************************************
-//  $Id: ossimOgcWktTranslator.cpp 12031 2007-11-13 18:03:57Z gpotts $
+//  $Id: ossimOgcWktTranslator.cpp 14028 2009-02-13 13:12:17Z gpotts $
 
 #include <cstdio>
-#include "gdal.h"
+#include <gdal.h>
 
 #include "ossimOgcWktTranslator.h"
 #include <ogr_spatialref.h>
@@ -448,11 +448,11 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
          {
 	    ossimProj = "ossimBngProjection";
          }
-         else if (ossim_units.contains("degree"))
-         {
-            // Assumption...
-            ossimProj = "ossimEquDistCylProjection";
-         }
+//          else if (ossim_units.contains("degree"))
+//          {
+//             // Assumption...
+//             ossimProj = "ossimEquDistCylProjection";
+//          }
       }
    }
 
@@ -612,13 +612,13 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
    {
       int bNorth;
       int nZone = OSRGetUTMZone( hSRS, &bNorth );
-
+      OGRErr err = OGRERR_NONE;
       if( nZone != 0 )
       {
          kwl.add(prefix,
                  ossimKeywordNames::TYPE_KW,
                  "ossimUtmProjection",
-                   true);
+                 true);
 
          kwl.add(prefix,
                  ossimKeywordNames::ZONE_KW,
@@ -639,6 +639,10 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
                  ossimKeywordNames::TYPE_KW,
                  "ossimTransMercatorProjection",
                    true);
+         kwl.add(prefix,
+                 ossimKeywordNames::SCALE_FACTOR_KW,
+                 OSRGetProjParm(hSRS, SRS_PP_SCALE_FACTOR, 1.0, NULL),
+                 true);
 
          kwl.add(prefix,
                  ossimKeywordNames::ORIGIN_LATITUDE_KW,
@@ -648,14 +652,14 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
                  ossimKeywordNames::CENTRAL_MERIDIAN_KW,
                  OSRGetProjParm(hSRS, SRS_PP_CENTRAL_MERIDIAN, 0.0, NULL),
                  true);
-      kwl.add(prefix,
-              ossimKeywordNames::FALSE_EASTING_NORTHING_KW,
-              falseEastingNorthing.toString(),
-              true);
-      kwl.add(prefix,
-              ossimKeywordNames::FALSE_EASTING_NORTHING_UNITS_KW,
-              ossim_units,
-              true);
+         kwl.add(prefix,
+                 ossimKeywordNames::FALSE_EASTING_NORTHING_KW,
+                 falseEastingNorthing.toString(),
+                 true);
+         kwl.add(prefix,
+                 ossimKeywordNames::FALSE_EASTING_NORTHING_UNITS_KW,
+                 ossim_units,
+                 true);
       }
    }
    else
@@ -688,6 +692,7 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
     kwl.add(prefix, ossimKeywordNames::DATUM_KW, oDatum, true);
 
 
+//   std::cout << "KWL ======= " << kwl << std::endl;
     OSRDestroySpatialReference( hSRS );
 
     return true;
@@ -717,7 +722,7 @@ void ossimOgcWktTranslator::initializeDatumTable()
    theOssimToWktDatumTranslation.insert(make_pair(ossimString("WGE"),
                                                   ossimString("WGS_1984")));
    theWktToOssimDatumTranslation.insert(make_pair(ossimString("OSGB_1936"),
-                                                  ossimString("OSGB_1936")));
+                                                  ossimString("OGB-B")));
 }
 
 void ossimOgcWktTranslator::initializeProjectionTable()
@@ -751,8 +756,6 @@ void ossimOgcWktTranslator::initializeProjectionTable()
 
 ossimString ossimOgcWktTranslator::wktToOssimDatum(const ossimString& datum)const
 {
-   map<ossimString, ossimString>::const_iterator i = theWktToOssimDatumTranslation.find(datum);
-
    if(datum.contains("North_American_Datum_1927"))
    {
       return "NAS-C";
@@ -765,14 +768,22 @@ ossimString ossimOgcWktTranslator::wktToOssimDatum(const ossimString& datum)cons
    {
       return "WGE";
    }
-   if(datum.contains("OSGB_1936"))
+   if(datum.contains("OSGA"))
    {
-      return "OSGB_1936";
+      return "OGB-A";
    }
-//    if(i != theWktToOssimDatumTranslation.end())
-//    {
-//       return (*i).second;
-//    }
+   if(datum.contains("OSGB"))
+   {
+      return "OGB-B";
+   }
+   if(datum.contains("OSGC"))
+   {
+      return "OGB-C";
+   }
+   if(datum.contains("OSGD"))
+   {
+      return "OGB-D";
+   }
 
    return "";
 }

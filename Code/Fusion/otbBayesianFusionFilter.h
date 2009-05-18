@@ -112,7 +112,7 @@ public:
     MatrixType obsMat, msiVect;
     obsMat.SetSize(1, obs.GetSize());
     msiVect.SetSize(1, msi.GetSize());
-    for (unsigned int i=0; i<msi.GetSize();i++)
+    for (unsigned int i=0; i<msi.GetSize();++i)
     {
       msiVect(0, i) = msi[i];
     }
@@ -135,16 +135,16 @@ public:
                                 PanVect.Rows() << "," << PanVect.Cols() << " )" );
     }
 
-    for ( unsigned int r=0; r<obsMat.Rows(); r++)
+    for ( unsigned int r=0; r<obsMat.Rows(); ++r)
     {
-      for ( unsigned int c=0; c<obsMat.Cols(); c++ )
+      for ( unsigned int c=0; c<obsMat.Cols(); ++c )
       {
         obsMat(r,c) += PanVect(r,c);
       }
     }
     //**** END TODO ****/
     obsMat *= m_Vcondopt;
-    for (unsigned int i=0; i<obs.GetSize();i++)
+    for (unsigned int i=0; i<obs.GetSize();++i)
     {
       obs[i] = static_cast<typename TOutput::ValueType>(obsMat(0U,i));
     }

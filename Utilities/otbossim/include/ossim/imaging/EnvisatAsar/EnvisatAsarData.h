@@ -60,7 +60,7 @@ public:
 	 * @brief Removes all the previous records from the EnvisatAsarData
 	 */
 	void ClearRecords();
-	
+
 	mph * get_mph();
 	sph * get_sph();
 	SQ_ADSR * get_SQ_ADSR();

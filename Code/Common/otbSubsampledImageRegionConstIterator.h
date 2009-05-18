@@ -105,7 +105,7 @@ public:
     const IndexType& startIndex = this->m_Region.GetIndex();
     const SizeType& size = this->m_Region.GetSize();
 
-    for ( unsigned int i = 0; i < ImageIteratorDimension; i++ )
+    for ( unsigned int i = 0; i < ImageIteratorDimension; ++i )
     {
       m_LastUsableIndex[i] = startIndex[i] + static_cast<IndexValueType>( size[i]-1 );
     }
@@ -123,7 +123,7 @@ public:
     const IndexType& startIndex = this->m_Region.GetIndex();
     const SizeType& size = this->m_Region.GetSize();
 
-    for ( unsigned int i = 0; i < ImageIteratorDimension; i++ )
+    for ( unsigned int i = 0; i < ImageIteratorDimension; ++i )
     {
       m_LastUsableIndex[i] = startIndex[i] + static_cast<IndexValueType>( size[i]-1 );
     }
@@ -144,7 +144,7 @@ public:
     const IndexType& startIndex = this->m_Region.GetIndex();
     const SizeType& size = this->m_Region.GetSize();
 
-    for ( unsigned int i = 0; i < ImageIteratorDimension; i++ )
+    for ( unsigned int i = 0; i < ImageIteratorDimension; ++i )
     {
       m_LastUsableIndex[i] = startIndex[i] + static_cast<IndexValueType>( size[i]-1 );
     }
@@ -164,7 +164,7 @@ public:
     const IndexType& startIndex = this->m_Region.GetIndex();
     const SizeType& size = this->m_Region.GetSize();
 
-    for ( unsigned int i = 0; i < ImageIteratorDimension; i++ )
+    for ( unsigned int i = 0; i < ImageIteratorDimension; ++i )
     {
       m_LastUsableIndex[i] = startIndex[i] + static_cast<IndexValueType>( size[i]-1 );
     }
@@ -189,7 +189,7 @@ public:
     const IndexType& startIndex = this->m_Region.GetIndex();
     const SizeType& size = this->m_Region.GetSize();
 
-    for ( unsigned int i = 0; i < ImageIteratorDimension; i++ )
+    for ( unsigned int i = 0; i < ImageIteratorDimension; ++i )
     {
       m_LastUsableIndex[i] = startIndex[i]
         + static_cast<IndexValueType>( m_SubsampleFactor[i] * ( (size[i]-1) / m_SubsampleFactor[i] ) );
@@ -347,7 +347,7 @@ public:
     IndexType startIndex = this->m_Region.GetIndex();
     SizeType size = this->m_Region.GetSize();
 
-    for ( unsigned int i = 0; i < ImageIteratorDimension; i++ )
+    for ( unsigned int i = 0; i < ImageIteratorDimension; ++i )
     {
       startIndex[i] /= m_SubsampleFactor[i];
       --size[i];
@@ -359,7 +359,7 @@ public:
     newRegion.SetIndex( startIndex );
     newRegion.SetSize( size );
 
-    for ( unsigned int i = 0; i < ImageIteratorDimension; i++ )
+    for ( unsigned int i = 0; i < ImageIteratorDimension; ++i )
     {
       otbGenericMsgDebugMacro(<<"NewRegionIndex[" << i << "] = " << startIndex[i]);
       otbGenericMsgDebugMacro(<<"NewRegionSize [" << i << "] = " << size[i]);

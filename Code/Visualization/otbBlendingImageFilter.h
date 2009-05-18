@@ -21,7 +21,7 @@
 #include "itkBinaryFunctorImageFilter.h"
 #include "otbUniformAlphaBlendingFunction.h"
 #include "otbImage.h"
-#include "itkRGBPixel.h"
+#include "itkRGBAPixel.h"
 
 namespace otb
 {

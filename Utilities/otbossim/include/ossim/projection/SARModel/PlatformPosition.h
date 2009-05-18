@@ -28,7 +28,7 @@ public:
 	 * @brief Copy constructor
 	 */
 	PlatformPosition(const PlatformPosition& rhs);
-	
+
 	/**
 	 * @brief Constructor with initialisation
 	 * @param data Ephemeris
@@ -37,19 +37,19 @@ public:
 	 * @remarks This constructor copy the content of data, so it's the calling fonction that have to manage the memory of data.
 	 */
 	PlatformPosition(Ephemeris** data, int nbrData);
-	
+
 	/**
 	 * @brief Affectation operator
 	 */
 	PlatformPosition& operator=(const PlatformPosition& rhs);
-	
+
 	/**
 	 * @brief This function interpolates its ephemeris to create a new ephemeris at the given date and time
 	 * @param date Date and time at wich the interpolation have to be done
 	 * @return The ephemeris at the given date, or NULL if an error occurs
 	 */
 	Ephemeris* Interpolate(JSDDateTime date);
-	
+
 	virtual PlatformPosition* Clone()
 	{
 		return new PlatformPosition(*this);
@@ -61,12 +61,12 @@ protected:
 	 * @see _data
 	 */
 	int _nbrData;
-	
+
 	/**
 	 * @brief Platform positions
 	 */
 	Ephemeris** _data;
-	
+
 	/**
 	 * @brief This function deletes all the contents of the class
 	 */

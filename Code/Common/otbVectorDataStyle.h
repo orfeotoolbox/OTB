@@ -50,7 +50,7 @@ class ITK_EXPORT VectorDataStyle : public itk::LightObject
     void LoadOSMStyle(mapnik::Map& mapnikMap) const;
 
     /** Get/Set the size of the scale factor. */
-    double GeScaleFactor() const
+    double GetScaleFactor() const
     {
       return m_ScaleFactor;
     }

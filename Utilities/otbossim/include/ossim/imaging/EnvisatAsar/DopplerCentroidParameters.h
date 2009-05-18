@@ -5,7 +5,7 @@
 #include <ossim/imaging/EnvisatAsar/EnvisatAsarRecord.h>
 /**
  * @ingroup DopplerCentroidParametersRecord
- * @brief This class is able to read the ASAR DopplerCentroidParameters record 
+ * @brief This class is able to read the ASAR DopplerCentroidParameters record
  * @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 23-11-07
@@ -76,55 +76,55 @@ public:
 	};
 
 
-	/**				
-	* @brief zero_doppler_time	
-	*/				
-	std::string   get_zero_doppler_time()	
-	{						
-		return _zero_doppler_time;		
-	}; 
-	/**				
-	* @brief attach_flag	
-	*/				
-	bool   get_attach_flag()	
-	{						
-		return _attach_flag;		
-	}; 
-	/**				
-	* @brief slant_range_time	
-	*/				
-	float   get_slant_range_time()	
-	{						
-		return _slant_range_time;		
-	}; 
-	/**				
-	* @brief dop_coef[5]	
-	*/				
-	float*   get_dop_coef()	
-	{						
-		return _dop_coef;		
-	}; 
-	/**				
-	* @brief dop_conf	
-	*/				
-	float   get_dop_conf()	
-	{						
-		return _dop_conf;		
-	}; 
-	/**				
-	* @brief dop_conf_below_thresh_flag	
-	*/				
-	bool   get_dop_conf_below_thresh_flag()	
-	{						
-		return _dop_conf_below_thresh_flag;		
-	}; 
-	/**				
-	* @brief delta_dopp_coeff[5]	
-	*/				
-	signed short  * get_delta_dopp_coeff()	
-	{						
-		return _delta_dopp_coeff;		
-	}; 
+	/**
+	* @brief zero_doppler_time
+	*/
+	std::string   get_zero_doppler_time()
+	{
+		return _zero_doppler_time;
+	};
+	/**
+	* @brief attach_flag
+	*/
+	bool   get_attach_flag()
+	{
+		return _attach_flag;
+	};
+	/**
+	* @brief slant_range_time
+	*/
+	float   get_slant_range_time()
+	{
+		return _slant_range_time;
+	};
+	/**
+	* @brief dop_coef[5]
+	*/
+	float*   get_dop_coef()
+	{
+		return _dop_coef;
+	};
+	/**
+	* @brief dop_conf
+	*/
+	float   get_dop_conf()
+	{
+		return _dop_conf;
+	};
+	/**
+	* @brief dop_conf_below_thresh_flag
+	*/
+	bool   get_dop_conf_below_thresh_flag()
+	{
+		return _dop_conf_below_thresh_flag;
+	};
+	/**
+	* @brief delta_dopp_coeff[5]
+	*/
+	signed short  * get_delta_dopp_coeff()
+	{
+		return _delta_dopp_coeff;
+	};
 
 	/**
 	* @brief zero_doppler_time

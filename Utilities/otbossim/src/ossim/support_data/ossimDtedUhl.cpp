@@ -1,6 +1,8 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Ken Melero
 // 
@@ -8,14 +10,17 @@
 //               (UHL) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedUhl.cpp 13025 2008-06-13 17:06:30Z sbortman $
+// $Id: ossimDtedUhl.cpp 14248 2009-04-08 19:38:11Z dburken $
 
 #include <cstdlib>
 #include <iostream>
+#include <iomanip>
 #include <fstream>
+#include <string>
 
 #include <ossim/support_data/ossimDtedUhl.h>
-#include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimNotify.h>
+#include <ossim/base/ossimProperty.h>
 
 
 //**************************************************************************
@@ -157,7 +162,20 @@ void ossimDtedUhl::parse(std::istream& in)
    theStopOffset = theStartOffset + UHL_LENGTH;
 }
 
-ossimString ossimDtedUhl::recoginitionSentinel() const
+ossimRefPtr<ossimProperty> ossimDtedUhl::getProperty(
+   const ossimString& name) const
+{
+   ossimRefPtr<ossimProperty> result = 0;
+   return result;
+}
+
+void ossimDtedUhl::getPropertyNames(
+   std::vector<ossimString>& propertyNames) const
+{
+   propertyNames.push_back(ossimString("dted_uhl_record"));
+}
+
+ossimString ossimDtedUhl::recognitionSentinel() const
 {
    return theRecSen;
 }
@@ -266,25 +284,35 @@ ossim_int32 ossimDtedUhl::stopOffset() const
 //**************************************************************************
 // operator <<
 //**************************************************************************
-std::ostream& operator<<( std::ostream& os, const ossimDtedUhl& uhl)
+std::ostream& operator<<( std::ostream& out, const ossimDtedUhl& uhl)
 {
-   os << "\nDTED Header (UHL):"
-      << "\n-------------------------------"
-      << "\nRecoginition Sentinel: " << uhl.theRecSen
-      << "\nLon Origin:            " << uhl.theLonOrigin
-      << "\nLat Origin:            " << uhl.theLatOrigin
-      << "\nLon Interval:          " << uhl.theLonInterval
-      << "\nLat Interval:          " << uhl.theLatInterval
-      << "\nAbsolute LE:           " << uhl.theAbsoluteLE
-      << "\nSecurity Code:         " << uhl.theSecurityCode
-      << "\nNumber of Lon Lines:   " << uhl.theNumLonLines
-      << "\nNumber of Lat Lines:   " << uhl.theNumLatPoints
-      << "\nMultiple Accuracy:     " << uhl.theMultipleAccuracy
-      << "\nStart Offset:          " << uhl.theStartOffset
-      << "\nStop Offset:           " << uhl.theStopOffset
-      << std::endl;
+   std::string prefix;
+   return uhl.print(out, prefix);
+}
+
+std::ostream& ossimDtedUhl::print(std::ostream& out,
+                                  const std::string& prefix) const
+{
+   std::string pfx = prefix;
+   pfx += "uhl.";
    
-   return os;
+   out << setiosflags(ios::left)
+       << pfx << setw(28) << "recognition_sentinel:" << theRecSen << "\n"
+       << pfx << setw(28) << "lon_origin:" << theLonOrigin << "\n"
+       << pfx << setw(28) << "lat_origin:" << theLatOrigin << "\n"
+       << pfx << setw(28) << "lon_interval:" << theLonInterval << "\n"
+       << pfx << setw(28) << "lat_interval:" << theLatInterval << "\n"
+       << pfx << setw(28) << "absolute_le:" << theAbsoluteLE << "\n"
+       << pfx << setw(28) << "security_code:" << theSecurityCode << "\n"
+       << pfx << setw(28) << "number_of_lat_points:" << theNumLatPoints << "\n"
+       << pfx << setw(28) << "number_of_lon_lines:" << theNumLonLines << "\n"
+       << pfx << setw(28) << "multiple_accuracy:"
+       << theMultipleAccuracy << "\n"
+       << pfx << setw(28) << "start_offset:" << theStartOffset << "\n"
+       << pfx << setw(28) << "stop_offset:" << theStopOffset
+       << std::endl;
+   
+   return out;
 }
 
 ossimDtedUhl::ossimDtedUhl(const ossimDtedUhl& source)

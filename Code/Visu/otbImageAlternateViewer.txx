@@ -861,7 +861,7 @@ ImageAlternateViewer<TPixel>
       m_SubWindowRegion.SetIndex(newIndex);
       m_SubWindowRegion.SetSize(newSize);
       this->redraw();
-      m_DragEventCounter++;
+      ++m_DragEventCounter;
     }
     else if (m_SubWindowMove)
     {
@@ -872,7 +872,7 @@ ImageAlternateViewer<TPixel>
       m_OldMousePos[0]=x;
       m_OldMousePos[1]=y;
       this->redraw();
-      m_DragEventCounter++;
+      ++m_DragEventCounter;
     }
 
     else
@@ -886,7 +886,7 @@ ImageAlternateViewer<TPixel>
       newCenter[1]=origin[1]+static_cast<double>(m_OldMousePos[1]-y+static_cast<long>(this->m_DisplayExtent.GetSize()[1])/2)*spacing[1];
       m_Image->TransformPhysicalPointToIndex(newCenter,m_ViewedRegionCenter);
       this->redraw();
-      m_DragEventCounter++;
+      ++m_DragEventCounter;
     }
 
     DecorationRedraw();

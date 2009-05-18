@@ -103,7 +103,7 @@ public:
     {
       this->m_Radius = rad;
       unsigned int arraySize=1;
-      for (unsigned int i=0; i<m_Radius.GetSizeDimension(); i++)
+      for (unsigned int i=0; i<m_Radius.GetSizeDimension(); ++i)
       {
         arraySize *= 2*this->m_Radius[i]+1;
       }

@@ -104,7 +104,7 @@ SVMImageModelEstimator<TInputImage,  TTrainingImage>
   trainingImageSize = trainingImage->GetBufferedRegion().GetSize();
 
   // Check if size of the two inputs are same
-  for ( unsigned int i = 0; i < TInputImage::ImageDimension; i++)
+  for ( unsigned int i = 0; i < TInputImage::ImageDimension; ++i)
   {
     if ( inputImageSize[i] != trainingImageSize[i] ) throw itk::ExceptionObject(__FILE__, __LINE__,"Input image size is not the same as the training image size.",ITK_LOCATION);
   }
@@ -142,7 +142,7 @@ SVMImageModelEstimator<TInputImage,  TTrainingImage>
 
       typename Superclass::MeasurementVectorType v;
 
-      for (unsigned int k=0; k<numberOfComponents; k++)
+      for (unsigned int k=0; k<numberOfComponents; ++k)
       {
         v.push_back(inIt.Get()[k]);
       }

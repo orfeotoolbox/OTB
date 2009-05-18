@@ -1,11 +1,13 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 // 
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.cpp 13604 2008-09-25 14:41:28Z gpotts $
+// $Id: ossimFilename.cpp 14242 2009-04-07 20:18:59Z dburken $
 
 #include <ossim/ossimConfig.h>  /* to pick up platform defines */
 
@@ -424,108 +426,135 @@ bool ossimFilename::touch()const
 
 ossimFilename ossimFilename::expand() const
 {
-   if(empty()) return ossimFilename("");
-   ossimFilename result = *this;
-   ossimFilename currentWorkingDirectory("$(PWD)");
-#if defined(_WIN32) // do windows style replacment
-   currentWorkingDirectory = "$(CD)";
-   if (size() > 1)
+   ossimFilename result = "";
+   if ( size() )
    {
-      if ( (*(begin()) == '~') && (*(begin()+1) == '/') )  // Expand tilde ~/
+      result = *this;
+      
+      if ( needsExpansion() )
       {
-         result = result.substitute("~/", "$(USERPROFILE)/");
-      }
-      else if((*(begin()) == '.') && (*(begin()+1) == '/') ) // check for ./
-      {
-         result = result.substitute(".", currentWorkingDirectory);
-      }
-      else if ( ossimString(result.begin(), result.begin()+3) == "../")
-      {
-         result = currentWorkingDirectory + "/" + result;
-      }
-      else if(result == ".") // if we just have a dot then expand to current directory
-      {
-         result = currentWorkingDirectory;
-      }
-      result.convertBackToForwardSlashes();
-   }
-#else // do unix style replacement
-   if (size() > 1)
-   {
-      if ( (*(begin()) == '~') && (*(begin()+1) == '/') )  // Expand tilde ~/
-      {
-         result = result.substitute("~/", "$(HOME)/");
-      }
-      else if ( (*(begin()) == '.') && (*(begin()+1) == '/') ) 
-      {
-         result = result.substitute(".", currentWorkingDirectory);
-      }
-      else if ( ossimString(result.begin(), result.begin()+3) == "../")
-      {
-         result = currentWorkingDirectory + "/" + result;
-      }
-      else if(result == ".")
-      {
-         result = currentWorkingDirectory;
-      }
-   }
-#endif
-   // now expand any environment variable substitutions
-   //
-   ossimFilename finalResult;
-   const char* tempPtr = result.c_str();
-   ossim_int32 startIdx = -1;
-   ossim_int32 resultSize = result.size();
-   ossim_int32 scanIdx = 0;
-   while(scanIdx < resultSize)
-   {
-      // look for start of substitution pattern
-      if(tempPtr[scanIdx] == '$')
-      {
-         if(tempPtr[scanIdx+1] == '(')
-         {
-            scanIdx +=2;
-            startIdx = scanIdx;
-         }
-      }
-      // look for an end pattern and apply if we found a start pattern
-      else if(tempPtr[scanIdx] == ')')
-      {
-         if(startIdx != -1)
-         {
-            std::cout << "Looking up variable = " << ossimString(tempPtr+startIdx,
-                                                                 tempPtr+scanIdx) << std::endl;
-            ossimFilename value(ossimEnvironmentUtility::instance()->getEnvironmentVariable(ossimString(tempPtr+startIdx,
-                                                                                                        tempPtr+scanIdx)));
-#if defined(_WIN32) // do windows style replacment
-            value.convertBackToForwardSlashes();
-#endif
-            finalResult += value;
-            // reset start idx indicator to not set so we are ready for next pattern
-            //
-            startIdx = -1;
-         }
-         else // if no start then tack on the )
-         {
-            finalResult += tempPtr[scanIdx];
-         }
-        ++scanIdx;
-      }
-      else if(startIdx == -1)
-      {
-         finalResult += tempPtr[scanIdx];
-         ++scanIdx;
-      }
-      else
-      {
-         ++scanIdx;
-      }
-   }
-   finalResult.gsub("//", "/", true);
+
 #if defined(_WIN32)
-   finalResult.convertForwardToBackSlashes();
+         result.convertBackToForwardSlashes();
 #endif
-   return finalResult;
+
+         bool addCwd = false;
+         
+         if ( (size() > 1) && (*(begin()) == '~') && (*(begin()+1) == '/') )
+         {
+            ossimFilename homeDir =
+               ossimEnvironmentUtility::instance()->getUserDir();
+            
+            ossimFilename s( (result.begin()+2) , result.end());
+            result = homeDir.dirCat(s);
+         }
+         else if( (size() > 1) &&
+                  (*(begin()) == '.') && (*(begin()+1) == '/') )
+         {
+            // dot slash i.e. ./foo
+            addCwd = true;
+         }
+         else if ( (size() > 2)  && (*(begin()) == '.')
+                   && (*(begin()+1) == '.') && (*(begin()+2) == '/') )
+         {
+            // ../foo
+            addCwd = true;
+         }
+         else if (result == ".")
+         {
+            result = ossimEnvironmentUtility::instance()->
+               getCurrentWorkingDir();
+         }
+
+         if (addCwd)
+         {
+            ossimFilename cwd = ossimEnvironmentUtility::instance()->
+               getCurrentWorkingDir();
+            result = cwd.dirCat(result);
+         }
+         else if ( result.isRelative() )
+         {
+            if ( (*(result.begin())) != '$' )
+            {
+               ossimFilename cwd = ossimEnvironmentUtility::instance()->
+               getCurrentWorkingDir();
+               result = cwd.dirCat(result);
+            }
+         }
+               
+         // Check result to see if we're finished.
+         if ( result.needsExpansion() )
+         {
+            // now expand any environment variable substitutions
+            
+#if defined(_WIN32)
+            result.convertBackToForwardSlashes();
+#endif        
+            
+            ossimFilename finalResult;
+            const char* tempPtr = result.c_str();
+            ossim_int32 startIdx = -1;
+            ossim_int32 resultSize = result.size();
+            ossim_int32 scanIdx = 0;
+            while(scanIdx < resultSize)
+            {
+               // look for start of substitution pattern
+               if(tempPtr[scanIdx] == '$')
+               {
+                  if(tempPtr[scanIdx+1] == '(')
+                  {
+                     scanIdx +=2;
+                     startIdx = scanIdx;
+                  }
+               }
+               // look for an end pattern and apply if we found a start pattern
+               else if(tempPtr[scanIdx] == ')')
+               {
+                  if(startIdx != -1)
+                  {
+                     ossimFilename value(
+                        ossimEnvironmentUtility::instance()->
+                        getEnvironmentVariable(ossimString(tempPtr+startIdx,
+                                                           tempPtr+scanIdx)));
+#if defined(_WIN32) // do windows style replacment
+                     value.convertBackToForwardSlashes();
+#endif
+                     finalResult += value;
+                     // reset start idx indicator to not set so we are ready for next pattern
+                     //
+                     startIdx = -1;
+                  }
+                  else // if no start then tack on the )
+                  {
+                     finalResult += tempPtr[scanIdx];
+                  }
+                  ++scanIdx;
+               }
+               else if(startIdx == -1)
+               {
+                  finalResult += tempPtr[scanIdx];
+                  ++scanIdx;
+               }
+               else
+               {
+                  ++scanIdx;
+               }
+            }
+            finalResult.gsub("//", "/", true);
+            
+            result = finalResult;
+         
+         } // matches:  if ( result.needsExpansion() )
+
+#if defined(_WIN32)
+         result.convertForwardToBackSlashes();
+#endif        
+
+      } // matches: if ( needsExpansion() )
+      
+   } // matches: if ( size() )
+   
+   return result;
 }
 
 bool ossimFilename::exists() const
@@ -880,8 +909,11 @@ ossimFilename ossimFilename::dirCat(const ossimFilename& file) const
 
    ossimFilename dir      = *this;
    ossimFilename tempFile = file;
-
-   dir.convertBackToForwardSlashes();
+      
+#if defined(_WIN32)
+      dir.convertBackToForwardSlashes();
+      tempFile.convertBackToForwardSlashes();
+#endif   
 
    // Check the end and see if it already has a "/".
    string::const_iterator i = dir.end();
@@ -893,15 +925,28 @@ ossimFilename ossimFilename::dirCat(const ossimFilename& file) const
       dir += "/";
    }
 
-   if( (*(tempFile.begin())) == '/') // let's not duplicate a forward slash
+   // check for dot slash or just slash: ./foo or /foo   
+   std::string::iterator iter = tempFile.begin();
+   if (iter != tempFile.end())
    {
-      dir += ossimString(tempFile.begin() + 1,
-                         tempFile.end());
-   }
-   else
-   {
-      dir += tempFile;  // Already has a separator.
-   }
+      if ((*iter) == '/')
+      {
+         ++iter; // skip slash
+      }
+      else if (tempFile.size() > 1)
+      {
+         if ( ((*iter) == '.') &&  ( *(iter + 1) == '/') )
+         {
+            iter = iter + 2; // skip dot slash
+         }
+      }
+   }   
+
+   dir += std::string(iter, tempFile.end());
+
+#if defined(_WIN32)
+      dir.convertForwardToBackSlashes();
+#endif   
 
    return dir;
 }
@@ -1143,32 +1188,51 @@ bool ossimFilename::copyFileTo(const ossimFilename& outputFile) const
    return true;
 }
 
+//---
+// We will only return false if we are absolutely sure absolutely sure we
+// are not relative. No pun intended:)
+//---
 bool ossimFilename::isRelative() const
 {
-	if(empty()) return true;
-   // Look for unix "/"...
-   if ( *(begin()) == '/' )
+   bool result = true;
+   if (size())
    {
-      return false;
-   }
-   // start of substitution
-   //
-   if(size() > 1)
-   {
-      if( *(begin()) == '$')
+      // Look for unix "/"...
+      if ( *(begin()) == '/' )
       {
-         if(*(begin()+1) == '(')
-            return false;
+         result = false;
+      }
+      else
+      {
+         // Look for windows drive
+         ossimRegExp regEx("^([a-z|A-Z])+:");
+         if ( regEx.find(c_str()) == true)
+         {
+            result = false;
+         }
       }
    }
-   // Look for windows drive
-   ossimRegExp regEx("^([a-z|A-Z])+:");
-   if ( regEx.find(c_str()) == true)
-   {
-      return false;
-   }
-
-   return true;
+   return result;
 }
 
-
+bool ossimFilename::needsExpansion() const
+{
+   bool result = false;
+   if ( size() )
+   {
+      result = isRelative();
+      if (result == false)
+      {
+         // Check for '$'
+         size_type pos = find('$', 0);
+         {
+            if (pos != npos)
+            {
+               // found '$'
+               result = true;
+            }
+         }
+      }    
+   }
+   return result;
+}

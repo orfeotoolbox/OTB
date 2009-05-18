@@ -184,9 +184,9 @@ TOutputImage>
                        S.Cols() << ") cannot be subtracted from matrix with size (" <<
                        tempS.Rows() << "," << tempS.Cols() <<" )" );
   }
-  for ( unsigned int r=0; r<S.Rows(); r++)
+  for ( unsigned int r=0; r<S.Rows(); ++r)
   {
-    for ( unsigned int c=0; c<S.Cols(); c++ )
+    for ( unsigned int c=0; c<S.Cols(); ++c )
     {
       S(r,c) -= tempS(r,c);
     }
@@ -207,9 +207,9 @@ TOutputImage>
                        tempS.Rows() << "," << tempS.Cols() << " )" );
 
   }
-  for ( unsigned int r=0; r<S.Rows(); r++)
+  for ( unsigned int r=0; r<S.Rows(); ++r)
   {
-    for ( unsigned int c=0; c<S.Cols(); c++ )
+    for ( unsigned int c=0; c<S.Cols(); ++c )
     {
       S(r,c) -= tempS(r,c);
     }
@@ -233,9 +233,9 @@ TOutputImage>
                        xxTbTb.Rows() << "," << xxTbTb.Cols() << " )" );
   }
 
-  for ( unsigned int r=0; r<S.Rows(); r++)
+  for ( unsigned int r=0; r<S.Rows(); ++r)
   {
-    for ( unsigned int c=0; c<S.Cols(); c++ )
+    for ( unsigned int c=0; c<S.Cols(); ++c )
     {
       S(r,c) += xxTbTb(r,c);
     }
@@ -255,7 +255,7 @@ TOutputImage>
   cutBeta.SetSize(multiSpecInterp->GetNumberOfComponentsPerPixel(), 1);
   cutBeta.Fill(itk::NumericTraits<InputMultiSpectralInterpRealType>::Zero);
   // Take the N-1 m_Beta last elements
-  for ( unsigned int r=1; r<m_Beta.Rows(); r++ )
+  for ( unsigned int r=1; r<m_Beta.Rows(); ++r )
   {
     cutBeta(r-1,0) = m_Beta(r,0);
   }
@@ -270,7 +270,7 @@ TOutputImage>
   MatrixType eye;
   eye.SetSize(multiSpecInterp->GetNumberOfComponentsPerPixel(), multiSpecInterp->GetNumberOfComponentsPerPixel());
   eye.Fill(itk::NumericTraits<InputMultiSpectralInterpRealType>::Zero);
-  for ( unsigned int r=1; r<eye.Rows(); r++)
+  for ( unsigned int r=1; r<eye.Rows(); ++r)
   {
     eye(r,r) = vcl_pow(10., -12.);
   }
@@ -287,9 +287,9 @@ TOutputImage>
                        varPan.Rows() << "," << varPan.Cols() << " ) or ( " <<
                        m_CovarianceInvMatrix.Rows() << "," << m_CovarianceInvMatrix.Cols()<<")"  );
   }
-  for ( unsigned int r=0; r<m_Vcondopt.Rows(); r++)
+  for ( unsigned int r=0; r<m_Vcondopt.Rows(); ++r)
   {
-    for ( unsigned int c=0; c<m_Vcondopt.Cols(); c++ )
+    for ( unsigned int c=0; c<m_Vcondopt.Cols(); ++c )
     {
       m_Vcondopt(r,c) = 2 *m_Lambda*varPan(r,c)
                         +2*m_CovarianceInvMatrix(r,c)*(1-m_Lambda)

@@ -59,7 +59,11 @@ public:
  * the selected channels.
  *  \ingroup Visualization
  */
-template <class TPixelPrecision, class TRGBPixel, class TTransferFunction = Identity<TPixelPrecision,TPixelPrecision> >
+template <class TPixelPrecision, class TRGBPixel, class TTransferFunction
+    = Identity<
+        typename itk::NumericTraits<TPixelPrecision>::ValueType,
+        typename itk::NumericTraits<TPixelPrecision>::ValueType
+        > >
 class StandardRenderingFunction
   : public RenderingFunction<TPixelPrecision,TRGBPixel>
 {
@@ -79,35 +83,67 @@ public:
   /** PixelType macros */
   typedef TRGBPixel                                  OutputPixelType;
   typedef typename OutputPixelType::ValueType        OutputValueType;
-  typedef TPixelPrecision                            ScalarPixelType;
-  typedef itk::VariableLengthVector<ScalarPixelType> VectorPixelType;
+  typedef TPixelPrecision                            PixelType;
+  typedef typename itk::NumericTraits<PixelType>::ValueType ScalarType;
+  typedef itk::VariableLengthVector<ScalarType>       VectorPixelType;
+  typedef itk::RGBPixel<ScalarType> RGBPixelType;
+  typedef itk::RGBAPixel<ScalarType> RGBAPixelType;
+
   /** Extrema vector */
-  typedef std::vector<ScalarPixelType>               ExtremaVectorType;
+  typedef std::vector<ScalarType>                    ExtremaVectorType;
   typedef TTransferFunction                          TransferFunctionType;
 
   /** Evaluate method (scalar version) */
-  inline virtual const OutputPixelType Evaluate(ScalarPixelType spixel) const
+  inline virtual const OutputPixelType Evaluate(ScalarType spixel) const
   {
     OutputPixelType resp;
-    resp.Fill(this->Evaluate(m_TransferFunction(spixel),m_TransferedMinimum[0],m_TransferedMaximum[0]));
+    resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
+    OutputValueType value = this->Evaluate(m_TransferFunction(spixel),m_TransferedMinimum[0],m_TransferedMaximum[0]);
+    resp.SetRed(value);
+    resp.SetGreen(value);
+    resp.SetBlue(value);
     return resp;
   }
   /** Evaluate method (vector version) */
   inline virtual const OutputPixelType Evaluate(const VectorPixelType & vpixel) const
   {
     OutputPixelType resp;
+    resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
     resp.SetRed(Evaluate(m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
-    resp.SetBlue(Evaluate(m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
     resp.SetGreen(Evaluate(m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
+    resp.SetBlue(Evaluate(m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
+    return resp;
+  }
+  /** Evaluate method (RGB pixel version) */
+  inline virtual const OutputPixelType Evaluate(const RGBPixelType & vpixel) const
+  {
+    OutputPixelType resp;
+    resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
+    resp.SetRed(Evaluate(m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
+    resp.SetGreen(Evaluate(m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
+    resp.SetBlue(Evaluate(m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
+    return resp;
+  }
+  /** Evaluate method (RGBA pixel version) */
+  inline virtual const OutputPixelType Evaluate(const RGBAPixelType & vpixel) const
+  {
+    OutputPixelType resp;
+//     resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
+    if (OutputPixelType::Length == 4)
+    {//Propagate the alpha channel
+      resp[3] = vpixel[3];
+    }
+    resp.SetRed(Evaluate(m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
+    resp.SetGreen(Evaluate(m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
+    resp.SetBlue(Evaluate(m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
     return resp;
   }
 
-
-  inline const std::string Describe(ScalarPixelType spixel) const
+  inline const std::string Describe(ScalarType spixel) const
   {
     itk::OStringStream oss;
     OutputPixelType output = this->Evaluate(spixel);
-    oss<<"Grayscale[value: "<< static_cast<typename itk::NumericTraits<ScalarPixelType>::PrintType>(spixel)<<", displayed: "<< static_cast<unsigned int>(output[0])<<"]";
+    oss<<"Grayscale [value: "<< static_cast<typename itk::NumericTraits<PixelType>::PrintType>(spixel)<<", displayed: "<< static_cast<unsigned int>(output[0])<<"]";
     return oss.str();
   }
 
@@ -129,7 +165,7 @@ public:
           {
           oss<<" ";
           }
-        oss<<", v= "<<static_cast<typename itk::NumericTraits<ScalarPixelType>::PrintType>(vpixel[channel])<<std::endl;
+        oss<<", v= "<<static_cast<typename itk::NumericTraits<PixelType>::PrintType>(vpixel[channel])<<std::endl;
         }
       else if(channel == m_GreenChannelIndex)
         {
@@ -142,7 +178,7 @@ public:
           {
           oss<<" ";
           }
-        oss<<", v= "<<static_cast<typename itk::NumericTraits<ScalarPixelType>::PrintType>(vpixel[channel])<<std::endl;
+        oss<<", v= "<<static_cast<typename itk::NumericTraits<PixelType>::PrintType>(vpixel[channel])<<std::endl;
         }
       else if(channel == m_BlueChannelIndex)
         {
@@ -155,13 +191,45 @@ public:
           {
           oss<<" ";
           }
-        oss<<", v= "<<static_cast<typename itk::NumericTraits<ScalarPixelType>::PrintType>(vpixel[channel])<<std::endl;
+        oss<<", v= "<<static_cast<typename itk::NumericTraits<PixelType>::PrintType>(vpixel[channel])<<std::endl;
         }
       else
         {
-        oss<<"c= "<<channel<<",         v= "<<static_cast<typename itk::NumericTraits<ScalarPixelType>::PrintType>(vpixel[channel])<<std::endl;
+        oss<<"c= "<<channel<<",         v= "<<static_cast<typename itk::NumericTraits<PixelType>::PrintType>(vpixel[channel])<<std::endl;
         }
       }
+    return oss.str();
+  }
+
+  inline const std::string Describe(const RGBPixelType & spixel) const
+  {
+    itk::OStringStream oss;
+    OutputPixelType output = this->Evaluate(spixel);
+    oss<<"RGB value: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[0])
+        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[1])
+        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[2])
+        << std::endl;
+    oss <<"   displayed: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[0])
+        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[1])
+        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[2])
+        <<std::endl;
+    return oss.str();
+  }
+
+  inline const std::string Describe(const RGBAPixelType & spixel) const
+  {
+    itk::OStringStream oss;
+    OutputPixelType output = this->Evaluate(spixel);
+    oss<<"RGBA value: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[0])
+        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[1])
+        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[2])
+        << " alpha: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[3])
+        << std::endl;
+    oss <<"   displayed: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[0])
+        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[1])
+        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[2])
+        << " alpha: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[3])
+        <<std::endl;
     return oss.str();
   }
 
@@ -228,14 +296,14 @@ public:
   }
 
   /** Set the transfered minimum (scalar version) */
-  virtual void SetTransferedMinimum(ScalarPixelType spixel)
+  virtual void SetTransferedMinimum(ScalarType spixel)
   {
     m_TransferedMinimum.clear();
     m_TransferedMinimum.push_back(spixel);
   }
 
   /** Set the transfered maximum (scalar version) */
-  virtual void SetTransferedMaximum(ScalarPixelType spixel)
+  virtual void SetTransferedMaximum(ScalarType spixel)
   {
     m_TransferedMaximum.clear();
     m_TransferedMaximum.push_back(spixel);
@@ -276,8 +344,8 @@ public:
         {
         const double v1 = m_TransferFunction(*minIt);
         const double v2 = m_TransferFunction(*maxIt);
-        m_TransferedMinimum.push_back(std::min(v1,v2));
-        m_TransferedMaximum.push_back(std::max(v1,v2));
+        m_TransferedMinimum.push_back(static_cast<ScalarType>(std::min(v1,v2)));
+        m_TransferedMaximum.push_back(static_cast<ScalarType>(std::max(v1,v2)));
         ++minIt;
         ++maxIt;
         }
@@ -294,7 +362,7 @@ protected:
   /** Perform the computation for a single value (this is done in
    * order to have the same code for vector and scalar version)
    */
-  const OutputValueType Evaluate(ScalarPixelType input, ScalarPixelType min, ScalarPixelType max) const
+  const OutputValueType Evaluate(ScalarType input, ScalarType min, ScalarType max) const
   {
     if(input > max)
       {

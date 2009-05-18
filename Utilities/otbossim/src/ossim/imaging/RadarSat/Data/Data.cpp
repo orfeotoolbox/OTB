@@ -12,7 +12,7 @@ Data::Data()
 }
 
 Data::~Data()
-{ 
+{
 	ClearRecords();
 }
 
@@ -35,8 +35,8 @@ std::istream& operator>>(std::istream& is, Data& data)
 	data.ClearRecords();
 
 	if (sizeof(int)!=4) std::cout << "RadarSat Data WARNING : (int) not coded over 32 bits, metadata might not be byte swapped correctly"<< std::endl ;
-	if (sizeof(float)!=4) std::cout << "RadarSat Data WARNING : (float) not coded over 32 bits, metadata might not be byte swapped correctly"<< std::endl ;	
-	if (sizeof(double)!=8) std::cout << "RadarSat Data WARNING : (double) not coded over 64 bits, metadata might not be byte swapped correctly"<< std::endl ; 
+	if (sizeof(float)!=4) std::cout << "RadarSat Data WARNING : (float) not coded over 32 bits, metadata might not be byte swapped correctly"<< std::endl ;
+	if (sizeof(double)!=8) std::cout << "RadarSat Data WARNING : (double) not coded over 64 bits, metadata might not be byte swapped correctly"<< std::endl ;
 
 	RadarSatRecordHeader header;
 	bool eof = false;
@@ -53,14 +53,14 @@ std::istream& operator>>(std::istream& is, Data& data)
 		}
 		else
 		{
-			if (header.get_rec_seq() == 1) { // ImageOptionsFileDescriptor 
+			if (header.get_rec_seq() == 1) { // ImageOptionsFileDescriptor
 				RadarSatRecord* record = factory.Instanciate(header.get_rec_seq());
 				if (record != NULL)
 				{
 					record->Read(is);
 					data._records[Data::ImageOptionsFileDescriptorID] = record;
 
-					nbLin  = ((ImageOptionsFileDescriptor *) record)->get_nlin() ; 
+					nbLin  = ((ImageOptionsFileDescriptor *) record)->get_nlin() ;
 				}
 				else
 				{
@@ -106,12 +106,12 @@ std::istream& operator>>(std::istream& is, Data& data)
 			else
 			{
 				// all lines between the first and last ones are skipped
-				if (lineLength != 0) 
-					is.seekg((nbLin-2)*lineLength-12, std::ios::cur) ; 
+				if (lineLength != 0)
+					is.seekg((nbLin-2)*lineLength-12, std::ios::cur) ;
 				else
 					is.seekg(0, std::ios::end) ;
 			}
-			
+
 		}
 /*
 	//while(!eof)

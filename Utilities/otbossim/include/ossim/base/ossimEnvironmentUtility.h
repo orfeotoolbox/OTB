@@ -23,6 +23,12 @@ public:
    ossimFilename getInstalledOssimPluginDir()const;
    ossimFilename getInstalledOssimPreferences()const;
 
+   /**
+    * @return The current working dir which is $(PWD) for unix $(CD) for
+    * windows.
+    */
+   ossimFilename getCurrentWorkingDir()const;
+
    ossimFilename searchAllPaths(const ossimFilename& file)const;
    
    ossimFilename findPlugin(const ossimFilename& plugin)const;

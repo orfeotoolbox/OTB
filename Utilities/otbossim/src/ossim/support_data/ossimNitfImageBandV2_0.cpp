@@ -1,13 +1,15 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 //
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageBandV2_0.cpp 12403 2008-02-04 17:59:13Z gpotts $
+// $Id: ossimNitfImageBandV2_0.cpp 14241 2009-04-07 19:59:23Z dburken $
 
 #include <sstream>
 #include <iostream>
@@ -74,40 +76,47 @@ void ossimNitfImageBandV2_0::writeStream(std::ostream& out)
 }
 
 std::ostream& ossimNitfImageBandV2_0::print(std::ostream& out,
+                                            const std::string& prefix,
                                             ossim_uint32 band)const
 {
    std::ostringstream os;
    os << std::setw(3) << std::setfill('0') << (band+1) << ":";
 
-   ossimString tmpStr = "\nIREPBAND";
+   ossimString tmpStr = "IREPBAND";
    tmpStr += os.str();
    
-   out << std::setw(24) << tmpStr << theBandRepresentation;
+   out << prefix << std::setw(24)
+       << tmpStr << theBandRepresentation << "\n";
 
-   tmpStr = "\nISUBCAT";
+   tmpStr = "ISUBCAT";
    tmpStr += os.str();
    
-   out << std::setw(24) << tmpStr << theBandSignificance;
+   out << prefix << std::setw(24)
+       << tmpStr << theBandSignificance << "\n";
 
-   tmpStr = "\nIFC";
+   tmpStr = "IFC";
    tmpStr += os.str();
    
-   out << std::setw(24) << tmpStr << theBandImageFilterCondition;
+   out << prefix << std::setw(24)
+       << tmpStr << theBandImageFilterCondition << "\n";
 
-   tmpStr = "\nIMFLT";
+   tmpStr = "IMFLT";
    tmpStr += os.str();
 
-   out << std::setw(24) << tmpStr << theBandStandardImageFilterCode;
+   out << prefix << std::setw(24)
+       << tmpStr << theBandStandardImageFilterCode << "\n";
 
-   tmpStr = "\nNLUTS";
+   tmpStr = "NLUTS";
    tmpStr += os.str();
 
-   out << std::setw(24) << tmpStr << theBandNumberOfLuts;
+   out << prefix << std::setw(24)
+       << tmpStr << theBandNumberOfLuts << "\n";
 
-   tmpStr = "\nNELUTS";
+   tmpStr = "NELUTS";
    tmpStr += os.str();
 
-   out << std::setw(24) << tmpStr << theBandNumberOfLutEntries << std::endl;
+   out << prefix << std::setw(24)
+       << tmpStr << theBandNumberOfLutEntries << "\n";
    
    for(ossim_uint32 idx = 0; idx < theLookupTables.size(); ++idx)
    {

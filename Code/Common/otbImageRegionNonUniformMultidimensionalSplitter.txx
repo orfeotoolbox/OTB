@@ -155,7 +155,7 @@ ImageRegionNonUniformMultidimensionalSplitter<VImageDimension>
   ijk[0] = offset;
 
   // compute the split
-  for (j=0; j < VImageDimension; j++)
+  for (j=0; j < VImageDimension; ++j)
   {
     splitIndex[j] += ijk[j]*pixelsPerSplit[j];
     if (ijk[j] < splits[j] - 1)

@@ -197,12 +197,12 @@ OverlapSaveConvolutionImageFilter< TInputImage, TOutputImage>
 
   k=0;
   // Filling the buffer with filter values
-  for (j=0;j<sizeOfFilter[1];j++)
+  for (j=0;j<sizeOfFilter[1];++j)
   {
-    for (i=0;i<sizeOfFilter[0];i++)
+    for (i=0;i<sizeOfFilter[0];++i)
     {
       resampledFilterPiece[i+j*pieceSize[0]]=m_Filter.GetElement(k);//Copy values
-      k++;
+      ++k;
     }
   }
 
@@ -220,7 +220,7 @@ OverlapSaveConvolutionImageFilter< TInputImage, TOutputImage>
   FFTWProxyType::PlanType outputPlan=FFTWProxyType::Plan_dft_c2r_2d(pieceSize[1],pieceSize[0],multipliedFFTarray,inverseFFTpiece,FFTW_MEASURE);
 
   // Filling the buffer with complex product values
-  for (k=0;k<sizeFFT;k++)
+  for (k=0;k<sizeFFT;++k)
   {
     //complex mutiplication
     multipliedFFTarray[k][0]=inputPieceFFT[k][0]*filterPieceFFT[k][0]-inputPieceFFT[k][1]*filterPieceFFT[k][1];
@@ -234,7 +234,7 @@ OverlapSaveConvolutionImageFilter< TInputImage, TOutputImage>
   if (m_NormalizeFilter)
   {
     norm = itk::NumericTraits<InputRealType>::Zero;
-    for (i=0;i<sizeOfFilter[0]*sizeOfFilter[1];i++)
+    for (i=0;i<sizeOfFilter[0]*sizeOfFilter[1];++i)
     {
       norm += static_cast<InputRealType>(m_Filter(i));
     }

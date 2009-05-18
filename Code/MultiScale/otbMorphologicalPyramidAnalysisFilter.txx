@@ -208,7 +208,7 @@ MorphologicalPyramidAnalysisFilter<TInputImage,TOutputImage,TMorphoFilter>
 
     // New  Size
     size = morphoFilter->GetOutput()->GetLargestPossibleRegion().GetSize();
-    for (int j =0; j<InputImageType::ImageDimension;j++)
+    for (int j =0; j<InputImageType::ImageDimension;++j)
     {
       sizeTmp=size[j];
       // As we knwow that our values will always be positive ones, we can simulate round by ceil(value+0.5)
@@ -261,7 +261,7 @@ MorphologicalPyramidAnalysisFilter<TInputImage,TOutputImage,TMorphoFilter>
     otbMsgDevMacro("MorphologicalPyramidAnalysisFilter: step "<<i<<" - Image appended to SupDeci");
 
     // Iteration ounter incrementation
-    i++;
+    ++i;
   }
   otbMsgDevMacro(<<"Exiting main loop");
 }

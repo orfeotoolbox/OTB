@@ -92,9 +92,9 @@ bool PrepareSRTMDirectory::Evaluate()
     }
 
  
-  for (int j=startY; j<= endY; j++)
+  for (int j=startY; j<= endY; ++j)
   {
-    for (int i=startX; i<= endX; i++)
+    for (int i=startX; i<= endX; ++i)
     {
       std::ostringstream inputfilename;
       inputfilename << m_FullDEMDirectoryPath;

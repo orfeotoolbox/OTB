@@ -65,7 +65,7 @@ public :
                                     - static_cast<double>( currentIteration )
                                     / static_cast<double>( numberOfIterations ),
                                     2.0 );
-    for (unsigned int i = 0; i < VDimension; i++ )
+    for (unsigned int i = 0; i < VDimension; ++i )
     {
       theSize[i] = static_cast<typename itk::Size<VDimension>::SizeValueType> (
                      static_cast<double>( sizeInit[i] ) * weightening );

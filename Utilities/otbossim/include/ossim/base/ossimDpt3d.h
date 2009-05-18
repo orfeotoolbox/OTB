@@ -1,6 +1,8 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  Garrett Potts
 //
@@ -9,23 +11,26 @@
 // Contains class declaration for dpt3d
 // Used to represent a 3d double point containing an x, y and z data member.
 //*******************************************************************
-//  $Id: ossimDpt3d.h 12619 2008-04-06 18:43:45Z dburken $
+//  $Id: ossimDpt3d.h 14356 2009-04-20 19:59:03Z dburken $
 
 #ifndef ossimDpt3d_HEADER
 #define ossimDpt3d_HEADER
 
 #include <cmath>
-#include <iostream>
-#include <iomanip>
+#include <iosfwd>
+#include <string>
 
-#include <ossim/base/ossimString.h>
-#include <ossim/base/ossimDpt.h>
+#include <ossim/base/ossimCommon.h> /* for ossim::isnan */
 #include <ossim/base/ossimColumnVector3d.h>
+
+class ossimIpt;
+class ossimDpt;
 
 class OSSIMDLLEXPORT ossimDpt3d
 {
 public:
-   friend inline std::ostream & operator << (std::ostream &out, const ossimDpt3d &rhs);
+   friend std::ostream & operator << (std::ostream &out, const ossimDpt3d &rhs);
+   
    ossimDpt3d(const double &aX=0, const double &aY=0, const double &aZ=0)
       :x(aX), y(aY), z(aZ) {}
 
@@ -104,19 +109,35 @@ public:
                         z*rhs.x-x*rhs.z ,
                         x*rhs.y-y*rhs.x);
    }
+
+   /**
+    * @brief To string method.
+    * 
+    * @param precision Output floating point precision.
+    * 
+    * @return std::string representing point.
+    *
+    * Output format:
+    * ( 0.0000000,  0.0000000,  0.00000000 )
+    *   -----x----  -----y----  ------z----
+    */
+   std::string toString(ossim_uint32 precision=15) const;
+   
+   /**
+    * @brief Initializes this point from string.
+    *
+    * Expected format:
+    * 
+    * ( 0.0000000,  0.0000000,  0.00000000 )
+    *   -----x----  -----y----  ------z----
+    *
+    * @param s String to initialize from.
+    */
+   void toPoint(const std::string& s); 
+   
    double x;
    double y;
    double z;
 };
 
-inline std::ostream &operator << (std::ostream &out, const ossimDpt3d &rhs)
-{
-   return out << std::setiosflags(std::ios::fixed)
-              << std::setprecision(15)
-              << (ossim::isnan(rhs.x)?ossimString("nan"):ossimString::toString(rhs.x))
-              << " "
-              << (ossim::isnan(rhs.y)?ossimString("nan"):ossimString::toString(rhs.y))
-              << " "
-              << (ossim::isnan(rhs.z)?ossimString("nan"):ossimString::toString(rhs.z))<< endl;
-}
 #endif

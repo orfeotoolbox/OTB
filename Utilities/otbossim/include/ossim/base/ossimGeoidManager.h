@@ -77,7 +77,7 @@ private:
 
    static ossimGeoidManager* theInstance;
    mutable std::vector< ossimRefPtr<ossimGeoid> > theGeoidList;
-
+   
    TYPE_DATA
 };
 

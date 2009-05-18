@@ -48,7 +48,7 @@ public:
     double normProd=0.0;
     double normProd1=0.0;
     double sqrtNormProd = 0.0;
-    for (unsigned int i=0; i<std::min(inPix.Size(),m_ReferencePixel.Size()); i++)
+    for (unsigned int i=0; i<std::min(inPix.Size(),m_ReferencePixel.Size()); ++i)
     {
       scalarProd += inPix[i]*m_ReferencePixel[i];
       normProd1 += inPix[i]*inPix[i];
@@ -73,7 +73,7 @@ public:
   {
     m_ReferencePixel = ref;
     m_RefNorm = 0.0;
-    for (unsigned int i = 0; i<ref.Size(); i++)
+    for (unsigned int i = 0; i<ref.Size(); ++i)
     {
       m_RefNorm += ref[i]*ref[i];
     }

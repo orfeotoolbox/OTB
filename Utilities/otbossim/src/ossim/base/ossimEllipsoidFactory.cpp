@@ -1,11 +1,13 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  Garrett Potts
 // 
 //*******************************************************************
-//  $Id: ossimEllipsoidFactory.cpp 12761 2008-04-29 19:07:53Z gpotts $
+//  $Id: ossimEllipsoidFactory.cpp 14514 2009-05-15 14:45:27Z dburken $
 #include <ossim/base/ossimEllipsoidFactory.h>
 #include <ossim/base/ossimEllipsoid.h>
 #include <ossim/base/ossimString.h>
@@ -168,4 +170,15 @@ void ossimEllipsoidFactory::deleteAll()
    }
 
    theEllipsoidTable.clear();
+
+   if (theWgs84Ellipsoid)
+   {
+      delete theWgs84Ellipsoid;
+      theWgs84Ellipsoid = 0;
+   }
+   if (theWgs72Ellipsoid)
+   {
+      delete theWgs72Ellipsoid;
+      theWgs72Ellipsoid = 0;
+   }
 }

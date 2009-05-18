@@ -1,13 +1,15 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //
 // Description:  Contains class definition for ossimNitfTileSource.
 // 
 //*******************************************************************
-//  $Id: ossimNitfTileSource.cpp 13943 2009-01-01 19:05:52Z dburken $
+//  $Id: ossimNitfTileSource.cpp 14380 2009-04-20 22:23:24Z dburken $
 #include <jerror.h>
 
 #include <ossim/imaging/ossimNitfTileSource.h>
@@ -42,7 +44,7 @@
 RTTI_DEF1_INST(ossimNitfTileSource, "ossimNitfTileSource", ossimImageHandler)
 
 #ifdef OSSIM_ID_ENABLED
-   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 13943 2009-01-01 19:05:52Z dburken $";
+   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 14380 2009-04-20 22:23:24Z dburken $";
 #endif
    
 //---
@@ -2162,37 +2164,44 @@ void ossimNitfTileSource::getEntryList(std::vector<ossim_uint32>& entryList)cons
 
 bool ossimNitfTileSource::setCurrentEntry(ossim_uint32 entryIdx)
 {
-   if (theCurrentEntry == entryIdx)
+   bool result = true;
+   
+   if (theCurrentEntry != entryIdx)
    {
-      return true; // Nothing to change.
-   }
-
-   if ( isOpen() )
-   {
-      if ( entryIdx < theNumberOfImages )
+      if ( isOpen() )
       {
-         theCurrentEntry = entryIdx;
-         //---
-         // Since we were previously open and the the entry has changed we
-         // need to reinitialize some things.
-         //---
-         allocate();
+         if ( entryIdx < theNumberOfImages )
+         {
+            // Must clear or getImageGeometry method will use last entries.
+            theGeometryKwl.clear();
+            
+            // Must clear or openOverview will use last entries.
+            theOverviewFile.clear();
+            
+            theCurrentEntry = entryIdx;
+            
+            //---
+            // Since we were previously open and the the entry has changed we
+            // need to reinitialize some things.
+            //---
+            result = allocate();
+         }
+         else
+         {
+            result = false; // Entry index out of range.
+         }
       }
       else
       {
-         return false;
+         //---
+         // Not open.
+         // Allow this knowing that the parseFile will check for out of range.
+         //---
+         theCurrentEntry = entryIdx;
       }
    }
-   else
-   {
-      //---
-      // Not open.
-      // Allow this know that the parseFile will check for out of range.
-      //---
-      theCurrentEntry = entryIdx;
-   }
 
-   return true;
+   return result;
 }
 
 bool ossimNitfTileSource::getCacheEnabledFlag() const

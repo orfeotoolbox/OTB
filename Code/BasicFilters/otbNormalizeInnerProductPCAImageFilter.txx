@@ -71,7 +71,7 @@ NormalizeInnerProductPCAImageFilter<TInputImage,TOutputImage>
                          cov.Cols() << ") is incompatible with mean vector with size" << means.Size() );
   }
   m_CoefNorm.SetSize(means.Size());
-  for(unsigned int i=0; i<m_CoefNorm.Size(); i++)
+  for(unsigned int i=0; i<m_CoefNorm.Size(); ++i)
   {
     m_CoefNorm[i] = (1./vcl_sqrt(NbPixels*(cov[i][i] + means[i]*means[i])));
   }
@@ -107,7 +107,7 @@ NormalizeInnerProductPCAImageFilter<TInputImage,TOutputImage>
     outPixel.SetSize( inputPtr->GetNumberOfComponentsPerPixel() );
     outPixel.Fill(itk::NumericTraits<OutputInternalPixelType>::Zero);
     //outPixel = m_Means * inPixel;
-    for (unsigned int j=0; j<inputPtr->GetNumberOfComponentsPerPixel(); j++)
+    for (unsigned int j=0; j<inputPtr->GetNumberOfComponentsPerPixel(); ++j)
     {
         outPixel[j] = static_cast<OutputInternalPixelType>(m_CoefNorm[j]*static_cast<double>(inPixel[j]));
     }

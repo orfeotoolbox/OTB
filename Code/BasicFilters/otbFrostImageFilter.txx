@@ -170,9 +170,9 @@ void FrostImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
       const double rad_x = static_cast<double>(m_Radius[0]);
       const double rad_y = static_cast<double>(m_Radius[1]);
 
-      for (double x = -rad_x; x<= rad_x; x++)
+      for (double x = -rad_x; x<= rad_x; ++x)
       {
-        for (double y = -rad_y; y <= rad_y; y++)
+        for (double y = -rad_y; y <= rad_y; ++y)
         {
           double Dist = double(vcl_sqrt(x*x+y*y));
           off[0]= static_cast<int>(x);

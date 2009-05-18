@@ -9,7 +9,7 @@
 // Contains definition of class ossimSpotDimapSupportData.
 //
 //*****************************************************************************
-// $Id: ossimSpotDimapSupportData.cpp 13676 2008-10-03 17:35:02Z gpotts $
+// $Id: ossimSpotDimapSupportData.cpp 14208 2009-04-01 18:18:06Z dburken $
 
 
 #include <iostream>
@@ -26,7 +26,6 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <sstream>
-#include <cassert>
 
 // Define Trace flags for use within this file:
 static ossimTrace traceDebug ("ossimSpotDimapSupportData:debug");
@@ -2217,9 +2216,14 @@ bool ossimSpotDimapSupportData::parsePart4(
       setErrorStatus();
       return false;
     }
-    int bandIndex = sub_nodes[0]->getText().toInt() - 1;
 
-    assert(bandIndex < theNumBands);
+    ossim_int32 bandIndex = sub_nodes[0]->getText().toInt32() - 1;
+
+    if( (bandIndex >= static_cast<int>(theNumBands) ) || (bandIndex<0) )
+    {
+       ossimNotify(ossimNotifyLevel_WARN) << "ossimSpotDimapSupportData::parsePart4 ERROR: Band index outside of range\n";
+       return false;
+    }
 
     sub_nodes.clear();
     xpath = "PHYSICAL_BIAS";
@@ -2259,10 +2263,15 @@ bool ossimSpotDimapSupportData::parsePart4(
       setErrorStatus();
       return false;
     }
-    int bandIndex = sub_nodes[0]->getText().toInt() - 1;
 
-    assert(bandIndex < theNumBands);
-
+    ossim_int32 bandIndex = sub_nodes[0]->getText().toInt32() - 1;
+    
+    if((bandIndex >= static_cast<ossim_int32>(theNumBands) ) || (bandIndex<0))
+    {
+       ossimNotify(ossimNotifyLevel_WARN) << "ossimSpotDimapSupportData::parsePart4 ERROR: Band index outside of range\n";
+       return false;
+    }
+    
     sub_nodes.clear();
     xpath = "SOLAR_IRRADIANCE_VALUE";
     (*node)->findChildNodes(xpath, sub_nodes);

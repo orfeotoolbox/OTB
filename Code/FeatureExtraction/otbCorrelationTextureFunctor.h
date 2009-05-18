@@ -60,9 +60,9 @@ public:
     double areaInv = 1/area;
     double out = 0.;
     double sumProb = 0.;
-    for (unsigned r = 0; r<this->GetHisto().size(); r++)
+    for (unsigned r = 0; r<this->GetHisto().size(); ++r)
       {
-        for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
+        for (unsigned s = 0; s<this->GetHisto()[r].size(); ++s)
           {
             double p =  static_cast<double>(this->GetHisto()[r][s])*areaInv;
             sumProb += p;
@@ -76,10 +76,10 @@ public:
 
     // Standard deviation of p for offset region
     double stdPOff = 0.;
-    for (unsigned r = 0; r<this->GetHisto().size(); r++)
+    for (unsigned r = 0; r<this->GetHisto().size(); ++r)
       {
         double sumTemp = 0.;
-        for (unsigned s = 0; s<this->GetHisto()[r].size(); s++)
+        for (unsigned s = 0; s<this->GetHisto()[r].size(); ++s)
           {
             sumTemp += this->GetHisto()[r][s]*areaInv;
           }
@@ -90,10 +90,10 @@ public:
 
     // Standard deviation of p for neighborhood region
     double stdPNeigh = 0.;
-    for (unsigned r = 0; r<this->GetHisto()[0].size(); r++)
+    for (unsigned r = 0; r<this->GetHisto()[0].size(); ++r)
       {
         double sumTemp = 0.;
-        for (unsigned s = 0; s<this->GetHisto().size(); s++)
+        for (unsigned s = 0; s<this->GetHisto().size(); ++s)
           {
             sumTemp += this->GetHisto()[s][r]*areaInv;
           }

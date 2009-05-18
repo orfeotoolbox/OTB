@@ -13,7 +13,7 @@
 // Container class for four double points representing a rectangle.
 // 
 //*******************************************************************
-//  $Id: ossimDrect.h 13672 2008-10-03 15:06:47Z gpotts $
+//  $Id: ossimDrect.h 14218 2009-04-03 13:00:21Z gpotts $
 
 #ifndef ossimDrect_HEADER
 #define ossimDrect_HEADER
@@ -333,6 +333,34 @@ public:
    ossimDpt lr() const { return theLrCorner; }
    ossimDpt ll() const { return theLlCorner; }
 
+   const ossimDrect& changeOrientationMode(ossimCoordSysOrientMode mode)
+   {
+      // if we are already in the orientation then return
+      //
+      if(mode == theOrientMode) return *this;
+      if(mode == OSSIM_LEFT_HANDED)
+      {
+         // we must be right handed so change to left handed
+         *this = ossimDrect(theUlCorner.x,
+                            theLlCorner.y,
+                            theLrCorner.x,
+                            theUlCorner.y,
+                            OSSIM_LEFT_HANDED);
+      }
+      else
+      {
+         // we must be left handed so change to RIGHT handed
+         *this = ossimDrect(theUlCorner.x,
+                            theLlCorner.y,
+                            theLrCorner.x,
+                            theUlCorner.y,
+                            OSSIM_RIGHT_HANDED);
+      }
+      theOrientMode = mode;
+      
+      return *this;
+   }
+   
    void getBounds(double& minx, double& miny,
                   double& maxx, double& maxy)const
       {
@@ -474,6 +502,7 @@ public:
     */
    bool completely_within(const ossimDrect& rect) const;
 
+   ossimCoordSysOrientMode orientationMode()const{return theOrientMode;}
    /*!
     * Returns the height of a rectangle.
     */
@@ -494,6 +523,7 @@ public:
     */
    void stretchToTileBoundary(const ossimDpt& widthHeight);
 
+   const ossimDrect& expand(const ossimDpt& padding);
    /*!
     * Will subdivide this rect into four partiions.
     */

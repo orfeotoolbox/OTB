@@ -198,10 +198,10 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
       vertex->SetSegmentationType(segmentationImageIndex%2);
       // Put it in the graph
       graph->SetVertex(vertexIndex,vertex);
-      vertexIndex++;
+      ++vertexIndex;
       ++nbVertices;
     }
-    segmentationImageIndex++;
+    ++segmentationImageIndex;
   }
 
   itk::ProgressReporter progress(this,0,nbVertices*nbVertices);

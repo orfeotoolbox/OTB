@@ -39,7 +39,7 @@ public:
 	{
 		return _solutions;
 	};
-	
+
 	int * get_order()
 	{
 		return _order;
@@ -87,7 +87,7 @@ private:
 	 */
 	std::complex<double> Proche(std::complex<double> z, double epsilon);
 
-	/** 
+	/**
 	 * @brief Tests whether a triple root exists in a third degree equation
 	 */
 	int TestDegree3Triple(std::complex<double>* a, double epsilon);

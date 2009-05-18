@@ -1,18 +1,21 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 // 
 // Description: A brief description of the contents of the file.
 //
 //*******************************************************************
-// $Id: ossimImageData.h 12034 2007-11-13 19:48:39Z gpotts $
+// $Id: ossimImageData.h 14530 2009-05-16 23:56:54Z dburken $
 #ifndef ossimImageData_HEADER
 #define ossimImageData_HEADER
 
 #include <vector>
 
+#include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimRectilinearDataObject.h>
 #include <ossim/base/ossimIrect.h>
 #include <ossim/base/ossimIpt.h>
@@ -956,44 +959,35 @@ inline ossimIrect ossimImageData::getImageRectangle() const
 
 inline const ossim_float64* ossimImageData::getNullPix()const
 {
-   if (theNullPixelValue.size() > 0)
-   {
-      return &theNullPixelValue.front();
-   }
-   return 0;
+   return ( theNullPixelValue.size() > 0 ? &theNullPixelValue.front() : 0 );
 }
 
 inline const ossim_float64* ossimImageData::getMinPix()const
 {
-   if (theMinPixelValue.size() > 0)
-   {
-      return &theMinPixelValue.front();
-   }
-   return 0;
+   return ( theMinPixelValue.size() > 0 ? &theMinPixelValue.front() : 0 );
 }
 
 inline const ossim_float64* ossimImageData::getMaxPix()const
 {
-   if (theMaxPixelValue.size() > 0)
-   {
-      return &theMaxPixelValue.front();
-   }
-   return 0;
+   return ( theMaxPixelValue.size() > 0 ? &theMaxPixelValue.front() : 0 );
 }
 
 inline ossim_float64 ossimImageData::getNullPix(ossim_uint32 band) const
 {
-   return theNullPixelValue[band];
+   return ( band < theNullPixelValue.size() ? theNullPixelValue[band] :
+            ossim::defaultNull( getScalarType() ) );
 }
-
+      
 inline ossim_float64 ossimImageData::getMinPix(ossim_uint32 band) const
 {
-   return theMinPixelValue[band];
+   return ( band < theMinPixelValue.size() ? theMinPixelValue[band] :
+            ossim::defaultMin( getScalarType() ) );
 }
 
 inline ossim_float64 ossimImageData::getMaxPix(ossim_uint32 band) const
 {
-   return theMaxPixelValue[band];
+   return ( band < theMaxPixelValue.size() ? theMaxPixelValue[band] :
+            ossim::defaultMax( getScalarType() ) );
 }
 
 inline ossim_uint32 ossimImageData::getHashId()const

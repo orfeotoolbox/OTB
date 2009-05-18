@@ -774,7 +774,7 @@ ImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent, const Me
   MetaDataDictionaryType dict2 = dict;
   MetaDataKey key;
 
-  for (unsigned int itkey=0; itkey<keys.size(); itkey++)
+  for (unsigned int itkey=0; itkey<keys.size(); ++itkey)
   {
 
 
@@ -793,7 +793,7 @@ ImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent, const Me
     case MetaDataKey::TVECTOR:
       itk::ExposeMetaData<VectorType>(dict2, keys[itkey], vvalue);
 
-      for (i = 0; i < vvalue.size(); i++ )
+      for (i = 0; i < vvalue.size(); ++i )
       {
         os << indent << "---> " << keys[itkey] << "[" << i <<"] = "<< vvalue[i]<< std::endl;
       }

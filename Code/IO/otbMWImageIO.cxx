@@ -331,7 +331,7 @@ void MWImageIO::WriteImageInformation()
   std::string comments("Image written with otb mw_IO_factory");
   m_Ncom = comments.length();
   //Initialization to 0
-  for (unsigned int i =0; i<64; i++)
+  for (unsigned int i =0; i<64; ++i)
     header[i] = static_cast<unsigned char>(0);
   //Write image size and other information
   unsigned short lNbComments = m_Ncom;

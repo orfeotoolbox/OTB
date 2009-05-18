@@ -279,7 +279,7 @@ namespace otb
                   }
 
                   etatPrec = etatCour;
-                  i++;
+                  ++i;
                 }
 
               // Simpliest case : string characters or numeric value between 2 separators
@@ -384,7 +384,7 @@ namespace otb
       std::cout << "Tolerance value     : "<<epsilon << std::endl;
 
       std::cout << "Nb lines differents : "<<listStrDiffLineFileRef.size() << std::endl;
-      for ( unsigned int i = 0; i  < listStrDiffLineFileRef.size(); i++)
+      for ( unsigned int i = 0; i  < listStrDiffLineFileRef.size(); ++i)
       {
         std::cout << "   -------------------------------"<<std::endl;
         std::cout << "   Base << "<<listStrDiffLineFileRef[i]<<std::endl;
@@ -911,7 +911,7 @@ namespace otb
         
         if(bVerbose) std::cout << "FAILURE:\n"
                 "Unable to open REF datasource `"<<ref_pszDataSource<<"' with the following drivers."<<std::endl;
-        for( int iDriver = 0; iDriver < ref_poR->GetDriverCount(); iDriver++ )
+        for( int iDriver = 0; iDriver < ref_poR->GetDriverCount(); ++iDriver )
         {
             std::cout<< "  -> "<< ref_poR->GetDriver(iDriver)->GetName() <<std::endl;
         }
@@ -925,7 +925,7 @@ namespace otb
         
         if(bVerbose) std::cout << "FAILURE:\n"
                 "Unable to open TEST datasource `"<<test_pszDataSource<<"' with the following drivers."<<std::endl;
-        for( int iDriver = 0; iDriver < test_poR->GetDriverCount(); iDriver++ )
+        for( int iDriver = 0; iDriver < test_poR->GetDriverCount(); ++iDriver )
         {
             std::cout<< "  -> "<< test_poR->GetDriver(iDriver)->GetName() <<std::endl;
         }
@@ -952,7 +952,7 @@ namespace otb
 /* -------------------------------------------------------------------- */
     otbCheckValue("GetLayerCount()", ref_poDS->GetLayerCount(),test_poDS->GetLayerCount(),nbdiff,bVerbose );
 
-        for( int iLayer = 0; iLayer < ref_poDS->GetLayerCount(); iLayer++ )
+        for( int iLayer = 0; iLayer < ref_poDS->GetLayerCount(); ++iLayer )
         {
             OGRLayer        *ref_poLayer = ref_poDS->GetLayer(iLayer);
             OGRLayer        *test_poLayer = test_poDS->GetLayer(iLayer);
@@ -1086,14 +1086,14 @@ namespace otb
       number = str[i];
 
       if (isPoint(number))
-        nbOfPoints++;
+        ++nbOfPoints;
       if (isNumber(number))
-        nbOfNumbers++;
+        ++nbOfNumbers;
       if ((!isNumber(number)&&!isPoint(number)&&!isMinusSign(number))
             ||(isMinusSign(number)&&(i!=0)))
         result = false;
 
-      i++;
+      ++i;
     }
     if ((str.size()==0)||(nbOfPoints > 1)/*||(nbOfNumbers==0)*/)
       result = false;
@@ -1297,7 +1297,7 @@ void TestHelper::ogrReportOnLayer(
     otbCheckValue("GetFieldCount",ref_poDefn->GetFieldCount(),test_poDefn->GetFieldCount(),nbdiff,bVerbose);
     if( ref_poDefn->GetFieldCount() == test_poDefn->GetFieldCount())
     {
-        for( int iAttr = 0; iAttr < ref_poDefn->GetFieldCount(); iAttr++ )
+        for( int iAttr = 0; iAttr < ref_poDefn->GetFieldCount(); ++iAttr )
         {
             OGRFieldDefn    *ref_poField = ref_poDefn->GetFieldDefn( iAttr );
             OGRFieldDefn    *test_poField = test_poDefn->GetFieldDefn( iAttr );

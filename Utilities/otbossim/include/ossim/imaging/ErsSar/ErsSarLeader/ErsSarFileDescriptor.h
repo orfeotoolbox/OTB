@@ -84,7 +84,7 @@ public:
 	{
 		return _ascii_flag;
 	};
-	
+
 	/**
 	 * @brief Format control documentation
 	 */
@@ -126,7 +126,7 @@ public:
     std::string   get_file_name()
 	{
 		return _file_name;
-	};  
+	};
 	/**
 	 * @brief Record sequence/location flag
 	 */
@@ -140,7 +140,7 @@ public:
 	int   get_seq_loc()
 	{
 		return _seq_loc;
-	};    
+	};
 	/**
 	 * @brief Sequence number lenght
 	 */
@@ -308,7 +308,7 @@ public:
 	int get_n_rang_spec()
 	{
 		return _n_rang_spec ;
-	};      
+	};
 	/**
 	 * @brief Range spectra record length, bytes
 	 */
@@ -373,14 +373,14 @@ public:
 		return _l_det_proc;
 	};
 	/**
-	 * @brief Number of calibration records 
+	 * @brief Number of calibration records
 	 */
 	int get_n_cal()
 	{
 		return _n_cal;
 	};
 	/**
-	 * @brief Calibration record length, bytes 
+	 * @brief Calibration record length, bytes
 	 */
 	int get_l_cal()
 	{
@@ -394,7 +394,7 @@ public:
 		return _n_gcp;
 	};
 	/**
-	 * @brief GCP record length, bytes    
+	 * @brief GCP record length, bytes
 	 */
 	int get_l_gcp()
 	{
@@ -414,13 +414,13 @@ public:
 	{
 		return _l_fac_data;
 	};
-	
+
 protected:
 	/**
 	 * @brief ASCII flag
 	 */
 	std::string _ascii_flag;
-	
+
 	/**
 	 * @brief Format control documentation
 	 */
@@ -428,11 +428,11 @@ protected:
 	/**
 	 * @brief Format doc version
 	 */
-	std::string   _format_ver; 
+	std::string   _format_ver;
 	/**
 	 * @brief Format doc revision
 	 */
-    std::string   _design_rev;   
+    std::string   _design_rev;
 	/**
 	 * @brief Software identifier
 	 */
@@ -440,23 +440,23 @@ protected:
 	/**
 	 * @brief File number
 	 */
-	int   _file_num;    
+	int   _file_num;
 	/**
 	 * @brief File name
 	 */
-    std::string   _file_name;      
+    std::string   _file_name;
 	/**
 	 * @brief Record sequence/location flag
 	 */
-    std::string   _rec_seq;  
+    std::string   _rec_seq;
 	/**
 	 * @brief Sequence number location
 	 */
-	int   _seq_loc;     
+	int   _seq_loc;
 	/**
 	 * @brief Sequence number lenght
 	 */
-	int   _seq_len;  
+	int   _seq_len;
 	/**
 	 * @brief Record code/location flag
 	 */
@@ -468,7 +468,7 @@ protected:
 	/**
 	 * @brief Record code length
 	 */
-    int   _code_len; 
+    int   _code_len;
 	/**
 	 * @brief Record length/location flag
 	 */
@@ -481,8 +481,8 @@ protected:
 	 * @brief Record length, bytes
 	 */
 	int _rlen_len;
-	
-	
+
+
 	/**
 	 * @brief Number of dataset summ records
 	 */
@@ -550,7 +550,7 @@ protected:
 	/**
 	 * @brief Number of range spectra records
 	 */
-	int _n_rang_spec;           
+	int _n_rang_spec;
 	/**
 	 * @brief Range spectra record length, bytes
 	 */
@@ -588,11 +588,11 @@ protected:
 	 */
 	int _l_det_proc;
 	/**
-	 * @brief Number of calibration records 
+	 * @brief Number of calibration records
 	 */
 	int _n_cal;
 	/**
-	 * @brief Calibration record length, bytes 
+	 * @brief Calibration record length, bytes
 	 */
 	int _l_cal;
 	/**
@@ -600,10 +600,10 @@ protected:
 	 */
 	int _n_gcp;
 	/**
-	 * @brief GCP record length, bytes    
+	 * @brief GCP record length, bytes
 	 */
 	int _l_gcp;
-	
+
 	/**
 	 * @brief Number of facility data records
 	 */
@@ -612,7 +612,7 @@ protected:
 	 * @brief Fac data record length, bytes
 	 */
 	int _l_fac_data;
-	      
+
 private:
 };
 

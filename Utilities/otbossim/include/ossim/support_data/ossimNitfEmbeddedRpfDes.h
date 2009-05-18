@@ -1,16 +1,19 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 // 
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfEmbeddedRpfDes.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfEmbeddedRpfDes.h 14241 2009-04-07 19:59:23Z dburken $
 #ifndef ossimNitfEmbeddedRpfDes_HEADER
 #define ossimNitfEmbeddedRpfDes_HEADER
+
+#include <iosfwd>
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
 class ossimNitfFileHeader;
 
@@ -26,7 +29,15 @@ public:
    virtual ossimString getRegisterTagName()const{return "RPFDES";}
 
    virtual void parseStream(std::istream &in);
-   virtual std::ostream& print(std::ostream& out)const;
+
+   /**
+    * @brief Print method that outputs a key/value type format
+    * adding prefix to keys.
+    * @param out Stream to output to.
+    * @param prefix Prefix added to key like "image0.";
+    */
+   virtual std::ostream& print(std::ostream& out,
+                               const std::string& prefix=std::string()) const;
 
 TYPE_DATA
 private:

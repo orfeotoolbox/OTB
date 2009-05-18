@@ -74,6 +74,9 @@ template <class TVectorData, class TImage>
     typedef typename TImage::PointType     OriginType;
     typedef typename TImage::DirectionType DirectionType;
 
+    /** Region typedef */
+    typedef typename TImage::RegionType RegionType;
+
     /** typedef specific to mapnik */
     typedef boost::shared_ptr<mapnik::memory_datasource> datasource_ptr;
 
@@ -103,6 +106,11 @@ template <class TVectorData, class TImage>
     virtual void SetSpacing (const float spacing[2]);
 
     itkGetConstReferenceMacro(Spacing, SpacingType);
+
+    /** Get/Set methods for the scale factor */
+    itkSetMacro(ScaleFactor, double);
+    itkGetMacro(ScaleFactor, double);
+
 
   protected:
     /** Constructor */
@@ -136,6 +144,10 @@ template <class TVectorData, class TImage>
     //This factor is used to flip the data on the Y axis when using a
     //sensor model geometry (where the Y coordinate increases top-down)
     int m_SensorModelFlip;
+
+    //this parameter is used only in the case of sensor geometry
+    //to adjust the scale
+    double m_ScaleFactor;
 
 }; // end class
 } // end namespace otb

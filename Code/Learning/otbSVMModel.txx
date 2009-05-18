@@ -228,7 +228,7 @@ SVMModel<TInputPixel, TLabel>
   // delete just the first element, it destoyes the whole pointers (cf SV filling with x_space)
   delete [] (m_Model->SV[0]);
 
-  for (int n = 0; n<m_Model->l; n++)
+  for (int n = 0; n<m_Model->l; ++n)
   {
     m_Model->SV[n] = NULL;
   }
@@ -243,7 +243,7 @@ SVMModel<TInputPixel, TLabel>
 
   // Compute the total number of SV elements.
   unsigned int elements = 0;
-  for (int p=0; p<nbOfSupportVector; p++)
+  for (int p=0; p<nbOfSupportVector; ++p)
   {
     std::cout<<p<<"  ";
     const svm_node *tempNode = sv[p];
@@ -251,9 +251,9 @@ SVMModel<TInputPixel, TLabel>
     while (tempNode->index != -1)
     {
       tempNode++;
-      elements++;
+      ++elements;
     }
-    elements++;// for -1 values
+    ++elements;// for -1 values
   }
 
   if (m_Model->l>0)
@@ -264,7 +264,7 @@ SVMModel<TInputPixel, TLabel>
   svm_node *x_space =  SV[0];
 
   int j = 0;
-  for (int i=0; i<m_Model->l; i++)
+  for (int i=0; i<m_Model->l; ++i)
   {
     // SV
     SV[i] = &x_space[j];
@@ -274,12 +274,12 @@ SVMModel<TInputPixel, TLabel>
     {
       pCpy->index = p->index;
       pCpy->value = p->value;
-      p++;
-      pCpy++;
-      j++;
+      ++p;
+      ++pCpy;
+      ++j;
     }
     pCpy->index = -1;
-    j++;
+    ++j;
   }
   this->Modified();
 }
@@ -290,7 +290,7 @@ SVMModel<TInputPixel, TLabel>
 ::SetAlpha( double ** alpha, int nbOfSupportVector )
 {
   // Erase the old sv_coef
-  for (int i=0; i<m_Model->nr_class-1; i++)
+  for (int i=0; i<m_Model->nr_class-1; ++i)
   {
     delete[] m_Model->sv_coef[i];
   }
@@ -300,13 +300,13 @@ SVMModel<TInputPixel, TLabel>
 
   // copy new sv_coef values
   m_Model->sv_coef = Malloc(double *,m_Model->nr_class-1);
-  for (int i=0; i<m_Model->nr_class-1; i++)
+  for (int i=0; i<m_Model->nr_class-1; ++i)
     m_Model->sv_coef[i] = Malloc(double,m_Model->l);
 
-  for (int i=0; i<m_Model->l; i++)
+  for (int i=0; i<m_Model->l; ++i)
   {
     // sv_coef
-    for (int k=0; k<m_Model->nr_class-1; k++)
+    for (int k=0; k<m_Model->nr_class-1; ++k)
     {
       m_Model->sv_coef[k][i] = alpha[k][i];
     }

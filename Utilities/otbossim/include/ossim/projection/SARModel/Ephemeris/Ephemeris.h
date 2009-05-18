@@ -21,7 +21,7 @@ public:
 	  * @brief Destructor
 	  */
 	~Ephemeris();
-	
+
 	/**
 	 * @brief Constructor with initialisations
 	 */
@@ -30,12 +30,12 @@ public:
 	 * @brief Copy constructor
 	 */
 	Ephemeris(const Ephemeris& rhs);
-	
+
 	/**
 	 * @brief Affectation operator
 	 */
 	Ephemeris& operator=(const Ephemeris& rhs);
-	
+
 	/**
 	 * @brief This function creatse a copy of the current class
 	 */
@@ -43,34 +43,34 @@ public:
 	{
 		return new Ephemeris(*this);
 	};
-	
+
 	JSDDateTime get_date()
 	{
 		return _date;
 	};
-	
+
 	double* get_position()
 	{
 		return _position;
 	};
-	
+
 	double* get_vitesse()
 	{
 		return _vitesse;
 	};
-	
+
 	void set_date(JSDDateTime date)
 	{
 		_date = date;
 	};
-	
+
 	void set_position(double position[3])
 	{
 		_position[0] = position[0];
 		_position[1] = position[1];
 		_position[2] = position[2];
 	};
-	
+
 	void set_vitesse(double vitesse[3])
 	{
 		_vitesse[0] = vitesse[0];

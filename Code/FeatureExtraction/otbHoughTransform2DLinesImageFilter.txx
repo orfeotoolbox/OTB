@@ -378,7 +378,7 @@ HoughTransform2DLinesImageFilter< TInputPixelType, TOutputPixelType>
         minMaxCalculator->ComputeMaximum();
         max = minMaxCalculator->GetMaximum();
 
-        lines++;
+        ++lines;
         found = true;
         if (lines == m_NumberOfLines) break;
       }

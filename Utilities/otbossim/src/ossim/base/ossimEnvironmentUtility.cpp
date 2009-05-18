@@ -190,6 +190,17 @@ ossimFilename ossimEnvironmentUtility::getInstalledOssimPreferences()const
    
 }
 
+ossimFilename ossimEnvironmentUtility::getCurrentWorkingDir()const
+{
+   ossimFilename result;
+#if OSSIM_ENVIRONEMENT_UTILITY_UNIX
+   result = this->getEnvironmentVariable("PWD");
+#else
+   result = this->getEnvironmentVariable("CD");
+#endif
+   return result;
+}
+
 ossimFilename ossimEnvironmentUtility::searchAllPaths(const ossimFilename& file)const
 {
    ossimFilename result;

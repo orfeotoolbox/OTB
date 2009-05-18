@@ -77,7 +77,7 @@ private:
 	virtual bool InitSensorParams(const ossimKeywordlist &kwl, const char *prefix);
 	virtual bool InitRefPoint(const ossimKeywordlist &kwl, const char *prefix);
 	/**
-	 * @brief Initializes the Slant Range to Ground Range data sets : 
+	 * @brief Initializes the Slant Range to Ground Range data sets :
 	 *				_SrToGr_R0,_SrToGr_coeffs_number,_SrToGr_exponent,_SrToGr_coeffs,_nbCol
 	 */
 	virtual bool InitSRGR(const ossimKeywordlist &kwl, const char *prefix);

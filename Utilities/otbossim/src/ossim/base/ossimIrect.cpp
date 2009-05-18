@@ -10,7 +10,7 @@
 // Contains class definition for ossimIrect.
 // 
 //*******************************************************************
-//  $Id: ossimIrect.cpp 12953 2008-06-01 16:24:05Z dburken $
+//  $Id: ossimIrect.cpp 14353 2009-04-20 19:35:15Z gpotts $
 
 #include <ostream>
 #include <ossim/base/ossimIrect.h>
@@ -121,24 +121,23 @@ bool ossimIrect::intersects(const ossimIrect& rect) const
    if (theOrientMode != rect.theOrientMode)
       return false;
    
-   ossim_int32 ulx = MAX(rect.ul().x,ul().x);
-   ossim_int32 lrx = MIN(rect.lr().x,lr().x);
-   ossim_int32 uly, lry;
-   bool   rtn;
-   
+   ossim_int32  ulx = ossim::max(rect.ul().x,ul().x);
+   ossim_int32  lrx = ossim::min(rect.lr().x,lr().x);
+   ossim_int32  uly, lry;
+   bool rtn=false;
    if (theOrientMode == OSSIM_LEFT_HANDED)
    {
-      uly = MAX(rect.ul().y,ul().y);
-      lry = MIN(rect.lr().y,lr().y);
+      uly  = ossim::max(rect.ul().y,ul().y);
+      lry  = ossim::min(rect.lr().y,lr().y);
       rtn = ((ulx <= lrx) && (uly <= lry));
    }
    else
    {
-      uly = MIN(rect.ul().y,ul().y);
-      lry = MAX(rect.lr().y,lr().y);
-      rtn = ((ulx <= lrx) && (uly >= lry));
+      uly  = ossim::max(rect.ll().y,ll().y);
+      lry  = ossim::min(rect.ur().y,ur().y);
+      rtn = ((ulx <= lrx) && (uly <= lry));
    }
-      
+   
    return (rtn);
 }
 
@@ -235,6 +234,31 @@ void ossimIrect::stretchToTileBoundary(const ossimIpt& tileWidthHeight)
   }
 
    *this = ossimIrect(ul, lr, theOrientMode);
+}
+
+
+const ossimIrect& ossimIrect::expand(const ossimIpt& padding)
+{
+   theUlCorner.x -= padding.x;
+   theUrCorner.x += padding.x;
+   theLrCorner.x += padding.x;
+   theLlCorner.x -= padding.x;
+   if(theOrientMode == OSSIM_LEFT_HANDED)
+   {
+      theUlCorner.y -= padding.y;
+      theUrCorner.y -= padding.y;
+      theLrCorner.y += padding.y;
+      theLlCorner.y += padding.y;
+   }
+   else
+   {
+      theUlCorner.y += padding.y;
+      theUrCorner.y += padding.y;
+      theLrCorner.y -= padding.y;
+      theLlCorner.y -= padding.y;
+   }
+   
+   return *this;
 }
 
 //*******************************************************************

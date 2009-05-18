@@ -22,7 +22,7 @@
 /**
  * @brief main application for getting version / date and generating the
  * ossimVersion.h file.
- *
+ * 
  * @param argv[1] Path to ossim/include/ossim/ossimVersion.h
  *
  * @param argv[2] Version number string like "1.7.11"
@@ -31,13 +31,13 @@ int main(int argc, char* argv[])
 {
    if (argc != 3)
    {
-      return(1);
+      exit(1);
    }
 
    std::ofstream os(argv[1]);
    if (!os)
    {
-      return(1);
+      exit(1);
    }
 
    // Get the version.  This is now passed in from the make file.
@@ -49,7 +49,8 @@ int main(int argc, char* argv[])
    std::string releaseVersion = "0";
    std::string::size_type pos1 = std::string::npos;
    std::string::size_type pos2 = std::string::npos;
-
+   std::string::size_type pos3 = std::string::npos;
+   
    pos1 = versionNumber.find(".", 0);
    if(pos1 != std::string::npos)
    {
@@ -99,10 +100,10 @@ int main(int argc, char* argv[])
       << "\n"
       << "#endif /* End of #ifndef ossimVersion_HEADER */"
       << std::endl;
-
+   
    os.close();
-
+   
    std::cout << "wrote file: " << argv[1] << std::endl;
 
-   return(0);
+   exit(0);
 }

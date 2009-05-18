@@ -6,7 +6,7 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfBoundaryRectRecord.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimRpfBoundaryRectRecord.cpp 14241 2009-04-07 19:59:23Z dburken $
 #include <ossim/support_data/ossimRpfBoundaryRectRecord.h>
 #include <string.h> // for memset
 #include <ossim/base/ossimEndian.h>
@@ -76,4 +76,37 @@ void ossimRpfBoundaryRectRecord::clearFields()
    theScale[12] = '\0';
    theProducer[5] = '\0';
    theZone = ' ';
+}
+
+std::ostream& ossimRpfBoundaryRectRecord::print(std::ostream& out,
+                                                ossimString prefix) const
+{
+   // Capture the original flags.
+   std::ios_base::fmtflags f = out.flags();
+   
+   out << setiosflags(ios::fixed)
+       << setprecision(12)
+       << prefix << "ProductDataType: "
+       << theProductDataType << "\n"
+       << prefix << "CompressionRatio: "
+       << theCompressionRatio << "\n"
+       << prefix << "Scale: "
+       << theScale << "\n"
+       << prefix << "Zone: "
+       << theZone << "\n"
+       << prefix << "Producer: "
+       << theProducer << "\n";
+   
+   theCoverage.print(out, prefix);
+   
+   out << prefix << "NumberOfFramesNorthSouth: "
+       << theNumberOfFramesNorthSouth << "\n"
+       << prefix << "NumberOfFramesEastWest: "
+       << theNumberOfFramesEastWest
+       << "\n";
+
+   // Reset flags.
+   out.setf(f);
+
+   return out;
 }

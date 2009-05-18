@@ -1,19 +1,21 @@
 //*******************************************************************
-// Copyright (C) 2004 Intelligence Data Systems. 
 //
-// LICENSE: LGPL
+// License:  LGPL
 //
-// see top level LICENSE.txt
+// See LICENSE.txt file in the top level directory for more details.
 // 
 // Author: Garrett Potts
+// 
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfGeoPositioningTag.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfGeoPositioningTag.cpp 14241 2009-04-07 19:59:23Z dburken $
 
 #include <ossim/support_data/ossimNitfGeoPositioningTag.h>
 #include <cstring>
 #include <istream>
+#include <iostream>
+#include <iomanip>
 
 RTTI_DEF1(ossimNitfGeoPositioningTag, "ossimNitfGeoPositioningTag", ossimNitfRegisteredTag);
 
@@ -86,6 +88,7 @@ void ossimNitfGeoPositioningTag::clearFields()
    memset(theVerticalDatumReference, ' ', 80);
    memset(theVerticalReferenceCode, ' ', 4);
    memset(theSoundingDatumName, ' ', 80);
+   memset(theSoundingDatumCode, ' ', 4);
    memset(theZFalseOrigin, '0', 15);
    memset(theGridCode, ' ', 3);
    memset(theGridDescription, ' ', 80);
@@ -100,6 +103,7 @@ void ossimNitfGeoPositioningTag::clearFields()
    memcpy(theVerticalDatumReference, "Geodetic", 8);
    memcpy(theVerticalReferenceCode, "GEOD", 4);
    memcpy(theSoundingDatumName, "Mean Sea", 8);
+   memcpy(theSoundingDatumCode, "MSL", 3);
 
    theType[3]                    = '\0';
    theCoordinateUnits[3]         = '\0';
@@ -110,9 +114,39 @@ void ossimNitfGeoPositioningTag::clearFields()
    theVerticalDatumReference[80] = '\0';
    theVerticalReferenceCode[4]   = '\0';
    theSoundingDatumName[80]      = '\0';
+   theSoundingDatumCode[4]       = '\0';
    theZFalseOrigin[15]           = '\0';
    theGridCode[3]                = '\0';
    theGridDescription[80]        = '\0';
    theGridZoneNumber[4]          = '\0';
    
+}
+
+std::ostream& ossimNitfGeoPositioningTag::print(
+   std::ostream& out, const std::string& prefix) const
+{
+   std::string pfx = prefix;
+   pfx += getRegisterTagName();
+   pfx += ".";
+   
+   out << setiosflags(std::ios::left)
+       << pfx << std::setw(24) << "CETAG:"
+       << getRegisterTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"   << getSizeInBytes() << "\n"
+       << pfx << std::setw(24) << "TYP:" << theType << "\n"
+       << pfx << std::setw(24) << "UNI:" << theCoordinateUnits << "\n"
+       << pfx << std::setw(24) << "DAG:" << theGeodeticDatumName << "\n"
+       << pfx << std::setw(24) << "DCD:" << theGeodeticDatumCode << "\n"
+       << pfx << std::setw(24) << "ELL:" << theEllipsoidName << "\n"
+       << pfx << std::setw(24) << "ELC:" << theEllipsoidCode << "\n"
+       << pfx << std::setw(24) << "DVR:" << theVerticalDatumReference << "\n"
+       << pfx << std::setw(24) << "VDCDVR:" << theVerticalReferenceCode << "\n"
+       << pfx << std::setw(24) << "SDA:" << theSoundingDatumName << "\n"
+       << pfx << std::setw(24) << "VDCSDA:" << theSoundingDatumCode << "\n"
+       << pfx << std::setw(24) << "ZOR:" << theZFalseOrigin << "\n"
+       << pfx << std::setw(24) << "GRD:" << theGridCode << "\n"
+       << pfx << std::setw(24) << "GRN:" << theGridDescription << "\n"
+       << pfx << std::setw(24) << "ZNA:" << theGridZoneNumber << "\n";
+   
+   return out;
 }

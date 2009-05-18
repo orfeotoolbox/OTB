@@ -254,7 +254,7 @@ bool CommandLineArgumentParser::TryParseCommandLine(int argc, char *argv[],
   int index(0);
 
 // Go through the arguments
-  for (i=1; i < argc; i++)
+  for (i=1; i < argc; ++i)
   {
 // Get the next argument
     std::string arg(argv[i]);
@@ -294,7 +294,7 @@ bool CommandLineArgumentParser::TryParseCommandLine(int argc, char *argv[],
       outResult->AddOption(m_OptionList[index].CommonName);
 
       // Pass in the parameters
-      for (int j=0;j<nParameters;j++,i++)
+      for (int j=0;j<nParameters;++j,++i)
       {
         outResult->AddParameter(m_OptionList[index].CommonName,std::string(argv[i+1]));
       }
@@ -317,11 +317,11 @@ bool CommandLineArgumentParser::TryParseCommandLine(int argc, char *argv[],
           else
           {
             outResult->AddParameter(m_OptionList[index].CommonName,strArgv);
-            i++;
+            ++i;
           }
         }
         else goOnFlag = false;
-        //         i++;
+        //         ++i;
       }
     }
 
@@ -386,14 +386,14 @@ void CommandLineArgumentParser::PrintUsage(std::ostream& os)const
   int largeurmax(-1);
   unsigned int i;
 
-  for (i=0; i < m_OptionList.size(); i++ )
+  for (i=0; i < m_OptionList.size(); ++i )
   {
     int largeur = m_OptionList[i].CommonName.size() + m_OptionList[i].Synonim.size();
     if ( largeur > largeurmax ) largeurmax = largeur;
   }
 
   // Check that all required arguments are present on the command line
-  for (i=0; i < m_OptionList.size(); i++ )
+  for (i=0; i < m_OptionList.size(); ++i )
   {
     if (m_OptionList[i].CommonName != "--OTBTesting")
     {

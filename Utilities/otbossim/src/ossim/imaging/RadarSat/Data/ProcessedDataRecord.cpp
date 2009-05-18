@@ -47,7 +47,7 @@ std::ostream& operator<<(std::ostream& os, const ProcessedDataRecord& data)
 	os<<"east_first:"<<data._east_first<<std::endl;
 	os<<"east_last:"<<data._east_last<<std::endl;
 	os<<"heading:"<<data._heading<<std::endl;
-	
+
 	return os;
 }
 
@@ -158,19 +158,19 @@ std::istream& operator>>(std::istream& is, ProcessedDataRecord& data)
 
 	is.read((char*)&(data._lat_mid),4);
 	data.SwitchEndian(data._lat_mid);
-	
+
 	is.read((char*)&(data._lat_last),4);
 	data.SwitchEndian(data._lat_last);
-	
+
 	is.read((char*)&(data._lon_first),4);
 	data.SwitchEndian(data._lon_first);
-	
+
 	is.read((char*)&(data._lon_mid),4);
 	data.SwitchEndian(data._lon_mid);
-	
+
 	is.read((char*)&(data._lon_last),4);
 	data.SwitchEndian(data._lon_last);
-	
+
 	is.read((char*)&(data._north_first),4);
 	data.SwitchEndian(data._north_first);
 
@@ -189,7 +189,7 @@ std::istream& operator>>(std::istream& is, ProcessedDataRecord& data)
 
 	is.read((char*)&(data._heading),4);
 	data.SwitchEndian(data._heading);
-	
+
 	is.read(buf,8);
 
 	return is;

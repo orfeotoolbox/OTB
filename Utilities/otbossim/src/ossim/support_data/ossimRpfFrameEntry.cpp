@@ -1,18 +1,33 @@
+//*******************************************************************
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
+// 
+// Author: Garrett Potts
+//
+// Description: Rpf support class
+// 
+//********************************************************************
+// $Id: ossimRpfFrameEntry.cpp 14241 2009-04-07 19:59:23Z dburken $
+
+#include <ostream>
 #include <ossim/support_data/ossimRpfFrameEntry.h>
 
-ostream& operator<<(ostream& out,
-                    const ossimRpfFrameEntry& data)
+std::ostream& operator<<(std::ostream& out,
+                         const ossimRpfFrameEntry& data)
 {
    data.print(out);
 
    return out;
 }
 
-
-ossimRpfFrameEntry::ossimRpfFrameEntry(const ossimString& rootDirectory,
-                                       const ossimString& pathToFrameFileFromRoot)
-   :theRootDirectory(rootDirectory),
-    thePathToFrameFileFromRoot(pathToFrameFileFromRoot)
+ossimRpfFrameEntry::ossimRpfFrameEntry(const ossimFilename& rootDirectory,
+                                       const ossimFilename& pathToFrameFileFromRoot)
+   :theExists(false),
+    theRootDirectory(rootDirectory),
+    thePathToFrameFileFromRoot(pathToFrameFileFromRoot),
+    theFullValidPath()
 {
    setEntry(rootDirectory,
             pathToFrameFileFromRoot);
@@ -25,49 +40,57 @@ ossimRpfFrameEntry::ossimRpfFrameEntry(const ossimRpfFrameEntry& rhs)
     theFullValidPath(rhs.theFullValidPath)
 {}
 
-void ossimRpfFrameEntry::setEntry(const ossimString& rootDirectory,
-                                  const ossimString& pathToFrameFileFromRoot)
+void ossimRpfFrameEntry::setEntry(const ossimFilename& rootDirectory,
+                                  const ossimFilename& pathToFrameFileFromRoot)
 {
-   ossimFilename temp(rootDirectory + pathToFrameFileFromRoot);
-   
+   //---
+   // We must check for case combinations:
+   //---
    theRootDirectory           = rootDirectory;
    thePathToFrameFileFromRoot = pathToFrameFileFromRoot;
-   
-   if(temp.exists())
+   theFullValidPath = theRootDirectory.dirCat(thePathToFrameFileFromRoot);
+
+   // Check as supplied:
+   if(theFullValidPath.exists())
    {
-      theFullValidPath = temp;
-      theExists        = true;
+      theExists = true;
    }
-   else // it might be upper cases( upper/lower) may be different. check it
+   else // Check root/downcased_path
    {
       thePathToFrameFileFromRoot = thePathToFrameFileFromRoot.downcase();
-      temp = ossimFilename(theRootDirectory + thePathToFrameFileFromRoot);
-      if(temp.exists())
+      theFullValidPath = theRootDirectory.dirCat(thePathToFrameFileFromRoot);
+
+      if(theFullValidPath.exists())
       {
-         theFullValidPath = temp;
-         theExists        = true;
+         theExists = true;
       }
-      else
+      else // Check root/upcased_path
       {
          thePathToFrameFileFromRoot = thePathToFrameFileFromRoot.upcase();
-         temp = ossimFilename(theRootDirectory + thePathToFrameFileFromRoot);
-         if(temp.exists())
+         theFullValidPath =
+            theRootDirectory.dirCat(thePathToFrameFileFromRoot);
+         if(theFullValidPath.exists())
          {
-            theFullValidPath = temp;
             theExists = true;
          }
          else
          {
             thePathToFrameFileFromRoot = pathToFrameFileFromRoot;
-            theFullValidPath = ossimFilename(rootDirectory + pathToFrameFileFromRoot);
+            theFullValidPath =
+               theRootDirectory.dirCat(thePathToFrameFileFromRoot);
             theExists = false;
          }
       }
    }
 }
-
-void ossimRpfFrameEntry::print(ostream& out)const
+std::ostream& ossimRpfFrameEntry::print(
+   std::ostream& out, const std::string& prefix) const
 {
-   out << "exists:          " << theExists    << endl
-       << "theFilename:     " << theFullValidPath;
+   out << prefix << "exists:       " << theExists << "\n"
+       << prefix << "root_directory: " << theRootDirectory << "\n"
+       << prefix << "relative_path: "
+       << thePathToFrameFileFromRoot << "\n"
+       << prefix << "full_path:     " << theFullValidPath << "\n";
+
+   return out;
 }

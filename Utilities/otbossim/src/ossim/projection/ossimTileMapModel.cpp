@@ -1,10 +1,10 @@
 //*******************************************************************
 //
 // License:  See top level LICENSE.txt file.
-// 
+//
 // AUTHOR: Jordi Inglada
 //
-// DESCRIPTION: 
+// DESCRIPTION:
 //
 // SOFTWARE HISTORY:
 //   23JAN2008  Jordi Inglada, CNES
@@ -96,14 +96,14 @@ static const char* PROJ_TYPE[] = { "UNKNOWN_PROJECTION",
 
 //*****************************************************************************
 //  DEFAULT CONSTRUCTOR: ossimTileMapModel()
-//  
+//
 //*****************************************************************************
 ossimTileMapModel::ossimTileMapModel()
    :
    ossimSensorModel(),
    theIntrackOffset     (0.0),
    theCrtrackOffset     (0.0),
-   theLineGsdCorr       (0.0),   
+   theLineGsdCorr       (0.0),
    theSampGsdCorr       (0.0),
    theRollOffset        (0.0),
    theYawOffset         (0.0),
@@ -117,20 +117,20 @@ ossimTileMapModel::ossimTileMapModel()
 //   initAdjustableParameters();
 
 //    std::cout << "TileMapModel constructor" << std::endl;
-   
+
    if (traceExec()) ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::ossimTileMapModel: returning..." << std::endl;
 }
 
 //*****************************************************************************
 //  COPY CONSTRUCTOR: ossimTileMapModel(ossimTileMapModel)
-//  
+//
 //*****************************************************************************
 ossimTileMapModel::ossimTileMapModel(const ossimFfL7& head)
    :
    ossimSensorModel(),
    theIntrackOffset     (0.0),
    theCrtrackOffset     (0.0),
-   theLineGsdCorr       (0.0),   
+   theLineGsdCorr       (0.0),
    theSampGsdCorr       (0.0),
    theRollOffset        (0.0),
    theYawOffset         (0.0),
@@ -148,13 +148,13 @@ ossimTileMapModel::ossimTileMapModel(const ossimFfL7& head)
 
 //*****************************************************************************
 //  CONSTRUCTOR: ossimTileMapModel(filename)
-//  
+//
 //  Constructs model from a filename. The file can be either a FF header file
 //  or a KWL file.
-//  
+//
 //*****************************************************************************
 ossimTileMapModel::ossimTileMapModel(const ossimFilename& init_file)
- 
+
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::ossimTileMapModel(init_file): entering..." << std::endl;
 
@@ -167,16 +167,16 @@ ossimTileMapModel::ossimTileMapModel(const ossimFilename& init_file)
 
 //*****************************************************************************
 //  CONSTRUCTOR: ossimTileMapModel(kwl)
-//  
+//
 //  Constructs model from keywordlist geometry file
-//  
+//
 //*****************************************************************************
 ossimTileMapModel::ossimTileMapModel(const ossimKeywordlist& geom_kwl)
    :
    ossimSensorModel(),
    theIntrackOffset     (0.0),
    theCrtrackOffset     (0.0),
-   theLineGsdCorr       (0.0),   
+   theLineGsdCorr       (0.0),
    theSampGsdCorr       (0.0),
    theRollOffset        (0.0),
    theYawOffset         (0.0),
@@ -197,7 +197,7 @@ ossimTileMapModel::ossimTileMapModel(const ossimKeywordlist& geom_kwl)
 }
 
 //*****************************************************************************
-//  COPY CONSTRUCTOR: 
+//  COPY CONSTRUCTOR:
 //*****************************************************************************
 ossimTileMapModel::ossimTileMapModel(const ossimTileMapModel& rhs)
    :
@@ -233,7 +233,7 @@ ossimTileMapModel::ossimTileMapModel(const ossimTileMapModel& rhs)
    theRollRotMat      (rhs.theRollRotMat)
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::ossimTileMapModel(rhs): entering..." << std::endl;
-   
+
    initAdjustableParameters();
 
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::ossimTileMapModel(rhs): returning..." << std::endl;
@@ -241,7 +241,7 @@ ossimTileMapModel::ossimTileMapModel(const ossimTileMapModel& rhs)
 
 //*****************************************************************************
 //  DESTRUCTOR: ~ossimTileMapModel()
-//  
+//
 //*****************************************************************************
 ossimTileMapModel::~ossimTileMapModel()
 {
@@ -254,12 +254,12 @@ ossimTileMapModel::~ossimTileMapModel()
 
 //*****************************************************************************
 //  METHOD: ossimTileMapModel::initFromHeader()
-//  
+//
 //*****************************************************************************
 void ossimTileMapModel::initFromHeader(const ossimFfL7& head)
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::initFromHeader: entering..." << std::endl;
-   
+
    //***
    // Initialize base-class data members:
    //***
@@ -278,7 +278,7 @@ void ossimTileMapModel::initFromHeader(const ossimFfL7& head)
    theWrsRowNumber     = head.theRowNumber;
    theRollOffset       = head.theOffNadirAngle;
    theMeanGSD          = head.theGsd;
-   
+
    //satellite orbit and accuracy
    ossimString satname(head.theSatName);
    if (satname.contains("7"))
@@ -297,9 +297,9 @@ void ossimTileMapModel::initFromHeader(const ossimFfL7& head)
       {
          ossimNotify(ossimNotifyLevel_WARN) << "WARNING ossimTileMapModel::initFromHeader: " << "Unknown satellite name : " << satname << std::endl;
       }
-   }   
-   
-   
+   }
+
+
    //***
    // Assign the meridianal angle. The Meridianal angle is
    // the angle between true north and the vehicles ground track. The
@@ -373,7 +373,7 @@ void ossimTileMapModel::initFromHeader(const ossimFfL7& head)
    //***
    initMapProjection();
 
-      
+
    theMapOffset = theMapProjection->forward(head.theUL_Corner);
    if (traceDebug())
    {
@@ -388,7 +388,7 @@ void ossimTileMapModel::initFromHeader(const ossimFfL7& head)
          << std::endl;
    }
 
-   //*** 
+   //***
    // initialize remaining data members:
    //***
    initAdjustableParameters();
@@ -399,9 +399,9 @@ void ossimTileMapModel::initFromHeader(const ossimFfL7& head)
 
 //*****************************************************************************
 //  METHOD: ossimTileMapModel::lineSampleHeightToWorld()
-//  
+//
 //  Performs the line/sample to groundpoint projection given an elevation.
-//  
+//
 //  5. Intersect imaging ray with elevation surface.
 //
 //*****************************************************************************
@@ -427,7 +427,7 @@ void ossimTileMapModel::lineSampleHeightToWorld(const ossimDpt& image_point,
       gpt.makeNan();
    }
   return;
-  
+
 
 }
 
@@ -449,17 +449,17 @@ void ossimTileMapModel::worldToLineSample(const ossimGpt& ground_point,
    y += 0.5; // and make y range from 0 - 1
 
    img_pt.samp = floor(x*pow(2.,static_cast<double>(qDepth))*256);
-   
+
    img_pt.line = floor(y*pow(2.,static_cast<double>(qDepth))*256);
 
    return;
 }
 
-   
-   
+
+
 //*****************************************************************************
 //  METHOD: ossimTileMapModel::imagingRay()
-//  
+//
 //  This model implements an affine transform with scaling to arrive at an
 //  ECF ray given an image point. This ray is intersected with a constant
 //  elevation surface to arrive at a ground point. The transform to arrive at a
@@ -491,14 +491,14 @@ void ossimTileMapModel::imagingRay(const ossimDpt& inImgPt,
       ossimNotify(ossimNotifyLevel_DEBUG) << "inImgPt = " << inImgPt << std::endl;
    }
 #endif
-   
+
    //***
    // Get ground point for given map image point:
    //***
    ossimDpt rot_img_pt(-inImgPt.line*theMapAzimSin+inImgPt.samp*theMapAzimCos,
                         inImgPt.line*theMapAzimCos+inImgPt.samp*theMapAzimSin);
-   ossimDpt map_point 
-      (theMapOffset.x + rot_img_pt.samp*(theGSD.samp+theSampGsdCorr), 
+   ossimDpt map_point
+      (theMapOffset.x + rot_img_pt.samp*(theGSD.samp+theSampGsdCorr),
        theMapOffset.y - rot_img_pt.line*(theGSD.line+theLineGsdCorr));
 
    ossimGpt inGndPt (theMapProjection->inverse(map_point));
@@ -528,7 +528,7 @@ void ossimTileMapModel::imagingRay(const ossimDpt& inImgPt,
       ossimNotify(ossimNotifyLevel_DEBUG) << "\t icInPt="<<icInPt<<endl;
    }
 #endif
-   
+
    //***
    // Establish an image map point at vehicle NADIR corresponding to imaging
    // line:
@@ -560,7 +560,7 @@ void ossimTileMapModel::imagingRay(const ossimDpt& inImgPt,
       map_point.x = theMapOffset.x+rotNdrMapPt.y*(theGSD.y+theLineGsdCorr);
    else
       map_point.x = theMapOffset.x-rotNdrMapPt.y*(theGSD.y+theLineGsdCorr);
-      
+
    ossimGpt vehiclePlhPos(theMapProjection->inverse(map_point));
    vehiclePlhPos.hgt = theOrbitAltitude;
 
@@ -571,7 +571,7 @@ void ossimTileMapModel::imagingRay(const ossimDpt& inImgPt,
       ossimNotify(ossimNotifyLevel_DEBUG) << "\t vehiclePlhPos="<<vehiclePlhPos<<endl;
    }
 #endif
-   
+
    //***
    // Establish an LSR space at the vehicle with X along the intrack direction:
    //***
@@ -642,9 +642,9 @@ void ossimTileMapModel::imagingRay(const ossimDpt& inImgPt,
 
 //*****************************************************************************
 //  METHOD: ossimTileMapModel::print()
-//  
+//
 //  Formatted dump of data members.
-//  
+//
 //*****************************************************************************
 std::ostream& ossimTileMapModel::print(std::ostream& os) const
 {
@@ -685,9 +685,9 @@ std::ostream& ossimTileMapModel::print(std::ostream& os) const
 
 //*****************************************************************************
 //  METHOD: ossimTileMapModel::saveState()
-//  
+//
 //  Saves the model state to the KWL. This KWL also serves as a geometry file.
-//  
+//
 //*****************************************************************************
 bool ossimTileMapModel::saveState(ossimKeywordlist& kwl,
                               const char* prefix) const
@@ -726,20 +726,20 @@ bool ossimTileMapModel::saveState(ossimKeywordlist& kwl,
 // //    kwl.add(prefix, YAW_OFFSET_KW,        theYawOffset, true);
 // //    kwl.add(prefix, YAW_RATE_KW,          theYawRate, true);
 // //    kwl.add(prefix, MAP_ROTATION_KW,      theMapRotation, true);
-   
+
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::saveState: returning..." << std::endl;
    return true;
 }
 
 //*****************************************************************************
 //  METHOD: ossimTileMapModel::loadState()
-//  
+//
 //  Restores the model's state from the KWL. This KWL also serves as a
 //  geometry file.
-//  
+//
 //*****************************************************************************
 bool ossimTileMapModel::loadState(const ossimKeywordlist& kwl,
-                                  const char* prefix) 
+                                  const char* prefix)
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::loadState: entering..." << std::endl;
 
@@ -758,7 +758,7 @@ bool ossimTileMapModel::loadState(const ossimKeywordlist& kwl,
    // Assure this keywordlist contains correct type info:
    //***
    value = kwl.find(prefix, ossimKeywordNames::TYPE_KW);
-   if (!value || (strcmp(value, TYPE_NAME(this)))) 
+   if (!value || (strcmp(value, TYPE_NAME(this))))
      {
        theErrorStatus = 1;
        return false;
@@ -771,17 +771,17 @@ bool ossimTileMapModel::loadState(const ossimKeywordlist& kwl,
      {
        initAdjustableParameters();
      }
-   
+
    //***
    // Pass on to the base-class for parsing first:
    //***
    success = ossimSensorModel::loadState(kwl, prefix);
-   if (!success) 
+   if (!success)
      {
        theErrorStatus++;
        return false;
      }
- 
+
 //    keyword = PROJECTION_TYPE_KW;
 //    value = kwl.find(prefix, keyword);
 //    if (!value)
@@ -791,7 +791,7 @@ bool ossimTileMapModel::loadState(const ossimKeywordlist& kwl,
 //      }
 
 //    theProjectionType = (ProjectionType) atoi(value);
- 
+
 //    keyword = MAP_ZONE_KW;
 //    value = kwl.find(prefix, keyword);
 //    if (!value)
@@ -800,7 +800,7 @@ bool ossimTileMapModel::loadState(const ossimKeywordlist& kwl,
 //        return false;
 //      }
 //    theMapZone = atoi(value);
- 
+
 //    keyword = MAP_OFFSET_X_KW;
 //    value = kwl.find(prefix, keyword);
 //    if (!value)
@@ -809,7 +809,7 @@ bool ossimTileMapModel::loadState(const ossimKeywordlist& kwl,
 //        return false;
 //      }
 //    theMapOffset.x = atof(value);
- 
+
 //    keyword = MAP_OFFSET_Y_KW;
 //    value = kwl.find(prefix, keyword);
 //    if (!value)
@@ -818,7 +818,7 @@ bool ossimTileMapModel::loadState(const ossimKeywordlist& kwl,
 //        return false;
 //      }
 //    theMapOffset.y = atof(value);
- 
+
 //    keyword = WRS_PATH_NUMBER_KW;
 //    value = kwl.find(prefix, keyword);
 //    if (!value)
@@ -836,7 +836,7 @@ bool ossimTileMapModel::loadState(const ossimKeywordlist& kwl,
 //        return false;
 //      }
 //    theWrsRowNumber = atoi(value);
- 
+
 //    keyword = ILLUM_AZIMUTH_KW;
 //    value = kwl.find(prefix, keyword);
 //    if (!value)
@@ -845,7 +845,7 @@ bool ossimTileMapModel::loadState(const ossimKeywordlist& kwl,
 //        return false;
 //      }
 //    theIllumAzimuth = atof(value);
- 
+
 //    keyword = ILLUM_ELEVATION_KW;
 //    value = kwl.find(prefix, keyword);
 //    if (!value)
@@ -854,7 +854,7 @@ bool ossimTileMapModel::loadState(const ossimKeywordlist& kwl,
 //        return false;
 //      }
 //    theIllumElevation = atof(value);
- 
+
 //    keyword = MERIDIANAL_ANGLE_KW;
 //    value = kwl.find(prefix, keyword);
 //    if (!value)
@@ -863,7 +863,7 @@ bool ossimTileMapModel::loadState(const ossimKeywordlist& kwl,
 //        return false;
 //      }
 //    theMeridianalAngle = atof(value);
- 
+
 //    keyword = ORBIT_ALTITUDE_KW;
 //    value = kwl.find(prefix, keyword);
 //    if (!value)
@@ -872,7 +872,7 @@ bool ossimTileMapModel::loadState(const ossimKeywordlist& kwl,
 //        return false;
 //      }
 //    theOrbitAltitude = atof(value);
-   
+
 //    keyword = ORBIT_INCLINATION_KW;
 //    value = kwl.find(prefix, keyword);
 //    if (!value)
@@ -881,7 +881,7 @@ bool ossimTileMapModel::loadState(const ossimKeywordlist& kwl,
 //        return false;
 //      }
 //    theOrbitInclination = atof(value);
-   
+
 //    keyword = MAP_AZIM_ANGLE_KW;
 //    value = kwl.find(prefix, keyword);
 //    if (!value)
@@ -890,7 +890,7 @@ bool ossimTileMapModel::loadState(const ossimKeywordlist& kwl,
 //        return false;
 //      }
 //    theMapAzimAngle = atof(value);
- 
+
 //    keyword = MAP_2Ic_ROT_ANGLE_KW;
 //    value = kwl.find(prefix, keyword);
 //    if (!value)
@@ -918,7 +918,7 @@ bool ossimTileMapModel::loadState(const ossimKeywordlist& kwl,
 // //       theIntrackOffset = ossimString(value).toDouble();
 // //    else
 // //     theIntrackOffset = 0.0;
-   
+
 // //    keyword = CRTRACK_OFFSET_KW;
 // //    value = kwl.find(prefix, keyword);
 // //    if(value)
@@ -939,21 +939,21 @@ bool ossimTileMapModel::loadState(const ossimKeywordlist& kwl,
 // //       theSampGsdCorr = ossimString(value).toDouble();
 // //    else
 // //       theSampGsdCorr = 0.0;
-   
+
 // //    keyword = ROLL_OFFSET_KW;
 // //    value = kwl.find(prefix, keyword);
 // //    if(value)
 // //       theRollOffset = ossimString(value).toDouble();
 // //    else
 // //       theRollOffset = 0.0;
-   
+
 // //    keyword = YAW_OFFSET_KW;
 // //    value = kwl.find(prefix, keyword);
 // //    if(value)
 // //       theYawOffset = ossimString(value).toDouble();
 // //    else
 // //      theYawOffset = 0.0;
-   
+
 // //    keyword = YAW_RATE_KW;
 // //    value = kwl.find(prefix, keyword);
 // //    if(value)
@@ -973,16 +973,16 @@ bool ossimTileMapModel::loadState(const ossimKeywordlist& kwl,
    //***
    initMapProjection();
    updateModel();
-   
+
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::loadState: returning..." << std::endl;
    return true;
 }
 
 //*****************************************************************************
 // STATIC METHOD: ossimTileMapModel::writeGeomTemplate
-//  
+//
 //  Writes a sample kwl to output stream.
-//  
+//
 //*****************************************************************************
 void ossimTileMapModel::writeGeomTemplate(ostream& os)
 {
@@ -995,7 +995,7 @@ void ossimTileMapModel::writeGeomTemplate(ostream& os)
       << ossimKeywordNames::TYPE_KW << ": " << "ossimTileMapModel" << endl;
 
 //    ossimSensorModel::writeGeomTemplate(os);
-   
+
 //    os << "//\n"
 //       << "// Derived-class ossimTileMapModel Keywords:\n"
 //       << "//\n"
@@ -1030,14 +1030,14 @@ void ossimTileMapModel::writeGeomTemplate(ostream& os)
 
 //*****************************************************************************
 // PROTECTED METHOD: ossimTileMapModel::initMapProjection()
-//  
+//
 //*****************************************************************************
 void ossimTileMapModel::initMapProjection()
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) <<  "DEBUG ossimTileMapModel::writeGeomTemplate: entering... " << std::endl;
 
-   theMapProjection = 0;   
-   //*** 
+   theMapProjection = 0;
+   //***
    // Instantiate the proper map projection:
    //***
    if ((theProjectionType == SOM_ORBIT) || (theProjectionType == SOM_MAP))
@@ -1046,7 +1046,7 @@ void ossimTileMapModel::initMapProjection()
          ossimSpaceObliqueMercatorProjection::SOM_TYPE_LANDSAT_7,
          (double)theWrsPathNumber);
    }
-   else 
+   else
    {
       ossimUtmProjection* utm   = new ossimUtmProjection(theMapZone);
       theMapProjection = utm;
@@ -1116,16 +1116,16 @@ void  ossimTileMapModel::updateModel()
 //    theRollRotMat = ossimMatrix3x3::create( 1.0, 0.0, 0.0,
 //                                            0.0, cos,-sin,
 //                                            0.0, sin, cos);
-   
-   
+
+
 }
 //*****************************************************************************
 // PRIVATE METHOD: ossimTileMapModel::initAdjustableParameters()
-//  
+//
 //  This method initializes the base class adjustable parameter and associated
 //  sigmas arrays with quantities specific to this model.
 //
-//  
+//
 //*****************************************************************************
 void ossimTileMapModel::initAdjustableParameters()
 {
@@ -1150,11 +1150,11 @@ void ossimTileMapModel::initAdjustableParameters()
 //    //***
 //    setParameterSigma(INTRACK_OFFSET, 500.0); //change for TileMap 5
 //    setParameterSigma(CRTRACK_OFFSET, 500.0); //change for TileMap 5
-//    setParameterSigma(LINE_GSD_CORR, 0.005);  
-//    setParameterSigma(SAMP_GSD_CORR, 0.005);  
-//    setParameterSigma(ROLL_OFFSET, 0.01);  
-//    setParameterSigma(YAW_OFFSET, 0.01);  
-//    setParameterSigma(YAW_RATE, 0.05);  
+//    setParameterSigma(LINE_GSD_CORR, 0.005);
+//    setParameterSigma(SAMP_GSD_CORR, 0.005);
+//    setParameterSigma(ROLL_OFFSET, 0.01);
+//    setParameterSigma(YAW_OFFSET, 0.01);
+//    setParameterSigma(YAW_RATE, 0.05);
 //    setParameterSigma(MAP_ROTATION, 0.1);
 //    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::initAdjustableParameters: returning..." << std::endl;
 }
@@ -1168,7 +1168,7 @@ ossimTileMapModel::setupOptimizer(const ossimString& init_file)
    theMapProjection = 0;
    theIntrackOffset = 0.0;
    theCrtrackOffset = 0.0;
-   theLineGsdCorr   = 0.0;   
+   theLineGsdCorr   = 0.0;
    theSampGsdCorr   = 0.0;
    theRollOffset    = 0.0;
    theYawOffset     = 0.0;
@@ -1178,21 +1178,21 @@ ossimTileMapModel::setupOptimizer(const ossimString& init_file)
    ossimRefPtr<ossimFfL7> ff_headerp;
    if (ossimString::downcase(init_file).contains("header.dat"))
    {
-      ossimRefPtr<ossimFfL5> h = new ossimFfL5(init_file); 
+      ossimRefPtr<ossimFfL5> h = new ossimFfL5(init_file);
       ff_headerp = h.get();
-      
+
       if (!ff_headerp->getErrorStatus())
       {
          double d = fabs(h->revb()->theUlEasting - h->revb()->theCenterEasting)/h->theGsd;
          h->theCenterImagePoint.x = static_cast<ossim_int32>(d); // d + 0.5 ???
-         
+
          d = fabs(h->revb()->theUlNorthing - h->revb()->theCenterNorthing)/h->theGsd;
          h->theCenterImagePoint.y = static_cast<ossim_int32>(d); // d + 0.5 ???
          initFromHeader(*ff_headerp);
-         
+
          theMapOffset.x = h->revb()->theUlEasting;
          theMapOffset.y = h->revb()->theUlNorthing;
-         
+
       }
       else
       {

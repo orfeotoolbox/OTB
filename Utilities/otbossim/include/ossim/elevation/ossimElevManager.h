@@ -380,6 +380,7 @@ protected:
     */
    static ossimElevManager* theInstance;
 
+   OpenThreads::ReadWriteMutex                       theElevSourceListMutex;
    std::vector<ossimRefPtr<ossimElevSource> >        theElevSourceList;
    std::vector<ossimRefPtr<ossimElevSourceFactory> > theElevSourceFactoryList;
 
@@ -394,7 +395,7 @@ protected:
    bool                theAutoLoadFlag;
    bool                theAutoSortFlag;
    ossimFilename       theDefaultElevationPath;
-   mutable OpenThreads::ReentrantMutex theMutex;
+   //mutable OpenThreads::ReentrantMutex theMutex;
    std::vector<ossimFilename>  TheElevationSearchPaths;
 TYPE_DATA
 };

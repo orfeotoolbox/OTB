@@ -1,16 +1,19 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 // 
-// Author: Garrett Potts (gpotts@imagelinks.com)
+// Author: Garrett Potts
+// 
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfCoverageSection.h 9967 2006-11-29 02:01:23Z gpotts $
+// $Id: ossimRpfCoverageSection.h 14241 2009-04-07 19:59:23Z dburken $
 #ifndef ossimRpfCoverageSection_HEADER
 #define ossimRpfCoverageSection_HEADER
-#include <iostream>
-using namespace std;
+
+#include <iosfwd>
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/support_data/ossimRpfConstants.h>
@@ -19,31 +22,44 @@ using namespace std;
 class ossimRpfCoverageSection
 {
 public:
-   friend ostream& operator <<(ostream &out,
-                               const ossimRpfCoverageSection &data);
+   friend std::ostream& operator <<(std::ostream &out,
+                                    const ossimRpfCoverageSection &data);
    
    ossimRpfCoverageSection();
    virtual ~ossimRpfCoverageSection(){}
-   ossim_int32 parseStream(istream &in, ossimByteOrder byteOrder);
-   virtual void print(ostream &out)const;
+
+   ossimErrorCode parseStream(std::istream &in, ossimByteOrder byteOrder);
+
+   /**
+    * @brief print method that outputs a key/value type format adding prefix
+    * to keys.
+    * @param out String to output to.
+    * @param prefix This will be prepended to key.
+    * e.g. Where prefix = "nitf." and key is "file_name" key becomes:
+    * "nitf.file_name:"
+    * @return output stream.
+    */
+   std::ostream& print(std::ostream& out,
+                       const std::string& prefix=std::string()) const;
+   
    void clearFields();
 
    bool isGeographicRectNull()const
-      {
-         return ((theUpperLeftLat  == OSSIM_RPF_ULONG_NULL) &&
-                 (theUpperLeftLon  == OSSIM_RPF_ULONG_NULL) &&
-                 (theLowerLeftLat  == OSSIM_RPF_ULONG_NULL) &&
-                 (theLowerLeftLon  == OSSIM_RPF_ULONG_NULL) &&
-                 (theLowerRightLat == OSSIM_RPF_ULONG_NULL) &&
-                 (theLowerRightLon == OSSIM_RPF_ULONG_NULL) &&
-                 (theUpperRightLat == OSSIM_RPF_ULONG_NULL) &&
-                 (theUpperRightLon == OSSIM_RPF_ULONG_NULL));
-      }
+   {
+      return ((theUpperLeftLat  == OSSIM_RPF_ULONG_NULL) &&
+              (theUpperLeftLon  == OSSIM_RPF_ULONG_NULL) &&
+              (theLowerLeftLat  == OSSIM_RPF_ULONG_NULL) &&
+              (theLowerLeftLon  == OSSIM_RPF_ULONG_NULL) &&
+              (theLowerRightLat == OSSIM_RPF_ULONG_NULL) &&
+              (theLowerRightLon == OSSIM_RPF_ULONG_NULL) &&
+              (theUpperRightLat == OSSIM_RPF_ULONG_NULL) &&
+              (theUpperRightLon == OSSIM_RPF_ULONG_NULL));
+   }
    bool isIntervalNull()const
-      {
-         return ((theVerticalInterval   == OSSIM_RPF_ULONG_NULL)&&
-                 (theHorizontalInterval == OSSIM_RPF_ULONG_NULL));
-      }
+   {
+      return ((theVerticalInterval   == OSSIM_RPF_ULONG_NULL)&&
+              (theHorizontalInterval == OSSIM_RPF_ULONG_NULL));
+   }
    double getUlLat()const{return theUpperLeftLat;}
    double getUlLon()const{return theUpperLeftLon;}
    double getLlLat()const{return theLowerLeftLat;}
@@ -88,9 +104,6 @@ private:
    double theLowerRightLat;
    double theLowerRightLon;
 
-   /*!
-    *
-    */
    double theVerticalResolution;
 
    double theHorizontalResolution;

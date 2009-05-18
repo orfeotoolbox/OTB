@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // License:  LGPL
 // 
@@ -11,14 +10,17 @@
 //               (DSI) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedDsi.cpp 13025 2008-06-13 17:06:30Z sbortman $
+// $Id: ossimDtedDsi.cpp 14248 2009-04-08 19:38:11Z dburken $
 
 #include <cstdlib>
 #include <iostream>
+#include <iomanip>
 #include <fstream>
+#include <string>
 
 #include <ossim/support_data/ossimDtedDsi.h>
-#include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimNotify.h>
+#include <ossim/base/ossimProperty.h>
 
 //**************************************************************************
 // CONSTRUCTOR
@@ -336,7 +338,20 @@ void ossimDtedDsi::parse(std::istream& in)
    theStopOffset = theStartOffset + DSI_LENGTH;
 }
 
-ossimString ossimDtedDsi::recoginitionSentinel() const
+ossimRefPtr<ossimProperty> ossimDtedDsi::getProperty(
+   const ossimString& name) const
+{
+   ossimRefPtr<ossimProperty> result = 0;
+   return result;
+}
+
+void ossimDtedDsi::getPropertyNames(
+   std::vector<ossimString>& propertyNames) const
+{
+   propertyNames.push_back(ossimString("dted_dsi_record"));
+}
+
+ossimString ossimDtedDsi::recognitionSentinel() const
 {
    return theRecSen;
 }
@@ -506,43 +521,55 @@ ossim_int32 ossimDtedDsi::stopOffset() const
 //**************************************************************************
 std::ostream& operator<<( std::ostream& os, const ossimDtedDsi& dsi)
 {
-   os << "\nDTED Header (DSI):"
-      << "\n-------------------------------"
-      << "\nRecoginition Sentinel:     " << dsi.theRecSen
-      << "\nSecurity Code:             " << dsi.theSecurityCode
-      << "\nProduct Level:             " << dsi.theProductLevel
-      << "\nEdition:                   " << dsi.theEdition
-      << "\nMatch/Merge Version:       " << dsi.theMatchMergeVersion
-      << "\nMaintenance Date:          " << dsi.theMaintenanceDate
-      << "\nMatch/Merge Date:          " << dsi.theMatchMergeDate
-      << "\nMaintenance Code:          " << dsi.theMaintenanceCode
-      << "\nProducer Code:             " << dsi.theProducerCode
-      << "\nProduct Stock Spec Number: " << dsi.theProductStockSpecNumber
-      << "\nProduct Spec Number:       " << dsi.theProductSpecNumber
-      << "\nVertical Datum:            " << dsi.theVerticalDatum
-      << "\nHorizontal Datum:          " << dsi.theHorizontalDatum
-      << "\nCompilation Date:          " << dsi.theCompilationDate
-      << "\nLat Origin:                " << dsi.theLatOrigin
-      << "\nLon Origin:                " << dsi.theLonOrigin
-      << "\nLat SW:                    " << dsi.theLatSW
-      << "\nLon SW:                    " << dsi.theLonSW
-      << "\nLat NW:                    " << dsi.theLatNW
-      << "\nLon NW:                    " << dsi.theLonNW
-      << "\nLat NE:                    " << dsi.theLatNE
-      << "\nLon NE:                    " << dsi.theLonNE
-      << "\nLat SE:                    " << dsi.theLatSE
-      << "\nLon SE:                    " << dsi.theLonSE
-      << "\nOrientation:               " << dsi.theOrientation
-      << "\nLat Interval:              " << dsi.theLatInterval
-      << "\nLon Interval:              " << dsi.theLonInterval
-      << "\nNumber of Lat Points:      " << dsi.theNumLatPoints
-      << "\nNumber of Lon Lines:       " << dsi.theNumLonLines
-      << "\nCell Indicator:            " << dsi.theCellIndicator
-      << "\nStart Offset:              " << dsi.theStartOffset
-      << "\nStop Offset:               " << dsi.theStopOffset
-      << std::endl;
+   std::string prefix;
+   return dsi.print(os, prefix);
+}
 
-   return os;
+std::ostream& ossimDtedDsi::print(std::ostream& out,
+                                  const std::string& prefix) const
+{
+   std::string pfx = prefix;
+   pfx += "dsi.";
+   
+   out << setiosflags(ios::left)
+       << pfx << setw(28) << "recognition_sentinel:" << theRecSen << "\n"
+       << pfx << setw(28) << "security_code:" << theSecurityCode << "\n"
+       << pfx << setw(28) << "product_level:" << theProductLevel << "\n"
+       << pfx << setw(28) << "edition:" << theEdition << "\n"
+       << pfx << setw(28) << "match_merge_version:" << theMatchMergeVersion
+       << "\n"
+       << pfx << setw(28) << "maintenance_date:" << theMaintenanceDate << "\n"
+       << pfx << setw(28) << "match_merge_date:" << theMatchMergeDate << "\n"
+       << pfx << setw(28) << "maintenance_code:" << theMaintenanceCode << "\n"
+       << pfx << setw(28) << "producer_code:" << theProducerCode << "\n"
+       << pfx << setw(28) << "product_stock_spec_number:"
+       << theProductStockSpecNumber
+       << "\n"
+       << pfx << setw(28) << "product_spec_number:"
+       << theProductSpecNumber << "\n"
+       << pfx << setw(28) << "vertical_datum:" << theVerticalDatum << "\n"
+       << pfx << setw(28) << "horizontal_datum:" << theHorizontalDatum << "\n"
+       << pfx << setw(28) << "compilation_date:" << theCompilationDate << "\n"
+       << pfx << setw(28) << "lat_origin:" << theLatOrigin << "\n"
+       << pfx << setw(28) << "lon_origin:" << theLonOrigin << "\n"
+       << pfx << setw(28) << "lat_sw:" << theLatSW << "\n"
+       << pfx << setw(28) << "lon_sw:" << theLonSW << "\n"
+       << pfx << setw(28) << "lat_nw:" << theLatNW << "\n"
+       << pfx << setw(28) << "lon_nw:" << theLonNW << "\n"
+       << pfx << setw(28) << "lat_ne:" << theLatNE << "\n"
+       << pfx << setw(28) << "lon_ne:" << theLonNE << "\n"
+       << pfx << setw(28) << "lat_se:" << theLatSE << "\n"
+       << pfx << setw(28) << "lon_se:" << theLonSE << "\n"
+       << pfx << setw(28) << "orientation:" << theOrientation << "\n"
+       << pfx << setw(28) << "lat_interval:" << theLatInterval << "\n"
+       << pfx << setw(28) << "lon_interval:" << theLonInterval << "\n"
+       << pfx << setw(28) << "number_of_lat_points:" << theNumLatPoints << "\n"
+       << pfx << setw(28) << "number_of_lon_lines:" << theNumLonLines << "\n"
+       << pfx << setw(28) << "cell_indicator:" << theCellIndicator << "\n"
+       << pfx << setw(28) << "start_offset:" << theStartOffset << "\n"
+       << pfx << setw(28) << "stop_offset:" << theStopOffset
+       << std::endl;
+   return out;
 }
 
 ossimDtedDsi::ossimDtedDsi(const ossimDtedDsi& source)

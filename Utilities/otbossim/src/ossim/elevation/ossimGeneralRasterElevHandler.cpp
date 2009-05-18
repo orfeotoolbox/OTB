@@ -13,6 +13,7 @@
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimGpt.h>
+#include <OpenThreads/ScopedLock>
 
 RTTI_DEF1(ossimGeneralRasterElevHandler, "ossimGeneralRasterElevHandler", ossimElevCellHandler);
 
@@ -65,6 +66,7 @@ ossimGeneralRasterElevHandler::~ossimGeneralRasterElevHandler()
 
 double ossimGeneralRasterElevHandler::getHeightAboveMSL(const ossimGpt& gpt)
 {
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theFileAccessMutex);
    if(!theInputStream.valid())
    {
       return ossim::nan();

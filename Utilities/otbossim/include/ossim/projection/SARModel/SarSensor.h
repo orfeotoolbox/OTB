@@ -35,8 +35,8 @@ public:
 	 * @param distance : Slant range of the image point
 	 * @param time :		Azimuth time of the image point
 	 * @param height :	Altitude of the world point
-	 * @retval lon :		Longitude of the world point 
-	 * @retval lat :		Latitude of the world point 
+	 * @retval lon :		Longitude of the world point
+	 * @retval lat :		Latitude of the world point
 	 *
 	 * @remark : the doppler frequency is set to zero in this implementation
 	 */

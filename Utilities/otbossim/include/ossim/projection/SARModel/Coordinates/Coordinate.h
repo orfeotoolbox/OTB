@@ -8,7 +8,7 @@
  * @version 1.0
  * @date 04-02-08
  */
- 
+
  class Coordinate
  {
  public:
@@ -28,24 +28,24 @@
 	 * @brief Copy constructor
 	 */
 	Coordinate(const Coordinate& rhs);
-	
+
 	/**
 	 * @brief Affectation operator
 	 */
 	Coordinate& operator=(const Coordinate& rhs);
-	
+
 	void set_coordinates(double x, double y, double z);
-	
+
 	double get_x()
 	{
 		return _x;
 	};
-	
+
 	double get_y()
 	{
 		return _y;
 	};
-	
+
 	double get_z()
 	{
 		return _z;
@@ -56,5 +56,5 @@
 	double _z;
  private:
  };
- 
+
  #endif

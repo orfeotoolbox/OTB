@@ -504,7 +504,7 @@ double Polygon<TValue>
       pt1=pt2;
       pt2 = it.Value();
       double accum=0.0;
-      for (int i=0; i<2; i++)
+      for (int i=0; i<2; ++i)
       {
         accum += (pt1[i]-pt2[i])*(pt1[i]-pt2[i]);
       }
@@ -514,7 +514,7 @@ double Polygon<TValue>
 
     //Adding the last segment (between first and last point)
     double accum=0.0;
-    for (int i=0; i<2; i++)
+    for (int i=0; i<2; ++i)
     {
       accum += (origin[i]-pt2[i])*(origin[i]-pt2[i]);
     }

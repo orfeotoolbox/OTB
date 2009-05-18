@@ -203,7 +203,7 @@ public:
 	{
 		return _pos_vect;
 	};
-    
+
 protected:
 	/**
 	 * @brief Orbital elements designator
@@ -277,7 +277,7 @@ protected:
 	 * @brief Data point position/velocity
 	 */
 	PositionVectorRecord _pos_vect[64];
-    
+
 private:
 };
 #endif

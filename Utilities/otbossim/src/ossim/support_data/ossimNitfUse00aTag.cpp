@@ -1,8 +1,8 @@
 //*******************************************************************
 //
-// LICENSE: LGPL
+// License:  LGPL
 //
-// see top level LICENSE.txt
+// See LICENSE.txt file in the top level directory for more details.
 // 
 // Author: Walt Bunch
 //
@@ -10,7 +10,7 @@
 // Exploitation Usability extension.
 // 
 //********************************************************************
-// $Id: ossimNitfUse00aTag.cpp 11423 2007-07-27 16:59:22Z dburken $
+// $Id: ossimNitfUse00aTag.cpp 14241 2009-04-07 19:59:23Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -444,28 +444,31 @@ void ossimNitfUse00aTag::setSunAz(const ossimString& sunAz)
    memcpy(theSunAz, sunAz.c_str(), std::min((size_t)SUN_AZ_SIZE, sunAz.length()));
 }
 
-std::ostream& ossimNitfUse00aTag::print(std::ostream& out) const
+std::ostream& ossimNitfUse00aTag::print(std::ostream& out,
+                                        const std::string& prefix) const
 {
+   std::string pfx = prefix;
+   pfx += getRegisterTagName();
+   pfx += ".";
+
    out << setiosflags(std::ios::left)
-       << "ossimNitfUse00aTag::print"
-       << std::setw(24) << "\nTag name:"     << getRegisterTagName()
-       << std::setw(24) << "\nTag length:"   << getSizeInBytes()
-       << std::setw(24) << "\nANGLETONORTH:" << theAngleToNorth
-       << std::setw(24) << "\nMEANGSD:"      << theMeanGsd
-       << std::setw(24) << "\nDYNAMICRANGE:" << theDynamicRange
-       << std::setw(24) << "\nOBLANG:"       << theOblAng
-       << std::setw(24) << "\nROLLANG:"      << theRollAng
-       << std::setw(24) << "\nNREF:"         << theNRef
-       << std::setw(24) << "\nREVNUM:"       << theRevNum
-       << std::setw(24) << "\nNSEG:"         << theNSeg
-       << std::setw(24) << "\nMAXLPSEG:"     << theMaxLpSeg
-       << std::setw(24) << "\nSUNEL:"        << theSunEl
-       << std::setw(24) << "\nSUNAZ:"        << theSunAz
-       << std::endl;
+       << pfx << std::setw(24) << "CETAG:" << getRegisterTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"   << getSizeInBytes() << "\n"
+       << pfx << std::setw(24) << "ANGLETONORTH:" << theAngleToNorth << "\n" 
+       << pfx << std::setw(24) << "MEANGSD:"      << theMeanGsd << "\n"
+       << pfx << std::setw(24) << "DYNAMICRANGE:" << theDynamicRange << "\n"
+       << pfx << std::setw(24) << "OBLANG:"       << theOblAng << "\n"
+       << pfx << std::setw(24) << "ROLLANG:"      << theRollAng << "\n"
+       << pfx << std::setw(24) << "NREF:"         << theNRef << "\n"
+       << pfx << std::setw(24) << "REVNUM:"       << theRevNum << "\n"
+       << pfx << std::setw(24) << "NSEG:"         << theNSeg << "\n"
+       << pfx << std::setw(24) << "MAXLPSEG:"     << theMaxLpSeg << "\n"
+       << pfx << std::setw(24) << "SUNEL:"        << theSunEl << "\n"
+       << pfx << std::setw(24) << "SUNAZ:"        << theSunAz << "\n";
 
-   return out;
+   return out; 
 }
-
+   
 void ossimNitfUse00aTag::setProperty(ossimRefPtr<ossimProperty> property)
 {
    ossimNitfRegisteredTag::setProperty(property);

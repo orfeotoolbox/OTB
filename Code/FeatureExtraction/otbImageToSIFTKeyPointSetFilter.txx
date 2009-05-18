@@ -339,11 +339,11 @@ ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
             {
               changed = false;
             }
-            lChangeSamplePoints++;
+            ++lChangeSamplePoints;
           }
           if (changed)
           {
-            m_DifferentSamplePoints++;
+            ++m_DifferentSamplePoints;
           }
 
           // add key point
@@ -381,12 +381,12 @@ ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
               while (lIterDescriptor != lDescriptors.end())
               {
                 data.SetElement(lIndDesc, *lIterDescriptor);
-                lIndDesc++;
-                lIterDescriptor++;
+                ++lIndDesc;
+                ++lIterDescriptor;
               }
               outputPointSet->SetPointData(m_ValidatedKeyPoints, data);
 
-              m_ValidatedKeyPoints++;
+              ++m_ValidatedKeyPoints;
             }
           }
         }
@@ -397,7 +397,7 @@ ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
       }
 
       ++lIterDoG;
-      lScale++;
+      ++lScale;
     }
   }
 }
@@ -528,7 +528,7 @@ ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
 
   if (!accepted)
   {
-    m_DiscardedKeyPoints++;
+    ++m_DiscardedKeyPoints;
   }
   if (det < 1e-10f)
   {

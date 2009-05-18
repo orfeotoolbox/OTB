@@ -237,7 +237,10 @@ ossimLandSatModel::ossimLandSatModel(const ossimLandSatModel& rhs)
 
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimLandSatModel::ossimLandSatModel(rhs): returning..." << std::endl;
 }
-
+ossimObject* ossimLandSatModel::dup()const
+{
+   return new ossimLandSatModel(*this);
+}
 //*****************************************************************************
 //  DESTRUCTOR: ~ossimLandSatModel()
 //  

@@ -6,7 +6,7 @@
 
     Licence: wxWidgets Licence
 
-    RCS-ID: $Id: node.h 9094 2006-06-13 19:12:40Z dburken $
+    RCS-ID: $Id: node.h 12629 2008-04-07 17:19:06Z dburken $
 */
 
 #ifndef NODE_H

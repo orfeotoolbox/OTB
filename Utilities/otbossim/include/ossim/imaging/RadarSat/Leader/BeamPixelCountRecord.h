@@ -67,7 +67,7 @@ protected:
 	 */
 	std::string  _pix_update;
     /**
-	 * @brief Count of image pixels in beams 
+	 * @brief Count of image pixels in beams
 	 */
 	int   _n_pix[4];
 private:

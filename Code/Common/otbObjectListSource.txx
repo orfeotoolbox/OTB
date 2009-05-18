@@ -127,7 +127,7 @@ ObjectListSource<TOutputList>
   OutputListPointer outputPtr;
 
   // Allocate the output memory
-  for (unsigned int i=0; i < this->GetNumberOfOutputs(); i++)
+  for (unsigned int i=0; i < this->GetNumberOfOutputs(); ++i)
   {
     outputPtr = this->GetOutput(i);
     outputPtr->Clear();

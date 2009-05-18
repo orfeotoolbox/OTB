@@ -12,14 +12,14 @@ ErsSarPlatformPositionData::~ErsSarPlatformPositionData()
 std::ostream& operator<<(std::ostream& os, const ErsSarPlatformPositionData& data)
 {
 	os<<"orbit_ele_desg:"<<data._orbit_ele_desg.c_str()<<std::endl;
-    
+
 	for(int i=0;i<6;i++)
 	{
 		os<<"orbit_ele["<<i<<"]:"<<data._orbit_ele[i]<<std::endl;
 	}
-    
+
 	os<<"ndata:"<<data._ndata<<std::endl;
-	
+
     os<<"year:"<<data._year<<std::endl;
 
     os<<"month:"<<data._month<<std::endl;
@@ -52,7 +52,7 @@ std::ostream& operator<<(std::ostream& os, const ErsSarPlatformPositionData& dat
 	{
 		os<<"pos_vect["<<i<<"]:"<<data._pos_vect[i]<<std::endl;
 	}
-   
+
 	return os;
 }
 
@@ -60,22 +60,22 @@ std::istream& operator>>(std::istream& is, ErsSarPlatformPositionData& data)
 {
 	char buf[1207];
 	buf[1206] = '\0';
-	
+
 	is.read(buf,32);
 	buf[32] = '\0';
 	data._orbit_ele_desg = buf;
-    
+
 	for(int i=0;i<6;i++)
 	{
 		is.read(buf,16);
 		buf[16] = '\0';
 		data._orbit_ele[i] = atof(buf);
 	}
-    
+
 	is.read(buf,4);
 	buf[4] = '\0';
 	data._ndata = atoi(buf);
-	
+
     is.read(buf,4);
 	buf[4] = '\0';
 	data._year = atoi(buf);
@@ -144,14 +144,14 @@ ErsSarPlatformPositionData::ErsSarPlatformPositionData(const ErsSarPlatformPosit
 	ErsSarRecord(rhs)
 {
 	_orbit_ele_desg = rhs._orbit_ele_desg;
-    
+
 	for(int i=0;i<6;i++)
 	{
 		_orbit_ele[i] = rhs._orbit_ele[i];
 	}
-    
+
 	_ndata = rhs._ndata;
-	
+
     _year = rhs._year;
 
     _month = rhs._month;
@@ -184,20 +184,20 @@ ErsSarPlatformPositionData::ErsSarPlatformPositionData(const ErsSarPlatformPosit
 	{
 		_pos_vect[i] = rhs._pos_vect[i];
 	}
-   
+
 }
 
 ErsSarPlatformPositionData& ErsSarPlatformPositionData::operator=(const ErsSarPlatformPositionData& rhs)
 {
 		_orbit_ele_desg = rhs._orbit_ele_desg;
-    
+
 	for(int i=0;i<6;i++)
 	{
 		_orbit_ele[i] = rhs._orbit_ele[i];
 	}
-    
+
 	_ndata = rhs._ndata;
-	
+
     _year = rhs._year;
 
     _month = rhs._month;
@@ -230,6 +230,6 @@ ErsSarPlatformPositionData& ErsSarPlatformPositionData::operator=(const ErsSarPl
 	{
 		_pos_vect[i] = rhs._pos_vect[i];
 	}
-   
+
 	return *this;
 }

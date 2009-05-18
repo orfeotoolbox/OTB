@@ -113,7 +113,7 @@ public:
 	{
 		return _yaw_bias;
 	};
-	
+
 
 protected:
 	/**

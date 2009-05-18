@@ -14,7 +14,7 @@
 // http://www.remotesensing.org/geotiff/spec/geotiff6.html#6.3.3.1
 // 
 //----------------------------------------------------------------------------
-//  $Id: ossimPcsCodeProjectionFactory.cpp 13819 2008-10-31 16:58:37Z dburken $
+//  $Id: ossimPcsCodeProjectionFactory.cpp 14071 2009-03-08 21:45:41Z dburken $
 
 #include <ossim/projection/ossimPcsCodeProjectionFactory.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -30,7 +30,7 @@ static const ossimTrace
 traceDebug(ossimString("ossimPcsCodeProjectionFactory:debug"));
 
 #if OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimPcsCodeProjectionFactory.cpp 13819 2008-10-31 16:58:37Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimPcsCodeProjectionFactory.cpp 14071 2009-03-08 21:45:41Z dburken $";
 #endif
 
 ossimPcsCodeProjectionFactory* ossimPcsCodeProjectionFactory::theInstance = 0;
@@ -357,7 +357,7 @@ ossim_uint16 ossimPcsCodeProjectionFactory::getPcsCodeFromProjection(
             pcsCode = 32300 + mapZone;
          }
       }
-      else if (datumCode.contains("NAS-"))
+      else if (datumCode.contains("NAS"))
       {
          if (hemisphere == "N") // Northern hemisphere.
          {
@@ -368,7 +368,7 @@ ossim_uint16 ossimPcsCodeProjectionFactory::getPcsCodeFromProjection(
             pcsCode = 32000 + mapZone;
          }
       }
-      else if (datumCode.contains("NAR-"))
+      else if (datumCode.contains("NAR"))
       {
          if (hemisphere == "N") // Northern hemisphere.
          {

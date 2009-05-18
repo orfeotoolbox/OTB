@@ -18,36 +18,36 @@ public:
 	 * @brief Constructor
 	 */
 	GalileanEphemeris();
-	
+
 	/**
 	  * @brief Destructor
 	  */
 	~GalileanEphemeris();
-	
+
 	/**
 	 * @brief Constructor with initialisations
 	 */
 	GalileanEphemeris(JSDDateTime date, double pos[3], double vitesse[3]);
-	
+
 	/**
 	 * @brief Copy constructor
 	 */
 	GalileanEphemeris(const GalileanEphemeris& rhs);
-	
+
 	GalileanEphemeris(GeographicEphemeris& rhs);
 	/**
 	 * @brief Affectation operator
 	 */
 	GalileanEphemeris& operator=(const GalileanEphemeris& rhs);
-	
+
 	/**
-	 * @brief This fonction converts the current ephemeris in the Geographic coordinates systèm
+	 * @brief This fonction converts the current ephemeris in the Geographic coordinates systï¿½m
 	 */
 	void ToGeographic(GeographicEphemeris* vGeo);
 	void ToGeographic(double greenwich,GeographicEphemeris* vGeo);
 
 	operator GeographicEphemeris();
-	
+
 	/**
 	 * @brief This function creates a copy of the current class
 	 */
