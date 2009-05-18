@@ -344,8 +344,8 @@ public:
         {
         const double v1 = m_TransferFunction(*minIt);
         const double v2 = m_TransferFunction(*maxIt);
-        m_TransferedMinimum.push_back(static_cast<ScalarPixelType>(std::min(v1,v2)));
-        m_TransferedMaximum.push_back(static_cast<ScalarPixelType>(std::max(v1,v2)));
+        m_TransferedMinimum.push_back(static_cast<ScalarType>(std::min(v1,v2)));
+        m_TransferedMaximum.push_back(static_cast<ScalarType>(std::max(v1,v2)));
         ++minIt;
         ++maxIt;
         }
