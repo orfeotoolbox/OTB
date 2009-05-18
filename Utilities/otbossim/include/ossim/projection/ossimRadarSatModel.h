@@ -72,7 +72,7 @@ private:
 	 */
 	int FindSRGRSetNumber(JSDDateTime date)  const;
 	TYPE_DATA
-	
+
 };
 
 #endif

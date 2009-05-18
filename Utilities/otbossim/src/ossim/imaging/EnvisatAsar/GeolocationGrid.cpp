@@ -10,19 +10,19 @@ GeolocationGrid::~GeolocationGrid()
 
 
 std::ostream& operator<<(std::ostream& os, const GeolocationGrid& data)
-{	
-	os<<"first_zero_doppler_time_day:"<<data._first_zero_doppler_time_day<<std::endl;    
-  
-	os<<"first_zero_doppler_time_sec:"<<data._first_zero_doppler_time_sec<<std::endl;    
+{
+	os<<"first_zero_doppler_time_day:"<<data._first_zero_doppler_time_day<<std::endl;
 
-	os<<"first_zero_doppler_time_microsec:"<<data._first_zero_doppler_time_microsec<<std::endl;    
+	os<<"first_zero_doppler_time_sec:"<<data._first_zero_doppler_time_sec<<std::endl;
 
-	os<<"attach_flag:"<<data._attach_flag<<std::endl;   
-  
-	os<<"line_num:"<<data._line_num<<std::endl;   
-  
-	os<<"num_lines:"<<data._num_lines<<std::endl;   
-  
+	os<<"first_zero_doppler_time_microsec:"<<data._first_zero_doppler_time_microsec<<std::endl;
+
+	os<<"attach_flag:"<<data._attach_flag<<std::endl;
+
+	os<<"line_num:"<<data._line_num<<std::endl;
+
+	os<<"num_lines:"<<data._num_lines<<std::endl;
+
 	os<<"sub_sat_track:"<<data._sub_sat_track<<std::endl;
 
 	for (int i = 0; i<11; i++) {
@@ -44,9 +44,9 @@ std::ostream& operator<<(std::ostream& os, const GeolocationGrid& data)
 	for (int i = 0; i<11; i++) {
 		os<<"longs["<<i<<"]:"<<data._longs[i]<<std::endl;
 	}
-  
-	os<<"last_zero_doppler_time:"<<data._last_zero_doppler_time.c_str()<<std::endl;    
-  
+
+	os<<"last_zero_doppler_time:"<<data._last_zero_doppler_time.c_str()<<std::endl;
+
 	os<<"last_line_tie_points:"<<data._last_line_tie_points.c_str()<<std::endl;
 
 	return os;
@@ -83,17 +83,17 @@ std::istream& operator>>(std::istream& is, GeolocationGrid& data)
 	buf8[8] = '\0';
 	char buf7[8];
 	buf7[7] = '\0';
-	char buf6[7]; 
-	buf6[6] = '\0'; 
+	char buf6[7];
+	buf6[6] = '\0';
 	char buf5[6];
-	buf5[5] = '\0'; 
-	char buf4[5]; 
-	buf4[4] = '\0'; 
-	char buf3[4]; 
-	buf3[3] = '\0'; 
+	buf5[5] = '\0';
+	char buf4[5];
+	buf4[4] = '\0';
+	char buf3[4];
+	buf3[3] = '\0';
 	char buf2[3];
 	buf2[2] = '\0';
-	char buf1[1]; 
+	char buf1[1];
 
 	is.read((char*)&(data._first_zero_doppler_time_day),4);
 	data.SwitchEndian(data._first_zero_doppler_time_day);
@@ -103,15 +103,15 @@ std::istream& operator>>(std::istream& is, GeolocationGrid& data)
 
 	is.read((char*)&(data._first_zero_doppler_time_microsec),4);
 	data.SwitchEndian(data._first_zero_doppler_time_microsec);
-  
+
 	is.read((char*)&(data._attach_flag),1);
-  
+
 	is.read((char*)&(data._line_num),4);
 	data.SwitchEndian(data._line_num);
-  
+
 	is.read((char*)&(data._num_lines),4);
 	data.SwitchEndian(data._num_lines);
-  
+
 	is.read((char*)&(data._sub_sat_track),4);
 	data.SwitchEndian(data._sub_sat_track);
 
@@ -119,17 +119,17 @@ std::istream& operator>>(std::istream& is, GeolocationGrid& data)
 		is.read((char*)&(data._samp_numbers[i]),4);
 		data.SwitchEndian(data._samp_numbers[i]);
 	}
-  
+
 	for (int i = 0; i<11; i++) {
 		is.read((char*)&(data._slant_range_times[i]),4);
 		data.SwitchEndian(data._slant_range_times[i]);
 	}
- 
+
 	for (int i = 0; i<11; i++) {
 		is.read((char*)&(data._angles[i]),4);
 		data.SwitchEndian(data._angles[i]);
 	}
- 
+
 	for (int i = 0; i<11; i++) {
 		is.read((char*)&(data._lats[i]),4);
 		data.SwitchEndian(data._lats[i]);
@@ -139,34 +139,34 @@ std::istream& operator>>(std::istream& is, GeolocationGrid& data)
 		is.read((char*)&(data._longs[i]),4);
 		data.SwitchEndian(data._longs[i]);
 	}
- 
-	is.read(buf32,22);  
-  
+
+	is.read(buf32,22);
+
 	is.read(buf12,12);
 	data._last_zero_doppler_time = buf12;
-  
+
 	is.read(buf220,220);
 	data._last_line_tie_points = buf220;
-  
-	is.read(buf32,22);  
-  
+
+	is.read(buf32,22);
+
 	return is;
 
 }
 
 GeolocationGrid::GeolocationGrid(const GeolocationGrid& rhs):
 	EnvisatAsarRecord(rhs),
-	_first_zero_doppler_time_day(rhs._first_zero_doppler_time_day),  
-	_first_zero_doppler_time_sec(rhs._first_zero_doppler_time_sec),  
-	_first_zero_doppler_time_microsec(rhs._first_zero_doppler_time_microsec),  
-	_attach_flag(rhs._attach_flag),  
-	_line_num(rhs._line_num),  
-	_num_lines(rhs._num_lines),  
-	_sub_sat_track(rhs._sub_sat_track),  
-	_last_zero_doppler_time(rhs._last_zero_doppler_time),  
+	_first_zero_doppler_time_day(rhs._first_zero_doppler_time_day),
+	_first_zero_doppler_time_sec(rhs._first_zero_doppler_time_sec),
+	_first_zero_doppler_time_microsec(rhs._first_zero_doppler_time_microsec),
+	_attach_flag(rhs._attach_flag),
+	_line_num(rhs._line_num),
+	_num_lines(rhs._num_lines),
+	_sub_sat_track(rhs._sub_sat_track),
+	_last_zero_doppler_time(rhs._last_zero_doppler_time),
 	_last_line_tie_points(rhs._last_line_tie_points)
 	{
-	
+
 	for (int i = 0; i<11; i++) {
 		_samp_numbers[i] = rhs._samp_numbers[i];
 		_slant_range_times[i] = rhs._slant_range_times[i];
@@ -174,22 +174,22 @@ GeolocationGrid::GeolocationGrid(const GeolocationGrid& rhs):
 		_lats[i] = rhs._lats[i];
 		_longs[i] = rhs._longs[i];
 	}
-	
-	
+
+
 	}
 
 
 GeolocationGrid& GeolocationGrid::operator=(const GeolocationGrid& rhs)
 {
-	_first_zero_doppler_time_day = rhs._first_zero_doppler_time_day;  
-	_first_zero_doppler_time_sec = rhs._first_zero_doppler_time_sec;  
-	_first_zero_doppler_time_microsec = rhs._first_zero_doppler_time_microsec;  
-	_attach_flag = rhs._attach_flag;  
-	_line_num = rhs._line_num;  
-	_num_lines = rhs._num_lines;  
-	_sub_sat_track = rhs._sub_sat_track;  
-	_last_zero_doppler_time = rhs._last_zero_doppler_time;  
-	_last_line_tie_points = rhs._last_line_tie_points;  
+	_first_zero_doppler_time_day = rhs._first_zero_doppler_time_day;
+	_first_zero_doppler_time_sec = rhs._first_zero_doppler_time_sec;
+	_first_zero_doppler_time_microsec = rhs._first_zero_doppler_time_microsec;
+	_attach_flag = rhs._attach_flag;
+	_line_num = rhs._line_num;
+	_num_lines = rhs._num_lines;
+	_sub_sat_track = rhs._sub_sat_track;
+	_last_zero_doppler_time = rhs._last_zero_doppler_time;
+	_last_line_tie_points = rhs._last_line_tie_points;
 
 	for (int i = 0; i<11; i++) {
 		_samp_numbers[i] = rhs._samp_numbers[i];

@@ -5,7 +5,7 @@
 #include <ossim/imaging/EnvisatAsar/EnvisatAsarRecord.h>
 /**
  * @ingroup dsdRecord
- * @brief This class is able to read the ASAR dsd record 
+ * @brief This class is able to read the ASAR dsd record
  * @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 23-11-07
@@ -76,84 +76,84 @@ public:
 	};
 
 
-	/**				
-	* @brief Data set Name	
-	*/				
-	std::string   get_ds_name()	
+	/**
+	* @brief Data set Name
+	*/
+	std::string   get_ds_name()
 	{
 		return _ds_name;
 	}
-	/**				
-	* @brief Data set Type	
-	*/				
-	std::string   get_ds_type()	
+	/**
+	* @brief Data set Type
+	*/
+	std::string   get_ds_type()
 	{
 		return _ds_type;
 	}
-	/**				
+	/**
 	* @brief Data set Filename
-	*/				
-	std::string   get_filename()	
+	*/
+	std::string   get_filename()
 	{
 		return _filename;
 	}
-	/**				
-	* @brief Data set Offset	
-	*/				
-	double   get_ds_offset()	
+	/**
+	* @brief Data set Offset
+	*/
+	double   get_ds_offset()
 	{
 		return _ds_offset;
 	}
-	/**				
-	* @brief Data set Size	
-	*/				
-	double   get_ds_size()	
+	/**
+	* @brief Data set Size
+	*/
+	double   get_ds_size()
 	{
 		return _ds_size;
 	}
-	/**				
-	* @brief Number of data set record	
-	*/				
-	int   get_num_dsr()	
+	/**
+	* @brief Number of data set record
+	*/
+	int   get_num_dsr()
 	{
 		return _num_dsr;
 	}
-	/**				
+	/**
 	* @brief Data set record size
-	*/				
-	int   get_dsr_size()	
+	*/
+	int   get_dsr_size()
 	{
 		return _dsr_size;
 	}
-	
-	/**				
-	* @brief Data set Name	
-	*/				
-	std::string   _ds_name;	
-	/**				
-	* @brief Data set Type	
-	*/				
-	std::string   _ds_type;	
-	/**				
+
+	/**
+	* @brief Data set Name
+	*/
+	std::string   _ds_name;
+	/**
+	* @brief Data set Type
+	*/
+	std::string   _ds_type;
+	/**
 	* @brief Data set Filename
-	*/				
-	std::string   _filename;	
-	/**				
-	* @brief Data set Offset	
-	*/				
-	double	_ds_offset;	
-	/**				
-	* @brief Data set Size	
-	*/				
-	double	_ds_size;	
-	/**				
-	* @brief Number of data set record	
-	*/				
-	int	_num_dsr;	
-	/**				
+	*/
+	std::string   _filename;
+	/**
+	* @brief Data set Offset
+	*/
+	double	_ds_offset;
+	/**
+	* @brief Data set Size
+	*/
+	double	_ds_size;
+	/**
+	* @brief Number of data set record
+	*/
+	int	_num_dsr;
+	/**
 	* @brief Data set record size
-	*/				
-	int	_dsr_size;	
+	*/
+	int	_dsr_size;
 
 private:
 

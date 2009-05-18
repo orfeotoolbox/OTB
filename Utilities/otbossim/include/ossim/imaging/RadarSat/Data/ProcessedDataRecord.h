@@ -81,7 +81,7 @@ public:
 	 * @brief Image data line number
 	 */
 	int get_line_num() {return _line_num;};
-    
+
     /**
 	 * @brief Image data record index
 	 */
@@ -226,13 +226,13 @@ public:
 	 * @brief Line heading, 10e-6 deg
 	 */
 	int get_heading() {return _heading;};
-	
+
 protected:
 	/**
 	 * @brief Image data line number
 	 */
 	int _line_num;
-    
+
     /**
 	 * @brief Image data record index
 	 */
@@ -293,7 +293,7 @@ protected:
 	 * @brief Slant range to mid-pixel, m
 	 */
 	int _sr_mid;
-    
+
     /**
 	 * @brief Slant range to last pixel, m
 	 */
@@ -302,7 +302,7 @@ protected:
 	 * @brief First pixel Doppler centroid, Hz
 	 */
 	int _fdc_first;
-    
+
     /**
 	 * @brief Mid pixel Doppler centroid, Hz
 	 */
@@ -379,7 +379,7 @@ protected:
 	 * @brief Line heading, 10e-6 deg
 	 */
 	int _heading;
-	
+
 private:
 	/**
 	 * @brief This function switches the LSB value and the MSB value of the parameter

@@ -30,7 +30,7 @@ class GeodesicCoordinate;
 	 * @brief Copy constructor
 	 */
 	RectangularCoordinate(const RectangularCoordinate& rhs);
-	
+
 	/**
 	 * @brief Affectation operator
 	 */
@@ -40,5 +40,5 @@ class GeodesicCoordinate;
  protected:
  private:
  };
- 
+
  #endif

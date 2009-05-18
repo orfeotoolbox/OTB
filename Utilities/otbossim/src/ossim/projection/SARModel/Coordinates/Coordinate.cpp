@@ -25,13 +25,13 @@ Coordinate::Coordinate(const Coordinate& rhs):
 	_z(rhs._z)
 {
 }
-	
+
 Coordinate& Coordinate::operator=(const Coordinate& rhs)
 {
 	_x = rhs._x;
 	_y = rhs._y;
 	_z = rhs._z;
-	
+
 	return *this;
 }
 

@@ -29,7 +29,7 @@
 	 * @brief Copy constructor
 	 */
 	GeodesicCoordinate(const GeodesicCoordinate& rhs);
-	
+
 	/**
 	 * @brief Affectation operator
 	 */
@@ -37,5 +37,5 @@
  protected:
  private:
  };
- 
+
  #endif

@@ -8,17 +8,17 @@
  * @version 1.0
  * @date 15-01-08
  */
- 
+
  class SensorParams
  {
 	public:
-	 
+
 	enum SightDirection
 	{
 		Left,
 		Right
 	};
-	
+
 	/**
 	 * @brief Constructor
 	 */
@@ -27,42 +27,42 @@
 	 * @brief Destructor
 	 */
 	~SensorParams();
-	
-	/** 
+
+	/**
 	 *@brief Copy constructor
 	 */
 	SensorParams(const SensorParams& rhs);
-	
+
 	/**
 	 * @brief Affectation operator
 	 */
 	SensorParams& operator=(const SensorParams& rhs);
-	
+
 	double get_prf()
 	{
 		return _prf;
 	};
-	
+
 	double get_sf()
 	{
 		return _sf;
 	};
-	
+
 	double get_rwl()
 	{
 		return _rwl;
 	};
-	
+
 	void set_prf(double prf)
 	{
 		_prf = prf;
 	};
-	
+
 	void set_sf(double sf)
 	{
 		_sf = sf;
 	};
-	
+
 	void set_rwl(double rwl)
 	{
 		_rwl = rwl;
@@ -77,7 +77,7 @@
 	{
 		_sightDirection = sight;
 	};
-	
+
 	virtual SensorParams* Clone()
 	{
 		return new SensorParams(*this);
@@ -148,12 +148,12 @@
 	 * @brief Nominal PRF, Hz
 	 */
 	double _prf;
-	
+
 	/**
 	 * @brief Sampling frequency
 	 */
 	double _sf;
-	
+
 	/**
 	 * @brief Radar wave length
 	 */
@@ -198,5 +198,5 @@
 
  private:
  };
- 
+
 #endif

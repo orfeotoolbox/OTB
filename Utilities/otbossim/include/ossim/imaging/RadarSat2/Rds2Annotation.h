@@ -55,7 +55,7 @@ public:
 	std::string get_lookDirection() {
 		return _lookDirection ;
 	}
-  
+
    /**
 	 * @brief Ellipsoid semi-major axis, km
 	 */
@@ -70,15 +70,15 @@ public:
 	{
 		return _ellip_min;
 	};
-	 
+
     /**
 	 * @brief Average terrain height, km
 	 */
     double   get_terrain_h()
 	{
 		return _terrain_h;
-	};    
-   
+	};
+
     /**
 	 * @brief Radar central frequency
 	 */
@@ -86,7 +86,7 @@ public:
 	{
 		return _central_freq;
 	};
-       
+
     /**
 	 * @brief Range sampling rate
 	 */
@@ -94,7 +94,7 @@ public:
 	{
 		return _fr;
 	};
-   	 
+
     /**
 	 * @brief Nominal PRF, Hz
 	 */
@@ -102,7 +102,7 @@ public:
 	{
 		return _fa;
 	};
-    
+
     /**
 	 * @brief Number of azimuth looks
 	 */
@@ -110,7 +110,7 @@ public:
 	{
 		return _n_azilok;
 	};
-    
+
 	/**
 	 * @brief Number of range looks
 	 */
@@ -118,7 +118,7 @@ public:
 	{
 		return _n_rnglok;
 	};
-    
+
 	/**
 	 * @brief Slant range near edge
 	 */
@@ -126,7 +126,7 @@ public:
 	{
 		return _slantRangeNearEdge;
 	};
-    
+
 	/**
 	 * @brief Zero Doppler Time First Line
 	 */
@@ -134,7 +134,7 @@ public:
 	{
 		return _zeroDopplerTimeFirstLine;
 	};
-	 
+
 
 	/**
 	 * @brief ProductType (SLC,SGF,SGX,SGC,SSG,SPG)
@@ -150,7 +150,7 @@ public:
 	{
 		return _ndata;
 	};
-	
+
 	/**
 	 * @brief State vector data point date, position, velocity
 	 */
@@ -357,12 +357,12 @@ protected:
 	* @brief Data point position/velocity
 	*/
 	std::vector<std::string> _eph_date;
-	std::vector<double> _posX; 
-	std::vector<double> _posY; 
-	std::vector<double> _posZ; 
-	std::vector<double> _velX; 
-	std::vector<double> _velY; 
-	std::vector<double> _velZ; 
+	std::vector<double> _posX;
+	std::vector<double> _posY;
+	std::vector<double> _posZ;
+	std::vector<double> _velX;
+	std::vector<double> _velY;
+	std::vector<double> _velZ;
 
 	/**
 	 * @brief Tie points longitudes

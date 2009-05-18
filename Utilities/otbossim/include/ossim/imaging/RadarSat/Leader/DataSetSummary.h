@@ -181,7 +181,7 @@ public:
 	{
 		return _ellip_j;
 	};
-    
+
     /**
 	 * @brief Average terrain height, km
 	 */
@@ -217,7 +217,7 @@ public:
 	{
 		return _scene_wid;
 	};
-   
+
     /**
 	 * @brief Number of SAR channels
 	 */
@@ -225,7 +225,7 @@ public:
 	{
 		return _nchn;
 	};
-    
+
     /**
 	 * @brief Mission identifier
 	 */
@@ -282,7 +282,7 @@ public:
 	{
 		return _incident_ang;
 	};
-    
+
     /**
 	 * @brief Radar wave length
 	 */
@@ -325,7 +325,7 @@ public:
 	{
 		return _chirp_ext_ind;
 	};
-    
+
     /**
 	 * @brief Range sampling rate
 	 */
@@ -410,8 +410,8 @@ public:
 	{
 		return _iq_ratio;
 	};
-    
-    
+
+
     /**
 	 * @brief Electronic boresight
 	 */
@@ -475,7 +475,7 @@ public:
 	{
 		return _sat_clkinc;
 	};
-    
+
     /**
 	 * @brief Processing facility identifier
 	 */
@@ -616,7 +616,7 @@ public:
 	{
 		return _alt_dopcen;
 	};
-    
+
     /**
 	 * @brief Cross track Doppler frequency terms
 	 */
@@ -645,7 +645,7 @@ public:
 	{
 		return _alt_rate;
 	};
-    
+
     /**
 	 * @brief Cross track Doppler rate term
 	 */
@@ -653,7 +653,7 @@ public:
 	{
 		return _crt_rate;
 	};
-    
+
     /**
 	 * @brief Line content indicator
 	 */
@@ -696,7 +696,7 @@ public:
 	{
 		return _rngcmp_desg;
 	};
-    
+
 protected:
 	/**
 	 * @brief Sequence number
@@ -758,7 +758,7 @@ protected:
 	 * @brief Ellipsoid J2-4 parameters
 	 */
     double   _ellip_j[3];
-    
+
     /**
 	 * @brief Average terrain height, km
 	 */
@@ -779,12 +779,12 @@ protected:
 	 * @brief Scene width, km
 	 */
     double   _scene_wid;
-    
+
     /**
 	 * @brief Number of SAR channels
 	 */
     double   _nchn;
-    
+
     /**
 	 * @brief Mission identifier
 	 */
@@ -817,7 +817,7 @@ protected:
 	 * @brief Incidence angle
 	 */
     double   _incident_ang;
-    
+
     /**
 	 * @brief Radar wave length
 	 */
@@ -842,7 +842,7 @@ protected:
 	 * @brief Chirp extraction index
 	 */
     int   _chirp_ext_ind;
-    
+
     /**
 	 * @brief Range sampling rate
 	 */
@@ -891,7 +891,7 @@ protected:
 	 * @brief I/Q channel ratio
 	 */
     double   _iq_ratio;
-    
+
     /**
 	 * @brief Electronic boresight
 	 */
@@ -928,7 +928,7 @@ protected:
 	 * @brief Satellite clock increment
 	 */
     int   _sat_clkinc;
-    
+
     /**
 	 * @brief Processing facility identifier
 	 */
@@ -1009,7 +1009,7 @@ protected:
 	 * @brief Along track Doppler frequency terms
 	 */
     double   _alt_dopcen[3];
-    
+
     /**
 	 * @brief Cross track Doppler frequency terms
 	 */
@@ -1026,12 +1026,12 @@ protected:
 	 * @brief Along track Doppler rate term
 	 */
     double   _alt_rate[3];
-    
+
     /**
 	 * @brief Cross track Doppler rate term
 	 */
     double   _crt_rate[3];
-    
+
     /**
 	 * @brief Line content indicator
 	 */
@@ -1056,7 +1056,7 @@ protected:
 	 * @brief Range compression designator
 	 */
     std::string   _rngcmp_desg;
-    
+
 private:
 
 };

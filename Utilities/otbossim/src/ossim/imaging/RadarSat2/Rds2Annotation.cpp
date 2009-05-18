@@ -17,7 +17,7 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 
 	// Rds2 date format is UTC (xs:dateTime) : yyyy-mm-ddThh:mm:ss(.s+)zzzz (where zzzz is the timeZone).
 
-	std::vector< ossimRefPtr<ossimXmlNode> > searchResult, secondSearchResult ; 
+	std::vector< ossimRefPtr<ossimXmlNode> > searchResult, secondSearchResult ;
 	ossimRefPtr<ossimXmlNode> foundNode;
 	ossimRefPtr<ossimXmlNode> foundSubNode ;
 	ossimString * xpathTest ;
@@ -45,7 +45,7 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 	foundNode = searchResult.at(0) ;
 	_orbitDirection = foundNode->getText() ;
 
-	//  Look direction 
+	//  Look direction
 	xpathTest = new ossimString("/product/sourceAttributes/radarParameters/antennaPointing") ;
 	searchResult.clear();
 	docXML.findNodes(*xpathTest, searchResult) ;
@@ -76,7 +76,7 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 	 if (searchResult.size() != 1 ) return false ;
 	 foundNode = searchResult.at(0) ;
 	 _central_freq = ( foundNode->getText() ).toDouble() ;
-    
+
 	 //  Range sampling rate
 	 xpathTest = new ossimString("/product/sourceAttributes/radarParameters/adcSamplingRate") ;
 	 searchResult.clear();
@@ -108,7 +108,7 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 	 if (searchResult.size() != 1 ) return false ;
 	 foundNode = searchResult.at(0) ;
 	 _fa = ( foundNode->getText() ).toDouble() ;
-    
+
 	 // Number of azimuth looks
 	 xpathTest = new ossimString("/product/imageGenerationParameters/sarProcessingInformation/numberOfAzimuthLooks") ;
 	 searchResult.clear();
@@ -116,7 +116,7 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 	 if (searchResult.size() != 1 ) return false ;
 	 foundNode = searchResult.at(0) ;
 	 _n_azilok = ( foundNode->getText() ).toDouble() ;
-	 
+
 	 // Number of range looks
 	 xpathTest = new ossimString("/product/imageGenerationParameters/sarProcessingInformation/numberOfRangeLooks") ;
 	 searchResult.clear();
@@ -126,7 +126,7 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 	 _n_rnglok = ( foundNode->getText() ).toDouble() ;
 
 	 // Average terrain height, m
-	 xpathTest = new ossimString("/product/imageAttributes/geographicInformation/referenceEllipsoidParameters/geodeticTerrainHeight") ; 
+	 xpathTest = new ossimString("/product/imageAttributes/geographicInformation/referenceEllipsoidParameters/geodeticTerrainHeight") ;
 	 searchResult.clear();
 	 docXML.findNodes(*xpathTest, searchResult) ;
 	 if (searchResult.size() != 1 ) return false ;
@@ -142,7 +142,7 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 	 _productType = foundNode->getText() ;
 
 	// number of lines
-	xpathTest = new ossimString("/product/imageAttributes/rasterAttributes/numberOfLines") ; 
+	xpathTest = new ossimString("/product/imageAttributes/rasterAttributes/numberOfLines") ;
 	searchResult.clear();
 	docXML.findNodes(*xpathTest, searchResult) ;
 	if (searchResult.size() != 1 ) return false ;
@@ -151,14 +151,14 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 
 	// Slant Range FOR EACH Ground Range Projection
 			// number of columns
-	xpathTest = new ossimString("/product/imageAttributes/rasterAttributes/numberOfSamplesPerLine") ; 
+	xpathTest = new ossimString("/product/imageAttributes/rasterAttributes/numberOfSamplesPerLine") ;
 	searchResult.clear();
 	docXML.findNodes(*xpathTest, searchResult) ;
 	if (searchResult.size() != 1 ) return false ;
 	foundNode = searchResult.at(0) ;
 	_nbCol = (foundNode->getText()).toDouble() ;
 			// mean pixel spacing
-	xpathTest = new ossimString("/product/imageAttributes/rasterAttributes/sampledPixelSpacing") ; 
+	xpathTest = new ossimString("/product/imageAttributes/rasterAttributes/sampledPixelSpacing") ;
 	searchResult.clear();
 	docXML.findNodes(*xpathTest, searchResult) ;
 	if (searchResult.size() != 1 ) return false ;
@@ -166,7 +166,7 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 	_pixel_spacing_mean = (foundNode->getText()).toDouble() ;
 
 			// update times
-	xpathTest = new ossimString("/product/imageGenerationParameters/slantRangeToGroundRange/zeroDopplerAzimuthTime") ; 
+	xpathTest = new ossimString("/product/imageGenerationParameters/slantRangeToGroundRange/zeroDopplerAzimuthTime") ;
 	searchResult.clear();
 	docXML.findNodes(*xpathTest, searchResult) ;
 	for ( int i=0 ; i<searchResult.size() ; i++) {
@@ -175,7 +175,7 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 	}
 
 			// reference points
-	xpathTest = new ossimString("/product/imageGenerationParameters/slantRangeToGroundRange/groundRangeOrigin") ; 
+	xpathTest = new ossimString("/product/imageGenerationParameters/slantRangeToGroundRange/groundRangeOrigin") ;
 	searchResult.clear();
 	docXML.findNodes(*xpathTest, searchResult) ;
 	for ( int i=0 ; i<searchResult.size() ; i++) {
@@ -183,31 +183,31 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 		_SrGr_R0.push_back(foundNode->getText().toDouble()) ;
 	}
 			// coefficients
-	xpathTest = new ossimString("/product/imageGenerationParameters/slantRangeToGroundRange/groundToSlantRangeCoefficients") ; 
+	xpathTest = new ossimString("/product/imageGenerationParameters/slantRangeToGroundRange/groundToSlantRangeCoefficients") ;
 	searchResult.clear();
 	docXML.findNodes(*xpathTest, searchResult) ;
 	std::string coefficients;
 	double coeff ;
-	int indexDeb, indexFin ; 
+	int indexDeb, indexFin ;
 	for ( int i=0 ; i<searchResult.size() ; i++) {
 		foundNode = searchResult.at(i) ;
 		coefficients = (foundNode->getText()) ; // list of coefficients ; separator : ' '
 		std::vector<double> coefficientVector;
 		indexDeb = 0 ;
 		indexFin = 0 ;
-		while (indexFin != std::string::npos) { 
-			indexFin = coefficients.find(' ', indexDeb) ; 
-			coeff = ossimString(coefficients.substr(indexDeb,indexFin-indexDeb)).toDouble() ; 
-			coefficientVector.push_back(coeff) ; 
+		while (indexFin != std::string::npos) {
+			indexFin = coefficients.find(' ', indexDeb) ;
+			coeff = ossimString(coefficients.substr(indexDeb,indexFin-indexDeb)).toDouble() ;
+			coefficientVector.push_back(coeff) ;
 			indexDeb = indexFin+1 ;
 		}
 		_SrGr_coeffs.push_back(coefficientVector) ;
 	}
-	
+
 	_ndata=0 ; // Number of state vector data points
-	
+
 	// Data point position/velocity
-	xpathTest = new ossimString("/product/sourceAttributes/orbitAndAttitude/orbitInformation/stateVector") ; 
+	xpathTest = new ossimString("/product/sourceAttributes/orbitAndAttitude/orbitInformation/stateVector") ;
 	searchResult.clear();
 	docXML.findNodes(*xpathTest, searchResult) ;
 
@@ -219,16 +219,16 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 	ossimString *xpathVelY = new ossimString("yVelocity") ;
 	ossimString *xpathVelZ = new ossimString("zVelocity") ;
 	_eph_date.clear();
-	_posX.clear(); 
-	_posY.clear(); 
-	_posZ.clear(); 
-	_velX.clear(); 
-	_velY.clear(); 
-	_velZ.clear(); 
+	_posX.clear();
+	_posY.clear();
+	_posZ.clear();
+	_velX.clear();
+	_velY.clear();
+	_velZ.clear();
 
 	 for (int i=0 ; i<searchResult.size() ; i++) {
 		foundNode = searchResult.at(i) ;
-		
+
 		_ndata++;
 		secondSearchResult.clear();
 		foundSubNode =foundNode->findFirstNode(*xpathTime);
@@ -259,7 +259,7 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 		if (foundSubNode==0) return false;
 		_velZ.push_back((foundSubNode->getText()).toDouble());
 	 }
-    
+
 	  // Tie points longitudes
 	 xpathTest = new ossimString("/product/imageAttributes/geographicInformation/geolocationGrid/imageTiePoint/geodeticCoordinate/longitude") ;
 	 searchResult.clear();
@@ -295,7 +295,7 @@ bool Rds2Annotation::Parse(ossimXmlDocument docXML) {
 		foundNode = searchResult.at(i) ;
 		_cornersCol.push_back( (foundNode->getText()).toDouble() ) ;
 	 }
-    
+
 	 // Tie points lines
 	 xpathTest = new ossimString("/product/imageAttributes/geographicInformation/geolocationGrid/imageTiePoint/imageCoordinate/line") ;
 	 searchResult.clear();

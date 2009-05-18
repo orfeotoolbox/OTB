@@ -23,7 +23,7 @@ public:
 	 */
 	~ErsSarLeaderFactory();
 
-	
+
 protected:
 
 

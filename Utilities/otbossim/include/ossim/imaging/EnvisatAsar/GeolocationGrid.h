@@ -5,7 +5,7 @@
 #include <ossim/imaging/EnvisatAsar/EnvisatAsarRecord.h>
 /**
  * @ingroup GeolocationGridRecord
- * @brief This class is able to read the ASAR GeolocationGrid record 
+ * @brief This class is able to read the ASAR GeolocationGrid record
  * @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 23-11-07
@@ -75,104 +75,104 @@ public:
 		os<<*this;
 	};
 
-	/**				
+	/**
 	* @brief first_zero_doppler_time day
-	*/				
-	int  get_first_zero_doppler_time_day()	
-	{						
-		return _first_zero_doppler_time_day;		
-	}; 
-	/**				
+	*/
+	int  get_first_zero_doppler_time_day()
+	{
+		return _first_zero_doppler_time_day;
+	};
+	/**
 	* @brief first_zero_doppler_time second
-	*/				
-	unsigned int  get_first_zero_doppler_time_sec()	
-	{						
-		return _first_zero_doppler_time_sec;		
-	}; 
-	/**				
-	* @brief first_zero_doppler_time micro sec	
-	*/				
-	unsigned int  get_first_zero_doppler_time_microsec()	
-	{						
-		return _first_zero_doppler_time_microsec;		
-	}; 
-	/**				
-	* @brief attach_flag	
-	*/				
-	bool   get_attach_flag()	
-	{						
-		return _attach_flag;		
-	}; 
-	/**				
-	* @brief line_num	
-	*/				
-	unsigned int   get_line_num()	
-	{						
-		return _line_num;		
-	}; 
-	/**				
-	* @brief num_lines	
-	*/				
-	unsigned int   get_num_lines()	
-	{						
-		return _num_lines;		
-	}; 
-	/**				
-	* @brief sub_sat_track	
-	*/				
-	float   get_sub_sat_track()	
-	{						
-		return _sub_sat_track;		
-	}; 
-	/**				
-	* @brief samp_numbvers	
-	*/				
-	unsigned int *  get_samp_numbers()	
-	{						
-		return _samp_numbers;		
+	*/
+	unsigned int  get_first_zero_doppler_time_sec()
+	{
+		return _first_zero_doppler_time_sec;
 	};
-	/**				
-	* @brief slant_range_times	
-	*/				
-	float *  get_slant_range_times()	
-	{						
-		return _slant_range_times;		
+	/**
+	* @brief first_zero_doppler_time micro sec
+	*/
+	unsigned int  get_first_zero_doppler_time_microsec()
+	{
+		return _first_zero_doppler_time_microsec;
 	};
-	/**				
-	* @brief angles	
-	*/				
-	float *  get_angles()	
-	{						
-		return _angles;		
+	/**
+	* @brief attach_flag
+	*/
+	bool   get_attach_flag()
+	{
+		return _attach_flag;
 	};
-	/**				
-	* @brief lats	
-	*/				
-	int *  get_lats()	
-	{						
-		return _lats;		
+	/**
+	* @brief line_num
+	*/
+	unsigned int   get_line_num()
+	{
+		return _line_num;
 	};
-	/**				
-	* @brief longs	
-	*/				
-	int *  get_longs()	
-	{						
-		return _longs;		
+	/**
+	* @brief num_lines
+	*/
+	unsigned int   get_num_lines()
+	{
+		return _num_lines;
 	};
-	/**				
-	* @brief last_zero_doppler_time	
-	*/				
-	std::string   get_last_zero_doppler_time()	
-	{						
-		return _last_zero_doppler_time;		
-	}; 
-	/**				
-	* @brief last_line_tie_points	
-	*/				
-	std::string   get_last_line_tie_points()	
-	{						
-		return _last_line_tie_points;		
-	}; 
+	/**
+	* @brief sub_sat_track
+	*/
+	float   get_sub_sat_track()
+	{
+		return _sub_sat_track;
+	};
+	/**
+	* @brief samp_numbvers
+	*/
+	unsigned int *  get_samp_numbers()
+	{
+		return _samp_numbers;
+	};
+	/**
+	* @brief slant_range_times
+	*/
+	float *  get_slant_range_times()
+	{
+		return _slant_range_times;
+	};
+	/**
+	* @brief angles
+	*/
+	float *  get_angles()
+	{
+		return _angles;
+	};
+	/**
+	* @brief lats
+	*/
+	int *  get_lats()
+	{
+		return _lats;
+	};
+	/**
+	* @brief longs
+	*/
+	int *  get_longs()
+	{
+		return _longs;
+	};
+	/**
+	* @brief last_zero_doppler_time
+	*/
+	std::string   get_last_zero_doppler_time()
+	{
+		return _last_zero_doppler_time;
+	};
+	/**
+	* @brief last_line_tie_points
+	*/
+	std::string   get_last_line_tie_points()
+	{
+		return _last_line_tie_points;
+	};
 
 
 	/**
@@ -231,7 +231,7 @@ public:
 	* @brief last_line_tie_points
 	*/
 	std::string   _last_line_tie_points;
-	
+
 
 private:
 

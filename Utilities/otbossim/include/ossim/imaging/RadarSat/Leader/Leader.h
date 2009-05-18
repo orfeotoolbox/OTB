@@ -77,7 +77,7 @@ public:
 	FileDescriptor * get_FileDescriptor();
 protected:
 	std::map<int, RadarSatRecord*> _records;
-	
+
 	static const int RadiometricDataID;
 	static const int RadiometricCompensationDataID;
 	static const int AttitudeDataID;

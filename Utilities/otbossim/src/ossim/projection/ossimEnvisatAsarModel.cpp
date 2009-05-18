@@ -31,18 +31,18 @@ double ossimEnvisatAsarModel::getSlantRangeFromGeoreferenced(double col) const
 
 	double GR, GR0, relativeGroundRange, slantRange, slantrangetime;
 
-	if (_n_srgr==0) return(-1) ; 
+	if (_n_srgr==0) return(-1) ;
 
 	std::vector<double> coefset = FindSRGRSetNumber((_refPoint->get_ephemeris())->get_date()) ;
 
-	GR = _sensor->get_col_direction() * (col)* _pixel_spacing ; 
+	GR = _sensor->get_col_direction() * (col)* _pixel_spacing ;
 	GR0 = coefset[0];
 	relativeGroundRange = GR-GR0;
-	slantRange = coefset[1] 
-							+ coefset[2]*relativeGroundRange 
+	slantRange = coefset[1]
+							+ coefset[2]*relativeGroundRange
 							+ coefset[3]*pow(relativeGroundRange,2)
-							+ coefset[4]*pow(relativeGroundRange,3) 
-							+ coefset[5]*pow(relativeGroundRange,4);	
+							+ coefset[4]*pow(relativeGroundRange,3)
+							+ coefset[5]*pow(relativeGroundRange,4);
 
 	slantrangetime = 2.0*slantRange / (CLUM);
 	return  slantRange ;
@@ -59,7 +59,7 @@ bool ossimEnvisatAsarModel::InitSensorParams(const ossimKeywordlist &kwl, const 
 	// product type : Slant Range or Ground Range
 	_isProductGeoreferenced = atoi(kwl.find(prefix,"is_groundrange"));
 	double fa;
-	if (!_isProductGeoreferenced) 
+	if (!_isProductGeoreferenced)
 	{
 		const char* fa_str = kwl.find(prefix,"prf");
 		fa = atof(fa_str);
@@ -70,7 +70,7 @@ bool ossimEnvisatAsarModel::InitSensorParams(const ossimKeywordlist &kwl, const 
 		fa = 1.0/atof(fa_str);
 	}
 
-	// TODO : vérifier que ceci est ok pour les produits IMP
+	// TODO : vï¿½rifier que ceci est ok pour les produits IMP
 	const char* time_dir_pix = "INCREASE";
 	const char* time_dir_lin = "INCREASE";
 
@@ -98,7 +98,7 @@ bool ossimEnvisatAsarModel::InitSensorParams(const ossimKeywordlist &kwl, const 
 	{
 		_sensor->set_lin_direction(-1);
 	}
-	
+
 	_sensor->set_prf(fa);
 	_sensor->set_sf(fr);
 	_sensor->set_rwl(wave_length);
@@ -113,11 +113,11 @@ bool ossimEnvisatAsarModel::InitPlatformPosition(const ossimKeywordlist &kwl, co
 	unsigned long val_ulong1;
 	unsigned long val_ulong2;
 	CivilDateTime ref_civil_date;
-	
+
 	Ephemeris** ephemeris = new Ephemeris*[neph];
 
 	for (int i=1;i<=neph;i++)
-	{	
+	{
 		double pos[3];
 		double vel[3];
 		char name[64];
@@ -164,7 +164,7 @@ bool ossimEnvisatAsarModel::InitPlatformPosition(const ossimKeywordlist &kwl, co
 	_platformPosition = new PlatformPosition(ephemeris,neph);
 
 	/*
-	 * Liberation de la memoire utilisée par la liste des ephemerides
+	 * Liberation de la memoire utilisï¿½e par la liste des ephemerides
 	 * ->Le constructeur effectue une copie des ephemerides
 	 */
 	for (int i=0;i<neph;i++)
@@ -176,7 +176,7 @@ bool ossimEnvisatAsarModel::InitPlatformPosition(const ossimKeywordlist &kwl, co
 	return true;
 }
 
-	
+
 
 bool ossimEnvisatAsarModel::InitRefPoint(const ossimKeywordlist &kwl, const char *prefix)
 {
@@ -191,9 +191,9 @@ bool ossimEnvisatAsarModel::InitRefPoint(const ossimKeywordlist &kwl, const char
 	double sc_lin = atof(kwl.find(prefix,"line_num")) - 1.0;
 	_refPoint->set_pix_line(sc_lin);
 
-	// Reference Point distance	
-	double c = 2.99792458e+8; 
-	double distance = atof(kwl.find(prefix,"slant_range_time")) * (c/2.0) * 1.0e-9;	
+	// Reference Point distance
+	double c = 2.99792458e+8;
+	double distance = atof(kwl.find(prefix,"slant_range_time")) * (c/2.0) * 1.0e-9;
 	_refPoint->set_distance(distance);
 
 
@@ -208,7 +208,7 @@ bool ossimEnvisatAsarModel::InitRefPoint(const ossimKeywordlist &kwl, const char
 	if(_platformPosition != NULL)
 	{
 		Ephemeris * ephemeris = _platformPosition->Interpolate(jsd_date_ref);
-		if (ephemeris == NULL) return false ; 
+		if (ephemeris == NULL) return false ;
 		_refPoint->set_ephemeris(ephemeris);
 		delete ephemeris;
 	}
@@ -223,52 +223,52 @@ bool ossimEnvisatAsarModel::InitRefPoint(const ossimKeywordlist &kwl, const char
 	theImageClipRect    = ossimDrect(0, 0, theImageSize.x-1, theImageSize.y-1);
 
 	// Ground Control Points extracted from the model : corner points
-	std::list<ossimGpt> groundGcpCoordinates ; 
+	std::list<ossimGpt> groundGcpCoordinates ;
 	std::list<ossimDpt> imageGcpCoordinates ;
 	double h = atof(kwl.find("avg_scene_height"));
 
 	// first line first pix
 	double line = atof(kwl.find("UL_line")) - 1;
-	double col  = atof(kwl.find("UL_col"))  - 1;	
+	double col  = atof(kwl.find("UL_col"))  - 1;
 	double lon  = atof(kwl.find("UL_lon")) * 1e-6;
 	double lat  = atof(kwl.find("UL_lat")) * 1e-6;
 	if (lon > 180.0) lon -= 360.0;
 	ossimDpt imageGCP1(col,line);
 	ossimGpt groundGCP1(lat, lon, h);
-	groundGcpCoordinates.push_back(groundGCP1) ; 
+	groundGcpCoordinates.push_back(groundGCP1) ;
 	imageGcpCoordinates.push_back(imageGCP1) ;
 	// first line last pix
 	line = atof(kwl.find("UR_line")) - 1;
-	col  = atof(kwl.find("UR_col"))  - 1;	
+	col  = atof(kwl.find("UR_col"))  - 1;
 	lon  = atof(kwl.find("UR_lon")) * 1e-6;
 	lat  = atof(kwl.find("UR_lat")) * 1e-6;
 	if (lon > 180.0) lon -= 360.0;
 	ossimDpt imageGCP2(col,line);
 	ossimGpt groundGCP2(lat, lon, h);
-	groundGcpCoordinates.push_back(groundGCP2) ; 
+	groundGcpCoordinates.push_back(groundGCP2) ;
 	imageGcpCoordinates.push_back(imageGCP2) ;
 	// last line last pix
 	line = atof(kwl.find("LR_line")) - 1;
-	col  = atof(kwl.find("LR_col"))  - 1;	
+	col  = atof(kwl.find("LR_col"))  - 1;
 	lon  = atof(kwl.find("LR_lon")) * 1e-6;
 	lat  = atof(kwl.find("LR_lat")) * 1e-6;
 	if (lon > 180.0) lon -= 360.0;
 	ossimDpt imageGCP3(col,line);
 	ossimGpt groundGCP3(lat, lon, h);
-	groundGcpCoordinates.push_back(groundGCP3) ; 
+	groundGcpCoordinates.push_back(groundGCP3) ;
 	imageGcpCoordinates.push_back(imageGCP3) ;
 	// last line first pix
 	line = atof(kwl.find("LL_line")) - 1;
-	col  = atof(kwl.find("LL_col"))  - 1;	
+	col  = atof(kwl.find("LL_col"))  - 1;
 	lon  = atof(kwl.find("LL_lon")) * 1e-6;
 	lat  = atof(kwl.find("LL_lat")) * 1e-6;
 	if (lon > 180.0) lon -= 360.0;
 	ossimDpt imageGCP4(col,line);
 	ossimGpt groundGCP4(lat, lon, h);
-	groundGcpCoordinates.push_back(groundGCP4) ; 
+	groundGcpCoordinates.push_back(groundGCP4) ;
 	imageGcpCoordinates.push_back(imageGCP4) ;
 
-	// Default optimization 
+	// Default optimization
 	optimizeModel(groundGcpCoordinates, imageGcpCoordinates) ;
 
 	return true;
@@ -287,7 +287,7 @@ bool ossimEnvisatAsarModel::InitSRGR(const ossimKeywordlist &kwl, const char *pr
 
 	char name[64];
 	for (int i=0;i<_n_srgr;i++)
-	{	
+	{
 		// SRGR update time
 		sprintf(name,"srgr_update_day%i",i);
 		long day_ref = (long)atof(kwl.find(prefix,name));
@@ -335,14 +335,14 @@ std::vector<double> ossimEnvisatAsarModel::FindSRGRSetNumber(JSDDateTime date) c
 	std::vector<double> delays;
 	double delay;
 	for (int i=0;i<_n_srgr;i++)
-	{	
+	{
 		JSDDateTime datetmp(_srgr_update.at(i));
 		delay = date.get_second()+date.get_decimal() - (datetmp.get_second() + datetmp.get_decimal());
-		delays.push_back( fabs(delay) );   
+		delays.push_back( fabs(delay) );
 	}
-	
-	int setNumber = 0 ; 
-	double min_delay = delays[0] ; 
+
+	int setNumber = 0 ;
+	double min_delay = delays[0] ;
 	for (int i=1;i<_n_srgr;i++)
 	{
 		if (delays[i]<min_delay) {

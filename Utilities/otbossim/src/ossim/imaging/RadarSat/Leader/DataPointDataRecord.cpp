@@ -32,11 +32,11 @@ std::istream& operator>>(std::istream& is, DataPointDataRecord& data)
 {
 	char buf[15];
 	buf[14] = '\0';
-	
+
 	is.read(buf,4);
 	buf[4] = '\0';
 	data._gmt_day = atoi(buf);
-    
+
 	is.read(buf,8);
 	buf[8] = '\0';
 	data._gmt_sec = atoi(buf);

@@ -28,17 +28,17 @@ public:
 
    ossimTileMapTileSource(const ossimKeywordlist& kwl,
                            const char* prefix=0);
-   
+
    virtual ~ossimTileMapTileSource();
 
    virtual ossimString getShortName() const;
-   
+
    virtual ossimString getLongName() const;
 
    virtual ossimString  className() const;
 
    virtual bool open();
-   
+
    virtual double getNullPixelValue(ossim_uint32 band=0)const;
 
    virtual double getMinPixelValue(ossim_uint32 band=0)const;
@@ -51,11 +51,11 @@ public:
    ossimString getSatelliteName()const;
 
    ossimFilename getBandFilename(ossim_uint32 idx)const;
-   
+
    bool isPan()const;
    bool isVir()const;
    bool isTm()const;
-   
+
   /*!
     *  Populates the keyword list with image geometry information.  This
     *  method is used to relay projection/model information to users.
@@ -74,17 +74,17 @@ public:
     * @return Returns property matching "name".
     */
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
-   
+
    /**
     * @brief Gets a list of property names available.
     * @param propertyNames The list to push back names to.
     */
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
-   
+
 private:
 
    void openHeader(const ossimFilename& file);
-   
+
    ossimFfL7* theFfHdr;
 
    TYPE_DATA

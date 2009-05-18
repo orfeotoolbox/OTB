@@ -88,7 +88,7 @@ public:
 	{
 		return _rec_seq;
 	};
-    
+
     /**
 	 * @brief Input media
 	 */
@@ -293,14 +293,14 @@ public:
 		return _sych_marker;
 	};
     /**
-	 * @brief Range reference function source 
+	 * @brief Range reference function source
 	 */
 	std::string   get_rng_ref_src()
 	{
 		return _rng_ref_src;
 	};
     /**
-	 * @brief Range reference amplitude coefficients 
+	 * @brief Range reference amplitude coefficients
 	 */
 	double*   get_rng_amp_coef()
 	{
@@ -349,7 +349,7 @@ public:
 		return _rep_agc_attn;
 	};
     /**
-	 * @brief Gain correction factor (dB) 
+	 * @brief Gain correction factor (dB)
 	 */
 	double   get_gn_corctn_fctr()
 	{
@@ -363,7 +363,7 @@ public:
 		return _rep_energy_gn;
 	};
     /**
-	 * @brief Orbit data source  
+	 * @brief Orbit data source
 	 */
 	std::string   get_orb_data_src()
 	{
@@ -426,7 +426,7 @@ public:
 		return _n_pix_updates;
 	};
 	/**
-	 * @brief Beam pixel counts  
+	 * @brief Beam pixel counts
 	 */
 	BeamPixelCountRecord* get_pix_count()
 	{
@@ -559,7 +559,7 @@ public:
 		return _dopamb_conf;
 	};
     /**
-	 * @brief Ephemeris orbit data 
+	 * @brief Ephemeris orbit data
 	 */
 	double*   get_eph_orb_data()
 	{
@@ -755,17 +755,17 @@ public:
 	{
 		return _state_time_inc;
 	};
-   
+
 protected:
 	/**
 	 * @brief Record sequence number
 	 */
 	int   _rec_seq;
-    
+
     /**
 	 * @brief Input media
 	 */
-	std::string   _inp_media; 
+	std::string   _inp_media;
     /**
 	 * @brief Number of tape input ids
 	 */
@@ -857,7 +857,7 @@ protected:
     /**
 	 * @brief Frames rejected due to master channel error
 	 */
-	int   _rej_mchn_err; 
+	int   _rej_mchn_err;
     /**
 	 * @brief Frames rejected due to virtual channel error
 	 */
@@ -879,11 +879,11 @@ protected:
 	 */
 	std::string   _sych_marker;
     /**
-	 * @brief Range reference function source 
+	 * @brief Range reference function source
 	 */
 	std::string   _rng_ref_src;
     /**
-	 * @brief Range reference amplitude coefficients 
+	 * @brief Range reference amplitude coefficients
 	 */
 	double   _rng_amp_coef[4];
     /**
@@ -911,7 +911,7 @@ protected:
 	 */
 	double   _rep_agc_attn;
     /**
-	 * @brief Gain correction factor (dB) 
+	 * @brief Gain correction factor (dB)
 	 */
 	double   _gn_corctn_fctr;
     /**
@@ -919,7 +919,7 @@ protected:
 	 */
 	double   _rep_energy_gn;
     /**
-	 * @brief Orbit data source  
+	 * @brief Orbit data source
 	 */
 	std::string   _orb_data_src;
     /**
@@ -955,7 +955,7 @@ protected:
 	 */
 	int   _n_pix_updates;
 	/**
-	 * @brief Beam pixel counts  
+	 * @brief Beam pixel counts
 	 */
 	BeamPixelCountRecord _pix_count[20];
     /**
@@ -1031,7 +1031,7 @@ protected:
 	 */
 	double   _dopamb_conf;
     /**
-	 * @brief Ephemeris orbit data 
+	 * @brief Ephemeris orbit data
 	 */
 	double   _eph_orb_data[7];
     /**
@@ -1143,7 +1143,7 @@ protected:
 	 * @brief Time increment between state vectors
 	 */
 	double   _state_time_inc;
-    
+
 private:
 };
 #endif

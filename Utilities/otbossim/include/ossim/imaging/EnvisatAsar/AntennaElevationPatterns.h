@@ -5,7 +5,7 @@
 #include <ossim/imaging/EnvisatAsar/EnvisatAsarRecord.h>
 /**
  * @ingroup AntennaElevationPatternsRecord
- * @brief This class is able to read the ASAR AntennaElevationPatterns record 
+ * @brief This class is able to read the ASAR AntennaElevationPatterns record
  * @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 23-11-07
@@ -76,34 +76,34 @@ public:
 	};
 
 
-	/**				
-	* @brief zero_doppler_time	
-	*/				
-	std::string   get_zero_doppler_time()	
-	{						
-		return _zero_doppler_time;		
-	}; 
-	/**				
-	* @brief attach_flag	
-	*/				
-	bool   get_attach_flag()	
-	{						
-		return _attach_flag;		
-	}; 
-	/**				
-	* @brief swath	
-	*/				
-	std::string		get_swath()	
-	{						
-		return _swath;		
-	}; 
-	/**				
-	* @brief Elevation Pattern	
-	*/				
-	float *		get_elevation_pattern()	
-	{						
-		return _elevation_pattern;		
-	}; 
+	/**
+	* @brief zero_doppler_time
+	*/
+	std::string   get_zero_doppler_time()
+	{
+		return _zero_doppler_time;
+	};
+	/**
+	* @brief attach_flag
+	*/
+	bool   get_attach_flag()
+	{
+		return _attach_flag;
+	};
+	/**
+	* @brief swath
+	*/
+	std::string		get_swath()
+	{
+		return _swath;
+	};
+	/**
+	* @brief Elevation Pattern
+	*/
+	float *		get_elevation_pattern()
+	{
+		return _elevation_pattern;
+	};
 
 
 	/**

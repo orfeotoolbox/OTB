@@ -12,9 +12,9 @@ ProcessingParameters::~ProcessingParameters()
 std::ostream& operator<<(std::ostream& os, const ProcessingParameters& data)
 {
 	os<<"rec_seq:"<<data._rec_seq<<std::endl;
-	
+
 	os<<"inp_media:"<<data._inp_media.c_str()<<std::endl;
- 
+
 	os<<"n_tape_id:"<<data._n_tape_id<<std::endl;
 
 	for (int i=0;i<10;i++)
@@ -119,9 +119,9 @@ std::ostream& operator<<(std::ostream& os, const ProcessingParameters& data)
 	os<<"beam_edge_rqd:"<<data._beam_edge_rqd.c_str()<<std::endl;
 
 	os<<"beam_edge_conf:"<<data._beam_edge_conf<<std::endl;
- 
+
 	os<<"pix_overlap:"<<data._pix_overlap<<std::endl;
- 
+
 	os<<"n_beams:"<<data._n_beams<<std::endl;
 
 	for (int i=0;i<4;i++)
@@ -137,7 +137,7 @@ std::ostream& operator<<(std::ostream& os, const ProcessingParameters& data)
 	}
 
 	os<<"pwin_start:"<<data._pwin_start<<std::endl;
- 
+
 	os<<"pwin_end:"<<data._pwin_end<<std::endl;
 
 	os<<"recd_type:"<<data._recd_type.c_str()<<std::endl;
@@ -150,15 +150,15 @@ std::ostream& operator<<(std::ostream& os, const ProcessingParameters& data)
 	{
 		os<<"temp["<<i<<"]:"<<data._temp[i]<<std::endl;
 	}
-	
+
 	os<<"n_image_pix:"<<data._n_image_pix<<std::endl;
 
 	os<<"prc_zero_pix:"<<data._prc_zero_pix<<std::endl;
- 
+
 	os<<"prc_satur_pix:"<<data._prc_satur_pix<<std::endl;
 
 	os<<"img_hist_mean:"<<data._img_hist_mean<<std::endl;
- 
+
 	for (int i=0;i<3;i++)
 	{
 		os<<"img_cumu_dist["<<i<<"]:"<<data._img_cumu_dist[i]<<std::endl;
@@ -253,18 +253,18 @@ std::istream& operator>>(std::istream& is, ProcessingParameters& data)
 {
 	char buf[2407];
 	buf[2406] = '\0';
-	
+
 	is.read(buf,4);
 	buf[4] = '\0';
 	data._rec_seq = atoi(buf);
 
 	is.read(buf,4);
 	buf[4] = '\0';
-	
+
 	is.read(buf,3);
 	buf[3] = '\0';
 	data._inp_media = buf;
- 
+
 	is.read(buf,4);
 	buf[4] = '\0';
 	data._n_tape_id = atoi(buf);
@@ -455,11 +455,11 @@ std::istream& operator>>(std::istream& is, ProcessingParameters& data)
 	is.read(buf,16);
 	buf[16] = '\0';
 	data._beam_edge_conf = atof(buf);
- 
+
 	is.read(buf,4);
 	buf[4] = '\0';
 	data._pix_overlap = atoi(buf);
- 
+
 	is.read(buf,4);
 	buf[4] = '\0';
 	data._n_beams = atoi(buf);
@@ -481,7 +481,7 @@ std::istream& operator>>(std::istream& is, ProcessingParameters& data)
 	is.read(buf,16);
 	buf[16] = '\0';
 	data._pwin_start = atof(buf);
- 
+
 	is.read(buf,16);
 	buf[16] = '\0';
 	data._pwin_end = atof(buf);
@@ -502,7 +502,7 @@ std::istream& operator>>(std::istream& is, ProcessingParameters& data)
 	{
 		is>>data._temp[i];
 	}
-	
+
 	is.read(buf,8);
 	buf[8] = '\0';
 	data._n_image_pix = atoi(buf);
@@ -510,7 +510,7 @@ std::istream& operator>>(std::istream& is, ProcessingParameters& data)
 	is.read(buf,16);
 	buf[16] = '\0';
 	data._prc_zero_pix = atof(buf);
- 
+
 	is.read(buf,16);
 	buf[16] = '\0';
 	data._prc_satur_pix = atof(buf);
@@ -518,7 +518,7 @@ std::istream& operator>>(std::istream& is, ProcessingParameters& data)
 	is.read(buf,16);
 	buf[16] = '\0';
 	data._img_hist_mean = atof(buf);
- 
+
 	for (int i=0;i<3;i++)
 	{
 		is.read(buf,16);
@@ -694,7 +694,7 @@ ProcessingParameters& ProcessingParameters::operator=(const ProcessingParameters
 	std::string   _spare1
 
 	std::string  _inp_media
- 
+
 	int   _n_tape_id
 
 	std::string   _tape_id
@@ -780,9 +780,9 @@ ProcessingParameters& ProcessingParameters::operator=(const ProcessingParameters
 	std::string    _beam_edge_rqd
 
 	double   _beam_edge_conf
- 
+
 	int   _pix_overlap
- 
+
 	int   _n_beams
 
 	BeamInformationRecord* _beam_info
@@ -792,7 +792,7 @@ ProcessingParameters& ProcessingParameters::operator=(const ProcessingParameters
 	BeamPixelCountRecord* _pix_count
 
 	double   _pwin_start
- 
+
 	double   _pwin_end
 
 	std::string   _recd_type
@@ -806,11 +806,11 @@ ProcessingParameters& ProcessingParameters::operator=(const ProcessingParameters
 	int   _n_image_pix
 
 	double   _prc_zero_pix
- 
+
 	double   _prc_satur_pix
 
 	double   _img_hist_mean
- 
+
 	double*   _img_cumu_dist
 
 	double   _pre_img_gn

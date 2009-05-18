@@ -26,11 +26,11 @@ std::istream& operator>>(std::istream& is, AttitudeData& data)
 {
 	char buf[6503];
 	buf[6502] = '\0';
-	
+
 	is.read(buf,4);
 	buf[4] = '\0';
 	data._npoint = atoi(buf);
-   
+
 	for (int i=0;i<20;i++)
 	{
 		is>>data._att_vect[i];

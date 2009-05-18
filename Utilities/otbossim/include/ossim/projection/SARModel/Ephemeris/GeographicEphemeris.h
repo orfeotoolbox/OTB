@@ -22,7 +22,7 @@ public:
 	  * @brief Destructor
 	  */
 	~GeographicEphemeris();
-	
+
 	/**
 	 * @brief Constructor with initialisations
 	 */
@@ -31,20 +31,20 @@ public:
 	 * @brief Copy constructor
 	 */
 	GeographicEphemeris(const GeographicEphemeris& rhs);
-	
+
 	GeographicEphemeris(GalileanEphemeris& rhs);
 	/**
 	 * @brief Affectation operator
 	 */
 	GeographicEphemeris& operator=(const GeographicEphemeris& rhs);
-	
+
 	/**
 	 * @brief This fonction converts the current ephemeris in the Galilean coordinates system
 	 */
 	void ToGalilean(GalileanEphemeris* vGal);
-	
+
 	operator GalileanEphemeris();
-	
+
 	/**
 	 * @brief This function creates a copy of the current class
 	 */

@@ -64,7 +64,7 @@ private:
 	virtual bool InitSRGR(const ossimKeywordlist &kwl, const char *prefix);
 
 	TYPE_DATA
-	
+
 };
 
 #endif

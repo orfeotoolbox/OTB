@@ -46,8 +46,8 @@ public:
 	 */
 	friend std::istream& operator>>(std::istream& is, DataHistogramRecord& data);
 
-    
-    
+
+
 	/**
 	 * @brief Histogram descriptor
 	 */
@@ -77,7 +77,7 @@ public:
 		return _nbin;
 	};
     /**
-	 * @brief Total number of lines 
+	 * @brief Total number of lines
 	 */
 	int   get_ns_lin()
 	{
@@ -140,14 +140,14 @@ public:
 		return _mean_smp;
 	};
     /**
-	 * @brief Sample standard deviation 
+	 * @brief Sample standard deviation
 	 */
 	double   get_std_smp()
 	{
 		return _std_smp;
 	};
     /**
-	 * @brief Sample value increment 
+	 * @brief Sample value increment
 	 */
 	double   get_smp_inc()
 	{
@@ -197,8 +197,8 @@ public:
 		return _hist;
 	};
 protected:
-    
-    
+
+
 	/**
 	 * @brief Histogram descriptor
 	 */
@@ -216,7 +216,7 @@ protected:
 	 */
 	int   _nbin;
     /**
-	 * @brief Total number of lines 
+	 * @brief Total number of lines
 	 */
 	int   _ns_lin;
     /**
@@ -252,11 +252,11 @@ protected:
 	 */
 	double   _mean_smp;
     /**
-	 * @brief Sample standard deviation 
+	 * @brief Sample standard deviation
 	 */
 	double   _std_smp;
     /**
-	 * @brief Sample value increment 
+	 * @brief Sample value increment
 	 */
 	double   _smp_inc;
     /**

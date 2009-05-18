@@ -54,7 +54,7 @@ ossimErsSarTileSource::ossimErsSarTileSource():
 	_ErsSarleader(NULL)
 {
 }
-	
+
 ossimErsSarTileSource::~ossimErsSarTileSource()
 {
 	if (_ErsSardata != NULL)
@@ -76,12 +76,12 @@ ossimString ossimErsSarTileSource::getShortName()const
 {
 	return ossimString("ErsSar Image Handler");
 }
-   
+
 bool ossimErsSarTileSource::saveState(ossimKeywordlist& kwl, const char* prefix)const
 {
 	return false;
 }
-   
+
 bool ossimErsSarTileSource::loadState(const ossimKeywordlist& kwl,  const char* prefix)
 {
 	return false;
@@ -102,7 +102,7 @@ bool ossimErsSarTileSource::open()
 	ossimFilename tempFilename = theImageFile;
 
 	/*
-	 * Creation of the class allowing to store Data file metadata 
+	 * Creation of the class allowing to store Data file metadata
 	 */
 	if (_ErsSardata != NULL)
 	{
@@ -143,7 +143,7 @@ bool ossimErsSarTileSource::open()
 		{
 			record->Read(dataFile);
 			/*
-			 * ErsSar DAT file verificationTest whether 
+			 * ErsSar DAT file verificationTest whether
 			 */
 			std::string capteur = (((ErsSarImageOptionsFileDescriptor*)record)->get_file_name()).substr(0,3);
 			if ( capteur == "ERS")
@@ -151,7 +151,7 @@ bool ossimErsSarTileSource::open()
 				/*
 				 * We are in a ErsSar Data file tree, we read the remaining of the Data file
 				 */
-				
+
 				dataFile>>*_ErsSardata;
 				_ErsSardata->InsertRecord(header.get_rec_seq(), record);
 				dataFile.close();
@@ -163,7 +163,7 @@ bool ossimErsSarTileSource::open()
 				}
 				/*
 				 * Leader file path contruction from the DAT file path
-				 */ 
+				 */
 				std::string leader_file = theImageFile;
 				string::size_type loc = leader_file.find( "DAT_01", 0 );
 				if( loc != string::npos ) leader_file.replace(loc, 6, "LEA_01" ); // upper case test
@@ -189,7 +189,7 @@ bool ossimErsSarTileSource::open()
 						<< "Begin reading Leader file" << std::endl;
 					}
 					/*
-					 * Leader file data reading 
+					 * Leader file data reading
 					 */
 					ifstream leaderFile (leaderFilePath, ios::in|ios::binary);
 					leaderFile>>*_ErsSarleader;
@@ -199,7 +199,7 @@ bool ossimErsSarTileSource::open()
 						ossimNotify(ossimNotifyLevel_DEBUG)
 						<< "End reading Leader file" << std::endl;
 					}
-				}		
+				}
 			}
 			else
 			{
@@ -255,14 +255,14 @@ bool ossimErsSarTileSource::getImageGeometry(ossimKeywordlist& kwl,const char* p
 	if(datasetSummary != NULL)
 	{
 		kwl.add(prefix, "inp_sctim",(datasetSummary->get_inp_sctim()).c_str(),true);
-		kwl.add(prefix, "ellip_maj", datasetSummary->get_ellip_maj(),true); 
-		kwl.add(prefix, "ellip_min", datasetSummary->get_ellip_min(),true); 
-		kwl.add(prefix, "sc_lin", datasetSummary->get_sc_lin(),true); 
-		kwl.add(prefix, "sc_pix", datasetSummary->get_sc_pix(),true); 
-		kwl.add(prefix, "wave_length", datasetSummary->get_wave_length(),true); 
-		kwl.add(prefix, "fr", datasetSummary->get_fr(),true); 
-		kwl.add(prefix, "fa", datasetSummary->get_fa(),true); 
-		kwl.add(prefix, "time_dir_pix", (datasetSummary->get_time_dir_pix()).c_str(),true);  
+		kwl.add(prefix, "ellip_maj", datasetSummary->get_ellip_maj(),true);
+		kwl.add(prefix, "ellip_min", datasetSummary->get_ellip_min(),true);
+		kwl.add(prefix, "sc_lin", datasetSummary->get_sc_lin(),true);
+		kwl.add(prefix, "sc_pix", datasetSummary->get_sc_pix(),true);
+		kwl.add(prefix, "wave_length", datasetSummary->get_wave_length(),true);
+		kwl.add(prefix, "fr", datasetSummary->get_fr(),true);
+		kwl.add(prefix, "fa", datasetSummary->get_fa(),true);
+		kwl.add(prefix, "time_dir_pix", (datasetSummary->get_time_dir_pix()).c_str(),true);
 		kwl.add(prefix, "time_dir_lin", (datasetSummary->get_time_dir_lin()).c_str(),true);
 		kwl.add(prefix, "line_spacing", datasetSummary->get_line_spacing(),true);
 		kwl.add(prefix, "pix_spacing", datasetSummary->get_pix_spacing(),true);
@@ -322,7 +322,7 @@ bool ossimErsSarTileSource::getImageGeometry(ossimKeywordlist& kwl,const char* p
 			kwl.add(prefix, name,(platformposition->get_pos_vect()[i]).get_vel()[1],true);
 			sprintf(name,"eph%i_velZ",i);
 			kwl.add(prefix, name,(platformposition->get_pos_vect()[i]).get_vel()[2],true);
-		}		
+		}
 	}
 	else
 	{

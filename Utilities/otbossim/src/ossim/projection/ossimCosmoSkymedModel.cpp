@@ -28,15 +28,15 @@ ossimCosmoSkymedModel::~ossimCosmoSkymedModel()
 double ossimCosmoSkymedModel::getSlantRangeFromGeoreferenced(double col) const
 {
 	// in the case of Georeferenced images, _refPoint->get_distance() contains the ground range
-	double relativeGroundRange = _refPoint->get_distance() + _sensor->get_col_direction() * (col-_refPoint->get_pix_col())* _pixel_spacing ; 
+	double relativeGroundRange = _refPoint->get_distance() + _sensor->get_col_direction() * (col-_refPoint->get_pix_col())* _pixel_spacing ;
 
-	double slantRange = _SrGr_coeffs[0] 
-							+ _SrGr_coeffs[1]*(relativeGroundRange-_SrGr_R0) 
+	double slantRange = _SrGr_coeffs[0]
+							+ _SrGr_coeffs[1]*(relativeGroundRange-_SrGr_R0)
 							+ _SrGr_coeffs[2]*(pow(relativeGroundRange,2)-_SrGr_R0)
 							+ _SrGr_coeffs[3]*(pow(relativeGroundRange,3)-_SrGr_R0)
-							+ _SrGr_coeffs[4]*(pow(relativeGroundRange,4)-_SrGr_R0) 
+							+ _SrGr_coeffs[4]*(pow(relativeGroundRange,4)-_SrGr_R0)
 							+ _SrGr_coeffs[5]*(pow(relativeGroundRange,5)-_SrGr_R0);
-	
+
 	return  slantRange ;
 }
 
@@ -49,7 +49,7 @@ bool ossimCosmoSkymedModel::InitSensorParams(const ossimKeywordlist &kwl, const 
 	const char* fa_str = kwl.find(prefix,"fa");
 	double fa = atof(fa_str);
 
-	//number of different looks 
+	//number of different looks
 	const char* n_azilok_str = kwl.find(prefix,"n_azilok");
 	double n_azilok = atof(n_azilok_str);
 	const char* n_rnglok_str = kwl.find(prefix,"n_rnglok");
@@ -70,11 +70,11 @@ bool ossimCosmoSkymedModel::InitSensorParams(const ossimKeywordlist &kwl, const 
 
 
 	/**
-	* @todo : à voir sur de vrais produits (exemples de DESCENDING et ASCENDING)
+	* @todo : ï¿½ voir sur de vrais produits (exemples de DESCENDING et ASCENDING)
 	*/
 	const char* orbitDirection_str = kwl.find(prefix,"orbitDirection");
 	std::string orbitDirection(orbitDirection_str) ;
-	int orbitDirectionSign ; 
+	int orbitDirectionSign ;
 	if (orbitDirection=="DESCENDING") orbitDirectionSign = 1 ;
 	else orbitDirectionSign = - 1 ;
 
@@ -87,12 +87,12 @@ bool ossimCosmoSkymedModel::InitSensorParams(const ossimKeywordlist &kwl, const 
 	std::string colsOrder(colsOrder_str) ;
 	const char* linsOrder_str = kwl.find(prefix,"linsOrder");
 	std::string linsOrder(linsOrder_str) ;
-	if (colsOrder=="NEAR-FAR") 
-		_sensor->set_col_direction(orbitDirectionSign); 
-	else _sensor->set_col_direction(-orbitDirectionSign); 
-	if (linsOrder=="NEAR-FAR") 
-		_sensor->set_lin_direction(orbitDirectionSign); 
-	else _sensor->set_lin_direction(-orbitDirectionSign); 
+	if (colsOrder=="NEAR-FAR")
+		_sensor->set_col_direction(orbitDirectionSign);
+	else _sensor->set_col_direction(-orbitDirectionSign);
+	if (linsOrder=="NEAR-FAR")
+		_sensor->set_lin_direction(orbitDirectionSign);
+	else _sensor->set_lin_direction(-orbitDirectionSign);
 
 	_sensor->set_sf(fr);
 	const double CLUM        = 2.99792458e+8 ;
@@ -101,11 +101,11 @@ bool ossimCosmoSkymedModel::InitSensorParams(const ossimKeywordlist &kwl, const 
 	_sensor->set_nAzimuthLook(n_azilok);
 	_sensor->set_nRangeLook(n_rnglok);
 
-	// fa is the processing PRF 
+	// fa is the processing PRF
 	_sensor->set_prf(fa * n_azilok);
 
-	_sensor->set_semiMajorAxis(ellip_maj) ; 
-	_sensor->set_semiMinorAxis(ellip_min) ; 
+	_sensor->set_semiMajorAxis(ellip_maj) ;
+	_sensor->set_semiMinorAxis(ellip_min) ;
 
 	return true;
 }
@@ -127,8 +127,8 @@ bool ossimCosmoSkymedModel::InitPlatformPosition(const ossimKeywordlist &kwl, co
 	std::string referenceUTC(referenceUTC_str) ;
 	CivilDateTime ref_civil_date;
 	if (! UtcDateTimeStringToCivilDate(referenceUTC, ref_civil_date)) return false;
-	
-	/* 
+
+	/*
 	 * Retrieval of ephemerisis
 	 */
 	for (int i=0;i<neph;i++)
@@ -155,19 +155,19 @@ bool ossimCosmoSkymedModel::InitPlatformPosition(const ossimKeywordlist &kwl, co
 
 		sprintf(name,"eph%i_velX",i);
 		const char* vx_str = kwl.find(prefix,name);
-		vit[0] = atof(vx_str) ; 
+		vit[0] = atof(vx_str) ;
 
 		sprintf(name,"eph%i_velY",i);
 		const char* vy_str = kwl.find(prefix,name);
-		vit[1] = atof(vy_str) ; 
+		vit[1] = atof(vy_str) ;
 
 		sprintf(name,"eph%i_velZ",i);
 		const char* vz_str = kwl.find(prefix,name);
-		vit[2] = atof(vz_str) ; 
+		vit[2] = atof(vz_str) ;
 		/*
 		 * Conversion to JSD Date
 		 */
-		int second = (int) relative_date ; 
+		int second = (int) relative_date ;
 		double decimal = relative_date - second ;
 		CivilDateTime eph_civil_date(ref_civil_date.get_year(), ref_civil_date.get_month(), ref_civil_date.get_day(), second, decimal);
 		JSDDateTime eph_jsd_date(eph_civil_date);
@@ -176,7 +176,7 @@ bool ossimCosmoSkymedModel::InitPlatformPosition(const ossimKeywordlist &kwl, co
 
 		ephemeris[i] = eph;
 	}
-	
+
 	/*
 	 * Creation of the platform position interpolator
 	 */
@@ -229,14 +229,14 @@ bool ossimCosmoSkymedModel::InitRefPoint(const ossimKeywordlist &kwl, const char
 	_refPoint->set_pix_line(sc_lin);
 
 	double relative_date = (azimuthStartTime + sc_lin/_sensor->get_prf());
-	int second = (int) relative_date ; 
+	int second = (int) relative_date ;
 	double decimal = relative_date - second ;
 	CivilDateTime * date = new CivilDateTime(ref_civil_date.get_year(), ref_civil_date.get_month(), ref_civil_date.get_day(), second, decimal);
 
 	if(_platformPosition != NULL)
 	{
 		Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)*date);
-		if (ephemeris == NULL) return false ; 
+		if (ephemeris == NULL) return false ;
 
 		_refPoint->set_ephemeris(ephemeris);
 
@@ -249,12 +249,12 @@ bool ossimCosmoSkymedModel::InitRefPoint(const ossimKeywordlist &kwl, const char
 
 	double c = 2.99792458e+8;
 	double distance = (rng_gate + sc_pix*_sensor->get_nRangeLook()/_sensor->get_sf()) * (c/2.0);
-	
+
 	// in the case of Georeferenced images, the "relative" ground range is stored in place of the slant range
 	// (used for SlantRange computation relative to reference point, necessary for optimization)
 	// here, the pixelDirection is ignored since the CSKS reference point is always at the scene centre
 	if (_isProductGeoreferenced) {
-		distance = _refPoint->get_pix_col() * _pixel_spacing ; 
+		distance = _refPoint->get_pix_col() * _pixel_spacing ;
 	}
 
 	_refPoint->set_distance(distance);
@@ -269,8 +269,8 @@ bool ossimCosmoSkymedModel::InitRefPoint(const ossimKeywordlist &kwl, const char
 
 
 	// Ground Control Points extracted from the model : scene center and corners
-	std::list<ossimGpt> groundGcpCoordinates ; 
-	std::list<ossimDpt> imageGcpCoordinates ; 
+	std::list<ossimGpt> groundGcpCoordinates ;
+	std::list<ossimDpt> imageGcpCoordinates ;
 	char name[64];
 	for (int k=0 ; k<5 ; k++) {
 		sprintf(name,"cornersCol%i",k);
@@ -291,11 +291,11 @@ bool ossimCosmoSkymedModel::InitRefPoint(const ossimKeywordlist &kwl, const char
 
 		ossimDpt imageGCP(i,j);
 		ossimGpt groundGCP(lat, lon, height);
-		groundGcpCoordinates.push_back(groundGCP) ; 
+		groundGcpCoordinates.push_back(groundGCP) ;
 		imageGcpCoordinates.push_back(imageGCP) ;
 	}
 
-	// Default optimization 
+	// Default optimization
 	optimizeModel(groundGcpCoordinates, imageGcpCoordinates) ;
 
 	return true;
@@ -319,9 +319,9 @@ bool ossimCosmoSkymedModel::InitSRGR(const ossimKeywordlist &kwl, const char *pr
 	const char* SrGr_R0_str = kwl.find(prefix,"SrGr_R0");
 	_SrGr_R0 = atof(SrGr_R0_str);
 
-	// SRGR coefficients 
+	// SRGR coefficients
 	char name[64];
-	double coeff ; 
+	double coeff ;
 	for(int i=0;i<6;i++)
 	{
 		sprintf(name,"SrToGr_coeffs_%i",i);
@@ -329,7 +329,7 @@ bool ossimCosmoSkymedModel::InitSRGR(const ossimKeywordlist &kwl, const char *pr
 		coeff = atof(coeff_str);
 		_SrGr_coeffs.push_back(coeff);
 	}
-	
+
 	return true;
 }
 
@@ -371,6 +371,6 @@ bool ossimCosmoSkymedModel::UtcDateTimeStringToCivilDate(const std::string &utcS
 	return true ;
 }
 
-	
-	 
-	 
+
+
+

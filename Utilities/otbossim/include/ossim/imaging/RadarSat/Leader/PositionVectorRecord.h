@@ -50,7 +50,7 @@ public:
 		return _pos;
 	};
 
-	/** 
+	/**
 	 * @brief Data point velocity (mm/s)
 	 */
 	double* get_vel()
@@ -63,7 +63,7 @@ protected:
 	 * @brief Data point position (m)
 	 */
 	double _pos[3];
-	/** 
+	/**
 	 * @brief Data point velocity (mm/s)
 	 */
 	double _vel[3];

@@ -57,7 +57,7 @@ public:
 protected:
 
 	std::string _mnemonic;
-	
+
 private:
 };
 

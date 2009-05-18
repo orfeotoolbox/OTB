@@ -20,7 +20,7 @@ std::ostream& operator<<(std::ostream& os, const RadiometricData& data)
 	os<<"chan_ind:"<<data._chan_ind.c_str()<<std::endl;
 
     os<<"table_desig:"<<data._table_desig.c_str()<<std::endl;
-	
+
     os<<"n_samp:"<<data._n_samp<<std::endl;
 
     os<<"samp_type:"<<data._samp_type.c_str()<<std::endl;
@@ -45,7 +45,7 @@ std::istream& operator>>(std::istream& is, RadiometricData& data)
 {
 	char buf[1513];
 	buf[1512] = '\0';
-	
+
 
 	is.read(buf,4);
 	buf[4] = '\0';
@@ -68,7 +68,7 @@ std::istream& operator>>(std::istream& is, RadiometricData& data)
     is.read(buf,24);
 	buf[24] = '\0';
 	data._table_desig = buf;
-	
+
     is.read(buf,8);
 	buf[8] = '\0';
 	data._n_samp = atoi(buf);
@@ -122,7 +122,7 @@ RadiometricData::RadiometricData(const RadiometricData& rhs):
 	_chan_ind = rhs._chan_ind;
 
     _table_desig = rhs._table_desig;
-	
+
     _n_samp = rhs._n_samp;
 
     _samp_type = rhs._samp_type;
@@ -152,7 +152,7 @@ RadiometricData& RadiometricData::operator=(const RadiometricData& rhs)
 	_chan_ind = rhs._chan_ind;
 
     _table_desig = rhs._table_desig;
-	
+
     _n_samp = rhs._n_samp;
 
     _samp_type = rhs._samp_type;

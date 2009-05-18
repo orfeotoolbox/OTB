@@ -9,14 +9,14 @@ dsd::~dsd()
 }
 
 std::ostream& operator<<(std::ostream& os, const dsd& data)
-{	
-	os<<"ds_name:"<<data._ds_name.c_str()<<std::endl;   
-	os<<"ds_type:"<<data._ds_type.c_str()<<std::endl;   
-	os<<"filename:"<<data._filename.c_str()<<std::endl;   
-	os<<"ds_offset:"<<data._ds_offset<<std::endl;  
-	os<<"ds_size:"<<data._ds_size<<std::endl; 
-	os<<"num_dsr:"<<data._num_dsr<<std::endl; 
-	os<<"dsr_size:"<<data._dsr_size<<std::endl; 
+{
+	os<<"ds_name:"<<data._ds_name.c_str()<<std::endl;
+	os<<"ds_type:"<<data._ds_type.c_str()<<std::endl;
+	os<<"filename:"<<data._filename.c_str()<<std::endl;
+	os<<"ds_offset:"<<data._ds_offset<<std::endl;
+	os<<"ds_size:"<<data._ds_size<<std::endl;
+	os<<"num_dsr:"<<data._num_dsr<<std::endl;
+	os<<"dsr_size:"<<data._dsr_size<<std::endl;
 
 	return os;
 }
@@ -53,20 +53,20 @@ std::istream& operator>>(std::istream& is, dsd& data)
 	buf8[8] = '\0';
 	char buf7[8];
 	buf7[7] = '\0';
-	char buf6[7]; 
-	buf6[6] = '\0'; 
+	char buf6[7];
+	buf6[6] = '\0';
 	char buf5[6];
-	buf5[5] = '\0'; 
-	char buf4[5]; 
-	buf4[4] = '\0'; 
-	char buf3[4]; 
-	buf3[3] = '\0'; 
+	buf5[5] = '\0';
+	char buf4[5];
+	buf4[4] = '\0';
+	char buf3[4];
+	buf3[3] = '\0';
 	char buf2[3];
 	buf2[2] = '\0';
-	char buf1[1]; 
+	char buf1[1];
 
 	is.read(buf9,9);
- 
+
 	is.read(buf28,28);
 	data._ds_name = buf28;
 
@@ -108,20 +108,20 @@ std::istream& operator>>(std::istream& is, dsd& data)
 	return is;
 
 }
-	std::string   _ds_name;	
-	std::string   _ds_type;	
-	std::string   _filename;	
-	double	_ds_offset;	
-	double	_ds_size;				
-	int	_num_dsr;			
-	int	_dsr_size;	
+	std::string   _ds_name;
+	std::string   _ds_type;
+	std::string   _filename;
+	double	_ds_offset;
+	double	_ds_size;
+	int	_num_dsr;
+	int	_dsr_size;
 
 dsd::dsd(const dsd& rhs):
 	EnvisatAsarRecord(rhs),
-	_ds_name(rhs._ds_name),  
-	_ds_type(rhs._ds_type),  
-	_filename(rhs._filename),  
-	_ds_offset(rhs._ds_offset),  
+	_ds_name(rhs._ds_name),
+	_ds_type(rhs._ds_type),
+	_filename(rhs._filename),
+	_ds_offset(rhs._ds_offset),
 	_ds_size(rhs._ds_size),
 	_num_dsr(rhs._num_dsr),
 	_dsr_size(rhs._dsr_size)
@@ -131,13 +131,13 @@ dsd::dsd(const dsd& rhs):
 
 dsd& dsd::operator=(const dsd& rhs)
 {
-	_ds_name = rhs._ds_name;  
-	_ds_type = rhs._ds_type;  
-	_filename = rhs._filename;  
-	_ds_offset = rhs._ds_offset;  
+	_ds_name = rhs._ds_name;
+	_ds_type = rhs._ds_type;
+	_filename = rhs._filename;
+	_ds_offset = rhs._ds_offset;
 	_ds_size = rhs._ds_size;
 	_num_dsr = rhs._num_dsr;
 	_dsr_size = rhs._dsr_size;
-	
+
 	return *this;
 }

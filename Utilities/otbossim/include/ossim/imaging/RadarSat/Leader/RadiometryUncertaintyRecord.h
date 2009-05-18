@@ -50,7 +50,7 @@ public:
 		return _db;
 	};
     /**
-	 * @brief Units of deg 
+	 * @brief Units of deg
 	 */
 	double   get_deg()
 	{
@@ -63,7 +63,7 @@ protected:
 	 */
 	double   _db;
     /**
-	 * @brief Units of deg 
+	 * @brief Units of deg
 	 */
 	double   _deg;
 private:

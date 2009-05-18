@@ -77,14 +77,14 @@ public:
 	};
 
 	/**
-	 * @brief Record sequence number 
+	 * @brief Record sequence number
 	 */
 	int   get_seq_num()
 	{
 		return _seq_num;
 	};
     /**
-	 * @brief Number of data fields 
+	 * @brief Number of data fields
 	 */
 	int   get_n_data()
 	{
@@ -105,7 +105,7 @@ public:
 	{
 		return _chan_ind;
 	};
-    
+
     /**
 	 * @brief Table designator
 	 */
@@ -141,7 +141,7 @@ public:
 	{
 		return _lookup_tab;
 	};
-    
+
     /**
 	 * @brief Thermal noise reference level
 	 */
@@ -149,7 +149,7 @@ public:
 	{
 		return _noise_scale;
 	};
-    
+
     /**
 	 * @brief Scaling offset
 	 */
@@ -164,15 +164,15 @@ public:
 	{
 		return _calib_const;
 	};
-	
+
 
 protected:
 	/**
-	 * @brief Record sequence number 
+	 * @brief Record sequence number
 	 */
 	int   _seq_num;
     /**
-	 * @brief Number of data fields 
+	 * @brief Number of data fields
 	 */
 	int   _n_data;
     /**
@@ -184,7 +184,7 @@ protected:
 	 * @brief SAR channel indicator
 	 */
 	std::string   _chan_ind;
-    
+
     /**
 	 * @brief Table designator
 	 */
@@ -205,12 +205,12 @@ protected:
 	 * @brief Output scaling gain table
 	 */
 	double   _lookup_tab[512];
-   
+
     /**
 	 * @brief Thermal noise reference level
 	 */
 	double   _noise_scale;
-    
+
     /**
 	 * @brief Scaling offset
 	 */
@@ -219,7 +219,7 @@ protected:
 	 * @brief Calibration constant
 	 */
 	double   _calib_const;
-	
+
 private:
 };
 #endif

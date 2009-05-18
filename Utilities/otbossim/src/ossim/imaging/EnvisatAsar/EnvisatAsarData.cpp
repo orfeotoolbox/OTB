@@ -38,8 +38,8 @@ std::istream& operator>>(std::istream& is, EnvisatAsarData& data)
 	EnvisatAsarDataFactory factory;
 
 	if (sizeof(int)!=4) std::cout << "EnvisatAsarData WARNING : (int) not coded over 32 bits, metadata might not be byte swapped correctly"<< std::endl ;
-	if (sizeof(float)!=4) std::cout << "EnvisatAsarData WARNING : (float) not coded over 32 bits, metadata might not be byte swapped correctly"<< std::endl ;	
-	if (sizeof(double)!=8) std::cout << "EnvisatAsarData WARNING : (double) not coded over 64 bits, metadata might not be byte swapped correctly"<< std::endl ; 
+	if (sizeof(float)!=4) std::cout << "EnvisatAsarData WARNING : (float) not coded over 32 bits, metadata might not be byte swapped correctly"<< std::endl ;
+	if (sizeof(double)!=8) std::cout << "EnvisatAsarData WARNING : (double) not coded over 64 bits, metadata might not be byte swapped correctly"<< std::endl ;
 
 	data.ClearRecords();
 
@@ -61,15 +61,15 @@ std::istream& operator>>(std::istream& is, EnvisatAsarData& data)
 	std::vector<dsd>::iterator it = dsd_vector.begin();
 	while(it != dsd_vector.end())
 	{
-		std::string str = (it->get_ds_name());		
-		
-		if ( (it->get_ds_size()) != 0) 
+		std::string str = (it->get_ds_name());
+
+		if ( (it->get_ds_size()) != 0)
 		{
-			for (int i = 0; i<(it->get_num_dsr()); i++) 
+			for (int i = 0; i<(it->get_num_dsr()); i++)
 			{
 				EnvisatAsarRecord* record = factory.Instanciate(str);
 				if (record != NULL)
-				{ 
+				{
 					is.seekg((it->get_ds_offset())+ i*(it->get_dsr_size()));
 					record->Read(is);
 					data._records.push_back(record);
@@ -212,7 +212,7 @@ AntennaElevationPatterns * EnvisatAsarData::get_AntennaElevationPatterns()
 //	while(it != _records.end())
 //	{
 //		std::string str = (*it)->get_mnemonic();
-//		if ((*it)->get_mnemonic().compare("GeolocationGrid_rec") == 0)	
+//		if ((*it)->get_mnemonic().compare("GeolocationGrid_rec") == 0)
 //		{
 //			return (GeolocationGrid*)(*it);
 //		}
@@ -239,7 +239,7 @@ GeolocationGrid * EnvisatAsarData::get_GeolocationGrid(int num_ds)
 	while(it != _records.end())
 	{
 		std::string str = (*it)->get_mnemonic();
-		if ((*it)->get_mnemonic().compare("GeolocationGrid_rec") == 0)	
+		if ((*it)->get_mnemonic().compare("GeolocationGrid_rec") == 0)
 		{
 			if ((cpt == num_ds) || (cpt == total_num_ds-1))	return (GeolocationGrid*)(*it);
 			cpt +=1;
@@ -259,7 +259,7 @@ int EnvisatAsarData::get_num_ds(EnvisatAsarRecord * record)
 	while(it != _records.end())
 	{
 		std::string str = (*it)->get_mnemonic();
-		if ((*it)->get_mnemonic().compare(record->get_mnemonic()) == 0)	
+		if ((*it)->get_mnemonic().compare(record->get_mnemonic()) == 0)
 		{
 			cpt++;
 		}

@@ -54,7 +54,7 @@ ossimEnvisatAsarTileSource::ossimEnvisatAsarTileSource():
 	_EnvisatAsarData(NULL)
 {
 }
-	
+
 ossimEnvisatAsarTileSource::~ossimEnvisatAsarTileSource()
 {
 	if(_EnvisatAsarData != NULL)
@@ -72,12 +72,12 @@ ossimString ossimEnvisatAsarTileSource::getShortName()const
 {
 	return ossimString("EnvisatAsar Image Handler");
 }
-   
+
 bool ossimEnvisatAsarTileSource::saveState(ossimKeywordlist& kwl, const char* prefix)const
 {
 	return false;
 }
-   
+
 bool ossimEnvisatAsarTileSource::loadState(const ossimKeywordlist& kwl,  const char* prefix)
 {
 	return false;
@@ -180,9 +180,9 @@ bool ossimEnvisatAsarTileSource::getImageGeometry(ossimKeywordlist& kwl,const ch
 	sph* sph_rec = _EnvisatAsarData->get_sph();
 	if(sph_rec != NULL)
 	{
-		kwl.add(prefix, "pixel_spacing", sph_rec->get_range_spacing().c_str(), true ); 
-		kwl.add(prefix, "line_time_interval", sph_rec->get_line_time_interval().c_str(), true ); 
-	} 
+		kwl.add(prefix, "pixel_spacing", sph_rec->get_range_spacing().c_str(), true );
+		kwl.add(prefix, "line_time_interval", sph_rec->get_line_time_interval().c_str(), true );
+	}
 	else
 	{
 		return false;
@@ -193,7 +193,7 @@ bool ossimEnvisatAsarTileSource::getImageGeometry(ossimKeywordlist& kwl,const ch
 	 */
 	MainProcessingParameters* MPP_rec = _EnvisatAsarData->get_MainProcessingParameters();
 	if(MPP_rec != NULL)
-	{	
+	{
 		kwl.add(prefix, "num_pix", (double)MPP_rec->get_num_samples_per_line(), true );
 		kwl.add(prefix, "num_lines", (double)MPP_rec->get_num_output_lines(), true );
 		kwl.add(prefix, "wave_length", MPP_rec->get_radar_freq(), true );
@@ -246,7 +246,7 @@ bool ossimEnvisatAsarTileSource::getImageGeometry(ossimKeywordlist& kwl,const ch
 		kwl.add(prefix, "x_vel_5", (double)MPP_rec->get_x_vel_5(), true );
 		kwl.add(prefix, "y_vel_5", (double)MPP_rec->get_y_vel_5(), true );
 		kwl.add(prefix, "z_vel_5", (double)MPP_rec->get_z_vel_5(), true );
-	} 
+	}
 	else
 	{
 		return false;
@@ -258,13 +258,13 @@ bool ossimEnvisatAsarTileSource::getImageGeometry(ossimKeywordlist& kwl,const ch
 	GeolocationGrid* GG_rec = _EnvisatAsarData->get_GeolocationGrid(0);
 	if(GG_rec != NULL)
 	{
-		kwl.add(prefix, "first_zero_doppler_time_day", (double)GG_rec->get_first_zero_doppler_time_day(), true ); 
-		kwl.add(prefix, "first_zero_doppler_time_sec", (double)GG_rec->get_first_zero_doppler_time_sec(), true ); 
-		kwl.add(prefix, "first_zero_doppler_time_microsec", (double)GG_rec->get_first_zero_doppler_time_microsec(), true ); 
+		kwl.add(prefix, "first_zero_doppler_time_day", (double)GG_rec->get_first_zero_doppler_time_day(), true );
+		kwl.add(prefix, "first_zero_doppler_time_sec", (double)GG_rec->get_first_zero_doppler_time_sec(), true );
+		kwl.add(prefix, "first_zero_doppler_time_microsec", (double)GG_rec->get_first_zero_doppler_time_microsec(), true );
 		kwl.add(prefix, "line_num", (double)GG_rec->get_line_num(), true );
-		kwl.add(prefix, "samp_num", (double)(GG_rec->get_samp_numbers())[0], true ); 
+		kwl.add(prefix, "samp_num", (double)(GG_rec->get_samp_numbers())[0], true );
 		kwl.add(prefix, "slant_range_time", (double)(GG_rec->get_slant_range_times())[0], true );
-	} 
+	}
 	else
 	{
 		return false;
@@ -284,7 +284,7 @@ bool ossimEnvisatAsarTileSource::getImageGeometry(ossimKeywordlist& kwl,const ch
 		kwl.add(prefix, "UR_col", (double)(GG_rec->get_samp_numbers())[10], true );
 		kwl.add(prefix, "UR_lat", (double)(GG_rec->get_lats())[10], true );
 		kwl.add(prefix, "UR_lon", (double)(GG_rec->get_longs())[10], true );
-	} 
+	}
 	else
 	{
 		return false;
@@ -300,7 +300,7 @@ bool ossimEnvisatAsarTileSource::getImageGeometry(ossimKeywordlist& kwl,const ch
 		kwl.add(prefix, "LR_col", (double)(GG_rec->get_samp_numbers())[10], true );
 		kwl.add(prefix, "LR_lat", (double)(GG_rec->get_lats())[10], true );
 		kwl.add(prefix, "LR_lon", (double)(GG_rec->get_longs())[10], true );
-	} 
+	}
 	else
 	{
 		return false;
@@ -330,7 +330,7 @@ bool ossimEnvisatAsarTileSource::getImageGeometry(ossimKeywordlist& kwl,const ch
 
 			sprintf(name,"srgr_coef%iA",i);
 			kwl.add(prefix, name,(double)SRGR->get_ground_range_origin(),true);
-		
+
 			sprintf(name,"srgr_coef%iB",i);
 			kwl.add(prefix, name,(double)SRGR->get_srgr_coef()[0],true);
 			sprintf(name,"srgr_coef%iC",i);

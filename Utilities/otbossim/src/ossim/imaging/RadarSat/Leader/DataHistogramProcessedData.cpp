@@ -22,7 +22,7 @@ std::ostream& operator<<(std::ostream& os, const DataHistogramProcessedData& dat
 	os<<data._histogram1<<std::endl;
 
 	os<<data._histogram2<<std::endl;
-  
+
 	return os;
 }
 
@@ -57,7 +57,7 @@ std::istream& operator>>(std::istream& is, DataHistogramProcessedData& data)
 	return is;
 }
 
-DataHistogramProcessedData::DataHistogramProcessedData(const DataHistogramProcessedData& rhs) : 
+DataHistogramProcessedData::DataHistogramProcessedData(const DataHistogramProcessedData& rhs) :
 		RadarSatRecord(rhs),
 		_histogram1(rhs._histogram1),
 		_histogram2(rhs._histogram2),

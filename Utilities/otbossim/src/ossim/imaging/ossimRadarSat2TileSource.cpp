@@ -28,7 +28,7 @@ ossimRadarSat2TileSource::ossimRadarSat2TileSource():
 	_annotation(NULL)
 {
 }
-	
+
 ossimRadarSat2TileSource::~ossimRadarSat2TileSource()
 {
 	if(_annotation != NULL)
@@ -46,12 +46,12 @@ ossimString ossimRadarSat2TileSource::getShortName()const
 {
 	return ossimString("RadarSat2 Image Handler");
 }
-   
+
 bool ossimRadarSat2TileSource::saveState(ossimKeywordlist& kwl, const char* prefix)const
 {
 	return false;
 }
-   
+
 bool ossimRadarSat2TileSource::loadState(const ossimKeywordlist& kwl,  const char* prefix)
 {
 	return false;
@@ -79,7 +79,7 @@ bool ossimRadarSat2TileSource::open()
 	}
 
 	_annotation = new Rds2Annotation();
-	
+
 	/*
 	 * Uses XML annotation file corresponding to the input "image file"
 	 */
@@ -87,10 +87,10 @@ bool ossimRadarSat2TileSource::open()
 	if ((annotationFilename.ext()).downcase() != "xml") {
 		// assigned to a "product.xml" file in the same directory
 		annotationFilename = annotationFilename.path();
-		annotationFilename +=  annotationFilename.thePathSeparator ; 
-		annotationFilename +=  "product.xml" ; 
+		annotationFilename +=  annotationFilename.thePathSeparator ;
+		annotationFilename +=  "product.xml" ;
 	}
-				
+
 	if (annotationFilename.exists())
 	{
 		if(traceDebug())
@@ -102,12 +102,12 @@ bool ossimRadarSat2TileSource::open()
 		/*
 		 * Checks whether the XML file corresponds to a RadarSat2 product
 		 */
-		ossimXmlDocument docXML(annotationFilename) ; 
+		ossimXmlDocument docXML(annotationFilename) ;
 		ossimString xpathTest("/product/sourceAttributes/satellite") ;
 		// note : the satellite name could be tested ("RADARSAT-1, RADARSAT-2)
-		std::vector<ossimRefPtr<ossimXmlNode> > listeResultat ; 
-		docXML.findNodes(xpathTest, listeResultat) ; 
-		if (listeResultat.size() != 1 ) 
+		std::vector<ossimRefPtr<ossimXmlNode> > listeResultat ;
+		docXML.findNodes(xpathTest, listeResultat) ;
+		if (listeResultat.size() != 1 )
 		{
 			if(traceDebug())
 			{
@@ -144,7 +144,7 @@ bool ossimRadarSat2TileSource::open()
 	{
 		retValue = false;
 	}
-	
+
 
 	if(traceDebug())
 	{
@@ -170,7 +170,7 @@ bool ossimRadarSat2TileSource::getImageGeometry(ossimKeywordlist& kwl,const char
 	/*
 	 * Insertion of data related to the sensor model acquisition parameters into the keywordlist
 	 */
-	
+
 	kwl.add(prefix, "lineTimeOrdering",_annotation->get_lineTimeOrdering().c_str(),true);
 	kwl.add(prefix, "pixelTimeOrdering",_annotation->get_pixelTimeOrdering().c_str(),true);
 	kwl.add(prefix, "orbitDirection",_annotation->get_orbitDirection().c_str(),true);
@@ -190,14 +190,14 @@ bool ossimRadarSat2TileSource::getImageGeometry(ossimKeywordlist& kwl,const char
 
 	kwl.add(prefix, "zeroDopplerTimeFirstLine",_annotation->get_zeroDopplerTimeFirstLine().c_str(),true);
 	kwl.add(prefix, "slantRangeNearEdge",_annotation->get_slantRangeNearEdge(),true);
-	
+
 	kwl.add(prefix, "productType",(_annotation->get_productType()).c_str(),true);
 
 	kwl.add(prefix, "nbCol",_annotation->get_nbCol(),true);
 	kwl.add(prefix, "nbLin",_annotation->get_nbLin(),true);
 	kwl.add(prefix, "pixel_spacing_mean",_annotation->get_pixel_spacing_mean(),true);
 
-	int nbCoeffs = (_annotation->get_SrGr_update()).size() ; 
+	int nbCoeffs = (_annotation->get_SrGr_update()).size() ;
 
 	kwl.add(prefix, "SrGr_coeffs_number",nbCoeffs,true);
 

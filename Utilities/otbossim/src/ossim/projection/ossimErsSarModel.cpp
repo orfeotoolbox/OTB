@@ -46,10 +46,10 @@ bool ossimErsSarModel::InitSensorParams(const ossimKeywordlist &kwl, const char 
 	double fa = atof(fa_str);
 
 	ossimString time_dir_pix = kwl.find(prefix,"time_dir_pix");
-	time_dir_pix.upcase(); 
+	time_dir_pix.upcase();
 	//std::transform(time_dir_pix.begin(), time_dir_pix.end(), time_dir_pix.begin(), toupper);
 	ossimString time_dir_lin = kwl.find(prefix,"time_dir_lin");
-	time_dir_lin.upcase(); 
+	time_dir_lin.upcase();
 	//std::transform(time_dir_lin.begin(), time_dir_lin.end(), time_dir_lin.begin(), toupper);
 
 	//ellipsoid parameters
@@ -94,8 +94,8 @@ bool ossimErsSarModel::InitSensorParams(const ossimKeywordlist &kwl, const char 
 	_sensor->set_sf(fr);
 	_sensor->set_rwl(wave_length);
 
-	_sensor->set_semiMajorAxis(ellip_maj) ; 
-	_sensor->set_semiMinorAxis(ellip_min) ; 
+	_sensor->set_semiMajorAxis(ellip_maj) ;
+	_sensor->set_semiMinorAxis(ellip_min) ;
 
 	return true;
 }
@@ -123,7 +123,7 @@ bool ossimErsSarModel::InitPlatformPosition(const ossimKeywordlist &kwl, const c
 	ref_civil_date.set_decimal( eph_sec-(double)((int)eph_sec));
 
 	JSDDateTime ref_jsd_date(ref_civil_date);
-	
+
 	/*
 	 * Ephemerisis time interval retrieval
 	 */
@@ -137,7 +137,7 @@ bool ossimErsSarModel::InitPlatformPosition(const ossimKeywordlist &kwl, const c
 
 	Ephemeris** ephemeris = new Ephemeris*[neph];
 
-	/* 
+	/*
 	 * Ephemerisis retrieval
 	 */
 	for (int i=0;i<neph;i++)
@@ -146,7 +146,7 @@ bool ossimErsSarModel::InitPlatformPosition(const ossimKeywordlist &kwl, const c
 		double vit[3];
 		char name[64];
 
-	
+
 		sprintf(name,"eph%i_posX",i);
 		const char* px_str = kwl.find(prefix,name);
 		pos[0] = atof(px_str);
@@ -183,7 +183,7 @@ bool ossimErsSarModel::InitPlatformPosition(const ossimKeywordlist &kwl, const c
 
 		ephemeris[i] = eph;
 	}
-	
+
 	/*
 	 * Antenna position interpolator creation
 	 */
@@ -285,11 +285,11 @@ bool ossimErsSarModel::InitRefPoint(const ossimKeywordlist &kwl, const char *pre
 
 
 	CivilDateTime date(year, month, day, hour * 3600 + min * 60 + sec, mili/1000.0);
-	
+
 	if(_platformPosition != NULL)
 	{
 		Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)date);
-		if (ephemeris == NULL) return false ; 
+		if (ephemeris == NULL) return false ;
 		_refPoint->set_ephemeris(ephemeris);
 
 		delete ephemeris;
@@ -313,7 +313,7 @@ bool ossimErsSarModel::InitRefPoint(const ossimKeywordlist &kwl, const char *pre
 	theImageClipRect    = ossimDrect(0, 0, theImageSize.x-1, theImageSize.y-1);
 
 	// Ground Control Points extracted from the model : corner points
-	std::list<ossimGpt> groundGcpCoordinates ; 
+	std::list<ossimGpt> groundGcpCoordinates ;
 	std::list<ossimDpt> imageGcpCoordinates ;
 	// first line first pix
 	const char* lon_str = kwl.find("first_line_first_pixel_lon");
@@ -323,7 +323,7 @@ bool ossimErsSarModel::InitRefPoint(const ossimKeywordlist &kwl, const char *pre
 	if (lon > 180.0) lon -= 360.0;
 	ossimDpt imageGCP1(0,0);
 	ossimGpt groundGCP1(lat, lon, 0.0);
-	groundGcpCoordinates.push_back(groundGCP1) ; 
+	groundGcpCoordinates.push_back(groundGCP1) ;
 	imageGcpCoordinates.push_back(imageGCP1) ;
 	// first line last pix
 	lon_str = kwl.find("first_line_last_pixel_lon");
@@ -333,7 +333,7 @@ bool ossimErsSarModel::InitRefPoint(const ossimKeywordlist &kwl, const char *pre
 	if (lon > 180.0) lon -= 360.0;
 	ossimDpt imageGCP2(theImageSize.x-1, 0);
 	ossimGpt groundGCP2(lat, lon, 0.0);
-	groundGcpCoordinates.push_back(groundGCP2) ; 
+	groundGcpCoordinates.push_back(groundGCP2) ;
 	imageGcpCoordinates.push_back(imageGCP2) ;
 	// last line last pix
 	lon_str = kwl.find("last_line_last_pixel_lon");
@@ -343,7 +343,7 @@ bool ossimErsSarModel::InitRefPoint(const ossimKeywordlist &kwl, const char *pre
 	if (lon > 180.0) lon -= 360.0;
 	ossimDpt imageGCP3(theImageSize.x-1,theImageSize.y-1);
 	ossimGpt groundGCP3(lat, lon, 0.0);
-	groundGcpCoordinates.push_back(groundGCP3) ; 
+	groundGcpCoordinates.push_back(groundGCP3) ;
 	imageGcpCoordinates.push_back(imageGCP3) ;
 	// last line first pix
 	lon_str = kwl.find("last_line_first_pixel_lon");
@@ -353,10 +353,10 @@ bool ossimErsSarModel::InitRefPoint(const ossimKeywordlist &kwl, const char *pre
 	if (lon > 180.0) lon -= 360.0;
 	ossimDpt imageGCP4(0,theImageSize.y-1);
 	ossimGpt groundGCP4(lat, lon, 0.0);
-	groundGcpCoordinates.push_back(groundGCP4) ; 
+	groundGcpCoordinates.push_back(groundGCP4) ;
 	imageGcpCoordinates.push_back(imageGCP4) ;
 
-	// Default optimization 
+	// Default optimization
 	optimizeModel(groundGcpCoordinates, imageGcpCoordinates) ;
 
 	return true;
@@ -366,14 +366,14 @@ bool ossimErsSarModel::InitSRGR(const ossimKeywordlist &kwl, const char *prefix)
 {
 	// Product type = PRI
 	ossimString filename(kwl.find("filename"));
-	filename.upcase(); 
+	filename.upcase();
 	//std::transform(filename.begin(), filename.end(), filename.begin(), toupper);
 	string::size_type loc = filename.find("PRI");
 	if( loc != string::npos ) {
      _isProductGeoreferenced = true;
    } else {
      _isProductGeoreferenced = false;
-   } 
+   }
 
 	// Number of SRGR Coef
 	_n_srgr = 3;
@@ -386,8 +386,8 @@ bool ossimErsSarModel::InitSRGR(const ossimKeywordlist &kwl, const char *prefix)
 	// Range pixels numbers corresponding
 	// Todo : check if it works with "DECREASING LINE TIME"
 	double x1 = 0.0;
-	double x2 = atof(kwl.find("sc_pix")) - 1.0; 
-	double x3 = 2.0*(x2+1.0) -1.0 ; 
+	double x2 = atof(kwl.find("sc_pix")) - 1.0;
+	double x3 = 2.0*(x2+1.0) -1.0 ;
 
 	_srgr_coefset[0][0] = t1;
 	_srgr_coefset[0][1] = ((t2-t1)/(x2*x2)+(t1-t3)/(x3*x3))/((1.0/x2)-(1.0/x3));

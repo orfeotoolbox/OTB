@@ -16,26 +16,26 @@ public:
 	 * @brief Constructor
 	 */
 	HermiteInterpolator();
-	
+
 	/**
 	 * @brief Constructor with initialisations
 	 * @param nbrPoints Number of points used to perform the interpolation
 	 * @param x Values of the points abscissa
-	 * @param y Values of the points 
+	 * @param y Values of the points
 	 * @param dy Values of the differential coefficients
 	 */
 	HermiteInterpolator(int nbrPoints, double* x, double* y, double* dy);
-	
+
 	/**
 	 * @brief Destructor
 	 */
 	~HermiteInterpolator();
-	
+
 	/**
 	 * @brief Copy constructor
 	 */
 	HermiteInterpolator(const HermiteInterpolator& rhs);
-	
+
 	/**
 	 * @brief Affectation operator
 	 */

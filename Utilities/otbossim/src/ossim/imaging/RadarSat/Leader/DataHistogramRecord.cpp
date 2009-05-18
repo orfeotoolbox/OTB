@@ -83,7 +83,7 @@ std::ostream& operator<<(std::ostream& os, const DataHistogramRecord& data)
     os<<"ngrp_lin:"<<data._ngrp_lin<<std::endl;
 
     os<<"ngrp_pix:"<<data._ngrp_pix<<std::endl;
-	
+
     os<<"nsamp_lin:"<<data._nsamp_lin<<std::endl;
 
     os<<"nsamp_pix:"<<data._nsamp_pix<<std::endl;
@@ -150,7 +150,7 @@ std::istream& operator>>(std::istream& is, DataHistogramRecord& data)
     is.read(buff,8);
 	buff[8] = '\0';
 	data._ngrp_pix = atoi(buff);
-	
+
     is.read(buff,8);
 	buff[8] = '\0';
 	data._nsamp_lin = atoi(buff);
@@ -203,10 +203,10 @@ std::istream& operator>>(std::istream& is, DataHistogramRecord& data)
 	{
 		delete[] data._hist;
 	}
-	
+
 	//for (int i=0;i<data._nhist;i++)
 	int nhist ;
-	if (data._nhist == 256) 
+	if (data._nhist == 256)
 		{  nhist = 256 ; } // Signal Data
 	else {nhist = 1024 ; } // Processed Data
 

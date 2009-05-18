@@ -10,7 +10,7 @@
 
 long inint (double x)
 {
-  return (x >= 0.0)  ?  (long)(x + 0.5)  :  (long)(x-0.5) ; 
+  return (x >= 0.0)  ?  (long)(x + 0.5)  :  (long)(x-0.5) ;
 }
 
 /*-------------------------------------------------------------------------*/
@@ -31,7 +31,7 @@ long pgcd ( long n , long p )
   long k ;
   long n1 , p1 ;
   long m0 , m1 , m ;
-  
+
   n1 = labs(n) ;
   p1 = labs(p) ;
   if (n1 > p1)
@@ -55,7 +55,7 @@ long pgcd ( long n , long p )
     k = m0 ;
   }
   else k = 1 ;
-  
+
   return k ;
 }
 
@@ -68,7 +68,7 @@ long ppcm ( long n , long p )
   long k ;
   long n1 , p1 ;
   long m0 , m1 , m ;
-  
+
   n1 = labs(n) ;
   p1 = labs(p) ;
   if (n1>p1)
@@ -88,7 +88,7 @@ long ppcm ( long n , long p )
     k = m ;
   }
   else k = 0 ;
-  
+
   return k ;
 }
 
