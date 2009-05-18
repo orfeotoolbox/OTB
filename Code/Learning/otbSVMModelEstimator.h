@@ -88,6 +88,27 @@ public:
   /** Set the model */
   itkGetMacro(Model, SVMModelPointer);
 
+  /** Get the cross validation accuracy measures */
+  itkGetMacro(InitialCrossValidationAccuracy,double);
+  itkGetMacro(FinalCrossValidationAccuracy,double);
+
+  /** Activate/Deactivate parameters optimization */
+  itkSetMacro(ParametersOptimization,bool);
+  itkGetMacro(ParametersOptimization,bool);
+  itkBooleanMacro(ParametersOptimization);
+
+  /** Set/Get the number of steps for the coarse optimization */
+  itkSetMacro(CoarseOptimizationNumberOfSteps,unsigned int);
+  itkGetMacro(CoarseOptimizationNumberOfSteps,unsigned int);
+
+  /** Set/Get the number of steps for the fine optimization */
+  itkSetMacro(FineOptimizationNumberOfSteps,unsigned int);
+  itkGetMacro(FineOptimizationNumberOfSteps,unsigned int);
+
+  /** Set/Get the number of cross validation folders */
+  itkSetMacro(NumberOfCrossValidationFolders,unsigned int);
+  itkGetMacro(NumberOfCrossValidationFolders,unsigned int);
+
   /** Set/Get the Measures */
   void SetMeasures( TrainingMeasuresType measures )
   {
@@ -309,6 +330,7 @@ protected:
    * model based on the training input data
    * Achieves the goal of training the classifier. */
   virtual void EstimateModels();
+  virtual void CrossValidate();
   virtual void BuildProblem()
   {
   }
@@ -318,10 +340,27 @@ protected:
 
   bool m_Done;
 
-
 private:
   SVMModelEstimator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+
+  // Initial cross validation accuracy
+  double m_InitialCrossValidationAccuracy;
+
+  // Final cross validationa accuracy
+  double m_FinalCrossValidationAccuracy;
+
+  // Do parameters optimization
+  bool m_ParametersOptimization;
+
+  // Number of steps for the coarse search
+  unsigned int m_CoarseOptimizationNumberOfSteps;
+  
+  // Number of steps for the fine search
+  unsigned int m_FineOptimizationNumberOfSteps;
+
+  // Number of cross validation folders
+  unsigned int m_NumberOfCrossValidationFolders;
 
 }; // class SVMModelEstimator
 

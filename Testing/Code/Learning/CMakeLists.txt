@@ -79,7 +79,18 @@ ADD_TEST(leTvSVMImageModelEstimatorTrain ${LEARNING_TESTS1}
         otbSVMImageModelEstimatorTrain
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
-	${TEMP}/leTvsvm_model_image)
+	${TEMP}/leTvsvm_model_image
+	0 )
+
+ADD_TEST(leTvSVMImageModelEstimatorTrainWithOptimization ${LEARNING_TESTS1}
+--compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leTvsvm_model_image_opt
+                        ${TEMP}/leTvsvm_model_image_opt
+--ignore-lines-with 2 probA probB 
+        otbSVMImageModelEstimatorTrain
+	${INPUTDATA}/ROI_QB_MUL_4.tif
+	${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
+	${TEMP}/leTvsvm_model_image_opt
+	1 )
 
 ADD_TEST(leTvSVMImageModelEstimatorTrainOneClass ${LEARNING_TESTS1}
 --compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leTvsvm_model_image_one_class 
@@ -376,9 +387,11 @@ ADD_TEST(leTuROIdataConversion ${LEARNING_TESTS4}
 )
 
 
+ADD_TEST(leTuSVMCrossValidationCostFunctionNew ${LEARNING_TESTS4}  
+        otbSVMCrossValidationCostFunctionNew)
 
-
-
+ADD_TEST(leTuExhaustiveExponentialOptimizerNew ${LEARNING_TESTS4}  
+        otbExhaustiveExponentialOptimizerNew)
 
 # A enrichir
 SET(BasicLearning_SRCS1
@@ -430,6 +443,8 @@ otbSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest.cxx
 SET(BasicLearning_SRCS4
 otbROIdataConversionNew.cxx
 otbROIdataConversion.cxx
+otbSVMCrossValidationCostFunctionNew.cxx
+otbExhaustiveExponentialOptimizerNew.cxx
 )
 
 
