@@ -82,10 +82,10 @@ ArcSpatialObject< VDimension >
     {
       angle=-90;
     }
-    printf("\n angle=%6.3f ",angle);
+//     std::cout << "\n angle= " << angle << std::endl;
     if (angle>=m_Angle1 && angle<=m_Angle2)
     {
-      printf("----> OK");
+//       std::cout << "----> OK") << std::endl;
       return true;
     }
     else return false;
