@@ -36,6 +36,8 @@ int otbSVMImageModelEstimatorTrain( int argc, char* argv[] )
   const char* inputImageFileName = argv[1];
   const char* trainingImageFileName = argv[2];
   const char* outputModelFileName = argv[3];
+  const bool  optimization        = atoi(argv[4]);
+
 
   typedef double                                           InputPixelType;
   const   unsigned int                                     Dimension = 2;
@@ -59,7 +61,7 @@ int otbSVMImageModelEstimatorTrain( int argc, char* argv[] )
   svmEstimator->SetInputImage( inputReader->GetOutput() );
   svmEstimator->SetTrainingImage( trainingReader->GetOutput() );
   svmEstimator->SetNumberOfClasses( 2 );
-
+  svmEstimator->SetParametersOptimization(optimization);
 
   svmEstimator->Update();
 
