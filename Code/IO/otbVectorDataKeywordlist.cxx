@@ -50,7 +50,7 @@ VectorDataKeywordlist
   newField.first = fieldDefn;
   newField.second = *field;
   //TODO: evaluate performance impact of fieldDefn copy
-  // the object itself could be handle at the VectorData level
+  // the object itself could be handled at the VectorData level
   // keeping only pointer here. (but it does not seem
   // necessary so far...)
   m_FieldList.push_back(CopyOgrField(newField));
@@ -93,7 +93,7 @@ VectorDataKeywordlist
         ss << std::setprecision(15) << m_FieldList[i].second.Real;
         return ss.str();
       }
-      itkExceptionMacro(<<"This type is not handle (yet) by GetFieldAsString(), please request for it");
+      itkExceptionMacro(<<"This type is not handled (yet) by GetFieldAsString(), please request for it");
     }
   }
   return "";
