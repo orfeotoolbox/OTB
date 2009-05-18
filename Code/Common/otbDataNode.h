@@ -29,7 +29,7 @@
 namespace otb
 {
 /**
- * This enumeration describes the type fo nodes used to represent a tree of vector data in the Orfeo ToolBox.
+ * This enumeration describes the type of nodes used to represent a tree of vector data in the Orfeo ToolBox.
  */
 
 typedef
@@ -49,19 +49,19 @@ enum
 
 
 /** \class DataNode
- *  \brief This class represent a node of data in a vector data hierarchy.
- *   A DataNode has a type represented by the NodeType enumeration. Depending of
+ *  \brief This class represents a node of data in a vector data hierarchy.
+ *   A DataNode has a type represented by the NodeType enumeration. Depending on
  *  its type, it can have associated data such as Point, Line or Polygon.
  *
  *  A flag indicates if the data are valid or not.
  *
  *  A DataNode has also a dictionnary of fields which can be used to store associated data.
- *  Depending of the writing vector data file format, fields will be used by the writing driver.
+ *  Depending on the writing vector data file format, fields will be used by the writing driver.
  *
  * The three templates indicate
- * - the precision of the points coordinates (default double)
+ * - the precision of the point coordinates (default double)
  * - the number of dimensions of the space (default 2)
- * - the precision of the value associated with objects such as line or polygons (default double)
+ * - the precision of the value associated with objects such as lines or polygons (default double)
  *
  * \sa VectorData
  */
