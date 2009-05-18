@@ -19,6 +19,9 @@
 #define __otbSVMModelEstimator_txx
 
 #include "otbSVMModelEstimator.h"
+#include "otbSVMCrossValidationCostFunction.h"
+#include "otbExhaustiveExponentialOptimizer.h"
+#include "itkRegularStepGradientDescentOptimizer.h"
 #include "otbMacro.h"
 #include "itkCommand.h"
 
@@ -51,6 +54,13 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
   m_Model->DoShrinking(1);
   m_Model->DoProbabilityEstimates(true);
 
+  // Cross validation accuracy measures
+  m_InitialCrossValidationAccuracy = 0.;
+  m_FinalCrossValidationAccuracy = 0.;
+  m_ParametersOptimization = true;
+  m_NumberOfCrossValidationFolders = 5;
+  m_CoarseOptimizationNumberOfSteps = 5;
+  m_FineOptimizationNumberOfSteps = 5;
 }
 
 
@@ -116,6 +126,135 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
   }
 }// end Generate data
 
+template<class InputPixelType, class LabelPixelType>
+void
+SVMModelEstimator<InputPixelType, LabelPixelType>
+::CrossValidate()
+{
+  typedef SVMCrossValidationCostFunction<SVMModelType> CrossValidationFunctionType;
+
+  typename CrossValidationFunctionType::Pointer crossValidationFunction = CrossValidationFunctionType::New();
+
+  crossValidationFunction->SetModel(m_Model);
+  crossValidationFunction->SetNumberOfCrossValidationFolders(m_NumberOfCrossValidationFolders);
+
+  typename CrossValidationFunctionType::ParametersType initialParameters, coarseBestParameters, fineBestParameters;
+
+  switch(m_Model->GetKernelType())
+      {
+      case LINEAR:
+	// C
+	initialParameters.SetSize(1);
+	initialParameters[0] = m_Model->GetC();
+	break;
+
+      case POLY:
+	// C, gamma and coef0
+	initialParameters.SetSize(3);
+	initialParameters[0] = m_Model->GetC();
+	initialParameters[1] = m_Model->GetKernelGamma();
+	initialParameters[2] = m_Model->GetKernelCoef0();
+	break;
+
+      case RBF:
+	// C and gamma
+	initialParameters.SetSize(2);
+	initialParameters[0] = m_Model->GetC();
+	initialParameters[1] = m_Model->GetKernelGamma();
+	break;
+
+      case SIGMOID:
+	// C, gamma and coef0
+	initialParameters.SetSize(3);
+	initialParameters[0] = m_Model->GetC();
+	initialParameters[1] = m_Model->GetKernelGamma();
+	initialParameters[2] = m_Model->GetKernelCoef0();
+	break;
+
+      default:
+	// Only C
+	initialParameters.SetSize(1);
+	initialParameters[0] = m_Model->GetC();
+	break;
+      }
+  
+  m_InitialCrossValidationAccuracy = crossValidationFunction->GetValue(initialParameters);
+  m_FinalCrossValidationAccuracy = m_InitialCrossValidationAccuracy;
+
+  otbMsgDebugMacro(<<"Initial accuracy : "<<m_InitialCrossValidationAccuracy);
+
+  if(m_ParametersOptimization)
+    {
+    otbMsgDebugMacro(<<"Model parameters optimization");
+
+    typename ExhaustiveExponentialOptimizer::Pointer coarseOptimizer = ExhaustiveExponentialOptimizer::New();
+    typename ExhaustiveExponentialOptimizer::StepsType coarseNbSteps(initialParameters.Size());
+    coarseNbSteps.Fill(m_CoarseOptimizationNumberOfSteps);
+    
+    coarseOptimizer->SetNumberOfSteps(coarseNbSteps);
+    coarseOptimizer->SetCostFunction(crossValidationFunction);
+    coarseOptimizer->SetInitialPosition(initialParameters);
+    coarseOptimizer->StartOptimization();
+    
+    coarseBestParameters = coarseOptimizer->GetMaximumMetricValuePosition();
+    
+    otbMsgDebugMacro(<<"Coarse minimum accuracy: "<< coarseOptimizer->GetMinimumMetricValue() <<" "<< coarseOptimizer->GetMinimumMetricValuePosition());
+    otbMsgDebugMacro(<<"Coarse maximum accuracy: "<< coarseOptimizer->GetMaximumMetricValue() <<" "<< coarseOptimizer->GetMaximumMetricValuePosition());
+    
+    typename ExhaustiveExponentialOptimizer::Pointer fineOptimizer = ExhaustiveExponentialOptimizer::New();
+    typename ExhaustiveExponentialOptimizer::StepsType fineNbSteps(initialParameters.Size());
+    fineNbSteps.Fill(m_FineOptimizationNumberOfSteps);
+
+    double stepLength = 1. / static_cast<double>(m_FineOptimizationNumberOfSteps);
+    
+    fineOptimizer->SetNumberOfSteps(fineNbSteps);
+    fineOptimizer->SetStepLength(stepLength);
+    fineOptimizer->SetCostFunction(crossValidationFunction);
+    fineOptimizer->SetInitialPosition(coarseBestParameters);
+    fineOptimizer->StartOptimization();
+    
+    
+    otbMsgDebugMacro(<<"Fine minimum accuracy: "<< fineOptimizer->GetMinimumMetricValue() << " " << fineOptimizer->GetMinimumMetricValuePosition());
+    otbMsgDebugMacro(<<"Fine maximum accuracy: "<< fineOptimizer->GetMaximumMetricValue() << " " << fineOptimizer->GetMaximumMetricValuePosition());
+    
+    fineBestParameters = fineOptimizer->GetMaximumMetricValuePosition();
+    
+    m_FinalCrossValidationAccuracy = fineOptimizer->GetMaximumMetricValue();
+    
+    switch(m_Model->GetKernelType())
+      {
+      case LINEAR:
+	// C
+	m_Model->SetC(fineBestParameters[0]);
+	break;
+	
+      case POLY:
+	// C, gamma and coef0
+	m_Model->SetC(fineBestParameters[0]);
+	m_Model->SetKernelGamma(fineBestParameters[1]);
+	m_Model->SetKernelCoef0(fineBestParameters[2]);
+	break;
+	
+      case RBF:
+	// C and gamma
+	m_Model->SetC(fineBestParameters[0]);
+	m_Model->SetKernelGamma(fineBestParameters[1]);
+	break;
+	
+      case SIGMOID:
+	// C, gamma and coef0
+	m_Model->SetC(fineBestParameters[0]);
+	m_Model->SetKernelGamma(fineBestParameters[1]);
+	m_Model->SetKernelCoef0(fineBestParameters[2]);
+	break;
+	
+      default:
+	// Only C
+	m_Model->SetC(fineBestParameters[0]);
+	break;
+      }
+    }
+}
 
 template<class InputPixelType, class LabelPixelType>
 void
@@ -127,9 +266,6 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
   //-------------------------------------------------------------------
   // Build the SVM problem
   //-------------------------------------------------------------------
-
-
-
   this->BuildProblem();
 
   const char* error_msg = svm_check_parameter(&m_Model->GetProblem(),&m_Model->GetParameters());
@@ -138,6 +274,10 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
   {
     throw itk::ExceptionObject(__FILE__, __LINE__,error_msg,ITK_LOCATION);
   }
+
+  otbMsgDebugMacro(<<"Cross validation");
+
+  this->CrossValidate();
 
   otbMsgDebugMacro(  << "Starting training" );
 
