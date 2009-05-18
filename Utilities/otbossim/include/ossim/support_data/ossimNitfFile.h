@@ -1,14 +1,15 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 // 
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFile.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfFile.h 14243 2009-04-07 20:35:45Z dburken $
 #ifndef ossimNitfFile_HEADER
 #define ossimNitfFile_HEADER
 
@@ -20,8 +21,8 @@
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimIrect.h>
+#include <ossim/support_data/ossimNitfFileHeader.h>
 
-class ossimNitfFileHeader;
 class ossimNitfImageHeader;
 class ossimNitfSymbolHeader;
 class ossimNitfLabelHeader;
@@ -36,7 +37,18 @@ class OSSIMDLLEXPORT ossimNitfFile : public ossimReferenced
 public:
    friend OSSIMDLLEXPORT std::ostream& operator <<(std::ostream& out,
                                                    const ossimNitfFile &data);
-   virtual std::ostream& print(std::ostream& out) const;
+
+   /**
+    * @brief print method that outputs a key/value type format adding prefix
+    * to keys.
+    * @param out String to output to.
+    * @param prefix This will be prepended to key.
+    * e.g. Where prefix = "nitf." and key is "file_name" key becomes:
+    * "nitf.file_name:"
+    * @return output stream.
+    */
+   std::ostream& print(std::ostream& out,
+                       const std::string& prefix=std::string()) const;
    
    ossimNitfFile();
    virtual ~ossimNitfFile();
@@ -60,6 +72,9 @@ public:
    ossimNitfDataExtensionSegment* getNewDataExtensionSegment(long dataExtNumber)const;
    
    ossimString getVersion()const;
+
+   /** @return The filename parsed by this object. */
+   ossimFilename getFilename() const;
 
 protected:
    ossimNitfImageHeader* allocateImageHeader()const;

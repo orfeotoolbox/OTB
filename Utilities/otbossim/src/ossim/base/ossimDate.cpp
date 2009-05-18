@@ -1,3 +1,14 @@
+//----------------------------------------------------------------------------
+//
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
+//
+// Author: Garrett Potts
+// 
+//----------------------------------------------------------------------------
+// $Id: ossimDate.cpp 14478 2009-05-08 18:24:22Z dburken $
+
 #include <ossim/base/ossimDate.h>
 #include <iomanip>
 #include <sstream>
@@ -203,6 +214,8 @@ std::ostream& ossimLocalTm::print(std::ostream & os,
     return os << pTmp.str();
 }
 
+
+
 std::ostream& ossimLocalTm::printDate (std::ostream & os, int fmt) const
 {
     std::ostringstream pTmp;
@@ -241,6 +254,34 @@ std::ostream& ossimLocalTm::printDate (std::ostream & os, int fmt) const
 
     return os << pTmp.str();
 }
+
+std::ostream& ossimLocalTm::dump(std::ostream& os) const
+{
+   // Capture the original flags.
+   std::ios_base::fmtflags f = os.flags();
+
+   os << setiosflags(ios::fixed) << setprecision(8) << setiosflags(ios::left);
+
+   os << "fr_sec:   " << setw(12) << theFractionalSecond
+      << "fractional second\n"
+      << "tm_sec:   " << setw(12) << tm_sec
+      << "seconds [0-60] (1 leap second)\n"
+      << "tm_min:   " << setw(12) << tm_min   << "minutes [0-59]\n"
+      << "tm_hour:  " << setw(12) << tm_hour  << "hours [0-23]\n"
+      << "tm_mday:  " << setw(12) << tm_mday  << "day [1-31]\n"
+      << "tm_mon:   " << setw(12) << tm_mon   << "month [0-11]\n"
+      << "tm_year:  " << setw(12) << tm_year  << "year - 1900\n"
+      << "tm_wday:  " << setw(12) << tm_wday  << "day of week [0-6]\n"
+      << "tm_yday:  " << setw(12) << tm_yday  << "days in year[0-365]\n"
+      << "tm_isdst: " << setw(12) << tm_isdst << "DST.[-1/0/1]\n"
+      << std::endl;
+
+   // Reset flags.
+   os.setf(f);
+   
+   return os;
+}
+
 void ossimLocalTm::tSfx (std::ostream & os, int fmt, char ch) const
 {
     if (fmt & ossimTimeFormatSepAbbrev)

@@ -1,15 +1,18 @@
 //********************************************************************
-// Copyright (C) 2004 Intelligence Data Systems. 
 //
-// LICENSE: LGPL
+// License:  LGPL
 //
-// see top level LICENSE.txt
+// See LICENSE.txt file in the top level directory for more details.
 // 
 // Author:      Garrett Potts
+// 
 // Description: Nitf support class
+//
+// Documentation reference:
+// DIGEST Part 2 Annex D - Appendix 1, Table D1-3
 // 
 //********************************************************************
-// $Id: ossimNitfGeoPositioningTag.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfGeoPositioningTag.h 14241 2009-04-07 19:59:23Z dburken $
 //
 #ifndef ossimNitfGeoPositioningTag_HEADER
 #define ossimNitfGeoPositioningTag_HEADER
@@ -26,6 +29,14 @@ public:
    virtual ossim_uint32 getSizeInBytes()const;
    virtual void clearFields();
 
+   /**
+    * @brief Print method that outputs a key/value type format
+    * adding prefix to keys.
+    * @param out Stream to output to.
+    * @param prefix Prefix added to key like "image0.";
+    */
+   virtual std::ostream& print(std::ostream& out,
+                               const std::string& prefix=std::string()) const;
    
 protected:
    /**

@@ -14,7 +14,7 @@
 // handler for DTED files.
 //
 //********************************************************************
-// $Id: ossimDtedTileSource.h 9184 2006-06-22 19:27:59Z sbortman $
+// $Id: ossimDtedTileSource.h 14137 2009-03-25 20:23:05Z dburken $
 
 #ifndef ossimDtedTileSource_HEADER
 #define ossimDtedTileSource_HEADER
@@ -148,6 +148,20 @@ public:
     * postspacing.x = longitude interval and postspacing.y = latitude interval.
     */
    void getPostSpacing(ossimDpt& postSpacing) const;
+
+   /**
+    * @brief Gets a property for name.
+    * @param name Property name to get.
+    * @return ossimRefPtr<ossimProperty> Note that this can be empty if
+    * property for name was not found.
+    */
+   virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
+   /**
+    * @brief Adds this class's properties to list.
+    * @param propertyNames list to append to.
+    */
+   virtual void getPropertyNames(
+      std::vector<ossimString>& propertyNames)const;
    
 private:
    // Disallow operator= and copy constrution...

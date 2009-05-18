@@ -1,14 +1,15 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 // 
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_0.cpp 13931 2008-12-15 23:44:40Z dburken $
+// $Id: ossimNitfImageHeaderV2_0.cpp 14251 2009-04-09 16:25:19Z dburken $
 
 
 #include <iomanip>
@@ -392,88 +393,131 @@ void ossimNitfImageHeaderV2_0::writeStream(std::ostream &out)
    }
 }
 
-std::ostream& ossimNitfImageHeaderV2_0::print(std::ostream& out)const
+std::ostream& ossimNitfImageHeaderV2_0::print(std::ostream& out,
+                                              const std::string& prefix) const
 {
-   out << setiosflags(std::ios::left) << "ossimNitfImageHeaderV2_0::print"
-       << std::setw(24) << "\nIM:" << theType 
-       << std::setw(24) << "\nIID:" << theImageId 
-       << std::setw(24) << "\nIDATIM:" << theDateTime 
-       << std::setw(24) << "\nTGTID:" << theTargetId 
-       << std::setw(24) << "\nITITLE:" << theTitle    
-       << std::setw(24) << "\nISCLAS:" << theSecurityClassification 
-       << std::setw(24) << "\nISCODE:" << theCodewords 
-       << std::setw(24) << "\nISCTLH:" << theControlAndHandling 
-       << std::setw(24) << "\nISREL:" << theReleasingInstructions 
-       << std::setw(24) << "\nISCAUT:" << theClassificationAuthority 
-       << std::setw(24) << "\nISCTLN:" << theSecurityControlNumber 
-       << std::setw(24) << "\nISDWNG:" << theSecurityDowngrade     
-       << std::setw(24) << "\nISDEBT:" << theDowngradingEvent 
-       << std::setw(24) << "\nENCRYP:" << theEncryption 
-       << std::setw(24) << "\nISORCE:" << theImageSource 
-       << std::setw(24) << "\nNROWS:" << theSignificantRows 
-       << std::setw(24) << "\nNCOLS:" << theSignificantCols 
-       << std::setw(24) << "\nPVTYPE:" << thePixelValueType 
-       << std::setw(24) << "\nIREP:" << theRepresentation 
-       << std::setw(24) << "\nICAT:" << theCategory       
-       << std::setw(24) << "\nABPP:" << theActualBitsPerPixelPerBand 
-       << std::setw(24) << "\nPJUST:" << theJustification 
-       << std::setw(24) << "\nICORDS:" << theCoordinateSystem 
-       << std::setw(24) << "\nIGEOLO:" << theGeographicLocation 
-       << std::setw(24) << "\nNICOM:" << theNumberOfComments 
-       << std::setw(24) << "\nIC:" << theCompression      
-       << std::setw(24) << "\nCOMRAT:" << theCompressionRateCode 
-       << std::setw(24) << "\nNBANDS:" << theNumberOfBands ;
+   out << setiosflags(std::ios::left)
+       << prefix << std::setw(24) << "IM:"
+       << theType << "\n"
+       << prefix << std::setw(24) << "IID:"
+       << theImageId  << "\n"
+       << prefix << std::setw(24) << "IDATIM:"
+       << theDateTime << "\n" 
+       << prefix << std::setw(24) << "TGTID:"
+       << theTargetId  << "\n"
+       << prefix << std::setw(24) << "ITITLE:"
+       << theTitle  << "\n"   
+       << prefix << std::setw(24) << "ISCLAS:"
+       << theSecurityClassification << "\n"
+       << prefix << std::setw(24) << "ISCODE:"
+       << theCodewords  << "\n"
+       << prefix << std::setw(24) << "ISCTLH:"
+       << theControlAndHandling << "\n" 
+       << prefix << std::setw(24) << "ISREL:"
+       << theReleasingInstructions << "\n" 
+       << prefix << std::setw(24) << "ISCAUT:"
+       << theClassificationAuthority << "\n" 
+       << prefix << std::setw(24) << "ISCTLN:"
+       << theSecurityControlNumber << "\n" 
+       << prefix << std::setw(24) << "ISDWNG:"
+       << theSecurityDowngrade  << "\n"    
+       << prefix << std::setw(24) << "ISDEBT:"
+       << theDowngradingEvent  << "\n"
+       << prefix << std::setw(24) << "ENCRYP:"
+       << theEncryption  << "\n"
+       << prefix << std::setw(24) << "ISORCE:"
+       << theImageSource  << "\n"
+       << prefix << std::setw(24) << "NROWS:"
+       << theSignificantRows  << "\n"
+       << prefix << std::setw(24) << "NCOLS:"
+       << theSignificantCols  << "\n"
+       << prefix << std::setw(24) << "PVTYPE:"
+       << thePixelValueType  << "\n"
+       << prefix << std::setw(24) << "IREP:"
+       << theRepresentation  << "\n"
+       << prefix << std::setw(24) << "ICAT:"
+       << theCategory  << "\n"      
+       << prefix << std::setw(24) << "ABPP:"
+       << theActualBitsPerPixelPerBand << "\n"
+       << prefix << std::setw(24) << "PJUST:"
+       << theJustification  << "\n"
+       << prefix << std::setw(24) << "ICORDS:"
+       << theCoordinateSystem  << "\n"
+       << prefix << std::setw(24) << "IGEOLO:"
+       << theGeographicLocation  << "\n"
+       << prefix << std::setw(24) << "NICOM:"
+       << theNumberOfComments << "\n" 
+       << prefix << std::setw(24) << "IC:"
+       << theCompression  << "\n"     
+       << prefix << std::setw(24) << "COMRAT:"
+       << theCompressionRateCode  << "\n"
+       << prefix << std::setw(24) << "NBANDS:"
+       << theNumberOfBands  << "\n";
 
    ossim_uint32 idx = 0;
    for(idx = 0; idx < theImageBands.size(); ++idx)
    {
       if(theImageBands[idx].valid())
       {
-         theImageBands[idx]->print(out, idx); 
+         theImageBands[idx]->print(out, prefix, idx); 
       }
    }
    
-   out << std::setw(24) << "\nISYNC:" << theImageSyncCode 
-       << std::setw(24) << "\nIMODE:" << theImageMode 
-       << std::setw(24) << "\nNBPR:" << theNumberOfBlocksPerRow 
-       << std::setw(24) << "\nNBPC:" << theNumberOfBlocksPerCol 
-       << std::setw(24) << "\nNPPBH:" << theNumberOfPixelsPerBlockHoriz 
-       << std::setw(24) << "\nNPPBV:" << theNumberOfPixelsPerBlockVert 
-       << std::setw(24) << "\nNBPP:" << theNumberOfBitsPerPixelPerBand 
-       << std::setw(24) << "\nIDLVL:" << theDisplayLevel 
-       << std::setw(24) << "\nIALVL:" << theAttachmentLevel 
-       << std::setw(24) << "\nILOC:" << theImageLocation 
-       << std::setw(24) << "\nIMAG:" << theImageMagnification 
-       << std::setw(24) << "\nUDIDL:" << theUserDefinedImageDataLength 
-       << std::setw(24) << "\nUDOFL:" << theUserDefinedOverflow 
-       << std::setw(24) << "\nIXSHDL:" << theExtendedSubheaderDataLen 
-       << std::setw(24) << "\nIXSOFL:" << theExtendedSubheaderOverflow 
-       << std::setw(24) << "\ntheDataLocation:" << theDataLocation
-       << std::setw(24) << "\ntheBlockedImageDataOffset:"
-       << theBlockedImageDataOffset
-       << std::setw(24) << "\ntheBlockMaskRecordLength:"
-       << theBlockMaskRecordLength
-       << std::setw(24) << "\nthePadPixelMaskRecordLength:"
-       << thePadPixelMaskRecordLength
-       << std::setw(24) << "\ntheTransparentOutputPixelCodeLength:"
-       << theTransparentOutputPixelCodeLength
-       << std::setw(24) << "\nthePadOutputPixelCode:" << thePadOutputPixelCode
-       << std::endl;
+   out << prefix << std::setw(24) << "ISYNC:"
+       << theImageSyncCode << "\n" 
+       << prefix << std::setw(24) << "IMODE:"
+       << theImageMode  << "\n"
+       << prefix << std::setw(24) << "NBPR:"
+       << theNumberOfBlocksPerRow << "\n" 
+       << prefix << std::setw(24) << "NBPC:"
+       << theNumberOfBlocksPerCol << "\n" 
+       << prefix << std::setw(24) << "NPPBH:"
+       << theNumberOfPixelsPerBlockHoriz << "\n" 
+       << prefix << std::setw(24) << "NPPBV:"
+       << theNumberOfPixelsPerBlockVert  << "\n"
+       << prefix << std::setw(24) << "NBPP:"
+       << theNumberOfBitsPerPixelPerBand  << "\n"
+       << prefix << std::setw(24) << "IDLVL:"
+       << theDisplayLevel << "\n"
+       << prefix << std::setw(24) << "IALVL:"
+       << theAttachmentLevel << "\n" 
+       << prefix << std::setw(24) << "ILOC:"
+       << theImageLocation << "\n" 
+       << prefix << std::setw(24) << "IMAG:"
+       << theImageMagnification  << "\n"
+       << prefix << std::setw(24) << "UDIDL:"
+       << theUserDefinedImageDataLength  << "\n"
+       << prefix << std::setw(24) << "UDOFL:"
+       << theUserDefinedOverflow  << "\n"
+       << prefix << std::setw(24) << "IXSHDL:"
+       << theExtendedSubheaderDataLen  << "\n"
+       << prefix << std::setw(24) << "IXSOFL:"
+       << theExtendedSubheaderOverflow  << "\n";
+
+   if ( traceDebug() )
+   {
+       out << prefix << std::setw(24) << "theDataLocation:"
+           << theDataLocation << "\n"
+           << prefix << std::setw(24) << "theBlockedImageDataOffset:"
+           << theBlockedImageDataOffset << "\n"
+           << prefix << std::setw(24) << "theBlockMaskRecordLength:"
+           << theBlockMaskRecordLength << "\n"
+           << prefix << std::setw(24) << "thePadPixelMaskRecordLength:"
+           << thePadPixelMaskRecordLength << "\n"
+           << prefix << std::setw(24) << "theTransparentOutputPixelCodeLength:"
+           << theTransparentOutputPixelCodeLength << "\n"
+           << prefix << std::setw(24) << "thePadOutputPixelCode:"
+           << thePadOutputPixelCode << "\n";
+   }
 
    if(theCompressionHeader.valid())
    {
       theCompressionHeader->print(out);
-      out << std::endl;
    }
 
-   printTags(out);
-   
-   
-//    out << setw(24) << "\nTAGS:\n";
-//    std::copy(theTagList.begin(),
-//              theTagList.end(),
-//              std::ostream_iterator<ossimNitfTagInformation>(out,"\n"));
-   return out;
+   out << std::endl;
+
+   return printTags(out, prefix);
 }
 
 ossimDrect ossimNitfImageHeaderV2_0::getImageRect()const

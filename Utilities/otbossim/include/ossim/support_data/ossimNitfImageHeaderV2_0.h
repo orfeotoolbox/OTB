@@ -1,14 +1,15 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// LICENSE:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 //
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_0.h 13619 2008-09-29 19:10:31Z gpotts $
+// $Id: ossimNitfImageHeaderV2_0.h 14241 2009-04-07 19:59:23Z dburken $
 #ifndef ossimNitfImageHeaderV2_0_HEADER
 #define ossimNitfImageHeaderV2_0_HEADER
 #include <ossim/support_data/ossimNitfImageHeaderV2_X.h>
@@ -24,7 +25,12 @@ public:
    virtual void parseStream(std::istream &in);
    virtual void writeStream(std::ostream &out);
    
-   virtual std::ostream& print(std::ostream &out)const;
+   /**
+    * @brief print method that outputs a key/value type format adding prefix
+    * to keys.
+    */
+   virtual std::ostream& print(std::ostream& out,
+                               const std::string& prefix=std::string()) const;
    
    virtual void setProperty(ossimRefPtr<ossimProperty> property);
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;

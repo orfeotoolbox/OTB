@@ -1,14 +1,15 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 // 
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeader.cpp 13874 2008-11-17 19:44:49Z dburken $
+// $Id: ossimNitfFileHeader.cpp 14241 2009-04-07 19:59:23Z dburken $
 #include <ossim/support_data/ossimNitfFileHeader.h>
 #include <ossim/base/ossimContainerProperty.h>
 #include <iostream>
@@ -181,3 +182,23 @@ void ossimNitfFileHeader::getPropertyNames(std::vector<ossimString>& propertyNam
    propertyNames.push_back(TAGS_KW);
 }
 
+std::ostream& ossimNitfFileHeader::print(std::ostream& out,
+                                         const std::string& /* prefix */) const
+{
+   return out;
+}
+
+std::ostream& ossimNitfFileHeader::printTags(std::ostream& out,
+                                             const std::string& prefix) const
+{
+   for(ossim_uint32 i = 0; i < theTagList.size(); ++i)
+   {
+      ossimRefPtr<ossimNitfRegisteredTag> tag = theTagList[i].getTagData();
+      if (tag.valid())
+      {
+         tag->print(out, prefix);
+      }
+   }
+
+   return out;
+}

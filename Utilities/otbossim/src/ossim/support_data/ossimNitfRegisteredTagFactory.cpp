@@ -1,16 +1,20 @@
 //*******************************************************************
-// Copyright (C) 2004 Intelligence Data Systems. 
 //
-// LICENSE: See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 // 
 // Author: Garrett Potts
 //
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfRegisteredTagFactory.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfRegisteredTagFactory.cpp 14241 2009-04-07 19:59:23Z dburken $
 #include <ossim/support_data/ossimNitfRegisteredTagFactory.h>
 #include <ossim/support_data/ossimNitfBlockaTag.h>
+#include <ossim/support_data/ossimNitfCscrnaTag.h>
+#include <ossim/support_data/ossimNitfCsdidaTag.h>
+#include <ossim/support_data/ossimNitfCsexraTag.h>
 #include <ossim/support_data/ossimNitfGeoPositioningTag.h>
 #include <ossim/support_data/ossimNitfIchipbTag.h>
 #include <ossim/support_data/ossimNitfLocalGeographicTag.h>
@@ -28,6 +32,9 @@ RTTI_DEF1(ossimNitfRegisteredTagFactory, "ossimNitfRegisteredTagFactory", ossimN
 ossimNitfRegisteredTagFactory* ossimNitfRegisteredTagFactory::theInstance = NULL;
 
 static const char BLOCKA_TAG[]               = "BLOCKA";
+static const char CSCRNA_TAG[]               = "CSCRNA";
+static const char CSDIDA_TAG[]               = "CSDIDA";
+static const char CSEXRA_TAG[]               = "CSEXRA";
 static const char GEO_POSITIONING_TAG[]      = "GEOPSB";
 static const char ICHIPB_TAG[]               = "ICHIPB";
 static const char LOCAL_GEOGRAPHIC_TAG[]     = "GEOLOB";
@@ -67,6 +74,18 @@ ossimRefPtr<ossimNitfRegisteredTag> ossimNitfRegisteredTagFactory::create(
    if(tagName == BLOCKA_TAG)
    {
       return new ossimNitfBlockaTag;
+   }
+   else if(tagName == CSCRNA_TAG)
+   {
+      return new ossimNitfCscrnaTag;
+   }
+   else if(tagName == CSDIDA_TAG)
+   {
+      return new ossimNitfCsdidaTag;
+   }
+   else if(tagName == CSEXRA_TAG)
+   {
+      return new ossimNitfCsexraTag;
    }
    else if(tagName == GEO_POSITIONING_TAG)
    {

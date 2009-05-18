@@ -9,7 +9,7 @@
 // Shuttle Radar Topography Mission (SRTM) elevation source.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmHandler.h 11180 2007-06-07 19:56:09Z dburken $
+// $Id: ossimSrtmHandler.h 14298 2009-04-14 17:26:03Z gpotts $
 #ifndef ossimSrtmHandler_HEADER
 #define ossimSrtmHandler_HEADER
 
@@ -59,17 +59,19 @@ public:
     */
    virtual double getPostValue(const ossimIpt& gridPt) const;
 
+   virtual bool isOpen()const;
+   
    /**
     * Opens a stream to the srtm cell.
     *
     * @return Returns true on success, false on error.
     */
-   virtual bool open() const;
+   virtual bool open();
 
    /**
     * Closes the stream to the file.
     */
-   virtual void close() const;
+   virtual void close();
    
 private:
    // Disallow operator= and copy constrution...

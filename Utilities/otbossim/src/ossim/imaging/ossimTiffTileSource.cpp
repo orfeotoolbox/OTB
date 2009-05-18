@@ -1,6 +1,8 @@
 //*******************************************************************
 //
-// License:  See LICENSE.txt file in the top level directory.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //          Frank Warmerdam (warmerdam@pobox.com)
@@ -10,7 +12,7 @@
 // Contains class definition for TiffTileSource.
 //
 //*******************************************************************
-//  $Id: ossimTiffTileSource.cpp 13482 2008-08-22 17:04:25Z gpotts $
+//  $Id: ossimTiffTileSource.cpp 14425 2009-04-30 16:17:49Z gpotts $
 
 #include <cstdlib> /* for abs(int) */
 #include <ossim/imaging/ossimTiffTileSource.h>
@@ -557,19 +559,30 @@ bool ossimTiffTileSource::open()
    // Get the scalar type.
    //---
    theScalarType = OSSIM_SCALAR_UNKNOWN;
-   
    if (theBitsPerSample == 16)
    {
       theBytesPerPixel = 2;
-      theScalarType = OSSIM_USHORT16; // Default to unsigned...
-      
-      if (theMaxSampleValue == 2047) // 2^11-1
-      {
-         theScalarType = OSSIM_USHORT11; // IKONOS probably...
-      }
-      else if (theSampleFormatUnit == SAMPLEFORMAT_INT)
+
+      if (theSampleFormatUnit == SAMPLEFORMAT_INT)
       {
          theScalarType = OSSIM_SSHORT16;
+      }
+      else if (theSampleFormatUnit == SAMPLEFORMAT_UINT)
+      {
+         // ESH 03/2009 -- Changed "== 2047" to "<= 2047"
+         if (theMaxSampleValue <= 2047) // 2^11-1
+         {
+            // 11 bit EO, i.e. Ikonos, QuickBird, WorldView, GeoEye.
+            theScalarType = OSSIM_USHORT11; // IKONOS probably...
+         }
+         else
+         {
+            theScalarType = OSSIM_USHORT16; 
+         }
+      }
+      else
+      {
+         theScalarType = OSSIM_USHORT16; // Default to unsigned...
       }
    }
    else if ( (theBitsPerSample == 32) &&
@@ -577,6 +590,12 @@ bool ossimTiffTileSource::open()
    {
       theBytesPerPixel = 4;
       theScalarType = OSSIM_UINT32;
+   }
+   else if ( (theBitsPerSample == 32) &&
+             (theSampleFormatUnit == SAMPLEFORMAT_INT) )
+   {
+      theBytesPerPixel = 4;
+      theScalarType = OSSIM_SINT32;
    }
    else if (theBitsPerSample == 32 &&
             theSampleFormatUnit == SAMPLEFORMAT_IEEEFP)

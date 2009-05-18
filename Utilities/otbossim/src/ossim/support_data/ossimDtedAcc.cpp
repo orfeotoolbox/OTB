@@ -8,14 +8,18 @@
 //               (ACC) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedAcc.cpp 13571 2008-09-12 14:59:59Z gpotts $
+// $Id: ossimDtedAcc.cpp 14248 2009-04-08 19:38:11Z dburken $
 
 #include <cstdlib>
 #include <iostream>
+#include <iomanip>
 #include <fstream>
+#include <string>
 
 #include <ossim/support_data/ossimDtedAcc.h>
-#include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimNotify.h>
+#include <ossim/base/ossimProperty.h>
+#include <ossim/base/ossimStringProperty.h>
 
 //**************************************************************************
 // CONSTRUCTOR
@@ -23,8 +27,8 @@
 ossimDtedAcc::ossimDtedAcc(const ossimFilename& dted_file,
                            ossim_int32 offset)
 {
-	clearFields();
-	theStartOffset = offset;
+   clearFields();
+   theStartOffset = offset;
    // Check to see that dted file exists. 
    if(!dted_file.exists())
    {
@@ -173,6 +177,62 @@ void ossimDtedAcc::parse(std::istream& in)
    theStopOffset = theStartOffset + ACC_LENGTH;
 }
 
+ossimRefPtr<ossimProperty> ossimDtedAcc::getProperty(
+   const ossimString& name) const
+{
+   ossimRefPtr<ossimProperty> result = 0;
+   if (name == "recognition_sentinel")
+   {
+      result = new ossimStringProperty(name, theRecSen);
+      
+   }
+   else if (name == "absolute_ce")
+   {
+      result = new ossimStringProperty(name, theAbsoluteCE);
+   }
+   else if (name == "absolute_le")
+   {
+      result = new ossimStringProperty(name, theAbsoluteLE); 
+   }
+   else if (name == "relative_ce")
+   {
+      result = new ossimStringProperty(name, theRelativeCE);
+   }
+   else if (name == "relative_le")
+   {
+      result = new ossimStringProperty(name, theRelativeLE);
+   }
+   return result;
+}
+
+void ossimDtedAcc::getPropertyNames(
+   std::vector<ossimString>& propertyNames) const
+{
+   propertyNames.push_back(ossimString("recognition_sentinel"));
+   propertyNames.push_back(ossimString("absolute_ce"));
+   propertyNames.push_back(ossimString("absolute_le"));
+   propertyNames.push_back(ossimString("relative_ce"));
+   propertyNames.push_back(ossimString("relative_le"));
+}
+
+std::ostream& ossimDtedAcc::print(std::ostream& out,
+                                  const std::string& prefix) const
+{
+   std::string pfx = prefix;
+   pfx += "acc.";
+
+   out << setiosflags(ios::left)
+       << pfx << setw(28) << "recognition_sentinel:" << theRecSen << "\n"
+       << pfx << setw(28) << "absolute_ce:"  << theAbsoluteCE << "\n"
+       << pfx << setw(28) << "absolute_le:"  << theAbsoluteLE << "\n"
+       << pfx << setw(28) << "relative ce:"  << theRelativeCE << "\n"
+       << pfx << setw(28) << "relative le:"  << theRelativeLE << "\n"
+       << pfx << setw(28) << "start_offset:" << theStartOffset << "\n"
+       << pfx << setw(28) << "stop_offset:"  << theStopOffset
+       << std::endl;
+   return out;
+}
+
 ossim_int32 ossimDtedAcc::absCE() const
 {
    return (theAbsoluteCE ? atoi(theAbsoluteCE) : 0);
@@ -210,18 +270,8 @@ ossim_int32 ossimDtedAcc::stopOffset()  const
 //**************************************************************************
 std::ostream& operator<<( std::ostream& os, const ossimDtedAcc& acc)
 {
-   os << "\nDTED Header (ACC):"
-      << "\n-------------------------------"
-      << "\nRecoginition Sentinel: " << acc.theRecSen
-      << "\nAbsolute CE:           " << acc.theAbsoluteCE
-      << "\nAbsolute LE:           " << acc.theAbsoluteLE
-      << "\nRelative CE:           " << acc.theRelativeCE
-      << "\nRelative LE:           " << acc.theRelativeLE
-      << "\nStart Offset:          " << acc.theStartOffset
-      << "\nStop Offset:           " << acc.theStopOffset
-      << std::endl;
-
-   return os;
+   std::string prefix;
+   return acc.print(os, prefix);
 }
 
 ossimDtedAcc::ossimDtedAcc(const ossimDtedAcc& source)

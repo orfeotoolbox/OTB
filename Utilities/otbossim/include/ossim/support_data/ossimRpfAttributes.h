@@ -1,3 +1,12 @@
+//----------------------------------------------------------------------------
+//
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
+// 
+//----------------------------------------------------------------------------
+// $Id: ossimRpfAttributes.h 14241 2009-04-07 19:59:23Z dburken $
+
 #ifndef ossimRpfAttributes_HEADER
 #define ossimRpfAttributes_HEADER
 #include <map>
@@ -8,18 +17,29 @@ class OSSIM_DLL ossimRpfAttributes
 {
 
 public:
-	friend OSSIM_DLL std::ostream& operator<<(std::ostream& out,
-                              const ossimRpfAttributes& data);
+   friend OSSIM_DLL std::ostream& operator<<(std::ostream& out,
+                                             const ossimRpfAttributes& data);
    ossimRpfAttributes();
    ~ossimRpfAttributes();
 
    void setAttributeFlag(ossim_uint32 id,
                          bool flag);
    bool getAttributeFlag(ossim_uint32 id)const;
-   void print(std::ostream& out)const;
+
+   /**
+    * @brief print method that outputs a key/value type format adding prefix
+    * to keys.
+    * @param out String to output to.
+    * @param prefix This will be prepended to key.
+    * e.g. Where prefix = "nitf." and key is "file_name" key becomes:
+    * "nitf.file_name:"
+    * @return output stream.
+    */
+   std::ostream& print(std::ostream& out,
+                       const std::string& prefix=std::string()) const;
+   
    bool isEmpty()const;
    void clearFields();
-
    
    /*!
     * The attribute Id.  The Id and descriptions are taken from

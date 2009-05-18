@@ -11,7 +11,7 @@
 //
 // Contains class definition for ossimDrect.
 //*******************************************************************
-//  $Id: ossimDrect.cpp 11408 2007-07-27 13:43:00Z dburken $
+//  $Id: ossimDrect.cpp 14352 2009-04-20 19:34:49Z gpotts $
 
 #include <iostream>
 
@@ -267,22 +267,21 @@ bool ossimDrect::intersects(const ossimDrect& rect) const
    if (theOrientMode != rect.theOrientMode)
       return false;
    
-   ossim_float64  ulx = d_MAX(rect.ul().x,ul().x);
-   ossim_float64  lrx = std::min(rect.lr().x,lr().x);
+   ossim_float64  ulx = ossim::max(rect.ul().x,ul().x);
+   ossim_float64  lrx = ossim::min(rect.lr().x,lr().x);
    ossim_float64  uly, lry;
-   bool rtn;
-   
+   bool rtn=false;
    if (theOrientMode == OSSIM_LEFT_HANDED)
    {
-      uly  = d_MAX(rect.ul().y,ul().y);
-      lry  = std::min(rect.lr().y,lr().y);
+      uly  = ossim::max(rect.ul().y,ul().y);
+      lry  = ossim::min(rect.lr().y,lr().y);
       rtn = ((ulx <= lrx) && (uly <= lry));
    }
    else
    {
-      uly  = d_MAX(rect.ul().y,ul().y);
-      lry  = std::min(rect.lr().y,lr().y);
-      rtn = ((ulx <= lrx) && (uly >= lry));
+      uly  = ossim::max(rect.ll().y,ll().y);
+      lry  = ossim::min(rect.ur().y,ur().y);
+      rtn = ((ulx <= lrx) && (uly <= lry));
    }
       
    return (rtn);
@@ -458,6 +457,29 @@ void ossimDrect::stretchToTileBoundary(const ossimDpt& widthHeight)
    *this = ossimDrect(ul, lr, theOrientMode);
 }
 
+const ossimDrect& ossimDrect::expand(const ossimDpt& padding)
+{
+   theUlCorner.x -= padding.x;
+   theUrCorner.x += padding.x;
+   theLrCorner.x += padding.x;
+   theLlCorner.x -= padding.x;
+   if(theOrientMode == OSSIM_LEFT_HANDED)
+   {
+      theUlCorner.y -= padding.y;
+      theUrCorner.y -= padding.y;
+      theLrCorner.y += padding.y;
+      theLlCorner.y += padding.y;
+   }
+   else
+   {
+      theUlCorner.y += padding.y;
+      theUrCorner.y += padding.y;
+      theLrCorner.y -= padding.y;
+      theLlCorner.y -= padding.y;
+   }
+   
+   return *this;
+}
 
 
 //*******************************************************************
@@ -623,48 +645,42 @@ void ossimDrect::splitToQuad(ossimDrect& ulRect,
    ossimIpt midPt = this->midPoint();
    
    ulRect = ossimDrect(ulPt.x,
-		       ulPt.y,
-		       midPt.x,
-		       midPt.y,
-		       theOrientMode);
+                       ulPt.y,
+                       midPt.x,
+                       midPt.y,
+                       theOrientMode);
    
-   urRect = ossimDrect(midPt.x+DBL_EPSILON,
-		       ulPt.y,
-		       urPt.x,
-		       midPt.y,
-		       theOrientMode);
-
+   urRect = ossimDrect(midPt.x,
+                       ulPt.y,
+                       urPt.x,
+                       midPt.y,
+                       theOrientMode);
+   
    if(theOrientMode  == OSSIM_LEFT_HANDED)
-     {
-       lrRect = ossimDrect(midPt.x+DBL_EPSILON,
-			   midPt.y+DBL_EPSILON,
-			   lrPt.x,
-			   theOrientMode);
-     }
+   {
+      lrRect = ossimDrect(midPt.x,
+                          midPt.y,
+                          lrPt.x,
+                          theOrientMode);
+      llRect = ossimDrect(ulPt.x,
+                          midPt.y,
+                          midPt.x,
+                          llPt.y,
+                          theOrientMode);
+   }
    else
-     {       
-       lrRect = ossimDrect(midPt.x+DBL_EPSILON,
-			   midPt.y-DBL_EPSILON,
-			   lrPt.x,
-			   theOrientMode);
-     }
-
-   if(theOrientMode  == OSSIM_LEFT_HANDED)
-     {
-       llRect = ossimDrect(ulPt.x,
-			   midPt.y+DBL_EPSILON,
-			   midPt.x,
-			   llPt.y,
-			   theOrientMode);
-     }
-   else
-     {
-       llRect = ossimDrect(ulPt.x,
-			   midPt.y-DBL_EPSILON,
-			   midPt.x,
-			   llPt.y,
-			   theOrientMode);       
-     }
+   {       
+      lrRect = ossimDrect(midPt.x,
+                          midPt.y,
+                          lrPt.x,
+                          theOrientMode);
+      llRect = ossimDrect(ulPt.x,
+                          midPt.y,
+                          midPt.x,
+                          llPt.y,
+                          theOrientMode);       
+   }
+   
 }
 
 //*******************************************************************
@@ -672,10 +688,10 @@ void ossimDrect::splitToQuad(ossimDrect& ulRect,
 //*******************************************************************
 ossimDrect ossimDrect::clipToRect(const ossimDrect& rect)const
 {
+   ossimDrect result;
+   result.makeNan();
    if(rect.hasNans() || hasNans())
    {
-      ossimDrect result;
-      result.makeNan();
 
       return result;
    }
@@ -683,37 +699,30 @@ ossimDrect ossimDrect::clipToRect(const ossimDrect& rect)const
    if (theOrientMode != rect.theOrientMode)
       return (*this);
 
-   double x0 = d_MAX(rect.ul().x, ul().x);
-   double x1 = std::min(rect.lr().x, lr().x);
+   double x0 = ossim::max(rect.ul().x, ul().x);
+   double x1 = ossim::min(rect.lr().x, lr().x);
    double y0, y1;
 
-   if(!this->intersects(rect))
-   {
-      return ossimDrect(ossim::nan(),
-                        ossim::nan(),
-                        ossim::nan(),
-                        ossim::nan());
-   }
    if (theOrientMode == OSSIM_LEFT_HANDED)
    {
-      y0 = d_MAX(rect.ul().y, ul().y);
-      y1 = std::min(rect.lr().y, lr().y);
+      y0 = ossim::max(rect.ll().y, ll().y);
+      y1 = ossim::min(rect.ur().y, ur().y);
 
       if( (x1 < x0) || (y1 < y0) )
-         return ossimDrect(ossimDpt(0,0), ossimDpt(0,0), theOrientMode);
+         return result;
       else
-         return ossimDrect(x0, y0, x1, y1, theOrientMode);
+         result = ossimDrect(x0, y0, x1, y1, theOrientMode);
    }
    else
    {
-      y1 = std::min(rect.ul().y,ul().y);
-      y0 = d_MAX(rect.lr().y,lr().y);
-
-      if((x1 < x0) || (y1 < y0))
-         return ossimDrect(ossimDpt(0,0), ossimDpt(0,0), theOrientMode);
-      else
-         return ossimDrect(x0, y1, x1, y0, theOrientMode);
+      y0 = ossim::max(rect.ll().y,ll().y);
+      y1 = ossim::min(rect.ur().y,ur().y);
+      if((x0 <= x1) && (y0 <= y1))
+      {
+         result = ossimDrect(x0, y1, x1, y0, theOrientMode);
+      }
    }
+   return result;
 }
 
 const ossimDrect& ossimDrect::operator=(const ossimIrect& rect)

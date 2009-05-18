@@ -80,7 +80,7 @@ public:
 
    /** @return The preference filename. */ 
    ossimFilename getPreferencesFilename() const;
-
+   
 protected:
    /*!
     * Override the compiler default constructors:

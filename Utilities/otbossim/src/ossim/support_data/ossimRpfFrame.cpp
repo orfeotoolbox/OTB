@@ -1,7 +1,8 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// LICENSE:  See top level LICENSE.txt for more details.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 //
@@ -9,7 +10,11 @@
 //              rpf file.
 //
 //********************************************************************
-// $Id: ossimRpfFrame.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimRpfFrame.cpp 14241 2009-04-07 19:59:23Z dburken $
+
+#include <istream>
+#include <ostream>
+
 #include <ossim/support_data/ossimRpfFrame.h>
 #include <ossim/support_data/ossimRpfHeader.h>
 #include <ossim/support_data/ossimRpfAttributes.h>
@@ -37,8 +42,8 @@
 
 static const ossimTrace traceDebug("ossimRpfFrame:debug");
 
-ostream& operator <<(std::ostream& out,
-                     const ossimRpfFrame& data)
+std::ostream& operator <<(std::ostream& out,
+                          const ossimRpfFrame& data)
 {
    data.print(out);
    
@@ -64,118 +69,141 @@ ossimRpfFrame::~ossimRpfFrame()
    deleteAll();
 }
 
-void ossimRpfFrame::print(ostream& out)const
+std::ostream& ossimRpfFrame::print(std::ostream& out,
+                                   const std::string& prefix) const
 {
+   if (traceDebug())
+   {
+      out << "begin_rpf_frame_print:\n";
+   }
+   
    if(theHeader)
    {
-      out << *theHeader << endl;
+      theHeader->print(out, prefix);
+   }
+
+   out << prefix << "filename: " << theFilename << "\n";
+
+   if (traceDebug())
+   {
+      if(theCoverage)
+      {
+         theCoverage->print(out, prefix);
+      }
    }
 
    if(theAttributes)
    {
-      out << *theAttributes << endl;
-   }
-   if(theCoverage)
-   {
-      out << *theCoverage << endl;
-   }
-   if(theImageDescriptionSubheader)
-   {
-      out << *theImageDescriptionSubheader << endl;
-   }
-   if(theMaskSubheader)
-   {
-      out << *theMaskSubheader << endl;
-   }
-   if(theImageDisplayParameterSubheader)
-   {
-      out << *theImageDisplayParameterSubheader << endl;
-   }
-   if(theCompressionSection)
-   {
-      out << *theCompressionSection << endl;
-   }
-   if(theColorGrayscaleSubheader)
-   {
-      out << *theColorGrayscaleSubheader << endl;
-   }
-   if(theColorConverterSubsection)
-   {
-      out << *theColorConverterSubsection << endl;
+      theAttributes->print(out, prefix);
    }
 
-   copy(theColorGrayscaleTable.begin(),
-        theColorGrayscaleTable.end(),
-        ostream_iterator<ossimRpfColorGrayscaleTable>(out, "\n"));
-
-   if(theImageDescriptionSubheader&&
-      !(theImageDescriptionSubheader->isSubframeMaskTableOffsetNull()))
+   if (traceDebug())
    {
-      out << "Subframe Mask Table:" << endl;
-      unsigned long spectralIndex;
-      unsigned long rowIndex;
-      unsigned long colIndex;
-      // first loop through the Mask table and allocate while we do it
-      for(spectralIndex = 0;
-          spectralIndex < theImageDescriptionSubheader->getNumberOfSpectralGroups();
-          ++spectralIndex)
+      if(theImageDescriptionSubheader)
       {
-         for(rowIndex = 0;
-             rowIndex < theImageDescriptionSubheader->getNumberOfSubframesVertical();
-             ++rowIndex)
+         theImageDescriptionSubheader->print(out, prefix);
+      }
+      
+      if(theMaskSubheader)
+      {
+         out << *theMaskSubheader << endl;
+      }
+      if(theImageDisplayParameterSubheader)
+      {
+         out << *theImageDisplayParameterSubheader << endl;
+      }
+      if(theCompressionSection)
+      {
+         out << *theCompressionSection << endl;
+      }
+      if(theColorGrayscaleSubheader)
+      {
+         out << *theColorGrayscaleSubheader << endl;
+      }
+      if(theColorConverterSubsection)
+      {
+         out << *theColorConverterSubsection << endl;
+      }
+      
+      copy(theColorGrayscaleTable.begin(),
+           theColorGrayscaleTable.end(),
+           ostream_iterator<ossimRpfColorGrayscaleTable>(out, "\n"));
+      
+      if(theImageDescriptionSubheader&&
+         !(theImageDescriptionSubheader->isSubframeMaskTableOffsetNull()))
+      {
+         out << "Subframe Mask Table:" << endl;
+         unsigned long spectralIndex;
+         unsigned long rowIndex;
+         unsigned long colIndex;
+         // first loop through the Mask table and allocate while we do it
+         for(spectralIndex = 0;
+             spectralIndex < theImageDescriptionSubheader->getNumberOfSpectralGroups();
+             ++spectralIndex)
          {
-            for(colIndex = 0;
-                colIndex < theImageDescriptionSubheader->getNumberOfSubframesHorizontal();
-                ++colIndex)
+            for(rowIndex = 0;
+                rowIndex < theImageDescriptionSubheader->getNumberOfSubframesVertical();
+                ++rowIndex)
             {
-               if( theSubframeMaskTable[spectralIndex][rowIndex][colIndex] == OSSIM_RPF_ULONG_NULL)
+               for(colIndex = 0;
+                   colIndex < theImageDescriptionSubheader->getNumberOfSubframesHorizontal();
+                   ++colIndex)
                {
-                  out << "NULL ";
+                  if( theSubframeMaskTable[spectralIndex][rowIndex][colIndex] == OSSIM_RPF_ULONG_NULL)
+                  {
+                     out << "NULL ";
+                  }
+                  else
+                  {
+                     out << theSubframeMaskTable[spectralIndex][rowIndex][colIndex] << " ";
+                  }
                }
-               else
-               {
-                  out << theSubframeMaskTable[spectralIndex][rowIndex][colIndex] << " ";
-               }
+               out << endl;
             }
-            out << endl;
          }
       }
-   }
 
-   if(theImageDescriptionSubheader&&
-      !(theImageDescriptionSubheader->isTransparencyMaskTableOffsetNull()))
-   {
-      out << "Transparency Mask Table:" << endl;
-      unsigned long spectralIndex;
-      unsigned long rowIndex;
-      unsigned long colIndex;
-      // first loop through the Mask table and allocate while we do it
-      for(spectralIndex = 0;
-          spectralIndex < theImageDescriptionSubheader->getNumberOfSpectralGroups();
-          ++spectralIndex)
+
+      if(theImageDescriptionSubheader&&
+         !(theImageDescriptionSubheader->isTransparencyMaskTableOffsetNull()))
       {
-         for(rowIndex = 0;
-             rowIndex < theImageDescriptionSubheader->getNumberOfSubframesVertical();
-             ++rowIndex)
+         out << "Transparency Mask Table:" << endl;
+         unsigned long spectralIndex;
+         unsigned long rowIndex;
+         unsigned long colIndex;
+         // first loop through the Mask table and allocate while we do it
+         for(spectralIndex = 0;
+             spectralIndex < theImageDescriptionSubheader->getNumberOfSpectralGroups();
+             ++spectralIndex)
          {
-            for(colIndex = 0;
-                colIndex < theImageDescriptionSubheader->getNumberOfSubframesHorizontal();
-                ++colIndex)
+            for(rowIndex = 0;
+                rowIndex < theImageDescriptionSubheader->getNumberOfSubframesVertical();
+                ++rowIndex)
             {
-               if( theSubframeTransparencyMaskTable[spectralIndex][rowIndex][colIndex] == OSSIM_RPF_ULONG_NULL)
+               for(colIndex = 0;
+                   colIndex < theImageDescriptionSubheader->getNumberOfSubframesHorizontal();
+                   ++colIndex)
                {
-                  out << "NULL ";
-               }
-               else
-               {
-                  out << theSubframeTransparencyMaskTable[spectralIndex][rowIndex][colIndex] << " ";
+                  if( theSubframeTransparencyMaskTable[spectralIndex][rowIndex][colIndex] == OSSIM_RPF_ULONG_NULL)
+                  {
+                     out << "NULL ";
+                  }
+                  else
+                  {
+                     out << theSubframeTransparencyMaskTable[spectralIndex][rowIndex][colIndex] << " ";
+                  }
                }
             }
-            out << endl;
          }
       }
-   }
+      
+      out << "end_rpf_frame_print:\n";
+      
+   } // matches:  if (traceDebug())
 
+   out << std::endl;
+   
+   return out;
 }
 
 ossimErrorCode ossimRpfFrame::parseFile(const ossimFilename& filename)

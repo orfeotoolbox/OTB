@@ -1,13 +1,15 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 // 
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_0.cpp 13953 2009-01-09 15:20:58Z gpotts $
+// $Id: ossimNitfFileHeaderV2_0.cpp 14247 2009-04-08 17:51:25Z dburken $
 
 
 #include <sstream>
@@ -24,9 +26,11 @@
 #include <ossim/support_data/ossimNitfDataExtensionSegmentV2_0.h>
 
 #include <ossim/base/ossimException.h>
+#include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimStringProperty.h>
+
 
 const ossimString ossimNitfFileHeaderV2_0::FSDWNG_KW = "fsdwng";
 const ossimString ossimNitfFileHeaderV2_0::FSDEVT_KW = "fsdevt";
@@ -356,7 +360,7 @@ void ossimNitfFileHeaderV2_0::parseStream(std::istream &in)
 
    if(traceDebug())
    {
-      print(ossimNotify(ossimNotifyLevel_DEBUG)) << std::endl;
+      ossimNitfFileHeader::print( ossimNotify(ossimNotifyLevel_DEBUG) );
    }
    if(traceDebug())
    {
@@ -531,32 +535,54 @@ void ossimNitfFileHeaderV2_0::writeStream(std::ostream &out)
    }
 }
 
-std::ostream& ossimNitfFileHeaderV2_0::print(std::ostream& out)const
+std::ostream& ossimNitfFileHeaderV2_0::print(std::ostream& out,
+                                             const std::string& prefix) const
 {
    out << setiosflags(std::ios::left)
-       << "\nossimNitfFileHeaderV2_0::print"
-       << std::setw(24) << "\nFHDR:"     << theFileTypeVersion
-       << std::setw(24) << "\nCLEVEL:"   << theComplexityLevel
-       << std::setw(24) << "\nSTYPE:"    << theSystemType     
-       << std::setw(24) << "\nOSTAID:"   << theOriginatingStationId
-       << std::setw(24) << "\nFDT:"      << theDateTime       
-       << std::setw(24) << "\nFTITLE:"   << theFileTitle      
-       << std::setw(24) << "\nFSCLAS:"   << theSecurityClassification
-       << std::setw(24) << "\nFSCODE:"   << theCodewords
-       << std::setw(24) << "\nFSCTLH:"   << theControlAndHandling
-       << std::setw(24) << "\nFSREL:"    << theReleasingInstructions
-       << std::setw(24) << "\nFSCAUT:"   << theClassificationAuthority
-       << std::setw(24) << "\nFSCTLN:"   << theSecurityControlNumber
-       << std::setw(24) << "\nFSDWNG:"   << theSecurityDowngrade
-       << std::setw(24) << "\nFSDEVT:"   << theDowngradingEvent
-       << std::setw(24) << "\nFSCOP:"    << theCopyNumber
-       << std::setw(24) << "\nFSCPYS:"   << theNumberOfCopies
-       << std::setw(24) << "\nENCRYP:"   << theEncryption
-       << std::setw(24) << "\nONAME:"    << theOriginatorsName
-       << std::setw(24) << "\nOPHONE:"   << theOriginatorsPhone
-       << std::setw(24) << "\nFL:"       << theFileLength
-       << std::setw(24) << "\nHL:"       << theHeaderLength
-       << std::setw(24) << "\nNUMI:"     << theNumberOfImageInfoRecords;
+       << prefix << std::setw(24) << "FHDR:"
+       << theFileTypeVersion << "\n"
+       << prefix << std::setw(24) << "CLEVEL:"
+       << theComplexityLevel << "\n"
+       << prefix << std::setw(24) << "STYPE:"
+       << theSystemType  << "\n"    
+       << prefix << std::setw(24) << "OSTAID:"
+       << theOriginatingStationId << "\n"
+       << prefix << std::setw(24) << "FDT:"
+       << theDateTime  << "\n"      
+       << prefix << std::setw(24) << "FTITLE:"
+       << theFileTitle  << "\n"     
+       << prefix << std::setw(24) << "FSCLAS:"
+       << theSecurityClassification << "\n"
+       << prefix << std::setw(24) << "FSCODE:"
+       << theCodewords << "\n"
+       << prefix << std::setw(24) << "FSCTLH:"
+       << theControlAndHandling << "\n"
+       << prefix << std::setw(24) << "FSREL:"
+       << theReleasingInstructions << "\n"
+       << prefix << std::setw(24) << "FSCAUT:"
+       << theClassificationAuthority << "\n"
+       << prefix << std::setw(24) << "FSCTLN:"
+       << theSecurityControlNumber << "\n"
+       << prefix << std::setw(24) << "FSDWNG:"
+       << theSecurityDowngrade << "\n"
+       << prefix << std::setw(24) << "FSDEVT:"
+       << theDowngradingEvent << "\n"
+       << prefix << std::setw(24) << "FSCOP:"
+       << theCopyNumber << "\n"
+       << prefix << std::setw(24) << "FSCPYS:"
+       << theNumberOfCopies << "\n"
+       << prefix << std::setw(24) << "ENCRYP:"
+       << theEncryption << "\n"
+       << prefix << std::setw(24) << "ONAME:"
+       << theOriginatorsName << "\n"
+       << prefix << std::setw(24) << "OPHONE:"
+       << theOriginatorsPhone << "\n"
+       << prefix << std::setw(24) << "FL:"
+       << theFileLength << "\n"
+       << prefix << std::setw(24) << "HL:"
+       << theHeaderLength << "\n"
+       << prefix << std::setw(24) << "NUMI:"
+       << theNumberOfImageInfoRecords << "\n";
 
    ossim_uint32 index;
    
@@ -565,130 +591,135 @@ std::ostream& ossimNitfFileHeaderV2_0::print(std::ostream& out)const
       std::ostringstream os;
       os << std::setw(3) << std::setfill('0') << (index+1) << ":";
       
-      ossimString tmpStr = "\nLISH";
+      ossimString tmpStr = "LISH";
       tmpStr += os.str();
       
-      out << std::setw(24) << tmpStr
-          << theNitfImageInfoRecords[index].theImageSubheaderLength;
-      tmpStr = "\nLI";
+      out << prefix << std::setw(24) << tmpStr
+          << theNitfImageInfoRecords[index].theImageSubheaderLength << "\n";
+      tmpStr = "LI";
       tmpStr += os.str();
       
-      out << std::setw(24) << tmpStr
-          << theNitfImageInfoRecords[index].theImageLength;
+      out << prefix << std::setw(24) << tmpStr
+          << theNitfImageInfoRecords[index].theImageLength << "\n";
    }
 
-   out << std::setw(24) << "\nNUMS:" << theNumberOfSymbolInfoRecords << std::endl;
+   out << prefix << std::setw(24) << "NUMS:" << theNumberOfSymbolInfoRecords
+       << "\n";
 
    for (index = 0; index < theNitfSymbolInfoRecords.size(); ++index)
    {
       std::ostringstream os;
       os << std::setw(3) << std::setfill('0') << (index+1) << ":";
 
-      ossimString tmpStr = "\nLSSH";
+      ossimString tmpStr = "LSSH";
       tmpStr += os.str();
 
       out << tmpStr
-          << theNitfSymbolInfoRecords[index].theSymbolSubheaderLength;
+          << theNitfSymbolInfoRecords[index].theSymbolSubheaderLength << "\n";
 
-      tmpStr = "\nLS";
+      tmpStr = "LS";
       tmpStr += os.str();
 
       out << tmpStr 
-          << theNitfSymbolInfoRecords[index].theSymbolLength;
+          << theNitfSymbolInfoRecords[index].theSymbolLength << "\n";
    }
 
    
-   out << std::setw(24) << "\nNUML:" << theNumberOfLabelInfoRecords << std::endl;
+   out << prefix << std::setw(24) << "NUML:" << theNumberOfLabelInfoRecords
+       << "\n";
 
    for (index = 0; index < theNitfLabelInfoRecords.size(); ++index)
    {
       std::ostringstream os;
       os << std::setw(3) << std::setfill('0') << (index+1) << ":";
 
-      ossimString tmpStr = "\nLLSH";
+      ossimString tmpStr = "LLSH";
       tmpStr += os.str();
 
       out << tmpStr
-          << theNitfLabelInfoRecords[index].theLabelSubheaderLength;
+          << theNitfLabelInfoRecords[index].theLabelSubheaderLength  << "\n";
 
-      tmpStr = "\nLL";
+      tmpStr = "LL";
       tmpStr += os.str();
 
       out << tmpStr 
-          << theNitfLabelInfoRecords[index].theLabelLength;
+          << theNitfLabelInfoRecords[index].theLabelLength << "\n";
    }
 
-   out << std::setw(24) << "\nNUMT:" << theNumberOfTextFileInfoRecords << std::endl;
+   out << prefix << std::setw(24) << "NUMT:" << theNumberOfTextFileInfoRecords
+       << "\n";
 
    for (index = 0; index < theNitfTextInfoRecords.size(); ++index)
    {
       std::ostringstream os;
       os << std::setw(3) << std::setfill('0') << (index+1) << ":";
 
-      ossimString tmpStr = "\nLTSH";
+      ossimString tmpStr = "LTSH";
       tmpStr += os.str();
 
-      out << tmpStr
-          << theNitfTextInfoRecords[index].theTextSubheaderLength;
+      out << prefix << std::setw(24) << tmpStr
+          << theNitfTextInfoRecords[index].theTextSubheaderLength << "\n";
 
-      tmpStr = "\nLT";
+      tmpStr = "LT";
       tmpStr += os.str();
 
-      out << tmpStr 
-          << theNitfTextInfoRecords[index].theTextLength;
+      out << prefix << std::setw(24) << tmpStr 
+          << theNitfTextInfoRecords[index].theTextLength<< "\n";
    }
 
-   out << std::setw(24) << "\nNUMDES:" << theNumberOfDataExtSegInfoRecords << std::endl;
+   out << prefix << std::setw(24) << "NUMDES:"
+       << theNumberOfDataExtSegInfoRecords << "\n";
 
    for (index = 0; index < theNitfDataExtSegInfoRecords.size(); ++index)
    {
       std::ostringstream os;
       os << std::setw(3) << std::setfill('0') << (index+1) << ":";
 
-      ossimString tmpStr = "\nLDSH";
+      ossimString tmpStr = "LDSH";
       tmpStr += os.str();
 
-      out << tmpStr
-          << theNitfDataExtSegInfoRecords[index].theDataExtSegSubheaderLength;
+      out << prefix << std::setw(24) << tmpStr
+          << theNitfDataExtSegInfoRecords[index].theDataExtSegSubheaderLength
+          << "\n";
 
-      tmpStr = "\nLD";
+      tmpStr = "LD";
       tmpStr += os.str();
 
-      out << tmpStr 
-          << theNitfDataExtSegInfoRecords[index].theDataExtSegLength;
+      out << prefix << std::setw(24) << tmpStr 
+          << theNitfDataExtSegInfoRecords[index].theDataExtSegLength << "\n";
    }
 
-   out << std::setw(24) << "\nNUMRES:" << theNumberOfResExtSegInfoRecords << std::endl;
+   out << prefix << std::setw(24) << "NUMRES:"
+       << theNumberOfResExtSegInfoRecords << "\n";
 
    for (index = 0; index < theNitfResExtSegInfoRecords.size(); ++index)
    {
       std::ostringstream os;
       os << std::setw(3) << std::setfill('0') << (index+1) << ":";
 
-      ossimString tmpStr = "\nLRSH";
+      ossimString tmpStr = "LRSH";
       tmpStr += os.str();
 
       out << tmpStr
-          << theNitfResExtSegInfoRecords[index].theResExtSegSubheaderLength;
+          << theNitfResExtSegInfoRecords[index].theResExtSegSubheaderLength
+          << "\n";
 
-      tmpStr = "\nLR";
+      tmpStr = "LR";
       tmpStr += os.str();
 
       out << tmpStr 
-          << theNitfResExtSegInfoRecords[index].theResExtSegLength;
+          << theNitfResExtSegInfoRecords[index].theResExtSegLength
+          << "\n";
    }
 
-   out << std::setw(24) << "\nUDHDL:"   << theUserDefinedHeaderDataLength
-       << std::setw(24) << "\nUDHOFL:"  << theUserDefinedHeaderOverflow
-       << std::setw(24) << "\nXHDL:"    << theExtendedHeaderDataLength
-       << std::endl;
-
-   out << "TAGS:\n";
-   std::copy(theTagList.begin(),
-             theTagList.end(),
-             std::ostream_iterator<ossimNitfTagInformation>(out,"\n"));
-//   out << theHeaderTag;
-   return out;
+   out << prefix << std::setw(24) << "UDHDL:"
+       << theUserDefinedHeaderDataLength << "\n"
+       << prefix << std::setw(24) << "UDHOFL:"
+       << theUserDefinedHeaderOverflow << "\n"
+       << prefix << std::setw(24) << "XHDL:"
+       << theExtendedHeaderDataLength << "\n";
+   
+   return ossimNitfFileHeader::print(out, prefix);
 }
 
 ossimDrect ossimNitfFileHeaderV2_0::getImageRect()const
@@ -1437,3 +1468,4 @@ void ossimNitfFileHeaderV2_0::getPropertyNames(std::vector<ossimString>& propert
 {
    ossimNitfFileHeaderV2_X::getPropertyNames(propertyNames);
 }
+

@@ -1,11 +1,13 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 //
 //********************************************************************
-// $Id: ossimCibCadrgTileSource.cpp 12990 2008-06-04 19:14:34Z gpotts $
+// $Id: ossimCibCadrgTileSource.cpp 14379 2009-04-20 22:16:35Z dburken $
 #include <algorithm>
 using namespace std;
 
@@ -39,7 +41,7 @@ using namespace std;
 static ossimTrace traceDebug = ossimTrace("ossimCibCadrgTileSource:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimCibCadrgTileSource.cpp 12990 2008-06-04 19:14:34Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimCibCadrgTileSource.cpp 14379 2009-04-20 22:16:35Z dburken $";
 #endif
 
 RTTI_DEF1(ossimCibCadrgTileSource, "ossimCibCadrgTileSource", ossimImageHandler)
@@ -704,7 +706,12 @@ ossim_uint32 ossimCibCadrgTileSource::getCurrentEntry()const
 
 bool ossimCibCadrgTileSource::setCurrentEntry(ossim_uint32 entryIdx)
 {
+   // Must clear or getImageGeometry method will use last entries.
    theGeometryKwl.clear();
+
+   // Must clear or openOverview will use last entries.
+   theOverviewFile.clear();
+   
    if(!setEntryToRender(entryIdx))
    {
       return false;

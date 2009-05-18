@@ -3,7 +3,7 @@
 // License:  See top level LICENSE.txt file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimImageHandlerFactory.cpp 13910 2008-12-03 21:13:09Z gpotts $
+// $Id: ossimImageHandlerFactory.cpp 14056 2009-03-04 20:32:58Z gpotts $
 #include <ossim/imaging/ossimImageHandlerFactory.h>
 #include <ossim/imaging/ossimAdrgTileSource.h>
 #include <ossim/imaging/ossimCcfTileSource.h>
@@ -20,12 +20,9 @@
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
 #include <ossim/imaging/ossimERSTileSource.h>
 #include <ossim/imaging/ossimVpfTileSource.h>
-#include <ossim/imaging/ossimTileMapTileSource.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/imaging/ossimJpegTileSource.h>
-#include <ossim/imaging/ossimRadarSatTileSource.h>
-#include <ossim/imaging/ossimTerraSarTileSource.h>
 
 static const ossimTrace traceDebug("ossimImageHandlerFactory:debug");
 
@@ -72,6 +69,11 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
       return result;
    }
 
+   // for all of our imagehandlers the filename must exist.
+   // if we have any imagehandlers that require an encoded string and is contrlled in this factory then
+   // we need to move this.
+   if(!copyFilename.exists()) return 0;
+   
    if(copyFilename.ext() == "gz")
    {
       copyFilename = copyFilename.setExtension("");
@@ -88,76 +90,6 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    }
    delete result;
    
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying adrg" << std::endl;
-   }
-
-   // test if ADRG
-   result  = new ossimAdrgTileSource();
-
-   if(result->open(copyFilename))
-   {
-      return result;
-   }
-   delete result;
-
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying ccf" << std::endl;
-   }
-   // test if ccf
-   result = new ossimCcfTileSource();
-   if(result->open(copyFilename))
-   {
-      return result;
-   }
-
-   delete result;
-
-   // test if TileMap
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying TileMap"
-         << std::endl;
-   }
-   result = new ossimTileMapTileSource;
-   if(result->open(copyFilename))
-   {
-      return result;
-   }
-   delete result;
-
-      // test if Radarsat
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "Radarsat"
-         << std::endl;
-   }
-   result = new ossimRadarSatTileSource;
-   if(result->open(copyFilename))
-   {
-      return result;
-   }
-   delete result;
-
-      // test if TerraSAR
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying TerraSAR"
-         << std::endl;
-   }
-   result = new ossimTerraSarTileSource;
-   if(result->open(copyFilename))
-   {
-      return result;
-   }
-   delete result;
 
    // this must be checked first before the TIFF handler
    if(traceDebug())
@@ -251,7 +183,6 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    }
    delete result;
 
-
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -329,6 +260,34 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    }
    delete result;
 
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+      << "trying adrg" << std::endl;
+   }
+   
+   // test if ADRG
+   result  = new ossimAdrgTileSource();
+   
+   if(result->open(copyFilename))
+   {
+      return result;
+   }
+   delete result;
+   
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+      << "trying ccf" << std::endl;
+   }
+   // test if ccf
+   result = new ossimCcfTileSource();
+   if(result->open(copyFilename))
+   {
+      return result;
+   }
+   
+   delete result;
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -447,51 +406,6 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    {
       return result;
    }
-   delete result;
-
-   // TileMap
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying TileMap"
-         << std::endl;
-   }
-   result = new ossimTileMapTileSource;
-   if(result->loadState(kwl, prefix))
-   {
-      return result;
-   }
-   
-   delete result;
-
-      // RadarSat
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying RadarSat"
-         << std::endl;
-   }
-   result = new ossimRadarSatTileSource;
-   if(result->loadState(kwl, prefix))
-   {
-      return result;
-   }
-   
-   delete result;
-
-      // TerraSAR
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying TerraSAR"
-         << std::endl;
-   }
-   result = new ossimTerraSarTileSource;
-   if(result->loadState(kwl, prefix))
-   {
-      return result;
-   }
-   
    delete result;
 
    // Must be before tiff...
@@ -660,11 +574,6 @@ ossimObject* ossimImageHandlerFactory::createObject(const ossimString& typeName)
       return new ossimGeneralRasterTileSource();
    }
 
-   if(STATIC_TYPE_NAME(ossimTileMapTileSource) == typeName)
-   {
-      return new ossimTileMapTileSource();
-   }
-
    return (ossimObject*)NULL;
 }
 
@@ -690,7 +599,6 @@ void ossimImageHandlerFactory::getSupportedExtensions(ossimImageHandlerFactoryBa
    extensionList.push_back("nsf");
    extensionList.push_back("nitf");
    extensionList.push_back("ntf");
-   extensionList.push_back("otb");
 }
 
 ossimObject* ossimImageHandlerFactory::createObject(const ossimKeywordlist& kwl,
@@ -753,7 +661,6 @@ void ossimImageHandlerFactory::getTypeNameList(std::vector<ossimString>& typeLis
    typeList.push_back(STATIC_TYPE_NAME(ossimERSTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimSrtmTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimGeneralRasterTileSource));
-   typeList.push_back(STATIC_TYPE_NAME(ossimTileMapTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimQuickbirdNitfTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimQuickbirdTiffTileSource));
 }

@@ -9,7 +9,7 @@
 // Contains class definition for ImageHandlerRegistry.
 //
 //*******************************************************************
-//  $Id: ossimImageHandlerRegistry.cpp 13646 2008-10-01 15:52:51Z gpotts $
+//  $Id: ossimImageHandlerRegistry.cpp 14053 2009-03-04 12:25:51Z gpotts $
 #include <algorithm>
 #include <ossim/imaging/ossimImageHandlerRegistry.h>
 #include <ossim/imaging/ossimImageHandlerFactory.h>
@@ -152,14 +152,12 @@ void ossimImageHandlerRegistry::getSupportedExtensions(ossimImageHandlerFactoryB
 
 ossimImageHandler* ossimImageHandlerRegistry::open(const ossimFilename& fileName)const
 {
-   if(!fileName.exists()) return 0;
    ossimImageHandler*                   result = NULL;
    vector<ossimImageHandlerFactoryBase*>::const_iterator factory;
 
    factory = theFactoryList.begin();
    while((factory != theFactoryList.end()) && !result)
    {
-      
       result = (*factory)->open(fileName);
       ++factory;
    }

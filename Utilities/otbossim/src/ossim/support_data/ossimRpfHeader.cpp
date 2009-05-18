@@ -1,14 +1,21 @@
 //*******************************************************************
-// License:  See top level LICENSE.txt file.
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 // 
 // Description: This class extends the stl's string class.
 //
 //********************************************************************
-// $Id: ossimRpfHeader.cpp 11094 2007-05-30 14:48:30Z dburken $
+// $Id: ossimRpfHeader.cpp 14241 2009-04-07 19:59:23Z dburken $
+
+#include <cstring>
+#include <iostream>
+#include <fstream>
+
 #include <ossim/support_data/ossimRpfHeader.h>
-#include <string.h>
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimErrorCodes.h>
@@ -26,7 +33,12 @@
 #include <ossim/support_data/ossimRpfCompressionSection.h>
 #include <ossim/support_data/ossimRpfColorGrayscaleSubheader.h>
 
-ostream& operator <<(ostream &out, const ossimRpfHeader &data)
+#include <ossim/base/ossimTrace.h>
+
+// Static trace for debugging
+static ossimTrace traceDebug("ossimRpfHeader:debug");
+
+std::ostream& operator <<(std::ostream &out, const ossimRpfHeader &data)
 {
    data.print(out);
 
@@ -65,7 +77,7 @@ ossimRpfHeader::ossimRpfHeader()
    theSecurityReleaseMarking[2] = '\0';
 }
 
-ossimErrorCode ossimRpfHeader::parseStream(istream& in)
+ossimErrorCode ossimRpfHeader::parseStream(std::istream& in)
 {
    if(in)
    {      
@@ -118,20 +130,37 @@ ossimErrorCode ossimRpfHeader::parseStream(istream& in)
    return ossimErrorCodes::OSSIM_OK;
 }
 
-void ossimRpfHeader::print(ostream &out)const
+std::ostream& ossimRpfHeader::print(std::ostream& out,
+                                    const std::string& prefix) const
 {
-   out << "ossimRpfHeader::print:"
-       << "\ntheLittleBigEndianIndicator: "
-       << int(theLittleBigEndianIndicator)
-       << "\ntheHeaderSectionLength:      " << theHeaderSectionLength
-       << "\ntheFileName:                 " << theFileName
-       << "\ntheNewRepUpIndicator:        " << theNewRepUpIndicator       
-       << "\ntheGovSpecNumber:            " << theGovSpecNumber           
-       << "\ntheSecurityClassification:   " << theSecurityClassification  
-       << "\ntheCountryCode:              " << theCountryCode             
-       << "\ntheSecurityReleaseMarking:   " << theSecurityReleaseMarking  
-       << "\ntheLocSectionLoc:            " << theLocSectionLoc << "\n"
-       << (*theLocationSection) << endl;
+   out << prefix << "byte_order:               "
+       << (theLittleBigEndianIndicator==0x00?"big_endian\n":"little_endian\n")
+       << prefix << "HeaderSectionLength:      "
+       << theHeaderSectionLength << "\n"
+       << prefix << "filename:                 "
+       << theFileName << "\n"
+       << prefix << "NewRepUpIndicator:        "
+       << int(theNewRepUpIndicator) << "\n"       
+       << prefix << "GovSpecNumber:            "
+       << theGovSpecNumber << "\n"         
+       << prefix << "SecurityClassification:   "
+       << theSecurityClassification << "\n"
+       << prefix << "CountryCode:              "
+       << theCountryCode   << "\n"           
+       << prefix << "SecurityReleaseMarking:   "
+       << theSecurityReleaseMarking << "\n";
+
+   if ( traceDebug() )
+   {
+      out << prefix << "LocSectionLoc:            "
+          << theLocSectionLoc << "\n";
+      if (theLocationSection)
+      {
+         theLocationSection->print(out, prefix);
+      }
+   }
+
+   return out;
 }
 
 bool ossimRpfHeader::hasComponent(ossimRpfComponentId componentId)const
@@ -149,7 +178,7 @@ ossimString ossimRpfHeader::getSecurityClassification()const
    return theSecurityClassification;
 }
 
-ossimRpfCoverageSection* ossimRpfHeader::getNewCoverageSection(istream& in)const
+ossimRpfCoverageSection* ossimRpfHeader::getNewCoverageSection(std::istream& in)const
 {
    ossimRpfCoverageSection* result = 0;
 
@@ -178,7 +207,7 @@ ossimRpfCoverageSection* ossimRpfHeader::getNewCoverageSection(istream& in)const
    return result;
 }
 
-ossimRpfMaskSubsection*  ossimRpfHeader::getNewMaskSubsection(istream& in)const
+ossimRpfMaskSubsection*  ossimRpfHeader::getNewMaskSubsection(std::istream& in)const
 {
    ossimRpfMaskSubsection* result = 0;
 
@@ -214,7 +243,7 @@ ossimRpfMaskSubsection*  ossimRpfHeader::getNewMaskSubsection(istream& in)const
 }
 
 
-ossimRpfAttributeSectionSubheader* ossimRpfHeader::getNewAttributeSectionSubheader(istream& in)const
+ossimRpfAttributeSectionSubheader* ossimRpfHeader::getNewAttributeSectionSubheader(std::istream& in)const
 {
    ossimRpfAttributeSectionSubheader* result = 0;
 
@@ -249,7 +278,7 @@ ossimRpfAttributeSectionSubheader* ossimRpfHeader::getNewAttributeSectionSubhead
    return result;
 }
 
-ossimRpfColorGrayscaleSubheader* ossimRpfHeader::getNewColorGrayscaleSubheader(istream& in)const
+ossimRpfColorGrayscaleSubheader* ossimRpfHeader::getNewColorGrayscaleSubheader(std::istream& in)const
 {
    ossimRpfColorGrayscaleSubheader* result = 0;
    
@@ -284,7 +313,7 @@ ossimRpfColorGrayscaleSubheader* ossimRpfHeader::getNewColorGrayscaleSubheader(i
    return result;
 }
 
-ossimRpfCompressionSection* ossimRpfHeader::getNewCompressionSection(istream& in)const
+ossimRpfCompressionSection* ossimRpfHeader::getNewCompressionSection(std::istream& in)const
 {   
    ossimRpfCompressionSection* result = 0;
 
@@ -319,7 +348,7 @@ ossimRpfCompressionSection* ossimRpfHeader::getNewCompressionSection(istream& in
    return result;   
 }
 
-ossimRpfCompressionSectionSubheader* ossimRpfHeader::getNewCompressionSectionSubheader(istream& in)const
+ossimRpfCompressionSectionSubheader* ossimRpfHeader::getNewCompressionSectionSubheader(std::istream& in)const
 {
    ossimRpfCompressionSectionSubheader* result = 0;
 
@@ -356,7 +385,7 @@ ossimRpfCompressionSectionSubheader* ossimRpfHeader::getNewCompressionSectionSub
 
    
 
-ossimRpfImageDisplayParameterSubheader* ossimRpfHeader::getNewImageDisplayParameterSubheader(istream& in)const
+ossimRpfImageDisplayParameterSubheader* ossimRpfHeader::getNewImageDisplayParameterSubheader(std::istream& in)const
 {
    ossimRpfImageDisplayParameterSubheader* result = 0;
 
@@ -391,7 +420,7 @@ ossimRpfImageDisplayParameterSubheader* ossimRpfHeader::getNewImageDisplayParame
    return result;
 }
 
-ossimRpfImageDescriptionSubheader* ossimRpfHeader::getNewImageDescriptionSubheader(istream& in)const
+ossimRpfImageDescriptionSubheader* ossimRpfHeader::getNewImageDescriptionSubheader(std::istream& in)const
 {
    ossimRpfImageDescriptionSubheader* result = 0;
 
@@ -427,7 +456,7 @@ ossimRpfImageDescriptionSubheader* ossimRpfHeader::getNewImageDescriptionSubhead
 }
 
 
-ossimRpfBoundaryRectTable* ossimRpfHeader::getNewBoundaryRectTable(istream &in)const
+ossimRpfBoundaryRectTable* ossimRpfHeader::getNewBoundaryRectTable(std::istream &in)const
 {
    ossimRpfBoundaryRectTable* result = 0;
 
@@ -470,7 +499,7 @@ ossimRpfBoundaryRectTable* ossimRpfHeader::getNewBoundaryRectTable(istream &in)c
    return result;
 }
 
-ossimRpfBoundaryRectSectionSubheader* ossimRpfHeader::getNewBoundaryRectSectSubheader(istream &in)const
+ossimRpfBoundaryRectSectionSubheader* ossimRpfHeader::getNewBoundaryRectSectSubheader(std::istream &in)const
 {
    ossimRpfBoundaryRectSectionSubheader* result = 0;
 
@@ -506,7 +535,7 @@ ossimRpfBoundaryRectSectionSubheader* ossimRpfHeader::getNewBoundaryRectSectSubh
    
 }
 
-ossimRpfFrameFileIndexSectionSubheader* ossimRpfHeader::getNewFrameFileIndexSectionSubheader(istream &in)const
+ossimRpfFrameFileIndexSectionSubheader* ossimRpfHeader::getNewFrameFileIndexSectionSubheader(std::istream &in)const
 {
    ossimRpfFrameFileIndexSectionSubheader* result = 0;
 
@@ -540,7 +569,7 @@ ossimRpfFrameFileIndexSectionSubheader* ossimRpfHeader::getNewFrameFileIndexSect
    return result;   
 }
 
-ossimRpfFrameFileIndexSubsection* ossimRpfHeader::getNewFileIndexSubsection(istream& in)const
+ossimRpfFrameFileIndexSubsection* ossimRpfHeader::getNewFileIndexSubsection(std::istream& in)const
 {
    ossimRpfFrameFileIndexSubsection* result = 0;
 

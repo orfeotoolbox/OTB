@@ -1,13 +1,15 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+//  License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 // 
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFile.cpp 11091 2007-05-30 14:37:52Z dburken $
+// $Id: ossimNitfFile.cpp 14241 2009-04-07 19:59:23Z dburken $
 
 #include <fstream>
 #include <iostream>
@@ -22,6 +24,7 @@
 #include <ossim/support_data/ossimNitfImageHeaderV2_1.h>
 #include <ossim/support_data/ossimNitfTagFactoryRegistry.h>
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
+#include <ossim/support_data/ossimRpfToc.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimNotifyContext.h>
@@ -36,34 +39,57 @@ std::ostream& operator <<(std::ostream& out, const ossimNitfFile& data)
    return data.print(out);
 }
 
-std::ostream& ossimNitfFile::print(std::ostream& out) const
+std::ostream& ossimNitfFile::print(std::ostream& out,
+                                   const std::string& prefix) const
 {
-   out << "ossimNitfFile::print"
-       << setiosflags(std::ios::left) << std::setw(24)
-       << "\ntheFilename:" << theFilename << std::endl;
-   
    if(theNitfFileHeader.valid())
    {
-      out << *(theNitfFileHeader.get()) << std::endl;
-
-      int n = 0;
-      n = theNitfFileHeader->getNumberOfImages();
-      int idx = 0;
-
-      for(idx = 0; idx < n;++idx)
+      std::string pfx = prefix;
+      pfx += "nitf.";
+      theNitfFileHeader->print(out, pfx);
+      
+      ossim_int32 n = theNitfFileHeader->getNumberOfImages();
+      for(ossim_int32 idx = 0; idx < n; ++idx)
       {
          ossimNitfImageHeader* ih = getNewImageHeader(idx);
-         out << "IMAGE -----> " << idx << std::endl;
          if(ih)
          {
-            out << *ih << std::endl;
+            // Add our prefix onto prefix.
+            std::string s = pfx;
+            s += "image";
+            s += ossimString::toString(idx);
+            s += ".";
+            
+            ih->print(out, s);
+            
             delete ih;
             ih = 0;
          }
       }
-   }
+
+      //---
+      // Check for RPF stuff:
+      //---
+      ossimNitfTagInformation info; 
+      theNitfFileHeader->getTag(info, "RPFHDR");
+      if(info.getTagName() == "RPFHDR")
+      {
+         // Open of the a.toc.
+         ossimRpfToc* toc = new ossimRpfToc;
+         if ( toc->parseFile(getFilename()) ==
+              ossimErrorCodes::OSSIM_OK )
+         {
+            pfx += "rpf.";
+            toc->print(out, pfx);
+         }
+         delete toc;
+         toc = 0;
+      }
+      
+   } // matches:  if(theNitfFileHeader.valid())
 
    return out;
+   
 }
 
 ossimNitfFile::ossimNitfFile()
@@ -271,3 +297,7 @@ ossimString ossimNitfFile::getVersion()const
    return ossimString("");
 }
 
+ossimFilename ossimNitfFile::getFilename() const
+{
+   return theFilename;
+}

@@ -10,7 +10,7 @@
 // information.
 //
 //***************************************************************************
-// $Id: ossimGeoTiff.cpp 13937 2008-12-29 22:16:08Z gpotts $
+// $Id: ossimGeoTiff.cpp 14369 2009-04-20 21:32:33Z dburken $
 
 #include <ossim/support_data/ossimGeoTiff.h>
 #include <ossim/base/ossimTrace.h>
@@ -49,7 +49,7 @@ static const ossimGeoTiffCoordTransformsLut COORD_TRANS_LUT;
 static const ossimGeoTiffDatumLut DATUM_LUT;
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 13937 2008-12-29 22:16:08Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 14369 2009-04-20 21:32:33Z dburken $";
 #endif
 
 //---
@@ -406,7 +406,7 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
       gcs = USER_DEFINED;
 
       std::ostringstream os;
-      os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 13937 $ $Date: 2008-12-30 06:16:08 +0800 (Tue, 30 Dec 2008) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
+      os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 14369 $ $Date: 2009-04-21 05:32:33 +0800 (Tue, 21 Apr 2009) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
 
       GTIFKeySet(gtif,
                  GeogCitationGeoKey,
@@ -996,7 +996,7 @@ bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
 //       theTiePoint.push_back(0.0);
 //    }
    ossim_uint16 doubleParamSize = 0;
-   double* tempDoubleParam;
+   double* tempDoubleParam = 0;
    theDoubleParam.clear();
    if(TIFFGetField(theTiffPtr, TIFFTAG_GEODOUBLEPARAMS, &doubleParamSize, &tempDoubleParam))
    {
@@ -1046,7 +1046,12 @@ bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
       }
       else
       {
-         std::cout << "Need to add double param support for projection = " << projName << std::endl;
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "Need to add double param support for projection = "
+               << projName << std::endl;
+         }
       }
    }
    
@@ -1456,14 +1461,24 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
  
    } // End of "if (UTM)"
 
-   else if (getOssimProjectionName() == "ossimUtmProjection")
+   else if (getOssimProjectionName() == "ossimTransMercatorProjection")
    {
       kwl.add(copyPrefix.c_str(),
               ossimKeywordNames::SCALE_FACTOR_KW,
               theScaleFactor,
               true);  // overwrite keyword if previously added...
    }
-   
+   else if (getOssimProjectionName() == "ossimLambertConformalConicProjection")
+   {
+      if (ossim::isnan(theCenterLon) == false)
+      {
+         kwl.add(copyPrefix.c_str(),
+                 ossimKeywordNames::CENTRAL_MERIDIAN_KW,
+                 theCenterLon,
+                 true); // overwrite keyword if previously added...
+      }
+   }
+
    //---
    // Get the model transformation info if it's present.
    //---

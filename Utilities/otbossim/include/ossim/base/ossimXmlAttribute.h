@@ -28,9 +28,9 @@ public:
    ossimXmlAttribute(const ossimString& name,
                      const ossimString& value);
    virtual ossimObject* dup() const
-     {
-       return new ossimXmlAttribute(*this);
-     }
+   {
+      return new ossimXmlAttribute(*this);
+   }
    ~ossimXmlAttribute();
 
    bool read(std::istream& in);

@@ -1,13 +1,15 @@
 //*******************************************************************
 //
-// LICENSE: LGPL see top level LICENSE.txt for more details
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 // 
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeader.h 13630 2008-09-30 17:41:15Z gpotts $
+// $Id: ossimNitfImageHeader.h 14241 2009-04-07 19:59:23Z dburken $
 #ifndef ossimNitfImageHeader_HEADER
 #define ossimNitfImageHeader_HEADER
 
@@ -113,7 +115,13 @@ public:
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
 
    virtual ossim_uint32 getTotalTagLength()const;
-   virtual void printTags(std::ostream& out)const;
+
+   /**
+    * @brief print method that outputs a key/value type format adding prefix
+    * to keys.
+    */
+   virtual std::ostream& printTags(
+      std::ostream& out, const std::string& prefix=std::string()) const;
    
    /**
     * @brief Populates keyword list with metadata.
@@ -125,6 +133,14 @@ public:
     */
    virtual void getMetadata(ossimKeywordlist& kwl,
                             const char* prefix=0) const;
+
+   /**
+    * @brief pure virtual print method that outputs a key/value type format
+    * adding prefix to keys.
+    */
+   virtual std::ostream& print(std::ostream& out,
+                               const std::string& prefix) const = 0;
+
 protected:
 
    /**

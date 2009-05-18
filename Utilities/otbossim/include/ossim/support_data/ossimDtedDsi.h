@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // License:  LGPL
 // 
@@ -11,7 +10,7 @@
 //               (DSI) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedDsi.h 10277 2007-01-15 19:28:03Z dburken $
+// $Id: ossimDtedDsi.h 14248 2009-04-08 19:38:11Z dburken $
 
 #ifndef ossimDtedDsi_H
 #define ossimDtedDsi_H
@@ -19,6 +18,9 @@
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimErrorStatusInterface.h>
 #include <ossim/base/ossimFilename.h>
+#include <ossim/base/ossimRefPtr.h>
+
+class ossimProperty;
 
 class OSSIM_DLL ossimDtedDsi : public ossimErrorStatusInterface
 {
@@ -112,8 +114,8 @@ public:
       FIELD42_SIZE          = 156
    };
 
-   // The Recoginition Sentinel signifies if the DSI record exists.
-   ossimString recoginitionSentinel() const;
+   // The Recognition Sentinel signifies if the DSI record exists.
+   ossimString recognitionSentinel() const;
 
    ossimString securityCode()           const;
    ossimString productLevel()           const;
@@ -151,8 +153,34 @@ public:
    
    friend OSSIM_DLL std::ostream& operator<<( std::ostream& os,
                                               const ossimDtedDsi& dsi);
+
+   /**
+    * @brief print method that outputs a key/value type format adding prefix
+    * to keys.
+    * @param out String to output to.
+    * @param prefix This will be prepended to key.
+    * e.g. Where prefix = "nitf." and key is "file_name" key becomes:
+    * "nitf.file_name:"
+    * @return output stream.
+    */
+   std::ostream& print(std::ostream& out,
+                       const std::string& prefix) const;   
    
    void parse(std::istream& in);
+
+   /**
+    * @brief Gets a property for name.
+    * @param name Property name to get.
+    * @return ossimRefPtr<ossimProperty> Note that this can be empty if
+    * property for name was not found.
+    */
+   ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
+   
+   /**
+    * @brief Adds this class's properties to list.
+    * @param propertyNames list to append to.
+    */
+   void getPropertyNames(std::vector<ossimString>& propertyNames)const;
 
 private:
    // Do not allow...

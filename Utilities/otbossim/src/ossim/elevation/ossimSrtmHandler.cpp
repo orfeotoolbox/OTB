@@ -9,7 +9,7 @@
 // Shuttle Radar Topography Mission (SRTM) elevation source.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmHandler.cpp 11504 2007-08-06 09:29:44Z dburken $
+// $Id: ossimSrtmHandler.cpp 14300 2009-04-14 17:27:00Z gpotts $
 
 #include <ossim/elevation/ossimSrtmHandler.h>
 #include <ossim/support_data/ossimSrtmSupportData.h>
@@ -289,7 +289,7 @@ double ossimSrtmHandler::getPostValue(const ossimIpt& gridPt) const
       return ossim::nan();
    }
 
-   if (!open())
+   if (!isOpen())
    {
       return ossim::nan();
    }
@@ -325,8 +325,13 @@ ossimSrtmHandler::ossimSrtmHandler(const ossimSrtmHandler&)
 {
 }
 
+bool ossimSrtmHandler::isOpen()const
+{
+   return theFileStr.valid()?theFileStr->is_open():false;
+}
 
-bool ossimSrtmHandler::open() const
+
+bool ossimSrtmHandler::open()
 {
    if(theFileStr.valid())
    {
@@ -348,7 +353,7 @@ bool ossimSrtmHandler::open() const
    return false;
 }
 
-void ossimSrtmHandler::close() const
+void ossimSrtmHandler::close()
 {
    if(theFileStr.valid())
    {

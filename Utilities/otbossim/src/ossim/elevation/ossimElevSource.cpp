@@ -15,7 +15,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-// $Id: ossimElevSource.cpp 13457 2008-08-18 18:49:25Z gpotts $
+// $Id: ossimElevSource.cpp 14300 2009-04-14 17:27:00Z gpotts $
 
 #include <ossim/elevation/ossimElevSource.h>
 #include <ossim/base/ossimPreferences.h>
@@ -271,12 +271,12 @@ ossimFilename ossimElevSource::getFilename() const
    return ossimFilename::NIL;
 }
 
-bool ossimElevSource::open() const
+bool ossimElevSource::open()
 {
    return true;
 }
 
-void ossimElevSource::close() const
+void ossimElevSource::close()
 {
 }
 

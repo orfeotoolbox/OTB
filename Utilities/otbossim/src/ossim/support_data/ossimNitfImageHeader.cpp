@@ -1,13 +1,15 @@
 //*******************************************************************
 //
-// LICENSE: See top level LICENSE.txt for more details.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 //
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeader.cpp 13629 2008-09-30 17:39:20Z gpotts $
+// $Id: ossimNitfImageHeader.cpp 14241 2009-04-07 19:59:23Z dburken $
 
 #include <cmath> /* for fmod */
 #include <iomanip>
@@ -205,23 +207,18 @@ ossim_uint32 ossimNitfImageHeader::getTotalTagLength()const
    return tagLength;
 }
 
-void ossimNitfImageHeader::printTags(std::ostream& out)const
+std::ostream& ossimNitfImageHeader::printTags(std::ostream& out,
+                                              const std::string& prefix)const
 {
-   out << setiosflags(std::ios::left)
-       << "ossimNitfImageHeader::printTags";
-   
    for(ossim_uint32 i = 0; i < theTagList.size(); ++i)
    {
-      out << std::setw(24) << "\nTag name:"   << theTagList[i].getTagName()
-          << std::setw(24) << "\nTag Length:" << theTagList[i].getTagLength()
-          << std::endl;
-
       ossimRefPtr<ossimNitfRegisteredTag> tag = theTagList[i].getTagData();
       if (tag.valid())
       {
-         tag->print(out);
+         tag->print(out, prefix);
       }
    }
+   return out;
 }
 
 void ossimNitfImageHeader::getMetadata(ossimKeywordlist& kwl,

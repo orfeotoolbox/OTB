@@ -1,11 +1,13 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  Garrett Potts
-//
+// 
 //*******************************************************************
-//  $Id: ossimEllipsoidFactory.cpp 12761 2008-04-29 19:07:53Z gpotts $
+//  $Id: ossimEllipsoidFactory.cpp 14514 2009-05-15 14:45:27Z dburken $
 #include <ossim/base/ossimEllipsoidFactory.h>
 #include <ossim/base/ossimEllipsoid.h>
 #include <ossim/base/ossimString.h>
@@ -19,9 +21,9 @@ ossimEllipsoidFactory* ossimEllipsoidFactory::instance()
       theInstance = new ossimEllipsoidFactory;
       theInstance->initializeTable();
    }
-
-   return theInstance;
-}
+ 
+   return theInstance; 
+} 
 
 ossimEllipsoidFactory::ossimEllipsoidFactory()
 {
@@ -42,7 +44,7 @@ const ossimEllipsoid* ossimEllipsoidFactory::create(const ossimString &code)cons
    {
       return (*ellipsoid).second;
    }
-
+   
    return NULL;
 }
 
@@ -51,7 +53,7 @@ void ossimEllipsoidFactory::initializeTable()
    if(theEllipsoidTable.size()<1)
    {
 	   theEllipsoidTable.insert(std::make_pair(ossimString("AA"),
-                                         new ossimEllipsoid(ossimString("Airy"), ossimString("AA"), 6377563.396, 6356256.9090)));
+                                         new ossimEllipsoid(ossimString("Airy"), ossimString("AA"), 6377563.396, 6356256.9090)));   
       theEllipsoidTable.insert(std::make_pair(ossimString("AM"),
                                          new ossimEllipsoid(ossimString("Modified Airy"), ossimString("AM"), 6377340.189, 6356034.448)));
       theEllipsoidTable.insert(std::make_pair(ossimString("AN"),
@@ -101,12 +103,12 @@ void ossimEllipsoidFactory::initializeTable()
       theWgs84Ellipsoid = new ossimEllipsoid(ossimString("WGS 84"), ossimString("WE"), 6378137.000, 6356752.3142);
       theWgs72Ellipsoid = new ossimEllipsoid(ossimString("WGS 72"), ossimString("WD"), 6378135.000, 6356750.5200);
    }
-
-#if 0
+   
+#if 0   
    if(theEllipsoidTable.size()<1)
    {
       theEllipsoidTable.insert(std::make_pair(ossimString("AA"),
-                                         new ossimEllipsoid(ossimString("Airy"), ossimString("AA"), 6377563.396, 6356256.9090, 299.3249646)));
+                                         new ossimEllipsoid(ossimString("Airy"), ossimString("AA"), 6377563.396, 6356256.9090, 299.3249646)));   
       theEllipsoidTable.insert(std::make_pair(ossimString("AM"),
                                          new ossimEllipsoid(ossimString("Modified Airy"), ossimString("AM"), 6377340.189, 6356034.448, 299.3249646)));
       theEllipsoidTable.insert(std::make_pair(ossimString("AN"),
@@ -160,7 +162,7 @@ void ossimEllipsoidFactory::initializeTable()
 void ossimEllipsoidFactory::deleteAll()
 {
    TableType::const_iterator ellipsoid = theEllipsoidTable.begin();
-
+   
    while(ellipsoid != theEllipsoidTable.end())
    {
       delete (*ellipsoid).second;
@@ -168,6 +170,15 @@ void ossimEllipsoidFactory::deleteAll()
    }
 
    theEllipsoidTable.clear();
-   delete theWgs84Ellipsoid;
-   delete theWgs72Ellipsoid;
+
+   if (theWgs84Ellipsoid)
+   {
+      delete theWgs84Ellipsoid;
+      theWgs84Ellipsoid = 0;
+   }
+   if (theWgs72Ellipsoid)
+   {
+      delete theWgs72Ellipsoid;
+      theWgs72Ellipsoid = 0;
+   }
 }

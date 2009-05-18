@@ -28,7 +28,7 @@ public:
                             const ossimString& value);
    virtual void setProperty(ossimRefPtr<ossimProperty> property);
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const; 
-   virtual ossimString getPropertyValueAsString(const ossimString& name)const;
+	virtual ossimString getPropertyValueAsString(const ossimString& name)const;
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
    void getPropertyList(std::vector<ossimRefPtr<ossimProperty> >& propertyList)const;
    void setProperties(std::vector<ossimRefPtr<ossimProperty> >& propertyList);

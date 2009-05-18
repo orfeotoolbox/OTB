@@ -8,7 +8,7 @@
 //
 // Contains class definition for Degrees Minutes Seconds (ossimDms)
 //*******************************************************************
-//  $Id: ossimDms.cpp 12953 2008-06-01 16:24:05Z dburken $
+//  $Id: ossimDms.cpp 14482 2009-05-12 11:42:38Z gpotts $
 
 #include <cmath>
 #include <cstring> /* for strcpy */
@@ -71,16 +71,16 @@ ossimDms::ossimDms(const std::string& value)
 ossimDms& ossimDms::setDegrees(double degrees)
 {
    theDegrees = degrees;
-
+   
    return *this;
 }
 
 bool ossimDms::setDegrees(const std::string& cdegrees)
 {
    bool status = true;
-
+   
    ossimString copy = cdegrees;
-
+   
    double degrees, factor, dividend, units;
    int i;
    bool afterdelim;
@@ -102,9 +102,9 @@ bool ossimDms::setDegrees(const std::string& cdegrees)
       cptr++;
    }
 
-   while(*cptr != '\0')
+   while(*cptr != '\0') 
    {
-      switch (*cptr)
+      switch (*cptr) 
       {
 
          // north, west and + values will change sign of degrees to plus.
@@ -132,7 +132,7 @@ bool ossimDms::setDegrees(const std::string& cdegrees)
          }
 
          // south, east and - values will change sign of degrees to minus
-
+         
          case '-':
          {
             theSign = -1;
@@ -155,7 +155,7 @@ bool ossimDms::setDegrees(const std::string& cdegrees)
             theLatFlag = false;
             break;
          }
-
+         
          case '0':
          case '1':
          case '2':
@@ -165,14 +165,14 @@ bool ossimDms::setDegrees(const std::string& cdegrees)
          case '6':
          case '7':
          case '8':
-         case '9':
+         case '9': 
          {
             c = *cptr;
             i = (c - '0');
-
-            if (afterdelim == true)
+            
+            if (afterdelim == true) 
             {
-               if (theAfterDot == true)
+               if (theAfterDot == true) 
                {
                   units = units + (((double)i * factor) / dividend);
                }
@@ -181,7 +181,7 @@ bool ossimDms::setDegrees(const std::string& cdegrees)
                   units = (units * factor) + ((double)i / dividend);
                }
             }
-            else
+            else 
             {
                if (theAfterDot == true)
                {
@@ -200,7 +200,7 @@ bool ossimDms::setDegrees(const std::string& cdegrees)
             {
                factor = 10.;
             }
-
+            
             cptr++;
             break;
          }
@@ -209,7 +209,7 @@ bool ossimDms::setDegrees(const std::string& cdegrees)
          // a decimal point indicates a change in the factor used
          // to calculate degrees or units (minutes or seconds)
          //---
-         case '.':
+         case '.': 
          {
             factor = .10;
             theAfterDot = true;
@@ -218,7 +218,7 @@ bool ossimDms::setDegrees(const std::string& cdegrees)
          }
 
          // after a delimiter the value contains minutes, first time through
-         case ' ':
+         case ' ': 
          case '\"':
          case '\'':
          {
@@ -226,10 +226,10 @@ bool ossimDms::setDegrees(const std::string& cdegrees)
             {
                cptr++;
             }
-
+            
             degrees = degrees + units;
             units = 0.0;
-
+            
             if (afterdelim == true) 	/* must be seconds */
             {
                dividend = dividend * dividend;
@@ -238,18 +238,18 @@ bool ossimDms::setDegrees(const std::string& cdegrees)
             {
                afterdelim = true;
             }
-
+            
             factor = 1.;
-
+            
             cptr++;
-
+            
             // skip any leading zeroes after delimiter */
-
+            
             while (*cptr == '0')
             {
                cptr++;
             }
-
+            
             break;
          }
 
@@ -258,10 +258,10 @@ bool ossimDms::setDegrees(const std::string& cdegrees)
          // isspace allows: space, tab, cr, nl, vt, ff
          // ispunct allows: punctuation char != space or control or letter
          //---
-         default:
+         default: 
          {
-            if(isspace(*cptr) ||
-               ispunct(*cptr) ||
+            if(isspace(*cptr) || 
+               ispunct(*cptr) || 
                ((ossim_uint8)(*cptr) == theDegreeSign))
             {
                *cptr = ' ';
@@ -272,21 +272,21 @@ bool ossimDms::setDegrees(const std::string& cdegrees)
                ++cptr;
             }
          }
-
+         
       }	// end switch
 
       if (status == false)
       {
          break;
       }
-
+      
    } //  end while loop
 
    // add any units that may have been calculated (minutes or seconds)
    degrees     = degrees + units;
-
+   
    theDegrees = (degrees * (double)theSign);
-
+   
    return status;
 }
 
@@ -302,11 +302,11 @@ ossimString ossimDms::toString(const ossimString& formatString)const
 
    stringIter = tempFormatString.begin();
    int i, d_s;
-
+   
 /* assign a default format if none is given */
-
+      
    init_values(theDegrees);
-
+   
    while(stringIter != tempFormatString.end())
    {
       switch(*stringIter)
@@ -317,7 +317,7 @@ ossimString ossimDms::toString(const ossimString& formatString)const
             stringIter++;
             break;
          }
-
+         
          case 'c':
          case 'C':
          {
@@ -330,7 +330,7 @@ ossimString ossimDms::toString(const ossimString& formatString)const
             {
                temp= (theLatFlag == true) ? ('N') : ('E');
             }
-
+            
             if(*stringIter == 'c')
             {
                temp = tolower(temp);
@@ -339,7 +339,7 @@ ossimString ossimDms::toString(const ossimString& formatString)const
             stringIter++;
             break;
          }
-
+         
          case 'd':
          case 'D':
          {			/* how many 'd's until not 'd' */
@@ -384,7 +384,7 @@ ossimString ossimDms::toString(const ossimString& formatString)const
 //             {
 //                if(theAfterDot)
 //                {
-
+                  
 //                   while(d_s > 0)
 //                   {
 //                      temp+='0';
@@ -402,14 +402,14 @@ ossimString ossimDms::toString(const ossimString& formatString)const
 //                   temp = prefix + temp;
 //                }
 //             }
-
+            
             break;
          }
-
+ 
          case ' ':
-         {
+         {			
             result += *stringIter;
-
+            
             while (*stringIter == ' ')
             {
                result += *stringIter;
@@ -417,14 +417,14 @@ ossimString ossimDms::toString(const ossimString& formatString)const
             }
             break;
          }
-
-         case '.':
+         
+         case '.': 
          {
-            theAfterDot = true;
+            theAfterDot = true;              
             result +=  *stringIter++;
             break;
          }
-
+         
          case 'm':
          case 'M':
          case 's':
@@ -435,11 +435,11 @@ ossimString ossimDms::toString(const ossimString& formatString)const
             {
                theDoingSeconds = true;
             }
-
+            
             calc_mins_or_secs(&theDecDegs, stringIter, result);
             break;
          }
-
+         
          // This is code that I added so you can do additional
          // formatting.
          //
@@ -465,8 +465,8 @@ ossimString ossimDms::toString(const ossimString& formatString)const
          }
       }	/* end switch statement */
    }	/* end while loop */
-
-   return result;
+   
+   return result;   
 }
 
 // The functions that follow are all dts stuff
@@ -479,9 +479,9 @@ ossimString ossimDms::degree_to_string(double degrees,
    char str_fmt[10];
    char *rptr, *fptr, *sptr;
    int i, d_s;
-
+   
 /* assign a default format if none is given */
-
+   
    if (format[0] == '\0')
    {
       set_default(format, cdegrees);
@@ -491,17 +491,17 @@ ossimString ossimDms::degree_to_string(double degrees,
       memset(cdegrees, ' ', 64);
 //       strcpy(cdegrees, SPACES);
    }
-
+   
    init_values(degrees);
-
+   
    rptr = cdegrees;
    fptr = format;
    sptr = str_fmt;
-
+   
 /* cycle through characters of the format and plug in values */
-
+   
    while (*fptr != '\0') {
-
+      
 	 switch (*fptr) {
 
 	   case '-': {
@@ -516,7 +516,7 @@ ossimString ossimDms::degree_to_string(double degrees,
 		   (lat_flag == true) ? (*rptr = 'S') : (*rptr = 'W');
 		else
 		   (lat_flag == true) ? (*rptr = 'N') : (*rptr = 'E');
-
+		
 		rptr++, fptr++;
 		break;
 	   }
@@ -650,7 +650,7 @@ void ossimDms::calc_mins_or_secs(double *dd,
            if(*dd < 0.0) *dd = 0.0;
 	}
         std::ostringstream out;
-
+        
         out << std::setw(numunits)
             << std::setfill('0')
             << std::setiosflags(std::ios::right)
@@ -658,7 +658,7 @@ void ossimDms::calc_mins_or_secs(double *dd,
             << ires
             << std::ends;
         result+=out.str().c_str();
-
+        
 
 //        result += ossimString::toString(ires);
 }
@@ -710,7 +710,7 @@ int ossimDms::calc_mins_or_secs(double *dd,
 	}
 	setup_printf(numunits, str_fmt);
 	sprintf(res, str_fmt, ires);
-
+        
 	return(numunits);
 }
 
@@ -726,7 +726,7 @@ int ossimDms::calc_mins_or_secs(double *dd,
 void ossimDms::setup_printf(int ival, char *fmt)const
 {
 	char precis[3];
-
+	
 	strcpy(fmt, "%");
 	sprintf(precis, "%d", ival);
 	strcat(fmt,precis);
@@ -745,7 +745,7 @@ void ossimDms::setup_printf(int ival, char *fmt)const
  *	may have been placed therein prior to the call here.	*
  ****************************************************************/
 
-
+ 
 void ossimDms::set_default(char *fp, char *rp)const
 {
 	strcpy(fp, DEFAULT_FORMAT); 	/* assign default format */
@@ -767,11 +767,11 @@ void ossimDms::init_values(double d)const
    theSign = 1;
    if (d < 0.0)
       theSign = -1;
-
+   
    theWorking = d;
    theIntDegs = (int)theWorking * theSign;
    theDecDegs = (theWorking  * theSign) - theIntDegs;
-
+   
    return;
 }
 
@@ -815,14 +815,14 @@ double ossimDms::string_to_degree(const std::string& cdegrees)
    // original pointer so we can delete it at the bottom.
    //---
    char* cptr = copy;
-
+   
    strcpy(cptr, cdegrees.c_str());
-
+   
    double degrees, factor, dividend, units;
    int i;
    bool afterdelim;
    char c;
-
+   
    theAfterDot = false;
    afterdelim = false;
    degrees = 0.0;
@@ -830,23 +830,23 @@ double ossimDms::string_to_degree(const std::string& cdegrees)
    factor = 1.0;
    dividend = 60.0;
    theSign = 1;
-
+   
    /* get rid of leading spaces */
-
+   
    while (*cptr == ' ')
       cptr++;
-
+   
    while(*cptr != '\0')
    {
       switch (*cptr)
       {
-
+         
          /* north, west and + values will change sign of degrees to plus */
          case '+':
          case 'n':
          case 'N':
          case 'e':
-         case 'E':
+         case 'E': 
          {
             if(toupper(*cptr) == 'N')
             {
@@ -860,14 +860,14 @@ double ossimDms::string_to_degree(const std::string& cdegrees)
             cptr++;
             break;
          }
-
+         
          /* south, east and - values will change sign of degrees to minus */
-
+         
          case '-':
          case 's':
          case 'S':
          case 'w':
-         case 'W':
+         case 'W': 
          {
             if(toupper(*cptr) == 'S')
             {
@@ -881,7 +881,7 @@ double ossimDms::string_to_degree(const std::string& cdegrees)
             cptr++;
             break;
          }
-
+         
          case '0':
          case '1':
          case '2':
@@ -895,34 +895,34 @@ double ossimDms::string_to_degree(const std::string& cdegrees)
          {
             c = *cptr;
             i = (c - '0');
-
+            
             if (afterdelim == true) {
-
-               if (theAfterDot == true)
+               
+               if (theAfterDot == true) 
                   units = units + (((double)i * factor) / dividend);
                else
                   units = (units * factor) + ((double)i / dividend);
             }
             else {
-
+               
                if (theAfterDot == true)
                   degrees = degrees + ((double)i * factor);
                else
                   degrees = (degrees * factor) + (double)i;
             }
-
-            if (theAfterDot == true)
+            
+            if (theAfterDot == true) 
                factor = factor * .10;
             else
                factor = 10.;
-
+            
             cptr++;
             break;
          }
-
+            
          /* a decimal point indicates a change in the factor used */
          /* to calculate degrees or units (minutes or seconds)    */
-
+            
          case '.':
          {
             factor = .10;
@@ -930,51 +930,51 @@ double ossimDms::string_to_degree(const std::string& cdegrees)
             cptr++;
             break;
          }
-
+         
          /* after a delimiter the value contains minutes, first time through */
-
+         
          case ' ':
          {
-
-            while (*(cptr + 1) == ' ')
+            
+            while (*(cptr + 1) == ' ') 
                cptr++;
-
+            
             degrees = degrees + units;
             units = 0.0;
-
+            
             if (afterdelim == true) 	/* must be seconds */
                dividend = dividend * dividend;
-            else
+            else 
                afterdelim = true;
-
+            
             factor = 1.;
-
+            
             cptr++;
-
+            
             /* skip any leading zeroes after delimiter */
-
+            
             while (*cptr == '0')
                cptr++;
-
+            
             break;
          }
-
+            
          /* check for a delimiter that is allowable:
             isspace allows: space, tab, cr, nl, vt, ff
             ispunct allows: punctuation char != space or control or letter */
-
+         
          default:
          {
             if (isspace(*cptr) || ispunct(*cptr))
                *cptr = ' ';
          }
-
+         
       }	/* end switch */
-
+      
    }	/* end while loop */
-
+   
    /* add any units that may have been calculated (minutes or seconds) */
-
+   
    degrees = degrees + units;
 
    //---
@@ -983,6 +983,6 @@ double ossimDms::string_to_degree(const std::string& cdegrees)
    //---
    delete [] copy;
    copy = 0;
-
+   
    return(degrees * (double)theSign);
 }

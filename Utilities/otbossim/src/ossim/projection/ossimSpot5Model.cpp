@@ -9,7 +9,7 @@
 // Contains definition of class ossimSpot5Model.
 //
 //*****************************************************************************
-// $Id: ossimSpot5Model.cpp 13976 2009-01-20 16:00:16Z gpotts $
+// $Id: ossimSpot5Model.cpp 14206 2009-04-01 12:11:20Z gpotts $
 
 #include <iostream>
 #include <iomanip>

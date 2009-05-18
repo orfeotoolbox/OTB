@@ -17,7 +17,7 @@
 //         User Header Label (UHL) in South to North profile sequence.
 //
 //********************************************************************
-// $Id: ossimDtedRecord.cpp 11550 2007-08-09 19:43:12Z dburken $
+// $Id: ossimDtedRecord.cpp 14248 2009-04-08 19:38:11Z dburken $
 
 #include <iostream>
 
@@ -203,7 +203,7 @@ bool ossimDtedRecord::validateCheckSum(std::istream& in)
    return true;
 }
 
-ossimString ossimDtedRecord::recoginitionSentinel() const
+ossimString ossimDtedRecord::recognitionSentinel() const
 {
    return theRecSen;
 }
@@ -275,7 +275,7 @@ std::ostream& operator<<( std::ostream& os, const ossimDtedRecord& rec)
 {
    os << "\nDTED Record:"
       << "\n-------------------------------"
-      << "\nRecoginition Sentinel: " << rec.theRecSen
+      << "\n Recognition Sentinel: " << rec.theRecSen
       << "\nData Block Count:      " << rec.theDataBlockCount
       << "\nLon Count:             " << rec.theLonCount
       << "\nLat Count:             " << rec.theLatCount

@@ -1,12 +1,13 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimDate.h 13732 2008-10-17 19:47:43Z gpotts $
+// $Id: ossimDate.h 14478 2009-05-08 18:24:22Z dburken $
 #ifndef ossimDate_HEADER
 #define ossimDate_HEADER
 #include <ctime>
@@ -122,6 +123,19 @@ public:
                        int tf =timefmt) const;
    std::ostream& printTime(std::ostream & os, int f =timefmt) const;
    std::ostream& printDate(std::ostream & os, int f =datefmt) const;
+
+   /**
+    * @brief method to dump all the data members.  This is the tm struct +
+    * the theFractionalSecond from this class.
+    *
+    * @note: tm_gmtoff and  tm_zone from tm struct are not printed as they
+    * are not standard.
+    *
+    * @param os Stream to dump to.
+    *
+    * @return stream.
+    */
+   std::ostream& dump(std::ostream& os) const;
 
 
     int getYear()const;

@@ -1,6 +1,8 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 // 
 // Author: Ken Melero
 // 
@@ -8,13 +10,15 @@
 //               (HDR) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedHdr.cpp 10261 2007-01-14 18:52:50Z dburken $
+// $Id: ossimDtedHdr.cpp 14248 2009-04-08 19:38:11Z dburken $
 
 #include <iostream>
 #include <fstream>
+#include <string>
 
 #include <ossim/support_data/ossimDtedHdr.h>
-#include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimNotify.h>
+#include <ossim/base/ossimProperty.h>
 
 //**************************************************************************
 // CONSTRUCTOR
@@ -168,33 +172,55 @@ void ossimDtedHdr::parse(std::istream& in)
    theStopOffset = theStartOffset + HDR_LENGTH;
 }
 
+ossimRefPtr<ossimProperty> ossimDtedHdr::getProperty(
+   const ossimString& name) const
+{
+   ossimRefPtr<ossimProperty> result = 0;
+   return result;
+}
+
+void ossimDtedHdr::getPropertyNames(
+   std::vector<ossimString>& propertyNames) const
+{
+   propertyNames.push_back(ossimString("dted_hdr_record"));
+}
+
+
 //**************************************************************************
 // operator <<
 //**************************************************************************
 std::ostream& operator<<( std::ostream& os, const ossimDtedHdr& hdr)
 {
-   os << "\nDTED Header (VOL):"
-      << "\n-------------------------------"
-      << "\ntheRecSen:             " << hdr.theRecSen
-      << "\nField 2:               " << hdr.theField2
-      << "\ntheFilename:           " << hdr.theFilename
-      << "\nField 4:               " << hdr.theField4
-      << "\nField 5:               " << hdr.theField5
-      << "\nField 6:               " << hdr.theField6
-      << "\nVersion:               " << hdr.theVersion
-      << "\ntheCreationDate:       " << hdr.theCreationDate
-      << "\nField 9:               " << hdr.theField9
-      << "\nField 10:              " << hdr.theField10
-      << "\nField 11:              " << hdr.theField11
-      << "\nField 12:              " << hdr.theField12
-      << "\nField 13:              " << hdr.theField13
-      << "\nField 14:              " << hdr.theField14
-      << std::endl;
-   
-   return os;
+   std::string prefix;
+   return hdr.print(os, prefix);
 }
 
-ossimString ossimDtedHdr::recoginitionSentinel() const
+std::ostream& ossimDtedHdr::print(std::ostream& out,
+                                  const std::string& prefix) const
+{
+   std::string pfx = prefix;
+   pfx += "hdr.";
+   
+   out << pfx << "recognition_sentinel:  " << theRecSen << "\n"
+       << pfx << "field2:                " << theField2 << "\n"
+       << pfx << "filename:              " << theFilename << "\n"
+       << pfx << "field4:                " << theField4 << "\n"
+       << pfx << "field5:                " << theField5 << "\n"
+       << pfx << "field6:                " << theField6 << "\n"
+       << pfx << "version:               " << theVersion << "\n"
+       << pfx << "creation_date:         " << theCreationDate << "\n"
+       << pfx << "field9:                " << theField9 << "\n"
+       << pfx << "field10:               " << theField10 << "\n"
+       << pfx << "field11:               " << theField11 << "\n"
+       << pfx << "field12:               " << theField12 << "\n"
+       << pfx << "field13:               " << theField13 << "\n"
+       << pfx << "field14:               " << theField14 << "\n"
+       << std::endl;
+   
+   return out;
+}
+
+ossimString ossimDtedHdr::recognitionSentinel() const
 {
    return theRecSen;
 }

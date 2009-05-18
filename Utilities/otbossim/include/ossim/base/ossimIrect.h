@@ -10,7 +10,7 @@
 // Container class for four integer points representing a rectangle.
 //
 //*******************************************************************
-//  $Id: ossimIrect.h 12951 2008-06-01 16:12:29Z dburken $
+//  $Id: ossimIrect.h 14217 2009-04-03 12:59:37Z gpotts $
 
 #ifndef ossimIrect_HEADER
 #define ossimIrect_HEADER 1
@@ -270,6 +270,33 @@ public:
    ossimIpt lr() const { return theLrCorner; }
    ossimIpt ll() const { return theLlCorner; }
 
+   const ossimIrect& changeOrientationMode(ossimCoordSysOrientMode mode)
+   {
+      // if we are already in the orientation then return
+      //
+      if(mode == theOrientMode) return *this;
+      if(mode == OSSIM_LEFT_HANDED)
+      {
+         // we must be right handed so change to left handed
+         *this = ossimIrect(theUlCorner.x,
+                            theLlCorner.y,
+                            theLrCorner.x,
+                            theUlCorner.y,
+                            OSSIM_LEFT_HANDED);
+      }
+      else
+      {
+         // we must be left handed so change to RIGHT handed
+         *this = ossimIrect(theUlCorner.x,
+                            theLlCorner.y,
+                            theLrCorner.x,
+                            theUlCorner.y,
+                            OSSIM_RIGHT_HANDED);
+      }
+      theOrientMode = mode;
+      
+      return *this;
+   }
    void getBounds(ossim_int32& minx, ossim_int32& miny,
                   ossim_int32& maxx, ossim_int32& maxy)const
       {
@@ -320,6 +347,7 @@ public:
 
    void stretchToTileBoundary(const ossimIpt& tileWidthHeight);
 
+   const ossimIrect& expand(const ossimIpt& padding);
    ossim_uint32 area()const
       {
          return width()*height();
@@ -407,6 +435,7 @@ public:
     */
    bool completely_within(const ossimIrect& rect) const;
 
+   ossimCoordSysOrientMode orientationMode()const{return theOrientMode;}
    /*!
     * Returns the height of the rectangle.
     */

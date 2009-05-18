@@ -10,7 +10,7 @@
 //   all objects providing height information given horizontal ground position.
 //
 //*****************************************************************************
-// $Id: ossimElevSource.h 11428 2007-07-27 18:44:18Z gpotts $
+// $Id: ossimElevSource.h 14297 2009-04-14 17:25:31Z gpotts $
 
 #ifndef ossimElevSource_HEADER
 #define ossimElevSource_HEADER
@@ -119,7 +119,7 @@ public:
     * @note This implementation always returns true.  This should be
     * overridden in derived classes that have streams to files.
     */
-   virtual bool open() const;
+   virtual bool open();
    
    /**
     * Closes the stream to the file.
@@ -127,7 +127,7 @@ public:
     * @note This implementation does nothing.  This should be
     * overridden in derived classes that have streams to files.
     */
-   virtual void close()const;
+   virtual void close();
 
    /**
     * @return Returns the flag which controls whether or not statistics will

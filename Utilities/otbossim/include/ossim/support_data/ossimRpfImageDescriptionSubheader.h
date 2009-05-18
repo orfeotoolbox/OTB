@@ -1,16 +1,19 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 // 
-// Author: Garrett Potts (gpotts@imagelinks.com)
+// Author: Garrett Potts
+// 
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfImageDescriptionSubheader.h 9967 2006-11-29 02:01:23Z gpotts $
+// $Id: ossimRpfImageDescriptionSubheader.h 14241 2009-04-07 19:59:23Z dburken $
 #ifndef ossimRpfImageDescriptionSubheader_HEADER
 #define ossimRpfImageDescriptionSubheader_HEADER
-#include <iostream>
-using namespace std;
+
+#include <iosfwd>
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/support_data/ossimRpfConstants.h>
@@ -19,65 +22,77 @@ using namespace std;
 class ossimRpfImageDescriptionSubheader
 {
 public:
-   friend ostream& operator <<(ostream& out,
-                               const ossimRpfImageDescriptionSubheader& data);
-   ossimRpfImageDescriptionSubheader();
-   virtual ~ossimRpfImageDescriptionSubheader(){}
+   friend std::ostream& operator <<(
+      std::ostream& out, const ossimRpfImageDescriptionSubheader& data);
 
-   ossimErrorCode parseStream(istream& in, ossimByteOrder byteOrder);
+   ossimRpfImageDescriptionSubheader();
+   ~ossimRpfImageDescriptionSubheader(){}
+
+   ossimErrorCode parseStream(std::istream& in, ossimByteOrder byteOrder);
    
    ossim_uint32 getStartOffset()const{return theStartOffset;}
    ossim_uint32 getEndOffset()const{return theEndOffset;}
 
    bool isSubframeMaskTableOffsetNull()const
-      {
-         return (theSubframeMaskTableOffset == OSSIM_RPF_ULONG_NULL);
-      }
+   {
+      return (theSubframeMaskTableOffset == OSSIM_RPF_ULONG_NULL);
+   }
    bool isTransparencyMaskTableOffsetNull()const
-      {
-         return (theTransparencyMaskTableOffset == OSSIM_RPF_ULONG_NULL);
-      }
+   {
+      return (theTransparencyMaskTableOffset == OSSIM_RPF_ULONG_NULL);
+   }
    ossim_uint16 getNumberOfSpectralGroups()const
-      {
-         return theNumberOfSpectralGroups;
-      }
+   {
+      return theNumberOfSpectralGroups;
+   }
    ossim_uint16 getNumberOfSubframeTables()const
-      {
-         return theNumberOfSubframeTables;
-      }
+   {
+      return theNumberOfSubframeTables;
+   }
    ossim_uint16 getNumberOfSpectralBandTables()const
-      {
-         return theNumberOfSpectralBandTables;
-      }
+   {
+      return theNumberOfSpectralBandTables;
+   }
    ossim_uint16 getNumberOfSpectralBandLinesPerImageRow()const
-      {
-         return theNumberOfSpectralBandLinesPerImageRow;
-      }
+   {
+      return theNumberOfSpectralBandLinesPerImageRow;
+   }
    ossim_uint16 getNumberOfSubframesHorizontal()const
-      {
-         return theNumberOfSubframesHorizontal;
-      }
+   {
+      return theNumberOfSubframesHorizontal;
+   }
    ossim_uint16 getNumberOfSubframesVertical()const
-      {
-         return theNumberOfSubframesVertical;
-      }
+   {
+      return theNumberOfSubframesVertical;
+   }
    ossim_uint32  getNumberOfOutputColumnsPerSubframe()const
-      {
-         return theNumberOfOutputColumnsPerSubframe;
-      }
+   {
+      return theNumberOfOutputColumnsPerSubframe;
+   }
    ossim_uint32  getNumberOfOutputRowsPerSubframe()const
-      {
-         return theNumberOfOutputRowsPerSubframe;
-      }
+   {
+      return theNumberOfOutputRowsPerSubframe;
+   }
    ossim_uint32  getSubframeMaskTableOffset()const
-      {
-         return theSubframeMaskTableOffset;
-      }
+   {
+      return theSubframeMaskTableOffset;
+   }
    ossim_uint32  getTransparencyMaskTableOffset()const
-      {
-         return theTransparencyMaskTableOffset;
-      }
-   virtual void print(ostream& out)const;
+   {
+      return theTransparencyMaskTableOffset;
+   }
+
+   /**
+    * @brief print method that outputs a key/value type format adding prefix
+    * to keys.
+    * @param out String to output to.
+    * @param prefix This will be prepended to key.
+    * e.g. Where prefix = "nitf." and key is "file_name" key becomes:
+    * "nitf.file_name:"
+    * @return output stream.
+    */
+   std::ostream& print(std::ostream& out,
+                       const std::string& prefix=std::string()) const;
    
 private:
    void clearFields();

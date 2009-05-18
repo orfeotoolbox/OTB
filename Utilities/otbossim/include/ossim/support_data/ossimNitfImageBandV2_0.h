@@ -1,19 +1,19 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 // 
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageBandV2_0.h 9153 2006-06-20 20:56:46Z dburken $
+// $Id: ossimNitfImageBandV2_0.h 14241 2009-04-07 19:59:23Z dburken $
 #ifndef ossimNitfImageBandV2_0_HEADER
 #define ossimNitfImageBandV2_0_HEADER
 
-  // #include <iterator>
-
+#include <string>
 #include <ossim/support_data/ossimNitfImageBand.h>
 #include <ossim/support_data/ossimNitfImageLutV2_0.h>
 
@@ -31,10 +31,15 @@ public:
    virtual void writeStream(std::ostream& out);
 
    /**
-    * @param bandNumber Zero based band number.
+    * @brief print method that outputs a key/value type format adding prefix
+    * to keys.
+    * @param out Stream to output to.
+    * @param prefix Like "image0."
+    * @param band zero based band.
     */
    virtual std::ostream& print(std::ostream& out,
-                               ossim_uint32 band=0)const;
+                               const std::string& prefix=std::string(),
+                               ossim_uint32 band=0) const;   
    
    virtual ossim_uint32 getNumberOfLuts()const;
    virtual const ossimRefPtr<ossimNitfImageLut> getLut(ossim_uint32 idx)const;

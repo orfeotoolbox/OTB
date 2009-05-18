@@ -1,0 +1,71 @@
+//----------------------------------------------------------------------------
+//
+// License:  See top level LICENSE.txt file
+//
+// Author:  David Burken
+//
+// Description: Class declaration of Registry (singleton) for info factories.
+//
+//----------------------------------------------------------------------------
+// $Id$
+
+#ifndef ossimInfoFactoryRegistry_HEADER
+#define ossimInfoFactoryRegistry_HEADER
+
+#include <vector>
+#include <ossim/base/ossimConstants.h> /* for OSSIM_DLL macro */
+
+// Forward class declarations.
+class ossimInfoFactoryInterface;
+class ossimInfoBase;
+class ossimFilename;
+
+class OSSIM_DLL ossimInfoFactoryRegistry
+{
+public:
+   
+   /** destructor */
+   ~ossimInfoFactoryRegistry();
+
+   /**
+    * instance method
+    *
+    * @return Pointer to the instance of the registry.
+    */
+   static ossimInfoFactoryRegistry* instance();
+
+   /**
+    * Method to add factory to registry.
+    * @param factory Factory to register.
+    */
+   void registerFactory(ossimInfoFactoryInterface* factory);
+
+   /**
+    * @brief Create method.
+    *
+    * @param file Some file you want info for.
+    *
+    * @return ossimInfoBase* on success 0 on failure.  Caller is responsible
+    * for memory.
+    */
+   ossimInfoBase* create(const ossimFilename& file) const;
+   
+protected:
+
+   /**
+    * @brief Hidden from use default constructor.
+    * @note Adds ossimInfoFactory to registry.
+    */
+   ossimInfoFactoryRegistry();
+
+   /** @brief hidden from use copy constructor */
+   ossimInfoFactoryRegistry(const ossimInfoFactoryRegistry& obj);
+
+   /** @brief hidden from use assignment operator */
+   const ossimInfoFactoryRegistry& operator=(
+      const ossimInfoFactoryRegistry& rhs);
+   
+   std::vector<ossimInfoFactoryInterface*> theFactoryList;
+};
+
+#endif /* #ifndef ossimInfoFactoryRegistry_HEADER */

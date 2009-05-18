@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimHistogramEqualization.cpp 11721 2007-09-13 13:19:34Z gpotts $
+// $Id: ossimHistogramEqualization.cpp 14110 2009-03-14 15:46:40Z dburken $
 #include <ossim/imaging/ossimHistogramEqualization.h>
 #include <ossim/base/ossimMultiResLevelHistogram.h>
 #include <ossim/base/ossimMultiBandHistogram.h>
@@ -285,8 +285,14 @@ ossimRefPtr<ossimImageData> ossimHistogramEqualization::runEqualizationAlgorithm
                         if(idx>=0)
                         {
                            T value = (T)(histoLut[idx]);
-                           buf[offset] = value>maxPix?maxPix:value;
-                           buf[offset] = value<minPix?minPix:value;
+
+                           //---
+                           // Assign clamping to min max.
+                           // 
+                           // ESH 03/2009 -- Clamping to within min-max fixed
+                           //--- 
+                           buf[offset] = value < minPix ? minPix :
+                              (value > maxPix ? maxPix : value);
                         }
                      }
                   }
@@ -302,8 +308,14 @@ ossimRefPtr<ossimImageData> ossimHistogramEqualization::runEqualizationAlgorithm
                         if((buf[offset]!=nullPix)&&(idx>=0))
                         {
                            T value = (T)(histoLut[idx]);
-                           buf[offset] = value>maxPix?maxPix:value;
-                           buf[offset] = value<minPix?minPix:value;
+
+                           //---
+                           // Assign clamping to min max.
+                           // 
+                           // ESH 03/2009 -- Clamping to within min-max fixed
+                           //--- 
+                           buf[offset] = value < minPix ? minPix :
+                              (value > maxPix ? maxPix : value);
                         }
                         else
                         {

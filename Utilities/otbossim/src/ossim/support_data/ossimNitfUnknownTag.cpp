@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //
@@ -10,20 +12,14 @@
 // the tag factories.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfUnknownTag.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfUnknownTag.cpp 14241 2009-04-07 19:59:23Z dburken $
 
-#include <cstring> /* for memcpy */
-#include <cctype>  /* for isascii */
+#include <ostream>
 #include <iomanip>
+#include <cctype> /* for isascii */
 
 #include <ossim/support_data/ossimNitfUnknownTag.h>
 #include <ossim/support_data/ossimNitfCommon.h>
-#include <ossim/base/ossimNotifyContext.h>
-#include <ossim/base/ossimTrace.h>
-#include <ossim/base/ossimDms.h>
-#include <ossim/base/ossimDpt.h>
-
-static const ossimTrace traceDebug(ossimString("ossimNitfUnknownTag:debug"));
 
 RTTI_DEF1(ossimNitfUnknownTag, "ossimNitfUnknownTag", ossimNitfRegisteredTag);
 
@@ -88,21 +84,29 @@ void ossimNitfUnknownTag::clearFields()
    }
 }
 
-std::ostream& ossimNitfUnknownTag::print(std::ostream& out) const
+std::ostream& ossimNitfUnknownTag::print(std::ostream& out,
+                                         const std::string& prefix) const
 {
+   std::string pfx = prefix;
+   pfx += getRegisterTagName();
+   pfx += ".";
+
    out << setiosflags(std::ios::left)
-       << "ossimNitfUnknownTag::print"
-       << std::setw(24) << "\nTag name:" << theTagName
-       << std::setw(24) << "\nTag length:" << theTagLength
-       << "\nUnformatted tag data:" << std::endl;
+       << pfx << std::setw(24) << "CETAG:" << getRegisterTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"   << getSizeInBytes() << "\n"
+       << pfx << std::setw(24) << "unformatted_tag_data: ";
+   
    if (tagDataIsAscii())
    {
-      out << theTagData << std::endl;
+      out << theTagData << "\n";
    }
-
+   else
+   {
+      out << "binary not displayed\n";
+   }
+   
    return out;
 }
-
 
 void ossimNitfUnknownTag::setTagName(const ossimString& tagName)
 {

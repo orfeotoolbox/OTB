@@ -1,13 +1,15 @@
 //*******************************************************************
 //
-// LICENSE:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 // 
 // Author: Garrett Potts
 // 
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfRegisteredTag.h 11255 2007-06-21 20:52:22Z dburken $
+// $Id: ossimNitfRegisteredTag.h 14241 2009-04-07 19:59:23Z dburken $
 #ifndef ossimNitfRegisteredTag_HEADER
 #define ossimNitfRegisteredTag_HEADER
 
@@ -57,6 +59,14 @@ public:
     */
    virtual void getMetadata(ossimKeywordlist& kwl,
                             const char* prefix=0) const;
+
+   /**
+    * @brief Pure virtual print method that outputs a key/value type format
+    * adding prefix to keys.
+    */
+   virtual std::ostream& print(std::ostream& out,
+                               const std::string& prefix=std::string()) const;
+   
 
 protected:
    ossimString theRegisteredTagName;

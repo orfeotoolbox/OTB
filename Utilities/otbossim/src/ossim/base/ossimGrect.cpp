@@ -9,7 +9,7 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimGrect.cpp 11955 2007-10-31 16:10:22Z gpotts $
+// $Id: ossimGrect.cpp 14390 2009-04-22 22:36:02Z gpotts $
 
 #include <ossim/base/ossimGrect.h>
 using namespace std;
@@ -133,7 +133,7 @@ void ossimGrect::computeEvenTiles(std::vector<ossimGrect>& result,
                                   double lonSpacingInDegrees,
                                   bool clipToGeographicBounds)const
 {
-   ossimGrect clipRect = ossimGrect(90, -180, -190, 180);
+   ossimGrect clipRect = ossimGrect(90, -180, -90, 180);
    result.clear();
    ossimGrect temp = stretchToEvenBoundary(latSpacingInDegrees,
                                            lonSpacingInDegrees);

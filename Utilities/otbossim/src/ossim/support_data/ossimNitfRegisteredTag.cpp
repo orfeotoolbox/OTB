@@ -1,13 +1,18 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 // 
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfRegisteredTag.cpp 11256 2007-06-21 20:53:58Z dburken $
+// $Id: ossimNitfRegisteredTag.cpp 14241 2009-04-07 19:59:23Z dburken $
+
+#include <ostream>
+#include <string>
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
 #include <ossim/base/ossimKeywordlist.h>
 
@@ -38,4 +43,11 @@ void ossimNitfRegisteredTag::getPropertyNames(std::vector<ossimString>& property
 void ossimNitfRegisteredTag::getMetadata(ossimKeywordlist& /* kwl */,
                                          const char* /* prefix */ ) const
 {
+}
+
+std::ostream& ossimNitfRegisteredTag::print(
+   std::ostream& out, const std::string& /* prefix */) const
+{
+   // return print(out);
+   return out;
 }

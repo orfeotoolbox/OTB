@@ -10,7 +10,7 @@
 // Contains declaration of class ossimSpotDimapSupportData.
 //
 //*****************************************************************************
-// $Id: ossimSpotDimapSupportData.h 12101 2007-12-01 19:15:28Z dburken $
+// $Id: ossimSpotDimapSupportData.h 14206 2009-04-01 12:11:20Z gpotts $
 #ifndef ossimSpotDimapSupportData_HEADER
 #define ossimSpotDimapSupportData_HEADER
 

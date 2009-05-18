@@ -46,13 +46,6 @@ static ossimTrace traceDebug = ossimTrace("ossimSensorModelFactory:debug");
 #include <ossim/projection/ossimApplanixEcefModel.h>
 #include <ossim/support_data/ossimFfL7.h>
 #include <ossim/support_data/ossimFfL5.h>
-#include <ossim/projection/ossimRadarSatModel.h>
-#include <ossim/projection/ossimEnvisatAsarModel.h>
-#include <ossim/projection/ossimTerraSarModel.h>
-//#include <ossim/projection/ossimCosmoSkymedModel.h>
-#include <ossim/projection/ossimRadarSat2Model.h>
-#include <ossim/projection/ossimErsSarModel.h>
-#include <ossim/projection/ossimTileMapModel.h> 
 
 //***
 // ADD_MODEL: List names of all sensor models produced by this factory:
@@ -184,38 +177,11 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
       return new ossimSpot5Model;
    }
 
-   if(name==STATIC_TYPE_NAME(ossimTileMapModel))
-    {
-      return new ossimTileMapModel;
-    }
    if(name == STATIC_TYPE_NAME(ossimSarModel))
    {
       return new ossimSarModel;
    }
-   if (name == STATIC_TYPE_NAME(ossimRadarSatModel))
-   {
-	   return new ossimRadarSatModel;
-   }
-   if (name == STATIC_TYPE_NAME(ossimEnvisatAsarModel))
-   {
-	   return new ossimEnvisatAsarModel;
-   }
-	if (name == STATIC_TYPE_NAME(ossimTerraSarModel))
-   {
-	   return new ossimTerraSarModel;
-   }
-// 	if (name == STATIC_TYPE_NAME(ossimCosmoSkymedModel))
-//    {
-// 	   return new ossimCosmoSkymedModel;
-//   }
-	if (name == STATIC_TYPE_NAME(ossimRadarSat2Model))
-   {
-	   return new ossimRadarSat2Model;
-   }
-   if (name == STATIC_TYPE_NAME(ossimErsSarModel))
-   {
-	   return new ossimErsSarModel;
-   }
+
    //***
    // ADD_MODEL: (Please leave this comment for the next programmer)
    //***
@@ -263,13 +229,7 @@ ossimSensorModelFactory::getTypeNameList(std::vector<ossimString>& typeList)
    typeList.push_back(STATIC_TYPE_NAME(ossimFcsiModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimSpot5Model));
    typeList.push_back(STATIC_TYPE_NAME(ossimSarModel));
-   typeList.push_back(STATIC_TYPE_NAME(ossimRadarSatModel));
-   typeList.push_back(STATIC_TYPE_NAME(ossimRadarSat2Model));
-   typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarModel));
-   //   typeList.push_back(STATIC_TYPE_NAME(ossimCosmoSkymedModel));
-   typeList.push_back(STATIC_TYPE_NAME(ossimEnvisatAsarModel));
-   typeList.push_back(STATIC_TYPE_NAME(ossimErsSarModel));
-   typeList.push_back(STATIC_TYPE_NAME(ossimTileMapModel));
+
    //***
    // ADD_MODEL: Please leave this comment for the next programmer. Add above.
    //***
@@ -458,7 +418,7 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
    }
 
    ossimFilename spot5Test = geomFile;
-    if(!spot5Test.exists())
+   if(!spot5Test.exists())
    {
       spot5Test = geomFile.path();
       spot5Test = spot5Test.dirCat(ossimFilename("METADATA.DIM"));
@@ -467,8 +427,7 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
          spot5Test = geomFile.path();
          spot5Test = spot5Test.dirCat(ossimFilename("metadata.dim"));
       }
-   }  
-
+   }
    if(spot5Test.exists())
    {
       ossimSpotDimapSupportData *meta = new ossimSpotDimapSupportData;
@@ -499,18 +458,7 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
    }
    return model;
 }
-
-bool ossimSensorModelFactory::isTileMap(const ossimFilename& filename)const
-{ 
-  ossimFilename temp(filename);
-  temp.downcase(); 
-  if(temp.ext()=="otb")
-    {std::cout << "TileMap format "<<std::endl;
-    return true;
-    }
-  return false;
-}
-
+   
 bool ossimSensorModelFactory::isNitf(const ossimFilename& filename)const
 {
    std::ifstream in(filename.c_str(), ios::in|ios::binary);

@@ -1,14 +1,15 @@
 //----------------------------------------------------------------------------
-// Copyright (c) 2004, David Burken, all rights reserved.
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //
 // Description: BLOCKA tag class declaration.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfBlockaTag.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimNitfBlockaTag.cpp 14241 2009-04-07 19:59:23Z dburken $
 
 #include <cstring> /* for memcpy */
 #include <sstream>
@@ -100,8 +101,13 @@ void ossimNitfBlockaTag::clearFields()
    theField11[FIELD_11_SIZE]              = '\0';
 }
 
-std::ostream& ossimNitfBlockaTag::print(std::ostream& out) const
+std::ostream& ossimNitfBlockaTag::print(std::ostream& out,
+                                        const std::string& prefix) const
 {
+   std::string pfx = prefix;
+   pfx += getRegisterTagName();
+   pfx += "_";
+   
    // Grab the corners parsed into points.
    ossimDpt ulPt;
    ossimDpt urPt;
@@ -112,23 +118,24 @@ std::ostream& ossimNitfBlockaTag::print(std::ostream& out) const
    getLrlcLoc(lrPt);
    getLrfcLoc(llPt);
    
-   out << setiosflags(ios::left) << "ossimNitfBlockaTag::print"
-       << setw(24) << "\nBLOCK_INSTANCE:" << theBlockInstance
-       << setw(24) << "\nN_GRAY:"         << theNGray
-       << setw(24) << "\nL_LINES:"        << theLLines
-       << setw(24) << "\nLAYOVER_ANGLE:"  << theLayoverAngle
-       << setw(24) << "\nSHADOW_ANGLE:"   << theShadowAngle
-       << setw(24) << "\nFIELD_6:"        << theField6
-       << setw(24) << "\nFRLC_LOC:"       << theFrlcLoc
-       << setw(24) << "\nLRLC_LOC:"       << theLrlcLoc
-       << setw(24) << "\nLRFC_LOC:"       << theLrfcLoc
-       << setw(24) << "\nFRFC_LOC:"       << theFrfcLoc
-       << setw(24) << "\nFIELD_11:"       << theField11
-       << setw(24) << "\nupper left:"     << ulPt
-       << setw(24) << "\nupper right:"    << urPt
-       << setw(24) << "\nlower right:"    << lrPt
-       << setw(24) << "\nlower left:"     << llPt
-       << std::endl;
+   out << setiosflags(ios::left)
+       << pfx << std::setw(24) << "CETAG:" << getRegisterTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"   << getSizeInBytes() << "\n"
+       << pfx << std::setw(24) << "BLOCK_INSTANCE:" << theBlockInstance << "\n"
+       << pfx << std::setw(24) << "N_GRAY:"         << theNGray << "\n"
+       << pfx << std::setw(24) << "L_LINES:"        << theLLines << "\n"
+       << pfx << std::setw(24) << "LAYOVER_ANGLE:"  << theLayoverAngle << "\n"
+       << pfx << std::setw(24) << "SHADOW_ANGLE:"   << theShadowAngle << "\n"
+       << pfx << std::setw(24) << "FIELD_6:"        << theField6 << "\n"
+       << pfx << std::setw(24) << "FRLC_LOC:"       << theFrlcLoc << "\n"
+       << pfx << std::setw(24) << "LRLC_LOC:"       << theLrlcLoc << "\n"
+       << pfx << std::setw(24) << "LRFC_LOC:"       << theLrfcLoc << "\n"
+       << pfx << std::setw(24) << "FRFC_LOC:"       << theFrfcLoc << "\n"
+       << pfx << std::setw(24) << "FIELD_11:"       << theField11 << "\n"
+       << pfx << std::setw(24) << "upper left:"     << ulPt << "\n"
+       << pfx << std::setw(24) << "upper right:"    << urPt << "\n"
+       << pfx << std::setw(24) << "lower right:"    << lrPt << "\n"
+       << pfx << std::setw(24) << "lower left:"     << llPt << "\n";
 
    return out;
 }

@@ -10,7 +10,7 @@
 // derive from.
 //
 //********************************************************************
-// $Id: ossimImageHandler.h 12558 2008-03-18 19:46:21Z gpotts $
+// $Id: ossimImageHandler.h 14047 2009-03-03 02:24:10Z gpotts $
 #ifndef ossimImageHandler_HEADER
 #define ossimImageHandler_HEADER
 
@@ -195,6 +195,16 @@ public:
     *  @return true on success, false if not open.
     */
    virtual bool buildHistogram(int numberOfRLevels=0);
+   
+   
+   /**
+    *  Build a histograms for all image entries.
+    *
+    *  @param numberOfRLevels sets the maximum number of reduced resolution
+    *  level to compute histogram for.
+    *
+    *  @return true on success, false if not open.
+    */
    virtual bool buildAllHistograms(int numberOfRLevels=0);
    
    /**
@@ -208,6 +218,12 @@ public:
                               ossimFilterResampler::ossimFilterResamplerType resampleType = ossimFilterResampler::ossimFilterResampler_BOX,
                               bool includeFullResFlag=false);
 
+   /**
+    *  Will build over file for all image entries.
+    *
+    *  @param includeFullResFlag if true the full resolution layer will also
+    *  be put in the overview format.  This is handly for inefficeint formats.
+    */
    virtual bool buildAllOverviews(ossimImageHandlerOverviewCompressionType compressionType = OSSIM_OVERVIEW_COMPRESSION_NONE,
                                   ossim_uint32 quality = 75,
                                   ossimFilterResampler::ossimFilterResamplerType resampleType = ossimFilterResampler::ossimFilterResampler_BOX,

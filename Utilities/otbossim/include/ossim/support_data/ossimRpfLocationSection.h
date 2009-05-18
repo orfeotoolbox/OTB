@@ -1,18 +1,20 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 // 
-// Author: Garrett Potts (gpotts@imagelinks.com)
+// Author: Garrett Potts
+// 
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfLocationSection.h 9967 2006-11-29 02:01:23Z gpotts $
+// $Id: ossimRpfLocationSection.h 14241 2009-04-07 19:59:23Z dburken $
 #ifndef ossimRpfLocationSection_HEADER
 #define ossimRpfLocationSection_HEADER
-#include <iostream>
+
+#include <iosfwd>
 #include <vector>
-#include <iterator>
-using namespace std;
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/support_data/ossimRpfConstants.h>
@@ -21,10 +23,22 @@ using namespace std;
 struct ossimRpfComponentLocationRecord
 {
 public:
-   friend ostream& operator<<(ostream& out,
-                              const ossimRpfComponentLocationRecord& data);
-   void print(ostream& out)const;
-   ossimErrorCode parseStream(istream& in, ossimByteOrder endianOrder);
+   friend std::ostream& operator<<(
+      std::ostream& out, const ossimRpfComponentLocationRecord& data);
+   
+   /**
+    * @brief print method that outputs a key/value type format adding prefix
+    * to keys.
+    * @param out String to output to.
+    * @param prefix This will be prepended to key.
+    * e.g. Where prefix = "nitf." and key is "file_name" key becomes:
+    * "nitf.file_name:"
+    * @return output stream.
+    */
+   std::ostream& print(std::ostream& out,
+                       const std::string& prefix=std::string()) const;
+
+   ossimErrorCode parseStream(std::istream& in, ossimByteOrder endianOrder);
 
    /*!
     * The component is a 2-Byte unsigned value which
@@ -50,14 +64,25 @@ public:
 class ossimRpfLocationSection
 {
 public:
-   friend ostream& operator <<(ostream& out,
-                               const ossimRpfLocationSection &data);
+   friend std::ostream& operator <<(std::ostream& out,
+                                    const ossimRpfLocationSection &data);
    ossimRpfLocationSection();
    virtual ~ossimRpfLocationSection(){}
 
-   virtual ossimErrorCode parseStream(istream& in,
-                            ossimByteOrder endianOrder);
-   virtual void print(ostream& out)const;
+   virtual ossimErrorCode parseStream(std::istream& in,
+                                      ossimByteOrder endianOrder);
+
+   /**
+    * @brief print method that outputs a key/value type format adding prefix
+    * to keys.
+    * @param out String to output to.
+    * @param prefix This will be prepended to key.
+    * e.g. Where prefix = "nitf." and key is "file_name" key becomes:
+    * "nitf.file_name:"
+    * @return output stream.
+    */
+   std::ostream& print(std::ostream& out,
+                       const std::string& prefix=std::string()) const;
 
    /*!
     * Will let you know if a component exists within the location section.
@@ -95,7 +120,7 @@ private:
     * map.  We will just use an array (stl vector) and do linear searches
     * for components when we need to.
     */
-   vector<ossimRpfComponentLocationRecord> theComponentLocationList;
+   std::vector<ossimRpfComponentLocationRecord> theComponentLocationList;
 };
 
 #endif

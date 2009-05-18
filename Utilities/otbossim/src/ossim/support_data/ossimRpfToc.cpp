@@ -1,19 +1,22 @@
 //*******************************************************************
 //
-// LICENSE:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 // 
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfToc.cpp 12740 2008-04-26 01:47:29Z gpotts $
+// $Id: ossimRpfToc.cpp 14241 2009-04-07 19:59:23Z dburken $
 
 #include <iostream>
 
 #include <ossim/support_data/ossimRpfToc.h>
 #include <ossim/base/ossimErrorCodes.h>
 #include <ossim/base/ossimErrorContext.h>
+#include <ossim/support_data/ossimRpfFrame.h>
 #include <ossim/support_data/ossimRpfHeader.h>
 #include <ossim/support_data/ossimRpfFrameFileIndexSectionSubheader.h>
 #include <ossim/support_data/ossimRpfFrameFileIndexSubsection.h>
@@ -144,21 +147,63 @@ ossimErrorCode ossimRpfToc::parseFile(const ossimFilename &fileName)
    return ossimErrorCodes::OSSIM_OK;
 }
 
-void ossimRpfToc::print(std::ostream& out)const
+std::ostream& ossimRpfToc::print(std::ostream& out,
+                                 const std::string& prefix) const
 {
    if(theRpfHeader)
    {
-      out << *theRpfHeader << endl;
+      theRpfHeader->print(out, prefix);
 
+      //---
+      // Go through the entries...  We're going to skip overviews here.
+      //---
+      ossim_uint32 prefixIndex = 0;
       std::vector< ossimRpfTocEntry*>::const_iterator tocEntry =
          theTocEntryList.begin();
       while(tocEntry != theTocEntryList.end())
       {
-         out << *(*tocEntry) << endl;
+         if (*tocEntry)
+         {
+            if ( traceDebug() )
+            {
+               (*tocEntry)->print(out, prefix);
+            }
+            
+            const ossimRpfBoundaryRectRecord REC =
+               (*tocEntry)->getBoundaryInformation();
+
+            ossimString scale = REC.getScale();
+            
+            if (scale.contains("OVERVIEW") == false)
+            {
+               std::string entryPrefix = prefix;
+               entryPrefix += "image";
+               entryPrefix += ossimString::toString(prefixIndex++);
+               entryPrefix += ".";
+               REC.print(out, entryPrefix);
+
+               //---
+               // Get the first frame that exists so we can get to
+               // the attributes.
+               //---
+               ossimRpfFrameEntry frameEntry;
+               getFirstEntry((*tocEntry), frameEntry);
+
+               if (frameEntry.exists())
+               {
+                  ossimRpfFrame rpfFrame;
+                  if ( rpfFrame.parseFile(frameEntry.getFullPath())
+                       == ossimErrorCodes::OSSIM_OK )
+                  {
+                     rpfFrame.print(out, entryPrefix);
+                  }
+               }
+            }
+         }
          ++tocEntry;
       }
-      
    }
+   return out;
 }
 
 const ossimRpfTocEntry* ossimRpfToc::getTocEntry(unsigned long index)const
@@ -287,15 +332,21 @@ void ossimRpfToc::buildTocEntryList(ossimRpfHeader* rpfHeader)
                tempPathNameRec.parseStream(in, rpfHeader->getByteOrder());
 
                // We have the root directory where all frame files are subfiles of
-               ossimString rootDirectory(ossimFilename(theFilename.path())+
-                                           ossimFilename(ossimFilename::thePathSeparator));
+//               ossimString rootDirectory(ossimFilename(theFilename.path())+
+               // ossimFilename(ossimFilename::thePathSeparator));
+               ossimFilename rootDirectory;
+               getRootDirectory(rootDirectory);
 
-               // we have the actual path from the root directory to the frame file.  We must
-               // separate the two.  There have been occurrences where the path in the A.TOC file
-               // is upper case but the path in the directory on the file system is lower case.  This
-               // will fool the system in thinking the file doesnot exist when it actually does.
+               // we have the actual path from the root directory to the
+               // frame file.  We must separate the two.  There have been
+               // occurrences where the path in the A.TOC file
+               // is upper case but the path in the directory on the file
+               // system is lower case.  This
+               // will fool the system in thinking the file does not exist
+               // when it actually does.
                ossimString pathToFrameFile( ossimFilename(tempPathNameRec.getPathname()) +
                                               tempIndexRec.getFilename());
+
                ossimRpfFrameEntry entry(rootDirectory,
                                         pathToFrameFile);
                theTocEntryList[tempIndexRec.getBoundaryRecNumber()]->setEntry(entry,
@@ -329,4 +380,39 @@ void ossimRpfToc::allocateTocEntryList(unsigned long numberOfEntries)
    {
       theTocEntryList.push_back(new ossimRpfTocEntry);
    }   
+}
+
+void ossimRpfToc::getRootDirectory(ossimFilename& dir) const
+{
+   dir = theFilename.expand().path();
+}
+
+void ossimRpfToc::getFirstEntry(const ossimRpfTocEntry* rpfTocEntry,
+                                ossimRpfFrameEntry& frameEntry) const
+{
+   if (rpfTocEntry)
+   {
+      ossim_int32 framesHorizontal =
+         rpfTocEntry->getNumberOfFramesHorizontal();
+      ossim_int32 framesVertical =
+         rpfTocEntry->getNumberOfFramesVertical();
+   
+      bool foundEntry = false;
+      for (ossim_int32 v = 0; v < framesVertical; ++v)
+      {
+         for (ossim_int32 h = 0; h < framesHorizontal; ++h)
+         {
+            rpfTocEntry->getEntry(v, h, frameEntry);
+            if (frameEntry.exists())
+            {
+               foundEntry = true;
+               break;
+            }
+         }
+         if (foundEntry)
+         {
+            break;
+         }
+      }
+   }
 }

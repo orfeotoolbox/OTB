@@ -73,7 +73,7 @@ protected:
    /** Single static instance of this class. */
    //static ossimDatumFactoryRegistry* theInstance;
 
-   mutable OpenThreads::ReadWriteMutex theFactoryListMutex;
+	mutable OpenThreads::ReadWriteMutex theFactoryListMutex;
    std::vector<ossimDatumFactoryInterface*> theFactoryList;
 };
 

@@ -9,7 +9,7 @@
 //   from disk. This elevation files are memory mapped.
 //
 //*****************************************************************************
-// $Id: ossimDtedHandler.cpp 12982 2008-06-04 01:12:46Z dburken $
+// $Id: ossimDtedHandler.cpp 14296 2009-04-14 17:25:00Z gpotts $
 
 #include <cstdlib>
 #include <cstring> /* for memcpy */
@@ -38,7 +38,7 @@ static ossimTrace traceDebug ("ossimDtedHandler:debug");
 static const char ENABLE_STATS_KW[] = "elevation.compute_statistics.enabled";
 
 
-ossimDtedHandler::ossimDtedHandler(const ossimFilename& dted_file)
+ossimDtedHandler::ossimDtedHandler(const ossimFilename& dted_file, bool memoryMapFlag)
    :
       ossimElevCellHandler(dted_file),
       theFileStr(),
@@ -52,7 +52,8 @@ ossimDtedHandler::ossimDtedHandler(const ossimFilename& dted_file)
       theLatSpacing(0.0),
       theLonSpacing(0.0),
       theSwCornerPost(),
-      theSwapBytesFlag(false)
+      theSwapBytesFlag(false),
+      theMemoryMapFlag(memoryMapFlag)
 {
    static const char MODULE[] = "ossimDtedHandler (Filename) Constructor";
    if (traceExec())
@@ -60,7 +61,7 @@ ossimDtedHandler::ossimDtedHandler(const ossimFilename& dted_file)
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "DEBUG " << MODULE <<": entering..." << std::endl;
    }
- 
+   
    //---
    //  Open the dted file for reading.
    //---
@@ -92,6 +93,17 @@ ossimDtedHandler::ossimDtedHandler(const ossimFilename& dted_file)
    // DTED is stored in big endian.
    theSwapBytesFlag = ossim::byteOrder() == OSSIM_LITTLE_ENDIAN ? true : false;
 
+   // the file was mapped to memory
+   if(memoryMapFlag)
+   {
+      theFileStr.open(theFilename.c_str(), 
+                      std::ios::in | std::ios::binary);
+   }
+   else
+   {
+      theFileStr.seekg(0);
+   }
+
    // Attempt to parse.
    ossimDtedVol vol(theFileStr, 0);
    ossimDtedHdr hdr(theFileStr, vol.stopOffset());
@@ -99,6 +111,11 @@ ossimDtedHandler::ossimDtedHandler(const ossimFilename& dted_file)
    ossimDtedDsi dsi(theFileStr, uhl.stopOffset());
    ossimDtedAcc acc(theFileStr, dsi.stopOffset());
 
+   if(memoryMapFlag)
+   {
+      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theFileStrMutex);
+      theFileStr.close();
+   }
    //***
    // Check for errors.  Must have uhl, dsi and acc records.  vol and hdr
    // are for magnetic tape only; hence, may or may not be there.
@@ -117,7 +134,7 @@ ossimDtedHandler::ossimDtedHandler(const ossimFilename& dted_file)
       }
       
       theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-      theFileStr.close();
+      close();
       return;
    }
    
@@ -175,16 +192,34 @@ ossimDtedHandler::ossimDtedHandler(const ossimFilename& dted_file)
 ossimDtedHandler::~ossimDtedHandler()
 {
    theFileStr.close();
+   theMemoryMap.clear();
 }
 
 double ossimDtedHandler::getHeightAboveMSL(const ossimGpt& gpt)
 {
-   if(theMemoryMap.size() < 1)
+   if(!theMemoryMapFlag)
    {
       return getHeightAboveMSLFile(gpt);
    }
-
+   // will map to memory if needed
+   //
+   //mapToMemory();
    return getHeightAboveMSLMemory(gpt);
+}
+
+void ossimDtedHandler::mapToMemory()
+{
+   {
+      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theFileStrMutex);
+      theFileStr.close();
+   }
+   OpenThreads::ScopedWriteLock lock(theMemoryMapMutex);
+   if(theMemoryMap.size()) return;
+   std::ifstream in(theFilename.c_str(), 
+                    std::ios::in|std::ios::binary);
+   theMemoryMap.resize(theFilename.fileSize());
+   in.read((char*)(&theMemoryMap.front()), theMemoryMap.size());
+   in.close();
 }
 
 double ossimDtedHandler::getHeightAboveMSLFile(const ossimGpt& gpt)
@@ -235,35 +270,38 @@ double ossimDtedHandler::getHeightAboveMSLFile(const ossimGpt& gpt)
    int offset = theOffsetToFirstDataRecord + x0 * theDtedRecordSizeInBytes +
                 y0 * 2 + DATA_RECORD_OFFSET_TO_POST;
 
-   // Put the file pointer at the start of the first elevation post.
-   theFileStr.seekg(offset, std::ios::beg);
-
-   ossim_sint16 ss;
-   ossim_uint16 us;
-
-   // Get the first post.
-   theFileStr.read((char*)&us, POST_SIZE);
-   ss = convertSignedMagnitude(us);
-   p00 = ss;
-
-   // Get the second post.
-   theFileStr.read((char*)&us, POST_SIZE);
-   ss = convertSignedMagnitude(us);
-   p01 = ss;
-
-   // Move over to the next column.
-   offset += theDtedRecordSizeInBytes;
-   theFileStr.seekg(offset, std::ios::beg);
-
-   // Get the third post.
-   theFileStr.read((char*)&us, POST_SIZE);
-   ss = convertSignedMagnitude(us);
-   p10 = ss;
-
-   // Get the fourth post.
-   theFileStr.read((char*)&us, POST_SIZE);
-   ss = convertSignedMagnitude(us);
-   p11 = ss;
+   {
+      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theFileStrMutex);
+      // Put the file pointer at the start of the first elevation post.
+      theFileStr.seekg(offset, std::ios::beg);
+      
+      ossim_sint16 ss;
+      ossim_uint16 us;
+      
+      // Get the first post.
+      theFileStr.read((char*)&us, POST_SIZE);
+      ss = convertSignedMagnitude(us);
+      p00 = ss;
+      
+      // Get the second post.
+      theFileStr.read((char*)&us, POST_SIZE);
+      ss = convertSignedMagnitude(us);
+      p01 = ss;
+      
+      // Move over to the next column.
+      offset += theDtedRecordSizeInBytes;
+      theFileStr.seekg(offset, std::ios::beg);
+      
+      // Get the third post.
+      theFileStr.read((char*)&us, POST_SIZE);
+      ss = convertSignedMagnitude(us);
+      p10 = ss;
+      
+      // Get the fourth post.
+      theFileStr.read((char*)&us, POST_SIZE);
+      ss = convertSignedMagnitude(us);
+      p11 = ss;
+   }
    
    // Perform bilinear interpolation:
    double wx1 = xi  - x0;
@@ -354,31 +392,22 @@ double ossimDtedHandler::getHeightAboveMSLMemory(const ossimGpt& gpt)
    //***
    ossim_uint64 offset = theOffsetToFirstDataRecord + x0 * theDtedRecordSizeInBytes +
                          y0 * 2 + DATA_RECORD_OFFSET_TO_POST;
-
-   // Put the file pointer at the start of the first elevation post.
-//   theFileStr.seekg(offset, std::ios::beg);
-
-//    ossim_sint16 ss;
-    ossim_uint16 us;
-
-   // Get the first post.
-   //theFileStr.read((char*)&us, POST_SIZE);
-//   ss = convertSignedMagnitude(us);
-    memcpy(&us, buf+offset, POST_SIZE); 
-    p00 = convertSignedMagnitude(us);
-    memcpy(&us, buf+offset+POST_SIZE, POST_SIZE); 
-    p01 = convertSignedMagnitude(us);
-    
-    // Move over to the next column.
-    offset += theDtedRecordSizeInBytes;
-    memcpy(&us, buf+offset, POST_SIZE); 
-    p10 = convertSignedMagnitude(us);
-    memcpy(&us, buf+offset+POST_SIZE, POST_SIZE); 
-    p11 = convertSignedMagnitude(us);
-    // Get the fourth post.
-//    theFileStr.read((char*)&us, POST_SIZE);
-//    ss = convertSignedMagnitude(us);
-//    p11 = ss;
+   {
+      OpenThreads::ScopedReadLock lock(theMemoryMapMutex);
+      ossim_uint16 us;
+      
+      memcpy(&us, buf+offset, POST_SIZE); 
+      p00 = convertSignedMagnitude(us);
+      memcpy(&us, buf+offset+POST_SIZE, POST_SIZE); 
+      p01 = convertSignedMagnitude(us);
+      
+      // Move over to the next column.
+      offset += theDtedRecordSizeInBytes;
+      memcpy(&us, buf+offset, POST_SIZE); 
+      p10 = convertSignedMagnitude(us);
+      memcpy(&us, buf+offset+POST_SIZE, POST_SIZE); 
+      p11 = convertSignedMagnitude(us);
+   }
     
    // Perform bilinear interpolation:
    double wx1 = xi  - x0;
@@ -442,8 +471,9 @@ double ossimDtedHandler::getPostValue(const ossimIpt& gridPt) const
       return ossim::nan();
    }
 
-   if (!open())
+   if (!isOpen())
    {
+      const_cast<ossimDtedHandler*>(this)->open();
       return ossim::nan();
    }
 
@@ -580,20 +610,19 @@ ossimString  ossimDtedHandler::compilationDate() const
    return theCompilationDate;
 }
 
-void ossimDtedHandler::setMemoryMapFlag(bool flag)const
+void ossimDtedHandler::setMemoryMapFlag(bool flag)
 {
+   theMemoryMapFlag = flag;
    if(!flag)
    {
       theMemoryMap.clear();
    }
+   
+   
    else
    {
       if(!theMemoryMap.size())
       {
-         std::ifstream in(theFilename.c_str(), std::ios::in|std::ios::binary);
-         theMemoryMap.resize(theFilename.fileSize());
-         in.read((char*)(&theMemoryMap.front()), theMemoryMap.size());
-         in.close();
       }
    }
 }

@@ -8,7 +8,7 @@
 // 
 //
 //----------------------------------------------------------------------------
-// $Id: ossimGeneralRasterElevHandler.h 13524 2008-09-02 16:22:15Z gpotts $
+// $Id: ossimGeneralRasterElevHandler.h 14298 2009-04-14 17:26:03Z gpotts $
 #ifndef ossimGeneralRasterElevHandler_HEADER
 #define ossimGeneralRasterElevHandler_HEADER
 #include <list>
@@ -28,6 +28,7 @@
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimGpt.h>
+#include <OpenThreads/ReentrantMutex>
 class ossimProjection;
 /**
  * @class ossimGeneralRasterElevHandler Elevation source for an srtm file.
@@ -107,6 +108,10 @@ public:
     */
    virtual double getPostValue(const ossimIpt& gridPt) const;
 
+   virtual bool isOpen()const
+   {
+      return theInputStream.valid();
+   }
    /**
     * Opens a stream to the srtm cell.
     *
@@ -150,7 +155,7 @@ private:
    
    ossimGeneralRasterElevHandler::GeneralRasterInfo theGeneralRasterInfo;
    mutable ossimRefPtr<ossimIFStream> theInputStream;
-
+   OpenThreads::ReentrantMutex theFileAccessMutex;
 TYPE_DATA
 };
 

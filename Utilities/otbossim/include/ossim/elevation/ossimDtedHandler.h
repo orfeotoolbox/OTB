@@ -16,7 +16,7 @@
 //              Derived from ossimElevCellHandler.
 //<
 //*****************************************************************************
-// $Id: ossimDtedHandler.h 10372 2007-01-25 19:22:19Z dburken $
+// $Id: ossimDtedHandler.h 14296 2009-04-14 17:25:00Z gpotts $
 
 #ifndef ossimDtedHandler_HEADER
 #define ossimDtedHandler_HEADER
@@ -26,11 +26,13 @@
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/elevation/ossimElevCellHandler.h>
+#include <OpenThreads/ReadWriteMutex>
+#include <OpenThreads/ReadWriteMutex>
 
 class OSSIM_DLL ossimDtedHandler : public ossimElevCellHandler
 {
 public:
-   ossimDtedHandler(const ossimFilename& dted_file);
+   ossimDtedHandler(const ossimFilename& dted_file, bool memoryMapFlag=false);
    
    virtual ~ossimDtedHandler();
 
@@ -66,19 +68,20 @@ public:
    ossimString  productLevel()    const;
    ossimString  compilationDate() const;
 
+   virtual bool isOpen()const;
    /**
     * Opens a stream to the dted cell.
     *
     * @return Returns true on success, false on error.
     */
-   virtual bool open() const;
+   virtual bool open();
 
    /**
     * Closes the stream to the file.
     */
-   virtual void close() const;
+   virtual void close();
 
-   virtual void setMemoryMapFlag(bool flag)const;
+   virtual void setMemoryMapFlag(bool flag);
    
 private:
    // Disallow operator= and copy constrution...
@@ -97,7 +100,9 @@ private:
    ossim_sint16 convertSignedMagnitude(ossim_uint16& s) const;
    virtual double getHeightAboveMSLFile(const ossimGpt&);
    virtual double getHeightAboveMSLMemory(const ossimGpt&);
+   void mapToMemory();
    
+   mutable OpenThreads::Mutex theFileStrMutex;
    mutable std::ifstream theFileStr;
    
    ossim_int32      theNumLonLines;  // east-west dir
@@ -114,6 +119,8 @@ private:
    // Indicates whether byte swapping is needed.
    bool theSwapBytesFlag;
 
+   mutable OpenThreads::ReadWriteMutex theMemoryMapMutex;
+   mutable bool theMemoryMapFlag;
    mutable std::vector<ossim_uint8> theMemoryMap;
    
    TYPE_DATA
@@ -136,23 +143,64 @@ inline ossim_sint16 ossimDtedHandler::convertSignedMagnitude(ossim_uint16& s) co
    return static_cast<ossim_sint16>(s);
 }
 
-inline bool ossimDtedHandler::open() const
+inline bool ossimDtedHandler::isOpen()const
 {
-   if (theFileStr.is_open())
+   if(theMemoryMapFlag)
    {
-      return true;
+      OpenThreads::ScopedReadLock lock(theMemoryMapMutex);
+      return theMemoryMap.size()>0;
    }
-
-   theFileStr.open(theFilename.c_str(), std::ios::in | std::ios::binary);
-
-   return theFileStr.is_open();
+   {
+      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theFileStrMutex);
+      return theFileStr.is_open();
+   }
 }
 
-inline void ossimDtedHandler::close() const
+inline bool ossimDtedHandler::open()
 {
-   if (theFileStr.is_open())
+   if(theMemoryMapFlag)
    {
-      theFileStr.close();
+      theMemoryMapMutex.readLock();
+      if(theMemoryMap.size())
+      {
+         theMemoryMapMutex.readUnlock();
+         return true;
+      }
+      else
+      {
+         theMemoryMapMutex.readUnlock();
+         mapToMemory();
+         return (theMemoryMap.size()>0);
+      }
+   }
+   else
+   {
+      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theFileStrMutex);
+      if (theFileStr.is_open())
+      {
+         return true;
+      }
+      
+      theFileStr.open(theFilename.c_str(), std::ios::in | std::ios::binary);
+      
+      return theFileStr.is_open();
+   }
+   
+   return false;
+}
+
+inline void ossimDtedHandler::close()
+{
+   {  
+      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theFileStrMutex);
+      if (theFileStr.is_open())
+      {
+         theFileStr.close();
+      }
+   }
+   {
+      OpenThreads::ScopedWriteLock lock(theMemoryMapMutex);
+      theMemoryMap.clear();
    }
 }
 

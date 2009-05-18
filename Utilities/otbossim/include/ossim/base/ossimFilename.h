@@ -1,13 +1,15 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Ken Melero
 //
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.h 12810 2008-05-08 14:16:30Z gpotts $
+// $Id: ossimFilename.h 14233 2009-04-07 01:16:26Z dburken $
 
 #ifndef ossimFilename_HEADER
 #define ossimFilename_HEADER
@@ -141,12 +143,12 @@ public:
     * @returns a reference to this.
     */
    ossimFilename& setExtension(const ossimString& e);
-   
+
    /**
-    * Sets the file path and drive.
-    * Input: the drive to be set (this should come from the user's preferences)
-    * Example: "x:"
-    * Given: "/filepath/file.ext"
+	* Sets the file path and drive.
+	* Input: the drive to be set (this should come from the user's preferences)
+	* Example: "x:"
+	* Given: "/filepath/file.ext"
     * @return @return "c:\filepath\file.ext".
     */
    ossimFilename& setDrive(const ossimString& d);
@@ -214,6 +216,18 @@ public:
     * @note This will return true if file name is empty.
     */
    bool isRelative() const;
+   
+   /**
+    * @brief Method to check if expansion is needed.
+    *
+    * This checks if file isRelative() first if isRelative is false (has
+    * absolute path) it then walks the file and looks for '$'.
+    * 
+    * @return true if file name is relative or has environment vars.
+    *
+    * @note This will return false if file name is empty.
+    */
+   bool needsExpansion() const;
    
    /*!
     * since windows uses \ for path separation

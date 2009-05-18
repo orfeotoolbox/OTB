@@ -11,7 +11,7 @@
 // Description: This class provides some simple utilities for DEMs.
 //
 //********************************************************************
-// $Id: ossimDemUtil.h 13025 2008-06-13 17:06:30Z sbortman $
+// $Id: ossimDemUtil.h 14482 2009-05-12 11:42:38Z gpotts $
 
 #ifndef ossimDemUtil_HEADER
 #define ossimDemUtil_HEADER
@@ -20,7 +20,7 @@
 #include <cstdlib>
 #include <string>
 #include <iostream>
-
+#include <fstream>
 
 class ossimDemUtil
 {

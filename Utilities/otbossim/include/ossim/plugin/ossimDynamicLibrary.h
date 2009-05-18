@@ -49,7 +49,7 @@ public:
       {
          return theLibraryName;
       }
-
+   
 protected:
     // the handle to DLL or NULL
 #if defined(_WIN32)

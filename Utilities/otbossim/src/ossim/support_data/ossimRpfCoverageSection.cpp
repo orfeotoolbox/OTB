@@ -1,18 +1,24 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 // 
-// Author: Garrett Potts (gpotts@imagelinks.com)
+// Author: Garrett Potts
+// 
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfCoverageSection.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimRpfCoverageSection.cpp 14241 2009-04-07 19:59:23Z dburken $
+
+#include <istream>
+#include <iostream>
 #include <ossim/support_data/ossimRpfCoverageSection.h>
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimErrorCodes.h>
 
-ostream& operator <<(ostream &out,
-                     const ossimRpfCoverageSection &data)
+std::ostream& operator <<(std::ostream &out,
+                          const ossimRpfCoverageSection &data)
 {
    data.print(out);
    
@@ -24,7 +30,8 @@ ossimRpfCoverageSection::ossimRpfCoverageSection()
    clearFields();
 }
 
-ossimErrorCode ossimRpfCoverageSection::parseStream(istream &in, ossimByteOrder byteOrder)
+ossimErrorCode ossimRpfCoverageSection::parseStream(std::istream &in,
+                                                    ossimByteOrder byteOrder)
 {
    if(in)
    {
@@ -68,20 +75,34 @@ ossimErrorCode ossimRpfCoverageSection::parseStream(istream &in, ossimByteOrder 
    return ossimErrorCodes::OSSIM_OK;
 }
 
-void ossimRpfCoverageSection::print(ostream &out)const
+std::ostream& ossimRpfCoverageSection::print(
+   std::ostream& out, const std::string& prefix) const
 {
-   out << "theUpperLeftLat:         " << theUpperLeftLat << endl
-       << "theUpperLeftLon:         " << theUpperLeftLon << endl
-       << "theLowerLeftLat:         " << theLowerLeftLat << endl
-       << "theLowerLeftLon:         " << theLowerLeftLon << endl
-       << "theUpperRightLat:        " << theUpperRightLat << endl
-       << "theUpperRightLon:        " << theUpperRightLon << endl
-       << "theLowerRightLat:        " << theLowerRightLat << endl
-       << "theLowerRightLon:        " << theLowerRightLon << endl
-       << "theVerticalResolution:   " << theVerticalResolution << endl
-       << "theHorizontalResolution: " << theHorizontalResolution << endl
-       << "theVerticalInterval:     " << theVerticalInterval << endl
-       << "theHorizontalInterval:   " << theHorizontalInterval;
+   out << prefix << "ul_lat: "
+       << theUpperLeftLat << "\n"
+       << prefix << "ul_lon: "
+       << theUpperLeftLon << "\n"
+       << prefix << "ll_lat: "
+       << theLowerLeftLat << "\n"
+       << prefix << "ll_lon: "
+       << theLowerLeftLon << "\n"
+       << prefix << "ur_lat: "
+       << theUpperRightLat << "\n"
+       << prefix << "ur_lon: "
+       << theUpperRightLon << "\n"
+       << prefix << "lr_lat: "
+       << theLowerRightLat << "\n"
+       << prefix << "lr_lon: "
+       << theLowerRightLon << "\n"
+       << prefix << "vertical_resolution: "
+       << theVerticalResolution << "\n"
+       << prefix << "horizontal_resolution: "
+       << theHorizontalResolution << "\n"
+       << prefix << "vertical_interval: "
+       << theVerticalInterval << "\n"
+       << prefix << "horizontal_interval: "
+       << theHorizontalInterval << std::endl;
+   return out;
 }
 
 void ossimRpfCoverageSection::clearFields()

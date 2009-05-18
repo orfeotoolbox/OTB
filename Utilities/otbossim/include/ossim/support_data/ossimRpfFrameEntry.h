@@ -1,30 +1,47 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 // 
-// Author: Garrett Potts (gpotts@imagelinks.com)
+// Author: Garrett Potts
+//
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfFrameEntry.h 9967 2006-11-29 02:01:23Z gpotts $
+// $Id: ossimRpfFrameEntry.h 14241 2009-04-07 19:59:23Z dburken $
 #ifndef ossimRpfFrameEntry_HEADER
 #define ossimRpfFrameEntry_HEADER
-#include <iostream>
-using namespace std;
 
+#include <iosfwd>
 #include <ossim/base/ossimFilename.h>
+
 class ossimRpfFrameEntry
 {
 public:
-   friend ostream& operator<<(ostream& out,
-                              const ossimRpfFrameEntry& data);
-   ossimRpfFrameEntry(const ossimString& rootDirectory=ossimString(""),
-                      const ossimString& pathToFrameFileFromRoot=ossimString(""));
+   friend std::ostream& operator<<(std::ostream& out,
+                                   const ossimRpfFrameEntry& data);
+   ossimRpfFrameEntry(const ossimFilename& rootDirectory=ossimFilename(""),
+                      const ossimFilename& pathToFrameFileFromRoot=ossimFilename(""));
    ossimRpfFrameEntry(const ossimRpfFrameEntry& rhs);
-   void print(ostream& out)const;
+
+   /**
+    * @brief print method that outputs a key/value type format adding prefix
+    * to keys.
+    * @param out String to output to.
+    * @param prefix This will be prepended to key.
+    * e.g. Where prefix = "nitf." and key is "file_name" key becomes:
+    * "nitf.file_name:"
+    * @return output stream.
+    */
+   std::ostream& print(std::ostream& out,
+                       const std::string& prefix=std::string()) const;  
+
    bool exists()const{return theExists;}
-   void setEntry(const ossimString& rootDirectory,
-                 const ossimString& pathToFrameFileFromRoot);
+   
+   void setEntry(const ossimFilename& rootDirectory,
+                 const ossimFilename& pathToFrameFileFromRoot);
+   
    const ossimFilename& getFullPath()const{return theFullValidPath;}
    const ossimString&   getRootDirectory()const{return theRootDirectory;}
    const ossimString    getPathToFrameFileFromRoot()const
@@ -35,9 +52,9 @@ public:
 private:
    bool theExists;
 
-   ossimString theRootDirectory;
+   ossimFilename theRootDirectory;
 
-   ossimString thePathToFrameFileFromRoot;
+   ossimFilename thePathToFrameFileFromRoot;
 
    ossimFilename theFullValidPath;
 };

@@ -1,17 +1,22 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 // 
-// Author: Garrett Potts (gpotts@imagelinks.com)
+// Author: Garrett Potts
+// 
 // Description: This class give the capability to access tiles from an
 //              rpf file.
 //
 //********************************************************************
-// $Id: ossimRpfFrame.h 9967 2006-11-29 02:01:23Z gpotts $
+// $Id: ossimRpfFrame.h 14241 2009-04-07 19:59:23Z dburken $
+
 #ifndef ossimRpfFrame_HEADER
 #define ossimRpfFrame_HEADER
+
+#include <iosfwd>
 #include <vector>
-using namespace std;
 
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimErrorContext.h>
@@ -31,22 +36,33 @@ class ossimRpfColorConverterSubsection;
 class ossimRpfFrame
 {
 public:
-   friend ostream& operator <<(ostream& out,
-                               const ossimRpfFrame& data);
+   friend std::ostream& operator <<(std::ostream& out,
+                                    const ossimRpfFrame& data);
    ossimRpfFrame();
-   virtual ~ossimRpfFrame();
+   ~ossimRpfFrame();
    
-   void print(ostream& out)const;
+   /**
+    * @brief print method that outputs a key/value type format adding prefix
+    * to keys.
+    * @param out String to output to.
+    * @param prefix This will be prepended to key.
+    * e.g. Where prefix = "nitf." and key is "file_name" key becomes:
+    * "nitf.file_name:"
+    * @return output stream.
+    */
+   std::ostream& print(std::ostream& out,
+                       const std::string& prefix=std::string()) const;  
 
    ossimErrorCode parseFile(const ossimFilename& filename);
    const ossimRpfHeader* getRpfHeader()const{return theHeader;}
 
    bool hasSubframeMaskTable()const;
 
-   const vector< vector<ossim_uint32> >& getSubFrameMask(ossim_uint32 spectralGroup)
-      {
-         return theSubframeMaskTable[spectralGroup];
-      }
+   const vector< vector<ossim_uint32> >& getSubFrameMask(
+      ossim_uint32 spectralGroup)
+   {
+      return theSubframeMaskTable[spectralGroup];
+   }
    
    bool fillSubFrameBuffer(ossim_uint8* buffer,
                            ossim_uint32 spectralGroup,
@@ -54,26 +70,26 @@ public:
                            ossim_uint32 col)const;
    
    const ossimRpfCompressionSection* getCompressionSection()const
-      {
-         return theCompressionSection;
-      }
+   {
+      return theCompressionSection;
+   }
    const vector<ossimRpfColorGrayscaleTable>& getColorGrayscaleTable()const
-      {
-         return theColorGrayscaleTable;
-      }
+   {
+      return theColorGrayscaleTable;
+   }
    const ossimRpfColorConverterSubsection* getColorConverterSubsection()const
-      {
-         return theColorConverterSubsection;
-      }
+   {
+      return theColorConverterSubsection;
+   }
 private:
    void clearFields();
    void deleteAll();
-   ossimErrorCode populateCoverageSection(istream& in);
-   ossimErrorCode populateCompressionSection(istream& in);
-   ossimErrorCode populateImageSection(istream& in);
-   ossimErrorCode populateAttributeSection(istream& in);
-   ossimErrorCode populateColorGrayscaleSection(istream& in);
-   ossimErrorCode populateMasks(istream& in);
+   ossimErrorCode populateCoverageSection(std::istream& in);
+   ossimErrorCode populateCompressionSection(std::istream& in);
+   ossimErrorCode populateImageSection(std::istream& in);
+   ossimErrorCode populateAttributeSection(std::istream& in);
+   ossimErrorCode populateColorGrayscaleSection(std::istream& in);
+   ossimErrorCode populateMasks(std::istream& in);
 
    /*!
     * The header will be instantiated during the opening of the

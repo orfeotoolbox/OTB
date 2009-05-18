@@ -1,8 +1,8 @@
 //*******************************************************************
 //
-// LICENSE: LGPL
-//
-// See top level LICENSE.txt
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 // 
 // Author:  Walt Bunch
 // 
@@ -11,7 +11,7 @@
 // See:  STDI-000_v2.1 Table 7-3 for detailed description.
 // 
 //********************************************************************
-// $Id: ossimNitfStdidcTag.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimNitfStdidcTag.cpp 14241 2009-04-07 19:59:23Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -341,28 +341,32 @@ void ossimNitfStdidcTag::setField18(ossimString field18)
    memcpy(theField18, field18.c_str(), std::min((size_t)FIELD18_SIZE, field18.length()));
 }
 
-std::ostream& ossimNitfStdidcTag::print(std::ostream& out) const
+std::ostream& ossimNitfStdidcTag::print(std::ostream& out,
+                                        const std::string& prefix) const
 {
+   std::string pfx = prefix;
+   pfx += getRegisterTagName();
+   pfx += ".";
+   
    out << setiosflags(std::ios::left)
-       << "ossimNitfStdidcTag::print"
-       << std::setw(24) << "\nTag name:"     << getRegisterTagName()
-       << std::setw(24) << "\nTag length:"   << getSizeInBytes()
-       << std::setw(24) << "\nACQDATE:"      << theAcqDate
-       << std::setw(24) << "\nMISSION:"      << theMission
-       << std::setw(24) << "\nPASS:"         << thePass
-       << std::setw(24) << "\nOPNUM:"        << theOpNum 
-       << std::setw(24) << "\nSTARTSEGMENT:" << theStartSegment
-       << std::setw(24) << "\nREPRONUM:"     << theReproNum
-       << std::setw(24) << "\nREPLAYREGEN:"  << theReplayRegen
-       << std::setw(24) << "\nSTARTCOLUMN:"  << theStartColumn
-       << std::setw(24) << "\nSTARTROW:"     << theStartRow
-       << std::setw(24) << "\nENDSEGMENT:"   << theEndSegment
-       << std::setw(24) << "\nENDCOLUMN:"    << theEndColumn
-       << std::setw(24) << "\nENDROW:"       << theEndRow
-       << std::setw(24) << "\nCOUNTRY:"      << theCountry
-       << std::setw(24) << "\nWAC:"          << theWac
-       << std::setw(24) << "\nLOCATION:"     << theLocation
-       << std::endl;
+       << pfx << std::setw(24) << "CETAG:"
+       << getRegisterTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"   << getSizeInBytes() << "\n"
+       << pfx << std::setw(24) << "ACQDATE:"      << theAcqDate << "\n"
+       << pfx << std::setw(24) << "MISSION:"      << theMission << "\n"
+       << pfx << std::setw(24) << "PASS:"         << thePass << "\n"
+       << pfx << std::setw(24) << "OPNUM:"        << theOpNum  << "\n"
+       << pfx << std::setw(24) << "STARTSEGMENT:" << theStartSegment << "\n"
+       << pfx << std::setw(24) << "REPRONUM:"     << theReproNum << "\n"
+       << pfx << std::setw(24) << "REPLAYREGEN:"  << theReplayRegen << "\n"
+       << pfx << std::setw(24) << "STARTCOLUMN:"  << theStartColumn << "\n"
+       << pfx << std::setw(24) << "STARTROW:"     << theStartRow << "\n"
+       << pfx << std::setw(24) << "ENDSEGMENT:"   << theEndSegment << "\n"
+       << pfx << std::setw(24) << "ENDCOLUMN:"    << theEndColumn << "\n"
+       << pfx << std::setw(24) << "ENDROW:"       << theEndRow << "\n"
+       << pfx << std::setw(24) << "COUNTRY:"      << theCountry << "\n"
+       << pfx << std::setw(24) << "WAC:"          << theWac << "\n"
+       << pfx << std::setw(24) << "LOCATION:"     << theLocation << "\n";
 
    return out;
 }

@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //
@@ -13,7 +15,7 @@
 // http://164.214.2.51/ntb/baseline/docs/stdi0002/final.pdf
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfPiaimcTag.h 10173 2007-01-03 18:21:26Z gpotts $
+// $Id: ossimNitfPiaimcTag.h 14241 2009-04-07 19:59:23Z dburken $
 #ifndef ossimNitfPiaimcTag_HEADER
 #define ossimNitfPiaimcTag_HEADER
 
@@ -79,14 +81,13 @@ public:
    virtual void clearFields();
    
    /**
-    * Print method.
-    *
-    * @param out Stream to print to.
-    * 
-    * @return std::ostream&
+    * @brief Print method that outputs a key/value type format
+    * adding prefix to keys.
+    * @param out Stream to output to.
+    * @param prefix Prefix added to key like "image0.";
     */
-   virtual std::ostream& print(std::ostream& out) const;
-
+   virtual std::ostream& print(std::ostream& out,
+                               const std::string& prefix) const;
    /**
     * @return CLOUDCVR field as an ossimString.
     */

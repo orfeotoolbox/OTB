@@ -12,7 +12,7 @@
 // Contains class declaration for ossimDtedTileSource.
 //
 //********************************************************************
-// $Id: ossimDtedTileSource.cpp 13484 2008-08-22 17:05:42Z gpotts $
+// $Id: ossimDtedTileSource.cpp 14137 2009-03-25 20:23:05Z dburken $
 
 #include <cstdlib>
 #include <iostream>
@@ -38,6 +38,7 @@ using namespace std;
 #include <ossim/support_data/ossimDtedUhl.h>
 #include <ossim/support_data/ossimDtedDsi.h>
 #include <ossim/support_data/ossimDtedAcc.h>
+#include <ossim/support_data/ossimDtedInfo.h>
 
 RTTI_DEF1(ossimDtedTileSource, "ossimDtedTileSource", ossimImageHandler)
 
@@ -733,6 +734,36 @@ void ossimDtedTileSource::getPostSpacing(ossimDpt& postSpacing) const
 {
    postSpacing.x = thePostSpacing.x;
    postSpacing.y = thePostSpacing.y;
+}
+
+ossimRefPtr<ossimProperty> ossimDtedTileSource::getProperty(
+   const ossimString& name)const
+{
+   // look in base class.
+   ossimRefPtr<ossimProperty> result = ossimImageHandler::getProperty(name);
+
+   if (result.valid() == false)
+   {
+      ossimDtedInfo info;
+      if (info.open(theImageFile))
+      {
+         result = info.getProperty(name);
+      }
+   }
+
+   return result;
+}
+
+void ossimDtedTileSource::getPropertyNames(
+   std::vector<ossimString>& propertyNames) const
+{
+   ossimImageHandler::getPropertyNames(propertyNames);
+
+   ossimDtedInfo info;
+   if (info.open(theImageFile))
+   {
+      info.getPropertyNames(propertyNames);
+   }
 }
 
 const ossimDtedTileSource& ossimDtedTileSource::operator=(const  ossimDtedTileSource& rhs)

@@ -1,14 +1,15 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 // 
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfEmbeddedRpfHeader.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfEmbeddedRpfHeader.h 14241 2009-04-07 19:59:23Z dburken $
 #ifndef ossimNitfEmbeddedRpfHeader_HEADER
 #define ossimNitfEmbeddedRpfHeader_HEADER
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
@@ -31,7 +32,16 @@ public:
     */
    virtual void parseStream(std::istream &in);
    virtual void writeStream(std::ostream& out);
-   virtual std::ostream& print(std::ostream& out)const;
+
+    /**
+    * @brief Print method that outputs a key/value type format
+    * adding prefix to keys.
+    * @param out Stream to output to.
+    * @param prefix Prefix added to key like "image0.";
+    */
+   virtual std::ostream& print(std::ostream& out,
+                               const std::string& prefix=std::string()) const;  
+   
    virtual ossim_uint32 getSizeInBytes()const;
    
    virtual const ossimRpfHeader* getRpfHeader()const;

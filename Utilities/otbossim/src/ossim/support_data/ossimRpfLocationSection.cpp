@@ -1,12 +1,20 @@
 //*******************************************************************
-// License:  See top level LICENSE.txt file.
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 // 
-// Description: This class extends the stl's string class.
+// Description: Rpf support class
 //
 //********************************************************************
-// $Id: ossimRpfLocationSection.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimRpfLocationSection.cpp 14241 2009-04-07 19:59:23Z dburken $
+
+#include <istream>
+#include <ostream>
+#include <iterator>
+
 #include <ossim/support_data/ossimRpfLocationSection.h>
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimErrorCodes.h>
@@ -14,31 +22,36 @@
 
 static const ossimTrace traceDebug("ossimRpfLocationSection:debug");
 
-ostream& operator<<(ostream& out,
-                    const ossimRpfComponentLocationRecord& data)
+std::ostream& operator<<(std::ostream& out,
+                         const ossimRpfComponentLocationRecord& data)
 {
    data.print(out);
 
    return out;
 }
 
-void ossimRpfComponentLocationRecord::print(ostream& out)const
+std::ostream& ossimRpfComponentLocationRecord::print(
+   std::ostream& out, const std::string& prefix) const
 {
-   out << "theComponentId:             " << theComponentId       << endl
-       << "theComponentLength:         " << theComponentLength   << endl
-       << "theComponentLocation:       " << theComponentLocation;
+   out << prefix << "ComponentId:             "
+       << theComponentId << "\n"
+       << prefix << "ComponentLength:         "
+       << theComponentLength   << "\n"
+       << prefix << "ComponentLocation:       "
+       << theComponentLocation << "\n";
+   return out;
 }
 
-ostream& operator <<(ostream& out,
-                     const ossimRpfLocationSection &data)
+std::ostream& operator <<(std::ostream& out,
+                          const ossimRpfLocationSection &data)
 {
    data.print(out);
 
    return out;
 }
 
-ossimErrorCode ossimRpfComponentLocationRecord::parseStream(istream& in,
-                                                            ossimByteOrder byteOrder)
+ossimErrorCode ossimRpfComponentLocationRecord::parseStream(
+   std::istream& in, ossimByteOrder byteOrder)
 {
    if(in)
    {
@@ -70,7 +83,7 @@ ossimRpfLocationSection::ossimRpfLocationSection()
    clearFields();
 }
 
-ossimErrorCode ossimRpfLocationSection::parseStream(istream& in,
+ossimErrorCode ossimRpfLocationSection::parseStream(std::istream& in,
                                                     ossimByteOrder byteOrder)
 {
    ossimErrorCode result = ossimErrorCodes::OSSIM_OK;
@@ -116,21 +129,31 @@ ossimErrorCode ossimRpfLocationSection::parseStream(istream& in,
    return result;
 }
 
-void ossimRpfLocationSection::print(ostream& out) const
+std::ostream& ossimRpfLocationSection::print(
+   std::ostream& out, const std::string& prefix) const
 {
-   out << "theLocationSectionLength:            " << theLocationSectionLength << endl
-       << "theLocationTableOffset:              " << theLocationTableOffset << endl
-       << "theNumberOfComponentLocationRecords: " << theNumberOfComponentLocationRecords << endl
-       << "theLocationRecordLength:             " << theLocationRecordLength << endl
-       << "theComponentAggregateLength:         " << theComponentAggregateLength;
+   out << prefix << "LocationSectionLength:            "
+       << theLocationSectionLength << "\n"
+       << prefix << "LocationTableOffset:              "
+       << theLocationTableOffset << "\n"
+       << prefix << "NumberOfComponentLocationRecords: "
+       << theNumberOfComponentLocationRecords << "\n"
+       << prefix << "LocationRecordLength:             "
+       << theLocationRecordLength << "\n"
+       << prefix << "ComponentAggregateLength:         "
+       << theComponentAggregateLength << "\n";
    
    if(theNumberOfComponentLocationRecords > 0)
    {
-      out << endl;
-      copy(theComponentLocationList.begin(),
-           theComponentLocationList.end(),
-           ostream_iterator<ossimRpfComponentLocationRecord>(out, "\n"));
+      std::vector<ossimRpfComponentLocationRecord>::const_iterator i =
+         theComponentLocationList.begin();
+      while (i != theComponentLocationList.end())
+      {
+         (*i).print(out, prefix);
+         ++i;
+      }
    }
+   return out;
 }
 
 bool ossimRpfLocationSection::hasComponent(ossimRpfComponentId componentId)const
@@ -143,7 +166,8 @@ bool ossimRpfLocationSection::hasComponent(ossimRpfComponentId componentId)const
 bool ossimRpfLocationSection::getComponent(ossimRpfComponentId componentId,
                                            ossimRpfComponentLocationRecord &result)const
 {
-   vector<ossimRpfComponentLocationRecord>::const_iterator component = theComponentLocationList.begin();
+   std::vector<ossimRpfComponentLocationRecord>::const_iterator component =
+      theComponentLocationList.begin();
    
    while(component != theComponentLocationList.end())
    {

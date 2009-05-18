@@ -10,7 +10,7 @@
 // derive from.
 //
 //*******************************************************************
-//  $Id: ossimImageHandler.cpp 12570 2008-03-24 18:26:40Z gpotts $
+//  $Id: ossimImageHandler.cpp 14268 2009-04-10 15:40:01Z dburken $
 
 #include <algorithm>
 
@@ -41,7 +41,7 @@ RTTI_DEF1(ossimImageHandler, "ossimImageHandler", ossimImageSource)
 static ossimTrace traceDebug("ossimImageHandler:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 12570 2008-03-24 18:26:40Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 14268 2009-04-10 15:40:01Z dburken $";
 #endif
 
    
@@ -109,7 +109,7 @@ bool ossimImageHandler::saveState(ossimKeywordlist& kwl,
            true);
    kwl.add(prefix,
            ossimKeywordNames::OVERVIEW_FILE_KW,
-           theImageFile.c_str(),
+           theOverviewFile.c_str(),
            true);
    
    return true;
@@ -714,74 +714,51 @@ bool ossimImageHandler::openOverview(const ossimFilename& overview_file)
 
 bool ossimImageHandler::openOverview()
 {
-   closeOverview();	
-	ossimFilename overviewFilename = createDefaultOverviewFilename();
-	
-   // 1) If the current over file exists see if it can be opened.
-   if( overviewFilename.exists() )
+   closeOverview();
+   
+   // 1) ESH 03/2009 -- Use the overview file set e.g. using a .spec file.
+   ossimFilename overviewFilename = getOverviewFile();
+   
+   if (overviewFilename.empty() || (overviewFilename.exists() == false) )
    {
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "Looking for " << overviewFilename
-            << " overview file..." << std::endl;
-      }
-
-      if ( openOverview(overviewFilename) )
-      {
-         if (traceDebug())
+      // 2) Generate the name from image name.
+      overviewFilename = createDefaultOverviewFilename();
+      
+      if (overviewFilename.empty() || (overviewFilename.exists() == false) )
+      {  
+         // 3) For backward compatibility check if single entry and _e0.ovr
+         overviewFilename = getFilenameWithThisExtension(ossimString(".ovr"), true);
+         if (overviewFilename.empty() || (overviewFilename.exists() == false) )
          {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               << "Opened overview " << overviewFilename
-               << std::endl;
+            // 4) For overviews built with gdal look for foo.tif.ovr
+            overviewFilename = getFilename();
+            overviewFilename += ".ovr";
          }
-         return true;
-      }
-   }
-   
-   // 2) For backward compatibility check if single entry and _e0.ovr
-   overviewFilename = getFilenameWithThisExtension(ossimString(".ovr"), true);
-   if ( overviewFilename.exists() )
-   {
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "Looking for " << overviewFilename
-            << " overview file..." << std::endl;
-      }
-   
-      if ( openOverview(overviewFilename) )
-      {
-         return true;
       }
    }
 
-   // 3) For overviews built with gdal look for foo.tif.ovr
-   overviewFilename = getFilename();
-   overviewFilename += ".ovr";
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "Looking for " << overviewFilename
+         << " overview file..." << std::endl;
+   }
+
+   bool status = false;
+   
    if ( overviewFilename.exists() )
    {
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "Looking for " << overviewFilename
-            << " overview file..." << std::endl;
-      }
-   
-      if ( openOverview(overviewFilename) )
-      {
-         return true;
-      }
+      status = openOverview(overviewFilename);
    }
-   
-   if (traceDebug())
+
+   if ( !status  && traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "ossimImageHandler::openOverview NOTICE:"
          << "\nCould not find an overview." << std::endl;
    }
 
-   return false;
+   return status;
 }
 
 
