@@ -27,9 +27,10 @@ ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
 IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
   FILE(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
   FILE(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
-  FILE(GLOB __files3 "${CMAKE_CURRENT_BINARY_DIR}/*.h")
-  FILE(GLOB __files4 "${CMAKE_CURRENT_SOURCE_DIR}/*.fl")
-  INSTALL(FILES ${__files1} ${__files2}  ${__files3}  ${__files4}
+  FILE(GLOB __files3 "${CMAKE_CURRENT_SOURCE_DIR}/*.fl")
+  INSTALL(FILES ${__files1} ${__files2}  ${__files3}
+    ${CMAKE_CURRENT_BINARY_DIR}/otbImageWidgetPackedManager.h
+    ${CMAKE_CURRENT_BINARY_DIR}/otbImageWidgetSplittedManager.h
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Visualization
     COMPONENT Development)
 ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
