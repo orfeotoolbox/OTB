@@ -18,6 +18,7 @@
 #ifndef __otbSVMModel_h
 #define __otbSVMModel_h
 
+#include "itkObjectFactory.h"
 #include "itkDataObject.h"
 #include "itkVariableLengthVector.h"
 
