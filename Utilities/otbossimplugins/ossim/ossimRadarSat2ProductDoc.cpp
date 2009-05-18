@@ -104,10 +104,10 @@ bool ossimRadarSat2ProductDoc::initPlatformPosition(
             ossimString s;
 
             path = "timeStamp";
-            result = findFirstNode(path, svNode, s);
+            result = ossim::findFirstNode(path, svNode, s);
             if (result)
             {
-               ossim::UtcDateTimeStringToCivilDate(s, eph_civil_date);
+               ossim::iso8601TimeStringToCivilDate(s, eph_civil_date);
             }
             else
             {
@@ -119,7 +119,7 @@ bool ossimRadarSat2ProductDoc::initPlatformPosition(
             }
 
             path = "xPosition";
-            result = findFirstNode(path, svNode, s);
+            result = ossim::findFirstNode(path, svNode, s);
             if (result)
             {
                pos[0] = s.toDouble();
@@ -134,7 +134,7 @@ bool ossimRadarSat2ProductDoc::initPlatformPosition(
             }
 
             path = "yPosition";
-            result = findFirstNode(path, svNode, s);
+            result = ossim::findFirstNode(path, svNode, s);
             if (result)
             {
                pos[1] = s.toDouble();
@@ -149,7 +149,7 @@ bool ossimRadarSat2ProductDoc::initPlatformPosition(
             }
 
             path = "zPosition";
-            result = findFirstNode(path, svNode, s);
+            result = ossim::findFirstNode(path, svNode, s);
             if (result)
             {
                pos[2] = s.toDouble();
@@ -164,7 +164,7 @@ bool ossimRadarSat2ProductDoc::initPlatformPosition(
             }
 
             path = "xVelocity";
-            result = findFirstNode(path, svNode, s);
+            result = ossim::findFirstNode(path, svNode, s);
             if (result)
             {
                vit[0] = s.toDouble();
@@ -179,7 +179,7 @@ bool ossimRadarSat2ProductDoc::initPlatformPosition(
             }
 
             path = "yVelocity";
-            result = findFirstNode(path, svNode, s);
+            result = ossim::findFirstNode(path, svNode, s);
             if (result)
             {
                vit[1] = s.toDouble();
@@ -194,7 +194,7 @@ bool ossimRadarSat2ProductDoc::initPlatformPosition(
             }
 
             path = "zVelocity";
-            result = findFirstNode(path, svNode, s);
+            result = ossim::findFirstNode(path, svNode, s);
             if (result)
             {
                vit[2] = s.toDouble();
@@ -415,7 +415,7 @@ bool ossimRadarSat2ProductDoc::initImageSize(const ossimXmlDocument* xdoc,
       ossimString s;
       if ( getNumberOfSamplesPerLine(xdoc, s) )
       {
-         imageSize.x = static_cast<ossim_int32>(s.toFloat64());
+         imageSize.x = s.toFloat64();
       }
       else
       {
@@ -423,7 +423,7 @@ bool ossimRadarSat2ProductDoc::initImageSize(const ossimXmlDocument* xdoc,
       }
       if ( getNumberOfLines(xdoc, s) )
       {
-         imageSize.y = static_cast<ossim_int32>(s.toFloat64());
+         imageSize.y = s.toFloat64();
       }
       else
       {
@@ -440,6 +440,47 @@ bool ossimRadarSat2ProductDoc::initImageSize(const ossimXmlDocument* xdoc,
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "ossimRadarSat2ProductDoc::initImageSize DEBUG:\nimage size: "
          << imageSize
+         << "\nexit status = " << (result?"true":"false")
+         << std::endl;
+   }
+   
+   return result;
+}
+
+bool ossimRadarSat2ProductDoc::initGsd(const ossimXmlDocument* xdoc,
+                                       ossimDpt& gsd) const
+{
+   bool result = true;
+
+   if (xdoc)
+   {
+      ossimString s;
+      if ( getSampledPixelSpacing(xdoc, s) )
+      {
+         gsd.x = s.toFloat64();
+      }
+      else
+      {
+         result = false;
+      }
+      if ( getSampledLineSpacing(xdoc, s) )
+      {
+         gsd.y = s.toFloat64(s);
+      }
+      else
+      {
+         result = false;
+      }
+   }
+   else
+   {
+      result = false;
+   }
+      
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimRadarSat2ProductDoc::initGsd DEBUG:\ngsd: " << gsd
          << "\nexit status = " << (result?"true":"false")
          << std::endl;
    }
@@ -478,25 +519,18 @@ bool ossimRadarSat2ProductDoc::initTiePoints(const ossimXmlDocument* xdoc,
                {
                   ossimString s;
                   ossimDpt dpt;
-                  result = findFirstNode(ossimString("line"), icNode, s);
+                  result = ossim::findFirstNode(ossimString("line"),
+                                                icNode, s);
                   if (result)
                   {
                      dpt.y = s.toDouble();
                   }
-                  else
-                  {
-                     result = false;
-                  }
-                  result = findFirstNode(ossimString("pixel"), icNode, s);
+                  result = ossim::findFirstNode(ossimString("pixel"),
+                                                icNode, s);
                   if (result)
                   {
                      dpt.x = s.toDouble();
                   }
-                  else
-                  {
-                     result = false;
-                  }
-
                   icp.push_back(dpt);
 
                   if (traceDebug())
@@ -518,34 +552,24 @@ bool ossimRadarSat2ProductDoc::initTiePoints(const ossimXmlDocument* xdoc,
                {
                   ossimString s;
                   ossimGpt gpt;
-                  result = findFirstNode(ossimString("latitude"), gcNode, s);
+                  result = ossim::findFirstNode(ossimString("latitude"),
+                                                gcNode, s);
                   if (result)
                   {
                      gpt.lat = s.toDouble();
                   }
-                  else
-                  {
-                     result = false;
-                  }
-                  result = findFirstNode(ossimString("longitude"), gcNode, s);
+                  result = ossim::findFirstNode(ossimString("longitude"),
+                                                gcNode, s);
                   if (result)
                   {
                      gpt.lon = s.toDouble();
                   }
-                  else
-                  {
-                     result = false;
-                  }
-                  result = findFirstNode(ossimString("height"), gcNode, s);
+                  result = ossim::findFirstNode(ossimString("height"),
+                                                gcNode, s);
                   if (result)
                   {
                      gpt.hgt = s.toDouble();
                   }
-                  else
-                  {
-                     result = false;
-                  }
-
                   gcp.push_back(gpt);
 
                   if (traceDebug())
@@ -590,21 +614,21 @@ bool ossimRadarSat2ProductDoc::getSatellite(const ossimXmlDocument* xdoc,
                                             ossimString& s) const
 {
    ossimString path = "/product/sourceAttributes/satellite";
-   return getPath(path, xdoc, s);
+   return ossim::getPath(path, xdoc, s);
 }
 
 bool ossimRadarSat2ProductDoc::getSensor(const ossimXmlDocument* xdoc,
                                          ossimString& s) const
 {
    ossimString path = "/product/sourceAttributes/sensor";
-   return getPath(path, xdoc, s);
+   return ossim::getPath(path, xdoc, s);
 }
 
 bool ossimRadarSat2ProductDoc::getImageId(const ossimXmlDocument* xdoc,
                                           ossimString& s) const
 {
    ossimString path = "/product/sourceAttributes/imageId";
-   return getPath(path, xdoc, s);
+   return ossim::getPath(path, xdoc, s);
 }
 
 bool ossimRadarSat2ProductDoc::getRadarCenterFrequency(
@@ -612,7 +636,7 @@ bool ossimRadarSat2ProductDoc::getRadarCenterFrequency(
 {
    ossimString path =
       "/product/sourceAttributes/radarParameters/radarCenterFrequency";
-   return getPath(path, xdoc, s);
+   return ossim::getPath(path, xdoc, s);
 }
 
 //---
@@ -656,7 +680,7 @@ bool ossimRadarSat2ProductDoc::getPulseRepetitionFrequency(
 {
    ossimString path =
          "/product/sourceAttributes/radarParameters/pulseRepetitionFrequency";
-   return getPath(path, xdoc, v);
+   return ossim::getPath(path, xdoc, v);
 }
 
 bool ossimRadarSat2ProductDoc::getAntennaPointing(
@@ -664,7 +688,7 @@ bool ossimRadarSat2ProductDoc::getAntennaPointing(
 {
    ossimString path =
       "/product/sourceAttributes/radarParameters/antennaPointing";
-   return getPath(path, xdoc, s);
+   return ossim::getPath(path, xdoc, s);
 }
 
 bool ossimRadarSat2ProductDoc::getAdcSamplingRate(
@@ -672,7 +696,7 @@ bool ossimRadarSat2ProductDoc::getAdcSamplingRate(
 {
    ossimString path =
       "/product/sourceAttributes/radarParameters/adcSamplingRate";
-   return getPath(path, xdoc, s);
+   return ossim::getPath(path, xdoc, s);
 }
 
 bool ossimRadarSat2ProductDoc::getPassDirection(
@@ -680,7 +704,7 @@ bool ossimRadarSat2ProductDoc::getPassDirection(
 {
    ossimString path =
       "/product/sourceAttributes/orbitAndAttitude/orbitInformation/passDirection";
-   return getPath(path, xdoc, s);
+   return ossim::getPath(path, xdoc, s);
 }
 
 bool ossimRadarSat2ProductDoc::getProductType(
@@ -688,7 +712,7 @@ bool ossimRadarSat2ProductDoc::getProductType(
 {
    ossimString path =
       "/product/imageGenerationParameters/generalProcessingInformation/productType";
-   return getPath(path, xdoc, s);
+   return ossim::getPath(path, xdoc, s);
 }
 
 bool ossimRadarSat2ProductDoc::getZeroDopplerTimeFirstLine(
@@ -696,7 +720,7 @@ bool ossimRadarSat2ProductDoc::getZeroDopplerTimeFirstLine(
 {
    ossimString path =
       "/product/imageGenerationParameters/sarProcessingInformation/zeroDopplerTimeFirstLine";
-   return getPath(path, xdoc, s);
+   return ossim::getPath(path, xdoc, s);
 }
 
 bool ossimRadarSat2ProductDoc::getNumberOfRangeLooks(
@@ -704,7 +728,7 @@ bool ossimRadarSat2ProductDoc::getNumberOfRangeLooks(
 {
    ossimString path =
       "/product/imageGenerationParameters/sarProcessingInformation/numberOfRangeLooks";
-   return getPath(path, xdoc, s);
+   return ossim::getPath(path, xdoc, s);
 }
 
 bool ossimRadarSat2ProductDoc::getNumberOfAzimuthLooks(
@@ -712,7 +736,7 @@ bool ossimRadarSat2ProductDoc::getNumberOfAzimuthLooks(
 {
    ossimString path =
       "/product/imageGenerationParameters/sarProcessingInformation/numberOfAzimuthLooks";
-   return getPath(path, xdoc, s);
+   return ossim::getPath(path, xdoc, s);
 }
 
 bool ossimRadarSat2ProductDoc::getSlantRangeNearEdge(
@@ -720,7 +744,7 @@ bool ossimRadarSat2ProductDoc::getSlantRangeNearEdge(
 {
    ossimString path =
       "/product/imageGenerationParameters/sarProcessingInformation/slantRangeNearEdge";
-   return getPath(path, xdoc, s);
+   return ossim::getPath(path, xdoc, s);
 }
 
 bool ossimRadarSat2ProductDoc::getZeroDopplerAzimuthTime(
@@ -728,7 +752,7 @@ bool ossimRadarSat2ProductDoc::getZeroDopplerAzimuthTime(
 {
    ossimString path =
       "/product/imageGenerationParameters/slantRangeToGroundRange/zeroDopplerAzimuthTime";
-   return getPath(path, xdoc, v);
+   return ossim::getPath(path, xdoc, v);
 }
 
 bool ossimRadarSat2ProductDoc::getGroundRangeOrigin(
@@ -736,7 +760,7 @@ bool ossimRadarSat2ProductDoc::getGroundRangeOrigin(
 {
    ossimString path =
       "/product/imageGenerationParameters/slantRangeToGroundRange/groundRangeOrigin";
-   return getPath(path, xdoc, v);
+   return ossim::getPath(path, xdoc, v);
 }
 
 bool ossimRadarSat2ProductDoc::getGroundToSlantRangeCoefficients(
@@ -744,7 +768,7 @@ bool ossimRadarSat2ProductDoc::getGroundToSlantRangeCoefficients(
 {
    ossimString path =
       "/product/imageGenerationParameters/slantRangeToGroundRange/groundToSlantRangeCoefficients";
-   return getPath(path, xdoc, v);
+   return ossim::getPath(path, xdoc, v);
 }
 
 bool ossimRadarSat2ProductDoc::getSemiMajorAxis(
@@ -752,7 +776,7 @@ bool ossimRadarSat2ProductDoc::getSemiMajorAxis(
 {
    ossimString path =
       "/product/imageAttributes/geographicInformation/referenceEllipsoidParameters/semiMajorAxis";
-   return getPath(path, xdoc, s);
+   return ossim::getPath(path, xdoc, s);
 }
 
 bool ossimRadarSat2ProductDoc::getSemiMinorAxis(
@@ -760,7 +784,7 @@ bool ossimRadarSat2ProductDoc::getSemiMinorAxis(
 {
    ossimString path =
       "/product/imageAttributes/geographicInformation/referenceEllipsoidParameters/semiMinorAxis";
-   return getPath(path, xdoc, s);
+   return ossim::getPath(path, xdoc, s);
 }
 
 bool ossimRadarSat2ProductDoc::getNumberOfSamplesPerLine(
@@ -768,7 +792,7 @@ bool ossimRadarSat2ProductDoc::getNumberOfSamplesPerLine(
 {
    ossimString path =
       "/product/imageAttributes/rasterAttributes/numberOfSamplesPerLine";
-   return getPath(path, xdoc, s);
+   return ossim::getPath(path, xdoc, s);
 }
 
 bool ossimRadarSat2ProductDoc::getNumberOfLines(
@@ -776,7 +800,7 @@ bool ossimRadarSat2ProductDoc::getNumberOfLines(
 {
    ossimString path =
       "/product/imageAttributes/rasterAttributes/numberOfLines";
-   return getPath(path, xdoc, s);
+   return ossim::getPath(path, xdoc, s);
 }
 
 bool ossimRadarSat2ProductDoc::getSampledPixelSpacing(
@@ -784,7 +808,7 @@ bool ossimRadarSat2ProductDoc::getSampledPixelSpacing(
 {
    ossimString path =
       "/product/imageAttributes/rasterAttributes/sampledPixelSpacing";
-   return getPath(path, xdoc, s);
+   return ossim::getPath(path, xdoc, s);
 }
 
 bool ossimRadarSat2ProductDoc::getSampledLineSpacing(
@@ -792,7 +816,7 @@ bool ossimRadarSat2ProductDoc::getSampledLineSpacing(
 {
    ossimString path =
       "/product/imageAttributes/rasterAttributes/sampledLineSpacing";
-   return getPath(path, xdoc, s);
+   return ossim::getPath(path, xdoc, s);
 }
 
 bool ossimRadarSat2ProductDoc::getLineTimeOrdering(
@@ -800,7 +824,7 @@ bool ossimRadarSat2ProductDoc::getLineTimeOrdering(
 {
    ossimString path =
       "/product/imageAttributes/rasterAttributes/lineTimeOrdering";
-   return getPath(path, xdoc, s);
+   return ossim::getPath(path, xdoc, s);
 }
 
 bool ossimRadarSat2ProductDoc::getPixelTimeOrdering(
@@ -808,7 +832,7 @@ bool ossimRadarSat2ProductDoc::getPixelTimeOrdering(
 {
    ossimString path =
       "/product/imageAttributes/rasterAttributes/pixelTimeOrdering";
-   return getPath(path, xdoc, s);
+   return ossim::getPath(path, xdoc, s);
 }
 
 bool ossimRadarSat2ProductDoc::getGeodeticTerrainHeight(
@@ -816,113 +840,5 @@ bool ossimRadarSat2ProductDoc::getGeodeticTerrainHeight(
 {
    ossimString path =
       "/product/imageAttributes/geographicInformation/referenceEllipsoidParameters/geodeticTerrainHeight";
-   return getPath(path, xdoc, s);
-}
-
-bool ossimRadarSat2ProductDoc::getPath(const ossimString& path,
-                                       const ossimXmlDocument* xdoc,
-                                       ossimString& s) const
-{
-   bool result = false;
-   if (xdoc)
-   {
-      std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
-      xdoc->findNodes(path, xnodes);
-      if ( xnodes.size() == 1 ) // Error if more than one.
-      {
-         if ( xnodes[0].valid() )
-         {
-            s = xnodes[0]->getText();
-            result = true;
-         }
-         else
-         {
-            ossimNotify(ossimNotifyLevel_WARN)
-               << "ossimRadarSat2ProductDoc::getPath ERROR:\n"
-               << "Node not found: " << path
-               << std::endl; 
-         }
-      }
-      else
-      {
-         ossimNotify(ossimNotifyLevel_WARN)
-               << "ossimRadarSat2ProductDoc::getPath ERROR:\n"
-               << "Multiple nodes found: " << path
-               << std::endl; 
-      }
-   }
-   if (!result)
-   {
-      s.clear();
-   }
-   return result; 
-}
-
-bool ossimRadarSat2ProductDoc::getPath(const ossimString& path,
-                                       const ossimXmlDocument* xdoc,
-                                       std::vector<ossimString>& v) const
-{
-   bool result = false;
-   if (xdoc)
-   {
-      std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
-      xdoc->findNodes(path, xnodes);
-      if ( xnodes.size() )
-      {
-         std::vector<ossimRefPtr<ossimXmlNode> >::const_iterator i =
-            xnodes.begin();
-         while ( i != xnodes.end() )
-         {
-            v.push_back( (*i)->getText() );
-            ++i;
-         }
-         result = true;
-      }
-      else
-      {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << "ossimRadarSat2ProductDoc::getPath ERROR:\n"
-            << "Nodes not found: " << path
-            << std::endl;  
-      }
-   }
-   if (!result)
-   {
-      v.clear();
-   }
-   return result;
-}
-
-bool ossimRadarSat2ProductDoc::findFirstNode(const ossimString& path,
-                                             ossimRefPtr<ossimXmlNode> node,
-                                             ossimString& s) const
-{
-   bool result = false;
-   if ( node.valid() )
-   {
-      ossimRefPtr<ossimXmlNode> n = node->findFirstNode(path);
-      if ( n.valid() )
-      {
-         s = n->getText();
-         if ( s.size() )
-         {
-            result = true;
-         }
-         else
-         {
-            ossimNotify(ossimNotifyLevel_WARN)
-               << "ossimRadarSat2ProductDoc::findFirstNode ERROR:\n"
-               << "Node empty: " << path
-               << std::endl;
-         }
-      }
-      else
-      {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << "ossimRadarSat2ProductDoc::findFirstNode ERROR:\n"
-            << "Node not found: " << path
-            << std::endl;   
-      }
-   }
-   return result;
+   return ossim::getPath(path, xdoc, s);
 }

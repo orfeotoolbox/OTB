@@ -13,7 +13,6 @@
 #define ossimErsSarModel_H
 
 #include <otb/JSDDateTime.h>
-
 #include <ossimGeometricSarSensorModel.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/base/ossimIpt.h>
@@ -30,7 +29,7 @@ class RefPoint;
  * @brief This class is able to direct localisation and indirect localisation
  * using the ErsSar sensor model
  */
-class OSSIMDLLEXPORT ossimErsSarModel : public ossimGeometricSarSensorModel
+class ossimErsSarModel : public ossimGeometricSarSensorModel
 {
 public:
 	/**

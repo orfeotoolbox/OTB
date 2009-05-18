@@ -44,9 +44,9 @@ public:
    void set_pix_col(double pix_col);
 
    Ephemeris* get_ephemeris();
-   double get_distance();
-   double get_pix_line();
-   double get_pix_col();
+   double get_distance() const;
+   double get_pix_line() const;
+   double get_pix_col() const;
 
    RefPoint* Clone()
    {

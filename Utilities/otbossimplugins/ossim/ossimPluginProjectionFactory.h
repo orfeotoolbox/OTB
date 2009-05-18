@@ -1,3 +1,12 @@
+//----------------------------------------------------------------------------
+//
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
+//
+//----------------------------------------------------------------------------
+// $Id$
+
 #ifndef ossimPluginProjectionFactory_HEADER
 #define ossimPluginProjectionFactory_HEADER
 #include <ossim/projection/ossimProjectionFactoryBase.h>

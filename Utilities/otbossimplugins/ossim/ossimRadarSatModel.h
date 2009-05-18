@@ -29,18 +29,20 @@ class RefPoint;
 /**
  * @brief This class is able to direct localisation and indirect localisation using the RadarSat sensor model
  */
-class OSSIMDLLEXPORT ossimRadarSatModel : public ossimGeometricSarSensorModel
+class ossimRadarSatModel : public ossimGeometricSarSensorModel
 {
 public:
-	/**
-	 * @brief Constructor
-	 */
+	/** @brief Constructor */
 	ossimRadarSatModel();
 
-	/**
-	 * @brief Destructor
-	 */
-	~ossimRadarSatModel();
+	/** @brief Destructor */
+	virtual ~ossimRadarSatModel();
+
+        /**
+         * @brief Method to return the class name.
+         * @return The name of this class.
+         */
+        virtual ossimString getClassName()   const;
 
 	/**
 	 * @brief This function associates an image column number to a slant range when the image is georeferenced (ground projected)

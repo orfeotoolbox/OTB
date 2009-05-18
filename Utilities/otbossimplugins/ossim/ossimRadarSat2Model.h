@@ -35,7 +35,7 @@ class RefPoint;
  * @brief This class allows for direct localisation and indirect localisation
  * using the RadarSat2 sensor model
  */
-class OSSIMDLLEXPORT ossimRadarSat2Model : public ossimGeometricSarSensorModel
+class ossimRadarSat2Model : public ossimGeometricSarSensorModel
 {
 public:
    /** @brief default constructor */
@@ -46,6 +46,12 @@ public:
 
    /** @brief Destructor */
    virtual ~ossimRadarSat2Model();
+
+   /**
+    * @brief Method to return the class name.
+    * @return The name of this class.
+    */
+   virtual ossimString getClassName()   const;
 
    /**
     * @brief Returns pointer to a new instance, copy of this.
@@ -69,15 +75,27 @@ public:
     */
    bool open(const ossimFilename& file);
 
+   /**
+    * @brief Method to save object state to a keyword list.
+    * @param kwl Keyword list to save to.
+    * @param prefix added to keys when saved.
+    * @return true on success, false on error.
+    */
+   virtual bool saveState(ossimKeywordlist& kwl,
+                          const char* prefix=0) const;
+   
+   /**
+    * @brief Method to the load (recreate) the state of the object from a
+    * keyword list. Return true if ok or false on error.
+    * @return true if load OK, false on error
+    */
+   virtual bool loadState (const ossimKeywordlist &kwl, const char *prefix=0);
+
    /*!
     * METHOD: print()
     * Fulfills base-class pure virtual. Dumps contents of object to ostream.
     */
    virtual std::ostream& print(std::ostream& out) const;
-
-protected:
-
-
 
 private:
    
@@ -125,24 +143,6 @@ private:
                      const ossimRadarSat2ProductDoc& rsDoc);
 
    /**
-    * @brief Method to save object state to a keyword list.
-    * @param kwl Keyword list to save to.
-    * @param prefix added to keys when saved.
-    * @return true on success, false on error.
-    */
-   virtual bool saveState(ossimKeywordlist& kwl,
-                          const char* prefix=0) const;
-   
-   /**
-    * @brief Method to the load (recreate) the state of the object from a
-    * keyword list. Return true if ok or false on error.
-    * @return true if load OK, false on error
-    */
-   virtual bool loadState (const ossimKeywordlist &kwl, const char *prefix=0); 
-
-private:
-
-   /**
     * @brief Sets ossimSensorModel members theRefImgPt and theRefGndPt from
     * tie points.
     * @param groundGcpCoordinates Ground tie points.
@@ -153,19 +153,11 @@ private:
                          const std::list<ossimDpt>& imageGcpCoordinates);
 
    /**
-    * @brief Number of columns
-    */
-   double _nbCol;
-   /**
-    * @brief Pixel spacing
-    */
-   double _pixel_spacing;
-
-   /**
     * @brief Slant Range FOR EACH Ground Range (SRGR) number of coefficients
     * sets
     */
    int   _n_srgr;
+
    /**
     * @brief Slant Range FOR EACH Ground Range coefficient sets update times
     */
@@ -181,7 +173,7 @@ private:
     */
    std::vector< std::vector<double> > _SrGr_coeffs ;
    
-   ossimFilename theProductDotXmlFile;
+   ossimFilename theProductXmlFile;
 
 TYPE_DATA
 

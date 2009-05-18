@@ -1,7 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2005 David Burken, all rights reserved.
-//
-// "Copyright Centre National d'Etudes Spatiales"
 //
 // License:  LGPL
 // 
@@ -13,8 +10,12 @@
 #include <ossim/plugin/ossimSharedObjectBridge.h>
 #include <ossimPluginConstants.h>
 #include <ossim/base/ossimObjectFactoryRegistry.h>
+#include <ossim/imaging/ossimImageHandlerRegistry.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
-#include "ossimPluginProjectionFactory.h"
+#include <ossimPluginProjectionFactory.h>
+#include <ossimPluginReaderFactory.h>
+
+
 static void setDescription(ossimString& description)
 {
    description = "OSSIM Plugin\n\n";
@@ -61,13 +62,26 @@ extern "C"
       myInfo.getClassName = getClassName;
       
       *info = &myInfo;
-      ossimProjectionFactoryRegistry::instance()->registerFactory(ossimPluginProjectionFactory::instance(), true);
+
+      /** Register the readers... */
+      ossimImageHandlerRegistry::instance()->
+        registerFactory(ossimPluginReaderFactory::instance());
+
+      /** Register the projection factory. */
+      ossimProjectionFactoryRegistry::instance()->
+         registerFactory(ossimPluginProjectionFactory::instance(), true);
+      
      setDescription(theDescription);
   }
 
    /* Note symbols need to be exported on windoze... */ 
   OSSIM_PLUGINS_DLL void ossimSharedLibraryFinalize()
   {
-     
+      ossimImageHandlerRegistry::instance()->
+        unregisterFactory(ossimPluginReaderFactory::instance());
+
+      ossimProjectionFactoryRegistry::instance()->
+         unregisterFactory(ossimPluginProjectionFactory::instance());
   }
+   
 }

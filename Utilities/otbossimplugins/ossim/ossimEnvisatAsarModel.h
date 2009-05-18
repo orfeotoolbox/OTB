@@ -29,7 +29,7 @@ class RefPoint;
  * @brief This class is able to direct localisation and indirect localisation
  * using the EnvisatAsar sensor model
  */
-class OSSIMDLLEXPORT ossimEnvisatAsarModel : public ossimGeometricSarSensorModel
+class ossimEnvisatAsarModel : public ossimGeometricSarSensorModel
 {
 public:
 	/**

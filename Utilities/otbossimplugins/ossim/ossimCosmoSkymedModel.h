@@ -31,7 +31,7 @@ class RefPoint;
  * @brief This class allows for direct localisation and indirect localisation
  * using the CosmoSkymed sensor model
  */
-class OSSIMDLLEXPORT ossimCosmoSkymedModel : public ossimGeometricSarSensorModel
+class ossimCosmoSkymedModel : public ossimGeometricSarSensorModel
 {
 public:
 	/**

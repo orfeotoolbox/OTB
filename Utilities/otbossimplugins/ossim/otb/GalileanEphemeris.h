@@ -30,7 +30,7 @@ public:
 	/**
 	  * @brief Destructor
 	  */
-	virtual ~GalileanEphemeris();
+	~GalileanEphemeris();
 	
 	/**
 	 * @brief Constructor with initialisations
@@ -49,7 +49,7 @@ public:
 	GalileanEphemeris& operator=(const GalileanEphemeris& rhs);
 	
 	/**
-	 * @brief This fonction converts the current ephemeris in the Geographic coordinates systï¿½m
+	 * @brief This fonction converts the current ephemeris in the Geographic coordinates systèm
 	 */
 	void ToGeographic(GeographicEphemeris* vGeo);
 	void ToGeographic(double greenwich,GeographicEphemeris* vGeo);

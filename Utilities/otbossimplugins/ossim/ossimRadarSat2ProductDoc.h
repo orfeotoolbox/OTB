@@ -30,7 +30,7 @@ class RefPoint;
 class SensorParams;
 
 /** @brief Class to encapsulate parsing RadarSat2 product.xml file. */
-class OSSIM_DLL ossimRadarSat2ProductDoc
+class ossimRadarSat2ProductDoc
 {
 public:
    /** @brief default constructor */
@@ -76,6 +76,17 @@ public:
     */
    bool initImageSize(const ossimXmlDocument* xdoc,
                       ossimIpt& imageSize) const;
+
+   /**
+    * @brief Method to initialize gsd from
+    * RadarSat "product.xml" file.
+    * @param xdoc Opened product.xml file.
+    * @param gsd The point to initialize.
+    * @return true on success, false on error.
+    */
+   bool initGsd(const ossimXmlDocument* xdoc,
+                ossimDpt& gsd) const;
+   
    /**
     * @brief Method to initialize image tie points from
     * RadarSat "product.xml" file.
@@ -163,48 +174,6 @@ public:
    bool getGeodeticTerrainHeight(const ossimXmlDocument* xdoc,
                                  ossimString& s) const;
 
-private:
-
-   /**
-    * @brief Gets path from doc and initializes string.
-    * @param path Xml path to look for.
-    * @param xdoc Xml doc to look in.
-    * @param s String to initialize.
-    * @return true on success and false if path is not found or if there
-    * are more than one of path.
-    * @note You should call getPath that takes a vector for things that are
-    * repetitive.
-    */
-   bool getPath(const ossimString& path,
-                const ossimXmlDocument* xdoc,
-                ossimString& s) const;
-   
-   /**
-    * @brief Gets path from doc and initializes string.
-    * @param path Xml path to look for.
-    * @param xdoc Xml doc to look in.
-    * @param v Vector to initialize.
-    * @return true on success and false if path is not found.
-    */
-   bool getPath(const ossimString& path,
-                const ossimXmlDocument* xdoc,
-                std::vector<ossimString>& v) const;
-
-   /**
-    * @brief Finds from node with path from node and initializes string.
-    *
-    * @param path Xml path to look for.
-    *
-    * @param node Xml node to look in.
-    *
-    * @param s String to initialize.
-    *
-    * @return true on success and false if path is not found or if text is
-    * empty from found node..
-    */   
-   bool findFirstNode(const ossimString& path,
-                      ossimRefPtr<ossimXmlNode> node,
-                      ossimString& s) const;
 };
 
 #endif /* matches: #ifndef ossimRadarSat2ProductDoc_HEADER */

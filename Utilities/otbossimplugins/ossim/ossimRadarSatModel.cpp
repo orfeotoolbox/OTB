@@ -38,6 +38,11 @@ ossimRadarSatModel::~ossimRadarSatModel()
 {
 }
 
+ossimString ossimRadarSatModel::getClassName() const
+{
+   return ossimString("ossimRadarSatModel");
+}
+
 double ossimRadarSatModel::getSlantRangeFromGeoreferenced(double col) const
 {
 	if (_n_srgr==0) return(-1) ;
