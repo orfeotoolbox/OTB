@@ -86,6 +86,12 @@ TileMapImageIO::TileMapImageIO()
   m_FileSuffix="jpg";
   m_AddressMode="0";
 
+  this->AddSupportedWriteExtension(".otb");
+  this->AddSupportedWriteExtension(".OTB");
+
+  this->AddSupportedReadExtension(".otb");
+  this->AddSupportedReadExtension(".OTB");
+
 }
 
 TileMapImageIO::~TileMapImageIO()

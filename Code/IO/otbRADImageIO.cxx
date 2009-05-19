@@ -66,6 +66,13 @@ RADImageIO::RADImageIO()
   m_Origin[1] = 0.0;
   m_ChannelsFile = NULL;
   m_FlagWriteImageInformation = true;
+
+  this->AddSupportedWriteExtension(".rad");
+  this->AddSupportedWriteExtension(".RAD");
+
+  this->AddSupportedReadExtension(".rad");
+  this->AddSupportedReadExtension(".RAD");
+
 }
 
 RADImageIO::~RADImageIO()

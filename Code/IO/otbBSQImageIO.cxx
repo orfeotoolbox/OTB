@@ -58,6 +58,13 @@ BSQImageIO::BSQImageIO()
   m_Origin[1] = 0.0;
   m_ChannelsFile = NULL;
   m_FlagWriteImageInformation = true;
+
+  this->AddSupportedWriteExtension(".hd");
+  this->AddSupportedWriteExtension(".HD");
+
+  this->AddSupportedReadExtension(".hd");
+  this->AddSupportedReadExtension(".HD");
+
 }
 
 BSQImageIO::~BSQImageIO()

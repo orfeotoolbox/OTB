@@ -56,6 +56,16 @@ MWImageIO::MWImageIO()
   m_FlagWriteImageInformation = true;
   m_Ncom = 0;
 
+  this->AddSupportedWriteExtension(".img");
+  this->AddSupportedWriteExtension(".IMG");
+  this->AddSupportedWriteExtension(".mw");
+  this->AddSupportedWriteExtension(".MW");
+
+  this->AddSupportedReadExtension(".img");
+  this->AddSupportedReadExtension(".IMG");
+  this->AddSupportedReadExtension(".mw");
+  this->AddSupportedReadExtension(".MW");
+
 }
 
 MWImageIO::~MWImageIO()

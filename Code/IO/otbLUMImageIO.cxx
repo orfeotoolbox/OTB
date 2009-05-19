@@ -66,6 +66,12 @@ LUMImageIO::LUMImageIO()
   m_CaiLumTyp.push_back("R8B");
   m_CaiLumTyp.push_back("R8L");
 
+  this->AddSupportedWriteExtension(".lum");
+  this->AddSupportedWriteExtension(".LUM");
+
+  this->AddSupportedReadExtension(".lum");
+  this->AddSupportedReadExtension(".LUM");
+
 
 }
 
