@@ -56,6 +56,7 @@ namespace otb
     m_Map = mapnik::Map();
     m_SensorModelFlip = 1;
     m_ScaleFactor = 1.0;
+    m_VectorDataProjectionProj4 = "";
   }
 
 
@@ -190,14 +191,42 @@ namespace otb
 
     mapnik::freetype_engine::register_font("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");
 
-
-//     m_Map.set_background(mapnik::color("#f2efe9"));
     m_Map.set_background(mapnik::color(255,255,255,0));
 
     otb::VectorDataStyle::Pointer styleLoader = otb::VectorDataStyle::New();
     styleLoader->SetScaleFactor(m_ScaleFactor);
     styleLoader->LoadOSMStyle(m_Map);
 
+    VectorDataConstPointer input = this->GetInput();
+    //Converting the projection string to the proj.4 format
+    std::string vectorDataProjectionWKT;
+    itk::ExposeMetaData<std::string>(input->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey,  vectorDataProjectionWKT);
+    std::cout << "WKT -> " << vectorDataProjectionWKT << std::endl;
+    m_SensorModelFlip = 1;
+
+    if (vectorDataProjectionWKT == "")
+    {
+      //We assume that it is an image in sensor model geometry
+      //and tell mapnik that this is utm
+      //(with a resolution of 1m per unit)
+      m_VectorDataProjectionProj4 = "+proj=utm +zone=31 +ellps=WGS84";
+      m_SensorModelFlip =  -1;
+      otbMsgDevMacro(<<"The output map will be in sensor geometry");
+    }
+    else
+    {
+      OGRSpatialReference oSRS(vectorDataProjectionWKT.c_str());
+      char * pszProj4;
+      oSRS.exportToProj4(&pszProj4);
+      m_VectorDataProjectionProj4 = pszProj4;
+      CPLFree(pszProj4);
+      m_SensorModelFlip =  1;
+      otbMsgDevMacro(<<"The output map will be carto/geo geometry");
+    }
+    std::cout << "Proj.4 -> " << m_VectorDataProjectionProj4 << std::endl;
+
+
+    m_Map.set_srs(m_VectorDataProjectionProj4);
 
   }
 
@@ -222,36 +251,6 @@ namespace otb
     VectorDataConstPointer input = this->GetInput();
     InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(input->GetDataTree()->GetRoot());
 
-
-    //Converting the projection string to the proj.4 format
-    std::string vectorDataProjectionWKT;
-    itk::ExposeMetaData<std::string>(input->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey,  vectorDataProjectionWKT);
-    std::cout << "WKT -> " << vectorDataProjectionWKT << std::endl;
-    std::string vectorDataProjectionProj4;
-    m_SensorModelFlip = 1;
-
-    if (vectorDataProjectionWKT == "")
-    {
-      //We assume that it is an image in sensor model geometry
-      //and tell mapnik that this is utm
-      //(with a resolution of 1m per unit)
-      vectorDataProjectionProj4 = "+proj=utm +zone=31 +ellps=WGS84";
-      m_SensorModelFlip =  -1;
-      otbMsgDevMacro(<<"The output map will be in sensor geometry");
-    }
-    else
-    {
-      OGRSpatialReference oSRS(vectorDataProjectionWKT.c_str());
-      char * pszProj4;
-      oSRS.exportToProj4(&pszProj4);
-      vectorDataProjectionProj4 = pszProj4;
-      CPLFree(pszProj4);
-      m_SensorModelFlip =  1;
-      otbMsgDevMacro(<<"The output map will be carto/geo geometry");
-    }
-    std::cout << "Proj.4 -> " << vectorDataProjectionProj4 << std::endl;
-
-//      std::string   vectorDataProjectionProj4 = "+proj=utm +zone=31 +ellps=WGS84";
     if ((requestedRegion.GetSize()[0] > (16LU << 10)) || (requestedRegion.GetSize()[1] > (16LU << 10)))
     {
       //Limitation in mapnik/map.hpp, where we have
@@ -260,8 +259,17 @@ namespace otb
       itkExceptionMacro(<<"Mapnik does not support the generation of tiles bigger than 16 384");
     }
 
+
+    //Delete the previous layers from the map
+    int numberLayer = m_Map.layerCount();
+    for (int i = numberLayer-1; i>=0; i--)//yes, int.
+    {
+      m_Map.removeLayer(i);
+    }
+
+
     m_Map.resize(requestedRegion.GetSize()[0],requestedRegion.GetSize()[1]);
-    m_Map.set_srs(vectorDataProjectionProj4);
+
 
     ProcessNode(inputRoot,mDatasource);
 
@@ -271,7 +279,7 @@ namespace otb
 
 
     mapnik::Layer lyr("data");
-    lyr.set_srs(vectorDataProjectionProj4);
+    lyr.set_srs(m_VectorDataProjectionProj4);
     lyr.set_datasource(mDatasource);
 //     lyr.add_style("river");
     lyr.add_style("minor-roads-casing");
