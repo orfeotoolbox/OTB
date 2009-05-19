@@ -15,7 +15,7 @@
 class ossimKeywordlist;
 
 /**
- * @ingroup SARModel
+ * @ingroup otb
  * @brief This class handles the sensor parameters
  */
  

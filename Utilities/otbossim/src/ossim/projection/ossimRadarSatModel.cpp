@@ -1,15 +1,15 @@
 #include <ossim/projection/ossimRadarSatModel.h>
-#include <ossim/projection/SARModel/Ephemeris/GalileanEphemeris.h>
-#include <ossim/projection/SARModel/Ephemeris/GeographicEphemeris.h>
+#include <ossim/projection/otb/GalileanEphemeris.h>
+#include <ossim/projection/otb/GeographicEphemeris.h>
 
-#include <ossim/projection/SARModel/DateTime/JSDDateTime.h>
-#include <ossim/projection/SARModel/DateTime/GMSTDateTime.h>
-#include <ossim/projection/SARModel/DateTime/CivilDateTime.h>
+#include <ossim/projection/otb/JSDDateTime.h>
+#include <ossim/projection/otb/GMSTDateTime.h>
+#include <ossim/projection/otb/CivilDateTime.h>
 
-#include <ossim/projection/SARModel/PlatformPosition.h>
-#include <ossim/projection/SARModel/SensorParams.h>
-#include <ossim/projection/SARModel/RefPoint.h>
-#include <ossim/projection/SARModel/SarSensor.h>
+#include <ossim/projection/otb/PlatformPosition.h>
+#include <ossim/projection/otb/SensorParams.h>
+#include <ossim/projection/otb/RefPoint.h>
+#include <ossim/projection/otb/SarSensor.h>
 
 #include <math.h>
 

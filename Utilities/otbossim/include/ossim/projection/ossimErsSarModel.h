@@ -1,7 +1,7 @@
 #ifndef ossimErsSarModel_H
 #define ossimErsSarModel_H
 
-#include <ossim/projection/SARModel/DateTime/JSDDateTime.h>
+#include <ossim/projection/otb/JSDDateTime.h>
 
 #include <ossim/projection/ossimGeometricSarSensorModel.h>
 #include <ossim/projection/ossimMapProjection.h>

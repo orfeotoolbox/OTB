@@ -4,7 +4,8 @@ SET(ossimplugins_VERSION_MAJOR "1")
 SET(ossimplugins_VERSION_MINOR "7")
 SET(ossimplugins_VERSION_PATCH "15")
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/ossim ${CMAKE_CURRENT_SOURCE_DIR}/ossim/otb)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/ossim ${CMAKE_CURRENT_SOURCE_DIR}/ossim/otb ${CMAKE_CURRENT_SOURCE_DIR}/../otbossim/include/ossim/projection ${CMAKE_CURRENT_SOURCE_DIR}/../otbossim/include/ossim/projection/otb)
+#these two last directory are to be removed when the SAR plugin will have migrated
 
 SET(ossimplugins_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 

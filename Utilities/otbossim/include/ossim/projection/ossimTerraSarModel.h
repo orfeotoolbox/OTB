@@ -10,7 +10,7 @@
 #include <iostream>
 #include <list>
 
-#include <ossim/projection/SARModel/DateTime/CivilDateTime.h>
+#include <ossim/projection/otb/CivilDateTime.h>
 
 class PlatformPosition;
 class SensorParams;

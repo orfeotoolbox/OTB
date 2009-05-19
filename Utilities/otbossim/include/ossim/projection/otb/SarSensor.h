@@ -20,7 +20,7 @@ class GeographicEphemeris;
 class RectangularCoordinate;
 class JSDDateTime;
 /**
- * @ingroup SARModel
+ * @ingroup otb
  * @brief This class provides basic location services for SAR sensors
  */
 class SarSensor : Sensor

@@ -18,7 +18,7 @@ class Ephemeris;
 class ossimKeywordlist;
 
 /**
- * @ingroup SARModel
+ * @ingroup otb
  * @brief This class handles the platform position
  */
 class PlatformPosition
