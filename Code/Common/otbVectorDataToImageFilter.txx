@@ -286,6 +286,7 @@ namespace otb
     lyr.add_style("minor-roads");
     lyr.add_style("roads");
     lyr.add_style("roads-text");
+    lyr.add_style("world");
 
     m_Map.addLayer(lyr);
 
@@ -374,13 +375,14 @@ namespace otb
           ProcessNode((*it),mDatasource);
           break;
         }
-      case FEATURE_POINT:
-      {
-        itkExceptionMacro(<<"This type (FEATURE_POINT) is not handle (yet) by VectorDataToImageFilter(), please request for it");
-      }
+        case FEATURE_POINT:
+        {
+          itkExceptionMacro(<<"This type (FEATURE_POINT) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+          break;
+        }
         case otb::FEATURE_LINE:
         {
-          std::cout << std::setprecision(15);
+//           std::cout << std::setprecision(15);
 //           std::cout << " ** Inserting new line **" << std::endl;
           typedef mapnik::vertex<double,2> vertex2d;
           typedef mapnik::line_string<vertex2d,mapnik::vertex_vector2> line2d;
@@ -404,7 +406,7 @@ namespace otb
           typedef boost::shared_ptr<Feature> feature_ptr;
 
           feature_ptr mfeature = feature_ptr(new Feature(1));
-           mfeature->add_geometry(line);
+          mfeature->add_geometry(line);
 
           mapnik::transcoder tr("ISO-8859-15");
 
@@ -432,23 +434,49 @@ namespace otb
         }
       case FEATURE_POLYGON:
       {
-        itkExceptionMacro(<<"This type (FEATURE_POLYGON) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+//         itkExceptionMacro(<<"This type (FEATURE_POLYGON) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+        typedef mapnik::vertex<double,2> vertex2d;
+        typedef mapnik::polygon<vertex2d,mapnik::vertex_vector2> polygon2d;
+        typedef boost::shared_ptr<polygon2d> polygon_ptr;
+        mapnik::geometry2d * polygon = new polygon2d;
+
+        typedef DataNodeType::PolygonType::VertexListConstIteratorType VertexIterator;
+        VertexIterator itVertex = dataNode->GetPolygonExteriorRing()->GetVertexList()->Begin();
+        while (itVertex != dataNode->GetPolygonExteriorRing()->GetVertexList()->End())
+        {
+          polygon->line_to(itVertex.Value()[0],m_SensorModelFlip*itVertex.Value()[1]);
+          ++itVertex;
+        }
+
+        typedef boost::shared_ptr<mapnik::raster> raster_ptr;
+        typedef mapnik::feature<mapnik::geometry2d,raster_ptr> Feature;
+        typedef boost::shared_ptr<Feature> feature_ptr;
+
+        feature_ptr mfeature = feature_ptr(new Feature(1));
+        mfeature->add_geometry(polygon);
+        mDatasource->push(mfeature);
+
+        break;
       }
       case FEATURE_MULTIPOINT:
       {
         itkExceptionMacro(<<"This type (FEATURE_MULTIPOINT) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+        break;
       }
       case FEATURE_MULTILINE:
       {
         itkExceptionMacro(<<"This type (FEATURE_MULTILINE) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+        break;
       }
       case FEATURE_MULTIPOLYGON:
       {
         itkExceptionMacro(<<"This type (FEATURE_MULTIPOLYGON) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+        break;
       }
       case FEATURE_COLLECTION:
       {
         itkExceptionMacro(<<"This type (FEATURE_COLLECTION) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+        break;
       }
       }
     }
