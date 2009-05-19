@@ -36,13 +36,7 @@ int otbStreamingImageFileWriterTest (int argc, char* argv[])
   const char * outputFilename = argv[2];
   int   iStreaming(::atoi(argv[3]));
   bool streaming = (bool)(iStreaming);
-  int NumberOfStreamDivisions(10);
-  if ( streaming == true )
-  {
-    NumberOfStreamDivisions = ::atoi(argv[4]);
-  }
-
-
+  int NumberOfStreamDivisions(::atoi(argv[4]));
 
   typedef unsigned char                                    InputPixelType;
   typedef unsigned char                                    OutputPixelType;
@@ -71,6 +65,13 @@ int otbStreamingImageFileWriterTest (int argc, char* argv[])
   {
     std::cout << "Writing test"<<std::endl;
     WriterType::Pointer writer = WriterType::New();
+    if(NumberOfStreamDivisions > 1)
+    {
+        std::cout << "Streaming testing of otb::ImageFileWriter "<<std::endl;
+        std::cout << "NumberOfStreamDivisions: "<<NumberOfStreamDivisions<<std::endl;
+        writer->SetNumberOfStreamDivisions( NumberOfStreamDivisions );
+    }
+
     writer->SetFileName( outputFilename );
     writer->SetInput( reader->GetOutput() );
     writer->Update();
