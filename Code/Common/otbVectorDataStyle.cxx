@@ -1814,6 +1814,7 @@ void
       rule.set_max_scale(static_cast<unsigned long long>(5000LLU/m_ScaleFactor));
       mapnik::text_symbolizer textSymb0("addr:housenumber", "DejaVu Sans Book", 9, mapnik::color("#555"));
       textSymb0.set_halo_radius(1);
+      textSymb0.set_halo_fill(mapnik::color("#eee"));
       textSymb0.set_wrap_width(0);
       textSymb0.set_displacement(0.0,0);
       rule.append(textSymb0);
@@ -2033,6 +2034,7 @@ void
       mapnik::text_symbolizer textSymb0("ref", "DejaVu Sans Book", 9, mapnik::color("#6666ff"));
       textSymb0.set_halo_radius(1);
       textSymb0.set_wrap_width(12);
+      textSymb0.set_minimum_distance (20);
       rule.append(textSymb0);
       style.add_rule(rule);
     }
@@ -2044,11 +2046,13 @@ void
       mapnik::text_symbolizer textSymb0("ref", "DejaVu Sans Book", 9, mapnik::color("#6666ff"));
       textSymb0.set_halo_radius(1);
       textSymb0.set_wrap_width(12);
+      textSymb0.set_minimum_distance (20);
       rule.append(textSymb0);
       mapnik::text_symbolizer textSymb1("name", "DejaVu Sans Book", 8, mapnik::color("#6666ff"));
       textSymb1.set_halo_radius(1);
       textSymb1.set_wrap_width(12);
       textSymb1.set_displacement(0.0,-8);
+      textSymb1.set_minimum_distance (20);
       rule.append(textSymb1);
       style.add_rule(rule);
     }
@@ -2059,11 +2063,13 @@ void
       mapnik::text_symbolizer textSymb0("ref", "DejaVu Sans Book", 13, mapnik::color("#6666ff"));
       textSymb0.set_halo_radius(1);
       textSymb0.set_wrap_width(12);
+      textSymb0.set_minimum_distance (20);
       rule.append(textSymb0);
       mapnik::text_symbolizer textSymb1("name", "DejaVu Sans Book", 14, mapnik::color("#6666ff"));
       textSymb1.set_halo_radius(1);
       textSymb1.set_wrap_width(12);
       textSymb1.set_displacement(0.0,-14);
+      textSymb1.set_minimum_distance (20);
       rule.append(textSymb1);
       style.add_rule(rule);
     }
@@ -2213,6 +2219,7 @@ void
       mapnik::text_symbolizer textSymb0("name", "DejaVu Sans Book", 10, mapnik::color("#6699cc"));
       textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
       textSymb0.set_halo_radius(1);
+      textSymb0.set_minimum_distance (200);
       rule.append(textSymb0);
       style.add_rule(rule);
     }
@@ -8958,6 +8965,7 @@ void
       mapnik::text_symbolizer textSymb0("name", "DejaVu Sans Book", 8, mapnik::color("black"));
       textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
       textSymb0.set_halo_radius(1);
+      textSymb0.set_halo_fill(mapnik::color("#fed7a5"));
       rule.append(textSymb0);
       style.add_rule(rule);
     }
@@ -8991,6 +8999,7 @@ void
       mapnik::text_symbolizer textSymb0("name", "DejaVu Sans Book", 9, mapnik::color("black"));
       textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
       textSymb0.set_halo_radius(1);
+      textSymb0.set_halo_fill(mapnik::color("#fed7a5"));
       rule.append(textSymb0);
       style.add_rule(rule);
     }
@@ -9002,6 +9011,7 @@ void
       mapnik::text_symbolizer textSymb0("name", "DejaVu Sans Book", 10, mapnik::color("black"));
       textSymb0.set_label_placement(mapnik::LINE_PLACEMENT);
       textSymb0.set_halo_radius(1);
+      textSymb0.set_halo_fill(mapnik::color("#fed7a5"));
       rule.append(textSymb0);
       style.add_rule(rule);
     }
@@ -9489,6 +9499,7 @@ void
     }
     mapnikMap.insert_style("admin",style);
   }
+
 
 }
 
