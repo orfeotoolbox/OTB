@@ -45,7 +45,8 @@ namespace otb
  */
   template <class TVectorData, class TImage>
       VectorDataToImageFilter<TVectorData, TImage>
-  ::VectorDataToImageFilter()
+  ::VectorDataToImageFilter() :
+        m_StyleList()
   {
     this->SetNumberOfRequiredInputs( 1 );
     m_Spacing.Fill(1.0);
@@ -282,11 +283,19 @@ namespace otb
     lyr.set_srs(m_VectorDataProjectionProj4);
     lyr.set_datasource(mDatasource);
 //     lyr.add_style("river");
-    lyr.add_style("minor-roads-casing");
-    lyr.add_style("minor-roads");
-    lyr.add_style("roads");
-    lyr.add_style("roads-text");
-    lyr.add_style("world");
+//     lyr.add_style("minor-roads-casing");
+//     lyr.add_style("minor-roads");
+//     lyr.add_style("roads");
+//     lyr.add_style("roads-text");
+//     lyr.add_style("world");
+    if (m_StyleList.size() == 0)
+    {
+      itkExceptionMacro(<<"No style is provided for the vector data");
+    }
+    for (unsigned int i=0; i<m_StyleList.size(); ++i)
+    {
+      lyr.add_style(m_StyleList[i]);
+    }
 
     m_Map.addLayer(lyr);
 

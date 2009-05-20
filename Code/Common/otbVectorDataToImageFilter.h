@@ -111,6 +111,17 @@ template <class TVectorData, class TImage>
     itkSetMacro(ScaleFactor, double);
     itkGetMacro(ScaleFactor, double);
 
+    /** */
+    void AddStyle(std::string style)
+    {
+      m_StyleList.push_back(style);
+    }
+
+    /** Clear the style list */
+    void ClearStyleList()
+    {
+      m_StyleList.clear();
+    }
 
   protected:
     /** Constructor */
@@ -148,6 +159,9 @@ template <class TVectorData, class TImage>
     //this parameter is used only in the case of sensor geometry
     //to adjust the scale
     double m_ScaleFactor;
+
+    //style list
+    std::vector<std::string> m_StyleList;
 
     //Projection in the proj.4 format (for mapnik)
     std::string m_VectorDataProjectionProj4;
