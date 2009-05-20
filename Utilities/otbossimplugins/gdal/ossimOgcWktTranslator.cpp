@@ -395,6 +395,12 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
       return false;
    }
 
+   if (static_cast<OGRSpatialReference *>(hSRS)->IsGeographic())
+   {
+     OSRDestroySpatialReference( hSRS );
+     return false;
+   }
+
    // Determine if State Plane Coordinate System
    ossimString ossimProj = "";
    const ossimStatePlaneProjectionInfo* spi = NULL;
@@ -448,11 +454,11 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
          {
 	    ossimProj = "ossimBngProjection";
          }
-//          else if (ossim_units.contains("degree"))
-//          {
-//             // Assumption...
-//             ossimProj = "ossimEquDistCylProjection";
-//          }
+         else if (ossim_units.contains("degree"))
+         {
+            // Assumption...
+            ossimProj = "ossimEquDistCylProjection";
+         }
       }
    }
 

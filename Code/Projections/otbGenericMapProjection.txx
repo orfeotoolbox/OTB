@@ -120,7 +120,8 @@ GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions
 
     if (!projectionInformationAvailable)
     {
-      itkExceptionMacro(<<"Impossible to create the projection from string: "<< m_ProjectionRefWkt);
+      std::cout << "WARNING: Impossible to create the projection from string: "<< m_ProjectionRefWkt << std::endl;
+      return false;
     }
 
     m_MapProjection = ossimMapProjectionFactory::instance()->createProjection(kwl);

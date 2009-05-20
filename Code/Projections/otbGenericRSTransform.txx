@@ -24,6 +24,9 @@ PURPOSE.  See the above copyright notices for more information.
 // #include "projection/ossimMapProjection.h"
 #include "itkMetaDataObject.h"
 
+//TODO OTB wrapper around the WKT/ossimProjection/isGeographic, etc.
+#include "ogr_spatialref.h"
+
 namespace otb
 {
 
@@ -290,7 +293,28 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   if (m_InputTransform.IsNull())//default if we didn't manage to instantiate it before
   {
     m_InputTransform = itk::IdentityTransform< double, 2 >::New();
-    firstTransformGiveGeo = false;
+//     firstTransformGiveGeo = false;
+
+    OGRSpatialReferenceH  hSRS = NULL;
+    hSRS = OSRNewSpatialReference(NULL);
+    const char * wktString = m_InputProjectionRef.c_str();
+    if( OSRImportFromWkt( hSRS, (char **) &wktString ) != OGRERR_NONE )
+    {
+      OSRDestroySpatialReference( hSRS );
+      firstTransformGiveGeo = false;
+    }
+
+    else if (static_cast<OGRSpatialReference *>(hSRS)->IsGeographic())
+    {
+      OSRDestroySpatialReference( hSRS );
+      firstTransformGiveGeo = true;
+    }
+    else
+    {
+      OSRDestroySpatialReference( hSRS );
+      firstTransformGiveGeo = false;
+    }
+
     otbMsgDevMacro(<< "Input projection set to identity")
   }
 
