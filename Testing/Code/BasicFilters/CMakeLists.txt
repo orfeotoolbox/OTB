@@ -351,9 +351,9 @@ ADD_TEST(bfTvImageListToImageListApplyFilter ${BASICFILTERS_TESTS4}
 		    ${BASELINE}/bfTvImageListToImageListApplyFilterBand3.png
 		    ${TEMP}/bfTvImageListToImageListApplyFilterBand3.png
 		    otbImageListToImageListApplyFilter
-	            ${INPUTDATA}/poupees.c1
-		    ${INPUTDATA}/poupees.c2
-		    ${INPUTDATA}/poupees.c3
+	      ${INPUTDATA}/poupees.c1.hdr
+		    ${INPUTDATA}/poupees.c2.hdr
+		    ${INPUTDATA}/poupees.c3.hdr
 		    ${TEMP}/bfTvImageListToImageListApplyFilterBand1.png
 		    ${TEMP}/bfTvImageListToImageListApplyFilterBand2.png
 		    ${TEMP}/bfTvImageListToImageListApplyFilterBand3.png
