@@ -129,6 +129,13 @@ template <class TVectorData, class TImage>
       m_StyleList.clear();
     }
 
+    /** Specify if the output image is to be uses as an overlar
+    * (with transparent background) or not (with blue background).
+    */
+    itkSetMacro(UseAsOverlay, bool);
+    itkGetMacro(UseAsOverlay, bool);
+    itkBooleanMacro(UseAsOverlay)
+
   protected:
     /** Constructor */
     VectorDataToImageFilter();
@@ -169,8 +176,13 @@ template <class TVectorData, class TImage>
     //style list
     std::vector<std::string> m_StyleList;
 
+    //Overlay option: change the backgroup (blue or transparent)
+    bool m_UseAsOverlay;
+
     //Projection in the proj.4 format (for mapnik)
     std::string m_VectorDataProjectionProj4;
+
+
 
 }; // end class
 } // end namespace otb

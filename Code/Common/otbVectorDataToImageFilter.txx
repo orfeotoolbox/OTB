@@ -47,7 +47,8 @@ namespace otb
   template <class TVectorData, class TImage>
       VectorDataToImageFilter<TVectorData, TImage>
   ::VectorDataToImageFilter() :
-        m_StyleList()
+        m_StyleList(),
+        m_UseAsOverlay(true)
   {
     this->SetNumberOfRequiredInputs( 1 );
     m_Spacing.Fill(1.0);
@@ -214,9 +215,15 @@ namespace otb
 
     mapnik::freetype_engine::register_font("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");
 
-    //Set the default backgroup to transparent
-    m_Map.set_background(mapnik::color(255,255,255,0));
-
+    if(m_UseAsOverlay)
+    {
+      //Set the default backgroup to transparent
+      m_Map.set_background(mapnik::color(255,255,255,0));
+    }
+    else
+    {
+      m_Map.set_background(mapnik::color("#b5d0d0"));
+    }
     //Load the OSM styles using helper class
     otb::VectorDataStyle::Pointer styleLoader = otb::VectorDataStyle::New();
     styleLoader->SetScaleFactor(m_ScaleFactor);
