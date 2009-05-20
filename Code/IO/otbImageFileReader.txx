@@ -34,6 +34,7 @@
 #include "base/ossimKeywordlist.h"
 // #include "ossim/projection/ossimProjectionFactoryRegistry.h"
 // #include "ossim/ossimPluginProjectionFactory.h"
+#include "ossim/ossimPluginReaderFactory.h"
 
 #include <itksys/SystemTools.hxx>
 #include <fstream>
@@ -332,11 +333,15 @@ ImageFileReader<TOutputImage>
 
   // Trying to read ossim MetaData
 
+  // Add the plugins factory
+  ossimImageHandlerRegistry::instance()->addFactory(ossimPluginReaderFactory::instance());
+
   // Add the radar factory
   ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
 
 
-  ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(lFileNameOssimKeywordlist.c_str()));
+  ossimImageHandler* handler = ossimImageHandlerRegistry::instance()
+     ->open(ossimFilename(lFileNameOssimKeywordlist.c_str()));
 
   if (!handler)
   {
