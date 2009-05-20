@@ -209,9 +209,9 @@ public:
         << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[1])
         << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[2])
         << std::endl;
-    oss <<"   displayed: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[0])
-        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[1])
-        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[2])
+    oss <<"   displayed: "<< static_cast<typename itk::NumericTraits<OutputPixelType>::PrintType>(output[0])
+        << ", "<< static_cast<typename itk::NumericTraits<OutputPixelType>::PrintType>(output[1])
+        << ", "<< static_cast<typename itk::NumericTraits<OutputPixelType>::PrintType>(output[2])
         <<std::endl;
     return oss.str();
   }
@@ -225,10 +225,10 @@ public:
         << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[2])
         << " alpha: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[3])
         << std::endl;
-    oss <<"   displayed: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[0])
-        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[1])
-        << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[2])
-        << " alpha: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(output[3])
+    oss <<"   displayed: "<< static_cast<typename itk::NumericTraits<OutputPixelType>::PrintType>(output[0])
+        << ", "<< static_cast<typename itk::NumericTraits<OutputPixelType>::PrintType>(output[1])
+        << ", "<< static_cast<typename itk::NumericTraits<OutputPixelType>::PrintType>(output[2])
+        << " alpha: "<< static_cast<typename itk::NumericTraits<OutputPixelType>::PrintType>(output[3])
         <<std::endl;
     return oss.str();
   }
