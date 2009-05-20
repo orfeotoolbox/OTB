@@ -328,7 +328,7 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
 
   m_Transform->InstanciateTransform();
   // retrieve the output projection ref
-  // if it is not specified and end up beeing geographic,
+  // if it is not specified and end up being geographic,
   // only the m_Transform will know
   m_OutputProjectionRef = m_Transform->GetOutputProjectionRef();
 
