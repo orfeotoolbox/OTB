@@ -324,9 +324,9 @@ ADD_TEST(bfTvImageListToVectorImageFilter ${BASICFILTERS_TESTS3}
 		    ${BASELINE}/bfTvImageListToVectorImageFilter.png
 		    ${TEMP}/bfTvImageListToVectorImageFilter.png
 		    otbImageListToVectorImageFilter
-	            ${INPUTDATA}/poupees.c1
-		    ${INPUTDATA}/poupees.c2
-		    ${INPUTDATA}/poupees.c3
+        ${INPUTDATA}/poupees.c1.hdr
+		    ${INPUTDATA}/poupees.c2.hdr
+		    ${INPUTDATA}/poupees.c3.hdr
 		    ${TEMP}/bfTvImageListToVectorImageFilter.png
 )
 
