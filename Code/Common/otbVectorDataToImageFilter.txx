@@ -288,6 +288,7 @@ namespace otb
 //     lyr.add_style("roads");
 //     lyr.add_style("roads-text");
 //     lyr.add_style("world");
+
     if (m_StyleList.size() == 0)
     {
       itkExceptionMacro(<<"No style is provided for the vector data");
@@ -297,14 +298,8 @@ namespace otb
       lyr.add_style(m_StyleList[i]);
     }
 
-    m_Map.addLayer(lyr);
 
-//     mapnik::Layer lyr2("text");
-//     lyr2.set_srs(vectorDataProjectionProj4);
-//     lyr2.set_datasource(mDatasource);
-//     lyr2.add_style("roads-text");
-//
-//     m_Map.addLayer(lyr2);
+    m_Map.addLayer(lyr);
 
     assert( (m_SensorModelFlip == 1)||(m_SensorModelFlip == -1) );
 
@@ -386,7 +381,37 @@ namespace otb
         }
         case FEATURE_POINT:
         {
-          itkExceptionMacro(<<"This type (FEATURE_POINT) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+//           itkExceptionMacro(<<"This type (FEATURE_POINT) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+//           std::cout << std::setprecision(15);
+//           std::cout << " ** Inserting new point **" << std::endl;
+
+          typedef mapnik::vertex<double,2> vertex2d;
+          typedef mapnik::point<vertex2d> point2d;
+          typedef boost::shared_ptr<point2d> point_ptr;
+          mapnik::geometry2d * point = new point2d;
+
+          point->move_to(dataNode->GetPoint()[0],dataNode->GetPoint()[1]);
+//           std::cout << dataNode->GetPoint()[0] << ", " << dataNode->GetPoint()[1] << std::endl;
+
+
+
+          typedef boost::shared_ptr<mapnik::raster> raster_ptr;
+          typedef mapnik::feature<mapnik::geometry2d,raster_ptr> Feature;
+          typedef boost::shared_ptr<Feature> feature_ptr;
+
+          feature_ptr mfeature = feature_ptr(new Feature(1));
+          mfeature->add_geometry(point);
+
+          mapnik::transcoder tr("ISO-8859-15");
+
+          if (dataNode->HasField("place_name"))
+            boost::put(*mfeature, "name", tr.transcode((dataNode->GetFieldAsString("place_name")).c_str()));
+
+          boost::put(*mfeature, "place", tr.transcode("city"));
+          boost::put(*mfeature, "capital", tr.transcode("yes"));//FIXME more a question of style
+
+          mDatasource->push(mfeature);
+
           break;
         }
         case otb::FEATURE_LINE:
