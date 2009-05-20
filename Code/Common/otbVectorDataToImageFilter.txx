@@ -19,6 +19,7 @@
 #ifndef __otbVectorDataToImageFilter_txx
 #define __otbVectorDataToImageFilter_txx
 
+#include <sstream>
 #include "otbVectorDataToImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageIteratorWithIndex.h"
@@ -72,6 +73,16 @@ namespace otb
   }
 
   template <class TVectorData, class TImage>
+  void
+  VectorDataToImageFilter<TVectorData, TImage>
+  ::SetInput(unsigned int idx, const VectorDataType *input)
+  {
+    // Process object is not const-correct so the const_cast is required here
+    this->itk::ProcessObject::SetNthInput(idx,
+                                          const_cast< VectorDataType * >( input ) );
+  }
+
+  template <class TVectorData, class TImage>
       const typename VectorDataToImageFilter<TVectorData, TImage>::VectorDataType *
           VectorDataToImageFilter<TVectorData, TImage>
   ::GetInput(void)
@@ -85,7 +96,14 @@ namespace otb
         (this->itk::ProcessObject::GetInput(0) );
   }
 
-
+  template <class TVectorData, class TImage>
+  const typename VectorDataToImageFilter<TVectorData, TImage>::VectorDataType *
+  VectorDataToImageFilter<TVectorData, TImage>
+  ::GetInput(unsigned int idx)
+  {
+    return static_cast<const TVectorData * >
+    (this->itk::ProcessObject::GetInput(idx) );
+  }
 
 //----------------------------------------------------------------------------
   template <class TVectorData, class TImage>
@@ -182,22 +200,29 @@ namespace otb
     return;
   }
 
+
+  /**
+  * BeforeThreadedGenerateData
+  */
   template <class TVectorData, class TImage>
       void
           VectorDataToImageFilter<TVectorData, TImage>
   ::BeforeThreadedGenerateData(void)
   {
-    Superclass::BeforeThreadedGenerateData();
 
+    Superclass::BeforeThreadedGenerateData();
 
     mapnik::freetype_engine::register_font("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");
 
+    //Set the default backgroup to transparent
     m_Map.set_background(mapnik::color(255,255,255,0));
 
+    //Load the OSM styles using helper class
     otb::VectorDataStyle::Pointer styleLoader = otb::VectorDataStyle::New();
     styleLoader->SetScaleFactor(m_ScaleFactor);
     styleLoader->LoadOSMStyle(m_Map);
 
+    //We assume that all the data are reprojected before using OTB.
     VectorDataConstPointer input = this->GetInput();
     //Converting the projection string to the proj.4 format
     std::string vectorDataProjectionWKT;
@@ -245,12 +270,7 @@ namespace otb
 
     ImagePointer output = this->GetOutput();
     RegionType requestedRegion = output->GetRequestedRegion();
-    std::cerr << "requestedRegion: " << requestedRegion << std::endl;
-
-    datasource_ptr mDatasource = datasource_ptr(new mapnik::memory_datasource);
-
-    VectorDataConstPointer input = this->GetInput();
-    InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(input->GetDataTree()->GetRoot());
+    otbMsgDevMacro("requestedRegion: " << requestedRegion);
 
     if ((requestedRegion.GetSize()[0] > (16LU << 10)) || (requestedRegion.GetSize()[1] > (16LU << 10)))
     {
@@ -260,47 +280,53 @@ namespace otb
       itkExceptionMacro(<<"Mapnik does not support the generation of tiles bigger than 16 384");
     }
 
-
     //Delete the previous layers from the map
     int numberLayer = m_Map.layerCount();
     for (int i = numberLayer-1; i>=0; i--)//yes, int.
     {
       m_Map.removeLayer(i);
     }
-
-
     m_Map.resize(requestedRegion.GetSize()[0],requestedRegion.GetSize()[1]);
 
 
-    ProcessNode(inputRoot,mDatasource);
-
-
-    std::cout << "Datasource size: " << mDatasource->size() << std::endl;
-
-
-
-    mapnik::Layer lyr("data");
-    lyr.set_srs(m_VectorDataProjectionProj4);
-    lyr.set_datasource(mDatasource);
-//     lyr.add_style("river");
-//     lyr.add_style("minor-roads-casing");
-//     lyr.add_style("minor-roads");
-//     lyr.add_style("roads");
-//     lyr.add_style("roads-text");
-//     lyr.add_style("world");
-
-    if (m_StyleList.size() == 0)
+    for (unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
     {
-      itkExceptionMacro(<<"No style is provided for the vector data");
+      if (this->GetInput(idx))
+      {
+        datasource_ptr mDatasource = datasource_ptr(new mapnik::memory_datasource);
+
+        VectorDataConstPointer input = this->GetInput(idx);
+        InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(input->GetDataTree()->GetRoot());
+
+        ProcessNode(inputRoot,mDatasource);
+        otbMsgDevMacro( "Datasource size: " << mDatasource->size());
+
+        std::stringstream layerName;
+        layerName << "layer-" << idx;
+        mapnik::Layer lyr(layerName.str());
+        lyr.set_srs(m_VectorDataProjectionProj4);
+        lyr.set_datasource(mDatasource);
+    //     lyr.add_style("river");
+    //     lyr.add_style("minor-roads-casing");
+    //     lyr.add_style("minor-roads");
+    //     lyr.add_style("roads");
+    //     lyr.add_style("roads-text");
+    //     lyr.add_style("world");
+
+        if (m_StyleList.size() == 0)
+        {
+          itkExceptionMacro(<<"No style is provided for the vector data");
+        }
+        for (unsigned int i=0; i<m_StyleList.size(); ++i)
+        {
+          lyr.add_style(m_StyleList[i]);
+        }
+
+
+        m_Map.addLayer(lyr);
+
+      }
     }
-    for (unsigned int i=0; i<m_StyleList.size(); ++i)
-    {
-      lyr.add_style(m_StyleList[i]);
-    }
-
-
-    m_Map.addLayer(lyr);
-
     assert( (m_SensorModelFlip == 1)||(m_SensorModelFlip == -1) );
 
 

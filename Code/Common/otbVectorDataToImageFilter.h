@@ -32,6 +32,10 @@ namespace otb
    * To use this class, you need to compile the library with the option OTB_USE_MAPNIK
    * to ON. You also need to install mapnik on your machine (http://www.mapnik.org)
    *
+   * We assume that all the data have been reprojected before in the desired cartographic,
+   * geographic or sensor model projection (using the otb::VectorDataProjectionFilter).
+   * This filter does not use the projection capabilities of mapnik.
+   *
    */
 
 
@@ -80,9 +84,11 @@ template <class TVectorData, class TImage>
     /** typedef specific to mapnik */
     typedef boost::shared_ptr<mapnik::memory_datasource> datasource_ptr;
 
-
+    /** Set/Get the vector data input of this process object.  */
     virtual void SetInput( const VectorDataType *input);
+    virtual void SetInput( unsigned int idx, const VectorDataType *input);
     const VectorDataType * GetInput(void);
+    const VectorDataType * GetInput(unsigned int idx);
 
     /** Set the size of the output image. */
     itkSetMacro( Size, SizeType );
