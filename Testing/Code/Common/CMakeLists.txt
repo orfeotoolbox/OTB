@@ -753,6 +753,20 @@ ADD_TEST(coTvVectorDataToImageFilterSensorModel ${COMMON_TESTS9}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+ADD_TEST(coTvVectorDataToImageFilterWorld ${COMMON_TESTS9}
+     --compare-image ${NOTOL}
+                     ${BASELINE}/coTvVectorDataToImageFilterWorld.png
+                     ${TEMP}/coTvVectorDataToImageFilterWorld.png
+   otbVectorDataToImageFilterWorld
+        ${INPUTDATA}/world_boundaries/world_boundaries_m.shp
+        ${INPUTDATA}/world_boundaries/places.shp
+        ${TEMP}/coTvVectorDataToImageFilterWorld.png
+        500 500 #Size
+        -20 60 #lon/lat
+        0.1 -0.1 #spacing lon/lat
+)
+
+
 ENDIF(OTB_USE_MAPNIK)
 
 # -------       Fichiers sources CXX -----------------------------------
@@ -864,6 +878,7 @@ SET(BasicCommon_SRCS9
 otbVectorDataToImageFilterNew.cxx
 otbVectorDataToImageFilter.cxx
 otbVectorDataToImageFilterSensorModel.cxx
+otbVectorDataToImageFilterWorld.cxx
 )
 ENDIF(OTB_USE_MAPNIK)
 
