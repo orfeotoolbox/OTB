@@ -28,6 +28,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "base/ossimRefPtr.h"
 #include "imaging/ossimImageHandlerRegistry.h"
 #include "imaging/ossimImageHandler.h"
+#include "ossim/ossimPluginProjectionFactory.h"
 
 namespace otb
 {
@@ -147,6 +148,10 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimen
   otbMsgDevMacro(<< "* type: " << geom.find("type"));
 
   m_Model = ossimSensorModelFactory::instance()->createProjection(geom);
+  if ( m_Model == NULL)
+  {
+    m_Model = ossimPluginProjectionFactory::instance()->createProjection(geom);
+  }
   if ( m_Model == NULL)
   {
     itkExceptionMacro(<< "Invalid Model pointer m_Model == NULL !\n The ossim keywordlist is bad!");

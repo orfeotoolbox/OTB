@@ -34,7 +34,9 @@
 #include "base/ossimKeywordlist.h"
 // #include "ossim/projection/ossimProjectionFactoryRegistry.h"
 // #include "ossim/ossimPluginProjectionFactory.h"
-#include "ossim/ossimPluginReaderFactory.h"
+#include "projection/ossimProjection.h"
+#include "projection/ossimProjectionFactoryRegistry.h"
+#include "ossim/ossimPluginProjectionFactory.h"
 
 #include <itksys/SystemTools.hxx>
 #include <fstream>
@@ -332,68 +334,70 @@ ImageFileReader<TOutputImage>
   output->SetDirection( direction ); // Set the image direction cosines
 
   // Trying to read ossim MetaData
+  bool hasMetaData = false;
+  ossimKeywordlist geom_kwl, tmp_kwl, tmp_kwl2;// = new ossimKeywordlist();
 
   // Add the plugins factory
-  ossimImageHandlerRegistry::instance()->addFactory(ossimPluginReaderFactory::instance());
-
-  // Add the radar factory
-  ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
-
-
-  ossimImageHandler* handler = ossimImageHandlerRegistry::instance()
-     ->open(ossimFilename(lFileNameOssimKeywordlist.c_str()));
-
-  if (!handler)
+  ossimProjectionFactoryRegistry::instance()->registerFactory(ossimPluginProjectionFactory::instance());
+  ossimProjection * projection = ossimProjectionFactoryRegistry::instance()
+      ->createProjection(ossimFilename(lFileNameOssimKeywordlist.c_str()),0);
+  if (!projection)
   {
-    otbMsgDevMacro( <<"OSSIM Open Image FAILED ! ");
+    otbMsgDevMacro( <<"OSSIM Instanciate projection FAILED ! ");
   }
-
   else
   {
-    otbMsgDevMacro( <<"OSSIM Open Image SUCCESS ! ");
-    ossimKeywordlist geom_kwl, tmp_kwl, tmp_kwl2;// = new ossimKeywordlist();
+    otbMsgDevMacro( <<"OSSIM Instanciate projection SUCCESS ! ");
+    hasMetaData = projection->saveState(geom_kwl);
+    // Free memory
+    delete projection;
+  }
 
-    // Read OSSIM Keyword List
-    bool hasMetaData = handler->getImageGeometry(geom_kwl);
+  if (!hasMetaData)
+  {
+    // Add the radar factory
+    ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
 
-    if (!hasMetaData)
+
+
+    ossimImageHandler* handler = ossimImageHandlerRegistry::instance()
+      ->open(ossimFilename(lFileNameOssimKeywordlist.c_str()));
+
+    if (!handler)
     {
-      otbMsgDebugMacro( <<"OSSIM MetaData not present ! ");
+      otbMsgDevMacro( <<"OSSIM Open Image FAILED ! ");
     }
+
     else
     {
-      otbMsgDebugMacro( <<"OSSIM MetaData present ! ");
-
-      // Update otb Keywordlist
-      ImageKeywordlist otb_kwl;
-      otb_kwl.SetKeywordlist( geom_kwl );
-
-      // Update itk MetaData Dictionnary
-//      otbMsgDebugMacro( <<"Start update ITK Dictionnary ? ");
-
-      otb_kwl.convertToOSSIMKeywordlist(tmp_kwl);
-
-      itk::MetaDataDictionary& dico = this->m_ImageIO->GetMetaDataDictionary();
-
-//      otbMsgDebugMacro( <<"Before write ITK Dictionnary ? ");
-      itk::EncapsulateMetaData< ImageKeywordlist >(dico,
-          MetaDataKey::OSSIMKeywordlistKey,
-          otb_kwl);
-
-//      otbMsgDebugMacro( <<"After write ITK Dictionnary ? ");
-//      itk::ExposeMetaData< ImageKeywordlist >(dico,
-//                           MetaDataKey::OSSIMKeywordlistKey,
-//                         otb_tmp);
-//      otbMsgDebugMacro( <<"After read ITK Dictionnary ? ");
-
-//      otb_tmp.convertToOSSIMKeywordlist(tmp_kwl2);
-//      otbMsgDebugMacro( << " DEBUT THOMAS : Ossim key word list copy : "<<tmp_kwl2<<std::endl);
-
-      // otbMsgDebugMacro( <<"Image keyword lists in dictionnary are :" << std::endl << geom_tmp);
-
+      otbMsgDevMacro( <<"OSSIM Open Image SUCCESS ! ");
+      hasMetaData = handler->getImageGeometry(geom_kwl);
     }
     // Free memory
     delete handler;
+  }
+
+  if (!hasMetaData)
+  {
+    otbMsgDevMacro( <<"OSSIM MetaData not present ! ");
+  }
+  else
+  {
+    otbMsgDevMacro( <<"OSSIM MetaData present ! ");
+
+    otbMsgDevMacro( << geom_kwl);
+
+    // Update otb Keywordlist
+    ImageKeywordlist otb_kwl;
+    otb_kwl.SetKeywordlist( geom_kwl );
+
+    // Update itk MetaData Dictionnary
+
+    itk::MetaDataDictionary& dict = this->m_ImageIO->GetMetaDataDictionary();
+
+    itk::EncapsulateMetaData< ImageKeywordlist >(dict,
+        MetaDataKey::OSSIMKeywordlistKey,
+        otb_kwl);
   }
 
   //Copy MetaDataDictionary from instantiated reader to output image.
