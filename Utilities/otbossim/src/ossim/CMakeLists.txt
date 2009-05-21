@@ -61,7 +61,7 @@ ENDIF(WIN32)
 ADD_CUSTOM_COMMAND(
   OUTPUT ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h
   DEPENDS version-config
-  COMMAND version-config
+  COMMAND ${OTB_BINARY_DIR}/bin/version-config
   ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h" "${OSSIM_VERSION}"
   COMMENT "Generating ossimVersion.h"
   )
