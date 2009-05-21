@@ -35,4 +35,5 @@ void RegisterTests()
   REGISTER_TEST(otbCreateProjectionWithOTB);
   REGISTER_TEST(otbCreateInverseForwardSensorModel);
   REGISTER_TEST(otbRegionProjectionResampler);
+  REGISTER_TEST(otbSensorModel);
 }

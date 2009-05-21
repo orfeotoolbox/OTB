@@ -93,6 +93,97 @@ ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS1}
 				0.00001
 				-0.00001
         )
+
+ADD_TEST(prTvSensorModelSpot5 ${PROJECTIONS_TESTS1}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/prTvSensorModelSpot5.txt
+         ${TEMP}/prTvSensorModelQuickbird.txt
+    otbSensorModel
+         ${LARGEINPUT}/SPOT5_SCENE01/IMAGERY.TIF
+         ${TEMP}/prTvSensorModelSpot5.txt
+)
+
+ADD_TEST(prTvSensorModelQuickbird ${PROJECTIONS_TESTS1}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/prTvSensorModelQuickbird.txt
+         ${TEMP}/prTvSensorModelQuickbird.txt
+    otbSensorModel
+         ${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         ${TEMP}/prTvSensorModelQuickbird.txt
+)
+
+ADD_TEST(prTvSensorModelIkonos ${PROJECTIONS_TESTS1}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/prTvSensorModelIkonos.txt
+         ${TEMP}/prTvSensorModelIkonos.txt
+    otbSensorModel
+         ${LARGEINPUT}/IKONOS_BLOSSEVILLE/po_2619900_pan_0000000.tif
+         ${TEMP}/prTvSensorModelIkonos.txt
+)
+
+ADD_TEST(prTvSensorModelRapidEye ${PROJECTIONS_TESTS1}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/prTvSensorModelRapidEye.txt
+         ${TEMP}/prTvSensorModelRapidEye.txt
+    otbSensorModel
+         ${LARGEINPUT}/RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf
+         ${TEMP}/prTvSensorModelRapidEye.txt
+)
+
+ADD_TEST(prTvSensorModelEnvisatAsar ${PROJECTIONS_TESTS1}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/prTvSensorModelEnvisatAsar.txt
+         ${TEMP}/prTvSensorModelEnvisatAsar.txt
+    otbSensorModel
+         ${LARGEINPUT}/ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1
+         ${TEMP}/prTvSensorModelEnvisatAsar.txt
+)
+
+ADD_TEST(prTvSensorModelAlosPalsar ${PROJECTIONS_TESTS1}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/prTvSensorModelAlosPalsar.txt
+         ${TEMP}/prTvSensorModelAlosPalsar.txt
+    otbSensorModel
+         ${LARGEINPUT}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
+         ${TEMP}/prTvSensorModelAlosPalsar.txt
+)
+
+ADD_TEST(prTvSensorModelRadarSat1 ${PROJECTIONS_TESTS1}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/prTvSensorModelRadarSat1.txt
+         ${TEMP}/prTvSensorModelRadarSat1.txt
+    otbSensorModel
+         ${LARGEINPUT}/RADARSAT1/SCENE01/DAT_01.001
+         ${TEMP}/prTvSensorModelRadarSat1.txt
+)
+
+ADD_TEST(prTvSensorModelRadarSat2 ${PROJECTIONS_TESTS1}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/prTvSensorModelRadarSat2.txt
+         ${TEMP}/prTvSensorModelRadarSat2.txt
+    otbSensorModel
+         ${LARGEINPUT}/RSAT2/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
+         ${TEMP}/prTvSensorModelRadarSat2.txt
+)
+
+ADD_TEST(prTvSensorModelTerraSarX ${PROJECTIONS_TESTS1}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/prTvSensorModelTerraSarX.txt
+         ${TEMP}/prTvSensorModelTerraSarX.txt
+    otbSensorModel
+         ${LARGEINPUT}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
+         ${TEMP}/prTvSensorModelTerraSarX.txt
+)
+
+ADD_TEST(prTvSensorModelErs ${PROJECTIONS_TESTS1}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/prTvSensorModelErs.txt
+         ${TEMP}/prTvSensorModelErs.txt
+    otbSensorModel
+         ${LARGEINPUT}/SAR_ERS2_SLCI_SCENE1/DAT_01.001
+         ${TEMP}/prTvSensorModelErs.txt
+)
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -352,6 +443,7 @@ otbCreateProjectionWithOSSIM.cxx
 otbCreateProjectionWithOTB.cxx
 otbCreateInverseForwardSensorModel.cxx
 otbRegionProjectionResampler.cxx
+otbSensorModel.cxx
 )
 SET(Projections_SRCS2
 otbOrthoRectificationFilterNew.cxx
