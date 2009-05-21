@@ -40,7 +40,7 @@
 #include "ossim/projection/ossimProjectionFactoryRegistry.h"
 #include "ossim/imaging/ossimImageHandlerRegistry.h"
 #include "ossim/imaging/ossimImageHandlerSarFactory.h"
-#include "ossim/projection/ossimTerraSarModel.h"
+// #include "ossim/projection/ossimTerraSarModel.h"
 #include "ossim/projection/ossimRadarSatModel.h"
 
 

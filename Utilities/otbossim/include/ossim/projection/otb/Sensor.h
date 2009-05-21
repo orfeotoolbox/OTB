@@ -19,7 +19,7 @@ class PlatformPosition;
 class JSDDateTime;
 
 /**
- * @ingroup otb
+ * @ingroup SARModel
  * @brief This class provides basic location services
  */
 class Sensor

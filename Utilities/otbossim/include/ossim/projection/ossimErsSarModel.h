@@ -40,6 +40,8 @@ public:
 	 */
 	virtual double getSlantRangeFromGeoreferenced(double col) const;
 
+        virtual ossimObject* dup() const {}; //FIXME just while ossimplupgins are integrated
+
 protected:
 	/**
 	 *	@brief Slant Range for each Ground Range (SRGR) number of coefficients sets

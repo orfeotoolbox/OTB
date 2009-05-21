@@ -20,6 +20,7 @@ INCLUDE_DIRECTORIES(${OTB_BINARY_DIR}/Utilities/otbossim/include)
 
 #Temporary until the SAR plugins are fully integrated
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim/projection/otb)
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim/projection)
 
 CONFIGURE_FILE(${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim/ossimConfig.h.in
 	       ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimConfig.h)

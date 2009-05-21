@@ -110,9 +110,6 @@ private:
     */
    virtual bool InitSRGR(const ossimKeywordlist &kwl, const char *prefix);
 
-   bool UtcDateTimeStringToCivilDate(const std::string &utcString, CivilDateTime &outputDate);
-
-   
   /**
     * @note This method must be called before initRefPoint.
     */

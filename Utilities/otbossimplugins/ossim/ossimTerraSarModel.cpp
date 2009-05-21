@@ -781,7 +781,7 @@ bool ossimTerraSarModel::InitPlatformPosition(const ossimKeywordlist &kwl, const
 		 */
 		std::string utcString(date_str);
 		CivilDateTime eph_civil_date;
-		if (! UtcDateTimeStringToCivilDate(utcString, eph_civil_date)) return false;
+		if (! ossim::iso8601TimeStringToCivilDate(utcString, eph_civil_date)) return false;
 
 		JSDDateTime eph_jsd_date(eph_civil_date);
 
@@ -834,7 +834,7 @@ bool ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl, const char *p
 	_refPoint->set_pix_line(sc_lin);
 
 	CivilDateTime * date = new CivilDateTime() ;
-	if (! UtcDateTimeStringToCivilDate(inp_sctim_string, *date)) return false ;
+	if (! ossim::iso8601TimeStringToCivilDate(inp_sctim_string, *date)) return false ;
 
 	if(_platformPosition != NULL)
 	{
@@ -879,9 +879,9 @@ bool ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl, const char *p
 		std::string azimuthStartTime(kwl.find("azimuthStartTime"));
 		std::string azimuthStopTime(kwl.find("azimuthStopTime"));
 		CivilDateTime * dateStart = new CivilDateTime() ;
-		if (! UtcDateTimeStringToCivilDate(azimuthStartTime, *dateStart)) return false ;
+		if (! ossim::iso8601TimeStringToCivilDate(azimuthStartTime, *dateStart)) return false ;
 		CivilDateTime * dateStop = new CivilDateTime() ;
-		if (! UtcDateTimeStringToCivilDate(azimuthStopTime, *dateStop)) return false ;
+		if (! ossim::iso8601TimeStringToCivilDate(azimuthStopTime, *dateStop)) return false ;
 		double acq_msec_first = (double) dateStart->get_second()+dateStart->get_decimal();
 		double acq_msec_last = (double) dateStop->get_second()+dateStop->get_decimal();
 

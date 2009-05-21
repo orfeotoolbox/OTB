@@ -40,6 +40,8 @@ public:
 	 */
 	virtual double getSlantRangeFromGeoreferenced(double col) const;
 
+        virtual ossimObject* dup() const {}; //FIXME just while ossimplupgins are integrated
+
 protected:
 
 	/**

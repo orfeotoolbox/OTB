@@ -48,7 +48,7 @@ static ossimTrace traceDebug = ossimTrace("ossimSensorModelFactory:debug");
 #include <ossim/support_data/ossimFfL5.h>
 #include <ossim/projection/ossimRadarSatModel.h>
 #include <ossim/projection/ossimEnvisatAsarModel.h>
-#include <ossim/projection/ossimTerraSarModel.h>
+// #include <ossim/projection/ossimTerraSarModel.h>//in plugins
 //#include <ossim/projection/ossimCosmoSkymedModel.h>
 #include <ossim/projection/ossimRadarSat2Model.h>
 #include <ossim/projection/ossimErsSarModel.h>
@@ -200,10 +200,10 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
    {
 	   return new ossimEnvisatAsarModel;
    }
-	if (name == STATIC_TYPE_NAME(ossimTerraSarModel))
-   {
-	   return new ossimTerraSarModel;
-   }
+// 	if (name == STATIC_TYPE_NAME(ossimTerraSarModel))
+//    {
+// 	   return new ossimTerraSarModel;//in plugins
+//    }
 // 	if (name == STATIC_TYPE_NAME(ossimCosmoSkymedModel))
 //    {
 // 	   return new ossimCosmoSkymedModel;
@@ -265,7 +265,7 @@ ossimSensorModelFactory::getTypeNameList(std::vector<ossimString>& typeList)
    typeList.push_back(STATIC_TYPE_NAME(ossimSarModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimRadarSatModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimRadarSat2Model));
-   typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarModel));
+//    typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarModel));
    //   typeList.push_back(STATIC_TYPE_NAME(ossimCosmoSkymedModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimEnvisatAsarModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimErsSarModel));
