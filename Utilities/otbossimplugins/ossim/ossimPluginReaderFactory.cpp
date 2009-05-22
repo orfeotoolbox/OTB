@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------
 //
 // License:  LGPL
-// 
+//
 // See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
@@ -18,6 +18,10 @@
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordNames.h>
+
+namespace ossimplugins
+{
+
 
 static const ossimTrace traceDebug("ossimPluginReaderFactory:debug");
 
@@ -40,7 +44,7 @@ ossimPluginReaderFactory* ossimPluginReaderFactory::instance()
    }
    return theInstance;
 }
-   
+
 ossimImageHandler* ossimPluginReaderFactory::open(
    const ossimFilename& fileName)const
 {
@@ -51,21 +55,21 @@ ossimImageHandler* ossimPluginReaderFactory::open(
          << "\ntrying ossimTerraSarTiffReader"
          << std::endl;
    }
-   
+
    ossimImageHandler* reader = new ossimTerraSarTiffReader();
    if(reader->open(fileName) == false)
    {
       delete reader;
       reader = 0;
    }
-   
+
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "ossimPluginReaderFactory::open(filename) DEBUG: leaving..."
          << std::endl;
    }
-   
+
    return reader;
 }
 
@@ -86,14 +90,14 @@ ossimImageHandler* ossimPluginReaderFactory::open(const ossimKeywordlist& kwl,
       delete reader;
       reader = 0;
    }
-   
+
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "ossimPluginReaderFactory::open(kwl, prefix) DEBUG: leaving..."
          << std::endl;
    }
-   
+
    return reader;
 }
 
@@ -112,7 +116,7 @@ ossimObject* ossimPluginReaderFactory::createObject(const ossimKeywordlist& kwl,
 {
    return this->open(kwl, prefix);
 }
- 
+
 void ossimPluginReaderFactory::getTypeNameList(std::vector<ossimString>& typeList)const
 {
    typeList.push_back(ossimString("ossimTerraSarTiffReader"));
@@ -129,3 +133,4 @@ ossimPluginReaderFactory::ossimPluginReaderFactory(){}
 ossimPluginReaderFactory::ossimPluginReaderFactory(const ossimPluginReaderFactory&){}
 
 void ossimPluginReaderFactory::operator=(const ossimPluginReaderFactory&){}
+}

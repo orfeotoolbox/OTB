@@ -3,9 +3,9 @@
 // "Copyright Centre National d'Etudes Spatiales"
 //
 // License:  LGPL
-// 
+//
 // See LICENSE.txt file in the top level directory for more details.
-// 
+//
 //----------------------------------------------------------------------------
 // $Id$
 
@@ -24,10 +24,15 @@
 
 #include <otb/CivilDateTime.h>
 
+class ossimXmlDocument;
+
+namespace ossimplugins
+{
+
+
 class PlatformPosition;
 class SensorParams;
 class RefPoint;
-class ossimXmlDocument;
 class ossimTerraSarProductDoc;
 
 
@@ -43,7 +48,7 @@ public:
 
    /** @brief copy constructor */
    ossimTerraSarModel(const ossimTerraSarModel& rhs);
-   
+
    /** @brief Destructor */
    virtual ~ossimTerraSarModel();
 
@@ -90,7 +95,7 @@ public:
     * @return true if load OK, false on error
     */
    virtual bool loadState (const ossimKeywordlist &kwl, const char *prefix=0);
-   
+
    /*!
     * METHOD: print()
     * Fulfills base-class pure virtual. Dumps contents of object to ostream.
@@ -105,7 +110,7 @@ private:
    virtual bool InitSensorParams(const ossimKeywordlist &kwl, const char *prefix);
    virtual bool InitRefPoint(const ossimKeywordlist &kwl, const char *prefix);
    /**
-    * @brief Initializes the Slant Range to Ground Range data sets : 
+    * @brief Initializes the Slant Range to Ground Range data sets :
     *				_SrToGr_R0,_SrToGr_coeffs_number,_SrToGr_exponent,_SrToGr_coeffs,_nbCol
     */
    virtual bool InitSRGR(const ossimKeywordlist &kwl, const char *prefix);
@@ -115,7 +120,7 @@ private:
     */
    bool initSRGR(const ossimXmlDocument* xdoc,
                  const ossimTerraSarProductDoc& rsDoc);
-   
+
    bool initPlatformPosition(const ossimXmlDocument* xdoc,
                              const ossimTerraSarProductDoc& rsDoc);
 
@@ -135,7 +140,7 @@ private:
     * @brief Slant Range TO Ground Range Projection reference point
     */
    double _SrToGr_R0;
-   
+
    /**
     * @brief Slant Range TO Ground Range Projection exponents
     */
@@ -149,7 +154,7 @@ private:
     * @brief Scene Center range time
     */
    double _sceneCenterRangeTime;
-   
+
    /**
     * @brief Slant Range TO Ground Range scaling factor at scene center
     */
@@ -164,5 +169,6 @@ private:
 
    TYPE_DATA
 };
+}
 
 #endif /* #ifndef ossimTerraSarModel_H */

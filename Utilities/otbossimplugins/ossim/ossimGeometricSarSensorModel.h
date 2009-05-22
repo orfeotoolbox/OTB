@@ -3,9 +3,9 @@
 // "Copyright Centre National d'Etudes Spatiales"
 //
 // License:  LGPL
-// 
+//
 // See LICENSE.txt file in the top level directory for more details.
-// 
+//
 //----------------------------------------------------------------------------
 // $Id$
 
@@ -28,18 +28,21 @@
 
 #include <otb/CivilDateTime.h>
 
+namespace ossimplugins
+{
+
 class PlatformPosition;
 class SensorParams;
 class RefPoint;
 /**
  * @brief This class allows for direct localisation and indirect localisation
  * using the geometric model of SAR sensors.
- * This class must be specified for each sensor. 
+ * This class must be specified for each sensor.
  */
 class ossimGeometricSarSensorModel : public ossimSensorModel
 {
 public:
-   
+
    /** @brief default constructor */
    ossimGeometricSarSensorModel();
 
@@ -81,13 +84,13 @@ public:
 
    /**
     * @brief This function optimizes the model according to a list of Ground
-    * Control Points. 
+    * Control Points.
     *
-    * The input list of GCPs is appended to the one present in memory. 
-    * An inverse localization of each ground GCP is performed. 
+    * The input list of GCPs is appended to the one present in memory.
+    * An inverse localization of each ground GCP is performed.
     * The error between localized GCPs and actual image coordinates is then
-    * computed and modeled by a linear model on each dimension. 
-    * The time and range estimations are updated accordingly. 
+    * computed and modeled by a linear model on each dimension.
+    * The time and range estimations are updated accordingly.
     *
     * @param groundCoordinates : input GCP ground coordinates
     * @param imageCoordinates : actual image coordinates corresponding to
@@ -102,7 +105,7 @@ public:
     * _optimizationGCPsImageCoordinates attributes
     * Updates the optimisation factors and bias
     */
-   virtual void clearGCPlist() ; 
+   virtual void clearGCPlist() ;
 
    /**
     * @brief Returns _optimizationGCPsGroundCoordinates and
@@ -113,7 +116,7 @@ public:
     * groundCoordinates
     */
    virtual void getGCPlist(std::list<ossimGpt> &groundCoordinates,
-                           std::list<ossimDpt> & imageCoordinates) ; 
+                           std::list<ossimDpt> & imageCoordinates) ;
 
 
 
@@ -133,7 +136,7 @@ public:
     */
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix=0) const;
-   
+
    /**
     * @brief Method to the load (recreate) the state of the object from a
     * keyword list. Return true if ok or false on error.
@@ -145,12 +148,12 @@ public:
     * METHOD: print()
     * Fulfills base-class pure virtual. Dumps contents of object to ostream.
     */
-   virtual std::ostream& print(std::ostream& out) const; 
-	
+   virtual std::ostream& print(std::ostream& out) const;
+
    /**
     * @brief Accessors to the optimization parameters.
     */
-   double get_optimizationFactorX() const { return _optimizationFactorX; } 
+   double get_optimizationFactorX() const { return _optimizationFactorX; }
    double get_optimizationFactorY() const { return _optimizationFactorY; }
    double get_optimizationBiasX()   const { return _optimizationBiasX; }
    double get_optimizationBiasY()   const { return _optimizationBiasY; }
@@ -161,7 +164,7 @@ protected:
     * @brief Handle the position of the platform
     */
    PlatformPosition *_platformPosition;
-   SensorParams * _sensor; 
+   SensorParams * _sensor;
    RefPoint * _refPoint;
 
    /**
@@ -178,9 +181,9 @@ protected:
    /**
     * @brief Optimization result : linear error correction in both dimensions
     */
-   double _optimizationFactorX ; 
-   double _optimizationFactorY ; 
-   double _optimizationBiasX ; 
+   double _optimizationFactorX ;
+   double _optimizationFactorY ;
+   double _optimizationBiasX ;
    double _optimizationBiasY ;
 
 private:
@@ -202,7 +205,8 @@ private:
    virtual bool InitSRGR(const ossimKeywordlist &kwl, const char *prefix)=0;
 
 TYPE_DATA
-   
+
 };
+}
 
 #endif

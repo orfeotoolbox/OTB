@@ -8,7 +8,7 @@
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimDpt.h>
 
-#include <ossim/projection/otb/CivilDateTime.h>
+#include <ossim/projection/SARModel/DateTime/CivilDateTime.h>
 
 #include <iostream>
 #include <list>

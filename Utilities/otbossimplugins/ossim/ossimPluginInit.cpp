@@ -1,7 +1,7 @@
 //*******************************************************************
 //
 // License:  LGPL
-// 
+//
 // See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
@@ -16,11 +16,15 @@
 #include <ossimPluginReaderFactory.h>
 
 
+namespace ossimplugins
+{
+
+
 static void setDescription(ossimString& description)
 {
    description = "OSSIM Plugin\n\n";
    std::vector<ossimString> projectionTypes;
-   
+
    ossimPluginProjectionFactory::instance()->getTypeNameList(projectionTypes);
    ossim_uint32 idx = 0;
    description = "Projecitons Supported:\n\n";
@@ -53,14 +57,14 @@ extern "C"
       return (const char*)0;
    }
 
-   /* Note symbols need to be exported on windoze... */ 
+   /* Note symbols need to be exported on windoze... */
    OSSIM_PLUGINS_DLL void ossimSharedLibraryInitialize(
       ossimSharedObjectInfo** info)
-   {    
+   {
       myInfo.getDescription = getDescription;
       myInfo.getNumberOfClassNames = getNumberOfClassNames;
       myInfo.getClassName = getClassName;
-      
+
       *info = &myInfo;
 
       /** Register the readers... */
@@ -70,11 +74,11 @@ extern "C"
       /** Register the projection factory. */
       ossimProjectionFactoryRegistry::instance()->
          registerFactory(ossimPluginProjectionFactory::instance(), true);
-      
+
      setDescription(theDescription);
   }
 
-   /* Note symbols need to be exported on windoze... */ 
+   /* Note symbols need to be exported on windoze... */
   OSSIM_PLUGINS_DLL void ossimSharedLibraryFinalize()
   {
       ossimImageHandlerRegistry::instance()->
@@ -83,5 +87,6 @@ extern "C"
       ossimProjectionFactoryRegistry::instance()->
          unregisterFactory(ossimPluginProjectionFactory::instance());
   }
-   
+
+}
 }

@@ -1,13 +1,13 @@
 //----------------------------------------------------------------------------
 //
 // License:  LGPL
-// 
+//
 // See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //
 // Description: Common code for this plugin.
-// 
+//
 //----------------------------------------------------------------------------
 // $Id$
 
@@ -18,16 +18,22 @@
 #include <vector>
 #include <ossim/base/ossimRefPtr.h>
 
-class CivilDateTime;
 class ossimString;
 class ossimXmlDocument;
 class ossimXmlNode;
+
+namespace ossimplugins
+{
+
+
+class CivilDateTime;
+
 
 namespace ossim
 {
    /**
     * @note This code was moved out of ossimRadarSat2Model.
-    * 
+    *
     * @brief Converts date string from ISO 8601 format to CivilDateTime.
     *
     * @param dateString Input date string.
@@ -52,7 +58,7 @@ namespace ossim
    bool getPath(const ossimString& path,
                 const ossimXmlDocument* xdoc,
                 ossimString& s);
-   
+
    /**
     * @brief Gets path from doc and initializes string.
     * @param path Xml path to look for.
@@ -75,11 +81,12 @@ namespace ossim
     *
     * @return true on success and false if path is not found or if text is
     * empty from found node..
-    */   
+    */
    bool findFirstNode(const ossimString& path,
                       ossimRefPtr<ossimXmlNode> node,
                       ossimString& s);
-   
+
 } // matches: namespace ossim
+}
 
 #endif /* matches: #ifndef ossimPluginCommon_HEADER */

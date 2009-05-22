@@ -1,14 +1,14 @@
 //----------------------------------------------------------------------------
 //
 // License:  LGPL
-// 
+//
 // See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //
 // Description: Utility class to encapsulate parsing TerraSAR-X product.xml
 // file.
-// 
+//
 //----------------------------------------------------------------------------
 // $Id$
 #ifndef ossimTerraSarProductDoc_HEADER
@@ -26,6 +26,10 @@ class ossimIpt;
 class ossimXmlDocument;
 class ossimXmlNode;
 class ossimString;
+
+namespace ossimplugins
+{
+
 class CivilDateTime;
 class PlatformPosition;
 class RefPoint;
@@ -44,7 +48,7 @@ public:
    /**
     * @brief Checks for node /level1Product/generalHeader/mission containing
     * "TSX-1".
-    * 
+    *
     * @return true if present, false if not.
     */
    bool isTerraSarX(const ossimXmlDocument* xdoc) const;
@@ -68,7 +72,7 @@ public:
     */
    bool initSensorParams(const ossimXmlDocument* xdoc,
                          SensorParams* sp) const;
-   
+
    /**
     * @brief Method to initialize image size from
     * TerraSAR product xml file.
@@ -88,7 +92,7 @@ public:
     */
    bool initGsd(const ossimXmlDocument* xdoc,
                 ossimDpt& gsd) const;
-   
+
    /**
     * @brief Method to initialize image tie points from
     * TerraSAR product xml file.
@@ -107,16 +111,16 @@ public:
 
    bool getImageFile(const ossimXmlDocument* xdoc,
                      ossimString& s) const;
-   
+
    bool getSceneId(const ossimXmlDocument* xdoc,
                    ossimString& s) const;
-   
+
    bool getProjection(const ossimXmlDocument* xdoc,
                       ossimString& s) const;
 
    bool getReferencePoint(const ossimXmlDocument* xdoc,
                           ossimString& s) const;
-   
+
    bool getImageDataStrartWith(const ossimXmlDocument* xdoc,
                                ossimString& s) const;
 
@@ -158,27 +162,27 @@ public:
 
    bool getSceneAverageHeight(const ossimXmlDocument* xdoc,
                               ossimString& s) const;
-   
+
    bool getRadarCenterFrequency(const ossimXmlDocument* xdoc,
                                 ossimString& s) const;
 
    bool getAzimuthStartTime(const ossimXmlDocument* xdoc,
                             ossimString& s) const;
-   
+
    bool getAzimuthStopTime(const ossimXmlDocument* xdoc,
                            ossimString& s) const;
-   
+
    bool getCommonPrf(const ossimXmlDocument* xdoc, ossimString& s) const;
 
    /** range sampling rate */
    bool getCommonRsf(const ossimXmlDocument* xdoc, ossimString& s) const;
-   
+
    bool getNumberOfRangeLooks(const ossimXmlDocument* xdoc,
                               ossimString& s) const;
-   
+
    bool getNumberOfAzimuthLooks(const ossimXmlDocument* xdoc,
                                 ossimString& s) const;
-   
+
    bool getNumberOfColumns(const ossimXmlDocument* xdoc,
                            ossimString& s) const;
 
@@ -194,5 +198,6 @@ public:
    bool getGeodeticTerrainHeight(const ossimXmlDocument* xdoc,
                                  ossimString& s) const;
 };
+}
 
 #endif /* matches: #ifndef ossimTerraSarProductDoc_HEADER */

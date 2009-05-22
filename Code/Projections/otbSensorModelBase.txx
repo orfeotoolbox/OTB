@@ -150,7 +150,7 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimen
   m_Model = ossimSensorModelFactory::instance()->createProjection(geom);
   if ( m_Model == NULL)
   {
-    m_Model = ossimPluginProjectionFactory::instance()->createProjection(geom);
+    m_Model = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(geom);
   }
   if ( m_Model == NULL)
   {

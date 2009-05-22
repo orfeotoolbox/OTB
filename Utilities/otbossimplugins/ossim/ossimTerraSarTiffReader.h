@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------
 //
 // License:  LGPL
-// 
+//
 // See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
@@ -17,6 +17,10 @@
 #include <ossim/base/ossimFilename.h>
 
 class ossimXmlDocument;
+
+namespace ossimplugins
+{
+
 
 class ossimTerraSarTiffReader : public ossimTiffTileSource
 {
@@ -39,7 +43,7 @@ public:
 
    /**
     *  This open take the product xml file.
-    *  
+    *
     *  @param file File to open.
     *
     *  @return true on success, false on error.
@@ -75,7 +79,7 @@ public:
     *  keyword ul_lat will be like:  "image01.ul_lat:  -40.00000"
     */
    virtual bool getImageGeometry(ossimKeywordlist& kwl,
-                                 const char* prefix=0);   
+                                 const char* prefix=0);
 
 private:
 
@@ -92,12 +96,13 @@ private:
     * @return true on success, false on error.
     */
    bool isTerraSarProductFile(const ossimXmlDocument* xdoc) const;
-   
-   
+
+
    ossimFilename theProductXmlFile;
 
 TYPE_DATA
 };
+}
 
 #endif /* #ifndef ossimTerraSarTiffReader_HEADER */
 

@@ -1,14 +1,14 @@
 //----------------------------------------------------------------------------
 //
 // License:  LGPL
-// 
+//
 // See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //
 // Description: Utility class to encapsulate parsing TerraSAR-X product.xml
 // file.
-// 
+//
 //----------------------------------------------------------------------------
 // $Id$
 
@@ -32,6 +32,10 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimXmlDocument.h>
 #include <ossim/base/ossimXmlNode.h>
+
+namespace ossimplugins
+{
+
 
 // Static trace for debugging
 static ossimTrace traceDebug("ossimTerraSarProductDoc:debug");
@@ -68,10 +72,10 @@ bool ossimTerraSarProductDoc::initPlatformPosition(
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
-   }  
+   }
 
    bool result = true;
-   
+
    if ( xdoc && pos )
    {
       // Get all the stateVector nodes.
@@ -83,9 +87,9 @@ bool ossimTerraSarProductDoc::initPlatformPosition(
       {
          const std::vector<ossimRefPtr<ossimXmlNode> >::size_type COUNT =
             xnodes.size();
-         
+
          std::vector<Ephemeris*> ev;
-         
+
          int nbrData = 0; // to keep track of good stateVector count.
 
          ossimRefPtr<ossimXmlNode> svNode = 0; // stateVector node
@@ -109,7 +113,7 @@ bool ossimTerraSarProductDoc::initPlatformPosition(
                double pos[3];
                double vit[3];
                CivilDateTime eph_civil_date;
-               
+
                path = "timeUTC";
                result = ossim::findFirstNode(path, svNode, s);
                if (result)
@@ -169,7 +173,7 @@ bool ossimTerraSarProductDoc::initPlatformPosition(
                      << std::endl;
                   break;
                }
-               
+
                path = "velX";
                result = ossim::findFirstNode(path, svNode, s);
                if (result)
@@ -184,7 +188,7 @@ bool ossimTerraSarProductDoc::initPlatformPosition(
                      << std::endl;
                   break;
                }
-               
+
                path = "velY";
                result = ossim::findFirstNode(path, svNode, s);
                if (result)
@@ -199,7 +203,7 @@ bool ossimTerraSarProductDoc::initPlatformPosition(
                      << std::endl;
                   break;
                }
-               
+
                path = "velZ";
                result = ossim::findFirstNode(path, svNode, s);
                if (result)
@@ -214,14 +218,14 @@ bool ossimTerraSarProductDoc::initPlatformPosition(
                      << std::endl;
                   break;
                }
-               
+
                JSDDateTime eph_jsd_date(eph_civil_date);
                GeographicEphemeris* eph =
                   new GeographicEphemeris(eph_jsd_date, pos, vit);
                ev.push_back(eph);
                ++nbrData;
             }  // matches: if (s == "1")
-               
+
 	 } // matches: for (ossim_uint32 i = 0 ; i < COUNT; ++i)
 
          if (result && ev.size())
@@ -237,7 +241,7 @@ bool ossimTerraSarProductDoc::initPlatformPosition(
             {
                ossimNotify(ossimNotifyLevel_DEBUG)
                   << " DEBUG\nnbrData:  " << nbrData << "\n";
-            } 
+            }
             pos->setData(ephemeris, nbrData);
          }
          else
@@ -250,7 +254,7 @@ bool ossimTerraSarProductDoc::initPlatformPosition(
             }
             ev.clear();
          }
-         
+
       } // matches: if ( xnodes.size() )
       else
       {
@@ -258,7 +262,7 @@ bool ossimTerraSarProductDoc::initPlatformPosition(
          ossimNotify(ossimNotifyLevel_WARN)
             << MODULE << " ERROR:\nNodes not found: " << path << std::endl;
       }
-      
+
    } // matches: if (xdoc && pos)
    else
    {
@@ -269,7 +273,7 @@ bool ossimTerraSarProductDoc::initPlatformPosition(
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << MODULE << " exit status = " << (result?"true\n":"false\n");
-   } 
+   }
 
    return result;
 }
@@ -356,7 +360,7 @@ bool ossimTerraSarProductDoc::initSensorParams(const ossimXmlDocument* xdoc,
       const double SEMI_MINOR = 6356752.3142;
       sp->set_semiMajorAxis(SEMI_MAJOR);
       sp->set_semiMinorAxis(SEMI_MINOR);
-      
+
       if ( isProductGeoreferenced(xdoc) )
       {
          if ( getOrbitDirection(xdoc, s) )
@@ -375,7 +379,7 @@ bool ossimTerraSarProductDoc::initSensorParams(const ossimXmlDocument* xdoc,
             {
                if (s=="EARLYAZNEARRG")
                {
-                  sp->set_col_direction(orbitDirectionSign); 
+                  sp->set_col_direction(orbitDirectionSign);
                   sp->set_lin_direction(orbitDirectionSign);
                }
                else if (s=="EARLYAZFARRG")
@@ -411,21 +415,21 @@ bool ossimTerraSarProductDoc::initSensorParams(const ossimXmlDocument* xdoc,
          {
             result = false;
          }
-         
+
       } // matches: if ( isProductGeoreferenced(xdoc) )
       else
       {
          sp->set_col_direction(1);
          sp->set_lin_direction(1);
       }
-      
+
    } // matches: if (xdoc && sp)
    else
    {
       result = false;
    }
-   
-   return result;  
+
+   return result;
 }
 
 bool ossimTerraSarProductDoc::initImageSize(const ossimXmlDocument* xdoc,
@@ -457,7 +461,7 @@ bool ossimTerraSarProductDoc::initImageSize(const ossimXmlDocument* xdoc,
    {
       result = false;
    }
-      
+
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -466,7 +470,7 @@ bool ossimTerraSarProductDoc::initImageSize(const ossimXmlDocument* xdoc,
          << "\nexit status = " << (result?"true":"false")
          << std::endl;
    }
-   
+
    return result;
 }
 
@@ -499,7 +503,7 @@ bool ossimTerraSarProductDoc::initGsd(const ossimXmlDocument* xdoc,
    {
       result = false;
    }
-      
+
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -507,7 +511,7 @@ bool ossimTerraSarProductDoc::initGsd(const ossimXmlDocument* xdoc,
          << "\nexit status = " << (result?"true":"false")
          << std::endl;
    }
-   
+
    return result;
 }
 
@@ -516,14 +520,14 @@ bool ossimTerraSarProductDoc::initTiePoints(const ossimXmlDocument* xdoc,
                                              std::list<ossimDpt>& icp) const
 {
    static const char MODULE[] = "ossimTerraSarProductDoc::initTiePoints";
-   
+
    bool result = true;
 
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:\n";
    }
-         
+
    if (xdoc)
    {
       ossimString s;
@@ -536,7 +540,7 @@ bool ossimTerraSarProductDoc::initTiePoints(const ossimXmlDocument* xdoc,
       {
          gpt.hgt = s.toFloat64();
       }
-      
+
       // Get the scene center.
       result = getSceneCenterRefColumn(xdoc, s);
       if (result)
@@ -561,7 +565,7 @@ bool ossimTerraSarProductDoc::initTiePoints(const ossimXmlDocument* xdoc,
          gpt.lon = s.toFloat64();
       }
       gcp.push_back(gpt);
-      
+
       ossimString path =
          "/level1Product/productInfo/sceneInfo/sceneCornerCoord";
       std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
@@ -606,22 +610,22 @@ bool ossimTerraSarProductDoc::initTiePoints(const ossimXmlDocument* xdoc,
                   gpt.lon = s.toDouble();
                }
                gcp.push_back(gpt);
-               
+
                if (traceDebug())
                {
                   ossimNotify(ossimNotifyLevel_DEBUG)
                      << "gpt" << i << ": " << gpt
                      << "\n";
                }
-               
+
             } // matches: if (xnodes[i].valid())
             else
             {
                result = false;
             }
-            
+
          } // mathches: for (ossim_uint32 i = 0; i < xnodes.size(); ++i)
-         
+
       } // matches: if ( xnodes.size() )
       else
       {
@@ -632,14 +636,14 @@ bool ossimTerraSarProductDoc::initTiePoints(const ossimXmlDocument* xdoc,
    {
       result = false; // Null pointer passed in.
    }
-   
+
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << MODULE << " DEBUG: exit status = " << (result?"true":"false")
          << std::endl;
    }
-   
+
    return result;
 }
 
@@ -647,7 +651,7 @@ bool ossimTerraSarProductDoc::isProductGeoreferenced(
    const ossimXmlDocument* xdoc) const
 {
    bool result = false;
-   
+
    ossimString s;
    if ( getProjection(xdoc, s) )
    {
@@ -670,7 +674,7 @@ bool ossimTerraSarProductDoc::getImageFile(const ossimXmlDocument* xdoc,
    bool result = false;
    ossimString subDir;
    ossimString fileName;
-   
+
    ossimString path = "/level1Product/productComponents/imageData/file/location/path";
 
    if ( ossim::getPath(path, xdoc, subDir) )
@@ -883,4 +887,5 @@ bool ossimTerraSarProductDoc::getRowSpacing(
    ossimString path =
       "/level1Product/productInfo/imageDataInfo/imageRaster/rowSpacing";
    return ossim::getPath(path, xdoc, s);
+}
 }

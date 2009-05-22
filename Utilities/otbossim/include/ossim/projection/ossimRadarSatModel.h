@@ -1,7 +1,7 @@
 #ifndef ossimRadarSatModel_H
 #define ossimRadarSatModel_H
 
-#include <ossim/projection/otb/JSDDateTime.h>
+#include <ossim/projection/SARModel/DateTime/JSDDateTime.h>
 
 #include <ossim/projection/ossimGeometricSarSensorModel.h>
 #include <ossim/projection/ossimMapProjection.h>
@@ -39,8 +39,6 @@ public:
 	 * @param col Column coordinate of the image point
 	 */
 	virtual double getSlantRangeFromGeoreferenced(double col) const;
-
-        virtual ossimObject* dup() const {}; //FIXME just while ossimplupgins are integrated
 
 protected:
 

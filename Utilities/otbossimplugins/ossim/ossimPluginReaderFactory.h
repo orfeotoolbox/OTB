@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------
 //
 // License:  LGPL
-// 
+//
 // See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
@@ -17,6 +17,10 @@
 class ossimString;
 class ossimFilename;
 class ossimKeywordlist;
+
+namespace ossimplugins
+{
+
 
 /** @brief Image handler factory for ossim plugins plugin. */
 class ossimPluginReaderFactory : public ossimImageHandlerFactoryBase
@@ -54,7 +58,7 @@ public:
     * @return pointer to image writer on success, 0 on failure.
     */
    virtual ossimObject* createObject(const ossimString& typeName)const;
-   
+
    /**
     * @brief Creates and object given a keyword list and prefix.
     * @param kwl The keyword list.
@@ -63,7 +67,7 @@ public:
     */
    virtual ossimObject* createObject(const ossimKeywordlist& kwl,
                                      const char* prefix=0)const;
-   
+
    /**
     * @brief Adds ossimTerraSarTiffReader to the typeList.
     * @param typeList List to add to.
@@ -77,7 +81,7 @@ public:
     */
    virtual void getSupportedExtensions(
       ossimImageHandlerFactoryBase::UniqueStringList& extensionList)const;
-  
+
 protected:
    /** @brief hidden from use default constructor */
    ossimPluginReaderFactory();
@@ -93,5 +97,6 @@ protected:
 
 TYPE_DATA
 };
+}
 
 #endif /* end of #ifndef ossimPluginReaderFactory_HEADER */

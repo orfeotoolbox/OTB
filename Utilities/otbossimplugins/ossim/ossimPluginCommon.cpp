@@ -1,13 +1,13 @@
 //----------------------------------------------------------------------------
 //
 // License:  LGPL
-// 
+//
 // See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //
 // Description: Common code for this plugin.
-// 
+//
 //----------------------------------------------------------------------------
 // $Id$
 
@@ -21,11 +21,15 @@
 #include <ossim/base/ossimXmlNode.h>
 #include <otb/CivilDateTime.h>
 
+namespace ossimplugins
+{
+
+
 bool ossim::iso8601TimeStringToCivilDate(const std::string& dateString,
                                          CivilDateTime& outputDate)
 {
    bool result = true;
-   
+
    ossimLocalTm otm;
    if ( otm.setIso8601(dateString) )
    {
@@ -68,7 +72,7 @@ bool ossim::getPath(const ossimString& path,
             ossimNotify(ossimNotifyLevel_WARN)
                << "ossim::getPath ERROR:\n"
                << "Node not found: " << path
-               << std::endl; 
+               << std::endl;
          }
       }
       else if ( xnodes.size() == 0 )
@@ -76,21 +80,21 @@ bool ossim::getPath(const ossimString& path,
          ossimNotify(ossimNotifyLevel_WARN)
             << "ossim::getPath ERROR:\n"
                << "Node not found: " << path
-            << std::endl; 
-      }       
+            << std::endl;
+      }
       else
       {
          ossimNotify(ossimNotifyLevel_WARN)
                << "ossim::getPath ERROR:\n"
                << "Multiple nodes found: " << path
-               << std::endl; 
+               << std::endl;
       }
    }
    if (!result)
    {
       s.clear();
    }
-   return result; 
+   return result;
 }
 
 bool ossim::getPath(const ossimString& path,
@@ -118,7 +122,7 @@ bool ossim::getPath(const ossimString& path,
          ossimNotify(ossimNotifyLevel_WARN)
             << "ossim::getPath ERROR:\n"
             << "Nodes not found: " << path
-            << std::endl;  
+            << std::endl;
       }
    }
    if (!result)
@@ -156,8 +160,9 @@ bool ossim::findFirstNode(const ossimString& path,
          ossimNotify(ossimNotifyLevel_WARN)
             << "ossim::findFirstNode ERROR:\n"
             << "Node not found: " << path
-            << std::endl;   
+            << std::endl;
       }
    }
    return result;
+}
 }

@@ -10,7 +10,7 @@
 #include <iostream>
 #include <list>
 
-#include <ossim/projection/otb/CivilDateTime.h>
+#include <ossim/projection/SARModel/DateTime/CivilDateTime.h>
 
 class PlatformPosition;
 class SensorParams;
@@ -39,8 +39,6 @@ public:
 	 * @param col Column coordinate of the image point
 	 */
 	virtual double getSlantRangeFromGeoreferenced(double col) const;
-
-        virtual ossimObject* dup() const {}; //FIXME just while ossimplupgins are integrated
 
 protected:
 
