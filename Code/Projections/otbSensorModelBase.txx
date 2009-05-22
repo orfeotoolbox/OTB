@@ -154,7 +154,7 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimen
   }
   if ( m_Model == NULL)
   {
-    itkExceptionMacro(<< "Invalid Model pointer m_Model == NULL !\n The ossim keywordlist is bad!");
+    itkExceptionMacro(<< "Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!");
   }
 }
 
