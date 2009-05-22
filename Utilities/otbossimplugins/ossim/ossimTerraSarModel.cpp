@@ -1005,7 +1005,15 @@ bool ossimTerraSarModel::initSRGR(const ossimXmlDocument* xdoc,
    }
    else
    {
-      result = false;
+      //---
+      // This value is only used if product is geo referenced,
+      // (projection == GROUNDRANGE) so we won't error out if not.
+      //---
+      if (_isProductGeoreferenced)
+      {
+         result = false;
+      }
+      _SrToGr_R0 = 0.0;
    }
 
    // number of SRtoGR coefficients
