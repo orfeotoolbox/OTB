@@ -66,7 +66,6 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otbedison/edge
   ${OTB_SOURCE_DIR}/Utilities/otbsiftfast
   ${OTB_BINARY_DIR}/Code/Visualization
-
 )
 
 IF(NOT OTB_USE_EXTERNAL_BOOST)
@@ -119,15 +118,35 @@ ELSE(OTB_USE_EXTERNAL_ITK)
 	IF(NOT ITK_INSTALL_INCLUDE_DIR)
   		SET(ITK_INSTALL_INCLUDE_DIR "/include/otb/Utilities/ITK")
 	ENDIF(NOT ITK_INSTALL_INCLUDE_DIR)
-        INCLUDE(${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkThirdParty.cmake)
- 	INCLUDE(${OTB_SOURCE_DIR}/Utilities/ITK/itkIncludeDirectories.cmake)
+#         INCLUDE(${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkThirdParty.cmake)
+#  	INCLUDE(${OTB_SOURCE_DIR}/Utilities/ITK/itkIncludeDirectories.cmake)
 	SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
 # 2008/12/18: Added ITK include dir
-        ${ITK_INCLUDE_DIRS_BUILD_TREE}
-        ${ITK_INCLUDE_DIRS_BUILD_TREE_CXX}
-        ${ITK_INCLUDE_DIRS_SYSTEM}
-	${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/v3p/netlib
-	${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/v3p/netlib/opt)
+#         ${ITK_INCLUDE_DIRS_BUILD_TREE}
+#         ${ITK_INCLUDE_DIRS_BUILD_TREE_CXX}
+#         ${ITK_INCLUDE_DIRS_SYSTEM}
+# 	${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/v3p/netlib
+# 	${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/v3p/netlib/opt
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/Algorithms
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/BasicFilters
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/Common
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/IO
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/Numerics
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/Numerics/FEM
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/Numerics/NeuralNetworks
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/Numerics/Statistics
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/Patented
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/Review
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/SpatialObject
+        ${OTB_BINARY_DIR}/Utilities/ITK
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/v3p/netlib
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/vcl
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/core
+        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/vxl/v3p/netlib
+        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/vxl/vcl
+        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/vxl/core
+        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities
+        )
 ENDIF(OTB_USE_EXTERNAL_ITK)
 
 #For FLTK header file
