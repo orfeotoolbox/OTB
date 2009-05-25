@@ -59,7 +59,6 @@ FIND_PROGRAM( VERSION_CONFIG_PATH
 ADD_CUSTOM_COMMAND(
   OUTPUT ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h
   DEPENDS version-config
-  #COMMAND ${OTB_BINARY_DIR}/bin/version-config
   COMMAND ${VERSION_CONFIG_PATH}
   ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h" "${OSSIM_VERSION}"
   COMMENT "Generating ossimVersion.h"
