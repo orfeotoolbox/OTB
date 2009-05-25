@@ -76,7 +76,7 @@ public:
   typedef typename InputImageType::PixelType        InputPixelType;
   typedef typename OutputImageType::PixelType       OutputPixelType;
   typedef typename OutputImageType::IndexType       OutputIndexType;
-
+  typedef typename OutputIndexType::IndexValueType  OutputIndexValueType;
 
   /** Set/Get the image input of this process object. */
   virtual void SetInputLineSpatialObjectList(const LinesListType * list);

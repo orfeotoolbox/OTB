@@ -102,23 +102,23 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
       PointListType & pointsList = (*itList)->GetPoints();
       typename PointListType::const_iterator itPoints = pointsList.begin();
 
-      indexBeginLine[0] = static_cast<unsigned int>((*itPoints).GetPosition()[0]);
-      indexBeginLine[1] = static_cast<unsigned int>((*itPoints).GetPosition()[1]);
+      indexBeginLine[0] = static_cast<OutputIndexValueType>((*itPoints).GetPosition()[0]);
+      indexBeginLine[1] = static_cast<OutputIndexValueType>((*itPoints).GetPosition()[1]);
 
       ++itPoints;  //Get the second extremity of the segment
 
-      indexEndLine[0] = static_cast<unsigned int>((*itPoints).GetPosition()[0]);
-      indexEndLine[1] = static_cast<unsigned int>((*itPoints).GetPosition()[1]);
+      indexEndLine[0] = static_cast<OutputIndexValueType>((*itPoints).GetPosition()[0]);
+      indexEndLine[1] = static_cast<OutputIndexValueType>((*itPoints).GetPosition()[1]);
       
 
       /** Crop the segment if it is outside the region in the left*/
       
       if( !(this->IsColumnOutsideOfTheRegion(&indexBeginLine,&indexEndLine,&outputRegionForThread) && this->IsColumnOutsideOfTheRegion(&indexEndLine,&indexBeginLine,&outputRegionForThread)))
         {
-          if(indexEndLine[0] >=static_cast< int>(size[0]))
+          if(indexEndLine[0] >=static_cast<OutputIndexValueType>(size[0]))
             this->CropRightSegment(&indexEndLine,&indexBeginLine, &outputRegionForThread);
           
-          if( indexBeginLine[0] >= static_cast< int>(size[0]) )
+          if( indexBeginLine[0] >= static_cast<OutputIndexValueType>(size[0]) )
             this->CropRightSegment(&indexBeginLine,&indexEndLine, &outputRegionForThread);
         }
 
@@ -178,8 +178,8 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
  double slope         =  lengthSegment/(  (*indexToCrop)[0]  - (*otherIndex)[0]);
  double origin        =  (*otherIndex)[1] - (slope * (*otherIndex)[0]);
 
- (*indexToCrop)[0] = static_cast<unsigned int>(size[0]-1);
- (*indexToCrop)[1] = static_cast<unsigned int>(slope *(*indexToCrop)[0] + origin +0.5);
+ (*indexToCrop)[0] = static_cast<OutputIndexValueType>(size[0]-1);
+ (*indexToCrop)[1] = static_cast<OutputIndexValueType>(slope *(*indexToCrop)[0] + origin +0.5);
 }
 
 /**
@@ -196,7 +196,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
   typename OutputImageRegionType::SizeType  size  = outputRegionForThread->GetSize();
   typename OutputImageRegionType::IndexType start = outputRegionForThread->GetIndex();
 
-  return (*indexToCrop)[1] < static_cast<unsigned int>(start[1]);
+  return (*indexToCrop)[1] < static_cast<OutputIndexValueType>(start[1]);
 }
 
 /**
@@ -213,7 +213,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
   typename OutputImageRegionType::SizeType  size  = outputRegionForThread->GetSize();
   typename OutputImageRegionType::IndexType start = outputRegionForThread->GetIndex();
 
-  return (*indexToCrop)[1] >= static_cast< int>(start[1]+size[1]); //The down limit of the region in the Y direction
+  return (*indexToCrop)[1] >= static_cast<OutputIndexValueType>(start[1]+size[1]); //The down limit of the region in the Y direction
 }
 
 /**
@@ -226,7 +226,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
 ::IsDownsideTheImage(OutputIndexType *indexToCrop) const
 
 {
-  return (*indexToCrop)[1] >= static_cast<int>(m_Length); //The down limit of the Image in the Y direction
+  return (*indexToCrop)[1] >= static_cast<OutputIndexValueType>(m_Length); //The down limit of the Image in the Y direction
 }
 
 
@@ -243,13 +243,13 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
   typename OutputImageRegionType::SizeType size = outputRegionForThread->GetSize();
   bool res = false, res1= false , res2 = false;
   
-  if (  ((*indexToCheck)[0]>=static_cast< int>(size[0])) && ((*otherToCheck)[0]>=static_cast< int>(size[0]) ))
+  if (  ((*indexToCheck)[0]>=static_cast<OutputIndexValueType>(size[0])) && ((*otherToCheck)[0]>=static_cast<OutputIndexValueType>(size[0]) ))
     res  = true;
   
-  if((*indexToCheck)[0]>=static_cast< int>(size[0]) && this->IsUpsideTheRegion(otherToCheck,outputRegionForThread))  
+  if((*indexToCheck)[0]>=static_cast<OutputIndexValueType>(size[0]) && this->IsUpsideTheRegion(otherToCheck,outputRegionForThread))  
     res1 = true;
   
-  if((*indexToCheck)[0]>=static_cast< int>(size[0]) && this->IsDownsideTheRegion(otherToCheck,outputRegionForThread) )
+  if((*indexToCheck)[0]>=static_cast<OutputIndexValueType>(size[0]) && this->IsDownsideTheRegion(otherToCheck,outputRegionForThread) )
     res2 = true;
 
 
@@ -309,8 +309,8 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
   if(this->IsDownsideTheImage(indexToCrop ))
     {
       double Y = static_cast<double>(m_Length-1)/*tstart[1]+size[1]-1*/;
-      tempIndex[1] = static_cast<unsigned int>(Y);
-      tempIndex[0] = static_cast<unsigned int>((Y-origin) / slope);  // X = (Y-B)/A
+      tempIndex[1] = static_cast<OutputIndexValueType>(Y);
+      tempIndex[0] = static_cast<OutputIndexValueType>((Y-origin) / slope);  // X = (Y-B)/A
     } 
 
   (*indexToCrop)[0] = tempIndex[0];
