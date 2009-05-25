@@ -3,7 +3,7 @@
 */
 
 /* OTB Modifications */
-# include "otb_expat_mangle.h"
+//# include "otb_expat_mangle.h"
 
 #ifndef Expat_INCLUDED
 #define Expat_INCLUDED 1

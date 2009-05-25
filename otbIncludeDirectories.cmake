@@ -202,7 +202,8 @@ IF(OTB_USE_EXTERNAL_EXPAT)
   	        ${EXPAT_INCLUDE_DIR} )
 ELSE(OTB_USE_EXTERNAL_EXPAT)
         SET(OTB_INCLUDE_DIRS_BUILD_TREE_CXX ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
-                ${OTB_SOURCE_DIR}/Utilities/otbexpat)
+                ${OTB_SOURCE_DIR}/Utilities/otbexpat
+                ${OTB_SOURCE_DIR}/Utilities/otbexpat/lib)
 ENDIF(OTB_USE_EXTERNAL_EXPAT)
 
 # For OpenThreads

@@ -22,7 +22,8 @@
 
 #include "ascii.h"
 // OTB Modifications
-#include "otb_expat.h"
+//#include "otb_expat.h"
+#include "expat.h"
 
 #ifdef XML_UNICODE
 #define XML_ENCODE_MAX XML_UTF16_ENCODE_MAX
