@@ -124,7 +124,17 @@ GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions
       return false;
     }
 
+    //we don't want to have a ossimEquDistCylProjection here:
+    //see discussion in May 2009 on ossim list;
+    //a better solution might be available...
+    if (std::string(kwl.find("type")) == "ossimEquDistCylProjection")
+    {
+      std::cout << "WARNING: Not instanciating a ossimEquDistCylProjection"<< std::endl;
+      return false;
+    }
+
     m_MapProjection = ossimMapProjectionFactory::instance()->createProjection(kwl);
+
     this->reinstanciateProjection = false;
     return true;
   }
