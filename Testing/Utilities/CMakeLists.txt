@@ -432,9 +432,11 @@ ADD_TEST( utKmlprintgeometry   ${UTILITIES_TESTS}
 #        ${TEMP}/utkmlprintgeometry.txt
         )
 
-ADD_TEST(ijObjectLabelAttributeValuesTest ${UTILITIES_TESTS}
-                ijObjectLabelAttributeValuesTest
-)
+# FIXME set inputs; this test has never been finished...
+# ADD_TEST(ijObjectLabelAttributeValuesTest ${UTILITIES_TESTS}
+#                 ijObjectLabelAttributeValuesTest
+# )
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(UtilitiesTests_SRCS
 ossimIntegrationTest.cxx
