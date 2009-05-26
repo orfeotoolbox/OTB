@@ -216,11 +216,13 @@ ADD_TEST(FA-0000041-mean_shift2 ${CXX_TEST_PATH}/0000041-mean_shift
 	)
 
 # -------       Vectorization issue   -----------------------------------
-ADD_TEST(FA-0000094-fe-PolygonsVectorization ${CXX_TEST_PATH}/PolygonsVectorization
-	-in ${INPUTDATA}/objtest2.tif
-	-ot ${TEMP}/output.txt
-	-out ${TEMP}/objtest2-result.tif
-	)
+# FIXME Desactivated until http://bugs.orfeo-toolbox.org/view.php?id=94
+# has somebody working on it
+# ADD_TEST(FA-0000094-fe-PolygonsVectorization ${CXX_TEST_PATH}/PolygonsVectorization
+# 	-in ${INPUTDATA}/objtest2.tif
+# 	-ot ${TEMP}/output.txt
+# 	-out ${TEMP}/objtest2-result.tif
+# 	)
 
 
 ADD_EXECUTABLE(AlignementsQB  AlignementsQB.cxx)
