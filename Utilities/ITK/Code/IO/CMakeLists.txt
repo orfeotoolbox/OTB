@@ -81,16 +81,30 @@ IF (APPLE)
   ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF (APPLE)
 
-TARGET_LINK_LIBRARIES(ITKIO
-ITKNrrdIO
-${ITK_GDCM_LIBRARIES}
-${ITK_PNG_LIBRARIES}
-${ITK_TIFF_LIBRARIES}
-ITKSpatialObject
-ITKMetaIO
-ITKDICOMParser
-ITKEXPAT
-ITKniftiio)
+IF( OTB_USE_EXTERNAL_EXPAT )
+    TARGET_LINK_LIBRARIES(ITKIO
+    ITKNrrdIO
+    ${ITK_GDCM_LIBRARIES}
+    ${ITK_PNG_LIBRARIES}
+    ${ITK_TIFF_LIBRARIES}
+    ITKSpatialObject
+    ITKMetaIO
+    ITKDICOMParser
+    expat
+    ITKniftiio)
+ELSE( OTB_USE_EXTERNAL_EXPAT  )
+    TARGET_LINK_LIBRARIES(ITKIO
+    ITKNrrdIO
+    ${ITK_GDCM_LIBRARIES}
+    ${ITK_PNG_LIBRARIES}
+    ${ITK_TIFF_LIBRARIES}
+    ITKSpatialObject
+    ITKMetaIO
+    ITKDICOMParser
+    otbexpat
+    ITKniftiio)
+ENDIF( OTB_USE_EXTERNAL_EXPAT )
+
 
 IF( ITK_USE_TRANSFORM_IO_FACTORIES )
     TARGET_LINK_LIBRARIES(ITKIO ITKTransformIOReview)
@@ -113,13 +127,13 @@ ENDIF(SUN_COMPILER)
 # itkTestDriver is built even when BUILD_TESTING is FALSE to:
 # + allow to run WrapITK tests without the other of the ITK tests
 # + be used by external code like contributions to the insight journal
-ADD_EXECUTABLE(itkTestDriver itkTestDriver.cxx) 
+ADD_EXECUTABLE(itkTestDriver itkTestDriver.cxx)
 TARGET_LINK_LIBRARIES(itkTestDriver ITKIO)
 IF(NOT ITK_INSTALL_NO_DEVELOPMENT)
   INSTALL(TARGETS itkTestDriver
     RUNTIME DESTINATION ${ITK_INSTALL_BIN_DIR_CM24} COMPONENT Development)
 ENDIF(NOT ITK_INSTALL_NO_DEVELOPMENT)
-SET(ITK_TEST_DRIVER "${EXECUTABLE_OUTPUT_PATH}/itkTestDriver" 
+SET(ITK_TEST_DRIVER "${EXECUTABLE_OUTPUT_PATH}/itkTestDriver"
     CACHE INTERNAL "itkTestDriver path to be used by subprojects")
 
 IF(ITK_LIBRARY_PROPERTIES)

@@ -53,7 +53,7 @@ ITK_THIRD_PARTY_SUBDIR(GDCM gdcm)
 
 #
 # Handle the special case of building libxml2
-#  Fetch libxml2 using subversion if requested 
+#  Fetch libxml2 using subversion if requested
 IF(ITK_USE_LIBXML2)
   IF(NOT ITK_USE_SYSTEM_LIBXML2)
     IF(EXISTS "${ITK_BINARY_DIR}/Utilities/itklibxml2/VERSION_2_6_27_1.txt")
@@ -78,7 +78,7 @@ IF(ITK_USE_LIBXML2)
       SET(svnDir "${ITK_BINARY_DIR}/Utilities")
       FILE(WRITE ${ITK_BINARY_DIR}/Utilities/t "t\n")
       EXECUTE_PROCESS(
-            COMMAND "${SVNCOMMAND}" ${svnCmd} ${svnRevFlag} ${svnRevNum} ${svnSite} ${svnDir} 
+            COMMAND "${SVNCOMMAND}" ${svnCmd} ${svnRevFlag} ${svnRevNum} ${svnSite} ${svnDir}
             INPUT_FILE ${ITK_BINARY_DIR}/Utilities/t
             OUTPUT_VARIABLE svnOutput
             ERROR_VARIABLE svnError
@@ -86,7 +86,7 @@ IF(ITK_USE_LIBXML2)
             )
       # Result should be 0 on success
       IF(NOT svnResult)
-        ADD_SUBDIRECTORY( "${ITK_BINARY_DIR}/Utilities/itklibxml2" 
+        ADD_SUBDIRECTORY( "${ITK_BINARY_DIR}/Utilities/itklibxml2"
                           "${ITK_BINARY_DIR}/Utilities/itklibxml2" )
       ELSE(NOT svnResult)
         MESSAGE(FATAL_ERROR "SVN checkout of itklibxml2 failed with error = ${svnError}")
@@ -101,7 +101,7 @@ ENDIF(ITK_USE_LIBXML2)
 # Other utilities libraries
 ADD_SUBDIRECTORY(MetaIO)
 ADD_SUBDIRECTORY(NrrdIO)
-ADD_SUBDIRECTORY(expat)
+# ADD_SUBDIRECTORY(expat)
 ADD_SUBDIRECTORY(nifti)
 ADD_SUBDIRECTORY(itkExtHdrs)
 ADD_SUBDIRECTORY(KWStyle)
