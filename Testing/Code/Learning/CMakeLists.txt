@@ -119,7 +119,7 @@ ADD_TEST(leTvSVMImageModelEstimatorModelAccessor ${LEARNING_TESTS1}
 ADD_TEST(leTuSVMPointSetModelEstimatorNew ${LEARNING_TESTS2}  
         otbSVMPointSetModelEstimatorNew)
 
-ADD_TEST(leTuSVMPointSetModelEstimatorTrain ${LEARNING_TESTS2}  
+ADD_TEST(leTvSVMPointSetModelEstimatorTrain ${LEARNING_TESTS2}  
 --compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leTvsvm_model_pointset 
                         ${TEMP}/leTvsvm_model_pointset
 --ignore-lines-with 2 probA probB 
@@ -355,13 +355,13 @@ ADD_TEST(leTvSVMModelCopyComposedKernel ${LEARNING_TESTS3}
 	${INPUTDATA}/svm_model_composed
 	${TEMP}/svmcopycomposed_test)
 
-ADD_TEST(leTuSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest ${LEARNING_TESTS3}
+ADD_TEST(leTvSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest ${LEARNING_TESTS3}
         otbSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${INPUTDATA}/ROI_QB_MUL_4_train_one_class.tif
 	${TEMP}/leTvsvm_model_image_one_class)
 
-ADD_TEST(leTuSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest ${LEARNING_TESTS3}
+ADD_TEST(leTvSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest ${LEARNING_TESTS3}
         otbSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${INPUTDATA}/ROI_QB_MUL_4_train_one_class.tif
@@ -377,14 +377,14 @@ ADD_TEST(leTuSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest ${LE
 ADD_TEST(leTuROIdataConversionNew ${LEARNING_TESTS4}  
         otbROIdataConversionNew)
 
-ADD_TEST(leTuROIdataConversion ${LEARNING_TESTS4}
+ADD_TEST(leTvROIdataConversion ${LEARNING_TESTS4}
  --compare-ascii ${TOL}
-	${BASELINE_FILES}/leTuROIdataConversion.txt
-	${TEMP}/leTuROIdataConversion.txt
+	${BASELINE_FILES}/leTvROIdataConversion.txt
+	${TEMP}/leTvROIdataConversion.txt
         otbROIdataConversion
 	${INPUTDATA}/ImageLineDir.bsq.hdr
 	${INPUTDATA}/ImageLine.bsq.hdr
-	${TEMP}/leTuROIdataConversion.txt
+	${TEMP}/leTvROIdataConversion.txt
 )
 
 
