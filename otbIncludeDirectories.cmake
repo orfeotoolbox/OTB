@@ -44,6 +44,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otbossim
   ${OTB_SOURCE_DIR}/Utilities/otbossim/include
   ${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim
+  ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim
   ${OTB_SOURCE_DIR}/Utilities/otbossimplugins
   #Temporary until the SAR plugins are fully integrated:
 #   ${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim/projection/otb

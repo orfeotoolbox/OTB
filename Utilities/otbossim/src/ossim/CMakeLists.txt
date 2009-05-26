@@ -51,22 +51,25 @@ IF(WIN32)
   ENDIF(NOT BORLAND)
 ENDIF(WIN32)
 
-FIND_PROGRAM( VERSION_CONFIG_PATH
-		   NAMES version-config 
-		   PATHS ${OTB_BINARY_DIR}/bin
-		   NO_DEFAULT_PATH )
+ADD_EXECUTABLE(version-config ${OTB_SOURCE_DIR}/Utilities/otbossim/src/ossim/version-config.cpp)
+
+# FIND_PROGRAM( VERSION_CONFIG_PATH
+#                  NAMES version-config
+#                  PATHS ${OTB_BINARY_DIR}/bin
+#                  NO_DEFAULT_PATH )
 
 ADD_CUSTOM_COMMAND(
-  OUTPUT ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h
-  DEPENDS version-config
-  COMMAND ${VERSION_CONFIG_PATH}
-  ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h" "${OSSIM_VERSION}"
-  COMMENT "Generating ossimVersion.h"
-  )
+OUTPUT ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h
+DEPENDS ${OTB_BINARY_DIR}/bin/version-config
+COMMAND ${OTB_BINARY_DIR}/bin/version-config
+ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h" "${OSSIM_VERSION}"
+COMMENT "Generating ossimVersion.h"
+)
+
 SET_SOURCE_FILES_PROPERTIES(
-  ${OTB_SOURCE_DIR}/Utilities/otbossim/src/ossim/init/ossimInit.cpp PROPERTIES
-  OBJECT_DEPENDS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h"
-  )
+    init/ossimInit.cpp PROPERTIES
+    OBJECT_DEPENDS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h"
+    )
 
 #Specify that we are making DLL here
 ADD_DEFINITIONS(-DNOMINMAX -DOSSIMMAKINGDLL)
