@@ -14,6 +14,7 @@ SET(TOL 0.0)
 SET(EPSILON 0.0000000001)
 SET(EPSILON_10e3 0.001)
 SET(EPSILON_10e4 0.0001)
+SET(EPSILON_10e5 0.00001)
 
 
 SET(LEARNING_TESTS1 ${CXX_TEST_PATH}/otbLearningTests1)
@@ -37,7 +38,7 @@ ADD_TEST(leTuSVMModelLoad ${LEARNING_TESTS1}
 	${INPUTDATA}/svm_model)
 
 ADD_TEST(leTvSVMModelAccessor ${LEARNING_TESTS1}
---compare-ascii ${TOL}  ${BASELINE_FILES}/leSVMModelAccessor.txt
+--compare-ascii ${EPSILON_10e5}  ${BASELINE_FILES}/leSVMModelAccessor.txt
                         ${TEMP}/leSVMModelAccessor.txt
         otbSVMModelAccessor
 	${INPUTDATA}/svm_model
