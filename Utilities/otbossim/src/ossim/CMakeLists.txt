@@ -51,18 +51,22 @@ IF(WIN32)
   ENDIF(NOT BORLAND)
 ENDIF(WIN32)
 
-ADD_EXECUTABLE(version-config ${OTB_SOURCE_DIR}/Utilities/otbossim/src/ossim/version-config.cpp)
-
-# FIND_PROGRAM( VERSION_CONFIG_PATH
-#                  NAMES version-config
-#                  PATHS ${OTB_BINARY_DIR}/bin
-#                  NO_DEFAULT_PATH )
+ADD_EXECUTABLE(version-config version-config.cpp)
+FIND_PROGRAM( VERSION_CONFIG_PROGRAM
+              NAMES version-config
+              PATHS  ${EXECUTABLE_OUTPUT_PATH}
+                     ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}
+#                     ${EXECUTABLE_OUTPUT_PATH}/Release
+#                     ${EXECUTABLE_OUTPUT_PATH}/Debug
+#                     ${EXECUTABLE_OUTPUT_PATH}/MinSizeRel
+#                     ${EXECUTABLE_OUTPUT_PATH}/RelWithDebInfo
+              NO_DEFAULT_PATH )
 
 ADD_CUSTOM_COMMAND(
 OUTPUT ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h
-DEPENDS ${OTB_BINARY_DIR}/bin/version-config
-COMMAND ${OTB_BINARY_DIR}/bin/version-config
+COMMAND ${VERSION_CONFIG_PROGRAM}
 ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h" "${OSSIM_VERSION}"
+DEPENDS version-config
 COMMENT "Generating ossimVersion.h"
 )
 
