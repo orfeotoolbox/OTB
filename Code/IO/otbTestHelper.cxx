@@ -184,6 +184,7 @@ namespace otb
 
                 }
                 else if ( (strRef != strTest)
+                           && (vcl_abs(atof(strRef.c_str())) > m_EpsilonBoundaryChecking)
                            && (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str()))
                            > epsilon*vcl_abs(atof(strRef.c_str()))
                               ) )//epsilon as relative error
@@ -244,6 +245,7 @@ namespace otb
                   {
 
                     if ( (strNumRef != strNumTest)
+                          && (vcl_abs(atof(strNumRef.c_str())) > m_EpsilonBoundaryChecking)
                           && (vcl_abs(atof(strNumRef.c_str())-atof(strNumTest.c_str()))
                           > epsilon*vcl_abs(atof(strNumRef.c_str()))
                              ) ) //epsilon as relative error
@@ -289,6 +291,7 @@ namespace otb
                   {
 
                     if ( ( strRef != strTest)
+                           && (vcl_abs(atof(strRef.c_str())) > m_EpsilonBoundaryChecking)
                            && (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str()))
                            > epsilon*vcl_abs(atof(strRef.c_str()))
                               )) //epsilon as relative error
@@ -382,6 +385,7 @@ namespace otb
       std::cout << "Test ASCII File     : "<<testAsciiFileName << std::endl;
       std::cout << "Diff ASCII File     : "<<diffAsciiFileName << std::endl;
       std::cout << "Tolerance value     : "<<epsilon << std::endl;
+      std::cout << "Tolerance max check : "<<m_EpsilonBoundaryChecking << std::endl;
 
       std::cout << "Nb lines differents : "<<listStrDiffLineFileRef.size() << std::endl;
       for ( unsigned int i = 0; i  < listStrDiffLineFileRef.size(); ++i)

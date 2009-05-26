@@ -34,7 +34,7 @@ namespace otb
   class /*ITK_EXPORT*/ TestHelper
   {
     public:
-      TestHelper(){};
+      TestHelper() : m_EpsilonBoundaryChecking(1.0e-30){};
       ~TestHelper(){};
 
       std::map<std::string,int> RegressionTestbaselines (char *baselineFilename) const;
@@ -60,6 +60,7 @@ namespace otb
         OGRLayer * test_poLayer,  const char *test_pszWHERE,  OGRGeometry *test_poSpatialFilter,
                            int & nbdiff, int bVerbose ) const;
 
+      double m_EpsilonBoundaryChecking;
 
   };
 }
