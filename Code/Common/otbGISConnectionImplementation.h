@@ -15,30 +15,29 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPostGISConnectionImplementation_h
-#define __otbPostGISConnectionImplementation_h
+#ifndef __otbGISConnectionImplementation_h
+#define __otbGISConnectionImplementation_h
 
+#include "itkDataObject.h"
+#include "itkObjectFactory.h"
 
-#include "otbGISConnectionImplementation.h"
-#include <pqxx/pqxx>
 
 namespace otb
 {
-/** \class PostGISConnectionImplementation
- * \brief this class represents a connection to a PostGIS data base.
+/** \class GISConnectionImplementation
+ * \brief Base class for GIS DB connection implementations
  *
- * 
  *
  */
 
-class ITK_EXPORT PostGISConnectionImplementation
-  : public GISConnectionImplementation< pqxx::transactor<pqxx::nontransaction > >
+template <class TransactorType>
+class ITK_EXPORT GISConnectionImplementation
+  : public itk::DataObject
 {
 public:
   /** Standard class typedefs */
-  typedef PostGISConnectionImplementation Self;
-  typedef pqxx::transactor<pqxx::nontransaction> PQXXTransactorType;
-  typedef GISConnectionImplementation<PQXXTransactorType> Superclass;
+  typedef GISConnectionImplementation Self;
+  typedef itk::DataObject Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -46,12 +45,8 @@ public:
 
   /** Standard macros */
   itkNewMacro(Self);
-  itkTypeMacro(PostGISConnectionImplementation, GISConnectionImplementation);
+  itkTypeMacro(GISConnectionImplementation,itk::DataObject);
 
-
-  /** Typedefs */
-  typedef pqxx::basic_connection<pqxx::connect_direct> BasicConnectionType;
-  typedef PQXXTransactorType TransactorType;
 
   /** Acessors */
   itkGetMacro(Host, std::string);
@@ -74,22 +69,20 @@ public:
 
   /** Using the connection */
 
-  void ConnectToDB();
+  virtual void ConnectToDB(){};
 
-  void PerformTransaction(const TransactorType& theTransaction);
+  virtual void PerformTransaction(const TransactorType& theTransaction){};
 
 
 
 protected:
   /** Constructor */
-  PostGISConnectionImplementation();
+  GISConnectionImplementation(){};
   /** Destructor */
-  virtual ~PostGISConnectionImplementation();
-  /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  virtual ~GISConnectionImplementation(){};
 
 private:
-  PostGISConnectionImplementation(const Self&); //purposely not implemented
+  GISConnectionImplementation(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
 
@@ -100,7 +93,6 @@ private:
   std::string m_Port;
   std::string m_Options;
 
-  BasicConnectionType* m_PostGISConnection;
 
 
 };
