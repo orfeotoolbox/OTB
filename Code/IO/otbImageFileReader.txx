@@ -250,6 +250,7 @@ ImageFileReader<TOutputImage>
 
   if ( this->m_ImageIO.IsNull() )
   {
+    this->Print( std::cerr );
     itk::ImageFileReaderException e(__FILE__, __LINE__);
     itk::OStringStream msg;
     msg << " Could not create IO object for file "

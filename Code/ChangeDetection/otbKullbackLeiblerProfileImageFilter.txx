@@ -181,7 +181,10 @@ CumulantsForEdgeworthProfile<TInput>
     }
   }
   if ( fSum0 == 0.0 )
+  {
+    fDataAvailable = false;
     return 1;
+  }
 
   double mu1, mu2;
 
@@ -189,7 +192,10 @@ CumulantsForEdgeworthProfile<TInput>
   mu2 = fSum2 / fSum0 - mu1 * mu1;
 
   if ( mu2 == 0.0 )
+  {
+    fDataAvailable = false;
     return 1;
+  }
 
   double sigma = sqrt( mu2 );
 
@@ -224,12 +230,17 @@ CumulantsForEdgeworthProfile<TInput>
   mu4 /= fSum0;
 
   if ( vnl_math_isnan( mu3 ) || vnl_math_isnan( mu4 ) )
+  {
+    fDataAvailable = false;
     return 1;
+  }
 
   fMu[0][0] = mu1;
   fMu[0][1] = mu2;
   fMu[0][2] = mu3;
   fMu[0][3] = mu4;
+
+  fDataAvailable = true;
 
   return 0;
 }
@@ -245,10 +256,10 @@ CumulantsForEdgeworthProfile<TInput>
   fMu[level].Fill(0.0);
   // mise a jour du comptage...
   double sum0 = 0.0,
-                sum1 = 0.0,
-                       sum2 = 0.0,
-                              sum3 = 0.0,
-                                     sum4 = 0.0;
+          sum1 = 0.0,
+          sum2 = 0.0,
+          sum3 = 0.0,
+          sum4 = 0.0;
 
   double pixel,pixel_2;
 
@@ -310,6 +321,9 @@ int
 CumulantsForEdgeworthProfile<TInput>
 ::MakeCumulants()
 {
+  if ( !IsDataAvailable() )
+    return 1;
+
   fCum.resize( fMu.size() );
   fCum = fMu;
 
@@ -416,7 +430,6 @@ KullbackLeiblerProfile<TInput1,TInput2,TOutput>
 ( const TInput1 & it1, const TInput2 & it2 )
 {
   CumulantsForEdgeworthProfile<TInput1> cum1 ( it1, m_mask );
-  CumulantsForEdgeworthProfile<TInput2> cum2 ( it2, m_mask );
 
   if ( cum1.m_debug )
   {
@@ -424,6 +437,8 @@ KullbackLeiblerProfile<TInput1,TInput2,TOutput>
     resu.Fill( 1e3 );
     return static_cast<TOutput> ( resu );
   }
+
+  CumulantsForEdgeworthProfile<TInput2> cum2 ( it2, m_mask );
 
   if ( cum2.m_debug )
   {

@@ -98,24 +98,24 @@ void
 ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixel, 2 > >
 ::TestBandSelection ( std::vector<unsigned int> & bands )
 {
-        if (  bands.size() != 1 )
-        {
-                itk::OStringStream msg;
-                msg << "Unable to handle multicomponent file from Image<> class\n";
-                msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
-                ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
-                throw e;
-        }
+  if (  bands.size() != 1 )
+  {
+    itk::OStringStream msg;
+    msg << "Unable to handle multicomponent file from Image<> class\n";
+    msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
+    ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
+    throw e;
+  }
 
-        if ( bands[0] != 1 )
-        {
-                itk::OStringStream msg;
-                msg << "Unable to handle given band reading from multicomponent file with Image<> class\n";
-                msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
-                ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
-                throw e;
-        }
-        return;
+  if ( bands[0] != 1 )
+  {
+    itk::OStringStream msg;
+    msg << "Unable to handle given band reading from multicomponent file with Image<> class\n";
+    msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
+    ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
+    throw e;
+  }
+  return;
 }
 
 /**
@@ -126,6 +126,9 @@ void
 ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixel, 2 > >
 ::GenerateData( unsigned int idx )
 {
+  std::cerr << "Reading " << idx << "th image: " << this->m_ListOfFileNames[ idx ] << "\n";
+  otbMsgDebugMacro( << "Reading " << idx << "th image: " << this->m_ListOfFileNames[ idx ] );
+
   ReaderType * reader 
     = static_cast<ReaderType*>( this->m_ImageFileReaderList->GetNthElement( idx ) );
 
@@ -205,6 +208,8 @@ void
 ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
 ::GenerateData( unsigned int idx )
 {
+  otbMsgDebugMacro( << "Reading " << idx << "th image: " << this->m_ListOfFileNames[ idx ] );
+  
   ReaderType * reader 
     = static_cast<ReaderType*>( this->m_ImageFileReaderList->GetNthElement( idx ) );
 
@@ -264,6 +269,8 @@ void
 ImageSeriesFileReader< VectorImage< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
 ::GenerateData( unsigned int idx )
 {
+  otbMsgDebugMacro( << "Reading " << idx << "th image: " << this->m_ListOfFileNames[ idx ] );
+
   ReaderType * reader 
     = static_cast<ReaderType*>( this->m_ImageFileReaderList->GetNthElement( idx ) );
 

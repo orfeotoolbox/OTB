@@ -109,7 +109,7 @@ CumulantsForEdgeworth< TInput >
 /* ========== Moment estimation from initial neighborhood ============ */
 
 template < class TInput >
-int
+void
 CumulantsForEdgeworth< TInput >
 ::MakeSumAndMoments ( const TInput & input )
 {
@@ -134,10 +134,11 @@ CumulantsForEdgeworth< TInput >
 
   if ( fMu2 <= 0.0 )
   {
-    otbGenericMsgDebugMacro( << "Potential NAN detected in function MakeSumAndMoments.");
+    //otbGenericMsgDebugMacro( << "Potential NAN detected in function MakeSumAndMoments.");
     fMu3 = 0.0;
     fMu4 = 4.0;
-    return 1;
+    fDataAvailable = false;
+    //return 1;
   }
 
   double sigma = sqrt( fMu2 );
@@ -161,13 +162,13 @@ CumulantsForEdgeworth< TInput >
   fMu3 /= fSum0;
   fMu4 /= fSum0;
 
-  return 0;
+  fDataAvailable = true;
 }
 
 /* ================= Moment estimation from raw data ================= */
 
 template < class TInput >
-int
+void
 CumulantsForEdgeworth< TInput >
 ::MakeSumAndMoments ( const itk::Image< typename TInput::ImageType::PixelType, 1 > * input )
 {
@@ -202,10 +203,11 @@ CumulantsForEdgeworth< TInput >
 
   if ( fMu2 <= 0.0 )
   {
-    otbGenericMsgDebugMacro( << "Potential NAN detected in function MakeSumAndMoments.");
+    //otbGenericMsgDebugMacro( << "Potential NAN detected in function MakeSumAndMoments.");
     fMu3 = 0.0;
     fMu4 = 4.0;
-    return 1;
+    //return 1;
+    fDataAvailable = false;
   }
 
   double sigma = sqrt( fMu2 );
@@ -238,22 +240,26 @@ CumulantsForEdgeworth< TInput >
 
   otbGenericMsgDebugMacro( << "Moments: " << fMu1 << ",\t" << fMu2 << ",\t" << fMu3 << ",\t" << fMu4 );
 
-  return 0;
+  fDataAvailable = true;
+  //return 0;
 }
 
 
 /* ================= moments -> cumulants transformation ============= */
 
 template < class TInput >
-int
+void
 CumulantsForEdgeworth< TInput >
 ::MakeCumulants ()
 {
-  fMean = fMu1;
-  fVariance = fMu2;
-  fSkewness = fMu3;
-  fKurtosis = fMu4 - 3.0;
-  return 0;
+  if ( fDataAvailable )
+  {
+    fMean = fMu1;
+    fVariance = fMu2;
+    fSkewness = fMu3;
+    fKurtosis = fMu4 - 3.0;
+  }
+  //return 0;
 }
 
 } // end of namespace otb

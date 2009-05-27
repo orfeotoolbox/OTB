@@ -126,6 +126,7 @@ class OSSIMDLLEXPORT RTTItypeid
 
 		                    RTTItypeid(const RTTITypeinfo* p):  theId(p)  {}
 				    RTTItypeid(); 			 
+
 		   int 		    operator==(RTTItypeid) const;
 		   int 		    operator!=(RTTItypeid) const;
 		   const RTTITypeinfo* get_info() const    	 { return theId; }
