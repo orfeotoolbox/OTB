@@ -15,15 +15,14 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGISConnection_txx
-#define __otbGISConnection_txx
+#ifndef __otbGISConnection_cxx
+#define __otbGISConnection_cxx
 
 #include "otbGISConnection.h"
 #include <sstream>
 
 namespace otb
 {
-
 GISConnection::GISConnection()
 {
   m_Host = "localhost";
@@ -31,7 +30,7 @@ GISConnection::GISConnection()
   m_User = "postgres";
   m_Password = "";
   m_Port = "";
-  m_Options "";
+  m_Options = "";
 
   m_PostGISConnection = new BasicConnectionType();
 }
@@ -58,15 +57,14 @@ void GISConnection::ConnectToDB()
 
   delete m_PostGISConnection;
 
-  m_PostGISConnection = new = BasicConnectionType(connstring.str().c_str());
+  m_PostGISConnection = new BasicConnectionType(connstring.str().c_str());
 
 }
 
 void GISConnection::PerformTransaction(const TransactorType& theTransaction)
 {
-  m_PostGISConnection.perform( theTransaction() );
+  //m_PostGISConnection->perform( theTransaction() );
 }
-
 
 
 
@@ -77,8 +75,8 @@ void GISConnection::PrintSelf(std::ostream& os, itk::Indent indent) const
 
   os<<"DB name: " << m_DBName <<std::endl;
 
-  }
 }
+
 } // end namespace otb
 
 #endif

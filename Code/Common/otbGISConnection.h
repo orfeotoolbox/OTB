@@ -19,6 +19,7 @@
 #define __otbGISConnection_h
 
 #include "itkDataObject.h"
+#include "itkObjectFactory.h"
 #include <pqxx/pqxx>
 
 namespace otb
@@ -31,7 +32,8 @@ namespace otb
  * \sa GISConnectionFileWriter
  *
  */
-class GISConnection : public itk::DataObject
+
+class ITK_EXPORT GISConnection : public itk::DataObject
 {
 public:
   /** Standard class typedefs */
@@ -44,7 +46,8 @@ public:
 
   /** Standard macros */
   itkNewMacro(Self);
-  itkTypeMacro(GISConnection,DataObject);
+  itkTypeMacro(GISConnection,itk::DataObject);
+
 
   /** Typedefs */
   typedef pqxx::basic_connection<pqxx::connect_direct> BasicConnectionType;
@@ -73,7 +76,7 @@ public:
 
   void ConnectToDB();
 
-  void PerformTransaction(TransactorType theTransaction);
+  void PerformTransaction(const TransactorType& theTransaction);
 
 
 
@@ -99,10 +102,9 @@ private:
 
   BasicConnectionType* m_PostGISConnection;
 
-  
+
 };
 }// end namespace otb
-
 
 
 
