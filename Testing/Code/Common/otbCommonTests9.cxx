@@ -30,4 +30,5 @@ REGISTER_TEST(otbVectorDataToImageFilterNew);
 REGISTER_TEST(otbVectorDataToImageFilter);
 REGISTER_TEST(otbVectorDataToImageFilterSensorModel);
 REGISTER_TEST(otbVectorDataToImageFilterWorld);
+REGISTER_TEST(otbGISConnectionNew); 
 }

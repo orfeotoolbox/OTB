@@ -769,6 +769,17 @@ ADD_TEST(coTvVectorDataToImageFilterWorld ${COMMON_TESTS9}
 
 ENDIF(OTB_USE_MAPNIK)
 
+# ----------------  PostGIS Interface ---------------------#
+IF(OTB_USE_PQXX)
+
+ADD_TEST(coTuGISConnectionNew ${COMMON_TESTS9}
+otbGISConnectionNewNew
+)
+
+ENDIF(OTB_USE_PQXX)
+
+
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
 otbSystemTest.cxx
