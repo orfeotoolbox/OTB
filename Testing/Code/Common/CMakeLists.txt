@@ -779,6 +779,15 @@ ADD_TEST(coTuGISConnectionNew ${COMMON_TESTS10}
 otbGISConnectionNew
 )
 
+#This test need a runing PostGIS server on the localhost with trusted potgres user and an ecisting testgis base
+ADD_TEST(coTvGISConnectionConnectToDB ${COMMON_TESTS10}
+        otbGISConnectionConnectToDB
+        localhost
+	testgis
+	postgres
+)
+
+
 ADD_TEST(coTuGISTableNew ${COMMON_TESTS10}
 otbGISTableNew
 )
@@ -903,6 +912,7 @@ ENDIF(OTB_USE_MAPNIK)
 IF(OTB_USE_PQXX)
 SET(BasicCommon_SRCS10
 otbGISConnectionNew.cxx
+otbGISConnectionConnectToDB.cxx
 otbGISTableNew.cxx
 )
 ENDIF(OTB_USE_PQXX)
