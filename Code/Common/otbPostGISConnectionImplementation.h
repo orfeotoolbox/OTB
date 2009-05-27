@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGISConnection_h
-#define __otbGISConnection_h
+#ifndef __otbPostGISConnectionImplementation_h
+#define __otbPostGISConnectionImplementation_h
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
@@ -24,20 +24,20 @@
 
 namespace otb
 {
-/** \class GISConnection
+/** \class PostGISConnectionImplementation
  * \brief this class represents a connection to a geospatial database (ie. PostGIS).
  *
  * 
- * \sa GISConnectionFileReader
- * \sa GISConnectionFileWriter
+ * \sa PostGISConnectionImplementationFileReader
+ * \sa PostGISConnectionImplementationFileWriter
  *
  */
 
-class ITK_EXPORT GISConnection : public itk::DataObject
+class ITK_EXPORT PostGISConnectionImplementation : public itk::DataObject
 {
 public:
   /** Standard class typedefs */
-  typedef GISConnection Self;
+  typedef PostGISConnectionImplementation Self;
   typedef itk::DataObject Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -46,7 +46,7 @@ public:
 
   /** Standard macros */
   itkNewMacro(Self);
-  itkTypeMacro(GISConnection,itk::DataObject);
+  itkTypeMacro(PostGISConnectionImplementation,itk::DataObject);
 
 
   /** Typedefs */
@@ -82,14 +82,14 @@ public:
 
 protected:
   /** Constructor */
-  GISConnection();
+  PostGISConnectionImplementation();
   /** Destructor */
-  virtual ~GISConnection();
+  virtual ~PostGISConnectionImplementation();
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  GISConnection(const Self&); //purposely not implemented
+  PostGISConnectionImplementation(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
 
