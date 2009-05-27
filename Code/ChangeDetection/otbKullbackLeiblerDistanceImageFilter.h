@@ -58,19 +58,24 @@ public :
   {
     return this->fKurtosis;
   }
+  inline bool IsDataAvailable () const {
+    return this->fDataAvailable;
+  }
 
 protected :
 
   /** Moment estimation from intial neighborhood */
-  int  MakeSumAndMoments  ( const TInput & input );
+  void  MakeSumAndMoments  ( const TInput & input );
   /** Moment estimation from raw data */
-  int  MakeSumAndMoments  ( const itk::Image< typename TInput::ImageType::PixelType, 1 > * input );
+  void  MakeSumAndMoments  ( const itk::Image< typename TInput::ImageType::PixelType, 1 > * input );
   /** transformation moment -> cumulants (for Edgeworth) */
-  int MakeCumulants();
+  void MakeCumulants();
 
   double  fSum0, fSum1, fSum2, fSum3, fSum4;
   double  fMu1, fMu2, fMu3, fMu4;
   double  fMean, fVariance, fSkewness, fKurtosis;
+
+  bool  fDataAvailable;
 };
 
 
@@ -90,7 +95,13 @@ public :
   TOutput operator () ( const TInput1 & it1, const TInput2 & it2 )
   {
     CumulantsForEdgeworth<TInput1> cum1 ( it1 );
+    if ( !cum1.IsDataAvailable() )
+      return static_cast<TOutput>( 0. );
+
     CumulantsForEdgeworth<TInput2> cum2 ( it2 );
+    if ( !cum2.IsDataAvailable() )
+      return static_cast<TOutput>( 0. );
+
     return static_cast<TOutput> ( cum1.Divergence( cum2 )
                                   + cum2.Divergence( cum1 ) );
   }

@@ -72,6 +72,11 @@ KullbackLeiblerSupervizedDistance< TInput1, TInput2, TInputROIImage, TOutput >
 
   m_CumROI1 = new CumulantsForEdgeworth< ROIInputType1 > ( convertion1->GetOutput() );
 
+  if ( !m_CumROI1->IsDataAvailable() )
+  {
+    throw itk::ExceptionObject( __FILE__, __LINE__, "Cumulants estimated from ROI in image 1 are not usable", ITK_LOCATION );
+  }
+
   typedef ROIdataConversion< typename TInput2::ImageType, TInputROIImage >
   ROIConversionType2;
 
@@ -87,6 +92,11 @@ KullbackLeiblerSupervizedDistance< TInput1, TInput2, TInputROIImage, TOutput >
     delete m_CumROI2;
 
   m_CumROI2 = new CumulantsForEdgeworth< ROIInputType2 > ( convertion2->GetOutput() );
+
+  if ( !m_CumROI2->IsDataAvailable() )
+  {
+    throw itk::ExceptionObject( __FILE__, __LINE__, "Cumulants estimated from ROI in image 2 are not usable", ITK_LOCATION );
+  }
 }
 
 template < class TInput1, class TInput2, class TInputROIImage, class TOutput >
@@ -95,7 +105,19 @@ KullbackLeiblerSupervizedDistance< TInput1, TInput2, TInputROIImage, TOutput >
 ::operator () ( const TInput1 & it1, const TInput2 & it2 )
 {
   CumulantsForEdgeworth<TInput1> cum1 ( it1 );
+
+  if ( !cum1.IsDataAvailable() )
+  {
+    return static_cast<TOutput> ( 0. );
+  }
+
   CumulantsForEdgeworth<TInput2> cum2 ( it2 );
+
+  if ( !cum2.IsDataAvailable() )
+  {
+    return static_cast<TOutput> ( 0. );
+  }
+
   return static_cast<TOutput> ( m_CumROI1->Divergence( cum1 )
                                 + m_CumROI2->Divergence( cum2 ) );
 }

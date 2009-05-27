@@ -57,25 +57,31 @@ public :
   {
     return this->fCum[i];
   }
+  // Check data availability
+  inline bool IsDataAvailable () const {
+    return this->fDataAvailable;
+  }
 
   // debug
   int m_debug;
 
 protected :
 
-  // Estimation des moments � partir de voisinnages emboit�s
+  // Momentum Estimation from encapsulated neighborhood
   int  MakeSumAndMoments  ( const TInput & input, std::vector< itk::Array2D<int> > & mask );
-  // Estimation des moments � partir de la petite taille de fenetre
+  // momentum estimation from the smaller window
   int InitSumAndMoments ( const TInput & input, itk::Array2D<int> & mask );
   //
   int ReInitSumAndMoments ( const TInput & input, itk::Array2D<int> & mask, int level );
-  // transformation moment -> cumulants (pour Edgeworth)
+  // transformation moment -> cumulants (for Edgeworth)
   int MakeCumulants();
 
-  // Attributs internes � la classe
+  // Internal variables
   double  fSum0, fSum1, fSum2, fSum3, fSum4;
   CumulantSet fMu;
   CumulantSet fCum;
+
+  bool fDataAvailable;
 
 private :
   CumulantsForEdgeworthProfile (); // Not implemented
