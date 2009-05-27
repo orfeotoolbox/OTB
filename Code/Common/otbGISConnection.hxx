@@ -48,9 +48,32 @@ public:
 
   /** Typedefs */
   typedef pqxx::basic_connection<pqxx::connect_direct> BasicConnectionType;
+  typedef pqxx::transactor<pqxx::nontransaction> TransactorType;
 
   /** Acessors */
+  itkGetMacro(Host, std::string);
+  itkSetMacro(Host, std::string);
 
+  itkGetMacro(DBName, std::string);
+  itkSetMacro(DBName, std::string);
+
+  itkGetMacro(User, std::string);
+  itkSetMacro(User, std::string);
+
+  itkGetMacro(Password, std::string);
+  itkSetMacro(Password, std::string);
+
+  itkGetMacro(Port, std::string);
+  itkSetMacro(Port, std::string);
+
+  itkGetMacro(Options, std::string);
+  itkSetMacro(Options, std::string);
+
+  /** Using the connection */
+
+  void ConnectToDB();
+
+  void PerformTransaction(TransactorType theTransaction);
 
 
 
@@ -58,7 +81,7 @@ protected:
   /** Constructor */
   GISConnection();
   /** Destructor */
-  virtual ~GISConnection() {};
+  virtual ~GISConnection();
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -67,7 +90,14 @@ private:
   void operator=(const Self&); //purposely not implemented
 
 
-  std::string m_TableName;
+  std::string m_Host;
+  std::string m_DBName;
+  std::string m_User;
+  std::string m_Password;
+  std::string m_Port;
+  std::string m_Options;
+
+  BasicConnectionType* m_PostGISConnection;
 
   
 };
