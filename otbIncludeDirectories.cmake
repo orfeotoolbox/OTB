@@ -106,6 +106,14 @@ IF(OTB_USE_MAPNIK)
 ENDIF(OTB_USE_MAPNIK)
 
 #-----------------------------------------------------------------------------
+# Include directories from the PQXX build tree.
+IF(OTB_USE_PQXX)
+  SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+  	${PQXX_INCLUDE_DIR}
+ENDIF(OTB_USE_PQXX)
+
+
+#-----------------------------------------------------------------------------
 # Include directories from the ITK build tree.
 IF(OTB_USE_EXTERNAL_ITK)
 #        INCLUDE(${ITK_SOURCE_DIR}/Utilities/itkThirdParty.cmake)
