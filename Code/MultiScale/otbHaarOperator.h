@@ -102,6 +102,7 @@ protected:
    */
   CoefficientVector GenerateCoefficients()
   {
+    // FIXME sqrt(2)
     CoefficientVector coeff;
     // stands for z^{-1}
     coeff.push_back(0.5);
