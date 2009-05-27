@@ -779,6 +779,10 @@ ADD_TEST(coTuGISConnectionNew ${COMMON_TESTS10}
 otbGISConnectionNew
 )
 
+ADD_TEST(coTuGISTableNew ${COMMON_TESTS10}
+otbGISTableNew
+)
+
 ENDIF(OTB_USE_PQXX)
 
 
@@ -899,6 +903,7 @@ ENDIF(OTB_USE_MAPNIK)
 IF(OTB_USE_PQXX)
 SET(BasicCommon_SRCS10
 otbGISConnectionNew.cxx
+otbGISTableNew.cxx
 )
 ENDIF(OTB_USE_PQXX)
 

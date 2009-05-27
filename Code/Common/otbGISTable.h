@@ -19,7 +19,7 @@
 #define __otbGISTable_h
 
 
-#include "otbGISConnection.hxx"
+#include "otbGISConnection.h"
 
 namespace otb
 {
@@ -31,7 +31,7 @@ namespace otb
  * \sa GISTableFileWriter
  *
  */
-template <unsigned int VDimension =2>
+template <unsigned int SpatialDimension =2>
 class GISTable
       : public itk::DataObject
 {
@@ -47,10 +47,11 @@ public:
   /** Standard macros */
   itkNewMacro(Self);
   itkTypeMacro(GISTable,DataObject);
-  itkStaticConstMacro(Dimension, unsigned int, VDimension);
+  itkStaticConstMacro(Dimension, unsigned int, SpatialDimension);
 
   /** Typedefs */
   typedef otb::GISConnection ConnectionType;
+  typedef ConnectionType::Pointer ConnectionPointerType;
 
   /** Acessors */
 
@@ -62,9 +63,6 @@ public:
 
 
   
-  /** Clear the table contents */
-  virtual bool Clear();
-
 
 protected:
   /** Constructor */
@@ -80,7 +78,7 @@ private:
 
 
   std::string m_TableName;
-  ConnectionType m_Connection;
+  ConnectionPointerType m_Connection;
 
   
 };

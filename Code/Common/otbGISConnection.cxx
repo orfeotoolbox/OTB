@@ -32,12 +32,12 @@ GISConnection::GISConnection()
   m_Port = "";
   m_Options = "";
 
-  m_PostGISConnection = new BasicConnectionType();
+  
 }
 
 GISConnection::~GISConnection()
 {
-  delete m_PostGISConnection;
+ 
 }
 
 void GISConnection::ConnectToDB()
