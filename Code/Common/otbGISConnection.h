@@ -18,7 +18,7 @@
 #ifndef __otbGISConnection_h
 #define __otbGISConnection_h
 
-
+#include "itkDataObject.h"
 #include <pqxx/pqxx>
 
 namespace otb
