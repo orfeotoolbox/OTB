@@ -6,12 +6,22 @@ IF( NOT OTB_USE_MAPNIK )
     LIST(REMOVE_ITEM OTBCommon_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/otbVectorDataStyle.cxx" )
 ENDIF( NOT OTB_USE_MAPNIK )
 
+IF( NOT OTB_USE_PQXX )
+    LIST(REMOVE_ITEM OTBCommon_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/otbGISConnection.cxx" )
+ENDIF( NOT OTB_USE_PQXX )
+
+
 ADD_LIBRARY(OTBCommon ${OTBCommon_SRCS})
 TARGET_LINK_LIBRARIES (OTBCommon ITKAlgorithms ITKStatistics ITKCommon)
 IF (OTB_USE_MAPNIK)
 #TODO this line should be refined when we will like to have this capability with windows
     TARGET_LINK_LIBRARIES(OTBCommon ${MAPNIK_LIBRARY}/libmapnik.so)
 ENDIF(OTB_USE_MAPNIK)
+IF (OTB_USE_PQXX)
+#TODO this line should be refined when we will like to have this capability with windows
+    TARGET_LINK_LIBRARIES(OTBCommon pq pqxx)
+ENDIF(OTB_USE_PQXX)
+
 
 IF(OTB_LIBRARY_PROPERTIES)
   SET_TARGET_PROPERTIES(OTBCommon PROPERTIES ${OTB_LIBRARY_PROPERTIES})

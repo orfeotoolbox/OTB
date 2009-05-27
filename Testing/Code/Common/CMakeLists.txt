@@ -28,6 +28,9 @@ SET(COMMON_TESTS8 ${CXX_TEST_PATH}/otbCommonTests8)
 IF(OTB_USE_MAPNIK)
   SET(COMMON_TESTS9 ${CXX_TEST_PATH}/otbCommonTests9)
 ENDIF(OTB_USE_MAPNIK)
+IF(OTB_USE_PQXX)
+  SET(COMMON_TESTS10 ${CXX_TEST_PATH}/otbCommonTests10)
+ENDIF(OTB_USE_PQXX)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -769,6 +772,30 @@ ADD_TEST(coTvVectorDataToImageFilterWorld ${COMMON_TESTS9}
 
 ENDIF(OTB_USE_MAPNIK)
 
+# ----------------  PostGIS Interface ---------------------#
+IF(OTB_USE_PQXX)
+
+ADD_TEST(coTuGISConnectionNew ${COMMON_TESTS10}
+otbGISConnectionNew
+)
+
+#This test need a runing PostGIS server on the localhost with trusted potgres user and an ecisting testgis base
+ADD_TEST(coTvGISConnectionConnectToDB ${COMMON_TESTS10}
+        otbGISConnectionConnectToDB
+        localhost
+	testgis
+	postgres
+)
+
+
+ADD_TEST(coTuGISTableNew ${COMMON_TESTS10}
+otbGISTableNew
+)
+
+ENDIF(OTB_USE_PQXX)
+
+
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
 otbSystemTest.cxx
@@ -882,6 +909,14 @@ otbVectorDataToImageFilterWorld.cxx
 )
 ENDIF(OTB_USE_MAPNIK)
 
+IF(OTB_USE_PQXX)
+SET(BasicCommon_SRCS10
+otbGISConnectionNew.cxx
+otbGISConnectionConnectToDB.cxx
+otbGISTableNew.cxx
+)
+ENDIF(OTB_USE_PQXX)
+
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
@@ -916,5 +951,11 @@ ADD_EXECUTABLE(otbCommonTests9 otbCommonTests9.cxx ${BasicCommon_SRCS9})
 #TODO this line should be refined when we will like to have this capability with windows
 TARGET_LINK_LIBRARIES(otbCommonTests9 OTBIO ${MAPNIK_LIBRARY}/libmapnik.so)
 ENDIF(OTB_USE_MAPNIK)
+
+IF(OTB_USE_PQXX)
+ADD_EXECUTABLE(otbCommonTests10 otbCommonTests10.cxx ${BasicCommon_SRCS10})
+#TODO this line should be refined when we will like to have this capability with windows
+TARGET_LINK_LIBRARIES(otbCommonTests10 OTBIO pq pqxx)
+ENDIF(OTB_USE_PQXX)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
