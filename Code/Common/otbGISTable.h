@@ -19,7 +19,7 @@
 #define __otbGISTable_h
 
 
-#include "otbGISConnection.h"
+#include "otbGISConnectionBase.h"
 
 namespace otb
 {
