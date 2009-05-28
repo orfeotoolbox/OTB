@@ -18,8 +18,8 @@
 #ifndef __otbGISTable_h
 #define __otbGISTable_h
 
-
-#include "otbGISConnectionBase.h"
+#include "itkDataObject.h"
+#include "itkObjectFactory.h"
 
 namespace otb
 {
@@ -31,7 +31,7 @@ namespace otb
  * \sa GISTableFileWriter
  *
  */
-template <unsigned int SpatialDimension =2>
+template <class TConnectionImplementation, unsigned int SpatialDimension =2>
 class GISTable
       : public itk::DataObject
 {
@@ -50,8 +50,8 @@ public:
   itkStaticConstMacro(Dimension, unsigned int, SpatialDimension);
 
   /** Typedefs */
-  typedef otb::GISConnection ConnectionType;
-  typedef ConnectionType::Pointer ConnectionPointerType;
+  typedef TConnectionImplementation ConnectionType;
+  typedef typename ConnectionType::Pointer ConnectionPointerType;
 
   /** Acessors */
 
