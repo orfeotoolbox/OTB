@@ -138,7 +138,7 @@ CumulantsForEdgeworth< TInput >
     fMu3 = 0.0;
     fMu4 = 4.0;
     fDataAvailable = false;
-    //return 1;
+    return ;
   }
 
   double sigma = sqrt( fMu2 );
@@ -206,8 +206,10 @@ CumulantsForEdgeworth< TInput >
     //otbGenericMsgDebugMacro( << "Potential NAN detected in function MakeSumAndMoments.");
     fMu3 = 0.0;
     fMu4 = 4.0;
-    //return 1;
+    
     fDataAvailable = false;
+
+    return;
   }
 
   double sigma = sqrt( fMu2 );
