@@ -15,36 +15,32 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkGISTableFunction_h
-#define __itkGISTableFunction_h
+#ifndef __itkTransactorGISTableFunction_h
+#define __itkTransactorGISTableFunction_h
 
-#include "itkFunctionBase.h"
-#include "otbGISTable.h"
+#include "otbGISTableFunction.h"
 
 namespace otb
 {
 
 
-/** \class GISTableFunction
- * \brief Evaluates a const transaction on a GISTable
+/** \class TransactorGISTableFunction
+ * \brief Evaluates a const transaction on a GISTable using a transactor
  *
- * GISTableFunction is a baseclass for all objects that evaluate
- * a const transaction on a GISTable.
+ * TransactorGISTableFunction is a baseclass for all objects that evaluate
+ * a const transaction on a GISTable using an external transactor.
  *
- * The input table is set via method SetInputTable().
  * 
  * 
- * \sa GISTable
- * \sa GISConnection
  *
- * \ingroup GISTableFunctions
+ * \ingroup TransactorGISTableFunctions
  */
 template <
 class TInputTable,
-class TOutput
+  class TOutput, class TTransactor
 >
-class ITK_EXPORT GISTableFunction :
-    public FunctionBase< TInputTable,
+class ITK_EXPORT TransactorGISTableFunction :
+    public GISTableFunction< TInputTable,
                        TOutput >
 {
 public:
@@ -53,18 +49,17 @@ public:
                       TInputTable::SpatialDimension);
 
   /** Standard class typedefs. */
-  typedef GISTableFunction                                         Self;
-  typedef FunctionBase<
-    TInputTable,
-    TOutput >                                                   Superclass;
+  typedef TransactorGISTableFunction                                  Self;
+  typedef GISTableFunction< TInputTable, TOutput >              Superclass;
   typedef SmartPointer<Self>                                    Pointer;
   typedef SmartPointer<const Self>                              ConstPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GISTableFunction, FunctionBase);
+  itkTypeMacro(TransactorGISTableFunction, GISTableFunction);
 
   /** InputTableType typedef support. */
   typedef TInputTable InputTableType;
+  typedef TTransactor TransactorType;
 
   /** Connection typedef support */
   typedef typename InputTableType::ConnectionType ConnectionType;
@@ -75,28 +70,22 @@ public:
   /** OutputType typedef support. */
   typedef TOutput OutputType;
 
-  /** Set the input table. */
-  virtual void SetInputTable( const InputTableType* ptr );
-
-  /** Get the input Table. */
-  const InputTableType * GetInputTable() const
-    { return m_Table.GetPointer(); }
-
-  /** Evaluate the function.
-   * Subclasses must provide this method. */
-  virtual TOutput Evaluate( ) const = 0;
+  /** Evaluate the function using the transactor. */
+  virtual TOutput Evaluate( ){
+    m_Table->GetConnection()->PerformTransaction( TransactorType() );
+    };
 
 
 protected:
-  GISTableFunction();
-  ~GISTableFunction() {}
+  TransactorGISTableFunction();
+  ~TransactorGISTableFunction() {}
   void PrintSelf(std::ostream& os, Indent indent) const;
 
-  /** Const pointer to the input table. */
+  /** Const pointer to the input Table. */
   InputTableConstPointer  m_Table;
 
 private:
-  GISTableFunction(const Self&); //purposely not implemented
+  TransactorGISTableFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
 };
@@ -104,8 +93,5 @@ private:
 } // end namespace otb
 
 
-#if OTB_MANUAL_INSTANTIATION
-# include "itkGISTableFunction.txx"
-#endif
 
 #endif
