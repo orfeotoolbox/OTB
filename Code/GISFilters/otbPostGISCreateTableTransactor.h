@@ -44,23 +44,26 @@ public:
 
   typedef pqxx::result ResultType;
 
-  CreateTable() : pqxx::transactor<pqxx::nontransaction>("CreateTable") {}
+  PostGISCreateTableTransactor(){};/* :
+    pqxx::transactor<pqxx::nontransaction>("CreateTable") {}*/
 
   void operator()(argument_type &T)
   {
-    std::sstream createCommand;
 
-    createCommand = "CREATE TABLE "<< m_TableName
-				   <<" (id serial PRIMARY KEY,genre text);"
+/*    std::stringstream createCommand;
+
+    createCommand << "CREATE TABLE "<< m_TableName
+				   <<" (id serial PRIMARY KEY,genre text);";
       
     m_Result = T.exec(createCommand.str());
 
-    std::sstream addGeometryCommand;
+    std::stringstream addGeometryCommand;
 
-    addGeometryCommand = "SELECT AddGeometryColumn( '"<< m_TableName <<
-      "', 'geom', "<< m_SRID <<", 'GEOMETRY',"<< m_Dimension <<" );"
-    m_Result = T.exec();
+    addGeometryCommand << "SELECT AddGeometryColumn( '"<< m_TableName <<
+      "', 'geom', "<< m_SRID <<", 'GEOMETRY',"<< m_Dimension <<" );";
 
+    m_Result = T.exec(addGeometryCommand.str());
+*/
     
   }
 
@@ -70,16 +73,17 @@ public:
 
   }
 
-  itkGetMacro(TableName, std::string);
+/*  itkGetMacro(TableName, std::string);
   itkSetMacro(TableName, std::string);
 
   itkGetMacro(SRID, int);
   itkSetMacro(SRID, int);
 
-  itkGetMacro(Dimension, unisgned short);
-  itkSetMacro(Dimension, unisgned short);
+  itkGetMacro(Dimension, unsigned short);
+  itkSetMacro(Dimension, unsigned short);
 
   itkGetMacro(Result, ResultType);
+  */
   
 protected:
   ResultType m_Result;
