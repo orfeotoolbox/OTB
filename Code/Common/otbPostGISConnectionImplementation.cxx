@@ -15,15 +15,15 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGISConnection_cxx
-#define __otbGISConnection_cxx
+#ifndef __otbPostGISConnectionImplementation_cxx
+#define __otbPostGISConnectionImplementation_cxx
 
-#include "otbGISConnection.h"
+#include "otbPostGISConnectionImplementation.h"
 #include <sstream>
 
 namespace otb
 {
-GISConnection::GISConnection()
+PostGISConnectionImplementation::PostGISConnectionImplementation()
 {
   m_Host = "localhost";
   m_DBName = "";
@@ -35,12 +35,12 @@ GISConnection::GISConnection()
   
 }
 
-GISConnection::~GISConnection()
+PostGISConnectionImplementation::~PostGISConnectionImplementation()
 {
  
 }
 
-void GISConnection::ConnectToDB()
+void PostGISConnectionImplementation::ConnectToDB()
 {
   std::stringstream connstring;
 
@@ -55,20 +55,21 @@ void GISConnection::ConnectToDB()
   if(m_Options!="")
     connstring << " options=" << m_Options;
 
-  delete m_PostGISConnection;
+  if(! m_PostGISConnection )
+    delete m_PostGISConnection;
 
   m_PostGISConnection = new BasicConnectionType(connstring.str().c_str());
 
 }
 
-void GISConnection::PerformTransaction(const TransactorType& theTransaction)
+void PostGISConnectionImplementation::PerformTransaction(const TransactorType& theTransaction)
 {
   //m_PostGISConnection->perform( theTransaction() );
 }
 
 
 
-void GISConnection::PrintSelf(std::ostream& os, itk::Indent indent) const
+void PostGISConnectionImplementation::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
   os<<std::endl;

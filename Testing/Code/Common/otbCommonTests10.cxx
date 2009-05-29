@@ -26,7 +26,7 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbGISConnectionNew);
-REGISTER_TEST(otbGISConnectionConnectToDB); 
+REGISTER_TEST(otbPostGISConnectionImplementationNew);
+REGISTER_TEST(otbPostGISConnectionImplementationConnectToDB); 
 REGISTER_TEST(otbGISTableNew); 
 }

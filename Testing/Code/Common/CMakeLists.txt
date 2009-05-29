@@ -775,13 +775,13 @@ ENDIF(OTB_USE_MAPNIK)
 # ----------------  PostGIS Interface ---------------------#
 IF(OTB_USE_PQXX)
 
-ADD_TEST(coTuGISConnectionNew ${COMMON_TESTS10}
-otbGISConnectionNew
+ADD_TEST(coTuPostGISConnectionImplementationNew ${COMMON_TESTS10}
+otbPostGISConnectionImplementationNew
 )
 
 #This test need a runing PostGIS server on the localhost with trusted potgres user and an ecisting testgis base
-ADD_TEST(coTvGISConnectionConnectToDB ${COMMON_TESTS10}
-        otbGISConnectionConnectToDB
+ADD_TEST(coTvPostGISConnectionImplementationConnectToDB ${COMMON_TESTS10}
+        otbPostGISConnectionImplementationConnectToDB
         localhost
 	testgis
 	postgres
@@ -911,8 +911,8 @@ ENDIF(OTB_USE_MAPNIK)
 
 IF(OTB_USE_PQXX)
 SET(BasicCommon_SRCS10
-otbGISConnectionNew.cxx
-otbGISConnectionConnectToDB.cxx
+otbPostGISConnectionImplementationNew.cxx
+otbPostGISConnectionImplementationConnectToDB.cxx
 otbGISTableNew.cxx
 )
 ENDIF(OTB_USE_PQXX)

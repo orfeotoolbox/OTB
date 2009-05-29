@@ -18,27 +18,17 @@
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
 
-#include "otbGISConnection.h"
+#include "otbGISTable.h"
+#include "otbPostGISConnectionImplementation.h"
 
-int otbGISConnectionConnectToDB(int argc, char * argv[])
+int otbGISTableNew(int argc, char * argv[])
 {
+  typedef otb::PostGISConnectionImplementation GISConnectionType;
 
-  const std::string hostName = argv[1];
-  const std::string dbName = argv[2];
-  const std::string userName = argv[3];
-  
-  typedef otb::GISConnection GISConnectionType;
+  typedef otb::GISTable<GISConnectionType, 2> GISTableType;
 
   //Instantiation
-  GISConnectionType::Pointer connection = GISConnectionType::New();
-
-  connection->SetHost( hostName );
-  connection->SetDBName( dbName );
-  connection->SetUser( userName );
-
-  connection->ConnectToDB();
-
-  
+  GISTableType::Pointer data = GISTableType::New();
 
   return EXIT_SUCCESS;
 }
