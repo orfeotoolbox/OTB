@@ -374,7 +374,9 @@ ImageMetadataInterface::VariableLengthVectorType
   // XS3, XS2. XS1, SWIR in the tif file.
   if(IsSpot(dict))
   {
-    assert(outputValues.size() == 4);//Valid for Spot 4 and 5
+    //assert(outputValues.size() == 4);//Valid for Spot 4 and 5
+    if(outputValues.size() != 4)
+      itkGenericExceptionMacro(<<"Invalid Solar Irradiance");
     outputValuesVariableLengthVector[0]=outputValues[2];
     outputValuesVariableLengthVector[1]=outputValues[1];
     outputValuesVariableLengthVector[2]=outputValues[0];
@@ -442,8 +444,10 @@ int ImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) const
   ossimString keywordString = kwl.find(key.c_str());
   ossimString separatorList = "-T";
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
-
-  assert(keywordStrings.size() > 2);
+ 
+  //assert(keywordStrings.size() > 2);
+  if(keywordStrings.size() <= 2)
+    itkExceptionMacro(<<"Invalid Day");
 
   return keywordStrings[2].toInt();
 }
@@ -466,7 +470,9 @@ int ImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) cons
   ossimString separatorList = "-T";
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
 
-  assert(keywordStrings.size() > 2);
+  //assert(keywordStrings.size() > 2);
+  if(keywordStrings.size() <= 2)
+    itkExceptionMacro(<<"Invalid Month");
 
   return keywordStrings[1].toInt();
 }
@@ -488,7 +494,9 @@ int ImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) const
   ossimString separatorList = "-T";
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
 
-  assert(keywordStrings.size() > 2);
+  //assert(keywordStrings.size() > 2);
+  if(  keywordStrings.size() <= 2 )
+    itkExceptionMacro("Invalid Year");
 
   return keywordStrings[0].toInt();
 }
@@ -599,7 +607,10 @@ ImageMetadataInterface::VariableLengthVectorType
   //In the case of SPOT, the bands are in a different order:
   // XS3, XS2. XS1, SWIR in the tif file.
 
-  assert(outputValues.size() == 4);//Valid for Spot 4 and 5
+  //assert(outputValues.size() == 4);//Valid for Spot 4 and 5
+   if(  outputValues.size() != 4 )
+     itkExceptionMacro("Invalid Physical Bias");
+
   outputValuesVariableLengthVector[0]=outputValues[2];
   outputValuesVariableLengthVector[1]=outputValues[1];
   outputValuesVariableLengthVector[2]=outputValues[0];
@@ -642,7 +653,9 @@ ImageMetadataInterface::VariableLengthVectorType
   //In the case of SPOT, the bands are in a different order:
   // XS3, XS2. XS1, SWIR in the tif file.
 
-  assert(outputValues.size() == 4);//Valid for Spot 4 and 5
+  //assert(outputValues.size() == 4);//Valid for Spot 4 and 5
+  if(  outputValues.size() != 4 )
+    itkExceptionMacro("Invalid Physical Gain");
   outputValuesVariableLengthVector[0]=outputValues[2];
   outputValuesVariableLengthVector[1]=outputValues[1];
   outputValuesVariableLengthVector[2]=outputValues[0];
