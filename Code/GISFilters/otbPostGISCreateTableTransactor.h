@@ -48,8 +48,18 @@ public:
 
   void operator()(argument_type &T)
   {
-    m_Result = T.exec("CREATE TABLE testtable (id serial PRIMARY KEY,genre text);");
-    m_Result = T.exec("SELECT AddGeometryColumn( 'testtable', 'geom', -1, 'GEOMETRY', 2 );");
+    std::sstream createCommand;
+
+    createCommand = "CREATE TABLE "<< m_TableName
+				   <<" (id serial PRIMARY KEY,genre text);"
+      
+    m_Result = T.exec(createCommand.str());
+
+    std::sstream addGeometryCommand;
+
+    addGeometryCommand = "SELECT AddGeometryColumn( '"<< m_TableName <<
+      "', 'geom', "<< m_SRID <<", 'GEOMETRY',"<< m_Dimension <<" );"
+    m_Result = T.exec();
 
     
   }
