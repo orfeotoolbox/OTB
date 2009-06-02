@@ -19,7 +19,7 @@
 #define __itkPostGISCreateTableTransactor_h
 
 #include <pqxx/pqxx>
-#include <sstream>
+#include <string>
 
 
 
@@ -37,7 +37,7 @@ namespace otb
  * \ingroup GISTransactors
  */
 
-class ITK_EXPORT PostGISCreateTableTransactor :
+class PostGISCreateTableTransactor :
      public pqxx::transactor<pqxx::nontransaction>
 {
   
@@ -47,72 +47,32 @@ public:
 
   typedef pqxx::transactor<pqxx::nontransaction> Superclass;
 
-  PostGISCreateTableTransactor() : Superclass("CreateTable") {}
+  PostGISCreateTableTransactor();
 
-  void operator()(argument_type &T)
-  {
+  PostGISCreateTableTransactor(const PostGISCreateTableTransactor& pgt);
 
-    std::stringstream createCommand;
+  PostGISCreateTableTransactor& operator=(const PostGISCreateTableTransactor& pgt) throw();
+  
+  void operator()(pqxx::nontransaction &T);
+  
+  void on_commit();
 
-    createCommand << "CREATE TABLE "<< m_TableName
-				   <<" (id serial PRIMARY KEY,genre text);";
+  std::string GetTableName() const;
 
-    otbGenericMsgDebugMacro(<<"Create Command " << createCommand.str());
-    m_Result = T.exec(createCommand.str());
+  void SetTableName(const std::string& aName);
 
-    std::stringstream addGeometryCommand;
+  int GetSRID() const;
 
-    addGeometryCommand << "SELECT AddGeometryColumn( '"<< m_TableName <<
-      "', 'geom', "<< m_SRID <<", 'GEOMETRY',"<< m_Dimension <<" );";
+  void SetSRID(int aSRID);
 
-    m_Result = T.exec(addGeometryCommand.str());
+  unsigned short GetDimension() const;
 
-    
-  }
+  void SetDimension(unsigned short aDim);
 
-  void on_commit()
-  {
-      std::cout << "\t Table is created \t"  << std::endl;
-
-  }
-
-  std::string GetTableName() const
-  {
-    return m_TableName;
-  }
-
-  void SetTableName(const std::string& aName)
-  {
-    m_TableName = aName;
-  }
-
-  int GetSRID() const
-  {
-    return m_SRID;
-  }
-
-  void SetSRID(int aSRID)
-  {
-    m_SRID = aSRID;
-  }
-
-  unsigned short GetDimension() const
-  {
-    return m_Dimension;
-  }
-
-  void SetDimension(unsigned short aDim)
-  {
-    m_Dimension = aDim;
-  }
-
-  ResultType GetResult() const
-  {
-    return m_Result;
-  }
-
+  ResultType GetResult() const;
     
 protected:
+  
   ResultType m_Result;
   std::string m_TableName;
   int m_SRID;
