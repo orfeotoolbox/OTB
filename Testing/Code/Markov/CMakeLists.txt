@@ -13,19 +13,19 @@ SET(EPSILON_10e6 0.000001)
 SET(MARKOV_TESTS1 ${CXX_TEST_PATH}/otbMarkovTests1)
 SET(MARKOV_TESTS2 ${CXX_TEST_PATH}/otbMarkovTests2)
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbMARKOV_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # -------            otb::MarkovRandomFieldFilter   ------------------------------
 
-ADD_TEST(maTuMarkovRandomFieldFilterNew ${MARKOV_TESTS1}  
+ADD_TEST(maTuMarkovRandomFieldFilterNew ${MARKOV_TESTS1}
         otbMarkovRandomFieldFilterNew )
-      
-ADD_TEST(maTvMarkovRandomFieldFilter ${MARKOV_TESTS1}  
+
+ADD_TEST(maTvMarkovRandomFieldFilter ${MARKOV_TESTS1}
   --compare-image ${TOL}  ${BASELINE}/maTvMarkovRandomField.png
                   	  ${TEMP}/maTvMarkovRandomField.png
         otbMarkovRandomFieldFilter
-            ${INPUTDATA}/QB_Suburb.png	
+            ${INPUTDATA}/QB_Suburb.png
 	    ${TEMP}/maTvMarkovRandomField.png
 	    1.0
 	    30
@@ -34,117 +34,117 @@ ADD_TEST(maTvMarkovRandomFieldFilter ${MARKOV_TESTS1}
 
 
 # -------            otb::MRFEnergyEdgeFidelity       ------------------------------
-ADD_TEST(maTuMRFEnergyEdgeFidelityNew ${MARKOV_TESTS1}  
+ADD_TEST(maTuMRFEnergyEdgeFidelityNew ${MARKOV_TESTS1}
         otbMRFEnergyEdgeFidelityNew )
 
-ADD_TEST(maTvMRFEnergyEdgeFidelity ${MARKOV_TESTS1} 
+ADD_TEST(maTvMRFEnergyEdgeFidelity ${MARKOV_TESTS1}
 --compare-ascii ${TOL} ${BASELINE_FILES}/maTvMRFEnergyEdgeFidelity.txt
                          ${TEMP}/maTvMRFEnergyEdgeFidelity.txt
      otbMRFEnergyEdgeFidelity
-	${TEMP}/maTvMRFEnergyEdgeFidelity.txt 
+	${TEMP}/maTvMRFEnergyEdgeFidelity.txt
 	)
 
 
 # -------            otb::MRFEnergyGaussianClassification   ------------------------------
-ADD_TEST(maTuMRFEnergyGaussianClassificationNew ${MARKOV_TESTS1}  
+ADD_TEST(maTuMRFEnergyGaussianClassificationNew ${MARKOV_TESTS1}
         otbMRFEnergyGaussianClassificationNew )
 
-ADD_TEST(maTvMRFEnergyGaussianClassification ${MARKOV_TESTS1} 
+ADD_TEST(maTvMRFEnergyGaussianClassification ${MARKOV_TESTS1}
 --compare-ascii ${TOL} ${BASELINE_FILES}/maTvMRFEnergyGaussianClassification.txt
                        ${TEMP}/maTvMRFEnergyGaussianClassification.txt
      otbMRFEnergyGaussianClassification
-	${TEMP}/maTvMRFEnergyGaussianClassification.txt 
+	${TEMP}/maTvMRFEnergyGaussianClassification.txt
 	)
 
 
 # -------            otb::MRFEnergyPotts   ------------------------------
-ADD_TEST(maTuMRFEnergyPottsNew ${MARKOV_TESTS1}  
+ADD_TEST(maTuMRFEnergyPottsNew ${MARKOV_TESTS1}
         otbMRFEnergyPottsNew )
 
-ADD_TEST(maTvMRFEnergyPotts ${MARKOV_TESTS1}  
-  --compare-ascii ${TOL}   
+ADD_TEST(maTvMRFEnergyPotts ${MARKOV_TESTS1}
+  --compare-ascii ${TOL}
                   ${BASELINE_FILES}/maTvMRFEnergyPotts.txt
                   ${TEMP}/maTvMRFEnergyPotts.txt
      otbMRFEnergyPotts
-	${TEMP}/maTvMRFEnergyPotts.txt 
+	${TEMP}/maTvMRFEnergyPotts.txt
 	)
 
 # -------            otb::MRFEnergyGaussian   ------------------------------
-ADD_TEST(maTuMRFEnergyGaussianNew ${MARKOV_TESTS1}  
+ADD_TEST(maTuMRFEnergyGaussianNew ${MARKOV_TESTS1}
         otbMRFEnergyGaussianNew )
 
-ADD_TEST(maTvMRFEnergyGaussian ${MARKOV_TESTS1}  
+ADD_TEST(maTvMRFEnergyGaussian ${MARKOV_TESTS1}
      otbMRFEnergyGaussian
 	)
 
 
 
 # -------            otbMRFOptimizerICM   ------------------------------
-ADD_TEST(maTuMRFOptimizerICMNew ${MARKOV_TESTS1}  
+ADD_TEST(maTuMRFOptimizerICMNew ${MARKOV_TESTS1}
         otbMRFOptimizerICMNew )
 
-ADD_TEST(maTuMRFOptimizerICM ${MARKOV_TESTS1}  
+ADD_TEST(maTuMRFOptimizerICM ${MARKOV_TESTS1}
      otbMRFOptimizerICM
-	${TEMP}/maTuMRFOptimizerICM.txt 
+	${TEMP}/maTuMRFOptimizerICM.txt
 	)
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbMARKOV_TESTS2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -------            otbMRFOptimizerMetropolis   ------------------------------
-ADD_TEST(maTuMRFOptimizerMetropolisNew ${MARKOV_TESTS2}  
+ADD_TEST(maTuMRFOptimizerMetropolisNew ${MARKOV_TESTS2}
         otbMRFOptimizerMetropolisNew )
 
 ADD_TEST(maTvMRFOptimizerMetropolis ${MARKOV_TESTS2}
-  --compare-ascii ${TOL}   
+  --compare-ascii ${TOL}
                   ${BASELINE_FILES}/maTvMRFOptimizerMetropolis.txt
                   ${TEMP}/maTvMRFOptimizerMetropolis.txt
      otbMRFOptimizerMetropolis
-	${TEMP}/maTvMRFOptimizerMetropolis.txt 
+	${TEMP}/maTvMRFOptimizerMetropolis.txt
 	)
 
 
-# -------            otbMRFSamplerMAP     ------------------------------  
-ADD_TEST(maTuMRFSamplerMAPNew ${MARKOV_TESTS2}  
+# -------            otbMRFSamplerMAP     ------------------------------
+ADD_TEST(maTuMRFSamplerMAPNew ${MARKOV_TESTS2}
         otbMRFSamplerMAPNew )
 ADD_TEST(maTvMRFSamplerMAP ${MARKOV_TESTS2}
-  --compare-ascii ${TOL}   
+  --compare-ascii ${TOL}
                   ${BASELINE_FILES}/maTvMRFSamplerMAP.txt
                   ${TEMP}/maTvMRFSamplerMAP.txt
      otbMRFSamplerMAP
 	${INPUTDATA}/poupees_sub_c1.png
 	${INPUTDATA}/poupees_sub_c2.png
-	${TEMP}/maTvMRFSamplerMAP.txt 
+	${TEMP}/maTvMRFSamplerMAP.txt
 	)
 
 
 # -------            otbMRFSamplerRandom    ------------------------------
- ADD_TEST(maTuMRFSamplerRandomNew ${MARKOV_TESTS2}  
+ ADD_TEST(maTuMRFSamplerRandomNew ${MARKOV_TESTS2}
         otbMRFSamplerRandomNew )
 
 ADD_TEST(maTvMRFSamplerRandom ${MARKOV_TESTS2}
-  --compare-ascii ${TOL}   
+  --compare-ascii ${TOL}
                   ${BASELINE_FILES}/maTvMRFSamplerRandom.txt
                   ${TEMP}/maTvMRFSamplerRandom.txt
      otbMRFSamplerRandom
 	${INPUTDATA}/poupees_sub_c1.png
 	${INPUTDATA}/poupees_sub_c2.png
-	${TEMP}/maTvMRFSamplerRandom.txt 
+	${TEMP}/maTvMRFSamplerRandom.txt
 	)
 
 # -------            otbMRFSamplerRandomMAP    ------------------------------
- ADD_TEST(maTuMRFSamplerRandomMAPNew ${MARKOV_TESTS2}  
+ ADD_TEST(maTuMRFSamplerRandomMAPNew ${MARKOV_TESTS2}
         otbMRFSamplerRandomMAPNew )
 
 ADD_TEST(maTvMRFSamplerRandomMAP ${MARKOV_TESTS2}
-  --compare-ascii ${TOL}   
+  --compare-ascii ${TOL}
                   ${BASELINE_FILES}/maTvMRFSamplerRandomMAP.txt
                   ${TEMP}/maTvMRFSamplerRandomMAP.txt
      otbMRFSamplerRandomMAP
 	${INPUTDATA}/poupees_sub_c1.png
 	${INPUTDATA}/poupees_sub_c2.png
-	${TEMP}/maTvMRFSamplerRandomMAP.txt 
+	${TEMP}/maTvMRFSamplerRandomMAP.txt
 	)
 
 
@@ -178,9 +178,9 @@ otbMRFSamplerRandomMAP.cxx
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbMarkovTests1 otbMarkovTests1.cxx ${Markov_SRCS1})
-TARGET_LINK_LIBRARIES(otbMarkovTests1 OTBMarkov OTBIO)
+TARGET_LINK_LIBRARIES(otbMarkovTests1 OTBMarkov OTBIO OTBTesting)
 
 ADD_EXECUTABLE(otbMarkovTests2 otbMarkovTests2.cxx ${Markov_SRCS2})
-TARGET_LINK_LIBRARIES(otbMarkovTests2 OTBMarkov OTBIO)
+TARGET_LINK_LIBRARIES(otbMarkovTests2 OTBMarkov OTBIO OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

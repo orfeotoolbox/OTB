@@ -505,6 +505,6 @@ ADD_TEST(DerivativeImageFilterTest ${EXE_TESTS}
 )
 
 ADD_EXECUTABLE(otbFilteringExamplesTests otbFilteringExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbFilteringExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbFilteringExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -332,31 +332,31 @@ ADD_TEST(CloudDetectionExampleTest ${EXE_TESTS2}
         CloudDetectionExampleTest
         ${INPUTDATA}/CloudsOnReunion.tif
         ${TEMP}/CloudDetectionOutput.tif
-	${TEMP}/PrettyCloudDetectionInput.png	
-	${TEMP}/PrettyCloudDetectionOutput.png	
+	${TEMP}/PrettyCloudDetectionInput.png
+	${TEMP}/PrettyCloudDetectionOutput.png
         553 467 734 581 0.4 0.6 1.0
 )
 
 # ------- Right Angle Detection test----------
 
 ADD_TEST(RightAngleDetectionExample  ${EXE_TESTS2}
-        --compare-image ${TOL}	     
+        --compare-image ${TOL}
         ${BASELINE}/RightAngleOutput.png
         ${TEMP}/PrettyRightAngleOutput.png
-       RightAngleDetectionExample 
+       RightAngleDetectionExample
 	${INPUTDATA}/qb_RoadExtract2.tif
 	${TEMP}/RighAngleOutput.tif
-	${TEMP}/PrettyRightAngleInput.png	
+	${TEMP}/PrettyRightAngleInput.png
 	${TEMP}/PrettyRightAngleOutput.png
 	0.1
 	35.
 )
 
 ADD_EXECUTABLE(otbFeatureExtractionExamplesTests1 otbFeatureExtractionExamplesTests1.cxx)
-TARGET_LINK_LIBRARIES(otbFeatureExtractionExamplesTests1  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbFeatureExtractionExamplesTests1  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
 ADD_EXECUTABLE(otbFeatureExtractionExamplesTests2 otbFeatureExtractionExamplesTests2.cxx)
-TARGET_LINK_LIBRARIES(otbFeatureExtractionExamplesTests2  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbFeatureExtractionExamplesTests2  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

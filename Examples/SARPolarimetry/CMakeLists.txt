@@ -21,22 +21,22 @@ SET(EPSILON 0.000000000001)
 
 # -------            PiOver4ExamplePolarimetricSynthesisFilterTest   ------------------------------
 
-# Tutorial example . pi / 4   
-ADD_TEST(rdTvPiOver4ExamplePolarimetricSynthesisFilterTest ${SARPOLARIMETRY_TESTS1}  
+# Tutorial example . pi / 4
+ADD_TEST(rdTvPiOver4ExamplePolarimetricSynthesisFilterTest ${SARPOLARIMETRY_TESTS1}
   --compare-image ${EPSILON}
 		  ${BASELINE}/refPiOver4PolarimetricSynthesis.tif
                   ${TEMP}/resPiOver4PolarimetricSynthesis.tif
-       PiOver4ExamplePolarimetricSynthesisFilter                  
+       PiOver4ExamplePolarimetricSynthesisFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_VH.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif
         ${TEMP}/resPiOver4PolarimetricSynthesis.tif
-	)        
+	)
 
 
 ADD_EXECUTABLE(otbSARPolarimetryExamplesTests otbSARPolarimetryExamplesTests.cxx )
-TARGET_LINK_LIBRARIES(otbSARPolarimetryExamplesTests OTBSARPolarimetry OTBCommon OTBIO  ITKBasicFilters)
+TARGET_LINK_LIBRARIES(otbSARPolarimetryExamplesTests OTBSARPolarimetry OTBCommon OTBIO  ITKBasicFilters OTBTesting)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -22,18 +22,18 @@ SET(LEARNING_TESTS2 ${CXX_TEST_PATH}/otbLearningTests2)
 SET(LEARNING_TESTS3 ${CXX_TEST_PATH}/otbLearningTests3)
 SET(LEARNING_TESTS4 ${CXX_TEST_PATH}/otbLearningTests4)
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # -------            otb::SVMModel   ------------------------------
 
-ADD_TEST(leTuSVMModelNew ${LEARNING_TESTS1}  
+ADD_TEST(leTuSVMModelNew ${LEARNING_TESTS1}
         otbSVMModelNew)
 
-ADD_TEST(leTuSVMModelAllocateProblem ${LEARNING_TESTS1}  
-        otbSVMModelAllocateProblem)	
+ADD_TEST(leTuSVMModelAllocateProblem ${LEARNING_TESTS1}
+        otbSVMModelAllocateProblem)
 
-ADD_TEST(leTuSVMModelLoad ${LEARNING_TESTS1}  
+ADD_TEST(leTuSVMModelLoad ${LEARNING_TESTS1}
         otbSVMModelLoad
 	${INPUTDATA}/svm_model)
 
@@ -42,7 +42,7 @@ ADD_TEST(leTvSVMModelAccessor ${LEARNING_TESTS1}
                         ${TEMP}/leSVMModelAccessor.txt
         otbSVMModelAccessor
 	${INPUTDATA}/svm_model
-	${TEMP}/leSVMModelAccessor.txt)		
+	${TEMP}/leSVMModelAccessor.txt)
 
 
 ADD_TEST(leTvSVMModelLoadSave ${LEARNING_TESTS1}
@@ -50,33 +50,33 @@ ADD_TEST(leTvSVMModelLoadSave ${LEARNING_TESTS1}
                         ${TEMP}/svmmodel_test
         otbSVMModelLoadSave
 	${INPUTDATA}/svm_model
-	${TEMP}/svmmodel_test)		
+	${TEMP}/svmmodel_test)
 
-ADD_TEST(leTvSVMModelWithGenericKeywordKernelLoadSave ${LEARNING_TESTS1}  
+ADD_TEST(leTvSVMModelWithGenericKeywordKernelLoadSave ${LEARNING_TESTS1}
 --compare-ascii ${TOL}  ${BASELINE_FILES}/leTvsvmmodel_image_generic_version_test
                         ${TEMP}/leTvsvmmodel_image_generic_version_test
         otbSVMModelGenericKernelLoadSave
 	${INPUTDATA}/svm_model_image_generic_version
-	${TEMP}/leTvsvmmodel_image_generic_version_test)		
+	${TEMP}/leTvsvmmodel_image_generic_version_test)
 
-ADD_TEST(leTvSVMModelKernelTypeGenericLoadSave ${LEARNING_TESTS1}  
+ADD_TEST(leTvSVMModelKernelTypeGenericLoadSave ${LEARNING_TESTS1}
 --compare-ascii ${TOL}  ${INPUTDATA}/svm_model_image_generic_kernel
                         ${TEMP}/leTvsvmmodel_image_generic_kernel_test
         otbSVMModelGenericKernelLoadSave
 	${INPUTDATA}/svm_model_image_generic_kernel
-	${TEMP}/leTvsvmmodel_image_generic_kernel_test)		
+	${TEMP}/leTvsvmmodel_image_generic_kernel_test)
 
 
-# -------            otb::SVMImageModelEstimator   --------------------	
+# -------            otb::SVMImageModelEstimator   --------------------
 
-ADD_TEST(leTuSVMImageModelEstimatorNew ${LEARNING_TESTS1}  
+ADD_TEST(leTuSVMImageModelEstimatorNew ${LEARNING_TESTS1}
         otbSVMImageModelEstimatorNew)
 
 
 ADD_TEST(leTvSVMImageModelEstimatorTrain ${LEARNING_TESTS1}
---compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leTvsvm_model_image 
+--compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leTvsvm_model_image
                         ${TEMP}/leTvsvm_model_image
---ignore-lines-with 2 probA probB 
+--ignore-lines-with 2 probA probB
         otbSVMImageModelEstimatorTrain
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
@@ -86,7 +86,7 @@ ADD_TEST(leTvSVMImageModelEstimatorTrain ${LEARNING_TESTS1}
 ADD_TEST(leTvSVMImageModelEstimatorTrainWithOptimization ${LEARNING_TESTS1}
 --compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leTvsvm_model_image_opt
                         ${TEMP}/leTvsvm_model_image_opt
---ignore-lines-with 2 probA probB 
+--ignore-lines-with 2 probA probB
         otbSVMImageModelEstimatorTrain
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
@@ -94,7 +94,7 @@ ADD_TEST(leTvSVMImageModelEstimatorTrainWithOptimization ${LEARNING_TESTS1}
 	1 )
 
 ADD_TEST(leTvSVMImageModelEstimatorTrainOneClass ${LEARNING_TESTS1}
---compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leTvsvm_model_image_one_class 
+--compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leTvsvm_model_image_one_class
                         ${TEMP}/leTvsvm_model_image_one_class
         otbSVMImageModelEstimatorTrainOneClass
 	${INPUTDATA}/ROI_QB_MUL_4.tif
@@ -109,31 +109,31 @@ ADD_TEST(leTvSVMImageModelEstimatorModelAccessor ${LEARNING_TESTS1}
 	${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
 	${TEMP}/leSVMModelEstimatorModelAccessor.txt)
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-# -------            otb::SVMPointSetModelEstimator   --------------------		
+# -------            otb::SVMPointSetModelEstimator   --------------------
 
-ADD_TEST(leTuSVMPointSetModelEstimatorNew ${LEARNING_TESTS2}  
+ADD_TEST(leTuSVMPointSetModelEstimatorNew ${LEARNING_TESTS2}
         otbSVMPointSetModelEstimatorNew)
 
-ADD_TEST(leTvSVMPointSetModelEstimatorTrain ${LEARNING_TESTS2}  
---compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leTvsvm_model_pointset 
+ADD_TEST(leTvSVMPointSetModelEstimatorTrain ${LEARNING_TESTS2}
+--compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leTvsvm_model_pointset
                         ${TEMP}/leTvsvm_model_pointset
---ignore-lines-with 2 probA probB 
+--ignore-lines-with 2 probA probB
         otbSVMPointSetModelEstimatorTrain
 	${TEMP}/leTvsvm_model_pointset)
-	
-	
-# -------            otb::SVMClassifier   -----------------------------	
 
-ADD_TEST(leTuSVMClassifierNew ${LEARNING_TESTS2}  
+
+# -------            otb::SVMClassifier   -----------------------------
+
+ADD_TEST(leTuSVMClassifierNew ${LEARNING_TESTS2}
         otbSVMClassifierNew)
 
-ADD_TEST(leTvSVMClassifierImage ${LEARNING_TESTS2}  
---compare-image ${TOL} 
+ADD_TEST(leTvSVMClassifierImage ${LEARNING_TESTS2}
+--compare-image ${TOL}
 		${BASELINE}/leSVMClassifierImageOutput.png
 		${TEMP}/leSVMClassifierImageOutput.png
         otbSVMClassifierImage
@@ -141,8 +141,8 @@ ADD_TEST(leTvSVMClassifierImage ${LEARNING_TESTS2}
 	${INPUTDATA}/svm_model_image
 	${TEMP}/leSVMClassifierImageOutput.png)
 
-ADD_TEST(leTvSVMClassifierImageOneClass ${LEARNING_TESTS2}  
---compare-image ${TOL} 
+ADD_TEST(leTvSVMClassifierImageOneClass ${LEARNING_TESTS2}
+--compare-image ${TOL}
 		${BASELINE}/leSVMClassifierImageOneClassOutput.png
 		${TEMP}/leSVMClassifierImageOneClassOutput.png
         otbSVMClassifierImage
@@ -150,7 +150,7 @@ ADD_TEST(leTvSVMClassifierImageOneClass ${LEARNING_TESTS2}
 	${INPUTDATA}/svm_model_image_one_class
 	${TEMP}/leSVMClassifierImageOneClassOutput.png)
 
-ADD_TEST(leTvSVMClassifierImageWithGenericKernalLinear ${LEARNING_TESTS2}  
+ADD_TEST(leTvSVMClassifierImageWithGenericKernalLinear ${LEARNING_TESTS2}
 --compare-image ${TOL}  ${BASELINE}/leTvSVMClassifierImageWithGenericKernalLinearOutput.png
                         ${TEMP}/leTvSVMClassifierImageWithGenericKernalLinearOutput.png
 	otbSVMClassifierImage
@@ -160,25 +160,25 @@ ADD_TEST(leTvSVMClassifierImageWithGenericKernalLinear ${LEARNING_TESTS2}
 
 
 
-ADD_TEST(leTvSVMClassifierPointSet ${LEARNING_TESTS2}  
+ADD_TEST(leTvSVMClassifierPointSet ${LEARNING_TESTS2}
         otbSVMClassifierPointSet
 	${INPUTDATA}/svm_model_pointset)
-	
 
-# -------            otb::SOMMap   -----------------------------	
 
-ADD_TEST(leTuSOMMapNew ${LEARNING_TESTS2}  
+# -------            otb::SOMMap   -----------------------------
+
+ADD_TEST(leTuSOMMapNew ${LEARNING_TESTS2}
         otbSOMMapNew)
 
-ADD_TEST(leTvSOMMap ${LEARNING_TESTS2}  
+ADD_TEST(leTvSOMMap ${LEARNING_TESTS2}
         otbSOMMap)
 
-# -------            otb::SOM   -----------------------------	
+# -------            otb::SOM   -----------------------------
 
-ADD_TEST(leTuSOMNew ${LEARNING_TESTS2}  
+ADD_TEST(leTuSOMNew ${LEARNING_TESTS2}
         otbSOMNew)
 
-ADD_TEST(leTvSOM ${LEARNING_TESTS2}  
+ADD_TEST(leTvSOM ${LEARNING_TESTS2}
         --compare-image ${EPSILON}
 	${BASELINE}/leSOMPoupeesSubOutputMap1.hdr
 	${TEMP}/leSOMPoupeesSubOutputMap1.hdr
@@ -187,12 +187,12 @@ ADD_TEST(leTvSOM ${LEARNING_TESTS2}
 	${TEMP}/leSOMPoupeesSubOutputMap1.hdr
 	32 32 10 10 5 1.0 0.1 0)
 
-# -------            otb::PeriodicSOM   -----------------------------	
+# -------            otb::PeriodicSOM   -----------------------------
 
-ADD_TEST(leTuPeriodicSOMNew ${LEARNING_TESTS2}  
+ADD_TEST(leTuPeriodicSOMNew ${LEARNING_TESTS2}
         otbPeriodicSOMNew)
 
-ADD_TEST(leTvPeriodicSOM ${LEARNING_TESTS2}  
+ADD_TEST(leTvPeriodicSOM ${LEARNING_TESTS2}
         --compare-image ${EPSILON}
 	${BASELINE}/lePeriodicSOMPoupeesSubOutputMap1.hdr
 	${TEMP}/lePeriodicSOMPoupeesSubOutputMap1.hdr
@@ -201,12 +201,12 @@ ADD_TEST(leTvPeriodicSOM ${LEARNING_TESTS2}
 	${TEMP}/lePeriodicSOMPoupeesSubOutputMap1.hdr
 	32 32 10 10 5 1.0 0.1 0)
 
-# -------            otb::SOMActivationBuilder   -----------------------------	
+# -------            otb::SOMActivationBuilder   -----------------------------
 
-ADD_TEST(leTuSOMActivationBuilderNew ${LEARNING_TESTS2}  
+ADD_TEST(leTuSOMActivationBuilderNew ${LEARNING_TESTS2}
         otbSOMActivationBuilderNew)
 
-ADD_TEST(leTvSOMActivationBuilder ${LEARNING_TESTS2}  
+ADD_TEST(leTvSOMActivationBuilder ${LEARNING_TESTS2}
         --compare-image ${TOL}
 	${BASELINE}/leSOMPoupeesSubActivationMap1.hdr
 	${TEMP}/leSOMPoupeesSubActivationMap1.hdr
@@ -216,16 +216,16 @@ ADD_TEST(leTvSOMActivationBuilder ${LEARNING_TESTS2}
 	${TEMP}/leSOMPoupeesSubActivationMap1.hdr
 	32 32 10 10 5 1.0 0.1 128)
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# -------            otb::SOMClassifier   -----------------------------	
+# -------            otb::SOMClassifier   -----------------------------
 
-ADD_TEST(leTuSOMClassifierNew ${LEARNING_TESTS3}  
+ADD_TEST(leTuSOMClassifierNew ${LEARNING_TESTS3}
         otbSOMClassifierNew)
 
-ADD_TEST(leTvSOMClassifier ${LEARNING_TESTS3}  
+ADD_TEST(leTvSOMClassifier ${LEARNING_TESTS3}
         --compare-image ${TOL}
 	${BASELINE}/leSOMPoupeesClassified.hdr
 	${TEMP}/leSOMPoupeesClassified.hdr
@@ -235,12 +235,12 @@ ADD_TEST(leTvSOMClassifier ${LEARNING_TESTS3}
 	${TEMP}/leSOMPoupeesClassified.hdr
 	)
 
-# -------            otb::SOMImageClassificationFilter   -----------------------------	
+# -------            otb::SOMImageClassificationFilter   -----------------------------
 
-ADD_TEST(leTuSOMImageClassificationFilterNew ${LEARNING_TESTS3}  
+ADD_TEST(leTuSOMImageClassificationFilterNew ${LEARNING_TESTS3}
         otbSOMImageClassificationFilterNew)
 
-ADD_TEST(leTvSOMImageClassificationFilter ${LEARNING_TESTS3}  
+ADD_TEST(leTvSOMImageClassificationFilter ${LEARNING_TESTS3}
         --compare-image ${TOL}
 	${BASELINE}/leSOMPoupeesClassified.hdr
 	${TEMP}/leSOMImageClassificationFilterOuptut.hdr
@@ -251,12 +251,12 @@ ADD_TEST(leTvSOMImageClassificationFilter ${LEARNING_TESTS3}
 	)
 
 
-# -------            otb::KMeansImageClassificationFilter   -----------------------------	
+# -------            otb::KMeansImageClassificationFilter   -----------------------------
 
-ADD_TEST(leTuKMeansImageClassificationFilterNew ${LEARNING_TESTS3}  
+ADD_TEST(leTuKMeansImageClassificationFilterNew ${LEARNING_TESTS3}
         otbKMeansImageClassificationFilterNew)
 
-ADD_TEST(leTvKMeansImageClassificationFilter ${LEARNING_TESTS3}  
+ADD_TEST(leTvKMeansImageClassificationFilter ${LEARNING_TESTS3}
         --compare-image ${TOL}
 	${BASELINE}/leKMeansImageClassificationFilterOuptut.hdr
 	${TEMP}/leKMeansImageClassificationFilterOuptut.hdr
@@ -268,9 +268,9 @@ ADD_TEST(leTvKMeansImageClassificationFilter ${LEARNING_TESTS3}
 	255 255 255 255
 	)
 
-# -------            otb::SEMClassifier   -----------------------------	
+# -------            otb::SEMClassifier   -----------------------------
 
-ADD_TEST(leTuSEMClassifierNew ${LEARNING_TESTS3}  
+ADD_TEST(leTuSEMClassifierNew ${LEARNING_TESTS3}
         otbSEMClassifierNew)
 
 # -----------------------------------------------------------------------
@@ -288,7 +288,7 @@ ADD_TEST(leTvSVMImageClassificationFilter ${LEARNING_TESTS3}
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${INPUTDATA}/svm_model_image
 	${TEMP}/leSVMImageClassificationFilterOutput.tif)
-			        
+
 ADD_TEST(leTvSVMModelGenericKernelsTest ${LEARNING_TESTS3}
     --compare-n-ascii ${TOL} 13
         ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest1.txt
@@ -366,15 +366,15 @@ ADD_TEST(leTvSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest ${LE
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${INPUTDATA}/ROI_QB_MUL_4_train_one_class.tif
 	${TEMP}/leTvsvm_model_image_one_class)
-      
 
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS4 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# -------            otb::RoidataConversion   -----------------------------	
-ADD_TEST(leTuROIdataConversionNew ${LEARNING_TESTS4}  
+# -------            otb::RoidataConversion   -----------------------------
+ADD_TEST(leTuROIdataConversionNew ${LEARNING_TESTS4}
         otbROIdataConversionNew)
 
 ADD_TEST(leTvROIdataConversion ${LEARNING_TESTS4}
@@ -388,10 +388,10 @@ ADD_TEST(leTvROIdataConversion ${LEARNING_TESTS4}
 )
 
 
-ADD_TEST(leTuSVMCrossValidationCostFunctionNew ${LEARNING_TESTS4}  
+ADD_TEST(leTuSVMCrossValidationCostFunctionNew ${LEARNING_TESTS4}
         otbSVMCrossValidationCostFunctionNew)
 
-ADD_TEST(leTuExhaustiveExponentialOptimizerNew ${LEARNING_TESTS4}  
+ADD_TEST(leTuExhaustiveExponentialOptimizerNew ${LEARNING_TESTS4}
         otbExhaustiveExponentialOptimizerNew)
 
 # A enrichir
@@ -452,13 +452,13 @@ otbExhaustiveExponentialOptimizerNew.cxx
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbLearningTests1 otbLearningTests1.cxx ${BasicLearning_SRCS1})
-TARGET_LINK_LIBRARIES(otbLearningTests1 OTBLearning OTBIO)
+TARGET_LINK_LIBRARIES(otbLearningTests1 OTBLearning OTBIO OTBTesting)
 ADD_EXECUTABLE(otbLearningTests2 otbLearningTests2.cxx ${BasicLearning_SRCS2})
-TARGET_LINK_LIBRARIES(otbLearningTests2 OTBLearning OTBIO)
+TARGET_LINK_LIBRARIES(otbLearningTests2 OTBLearning OTBIO OTBTesting)
 ADD_EXECUTABLE(otbLearningTests3 otbLearningTests3.cxx ${BasicLearning_SRCS3})
-TARGET_LINK_LIBRARIES(otbLearningTests3 OTBLearning OTBIO)
+TARGET_LINK_LIBRARIES(otbLearningTests3 OTBLearning OTBIO OTBTesting)
 ADD_EXECUTABLE(otbLearningTests4 otbLearningTests4.cxx ${BasicLearning_SRCS4})
-TARGET_LINK_LIBRARIES(otbLearningTests4 OTBLearning OTBIO)
+TARGET_LINK_LIBRARIES(otbLearningTests4 OTBLearning OTBIO OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 

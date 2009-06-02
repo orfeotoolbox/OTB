@@ -354,6 +354,6 @@ otbSplittedWidgetManagerNew.cxx
 
 # Building testing executables
 ADD_EXECUTABLE(otbVisualizationTests1 otbVisualizationTests1.cxx ${Visualization_SRCS1})
-TARGET_LINK_LIBRARIES(otbVisualizationTests1 OTBVisualization OTBIO)
+TARGET_LINK_LIBRARIES(otbVisualizationTests1 OTBVisualization OTBIO OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

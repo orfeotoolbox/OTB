@@ -115,11 +115,11 @@ ENDIF( OTB_USE_CURL )
 
 
 ADD_EXECUTABLE(otbProjectionsExamplesTests otbProjectionsExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests OTBCommon OTBIO OTBProjections)
+TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests OTBCommon OTBIO OTBProjections OTBTesting)
 
 IF( OTB_USE_CURL )
   ADD_EXECUTABLE(otbProjectionsExamplesTests2 otbProjectionsExamplesTests2.cxx)
-  TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests2 OTBCommon OTBIO OTBProjections ${CURL_LIBRARY} tinyXML)
+  TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests2 OTBCommon OTBIO OTBProjections ${CURL_LIBRARY} tinyXML OTBTesting)
 ENDIF( OTB_USE_CURL )
 
 

@@ -155,6 +155,6 @@ ADD_TEST(ScalarImageKmeansClassifierTest ${EXE_TESTS}
 
 
 ADD_EXECUTABLE(otbClassificationExamplesTests otbClassificationExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbClassificationExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbClassificationExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

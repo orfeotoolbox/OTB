@@ -174,6 +174,6 @@ ADD_TEST(SVMGenericKernelImageClassificationExampleTest ${EXE_TESTS}
 
 
 ADD_EXECUTABLE(otbLearningExamplesTests otbLearningExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbLearningExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbLearningExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
