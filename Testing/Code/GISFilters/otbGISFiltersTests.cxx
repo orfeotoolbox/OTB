@@ -27,4 +27,6 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbPostGISCreateTableTransactorNew);
+  REGISTER_TEST(otbPostGISCreateTableTransactorAccessors);
+  REGISTER_TEST(otbPostGISCreateTableTransactorCreate);
 }
