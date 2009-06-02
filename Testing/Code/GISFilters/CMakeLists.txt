@@ -22,7 +22,7 @@ ADD_TEST(gfTuPostGISCreateTableTransactorNew ${GISFILTERS_TESTS}
 
 
 
-# -------       Fichiers sources CXX -----------------------------------
+# -------       CXX source files -----------------------------------
 SET(GISFilters_SRCS
 otbPostGISCreateTableTransactorNew.cxx
 )
