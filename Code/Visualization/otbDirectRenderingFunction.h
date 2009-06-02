@@ -21,6 +21,7 @@
 #include "otbRenderingFunction.h"
 #include "otbMacro.h"
 #include <assert.h>
+#include <iomanip>
 
 namespace otb
 {
@@ -123,41 +124,17 @@ public:
       {
       if(channel == m_RedChannelIndex)
         {
-        oss<<"c= "<<channel<<", R= "<<(int)output[0];
-        if(output[0]<100)
-          {
-          oss<<" ";
-          }
-        if(output[0]<10)
-          {
-          oss<<" ";
-          }
+        oss<<"c= "<<channel<<", R= " << std::setw(3) <<(int)output[0];
         oss<<", v= "<<static_cast<typename itk::NumericTraits<PixelType>::PrintType>(vpixel[channel])<<std::endl;
         }
       else if(channel == m_GreenChannelIndex)
         {
-        oss<<"c= "<<channel<<", G= "<<(int)output[1];
-        if(output[1]<100)
-          {
-          oss<<" ";
-          }
-        if(output[1]<10)
-          {
-          oss<<" ";
-          }
+        oss<<"c= "<<channel<<", G= " << std::setw(3) <<(int)output[1];
         oss<<", v= "<<static_cast<typename itk::NumericTraits<PixelType>::PrintType>(vpixel[channel])<<std::endl;
         }
       else if(channel == m_BlueChannelIndex)
         {
-        oss<<"c= "<<channel<<", B= "<<(int)output[2];
-        if(output[2]<100)
-          {
-          oss<<" ";
-          }
-        if(output[2]<10)
-          {
-          oss<<" ";
-          }
+        oss<<"c= "<<channel<<", B= " << std::setw(3) <<(int)output[2];
         oss<<", v= "<<static_cast<typename itk::NumericTraits<PixelType>::PrintType>(vpixel[channel])<<std::endl;
         }
       else
