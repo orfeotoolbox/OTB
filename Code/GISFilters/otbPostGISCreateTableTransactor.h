@@ -44,13 +44,14 @@ public:
 
   typedef pqxx::result ResultType;
 
-  PostGISCreateTableTransactor(){};/* :
-    pqxx::transactor<pqxx::nontransaction>("CreateTable") {}*/
+  typedef pqxx::transactor<pqxx::nontransaction> Superclass;
+
+  PostGISCreateTableTransactor() : Superclass("CreateTable") {}
 
   void operator()(argument_type &T)
   {
 
-/*    std::stringstream createCommand;
+    std::stringstream createCommand;
 
     createCommand << "CREATE TABLE "<< m_TableName
 				   <<" (id serial PRIMARY KEY,genre text);";
@@ -63,7 +64,7 @@ public:
       "', 'geom', "<< m_SRID <<", 'GEOMETRY',"<< m_Dimension <<" );";
 
     m_Result = T.exec(addGeometryCommand.str());
-*/
+
     
   }
 
@@ -73,18 +74,42 @@ public:
 
   }
 
-/*  itkGetMacro(TableName, std::string);
-  itkSetMacro(TableName, std::string);
+  std::string GetTableName() const
+  {
+    return m_TableName;
+  }
 
-  itkGetMacro(SRID, int);
-  itkSetMacro(SRID, int);
+  void SetTableName(const std::string& aName)
+  {
+    m_TableName = aName;
+  }
 
-  itkGetMacro(Dimension, unsigned short);
-  itkSetMacro(Dimension, unsigned short);
+  int GetSRID() const
+  {
+    return m_SRID;
+  }
 
-  itkGetMacro(Result, ResultType);
-  */
-  
+  void SetSRID(int aSRID)
+  {
+    m_SRID = aSRID;
+  }
+
+  unsigned short GetDimension() const
+  {
+    return m_Dimension;
+  }
+
+  void SetDimension(unsigned short aDim)
+  {
+    m_Dimension = aDim;
+  }
+
+  ResultType GetResult() const
+  {
+    return m_Result;
+  }
+
+    
 protected:
   ResultType m_Result;
   std::string m_TableName;
