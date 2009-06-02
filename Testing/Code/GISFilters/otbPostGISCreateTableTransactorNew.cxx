@@ -20,7 +20,7 @@
 
 #include "otbPostGISCreateTableTransactor.h"
 
-int otbGISTableNew(int argc, char * argv[])
+int otbPostGISCreateTableTransactorNew(int argc, char * argv[])
 {
   typedef otb::PostGISCreateTableTransactor TransactorType;
 

@@ -89,7 +89,7 @@ protected:
   ResultType m_Result;
   std::string m_TableName;
   int m_SRID;
-  unsigned short m_Dimension:
+  unsigned short m_Dimension;
 };
 
 } // end namespace otb
