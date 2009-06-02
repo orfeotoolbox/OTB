@@ -80,6 +80,12 @@ IF(OTB_COMPILE_JPEG2000)
         ${OTB_SOURCE_DIR}/Utilities/otbopenjpeg/libopenjpeg)
 ENDIF(OTB_COMPILE_JPEG2000)
 
+IF(OTB_USE_PQXX)
+  SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+    ${OTB_SOURCE_DIR}/Code/GISFilters)
+ENDIF(OTB_USE_PQXX)
+
+
 #-----------------------------------------------------------------------------
 # Include directories from the ossim build tree
 SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
