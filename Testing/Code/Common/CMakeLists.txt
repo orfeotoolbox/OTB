@@ -787,6 +787,13 @@ ADD_TEST(coTvPostGISConnectionImplementationConnectToDB ${COMMON_TESTS10}
 	postgres
 )
 
+ADD_TEST(coTvPostGISConnectionImplementationPerformTransaction ${COMMON_TESTS10}
+        otbPostGISConnectionImplementationPerformTransaction
+        localhost
+	testgis
+	postgres
+)
+
 
 ADD_TEST(coTuGISTableNew ${COMMON_TESTS10}
 otbGISTableNew
@@ -913,6 +920,7 @@ IF(OTB_USE_PQXX)
 SET(BasicCommon_SRCS10
 otbPostGISConnectionImplementationNew.cxx
 otbPostGISConnectionImplementationConnectToDB.cxx
+otbPostGISConnectionImplementationPerformTransaction.cxx
 otbGISTableNew.cxx
 )
 ENDIF(OTB_USE_PQXX)
