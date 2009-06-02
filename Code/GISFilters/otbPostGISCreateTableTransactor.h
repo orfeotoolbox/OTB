@@ -20,6 +20,7 @@
 
 #include <pqxx/pqxx>
 #include <sstream>
+#include <itkObject.h>
 
 
 namespace otb
@@ -55,7 +56,8 @@ public:
 
     createCommand << "CREATE TABLE "<< m_TableName
 				   <<" (id serial PRIMARY KEY,genre text);";
-      
+
+    otbGenericMsgDebugMacro(<<"Create Command " << createCommand.str());
     m_Result = T.exec(createCommand.str());
 
     std::stringstream addGeometryCommand;
