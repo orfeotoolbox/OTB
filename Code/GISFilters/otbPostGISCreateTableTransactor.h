@@ -20,7 +20,7 @@
 
 #include <pqxx/pqxx>
 #include <sstream>
-#include <itkObject.h>
+
 
 
 namespace otb
