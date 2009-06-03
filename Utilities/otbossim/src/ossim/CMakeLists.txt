@@ -64,13 +64,23 @@ ADD_EXECUTABLE(version-config version-config.cpp)
 #              NO_DEFAULT_PATH )
 
 
-ADD_CUSTOM_COMMAND(
-OUTPUT ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h
-COMMAND version-config
-ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h" "${OSSIM_VERSION}"
-DEPENDS version-config
-COMMENT "Generating ossimVersion.h"
-)
+IF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^2\\.4$")
+    ADD_CUSTOM_COMMAND(
+        OUTPUT ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h
+        COMMAND ${OTB_BINARY_DIR}/bin/version-config
+        ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h" "${OSSIM_VERSION}"
+        DEPENDS version-config
+        COMMENT "Generating ossimVersion.h" )
+ELSE("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^2\\.4$")
+    ADD_CUSTOM_COMMAND(
+        OUTPUT ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h
+        COMMAND version-config
+        ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h" "${OSSIM_VERSION}"
+        DEPENDS version-config
+        COMMENT "Generating ossimVersion.h" )
+ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^2\\.4$")
+
+
 
 SET_SOURCE_FILES_PROPERTIES(
     init/ossimInit.cpp PROPERTIES
