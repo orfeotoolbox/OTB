@@ -22,7 +22,7 @@
 #include "otbPostGISConnectionImplementation.h"
 
 /** This test uses a transactor to create a table. The transactor
-needs to have a copy ocnstructir, so the initialization is done
+needs to have a copy constructor, so the initialization is done
 correctly for the class variables which are set before the transaction
 */
 
