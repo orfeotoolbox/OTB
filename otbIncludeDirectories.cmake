@@ -40,7 +40,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/Radiometry
   ${OTB_SOURCE_DIR}/Code/SARPolarimetry
   ${OTB_SOURCE_DIR}/Code/Markov
-  ${OTB_SOURCE_DIR}/Code/GISFilters
+  ${OTB_SOURCE_DIR}/Code/GeospatialAnalysis
   ${OTB_SOURCE_DIR}/Utilities/otbsvm
   ${OTB_SOURCE_DIR}/Utilities/otbossim
   ${OTB_SOURCE_DIR}/Utilities/otbossim/include
@@ -83,7 +83,7 @@ ENDIF(OTB_COMPILE_JPEG2000)
 
 IF(OTB_USE_PQXX)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-    ${OTB_SOURCE_DIR}/Code/GISFilters)
+    ${OTB_SOURCE_DIR}/Code/GeospatialAnalysis)
 ENDIF(OTB_USE_PQXX)
 
 
