@@ -41,7 +41,7 @@ ADD_TEST(gfTuPostGISFromStringTransactorNew ${GEOSPATIALANALYSIS_TESTS}
       
 
 # -------       CXX source files -----------------------------------
-SET(GeospatialAnalysis_SRCS
+SET(GEOSPATIALANALYSIS_SRCS
 otbPostGISCreateTableTransactorNew.cxx
 otbPostGISCreateTableTransactorAccessors.cxx
 otbPostGISCreateTableTransactorCreate.cxx
