@@ -541,7 +541,6 @@ int ImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) cons
 
 int ImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) const
 {
-std::cout<<"ImageMetadataInterface::GetYear"<<std::endl;
   //The image date in the ossim metadata has the form: 2007-10-03T03:17:16.973000
   ImageKeywordlistType imageKeywordlist;
 
