@@ -109,7 +109,7 @@ ADD_TEST( TutorialsOrthoFusionTest ${EXE_TESTS}
         )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbTutorialsExamplesTests otbTutorialsExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbTutorialsExamplesTests  ITKAlgorithms ITKStatistics ITKNumerics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion OTBTesting)
 

@@ -92,7 +92,7 @@ ADD_TEST(MorphologicalPyramidSegmenterExampleTest ${EXE_TESTS}
 	0 0.9 0.9 10
 )
 
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbMultiScaleExamplesTests otbMultiScaleExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbMultiScaleExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale  OTBTesting)
 

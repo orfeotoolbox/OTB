@@ -448,8 +448,7 @@ otbSVMCrossValidationCostFunctionNew.cxx
 otbExhaustiveExponentialOptimizerNew.cxx
 )
 
-
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 ADD_EXECUTABLE(otbLearningTests1 otbLearningTests1.cxx ${BasicLearning_SRCS1})
 TARGET_LINK_LIBRARIES(otbLearningTests1 OTBLearning OTBIO OTBTesting)

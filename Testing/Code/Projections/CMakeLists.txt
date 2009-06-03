@@ -466,8 +466,7 @@ otbGeocentricTransform.cxx
 otbVectorDataExtractROIandProjection.cxx
 )
 
-
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 ADD_EXECUTABLE(otbProjectionsTests1 otbProjectionsTests1.cxx ${Projections_SRCS1})
 TARGET_LINK_LIBRARIES(otbProjectionsTests1  OTBProjections OTBIO OTBTesting)

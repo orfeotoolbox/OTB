@@ -149,8 +149,7 @@ otbKullbackLeiblerSupervizedDistanceImageFilter.cxx
 )
 
 
-
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 ADD_EXECUTABLE(otbChangeDetectionTests1 otbChangeDetectionTests1.cxx ${BasicChangeDetection_SRCS1})
 TARGET_LINK_LIBRARIES(otbChangeDetectionTests1 OTBChangeDetection OTBIO OTBTesting)

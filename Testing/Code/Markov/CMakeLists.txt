@@ -175,7 +175,7 @@ otbMRFSamplerRandomMAPNew.cxx
 otbMRFSamplerRandomMAP.cxx
 )
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 ADD_EXECUTABLE(otbMarkovTests1 otbMarkovTests1.cxx ${Markov_SRCS1})
 TARGET_LINK_LIBRARIES(otbMarkovTests1 OTBMarkov OTBIO OTBTesting)

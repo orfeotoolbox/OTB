@@ -42,7 +42,7 @@ otbPostGISCreateTableTransactorAccessors.cxx
 otbPostGISCreateTableTransactorCreate.cxx
 )
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 # ${TIFF_LIBRARY}
 

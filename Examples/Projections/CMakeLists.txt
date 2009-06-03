@@ -113,7 +113,7 @@ ADD_TEST(PlaceNameToLonLatExampleTest ${EXE_TESTS2}
 )
 ENDIF( OTB_USE_CURL )
 
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbProjectionsExamplesTests otbProjectionsExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests OTBCommon OTBIO OTBProjections OTBTesting)
 

@@ -377,10 +377,9 @@ otbBSplinesInterpolateTransformDeformationFieldGenerator.cxx
 SET(BasicDisparityMap_SRCS3
 otbStreamingWarpImageFilterNew.cxx
 otbStreamingWarpImageFilter.cxx
-
 )
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 ADD_EXECUTABLE(otbDisparityMapTests1 otbDisparityMapTests1.cxx ${BasicDisparityMap_SRCS1})
 TARGET_LINK_LIBRARIES(otbDisparityMapTests1 OTBIO OTBDisparityMap OTBTesting)

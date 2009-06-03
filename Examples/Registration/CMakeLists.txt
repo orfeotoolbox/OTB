@@ -555,7 +555,7 @@ ADD_TEST(ImageRegistration5Cas2ExampleTest ${EXE_TESTS}
         ${TEMP}/ImageRegistration5DifferenceBefore2.png
 )
 
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbRegistrationExamplesTests otbRegistrationExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbRegistrationExamplesTests  ITKAlgorithms ITKStatistics ITKNumerics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 

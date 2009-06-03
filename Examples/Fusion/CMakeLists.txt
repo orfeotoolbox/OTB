@@ -51,7 +51,7 @@ ADD_TEST(PanSharpeningExampleTest ${EXE_TESTS}
 	${TEMP}/PanSharpeningExampleTest3.png
 )
 
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbFusionExamplesTests otbFusionExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbFusionExamplesTests  ITKAlgorithms ITKStatistics ITKNumerics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion OTBTesting)
 

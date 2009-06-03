@@ -69,8 +69,7 @@ otbSimpleRcsPanSharpeningFusionImageFilterNew.cxx
 otbSimpleRcsPanSharpeningFusionImageFilter.cxx
 )
 
-
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 ADD_EXECUTABLE(otbFusionTests1 otbFusionTests1.cxx ${Fusion_SRCS1})
 TARGET_LINK_LIBRARIES(otbFusionTests1  OTBFusion OTBIO OTBTesting)

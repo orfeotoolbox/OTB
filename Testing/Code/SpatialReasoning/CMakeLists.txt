@@ -265,7 +265,7 @@ otbPolygonListToRCC8GraphFilterNew.cxx
 otbPolygonListToRCC8GraphFilter.cxx
 )
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 ADD_EXECUTABLE(otbSpatialReasoningTests1 otbSpatialReasoningTests1.cxx ${BasicSpatialReasoning_SRCS1})
 TARGET_LINK_LIBRARIES(otbSpatialReasoningTests1 OTBIO OTBSpatialReasoning OTBTesting)

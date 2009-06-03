@@ -81,7 +81,7 @@ ADD_TEST(MarkovRegularizationExampleTest ${EXE_TESTS}
        1 # true to use always the same rand() sample, false otherwis
 )
 
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbMarkovExamplesTests otbMarkovExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbMarkovExamplesTests  ITKAlgorithms ITKStatistics ITKNumerics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBMarkov OTBTesting)
 

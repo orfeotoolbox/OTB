@@ -1019,8 +1019,7 @@ otbNDWIMultiChannelWaterIndexImageFilter.cxx
 otbNDWIWaterIndexImageFilter.cxx
 )
 
-
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 ADD_EXECUTABLE(otbRadiometryTests1 otbRadiometryTests1.cxx ${Radiometry_SRCS1})
 TARGET_LINK_LIBRARIES(otbRadiometryTests1 OTBRadiometry OTBIO OTBTesting)

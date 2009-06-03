@@ -205,7 +205,7 @@ ADD_TEST(TileMapImageIOExampleTest ${EXE_TESTS2}
          )
 ENDIF( OTB_USE_CURL )
 
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbIOExamplesTests1 otbIOExamplesTests1.cxx)
 # TARGET_LINK_LIBRARIES(otbIOExamplesTests1 OTBIO OTBBasicFilters OTBCommon OTBDisparityMap  OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBProjections ITKAlgorithms ITKStatistics  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 TARGET_LINK_LIBRARIES(otbIOExamplesTests1 OTBIO OTBCommon OTBTesting)

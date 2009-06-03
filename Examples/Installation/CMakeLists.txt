@@ -8,6 +8,7 @@ ELSE(OTB_FOUND)
           "Cannot build HelloWorld application without OTB.  Please set OTB_DIR.")
 ENDIF(OTB_FOUND)
 
+
 ADD_EXECUTABLE(HelloWorld HelloWorld.cxx )
 
 TARGET_LINK_LIBRARIES(HelloWorld OTBIO OTBCommon  OTBLearning OTBTesting)

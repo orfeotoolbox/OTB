@@ -2024,7 +2024,7 @@ otbPointSetFileReaderNew.cxx
 otbPointSetFileReader.cxx
 )
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 ADD_EXECUTABLE(otbIOTests1 otbIOTests1.cxx ${BasicIO_SRCS1})
 TARGET_LINK_LIBRARIES(otbIOTests1 OTBIO OTBTesting)

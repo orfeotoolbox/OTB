@@ -466,7 +466,7 @@ otbWaveletFilterBankNew.cxx
 otbWaveletFilterBank.cxx
 )
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 ADD_EXECUTABLE(otbMultiScaleTests1 otbMultiScaleTests1.cxx ${BasicMultiScale_SRCS1})
 TARGET_LINK_LIBRARIES(otbMultiScaleTests1 OTBIO OTBMultiScale OTBTesting)

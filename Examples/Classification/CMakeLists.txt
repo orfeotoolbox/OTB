@@ -153,7 +153,7 @@ ADD_TEST(ScalarImageKmeansClassifierTest ${EXE_TESTS}
     0 4 79.5097 138.136 213.846 25.9395
 )
 
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbClassificationExamplesTests otbClassificationExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbClassificationExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
