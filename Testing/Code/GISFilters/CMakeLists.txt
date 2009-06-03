@@ -35,11 +35,17 @@ ADD_TEST(gfTuPostGISCreateTableTransactorCreate ${GISFILTERS_TESTS}
   postgres
 	)
 
+ADD_TEST(gfTuPostGISFromStringTransactorNew ${GISFILTERS_TESTS}
+     otbPostGISFromStringTransactorNew
+	)
+      
+
 # -------       CXX source files -----------------------------------
 SET(GISFilters_SRCS
 otbPostGISCreateTableTransactorNew.cxx
 otbPostGISCreateTableTransactorAccessors.cxx
 otbPostGISCreateTableTransactorCreate.cxx
+otbPostGISFromStringTransactorNew.cxx
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)

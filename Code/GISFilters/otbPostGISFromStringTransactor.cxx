@@ -24,7 +24,7 @@ namespace otb
 {
 
 PostGISFromStringTransactor::PostGISFromStringTransactor() : PostGISFromStringTransactor::Superclass("FromStringTransactor") {
- m_TransactionString = ""
+  m_TransactionString = "";
    };
 
 PostGISFromStringTransactor::PostGISFromStringTransactor(const PostGISFromStringTransactor& pgt)
