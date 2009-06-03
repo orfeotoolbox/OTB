@@ -64,7 +64,7 @@ void PostGISConnectionImplementation::ConnectToDB()
 
 void PostGISConnectionImplementation::PerformTransaction(const TransactorType& theTransaction)
 {
-  //m_PostGISConnection->perform( theTransaction() );
+//  m_PostGISConnection->perform( theTransaction );
 }
 
 
