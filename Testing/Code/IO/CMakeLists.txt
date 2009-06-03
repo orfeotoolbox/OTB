@@ -1879,6 +1879,21 @@ ADD_TEST(ioTvPointSetFileReader ${IO_TESTS17}
 ENDIF(OTB_USE_LIBLAS)
 
 
+ADD_TEST(ioTuImageMetadataInterfaceNew ${IO_TESTS17}
+#         --compare-ascii ${TOL}  ${BASELINE_FILES}/ioPointSetFileReader.txt
+#                         ${TEMP}/ioPointSetFileReader.txt
+        otbImageMetadataInterfaceNew
+)
+
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(ioTvImageMetadataInterfaceTest ${IO_TESTS17}
+#         --compare-ascii ${TOL}  ${BASELINE_FILES}/ioPointSetFileReader.txt
+#                         ${TEMP}/ioPointSetFileReader.txt
+        otbImageMetadataInterfaceTest
+        ${LARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 
 
 #----------------------------------------------------------------------------------
@@ -2022,6 +2037,8 @@ otbImageSeriesFileReader.cxx
 SET(BasicIO_SRCS17
 otbPointSetFileReaderNew.cxx
 otbPointSetFileReader.cxx
+otbImageMetadataInterfaceNew.cxx
+otbImageMetadataInterfaceTest.cxx
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)

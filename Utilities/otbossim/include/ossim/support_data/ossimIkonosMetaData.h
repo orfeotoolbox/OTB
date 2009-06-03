@@ -46,6 +46,8 @@ public:
    bool open(const ossimFilename& imageFile);
 
    void clearFields();
+   
+   ossimString   getSensorID() const;
 
    //---
    // Convenient method to print important image info:
@@ -104,6 +106,7 @@ private:
    ossim_uint32  theNumBands;
    ossimString   theBandName;
    ossimString   theProductionDate;
+   ossimString   theSensorID;
    
 TYPE_DATA   
 };

@@ -137,7 +137,6 @@ public:
 
   void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const;
 
-
 protected:
   ImageMetadataInterface();
   virtual ~ImageMetadataInterface() {};
@@ -146,11 +145,16 @@ protected:
 
   bool IsIkonos( const MetaDataDictionaryType & dict) const;
 
+  bool IsQuickbird( const MetaDataDictionaryType & dict) const;
+
   VariableLengthVectorType GetSpotPhysicalBias( const MetaDataDictionaryType & dict ) const;
   VariableLengthVectorType GetSpotPhysicalGain( const MetaDataDictionaryType & dict ) const;
 
   VariableLengthVectorType GetIkonosPhysicalBias( const MetaDataDictionaryType & dict ) const;
   VariableLengthVectorType GetIkonosPhysicalGain( const MetaDataDictionaryType & dict ) const;
+
+//   VariableLengthVectorType GetQuickbirdPhysicalBias( const MetaDataDictionaryType & dict ) const;
+//   VariableLengthVectorType GetQuickbirdPhysicalGain( const MetaDataDictionaryType & dict ) const;
 
 private:
 
