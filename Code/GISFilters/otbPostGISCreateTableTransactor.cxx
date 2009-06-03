@@ -42,6 +42,14 @@ PostGISCreateTableTransactor& PostGISCreateTableTransactor::operator=(const Post
   
 void PostGISCreateTableTransactor::operator()(pqxx::nontransaction &T)
 {
+
+  std::stringstream dropCommand;
+
+  dropCommand << "DROP TABLE " << m_TableName;
+
+  otbGenericMsgDebugMacro(<<"Drop Command " << dropCommand.str());
+
+  m_Result = T.exec(dropCommand.str());
   
   std::stringstream createCommand;
   

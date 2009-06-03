@@ -21,6 +21,11 @@
 #include "otbPostGISCreateTableTransactor.h"
 #include "otbPostGISConnectionImplementation.h"
 
+/** This test uses a transactor to create a table. The transactor
+needs to have a copy ocnstructir, so the initialization is done
+correctly for the class variables which are set before the transaction
+*/
+
 int otbPostGISCreateTableTransactorCreate(int argc, char * argv[])
 {
   typedef otb::PostGISCreateTableTransactor TransactorType;
@@ -54,7 +59,7 @@ int otbPostGISCreateTableTransactorCreate(int argc, char * argv[])
 
   connection->ConnectToDB();
 
-  connection->PerformTransaction( TransactorType() );
+  connection->GetConnection()->perform( myTransactor );
 
   return EXIT_SUCCESS;
 }
