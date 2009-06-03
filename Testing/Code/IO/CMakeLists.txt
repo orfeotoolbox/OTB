@@ -1672,7 +1672,7 @@ ADD_TEST(ioTvSHPVectorDataFileReader2 ${IO_TESTS15}
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(ioTvSHPVectorDataFileReader3 ${IO_TESTS15}
+ADD_TEST(ioTlSHPVectorDataFileReader3 ${IO_TESTS15}
         --compare-ascii ${TOL}  ${BASELINE_FILES}/ioSHPVectorDataFileReader3.txt
                         ${TEMP}/ioSHPVectorDataFileReader3.txt
         otbVectorDataFileReader
