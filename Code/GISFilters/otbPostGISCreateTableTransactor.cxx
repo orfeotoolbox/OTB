@@ -23,7 +23,9 @@
 namespace otb
 {
 
-PostGISCreateTableTransactor::PostGISCreateTableTransactor() : PostGISCreateTableTransactor::Superclass("CreateTable") {};
+PostGISCreateTableTransactor::PostGISCreateTableTransactor() : PostGISCreateTableTransactor::Superclass("CreateTable") {
+  m_RemoveExistingTable = false;
+};
 
 PostGISCreateTableTransactor::PostGISCreateTableTransactor(const PostGISCreateTableTransactor& pgt)
   : PostGISCreateTableTransactor::Superclass("CreateTable")
@@ -37,7 +39,7 @@ PostGISCreateTableTransactor& PostGISCreateTableTransactor::operator=(const Post
     m_TableName = pgt.GetTableName();
     m_SRID = pgt.GetSRID();
     m_Dimension = pgt.GetDimension();
-    m_RemoveExistingTable = false;
+    m_RemoveExistingTable = pgt.GetRemoveExistingTable();
   return *this;
 } 
   
