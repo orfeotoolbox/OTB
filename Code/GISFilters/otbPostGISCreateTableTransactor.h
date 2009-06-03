@@ -71,6 +71,10 @@ public:
 
   void SetDimension(unsigned short aDim);
 
+  void SetRemoveExistingTable(bool val);
+
+  bool GetRemoveExistingTable() const;
+
   ResultType GetResult() const;
     
 protected:
@@ -79,6 +83,7 @@ protected:
   std::string m_TableName;
   int m_SRID;
   unsigned short m_Dimension;
+  bool m_RemoveExistingTable;
 };
 
 } // end namespace otb

@@ -37,19 +37,23 @@ PostGISCreateTableTransactor& PostGISCreateTableTransactor::operator=(const Post
     m_TableName = pgt.GetTableName();
     m_SRID = pgt.GetSRID();
     m_Dimension = pgt.GetDimension();
+    m_RemoveExistingTable = false;
   return *this;
 } 
   
 void PostGISCreateTableTransactor::operator()(pqxx::nontransaction &T)
 {
 
-  std::stringstream dropCommand;
-
-  dropCommand << "DROP TABLE " << m_TableName;
-
-  otbGenericMsgDebugMacro(<<"Drop Command " << dropCommand.str());
-
-  m_Result = T.exec(dropCommand.str());
+  if(m_RemoveExistingTable)
+    {
+    std::stringstream dropCommand;
+    
+    dropCommand << "DROP TABLE " << m_TableName;
+  
+    otbGenericMsgDebugMacro(<<"Drop Command " << dropCommand.str());
+  
+    m_Result = T.exec(dropCommand.str());
+    }
   
   std::stringstream createCommand;
   
@@ -103,6 +107,16 @@ unsigned short PostGISCreateTableTransactor::GetDimension() const
 void PostGISCreateTableTransactor::SetDimension(unsigned short aDim)
 {
   m_Dimension = aDim;
+}
+
+void PostGISCreateTableTransactor::SetRemoveExistingTable(bool val)
+{
+  m_RemoveExistingTable = val;
+}
+
+bool PostGISCreateTableTransactor::GetRemoveExistingTable() const
+{
+  return m_RemoveExistingTable;
 }
 
 PostGISCreateTableTransactor::ResultType PostGISCreateTableTransactor::GetResult() const
