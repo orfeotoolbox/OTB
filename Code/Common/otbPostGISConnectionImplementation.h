@@ -78,6 +78,7 @@ public:
 
   void PerformTransaction(const TransactorType& theTransaction);
 
+  BasicConnectionType* GetConnection();
 
 
 protected:

@@ -17,27 +17,28 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
-
 #include "otbPostGISConnectionImplementation.h"
 
-class CreateTable : public pqxx::transactor<pqxx::nontransaction>
+class ReadTables : public pqxx::transactor<pqxx::nontransaction>
 {
   pqxx::result m_Result;
 public:
-  CreateTable() : pqxx::transactor<pqxx::nontransaction>("CreateTable") {}
+  ReadTables() : pqxx::transactor<pqxx::nontransaction>("ReadTables") {}
 
   void operator()(argument_type &T)
   {
-    m_Result = T.exec("CREATE TABLE testtable (id serial PRIMARY KEY,genre text);");
-    m_Result = T.exec("SELECT AddGeometryColumn( 'testtable', 'geom', -1, 'GEOMETRY', 2 );");
-
-    
+    m_Result = T.exec("SELECT * FROM pg_tables");
   }
 
   void on_commit()
   {
-      std::cout << "\t Table is created \t"  << std::endl;
+    for (pqxx::result::const_iterator c = m_Result.begin(); c != m_Result.end(); ++c)
+    {
+      std::string N;
+      c[0].to(N);
 
+      std::cout << '\t' << c.num() << '\t' << N << std::endl;
+    }
   }
 };
 
@@ -59,7 +60,7 @@ int otbPostGISConnectionImplementationPerformTransaction(int argc, char * argv[]
 
   connection->ConnectToDB();
 
-  connection->PerformTransaction( CreateTable() );
+  connection->GetConnection()->perform( ReadTables() );
 
   return EXIT_SUCCESS;
 }
