@@ -273,7 +273,7 @@ TARGET_LINK_LIBRARIES(ImageRegistration5 OTBCommon OTBIO ITKNumerics)
 #   ImageRegistration7Test
 #         ${ITK_SOURCE_DIR}/Examples/Data/BrainProtonDensitySliceBorder20.png
 #         ${ITK_SOURCE_DIR}/Examples/Data/BrainProtonDensitySliceR10X13Y17S12.png
-#         ${TEMP}/ImageRegistration7Test.png 
+#         ${TEMP}/ImageRegistration7Test.png
 #         ${TEMP}/ImageRegistration7BeforeTest.png
 #         ${TEMP}/ImageRegistration7AfterTest.png
 #         1.0   1.0  0.0
@@ -307,7 +307,7 @@ TARGET_LINK_LIBRARIES(ImageRegistration5 OTBCommon OTBIO ITKNumerics)
 #   TARGET_LINK_LIBRARIES(ImageRegistration17 ITKStatistics ITKNumerics)
 
 #   ADD_EXECUTABLE(ImageRegistrationHistogramPlotter ImageRegistrationHistogramPlotter.cxx )
-#   TARGET_LINK_LIBRARIES(ImageRegistrationHistogramPlotter 
+#   TARGET_LINK_LIBRARIES(ImageRegistrationHistogramPlotter
 #                         ITKNumerics ITKStatistics)
 
 #   ADD_EXECUTABLE(MeanSquaresImageMetric1  MeanSquaresImageMetric1.cxx )
@@ -521,7 +521,7 @@ ADD_TEST(ImageRegistration1ExampleTest ${EXE_TESTS}
 )
 
 ADD_TEST(ImageRegistration2ExampleTest ${EXE_TESTS}
-        --compare-image ${TOL} 
+        --compare-image ${TOL}
         ${BASELINE}/ImageRegistration2Output.png
         ${TEMP}/ImageRegistration2Output.png
 	ImageRegistration2ExampleTest
@@ -555,8 +555,8 @@ ADD_TEST(ImageRegistration5Cas2ExampleTest ${EXE_TESTS}
         ${TEMP}/ImageRegistration5DifferenceBefore2.png
 )
 
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbRegistrationExamplesTests otbRegistrationExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbRegistrationExamplesTests  ITKAlgorithms ITKStatistics ITKNumerics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbRegistrationExamplesTests  ITKAlgorithms ITKStatistics ITKNumerics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

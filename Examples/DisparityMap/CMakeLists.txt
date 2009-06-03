@@ -42,8 +42,8 @@ ADD_TEST(SimpleDisparityMapEstimationExampleTest ${EXE_TESTS}
  100 10 15 10 10 250 0.9
 )
 
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbDisparityMapExamplesTests otbDisparityMapExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbDisparityMapExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbDisparityMapExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

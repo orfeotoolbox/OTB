@@ -20,66 +20,66 @@ SET(CHANGEDETECTION_TESTS2 ${CXX_TEST_PATH}/otbChangeDetectionTests2)
 
 # -------            otb::CBAMI   ------------------------------
 
-ADD_TEST(cdTvCBAMI ${CHANGEDETECTION_TESTS1}  
+ADD_TEST(cdTvCBAMI ${CHANGEDETECTION_TESTS1}
   --compare-image ${TOL}   ${BASELINE}/cdCBAMIImage.png
                     ${TEMP}/cdCBAMIImage.png
         otbCBAMIChangeDetectionTest
-	 ${INPUTDATA}/GomaAvant.png 
+	 ${INPUTDATA}/GomaAvant.png
 	 ${INPUTDATA}/GomaApres.png
-	 2 
-	 ${TEMP}/cdCBAMIImage.png 
+	 2
+	 ${TEMP}/cdCBAMIImage.png
 	 )
-	 
+
 ADD_TEST(cdTvCorrel ${CHANGEDETECTION_TESTS1}
   --compare-image ${TOL}   ${BASELINE}/cdCorrelImage.png
                     ${TEMP}/cdCorrelImage.png
-	otbCorrelChangeDetectionTest 
-	 ${INPUTDATA}/GomaAvant.png 
-	 ${INPUTDATA}/GomaApres.png 
-	 2 
-	 ${TEMP}/cdCorrelImage.png 
+	otbCorrelChangeDetectionTest
+	 ${INPUTDATA}/GomaAvant.png
+	 ${INPUTDATA}/GomaApres.png
+	 2
+	 ${TEMP}/cdCorrelImage.png
 	 )
 
 ADD_TEST(cdTvMeanDiff ${CHANGEDETECTION_TESTS1}
-  --compare-image ${EPSILON} 
+  --compare-image ${EPSILON}
 		  ${BASELINE}/cdMeanDiffImage.hdr
 		  ${TEMP}/cdMeanDiffImage.hdr
-	otbMeanDiffChangeDetectionTest 
-	 ${INPUTDATA}/GomaAvant.png 
+	otbMeanDiffChangeDetectionTest
+	 ${INPUTDATA}/GomaAvant.png
 	 ${INPUTDATA}/GomaApres.png
-	 2 
-	 ${TEMP}/cdMeanDiffImage.hdr 
+	 2
+	 ${TEMP}/cdMeanDiffImage.hdr
 	 )
 
 ADD_TEST(cdTvMeanRatio ${CHANGEDETECTION_TESTS1}
   --compare-image ${TOL}   ${BASELINE}/cdMeanRatioImage.png
                     ${TEMP}/cdMeanRatioImage.png
-	otbMeanRatioChangeDetectionTest 
-	 ${INPUTDATA}/GomaAvant.png 
+	otbMeanRatioChangeDetectionTest
+	 ${INPUTDATA}/GomaAvant.png
 	 ${INPUTDATA}/GomaApres.png
-	 2 
-	 ${TEMP}/cdMeanRatioImage.png 
+	 2
+	 ${TEMP}/cdMeanRatioImage.png
 	 )
-	 
+
 ADD_TEST(cdTvLHMI ${CHANGEDETECTION_TESTS1}
 #  --compare-image ${TOL}   ${BASELINE}/cdLHMIImage.png
 #                    ${TEMP}/cdLHMIImage.png
-	otbLHMIChangeDetectionTest 
-	 ${INPUTDATA}/GomaAvantSousEch.png 
+	otbLHMIChangeDetectionTest
+	 ${INPUTDATA}/GomaAvantSousEch.png
 	 ${INPUTDATA}/GomaApresSousEch.png
-	 2 
-	 ${TEMP}/cdLHMIImage.png 
+	 2
+	 ${TEMP}/cdLHMIImage.png
 	 )
 
 ADD_TEST(cdTvJHMI ${CHANGEDETECTION_TESTS1}
-  --compare-image ${TOL}   
+  --compare-image ${TOL}
 		  ${BASELINE}/cdJHMIImage.png
                   ${TEMP}/cdJHMIImage.png
-	otbJHMIChangeDetectionTest 
-	 ${INPUTDATA}/GomaAvant.png 
+	otbJHMIChangeDetectionTest
+	 ${INPUTDATA}/GomaAvant.png
 	 ${INPUTDATA}/GomaApres.png
-	 2 
-	 ${TEMP}/cdJHMIImage.png 
+	 2
+	 ${TEMP}/cdJHMIImage.png
 	 )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -94,7 +94,7 @@ ADD_TEST(cdTvKullbackLeiblerDistanceImageFilter ${CHANGEDETECTION_TESTS2}
 			 ${BASELINE}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
 			 ${TEMP}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
 	 otbKullbackLeiblerDistanceImageFilter
-			${INPUTDATA}/GomaAvant.png 
+			${INPUTDATA}/GomaAvant.png
 			${INPUTDATA}/GomaApres.png
 			${TEMP}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
 			35)
@@ -107,7 +107,7 @@ ADD_TEST(cdTvKullbackLeiblerProfileImageFilter ${CHANGEDETECTION_TESTS2}
 			 ${BASELINE}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
 			 ${TEMP}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
 	 otbKullbackLeiblerProfileImageFilter
-			${INPUTDATA}/GomaAvant.png 
+			${INPUTDATA}/GomaAvant.png
 			${INPUTDATA}/GomaApres.png
 			${TEMP}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
 			5 51)
@@ -118,7 +118,7 @@ ADD_TEST(cdTuKullbackLeiblerSupervizedDistanceImageFilterNew ${CHANGEDETECTION_T
 
 ADD_TEST(cdTvKullbackLeiblerSupervizedDistanceImageFilter ${CHANGEDETECTION_TESTS2}
          --compare-image ${TOL}
-             ${BASELINE}/cdTVKullbackLeiblerSupervizedDistanceImageFilterOutput.png 
+             ${BASELINE}/cdTVKullbackLeiblerSupervizedDistanceImageFilterOutput.png
 			 ${TEMP}/cdTVKullbackLeiblerSupervizedDistanceImageFilterOutput.png
          otbKullbackLeiblerSupervizedDistanceImageFilter
              ${INPUTDATA}/ERSBefore.png
@@ -149,13 +149,12 @@ otbKullbackLeiblerSupervizedDistanceImageFilter.cxx
 )
 
 
-
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 ADD_EXECUTABLE(otbChangeDetectionTests1 otbChangeDetectionTests1.cxx ${BasicChangeDetection_SRCS1})
-TARGET_LINK_LIBRARIES(otbChangeDetectionTests1 OTBChangeDetection OTBIO)
+TARGET_LINK_LIBRARIES(otbChangeDetectionTests1 OTBChangeDetection OTBIO OTBTesting)
 
 ADD_EXECUTABLE(otbChangeDetectionTests2 otbChangeDetectionTests2.cxx ${BasicChangeDetection_SRCS2})
-TARGET_LINK_LIBRARIES(otbChangeDetectionTests2 OTBChangeDetection OTBIO)
+TARGET_LINK_LIBRARIES(otbChangeDetectionTests2 OTBChangeDetection OTBIO OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

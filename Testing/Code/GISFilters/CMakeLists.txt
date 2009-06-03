@@ -1,4 +1,4 @@
- 
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
@@ -42,11 +42,11 @@ otbPostGISCreateTableTransactorAccessors.cxx
 otbPostGISCreateTableTransactorCreate.cxx
 )
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 # ${TIFF_LIBRARY}
 
 ADD_EXECUTABLE(otbGISFiltersTests otbGISFiltersTests.cxx ${GISFilters_SRCS})
-TARGET_LINK_LIBRARIES(otbGISFiltersTests OTBGISFilters OTBIO OTBCommon pq pqxx)
+TARGET_LINK_LIBRARIES(otbGISFiltersTests OTBGISFilters OTBTesting OTBCommon pq pqxx)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

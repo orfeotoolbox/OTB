@@ -925,45 +925,44 @@ otbGISTableNew.cxx
 )
 ENDIF(OTB_USE_PQXX)
 
-
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 # ${TIFF_LIBRARY}
 
 ADD_EXECUTABLE(otbCommonTests1 otbCommonTests1.cxx ${BasicCommon_SRCS1})
-TARGET_LINK_LIBRARIES(otbCommonTests1 OTBIO)
+TARGET_LINK_LIBRARIES(otbCommonTests1 OTBIO OTBTesting)
 
 ADD_EXECUTABLE(otbCommonTests2 otbCommonTests2.cxx ${BasicCommon_SRCS2})
-TARGET_LINK_LIBRARIES(otbCommonTests2 OTBIO)
+TARGET_LINK_LIBRARIES(otbCommonTests2 OTBIO OTBTesting)
 
 ADD_EXECUTABLE(otbCommonTests3 otbCommonTests3.cxx ${BasicCommon_SRCS3})
-TARGET_LINK_LIBRARIES(otbCommonTests3 OTBIO)
+TARGET_LINK_LIBRARIES(otbCommonTests3 OTBIO OTBTesting)
 
 ADD_EXECUTABLE(otbCommonTests4 otbCommonTests4.cxx ${BasicCommon_SRCS4})
-TARGET_LINK_LIBRARIES(otbCommonTests4 OTBIO)
+TARGET_LINK_LIBRARIES(otbCommonTests4 OTBIO OTBTesting)
 
 ADD_EXECUTABLE(otbCommonTests5 otbCommonTests5.cxx ${BasicCommon_SRCS5})
-TARGET_LINK_LIBRARIES(otbCommonTests5 OTBIO)
+TARGET_LINK_LIBRARIES(otbCommonTests5 OTBIO OTBTesting)
 
 ADD_EXECUTABLE(otbCommonTests6 otbCommonTests6.cxx ${BasicCommon_SRCS6})
-TARGET_LINK_LIBRARIES(otbCommonTests6 OTBIO)
+TARGET_LINK_LIBRARIES(otbCommonTests6 OTBIO OTBTesting)
 
 ADD_EXECUTABLE(otbCommonTests7 otbCommonTests7.cxx ${BasicCommon_SRCS7})
-TARGET_LINK_LIBRARIES(otbCommonTests7 OTBIO)
+TARGET_LINK_LIBRARIES(otbCommonTests7 OTBIO OTBTesting)
 
 ADD_EXECUTABLE(otbCommonTests8 otbCommonTests8.cxx ${BasicCommon_SRCS8})
-TARGET_LINK_LIBRARIES(otbCommonTests8 OTBIO)
+TARGET_LINK_LIBRARIES(otbCommonTests8 OTBIO OTBTesting)
 
 IF(OTB_USE_MAPNIK)
 ADD_EXECUTABLE(otbCommonTests9 otbCommonTests9.cxx ${BasicCommon_SRCS9})
 #TODO this line should be refined when we will like to have this capability with windows
-TARGET_LINK_LIBRARIES(otbCommonTests9 OTBIO ${MAPNIK_LIBRARY}/libmapnik.so)
+TARGET_LINK_LIBRARIES(otbCommonTests9 OTBIO  OTBTesting ${MAPNIK_LIBRARY}/libmapnik.so)
 ENDIF(OTB_USE_MAPNIK)
 
 IF(OTB_USE_PQXX)
 ADD_EXECUTABLE(otbCommonTests10 otbCommonTests10.cxx ${BasicCommon_SRCS10})
 #TODO this line should be refined when we will like to have this capability with windows
-TARGET_LINK_LIBRARIES(otbCommonTests10 OTBIO pq pqxx)
+TARGET_LINK_LIBRARIES(otbCommonTests10 OTBIO  OTBTesting pq pqxx)
 ENDIF(OTB_USE_PQXX)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

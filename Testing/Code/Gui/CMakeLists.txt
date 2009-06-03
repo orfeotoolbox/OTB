@@ -1,4 +1,4 @@
- 
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
@@ -15,7 +15,7 @@ SET(EPS 0.001)
 SET(GUI_TESTS ${CXX_TEST_PATH}/otbGuiTests)
 
 # -------            otb::System  -------------
-ADD_TEST(guTuFltkFilterWatcher ${GUI_TESTS}  
+ADD_TEST(guTuFltkFilterWatcher ${GUI_TESTS}
         otbFltkFilterWatcher
 	${INPUTDATA}/couleurs.tif
         )
@@ -37,11 +37,11 @@ otbFltkFilterWatcher.cxx
 otbFltkWriterWatcher.cxx
 )
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 # ${TIFF_LIBRARY}
 
-# To suppress "ld: cycle in dylib re-exports with /usr/X11R6/lib/libGL.dylib" error on APPLE configuration 
+# To suppress "ld: cycle in dylib re-exports with /usr/X11R6/lib/libGL.dylib" error on APPLE configuration
 IF(APPLE)
       FOREACH(c "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
         SET(CMAKE_EXE_LINKER_FLAGS${c} "${CMAKE_EXE_LINKER_FLAGS${c}} -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
@@ -50,6 +50,6 @@ ENDIF(APPLE)
 
 
 ADD_EXECUTABLE(otbGuiTests otbGuiTests.cxx ${Gui_SRCS})
-TARGET_LINK_LIBRARIES(otbGuiTests OTBIO OTBGui)
+TARGET_LINK_LIBRARIES(otbGuiTests OTBIO OTBGui OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -466,15 +466,15 @@ otbWaveletFilterBankNew.cxx
 otbWaveletFilterBank.cxx
 )
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 ADD_EXECUTABLE(otbMultiScaleTests1 otbMultiScaleTests1.cxx ${BasicMultiScale_SRCS1})
-TARGET_LINK_LIBRARIES(otbMultiScaleTests1 OTBIO OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbMultiScaleTests1 OTBIO OTBMultiScale OTBTesting)
 ADD_EXECUTABLE(otbMultiScaleTests2 otbMultiScaleTests2.cxx ${BasicMultiScale_SRCS2})
-TARGET_LINK_LIBRARIES(otbMultiScaleTests2 OTBIO OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbMultiScaleTests2 OTBIO OTBMultiScale OTBTesting)
 ADD_EXECUTABLE(otbMultiScaleTests3 otbMultiScaleTests3.cxx ${BasicMultiScale_SRCS3})
-TARGET_LINK_LIBRARIES(otbMultiScaleTests3 OTBIO OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbMultiScaleTests3 OTBIO OTBMultiScale OTBTesting)
 ADD_EXECUTABLE(otbMultiScaleTests4 otbMultiScaleTests4.cxx ${BasicMultiScale_SRCS4})
-TARGET_LINK_LIBRARIES(otbMultiScaleTests4 OTBIO OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbMultiScaleTests4 OTBIO OTBMultiScale OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
