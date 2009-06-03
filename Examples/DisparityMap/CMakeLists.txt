@@ -28,7 +28,7 @@ SET(TOL 0.0)
 # ------- SimpleDisparityMapEstimationExampleTest ----------
 
 
-ADD_TEST(SimpleDisparityMapEstimationExampleTest ${EXE_TESTS}
+ADD_TEST(dmTeSimpleDisparityMapEstimationExampleTest ${EXE_TESTS}
  --compare-n-images ${TOL} 2
  ${BASELINE}/deformationFieldOutput.png
  ${TEMP}/deformationFieldOutput.png

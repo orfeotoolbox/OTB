@@ -128,7 +128,7 @@ SET(TOL 0.0)
 
 # ------- CorrelationLineDetectorExampleTest----------
 
-ADD_TEST(CorrelationLineDetectorExampleTest ${EXE_TESTS1}
+ADD_TEST(feTeCorrelationLineDetectorExampleTest ${EXE_TESTS1}
 	--compare-n-images ${TOL} 2
 	${BASELINE}/amstLineCorrelations.png
 	${TEMP}/amstLineCorrelations.png
@@ -143,7 +143,7 @@ ADD_TEST(CorrelationLineDetectorExampleTest ${EXE_TESTS1}
 
 # ------- LocalHoughExampleTest----------
 
-ADD_TEST(LocalHoughExampleTest ${EXE_TESTS1}
+ADD_TEST(feTeLocalHoughExampleTest ${EXE_TESTS1}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/detected_local_hough.png
 	${TEMP}/detected_local_hough.png
@@ -155,7 +155,7 @@ ADD_TEST(LocalHoughExampleTest ${EXE_TESTS1}
 
 # ------- HarrisExampleTest----------
 
-ADD_TEST(HarrisExampleTest ${EXE_TESTS1}
+ADD_TEST(feTeHarrisExampleTest ${EXE_TESTS1}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/ROISpot5Harris.png
 	${TEMP}/ROISpot5Harris.png
@@ -167,7 +167,7 @@ ADD_TEST(HarrisExampleTest ${EXE_TESTS1}
 
 # ------- TouziEdgeDetectorExampleTest----------
 
-ADD_TEST(TouziEdgeDetectorExampleTest ${EXE_TESTS1}
+ADD_TEST(feTeTouziEdgeDetectorExampleTest ${EXE_TESTS1}
 	--compare-n-images ${TOL} 2
 	${BASELINE}/amstTouziEdges.png
 	${TEMP}/amstTouziEdges.png
@@ -182,7 +182,7 @@ ADD_TEST(TouziEdgeDetectorExampleTest ${EXE_TESTS1}
 
 # ------- ExtractSegmentsByStepsExampleTest----------
 
-ADD_TEST(ExtractSegmentsByStepsExampleTest ${EXE_TESTS1}
+ADD_TEST(feTeExtractSegmentsByStepsExampleTest ${EXE_TESTS1}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/amstSegmentExtractionBySteps.png
 	${TEMP}/amstSegmentExtractionBySteps.png
@@ -194,7 +194,7 @@ ADD_TEST(ExtractSegmentsByStepsExampleTest ${EXE_TESTS1}
 
 # ------- AssymmetricFusionOfLineDetectorExampleTest----------
 
-ADD_TEST(AssymmetricFusionOfLineDetectorExampleTest ${EXE_TESTS1}
+ADD_TEST(feTeAssymmetricFusionOfLineDetectorExampleTest ${EXE_TESTS1}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/amstLineFusion.png
 	${TEMP}/amstLineFusion.png
@@ -206,7 +206,7 @@ ADD_TEST(AssymmetricFusionOfLineDetectorExampleTest ${EXE_TESTS1}
 
 # ------- ExtractSegmentsExampleTest----------
 
-ADD_TEST(ExtractSegmentsExampleTest ${EXE_TESTS1}
+ADD_TEST(feTeExtractSegmentsExampleTest ${EXE_TESTS1}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/amstSegmentExtraction.png
 	${TEMP}/amstSegmentExtraction.png
@@ -218,7 +218,7 @@ ADD_TEST(ExtractSegmentsExampleTest ${EXE_TESTS1}
 
 # ------- RatioLineDetectorExampleTest----------
 
-ADD_TEST(RatioLineDetectorExampleTest ${EXE_TESTS1}
+ADD_TEST(feTeRatioLineDetectorExampleTest ${EXE_TESTS1}
 	--compare-n-images ${TOL} 2
 	${BASELINE}/amstLineRatios.png
 	${TEMP}/amstLineRatios.png
@@ -233,7 +233,7 @@ ADD_TEST(RatioLineDetectorExampleTest ${EXE_TESTS1}
 
 # ------- AlignmentsExampleTest----------
 
-ADD_TEST(AlignmentsExampleTest ${EXE_TESTS1}
+ADD_TEST(feTeAlignmentsExampleTest ${EXE_TESTS1}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/QB_SuburbAlign.png
 	${TEMP}/QB_SuburbAlign.png
@@ -246,7 +246,7 @@ ADD_TEST(AlignmentsExampleTest ${EXE_TESTS1}
 # ------- RoadExtractionExamplesTest----------
 
 
-ADD_TEST(ExtractRoadByStepsExampleTest ${EXE_TESTS2}
+ADD_TEST(feTeExtractRoadByStepsExampleTest ${EXE_TESTS2}
         --compare-n-images ${TOL} 2
 	${BASELINE}/qb_ExtractRoad_pretty.png
 	${TEMP}/qb_ExtractRoad_pretty.png
@@ -260,7 +260,7 @@ ADD_TEST(ExtractRoadByStepsExampleTest ${EXE_TESTS2}
 )
 
 
-ADD_TEST(ExtractRoadExampleTest ${EXE_TESTS2}
+ADD_TEST(feTeExtractRoadExampleTest ${EXE_TESTS2}
         --compare-image ${TOL}
         ${BASELINE}/ExtractRoadExampleOutput.png
         ${TEMP}/ExtractRoadExampleOutput.png
@@ -272,7 +272,7 @@ ADD_TEST(ExtractRoadExampleTest ${EXE_TESTS2}
 
 # ------- SeamCarvingExamplesTest----------
 
-ADD_TEST(SeamCarvingExampleTest ${EXE_TESTS2}
+ADD_TEST(feTeSeamCarvingExampleTest ${EXE_TESTS2}
         --compare-image ${TOL}
         ${BASELINE}/SeamCarvingExampleOutput.png
         ${TEMP}/SeamCarvingExampleOutput.png
@@ -282,7 +282,7 @@ ADD_TEST(SeamCarvingExampleTest ${EXE_TESTS2}
 	50
 )
 
-ADD_TEST(SeamCarvingOtherExampleTest ${EXE_TESTS2}
+ADD_TEST(feTeSeamCarvingOtherExampleTest ${EXE_TESTS2}
         --compare-image ${TOL}
         ${BASELINE}/SeamCarvingOtherExampleOutput.png
         ${TEMP}/SeamCarvingOtherExampleOutput.png
@@ -292,7 +292,7 @@ ADD_TEST(SeamCarvingOtherExampleTest ${EXE_TESTS2}
 	50
 )
 
-#ADD_TEST(ImageToSIFTKeyPointSetFilterTest ${EXE_TESTS}
+#ADD_TEST(feTeImageToSIFTKeyPointSetFilterTest ${EXE_TESTS}
 #        --compare-image ${TOL}
 #        ${BASELINE}/ImageToSIFTKeyPointSetFilterOutput.png
 #        ${TEMP}/ImageToSIFTKeyPointSetFilterOutput.png
@@ -302,7 +302,7 @@ ADD_TEST(SeamCarvingOtherExampleTest ${EXE_TESTS2}
 #	6 3 0.08 10
 #)
 
-ADD_TEST(ScaleInvariantFeatureImageFilterTest ${EXE_TESTS2}
+ADD_TEST(feTeScaleInvariantFeatureImageFilterTest ${EXE_TESTS2}
         --compare-n-images ${TOL} 4
         ${BASELINE}/ScaleInvariantFeatureImageFilterOutput1.png
         ${TEMP}/ScaleInvariantFeatureImageFilterOutput1.png
@@ -325,7 +325,7 @@ ADD_TEST(ScaleInvariantFeatureImageFilterTest ${EXE_TESTS2}
 
 # ------- CloudDetectionExampleTest----------
 
-ADD_TEST(CloudDetectionExampleTest ${EXE_TESTS2}
+ADD_TEST(feTeCloudDetectionExampleTest ${EXE_TESTS2}
         --compare-image ${TOL}
         ${BASELINE}/CloudDetectionOutput.png
         ${TEMP}/PrettyCloudDetectionOutput.png
@@ -339,7 +339,7 @@ ADD_TEST(CloudDetectionExampleTest ${EXE_TESTS2}
 
 # ------- Right Angle Detection test----------
 
-ADD_TEST(RightAngleDetectionExample  ${EXE_TESTS2}
+ADD_TEST(feTeRightAngleDetectionExample  ${EXE_TESTS2}
         --compare-image ${TOL}
         ${BASELINE}/RightAngleOutput.png
         ${TEMP}/PrettyRightAngleOutput.png

@@ -60,7 +60,7 @@ SET(PNGEPSILON 2)
 
 # ------- CorrelChDetTest----------
 
-ADD_TEST(CorrelChDetTest ${EXE_TESTS}
+ADD_TEST(cdTeCorrelChDetTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/CorrChDet.tif
 	${TEMP}/CorrChDet.tif
@@ -73,7 +73,7 @@ ADD_TEST(CorrelChDetTest ${EXE_TESTS}
 
 # ------- DiffChDetTest----------
 
-ADD_TEST(DiffChDetTest ${EXE_TESTS}
+ADD_TEST(cdTeDiffChDetTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/DiffChDet.tif
 	${TEMP}/DiffChDet.tif
@@ -86,7 +86,7 @@ ADD_TEST(DiffChDetTest ${EXE_TESTS}
 
 # ------- RatioChDetTest----------
 
-ADD_TEST(RatioChDetTest ${EXE_TESTS}
+ADD_TEST(cdTeRatioChDetTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/RatioChDet.tif
 	${TEMP}/RatioChDet.tif
@@ -99,7 +99,7 @@ ADD_TEST(RatioChDetTest ${EXE_TESTS}
 
 # ------- KullbackLeiblerDistanceChDetTest----------
 
-ADD_TEST(KullbackLeiblerDistanceChDetTest ${EXE_TESTS}
+ADD_TEST(cdTeKullbackLeiblerDistanceChDetTest ${EXE_TESTS}
 	--compare-n-images ${PNGEPSILON} 1
 	${BASELINE}/KullbackLeiblerDistanceChDetTest.png
 	${TEMP}/KullbackLeiblerDistanceChDetTest.png
@@ -112,7 +112,7 @@ ADD_TEST(KullbackLeiblerDistanceChDetTest ${EXE_TESTS}
 
 # ------- KullbackLeiblerProfileChDetTest----------
 
-ADD_TEST(KullbackLeiblerProfileChDetTest ${EXE_TESTS}
+ADD_TEST(cdTeKullbackLeiblerProfileChDetTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/KullbackLeiblerProfileChDetTest.png
 	${TEMP}/KullbackLeiblerProfileChDetTest.png

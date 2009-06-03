@@ -30,7 +30,7 @@ SET(TOL 0.0)
 
 # ------- MorphologicalPyramidAnalysisFilterExampleTest ----------
 
-ADD_TEST(MorphologicalPyramidAnalysisFilterExampleTest ${EXE_TESTS}
+ADD_TEST(msTeMorphologicalPyramidAnalysisFilterExampleTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 20
 	${BASELINE}/suburb2_an_1.jpeg ${TEMP}/suburb2_an_1.jpeg
 	${BASELINE}/suburb2_an_2.jpeg ${TEMP}/suburb2_an_2.jpeg
@@ -69,7 +69,7 @@ ADD_TEST(MorphologicalPyramidAnalysisFilterExampleTest ${EXE_TESTS}
 
 # ------- MorphologicalPyramidSynthesisFilterExampleTest ----------
 
-ADD_TEST(MorphologicalPyramidSynthesisFilterExampleTest ${EXE_TESTS}
+ADD_TEST(msTeMorphologicalPyramidSynthesisFilterExampleTest ${EXE_TESTS}
 	--compare-image ${TOL}
 	${BASELINE}/suburb2_synthesis.jpeg
 	${TEMP}/suburb2_synthesis.jpeg
@@ -81,7 +81,7 @@ ADD_TEST(MorphologicalPyramidSynthesisFilterExampleTest ${EXE_TESTS}
 
 # ------- MorphologicalPyramidSegmenterExampleTest ----------
 
-ADD_TEST(MorphologicalPyramidSegmenterExampleTest ${EXE_TESTS}
+ADD_TEST(msTeMorphologicalPyramidSegmenterExampleTest ${EXE_TESTS}
 	--compare-image ${TOL}
 	${BASELINE}/outputPyrSegmented.tif
 	${TEMP}/outputPyrSegmented.tif

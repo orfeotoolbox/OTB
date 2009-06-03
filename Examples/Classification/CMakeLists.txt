@@ -130,7 +130,7 @@ SET(TOL 0.0)
 
 # ------- ScalarImageMarkovRandomField1Test----------
 
-ADD_TEST(ScalarImageMarkovRandomField1Test ${EXE_TESTS}
+ADD_TEST(clTeScalarImageMarkovRandomField1Test ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/ScalarImageMarkovRandomField1Output.png
 	${TEMP}/ScalarImageMarkovRandomField1Output.png
@@ -143,7 +143,7 @@ ADD_TEST(ScalarImageMarkovRandomField1Test ${EXE_TESTS}
 
 # ------- ScalarImageKmeansClassifierTest----------
 
-ADD_TEST(ScalarImageKmeansClassifierTest ${EXE_TESTS}
+ADD_TEST(clTeScalarImageKmeansClassifierTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/QB_Suburb_labelled.png
 	${TEMP}/QB_Suburb_labelled.png
