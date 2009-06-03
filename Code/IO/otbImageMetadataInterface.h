@@ -153,8 +153,8 @@ protected:
   VariableLengthVectorType GetIkonosPhysicalBias( const MetaDataDictionaryType & dict ) const;
   VariableLengthVectorType GetIkonosPhysicalGain( const MetaDataDictionaryType & dict ) const;
 
-//   VariableLengthVectorType GetQuickbirdPhysicalBias( const MetaDataDictionaryType & dict ) const;
-//   VariableLengthVectorType GetQuickbirdPhysicalGain( const MetaDataDictionaryType & dict ) const;
+  VariableLengthVectorType GetQuickbirdPhysicalBias( const MetaDataDictionaryType & dict ) const;
+  VariableLengthVectorType GetQuickbirdPhysicalGain( const MetaDataDictionaryType & dict ) const;
 
 private:
 

@@ -317,6 +317,11 @@ ImageMetadataInterface::VariableLengthVectorType
     return GetIkonosPhysicalBias(dict);
   }
 
+  if(IsQuickbird(dict))
+  {
+    return GetQuickbirdPhysicalBias(dict);
+  }
+
   VariableLengthVectorType output(1);
   output.Fill(0);
   return output;
@@ -333,6 +338,11 @@ ImageMetadataInterface::VariableLengthVectorType
   if(IsIkonos(dict))
   {
     return GetIkonosPhysicalGain(dict);
+  }
+
+  if(IsQuickbird(dict))
+  {
+    return GetQuickbirdPhysicalGain(dict);
   }
 
   VariableLengthVectorType output(1);
@@ -488,6 +498,12 @@ int ImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) const
     separatorList = "/";
   }
 
+  if(IsQuickbird(dict))
+  {
+    key = "support_data.generation_date";
+    separatorList = "-T";
+  }
+
   ossimString keywordString = kwl.find(key.c_str());
   //ossimString separatorList = "-T";
   //std::string key= "support_data.image_date";
@@ -527,6 +543,12 @@ int ImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) cons
     separatorList = "/";
   }
 
+  if(IsQuickbird(dict))
+  {
+    key = "support_data.generation_date";
+    separatorList = "-T";
+  }
+
   ossimString keywordString = kwl.find(key.c_str());
   //ossimString separatorList = "-T";
   //std::string key= "support_data.image_date";
@@ -541,6 +563,7 @@ int ImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) cons
 
 int ImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) const
 {
+std::cout<<"ImageMetadataInterface::GetYear"<<std::endl;
   //The image date in the ossim metadata has the form: 2007-10-03T03:17:16.973000
   ImageKeywordlistType imageKeywordlist;
 
@@ -564,6 +587,12 @@ int ImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) const
   {
     key = "support_data.production_date";
     separatorList = "/";
+  }
+
+  if(IsQuickbird(dict))
+  {
+    key = "support_data.generation_date";
+    separatorList = "-T";
   }
 
   ossimString keywordString = kwl.find(key.c_str());
@@ -657,7 +686,7 @@ bool ImageMetadataInterface::IsSpot( const MetaDataDictionaryType & dict ) const
 bool ImageMetadataInterface::IsIkonos( const MetaDataDictionaryType & dict ) const
 {
   std::string sensorID = GetSensorID(dict);
-  if (sensorID.find("IKONOS-1") != std::string::npos || sensorID.find("IKONOS-2") != std::string::npos)
+  if (sensorID.find("IKONOS-2") != std::string::npos)
     return true;
   else
     return false;
@@ -666,7 +695,7 @@ bool ImageMetadataInterface::IsIkonos( const MetaDataDictionaryType & dict ) con
 bool ImageMetadataInterface::IsQuickbird( const MetaDataDictionaryType & dict ) const
 {
   std::string sensorID = GetSensorID(dict);
-  if (sensorID.find("QB") != std::string::npos)
+  if (sensorID.find("QB02") != std::string::npos)
     return true;
   else
     return false;
@@ -762,8 +791,28 @@ ImageMetadataInterface::VariableLengthVectorType
 }
 
 
+ImageMetadataInterface::VariableLengthVectorType
+    ImageMetadataInterface::GetQuickbirdPhysicalBias( const MetaDataDictionaryType & dict ) const
+{
+  VariableLengthVectorType outputValuesVariableLengthVector;
+  outputValuesVariableLengthVector.SetSize(GetNumberOfBands(dict));
+  outputValuesVariableLengthVector.Fill(0.0);
 
-/** CHECK THE BIAS : 0 0 0 0 !!! */
+  return outputValuesVariableLengthVector;
+}
+
+
+ImageMetadataInterface::VariableLengthVectorType
+    ImageMetadataInterface::GetQuickbirdPhysicalGain( const MetaDataDictionaryType & dict ) const
+{
+  VariableLengthVectorType outputValuesVariableLengthVector;
+  outputValuesVariableLengthVector.SetSize(GetNumberOfBands(dict));
+  outputValuesVariableLengthVector.Fill(0.0);
+
+  return outputValuesVariableLengthVector;
+}
+
+
 ImageMetadataInterface::VariableLengthVectorType
     ImageMetadataInterface::GetIkonosPhysicalBias( const MetaDataDictionaryType & dict ) const
 {

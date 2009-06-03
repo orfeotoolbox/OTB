@@ -130,10 +130,10 @@ public:
   <RenderingModelType,ViewType>                     ChangeScaleHandlerType;
   typedef otb::ArrowKeyMoveActionHandler
   <RenderingModelType,ViewType>                     ArrowKeyMoveActionHandlerType;
+
   /** Rendering function */
   typedef typename ImageLayerGeneratorType::RenderingFunctionType StandardRenderingFunctionType;
   typedef typename StandardRenderingFunctionType::Pointer StandardRenderingFunctionPointerType;
-
 
   /** Pixel description */
   typedef PixelDescriptionModel<OutputImageType>    PixelDescriptionModelType;

@@ -23,11 +23,11 @@
 #include "itkExceptionObject.h"
 
 #include <iostream>
-#include "otbVectorImage.h"
-
-#include "otbImageFileReader.h"
-#include "otbImageMetadataInterface.h"
-
+//#include "otbVectorImage.h"
+//#include "otbImageFileReader.h"
+//#include "otbImageMetadataInterface.h"
+#include "support_data/ossimQuickbirdMetaData.h"
+#include "base/ossimFilename.h"
 
 int otbImageMetadataInterfaceTest (int argc, char* argv[])
 {
@@ -35,7 +35,7 @@ int otbImageMetadataInterfaceTest (int argc, char* argv[])
 
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];
-
+/*
   typedef otb::VectorImage< double,  2 >                 InputImageType;
   typedef otb::ImageFileReader< InputImageType >         ImageReaderType;
 
@@ -55,6 +55,12 @@ int otbImageMetadataInterfaceTest (int argc, char* argv[])
   std::cout<<"GetYear:            "<<lImageMetadata->GetYear(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
   std::cout<<"GetSolarIrradiance: "<<lImageMetadata->GetSolarIrradiance(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
   std::cout<<"GetSunElevation:    "<<lImageMetadata->GetSunElevation(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
+*/
+
+ossimQuickbirdMetaData * meataData = new ossimQuickbirdMetaData();
+meataData->open(ossimFilename(inputFilename));
+std::cout<<"TEST : OPEN DONE"<<std::endl;
+delete meataData;
 
   return EXIT_SUCCESS;
 
