@@ -262,7 +262,7 @@ SET(PNGTOL 2)
 
 # ------- MathematicalMorphologyBinaryFiltersTest----------
 
-ADD_TEST(MathematicalMorphologyBinaryFiltersTest ${EXE_TESTS}
+ADD_TEST(fiTeMathematicalMorphologyBinaryFiltersTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 2
 	${BASELINE}/MathematicalMorphologyBinaryErosionOutput.png
 	${TEMP}/MathematicalMorphologyBinaryErosionOutput.png
@@ -277,7 +277,7 @@ ADD_TEST(MathematicalMorphologyBinaryFiltersTest ${EXE_TESTS}
 
 # ------- DanielssonDistanceMapImageFilterTest----------
 
-ADD_TEST(DanielssonDistanceMapImageFilterTest ${EXE_TESTS}
+ADD_TEST(fiTeDanielssonDistanceMapImageFilterTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 3
 	${BASELINE}/DanielssonDistanceMapImageFilterOutput1.png
 	${TEMP}/DanielssonDistanceMapImageFilterOutput1.png
@@ -294,7 +294,7 @@ ADD_TEST(DanielssonDistanceMapImageFilterTest ${EXE_TESTS}
 
 # ------- MeanImageFilterTest----------
 
-ADD_TEST(MeanImageFilterTest ${EXE_TESTS}
+ADD_TEST(fiTeMeanImageFilterTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/MeanImageFilterOutput.png
 	${TEMP}/MeanImageFilterOutput.png
@@ -305,7 +305,7 @@ ADD_TEST(MeanImageFilterTest ${EXE_TESTS}
 
 # ------- ThresholdImageFilterTest----------
 
-ADD_TEST(ThresholdImageFilterTest ${EXE_TESTS}
+ADD_TEST(fiTeThresholdImageFilterTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 3
 	${BASELINE}/ThresholdImageFilterOutputBelow.png
 	${TEMP}/ThresholdImageFilterOutputBelow.png
@@ -322,7 +322,7 @@ ADD_TEST(ThresholdImageFilterTest ${EXE_TESTS}
 
 # ------- GradientMagnitudeRecursiveGaussianImageFilterTest----------
 
-ADD_TEST(GradientMagnitudeRecursiveGaussianImageFilterTest ${EXE_TESTS}
+ADD_TEST(fiTeGradientMagnitudeRecursiveGaussianImageFilterTest ${EXE_TESTS}
 	--compare-n-images ${PNGTOL} 1
 	${BASELINE}/GradientMagnitudeRecursiveGaussianImageFilterOutput3.png
 	${TEMP}/GradientMagnitudeRecursiveGaussianImageFilterOutput3.png
@@ -334,7 +334,7 @@ ADD_TEST(GradientMagnitudeRecursiveGaussianImageFilterTest ${EXE_TESTS}
 
 # ------- GradientMagnitudeRecursiveGaussianImageFilterTest----------
 
-ADD_TEST(GradientMagnitudeRecursiveGaussianImageFilterTest ${EXE_TESTS}
+ADD_TEST(fiTeGradientMagnitudeRecursiveGaussianImageFilterTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/GradientMagnitudeRecursiveGaussianImageFilterOutput5.png
 	${TEMP}/GradientMagnitudeRecursiveGaussianImageFilterOutput5.png
@@ -346,7 +346,7 @@ ADD_TEST(GradientMagnitudeRecursiveGaussianImageFilterTest ${EXE_TESTS}
 
 # ------- GradientAnisotropicDiffusionImageFilterTest----------
 
-ADD_TEST(GradientAnisotropicDiffusionImageFilterTest ${EXE_TESTS}
+ADD_TEST(fiTeGradientAnisotropicDiffusionImageFilterTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/GradientAnisotropicDiffusionImageFilterOutput.png
 	${TEMP}/GradientAnisotropicDiffusionImageFilterOutput.png
@@ -358,7 +358,7 @@ ADD_TEST(GradientAnisotropicDiffusionImageFilterTest ${EXE_TESTS}
 
 # ------- GradientMagnitudeImageFilterTest----------
 
-ADD_TEST(GradientMagnitudeImageFilterTest ${EXE_TESTS}
+ADD_TEST(fiTeGradientMagnitudeImageFilterTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/GradientMagnitudeImageFilterOutput.png
 	${TEMP}/GradientMagnitudeImageFilterOutput.png
@@ -369,7 +369,7 @@ ADD_TEST(GradientMagnitudeImageFilterTest ${EXE_TESTS}
 
 # ------- MathematicalMorphologyGrayscaleFiltersTest----------
 
-ADD_TEST(MathematicalMorphologyGrayscaleFiltersTest ${EXE_TESTS}
+ADD_TEST(fiTeMathematicalMorphologyGrayscaleFiltersTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 2
 	${BASELINE}/MathematicalMorphologyGrayscaleErosionOutput.png
 	${TEMP}/MathematicalMorphologyGrayscaleErosionOutput.png
@@ -384,7 +384,7 @@ ADD_TEST(MathematicalMorphologyGrayscaleFiltersTest ${EXE_TESTS}
 
 # ------- LaplacianRecursiveGaussianImageFilter1Test----------
 
-ADD_TEST(LaplacianRecursiveGaussianImageFilter1Test ${EXE_TESTS}
+ADD_TEST(fiTeLaplacianRecursiveGaussianImageFilter1Test ${EXE_TESTS}
 	--compare-n-images ${TOL} 2
 	${BASELINE}/LaplacianRecursiveGaussianImageFilteroutput3.mha
 	${TEMP}/LaplacianRecursiveGaussianImageFilteroutput3.mha
@@ -399,7 +399,7 @@ ADD_TEST(LaplacianRecursiveGaussianImageFilter1Test ${EXE_TESTS}
 
 # ------- LaplacianRecursiveGaussianImageFilter1Test----------
 
-ADD_TEST(LaplacianRecursiveGaussianImageFilter1Test ${EXE_TESTS}
+ADD_TEST(fiTeLaplacianRecursiveGaussianImageFilter1Test ${EXE_TESTS}
 	--compare-n-images ${TOL} 2
 	${BASELINE}/LaplacianRecursiveGaussianImageFilteroutput5.mha
 	${TEMP}/LaplacianRecursiveGaussianImageFilteroutput5.mha
@@ -414,7 +414,7 @@ ADD_TEST(LaplacianRecursiveGaussianImageFilter1Test ${EXE_TESTS}
 
 # ------- LaplacianRecursiveGaussianImageFilter2Test----------
 
-ADD_TEST(LaplacianRecursiveGaussianImageFilter2Test ${EXE_TESTS}
+ADD_TEST(fiTeLaplacianRecursiveGaussianImageFilter2Test ${EXE_TESTS}
 	--compare-n-images ${TOL} 2
 	${BASELINE}/LaplacianRecursiveGaussianImageFilter2output3.mha
 	${TEMP}/LaplacianRecursiveGaussianImageFilter2output3.mha
@@ -429,7 +429,7 @@ ADD_TEST(LaplacianRecursiveGaussianImageFilter2Test ${EXE_TESTS}
 
 # ------- LaplacianRecursiveGaussianImageFilter2Test----------
 
-ADD_TEST(LaplacianRecursiveGaussianImageFilter2Test ${EXE_TESTS}
+ADD_TEST(fiTeLaplacianRecursiveGaussianImageFilter2Test ${EXE_TESTS}
 	--compare-n-images ${TOL} 2
 	${BASELINE}/LaplacianRecursiveGaussianImageFilter2output5.mha
 	${TEMP}/LaplacianRecursiveGaussianImageFilter2output5.mha
@@ -444,7 +444,7 @@ ADD_TEST(LaplacianRecursiveGaussianImageFilter2Test ${EXE_TESTS}
 
 # ------- CannyEdgeDetectionImageFilterTest----------
 
-ADD_TEST(CannyEdgeDetectionImageFilterTest ${EXE_TESTS}
+ADD_TEST(fiTeCannyEdgeDetectionImageFilterTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/CannyEdgeDetectorImageFilterOutput.png
 	${TEMP}/CannyEdgeDetectorImageFilterOutput.png
@@ -456,7 +456,7 @@ ADD_TEST(CannyEdgeDetectionImageFilterTest ${EXE_TESTS}
 
 # ------- DiscreteGaussianImageFilterTest----------
 
-ADD_TEST(DiscreteGaussianImageFilterTest ${EXE_TESTS}
+ADD_TEST(fiTeDiscreteGaussianImageFilterTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/DiscreteGaussianImageFilterOutput.png
 	${TEMP}/DiscreteGaussianImageFilterOutput.png
@@ -468,7 +468,7 @@ ADD_TEST(DiscreteGaussianImageFilterTest ${EXE_TESTS}
 
 # ------- MedianImageFilterTest----------
 
-ADD_TEST(MedianImageFilterTest ${EXE_TESTS}
+ADD_TEST(fiTeMedianImageFilterTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/MedianImageFilterOutput.png
 	${TEMP}/MedianImageFilterOutput.png
@@ -479,7 +479,7 @@ ADD_TEST(MedianImageFilterTest ${EXE_TESTS}
 
 # ------- BinaryThresholdImageFilterTest----------
 
-ADD_TEST(BinaryThresholdImageFilterTest ${EXE_TESTS}
+ADD_TEST(fiTeBinaryThresholdImageFilterTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/BinaryThresholdImageFilterOutput.png
 	${TEMP}/BinaryThresholdImageFilterOutput.png
@@ -491,7 +491,7 @@ ADD_TEST(BinaryThresholdImageFilterTest ${EXE_TESTS}
 
 # ------- DerivativeImageFilterTest----------
 
-ADD_TEST(DerivativeImageFilterTest ${EXE_TESTS}
+ADD_TEST(fiTeDerivativeImageFilterTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 2
 	${BASELINE}/DerivativeImageFilterFloatOutput.mhd
 	${TEMP}/DerivativeImageFilterFloatOutput.mhd
@@ -504,7 +504,8 @@ ADD_TEST(DerivativeImageFilterTest ${EXE_TESTS}
     1 0
 )
 
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbFilteringExamplesTests otbFilteringExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbFilteringExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbFilteringExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

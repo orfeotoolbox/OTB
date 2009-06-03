@@ -135,7 +135,7 @@ SET(HIGHTOL 5000.0)
 
 # ------- ExtractROITest----------
 
-ADD_TEST(ExtractROITest ${EXE_TESTS1}
+ADD_TEST(ioTeExtractROITest ${EXE_TESTS1}
 	--compare-n-images ${TOL} 2
 	${BASELINE}/ROI_IMAGERY_RGB.png
 	${TEMP}/ROI_IMAGERY_RGB.png
@@ -149,7 +149,7 @@ ADD_TEST(ExtractROITest ${EXE_TESTS1}
     0 0 100 100
 )
 
-ADD_TEST(DEMToImageGeneratorTest ${EXE_TESTS1}
+ADD_TEST(ioTeDEMToImageGeneratorTest ${EXE_TESTS1}
 --compare-image ${TOL}  ${BASELINE}/DEMToImageGenerator.tif
                         ${TEMP}/DEMToImageGenerator.tif
         DEMToImageGeneratorTest
@@ -166,7 +166,7 @@ ADD_TEST(DEMToImageGeneratorTest ${EXE_TESTS1}
 
 IF(OTB_USE_LIBLAS)
 IF(ITK_USE_REVIEW)
-ADD_TEST(LidarToImageExampleTest ${EXE_TESTS1}
+ADD_TEST(ioTeLidarToImageExampleTest ${EXE_TESTS1}
 --compare-image ${TOL}  ${BASELINE}/lidar-image-4.hdr
                         ${TEMP}/lidar-image-4.hdr
          LidarToImageExampleTest
@@ -177,7 +177,7 @@ ADD_TEST(LidarToImageExampleTest ${EXE_TESTS1}
          5
          4
          )
-ADD_TEST(LidarToImageExample2Test ${EXE_TESTS1}
+ADD_TEST(ioTeLidarToImageExample2Test ${EXE_TESTS1}
 --compare-image ${TOL}  ${BASELINE}/lidar-image-8.hdr
                         ${TEMP}/lidar-image-8.hdr
          LidarToImageExampleTest
@@ -192,7 +192,7 @@ ENDIF(ITK_USE_REVIEW)
 ENDIF(OTB_USE_LIBLAS)
 
 IF( OTB_USE_CURL )
-ADD_TEST(TileMapImageIOExampleTest ${EXE_TESTS2}
+ADD_TEST(ioTeTileMapImageIOExampleTest ${EXE_TESTS2}
 --compare-image ${HIGHTOL}  ${BASELINE}/openStreetMap.png
                         ${TEMP}/openStreetMap.png
          TileMapImageIOExampleTest
@@ -205,15 +205,15 @@ ADD_TEST(TileMapImageIOExampleTest ${EXE_TESTS2}
          )
 ENDIF( OTB_USE_CURL )
 
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbIOExamplesTests1 otbIOExamplesTests1.cxx)
 # TARGET_LINK_LIBRARIES(otbIOExamplesTests1 OTBIO OTBBasicFilters OTBCommon OTBDisparityMap  OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBProjections ITKAlgorithms ITKStatistics  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
-TARGET_LINK_LIBRARIES(otbIOExamplesTests1 OTBIO OTBCommon)
+TARGET_LINK_LIBRARIES(otbIOExamplesTests1 OTBIO OTBCommon OTBTesting)
 
 IF( OTB_USE_CURL )
   ADD_EXECUTABLE(otbIOExamplesTests2 otbIOExamplesTests2.cxx)
 #   TARGET_LINK_LIBRARIES(otbIOExamplesTests2 OTBCommon OTBIO ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES} ${CURL_LIBRARY} )
-  TARGET_LINK_LIBRARIES(otbIOExamplesTests2 OTBCommon OTBIO ${CURL_LIBRARY} )
+  TARGET_LINK_LIBRARIES(otbIOExamplesTests2 OTBCommon OTBIO ${CURL_LIBRARY}  OTBTesting)
 ENDIF( OTB_USE_CURL )
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

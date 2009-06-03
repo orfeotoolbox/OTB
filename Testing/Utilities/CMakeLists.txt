@@ -510,7 +510,7 @@ ELSE(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}")
 
@@ -521,7 +521,7 @@ ENDIF(NOT BUILD_SHARED_LIBS)
 
 ADD_EXECUTABLE(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
 # TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon ${GDAL_LIBRARY} ITKAlgorithms ITKStatistics otbossim otbsvm otb6S tinyXML otbkml otbsiftfast)
-TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon otbsvm otb6S tinyXML otbkml otbsiftfast)
+TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon OTBTesting otbsvm otb6S tinyXML otbkml otbsiftfast)
 
 
 IF(OTB_COMPILE_JPEG2000)

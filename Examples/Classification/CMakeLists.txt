@@ -130,7 +130,7 @@ SET(TOL 0.0)
 
 # ------- ScalarImageMarkovRandomField1Test----------
 
-ADD_TEST(ScalarImageMarkovRandomField1Test ${EXE_TESTS}
+ADD_TEST(clTeScalarImageMarkovRandomField1Test ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/ScalarImageMarkovRandomField1Output.png
 	${TEMP}/ScalarImageMarkovRandomField1Output.png
@@ -143,7 +143,7 @@ ADD_TEST(ScalarImageMarkovRandomField1Test ${EXE_TESTS}
 
 # ------- ScalarImageKmeansClassifierTest----------
 
-ADD_TEST(ScalarImageKmeansClassifierTest ${EXE_TESTS}
+ADD_TEST(clTeScalarImageKmeansClassifierTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/QB_Suburb_labelled.png
 	${TEMP}/QB_Suburb_labelled.png
@@ -153,8 +153,8 @@ ADD_TEST(ScalarImageKmeansClassifierTest ${EXE_TESTS}
     0 4 79.5097 138.136 213.846 25.9395
 )
 
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbClassificationExamplesTests otbClassificationExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbClassificationExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbClassificationExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

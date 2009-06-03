@@ -55,7 +55,7 @@ SET(TOL 0.0)
 
 # ------- ImageAdaptor4Test----------
 
-ADD_TEST(ImageAdaptor4Test1 ${EXE_TESTS}
+ADD_TEST(diTeImageAdaptor4Test1 ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/ImageAdaptorThresholdingA.png
 	${TEMP}/ImageAdaptorThresholdingA.png
@@ -67,7 +67,7 @@ ADD_TEST(ImageAdaptor4Test1 ${EXE_TESTS}
 
 # ------- ImageAdaptor4Test----------
 
-ADD_TEST(ImageAdaptor4Test2 ${EXE_TESTS}
+ADD_TEST(diTeImageAdaptor4Test2 ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/ImageAdaptorThresholdingB.png
 	${TEMP}/ImageAdaptorThresholdingB.png
@@ -79,7 +79,7 @@ ADD_TEST(ImageAdaptor4Test2 ${EXE_TESTS}
 
 # ------- Image5Test----------
 
-ADD_TEST(Image5Test ${EXE_TESTS}
+ADD_TEST(diTeImage5Test ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/Image5.png
 	${TEMP}/Image5.png
@@ -89,7 +89,7 @@ ADD_TEST(Image5Test ${EXE_TESTS}
 
 # ------- Image6Test----------
 
-ADD_TEST(Image6Test ${EXE_TESTS}
+ADD_TEST(diTeImage6Test ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/Image6.tif
 	${TEMP}/Image6.tif
@@ -97,8 +97,8 @@ ADD_TEST(Image6Test ${EXE_TESTS}
 	${TEMP}/Image6.tif
 )
 
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbImageExamplesTests otbImageExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbImageExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale  )
+TARGET_LINK_LIBRARIES(otbImageExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale  OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

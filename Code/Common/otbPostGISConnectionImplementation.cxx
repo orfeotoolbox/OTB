@@ -20,6 +20,8 @@
 
 #include "otbPostGISConnectionImplementation.h"
 #include <sstream>
+#include <sstream>
+#include <assert.h>
 
 namespace otb
 {
@@ -64,9 +66,14 @@ void PostGISConnectionImplementation::ConnectToDB()
 
 void PostGISConnectionImplementation::PerformTransaction(const TransactorType& theTransaction)
 {
-  //m_PostGISConnection->perform( theTransaction() );
+  assert(0); //do not use this method yet
+//  m_PostGISConnection->perform( theTransaction );
 }
 
+PostGISConnectionImplementation::BasicConnectionType* PostGISConnectionImplementation::GetConnection()
+{
+  return m_PostGISConnection;
+}
 
 
 void PostGISConnectionImplementation::PrintSelf(std::ostream& os, itk::Indent indent) const

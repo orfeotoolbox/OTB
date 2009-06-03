@@ -37,7 +37,7 @@ SET(TOL 0.0)
 
 # ------- LeeImageFilterTest----------
 
-ADD_TEST(LeeImageFilterTest ${EXE_TESTS}
+ADD_TEST(bfTeLeeImageFilterTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/GomaSmallLeeFiltered.png
 	${TEMP}/GomaSmallLeeFiltered.png
@@ -49,7 +49,7 @@ ADD_TEST(LeeImageFilterTest ${EXE_TESTS}
 
 # ------- FrostImageFilterTest----------
 
-ADD_TEST(FrostImageFilterTest ${EXE_TESTS}
+ADD_TEST(bfTeFrostImageFilterTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/GomaSmallFrostFiltered.png
 	${TEMP}/GomaSmallFrostFiltered.png
@@ -61,7 +61,7 @@ ADD_TEST(FrostImageFilterTest ${EXE_TESTS}
 
 # ------- DEMToRainbowExampleTest ----------
 
-ADD_TEST(DEMToRainbowExampleTest ${EXE_TESTS}
+ADD_TEST(bfTeDEMToRainbowExampleTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/DEMToRainbowImageGenerator.png
 	${TEMP}/DEMToRainbowImageGenerator.png
@@ -73,7 +73,7 @@ ADD_TEST(DEMToRainbowExampleTest ${EXE_TESTS}
 
 # ------- ScalingFilterExampleTest ----------
 
-ADD_TEST(ScalingFilterExampleTest ${EXE_TESTS}
+ADD_TEST(bfTeScalingFilterExampleTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 2
 	${BASELINE}/QB_Toulouse_Ortho_PAN_rescaled.png
 	${TEMP}/QB_Toulouse_Ortho_PAN_rescaled.png
@@ -87,7 +87,7 @@ ADD_TEST(ScalingFilterExampleTest ${EXE_TESTS}
 
 # ------- PrintableImageFilterTest----------
 
-ADD_TEST(PrintableImageFilterExample1Test ${EXE_TESTS}
+ADD_TEST(bfTePrintableImageFilterExample1Test ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/PrintableExampleOutput1.png
 	${TEMP}/PrintableExampleOutput1.png
@@ -97,7 +97,7 @@ ADD_TEST(PrintableImageFilterExample1Test ${EXE_TESTS}
     1 2 3
 )
 
-ADD_TEST(PrintableImageFilteExample2rTest ${EXE_TESTS}
+ADD_TEST(bfTePrintableImageFilteExample2rTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/PrintableExampleOutput2.png
 	${TEMP}/PrintableExampleOutput2.png
@@ -109,7 +109,7 @@ ADD_TEST(PrintableImageFilteExample2rTest ${EXE_TESTS}
 
 # ------- IndexedToRGBExampleTest----------
 
-ADD_TEST(IndexedToRGBExampleTest ${EXE_TESTS}
+ADD_TEST(bfTeIndexedToRGBExampleTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 2
 	${BASELINE}/buildingExtractionRGB.png
 	${TEMP}/buildingExtractionRGB.png
@@ -121,7 +121,7 @@ ADD_TEST(IndexedToRGBExampleTest ${EXE_TESTS}
 	${TEMP}/buildingExtractionIndexed_scaled.png
 )
 
-ADD_TEST(MeanShiftVectorImageFilterExampleTest ${EXE_TESTS}
+ADD_TEST(bfTeMeanShiftVectorImageFilterExampleTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 6
 	${BASELINE}/MSFilteredOutput.tif
 	${TEMP}/MSFilteredOutput.tif
@@ -149,8 +149,8 @@ ADD_TEST(MeanShiftVectorImageFilterExampleTest ${EXE_TESTS}
         1.0
 )
 
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbBasicFiltersExamplesTests otbBasicFiltersExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbBasicFiltersExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbBasicFiltersExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

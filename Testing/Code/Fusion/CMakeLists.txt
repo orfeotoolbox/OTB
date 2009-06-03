@@ -18,48 +18,48 @@ SET(EPSILON 0.00000001)
 
 SET(FUSION_TESTS1 ${CXX_TEST_PATH}/otbFusionTests1)
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFusion1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -------            otb::ImageFusionBase   ------------------------------
-ADD_TEST(fuTuFusionImageBaseNew ${FUSION_TESTS1}  
+ADD_TEST(fuTuFusionImageBaseNew ${FUSION_TESTS1}
         otbFusionImageBaseNew
 )
 # -------            otb::BayesianFusionFilter   ------------------------------
-ADD_TEST(fuTuBayesianFusionFilterNew ${FUSION_TESTS1}  
+ADD_TEST(fuTuBayesianFusionFilterNew ${FUSION_TESTS1}
         otbBayesianFusionFilterNew
 )
 
-ADD_TEST(fuTvBayesianFusionFilter ${FUSION_TESTS1} 
+ADD_TEST(fuTvBayesianFusionFilter ${FUSION_TESTS1}
     --compare-image ${TOL}  ${BASELINE}/fuTvBayesianFusion.tif
                            ${TEMP}/fuTvBayesianFusion.tif
         otbBayesianFusionFilter
-	${INPUTDATA}/multiSpect.tif 
-	${INPUTDATA}/multiSpectInterp.tif 
-	${INPUTDATA}/panchro.tif 
+	${INPUTDATA}/multiSpect.tif
+	${INPUTDATA}/multiSpectInterp.tif
+	${INPUTDATA}/panchro.tif
 	${TEMP}/fuTvBayesianFusion.tif
 )
 
 
 # -------    otb::SimpleRcsPanSharpeningFusionImageFilter   -------------------
-ADD_TEST(fuTuSimpleRcsPanSharpeningFusionImageFilterNew ${FUSION_TESTS1}  
+ADD_TEST(fuTuSimpleRcsPanSharpeningFusionImageFilterNew ${FUSION_TESTS1}
         otbSimpleRcsPanSharpeningFusionImageFilterNew
 )
 
-ADD_TEST(fuTvSimpleRcsPanSharpeningFusionImageFilter ${FUSION_TESTS1} 
+ADD_TEST(fuTvSimpleRcsPanSharpeningFusionImageFilter ${FUSION_TESTS1}
     --compare-image ${EPSILON}  ${BASELINE}/fuTvRcsPanSharpeningFusion.tif
                            ${TEMP}/fuTvRcsPanSharpeningFusion.tif
         otbSimpleRcsPanSharpeningFusionImageFilter
 	${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-	${INPUTDATA}/QB_Toulouse_Ortho_XS.tif 
+	${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
 	${TEMP}/fuTvRcsPanSharpeningFusion.tif
 )
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFusion2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
-        
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # A enrichir
 SET(Fusion_SRCS1
 otbFusionImageBaseNew.cxx
@@ -69,11 +69,10 @@ otbSimpleRcsPanSharpeningFusionImageFilterNew.cxx
 otbSimpleRcsPanSharpeningFusionImageFilter.cxx
 )
 
-
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 ADD_EXECUTABLE(otbFusionTests1 otbFusionTests1.cxx ${Fusion_SRCS1})
-TARGET_LINK_LIBRARIES(otbFusionTests1  OTBFusion OTBIO)
+TARGET_LINK_LIBRARIES(otbFusionTests1  OTBFusion OTBIO OTBTesting)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

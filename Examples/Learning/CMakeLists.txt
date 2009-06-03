@@ -61,7 +61,7 @@ SET(EPS 0.001)
 
 # ------- SVMImageClassificationExampleTest----------
 
-ADD_TEST(SVMImageClassificationExampleTest ${EXE_TESTS}
+ADD_TEST(leTeSVMImageClassificationExampleTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/ROI_QB_MUL_1_SVN_CLASS.png
 	${TEMP}/ROI_QB_MUL_1_SVN_CLASS.png
@@ -73,7 +73,7 @@ ADD_TEST(SVMImageClassificationExampleTest ${EXE_TESTS}
 
 # ------- SVMImageEstimatorClassificationMultiExampleTest----------
 
-ADD_TEST(SVMImageEstimatorClassificationMultiExampleTest ${EXE_TESTS}
+ADD_TEST(leTeSVMImageEstimatorClassificationMultiExampleTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
 	${TEMP}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
@@ -86,7 +86,7 @@ ADD_TEST(SVMImageEstimatorClassificationMultiExampleTest ${EXE_TESTS}
 
 # ------- GenerateTrainingImageExampleTest----------
 
-ADD_TEST(GenerateTrainingImageExampleTest ${EXE_TESTS}
+ADD_TEST(leTeGenerateTrainingImageExampleTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/ROI_QB_MUL_4_training.png
 	${TEMP}/ROI_QB_MUL_4_training.png
@@ -98,7 +98,7 @@ ADD_TEST(GenerateTrainingImageExampleTest ${EXE_TESTS}
 
 # ------- SVMImageModelEstimatorExampleTest----------
 
-ADD_TEST(SVMImageModelEstimatorExampleTest ${EXE_TESTS}
+ADD_TEST(leTeSVMImageModelEstimatorExampleTest ${EXE_TESTS}
 	--compare-ascii ${EPS}
 	${BASELINE}/svm_image_model.svn
 	${TEMP}/svm_image_model.svn
@@ -111,7 +111,7 @@ ADD_TEST(SVMImageModelEstimatorExampleTest ${EXE_TESTS}
 
 # ------- SOMExampleTest----------
 
-ADD_TEST(SOMExampleTest ${EXE_TESTS}
+ADD_TEST(leTeSOMExampleTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 2
 	${BASELINE}/ROI_QB_MUL_SOM.png
 	${TEMP}/ROI_QB_MUL_SOM.png
@@ -126,7 +126,7 @@ ADD_TEST(SOMExampleTest ${EXE_TESTS}
 
 # ------- SOMClassifierExampleTest----------
 
-ADD_TEST(SOMClassifierExampleTest ${EXE_TESTS}
+ADD_TEST(leTeSOMClassifierExampleTest ${EXE_TESTS}
 	--compare-image ${TOL}
 	${BASELINE}/ROI_QB_MUL_extractSOMCLASS.tif
 	${TEMP}/ROI_QB_MUL_extractSOMCLASS.tif
@@ -138,7 +138,7 @@ ADD_TEST(SOMClassifierExampleTest ${EXE_TESTS}
 
 # ------- SEMModelEstimatorExampleTest----------
 
-ADD_TEST(SEMModelEstimatorExampleTest ${EXE_TESTS}
+ADD_TEST(leTeSEMModelEstimatorExampleTest ${EXE_TESTS}
 #	--compare-image ${TOL}
 #	${BASELINE}/ROI_QB_MUL_SEMMODEL_ESTIMATOR.png
 #	${TEMP}/ROI_QB_MUL_SEMMODEL_ESTIMATOR.png
@@ -150,7 +150,7 @@ ADD_TEST(SEMModelEstimatorExampleTest ${EXE_TESTS}
 
 # ------- SVMGenericKernelImageModelEstimatorExampleTest----------
 
-ADD_TEST(SVMGenericKernelImageModelEstimatorExampleTest ${EXE_TESTS}
+ADD_TEST(leTeSVMGenericKernelImageModelEstimatorExampleTest ${EXE_TESTS}
 	--compare-ascii ${EPS}
 	${BASELINE}/svm_image_model_generic_kernel.svn
 	${TEMP}/svm_image_model_generic_kernel.svn
@@ -162,7 +162,7 @@ ADD_TEST(SVMGenericKernelImageModelEstimatorExampleTest ${EXE_TESTS}
 
 # ------- SVMGenericKernelImageClassificationExampleTest----------
 
-ADD_TEST(SVMGenericKernelImageClassificationExampleTest ${EXE_TESTS}
+ADD_TEST(leTeSVMGenericKernelImageClassificationExampleTest ${EXE_TESTS}
 	--compare-ascii ${EPS}
 	${BASELINE}/svm_image_model_generic_kernel.svn
 	${TEMP}/svm_image_model_generic_kernel.svn
@@ -172,8 +172,8 @@ ADD_TEST(SVMGenericKernelImageClassificationExampleTest ${EXE_TESTS}
 	${INPUTDATA}/svm_image_model_generic_kernel.svn
 )
 
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbLearningExamplesTests otbLearningExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbLearningExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbLearningExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

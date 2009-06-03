@@ -30,18 +30,18 @@ SET(EPSILON 0.000000000001)
 
 # -------            ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter   ------------------------------
 
-ADD_TEST(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}  
-  --compare-image ${EPSILON}   
+ADD_TEST(raTeARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
+  --compare-image ${EPSILON}
   		  ${BASELINE}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
                   ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
        ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest
-        	  ${INPUTDATA}/poupees_sub.png 
+        	  ${INPUTDATA}/poupees_sub.png
 	          ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
-              ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex3.tif		
-	          ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex2.tif 
- 	          1 
- 	          2 
- 	          3	
+              ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex3.tif
+	          ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex2.tif
+ 	          1
+ 	          2
+ 	          3
          	  0.6 # Gamma parameter
  	)
 
@@ -49,8 +49,8 @@ ADD_TEST(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
 
 # -------            AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest   ------------------------------
 
-ADD_TEST(AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}  
-  #--compare-image ${TOL}   
+ADD_TEST(raTeAVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
+  #--compare-image ${TOL}
               #${BASELINE}/AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest.tif
               #${TEMP}/AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest.tif
     AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest
@@ -69,9 +69,9 @@ ADD_TEST(AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
 
 
 # -------            NDVIRAndNIRVegetationIndexImageFilter   ------------------------------
-        
-ADD_TEST(NDVIRAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}  
-  --compare-image ${TOL}   
+
+ADD_TEST(raTeNDVIRAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
+  --compare-image ${TOL}
   	          ${BASELINE}/NDVIRAndNIRVegetationIndex.tif
                   ${TEMP}/NDVIRAndNIRVegetationIndex.tif
        NDVIRAndNIRVegetationIndexImageFilterTest
@@ -85,8 +85,8 @@ ADD_TEST(NDVIRAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
 
 
 
-ADD_TEST(AtmosphericCorrectionSequencementTest ${EXE_TESTS}  
-        --compare-image ${EPSILON}  
+ADD_TEST(raTeAtmosphericCorrectionSequencementTest ${EXE_TESTS}
+        --compare-image ${EPSILON}
 		${BASELINE}/Example_RomaniaAtmosphericCorrectionSequencement.tif
                 ${TEMP}/Example_RomaniaAtmosphericCorrectionSequencement.tif
         AtmosphericCorrectionSequencementTest
@@ -95,30 +95,30 @@ ADD_TEST(AtmosphericCorrectionSequencementTest ${EXE_TESTS}
         ${INPUTDATA}/atmosphericCorrectionSequencement_alpha_beta.txt
         ${INPUTDATA}/atmosphericCorrectionSequencement_solar_illumination.txt
         ${INPUTDATA}/atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt
-        
-# ImageToLuminance parameters                
-# LuminanceToReflectance parameters                
+
+# ImageToLuminance parameters
+# LuminanceToReflectance parameters
         27.3    #solar azimuthal elevation
 	4       #day
 	12      #mounth
-# AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms parameters                
+# AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms parameters
         152.7
-	2.5	
+	2.5
         -77.0
         1013.
         2.48134
         0.34400
-        1		
-        0.199854		
-# ReflectanceToSurfaceReflectance parameters                
-# SurfaceAdjencyEffect6SCorrectionSchemeFilter parameters                
-	2       # Radius;	
+        1
+        0.199854
+# ReflectanceToSurfaceReflectance parameters
+# SurfaceAdjencyEffect6SCorrectionSchemeFilter parameters
+	2       # Radius;
 	0.020   # pixel spacing in kilometers
         )
 
 
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbRadiometryExamplesTests otbRadiometryExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbRadiometryExamplesTests OTBBasicFilters OTBCommon OTBDisparityMap OTBRadiometry OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion   ITKAlgorithms ITKStatistics ITKNumerics )
+TARGET_LINK_LIBRARIES(otbRadiometryExamplesTests OTBBasicFilters OTBCommon OTBDisparityMap OTBRadiometry OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion   ITKAlgorithms ITKStatistics ITKNumerics  OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

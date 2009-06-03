@@ -33,7 +33,7 @@ int otbDisparityMapEstimationMethod(int argc, char* argv[])
   const char* pointSetFileName = argv[3];
   const char* outputFileName = argv[4];
   const unsigned int exploSize = atoi(argv[5]);
-  const unsigned int winSize = 20;
+  const unsigned int winSize = atoi(argv[6]);
 
   const unsigned int Dimension=2;
   typedef double PixelType;

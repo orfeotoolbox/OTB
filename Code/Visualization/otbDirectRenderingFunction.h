@@ -21,6 +21,7 @@
 #include "otbRenderingFunction.h"
 #include "otbMacro.h"
 #include <assert.h>
+#include <iomanip>
 
 namespace otb
 {
@@ -118,52 +119,26 @@ public:
   {
     itk::OStringStream oss;
     OutputPixelType output = this->Evaluate(vpixel);
-
     for(unsigned int channel = 0; channel < vpixel.Size();++channel)
       {
+      oss<<"c= "<< channel << ", ";
       if(channel == m_RedChannelIndex)
         {
-        oss<<"c= "<<channel<<", R= "<<(int)output[0];
-        if(output[0]<100)
-          {
-          oss<<" ";
-          }
-        if(output[0]<10)
-          {
-          oss<<" ";
-          }
-        oss<<", v= "<<static_cast<typename itk::NumericTraits<PixelType>::PrintType>(vpixel[channel])<<std::endl;
+        oss <<"R= " << std::setw(3) <<(int)output[0]<< ", ";
         }
       else if(channel == m_GreenChannelIndex)
         {
-        oss<<"c= "<<channel<<", G= "<<(int)output[1];
-        if(output[1]<100)
-          {
-          oss<<" ";
-          }
-        if(output[1]<10)
-          {
-          oss<<" ";
-          }
-        oss<<", v= "<<static_cast<typename itk::NumericTraits<PixelType>::PrintType>(vpixel[channel])<<std::endl;
+        oss <<"G= " << std::setw(3) <<(int)output[1]<< ", ";
         }
       else if(channel == m_BlueChannelIndex)
         {
-        oss<<"c= "<<channel<<", B= "<<(int)output[2];
-        if(output[2]<100)
-          {
-          oss<<" ";
-          }
-        if(output[2]<10)
-          {
-          oss<<" ";
-          }
-        oss<<", v= "<<static_cast<typename itk::NumericTraits<PixelType>::PrintType>(vpixel[channel])<<std::endl;
+        oss <<"B= " << std::setw(3) <<(int)output[2]<< ", ";
         }
       else
         {
-        oss<<"c= "<<channel<<",         v= "<<static_cast<typename itk::NumericTraits<PixelType>::PrintType>(vpixel[channel])<<std::endl;
+        oss <<"       ";
         }
+        oss<<"v= "<<static_cast<typename itk::NumericTraits<PixelType>::PrintType>(vpixel[channel])<<std::endl;
       }
     return oss.str();
   }

@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-// this file defines the otbCommonTest for the test driver
+// this file defines the otbGISFiltersTest for the test driver
 // and all it expects is that you have a function called RegisterTests
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
@@ -26,8 +26,8 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbPostGISConnectionImplementationNew);
-REGISTER_TEST(otbPostGISConnectionImplementationConnectToDB);
-REGISTER_TEST(otbPostGISConnectionImplementationPerformTransaction);  
-REGISTER_TEST(otbGISTableNew); 
+  REGISTER_TEST(otbPostGISCreateTableTransactorNew);
+  REGISTER_TEST(otbPostGISCreateTableTransactorAccessors);
+  REGISTER_TEST(otbPostGISCreateTableTransactorCreate);
+  REGISTER_TEST(otbPostGISFromStringTransactorNew);
 }

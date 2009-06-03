@@ -27,7 +27,7 @@ SET(EXE_TESTS ${CXX_TEST_PATH}/otbMarkovExamplesTests)
 SET(TOL 0.0)
 SET(EPSILON 0.00000001)
 
-ADD_TEST(MarkovClassification1ExampleTest ${EXE_TESTS}
+ADD_TEST(maTeMarkovClassification1ExampleTest ${EXE_TESTS}
 	--compare-image ${EPSILON}
                     ${BASELINE}/MarkovClassification1.png
                     ${TEMP}/MarkovClassification1.png
@@ -40,7 +40,7 @@ ADD_TEST(MarkovClassification1ExampleTest ${EXE_TESTS}
 	1 #true to use always the same rand() sample, false otherwise
 )
 
-ADD_TEST(MarkovClassification2ExampleTest ${EXE_TESTS}
+ADD_TEST(maTeMarkovClassification2ExampleTest ${EXE_TESTS}
 	--compare-image ${EPSILON}
                     ${BASELINE}/MarkovClassification2.png
                     ${TEMP}/MarkovClassification2.png
@@ -52,7 +52,7 @@ ADD_TEST(MarkovClassification2ExampleTest ${EXE_TESTS}
 	1 # true to use always the same rand() sample, false otherwise
 )
 
-ADD_TEST(MarkovRestaurationExampleTest ${EXE_TESTS}
+ADD_TEST(maTeMarkovRestaurationExampleTest ${EXE_TESTS}
 	--compare-image ${EPSILON}
 	                ${BASELINE}/MarkovRestauration.png
 	                ${TEMP}/MarkovRestauration.png
@@ -67,7 +67,7 @@ ADD_TEST(MarkovRestaurationExampleTest ${EXE_TESTS}
 )
 
 
-ADD_TEST(MarkovRegularizationExampleTest ${EXE_TESTS}
+ADD_TEST(maTeMarkovRegularizationExampleTest ${EXE_TESTS}
 	--compare-image ${EPSILON}
                       ${BASELINE}/MarkovRegularization-scaled.png
                       ${TEMP}/MarkovRegularization-scaled.png
@@ -81,9 +81,9 @@ ADD_TEST(MarkovRegularizationExampleTest ${EXE_TESTS}
        1 # true to use always the same rand() sample, false otherwis
 )
 
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbMarkovExamplesTests otbMarkovExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbMarkovExamplesTests  ITKAlgorithms ITKStatistics ITKNumerics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBMarkov)
+TARGET_LINK_LIBRARIES(otbMarkovExamplesTests  ITKAlgorithms ITKStatistics ITKNumerics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBMarkov OTBTesting)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

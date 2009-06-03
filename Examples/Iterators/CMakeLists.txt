@@ -67,7 +67,7 @@ SET(TOL 0.0)
 
 # ------- ImageRegionIteratorWithIndexTest----------
 
-ADD_TEST(ImageRegionIteratorWithIndexTest ${EXE_TESTS}
+ADD_TEST(itTeImageRegionIteratorWithIndexTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/ImageRegionIteratorWithIndexOutput.png
 	${TEMP}/ImageRegionIteratorWithIndexOutput.png
@@ -78,7 +78,7 @@ ADD_TEST(ImageRegionIteratorWithIndexTest ${EXE_TESTS}
 
 # ------- NeighborhoodIterators1Test----------
 
-ADD_TEST(NeighborhoodIterators1Test ${EXE_TESTS}
+ADD_TEST(itTeNeighborhoodIterators1Test ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/NeighborhoodIterators1a.png
 	${TEMP}/NeighborhoodIterators1a.png
@@ -89,7 +89,7 @@ ADD_TEST(NeighborhoodIterators1Test ${EXE_TESTS}
 
 # ------- NeighborhoodIterators4Test----------
 
-ADD_TEST(NeighborhoodIterators4Test ${EXE_TESTS}
+ADD_TEST(itTeNeighborhoodIterators4Test ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/NeighborhoodIterators4a.png
 	${TEMP}/NeighborhoodIterators4a.png
@@ -101,7 +101,7 @@ ADD_TEST(NeighborhoodIterators4Test ${EXE_TESTS}
 
 # ------- NeighborhoodIterators4Test----------
 
-ADD_TEST(NeighborhoodIterators4Test ${EXE_TESTS}
+ADD_TEST(itTeNeighborhoodIterators4Test ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/NeighborhoodIterators4b.png
 	${TEMP}/NeighborhoodIterators4b.png
@@ -113,7 +113,7 @@ ADD_TEST(NeighborhoodIterators4Test ${EXE_TESTS}
 
 # ------- NeighborhoodIterators4Test----------
 
-ADD_TEST(NeighborhoodIterators4Test ${EXE_TESTS}
+ADD_TEST(itTeNeighborhoodIterators4Test ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/NeighborhoodIterators4c.png
 	${TEMP}/NeighborhoodIterators4c.png
@@ -125,7 +125,7 @@ ADD_TEST(NeighborhoodIterators4Test ${EXE_TESTS}
 
 # ------- NeighborhoodIterators4Test----------
 
-ADD_TEST(NeighborhoodIterators4Test ${EXE_TESTS}
+ADD_TEST(itTeNeighborhoodIterators4Test ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/NeighborhoodIterators4d.png
 	${TEMP}/NeighborhoodIterators4d.png
@@ -137,7 +137,7 @@ ADD_TEST(NeighborhoodIterators4Test ${EXE_TESTS}
 
 # ------- NeighborhoodIterators6Test----------
 
-ADD_TEST(NeighborhoodIterators6Test ${EXE_TESTS}
+ADD_TEST(itTeNeighborhoodIterators6Test ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/NeighborhoodIterators6a.png
 	${TEMP}/NeighborhoodIterators6a.png
@@ -148,7 +148,7 @@ ADD_TEST(NeighborhoodIterators6Test ${EXE_TESTS}
 
 # ------- NeighborhoodIterators6Test----------
 
-ADD_TEST(NeighborhoodIterators6Test ${EXE_TESTS}
+ADD_TEST(itTeNeighborhoodIterators6Test ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/NeighborhoodIterators6b.png
 	${TEMP}/NeighborhoodIterators6b.png
@@ -159,7 +159,7 @@ ADD_TEST(NeighborhoodIterators6Test ${EXE_TESTS}
 
 # ------- NeighborhoodIterators6Test----------
 
-ADD_TEST(NeighborhoodIterators6Test ${EXE_TESTS}
+ADD_TEST(itTeNeighborhoodIterators6Test ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/NeighborhoodIterators6c.png
 	${TEMP}/NeighborhoodIterators6c.png
@@ -170,7 +170,7 @@ ADD_TEST(NeighborhoodIterators6Test ${EXE_TESTS}
 
 # ------- ImageRegionIteratorTest----------
 
-ADD_TEST(ImageRegionIteratorTest ${EXE_TESTS}
+ADD_TEST(itTeImageRegionIteratorTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/ImageRegionIteratorOutput.png
 	${TEMP}/ImageRegionIteratorOutput.png
@@ -182,7 +182,7 @@ ADD_TEST(ImageRegionIteratorTest ${EXE_TESTS}
 
 # ------- ShapedNeighborhoodIterators2Test----------
 
-ADD_TEST(ShapedNeighborhoodIterators2Test ${EXE_TESTS}
+ADD_TEST(itTeShapedNeighborhoodIterators2Test ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/ShapedNeighborhoodIterators1b.png
 	${TEMP}/ShapedNeighborhoodIterators1b.png
@@ -192,8 +192,8 @@ ADD_TEST(ShapedNeighborhoodIterators2Test ${EXE_TESTS}
   4
 )
 
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbIteratorsExamplesTests otbIteratorsExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbIteratorsExamplesTests ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale )
+TARGET_LINK_LIBRARIES(otbIteratorsExamplesTests ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale  OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbVectorDataSource_h
-#define __otbVectorDataSource_h
+#ifndef __otbGISTableSource_h
+#define __otbGISTableSource_h
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
@@ -29,21 +29,21 @@
 
 namespace otb
 {
-/** \class VectorDataSource
- * \brief Filter hierarchy for generating VectorData
+/** \class GISTableSource
+ * \brief Filter hierarchy for generating GISTables
  *
  *
  * \ingroup IO
  *
  */
 
-template <class TOutputVectorData>
-class ITK_EXPORT VectorDataSource : public itk::ProcessObject
+template <class TOutputGISTable>
+class ITK_EXPORT GISTableSource : public itk::ProcessObject
 {
 public :
 
   /** Standard class typedefs. */
-  typedef VectorDataSource                      Self;
+  typedef GISTableSource                      Self;
   typedef itk::ProcessObject                    Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
@@ -52,18 +52,18 @@ public :
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VectorDataSource, itk::ProcessObject);
+  itkTypeMacro(GISTableSource, itk::ProcessObject);
 
-  typedef TOutputVectorData     OutputVectorDataType;
-  typedef typename TOutputVectorData::Pointer OutputVectorDataPointer;
+  typedef TOutputGISTable     OutputGISTableType;
+  typedef typename TOutputGISTable::Pointer OutputGISTablePointer;
 
   /** Overriding GetOutput() method */
-  virtual OutputVectorDataType* GetOutput(void);
-  virtual OutputVectorDataType* GetOutput(unsigned int idx);
+  virtual OutputGISTableType* GetOutput(void);
+  virtual OutputGISTableType* GetOutput(unsigned int idx);
 
 protected:
-  VectorDataSource();
-  ~VectorDataSource();
+  GISTableSource();
+  ~GISTableSource();
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -71,7 +71,7 @@ protected:
   virtual void  AllocateOutputs();
 
 private:
-  VectorDataSource(const Self&); //purposely not implemented
+  GISTableSource(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
 };
@@ -79,9 +79,9 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataSource.txx"
+#include "otbGISTableSource.txx"
 #endif
 
-#endif // __otbVectorDataSource_h
+#endif // __otbGISTableSource_h
 
 

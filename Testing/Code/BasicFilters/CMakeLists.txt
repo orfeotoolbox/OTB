@@ -1693,42 +1693,42 @@ otbChangeLabelImageFilterNew.cxx
 otbChangeLabelImageFilter.cxx
 )
 
-INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 ADD_EXECUTABLE(otbBasicFiltersTests1 otbBasicFiltersTests1.cxx ${BasicFilters_SRCS1})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests1  OTBBasicFilters OTBIO)
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests1  OTBBasicFilters OTBIO OTBTesting)
 
 ADD_EXECUTABLE(otbBasicFiltersTests2 otbBasicFiltersTests2.cxx ${BasicFilters_SRCS2})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests2  OTBBasicFilters  OTBIO )
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests2  OTBBasicFilters  OTBIO  OTBTesting)
 
 ADD_EXECUTABLE(otbBasicFiltersTests3 otbBasicFiltersTests3.cxx ${BasicFilters_SRCS3})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests3  OTBBasicFilters  OTBIO )
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests3  OTBBasicFilters  OTBIO  OTBTesting)
 
 ADD_EXECUTABLE(otbBasicFiltersTests4 otbBasicFiltersTests4.cxx ${BasicFilters_SRCS4})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests4  OTBBasicFilters  OTBIO )
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests4  OTBBasicFilters  OTBIO  OTBTesting)
 
 ADD_EXECUTABLE(otbBasicFiltersTests5 otbBasicFiltersTests5.cxx ${BasicFilters_SRCS5})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests5  OTBBasicFilters  OTBIO )
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests5  OTBBasicFilters  OTBIO  OTBTesting)
 
 ADD_EXECUTABLE(otbBasicFiltersTests6 otbBasicFiltersTests6.cxx ${BasicFilters_SRCS6})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests6  OTBBasicFilters  OTBIO )
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests6  OTBBasicFilters  OTBIO  OTBTesting)
 
 ADD_EXECUTABLE(otbBasicFiltersTests7 otbBasicFiltersTests7.cxx ${BasicFilters_SRCS7})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests7  OTBBasicFilters  OTBIO )
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests7  OTBBasicFilters  OTBIO  OTBTesting)
 
 ADD_EXECUTABLE(otbBasicFiltersTests8 otbBasicFiltersTests8.cxx ${BasicFilters_SRCS8})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests8  OTBBasicFilters  OTBIO )
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests8  OTBBasicFilters  OTBIO  OTBTesting)
 
 ADD_EXECUTABLE(otbBasicFiltersTests9 otbBasicFiltersTests9.cxx ${BasicFilters_SRCS9})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests9  OTBBasicFilters  OTBIO )
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests9  OTBBasicFilters  OTBIO  OTBTesting)
 
 ADD_EXECUTABLE(otbBasicFiltersTests10 otbBasicFiltersTests10.cxx ${BasicFilters_SRCS10})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests10  OTBBasicFilters  OTBIO )
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests10  OTBBasicFilters  OTBIO  OTBTesting)
 
 ADD_EXECUTABLE(otbBasicFiltersTests11 otbBasicFiltersTests11.cxx ${BasicFilters_SRCS11})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests11  OTBBasicFilters ITKAlgorithms OTBIO )
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests11  OTBBasicFilters ITKAlgorithms OTBIO  OTBTesting)
 
 ADD_EXECUTABLE(otbBasicFiltersTests12 otbBasicFiltersTests12.cxx ${BasicFilters_SRCS12})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests12  OTBBasicFilters ITKAlgorithms OTBIO )
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests12  OTBBasicFilters ITKAlgorithms OTBIO  OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

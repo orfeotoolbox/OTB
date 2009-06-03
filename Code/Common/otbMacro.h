@@ -27,6 +27,7 @@
 #define __otbMacro_h
 
 #include "itkMacro.h"
+#include "itkObject.h"
 #include "otbConfigure.h"
 
 /**
