@@ -16,32 +16,32 @@ SET(TOL 0.0)
 #Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
 SET(EPS 0.001)
 
-SET(GISFILTERS_TESTS ${CXX_TEST_PATH}/otbGISFiltersTests)
+SET(GEOSPATIALANALYSIS_TESTS ${CXX_TEST_PATH}/otbGeospatialAnalysisTests)
 
 # -------------  Transactors ----------------------------
 
-ADD_TEST(gfTuPostGISCreateTableTransactorNew ${GISFILTERS_TESTS}
+ADD_TEST(gfTuPostGISCreateTableTransactorNew ${GEOSPATIALANALYSIS_TESTS}
      otbPostGISCreateTableTransactorNew
 	)
 
-ADD_TEST(gfTuPostGISCreateTableTransactorAccessors ${GISFILTERS_TESTS}
+ADD_TEST(gfTuPostGISCreateTableTransactorAccessors ${GEOSPATIALANALYSIS_TESTS}
      otbPostGISCreateTableTransactorAccessors
 	)
 
-ADD_TEST(gfTuPostGISCreateTableTransactorCreate ${GISFILTERS_TESTS}
+ADD_TEST(gfTuPostGISCreateTableTransactorCreate ${GEOSPATIALANALYSIS_TESTS}
   otbPostGISCreateTableTransactorCreate
   localhost
   testgis
   postgres
 	)
 
-ADD_TEST(gfTuPostGISFromStringTransactorNew ${GISFILTERS_TESTS}
+ADD_TEST(gfTuPostGISFromStringTransactorNew ${GEOSPATIALANALYSIS_TESTS}
      otbPostGISFromStringTransactorNew
 	)
       
 
 # -------       CXX source files -----------------------------------
-SET(GISFilters_SRCS
+SET(GeospatialAnalysis_SRCS
 otbPostGISCreateTableTransactorNew.cxx
 otbPostGISCreateTableTransactorAccessors.cxx
 otbPostGISCreateTableTransactorCreate.cxx
@@ -52,7 +52,7 @@ INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 # ${TIFF_LIBRARY}
 
-ADD_EXECUTABLE(otbGISFiltersTests otbGISFiltersTests.cxx ${GISFilters_SRCS})
-TARGET_LINK_LIBRARIES(otbGISFiltersTests OTBGISFilters OTBTesting OTBCommon pq pqxx)
+ADD_EXECUTABLE(otbGeospatialAnalysisTests otbGeospatialAnalysisTests.cxx ${GEOSPATIALANALYSIS_SRCS})
+TARGET_LINK_LIBRARIES(otbGeospatialAnalysisTests OTBGeospatialAnalysis OTBTesting OTBCommon pq pqxx)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
