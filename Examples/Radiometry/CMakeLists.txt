@@ -30,7 +30,7 @@ SET(EPSILON 0.000000000001)
 
 # -------            ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter   ------------------------------
 
-ADD_TEST(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
+ADD_TEST(raTeARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
   --compare-image ${EPSILON}
   		  ${BASELINE}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
                   ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
@@ -49,7 +49,7 @@ ADD_TEST(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
 
 # -------            AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest   ------------------------------
 
-ADD_TEST(AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
+ADD_TEST(raTeAVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
   #--compare-image ${TOL}
               #${BASELINE}/AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest.tif
               #${TEMP}/AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest.tif
@@ -70,7 +70,7 @@ ADD_TEST(AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
 
 # -------            NDVIRAndNIRVegetationIndexImageFilter   ------------------------------
 
-ADD_TEST(NDVIRAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
+ADD_TEST(raTeNDVIRAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
   --compare-image ${TOL}
   	          ${BASELINE}/NDVIRAndNIRVegetationIndex.tif
                   ${TEMP}/NDVIRAndNIRVegetationIndex.tif
@@ -85,7 +85,7 @@ ADD_TEST(NDVIRAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
 
 
 
-ADD_TEST(AtmosphericCorrectionSequencementTest ${EXE_TESTS}
+ADD_TEST(raTeAtmosphericCorrectionSequencementTest ${EXE_TESTS}
         --compare-image ${EPSILON}
 		${BASELINE}/Example_RomaniaAtmosphericCorrectionSequencement.tif
                 ${TEMP}/Example_RomaniaAtmosphericCorrectionSequencement.tif

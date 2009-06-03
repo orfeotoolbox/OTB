@@ -24,7 +24,7 @@ SET(TOL 0.0)
 
 # ------- HybridSegmentationFuzzyVoronoiTest----------
 
-ADD_TEST(HybridSegmentationFuzzyVoronoiTest ${EXE_TESTS}
+ADD_TEST(paTeHybridSegmentationFuzzyVoronoiTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/HybridSegmentationFuzzyVoronoiOutput.png
 	${TEMP}/HybridSegmentationFuzzyVoronoiOutput.png

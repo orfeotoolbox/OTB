@@ -43,7 +43,7 @@ SET(EXE_TESTS ${CXX_TEST_PATH}/otbTutorialsExamplesTests)
 
 SET(TOL 0.0)
 
-ADD_TEST( TutorialsPipelineTest ${EXE_TESTS}
+ADD_TEST( trTeTutorialsPipelineTest ${EXE_TESTS}
         --compare-image ${TOL}          ${BASELINE}/TutorialsPipelineOutput.png
                                         ${TEMP}/TutorialsPipelineOutput.png
         TutorialsPipelineTest
@@ -51,7 +51,7 @@ ADD_TEST( TutorialsPipelineTest ${EXE_TESTS}
         ${TEMP}/TutorialsPipelineOutput.png
         )
 
-ADD_TEST( TutorialsFilteringPipelineTest ${EXE_TESTS}
+ADD_TEST( trTeTutorialsFilteringPipelineTest ${EXE_TESTS}
         --compare-image ${TOL}          ${BASELINE}/TutorialsFilteringPipelineOutput.png
                                         ${TEMP}/TutorialsFilteringPipelineOutput.png
         TutorialsFilteringPipelineTest
@@ -59,7 +59,7 @@ ADD_TEST( TutorialsFilteringPipelineTest ${EXE_TESTS}
         ${TEMP}/TutorialsFilteringPipelineOutput.png
         )
 
-ADD_TEST( TutorialsScalingPipelineTest ${EXE_TESTS}
+ADD_TEST( trTeTutorialsScalingPipelineTest ${EXE_TESTS}
         --compare-image ${TOL}          ${BASELINE}/TutorialsScalingPipelineOutput.png
                                         ${TEMP}/TutorialsScalingPipelineOutput.png
         TutorialsScalingPipelineTest
@@ -67,7 +67,7 @@ ADD_TEST( TutorialsScalingPipelineTest ${EXE_TESTS}
         ${TEMP}/TutorialsScalingPipelineOutput.png
         )
 
-ADD_TEST( TutorialsMultispectralTest ${EXE_TESTS}
+ADD_TEST( trTeTutorialsMultispectralTest ${EXE_TESTS}
         --compare-n-images ${TOL} 2      ${BASELINE}/MultispectralOutput1.tif
                                         ${TEMP}/MultispectralOutput1.tif
                                         ${BASELINE}/MultispectralOutput2.tif
@@ -79,7 +79,7 @@ ADD_TEST( TutorialsMultispectralTest ${EXE_TESTS}
         )
 
 
-ADD_TEST( TutorialsSmarterFilteringPipelineTest ${EXE_TESTS}
+ADD_TEST( trTeTutorialsSmarterFilteringPipelineTest ${EXE_TESTS}
         --compare-image ${TOL}          ${BASELINE}/TutorialsSmarterFilteringPipelineOutput.png
                                         ${TEMP}/TutorialsSmarterFilteringPipelineOutput.png
         TutorialsSmarterFilteringPipelineTest
@@ -91,7 +91,7 @@ ADD_TEST( TutorialsSmarterFilteringPipelineTest ${EXE_TESTS}
         )
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST( TutorialsOrthoFusionTest ${EXE_TESTS}
+ADD_TEST( trTeTutorialsOrthoFusionTest ${EXE_TESTS}
         --compare-image ${TOL}          ${BASELINE}/TutorialsOrthoFusionOutput.tif
                                         ${TEMP}/TutorialsOrthoFusionOutput.tif
         TutorialsOrthoFusionTest
