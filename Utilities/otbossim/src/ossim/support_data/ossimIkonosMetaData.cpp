@@ -33,7 +33,8 @@ ossimIkonosMetaData::ossimIkonosMetaData()
   theSunElevation(0.0),
   theNumBands(0),
   theBandName("Unknown"),
-  theProductionDate("Unknown")
+  theProductionDate("Unknown"),
+  theSensorID("Unknown")
 {
 }
 
@@ -115,6 +116,7 @@ void ossimIkonosMetaData::clearFields()
   theNumBands = 0;
   theBandName = "Unknown";
   theProductionDate = "Unknown";
+  theSensorID = "Unknown";
 }
 
 std::ostream& ossimIkonosMetaData::print(std::ostream& out) const
@@ -127,10 +129,16 @@ std::ostream& ossimIkonosMetaData::print(std::ostream& out) const
       << "\n  Number of bands:   " << theNumBands
       << "\n  Band name:   " << theBandName
       << "\n  Production date:   " << theProductionDate
+      << "\n  Sensor Type:   " << theSensorID
       << "\n"
       << "\n---------------------------------------------------------"
       << "\n  " << std::endl;
   return out;
+}
+
+ossimString ossimIkonosMetaData::getSensorID() const
+{
+  return theSensorID;
 }
 
 bool ossimIkonosMetaData::saveState(ossimKeywordlist& kwl,
@@ -165,6 +173,10 @@ bool ossimIkonosMetaData::saveState(ossimKeywordlist& kwl,
   kwl.add(prefix,
           "production_date",
           theProductionDate,
+          true);
+  kwl.add(prefix,
+          "sensor",
+          theSensorID,
           true);
 
   return true;
@@ -220,7 +232,13 @@ bool ossimIkonosMetaData::loadState(const ossimKeywordlist& kwl,
   {
      theProductionDate = lookup;
   }
-
+  
+  lookup = kwl.find(prefix, "sensor");
+  if (lookup)
+  {
+     theSensorID = lookup;
+  }
+  
   return true;
 }
 
@@ -285,6 +303,27 @@ bool ossimIkonosMetaData::parseMetaData(const ossimFilename& data_file)
 
   sscanf(strptr, "%15c %s", dummy, name);
   theProductionDate = name;
+
+
+  //***
+  // Sensor Type:
+  //***
+  strptr = strstr(strptr, "\nSensor:");
+  if (!strptr)
+    {
+      if(traceDebug())
+ 	{ 
+	  ossimNotify(ossimNotifyLevel_FATAL)
+            << "FATAL ossimIkonosRpcModel::parseMetaData(data_file): "
+            << "\n\tAborting construction. Error encountered parsing "
+            << "presumed meta-data file." << std::endl;
+	  
+	  delete [] filebuf;
+	  return false;
+	}
+    }
+  sscanf(strptr, "%8c %s", dummy, name);
+  theSensorID = name;
 
     //***
    // Sun Azimuth:

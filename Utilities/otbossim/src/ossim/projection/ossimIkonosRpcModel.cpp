@@ -315,7 +315,8 @@ void ossimIkonosRpcModel::parseMetaData(const ossimFilename& data_file)
    }
    sscanf(strptr, "%8c %s", dummy, name);
    theSensorID = name;
-
+   
+   
    //***
    // GSD:
    //***
@@ -741,10 +742,10 @@ bool ossimIkonosRpcModel::saveState(ossimKeywordlist& kwl,
    {
       ossimString supportPrefix = ossimString(prefix) + "support_data.";
       theSupportData->saveState(kwl, supportPrefix);
+      // to record the sensor type as "senor" key, theSensorID was updatesd in parseTiff
    }
 
    ossimRpcModel::saveState(kwl, prefix);
-
   // this model just sets the base class values so
   // we do not need to re-construct this model so 
   // specify the type as the base class type
@@ -897,6 +898,11 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
          << std::endl;
       }
    }
+   else
+     {
+       // set sensor type as "sensor" key. Using saveState save it with the prefix support_data -> support_data.sensor in the final keywordlist
+       theSensorID = theSupportData->getSensorID();
+     }
    
 
    //convert file to rpc filename and hdr filename so we can get some info
@@ -937,8 +943,9 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
                        INIT_RPC_GEOM_FILENAME,
                        "");
    ossimKeywordlist kwl (init_rpc_geom);
+ 
    saveState(kwl);
-   
+
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimIkonosRpcModel parseTiffFile: returning..." << std::endl;
 
    return true;
