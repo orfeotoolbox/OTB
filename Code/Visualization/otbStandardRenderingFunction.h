@@ -132,7 +132,7 @@ public:
 //     resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
     if (OutputPixelType::Length == 4)
     {//Propagate the alpha channel
-      resp[3] = vpixel[3];
+      resp[3] = static_cast<OutputValueType>(vpixel[3]);
     }
     resp.SetRed(Evaluate(m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
     resp.SetGreen(Evaluate(m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
