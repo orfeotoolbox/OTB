@@ -29,11 +29,12 @@ static ossimTrace traceDebug ("ossimQuickbirdMetaData:debug");
 
 ossimQuickbirdMetaData::ossimQuickbirdMetaData()
   :
-  theGenerationTime("Unknown"),
+  theGenerationDate("Unknown"),
   theBandId("Unknown"),
+  theSatID("Unknown"),
+  theTLCDate("Unknown"),
   theSunAzimuth(0.0),
   theSunElevation(0.0)
-
 {
 }
 
@@ -51,17 +52,8 @@ bool ossimQuickbirdMetaData::open(const ossimFilename& imageFile)
    //if the Quickbird tif is 02APR01105228-M1BS-000000128955_01_P001.TIF
    //the metadata file will be 02APR01105228-M1BS-000000128955_01_P001.IMD
 
-//    ossimString separator(".");
-   //ossimString filenamebase = imageFile.fileNoExtension();
-//    std::vector< ossimString > filenameparts = filenamebase.split(separator);
-// metadatafile += ".IMD";
-// metadatafile.setPath(imageFile.path());
-
-std::cout<<"ImageFile : "<<imageFile<<std::endl;
    ossimFilename metadatafile = imageFile;
    metadatafile.setExtension(ossimString("IMD"));
-
-std::cout<<"metadatafile : "<<metadatafile<<std::endl;
 
    if( parseMetaData(metadatafile) == false )
    {
@@ -72,30 +64,18 @@ std::cout<<"metadatafile : "<<metadatafile<<std::endl;
       }
       return false;
    }
-   
-   ossimFilename geofile = imageFile;
-   geofile.setExtension(ossimString("GEO"));
-std::cout<<"geofile : "<<geofile<<std::endl;
-   if( parseGEOData(geofile) == false )
-   {
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_WARN)
-         << MODULE << " errors parsing GEO" << std::endl;
-      }
-      return false;
-   }
-
 
    return true;
 }
 
 void ossimQuickbirdMetaData::clearFields()
 {
+  theGenerationDate = "Unknown";
+  theBandId = "Unknown";
+  theSatID = "Unknown";
+  theTLCDate = "Unknown",
   theSunAzimuth = 0.0;
   theSunElevation = 0.0;
-  theBandId = "Unknown";
-  theGenerationTime = "Unknown";
 }
 
 std::ostream& ossimQuickbirdMetaData::print(std::ostream& out) const
@@ -103,8 +83,10 @@ std::ostream& ossimQuickbirdMetaData::print(std::ostream& out) const
 
   out << "\n----------------- Info on Quickbird Image -------------------"
       << "\n  "
-      << "\n  Generation date:   " << theGenerationTime
+      << "\n  Generation date:   " << theGenerationDate
       << "\n  Band Id:   " << theBandId
+      << "\n  Sat Id:   " << theSatID
+      << "\n  TLC date:   " << theTLCDate
       << "\n  Sun Azimuth:    " << theSunAzimuth
       << "\n  Sun Elevation:   " << theSunElevation
       << "\n"
@@ -124,13 +106,23 @@ bool ossimQuickbirdMetaData::saveState(ossimKeywordlist& kwl,
           true);
 
   kwl.add(prefix,
-          "generation_time",
-          theGenerationTime,
+          "generation_date",
+          theGenerationDate,
           true);
 
   kwl.add(prefix,
           "band_id",
           theBandId,
+          true);
+
+    kwl.add(prefix,
+          "sat_id",
+          theSatID,
+          true);
+
+   kwl.add(prefix,
+          "tlc_date",
+          theTLCDate,
           true);
 
   kwl.add(prefix,
@@ -165,16 +157,28 @@ bool ossimQuickbirdMetaData::loadState(const ossimKeywordlist& kwl,
      }
   }
 
-  lookup = kwl.find(prefix, "generation_time");
+  lookup = kwl.find(prefix, "generation_date");
   if (lookup)
   {
-     theGenerationTime = lookup;
+     theGenerationDate = lookup;
   }
 
   lookup = kwl.find(prefix, "band_id");
   if (lookup)
   {
      theBandId = lookup;
+  }
+
+  lookup = kwl.find(prefix, "sat_id");
+  if (lookup)
+  {
+     theSatID = lookup;
+  }
+
+  lookup = kwl.find(prefix, "tlc_date");
+  if (lookup)
+  {
+     theTLCDate= lookup;
   }
 
   lookup = kwl.find(prefix, ossimKeywordNames::AZIMUTH_ANGLE_KW);
@@ -254,8 +258,7 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
   }
 
   sscanf(strptr, "%17c %s", dummy, name);
-  theGenerationTime = name;
-std::cout<<name<<std::endl;
+  theGenerationDate = ossimString(name).before(";");
 
 
   //---
@@ -277,8 +280,48 @@ std::cout<<name<<std::endl;
   }
 
   sscanf(strptr, "%9c %s", dummy, name);
-  theBandId = name;
-std::cout<<name<<std::endl;
+  theBandId = ossimString(name).after("\"").before("\";");
+
+
+  //---
+  // SatID:
+  //---
+  strptr = strstr(filebuf, "\n\tsatId =");
+  if (!strptr)
+  {
+    if(traceDebug())
+    {
+      ossimNotify(ossimNotifyLevel_FATAL)
+          << "FATAL ossimQuickbirdRpcModel::parseMetaData(data_file): "
+          << "\n\tAborting construction. Error encountered parsing "
+          << "presumed meta-data file." << std::endl;
+
+      delete [] filebuf;
+      return false;
+    }
+  }
+  sscanf(strptr, "%9c %s", dummy, name);
+  theSatID = ossimString(name).after("\"").before("\";");
+
+  //---
+  // TLCTime:
+  //---
+  strptr = strstr(filebuf, "\n\tTLCTime =");
+  if (!strptr)
+  {
+    if(traceDebug())
+    {
+      ossimNotify(ossimNotifyLevel_FATAL)
+          << "FATAL ossimQuickbirdRpcModel::parseMetaData(data_file): "
+          << "\n\tAborting construction. Error encountered parsing "
+          << "presumed meta-data file." << std::endl;
+
+      delete [] filebuf;
+      return false;
+    }
+  }
+  sscanf(strptr, "%11c %s", dummy, name);
+  theTLCDate = ossimString(name).before("\";");
 
    //***
    // Sun Azimuth:
@@ -297,10 +340,8 @@ std::cout<<name<<std::endl;
       return false;
     }
   }
-
   sscanf(strptr, "%9c %s", dummy, name);
-  //theSunAzimuth = name;
-std::cout<<name<<std::endl;
+  theSunAzimuth = ossimString(name).before(";").toFloat64();;
 
    //***
    // Sun Elevation:
@@ -319,10 +360,9 @@ std::cout<<name<<std::endl;
       return false;
     }
   }
-
   sscanf(strptr, "%9c %s", dummy, name);
- // theSunElevation = value;
-std::cout<<name<<std::endl;
+  theSunElevation = ossimString(name).before(";").toFloat64();
+
 
   delete [] filebuf;
   filebuf = 0;

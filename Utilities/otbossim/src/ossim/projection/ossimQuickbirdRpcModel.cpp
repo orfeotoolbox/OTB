@@ -33,13 +33,29 @@ RTTI_DEF1(ossimQuickbirdRpcModel, "ossimQuickbirdRpcModel", ossimRpcModel);
 
 
 ossimQuickbirdRpcModel::ossimQuickbirdRpcModel()
-      :ossimRpcModel()
+      :ossimRpcModel(),
+      theSupportData(0)
 {
+   theSupportData = new ossimQuickbirdMetaData();
 }
 
 ossimQuickbirdRpcModel::ossimQuickbirdRpcModel(const ossimQuickbirdRpcModel& rhs)
       : ossimRpcModel(rhs)
 {
+//   if (theSupportData)
+//    {
+//       delete theSupportData;
+//   }
+//   *(theSupportData) = *(rhs.getTheSupportData());
+}
+
+ossimQuickbirdRpcModel::~ossimQuickbirdRpcModel()
+{
+   if (theSupportData)
+   {
+      delete theSupportData;
+      theSupportData = 0;
+   }
 }
 
 ossimObject* ossimQuickbirdRpcModel::dup() const
@@ -85,11 +101,32 @@ bool ossimQuickbirdRpcModel::parseNitfFile(const ossimFilename& file)
    ossimQuickbirdTile tileHdr;
    ossimFilename tileFile = file;
    ossimFilename rpcFile = file;
+   ossimFilename metadataFile = file;
 
    tileFile = tileFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
    rpcFile  = rpcFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
+   metadataFile = metadataFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
    bool useInternalRpcTags = false;
    
+   if ( !theSupportData )
+   {
+      theSupportData = new ossimQuickbirdMetaData();
+   }
+
+   metadataFile = metadataFile.setExtension("IMD");
+   if(!theSupportData->open(metadataFile))
+   {
+      metadataFile = metadataFile.setExtension("imd");
+      if(!theSupportData->open(tileFile))
+      {
+         return false;
+      }
+   }
+   else
+   {
+       theSensorID = theSupportData->getSatID();
+   }
+
    if(!hdr.open(rpcFile))
    {
       rpcFile = rpcFile.setExtension("RPB");
@@ -338,12 +375,35 @@ bool ossimQuickbirdRpcModel::parseTiffFile(const ossimFilename& file)
    
    ossimQuickbirdRpcHeader hdr;
    ossimQuickbirdTile tileHdr;
+
    ossimFilename tileFile = file;
    ossimFilename rpcFile = file;
+   ossimFilename metadataFile = file;
 
    tileFile = tileFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
    rpcFile  = rpcFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
-   
+   metadataFile = metadataFile.replaceAllThatMatch("_R[0-9]+C[0-9]+");
+
+   if ( !theSupportData )
+   {
+      theSupportData = new ossimQuickbirdMetaData();
+   }
+
+   metadataFile = metadataFile.setExtension("IMD");
+   if(!theSupportData->open(metadataFile))
+   {
+      metadataFile = metadataFile.setExtension("imd");
+      if(!theSupportData->open(tileFile))
+      {
+         return false;
+      }
+   }
+   else
+   {
+       theSensorID = theSupportData->getSatID();
+   }
+
+
    if(!hdr.open(rpcFile))
    {
       rpcFile = rpcFile.setExtension("RPB");
@@ -492,11 +552,23 @@ bool ossimQuickbirdRpcModel::parseTiffFile(const ossimFilename& file)
 bool ossimQuickbirdRpcModel::saveState(ossimKeywordlist& kwl,
                                        const char* prefix) const
 {
+ if(theSupportData)
+   {
+      ossimString supportPrefix = ossimString(prefix) + "support_data.";
+      theSupportData->saveState(kwl, supportPrefix);
+   }
+
    return ossimRpcModel::saveState(kwl, prefix);
 }
 
 bool ossimQuickbirdRpcModel::loadState(const ossimKeywordlist& kwl,
                                        const char* prefix)
 {
+ if(theSupportData)
+   {
+      ossimString supportPrefix = ossimString(prefix) + "support_data.";
+      theSupportData->loadState(kwl, supportPrefix);
+   }
+
    return ossimRpcModel::loadState(kwl, prefix);
 }

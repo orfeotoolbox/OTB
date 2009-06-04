@@ -92,6 +92,11 @@ public:
 
    bool parseEPHData(const ossimFilename& data_file);
 
+   ossimString getSatID()
+   {
+		return theSatID;
+   }
+
  /*****************************************
 *parseATTData EPH GEO IMD RPB TIL
 *
@@ -99,8 +104,10 @@ public:
    
 private:
 
-   ossimString   theGenerationTime;
+   ossimString   theGenerationDate;
    ossimString   theBandId;
+   ossimString   theSatID;
+   ossimString   theTLCDate;
    ossim_float64 theSunAzimuth;
    ossim_float64 theSunElevation;
    /*ossim_uint32  theNumBands;*/

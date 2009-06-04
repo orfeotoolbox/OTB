@@ -506,7 +506,6 @@ bool ossimSensorModelFactory::isTileMap(const ossimFilename& filename)const
   temp.downcase();
   if(temp.ext()=="otb")
   {
-    std::cout << "TileMap format "<<std::endl;
     return true;
   }
   return false;
