@@ -41,9 +41,7 @@ int otbImageMetadataInterfaceTest (int argc, char* argv[])
   ImageReaderType::Pointer reader = ImageReaderType::New();
   reader->SetFileName( inputFilename  );
   reader->UpdateOutputInformation();
-
   otb::ImageMetadataInterface::Pointer lImageMetadata = otb::ImageMetadataInterface::New();
-
 
   std::ofstream file;
   file.open(outputFilename);
@@ -56,7 +54,7 @@ int otbImageMetadataInterfaceTest (int argc, char* argv[])
   file<<"GetYear:            "<<lImageMetadata->GetYear(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
   file<<"GetSolarIrradiance: "<<lImageMetadata->GetSolarIrradiance(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
   file<<"GetSunElevation:    "<<lImageMetadata->GetSunElevation(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
-
+  file<<"GetSunAzimuth:    "<<lImageMetadata->GetSunAzimuth(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
   file.close();
 
   return EXIT_SUCCESS;

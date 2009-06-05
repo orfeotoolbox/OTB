@@ -1893,6 +1893,13 @@ ADD_TEST(ioTvImageMetadataInterfaceQBTest ${IO_TESTS17}
         ${LARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceQB.txt
 )
+ADD_TEST(ioTvImageMetadataInterfaceQBCevennesTest ${IO_TESTS17}
+         --compare-ascii 0 ${BASELINE_FILES}/ioTvImageMetadataInterfaceQBCevennes.txt
+                         ${TEMP}/ioTvImageMetadataInterfaceQBCevennes.txt
+        otbImageMetadataInterfaceTest
+        ${LARGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${TEMP}/ioTvImageMetadataInterfaceQBCevennes.txt
+)
 ADD_TEST(ioTvImageMetadataInterfaceIKONOSTest ${IO_TESTS17}
          --compare-ascii 0 ${BASELINE_FILES}/ioTvImageMetadataInterfaceIKONOS.txt
                          ${TEMP}/ioTvImageMetadataInterfaceIKONOS.txt
