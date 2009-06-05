@@ -372,10 +372,24 @@ IF(OTB_USE_EXTERNAL_ITK)
 ELSE(OTB_USE_EXTERNAL_ITK)
 
     #Add prefix path "Utilities/ITK" For ITK_INCLUDE_RELATIVE_DIRS paths
-    FOREACH(DIR ${ITK_INCLUDE_RELATIVE_DIRS})
-        LIST(APPEND OTB_INCLUDE_RELATIVE_DIRS Utilities/ITK/${DIR})
-    ENDFOREACH(DIR)
-
+        SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
+              Utilities/ITK/Algorithms
+              Utilities/ITK/BasicFilters
+              Utilities/ITK/Common
+              Utilities/ITK/IO
+              Utilities/ITK/Numerics
+              Utilities/ITK/Numerics/FEM
+              Utilities/ITK/Numerics/NeuralNetworks
+              Utilities/ITK/Numerics/Statistics
+              Utilities/ITK/Patented
+              Utilities/ITK/Review
+              Utilities/ITK/SpatialObject
+              Utilities/ITK
+              Utilities/ITK/Utilities/vxl/v3p/netlib
+              Utilities/ITK/Utilities/vxl/vcl
+              Utilities/ITK/Utilities/vxl/core
+              Utilities/ITK/Utilities
+        )
 
 # JULIEN Seems that ITK_INCLUDE_DIRS_CONFIG replaces ITK_INCLUDE_DIRS_INSTALL_TREE
 #             SET(ITK_INCLUDE_DIRS  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/ITK/)
