@@ -97,7 +97,7 @@ ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS1}
 ADD_TEST(prTvSensorModelSpot5 ${PROJECTIONS_TESTS1}
   --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelSpot5.txt
-         ${TEMP}/prTvSensorModelQuickbird.txt
+         ${TEMP}/prTvSensorModelSpot5.txt
     otbSensorModel
          ${LARGEINPUT}/SPOT5_SCENE01/IMAGERY.TIF
          ${TEMP}/prTvSensorModelSpot5.txt
