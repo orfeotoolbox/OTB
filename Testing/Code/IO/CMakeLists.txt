@@ -1886,11 +1886,26 @@ ADD_TEST(ioTuImageMetadataInterfaceNew ${IO_TESTS17}
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(ioTvImageMetadataInterfaceTest ${IO_TESTS17}
-#         --compare-ascii ${TOL}  ${BASELINE_FILES}/ioPointSetFileReader.txt
-#                         ${TEMP}/ioPointSetFileReader.txt
+ADD_TEST(ioTvImageMetadataInterfaceQBTest ${IO_TESTS17}
+         --compare-ascii 0 ${BASELINE_FILES}/ioTvImageMetadataInterfaceQB.txt
+                         ${TEMP}/ioTvImageMetadataInterfaceQB.txt
         otbImageMetadataInterfaceTest
         ${LARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${TEMP}/ioTvImageMetadataInterfaceQB.txt
+)
+ADD_TEST(ioTvImageMetadataInterfaceIKONOSTest ${IO_TESTS17}
+         --compare-ascii 0 ${BASELINE_FILES}/ioTvImageMetadataInterfaceIKONOS.txt
+                         ${TEMP}/ioTvImageMetadataInterfaceIKONOS.txt
+        otbImageMetadataInterfaceTest
+        ${LARGEDATA}/IKONOS_BLOSSEVILLE/po_2619900_blu_0000000.tif
+        ${TEMP}/ioTvImageMetadataInterfaceIKONOS.txt
+)
+ADD_TEST(ioTvImageMetadataInterfaceSPOTTest ${IO_TESTS17}
+         --compare-ascii 0 ${BASELINE_FILES}/ioTvImageMetadataInterfaceSPOT.txt
+                         ${TEMP}/ioTvImageMetadataInterfaceSPOT.txt
+        otbImageMetadataInterfaceTest
+        ${LARGEDATA}/SPOT5_SCENE01/IMAGERY.TIF
+        ${TEMP}/ioTvImageMetadataInterfaceSPOT.txt
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 

@@ -22,42 +22,43 @@
 
 #include "itkExceptionObject.h"
 
+#include <fstream>
 #include <iostream>
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageMetadataInterface.h"
-//#include "support_data/ossimQuickbirdMetaData.h"
-//#include "base/ossimFilename.h"
+
 
 int otbImageMetadataInterfaceTest (int argc, char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];
-std::cout<<"pffffffffffff????????,"<<std::endl;
+  const char * outputFilename  = argv[2];
+
   typedef otb::VectorImage< double,  2 >                 InputImageType;
   typedef otb::ImageFileReader< InputImageType >         ImageReaderType;
-  std::cout<<"ImageMetadataInterface????????,"<<std::endl;
+
   ImageReaderType::Pointer reader = ImageReaderType::New();
   reader->SetFileName( inputFilename  );
   reader->UpdateOutputInformation();
-  std::cout<<"ImageMetadataInterface"<<std::endl;
-  otb::ImageMetadataInterface::Pointer lImageMetadata = otb::ImageMetadataInterface::New();
-  std::cout<<"GetSensorID"<<std::endl;
-  std::cout<<"GetSensorID:        "<<lImageMetadata->GetSensorID(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
-  std::cout<<"GetPhysicalGain:    "<<lImageMetadata->GetPhysicalGain(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
-  std::cout<<"GetPhysicalBias:    "<<lImageMetadata->GetPhysicalBias(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
-  std::cout<<"GetDay:             "<<lImageMetadata->GetDay(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
-  std::cout<<"GetMonth:           "<<lImageMetadata->GetMonth(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
-  std::cout<<"GetYear:            "<<lImageMetadata->GetYear(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
-  std::cout<<"GetSolarIrradiance: "<<lImageMetadata->GetSolarIrradiance(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
-  std::cout<<"GetSunElevation:    "<<lImageMetadata->GetSunElevation(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
 
-/*
-ossimQuickbirdMetaData * meataData = new ossimQuickbirdMetaData();
-meataData->open(ossimFilename(inputFilename));
-std::cout<<"TEST : OPEN DONE"<<std::endl;
-delete meataData;
-*/
+  otb::ImageMetadataInterface::Pointer lImageMetadata = otb::ImageMetadataInterface::New();
+
+
+  std::ofstream file;
+  file.open(outputFilename);
+
+  file<<"GetSensorID:        "<<lImageMetadata->GetSensorID(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
+  file<<"GetPhysicalGain:    "<<lImageMetadata->GetPhysicalGain(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
+  file<<"GetPhysicalBias:    "<<lImageMetadata->GetPhysicalBias(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
+  file<<"GetDay:             "<<lImageMetadata->GetDay(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
+  file<<"GetMonth:           "<<lImageMetadata->GetMonth(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
+  file<<"GetYear:            "<<lImageMetadata->GetYear(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
+  file<<"GetSolarIrradiance: "<<lImageMetadata->GetSolarIrradiance(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
+  file<<"GetSunElevation:    "<<lImageMetadata->GetSunElevation(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
+
+  file.close();
+
   return EXIT_SUCCESS;
 
 }

@@ -741,8 +741,8 @@ bool ossimIkonosRpcModel::saveState(ossimKeywordlist& kwl,
    if(theSupportData)
    {
       ossimString supportPrefix = ossimString(prefix) + "support_data.";
+      // copy ossimIkonosMetada-sensor into ossimIkonosRpcModel-sensorId
       theSupportData->saveState(kwl, supportPrefix);
-      // to record the sensor type as "senor" key, theSensorID was updatesd in parseTiff
    }
 
    ossimRpcModel::saveState(kwl, prefix);
@@ -900,7 +900,7 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
    }
    else
      {
-       // set sensor type as "sensor" key. Using saveState save it with the prefix support_data -> support_data.sensor in the final keywordlist
+       // copy ossimIkonosMetada-sensor into ossimIkonosRpcModel-sensorId
        theSensorID = theSupportData->getSensorID();
      }
    
