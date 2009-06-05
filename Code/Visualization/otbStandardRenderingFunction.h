@@ -13,7 +13,7 @@
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
-
+//
 =========================================================================*/
 #ifndef __otbStandardRenderingFunction_h
 #define __otbStandardRenderingFunction_h
@@ -23,34 +23,13 @@
 #include <assert.h>
 #include <iomanip>
 
+#include "otbChannelSelectorFunctor.h"
+
 namespace otb
 {
 namespace Function
 {
-/** \class Identiy
-* \brief Default math functor parameter for rendering function.
-*  \ingroup Visualization
- */
-template <class TInputPixel, class TOutputPixel>
-class Identity
-{
-public:
-  Identity(){};
-  ~Identity(){};
-  bool operator !=(const Identity &) const
-  {
-    return false;
-  }
-  bool operator ==(const Identity & other) const
-  {
-    return !(*this != other);
-  }
 
-  inline TOutputPixel operator()(const TInputPixel & A) const
-  {
-    return static_cast<TOutputPixel>(A);
-  }
-};
 
 /** \class StandardRenderingFunction
  * \brief Standard rendering.
@@ -60,13 +39,17 @@ public:
  * the selected channels.
  *  \ingroup Visualization
  */
-template <class TPixelPrecision, class TRGBPixel, class TTransferFunction
-    = Identity<
+template <class TPixelPrecision, class TRGBPixel,
+  class TPixelRepresentationFunction = ChannelSelectorFunctor<
+        typename itk::NumericTraits<TPixelPrecision>::ValueType,
+        typename itk::NumericTraits<TPixelPrecision>::ValueType
+        >,
+  class TTransferFunction = Identity<
         typename itk::NumericTraits<TPixelPrecision>::ValueType,
         typename itk::NumericTraits<TPixelPrecision>::ValueType
         > >
 class StandardRenderingFunction
-  : public RenderingFunction<TPixelPrecision,TRGBPixel>
+  : public RenderingFunction<TPixelPrecision,TRGBPixel, TPixelRepresentationFunction, TTransferFunction>
 {
 public:
   /** Standard class typedefs */
@@ -209,55 +192,6 @@ public:
     return oss.str();
   }
 
-  /** Get the transfer function for tuning */
-  TransferFunctionType & GetTransferFunction()
-  {
-    return m_TransferFunction;
-  }
-
-  /** Set the red channel index (vector mode only) */
-  void SetRedChannelIndex(unsigned int index)
-  {
-    m_RedChannelIndex = index;
-  }
-
-  /** Get the red channel index (vector mode only) */
-  unsigned int GetRedChannelIndex(void)
-  {
-    return m_RedChannelIndex;
-  }
-
-  /** Set the blue channel index (vector mode only) */
-  void SetBlueChannelIndex(unsigned int index)
-  {
-    m_BlueChannelIndex = index;
-  }
-
-  /** Get the blue channel index (vector mode only) */
-  unsigned int GetBlueChannelIndex(void)
-  {
-    return m_BlueChannelIndex;
-  }
-
-  /** Set the green channel index (vector mode only) */
-  void SetGreenChannelIndex(unsigned int index)
-  {
-    m_GreenChannelIndex = index;
-  }
-
-  /** Get the green channel index (vector mode only) */
-  unsigned int GetGreenChannelIndex(void)
-  {
-    return m_GreenChannelIndex;
-  }
-
-  /** Set all channels (grayscale mode) */
-  void SetAllChannels(unsigned int index)
-  {
-    m_RedChannelIndex   = index;
-    m_BlueChannelIndex  = index;
-    m_GreenChannelIndex = index;
-  }
 
   /** Togle the UserDefinedTransferedMinMax mode */
   void SetUserDefinedTransferedMinMax(bool val)
@@ -359,13 +293,6 @@ private:
   StandardRenderingFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /** Index of the channels to display (vector mode only, has no effet
-   *  on scalar mode)
-   */
-  unsigned int m_RedChannelIndex;
-  unsigned int m_GreenChannelIndex;
-  unsigned int m_BlueChannelIndex;
-
   /** Transfer function
    *  \note This member is declared mutable because some functors that
    * can be used as a transfer function but are not const correct.
@@ -373,7 +300,7 @@ private:
    * not harmful to do so and preserves const correctness of the
    *  Evaluate() mehtods.
    */
-  mutable TransferFunctionType m_TransferFunction;
+//   mutable TransferFunctionType m_TransferFunction;
 
   /** If true, values mapped by the transfert function are clamped to
       user defined min/max */

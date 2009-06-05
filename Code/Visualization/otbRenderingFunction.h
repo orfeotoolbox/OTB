@@ -23,18 +23,52 @@
 #include "itkVariableLengthVector.h"
 #include "itkRGBPixel.h"
 #include "itkRGBAPixel.h"
+#include "otbPixelRepresentationFunction.h"
 
 namespace otb
 {
 namespace Function
 {
-/**\class RenderingFunction
+/** \class Identiy
+* \brief Default math functor parameter for rendering function.
+*  \ingroup Visualization
+ */
+template <class TInputPixel, class TOutputPixel>
+class Identity
+{
+public:
+  Identity(){};
+  ~Identity(){};
+  bool operator !=(const Identity &) const
+  {
+    return false;
+  }
+  bool operator ==(const Identity & other) const
+  {
+    return !(*this != other);
+  }
+
+  inline TOutputPixel operator()(const TInputPixel & A) const
+  {
+    return static_cast<TOutputPixel>(A);
+  }
+};
+
+/** \class RenderingFunction
  * \brief Base class for rendering functions.
  *  Please note that this class is pure virtual, and should be
  *  subclassed.
  *  \ingroup Visualization
  */
-template <class TPixelPrecision, class TRGBPixel>
+template <class TPixelPrecision, class TRGBPixel,
+  class TPixelRepresentationFunction = Identity<
+        typename itk::NumericTraits<TPixelPrecision>::ValueType,
+        typename itk::NumericTraits<TPixelPrecision>::ValueType
+        >,
+  class TTransferFunction = Identity<
+        typename itk::NumericTraits<TPixelPrecision>::ValueType,
+        typename itk::NumericTraits<TPixelPrecision>::ValueType
+        > >
 class RenderingFunction
   : public itk::Object
 {
@@ -55,6 +89,12 @@ public:
   typedef itk::VariableLengthVector<ScalarType>       VectorPixelType;
   typedef itk::RGBPixel<ScalarType> RGBPixelType;
   typedef itk::RGBAPixel<ScalarType> RGBAPixelType;
+
+  /** Pixel representation */
+  typedef TPixelRepresentationFunction PixelRepresentationFunctionType;
+  typedef typename PixelRepresentationFunctionType::Pointer PixelRepresentationFunctionPointerType;
+
+  typedef TTransferFunction                          TransferFunctionType;
 
   /** Extrema vector */
   typedef std::vector<ScalarType>               ExtremaVectorType;
@@ -135,49 +175,16 @@ public:
   }
 
 
-  /** Set the red channel index (vector mode only) */
-  virtual void SetRedChannelIndex(unsigned int index)
-  {
-    m_RedChannelIndex = index;
-  }
+  /** Get the transfer function for tuning */
+//   TransferFunctionType & GetTransferFunction()
+//   {
+//     return m_TransferFunction;
+//   }
+  itkGetConstReferenceMacro(TransferFunction, TransferFunctionType);
+  itkSetMacro(TransferFunction, TransferFunctionType);
 
-  /** Get the red channel index (vector mode only) */
-  virtual unsigned int GetRedChannelIndex(void)
-  {
-    return m_RedChannelIndex;
-  }
-
-  /** Set the blue channel index (vector mode only) */
-  virtual void SetBlueChannelIndex(unsigned int index)
-  {
-    m_BlueChannelIndex = index;
-  }
-
-  /** Get the blue channel index (vector mode only) */
-  virtual unsigned int GetBlueChannelIndex(void)
-  {
-    return m_BlueChannelIndex;
-  }
-
-  /** Set the green channel index (vector mode only) */
-  virtual void SetGreenChannelIndex(unsigned int index)
-  {
-    m_GreenChannelIndex = index;
-  }
-
-  /** Get the green channel index (vector mode only) */
-  virtual unsigned int GetGreenChannelIndex(void)
-  {
-    return m_GreenChannelIndex;
-  }
-
-  /** Set all channels (grayscale mode) */
-  virtual void SetAllChannels(unsigned int index)
-  {
-    m_RedChannelIndex   = index;
-    m_BlueChannelIndex  = index;
-    m_GreenChannelIndex = index;
-  }
+  itkGetConstReferenceMacro(PixelRepresentationFunction, PixelRepresentationFunctionType);
+  itkSetMacro(PixelRepresentationFunction, PixelRepresentationFunctionType);
 
 protected:
   /** Constructor */
@@ -193,12 +200,12 @@ private:
   RenderingFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-    /** Index of the channels to display (vector mode only, has no effet
-   *  on scalar mode)
-     */
-  unsigned int m_RedChannelIndex;
-  unsigned int m_GreenChannelIndex;
-  unsigned int m_BlueChannelIndex;
+  /** PixelRepresentation function*/
+  PixelRepresentationFunctionType m_PixelRepresentationFunction;
+
+  /** Transfer function*/
+  TransferFunctionType m_TransferFunction;
+
 
 };
 } // end namespace Function
