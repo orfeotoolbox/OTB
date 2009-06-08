@@ -22,11 +22,12 @@ SET(EXE_TESTS ${CXX_TEST_PATH}/otbOBIAExamplesTests)
 SET(TOL 0.0)
 
 ADD_TEST( trTeOBIAImageToLabelToImageTest ${EXE_TESTS}
-        --compare-image ${TOL}          ${BASELINE}/OBIAI2L2IOutput.png
-                                        ${TEMP}/OBIAI2L2IOutput.png
+        --compare-image ${TOL}          ${BASELINE}/OBIAI2L2IOutput.tif
+                                        ${TEMP}/OBIAI2L2IOutput.tif
         OBIAImageToLabelToImageTest
         ${INPUTDATA}/MSLabeledOutput.tif
-        ${TEMP}/OBIAI2L2IOutput.png
+        ${TEMP}/OBIAI2L2IOutput.tif
+	1 1108 0
         )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
