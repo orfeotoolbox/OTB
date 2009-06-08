@@ -17,16 +17,16 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
-SET(EXE_TESTS ${CXX_TEST_PATH}/otbTutorialsExamplesTests)
+SET(EXE_TESTS ${CXX_TEST_PATH}/otbOBIAExamplesTests)
 
 SET(TOL 0.0)
 
-ADD_TEST( trTeTutorialsPipelineTest ${EXE_TESTS}
-        --compare-image ${TOL}          ${BASELINE}/TutorialsPipelineOutput.png
-                                        ${TEMP}/TutorialsPipelineOutput.png
-        TutorialsPipelineTest
-        ${INPUTDATA}/QB_Suburb.png
-        ${TEMP}/TutorialsPipelineOutput.png
+ADD_TEST( trTeOBIAImageToLabelToImageTest ${EXE_TESTS}
+        --compare-image ${TOL}          ${BASELINE}/OBIAI2L2IOutput.png
+                                        ${TEMP}/OBIAI2L2IOutput.png
+        OBIAImageToLabelToImageTest
+        ${INPUTDATA}/MSLabeledOutput.tif
+        ${TEMP}/OBIAI2L2IOutput.png
         )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
