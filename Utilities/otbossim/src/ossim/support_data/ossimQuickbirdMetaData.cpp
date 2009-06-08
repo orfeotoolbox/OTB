@@ -215,6 +215,14 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
         << std::endl;
     }
 
+  if( !data_file.exists() )
+  {
+    ossimNotify(ossimNotifyLevel_WARN)
+            << "ossimQuickbirdMetaData::parseMetaData(data_file) WARN:"
+            << "\nmetadate data file <" << data_file << ">. "
+            << "doesn't exist..." << std::endl;
+  }
+
   FILE* fptr = fopen (data_file, "r");
   if (!fptr)
     {
