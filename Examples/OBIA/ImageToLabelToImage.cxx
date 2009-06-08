@@ -44,10 +44,12 @@ int main(int argc, char * argv[])
     }
 
   const int dim = 2;
-  
-  typedef itk::Image< unsigned char, dim > ImageType;
 
-  typedef itk::LabelObject< unsigned char, dim > LabelObjectType;
+  typedef unsigned short PixelType;
+  
+  typedef itk::Image< PixelType, dim > ImageType;
+
+  typedef itk::LabelObject< PixelType, dim > LabelObjectType;
   typedef itk::LabelMap< LabelObjectType > LabelMapType;
   
   typedef itk::ImageFileReader< ImageType > ReaderType;
