@@ -20,7 +20,6 @@
 #include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimTrace.h>
-#include <ossim/base/ossimFileParser.h>
 
 
 RTTI_DEF1(ossimQuickbirdMetaData, "ossimQuickbirdMetaData", ossimObject);
@@ -242,13 +241,12 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
   fread(filebuf, 1, fileSize, fptr);
   strptr = filebuf;
   fclose(fptr);
-  ossimFileParser parser;
   ossimString temp;
 
   //---
   // Generation time:
   //---
-  if(parser.getEndOfLine( strptr, ossimString("\ngenerationTime ="), "%17c %s", temp))
+  if(getEndOfLine( strptr, ossimString("\ngenerationTime ="), "%17c %s", temp))
     theGenerationDate = ossimString(temp).before(";");
   else
     {
@@ -267,7 +265,7 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
   //---
   // BandId:
   //---
-  if(parser.getEndOfLine( strptr, ossimString("\nbandId ="), "%9c %s", temp))
+  if(getEndOfLine( strptr, ossimString("\nbandId ="), "%9c %s", temp))
     theBandId = ossimString(temp).after("\"").before("\";");
   else
     {
@@ -287,7 +285,7 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
   //---
   // SatID:
   //---
-  if(parser.getEndOfLine( strptr, ossimString("\n\tsatId ="), "%9c %s", temp))
+  if(getEndOfLine( strptr, ossimString("\n\tsatId ="), "%9c %s", temp))
     theSatID = ossimString(temp).after("\"").before("\";");
   else
     {
@@ -307,7 +305,7 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
   //---
   // TLCTime:
   //---
-  if(parser.getEndOfLine( strptr, ossimString("\n\tTLCTime ="), "%11c %s", temp))
+  if(getEndOfLine( strptr, ossimString("\n\tTLCTime ="), "%11c %s", temp))
     theTLCDate = ossimString(temp).before("\";");
   else
     {
@@ -327,11 +325,11 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
   //***
   // Sun Azimuth:
   //***
-  if(parser.getEndOfLine( strptr, ossimString("\n\tsunAz ="), "%9c %s", temp))
+  if(getEndOfLine( strptr, ossimString("\n\tsunAz ="), "%9c %s", temp))
     theSunAzimuth = ossimString(temp).before(";").toFloat64();
   else
     {
-      if(parser.getEndOfLine( strptr, ossimString("\n\tmeanSunAz ="), "%13c %s", temp))
+      if(getEndOfLine( strptr, ossimString("\n\tmeanSunAz ="), "%13c %s", temp))
 	theSunAzimuth = ossimString(temp).before(";").toFloat64();
       else
 	{
@@ -351,11 +349,11 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
   //***
   // Sun Elevation:
   //***
-  if(parser.getEndOfLine( filebuf, ossimString("\n\tsunEl ="), "%9c %s", temp))
+  if(getEndOfLine( filebuf, ossimString("\n\tsunEl ="), "%9c %s", temp))
     theSunElevation = ossimString(temp).before(";").toFloat64();
   else
     {
-      if(parser.getEndOfLine( filebuf, ossimString("\n\tmeanSunEl ="), "%13c %s", temp))
+      if(getEndOfLine( filebuf, ossimString("\n\tmeanSunEl ="), "%13c %s", temp))
 	theSunElevation = ossimString(temp).before(";").toFloat64();
       else
 	{
@@ -417,3 +415,26 @@ bool ossimQuickbirdMetaData::parseATTData(const ossimFilename& data_file)
 {
   return true;
 }
+
+//*****************************************************************************
+// PROTECTED METHOD: ossimQuickbirdMetaData::getEndOfLine
+//
+// //  Parse a char * to find another char *. Change the pointer only if the second char * is found.
+//
+//*****************************************************************************
+bool ossimQuickbirdMetaData::getEndOfLine( char * fileBuf, ossimString lineBeginning, char * format, ossimString & name)
+  {
+     char * res = strstr(fileBuf, lineBeginning.c_str());
+     if (!res)
+     {
+       return false;
+      }
+    // if the lineBeginning is found, update the start pointer adress
+    fileBuf = res;
+
+    char dummy[80], nameChar[80];
+    sscanf(res, format, dummy, nameChar);
+    name = ossimString(nameChar);
+
+    return true;
+  }

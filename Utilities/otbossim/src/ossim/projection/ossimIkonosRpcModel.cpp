@@ -515,7 +515,6 @@ bool ossimIkonosRpcModel::parseHdrData(const ossimFilename& data_file)
 //*****************************************************************************
 void ossimIkonosRpcModel::parseRpcData(const ossimFilename& data_file)
 {
-std::cout<<" ############### parseRpcData: "<<std::endl;
    if (traceExec())      ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimIkonosRpcModel::parseRpcData(data_file): entering..." << std::endl;
 
    if( !data_file.exists() )
@@ -524,8 +523,6 @@ std::cout<<" ############### parseRpcData: "<<std::endl;
       return;
     }
 
-
-  std::cout<<" ############### parseRpcData: "<<std::endl;
    //***
    // The Ikonos RPC data file is conveniently formatted as KWL file:
    //***
@@ -554,7 +551,7 @@ std::cout<<" ############### parseRpcData: "<<std::endl;
                                           << keyword << std::endl;
       return;
    }
-std::cout<<" ############### : "<<buf<<std::endl;
+
    theLineOffset = atof(buf);
       
    keyword = SAMP_OFF_KW;
@@ -924,13 +921,12 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
    ossimFilename hdrfile = filename;
    hdrfile.setExtension(ossimString("hdr"));
 
-   parseRpcData (rpcfile);
    if(!parseHdrData(hdrfile))
    {
       return false;
    }
 
-
+   parseRpcData (rpcfile);
    if (getErrorStatus()) //check for errors in parsing rpc data
    {
       return false;
