@@ -16,22 +16,32 @@
 
 =========================================================================*/
 
+
+//  Software Guide : BeginCommandLineArgs
+//    INPUTS: {MSLabeledOutput.tif}
+//    OUTPUTS: {OBIAI2L2IOutput.tif}
+//    1 1108 0
+//  Software Guide : EndCommandLineArgs
+
 //  Software Guide : BeginLatex
 //
-//  
+//  This example shows the basic approach for the transformation of a
+//  segmenred (labeled) image into a LabelObjectMap and then back to
+//  an image. For this matter we will need the following header files
+//  which contain the basic classes.
 //
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
+#include "itkLabelObject.h"
+#include "itkLabelMap.h"
+#include "itkBinaryImageToLabelMapFilter.h"
+#include "itkLabelMapToLabelImageFilter.h"
 
 // Software Guide : EndCodeSnippet
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-#include "itkLabelObject.h"
-#include "itkLabelMap.h"
-#include "itkBinaryImageToLabelMapFilter.h"
-#include "itkLabelMapToLabelImageFilter.h"
 
 
 int main(int argc, char * argv[])
