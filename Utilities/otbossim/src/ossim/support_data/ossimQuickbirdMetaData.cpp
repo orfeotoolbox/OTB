@@ -208,20 +208,14 @@ bool ossimQuickbirdMetaData::loadState(const ossimKeywordlist& kwl,
 //*****************************************************************************
 bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
 {
-  if (traceExec())
-    {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-        << "DEBUG ossimQuickbirdRpcModel::parseMetaData(data_file): entering..."
-        << std::endl;
-    }
-
+  if (traceExec()) ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimQuickbirdMetaData::parseMetaData(data_file): entering..." << std::endl;
+   
   if( !data_file.exists() )
-  {
-    ossimNotify(ossimNotifyLevel_WARN)
-            << "ossimQuickbirdMetaData::parseMetaData(data_file) WARN:"
-            << "\nmetadate data file <" << data_file << ">. "
-            << "doesn't exist..." << std::endl;
-  }
+    {
+     if (traceExec()) ossimNotify(ossimNotifyLevel_WARN) << "ossimQuickbirdMetaData::parseMetaData(data_file) WARN:" << "\nmetadate data file <" << data_file << ">. " << "doesn't exist..." << std::endl;
+     return false;
+    }
+  
 
   FILE* fptr = fopen (data_file, "r");
   if (!fptr)
