@@ -182,11 +182,11 @@ ImageLayer<TImage,TOutputImage>
       {
 //       SampleType sample(histogramSource->GetNumberOfComponentsPerPixel());
 //       SampleType sample(PixelSize(histogramSource, histogramSource->GetBufferPointer()));
-      SampleType sample(m_RenderingFunction->GetPixelRepresentationFunction()->GetOutputSize());
+      SampleType sample(m_RenderingFunction->GetPixelRepresentationFunction().GetOutputSize());
       // workaround to handle both scalar and vector pixels the same way
       sample.Fill(itk::NumericTraits<ScalarType>::Zero);
       sample = sample +
-        m_RenderingFunction->GetPixelRepresentationFunction(it.Get()));
+        m_RenderingFunction->GetPixelRepresentationFunction()(it.Get());
       listSample->PushBack(sample);
       ++it;
       }

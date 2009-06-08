@@ -126,19 +126,19 @@ ImageLayerGenerator<TImageLayer>
   {
     case 1:
     {
-      m_RenderingFunction->SetAllChannels(0);
+      m_RenderingFunction->GetPixelRepresentationFunction().SetAllChannels(0);
       break;
     }
     case 2:
     {
-      m_RenderingFunction->SetAllChannels(0);
+      m_RenderingFunction->GetPixelRepresentationFunction().SetAllChannels(0);
       break;
     }
     case 3:
     {
-      m_RenderingFunction->SetRedChannelIndex(0);
-      m_RenderingFunction->SetGreenChannelIndex(1);
-      m_RenderingFunction->SetBlueChannelIndex(2);
+      m_RenderingFunction->GetPixelRepresentationFunction().SetRedChannelIndex(0);
+      m_RenderingFunction->GetPixelRepresentationFunction().SetGreenChannelIndex(1);
+      m_RenderingFunction->GetPixelRepresentationFunction().SetBlueChannelIndex(2);
       break;
     }
     case 4:
@@ -149,16 +149,16 @@ ImageLayerGenerator<TImageLayer>
       if (sensorID.find("Spot") != std::string::npos)
       {
         // Handle Spot like channel order
-        m_RenderingFunction->SetRedChannelIndex(0);//XS3
-        m_RenderingFunction->SetGreenChannelIndex(1);//XS2
-        m_RenderingFunction->SetBlueChannelIndex(2);//XS1
+        m_RenderingFunction->GetPixelRepresentationFunction().SetRedChannelIndex(0);//XS3
+        m_RenderingFunction->GetPixelRepresentationFunction().SetGreenChannelIndex(1);//XS2
+        m_RenderingFunction->GetPixelRepresentationFunction().SetBlueChannelIndex(2);//XS1
       }
       else
       {
         // Handle quickbird like channel order (wavelenght order)
-        m_RenderingFunction->SetRedChannelIndex(2);
-        m_RenderingFunction->SetGreenChannelIndex(1);
-        m_RenderingFunction->SetBlueChannelIndex(0);
+        m_RenderingFunction->GetPixelRepresentationFunction().SetRedChannelIndex(2);
+        m_RenderingFunction->GetPixelRepresentationFunction().SetGreenChannelIndex(1);
+        m_RenderingFunction->GetPixelRepresentationFunction().SetBlueChannelIndex(0);
       }
       break;
     }

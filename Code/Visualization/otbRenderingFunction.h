@@ -24,6 +24,7 @@
 #include "itkRGBPixel.h"
 #include "itkRGBAPixel.h"
 #include "otbPixelRepresentationFunction.h"
+#include "otbChannelSelectorFunctor.h"
 
 namespace otb
 {
@@ -61,8 +62,7 @@ public:
  *  \ingroup Visualization
  */
 template <class TPixelPrecision, class TRGBPixel,
-  class TPixelRepresentationFunction = Identity<
-        typename itk::NumericTraits<TPixelPrecision>::ValueType,
+  class TPixelRepresentationFunction = ChannelSelectorFunctor<
         typename itk::NumericTraits<TPixelPrecision>::ValueType
         >,
   class TTransferFunction = Identity<
@@ -92,7 +92,6 @@ public:
 
   /** Pixel representation */
   typedef TPixelRepresentationFunction PixelRepresentationFunctionType;
-  typedef typename PixelRepresentationFunctionType::Pointer PixelRepresentationFunctionPointerType;
 
   typedef TTransferFunction                          TransferFunctionType;
 
@@ -180,12 +179,37 @@ public:
 //   {
 //     return m_TransferFunction;
 //   }
-  itkGetConstReferenceMacro(TransferFunction, TransferFunctionType);
-  itkSetMacro(TransferFunction, TransferFunctionType);
+//   itkGetConstReferenceMacro(TransferFunction, TransferFunctionType);
+  virtual const TransferFunctionType & GetTransferFunction() const
+  {
+    return this->m_TransferFunction;
+  }
+  virtual TransferFunctionType  & GetTransferFunction()
+  {
+    return this->m_TransferFunction;
+  }
+//   itkSetMacro(TransferFunction, TransferFunctionType);
+  virtual void SetTransferFunction (const TransferFunctionType function)
+  {
+      this->m_TransferFunction = function;
+      this->Modified();
+  }
 
-  itkGetConstReferenceMacro(PixelRepresentationFunction, PixelRepresentationFunctionType);
-  itkSetMacro(PixelRepresentationFunction, PixelRepresentationFunctionType);
-
+//   itkGetConstReferenceMacro(PixelRepresentationFunction, PixelRepresentationFunctionType);
+  virtual const PixelRepresentationFunctionType & GetPixelRepresentationFunction() const
+  {
+    return this->m_PixelRepresentationFunction;
+  }
+  virtual PixelRepresentationFunctionType & GetPixelRepresentationFunction()
+  {
+    return this->m_PixelRepresentationFunction;
+  }
+//   itkSetMacro(PixelRepresentationFunction, PixelRepresentationFunctionType);
+  virtual void SetPixelRepresentationFunction (const PixelRepresentationFunctionType function)
+  {
+      this->m_PixelRepresentationFunction = function;
+      this->Modified();
+  }
 protected:
   /** Constructor */
   RenderingFunction() : m_Minimum(), m_Maximum()  {}
@@ -196,15 +220,17 @@ protected:
   ExtremaVectorType m_Minimum;
   ExtremaVectorType m_Maximum;
 
+  /** PixelRepresentation function*/
+  PixelRepresentationFunctionType m_PixelRepresentationFunction;//FIXME private
+
+  /** Transfer function*/
+  TransferFunctionType m_TransferFunction;//FIXME private
+
 private:
   RenderingFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /** PixelRepresentation function*/
-  PixelRepresentationFunctionType m_PixelRepresentationFunction;
 
-  /** Transfer function*/
-  TransferFunctionType m_TransferFunction;
 
 
 };

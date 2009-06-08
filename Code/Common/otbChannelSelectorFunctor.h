@@ -38,7 +38,7 @@ namespace otb
         typedef itk::RGBPixel<ScalarType> RGBPixelType;
         typedef itk::RGBAPixel<ScalarType> RGBAPixelType;
 
-        typedef VectorPixelType OutputPixelType;
+        typedef TInputPixel OutputPixelType;
 
 
         /** Constructor */
@@ -55,7 +55,7 @@ namespace otb
         {
           OutputPixelType outPixel;
           outPixel.SetSize(m_ChannelList.size());
-          for (int i=0; i<m_ChannelList.size(); ++i)
+          for (unsigned int i=0; i<m_ChannelList.size(); ++i)
           {
             assert(m_ChannelList[i] < inPixel.Size());
             outPixel[i] = inPixel[m_ChannelList[i]];
@@ -66,11 +66,10 @@ namespace otb
         OutputPixelType operator()(ScalarType inPixel) const
         {
           OutputPixelType outPixel;
-          outPixel.SetSize(m_ChannelList.size());
-          for (int i=0; i<m_ChannelList.size(); ++i)
+          for (unsigned int i=0; i<m_ChannelList.size(); ++i)
           {
             assert(m_ChannelList[i] < 1);
-            outPixel[i] = inPixel;
+            outPixel = inPixel;
           }
           return outPixel;
         }
@@ -79,7 +78,7 @@ namespace otb
         {
           OutputPixelType outPixel;
           outPixel.SetSize(m_ChannelList.size());
-          for (int i=0; i<m_ChannelList.size(); ++i)
+          for (unsigned int i=0; i<m_ChannelList.size(); ++i)
           {
             assert(m_ChannelList[i] < 3);
             outPixel[i] = inPixel[m_ChannelList[i]];
@@ -91,7 +90,7 @@ namespace otb
         {
           OutputPixelType outPixel;
           outPixel.SetSize(m_ChannelList.size());
-          for (int i=0; i<m_ChannelList.size(); ++i)
+          for (unsigned int i=0; i<m_ChannelList.size(); ++i)
           {
             assert(m_ChannelList[i] < 4);
             outPixel[i] = inPixel[m_ChannelList[i]];
@@ -113,6 +112,56 @@ namespace otb
           m_ChannelList = channels;
         }
 
+        /** Only for backward compatibility but should not be used*/
+        void SetAllChannels(unsigned int channel)
+        {
+          if (m_ChannelList.size() <3)
+          {
+            m_ChannelList.resize(3,0);
+          }
+          m_ChannelList[0]=channel;
+          m_ChannelList[1]=channel;
+          m_ChannelList[2]=channel;
+        }
+        void SetRedChannelIndex(unsigned int channel)
+        {
+          if (m_ChannelList.size() <1)
+          {
+            m_ChannelList.resize(3,0);
+          }
+          m_ChannelList[0] = channel;
+        }
+
+        void SetGreenChannelIndex(unsigned int channel)
+        {
+          if (m_ChannelList.size() <2)
+          {
+            m_ChannelList.resize(3,0);
+          }
+          m_ChannelList[1] = channel;
+        }
+
+        void SetBlueChannelIndex(unsigned int channel)
+        {
+          if (m_ChannelList.size() <3)
+          {
+            m_ChannelList.resize(3,0);
+          }
+          m_ChannelList[2] = channel;
+        }
+
+        unsigned int GetRedChannelIndex() const
+        {
+          return m_ChannelList[0];
+        }
+        unsigned int GetGreenChannelIndex() const
+        {
+          return m_ChannelList[1];
+        }
+        unsigned int GetBlueChannelIndex() const
+        {
+          return m_ChannelList[2];
+        }
       private:
         std::vector<unsigned int> m_ChannelList;
     };

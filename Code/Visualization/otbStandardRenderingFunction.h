@@ -41,7 +41,6 @@ namespace Function
  */
 template <class TPixelPrecision, class TRGBPixel,
   class TPixelRepresentationFunction = ChannelSelectorFunctor<
-        typename itk::NumericTraits<TPixelPrecision>::ValueType,
         typename itk::NumericTraits<TPixelPrecision>::ValueType
         >,
   class TTransferFunction = Identity<
@@ -82,7 +81,7 @@ public:
   {
     OutputPixelType resp;
     resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
-    OutputValueType value = this->Evaluate(m_TransferFunction(spixel),m_TransferedMinimum[0],m_TransferedMaximum[0]);
+    OutputValueType value = this->Evaluate(this->m_TransferFunction(spixel),m_TransferedMinimum[0],m_TransferedMaximum[0]);
     resp.SetRed(value);
     resp.SetGreen(value);
     resp.SetBlue(value);
@@ -93,9 +92,9 @@ public:
   {
     OutputPixelType resp;
     resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
-    resp.SetRed(Evaluate(m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
-    resp.SetGreen(Evaluate(m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
-    resp.SetBlue(Evaluate(m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
+    resp.SetRed(Evaluate(this->m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
+    resp.SetGreen(Evaluate(this->m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
+    resp.SetBlue(Evaluate(this->m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
     return resp;
   }
   /** Evaluate method (RGB pixel version) */
@@ -103,9 +102,9 @@ public:
   {
     OutputPixelType resp;
     resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
-    resp.SetRed(Evaluate(m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
-    resp.SetGreen(Evaluate(m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
-    resp.SetBlue(Evaluate(m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
+    resp.SetRed(Evaluate(this->m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
+    resp.SetGreen(Evaluate(this->m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
+    resp.SetBlue(Evaluate(this->m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
     return resp;
   }
   /** Evaluate method (RGBA pixel version) */
@@ -117,9 +116,9 @@ public:
     {//Propagate the alpha channel
       resp[3] = static_cast<OutputValueType>(vpixel[3]);
     }
-    resp.SetRed(Evaluate(m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
-    resp.SetGreen(Evaluate(m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
-    resp.SetBlue(Evaluate(m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
+    resp.SetRed(Evaluate(this->m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
+    resp.SetGreen(Evaluate(this->m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
+    resp.SetBlue(Evaluate(this->m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
     return resp;
   }
 
@@ -252,8 +251,8 @@ public:
 
       while(minIt != this->m_Minimum.end() && maxIt != this->m_Maximum.end())
         {
-        const double v1 = m_TransferFunction(*minIt);
-        const double v2 = m_TransferFunction(*maxIt);
+        const double v1 = this->m_TransferFunction(*minIt);
+        const double v2 = this->m_TransferFunction(*maxIt);
         m_TransferedMinimum.push_back(static_cast<ScalarType>(std::min(v1,v2)));
         m_TransferedMaximum.push_back(static_cast<ScalarType>(std::max(v1,v2)));
         ++minIt;
@@ -264,8 +263,8 @@ public:
 
 protected:
   /** Constructor */
-  StandardRenderingFunction() : m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2), m_TransferFunction(),
-                                m_UserDefinedTransferedMinMax(false),         m_TransferedMinimum(), m_TransferedMaximum()
+  StandardRenderingFunction() : m_UserDefinedTransferedMinMax(false),         m_TransferedMinimum(), m_TransferedMaximum(),
+                                m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2)
   {}
   /** Destructor */
   ~StandardRenderingFunction() {}
@@ -300,7 +299,7 @@ private:
    * not harmful to do so and preserves const correctness of the
    *  Evaluate() mehtods.
    */
-//   mutable TransferFunctionType m_TransferFunction;
+//   mutable TransferFunctionType this->m_TransferFunction;
 
   /** If true, values mapped by the transfert function are clamped to
       user defined min/max */
@@ -309,6 +308,11 @@ private:
   /** Transfered min and max */
   ExtremaVectorType m_TransferedMinimum;
   ExtremaVectorType m_TransferedMaximum;
+
+  unsigned int m_RedChannelIndex;
+  unsigned int m_GreenChannelIndex;
+  unsigned int m_BlueChannelIndex;
+
 };
 } // end namespace Functor
 } // end namespace otb
