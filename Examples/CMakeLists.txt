@@ -25,6 +25,7 @@ SUBDIRS(
   Fusion
   Tutorials
   Markov
+  OBIA
 )
 
 IF(OTB_USE_VISU_GUI)
@@ -82,6 +83,7 @@ ELSE(OTB_BINARY_DIR)
         Fusion
         Tutorials
         Markov
+	OBIA
         )
 
     IF(OTB_USE_VISU_GUI)
