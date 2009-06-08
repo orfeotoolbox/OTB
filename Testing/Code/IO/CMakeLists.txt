@@ -1081,6 +1081,7 @@ ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS2}
          ${INPUTDATA}/poupees_1canal.c1.hdr
          ${TEMP}/ioStreamingImageFileWriterBSQWithoutStreaming.hdr
          0 # Streaming
+         0
          )
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS2}
