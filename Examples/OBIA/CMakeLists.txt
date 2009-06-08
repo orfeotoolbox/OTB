@@ -27,6 +27,8 @@ ADD_TEST( trTeOBIAImageToLabelToImageTest ${EXE_TESTS}
         OBIAImageToLabelToImageTest
         ${INPUTDATA}/MSLabeledOutput.tif
         ${TEMP}/OBIAI2L2IOutput.tif
+	${TEMP}/OBIAI2L2IInPretty.tif
+	${TEMP}/OBIAI2L2IOutPretty.tif
 	1 1108 0
         )
 
