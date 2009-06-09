@@ -26,6 +26,7 @@ SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 SET(EXE_TESTS ${CXX_TEST_PATH}/otbOBIAExamplesTests)
 
 SET(TOL 0.0)
+SET(EPS 0.001)
 
 ADD_TEST( trTeOBIAImageToLabelToImageTest ${EXE_TESTS}
         --compare-image ${TOL}          ${BASELINE}/OBIAI2L2IOutput.tif
@@ -38,11 +39,10 @@ ADD_TEST( trTeOBIAImageToLabelToImageTest ${EXE_TESTS}
 	1 1108 0
         )
 
-ADD_TEST(trTeOBIAShapeAttributeComputation ${EXE_TESTS}
-	--compare-ascii ${EPS}
-	${BASELINE}/OBIAShapeAttribute.txt
-	${TEMP}/OBIAShapeAttribute.txt
-	ShapeAttributeComputationTest
+ADD_TEST(trTeOBIAShapeAttributeComputationTest ${EXE_TESTS}
+	--compare-ascii ${EPS}	${BASELINE}/OBIAShapeAttribute.txt
+	                        ${TEMP}/OBIAShapeAttribute.txt
+	OBIAShapeAttributeComputationTest
 	${INPUTDATA}/MSLabeledOutput.tif
 	${TEMP}/OBIAShapeAttribute.txt
 )
