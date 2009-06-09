@@ -3,8 +3,12 @@
 
 #include "imaging/ossimImageHandlerRegistry.h"
 #include "imaging/ossimImageHandler.h"
+#include "imaging/ossimImageHandlerFactory.h"
+#include "imaging/ossimImageHandlerSarFactory.h"
 #include "base/ossimKeywordlist.h"
 #include "base/ossimFilename.h"
+
+#include "base/ossimTraceManager.h"
 
 #include "ossimPluginReaderFactory.h"
 
@@ -12,7 +16,12 @@ int main(int argc, char * argv[])
 {
 
   char * filename = argv[1];
+  
+  ossimTraceManager::instance()->setTracePattern("");
+  
+  ossimImageHandlerRegistry::instance()->unregisterFactory(ossimImageHandlerFactory::instance());
   ossimImageHandlerRegistry::instance()->addFactory(ossimPluginReaderFactory::instance());
+  ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
   ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(filename));
 
   if (!handler)
