@@ -134,7 +134,7 @@ protected:
   PointSetToImageFilter();
   ~PointSetToImageFilter();
 
-  virtual void GenerateOutputInformation(){}; // do nothing
+  virtual void GenerateOutputInformation(); // do nothing
   virtual void GenerateData();
 
   SizeType            m_Size;

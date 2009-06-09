@@ -134,17 +134,12 @@ PointSetToImageFilter<TInputPointSet,TOutputImage>
   this->SetOrigin(origin);
 }
 
-//----------------------------------------------------------------------------
-
-/** Update */
 template <class TInputPointSet, class TOutputImage>
 void
 PointSetToImageFilter<TInputPointSet,TOutputImage>
-::GenerateData(void)
+::GenerateOutputInformation(void)
 {
   unsigned int i;
-  itkDebugMacro(<< "PointSetToImageFilter::Update() called");
-
   // Get the input and output pointers 
   const InputPointSetType * InputPointSet  = this->GetInput();
   OutputImagePointer   OutputImage = this->GetOutput();
@@ -230,8 +225,26 @@ PointSetToImageFilter<TInputPointSet,TOutputImage>
 
   OutputImage->SetOrigin(origin);   //   and origin
   OutputImage->SetDirection(m_Direction);   //   and Direction
-  OutputImage->Allocate();   // allocate the image   
+}
+
+
+//----------------------------------------------------------------------------
+/** Update */
+template <class TInputPointSet, class TOutputImage>
+void
+PointSetToImageFilter<TInputPointSet,TOutputImage>
+::GenerateData(void)
+{
+  //unsigned int i;
+  itkDebugMacro(<< "PointSetToImageFilter::Update() called");
+
+  // Get the input and output pointers 
+  const InputPointSetType * InputPointSet  = this->GetInput();
+  OutputImagePointer   OutputImage = this->GetOutput();
+  // Allocate output image
+  OutputImage->Allocate();
   OutputImage->FillBuffer(m_OutsideValue);
+
 
   typedef typename InputPointSetType::PointsContainer::ConstIterator  PointIterator;
   PointIterator pointItr = InputPointSet->GetPoints()->Begin();
