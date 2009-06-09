@@ -36,6 +36,7 @@
 
 // Software Guide : EndCodeSnippet
 #include "otbImageFileReader.h"
+#include <fstream>
 
 int main(int argc, char * argv[])
 {
@@ -82,16 +83,22 @@ int main(int argc, char * argv[])
   // then we can read the attribute values we're interested in. The BinaryImageToShapeLabelMapFilter
   // produce consecutive labels, so we can use a for loop and GetLabelObject() method to retrieve
   // the label objects. If the labels are not consecutive, the GetNthLabelObject() method must be
-  // use instead of GetLabelObject(), or an iterator on the label object container of the label map.
+  // use instead of GetLabelObject(), or an iterator on the label
+  // object container of the label map.
+    std::ofstream outfile(argv[2]);
+
+
   LabelMapType::Pointer labelMap = shape->GetOutput();
   for( unsigned long label=1; label<=labelMap->GetNumberOfLabelObjects(); label++ )
     {
     // we don't need a SmartPointer of the label object here, because the reference is kept in
     // in the label map.
     const LabelObjectType * labelObject = labelMap->GetLabelObject( label );
-    std::cout << label << "\t" << labelObject->GetPhysicalSize() << "\t" << labelObject->GetCentroid() << std::endl;
+    outfile << label << "\t" << labelObject->GetPhysicalSize() << "\t" << labelObject->GetCentroid() << std::endl;
+
     }
-  
+
+  outfile.close();
   return 0;
 }
 
