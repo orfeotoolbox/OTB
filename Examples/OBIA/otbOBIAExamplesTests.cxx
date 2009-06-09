@@ -26,9 +26,13 @@
 void RegisterTests()
 {
   REGISTER_TEST(OBIAImageToLabelToImageTest);
+  REGISTER_TEST(OBIAShapeAttributeComputationTest);
 }
 
 #undef main
 #define main OBIAImageToLabelToImageTest
 #include "ImageToLabelToImage.cxx"
 
+#undef main
+#define main OBIAShapeAttributeComputationTest
+#include "ShapeAttributeComputation.cxx"
