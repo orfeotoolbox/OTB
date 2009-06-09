@@ -57,7 +57,7 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
   // Cross validation accuracy measures
   m_InitialCrossValidationAccuracy = 0.;
   m_FinalCrossValidationAccuracy = 0.;
-  m_ParametersOptimization = true;
+  m_ParametersOptimization = false;
   m_NumberOfCrossValidationFolders = 5;
   m_CoarseOptimizationNumberOfSteps = 5;
   m_FineOptimizationNumberOfSteps = 5;

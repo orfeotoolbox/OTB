@@ -350,7 +350,7 @@ private:
   // Final cross validationa accuracy
   double m_FinalCrossValidationAccuracy;
 
-  // Do parameters optimization
+  // Do parameters optimization, default : false
   bool m_ParametersOptimization;
 
   // Number of steps for the coarse search
