@@ -97,6 +97,10 @@ public:
 		return theSatID;
    }
 
+   bool getEndOfLine( char * fileBuf, ossimString lineBeginning, char * format, ossimString & name );
+
+ 
+
  /*****************************************
 *parseATTData EPH GEO IMD RPB TIL
 *

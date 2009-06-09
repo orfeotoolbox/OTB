@@ -351,13 +351,11 @@ ImageFileReader<TOutputImage>
   if (!handler)
   {
     otbMsgDevMacro( <<"OSSIM Open Image FAILED ! ");
-    //std::cout<<"OSSIM Open Image FAILED ! "<<std::endl;
   }
 
   else
   {
     otbMsgDevMacro( <<"OSSIM Open Image SUCCESS ! ");
-    //std::cout<<"OSSIM Open Image SUCCESS ! "<<std::endl;
     hasMetaData = handler->getImageGeometry(geom_kwl);
   }
   // Free memory
@@ -372,12 +370,10 @@ ImageFileReader<TOutputImage>
     if (!projection)
     {
       otbMsgDevMacro( <<"OSSIM Instanciate projection FAILED ! ");
-      //std::cout<<"OSSIM Instanciate projection FAILED ! "<<std::endl;
     }
     else
     {
       otbMsgDevMacro( <<"OSSIM Instanciate projection SUCCESS ! ");
-      //std::cout<<"OSSIM Instanciate projection SUCCESS ! "<<std::endl;
       hasMetaData = projection->saveState(geom_kwl);
       // Free memory
       delete projection;
@@ -387,14 +383,11 @@ ImageFileReader<TOutputImage>
   if (!hasMetaData)
   {
     otbMsgDevMacro( <<"OSSIM MetaData not present ! ");
-    //std::cout<<"OSSIM MetaData not present ! "<<std::endl;
   }
   else
   {
     otbMsgDevMacro( <<"OSSIM MetaData present ! ");
     otbMsgDevMacro( << geom_kwl);
-    //std::cout<<"OSSIM MetaData present ! "<<std::endl;
-    //std::cout<<geom_kwl<<std::endl;
   
 
     // Update otb Keywordlist

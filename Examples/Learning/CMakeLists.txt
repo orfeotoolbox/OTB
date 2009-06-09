@@ -163,9 +163,9 @@ ADD_TEST(leTeSVMGenericKernelImageModelEstimatorExampleTest ${EXE_TESTS}
 # ------- SVMGenericKernelImageClassificationExampleTest----------
 
 ADD_TEST(leTeSVMGenericKernelImageClassificationExampleTest ${EXE_TESTS}
-	--compare-ascii ${EPS}
-	${BASELINE}/svm_image_model_generic_kernel.svn
-	${TEMP}/svm_image_model_generic_kernel.svn
+	--compare-image ${EPS}
+	${BASELINE}/ROI_QB_MUL_GENERIC_KERNEL_IMAGE_CLASSIF.png
+	${TEMP}/ROI_QB_MUL_GENERIC_KERNEL_IMAGE_CLASSIF.png
 	SVMGenericKernelImageClassificationExampleTest
 	${INPUTDATA}/ROI_QB_MUL_1.png
 	${TEMP}/ROI_QB_MUL_GENERIC_KERNEL_IMAGE_CLASSIF.png

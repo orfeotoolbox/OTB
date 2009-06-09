@@ -30,7 +30,7 @@ SET(UTILITIES_TESTS ${CXX_TEST_PATH}/otbUtilitiesTests)
 
 IF(OTB_DATA_USE_LARGEINPUT)
 
-ADD_TEST(utOssimKeywordlistToulouseQuickBirdTest ${UTILITIES_TESTS}
+ADD_TEST(utTvOssimKeywordlistToulouseQuickBirdTest ${UTILITIES_TESTS}
 --compare-ascii ${EPSILON_10e6}  ${BASELINE_FILES}/utOssimKeywordlistToulouseQuickBird.txt
                         ${TEMP}/utOssimKeywordlistToulouseQuickBird.txt
         ossimKeywordlistTest
@@ -38,7 +38,7 @@ ADD_TEST(utOssimKeywordlistToulouseQuickBirdTest ${UTILITIES_TESTS}
         ${TEMP}/utOssimKeywordlistToulouseQuickBird.txt
         )
 
-ADD_TEST(utOssimKeywordlistBlossevilleIkonosTest ${UTILITIES_TESTS}
+ADD_TEST(utTvOssimKeywordlistBlossevilleIkonosTest ${UTILITIES_TESTS}
 --compare-ascii ${TOL}  ${BASELINE_FILES}/utOssimKeywordlistBlossevilleIkonos.txt
                         ${TEMP}/utOssimKeywordlistBlossevilleIkonos.txt
         ossimKeywordlistTest
@@ -47,12 +47,12 @@ ADD_TEST(utOssimKeywordlistBlossevilleIkonosTest ${UTILITIES_TESTS}
         )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-ADD_TEST(utOssimElevManagerTest ${UTILITIES_TESTS}
+ADD_TEST(utTuOssimElevManagerTest ${UTILITIES_TESTS}
         ossimElevManagerTest
         )
 
 
-ADD_TEST(utIjBSplineScatteredDataPointSetToImageFilterTest ${UTILITIES_TESTS}
+ADD_TEST(utTvIjBSplineScatteredDataPointSetToImageFilterTest ${UTILITIES_TESTS}
 --compare-image ${EPSILON}
 		${BASELINE}/ijBSplineScatteredDataPointSetToImageFilterTestOutput.hdr
 		${TEMP}/ijBSplineScatteredDataPointSetToImageFilterTestOutput.hdr
@@ -148,7 +148,7 @@ ADD_TEST(utTvTinyXMLTest ${UTILITIES_TESTS}
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(utOssimRadarSatSupport ${UTILITIES_TESTS}
+ADD_TEST(utTvOssimRadarSatSupport ${UTILITIES_TESTS}
         ossimRadarSatSupport
         ${IMAGEDATA}/RADARSAT2/SCENE01/DAT_01.001
         )
@@ -332,12 +332,12 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 # -------            lib OpenJpeg   ------------------------------
 # Case for release 2.2.1
 IF(OTB_COMPILE_JPEG2000)
-ADD_TEST(utOpenJpegEncoder ${UTILITIES_TESTS}
+ADD_TEST(utTvOpenJpegEncoder ${UTILITIES_TESTS}
 	openJpegEncoder
 	${TEMP}/testjpeg.j2k
 )
 
-ADD_TEST(utOpenJpegDecoder ${UTILITIES_TESTS}
+ADD_TEST(utTvOpenJpegDecoder ${UTILITIES_TESTS}
 	openJpegDecoder
 	${TEMP}/testjpeg.j2k
 )
@@ -345,26 +345,26 @@ ENDIF(OTB_COMPILE_JPEG2000)
 
 # -------            lib expat  ------------------------------
 IF(NOT OTB_USE_EXTERNAL_EXPAT)
-ADD_TEST(utExpatRunTests ${UTILITIES_TESTS}
+ADD_TEST(utTvExpatRunTests ${UTILITIES_TESTS}
         expatruntests
         -q)
 ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
 
 # -------            lib OpenThreads  ------------------------------
 IF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
-  ADD_TEST(utOpenthreadsSimpleThreader ${UTILITIES_TESTS}
+  ADD_TEST(utTvOpenthreadsSimpleThreader ${UTILITIES_TESTS}
 	openthreadsSimpleThreader
 	2 # [NUM_ELTS]
 	1 # [NUM_THREADS]
 	)
-  ADD_TEST(utOpenthreadsWorkCrew ${UTILITIES_TESTS}
+  ADD_TEST(utTvOpenthreadsWorkCrew ${UTILITIES_TESTS}
 	openthreadsWorkCrew
 	1 # [NUM_THREADS]
 	)
 ENDIF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
 
 # -------            SIFT   -------------------------------------
-ADD_TEST(ut2DSiftImageSquareSyntheticRotate10 ${UTILITIES_TESTS}
+ADD_TEST(utTv2DSiftImageSquareSyntheticRotate10 ${UTILITIES_TESTS}
 	 itk2DScaleInvariantFeatureImageFilterTest
 	 ${INPUTDATA}/carre.png
          ${TEMP}/itk2DScaleInvariantFeatureImageFilter_carre1.png
@@ -373,7 +373,7 @@ ADD_TEST(ut2DSiftImageSquareSyntheticRotate10 ${UTILITIES_TESTS}
 	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_carre_keys2.png
 	 1 10 0.5 0  )
 
-ADD_TEST(ut2DSiftImageGridSyntheticRotate10 ${UTILITIES_TESTS}
+ADD_TEST(utTv2DSiftImageGridSyntheticRotate10 ${UTILITIES_TESTS}
 	 itk2DScaleInvariantFeatureImageFilterTest
 	 ${INPUTDATA}/damier.png
 	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier1.png
@@ -382,7 +382,7 @@ ADD_TEST(ut2DSiftImageGridSyntheticRotate10 ${UTILITIES_TESTS}
 	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier_keys2.png
 	 1 10 0.5 0 )
 
-ADD_TEST(ut2DSiftImageSceneSyntheticRotate10 ${UTILITIES_TESTS}
+ADD_TEST(utTv2DSiftImageSceneSyntheticRotate10 ${UTILITIES_TESTS}
 	 itk2DScaleInvariantFeatureImageFilterTest
 	 ${INPUTDATA}/scene.png
 	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_scene1.png
@@ -393,31 +393,31 @@ ADD_TEST(ut2DSiftImageSceneSyntheticRotate10 ${UTILITIES_TESTS}
 
 # -------            lib Kml   ------------------------------
 FOREACH(id_test createkml helloattrs helloenum hellofolder hellogeometry helloregion helloworld parsekml )
-        ADD_TEST( utKml${id_test} ${UTILITIES_TESTS}
+        ADD_TEST( utTuKml${id_test} ${UTILITIES_TESTS}
         kml${id_test}
         ${TEMP}/utkml${id_test}.txt
         )
 ENDFOREACH(id_test)
 
 
-ADD_TEST( utKmlhellofeatures   ${UTILITIES_TESTS}
+ADD_TEST( utTvKmlhellofeatures   ${UTILITIES_TESTS}
         kmlhellofeatures
         ${INPUTDATA}/MODIS20040214212340.kml #abstractview.kml
 #        ${TEMP}/utkmlhellofeatures.txt
         )
 
-ADD_TEST( utKmlhellohref   ${UTILITIES_TESTS}
+ADD_TEST( utTvKmlhellohref   ${UTILITIES_TESTS}
         kmlhellohref
         ${INPUTDATA}/abstractview.kml
 #        ${TEMP}/utkmlhellohref.txt
         )
-ADD_TEST( utKmlhellokmz   ${UTILITIES_TESTS}
+ADD_TEST( utTvKmlhellokmz   ${UTILITIES_TESTS}
         kmlhellokmz
         ${INPUTDATA}/multikml-doc.kmz
 #        ${TEMP}/utkmlhellokmz.txt
         )
 
-ADD_TEST( utKmlprettykml   ${UTILITIES_TESTS}
+ADD_TEST( utTvKmlprettykml   ${UTILITIES_TESTS}
         --compare-ascii ${TOL}
                         ${BASELINE_FILES}/utkmlprettykml.txt
                         ${TEMP}/utkmlprettykml.txt
@@ -426,7 +426,7 @@ ADD_TEST( utKmlprettykml   ${UTILITIES_TESTS}
         ${TEMP}/utkmlprettykml.txt
         )
 
-ADD_TEST( utKmlprintgeometry   ${UTILITIES_TESTS}
+ADD_TEST( utTvKmlprintgeometry   ${UTILITIES_TESTS}
         kmlprintgeometry
         ${INPUTDATA}/polygons2d.kml
 #        ${TEMP}/utkmlprintgeometry.txt
