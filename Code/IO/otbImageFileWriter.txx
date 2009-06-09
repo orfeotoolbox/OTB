@@ -32,11 +32,18 @@ namespace otb
 //---------------------------------------------------------
 template <class TInputImage>
 ImageFileWriter<TInputImage>
-::ImageFileWriter() : itk::ImageFileWriter<TInputImage>(),
-    m_UserSpecifiedIORegion(false),
-    m_FactorySpecifiedImageIO(false)
+::ImageFileWriter() : itk::ImageFileWriter<TInputImage>()
 
 {
+  m_BufferMemorySize = 0;
+  m_BufferNumberOfLinesDivisions = 0;
+  // default to AUTOMATIC_NUMBER_OF_DIVISIONS
+  m_CalculationDivision = SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
+
+  // create default region splitter
+  m_RegionSplitterUseToEstimateNumberOfStreamDivisions = itk::ImageRegionSplitter<InputImageDimension>::New();
+
+  this->Superclass::SetNumberOfStreamDivisions(10); 
 }
 
 
@@ -55,152 +62,139 @@ void
 ImageFileWriter<TInputImage>
 ::Write()
 {
-  const InputImageType * input = this->GetInput();
-
-  itkDebugMacro( <<"Writing an image file" );
-
-  // Make sure input is available
-  if ( input == 0 )
-  {
-    itkExceptionMacro(<< "No input to writer!");
-  }
-
-  // Make sure that we can write the file given the name
-  //
-  std::string strFileName(this->GetFileName()); // this->GetFileName() return a const char *
-  if ( strFileName == "" )
-  {
-    itkExceptionMacro(<<"No filename was specified");
-  }
-
-//  if ( this->GetImageIO()->IsNull() ) //try creating via factory
-  if ( this->GetImageIO() == 0 ) //try creating via factory
-  {
-    itkDebugMacro(<<"Attempting factory creation of ImageIO for file: "
-                  << this->GetFileName());
-    this->SetImageIO( ImageIOFactory::CreateImageIO( this->GetFileName(),
-                      itk::ImageIOFactory::WriteMode ) );
-    m_FactorySpecifiedImageIO = true;
-  }
-  else
-  {
-    if ( m_FactorySpecifiedImageIO && !this->GetImageIO()->CanWriteFile( this->GetFileName() ) )
-    {
-      itkDebugMacro(<<"ImageIO exists but doesn't know how to write file:"
-                    << this->GetFileName() );
-      itkDebugMacro(<<"Attempting creation of ImageIO with a factory for file:"
-                    << this->GetFileName());
-      this->SetImageIO( ImageIOFactory::CreateImageIO( this->GetFileName(),
-                        itk::ImageIOFactory::WriteMode ) );
-      m_FactorySpecifiedImageIO = true;
-    }
-  }
-
-//  if ( this->GetImageIO()->IsNull() )
-  if ( this->GetImageIO() == 0 )
-  {
-    itk::ImageFileWriterException e(__FILE__, __LINE__);
-    itk::OStringStream msg;
-    msg << " Could not create IO object for file "
-    << this->GetFileName() << std::endl;
-    msg << "  Tried to create one of the following:" << std::endl;
-    std::list<itk::LightObject::Pointer> allobjects =
-      itk::ObjectFactoryBase::CreateAllInstance("itkImageIOBase");
-    for (std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
-         i != allobjects.end(); ++i)
-    {
-      itk::ImageIOBase* io = dynamic_cast<itk::ImageIOBase*>(i->GetPointer());
-      msg << "    " << io->GetNameOfClass() << std::endl;
-    }
-    msg << "  You probably failed to set a file suffix, or" << std::endl;
-    msg << "    set the suffix to an unsupported type." << std::endl;
-    e.SetDescription(msg.str().c_str());
-    throw e;
-    return;
-  }
-  // Notify start event observers
-  this->InvokeEvent( itk::StartEvent() );
-
   // NOTE: this const_cast<> is due to the lack of const-correctness
   // of the ProcessObject.
-  InputImageType * nonConstImage = const_cast<InputImageType *>(input);
+  InputImageType * nonConstInput = const_cast<InputImageType *>(this->GetInput());
 
-  typedef typename TInputImage::RegionType   RegionType;
+  // Update the meta data
+  nonConstInput->UpdateOutputInformation();
 
-  if ( ! m_UserSpecifiedIORegion )
-  {
-    // Make sure the data is up-to-date.
-    if ( nonConstImage->GetSource() )
-    {
-      nonConstImage->GetSource()->UpdateLargestPossibleRegion();
-    }
-    // Write the whole image
-    itk::ImageIORegion ioRegion(TInputImage::ImageDimension);
-    RegionType region = input->GetLargestPossibleRegion();
+  this->SetImageIO( ImageIOFactory::CreateImageIO( this->GetFileName(),
+                        itk::ImageIOFactory::WriteMode ) );
+  this->SetNumberOfStreamDivisions( static_cast<unsigned int>( CalculateNumberOfStreamDivisions() ) );
+  this->Superclass::Write();
 
-    for (unsigned int i=0; i<TInputImage::ImageDimension; ++i)
-    {
-      ioRegion.SetSize(i,region.GetSize(i));
-      ioRegion.SetIndex(i,region.GetIndex(i));
-    }
-    this->SetIORegion( ioRegion ); //used by GenerateData
-  }
-  else
-  {
-    nonConstImage->Update();
-  }
-
-  // Setup the ImageIO
-  //
-  this->GetImageIO()->SetNumberOfDimensions(TInputImage::ImageDimension);
-  RegionType region = input->GetLargestPossibleRegion();
-  const typename TInputImage::SpacingType& spacing = input->GetSpacing();
-  const typename TInputImage::PointType& origin = input->GetOrigin();
-  const typename TInputImage::DirectionType& direction = input->GetDirection();
-
-  for (unsigned int i=0; i<TInputImage::ImageDimension; ++i)
-  {
-    this->GetImageIO()->SetDimensions(i,region.GetSize(i));
-    this->GetImageIO()->SetSpacing(i,spacing[i]);
-    this->GetImageIO()->SetOrigin(i,origin[i]);
-    vnl_vector< double > axisDirection(TInputImage::ImageDimension);
-// Please note: direction cosines are stored as columns of the
-// direction matrix
-    for (unsigned int j=0; j<TInputImage::ImageDimension; ++j)
-    {
-      axisDirection[j] = direction[j][i];
-    }
-    this->GetImageIO()->SetDirection( i, axisDirection );
-  }
-
-  this->GetImageIO()->SetUseCompression(this->GetUseCompression());
-  this->GetImageIO()->SetIORegion(this->GetIORegion());
-  if ( this->GetUseInputMetaDataDictionary() )
-  {
-    this->GetImageIO()->SetMetaDataDictionary(input->GetMetaDataDictionary());
-  }
-
-//otbMsgDevMacro( << this->GetFileName() );
-//  this->GetImageIO()->SetFileName( this->GetFileName() );
-//  this->GetImageIO()->WriteImageInformation();
-
-
-  this->UpdateProgress(0.);
-
-  // Actually do something
-  this->GenerateData();
-
-  this->UpdateProgress(1.);
-
-  // Notify end event observers
-  this->InvokeEvent( itk::EndEvent() );
-
-  // Release upstream data if requested
-  if ( input->ShouldIReleaseData() )
-  {
-    nonConstImage->ReleaseData();
-  }
 }
+
+/**
+ *
+ */
+template <class TInputImage>
+void
+ImageFileWriter<TInputImage>
+::SetBufferMemorySize(unsigned long memory_size_divisions)
+{
+  m_BufferMemorySize = memory_size_divisions;
+  m_CalculationDivision = SET_BUFFER_MEMORY_SIZE;
+  this->Modified();
+}
+
+/**
+ *
+ */
+template <class TInputImage>
+void
+ImageFileWriter<TInputImage>
+::SetBufferNumberOfLinesDivisions(unsigned long nb_lines_divisions)
+{
+  m_BufferNumberOfLinesDivisions = nb_lines_divisions;
+  m_CalculationDivision = SET_BUFFER_NUMBER_OF_LINES;
+  this->Modified();
+}
+
+/**
+ *
+ */
+template <class TInputImage>
+void
+ImageFileWriter<TInputImage>
+::SetNumberOfStreamDivisions(unsigned long nb_divisions)
+{
+  this->Superclass::SetNumberOfStreamDivisions( nb_divisions );
+  m_CalculationDivision = SET_NUMBER_OF_STREAM_DIVISIONS;
+  this->Modified();
+}
+
+/**
+ *
+ */
+template <class TInputImage>
+void
+ImageFileWriter<TInputImage>
+::SetAutomaticNumberOfStreamDivisions(void)
+{
+  m_CalculationDivision = SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
+  this->Modified();
+}
+
+/**
+ *
+ */
+/*
+template <class TInputImage>
+void
+ImageFileWriter<TInputImage>
+::SetTilingStreamDivisions(void)
+{
+  m_CalculationDivision = SET_TILING_WITH_SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
+  m_RegionSplitter = itk::ImageRegionMultidimensionalSplitter<InputImageDimension>::New();
+  this->Modified();
+}
+
+
+template <class TInputImage>
+void
+ImageFileWriter<TInputImage>
+::SetTilingStreamDivisions(unsigned long nb_divisions)
+{
+  m_CalculationDivision = SET_TILING_WITH_SET_NUMBER_OF_STREAM_DIVISIONS;
+  this->SetNumberOfStreamDivisions( nb_divisions );
+  m_RegionSplitter = itk::ImageRegionMultidimensionalSplitter<InputImageDimension>::New();
+  this->Modified();
+}
+*/
+
+/**
+ *
+ */
+template <class TInputImage>
+unsigned long
+ImageFileWriter<TInputImage>
+::GetNumberOfStreamDivisions(void)
+{
+  return(CalculateNumberOfStreamDivisions());
+}
+
+/**
+ *
+ */
+template <class TInputImage>
+std::string
+ImageFileWriter<TInputImage>
+::GetMethodUseToCalculateNumberOfStreamDivisions(void)
+{
+  return (StreamingTraitsType::GetMethodUseToCalculateNumberOfStreamDivisions(m_CalculationDivision));
+}
+
+/**
+ *
+ */
+template<class TInputImage>
+unsigned long
+ImageFileWriter<TInputImage>
+::CalculateNumberOfStreamDivisions(void)
+{
+
+  return StreamingTraitsType
+         ::CalculateNumberOfStreamDivisions(this->GetInput(),
+                                            this->GetInput()->GetLargestPossibleRegion(),
+                                            m_RegionSplitterUseToEstimateNumberOfStreamDivisions,
+                                            m_CalculationDivision,
+                                            this->Superclass::GetNumberOfStreamDivisions(),
+                                            m_BufferMemorySize,
+                                            m_BufferNumberOfLinesDivisions);
+}
+
 
 
 //---------------------------------------------------------

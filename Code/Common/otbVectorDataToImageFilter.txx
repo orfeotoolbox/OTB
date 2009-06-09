@@ -56,6 +56,7 @@ namespace otb
     m_Map = mapnik::Map();
     m_SensorModelFlip = 1;
     m_ScaleFactor = 1.0;
+    m_VectorDataProjectionProj4 = "";
   }
 
 
@@ -190,14 +191,42 @@ namespace otb
 
     mapnik::freetype_engine::register_font("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");
 
-
-//     m_Map.set_background(mapnik::color("#f2efe9"));
     m_Map.set_background(mapnik::color(255,255,255,0));
 
     otb::VectorDataStyle::Pointer styleLoader = otb::VectorDataStyle::New();
     styleLoader->SetScaleFactor(m_ScaleFactor);
     styleLoader->LoadOSMStyle(m_Map);
 
+    VectorDataConstPointer input = this->GetInput();
+    //Converting the projection string to the proj.4 format
+    std::string vectorDataProjectionWKT;
+    itk::ExposeMetaData<std::string>(input->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey,  vectorDataProjectionWKT);
+    std::cout << "WKT -> " << vectorDataProjectionWKT << std::endl;
+    m_SensorModelFlip = 1;
+
+    if (vectorDataProjectionWKT == "")
+    {
+      //We assume that it is an image in sensor model geometry
+      //and tell mapnik that this is utm
+      //(with a resolution of 1m per unit)
+      m_VectorDataProjectionProj4 = "+proj=utm +zone=31 +ellps=WGS84";
+      m_SensorModelFlip =  -1;
+      otbMsgDevMacro(<<"The output map will be in sensor geometry");
+    }
+    else
+    {
+      OGRSpatialReference oSRS(vectorDataProjectionWKT.c_str());
+      char * pszProj4;
+      oSRS.exportToProj4(&pszProj4);
+      m_VectorDataProjectionProj4 = pszProj4;
+      CPLFree(pszProj4);
+      m_SensorModelFlip =  1;
+      otbMsgDevMacro(<<"The output map will be carto/geo geometry");
+    }
+    std::cout << "Proj.4 -> " << m_VectorDataProjectionProj4 << std::endl;
+
+
+    m_Map.set_srs(m_VectorDataProjectionProj4);
 
   }
 
@@ -222,36 +251,6 @@ namespace otb
     VectorDataConstPointer input = this->GetInput();
     InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(input->GetDataTree()->GetRoot());
 
-
-    //Converting the projection string to the proj.4 format
-    std::string vectorDataProjectionWKT;
-    itk::ExposeMetaData<std::string>(input->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey,  vectorDataProjectionWKT);
-    std::cout << "WKT -> " << vectorDataProjectionWKT << std::endl;
-    std::string vectorDataProjectionProj4;
-    m_SensorModelFlip = 1;
-
-    if (vectorDataProjectionWKT == "")
-    {
-      //We assume that it is an image in sensor model geometry
-      //and tell mapnik that this is utm
-      //(with a resolution of 1m per unit)
-      vectorDataProjectionProj4 = "+proj=utm +zone=31 +ellps=WGS84";
-      m_SensorModelFlip =  -1;
-      otbMsgDevMacro(<<"The output map will be in sensor geometry");
-    }
-    else
-    {
-      OGRSpatialReference oSRS(vectorDataProjectionWKT.c_str());
-      char * pszProj4;
-      oSRS.exportToProj4(&pszProj4);
-      vectorDataProjectionProj4 = pszProj4;
-      CPLFree(pszProj4);
-      m_SensorModelFlip =  1;
-      otbMsgDevMacro(<<"The output map will be carto/geo geometry");
-    }
-    std::cout << "Proj.4 -> " << vectorDataProjectionProj4 << std::endl;
-
-//      std::string   vectorDataProjectionProj4 = "+proj=utm +zone=31 +ellps=WGS84";
     if ((requestedRegion.GetSize()[0] > (16LU << 10)) || (requestedRegion.GetSize()[1] > (16LU << 10)))
     {
       //Limitation in mapnik/map.hpp, where we have
@@ -260,8 +259,17 @@ namespace otb
       itkExceptionMacro(<<"Mapnik does not support the generation of tiles bigger than 16 384");
     }
 
+
+    //Delete the previous layers from the map
+    int numberLayer = m_Map.layerCount();
+    for (int i = numberLayer-1; i>=0; i--)//yes, int.
+    {
+      m_Map.removeLayer(i);
+    }
+
+
     m_Map.resize(requestedRegion.GetSize()[0],requestedRegion.GetSize()[1]);
-    m_Map.set_srs(vectorDataProjectionProj4);
+
 
     ProcessNode(inputRoot,mDatasource);
 
@@ -271,13 +279,14 @@ namespace otb
 
 
     mapnik::Layer lyr("data");
-    lyr.set_srs(vectorDataProjectionProj4);
+    lyr.set_srs(m_VectorDataProjectionProj4);
     lyr.set_datasource(mDatasource);
 //     lyr.add_style("river");
     lyr.add_style("minor-roads-casing");
     lyr.add_style("minor-roads");
     lyr.add_style("roads");
     lyr.add_style("roads-text");
+    lyr.add_style("world");
 
     m_Map.addLayer(lyr);
 
@@ -366,13 +375,14 @@ namespace otb
           ProcessNode((*it),mDatasource);
           break;
         }
-      case FEATURE_POINT:
-      {
-        itkExceptionMacro(<<"This type (FEATURE_POINT) is not handle (yet) by VectorDataToImageFilter(), please request for it");
-      }
+        case FEATURE_POINT:
+        {
+          itkExceptionMacro(<<"This type (FEATURE_POINT) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+          break;
+        }
         case otb::FEATURE_LINE:
         {
-          std::cout << std::setprecision(15);
+//           std::cout << std::setprecision(15);
 //           std::cout << " ** Inserting new line **" << std::endl;
           typedef mapnik::vertex<double,2> vertex2d;
           typedef mapnik::line_string<vertex2d,mapnik::vertex_vector2> line2d;
@@ -396,7 +406,7 @@ namespace otb
           typedef boost::shared_ptr<Feature> feature_ptr;
 
           feature_ptr mfeature = feature_ptr(new Feature(1));
-           mfeature->add_geometry(line);
+          mfeature->add_geometry(line);
 
           mapnik::transcoder tr("ISO-8859-15");
 
@@ -424,23 +434,49 @@ namespace otb
         }
       case FEATURE_POLYGON:
       {
-        itkExceptionMacro(<<"This type (FEATURE_POLYGON) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+//         itkExceptionMacro(<<"This type (FEATURE_POLYGON) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+        typedef mapnik::vertex<double,2> vertex2d;
+        typedef mapnik::polygon<vertex2d,mapnik::vertex_vector2> polygon2d;
+        typedef boost::shared_ptr<polygon2d> polygon_ptr;
+        mapnik::geometry2d * polygon = new polygon2d;
+
+        typedef DataNodeType::PolygonType::VertexListConstIteratorType VertexIterator;
+        VertexIterator itVertex = dataNode->GetPolygonExteriorRing()->GetVertexList()->Begin();
+        while (itVertex != dataNode->GetPolygonExteriorRing()->GetVertexList()->End())
+        {
+          polygon->line_to(itVertex.Value()[0],m_SensorModelFlip*itVertex.Value()[1]);
+          ++itVertex;
+        }
+
+        typedef boost::shared_ptr<mapnik::raster> raster_ptr;
+        typedef mapnik::feature<mapnik::geometry2d,raster_ptr> Feature;
+        typedef boost::shared_ptr<Feature> feature_ptr;
+
+        feature_ptr mfeature = feature_ptr(new Feature(1));
+        mfeature->add_geometry(polygon);
+        mDatasource->push(mfeature);
+
+        break;
       }
       case FEATURE_MULTIPOINT:
       {
         itkExceptionMacro(<<"This type (FEATURE_MULTIPOINT) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+        break;
       }
       case FEATURE_MULTILINE:
       {
         itkExceptionMacro(<<"This type (FEATURE_MULTILINE) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+        break;
       }
       case FEATURE_MULTIPOLYGON:
       {
         itkExceptionMacro(<<"This type (FEATURE_MULTIPOLYGON) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+        break;
       }
       case FEATURE_COLLECTION:
       {
         itkExceptionMacro(<<"This type (FEATURE_COLLECTION) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+        break;
       }
       }
     }

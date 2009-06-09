@@ -20,6 +20,7 @@
 
 #include "itkImageFileWriter.h"
 #include "otbImageIOFactory.h"
+#include "otbStreamingTraits.h"
 
 namespace otb
 {
@@ -57,41 +58,81 @@ public:
   typedef typename InputImageType::RegionType InputImageRegionType;
   typedef typename InputImageType::PixelType InputImagePixelType;
 
-  /** A special SetFileName() method for setting filename and
-   * invokes the creating of the specific otb::ImageIOFactory.
+  /** Dimension of input image. */
+  itkStaticConstMacro(InputImageDimension, unsigned int,
+                      InputImageType::ImageDimension);
+
+  /** Streaming traits helper typedef */
+  typedef StreamingTraits<InputImageType> StreamingTraitsType;
+
+  /** SmartPointer to a region splitting object */
+  typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)>  SplitterType;
+  typedef typename SplitterType::Pointer RegionSplitterPointer;
+
+  /** Type use to define number of divisions */
+  typedef StreamingMode CalculationDivisionEnumType;
+
+  /** A special Write() method. It invokes the creating of the 
+    * specific otb::ImageIOFactory.
+    */
+  virtual void Write(void);
+
+  /**  Set buffer memory size (in bytes) use to calculate the number of stream divisions */
+  void SetBufferMemorySize(unsigned long );
+
+  /**  Set the buffer number of lines use to calculate the number of stream divisions */
+  void SetBufferNumberOfLinesDivisions(unsigned long);
+
+  /**  Set the number of stream divisions */
+  void SetNumberOfStreamDivisions(unsigned long nb_divisions);
+
+  /** Get the number of stream divisions computed */
+  unsigned long GetNumberOfStreamDivisions(void);
+
+  /**  The number of stream divisions is calculate by using
+   * OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING and
+   * OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING cmake variables.
    */
-  virtual void SetFileName(const char* filename)
-  {
-    if ( filename && (filename == this->GetFileName() ) )
-    { 
-        return;
-    }
-    this->Superclass::SetFileName(filename);
-    this->SetImageIO( ImageIOFactory::CreateImageIO( this->GetFileName(),
-                        itk::ImageIOFactory::WriteMode ) );
-  }  
-  virtual void SetFileName (const std::string & filename)
-  { 
-    this->SetFileName( filename.c_str() ); 
-  } 
+  void SetAutomaticNumberOfStreamDivisions(void);
+
+  /** Set the tiling automatic mode for streaming division */
+//  void SetTilingStreamDivisions(void);
+  /** Choose number of divisions in tiling streaming division */
+//  void SetTilingStreamDivisions(unsigned long);
+
+  /** Return the string to indicate the method use to calculate number of stream divisions. */
+  std::string GetMethodUseToCalculateNumberOfStreamDivisions(void);
 
 protected:
-  ImageFileWriter(){};
-  ~ImageFileWriter(){};
+  ImageFileWriter();
+  ~ImageFileWriter();
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
   ImageFileWriter(const Self&); //purposely not implemented
   void operator=(const Self&);  //purposely not implemented
 
+  /** This method calculate the number of stream divisions, by using the CalculationDivision type */
+  unsigned long CalculateNumberOfStreamDivisions(void);
+
+  /** Use to define the method used to calculate number of divisions */
+  unsigned long m_BufferMemorySize;
+  unsigned long m_BufferNumberOfLinesDivisions;
+
+  RegionSplitterPointer m_RegionSplitterUseToEstimateNumberOfStreamDivisions;
+
+  /** Use to determine method of calculation number of divisions */
+  CalculationDivisionEnumType m_CalculationDivision;
+
 };
 
 } // end namespace otb
 
-/*
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImageFileWriter.txx"
 #endif
-*/
+
 
 #endif // __otbImageFileWriter_h
 

@@ -284,17 +284,28 @@ ADD_TEST(ioTvStreamingIFWriterLUMWithoutStreaming ${IO_TESTS2}
          otbStreamingImageFileWriterTest
          ${TEMP}/ioImageFileReaderPNG2LUM.lum
          ${TEMP}/ioStreamingImageFileWriterLUM2LUMWithoutStreaming.lum
-         0 # Streaming
+         0 # StreamingImageFileWriter
+         0 # NumberOfStreamDivisions
          )
-# ---  LUM STREAMING  IMAGE   FILE    WRITER  ---
+# ---  LUM STREAMING  With STREAMING IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterLUMWithStreaming ${IO_TESTS2}
    --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2LUM.lum
                                 ${TEMP}/ioStreamingImageFileWriterLUM2LUMWithStreaming_10.lum
          otbStreamingImageFileWriterTest
          ${TEMP}/ioImageFileReaderPNG2LUM.lum
          ${TEMP}/ioStreamingImageFileWriterLUM2LUMWithStreaming_10.lum
-         1 # Streaming
-         10
+         1 # StreamingImageFileWriter
+         10 # NumberOfStreamDivisions
+         )
+# ---  LUM STREAMING  With IMAGE   FILE    WRITER  ---
+ADD_TEST(ioTvStreamingWithIFWriterLUMWithStreaming ${IO_TESTS2}
+   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2LUM.lum
+                                ${TEMP}/ioStreamingWithImageFileWriterLUM2LUMWithStreaming_10.lum
+         otbStreamingImageFileWriterTest
+         ${TEMP}/ioImageFileReaderPNG2LUM.lum
+         ${TEMP}/ioStreamingWithImageFileWriterLUM2LUMWithStreaming_10.lum
+         0 # StreamingImageFileWriter
+         10 # NumberOfStreamDivisions
          )
 
 # ---  STREAMING  Pipeline Example ---
@@ -305,6 +316,74 @@ ADD_TEST(ioTvStreamingPipeline_TIF2PNG ${IO_TESTS2}
          )
 
 
+# --- Image FLOAT
+ADD_TEST(ioTvImageFileReaderFloatBSQ2HDR ${IO_TESTS2}
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_R4.hd
+                                ${TEMP}/ioImageFileReaderR4_BSQ2HDR.hdr
+        otbFloatImageIOTest
+        ${INPUTDATA}/poupees_R4.hd
+        ${TEMP}/ioImageFileReaderR4_BSQ2HDR.hdr )
+ADD_TEST(ioTvImageFileReaderFloatHDR2BSQ ${IO_TESTS2}
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_R4.hd
+                                ${TEMP}/ioImageFileReaderR4_HDR2BSQ.hd
+        otbFloatImageIOTest
+        ${TEMP}/ioImageFileReaderR4_BSQ2HDR.hdr
+        ${TEMP}/ioImageFileReaderR4_HDR2BSQ.hd )
+
+# --- Image DOUBLE
+ADD_TEST(ioTvImageFileReaderDoubleBSQ2HDR ${IO_TESTS2}
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_R8.hd
+                                ${TEMP}/ioImageFileReaderR8_BSQ2HDR.hdr
+        otbDoubleImageIOTest
+        ${INPUTDATA}/poupees_R8.hd
+        ${TEMP}/ioImageFileReaderR8_BSQ2HDR.hdr )
+ADD_TEST(ioTvImageFileReaderDoubleHDR2BSQ ${IO_TESTS2}
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_R8.hd
+                                ${TEMP}/ioImageFileReaderR8_HDR2BSQ.hd
+        otbDoubleImageIOTest
+        ${TEMP}/ioImageFileReaderR8_BSQ2HDR.hdr
+        ${TEMP}/ioImageFileReaderR8_HDR2BSQ.hd )
+
+
+# ---  STREAMING FILTER : BSQ  ---
+ADD_TEST(ioTvStreamingImageFilterBSQ2PNG ${IO_TESTS2}
+   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+                                ${TEMP}/ioStreamingImageFilterTestBSQ.png
+         otbStreamingImageFilterTest
+         ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+         ${TEMP}/ioStreamingImageFilterTestBSQ.png
+         )
+
+# ---  BSQ STREAMING  IMAGE   FILE    WRITER  ---
+ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS2}
+   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+                                ${TEMP}/ioStreamingImageFileWriterBSQ2BSQWithoutStreaming.hd
+         otbStreamingImageFileWriterTest
+         ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+         ${TEMP}/ioStreamingImageFileWriterBSQ2BSQWithoutStreaming.hd
+         0 # StreamingImageFileWriter
+         0 # NumberOfStreamDivisions
+         )
+# ---  BSQ STREAMING  IMAGE   FILE    WRITER  ---
+ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS2}
+   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+                                ${TEMP}/ioStreamingImageFileWriterBSQ2BSQWithStreaming_10.hd
+         otbStreamingImageFileWriterTest
+         ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+         ${TEMP}/ioStreamingImageFileWriterBSQ2BSQWithStreaming_10.hd
+         1 # StreamingImageFileWriter
+         10 # NumberOfStreamDivisions
+         )
+# ---  BSQ STREAMING  IMAGE   FILE    WRITER  ---
+ADD_TEST(ioTvStreamingWithIFWriterBSQWithStreaming ${IO_TESTS2}
+   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+                                ${TEMP}/ioStreamingWithImageFileWriterBSQ2BSQWithStreaming_10.hd
+         otbStreamingImageFileWriterTest
+         ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+         ${TEMP}/ioStreamingWithImageFileWriterBSQ2BSQWithStreaming_10.hd
+         0 # StreamingImageFileWriter
+         10 # NumberOfStreamDivisions
+         )
 
 
 
@@ -400,63 +479,6 @@ ADD_TEST(ioTvImageFileReaderIntHDR2BSQ ${IO_TESTS3}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-# --- Image FLOAT
-ADD_TEST(ioTvImageFileReaderFloatBSQ2HDR ${IO_TESTS4}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_R4.hd
-                                ${TEMP}/ioImageFileReaderR4_BSQ2HDR.hdr
-        otbFloatImageIOTest
-        ${INPUTDATA}/poupees_R4.hd
-        ${TEMP}/ioImageFileReaderR4_BSQ2HDR.hdr )
-ADD_TEST(ioTvImageFileReaderFloatHDR2BSQ ${IO_TESTS4}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_R4.hd
-                                ${TEMP}/ioImageFileReaderR4_HDR2BSQ.hd
-        otbFloatImageIOTest
-        ${TEMP}/ioImageFileReaderR4_BSQ2HDR.hdr
-        ${TEMP}/ioImageFileReaderR4_HDR2BSQ.hd )
-
-# --- Image DOUBLE
-ADD_TEST(ioTvImageFileReaderDoubleBSQ2HDR ${IO_TESTS4}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_R8.hd
-                                ${TEMP}/ioImageFileReaderR8_BSQ2HDR.hdr
-        otbDoubleImageIOTest
-        ${INPUTDATA}/poupees_R8.hd
-        ${TEMP}/ioImageFileReaderR8_BSQ2HDR.hdr )
-ADD_TEST(ioTvImageFileReaderDoubleHDR2BSQ ${IO_TESTS4}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_R8.hd
-                                ${TEMP}/ioImageFileReaderR8_HDR2BSQ.hd
-        otbDoubleImageIOTest
-        ${TEMP}/ioImageFileReaderR8_BSQ2HDR.hdr
-        ${TEMP}/ioImageFileReaderR8_HDR2BSQ.hd )
-
-
-# ---  STREAMING FILTER : BSQ  ---
-ADD_TEST(ioTvStreamingImageFilterBSQ2PNG ${IO_TESTS4}
-   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
-                                ${TEMP}/ioStreamingImageFilterTestBSQ.png
-         otbStreamingImageFilterTest
-         ${TEMP}/ioImageFileReaderPNG2BSQ.hd
-         ${TEMP}/ioStreamingImageFilterTestBSQ.png
-         )
-
-# ---  BSQ STREAMING  IMAGE   FILE    WRITER  ---
-ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS4}
-   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
-                                ${TEMP}/ioStreamingImageFileWriterBSQ2BSQWithoutStreaming.hd
-         otbStreamingImageFileWriterTest
-         ${TEMP}/ioImageFileReaderPNG2BSQ.hd
-         ${TEMP}/ioStreamingImageFileWriterBSQ2BSQWithoutStreaming.hd
-         0 # Streaming
-         )
-# ---  BSQ STREAMING  IMAGE   FILE    WRITER  ---
-ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS4}
-   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
-                                ${TEMP}/ioStreamingImageFileWriterBSQ2BSQWithStreaming_10.hd
-         otbStreamingImageFileWriterTest
-         ${TEMP}/ioImageFileReaderPNG2BSQ.hd
-         ${TEMP}/ioStreamingImageFileWriterBSQ2BSQWithStreaming_10.hd
-         1 # Streaming
-         10
-         )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests5 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1050,7 +1072,7 @@ ADD_TEST(ioTvStreamingImageFilterGDAL_TIFF ${IO_TESTS9}
 
 
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
-ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS9}
+ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS2}
    --compare-image ${TOL}   ${INPUTDATA}/poupees_1canal.c1.hdr
                       ${TEMP}/ioStreamingImageFileWriterBSQWithoutStreaming.hdr
          otbStreamingImageFileWriterTest
@@ -1059,7 +1081,7 @@ ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS9}
          0 # Streaming
          )
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
-ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS9}
+ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS2}
    --compare-image ${TOL}   ${INPUTDATA}/poupees_1canal.c1.hdr
                       ${TEMP}/ioStreamingImageFileWriterBSQWithStreaming_100.hdr
          otbStreamingImageFileWriterTest
@@ -1084,6 +1106,15 @@ ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_DEFAULT ${IO_TES
          ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_DEFAULT.tif
          DEFAULT
          )
+# 1.bis WITH IMAGEFILEWRITER : DEFAULT
+ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_DEFAULT ${IO_TESTS10}
+   --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+                          ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_DEFAULT.tif
+         otbStreamingWithImageFileWriterTestCalculateNumberOfDivisions
+         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+         ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_DEFAULT.tif
+         DEFAULT
+         )
 # 2. AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS
 ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS ${IO_TESTS10}
    --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
@@ -1091,6 +1122,15 @@ ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NUMBER
          otbStreamingImageFileWriterTestCalculateNumberOfDivisions
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
          ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS.tif
+         AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS
+         )
+# 2.bis WITH IMAGEFILEWRITER : AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS
+ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS ${IO_TESTS10}
+   --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+                          ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS.tif
+         otbStreamingWithImageFileWriterTestCalculateNumberOfDivisions
+         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+         ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS.tif
          AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS
          )
 # 3. NUMBER_OF_STREAM_DIVISIONS
@@ -1103,23 +1143,57 @@ ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_NUMBER_OF_STREAM
          NUMBER_OF_STREAM_DIVISIONS
          10
          )
+
+# 3.bis WITH IMAGEFILEWRITER : NUMBER_OF_STREAM_DIVISIONS
+ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_NUMBER_OF_STREAM_DIVISIONS ${IO_TESTS10}
+   --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+                          ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_NUMBER_OF_STREAM_DIVISIONS_10.tif
+         otbStreamingWithImageFileWriterTestCalculateNumberOfDivisions
+         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+         ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_NUMBER_OF_STREAM_DIVISIONS_10.tif
+         NUMBER_OF_STREAM_DIVISIONS
+         10
+         )
+
+
+
 # 4. BUFFER_MEMORY_SIZE
 ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMORY_SIZE ${IO_TESTS10}
    --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-                      		${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMORY_SIZE_8x2000x10.tif
+                          ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMORY_SIZE_8x2000x10.tif
          otbStreamingImageFileWriterTestCalculateNumberOfDivisions
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
          ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMORY_SIZE_8x2000x10.tif
          BUFFER_MEMORY_SIZE
          8*2000*10
          )
+# 4.bis WITH IMAGEFILEWRITER BUFFER_MEMORY_SIZE
+ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMORY_SIZE ${IO_TESTS10}
+   --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+                          ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMORY_SIZE_8x2000x10.tif
+         otbStreamingWithImageFileWriterTestCalculateNumberOfDivisions
+         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+         ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMORY_SIZE_8x2000x10.tif
+         BUFFER_MEMORY_SIZE
+         8*2000*10
+         )
 # 5. BUFFER_NUMBER_OF_LINES
 ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF_LINES ${IO_TESTS10}
    --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-                      		${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF_LINES_1000.tif
+                          ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF_LINES_1000.tif
          otbStreamingImageFileWriterTestCalculateNumberOfDivisions
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
          ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF_LINES_1000.tif
+         BUFFER_NUMBER_OF_LINES
+         1000
+         )
+# 5.bis WITH IMAGEFILEWRITER  BUFFER_NUMBER_OF_LINES
+ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF_LINES ${IO_TESTS10}
+   --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+                          ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF_LINES_1000.tif
+         otbStreamingWithImageFileWriterTestCalculateNumberOfDivisions
+         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+         ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF_LINES_1000.tif
          BUFFER_NUMBER_OF_LINES
          1000
          )
@@ -1861,15 +1935,14 @@ otbImageFileWriterRGBTest.cxx
 SET(BasicIO_SRCS9
 otbImageTest.cxx
 otbVectorImageTest.cxx
-otbStreamingImageFileWriterTest.cxx
 otbStreamingImageFilterTest.cxx
 otbVectorImageFileReaderWriterTest.cxx
 otbStreamingShortImageFileWriterTest.cxx
-otbStreamingImageFileWriterWithFilterTest.cxx
 )
 SET(BasicIO_SRCS10
 otbStreamingImageFileWriterTestCalculateNumberOfDivisions.cxx
 otbStreamingImageFileWriterWithFilterTest.cxx
+otbStreamingWithImageFileWriterTestCalculateNumberOfDivisions.cxx
 )
 SET(BasicIO_SRCS11
 otbImageMetadataFileWriterTest.cxx
@@ -1958,8 +2031,8 @@ TARGET_LINK_LIBRARIES(otbIOTests2 OTBIO  )
 ADD_EXECUTABLE(otbIOTests3 otbIOTests3.cxx ${BasicIO_SRCS3})
 TARGET_LINK_LIBRARIES(otbIOTests3 OTBIO  )
 
-ADD_EXECUTABLE(otbIOTests4 otbIOTests4.cxx ${BasicIO_SRCS2})
-TARGET_LINK_LIBRARIES(otbIOTests4 OTBIO  )
+#ADD_EXECUTABLE(otbIOTests4 otbIOTests4.cxx ${BasicIO_SRCS2})
+#TARGET_LINK_LIBRARIES(otbIOTests4 OTBIO  )
 
 ADD_EXECUTABLE(otbIOTests5 otbIOTests5.cxx ${BasicIO_SRCS5})
 TARGET_LINK_LIBRARIES(otbIOTests5 OTBIO  )

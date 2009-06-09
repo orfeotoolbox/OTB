@@ -149,6 +149,9 @@ template <class TVectorData, class TImage>
     //to adjust the scale
     double m_ScaleFactor;
 
+    //Projection in the proj.4 format (for mapnik)
+    std::string m_VectorDataProjectionProj4;
+
 }; // end class
 } // end namespace otb
 
