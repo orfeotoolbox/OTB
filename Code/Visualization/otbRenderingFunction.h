@@ -63,8 +63,7 @@ public:
  */
 template <class TPixelPrecision, class TRGBPixel,
   class TPixelRepresentationFunction = ChannelSelectorFunctor<
-        typename itk::NumericTraits<TPixelPrecision>::ValueType
-        >,
+        TPixelPrecision>,
   class TTransferFunction = Identity<
         typename itk::NumericTraits<TPixelPrecision>::ValueType,
         typename itk::NumericTraits<TPixelPrecision>::ValueType

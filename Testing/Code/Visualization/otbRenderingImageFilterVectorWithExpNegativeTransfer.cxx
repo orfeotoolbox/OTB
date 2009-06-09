@@ -22,6 +22,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbStreamingImageFileWriter.h"
 #include "itkRGBPixel.h"
 #include "otbStandardRenderingFunction.h"
+#include "otbChannelSelectorFunctor.h"
 #include "itkExpNegativeImageFilter.h"
 
 int otbRenderingImageFilterVectorWithExpNegativeTransfer( int argc, char * argv[] )
@@ -33,9 +34,13 @@ int otbRenderingImageFilterVectorWithExpNegativeTransfer( int argc, char * argv[
   typedef otb::RenderingImageFilter<ImageType,RGBImageType> RenderingFilterType;
   typedef otb::ImageFileReader<ImageType>                   ReaderType;
   typedef otb::StreamingImageFileWriter<RGBImageType>       WriterType;
+  typedef otb::Function::ChannelSelectorFunctor<VectorPixelType>      PixelRepresentationFunctionType;
   typedef itk::Function::ExpNegative<PixelType,PixelType>   ExpNegativeFunctionType;
-  typedef otb::Function::StandardRenderingFunction<PixelType,
-    itk::RGBPixel<unsigned char>,ExpNegativeFunctionType >  RenderingFunctionType;
+  typedef otb::Function::StandardRenderingFunction<
+    VectorPixelType,
+    itk::RGBPixel<unsigned char>,
+    PixelRepresentationFunctionType,
+    ExpNegativeFunctionType >                               RenderingFunctionType;
 
 
   // Instantiation
@@ -61,7 +66,7 @@ int otbRenderingImageFilterVectorWithExpNegativeTransfer( int argc, char * argv[
     min[i]=atof(argv[5+i]);
     max[i]=atof(argv[5+nbComponents+i]);
     }
- 
+
   // rendering
   rendering->SetInput(reader->GetOutput());
   rendering->SetRenderingFunction(function);

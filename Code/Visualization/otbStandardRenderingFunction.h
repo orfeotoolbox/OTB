@@ -41,8 +41,7 @@ namespace Function
  */
 template <class TPixelPrecision, class TRGBPixel,
   class TPixelRepresentationFunction = ChannelSelectorFunctor<
-        typename itk::NumericTraits<TPixelPrecision>::ValueType
-        >,
+        TPixelPrecision>,
   class TTransferFunction = Identity<
         typename itk::NumericTraits<TPixelPrecision>::ValueType,
         typename itk::NumericTraits<TPixelPrecision>::ValueType
@@ -53,7 +52,7 @@ class StandardRenderingFunction
 public:
   /** Standard class typedefs */
   typedef StandardRenderingFunction                   Self;
-  typedef RenderingFunction<TPixelPrecision,TRGBPixel> Superclass;
+  typedef RenderingFunction<TPixelPrecision,TRGBPixel,TPixelRepresentationFunction,TTransferFunction> Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
 

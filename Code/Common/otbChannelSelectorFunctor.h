@@ -17,6 +17,7 @@ PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #ifndef __otbChannelSelectorFunctor_h
 #define __otbChannelSelectorFunctor_h
+#include <cassert>
 
 namespace otb
 {
