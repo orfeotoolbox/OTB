@@ -48,7 +48,8 @@ int otbPostGISConnectionImplementationPerformTransaction(int argc, char * argv[]
   const std::string hostName = argv[1];
   const std::string dbName = argv[2];
   const std::string userName = argv[3];
-  
+  const std::string userPassword = argv[4];
+
   typedef otb::PostGISConnectionImplementation GISConnectionType;
 
   //Instantiation
@@ -57,6 +58,7 @@ int otbPostGISConnectionImplementationPerformTransaction(int argc, char * argv[]
   connection->SetHost( hostName );
   connection->SetDBName( dbName );
   connection->SetUser( userName );
+  connection->SetPassword( userPassword );
 
   connection->ConnectToDB();
 

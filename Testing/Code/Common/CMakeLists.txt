@@ -783,15 +783,17 @@ otbPostGISConnectionImplementationNew
 ADD_TEST(coTvPostGISConnectionImplementationConnectToDB ${COMMON_TESTS10}
         otbPostGISConnectionImplementationConnectToDB
         localhost
-	testgis
-	postgres
+        orfeotoolbox_test
+        orfeotoolbox_test_user
+        Bidfeud0
 )
 
 ADD_TEST(coTvPostGISConnectionImplementationPerformTransaction ${COMMON_TESTS10}
         otbPostGISConnectionImplementationPerformTransaction
         localhost
-	testgis
-	postgres
+        orfeotoolbox_test
+        orfeotoolbox_test_user
+        Bidfeud0
 )
 
 
