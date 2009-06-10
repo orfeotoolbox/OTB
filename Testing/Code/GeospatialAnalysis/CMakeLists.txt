@@ -31,14 +31,15 @@ ADD_TEST(gfTuPostGISCreateTableTransactorAccessors ${GEOSPATIALANALYSIS_TESTS}
 ADD_TEST(gfTuPostGISCreateTableTransactorCreate ${GEOSPATIALANALYSIS_TESTS}
   otbPostGISCreateTableTransactorCreate
   localhost
-  testgis
-  postgres
+  orfeotoolbox_test
+  orfeotoolbox_test_user
+  Bidfeud0
 	)
 
 ADD_TEST(gfTuPostGISFromStringTransactorNew ${GEOSPATIALANALYSIS_TESTS}
      otbPostGISFromStringTransactorNew
 	)
-      
+
 
 # -------       CXX source files -----------------------------------
 SET(GEOSPATIALANALYSIS_SRCS

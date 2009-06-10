@@ -35,6 +35,7 @@ std::istream& operator>>(std::istream& is, ErsSarData& data)
 	if (sizeof(float)!=4) std::cout << "ErsSarData WARNING : (float) not coded over 32 bits, metadata might not be byte swapped correctly"<< std::endl ;
 	if (sizeof(double)!=8) std::cout << "ErsSarData WARNING : (double) not coded over 64 bits, metadata might not be byte swapped correctly"<< std::endl ;
 
+  /*
 	ErsSarRecordHeader header;
 	bool eof = false;
 	//while(!eof)
@@ -60,6 +61,7 @@ std::istream& operator>>(std::istream& is, ErsSarData& data)
 			}
 		}
 	}
+	*/
 	return is;
 }
 

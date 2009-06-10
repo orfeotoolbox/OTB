@@ -510,7 +510,7 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
       //std::cout<<"indx: "<<indx<<std::endl;
       for (unsigned int k = 0; k <= splineOrder; ++k)
       {
-        evaluateIndex[n][k] = ++indx;
+        evaluateIndex[n][k] = indx++;
       }
     }
     else                       // Use this index calculation for even splineOrder
@@ -522,7 +522,7 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
       //std::cout<<"indx: "<<indx<<std::endl;
       for (unsigned int k = 0; k <= splineOrder; ++k)
       {
-        evaluateIndex[n][k] = ++indx;
+        evaluateIndex[n][k] = indx++;
       }
     }
   }
