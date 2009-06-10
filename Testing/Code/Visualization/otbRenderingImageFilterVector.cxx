@@ -32,7 +32,7 @@ int otbRenderingImageFilterVector( int argc, char * argv[] )
   typedef otb::RenderingImageFilter<ImageType,RGBImageType> RenderingFilterType;
   typedef otb::ImageFileReader<ImageType>                   ReaderType;
   typedef otb::StreamingImageFileWriter<RGBImageType>       WriterType;
-  typedef otb::Function::StandardRenderingFunction<PixelType,itk::RGBPixel<unsigned char> > RenderingFunctionType;
+  typedef otb::Function::StandardRenderingFunction<VectorPixelType,itk::RGBPixel<unsigned char> > RenderingFunctionType;
 
 
   // Instantiation
@@ -58,13 +58,13 @@ int otbRenderingImageFilterVector( int argc, char * argv[] )
     min[i]=atof(argv[4+i]);
     max[i]=atof(argv[4+nbComponents+i]);
     }
- 
+
   // rendering
   rendering->SetInput(reader->GetOutput());
   rendering->SetRenderingFunction(function);
   function->SetMinimum(min);
   function->SetMaximum(max);
-  function->SetAllChannels(channel);
+  function->GetPixelRepresentationFunction().SetAllChannels(channel);
 
   // writing
   writer->SetFileName(argv[2]);

@@ -23,18 +23,51 @@
 #include "itkVariableLengthVector.h"
 #include "itkRGBPixel.h"
 #include "itkRGBAPixel.h"
+#include "otbPixelRepresentationFunction.h"
+#include "otbChannelSelectorFunctor.h"
 
 namespace otb
 {
 namespace Function
 {
-/**\class RenderingFunction
+/** \class Identiy
+* \brief Default math functor parameter for rendering function.
+*  \ingroup Visualization
+ */
+template <class TInputPixel, class TOutputPixel>
+class Identity
+{
+public:
+  Identity(){};
+  ~Identity(){};
+  bool operator !=(const Identity &) const
+  {
+    return false;
+  }
+  bool operator ==(const Identity & other) const
+  {
+    return !(*this != other);
+  }
+
+  inline TOutputPixel operator()(const TInputPixel & A) const
+  {
+    return static_cast<TOutputPixel>(A);
+  }
+};
+
+/** \class RenderingFunction
  * \brief Base class for rendering functions.
  *  Please note that this class is pure virtual, and should be
  *  subclassed.
  *  \ingroup Visualization
  */
-template <class TPixelPrecision, class TRGBPixel>
+template <class TPixelPrecision, class TRGBPixel,
+  class TPixelRepresentationFunction = ChannelSelectorFunctor<
+        TPixelPrecision>,
+  class TTransferFunction = Identity<
+        typename itk::NumericTraits<TPixelPrecision>::ValueType,
+        typename itk::NumericTraits<TPixelPrecision>::ValueType
+        > >
 class RenderingFunction
   : public itk::Object
 {
@@ -55,6 +88,11 @@ public:
   typedef itk::VariableLengthVector<ScalarType>       VectorPixelType;
   typedef itk::RGBPixel<ScalarType> RGBPixelType;
   typedef itk::RGBAPixel<ScalarType> RGBAPixelType;
+
+  /** Pixel representation */
+  typedef TPixelRepresentationFunction PixelRepresentationFunctionType;
+
+  typedef TTransferFunction                          TransferFunctionType;
 
   /** Extrema vector */
   typedef std::vector<ScalarType>               ExtremaVectorType;
@@ -135,50 +173,42 @@ public:
   }
 
 
-  /** Set the red channel index (vector mode only) */
-  virtual void SetRedChannelIndex(unsigned int index)
+  /** Get the transfer function for tuning */
+//   TransferFunctionType & GetTransferFunction()
+//   {
+//     return m_TransferFunction;
+//   }
+//   itkGetConstReferenceMacro(TransferFunction, TransferFunctionType);
+  virtual const TransferFunctionType & GetTransferFunction() const
   {
-    m_RedChannelIndex = index;
+    return this->m_TransferFunction;
+  }
+  virtual TransferFunctionType  & GetTransferFunction()
+  {
+    return this->m_TransferFunction;
+  }
+//   itkSetMacro(TransferFunction, TransferFunctionType);
+  virtual void SetTransferFunction (const TransferFunctionType function)
+  {
+      this->m_TransferFunction = function;
+      this->Modified();
   }
 
-  /** Get the red channel index (vector mode only) */
-  virtual unsigned int GetRedChannelIndex(void)
+//   itkGetConstReferenceMacro(PixelRepresentationFunction, PixelRepresentationFunctionType);
+  virtual const PixelRepresentationFunctionType & GetPixelRepresentationFunction() const
   {
-    return m_RedChannelIndex;
+    return this->m_PixelRepresentationFunction;
   }
-
-  /** Set the blue channel index (vector mode only) */
-  virtual void SetBlueChannelIndex(unsigned int index)
+  virtual PixelRepresentationFunctionType & GetPixelRepresentationFunction()
   {
-    m_BlueChannelIndex = index;
+    return this->m_PixelRepresentationFunction;
   }
-
-  /** Get the blue channel index (vector mode only) */
-  virtual unsigned int GetBlueChannelIndex(void)
+//   itkSetMacro(PixelRepresentationFunction, PixelRepresentationFunctionType);
+  virtual void SetPixelRepresentationFunction (const PixelRepresentationFunctionType function)
   {
-    return m_BlueChannelIndex;
+      this->m_PixelRepresentationFunction = function;
+      this->Modified();
   }
-
-  /** Set the green channel index (vector mode only) */
-  virtual void SetGreenChannelIndex(unsigned int index)
-  {
-    m_GreenChannelIndex = index;
-  }
-
-  /** Get the green channel index (vector mode only) */
-  virtual unsigned int GetGreenChannelIndex(void)
-  {
-    return m_GreenChannelIndex;
-  }
-
-  /** Set all channels (grayscale mode) */
-  virtual void SetAllChannels(unsigned int index)
-  {
-    m_RedChannelIndex   = index;
-    m_BlueChannelIndex  = index;
-    m_GreenChannelIndex = index;
-  }
-
 protected:
   /** Constructor */
   RenderingFunction() : m_Minimum(), m_Maximum()  {}
@@ -189,16 +219,18 @@ protected:
   ExtremaVectorType m_Minimum;
   ExtremaVectorType m_Maximum;
 
+  /** PixelRepresentation function*/
+  PixelRepresentationFunctionType m_PixelRepresentationFunction;//FIXME private
+
+  /** Transfer function*/
+  TransferFunctionType m_TransferFunction;//FIXME private
+
 private:
   RenderingFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-    /** Index of the channels to display (vector mode only, has no effet
-   *  on scalar mode)
-     */
-  unsigned int m_RedChannelIndex;
-  unsigned int m_GreenChannelIndex;
-  unsigned int m_BlueChannelIndex;
+
+
 
 };
 } // end namespace Function
