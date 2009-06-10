@@ -346,6 +346,12 @@ ADD_TEST(ioTvImageFileReaderDoubleHDR2BSQ ${IO_TESTS2}
 
 
 # ---  STREAMING FILTER : BSQ  ---
+ADD_TEST(ioTvImageFileReaderPNG2BSQ ${IO_TESTS2}
+  --compare-image ${TOL}        ${INPUTDATA}/cthead1.png
+                                ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+        otbImageFileReaderTest
+        ${INPUTDATA}/cthead1.png
+        ${TEMP}/ioImageFileReaderPNG2BSQ.hd )
 ADD_TEST(ioTvStreamingImageFilterBSQ2PNG ${IO_TESTS2}
    --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
                                 ${TEMP}/ioStreamingImageFilterTestBSQ.png
@@ -400,13 +406,6 @@ ADD_TEST(ioTuBSQImageIOCanRead ${IO_TESTS3} otbBSQImageIOTestCanRead
 # CanWrite()
 ADD_TEST(ioTuBSQImageIOCanWrite ${IO_TESTS3} otbBSQImageIOTestCanWrite
         ${TEMP}/poupees.hd)
-
-ADD_TEST(ioTvImageFileReaderPNG2BSQ ${IO_TESTS3}
-  --compare-image ${TOL}        ${INPUTDATA}/cthead1.png
-                                ${TEMP}/ioImageFileReaderPNG2BSQ.hd
-        otbImageFileReaderTest
-        ${INPUTDATA}/cthead1.png
-        ${TEMP}/ioImageFileReaderPNG2BSQ.hd )
 
 ADD_TEST(ioTvImageFileReaderPNG2ENVI ${IO_TESTS3}
   --compare-image ${TOL}        ${TEMP}/ioImageFileReaderPNG2BSQ.hd
@@ -1934,6 +1933,7 @@ otbImageIOFactoryNew.cxx
 SET(BasicIO_SRCS2
 otbIntImageIOTest.cxx
 otbFloatImageIOTest.cxx
+otbImageFileReaderTest.cxx
 otbDoubleImageIOTest.cxx
 otbStreamingImageFilterTest.cxx
 otbStreamingImageFileWriterTest.cxx
