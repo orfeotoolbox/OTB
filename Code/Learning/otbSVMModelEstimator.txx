@@ -177,7 +177,7 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 	initialParameters[0] = m_Model->GetC();
 	break;
       }
-  
+
   m_InitialCrossValidationAccuracy = crossValidationFunction->GetValue(initialParameters);
   m_FinalCrossValidationAccuracy = m_InitialCrossValidationAccuracy;
 
@@ -190,64 +190,64 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
     typename ExhaustiveExponentialOptimizer::Pointer coarseOptimizer = ExhaustiveExponentialOptimizer::New();
     typename ExhaustiveExponentialOptimizer::StepsType coarseNbSteps(initialParameters.Size());
     coarseNbSteps.Fill(m_CoarseOptimizationNumberOfSteps);
-    
+
     coarseOptimizer->SetNumberOfSteps(coarseNbSteps);
     coarseOptimizer->SetCostFunction(crossValidationFunction);
     coarseOptimizer->SetInitialPosition(initialParameters);
     coarseOptimizer->StartOptimization();
-    
+
     coarseBestParameters = coarseOptimizer->GetMaximumMetricValuePosition();
-    
+
     otbMsgDebugMacro(<<"Coarse minimum accuracy: "<< coarseOptimizer->GetMinimumMetricValue() <<" "<< coarseOptimizer->GetMinimumMetricValuePosition());
     otbMsgDebugMacro(<<"Coarse maximum accuracy: "<< coarseOptimizer->GetMaximumMetricValue() <<" "<< coarseOptimizer->GetMaximumMetricValuePosition());
-    
+
     typename ExhaustiveExponentialOptimizer::Pointer fineOptimizer = ExhaustiveExponentialOptimizer::New();
     typename ExhaustiveExponentialOptimizer::StepsType fineNbSteps(initialParameters.Size());
     fineNbSteps.Fill(m_FineOptimizationNumberOfSteps);
 
     double stepLength = 1. / static_cast<double>(m_FineOptimizationNumberOfSteps);
-    
+
     fineOptimizer->SetNumberOfSteps(fineNbSteps);
     fineOptimizer->SetStepLength(stepLength);
     fineOptimizer->SetCostFunction(crossValidationFunction);
     fineOptimizer->SetInitialPosition(coarseBestParameters);
     fineOptimizer->StartOptimization();
-    
-    
+
+
     otbMsgDebugMacro(<<"Fine minimum accuracy: "<< fineOptimizer->GetMinimumMetricValue() << " " << fineOptimizer->GetMinimumMetricValuePosition());
     otbMsgDebugMacro(<<"Fine maximum accuracy: "<< fineOptimizer->GetMaximumMetricValue() << " " << fineOptimizer->GetMaximumMetricValuePosition());
-    
+
     fineBestParameters = fineOptimizer->GetMaximumMetricValuePosition();
-    
+
     m_FinalCrossValidationAccuracy = fineOptimizer->GetMaximumMetricValue();
-    
+
     switch(m_Model->GetKernelType())
       {
       case LINEAR:
 	// C
 	m_Model->SetC(fineBestParameters[0]);
 	break;
-	
+
       case POLY:
 	// C, gamma and coef0
 	m_Model->SetC(fineBestParameters[0]);
 	m_Model->SetKernelGamma(fineBestParameters[1]);
 	m_Model->SetKernelCoef0(fineBestParameters[2]);
 	break;
-	
+
       case RBF:
 	// C and gamma
 	m_Model->SetC(fineBestParameters[0]);
 	m_Model->SetKernelGamma(fineBestParameters[1]);
 	break;
-	
+
       case SIGMOID:
 	// C, gamma and coef0
 	m_Model->SetC(fineBestParameters[0]);
 	m_Model->SetKernelGamma(fineBestParameters[1]);
 	m_Model->SetKernelCoef0(fineBestParameters[2]);
 	break;
-	
+
       default:
 	// Only C
 	m_Model->SetC(fineBestParameters[0]);
@@ -343,7 +343,7 @@ SVMModelEstimator< InputPixelType, LabelPixelType >
     }
     if (j>=1 && x_space[j-1].index > max_index)
       max_index = x_space[j-1].index;
-    x_space[++j].index = -1;
+    x_space[j++].index = -1;
     ++i;
 
     ++measIt;
