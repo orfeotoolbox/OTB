@@ -294,7 +294,8 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
       const char* type = kwl.find(ossimKeywordNames::TYPE_KW);
       if(type)
       {
-         if(ossimString(type) == ossimString(STATIC_TYPE_NAME(ossimCoarseGridModel)))
+//          if(ossimString(type) == ossimString(STATIC_TYPE_NAME(ossimCoarseGridModel)))
+         if(ossimString(type) == STATIC_TYPE_NAME(ossimCoarseGridModel))
          {
             findCoarseGrid(coarseGrid,
                            filename);
