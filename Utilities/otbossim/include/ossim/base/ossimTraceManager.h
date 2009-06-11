@@ -6,7 +6,7 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  Garrett Potts
-// 
+//
 // DESCRIPTION:
 //   Contains declaration of class ossimTraceManager.
 //
@@ -43,10 +43,13 @@ public:
     * @param traceObj ossimTrace* to remove from "theTraceList".
     */
    void removeTrace(ossimTrace* traceObj);
-   
+
 protected:
    /** Protected default constructor. */
    ossimTraceManager();
+
+   /** Protected default destructor. */
+   ~ossimTraceManager();
 
 private:
    /**
