@@ -186,7 +186,7 @@ ImageLayer<TImage,TOutputImage>
       // workaround to handle both scalar and vector pixels the same way
       sample.Fill(itk::NumericTraits<ScalarType>::Zero);
       sample = sample +
-        m_RenderingFunction->GetPixelRepresentationFunction()(it.Get());
+        m_RenderingFunction->EvaluatePixelRepresentation(it.Get());
       listSample->PushBack(sample);
       ++it;
       }

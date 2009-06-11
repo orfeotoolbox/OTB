@@ -47,12 +47,12 @@ template <class TPixelPrecision, class TRGBPixel,
         typename itk::NumericTraits<TPixelPrecision>::ValueType
         > >
 class StandardRenderingFunction
-  : public RenderingFunction<TPixelPrecision,TRGBPixel, TPixelRepresentationFunction, TTransferFunction>
+  : public RenderingFunction<TPixelPrecision, TRGBPixel>
 {
 public:
   /** Standard class typedefs */
   typedef StandardRenderingFunction                   Self;
-  typedef RenderingFunction<TPixelPrecision,TRGBPixel,TPixelRepresentationFunction,TTransferFunction> Superclass;
+  typedef RenderingFunction<TPixelPrecision,TRGBPixel> Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
 
@@ -75,12 +75,15 @@ public:
   typedef std::vector<ScalarType>                    ExtremaVectorType;
   typedef TTransferFunction                          TransferFunctionType;
 
+
   /** Evaluate method (scalar version) */
   inline virtual const OutputPixelType Evaluate(ScalarType spixel) const
   {
     OutputPixelType resp;
     resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
-    OutputValueType value = this->Evaluate(this->m_TransferFunction(spixel),m_TransferedMinimum[0],m_TransferedMaximum[0]);
+    OutputValueType value = this->ClampRescale(
+                this->EvaluateTransferFunction(this->EvaluatePixelRepresentation(spixel)),
+                m_TransferedMinimum[0],m_TransferedMaximum[0]);
     resp.SetRed(value);
     resp.SetGreen(value);
     resp.SetBlue(value);
@@ -91,9 +94,9 @@ public:
   {
     OutputPixelType resp;
     resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
-    resp.SetRed(Evaluate(this->m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
-    resp.SetGreen(Evaluate(this->m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
-    resp.SetBlue(Evaluate(this->m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
+    resp.SetRed(ClampRescale(this->m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
+    resp.SetGreen(ClampRescale(this->m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
+    resp.SetBlue(ClampRescale(this->m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
     return resp;
   }
   /** Evaluate method (RGB pixel version) */
@@ -101,9 +104,9 @@ public:
   {
     OutputPixelType resp;
     resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
-    resp.SetRed(Evaluate(this->m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
-    resp.SetGreen(Evaluate(this->m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
-    resp.SetBlue(Evaluate(this->m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
+    resp.SetRed(ClampRescale(this->m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
+    resp.SetGreen(ClampRescale(this->m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
+    resp.SetBlue(ClampRescale(this->m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
     return resp;
   }
   /** Evaluate method (RGBA pixel version) */
@@ -115,9 +118,9 @@ public:
     {//Propagate the alpha channel
       resp[3] = static_cast<OutputValueType>(vpixel[3]);
     }
-    resp.SetRed(Evaluate(this->m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
-    resp.SetGreen(Evaluate(this->m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
-    resp.SetBlue(Evaluate(this->m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
+    resp.SetRed(ClampRescale(this->m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
+    resp.SetGreen(ClampRescale(this->m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
+    resp.SetBlue(ClampRescale(this->m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
     return resp;
   }
 
@@ -270,7 +273,7 @@ protected:
   /** Perform the computation for a single value (this is done in
    * order to have the same code for vector and scalar version)
    */
-  const OutputValueType Evaluate(ScalarType input, ScalarType min, ScalarType max) const
+  const OutputValueType ClampRescale(ScalarType input, ScalarType min, ScalarType max) const //FIXME should it be part of the transfer function
   {
     if(input > max)
       {
@@ -296,7 +299,7 @@ private:
    * can be used as a transfer function but are not const correct.
    *  Since a const reference is passed to the functor anyway, it is
    * not harmful to do so and preserves const correctness of the
-   *  Evaluate() mehtods.
+   *  Evaluate() methods.
    */
 //   mutable TransferFunctionType this->m_TransferFunction;
 
