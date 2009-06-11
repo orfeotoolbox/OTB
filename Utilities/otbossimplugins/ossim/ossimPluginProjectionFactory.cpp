@@ -13,12 +13,12 @@
 #include "ossimPluginProjectionFactory.h"
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/projection/ossimProjection.h>
-#include "ossimRadarSatModel.h"
-#include "ossimEnvisatAsarModel.h"
+//#include "ossimRadarSatModel.h"
+//#include "ossimEnvisatAsarModel.h"
 #include "ossimTerraSarModel.h"
 //#include <ossim/projection/ossimCosmoSkymedModel.h>
-#include "ossimRadarSat2Model.h"
-#include "ossimErsSarModel.h"
+//#include "ossimRadarSat2Model.h"
+//#include "ossimErsSarModel.h"
 
 ossimPluginProjectionFactory* ossimPluginProjectionFactory::instance()
 {
@@ -27,11 +27,12 @@ ossimPluginProjectionFactory* ossimPluginProjectionFactory::instance()
    return factoryInstance;
 }
 
+// FIXME: 2 methods with the same name
 ossimProjection* ossimPluginProjectionFactory::createProjection(const ossimFilename& filename,
                                                                 ossim_uint32 entryIdx)const
 {
    ossimProjection* result = 0;
-
+   /*
    if ( !result )
    {
       ossimRadarSat2Model* model = new ossimRadarSat2Model();
@@ -45,10 +46,12 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(const ossimFilen
          model = 0;
       }
    }
+   */
 
    if ( !result )
    {
       ossimTerraSarModel* model = new ossimTerraSarModel();
+      std::cout << "Trying ossimTerraSarModel" << endl;
       if ( model->open(filename) )
       {
          result = model;
@@ -82,11 +85,15 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    //    {
    // 	   return new ossimCosmoSkymedModel;
    //   }
+   /*
    if (name == STATIC_TYPE_NAME(ossimRadarSat2Model))
    {
       return new ossimRadarSat2Model();
    }
-   else if (name == STATIC_TYPE_NAME(ossimTerraSarModel))
+   else
+   */
+  
+   if (name == STATIC_TYPE_NAME(ossimTerraSarModel))
    {
       return new ossimTerraSarModel();
    }
@@ -106,7 +113,8 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    if (lookup)
    {
       ossimString type = lookup;
-
+      
+      /*
       if (type == "ossimRadarSat2Model")
       {
          result = new ossimRadarSat2Model();
@@ -116,7 +124,10 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
             result = 0;
          }
       }
-      else if (type == "ossimTerraSarModel")
+      else
+      */
+      
+      if (type == "ossimTerraSarModel")
       {
          result = new ossimTerraSarModel();
          if ( !result->loadState(kwl, prefix) )
@@ -145,10 +156,10 @@ ossimObject* ossimPluginProjectionFactory::createObject(
 
 void ossimPluginProjectionFactory::getTypeNameList(std::vector<ossimString>& typeList)const
 {
-   typeList.push_back(STATIC_TYPE_NAME(ossimRadarSatModel));
-   typeList.push_back(STATIC_TYPE_NAME(ossimRadarSat2Model));
+   //typeList.push_back(STATIC_TYPE_NAME(ossimRadarSatModel));
+   //typeList.push_back(STATIC_TYPE_NAME(ossimRadarSat2Model));
    typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarModel));
    //   result.push_back(STATIC_TYPE_NAME(ossimCosmoSkymedModel));
-   typeList.push_back(STATIC_TYPE_NAME(ossimEnvisatAsarModel));
-   typeList.push_back(STATIC_TYPE_NAME(ossimErsSarModel));
+   //typeList.push_back(STATIC_TYPE_NAME(ossimEnvisatAsarModel));
+   //typeList.push_back(STATIC_TYPE_NAME(ossimErsSarModel));
 }

@@ -1,51 +1,44 @@
 
 #include <cstdlib>
 
-#include "imaging/ossimImageHandlerRegistry.h"
-#include "imaging/ossimImageHandler.h"
-#include "imaging/ossimImageHandlerFactory.h"
-#include "imaging/ossimImageHandlerSarFactory.h"
+#include "projection/ossimProjectionFactoryRegistry.h"
+#include "projection/ossimProjection.h"
+#include <ossim/projection/ossimPcsCodeProjectionFactory.h>
 #include "base/ossimKeywordlist.h"
 #include "base/ossimFilename.h"
 
 #include "base/ossimTraceManager.h"
 
-#include "ossimPluginReaderFactory.h"
+#include "ossimPluginProjectionFactory.h"
 
-int main(int argc, char * argv[])
+
+int main(int argc, char *argv[])
 {
 
-  char * filename = argv[1];
+  char *filename = argv[1];
   
   ossimTraceManager::instance()->setTracePattern("");
   
-  ossimImageHandlerRegistry::instance()->unregisterFactory(ossimImageHandlerFactory::instance());
-  ossimImageHandlerRegistry::instance()->addFactory(ossimPluginReaderFactory::instance());
-  ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
-  ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(filename));
-
-  if (!handler)
-  {
-    std::cout <<"OSSIM Open Image FAILED! " << std::endl;
+  ossimProjectionFactoryRegistry::instance()->unregisterFactory(ossimPcsCodeProjectionFactory::instance());
+  ossimProjectionFactoryRegistry::instance()->registerFactory(ossimPluginProjectionFactory::instance());
+  ossimProjection *projection = ossimProjectionFactoryRegistry::instance()->createProjection(ossimFilename(filename),0);
+  
+  if (!projection) {
+    std::cout << "OSSIM Instantiate Projection FAILED! " << std::endl;
     return EXIT_FAILURE;
-  }
-
-  else
-  {
-    std::cout <<"OSSIM Open Image SUCCESS! " << std::endl;
+  } else {
+    std::cout << "OSSIM Instantiate Projection SUCCESS! " << std::endl;
     ossimKeywordlist geom_kwl;
 
     // Read OSSIM Keyword List
-    bool hasMetaData = handler->getImageGeometry(geom_kwl);
+    bool hasMetaData = projection->saveState(geom_kwl);
+    delete projection;
 
-    if (!hasMetaData)
-    {
-      std::cout <<"OSSIM MetaData not present! " << std::endl;
+    if (!hasMetaData) {
+      std::cout << "OSSIM MetaData not present! " << std::endl;
       return EXIT_FAILURE;
-    }
-    else
-    {
-      std::cout <<"OSSIM MetaData present! " << std::endl;
+    } else {
+      std::cout << "OSSIM MetaData present! " << std::endl;
       std::cout << geom_kwl << std::endl;
     }
 
