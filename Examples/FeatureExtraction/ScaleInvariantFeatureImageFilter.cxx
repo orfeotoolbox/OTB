@@ -152,6 +152,7 @@ int main( int argc, char *argv[])
   pointSet1->SetOutsideValue(0);
   pointSet1->SetInsideValue(255);
   pointSet1->SetSize(fixedImage->GetLargestPossibleRegion().GetSize());
+  pointSet1->Update();
 
   typedef itk::ImageFileWriter<OutputImageType> WriterType;
 
@@ -243,6 +244,7 @@ int main( int argc, char *argv[])
       pointSet2->SetOutsideValue(0);
       pointSet2->SetInsideValue(255);
       pointSet2->SetSize(scaledImage->GetLargestPossibleRegion().GetSize());
+      pointSet2->Update();
 
       WriterType::Pointer writer2 = WriterType::New();
       writer2->SetFileName(outputImageKeys2);
