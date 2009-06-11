@@ -263,6 +263,128 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   return m_Origin;
 }
 
+
+template <class TInputSpatialObject, class TOutputImage>
+void
+SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
+::GenerateOutputInformation()
+{
+  const InputSpatialObjectType * InputObject  = this->GetInput();
+  OutputImagePointer   OutputImage = this->GetOutput();
+  
+  unsigned int i;
+  // Generate the image
+  SizeType size;
+  double origine[ObjectDimension];
+  InputObject->ComputeBoundingBox();
+  bool originspecified = false;
+  if (!strcmp(InputObject->GetNameOfClass(),"GroupSpatialObject"))
+    {      
+      ChildrenType children;
+      children=InputObject->GetChildren(0);
+      IteratorType iter = children->begin();
+      IteratorType end = children->end();
+      double minimum[ObjectDimension];
+      
+      (*iter)->ComputeBoundingBox();
+      for (i=0;i<ObjectDimension;++i)
+	{
+	  minimum[i]=(*iter)->GetBoundingBox()->GetMinimum()[i];
+	}
+      
+      while (iter != end)
+	{
+	  (*iter)->ComputeBoundingBox();
+	  for (i=0;i<ObjectDimension;++i)
+	    {
+	      if ((*iter)->GetBoundingBox()->GetMinimum()[i] < minimum[i])
+		{
+		  minimum[i]=(*iter)->GetBoundingBox()->GetMinimum()[i];
+		}
+	    }
+	  ++iter;
+	}
+      
+      for (i=0;i<ObjectDimension;++i)
+	{
+	  size[i] = (long unsigned int) (InputObject->GetBoundingBox()->GetMaximum()[i] - minimum[i])+1;
+	  origine[i]=(long int) minimum[i];
+	  originspecified = true;
+	}
+
+      itkDebugMacro(<<"minx= "<<minimum[0]<<", miny= "<<minimum[0]<<", maxx= "<<InputObject->GetBoundingBox()->GetMaximum()[0]<<", maxy= "<<InputObject->GetBoundingBox()->GetMaximum()[1]);
+    }
+  else
+    {
+      
+      for (i=0;i<ObjectDimension;++i)
+	{
+	  size[i] = (long int)(InputObject->GetBoundingBox()->GetMaximum()[i]
+			       - InputObject->GetBoundingBox()->GetMinimum()[i]);
+	} 
+    }
+  
+  typename OutputImageType::IndexType index;
+  index.Fill(0);
+  typename OutputImageType::RegionType region;
+  
+  // If the size of the output has been explicitly specified, the filter
+  // will set the output size to the explicit size, otherwise the size from the spatial
+  // object's bounding box will be used as default.
+  
+  bool specified = false;
+  for (i = 0; i < OutputImageDimension; ++i)
+  {
+    if (m_Size[i] != 0)
+      {
+	specified = true;
+	break;
+      }
+  }
+  
+  if (specified)
+    {
+      region.SetSize( m_Size );
+    }
+  else
+    {
+      region.SetSize ( size );
+      m_Size = size;
+    }
+  region.SetIndex( index );
+  
+  OutputImage->SetLargestPossibleRegion( region);
+  specified = false;
+  for (i = 0; i < OutputImageDimension; ++i)
+    {
+      if (m_Spacing[i] != 0)
+	{
+	  specified = true;
+	  break;
+	}
+    }
+  
+  if (specified)
+    {
+      OutputImage->SetSpacing(this->m_Spacing);         // set spacing
+    }
+  else
+    {
+      OutputImage->SetSpacing(InputObject->GetIndexToObjectTransform()->GetScaleComponent());   // set spacing
+      m_Spacing[0] = InputObject->GetIndexToObjectTransform()->GetScaleComponent()[0];
+      m_Spacing[1] = InputObject->GetIndexToObjectTransform()->GetScaleComponent()[1];
+    }
+  
+  if (originspecified)
+    {
+      OutputImage->SetOrigin(origine);   //   and origin
+      m_Origin[0] = OutputImage->GetOrigin()[0];
+      m_Origin[1] = OutputImage->GetOrigin()[1];
+
+    }
+  else OutputImage->SetOrigin(m_Origin);
+}
+
 //----------------------------------------------------------------------------
 
 /** Update */
@@ -277,124 +399,11 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   // Get the input and output pointers
   const InputSpatialObjectType * InputObject  = this->GetInput();
   OutputImagePointer   OutputImage = this->GetOutput();
-
-  // Generate the image
-  SizeType size;
-  double origine[ObjectDimension];
-  InputObject->ComputeBoundingBox();
-  bool originspecified = false;
-  if (!strcmp(InputObject->GetNameOfClass(),"GroupSpatialObject"))
-  {
-
-    ChildrenType children;
-    children=InputObject->GetChildren(0);
-    IteratorType iter = children->begin();
-    IteratorType end = children->end();
-    double minimum[ObjectDimension];
-
-    (*iter)->ComputeBoundingBox();
-    for (i=0;i<ObjectDimension;++i)
-    {
-      minimum[i]=(*iter)->GetBoundingBox()->GetMinimum()[i];
-    }
-
-    while (iter != end)
-    {
-      (*iter)->ComputeBoundingBox();
-      for (i=0;i<ObjectDimension;++i)
-      {
-        if ((*iter)->GetBoundingBox()->GetMinimum()[i] < minimum[i])
-        {
-          minimum[i]=(*iter)->GetBoundingBox()->GetMinimum()[i];
-        }
-      }
-      ++iter;
-    }
-
-    for (i=0;i<ObjectDimension;++i)
-    {
-      size[i] = (long unsigned int) (InputObject->GetBoundingBox()->GetMaximum()[i] - minimum[i])+1;
-      origine[i]=(long int) minimum[i];
-      originspecified=true;
-
-    }
-
-
-    printf("minx= %6.3f,miny= %6.3f,maxx= %6.3f,maxy= %6.3f \n",minimum[0],minimum[1],InputObject->GetBoundingBox()->GetMaximum()[0],InputObject->GetBoundingBox()->GetMaximum()[1]);
-
-
-  }
-  else
-  {
-
-    for (i=0;i<ObjectDimension;++i)
-    {
-      size[i] = (long int)(InputObject->GetBoundingBox()->GetMaximum()[i]
-                           - InputObject->GetBoundingBox()->GetMinimum()[i]);
-    }
-
-  }
-
-  typename OutputImageType::IndexType index;
-  index.Fill(0);
-  typename OutputImageType::RegionType region;
-
-  // If the size of the output has been explicitly specified, the filter
-  // will set the output size to the explicit size, otherwise the size from the spatial
-  // object's bounding box will be used as default.
-
-  bool specified = false;
-  for (i = 0; i < OutputImageDimension; ++i)
-  {
-    if (m_Size[i] != 0)
-    {
-      specified = true;
-      break;
-    }
-  }
-
-  if (specified)
-  {
-    region.SetSize( m_Size );
-  }
-  else
-  {
-    region.SetSize ( size );
-  }
-  region.SetIndex( index );
-
-  OutputImage->SetLargestPossibleRegion( region);     //
+  
+  typename OutputImageType::RegionType region = OutputImage->GetLargestPossibleRegion();
   OutputImage->SetBufferedRegion( region );           // set the region
   OutputImage->SetRequestedRegion( region );          //
-  // If the spacing has been explicitly specified, the filter
-  // will set the output spacing to that explicit spacing, otherwise the spacing from
-  // the spatial object is used as default.
-
-  specified = false;
-  for (i = 0; i < OutputImageDimension; ++i)
-  {
-    if (m_Spacing[i] != 0)
-    {
-      specified = true;
-      break;
-    }
-  }
-
-  if (specified)
-  {
-    OutputImage->SetSpacing(this->m_Spacing);         // set spacing
-  }
-  else
-  {
-    OutputImage->SetSpacing(InputObject->GetIndexToObjectTransform()->GetScaleComponent());   // set spacing
-  }
-
-  if (originspecified)
-  {
-    OutputImage->SetOrigin(origine);   //   and origin
-  }
-  else OutputImage->SetOrigin(m_Origin);
-
+ 
   OutputImage->Allocate();   // allocate the image
 
   typedef itk::ImageRegionIteratorWithIndex<OutputImageType> myIteratorType;
@@ -409,37 +418,36 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
     // ValueAt requires the point to be in physical coordinate i.e
     for (unsigned int i=0;i<ObjectDimension;++i)
     {
-      point[i]=(int) (it.GetIndex()[i]*m_Spacing[i])+m_Origin[i];
+      point[i]=(int)(it.GetIndex()[i]*m_Spacing[i])+m_Origin[i];
     }
     double val =0;
 
     InputObject->ValueAt(point,val,99999);
-    if (   m_InsideValue != 0
-           ||  m_OutsideValue != 0 )
+    if ( m_InsideValue != 0 ||  m_OutsideValue != 0 )
     {
       if ( val)
-      {
-        if (m_UseObjectValue)
-        {
-          it.Set(static_cast<ValueType>(val));
-        }
-        else
-        {
-          it.Set(m_InsideValue);
-        }
-      }
+	{
+	  if (m_UseObjectValue)
+	    {
+	      it.Set(static_cast<ValueType>(val));
+	    }
+	  else
+	    {
+	      it.Set(m_InsideValue);
+	    }
+	}
       else
-      {
-        it.Set(m_OutsideValue);
-      }
+	{
+	  it.Set(m_OutsideValue);
+	}
     }
     else
-    {
-      it.Set(static_cast<ValueType>(val));
-    }
+      {
+	it.Set(static_cast<ValueType>(val));
+      }
     ++it;
   }
-
+  
   itkDebugMacro(<< "SpatialObjectToImageDrawingFilter::Update() finished");
 
 } // end update function
