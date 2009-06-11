@@ -290,6 +290,7 @@ MIRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
 
     indct=0;
 
+    randasamit.ReinitializeSeed();
     randasamit.GoToBegin();
     while( !randasamit.IsAtEnd() &&  indct < numberOfSamples )
       {
