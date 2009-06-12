@@ -197,7 +197,6 @@ LineSegmentDetector<TInputImage,TPrecision >
         }
       ++it;
     }
-
   return tempHisto;
 }
 
@@ -453,7 +452,15 @@ LineSegmentDetector<TInputImage, TPrecision>
     {
       itkExceptionMacro(<<"Can't access to index "<<index<<", outside the image largest region ("<<region.GetIndex()<<", "<<region.GetSize()<<")");
     }
-
+//   typedef itk::NeighborhoodIterator<LabelImageType>   NeighborhoodLabelIteratorType;
+//   typename NeighborhoodLabelIteratorType::SizeType    radiusLabel;
+//   radiusLabel.Fill(0);
+//   NeighborhoodLabelIteratorType                       itLabel(radiusLabel,m_UsedPointImage,
+//                                                               m_UsedPointImage->GetRequestedRegion());
+//   
+//   itLabel.SetLocation(index);
+//   if(*(itLabel.GetCenterValue()) == 1)
+//     isUsed = true;
   return isUsed;
 }
 
