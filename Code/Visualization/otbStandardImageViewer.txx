@@ -225,17 +225,17 @@ StandardImageViewer<TImage,TVectorData,TWidgetManager>
 
   // adding histograms rendering
   typename HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
-  rhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(m_RenderingFunction->GetRedChannelIndex()));
+  rhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(m_RenderingFunction->GetPixelRepresentationFunction().GetRedChannelIndex()));
   rhistogram->SetHistogramColor(red);
   rhistogram->SetLabelColor(red);
 
   typename HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
-  ghistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(m_RenderingFunction->GetGreenChannelIndex()));
+  ghistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(m_RenderingFunction->GetPixelRepresentationFunction().GetGreenChannelIndex()));
   ghistogram->SetHistogramColor(green);
   ghistogram->SetLabelColor(green);
 
   typename HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
-  bhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(m_RenderingFunction->GetBlueChannelIndex()));
+  bhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(m_RenderingFunction->GetPixelRepresentationFunction().GetBlueChannelIndex()));
   bhistogram->SetHistogramColor(blue);
   bhistogram->SetLabelColor(blue);
   m_CurveWidget->AddCurve(rhistogram);

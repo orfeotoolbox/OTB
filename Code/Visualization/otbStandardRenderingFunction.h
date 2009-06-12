@@ -13,7 +13,7 @@
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
-
+//
 =========================================================================*/
 #ifndef __otbStandardRenderingFunction_h
 #define __otbStandardRenderingFunction_h
@@ -23,34 +23,13 @@
 #include <assert.h>
 #include <iomanip>
 
+#include "otbChannelSelectorFunctor.h"
+
 namespace otb
 {
 namespace Function
 {
-/** \class Identiy
-* \brief Default math functor parameter for rendering function.
-*  \ingroup Visualization
- */
-template <class TInputPixel, class TOutputPixel>
-class Identity
-{
-public:
-  Identity(){};
-  ~Identity(){};
-  bool operator !=(const Identity &) const
-  {
-    return false;
-  }
-  bool operator ==(const Identity & other) const
-  {
-    return !(*this != other);
-  }
 
-  inline TOutputPixel operator()(const TInputPixel & A) const
-  {
-    return static_cast<TOutputPixel>(A);
-  }
-};
 
 /** \class StandardRenderingFunction
  * \brief Standard rendering.
@@ -60,13 +39,15 @@ public:
  * the selected channels.
  *  \ingroup Visualization
  */
-template <class TPixelPrecision, class TRGBPixel, class TTransferFunction
-    = Identity<
+template <class TPixelPrecision, class TRGBPixel,
+  class TPixelRepresentationFunction = ChannelSelectorFunctor<
+        TPixelPrecision>,
+  class TTransferFunction = Identity<
         typename itk::NumericTraits<TPixelPrecision>::ValueType,
         typename itk::NumericTraits<TPixelPrecision>::ValueType
         > >
 class StandardRenderingFunction
-  : public RenderingFunction<TPixelPrecision,TRGBPixel>
+  : public RenderingFunction<TPixelPrecision, TRGBPixel>
 {
 public:
   /** Standard class typedefs */
@@ -94,12 +75,15 @@ public:
   typedef std::vector<ScalarType>                    ExtremaVectorType;
   typedef TTransferFunction                          TransferFunctionType;
 
+
   /** Evaluate method (scalar version) */
   inline virtual const OutputPixelType Evaluate(ScalarType spixel) const
   {
     OutputPixelType resp;
     resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
-    OutputValueType value = this->Evaluate(m_TransferFunction(spixel),m_TransferedMinimum[0],m_TransferedMaximum[0]);
+    OutputValueType value = this->ClampRescale(
+                this->EvaluateTransferFunction(this->EvaluatePixelRepresentation(spixel)),
+                m_TransferedMinimum[0],m_TransferedMaximum[0]);
     resp.SetRed(value);
     resp.SetGreen(value);
     resp.SetBlue(value);
@@ -110,9 +94,9 @@ public:
   {
     OutputPixelType resp;
     resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
-    resp.SetRed(Evaluate(m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
-    resp.SetGreen(Evaluate(m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
-    resp.SetBlue(Evaluate(m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
+    resp.SetRed(ClampRescale(this->m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
+    resp.SetGreen(ClampRescale(this->m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
+    resp.SetBlue(ClampRescale(this->m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
     return resp;
   }
   /** Evaluate method (RGB pixel version) */
@@ -120,9 +104,9 @@ public:
   {
     OutputPixelType resp;
     resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
-    resp.SetRed(Evaluate(m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
-    resp.SetGreen(Evaluate(m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
-    resp.SetBlue(Evaluate(m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
+    resp.SetRed(ClampRescale(this->m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
+    resp.SetGreen(ClampRescale(this->m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
+    resp.SetBlue(ClampRescale(this->m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
     return resp;
   }
   /** Evaluate method (RGBA pixel version) */
@@ -134,9 +118,9 @@ public:
     {//Propagate the alpha channel
       resp[3] = static_cast<OutputValueType>(vpixel[3]);
     }
-    resp.SetRed(Evaluate(m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
-    resp.SetGreen(Evaluate(m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
-    resp.SetBlue(Evaluate(m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
+    resp.SetRed(ClampRescale(this->m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
+    resp.SetGreen(ClampRescale(this->m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
+    resp.SetBlue(ClampRescale(this->m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
     return resp;
   }
 
@@ -209,55 +193,6 @@ public:
     return oss.str();
   }
 
-  /** Get the transfer function for tuning */
-  TransferFunctionType & GetTransferFunction()
-  {
-    return m_TransferFunction;
-  }
-
-  /** Set the red channel index (vector mode only) */
-  void SetRedChannelIndex(unsigned int index)
-  {
-    m_RedChannelIndex = index;
-  }
-
-  /** Get the red channel index (vector mode only) */
-  unsigned int GetRedChannelIndex(void)
-  {
-    return m_RedChannelIndex;
-  }
-
-  /** Set the blue channel index (vector mode only) */
-  void SetBlueChannelIndex(unsigned int index)
-  {
-    m_BlueChannelIndex = index;
-  }
-
-  /** Get the blue channel index (vector mode only) */
-  unsigned int GetBlueChannelIndex(void)
-  {
-    return m_BlueChannelIndex;
-  }
-
-  /** Set the green channel index (vector mode only) */
-  void SetGreenChannelIndex(unsigned int index)
-  {
-    m_GreenChannelIndex = index;
-  }
-
-  /** Get the green channel index (vector mode only) */
-  unsigned int GetGreenChannelIndex(void)
-  {
-    return m_GreenChannelIndex;
-  }
-
-  /** Set all channels (grayscale mode) */
-  void SetAllChannels(unsigned int index)
-  {
-    m_RedChannelIndex   = index;
-    m_BlueChannelIndex  = index;
-    m_GreenChannelIndex = index;
-  }
 
   /** Togle the UserDefinedTransferedMinMax mode */
   void SetUserDefinedTransferedMinMax(bool val)
@@ -318,8 +253,8 @@ public:
 
       while(minIt != this->m_Minimum.end() && maxIt != this->m_Maximum.end())
         {
-        const double v1 = m_TransferFunction(*minIt);
-        const double v2 = m_TransferFunction(*maxIt);
+        const double v1 = this->m_TransferFunction(*minIt);
+        const double v2 = this->m_TransferFunction(*maxIt);
         m_TransferedMinimum.push_back(static_cast<ScalarType>(std::min(v1,v2)));
         m_TransferedMaximum.push_back(static_cast<ScalarType>(std::max(v1,v2)));
         ++minIt;
@@ -330,15 +265,15 @@ public:
 
 protected:
   /** Constructor */
-  StandardRenderingFunction() : m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2), m_TransferFunction(),
-                                m_UserDefinedTransferedMinMax(false),         m_TransferedMinimum(), m_TransferedMaximum()
+  StandardRenderingFunction() : m_UserDefinedTransferedMinMax(false),         m_TransferedMinimum(), m_TransferedMaximum(),
+                                m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2)
   {}
   /** Destructor */
   ~StandardRenderingFunction() {}
   /** Perform the computation for a single value (this is done in
    * order to have the same code for vector and scalar version)
    */
-  const OutputValueType Evaluate(ScalarType input, ScalarType min, ScalarType max) const
+  const OutputValueType ClampRescale(ScalarType input, ScalarType min, ScalarType max) const //FIXME should it be part of the transfer function
   {
     if(input > max)
       {
@@ -359,21 +294,14 @@ private:
   StandardRenderingFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /** Index of the channels to display (vector mode only, has no effet
-   *  on scalar mode)
-   */
-  unsigned int m_RedChannelIndex;
-  unsigned int m_GreenChannelIndex;
-  unsigned int m_BlueChannelIndex;
-
   /** Transfer function
    *  \note This member is declared mutable because some functors that
    * can be used as a transfer function but are not const correct.
    *  Since a const reference is passed to the functor anyway, it is
    * not harmful to do so and preserves const correctness of the
-   *  Evaluate() mehtods.
+   *  Evaluate() methods.
    */
-  mutable TransferFunctionType m_TransferFunction;
+//   mutable TransferFunctionType this->m_TransferFunction;
 
   /** If true, values mapped by the transfert function are clamped to
       user defined min/max */
@@ -382,6 +310,11 @@ private:
   /** Transfered min and max */
   ExtremaVectorType m_TransferedMinimum;
   ExtremaVectorType m_TransferedMaximum;
+
+  unsigned int m_RedChannelIndex;
+  unsigned int m_GreenChannelIndex;
+  unsigned int m_BlueChannelIndex;
+
 };
 } // end namespace Functor
 } // end namespace otb

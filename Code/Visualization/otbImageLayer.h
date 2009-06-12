@@ -59,7 +59,7 @@ public:
   typedef TImage                                                      ImageType;
   typedef typename ImageType::Pointer                                 ImagePointerType;
   typedef typename ImageType::PixelType                               PixelType;
-  typedef typename ImageType::InternalPixelType                       InternalPixelType;
+//   typedef typename ImageType::InternalPixelType                       InternalPixelType;
   typedef typename itk::NumericTraits<PixelType>::ValueType           ScalarType;
   typedef itk::VariableLengthVector<ScalarType>                       VectorPixelType;
   typedef itk::RGBPixel<ScalarType>                                   RGBPixelType;
@@ -90,7 +90,7 @@ public:
   typedef typename RenderingFilterType::Pointer                       RenderingFilterPointerType;
   typedef typename RenderingFilterType::RenderingFunctionType         RenderingFunctionType;
   typedef typename RenderingFunctionType::Pointer                     RenderingFunctionPointerType;
-  typedef Function::StandardRenderingFunction<InternalPixelType,
+  typedef Function::StandardRenderingFunction<PixelType,
                                     typename TOutputImage::PixelType> DefaultRenderingFunctionType;
   typedef itk::ExtractImageFilter<ImageType,ImageType>                ExtractFilterType;
   typedef typename ExtractFilterType::Pointer                         ExtractFilterPointerType;
