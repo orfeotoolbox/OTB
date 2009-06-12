@@ -6,7 +6,7 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  Garrett Potts
-//
+// 
 // DESCRIPTION:
 //   Contains declaration of class ossimTraceManager.
 //
@@ -26,21 +26,13 @@ ossimTraceManager::ossimTraceManager()
    theInstance = this;
 }
 
-ossimTraceManager::~ossimTraceManager()
-{
-   if(theInstance)
-   {
-     delete theInstance;
-   }
-}
-
 ossimTraceManager* ossimTraceManager::instance()
 {
    if(!theInstance)
    {
       theInstance = new ossimTraceManager;
    }
-
+   
    return theInstance;
 }
 
@@ -56,7 +48,7 @@ void ossimTraceManager::addTrace(ossimTrace* traceObj)
    {
       return;
    }
-
+   
    std::vector<ossimTrace*>::iterator iter = std::find(theTraceList.begin(),
                                                        theTraceList.end(),
                                                        traceObj);
@@ -81,7 +73,7 @@ void ossimTraceManager::addTrace(ossimTrace* traceObj)
       else
       {
          traceObj->setTraceFlag(false);
-      }
+      } 
    }
 }
 
@@ -101,7 +93,7 @@ void ossimTraceManager::setTraceFlags(bool flag)
 {
    ossimRegExp rxp;
    rxp.compile(thePattern.c_str());
-
+   
    for(ossim_uint32 idx = 0; idx < theTraceList.size(); ++idx)
    {
       if (rxp.find(theTraceList[idx]->getTraceName().c_str()))
