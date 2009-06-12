@@ -91,7 +91,10 @@ public:
 
 
   /** Evaluate method (scalar version) */
-  virtual OutputPixelType Evaluate(const PixelType &  spixel) const = 0;
+  virtual OutputPixelType Evaluate(const PixelType &  spixel) const;
+  {
+    return EvaluateTransferFunction(EvaluatePixelRepresentation(spixel));
+  }
 
   /** Get a string description of a pixel  (scalar version) */
   virtual const std::string Describe(const PixelType & spixel) const = 0;

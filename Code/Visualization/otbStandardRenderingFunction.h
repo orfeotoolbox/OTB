@@ -39,20 +39,20 @@ namespace Function
  * the selected channels.
  *  \ingroup Visualization
  */
-template <class TPixelPrecision, class TRGBPixel,
+template <class TPixel, class TRGBPixel,
   class TPixelRepresentationFunction = ChannelSelectorFunctor<
-        TPixelPrecision>,
+        TPixel>,
   class TTransferFunction = Identity<
-        typename itk::NumericTraits<TPixelPrecision>::ValueType,
-        typename itk::NumericTraits<TPixelPrecision>::ValueType
+        typename itk::NumericTraits<TPixel>::ValueType,
+        typename itk::NumericTraits<TPixel>::ValueType
         > >
 class StandardRenderingFunction
-  : public RenderingFunction<TPixelPrecision, TRGBPixel>
+  : public RenderingFunction<TPixel, TRGBPixel>
 {
 public:
   /** Standard class typedefs */
   typedef StandardRenderingFunction                   Self;
-  typedef RenderingFunction<TPixelPrecision,TRGBPixel> Superclass;
+  typedef RenderingFunction<TPixel,TRGBPixel> Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
 
@@ -65,7 +65,7 @@ public:
   /** PixelType macros */
   typedef TRGBPixel                                  OutputPixelType;
   typedef typename OutputPixelType::ValueType        OutputValueType;
-  typedef TPixelPrecision                            PixelType;
+  typedef TPixel                                     PixelType;
   typedef typename itk::NumericTraits<PixelType>::ValueType ScalarType;
   typedef itk::VariableLengthVector<ScalarType>       VectorPixelType;
   typedef itk::RGBPixel<ScalarType> RGBPixelType;
@@ -74,6 +74,13 @@ public:
   /** Extrema vector */
   typedef std::vector<ScalarType>                    ExtremaVectorType;
   typedef TTransferFunction                          TransferFunctionType;
+
+
+  InternalPixelType EvaluatePixelRepresentation(const PixelType &  spixel) const
+  {
+    //TODO return type of the channelSelectorFunctor ?
+    // VariableLengthVector<ScalarType>
+  }
 
 
   /** Evaluate method (scalar version) */
