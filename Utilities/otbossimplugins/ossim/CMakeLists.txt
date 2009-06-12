@@ -20,4 +20,5 @@ INCLUDE_DIRECTORIES(${AlosModel_SOURCE_DIR}/otb)
 ADD_EXECUTABLE(testSensorModel testSensorModel.cxx ${ossim_src})
 TARGET_LINK_LIBRARIES(testSensorModel OTBCommon OTBIO)
 
-
+ADD_EXECUTABLE(testAlosPalsarLeader testAlosPalsarLeader.cxx ${ossim_src})
+TARGET_LINK_LIBRARIES(testAlosPalsarLeader OTBCommon OTBIO)
