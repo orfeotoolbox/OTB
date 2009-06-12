@@ -22,6 +22,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
 
+#pragma warning( disable : 4290 )
+
 namespace otb
 {
 /** \class ObjectList
