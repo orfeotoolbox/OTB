@@ -18,7 +18,7 @@
 #include "ossimTerraSarModel.h"
 //#include <ossim/projection/ossimCosmoSkymedModel.h>
 //#include "ossimRadarSat2Model.h"
-//#include "ossimErsSarModel.h"
+#include "ossimErsSarModel.h"
 
 ossimPluginProjectionFactory* ossimPluginProjectionFactory::instance()
 {
@@ -51,7 +51,6 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(const ossimFilen
    if ( !result )
    {
       ossimTerraSarModel* model = new ossimTerraSarModel();
-      std::cout << "Trying ossimTerraSarModel" << endl;
       if ( model->open(filename) )
       {
          result = model;
@@ -62,6 +61,22 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(const ossimFilen
          model = 0;
       }
    }
+   
+   if ( !result )
+   {
+      ossimErsSarModel* model = new ossimErsSarModel();
+      std::cout << "Here!" << std::endl;
+      if ( model->open(filename) )
+      {
+         result = model;
+      }
+      else
+      {
+         delete model;
+         model = 0;
+      }
+   }
+
    
    return result;
 }
@@ -97,10 +112,10 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    {
       return new ossimTerraSarModel();
    }
-//    else if (name == STATIC_TYPE_NAME(ossimErsSarModel))
-//    {
-// 	   return new ossimErsSarModel;
-//    }
+   else if (name == STATIC_TYPE_NAME(ossimErsSarModel))
+   {
+ 	   return new ossimErsSarModel;
+   }
    return 0;
 }
 
