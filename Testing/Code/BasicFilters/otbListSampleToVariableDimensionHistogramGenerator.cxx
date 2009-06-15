@@ -61,7 +61,7 @@ int otbListSampleToVariableDimensionHistogramGenerator(int argc, char * argv[])
   for(unsigned int comp = 0; comp<reader->GetOutput()->GetNumberOfComponentsPerPixel();++comp)
     {
     ofs<<"Channel: "<<comp<<" histogram: "<<std::endl;
-    for(unsigned int bin = 0; bin < nbBins[comp];++bin)
+    for(unsigned int bin = 0; bin < static_cast<unsigned int>(nbBins[comp]);++bin)
       {
       ofs<<generator->GetOutput()->GetFrequency(bin,comp)<<"\t";
       }
