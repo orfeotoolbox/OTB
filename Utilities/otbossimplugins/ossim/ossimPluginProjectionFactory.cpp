@@ -65,7 +65,6 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(const ossimFilen
    if ( !result )
    {
       ossimErsSarModel* model = new ossimErsSarModel();
-      std::cout << "Here!" << std::endl;
       if ( model->open(filename) )
       {
          result = model;
