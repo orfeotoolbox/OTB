@@ -29,6 +29,9 @@
 
 namespace otb
 {
+
+enum ImageInformationType {SCALAR, TWOBANDS, THREEBANDS, SENSORINVERTED, SENSORWAVELENTHORDER};
+
 namespace Function
 {
 
@@ -81,7 +84,7 @@ public:
   virtual InternalPixelType EvaluatePixelRepresentation(const PixelType &  spixel) const = 0;
 
   /** Return the Pixel representation size*/
-  virtual int GetPixelRepresentationSize() const = 0;
+//   virtual int GetPixelRepresentationSize() const = 0;
 
   /** Evaluate transfer function */
   virtual OutputPixelType EvaluateTransferFunction(const InternalPixelType &  spixel) const = 0;
@@ -96,6 +99,11 @@ public:
   {
     return m_Histogram;
   }
+
+  /** This method is available to allow implementation of
+   * preprocessing.
+   */
+  virtual void Initialize(ImageInformationType){};
 
 protected:
   /** Constructor */

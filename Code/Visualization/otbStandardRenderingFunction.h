@@ -28,6 +28,9 @@
 
 namespace otb
 {
+
+
+
 namespace Function
 {
 /** \class Identiy
@@ -106,6 +109,54 @@ public:
     return m_PixelRepresentationFunction(spixel);
   }
 
+  /** This method is available to allow implementation of
+   * preprocessing.
+   */
+  virtual void Initialize(ImageInformationType imageInformation)
+  {
+    switch(imageInformation)
+    {
+      case SCALAR:
+      {
+        m_PixelRepresentationFunction.SetAllChannels(0);
+        break;
+      }
+      case TWOBANDS:
+      {
+        m_PixelRepresentationFunction.SetAllChannels(0);
+        break;
+      }
+      case THREEBANDS:
+      {
+        m_PixelRepresentationFunction.SetRedChannelIndex(0);
+        m_PixelRepresentationFunction.SetGreenChannelIndex(1);
+        m_PixelRepresentationFunction.SetBlueChannelIndex(2);
+        break;
+      }
+      case SENSORINVERTED:
+      {
+        // Handle Spot like channel order
+        m_PixelRepresentationFunction.SetRedChannelIndex(0);//XS3
+        m_PixelRepresentationFunction.SetGreenChannelIndex(1);//XS2
+        m_PixelRepresentationFunction.SetBlueChannelIndex(2);//XS1
+        break;
+      }
+      case SENSORWAVELENTHORDER:
+      {
+        // Handle quickbird like channel order (wavelenght order)
+        m_PixelRepresentationFunction.SetRedChannelIndex(2);
+        m_PixelRepresentationFunction.SetGreenChannelIndex(1);
+        m_PixelRepresentationFunction.SetBlueChannelIndex(0);
+        break;
+      }
+      default:
+      {
+        //Discard
+        break;
+      }
+    }
+  }
+
 
   /** Evaluate method (scalar version) */
   inline virtual const OutputPixelType Evaluate(ScalarType spixel) const
@@ -155,7 +206,7 @@ public:
     return resp;
   }
 
-  inline const std::string Describe(ScalarType spixel) const
+  inline const std::string Describe(const ScalarType & spixel) const
   {
     itk::OStringStream oss;
     OutputPixelType output = this->Evaluate(spixel);

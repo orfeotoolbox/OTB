@@ -122,52 +122,45 @@ ImageLayerGenerator<TImageLayer>
 
   // Setup channels
 //   switch(m_Image->GetNumberOfComponentsPerPixel())
-  switch( PixelSize(m_Image, m_Image->GetBufferPointer()) )
-  {
-    case 1:
+ switch( PixelSize(m_Image, m_Image->GetBufferPointer()) )
     {
-      m_RenderingFunction->GetPixelRepresentationFunction().SetAllChannels(0);
-      break;
-    }
-    case 2:
-    {
-      m_RenderingFunction->GetPixelRepresentationFunction().SetAllChannels(0);
-      break;
-    }
-    case 3:
-    {
-      m_RenderingFunction->GetPixelRepresentationFunction().SetRedChannelIndex(0);
-      m_RenderingFunction->GetPixelRepresentationFunction().SetGreenChannelIndex(1);
-      m_RenderingFunction->GetPixelRepresentationFunction().SetBlueChannelIndex(2);
-      break;
-    }
-    case 4:
-    {
-      // Get the sensor ID
-      ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
-      std::string sensorID = imageMetadataInterface->GetSensorID(m_Image->GetMetaDataDictionary());
-      if (sensorID.find("Spot") != std::string::npos)
+      case 1:
       {
-        // Handle Spot like channel order
-        m_RenderingFunction->GetPixelRepresentationFunction().SetRedChannelIndex(0);//XS3
-        m_RenderingFunction->GetPixelRepresentationFunction().SetGreenChannelIndex(1);//XS2
-        m_RenderingFunction->GetPixelRepresentationFunction().SetBlueChannelIndex(2);//XS1
+        m_RenderingFunction->Initialize(SCALAR);
+        break;
       }
-      else
+      case 2:
       {
-        // Handle quickbird like channel order (wavelenght order)
-        m_RenderingFunction->GetPixelRepresentationFunction().SetRedChannelIndex(2);
-        m_RenderingFunction->GetPixelRepresentationFunction().SetGreenChannelIndex(1);
-        m_RenderingFunction->GetPixelRepresentationFunction().SetBlueChannelIndex(0);
+        m_RenderingFunction->Initialize(TWOBANDS);
+        break;
       }
-      break;
+      case 3:
+      {
+        m_RenderingFunction->Initialize(THREEBANDS);
+        break;
+      }
+      case 4:
+      {
+        // Get the sensor ID
+        ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
+        std::string sensorID = imageMetadataInterface->GetSensorID(m_Image->GetMetaDataDictionary());
+        if (sensorID.find("Spot") != std::string::npos)
+        {
+          m_RenderingFunction->Initialize(SENSORINVERTED);
+        }
+        else
+        {
+          m_RenderingFunction->Initialize(SENSORWAVELENTHORDER);
+        }
+        break;
+      }
+      default:
+      {
+        //Discard
+        break;
+      }
     }
-    default:
-    {
-    //Discard
-      break;
-    }
-  }
+
 
   // Set the rendering function
   m_Layer->SetRenderingFunction(m_RenderingFunction);
