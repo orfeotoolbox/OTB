@@ -20,8 +20,9 @@
 
 #include "otbRenderingFunction.h"
 #include "otbMacro.h"
-#include <assert.h>
+#include <cassert>
 #include <iomanip>
+#include <vector>
 
 #include "otbChannelSelectorFunctor.h"
 
@@ -29,7 +30,30 @@ namespace otb
 {
 namespace Function
 {
+/** \class Identiy
+* \brief Default math functor parameter for rendering function.
+*  \ingroup Visualization
+ */
+template <class TInputPixel, class TOutputPixel>
+class Identity
+{
+public:
+  Identity(){};
+  ~Identity(){};
+  bool operator !=(const Identity &) const
+  {
+    return false;
+  }
+  bool operator ==(const Identity & other) const
+  {
+    return !(*this != other);
+  }
 
+  inline TOutputPixel operator()(const TInputPixel & A) const
+  {
+    return static_cast<TOutputPixel>(A);
+  }
+};
 
 /** \class StandardRenderingFunction
  * \brief Standard rendering.
@@ -51,8 +75,8 @@ class StandardRenderingFunction
 {
 public:
   /** Standard class typedefs */
-  typedef StandardRenderingFunction                   Self;
-  typedef RenderingFunction<TPixel,TRGBPixel> Superclass;
+  typedef StandardRenderingFunction                    Self;
+  typedef RenderingFunction<TPixel,TRGBPixel>          Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
 
@@ -63,23 +87,23 @@ public:
   itkNewMacro(Self);
 
   /** PixelType macros */
-  typedef TRGBPixel                                  OutputPixelType;
-  typedef typename OutputPixelType::ValueType        OutputValueType;
-  typedef TPixel                                     PixelType;
-  typedef typename itk::NumericTraits<PixelType>::ValueType ScalarType;
-  typedef itk::VariableLengthVector<ScalarType>       VectorPixelType;
-  typedef itk::RGBPixel<ScalarType> RGBPixelType;
-  typedef itk::RGBAPixel<ScalarType> RGBAPixelType;
+  typedef TRGBPixel                                               OutputPixelType;
+  typedef typename OutputPixelType::ValueType                     OutputValueType;
+  typedef TPixel                                                  PixelType;
+  typedef typename itk::NumericTraits<PixelType>::ValueType       ScalarType;
+  typedef itk::VariableLengthVector<ScalarType>                   VectorPixelType;
+  typedef itk::RGBPixel<ScalarType>                               RGBPixelType;
+  typedef itk::RGBAPixel<ScalarType>                              RGBAPixelType;
+  typedef VectorPixelType                                         InternalPixelType;
 
   /** Extrema vector */
   typedef std::vector<ScalarType>                    ExtremaVectorType;
   typedef TTransferFunction                          TransferFunctionType;
-
+  typedef TPixelRepresentationFunction               PixelRepresentationFunctionType;
 
   InternalPixelType EvaluatePixelRepresentation(const PixelType &  spixel) const
   {
-    //TODO return type of the channelSelectorFunctor ?
-    // VariableLengthVector<ScalarType>
+    return m_PixelRepresentationFunction(spixel);
   }
 
 
@@ -301,14 +325,16 @@ private:
   StandardRenderingFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /** Transfer function
-   *  \note This member is declared mutable because some functors that
-   * can be used as a transfer function but are not const correct.
-   *  Since a const reference is passed to the functor anyway, it is
-   * not harmful to do so and preserves const correctness of the
-   *  Evaluate() methods.
-   */
+//  /** Transfer function
+//   *  \note This member is declared mutable because some functors that
+//   * can be used as a transfer function but are not const correct.
+//  *  Since a const reference is passed to the functor anyway, it is
+//   * not harmful to do so and preserves const correctness of the
+//   *  Evaluate() methods.
+//   */
 //   mutable TransferFunctionType this->m_TransferFunction;
+  TransferFunctionType m_TranferFunction;
+  PixelRepresentationFunctionType m_PixelRepresentationFunction;
 
   /** If true, values mapped by the transfert function are clamped to
       user defined min/max */

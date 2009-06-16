@@ -39,7 +39,7 @@ namespace otb
         typedef itk::RGBPixel<ScalarType> RGBPixelType;
         typedef itk::RGBAPixel<ScalarType> RGBAPixelType;
 
-        typedef TInputPixel OutputPixelType;
+        typedef VectorPixelType OutputPixelType;
 
 
         /** Constructor */
@@ -67,10 +67,11 @@ namespace otb
         OutputPixelType operator()(ScalarType inPixel) const
         {
           OutputPixelType outPixel;
+          outPixel.SetSize(1);
           for (unsigned int i=0; i<m_ChannelList.size(); ++i)
           {
             assert(m_ChannelList[i] < 1);
-            outPixel = inPixel;
+            outPixel[0] = inPixel;
           }
           return outPixel;
         }

@@ -25,35 +25,13 @@
 #include "itkRGBAPixel.h"
 #include "otbPixelRepresentationFunction.h"
 #include "otbChannelSelectorFunctor.h"
+#include "itkHistogram.h"
 
 namespace otb
 {
 namespace Function
 {
-/** \class Identiy
-* \brief Default math functor parameter for rendering function.
-*  \ingroup Visualization
- */
-template <class TInputPixel, class TOutputPixel>
-class Identity
-{
-public:
-  Identity(){};
-  ~Identity(){};
-  bool operator !=(const Identity &) const
-  {
-    return false;
-  }
-  bool operator ==(const Identity & other) const
-  {
-    return !(*this != other);
-  }
 
-  inline TOutputPixel operator()(const TInputPixel & A) const
-  {
-    return static_cast<TOutputPixel>(A);
-  }
-};
 
 /** \class RenderingFunction
  * \brief Base class for rendering functions.
@@ -91,7 +69,7 @@ public:
 
 
   /** Evaluate method (scalar version) */
-  virtual OutputPixelType Evaluate(const PixelType &  spixel) const;
+  virtual OutputPixelType Evaluate(const PixelType &  spixel) const
   {
     return EvaluateTransferFunction(EvaluatePixelRepresentation(spixel));
   }
