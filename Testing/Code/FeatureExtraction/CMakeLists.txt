@@ -1746,12 +1746,12 @@ ADD_TEST(feTuImageToLineSegmentVectorDataNew ${FEATUREEXTRACTION_TESTS15}
     otbImageToLineSegmentVectorDataNew)
 
 ADD_TEST(feTvImageToLineSegmentVectorData ${FEATUREEXTRACTION_TESTS15}
---compare-ogr ${EPSILON_3}
-     ${BASELINE_FILES}/feTvImageToLineSegmentVectorData.shp
-     ${TEMP}/feTvImageToLineSegmentVectorData.shp
+--compare-ascii ${EPSILON_3}
+     ${BASELINE_FILES}/feTvImageToLineSegmentVectorData.kml
+     ${TEMP}/feTvImageToLineSegmentVectorData.kml
     otbImageToLineSegmentVectorData
       ${INPUTDATA}/scene.png  #prison_toulouse.tif
-      ${TEMP}/feTvImageToLineSegmentVectorData.shp
+      ${TEMP}/feTvImageToLineSegmentVectorData.kml
 )
 
 # A enrichir
