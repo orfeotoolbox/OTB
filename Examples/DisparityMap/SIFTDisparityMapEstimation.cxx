@@ -222,9 +222,9 @@ int main (int argc, char* argv[])
   bool useBackMatching = 0;
 
   filter1->SetInput(0, fixedReader->GetOutput() );
-  filter1->SetNumberOfScales(3);
+  filter1->SetScalesNumber(3);
   filter2->SetInput(0, movingReader->GetOutput() );
-  filter2->SetNumberOfScales(3);
+  filter2->SetScalesNumber(3);
 
   euclideanMatcher->SetInput1(filter1->GetOutput());
   euclideanMatcher->SetInput2(filter2->GetOutput());
