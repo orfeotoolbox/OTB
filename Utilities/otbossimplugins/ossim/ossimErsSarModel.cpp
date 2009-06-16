@@ -330,7 +330,7 @@ bool ossimErsSarModel::saveState(ossimKeywordlist& kwl,
 	}
 	else
 	{
-		return false;
+		result = false;
 	}
 	/*
 	 * Adding metadata necessary to the sensor model in the keywordlist
@@ -345,7 +345,7 @@ bool ossimErsSarModel::saveState(ossimKeywordlist& kwl,
 	}
 	else
 	{
-		return false;
+		result = false;
 	}
    
   if (traceDebug())
