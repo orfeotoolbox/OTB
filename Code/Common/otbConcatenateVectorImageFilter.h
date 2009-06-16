@@ -53,6 +53,10 @@ public:
   typedef typename InputImage2Type::Pointer InputImage2PointerType;
   typedef typename OutputImageType::Pointer OutputImagePointerType;
 
+  typedef typename OutputImageType::PixelType         OutputPixelType;
+  typedef typename OutputImageType::InternalPixelType OutputInternalPixelType;
+  typedef typename OutputImageType::RegionType        OutputImageRegionType;
+
   /**
    * Set The first input image.
    * \param image The first input image.
@@ -84,8 +88,10 @@ protected:
   ConcatenateVectorImageFilter();
   /** Destructor. */
   virtual ~ConcatenateVectorImageFilter();
+  virtual void GenerateOutputInformation();
+  virtual void BeforeThreadedGenerateData();
   /** Main computation method. */
-  void GenerateData(void);
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

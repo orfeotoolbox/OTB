@@ -30,7 +30,7 @@
 namespace otb
 {
 /** \class VectorDataSource
- * \brief Famille de filtres ayant un object de type shapeFile en sortie
+ * \brief Filter hierarchy for generating VectorData
  *
  *
  * \ingroup IO

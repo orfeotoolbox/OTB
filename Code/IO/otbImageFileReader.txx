@@ -387,8 +387,8 @@ ImageFileReader<TOutputImage>
   else
   {
     otbMsgDevMacro( <<"OSSIM MetaData present ! ");
-
     otbMsgDevMacro( << geom_kwl);
+  
 
     // Update otb Keywordlist
     ImageKeywordlist otb_kwl;

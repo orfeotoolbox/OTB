@@ -64,13 +64,23 @@ ADD_EXECUTABLE(version-config version-config.cpp)
 #              NO_DEFAULT_PATH )
 
 
-ADD_CUSTOM_COMMAND(
-OUTPUT ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h
-COMMAND version-config
-ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h" "${OSSIM_VERSION}"
-DEPENDS version-config
-COMMENT "Generating ossimVersion.h"
-)
+IF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^2\\.4$")
+    ADD_CUSTOM_COMMAND(
+        OUTPUT ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h
+        COMMAND ${OTB_BINARY_DIR}/bin/version-config
+        ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h" "${OSSIM_VERSION}"
+        DEPENDS version-config
+        COMMENT "Generating ossimVersion.h" )
+ELSE("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^2\\.4$")
+    ADD_CUSTOM_COMMAND(
+        OUTPUT ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h
+        COMMAND version-config
+        ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h" "${OSSIM_VERSION}"
+        DEPENDS version-config
+        COMMENT "Generating ossimVersion.h" )
+ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^2\\.4$")
+
+
 
 SET_SOURCE_FILES_PROPERTIES(
     init/ossimInit.cpp PROPERTIES
@@ -97,8 +107,9 @@ ${ossim_elevation_SRCS}
 )
 TARGET_LINK_LIBRARIES(otbossim ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${JPEG_LIBRARY} OpenThreads)
 
-INSTALL(TARGETS otbossim
-RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
-LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
-ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-
+IF(NOT OTB_INSTALL_NO_LIBRARIES)
+ INSTALL(TARGETS otbossim
+ RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR_CM24} COMPONENT RuntimeLibraries
+ LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR_CM24} COMPONENT RuntimeLibraries
+ ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR_CM24} COMPONENT Development)
+ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)

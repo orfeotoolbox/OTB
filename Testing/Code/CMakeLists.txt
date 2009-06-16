@@ -22,7 +22,7 @@ IF(OTB_USE_VISU_GUI)
 ENDIF(OTB_USE_VISU_GUI)
 
 IF(OTB_USE_PQXX)
-        SUBDIRS(GISFilters)
+        SUBDIRS(GeospatialAnalysis)
 ENDIF(OTB_USE_PQXX)
 
 ADD_LIBRARY(OTBTesting otbTestHelper.cxx)

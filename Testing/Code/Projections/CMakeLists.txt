@@ -97,7 +97,8 @@ ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS1}
 ADD_TEST(prTvSensorModelSpot5 ${PROJECTIONS_TESTS1}
   --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelSpot5.txt
-         ${TEMP}/prTvSensorModelQuickbird.txt
+         ${TEMP}/prTvSensorModelSpot5.txt
+--ignore-lines-with 1 support_data.metadata_file
     otbSensorModel
          ${LARGEINPUT}/SPOT5_SCENE01/IMAGERY.TIF
          ${TEMP}/prTvSensorModelSpot5.txt
@@ -272,7 +273,7 @@ ADD_TEST(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS2}
 
 #========================= Ortho rectif SPOT5 ===============================
 
-ADD_TEST(prTvOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
+ADD_TEST(prTlOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationSPOT5_UTM.tif
                           ${TEMP}/prTvOrthoRectificationSPOT5_UTM.tif
         otbOrthoRectificationFilter
@@ -288,7 +289,7 @@ ADD_TEST(prTvOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
         N
         )
 
- ADD_TEST(prTvOrthoRectificationMonoThreadSPOT5 ${PROJECTIONS_TESTS2}
+ ADD_TEST(prTlOrthoRectificationMonoThreadSPOT5 ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationSPOT5_UTM.tif
                           ${TEMP}/prTvOrthoRectificationMonoThreadSPOT5_UTM.tif
         otbOrthoRectificationMonoThreadFilter

@@ -19,8 +19,10 @@
 #define ossimQuickbirdRpcModel_HEADER
 
 #include <ossim/projection/ossimRpcModel.h>
+#include <ossim/support_data/ossimQuickbirdMetaData.h>
 
 class ossimFilename;
+class ossimQuickbirdMetaData;
 
 /*!****************************************************************************
  *
@@ -32,7 +34,8 @@ class ossimQuickbirdRpcModel : public ossimRpcModel
 public:
    ossimQuickbirdRpcModel();
    ossimQuickbirdRpcModel(const ossimQuickbirdRpcModel& rhs);
-   
+   ~ossimQuickbirdRpcModel();
+
    virtual ossimObject* dup() const;
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix=0) const;
@@ -44,11 +47,21 @@ public:
    
    
 protected:
+   //void finishConstruction();
+   void parseMetaData(const ossimFilename& metadata);
+   void parseRpcData (const ossimFilename& rpcdata);
 
    bool parseNitfFile(const ossimFilename& file);
    bool parseTiffFile(const ossimFilename& file);
-   
-   
+/*
+  ossimQuickbirdMetaData* getTheSupportData()
+  {
+    return theSupportData;
+  }
+*/
+   ossimQuickbirdMetaData* theSupportData;
+
+
 TYPE_DATA
 };
 

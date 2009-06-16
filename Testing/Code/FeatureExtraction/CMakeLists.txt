@@ -271,7 +271,7 @@ ADD_TEST(feTvAssociativeSymmetricalSum ${FEATUREEXTRACTION_TESTS4}
 ADD_TEST(feTuAssymmetricFusionOfLineDetectorNew ${FEATUREEXTRACTION_TESTS4}
         otbAssymmetricFusionOfLineDetectorNew)
 
-ADD_TEST(feTvAssymmetricFusionOfLineDetector ${FEATUREEXTRACTION_TESTS4}
+ADD_TEST(feTlAssymmetricFusionOfLineDetector ${FEATUREEXTRACTION_TESTS4}
   --compare-image ${EPSILON_8}  ${BASELINE}/feFiltreAssymmetricFusion_amst_2_3.hdr
                           ${TEMP}/feFiltreAssymmetricFusion_amst_2_3.hdr
         otbAssymmetricFusionOfLineDetector
@@ -402,7 +402,7 @@ ADD_TEST(feTvLocalHoughDraw ${FEATUREEXTRACTION_TESTS5}
 	${TEMP}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hdr
 	20 20 1)
 
-ADD_TEST(feTvLocalHoughDraw2 ${FEATUREEXTRACTION_TESTS5}
+ADD_TEST(feTlLocalHoughDraw2 ${FEATUREEXTRACTION_TESTS5}
   --compare-image ${EPSILON_8}  ${BASELINE}/feFilterLocalHoughDraw_amst_20_20_1.png
                           ${TEMP}/feFilterLocalHoughDraw_amst_20_20_1.png
         otbLocalHoughDraw
@@ -792,7 +792,7 @@ ADD_TEST(feTuImageToSIFTKeyPointSetFilterNew ${FEATUREEXTRACTION_TESTS9}
          otbImageToSIFTKeyPointSetFilterNew)
 
 
-ADD_TEST(feTvImageToSIFTKeyPointSetFilterDistanceMap ${FEATUREEXTRACTION_TESTS9}
+ADD_TEST(feTlImageToSIFTKeyPointSetFilterDistanceMap ${FEATUREEXTRACTION_TESTS9}
 #--compare-ascii ${EPSILON_3}
         #${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterDistanceMap.txt
         #${TEMP}/feTvImageToSIFTKeyPointSetFilterDistanceMap.txt

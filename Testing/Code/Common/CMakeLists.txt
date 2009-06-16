@@ -586,6 +586,7 @@ ADD_TEST(coTvVectorData ${COMMON_TESTS7}
       --compare-ascii ${EPSILON_3}
             ${BASELINE_FILES}/coTvVectorData.txt
             ${TEMP}/coTvVectorData.txt
+			--ignore-lines-with 1 RTTI
      otbVectorData
        ${TEMP}/coTvVectorData.txt
 )
@@ -783,15 +784,17 @@ otbPostGISConnectionImplementationNew
 ADD_TEST(coTvPostGISConnectionImplementationConnectToDB ${COMMON_TESTS10}
         otbPostGISConnectionImplementationConnectToDB
         localhost
-	testgis
-	postgres
+        orfeotoolbox_test
+        orfeotoolbox_test_user
+        Bidfeud0
 )
 
 ADD_TEST(coTvPostGISConnectionImplementationPerformTransaction ${COMMON_TESTS10}
         otbPostGISConnectionImplementationPerformTransaction
         localhost
-	testgis
-	postgres
+        orfeotoolbox_test
+        orfeotoolbox_test_user
+        Bidfeud0
 )
 
 

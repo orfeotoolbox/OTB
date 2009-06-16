@@ -128,6 +128,7 @@ int itk2DScaleInvariantFeatureImageFilterTest( int argc, char *argv[])
   pointSet1->SetOutsideValue(0);
   pointSet1->SetInsideValue(255);
   pointSet1->SetSize(fixedImage->GetLargestPossibleRegion().GetSize());
+  pointSet1->Update();
 
   typedef itk::ImageFileWriter<OutputImageType> WriterType;
 
@@ -197,6 +198,7 @@ int itk2DScaleInvariantFeatureImageFilterTest( int argc, char *argv[])
       for (unsigned int k = 0; k < Dimension; ++k)
 	size[k] = (unsigned int) floor(size[k] * test_scale);
       scaler->SetSize( size );
+
       scaler->SetOutputSpacing(fixedImage->GetSpacing());
       scaler->SetTransform(test_transform);
       scaler->Update();
@@ -208,9 +210,10 @@ int itk2DScaleInvariantFeatureImageFilterTest( int argc, char *argv[])
       keypoints2 = siftFilter2.getSiftFeatures(scaledImage);
 
       pointSet2->SetInput(keypoints2);
-      pointSet1->SetOutsideValue(0);
-      pointSet1->SetInsideValue(255);
-      pointSet1->SetSize(scaledImage->GetLargestPossibleRegion().GetSize());
+      pointSet2->SetOutsideValue(0);
+      pointSet2->SetInsideValue(255);
+      pointSet2->SetSize(scaledImage->GetLargestPossibleRegion().GetSize());
+      pointSet2->Update();
 
       WriterType::Pointer writer2 = WriterType::New();
       writer2->SetFileName(outputImageKeys2);

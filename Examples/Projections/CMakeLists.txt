@@ -49,7 +49,7 @@ SET(EXE_TESTS2 ${CXX_TEST_PATH}/otbProjectionsExamplesTests2)
 SET(TOL 0.0)
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(OrthoRectificationExampleTest ${EXE_TESTS}
+ADD_TEST(prTeOrthoRectificationExampleTest ${EXE_TESTS}
 	--compare-image ${TOL}
 	${BASELINE}/panOrthoToul.tif
 	${TEMP}/panOrthoToul.tif
@@ -67,7 +67,7 @@ ADD_TEST(OrthoRectificationExampleTest ${EXE_TESTS}
 
 )
 
-ADD_TEST(OrthoRectificationExampleXSTest ${EXE_TESTS}
+ADD_TEST(prTeOrthoRectificationExampleXSTest ${EXE_TESTS}
 	--compare-image ${TOL}
 	${BASELINE}/xsOrthoToul.tif
 	${TEMP}/xsOrthoToul.tif
@@ -86,7 +86,7 @@ ADD_TEST(OrthoRectificationExampleXSTest ${EXE_TESTS}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-ADD_TEST(MapProjectionExampleTest ${EXE_TESTS}
+ADD_TEST(prTeMapProjectionExampleTest ${EXE_TESTS}
 	--compare-ascii ${TOL}
 	${BASELINE}/mapProjectionExample.txt
 	${TEMP}/mapProjectionExample.txt
@@ -95,7 +95,7 @@ ADD_TEST(MapProjectionExampleTest ${EXE_TESTS}
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(VectorDataProjectionExampleTest ${EXE_TESTS}
+ADD_TEST(prTeVectorDataProjectionExampleTest ${EXE_TESTS}
 	--compare-binary
 	${BASELINE}/vectorDataProjectionExample.shp
 	${TEMP}/vectorDataProjectionExample.shp
@@ -107,7 +107,7 @@ ADD_TEST(VectorDataProjectionExampleTest ${EXE_TESTS}
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 IF( OTB_USE_CURL )
-ADD_TEST(PlaceNameToLonLatExampleTest ${EXE_TESTS2}
+ADD_TEST(prTePlaceNameToLonLatExampleTest ${EXE_TESTS2}
     PlaceNameToLonLatExampleTest
         Toulouse
 )

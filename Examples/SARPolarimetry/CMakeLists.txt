@@ -22,7 +22,7 @@ SET(EPSILON 0.000000000001)
 # -------            PiOver4ExamplePolarimetricSynthesisFilterTest   ------------------------------
 
 # Tutorial example . pi / 4
-ADD_TEST(rdTvPiOver4ExamplePolarimetricSynthesisFilterTest ${SARPOLARIMETRY_TESTS1}
+ADD_TEST(rdTePiOver4ExamplePolarimetricSynthesisFilterTest ${SARPOLARIMETRY_TESTS1}
   --compare-image ${EPSILON}
 		  ${BASELINE}/refPiOver4PolarimetricSynthesis.tif
                   ${TEMP}/resPiOver4PolarimetricSynthesis.tif

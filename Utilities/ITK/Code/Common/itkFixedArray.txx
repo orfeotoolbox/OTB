@@ -215,7 +215,7 @@ FixedArray<TValueType, VLength>
   Iterator i = this->Begin();
   while( i != this->End() )
     {
-    *i++ = value;
+    *(i++) = value;
     }
 }
 

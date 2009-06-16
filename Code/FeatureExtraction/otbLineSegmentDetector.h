@@ -41,13 +41,13 @@ namespace Functor
       class MagnitudeFunctor
       {
       public:
-        
+
         inline TOutputPixel operator()(const TInputPixel& input)
           {
             return static_cast<TOutputPixel>(2*vcl_sqrt(input[0]*input[0] + input[1]*input[1] ));
           }
       };
-    
+
     /** \class OrientationFunctor
      *  \brief This functor computes the orientation of a cavariant vector<br>
      *   Orientation values lies between 0 and 2*Pi.
@@ -56,29 +56,29 @@ namespace Functor
       class OrientationFunctor
       {
       public:
-        
+
         inline TOutputPixel operator()(const TInputPixel& input)
           {
             TOutputPixel resp = static_cast<TOutputPixel>(vcl_atan2(input[0],-input[1]));
-            
+
              if (resp< itk::NumericTraits<TOutputPixel>::Zero)
                {
                  resp = -resp;
                }
-            
+
             return resp;
           }
       };
   }// end namespace Functor
 
 /** \class LineSegmentDetector
- *  \brief this class implement a fast line detector with false detection control using 
+ *  \brief this class implement a fast line detector with false detection control using
  *         the a contrario method
- *  
+ *
  *  \sa ImageLineSegmentDetector (streamed version)
  *
- *  See Publication : " LSD: A line segment detector ", R. Grompone, J.Jackubowicz, J-M.Morel, G.Randall 
- * 
+ *  See Publication : " LSD: A line segment detector ", R. Grompone, J.Jackubowicz, J-M.Morel, G.Randall
+ *
  */
 
 template <class TInputImage,class TPrecision = double>
@@ -86,16 +86,16 @@ class ITK_EXPORT LineSegmentDetector :
       public otb::ImageToLineSpatialObjectListFilter< TInputImage >
 {
   public:
-  
+
   /** typedef for the classes standards. */
   typedef LineSegmentDetector                               Self;
   typedef ImageToLineSpatialObjectListFilter< TInputImage>  Superclass;
   typedef itk::SmartPointer<Self>                           Pointer;
   typedef itk::SmartPointer<const Self>                     ConstPointer;
-  
+
   /** Method for management of the object factory. */
   itkNewMacro(Self);
-  
+
   /** Return the name of the class. */
   itkTypeMacro(LineSegmentDetector,ImageToLineSpatialObjectListFilter );
 
@@ -112,27 +112,27 @@ class ITK_EXPORT LineSegmentDetector :
   typedef LineSpatialObjectListType::LineType                           LineSpatialObjectType;
   typedef LineSpatialObjectType::PointListType                          PointListType;
   typedef LineSpatialObjectType::LinePointType                          PointType;
-  
+
 
   /** Definition of temporary image ised to store LABELS*/
   typedef Image<TPrecision ,2>                                          OutputImageType;
   typedef typename OutputImageType::PixelType                           OutputPixelType;
   typedef typename OutputImageType::IndexType                           OutputIndexType;
   typedef typename OutputImageType::SizeType                            OutputSizeType;
-  
+
   /** Histogram to store the coordinate of ordered pixels*/
   typedef std::vector<OutputIndexType>                                  IndexVectorType;
   typedef typename IndexVectorType::iterator                            IndexVectorIteratorType;
   typedef std::vector<IndexVectorType >                                 CoordinateHistogramType;
   typedef typename CoordinateHistogramType::iterator                    CoordinateHistogramIteratorType;
 
-   
+
   /** typedef structure to store REGION*/
   typedef std::vector<IndexVectorType>                                  VectorOfIndexVectorType;
   typedef std::vector<float>                                            DirectionVectorType;
-  typedef typename DirectionVectorType::iterator                        DirectionVectorIteratorType; 
+  typedef typename DirectionVectorType::iterator                        DirectionVectorIteratorType;
 
-  /** */ 
+  /** */
   typedef itk::GradientRecursiveGaussianImageFilter<OutputImageType > GradientFilterType;
   //typedef itk::GradientImageFilter<InputImageType > GradientFilterType;
   typedef typename GradientFilterType::Pointer GradientFilterPointerType;
@@ -145,7 +145,7 @@ class ITK_EXPORT LineSegmentDetector :
   typedef typename MagnitudeFilterType::OutputImageType::PixelType                    MagnitudePixelType;
   typedef typename MagnitudeFilterType::OutputImageType                               MagnitudeImageType;
   typedef typename MagnitudeImageType::Pointer                                        MagnitudeImagePointerType;
-            
+
   typedef itk::UnaryFunctorImageFilter<GradientOutputImageType,OutputImageType,
   Functor::OrientationFunctor<typename GradientOutputImageType::PixelType,TPrecision> > OrientationFilterType;
   typedef typename OrientationFilterType::Pointer                                       OrientationFilterPointerType;
@@ -155,12 +155,12 @@ class ITK_EXPORT LineSegmentDetector :
   /** Create an image to store the label USED(1) or notUsed (0)*/
   typedef otb::Image<unsigned char, 2>                              LabelImageType;
   typedef typename LabelImageType::Pointer                          LabelImagePointerType;
-  
+
   /** Vector to store the rectangle characteization  center, width, orientation ,( begin ,end ) of the central line*/
   typedef std::vector<double>                                       RectangleType;
   typedef typename RectangleType::iterator                          RectangleIteratorType;
   typedef std::vector< RectangleType>                               RectangleListType;
-  typedef typename RectangleListType::iterator                      RectangleListTypeIterator; 
+  typedef typename RectangleListType::iterator                      RectangleListTypeIterator;
 
 
   itkSetMacro(ImageSize, SizeType);
@@ -183,50 +183,50 @@ protected:
 
   /** */
   virtual void LineSegmentDetection(CoordinateHistogramType & CoordinateHistogram);
-  
+
   /** */
-  virtual bool IsUsed(InputIndexType & index);
-  
+  virtual bool IsUsed(InputIndexType & index) const;
+
    /** Set Pixel flag to USED*/
   virtual void SetPixelToUsed(InputIndexType  index);
-  
- 
+
+
   /** search for a segment which begins from a seed "index "*/
   virtual void GrowRegion(InputIndexType  index);
-  
+
   /** Define if two are aligned */
-  virtual bool IsAligned(double Angle, double regionAngle, double prec);
-  
+  virtual bool IsAligned(double Angle, double regionAngle, double prec) const;
+
   /** For each region of the region List it builds a rectangle */
   virtual int ComputeRectangles();
-  
+
   /** */
   virtual void Region2Rect(IndexVectorType  region , double angleRegion);
-  
-  /** */
-  virtual double ComputeRegionOrientation(IndexVectorType  region , double x, double y , double angleRegion);
 
   /** */
-  virtual double angle_diff(double a, double b);
+  virtual double ComputeRegionOrientation(IndexVectorType  region , double x, double y , double angleRegion) const;
+
+  /** */
+  virtual double angle_diff(double a, double b) const;
 
   /**  Compute the Number Of False Alarm for a rectangle*/
-  virtual double ComputeRectNFA(RectangleType & rec);
+  virtual double ComputeRectNFA(const RectangleType & rec) const;
 
   /** */
-  virtual double ImproveRectangle(RectangleType  & rec);
+  virtual double ImproveRectangle(RectangleType  & rec) const;
 
   /** NFA For a rectangle*/
-  virtual double NFA(int n, int k, double p, double logNT);
-  
+  virtual double NFA(int n, int k, double p, double logNT) const;
+
   /** Create a copy of a rectangle*/
-  virtual void CopyRectangle(RectangleType & rDst , RectangleType  & rSrc );
-  
+  virtual void CopyRectangle(RectangleType & rDst , RectangleType  & rSrc ) const;
+
 
   /** Rutines from numerical recipes*/
-  virtual double betacf(double a, double b, double x);
-  virtual double gammln(double xx);
-  virtual double betai(double a, double b, double x);
-  virtual double factln(int n);
+  virtual double betacf(double a, double b, double x) const;
+  virtual double gammln(double xx) const;
+  virtual double betai(double a, double b, double x) const;
+  virtual double factln(int n) const;
 
   /** Printself method*/
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -241,7 +241,7 @@ private:
   DirectionVectorType               m_DirectionVector;
   LabelImagePointerType             m_UsedPointImage;
   RectangleListType                 m_RectangleList;
-  
+
   double                             m_Threshold;
   double                             m_Prec;
   double                             m_DirectionsAllowed;
@@ -252,7 +252,7 @@ private:
    * (streaming uses (streaming decorator).
    */
   SizeType                           m_ImageSize;
-  
+
   /** Gradient filter */
   GradientFilterPointerType m_GradientFilter;
 
@@ -265,9 +265,9 @@ private:
   /** Output*/
   LineSpatialObjectListPointer      m_LineList;
 
-  
 
-  
+
+
 };
 } // end namespace otb
 

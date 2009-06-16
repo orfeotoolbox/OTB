@@ -346,6 +346,12 @@ ADD_TEST(ioTvImageFileReaderDoubleHDR2BSQ ${IO_TESTS2}
 
 
 # ---  STREAMING FILTER : BSQ  ---
+ADD_TEST(ioTvImageFileReaderPNG2BSQ ${IO_TESTS2}
+  --compare-image ${TOL}        ${INPUTDATA}/cthead1.png
+                                ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+        otbImageFileReaderTest
+        ${INPUTDATA}/cthead1.png
+        ${TEMP}/ioImageFileReaderPNG2BSQ.hd )
 ADD_TEST(ioTvStreamingImageFilterBSQ2PNG ${IO_TESTS2}
    --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
                                 ${TEMP}/ioStreamingImageFilterTestBSQ.png
@@ -400,13 +406,6 @@ ADD_TEST(ioTuBSQImageIOCanRead ${IO_TESTS3} otbBSQImageIOTestCanRead
 # CanWrite()
 ADD_TEST(ioTuBSQImageIOCanWrite ${IO_TESTS3} otbBSQImageIOTestCanWrite
         ${TEMP}/poupees.hd)
-
-ADD_TEST(ioTvImageFileReaderPNG2BSQ ${IO_TESTS3}
-  --compare-image ${TOL}        ${INPUTDATA}/cthead1.png
-                                ${TEMP}/ioImageFileReaderPNG2BSQ.hd
-        otbImageFileReaderTest
-        ${INPUTDATA}/cthead1.png
-        ${TEMP}/ioImageFileReaderPNG2BSQ.hd )
 
 ADD_TEST(ioTvImageFileReaderPNG2ENVI ${IO_TESTS3}
   --compare-image ${TOL}        ${TEMP}/ioImageFileReaderPNG2BSQ.hd
@@ -1081,6 +1080,7 @@ ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS2}
          ${INPUTDATA}/poupees_1canal.c1.hdr
          ${TEMP}/ioStreamingImageFileWriterBSQWithoutStreaming.hdr
          0 # Streaming
+         0
          )
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS2}
@@ -1672,7 +1672,7 @@ ADD_TEST(ioTvSHPVectorDataFileReader2 ${IO_TESTS15}
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(ioTvSHPVectorDataFileReader3 ${IO_TESTS15}
+ADD_TEST(ioTlSHPVectorDataFileReader3 ${IO_TESTS15}
         --compare-ascii ${TOL}  ${BASELINE_FILES}/ioSHPVectorDataFileReader3.txt
                         ${TEMP}/ioSHPVectorDataFileReader3.txt
         otbVectorDataFileReader
@@ -1879,6 +1879,43 @@ ADD_TEST(ioTvPointSetFileReader ${IO_TESTS17}
 ENDIF(OTB_USE_LIBLAS)
 
 
+ADD_TEST(ioTuImageMetadataInterfaceNew ${IO_TESTS17}
+#         --compare-ascii ${TOL}  ${BASELINE_FILES}/ioPointSetFileReader.txt
+#                         ${TEMP}/ioPointSetFileReader.txt
+        otbImageMetadataInterfaceNew
+)
+
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(ioTvImageMetadataInterfaceQBTest ${IO_TESTS17}
+         --compare-ascii 0 ${BASELINE_FILES}/ioTvImageMetadataInterfaceQB.txt
+                         ${TEMP}/ioTvImageMetadataInterfaceQB.txt
+        otbImageMetadataInterfaceTest
+        ${LARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${TEMP}/ioTvImageMetadataInterfaceQB.txt
+)
+ADD_TEST(ioTvImageMetadataInterfaceQBCevennesTest ${IO_TESTS17}
+         --compare-ascii 0 ${BASELINE_FILES}/ioTvImageMetadataInterfaceQBCevennes.txt
+                         ${TEMP}/ioTvImageMetadataInterfaceQBCevennes.txt
+        otbImageMetadataInterfaceTest
+        ${LARGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${TEMP}/ioTvImageMetadataInterfaceQBCevennes.txt
+)
+ADD_TEST(ioTvImageMetadataInterfaceIKONOSTest ${IO_TESTS17}
+         --compare-ascii 0 ${BASELINE_FILES}/ioTvImageMetadataInterfaceIKONOS.txt
+                         ${TEMP}/ioTvImageMetadataInterfaceIKONOS.txt
+        otbImageMetadataInterfaceTest
+        ${LARGEDATA}/IKONOS_BLOSSEVILLE/po_2619900_blu_0000000.tif
+        ${TEMP}/ioTvImageMetadataInterfaceIKONOS.txt
+)
+ADD_TEST(ioTvImageMetadataInterfaceSPOTTest ${IO_TESTS17}
+         --compare-ascii 0 ${BASELINE_FILES}/ioTvImageMetadataInterfaceSPOT.txt
+                         ${TEMP}/ioTvImageMetadataInterfaceSPOT.txt
+        otbImageMetadataInterfaceTest
+        ${LARGEDATA}/SPOT5_SCENE01/IMAGERY.TIF
+        ${TEMP}/ioTvImageMetadataInterfaceSPOT.txt
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 
 
 #----------------------------------------------------------------------------------
@@ -1896,6 +1933,7 @@ otbImageIOFactoryNew.cxx
 SET(BasicIO_SRCS2
 otbIntImageIOTest.cxx
 otbFloatImageIOTest.cxx
+otbImageFileReaderTest.cxx
 otbDoubleImageIOTest.cxx
 otbStreamingImageFilterTest.cxx
 otbStreamingImageFileWriterTest.cxx
@@ -2022,6 +2060,8 @@ otbImageSeriesFileReader.cxx
 SET(BasicIO_SRCS17
 otbPointSetFileReaderNew.cxx
 otbPointSetFileReader.cxx
+otbImageMetadataInterfaceNew.cxx
+otbImageMetadataInterfaceTest.cxx
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)

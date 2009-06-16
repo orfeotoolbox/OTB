@@ -33,6 +33,7 @@ PostGISCreateTableTransactor::PostGISCreateTableTransactor(const PostGISCreateTa
   m_TableName = pgt.GetTableName();
   m_SRID = pgt.GetSRID();
   m_Dimension = pgt.GetDimension();
+  m_RemoveExistingTable = pgt.GetRemoveExistingTable();
 }
 
 PostGISCreateTableTransactor& PostGISCreateTableTransactor::operator=(const PostGISCreateTableTransactor& pgt) throw() {
@@ -41,44 +42,44 @@ PostGISCreateTableTransactor& PostGISCreateTableTransactor::operator=(const Post
     m_Dimension = pgt.GetDimension();
     m_RemoveExistingTable = pgt.GetRemoveExistingTable();
   return *this;
-} 
-  
+}
+
 void PostGISCreateTableTransactor::operator()(pqxx::nontransaction &T)
 {
 
   if(m_RemoveExistingTable)
     {
     std::stringstream dropCommand;
-    
+
     dropCommand << "DROP TABLE " << m_TableName;
-  
+
     otbGenericMsgDebugMacro(<<"Drop Command " << dropCommand.str());
-  
+
     m_Result = T.exec(dropCommand.str());
     }
-  
+
   std::stringstream createCommand;
-  
+
   createCommand << "CREATE TABLE "<< m_TableName
 		<<" (id serial PRIMARY KEY,genre text);";
-  
+
   otbGenericMsgDebugMacro(<<"Create Command " << createCommand.str());
   m_Result = T.exec(createCommand.str());
-  
+
   std::stringstream addGeometryCommand;
-  
+
   addGeometryCommand << "SELECT AddGeometryColumn( '"<< m_TableName <<
     "', 'geom', "<< m_SRID <<", 'GEOMETRY',"<< m_Dimension <<" );";
-  
+
   m_Result = T.exec(addGeometryCommand.str());
-  
-  
+
+
 }
 
 void PostGISCreateTableTransactor::on_commit()
 {
   std::cout << "\t Table is created \t"  << std::endl;
-  
+
 }
 
 std::string PostGISCreateTableTransactor::GetTableName() const

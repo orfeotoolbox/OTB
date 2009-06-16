@@ -10,10 +10,11 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
-SET(TOL 0.0)
+SET(NOTOL 0.0)
 SET(EPSILON 0.000000000001)
-SET(EPSILON_10e4 0.0001)
-SET(EPSILON_10e6 0.000001)
+SET(EPSILON_10e4  0.0001)
+SET(EPSILON_10e6  0.000001)
+SET(EPSILON_10e8  0.00000001)
 SET(EPSILON_10e10 0.0000000001)
 SET(RADIOMETRY_TESTS1 ${CXX_TEST_PATH}/otbRadiometryTests1)
 SET(RADIOMETRY_TESTS2 ${CXX_TEST_PATH}/otbRadiometryTests2)
@@ -35,7 +36,7 @@ ADD_TEST(raTuMultiChannelRAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS
         otbMultiChannelRAndNIRVegetationIndexImageFilterNew )
 
 ADD_TEST(raTvNDVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}
-  --compare-image ${TOL}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_NDVI_verySmallFSATSWcRcNir.tif
+  --compare-image ${NOTOL}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_NDVI_verySmallFSATSWcRcNir.tif
                     ${TEMP}/raMultiChannelRAndNIRVegetationIndex_NDVI_verySmallFSATSWcRcNir.tif
         otbMultiChannelRAndNIRVegetationIndexImageFilter
         NDVI
@@ -44,7 +45,7 @@ ADD_TEST(raTvNDVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TES
 	3 4
 	)
 ADD_TEST(raTvRVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}
-  --compare-image ${TOL}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_RVI_verySmallFSATSWcRcNir.tif
+  --compare-image ${NOTOL}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_RVI_verySmallFSATSWcRcNir.tif
                     ${TEMP}/raMultiChannelRAndNIRVegetationIndex_RVI_verySmallFSATSWcRcNir.tif
         otbMultiChannelRAndNIRVegetationIndexImageFilter
         RVI
@@ -54,7 +55,7 @@ ADD_TEST(raTvRVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TEST
 	)
 
 ADD_TEST(raTvSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}
-  --compare-image ${TOL}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_SAVI_verySmallFSATSWcRcNir.tif
+  --compare-image ${NOTOL}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_SAVI_verySmallFSATSWcRcNir.tif
                     ${TEMP}/raMultiChannelRAndNIRVegetationIndex_SAVI_verySmallFSATSWcRcNir.tif
         otbMultiChannelRAndNIRVegetationIndexImageFilter
         SAVI
@@ -64,7 +65,7 @@ ADD_TEST(raTvSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TES
 	)
 
 ADD_TEST(raTvMSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}
-  --compare-image ${TOL}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_MSAVI_qb_RoadExtract2sub200x200.tif
+  --compare-image ${EPSILON_10e10}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_MSAVI_qb_RoadExtract2sub200x200.tif
                     ${TEMP}/raMultiChannelRAndNIRVegetationIndex_MSAVI_qb_RoadExtract2sub200x200.tif
         otbMultiChannelRAndNIRVegetationIndexImageFilter
         MSAVI
@@ -74,7 +75,7 @@ ADD_TEST(raTvMSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TE
     )
 
 ADD_TEST(raTvMSAVI2_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}
-  --compare-image ${TOL}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_MSAVI2_verySmallFSATSWcRcNir.tif
+  --compare-image ${EPSILON_10e8}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_MSAVI2_verySmallFSATSWcRcNir.tif
                     ${TEMP}/raMultiChannelRAndNIRVegetationIndex_MSAVI2_verySmallFSATSWcRcNir.tif
         otbMultiChannelRAndNIRVegetationIndexImageFilter
         MSAVI2
@@ -582,7 +583,7 @@ ADD_TEST(raTuRAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS5}
         otbRAndNIRVegetationIndexImageFilterNew )
 
 ADD_TEST(raTvNDVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}
-  --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_NDVI_verySmallFSATSWcRcNir.tif
+  --compare-image ${NOTOL}   ${BASELINE}/raRAndNIRVegetationIndex_NDVI_verySmallFSATSWcRcNir.tif
                     ${TEMP}/raRAndNIRVegetationIndex_NDVI_verySmallFSATSWcRcNir.tif
         otbRAndNIRVegetationIndexImageFilter
         NDVI
@@ -591,7 +592,7 @@ ADD_TEST(raTvNDVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}
     ${TEMP}/raRAndNIRVegetationIndex_NDVI_verySmallFSATSWcRcNir.tif
     )
 ADD_TEST(raTvRVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}
-  --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_RVI_verySmallFSATSWcRcNir.tif
+  --compare-image ${NOTOL}   ${BASELINE}/raRAndNIRVegetationIndex_RVI_verySmallFSATSWcRcNir.tif
                     ${TEMP}/raRAndNIRVegetationIndex_RVI_verySmallFSATSWcRcNir.tif
         otbRAndNIRVegetationIndexImageFilter
         RVI
@@ -601,7 +602,7 @@ ADD_TEST(raTvRVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}
     )
 
 ADD_TEST(raTvSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}
-  --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_SAVI_verySmallFSATSWcRcNir.tif
+  --compare-image ${NOTOL}   ${BASELINE}/raRAndNIRVegetationIndex_SAVI_verySmallFSATSWcRcNir.tif
                     ${TEMP}/raRAndNIRVegetationIndex_SAVI_verySmallFSATSWcRcNir.tif
         otbRAndNIRVegetationIndexImageFilter
         SAVI
@@ -611,7 +612,7 @@ ADD_TEST(raTvSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}
     )
 
 ADD_TEST(raTvMSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}
-  --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_MSAVI_verySmallFSATSWcRcNir.tif
+  --compare-image ${EPSILON_10e8}   ${BASELINE}/raRAndNIRVegetationIndex_MSAVI_verySmallFSATSWcRcNir.tif
                     ${TEMP}/raRAndNIRVegetationIndex_MSAVI_verySmallFSATSWcRcNir.tif
         otbRAndNIRVegetationIndexImageFilter
         MSAVI
@@ -621,7 +622,7 @@ ADD_TEST(raTvMSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}
     )
 
 ADD_TEST(raTvMSAVI2_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}
-  --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_MSAVI2_verySmallFSATSWcRcNir.tif
+  --compare-image ${EPSILON_10e8}   ${BASELINE}/raRAndNIRVegetationIndex_MSAVI2_verySmallFSATSWcRcNir.tif
                     ${TEMP}/raRAndNIRVegetationIndex_MSAVI2_verySmallFSATSWcRcNir.tif
         otbRAndNIRVegetationIndexImageFilter
         MSAVI2
@@ -790,7 +791,7 @@ ADD_TEST(raTvIR_GAndRIndexImageFilter ${RADIOMETRY_TESTS7}
 
 # -------            IR MultiChannelGAndRIndexImageFilter   ------------------------------
 ADD_TEST(raTvIR_MultiChannelGAndRIndexImageFilter ${RADIOMETRY_TESTS7}
-   --compare-image ${TOL}   ${BASELINE}/raMultiChannelGAndRIndex_IR_Romania_Extract.tif
+   --compare-image ${EPSILON_10e10}   ${BASELINE}/raMultiChannelGAndRIndex_IR_Romania_Extract.tif
                      ${TEMP}/raMultiChannelGAndRIndex_IR_Romania_Extract.tif
         otbMultiChannelGAndRIndexImageFilter
         IR
@@ -812,7 +813,7 @@ ADD_TEST(raTvIC_GAndRIndexImageFilter ${RADIOMETRY_TESTS7}
 
 # -------            IC MultiChannelGAndRIndexImageFilter   ------------------------------
 ADD_TEST(raTvIC_MultiChannelGAndRIndexImageFilter ${RADIOMETRY_TESTS7}
-   --compare-image ${TOL}   ${BASELINE}/raMultiChannelGAndRIndex_IC_Romania_Extract.tif
+   --compare-image ${NOTOL}   ${BASELINE}/raMultiChannelGAndRIndex_IC_Romania_Extract.tif
                      ${TEMP}/raMultiChannelGAndRIndex_IC_Romania_Extract.tif
         otbMultiChannelGAndRIndexImageFilter
         IC
@@ -834,7 +835,7 @@ ADD_TEST(raTvIB_GAndRIndexImageFilter ${RADIOMETRY_TESTS7}
 
 # -------            IB MultiChannelGAndRIndexImageFilter   ------------------------------
 ADD_TEST(raTvIB_MultiChannelGAndRIndexImageFilter ${RADIOMETRY_TESTS7}
-   --compare-image ${TOL}   ${BASELINE}/raMultiChannelGAndRIndex_IB_Romania_Extract.tif
+   --compare-image ${EPSILON_10e10}   ${BASELINE}/raMultiChannelGAndRIndex_IB_Romania_Extract.tif
                      ${TEMP}/raMultiChannelGAndRIndex_IB_Romania_Extract.tif
         otbMultiChannelGAndRIndexImageFilter
         IB
@@ -856,7 +857,7 @@ ADD_TEST(raTvIB2_GAndRAndNIRIndexImageFilter ${RADIOMETRY_TESTS7}
 
 # -------            IB2 MultiChannelGAndRAndNIRIndexImageFilter   ------------------------------
 ADD_TEST(raTvIB2_MultiChannelGAndRIndexImageFilter ${RADIOMETRY_TESTS7}
-   --compare-image ${TOL}   ${BASELINE}/raMultiChannelGAndRAndNIRIndex_IB2_Romania_Extract.tif
+   --compare-image ${EPSILON_10e6}   ${BASELINE}/raMultiChannelGAndRAndNIRIndex_IB2_Romania_Extract.tif
                      ${TEMP}/raMultiChannelGAndRAndNIRIndex_IB2_Romania_Extract.tif
          otbIBMultiChannelGAndRAndNIRIndexImageFilter
          ${INPUTDATA}/Romania_Extract.tif

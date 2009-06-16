@@ -20,6 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbConcatenateVectorImageFilter.h"
 #include "itkImageRegionIterator.h"
+#include "itkProgressReporter.h"
 
 namespace otb
 {
@@ -85,52 +86,80 @@ ConcatenateVectorImageFilter<TInputImage1,TInputImage2,TOutputImage>
 {
   return const_cast<InputImage2Type *>(this->GetInput(1));
 }
+
+
+template <class TInputImage1,class TInputImage2,class TOutputImage>
+void
+ConcatenateVectorImageFilter<TInputImage1,TInputImage2,TOutputImage>
+::GenerateOutputInformation()
+{
+  // Call to the superclass implementation
+  Superclass::GenerateOutputInformation();
+
+  typename Superclass::InputImageConstPointer  inputPtr1 = this->GetInput1();
+  typename Superclass::InputImageConstPointer  inputPtr2 = this->GetInput2();
+  typename Superclass::OutputImagePointer      outputPtr = this->GetOutput();
+ 
+  unsigned int nbComponentsPerPixel = inputPtr1->GetNumberOfComponentsPerPixel() + inputPtr2->GetNumberOfComponentsPerPixel();
+  
+  // initialize the number of channels of the output image
+  outputPtr->SetNumberOfComponentsPerPixel( nbComponentsPerPixel );
+}
+
+
+template <class TInputImage1,class TInputImage2,class TOutputImage>
+void
+ConcatenateVectorImageFilter<TInputImage1,TInputImage2,TOutputImage>
+::BeforeThreadedGenerateData()
+{
+  Superclass::BeforeThreadedGenerateData();
+
+  typename Superclass::InputImageConstPointer  inputPtr1 = this->GetInput1();
+  typename Superclass::InputImageConstPointer  inputPtr2 = this->GetInput2();
+  typename Superclass::OutputImagePointer      outputPtr = this->GetOutput();
+
+  if (inputPtr1->GetLargestPossibleRegion()!=inputPtr2->GetLargestPossibleRegion())
+  {
+    itkExceptionMacro(<<"InputImage1 and InputImage2 have different requested regions.");
+  }
+}
+
 /**
  * Main computation method.
  */
 template <class TInputImage1,class TInputImage2,class TOutputImage>
 void
 ConcatenateVectorImageFilter<TInputImage1,TInputImage2,TOutputImage>
-::GenerateData()
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                       int threadId)
 {
   // retrieves inputs and output pointer
   InputImage1PointerType input1 = this->GetInput1();
   InputImage2PointerType input2 = this->GetInput2();
   OutputImagePointerType output = this->GetOutput();
 
-  // Check the requested regions
-  typename InputImage1Type::RegionType region1 = input1->GetRequestedRegion();
-  typename InputImage2Type::RegionType region2 = input2->GetRequestedRegion();
-
-  if (region1!=region2)
-  {
-    itkExceptionMacro(<<"InputImage1 and InputImage2 have different requested regions.");
-  }
+  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+ 
+  // Define the portion of the input to walk for this thread
+  typename InputImage1Type::RegionType inputRegionForThread;
+  this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
 
   // Iterators typedefs
   typedef itk::ImageRegionIterator<InputImage1Type> Input1IteratorType;
   typedef itk::ImageRegionIterator<InputImage2Type> Input2IteratorType;
   typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
-
-  // Initialize output
-  output->SetRegions(region1);
-  output->SetNumberOfComponentsPerPixel(input1->GetNumberOfComponentsPerPixel()
-                                        +input2->GetNumberOfComponentsPerPixel());
-  output->Allocate();
-
+ 
   // Iterators declaration
-  Input1IteratorType input1It(input1,region1);
-  Input2IteratorType input2It(input2,region1);
-  OutputIteratorType outputIt(output,region1);
+  Input1IteratorType input1It(input1,inputRegionForThread);
+  Input2IteratorType input2It(input2,inputRegionForThread);
+  OutputIteratorType outputIt(output,outputRegionForThread);
 
   input1It.GoToBegin();
   input2It.GoToBegin();
   outputIt.GoToBegin();
 
   // Iterate through the pixel
-  while (!input1It.IsAtEnd()
-         &&!input2It.IsAtEnd()
-         &&!outputIt.IsAtEnd())
+  while (!outputIt.IsAtEnd())
   {
     // define an output pixel
     typename OutputImageType::PixelType output;
@@ -149,6 +178,7 @@ ConcatenateVectorImageFilter<TInputImage1,TInputImage2,TOutputImage>
     for (unsigned int i = 0;i<l2;++i)
     {
       // Fill the output pixel
+
       output[i+l1]=static_cast<typename OutputImageType::InternalPixelType>(input2It.Get()[i]);
     }
     // Set the output pixel
@@ -158,6 +188,7 @@ ConcatenateVectorImageFilter<TInputImage1,TInputImage2,TOutputImage>
     ++input2It;
     ++outputIt;
   }
+  
 }
 /**
  * PrintSelf method.

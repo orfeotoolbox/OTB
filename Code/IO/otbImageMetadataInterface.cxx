@@ -317,6 +317,11 @@ ImageMetadataInterface::VariableLengthVectorType
     return GetIkonosPhysicalBias(dict);
   }
 
+  if(IsQuickbird(dict))
+  {
+    return GetQuickbirdPhysicalBias(dict);
+  }
+
   VariableLengthVectorType output(1);
   output.Fill(0);
   return output;
@@ -333,6 +338,11 @@ ImageMetadataInterface::VariableLengthVectorType
   if(IsIkonos(dict))
   {
     return GetIkonosPhysicalGain(dict);
+  }
+
+  if(IsQuickbird(dict))
+  {
+    return GetQuickbirdPhysicalGain(dict);
   }
 
   VariableLengthVectorType output(1);
@@ -352,43 +362,100 @@ ImageMetadataInterface::VariableLengthVectorType
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key= "support_data.solar_irradiance";
-  ossimString keywordString = kwl.find(key.c_str());
-  ossimString separatorList = " ";
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
-  std::vector<double> outputValues;
-  for (unsigned int i=0; i < keywordStrings.size(); ++i)
-  {
-    if (!keywordStrings[i].empty())
-    {
-      outputValues.push_back(keywordStrings[i].toDouble());
-    }
-  }
+ VariableLengthVectorType outputValuesVariableLengthVector;
+ ossimKeywordlist kwl;
+ imageKeywordlist.convertToOSSIMKeywordlist(kwl);
 
-  VariableLengthVectorType outputValuesVariableLengthVector;
-  outputValuesVariableLengthVector.SetSize(outputValues.size());
-  outputValuesVariableLengthVector.Fill(0);
-  //In the case of SPOT, the bands are in a different order:
-  // XS3, XS2. XS1, SWIR in the tif file.
-  if(IsSpot(dict))
+  if(IsSpot(dict)) // and QB?
   {
-    //assert(outputValues.size() == 4);//Valid for Spot 4 and 5
-    if(outputValues.size() != 4)
-      itkGenericExceptionMacro(<<"Invalid Solar Irradiance");
-    outputValuesVariableLengthVector[0]=outputValues[2];
-    outputValuesVariableLengthVector[1]=outputValues[1];
-    outputValuesVariableLengthVector[2]=outputValues[0];
-    outputValuesVariableLengthVector[3]=outputValues[3];
+    std::string key= "support_data.solar_irradiance";
+    ossimString keywordString = kwl.find(key.c_str());
+    ossimString separatorList = " ";
+    std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+    std::vector<double> outputValues;
+    for (unsigned int i=0; i < keywordStrings.size(); ++i)
+      {
+	if (!keywordStrings[i].empty())
+	  {
+	    outputValues.push_back(keywordStrings[i].toDouble());
+	  }
+      }
+    
+    
+    outputValuesVariableLengthVector.SetSize(outputValues.size());
+    outputValuesVariableLengthVector.Fill(0);
+    //In the case of SPOT, the bands are in a different order:
+    // XS3, XS2. XS1, SWIR in the tif file.
+    if(IsSpot(dict))
+      {
+	//assert(outputValues.size() == 4);//Valid for Spot 4 and 5
+	if(outputValues.size() != 4)
+	  itkGenericExceptionMacro(<<"Invalid Solar Irradiance");
+	outputValuesVariableLengthVector[0]=outputValues[2];
+	outputValuesVariableLengthVector[1]=outputValues[1];
+	outputValuesVariableLengthVector[2]=outputValues[0];
+	outputValuesVariableLengthVector[3]=outputValues[3];
+      }
+    else
+      {
+	for(unsigned int i=0; i<outputValues.size(); ++i)
+	  {
+	    outputValuesVariableLengthVector[i]=outputValues[i];
+	  }
+      }
   }
-  else
-  {
-    for(unsigned int i=0; i<outputValues.size(); ++i)
+  else if(IsIkonos(dict))
     {
-      outputValuesVariableLengthVector[i]=outputValues[i];
+      outputValuesVariableLengthVector.SetSize(1);
+      // values from geoeye
+      std::string key= "support_data.band_name";
+      ossimString keywordString = kwl.find(key.c_str());
+      if(keywordString=="Pan")
+	{
+	  outputValuesVariableLengthVector[0] = 1375.8;
+	}
+      else if(keywordString=="Blue")
+	{
+	  outputValuesVariableLengthVector[0] = 1930.9;
+	}
+      else if(keywordString=="Green")
+	{
+	  outputValuesVariableLengthVector[0] = 1854.8;
+	}
+      else if(keywordString=="Red")
+	{
+	  outputValuesVariableLengthVector[0] = 1556.5;
+	}
+      else if(keywordString=="NIR")
+	{
+	  outputValuesVariableLengthVector[0] = 1156.9;
+	}
     }
-  }
+    else if(IsQuickbird(dict))
+    {
+
+      std::string keyBId= "support_data.band_id";
+      ossimString keywordStringBId = kwl.find(keyBId.c_str());
+      if( keywordStringBId == ossimString("P") )
+      {  
+          outputValuesVariableLengthVector.SetSize(1);
+          outputValuesVariableLengthVector.Fill(1381.79);
+      }
+      else if(keywordStringBId == ossimString("Multi") )
+      {
+          outputValuesVariableLengthVector.SetSize(4);
+          outputValuesVariableLengthVector[0]=1924.59;
+          outputValuesVariableLengthVector[1]=1843.08;
+          outputValuesVariableLengthVector[2]=1574.77;
+          outputValuesVariableLengthVector[3]=1113.71;
+      }
+      else
+      {
+        itkExceptionMacro(<<"Invalid bandID "<<keywordStringBId);
+      }
+
+    }
+
 
   return outputValuesVariableLengthVector;
 
@@ -440,16 +507,45 @@ int ImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) const
 
   ossimKeywordlist kwl;
   imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key= "support_data.image_date";
+  
+  std::string key;
+  ossimString separatorList;
+  if(IsSpot(dict))
+  {
+    key = "support_data.image_date";
+    separatorList = "-T";
+  }
+
+  if(IsIkonos(dict))
+  {
+    key = "support_data.production_date";
+    separatorList = "/";
+  }
+
+  if(IsQuickbird(dict))
+  {
+    key = "support_data.tlc_date";
+    separatorList = "-T";
+  }
+
   ossimString keywordString = kwl.find(key.c_str());
-  ossimString separatorList = "-T";
+  //ossimString separatorList = "-T";
+  //std::string key= "support_data.image_date";
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
- 
   //assert(keywordStrings.size() > 2);
+
   if(keywordStrings.size() <= 2)
     itkExceptionMacro(<<"Invalid Day");
 
-  return keywordStrings[2].toInt();
+ ossimString day = keywordStrings[2];
+ if(IsIkonos(dict))
+  {
+      // MM/DD/YY
+     day = keywordStrings[1];
+ }
+
+
+  return day.toInt();
 }
 
 
@@ -465,16 +561,43 @@ int ImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) cons
 
   ossimKeywordlist kwl;
   imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key= "support_data.image_date";
+
+  std::string key;
+  ossimString separatorList;
+  if(IsSpot(dict))
+  {
+    key = "support_data.image_date";
+    separatorList = "-T";
+  }
+
+  if(IsIkonos(dict))
+  {
+    key = "support_data.production_date";
+    separatorList = "/";
+  }
+
+  if(IsQuickbird(dict))
+  {
+    key = "support_data.tlc_date";
+    separatorList = "-T";
+  }
+
   ossimString keywordString = kwl.find(key.c_str());
-  ossimString separatorList = "-T";
+  //ossimString separatorList = "-T";
+  //std::string key= "support_data.image_date";
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
 
   //assert(keywordStrings.size() > 2);
   if(keywordStrings.size() <= 2)
     itkExceptionMacro(<<"Invalid Month");
 
-  return keywordStrings[1].toInt();
+  ossimString month = keywordStrings[1];
+   if(IsIkonos(dict))
+  {
+    month = keywordStrings[0];
+  }
+
+  return month.toInt();
 }
 
 int ImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) const
@@ -486,19 +609,48 @@ int ImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) const
   {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
-
+ 
   ossimKeywordlist kwl;
   imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key= "support_data.image_date";
-  ossimString keywordString = kwl.find(key.c_str());
-  ossimString separatorList = "-T";
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
 
+  std::string key;
+  ossimString separatorList;
+  if(IsSpot(dict))
+  {
+    key = "support_data.image_date";
+    separatorList = "-T";
+  }
+
+  if(IsIkonos(dict))
+  {
+    key = "support_data.production_date";
+    separatorList = "/";
+  }
+
+  if(IsQuickbird(dict))
+  {
+    key = "support_data.tlc_date";
+    separatorList = "-T";
+  }
+
+  ossimString keywordString = kwl.find(key.c_str());
+  //ossimString separatorList = "-T";
+  //std::string key= "support_data.image_date";
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
   //assert(keywordStrings.size() > 2);
   if(  keywordStrings.size() <= 2 )
     itkExceptionMacro("Invalid Year");
 
-  return keywordStrings[0].toInt();
+  ossimString year = keywordStrings[0];
+// For Ikonos 2002 is 02
+ if(IsIkonos(dict))
+  {
+      year = keywordStrings[2];
+      year = "20"+year; 
+  }
+
+  return year.toInt();
+  //return keywordStrings[0].toInt();
 }
 
 std::string ImageMetadataInterface::GetSensorID( const MetaDataDictionaryType & dict ) const
@@ -514,6 +666,7 @@ std::string ImageMetadataInterface::GetSensorID( const MetaDataDictionaryType & 
   std::string key= "sensor";
   ossimString keywordString = kwl.find(key.c_str());
   std::string output(keywordString.chars());
+
   return output;
 }
 
@@ -570,12 +723,20 @@ bool ImageMetadataInterface::IsSpot( const MetaDataDictionaryType & dict ) const
 bool ImageMetadataInterface::IsIkonos( const MetaDataDictionaryType & dict ) const
 {
   std::string sensorID = GetSensorID(dict);
-  if (sensorID.find("IKONOS") != std::string::npos)
+  if (sensorID.find("IKONOS-2") != std::string::npos)
     return true;
   else
     return false;
 }
 
+bool ImageMetadataInterface::IsQuickbird( const MetaDataDictionaryType & dict ) const
+{
+  std::string sensorID = GetSensorID(dict);
+  if (sensorID.find("QB02") != std::string::npos)
+    return true;
+  else
+    return false;
+}
 
 ImageMetadataInterface::VariableLengthVectorType
     ImageMetadataInterface::GetSpotPhysicalBias( const MetaDataDictionaryType & dict ) const
@@ -667,6 +828,129 @@ ImageMetadataInterface::VariableLengthVectorType
 }
 
 
+ImageMetadataInterface::VariableLengthVectorType
+    ImageMetadataInterface::GetQuickbirdPhysicalBias( const MetaDataDictionaryType & dict ) const
+{
+  ImageKeywordlistType ImageKeywordlist;
+
+ if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
+  }  
+  ossimKeywordlist kwl;
+  ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  VariableLengthVectorType outputValuesVariableLengthVector;
+  std::string keyBId= "support_data.band_id";
+  ossimString keywordStringBId = kwl.find(keyBId.c_str());
+  if( keywordStringBId == ossimString("P") )
+  {  
+      outputValuesVariableLengthVector.SetSize(1);
+      outputValuesVariableLengthVector.Fill(0.0);
+  }
+  else if(keywordStringBId == ossimString("Multi") )
+  {
+      outputValuesVariableLengthVector.SetSize(4);
+      outputValuesVariableLengthVector.Fill(0.0);
+  }
+  else
+  {
+     itkExceptionMacro(<<"Invalid bandID "<<keywordStringBId);
+  }
+
+  return outputValuesVariableLengthVector;
+}
+
+
+ImageMetadataInterface::VariableLengthVectorType
+ImageMetadataInterface::GetQuickbirdPhysicalGain( const MetaDataDictionaryType & dict ) const
+{
+   //Values are different pre/post 2003-06-06 production date, find out where we are
+  ImageKeywordlistType ImageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
+  }
+  ossimKeywordlist kwl;
+  ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "support_data.generation_date";
+  ossimString keywordString = kwl.find(key.c_str());
+  std::string output(keywordString.chars());
+
+  //The Ikonos production date has the format MM/DD/YY
+  ossimString separatorList = "-";
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  if (keywordStrings.size() < 3)
+  {
+    itkGenericExceptionMacro(<<"Could not retrieve the production date for Ikonos");
+  }
+
+  int productionYear = keywordStrings[0].toInt();
+  int productionMonth = keywordStrings[1].toInt();
+  int productionDay = keywordStrings[2].toInt();
+  bool isPost20030606 = false;
+  if(productionYear > 2003)
+    isPost20030606 = true;
+  else
+  {
+    if(productionYear == 2003)
+    {
+      if(productionMonth > 6) 
+        isPost20030606 = true;
+      else
+        if(productionDay >= 6) 
+          isPost20030606 = true;
+    }
+  }
+
+    //Value computed from
+  // http://www.geoeye.com/CorpSite/assets/docs/technical-papers/2009/IKONOS_Esun_Calculations.pdf
+  // to get the equivalent of the SPOT alpha
+  VariableLengthVectorType gain;
+  gain.SetSize(5);
+  if (isPost20030606)
+  {
+    gain[0] = 0.16200;//Pan
+    gain[1] = 0.23590;//Blue
+    gain[2] = 0.14530;//Green
+    gain[3] = 0.17850;//Red
+    gain[4] = 0.13530;//NIR
+  }
+  else
+  {
+    gain[0] = 1;//Pan
+    gain[1] = 1;//Blue
+    gain[2] = 1;//Green
+    gain[3] = 1;//Red
+    gain[4] = 1;//NIR
+  }
+
+  VariableLengthVectorType outputValuesVariableLengthVector;
+
+  std::string keyBId= "support_data.band_id";
+  ossimString keywordStringBId = kwl.find(keyBId.c_str());
+  if (keywordStringBId == ossimString("P") )
+  {
+    outputValuesVariableLengthVector.SetSize(1);
+    outputValuesVariableLengthVector[0]=gain[0];
+  }
+  // Multi spectral
+  else if(keywordStringBId == ossimString("Multi") )
+  {
+      outputValuesVariableLengthVector.SetSize(4);
+      outputValuesVariableLengthVector[0]=gain[1];
+      outputValuesVariableLengthVector[1]=gain[2];
+      outputValuesVariableLengthVector[2]=gain[3];
+      outputValuesVariableLengthVector[3]=gain[4];
+  }
+  else
+  {
+     itkExceptionMacro(<<"Invalid bandID "<<keywordStringBId);
+  }
+  
+  return outputValuesVariableLengthVector;
+}
 
 
 ImageMetadataInterface::VariableLengthVectorType

@@ -294,7 +294,8 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
       const char* type = kwl.find(ossimKeywordNames::TYPE_KW);
       if(type)
       {
-         if(ossimString(type) == ossimString(STATIC_TYPE_NAME(ossimCoarseGridModel)))
+//          if(ossimString(type) == ossimString(STATIC_TYPE_NAME(ossimCoarseGridModel)))
+         if(ossimString(type) == STATIC_TYPE_NAME(ossimCoarseGridModel))
          {
             findCoarseGrid(coarseGrid,
                            filename);
@@ -506,7 +507,6 @@ bool ossimSensorModelFactory::isTileMap(const ossimFilename& filename)const
   temp.downcase();
   if(temp.ext()=="otb")
   {
-    std::cout << "TileMap format "<<std::endl;
     return true;
   }
   return false;

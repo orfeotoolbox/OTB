@@ -315,7 +315,8 @@ void ossimIkonosRpcModel::parseMetaData(const ossimFilename& data_file)
    }
    sscanf(strptr, "%8c %s", dummy, name);
    theSensorID = name;
-
+   
+   
    //***
    // GSD:
    //***
@@ -396,12 +397,14 @@ void ossimIkonosRpcModel::parseMetaData(const ossimFilename& data_file)
 //*****************************************************************************
 bool ossimIkonosRpcModel::parseHdrData(const ossimFilename& data_file)
 {
-   if (traceExec())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG ossimIkonosRpcModel::parseHdrData(data_file): entering..."
-         << std::endl;
-   }
+   if (traceExec()) ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimIkonosRpcModel::parseHdrData(data_file): entering..." << std::endl;
+   
+  if( !data_file.exists() )
+    {
+      if (traceExec()) ossimNotify(ossimNotifyLevel_WARN)<< "ossimIkonosRpcModel::parseHdrData(data_file) WARN:"<< "\nrpc data file <" << data_file << ">. "<< "doesn't exist..." << std::endl;
+      return false;
+    }
+     
 
    FILE* fptr = fopen (data_file, "r");
    if (!fptr)
@@ -512,7 +515,13 @@ bool ossimIkonosRpcModel::parseHdrData(const ossimFilename& data_file)
 //*****************************************************************************
 void ossimIkonosRpcModel::parseRpcData(const ossimFilename& data_file)
 {
-   if (traceExec())   ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimIkonosRpcModel::parseRpcData(data_file): entering..." << std::endl;
+   if (traceExec())      ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimIkonosRpcModel::parseRpcData(data_file): entering..." << std::endl;
+
+   if( !data_file.exists() )
+    {
+      if (traceExec()) ossimNotify(ossimNotifyLevel_WARN)<< "ossimIkonosRpcModel::parseRpcData(data_file) WARN:"<< "\nrpc data file <" << data_file << ">. "<< "doesn't exist..." << std::endl;
+      return;
+    }
 
    //***
    // The Ikonos RPC data file is conveniently formatted as KWL file:
@@ -542,6 +551,7 @@ void ossimIkonosRpcModel::parseRpcData(const ossimFilename& data_file)
                                           << keyword << std::endl;
       return;
    }
+
    theLineOffset = atof(buf);
       
    keyword = SAMP_OFF_KW;
@@ -740,11 +750,11 @@ bool ossimIkonosRpcModel::saveState(ossimKeywordlist& kwl,
    if(theSupportData)
    {
       ossimString supportPrefix = ossimString(prefix) + "support_data.";
+      // copy ossimIkonosMetada-sensor into ossimIkonosRpcModel-sensorId
       theSupportData->saveState(kwl, supportPrefix);
    }
 
    ossimRpcModel::saveState(kwl, prefix);
-
   // this model just sets the base class values so
   // we do not need to re-construct this model so 
   // specify the type as the base class type
@@ -897,6 +907,11 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
          << std::endl;
       }
    }
+   else
+     {
+       // copy ossimIkonosMetada-sensor into ossimIkonosRpcModel-sensorId
+       theSensorID = theSupportData->getSensorID();
+     }
    
 
    //convert file to rpc filename and hdr filename so we can get some info
@@ -937,8 +952,9 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
                        INIT_RPC_GEOM_FILENAME,
                        "");
    ossimKeywordlist kwl (init_rpc_geom);
+ 
    saveState(kwl);
-   
+
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimIkonosRpcModel parseTiffFile: returning..." << std::endl;
 
    return true;
