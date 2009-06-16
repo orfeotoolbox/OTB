@@ -64,12 +64,19 @@ public:
   typedef typename TOutputPointSet::PointIdentifier OutputPointIdentifierType;
 
   typedef otb::Image<float,2> FloatImageType;
+  typedef std::vector< std::pair<OutputPointType,double> >     OrientationVectorType;
 
   // Used to rescale data in the [0,1] range
   typedef itk::RescaleIntensityImageFilter<InputImageType,FloatImageType> RescalerType;
 
-  itkSetMacro(NumberOfScales,unsigned int);
-  itkGetMacro(NumberOfScales,unsigned int);
+  itkSetMacro(ScalesNumber,unsigned int);
+  itkGetMacro(ScalesNumber,unsigned int);
+
+  //Set/Get the Orientation of all KeyPoints
+  OrientationVectorType GetOrientationVector()
+    {
+      return m_OrientationVector;
+    }
 
 protected:
   /** Actually process the input */
@@ -86,7 +93,8 @@ protected:
 
 private:
   /** The number of scales */
-  unsigned int m_NumberOfScales;
+  unsigned int                m_ScalesNumber;
+  OrientationVectorType       m_OrientationVector;
 
 
 };
