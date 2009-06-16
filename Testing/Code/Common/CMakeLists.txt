@@ -586,7 +586,6 @@ ADD_TEST(coTvVectorData ${COMMON_TESTS7}
       --compare-ascii ${EPSILON_3}
             ${BASELINE_FILES}/coTvVectorData.txt
             ${TEMP}/coTvVectorData.txt
-			--ignore-lines-with 1 RTTI
      otbVectorData
        ${TEMP}/coTvVectorData.txt
 )
