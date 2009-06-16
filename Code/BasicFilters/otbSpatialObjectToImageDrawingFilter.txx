@@ -393,7 +393,6 @@ void
 SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 ::GenerateData(void)
 {
-  unsigned int i;
   itkDebugMacro(<< "SpatialObjectToImageDrawingFilter::Update() called");
 
   // Get the input and output pointers

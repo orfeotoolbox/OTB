@@ -178,23 +178,52 @@ LineSegmentDetector<TInputImage,TPrecision >
   double lengthBin = static_cast<double>((max - min))/static_cast<double>(NbBin-1);
   CoordinateHistogramType  tempHisto(NbBin);  /** Initializing the histogram */
 
+  // New region : without boundaries
+  RegionType region;
+  SizeType size = modulusImage->GetRequestedRegion().GetSize();
+  InputIndexType id = modulusImage->GetRequestedRegion().GetIndex();
 
-  itk::ImageRegionIterator<OutputImageType> it(modulusImage, modulusImage->GetLargestPossibleRegion()); //modulusImage->GetRequestedRegion());
 
-  InputIndexType indexRef = this->GetInput()->GetLargestPossibleRegion().GetIndex();
+  // Don't take in carre the boudary of the image. 
+  // Special cases for streamed call 
+  if( modulusImage->GetRequestedRegion().GetIndex()[0] == 0)
+    {
+      id[0]++;
+      size[0]--;
+      if( modulusImage->GetRequestedRegion().GetSize()[0]+modulusImage->GetRequestedRegion().GetIndex()[0] == m_ImageSize[0])
+	size[0]--;
+    }
+  else if( modulusImage->GetRequestedRegion().GetSize()[0]+modulusImage->GetRequestedRegion().GetIndex()[0] ==  m_ImageSize[0])
+    {
+      size[0]--;
+    }
+  
+  if( modulusImage->GetRequestedRegion().GetIndex()[1] == 0)
+    {
+      id[1]++;
+      size[1]--;
+      if( modulusImage->GetRequestedRegion().GetSize()[1]+modulusImage->GetRequestedRegion().GetIndex()[1] == m_ImageSize[1])
+	size[1]--;
+    }
+   else if( modulusImage->GetRequestedRegion().GetSize()[1]+modulusImage->GetRequestedRegion().GetIndex()[1] ==  m_ImageSize[1])
+    {
+      size[1]--;
+    }
+  
+  region.SetIndex(id);
+  region.SetSize(size);
 
+  itk::ImageRegionIterator<OutputImageType> it(modulusImage, region);
+
+  
   it.GoToBegin();
   while(!it.IsAtEnd())
     {
       OutputIndexType index = it.GetIndex();
-      // don't work with image boundaries
-      if(static_cast<int>(index[0]) > indexRef[0] && static_cast<int>(index[0]) < static_cast<int>(m_ImageSize[0]+indexRef[0])-1 &&
-         static_cast<int>(index[1]) > indexRef[1] && static_cast<int>(index[1]) < static_cast<int>(m_ImageSize[1]+indexRef[1])-1 )
-        {
-          unsigned int bin = static_cast<unsigned int> (static_cast<double>(it.Value())/lengthBin);
-          if( it.Value()- m_Threshold >1e-10 )
-            tempHisto[NbBin-bin-1].push_back(it.GetIndex());
-        }
+      unsigned int bin = static_cast<unsigned int> (static_cast<double>(it.Value())/lengthBin);
+      if( it.Value()- m_Threshold >1e-10 )
+	tempHisto[NbBin-bin-1].push_back(it.GetIndex());
+      
       ++it;
     }
 
@@ -453,7 +482,15 @@ LineSegmentDetector<TInputImage, TPrecision>
     {
       itkExceptionMacro(<<"Can't access to index "<<index<<", outside the image largest region ("<<region.GetIndex()<<", "<<region.GetSize()<<")");
     }
-
+//   typedef itk::NeighborhoodIterator<LabelImageType>   NeighborhoodLabelIteratorType;
+//   typename NeighborhoodLabelIteratorType::SizeType    radiusLabel;
+//   radiusLabel.Fill(0);
+//   NeighborhoodLabelIteratorType                       itLabel(radiusLabel,m_UsedPointImage,
+//                                                               m_UsedPointImage->GetRequestedRegion());
+//   
+//   itLabel.SetLocation(index);
+//   if(*(itLabel.GetCenterValue()) == 1)
+//     isUsed = true;
   return isUsed;
 }
 

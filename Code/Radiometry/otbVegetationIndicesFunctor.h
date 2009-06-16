@@ -548,12 +548,12 @@ class WDVI : public RAndNIRIndexBase<TInput1,TInput2,TOutput>
 {
 public:
   /// Constructor
-  WDVI() {};
+  WDVI() : m_S(0.4) {};
   /// Desctructor
   ~WDVI() {};
   // Operator on r and nir single pixel values
 /** Set/Get Slop of soil line */
-  void SetS(const double s)
+  void SetS( const double s)
   {
     m_S = s;
   }
@@ -566,6 +566,7 @@ protected:
   {
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
+	
     return (dnir -m_S*dr);
   }
 private:
@@ -588,12 +589,16 @@ public:
   typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
   typedef SAVI<TInput1, TInput2, TOutput> SAVIFunctorType;
   typedef WDVI<TInput1, TInput2, TOutput> WDVIFunctorType;
-  MSAVI() :  m_S(0.4) {};
+  MSAVI() : m_S(0.4)
+  {
+	m_WDVIfunctor.SetS(m_S);
+  };
   ~MSAVI() {};
 /** Set/Get Slop of soil line */
-  void SetS(const double s)
+  void SetS( const double s)
   {
     m_S = s;
+	m_WDVIfunctor.SetS(m_S);
   }
   double GetS(void)const
   {
@@ -620,10 +625,12 @@ protected:
     double dL = 1 - 2*m_S*dNDVI*dWDVI;
 
     double denominator = dnir + dr + dL;
-    if ( denominator == 0. )
+
+	if ( denominator== 0. )
       {
       return static_cast<TOutput>(0.);
       }
+	 
     return ( static_cast<TOutput>(  ((dnir-dr)*(1+dL))/denominator ) );
   }
 
@@ -631,7 +638,7 @@ private:
   /** Slope of soil line */
   double  m_S;
   const NDVIFunctorType m_NDVIfunctor;
-  const WDVIFunctorType m_WDVIfunctor;
+  WDVIFunctorType m_WDVIfunctor;
 
 };
 
