@@ -325,9 +325,12 @@ ADD_TEST(bfTvImageListToVectorImageFilter ${BASICFILTERS_TESTS3}
 		    ${BASELINE}/bfTvImageListToVectorImageFilter.png
 		    ${TEMP}/bfTvImageListToVectorImageFilter.png
 		    otbImageListToVectorImageFilter
-        ${INPUTDATA}/poupees.c1.hdr
-		    ${INPUTDATA}/poupees.c2.hdr
-		    ${INPUTDATA}/poupees.c3.hdr
+          ${INPUTDATA}/poupees_c1.hdr
+          ${INPUTDATA}/poupees_c2.hdr
+          ${INPUTDATA}/poupees_c3.hdr
+            #${INPUTDATA}/poupees.c1.hdr
+		    #${INPUTDATA}/poupees.c2.hdr
+		    #${INPUTDATA}/poupees.c3.hdr
 		    ${TEMP}/bfTvImageListToVectorImageFilter.png
 )
 
@@ -352,9 +355,9 @@ ADD_TEST(bfTvImageListToImageListApplyFilter ${BASICFILTERS_TESTS4}
 		    ${BASELINE}/bfTvImageListToImageListApplyFilterBand3.png
 		    ${TEMP}/bfTvImageListToImageListApplyFilterBand3.png
 		    otbImageListToImageListApplyFilter
-	      ${INPUTDATA}/poupees.c1.hdr
-		    ${INPUTDATA}/poupees.c2.hdr
-		    ${INPUTDATA}/poupees.c3.hdr
+	      ${INPUTDATA}/poupees_c1.hdr
+		    ${INPUTDATA}/poupees_c2.hdr
+		    ${INPUTDATA}/poupees_c3.hdr
 		    ${TEMP}/bfTvImageListToImageListApplyFilterBand1.png
 		    ${TEMP}/bfTvImageListToImageListApplyFilterBand2.png
 		    ${TEMP}/bfTvImageListToImageListApplyFilterBand3.png
