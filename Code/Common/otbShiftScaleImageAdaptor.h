@@ -30,7 +30,7 @@ namespace otb
 namespace Accessor
 {
 /** \class ShiftScalePixelAccessor
- * \brief Give access to the vcl_sqrt() function of a value
+ * \brief Apply a shift scale operation to the value
  *
  * ShiftScalePixelAccessor shifts the input pixel by Shift
  * and then scales the pixel by Scale. All computations
@@ -43,7 +43,7 @@ namespace Accessor
  *
  * \ingroup ImageAdaptors
  */
-template <class TInternalType, class TExternalType >
+template <class TPixelType, class TExternalType >
 class ITK_EXPORT ShiftScalePixelAccessor
 {
 public:
@@ -53,9 +53,9 @@ public:
 
   /** Internal typedef. It defines the internal real
    * representation of data. */
-  typedef TInternalType InternalType;
+  typedef typename itk::NumericTraits<TPixelType>::RealType InternalType;
 
-  InternalType GetShift()
+  InternalType GetShift() const
   {
     return m_Shift;
   }
@@ -64,7 +64,7 @@ public:
     m_Shift = value;
   }
 
-  InternalType GetScale()
+  InternalType GetScale() const
   {
     return m_Scale;
   }
@@ -74,16 +74,14 @@ public:
   }
 
 
-  inline void Set(TInternalType & output, const TExternalType & input)
-//     {output = (TInternalType)((double) (input));}
+  inline void Set(InternalType & output, const ExternalType & input)
   {
-    output = (TInternalType)((double) m_Scale*(input+m_Shift));
+    output = static_cast<InternalType>(m_Scale*(static_cast<InternalType>(input)+m_Shift));
   }
 
-  inline const TExternalType Get(const TInternalType & input) const
-//     {return (TExternalType)((double) (input));}
+  inline const ExternalType Get(const InternalType & input) const
   {
-    return (TExternalType)((double) m_Scale*(input+m_Shift));
+    return static_cast<ExternalType>(m_Scale*(static_cast<InternalType>(input)+m_Shift));
   }
 
 private:
@@ -95,7 +93,7 @@ private:
 } // end namespace Accessor
 
 /** \class ShiftScaleImageAdaptor
- * \brief Presents an image as being composed of the vcl_sqrt() of its pixels
+ * \brief Presents an image as being composed of the shift scale operation of its pixels
  *
  * Additional casting is performed according to the input and output image
  * types following C++ default casting rules.
@@ -111,17 +109,18 @@ class ITK_EXPORT ShiftScaleImageAdaptor : public
 public:
   /** Standard class typedefs. */
   typedef ShiftScaleImageAdaptor                                 Self;
-  typedef itk::ImageAdaptor<TImage,Accessor::ShiftScalePixelAccessor<
-  typename TImage::PixelType,
-  TOutputPixelType > > Superclass;
+  typedef itk::ImageAdaptor<
+           TImage,
+           Accessor::ShiftScalePixelAccessor< typename TImage::PixelType, TOutputPixelType >
+                           >                                    Superclass;
   typedef itk::SmartPointer<Self>                               Pointer;
   typedef itk::SmartPointer<const Self>                         ConstPointer;
-  typedef typename TImage::PixelType InternalType;
-  typedef typename Superclass::IndexType  IndexType;
+  typedef typename TImage::PixelType                            InternalType;
+  typedef typename Superclass::IndexType                        IndexType;
   typedef typename Accessor::ShiftScalePixelAccessor<
-  typename TImage::PixelType,
-  TOutputPixelType > AccessorType;
-  typedef typename AccessorType::ExternalType PixelType;
+                             typename TImage::PixelType,
+                             TOutputPixelType >                 AccessorType;
+  typedef typename AccessorType::ExternalType                   PixelType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -129,7 +128,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro( ShiftScaleImageAdaptor, ImageAdaptor );
 
-  typename TImage::PixelType GetShift ()
+  typename TImage::PixelType GetShift () const
   {
     itkDebugMacro("returning " << " m_Shift of " << this->GetPixelAccessor().GetShift() );
     return this->GetPixelAccessor().GetShift();
@@ -145,7 +144,7 @@ public:
     }
   }
 
-  typename TImage::PixelType GetScale ()
+  typename TImage::PixelType GetScale () const
   {
     itkDebugMacro("returning " << " m_Scale of " << this->GetPixelAccessor().GetScale() );
     return this->GetPixelAccessor().GetScale();
