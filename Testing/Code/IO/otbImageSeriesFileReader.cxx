@@ -30,32 +30,8 @@
 
 int otbImageSeriesFileReader(int argc, char* argv[] )
 {
-  typedef otb::CommandLineArgumentParser ParserType;
-  ParserType::Pointer parser = ParserType::New();
-  parser->AddInputImage();
-  parser->AddOption("--OutputImageBaseName","Output Image Base Name","-out", 1, true);
-
-  typedef otb::CommandLineArgumentParseResult ParserResultType;
-  ParserResultType::Pointer  parseResult = ParserResultType::New();
-
-  try
-  {
-    parser->ParseCommandLine( argc, argv, parseResult );
-  }
-  catch( itk::ExceptionObject & err )
-  {
-    std::cerr << "This program tests the reader of lists through ImageSeriesReader\n";
-    std::string descriptionException = err.GetDescription();
-    if ( descriptionException.find("ParseCommandLine(): Help Parser")
-         != std::string::npos )
-      return EXIT_SUCCESS;
-    if(descriptionException.find("ParseCommandLine(): Version Parser")
-       != std::string::npos )
-      return EXIT_SUCCESS;
-    return EXIT_FAILURE;
-  }
-
-  const char * inputListName = parseResult->GetInputImage().c_str();
+  const char * enviMetaFile = argv[1];
+  const char * outputFile   = argv[2];
 
   const  unsigned int Dimension = 2;
   typedef unsigned char PixelType;
@@ -64,12 +40,10 @@ int otbImageSeriesFileReader(int argc, char* argv[] )
 
   typedef otb::ImageSeriesFileReader< ImageType > ImageReader;
   ImageReader::Pointer reader = ImageReader::New();
-  reader->SetFileName( inputListName );
+  reader->SetFileName( enviMetaFile );
   reader->Update();
 
-
-  ossimFilename outputFilenameBase(
-         parseResult->GetParameterString("--OutputImageBaseName").c_str());
+  ossimFilename outputFilenameBase(outputFile);
 
   ImageListType * imageList = reader->GetOutput();
 
