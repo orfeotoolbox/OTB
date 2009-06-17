@@ -100,12 +100,12 @@ namespace otb
           return outPixel;
         }
 
-        unsigned int GetOutputSize()
+        unsigned int GetOutputSize() const
         {
           return m_ChannelList.size();
         }
 
-        std::vector<unsigned int> GetChannelList()
+        std::vector<unsigned int> GetChannelList() const
         {
           return m_ChannelList;
         }

@@ -26,7 +26,7 @@
 #include "otbPixelRepresentationFunction.h"
 #include "otbChannelSelectorFunctor.h"
 #include "itkHistogram.h"
-
+#include "otbObjectList.h"
 namespace otb
 {
 
@@ -69,6 +69,10 @@ public:
                   typename itk::NumericTraits<ScalarType>::RealType,1,
                   typename itk::Statistics::DenseFrequencyContainer> HistogramType;
   typedef typename HistogramType::Pointer HistogramPointerType;
+  typedef ObjectList<HistogramType>                         HistogramListType;
+  typedef typename HistogramListType::Pointer               HistogramListPointerType;
+
+  typedef  itk::Array< double >           ParametersType;
 
 
   /** Evaluate method (scalar version) */
@@ -84,27 +88,30 @@ public:
   virtual InternalPixelType EvaluatePixelRepresentation(const PixelType &  spixel) const = 0;
 
   /** Return the Pixel representation size*/
-//   virtual int GetPixelRepresentationSize() const = 0;
+  virtual unsigned int GetPixelRepresentationSize() const = 0;
 
   /** Evaluate transfer function */
   virtual OutputPixelType EvaluateTransferFunction(const InternalPixelType &  spixel) const = 0;
 
   /** Set/Get the histogram */
-  void SetHistogram(HistogramPointerType histogram)
+  void SetHistogramList(HistogramListPointerType histogramList)
   {
-    m_Histogram = histogram;
+    m_HistogramList = histogramList;
     this->Modified();
   }
-  HistogramPointerType GetHistogram()
+  HistogramListPointerType GetHistogramList()
   {
-    return m_Histogram;
+    return m_HistogramList;
   }
+
+  /** Set the Rendering function parameters */
+  virtual void SetParameters( const ParametersType & ){};
 
   /** This method is available to allow implementation of
    * preprocessing.
    */
   virtual void Initialize(ImageInformationType){};
-
+  virtual void Initialize(){};//FIXME should disappear and be automatic (IsModified())
 protected:
   /** Constructor */
   RenderingFunction() {}
@@ -116,7 +123,7 @@ protected:
 private:
   RenderingFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  HistogramPointerType m_Histogram;
+  HistogramListPointerType m_HistogramList;
 
 };
 } // end namespace Function

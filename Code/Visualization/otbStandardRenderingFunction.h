@@ -98,15 +98,29 @@ public:
   typedef itk::RGBPixel<ScalarType>                               RGBPixelType;
   typedef itk::RGBAPixel<ScalarType>                              RGBAPixelType;
   typedef VectorPixelType                                         InternalPixelType;
+  typedef typename Superclass::ParametersType                     ParametersType;
 
   /** Extrema vector */
   typedef std::vector<ScalarType>                    ExtremaVectorType;
   typedef TTransferFunction                          TransferFunctionType;
   typedef TPixelRepresentationFunction               PixelRepresentationFunctionType;
 
-  InternalPixelType EvaluatePixelRepresentation(const PixelType &  spixel) const
+  virtual InternalPixelType EvaluatePixelRepresentation(const PixelType &  spixel) const
   {
     return m_PixelRepresentationFunction(spixel);
+  }
+
+  virtual OutputPixelType EvaluateTransferFunction(const InternalPixelType &  spixel) const
+  {
+    //FIXME do the clamping here?
+    // make sure we take an InternalPixelType as input...
+    // loop on the bands?
+//     return m_TranferFunction(spixel);
+  }
+
+  virtual unsigned int GetPixelRepresentationSize() const
+  {
+    return m_PixelRepresentationFunction.GetOutputSize();
   }
 
   /** This method is available to allow implementation of
@@ -155,56 +169,94 @@ public:
         break;
       }
     }
-  }
 
+
+
+  }
+  virtual void Initialize()//FIXME should disappear and be automatic (IsModified())
+  {
+     if(!m_UserDefinedTransferedMinMax)
+    {
+      unsigned int nbComps = m_PixelRepresentationFunction.GetOutputSize();//FIXME check what happen if the m_PixelRepresentationFunction is modified AFTER the Initialize.
+      otbMsgDevMacro(<<"AutoMinMaxRenderingFunctionSetup(): "<<nbComps<<" components, quantile= "<<100*m_AutoMinMaxQuantile<<" %");
+      // For each components, use the histogram to compute min and max
+      m_Minimum.clear();
+      m_Maximum.clear();
+      for(unsigned int comp = 0; comp < nbComps;++comp)
+      {
+        // Compute quantiles
+        m_Minimum.push_back(static_cast<ScalarType>(this->GetHistogramList()->GetNthElement(comp)->Quantile(0,m_AutoMinMaxQuantile)));
+        m_Maximum.push_back(static_cast<ScalarType>(this->GetHistogramList()->GetNthElement(comp)->Quantile(0,1-m_AutoMinMaxQuantile)));
+        otbMsgDevMacro(<<"AutoMinMaxRenderingFunctionSetup():"<< " component "<<comp
+            <<", min= "<< static_cast< typename itk::NumericTraits<ScalarType >::PrintType>(m_Minimum.back())
+            <<", max= "<<static_cast< typename itk::NumericTraits<ScalarType >::PrintType>(m_Maximum.back()));
+      }
+
+      typename ExtremaVectorType::const_iterator minIt = this->m_Minimum.begin();
+      typename ExtremaVectorType::const_iterator maxIt = this->m_Maximum.begin();
+
+      m_TransferedMinimum.clear();
+      m_TransferedMaximum.clear();
+
+      while(minIt != this->m_Minimum.end() && maxIt != this->m_Maximum.end())
+      {
+        const double v1 = this->m_TransferFunction(*minIt);
+        const double v2 = this->m_TransferFunction(*maxIt);
+        m_TransferedMinimum.push_back(static_cast<ScalarType>(std::min(v1,v2)));
+        m_TransferedMaximum.push_back(static_cast<ScalarType>(std::max(v1,v2)));
+        ++minIt;
+        ++maxIt;
+      }
+    }
+  }
 
   /** Evaluate method (scalar version) */
-  inline virtual const OutputPixelType Evaluate(ScalarType spixel) const
-  {
-    OutputPixelType resp;
-    resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
-    OutputValueType value = this->ClampRescale(
-                this->EvaluateTransferFunction(this->EvaluatePixelRepresentation(spixel)),
-                m_TransferedMinimum[0],m_TransferedMaximum[0]);
-    resp.SetRed(value);
-    resp.SetGreen(value);
-    resp.SetBlue(value);
-    return resp;
-  }
-  /** Evaluate method (vector version) */
-  inline virtual const OutputPixelType Evaluate(const VectorPixelType & vpixel) const
-  {
-    OutputPixelType resp;
-    resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
-    resp.SetRed(ClampRescale(this->m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
-    resp.SetGreen(ClampRescale(this->m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
-    resp.SetBlue(ClampRescale(this->m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
-    return resp;
-  }
-  /** Evaluate method (RGB pixel version) */
-  inline virtual const OutputPixelType Evaluate(const RGBPixelType & vpixel) const
-  {
-    OutputPixelType resp;
-    resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
-    resp.SetRed(ClampRescale(this->m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
-    resp.SetGreen(ClampRescale(this->m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
-    resp.SetBlue(ClampRescale(this->m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
-    return resp;
-  }
-  /** Evaluate method (RGBA pixel version) */
-  inline virtual const OutputPixelType Evaluate(const RGBAPixelType & vpixel) const
-  {
-    OutputPixelType resp;
+//   inline virtual const OutputPixelType Evaluate(ScalarType spixel) const
+//   {
+//     OutputPixelType resp;
 //     resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
-    if (OutputPixelType::Length == 4)
-    {//Propagate the alpha channel
-      resp[3] = static_cast<OutputValueType>(vpixel[3]);
-    }
-    resp.SetRed(ClampRescale(this->m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
-    resp.SetGreen(ClampRescale(this->m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
-    resp.SetBlue(ClampRescale(this->m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
-    return resp;
-  }
+//     OutputValueType value =
+//                 this->EvaluateTransferFunction(this->EvaluatePixelRepresentation(spixel))
+//                 ;
+//     resp.SetRed(value);
+//     resp.SetGreen(value);
+//     resp.SetBlue(value);
+//     return resp;
+//   }
+  /** Evaluate method (vector version) */
+//   inline virtual const OutputPixelType Evaluate(const VectorPixelType & vpixel) const
+//   {
+//     OutputPixelType resp;
+//     resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
+//     resp.SetRed(this->m_TransferFunction(vpixel[m_RedChannelIndex]));
+//     resp.SetGreen(this->m_TransferFunction(vpixel[m_GreenChannelIndex]));
+//     resp.SetBlue(this->m_TransferFunction(vpixel[m_BlueChannelIndex]));
+//     return resp;
+//   }
+  /** Evaluate method (RGB pixel version) */
+//   inline virtual const OutputPixelType Evaluate(const RGBPixelType & vpixel) const
+//   {
+//     OutputPixelType resp;
+//     resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
+//     resp.SetRed(ClampRescale(this->m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
+//     resp.SetGreen(ClampRescale(this->m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
+//     resp.SetBlue(ClampRescale(this->m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
+//     return resp;
+//   }
+  /** Evaluate method (RGBA pixel version) */
+//   inline virtual const OutputPixelType Evaluate(const RGBAPixelType & vpixel) const
+//   {
+//     OutputPixelType resp;
+// //     resp.Fill(itk::NumericTraits<typename OutputPixelType::ValueType>::max());
+//     if (OutputPixelType::Length == 4)
+//     {//Propagate the alpha channel
+//       resp[3] = static_cast<OutputValueType>(vpixel[3]);
+//     }
+//     resp.SetRed(ClampRescale(this->m_TransferFunction(vpixel[m_RedChannelIndex]),m_TransferedMinimum[m_RedChannelIndex],m_TransferedMaximum[m_RedChannelIndex]));
+//     resp.SetGreen(ClampRescale(this->m_TransferFunction(vpixel[m_GreenChannelIndex]),m_TransferedMinimum[m_GreenChannelIndex],m_TransferedMaximum[m_GreenChannelIndex]));
+//     resp.SetBlue(ClampRescale(this->m_TransferFunction(vpixel[m_BlueChannelIndex]),m_TransferedMinimum[m_BlueChannelIndex],m_TransferedMaximum[m_BlueChannelIndex]));
+//     return resp;
+//   }
 
   inline const std::string Describe(const ScalarType & spixel) const
   {
@@ -289,66 +341,56 @@ public:
   }
 
   /** Set the transfered minimum (scalar version) */
-  virtual void SetTransferedMinimum(ScalarType spixel)
-  {
-    m_TransferedMinimum.clear();
-    m_TransferedMinimum.push_back(spixel);
-  }
+//   virtual void SetTransferedMinimum(ScalarType spixel)
+//   {
+//     m_TransferedMinimum.clear();
+//     m_TransferedMinimum.push_back(spixel);
+//   }
 
   /** Set the transfered maximum (scalar version) */
-  virtual void SetTransferedMaximum(ScalarType spixel)
-  {
-    m_TransferedMaximum.clear();
-    m_TransferedMaximum.push_back(spixel);
-  }
+//   virtual void SetTransferedMaximum(ScalarType spixel)
+//   {
+//     m_TransferedMaximum.clear();
+//     m_TransferedMaximum.push_back(spixel);
+//   }
 
   /** Set transfered minimum (vector version) */
-  virtual void SetTransferedMinimum(const VectorPixelType & vpixel)
-  {
-    m_TransferedMinimum.clear();
-    for(unsigned int i = 0; i < vpixel.Size();++i)
-      {
-      m_TransferedMinimum.push_back(vpixel[i]);
-      }
-  }
+//   virtual void SetTransferedMinimum(const VectorPixelType & vpixel)
+//   {
+//     m_TransferedMinimum.clear();
+//     for(unsigned int i = 0; i < vpixel.Size();++i)
+//       {
+//       m_TransferedMinimum.push_back(vpixel[i]);
+//       }
+//   }
 
   /** Set transfered maximum (vector version) */
-  virtual void SetTransferedMaximum(const VectorPixelType & vpixel)
-  {
-    m_TransferedMaximum.clear();
-    for(unsigned int i = 0; i < vpixel.Size();++i)
-      {
-      m_TransferedMaximum.push_back(vpixel[i]);
-      }
-  }
-
-  /** Update transfered min and max */
-  virtual void Initialize()
-  {
-    if(!m_UserDefinedTransferedMinMax)
-      {
-      typename ExtremaVectorType::const_iterator minIt = this->m_Minimum.begin();
-      typename ExtremaVectorType::const_iterator maxIt = this->m_Maximum.begin();
-
-      m_TransferedMinimum.clear();
-      m_TransferedMaximum.clear();
-
-      while(minIt != this->m_Minimum.end() && maxIt != this->m_Maximum.end())
-        {
-        const double v1 = this->m_TransferFunction(*minIt);
-        const double v2 = this->m_TransferFunction(*maxIt);
-        m_TransferedMinimum.push_back(static_cast<ScalarType>(std::min(v1,v2)));
-        m_TransferedMaximum.push_back(static_cast<ScalarType>(std::max(v1,v2)));
-        ++minIt;
-        ++maxIt;
-        }
-      }
-  }
+//   virtual void SetTransferedMaximum(const VectorPixelType & vpixel)
+//   {
+//     m_TransferedMaximum.clear();
+//     for(unsigned int i = 0; i < vpixel.Size();++i)
+//       {
+//       m_TransferedMaximum.push_back(vpixel[i]);
+//       }
+//   }
+   virtual void SetParameters( const ParametersType & parameters)
+   {
+     if (parameters.Size() % 2 != 0)
+     {
+       itkExceptionMacro( << "Min And Max should be provided for every band to display" )
+     }
+     for (unsigned int i=0; i< parameters.Size(); ++i)
+     {
+       m_Minimum.push_back(parameters[i]);
+       ++i;
+       m_Maximum.push_back(parameters[i]);
+     }
+   }
 
 protected:
   /** Constructor */
   StandardRenderingFunction() : m_UserDefinedTransferedMinMax(false),         m_TransferedMinimum(), m_TransferedMaximum(),
-                                m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2)
+                                m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2), m_AutoMinMaxQuantile(0.02)
   {}
   /** Destructor */
   ~StandardRenderingFunction() {}
@@ -384,12 +426,16 @@ private:
 //   *  Evaluate() methods.
 //   */
 //   mutable TransferFunctionType this->m_TransferFunction;
-  TransferFunctionType m_TranferFunction;
+  TransferFunctionType m_TransferFunction;
   PixelRepresentationFunctionType m_PixelRepresentationFunction;
 
   /** If true, values mapped by the transfert function are clamped to
       user defined min/max */
   bool m_UserDefinedTransferedMinMax;
+
+  /** Min and max (after pixel representation)*/
+  ExtremaVectorType m_Minimum;
+  ExtremaVectorType m_Maximum;
 
   /** Transfered min and max */
   ExtremaVectorType m_TransferedMinimum;
@@ -398,6 +444,9 @@ private:
   unsigned int m_RedChannelIndex;
   unsigned int m_GreenChannelIndex;
   unsigned int m_BlueChannelIndex;
+
+  /** Quantile used with AutoMinMax */
+  double m_AutoMinMaxQuantile;
 
 };
 } // end namespace Functor
