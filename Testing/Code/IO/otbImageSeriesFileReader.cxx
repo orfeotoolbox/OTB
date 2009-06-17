@@ -59,12 +59,12 @@ int otbImageSeriesFileReader(int argc, char* argv[] )
     number << "-" << i;
     ossimString fileNum(number.str());
     ossimFilename outputFilename;
-    outputFilename.merge(outputFilenameBase.drive(),
-                          outputFilenameBase.path(),
+    outputFilename.merge( "", outputFilenameBase.path(),
                           outputFilenameBase.fileNoExtension()+fileNum,
                           outputFilenameBase.ext()
                         );
-    WriterType::Pointer writer = WriterType::New();
+
+	WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(outputFilename);
     writer->SetInput(reader->GetOutput(i));
     writer->Update();
