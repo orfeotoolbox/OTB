@@ -30,9 +30,6 @@
 #include "otbHaarOperator.h"
 #include "otbSplineBiOrthogonalOperator.h"
 
-#include "otbCommandLineArgumentParser.h"
-#include "otbCommandProgressUpdate.h"
-
 int otbWaveletFilterBank( int argc, char * argv[] )
 {
   const char * inputFileName = argv[1];
@@ -58,11 +55,6 @@ int otbWaveletFilterBank( int argc, char * argv[] )
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );
   filter->SetSubsampleImageFactor(1);
-
-  /* Observer */
-  typedef otb::CommandProgressUpdate< FilterType > CommandType;
-  CommandType::Pointer observer = CommandType::New();
-  filter->AddObserver( itk::ProgressEvent(), observer );
 
   filter->Update();
 

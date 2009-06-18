@@ -31,8 +31,6 @@
 #include "otbHaarOperator.h"
 #include "otbSplineBiOrthogonalOperator.h"
 
-#include "otbCommandLineArgumentParser.h"
-#include "otbCommandProgressUpdate.h"
 
 int otbWaveletTransform( int argc, char * argv[] )
 {
@@ -61,11 +59,6 @@ int otbWaveletTransform( int argc, char * argv[] )
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );
   filter->SetNumberOfDecompositions( level );
-
-  /* Observer */
-  typedef otb::CommandProgressUpdate< FilterType > CommandType;
-  CommandType::Pointer observer = CommandType::New();
-  filter->AddObserver( itk::ProgressEvent(), observer );
 
   filter->Update();
 
