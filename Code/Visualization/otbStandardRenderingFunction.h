@@ -128,7 +128,13 @@ public:
       itkExceptionMacro( << "the PixelRepresentation function should give an output of "
        << "size 1, 3 or 4 otherwise I don't know how to make an RGB of it !" );
     }
-    OutputPixelType output;
+    if (spixel.Size() != m_TransferedMinimum.size())
+    {
+      itkExceptionMacro( << " m_TransferedMinimum and pixel size do not correspond"
+         << " spixel.Size(): " << spixel.Size()
+         << " m_TransferedMinimum.size(): " << m_TransferedMinimum.size());
+    }
+    OutputPixelType output(255);
 
     if (spixel.Size() == 1)
     {
@@ -143,6 +149,7 @@ public:
       output[1] = ClampRescale(m_TransferFunction(spixel[1]),m_TransferedMinimum[1],m_TransferedMaximum[1]);
       output[2] = ClampRescale(m_TransferFunction(spixel[2]),m_TransferedMinimum[2],m_TransferedMaximum[2]);
     }
+
     if ((spixel.Size() == 4) && (output.Size() == 4))
     {
       output[3] = spixel[3];//just copy the alpha channel

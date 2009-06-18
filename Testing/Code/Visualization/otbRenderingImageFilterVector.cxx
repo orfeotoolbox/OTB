@@ -45,19 +45,22 @@ int otbRenderingImageFilterVector( int argc, char * argv[] )
   // reading input image
   reader->SetFileName(argv[1]);
   reader->GenerateOutputInformation();
-  unsigned int nbComponents = reader->GetOutput()->GetNumberOfComponentsPerPixel();
+
 
     // min & max
 //   VectorPixelType min(nbComponents);
 //   VectorPixelType max(nbComponents);
 
-  unsigned int channel = atoi(argv[3]);
+  unsigned int channelRed = atoi(argv[3]);
+  unsigned int channelGreen = atoi(argv[4]);
+  unsigned int channelBlue = atoi(argv[5]);
+  unsigned int nbComponents = 3;//To be displayed
   ParametersType parameters(2*nbComponents);
   for(unsigned int i = 0; i<nbComponents;++i)
   {
-    parameters[i]=atof(argv[4+i]);
+    parameters[i]=atof(argv[6+i]);
     ++i;
-    parameters[i]=atof(argv[4+nbComponents+i]);
+    parameters[i]=atof(argv[6+i]);
   }
 
   // rendering
@@ -66,7 +69,9 @@ int otbRenderingImageFilterVector( int argc, char * argv[] )
 //   function->SetMinimum(min);
 //   function->SetMaximum(max);
   function->SetParameters(parameters);
-  function->GetPixelRepresentationFunction().SetAllChannels(channel);
+  function->GetPixelRepresentationFunction().SetRedChannelIndex(channelRed);
+  function->GetPixelRepresentationFunction().SetGreenChannelIndex(channelGreen);
+  function->GetPixelRepresentationFunction().SetBlueChannelIndex(channelBlue);
 
   // writing
   writer->SetFileName(argv[2]);

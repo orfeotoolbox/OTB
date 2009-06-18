@@ -118,7 +118,10 @@ ${TEMP}/vrTvRenderingImageFilterVectorOutput.png
 otbRenderingImageFilterVector
 ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
 ${TEMP}/vrTvRenderingImageFilterVectorOutput.png
-0 179 0 0 0 802 0 0 0
+0 1 2 #channel to extract
+179 802 #min max
+100 600 #min max
+200 700 #min max
 )
 
 ADD_TEST(vrTvRenderingImageFilterVectorWithExpNegativeTransfer ${VISUREFAC_TESTS1}
@@ -128,7 +131,11 @@ ${TEMP}/vrTvRenderingImageFilterVectorWithExpNegativeTransferOutput.png
 otbRenderingImageFilterVectorWithExpNegativeTransfer
 ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
 ${TEMP}/vrTvRenderingImageFilterVectorWithExpNegativeTransferOutput.png
-0 0.05 179 0 0 0 802 0 0 0
+0 1 2 #channel to extract
+0.05
+179 802 #min max
+100 600 #min max
+200 700 #min max
 )
 
 #------------ otb::UniformAlphaBlendingFunction ------------

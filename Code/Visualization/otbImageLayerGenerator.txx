@@ -164,7 +164,6 @@ ImageLayerGenerator<TImageLayer>
 //     }
 //   }
 
-
   // Set the rendering function
   m_Layer->SetRenderingFunction(m_RenderingFunction);
 

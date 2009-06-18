@@ -127,6 +127,7 @@ public:
   {
     m_RenderingFunction = function;
 //     m_AutoMinMaxUpToDate = false;
+    m_RenderingFunction->SetHistogramList(this->GetHistogramList());
     m_QuicklookRenderingFilter->SetRenderingFunction(m_RenderingFunction);
     m_ExtractRenderingFilter->SetRenderingFunction(m_RenderingFunction);
     m_ScaledExtractRenderingFilter->SetRenderingFunction(m_RenderingFunction);
