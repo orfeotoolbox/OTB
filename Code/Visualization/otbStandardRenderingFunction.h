@@ -97,7 +97,8 @@ public:
   typedef itk::VariableLengthVector<ScalarType>                   VectorPixelType;
   typedef itk::RGBPixel<ScalarType>                               RGBPixelType;
   typedef itk::RGBAPixel<ScalarType>                              RGBAPixelType;
-  typedef VectorPixelType                                         InternalPixelType;
+  typedef typename itk::NumericTraits<ScalarType>::RealType       RealScalarType;
+  typedef itk::VariableLengthVector<RealScalarType>               InternalPixelType;
   typedef typename Superclass::ParametersType                     ParametersType;
 
   /** Extrema vector */
@@ -116,6 +117,8 @@ public:
     // make sure we take an InternalPixelType as input...
     // loop on the bands?
 //     return m_TranferFunction(spixel);
+    OutputPixelType dummy;
+    return dummy;
   }
 
   virtual unsigned int GetPixelRepresentationSize() const
@@ -387,6 +390,17 @@ public:
      }
    }
 
+  /** Accessor to set some specific parameters on the transfer function */
+  TransferFunctionType& GetTransferFunction()
+  {
+    return m_TransferFunction;
+  }
+  /** Accessor to set some specific parameters on the pixel representation function */
+  PixelRepresentationFunctionType& GetPixelRepresentationFunction()
+  {
+    return m_PixelRepresentationFunction;
+  }
+
 protected:
   /** Constructor */
   StandardRenderingFunction() : m_UserDefinedTransferedMinMax(false),         m_TransferedMinimum(), m_TransferedMaximum(),
@@ -413,6 +427,8 @@ protected:
                                                     /(static_cast<double>(max)-static_cast<double>(min))+0.5));
       }
   }
+
+
 
 private:
   StandardRenderingFunction(const Self&); //purposely not implemented

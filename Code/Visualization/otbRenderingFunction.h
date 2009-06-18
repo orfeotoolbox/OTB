@@ -57,14 +57,15 @@ public:
   itkTypeMacro(RenderingFunction,Object);
 
   /** PixelType macros */
-  typedef TRGBPixel                                  OutputPixelType;
-  typedef TPixel                            PixelType;
+  typedef TRGBPixel                                         OutputPixelType;
+  typedef TPixel                                            PixelType;
   typedef typename itk::NumericTraits<PixelType>::ValueType ScalarType;
-  typedef itk::VariableLengthVector<ScalarType>       VectorPixelType;
-  typedef itk::RGBPixel<ScalarType> RGBPixelType;
-  typedef itk::RGBAPixel<ScalarType> RGBAPixelType;
+  typedef itk::VariableLengthVector<ScalarType>             VectorPixelType;
+  typedef itk::RGBPixel<ScalarType>                         RGBPixelType;
+  typedef itk::RGBAPixel<ScalarType>                        RGBAPixelType;
+  typedef typename itk::NumericTraits<ScalarType>::RealType RealScalarType;
+  typedef itk::VariableLengthVector<RealScalarType>         InternalPixelType;
 
-  typedef itk::VariableLengthVector<double> InternalPixelType;
   typedef itk::Statistics::Histogram<
                   typename itk::NumericTraits<ScalarType>::RealType,1,
                   typename itk::Statistics::DenseFrequencyContainer> HistogramType;

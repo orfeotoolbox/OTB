@@ -33,7 +33,7 @@ int otbRenderingImageFilterVector( int argc, char * argv[] )
   typedef otb::ImageFileReader<ImageType>                   ReaderType;
   typedef otb::StreamingImageFileWriter<RGBImageType>       WriterType;
   typedef otb::Function::StandardRenderingFunction<VectorPixelType,itk::RGBPixel<unsigned char> > RenderingFunctionType;
-
+  typedef RenderingFilterType::RenderingFunctionType::ParametersType ParametersType;
 
   // Instantiation
   ReaderType::Pointer          reader    = ReaderType::New();
@@ -48,22 +48,24 @@ int otbRenderingImageFilterVector( int argc, char * argv[] )
   unsigned int nbComponents = reader->GetOutput()->GetNumberOfComponentsPerPixel();
 
     // min & max
-  VectorPixelType min(nbComponents);
-  VectorPixelType max(nbComponents);
+//   VectorPixelType min(nbComponents);
+//   VectorPixelType max(nbComponents);
 
   unsigned int channel = atoi(argv[3]);
-
+  ParametersType parameters(2*nbComponents);
   for(unsigned int i = 0; i<nbComponents;++i)
-    {
-    min[i]=atof(argv[4+i]);
-    max[i]=atof(argv[4+nbComponents+i]);
-    }
+  {
+    parameters[i]=atof(argv[4+i]);
+    ++i;
+    parameters[i]=atof(argv[4+nbComponents+i]);
+  }
 
   // rendering
   rendering->SetInput(reader->GetOutput());
   rendering->SetRenderingFunction(function);
-  function->SetMinimum(min);
-  function->SetMaximum(max);
+//   function->SetMinimum(min);
+//   function->SetMaximum(max);
+  function->SetParameters(parameters);
   function->GetPixelRepresentationFunction().SetAllChannels(channel);
 
   // writing

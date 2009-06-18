@@ -41,7 +41,7 @@ int otbRenderingImageFilterVectorWithExpNegativeTransfer( int argc, char * argv[
     itk::RGBPixel<unsigned char>,
     PixelRepresentationFunctionType,
     ExpNegativeFunctionType >                               RenderingFunctionType;
-
+  typedef RenderingFunctionType::ParametersType             ParametersType;
 
   // Instantiation
   ReaderType::Pointer          reader    = ReaderType::New();
@@ -56,23 +56,22 @@ int otbRenderingImageFilterVectorWithExpNegativeTransfer( int argc, char * argv[
   unsigned int nbComponents = reader->GetOutput()->GetNumberOfComponentsPerPixel();
 
     // min & max
-  VectorPixelType min(nbComponents);
-  VectorPixelType max(nbComponents);
+  ParametersType parameters(2*nbComponents);
 
   unsigned int channel = atoi(argv[3]);
 
   for(unsigned int i = 0; i<nbComponents;++i)
-    {
-    min[i]=atof(argv[5+i]);
-    max[i]=atof(argv[5+nbComponents+i]);
-    }
+  {
+    parameters[i]=atof(argv[4+i]);
+    ++i;
+    parameters[i]=atof(argv[4+nbComponents+i]);
+  }
 
   // rendering
   rendering->SetInput(reader->GetOutput());
   rendering->SetRenderingFunction(function);
-  function->SetMinimum(min);
-  function->SetMaximum(max);
-  function->SetAllChannels(channel);
+  function->SetParameters(parameters);
+  function->GetPixelRepresentationFunction().SetAllChannels(channel);
   function->GetTransferFunction().SetFactor(atof(argv[4]));
 
   // writing

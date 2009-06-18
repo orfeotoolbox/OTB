@@ -42,6 +42,7 @@ int otbImageLayerVector( int argc, char * argv[] )
   typedef otb::StreamingShrinkImageFilter<ImageType,ImageType>              ShrinkFilterType;
   typedef otb::ImageFileWriter<OutputImageType>                             WriterType;
   typedef otb::Function::StandardRenderingFunction<VectorPixelType,OutputPixelType>  RenderingFunctionType;
+  typedef RenderingFunctionType::ParametersType                             ParametersType;
   // Instantiation
   ReaderType::Pointer reader = ReaderType::New();
   ShrinkFilterType::Pointer shrinker = ShrinkFilterType::New();
@@ -52,14 +53,14 @@ int otbImageLayerVector( int argc, char * argv[] )
 
   unsigned int nbComponents = reader->GetOutput()->GetNumberOfComponentsPerPixel();
   // min & max
-  VectorPixelType min(nbComponents);
-  VectorPixelType max(nbComponents);
 
+  ParametersType parameters(2*nbComponents);
   for(unsigned int i = 0; i<nbComponents;++i)
-    {
-    min[i]=atof(argv[6+i]);
-    max[i]=atof(argv[6+nbComponents+i]);
-    }
+  {
+    parameters[i]=atof(argv[4+i]);
+    ++i;
+    parameters[i]=atof(argv[4+nbComponents+i]);
+  }
 
 
   // Quicklook
@@ -78,10 +79,9 @@ int otbImageLayerVector( int argc, char * argv[] )
   layer->SetImage(reader->GetOutput());
   layer->SetHasExtract(true);
   layer->SetHasScaledExtract(true);
-  layer->AutoMinMaxOff();
+//   layer->AutoMinMaxOff();//FIXME
   RenderingFunctionType::Pointer function = RenderingFunctionType::New();
-  function->SetMinimum(min);
-  function->SetMaximum(max);
+  function->SetParameters(parameters);
   layer->SetRenderingFunction(function);
 
   ImageType::RegionType lregion = reader->GetOutput()->GetLargestPossibleRegion();
