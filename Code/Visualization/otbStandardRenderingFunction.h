@@ -70,8 +70,8 @@ template <class TPixel, class TRGBPixel,
   class TPixelRepresentationFunction = ChannelSelectorFunctor<
         TPixel>,
   class TTransferFunction = Identity<
-        typename itk::NumericTraits<TPixel>::ValueType,
-        typename itk::NumericTraits<TPixel>::ValueType
+        typename itk::NumericTraits<typename itk::NumericTraits<TPixel>::ValueType>::RealType,
+        typename itk::NumericTraits<typename itk::NumericTraits<TPixel>::ValueType>::RealType
         > >
 class StandardRenderingFunction
   : public RenderingFunction<TPixel, TRGBPixel>
@@ -106,19 +106,48 @@ public:
   typedef TTransferFunction                          TransferFunctionType;
   typedef TPixelRepresentationFunction               PixelRepresentationFunctionType;
 
+  /** Convert the input pixel to a pixel representation that can be displayed on
+    *  RGB. For example, channel selection, modulus computation, etc.
+    */
   virtual InternalPixelType EvaluatePixelRepresentation(const PixelType &  spixel) const
   {
     return m_PixelRepresentationFunction(spixel);
   }
 
+  /** Convert the output of the pixel representation to a RGB pixel on unsigned char
+    *  to be displayed on screen. Values are contrained to 0-255 with a transfer
+    * function and a clamping operation.
+    * If the pixel representation gives one band, the image is displayed on grey level
+    * If it gives 3 bands, it is interpreted as Red, Green and Blue
+    * If there is a fourth band, it is considered as the alpha channel and is not scaled.
+    */
   virtual OutputPixelType EvaluateTransferFunction(const InternalPixelType &  spixel) const
   {
-    //FIXME do the clamping here?
-    // make sure we take an InternalPixelType as input...
-    // loop on the bands?
-//     return m_TranferFunction(spixel);
-    OutputPixelType dummy;
-    return dummy;
+    if ((spixel.Size() != 1) || (spixel.Size() != 3) || (spixel.Size() != 4))
+    {
+      itkExceptionMacro( << "the PixelRepresentation function should give an output of "
+       << "size 1, 3 or 4 otherwise I don't know how to make an RGB of it !" );
+    }
+    OutputPixelType output;
+    if (spixel.Size() == 1)
+    {
+      OutputValueType value = ClampRescale(m_TransferFunction(spixel[0]),m_TransferedMinimum[0],m_TransferedMaximum[0]);
+      output[0] = value;
+      output[1] = value;
+      output[2] = value;
+    }
+    else
+    {
+      output[0] = ClampRescale(m_TransferFunction(spixel[0]),m_TransferedMinimum[0],m_TransferedMaximum[0]);
+      output[1] = ClampRescale(m_TransferFunction(spixel[1]),m_TransferedMinimum[1],m_TransferedMaximum[1]);
+      output[2] = ClampRescale(m_TransferFunction(spixel[2]),m_TransferedMinimum[2],m_TransferedMaximum[2]);
+    }
+    if ((spixel.Size() == 4) && (output.Size() == 4))
+    {
+      output[3] = spixel[3];//just copy the alpha channel
+    }
+
+    return output;
   }
 
   virtual unsigned int GetPixelRepresentationSize() const
@@ -173,12 +202,12 @@ public:
       }
     }
 
-
-
   }
+
+
   virtual void Initialize()//FIXME should disappear and be automatic (IsModified())
   {
-     if(!m_UserDefinedTransferedMinMax)
+    if(!m_UserDefinedTransferedMinMax)
     {
       unsigned int nbComps = m_PixelRepresentationFunction.GetOutputSize();//FIXME check what happen if the m_PixelRepresentationFunction is modified AFTER the Initialize.
       otbMsgDevMacro(<<"AutoMinMaxRenderingFunctionSetup(): "<<nbComps<<" components, quantile= "<<100*m_AutoMinMaxQuantile<<" %");
@@ -380,7 +409,7 @@ public:
    {
      if (parameters.Size() % 2 != 0)
      {
-       itkExceptionMacro( << "Min And Max should be provided for every band to display" )
+       itkExceptionMacro( << "Min And Max should be provided for every band to display" );
      }
      for (unsigned int i=0; i< parameters.Size(); ++i)
      {
@@ -411,7 +440,7 @@ protected:
   /** Perform the computation for a single value (this is done in
    * order to have the same code for vector and scalar version)
    */
-  const OutputValueType ClampRescale(ScalarType input, ScalarType min, ScalarType max) const //FIXME should it be part of the transfer function
+  const OutputValueType ClampRescale(RealScalarType input, RealScalarType min, RealScalarType max) const //FIXME should it be part of the transfer function
   {
     if(input > max)
       {
@@ -423,8 +452,10 @@ protected:
       }
     else
       {
-      return static_cast<OutputValueType>(vcl_floor(255.*(static_cast<double>(input)-static_cast<double>(min))
-                                                    /(static_cast<double>(max)-static_cast<double>(min))+0.5));
+      return static_cast<OutputValueType>(vcl_floor(
+                                     255.*(static_cast<double>(input)-static_cast<double>(min))
+                                                    /(static_cast<double>(max)-static_cast<double>(min))
+                                                    +0.5));
       }
   }
 
@@ -441,8 +472,7 @@ private:
 //   * not harmful to do so and preserves const correctness of the
 //   *  Evaluate() methods.
 //   */
-//   mutable TransferFunctionType this->m_TransferFunction;
-  TransferFunctionType m_TransferFunction;
+  mutable TransferFunctionType m_TransferFunction;
   PixelRepresentationFunctionType m_PixelRepresentationFunction;
 
   /** If true, values mapped by the transfert function are clamped to
