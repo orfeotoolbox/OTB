@@ -31,6 +31,10 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
 {
   m_OutputList = OutputImageListType::New();
   m_ImageFileReaderList = ReaderListType::New();
+  m_FileName = "";
+  m_ListOfFileNames.clear();
+  m_ListOfBandSelection.clear();
+  m_ListOfRegionSelection.clear();
 }
 
 template < class TImage, class TInternalImage >
@@ -173,7 +177,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
     // Or throw an exception when not found nor readable
     TestFileExistanceAndReadability( aLine, kImageFileName );
     m_ListOfFileNames.push_back( aLine );
-                std::string imageFileName = aLine;
+    std::string imageFileName = aLine;
 
     /*
      * Reading the Band number
@@ -412,13 +416,13 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
     }
     else
     {
-      std::vector< std::string > fullPath;
+	  std::vector< std::string > fullPath;
       fullPath.push_back( itksys::SystemTools::GetFilenamePath( m_FileName ) );
       fullPath.push_back( "/" );
       fullPath.push_back( file );
 
                         std::string fullFileName = itksys::SystemTools::JoinPath( fullPath );
-
+	 
       if ( !itksys::SystemTools::FileExists( fullFileName.c_str() ) )
       {
         ImageSeriesFileReaderException e(__FILE__, __LINE__);
@@ -434,7 +438,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
       else
       {
         // At this step, image file name is modified to add its path
-        file = fullFileName;
+		file = fullFileName;
       }
     }
   }

@@ -162,12 +162,13 @@ StreamingShrinkImageFilter<TInputImage, TOutputImage>
   it.GoToBegin();
 
   typename OutputImageType::SizeType size = outputRegion.GetSize();
+  typename OutputImageType::IndexType index = outputRegion.GetIndex();
 
   for (unsigned int i=0;i<size[1]&&!it.IsAtEnd();++i)
   {
     typename InputImageType::IndexType readIndex;
-    readIndex[0] = origin[0];
-    readIndex[1] = i*m_ShrinkFactor+origin[1];
+    readIndex[0] = index[0]*m_ShrinkFactor;
+    readIndex[1] = (i+index[1])*m_ShrinkFactor;
     typename InputImageType::SizeType readSize;
     readSize[0]=size[0]*m_ShrinkFactor;
     readSize[1]=1;

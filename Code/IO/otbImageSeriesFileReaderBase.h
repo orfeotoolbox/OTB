@@ -54,7 +54,11 @@ namespace otb {
         itk::ExceptionObject(file, line, message, loc) { }
   };
 
-
+/** \class ImageSeriesFileReaderBase
+ * \brief 
+ * \sa ImageSeriesFileReader
+ */
+ 
 template < class TImage, class TInternalImage = TImage >
 class ITK_EXPORT ImageSeriesFileReaderBase : public ImageListSource< TImage >
 {

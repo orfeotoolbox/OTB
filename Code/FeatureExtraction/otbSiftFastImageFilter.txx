@@ -66,7 +66,7 @@ SiftFastImageFilter<TInputImage,TOutputPointSet>
     ++index;
   }
 
-  Keypoint keypts = GetKeypoints(siftInputImage,m_NumberOfScales);
+  Keypoint keypts = GetKeypoints(siftInputImage,m_ScalesNumber);
 
   Keypoint key = keypts;
 
@@ -92,6 +92,14 @@ SiftFastImageFilter<TInputImage,TOutputPointSet>
     }
     outputPointSet->SetPoint(numkeys,point);
     outputPointSet->SetPointData(numkeys,data);
+
+    //Fill the current point and its orientation 
+    std::pair< OutputPointType,double>     pair;
+    pair.first  = point;
+    pair.second = key->ori;
+    m_OrientationVector.push_back(pair);
+
+    //std::cout << " In SiftFastimageFilter : point " << point << " have orientation   " << key->ori<< std::endl;
 
     // go to next key
     ++numkeys;

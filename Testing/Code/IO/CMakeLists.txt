@@ -1857,8 +1857,8 @@ ADD_TEST(ioTvImageSeriesFileReader ${IO_TESTS16}
             ${BASELINE}/ioTvImageSeries-1.png
             ${TEMP}/ioTvImageSeries-1.png
         otbImageSeriesFileReader
-            -in ${EXAMPLEDATA}/GomaAvantApres
-            -out ${TEMP}/ioTvImageSeries.png
+            ${EXAMPLEDATA}/GomaAvantApres
+            ${TEMP}/ioTvImageSeries.png
 )
 
 

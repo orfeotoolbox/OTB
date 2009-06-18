@@ -71,7 +71,7 @@ int otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii(int argc, char *
 
   reader->SetFileName(infname);
   filter->SetInput(reader->GetOutput());
-  filter->SetNumberOfScales(scales);
+  filter->SetScalesNumber(scales);
   filter->Update();
   PointsIteratorType pIt = filter->GetOutput()->GetPoints()->Begin();
   PointDataIteratorType pDataIt = filter->GetOutput()->GetPointData()->Begin();
