@@ -1,11 +1,11 @@
-#include <ossim/imaging/ErsSar/ErsSarLeader/ErsSarLeader.h>
-#include <ossim/imaging/ErsSar/ErsSarLeader/ErsSarLeaderFactory.h>
-#include <ossim/imaging/ErsSar/ErsSarRecordHeader.h>
+#include "ers/ErsSar/ErsSarLeader/ErsSarLeader.h"
+#include "ers/ErsSar/ErsSarLeader/ErsSarLeaderFactory.h"
+#include "ers/ErsSar/ErsSarRecordHeader.h"
 
-#include <ossim/imaging/ErsSar/ErsSarLeader/ErsSarFileDescriptor.h>
-#include <ossim/imaging/ErsSar/ErsSarLeader/ErsSarDataSetSummary.h>
-#include <ossim/imaging/ErsSar/ErsSarLeader/ErsSarMapProjectionData.h>
-#include <ossim/imaging/ErsSar/ErsSarLeader/ErsSarFacilityData.h>
+#include "ers/ErsSar/ErsSarLeader/ErsSarFileDescriptor.h"
+#include "ers/ErsSar/ErsSarLeader/ErsSarDataSetSummary.h"
+#include "ers/ErsSar/ErsSarLeader/ErsSarMapProjectionData.h"
+#include "ers/ErsSar/ErsSarLeader/ErsSarFacilityData.h"
 
 const int ErsSarLeader::ErsSarFacilityDataID = 5;
 const int ErsSarLeader::ErsSarPlatformPositionDataID = 4;

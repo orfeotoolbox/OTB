@@ -18,7 +18,7 @@
 #include <algorithm>
 
 #include <ossim/base/ossimTrace.h>
-#include <ossim/imaging/ErsSar/ErsSarLeader/ErsSarLeader.h>
+#include "ers/ErsSar/ErsSarLeader/ErsSarLeader.h"
 #include <ossim/base/ossimKeywordNames.h>
 
 

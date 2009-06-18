@@ -4,8 +4,8 @@
 
 #include<iostream>
 #include <cstdlib>
-#include <ossim/imaging/ErsSar/ErsSarRecordHeader.h>
-#include <ossim/imaging/ErsSar/ErsSarRecord.h>
+#include "ers/ErsSar/ErsSarRecordHeader.h"
+#include "ers/ErsSar/ErsSarRecord.h"
 /**
  * @ingroup SARLeaderErsSarFileDescriptorRecord
  * @brief This class is able to read the SAR leader file descriptor record of the leader file

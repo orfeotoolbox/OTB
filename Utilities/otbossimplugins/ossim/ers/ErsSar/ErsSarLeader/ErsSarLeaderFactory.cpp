@@ -1,10 +1,10 @@
-#include <ossim/imaging/ErsSar/ErsSarLeader/ErsSarLeaderFactory.h>
+#include "ers/ErsSar/ErsSarLeader/ErsSarLeaderFactory.h"
 
-#include <ossim/imaging/ErsSar/ErsSarLeader/ErsSarDataSetSummary.h>
-#include <ossim/imaging/ErsSar/ErsSarLeader/ErsSarFileDescriptor.h>
-#include <ossim/imaging/ErsSar/ErsSarLeader/ErsSarMapProjectionData.h>
-#include <ossim/imaging/ErsSar/ErsSarLeader/ErsSarPlatformPositionData.h>
-#include <ossim/imaging/ErsSar/ErsSarLeader/ErsSarFacilityData.h>
+#include "ers/ErsSar/ErsSarLeader/ErsSarDataSetSummary.h"
+#include "ers/ErsSar/ErsSarLeader/ErsSarFileDescriptor.h"
+#include "ers/ErsSar/ErsSarLeader/ErsSarMapProjectionData.h"
+#include "ers/ErsSar/ErsSarLeader/ErsSarPlatformPositionData.h"
+#include "ers/ErsSar/ErsSarLeader/ErsSarFacilityData.h"
 
 ErsSarLeaderFactory::ErsSarLeaderFactory()
 {

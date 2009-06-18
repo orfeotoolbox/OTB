@@ -1,4 +1,4 @@
-#include <ossim/imaging/ErsSar/ErsSarLeader/ErsSarPlatformPositionData.h>
+#include "ers/ErsSar/ErsSarLeader/ErsSarPlatformPositionData.h"
 
 
 ErsSarPlatformPositionData::ErsSarPlatformPositionData() : ErsSarRecord("pos_data_rec")

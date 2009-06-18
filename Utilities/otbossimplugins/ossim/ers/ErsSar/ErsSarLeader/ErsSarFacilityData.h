@@ -3,8 +3,8 @@
 
 #include <iostream>
 #include <cstdlib>
-#include <ossim/imaging/ErsSar/ErsSarRecordHeader.h>
-#include <ossim/imaging/ErsSar/ErsSarRecord.h>
+#include "ers/ErsSar/ErsSarRecordHeader.h"
+#include "ers/ErsSar/ErsSarRecord.h"
 /**
  * @ingroup ErsSarFacilityDataRecord
  * @brief This class is able to read the SAR leader data set summary record of the leader file

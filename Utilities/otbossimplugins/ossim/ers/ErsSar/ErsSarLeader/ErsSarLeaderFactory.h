@@ -2,7 +2,7 @@
 #define ErsSarLeaderFactory_h
 
 
-#include <ossim/imaging/ErsSar/ErsSarRecordFactory.h>
+#include "ers/ErsSar/ErsSarRecordFactory.h"
 #include <map>
 /**
  * @ingroup ErsSarLeaderFile

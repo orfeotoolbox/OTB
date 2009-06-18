@@ -1,4 +1,4 @@
-#include <ossim/imaging/ErsSar/ErsSarLeader/ErsSarMapProjectionData.h>
+#include "ers/ErsSar/ErsSarLeader/ErsSarMapProjectionData.h"
 
 ErsSarMapProjectionData::ErsSarMapProjectionData() : ErsSarRecord("map_proj_data_rec")
 {

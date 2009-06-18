@@ -1,4 +1,4 @@
-#include <ossim/imaging/ErsSar/ErsSarLeader/ErsSarDataSetSummary.h>
+#include "ers/ErsSar/ErsSarLeader/ErsSarDataSetSummary.h"
 
 ErsSarDataSetSummary::ErsSarDataSetSummary() : ErsSarRecord("dataset_sum_rec")
 {

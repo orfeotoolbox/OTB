@@ -1,4 +1,4 @@
-#include <ossim/imaging/ErsSar/ErsSarLeader/ErsSarFileDescriptor.h>
+#include "ers/ErsSar/ErsSarLeader/ErsSarFileDescriptor.h"
 
 
 ErsSarFileDescriptor::ErsSarFileDescriptor() : ErsSarRecord("sar_desc_rec")
