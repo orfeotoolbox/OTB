@@ -372,9 +372,9 @@ ADD_TEST(msTvWaveletTransform ${MULTISCALE_TESTS4}
               ${BASELINE}/msTvWaveletTransform-3.tif
               ${TEMP}/msTvWaveletTransform-3.tif
          otbWaveletTransform
-          -in ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-          -l 1
-          -out ${TEMP}/msTvWaveletTransform
+          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          1
+          ${TEMP}/msTvWaveletTransform
 )
 
 # -------            otb::WaveletPacketTransform   ----------
@@ -392,9 +392,9 @@ ADD_TEST(msTvWaveletPacketTransform ${MULTISCALE_TESTS4}
               ${BASELINE}/msTvWaveletPacketTransform-3.tif
               ${TEMP}/msTvWaveletPacketTransform-3.tif
          otbWaveletPacketTransform
-          -in ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-          -l 1
-          -out ${TEMP}/msTvWaveletPacketTransform
+          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          1
+          ${TEMP}/msTvWaveletPacketTransform
 )
 
 # -------            otb::WaveletFilterBankNew   ----------
@@ -415,8 +415,8 @@ ADD_TEST(msTvWaveletFilterBank ${MULTISCALE_TESTS4}
               ${BASELINE}/msTvStationaryFilterBank-3.tif
               ${TEMP}/msTvWaveletFilterBank-3.tif
          otbWaveletFilterBank
-          -in ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-          -out ${TEMP}/msTvWaveletFilterBank
+          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+          ${TEMP}/msTvWaveletFilterBank
 )
 ENDIF(DESACTIVATED_FOR_NOW)
 

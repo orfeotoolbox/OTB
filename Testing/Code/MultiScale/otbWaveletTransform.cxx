@@ -36,6 +36,10 @@
 
 int otbWaveletTransform( int argc, char * argv[] )
 {
+  const char * inputFileName = argv[1];
+  unsigned int level = atoi(argv[2]);
+  const char * prefix = argv[3];
+  /*
   typedef otb::CommandLineArgumentParser ParserType;
   ParserType::Pointer parser = ParserType::New();
   parser->AddInputImage();
@@ -62,7 +66,7 @@ int otbWaveletTransform( int argc, char * argv[] )
   const char * inputFileName = parseResult->GetInputImage().c_str();
   unsigned int level = parseResult->IsOptionPresent("--Level" ) ?
       parseResult->GetParameterUInt("--Level") : 1;
-
+  */
   const int Dimension = 2;
   typedef double PixelType;
   typedef otb::Image< PixelType, Dimension >  ImageType;
@@ -93,7 +97,7 @@ int otbWaveletTransform( int argc, char * argv[] )
   filter->Update();
 
 
-  std::string prefix = parseResult->GetParameterString("--Output");
+  //std::string prefix = parseResult->GetParameterString("--Output");
   for ( unsigned int i = 0; i < filter->GetNumberOfOutputs(); i++ )
   {
     std::stringstream filename;
