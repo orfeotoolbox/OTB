@@ -77,8 +77,13 @@ int otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii(int argc, char * ar
   outfile << "Number of scales: "<<scales << std::endl;
   outfile << "Number of SIFT key points: " << filter->GetOutput()->GetNumberOfPoints() << std::endl;
 
+ if(filter->GetOutput()->GetPointData()->Size() != filter->GetOutput()->GetPoints()->Size() )
+	return EXIT_FAILURE;
+ if(filter->GetOutput()->GetPointData()->Size() == 0 )
+	return EXIT_FAILURE;
+
   // Copy the PointSet to std::vector< std::vector >
-  while ( pIt!=filter->GetOutput()->GetPoints()->End() )
+  while ( pIt!=filter->GetOutput()->GetPoints()->End() &&  pDataIt!=filter->GetOutput()->GetPointData()->End() )
   {
     siftDataVector siftData;
 
@@ -102,18 +107,22 @@ int otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii(int argc, char * ar
   sort(imageData.begin() , imageData.end(),CMPData);
 
   itData = imageData.begin();
+  unsigned int stopVal = static_cast<unsigned int>(filter->GetOutput()->GetPointData()->Begin().Value().Size());
 
-  while (  itData != imageData.end()   )
+  while ( itData != imageData.end() )
   {
-    int itDescriptor = 0;
-    while (itDescriptor < static_cast<int> (pDataIt.Value().Size() ))
-    {
-      outfile << "[" << std::fixed << std::setprecision(3) << (*itData)[itDescriptor+2] << " ";
+	unsigned int itDescriptor = 0;
+	outfile << "[ ";
+    while (itDescriptor < stopVal )
+    //while (itDescriptor < static_cast<int>((*itData).size()-2) )
+     {
+	  outfile << std::fixed << std::setprecision(3) << (*itData)[itDescriptor+2] << " ";
       itDescriptor++;
     }
     outfile << "]" << std::endl;
     ++itData;
   }
+
   outfile.close();
 
   return EXIT_SUCCESS;
