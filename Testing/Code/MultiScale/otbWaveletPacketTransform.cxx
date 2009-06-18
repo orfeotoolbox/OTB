@@ -41,34 +41,6 @@ int otbWaveletPacketTransform( int argc, char * argv[] )
   unsigned int level = atoi(argv[2]);
   const char * prefix = argv[3];
 
-  /*
-  typedef otb::CommandLineArgumentParser ParserType;
-  ParserType::Pointer parser = ParserType::New();
-  parser->AddInputImage();
-  parser->AddOption( "--Level", "Decomposition level of the wavelet packet (def. 1)", "-l", 1, false );
-  parser->AddOption( "--Output", "Output filename prefix", "-out", 1, true );
-  typedef otb::CommandLineArgumentParseResult ParserResultType;
-  ParserResultType::Pointer  parseResult = ParserResultType::New();
-
-  try
-  {
-    parser->ParseCommandLine( argc, argv, parseResult );
-  }
-  catch( itk::ExceptionObject & err )
-  {
-    std::cerr << "Test foward wavelet packet transform \n";
-    std::string descriptionException = err.GetDescription();
-    if ( descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos )
-      return EXIT_SUCCESS;
-    if ( descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos )
-      return EXIT_SUCCESS;
-    return EXIT_FAILURE;
-  }
-
-  const char * inputFileName = parseResult->GetInputImage().c_str();
-  unsigned int level = parseResult->IsOptionPresent("--Level" ) ?
-      parseResult->GetParameterUInt("--Level") : 1;
-  */
   const int Dimension = 2;
   typedef double PixelType;
   typedef otb::Image< PixelType, Dimension >  ImageType;
@@ -99,8 +71,6 @@ int otbWaveletPacketTransform( int argc, char * argv[] )
 
   filter->Update();
 
-
-  //std::string prefix = parseResult->GetParameterString("--Output");
   for ( unsigned int i = 0; i < filter->GetOutput()->Size(); i++ )
   {
     std::stringstream filename;
