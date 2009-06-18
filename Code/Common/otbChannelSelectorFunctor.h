@@ -45,10 +45,11 @@ namespace otb
         /** Constructor */
         ChannelSelectorFunctor()
         {
-          m_ChannelList.push_back(0);
-          m_ChannelList.push_back(1);
-          m_ChannelList.push_back(2);
+          PixelType pix;
+          ChannelListInitialization(pix);
         }
+
+
         /** Destructor */
         virtual ~ChannelSelectorFunctor() {}
 
@@ -165,7 +166,32 @@ namespace otb
           return m_ChannelList[2];
         }
       private:
+
+        void ChannelListInitialization(ScalarType inPixel)
+        {
+          m_ChannelList.push_back(0);
+        }
+        void ChannelListInitialization(VectorPixelType inPixel)
+        {
+          m_ChannelList.push_back(0);
+          m_ChannelList.push_back(1);
+          m_ChannelList.push_back(2);
+        }
+        void ChannelListInitialization(RGBPixelType inPixel)
+        {
+          m_ChannelList.push_back(0);
+          m_ChannelList.push_back(1);
+          m_ChannelList.push_back(2);
+        }
+        void ChannelListInitialization(RGBAPixelType inPixel)
+        {
+          m_ChannelList.push_back(0);
+          m_ChannelList.push_back(1);
+          m_ChannelList.push_back(2);
+          m_ChannelList.push_back(3);
+        }
         std::vector<unsigned int> m_ChannelList;
+
     };
 
 

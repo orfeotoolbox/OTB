@@ -79,8 +79,8 @@ int otbImageLayerVector( int argc, char * argv[] )
   layer->SetImage(reader->GetOutput());
   layer->SetHasExtract(true);
   layer->SetHasScaledExtract(true);
-//   layer->AutoMinMaxOff();//FIXME
   RenderingFunctionType::Pointer function = RenderingFunctionType::New();
+  function->AutoMinMaxOff();
   function->SetParameters(parameters);
   layer->SetRenderingFunction(function);
 

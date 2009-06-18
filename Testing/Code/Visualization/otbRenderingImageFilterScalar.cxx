@@ -50,7 +50,6 @@ int otbRenderingImageFilterScalar( int argc, char * argv[] )
 //   rendering->GetRenderingFunction()->SetMinimum(min);
 //   rendering->GetRenderingFunction()->SetMaximum(max);
   rendering->GetRenderingFunction()->SetParameters(parameters);
-
   // writing
   writer->SetFileName(argv[2]);
   writer->SetInput(rendering->GetOutput());

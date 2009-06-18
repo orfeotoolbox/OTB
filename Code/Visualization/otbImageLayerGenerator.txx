@@ -125,44 +125,44 @@ ImageLayerGenerator<TImageLayer>
 
   // Setup channels
 //   switch(m_Image->GetNumberOfComponentsPerPixel())
-  switch( PixelSize(m_Image, m_Image->GetBufferPointer()) )
-  {
-    case 1:
-    {
-      m_RenderingFunction->Initialize(SCALAR);
-      break;
-    }
-    case 2:
-    {
-      m_RenderingFunction->Initialize(TWOBANDS);
-      break;
-    }
-    case 3:
-    {
-      m_RenderingFunction->Initialize(THREEBANDS);
-      break;
-    }
-    case 4:
-    {
-      // Get the sensor ID
-      ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
-      std::string sensorID = imageMetadataInterface->GetSensorID(m_Image->GetMetaDataDictionary());
-      if (sensorID.find("Spot") != std::string::npos)
-      {
-        m_RenderingFunction->Initialize(SENSORINVERTED);
-      }
-      else
-      {
-        m_RenderingFunction->Initialize(SENSORWAVELENTHORDER);
-      }
-      break;
-    }
-    default:
-    {
-      //Discard
-      break;
-    }
-  }
+//   switch( PixelSize(m_Image, m_Image->GetBufferPointer()) )
+//   {
+//     case 1:
+//     {
+//       m_RenderingFunction->Initialize(SCALAR);
+//       break;
+//     }
+//     case 2:
+//     {
+//       m_RenderingFunction->Initialize(TWOBANDS);
+//       break;
+//     }
+//     case 3:
+//     {
+//       m_RenderingFunction->Initialize(THREEBANDS);
+//       break;
+//     }
+//     case 4:
+//     {
+//       // Get the sensor ID
+//       ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
+//       std::string sensorID = imageMetadataInterface->GetSensorID(m_Image->GetMetaDataDictionary());
+//       if (sensorID.find("Spot") != std::string::npos)
+//       {
+//         m_RenderingFunction->Initialize(SENSORINVERTED);
+//       }
+//       else
+//       {
+//         m_RenderingFunction->Initialize(SENSORWAVELENTHORDER);
+//       }
+//       break;
+//     }
+//     default:
+//     {
+//       //Discard
+//       break;
+//     }
+//   }
 
 
   // Set the rendering function

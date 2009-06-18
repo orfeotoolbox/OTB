@@ -95,12 +95,12 @@ public:
   virtual OutputPixelType EvaluateTransferFunction(const InternalPixelType &  spixel) const = 0;
 
   /** Set/Get the histogram */
-  void SetHistogramList(HistogramListPointerType histogramList)
+  virtual void SetHistogramList(HistogramListPointerType histogramList)
   {
     m_HistogramList = histogramList;
     this->Modified();
   }
-  HistogramListPointerType GetHistogramList()
+  virtual HistogramListPointerType GetHistogramList()
   {
     return m_HistogramList;
   }
@@ -111,7 +111,7 @@ public:
   /** This method is available to allow implementation of
    * preprocessing.
    */
-  virtual void Initialize(ImageInformationType){};
+//   virtual void Initialize(ImageInformationType){};
   virtual void Initialize(){};//FIXME should disappear and be automatic (IsModified())
 protected:
   /** Constructor */

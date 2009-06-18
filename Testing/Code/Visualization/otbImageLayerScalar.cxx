@@ -67,8 +67,9 @@ int otbImageLayerScalar( int argc, char * argv[] )
   layer->SetImage(reader->GetOutput());
   layer->SetHasExtract(true);
   layer->SetHasScaledExtract(true);
-//   layer->AutoMinMaxOff();//FIXME
+
   RenderingFunctionType::Pointer function = RenderingFunctionType::New();
+  function->AutoMinMaxOff();
   ParametersType parameters(2);
   parameters[0] = min;
   parameters[1] = max;

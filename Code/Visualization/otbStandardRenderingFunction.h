@@ -123,12 +123,13 @@ public:
     */
   virtual OutputPixelType EvaluateTransferFunction(const InternalPixelType &  spixel) const
   {
-    if ((spixel.Size() != 1) || (spixel.Size() != 3) || (spixel.Size() != 4))
+    if ((spixel.Size() != 1) && (spixel.Size() != 3) && (spixel.Size() != 4))
     {
       itkExceptionMacro( << "the PixelRepresentation function should give an output of "
        << "size 1, 3 or 4 otherwise I don't know how to make an RGB of it !" );
     }
     OutputPixelType output;
+
     if (spixel.Size() == 1)
     {
       OutputValueType value = ClampRescale(m_TransferFunction(spixel[0]),m_TransferedMinimum[0],m_TransferedMaximum[0]);
@@ -158,62 +159,71 @@ public:
   /** This method is available to allow implementation of
    * preprocessing.
    */
-  virtual void Initialize(ImageInformationType imageInformation)
-  {
-    switch(imageInformation)
-    {
-      case SCALAR:
-      {
-        m_PixelRepresentationFunction.SetAllChannels(0);
-        break;
-      }
-      case TWOBANDS:
-      {
-        m_PixelRepresentationFunction.SetAllChannels(0);
-        break;
-      }
-      case THREEBANDS:
-      {
-        m_PixelRepresentationFunction.SetRedChannelIndex(0);
-        m_PixelRepresentationFunction.SetGreenChannelIndex(1);
-        m_PixelRepresentationFunction.SetBlueChannelIndex(2);
-        break;
-      }
-      case SENSORINVERTED:
-      {
-        // Handle Spot like channel order
-        m_PixelRepresentationFunction.SetRedChannelIndex(0);//XS3
-        m_PixelRepresentationFunction.SetGreenChannelIndex(1);//XS2
-        m_PixelRepresentationFunction.SetBlueChannelIndex(2);//XS1
-        break;
-      }
-      case SENSORWAVELENTHORDER:
-      {
-        // Handle quickbird like channel order (wavelenght order)
-        m_PixelRepresentationFunction.SetRedChannelIndex(2);
-        m_PixelRepresentationFunction.SetGreenChannelIndex(1);
-        m_PixelRepresentationFunction.SetBlueChannelIndex(0);
-        break;
-      }
-      default:
-      {
-        //Discard
-        break;
-      }
-    }
-
-  }
+//   virtual void Initialize(ImageInformationType imageInformation)
+//   {
+//     if (!m_DefaultChannelsAreSet)
+//     {
+//       switch(imageInformation)
+//       {
+//         case SCALAR:
+//         {
+//           m_PixelRepresentationFunction.SetAllChannels(0);
+//           break;
+//         }
+//         case TWOBANDS:
+//         {
+//           m_PixelRepresentationFunction.SetAllChannels(0);
+//           break;
+//         }
+//         case THREEBANDS:
+//         {
+//           m_PixelRepresentationFunction.SetRedChannelIndex(0);
+//           m_PixelRepresentationFunction.SetGreenChannelIndex(1);
+//           m_PixelRepresentationFunction.SetBlueChannelIndex(2);
+//           break;
+//         }
+//         case SENSORINVERTED:
+//         {
+//           // Handle Spot like channel order
+//           m_PixelRepresentationFunction.SetRedChannelIndex(0);//XS3
+//           m_PixelRepresentationFunction.SetGreenChannelIndex(1);//XS2
+//           m_PixelRepresentationFunction.SetBlueChannelIndex(2);//XS1
+//           break;
+//         }
+//         case SENSORWAVELENTHORDER:
+//         {
+//           // Handle quickbird like channel order (wavelenght order)
+//           m_PixelRepresentationFunction.SetRedChannelIndex(2);
+//           m_PixelRepresentationFunction.SetGreenChannelIndex(1);
+//           m_PixelRepresentationFunction.SetBlueChannelIndex(0);
+//           break;
+//         }
+//         default:
+//         {
+//           //Discard
+//           break;
+//         }
+//       }
+//       m_DefaultChannelsAreSet = true;
+//     }
+//   }
 
 
   virtual void Initialize()//FIXME should disappear and be automatic (IsModified())
   {
-    if(!m_UserDefinedTransferedMinMax)
+    if(m_AutoMinMax)
     {
       unsigned int nbComps = m_PixelRepresentationFunction.GetOutputSize();//FIXME check what happen if the m_PixelRepresentationFunction is modified AFTER the Initialize.
       otbMsgDevMacro(<<"AutoMinMaxRenderingFunctionSetup(): "<<nbComps<<" components, quantile= "<<100*m_AutoMinMaxQuantile<<" %");
       // For each components, use the histogram to compute min and max
       m_Minimum.clear();
       m_Maximum.clear();
+
+      if (this->GetHistogramList().IsNull())
+      {
+        itkExceptionMacro( << "To Compute min/max automatically, Histogram should be "
+         <<"provided to the rendering function with SetHistogramList()" );
+      }
       for(unsigned int comp = 0; comp < nbComps;++comp)
       {
         // Compute quantiles
@@ -361,16 +371,16 @@ public:
 
 
   /** Togle the UserDefinedTransferedMinMax mode */
-  void SetUserDefinedTransferedMinMax(bool val)
-  {
-    m_UserDefinedTransferedMinMax = val;
-  }
+//   void SetUserDefinedTransferedMinMax(bool val)
+//   {
+//     m_UserDefinedTransferedMinMax = val;
+//   }
 
   /** Togle the UserDefinedTransferedMinMax mode */
-  bool GetUserDefinedTransferedMinMax(void)
-  {
-    return m_UserDefinedTransferedMinMax;
-  }
+//   bool GetUserDefinedTransferedMinMax(void)
+//   {
+//     return m_UserDefinedTransferedMinMax;
+//   }
 
   /** Set the transfered minimum (scalar version) */
 //   virtual void SetTransferedMinimum(ScalarType spixel)
@@ -417,6 +427,8 @@ public:
        ++i;
        m_Maximum.push_back(parameters[i]);
      }
+     m_AutoMinMax = false;
+     UpdateTransferedMinMax();
    }
 
   /** Accessor to set some specific parameters on the transfer function */
@@ -430,17 +442,30 @@ public:
     return m_PixelRepresentationFunction;
   }
 
+    /** Set/Get the AutoMinMax mode */
+  itkSetMacro(AutoMinMax,bool);
+  itkGetMacro(AutoMinMax,bool);
+  itkBooleanMacro(AutoMinMax);
+
+  typedef typename Superclass::HistogramListPointerType HistogramListPointerType;
+  virtual void SetHistogramList(HistogramListPointerType histogramList)
+  {
+    Superclass::SetHistogramList(histogramList);
+    UpdateTransferedMinMax();
+  }
+
 protected:
   /** Constructor */
-  StandardRenderingFunction() : m_UserDefinedTransferedMinMax(false),         m_TransferedMinimum(), m_TransferedMaximum(),
-                                m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2), m_AutoMinMaxQuantile(0.02)
+  StandardRenderingFunction() : m_TransferedMinimum(), m_TransferedMaximum(),
+                                m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2), m_AutoMinMax(true),
+                                m_AutoMinMaxQuantile(0.02), m_DefaultChannelsAreSet(false)
   {}
   /** Destructor */
   ~StandardRenderingFunction() {}
   /** Perform the computation for a single value (this is done in
    * order to have the same code for vector and scalar version)
    */
-  const OutputValueType ClampRescale(RealScalarType input, RealScalarType min, RealScalarType max) const //FIXME should it be part of the transfer function
+  const OutputValueType ClampRescale(RealScalarType input, RealScalarType min, RealScalarType max) const
   {
     if(input > max)
       {
@@ -459,7 +484,20 @@ protected:
       }
   }
 
-
+  void UpdateTransferedMinMax()
+  {
+    if (m_Minimum.size() != m_Maximum.size())
+    {
+      itkExceptionMacro( << "m_Minimum and m_Maximum should have the same size" );
+    }
+    m_TransferedMinimum.clear();
+    m_TransferedMaximum.clear();
+    for (unsigned int i=0; i<m_Minimum.size(); ++i)
+    {
+      m_TransferedMinimum.push_back(m_TransferFunction(m_Minimum[i]));
+      m_TransferedMaximum.push_back(m_TransferFunction(m_Maximum[i]));
+    }
+  }
 
 private:
   StandardRenderingFunction(const Self&); //purposely not implemented
@@ -477,7 +515,7 @@ private:
 
   /** If true, values mapped by the transfert function are clamped to
       user defined min/max */
-  bool m_UserDefinedTransferedMinMax;
+//   bool m_UserDefinedTransferedMinMax;
 
   /** Min and max (after pixel representation)*/
   ExtremaVectorType m_Minimum;
@@ -491,9 +529,13 @@ private:
   unsigned int m_GreenChannelIndex;
   unsigned int m_BlueChannelIndex;
 
+  /** Boolean for AutoMinMax*/
+  bool m_AutoMinMax;
+
   /** Quantile used with AutoMinMax */
   double m_AutoMinMaxQuantile;
 
+  bool m_DefaultChannelsAreSet;
 };
 } // end namespace Functor
 } // end namespace otb
