@@ -204,7 +204,7 @@ ImageLayer<TImage,TOutputImage>
     otbMsgDevMacro(<<"ImageLayer::RenderHistogram()"<<" ("<<this->GetName()<<")"<< " Histogram has been updated");
 
     // Retrieve the histogram
-    m_HistogramList = histogramFilter->GetOutput();
+    this->SetHistogramList(histogramFilter->GetOutput());
     }
 }
 
@@ -220,9 +220,9 @@ ImageLayer<TImage,TOutputImage>
 //       {
 //       itkExceptionMacro(<<"Empty histogram, can not use auto min/max evaluation.");
 //       }
-//
-//     otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup():"<<" ("<<this->GetName()<<")"<< " Updating min/max from histogram");
 
+//     otbMsgDevMacro(<<"ImageLayer::AutoMinMaxRenderingFunctionSetup():"<<" ("<<this->GetName()<<")"<< " Updating min/max from histogram");
+//
 //     const unsigned int nbComps = m_Image->GetNumberOfComponentsPerPixel();
 //     const unsigned int nbComps = PixelSize(m_Image, m_Image->GetBufferPointer());
 //     typename RenderingFunctionType::ExtremaVectorType min, max;
@@ -239,7 +239,7 @@ ImageLayer<TImage,TOutputImage>
 //           <<", max= "<<static_cast< typename itk::NumericTraits<typename RenderingFunctionType::ScalarType >::PrintType>(max.back()));
 //       }
 
-    // Setup rendering function
+//     Setup rendering function
 //     m_RenderingFunction->SetMinimum(min);
 //     m_RenderingFunction->SetMaximum(max);
 
@@ -258,7 +258,7 @@ ImageLayer<TImage,TOutputImage>
   // If required, use histogram for auto min/max
 //   if(m_AutoMinMax)
 //     {
-//     this->RenderHistogram();
+    this->RenderHistogram();
 //     this->AutoMinMaxRenderingFunctionSetup();
 //     }
   // Ensure rendering function intialization

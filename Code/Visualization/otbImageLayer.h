@@ -214,6 +214,20 @@ virtual void RenderHistogram();
   unsigned int PixelSize(ImagePointerType image, RGBPixelType* v) const;
   unsigned int PixelSize(ImagePointerType image, RGBAPixelType* v) const;
 
+  /** Set the histogram list: used internaly to propagate the change to
+    * the rendering function
+    */
+  void SetHistogramList(HistogramListPointerType histogramList)
+  {
+    m_HistogramList = histogramList;
+    if (m_RenderingFunction.IsNotNull())
+    {
+      m_RenderingFunction->SetHistogramList(histogramList);
+    }
+    //Suggestion: the rendering function could have instead a pointer
+    //toward its layer.
+  }
+
 private:
   ImageLayer(const Self&);     // purposely not implemented
   void operator=(const Self&); // purposely not implemented
@@ -234,8 +248,8 @@ private:
   unsigned int                 m_NumberOfHistogramBins;
 
   /** Use histogram quantiles for min/max */
-//   bool m_AutoMinMax;
-//   bool m_AutoMinMaxUpToDate;
+  bool m_AutoMinMax;
+  bool m_AutoMinMaxUpToDate;
 
   /** Quantile used with AutoMinMax */
 //   double m_AutoMinMaxQuantile;
