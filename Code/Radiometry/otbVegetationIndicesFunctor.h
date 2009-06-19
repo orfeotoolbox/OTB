@@ -57,7 +57,7 @@ public:
     return this->Evaluate(r,nir);
   };
   /// Constructor
-  RAndNIRIndexBase() : m_RedIndex(3), m_NIRIndex(4) {};
+  RAndNIRIndexBase() :  m_EpsilonToBeConsideredAsZero(0.0000001), m_RedIndex(3), m_NIRIndex(4) {};
   /// Desctructor
   virtual ~RAndNIRIndexBase() {};
 
@@ -85,6 +85,7 @@ protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
   virtual TOutput Evaluate(const TInput1 & r, const TInput2 & nir) const = 0;
+  const double m_EpsilonToBeConsideredAsZero;
 
 private:
   unsigned int m_RedIndex;
@@ -121,7 +122,7 @@ public:
     return this->Evaluate(r,b,nir);
   };
   /// Constructor
-  RAndBAndNIRIndexBase() : m_RedIndex(3), m_BlueIndex(1), m_NIRIndex(4) {};
+  RAndBAndNIRIndexBase() : m_EpsilonToBeConsideredAsZero(0.0000001), m_RedIndex(3), m_BlueIndex(1), m_NIRIndex(4) {};
   /// Desctructor
   virtual ~RAndBAndNIRIndexBase() {};
 
@@ -160,6 +161,7 @@ protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
   virtual TOutput Evaluate(const TInput1 & r, const TInput2& b, const TInput3 & nir) const = 0;
+  const double m_EpsilonToBeConsideredAsZero;
 
 private:
   unsigned int m_RedIndex;
@@ -197,7 +199,7 @@ public:
     return this->Evaluate(r,g,nir);
   };
   /// Constructor
-  RAndGAndNIRIndexBase() : m_RedIndex(3), m_GreenIndex(2), m_NIRIndex(4) {};
+  RAndGAndNIRIndexBase() : m_EpsilonToBeConsideredAsZero(0.0000001), m_RedIndex(3), m_GreenIndex(2), m_NIRIndex(4)  {};
   /// Desctructor
   virtual ~RAndGAndNIRIndexBase() {};
 
@@ -236,6 +238,7 @@ protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
   virtual TOutput Evaluate(const TInput1 & r, const TInput2& g, const TInput3 & nir) const = 0;
+  const double m_EpsilonToBeConsideredAsZero;
 
 private:
   unsigned int m_RedIndex;
@@ -265,7 +268,7 @@ protected:
   {
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
-    if ( (nir + r) == 0 )
+    if ( vcl_abs(dnir + dr) < this->m_EpsilonToBeConsideredAsZero )
       {
       return static_cast<TOutput>(0.);
       }
@@ -293,7 +296,7 @@ protected:
   {
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
-    if ( r == 0 )
+    if ( vcl_abs(dr)  < this->m_EpsilonToBeConsideredAsZero  )
       {
       return static_cast<TOutput>(0.);
       }
@@ -382,7 +385,7 @@ protected:
     double dnir = static_cast<double>(nir);
     double dr = static_cast<double>(r);
     double denominator = dnir + dr + m_L;
-    if ( denominator == 0. )
+    if ( vcl_abs(denominator)  < this->m_EpsilonToBeConsideredAsZero  )
       {
       return static_cast<TOutput>(0.);
       }
@@ -444,7 +447,7 @@ protected:
     double dnir = static_cast<double>(nir);
     double dr = static_cast<double>(r);
     double denominator = m_A*dnir + dr + m_X*(1.+m_A*m_A);
-    if ( denominator == 0. )
+    if ( vcl_abs(denominator) < this->m_EpsilonToBeConsideredAsZero  )
       {
       return static_cast<TOutput>(0.);
       }
@@ -515,7 +518,7 @@ protected:
     double dnu;
     double dnumerateur_nu;
     double ddenominateur_nu = dnir + dr + 0.5;
-    if ( ddenominateur_nu == 0 )
+    if ( vcl_abs(ddenominateur_nu)  < this->m_EpsilonToBeConsideredAsZero  )
       {
         dnu = 0;
       }
@@ -526,7 +529,7 @@ protected:
       }
 
     double ddenominateur_GEMI = 1 - dr;
-    if ( ddenominateur_GEMI == 0. )
+    if ( vcl_abs(ddenominateur_GEMI)  < this->m_EpsilonToBeConsideredAsZero )
     {
       return static_cast<TOutput>(0.);
     }
@@ -566,7 +569,7 @@ protected:
   {
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
-	
+
     return (dnir -m_S*dr);
   }
 private:
@@ -626,11 +629,11 @@ protected:
 
     double denominator = dnir + dr + dL;
 
-	if ( denominator== 0. )
+    if ( vcl_abs(denominator)  < this->m_EpsilonToBeConsideredAsZero  )
       {
       return static_cast<TOutput>(0.);
       }
-	 
+
     return ( static_cast<TOutput>(  ((dnir-dr)*(1+dL))/denominator ) );
   }
 
@@ -696,7 +699,7 @@ protected:
     double dfact2 = (m_LambdaR - m_LambdaG) / m_LambdaR;
     double dterm1;
     double dterm2;
-    if( (dnir-dr) == 0 )
+    if( vcl_abs(dnir-dr)  < this->m_EpsilonToBeConsideredAsZero  )
     {
       dterm1 = 0;
     }
@@ -705,7 +708,7 @@ protected:
       dterm1 = vcl_atan(dfact1/(dnir - dr));
     }
 
-    if( (dg-dr) == 0 )
+    if( vcl_abs(dg-dr)  < this->m_EpsilonToBeConsideredAsZero  )
     {
       dterm2 = 0;
     }
@@ -764,7 +767,7 @@ protected:
     double dnir = static_cast<double>(nir);
     double RHOrb = dr - m_Gamma*(db - dr);
     double denominator = dnir + RHOrb;
-    if ( denominator == 0. )
+    if ( vcl_abs(denominator)  < this->m_EpsilonToBeConsideredAsZero  )
       {
       return static_cast<TOutput>(0.);
       }
@@ -836,7 +839,7 @@ protected:
     double dnir = static_cast<double>(nir);
     double dRB = dr - m_Gamma*(db - dr);
     double denominator = dRB + m_A*dnir - m_A*m_B + m_X*(1.+m_A*m_A);
-    if ( denominator == 0. )
+    if ( vcl_abs(denominator)  < this->m_EpsilonToBeConsideredAsZero  )
     {
       return static_cast<TOutput>(0.);
     }
@@ -914,7 +917,7 @@ protected:
     double db = static_cast<double>(b);
     double dnir = static_cast<double>(nir);
     double denominator = dnir + m_C1*dr - m_C2*db + m_L;
-    if ( denominator == 0. )
+    if ( vcl_abs(denominator) < this->m_EpsilonToBeConsideredAsZero  )
       {
       return ( static_cast<TOutput>(0.) );
       }
@@ -956,7 +959,7 @@ protected:
   {
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
-    if ((dnir + dr) == 0)
+    if (vcl_abs(dnir + dr)  < this->m_EpsilonToBeConsideredAsZero )
     {
       return static_cast<TOutput>(0.);
     }
@@ -993,8 +996,13 @@ protected:
   {
     double dval = this->GetNDVI()(r,nir) + 0.5;
     if(dval<0)
+    {
       return  ( static_cast<TOutput>(0));
-    return ( static_cast<TOutput>(vcl_sqrt(dval)));
+    }
+    else
+    {
+      return ( static_cast<TOutput>(vcl_sqrt(dval)));
+    }
   }
 private:
   const NDVIFunctorType m_NDVIfunctor;
