@@ -174,7 +174,8 @@ ImageLayer<TImage,TOutputImage>
 //     listSample->SetMeasurementVectorSize(histogramSource->GetNumberOfComponentsPerPixel());
 
     //Note: The GetBufferPointer is just used for overloading resolution
-    listSample->SetMeasurementVectorSize(PixelSize(histogramSource, histogramSource->GetBufferPointer()));
+//     listSample->SetMeasurementVectorSize(PixelSize(histogramSource, histogramSource->GetBufferPointer()));
+     listSample->SetMeasurementVectorSize(m_RenderingFunction->GetPixelRepresentationSize());
 
     // Fill the samples list
     it.GoToBegin();
@@ -190,8 +191,8 @@ ImageLayer<TImage,TOutputImage>
       listSample->PushBack(sample);
       ++it;
       }
-      otbMsgDevMacro(<<"ImageLayer::RenderHistogram()"<<" ("<<this->GetName()<<")"<< " Sample list generated ("<<listSample->Size()<<" samples, "<< PixelSize(histogramSource, histogramSource->GetBufferPointer())<<" bands)");
-
+//       otbMsgDevMacro(<<"ImageLayer::RenderHistogram()"<<" ("<<this->GetName()<<")"<< " Sample list generated ("<<listSample->Size()<<" samples, "<< PixelSize(histogramSource, histogramSource->GetBufferPointer())<<" bands)");
+       otbMsgDevMacro(<<"ImageLayer::RenderHistogram()"<<" ("<<this->GetName()<<")"<< " Sample list generated ("<<listSample->Size()<<" samples, "<< m_RenderingFunction->GetPixelRepresentationSize() <<" bands)");
 
     // Create the histogram generation filter
     typename HistogramFilterType::Pointer histogramFilter = HistogramFilterType::New();
@@ -322,41 +323,41 @@ template <class TImage, class TOutputImage>
 }
 
 
-//This is needed to create the histogram as a VariableLengthVector
-//from a RGBPixel or RGBAPixel image.
-namespace itk
-{
- template< class T > inline VariableLengthVector<T> operator+
-     ( const VariableLengthVector<T> &lhs, const RGBPixel< T > &rhs )
-{
-//   if( lhs.Size() != rhs.Size() )
+// //This is needed to create the histogram as a VariableLengthVector
+// //from a RGBPixel or RGBAPixel image.
+// namespace itk
+// {
+//  template< class T > inline VariableLengthVector<T> operator+
+//      ( const VariableLengthVector<T> &lhs, const RGBPixel< T > &rhs )
+// {
+// //   if( lhs.Size() != rhs.Size() )
+// //   {
+// //   itkGenericExceptionMacro( << "Cannot add VariableLengthVector of length "
+// //       <<  lhs.Size() << " and " << rhs.Size() );
+// //   }
+//   VariableLengthVector<T> out(lhs);
+//   for( typename VariableLengthVector<T>::ElementIdentifier i=0; i< rhs.Size(); i++ )
 //   {
-//   itkGenericExceptionMacro( << "Cannot add VariableLengthVector of length "
-//       <<  lhs.Size() << " and " << rhs.Size() );
+//     out[i] += rhs[i];
 //   }
-  VariableLengthVector<T> out(lhs);
-  for( typename VariableLengthVector<T>::ElementIdentifier i=0; i< rhs.Size(); i++ )
-  {
-    out[i] += rhs[i];
-  }
-  return out;
-}
- template< class T > inline VariableLengthVector<T> operator+
-     ( const VariableLengthVector<T> &lhs, const RGBAPixel< T > &rhs )
-{
-//   if( lhs.Size() != rhs.Size() )
+//   return out;
+// }
+//  template< class T > inline VariableLengthVector<T> operator+
+//      ( const VariableLengthVector<T> &lhs, const RGBAPixel< T > &rhs )
+// {
+// //   if( lhs.Size() != rhs.Size() )
+// //   {
+// //     itkGenericExceptionMacro( << "Cannot add VariableLengthVector of length "
+// //         <<  lhs.Size() << " and " << rhs.Size() );
+// //   }
+//   VariableLengthVector<T> out(lhs);
+//   for( typename VariableLengthVector<T>::ElementIdentifier i=0; i< rhs.Size(); i++ )
 //   {
-//     itkGenericExceptionMacro( << "Cannot add VariableLengthVector of length "
-//         <<  lhs.Size() << " and " << rhs.Size() );
+//     out[i] += rhs[i];
 //   }
-  VariableLengthVector<T> out(lhs);
-  for( typename VariableLengthVector<T>::ElementIdentifier i=0; i< rhs.Size(); i++ )
-  {
-    out[i] += rhs[i];
-  }
-  return out;
-}
-
-}
+//   return out;
+// }
+//
+// }
 
 #endif

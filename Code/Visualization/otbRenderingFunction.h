@@ -72,6 +72,8 @@ public:
   typedef typename HistogramType::Pointer HistogramPointerType;
   typedef ObjectList<HistogramType>                         HistogramListType;
   typedef typename HistogramListType::Pointer               HistogramListPointerType;
+  typedef itk::VariableLengthVector<ScalarType>                       SampleType;
+  typedef itk::Statistics::ListSample<SampleType>                     ListSampleType;
 
   typedef  itk::Array< double >           ParametersType;
 
@@ -94,15 +96,21 @@ public:
   /** Evaluate transfer function */
   virtual OutputPixelType EvaluateTransferFunction(const InternalPixelType &  spixel) const = 0;
 
-  /** Set/Get the histogram */
-  virtual void SetHistogramList(HistogramListPointerType histogramList)
-  {
-    m_HistogramList = histogramList;
-    this->Modified();
-  }
+  /** Set/Get the sample list */
+//   virtual void SetHistogramList(HistogramListPointerType histogramList)
+//   {
+//     m_HistogramList = histogramList;
+//     this->Modified();
+//   }
   virtual HistogramListPointerType GetHistogramList()
   {
     return m_HistogramList;
+  }
+
+  virtual void SetSampleList(SampleListPointerType sampleList)
+  {
+    m_SampleList = sampleList;
+    this->Modified();
   }
 
   /** Set the Rendering function parameters */
@@ -119,13 +127,17 @@ protected:
   /** Destructor */
   virtual ~RenderingFunction() {}
 
+  void RenderHistogram()
+  {
+
+  }
 
 
 private:
   RenderingFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   HistogramListPointerType m_HistogramList;
-
+  SampleListPointerType m_SampleList;
 };
 } // end namespace Function
 } // end namepsace otb
