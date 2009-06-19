@@ -21,7 +21,7 @@
 #include "otbImageLayerBase.h"
 #include "itkVariableLengthVector.h"
 #include "itkDenseFrequencyContainer.h"
-#include "otbRenderingImageFilter.h"
+
 #include "itkExtractImageFilter.h"
 #include "itkListSample.h"
 #include "otbListSampleToHistogramListGenerator.h"
@@ -73,13 +73,13 @@ public:
 
 
   /** Histogram typedef */
-   typedef itk::Statistics::DenseFrequencyContainer                   DFContainerType;
+//    typedef itk::Statistics::DenseFrequencyContainer                   DFContainerType;
 
   typedef itk::VariableLengthVector<ScalarType>                       SampleType;
   typedef itk::Statistics::ListSample<SampleType>                     ListSampleType;
 
-  typedef otb::ListSampleToHistogramListGenerator
-      <ListSampleType,ScalarType,DFContainerType>                     HistogramFilterType;
+//   typedef otb::ListSampleToHistogramListGenerator
+//       <ListSampleType,ScalarType,DFContainerType>                     HistogramFilterType;
   typedef typename HistogramFilterType::HistogramType                 HistogramType;
   typedef typename HistogramType::Pointer                             HistogramPointerType;
   typedef typename HistogramFilterType::HistogramListType             HistogramListType;
@@ -90,8 +90,8 @@ public:
   typedef typename RenderingFilterType::Pointer                       RenderingFilterPointerType;
   typedef typename RenderingFilterType::RenderingFunctionType         RenderingFunctionType;
   typedef typename RenderingFunctionType::Pointer                     RenderingFunctionPointerType;
-  typedef Function::StandardRenderingFunction<PixelType,
-                                    typename TOutputImage::PixelType> DefaultRenderingFunctionType;
+//   typedef Function::StandardRenderingFunction<PixelType,
+//                                     typename TOutputImage::PixelType> DefaultRenderingFunctionType;
   typedef itk::ExtractImageFilter<ImageType,ImageType>                ExtractFilterType;
   typedef typename ExtractFilterType::Pointer                         ExtractFilterPointerType;
 

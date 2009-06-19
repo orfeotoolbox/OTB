@@ -22,6 +22,7 @@
 #include "otbStandardRenderingFunction.h"
 #include "otbImage.h"
 #include "itkRGBAPixel.h"
+#include "otbRenderingFunction.h"
 
 namespace otb
 {
@@ -49,7 +50,7 @@ class RenderingFunctor
 {
 public:
   /** Rendering function typedef */
-  typedef otb::Function::RenderingFunction<TPixel,TRGBPixel>          RenderingFunctionType;
+  typedef typename otb::Function::RenderingFunction<TPixel,TRGBPixel>          RenderingFunctionType;
   /** Rendering function pointer typedef */
   typedef typename RenderingFunctionType::Pointer                              RenderingFunctionPointerType;
   /** Default rendering function typedef */

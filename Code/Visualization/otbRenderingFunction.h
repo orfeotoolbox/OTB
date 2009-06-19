@@ -27,6 +27,8 @@
 #include "otbChannelSelectorFunctor.h"
 #include "itkHistogram.h"
 #include "otbObjectList.h"
+// #include "otbRenderingImageFilter.h"
+
 namespace otb
 {
 
@@ -72,8 +74,16 @@ public:
   typedef typename HistogramType::Pointer HistogramPointerType;
   typedef ObjectList<HistogramType>                         HistogramListType;
   typedef typename HistogramListType::Pointer               HistogramListPointerType;
+
+
+
   typedef itk::VariableLengthVector<ScalarType>                       SampleType;
   typedef itk::Statistics::ListSample<SampleType>                     ListSampleType;
+  typedef typename ListSampleType::ConstPointer                       ListSamplePointerType;
+
+  typedef itk::Statistics::DenseFrequencyContainer                   DFContainerType;
+  typedef otb::ListSampleToHistogramListGenerator
+      <ListSampleType,ScalarType,DFContainerType>                     HistogramFilterType;
 
   typedef  itk::Array< double >           ParametersType;
 
@@ -107,9 +117,9 @@ public:
     return m_HistogramList;
   }
 
-  virtual void SetSampleList(SampleListPointerType sampleList)
+  virtual void SetListSample(ListSamplePointerType listSample)
   {
-    m_SampleList = sampleList;
+    m_ListSample = listSample;
     this->Modified();
   }
 
@@ -127,9 +137,31 @@ protected:
   /** Destructor */
   virtual ~RenderingFunction() {}
 
-  void RenderHistogram()
+  virtual void RenderHistogram()
   {
+    int m_NumberOfHistogramBins=255;//FIXME is it to be accessed from outside?
+    if(m_ListSample.IsNull())
+    {
+      itkExceptionMacro(<<"No sample list provided to render histogram");
+    }
+      // Create the histogram generation filter
+    ListSampleType pixelRepresentationListSample(this->GetPixelRepresentationSize());
+    for (typename ListSampleType::Iterator it = m_ListSample->Begin(); it != m_ListSample->End(); ++it)
+    {
+      pixelRepresentationListSample.PushBack(this->EvaluatePixelRepresentation(it.GetMeasurementVector()));
+    }
 
+    typename HistogramFilterType::Pointer histogramFilter = HistogramFilterType::New();
+    histogramFilter->SetListSample(pixelRepresentationListSample);
+
+    histogramFilter->SetNumberOfBins(m_NumberOfHistogramBins);
+
+    // Generate
+    histogramFilter->Update();
+    otbMsgDevMacro(<<"ImageRenderingFunction::RenderHistogram()"<<" ("<<this->GetName()<<")"<< " Histogram has been updated");
+
+    // Retrieve the histogram
+    m_HistogramList = histogramFilter->GetOutput();
   }
 
 
@@ -137,7 +169,7 @@ private:
   RenderingFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   HistogramListPointerType m_HistogramList;
-  SampleListPointerType m_SampleList;
+  ListSamplePointerType m_ListSample;
 };
 } // end namespace Function
 } // end namepsace otb
