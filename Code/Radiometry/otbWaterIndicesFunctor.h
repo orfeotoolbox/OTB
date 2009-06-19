@@ -20,6 +20,7 @@
 
 #include "otbMath.h"
 #include "itkVariableLengthVector.h"
+#include "otbSqrtSpectralAngleFunctor.h"
 
 namespace otb
 {
@@ -418,6 +419,99 @@ protected:
 private:
   // Water Index Classic Functor
   const WIFunctorType m_WIFunctor;
+};
+
+
+
+/** \class WaterSqrtSpectarlAngleFunctor
+ *  \brief This functor uses a spectral angle with a particular reference pixel.
+ *
+ *
+ *  \ingroup Functor
+ * \ingroup Radiometry
+ */
+template <class TInputVectorPixel,class TOutputPixel>
+class WaterSqrtSpectralAngleFunctor : public SqrtSpectralAngleFunctor<TInputVectorPixel,TOutputPixel>
+{
+public:
+
+  typedef WaterSqrtSpectralAngleFunctor Self;
+  typedef SqrtSpectralAngleFunctor<TInputVectorPixel,TOutputPixel> Superclass;
+  typedef TInputVectorPixel InputVectorPixelType;
+  WaterSqrtSpectralAngleFunctor() {
+
+    //Set the channels indices
+    m_BlueChannel = 0;
+    m_GreenChannel = 1;
+    m_RedChannel = 2;
+    m_NIRChannel = 3;
+
+    //Set reference water value
+    InputVectorPixelType reference;
+    reference.SetSize(4);
+    reference[0] = 136.0; reference[1] = 132.0; reference[2] = 47.0; reference[3] = 24.0;
+    this->SetReferenceWaterPixel( reference );
+  };
+  ~WaterSqrtSpectralAngleFunctor() {};
+
+  /** Set Reference Pixel */
+  void SetReferenceWaterPixel(InputVectorPixelType ref)
+  {
+    if(ref.GetSize() != 4)
+    {
+    }
+    InputVectorPixelType reference;
+    reference.SetSize(4);
+    reference[m_BlueChannel] = ref[0]; reference[m_GreenChannel] = ref[1]; reference[m_RedChannel] = ref[2]; reference[m_NIRChannel] = ref[3];
+    this->SetReferencePixel( reference );
+
+  }
+
+  /** Getters and setters */
+  void SetBlueChannel(unsigned int channel)
+  {
+    m_BlueChannel = channel;
+  }
+  unsigned int GetBlueChannel()
+  {
+    return m_BlueChannel;
+  }
+  void SetGreenChannel(unsigned int channel)
+  {
+    m_GreenChannel = channel;
+  }
+  unsigned int GetGreenChannel()
+  {
+    return m_GreenChannel;
+  }
+  void SetRedChannel(unsigned int channel)
+  {
+    m_RedChannel = channel;
+  }
+  unsigned int GetRedChannel()
+  {
+    return m_RedChannel;
+  }
+  void SetNIRChannel(unsigned int channel)
+  {
+    m_NIRChannel = channel;
+  }
+  unsigned int GetNIRChannel()
+  {
+    return m_NIRChannel;
+  }
+
+protected:
+  inline TOutputPixel Evaluate(const TInputVectorPixel& inPix) const
+  {
+    return static_cast<TOutputPixel>(Superclass::Evaluate(inPix));
+  }
+
+  /** Channels */
+  int m_BlueChannel;
+  int m_GreenChannel;
+  int m_RedChannel;
+  int m_NIRChannel;
 };
 
 
