@@ -69,6 +69,8 @@ namespace otb
           outPixel.SetSize(m_ChannelList.size());
           for (unsigned int i=0; i<m_ChannelList.size(); ++i)
           {
+// REVIEW: Not sure that assert is the best choice here. Exception
+// would be better.
             assert(m_ChannelList[i] < inPixel.Size());
             outPixel[i] = inPixel[m_ChannelList[i]];
           }

@@ -137,7 +137,11 @@ public:
    * preprocessing.
    */
 //   virtual void Initialize(ImageInformationType){};
-  virtual void Initialize(){};//FIXME should disappear and be automatic (IsModified())
+  // REVIEW: I agree, we should not be calling intialize ourselve, it
+  // would better be seamless
+  virtual void Initialize(){};//FIXME should disappear and be
+			      //automatic (IsModified())
+
 
 protected:
   /** Constructor */
@@ -167,7 +171,9 @@ protected:
       //Either we convert the ListSample to PixelType or we define a EvaluatePixelRepresentation
       //for vector.
 //       PixelType sample = itk::NumericTraits<PixelType>::Zero;
-//       sample = sample + (it.GetMeasurementVector());//FIXME better in a VisualizationPixelTraits
+//       sample = sample + (it.GetMeasurementVector());//FIXME better
+//       in a VisualizationPixelTraits
+    // REVIEW: Can't we use PixelType in the ListSample ?
       PixelType sample;
       VisualizationPixelTraits::Convert(it.GetMeasurementVector(), sample);
       SampleType sampleVector;

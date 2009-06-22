@@ -57,6 +57,10 @@ public:
  * If it is a VectorImage, the function renders
  * the selected channels.
  */
+
+// REVIEW: I do not really understand here. If the name of the class
+// include "Modulus", why are we left the choice of another transfert
+// function ?
 template <class TPixelPrecision, class TRGBPixel, class TTransferFunction = Modulus<TPixelPrecision,TPixelPrecision> >
 class ModulusRenderingFunction
   : public RenderingFunction<TPixelPrecision,TRGBPixel>
