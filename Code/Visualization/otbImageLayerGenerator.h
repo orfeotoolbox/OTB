@@ -77,7 +77,7 @@ public:
 
   /** Rendering function typedef */
   typedef typename ImageLayerType::RenderingFunctionType RenderingFunctionType;
-  typedef typename ImageLayerType::DefaultRenderingFunctionType DefaultRenderingFunctionType;
+//   typedef typename ImageLayerType::DefaultRenderingFunctionType DefaultRenderingFunctionType;
   typedef typename RenderingFunctionType::Pointer RenderingFunctionPointerType;
 
   /** Blending function typedef */

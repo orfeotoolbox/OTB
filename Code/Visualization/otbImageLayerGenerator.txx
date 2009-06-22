@@ -40,7 +40,7 @@ ImageLayerGenerator<TImageLayer>
   // Resampler
   m_Resampler = ResampleFilterType::New();
   // Rendering function
-  m_RenderingFunction = DefaultRenderingFunctionType::New();
+//   m_RenderingFunction = DefaultRenderingFunctionType::New();//Note: created in the layer by default
   // Default blending function
   m_BlendingFunction = m_Layer->GetBlendingFunction();
 }
@@ -165,7 +165,15 @@ ImageLayerGenerator<TImageLayer>
 //   }
 
   // Set the rendering function
-  m_Layer->SetRenderingFunction(m_RenderingFunction);
+  if (m_RenderingFunction.IsNotNull())
+  {
+    otbMsgDevMacro(<<"ImageLayerGenerator::GenerateLayerInformation(): set the rendering function of the layer");
+    m_Layer->SetRenderingFunction(m_RenderingFunction);
+  }
+  else
+  {
+    otbMsgDevMacro(<<"ImageLayerGenerator::GenerateLayerInformation(): keep the default rendering function of the layer");
+  }
 
   //Set the blending function
   m_Layer->SetBlendingFunction(m_BlendingFunction);

@@ -19,6 +19,11 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbChannelSelectorFunctor_h
 #include <cassert>
 
+#include "itkNumericTraits.h"
+#include "itkVariableLengthVector.h"
+#include "itkRGBPixel.h"
+#include "itkRGBAPixel.h"
+
 namespace otb
 {
   namespace Function

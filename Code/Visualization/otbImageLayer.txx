@@ -21,13 +21,14 @@
 #include "itkImageRegionConstIterator.h"
 #include "otbMacro.h"
 #include "itkTimeProbe.h"
+#include "otbStandardRenderingFunction.h"
 
 namespace otb
 {
 
 template <class TImage, class TOutputImage>
 ImageLayer<TImage,TOutputImage>
-::ImageLayer() : m_Quicklook(), m_Image(), m_HistogramList(), m_RenderingFunction(),
+::ImageLayer() : m_Quicklook(), m_Image(), m_HistogramList(),m_ListSample(), m_RenderingFunction(),
                  m_NumberOfHistogramBins(255),
                  m_QuicklookRenderingFilter(), m_ExtractRenderingFilter(), m_ScaledExtractRenderingFilter(),
                  m_ExtractFilter(), m_ScaledExtractFilter()
@@ -37,7 +38,11 @@ ImageLayer<TImage,TOutputImage>
   m_ExtractRenderingFilter = RenderingFilterType::New();
   m_ScaledExtractRenderingFilter = RenderingFilterType::New();
 
+  m_ListSample = ListSampleType::New();
+
   // Default rendering function
+  typedef Function::StandardRenderingFunction<PixelType,
+                                    typename TOutputImage::PixelType> DefaultRenderingFunctionType;
   m_RenderingFunction = DefaultRenderingFunctionType::New();
   m_QuicklookRenderingFilter->SetRenderingFunction(m_RenderingFunction);
   m_ExtractRenderingFilter->SetRenderingFunction(m_RenderingFunction);
@@ -72,7 +77,7 @@ ImageLayer<TImage,TOutputImage>
 ::Render()
 {
   // Render the histogram
-  this->RenderHistogram();
+  this->UpdateListSample();
 
   // If required, use histogram for auto min/max
 //   if(m_AutoMinMax)
@@ -138,7 +143,7 @@ ImageLayer<TImage,TOutputImage>
 template <class TImage, class TOutputImage>
 void
 ImageLayer<TImage,TOutputImage>
-::RenderHistogram()
+::UpdateListSample()
 {
   // Declare the source of the histogram
   ImagePointerType histogramSource;
@@ -158,7 +163,7 @@ ImageLayer<TImage,TOutputImage>
   // Check if we need to generate the histogram again
   if( !m_HistogramList || (histogramSource->GetUpdateMTime() < histogramSource->GetPipelineMTime()) )
     {
-    otbMsgDevMacro(<<"ImageLayer::RenderHistogram():"<<" ("<<this->GetName()<<")"<< " Regenerating histogram due to pippeline update.");
+    otbMsgDevMacro(<<"ImageLayer::UpdateListSample():"<<" ("<<this->GetName()<<")"<< " Regenerating histogram due to pippeline update.");
 //     m_AutoMinMaxUpToDate = false;
 
     // Update the histogram source
@@ -168,33 +173,34 @@ ImageLayer<TImage,TOutputImage>
     itk::ImageRegionConstIterator<ImageType> it(histogramSource,histogramSource->GetBufferedRegion());
 
     // declare a list to store the samples
-    typename ListSampleType::Pointer listSample = ListSampleType::New();
+//     typename ListSampleType::Pointer listSample = ListSampleType::New();
+    m_ListSample->Clear();
 
     // Set the measurement vector size
 //     listSample->SetMeasurementVectorSize(histogramSource->GetNumberOfComponentsPerPixel());
 
     //Note: The GetBufferPointer is just used for overloading resolution
-    listSample->SetMeasurementVectorSize(PixelSize(histogramSource, histogramSource->GetBufferPointer()));
+    m_ListSample->SetMeasurementVectorSize(PixelSize(histogramSource, histogramSource->GetBufferPointer()));
 //      listSample->SetMeasurementVectorSize(m_RenderingFunction->GetPixelRepresentationSize());
 
     // Fill the samples list
     it.GoToBegin();
     while(!it.IsAtEnd())
-      {
+    {
 //       SampleType sample(histogramSource->GetNumberOfComponentsPerPixel());
-      SampleType sample(PixelSize(histogramSource, histogramSource->GetBufferPointer()));
+      SampleType sample(PixelSize(histogramSource, histogramSource->GetBufferPointer()));//FIXME better in a VisualizationPixelTraits
 //       SampleType sample(m_RenderingFunction->GetPixelRepresentationSize());
       // workaround to handle both scalar and vector pixels the same way
       sample.Fill(itk::NumericTraits<ScalarType>::Zero);
-      sample = sample +  it.Get();
-      listSample->PushBack(sample);
+      sample = sample +  it.Get();//FIXME better in a VisualizationPixelTraits
+      m_ListSample->PushBack(sample);
       ++it;
-      }
-      otbMsgDevMacro(<<"ImageLayer::RenderHistogram()"<<" ("<<this->GetName()<<")"<< " Sample list generated ("<<listSample->Size()<<" samples, "<< PixelSize(histogramSource, histogramSource->GetBufferPointer())<<" bands)");
+    }
+    otbMsgDevMacro(<<"ImageLayer::UpdateListSample()"<<" ("<<this->GetName()<<")"<< " Sample list generated ("<<m_ListSample->Size()<<" samples, "<< PixelSize(histogramSource, histogramSource->GetBufferPointer())<<" bands)");
 
-      m_RenderingFunction->SetListSample(listSample);
+    m_RenderingFunction->SetListSample(m_ListSample);
 
-//        otbMsgDevMacro(<<"ImageLayer::RenderHistogram()"<<" ("<<this->GetName()<<")"<< " Sample list generated ("<<listSample->Size()<<" samples, "<< m_RenderingFunction->GetPixelRepresentationSize() <<" bands)");
+//        otbMsgDevMacro(<<"ImageLayer::UpdateListSample()"<<" ("<<this->GetName()<<")"<< " Sample list generated ("<<listSample->Size()<<" samples, "<< m_RenderingFunction->GetPixelRepresentationSize() <<" bands)");
 
 //     // Create the histogram generation filter
 //     typename HistogramFilterType::Pointer histogramFilter = HistogramFilterType::New();
@@ -204,7 +210,7 @@ ImageLayer<TImage,TOutputImage>
 //
 //     // Generate
 //     histogramFilter->Update();
-//     otbMsgDevMacro(<<"ImageLayer::RenderHistogram()"<<" ("<<this->GetName()<<")"<< " Histogram has been updated");
+//     otbMsgDevMacro(<<"ImageLayer::UpdateListSample()"<<" ("<<this->GetName()<<")"<< " Histogram has been updated");
 //
 //     // Retrieve the histogram
 //     this->SetHistogramList(histogramFilter->GetOutput());
@@ -261,7 +267,7 @@ ImageLayer<TImage,TOutputImage>
   // If required, use histogram for auto min/max
 //   if(m_AutoMinMax)
 //     {
-    this->RenderHistogram();
+    this->UpdateListSample();
 //     this->AutoMinMaxRenderingFunctionSetup();
 //     }
   // Ensure rendering function intialization
@@ -289,7 +295,7 @@ ImageLayer<TImage,TOutputImage>
   return oss.str();
 }
 
-
+//FIXME better in a VisualizationPixelTraits
 //Find out the histogram size from the pixel
 //FIXME duplication in ImageLayerGenerator
 template <class TImage, class TOutputImage>
@@ -324,7 +330,7 @@ template <class TImage, class TOutputImage>
 
 }
 
-
+//FIXME better in a VisualizationPixelTraits
 //This is needed to create the histogram as a VariableLengthVector
 //from a RGBPixel or RGBAPixel image.
 namespace itk

@@ -18,21 +18,21 @@
 #ifndef __otbStandardRenderingFunction_h
 #define __otbStandardRenderingFunction_h
 
-#include "otbRenderingFunction.h"
-#include "otbMacro.h"
+
 #include <cassert>
 #include <iomanip>
 #include <vector>
 
+
+#include "otbMacro.h"
 #include "otbChannelSelectorFunctor.h"
+#include "otbRenderingFunction.h"
 
 namespace otb
 {
-
-
-
 namespace Function
 {
+
 /** \class Identiy
 * \brief Default math functor parameter for rendering function.
 *  \ingroup Visualization
@@ -67,8 +67,7 @@ public:
  *  \ingroup Visualization
  */
 template <class TPixel, class TRGBPixel,
-  class TPixelRepresentationFunction = ChannelSelectorFunctor<
-        TPixel>,
+  class TPixelRepresentationFunction = ChannelSelectorFunctor<TPixel>,
   class TTransferFunction = Identity<
         typename itk::NumericTraits<typename itk::NumericTraits<TPixel>::ValueType>::RealType,
         typename itk::NumericTraits<typename itk::NumericTraits<TPixel>::ValueType>::RealType
@@ -454,12 +453,6 @@ public:
   itkGetMacro(AutoMinMax,bool);
   itkBooleanMacro(AutoMinMax);
 
-  typedef typename Superclass::HistogramListPointerType HistogramListPointerType;
-  virtual void SetHistogramList(HistogramListPointerType histogramList)
-  {
-    Superclass::SetHistogramList(histogramList);
-    UpdateTransferedMinMax();
-  }
 
 protected:
   /** Constructor */

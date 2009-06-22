@@ -28,11 +28,15 @@
 #include "itkHistogram.h"
 #include "otbObjectList.h"
 // #include "otbRenderingImageFilter.h"
+#include "otbVisualizationPixelTraits.h"
+#include "itkListSample.h"
+#include "otbListSampleToHistogramListGenerator.h"
+#include "itkConceptChecking.h"
 
 namespace otb
 {
 
-enum ImageInformationType {SCALAR, TWOBANDS, THREEBANDS, SENSORINVERTED, SENSORWAVELENTHORDER};
+// enum ImageInformationType {SCALAR, TWOBANDS, THREEBANDS, SENSORINVERTED, SENSORWAVELENTHORDER};
 
 namespace Function
 {
@@ -68,6 +72,15 @@ public:
   typedef typename itk::NumericTraits<ScalarType>::RealType RealScalarType;
   typedef itk::VariableLengthVector<RealScalarType>         InternalPixelType;
 
+
+  typedef itk::VariableLengthVector<ScalarType>                       SampleType;
+  typedef itk::Statistics::ListSample<SampleType>                     ListSampleType;
+  typedef typename ListSampleType::Pointer                       ListSamplePointerType;
+
+  typedef itk::Statistics::DenseFrequencyContainer                   DFContainerType;
+
+  typedef otb::ListSampleToHistogramListGenerator
+      <ListSampleType,ScalarType,DFContainerType>                     HistogramFilterType;
   typedef itk::Statistics::Histogram<
                   typename itk::NumericTraits<ScalarType>::RealType,1,
                   typename itk::Statistics::DenseFrequencyContainer> HistogramType;
@@ -75,15 +88,9 @@ public:
   typedef ObjectList<HistogramType>                         HistogramListType;
   typedef typename HistogramListType::Pointer               HistogramListPointerType;
 
+  itkConceptMacro(SameTypeCheck,
+    (itk::Concept::SameType<typename HistogramFilterType::HistogramType, HistogramType>));
 
-
-  typedef itk::VariableLengthVector<ScalarType>                       SampleType;
-  typedef itk::Statistics::ListSample<SampleType>                     ListSampleType;
-  typedef typename ListSampleType::ConstPointer                       ListSamplePointerType;
-
-  typedef itk::Statistics::DenseFrequencyContainer                   DFContainerType;
-  typedef otb::ListSampleToHistogramListGenerator
-      <ListSampleType,ScalarType,DFContainerType>                     HistogramFilterType;
 
   typedef  itk::Array< double >           ParametersType;
 
@@ -131,9 +138,14 @@ public:
    */
 //   virtual void Initialize(ImageInformationType){};
   virtual void Initialize(){};//FIXME should disappear and be automatic (IsModified())
+
 protected:
   /** Constructor */
-  RenderingFunction() {}
+  RenderingFunction()
+  {
+    m_HistogramList = NULL;
+    m_ListSample = NULL;
+  }
   /** Destructor */
   virtual ~RenderingFunction() {}
 
@@ -145,10 +157,23 @@ protected:
       itkExceptionMacro(<<"No sample list provided to render histogram");
     }
       // Create the histogram generation filter
-    ListSampleType pixelRepresentationListSample(this->GetPixelRepresentationSize());
-    for (typename ListSampleType::Iterator it = m_ListSample->Begin(); it != m_ListSample->End(); ++it)
+//     ListSampleType pixelRepresentationListSample(this->GetPixelRepresentationSize());
+    ListSamplePointerType pixelRepresentationListSample = ListSampleType::New();
+    for (typename ListSampleType::ConstIterator it = m_ListSample->Begin(); it != m_ListSample->End(); ++it)
     {
-      pixelRepresentationListSample.PushBack(this->EvaluatePixelRepresentation(it.GetMeasurementVector()));
+      //Here we have an issue:
+      //- the ListSample contains VariableLengthVector
+      //- the EvaluatePixelRepresentation is defined to apply to PixelType
+      //Either we convert the ListSample to PixelType or we define a EvaluatePixelRepresentation
+      //for vector.
+//       PixelType sample = itk::NumericTraits<PixelType>::Zero;
+//       sample = sample + (it.GetMeasurementVector());//FIXME better in a VisualizationPixelTraits
+      PixelType sample;
+      VisualizationPixelTraits::Convert(it.GetMeasurementVector(), sample);
+      SampleType sampleVector;
+      VisualizationPixelTraits::Convert(this->EvaluatePixelRepresentation(sample), sampleVector);
+      pixelRepresentationListSample->PushBack(sampleVector);
+
     }
 
     typename HistogramFilterType::Pointer histogramFilter = HistogramFilterType::New();
@@ -158,7 +183,7 @@ protected:
 
     // Generate
     histogramFilter->Update();
-    otbMsgDevMacro(<<"ImageRenderingFunction::RenderHistogram()"<<" ("<<this->GetName()<<")"<< " Histogram has been updated");
+    otbMsgDevMacro(<<"ImageRenderingFunction::RenderHistogram(): Histogram has been updated");
 
     // Retrieve the histogram
     m_HistogramList = histogramFilter->GetOutput();

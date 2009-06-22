@@ -25,7 +25,8 @@
 #include "itkExtractImageFilter.h"
 #include "itkListSample.h"
 #include "otbListSampleToHistogramListGenerator.h"
-#include "otbStandardRenderingFunction.h"
+
+#include "otbRenderingImageFilter.h"
 
 namespace otb
 {
@@ -77,12 +78,16 @@ public:
 
   typedef itk::VariableLengthVector<ScalarType>                       SampleType;
   typedef itk::Statistics::ListSample<SampleType>                     ListSampleType;
+  typedef typename ListSampleType::Pointer                       ListSamplePointerType;
 
 //   typedef otb::ListSampleToHistogramListGenerator
 //       <ListSampleType,ScalarType,DFContainerType>                     HistogramFilterType;
-  typedef typename HistogramFilterType::HistogramType                 HistogramType;
+//   typedef typename HistogramFilterType::HistogramType                 HistogramType;
+  typedef itk::Statistics::Histogram<
+                  typename itk::NumericTraits<ScalarType>::RealType,1,
+                  typename itk::Statistics::DenseFrequencyContainer> HistogramType;
   typedef typename HistogramType::Pointer                             HistogramPointerType;
-  typedef typename HistogramFilterType::HistogramListType             HistogramListType;
+  typedef ObjectList<HistogramType>                                   HistogramListType;
   typedef typename HistogramListType::Pointer                         HistogramListPointerType;
 
   /** Rendering part */
@@ -127,7 +132,8 @@ public:
   {
     m_RenderingFunction = function;
 //     m_AutoMinMaxUpToDate = false;
-    m_RenderingFunction->SetHistogramList(this->GetHistogramList());
+//     m_RenderingFunction->SetHistogramList(this->GetHistogramList());
+    m_RenderingFunction->SetListSample(this->GetListSample());
     m_QuicklookRenderingFilter->SetRenderingFunction(m_RenderingFunction);
     m_ExtractRenderingFilter->SetRenderingFunction(m_RenderingFunction);
     m_ScaledExtractRenderingFilter->SetRenderingFunction(m_RenderingFunction);
@@ -200,7 +206,13 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Update the histogram */
-virtual void RenderHistogram();
+  virtual void UpdateListSample();
+
+  virtual ListSamplePointerType GetListSample()
+  {
+//     this->UpdateListSample();//FIXME condition to IsModified
+    return m_ListSample;
+  }
 
   /** Update the images */
   virtual void RenderImages();
@@ -240,6 +252,8 @@ private:
 
   /** Joint Histogram */
   HistogramListPointerType     m_HistogramList;
+
+  ListSamplePointerType m_ListSample;
 
   /** Rendering function */
   RenderingFunctionPointerType m_RenderingFunction;
