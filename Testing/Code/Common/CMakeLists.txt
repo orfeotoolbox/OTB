@@ -43,7 +43,6 @@ ADD_TEST(coTuSystemTests_IsA_Methods ${COMMON_TESTS1}
         ${OTB_DATA_ROOT}
         )
 
-
 # -------            otb::CommandLibneArgumentParser  -------------
 
 ADD_TEST(coTuCmdLineArgParserHelpWithArg ${COMMON_TESTS1}
