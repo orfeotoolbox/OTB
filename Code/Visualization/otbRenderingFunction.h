@@ -23,7 +23,6 @@
 #include "itkVariableLengthVector.h"
 #include "itkRGBPixel.h"
 #include "itkRGBAPixel.h"
-#include "otbPixelRepresentationFunction.h"
 #include "otbChannelSelectorFunctor.h"
 #include "itkHistogram.h"
 #include "otbObjectList.h"
