@@ -48,7 +48,8 @@ namespace otb
 
 
         /** Constructor */
-        ChannelSelectorFunctor()
+        ChannelSelectorFunctor() :
+           usingDefaultParameters(true)
         {
           PixelType pix;
           ChannelListInitialization(pix);
@@ -130,6 +131,7 @@ namespace otb
           m_ChannelList[0]=channel;
           m_ChannelList[1]=channel;
           m_ChannelList[2]=channel;
+          usingDefaultParameters = false;
         }
         void SetRedChannelIndex(unsigned int channel)
         {
@@ -138,6 +140,7 @@ namespace otb
             m_ChannelList.resize(3,0);
           }
           m_ChannelList[0] = channel;
+          usingDefaultParameters = false;
         }
 
         void SetGreenChannelIndex(unsigned int channel)
@@ -147,6 +150,7 @@ namespace otb
             m_ChannelList.resize(3,0);
           }
           m_ChannelList[1] = channel;
+          usingDefaultParameters = false;
         }
 
         void SetBlueChannelIndex(unsigned int channel)
@@ -156,6 +160,7 @@ namespace otb
             m_ChannelList.resize(3,0);
           }
           m_ChannelList[2] = channel;
+          usingDefaultParameters = false;
         }
 
         unsigned int GetRedChannelIndex() const
@@ -169,6 +174,11 @@ namespace otb
         unsigned int GetBlueChannelIndex() const
         {
           return m_ChannelList[2];
+        }
+
+        bool IsUsingDefaultParameters()
+        {
+          return usingDefaultParameters;
         }
       private:
 
@@ -197,6 +207,7 @@ namespace otb
           m_ChannelList.push_back(3);
         }
         std::vector<unsigned int> m_ChannelList;
+        bool usingDefaultParameters;
 
     };
 

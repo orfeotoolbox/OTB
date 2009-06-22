@@ -176,6 +176,7 @@ protected:
 
     }
 
+
     typename HistogramFilterType::Pointer histogramFilter = HistogramFilterType::New();
     histogramFilter->SetListSample(pixelRepresentationListSample);
 
@@ -189,6 +190,11 @@ protected:
     m_HistogramList = histogramFilter->GetOutput();
   }
 
+
+    ListSamplePointerType GetListSample()
+    {
+      return m_ListSample;
+    }
 
 private:
   RenderingFunction(const Self&); //purposely not implemented

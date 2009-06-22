@@ -219,7 +219,22 @@ public:
   {
     if(m_AutoMinMax)
     {
+      if ((this->GetListSample()).IsNotNull())
+      {
+        //the size of the Vector was unknow at construction time for the
+        //m_PixelRepresentationFunction, now, we may get a better default
+        if (m_PixelRepresentationFunction.IsUsingDefaultParameters())
+        {
+           if (this->GetListSample()->GetMeasurementVectorSize() >=3)
+           {
+             m_PixelRepresentationFunction.SetRedChannelIndex(0);
+             m_PixelRepresentationFunction.SetGreenChannelIndex(1);
+             m_PixelRepresentationFunction.SetBlueChannelIndex(2);
+           }
+        }
+      }
       unsigned int nbComps = m_PixelRepresentationFunction.GetOutputSize();//FIXME check what happen if the m_PixelRepresentationFunction is modified AFTER the Initialize.
+
       otbMsgDevMacro(<<"AutoMinMaxRenderingFunctionSetup(): "<<nbComps<<" components, quantile= "<<100*m_AutoMinMaxQuantile<<" %");
       // For each components, use the histogram to compute min and max
       m_Minimum.clear();
@@ -227,8 +242,9 @@ public:
 
       if (this->GetHistogramList().IsNull())
       {
-        itkExceptionMacro( << "To Compute min/max automatically, Histogram should be "
-         <<"provided to the rendering function with SetHistogramList()" );
+        this->RenderHistogram();
+//         itkExceptionMacro( << "To Compute min/max automatically, Histogram should be "
+//          <<"provided to the rendering function with SetHistogramList()" );
       }
       for(unsigned int comp = 0; comp < nbComps;++comp)
       {

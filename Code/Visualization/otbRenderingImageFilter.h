@@ -178,6 +178,8 @@ public:
 
     // Initialize the rendering function
     this->GetFunctor().InitializeFunction();
+    otbMsgDevMacro(<<"RenderingImageFilter::BeforeThreadedGenerateData():"<< " Output functor size "
+            << (this->GetFunctor().GetFunction())->GetPixelRepresentationSize());
   }
 
  protected:
