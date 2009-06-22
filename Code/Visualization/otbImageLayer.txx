@@ -28,7 +28,7 @@ namespace otb
 
 template <class TImage, class TOutputImage>
 ImageLayer<TImage,TOutputImage>
-::ImageLayer() : m_Quicklook(), m_Image(), m_HistogramList(),m_ListSample(), m_RenderingFunction(),
+::ImageLayer() : m_Quicklook(), m_Image(), m_ListSample(), m_RenderingFunction(),
                  m_NumberOfHistogramBins(255),
                  m_QuicklookRenderingFilter(), m_ExtractRenderingFilter(), m_ScaledExtractRenderingFilter(),
                  m_ExtractFilter(), m_ScaledExtractFilter()
@@ -94,6 +94,10 @@ void
 ImageLayer<TImage,TOutputImage>
 ::RenderImages()
 {
+//   if (m_ListSample.IsNull()) //FIXME make sure that it is not necessary
+//   {
+//     this->UpdateListSample();
+//   }
   // Render quicklook
   if(this->GetHasQuicklook())
     {
@@ -145,6 +149,7 @@ void
 ImageLayer<TImage,TOutputImage>
 ::UpdateListSample()
 {
+  otbMsgDevMacro(<<"ImageLayer::UpdateListSample():"<<" ("<<this->GetName()<<")"<< " Entering method");
   // Declare the source of the histogram
   ImagePointerType histogramSource;
 
@@ -161,7 +166,8 @@ ImageLayer<TImage,TOutputImage>
     }
 
   // Check if we need to generate the histogram again
-  if( !m_HistogramList || (histogramSource->GetUpdateMTime() < histogramSource->GetPipelineMTime()) )
+//   if( !m_HistogramList || (histogramSource->GetUpdateMTime() < histogramSource->GetPipelineMTime()) )
+  if( m_ListSample.IsNull() || m_ListSample->Size() == 0 || (histogramSource->GetUpdateMTime() < histogramSource->GetPipelineMTime()) )
     {
     otbMsgDevMacro(<<"ImageLayer::UpdateListSample():"<<" ("<<this->GetName()<<")"<< " Regenerating histogram due to pippeline update.");
 //     m_AutoMinMaxUpToDate = false;

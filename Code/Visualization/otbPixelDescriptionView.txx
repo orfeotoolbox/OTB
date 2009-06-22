@@ -39,7 +39,8 @@ PixelDescriptionView<TInputPixelDescription>
 {
   if(m_PixelDescriptionWidget != NULL)
     {
-    delete m_PixelDescriptionWidget;
+//     delete m_PixelDescriptionWidget;//FIXME
+      //NOTE segfault with the previous line, why?
     }
 }
 
@@ -53,7 +54,7 @@ PixelDescriptionView<TInputPixelDescription>
     {
     m_Model->UnRegisterListener(this);
     }
-  
+
   // Set and register with new model
   m_Model = model;
   m_Model->RegisterListener(this);

@@ -61,6 +61,7 @@ namespace otb
 
         OutputPixelType operator()(const VectorPixelType & inPixel) const
         {
+//           otbMsgDevMacro(<<"Channel list "<< m_ChannelList[0]);
           OutputPixelType outPixel;
           outPixel.SetSize(m_ChannelList.size());
           for (unsigned int i=0; i<m_ChannelList.size(); ++i)

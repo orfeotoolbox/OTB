@@ -135,6 +135,11 @@ public:
     }
     OutputPixelType output(255);
 
+
+//     otbMsgDevMacro(<<"StandardRenderingFunction::EvaluateTransferFunction "
+//            << "m_TransferFunction(spixel[0])" << m_TransferFunction(spixel[0])
+//            << ", m_TransferedMinimum[0] " << m_TransferedMinimum[0]
+//            << ", m_TransferedMaximum[0] " << m_TransferedMaximum[0])
     if (spixel.Size() == 1)
     {
       OutputValueType value = ClampRescale(m_TransferFunction(spixel[0]),m_TransferedMinimum[0],m_TransferedMaximum[0]);
@@ -235,7 +240,7 @@ public:
       }
       unsigned int nbComps = m_PixelRepresentationFunction.GetOutputSize();//FIXME check what happen if the m_PixelRepresentationFunction is modified AFTER the Initialize.
 
-      otbMsgDevMacro(<<"AutoMinMaxRenderingFunctionSetup(): "<<nbComps<<" components, quantile= "<<100*m_AutoMinMaxQuantile<<" %");
+      otbMsgDevMacro(<<"Initialize(): "<<nbComps<<" components, quantile= "<<100*m_AutoMinMaxQuantile<<" %");
       // For each components, use the histogram to compute min and max
       m_Minimum.clear();
       m_Maximum.clear();
@@ -251,27 +256,29 @@ public:
         // Compute quantiles
         m_Minimum.push_back(static_cast<ScalarType>(this->GetHistogramList()->GetNthElement(comp)->Quantile(0,m_AutoMinMaxQuantile)));
         m_Maximum.push_back(static_cast<ScalarType>(this->GetHistogramList()->GetNthElement(comp)->Quantile(0,1-m_AutoMinMaxQuantile)));
-        otbMsgDevMacro(<<"AutoMinMaxRenderingFunctionSetup():"<< " component "<<comp
+        otbMsgDevMacro(<<"Initialize():"<< " component "<<comp
             <<", min= "<< static_cast< typename itk::NumericTraits<ScalarType >::PrintType>(m_Minimum.back())
             <<", max= "<<static_cast< typename itk::NumericTraits<ScalarType >::PrintType>(m_Maximum.back()));
       }
 
-      typename ExtremaVectorType::const_iterator minIt = this->m_Minimum.begin();
-      typename ExtremaVectorType::const_iterator maxIt = this->m_Maximum.begin();
-
-      m_TransferedMinimum.clear();
-      m_TransferedMaximum.clear();
-
-      while(minIt != this->m_Minimum.end() && maxIt != this->m_Maximum.end())
-      {
-        const double v1 = this->m_TransferFunction(*minIt);
-        const double v2 = this->m_TransferFunction(*maxIt);
-        m_TransferedMinimum.push_back(static_cast<ScalarType>(std::min(v1,v2)));
-        m_TransferedMaximum.push_back(static_cast<ScalarType>(std::max(v1,v2)));
-        ++minIt;
-        ++maxIt;
-      }
     }
+
+    typename ExtremaVectorType::const_iterator minIt = this->m_Minimum.begin();
+    typename ExtremaVectorType::const_iterator maxIt = this->m_Maximum.begin();
+
+    m_TransferedMinimum.clear();
+    m_TransferedMaximum.clear();
+
+    while(minIt != this->m_Minimum.end() && maxIt != this->m_Maximum.end())
+    {
+      const double v1 = this->m_TransferFunction(*minIt);
+      const double v2 = this->m_TransferFunction(*maxIt);
+      m_TransferedMinimum.push_back(static_cast<ScalarType>(std::min(v1,v2)));
+      m_TransferedMaximum.push_back(static_cast<ScalarType>(std::max(v1,v2)));
+      ++minIt;
+      ++maxIt;
+    }
+
   }
 
   /** Evaluate method (scalar version) */

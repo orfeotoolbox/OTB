@@ -125,7 +125,12 @@ public:
   itkGetObjectMacro(Quicklook,ImageType);
 
   /** Get the histogram list */
-  itkGetObjectMacro(HistogramList,HistogramListType);
+//   itkGetObjectMacro(HistogramList,HistogramListType);
+  HistogramListPointerType GetHistogramList()
+  {
+    //FIXME Update condition?
+    return m_RenderingFunction->GetHistogramList();
+  }
 
   /** Set/Get the rendering function */
   void SetRenderingFunction(RenderingFunctionType * function)
@@ -229,16 +234,16 @@ protected:
   /** Set the histogram list: used internaly to propagate the change to
     * the rendering function
     */
-  void SetHistogramList(HistogramListPointerType histogramList)
-  {
-    m_HistogramList = histogramList;
-    if (m_RenderingFunction.IsNotNull())
-    {
-      m_RenderingFunction->SetHistogramList(histogramList);
-    }
-    //Suggestion: the rendering function could have instead a pointer
-    //toward its layer.
-  }
+//   void SetHistogramList(HistogramListPointerType histogramList)
+//   {
+//     m_HistogramList = histogramList;
+//     if (m_RenderingFunction.IsNotNull())
+//     {
+//       m_RenderingFunction->SetHistogramList(histogramList);
+//     }
+//     //Suggestion: the rendering function could have instead a pointer
+//     //toward its layer.
+//   }
 
 private:
   ImageLayer(const Self&);     // purposely not implemented
@@ -251,7 +256,7 @@ private:
   ImagePointerType             m_Image;
 
   /** Joint Histogram */
-  HistogramListPointerType     m_HistogramList;
+//   HistogramListPointerType     m_HistogramList;
 
   ListSamplePointerType m_ListSample;
 

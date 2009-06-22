@@ -121,6 +121,7 @@ public:
 //   }
   virtual HistogramListPointerType GetHistogramList()
   {
+    //FIXME Update condition?
     return m_HistogramList;
   }
 
@@ -154,7 +155,7 @@ protected:
     int m_NumberOfHistogramBins=255;//FIXME is it to be accessed from outside?
     if(m_ListSample.IsNull())
     {
-      itkExceptionMacro(<<"No sample list provided to render histogram");
+      itkExceptionMacro(<<"No listSample provided to render histogram");
     }
       // Create the histogram generation filter
 //     ListSampleType pixelRepresentationListSample(this->GetPixelRepresentationSize());
