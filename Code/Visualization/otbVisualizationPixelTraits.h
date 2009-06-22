@@ -49,14 +49,11 @@ public:
   template< class TScalarTypeInput, class TScalarTypeOutput >
   static void Convert(const itk::VariableLengthVector<TScalarTypeInput>& in, itk::VariableLengthVector<TScalarTypeOutput>& out)
   {
-//     out.SetSize(in.GetSize());
-//     for (unsigned int i = 0; i<in.GetSize(); ++i)
-//     {
-//       out[i] = in[i];
-//     }
     out = in;
   }
 
+
+  //To be continued
 };
 
 }

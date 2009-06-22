@@ -55,9 +55,12 @@ namespace otb
           ChannelListInitialization(pix);
         }
 
-
         /** Destructor */
         virtual ~ChannelSelectorFunctor() {}
+
+        const char *GetNameOfClass() const
+        {return "ChannelSelectorFunctor";}
+
 
         OutputPixelType operator()(const VectorPixelType & inPixel) const
         {
@@ -121,6 +124,26 @@ namespace otb
         {
           m_ChannelList = channels;
         }
+
+       void SetChannelIndex(unsigned int channelPosition, unsigned int channel)
+       {
+          if (m_ChannelList.size() < channelPosition+1)
+          {
+            m_ChannelList.resize(channelPosition+1,0);
+          }
+         m_ChannelList[channelPosition] = channel;
+         usingDefaultParameters = false;
+       }
+
+       unsigned int GetChannelIndex(unsigned int channelPosition) const
+       {
+         if (channelPosition >= m_ChannelList.size())
+         {
+           itkExceptionMacro(<<"Can't get channel " << channelPosition << ", there is only " << m_ChannelList.size() << " element in the list");
+         }
+         return m_ChannelList[channelPosition];
+
+       }
 
         /** Only for backward compatibility but should not be used*/
         void SetAllChannels(unsigned int channel)
