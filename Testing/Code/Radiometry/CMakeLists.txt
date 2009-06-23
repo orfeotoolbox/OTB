@@ -929,8 +929,8 @@ ADD_TEST(raTvNDWI_MultiChannelWaterIndexImageFilter ${RADIOMETRY_TESTS8}
 
 # -------            NDWI SingleChannel WaterIndexFilter ------------------------------
 ADD_TEST(raTvNDWI_WaterIndexImageFilter ${RADIOMETRY_TESTS8}
- --compare-image ${EPSILON}   ${BASELINE}/raWaterIndex_NDWI_verySmallFSATSW.tif
-                   ${TEMP}/raWaterIndex_NDWI_verySmallFSATSW.tif
+--compare-image ${EPSILON}   ${BASELINE}/raWaterIndex_NDWI_verySmallFSATSW.tif
+                  ${TEMP}/raWaterIndex_NDWI_verySmallFSATSW.tif
         otbNDWIWaterIndexImageFilter
         ${INPUTDATA}/verySmallFSATSW_r.tif
         ${INPUTDATA}/verySmallFSATSW_nir.tif
@@ -949,7 +949,6 @@ ADD_TEST(raTvWaterSqrtSpectralAngleImageFilter ${RADIOMETRY_TESTS8}
         ${TEMP}/raWater_SqrtSpectralAngle.tif
         0 1 2 3
 )
-
 
 
 
