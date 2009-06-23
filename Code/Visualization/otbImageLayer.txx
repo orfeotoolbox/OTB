@@ -160,9 +160,11 @@ ImageLayer<TImage,TOutputImage>
     }
   else
     {
-    // Else use the full image (update the data) 
+    // Else use the full image (update the data)
     // REVIEW: Not sure the region is right here. Should be the
     // largest ?
+    // REPLY: might be... didn't change anything
+    //
     histogramSource = m_Image;
     histogramSource->SetRequestedRegion(this->GetExtractRegion());
     }

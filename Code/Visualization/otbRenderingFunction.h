@@ -174,6 +174,7 @@ protected:
 //       sample = sample + (it.GetMeasurementVector());//FIXME better
 //       in a VisualizationPixelTraits
     // REVIEW: Can't we use PixelType in the ListSample ?
+    // REPLY: tried. The ListSample can't work with scalar type (not without major modification in ITK)
       PixelType sample;
       VisualizationPixelTraits::Convert(it.GetMeasurementVector(), sample);
       SampleType sampleVector;
