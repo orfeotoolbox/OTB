@@ -406,7 +406,8 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 {
   std::cout<<"RegressionTestListFileRegressionTestListFileRegressionTestListFile"<<std::endl;
   std::ifstream fluxfileref(baselineListFileName);
-  std::vector<unsigned int> usedLineInTestFile;
+  // stores the line number of the tested file that has already matched a line of the baseline
+  std::vector<unsigned int> usedLineInTestFile; 
   
   enum TypeEtat { ETAT_NUM, ETAT_CHAR };
   
@@ -418,7 +419,6 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
       fluxfilediff.open(diffListFileName.c_str());
     }
   
-  //std::string strfiletest;
   std::string strfileref;
   
   int nbdiff(0);
@@ -435,15 +435,10 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
   std::vector<std::string> listStrDiffLineFileTest;
   
   
-  
+  // For each line of the baseline file
   while ( std::getline(fluxfileref,strfileref)!=0  )
     {
-      std::cout<<"**************** REFENC LINE: "<<strfileref<<std::endl;
-      //otb::StringStream buffstreamRef;
-      //buffstreamRef << strfileref;
-      
-      //check if we've reached end of test file
-      //if (std::getline(fluxfiletest,strfiletest) == 0)
+      // test if there's ignore lines
       bool foundexpr = false;
       if (ignoredLines.size()>0)
         {
@@ -461,11 +456,15 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 	      
 	    }
 	  
-        }      
+        }
+      // If no ignore lines
       if ( foundexpr == false )
         {
+	  // is the baseline line (ref) and the tested line (test) matches
 	  bool isFound = false;
+	  // tested file line number
 	  unsigned int lineId = 0;
+
 	  std::string strfiletest;
 	  // Open tested file
 	  std::ifstream fluxfiletest(testListFileName);
@@ -473,180 +472,223 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 	    {
 	      itkGenericExceptionMacro(<<"Impossible to open the test List file <"<<testListFileName<<">.");
 	    }
-
+	  // For each line of the tested file
 	  while ( std::getline(fluxfiletest,strfiletest)!=0 && isFound==false )
 	    {
-	      std::cout<<"**************** TESTED LINE: "<<strfiletest<<std::endl;
 	      lineId++;
-	      otb::StringStream buffstreamTest;
-	      otb::StringStream buffstreamRef;
+	      otb::StringStream buffstreamTest, buffstreamRef;
 	      isFound=true;
+
 	      buffstreamTest << strfiletest;
 	      buffstreamRef << strfileref;
 	      int nblinediff(0);
 	      
-	      while (buffstreamRef.peek() != EOF)
+	      //Check number of element in each line, if not equal : out    
+	      unsigned int refElt = 1;
+	      int lastElt = strfileref[0];
+	      for( unsigned int l=1; l<strfileref.size(); l++ )
 		{
-		  std::string strRef = "";
-		  std::string strTest = "";
-		  
-		  std::string strNumRef = "";
-		  std::string strCharRef = "";
-		  std::string strNumTest = "";
-		  std::string strCharTest = "";
-		  
-		  buffstreamRef >> strRef;
-		  buffstreamTest >> strTest;
-		  
-		  bool chgt= false;
-		  std::string charTmpRef = "";
-		  std::string charTmpTest = "";
-		  unsigned int i=0;
-		  
-		  std::cout<<strRef<<std::endl;
-		  if (!isHexaPointerAddress(strRef))
-		    {
-		      //Analyse if strRef contains scientific value (ex: "-142.124e-012")
-		      if (isScientificNumeric(strRef))
-			{
-			  if (!isScientificNumeric(strTest))
-			    {
-			      isFound = false;
-			    }
-			  else if ( (strRef != strTest)
-				    && (vcl_abs(atof(strRef.c_str())) > m_EpsilonBoundaryChecking)
-				    && (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str()))
-					> epsilon*vcl_abs(atof(strRef.c_str()))
-					) )//epsilon as relative error
-			    {
-			      isFound = false;
-			    }
-			}
-		      else
-			{
-			  std::cout<<"!isScientificNumeric "<<epsilon<<std::endl;
-			  while (i < strRef.size())
-			    {
-			      charTmpRef=strRef[i];
-			      
-			      if (i<strTest.size())
-				{
-				  charTmpTest=strTest[i];
-				}
-			      
-			      if (isNumeric(charTmpRef))
-				etatCour = ETAT_NUM;
-			      else
-				etatCour = ETAT_CHAR;
-			      
-			      // "reference" state initialisation.
-			      if (i==0)
-				etatPrec=etatCour;
-			      
-			      // Case where there's a number after characteres.
-			      if ((etatCour==ETAT_NUM)&&(etatPrec==ETAT_CHAR))
-				{
-				  if ( strCharRef != strCharTest )
-				    {
-				      isFound = false;
-				    }
-				  
-				  strCharRef="";
-				  strCharTest="";
-				  strNumRef=charTmpRef;
-				  strNumTest=charTmpTest;
-				  chgt=true;
-				}
-			      // Case where there's a character after numbers.
-			      else if ((etatCour==ETAT_CHAR)&&(etatPrec==ETAT_NUM))
-				{
-				  if ( (strNumRef != strNumTest)
-				       && (vcl_abs(atof(strNumRef.c_str())) > m_EpsilonBoundaryChecking)
-				       && (vcl_abs(atof(strNumRef.c_str())-atof(strNumTest.c_str()))
-					   > epsilon*vcl_abs(atof(strNumRef.c_str()))
-					   ) ) //epsilon as relative error
-				    {
-				      isFound = false;
-				    }
-				  
-				  strNumRef="";
-				  strNumTest="";
-				  strCharRef=charTmpRef;
-				  strCharTest=charTmpTest;
-				  chgt=true;
-				}
-			      else if (etatCour==etatPrec)
-				{
-				  if (etatCour==ETAT_CHAR)
-				    {
-				      strCharRef+=charTmpRef;
-				      strCharTest+=charTmpTest;
-				    }
-				  else
-				    {
-				      strNumRef+=charTmpRef;
-				      strNumTest+=charTmpTest;
-				    }
-				}
-			      
-			      etatPrec = etatCour;
-			      ++i;
-			    }
-			  // Simpliest case : string characters or numeric value between 2 separators
-			  if (!chgt)
-			    {
-			      if (isNumeric(strRef))
-				{
-				  if ( ( strRef != strTest)
-				       && (vcl_abs(atof(strRef.c_str())) > m_EpsilonBoundaryChecking)
-				       && (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str()))
-					   > epsilon*vcl_abs(atof(strRef.c_str()))
-					   )) //epsilon as relative error
-				    {
-				      isFound = false;
-				    }
-				}
-			      else
-				{
-				  if ( strRef != strTest )
-				    {
-				      isFound = false;
-				    }
-				}
-			    }
-			} // else
-		    } // if(!isHexaPointerAddress(strRef))
-		} // end 
-	      // copy the line
+		  if( !std::isspace(lastElt) && std::isspace(strfileref[l]))
+		      refElt++;
 
-	      if(isFound == true)
-		{
-		  bool lineAlreadyUsed = false;
-		  unsigned int count = 0;
-		  while(count<usedLineInTestFile.size() &&  lineAlreadyUsed==false)
-		    {
-		      if(usedLineInTestFile[count]==lineId)
-			{
-			  isFound = false;
-			  lineAlreadyUsed = true;
-			}
-		      count++;
-		    }
-		  if(lineAlreadyUsed==false)
-		    {
-		      usedLineInTestFile.push_back(lineId);
-		      std::cout<<"~~~~ Line found: "<<std::endl;
-		      std::cout<<"~~~~ reference: "<<strfileref<<std::endl;
-		      std::cout<<"~~~~ test     : "<<strfiletest<<std::endl;
-		    }
+		  lastElt = strfileref[l];
 		}
+	      if(std::isspace(lastElt))
+		refElt--;
+
+	      unsigned int testElt = 1;
+	      lastElt = strfiletest[0];
+	       for( unsigned int l=1; l<strfiletest.size(); l++ )
+		{
+		  if( !std::isspace(lastElt) && std::isspace(strfiletest[l]))
+		      testElt++;
+
+		  lastElt = strfiletest[l];
+		}
+	       if(std::isspace(lastElt))
+		 testElt--;
+
+	       if(refElt!=testElt)
+		 {
+		   isFound = false;
+		 }
+	       // Chek word by word the match of the line
+	       else
+		 {
+		   // Store the match result between 2 words of the same position
+		   std::vector<bool> isFoundVect;
+		   while (buffstreamRef.peek() != EOF  && buffstreamTest.peek() != EOF )
+		     {
+		       isFoundVect.push_back(true);
+		  
+		       std::string strRef = "";
+		       std::string strTest = "";
+		  
+		       std::string strNumRef = "";
+		       std::string strCharRef = "";
+		       std::string strNumTest = "";
+		       std::string strCharTest = "";
+		  
+		       buffstreamRef >> strRef;
+		       buffstreamTest >> strTest;
+		
+		       bool chgt= false;
+		       std::string charTmpRef = "";
+		       std::string charTmpTest = "";
+		       unsigned int i=0;
+		  
+		       if (!isHexaPointerAddress(strRef))
+			 {
+			   //Analyse if strRef contains scientific value (ex: "-142.124e-012")
+			   if (isScientificNumeric(strRef))
+			     {
+			       if (!isScientificNumeric(strTest))
+				 {
+				   isFoundVect[isFoundVect.size()-1] = false;//isFound = false;
+				 }
+			       else if ( (strRef != strTest)
+					 && (vcl_abs(atof(strRef.c_str())) > m_EpsilonBoundaryChecking)
+					 && (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str()))
+					     > epsilon*vcl_abs(atof(strRef.c_str()))
+					     ) )//epsilon as relative error
+				 {
+				   isFoundVect[isFoundVect.size()-1] = false;//isFound = false;
+				 }
+			     }
+			   else
+			     {
+			       while (i < strRef.size())
+				 {
+				   charTmpRef=strRef[i];
+			      
+				   if (i<strTest.size())
+				     {
+				       charTmpTest=strTest[i];
+				     }
+			      
+				   if (isNumeric(charTmpRef))
+				     etatCour = ETAT_NUM;
+				   else
+				     etatCour = ETAT_CHAR;
+			      
+				   // "reference" state initialisation.
+				   if (i==0)
+				     etatPrec=etatCour;
+			      
+				   // Case where there's a number after characteres.
+				   if ((etatCour==ETAT_NUM)&&(etatPrec==ETAT_CHAR))
+				     {
+				       if ( strCharRef != strCharTest )
+					 {
+					   isFoundVect[isFoundVect.size()-1] = false;//isFound = false;
+					 }
+				  
+				       strCharRef="";
+				       strCharTest="";
+				       strNumRef=charTmpRef;
+				       strNumTest=charTmpTest;
+				       chgt=true;
+				     }
+				   // Case where there's a character after numbers.
+				   else if ((etatCour==ETAT_CHAR)&&(etatPrec==ETAT_NUM))
+				     {
+				       if ( (strNumRef != strNumTest)
+					    && (vcl_abs(atof(strNumRef.c_str())) > m_EpsilonBoundaryChecking)
+					    && (vcl_abs(atof(strNumRef.c_str())-atof(strNumTest.c_str()))
+						> epsilon*vcl_abs(atof(strNumRef.c_str()))
+						) ) //epsilon as relative error
+					 {
+					   isFoundVect[isFoundVect.size()-1] = false;//isFound = false;
+					 }
+				  
+				       strNumRef="";
+				       strNumTest="";
+				       strCharRef=charTmpRef;
+				       strCharTest=charTmpTest;
+				       chgt=true;
+				     }
+				   else if (etatCour==etatPrec)
+				     {
+				       if (etatCour==ETAT_CHAR)
+					 {
+					   strCharRef+=charTmpRef;
+					   strCharTest+=charTmpTest;
+					 }
+				       else
+					 {
+					   strNumRef+=charTmpRef;
+					   strNumTest+=charTmpTest;
+					 }
+				     }
+			      
+				   etatPrec = etatCour;
+				   ++i;
+				 }
+			       // Simpliest case : string characters or numeric value between 2 separators
+			       if (!chgt)
+				 {
+				   if (isNumeric(strRef))
+				     {
+				       if ( ( strRef != strTest)
+					    && (vcl_abs(atof(strRef.c_str())) > m_EpsilonBoundaryChecking)
+					    && (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str()))
+						> epsilon*vcl_abs(atof(strRef.c_str()))
+						)) //epsilon as relative error
+					 {
+					   isFoundVect[isFoundVect.size()-1] = false;//isFound = false;
+					 }
+				     }
+				   else
+				     {
+				       if ( strRef != strTest )
+					 {
+					   isFoundVect[isFoundVect.size()-1] = false;//isFound = false;
+					 }
+				     }
+				 }
+			     } // else
+			 } // if(!isHexaPointerAddress(strRef))
+		     }  // while (buffstreamRef.peek() != EOF ) 
+		
+		   // If 1 word differs -> the line doesn't match
+		   unsigned int n=0;
+		   bool falseFound = false;
+		   while( n<isFoundVect.size() && falseFound==false)
+		     {
+		       if(isFoundVect[n]==false)
+			 {
+			   isFound=false;
+			   falseFound=true;
+			 }
+		       n++;
+		     }
+		 }
+		  
+	       // Check that the tested line has been alreday used (2 same lines in the baseline)
+	       // If yes, it won't be retained
+	       if(isFound == true)
+		 {
+		   bool lineAlreadyUsed = false;
+		   unsigned int count = 0;
+		   while(count<usedLineInTestFile.size() &&  lineAlreadyUsed==false)
+		     {
+		       if(usedLineInTestFile[count]==lineId)
+			 {
+			   isFound = false;
+			   lineAlreadyUsed = true;
+			 }
+		       count++;
+		     }
+		   if(lineAlreadyUsed==false)
+		       usedLineInTestFile.push_back(lineId);
+		 }
 	              
 
 	    }// end while( std::getline(fluxfiletestremoved,strfiletest)!=0 && foundexpr == false )
-
+	  
+	  // Stores the baseline line that hasn't found a twin in the tested file
 	  if(isFound == false)
 	    {
-	      std::cout<<"++++++++++++++++++++++++++++++++++++++++++++++++++ Line not found: "<<strfileref<<std::endl;
 	      listStrDiffLineFileRef.push_back(strfileref);
 	      nbdiff++;
 	    }
@@ -655,7 +697,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
     }// end while( std::getline(fluxfileref,strfileref)!=0 )
   
   
-      //fluxfiletest.close();
+  //fluxfiletest.close();
   fluxfileref.close();
   if ( reportErrors )
     {
@@ -663,6 +705,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
     }
   
 
+  // Stores the tested file lines that haven't found a twin in the baseline file
   std::ifstream fluxfiletest(testListFileName);
   std::string strfiletest;
   unsigned int testNbLines = 0;
@@ -690,12 +733,10 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 	    }
 	  if(found==false)
 	    listStrDiffLineFileTest.push_back(strfiletest);
-	  //count++;
 	}
     }
 
 
-  std::cout<<testNbLines<<std::endl;
 
   if ( nbdiff!=0 && reportErrors)
     {
