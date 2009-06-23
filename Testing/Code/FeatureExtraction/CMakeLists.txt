@@ -14,6 +14,7 @@ SET(EPSILON_3 0.001)
 
 #Tolerance sur diff pixel image
 #EPSILON est different de 0.0 pour les tests multiplateformes avec différentes options de compilation.
+SET(EPSILON_6 0.000001)
 SET(EPSILON_8 0.00000001)
 
 SET(FEATUREEXTRACTION_TESTS1 ${CXX_TEST_PATH}/otbFeatureExtractionTests1)
@@ -539,7 +540,7 @@ ADD_TEST(feTuNeighborhoodScalarProductFilterNew ${FEATUREEXTRACTION_TESTS6}
          otbNeighborhoodScalarProductFilterNew)
 
 ADD_TEST(feTvNeighborhoodScalarProductFilter ${FEATUREEXTRACTION_TESTS6}
-  --compare-n-images ${EPSILON_8} 2
+  --compare-n-images ${EPSILON_6} 2
 		      ${BASELINE}/feTvNeigborhoodScalarProductModulusOutput.hdr
 		      ${TEMP}/feTvNeigborhoodScalarProductModulusOutput.hdr
 		      ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
