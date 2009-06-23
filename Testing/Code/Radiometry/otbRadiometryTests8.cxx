@@ -33,6 +33,7 @@ void RegisterTests()
   REGISTER_TEST(otbISUMultiChannelRAndNIRIndexImageFilter);
   REGISTER_TEST(otbNDWIMultiChannelWaterIndexImageFilter);
   REGISTER_TEST(otbNDWIWaterIndexImageFilter);
+  REGISTER_TEST(otbWaterSqrtSpectralAngleImageFilter);
 }
 
 

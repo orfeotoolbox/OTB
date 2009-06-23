@@ -14,6 +14,7 @@ SET(EPSILON_3 0.001)
 
 #Tolerance sur diff pixel image
 #EPSILON est different de 0.0 pour les tests multiplateformes avec différentes options de compilation.
+SET(EPSILON_6 0.000001)
 SET(EPSILON_8 0.00000001)
 
 SET(FEATUREEXTRACTION_TESTS1 ${CXX_TEST_PATH}/otbFeatureExtractionTests1)
@@ -539,7 +540,7 @@ ADD_TEST(feTuNeighborhoodScalarProductFilterNew ${FEATUREEXTRACTION_TESTS6}
          otbNeighborhoodScalarProductFilterNew)
 
 ADD_TEST(feTvNeighborhoodScalarProductFilter ${FEATUREEXTRACTION_TESTS6}
-  --compare-n-images ${EPSILON_8} 2
+  --compare-n-images ${EPSILON_6} 2
 		      ${BASELINE}/feTvNeigborhoodScalarProductModulusOutput.hdr
 		      ${TEMP}/feTvNeigborhoodScalarProductModulusOutput.hdr
 		      ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
@@ -1754,6 +1755,17 @@ ADD_TEST(feTvImageToLineSegmentVectorData ${FEATUREEXTRACTION_TESTS15}
       ${TEMP}/feTvImageToLineSegmentVectorData.kml
 )
 
+# -------            otb::SqrtSpectralAngleImageFilter (Ossman)------------------------------
+ADD_TEST(feTvSqrtSpectralAngleImageFilter ${FEATUREEXTRACTION_TESTS15}
+ --compare-image ${EPSILON_8}   ${BASELINE}/feSqrtSpectralAngle.tif
+                   ${TEMP}/feSqrtSpectralAngle.tif
+        otbSqrtSpectralAngleImageFilter
+        ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
+        ${TEMP}/feSqrtSpectralAngle.tif
+        185 270 150 619 #reference pixel
+)
+
+
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
 otbAlignImageToPath.cxx
@@ -1916,6 +1928,7 @@ otbRegionImageToRectangularPathListFilter.cxx
 SET(BasicFeatureExtraction_SRCS15
 otbImageToLineSegmentVectorDataNew.cxx
 otbImageToLineSegmentVectorData.cxx
+otbSqrtSpectralAngleImageFilter.cxx
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)

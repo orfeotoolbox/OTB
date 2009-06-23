@@ -39,7 +39,31 @@ public:
   };
 
   ~SpectralAngleFunctor() {};
+  // Binary operator
   inline TOutputValue operator()(const TInput& inPix)
+  {
+    return this->Evaluate(inPix);
+  }
+
+  void SetReferencePixel( TInput ref )
+  {
+    m_ReferencePixel = ref;
+    m_RefNorm = 0.0;
+    for (unsigned int i = 0; i<ref.Size(); ++i)
+    {
+      m_RefNorm += ref[i]*ref[i];
+    }
+    m_RefNorm = vcl_sqrt(static_cast<double>(m_RefNorm));
+  };
+  TInput GetReferencePixel()
+  {
+    return m_ReferencePixel;
+  };
+
+protected:
+  // This method can be reimplemented in subclasses to actually
+  // compute the index value
+  virtual TOutputValue Evaluate(const TInput& inPix) const
   {
     TOutputValue out;
 
@@ -66,25 +90,8 @@ public:
 
     out = static_cast<TOutputValue>(dist);
     return out;
-
   }
 
-  void SetReferencePixel( TInput ref )
-  {
-    m_ReferencePixel = ref;
-    m_RefNorm = 0.0;
-    for (unsigned int i = 0; i<ref.Size(); ++i)
-    {
-      m_RefNorm += ref[i]*ref[i];
-    }
-    m_RefNorm = vcl_sqrt(static_cast<double>(m_RefNorm));
-  };
-  TInput GetReferencePixel()
-  {
-    return m_ReferencePixel;
-  };
-
-protected:
   TInput m_ReferencePixel;
   double m_RefNorm;
 };
@@ -94,3 +101,4 @@ protected:
 
 
 #endif
+

@@ -284,7 +284,8 @@ MIRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
     typename FixedImageType::RegionType region=img->GetLargestPossibleRegion();
 
     ImageRandomIteratorWithIndex<FixedImageType> randasamit(img,region);
-    unsigned int numberOfSamples=20;
+//     unsigned int numberOfSamples=20;
+    unsigned int numberOfSamples=10;
     randasamit.SetNumberOfSamples( numberOfSamples );
 //  numberOfSamples=100;
 
