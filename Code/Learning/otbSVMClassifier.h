@@ -21,6 +21,7 @@
 #include "itkSampleClassifier.h"
 #include "otbSVMModel.h"
 #include "itkVectorImage.h"
+#include "otbSVMClassifierFunctor.h"
 
 namespace otb
 {
@@ -77,6 +78,9 @@ public:
 
   /** typedef for label type */
   typedef TLabel ClassLabelType;
+
+  // The SVM classifier functor
+  typedef Functor::SVMClassifierFunctor<MeasurementVectorType,ClassLabelType> SVMFunctorType;
 
 
   /** Returns the classification result */
