@@ -41,7 +41,7 @@ public:
    /**
     * @brief Destructor
     */
-   ~SensorParams();
+   virtual ~SensorParams();
 
    /**
     *@brief Copy constructor

@@ -165,7 +165,11 @@ public:
                     maxSorted.pop_back();
                     doo=true;
                   }
-                ++itVector;
+		// Some visual plateform segfault at the ++ when the previous condition is checked
+		// even if a -- is done.
+		// Seems to be due to std::vector::insert that change the pointer.
+		if( !doo )
+		  ++itVector;
               }
             doo = false;
             itVector = minSorted.begin();
@@ -175,9 +179,13 @@ public:
                   {
                     minSorted.insert(itVector, dist);
                     minSorted.pop_back();
-                    doo=true;
+		    doo=true;
                   }
-                ++itVector;
+		// Some visual plateform segfault at the ++ when the previous condition is checked
+		// even if a -- is done.
+		// Seems to be due to std::vector::insert that change the pointer.
+		if( !doo )
+		  ++itVector;
               }
           }
 

@@ -55,14 +55,14 @@ WaveletForwardTransform< TInputImage, TOutputImage, TFilter >
   this->SetNumberOfOutputs( nbOutputs );
 
   unsigned int idx = 0;
-  GetFilter(0)->GraftNthOutput( 0, this->GetOutput(++idx) );
-  
+  GetFilter(0)->GraftNthOutput( 0, this->GetOutput(idx++) );
+ 
   for ( unsigned int i = 0; i < this->GetNumberOfDecompositions(); ++i )
   {
     for ( unsigned int j = 1; j < this->GetFilter(i)->GetNumberOfOutputs(); ++j )
     {
       this->SetNthOutput( idx, OutputImageType::New() );
-      GetFilter(i)->GraftNthOutput( j, this->GetOutput( ++idx ) );
+      GetFilter(i)->GraftNthOutput( j, this->GetOutput( idx++ ) );
     }
   }
 

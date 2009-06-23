@@ -43,7 +43,6 @@ ADD_TEST(coTuSystemTests_IsA_Methods ${COMMON_TESTS1}
         ${OTB_DATA_ROOT}
         )
 
-
 # -------            otb::CommandLibneArgumentParser  -------------
 
 ADD_TEST(coTuCmdLineArgParserHelpWithArg ${COMMON_TESTS1}
@@ -586,6 +585,7 @@ ADD_TEST(coTvVectorData ${COMMON_TESTS7}
       --compare-ascii ${EPSILON_3}
             ${BASELINE_FILES}/coTvVectorData.txt
             ${TEMP}/coTvVectorData.txt
+            --ignore-lines-with 1 RTTI
      otbVectorData
        ${TEMP}/coTvVectorData.txt
 )

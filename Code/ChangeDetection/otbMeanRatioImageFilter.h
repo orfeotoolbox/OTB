@@ -72,9 +72,13 @@ public:
     meanA /= itA.Size();
     meanB /= itB.Size();
 
+    //std::cout<<"meanA= "<<meanA<<", meanB= "<<meanB<<std::endl;
+
     TOutput ratio;
 
-    if (meanA>meanB)
+    if(meanA == meanB)
+      ratio = 0.;
+    else if (meanA>meanB)
       ratio = static_cast<TOutput>(1.0 - meanB/meanA);
     else ratio = static_cast<TOutput>(1.0 - meanA/meanB);
 

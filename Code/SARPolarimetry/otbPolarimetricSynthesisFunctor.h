@@ -68,7 +68,7 @@ public:
 
     tmp = vcl_conj(m_Er[0])*( m_Ei[0]*Shh + m_Ei[1]*Shv ) + vcl_conj(m_Er[1])*( m_Ei[0]*Svh + m_Ei[1]*Svv );
 
-    scalar=(double) ( vcl_pow( std::abs(tmp),2)  );
+    scalar=(double) ( vcl_pow( vcl_abs(tmp),2) );
 
     return ( static_cast<TOutput>(scalar) );
   }

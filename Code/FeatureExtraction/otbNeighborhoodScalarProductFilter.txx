@@ -84,7 +84,9 @@ NeighborhoodScalarProductFilter<TInputImage,TOutputModulus,TOutputDirection>
     {
       // local variable intialisation
       int neighborhoodNumberMax = 0;
-      double scalarMaxValue= 0.0;
+      double scalarMaxValue = 0;
+      //TODO for a more general algorithm this might be replaced by:
+      //double scalarMaxValue = itk::NumericTraits<double>::NonpositiveMin();
       int flagPosNegDirection = 0;
 
       // walk through each case
@@ -127,7 +129,7 @@ NeighborhoodScalarProductFilter<TInputImage,TOutputModulus,TOutputDirection>
         // Compute the scalar product
         scalarCurrentValue = -(pixel1[0]*pixel2[0]+pixel1[1]*pixel2[1]);
 
-        // If the value is upper than the current max value
+        // If the value is higher than the current max value
         if (scalarCurrentValue > scalarMaxValue)
         {
           // keep this configuration

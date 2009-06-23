@@ -29,9 +29,7 @@ template < class TImage, class TInternalImage >
 ImageSeriesFileReader< TImage, TInternalImage > 
 ::ImageSeriesFileReader ()
 {
-  this->m_OutputList = OutputImageListType::New();
-  this->m_ImageFileReaderList = ReaderListType::New();
-  m_ExtractorList = ExtractSelectionListType::New();
+   m_ExtractorList = ExtractSelectionListType::New();
 }
 
 template < class TImage, class TInternalImage >
@@ -68,8 +66,6 @@ template < class TPixel, class TInternalPixel >
 ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixel, 2 > >
 ::ImageSeriesFileReader ()
 {
-  this->m_OutputList = OutputImageListType::New();
-  this->m_ImageFileReaderList = ReaderListType::New();
   m_ExtractorList = ExtractSelectionListType::New();
 }
 
@@ -125,8 +121,9 @@ template < class TPixel, class TInternalPixel >
 void
 ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixel, 2 > >
 ::GenerateData( unsigned int idx )
-{
+{ 
   std::cerr << "Reading " << idx << "th image: " << this->m_ListOfFileNames[ idx ] << "\n";
+
   otbMsgDebugMacro( << "Reading " << idx << "th image: " << this->m_ListOfFileNames[ idx ] );
 
   ReaderType * reader 
@@ -159,8 +156,8 @@ template < class TPixel, class TInternalPixel >
 ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
 ::ImageSeriesFileReader ()
 {
-  this->m_OutputList = OutputImageListType::New();
-  this->m_ImageFileReaderList = ReaderListType::New();
+  //this->m_OutputList = OutputImageListType::New();
+  //this->m_ImageFileReaderList = ReaderListType::New();
   m_ExtractorList = ExtractSelectionListType::New();
 }
 
@@ -209,7 +206,7 @@ ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
 ::GenerateData( unsigned int idx )
 {
   otbMsgDebugMacro( << "Reading " << idx << "th image: " << this->m_ListOfFileNames[ idx ] );
-  
+
   ReaderType * reader 
     = static_cast<ReaderType*>( this->m_ImageFileReaderList->GetNthElement( idx ) );
 
@@ -240,8 +237,8 @@ template < class TPixel, class TInternalPixel >
 ImageSeriesFileReader< VectorImage< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
 ::ImageSeriesFileReader ()
 {
-  this->m_OutputList = OutputImageListType::New();
-  this->m_ImageFileReaderList = ReaderListType::New();
+  //this->m_OutputList = OutputImageListType::New();
+  //this->m_ImageFileReaderList = ReaderListType::New();
   m_ExtractorList = ExtractSelectionListType::New();
 }
 
@@ -279,7 +276,7 @@ ImageSeriesFileReader< VectorImage< TPixel, 2 >, VectorImage< TInternalPixel, 2 
   ExtractSelectionType * selection
     = static_cast<ExtractSelectionType*>( this->m_ExtractorList->GetNthElement( idx ) );
 
-  selection->SetExtractionRegion( this->m_ListOfRegionSelection[ idx ] );
+	selection->SetExtractionRegion( this->m_ListOfRegionSelection[ idx ] );
 
         for ( std::vector<unsigned int>::iterator band = this->m_ListOfBandSelection[ idx ].begin();
                 band != this->m_ListOfBandSelection[ idx ].end();
