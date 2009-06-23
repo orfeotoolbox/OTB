@@ -70,6 +70,8 @@ int main(int ac, char* av[] )
   std::vector<std::string> testFilenamesImage;
   std::vector<std::string> baselineFilenamesAscii;
   std::vector<std::string> testFilenamesAscii;
+  std::vector<std::string> baselineFilenamesList;
+  std::vector<std::string> testFilenamesList;
   std::vector<std::string> ignoredLines;
   ignoredLines.clear();
 
@@ -220,6 +222,56 @@ int main(int ac, char* av[] )
       av+=3+2*nbComparisons;
       ac-=3+2*nbComparisons;
     }
+    else if (strcmp(av[1], "--compare-list") == 0)
+    {
+      lFlagRegression = true;
+      lEpsilon = (double)(::atof(av[2]));
+      baselineFilenamesList.reserve(1);
+      testFilenamesList.reserve(1);
+      baselineFilenamesList.push_back(av[3]);
+      testFilenamesList.push_back(av[4]);
+      if ( ac > 5 )
+      {
+        if (strcmp(av[5], "--ignore-lines-with") == 0)
+        {
+          unsigned int nbIgnoredLines=(unsigned int)(::atoi(av[6]));
+          for (unsigned int  i=0; i<nbIgnoredLines; ++i )
+          {
+            ignoredLines.push_back(av[7+i]);
+          }
+          av += 6+nbIgnoredLines;
+          ac -= 6+nbIgnoredLines;
+        }
+        else
+        {
+          av += 4;
+          ac -= 4;
+        }
+      }
+      else
+      {
+        av += 4;
+        ac -= 4;
+      }
+    }
+
+    else if (strcmp(av[1], "--compare-n-list") == 0)
+    {
+      lFlagRegression = true;
+      lEpsilon = (double)(::atof(av[2]));
+      // Number of comparisons to do
+      unsigned int nbComparisons=(unsigned int)(::atoi(av[3]));
+      baselineFilenamesList.reserve(nbComparisons);
+      testFilenamesList.reserve(nbComparisons);
+      // Retrieve all the file names
+      for (unsigned int i = 0; i<nbComparisons;++i)
+      {
+        baselineFilenamesList.push_back(av[4+2*i]);
+        testFilenamesList.push_back(av[5+2*i]);
+      }
+      av+=3+2*nbComparisons;
+      ac-=3+2*nbComparisons;
+    }
     else if (strcmp(av[1], "--compare-metadata") == 0)
     {
       lFlagRegression = true;
@@ -231,6 +283,7 @@ int main(int ac, char* av[] )
       av += 4;
       ac -= 4;
     }
+
     else if (strcmp(av[1], "--compare-ogr") == 0)
     {
       lFlagRegression = true;
@@ -296,7 +349,6 @@ int main(int ac, char* av[] )
       {
         try
         {
-
           std::cout << "-------------  Start control baseline tests    -------------"<<std::endl;
           // Make a list of possible baselines
 
@@ -445,12 +497,74 @@ int main(int ac, char* av[] )
               result += multiResult;
             }
           }
+/******************************************/
+/******************************************/
+/******************************************/
+// Non regression test for list
+          if ((baselineFilenamesList.size()>0) && (testFilenamesList.size()>0))
+          {
+            // Creates iterators on baseline filenames vector and test filenames vector
+            std::vector<std::string>::iterator itbaselineFilenames = baselineFilenamesList.begin();
+            std::vector<std::string>::iterator itTestFilenames = testFilenamesList.begin();
+            std::vector<std::string>::iterator itIgnoredLines = ignoredLines.begin();
+            // Warning message
+            if (ignoredLines.size() > 0 )
+            {
+              std::cout << "The lines containing the expressions ";
+              for (;itIgnoredLines!=ignoredLines.end();++itIgnoredLines)
+              {
+                std::cout << (*itIgnoredLines) <<" ";
+              }
+              std::cout << "are not considered"<< std::endl;
+            }
+
+            // For each couple of baseline and test file, do the comparison
+            for (;(itbaselineFilenames != baselineFilenamesList.end())
+                 &&(itTestFilenames != testFilenamesList.end());
+                 ++itbaselineFilenames,++itTestFilenames)
+            {
+              std::string baselineFilenameList= (*itbaselineFilenames);
+              std::string testFilenameList= (*itTestFilenames);
+
+              std::map<std::string,int> baselines = testHelper.RegressionTestbaselines(const_cast<char*>(baselineFilenameList.c_str()));
+              std::map<std::string,int>::reverse_iterator baseline = baselines.rbegin();
+              multiResult = 1;
+              std::cout<<"Number of baseline files: "<<baselines.size()<<std::endl;
+              while (baseline!=baselines.rend() && (multiResult!=0))
+              {
+                std::cout<<"Testing non-regression on file: "<<(baseline->first).c_str()<<std::endl;
+                baseline->second = testHelper.RegressionTestListFile(testFilenameList.c_str(),
+                                   (baseline->first).c_str(),
+                                   0,
+                                   lEpsilon,
+                                   ignoredLines);
+
+                multiResult = baseline->second;
+                ++baseline;
+              }
+              if (multiResult != 0)
+              {
+                baseline = baselines.rbegin();
+                baseline->second
+                    = testHelper.RegressionTestListFile(testFilenameList.c_str(),
+                                          (baseline->first).c_str(),
+                                          1,
+                                          lEpsilon,
+                                          ignoredLines);
+              }
+              result += multiResult;
+            }
+          }
+/******************************************/
+/******************************************/
+/******************************************/
           // Non regression test for binary files
           if ((baselineFilenamesBinary.size()>0) && (testFilenamesBinary.size()>0))
           {
             // Creates iterators on baseline filenames vector and test filenames vector
             std::vector<std::string>::iterator itbaselineFilenames = baselineFilenamesBinary.begin();
             std::vector<std::string>::iterator itTestFilenames = testFilenamesBinary.begin();
+
             // For each couple of baseline and test file, do the comparison
             for (;(itbaselineFilenames != baselineFilenamesBinary.end())
                  &&(itTestFilenames != testFilenamesBinary.end());

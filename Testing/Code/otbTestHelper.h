@@ -42,6 +42,7 @@ namespace otb
       int RegressionTestOgrFile (const char *, const char *, int, const double) const;
       int RegressionTestBinaryFile(const char *, const char *, int) const;
       int RegressionTestAsciiFile(const char *, const char *, int, const double, std::vector<std::string> ignoredLines) const;
+      int RegressionTestListFile(const char *, const char *, int, const double, std::vector<std::string> ignoredLines) const;
       int RegressionTestMetaData(const char *, const char *,int,const double) const;
 
     private:

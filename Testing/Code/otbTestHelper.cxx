@@ -24,6 +24,7 @@
 #include <iostream>
 #include <fstream>
 
+
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
@@ -397,6 +398,338 @@ namespace otb
     }
     return (nbdiff != 0) ? 1 : 0;
   }
+
+/******************************************/
+/******************************************/
+/******************************************/
+int TestHelper::RegressionTestListFile(const char * testListFileName, const char * baselineListFileName, int reportErrors, const double epsilon, std::vector<std::string> ignoredLines) const
+{
+  std::cout<<"RegressionTestListFileRegressionTestListFileRegressionTestListFile"<<std::endl;
+  std::ifstream fluxfileref(baselineListFileName);
+  std::vector<unsigned int> usedLineInTestFile;
+  
+  enum TypeEtat { ETAT_NUM, ETAT_CHAR };
+  
+  std::string diffListFileName(testListFileName);
+  diffListFileName += ".diff.txt";
+  std::ofstream fluxfilediff;
+  if ( reportErrors )
+    {
+      fluxfilediff.open(diffListFileName.c_str());
+    }
+  
+  //std::string strfiletest;
+  std::string strfileref;
+  
+  int nbdiff(0);
+  int numLine(1);
+
+  if (!fluxfileref)
+    {
+      itkGenericExceptionMacro(<< "Impossible to open the baseline List file <"<<baselineListFileName<<">.");
+    }
+  
+  TypeEtat etatPrec(ETAT_NUM), etatCour(ETAT_NUM);
+  
+  std::vector<std::string> listStrDiffLineFileRef;
+  std::vector<std::string> listStrDiffLineFileTest;
+  
+  
+  
+  while ( std::getline(fluxfileref,strfileref)!=0  )
+    {
+      std::cout<<"**************** REFENC LINE: "<<strfileref<<std::endl;
+      //otb::StringStream buffstreamRef;
+      //buffstreamRef << strfileref;
+      
+      //check if we've reached end of test file
+      //if (std::getline(fluxfiletest,strfiletest) == 0)
+      bool foundexpr = false;
+      if (ignoredLines.size()>0)
+        {
+	  
+          std::vector<std::string>::iterator itIgnoredLines = ignoredLines.begin();
+	  
+          for (;(itIgnoredLines != ignoredLines.end()); ++itIgnoredLines)
+	    {
+	      std::string ignoredLinesList = (*itIgnoredLines);
+	      std::string::size_type loc = strfileref.find(ignoredLinesList);
+	      if ( loc != std::string::npos )
+		{
+		  foundexpr = true;
+		}
+	      
+	    }
+	  
+        }      
+      if ( foundexpr == false )
+        {
+	  bool isFound = false;
+	  unsigned int lineId = 0;
+	  std::string strfiletest;
+	  // Open tested file
+	  std::ifstream fluxfiletest(testListFileName);
+	  if (!fluxfiletest)
+	    {
+	      itkGenericExceptionMacro(<<"Impossible to open the test List file <"<<testListFileName<<">.");
+	    }
+
+	  while ( std::getline(fluxfiletest,strfiletest)!=0 && isFound==false )
+	    {
+	      std::cout<<"**************** TESTED LINE: "<<strfiletest<<std::endl;
+	      lineId++;
+	      otb::StringStream buffstreamTest;
+	      otb::StringStream buffstreamRef;
+	      isFound=true;
+	      buffstreamTest << strfiletest;
+	      buffstreamRef << strfileref;
+	      int nblinediff(0);
+	      
+	      while (buffstreamRef.peek() != EOF)
+		{
+		  std::string strRef = "";
+		  std::string strTest = "";
+		  
+		  std::string strNumRef = "";
+		  std::string strCharRef = "";
+		  std::string strNumTest = "";
+		  std::string strCharTest = "";
+		  
+		  buffstreamRef >> strRef;
+		  buffstreamTest >> strTest;
+		  
+		  bool chgt= false;
+		  std::string charTmpRef = "";
+		  std::string charTmpTest = "";
+		  unsigned int i=0;
+		  
+		  std::cout<<strRef<<std::endl;
+		  if (!isHexaPointerAddress(strRef))
+		    {
+		      //Analyse if strRef contains scientific value (ex: "-142.124e-012")
+		      if (isScientificNumeric(strRef))
+			{
+			  if (!isScientificNumeric(strTest))
+			    {
+			      isFound = false;
+			    }
+			  else if ( (strRef != strTest)
+				    && (vcl_abs(atof(strRef.c_str())) > m_EpsilonBoundaryChecking)
+				    && (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str()))
+					> epsilon*vcl_abs(atof(strRef.c_str()))
+					) )//epsilon as relative error
+			    {
+			      isFound = false;
+			    }
+			}
+		      else
+			{
+			  std::cout<<"!isScientificNumeric "<<epsilon<<std::endl;
+			  while (i < strRef.size())
+			    {
+			      charTmpRef=strRef[i];
+			      
+			      if (i<strTest.size())
+				{
+				  charTmpTest=strTest[i];
+				}
+			      
+			      if (isNumeric(charTmpRef))
+				etatCour = ETAT_NUM;
+			      else
+				etatCour = ETAT_CHAR;
+			      
+			      // "reference" state initialisation.
+			      if (i==0)
+				etatPrec=etatCour;
+			      
+			      // Case where there's a number after characteres.
+			      if ((etatCour==ETAT_NUM)&&(etatPrec==ETAT_CHAR))
+				{
+				  if ( strCharRef != strCharTest )
+				    {
+				      isFound = false;
+				    }
+				  
+				  strCharRef="";
+				  strCharTest="";
+				  strNumRef=charTmpRef;
+				  strNumTest=charTmpTest;
+				  chgt=true;
+				}
+			      // Case where there's a character after numbers.
+			      else if ((etatCour==ETAT_CHAR)&&(etatPrec==ETAT_NUM))
+				{
+				  if ( (strNumRef != strNumTest)
+				       && (vcl_abs(atof(strNumRef.c_str())) > m_EpsilonBoundaryChecking)
+				       && (vcl_abs(atof(strNumRef.c_str())-atof(strNumTest.c_str()))
+					   > epsilon*vcl_abs(atof(strNumRef.c_str()))
+					   ) ) //epsilon as relative error
+				    {
+				      isFound = false;
+				    }
+				  
+				  strNumRef="";
+				  strNumTest="";
+				  strCharRef=charTmpRef;
+				  strCharTest=charTmpTest;
+				  chgt=true;
+				}
+			      else if (etatCour==etatPrec)
+				{
+				  if (etatCour==ETAT_CHAR)
+				    {
+				      strCharRef+=charTmpRef;
+				      strCharTest+=charTmpTest;
+				    }
+				  else
+				    {
+				      strNumRef+=charTmpRef;
+				      strNumTest+=charTmpTest;
+				    }
+				}
+			      
+			      etatPrec = etatCour;
+			      ++i;
+			    }
+			  // Simpliest case : string characters or numeric value between 2 separators
+			  if (!chgt)
+			    {
+			      if (isNumeric(strRef))
+				{
+				  if ( ( strRef != strTest)
+				       && (vcl_abs(atof(strRef.c_str())) > m_EpsilonBoundaryChecking)
+				       && (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str()))
+					   > epsilon*vcl_abs(atof(strRef.c_str()))
+					   )) //epsilon as relative error
+				    {
+				      isFound = false;
+				    }
+				}
+			      else
+				{
+				  if ( strRef != strTest )
+				    {
+				      isFound = false;
+				    }
+				}
+			    }
+			} // else
+		    } // if(!isHexaPointerAddress(strRef))
+		} // end 
+	      // copy the line
+
+	      if(isFound == true)
+		{
+		  bool lineAlreadyUsed = false;
+		  unsigned int count = 0;
+		  while(count<usedLineInTestFile.size() &&  lineAlreadyUsed==false)
+		    {
+		      if(usedLineInTestFile[count]==lineId)
+			{
+			  isFound = false;
+			  lineAlreadyUsed = true;
+			}
+		      count++;
+		    }
+		  if(lineAlreadyUsed==false)
+		    {
+		      usedLineInTestFile.push_back(lineId);
+		      std::cout<<"~~~~ Line found: "<<std::endl;
+		      std::cout<<"~~~~ reference: "<<strfileref<<std::endl;
+		      std::cout<<"~~~~ test     : "<<strfiletest<<std::endl;
+		    }
+		}
+	              
+
+	    }// end while( std::getline(fluxfiletestremoved,strfiletest)!=0 && foundexpr == false )
+
+	  if(isFound == false)
+	    {
+	      std::cout<<"++++++++++++++++++++++++++++++++++++++++++++++++++ Line not found: "<<strfileref<<std::endl;
+	      listStrDiffLineFileRef.push_back(strfileref);
+	      nbdiff++;
+	    }
+	  fluxfiletest.close();
+	} // endif ( foundexpr == false )  
+    }// end while( std::getline(fluxfileref,strfileref)!=0 )
+  
+  
+      //fluxfiletest.close();
+  fluxfileref.close();
+  if ( reportErrors )
+    {
+      fluxfilediff.close();
+    }
+  
+
+  std::ifstream fluxfiletest(testListFileName);
+  std::string strfiletest;
+  unsigned int testNbLines = 0;
+  while ( std::getline(fluxfiletest,strfiletest) )
+    {
+      testNbLines++;
+    }
+
+  if( testNbLines > usedLineInTestFile.size() )
+    {
+      std::ifstream fluxfiletestTmp(testListFileName);
+      unsigned int count = 0;
+      while ( std::getline(fluxfiletestTmp,strfiletest)!=0 )
+	{
+	  count++;
+	  bool found = false;
+	  unsigned int j=0;
+	  while(j<usedLineInTestFile.size() &&  found==false)
+	    {
+	      if(usedLineInTestFile[j]==count)
+		{
+		  found = true;
+		}
+	      j++;
+	    }
+	  if(found==false)
+	    listStrDiffLineFileTest.push_back(strfiletest);
+	  //count++;
+	}
+    }
+
+
+  std::cout<<testNbLines<<std::endl;
+
+  if ( nbdiff!=0 && reportErrors)
+    {
+      std::cout << "<DartMeasurement name=\"ListFileError\" type=\"numeric/int\">";
+      std::cout << nbdiff;
+      std::cout <<  "</DartMeasurement>" << std::endl;
+      std::cout << "================================================================"<<std::endl;
+      std::cout << "baseline List File : "<<baselineListFileName << std::endl;
+      std::cout << "Test List File     : "<<testListFileName << std::endl;
+      std::cout << "Diff List File     : "<<diffListFileName << std::endl;
+      std::cout << "Tolerance value     : "<<epsilon << std::endl;
+      std::cout << "Tolerance max check : "<<m_EpsilonBoundaryChecking << std::endl;
+      
+      std::cout << "Nb lines differents : "<<listStrDiffLineFileRef.size() << std::endl;
+      std::cout << "Line(s) in Baseline file but not in Test file : "<<listStrDiffLineFileRef.size() << std::endl;
+      for ( unsigned int i = 0; i  < listStrDiffLineFileRef.size(); ++i)
+	{
+	  std::cout <<listStrDiffLineFileRef[i]<<std::endl;
+	}
+      std::cout << "   -------------------------------"<<std::endl;
+      std::cout << "Line(s) in Test file but not in Baseline file : "<<listStrDiffLineFileTest.size() << std::endl;
+      for ( unsigned int i = 0; i  < listStrDiffLineFileTest.size(); ++i)
+	{
+	  std::cout <<listStrDiffLineFileTest[i]<<std::endl;
+	}
+    }
+  
+  return (nbdiff != 0) ? 1 : 0;
+}
+  
+/******************************************/
+/******************************************/
+/******************************************/
+
 
   int TestHelper::RegressionTestBinaryFile(const char * testBinaryFileName, const char * baselineBinaryFileName, int reportErrors) const
   {
