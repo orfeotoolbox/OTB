@@ -404,7 +404,6 @@ namespace otb
 /******************************************/
 int TestHelper::RegressionTestListFile(const char * testListFileName, const char * baselineListFileName, int reportErrors, const double epsilon, std::vector<std::string> ignoredLines) const
 {
-  std::cout<<"RegressionTestListFileRegressionTestListFileRegressionTestListFile"<<std::endl;
   std::ifstream fluxfileref(baselineListFileName);
   // stores the line number of the tested file that has already matched a line of the baseline
   std::vector<unsigned int> usedLineInTestFile; 
@@ -414,6 +413,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
   std::string diffListFileName(testListFileName);
   diffListFileName += ".diff.txt";
   std::ofstream fluxfilediff;
+ 
   if ( reportErrors )
     {
       fluxfilediff.open(diffListFileName.c_str());
@@ -697,22 +697,19 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
     }// end while( std::getline(fluxfileref,strfileref)!=0 )
   
   
-  //fluxfiletest.close();
   fluxfileref.close();
-  if ( reportErrors )
-    {
-      fluxfilediff.close();
-    }
-  
+   
 
   // Stores the tested file lines that haven't found a twin in the baseline file
   std::ifstream fluxfiletest(testListFileName);
   std::string strfiletest;
   unsigned int testNbLines = 0;
+  //  number of lines in tested file
   while ( std::getline(fluxfiletest,strfiletest) )
     {
       testNbLines++;
     }
+
 
   if( testNbLines > usedLineInTestFile.size() )
     {
@@ -732,7 +729,26 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 	      j++;
 	    }
 	  if(found==false)
-	    listStrDiffLineFileTest.push_back(strfiletest);
+	    {
+	      if (ignoredLines.size()>0)
+		{
+		  std::vector<std::string>::iterator itIgnoredLines = ignoredLines.begin();
+		  
+		  for (;(itIgnoredLines != ignoredLines.end()); ++itIgnoredLines)
+		    {
+		      std::string ignoredLinesList = (*itIgnoredLines);
+		      std::string::size_type loc = strfiletest.find(ignoredLinesList);
+		      if ( loc == std::string::npos )
+			{
+			  listStrDiffLineFileTest.push_back(strfiletest);
+			}
+		      
+		    }
+		  
+		}
+	      else
+		listStrDiffLineFileTest.push_back(strfiletest);
+	    }
 	}
     }
 
@@ -752,18 +768,32 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
       
       std::cout << "Nb lines differents : "<<listStrDiffLineFileRef.size() << std::endl;
       std::cout << "Line(s) in Baseline file but not in Test file : "<<listStrDiffLineFileRef.size() << std::endl;
+      
+      fluxfilediff << "Nb lines differents : "<<listStrDiffLineFileRef.size() << std::endl;
+      fluxfilediff << "Line(s) in Baseline file but not in Test file : "<<listStrDiffLineFileRef.size() << std::endl;    
       for ( unsigned int i = 0; i  < listStrDiffLineFileRef.size(); ++i)
 	{
 	  std::cout <<listStrDiffLineFileRef[i]<<std::endl;
+	  fluxfilediff << ">> " << listStrDiffLineFileRef[i]<<std::endl;
 	}
       std::cout << "   -------------------------------"<<std::endl;
       std::cout << "Line(s) in Test file but not in Baseline file : "<<listStrDiffLineFileTest.size() << std::endl;
+      fluxfilediff << "   -------------------------------"<<std::endl;
+      fluxfilediff << "Line(s) in Test file but not in Baseline file : "<<listStrDiffLineFileTest.size() << std::endl;
+     
       for ( unsigned int i = 0; i  < listStrDiffLineFileTest.size(); ++i)
 	{
 	  std::cout <<listStrDiffLineFileTest[i]<<std::endl;
+	  fluxfilediff << "<< " <<listStrDiffLineFileTest[i]<<std::endl;
 	}
     }
   
+
+  if ( reportErrors )
+    {
+      fluxfilediff.close();
+    }
+
   return (nbdiff != 0) ? 1 : 0;
 }
   

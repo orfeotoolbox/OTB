@@ -530,6 +530,7 @@ int main(int ac, char* av[] )
               std::map<std::string,int>::reverse_iterator baseline = baselines.rbegin();
               multiResult = 1;
               std::cout<<"Number of baseline files: "<<baselines.size()<<std::endl;
+	      
               while (baseline!=baselines.rend() && (multiResult!=0))
               {
                 std::cout<<"Testing non-regression on file: "<<(baseline->first).c_str()<<std::endl;
@@ -542,7 +543,7 @@ int main(int ac, char* av[] )
                 multiResult = baseline->second;
                 ++baseline;
               }
-              if (multiResult != 0)
+	      if (multiResult != 0)
               {
                 baseline = baselines.rbegin();
                 baseline->second
@@ -552,6 +553,7 @@ int main(int ac, char* av[] )
                                           lEpsilon,
                                           ignoredLines);
               }
+	      
               result += multiResult;
             }
           }
