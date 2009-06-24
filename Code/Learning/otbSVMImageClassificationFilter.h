@@ -79,7 +79,7 @@ public:
   typedef typename ListSampleType::Pointer                   ListSamplePointerType;
   typedef otb::SVMClassifier<ListSampleType, LabelType>      ClassifierType;
   typedef typename ClassifierType::Pointer                   ClassifierPointerType;
-  typedef SVMModel< ValueType, LabelType >                   ModelType;
+  typedef SVMModel<ValueType,LabelType>                      ModelType;
   typedef typename ModelType::Pointer                        ModelPointerType;
 
   /** Set/Get the svm model */

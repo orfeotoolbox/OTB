@@ -116,6 +116,7 @@ SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension,TMaskI
     }
   }
   ClassifierPointerType classifier =ClassifierType::New();
+  // Clone the model to ensure thread safety
   classifier->SetModel(m_Model);
   classifier->SetNumberOfClasses(m_Model->GetNumberOfClasses());
   classifier->SetSample(listSample);

@@ -70,7 +70,6 @@ public:
   typedef typename TSample::MeasurementVectorType MeasurementVectorType;
   /*typedef typename itk::NumericTraits<TSample::ValueType>::RealType
    InputPixelType;*/
-  typedef typename TSample::MeasurementVectorType::ValueType InputPixelType;
 
   /** typedefs from Superclass */
   typedef typename Superclass::MembershipFunctionPointerVector
@@ -79,23 +78,19 @@ public:
   /** typedef for label type */
   typedef TLabel ClassLabelType;
 
-  // The SVM classifier functor
-  typedef Functor::SVMClassifierFunctor<MeasurementVectorType,ClassLabelType> SVMFunctorType;
-
-
   /** Returns the classification result */
   OutputType* GetOutput();
   void SetOutput(OutputType* output);
 
   /** Type definitions for the SVM Model. */
-  typedef SVMModel< InputPixelType, TLabel >   SVMModelType;
-  typedef typename SVMModelType::Pointer     SVMModelPointer;
+  typedef SVMModel<MeasurementType,ClassLabelType> SVMModelType;
+  typedef typename SVMModelType::Pointer           SVMModelPointer;
 
   /** Set the model */
-  itkSetMacro(Model, SVMModelPointer);
+  itkSetObjectMacro(Model,SVMModelType);
 
   /** Get the number of classes. */
-  itkGetConstReferenceMacro(Model, SVMModelPointer);
+  itkGetObjectMacro(Model, SVMModelType);
 
   void Update();
 

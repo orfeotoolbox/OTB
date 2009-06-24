@@ -108,17 +108,17 @@ int otbSVMModelAccessor( int argc, char* argv[] )
     }
   }
   f << std::endl;
-  f << " - Evaluate() (double) -> "<<ptrModel->Evaluate()<<std::endl;
+//   f << " - Evaluate() (double) -> "<<ptrModel->Evaluate()<<std::endl;
 
-  typedef ModelType::ValuesType ValuesType;
-  ValuesType _evaluateHyperplaneDistance;
-  _evaluateHyperplaneDistance = ptrModel->EvaluateHyperplaneDistance();
+//   typedef ModelType::ValuesType ValuesType;
+//   ValuesType _evaluateHyperplaneDistance;
+//   _evaluateHyperplaneDistance = ptrModel->EvaluateHyperplaneDistance();
 
-  f << " - EvaluateHyperplaneDistance() VariableLenghtVector() nb value(s): "<<_evaluateHyperplaneDistance.Size()<<std::endl;
-  for (unsigned int i=0;i<_evaluateHyperplaneDistance.Size();i++)
-  {
-    f << "     "<<_evaluateHyperplaneDistance[i]<<std::endl;
-  }
+//   f << " - EvaluateHyperplaneDistance() VariableLenghtVector() nb value(s): "<<_evaluateHyperplaneDistance.Size()<<std::endl;
+//   for (unsigned int i=0;i<_evaluateHyperplaneDistance.Size();i++)
+//   {
+//     f << "     "<<_evaluateHyperplaneDistance[i]<<std::endl;
+//   }
   f << "end"<<std::endl;
   f.close();
 

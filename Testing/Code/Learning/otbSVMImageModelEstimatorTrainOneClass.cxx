@@ -64,7 +64,7 @@ int otbSVMImageModelEstimatorTrainOneClass( int argc, char* argv[] )
   svmEstimator->Update();
 
   otbGenericMsgDebugMacro(<<"Saving model");
-  svmEstimator->SaveModel(outputModelFileName);
+  svmEstimator->GetModel()->SaveModel(outputModelFileName);
 
   return EXIT_SUCCESS;
 }

@@ -18,9 +18,6 @@
 #ifndef __otbSVMPointSetModelEstimator_h
 #define __otbSVMPointSetModelEstimator_h
 
-#include "itkImageModelEstimatorBase.h"
-#include "itkImageRegionIterator.h"
-#include "otbSVMModel.h"
 #include "otbSVMModelEstimator.h"
 
 namespace otb
@@ -47,21 +44,17 @@ namespace otb
  *
  * \ingroup ClassificationFilters
  */
-template <class TInputPointSet,
-class TTrainingPointSet>
-class ITK_EXPORT SVMPointSetModelEstimator:
+template <class TInputPointSet,class TTrainingPointSet>
+class ITK_EXPORT SVMPointSetModelEstimator :
       public SVMModelEstimator<typename TInputPointSet::PixelType::value_type, typename TTrainingPointSet::PixelType>
 {
 public:
   /** Standard class typedefs. */
-  typedef SVMPointSetModelEstimator   Self;
-  typedef SVMModelEstimator<typename TInputPointSet::PixelType::value_type,
-  typename TTrainingPointSet::PixelType>
-  Superclass;
-
-  typedef itk::SmartPointer<Self>  Pointer;
+  typedef SVMPointSetModelEstimator      Self;
+  typedef SVMModelEstimator<typename TInputPointSet::PixelType::value_type, typename TTrainingPointSet::PixelType> Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
-
+			    
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -69,7 +62,6 @@ public:
   itkTypeMacro(SVMPointSetModelEstimator, SVMModelEstimator);
 
   /** Type definition for the input image. */
-  /** Type definitions for the training image. */
   typedef typename TInputPointSet::Pointer   InputPointSetPointer;
 
   /** Type definitions for the training image. */
@@ -90,39 +82,31 @@ public:
   typedef typename
   TTrainingPointSet::PointsContainerConstIterator TrainingPointSetIteratorType;
 
-  /** Set the input image. */
-  itkSetObjectMacro(InputPointSet,TInputPointSet);
+  /** Set the input image */
+  void SetInputPointSet(const TInputPointSet * inputPointSet);
 
-  /** Get the input image. */
-  itkGetObjectMacro(InputPointSet,TInputPointSet);
+  /** Set the training image */
+  void SetTrainingPointSet(const TTrainingPointSet * trainingPointSet);
 
+  /** Get the input image */
+  const TInputPointSet * GetInputPointSet();
 
-  /** Set the training image. */
-  itkSetMacro(TrainingPointSet,TrainingPointSetPointer);
-
-  /** Get the training image. */
-  itkGetMacro(TrainingPointSet,TrainingPointSetPointer);
-
-
-
+  /** Get the training image */
+  const TTrainingPointSet * GetTrainingPointSet();
+  
 protected:
+  /** Constructor */
   SVMPointSetModelEstimator();
+  /** Destructor */
   ~SVMPointSetModelEstimator();
+  /** PrintSelf */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
-
-  virtual void BuildProblem();
+  /** Prepare data */
+  virtual void PrepareData();
 
 private:
   SVMPointSetModelEstimator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
-
-
-  TrainingPointSetPointer  m_TrainingPointSet;
-  InputPointSetPointer  m_InputPointSet;
-
-
 
 }; // class SVMPointSetModelEstimator
 

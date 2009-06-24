@@ -162,26 +162,23 @@ public:
   /** Get the training image. */
   itkGetMacro(TrainingSampleList,TrainingSampleListPointer);
 
-
-
 protected:
+  /** Constructor */
   SVMSampleListModelEstimator();
+  /** Destructor */
   ~SVMSampleListModelEstimator();
+  /** PrintSelf */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-
-  virtual void BuildProblem();
+  /** PrepareData method */
+  virtual void PrepareData();
 
 private:
   SVMSampleListModelEstimator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-
-
   TrainingSampleListPointer  m_TrainingSampleList;
   InputSampleListPointer  m_InputSampleList;
-
-
 
 }; // class SVMSampleListModelEstimator
 
