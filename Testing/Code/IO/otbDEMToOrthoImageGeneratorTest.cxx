@@ -26,7 +26,7 @@ int otbDEMToOrthoImageGeneratorTest(int argc, char * argv[])
 {
   if (argc<9)
   {
-    std::cout << argv[0] <<" DEM folder path , output filename , Easting Output Orign point , Northing Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing"  << std::endl;
+    std::cout << argv[0] <<" DEM folder path , output filename , Easting Output Orign point , Northing Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing, Zone, Hemisphere"  << std::endl;
     return EXIT_FAILURE;
   }
 
