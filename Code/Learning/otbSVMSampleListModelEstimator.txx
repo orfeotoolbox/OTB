@@ -58,7 +58,7 @@ template<class TInputSampleList,
 class TTrainingSampleList, class TMeasurementFunctor>
 void
 SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementFunctor>
-::BuildProblem()
+::PrepareData()
 {
   //Do some error checking
   InputSampleListPointer  inputSampleList = this->GetInputSampleList();
