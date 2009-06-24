@@ -23,7 +23,7 @@
 #include "otbMacro.h"
 #include <iostream>
 #include <fstream>
-
+#include <cctype>
 
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -406,21 +406,21 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 {
   std::ifstream fluxfileref(baselineListFileName);
   // stores the line number of the tested file that has already matched a line of the baseline
-  std::vector<unsigned int> usedLineInTestFile; 
-  
+  std::vector<unsigned int> usedLineInTestFile;
+
   enum TypeEtat { ETAT_NUM, ETAT_CHAR };
-  
+
   std::string diffListFileName(testListFileName);
   diffListFileName += ".diff.txt";
   std::ofstream fluxfilediff;
- 
+
   if ( reportErrors )
     {
       fluxfilediff.open(diffListFileName.c_str());
     }
-  
+
   std::string strfileref;
-  
+
   int nbdiff(0);
   int numLine(1);
 
@@ -428,13 +428,13 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
     {
       itkGenericExceptionMacro(<< "Impossible to open the baseline List file <"<<baselineListFileName<<">.");
     }
-  
+
   TypeEtat etatPrec(ETAT_NUM), etatCour(ETAT_NUM);
-  
+
   std::vector<std::string> listStrDiffLineFileRef;
   std::vector<std::string> listStrDiffLineFileTest;
-  
-  
+
+
   // For each line of the baseline file
   while ( std::getline(fluxfileref,strfileref)!=0  )
     {
@@ -442,9 +442,9 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
       bool foundexpr = false;
       if (ignoredLines.size()>0)
         {
-	  
+
           std::vector<std::string>::iterator itIgnoredLines = ignoredLines.begin();
-	  
+
           for (;(itIgnoredLines != ignoredLines.end()); ++itIgnoredLines)
 	    {
 	      std::string ignoredLinesList = (*itIgnoredLines);
@@ -453,9 +453,9 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 		{
 		  foundexpr = true;
 		}
-	      
+
 	    }
-	  
+
         }
       // If no ignore lines
       if ( foundexpr == false )
@@ -482,8 +482,8 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 	      buffstreamTest << strfiletest;
 	      buffstreamRef << strfileref;
 	      int nblinediff(0);
-	      
-	      //Check number of element in each line, if not equal : out    
+
+	      //Check number of element in each line, if not equal : out
 	      unsigned int refElt = 1;
 	      int lastElt = strfileref[0];
 	      for( unsigned int l=1; l<strfileref.size(); l++ )
@@ -520,23 +520,23 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 		   while (buffstreamRef.peek() != EOF  && buffstreamTest.peek() != EOF )
 		     {
 		       isFoundVect.push_back(true);
-		  
+
 		       std::string strRef = "";
 		       std::string strTest = "";
-		  
+
 		       std::string strNumRef = "";
 		       std::string strCharRef = "";
 		       std::string strNumTest = "";
 		       std::string strCharTest = "";
-		  
+
 		       buffstreamRef >> strRef;
 		       buffstreamTest >> strTest;
-		
+
 		       bool chgt= false;
 		       std::string charTmpRef = "";
 		       std::string charTmpTest = "";
 		       unsigned int i=0;
-		  
+
 		       if (!isHexaPointerAddress(strRef))
 			 {
 			   //Analyse if strRef contains scientific value (ex: "-142.124e-012")
@@ -560,21 +560,21 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 			       while (i < strRef.size())
 				 {
 				   charTmpRef=strRef[i];
-			      
+
 				   if (i<strTest.size())
 				     {
 				       charTmpTest=strTest[i];
 				     }
-			      
+
 				   if (isNumeric(charTmpRef))
 				     etatCour = ETAT_NUM;
 				   else
 				     etatCour = ETAT_CHAR;
-			      
+
 				   // "reference" state initialisation.
 				   if (i==0)
 				     etatPrec=etatCour;
-			      
+
 				   // Case where there's a number after characteres.
 				   if ((etatCour==ETAT_NUM)&&(etatPrec==ETAT_CHAR))
 				     {
@@ -582,7 +582,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 					 {
 					   isFoundVect[isFoundVect.size()-1] = false;//isFound = false;
 					 }
-				  
+
 				       strCharRef="";
 				       strCharTest="";
 				       strNumRef=charTmpRef;
@@ -600,7 +600,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 					 {
 					   isFoundVect[isFoundVect.size()-1] = false;//isFound = false;
 					 }
-				  
+
 				       strNumRef="";
 				       strNumTest="";
 				       strCharRef=charTmpRef;
@@ -620,7 +620,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 					   strNumTest+=charTmpTest;
 					 }
 				     }
-			      
+
 				   etatPrec = etatCour;
 				   ++i;
 				 }
@@ -648,8 +648,8 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 				 }
 			     } // else
 			 } // if(!isHexaPointerAddress(strRef))
-		     }  // while (buffstreamRef.peek() != EOF ) 
-		
+		     }  // while (buffstreamRef.peek() != EOF )
+
 		   // If 1 word differs -> the line doesn't match
 		   unsigned int n=0;
 		   bool falseFound = false;
@@ -663,7 +663,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 		       n++;
 		     }
 		 }
-		  
+
 	       // Check that the tested line has been alreday used (2 same lines in the baseline)
 	       // If yes, it won't be retained
 	       if(isFound == true)
@@ -682,10 +682,10 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 		   if(lineAlreadyUsed==false)
 		       usedLineInTestFile.push_back(lineId);
 		 }
-	              
+
 
 	    }// end while( std::getline(fluxfiletestremoved,strfiletest)!=0 && foundexpr == false )
-	  
+
 	  // Stores the baseline line that hasn't found a twin in the tested file
 	  if(isFound == false)
 	    {
@@ -693,12 +693,12 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 	      nbdiff++;
 	    }
 	  fluxfiletest.close();
-	} // endif ( foundexpr == false )  
+	} // endif ( foundexpr == false )
     }// end while( std::getline(fluxfileref,strfileref)!=0 )
-  
-  
+
+
   fluxfileref.close();
-   
+
 
   // Stores the tested file lines that haven't found a twin in the baseline file
   std::ifstream fluxfiletest(testListFileName);
@@ -733,7 +733,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 	      if (ignoredLines.size()>0)
 		{
 		  std::vector<std::string>::iterator itIgnoredLines = ignoredLines.begin();
-		  
+
 		  for (;(itIgnoredLines != ignoredLines.end()); ++itIgnoredLines)
 		    {
 		      std::string ignoredLinesList = (*itIgnoredLines);
@@ -742,9 +742,9 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 			{
 			  listStrDiffLineFileTest.push_back(strfiletest);
 			}
-		      
+
 		    }
-		  
+
 		}
 	      else
 		listStrDiffLineFileTest.push_back(strfiletest);
@@ -765,12 +765,12 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
       std::cout << "Diff List File     : "<<diffListFileName << std::endl;
       std::cout << "Tolerance value     : "<<epsilon << std::endl;
       std::cout << "Tolerance max check : "<<m_EpsilonBoundaryChecking << std::endl;
-      
+
       std::cout << "Nb lines differents : "<<listStrDiffLineFileRef.size() << std::endl;
       std::cout << "Line(s) in Baseline file but not in Test file : "<<listStrDiffLineFileRef.size() << std::endl;
-      
+
       fluxfilediff << "Nb lines differents : "<<listStrDiffLineFileRef.size() << std::endl;
-      fluxfilediff << "Line(s) in Baseline file but not in Test file : "<<listStrDiffLineFileRef.size() << std::endl;    
+      fluxfilediff << "Line(s) in Baseline file but not in Test file : "<<listStrDiffLineFileRef.size() << std::endl;
       for ( unsigned int i = 0; i  < listStrDiffLineFileRef.size(); ++i)
 	{
 	  std::cout <<listStrDiffLineFileRef[i]<<std::endl;
@@ -780,14 +780,14 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
       std::cout << "Line(s) in Test file but not in Baseline file : "<<listStrDiffLineFileTest.size() << std::endl;
       fluxfilediff << "   -------------------------------"<<std::endl;
       fluxfilediff << "Line(s) in Test file but not in Baseline file : "<<listStrDiffLineFileTest.size() << std::endl;
-     
+
       for ( unsigned int i = 0; i  < listStrDiffLineFileTest.size(); ++i)
 	{
 	  std::cout <<listStrDiffLineFileTest[i]<<std::endl;
 	  fluxfilediff << "<< " <<listStrDiffLineFileTest[i]<<std::endl;
 	}
     }
-  
+
 
   if ( reportErrors )
     {
@@ -796,7 +796,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 
   return (nbdiff != 0) ? 1 : 0;
 }
-  
+
 /******************************************/
 /******************************************/
 /******************************************/
@@ -1316,7 +1316,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
     if( ref_poDS == NULL )
     {
         OGRSFDriverRegistrar    *ref_poR = OGRSFDriverRegistrar::GetRegistrar();
-        
+
         if(bVerbose) std::cout << "FAILURE:\n"
                 "Unable to open REF datasource `"<<ref_pszDataSource<<"' with the following drivers."<<std::endl;
         for( int iDriver = 0; iDriver < ref_poR->GetDriverCount(); ++iDriver )
@@ -1330,7 +1330,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
     if( test_poDS == NULL )
     {
         OGRSFDriverRegistrar    *test_poR = OGRSFDriverRegistrar::GetRegistrar();
-        
+
         if(bVerbose) std::cout << "FAILURE:\n"
                 "Unable to open TEST datasource `"<<test_pszDataSource<<"' with the following drivers."<<std::endl;
         for( int iDriver = 0; iDriver < test_poR->GetDriverCount(); ++iDriver )
@@ -1353,7 +1353,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
     if( strRefName != strTestName)
     {
         if(!bVerbose) otbPrintDiff("WARNING: INFO: Internal data source name poDS->GetName() were different",strRefName,strTestName);
-    } 
+    }
 
 /* -------------------------------------------------------------------- */
 /*      Process each data source layer.                                 */
@@ -1379,7 +1379,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
             //Check Layer inforamtion
             ogrReportOnLayer( ref_poLayer, ref_pszWHERE, ref_poSpatialFilter, test_poLayer, test_pszWHERE, test_poSpatialFilter, nbdiff, bVerbose);
 
-            //If no difference, check the feature 
+            //If no difference, check the feature
             if(nbdiff == 0)
             {
                 OGRFeature  *ref_poFeature = NULL;
@@ -1426,7 +1426,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 
                     nbFeature++;
                 }
-                // If no verbose and an diff was found, exit checking. The full checking will be executed in verbose mode 
+                // If no verbose and an diff was found, exit checking. The full checking will be executed in verbose mode
                 if( (!bVerbose) && (nbdiff!=0) ) return (1);
             } //if(nbdiff == 0)
 
@@ -1629,7 +1629,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 /*                           ReportOnLayer()                            */
 /************************************************************************/
 
-void TestHelper::ogrReportOnLayer( 
+void TestHelper::ogrReportOnLayer(
     OGRLayer * ref_poLayer,   const char *ref_pszWHERE,   OGRGeometry *ref_poSpatialFilter,
     OGRLayer * test_poLayer,  const char *test_pszWHERE,  OGRGeometry *test_poSpatialFilter,
                            int & nbdiff, int bVerbose) const
@@ -1659,13 +1659,13 @@ void TestHelper::ogrReportOnLayer(
 /*      Report various overall information.                             */
 /* -------------------------------------------------------------------- */
     printf( "\n" );
-    
+
     otbCheckStringValue("Layer name", ref_poDefn->GetName() ,test_poDefn->GetName() ,nbdiff,bVerbose);
 
     otbCheckStringValue( "Geometry", OGRGeometryTypeToName( ref_poDefn->GetGeomType() ),  OGRGeometryTypeToName( test_poDefn->GetGeomType() ) ,nbdiff,bVerbose );
-        
+
     otbCheckValue("Feature Count", ref_poLayer->GetFeatureCount(),test_poLayer->GetFeatureCount() ,nbdiff,bVerbose);
-        
+
         OGREnvelope ref_oExt;
         OGREnvelope test_oExt;
 
@@ -1681,25 +1681,25 @@ void TestHelper::ogrReportOnLayer(
 
         char    *ref_pszWKT;
         char    *test_pszWKT;
-        
+
         if( ref_poLayer->GetSpatialRef() == NULL )
             ref_pszWKT = CPLStrdup( "(unknown)" );
         else
         {
             ref_poLayer->GetSpatialRef()->exportToPrettyWkt( &ref_pszWKT );
-        }            
+        }
         if( test_poLayer->GetSpatialRef() == NULL )
             test_pszWKT = CPLStrdup( "(unknown)" );
         else
         {
             test_poLayer->GetSpatialRef()->exportToPrettyWkt( &test_pszWKT );
-        }            
+        }
 
     otbCheckStringValue( "Layer SRS WKT", ref_pszWKT,test_pszWKT ,nbdiff,bVerbose);
 
         CPLFree( ref_pszWKT );
         CPLFree( test_pszWKT );
-    
+
     otbCheckStringValue( "FID Column", ref_poLayer->GetFIDColumn(),test_poLayer->GetFIDColumn() ,nbdiff,bVerbose);
     otbCheckStringValue( "Geometry Column", ref_poLayer->GetGeometryColumn(),test_poLayer->GetGeometryColumn() ,nbdiff,bVerbose);
     otbCheckValue("GetFieldCount",ref_poDefn->GetFieldCount(),test_poDefn->GetFieldCount(),nbdiff,bVerbose);
@@ -1709,7 +1709,7 @@ void TestHelper::ogrReportOnLayer(
         {
             OGRFieldDefn    *ref_poField = ref_poDefn->GetFieldDefn( iAttr );
             OGRFieldDefn    *test_poField = test_poDefn->GetFieldDefn( iAttr );
-            
+
             otbCheckStringValue( "Field GetName",ref_poField->GetNameRef(),test_poField->GetNameRef(),nbdiff,bVerbose);
             otbCheckStringValue( "Field GetFieldTypeName",ref_poField->GetFieldTypeName( ref_poField->GetType() ),test_poField->GetFieldTypeName( test_poField->GetType() ),nbdiff,bVerbose);
             otbCheckValue( "Field GetWidth",ref_poField->GetWidth(),test_poField->GetWidth(),nbdiff,bVerbose);
