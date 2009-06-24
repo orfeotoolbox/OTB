@@ -981,7 +981,7 @@ ADD_TEST(feTuImageToFastSIFTKeyPointSetFilterNew ${FEATUREEXTRACTION_TESTS10}
          otbImageToFastSIFTKeyPointSetFilterNew)
 
 ADD_TEST(feTvImageToFastSIFTKeyPointSetFilterSceneOutputDescriptorAscii ${FEATUREEXTRACTION_TESTS10}
---compare-ascii ${EPSILON_3}
+--compare-list ${EPSILON_3}
 		${BASELINE_FILES}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
 		${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
          otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii

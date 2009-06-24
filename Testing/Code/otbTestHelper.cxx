@@ -407,7 +407,9 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
   std::ifstream fluxfileref(baselineListFileName);
   // stores the line number of the tested file that has already matched a line of the baseline
   std::vector<unsigned int> usedLineInTestFile;
-
+  // store the number of words in each line of the tested file
+  std::vector<unsigned int> testedLineLength;
+  
   enum TypeEtat { ETAT_NUM, ETAT_CHAR };
 
   std::string diffListFileName(testListFileName);
@@ -464,7 +466,6 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 	  bool isFound = false;
 	  // tested file line number
 	  unsigned int lineId = 0;
-
 	  std::string strfiletest;
 	  // Open tested file
 	  std::ifstream fluxfiletest(testListFileName);
@@ -472,6 +473,20 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 	    {
 	      itkGenericExceptionMacro(<<"Impossible to open the test List file <"<<testListFileName<<">.");
 	    }
+	  
+	  // number of word in baseline file line
+	  unsigned int refElt = 1;
+	  int lastElt = strfileref[0];
+	  for( unsigned int l=1; l<strfileref.size(); l++ )
+	    {
+	      if( !std::isspace(lastElt) && std::isspace(strfileref[l]))
+		refElt++;
+	      
+	      lastElt = strfileref[l];
+	    }
+	  if(std::isspace(lastElt))
+	    refElt--;
+
 	  // For each line of the tested file
 	  while ( std::getline(fluxfiletest,strfiletest)!=0 && isFound==false )
 	    {
@@ -484,30 +499,26 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 	      int nblinediff(0);
 
 	      //Check number of element in each line, if not equal : out
-	      unsigned int refElt = 1;
-	      int lastElt = strfileref[0];
-	      for( unsigned int l=1; l<strfileref.size(); l++ )
-		{
-		  if( !std::isspace(lastElt) && std::isspace(strfileref[l]))
-		      refElt++;
-
-		  lastElt = strfileref[l];
-		}
-	      if(std::isspace(lastElt))
-		refElt--;
-
 	      unsigned int testElt = 1;
-	      lastElt = strfiletest[0];
-	       for( unsigned int l=1; l<strfiletest.size(); l++ )
+	      // if alreday computed
+	      if( lineId <= testedLineLength.size() )
 		{
-		  if( !std::isspace(lastElt) && std::isspace(strfiletest[l]))
-		      testElt++;
-
-		  lastElt = strfiletest[l];
+		  testElt = testedLineLength[lineId-1];
 		}
-	       if(std::isspace(lastElt))
-		 testElt--;
-
+	      else
+		{
+		  lastElt = strfiletest[0];
+		  for( unsigned int l=1; l<strfiletest.size(); l++ )
+		    {
+		      if( !std::isspace(lastElt) && std::isspace(strfiletest[l]))
+			testElt++;
+		      
+		      lastElt = strfiletest[l];
+		    }
+		  if(std::isspace(lastElt))
+		    testElt--;
+		  testedLineLength.push_back(testElt);
+		}
 	       if(refElt!=testElt)
 		 {
 		   isFound = false;
@@ -516,11 +527,9 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 	       else
 		 {
 		   // Store the match result between 2 words of the same position
-		   std::vector<bool> isFoundVect;
-		   while (buffstreamRef.peek() != EOF  && buffstreamTest.peek() != EOF )
+		   bool wordFound = true;
+		   while (buffstreamRef.peek() != EOF  && buffstreamTest.peek() != EOF && wordFound==true)
 		     {
-		       isFoundVect.push_back(true);
-
 		       std::string strRef = "";
 		       std::string strTest = "";
 
@@ -544,7 +553,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 			     {
 			       if (!isScientificNumeric(strTest))
 				 {
-				   isFoundVect[isFoundVect.size()-1] = false;//isFound = false;
+				   wordFound = false;
 				 }
 			       else if ( (strRef != strTest)
 					 && (vcl_abs(atof(strRef.c_str())) > m_EpsilonBoundaryChecking)
@@ -552,7 +561,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 					     > epsilon*vcl_abs(atof(strRef.c_str()))
 					     ) )//epsilon as relative error
 				 {
-				   isFoundVect[isFoundVect.size()-1] = false;//isFound = false;
+				   wordFound = false;
 				 }
 			     }
 			   else
@@ -580,7 +589,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 				     {
 				       if ( strCharRef != strCharTest )
 					 {
-					   isFoundVect[isFoundVect.size()-1] = false;//isFound = false;
+					   wordFound = false;
 					 }
 
 				       strCharRef="";
@@ -598,7 +607,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 						> epsilon*vcl_abs(atof(strNumRef.c_str()))
 						) ) //epsilon as relative error
 					 {
-					   isFoundVect[isFoundVect.size()-1] = false;//isFound = false;
+					   wordFound = false;
 					 }
 
 				       strNumRef="";
@@ -635,33 +644,26 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 						> epsilon*vcl_abs(atof(strRef.c_str()))
 						)) //epsilon as relative error
 					 {
-					   isFoundVect[isFoundVect.size()-1] = false;//isFound = false;
+					   wordFound = false;
 					 }
 				     }
 				   else
 				     {
 				       if ( strRef != strTest )
 					 {
-					   isFoundVect[isFoundVect.size()-1] = false;//isFound = false;
+					   wordFound = false;
 					 }
 				     }
 				 }
 			     } // else
 			 } // if(!isHexaPointerAddress(strRef))
-		     }  // while (buffstreamRef.peek() != EOF )
+		     }  // while (buffstreamRef.peek() != EOF && buffstreamTest.peek() != EOF && wordFound == true)
 
-		   // If 1 word differs -> the line doesn't match
-		   unsigned int n=0;
-		   bool falseFound = false;
-		   while( n<isFoundVect.size() && falseFound==false)
+		   if(wordFound==false)
 		     {
-		       if(isFoundVect[n]==false)
-			 {
-			   isFound=false;
-			   falseFound=true;
-			 }
-		       n++;
+		       isFound = false;
 		     }
+		     
 		 }
 
 	       // Check that the tested line has been alreday used (2 same lines in the baseline)
