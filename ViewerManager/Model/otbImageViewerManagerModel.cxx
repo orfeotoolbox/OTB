@@ -240,10 +240,14 @@ void
 ImageViewerManagerModel
 ::UpdateModulusChannelOrder(int realChoice , int imChoice, unsigned int selectedItem )
 {
-  RenderingFunctionType::Pointer modulusFunction;
+  ModulusRenderingFunction::Pointer modulusFunction;
   modulusFunction = ModulusRenderingFunction::New();
-  modulusFunction->SetRedChannelIndex(realChoice);
-  modulusFunction->SetGreenChannelIndex(imChoice);
+
+
+  ModulusRenderingFunction::PixelRepresentationFunctionType::ChannelListType channels;
+  channels.push_back(realChoice);
+  channels.push_back(imChoice);
+  modulusFunction->GetPixelRepresentationFunction().SetChannelList(channels);
   modulusFunction->Initialize();
 
   //Update the layer
@@ -261,10 +265,13 @@ void
 ImageViewerManagerModel
 ::UpdatePhaseChannelOrder(int realChoice , int imChoice, unsigned int selectedItem )
 {
-  RenderingFunctionType::Pointer phaseFunction;
+  PhaseRenderingFunction::Pointer phaseFunction;
   phaseFunction = PhaseRenderingFunction::New();
-  phaseFunction->SetRedChannelIndex(realChoice);
-  phaseFunction->SetGreenChannelIndex(imChoice);
+
+  PhaseRenderingFunction::PixelRepresentationFunctionType::ChannelListType channels;
+  channels.push_back(realChoice);
+  channels.push_back(imChoice);
+  phaseFunction->GetPixelRepresentationFunction().SetChannelList(channels);
   phaseFunction->Initialize();
 
   //Update the layer

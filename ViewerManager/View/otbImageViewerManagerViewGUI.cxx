@@ -826,6 +826,7 @@ ImageViewerManagerViewGUI
    guiGreenChannelChoice->activate();
    guiBlueChannelChoice->activate();
 
+   assert(renderingFunction);
    guiRedChannelChoice->value(std::min(renderingFunction->GetPixelRepresentationFunction().GetRedChannelIndex(),nbComponent-1));
    guiGreenChannelChoice->value(std::min(renderingFunction->GetPixelRepresentationFunction().GetGreenChannelIndex(),nbComponent-1));
    guiBlueChannelChoice->value(std::min(renderingFunction->GetPixelRepresentationFunction().GetBlueChannelIndex(),nbComponent-1));
