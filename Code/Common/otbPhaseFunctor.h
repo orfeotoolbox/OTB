@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAmplitudeFunctor_h
-#define __otbAmplitudeFunctor_h
+#ifndef __otbPhaseFunctor_h
+#define __otbPhaseFunctor_h
 
 #include "otbChannelSelectorFunctor.h"
 
@@ -24,15 +24,15 @@ namespace otb
 {
   namespace Function
   {
-    /** \class AmplitudeFunctor
+    /** \class PhaseFunctor
     * \brief Compute the module from the selected channel in the input
     *
     *  \ingroup Visualization
     *
-    * \sa PhaseFunctor ChannelSelectorFunctor
+    * \sa AmplitudeFunctor ChannelSelectorFunctor
     */
     template <class TInputPixel>
-    class AmplitudeFunctor: public ChannelSelectorFunctor<TInputPixel>
+    class PhaseFunctor: public ChannelSelectorFunctor<TInputPixel>
     {
       public:
         typedef TInputPixel PixelType;
@@ -45,7 +45,7 @@ namespace otb
 
 
         /** Constructor */
-        AmplitudeFunctor()
+        PhaseFunctor()
         {
           std::vector<unsigned int> channels;
           channels.push_back(0);
@@ -54,10 +54,10 @@ namespace otb
         }
 
         /** Destructor */
-        virtual ~AmplitudeFunctor() {}
+        virtual ~PhaseFunctor() {}
 
         const char *GetNameOfClass() const
-        {return "AmplitudeFunctor";}
+        {return "PhaseFunctor";}
 
         virtual unsigned int GetOutputSize() const
         {
@@ -71,7 +71,7 @@ namespace otb
           assert( (this->GetChannelList()).size() == 2);
           assert((this->GetChannelList())[0] < inPixel.Size());
           assert((this->GetChannelList())[1] < inPixel.Size());
-          outPixel[0] = ComputeAmplitude(inPixel[(this->GetChannelList())[0]], inPixel[(this->GetChannelList())[1]]);
+          outPixel[0] = ComputePhase(inPixel[(this->GetChannelList())[0]], inPixel[(this->GetChannelList())[1]]);
           return outPixel;
         }
 
@@ -89,7 +89,7 @@ namespace otb
           assert((this->GetChannelList())[0] < 3);
           assert((this->GetChannelList())[1] < 3);
 
-          outPixel[0] = ComputeAmplitude(inPixel[(this->GetChannelList())[0]], inPixel[(this->GetChannelList())[1]]);
+          outPixel[0] = ComputePhase(inPixel[(this->GetChannelList())[0]], inPixel[(this->GetChannelList())[1]]);
           return outPixel;
         }
 
@@ -101,14 +101,14 @@ namespace otb
           assert((this->GetChannelList())[0] < 4);
           assert((this->GetChannelList())[1] < 4);
 
-          outPixel[0] = ComputeAmplitude(inPixel[(this->GetChannelList())[0]], inPixel[(this->GetChannelList())[1]]);
+          outPixel[0] = ComputePhase(inPixel[(this->GetChannelList())[0]], inPixel[(this->GetChannelList())[1]]);
           return outPixel;
         }
 
       private:
-        inline ScalarType ComputeAmplitude(ScalarType a, ScalarType b) const
+        inline ScalarType ComputePhase(ScalarType a, ScalarType b) const
         {
-          return vcl_sqrt(a*a + b*b);
+          return vcl_atan2(b,a);
         }
 
     };

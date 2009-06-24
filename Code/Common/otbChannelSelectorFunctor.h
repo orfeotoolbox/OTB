@@ -32,6 +32,8 @@ namespace otb
     * \brief Base class for pixel representation functions.
     *
     *  \ingroup Visualization
+    *
+    * \sa AmplitudeFunctor PhaseFunctor
     */
     template <class TInputPixel>
     class ChannelSelectorFunctor

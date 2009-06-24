@@ -148,7 +148,16 @@ ${TEMP}/vrTvRenderingImageFilterAmplitudeOutput.png
 50 800
 )
 
-
+ADD_TEST(vrTvRenderingImageFilterPhase ${VISUREFAC_TESTS1}
+--compare-image ${NOTOL}
+${BASELINE}/vrTvRenderingImageFilterPhaseOutput.png
+${TEMP}/vrTvRenderingImageFilterPhaseOutput.png
+otbRenderingImageFilterPhase
+${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+${TEMP}/vrTvRenderingImageFilterPhaseOutput.png
+0 1 #channel to use to compute module
+0 1.57 #not very significant with an optical image
+)
 #------------ otb::UniformAlphaBlendingFunction ------------
 
 ADD_TEST(vrTuUniformAlphaBlendingFunctionNew ${VISUREFAC_TESTS1}
@@ -351,6 +360,7 @@ otbImageLayerGeneratorVector.cxx
 otbMultiplyBlendingFunctionNew.cxx
 otbRenderingImageFilterVectorWithExpNegativeTransfer.cxx
 otbRenderingImageFilterAmplitude.cxx
+otbRenderingImageFilterPhase.cxx
 otbImageViewNew.cxx
 otbImageViewerEndToEndSingleLayer.cxx
 otbImageViewerEndToEndSingleLayerWithSelectAreaHandler.cxx
