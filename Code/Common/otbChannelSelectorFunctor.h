@@ -62,7 +62,7 @@ namespace otb
         {return "ChannelSelectorFunctor";}
 
 
-        OutputPixelType operator()(const VectorPixelType & inPixel) const
+        virtual OutputPixelType operator()(const VectorPixelType & inPixel) const
         {
 //           otbMsgDevMacro(<<"Channel list "<< m_ChannelList[0]);
           OutputPixelType outPixel;
@@ -80,7 +80,7 @@ namespace otb
           return outPixel;
         }
 
-        OutputPixelType operator()(ScalarType inPixel) const
+        virtual OutputPixelType operator()(ScalarType inPixel) const
         {
           OutputPixelType outPixel;
           outPixel.SetSize(1);
@@ -92,7 +92,7 @@ namespace otb
           return outPixel;
         }
 
-        OutputPixelType operator()(const RGBPixelType & inPixel) const
+        virtual OutputPixelType operator()(const RGBPixelType & inPixel) const
         {
           OutputPixelType outPixel;
           outPixel.SetSize(m_ChannelList.size());
@@ -104,7 +104,7 @@ namespace otb
           return outPixel;
         }
 
-        OutputPixelType operator()(const RGBAPixelType & inPixel) const
+        virtual OutputPixelType operator()(const RGBAPixelType & inPixel) const
         {
           OutputPixelType outPixel;
           outPixel.SetSize(m_ChannelList.size());
@@ -116,21 +116,21 @@ namespace otb
           return outPixel;
         }
 
-        unsigned int GetOutputSize() const
+        virtual unsigned int GetOutputSize() const
         {
           return m_ChannelList.size();
         }
 
-        std::vector<unsigned int> GetChannelList() const
+        virtual std::vector<unsigned int> GetChannelList() const
         {
           return m_ChannelList;
         }
-        void SetChannelList(std::vector<unsigned int> channels)
+        virtual void SetChannelList(std::vector<unsigned int> channels)
         {
           m_ChannelList = channels;
         }
 
-       void SetChannelIndex(unsigned int channelPosition, unsigned int channel)
+       virtual void SetChannelIndex(unsigned int channelPosition, unsigned int channel)
        {
           if (m_ChannelList.size() < channelPosition+1)
           {
@@ -140,7 +140,7 @@ namespace otb
          usingDefaultParameters = false;
        }
 
-       unsigned int GetChannelIndex(unsigned int channelPosition) const
+       virtual unsigned int GetChannelIndex(unsigned int channelPosition) const
        {
          if (channelPosition >= m_ChannelList.size())
          {
@@ -151,7 +151,7 @@ namespace otb
        }
 
         /** Only for backward compatibility but should not be used*/
-        void SetAllChannels(unsigned int channel)
+        virtual void SetAllChannels(unsigned int channel)
         {
           if (m_ChannelList.size() <3)
           {
@@ -162,7 +162,7 @@ namespace otb
           m_ChannelList[2]=channel;
           usingDefaultParameters = false;
         }
-        void SetRedChannelIndex(unsigned int channel)
+        virtual void SetRedChannelIndex(unsigned int channel)
         {
           if (m_ChannelList.size() <1)
           {
@@ -172,7 +172,7 @@ namespace otb
           usingDefaultParameters = false;
         }
 
-        void SetGreenChannelIndex(unsigned int channel)
+        virtual void SetGreenChannelIndex(unsigned int channel)
         {
           if (m_ChannelList.size() <2)
           {
@@ -182,7 +182,7 @@ namespace otb
           usingDefaultParameters = false;
         }
 
-        void SetBlueChannelIndex(unsigned int channel)
+        virtual void SetBlueChannelIndex(unsigned int channel)
         {
           if (m_ChannelList.size() <3)
           {
@@ -192,20 +192,20 @@ namespace otb
           usingDefaultParameters = false;
         }
 
-        unsigned int GetRedChannelIndex() const
+        virtual unsigned int GetRedChannelIndex() const
         {
           return m_ChannelList[0];
         }
-        unsigned int GetGreenChannelIndex() const
+        virtual unsigned int GetGreenChannelIndex() const
         {
           return m_ChannelList[1];
         }
-        unsigned int GetBlueChannelIndex() const
+        virtual unsigned int GetBlueChannelIndex() const
         {
           return m_ChannelList[2];
         }
 
-        bool IsUsingDefaultParameters()
+        virtual bool IsUsingDefaultParameters()
         {
           return usingDefaultParameters;
         }
