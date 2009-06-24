@@ -48,6 +48,7 @@ namespace otb
 
         typedef VectorPixelType OutputPixelType;
 
+        typedef std::vector<unsigned int> ChannelListType;
 
         /** Constructor */
         ChannelSelectorFunctor() :
@@ -235,7 +236,7 @@ namespace otb
           m_ChannelList.push_back(2);
           m_ChannelList.push_back(3);
         }
-        std::vector<unsigned int> m_ChannelList;
+        ChannelListType m_ChannelList;
         bool usingDefaultParameters;
 
     };

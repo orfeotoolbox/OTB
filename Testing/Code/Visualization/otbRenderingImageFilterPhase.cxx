@@ -33,9 +33,10 @@ int otbRenderingImageFilterPhase( int argc, char * argv[] )
   typedef otb::RenderingImageFilter<ImageType,RGBImageType> RenderingFilterType;
   typedef otb::ImageFileReader<ImageType>                   ReaderType;
   typedef otb::StreamingImageFileWriter<RGBImageType>       WriterType;
+  typedef otb::Function::PhaseFunctor<VectorPixelType>      PixelRepresentationFunctionType;
   typedef otb::Function::StandardRenderingFunction
           <VectorPixelType, itk::RGBPixel<unsigned char>,
-           otb::Function::PhaseFunctor<VectorPixelType> >              RenderingFunctionType;
+           PixelRepresentationFunctionType >              RenderingFunctionType;
   typedef RenderingFilterType::RenderingFunctionType::ParametersType ParametersType;
 
   // Instantiation
@@ -54,7 +55,7 @@ int otbRenderingImageFilterPhase( int argc, char * argv[] )
 //   VectorPixelType min(nbComponents);
 //   VectorPixelType max(nbComponents);
 
-  std::vector<unsigned int> channels;
+  PixelRepresentationFunctionType::ChannelListType channels;
   channels.push_back( atoi(argv[3]) );
   channels.push_back( atoi(argv[4]) );
   unsigned int nbComponents = 1;//To be displayed
