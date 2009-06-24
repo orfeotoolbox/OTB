@@ -20,6 +20,7 @@
 
 #include "otbDEMToOrthoImageGenerator.h"
 #include "otbMacro.h"
+// #include <iomanip>
 
 namespace otb
 {
@@ -103,11 +104,11 @@ DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
 
     DEMImage->TransformIndexToPhysicalPoint(currentindex, cartoPoint);
 
-//     otbMsgDevMacro(<< "CartoPoint: (" << cartoPoint[0] << "," << cartoPoint[1] << ")");
+//     otbMsgDevMacro(<< std::setprecision(15) << "CartoPoint: (" << cartoPoint[0] << "," << cartoPoint[1] << ")");
 
     geoPoint = m_MapProjection->TransformPoint(cartoPoint);
 
-//     otbMsgDevMacro(<< "CartoPoint: (" << geoPoint[0] << "," << geoPoint[1] << ")");
+//     otbMsgDevMacro(<< "GeoPoint: (" << geoPoint[0] << "," << geoPoint[1] << ")");
 
     height=m_DEMHandler->GetHeightAboveMSL(geoPoint); // Altitude calculation
 //     otbMsgDevMacro(<< "height: " << height);

@@ -1440,7 +1440,6 @@ ADD_TEST(ioTvDEMToImageGeneratorTest ${IO_TESTS12}
         0.002
         )
 
-
 ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
 --compare-image ${TOL}  ${BASELINE}/ioTvossimElevManagerTest.tif
                         ${TEMP}/ioTvossimElevManagerTest.tif
@@ -1487,6 +1486,16 @@ ADD_TEST(ioTvDEMToOrthoImageGeneratorTest ${IO_TESTS12}
          -30 #resolution in m
 	 31 # utm zone
          N # hemisphere
+)
+
+#Big extend
+ADD_TEST(ioTvDEMToOrthoImageGeneratorTest2 ${IO_TESTS12}
+--compare-image ${TOL}  ${BASELINE}/ioTvDEMToOrthoImageGenerator2.tif
+                        ${TEMP}/ioTvDEMToOrthoImageGenerator2.tif
+        otbDEMToOrthoImageGeneratorTest
+         ${INPUTDATA}/DEM/srtm_directory
+         ${TEMP}/ioTvDEMToOrthoImageGenerator2.tif
+         576378.080 5763132.837 232 422 2000 -2000 30 N
 )
 
 # ---  otb::PrepareSRTMDirectory ---
