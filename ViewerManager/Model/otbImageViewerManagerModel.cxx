@@ -198,10 +198,13 @@ void
 ImageViewerManagerModel
 ::UpdateRGBChannelOrder(int redChoice , int greenChoice, int BlueChoice, unsigned int selectedItem)
 {
-  RenderingFunctionType::Pointer renderFunction = m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion;
-  renderFunction->SetRedChannelIndex(redChoice);
-  renderFunction->SetGreenChannelIndex(greenChoice);
-  renderFunction->SetBlueChannelIndex(BlueChoice);
+//   RenderingFunctionType::Pointer renderFunction = m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion;
+   //FIXME make sure this is called only when the renderingFunction is a StandardRenderingFunctionType
+   StandardRenderingFunctionType::Pointer renderFunction = static_cast<StandardRenderingFunctionType*>(m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion.GetPointer());
+
+  renderFunction->GetPixelRepresentationFunction().SetChannelIndex(0,redChoice);
+  renderFunction->GetPixelRepresentationFunction().SetChannelIndex(1,greenChoice);
+  renderFunction->GetPixelRepresentationFunction().SetChannelIndex(2,BlueChoice);
 
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(renderFunction);
@@ -217,8 +220,11 @@ void
 ImageViewerManagerModel
 ::UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem)
 {
-  RenderingFunctionType::Pointer renderFunction = m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion;
-  renderFunction->SetAllChannels(choice);
+//   RenderingFunctionType::Pointer renderFunction = m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion;
+   //FIXME make sure this is called only when the renderingFunction is a StandardRenderingFunctionType
+   StandardRenderingFunctionType::Pointer renderFunction = static_cast<StandardRenderingFunctionType*>(m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion.GetPointer());
+
+  renderFunction->GetPixelRepresentationFunction().SetAllChannels(choice);
 
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(renderFunction);
