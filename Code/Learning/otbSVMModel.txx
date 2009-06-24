@@ -320,11 +320,47 @@ SVMModel<TValue,TLabel>::EvaluateLabel(const MeasurementType & measure) const
     {
     itkExceptionMacro(<<"Model is not up-to-date, can not predict label");
     } 
+
+  // Check probability prediction
+  bool predict_probability = 1;
+
+  if (svm_check_probability_model(m_Model)==0)
+    {
+    if (this->GetSVMType() == ONE_CLASS)
+      {
+      predict_probability = 0;
+      }
+    else
+      {
+      throw itk::ExceptionObject(__FILE__, __LINE__,
+                                 "Model does not support probabiliy estimates",ITK_LOCATION);
+      }
+    }
+  
+  // Get type and number of classes
+  int svm_type=svm_get_svm_type(m_Model);
+  int nr_class=svm_get_nr_class(m_Model);
+ 
+  // Allocate space for labels
+  double *prob_estimates=NULL;
+
+  // Eventually allocate space for probabilities
+  if (predict_probability)
+    {
+    if (svm_type==NU_SVR || svm_type==EPSILON_SVR)
+      {
+       otbMsgDevMacro(<<"Prob. model for test data: target value = predicted value + z,\nz: Laplace distribution e^(-|z|/sigma)/(2sigma),sigma="<<svm_get_svr_probability(m_Model));
+      }
+    else
+      {
+      prob_estimates = new double[nr_class];
+      }
+    }
   
   // Allocate nodes (/TODO if performances problems are related to too
   // many allocations, a cache approach can be set)
   struct svm_node * x = new struct svm_node[measure.size()+1];
-
+  
   int valueIndex = 0;
   
   // Fill the node
@@ -335,13 +371,27 @@ SVMModel<TValue,TLabel>::EvaluateLabel(const MeasurementType & measure) const
     }
   
   // terminate node
-  x[valueIndex].index = -1;
-  x[valueIndex].value = 0;
+  x[measure.size()].index = -1;
+  x[measure.size()].value = 0;
 
-  LabelType label = static_cast<LabelType>(svm_predict(m_Model,x));
+  LabelType label = 0;
+
+  if(predict_probability && (svm_type==C_SVC || svm_type==NU_SVC))
+    {
+    label = static_cast<LabelType>(svm_predict_probability(m_Model,x,prob_estimates));
+    }
+  else
+    {
+    label = static_cast<LabelType>(svm_predict(m_Model,x));
+    }
 
   // Free allocated memory
   delete [] x;
+  
+  if(prob_estimates)
+    {
+    delete [] prob_estimates;
+    }
 
   return label;
 }
@@ -370,8 +420,8 @@ SVMModel<TValue,TLabel>::EvaluateHyperplanesDistances(const MeasurementType & me
     }
   
   // terminate node
-  x[valueIndex].index = -1;
-  x[valueIndex].value = 0;
+  x[measure.size()].index = -1;
+  x[measure.size()].value = 0;
   
   // Intialize distances vector
   DistancesVectorType distances(m_Model->nr_class*(m_Model->nr_class-1)/2);
