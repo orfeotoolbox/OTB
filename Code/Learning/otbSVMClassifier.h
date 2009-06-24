@@ -21,7 +21,6 @@
 #include "itkSampleClassifier.h"
 #include "otbSVMModel.h"
 #include "itkVectorImage.h"
-#include "otbSVMClassifierFunctor.h"
 
 namespace otb
 {
@@ -68,9 +67,7 @@ public:
   /** typedefs from TSample object */
   typedef typename TSample::MeasurementType MeasurementType;
   typedef typename TSample::MeasurementVectorType MeasurementVectorType;
-  /*typedef typename itk::NumericTraits<TSample::ValueType>::RealType
-   InputPixelType;*/
-
+   
   /** typedefs from Superclass */
   typedef typename Superclass::MembershipFunctionPointerVector
   MembershipFunctionPointerVector;

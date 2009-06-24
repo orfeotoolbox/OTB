@@ -47,6 +47,10 @@ namespace otb
       {
       return 0;
       }
+
+    // Updates vm_parameters according to current parameters
+    this->UpdateParameters(m_Model->GetParameters(),parameters);
+
     return m_Model->CrossValidation(m_NumberOfCrossValidationFolders);
   }
 

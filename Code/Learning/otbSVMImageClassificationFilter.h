@@ -18,11 +18,8 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbSVMImageClassificationFilter_h
 #define __otbSVMImageClassificationFilter_h
 
-#include "otbSVMClassifier.h"
 #include "itkInPlaceImageFilter.h"
-#include "itkFixedArray.h"
-#include "itkListSample.h"
-#include "otbSVMClassifier.h"
+#include "otbSVMModel.h"
 
 namespace otb
 {
@@ -38,7 +35,7 @@ namespace otb
  * \ingroup Streamed
  * \ingroup Threaded
  */
-template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimension = 10, class TMaskImage = TOutputImage>
+template <class TInputImage, class TOutputImage, class TMaskImage = TOutputImage>
 class ITK_EXPORT SVMImageClassificationFilter
       : public itk::InPlaceImageFilter<TInputImage,TOutputImage>
 {
@@ -59,7 +56,6 @@ public:
    *  This filter internally uses itk::FixedArray as input for the classifier,
    *  so the max sample size has to be fixed at compilation time.
    */
-  itkStaticConstMacro(MaxSampleDimension,unsigned int,VMaxSampleDimension);
 
   typedef TInputImage                                InputImageType;
   typedef typename InputImageType::ConstPointer      InputImageConstPointerType;
@@ -74,13 +70,8 @@ public:
   typedef typename OutputImageType::RegionType       OutputImageRegionType;
   typedef typename OutputImageType::PixelType        LabelType;
 
-  typedef itk::FixedArray<ValueType,VMaxSampleDimension>     MeasurementVectorType;
-  typedef itk::Statistics::ListSample<MeasurementVectorType> ListSampleType;
-  typedef typename ListSampleType::Pointer                   ListSamplePointerType;
-  typedef otb::SVMClassifier<ListSampleType, LabelType>      ClassifierType;
-  typedef typename ClassifierType::Pointer                   ClassifierPointerType;
-  typedef SVMModel<ValueType,LabelType>                      ModelType;
-  typedef typename ModelType::Pointer                        ModelPointerType;
+  typedef SVMModel<ValueType,LabelType>              ModelType;
+  typedef typename ModelType::Pointer                ModelPointerType;
 
   /** Set/Get the svm model */
   itkSetObjectMacro(Model,ModelType);
