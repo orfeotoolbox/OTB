@@ -38,6 +38,16 @@ SVMModel<TValue,TLabel>::SVMModel()
   m_Model->param.weight_label = NULL;
   m_Model->param.weight = NULL;
   m_Model->delete_composed = false;
+  m_Model->l = 0;
+  m_Model->nr_class = 0;
+  m_Model->SV = NULL;
+  m_Model->sv_coef = NULL;
+  m_Model->rho = NULL;
+  m_Model->label = NULL;
+  m_Model->probA = NULL;
+  m_Model->probB = NULL;
+  m_Model->nSV = NULL;
+
 
   m_ModelUpToDate = false;
 
@@ -67,12 +77,70 @@ SVMModel<TValue,TLabel>::SVMModel()
 template <class TValue,class TLabel> 
 SVMModel<TValue,TLabel>::~SVMModel()
 {
-  svm_destroy_model(m_Model);
+  this->DeleteModel();
+  this->DeleteProblem();
+}
 
-  // Deallocate any existing problem
+template <class TValue,class TLabel> 
+void
+SVMModel<TValue,TLabel>::DeleteModel()
+{ 
+  // Here we do not use svm_destroy_model because it delete memory
+  // without checking if actually allocated
+if(m_Model->free_sv && m_Model->l > 0)
+  {
+  if(m_Model->SV[0])
+    {
+    delete [] (m_Model->SV[0]);
+    }
+  }
+  for(int i=0;i<m_Model->nr_class-1;i++)
+    {
+    delete [](m_Model->sv_coef[i]);
+    }
+  if ( m_Model->delete_composed == true)
+    {
+    delete m_Model->param.kernel_composed;
+    }
+  if(m_Model->SV)
+    {
+    delete [](m_Model->SV);
+    }
+  if(m_Model->sv_coef)
+    {
+    delete [](m_Model->sv_coef);
+    }
+  if(m_Model->rho)
+    {
+    delete [](m_Model->rho);
+    }
+  if(m_Model->label)
+    {
+    delete [](m_Model->label);
+    }
+  if(m_Model->probA)
+    {
+    delete [](m_Model->probA);
+    }
+  if(m_Model->probB)
+    {
+    delete [](m_Model->probB);
+    }
+  if(m_Model->nSV)
+    {
+    delete [](m_Model->nSV);
+    }
+  delete m_Model;
+}
+template <class TValue,class TLabel> 
+void
+SVMModel<TValue,TLabel>::DeleteProblem()
+{
+// Deallocate any existing problem
   if(m_Problem.y)
     {
     delete [] m_Problem.y;
+    m_Problem.y = NULL;
     }
   
   if(m_Problem.x)
@@ -85,8 +153,12 @@ SVMModel<TValue,TLabel>::~SVMModel()
 	}
       }
     delete [] m_Problem.x;
+    m_Problem.x = NULL;
     }
+  m_Problem.l = 0;
+  m_ProblemUpToDate = false;
 }
+
 
 template <class TValue, class TLabel>
 void 
@@ -136,22 +208,7 @@ SVMModel<TValue,TLabel>::BuildProblem()
 
 
   // Deallocate any previous problem
-  if(m_Problem.y)
-    {
-    delete [] m_Problem.y;
-    }
-  
-  if(m_Problem.x)
-    {
-    for(int i = 0; i < m_Problem.l;++i)
-      {
-      if(m_Problem.x[i])
-	{
-	delete [] m_Problem.x[i];
-	}
-      }
-    delete [] m_Problem.x;
-    }
+  this->DeleteProblem();
 
   // Allocate the problem 
   m_Problem.l = probl;
@@ -439,7 +496,7 @@ template <class TValue,class TLabel>
 void
 SVMModel<TValue,TLabel>::SetModel(struct svm_model* aModel)
 {
-  // TODO: Destroy previous model
+  this->DeleteModel();
   m_Model = svm_copy_model(aModel);
   m_ModelUpToDate = true;
 }
@@ -460,6 +517,7 @@ template <class TValue,class TLabel>
 void
 SVMModel<TValue,TLabel>::LoadModel(const char* model_file_name)
 {
+  this->DeleteModel();
   m_Model = svm_load_model(model_file_name, m_Model->param.kernel_generic);
   if (m_Model == 0)
   {

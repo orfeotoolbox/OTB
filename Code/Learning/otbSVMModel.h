@@ -416,6 +416,12 @@ protected:
   /** Display infos */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+  /** Delete any allocated problem */
+  void DeleteProblem();
+
+  /** Delete any allocated model */
+  void DeleteModel();
+
 private:
   SVMModel(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
