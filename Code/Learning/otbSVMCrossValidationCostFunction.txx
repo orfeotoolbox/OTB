@@ -47,52 +47,11 @@ namespace otb
       {
       return 0;
       }
-    
-    // Get a copy of the problem
-    struct svm_problem svm_problem = m_Model->GetProblem();
-    
-    // Get a copy of the parameters
-    struct svm_parameter svm_parameters = m_Model->GetParameters();
 
-    // Update svm_parameters according to current parameters
-    this->UpdateParameters(svm_parameters,parameters);
+    // Updates vm_parameters according to current parameters
+    this->UpdateParameters(m_Model->GetParameters(),parameters);
 
-    // check problem and parameters consistancy
-    const char* error_msg = svm_check_parameter(&svm_problem,&svm_parameters);
-
-    // handle errors
-    if (error_msg)
-      {
-      throw itk::ExceptionObject(__FILE__, __LINE__,error_msg,ITK_LOCATION);
-      }
-
-    // Get the length of the problem
-    int length = m_Model->GetProblem().l;
-    
-    // Temporary memory to store cross validation results
-    double *target = Malloc(double,length);
-
-    // Do cross validation
-    svm_cross_validation(&svm_problem,&svm_parameters,m_NumberOfCrossValidationFolders,target);
-
-    // Evaluate accuracy
-    int i;
-    double total_correct = 0.;
-    
-    for(i=0;i<length;i++)
-      { 
-      if(target[i] == m_Model->GetProblem().y[i])
-	{
-	++total_correct;
-	}
-      }
-    MeasureType accuracy = total_correct/length;
-    
-    // Free temporary memory
-    free(target);
-
-    // return accuracy value
-    return accuracy;
+    return m_Model->CrossValidation(m_NumberOfCrossValidationFolders);
   }
 
   template<class TModel>

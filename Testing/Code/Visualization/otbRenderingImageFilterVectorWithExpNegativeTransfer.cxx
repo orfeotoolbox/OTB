@@ -22,6 +22,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbStreamingImageFileWriter.h"
 #include "itkRGBPixel.h"
 #include "otbStandardRenderingFunction.h"
+#include "otbChannelSelectorFunctor.h"
 #include "itkExpNegativeImageFilter.h"
 
 int otbRenderingImageFilterVectorWithExpNegativeTransfer( int argc, char * argv[] )
@@ -33,10 +34,14 @@ int otbRenderingImageFilterVectorWithExpNegativeTransfer( int argc, char * argv[
   typedef otb::RenderingImageFilter<ImageType,RGBImageType> RenderingFilterType;
   typedef otb::ImageFileReader<ImageType>                   ReaderType;
   typedef otb::StreamingImageFileWriter<RGBImageType>       WriterType;
+  typedef otb::Function::ChannelSelectorFunctor<VectorPixelType>      PixelRepresentationFunctionType;
   typedef itk::Function::ExpNegative<PixelType,PixelType>   ExpNegativeFunctionType;
-  typedef otb::Function::StandardRenderingFunction<PixelType,
-    itk::RGBPixel<unsigned char>,ExpNegativeFunctionType >  RenderingFunctionType;
-
+  typedef otb::Function::StandardRenderingFunction<
+    VectorPixelType,
+    itk::RGBPixel<unsigned char>,
+    PixelRepresentationFunctionType,
+    ExpNegativeFunctionType >                               RenderingFunctionType;
+  typedef RenderingFunctionType::ParametersType             ParametersType;
 
   // Instantiation
   ReaderType::Pointer          reader    = ReaderType::New();
@@ -48,27 +53,29 @@ int otbRenderingImageFilterVectorWithExpNegativeTransfer( int argc, char * argv[
   // reading input image
   reader->SetFileName(argv[1]);
   reader->GenerateOutputInformation();
-  unsigned int nbComponents = reader->GetOutput()->GetNumberOfComponentsPerPixel();
+  unsigned int nbComponents = 3;//To be displayed
 
     // min & max
-  VectorPixelType min(nbComponents);
-  VectorPixelType max(nbComponents);
+  ParametersType parameters(2*nbComponents);
 
-  unsigned int channel = atoi(argv[3]);
-
+  unsigned int channelRed = atoi(argv[3]);
+  unsigned int channelGreen = atoi(argv[4]);
+  unsigned int channelBlue = atoi(argv[5]);
   for(unsigned int i = 0; i<nbComponents;++i)
-    {
-    min[i]=atof(argv[5+i]);
-    max[i]=atof(argv[5+nbComponents+i]);
-    }
- 
+  {
+    parameters[i]=atof(argv[7+i]);
+    ++i;
+    parameters[i]=atof(argv[7+i]);
+  }
+
   // rendering
   rendering->SetInput(reader->GetOutput());
   rendering->SetRenderingFunction(function);
-  function->SetMinimum(min);
-  function->SetMaximum(max);
-  function->SetAllChannels(channel);
-  function->GetTransferFunction().SetFactor(atof(argv[4]));
+  function->SetParameters(parameters);
+  function->GetPixelRepresentationFunction().SetRedChannelIndex(channelRed);
+  function->GetPixelRepresentationFunction().SetGreenChannelIndex(channelGreen);
+  function->GetPixelRepresentationFunction().SetBlueChannelIndex(channelBlue);
+  function->GetTransferFunction().SetFactor(atof(argv[6]));
 
   // writing
   writer->SetFileName(argv[2]);

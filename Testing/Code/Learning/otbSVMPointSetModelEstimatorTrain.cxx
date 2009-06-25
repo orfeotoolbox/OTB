@@ -86,7 +86,7 @@ int otbSVMPointSetModelEstimatorTrain( int argc, char* argv[] )
 
   estimator->Update();
 
-  estimator->SaveModel(outputModelFileName);
+  estimator->GetModel()->SaveModel(outputModelFileName);
 
 
   return EXIT_SUCCESS;

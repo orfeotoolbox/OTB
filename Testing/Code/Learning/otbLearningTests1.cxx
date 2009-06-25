@@ -29,7 +29,6 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbSVMModelNew);
-  REGISTER_TEST(otbSVMModelAllocateProblem);
   REGISTER_TEST(otbSVMModelLoad);
   REGISTER_TEST(otbSVMModelAccessor);
   REGISTER_TEST(otbSVMModelLoadSave);

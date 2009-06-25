@@ -25,7 +25,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 int otbImageLayerVector( int argc, char * argv[] )
 {
-  
+
   const char * infname      = argv[1];
   const char * qloutfname   = argv[2];
   const char * extoutfname  = argv[3];
@@ -41,7 +41,8 @@ int otbImageLayerVector( int argc, char * argv[] )
   typedef otb::ImageFileReader<ImageType>                                   ReaderType;
   typedef otb::StreamingShrinkImageFilter<ImageType,ImageType>              ShrinkFilterType;
   typedef otb::ImageFileWriter<OutputImageType>                             WriterType;
-  typedef otb::Function::StandardRenderingFunction<double,OutputPixelType>  RenderingFunctionType;
+  typedef otb::Function::StandardRenderingFunction<VectorPixelType,OutputPixelType>  RenderingFunctionType;
+  typedef RenderingFunctionType::ParametersType                             ParametersType;
   // Instantiation
   ReaderType::Pointer reader = ReaderType::New();
   ShrinkFilterType::Pointer shrinker = ShrinkFilterType::New();
@@ -52,14 +53,14 @@ int otbImageLayerVector( int argc, char * argv[] )
 
   unsigned int nbComponents = reader->GetOutput()->GetNumberOfComponentsPerPixel();
   // min & max
-  VectorPixelType min(nbComponents);
-  VectorPixelType max(nbComponents);
 
+  ParametersType parameters(2*nbComponents);
   for(unsigned int i = 0; i<nbComponents;++i)
-    {
-    min[i]=atof(argv[6+i]);
-    max[i]=atof(argv[6+nbComponents+i]);
-    }
+  {
+    parameters[i]=atof(argv[4+i]);
+    ++i;
+    parameters[i]=atof(argv[4+nbComponents+i]);
+  }
 
 
   // Quicklook
@@ -78,10 +79,9 @@ int otbImageLayerVector( int argc, char * argv[] )
   layer->SetImage(reader->GetOutput());
   layer->SetHasExtract(true);
   layer->SetHasScaledExtract(true);
-  layer->AutoMinMaxOff();
   RenderingFunctionType::Pointer function = RenderingFunctionType::New();
-  function->SetMinimum(min);
-  function->SetMaximum(max);
+  function->AutoMinMaxOff();
+  function->SetParameters(parameters);
   layer->SetRenderingFunction(function);
 
   ImageType::RegionType lregion = reader->GetOutput()->GetLargestPossibleRegion();
@@ -93,25 +93,25 @@ int otbImageLayerVector( int argc, char * argv[] )
 
   index[0] = lregion.GetSize()[0]/4;
   index[1] = lregion.GetSize()[1]/4;
-  
+
   ImageType::RegionType extractRegion;
   extractRegion.SetSize(size);
   extractRegion.SetIndex(index);
-  
+
   layer->SetExtractRegion(extractRegion);
-  
+
   size[0]=25;
   size[1]=25;
 
   index[0] = 3 * lregion.GetSize()[0]/8;
   index[1] = 3 * lregion.GetSize()[1]/8;
-  
+
   ImageType::RegionType sextractRegion;
   sextractRegion.SetSize(size);
   sextractRegion.SetIndex(index);
-  
+
   layer->SetScaledExtractRegion(sextractRegion);
-  
+
   // Render the layer
   layer->Render();
 
@@ -128,11 +128,11 @@ int otbImageLayerVector( int argc, char * argv[] )
   writer->SetInput(layer->GetRenderedExtract());
   writer->SetFileName(extoutfname);
   writer->Update();
-  
+
   writer = WriterType::New();
   writer->SetInput(layer->GetRenderedScaledExtract());
   writer->SetFileName(sextoutfname);
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 }

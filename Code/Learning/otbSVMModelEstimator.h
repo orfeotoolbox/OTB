@@ -19,7 +19,7 @@
 #define __otbSVMModelEstimator_h
 
 #include "otbSVMModel.h"
-#include "itkLightProcessObject.h"
+#include "itkProcessObject.h"
 
 namespace otb
 {
@@ -56,37 +56,30 @@ namespace otb
  * \ingroup ClassificationFilters
  */
 template <class InputPixelType, class LabelPixelType>
-class ITK_EXPORT SVMModelEstimator : public itk::LightProcessObject
+class ITK_EXPORT SVMModelEstimator : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */
-  typedef SVMModelEstimator   Self;
-  typedef itk::LightProcessObject   Superclass;
-
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef SVMModelEstimator             Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+ 
+  /** Model typedef */
+  typedef SVMModel<InputPixelType,LabelPixelType> ModelType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
+  /** Get the output model */
+  ModelType * GetModel();
 
-  /** Set the number of classes. */
-  itkSetMacro(NumberOfClasses, unsigned int);
-
-  /** Get the number of classes. */
-  itkGetConstReferenceMacro(NumberOfClasses, unsigned int);
+  /** Get the output model */
+  const ModelType * GetModel() const;
 
   /** Type definitions for the SVM Model. */
-  typedef std::vector< InputPixelType > MeasurementVectorType;
-  typedef SVMModel< InputPixelType, LabelPixelType >   SVMModelType;
-  typedef typename SVMModelType::Pointer     SVMModelPointer;
-
-  /* Vectors to hold the training data */
-  typedef std::vector<MeasurementVectorType> TrainingMeasuresType;
-  typedef std::vector<LabelPixelType>        TrainingLabelsType;
-
-  /** Set the model */
-  itkGetMacro(Model, SVMModelPointer);
+  typedef SVMModel< InputPixelType, LabelPixelType > SVMModelType;
+  typedef typename SVMModelType::Pointer             SVMModelPointer;
 
   /** Get the cross validation accuracy measures */
   itkGetMacro(InitialCrossValidationAccuracy,double);
@@ -109,43 +102,30 @@ public:
   itkSetMacro(NumberOfCrossValidationFolders,unsigned int);
   itkGetMacro(NumberOfCrossValidationFolders,unsigned int);
 
-  /** Set/Get the Measures */
-  void SetMeasures( TrainingMeasuresType measures )
+  /** Set the number of classes */
+  void SetNumberOfClasses(unsigned int nbClasses)
   {
-    m_Measures = measures;
-  };
-  TrainingMeasuresType GetMeasures()
-  {
-    return m_Measures;
-  };
+    this->GetModel()->SetNumberOfClasses(nbClasses);
+    this->Modified();
+  }
 
-  /** Set/Get the Labels */
-  void SetLabels( TrainingLabelsType labels )
+  /** Get the number of classes */
+  unsigned int GetNumberOfClasses()
   {
-    m_Labels = labels;
-  };
-  TrainingLabelsType GetLabels()
-  {
-    return m_Labels;
-  };
-
-  /** Get the number of classes. */
-  itkGetConstReferenceMacro(Model, SVMModelPointer);
-
-  /** Save the estimated model */
-  void SaveModel(const char* model_file_name);
+    return this->GetModel()->GetNumberOfClasses();
+  }
 
   /** Set the SVM type to ONE_CLASS, C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR */
   void SetSVMType(int svmtype)
   {
-    m_Model->SetSVMType(svmtype);
+    this->GetModel()->SetSVMType(svmtype);
     this->Modified();
   }
 
   /** Get the SVM type (C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR) */
   int GetSVMType(void)
   {
-    return m_Model->GetSVMType();
+    return this->GetModel()->GetSVMType();
   }
 
   /** Set the kernel type to LINEAR, POLY, RBF, SIGMOID
@@ -155,20 +135,20 @@ public:
   sigmoid: tanh(gamma*u'*v + coef0)*/
   void SetKernelType(int kerneltype)
   {
-    m_Model->SetKernelType(kerneltype);
+    this->GetModel()->SetKernelType(kerneltype);
     this->Modified();
   }
 
   /** Get the kernel type */
   int GetKernelType(void)
   {
-    return m_Model->GetKernelType();
+    return this->GetModel()->GetKernelType();
   }
 
   /** Set the degree of the polynomial kernel */
   void SetPolynomialKernelDegree(int degree)
   {
-    m_Model->SetPolynomialKernelDegree(degree);
+    this->GetModel()->SetPolynomialKernelDegree(degree);
     this->Modified();
   }
 
@@ -176,84 +156,84 @@ public:
   /** Get the degree of the polynomial kernel */
   int GetPolynomialKernelDegree(void)
   {
-    return m_Model->GetPolynomialKernelDegree();
+    return this->GetModel()->GetPolynomialKernelDegree();
   }
 
   /** Set the gamma parameter for poly/rbf/sigmoid kernels */
   void SetKernelGamma(double gamma)
   {
-    m_Model->SetKernelGamma(gamma);
+    this->GetModel()->SetKernelGamma(gamma);
     this->Modified();
   }
   /** Get the gamma parameter for poly/rbf/sigmoid kernels */
   double GetKernelGamma(void)
   {
-    return m_Model->GetKernelGamma();
+    return this->GetModel()->GetKernelGamma();
   }
 
   /** Set the coef0 parameter for poly/sigmoid kernels */
   void SetKernelCoef0(double coef0)
   {
-    m_Model->SetKernelCoef0(coef0);
+    this->GetModel()->SetKernelCoef0(coef0);
     this->Modified();
   }
 
   /** Get the coef0 parameter for poly/sigmoid kernels */
   double GetKernelCoef0(void)
   {
-    return m_Model->GetKernelCoef0();
+    return this->GetModel()->GetKernelCoef0();
   }
 
   /** Set the Nu parameter for the training */
   void SetNu(double nu)
   {
-    m_Model->SetNu(nu);
+    this->GetModel()->SetNu(nu);
     this->Modified();
   }
 
   /** Set the Nu parameter for the training */
   double GetNu(void)
   {
-    return m_Model->GetNu();
+    return this->GetModel()->GetNu();
   }
 
   /** Set the cache size in MB for the training */
   void SetCacheSize(int cSize)
   {
-    m_Model->SetCacheSize(cSize);
+    this->GetModel()->SetCacheSize(cSize);
     this->Modified();
   }
 
   /** Get the cache size in MB for the training */
   int GetCacheSize(void)
   {
-    return (m_Model->GetCacheSize());
+    return (this->GetModel()->GetCacheSize());
   }
 
   /** Set the C parameter for the training for C_SVC, EPSILON_SVR and NU_SVR */
   void SetC(double c)
   {
-    m_Model->SetC(c);
+    this->GetModel()->SetC(c);
     this->Modified();
   }
 
   /** Get the C parameter for the training for C_SVC, EPSILON_SVR and NU_SVR */
   double GetC(void)
   {
-    return m_Model->GetC();
+    return this->GetModel()->GetC();
   }
 
   /** Set the tolerance for the stopping criterion for the training*/
   void SetEpsilon(double eps)
   {
-    m_Model->SetEpsilon(eps);
+    this->GetModel()->SetEpsilon(eps);
     this->Modified();
   }
 
   /** Get the tolerance for the stopping criterion for the training*/
   double GetEpsilon(void)
   {
-    return m_Model->GetEpsilon();
+    return this->GetModel()->GetEpsilon();
   }
 
 
@@ -261,7 +241,7 @@ public:
   void SetP(double p)
   {
     //param.svm_type = EPSILON_SVR;
-    m_Model->SetP(p);
+    this->GetModel()->SetP(p);
     this->Modified();
   }
 
@@ -269,76 +249,72 @@ public:
   /* Get the value of p for EPSILON_SVR */
   double GetP(void)
   {
-    return m_Model->GetP();
+    return this->GetModel()->GetP();
   }
 
   /** Use the shrinking heuristics for the training */
   void DoShrinking(bool s)
   {
-    m_Model->DoShrinking(s);
+    this->GetModel()->DoShrinking(s);
     this->Modified();
   }
 
   /** Get Use the shrinking heuristics for the training boolean */
   bool GetDoShrinking(void)
   {
-    return (m_Model->GetDoShrinking());
+    return (this->GetModel()->GetDoShrinking());
   }
 
 
   /** Do probability estimates */
   void DoProbabilityEstimates(bool prob)
   {
-    m_Model->DoProbabilityEstimates(prob);
+    this->GetModel()->DoProbabilityEstimates(prob);
     this->Modified();
   }
 
   /** Get Do probability estimates boolean */
   bool GetDoProbabilityEstimates(void)
   {
-    return (m_Model->GetDoProbabilityEstimates());
+    return (this->GetModel()->GetDoProbabilityEstimates());
   }
-
-  void Update();
 
   /** Get/Set methods for generic kernel functor */
   virtual GenericKernelFunctorBase * GetKernelFunctor(void)const
   {
-    return m_Model->GetKernelFunctor();
+    return this->GetModel()->GetKernelFunctor();
   }
   virtual void SetKernelFunctor(GenericKernelFunctorBase* pGenericKernelFunctor)
   {
-    m_Model->SetKernelFunctor(pGenericKernelFunctor);
+    this->GetModel()->SetKernelFunctor(pGenericKernelFunctor);
     this->Modified();
   }
 
-  virtual void  PrepareData();
+  /** Save the model */
+  virtual void SaveModel(const char * fname)
+  {
+    this->GetModel()->SaveModel(fname);
+  }
 
 protected:
+  /** Constructor */
   SVMModelEstimator();
+  /** Destructor */
   ~SVMModelEstimator();
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Starts the modelling process */
   void GenerateData();
 
+  /** This virtual function must be implemented in subclasses to
+  populate the model with samples */
+  virtual void  PrepareData(){};
+
+  /** Optimize parameters */
+  void OptimizeParameters();
+  
+  /** The number of classes */
   unsigned int         m_NumberOfClasses;
-  TrainingMeasuresType m_Measures;
-  TrainingLabelsType   m_Labels;
-
-  /** A function that generates the
-   * model based on the training input data
-   * Achieves the goal of training the classifier. */
-  virtual void EstimateModels();
-  virtual void CrossValidate();
-  virtual void BuildProblem()
-  {
-  }
-
-
-  SVMModelPointer m_Model;
-
-  bool m_Done;
 
 private:
   SVMModelEstimator(const Self&); //purposely not implemented

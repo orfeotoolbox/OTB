@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,25 +28,25 @@
 namespace otb
 {
 
-template< class TListSample, 
-          class THistogramMeasurement, 
+template< class TListSample,
+          class THistogramMeasurement,
           class TFrequencyContainer>
-ListSampleToHistogramListGenerator< TListSample, 
-                                    THistogramMeasurement, 
+ListSampleToHistogramListGenerator< TListSample,
+                                    THistogramMeasurement,
                                     TFrequencyContainer >
 ::ListSampleToHistogramListGenerator() : m_List(), m_Size(), m_MarginalScale(100), m_HistogramMin(), m_HistogramMax(), m_AutoMinMax(true), m_HistogramList()
 {
   m_HistogramList = HistogramListType::New();
   m_Size.Fill(255);
-}  
+}
 
 
-template< class TListSample, 
-          class THistogramMeasurement, 
+template< class TListSample,
+          class THistogramMeasurement,
           class TFrequencyContainer >
 void
-ListSampleToHistogramListGenerator< TListSample, 
-                                    THistogramMeasurement, 
+ListSampleToHistogramListGenerator< TListSample,
+                                    THistogramMeasurement,
                                     TFrequencyContainer >
 ::GenerateData()
 {
@@ -76,7 +76,7 @@ ListSampleToHistogramListGenerator< TListSample,
   // only return an empty histogram
   if( m_AutoMinMax && m_List->Size() != 0 )
     {
-    FindSampleBound(m_List, m_List->Begin(),
+    FindSampleBound(m_List.GetPointer () , m_List->Begin(),
                     m_List->End(), lower, upper);
     float margin;
 
@@ -84,34 +84,34 @@ ListSampleToHistogramListGenerator< TListSample,
       {
       if ( !itk::NumericTraits< THistogramMeasurement >::is_integer )
         {
-        margin = 
-          ( (THistogramMeasurement)(upper[i] - lower[i]) / 
-            (THistogramMeasurement) m_Size[0] ) / 
+        margin =
+          ( (THistogramMeasurement)(upper[i] - lower[i]) /
+            (THistogramMeasurement) m_Size[0] ) /
           (THistogramMeasurement) m_MarginalScale;
         h_upper[i] = (THistogramMeasurement) (upper[i] + margin);
         if(h_upper[i] <= upper[i])
-          { 
+          {
           // an overflow has occurred therefore set upper to upper
           h_upper[i] = upper[i];
           // Histogram measurement type would force the clipping the max value.
           // Therefore we must call the following to include the max value:
           clipBinsAtEnds = false;
-          // The above function is okay since here we are within the autoMinMax 
+          // The above function is okay since here we are within the autoMinMax
           // computation and clearly the user intended to include min and max.
           }
         }
       else
         {
-        h_upper[i] = ((THistogramMeasurement) upper[i]) + 
+        h_upper[i] = ((THistogramMeasurement) upper[i]) +
           itk::NumericTraits< THistogramMeasurement >::One;
         if(h_upper[i] <= upper[i])
-          { 
+          {
           // an overflow has occurred therefore set upper to upper
           h_upper[i] = upper[i];
           // Histogram measurement type would force the clipping the max value.
           // Therefore we must call the following to include the max value:
           clipBinsAtEnds = false;
-          // The above function is okay since here we are within the autoMinMax 
+          // The above function is okay since here we are within the autoMinMax
           // computation and clearly the user intended to include min and max.
           }
         }
@@ -127,7 +127,7 @@ ListSampleToHistogramListGenerator< TListSample,
   // Clearing previous histograms
   m_HistogramList->Clear();
 
-  // For each dimension 
+  // For each dimension
   for(unsigned int comp = 0; comp<m_List->GetMeasurementVectorSize();++comp)
     {
     // initialize the Histogram object using the sizes and
@@ -147,9 +147,9 @@ ListSampleToHistogramListGenerator< TListSample,
     typename TListSample::ConstIterator last = m_List->End();
     typename HistogramType::IndexType index;
     typename HistogramType::MeasurementVectorType hvector;
-  
+
     while (iter != last)
-      {   
+      {
       hvector[0] = static_cast<THistogramMeasurement>(iter.GetMeasurementVector()[comp]);
       m_HistogramList->Back()->GetIndex(hvector,index);
 
@@ -169,12 +169,12 @@ ListSampleToHistogramListGenerator< TListSample,
   otbMsgDebugMacro(<<"ListSampleToHistogramListGenerator::GenerateData(): Leaving");
 }
 
-template< class TListSample, 
-          class THistogramMeasurement, 
+template< class TListSample,
+          class THistogramMeasurement,
           class TFrequencyContainer >
 void
-ListSampleToHistogramListGenerator< TListSample, 
-                                    THistogramMeasurement, 
+ListSampleToHistogramListGenerator< TListSample,
+                                    THistogramMeasurement,
                                     TFrequencyContainer >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
@@ -186,7 +186,7 @@ ListSampleToHistogramListGenerator< TListSample,
   os << indent << "HistogramMax: "<< m_HistogramMax << std::endl;
 }
 
-} // end of namespace itk 
+} // end of namespace itk
 
 #endif
 

@@ -44,14 +44,10 @@ public:
   {
     MeasurementVectorType output;
 
-    typename VectorType::ConstIterator pIt =  value.Begin();
-    typename VectorType::ConstIterator pEnd = value.End();
-
-    while (pIt!=pEnd)
-    {
-      output.push_back(*pIt);
-      ++pIt;
-    }
+    for(unsigned int i = 0; i<value.Size();++i)
+      {
+      output.push_back(value[i]);
+      }
     return output;
   }
 };
@@ -162,26 +158,23 @@ public:
   /** Get the training image. */
   itkGetMacro(TrainingSampleList,TrainingSampleListPointer);
 
-
-
 protected:
+  /** Constructor */
   SVMSampleListModelEstimator();
+  /** Destructor */
   ~SVMSampleListModelEstimator();
+  /** PrintSelf */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-
-  virtual void BuildProblem();
+  /** PrepareData method */
+  virtual void PrepareData();
 
 private:
   SVMSampleListModelEstimator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-
-
   TrainingSampleListPointer  m_TrainingSampleList;
   InputSampleListPointer  m_InputSampleList;
-
-
 
 }; // class SVMSampleListModelEstimator
 

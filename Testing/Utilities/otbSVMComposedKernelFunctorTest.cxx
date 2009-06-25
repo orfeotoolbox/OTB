@@ -29,7 +29,9 @@
 #include "otbSVMKernels.h"
 #include "svm.h"
 
-
+#ifndef Malloc
+#define Malloc(type,n) new type[n]
+#endif
 
 int otbSVMComposedKernelFunctorTest( int argc, char* argv[] )
 {

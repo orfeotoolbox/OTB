@@ -45,11 +45,9 @@ namespace otb
  *
  * \ingroup ClassificationFilters
  */
-template <class TInputImage,
-class TTrainingImage>
+template <class TInputImage, class TTrainingImage>
 class ITK_EXPORT SVMImageModelEstimator:
       public SVMModelEstimator<ITK_TYPENAME TInputImage::InternalPixelType, ITK_TYPENAME TTrainingImage::PixelType>
-      //public SVMModelEstimator<ITK_TYPENAME TInputImage::PixelType::ComponentType, ITK_TYPENAME TTrainingImage::PixelType>
 {
 public:
   /** Standard class typedefs. */
@@ -87,42 +85,33 @@ public:
   itk::ImageRegionIterator< TInputImage >  InputImageIterator;
   typedef
   itk::ImageRegionIterator< TTrainingImage > TrainingImageIterator;
+  
+  /** Set the input image */
+  void SetInputImage(const TInputImage * inputImage);
 
-  /** Set the input image. */
-  itkSetObjectMacro(InputImage,TInputImage);
+  /** Set the training image */
+  void SetTrainingImage(const TTrainingImage * trainingImage);
 
-  /** Get the input image. */
-  itkGetObjectMacro(InputImage,TInputImage);
+  /** Get the input image */
+  const TInputImage * GetInputImage();
 
-
-  /** Set the training image (image of labels). */
-  itkSetMacro(TrainingImage,TrainingImagePointer);
-
-  /** Get the training image. */
-  itkGetMacro(TrainingImage,TrainingImagePointer);
-
-
+  /** Get the training image */
+  const TTrainingImage * GetTrainingImage();
 
 protected:
+  /** Constructor */
   SVMImageModelEstimator();
+  /** Destructor */
   ~SVMImageModelEstimator();
+  /** PrintSelf */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-
-  virtual void BuildProblem();
+  /** Implement the prepare data step from SVMModelEstimator */
+  virtual void PrepareData();
 
 private:
   SVMImageModelEstimator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
-
-  typedef typename TInputImage::SizeType InputImageSizeType;
-
-
-  TrainingImagePointer  m_TrainingImage;
-  InputImagePointer  m_InputImage;
-
-
 
 }; // class SVMImageModelEstimator
 

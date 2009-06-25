@@ -11,8 +11,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 
 # Tolerances
-SET(TOL 0.0)
-SET(EPSILON 0.000001)
+SET(NOTOL 0.0)
 
 # Test programs
 SET(VISUREFAC_TESTS1 ${CXX_TEST_PATH}/otbVisualizationTests1)
@@ -58,7 +57,7 @@ otbImageLayerNew
 )
 
 ADD_TEST(vrTvImageLayerScalar ${VISUREFAC_TESTS1}
---compare-n-images ${TOL} 3
+--compare-n-images ${NOTOL} 3
 ${BASELINE}/vrTvImageLayerScalarQuicklookOutput.png
 ${TEMP}/vrTvImageLayerScalarQuicklookOutput.png
 ${BASELINE}/vrTvImageLayerScalarExtractOutput.png
@@ -74,7 +73,7 @@ ${TEMP}/vrTvImageLayerScalarScaledExtractOutput.png
 )
 
 ADD_TEST(vrTvImageLayerVector ${VISUREFAC_TESTS1}
---compare-n-images ${TOL} 3
+--compare-n-images ${NOTOL} 3
 ${BASELINE}/vrTvImageLayerVectorQuicklookOutput.png
 ${TEMP}/vrTvImageLayerVectorQuicklookOutput.png
 ${BASELINE}/vrTvImageLayerVectorExtractOutput.png
@@ -102,7 +101,7 @@ otbRenderingImageFilterNew
 )
 
 ADD_TEST(vrTvRenderingImageFilterScalar ${VISUREFAC_TESTS1}
---compare-image ${TOL}
+--compare-image ${NOTOL}
 ${BASELINE}/vrTvRenderingImageFilterScalarOutput.png
 ${TEMP}/vrTvRenderingImageFilterScalarOutput.png
 otbRenderingImageFilterScalar
@@ -112,25 +111,53 @@ ${TEMP}/vrTvRenderingImageFilterScalarOutput.png
 )
 
 ADD_TEST(vrTvRenderingImageFilterVector ${VISUREFAC_TESTS1}
---compare-image ${TOL}
+--compare-image ${NOTOL}
 ${BASELINE}/vrTvRenderingImageFilterVectorOutput.png
 ${TEMP}/vrTvRenderingImageFilterVectorOutput.png
 otbRenderingImageFilterVector
 ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
 ${TEMP}/vrTvRenderingImageFilterVectorOutput.png
-0 179 0 0 0 802 0 0 0
+0 1 2 #channel to extract
+179 802 #min max
+100 600 #min max
+200 700 #min max
 )
 
 ADD_TEST(vrTvRenderingImageFilterVectorWithExpNegativeTransfer ${VISUREFAC_TESTS1}
---compare-image ${TOL}
+--compare-image ${NOTOL}
 ${BASELINE}/vrTvRenderingImageFilterVectorWithExpNegativeTransferOutput.png
 ${TEMP}/vrTvRenderingImageFilterVectorWithExpNegativeTransferOutput.png
 otbRenderingImageFilterVectorWithExpNegativeTransfer
 ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
 ${TEMP}/vrTvRenderingImageFilterVectorWithExpNegativeTransferOutput.png
-0 0.05 179 0 0 0 802 0 0 0
+0 1 2 #channel to extract
+0.05
+179 802 #min max
+100 600 #min max
+200 700 #min max
 )
 
+ADD_TEST(vrTvRenderingImageFilterAmplitude ${VISUREFAC_TESTS1}
+--compare-image ${NOTOL}
+${BASELINE}/vrTvRenderingImageFilterAmplitudeOutput.png
+${TEMP}/vrTvRenderingImageFilterAmplitudeOutput.png
+otbRenderingImageFilterAmplitude
+${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+${TEMP}/vrTvRenderingImageFilterAmplitudeOutput.png
+0 1 #channel to use to compute module
+50 800
+)
+
+ADD_TEST(vrTvRenderingImageFilterPhase ${VISUREFAC_TESTS1}
+--compare-image ${NOTOL}
+${BASELINE}/vrTvRenderingImageFilterPhaseOutput.png
+${TEMP}/vrTvRenderingImageFilterPhaseOutput.png
+otbRenderingImageFilterPhase
+${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+${TEMP}/vrTvRenderingImageFilterPhaseOutput.png
+0 1 #channel to use to compute module
+0 1.57 #not very significant with an optical image
+)
 #------------ otb::UniformAlphaBlendingFunction ------------
 
 ADD_TEST(vrTuUniformAlphaBlendingFunctionNew ${VISUREFAC_TESTS1}
@@ -169,7 +196,7 @@ otbImageLayerRenderingModelNew
 )
 
 ADD_TEST(vrTvImageLayerRenderingModelSingleLayer ${VISUREFAC_TESTS1}
---compare-n-images ${TOL} 3
+--compare-n-images ${NOTOL} 3
 ${BASELINE}/vrTvImageLayerRenderingModelSingleLayerQuicklookOutput.png
 ${TEMP}/vrTvImageLayerRenderingModelSingleLayerQuicklookOutput.png
 ${BASELINE}/vrTvImageLayerRenderingModelSingleLayerExtractOutput.png
@@ -332,6 +359,8 @@ otbImageLayerGeneratorScalar.cxx
 otbImageLayerGeneratorVector.cxx
 otbMultiplyBlendingFunctionNew.cxx
 otbRenderingImageFilterVectorWithExpNegativeTransfer.cxx
+otbRenderingImageFilterAmplitude.cxx
+otbRenderingImageFilterPhase.cxx
 otbImageViewNew.cxx
 otbImageViewerEndToEndSingleLayer.cxx
 otbImageViewerEndToEndSingleLayerWithSelectAreaHandler.cxx

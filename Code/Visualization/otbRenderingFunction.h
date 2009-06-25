@@ -23,18 +23,31 @@
 #include "itkVariableLengthVector.h"
 #include "itkRGBPixel.h"
 #include "itkRGBAPixel.h"
+#include "otbChannelSelectorFunctor.h"
+#include "itkHistogram.h"
+#include "otbObjectList.h"
+// #include "otbRenderingImageFilter.h"
+#include "otbVisualizationPixelTraits.h"
+#include "itkListSample.h"
+#include "otbListSampleToHistogramListGenerator.h"
+#include "itkConceptChecking.h"
 
 namespace otb
 {
+
+// enum ImageInformationType {SCALAR, TWOBANDS, THREEBANDS, SENSORINVERTED, SENSORWAVELENTHORDER};
+
 namespace Function
 {
-/**\class RenderingFunction
+
+
+/** \class RenderingFunction
  * \brief Base class for rendering functions.
  *  Please note that this class is pure virtual, and should be
  *  subclassed.
  *  \ingroup Visualization
  */
-template <class TPixelPrecision, class TRGBPixel>
+template <class TPixel, class TRGBPixel >
 class RenderingFunction
   : public itk::Object
 {
@@ -49,157 +62,152 @@ public:
   itkTypeMacro(RenderingFunction,Object);
 
   /** PixelType macros */
-  typedef TRGBPixel                                  OutputPixelType;
-  typedef TPixelPrecision                            PixelType;
+  typedef TRGBPixel                                         OutputPixelType;
+  typedef TPixel                                            PixelType;
   typedef typename itk::NumericTraits<PixelType>::ValueType ScalarType;
-  typedef itk::VariableLengthVector<ScalarType>       VectorPixelType;
-  typedef itk::RGBPixel<ScalarType> RGBPixelType;
-  typedef itk::RGBAPixel<ScalarType> RGBAPixelType;
+  typedef itk::VariableLengthVector<ScalarType>             VectorPixelType;
+  typedef itk::RGBPixel<ScalarType>                         RGBPixelType;
+  typedef itk::RGBAPixel<ScalarType>                        RGBAPixelType;
+  typedef typename itk::NumericTraits<ScalarType>::RealType RealScalarType;
+  typedef itk::VariableLengthVector<RealScalarType>         InternalPixelType;
 
-  /** Extrema vector */
-  typedef std::vector<ScalarType>               ExtremaVectorType;
+
+  typedef itk::VariableLengthVector<ScalarType>                       SampleType;
+  typedef itk::Statistics::ListSample<SampleType>                     ListSampleType;
+  typedef typename ListSampleType::Pointer                       ListSamplePointerType;
+
+  typedef itk::Statistics::DenseFrequencyContainer                   DFContainerType;
+
+  typedef otb::ListSampleToHistogramListGenerator
+      <ListSampleType,ScalarType,DFContainerType>                     HistogramFilterType;
+  typedef itk::Statistics::Histogram<
+                  typename itk::NumericTraits<ScalarType>::RealType,1,
+                  typename itk::Statistics::DenseFrequencyContainer> HistogramType;
+  typedef typename HistogramType::Pointer HistogramPointerType;
+  typedef ObjectList<HistogramType>                         HistogramListType;
+  typedef typename HistogramListType::Pointer               HistogramListPointerType;
+
+  itkConceptMacro(SameTypeCheck,
+    (itk::Concept::SameType<typename HistogramFilterType::HistogramType, HistogramType>));
+
+
+  typedef  itk::Array< double >           ParametersType;
+
 
   /** Evaluate method (scalar version) */
-  virtual const OutputPixelType Evaluate(ScalarType spixel) const = 0;
-
-  /** Evaluate method (vector version) */
-  virtual const OutputPixelType Evaluate(const VectorPixelType & vpixel) const = 0;
-
-  /** Evaluate method (RGB pixel version) */
-  virtual const OutputPixelType Evaluate(const RGBPixelType & vpixel) const = 0;
-
-  /** Evaluate method (RGBA pixel version) */
-  virtual const OutputPixelType Evaluate(const RGBAPixelType & vpixel) const = 0;
+  virtual OutputPixelType Evaluate(const PixelType &  spixel) const
+  {
+    return EvaluateTransferFunction(EvaluatePixelRepresentation(spixel));
+  }
 
   /** Get a string description of a pixel  (scalar version) */
-  virtual const std::string Describe(ScalarType spixel) const = 0;
+  virtual const std::string Describe(const PixelType & spixel) const = 0;
 
-  /** Get a string description of a pixel (vector version) */
-  virtual const std::string Describe(const VectorPixelType & vpixel) const = 0;
+  /** Evaluate pixel representation */
+  virtual InternalPixelType EvaluatePixelRepresentation(const PixelType &  spixel) const = 0;
 
-  /** Get a string description of a pixel  (RGB pixel version) */
-  virtual const std::string Describe(const RGBPixelType & spixel) const = 0;//FIXME should it provide a default implementation?
+  /** Return the Pixel representation size*/
+  virtual unsigned int GetPixelRepresentationSize() const = 0;
 
-  /** Get a string description of a pixel (RGBA pixel version) */
-  virtual const std::string Describe(const RGBAPixelType & vpixel) const = 0;//FIXME should it provide a default implementation?
+  /** Evaluate transfer function */
+  virtual OutputPixelType EvaluateTransferFunction(const InternalPixelType &  spixel) const = 0;
+
+  /** Set/Get the sample list */
+//   virtual void SetHistogramList(HistogramListPointerType histogramList)
+//   {
+//     m_HistogramList = histogramList;
+//     this->Modified();
+//   }
+  virtual HistogramListPointerType GetHistogramList()
+  {
+    //FIXME Update condition?
+    return m_HistogramList;
+  }
+
+  virtual void SetListSample(ListSamplePointerType listSample)
+  {
+    m_ListSample = listSample;
+    this->Modified();
+  }
+
+  /** Set the Rendering function parameters */
+  virtual void SetParameters( const ParametersType & ){};
 
   /** This method is available to allow implementation of
    * preprocessing.
    */
-  virtual void Initialize(){};
+//   virtual void Initialize(ImageInformationType){};
+  // REVIEW: I agree, we should not be calling intialize ourselve, it
+  // would better be seamless
+  virtual void Initialize(){};//FIXME should disappear and be
+			      //automatic (IsModified())
 
-  /** Set the minimum (scalar version) */
-  virtual void SetMinimum(ScalarType spixel)
-  {
-    m_Minimum.clear();
-    m_Minimum.push_back(spixel);
-  }
-
-  /** Set the maximum (scalar version) */
-  virtual void SetMaximum(ScalarType spixel)
-  {
-    m_Maximum.clear();
-    m_Maximum.push_back(spixel);
-  }
-
- /** Set minimum (vector version) */
-  virtual void SetMinimum(const VectorPixelType & vpixel)
-  {
-    m_Minimum.clear();
-    for(unsigned int i = 0; i < vpixel.Size();++i)
-      {
-      m_Minimum.push_back(vpixel[i]);
-      }
-  }
-
-  /** Set maximum (vector version) */
-  virtual void SetMaximum(const VectorPixelType & vpixel)
-  {
-    m_Maximum.clear();
-    for(unsigned int i = 0; i < vpixel.Size();++i)
-      {
-      m_Maximum.push_back(vpixel[i]);
-      }
-  }
-
-  /** Set minimum (std::vector version) */
-  virtual void SetMinimum(const ExtremaVectorType & vpixel)
-  {
-    m_Minimum = vpixel;
-  }
-
-  /** Set maximum (std::vector version) */
-  virtual void SetMaximum(const ExtremaVectorType & vpixel)
-  {
-    m_Maximum = vpixel;
-  }
-
-
-  /** Set the red channel index (vector mode only) */
-  virtual void SetRedChannelIndex(unsigned int index)
-  {
-    m_RedChannelIndex = index;
-  }
-
-  /** Get the red channel index (vector mode only) */
-  virtual unsigned int GetRedChannelIndex(void)
-  {
-    return m_RedChannelIndex;
-  }
-
-  /** Set the blue channel index (vector mode only) */
-  virtual void SetBlueChannelIndex(unsigned int index)
-  {
-    m_BlueChannelIndex = index;
-  }
-
-  /** Get the blue channel index (vector mode only) */
-  virtual unsigned int GetBlueChannelIndex(void)
-  {
-    return m_BlueChannelIndex;
-  }
-
-  /** Set the green channel index (vector mode only) */
-  virtual void SetGreenChannelIndex(unsigned int index)
-  {
-    m_GreenChannelIndex = index;
-  }
-
-  /** Get the green channel index (vector mode only) */
-  virtual unsigned int GetGreenChannelIndex(void)
-  {
-    return m_GreenChannelIndex;
-  }
-
-  /** Set all channels (grayscale mode) */
-  virtual void SetAllChannels(unsigned int index)
-  {
-    m_RedChannelIndex   = index;
-    m_BlueChannelIndex  = index;
-    m_GreenChannelIndex = index;
-  }
 
 protected:
   /** Constructor */
-  RenderingFunction() : m_Minimum(), m_Maximum()  {}
+  RenderingFunction()
+  {
+    m_HistogramList = NULL;
+    m_ListSample = NULL;
+  }
   /** Destructor */
   virtual ~RenderingFunction() {}
 
-  /** Extrema values */
-  ExtremaVectorType m_Minimum;
-  ExtremaVectorType m_Maximum;
+  virtual void RenderHistogram()
+  {
+    int m_NumberOfHistogramBins=255;//FIXME is it to be accessed from outside?
+    if(m_ListSample.IsNull())
+    {
+      itkExceptionMacro(<<"No listSample provided to render histogram");
+    }
+      // Create the histogram generation filter
+//     ListSampleType pixelRepresentationListSample(this->GetPixelRepresentationSize());
+    ListSamplePointerType pixelRepresentationListSample = ListSampleType::New();
+    for (typename ListSampleType::ConstIterator it = m_ListSample->Begin(); it != m_ListSample->End(); ++it)
+    {
+      //Here we have an issue:
+      //- the ListSample contains VariableLengthVector
+      //- the EvaluatePixelRepresentation is defined to apply to PixelType
+      //Either we convert the ListSample to PixelType or we define a EvaluatePixelRepresentation
+      //for vector.
+//       PixelType sample = itk::NumericTraits<PixelType>::Zero;
+//       sample = sample + (it.GetMeasurementVector());//FIXME better
+//       in a VisualizationPixelTraits
+    // REVIEW: Can't we use PixelType in the ListSample ?
+    // REPLY: tried. The ListSample can't work with scalar type (not without major modification in ITK)
+      PixelType sample;
+      VisualizationPixelTraits::Convert(it.GetMeasurementVector(), sample);
+      SampleType sampleVector;
+      VisualizationPixelTraits::Convert(this->EvaluatePixelRepresentation(sample), sampleVector);
+      pixelRepresentationListSample->PushBack(sampleVector);
+
+    }
+
+
+    typename HistogramFilterType::Pointer histogramFilter = HistogramFilterType::New();
+    histogramFilter->SetListSample(pixelRepresentationListSample);
+
+    histogramFilter->SetNumberOfBins(m_NumberOfHistogramBins);
+
+    // Generate
+    histogramFilter->Update();
+    otbMsgDevMacro(<<"ImageRenderingFunction::RenderHistogram(): Histogram has been updated");
+
+    // Retrieve the histogram
+    m_HistogramList = histogramFilter->GetOutput();
+  }
+
+
+    ListSamplePointerType GetListSample()
+    {
+      return m_ListSample;
+    }
 
 private:
   RenderingFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
-    /** Index of the channels to display (vector mode only, has no effet
-   *  on scalar mode)
-     */
-  unsigned int m_RedChannelIndex;
-  unsigned int m_GreenChannelIndex;
-  unsigned int m_BlueChannelIndex;
-
+  HistogramListPointerType m_HistogramList;
+  ListSamplePointerType m_ListSample;
 };
 } // end namespace Function
 } // end namepsace otb

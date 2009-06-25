@@ -30,9 +30,6 @@ SET(LEARNING_TESTS4 ${CXX_TEST_PATH}/otbLearningTests4)
 ADD_TEST(leTuSVMModelNew ${LEARNING_TESTS1}
         otbSVMModelNew)
 
-ADD_TEST(leTuSVMModelAllocateProblem ${LEARNING_TESTS1}
-        otbSVMModelAllocateProblem)
-
 ADD_TEST(leTuSVMModelLoad ${LEARNING_TESTS1}
         otbSVMModelLoad
 	${INPUTDATA}/svm_model)
@@ -397,7 +394,6 @@ ADD_TEST(leTuExhaustiveExponentialOptimizerNew ${LEARNING_TESTS4}
 # A enrichir
 SET(BasicLearning_SRCS1
 otbSVMModelNew.cxx
-otbSVMModelAllocateProblem.cxx
 otbSVMModelLoad.cxx
 otbSVMModelAccessor.cxx
 otbSVMModelLoadSave.cxx

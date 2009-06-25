@@ -63,19 +63,19 @@ int otbSVMModelGenericKernelsTest( int argc, char* argv[] )
   groupingAdaptiveFunctor.SetValue<double>("lin_coef", 5.2);
 
   struct svm_model *model;
-  model = (struct svm_model *)malloc(sizeof(struct svm_model));
+  model = new struct svm_model;
   model->param.svm_type = 0;
   model->param.kernel_type = 5;
   model->nr_class = 2;
   model->l = 5;
-  model->sv_coef = Malloc(double *,model->nr_class-1);
+  model->sv_coef = new double*[model->nr_class-1];
 
   for (int i=0; i<model->nr_class-1; i++)
-    model->sv_coef[i] = Malloc(double,model->l);
-  model->SV = Malloc(svm_node*,model->l);
+    model->sv_coef[i] = new double[model->l];
+  model->SV = new svm_node*[model->l];
   for (int n = 0; n<model->l; ++n)
   {
-    model->SV[n]=Malloc(svm_node,1);
+    model->SV[n]=new svm_node[1];
     model->SV[n]->index = -1;
     model->SV[n]->value = 0.;
   }
@@ -86,9 +86,9 @@ int otbSVMModelGenericKernelsTest( int argc, char* argv[] )
   model->sv_coef[0][3] = -1;
   model->sv_coef[0][4] = -0.54994;
 
-  model->rho = Malloc(double,1);
-  model->probA = Malloc(double,1);
-  model->probB = Malloc(double,1);
+  model->rho = new double[1];
+  model->probA = new double[1];
+  model->probB = new double[1];
   model->rho[0] = 22.3117;
   model->probA[0] = -0.541009;
   model->probB[0] = -0.687381;
@@ -97,7 +97,7 @@ int otbSVMModelGenericKernelsTest( int argc, char* argv[] )
   model->param.gamma = 1.5;
   model->param.degree = 2;
 
-  struct svm_node *p =  Malloc(struct svm_node,20);
+  struct svm_node *p =  new struct svm_node[20];
   for (unsigned int n = 0;n<20;++n)
   {
     p[n].index = -1;
@@ -144,10 +144,10 @@ int otbSVMModelGenericKernelsTest( int argc, char* argv[] )
   p[18].value = 255;
   p[19].index = -1;
 
-  model->label = Malloc(int,2);
+  model->label = new int[2];
   model->label[0] = 1;
   model->label[1] = -1;
-  model->nSV = Malloc(int,2);
+  model->nSV = new int[2];
   model->nSV[0] = 3;
   model->nSV[1] = 2;
 

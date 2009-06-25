@@ -21,10 +21,8 @@
 #include "itkObjectFactory.h"
 #include "itkDataObject.h"
 #include "itkVariableLengthVector.h"
-
 #include "svm.h"
-
-//#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+#include "itkTimeProbe.h"
 
 namespace otb
 {
@@ -61,118 +59,55 @@ namespace otb
  *
  * \ingroup ClassificationFilters
  */
-template <class TInputPixel, class TLabel >
+template <class TValue, class TLabel>
 class ITK_EXPORT SVMModel : public itk::DataObject
 {
 public:
   /** Standard class typedefs. */
-  typedef SVMModel   Self;
-  typedef itk::DataObject   Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
+  typedef SVMModel                       Self;
+  typedef itk::DataObject                Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
+
+  /** Value type */
+  typedef TValue                               ValueType;
+  /** Label Type */
+  typedef TLabel                               LabelType;
+  typedef std::vector<ValueType>               MeasurementType;
+  typedef std::pair<MeasurementType,LabelType> SampleType;
+  typedef std::vector<SampleType>              SamplesVectorType;
+  /** Cache vector type */
+  typedef std::vector<struct svm_node *>       CacheVectorType;
+
+  /** Distances vector */
+  typedef itk::VariableLengthVector<double>    DistancesVectorType;
+
+  typedef struct svm_node *                    NodeCacheType;
 
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
   itkTypeMacro(SVMModel,itk::DataObject);
 
-
-
-
-//   /** Set the number of classes. */
-//   itkSetMacro(NumberOfModels, unsigned int);
-
-//   /** Get the number of classes. */
-//   itkGetConstReferenceMacro(NumberOfModels, unsigned int);
-
-
-  typedef TInputPixel InputPixelType;
-  typedef TLabel LabelType;
-
-  typedef itk::VariableLengthVector<double> ValuesType;
-
-
-  /** Type definitions for the training image. */
-  //typedef typename TTrainingImage::Pointer TrainingImagePointer;
-
-//   /** Set the input image. */
-//   itkSetObjectMacro(InputImage,InputImageType);
-
-//   /** Get the input image. */
-//   itkGetObjectMacro(InputImage,InputImageType);
-
-//   /** Set the classified image. */
-//   void SetMembershipFunctions(MembershipFunctionPointerVector
-//                               membershipFunctions)
-//   {
-//     m_MembershipFunctions = membershipFunctions;
-//   }
-
-//   /** Method to get mean */
-//   const MembershipFunctionPointerVector GetMembershipFunctions() const
-//   {
-//     return m_MembershipFunctions;
-//   }
-
-//   /** Method to number of membership functions */
-//   unsigned int GetNumberOfMembershipFunctions()
-//   {
-//     return static_cast<unsigned int>( m_MembershipFunctions.size() );
-//   }
-
-//   /** Method to reset the membership fucntion mean */
-//   void DeleteAllMembershipFunctions()
-//   {
-//     m_MembershipFunctions.resize(0);
-//   }
-
-//   /** Stores a MembershipCalculator of a class in its internal vector */
-//   unsigned int AddMembershipFunction(MembershipFunctionPointer function);
-
-//   /** Define a virtual function to perform model generation from the input data
-//    */
-//   void Update();
-
   /** Set the number of classes. */
-//  itkSetMacro(NumberOfClasses, unsigned int);
   void SetNumberOfClasses(const unsigned int nr_class)
   {
     m_Model->nr_class = (int)nr_class;
   }
 
   /** Get the number of classes. */
-  unsigned int GetNumberOfClasses(void)
+  unsigned int GetNumberOfClasses(void) const
   {
     return (unsigned int)(m_Model->nr_class);
   }
 
   /** Get the number of hyperplane. */
-  unsigned int GetNumberOfHyperplane(void)
+  unsigned int GetNumberOfHyperplane(void) const
   {
     return (unsigned int)(m_Model->nr_class - 1);
   }
 
-  /** Gets the problem */
-  struct svm_problem & GetProblem()
-  {
-    return m_Problem;
-  }
-
-  /** Sets the x space */
-  void SetXSpace(struct svm_node* x_space)
-  {
-    m_XSpace = x_space;
-  }
-  /** Gets the x space */
-  struct svm_node* GetXSpace()
-  {
-    return m_XSpace;
-  }
-
-  /** Allocates the problem */
-  void AllocateProblem(int l, long int elements);
-
-
-  /** Sets the model */
+  /** Set a new model. To avoid pointers holding conflicts, this
+   * method actually makes a copy of aModel */
   void SetModel(struct svm_model* aModel);
 
   /** Gets the model */
@@ -184,19 +119,16 @@ public:
   /** Gets the parameters */
   struct svm_parameter & GetParameters()
   {
-    //return m_Parameters;
     return m_Model->param;
   }
   /** Gets the parameters */
   const struct svm_parameter & GetParameters() const
     {
-      //return m_Parameters;
       return m_Model->param;
     }
 
-
   /** Saves the model to a file */
-  void SaveModel(const char* model_file_name);
+  void SaveModel(const char* model_file_name) const;
 
 
   /** Loads the model from a file */
@@ -208,15 +140,13 @@ public:
   /** Set the SVM type to C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR */
   void SetSVMType(int svmtype)
   {
-    //m_Parameters.svm_type = svmtype;
     m_Model->param.svm_type = svmtype;
     this->Modified();
   }
 
   /** Get the SVM type (C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR) */
-  int GetSVMType(void)
+  int GetSVMType(void) const
   {
-    //return m_Parameters.svm_type;
     return m_Model->param.svm_type;
   }
 
@@ -227,58 +157,50 @@ public:
   sigmoid: tanh(gamma*u'*v + coef0)*/
   void SetKernelType(int kerneltype)
   {
-    //m_Parameters.kernel_type = kerneltype;
     m_Model->param.kernel_type = kerneltype;
     this->Modified();
   }
 
   /** Get the kernel type */
-  int GetKernelType(void)
+  int GetKernelType(void) const
   {
-    //return m_Parameters.kernel_type;
     return m_Model->param.kernel_type;
   }
 
   /** Set the degree of the polynomial kernel */
   void SetPolynomialKernelDegree(int degree)
   {
-    //m_Parameters.degree = degree;
     m_Model->param.degree = degree;
     this->Modified();
   }
 
-
   /** Get the degree of the polynomial kernel */
-  int GetPolynomialKernelDegree(void)
+  int GetPolynomialKernelDegree(void) const
   {
-    //return m_Parameters.degree;
     return m_Model->param.degree;
   }
 
   /** Set the gamma parameter for poly/rbf/sigmoid kernels */
   virtual void SetKernelGamma(double gamma)
   {
-    //m_Parameters.gamma = gamma;
     m_Model->param.gamma = gamma;
     this->Modified();
   }
   /** Get the gamma parameter for poly/rbf/sigmoid kernels */
-  double GetKernelGamma(void)
+  double GetKernelGamma(void) const
   {
-    //return m_Parameters.gamma;
     return m_Model->param.gamma;
   }
 
   /** Set the coef0 parameter for poly/sigmoid kernels */
   void SetKernelCoef0(double coef0)
   {
-    //m_Parameters.coef0 = coef0;
     m_Model->param.coef0 = coef0;
     this->Modified();
   }
 
   /** Get the coef0 parameter for poly/sigmoid kernels */
-  double GetKernelCoef0(void)
+  double GetKernelCoef0(void) const
   {
     //return m_Parameters.coef0;
     return m_Model->param.coef0;
@@ -287,13 +209,12 @@ public:
   /** Set the Nu parameter for the training */
   void SetNu(double nu)
   {
-    //m_Parameters.nu = nu;
     m_Model->param.nu = nu;
     this->Modified();
   }
 
   /** Set the Nu parameter for the training */
-  double GetNu(void)
+  double GetNu(void) const
   {
     //return m_Parameters.nu;
     return m_Model->param.nu;
@@ -302,78 +223,65 @@ public:
   /** Set the cache size in MB for the training */
   void SetCacheSize(int cSize)
   {
-    //m_Parameters.cache_size = static_cast<double>(cSize);
     m_Model->param.cache_size = static_cast<double>(cSize);
     this->Modified();
   }
 
   /** Get the cache size in MB for the training */
-  int GetCacheSize(void)
+  int GetCacheSize(void) const
   {
-    //return static_cast<int>(m_Parameters.cache_size);
     return static_cast<int>(m_Model->param.cache_size);
   }
 
   /** Set the C parameter for the training for C_SVC, EPSILON_SVR and NU_SVR */
   void SetC(double c)
   {
-    //m_Parameters.C = c;
     m_Model->param.C = c;
     this->Modified();
   }
 
   /** Get the C parameter for the training for C_SVC, EPSILON_SVR and NU_SVR */
-  double GetC(void)
+  double GetC(void) const
   {
-    //return m_Parameters.C;
     return m_Model->param.C;
   }
 
   /** Set the tolerance for the stopping criterion for the training*/
   void SetEpsilon(double eps)
   {
-    //m_Parameters.eps = eps;
     m_Model->param.eps = eps;
     this->Modified();
   }
 
   /** Get the tolerance for the stopping criterion for the training*/
-  double GetEpsilon(void)
+  double GetEpsilon(void) const
   {
-    //return m_Parameters.eps;
     return m_Model->param.eps;
   }
-
 
   /* Set the value of p for EPSILON_SVR */
   void SetP(double p)
   {
-    //param.svm_type = EPSILON_SVR;
-    //m_Parameters.p = p;
     m_Model->param.p = p;
     this->Modified();
   }
 
-
   /* Get the value of p for EPSILON_SVR */
-  double GetP(void)
+  double GetP(void) const
   {
-    //return m_Parameters.p;
     return m_Model->param.p;
   }
 
   /** Use the shrinking heuristics for the training */
   void DoShrinking(bool s)
   {
-    //m_Parameters.shrinking = static_cast<int>(s);
     m_Model->param.shrinking = static_cast<int>(s);
     this->Modified();
   }
 
   /** Get Use the shrinking heuristics for the training boolea */
-  bool GetDoShrinking(void)
+  bool GetDoShrinking(void) const
   {
-    //return static_cast<bool>(m_Parameters.shrinking);
     return static_cast<bool>(m_Model->param.shrinking);
   }
 
@@ -381,15 +289,13 @@ public:
   /** Do probability estimates */
   void DoProbabilityEstimates(bool prob)
   {
-    //m_Parameters.probability = static_cast<int>(prob);
     m_Model->param.probability = static_cast<int>(prob);
     this->Modified();
   }
 
   /** Get Do probability estimates boolean */
-  bool GetDoProbabilityEstimates(void)
+  bool GetDoProbabilityEstimates(void) const
   {
-    //return static_cast<bool>(m_Parameters.probability);
     return static_cast<bool>(m_Model->param.probability);
   }
 
@@ -397,18 +303,16 @@ public:
   /** Get/Set methods for generic kernel functor */
   virtual GenericKernelFunctorBase * GetKernelFunctor(void)const
   {
-    //return m_Parameters.kernel_generic;// m_GenericKernelFunctor;
     return m_Model->param.kernel_generic;
   }
   virtual void SetKernelFunctor(GenericKernelFunctorBase* pGenericKernelFunctor)
   {
-    //m_GenericKernelFunctor = pGenericKernelFunctor;
-    //m_Parameters.kernel_generic = pGenericKernelFunctor;
     m_Model->param.kernel_generic = pGenericKernelFunctor;
     this->Modified();
   }
+
   /** Return number of support vectors */
-  int GetNumberOfSupportVectors(void)
+  int GetNumberOfSupportVectors(void) const
   {
     return m_Model->l;
   }
@@ -419,7 +323,7 @@ public:
   }
 
   /** Return rho values */
-  double * GetRho(void)
+  double * GetRho(void) const
   {
     return m_Model->rho;
   }
@@ -459,46 +363,88 @@ public:
     return m_Model->nSV;
   }
 
-  /** Evaluate model */
-  double Evaluate(void);
+  struct svm_problem & GetProblem()
+  {
+    return m_Problem;
+  }
 
-  /** Evaluate hyperplane distance model.
-    * Return NumberOfClasses*(NumberOfClasses-1)/2 elements
-    */
-  ValuesType EvaluateHyperplaneDistance(void);
+  /** Reset ModelUpToDate */
+  virtual void Modified()
+  {
+    Superclass::Modified();
+    m_ModelUpToDate = false;
+  }
+
+  /** Allocate the problem */
+  void BuildProblem();
+
+  /** Check consistency (potentially throws exception) */
+  void ConsistencyCheck();
+
+  /** Estimate the model */
+  void Train();
+
+  /** Cross validation (returns the accuracy) */
+  double CrossValidation(unsigned int nbFolders);
+
+  /** Predict (Please note that due to caching this method is not
+* thread safe. If you want to run multiple concurrent instances of
+* this method, please consider using the GetCopy() method to clone the
+* model.)*/
+  LabelType EvaluateLabel(const MeasurementType & measure) const;
+
+  /** Evaluate hyperplan distances (Please note that due to caching this method is not
+* thread safe. If you want to run multiple concurrent instances of
+* this method, please consider using the GetCopy() method to clone the
+* model.)**/
+  DistancesVectorType EvaluateHyperplanesDistances(const MeasurementType & measure) const;
+
+  /** Add a new sample to the list */
+  void AddSample(const MeasurementType & measure, const LabelType & label);
+ 
+  /** Clear all samples */
+  void ClearSamples();
+
+  /** Set the samples vector */
+  void SetSamples(const SamplesVectorType & samples);
 
 protected:
+  /** Constructor */
   SVMModel();
+  /** Destructor */
   ~SVMModel();
+  /** Display infos */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  //virtual void GenerateData();
+  /** Delete any allocated problem */
+  void DeleteProblem();
+
+  /** Delete any allocated model */
+  void DeleteModel();
 
 private:
-
   SVMModel(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
-//  unsigned int                    m_NumberOfModels;
-//  unsigned int         m_NumberOfClasses;
 
   /** Container to hold the SVM model itself */
   struct svm_model* m_Model;
 
-  /** Container to hold the SVM model parameters */
-  //struct svm_parameter m_Parameters;
+  /** True if model is up-to-date */
+  bool m_ModelUpToDate;
 
+  /** Container of the SVM problem */
   struct svm_problem m_Problem;
-  struct svm_node* m_XSpace;
 
+  /** true if problem is up-to-date */
+  bool m_ProblemUpToDate;
 
-  /** Pointer to generic kernel functor */
-//  GenericKernelFunctorBase * m_GenericKernelFunctor;
-
+  /** Contains the samples */
+  SamplesVectorType   m_Samples;
 }; // class SVMModel
 
 
 } // namespace otb
+
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbSVMModel.txx"

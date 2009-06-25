@@ -37,6 +37,12 @@ int main( int argc, char * argv[] )
 {
 // Software Guide : EndCodeSnippet
 
+  if (argc != 2)
+  {
+    std::cerr << "Usage: " << argv[0] << " inputImageFile " << std::endl;
+    return EXIT_FAILURE;
+  }
+
   //  Software Guide : BeginLatex
   //
   //  We need to declare two different image types, one for the internal
