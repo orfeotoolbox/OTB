@@ -206,7 +206,7 @@ ImageViewerManagerModel
 
 void
 ImageViewerManagerModel
-::UpdateRGBChannelOrder(int redChoice , int greenChoice, int BlueChoice, unsigned int selectedItem)
+::UpdateRGBChannelOrder(int redChoice , int greenChoice, int blueChoice, unsigned int selectedItem)
 {
 //   RenderingFunctionType::Pointer renderFunction = m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion;
    //FIXME make sure this is called only when the renderingFunction is a StandardRenderingFunctionType
@@ -216,7 +216,7 @@ ImageViewerManagerModel
 
   renderFunction->GetPixelRepresentationFunction().SetChannelIndex(0,redChoice);
   renderFunction->GetPixelRepresentationFunction().SetChannelIndex(1,greenChoice);
-  renderFunction->GetPixelRepresentationFunction().SetChannelIndex(2,BlueChoice);
+  renderFunction->GetPixelRepresentationFunction().SetChannelIndex(2,blueChoice);
 
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(renderFunction);
