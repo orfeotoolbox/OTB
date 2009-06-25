@@ -290,6 +290,12 @@ public:
     this->Modified();
   }
 
+  /** Save the model */
+  virtual void SaveModel(const char * fname)
+  {
+    this->GetModel()->SaveModel(fname);
+  }
+
 protected:
   /** Constructor */
   SVMModelEstimator();

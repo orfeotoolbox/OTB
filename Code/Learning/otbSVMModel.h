@@ -30,6 +30,7 @@ namespace otb
 /** \class SVMModel
  * \brief Class for SVM models.
  *
+ * \TODO Update the documentation
  *
  * The basic functionality of the SVMModel framework base class is to
  * generate the models used in SVM classification. It requires input

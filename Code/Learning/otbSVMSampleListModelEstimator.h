@@ -44,14 +44,10 @@ public:
   {
     MeasurementVectorType output;
 
-    typename VectorType::ConstIterator pIt =  value.Begin();
-    typename VectorType::ConstIterator pEnd = value.End();
-
-    while (pIt!=pEnd)
-    {
-      output.push_back(*pIt);
-      ++pIt;
-    }
+    for(unsigned int i = 0; i<value.Size();++i)
+      {
+      output.push_back(value[i]);
+      }
     return output;
   }
 };
