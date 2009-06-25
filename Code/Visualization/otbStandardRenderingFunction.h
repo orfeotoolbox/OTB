@@ -329,7 +329,7 @@ public:
 //     return resp;
 //   }
 
-  inline const std::string Describe(const ScalarType & spixel) const
+  inline const std::string Describe(const ScalarType & spixel) const //FIXME not updated yet
   {
     itk::OStringStream oss;
     OutputPixelType output = this->Evaluate(spixel);
@@ -337,7 +337,7 @@ public:
     return oss.str();
   }
 
-  inline const std::string Describe(const VectorPixelType & vpixel) const
+  inline const std::string Describe(const VectorPixelType & vpixel) const//FIXME not updated yet
   {
     itk::OStringStream oss;
     OutputPixelType output = this->Evaluate(vpixel);
@@ -366,7 +366,7 @@ public:
     return oss.str();
   }
 
-  inline const std::string Describe(const RGBPixelType & spixel) const
+  inline const std::string Describe(const RGBPixelType & spixel) const //FIXME not updated yet
   {
     itk::OStringStream oss;
     OutputPixelType output = this->Evaluate(spixel);
@@ -381,7 +381,7 @@ public:
     return oss.str();
   }
 
-  inline const std::string Describe(const RGBAPixelType & spixel) const
+  inline const std::string Describe(const RGBAPixelType & spixel) const //FIXME not updated yet
   {
     itk::OStringStream oss;
     OutputPixelType output = this->Evaluate(spixel);
@@ -461,12 +461,12 @@ public:
    }
 
   /** Accessor to set some specific parameters on the transfer function */
-  TransferFunctionType& GetTransferFunction()
+  virtual TransferFunctionType& GetTransferFunction()
   {
     return m_TransferFunction;
   }
   /** Accessor to set some specific parameters on the pixel representation function */
-  PixelRepresentationFunctionType& GetPixelRepresentationFunction()
+  virtual PixelRepresentationFunctionType& GetPixelRepresentationFunction()
   {
     return m_PixelRepresentationFunction;
   }

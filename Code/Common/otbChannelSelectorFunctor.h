@@ -128,9 +128,11 @@ namespace otb
         {
           return m_ChannelList;
         }
+
         virtual void SetChannelList(std::vector<unsigned int> channels)
         {
           m_ChannelList = channels;
+          usingDefaultParameters = false;
         }
 
        virtual void SetChannelIndex(unsigned int channelPosition, unsigned int channel)

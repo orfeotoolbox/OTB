@@ -86,6 +86,7 @@ namespace otb
           OutputPixelType outPixel;
           outPixel.SetSize(1);
 
+          assert( (this->GetChannelList()).size() == 2);
           assert((this->GetChannelList())[0] < 3);
           assert((this->GetChannelList())[1] < 3);
 
@@ -98,6 +99,7 @@ namespace otb
           OutputPixelType outPixel;
           outPixel.SetSize(1);
 
+          assert( (this->GetChannelList()).size() == 2);
           assert((this->GetChannelList())[0] < 4);
           assert((this->GetChannelList())[1] < 4);
 

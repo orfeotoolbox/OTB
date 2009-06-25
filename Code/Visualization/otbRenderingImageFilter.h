@@ -54,7 +54,7 @@ public:
   /** Rendering function pointer typedef */
   typedef typename RenderingFunctionType::Pointer                              RenderingFunctionPointerType;
   /** Default rendering function typedef */
-  typedef otb::Function::StandardRenderingFunction<TPixel,TRGBPixel> DefaultRenderingFunctionType;
+//   typedef otb::Function::StandardRenderingFunction<TPixel,TRGBPixel> DefaultRenderingFunctionType;
   /** Scalar pixel typedef */
 // //   typedef TPixel                                                      ScalarPixelType;
   /** Vector pixel typedef */
@@ -75,7 +75,7 @@ public:
   RenderingFunctor() : m_Function()
   {
     // Default rendering function
-    m_Function = DefaultRenderingFunctionType::New();
+//     m_Function = DefaultRenderingFunctionType::New();
   }
 
   /** Destructor */
@@ -159,12 +159,18 @@ public:
     this->Modified();
   }
 
+
+
   /**
    * Get the rendering function
    * \return The rendering function.
    */
   RenderingFunctionType * GetRenderingFunction(void)
   {
+    if (this->GetFunctor().GetFunction() == NULL)
+    {
+      this->SetDefaultRenderingFunction();
+    }
     return this->GetFunctor().GetFunction();
   }
 
@@ -175,6 +181,11 @@ public:
   {
     // Call the superclass implementation
     Superclass::BeforeThreadedGenerateData();
+
+    if (this->GetFunctor().GetFunction() == NULL)
+    {
+      this->SetDefaultRenderingFunction();
+    }
 
     // Initialize the rendering function
     this->GetFunctor().InitializeFunction();
@@ -187,6 +198,17 @@ public:
   RenderingImageFilter() {}
   /** Destructor */
   virtual ~RenderingImageFilter() {}
+
+  typedef Function::StandardRenderingFunction<
+     typename TInputImage::PixelType,
+     typename TOutputImage::PixelType> DefaultRenderingFunctionType;
+
+  void SetDefaultRenderingFunction()
+  {
+    otbMsgDevMacro(<<"WARNING: using the default rendering function");
+
+    this->GetFunctor().SetFunction(DefaultRenderingFunctionType::New() );
+  }
 
 private:
   RenderingImageFilter(const Self&); //purposely not implemented
