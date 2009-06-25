@@ -126,12 +126,55 @@ public:
   itkGetMacro(ScreenRatio,double);
 
   /** Get the generated default rendering function */
-  itkSetObjectMacro(RenderingFunction,RenderingFunctionType);
-  itkGetObjectMacro(RenderingFunction,RenderingFunctionType);
+//   itkSetObjectMacro(RenderingFunction,RenderingFunctionType);
+//   itkGetObjectMacro(RenderingFunction,RenderingFunctionType);
+  virtual void SetRenderingFunction(RenderingFunctionType* func)
+  {
+    if(this->m_Layer.IsNull())
+    {
+      itkExceptionMacro(<<"Layer is not set");
+    }
+    if (this->m_Layer->GetRenderingFunction() != func)
+    {
+      this->m_Layer->SetRenderingFunction(func);
+      this->Modified();
+    }
+  }
+
+  virtual RenderingFunctionType * GetRenderingFunction ()
+  {
+    if(this->m_Layer.IsNull())
+    {
+      itkExceptionMacro(<<"Layer is not set");
+    }
+    return this->m_Layer->GetRenderingFunction();
+  }
+
 
   /** Set/Get the blending function */
-  itkSetObjectMacro(BlendingFunction,BlendingFunctionType);
-  itkGetObjectMacro(BlendingFunction,BlendingFunctionType);
+//   itkSetObjectMacro(BlendingFunction,BlendingFunctionType);
+//   itkGetObjectMacro(BlendingFunction,BlendingFunctionType);
+  virtual void SetBlendingFunction(BlendingFunctionType* func)
+  {
+    if(this->m_Layer.IsNull())
+    {
+      itkExceptionMacro(<<"Layer is not set");
+    }
+    if (this->m_Layer->GetBlendingFunction() != func)
+    {
+      this->m_Layer->SetBlendingFunction(func);
+      this->Modified();
+    }
+  }
+
+  virtual BlendingFunctionType * GetBlendingFunction ()
+  {
+    if(this->m_Layer.IsNull())
+    {
+      itkExceptionMacro(<<"Layer is not set");
+    }
+    return this->m_Layer->GetBlendingFunction();
+  }
 
   /** Get a hook on the resample filter to report progress */
   itkGetObjectMacro(Resampler,ResampleFilterType);
@@ -166,10 +209,10 @@ private:
   ImageLayerPointerType m_Layer;
 
   /** The default rendering function */
-  RenderingFunctionPointerType m_RenderingFunction;
+//   RenderingFunctionPointerType m_RenderingFunction;
 
   /** Pointer to the blending function */
-  BlendingFunctionPointerType m_BlendingFunction;
+//   BlendingFunctionPointerType m_BlendingFunction;
 
   /** The input image */
   ImagePointerType      m_Image;

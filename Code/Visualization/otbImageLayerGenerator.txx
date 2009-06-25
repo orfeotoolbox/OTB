@@ -31,7 +31,7 @@ namespace otb
 
 template < class TImageLayer >
 ImageLayerGenerator<TImageLayer>
-::ImageLayerGenerator() : m_Layer(), m_RenderingFunction(), m_Image(), m_Quicklook(),
+::ImageLayerGenerator() : m_Layer(), /*m_RenderingFunction(),*/ m_Image(), m_Quicklook(),
                           m_SubsamplingRate(1), m_GenerateQuicklook(true),
                           m_Resampler(), m_ScreenRatio(0.25)
 {
@@ -42,7 +42,7 @@ ImageLayerGenerator<TImageLayer>
   // Rendering function
 //   m_RenderingFunction = DefaultRenderingFunctionType::New();//Note: created in the layer by default
   // Default blending function
-  m_BlendingFunction = m_Layer->GetBlendingFunction();
+  //m_BlendingFunction = m_Layer->GetBlendingFunction();
 }
 
 template < class TImageLayer >
@@ -164,19 +164,19 @@ ImageLayerGenerator<TImageLayer>
 //     }
 //   }
 
-  // Set the rendering function
-  if (m_RenderingFunction.IsNotNull())
-  {
-    otbMsgDevMacro(<<"ImageLayerGenerator::GenerateLayerInformation(): set the rendering function of the layer");
-    m_Layer->SetRenderingFunction(m_RenderingFunction);
-  }
-  else
-  {
-    otbMsgDevMacro(<<"ImageLayerGenerator::GenerateLayerInformation(): keep the default rendering function of the layer");
-  }
-
-  //Set the blending function
-  m_Layer->SetBlendingFunction(m_BlendingFunction);
+//   // Set the rendering function
+//   if (m_RenderingFunction.IsNotNull())
+//   {
+//     otbMsgDevMacro(<<"ImageLayerGenerator::GenerateLayerInformation(): set the rendering function of the layer");
+//     m_Layer->SetRenderingFunction(m_RenderingFunction);
+//   }
+//   else
+//   {
+//     otbMsgDevMacro(<<"ImageLayerGenerator::GenerateLayerInformation(): keep the default rendering function of the layer");
+//   }
+//
+//   //Set the blending function
+//   m_Layer->SetBlendingFunction(m_BlendingFunction);
 
 }
 
