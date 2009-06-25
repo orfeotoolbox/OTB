@@ -210,7 +210,9 @@ ImageViewerManagerModel
 {
 //   RenderingFunctionType::Pointer renderFunction = m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion;
    //FIXME make sure this is called only when the renderingFunction is a StandardRenderingFunctionType
-   StandardRenderingFunctionType::Pointer renderFunction = static_cast<StandardRenderingFunctionType*>(m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion.GetPointer());
+//    StandardRenderingFunctionType::Pointer renderFunction = static_cast<StandardRenderingFunctionType*>(m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion.GetPointer());
+   StandardRenderingFunctionType::Pointer renderFunction;
+   renderFunction = StandardRenderingFunctionType::New();
 
   renderFunction->GetPixelRepresentationFunction().SetChannelIndex(0,redChoice);
   renderFunction->GetPixelRepresentationFunction().SetChannelIndex(1,greenChoice);
@@ -218,6 +220,8 @@ ImageViewerManagerModel
 
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(renderFunction);
+  m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion = renderFunction;
+  renderFunction->Initialize();//FIXME Initialize() should disappear from the renderinFunction
   m_ObjectTrackedList.at(selectedItem-1).pRendering->Update();
 
   //Notify
@@ -232,12 +236,16 @@ ImageViewerManagerModel
 {
 //   RenderingFunctionType::Pointer renderFunction = m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion;
    //FIXME make sure this is called only when the renderingFunction is a StandardRenderingFunctionType
-   StandardRenderingFunctionType::Pointer renderFunction = static_cast<StandardRenderingFunctionType*>(m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion.GetPointer());
+//    StandardRenderingFunctionType::Pointer renderFunction = static_cast<StandardRenderingFunctionType*>(m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion.GetPointer());
+  StandardRenderingFunctionType::Pointer renderFunction;
+  renderFunction = StandardRenderingFunctionType::New();
 
   renderFunction->GetPixelRepresentationFunction().SetAllChannels(choice);
 
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(renderFunction);
+  m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion = renderFunction;
+  renderFunction->Initialize();//FIXME Initialize() should disappear from the renderinFunction
   m_ObjectTrackedList.at(selectedItem-1).pRendering->Update();
 
   //Notify
@@ -258,10 +266,12 @@ ImageViewerManagerModel
   channels.push_back(realChoice);
   channels.push_back(imChoice);
   modulusFunction->GetPixelRepresentationFunction().SetChannelList(channels);
-  modulusFunction->Initialize();
+
 
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(modulusFunction);
+  m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion = modulusFunction;
+  modulusFunction->Initialize();//FIXME Initialize() should disappear from the renderinFunction
   m_ObjectTrackedList.at(selectedItem-1).pRendering->Update();
 
   //Notify
@@ -282,10 +292,11 @@ ImageViewerManagerModel
   channels.push_back(realChoice);
   channels.push_back(imChoice);
   phaseFunction->GetPixelRepresentationFunction().SetChannelList(channels);
-  phaseFunction->Initialize();
 
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(phaseFunction);
+  m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion = phaseFunction;
+  phaseFunction->Initialize();//FIXME Initialize() should disappear from the renderinFunction
   m_ObjectTrackedList.at(selectedItem-1).pRendering->Update();
 
   //Notify
