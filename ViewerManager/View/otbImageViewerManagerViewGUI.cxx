@@ -72,9 +72,6 @@ ImageViewerManagerViewGUI
   m_WidgetManager  =  PackedWidgetManagerType::New();
 }
 
-  /**
-   *
-   */
 void
 ImageViewerManagerViewGUI
 ::OpenImage(const char * inputFileName)
