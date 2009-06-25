@@ -115,6 +115,16 @@ ImageViewerManagerModel
   currentComponent.pPixelModel  = pixelModel;
   currentComponent.pCurveWidget = curveWidget;
 
+  assert(currentComponent.pLayer);
+  assert(currentComponent.pReader);
+  assert(currentComponent.pRendering);
+  assert(currentComponent.pVisuView);
+  assert(currentComponent.pWidgetController);
+  assert(currentComponent.pRenderFuntion);
+  assert(currentComponent.pPixelView);
+  assert(currentComponent.pPixelModel);
+  assert(currentComponent.pCurveWidget);
+
   /** Add the the struct in the list*/
   m_ObjectTrackedList.push_back(currentComponent);
 
@@ -196,15 +206,22 @@ ImageViewerManagerModel
 
 void
 ImageViewerManagerModel
-::UpdateRGBChannelOrder(int redChoice , int greenChoice, int BlueChoice, unsigned int selectedItem)
+::UpdateRGBChannelOrder(int redChoice , int greenChoice, int blueChoice, unsigned int selectedItem)
 {
-  RenderingFunctionType::Pointer renderFunction = m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion;
-  renderFunction->SetRedChannelIndex(redChoice);
-  renderFunction->SetGreenChannelIndex(greenChoice);
-  renderFunction->SetBlueChannelIndex(BlueChoice);
+//   RenderingFunctionType::Pointer renderFunction = m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion;
+   //FIXME make sure this is called only when the renderingFunction is a StandardRenderingFunctionType
+//    StandardRenderingFunctionType::Pointer renderFunction = static_cast<StandardRenderingFunctionType*>(m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion.GetPointer());
+   StandardRenderingFunctionType::Pointer renderFunction;
+   renderFunction = StandardRenderingFunctionType::New();
+
+  renderFunction->GetPixelRepresentationFunction().SetChannelIndex(0,redChoice);
+  renderFunction->GetPixelRepresentationFunction().SetChannelIndex(1,greenChoice);
+  renderFunction->GetPixelRepresentationFunction().SetChannelIndex(2,blueChoice);
 
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(renderFunction);
+  m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion = renderFunction;
+  renderFunction->Initialize();//FIXME Initialize() should disappear from the renderinFunction
   m_ObjectTrackedList.at(selectedItem-1).pRendering->Update();
 
   //Notify
@@ -217,11 +234,18 @@ void
 ImageViewerManagerModel
 ::UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem)
 {
-  RenderingFunctionType::Pointer renderFunction = m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion;
-  renderFunction->SetAllChannels(choice);
+//   RenderingFunctionType::Pointer renderFunction = m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion;
+   //FIXME make sure this is called only when the renderingFunction is a StandardRenderingFunctionType
+//    StandardRenderingFunctionType::Pointer renderFunction = static_cast<StandardRenderingFunctionType*>(m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion.GetPointer());
+  StandardRenderingFunctionType::Pointer renderFunction;
+  renderFunction = StandardRenderingFunctionType::New();
+
+  renderFunction->GetPixelRepresentationFunction().SetAllChannels(choice);
 
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(renderFunction);
+  m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion = renderFunction;
+  renderFunction->Initialize();//FIXME Initialize() should disappear from the renderinFunction
   m_ObjectTrackedList.at(selectedItem-1).pRendering->Update();
 
   //Notify
@@ -234,14 +258,20 @@ void
 ImageViewerManagerModel
 ::UpdateModulusChannelOrder(int realChoice , int imChoice, unsigned int selectedItem )
 {
-  RenderingFunctionType::Pointer modulusFunction;
+  ModulusRenderingFunction::Pointer modulusFunction;
   modulusFunction = ModulusRenderingFunction::New();
-  modulusFunction->SetRedChannelIndex(realChoice);
-  modulusFunction->SetGreenChannelIndex(imChoice);
-  modulusFunction->Initialize();
+
+
+  ModulusRenderingFunction::PixelRepresentationFunctionType::ChannelListType channels;
+  channels.push_back(realChoice);
+  channels.push_back(imChoice);
+  modulusFunction->GetPixelRepresentationFunction().SetChannelList(channels);
+
 
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(modulusFunction);
+  m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion = modulusFunction;
+  modulusFunction->Initialize();//FIXME Initialize() should disappear from the renderinFunction
   m_ObjectTrackedList.at(selectedItem-1).pRendering->Update();
 
   //Notify
@@ -255,14 +285,18 @@ void
 ImageViewerManagerModel
 ::UpdatePhaseChannelOrder(int realChoice , int imChoice, unsigned int selectedItem )
 {
-  RenderingFunctionType::Pointer phaseFunction;
+  PhaseRenderingFunction::Pointer phaseFunction;
   phaseFunction = PhaseRenderingFunction::New();
-  phaseFunction->SetRedChannelIndex(realChoice);
-  phaseFunction->SetGreenChannelIndex(imChoice);
-  phaseFunction->Initialize();
+
+  PhaseRenderingFunction::PixelRepresentationFunctionType::ChannelListType channels;
+  channels.push_back(realChoice);
+  channels.push_back(imChoice);
+  phaseFunction->GetPixelRepresentationFunction().SetChannelList(channels);
 
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(phaseFunction);
+  m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion = phaseFunction;
+  phaseFunction->Initialize();//FIXME Initialize() should disappear from the renderinFunction
   m_ObjectTrackedList.at(selectedItem-1).pRendering->Update();
 
   //Notify

@@ -37,9 +37,11 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbChangeScaleActionHandler.h"
 #include "otbArrowKeyMoveActionHandler.h"
 
-#include "otbModulusRenderingFunction.h"
-#include "otbPhaseRenderingFunction.h"
 
+// #include "otbModulusRenderingFunction.h"
+// #include "otbPhaseRenderingFunction.h"
+#include "otbAmplitudeFunctor.h"
+#include "otbPhaseFunctor.h"
 
 #include "otbPixelDescriptionModel.h"
 #include "otbPixelDescriptionView.h"
@@ -88,10 +90,15 @@ public:
   typedef otb::ImageLayerGenerator<LayerType>                                        LayerGeneratorType;
   typedef LayerGeneratorType::Pointer                                                LayerGeneratorPointerType;
   typedef LayerGeneratorType::RenderingFunctionType                                  RenderingFunctionType;
-  typedef LayerGeneratorType::DefaultRenderingFunctionType                           StandardRenderingFunctionType;
+  typedef Function::StandardRenderingFunction<ImageType::PixelType, RGBPixelType>                          StandardRenderingFunctionType;
 
-  typedef Function::ModulusRenderingFunction<ImageType::InternalPixelType, RGBPixelType>    ModulusRenderingFunction;
-  typedef Function::PhaseRenderingFunction<ImageType::InternalPixelType, RGBPixelType>      PhaseRenderingFunction;
+  typedef Function::StandardRenderingFunction<ImageType::PixelType, RGBPixelType,
+  otb::Function::AmplitudeFunctor<ImageType::PixelType> >                            ModulusRenderingFunction;
+//   typedef Function::ModulusRenderingFunction<ImageType::InternalPixelType, RGBPixelType>    ModulusRenderingFunction;
+
+//   typedef Function::PhaseRenderingFunction<ImageType::InternalPixelType, RGBPixelType>      PhaseRenderingFunction;
+  typedef Function::StandardRenderingFunction<ImageType::PixelType, RGBPixelType,
+  otb::Function::PhaseFunctor<ImageType::PixelType> >                                 PhaseRenderingFunction;
 
   /** typedef support for reader*/
   typedef ImageFileReader<ImageType>                                                  ReaderType;

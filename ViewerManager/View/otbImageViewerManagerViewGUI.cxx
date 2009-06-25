@@ -449,9 +449,12 @@ ImageViewerManagerViewGUI
    rhistogram->SetHistogramColor(m_Red);
    rhistogram->SetLabelColor(m_Red);
 
-   rhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(pRenderingFuntion->GetRedChannelIndex()));
-   ghistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(pRenderingFuntion->GetGreenChannelIndex()));
-   bhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(pRenderingFuntion->GetBlueChannelIndex()));
+//    rhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(pRenderingFuntion->GetRedChannelIndex()));
+//    ghistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(pRenderingFuntion->GetGreenChannelIndex()));
+//    bhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(pRenderingFuntion->GetBlueChannelIndex()));
+   rhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(0));
+   ghistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(1));
+   bhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(2));
 
    curveWidget->ClearAllCurves();
    curveWidget->AddCurve(bhistogram);
@@ -717,10 +720,11 @@ ImageViewerManagerViewGUI
    //update band information
    if(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pReader->GetOutput()->GetNumberOfComponentsPerPixel()>=3)
      {
-       oss<<"RGB Composition: ";
-       oss<<" Band 1: "<<m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion->GetRedChannelIndex();
-       oss<<" Band 2: "<<m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion->GetGreenChannelIndex();
-       oss<<" Band 3: "<<m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion->GetBlueChannelIndex()<<std::endl;
+       //FIXME why this is not using the Describe method of the rendering function?
+//        oss<<"RGB Composition: ";
+//        oss<<" Band 1: "<<m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion->GetRedChannelIndex();
+//        oss<<" Band 2: "<<m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion->GetGreenChannelIndex();
+//        oss<<" Band 3: "<<m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion->GetBlueChannelIndex()<<std::endl;
      }
 
    guiViewerInformation->insert(oss.str().c_str());
@@ -803,7 +807,9 @@ ImageViewerManagerViewGUI
    ImageViewerManagerModelType::ReaderPointerType reader = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pReader;
    unsigned int nbComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
 
-   RenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
+   //FIXME make sure this is called only when the renderingFunction is a StandardRenderingFunctionType
+   assert(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion.GetPointer());
+   StandardRenderingFunctionType::Pointer renderingFunction = static_cast<StandardRenderingFunctionType*>(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion.GetPointer());
 
    guiViewerSetupColorMode->set();
    guiViewerSetupComplexMode->clear();
@@ -818,9 +824,10 @@ ImageViewerManagerViewGUI
    guiGreenChannelChoice->activate();
    guiBlueChannelChoice->activate();
 
-   guiRedChannelChoice->value(std::min(renderingFunction->GetRedChannelIndex(),nbComponent-1));
-   guiGreenChannelChoice->value(std::min(renderingFunction->GetGreenChannelIndex(),nbComponent-1));
-   guiBlueChannelChoice->value(std::min(renderingFunction->GetBlueChannelIndex(),nbComponent-1));
+   assert(renderingFunction);
+   guiRedChannelChoice->value(std::min(renderingFunction->GetPixelRepresentationFunction().GetRedChannelIndex(),nbComponent-1));
+   guiGreenChannelChoice->value(std::min(renderingFunction->GetPixelRepresentationFunction().GetGreenChannelIndex(),nbComponent-1));
+   guiBlueChannelChoice->value(std::min(renderingFunction->GetPixelRepresentationFunction().GetBlueChannelIndex(),nbComponent-1));
 
  }
 
@@ -840,7 +847,9 @@ ImageViewerManagerViewGUI
    ImageViewerManagerModelType::ReaderPointerType reader = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pReader;
    unsigned int nbComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
 
-   RenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
+//    RenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
+   //FIXME make sure this is called only when the renderingFunction is a StandardRenderingFunctionType
+   StandardRenderingFunctionType::Pointer renderingFunction = static_cast<StandardRenderingFunctionType*>(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion.GetPointer());
 
    guiViewerSetupGrayscaleMode->set();
    guiViewerSetupComplexMode->clear();
@@ -855,7 +864,7 @@ ImageViewerManagerViewGUI
    guiBlueChannelChoice->deactivate();
 
    guiGrayscaleChannelChoice->activate();
-   guiGrayscaleChannelChoice->value(std::min(renderingFunction->GetRedChannelIndex(),nbComponent-1));
+   guiGrayscaleChannelChoice->value(std::min(renderingFunction->GetPixelRepresentationFunction().GetRedChannelIndex(),nbComponent-1));
  }
 
 
@@ -872,7 +881,9 @@ ImageViewerManagerViewGUI
    ImageViewerManagerModelType::ReaderPointerType reader = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pReader;
    unsigned int nbComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
 
-   RenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
+//    RenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
+    //FIXME make sure this is called only when the renderingFunction is a StandardRenderingFunctionType
+   StandardRenderingFunctionType::Pointer renderingFunction = static_cast<StandardRenderingFunctionType*>(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion.GetPointer()); //FIXME should be the Modulus/Phase rendering function
 
    guiViewerSetupComplexMode->set();
    guiViewerSetupColorMode->clear();
@@ -885,8 +896,8 @@ ImageViewerManagerViewGUI
    guiImaginaryChannelChoice->activate();
    bModulus->activate();
    bPhase->activate();
-   guiRealChannelChoice->value(std::min(renderingFunction->GetRedChannelIndex(),nbComponent-1));
-   guiImaginaryChannelChoice->value(std::min(renderingFunction->GetGreenChannelIndex(),nbComponent-1));
+   guiRealChannelChoice->value(std::min(renderingFunction->GetPixelRepresentationFunction().GetChannelIndex(0),nbComponent-1));
+   guiImaginaryChannelChoice->value(std::min(renderingFunction->GetPixelRepresentationFunction().GetChannelIndex(1),nbComponent-1));
  }
 
 
@@ -1027,9 +1038,9 @@ ImageViewerManagerViewGUI
   rhistogram->SetHistogramColor(Red);
   rhistogram->SetLabelColor(Red);
 
-  rhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(pRenderingFuntion->GetRedChannelIndex()));
-  ghistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(pRenderingFuntion->GetGreenChannelIndex()));
-  bhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(pRenderingFuntion->GetBlueChannelIndex()));
+  rhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(0));
+  ghistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(1));
+  bhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(2));
 
   curveWidget->ClearAllCurves();
   curveWidget->AddCurve(bhistogram);
