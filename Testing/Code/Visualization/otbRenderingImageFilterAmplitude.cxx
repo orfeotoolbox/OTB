@@ -22,8 +22,9 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbStreamingImageFileWriter.h"
 #include "itkRGBPixel.h"
 #include "otbStandardRenderingFunction.h"
+#include "otbAmplitudeFunctor.h"
 
-int otbRenderingImageFilterVector( int argc, char * argv[] )
+int otbRenderingImageFilterAmplitude( int argc, char * argv[] )
 {
   typedef double                                            PixelType;
   typedef otb::VectorImage<PixelType,2>                     ImageType;
@@ -32,7 +33,10 @@ int otbRenderingImageFilterVector( int argc, char * argv[] )
   typedef otb::RenderingImageFilter<ImageType,RGBImageType> RenderingFilterType;
   typedef otb::ImageFileReader<ImageType>                   ReaderType;
   typedef otb::StreamingImageFileWriter<RGBImageType>       WriterType;
-  typedef otb::Function::StandardRenderingFunction<VectorPixelType,itk::RGBPixel<unsigned char> > RenderingFunctionType;
+  typedef otb::Function::AmplitudeFunctor<VectorPixelType>  PixelRepresentationFunctionType;
+  typedef otb::Function::StandardRenderingFunction
+          <VectorPixelType, itk::RGBPixel<unsigned char>,
+            PixelRepresentationFunctionType>              RenderingFunctionType;
   typedef RenderingFilterType::RenderingFunctionType::ParametersType ParametersType;
 
   // Instantiation
@@ -51,27 +55,23 @@ int otbRenderingImageFilterVector( int argc, char * argv[] )
 //   VectorPixelType min(nbComponents);
 //   VectorPixelType max(nbComponents);
 
-  unsigned int channelRed = atoi(argv[3]);
-  unsigned int channelGreen = atoi(argv[4]);
-  unsigned int channelBlue = atoi(argv[5]);
-  unsigned int nbComponents = 3;//To be displayed
+  PixelRepresentationFunctionType::ChannelListType channels;
+  channels.push_back( atoi(argv[3]) );
+  channels.push_back( atoi(argv[4]) );
+  unsigned int nbComponents = 1;//To be displayed
   ParametersType parameters(2*nbComponents);
   for(unsigned int i = 0; i<nbComponents;++i)
   {
-    parameters[i]=atof(argv[6+i]);
+    parameters[i]=atof(argv[5+i]);
     ++i;
-    parameters[i]=atof(argv[6+i]);
+    parameters[i]=atof(argv[5+i]);
   }
-
   // rendering
   rendering->SetInput(reader->GetOutput());
   rendering->SetRenderingFunction(function);
-//   function->SetMinimum(min);
-//   function->SetMaximum(max);
   function->SetParameters(parameters);
-  function->GetPixelRepresentationFunction().SetRedChannelIndex(channelRed);
-  function->GetPixelRepresentationFunction().SetGreenChannelIndex(channelGreen);
-  function->GetPixelRepresentationFunction().SetBlueChannelIndex(channelBlue);
+  function->GetPixelRepresentationFunction().SetChannelList(channels);
+
 
   // writing
   writer->SetFileName(argv[2]);

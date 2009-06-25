@@ -21,6 +21,9 @@
 #include "otbImageLayerGenerator.h"
 #include "otbImageMetadataInterface.h"
 
+#include "otbRenderingFunction.h"
+//FIXME just for the enum declaration, might need to move that
+
 #include <FL/Fl.H>
 
 namespace otb
@@ -28,7 +31,7 @@ namespace otb
 
 template < class TImageLayer >
 ImageLayerGenerator<TImageLayer>
-::ImageLayerGenerator() : m_Layer(), m_RenderingFunction(), m_Image(), m_Quicklook(),
+::ImageLayerGenerator() : m_Layer(), /*m_RenderingFunction(),*/ m_Image(), m_Quicklook(),
                           m_SubsamplingRate(1), m_GenerateQuicklook(true),
                           m_Resampler(), m_ScreenRatio(0.25)
 {
@@ -37,9 +40,9 @@ ImageLayerGenerator<TImageLayer>
   // Resampler
   m_Resampler = ResampleFilterType::New();
   // Rendering function
-  m_RenderingFunction = DefaultRenderingFunctionType::New();
+//   m_RenderingFunction = DefaultRenderingFunctionType::New();//Note: created in the layer by default
   // Default blending function
-  m_BlendingFunction = m_Layer->GetBlendingFunction();
+  //m_BlendingFunction = m_Layer->GetBlendingFunction();
 }
 
 template < class TImageLayer >
@@ -122,58 +125,58 @@ ImageLayerGenerator<TImageLayer>
 
   // Setup channels
 //   switch(m_Image->GetNumberOfComponentsPerPixel())
-  switch( PixelSize(m_Image, m_Image->GetBufferPointer()) )
-  {
-    case 1:
-    {
-      m_RenderingFunction->SetAllChannels(0);
-      break;
-    }
-    case 2:
-    {
-      m_RenderingFunction->SetAllChannels(0);
-      break;
-    }
-    case 3:
-    {
-      m_RenderingFunction->SetRedChannelIndex(0);
-      m_RenderingFunction->SetGreenChannelIndex(1);
-      m_RenderingFunction->SetBlueChannelIndex(2);
-      break;
-    }
-    case 4:
-    {
-      // Get the sensor ID
-      ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
-      std::string sensorID = imageMetadataInterface->GetSensorID(m_Image->GetMetaDataDictionary());
-      if (sensorID.find("Spot") != std::string::npos)
-      {
-        // Handle Spot like channel order
-        m_RenderingFunction->SetRedChannelIndex(0);//XS3
-        m_RenderingFunction->SetGreenChannelIndex(1);//XS2
-        m_RenderingFunction->SetBlueChannelIndex(2);//XS1
-      }
-      else
-      {
-        // Handle quickbird like channel order (wavelenght order)
-        m_RenderingFunction->SetRedChannelIndex(2);
-        m_RenderingFunction->SetGreenChannelIndex(1);
-        m_RenderingFunction->SetBlueChannelIndex(0);
-      }
-      break;
-    }
-    default:
-    {
-    //Discard
-      break;
-    }
-  }
+//   switch( PixelSize(m_Image, m_Image->GetBufferPointer()) )
+//   {
+//     case 1:
+//     {
+//       m_RenderingFunction->Initialize(SCALAR);
+//       break;
+//     }
+//     case 2:
+//     {
+//       m_RenderingFunction->Initialize(TWOBANDS);
+//       break;
+//     }
+//     case 3:
+//     {
+//       m_RenderingFunction->Initialize(THREEBANDS);
+//       break;
+//     }
+//     case 4:
+//     {
+//       // Get the sensor ID
+//       ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
+//       std::string sensorID = imageMetadataInterface->GetSensorID(m_Image->GetMetaDataDictionary());
+//       if (sensorID.find("Spot") != std::string::npos)
+//       {
+//         m_RenderingFunction->Initialize(SENSORINVERTED);
+//       }
+//       else
+//       {
+//         m_RenderingFunction->Initialize(SENSORWAVELENTHORDER);
+//       }
+//       break;
+//     }
+//     default:
+//     {
+//       //Discard
+//       break;
+//     }
+//   }
 
-  // Set the rendering function
-  m_Layer->SetRenderingFunction(m_RenderingFunction);
-
-  //Set the blending function
-  m_Layer->SetBlendingFunction(m_BlendingFunction);
+//   // Set the rendering function
+//   if (m_RenderingFunction.IsNotNull())
+//   {
+//     otbMsgDevMacro(<<"ImageLayerGenerator::GenerateLayerInformation(): set the rendering function of the layer");
+//     m_Layer->SetRenderingFunction(m_RenderingFunction);
+//   }
+//   else
+//   {
+//     otbMsgDevMacro(<<"ImageLayerGenerator::GenerateLayerInformation(): keep the default rendering function of the layer");
+//   }
+//
+//   //Set the blending function
+//   m_Layer->SetBlendingFunction(m_BlendingFunction);
 
 }
 

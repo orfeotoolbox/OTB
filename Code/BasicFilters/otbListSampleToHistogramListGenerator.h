@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,8 +40,8 @@ namespace otb{
  *  ObjectList).
  * \sa ListSampleToVariableDimensionHistogram
  */
-template< class TListSample, 
-          class THistogramMeasurement,  
+template< class TListSample,
+          class THistogramMeasurement,
           class TFrequencyContainer = itk::Statistics::DenseFrequencyContainer>
 class ITK_EXPORT ListSampleToHistogramListGenerator :
     public itk::Object
@@ -52,10 +52,10 @@ public:
   typedef itk::Object Superclass;
   typedef itk::SmartPointer<Self>   Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(ListSampleToHistogramListGenerator, Object);
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -69,10 +69,11 @@ public:
   typedef ObjectList<HistogramType>                      HistogramListType;
   typedef typename HistogramListType::Pointer            HistogramListPointerType;
 
+  typedef typename TListSample::ConstPointer             ListSampleConstPointerType;
   /** plug in the ListSample object */
   void SetListSample(const TListSample* list)
-    { 
-     m_List = list; 
+    {
+     m_List = list;
     }
 
   void SetMarginalScale(float scale)
@@ -83,10 +84,10 @@ public:
     m_Size[0]=size;
   }
 
-  HistogramListType* GetOutput() const
+  HistogramListPointerType GetOutput() const
   { return m_HistogramList; }
 
-  void Update() 
+  void Update()
   { this->GenerateData(); }
 
   itkSetMacro(AutoMinMax,bool);
@@ -112,7 +113,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  const TListSample* m_List;
+  ListSampleConstPointerType m_List;
   HistogramSizeType m_Size;
   float m_MarginalScale;
   MeasurementVectorType m_HistogramMin;
@@ -122,7 +123,7 @@ private:
 
 }; // end of class
 
-} // end of namespace itk 
+} // end of namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbListSampleToHistogramListGenerator.txx"
