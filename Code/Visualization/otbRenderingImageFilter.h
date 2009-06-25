@@ -50,7 +50,7 @@ class RenderingFunctor
 {
 public:
   /** Rendering function typedef */
-  typedef typename otb::Function::RenderingFunction<TPixel,TRGBPixel>          RenderingFunctionType;
+  typedef otb::Function::RenderingFunction<TPixel,TRGBPixel>          RenderingFunctionType;
   /** Rendering function pointer typedef */
   typedef typename RenderingFunctionType::Pointer                              RenderingFunctionPointerType;
   /** Default rendering function typedef */

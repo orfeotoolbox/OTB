@@ -54,7 +54,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(ImageLayer,Layer);
+  itkTypeMacro(ImageLayer,ImageLayerBase);
 
   /** Image typedef */
   typedef TImage                                                      ImageType;
@@ -94,6 +94,7 @@ public:
   typedef RenderingImageFilter<TImage,TOutputImage>                   RenderingFilterType;
   typedef typename RenderingFilterType::Pointer                       RenderingFilterPointerType;
   typedef typename RenderingFilterType::RenderingFunctionType         RenderingFunctionType;
+//   typedef Function::RenderingFunction<PixelType,OutputPixelType> RenderingFunctionType;
   typedef typename RenderingFunctionType::Pointer                     RenderingFunctionPointerType;
 //   typedef Function::StandardRenderingFunction<PixelType,
 //                                     typename TOutputImage::PixelType> DefaultRenderingFunctionType;
