@@ -142,6 +142,9 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId)
 {
+  typename OutputImageType::Pointer output = this->GetOutput();
+  output->FillBuffer(0);
+
   SubsampledImageRegionIterator< OutputImageType > outputIter
     ( this->GetOutput(), outputRegionForThread );
   outputIter.SetSubsampleFactor(1);
