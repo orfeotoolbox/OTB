@@ -811,6 +811,7 @@ ImageViewerManagerViewGUI
    unsigned int nbComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
 
    //FIXME make sure this is called only when the renderingFunction is a StandardRenderingFunctionType
+   assert(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion.GetPointer());
    StandardRenderingFunctionType::Pointer renderingFunction = static_cast<StandardRenderingFunctionType*>(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion.GetPointer());
 
    guiViewerSetupColorMode->set();

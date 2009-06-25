@@ -115,6 +115,16 @@ ImageViewerManagerModel
   currentComponent.pPixelModel  = pixelModel;
   currentComponent.pCurveWidget = curveWidget;
 
+  assert(currentComponent.pLayer);
+  assert(currentComponent.pReader);
+  assert(currentComponent.pRendering);
+  assert(currentComponent.pVisuView);
+  assert(currentComponent.pWidgetController);
+  assert(currentComponent.pRenderFuntion);
+  assert(currentComponent.pPixelView);
+  assert(currentComponent.pPixelModel);
+  assert(currentComponent.pCurveWidget);
+
   /** Add the the struct in the list*/
   m_ObjectTrackedList.push_back(currentComponent);
 
