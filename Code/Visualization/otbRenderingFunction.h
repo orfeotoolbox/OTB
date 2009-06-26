@@ -35,8 +35,6 @@
 namespace otb
 {
 
-// enum ImageInformationType {SCALAR, TWOBANDS, THREEBANDS, SENSORINVERTED, SENSORWAVELENTHORDER};
-
 namespace Function
 {
 
@@ -94,49 +92,50 @@ public:
   typedef  itk::Array< double >           ParametersType;
 
 
-  /** Evaluate method (scalar version) */
+  /** Evaluate method: required interface */
   virtual OutputPixelType Evaluate(const PixelType &  spixel) const
   {
     return EvaluateTransferFunction(EvaluatePixelRepresentation(spixel));
   }
 
-  /** Get a string description of a pixel  (scalar version) */
+  /** Get a string description of a pixel: required interface */
   virtual const std::string Describe(const PixelType & spixel) const = 0;
 
-  /** Evaluate pixel representation */
-  virtual InternalPixelType EvaluatePixelRepresentation(const PixelType &  spixel) const = 0;
+  /** Evaluate pixel representation: required interface */
+  virtual InternalPixelType EvaluatePixelRepresentation(const PixelType &  spixel) const = 0;//FIXME pure virtual or exception?
 
-  /** Return the Pixel representation size*/
-  virtual unsigned int GetPixelRepresentationSize() const = 0;
+  /** Return the Pixel representation size: required interface*/
+  virtual unsigned int GetPixelRepresentationSize() const = 0;//FIXME pure virtual or exception?
 
-  /** Evaluate transfer function */
-  virtual OutputPixelType EvaluateTransferFunction(const InternalPixelType &  spixel) const = 0;
+  /** Evaluate transfer function: this is part of the required interface */
+  virtual OutputPixelType EvaluateTransferFunction(const InternalPixelType &  spixel) const = 0;//FIXME pure virtual or exception?
 
-  /** Set/Get the sample list */
-//   virtual void SetHistogramList(HistogramListPointerType histogramList)
-//   {
-//     m_HistogramList = histogramList;
-//     this->Modified();
-//   }
+  /** Set the Rendering function parameters: optional interface */
+  virtual void SetParameters( const ParametersType & )
+  {
+    itkExceptionMacro(<<"Subclasses should override this method");
+  };
+
+
+  /** Get the histogram of the pixel representation generated from the sample list */
   virtual HistogramListPointerType GetHistogramList()
   {
     //FIXME Update condition?
     return m_HistogramList;
   }
 
+  /** Set the sample list */
   virtual void SetListSample(ListSamplePointerType listSample)
   {
     m_ListSample = listSample;
     this->Modified();
   }
 
-  /** Set the Rendering function parameters */
-  virtual void SetParameters( const ParametersType & ){};
+
 
   /** This method is available to allow implementation of
    * preprocessing.
    */
-//   virtual void Initialize(ImageInformationType){};
   // REVIEW: I agree, we should not be calling intialize ourselve, it
   // would better be seamless
   virtual void Initialize(){};//FIXME should disappear and be
@@ -161,26 +160,14 @@ protected:
       itkExceptionMacro(<<"No listSample provided to render histogram");
     }
       // Create the histogram generation filter
-//     ListSampleType pixelRepresentationListSample(this->GetPixelRepresentationSize());
     ListSamplePointerType pixelRepresentationListSample = ListSampleType::New();
     for (typename ListSampleType::ConstIterator it = m_ListSample->Begin(); it != m_ListSample->End(); ++it)
     {
-      //Here we have an issue:
-      //- the ListSample contains VariableLengthVector
-      //- the EvaluatePixelRepresentation is defined to apply to PixelType
-      //Either we convert the ListSample to PixelType or we define a EvaluatePixelRepresentation
-      //for vector.
-//       PixelType sample = itk::NumericTraits<PixelType>::Zero;
-//       sample = sample + (it.GetMeasurementVector());//FIXME better
-//       in a VisualizationPixelTraits
-    // REVIEW: Can't we use PixelType in the ListSample ?
-    // REPLY: tried. The ListSample can't work with scalar type (not without major modification in ITK)
       PixelType sample;
       VisualizationPixelTraits::Convert(it.GetMeasurementVector(), sample);
       SampleType sampleVector;
       VisualizationPixelTraits::Convert(this->EvaluatePixelRepresentation(sample), sampleVector);
       pixelRepresentationListSample->PushBack(sampleVector);
-
     }
 
 
