@@ -35,6 +35,18 @@ namespace otb
     class PhaseFunctor: public ChannelSelectorFunctor<TInputPixel>
     {
       public:
+        /** Standard class typedefs */
+        typedef PhaseFunctor                      Self;
+        typedef itk::Object                       Superclass;
+        typedef itk::SmartPointer<Self>           Pointer;
+        typedef itk::SmartPointer<const Self>     ConstPointer;
+
+        /** Method for creation through the object factory */
+        itkNewMacro(Self);
+
+        /** Runtime information */
+        itkTypeMacro(PhaseFunctor,itk::Object);
+
         typedef TInputPixel PixelType;
         typedef typename itk::NumericTraits<PixelType>::ValueType ScalarType;
         typedef itk::VariableLengthVector<ScalarType>       VectorPixelType;
@@ -55,9 +67,6 @@ namespace otb
 
         /** Destructor */
         virtual ~PhaseFunctor() {}
-
-        const char *GetNameOfClass() const
-        {return "PhaseFunctor";}
 
         const char *GetDescription() const
         {return "Phase";}

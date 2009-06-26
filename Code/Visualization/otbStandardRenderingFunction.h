@@ -169,63 +169,69 @@ public:
 
   virtual void Initialize()//FIXME should disappear and be automatic (IsModified())
   {
-    if(m_AutoMinMax)
+    if ((this->GetMTime() > m_UTime)
+       || (this->GetPixelRepresentationFunction().GetMTime() > m_UTime))
+    //NOTE: we assume that Transfer function have no parameters
     {
-      if ((this->GetListSample()).IsNotNull())
+      if(m_AutoMinMax)
       {
-        //the size of the Vector was unknow at construction time for the
-        //m_PixelRepresentationFunction, now, we may get a better default
-        if (m_PixelRepresentationFunction.IsUsingDefaultParameters())
+        if ((this->GetListSample()).IsNotNull())
         {
-           if (this->GetListSample()->GetMeasurementVectorSize() >=3)
-           {
-             m_PixelRepresentationFunction.SetRedChannelIndex(0);
-             m_PixelRepresentationFunction.SetGreenChannelIndex(1);
-             m_PixelRepresentationFunction.SetBlueChannelIndex(2);
-           }
+          //the size of the Vector was unknow at construction time for the
+          //m_PixelRepresentationFunction, now, we may get a better default
+          if (m_PixelRepresentationFunction.IsUsingDefaultParameters())
+          {
+             if (this->GetListSample()->GetMeasurementVectorSize() >=3)
+             {
+               m_PixelRepresentationFunction.SetRedChannelIndex(0);
+               m_PixelRepresentationFunction.SetGreenChannelIndex(1);
+               m_PixelRepresentationFunction.SetBlueChannelIndex(2);
+             }
+          }
         }
+        unsigned int nbComps = m_PixelRepresentationFunction.GetOutputSize();//FIXME check what happen if the m_PixelRepresentationFunction is modified AFTER the Initialize.
+
+        otbMsgDevMacro(<<"Initialize(): "<<nbComps<<" components, quantile= "<<100*m_AutoMinMaxQuantile<<" %");
+        // For each components, use the histogram to compute min and max
+        m_Minimum.clear();
+        m_Maximum.clear();
+
+        if (this->GetHistogramList().IsNull())
+        {
+          this->RenderHistogram();
+  //         itkExceptionMacro( << "To Compute min/max automatically, Histogram should be "
+  //          <<"provided to the rendering function with SetHistogramList()" );
+        }
+        for(unsigned int comp = 0; comp < nbComps;++comp)
+        {
+          // Compute quantiles
+          m_Minimum.push_back(static_cast<ScalarType>(this->GetHistogramList()->GetNthElement(comp)->Quantile(0,m_AutoMinMaxQuantile)));
+          m_Maximum.push_back(static_cast<ScalarType>(this->GetHistogramList()->GetNthElement(comp)->Quantile(0,1-m_AutoMinMaxQuantile)));
+          otbMsgDevMacro(<<"Initialize():"<< " component "<<comp
+              <<", min= "<< static_cast< typename itk::NumericTraits<ScalarType >::PrintType>(m_Minimum.back())
+              <<", max= "<<static_cast< typename itk::NumericTraits<ScalarType >::PrintType>(m_Maximum.back()));
+        }
+
       }
-      unsigned int nbComps = m_PixelRepresentationFunction.GetOutputSize();//FIXME check what happen if the m_PixelRepresentationFunction is modified AFTER the Initialize.
 
-      otbMsgDevMacro(<<"Initialize(): "<<nbComps<<" components, quantile= "<<100*m_AutoMinMaxQuantile<<" %");
-      // For each components, use the histogram to compute min and max
-      m_Minimum.clear();
-      m_Maximum.clear();
+      typename ExtremaVectorType::const_iterator minIt = this->m_Minimum.begin();
+      typename ExtremaVectorType::const_iterator maxIt = this->m_Maximum.begin();
 
-      if (this->GetHistogramList().IsNull())
+      m_TransferedMinimum.clear();
+      m_TransferedMaximum.clear();
+
+      while(minIt != this->m_Minimum.end() && maxIt != this->m_Maximum.end())
       {
-        this->RenderHistogram();
-//         itkExceptionMacro( << "To Compute min/max automatically, Histogram should be "
-//          <<"provided to the rendering function with SetHistogramList()" );
-      }
-      for(unsigned int comp = 0; comp < nbComps;++comp)
-      {
-        // Compute quantiles
-        m_Minimum.push_back(static_cast<ScalarType>(this->GetHistogramList()->GetNthElement(comp)->Quantile(0,m_AutoMinMaxQuantile)));
-        m_Maximum.push_back(static_cast<ScalarType>(this->GetHistogramList()->GetNthElement(comp)->Quantile(0,1-m_AutoMinMaxQuantile)));
-        otbMsgDevMacro(<<"Initialize():"<< " component "<<comp
-            <<", min= "<< static_cast< typename itk::NumericTraits<ScalarType >::PrintType>(m_Minimum.back())
-            <<", max= "<<static_cast< typename itk::NumericTraits<ScalarType >::PrintType>(m_Maximum.back()));
+        const double v1 = this->m_TransferFunction(*minIt);
+        const double v2 = this->m_TransferFunction(*maxIt);
+        m_TransferedMinimum.push_back(static_cast<ScalarType>(std::min(v1,v2)));
+        m_TransferedMaximum.push_back(static_cast<ScalarType>(std::max(v1,v2)));
+        ++minIt;
+        ++maxIt;
       }
 
+      m_UTime.Modified();
     }
-
-    typename ExtremaVectorType::const_iterator minIt = this->m_Minimum.begin();
-    typename ExtremaVectorType::const_iterator maxIt = this->m_Maximum.begin();
-
-    m_TransferedMinimum.clear();
-    m_TransferedMaximum.clear();
-
-    while(minIt != this->m_Minimum.end() && maxIt != this->m_Maximum.end())
-    {
-      const double v1 = this->m_TransferFunction(*minIt);
-      const double v2 = this->m_TransferFunction(*maxIt);
-      m_TransferedMinimum.push_back(static_cast<ScalarType>(std::min(v1,v2)));
-      m_TransferedMaximum.push_back(static_cast<ScalarType>(std::max(v1,v2)));
-      ++minIt;
-      ++maxIt;
-    }
-
   }
 
   const std::string Describe(const PixelType & spixel) const
@@ -371,7 +377,7 @@ protected:
   /** Constructor */
   StandardRenderingFunction() : m_TransferedMinimum(), m_TransferedMaximum(),
                                 m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2), m_AutoMinMax(true),
-                                m_AutoMinMaxQuantile(0.02), m_DefaultChannelsAreSet(false)
+                                m_AutoMinMaxQuantile(0.02), m_DefaultChannelsAreSet(false), m_UTime()
   {}
   /** Destructor */
   ~StandardRenderingFunction() {}
@@ -449,6 +455,10 @@ private:
   double m_AutoMinMaxQuantile;
 
   bool m_DefaultChannelsAreSet;
+
+  /** Update time */
+  itk::TimeStamp m_UTime;
+
 };
 } // end namespace Functor
 } // end namespace otb

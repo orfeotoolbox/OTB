@@ -127,8 +127,11 @@ public:
   /** Set the sample list */
   virtual void SetListSample(ListSamplePointerType listSample)
   {
-    m_ListSample = listSample;
-    this->Modified();
+    if ( this->m_ListSample != listSample)
+    {
+      m_ListSample = listSample;
+      this->Modified();
+    }
   }
 
 

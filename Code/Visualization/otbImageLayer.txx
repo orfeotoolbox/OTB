@@ -142,7 +142,7 @@ void
 ImageLayer<TImage,TOutputImage>
 ::UpdateListSample()
 {
-  otbMsgDevMacro(<<"ImageLayer::UpdateListSample():"<<" ("<<this->GetName()<<")"<< " Entering method");
+//   otbMsgDevMacro(<<"ImageLayer::UpdateListSample():"<<" ("<<this->GetName()<<")"<< " Entering method");
   // Declare the source of the histogram
   ImagePointerType histogramSource;
 

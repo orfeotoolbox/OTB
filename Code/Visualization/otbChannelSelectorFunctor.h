@@ -23,6 +23,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkVariableLengthVector.h"
 #include "itkRGBPixel.h"
 #include "itkRGBAPixel.h"
+#include "itkObject.h"
+#include "itkObjectFactory.h"
 
 namespace otb
 {
@@ -36,9 +38,19 @@ namespace otb
     * \sa AmplitudeFunctor PhaseFunctor
     */
     template <class TInputPixel>
-    class ChannelSelectorFunctor
+    class ChannelSelectorFunctor: public itk::Object
     {
       public:
+        /** Standard class typedefs */
+        typedef ChannelSelectorFunctor            Self;
+        typedef itk::Object                       Superclass;
+        typedef itk::SmartPointer<Self>           Pointer;
+        typedef itk::SmartPointer<const Self>     ConstPointer;
+        /** Method for creation through the object factory */
+        itkNewMacro(Self);
+
+        /** Runtime information */
+        itkTypeMacro(ChannelSelectorFunctor,itk::Object);
 
         typedef TInputPixel PixelType;
         typedef typename itk::NumericTraits<PixelType>::ValueType ScalarType;
@@ -60,9 +72,6 @@ namespace otb
 
         /** Destructor */
         virtual ~ChannelSelectorFunctor() {}
-
-        const char *GetNameOfClass() const
-        {return "ChannelSelectorFunctor";}
 
         const char *GetDescription() const
         {return "Channel Selection";}

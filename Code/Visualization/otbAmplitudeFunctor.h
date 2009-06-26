@@ -35,6 +35,18 @@ namespace otb
     class AmplitudeFunctor: public ChannelSelectorFunctor<TInputPixel>
     {
       public:
+        /** Standard class typedefs */
+        typedef AmplitudeFunctor                  Self;
+        typedef itk::Object                       Superclass;
+        typedef itk::SmartPointer<Self>           Pointer;
+        typedef itk::SmartPointer<const Self>     ConstPointer;
+
+        /** Method for creation through the object factory */
+        itkNewMacro(Self);
+
+        /** Runtime information */
+        itkTypeMacro(AmplitudeFunctor,itk::Object);
+
         typedef TInputPixel PixelType;
         typedef typename itk::NumericTraits<PixelType>::ValueType ScalarType;
         typedef itk::VariableLengthVector<ScalarType>       VectorPixelType;
@@ -55,9 +67,6 @@ namespace otb
 
         /** Destructor */
         virtual ~AmplitudeFunctor() {}
-
-        const char *GetNameOfClass() const
-        {return "AmplitudeFunctor";}
 
         const char *GetDescription() const
         {return "Amplitude";}
