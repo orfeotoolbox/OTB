@@ -59,6 +59,9 @@ namespace otb
         const char *GetNameOfClass() const
         {return "AmplitudeFunctor";}
 
+        const char *GetDescription() const
+        {return "Amplitude";}
+
         virtual unsigned int GetOutputSize() const
         {
           return 1;

@@ -59,6 +59,9 @@ namespace otb
         const char *GetNameOfClass() const
         {return "PhaseFunctor";}
 
+        const char *GetDescription() const
+        {return "Phase";}
+
         virtual unsigned int GetOutputSize() const
         {
           return 1;

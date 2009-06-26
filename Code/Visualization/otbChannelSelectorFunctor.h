@@ -64,6 +64,9 @@ namespace otb
         const char *GetNameOfClass() const
         {return "ChannelSelectorFunctor";}
 
+        const char *GetDescription() const
+        {return "Channel Selection";}
+
 
         virtual OutputPixelType operator()(const VectorPixelType & inPixel) const
         {
