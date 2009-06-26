@@ -31,7 +31,7 @@ namespace otb
 
 template < class TImageLayer >
 ImageLayerGenerator<TImageLayer>
-::ImageLayerGenerator() : m_Layer(), /*m_RenderingFunction(),*/ m_Image(), m_Quicklook(),
+::ImageLayerGenerator() : m_Layer(), m_Image(), m_Quicklook(),
                           m_SubsamplingRate(1), m_GenerateQuicklook(true),
                           m_Resampler(), m_ScreenRatio(0.25)
 {
@@ -39,10 +39,7 @@ ImageLayerGenerator<TImageLayer>
   m_Layer = ImageLayerType::New();
   // Resampler
   m_Resampler = ResampleFilterType::New();
-  // Rendering function
-//   m_RenderingFunction = DefaultRenderingFunctionType::New();//Note: created in the layer by default
-  // Default blending function
-  //m_BlendingFunction = m_Layer->GetBlendingFunction();
+
 }
 
 template < class TImageLayer >
@@ -123,60 +120,8 @@ ImageLayerGenerator<TImageLayer>
   m_Layer->SetHasScaledExtract(true);
   m_Layer->VisibleOn();
 
-  // Setup channels
-//   switch(m_Image->GetNumberOfComponentsPerPixel())
-//   switch( PixelSize(m_Image, m_Image->GetBufferPointer()) )
-//   {
-//     case 1:
-//     {
-//       m_RenderingFunction->Initialize(SCALAR);
-//       break;
-//     }
-//     case 2:
-//     {
-//       m_RenderingFunction->Initialize(TWOBANDS);
-//       break;
-//     }
-//     case 3:
-//     {
-//       m_RenderingFunction->Initialize(THREEBANDS);
-//       break;
-//     }
-//     case 4:
-//     {
-//       // Get the sensor ID
-//       ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
-//       std::string sensorID = imageMetadataInterface->GetSensorID(m_Image->GetMetaDataDictionary());
-//       if (sensorID.find("Spot") != std::string::npos)
-//       {
-//         m_RenderingFunction->Initialize(SENSORINVERTED);
-//       }
-//       else
-//       {
-//         m_RenderingFunction->Initialize(SENSORWAVELENTHORDER);
-//       }
-//       break;
-//     }
-//     default:
-//     {
-//       //Discard
-//       break;
-//     }
-//   }
-
-//   // Set the rendering function
-//   if (m_RenderingFunction.IsNotNull())
-//   {
-//     otbMsgDevMacro(<<"ImageLayerGenerator::GenerateLayerInformation(): set the rendering function of the layer");
-//     m_Layer->SetRenderingFunction(m_RenderingFunction);
-//   }
-//   else
-//   {
-//     otbMsgDevMacro(<<"ImageLayerGenerator::GenerateLayerInformation(): keep the default rendering function of the layer");
-//   }
-//
-//   //Set the blending function
-//   m_Layer->SetBlendingFunction(m_BlendingFunction);
+  //FIXME: possible to set a different channel order
+  //here according to the sensor (reverse order)
 
 }
 
@@ -240,41 +185,6 @@ ImageLayerGenerator<TImageLayer>
 {
   Superclass::PrintSelf(os,indent);
 }
-
-
-//Find out the histogram size from the pixel
-//FIXME duplication in ImageLayer
-template < class TImageLayer >
-    unsigned int
-    ImageLayerGenerator<TImageLayer>
-  ::PixelSize(ImagePointerType image, ScalarType* v) const
-{
-  return image->GetNumberOfComponentsPerPixel();
-}
-//Match is done according to InternalPixelType which is scalar also for VectorImage
-// template < class TImageLayer >
-//     unsigned int
-//     ImageLayerGenerator<TImageLayer>
-//   ::PixelSize(ImagePointerType image, VectorPixelType* v) const
-// {
-//   std::cout << "Match on vector" << std::endl;
-//   return image->GetNumberOfComponentsPerPixel();
-// }
-template < class TImageLayer >
-    unsigned int
-    ImageLayerGenerator<TImageLayer>
-  ::PixelSize(ImagePointerType image, RGBPixelType* v) const
-{
-  return 3;
-}
-template < class TImageLayer >
-    unsigned int
-    ImageLayerGenerator<TImageLayer>
-  ::PixelSize(ImagePointerType image, RGBAPixelType* v) const
-{
-  return 3;//We don't really want to normalize the Alpha value
-}
-
 
 } // end namespace otb
 

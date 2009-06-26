@@ -60,7 +60,6 @@ public:
   typedef TImage                                                      ImageType;
   typedef typename ImageType::Pointer                                 ImagePointerType;
   typedef typename ImageType::PixelType                               PixelType;
-//   typedef typename ImageType::InternalPixelType                       InternalPixelType;
   typedef typename itk::NumericTraits<PixelType>::ValueType           ScalarType;
   typedef itk::VariableLengthVector<ScalarType>                       VectorPixelType;
   typedef itk::RGBPixel<ScalarType>                                   RGBPixelType;
@@ -74,15 +73,12 @@ public:
 
 
   /** Histogram typedef */
-//    typedef itk::Statistics::DenseFrequencyContainer                   DFContainerType;
 
   typedef itk::VariableLengthVector<ScalarType>                       SampleType;
   typedef itk::Statistics::ListSample<SampleType>                     ListSampleType;
   typedef typename ListSampleType::Pointer                       ListSamplePointerType;
 
-//   typedef otb::ListSampleToHistogramListGenerator
-//       <ListSampleType,ScalarType,DFContainerType>                     HistogramFilterType;
-//   typedef typename HistogramFilterType::HistogramType                 HistogramType;
+
   typedef itk::Statistics::Histogram<
                   typename itk::NumericTraits<ScalarType>::RealType,1,
                   typename itk::Statistics::DenseFrequencyContainer> HistogramType;
@@ -94,10 +90,7 @@ public:
   typedef RenderingImageFilter<TImage,TOutputImage>                   RenderingFilterType;
   typedef typename RenderingFilterType::Pointer                       RenderingFilterPointerType;
   typedef typename RenderingFilterType::RenderingFunctionType         RenderingFunctionType;
-//   typedef Function::RenderingFunction<PixelType,OutputPixelType> RenderingFunctionType;
   typedef typename RenderingFunctionType::Pointer                     RenderingFunctionPointerType;
-//   typedef Function::StandardRenderingFunction<PixelType,
-//                                     typename TOutputImage::PixelType> DefaultRenderingFunctionType;
   typedef itk::ExtractImageFilter<ImageType,ImageType>                ExtractFilterType;
   typedef typename ExtractFilterType::Pointer                         ExtractFilterPointerType;
 
@@ -126,7 +119,6 @@ public:
   itkGetObjectMacro(Quicklook,ImageType);
 
   /** Get the histogram list */
-//   itkGetObjectMacro(HistogramList,HistogramListType);
   HistogramListPointerType GetHistogramList()
   {
     //FIXME Update condition?
@@ -137,35 +129,12 @@ public:
   void SetRenderingFunction(RenderingFunctionType * function)
   {
     m_RenderingFunction = function;
-//     m_AutoMinMaxUpToDate = false;
-//     m_RenderingFunction->SetHistogramList(this->GetHistogramList());
     m_RenderingFunction->SetListSample(this->GetListSample());
     m_QuicklookRenderingFilter->SetRenderingFunction(m_RenderingFunction);
     m_ExtractRenderingFilter->SetRenderingFunction(m_RenderingFunction);
     m_ScaledExtractRenderingFilter->SetRenderingFunction(m_RenderingFunction);
   }
   itkGetObjectMacro(RenderingFunction,RenderingFunctionType);
-
-  /** Set/Get the number of bins for histogram generation */
-  itkSetMacro(NumberOfHistogramBins,unsigned int);
-  itkGetMacro(NumberOfHistogramBins,unsigned int);
-
-  /** Set/Get the AutoMinMax mode */
-//   itkSetMacro(AutoMinMax,bool);
-//   itkGetMacro(AutoMinMax,bool);
-//   itkBooleanMacro(AutoMinMax);
-
-  /** Set/Get the auto min/max quantile */
-//   void SetAutoMinMaxQuantile(double value)//FIXME report the call to rendering function
-//   {
-//     if(value < 0. || value > 1.)
-//       {
-//       itkExceptionMacro(<<"MinMax quantile should be in the range [0,1]");
-//       }
-//     m_AutoMinMaxQuantile = value;
-//     m_AutoMinMaxUpToDate = false;
-//   }
-//   itkGetMacro(AutoMinMaxQuantile,double);//FIXME report the call to rendering function
 
   /** Reimplemented to pass the parameter to the extract filter */
   virtual void SetExtractRegion(const RegionType & region)
@@ -223,28 +192,12 @@ protected:
   /** Update the images */
   virtual void RenderImages();
 
-  /** Auto min/max rendering function setup */
-//   virtual void AutoMinMaxRenderingFunctionSetup();
-
   /** Find out the histogram size from the pixel */
   unsigned int PixelSize(ImagePointerType image, ScalarType* v) const;
   unsigned int PixelSize(ImagePointerType image, VectorPixelType* v) const;
   unsigned int PixelSize(ImagePointerType image, RGBPixelType* v) const;
   unsigned int PixelSize(ImagePointerType image, RGBAPixelType* v) const;
 
-  /** Set the histogram list: used internaly to propagate the change to
-    * the rendering function
-    */
-//   void SetHistogramList(HistogramListPointerType histogramList)
-//   {
-//     m_HistogramList = histogramList;
-//     if (m_RenderingFunction.IsNotNull())
-//     {
-//       m_RenderingFunction->SetHistogramList(histogramList);
-//     }
-//     //Suggestion: the rendering function could have instead a pointer
-//     //toward its layer.
-//   }
 
 private:
   ImageLayer(const Self&);     // purposely not implemented
@@ -256,23 +209,11 @@ private:
   /** Pointer to the image */
   ImagePointerType             m_Image;
 
-  /** Joint Histogram */
-//   HistogramListPointerType     m_HistogramList;
-
+  /** List sample used to compute the histogram by the rendering function*/
   ListSamplePointerType m_ListSample;
 
   /** Rendering function */
   RenderingFunctionPointerType m_RenderingFunction;
-
-  /** Number of bins for histograms generation */
-  unsigned int                 m_NumberOfHistogramBins;
-
-  /** Use histogram quantiles for min/max */
-  bool m_AutoMinMax;
-  bool m_AutoMinMaxUpToDate;
-
-  /** Quantile used with AutoMinMax */
-//   double m_AutoMinMaxQuantile;
 
   /** Rendering filters */
   RenderingFilterPointerType  m_QuicklookRenderingFilter;
