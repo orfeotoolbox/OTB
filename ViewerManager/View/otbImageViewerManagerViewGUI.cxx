@@ -449,32 +449,40 @@ ImageViewerManagerViewGUI
    rhistogram->SetHistogramColor(m_Red);
    rhistogram->SetLabelColor(m_Red);
 
-//    rhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(pRenderingFuntion->GetRedChannelIndex()));
-//    ghistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(pRenderingFuntion->GetGreenChannelIndex()));
-//    bhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(pRenderingFuntion->GetBlueChannelIndex()));
-   rhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(0));
-   ghistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(1));
-   bhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(2));
-
    curveWidget->ClearAllCurves();
-   curveWidget->AddCurve(bhistogram);
-   curveWidget->AddCurve(ghistogram);
+
+   if (pRenderingFuntion->GetPixelRepresentationSize() >=3)
+   {
+     bhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(2));
+     curveWidget->AddCurve(bhistogram);
+   }
+
+   if (pRenderingFuntion->GetPixelRepresentationSize() >=2)
+   {
+     ghistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(1));
+     curveWidget->AddCurve(ghistogram);
+   }
+
+
+   rhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(0));
    curveWidget->AddCurve(rhistogram);
+
+
    curveWidget->SetXAxisLabel("Pixels");
    curveWidget->SetYAxisLabel("Frequency");
 
    //Get the pixelView
    PixelDescriptionViewType::Pointer pixelView = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pPixelView;
 
- //   //Edit the Widget Manager
- //   m_WidgetManagerList->GetNthElement(selectedItem-1)->UnRegisterAll();
- //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterFullWidget(currentVisuView->GetFullWidget());
- //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterScrollWidget(currentVisuView->GetScrollWidget());
- //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterZoomWidget(currentVisuView->GetZoomWidget());
- //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterPixelDescriptionWidget(pixelView->GetPixelDescriptionWidget());
- //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterHistogramWidget(curveWidget);
- //   m_WidgetManagerList->GetNthElement(selectedItem-1)->SetLabel(this->CutFileName(selectedItem-1));
- //   m_WidgetManagerList->GetNthElement(selectedItem-1)->Show();
+   //   //Edit the Widget Manager
+   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->UnRegisterAll();
+   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterFullWidget(currentVisuView->GetFullWidget());
+   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterScrollWidget(currentVisuView->GetScrollWidget());
+   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterZoomWidget(currentVisuView->GetZoomWidget());
+   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterPixelDescriptionWidget(pixelView->GetPixelDescriptionWidget());
+   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterHistogramWidget(curveWidget);
+   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->SetLabel(this->CutFileName(selectedItem-1));
+   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->Show();
 
    //widgetList->GetNthElement(selectedItem-1)->UnRegisterAll();
    widgetList->GetNthElement(selectedItem-1)->RegisterFullWidget(currentVisuView->GetFullWidget());
