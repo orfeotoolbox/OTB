@@ -88,7 +88,7 @@ private:
   void operator=(const Self&);             // purposely not implemented
 
   /** The description widget */
-  Fl_Multiline_Output * m_PixelDescriptionWidget;
+  PixelDescriptionWidgetType * m_PixelDescriptionWidget;
 
   /** Model pointer */
   ModelPointerType       m_Model;
