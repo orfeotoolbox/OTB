@@ -100,10 +100,12 @@ public:
   typedef itk::VariableLengthVector<RealScalarType>               InternalPixelType;
   typedef typename Superclass::ParametersType                     ParametersType;
 
+
   /** Extrema vector */
   typedef std::vector<ScalarType>                    ExtremaVectorType;
   typedef TTransferFunction                          TransferFunctionType;
   typedef TPixelRepresentationFunction               PixelRepresentationFunctionType;
+  typedef typename PixelRepresentationFunctionType::ChannelListType ChannelListType;
 
   /** Convert the input pixel to a pixel representation that can be displayed on
     *  RGB. For example, channel selection, modulus computation, etc.
@@ -355,6 +357,20 @@ public:
      m_AutoMinMax = false;
      UpdateTransferedMinMax();
    }
+
+  virtual void SetChannelList(std::vector<unsigned int>& channels)
+  {
+    if (m_PixelRepresentationFunction.GetChannelList() != channels)
+    {
+      m_PixelRepresentationFunction.SetChannelList(channels);
+      this->Modified();
+    }
+  }
+
+  virtual std::vector<unsigned int> GetChannelList()
+  {
+    return m_PixelRepresentationFunction.GetChannelList();
+  }
 
   /** Accessor to set some specific parameters on the transfer function */
   virtual TransferFunctionType& GetTransferFunction()

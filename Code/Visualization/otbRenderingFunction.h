@@ -114,8 +114,17 @@ public:
   virtual void SetParameters( const ParametersType & )
   {
     itkExceptionMacro(<<"Subclasses should override this method");
-  };
+  }
 
+  virtual void SetChannelList(std::vector<unsigned int> channels)
+  {
+    itkExceptionMacro(<<"Subclasses should override this method");
+  }
+
+  virtual std::vector<unsigned int> GetChannelList()
+  {
+    itkExceptionMacro(<<"Subclasses should override this method");
+  }
 
   /** Get the histogram of the pixel representation generated from the sample list */
   virtual HistogramListPointerType GetHistogramList()
