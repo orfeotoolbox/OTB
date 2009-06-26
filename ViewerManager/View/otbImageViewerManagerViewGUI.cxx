@@ -64,6 +64,7 @@ ImageViewerManagerViewGUI
   m_Red.Fill(0);
   m_Green.Fill(0);
   m_Blue.Fill(0);
+  m_Grey.Fill(0.5);
   m_Red[0]  = 1.;   m_Red[3]   = 0.5;
   m_Green[1]= 1.;   m_Green[3] = 0.5;
   m_Blue[2] = 1.;   m_Blue[3]  = 0.5;
@@ -437,33 +438,41 @@ ImageViewerManagerViewGUI
    //First get the histogram list
    RenderingFunctionType::Pointer pRenderingFuntion = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
 
-   HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
-   HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
-   HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
 
 
-   ghistogram->SetHistogramColor(m_Green);
-   ghistogram->SetLabelColor(m_Green);
-   bhistogram->SetHistogramColor(m_Blue);
-   bhistogram->SetLabelColor(m_Blue);
-   rhistogram->SetHistogramColor(m_Red);
-   rhistogram->SetLabelColor(m_Red);
+
 
    curveWidget->ClearAllCurves();
 
    if (pRenderingFuntion->GetPixelRepresentationSize() >=3)
    {
+     HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
+     bhistogram->SetHistogramColor(m_Blue);
+     bhistogram->SetLabelColor(m_Blue);
      bhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(2));
      curveWidget->AddCurve(bhistogram);
    }
 
    if (pRenderingFuntion->GetPixelRepresentationSize() >=2)
    {
+     HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
+     ghistogram->SetHistogramColor(m_Green);
+     ghistogram->SetLabelColor(m_Green);
      ghistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(1));
      curveWidget->AddCurve(ghistogram);
    }
 
-
+   HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
+   if (pRenderingFuntion->GetPixelRepresentationSize() == 1)
+   {
+     rhistogram->SetHistogramColor(m_Grey);
+     rhistogram->SetLabelColor(m_Grey);
+   }
+   else
+   {
+     rhistogram->SetHistogramColor(m_Red);
+     rhistogram->SetLabelColor(m_Red);
+   }
    rhistogram->SetHistogram(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(0));
    curveWidget->AddCurve(rhistogram);
 

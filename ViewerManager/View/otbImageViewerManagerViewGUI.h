@@ -229,6 +229,7 @@ private:
   HistogramCurveType::ColorType                 m_Red;
   HistogramCurveType::ColorType                 m_Green;
   HistogramCurveType::ColorType                 m_Blue;
+  HistogramCurveType::ColorType                 m_Grey;
 
   /** Store the component number of a pixel*/
   unsigned int                                  m_DiaporamaCurrentIndex;
