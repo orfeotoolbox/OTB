@@ -824,10 +824,6 @@ ImageViewerManagerViewGUI
    ImageViewerManagerModelType::ReaderPointerType reader = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pReader;
    unsigned int nbComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
 
-   //FIXME make sure this is called only when the renderingFunction is a StandardRenderingFunctionType
-   assert(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion.GetPointer());
-   StandardRenderingFunctionType::Pointer renderingFunction = static_cast<StandardRenderingFunctionType*>(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion.GetPointer());
-
    guiViewerSetupColorMode->set();
    guiViewerSetupComplexMode->clear();
    guiViewerSetupGrayscaleMode->clear();
@@ -841,10 +837,22 @@ ImageViewerManagerViewGUI
    guiGreenChannelChoice->activate();
    guiBlueChannelChoice->activate();
 
-   assert(renderingFunction);
-   guiRedChannelChoice->value(std::min(renderingFunction->GetPixelRepresentationFunction().GetRedChannelIndex(),nbComponent-1));
-   guiGreenChannelChoice->value(std::min(renderingFunction->GetPixelRepresentationFunction().GetGreenChannelIndex(),nbComponent-1));
-   guiBlueChannelChoice->value(std::min(renderingFunction->GetPixelRepresentationFunction().GetBlueChannelIndex(),nbComponent-1));
+   assert(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion.GetPointer());
+
+   RenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
+
+   ChannelListType channels = renderingFunction->GetChannelList();
+   unsigned int i=0;
+   while (channels.size() < 3)
+   {
+     channels.push_back(i);
+     ++i;
+   }
+
+
+   guiRedChannelChoice->value(std::min(channels[0],nbComponent-1));
+   guiGreenChannelChoice->value(std::min(channels[1],nbComponent-1));
+   guiBlueChannelChoice->value(std::min(channels[2],nbComponent-1));
 
  }
 
@@ -864,10 +872,6 @@ ImageViewerManagerViewGUI
    ImageViewerManagerModelType::ReaderPointerType reader = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pReader;
    unsigned int nbComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
 
-//    RenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
-   //FIXME make sure this is called only when the renderingFunction is a StandardRenderingFunctionType
-   StandardRenderingFunctionType::Pointer renderingFunction = static_cast<StandardRenderingFunctionType*>(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion.GetPointer());
-
    guiViewerSetupGrayscaleMode->set();
    guiViewerSetupComplexMode->clear();
    guiViewerSetupColorMode->clear();
@@ -881,7 +885,18 @@ ImageViewerManagerViewGUI
    guiBlueChannelChoice->deactivate();
 
    guiGrayscaleChannelChoice->activate();
-   guiGrayscaleChannelChoice->value(std::min(renderingFunction->GetPixelRepresentationFunction().GetRedChannelIndex(),nbComponent-1));
+
+   assert(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion.GetPointer());
+
+   RenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
+
+   ChannelListType channels = renderingFunction->GetChannelList();
+   if (channels.size() < 1)
+   {
+     channels.push_back(0);
+   }
+
+   guiGrayscaleChannelChoice->value(std::min(channels[0],nbComponent-1));
  }
 
 
@@ -898,10 +913,6 @@ ImageViewerManagerViewGUI
    ImageViewerManagerModelType::ReaderPointerType reader = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pReader;
    unsigned int nbComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
 
-//    RenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
-    //FIXME make sure this is called only when the renderingFunction is a StandardRenderingFunctionType
-   StandardRenderingFunctionType::Pointer renderingFunction = static_cast<StandardRenderingFunctionType*>(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion.GetPointer()); //FIXME should be the Modulus/Phase rendering function
-
    guiViewerSetupComplexMode->set();
    guiViewerSetupColorMode->clear();
    guiViewerSetupGrayscaleMode->clear();
@@ -913,8 +924,21 @@ ImageViewerManagerViewGUI
    guiImaginaryChannelChoice->activate();
    bModulus->activate();
    bPhase->activate();
-   guiRealChannelChoice->value(std::min(renderingFunction->GetPixelRepresentationFunction().GetChannelIndex(0),nbComponent-1));
-   guiImaginaryChannelChoice->value(std::min(renderingFunction->GetPixelRepresentationFunction().GetChannelIndex(1),nbComponent-1));
+
+
+   assert(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion.GetPointer());
+   RenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
+
+   ChannelListType channels = renderingFunction->GetChannelList();
+   unsigned int i=0;
+   while (channels.size() < 2)
+   {
+     channels.push_back(i);
+     ++i;
+   }
+
+   guiRealChannelChoice->value(std::min(channels[0],nbComponent-1));
+   guiImaginaryChannelChoice->value(std::min(channels[1],nbComponent-1));
  }
 
 

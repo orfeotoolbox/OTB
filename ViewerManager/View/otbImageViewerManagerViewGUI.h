@@ -83,7 +83,7 @@ public:
   typedef ImageViewerManagerModelType::OffsetType                 OffsetType;
   typedef ImageViewerManagerModelType::RenderingFunctionType      RenderingFunctionType;
   typedef ImageViewerManagerModelType::StandardRenderingFunctionType StandardRenderingFunctionType;
-
+  typedef StandardRenderingFunctionType::ChannelListType          ChannelListType;
   typedef ImageView<VisuModelType>                                VisuViewType;
   typedef VisuViewType::Pointer                                   VisuViewPointerType;
 
