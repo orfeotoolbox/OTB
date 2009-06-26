@@ -533,7 +533,7 @@ MESSAGE(FATAL_ERROR "OGR MESSAGE: ${OUTPUT}")
 FIND_LIBRARY(OGR_LIBRARY ogr PATHS)
 IF (NOT OGR_LIBRARY)
 MESSAGE(FATAL_ERROR
-         "Cannot find jpeg library. Please set OGR_LIBRARY.")
+         "Cannot find ogr library. Please set OGR_LIBRARY.")
 ENDIF (NOT OGR_LIBRARY)
 ENDIF(GDAL_HAS_OGR)
 
