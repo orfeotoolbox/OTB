@@ -155,14 +155,14 @@ class ImageViewerManagerViewGroup {open
         label {Imaginary channel index } open
         tooltip {Select band for imaginary channel in complex composition} xywh {375 96 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
       } {}
-      Fl_Round_Button bModulus {
-        label Modulus
+      Fl_Round_Button bAmplitude {
+        label Amplitude
         callback {bPhase->clear();}
         tooltip {Toggle modulus mode} xywh {235 50 80 15} down_box ROUND_DOWN_BOX value 1 labelcolor 187 deactivate
       }
       Fl_Round_Button bPhase {
         label Phase
-        callback {bModulus->clear();}
+        callback {bAmplitude->clear();}
         tooltip {Toggle phase mode} xywh {325 50 80 15} down_box ROUND_DOWN_BOX labelcolor 187 deactivate
       }
     }

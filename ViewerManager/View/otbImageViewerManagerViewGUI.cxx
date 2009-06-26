@@ -830,7 +830,7 @@ ImageViewerManagerViewGUI
    guiGrayscaleChannelChoice->deactivate();
    guiRealChannelChoice->deactivate();
    guiImaginaryChannelChoice->deactivate();
-   bModulus->deactivate();
+   bAmplitude->deactivate();
    bPhase->deactivate();
 
    guiRedChannelChoice->activate();
@@ -878,7 +878,7 @@ ImageViewerManagerViewGUI
 
    guiRealChannelChoice->deactivate();
    guiImaginaryChannelChoice->deactivate();
-   bModulus->deactivate();
+   bAmplitude->deactivate();
    bPhase->deactivate();
    guiRedChannelChoice->deactivate();
    guiGreenChannelChoice->deactivate();
@@ -922,7 +922,7 @@ ImageViewerManagerViewGUI
    guiBlueChannelChoice->deactivate();
    guiRealChannelChoice->activate();
    guiImaginaryChannelChoice->activate();
-   bModulus->activate();
+   bAmplitude->activate();
    bPhase->activate();
 
 
@@ -983,9 +983,9 @@ ImageViewerManagerViewGUI
      }
    else if (guiViewerSetupComplexMode->value())
      {
-       if (bModulus->value())
+       if (bAmplitude->value())
 	 {
-	   m_ImageViewerManagerController->UpdateModulusChannelOrder(atoi(guiRealChannelChoice->value())-1,
+	   m_ImageViewerManagerController->UpdateAmplitudeChannelOrder(atoi(guiRealChannelChoice->value())-1,
 								    atoi(guiImaginaryChannelChoice->value())-1,
 								    selectedItem);
 	 }

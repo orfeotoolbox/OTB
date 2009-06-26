@@ -102,11 +102,11 @@ ImageViewerManagerController
 
 void
 ImageViewerManagerController
-::UpdateModulusChannelOrder(int realChoice, int imChoice, unsigned int selectedItem)
+::UpdateAmplitudeChannelOrder(int realChoice, int imChoice, unsigned int selectedItem)
 {
   try
     {
-      m_Model->UpdateModulusChannelOrder(realChoice,imChoice, selectedItem);
+      m_Model->UpdateAmplitudeChannelOrder(realChoice,imChoice, selectedItem);
     }
   catch (itk::ExceptionObject & err)
     {

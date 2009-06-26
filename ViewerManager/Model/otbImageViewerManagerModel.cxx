@@ -260,14 +260,14 @@ ImageViewerManagerModel
 
 void
 ImageViewerManagerModel
-::UpdateModulusChannelOrder(int realChoice , int imChoice, unsigned int selectedItem )
+::UpdateAmplitudeChannelOrder(int realChoice , int imChoice, unsigned int selectedItem )
 {
-  ModulusRenderingFunction::PixelRepresentationFunctionType::ChannelListType channels;
+  AmplitudeRenderingFunction::PixelRepresentationFunctionType::ChannelListType channels;
   channels.push_back(realChoice);
   channels.push_back(imChoice);
 
-   ModulusRenderingFunction::Pointer modulusFunction;
-  modulusFunction = ModulusRenderingFunction::New();
+   AmplitudeRenderingFunction::Pointer modulusFunction;
+  modulusFunction = AmplitudeRenderingFunction::New();
 
   modulusFunction->SetChannelList(channels);
 

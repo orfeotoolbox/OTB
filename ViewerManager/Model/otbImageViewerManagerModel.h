@@ -37,9 +37,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbChangeScaleActionHandler.h"
 #include "otbArrowKeyMoveActionHandler.h"
 
-
-// #include "otbModulusRenderingFunction.h"
-// #include "otbPhaseRenderingFunction.h"
 #include "otbAmplitudeFunctor.h"
 #include "otbPhaseFunctor.h"
 
@@ -93,10 +90,7 @@ public:
   typedef Function::StandardRenderingFunction<ImageType::PixelType, RGBPixelType>                          StandardRenderingFunctionType;
 
   typedef Function::StandardRenderingFunction<ImageType::PixelType, RGBPixelType,
-  otb::Function::AmplitudeFunctor<ImageType::PixelType> >                            ModulusRenderingFunction;
-//   typedef Function::ModulusRenderingFunction<ImageType::InternalPixelType, RGBPixelType>    ModulusRenderingFunction;
-
-//   typedef Function::PhaseRenderingFunction<ImageType::InternalPixelType, RGBPixelType>      PhaseRenderingFunction;
+  otb::Function::AmplitudeFunctor<ImageType::PixelType> >                             AmplitudeRenderingFunction;
   typedef Function::StandardRenderingFunction<ImageType::PixelType, RGBPixelType,
   otb::Function::PhaseFunctor<ImageType::PixelType> >                                 PhaseRenderingFunction;
 
@@ -162,7 +156,7 @@ public:
   virtual void CloseImage(unsigned int selectedItem);
   virtual void UpdateRGBChannelOrder(int redChoice , int greenChoice, int BlueChoice, unsigned int selectedItem);
   virtual void UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem);
-  virtual void UpdateModulusChannelOrder(int realChoice , int imChoice,unsigned int selectedItem );
+  virtual void UpdateAmplitudeChannelOrder(int realChoice , int imChoice,unsigned int selectedItem );
   virtual void UpdatePhaseChannelOrder(int realChoice , int imChoice,unsigned int selectedItem );
   virtual void Link(unsigned int leftChoice, unsigned int rightChoice, OffsetType offset);
   virtual void InitializeImageViewController(unsigned int selectedItem);

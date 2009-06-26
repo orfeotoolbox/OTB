@@ -104,7 +104,7 @@ public:
   virtual void CloseImage(unsigned int selectedItem);
   virtual void UpdateRGBChannelOrder(int redChoice , int greenChoice, int BlueChoice, unsigned int selectedItem);
   virtual void UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem );
-  virtual void UpdateModulusChannelOrder(int realChoice , int imChoice ,unsigned int selectedItem );
+  virtual void UpdateAmplitudeChannelOrder(int realChoice , int imChoice ,unsigned int selectedItem );
   virtual void UpdatePhaseChannelOrder(int realChoice , int imChoice, unsigned int selectedItem);
   virtual void Link(unsigned int leftChoice, unsigned int rightChoice , OffsetType offset);
   virtual void UpdateImageViewController(unsigned int selectedItem);

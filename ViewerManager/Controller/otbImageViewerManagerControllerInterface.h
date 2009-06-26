@@ -72,7 +72,7 @@ public:
   virtual void CloseImage(unsigned int selectedItem) = 0;
   virtual void UpdateRGBChannelOrder(int redChoice , int greenChoice, int BlueChoice, unsigned int selectedItem) = 0;
   virtual void UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem) = 0; 
-  virtual void UpdateModulusChannelOrder(int realChoice , int imChoice,unsigned int selectedItem) = 0; 
+  virtual void UpdateAmplitudeChannelOrder(int realChoice , int imChoice,unsigned int selectedItem) = 0; 
   virtual void UpdatePhaseChannelOrder(int realChoice , int imChoice, unsigned int selectedItem) = 0; 
   virtual void Link(unsigned int leftChoice, unsigned int rightChoice , OffsetType offset) = 0;
   virtual void UpdateImageViewController(unsigned int selectedItem) = 0;
