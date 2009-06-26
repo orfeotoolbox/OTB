@@ -225,7 +225,7 @@ private:
 
 
   /** Histogram */
-  StandardRenderingFunctionType::Pointer        m_pRenderingFuntion;
+  StandardRenderingFunctionType::Pointer        m_pRenderingFunction;
   HistogramCurveType::ColorType                 m_Red;
   HistogramCurveType::ColorType                 m_Green;
   HistogramCurveType::ColorType                 m_Blue;

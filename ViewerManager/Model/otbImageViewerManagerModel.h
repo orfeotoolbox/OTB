@@ -134,7 +134,7 @@ public:
     VisuModelPointerType                   pRendering;
     WidgetControllerPointerType            pWidgetController;
     VisuViewPointerType                    pVisuView;
-    RenderingFunctionType::Pointer         pRenderFuntion;
+    RenderingFunctionType::Pointer         pRenderFunction;
     PixelDescriptionViewType::Pointer      pPixelView;
     PixelDescriptionModelPointerType       pPixelModel;
     CurvesWidgetType::Pointer              pCurveWidget;

@@ -75,7 +75,7 @@ ImageViewerManagerModel
   visuGenerator->SetImage(reader->GetOutput());
   FltkFilterWatcher qlwatcher(visuGenerator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
   visuGenerator->GenerateLayer();
-  RenderingFunctionType::Pointer  rendrerFuntion  = visuGenerator->GetRenderingFunction();
+  RenderingFunctionType::Pointer  rendrerFunction  = visuGenerator->GetRenderingFunction();
 
   /** Rendering image*/
   VisuModelPointerType rendering = VisuModelType::New();
@@ -110,7 +110,7 @@ ImageViewerManagerModel
   currentComponent.pRendering = rendering;
   currentComponent.pVisuView  = visuView;
   currentComponent.pWidgetController = controller;
-  currentComponent.pRenderFuntion  = rendrerFuntion;
+  currentComponent.pRenderFunction  = rendrerFunction;
   currentComponent.pPixelView   = pixelView;
   currentComponent.pPixelModel  = pixelModel;
   currentComponent.pCurveWidget = curveWidget;
@@ -120,7 +120,7 @@ ImageViewerManagerModel
   assert(currentComponent.pRendering);
   assert(currentComponent.pVisuView);
   assert(currentComponent.pWidgetController);
-  assert(currentComponent.pRenderFuntion);
+  assert(currentComponent.pRenderFunction);
   assert(currentComponent.pPixelView);
   assert(currentComponent.pPixelModel);
   assert(currentComponent.pCurveWidget);
@@ -223,7 +223,7 @@ ImageViewerManagerModel
 
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(renderFunction);
-  m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion = renderFunction;
+  m_ObjectTrackedList.at(selectedItem-1).pRenderFunction = renderFunction;
   renderFunction->Initialize();//FIXME Initialize() should disappear from the renderingFunction
   m_ObjectTrackedList.at(selectedItem-1).pRendering->Update();
 
@@ -248,7 +248,7 @@ ImageViewerManagerModel
 
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(renderFunction);
-  m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion = renderFunction;
+  m_ObjectTrackedList.at(selectedItem-1).pRenderFunction = renderFunction;
   renderFunction->Initialize();//FIXME Initialize() should disappear from the renderingFunction
   m_ObjectTrackedList.at(selectedItem-1).pRendering->Update();
 
@@ -274,7 +274,7 @@ ImageViewerManagerModel
 
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(modulusFunction);
-  m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion = modulusFunction;
+  m_ObjectTrackedList.at(selectedItem-1).pRenderFunction = modulusFunction;
   modulusFunction->Initialize();//FIXME Initialize() should disappear from the renderinFunction
   m_ObjectTrackedList.at(selectedItem-1).pRendering->Update();
 
@@ -302,7 +302,7 @@ ImageViewerManagerModel
 
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(phaseFunction);
-  m_ObjectTrackedList.at(selectedItem-1).pRenderFuntion = phaseFunction;
+  m_ObjectTrackedList.at(selectedItem-1).pRenderFunction = phaseFunction;
   phaseFunction->Initialize();//FIXME Initialize() should disappear from the renderinFunction
   m_ObjectTrackedList.at(selectedItem-1).pRendering->Update();
 

@@ -36,7 +36,7 @@ ImageViewerManagerViewGUI
 
   m_VisuView               =  VisuViewType::New();
   m_PreviewWidget          =  ImageWidgetType::New();
-  m_pRenderingFuntion      =  StandardRenderingFunctionType::New();
+  m_pRenderingFunction      =  StandardRenderingFunctionType::New();
   m_WidgetManagerList      =  WidgetManagerList::New();
   m_LinkWidgetManagerList  =  WidgetManagerList::New();
 
@@ -436,7 +436,7 @@ ImageViewerManagerViewGUI
    VisuViewPointerType               currentVisuView     =  m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pVisuView;
 
    //First get the histogram list
-   RenderingFunctionType::Pointer pRenderingFuntion = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
+   RenderingFunctionType::Pointer pRenderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFunction;
 
 
 
@@ -444,7 +444,7 @@ ImageViewerManagerViewGUI
 
    curveWidget->ClearAllCurves();
 
-   if (pRenderingFuntion->GetPixelRepresentationSize() >=3)
+   if (pRenderingFunction->GetPixelRepresentationSize() >=3)
    {
      HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
      bhistogram->SetHistogramColor(m_Blue);
@@ -453,7 +453,7 @@ ImageViewerManagerViewGUI
      curveWidget->AddCurve(bhistogram);
    }
 
-   if (pRenderingFuntion->GetPixelRepresentationSize() >=2)
+   if (pRenderingFunction->GetPixelRepresentationSize() >=2)
    {
      HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
      ghistogram->SetHistogramColor(m_Green);
@@ -463,7 +463,7 @@ ImageViewerManagerViewGUI
    }
 
    HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
-   if (pRenderingFuntion->GetPixelRepresentationSize() == 1)
+   if (pRenderingFunction->GetPixelRepresentationSize() == 1)
    {
      rhistogram->SetHistogramColor(m_Grey);
      rhistogram->SetLabelColor(m_Grey);
@@ -739,9 +739,9 @@ ImageViewerManagerViewGUI
      {
        //FIXME why this is not using the Describe method of the rendering function?
 //        oss<<"RGB Composition: ";
-//        oss<<" Band 1: "<<m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion->GetRedChannelIndex();
-//        oss<<" Band 2: "<<m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion->GetGreenChannelIndex();
-//        oss<<" Band 3: "<<m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion->GetBlueChannelIndex()<<std::endl;
+//        oss<<" Band 1: "<<m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFunction->GetRedChannelIndex();
+//        oss<<" Band 2: "<<m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFunction->GetGreenChannelIndex();
+//        oss<<" Band 3: "<<m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFunction->GetBlueChannelIndex()<<std::endl;
      }
 
    guiViewerInformation->insert(oss.str().c_str());
@@ -837,9 +837,9 @@ ImageViewerManagerViewGUI
    guiGreenChannelChoice->activate();
    guiBlueChannelChoice->activate();
 
-   assert(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion.GetPointer());
+   assert(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFunction.GetPointer());
 
-   RenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
+   RenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFunction;
 
    ChannelListType channels = renderingFunction->GetChannelList();
    unsigned int i=0;
@@ -886,9 +886,9 @@ ImageViewerManagerViewGUI
 
    guiGrayscaleChannelChoice->activate();
 
-   assert(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion.GetPointer());
+   assert(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFunction.GetPointer());
 
-   RenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
+   RenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFunction;
 
    ChannelListType channels = renderingFunction->GetChannelList();
    if (channels.size() < 1)
@@ -926,8 +926,8 @@ ImageViewerManagerViewGUI
    bPhase->activate();
 
 
-   assert(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion.GetPointer());
-   RenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFuntion;
+   assert(m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFunction.GetPointer());
+   RenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFunction;
 
    ChannelListType channels = renderingFunction->GetChannelList();
    unsigned int i=0;
@@ -1055,7 +1055,7 @@ ImageViewerManagerViewGUI
   VisuViewPointerType               currentVisuView     =  m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pVisuView;
 
   //First get the histogram list
-  RenderingFunctionType::Pointer pRenderingFuntion = m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pRenderFuntion;
+  RenderingFunctionType::Pointer pRenderingFunction = m_ImageViewerManagerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pRenderFunction;
 
   HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
   HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
