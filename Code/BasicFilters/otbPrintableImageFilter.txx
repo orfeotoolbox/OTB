@@ -27,8 +27,8 @@
 namespace otb
 {
 
-template <class TInputImage>
-PrintableImageFilter<TInputImage>
+template <class TInputImage, class TMaskImage>
+PrintableImageFilter<TInputImage, TMaskImage>
 ::PrintableImageFilter()
 {
 
@@ -39,29 +39,54 @@ PrintableImageFilter<TInputImage>
 
 }
 
-template <class TInputImage>
+template <class TInputImage, class TMaskImage>
 void
-PrintableImageFilter<TInputImage>
+PrintableImageFilter<TInputImage, TMaskImage>
 ::SetChannel(unsigned int channel)
 {
   m_Extractor->SetChannel(channel);
   this->Modified();
 }
 
-template <class TInputImage>
-const typename PrintableImageFilter<TInputImage>::ChannelsType
-PrintableImageFilter<TInputImage>
+template <class TInputImage, class TMaskImage>
+const typename PrintableImageFilter<TInputImage,TMaskImage>::ChannelsType
+PrintableImageFilter<TInputImage, TMaskImage>
 ::GetChannels() const
 {
   return m_Extractor->GetChannels();
 }
 
-
-template <class TInputImage>
+template <class TInputImage, class TMaskImage>
 void
-PrintableImageFilter<TInputImage>
+PrintableImageFilter<TInputImage, TMaskImage>
+::SetInputMask(const MaskImageType * mask)
+{
+  this->itk::ProcessObject::SetNthInput(1,const_cast<MaskImageType *>(mask));
+}
+
+template <class TInputImage, class TMaskImage>
+const typename PrintableImageFilter<TInputImage,TMaskImage>::MaskImageType *
+PrintableImageFilter<TInputImage, TMaskImage>
+::GetInputMask()
+{
+  if (this->GetNumberOfInputs()<2)
+  {
+    return 0;
+  }
+  return  static_cast<const MaskImageType *>(this->itk::ProcessObject::GetInput(1));
+}
+
+
+template <class TInputImage, class TMaskImage>
+void
+PrintableImageFilter<TInputImage, TMaskImage>
 ::GenerateData()
 {
+
+  MaskImageConstPointerType inputMaskPtr  = this->GetInputMask();
+
+
+
 
   if (m_Extractor->GetNbChannels() == 0)
   {
@@ -86,9 +111,9 @@ PrintableImageFilter<TInputImage>
   this->GraftOutput( m_Extractor->GetOutput() );
 }
 
-template <class TInputImage>
+template <class TInputImage, class TMaskImage>
 void
-PrintableImageFilter<TInputImage>
+PrintableImageFilter<TInputImage, TMaskImage>
 ::PrintSelf( std::ostream& os, itk::Indent indent ) const
 {
   Superclass::PrintSelf(os,indent);

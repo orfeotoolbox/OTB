@@ -35,14 +35,14 @@ namespace otb
      *  It is useful for publications for instance.
      **/
 
-template <class TInputImage>
+template <class TInputImage , class TMaskImage = TInputImage>
 class ITK_EXPORT PrintableImageFilter :
       public itk::ImageToImageFilter<TInputImage, otb::VectorImage<unsigned char,2> >
 {
 public:
   typedef PrintableImageFilter                            Self;
   typedef itk::ImageToImageFilter
-  <TInputImage, otb::VectorImage<unsigned char,2> >     Superclass;
+  <TInputImage, otb::VectorImage<unsigned char,2> >       Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
@@ -50,6 +50,11 @@ public:
   typedef typename InputImageType::PixelType              InputPixelType;
   typedef unsigned char                                   OutputPixelType;
   typedef otb::VectorImage<OutputPixelType,2>             OutputImageType;
+
+
+  typedef TMaskImage                                      MaskImageType;
+  typedef typename MaskImageType::ConstPointer            MaskImageConstPointerType;
+  typedef typename MaskImageType::Pointer                 MaskImagePointerType;
 
   typedef otb::VectorRescaleIntensityImageFilter
   <InputImageType,OutputImageType>                    VectorRescalerType;
@@ -77,6 +82,20 @@ public:
   otbGetObjectMemberMacro(Rescaler,InputMinimum,InputPixelType);
   otbSetObjectMemberMacro(Rescaler,InputMaximum,InputPixelType);
   otbGetObjectMemberMacro(Rescaler,InputMaximum,InputPixelType);
+
+
+  /**
+   * If set, only pixels within the mask will be classified.
+   * \param mask The input mask.
+   */
+  void SetInputMask(const MaskImageType * mask);
+
+  /**
+   * Get the input mask.
+   * \return The mask.
+   */
+  const MaskImageType * GetInputMask(void);
+
 
 protected:
 

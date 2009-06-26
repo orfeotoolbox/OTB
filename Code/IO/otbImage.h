@@ -34,7 +34,7 @@ namespace otb
  *
  */
 
-template <class TPixel,unsigned int VImageDimension>
+template <class TPixel,unsigned int VImageDimension=2>
 class ITK_EXPORT Image : public itk::Image<TPixel,VImageDimension>
 {
 public:
