@@ -31,6 +31,7 @@
 #include "itkListSample.h"
 #include "otbListSampleToHistogramListGenerator.h"
 #include "itkConceptChecking.h"
+#include "itkDenseFrequencyContainer.h"
 
 namespace otb
 {
