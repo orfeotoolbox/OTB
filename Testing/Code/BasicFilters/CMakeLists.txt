@@ -425,9 +425,12 @@ ADD_TEST(bfTuStreamingResampleImageFilterNew ${BASICFILTERS_TESTS5}
          otbStreamingResampleImageFilterNew)
 
 ADD_TEST(bfTvStreamingResampleImageFilter ${BASICFILTERS_TESTS5}
-				otbStreamingResampleImageFilter
-				${INPUTDATA}/poupees.tif
-				${TEMP}/bfTvStreamingResamplePoupeesTest.tif
+          --compare-image ${NOTOL}
+              ${BASELINE}/bfTvStreamingResamplePoupeesTest.tif
+              ${TEMP}/bfTvStreamingResamplePoupeesTest.tif
+          otbStreamingResampleImageFilter
+              ${INPUTDATA}/poupees.tif
+              ${TEMP}/bfTvStreamingResamplePoupeesTest.tif
 )
 
 ADD_TEST(bfTvStreamingResampleImageFilterCompareWithITK ${BASICFILTERS_TESTS5}
@@ -452,6 +455,15 @@ ADD_TEST(bfTvStreamingResampleImageFilterCompareWithITK ${BASICFILTERS_TESTS5}
 #					${TEMP}/bfTvStreamingResampleSPOT5TestOTB.tif
 #)
 
+
+ADD_TEST(bfTvResampleSLCImage ${BASICFILTERS_TESTS5}
+            --compare-image ${NOTOL}
+                ${BASELINE}/bfTvResampleSLCImage.tif
+                ${TEMP}/bfTvResampleSLCImage.tif
+            otbResampleSLCImage
+                ${INPUTDATA}/RSAT_imagery_HH.tif
+                ${TEMP}/bfTvResampleSLCImage.tif
+)
 
 
 # -------            otb::StreamingStatisticsVectorImageFilter   ----------------------------
@@ -1576,6 +1588,7 @@ SET(BasicFilters_SRCS5
 otbStreamingResampleImageFilterNew.cxx
 otbStreamingResampleImageFilter.cxx
 otbStreamingResampleImageFilterCompareWithITK.cxx
+otbResampleSLCImage.cxx
 otbStreamingStatisticsVectorImageFilterNew.cxx
 otbStreamingStatisticsVectorImageFilter.cxx
 otbMatrixTransposeMatrixImageFilterNew.cxx
