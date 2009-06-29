@@ -55,11 +55,11 @@ int otbImageLayerVector( int argc, char * argv[] )
   // min & max
 
   ParametersType parameters(2*nbComponents);
-  for(unsigned int i = 0; i<nbComponents;++i)
+  for(unsigned int i = 0; i<parameters.Size();++i)
   {
-    parameters[i]=atof(argv[4+i]);
+    parameters[i]=atof(argv[6+i]);
     ++i;
-    parameters[i]=atof(argv[4+nbComponents+i]);
+    parameters[i]=atof(argv[6+i]);
   }
 
 

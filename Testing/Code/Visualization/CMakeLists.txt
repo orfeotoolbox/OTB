@@ -85,7 +85,10 @@ ${INPUTDATA}/couleurs.tif
 ${TEMP}/vrTvImageLayerVectorQuicklookOutput.png
 ${TEMP}/vrTvImageLayerVectorExtractOutput.png
 ${TEMP}/vrTvImageLayerVectorScaledExtractOutput.png
-10 50 50 50 200 200 200
+10 # sampling rate
+50 200 #min/max
+50 200 #min/max
+50 200 #min/max
 )
 
 #------------ otb::StandardRenderingFunction ------------
