@@ -20,7 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbWaveletOperator.h"
 #include "otbWaveletFilterBank.h"
 
-int otbWaveletFilterBankNew(int argc, char * argv[])
+int otbWaveletInverseFilterBankNew(int argc, char * argv[])
 {
   const int Dimension = 2;
   typedef double PixelType;
@@ -28,10 +28,11 @@ int otbWaveletFilterBankNew(int argc, char * argv[])
 
   /* Wavelet choice */
   //const otb::MotherWaveletOperatorEnum wvltID = otb::HAAR;
-  const otb::MotherWaveletOperatorEnum wvltID = otb::DB4;
-  typedef otb::WaveletOperator< wvltID, otb::FORWARD, PixelType, Dimension > WaveletOperator;
+  const otb::MotherWaveletOperatorEnum wvltID = otb::SYMLET8;
 
-  typedef otb::WaveletFilterBank< ImageType, ImageType, WaveletOperator, otb::FORWARD >
+  /* Inverse Transformation */
+  typedef otb::WaveletOperator< wvltID, otb::INVERSE, PixelType, Dimension > WaveletOperator;
+  typedef otb::WaveletFilterBank< ImageType, ImageType, WaveletOperator, otb::INVERSE >
     FilterType;
   FilterType::Pointer filter = FilterType::New();
 
