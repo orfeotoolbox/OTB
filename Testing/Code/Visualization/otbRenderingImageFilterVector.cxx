@@ -56,7 +56,7 @@ int otbRenderingImageFilterVector( int argc, char * argv[] )
   unsigned int channelBlue = atoi(argv[5]);
   unsigned int nbComponents = 3;//To be displayed
   ParametersType parameters(2*nbComponents);
-  for(unsigned int i = 0; i<nbComponents;++i)
+  for(unsigned int i = 0; i<parameters.Size();++i)
   {
     parameters[i]=atof(argv[6+i]);
     ++i;

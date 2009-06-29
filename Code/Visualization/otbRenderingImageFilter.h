@@ -184,13 +184,30 @@ public:
 
     if (this->GetFunctor().GetFunction() == NULL)
     {
+      otbMsgDevMacro(<<"RenderingFunction set to default");
       this->SetDefaultRenderingFunction();
     }
 
     // Initialize the rendering function
     this->GetFunctor().InitializeFunction();
-    otbMsgDevMacro(<<"RenderingImageFilter::BeforeThreadedGenerateData():"<< " Output functor size "
+    otbMsgDevMacro(<<"RenderingImageFilter::BeforeThreadedGenerateData():");
+    otbMsgDevMacro(<< " - Output functor size "
             << (this->GetFunctor().GetFunction())->GetPixelRepresentationSize());
+    otbMsgDevMacro(<<"Rendering Funtion:" << this->GetFunctor().GetFunction());
+
+    //Check if the rendering function channels are compatible with the image
+    //might want to be more generic here one day.
+    unsigned int numberOfInputChannels = this->GetInput()->GetNumberOfComponentsPerPixel();
+    std::vector<unsigned int> channels = (this->GetFunctor().GetFunction())->GetChannelList();
+    for (unsigned int i=0; i<channels.size(); ++i)
+    {
+      if(channels[i] >= numberOfInputChannels)
+      {
+        itkExceptionMacro(<<"Channels specified as input (" << channels[i] << ") is not compatible "
+           << "with the size of the image: " << numberOfInputChannels);
+      }
+    }
+
   }
 
  protected:

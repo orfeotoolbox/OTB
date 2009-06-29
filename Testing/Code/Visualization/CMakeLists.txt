@@ -85,7 +85,10 @@ ${INPUTDATA}/couleurs.tif
 ${TEMP}/vrTvImageLayerVectorQuicklookOutput.png
 ${TEMP}/vrTvImageLayerVectorExtractOutput.png
 ${TEMP}/vrTvImageLayerVectorScaledExtractOutput.png
-10 50 50 50 200 200 200
+10 # sampling rate
+50 200 #min/max
+50 200 #min/max
+50 200 #min/max
 )
 
 #------------ otb::StandardRenderingFunction ------------
@@ -117,10 +120,10 @@ ${TEMP}/vrTvRenderingImageFilterVectorOutput.png
 otbRenderingImageFilterVector
 ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
 ${TEMP}/vrTvRenderingImageFilterVectorOutput.png
-0 1 2 #channel to extract
-179 802 #min max
-100 600 #min max
-200 700 #min max
+2 1 0 #channel to extract
+117 390 #min max
+223 430 #min max
+190 287 #min max
 )
 
 ADD_TEST(vrTvRenderingImageFilterVectorWithExpNegativeTransfer ${VISUREFAC_TESTS1}

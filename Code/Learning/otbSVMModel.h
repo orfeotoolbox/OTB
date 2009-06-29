@@ -103,7 +103,7 @@ public:
   /** Get the number of hyperplane. */
   unsigned int GetNumberOfHyperplane(void) const
   {
-    return (unsigned int)(m_Model->nr_class - 1);
+    return (unsigned int)(m_Model->nr_class*(m_Model->nr_class-1)/2);
   }
 
   /** Set a new model. To avoid pointers holding conflicts, this
@@ -135,7 +135,7 @@ public:
   void LoadModel(const char* model_file_name);
 
   /** Copy the model */
-  Pointer GetCopy();
+  Pointer GetCopy() const;
 
   /** Set the SVM type to C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR */
   void SetSVMType(int svmtype)

@@ -425,9 +425,12 @@ ADD_TEST(bfTuStreamingResampleImageFilterNew ${BASICFILTERS_TESTS5}
          otbStreamingResampleImageFilterNew)
 
 ADD_TEST(bfTvStreamingResampleImageFilter ${BASICFILTERS_TESTS5}
-				otbStreamingResampleImageFilter
-				${INPUTDATA}/poupees.tif
-				${TEMP}/bfTvStreamingResamplePoupeesTest.tif
+          --compare-image ${NOTOL}
+              ${BASELINE}/bfTvStreamingResamplePoupeesTest.tif
+              ${TEMP}/bfTvStreamingResamplePoupeesTest.tif
+          otbStreamingResampleImageFilter
+              ${INPUTDATA}/poupees.tif
+              ${TEMP}/bfTvStreamingResamplePoupeesTest.tif
 )
 
 ADD_TEST(bfTvStreamingResampleImageFilterCompareWithITK ${BASICFILTERS_TESTS5}
@@ -452,6 +455,15 @@ ADD_TEST(bfTvStreamingResampleImageFilterCompareWithITK ${BASICFILTERS_TESTS5}
 #					${TEMP}/bfTvStreamingResampleSPOT5TestOTB.tif
 #)
 
+
+ADD_TEST(bfTvResampleSLCImage ${BASICFILTERS_TESTS5}
+            --compare-image ${NOTOL}
+                ${BASELINE}/bfTvResampleSLCImage.tif
+                ${TEMP}/bfTvResampleSLCImage.tif
+            otbResampleSLCImage
+                ${INPUTDATA}/RSAT_imagery_HH.tif
+                ${TEMP}/bfTvResampleSLCImage.tif
+)
 
 
 # -------            otb::StreamingStatisticsVectorImageFilter   ----------------------------
@@ -1507,6 +1519,20 @@ ADD_TEST(bfTvChangeLabelImageFilter ${BASICFILTERS_TESTS12}
   255   # upper  threshold
 )
 
+# ----- otbSubsampleImageFilter --------------------------------------
+ADD_TEST(bfTuSubsampleImageFilterNew ${BASICFILTERS_TESTS12}
+	otbSubsampleImageFilterNew)
+
+ADD_TEST(bfTvSubsampleImageFilter ${BASICFILTERS_TESTS12}
+	--compare-image ${NOTOL}
+		${TEMP}/bfSubsampleImageFilterOversampled.tif
+		${TEMP}/bfSubsampleImageFilterOnePixelOutOf2.tif
+	otbSubsampleImageFilter
+		${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+		${TEMP}/bfSubsampleImageFilterOversampled.tif
+		${TEMP}/bfSubsampleImageFilterOnePixelOutOf2.tif
+)
+
 
 
 # A enrichir
@@ -1572,6 +1598,7 @@ SET(BasicFilters_SRCS5
 otbStreamingResampleImageFilterNew.cxx
 otbStreamingResampleImageFilter.cxx
 otbStreamingResampleImageFilterCompareWithITK.cxx
+otbResampleSLCImage.cxx
 otbStreamingStatisticsVectorImageFilterNew.cxx
 otbStreamingStatisticsVectorImageFilter.cxx
 otbMatrixTransposeMatrixImageFilterNew.cxx
@@ -1706,6 +1733,8 @@ otbEdgeDetectorImageFilter.cxx
 otbEdgeDetectorImageFilterNew.cxx
 otbChangeLabelImageFilterNew.cxx
 otbChangeLabelImageFilter.cxx
+otbSubsampleImageFilterNew.cxx
+otbSubsampleImageFilter.cxx
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)

@@ -17,25 +17,36 @@ PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
 #include "otbImage.h"
-#include "otbHaarOperator.h"
+#include "otbWaveletOperator.h"
 #include "otbWaveletFilterBank.h"
-#include "otbWaveletPacketForwardTransform.h"
-#include "otbWPCost.h"
+#include "otbWaveletPacketTransform.h"
+#include "otbWaveletPacketDecompositionCosts.h"
 
 int otbWaveletPacketTransformNew(int argc, char * argv[])
 {
   const int Dimension = 2;
   typedef double PixelType;
   typedef otb::Image< PixelType, Dimension >  ImageType;
-  typedef otb::LowPassHaarOperator< otb::FORWARD, PixelType, Dimension > LowPassOperator;
-  typedef otb::HighPassHaarOperator< otb::FORWARD, PixelType, Dimension > HighPassOperator;
-  typedef otb::WaveletFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator, otb::FORWARD >
-    WaveletFilterType;
-  typedef otb::FullyDecomposedWaveletPacketCost< ImageType > CostType;
-  typedef otb::WaveletPacketForwardTransform< ImageType, ImageType, WaveletFilterType, CostType >
-      FilterType;
 
+  /* Wavelet choice */
+  const otb::MotherWaveletOperatorEnum wvltID = otb::HAAR;
+  // const otb::MotherWaveletOperatorEnum wvltID = otb::SYMLET8;
+
+  /* Wavelet packet configuration */
+  typedef otb::FullyDecomposedWaveletPacketCost< ImageType > CostType;
+  CostType::NumberOfAllowedDecompositions = 1;
+  
+  /* Forward Transformation */
+  typedef otb::WaveletOperator< wvltID, otb::FORWARD, PixelType, Dimension > 
+    WaveletOperator;
+  typedef otb::WaveletFilterBank< ImageType, ImageType, WaveletOperator, otb::FORWARD > 
+    ForwardFilterBank;
+  typedef otb::WaveletPacketTransform< ImageType, ImageType, ForwardFilterBank, otb::FORWARD, CostType >
+    FilterType;
+  
   FilterType::Pointer filter = FilterType::New();
 
   return EXIT_SUCCESS;
 }
+
+

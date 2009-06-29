@@ -24,20 +24,19 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "itkRescaleIntensityImageFilter.h"
 
+#include "otbWaveletOperator.h"
 #include "otbWaveletFilterBank.h"
-#include "otbWaveletPacketForwardTransform.h"
-#include "otbWPCost.h"
-
-#include "otbHaarOperator.h"
-#include "otbSplineBiOrthogonalOperator.h"
-
+#include "otbWaveletPacketTransform.h"
+#include "otbWaveletPacketDecompositionCosts.h"
 
 int otbWaveletPacketTransform( int argc, char * argv[] )
 {
- const char * inputFileName = argv[1];
-  unsigned int level = atoi(argv[2]);
-  const char * prefix = argv[3];
+  const char * inputFileName = argv[1];
+  const unsigned int level = atoi(argv[2]);
+  const unsigned int decimFactor = atoi(argv[3]);
+  const char * outputFileName = argv[4];
 
   const int Dimension = 2;
   typedef double PixelType;
@@ -48,35 +47,56 @@ int otbWaveletPacketTransform( int argc, char * argv[] )
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( inputFileName );
 
-  /* Transformation */
-  typedef otb::LowPassSplineBiOrthogonalOperator< otb::FORWARD, PixelType, Dimension > LowPassOperator;
-  typedef otb::HighPassSplineBiOrthogonalOperator< otb::FORWARD, PixelType, Dimension > HighPassOperator;
+  /* Wavelet choice */
+  const otb::MotherWaveletOperatorEnum wvltID = otb::HAAR;
+  // const otb::MotherWaveletOperatorEnum wvltID = otb::SYMLET8;
 
-  typedef otb::WaveletFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator, otb::FORWARD >
-      WaveletFilterType;
+  /* Wavelet packet configuration */
   typedef otb::FullyDecomposedWaveletPacketCost< ImageType > CostType;
-
-  typedef otb::WaveletPacketForwardTransform< ImageType, ImageType, WaveletFilterType, CostType >
-      FilterType;
+  CostType::NumberOfAllowedDecompositions = level;
+  
+  /* Forward Transformation */
+  typedef otb::WaveletOperator< wvltID, otb::FORWARD, PixelType, Dimension > 
+    WaveletOperator;
+  typedef otb::WaveletFilterBank< ImageType, ImageType, WaveletOperator, otb::FORWARD > 
+    ForwardFilterBank;
+  typedef otb::WaveletPacketTransform< ImageType, ImageType, ForwardFilterBank, otb::FORWARD, CostType >
+    FilterType;
+  
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );
-  filter->GetCost()->SetNumberOfAllowedDecompositions( level );
-
+  filter->SetSubsampleImageFactor( decimFactor );
   filter->Update();
 
-  for ( unsigned int i = 0; i < filter->GetOutput()->Size(); i++ )
-  {
-    std::stringstream filename;
-    filename << prefix;
-    filename << "-" << i << ".tif";
+  /* Inverse Transformation */
+  typedef otb::WaveletOperator< wvltID, otb::INVERSE, PixelType, Dimension > 
+    InverseWaveletOperator;
+  typedef otb::WaveletFilterBank< ImageType, ImageType, InverseWaveletOperator, otb::INVERSE > 
+    InverseFilterBank;
+  typedef otb::WaveletPacketTransform< ImageType, ImageType, InverseFilterBank, otb::INVERSE > 
+    InvFilterType;
+  
+  InvFilterType::Pointer invFilter = InvFilterType::New();
+  invFilter->SetInput( filter->GetOutput() );
+  invFilter->SetWaveletPacketRule( filter->GetWaveletPacketRule() );
+  invFilter->SetSubsampleImageFactor( decimFactor );
+  invFilter->Update();
 
-    typedef otb::ImageFileWriter<ImageType> WriterType;
-    WriterType::Pointer writer = WriterType::New();
-    writer->SetFileName(filename.str());
-    writer->SetInput(filter->GetOutput()->GetNthElement(i));
-    writer->Update();
+  /* Writing the output */
+  typedef unsigned char OutputPixelType;
+  typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
+  typedef itk::RescaleIntensityImageFilter< ImageType, OutputImageType > RescalerType;
+  RescalerType::Pointer rescaler = RescalerType::New();
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetOutputMaximum(255);
+  rescaler->SetInput( invFilter->GetOutput() );
 
-  }
+  typedef otb::ImageFileWriter< OutputImageType > WriterType;
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName( outputFileName );
+  writer->SetInput( rescaler->GetOutput() );
+  writer->Update();
+
   return EXIT_SUCCESS;
 }
 

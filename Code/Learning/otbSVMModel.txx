@@ -55,8 +55,8 @@ SVMModel<TValue,TLabel>::SVMModel()
   this->SetSVMType(C_SVC);
   this->SetKernelType(LINEAR);
   this->SetPolynomialKernelDegree(3);
-  this->SetKernelGamma(0.);  // 1/k
-  this->SetKernelCoef0(0);
+  this->SetKernelGamma(1.);  // 1/k
+  this->SetKernelCoef0(1.);
   this->SetKernelFunctor(NULL);
   this->SetNu(0.5);
   this->SetCacheSize(40);
@@ -202,6 +202,7 @@ SVMModel<TValue,TLabel>::BuildProblem()
     {
     itkExceptionMacro(<<"No samples, can not build SVM problem.");
     }
+  std::cout<<"Rebuilding problem ..."<<std::endl;
 
   // Get the size of the samples
   long int elements = m_Samples[0].first.size()+1;
@@ -529,7 +530,7 @@ SVMModel<TValue,TLabel>::LoadModel(const char* model_file_name)
 
 template <class TValue,class TLabel> 
 typename SVMModel<TValue,TLabel>::Pointer 
-SVMModel<TValue,TLabel>::GetCopy()
+SVMModel<TValue,TLabel>::GetCopy() const
 {
   Pointer modelCopy = New();
   modelCopy->SetModel( m_Model );

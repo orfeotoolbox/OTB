@@ -1,0 +1,195 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  See ITCopyright.txt for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+
+#ifndef __otbWaveletOperatorBase_txx
+#define __otbWaveletOperatorBase_txx
+#include "otbWaveletOperatorBase.h"
+
+namespace otb {
+
+template < MotherWaveletOperatorEnum TMotherWaveletOperator,
+  class TPixel, unsigned int VDimension, class TAllocator >
+void 
+WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
+::PrintSelf ( std::ostream &os, itk::Indent i ) const  
+{ 
+  os << i << "Wavelet kind : " << GetWaveletName() << "\n";
+  os << i << "Up-Sampling factor " << GetUpSampleFactor() << "\n";
+  Superclass::PrintSelf(os, i.GetNextIndent());
+  os << i << "Wavelet coeff: [ ";
+  for ( typename Superclass::ConstIterator iter = Superclass::Begin();
+    iter != Superclass::End(); 
+    ++iter )
+  {
+    os << *iter << ' ';
+  }
+  os << "]\n";
+}
+
+
+template < MotherWaveletOperatorEnum TMotherWaveletOperator,
+  class TPixel, unsigned int VDimension, class TAllocator >
+void 
+WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
+::UpSamplingCoefficients ( CoefficientVector & coeff ) 
+{
+  if ( m_UpSampleFactor <= 1 )
+    return;
+
+  unsigned long radius = static_cast<unsigned long>( coeff.size() ) >> 1;
+  unsigned long upSampleRadius = radius * m_UpSampleFactor;
+
+  CoefficientVector upSampledCoeff;
+  upSampledCoeff.resize( 2*upSampleRadius+1 );
+  upSampledCoeff.assign( 2*upSampleRadius, 0. );
+  upSampledCoeff[upSampleRadius] = coeff[radius];
+
+  for ( unsigned int i = 0; i <= radius; ++i )
+  {
+    upSampledCoeff[ upSampleRadius + m_UpSampleFactor * i ] = coeff[radius + i];
+    upSampledCoeff[ upSampleRadius - m_UpSampleFactor * i ] = coeff[radius - i];
+  }
+  coeff = upSampledCoeff;
+}
+
+template < MotherWaveletOperatorEnum TMotherWaveletOperator,
+  class TPixel, unsigned int VDimension, class TAllocator >
+void 
+WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
+::RevertFilter ( CoefficientVector & coeff )
+{
+  const unsigned int length = coeff.size();
+  const unsigned int medianPosition = length / 2;
+
+  CoefficientVector newCoeff ( length );
+  newCoeff[ medianPosition ] = coeff[ medianPosition ];
+  for ( unsigned int i = 1; i <= medianPosition; i++ )
+  {
+    newCoeff[ medianPosition+i ] = coeff[ medianPosition-i ];
+    newCoeff[ medianPosition-i ] = coeff[ medianPosition+i ];
+  }
+
+  coeff = newCoeff;
+}
+
+template < MotherWaveletOperatorEnum TMotherWaveletOperator,
+  class TPixel, unsigned int VDimension, class TAllocator >
+void 
+WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
+::GenerateForwardHighPassFilterFromLowPassFilter ( CoefficientVector & coeff )
+{
+  const unsigned int length = coeff.size();
+  //const unsigned int medianPosition = length / 2;
+
+  CoefficientVector highPassCoeff ( length + 2 );
+
+  highPassCoeff[0] = 0.;
+  highPassCoeff[1] = 0.;
+
+  double sign = -1; //(medianPosition&1)==1 ? -1. : 1.;
+  for ( unsigned int i = 0; i < length; i++ )
+  {
+    highPassCoeff[i+2] = sign * coeff[length-1-i];
+    sign *= -1.;
+  }
+  //highPassCoeff[length] = 0.;
+  //highPassCoeff[length+1] = 0.;
+
+  coeff = highPassCoeff;
+
+  while ( coeff[0] == coeff[ coeff.size()-1 ] )
+  {
+    ReduceFilterLength( coeff );
+  }
+}
+
+template < MotherWaveletOperatorEnum TMotherWaveletOperator,
+  class TPixel, unsigned int VDimension, class TAllocator >
+void 
+WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
+::GenerateInverseHighPassFilterFromLowPassFilter ( CoefficientVector & coeff )
+{
+  const unsigned int length = coeff.size();
+
+  CoefficientVector highPassCoeff ( length + 2 );
+
+  double sign = -1; 
+  for ( unsigned int i = 0; i < length; i++ )
+  {
+    highPassCoeff[i] = sign * coeff[i];
+    sign *= -1.;
+  }
+  highPassCoeff[length] = 0.;
+  highPassCoeff[length+1] = 0.;
+
+  coeff = highPassCoeff;
+
+  while ( coeff[0] == coeff[ coeff.size()-1 ] )
+  {
+    ReduceFilterLength( coeff );
+  }
+}
+
+template < MotherWaveletOperatorEnum TMotherWaveletOperator,
+  class TPixel, unsigned int VDimension, class TAllocator >
+void 
+WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
+::GenerateInverseLowPassFilterFromHighPassFilter ( CoefficientVector & coeff )
+{
+  const unsigned int length = coeff.size();
+
+  CoefficientVector highPassCoeff ( length + 2 );
+
+  double sign = 1; 
+  for ( unsigned int i = 0; i < length; i++ )
+  {
+    highPassCoeff[i] = sign * coeff[i];
+    sign *= -1.;
+  }
+  highPassCoeff[length] = 0.;
+  highPassCoeff[length+1] = 0.;
+
+  coeff = highPassCoeff;
+
+  while ( coeff[0] == coeff[ coeff.size()-1 ] )
+  {
+    ReduceFilterLength( coeff );
+  }
+}
+
+template < MotherWaveletOperatorEnum TMotherWaveletOperator,
+  class TPixel, unsigned int VDimension, class TAllocator >
+void 
+WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
+::ReduceFilterLength ( CoefficientVector & coeff )
+{
+  const unsigned int length = coeff.size();
+  CoefficientVector newFilter ( length-2 );
+  for ( unsigned int i = 0; i < newFilter.size(); i++ )
+  {
+    newFilter[i] = coeff[i+1];
+  }
+  coeff = newFilter;
+}
+
+} // end of namespace otb
+
+#endif
+

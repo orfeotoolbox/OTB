@@ -26,10 +26,15 @@
 
 void RegisterTests()
 {
+  REGISTER_TEST(otbWaveletOperatorNew);
+  REGISTER_TEST(otbWaveletOperator);
+  REGISTER_TEST(otbWaveletFilterBankNew);
+  REGISTER_TEST(otbWaveletInverseFilterBankNew);
+  REGISTER_TEST(otbWaveletFilterBank);
   REGISTER_TEST(otbWaveletTransformNew);
+  REGISTER_TEST(otbWaveletInverseTransformNew);
   REGISTER_TEST(otbWaveletTransform);
   REGISTER_TEST(otbWaveletPacketTransformNew);
+  REGISTER_TEST(otbWaveletPacketInverseTransformNew);
   REGISTER_TEST(otbWaveletPacketTransform);
-  REGISTER_TEST(otbWaveletFilterBankNew);
-  REGISTER_TEST(otbWaveletFilterBank);
 }
