@@ -23,8 +23,6 @@
 
 #include "otbPrintableImageFilter.h"
 
-#include "otbImageFileWriter.h"
-
 namespace otb
 {
 
@@ -39,7 +37,7 @@ PrintableImageFilter<TInputImage, TMaskImage>
   m_Rescaler->SetInput( m_Extractor->GetOutput() );
   
   m_MaskRescaler = RescalerFilterType::New();
-  m_InvertIntensityImageFilter = InvertIntensityImageFilterType::New();
+  m_MaskThresholder =  ThresholdImageFilterType::New();
   m_Multiplier =  MultiplierType::New();
   m_MaskCaster = CasterFilterType::New();
   m_Adder = AdderFilterType::New();
@@ -69,7 +67,7 @@ const typename PrintableImageFilter<TInputImage,TMaskImage>::ChannelsType
 PrintableImageFilter<TInputImage, TMaskImage>
 ::GetChannels() const
 {
-  return m_ChannelList;//m_Extractor->GetChannels();
+  return m_ChannelList;
 }
 
 template <class TInputImage, class TMaskImage>
@@ -129,6 +127,15 @@ PrintableImageFilter<TInputImage, TMaskImage>
     }
 }
 
+
+/*
+ * If no mask used, just rescale the input between 0 and 255.
+ * Else, mBin = binarized mask (between 0 and 1)
+ * mul = input*mBin
+ * mVect = 3*mask (each band is the input mask)
+ * mColor = objectColor*mVect
+ * output = mul+mColor
+ */
 template <class TInputImage, class TMaskImage>
 void
 PrintableImageFilter<TInputImage, TMaskImage>
@@ -166,82 +173,57 @@ PrintableImageFilter<TInputImage, TMaskImage>
     }
   else
     {
-      //m_InvertIntensityImageFilter->SetMaximum(m_ForegroundMaskValue);
-      m_InvertIntensityImageFilter->SetInput(this->GetInputMask());
+      m_MaskThresholder->SetInput(this->GetInputMask());
       if(m_ForegroundMaskValue>m_BackgroundMaskValue)
 	{
-	  m_InvertIntensityImageFilter->SetInsideValue(0);
-	  m_InvertIntensityImageFilter->SetOutsideValue(1);
+	  m_MaskThresholder->SetInsideValue(0);
+	  m_MaskThresholder->SetOutsideValue(1);
 	}
       else
 	{
-	  m_InvertIntensityImageFilter->SetInsideValue(1);
-	  m_InvertIntensityImageFilter->SetOutsideValue(0);
+	  m_MaskThresholder->SetInsideValue(1);
+	  m_MaskThresholder->SetOutsideValue(0);
 	}
-      
       MaskPixelType thresh = static_cast<MaskPixelType>(static_cast<double>(m_ForegroundMaskValue+m_BackgroundMaskValue)/2);
-      m_InvertIntensityImageFilter->SetLowerThreshold(thresh);
-      m_InvertIntensityImageFilter->SetUpperThreshold(itk::NumericTraits<MaskPixelType>::max());
+      m_MaskThresholder->SetLowerThreshold(thresh);
+      m_MaskThresholder->SetUpperThreshold(itk::NumericTraits<MaskPixelType>::max());
 
-      typedef ImageFileWriter<MaskImageType> W44;
-      typename W44::Pointer w4 = W44::New();
-      w4->SetFileName("invert.tif");
-      w4->SetInput(m_InvertIntensityImageFilter->GetOutput());
-      w4->Update();
-      
-      
       m_Multiplier->SetInput1( m_Rescaler->GetOutput());
-      m_Multiplier->SetInput2( m_InvertIntensityImageFilter->GetOutput());
+      m_Multiplier->SetInput2( m_MaskThresholder->GetOutput());
       m_Multiplier->UpdateOutputInformation();
       
-      typedef ImageFileWriter<OutputImageType> W00;
-      W00::Pointer w00 = W00::New();
-      w00->SetFileName("multiplier.tif");
-      w00->SetInput(m_Multiplier->GetOutput());
-      w00->Update();
-
       typename ImageListType::Pointer imList = ImageListType::New();
       for(unsigned int i=0; i<m_Extractor->GetNbChannels(); i++)
 	imList->PushBack( this->GetInputMask());
 
       m_MaskCaster->SetInput(imList);
 
-      typedef ImageFileWriter<OutputImageType> W1;
-      W1::Pointer w1 = W1::New();
-      w1->SetFileName("maskcaster.tif");
-      w1->SetInput(m_MaskCaster->GetOutput());
-      w1->Update();
-
       OutputPixelType mini,maxi;
-      mini.SetSize(m_Extractor->GetNbChannels());
-      mini.Fill( std::min(m_BackgroundMaskValue, m_ForegroundMaskValue));
-      maxi = m_ObjectColor;
-      //maxi.SetSize(m_Extractor->GetNbChannels());
-      //maxi.Fill( 255 );
+      if(m_ForegroundMaskValue>m_BackgroundMaskValue)
+	{
+	  mini.SetSize(m_Extractor->GetNbChannels());
+	  mini.Fill( std::min(m_BackgroundMaskValue, m_ForegroundMaskValue));
+	  maxi = m_ObjectColor;
+	}
+      else
+	{
+	  mini = m_ObjectColor;
+	  maxi.SetSize(m_Extractor->GetNbChannels());
+	  maxi.Fill( std::min(m_BackgroundMaskValue, m_ForegroundMaskValue));
+	}
+
       
       m_MaskRescaler->SetOutputMinimum(mini);
       m_MaskRescaler->SetOutputMaximum(maxi);
       m_MaskRescaler->SetClampThreshold(1e-6);
       m_MaskRescaler->SetInput(m_MaskCaster->GetOutput());
 
-      typedef ImageFileWriter<OutputImageType> W2;
-      W2::Pointer w2 = W2::New();
-      w2->SetFileName("maskrescaler.tif");
-      w2->SetInput(m_MaskRescaler->GetOutput());
-      w2->Update();
-
       m_Adder->SetInput1( m_Multiplier->GetOutput()  );
       m_Adder->SetInput2( m_MaskRescaler->GetOutput() );
 
 
       m_Adder->GraftOutput( this->GetOutput() );
- typedef ImageFileWriter<OutputImageType> W12;
-      W12::Pointer w12 = W12::New();
-      w12->SetFileName("adder.tif");
-      w12->SetInput(m_Adder->GetOutput());
-      w12->Update();
       m_Adder->Update();
-std::cout<<"update3"<<std::endl;
       this->GraftOutput( m_Adder->GetOutput() );
     }
   

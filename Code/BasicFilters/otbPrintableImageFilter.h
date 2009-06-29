@@ -26,26 +26,29 @@
 #include "itkImageToImageFilter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
-#include "itkRescaleIntensityImageFilter.h"
 #include "otbMultiChannelExtractROI.h"
-#include "otbMultiToMonoChannelExtractROI.h"
 #include "itkMultiplyImageFilter.h"
 #include "itkAddImageFilter.h"
-//#include "otbImageToVectorImageCastFilter.h"
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
-#include "otbVectorRescaleIntensityImageFilter.h"
 #include "itkBinaryThresholdImageFilter.h"
 
-#include "itkInvertIntensityImageFilter.h"
 
 namespace otb
 {
 /**
  * \class PrintableImageFilter
  * \brief This class is a helper class to turn a vector image to a generic 8 bytes RGB image.
+ * A mask can be used to highlight some object represebted by the same value.
+ * The mask is a binary image. Foregroung and background MaskValue are used to precise which 
+ * value of the mask in the background ans which values are objects (default resp. 0 and 255). 
+ * Output object color can be set using m_ObjectColor (default white).
+ * The output is a 3 channelsbands images, each channel is a channel of the input image. 
+ * They can be selected usin m_ChannelList or SetChannel(int ch ) method.
  *
  *  It is useful for publications for instance.
+ * 
+ * \sa itkImageToImageFilter
  **/
   
 template <class TInputImage , class TMaskImage = otb::Image<unsigned char, 2> >
@@ -60,37 +63,28 @@ public itk::ImageToImageFilter<TInputImage, otb::VectorImage<unsigned char, 2> >
   typedef itk::SmartPointer<const Self>                   ConstPointer;
   
   typedef TInputImage                                     InputImageType;
-  //typedef typename InputImageType::Pointer                InputImagePointerType;
   typedef typename InputImageType::PixelType              InputPixelType;
   typedef typename InputImageType::InternalPixelType      InputInternalPixelType;
-  //typedef typename Image<InputInternalPixelType, 2>       SingleInputImageType;
   typedef unsigned char                                   OutputInternalPixelType;
   typedef VectorImage<OutputInternalPixelType,2>          OutputImageType;
   typedef OutputImageType::PixelType                      OutputPixelType;
   
-  typedef TMaskImage                                                        MaskImageType;
-  typedef typename MaskImageType::Pointer                                   MaskImagePointerType;
+  typedef TMaskImage                                      MaskImageType;
+  typedef typename MaskImageType::Pointer                 MaskImagePointerType;
   typedef typename MaskImageType::PixelType               MaskPixelType;   
 
   typedef VectorRescaleIntensityImageFilter<InputImageType,OutputImageType> VectorRescalerType;
-  //typedef itk::RescaleIntensityImageFilter<MaskImageType, MaskImageType>    MaskRescalerType;
   
-  
-  //typedef otb::MultiChannelExtractROI<OutputInternalPixelType,
-  //OutputInternalPixelType>              ChannelExtractorType;
   typedef otb::MultiChannelExtractROI<InputInternalPixelType,
-                                      InputInternalPixelType>              ChannelExtractorType;
+                                      InputInternalPixelType>               ChannelExtractorType;
   typedef typename ChannelExtractorType::ChannelsType                       ChannelsType;
 
 
   /** Filters */
-  //typedef itk::InvertIntensityImageFilter<MaskImageType,MaskImageType>       InvertIntensityImageFilterType;
-  typedef itk::BinaryThresholdImageFilter<MaskImageType,MaskImageType>      InvertIntensityImageFilterType;
-  typedef typename InvertIntensityImageFilterType::Pointer                   InvertIntensityImageFilterPointerType;
+  typedef itk::BinaryThresholdImageFilter<MaskImageType,MaskImageType>       ThresholdImageFilterType;
+  typedef typename ThresholdImageFilterType::Pointer                         ThresholdImageFilterPointerType;
   typedef typename itk::MultiplyImageFilter<OutputImageType, MaskImageType>  MultiplierType;
   typedef typename MultiplierType::Pointer                                   MultiplierPointerType;
-  //typedef ImageToVectorImageCastFilter<MaskImageType, OutputImageType>       CasterFilterType;
-  //typedef typename CasterFilterType::Pointer                                 CasterFilterPointerType;
   typedef otb::VectorRescaleIntensityImageFilter<OutputImageType,OutputImageType> RescalerFilterType;
   typedef typename RescalerFilterType::Pointer                               RescalerFilterPointerType;
   typedef typename itk::AddImageFilter<OutputImageType, OutputImageType>     AdderFilterType;
@@ -140,6 +134,7 @@ public itk::ImageToImageFilter<TInputImage, otb::VectorImage<unsigned char, 2> >
   {
     return m_ChannelList;
   }
+  /* Set the selected channle index (order is important) */
   void SetChannelList( ChannelsType chList )
   {
     if(chList.size() != 3)
@@ -150,6 +145,7 @@ public itk::ImageToImageFilter<TInputImage, otb::VectorImage<unsigned char, 2> >
     this->Modified();
   }
   
+  /** Output Mask Object color. */
   void SetObjectColor( OutputPixelType val )
   {
     if(val.GetSize() != 3)
@@ -181,7 +177,7 @@ public itk::ImageToImageFilter<TInputImage, otb::VectorImage<unsigned char, 2> >
   typename VectorRescalerType::Pointer   m_Rescaler;
   typename ChannelExtractorType::Pointer m_Extractor;
     
-  InvertIntensityImageFilterPointerType m_InvertIntensityImageFilter;
+  ThresholdImageFilterPointerType       m_MaskThresholder;
   MultiplierPointerType                 m_Multiplier;
   CasterFilterPointerType               m_MaskCaster;
   RescalerFilterPointerType             m_MaskRescaler;
