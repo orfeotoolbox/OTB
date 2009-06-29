@@ -363,7 +363,7 @@ ADD_TEST(msTuWaveletOperatorNew ${MULTISCALE_TESTS4}
          otbWaveletOperatorNew )
 
 # Further tests ar skiped for the moment due to unexpected "Multiple Defined" errors...
-IF(DESACTIVATED_FOR_NOW)
+#IF(DESACTIVATED_FOR_NOW)
 
 ADD_TEST(msTuWaveletOperator ${MULTISCALE_TESTS4} 
          otbWaveletOperator )
@@ -449,7 +449,7 @@ ADD_TEST(msTvWaveletPacketMultiScaleTransform ${MULTISCALE_TESTS4}
           ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketMultiScale.tif
 )
 
-ENDIF(DESACTIVATED_FOR_NOW)
+#ENDIF(DESACTIVATED_FOR_NOW)
 
 
 # -------       Fichiers sources CXX -----------------------------------
@@ -491,16 +491,16 @@ otbGeodesicMorphologyIterativeDecompositionImageFilter.cxx
 )
 SET(BasicMultiScale_SRCS4
 otbWaveletOperatorNew.cxx
-#otbWaveletOperator.cxx
-#otbWaveletFilterBankNew.cxx
-#otbWaveletInverseFilterBankNew.cxx
-#otbWaveletFilterBank.cxx
-#otbWaveletTransformNew.cxx
-#otbWaveletInverseTransformNew.cxx
-#otbWaveletTransform.cxx
-#otbWaveletPacketTransformNew.cxx
-#otbWaveletPacketInverseTransformNew.cxx
-#otbWaveletPacketTransform.cxx
+otbWaveletOperator.cxx
+otbWaveletFilterBankNew.cxx
+otbWaveletInverseFilterBankNew.cxx
+otbWaveletFilterBank.cxx
+otbWaveletTransformNew.cxx
+otbWaveletInverseTransformNew.cxx
+otbWaveletTransform.cxx
+otbWaveletPacketTransformNew.cxx
+otbWaveletPacketInverseTransformNew.cxx
+otbWaveletPacketTransform.cxx
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)

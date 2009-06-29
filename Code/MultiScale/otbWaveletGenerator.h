@@ -21,7 +21,10 @@
 #ifndef __otbWaveletGenerator_h
 #define __otbWaveletGenerator_h
 
+#include <vector>
+#include "itkMacro.h"
 #include "itkLightObject.h"
+#include "itkObjectFactory.h"
 
 namespace otb {
 
@@ -99,9 +102,11 @@ private:
 
 } // end of namespace otb
 
+/*
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbWaveletGenerator.txx"
 #endif
+*/
 
 #endif
 

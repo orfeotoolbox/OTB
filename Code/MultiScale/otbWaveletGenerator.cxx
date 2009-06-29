@@ -18,10 +18,11 @@
 
 =========================================================================*/
 
-#ifndef __otbWaveletGenerator_txx
-#define __otbWaveletGenerator_txx
+//#ifndef __otbWaveletGenerator_txx
+//#define __otbWaveletGenerator_txx
 #include "otbWaveletGenerator.h"
 
+#include <vcl_cmath.h>
 #include "itkExceptionObject.h"
 
 namespace otb {
@@ -510,9 +511,24 @@ WaveletGenerator<SYMLET8>
   coeff.resize(9);
 }
 
+/*
+ *  Forcing instantiation
+ */
+
+template class WaveletGenerator< HAAR >;
+template class WaveletGenerator< DB4 >;
+template class WaveletGenerator< DB6 >;
+template class WaveletGenerator< DB8 >;
+template class WaveletGenerator< DB12 >;
+template class WaveletGenerator< DB20 >;
+template class WaveletGenerator< SPLINE_BIORTHOGONAL_2_4 >;
+template class WaveletGenerator< SPLINE_BIORTHOGONAL_4_4 >;
+template class WaveletGenerator< SYMLET8 >;
+
 } // end of namespace otb
 
-#endif
+//#endif
+
 
 
 
