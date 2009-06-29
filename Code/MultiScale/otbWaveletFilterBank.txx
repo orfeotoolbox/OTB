@@ -1041,8 +1041,8 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 
         while ( !out.IsAtEnd() )
         {  
-          out.Set( innerProduct( lowIter, lowPassOperator ) 
-                     + innerProduct( highIter, highPassOperator ) );
+          out.Set( ( innerProduct( lowIter, lowPassOperator ) 
+                     + innerProduct( highIter, highPassOperator ) ) / 2. );
 
           ++lowIter;
           ++highIter;
@@ -1207,8 +1207,8 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 
         while ( !out.IsAtEnd() )
         {  
-          out.Set( innerProduct( lowIter, lowPassOperator ) 
-                      + innerProduct( highIter, highPassOperator ) );
+          out.Set( ( innerProduct( lowIter, lowPassOperator ) 
+                      + innerProduct( highIter, highPassOperator ) ) / 2. );
 
           ++lowIter;
           ++highIter;
