@@ -24,16 +24,16 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "itkRescaleIntensityImageFilter.h"
 
+#include "otbWaveletOperator.h"
 #include "otbWaveletFilterBank.h"
-
-#include "otbHaarOperator.h"
-#include "otbSplineBiOrthogonalOperator.h"
 
 int otbWaveletFilterBank( int argc, char * argv[] )
 {
   const char * inputFileName = argv[1];
-  const char * prefix = argv[2];
+  const unsigned int decimFactor = atoi(argv[2]); // 1 for multiscale, 2 for multiresolution
+  const char * outputFileName = argv[3];
 
   const int Dimension = 2;
   typedef double PixelType;
@@ -44,33 +44,48 @@ int otbWaveletFilterBank( int argc, char * argv[] )
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( inputFileName );
 
-  /* Transformation */
-  typedef otb::LowPassHaarOperator< otb::FORWARD, PixelType, Dimension > LowPassOperator;
-  typedef otb::HighPassHaarOperator< otb::FORWARD, PixelType, Dimension > HighPassOperator;
-  //typedef otb::LowPassSplineBiOrthogonalOperator< otb::FORWARD, PixelType, Dimension > LowPassOperator;
-  //typedef otb::HighPassSplineBiOrthogonalOperator< otb::FORWARD, PixelType, Dimension > HighPassOperator;
+  /* Wavelet choice */
+  //const otb::MotherWaveletOperatorEnum wvltID = otb::HAAR;
+  //const otb::MotherWaveletOperatorEnum wvltID = otb::DB4;
+  //const otb::MotherWaveletOperatorEnum wvltID = otb::DB6;
+  //const otb::MotherWaveletOperatorEnum wvltID = otb::DB8;
+  //const otb::MotherWaveletOperatorEnum wvltID = otb::DB12;
+  //const otb::MotherWaveletOperatorEnum wvltID = otb::SPLINE_BIORTHOGONAL_2_4;
+  //const otb::MotherWaveletOperatorEnum wvltID = otb::SPLINE_BIORTHOGONAL_4_4;
+  const otb::MotherWaveletOperatorEnum wvltID = otb::SYMLET8;
 
-  typedef otb::WaveletFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator, otb::FORWARD >
+  /* Forward Transformation */
+  typedef otb::WaveletOperator< wvltID, otb::FORWARD, PixelType, Dimension > WaveletOperator;
+  typedef otb::WaveletFilterBank< ImageType, ImageType, WaveletOperator, otb::FORWARD >
     FilterType;
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );
-  filter->SetSubsampleImageFactor(1);
+  filter->SetSubsampleImageFactor( decimFactor );
 
-  filter->Update();
-
+  /* Inverse Transformation */
+  typedef otb::WaveletOperator< wvltID, otb::INVERSE, PixelType, Dimension > InvWaveletOperator;
+  typedef otb::WaveletFilterBank< ImageType, ImageType, InvWaveletOperator, otb::INVERSE >
+    InvFilterType;
+  InvFilterType::Pointer invFilter = InvFilterType::New();
   for ( unsigned int i = 0; i < filter->GetNumberOfOutputs(); i++ )
-  {
-    std::stringstream filename;
-    filename << prefix;
-    filename << "-" << i << ".tif";
+    invFilter->SetInput( i, filter->GetOutput(i) );
+  invFilter->SetSubsampleImageFactor( filter->GetSubsampleImageFactor() );
 
-    typedef otb::ImageFileWriter<ImageType> WriterType;
-    WriterType::Pointer writer = WriterType::New();
-    writer->SetFileName(filename.str());
-    writer->SetInput(filter->GetOutput(i));
-    writer->Update();
+  /* Saving output */
+  typedef unsigned char OutputPixelType;
+  typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
+  typedef itk::RescaleIntensityImageFilter< ImageType, OutputImageType > RescalerType;
+  RescalerType::Pointer rescaler = RescalerType::New();
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetOutputMaximum(255);
+  rescaler->SetInput( invFilter->GetOutput() );
 
-  }
+  typedef otb::ImageFileWriter< OutputImageType > WriterType;
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName( outputFileName );
+  writer->SetInput( rescaler->GetOutput() );
+  writer->Update();
+
   return EXIT_SUCCESS;
 }
 

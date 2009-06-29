@@ -32,6 +32,8 @@ namespace otb {
 /** \class SubsampleImageFilter
  * \brief Performs a down sampling of an image
  *
+ * This class performs a simple resampling image filtering. 
+ *
  * The third template is a FORWARD/INVERSE InverseOrForwardTransformationEnum 
  * enumeration type. With FORWARD, the output image is of the same size of the one of 
  * the input image. But the output image contains only co-located subsample, the reset being 0.
@@ -41,7 +43,7 @@ namespace otb {
  *
  * \sa ResampleImageFilter
  * \sa SubsampleImageRegionConstIterator
- * \sa DecimateIMageFilter
+ * \sa DecimateImageFilter
  */
 template < class TInputImage, class TOutputImage, 
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
@@ -78,6 +80,7 @@ public:
   typedef typename InputImageIndexType::IndexValueType InputImageIndexValueType;
 
   typedef TOutputImage OutputImageType;
+  typedef typename OutputImageType::Pointer OutputImagePointerType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
   typedef typename OutputImageType::SizeType OutputImageSizeType;
   typedef typename OutputImageType::IndexType OutputImageIndexType;
@@ -115,6 +118,9 @@ protected:
    * That is why GenerateOutputInformation has to be redefined.
    */
   virtual void GenerateOutputInformation();
+
+  /** Set output image to 0 brfore processing */
+  virtual void BeforeThreadedGenerateData ();
 
   /** Allows multithreading */
   virtual void ThreadedGenerateData 

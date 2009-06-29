@@ -17,23 +17,28 @@ PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
 #include "otbImage.h"
-#include "otbWaveletForwardTransform.h"
-#include "otbHaarOperator.h"
+#include "otbWaveletOperator.h"
 #include "otbWaveletFilterBank.h"
+#include "otbWaveletTransform.h"
 
 int otbWaveletTransformNew(int argc, char * argv[])
 {
   const int Dimension = 2;
   typedef double PixelType;
   typedef otb::Image< PixelType, Dimension >  ImageType;
-  typedef otb::LowPassHaarOperator< otb::FORWARD, PixelType, Dimension > LowPassOperator;
-  typedef otb::HighPassHaarOperator< otb::FORWARD, PixelType, Dimension > HighPassOperator;
-  typedef otb::WaveletFilterBank< ImageType, ImageType, LowPassOperator, HighPassOperator, otb::FORWARD >
-    WaveletFilterType;
-  typedef otb::WaveletForwardTransform< ImageType, ImageType, WaveletFilterType > FilterType;
 
+  /* Wavelet choice */
+  const otb::MotherWaveletOperatorEnum wvltID = otb::SYMLET8;
 
+  /* Forward Transformation */
+  typedef otb::WaveletOperator< wvltID, otb::FORWARD, PixelType, Dimension > WaveletOperator;
+  typedef otb::WaveletFilterBank< ImageType, ImageType, WaveletOperator, otb::FORWARD > 
+    ForwardFilterBank;
+  typedef otb::WaveletTransform< ImageType, ImageType, ForwardFilterBank, otb::FORWARD > 
+    FilterType;
+  
   FilterType::Pointer filter = FilterType::New();
 
   return EXIT_SUCCESS;
 }
+
