@@ -78,10 +78,10 @@ public:
   typedef itk::Statistics::ListSample<SampleType>                     ListSampleType;
   typedef typename ListSampleType::Pointer                       ListSamplePointerType;
 
-
+  typedef itk::Statistics::DenseFrequencyContainer                   DFContainerType;
   typedef itk::Statistics::Histogram<
                   typename itk::NumericTraits<ScalarType>::RealType,1,
-                  typename itk::Statistics::DenseFrequencyContainer> HistogramType;
+                  DFContainerType> HistogramType;
   typedef typename HistogramType::Pointer                             HistogramPointerType;
   typedef ObjectList<HistogramType>                                   HistogramListType;
   typedef typename HistogramListType::Pointer                         HistogramListPointerType;
