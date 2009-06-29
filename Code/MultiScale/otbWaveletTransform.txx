@@ -127,29 +127,29 @@ void
 WaveletTransform< TInputImage, TOutputImage, TFilter, INVERSE >
 ::GenerateOutputInformation ()
 {
-  if ( GetSubsampleImageFactor() == 1 )
-    Superclass::GenerateOutputInformation();
-
   this->GetOutput()->CopyInformation( this->GetInput()->GetNthElement(0) );
 
-  InputImageRegionType inputRegion = this->GetInput()->GetNthElement(0)->GetLargestPossibleRegion();
-  SizeType inputSize = inputRegion.GetSize();
-  IndexType inputIndex = inputRegion.GetIndex();
-
-  OutputImageSizeType outputSize;
-  OutputImageIndexType outputIndex;
-
-  for ( unsigned int i = 0; i < InputImageDimension; i++ )
+  if ( GetSubsampleImageFactor() != 1 )
   {
-    outputIndex[i] = inputIndex[i] * GetSubsampleImageFactor() * GetNumberOfDecompositions();
-    outputSize[i] = inputSize[i] * GetSubsampleImageFactor() * GetNumberOfDecompositions();
+    InputImageRegionType inputRegion = this->GetInput()->GetNthElement(0)->GetLargestPossibleRegion();
+    SizeType inputSize = inputRegion.GetSize();
+    IndexType inputIndex = inputRegion.GetIndex();
+
+    OutputImageSizeType outputSize;
+    OutputImageIndexType outputIndex;
+
+    for ( unsigned int i = 0; i < InputImageDimension; i++ )
+    {
+      outputIndex[i] = inputIndex[i] * GetSubsampleImageFactor() * GetNumberOfDecompositions();
+      outputSize[i] = inputSize[i] * GetSubsampleImageFactor() * GetNumberOfDecompositions();
+    }
+
+    OutputImageRegionType outputRegion;
+    outputRegion.SetIndex( outputIndex );
+    outputRegion.SetSize( outputSize );
+
+    this->GetOutput()->SetRegions( outputRegion );
   }
-
-  OutputImageRegionType outputRegion;
-  outputRegion.SetIndex( outputIndex );
-  outputRegion.SetSize( outputSize );
-
-  this->GetOutput()->SetRegions( outputRegion );
 }
 
 template < class TInputImage, class TOutputImage, class TFilter >
