@@ -102,7 +102,7 @@ public:
 
 
   /** Extrema vector */
-  typedef std::vector<ScalarType>                    ExtremaVectorType;
+  typedef std::vector<RealScalarType>                    ExtremaVectorType;
   typedef TTransferFunction                          TransferFunctionType;
   typedef TPixelRepresentationFunction               PixelRepresentationFunctionType;
   typedef typename PixelRepresentationFunctionType::ChannelListType ChannelListType;
@@ -158,7 +158,8 @@ public:
 
     if ((spixel.Size() == 4) && (output.Size() == 4))
     {
-      output[3] = spixel[3];//just copy the alpha channel
+      assert((spixel[3] >= 0) && (spixel[3] <=255));
+      output[3] = static_cast<OutputValueType>(spixel[3]);//just copy the alpha channel
     }
 
     return output;
