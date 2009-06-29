@@ -61,7 +61,7 @@ int otbRenderingImageFilterVectorWithExpNegativeTransfer( int argc, char * argv[
   unsigned int channelRed = atoi(argv[3]);
   unsigned int channelGreen = atoi(argv[4]);
   unsigned int channelBlue = atoi(argv[5]);
-  for(unsigned int i = 0; i<nbComponents;++i)
+  for(unsigned int i = 0; i<parameters.Size();++i)
   {
     parameters[i]=atof(argv[7+i]);
     ++i;

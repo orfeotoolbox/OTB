@@ -142,6 +142,14 @@ public:
 //            << "m_TransferFunction(spixel[0])" << m_TransferFunction(spixel[0])
 //            << ", m_TransferedMinimum[0] " << m_TransferedMinimum[0]
 //            << ", m_TransferedMaximum[0] " << m_TransferedMaximum[0])
+//     otbMsgDevMacro(<<"StandardRenderingFunction::EvaluateTransferFunction "
+//            << "m_TransferFunction(spixel[1])" << m_TransferFunction(spixel[1])
+//            << ", m_TransferedMinimum[1] " << m_TransferedMinimum[1]
+//            << ", m_TransferedMaximum[1] " << m_TransferedMaximum[1])
+//     otbMsgDevMacro(<<"StandardRenderingFunction::EvaluateTransferFunction "
+//            << "m_TransferFunction(spixel[2])" << m_TransferFunction(spixel[2])
+//            << ", m_TransferedMinimum[2] " << m_TransferedMinimum[2]
+//            << ", m_TransferedMaximum[2] " << m_TransferedMaximum[2])
     if (spixel.Size() == 1)
     {
       OutputValueType value = ClampRescale(m_TransferFunction(spixel[0]),m_TransferedMinimum[0],m_TransferedMaximum[0]);
@@ -356,6 +364,7 @@ public:
      }
      m_AutoMinMax = false;
      UpdateTransferedMinMax();
+     otbMsgDevMacro(<< "StandardRenderingFunction::SetParameters: " << m_Minimum.size() << "; " << m_Maximum.size());
    }
 
   virtual void SetChannelList(std::vector<unsigned int>& channels)
@@ -397,6 +406,7 @@ protected:
   {}
   /** Destructor */
   ~StandardRenderingFunction() {}
+
   /** Perform the computation for a single value (this is done in
    * order to have the same code for vector and scalar version)
    */

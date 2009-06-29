@@ -184,13 +184,16 @@ public:
 
     if (this->GetFunctor().GetFunction() == NULL)
     {
+      otbMsgDevMacro(<<"RenderingFunction set to default");
       this->SetDefaultRenderingFunction();
     }
 
     // Initialize the rendering function
     this->GetFunctor().InitializeFunction();
-    otbMsgDevMacro(<<"RenderingImageFilter::BeforeThreadedGenerateData():"<< " Output functor size "
+    otbMsgDevMacro(<<"RenderingImageFilter::BeforeThreadedGenerateData():");
+    otbMsgDevMacro(<< " - Output functor size "
             << (this->GetFunctor().GetFunction())->GetPixelRepresentationSize());
+    otbMsgDevMacro(<<"Rendering Funtion:" << this->GetFunctor().GetFunction());
   }
 
  protected:
