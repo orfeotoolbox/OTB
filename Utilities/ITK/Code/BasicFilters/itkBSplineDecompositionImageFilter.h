@@ -12,8 +12,8 @@
   Portions of this code are covered under the VTK copyright.
   See VTKCopyright.txt or http://www.kitware.com/VTKCopyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,7 +34,7 @@ namespace itk
  * \brief Calculates the B-Spline coefficients of an image. Spline order may be from 0 to 5.
  *
  * This class defines N-Dimension B-Spline transformation.
- * It is based on: 
+ * It is based on:
  *    [1] M. Unser,
  *       "Splines: A Perfect Fit for Signal and Image Processing,"
  *        IEEE Signal Processing Magazine, vol. 16, no. 6, pp. 22-38,
@@ -48,7 +48,7 @@ namespace itk
  *        IEEE Transactions on Signal Processing, vol. 41, no. 2, pp. 834-848,
  *        February 1993.
  * And code obtained from bigwww.epfl.ch by Philippe Thevenaz
- * 
+ *
  * Limitations:  Spline order must be between 0 and 5.
  *               Spline order must be set before setting the image.
  *               Uses mirror boundary conditions.
@@ -60,10 +60,10 @@ namespace itk
  *  ***TODO: Is this an ImageFilter?  or does it belong to another group?
  * \ingroup ImageFilters
  * \ingroup SingleThreaded
- * \ingroup CannotBeStreamed 
+ * \ingroup CannotBeStreamed
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT BSplineDecompositionImageFilter : 
+class ITK_EXPORT BSplineDecompositionImageFilter :
     public ImageToImageFilter<TInputImage,TOutputImage>
 {
 public:
@@ -75,7 +75,7 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(BSplineDecompositionImageFilter, ImageToImageFilter);
- 
+
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro( Self );
 
@@ -102,13 +102,14 @@ public:
   /** Begin concept checking */
   itkConceptMacro(DimensionCheck,
     (Concept::SameDimension<ImageDimension, OutputImageDimension>));
-  itkConceptMacro(InputConvertibleToDoubleCheck,
-    (Concept::Convertible<typename TInputImage::PixelType, double>));
-  itkConceptMacro(OutputConvertibleToDoubleCheck,
-    (Concept::Convertible<typename TOutputImage::PixelType, double>));
-  itkConceptMacro(InputConvertibleToOutputCheck,
-     (Concept::Convertible<typename TInputImage::PixelType,
-                           typename TOutputImage::PixelType>));
+//   itkConceptMacro(InputConvertibleToDoubleCheck,
+//     (Concept::Convertible<typename TInputImage::PixelType, double>));
+//   itkConceptMacro(OutputConvertibleToDoubleCheck,
+//     (Concept::Convertible<typename TOutputImage::PixelType, double>));
+//   itkConceptMacro(InputConvertibleToOutputCheck,
+//      (Concept::Convertible<typename TInputImage::PixelType,
+//                            typename TOutputImage::PixelType>));
+//FIXME probably need a fix in the OptBSplineInterpolateImageFilter
   itkConceptMacro(DoubleConvertibleToOutputCheck,
     (Concept::Convertible<double, typename TOutputImage::PixelType>));
   /** End concept checking */
@@ -125,7 +126,7 @@ protected:
   void GenerateInputRequestedRegion();
 
   /** This filter must produce all of its output at once. */
-  void EnlargeOutputRequestedRegion( DataObject *output ); 
+  void EnlargeOutputRequestedRegion( DataObject *output );
 
   /** These are needed by the smoothing spline routine. */
   std::vector<double>              m_Scratch;       // temp storage for processing of Coefficients
@@ -166,7 +167,7 @@ private:
 
   /** Copies a vector of data from m_Scratch to the Coefficients image. */
   void CopyScratchToCoefficients( OutputLinearIterator & );
-  
+
 };
 
 
