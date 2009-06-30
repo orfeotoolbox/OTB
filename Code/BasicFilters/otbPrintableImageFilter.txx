@@ -35,13 +35,6 @@ PrintableImageFilter<TInputImage, TMaskImage>
   m_Extractor = ChannelExtractorType::New();
   
   m_Rescaler->SetInput( m_Extractor->GetOutput() );
-  /*
-  m_MaskRescaler = RescalerFilterType::New();
-  m_MaskThresholder =  ThresholdImageFilterType::New();
-  m_Multiplier =  MultiplierType::New();
-  m_MaskCaster = CasterFilterType::New();
-  m_Adder = AdderFilterType::New();
-  */
   m_MaskFilter = FunctorFilterType::New();
 
   m_ChannelList = ChannelsType(3,2);
@@ -50,7 +43,6 @@ PrintableImageFilter<TInputImage, TMaskImage>
   m_ObjectColor.SetSize( 3 );
   m_ObjectColor.Fill(255);
 
-  //m_ForegroundMaskValue = 1;
   m_BackgroundMaskValue = 0;
 }
 
@@ -132,11 +124,7 @@ PrintableImageFilter<TInputImage, TMaskImage>
 
 /*
  * If no mask used, just rescale the input between 0 and 255.
- * Else, mBin = binarized mask (between 0 and 1)
- * mul = input*mBin
- * mVect = 3*mask (each band is the input mask)
- * mColor = objectColor*mVect
- * output = mul+mColor
+ * Else, sur M%askFunctor.
  */
 template <class TInputImage, class TMaskImage>
 void
@@ -145,8 +133,7 @@ PrintableImageFilter<TInputImage, TMaskImage>
 {
   this->BeforeGenerateData();
 
-  // let this loop to be compliant with previous version of the class where m_ChannelList didn't exist...
-  
+  // let this loop to be compliant with previous version of the class where m_ChannelList didn't exist... 
   if(m_Extractor->GetNbChannels() == 0)
     {
       for(unsigned int i=0; i<m_ChannelList.size(); i++)
@@ -175,60 +162,6 @@ PrintableImageFilter<TInputImage, TMaskImage>
     }
   else
     {
-      /*
-      m_MaskThresholder->SetInput(this->GetInputMask());
-      if(m_ForegroundMaskValue>m_BackgroundMaskValue)
-	{
-	  m_MaskThresholder->SetInsideValue(0);
-	  m_MaskThresholder->SetOutsideValue(1);
-	}
-      else
-	{
-	  m_MaskThresholder->SetInsideValue(1);
-	  m_MaskThresholder->SetOutsideValue(0);
-	}
-      MaskPixelType thresh = static_cast<MaskPixelType>(static_cast<double>(m_ForegroundMaskValue+m_BackgroundMaskValue)/2);
-      m_MaskThresholder->SetLowerThreshold(thresh);
-      m_MaskThresholder->SetUpperThreshold(itk::NumericTraits<MaskPixelType>::max());
-
-      m_Multiplier->SetInput1( m_Rescaler->GetOutput());
-      m_Multiplier->SetInput2( m_MaskThresholder->GetOutput());
-      m_Multiplier->UpdateOutputInformation();
-      
-      typename ImageListType::Pointer imList = ImageListType::New();
-      for(unsigned int i=0; i<m_Extractor->GetNbChannels(); i++)
-	imList->PushBack( this->GetInputMask());
-
-      m_MaskCaster->SetInput(imList);
-
-      OutputPixelType mini,maxi;
-      if(m_ForegroundMaskValue>m_BackgroundMaskValue)
-	{
-	  mini.SetSize(m_Extractor->GetNbChannels());
-	  mini.Fill( std::min(m_BackgroundMaskValue, m_ForegroundMaskValue));
-	  maxi = m_ObjectColor;
-	}
-      else
-	{
-	  mini = m_ObjectColor;
-	  maxi.SetSize(m_Extractor->GetNbChannels());
-	  maxi.Fill( std::min(m_BackgroundMaskValue, m_ForegroundMaskValue));
-	}
-
-      
-      m_MaskRescaler->SetOutputMinimum(mini);
-      m_MaskRescaler->SetOutputMaximum(maxi);
-      m_MaskRescaler->SetClampThreshold(1e-6);
-      m_MaskRescaler->SetInput(m_MaskCaster->GetOutput());
-
-      m_Adder->SetInput1( m_Multiplier->GetOutput()  );
-      m_Adder->SetInput2( m_MaskRescaler->GetOutput() );
-
-
-      m_Adder->GraftOutput( this->GetOutput() );
-      m_Adder->Update();
-      this->GraftOutput( m_Adder->GetOutput() );
-      */
       m_MaskFilter->SetInput1(m_Rescaler->GetOutput());
       m_MaskFilter->SetInput2(this->GetInputMask());
       m_MaskFilter->GraftOutput( this->GetOutput() );
