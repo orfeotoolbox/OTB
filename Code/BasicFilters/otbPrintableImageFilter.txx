@@ -35,20 +35,22 @@ PrintableImageFilter<TInputImage, TMaskImage>
   m_Extractor = ChannelExtractorType::New();
   
   m_Rescaler->SetInput( m_Extractor->GetOutput() );
-  
+  /*
   m_MaskRescaler = RescalerFilterType::New();
   m_MaskThresholder =  ThresholdImageFilterType::New();
   m_Multiplier =  MultiplierType::New();
   m_MaskCaster = CasterFilterType::New();
   m_Adder = AdderFilterType::New();
-  
+  */
+  m_MaskFilter = FunctorFilterType::New();
+
   m_ChannelList = ChannelsType(3,2);
   m_ChannelList[1] = 3;
   m_ChannelList[2] = 4;
   m_ObjectColor.SetSize( 3 );
   m_ObjectColor.Fill(255);
 
-  m_ForegroundMaskValue = 1;
+  //m_ForegroundMaskValue = 1;
   m_BackgroundMaskValue = 0;
 }
 
@@ -173,6 +175,7 @@ PrintableImageFilter<TInputImage, TMaskImage>
     }
   else
     {
+      /*
       m_MaskThresholder->SetInput(this->GetInputMask());
       if(m_ForegroundMaskValue>m_BackgroundMaskValue)
 	{
@@ -225,6 +228,12 @@ PrintableImageFilter<TInputImage, TMaskImage>
       m_Adder->GraftOutput( this->GetOutput() );
       m_Adder->Update();
       this->GraftOutput( m_Adder->GetOutput() );
+      */
+      m_MaskFilter->SetInput1(m_Rescaler->GetOutput());
+      m_MaskFilter->SetInput2(this->GetInputMask());
+      m_MaskFilter->GraftOutput( this->GetOutput() );
+      m_MaskFilter->Update();
+      this->GraftOutput( m_MaskFilter->GetOutput() );
     }
   
 }

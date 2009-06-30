@@ -25,25 +25,87 @@
 #include "otbImage.h"
 #include "itkImageToImageFilter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
-#include "itkRescaleIntensityImageFilter.h"
 #include "otbMultiChannelExtractROI.h"
-#include "itkMultiplyImageFilter.h"
-#include "itkAddImageFilter.h"
-#include "otbImageList.h"
-#include "otbImageListToVectorImageFilter.h"
-#include "itkBinaryThresholdImageFilter.h"
-
+#include "itkBinaryFunctorImageFilter.h"
 
 namespace otb
 {
+namespace Functor
+{
+/**
+ * \class MaskFunctor
+ * \brief Output is a InputPixel if MaskPixel is m_Background a defined other value (m_ObjkeectColor) else.
+ */
+
+template<class TInputPixel, class TMaskPixel, class TOutputPixel>
+class ITK_EXPORT MaskFunctor
+{
+  public :
+    MaskFunctor()
+    {
+      m_BackgroundValue = 0;
+      m_ObjectColor.SetSize(3);
+      m_ObjectColor.Fill(255);
+    };
+  ~MaskFunctor(){};
+  
+  typedef TInputPixel                         InputPixelType;
+  typedef TMaskPixel                          MaskPixelType;
+  typedef TOutputPixel                        OutputPixelType;
+  typedef typename OutputPixelType::ValueType OutputInternalPixelType;
+  
+  MaskPixelType GetBackgroundValue()
+    {
+      return m_BackgroundValue;
+    }
+  void SetBackgroundValue( MaskPixelType val )
+    {
+      m_BackgroundValue = val;
+    }
+  
+ OutputPixelType GetObjectColor()
+    {
+      return m_ObjectColor;
+    }
+  void SetObjectColor( OutputPixelType val )
+    {
+      m_ObjectColor = val;
+    }
+  
+  inline OutputPixelType operator()(InputPixelType inPix, MaskPixelType maskPix) const
+    {
+      OutputPixelType outPix;
+      if( maskPix==m_BackgroundValue )
+	{
+	  outPix.SetSize( inPix.Size() );
+	  for(unsigned int i=0; i<outPix.Size(); i++)
+	    {
+	      outPix[i] = static_cast<OutputInternalPixelType>(inPix[i]);
+	    }
+	}
+      else
+	{
+	  outPix = m_ObjectColor;
+	}
+      
+      return outPix;
+    }
+  
+ protected:
+  MaskPixelType   m_BackgroundValue;
+  OutputPixelType m_ObjectColor;
+};
+}
+
+
 /**
  * \class PrintableImageFilter
  * \brief This class is a helper class to turn a vector image to a generic 8 bytes RGB image.
  * A mask can be used to highlight some object represebted by the same value.
- * The mask is a binary image. Foregroung and background MaskValue are used to precise which 
- * value of the mask in the background ans which values are objects (default resp. 0 and 255). 
+ * The mask is a binary image. Background MaskValue is used to precise which 
+ * value of the mask are objects (default 0). 
  * Output object color can be set using m_ObjectColor (default white).
- * The output is a 3 channelsbands images, each channel is a channel of the input image. 
+ * The output is a 3 channels image, each channel is a channel of the input image. 
  * They can be selected usin m_ChannelList or SetChannel(int ch ) method.
  *
  *  It is useful for publications for instance.
@@ -79,20 +141,10 @@ public itk::ImageToImageFilter<TInputImage, otb::VectorImage<unsigned char, 2> >
                                       InputInternalPixelType>               ChannelExtractorType;
   typedef typename ChannelExtractorType::ChannelsType                       ChannelsType;
 
-
-  /** Filters */
-  typedef itk::BinaryThresholdImageFilter<MaskImageType,MaskImageType>       ThresholdImageFilterType;
-  typedef typename ThresholdImageFilterType::Pointer                         ThresholdImageFilterPointerType;
-  typedef typename itk::MultiplyImageFilter<OutputImageType, MaskImageType>  MultiplierType;
-  typedef typename MultiplierType::Pointer                                   MultiplierPointerType;
-  typedef otb::VectorRescaleIntensityImageFilter<OutputImageType,OutputImageType> RescalerFilterType;
-  typedef typename RescalerFilterType::Pointer                               RescalerFilterPointerType;
-  typedef typename itk::AddImageFilter<OutputImageType, OutputImageType>     AdderFilterType;
-  typedef typename AdderFilterType::Pointer                                  AdderFilterPointerType;
-  typedef ImageList<MaskImageType>                                           ImageListType;
-  typedef ImageListToVectorImageFilter<ImageListType, OutputImageType>       CasterFilterType;
-  typedef typename CasterFilterType::Pointer                                 CasterFilterPointerType;
- 
+  typedef Functor::MaskFunctor<InputPixelType,MaskPixelType,OutputPixelType> FunctorType;
+  typedef itk::BinaryFunctorImageFilter<OutputImageType, MaskImageType, 
+                                        OutputImageType, FunctorType   >     FunctorFilterType;
+  typedef typename FunctorFilterType::Pointer                                FunctorFilterPointerType;
 
   /** Method for creation through object factory */
   itkNewMacro(Self);
@@ -153,14 +205,18 @@ public itk::ImageToImageFilter<TInputImage, otb::VectorImage<unsigned char, 2> >
       itkExceptionMacro(<<"Invalid object color, size is "<<val.Size()<<" instead of 3");
     }
     m_ObjectColor = val;
+    m_MaskFilter->GetFunctor().SetObjectColor( val );
     this->Modified();
   }
   itkGetMacro(ObjectColor, OutputPixelType);
   
-  itkSetMacro(BackgroundMaskValue, MaskPixelType);
+  void SetBackgroundMaskValue( MaskPixelType val )
+  {
+    m_BackgroundMaskValue = val;
+    m_MaskFilter->GetFunctor().SetBackgroundValue( val );
+    this->Modified();
+  }
   itkGetMacro(BackgroundMaskValue, MaskPixelType); 
-  itkSetMacro(ForegroundMaskValue, MaskPixelType);
-  itkGetMacro(ForegroundMaskValue, MaskPixelType); 
 
   protected:
 
@@ -176,13 +232,8 @@ public itk::ImageToImageFilter<TInputImage, otb::VectorImage<unsigned char, 2> >
   
   typename VectorRescalerType::Pointer   m_Rescaler;
   typename ChannelExtractorType::Pointer m_Extractor;
-    
-  ThresholdImageFilterPointerType       m_MaskThresholder;
-  MultiplierPointerType                 m_Multiplier;
-  CasterFilterPointerType               m_MaskCaster;
-  RescalerFilterPointerType             m_MaskRescaler;
-  AdderFilterPointerType                m_Adder;
-
+  // Foreground mask value
+  FunctorFilterPointerType              m_MaskFilter;
   // Objects (of the mask) will be displayer with the choosen color.
   OutputPixelType m_ObjectColor;
   // Use mask
@@ -190,7 +241,7 @@ public itk::ImageToImageFilter<TInputImage, otb::VectorImage<unsigned char, 2> >
   // Used channel for output Image
   ChannelsType m_ChannelList;
   // Foreground mask value
-  MaskPixelType m_ForegroundMaskValue;
+  //MaskPixelType m_ForegroundMaskValue;
   // Background mask value
   MaskPixelType m_BackgroundMaskValue;
   

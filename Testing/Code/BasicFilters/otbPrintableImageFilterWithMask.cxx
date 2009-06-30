@@ -74,7 +74,6 @@ int otbPrintableImageFilterWithMask( int argc, char * argv[] )
   objectColor[2] = 0;
   printableImageFilter->SetObjectColor( objectColor );
   printableImageFilter->SetBackgroundMaskValue(static_cast<MaskPixelType>(atof(argv[4])));
-  printableImageFilter->SetForegroundMaskValue(static_cast<MaskPixelType>(atof(argv[5])));
  
 
   writer->SetInput( printableImageFilter->GetOutput() );

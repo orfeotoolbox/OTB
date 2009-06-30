@@ -535,7 +535,6 @@ ADD_TEST(bfTvPrintableImageFilterWithMask ${BASICFILTERS_TESTS5}
 		${INPUTDATA}/carre.png
 		${TEMP}/bfTvPrintableImageFilterWithMask.png
 		0 # background
-		255 # foreground
 		)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
