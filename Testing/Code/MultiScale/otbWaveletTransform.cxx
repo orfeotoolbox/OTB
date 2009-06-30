@@ -77,18 +77,10 @@ int otbWaveletTransform( int argc, char * argv[] )
   invFilter->Update();
 
   /* Writing the output */
-  typedef unsigned char OutputPixelType;
-  typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
-  typedef itk::RescaleIntensityImageFilter< ImageType, OutputImageType > RescalerType;
-  RescalerType::Pointer rescaler = RescalerType::New();
-  rescaler->SetOutputMinimum(0);
-  rescaler->SetOutputMaximum(255);
-  rescaler->SetInput( invFilter->GetOutput() );
-
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName( outputFileName );
-  writer->SetInput( rescaler->GetOutput() );
+  writer->SetInput( invFilter->GetOutput() );
   writer->Update();
 
   return EXIT_SUCCESS;
