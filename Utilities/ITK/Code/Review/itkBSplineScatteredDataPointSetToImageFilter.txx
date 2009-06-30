@@ -919,7 +919,9 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
         idx[dimension] %=
           lattice->GetLargestPossibleRegion().GetSize()[dimension];
         }
-      data += ( lattice->GetPixel( idx ) * B );
+
+      if(idx[dimension]>=0 && idx[dimension]<lattice->GetLargestPossibleRegion().GetSize()[dimension])
+	data += ( lattice->GetPixel( idx ) * B );
       }
     It.Set( data );
     }
