@@ -51,16 +51,6 @@ ADD_TEST(utTuOssimElevManagerTest ${UTILITIES_TESTS}
         ossimElevManagerTest
         )
 
-
-ADD_TEST(utTvIjBSplineScatteredDataPointSetToImageFilterTest ${UTILITIES_TESTS}
---compare-image ${EPSILON}
-		${BASELINE}/ijBSplineScatteredDataPointSetToImageFilterTestOutput.hdr
-		${TEMP}/ijBSplineScatteredDataPointSetToImageFilterTestOutput.hdr
-		ijBSplineScatteredDataPointSetToImageFilterTest
-		${INPUTDATA}/brain.png
-		${TEMP}/ijBSplineScatteredDataPointSetToImageFilterTestOutput.hdr
-)
-
 # -------            lib otbsvm   ------------------------------
 
 ADD_TEST(utTuSvmKernelFunctorTest ${UTILITIES_TESTS}
@@ -442,7 +432,6 @@ SET(UtilitiesTests_SRCS
 ossimIntegrationTest.cxx
 ossimKeywordlistTest.cxx
 ossimElevManagerTest.cxx
-ijBSplineScatteredDataPointSetToImageFilterTest.cxx
 svmGenericKernelFunctor.cxx
 svmTest.cxx
 svmGenericKernelTest.cxx
@@ -492,7 +481,6 @@ ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
 
 # -------       Select sources files suppress warning  -----------------------------------
 SET(UtilitiesTests_DisableWarning_SRCS
-    ijBSplineScatteredDataPointSetToImageFilterTest.cxx
     siftfast.cpp
     openthreadsWorkCrew.cpp
     expatchardata.cxx

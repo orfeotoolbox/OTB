@@ -526,7 +526,16 @@ ADD_TEST(bfTvPrintableImageFilter ${BASICFILTERS_TESTS5}
 		${TEMP}/bfTvPrintableImageFilter.png
 		)
 
-
+ADD_TEST(bfTvPrintableImageFilterWithMask ${BASICFILTERS_TESTS5}
+     --compare-image ${NOTOL}
+     		     ${BASELINE}/bfTvPrintableImageFilterWithMask.png
+		     ${TEMP}/bfTvPrintableImageFilterWithMask.png
+         otbPrintableImageFilterWithMask
+		${INPUTDATA}/poupees.tif
+		${INPUTDATA}/carre.png
+		${TEMP}/bfTvPrintableImageFilterWithMask.png
+		0 # background
+		)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests6 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1597,6 +1606,7 @@ otbUnaryImageFunctorWithVectorImageFilterNew.cxx
 otbUnaryImageFunctorWithVectorImageFilter.cxx
 otbPrintableImageFilterNew.cxx
 otbPrintableImageFilter.cxx
+otbPrintableImageFilterWithMask.cxx
 )
 
 # A enrichir

@@ -659,14 +659,20 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
         }
       RealType wc = this->m_PointWeights->GetElement( It.Index() );
       RealType t = Itw.Get();
-      omega->SetPixel( idx, omega->GetPixel( idx ) + wc*t*t );
+      if(idx[0]>=0 && idx[1]>=0 && idx[0]< omega->GetLargestPossibleRegion().GetSize()[0] && idx[1]< omega->GetLargestPossibleRegion().GetSize()[1])
+	omega->SetPixel( idx, omega->GetPixel( idx ) + wc*t*t );
+    
 
       PointDataType data = It.Value();
       data *= ( t / w2_sum );
       Itp.Set( data );
       data *= ( t * t * wc );
+
+        if(idx[0]>=0 && idx[1]>=0 && idx[0]< delta->GetLargestPossibleRegion().GetSize()[0] && idx[1]< delta->GetLargestPossibleRegion().GetSize()[1])
+	  {
       delta->SetPixel( idx, delta->GetPixel( idx ) + data );
       delta->GetPixel( idx ) + data;
+	  }
       }
     }
 
@@ -913,7 +919,9 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
         idx[dimension] %=
           lattice->GetLargestPossibleRegion().GetSize()[dimension];
         }
-      data += ( lattice->GetPixel( idx ) * B );
+
+      if(idx[dimension]>=0 && idx[dimension]<lattice->GetLargestPossibleRegion().GetSize()[dimension])
+	data += ( lattice->GetPixel( idx ) * B );
       }
     It.Set( data );
     }
