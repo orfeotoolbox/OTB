@@ -44,10 +44,10 @@ inline double powi(double base, int times)
 #if 1
 void info(char *fmt,...)
 {
-//  va_list ap;
-//  va_start(ap,fmt);
-//  vprintf(fmt,ap);
-//  va_end(ap);
+  va_list ap;
+  va_start(ap,fmt);
+  vprintf(fmt,ap);
+  va_end(ap);
 }
 void info_flush()
 {
