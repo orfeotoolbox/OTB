@@ -19,7 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbBSplinesInterpolateTransformDeformationFieldGenerator_h
 
 #include "otbPointSetWithTransformToDeformationFieldGenerator.h"
-#include "ijBSplineScatteredDataPointSetToImageFilter.h"
+#include "itkBSplineScatteredDataPointSetToImageFilter.h"
 #include "otbImage.h"
 #include "otbMath.h"
 #include <complex>
@@ -29,14 +29,14 @@ namespace otb
 /** \class BSplinesInterpolateTransformDeformationFieldGenerator
  *  \brief This class generate the deformation field by using spline interpolation on the parameters of the transform.
  *
- *  Spline interpolation of non regularly scattered data is provided by a filter from the insight journal,
- *  ij::BSplineScatteredDataPointSetToImageFilter. It allows interpolation using any spline order and implements a multi-level approach.
+ *  Spline interpolation of non regularly scattered data is provided
+ *  by the itk::BSplineScatteredDataPointSetToImageFilter. It allows interpolation using any spline order and implements a multi-level approach.
  *
  *  This filter is used for each parameter. One can also specify the indices of the angular parameters. Angular parameters are first
  *  converted to complex exponential, the interpolated and converted back to the angular space. This is done to avoid interpolating angular discontinuities,
  *  which is a non-sense.
  *
- *  \sa ij::BSplineScatteredDataPointSetToImageFilter
+ *  \sa itk::BSplineScatteredDataPointSetToImageFilter
  */
 template <class TPointSet, class TDeformationField>
 class ITK_EXPORT BSplinesInterpolateTransformDeformationFieldGenerator
@@ -72,7 +72,7 @@ public:
   typedef itk::Vector<ValueType,2> PointSetDataType;
   typedef otb::Image<PointSetDataType,DeformationFieldType::ImageDimension> InternalImageType;
   typedef itk::PointSet<PointSetDataType,PointSetType::PointDimension> InternalPointSetType;
-  typedef ij::BSplineScatteredDataPointSetToImageFilter<InternalPointSetType,InternalImageType>
+  typedef itk::BSplineScatteredDataPointSetToImageFilter<InternalPointSetType,InternalImageType>
   SPlineInterpolateFilterType;
   typedef typename SPlineInterpolateFilterType::Pointer SPlineInterpolateFilterPointerType;
 
