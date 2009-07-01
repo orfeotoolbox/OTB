@@ -27,6 +27,7 @@
 #include "otbListSampleToHistogramListGenerator.h"
 
 #include "otbRenderingImageFilter.h"
+#include "otbGenericRSTransform.h"
 
 namespace otb
 {
@@ -66,6 +67,9 @@ public:
   typedef itk::RGBAPixel<ScalarType>                                  RGBAPixelType;
   typedef typename ImageType::RegionType                              RegionType;
   typedef typename ImageType::IndexType                               IndexType;
+
+  typedef itk::Point<double,2>                                          PointType;
+  typedef otb::GenericRSTransform<double> TransformType;
 
   /** Output image typedef */
   typedef TOutputImage                                                OutputImageType;
@@ -172,6 +176,9 @@ public:
   /** Get the pixel description */
   virtual std::string GetPixelDescription(const IndexType & index);
 
+  /** Get the pixel location */
+  virtual PointType GetPixelLocation(const IndexType & index);
+
 protected:
   /** Constructor */
   ImageLayer();
@@ -191,6 +198,8 @@ protected:
 
   /** Update the images */
   virtual void RenderImages();
+
+  virtual void InitTransform();
 
   /** Find out the histogram size from the pixel */
   unsigned int PixelSize(ImagePointerType image, ScalarType* v) const;
@@ -223,6 +232,9 @@ private:
   /** Extract filters */
   ExtractFilterPointerType    m_ExtractFilter;
   ExtractFilterPointerType    m_ScaledExtractFilter;
+
+  /** Coordinate transform */
+  TransformType::Pointer m_Transform;
 
 }; // end class
 } // end namespace otb

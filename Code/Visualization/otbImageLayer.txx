@@ -23,6 +23,8 @@
 #include "itkTimeProbe.h"
 #include "otbStandardRenderingFunction.h"
 
+#include "otbImageKeywordlist.h"
+
 namespace otb
 {
 
@@ -54,6 +56,8 @@ ImageLayer<TImage,TOutputImage>
   // Wiring
   m_ExtractRenderingFilter->SetInput(m_ExtractFilter->GetOutput());
   m_ScaledExtractRenderingFilter->SetInput(m_ScaledExtractFilter->GetOutput());
+
+  m_Transform = TransformType::New();
 }
 
 template <class TImage, class TOutputImage>
@@ -80,6 +84,9 @@ ImageLayer<TImage,TOutputImage>
 
   // Render images
   this->RenderImages();
+
+  // Initialize the geotransform
+  this->InitTransform();
 }
 
 template <class TImage, class TOutputImage>
@@ -226,7 +233,33 @@ ImageLayer<TImage,TOutputImage>
       oss<<" (ql)"<<std::endl<<m_RenderingFunction->Describe(m_Quicklook->GetPixel(ssindex));
       }
     }
+  PointType point = this->GetPixelLocation(index);
+  oss<< "Lon: " << point[0] << " Lat: "<< point[1] << std::endl;
   return oss.str();
+}
+
+template <class TImage, class TOutputImage>
+typename ImageLayer<TImage,TOutputImage>::PointType
+ImageLayer<TImage,TOutputImage>
+::GetPixelLocation(const IndexType & index)
+{
+  PointType inputPoint;
+  inputPoint[0] = index[0];
+  inputPoint[1] = index[1];
+  return m_Transform->TransformPoint(inputPoint);
+}
+
+template <class TImage, class TOutputImage>
+void
+ImageLayer<TImage,TOutputImage>
+::InitTransform()
+{
+  const itk::MetaDataDictionary & inputDict = m_Image->GetMetaDataDictionary();
+  m_Transform->SetInputDictionary(inputDict);
+  m_Transform->SetInputOrigin(m_Image->GetOrigin());
+  m_Transform->SetInputSpacing(m_Image->GetSpacing());
+  //  m_Transform->SetDEMDirectory(m_DEMDirectory);
+  m_Transform->InstanciateTransform();
 }
 
 }
