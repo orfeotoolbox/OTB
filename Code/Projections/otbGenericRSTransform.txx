@@ -226,9 +226,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 
   if (m_InputKeywordList.GetSize()  == 0)
   {
-    ossimKeywordlist kwl;
-    itk::ExposeMetaData<ossimKeywordlist>(m_InputDictionary, MetaDataKey::OSSIMKeywordlistKey, kwl );
-    m_InputKeywordList.SetKeywordlist(kwl);
+    itk::ExposeMetaData<ImageKeywordlist>(m_InputDictionary, MetaDataKey::OSSIMKeywordlistKey, m_InputKeywordList );
   }
   if (m_InputProjectionRef.empty())
   {
