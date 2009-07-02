@@ -47,6 +47,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   m_InputTransform = NULL;
   m_OutputTransform = NULL;
   m_TransformUpToDate = false;
+  m_TransformAccuracy = UNKNOWN;
 }
 
 
@@ -176,22 +177,6 @@ template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputD
 }
 
 
-
-// template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-//     const typename GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::TransformType*
-// GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
-// ::GetTransform ()
-// {
-//   itkDebugMacro("returning MapProjection address " << this->m_Transform );
-//   if ((reinstanciateTransform) || (m_Transform == NULL))
-//   {
-//     this->InstanciateProjection();
-//   }
-//
-//   return this->m_Transform;
-// }
-
-
 template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
     const typename GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::TransformType*
 GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
@@ -220,10 +205,6 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 {
   m_Transform = TransformType::New();
 
-  //If the information was not specified by the user, it is filled from the metadata
-  //   InputVectorDataPointer input = this->GetInput();
-  //   const itk::MetaDataDictionary & m_InputDictionary = input->GetMetaDataDictionary();
-
   if (m_InputKeywordList.GetSize()  == 0)
   {
     itk::ExposeMetaData<ImageKeywordlist>(m_InputDictionary, MetaDataKey::OSSIMKeywordlistKey, m_InputKeywordList );
@@ -232,9 +213,6 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   {
     itk::ExposeMetaData<std::string>(m_InputDictionary, MetaDataKey::ProjectionRefKey, m_InputProjectionRef );
   }
-
-
-
 
   otbMsgDevMacro(<< "Information to instanciate transform: ");
   otbMsgDevMacro(<< " * Input Origin: " << m_InputOrigin);
@@ -248,12 +226,19 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   otbMsgDevMacro(<< " * Output Origin: " << m_OutputOrigin);
   otbMsgDevMacro(<< " * Output Spacing: " << m_OutputSpacing);
 
+  //Make sure that the state is clean:
+  m_InputTransform = NULL;
+  m_OutputTransform = NULL;
+
   bool firstTransformGiveGeo = true;
+  bool inputTransformIsSensor = false;
+  bool inputTransformIsMap = false;
+  bool outputTransformIsSensor = false;
+  bool outputTransformIsMap = false;
 
   //*****************************
   //Set the input transformation
   //*****************************
-
   try
     {
     if (m_InputKeywordList.GetSize()  > 0)
@@ -266,6 +251,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
         sensorModel->SetDEMDirectory(m_DEMDirectory);
         }
       m_InputTransform = sensorModel.GetPointer();
+      inputTransformIsSensor = true;
       otbMsgDevMacro(<< "Input projection set to sensor model.");
       }
     }
@@ -283,6 +269,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     if (mapTransform->GetMapProjection() != NULL)
     {
       m_InputTransform = mapTransform.GetPointer();
+      inputTransformIsMap = true;
       otbMsgDevMacro(<< "Input projection set to map transform: " << m_InputTransform);
     }
 
@@ -331,6 +318,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
         sensorModel->SetDEMDirectory(m_DEMDirectory);
         }
       m_OutputTransform = sensorModel.GetPointer();
+      outputTransformIsSensor = true;
       otbMsgDevMacro(<< "Output projection set to sensor model");
       }
     }
@@ -348,6 +336,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     if (mapTransform->GetMapProjection() != NULL)
     {
       m_OutputTransform = mapTransform.GetPointer();
+      outputTransformIsMap = true;
       otbMsgDevMacro(<< "Output projection set to map transform: " << m_OutputTransform);
     }
 
@@ -364,27 +353,25 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   }
 
 
-  //If the projection information for the output is provided, propagate it
-//   OutputVectorDataPointer output = this->GetOutput();
-//   itk::MetaDataDictionary & m_OutputDictionary = output->GetMetaDataDictionary();
-
-  //FIXME: this part will need to be propagated independantly in the VectorDataProjectionFilter
-//   if (m_OutputKeywordList.GetSize()  != 0)
-//   {
-//     ossimKeywordlist kwl;
-//     m_OutputKeywordList.convertToOSSIMKeywordlist (kwl);
-//     itk::EncapsulateMetaData<ossimKeywordlist>(m_OutputDictionary, MetaDataKey::OSSIMKeywordlistKey, kwl );
-//   }
-//   if ( !m_OutputProjectionRef.empty())
-//   {
-//     itk::EncapsulateMetaData<std::string>(m_OutputDictionary, MetaDataKey::ProjectionRefKey, m_OutputProjectionRef );
-//   }
-
-
   m_Transform->SetFirstTransform(m_InputTransform);
   m_Transform->SetSecondTransform(m_OutputTransform);
-
   m_TransformUpToDate = true;
+  //The acurracy information is a simplistic model for now and should be refined
+  if ((inputTransformIsSensor || outputTransformIsSensor) && (m_DEMDirectory.empty()))
+  {
+    //Sensor model without DEM
+    m_TransformAccuracy = ESTIMATE;
+  }
+  else if (!inputTransformIsSensor && !outputTransformIsSensor && !inputTransformIsMap && !outputTransformIsMap)
+  {
+    //no transform
+    m_TransformAccuracy = UNKNOWN;
+  }
+  else
+  {
+
+    m_TransformAccuracy = PRECISE;
+  }
 
 }
 

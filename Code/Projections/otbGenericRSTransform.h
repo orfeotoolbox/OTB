@@ -25,17 +25,12 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkTransform.h"
 #include "itkExceptionObject.h"
 #include "itkMacro.h"
-// #include "base/ossimGpt.h"
-// #include "base/ossimDpt.h"
-// #include "projection/ossimProjection.h"
-// #include "base/ossimEllipsoid.h"
-// #include "base/ossimEllipsoidFactory.h"
-// #include "base/ossimString.h"
-// #include "ossimOgcWktTranslator.h"
 #include "otbCompositeTransform.h"
 
 namespace otb
 {
+
+  enum TransformAccuracy {UNKNOWN, ESTIMATE, PRECISE};
 
   /** \class GenericRSTransform
    *  \brief This is the class to handle generic remote sensing transform
@@ -189,6 +184,9 @@ namespace otb
         return m_TransformUpToDate;
       }
 
+      /** Get Transform accuracy */
+      itkGetMacro(TransformAccuracy, TransformAccuracy);
+
       /** Methods prototypes */
       virtual const TransformType * GetTransform() const;
 
@@ -240,6 +238,8 @@ namespace otb
       GenericTransformPointerType m_InputTransform;
       GenericTransformPointerType m_OutputTransform;
       bool                        m_TransformUpToDate;
+      TransformAccuracy           m_TransformAccuracy;
+
     };
 
 
