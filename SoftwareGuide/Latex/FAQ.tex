@@ -261,8 +261,9 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 	  --> set GDAL_LIBRARY_DIRS to INSTALL_DIR/lib within CMake
 	  --> set OTB_USE_EXTERNAL_ITK to OFF within CMake
 	  --> set FLTK_DIR to INSTALL_DIR/Fltk-Binary within CMake OR
-	      if you do not have FLTK press 't' to change to advanced
-              mode and set OTB_USE_VISU to OFF
+	      if you do not have FLTK, you can use the OTB internal FLTK setting  
+	      OTB_USE_EXTERNAL_ITK to OFF. If you don't have FLTK and don't want to use 
+	      the internal one, press 't' to change to advanced mode and set OTB_USE_VISU to OFF
 	  --> generate the configuration with 'g'
        make -j 2
   \end{verbatim}
