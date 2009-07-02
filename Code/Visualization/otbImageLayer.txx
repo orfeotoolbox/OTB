@@ -238,7 +238,7 @@ ImageLayer<TImage,TOutputImage>
   if (m_Transform->IsUpToDate())
   {
     PointType point = this->GetPixelLocation(index);
-    oss<< "Lon: " << point[0] << " Lat: "<< point[1] << std::endl;
+    oss<< setiosflags(ios::fixed) << setprecision(6) << "Lon: " << point[0] << " Lat: "<< point[1] << std::endl;
   }
   return oss.str();
 }
