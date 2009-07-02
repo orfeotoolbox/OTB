@@ -60,126 +60,138 @@ namespace otb {
  */
  
 template < class TImage, class TInternalImage = TImage >
-class ITK_EXPORT ImageSeriesFileReaderBase : public ImageListSource< TImage >
+class ITK_EXPORT ImageSeriesFileReaderBase 
+  : public ImageListSource< TImage >
 {
-  public:
-    /** Standart typedefs */
-    typedef ImageSeriesFileReaderBase Self;
-    typedef ImageListSource< TImage > Superclass;
-    typedef itk::SmartPointer<Self> Pointer;
-    typedef itk::SmartPointer<const Self> ConstPointer;
+public:
+  /** Standart typedefs */
+  typedef ImageSeriesFileReaderBase Self;
+  typedef ImageListSource< TImage > Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-    /** Creation through object factory macro */
-    itkNewMacro(Self);
-    /** Runtime informations macro */
-    itkTypeMacro(ImageSeriesFileReaderBase,ImageListSource);
+  /** Creation through object factory macro */
+  itkNewMacro(Self);
+  /** Runtime informations macro */
+  itkTypeMacro(ImageSeriesFileReaderBase,ImageListSource);
 
-    typedef TImage                                      OutputImageType;
-    typedef typename OutputImageType::Pointer           OutputImagePointerType;
-    typedef typename OutputImageType::InternalPixelType PixelType;
-    typedef typename OutputImageType::ValueType         ValueType;
-    typedef typename OutputImageType::IndexType         IndexType;
-    typedef typename OutputImageType::SizeType          SizeType;
-    typedef typename OutputImageType::RegionType        RegionType;
+  typedef TImage                                      OutputImageType;
+  typedef typename OutputImageType::Pointer           OutputImagePointerType;
+  typedef typename OutputImageType::InternalPixelType PixelType;
+  typedef typename OutputImageType::ValueType         ValueType;
+  typedef typename OutputImageType::IndexType         IndexType;
+  typedef typename OutputImageType::SizeType          SizeType;
+  typedef typename OutputImageType::RegionType        RegionType;
 
-    typedef ImageList<OutputImageType>                 OutputImageListType;
-    typedef typename OutputImageListType::Pointer      OutputImageListPointerType;
-    typedef typename OutputImageListType::ConstPointer OutputImageListConstPointerType;
+  typedef ImageList<OutputImageType>                 OutputImageListType;
+  typedef typename OutputImageListType::Pointer      OutputImageListPointerType;
+  typedef typename OutputImageListType::ConstPointer OutputImageListConstPointerType;
 
-    typedef TInternalImage                                InternalImageType;
-    typedef typename InternalImageType::Pointer           InternalImagePointerType;
-    typedef typename InternalImageType::InternalPixelType InternalPixelType;
-    typedef typename InternalImageType::ValueType         InternalValueType;
-    typedef typename InternalImageType::IndexType         InternalIndexType;
-    typedef typename InternalImageType::SizeType          InternalSizeType;
-    typedef typename InternalImageType::RegionType        InternalRegionType;
+  typedef TInternalImage                                InternalImageType;
+  typedef typename InternalImageType::Pointer           InternalImagePointerType;
+  typedef typename InternalImageType::InternalPixelType InternalPixelType;
+  typedef typename InternalImageType::ValueType         InternalValueType;
+  typedef typename InternalImageType::IndexType         InternalIndexType;
+  typedef typename InternalImageType::SizeType          InternalSizeType;
+  typedef typename InternalImageType::RegionType        InternalRegionType;
 
-    typedef ImageFileReader< InternalImageType > ReaderType;
-    typedef typename ReaderType::Pointer ReaderPointerType;
+  typedef ImageFileReader< InternalImageType > ReaderType;
+  typedef typename ReaderType::Pointer ReaderPointerType;
 
-    typedef ObjectList< ReaderType > ReaderListType;
-    typedef typename ReaderListType::Pointer ReaderListPointerType;
+  typedef ObjectList< ReaderType > ReaderListType;
+  typedef typename ReaderListType::Pointer ReaderListPointerType;
 
-    /** Get the file to be read */
-    itkGetStringMacro(FileName);
-    /**
-     * Set the file to be read. Once the Filename is set, ReadMeatFile is called in order to get
-     * the number of image files to be read, the images file names, the band and region
-     * selection
-     */
-    virtual void SetFileName ( const std::string & file );
-    virtual void SetFileName ( const char * file );
+  /** Get the file to be read */
+  itkGetStringMacro(FileName);
 
-    /** Get the readers */
-    itkGetObjectMacro(ImageFileReaderList,ReaderListType);
+  /**
+   * Set the file to be read. Once the Filename is set, ReadMeatFile is called in order to get
+   * the number of image files to be read, the images file names, the band and region
+   * selection
+   */
+  virtual void SetFileName ( const std::string & file );
+  virtual void SetFileName ( const char * file );
 
-    /** Get the output list */
-    virtual unsigned int GetNumberOfOutputs () const
-    {
-      return m_ListOfFileNames.size();
-    }
-    virtual OutputImageListType * GetOutput(void);
-    virtual OutputImageType *     GetOutput( unsigned int idx );
+  /** get the Filenames */
+  std::string GetFileName ( unsigned int i ) const
+  {
+    return  this->m_ListOfFileNames.at(i);
+  }
 
-    /** Performs selective file extraction */
-    virtual OutputImageListType * GenerateOutput (void);
-    virtual OutputImageType * GenerateOutput ( unsigned int idx );
+  /** Get the readers */
+  itkGetObjectMacro(ImageFileReaderList,ReaderListType);
+  ReaderType * GetImageFileReader ( unsigned int i ) const
+  {
+    return this->m_ImageFileReaderList->GetNthElement(i);
+  }
 
-    /** Synchronization */
-    void Update ()
-    {
-      this->GenerateData();
-    }
+  /** Get the output list */
+  virtual unsigned int GetNumberOfOutputs () const
+  {
+    return m_ListOfFileNames.size();
+  }
+  virtual OutputImageListType * GetOutput(void);
+  virtual OutputImageType *     GetOutput( unsigned int idx );
 
-  protected:
-    ImageSeriesFileReaderBase();
-    virtual ~ImageSeriesFileReaderBase () { }
+  /** Performs selective file extraction */
+  virtual OutputImageListType * GenerateOutput (void);
+  virtual OutputImageType * GenerateOutput ( unsigned int idx );
 
-    enum FileType { kFileName = 0, kImageFileName, kAnyFileName };
-    /**
-     * Test files.
-     * If the filename to test is an imageFileName, the file name may be modified in
-     * order to add the appropriated path
-     */
-    virtual void TestFileExistanceAndReadability( std::string & file, FileType fileType );
-                virtual void TestBandSelection( std::vector<unsigned int> & bands ) { }
+  /** Synchronization */
+  void Update ()
+  {
+    this->GenerateData();
+  }
 
-    virtual void GenerateData ( void );
+protected:
+  ImageSeriesFileReaderBase();
+  virtual ~ImageSeriesFileReaderBase () { }
 
-    /** GenerateData
-     * This method will be specialised if template definitions follow:
-     * - TImage is a VectorImage
-     * - TImage is an Image and TInteranalImage is a VectorImage
-     * - TImage and TInternalImage are of Image type.
-     */
-    virtual void GenerateData ( unsigned int idx );
+  enum FileType { kFileName = 0, kImageFileName, kAnyFileName };
+  /**
+   * Test files.
+   * If the filename to test is an imageFileName, the file name may be modified in
+   * order to add the appropriated path
+   */
+  virtual void TestFileExistanceAndReadability( std::string & file, FileType fileType );
+  virtual void TestBandSelection( std::vector<unsigned int> & bands ) { }
 
-    /**
-     * Read the MetaFile and test its effectiveness once inputFileName is set.
-     */
-    virtual void ReadMetaFile ();
-    /**
-     * Once MetaFile is read, allocation of lists are performed in SetFileName.
-     * This allows specific (or global) initialisation in the GenerateData methods,
-     * that the user may invoke throught GenerateOutput() or GenerateOutput( idx ).
-     */
-    virtual void AllocateListOfComponents ( void );
+  virtual void GenerateData ( void );
 
-    /** PrintSelf method */
-    virtual void PrintSelf ( std::ostream& os, itk::Indent indent ) const;
+  /** GenerateData
+   * This method will be specialised if template definitions follow:
+   * - TImage is a VectorImage
+   * - TImage is an Image and TInteranalImage is a VectorImage
+   * - TImage and TInternalImage are of Image type.
+   */
+  virtual void GenerateData ( unsigned int idx );
 
-    std::string m_FileName;
-    OutputImageListPointerType m_OutputList;
+  /**
+   * Read the MetaFile and test its effectiveness once inputFileName is set.
+   */
+  virtual void ReadMetaFile ();
+  /**
+   * Once MetaFile is read, allocation of lists are performed in SetFileName.
+   * This allows specific (or global) initialisation in the GenerateData methods,
+   * that the user may invoke throught GenerateOutput() or GenerateOutput( idx ).
+   */
+  virtual void AllocateListOfComponents ( void );
 
-    std::vector< std::string > m_ListOfFileNames;
-    std::vector< std::vector<unsigned int> > m_ListOfBandSelection;
-    std::vector< InternalRegionType > m_ListOfRegionSelection;
+  /** PrintSelf method */
+  virtual void PrintSelf ( std::ostream& os, itk::Indent indent ) const;
 
-    ReaderListPointerType m_ImageFileReaderList;
+  std::string m_FileName;
+  OutputImageListPointerType m_OutputList;
 
-        private:
-    ImageSeriesFileReaderBase ( const Self & );
-    void operator= ( const Self & );
+  std::vector< std::string > m_ListOfFileNames;
+  std::vector< std::vector<unsigned int> > m_ListOfBandSelection;
+  std::vector< InternalRegionType > m_ListOfRegionSelection;
+
+  ReaderListPointerType m_ImageFileReaderList;
+
+private:
+  ImageSeriesFileReaderBase ( const Self & );
+  void operator= ( const Self & );
 }; // end of class
 
 } // end of namespace otb
