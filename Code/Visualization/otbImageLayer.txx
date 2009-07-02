@@ -23,6 +23,9 @@
 #include "itkTimeProbe.h"
 #include "otbStandardRenderingFunction.h"
 
+#include "otbImageKeywordlist.h"
+// #include "otbCoordinateToName.h"
+
 namespace otb
 {
 
@@ -54,6 +57,11 @@ ImageLayer<TImage,TOutputImage>
   // Wiring
   m_ExtractRenderingFilter->SetInput(m_ExtractFilter->GetOutput());
   m_ScaledExtractRenderingFilter->SetInput(m_ScaledExtractFilter->GetOutput());
+
+  m_Transform = TransformType::New();
+
+  m_PlaceName = "";
+  m_CountryName = "";
 }
 
 template <class TImage, class TOutputImage>
@@ -80,6 +88,9 @@ ImageLayer<TImage,TOutputImage>
 
   // Render images
   this->RenderImages();
+
+  // Initialize the geotransform
+  this->InitTransform();
 }
 
 template <class TImage, class TOutputImage>
@@ -226,7 +237,61 @@ ImageLayer<TImage,TOutputImage>
       oss<<" (ql)"<<std::endl<<m_RenderingFunction->Describe(m_Quicklook->GetPixel(ssindex));
       }
     }
+  //here, we consider that if the transform is not ready (call to InitTransform)
+  //the user of the class don't want to use it
+  if (m_Transform->IsUpToDate())
+  {
+    if (m_Transform->GetTransformAccuracy() != UNKNOWN)
+    {
+      PointType point = this->GetPixelLocation(index);
+      oss<< setiosflags(ios::fixed) << setprecision(6) << "Lon: " << point[0] << " Lat: "<< point[1] << std::endl;
+      if (m_Transform->GetTransformAccuracy() == PRECISE) oss<< "(precise location)" << std::endl;
+      if (m_Transform->GetTransformAccuracy() == ESTIMATE) oss<< "(estimated location)" << std::endl;
+
+//       if ((m_PlaceName == "") && (m_CountryName == ""))
+//       {
+//         CoordinateToName::Pointer conv = CoordinateToName::New();
+//         conv->SetLon(point[0]);
+//         conv->SetLat(point[1]);
+//         conv->Evaluate();
+//
+//         m_PlaceName = conv->GetPlaceName();
+//         m_CountryName = conv->GetCountryName();
+//       }
+//       if (m_PlaceName != "") oss << "Near " << m_PlaceName;
+//       if (m_CountryName != "") oss << " in " << m_CountryName;
+    }
+    else
+    {
+      oss << "Location unknown" << std::endl;
+    }
+  }
   return oss.str();
+}
+
+template <class TImage, class TOutputImage>
+typename ImageLayer<TImage,TOutputImage>::PointType
+ImageLayer<TImage,TOutputImage>
+::GetPixelLocation(const IndexType & index)
+{
+  PointType inputPoint;
+  inputPoint[0] = index[0];
+  inputPoint[1] = index[1];
+  return m_Transform->TransformPoint(inputPoint);
+}
+
+
+template <class TImage, class TOutputImage>
+void
+ImageLayer<TImage,TOutputImage>
+::InitTransform()
+{
+  const itk::MetaDataDictionary & inputDict = m_Image->GetMetaDataDictionary();
+  m_Transform->SetInputDictionary(inputDict);
+  m_Transform->SetInputOrigin(m_Image->GetOrigin());
+  m_Transform->SetInputSpacing(m_Image->GetSpacing());
+  //  m_Transform->SetDEMDirectory(m_DEMDirectory);
+  m_Transform->InstanciateTransform();
 }
 
 }

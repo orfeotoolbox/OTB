@@ -27,6 +27,7 @@
 #include "otbListSampleToHistogramListGenerator.h"
 
 #include "otbRenderingImageFilter.h"
+#include "otbGenericRSTransform.h"
 
 namespace otb
 {
@@ -66,6 +67,9 @@ public:
   typedef itk::RGBAPixel<ScalarType>                                  RGBAPixelType;
   typedef typename ImageType::RegionType                              RegionType;
   typedef typename ImageType::IndexType                               IndexType;
+
+  typedef itk::Point<double,2>                                          PointType;
+  typedef otb::GenericRSTransform<double> TransformType;
 
   /** Output image typedef */
   typedef TOutputImage                                                OutputImageType;
@@ -172,6 +176,9 @@ public:
   /** Get the pixel description */
   virtual std::string GetPixelDescription(const IndexType & index);
 
+  /** Get the pixel location */
+  virtual PointType GetPixelLocation(const IndexType & index);
+
 protected:
   /** Constructor */
   ImageLayer();
@@ -192,12 +199,13 @@ protected:
   /** Update the images */
   virtual void RenderImages();
 
+  virtual void InitTransform();
+
   /** Find out the histogram size from the pixel */
   unsigned int PixelSize(ImagePointerType image, ScalarType* v) const;
   unsigned int PixelSize(ImagePointerType image, VectorPixelType* v) const;
   unsigned int PixelSize(ImagePointerType image, RGBPixelType* v) const;
   unsigned int PixelSize(ImagePointerType image, RGBAPixelType* v) const;
-
 
 private:
   ImageLayer(const Self&);     // purposely not implemented
@@ -223,6 +231,13 @@ private:
   /** Extract filters */
   ExtractFilterPointerType    m_ExtractFilter;
   ExtractFilterPointerType    m_ScaledExtractFilter;
+
+  /** Coordinate transform */
+  TransformType::Pointer m_Transform;
+
+  /** General info about the image*/
+  std::string m_PlaceName;//FIXME the call should be done by a more general method outside of the layer
+  std::string m_CountryName;//which would also handle the dependance to curl
 
 }; // end class
 } // end namespace otb

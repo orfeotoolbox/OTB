@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPlaceNameToLonLat_h
-#define __otbPlaceNameToLonLat_h
+#ifndef __otbCoordinateToName_h
+#define __otbCoordinateToName_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
@@ -25,57 +25,53 @@ namespace otb
 {
 
 /**
- * \class PlaceNameToLonLat
- * \brief Retrieve Longitude and Latitude coordinates from a place name
+ * \class CoordinateToName
+ * \brief Retrieve Geographical information for Longitude and Latitude coordinates
  *
 
  */
 
 
-class ITK_EXPORT PlaceNameToLonLat : public itk::Object
+class ITK_EXPORT CoordinateToName : public itk::Object
 {
 public:
   /** Standard class typedefs. */
-  typedef PlaceNameToLonLat                                      Self;
+  typedef CoordinateToName                                      Self;
   typedef itk::SmartPointer<Self>                                Pointer;
   typedef itk::SmartPointer<const Self>                          ConstPointer;
 
 
   typedef itk::Object Superclass;
 
-  itkTypeMacro(PlaceNameToLonLat, Object);
+  itkTypeMacro(CoordinateToName, Object);
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   itkGetMacro( Lon, double );
   itkGetMacro( Lat, double );
   itkGetMacro( PlaceName, std::string );
+  itkGetMacro( CountryName, std::string );
 
   itkSetMacro( Lon, double );
   itkSetMacro( Lat, double );
-  itkSetMacro( PlaceName, std::string );
-
-  typedef enum {ALL, GEONAMES, GOOGLE, YAHOO} SearchMethodEnum;//Not implemented yet TODO
 
   virtual bool Evaluate();
 
 protected:
-  PlaceNameToLonLat();
-  ~PlaceNameToLonLat() {};
+  CoordinateToName();
+  ~CoordinateToName() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   void RetrieveXML(std::ostringstream& urlStream);
-  void ParseXMLYahoo();
-  void ParseXMLGoogle();
-  void ParseXMLGeonames();//Not implemented yet TODO
+  void ParseXMLGeonames();
 
 private:
-  PlaceNameToLonLat( const Self& ); //purposely not implemented
+  CoordinateToName( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
 
   double m_Lon;
   double m_Lat;
   std::string m_PlaceName;
-  SearchMethodEnum m_SearchMethod;//Not implemented yet TODO
+  std::string m_CountryName;
 };
 
 } // namespace otb

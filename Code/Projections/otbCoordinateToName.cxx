@@ -15,13 +15,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPlaceNameToLonLat_txx
-#define __otbPlaceNameToLonLat_txx
 
-#include "otbPlaceNameToLonLat.h"
+#include "otbCoordinateToName.h"
 #include "tinyxml.h"
 #include <curl/curl.h>
-
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -30,11 +28,12 @@ namespace otb
    * Constructor
    */
 
-PlaceNameToLonLat::PlaceNameToLonLat()
+CoordinateToName::CoordinateToName()
 {
   m_Lon = -1000.0;
   m_Lat = -1000.0;
-  m_PlaceName = "Where everything started";
+  m_PlaceName = "";
+  m_CountryName = "";
 }
 
 /**
@@ -42,7 +41,7 @@ PlaceNameToLonLat::PlaceNameToLonLat()
    */
 
 void
-PlaceNameToLonLat
+CoordinateToName
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
@@ -52,41 +51,18 @@ PlaceNameToLonLat
 }
 
 
-bool PlaceNameToLonLat::Evaluate()
+bool CoordinateToName::Evaluate()
 {
-  std::string::size_type loc = m_PlaceName.find(" ", 0 );
-  while (loc != std::string::npos)
-  {
-    m_PlaceName.replace(loc, 1, "+");
-    loc = m_PlaceName.find(" ", loc);
-  }
 
-  if ((m_Lat == -1000.0) && (m_Lon == -1000.0))
-  {
-    std::ostringstream urlStream;
-    urlStream << "http://maps.google.com/maps?q=";
-    urlStream << m_PlaceName;
-    urlStream << "&sll=38.9594,-95.2655&sspn=119.526,360&output=kml&ie=utf-8&v=2.2&cv=4.2.0180.1134&hl=en";
-    RetrieveXML(urlStream);
-    ParseXMLGoogle();
-  }
+  std::ostringstream urlStream;
+  urlStream << "http://ws.geonames.org/findNearbyPlaceName?lat=";
+  urlStream << m_Lat;
+  urlStream << "&lng=";
+  urlStream << m_Lon;
+  otbMsgDevMacro("CoordinateToName: retrieve url " << urlStream.str());
+  RetrieveXML(urlStream);
+  ParseXMLGeonames();
 
-  if ((m_Lat == -1000.0) && (m_Lon == -1000.0))
-  {
-    std::ostringstream urlStream;
-    urlStream << "http://api.local.yahoo.com/MapsService/V1/geocode?appid=com.sun.blueprints.ui.geocoder&location=";
-    urlStream << m_PlaceName;
-    RetrieveXML(urlStream);
-    ParseXMLYahoo();
-  }
-
-  if ((m_Lat == -1000.0) && (m_Lon == -1000.0))
-  {
-    std::cout << "Search Error: fallback on the origin" << std::endl;
-    m_Lat = 43.560204;
-    m_Lon = 1.480736;
-    return false;
-  }
   return true;
 }
 
@@ -109,7 +85,7 @@ curlHandlerWriteMemoryCallback(void *ptr, size_t size, size_t nmemb,
 }
 */
 
-void PlaceNameToLonLat::RetrieveXML(std::ostringstream& urlStream)
+void CoordinateToName::RetrieveXML(std::ostringstream& urlStream)
 {
 
   CURL *curl;
@@ -145,48 +121,23 @@ void PlaceNameToLonLat::RetrieveXML(std::ostringstream& urlStream)
 }
 
 
-void PlaceNameToLonLat::ParseXMLYahoo()
+void CoordinateToName::ParseXMLGeonames()
 {
   TiXmlDocument doc( "out.xml" );
   doc.LoadFile();
   TiXmlHandle docHandle( &doc );
 
-  TiXmlElement* childLat = docHandle.FirstChild( "ResultSet" ).FirstChild( "Result" ).FirstChild( "Latitude" ).Element();
-  if ( childLat )
+  TiXmlElement* childName = docHandle.FirstChild( "geonames" ).FirstChild( "geoname" ).FirstChild( "name" ).Element();
+  if ( childName )
   {
-    m_Lat=atof(childLat->GetText());
+    m_PlaceName=childName->GetText();
   }
-  TiXmlElement* childLon = docHandle.FirstChild( "ResultSet" ).FirstChild( "Result" ).FirstChild( "Longitude" ).Element();
-  if ( childLon )
+  TiXmlElement* childCountryName = docHandle.FirstChild( "geonames" ).FirstChild( "geoname" ).FirstChild( "countryName" ).Element();
+  if ( childCountryName )
   {
-    m_Lon=atof(childLon->GetText());
+    m_CountryName=childCountryName->GetText();
   }
-
-}
-
-void PlaceNameToLonLat::ParseXMLGoogle()
-{
-  TiXmlDocument doc( "out.xml" );
-  doc.LoadFile();
-  TiXmlHandle docHandle( &doc );
-
-  TiXmlElement* childLat = docHandle.FirstChild( "kml" ).FirstChild( "Placemark" ).FirstChild( "LookAt" ).FirstChild( "latitude" ).Element();
-  if ( childLat )
-  {
-    m_Lat=atof(childLat->GetText());
-  }
-  TiXmlElement* childLon = docHandle.FirstChild( "kml" ).FirstChild( "Placemark" ).FirstChild( "LookAt" ).FirstChild( "longitude" ).Element();
-  if ( childLon )
-  {
-    m_Lon=atof(childLon->GetText());
-  }
-
-}
-void PlaceNameToLonLat::ParseXMLGeonames()
-{
-
 }
 
 } // namespace otb
 
-#endif
