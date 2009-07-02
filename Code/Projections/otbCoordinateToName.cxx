@@ -15,8 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCoordinateToName_txx
-#define __otbCoordinateToName_txx
 
 #include "otbCoordinateToName.h"
 #include "tinyxml.h"
@@ -143,4 +141,3 @@ void CoordinateToName::ParseXMLGeonames()
 
 } // namespace otb
 
-#endif

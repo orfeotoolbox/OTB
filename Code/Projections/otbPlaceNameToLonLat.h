@@ -80,8 +80,5 @@ private:
 
 } // namespace otb
 
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPlaceNameToLonLat.txx"
-#endif
 
 #endif

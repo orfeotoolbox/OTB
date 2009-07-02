@@ -15,8 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPlaceNameToLonLat_txx
-#define __otbPlaceNameToLonLat_txx
 
 #include "otbPlaceNameToLonLat.h"
 #include "tinyxml.h"
@@ -188,5 +186,3 @@ void PlaceNameToLonLat::ParseXMLGeonames()
 }
 
 } // namespace otb
-
-#endif

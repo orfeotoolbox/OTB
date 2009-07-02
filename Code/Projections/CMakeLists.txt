@@ -1,6 +1,7 @@
 FILE(GLOB OTBProjections_SRCS "*.cxx" )
 
 IF( NOT OTB_USE_CURL )
+    LIST(REMOVE_ITEM OTBProjections_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/otbPlaceNameToLonLat.cxx" )
     LIST(REMOVE_ITEM OTBProjections_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/otbCoordinateToName.cxx" )
 ENDIF( NOT OTB_USE_CURL )
 
@@ -26,7 +27,7 @@ IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
   FILE(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
   IF( NOT OTB_USE_CURL )
     LIST(REMOVE_ITEM __files1 "${CMAKE_CURRENT_SOURCE_DIR}/otbPlaceNameToLonLat.h" )
-    LIST(REMOVE_ITEM __files2 "${CMAKE_CURRENT_SOURCE_DIR}/otbPlaceNameToLonLat.txx" )
+    LIST(REMOVE_ITEM __files2 "${CMAKE_CURRENT_SOURCE_DIR}/otbCoordinateToName.h" )
   ENDIF( NOT OTB_USE_CURL )
   INSTALL(FILES ${__files1} ${__files2}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Projections
