@@ -24,6 +24,7 @@
 #include "otbStandardRenderingFunction.h"
 
 #include "otbImageKeywordlist.h"
+// #include "otbCoordinateToName.h"
 
 namespace otb
 {
@@ -58,6 +59,9 @@ ImageLayer<TImage,TOutputImage>
   m_ScaledExtractRenderingFilter->SetInput(m_ScaledExtractFilter->GetOutput());
 
   m_Transform = TransformType::New();
+
+  m_PlaceName = "";
+  m_CountryName = "";
 }
 
 template <class TImage, class TOutputImage>
@@ -243,6 +247,19 @@ ImageLayer<TImage,TOutputImage>
       oss<< setiosflags(ios::fixed) << setprecision(6) << "Lon: " << point[0] << " Lat: "<< point[1] << std::endl;
       if (m_Transform->GetTransformAccuracy() == PRECISE) oss<< "(precise location)" << std::endl;
       if (m_Transform->GetTransformAccuracy() == ESTIMATE) oss<< "(estimated location)" << std::endl;
+
+//       if ((m_PlaceName == "") && (m_CountryName == ""))
+//       {
+//         CoordinateToName::Pointer conv = CoordinateToName::New();
+//         conv->SetLon(point[0]);
+//         conv->SetLat(point[1]);
+//         conv->Evaluate();
+//
+//         m_PlaceName = conv->GetPlaceName();
+//         m_CountryName = conv->GetCountryName();
+//       }
+//       if (m_PlaceName != "") oss << "Near " << m_PlaceName;
+//       if (m_CountryName != "") oss << " in " << m_CountryName;
     }
     else
     {
@@ -262,6 +279,7 @@ ImageLayer<TImage,TOutputImage>
   inputPoint[1] = index[1];
   return m_Transform->TransformPoint(inputPoint);
 }
+
 
 template <class TImage, class TOutputImage>
 void
