@@ -22,6 +22,10 @@ TARGET_LINK_LIBRARIES(OrthoRectificationExample OTBProjections OTBCommon OTBIO)
 IF( OTB_USE_CURL )
 ADD_EXECUTABLE(PlaceNameToLonLatExample PlaceNameToLonLatExample.cxx )
 TARGET_LINK_LIBRARIES(PlaceNameToLonLatExample OTBProjections OTBCommon OTBIO ${CURL_LIBRARY} tinyXML)
+
+ADD_EXECUTABLE(CoordinateToNameExample CoordinateToNameExample.cxx )
+TARGET_LINK_LIBRARIES(CoordinateToNameExample OTBProjections OTBCommon OTBIO ${CURL_LIBRARY} tinyXML)
+
 ENDIF( OTB_USE_CURL )
 
 ADD_EXECUTABLE(VectorDataProjectionExample VectorDataProjectionExample.cxx )
@@ -110,6 +114,10 @@ IF( OTB_USE_CURL )
 ADD_TEST(prTePlaceNameToLonLatExampleTest ${EXE_TESTS2}
     PlaceNameToLonLatExampleTest
         Toulouse
+)
+ADD_TEST(prTeCoordinateToNameExampleTest ${EXE_TESTS2}
+    CoordinateToNameExampleTest
+         103.78 1.29
 )
 ENDIF( OTB_USE_CURL )
 
