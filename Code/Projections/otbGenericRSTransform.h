@@ -183,6 +183,12 @@ namespace otb
 
       itkGetConstReferenceMacro(OutputSpacing, SpacingType);
 
+      /** Check if the transform is up to date */
+      virtual bool IsUpToDate()
+      {
+        return m_TransformUpToDate;
+      }
+
       /** Methods prototypes */
       virtual const TransformType * GetTransform() const;
 

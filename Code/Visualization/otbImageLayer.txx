@@ -233,8 +233,13 @@ ImageLayer<TImage,TOutputImage>
       oss<<" (ql)"<<std::endl<<m_RenderingFunction->Describe(m_Quicklook->GetPixel(ssindex));
       }
     }
-  PointType point = this->GetPixelLocation(index);
-  oss<< "Lon: " << point[0] << " Lat: "<< point[1] << std::endl;
+  //here, we consider that if the transform is not ready (call to InitTransform)
+  //the user of the class don't want to use it
+  if (m_Transform->IsUpToDate())
+  {
+    PointType point = this->GetPixelLocation(index);
+    oss<< "Lon: " << point[0] << " Lat: "<< point[1] << std::endl;
+  }
   return oss.str();
 }
 
