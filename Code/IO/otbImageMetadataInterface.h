@@ -26,8 +26,21 @@
 
 #include "otbMetaDataKey.h"
 #include "otbImageKeywordlist.h"
+#include "itkImageBase.h"
 
 #include <string>
+
+
+/** */
+#define otbMetadataMacro(name,type) \
+  type Get##name () const \
+  { \
+    if (m_Image.IsNull()) \
+    { \
+      itkExceptionMacro(<<"Invalid Image, can't get the dictionary"); \
+    } \
+    return Get##name(m_Image->GetMetaDataDictionary()); \
+  }
 
 namespace otb
 {
@@ -51,6 +64,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageMetadataInterface, itk::Object);
 
+  typedef itk::ImageBase< 2 > ImageType;
 
   typedef itk::MetaDataDictionary   MetaDataDictionaryType;
 
@@ -59,9 +73,20 @@ public:
 
   typedef ImageKeywordlist              ImageKeywordlistType;
 
+  /** Set the image used to get the metadata */
+  itkSetObjectMacro(Image,ImageType);
 
   /** Get the projection coordinate system of the image. */
   std::string GetProjectionRef( const MetaDataDictionaryType & dict ) const;
+  otbMetadataMacro(ProjectionRef,std::string);
+//   std::string GetProjectionRef() const
+//   {
+//     if (m_Image.IsNull())
+//     {
+//       itkExceptionMacro(<<"Invalid Image, can't get the dictionary");
+//     }
+//     return GetProjectionRef(m_Image->GetMetaDataDictionary());
+//   }
 
   /** Get the GCP projection coordinates of the image. */
   std::string GetGCPProjection( const MetaDataDictionaryType & dict ) const;
@@ -162,7 +187,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   OTB_GCP m_GCP;
-
+  ImageType::Pointer m_Image;
 };
 
 
