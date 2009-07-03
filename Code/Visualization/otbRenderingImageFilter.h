@@ -197,7 +197,9 @@ public:
 
     //Check if the rendering function channels are compatible with the image
     //might want to be more generic here one day.
-    unsigned int numberOfInputChannels = this->GetInput()->GetNumberOfComponentsPerPixel();
+//     unsigned int numberOfInputChannels = this->GetInput()->GetNumberOfComponentsPerPixel();
+    itk::ImageRegionConstIterator<TInputImage> it(this->GetInput(),this->GetInput()->GetBufferedRegion());
+    unsigned int numberOfInputChannels = VisualizationPixelTraits::PixelSize(it.Get());
     std::vector<unsigned int> channels = (this->GetFunctor().GetFunction())->GetChannelList();
     for (unsigned int i=0; i<channels.size(); ++i)
     {

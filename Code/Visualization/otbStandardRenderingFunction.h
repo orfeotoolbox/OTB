@@ -142,14 +142,7 @@ public:
 //            << "m_TransferFunction(spixel[0])" << m_TransferFunction(spixel[0])
 //            << ", m_TransferedMinimum[0] " << m_TransferedMinimum[0]
 //            << ", m_TransferedMaximum[0] " << m_TransferedMaximum[0])
-//     otbMsgDevMacro(<<"StandardRenderingFunction::EvaluateTransferFunction "
-//            << "m_TransferFunction(spixel[1])" << m_TransferFunction(spixel[1])
-//            << ", m_TransferedMinimum[1] " << m_TransferedMinimum[1]
-//            << ", m_TransferedMaximum[1] " << m_TransferedMaximum[1])
-//     otbMsgDevMacro(<<"StandardRenderingFunction::EvaluateTransferFunction "
-//            << "m_TransferFunction(spixel[2])" << m_TransferFunction(spixel[2])
-//            << ", m_TransferedMinimum[2] " << m_TransferedMinimum[2]
-//            << ", m_TransferedMaximum[2] " << m_TransferedMaximum[2])
+
     if (spixel.Size() == 1)
     {
       OutputValueType value = ClampRescale(m_TransferFunction(spixel[0]),m_TransferedMinimum[0],m_TransferedMaximum[0]);
@@ -225,6 +218,18 @@ public:
         }
 
       }
+      else
+      {
+        unsigned int nbComps = m_PixelRepresentationFunction.GetOutputSize();
+        if (m_Minimum.empty())
+        {
+          m_Minimum.resize(nbComps,0);
+        }
+        if (m_Maximum.empty())
+        {
+          m_Maximum.resize(nbComps,255);
+        }
+      }
 
       typename ExtremaVectorType::const_iterator minIt = this->m_Minimum.begin();
       typename ExtremaVectorType::const_iterator maxIt = this->m_Maximum.begin();
@@ -279,75 +284,6 @@ public:
     oss << std::endl;
     return oss.str();
   }
-
-//   inline const std::string Describe(const ScalarType & spixel) const //FIXME not updated yet
-//   {
-//     itk::OStringStream oss;
-//     OutputPixelType output = this->Evaluate(spixel);
-//     oss<<"Grayscale [value: "<< static_cast<typename itk::NumericTraits<PixelType>::PrintType>(spixel)<<", displayed: "<< static_cast<unsigned int>(output[0])<<"]";
-//     return oss.str();
-//   }
-//
-//   inline const std::string Describe(const VectorPixelType & vpixel) const//FIXME not updated yet
-//   {
-//     itk::OStringStream oss;
-//     OutputPixelType output = this->Evaluate(vpixel);
-//
-//     for(unsigned int channel = 0; channel < vpixel.Size();++channel)
-//       {
-//       oss<<"c= "<< channel << ", ";
-//       if(channel == m_RedChannelIndex)
-//         {
-//         oss <<"R= " << std::setw(3) <<(int)output[0]<< ", ";
-//         }
-//       else if(channel == m_GreenChannelIndex)
-//         {
-//         oss <<"G= " << std::setw(3) <<(int)output[1]<< ", ";
-//         }
-//       else if(channel == m_BlueChannelIndex)
-//         {
-//         oss <<"B= " << std::setw(3) <<(int)output[2]<< ", ";
-//         }
-//       else
-//         {
-//         oss <<"       ";
-//         }
-//         oss<<"v= "<<static_cast<typename itk::NumericTraits<PixelType>::PrintType>(vpixel[channel])<<std::endl;
-//       }
-//     return oss.str();
-//   }
-//
-//   inline const std::string Describe(const RGBPixelType & spixel) const //FIXME not updated yet
-//   {
-//     itk::OStringStream oss;
-//     OutputPixelType output = this->Evaluate(spixel);
-//     oss<<"RGB value: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[0])
-//         << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[1])
-//         << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[2])
-//         << std::endl;
-//     oss <<"   displayed: "<< static_cast<typename itk::NumericTraits<OutputPixelType>::PrintType>(output[0])
-//         << ", "<< static_cast<typename itk::NumericTraits<OutputPixelType>::PrintType>(output[1])
-//         << ", "<< static_cast<typename itk::NumericTraits<OutputPixelType>::PrintType>(output[2])
-//         <<std::endl;
-//     return oss.str();
-//   }
-//
-//   inline const std::string Describe(const RGBAPixelType & spixel) const //FIXME not updated yet
-//   {
-//     itk::OStringStream oss;
-//     OutputPixelType output = this->Evaluate(spixel);
-//     oss<<"RGBA value: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[0])
-//         << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[1])
-//         << ", "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[2])
-//         << " alpha: "<< static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(spixel[3])
-//         << std::endl;
-//     oss <<"   displayed: "<< static_cast<typename itk::NumericTraits<OutputPixelType>::PrintType>(output[0])
-//         << ", "<< static_cast<typename itk::NumericTraits<OutputPixelType>::PrintType>(output[1])
-//         << ", "<< static_cast<typename itk::NumericTraits<OutputPixelType>::PrintType>(output[2])
-//         << " alpha: "<< static_cast<typename itk::NumericTraits<OutputPixelType>::PrintType>(output[3])
-//         <<std::endl;
-//     return oss.str();
-//   }
 
    /** Set the minimum and maximum for the different bands.
      * Has to be provided as [minBand0, maxBand0, minBand1, maxBand1,...]
