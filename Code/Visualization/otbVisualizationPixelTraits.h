@@ -105,9 +105,7 @@ public:
   template< class TScalarTypeInput >
   static unsigned int PixelSize(const itk::RGBAPixel<TScalarTypeInput>& in)
   {
-    //We return only the useful size of the pixel, the alpha channel may be used later
-    //but only for display purposes
-    return 3;
+    return 4;
   }
 
   template< class TScalarTypeInput >

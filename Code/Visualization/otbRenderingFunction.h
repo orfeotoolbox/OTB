@@ -126,6 +126,11 @@ public:
     itkExceptionMacro(<<"Subclasses should override this method");
   }
 
+  virtual void SetAutoMinMax(bool autoMinMax)
+  {
+    itkExceptionMacro(<<"Subclasses should override this method");
+  }
+
   /** Get the histogram of the pixel representation generated from the sample list */
   virtual HistogramListPointerType GetHistogramList()
   {
