@@ -1802,7 +1802,7 @@ ADD_TEST(ioTuRADImageIOCanRead_RADCI2 ${IO_TESTS16}
         ${LARGEDATA}/RAD_CI2/3017_HH.rad)
 
 # Convert a ci2.RAD file into ENVI format
-ADD_TEST(ioTvImageFileReaderRADCI22ENVI ${IO_TESTS16}
+ADD_TEST(ioTvImageFileReaderRADCI22ENVI ${IO_TESTS16}${EXAMPLEDATA}
 --compare-image ${TOL}
 	${BASELINE}/ioImageFileReaderRADCI22ENVI.hdr
 	${TEMP}/ioImageFileReaderRADCI22ENVI.hdr
@@ -1818,7 +1818,7 @@ ADD_TEST(ioTuRADImageIOCanRead_RADCR4sngl ${IO_TESTS16}
         otbRADImageIOTestCanRead
         ${INPUTDATA}/RADCR4_image.rad )
 
-# Can read a multi-image RAD format (cr4)
+# Can read a multi-image RAD format (cr4)${EXAMPLEDATA}
 ADD_TEST(ioTuRADImageIOCanRead_RADCR4mult ${IO_TESTS16}
         otbRADImageIOTestCanRead
         ${INPUTDATA}/RADCR4_multimage.rad )
@@ -1925,7 +1925,13 @@ ADD_TEST(ioTvImageMetadataInterfaceSPOTTest ${IO_TESTS17}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-
+ADD_TEST(ioTvImageMetadataInterfaceTest ${IO_TESTS17}
+         --compare-ascii 0 ${BASELINE_FILES}/ioTvImageMetadataInterface.txt
+                         ${TEMP}/ioTvImageMetadataInterface.txt
+        otbImageMetadataInterfaceTest2
+        ${EXAMPLEDATA}/qb_RoadExtract.tif
+        ${TEMP}/ioTvImageMetadataInterface.txt
+)
 
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
@@ -2071,6 +2077,7 @@ otbPointSetFileReaderNew.cxx
 otbPointSetFileReader.cxx
 otbImageMetadataInterfaceNew.cxx
 otbImageMetadataInterfaceTest.cxx
+otbImageMetadataInterfaceTest2.cxx
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)

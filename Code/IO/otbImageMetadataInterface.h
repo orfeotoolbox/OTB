@@ -79,14 +79,6 @@ public:
   /** Get the projection coordinate system of the image. */
   std::string GetProjectionRef( const MetaDataDictionaryType & dict ) const;
   otbMetadataMacro(ProjectionRef,std::string);
-//   std::string GetProjectionRef() const
-//   {
-//     if (m_Image.IsNull())
-//     {
-//       itkExceptionMacro(<<"Invalid Image, can't get the dictionary");
-//     }
-//     return GetProjectionRef(m_Image->GetMetaDataDictionary());
-//   }
 
   /** Get the GCP projection coordinates of the image. */
   std::string GetGCPProjection( const MetaDataDictionaryType & dict ) const;
