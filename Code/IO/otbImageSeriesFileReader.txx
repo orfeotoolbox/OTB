@@ -20,7 +20,6 @@
 
 #ifndef __otbImageSeriesFileReader__txx
 #define __otbImageSeriesFileReader__txx
-
 #include "otbImageSeriesFileReader.h"
 
 namespace otb {
@@ -50,11 +49,11 @@ void
 ImageSeriesFileReader< TImage, TInternalImage > 
 ::GenerateData( unsigned int idx )
 {
-        itk::OStringStream msg;
-        msg << "Something wrong... Check the template definition of this class in the program...\n";
-        msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
-        ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
-        throw e;
+  itk::OStringStream msg;
+  msg << "Something wrong... Check the template definition of this class in the program...\n";
+  msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
+  ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
+  throw e;
 }
 
 /* **********************************************************
@@ -122,8 +121,6 @@ void
 ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixel, 2 > >
 ::GenerateData( unsigned int idx )
 { 
-  std::cerr << "Reading " << idx << "th image: " << this->m_ListOfFileNames[ idx ] << "\n";
-
   otbMsgDebugMacro( << "Reading " << idx << "th image: " << this->m_ListOfFileNames[ idx ] );
 
   ReaderType * reader 
@@ -186,15 +183,15 @@ void
 ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
 ::TestBandSelection ( std::vector<unsigned int> & bands )
 {
-        if (  bands.size() != 1 )
-        {
-                itk::OStringStream msg;
-                msg << "Unable to handle multicomponent file from Image<> class as output\n";
-                msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
-                ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
-                throw e;
-        }
-        return;
+  if (  bands.size() != 1 )
+  {
+    itk::OStringStream msg;
+    msg << "Unable to handle multicomponent file from Image<> class as output\n";
+    msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
+    ImageSeriesFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
+    throw e;
+  }
+  return;
 }
 
 /**
@@ -276,14 +273,14 @@ ImageSeriesFileReader< VectorImage< TPixel, 2 >, VectorImage< TInternalPixel, 2 
   ExtractSelectionType * selection
     = static_cast<ExtractSelectionType*>( this->m_ExtractorList->GetNthElement( idx ) );
 
-	selection->SetExtractionRegion( this->m_ListOfRegionSelection[ idx ] );
+  selection->SetExtractionRegion( this->m_ListOfRegionSelection[ idx ] );
 
-        for ( std::vector<unsigned int>::iterator band = this->m_ListOfBandSelection[ idx ].begin();
-                band != this->m_ListOfBandSelection[ idx ].end();
-                ++band )
-        {
-                selection->SetChannel( *band );
-        }
+  for ( std::vector<unsigned int>::iterator band = this->m_ListOfBandSelection[ idx ].begin();
+          band != this->m_ListOfBandSelection[ idx ].end();
+          ++band )
+  {
+    selection->SetChannel( *band );
+  }
 
   selection->SetInput( reader->GetOutput() );
   selection->GraftOutput(  this->m_OutputList->GetNthElement( idx ) );
