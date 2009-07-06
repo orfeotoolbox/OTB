@@ -162,7 +162,7 @@ ELSE(OTB_USE_EXTERNAL_ITK)
         ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/vxl/vcl
         ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/vxl/core
         ${OTB_BINARY_DIR}/Utilities/ITK/Utilities
-        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/itkExtHdrs
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkExtHdrs
         )
 ENDIF(OTB_USE_EXTERNAL_ITK)
 
