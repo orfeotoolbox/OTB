@@ -36,14 +36,11 @@ int otbPrintableImageFilter( int argc, char * argv[] )
   typedef double InputPixelType;
   const   unsigned int Dimension = 2;
 
-  typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
-
-  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-
-  typedef otb::PrintableImageFilter< InputImageType>   FilterType;
-  typedef FilterType::OutputImageType OutputImageType;
-
-  typedef otb::StreamingImageFileWriter< OutputImageType >         WriterType;
+  typedef otb::VectorImage< InputPixelType,  Dimension >   InputImageType;
+  typedef otb::ImageFileReader< InputImageType  >          ReaderType;
+  typedef otb::PrintableImageFilter< InputImageType>       FilterType;
+  typedef FilterType::OutputImageType                      OutputImageType;
+  typedef otb::StreamingImageFileWriter< OutputImageType > WriterType;
 
 
   FilterType::Pointer printableImageFilter = FilterType::New();

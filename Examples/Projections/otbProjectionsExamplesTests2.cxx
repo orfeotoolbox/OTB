@@ -34,5 +34,7 @@ void RegisterTests()
 #undef main
 #define main PlaceNameToLonLatExampleTest
 #include "PlaceNameToLonLatExample.cxx"
+
+#undef main
 #define main CoordinateToNameExampleTest
 #include "CoordinateToNameExample.cxx"

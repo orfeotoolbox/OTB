@@ -424,7 +424,6 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
   std::string strfileref;
 
   int nbdiff(0);
-  int numLine(1);
 
   if (!fluxfileref)
     {
@@ -496,8 +495,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 
 	      buffstreamTest << strfiletest;
 	      buffstreamRef << strfileref;
-	      int nblinediff(0);
-
+	  
 	      //Check number of element in each line, if not equal : out
 	      unsigned int testElt = 1;
 	      // if alreday computed

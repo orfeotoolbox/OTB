@@ -58,7 +58,7 @@ int otbPrintableImageFilterWithMask( int argc, char * argv[] )
   writer->SetFileName( outputFilename );
 
   printableImageFilter->SetInput( inputReader->GetOutput() );
-  printableImageFilter->SetInputMask( maskReader->GetOutput()/*rescaler->GetOutput()*/ );
+  printableImageFilter->SetInputMask( maskReader->GetOutput() );
   
 
   FilterType::ChannelsType chList;

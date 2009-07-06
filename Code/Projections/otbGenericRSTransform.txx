@@ -47,7 +47,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   m_InputTransform = NULL;
   m_OutputTransform = NULL;
   m_TransformUpToDate = false;
-  m_TransformAccuracy = UNKNOWN;
+  m_TransformAccuracy = Projection::UNKNOWN;
 }
 
 
@@ -360,17 +360,17 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   if ((inputTransformIsSensor || outputTransformIsSensor) && (m_DEMDirectory.empty()))
   {
     //Sensor model without DEM
-    m_TransformAccuracy = ESTIMATE;
+    m_TransformAccuracy = Projection::ESTIMATE;
   }
   else if (!inputTransformIsSensor && !outputTransformIsSensor && !inputTransformIsMap && !outputTransformIsMap)
   {
     //no transform
-    m_TransformAccuracy = UNKNOWN;
+    m_TransformAccuracy = Projection::UNKNOWN;
   }
   else
   {
 
-    m_TransformAccuracy = PRECISE;
+    m_TransformAccuracy = Projection::PRECISE;
   }
 
 }

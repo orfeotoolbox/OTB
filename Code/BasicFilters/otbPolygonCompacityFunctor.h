@@ -31,9 +31,9 @@ namespace otb
 *
 * The compacity is defined as:
 *
-*  \f$ 4\pi \frac{S}{L}\f$
+*  \f$ 4\pi \frac{A}{L^2}\f$
 *
-* where \f$ S \f$ is the surface (obtained by the method GetSurface() )
+* where \f$ A \f$ is the area (obtained by the method GetArea() )
 * and \f$ L \f$ the perimeter (obtained by the method GetLength() ).
  *
  *  \ingroup Functor

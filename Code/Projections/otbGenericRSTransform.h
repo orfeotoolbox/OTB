@@ -29,9 +29,10 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-
-  enum TransformAccuracy {UNKNOWN, ESTIMATE, PRECISE};
-
+  namespace Projection
+  {
+    enum TransformAccuracy {UNKNOWN, ESTIMATE, PRECISE};
+  }
   /** \class GenericRSTransform
    *  \brief This is the class to handle generic remote sensing transform
    *
@@ -185,7 +186,7 @@ namespace otb
       }
 
       /** Get Transform accuracy */
-      itkGetMacro(TransformAccuracy, TransformAccuracy);
+      itkGetMacro(TransformAccuracy, Projection::TransformAccuracy);
 
       /** Methods prototypes */
       virtual const TransformType * GetTransform() const;
@@ -238,7 +239,7 @@ namespace otb
       GenericTransformPointerType m_InputTransform;
       GenericTransformPointerType m_OutputTransform;
       bool                        m_TransformUpToDate;
-      TransformAccuracy           m_TransformAccuracy;
+      Projection::TransformAccuracy           m_TransformAccuracy;
 
     };
 
