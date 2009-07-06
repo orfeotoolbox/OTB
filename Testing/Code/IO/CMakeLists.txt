@@ -13,7 +13,8 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance on  pixel image diff
-SET(TOL 0.000000001)
+SET(NOTOL 0.0)
+SET(EPSILON_9 0.000000001)
 
 #Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
 SET(EPS 0.001)
@@ -62,7 +63,7 @@ ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT2ENVI ${COMMON_TESTS3}
 # ---  RADARSAT (GDAL)  Nom r�pertoire ---
 ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT_ENVI2ENVI ${COMMON_TESTS3}
 # THOMAS (provisoire) : Images OK mais erreur au DIFF ITK !!!
-#   --compare-image ${TOL} ${BASELINE}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
+#   --compare-image ${EPSILON_9} ${BASELINE}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
 #                      ${TEMP}/ioMultiMonoChannelROI_RADARSAT_ENVI2ENVI_2559_3591_337_280_2.hdr
          otbMultiToMonoChannelExtractROI
          -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
@@ -72,7 +73,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # ---  ENVI (GDAL) ---
 ADD_TEST(ioTvMultiMonoChannelROI_ENVI2PNG ${COMMON_TESTS3}
-   --compare-image ${TOL}   ${BASELINE}/ioMultiMonoChannelROI_ENVI2PNG_poupees_1canal_302_2_134_330.png
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioMultiMonoChannelROI_ENVI2PNG_poupees_1canal_302_2_134_330.png
                      ${TEMP}/ioMultiMonoChannelROI_ENVI2PNG_poupees_1canal_302_2_134_330.png
          otbMultiToMonoChannelExtractROI
          ${INPUTDATA}/poupees_1canal.c1.hdr
@@ -88,21 +89,21 @@ ADD_TEST(ioTvMultiMonoChannelROI_ENVI2PNG ${COMMON_TESTS3}
 IF(OTB_DATA_USE_LARGEINPUT)
 # ---  SAR_ERS2_SLCI (GDAL)  ---
 ADD_TEST(ioTvImageFileReaderERS ${IO_TESTS1}
-   --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderERS_SLCI.tif
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileReaderERS_SLCI.tif
                             ${TEMP}/ioImageFileReaderERS_SLCI.tif
          otbImageFileReaderERS
          ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/
          ${TEMP}/ioImageFileReaderERS_SLCI.tif)
 
 ADD_TEST(ioTvImageFileReaderRADARSAT ${IO_TESTS1}
-   --compare-image ${TOL} ${BASELINE}/ioImageFileReaderRADARSAT.tif
+   --compare-image ${EPSILON_9} ${BASELINE}/ioImageFileReaderRADARSAT.tif
                            ${TEMP}/ioImageFileReaderRADARSAT.tif
          otbImageFileReaderERS
          ${LARGEDATA}/RADARSAT1/SCENE01/
          ${TEMP}/ioImageFileReaderRADARSAT.tif)
 
 ADD_TEST(ioTvImageFileReaderPALSAR ${IO_TESTS1}
-   --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderPALSAR_l1.1.tif
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileReaderPALSAR_l1.1.tif
                             ${TEMP}/ioImageFileReaderPALSAR_l1.1.tif
          otbImageFileReaderERS
          ${LARGEDATA}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
@@ -123,28 +124,28 @@ ADD_TEST(ioTuLUMImageIOCanWrite ${IO_TESTS1} otbLUMImageIOTestCanWrite
         ${TEMP}/poupees.lum)
 
 ADD_TEST(ioTvImageFileReaderHDR2LUM ${IO_TESTS1}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_1canal.c1.hdr
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_1canal.c1.hdr
                                 ${TEMP}/ioImageFileReaderHDR2LUM.lum
         otbImageFileReaderTest
         ${INPUTDATA}/poupees_1canal.c1.hdr
         ${TEMP}/ioImageFileReaderHDR2LUM.lum )
 
 ADD_TEST(ioTvImageFileReaderPNG2LUM ${IO_TESTS1}
-  --compare-image ${TOL}        ${INPUTDATA}/cthead1.png
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/cthead1.png
                                 ${TEMP}/ioImageFileReaderPNG2LUM.lum
         otbImageFileReaderTest
         ${INPUTDATA}/cthead1.png
         ${TEMP}/ioImageFileReaderPNG2LUM.lum )
 
 ADD_TEST(ioTvImageFileReaderLUM2LUM ${IO_TESTS1}
-  --compare-image ${TOL}        ${TEMP}/ioImageFileReaderPNG2LUM.lum
+  --compare-image ${EPSILON_9}        ${TEMP}/ioImageFileReaderPNG2LUM.lum
                                 ${TEMP}/ioImageFileReaderLUM2LUM.lum
         otbImageFileReaderTest
         ${TEMP}/ioImageFileReaderPNG2LUM.lum
         ${TEMP}/ioImageFileReaderLUM2LUM.lum )
 
 ADD_TEST(ioTvImageFileWriterLUM2HDR ${IO_TESTS1}
-  --compare-image ${TOL}        ${INPUTDATA}/cthead1.png
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/cthead1.png
                                 ${TEMP}/ioImageFileReaderLUM2HDR.hdr
         otbImageFileReaderTest
         ${TEMP}/ioImageFileReaderLUM2LUM.lum
@@ -152,21 +153,21 @@ ADD_TEST(ioTvImageFileWriterLUM2HDR ${IO_TESTS1}
 
 # --- Image I2
 ADD_TEST(ioTvImageFileReaderShortLUM2HDR ${IO_TESTS1}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_I2.lum
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_I2.lum
                                 ${TEMP}/ioImageFileReaderI2_LUM2HDR.hdr
         otbShortImageIOTest
         ${INPUTDATA}/poupees_I2.lum
         ${TEMP}/ioImageFileReaderI2_LUM2HDR.hdr )
 
 ADD_TEST(ioTvImageFileReaderShortHDR2LUM ${IO_TESTS1}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_I2.lum
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_I2.lum
                                 ${TEMP}/ioImageFileReaderI2_HDR2LUM.lum
         otbShortImageIOTest
         ${TEMP}/ioImageFileReaderI2_LUM2HDR.hdr
         ${TEMP}/ioImageFileReaderI2_HDR2LUM.lum )
 
 ADD_TEST(ioTvImageFileReaderShortLUM2LUM ${IO_TESTS1}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_I2.lum
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_I2.lum
                                 ${TEMP}/ioImageFileReaderI2_LUM2LUM.lum
         otbShortImageIOTest
         ${INPUTDATA}/poupees_I2.lum
@@ -181,14 +182,14 @@ ADD_TEST(ioTuMWImageIOCanReadMW ${IO_TESTS1} otbMWImageIOTestCanRead
         ${BASELINE}/QB_Toulouse_Ortho_PAN.mw)
 
 ADD_TEST(ioTvImageFileReaderMW2TIFIMG ${IO_TESTS1}
-  --compare-image ${TOL}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
                                 ${TEMP}/ioImageFileReaderMW2TIF.tif
         otbImageFileReaderTestFloat
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
         ${TEMP}/ioImageFileReaderMW2TIF.tif )
 
 ADD_TEST(ioTvImageFileReaderMW2TIFMW ${IO_TESTS1}
-  --compare-image ${TOL}        ${BASELINE}/QB_Toulouse_Ortho_PAN.mw
+  --compare-image ${EPSILON_9}        ${BASELINE}/QB_Toulouse_Ortho_PAN.mw
                                 ${TEMP}/ioImageFileReaderMW2TIF.tif
         otbImageFileReaderTestFloat
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
@@ -200,7 +201,7 @@ ADD_TEST(ioTuMWImageIOCanWrite ${IO_TESTS1} otbMWImageIOTestCanWrite
         ${TEMP}/QB_Toulouse_Ortho_PAN.mw)
 
 ADD_TEST(ioTvImageFileReaderTIF2MW ${IO_TESTS1}
-  --compare-image ${TOL}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
                                 ${TEMP}/ioImageFileReaderTIF2MW.mw
         otbImageFileReaderTestFloat
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
@@ -217,13 +218,13 @@ ADD_TEST(ioTuImageIOFactoryNew ${IO_TESTS1}
 
 # --- Image I4
 ADD_TEST(ioTvImageFileReaderIntLUM2HDR ${IO_TESTS2}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_I4.lum
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_I4.lum
                                 ${TEMP}/ioImageFileReaderI4_LUM2HDR.hdr
         otbIntImageIOTest
         ${INPUTDATA}/poupees_I4.lum
         ${TEMP}/ioImageFileReaderI4_LUM2HDR.hdr )
 ADD_TEST(ioTvImageFileReaderIntHDR2LUM ${IO_TESTS2}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_I4.lum
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_I4.lum
                                 ${TEMP}/ioImageFileReaderI4_HDR2LUM.lum
         otbIntImageIOTest
         ${TEMP}/ioImageFileReaderI4_LUM2HDR.hdr
@@ -231,13 +232,13 @@ ADD_TEST(ioTvImageFileReaderIntHDR2LUM ${IO_TESTS2}
 
 # --- Image FLOAT
 ADD_TEST(ioTvImageFileReaderFloatLUM2HDR ${IO_TESTS2}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_R4.lum
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_R4.lum
                                 ${TEMP}/ioImageFileReaderR4_LUM2HDR.hdr
         otbFloatImageIOTest
         ${INPUTDATA}/poupees_R4.lum
         ${TEMP}/ioImageFileReaderR4_LUM2HDR.hdr )
 ADD_TEST(ioTvImageFileReaderFloatHDR2LUM ${IO_TESTS2}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_R4.lum
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_R4.lum
                                 ${TEMP}/ioImageFileReaderR4_HDR2LUM.lum
         otbFloatImageIOTest
         ${TEMP}/ioImageFileReaderR4_LUM2HDR.hdr
@@ -245,13 +246,13 @@ ADD_TEST(ioTvImageFileReaderFloatHDR2LUM ${IO_TESTS2}
 
 # --- Image DOUBLE
 ADD_TEST(ioTvImageFileReaderDoubleLUM2HDR ${IO_TESTS2}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_R8.lum
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_R8.lum
                                 ${TEMP}/ioImageFileReaderR8_LUM2HDR.hdr
         otbDoubleImageIOTest
         ${INPUTDATA}/poupees_R8.lum
         ${TEMP}/ioImageFileReaderR8_LUM2HDR.hdr )
 ADD_TEST(ioTvImageFileReaderDoubleHDR2LUM ${IO_TESTS2}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_R8.lum
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_R8.lum
                                 ${TEMP}/ioImageFileReaderR8_HDR2LUM.lum
         otbDoubleImageIOTest
         ${TEMP}/ioImageFileReaderR8_LUM2HDR.hdr
@@ -261,7 +262,7 @@ ADD_TEST(ioTvImageFileReaderDoubleHDR2LUM ${IO_TESTS2}
 
 
 ADD_TEST(ioTvImageFileReaderFloatPNG2LUM ${IO_TESTS2}
-  --compare-image ${TOL}        ${INPUTDATA}/cthead1.png
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/cthead1.png
                                 ${TEMP}/ioImageFileReaderFloatPNG2LUM.lum
         otbFloatImageIOTest
         ${INPUTDATA}/cthead1.png
@@ -270,7 +271,7 @@ ADD_TEST(ioTvImageFileReaderFloatPNG2LUM ${IO_TESTS2}
 
 # ---  STREAMING : LUM  ---
 ADD_TEST(ioTvStreamingImageFilterLUM2PNG ${IO_TESTS2}
-   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2LUM.lum
+   --compare-image ${EPSILON_9}       ${TEMP}/ioImageFileReaderPNG2LUM.lum
                                 ${TEMP}/ioStreamingImageFilterTestLUM.png
          otbStreamingImageFilterTest
          ${TEMP}/ioImageFileReaderPNG2LUM.lum
@@ -279,7 +280,7 @@ ADD_TEST(ioTvStreamingImageFilterLUM2PNG ${IO_TESTS2}
 
 # ---  LUM STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterLUMWithoutStreaming ${IO_TESTS2}
-   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2LUM.lum
+   --compare-image ${EPSILON_9}       ${TEMP}/ioImageFileReaderPNG2LUM.lum
                                 ${TEMP}/ioStreamingImageFileWriterLUM2LUMWithoutStreaming.lum
          otbStreamingImageFileWriterTest
          ${TEMP}/ioImageFileReaderPNG2LUM.lum
@@ -289,7 +290,7 @@ ADD_TEST(ioTvStreamingIFWriterLUMWithoutStreaming ${IO_TESTS2}
          )
 # ---  LUM STREAMING  With STREAMING IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterLUMWithStreaming ${IO_TESTS2}
-   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2LUM.lum
+   --compare-image ${EPSILON_9}       ${TEMP}/ioImageFileReaderPNG2LUM.lum
                                 ${TEMP}/ioStreamingImageFileWriterLUM2LUMWithStreaming_10.lum
          otbStreamingImageFileWriterTest
          ${TEMP}/ioImageFileReaderPNG2LUM.lum
@@ -299,7 +300,7 @@ ADD_TEST(ioTvStreamingIFWriterLUMWithStreaming ${IO_TESTS2}
          )
 # ---  LUM STREAMING  With IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingWithIFWriterLUMWithStreaming ${IO_TESTS2}
-   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2LUM.lum
+   --compare-image ${EPSILON_9}       ${TEMP}/ioImageFileReaderPNG2LUM.lum
                                 ${TEMP}/ioStreamingWithImageFileWriterLUM2LUMWithStreaming_10.lum
          otbStreamingImageFileWriterTest
          ${TEMP}/ioImageFileReaderPNG2LUM.lum
@@ -318,13 +319,13 @@ ADD_TEST(ioTvStreamingPipeline_TIF2PNG ${IO_TESTS2}
 
 # --- Image FLOAT
 ADD_TEST(ioTvImageFileReaderFloatBSQ2HDR ${IO_TESTS2}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_R4.hd
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_R4.hd
                                 ${TEMP}/ioImageFileReaderR4_BSQ2HDR.hdr
         otbFloatImageIOTest
         ${INPUTDATA}/poupees_R4.hd
         ${TEMP}/ioImageFileReaderR4_BSQ2HDR.hdr )
 ADD_TEST(ioTvImageFileReaderFloatHDR2BSQ ${IO_TESTS2}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_R4.hd
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_R4.hd
                                 ${TEMP}/ioImageFileReaderR4_HDR2BSQ.hd
         otbFloatImageIOTest
         ${TEMP}/ioImageFileReaderR4_BSQ2HDR.hdr
@@ -332,13 +333,13 @@ ADD_TEST(ioTvImageFileReaderFloatHDR2BSQ ${IO_TESTS2}
 
 # --- Image DOUBLE
 ADD_TEST(ioTvImageFileReaderDoubleBSQ2HDR ${IO_TESTS2}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_R8.hd
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_R8.hd
                                 ${TEMP}/ioImageFileReaderR8_BSQ2HDR.hdr
         otbDoubleImageIOTest
         ${INPUTDATA}/poupees_R8.hd
         ${TEMP}/ioImageFileReaderR8_BSQ2HDR.hdr )
 ADD_TEST(ioTvImageFileReaderDoubleHDR2BSQ ${IO_TESTS2}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_R8.hd
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_R8.hd
                                 ${TEMP}/ioImageFileReaderR8_HDR2BSQ.hd
         otbDoubleImageIOTest
         ${TEMP}/ioImageFileReaderR8_BSQ2HDR.hdr
@@ -347,13 +348,13 @@ ADD_TEST(ioTvImageFileReaderDoubleHDR2BSQ ${IO_TESTS2}
 
 # ---  STREAMING FILTER : BSQ  ---
 ADD_TEST(ioTvImageFileReaderPNG2BSQ ${IO_TESTS2}
-  --compare-image ${TOL}        ${INPUTDATA}/cthead1.png
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/cthead1.png
                                 ${TEMP}/ioImageFileReaderPNG2BSQ.hd
         otbImageFileReaderTest
         ${INPUTDATA}/cthead1.png
         ${TEMP}/ioImageFileReaderPNG2BSQ.hd )
 ADD_TEST(ioTvStreamingImageFilterBSQ2PNG ${IO_TESTS2}
-   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+   --compare-image ${EPSILON_9}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
                                 ${TEMP}/ioStreamingImageFilterTestBSQ.png
          otbStreamingImageFilterTest
          ${TEMP}/ioImageFileReaderPNG2BSQ.hd
@@ -362,7 +363,7 @@ ADD_TEST(ioTvStreamingImageFilterBSQ2PNG ${IO_TESTS2}
 
 # ---  BSQ STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS2}
-   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+   --compare-image ${EPSILON_9}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
                                 ${TEMP}/ioStreamingImageFileWriterBSQ2BSQWithoutStreaming.hd
          otbStreamingImageFileWriterTest
          ${TEMP}/ioImageFileReaderPNG2BSQ.hd
@@ -372,7 +373,7 @@ ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS2}
          )
 # ---  BSQ STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS2}
-   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+   --compare-image ${EPSILON_9}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
                                 ${TEMP}/ioStreamingImageFileWriterBSQ2BSQWithStreaming_10.hd
          otbStreamingImageFileWriterTest
          ${TEMP}/ioImageFileReaderPNG2BSQ.hd
@@ -382,7 +383,7 @@ ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS2}
          )
 # ---  BSQ STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingWithIFWriterBSQWithStreaming ${IO_TESTS2}
-   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+   --compare-image ${EPSILON_9}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
                                 ${TEMP}/ioStreamingWithImageFileWriterBSQ2BSQWithStreaming_10.hd
          otbStreamingImageFileWriterTest
          ${TEMP}/ioImageFileReaderPNG2BSQ.hd
@@ -408,28 +409,28 @@ ADD_TEST(ioTuBSQImageIOCanWrite ${IO_TESTS3} otbBSQImageIOTestCanWrite
         ${TEMP}/poupees.hd)
 
 ADD_TEST(ioTvImageFileReaderPNG2ENVI ${IO_TESTS3}
-  --compare-image ${TOL}        ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+  --compare-image ${EPSILON_9}        ${TEMP}/ioImageFileReaderPNG2BSQ.hd
                                 ${TEMP}/ioImageFileReaderPNG2ENVI.hdr
         otbImageFileReaderTest
         ${INPUTDATA}/cthead1.png
         ${TEMP}/ioImageFileReaderPNG2ENVI.hdr )
 
 ADD_TEST(ioTvImageFileReaderBSQ2PNG ${IO_TESTS3}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_1canal.hd
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_1canal.hd
                                 ${TEMP}/ioImageFileReaderBSQ2PNG.png
         otbImageFileReaderTest
         ${INPUTDATA}/poupees_1canal.hd
         ${TEMP}/ioImageFileReaderBSQ2PNG.png )
 
 ADD_TEST(ioTvImageFileReaderRGB_PNG2BSQ ${IO_TESTS3}
-  --compare-image ${TOL}        ${INPUTDATA}/couleurs_extrait.png
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/couleurs_extrait.png
                                 ${TEMP}/ioImageFileReaderRGB_PNG2BSQ.hd
         otbImageFileReaderRGBTest
         ${INPUTDATA}/couleurs_extrait.png
         ${TEMP}/ioImageFileReaderRGB_PNG2BSQ.hd )
 
 ADD_TEST(ioTvImageFileReaderRGB_PNG2ENVI ${IO_TESTS3}
-  --compare-image ${TOL}        ${INPUTDATA}/couleurs_extrait.png
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/couleurs_extrait.png
                                 ${TEMP}/ioImageFileReaderRGB_PNG2ENVI.hdr
         otbImageFileReaderRGBTest
         ${INPUTDATA}/couleurs_extrait.png
@@ -438,7 +439,7 @@ ADD_TEST(ioTvImageFileReaderRGB_PNG2ENVI ${IO_TESTS3}
 # FIXME Desactivated until http://bugs.orfeo-toolbox.org/view.php?id=103
 # is solved
 # ADD_TEST(ioTvCheckReadPNGIndexee ${IO_TESTS3}
-#   --compare-image ${TOL}        ${INPUTDATA}/sbuv_indexee.png
+#   --compare-image ${EPSILON_9}        ${INPUTDATA}/sbuv_indexee.png
 #                                 ${TEMP}/ioImageFileReaderRGB_PNGIndexee2TIF.tif
 #         otbImageFileReaderRGBTest
 #         ${INPUTDATA}/sbuv_indexee.png
@@ -447,14 +448,14 @@ ADD_TEST(ioTvImageFileReaderRGB_PNG2ENVI ${IO_TESTS3}
 
 # --- Image I2
 ADD_TEST(ioTvImageFileReaderShortRGB_BSQ2HDR ${IO_TESTS3}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_I2.hd
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_I2.hd
                                 ${TEMP}/ioImageFileReaderI2_BSQ2HDR.hdr
         otbShortRGBImageIOTest
         ${INPUTDATA}/poupees_I2.hd
         ${TEMP}/ioImageFileReaderI2_BSQ2HDR.hdr )
 
 ADD_TEST(ioTvImageFileReaderShortHDR2BSQ ${IO_TESTS3}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_I2.hd
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_I2.hd
                                 ${TEMP}/ioImageFileReaderI2_HDR2BSQ.hd
         otbShortRGBImageIOTest
         ${TEMP}/ioImageFileReaderI2_BSQ2HDR.hdr
@@ -462,13 +463,13 @@ ADD_TEST(ioTvImageFileReaderShortHDR2BSQ ${IO_TESTS3}
 
 # --- Image I4
 ADD_TEST(ioTvImageFileReaderIntBSQ2HDR ${IO_TESTS3}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_I4.hd
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_I4.hd
                                 ${TEMP}/ioImageFileReaderI4_BSQ2HDR.hdr
         otbIntImageIOTest
         ${INPUTDATA}/poupees_I4.hd
         ${TEMP}/ioImageFileReaderI4_BSQ2HDR.hdr )
 ADD_TEST(ioTvImageFileReaderIntHDR2BSQ ${IO_TESTS3}
-  --compare-image ${TOL}        ${INPUTDATA}/poupees_I4.hd
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_I4.hd
                                 ${TEMP}/ioImageFileReaderI4_HDR2BSQ.hd
         otbIntImageIOTest
         ${TEMP}/ioImageFileReaderI4_BSQ2HDR.hdr
@@ -567,14 +568,14 @@ ADD_TEST(ioTuONERAImageIOCanRead ${IO_TESTS6} otbONERAImageIOTestCanRead
 
 
 ADD_TEST(ioTvONERAImageFileReader ${IO_TESTS6}
-  --compare-image ${TOL}  ${BASELINE}/ioImageFileReaderONERA.hdr
+  --compare-image ${EPSILON_9}  ${BASELINE}/ioImageFileReaderONERA.hdr
                           ${TEMP}/ioImageFileReaderONERA.hdr
         otbImageFileReaderONERATest
         ${LARGEDATA}/ONERA/spa3_0215_rad.ent
         ${TEMP}/ioImageFileReaderONERA.hdr )
 
 ADD_TEST(ioTvONERAImageFileReaderComplex ${IO_TESTS6}
-  --compare-n-images ${TOL} 2
+  --compare-n-images ${EPSILON_9} 2
 			  ${BASELINE}/ioImageFileReaderONERAComplexReal.hdr
 			  ${TEMP}/ioImageFileReaderONERAComplexReal.hdr
 			  ${BASELINE}/ioImageFileReaderONERAComplexImag.hdr
@@ -585,14 +586,14 @@ ADD_TEST(ioTvONERAImageFileReaderComplex ${IO_TESTS6}
 	${TEMP}/ioImageFileReaderONERAComplexImag.hdr )
 
 ADD_TEST(ioTvONERAImageFileWriterComplex ${IO_TESTS6}
-  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderONERAComplexWrite.ent
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileReaderONERAComplexWrite.ent
                            ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
         otbImageFileWriterONERAComplex
         ${LARGEDATA}/ONERA/spa3_0215_rad.ent
         ${TEMP}/ioImageFileReaderONERAComplexWrite.ent )
 
 ADD_TEST(ioTvONERAImageStreamWriter ${IO_TESTS6}
-  --compare-image ${TOL}   ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
+  --compare-image ${EPSILON_9}   ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
   			   ${TEMP}/ioImageFileReaderONERAStreamWrite.ent
         otbImageFileWriterStreamingONERAComplex
         ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
@@ -609,7 +610,7 @@ ADD_TEST(ioTuMSTARImageIOCanRead2 ${IO_TESTS6} otbMSTARImageIOTestCanRead
         ${INPUTDATA}/MSTAR/HB20010.000)
 
 ADD_TEST(ioTvImageFileReaderMSTAR ${IO_TESTS6}
-  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderMSTAR_rescal_chanel1.png
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileReaderMSTAR_rescal_chanel1.png
                     ${TEMP}/ioImageFileReaderMSTAR_rescal_chanel1.png
         otbImageFileReaderMSTAR
         ${INPUTDATA}/MSTAR/HB19896.016
@@ -623,47 +624,47 @@ ADD_TEST(ioTvImageFileReaderMSTAR ${IO_TESTS6}
 # -------            otb::ImageFileReader pour CAI  ------------------------------
 # Niveau de Gris
 ADD_TEST(ioTvImageFileReaderPNG2PNG ${IO_TESTS7}
-  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderPNG2PNG_cthead1.png
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileReaderPNG2PNG_cthead1.png
                     ${TEMP}/ioImageFileReaderPNG2PNG_cthead1.png
         otbImageFileReaderTest
         ${INPUTDATA}/cthead1.png
         ${TEMP}/ioImageFileReaderPNG2PNG_cthead1.png )
 # RGB
 ADD_TEST(ioTvImageFileReaderRGB_PNG2PNG ${IO_TESTS7}
-  --compare-image ${TOL}   ${INPUTDATA}/couleurs_extrait.png
+  --compare-image ${EPSILON_9}   ${INPUTDATA}/couleurs_extrait.png
                     ${TEMP}/ioImageFileReaderRGB_PNG2PNG.png
         otbImageFileReaderRGBTest
         ${INPUTDATA}/couleurs_extrait.png
         ${TEMP}/ioImageFileReaderRGB_PNG2PNG.png )
 ADD_TEST(ioTvImageFileReaderRGB_PNG2TIFF ${IO_TESTS7}
-  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderRGB_PNG2TIFF.tiff
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileReaderRGB_PNG2TIFF.tiff
                     ${TEMP}/ioImageFileReaderRGB_PNG2TIFF.tiff
         otbImageFileReaderRGBTest
         ${INPUTDATA}/couleurs_extrait.png
         ${TEMP}/ioImageFileReaderRGB_PNG2TIFF.tiff )
 ADD_TEST(ioTvImageFileReaderRGB_BSQ2PNG ${IO_TESTS7}
-  --compare-image ${TOL}   ${INPUTDATA}/poupees.hdr
+  --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.hdr
                     ${TEMP}/ioImageFileReaderRGB_BSQ2PNG_poupees.png
         otbImageFileReaderRGBTest
         ${INPUTDATA}/poupees.hdr
         ${TEMP}/ioImageFileReaderRGB_BSQ2PNG_poupees.png )
 
 ADD_TEST(ioTvImageFileReaderRGB_BSQ2TIFF ${IO_TESTS7}
-  --compare-image ${TOL}   ${INPUTDATA}/poupees.hdr
+  --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.hdr
                     ${TEMP}/ioImageFileReaderRGB_BSQ2TIFF_poupees.tiff
         otbImageFileReaderRGBTest
         ${INPUTDATA}/poupees.hdr
         ${TEMP}/ioImageFileReaderRGB_BSQ2TIFF_poupees.tiff )
 
 ADD_TEST(ioTvImageFileReaderRGB_Cai_SPOT5TIF2PNG ${IO_TESTS7}
-  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesTIF.png
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesTIF.png
                     ${TEMP}/ioImageFileReaderRGB_Cai_SPOT5TIF2PNG_poupeesTIF.png
         otbImageFileReaderRGBTest
         ${INPUTDATA}/poupeesTIF/
         ${TEMP}/ioImageFileReaderRGB_Cai_SPOT5TIF2PNG_poupeesTIF.png )
 
 ADD_TEST(ioTvImageFileReaderRGB_Gdal_SPOT5TIF2PNG ${IO_TESTS7}
-  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesTIF.png
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesTIF.png
                     ${TEMP}/ioImageFileReaderRGB_Gdal_SPOT5TIF2PNG_poupeesTIF.png
         otbImageFileReaderRGBTest
         ${INPUTDATA}/poupeesTIF/IMAGERY.TIF
@@ -671,7 +672,7 @@ ADD_TEST(ioTvImageFileReaderRGB_Gdal_SPOT5TIF2PNG ${IO_TESTS7}
 
 # Suppression CAI
 # ADD_TEST(ioTvImageFileReaderRGB_SPOT5BIL2PNG ${IO_TESTS7}
-#   --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesBIL.png
+#   --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesBIL.png
 #                     ${TEMP}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesBIL.png
 #         otbImageFileReaderRGBTest
 #         ${INPUTDATA}/poupeesBIL
@@ -685,7 +686,7 @@ ADD_TEST(ioTvImageFileReaderRGB_Gdal_SPOT5TIF2PNG ${IO_TESTS7}
 # Niveau de Gris
 
 ADD_TEST(ioTvImageFileWriterPNG2PNG ${IO_TESTS8}
-  --compare-image ${TOL}   ${INPUTDATA}/cthead1.png
+  --compare-image ${EPSILON_9}   ${INPUTDATA}/cthead1.png
                     ${TEMP}/ioImageFileWriterPNG2PNG_cthead1.png
         otbImageFileWriterTest
         ${INPUTDATA}/cthead1.png
@@ -697,14 +698,14 @@ ADD_TEST(ioTvImageFileWriterPNG2BSQ ${IO_TESTS8}
         ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hdr )
 
 ADD_TEST(ioTvImageFileReaderENVI2PNG ${IO_TESTS8}
-  --compare-image ${TOL}   ${INPUTDATA}/cthead1.png
+  --compare-image ${EPSILON_9}   ${INPUTDATA}/cthead1.png
                     ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1_2.png
         otbImageFileReaderTest
         ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hdr
         ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1_2.png )
 
 ADD_TEST(ioTvImageFileReaderPDS2TIFF ${IO_TESTS8}
-  --compare-image ${TOL}   ${INPUTDATA}/pdsImage.img
+  --compare-image ${EPSILON_9}   ${INPUTDATA}/pdsImage.img
                            ${TEMP}/ioTvImageFileReaderPDS2TIFF.tif
         otbImageFileReaderTest
         ${INPUTDATA}/pdsImage.img
@@ -712,7 +713,7 @@ ADD_TEST(ioTvImageFileReaderPDS2TIFF ${IO_TESTS8}
 # RGB
 
 ADD_TEST(ioTvImageFileWriterRGB_PNG2PNG ${IO_TESTS8}
-  --compare-image ${TOL}   ${BASELINE}/ioImageFileWriterRGB_PNG2PNG.png
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileWriterRGB_PNG2PNG.png
                     ${TEMP}/ioImageFileWriterRGB_PNG2PNG.png
         otbImageFileWriterRGBTest
         ${INPUTDATA}/couleurs_extrait.png
@@ -724,7 +725,7 @@ ADD_TEST(ioTvImageFileWriterRGB_PNG2BSQ ${IO_TESTS8}
         ${TEMP}/ioImageFileWriterRGB_PNG2BSQ.hdr )
 
 ADD_TEST(ioTvImageFileReaderRGB_BSQ2PNG_2 ${IO_TESTS8}
-  --compare-image ${TOL}   ${INPUTDATA}/couleurs_extrait.png
+  --compare-image ${EPSILON_9}   ${INPUTDATA}/couleurs_extrait.png
                     ${TEMP}/ioImageFileReaderRGB_PNG2BSQ_2.png
         otbImageFileReaderRGBTest
         ${TEMP}/ioImageFileWriterRGB_PNG2BSQ.hdr
@@ -742,52 +743,52 @@ ADD_TEST(ioTvGDALImageFileWriterTIF2TIF ${IO_TESTS8}
 
 
 ADD_TEST(ioTvImageReaderWriterRgbPNG2PNG ${IO_TESTS8}
-   --compare-image ${TOL}   ${INPUTDATA}/poupees.png
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.png
                      ${TEMP}/ioImageReaderWriterRgbPNG2PNG_poupees.png
         otbImageFileReaderRGBTest
         ${INPUTDATA}/poupees.png
         ${TEMP}/ioImageReaderWriterRgbPNG2PNG_poupees.png )
 
 ADD_TEST(ioTvImageReaderWriterRgbPNG2TIF ${IO_TESTS8}
-   --compare-image ${TOL}   ${INPUTDATA}/poupees.png
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.png
                      ${TEMP}/ioImageReaderWriterRgbPNG2TIF_poupees.tif
         otbImageFileReaderRGBTest
         ${INPUTDATA}/poupees.png
         ${TEMP}/ioImageReaderWriterRgbPNG2TIF_poupees.tif )
 ADD_TEST(ioTvImageReaderWriterRgbPNG2ENVI ${IO_TESTS8}
-   --compare-image ${TOL}   ${INPUTDATA}/poupees.png
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.png
                      ${TEMP}/ioImageReaderWriterRgbPNG2ENVI_poupees
         otbImageFileReaderRGBTest
         ${INPUTDATA}/poupees.png
         ${TEMP}/ioImageReaderWriterRgbPNG2ENVI_poupees.hdr )
 ADD_TEST(ioTvImageReaderWriterRgbPNG2JPEG ${IO_TESTS8}
 # THOMAS (provisoire) : Images OK mais erreur au DIFF ITK !!!
-#   --compare-image ${TOL} ${INPUTDATA}/poupees.png
+#   --compare-image ${EPSILON_9} ${INPUTDATA}/poupees.png
 #                 ${TEMP}/ioImageReaderWriterRgbPNG2JPEG_poupees.jpg
         otbImageFileReaderRGBTest
         ${INPUTDATA}/poupees.png
         ${TEMP}/ioImageReaderWriterRgbPNG2JPEG_poupees.jpg )
 
 ADD_TEST(ioTvImageReaderWriterRgbTIF2PNG ${IO_TESTS8}
-   --compare-image ${TOL}   ${INPUTDATA}/poupees.tif
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.tif
                      ${TEMP}/ioImageReaderWriterRgbTIF2PNG_poupees.png
         otbImageFileReaderRGBTest
         ${INPUTDATA}/poupees.tif
         ${TEMP}/ioImageReaderWriterRgbTIF2PNG_poupees.png )
 ADD_TEST(ioTvImageReaderWriterRgbENVI2PNG ${IO_TESTS8}
-   --compare-image ${TOL}   ${INPUTDATA}/poupees
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees
                      ${TEMP}/ioImageReaderWriterRgbENVI2PNG_poupees.png
         otbImageFileReaderRGBTest
         ${INPUTDATA}/poupees
         ${TEMP}/ioImageReaderWriterRgbENVI2PNG_poupees.png )
 ADD_TEST(ioTvImageReaderWriterRgbJPEG2PNG ${IO_TESTS8}
-   --compare-image ${TOL}   ${INPUTDATA}/couleurs.jpg
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/couleurs.jpg
                      ${TEMP}/ioImageReaderWriterRgbJPEG2PNG_couleurs.png
         otbImageFileReaderRGBTest
         ${INPUTDATA}/couleurs.jpg
         ${TEMP}/ioImageReaderWriterRgbJPEG2PNG_couleurs.png )
 ADD_TEST(ioTvImageReaderWriterRgbJPEG2TIF ${IO_TESTS8}
-   --compare-image ${TOL}   ${INPUTDATA}/couleurs.jpg
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/couleurs.jpg
                      ${TEMP}/ioImageReaderWriterRgbJPEG2TIF_couleurs.tif
         otbImageFileReaderRGBTest
         ${INPUTDATA}/couleurs.jpg
@@ -804,7 +805,7 @@ ADD_TEST(ioTvImageReaderWriterRgbJPEG2TIF ${IO_TESTS8}
 IF(OTB_DATA_USE_LARGEINPUT)
 # ---  SPOT4 (CAI)  ---
 ADD_TEST(ioTvMultiChannelROI_SPOT42PNG ${COMMON_TESTS2}
-   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
                      ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
          otbMultiChannelExtractROI
          ${LARGEDATA}/SPOT4_SCENE01/
@@ -812,7 +813,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT42PNG ${COMMON_TESTS2}
          -startX 700 -startY 60 -sizeX 77 -sizeY 489
          -channels 1 2 3 )
 ADD_TEST(ioTvMultiChannelROI_SPOT42PNG_2 ${COMMON_TESTS2}
-   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
                      ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
          otbMultiChannelExtractROI
          ${LARGEDATA}/SPOT4_SCENE01/
@@ -824,7 +825,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 # ---  ENVI  ---
 ADD_TEST(ioTvMultiChannelROI_ENVI2PNG_2 ${COMMON_TESTS2}
 # THOMAS (provisoire) : Images OK mais erreur au DIFF ITK !!!
-#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_ENVI2PNG_poupees_100_100_77_300_channels_1_2_3.png
+#   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_ENVI2PNG_poupees_100_100_77_300_channels_1_2_3.png
 #                     ${TEMP}/ioExtractROI_ENVI2PNG_poupees_100_100_77_300_channels_1_2_3.png
          otbMultiChannelExtractROI
          -uchar ${INPUTDATA}/poupees.hdr
@@ -836,7 +837,7 @@ ADD_TEST(ioTvMultiChannelROI_ENVI2PNG_2 ${COMMON_TESTS2}
 
 
 # ADD_TEST(ioTvMultiChannelROI_SPOT5BIL2PNG_2 ${COMMON_TESTS2}
-#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT5BIL2PNG_poupees_100_100_77_300_channels_1_2_3.png
+#   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT5BIL2PNG_poupees_100_100_77_300_channels_1_2_3.png
 #                     ${TEMP}/ioExtractROI_SPOT5BIL2PNG_poupees_100_100_77_300_channels_1_2_3.png
 #         otbMultiChannelExtractROI
 #         ${INPUTDATA}/poupeesBIL
@@ -848,7 +849,7 @@ ADD_TEST(ioTvMultiChannelROI_ENVI2PNG_2 ${COMMON_TESTS2}
 # ---  Test sur l'image SPOT 5 4 canaux  ---
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvMultiChannelROI_SPOT52PNG ${COMMON_TESTS2}
-   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
          otbMultiChannelExtractROI
          ${LARGEDATA}/SPOT5_SCENE01/
@@ -857,7 +858,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG ${COMMON_TESTS2}
          -channels 1 2 3 )
 
 ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_2 ${COMMON_TESTS2}
-   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
          otbMultiChannelExtractROI
          ${LARGEDATA}/SPOT5_SCENE01/
@@ -865,7 +866,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_2 ${COMMON_TESTS2}
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 1 )
 ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_3 ${COMMON_TESTS2}
-   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
          otbMultiChannelExtractROI
          ${LARGEDATA}/SPOT5_SCENE01/
@@ -873,7 +874,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_3 ${COMMON_TESTS2}
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 2 )
 ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_4 ${COMMON_TESTS2}
-   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
          otbMultiChannelExtractROI
          ${LARGEDATA}/SPOT5_SCENE01/
@@ -881,7 +882,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_4 ${COMMON_TESTS2}
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 3 )
 ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_5 ${COMMON_TESTS2}
-   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
          otbMultiChannelExtractROI
          ${LARGEDATA}/SPOT5_SCENE01/
@@ -891,7 +892,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_5 ${COMMON_TESTS2}
 
 # ---  Ikonos PAN  ---
 ADD_TEST(ioTvMultiChannelROI_IkonosPAN2PNG ${COMMON_TESTS2}
-   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
                      ${TEMP}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
          ${LARGEDATA}/PARIS/Ikonos/po_79039_pan_0000000.tif
@@ -901,7 +902,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosPAN2PNG ${COMMON_TESTS2}
 
 # ---  Ikonos XS  ---
 ADD_TEST(ioTvMultiChannelROI_IkonosRED2PNG ${COMMON_TESTS2}
-   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
                             ${TEMP}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
          ${LARGEDATA}/PARIS/Ikonos/po_79039_red_0000000.tif
@@ -910,7 +911,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosRED2PNG ${COMMON_TESTS2}
          -channels 1)
 
 ADD_TEST(ioTvMultiChannelROI_IkonosGRN2PNG ${COMMON_TESTS2}
-   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
                      ${TEMP}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
          ${LARGEDATA}/PARIS/Ikonos/po_79039_grn_0000000.tif
@@ -919,7 +920,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosGRN2PNG ${COMMON_TESTS2}
          -channels 1)
 
 ADD_TEST(ioTvMultiChannelROI_IkonosBLU2PNG ${COMMON_TESTS2}
-   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
                      ${TEMP}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
          ${LARGEDATA}/PARIS/Ikonos/po_79039_blu_0000000.tif
@@ -928,7 +929,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosBLU2PNG ${COMMON_TESTS2}
          -channels 1)
 
 ADD_TEST(ioTvMultiChannelROI_IkonosNIR2PNG ${COMMON_TESTS2}
-   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
                      ${TEMP}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
          ${LARGEDATA}/PARIS/Ikonos/po_79039_nir_0000000.tif
@@ -938,7 +939,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosNIR2PNG ${COMMON_TESTS2}
 
 # ---  LUM ----
 ADD_TEST(ioTvMultiChannelROI_IkonosNIR2LUM ${COMMON_TESTS2}
-   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
                      ${TEMP}/ioExtractROI_IkonosNIR2LUM_100_100_77_300.lum
          otbMultiChannelExtractROI
          ${LARGEDATA}/PARIS/Ikonos/po_79039_nir_0000000.tif
@@ -948,7 +949,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosNIR2LUM ${COMMON_TESTS2}
 
 # ---  BSQ ----
 ADD_TEST(ioTvMultiChannelROI_IkonosNIR2BSQ ${COMMON_TESTS2}
-   --compare-image ${TOL}       ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
+   --compare-image ${EPSILON_9}       ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
                                 ${TEMP}/ioExtractROI_IkonosNIR2BSQ_100_100_77_300.hd
          otbMultiChannelExtractROI
          ${LARGEDATA}/PARIS/Ikonos/po_79039_nir_0000000.tif
@@ -958,7 +959,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosNIR2BSQ ${COMMON_TESTS2}
 
 # ---  Quickbird PAN  ---
 ADD_TEST(ioTvMultiChannelROI_QuickbirdPAN2TIFF ${COMMON_TESTS2}
-   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_QuickbirdPAN2TIFF_1000_1000_100_150.tif
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_QuickbirdPAN2TIFF_1000_1000_100_150.tif
                      ${TEMP}/ioExtractROI_QuickbirdPAN2TIFF_1000_1000_100_150.tif
          otbMultiChannelExtractROI
          -ushort ${LARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
@@ -968,7 +969,7 @@ ADD_TEST(ioTvMultiChannelROI_QuickbirdPAN2TIFF ${COMMON_TESTS2}
 
 # ---  Quickbird XS  ---
 ADD_TEST(ioTvMultiChannelROI_QuickbirdXS2TIFF ${COMMON_TESTS2}
-   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_QuickbirdXS2TIFF_1000_1000_100_150.tif
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_QuickbirdXS2TIFF_1000_1000_100_150.tif
                      ${TEMP}/ioExtractROI_QuickbirdXS2TIFF_1000_1000_100_150.tif
          otbMultiChannelExtractROI
          -ushort ${LARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
@@ -1020,7 +1021,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # ---  otb::VectorImageReadWriteTest  ---
 ADD_TEST(ioTvVectorImageFileReaderWriterTest ${IO_TESTS9}
-   --compare-image ${TOL}
+   --compare-image ${EPSILON_9}
 		   ${INPUTDATA}/qb_RoadExtract.img.hdr
                    ${TEMP}/ioTvVectorImageFileReaderWriterTest.hdr
         otbVectorImageFileReaderWriterTest
@@ -1030,7 +1031,7 @@ ADD_TEST(ioTvVectorImageFileReaderWriterTest ${IO_TESTS9}
 
 # ---  otb::StreamingShortImageFileWriterTest  ---
 ADD_TEST(ioTvStreamingShortImageFileWriterTest ${IO_TESTS9}
-   --compare-image ${TOL}
+   --compare-image ${EPSILON_9}
 		   ${INPUTDATA}/poupees_sub.png
                    ${TEMP}/ioTvStreamingShortImageFileWriterTest.png
         otbStreamingShortImageFileWriterTest
@@ -1041,7 +1042,7 @@ ADD_TEST(ioTvStreamingShortImageFileWriterTest ${IO_TESTS9}
 
 # ---  otb::StreamingShortImageFileWriterTest  ---
 ADD_TEST(ioTvStreamingShortImageFileWriterStreamedTest ${IO_TESTS9}
-   --compare-image ${TOL}
+   --compare-image ${EPSILON_9}
 		   ${INPUTDATA}/poupees_sub.png
                    ${TEMP}/ioTvStreamingShortImageFileWriterStreamedTest.png
         otbStreamingShortImageFileWriterTest
@@ -1054,8 +1055,8 @@ ADD_TEST(ioTvStreamingShortImageFileWriterStreamedTest ${IO_TESTS9}
 
 # ---  STREAMING : GDAL  ---
 ADD_TEST(ioTvStreamingImageFilterGDAL_ENVI ${IO_TESTS9}
-#   --compare-image ${TOL} ${TEMP}/ioStreamingImageFilterTestCDAL_ENVI.png
-   --compare-image ${TOL} ${INPUTDATA}/poupees_1canal.c1.hdr
+#   --compare-image ${EPSILON_9} ${TEMP}/ioStreamingImageFilterTestCDAL_ENVI.png
+   --compare-image ${EPSILON_9} ${INPUTDATA}/poupees_1canal.c1.hdr
                       ${TEMP}/ioStreamingImageFilterTestCDAL_ENVI.png
          otbStreamingImageFilterTest
          ${INPUTDATA}/poupees_1canal.c1.hdr
@@ -1064,7 +1065,7 @@ ADD_TEST(ioTvStreamingImageFilterGDAL_ENVI ${IO_TESTS9}
 
 # ---  STREAMING : GDAL  ---
 ADD_TEST(ioTvStreamingImageFilterGDAL_TIFF ${IO_TESTS9}
-#   --compare-image ${TOL} ${TEMP}/ioStreamingImageFilterTestGDAL_PoupeesTif.png
+#   --compare-image ${EPSILON_9} ${TEMP}/ioStreamingImageFilterTestGDAL_PoupeesTif.png
 #                      ${TEMP}/ioStreamingImageFilterTestGDAL_PoupeesTif.png
          otbStreamingImageFilterTest
          ${INPUTDATA}/poupeesTIF/IMAGERY.TIF
@@ -1074,7 +1075,7 @@ ADD_TEST(ioTvStreamingImageFilterGDAL_TIFF ${IO_TESTS9}
 
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS2}
-   --compare-image ${TOL}   ${INPUTDATA}/poupees_1canal.c1.hdr
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees_1canal.c1.hdr
                       ${TEMP}/ioStreamingImageFileWriterBSQWithoutStreaming.hdr
          otbStreamingImageFileWriterTest
          ${INPUTDATA}/poupees_1canal.c1.hdr
@@ -1084,7 +1085,7 @@ ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS2}
          )
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS2}
-   --compare-image ${TOL}   ${INPUTDATA}/poupees_1canal.c1.hdr
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees_1canal.c1.hdr
                       ${TEMP}/ioStreamingImageFileWriterBSQWithStreaming_100.hdr
          otbStreamingImageFileWriterTest
          ${INPUTDATA}/poupees_1canal.c1.hdr
@@ -1101,7 +1102,7 @@ ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS2}
 # ---  TESTS DIFFERENT ACTIVATE STREAMING PARAMETER  ---
 # 1. DEFAULT
 ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_DEFAULT ${IO_TESTS10}
-   --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
                       		${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_DEFAULT.tif
          otbStreamingImageFileWriterTestCalculateNumberOfDivisions
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
@@ -1110,7 +1111,7 @@ ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_DEFAULT ${IO_TES
          )
 # 1.bis WITH IMAGEFILEWRITER : DEFAULT
 ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_DEFAULT ${IO_TESTS10}
-   --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
                           ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_DEFAULT.tif
          otbStreamingWithImageFileWriterTestCalculateNumberOfDivisions
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
@@ -1119,7 +1120,7 @@ ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_DEFAULT ${IO
          )
 # 2. AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS
 ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS ${IO_TESTS10}
-   --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
                       		${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS.tif
          otbStreamingImageFileWriterTestCalculateNumberOfDivisions
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
@@ -1128,7 +1129,7 @@ ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NUMBER
          )
 # 2.bis WITH IMAGEFILEWRITER : AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS
 ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS ${IO_TESTS10}
-   --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
                           ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS.tif
          otbStreamingWithImageFileWriterTestCalculateNumberOfDivisions
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
@@ -1137,7 +1138,7 @@ ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NU
          )
 # 3. NUMBER_OF_STREAM_DIVISIONS
 ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_NUMBER_OF_STREAM_DIVISIONS ${IO_TESTS10}
-   --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
                       		${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_NUMBER_OF_STREAM_DIVISIONS_10.tif
          otbStreamingImageFileWriterTestCalculateNumberOfDivisions
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
@@ -1148,7 +1149,7 @@ ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_NUMBER_OF_STREAM
 
 # 3.bis WITH IMAGEFILEWRITER : NUMBER_OF_STREAM_DIVISIONS
 ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_NUMBER_OF_STREAM_DIVISIONS ${IO_TESTS10}
-   --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
                           ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_NUMBER_OF_STREAM_DIVISIONS_10.tif
          otbStreamingWithImageFileWriterTestCalculateNumberOfDivisions
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
@@ -1161,7 +1162,7 @@ ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_NUMBER_OF_ST
 
 # 4. BUFFER_MEMORY_SIZE
 ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMORY_SIZE ${IO_TESTS10}
-   --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
                           ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMORY_SIZE_8x2000x10.tif
          otbStreamingImageFileWriterTestCalculateNumberOfDivisions
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
@@ -1171,7 +1172,7 @@ ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMORY_SI
          )
 # 4.bis WITH IMAGEFILEWRITER BUFFER_MEMORY_SIZE
 ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMORY_SIZE ${IO_TESTS10}
-   --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
                           ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMORY_SIZE_8x2000x10.tif
          otbStreamingWithImageFileWriterTestCalculateNumberOfDivisions
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
@@ -1181,7 +1182,7 @@ ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMOR
          )
 # 5. BUFFER_NUMBER_OF_LINES
 ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF_LINES ${IO_TESTS10}
-   --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
                           ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF_LINES_1000.tif
          otbStreamingImageFileWriterTestCalculateNumberOfDivisions
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
@@ -1191,7 +1192,7 @@ ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF
          )
 # 5.bis WITH IMAGEFILEWRITER  BUFFER_NUMBER_OF_LINES
 ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF_LINES ${IO_TESTS10}
-   --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
                           ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF_LINES_1000.tif
          otbStreamingWithImageFileWriterTestCalculateNumberOfDivisions
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
@@ -1201,7 +1202,7 @@ ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBE
          )
 # 6. TILING_STREAM_DIVISIONS
 ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_TILING_STREAM_DIVISIONS ${IO_TESTS10}
-   --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
 			    ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_TILING_STREAM_DIVISIONS.tif
          otbStreamingImageFileWriterTestCalculateNumberOfDivisions
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
@@ -1210,7 +1211,7 @@ ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_TILING_STREAM_DI
          )
 # 7. TILING_STREAM_DIVISIONS with number of divisions
 ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_TILING_NUMBER_OF_STREAM_DIVISIONS ${IO_TESTS10}
-   --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
 			    ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_TILING_NUMBER_OF_STREAM_DIVISIONS.tif
          otbStreamingImageFileWriterTestCalculateNumberOfDivisions
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
@@ -1220,7 +1221,7 @@ ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_TILING_NUMBER_OF
          )
 
 ADD_TEST(ioTvStreamingIFWriterWithFilter ${IO_TESTS10}
-   --compare-image ${TOL}   ${BASELINE}/ioStreamingImageFileWriterWithFilter_1_100.hdr
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioStreamingImageFileWriterWithFilter_1_100.hdr
                             ${TEMP}/ioStreamingImageFileWriterWithFilter_1_100.hdr
          otbStreamingImageFileWriterWithFilterTest
          ${INPUTDATA}/poupees_1canal.c1.hdr
@@ -1237,7 +1238,7 @@ ADD_TEST(ioTvStreamingIFWriterWithFilter ${IO_TESTS10}
 #---------- Metadata writing tests ------------------------
 
 ADD_TEST(ioTvImageMetadataWriterTest_HFA ${IO_TESTS11}
-   --compare-metadata ${TOL}
+   --compare-metadata ${EPSILON_9}
 		      ${INPUTDATA}/HFAGeoreferenced.img
 		      ${TEMP}/temp.img
         otbImageMetadataFileWriterTest
@@ -1246,7 +1247,7 @@ ADD_TEST(ioTvImageMetadataWriterTest_HFA ${IO_TESTS11}
         )
 
 ADD_TEST(ioTvImageMetadataWriterTest_TIF ${IO_TESTS11}
-   --compare-metadata ${TOL}
+   --compare-metadata ${EPSILON_9}
 		      ${INPUTDATA}/spot5SubWithGcps.tif
 		      ${TEMP}/temp.tif
         otbImageMetadataFileWriterTest
@@ -1257,7 +1258,7 @@ ADD_TEST(ioTvImageMetadataWriterTest_TIF ${IO_TESTS11}
 
 # Commented because gdal does not seems to write the metadata the same way in both formats
 #ADD_TEST(ioTvImageMetadataWriterTest_HFA2TIFF ${IO_TESTS11}
-#   --compare-metadata ${TOL}
+#   --compare-metadata ${EPSILON_9}
 #		      ${INPUTDATA}/HFAGeoreferenced.img
 #		      ${TEMP}/temp.tif
 #        otbImageMetadataFileWriterTest
@@ -1267,7 +1268,7 @@ ADD_TEST(ioTvImageMetadataWriterTest_TIF ${IO_TESTS11}
 
 # Commented because gdal does not seems to write the metadata the same way in both formats
 #ADD_TEST(ioTvImageMetadataWriterTest_TIFF2HFA ${IO_TESTS11}
-#   --compare-metadata ${TOL}
+#   --compare-metadata ${EPSILON_9}
 #		      ${INPUTDATA}/spot5SubWithGcps.tif
 #		      ${TEMP}/temp.img
 #        otbImageMetadataFileWriterTest
@@ -1277,7 +1278,7 @@ ADD_TEST(ioTvImageMetadataWriterTest_TIF ${IO_TESTS11}
 
 
 ADD_TEST(ioTvImageMetadataStreamingWriterTest_HFA ${IO_TESTS11}
-   --compare-metadata ${TOL}
+   --compare-metadata ${EPSILON_9}
 		      ${INPUTDATA}/HFAGeoreferenced.img
 		      ${TEMP}/temp.img
         otbImageMetadataStreamingFileWriterTest
@@ -1286,7 +1287,7 @@ ADD_TEST(ioTvImageMetadataStreamingWriterTest_HFA ${IO_TESTS11}
         )
 
 ADD_TEST(ioTvImageMetadataStreamingWriterTest_TIF ${IO_TESTS11}
-   --compare-metadata ${TOL}
+   --compare-metadata ${EPSILON_9}
 		      ${INPUTDATA}/spot5SubWithGcps.tif
 		      ${TEMP}/temp.tif
         otbImageMetadataStreamingFileWriterTest
@@ -1296,7 +1297,7 @@ ADD_TEST(ioTvImageMetadataStreamingWriterTest_TIF ${IO_TESTS11}
 
 # Commented because gdal does not seems to write the metadata the same way in both formats
 #ADD_TEST(ioTvImageMetadataStreamingWriterTest_HFA2TIFF ${IO_TESTS11}
-#   --compare-metadata ${TOL}
+#   --compare-metadata ${EPSILON_9}
 #		      ${INPUTDATA}/HFAGeoreferenced.img
 #		      ${TEMP}/temp.tif
 #        otbImageMetadataStreamingFileWriterTest
@@ -1306,7 +1307,7 @@ ADD_TEST(ioTvImageMetadataStreamingWriterTest_TIF ${IO_TESTS11}
 
 # Commented because gdal does not seems to write the metadata the same way in both formats
 #ADD_TEST(ioTvImageMetadataStreamingWriterTest_TIFF2HFA ${IO_TESTS11}
-#   --compare-metadata ${TOL}
+#   --compare-metadata ${EPSILON_9}
 #		      ${INPUTDATA}/spot5SubWithGcps.tif
 #		      ${TEMP}/temp.img
 #        otbImageMetadataStreamingFileWriterTest
@@ -1315,7 +1316,7 @@ ADD_TEST(ioTvImageMetadataStreamingWriterTest_TIF ${IO_TESTS11}
 #        )
 
 ADD_TEST(ioTvPipelineMetadataHandlingTest ${IO_TESTS11}
-   --compare-metadata ${TOL}
+   --compare-metadata ${EPSILON_9}
 		      ${INPUTDATA}/HFAGeoreferenced.img
 		      ${TEMP}/temp.img
         otbPipelineMetadataHandlingTest
@@ -1325,7 +1326,7 @@ ADD_TEST(ioTvPipelineMetadataHandlingTest ${IO_TESTS11}
 
 # Commented out, since this test fails beceause of an ITK bug (added to our bugtracker for tracking)
 #ADD_TEST(ioTvPipelineMetadataHandlingWithUFFilterTest ${IO_TESTS11}
-#   --compare-metadata ${TOL}
+#   --compare-metadata ${EPSILON_9}
 #		      ${INPUTDATA}/HFAGeoreferenced.img
 #		      ${TEMP}/temp.img
 #        otbPipelineMetadataHandlingWithUFFilterTest
@@ -1342,7 +1343,7 @@ ADD_TEST(ioTuSpatialObjectDXFReaderNew ${IO_TESTS11}
          otbSpatialObjectDXFReaderNew)
 
 ADD_TEST(ioTvSpatialObjectDXFReader ${IO_TESTS11}
---compare-image ${TOL}
+--compare-image ${EPSILON_9}
 	 ${BASELINE}/ioTvSpatialObjectDXFReaderOutput.png
 	 ${TEMP}/ioTvSpatialObjectDXFReaderOutput.png
          otbSpatialObjectDXFReader
@@ -1412,7 +1413,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTuDEMHandlerNew ${IO_TESTS12} otbDEMHandlerNew )
 
 ADD_TEST(ioTvDEMHandler ${IO_TESTS12}
---compare-ascii ${TOL} 	${BASELINE_FILES}/ioDEMGetHeightAboveMSL.txt
+--compare-ascii ${EPSILON_9} 	${BASELINE_FILES}/ioDEMGetHeightAboveMSL.txt
                         ${TEMP}/ioDEMGetHeightAboveMSL.txt
         otbDEMHandlerTest
         ${INPUTDATA}/DEM/srtm_directory
@@ -1427,7 +1428,7 @@ ADD_TEST(ioTuImageGeometryHandlerNew ${IO_TESTS12} otbImageGeometryHandlerNew )
 ADD_TEST(ioTuDEMToImageGeneratorNew ${IO_TESTS12} otbDEMToImageGeneratorNew )
 
 ADD_TEST(ioTvDEMToImageGeneratorTest ${IO_TESTS12}
---compare-image ${TOL}  ${BASELINE}/ioTvDEMToImageGenerator.tif
+--compare-image ${EPSILON_9}  ${BASELINE}/ioTvDEMToImageGenerator.tif
                         ${TEMP}/ioTvDEMToImageGenerator.tif
         otbDEMToImageGeneratorTest
          ${INPUTDATA}/DEM/srtm_directory
@@ -1441,7 +1442,7 @@ ADD_TEST(ioTvDEMToImageGeneratorTest ${IO_TESTS12}
         )
 
 ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
---compare-image ${TOL}  ${BASELINE}/ioTvossimElevManagerTest.tif
+--compare-image ${EPSILON_9}  ${BASELINE}/ioTvossimElevManagerTest.tif
                         ${TEMP}/ioTvossimElevManagerTest.tif
         otbOssimElevManagerTest
          ${INPUTDATA}/DEM/srtm_directory
@@ -1455,7 +1456,7 @@ ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
          )
 
 ADD_TEST(ioTvossimElevManagerTest2 ${IO_TESTS12}
---compare-ascii ${TOL}  ${BASELINE_FILES}/ioTvossimElevManagerTest2.txt
+--compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvossimElevManagerTest2.txt
                         ${TEMP}/ioTvossimElevManagerTest2.txt
         otbOssimElevManagerTest2
          ${INPUTDATA}/DEM/srtm_directory
@@ -1473,7 +1474,7 @@ ADD_TEST(ioTuDEMToOrthoImageGeneratorNew ${IO_TESTS12}
       otbDEMToOrthoImageGeneratorNew )
 
 ADD_TEST(ioTvDEMToOrthoImageGeneratorTest ${IO_TESTS12}
---compare-image ${TOL}  ${BASELINE}/ioTvDEMToOrthoImageGenerator.tif
+--compare-image ${EPSILON_9}  ${BASELINE}/ioTvDEMToOrthoImageGenerator.tif
                         ${TEMP}/ioTvDEMToOrthoImageGenerator.tif
         otbDEMToOrthoImageGeneratorTest
          ${INPUTDATA}/DEM/srtm_directory
@@ -1490,7 +1491,7 @@ ADD_TEST(ioTvDEMToOrthoImageGeneratorTest ${IO_TESTS12}
 
 #Big extend
 ADD_TEST(ioTvDEMToOrthoImageGeneratorTest2 ${IO_TESTS12}
---compare-image ${TOL}  ${BASELINE}/ioTvDEMToOrthoImageGenerator2.tif
+--compare-image ${EPSILON_9}  ${BASELINE}/ioTvDEMToOrthoImageGenerator2.tif
                         ${TEMP}/ioTvDEMToOrthoImageGenerator2.tif
         otbDEMToOrthoImageGeneratorTest
          ${INPUTDATA}/DEM/srtm_directory
@@ -1503,7 +1504,7 @@ ADD_TEST(ioTuPrepareSRTMDirectoryNew ${IO_TESTS12}
       otbPrepareSRTMDirectoryNew )
 
 ADD_TEST(ioTuPrepareSRTMDirectoryTest ${IO_TESTS12}
-  --compare-n-ascii ${TOL} 3
+  --compare-n-ascii ${EPSILON_9} 3
 		    ${INPUTDATA}/DEM/srtm_directory/N44E007.hgt
 		    ${TEMP}/ioTuPrepareSRTMDirectoryTest/N44E007.hgt
 		    ${INPUTDATA}/DEM/srtm_directory/N46E007.hgt
@@ -1562,7 +1563,7 @@ ADD_TEST(ioTuJP2ImageIOCanRead ${IO_TESTS13}
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(ioTvVectorImageFileReaderWriterJ2K2TIF ${IO_TESTS9}
---compare-image ${TOL}  ${BASELINE}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
+--compare-image ${EPSILON_9}  ${BASELINE}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
                         ${TEMP}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
          otbVectorImageFileReaderWriterTest
          ${INPUTDATA}/bretagne.j2k
@@ -1570,7 +1571,7 @@ ADD_TEST(ioTvVectorImageFileReaderWriterJ2K2TIF ${IO_TESTS9}
          )
 
 ADD_TEST(ioTvImageFileReaderWriterJ2K2TIF ${IO_TESTS2}
---compare-image ${TOL}  ${BASELINE}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
+--compare-image ${EPSILON_9}  ${BASELINE}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
                         ${TEMP}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
          otbDoubleImageIOTest
          ${INPUTDATA}/bretagne.j2k
@@ -1580,7 +1581,7 @@ ADD_TEST(ioTvImageFileReaderWriterJ2K2TIF ${IO_TESTS2}
 #NOTE: we are comparing with the kakadu output in raw format.
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF ${IO_TESTS9}
---compare-image ${TOL}  ${BASELINE}/ioTvVectorImageFileReaderWriterJP22TIFOutput
+--compare-image ${EPSILON_9}  ${BASELINE}/ioTvVectorImageFileReaderWriterJP22TIFOutput
                         ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
          otbVectorImageFileReaderWriterTest
          ${LARGEDATA}/JPEG2000/QB_multicomp_small.jpx
@@ -1589,7 +1590,7 @@ ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF ${IO_TESTS9}
 
 
 ADD_TEST(ioTvImageFileReaderWriterJP22TIF ${IO_TESTS2}
---compare-image ${TOL}  ${BASELINE}/ioTvImageFileReaderWriterJP22TIFOutput.tif
+--compare-image ${EPSILON_9}  ${BASELINE}/ioTvImageFileReaderWriterJP22TIFOutput.tif
                         ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
          otbDoubleImageIOTest
          ${LARGEDATA}/JPEG2000/QB_multicomp_small.jpx
@@ -1613,7 +1614,7 @@ ENDIF(OTB_COMPILE_JPEG2000)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ADD_TEST(ioTvGDALDriverDoubleWritingTest ${IO_TESTS14}
-		--compare-n-images ${TOL} 4
+		--compare-n-images ${EPSILON_9} 4
 			${INPUTDATA}/poupees.tif
 			${TEMP}/ioGdalDriverDoubleWritingTestImage1.tif
 			${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
@@ -1639,7 +1640,7 @@ ADD_TEST(ioTvReadingComplexDataIntoComplexImage ${IO_TESTS14}
 )
 
 ADD_TEST(ioTvWritingComplexDataWithComplexImage ${IO_TESTS14}
---compare-image ${TOL}
+--compare-image ${EPSILON_9}
 		${BASELINE}/ioWritingComplexDataWithComplexImageOutput.tif
 		${TEMP}/ioWritingComplexDataWithComplexImageOutput.tif
 		otbWritingComplexDataWithComplexImageTest
@@ -1664,7 +1665,7 @@ ADD_TEST(ioTuVectorDataFileReaderNew ${IO_TESTS15}
 
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvSHPVectorDataFileReader ${IO_TESTS15}
-        --compare-ascii ${TOL}  ${BASELINE_FILES}/ioSHPVectorDataFileReader.txt
+        --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioSHPVectorDataFileReader.txt
                         ${TEMP}/ioSHPVectorDataFileReader.txt
         otbVectorDataFileReader
 	${LARGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
@@ -1673,7 +1674,7 @@ ADD_TEST(ioTvSHPVectorDataFileReader ${IO_TESTS15}
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(ioTvSHPVectorDataFileReader2 ${IO_TESTS15}
-        --compare-ascii ${TOL}  ${BASELINE_FILES}/ioSHPVectorDataFileReader2.txt
+        --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioSHPVectorDataFileReader2.txt
                         ${TEMP}/ioSHPVectorDataFileReader2.txt
         otbVectorDataFileReader
 	${INPUTDATA}/ToulouseRoad-examples.shp
@@ -1682,7 +1683,7 @@ ADD_TEST(ioTvSHPVectorDataFileReader2 ${IO_TESTS15}
 
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTlSHPVectorDataFileReader3 ${IO_TESTS15}
-        --compare-ascii ${TOL}  ${BASELINE_FILES}/ioSHPVectorDataFileReader3.txt
+        --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioSHPVectorDataFileReader3.txt
                         ${TEMP}/ioSHPVectorDataFileReader3.txt
         otbVectorDataFileReader
 	${LARGEDATA}/VECTOR/MidiPyrenees/roads.shp
@@ -1696,7 +1697,7 @@ ADD_TEST(ioTuVectorDataFileWriterNew ${IO_TESTS15}
 
 
 ADD_TEST(ioTvVectorDataFileWriter ${IO_TESTS15}
-        --compare-ogr  ${TOL}
+        --compare-ogr  ${EPSILON_9}
             ${BASELINE_FILES}/ioTvVectorDataFileWriterOutput.shp
             ${TEMP}/ioTvVectorDataFileWriterOutput.shp
         otbVectorDataFileWriter
@@ -1710,7 +1711,7 @@ ADD_TEST(ioTvVectorDataFileWriterTwice ${IO_TESTS15}
 
 
 ADD_TEST(ioTvVectorDataFileWriterPolygons ${IO_TESTS15}
-        --compare-ogr  ${TOL}
+        --compare-ogr  ${EPSILON_9}
             ${BASELINE_FILES}/ioTvVectorDataFileWriterPolygonsOutput.shp
             ${TEMP}/ioTvVectorDataFileWriterPolygonsOutput.shp
         otbVectorDataFileWriterPolygons
@@ -1720,7 +1721,7 @@ ADD_TEST(ioTvVectorDataFileWriterPolygons ${IO_TESTS15}
 
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvVectorDataFileReaderWriter ${IO_TESTS15}
-        --compare-ogr  ${TOL}
+        --compare-ogr  ${EPSILON_9}
             ${BASELINE_FILES}/ioTvVectorDataFileReaderWriterOutput.shp
             ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp
         otbVectorDataFileReaderWriter
@@ -1730,7 +1731,7 @@ ADD_TEST(ioTvVectorDataFileReaderWriter ${IO_TESTS15}
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(ioTvVectorDataFileGeoReaderWriter ${IO_TESTS15}
-        --compare-ogr  ${TOL}
+        --compare-ogr  ${EPSILON_9}
             ${BASELINE_FILES}/ioTvVectorDataFileGeoReaderWriterOutput.shp
             ${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput.shp
         otbVectorDataFileGeoReaderWriter
@@ -1739,7 +1740,7 @@ ADD_TEST(ioTvVectorDataFileGeoReaderWriter ${IO_TESTS15}
 	)
 
 ADD_TEST(ioTvVectorDataFileGeoReaderWriter2 ${IO_TESTS15}
-        --compare-ogr  ${TOL}
+        --compare-ogr  ${EPSILON_9}
             ${BASELINE_FILES}/ioTvVectorDataFileGeoReaderWriterOutput2.shp
             ${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput2.shp
         otbVectorDataFileGeoReaderWriter
@@ -1779,7 +1780,7 @@ ADD_TEST(ioTvKMLVectorDataIOFileReaderLines ${IO_TESTS15}
         ${TEMP}/lines.kml)
 
 ADD_TEST(ioTuVectorDataKeywordlist ${IO_TESTS15}
-        --compare-ascii ${TOL}
+        --compare-ascii ${EPSILON_9}
             ${BASELINE_FILES}/ioTuVectorDataKeywordlist.txt
             ${TEMP}/ioTuVectorDataKeywordlist.txt
         otbVectorDataKeywordlist
@@ -1803,7 +1804,7 @@ ADD_TEST(ioTuRADImageIOCanRead_RADCI2 ${IO_TESTS16}
 
 # Convert a ci2.RAD file into ENVI format
 ADD_TEST(ioTvImageFileReaderRADCI22ENVI ${IO_TESTS16}${EXAMPLEDATA}
---compare-image ${TOL}
+--compare-image ${EPSILON_9}
 	${BASELINE}/ioImageFileReaderRADCI22ENVI.hdr
 	${TEMP}/ioImageFileReaderRADCI22ENVI.hdr
         otbImageFileReaderRADComplexFloatExtract
@@ -1860,7 +1861,7 @@ ADD_TEST(ioTvImageFileReaderTIF2RADCI4 ${IO_TESTS16}
 #        ${TEMP}/ioImageFileReaderPNG2RADPHA.rad )
 
 ADD_TEST(ioTvImageSeriesFileReader ${IO_TESTS16}
-        --compare-n-images ${TOL} 2
+        --compare-n-images ${EPSILON_9} 2
             ${BASELINE}/ioTvImageSeries-0.png
             ${TEMP}/ioTvImageSeries-0.png
             ${BASELINE}/ioTvImageSeries-1.png
@@ -1880,7 +1881,7 @@ ADD_TEST(ioTuPointSetFileReaderNew ${IO_TESTS17}
         otbPointSetFileReaderNew )
 
 ADD_TEST(ioTvPointSetFileReader ${IO_TESTS17}
-        --compare-ascii ${TOL}  ${BASELINE_FILES}/ioPointSetFileReader.txt
+        --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioPointSetFileReader.txt
                         ${TEMP}/ioPointSetFileReader.txt
         otbPointSetFileReader
   ${INPUTDATA}/srs.las
@@ -1889,35 +1890,35 @@ ENDIF(OTB_USE_LIBLAS)
 
 
 ADD_TEST(ioTuImageMetadataInterfaceNew ${IO_TESTS17}
-#         --compare-ascii ${TOL}  ${BASELINE_FILES}/ioPointSetFileReader.txt
+#         --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioPointSetFileReader.txt
 #                         ${TEMP}/ioPointSetFileReader.txt
         otbImageMetadataInterfaceNew
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvImageMetadataInterfaceQBTest ${IO_TESTS17}
-         --compare-ascii 0 ${BASELINE_FILES}/ioTvImageMetadataInterfaceQB.txt
+         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceQB.txt
                          ${TEMP}/ioTvImageMetadataInterfaceQB.txt
         otbImageMetadataInterfaceTest
         ${LARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceQB.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceQBCevennesTest ${IO_TESTS17}
-         --compare-ascii 0 ${BASELINE_FILES}/ioTvImageMetadataInterfaceQBCevennes.txt
+         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceQBCevennes.txt
                          ${TEMP}/ioTvImageMetadataInterfaceQBCevennes.txt
         otbImageMetadataInterfaceTest
         ${LARGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceQBCevennes.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceIKONOSTest ${IO_TESTS17}
-         --compare-ascii 0 ${BASELINE_FILES}/ioTvImageMetadataInterfaceIKONOS.txt
+         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceIKONOS.txt
                          ${TEMP}/ioTvImageMetadataInterfaceIKONOS.txt
         otbImageMetadataInterfaceTest
         ${LARGEDATA}/IKONOS_BLOSSEVILLE/po_2619900_blu_0000000.tif
         ${TEMP}/ioTvImageMetadataInterfaceIKONOS.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceSPOTTest ${IO_TESTS17}
-         --compare-ascii 0 ${BASELINE_FILES}/ioTvImageMetadataInterfaceSPOT.txt
+         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceSPOT.txt
                          ${TEMP}/ioTvImageMetadataInterfaceSPOT.txt
         otbImageMetadataInterfaceTest
         ${LARGEDATA}/SPOT5_SCENE01/IMAGERY.TIF
@@ -1926,7 +1927,7 @@ ADD_TEST(ioTvImageMetadataInterfaceSPOTTest ${IO_TESTS17}
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(ioTvImageMetadataInterfaceTest ${IO_TESTS17}
-         --compare-ascii 0 ${BASELINE_FILES}/ioTvImageMetadataInterface.txt
+         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterface.txt
                          ${TEMP}/ioTvImageMetadataInterface.txt
         otbImageMetadataInterfaceTest2
         ${EXAMPLEDATA}/qb_RoadExtract.tif
