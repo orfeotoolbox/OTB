@@ -95,8 +95,8 @@ OTB_GCP & ImageMetadataInterface::GetGCPs( MetaDataDictionaryType & dict, unsign
     itk::ExposeMetaData<OTB_GCP>(dict, key, m_GCP);
   }
   return ( m_GCP );
-
 }
+
 
 std::string ImageMetadataInterface::GetGCPId( const MetaDataDictionaryType & dict, unsigned int GCPnum ) const
 {
@@ -380,8 +380,8 @@ ImageMetadataInterface::VariableLengthVectorType
 	    outputValues.push_back(keywordStrings[i].toDouble());
 	  }
       }
-    
-    
+
+
     outputValuesVariableLengthVector.SetSize(outputValues.size());
     outputValuesVariableLengthVector.Fill(0);
     //In the case of SPOT, the bands are in a different order:
@@ -437,7 +437,7 @@ ImageMetadataInterface::VariableLengthVectorType
       std::string keyBId= "support_data.band_id";
       ossimString keywordStringBId = kwl.find(keyBId.c_str());
       if( keywordStringBId == ossimString("P") )
-      {  
+      {
           outputValuesVariableLengthVector.SetSize(1);
           outputValuesVariableLengthVector.Fill(1381.79);
       }
@@ -507,7 +507,7 @@ int ImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) const
 
   ossimKeywordlist kwl;
   imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  
+
   std::string key;
   ossimString separatorList;
   if(IsSpot(dict))
@@ -609,7 +609,7 @@ int ImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) const
   {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
- 
+
   ossimKeywordlist kwl;
   imageKeywordlist.convertToOSSIMKeywordlist(kwl);
 
@@ -646,7 +646,7 @@ int ImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) const
  if(IsIkonos(dict))
   {
       year = keywordStrings[2];
-      year = "20"+year; 
+      year = "20"+year;
   }
 
   return year.toInt();
@@ -836,7 +836,7 @@ ImageMetadataInterface::VariableLengthVectorType
  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
   {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
-  }  
+  }
   ossimKeywordlist kwl;
   ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
 
@@ -844,7 +844,7 @@ ImageMetadataInterface::VariableLengthVectorType
   std::string keyBId= "support_data.band_id";
   ossimString keywordStringBId = kwl.find(keyBId.c_str());
   if( keywordStringBId == ossimString("P") )
-  {  
+  {
       outputValuesVariableLengthVector.SetSize(1);
       outputValuesVariableLengthVector.Fill(0.0);
   }
@@ -896,10 +896,10 @@ ImageMetadataInterface::GetQuickbirdPhysicalGain( const MetaDataDictionaryType &
   {
     if(productionYear == 2003)
     {
-      if(productionMonth > 6) 
+      if(productionMonth > 6)
         isPost20030606 = true;
       else
-        if(productionDay >= 6) 
+        if(productionDay >= 6)
           isPost20030606 = true;
     }
   }
@@ -948,7 +948,7 @@ ImageMetadataInterface::GetQuickbirdPhysicalGain( const MetaDataDictionaryType &
   {
      itkExceptionMacro(<<"Invalid bandID "<<keywordStringBId);
   }
-  
+
   return outputValuesVariableLengthVector;
 }
 

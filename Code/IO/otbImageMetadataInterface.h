@@ -32,7 +32,7 @@
 
 
 /** */
-#define otbMetadataMacro(name,type) \
+#define otbMetadataGetMacro(name,type) \
   type Get##name () const \
   { \
     if (m_Image.IsNull()) \
@@ -78,12 +78,15 @@ public:
 
   /** Get the projection coordinate system of the image. */
   std::string GetProjectionRef( const MetaDataDictionaryType & dict ) const;
-  otbMetadataMacro(ProjectionRef,std::string);
+  otbMetadataGetMacro(ProjectionRef, std::string);
 
   /** Get the GCP projection coordinates of the image. */
   std::string GetGCPProjection( const MetaDataDictionaryType & dict ) const;
+  otbMetadataGetMacro(GCPProjection, std::string);
+
 
   unsigned int GetGCPCount( const MetaDataDictionaryType & dict ) const;
+  otbMetadataGetMacro(GCPCount, unsigned int);
 
   OTB_GCP & GetGCPs( MetaDataDictionaryType & dict, unsigned int GCPnum );
 
@@ -104,16 +107,21 @@ public:
   /** Get the six coefficients of affine geoTtransform. */
 
   VectorType GetGeoTransform( const MetaDataDictionaryType & dict ) const;
+  otbMetadataGetMacro(GeoTransform, VectorType);
 
   /** Get image corners. */
 
   VectorType GetUpperLeftCorner( const MetaDataDictionaryType & dict ) const;
+  otbMetadataGetMacro(UpperLeftCorner, VectorType);
 
   VectorType GetUpperRightCorner( const MetaDataDictionaryType & dict ) const;
+  otbMetadataGetMacro(UpperRightCorner, VectorType);
 
   VectorType GetLowerLeftCorner( const MetaDataDictionaryType & dict ) const;
+  otbMetadataGetMacro(LowerLeftCorner, VectorType);
 
   VectorType GetLowerRightCorner( const MetaDataDictionaryType & dict ) const;
+  otbMetadataGetMacro(LowerRightCorner, VectorType);
 
   /** Get the ImageKeywordlist */
   ImageKeywordlistType GetImageKeywordlist( MetaDataDictionaryType & dict );
@@ -121,36 +129,47 @@ public:
 
   /** Get the radiometric bias from the ossim metadata */
   VariableLengthVectorType GetPhysicalBias( const MetaDataDictionaryType & dict ) const;
+  otbMetadataGetMacro(PhysicalBias, VariableLengthVectorType);
 
   /** Get the radiometric gain from the ossim metadata */
   VariableLengthVectorType GetPhysicalGain( const MetaDataDictionaryType & dict ) const;
+  otbMetadataGetMacro(PhysicalGain, VariableLengthVectorType);
 
   /** Get the solar irradiance from the ossim metadata */
   VariableLengthVectorType GetSolarIrradiance( const MetaDataDictionaryType & dict ) const;
+  otbMetadataGetMacro(SolarIrradiance, VariableLengthVectorType);
 
   /** Get the sun elevation from the ossim metadata */
   double GetSunElevation( const MetaDataDictionaryType & dict ) const;
+  otbMetadataGetMacro(SunElevation, double);
 
   /** Get the sun azimuth from the ossim metadata */
   double GetSunAzimuth( const MetaDataDictionaryType & dict ) const;
+  otbMetadataGetMacro(SunAzimuth, double);
 
   /** Get the imaging day from the ossim metadata */
   int GetDay( const MetaDataDictionaryType & dict ) const;
+  otbMetadataGetMacro(Day, int);
 
   /** Get the imaging month from the ossim metadata */
   int GetMonth( const MetaDataDictionaryType & dict ) const;
+  otbMetadataGetMacro(Month, int);
 
   /** Get the imaging month from the ossim metadata */
   int GetYear( const MetaDataDictionaryType & dict ) const;
+  otbMetadataGetMacro(Year, int);
 
   /** Get the sensor ID from the ossim metadata */
   std::string GetSensorID(const MetaDataDictionaryType & dict ) const;
+  otbMetadataGetMacro(SensorID, std::string);
 
   /** Get the number of bands from the ossim metadata */
   unsigned int GetNumberOfBands(const MetaDataDictionaryType & dict ) const;
+  otbMetadataGetMacro(NumberOfBands, unsigned int);
 
   /** Get the band name from the ossim metadata */
   std::vector<std::string> GetBandName(const MetaDataDictionaryType & dict ) const;
+  otbMetadataGetMacro(BandName, std::vector<std::string>);
 
   void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const;
 
