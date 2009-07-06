@@ -28,7 +28,7 @@ namespace otb
  * \class CompacityPathFunction
  * \brief Calculate the compacity of a path.
  * The formula of the compacity is :
- * \f[ compacity = Surface / Perimeter^{2} \cdot \pi \f]
+ * \f[ compacity = 4 \pi Surface / Perimeter^{2} \f]
  *
  * The path must contain at least 3 points.
  * The result value is comprise between 0.0 and 1.0
