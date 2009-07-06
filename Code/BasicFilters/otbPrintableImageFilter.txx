@@ -42,7 +42,7 @@ PrintableImageFilter<TInputImage, TMaskImage>
   m_ChannelList[2] = 4;
   m_ObjectColor.SetSize( 3 );
   m_ObjectColor.Fill(255);
-
+  m_UseMask = false;
   m_BackgroundMaskValue = 0;
 }
 
