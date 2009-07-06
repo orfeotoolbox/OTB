@@ -241,12 +241,12 @@ ImageLayer<TImage,TOutputImage>
   //the user of the class don't want to use it
   if (m_Transform->IsUpToDate())
   {
-    if (m_Transform->GetTransformAccuracy() != UNKNOWN)
+    if (m_Transform->GetTransformAccuracy() != Projection::UNKNOWN)
     {
       PointType point = this->GetPixelLocation(index);
       oss<< setiosflags(ios::fixed) << setprecision(6) << "Lon: " << point[0] << " Lat: "<< point[1] << std::endl;
-      if (m_Transform->GetTransformAccuracy() == PRECISE) oss<< "(precise location)" << std::endl;
-      if (m_Transform->GetTransformAccuracy() == ESTIMATE) oss<< "(estimated location)" << std::endl;
+      if (m_Transform->GetTransformAccuracy() == Projection::PRECISE) oss<< "(precise location)" << std::endl;
+      if (m_Transform->GetTransformAccuracy() == Projection::ESTIMATE) oss<< "(estimated location)" << std::endl;
 
 //       if ((m_PlaceName == "") && (m_CountryName == ""))
 //       {
