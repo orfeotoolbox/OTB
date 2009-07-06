@@ -331,7 +331,11 @@ public:
   }
 
     /** Set/Get the AutoMinMax mode */
-  itkSetMacro(AutoMinMax,bool);
+  virtual void SetAutoMinMax(bool val)
+  {
+	m_AutoMinMax = val;
+	this->Modified();
+  }
   itkGetMacro(AutoMinMax,bool);
   itkBooleanMacro(AutoMinMax);
 
