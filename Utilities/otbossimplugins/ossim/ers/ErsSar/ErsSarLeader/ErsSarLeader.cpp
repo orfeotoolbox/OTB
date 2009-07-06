@@ -104,7 +104,7 @@ void ErsSarLeader::ClearRecords()
 }
 
 bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
-                             const char* prefix) const
+                             const char* prefix)
 {
    /*
    static const char MODULE[] = "ErsSarModel::saveState";
@@ -115,7 +115,7 @@ bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
    }
    */
   
-  std::cout << Here!! << std::endl;
+  std::cout << "Here!!" << std::endl;
 
   bool result = true;
 

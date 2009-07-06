@@ -1,4 +1,4 @@
-#include <ossim/imaging/ErsSar/ErsSarRecordHeader.h>
+#include "ers/ErsSar/ErsSarRecordHeader.h"
 
 
 ErsSarRecordHeader::ErsSarRecordHeader()

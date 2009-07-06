@@ -1,4 +1,4 @@
-#include <ossim/imaging/ErsSar/ErsSarRecordFactory.h>
+#include "ers/ErsSar/ErsSarRecordFactory.h"
 
 ErsSarRecordFactory::ErsSarRecordFactory()
 {

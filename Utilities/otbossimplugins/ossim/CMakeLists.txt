@@ -16,6 +16,8 @@ ENDIF(OTB_FOUND)
 FILE(GLOB_RECURSE ossim_src "*.cpp")
 INCLUDE_DIRECTORIES(${AlosModel_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${AlosModel_SOURCE_DIR}/otb)
+INCLUDE_DIRECTORIES(${AlosModel_SOURCE_DIR}/ers/ErsSar)
+INCLUDE_DIRECTORIES(${AlosModel_SOURCE_DIR}/ers/ErsSarLeader)
 
 ADD_EXECUTABLE(testSensorModel testSensorModel.cxx ${ossim_src})
 TARGET_LINK_LIBRARIES(testSensorModel OTBCommon OTBIO)

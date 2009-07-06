@@ -2,8 +2,9 @@
 #define ErsSarRecordFactory_h
 
 
-#include <ossim/imaging/ErsSar/ErsSarRecordHeader.h>
-#include <ossim/imaging/ErsSar/ErsSarRecord.h>
+#include "ers/ErsSar/ErsSarRecordHeader.h"
+#include "ers/ErsSar/ErsSarRecord.h"
+
 #include <map>
 /**
  * @ingroup ErsSar

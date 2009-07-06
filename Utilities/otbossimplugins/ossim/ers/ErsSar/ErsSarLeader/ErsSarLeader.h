@@ -9,7 +9,8 @@
 #include "ErsSarFacilityData.h"
 #include <map>
 
-#include <ossim/base/ossimKeywordlist.h> // Cause of segmentation fault?
+#include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimKeywordNames.h>
 
 class ErsSarPlatformPositionData;
 class ErsSarMapProjectionData;
@@ -69,7 +70,7 @@ public:
    * @return true on success, false on error.
    */
   virtual bool saveState(ossimKeywordlist& kwl,
-                         const char* prefix=0) const;
+                         const char* prefix=0);
 	
 	ErsSarFacilityData * get_ErsSarFacilityData();
 	ErsSarPlatformPositionData * get_ErsSarPlatformPositionData();
