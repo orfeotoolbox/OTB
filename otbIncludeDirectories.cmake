@@ -161,8 +161,17 @@ ELSE(OTB_USE_EXTERNAL_ITK)
         ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/vxl/v3p/netlib
         ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/vxl/vcl
         ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/vxl/core
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities
         ${OTB_BINARY_DIR}/Utilities/ITK/Utilities
         ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkExtHdrs
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/DICOMParser
+        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/DICOMParser
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/MetaIO
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/nifti/niftilib
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/nifti/znzlib
+        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/gdcm/src
+        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/gdcm
+        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/NrrdIO
         )
 ENDIF(OTB_USE_EXTERNAL_ITK)
 
