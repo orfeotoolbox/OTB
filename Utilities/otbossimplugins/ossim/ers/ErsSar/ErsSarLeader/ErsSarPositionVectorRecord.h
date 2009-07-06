@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <cstdlib>
-#include <ossim/imaging/ErsSar/ErsSarRecord.h>
+#include "ers/ErsSar/ErsSarRecord.h"
 /**
  * @ingroup PlatformPositionDataRecord
  * @brief This class is able to read a position vector record

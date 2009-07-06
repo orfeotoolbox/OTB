@@ -5,7 +5,7 @@
 #include "ers/ErsSar/ErsSarRecord.h"
 #include "ers/ErsSar/ErsSarRecordHeader.h"
 
-#include <ossim/imaging/ErsSar/ErsSarLeader/ErsSarPositionVectorRecord.h>
+#include "ers/ErsSar/ErsSarLeader/ErsSarPositionVectorRecord.h"
 /**
  * @ingroup PlatformPositionDataRecord
  * @brief This class is able to read a Platform position data record

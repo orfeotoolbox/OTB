@@ -1,4 +1,4 @@
-#include <ossim/imaging/ErsSar/ErsSarLeader/ErsSarPositionVectorRecord.h>
+#include "ers/ErsSar/ErsSarLeader/ErsSarPositionVectorRecord.h"
 
 
 ErsSarPositionVectorRecord::ErsSarPositionVectorRecord()

@@ -9,6 +9,8 @@
 #include "ErsSarFacilityData.h"
 #include <map>
 
+#include <ossim/base/ossimKeywordlist.h> // Cause of segmentation fault?
+
 class ErsSarPlatformPositionData;
 class ErsSarMapProjectionData;
 class ErsSarDataSetSummary;
@@ -59,6 +61,16 @@ public:
 	 * @brief Remove all the previous records from the ErsSarLeader
 	 */
 	void ClearRecords();
+	
+  /**
+   * @brief Method to save object state to a keyword list.
+   * @param kwl Keyword list to save to.
+   * @param prefix added to keys when saved.
+   * @return true on success, false on error.
+   */
+  virtual bool saveState(ossimKeywordlist& kwl,
+                         const char* prefix=0) const;
+	
 	ErsSarFacilityData * get_ErsSarFacilityData();
 	ErsSarPlatformPositionData * get_ErsSarPlatformPositionData();
 	ErsSarMapProjectionData * get_ErsSarMapProjectionData();
