@@ -424,7 +424,6 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
   std::string strfileref;
 
   int nbdiff(0);
-  int numLine(1);
 
   if (!fluxfileref)
     {
