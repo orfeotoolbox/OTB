@@ -45,7 +45,7 @@ public:
     m_Denom = 1.0;
   };
 
-  ~CloudEstimatorFunctor() {};
+  virtual ~CloudEstimatorFunctor() {};
   inline TOutputValue operator()(const TInput& inPix)
   {
 

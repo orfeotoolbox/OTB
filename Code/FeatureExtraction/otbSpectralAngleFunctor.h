@@ -38,7 +38,7 @@ public:
     m_ReferencePixel.Fill(1);
   };
 
-  ~SpectralAngleFunctor() {};
+  virtual ~SpectralAngleFunctor() {};
   // Binary operator
   inline TOutputValue operator()(const TInput& inPix)
   {
