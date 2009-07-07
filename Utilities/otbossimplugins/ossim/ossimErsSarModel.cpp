@@ -194,11 +194,10 @@ bool ossimErsSarModel::saveState(ossimKeywordlist& kwl,
 
 	//kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimErsSarModel", true);
 	
-	std::cout << "Here!" << std::endl;
-	
   if (_ErsSarleader == NULL)
 	{
-		std::cout << "ErsSarleader is NULL" << std::endl;
+		std::cout << "Error: ErsSarleader is NULL" << std::endl;
+		return false;
 	}
 	
 	result = _ErsSarleader->saveState(kwl);

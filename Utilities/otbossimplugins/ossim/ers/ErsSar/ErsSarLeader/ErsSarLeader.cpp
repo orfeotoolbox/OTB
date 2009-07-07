@@ -114,8 +114,6 @@ bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
    }
    */
-  
-  std::cout << "Here!!" << std::endl;
 
   bool result = true;
 
