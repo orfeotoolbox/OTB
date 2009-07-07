@@ -659,7 +659,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
         }
       RealType wc = this->m_PointWeights->GetElement( It.Index() );
       RealType t = Itw.Get();
-      if(idx[0]>=0 && idx[1]>=0 && idx[0]< omega->GetLargestPossibleRegion().GetSize()[0] && idx[1]< omega->GetLargestPossibleRegion().GetSize()[1])
+      if(idx[0]>=0 && idx[1]>=0 && static_cast<typename RealImageType::RegionType::SizeValueType>(idx[0])< omega->GetLargestPossibleRegion().GetSize()[0] && static_cast<typename RealImageType::RegionType::SizeValueType>(idx[1])< omega->GetLargestPossibleRegion().GetSize()[1])
 	omega->SetPixel( idx, omega->GetPixel( idx ) + wc*t*t );
     
 
@@ -668,7 +668,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
       Itp.Set( data );
       data *= ( t * t * wc );
 
-        if(idx[0]>=0 && idx[1]>=0 && idx[0]< delta->GetLargestPossibleRegion().GetSize()[0] && idx[1]< delta->GetLargestPossibleRegion().GetSize()[1])
+        if(idx[0]>=0 && idx[1]>=0 && static_cast<typename PointDataImageType::RegionType::SizeValueType>(idx[0])< delta->GetLargestPossibleRegion().GetSize()[0] && static_cast<typename PointDataImageType::RegionType::SizeValueType>(idx[1])< delta->GetLargestPossibleRegion().GetSize()[1])
 	  {
       delta->SetPixel( idx, delta->GetPixel( idx ) + data );
       delta->GetPixel( idx ) + data;
@@ -920,7 +920,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
           lattice->GetLargestPossibleRegion().GetSize()[dimension];
         }
 
-      if(idx[dimension]>=0 && idx[dimension]<lattice->GetLargestPossibleRegion().GetSize()[dimension])
+      if(idx[dimension]>=0 && static_cast<typename PointDataImageType::RegionType::SizeValueType>(idx[dimension])<lattice->GetLargestPossibleRegion().GetSize()[dimension])
 	data += ( lattice->GetPixel( idx ) * B );
       }
     It.Set( data );
