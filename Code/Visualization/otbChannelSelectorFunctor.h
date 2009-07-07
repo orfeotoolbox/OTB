@@ -66,7 +66,7 @@ namespace otb
         ChannelSelectorFunctor() :
            usingDefaultParameters(true)
         {
-          PixelType pix=itk::NumericTraits<PixelType>::Zero;
+          PixelType pix;
           ChannelListInitialization(pix);
         }
 
