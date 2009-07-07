@@ -43,7 +43,12 @@
 #ifdef _WIN32
 #undef M_PI
 #define M_PI   3.14159265358979323846
+
+/* OTB Disable pragma for CYGWIN */
+#if !defined(__CYGWIN__)
 #pragma warning(disable : 4800)
+#endif
+
 #endif
 
 #ifndef M_PI
