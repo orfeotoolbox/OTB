@@ -223,7 +223,7 @@ SVMModel<TValue,TLabel>::BuildProblem()
     m_Problem.x[i] = new struct svm_node[elements];
 
     // Intialize elements (value = 0; index = -1)
-    for(unsigned int j = 0; j<elements;++j)
+    for(unsigned int j = 0; j<static_cast<unsigned int>(elements);++j)
       {
       m_Problem.x[i][j].index = -1;
       m_Problem.x[i][j].value = 0;
