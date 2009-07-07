@@ -70,16 +70,18 @@ public:
    * @return true on success, false on error.
    */
   virtual bool saveState(ossimKeywordlist& kwl,
-                         const char* prefix=0);
+                         const char* prefix=0) const;
 	
-	ErsSarFacilityData * get_ErsSarFacilityData();
-	ErsSarPlatformPositionData * get_ErsSarPlatformPositionData();
-	ErsSarMapProjectionData * get_ErsSarMapProjectionData();
-	ErsSarDataSetSummary * get_ErsSarDataSetSummary();
-	ErsSarFileDescriptor * get_ErsSarFileDescriptor();
+	ErsSarFacilityData * get_ErsSarFacilityData() const;
+	ErsSarPlatformPositionData * get_ErsSarPlatformPositionData() const;
+	ErsSarMapProjectionData * get_ErsSarMapProjectionData() const;
+	ErsSarDataSetSummary * get_ErsSarDataSetSummary() const;
+	ErsSarFileDescriptor * get_ErsSarFileDescriptor() const;
 
 protected:
-	std::map<int, ErsSarRecord*> _records;
+  // Made mutable because the get_* methods need to access it.
+  // (modifying the definition of the map might be another solution)
+	mutable std::map<int, ErsSarRecord*> _records;
 
 	static const int ErsSarFacilityDataID;
 	static const int ErsSarPlatformPositionDataID;

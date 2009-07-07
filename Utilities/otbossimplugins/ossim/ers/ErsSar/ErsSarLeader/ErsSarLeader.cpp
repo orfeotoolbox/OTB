@@ -104,7 +104,7 @@ void ErsSarLeader::ClearRecords()
 }
 
 bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
-                             const char* prefix)
+                             const char* prefix) const
 {
    /*
    static const char MODULE[] = "ErsSarModel::saveState";
@@ -246,25 +246,25 @@ bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
 }
 
 
-ErsSarFacilityData * ErsSarLeader::get_ErsSarFacilityData()
+ErsSarFacilityData * ErsSarLeader::get_ErsSarFacilityData() const
 {
 	return (ErsSarFacilityData*)_records[ErsSarFacilityDataID];
 }
-ErsSarPlatformPositionData * ErsSarLeader::get_ErsSarPlatformPositionData()
+ErsSarPlatformPositionData * ErsSarLeader::get_ErsSarPlatformPositionData() const
 {
 	return (ErsSarPlatformPositionData*)_records[ErsSarPlatformPositionDataID];
 }
-ErsSarMapProjectionData * ErsSarLeader::get_ErsSarMapProjectionData()
+ErsSarMapProjectionData * ErsSarLeader::get_ErsSarMapProjectionData() const
 {
 	return (ErsSarMapProjectionData*)_records[ErsSarMapProjectionDataID];
 }
 
-ErsSarDataSetSummary * ErsSarLeader::get_ErsSarDataSetSummary()
+ErsSarDataSetSummary * ErsSarLeader::get_ErsSarDataSetSummary() const
 {
 	return (ErsSarDataSetSummary*)_records[ErsSarDataSetSummaryID];
 }
 
-ErsSarFileDescriptor * ErsSarLeader::get_ErsSarFileDescriptor()
+ErsSarFileDescriptor * ErsSarLeader::get_ErsSarFileDescriptor() const
 {
-	return (ErsSarFileDescriptor*)_records[ErsSarFileDescriptorID];
+	return static_cast<ErsSarFileDescriptor*>(_records[ErsSarFileDescriptorID]);
 }
