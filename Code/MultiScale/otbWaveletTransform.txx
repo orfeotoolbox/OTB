@@ -55,7 +55,8 @@ WaveletTransform< TInputImage, TOutputImage, TFilter, FORWARD >
 
   GetFilterList()->Resize( GetNumberOfDecompositions() );
 
-  FilterPointerType filter = FilterType::New();
+  this->GetFilterList()->SetNthElement( 0, FilterType::New() );
+  FilterPointerType filter = this->GetFilterList()->GetNthElement(0); //GetNthFilter( 0 );
   filter->SetInput( this->GetInput() );
   filter->SetSubsampleImageFactor( GetSubsampleImageFactor() );
 
@@ -73,8 +74,6 @@ WaveletTransform< TInputImage, TOutputImage, TFilter, FORWARD >
     1.f/static_cast<float>( GetNumberOfDecompositions() ) );
   filter->Update();
 
-  this->GetFilterList()->SetNthElement( 0, filter );
-
   for ( unsigned int idx = 1; idx < filter->GetNumberOfOutputs(); idx++ )
   {
     this->GetOutput()->SetNthElement( 
@@ -84,21 +83,22 @@ WaveletTransform< TInputImage, TOutputImage, TFilter, FORWARD >
 
   for ( unsigned int nbDecomp = 1; nbDecomp < GetNumberOfDecompositions(); nbDecomp++ )
   {
-    FilterPointerType filterBis = FilterType::New();
-    filterBis->SetInput( this->GetNthFilter( nbDecomp-1 )->GetOutput( 0 ) );
-    filterBis->SetSubsampleImageFactor( GetSubsampleImageFactor() );
+    this->GetFilterList()->SetNthElement( nbDecomp, FilterType::New() );
+    filter = this->GetFilterList()->GetNthElement(nbDecomp); //this->GetNthFilter( nbDecomp );
+    filter->SetInput( this->GetNthFilter( nbDecomp-1 )->GetOutput( 0 ) );
+    filter->SetSubsampleImageFactor( GetSubsampleImageFactor() );
     if ( GetSubsampleImageFactor() == 1 )
-      filterBis->SetUpSampleFilterFactor( nbDecomp-1 );
+      filter->SetUpSampleFilterFactor( nbDecomp+1 );
 
-    progress->RegisterInternalFilter( filterBis, 
+    progress->RegisterInternalFilter( filter, 
       1.f/static_cast<float>( GetNumberOfDecompositions() ) );
-    filterBis->Update();
-    this->GetFilterList()->SetNthElement( nbDecomp, filterBis );
-    for ( unsigned int idx = 1; idx < filterBis->GetNumberOfOutputs(); idx++ )
+    filter->Update();
+
+    for ( unsigned int idx = 1; idx < filter->GetNumberOfOutputs(); idx++ )
     {
       this->GetOutput()->SetNthElement( 
-        this->GetOutput()->Size() - 1 - (nbDecomp+1) * (filterBis->GetNumberOfOutputs()-1) + idx,
-        filterBis->GetOutput( idx ) );
+        this->GetOutput()->Size() - 1 - (nbDecomp+1) * (filter->GetNumberOfOutputs()-1) + idx,
+        filter->GetOutput( idx ) );
     }
   }
 
@@ -231,6 +231,4 @@ WaveletTransform< TInputImage, TOutputImage, TFilter, INVERSE >
 } // end of namespace otb
 
 #endif
-
-
 
