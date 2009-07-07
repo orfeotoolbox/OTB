@@ -1803,7 +1803,7 @@ ADD_TEST(ioTuRADImageIOCanRead_RADCI2 ${IO_TESTS16}
         ${LARGEDATA}/RAD_CI2/3017_HH.rad)
 
 # Convert a ci2.RAD file into ENVI format
-ADD_TEST(ioTvImageFileReaderRADCI22ENVI ${IO_TESTS16}${EXAMPLEDATA}
+ADD_TEST(ioTvImageFileReaderRADCI22ENVI ${IO_TESTS16}
 --compare-image ${EPSILON_9}
 	${BASELINE}/ioImageFileReaderRADCI22ENVI.hdr
 	${TEMP}/ioImageFileReaderRADCI22ENVI.hdr
