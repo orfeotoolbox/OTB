@@ -66,8 +66,27 @@ namespace otb
         ChannelSelectorFunctor() :
            usingDefaultParameters(true)
         {
-          PixelType pix;
-          ChannelListInitialization(pix);
+              if ( std::string(typeid(PixelType).name()).find("RGBAPixel") !=std::string::npos )
+              {
+                  m_ChannelList.push_back(0);
+                  m_ChannelList.push_back(1);
+                  m_ChannelList.push_back(2);
+                  m_ChannelList.push_back(3);
+              }
+              else if ( std::string(typeid(PixelType).name()).find("RGBPixel") !=std::string::npos )
+              {
+                  m_ChannelList.push_back(0);
+                  m_ChannelList.push_back(1);
+                  m_ChannelList.push_back(2);
+              }
+              else if ( std::string(typeid(PixelType).name()).find("VariableLengthVector") !=std::string::npos )
+              {
+                  m_ChannelList.push_back(0);
+              }
+              else
+              {
+                  m_ChannelList.push_back(0);
+              }
         }
 
         /** Destructor */
@@ -228,28 +247,6 @@ namespace otb
         }
       private:
 
-        void ChannelListInitialization(ScalarType inPixel)
-        {
-          m_ChannelList.push_back(0);
-        }
-        void ChannelListInitialization(VectorPixelType inPixel)
-        {
-          //at this point, we are not sure to have three bands
-          m_ChannelList.push_back(0);
-        }
-        void ChannelListInitialization(RGBPixelType inPixel)
-        {
-          m_ChannelList.push_back(0);
-          m_ChannelList.push_back(1);
-          m_ChannelList.push_back(2);
-        }
-        void ChannelListInitialization(RGBAPixelType inPixel)
-        {
-          m_ChannelList.push_back(0);
-          m_ChannelList.push_back(1);
-          m_ChannelList.push_back(2);
-          m_ChannelList.push_back(3);
-        }
         ChannelListType m_ChannelList;
         bool usingDefaultParameters;
 
