@@ -43,7 +43,7 @@ public:
   ~RemoveWrongDirectionFunctor() {};
   inline TOutput operator()(const TInput1 &A, const TInput2 &B)
   {
-    if (B < CONST_PI/8)
+    if (B < CONST_PI_8)
     {
       return 0;
     }

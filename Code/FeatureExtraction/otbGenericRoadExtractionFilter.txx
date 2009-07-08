@@ -53,12 +53,12 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
   /** Tolerance for segment consistency (tolerance in terms of distance) (use by the SimplifyPathFilter)*/
   m_Tolerance = static_cast<ToleranceType>(1.);
   /** Max angle (use bye the BreakAngularPathListFilter)*/
-  m_MaxAngle = static_cast<MaxAngleType>(CONST_PI/8.);
+  m_MaxAngle = static_cast<MaxAngleType>(CONST_PI_8);
   /** Tolerance for segment consistency (tolerance in terms of distance) (use by RemoveTortuousPathFilter)*/
   m_FirstMeanDistanceThreshold = static_cast<MeanDistanceThresholdType>(1.);
   m_SecondMeanDistanceThreshold = static_cast<MeanDistanceThresholdType>(10.);
   /** The angular threshold (use by LinkPathFilter) */
-  m_AngularThreshold = static_cast<LinkRealType>(CONST_PI/8.);
+  m_AngularThreshold = static_cast<LinkRealType>(CONST_PI_8);
 
   /** The distance threshold (use by LinkPathFilter) */
   m_DistanceThreshold = 25.;
