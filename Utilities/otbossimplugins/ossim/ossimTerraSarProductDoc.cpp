@@ -439,7 +439,7 @@ bool ossimplugins::ossimTerraSarProductDoc::initImageSize(
       ossimString s;
       if ( getNumberOfColumns(xdoc, s) )
       {
-         imageSize.x = s.toFloat64();
+         imageSize.x = static_cast<ossim_int32>(s.toFloat64());
       }
       else
       {
@@ -447,7 +447,7 @@ bool ossimplugins::ossimTerraSarProductDoc::initImageSize(
       }
       if ( getNumberOfRows(xdoc, s) )
       {
-         imageSize.y = s.toFloat64();
+         imageSize.y = static_cast<ossim_int32>(s.toFloat64());
       }
       else
       {
