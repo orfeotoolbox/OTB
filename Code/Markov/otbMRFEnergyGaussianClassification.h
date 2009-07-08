@@ -79,7 +79,7 @@ public:
 
     double result = vnl_math_sqr(val1-this->m_Parameters[2*static_cast<int>(value2)])
                     / (2*vnl_math_sqr(this->m_Parameters[2*static_cast<int>(value2)+1]))
-                    + vcl_log(vcl_sqrt(2*CONST_PI)*this->m_Parameters[2*static_cast<int>(value2)+1]);
+                    + vcl_log(vcl_sqrt(2CONST_PI)*this->m_Parameters[2*static_cast<int>(value2)+1]);
 
     return static_cast<double>( result );
   }

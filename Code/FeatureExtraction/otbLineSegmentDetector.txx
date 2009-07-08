@@ -600,7 +600,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   if( diff < 0.0 ) diff = -diff;
   if( diff > 1.5*CONST_PI )
     {
-      diff -= 2*CONST_PI;
+      diff -= 2CONST_PI;
       if( diff < 0.0 ) diff = -diff;
     }
 
@@ -809,8 +809,8 @@ LineSegmentDetector<TInputImage, TPrecision>
 ::angle_diff(double a, double b) const
 {
   a -= b;
-  while( a <= -CONST_PI ) a += 2*CONST_PI;
-  while( a >   CONST_PI ) a -= 2*CONST_PI;
+  while( a <= -CONST_PI ) a += 2CONST_PI;
+  while( a >   CONST_PI ) a -= 2CONST_PI;
   if( a < 0.0 ) a = -a;
   return a;
 }

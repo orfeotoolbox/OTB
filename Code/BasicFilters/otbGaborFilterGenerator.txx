@@ -74,7 +74,7 @@ GaborFilterGenerator<TPrecision>
     {
       xr = x * costheta + y * sintheta;
       yr = y * costheta - x * sintheta;
-      coef = vcl_exp(-CONST_PI*(vcl_pow(m_A*xr,2)+vcl_pow(m_B*yr,2)))*cos(2*CONST_PI*(m_U0*x+m_V0*y)+m_Phi);
+      coef = vcl_exp(-CONST_PI*(vcl_pow(m_A*xr,2)+vcl_pow(m_B*yr,2)))*cos(2CONST_PI*(m_U0*x+m_V0*y)+m_Phi);
       m_Filter.SetElement(k,coef);
       ++k;
     }
