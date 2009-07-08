@@ -47,11 +47,11 @@ public:
       int neighborhoodNumber;
       if (itB.GetCenterPixel() > 0)
       {
-        neighborhoodNumber = static_cast<int>(itB.GetCenterPixel()/(CONST_PI/4)-1);
+        neighborhoodNumber = static_cast<int>(itB.GetCenterPixel()/(CONST_PI_4)-1);
       }
       else
       {
-        neighborhoodNumber = static_cast<int>((itB.GetCenterPixel()+CONST_PI)/(CONST_PI/4)-1);
+        neighborhoodNumber = static_cast<int>((itB.GetCenterPixel()+CONST_PI)/(CONST_PI_4)-1);
       }
       switch ( neighborhoodNumber )
       {
