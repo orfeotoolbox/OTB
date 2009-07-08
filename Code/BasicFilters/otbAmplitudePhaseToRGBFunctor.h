@@ -72,7 +72,7 @@ namespace otb
         {
 //           std::cout << amplitude << " - " << phase << std::endl;
           double hinc, sinc, vinc;
-          hinc=0.6/(2CONST_PI);
+          hinc=0.6/(CONST_2PI);
           sinc=0.0;
           vinc=0.0;
 

@@ -441,8 +441,8 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
             if (error>-100.0)
             {
               error -= theta;
-              while (error<=-CONST_PI) error += 2CONST_PI;
-              while (error>CONST_PI) error -= 2CONST_PI;
+              while (error<=-CONST_PI) error += CONST_2PI;
+              while (error>CONST_PI) error -= CONST_2PI;
               if (error<0.0) error = -error;
               if (error<prec)
               {

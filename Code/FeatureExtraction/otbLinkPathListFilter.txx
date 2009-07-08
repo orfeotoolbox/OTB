@@ -238,9 +238,9 @@ LinkPathListFilter<TPath>
   }
   else
   {
-    alpha1 = (alpha1 >= 0)?alpha1:(alpha1+2CONST_PI);
-    alpha2 = (alpha2 >= 0)?alpha2:(alpha2+2CONST_PI);
-    alpha3 = (alpha3 >= 0)?alpha3:(alpha3+2CONST_PI);
+    alpha1 = (alpha1 >= 0)?alpha1:(alpha1+CONST_2PI);
+    alpha2 = (alpha2 >= 0)?alpha2:(alpha2+CONST_2PI);
+    alpha3 = (alpha3 >= 0)?alpha3:(alpha3+CONST_2PI);
   }
 
   bool resp = (vcl_abs(alpha1-alpha2) < static_cast<double>(m_AngularThreshold))

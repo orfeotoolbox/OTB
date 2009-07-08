@@ -69,7 +69,7 @@ public:
     TOutputPixel resp = vcl_atan2(input[1],input[0]);
     if (resp<0)
     {
-      resp+=2CONST_PI;
+      resp+=CONST_2PI;
     }
 
     return resp;
