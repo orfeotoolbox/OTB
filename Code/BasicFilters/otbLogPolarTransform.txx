@@ -91,7 +91,7 @@ LogPolarTransform<TScalarType>
 ::TransformPoint(const InputPointType &point) const
 {
   OutputPointType result;
-  double theta = point[0]*m_Scale[0]*CONST_PI/180.0;
+  double theta = point[0]*m_Scale[0]*CONST_PI_180;
   double logRho   = point[1]*m_Scale[1];
   result[0]=m_Center[0];
   result[1]=m_Center[1];
@@ -111,7 +111,7 @@ LogPolarTransform<TScalarType>
 ::TransformVector(const InputVectorType &vector) const
 {
   OutputVectorType result;
-  double theta = vector[0]*m_Scale[0]*CONST_PI/180.0;
+  double theta = vector[0]*m_Scale[0]*CONST_PI_180;
   double logRho   = vector[1]*m_Scale[1];
   result[0]=0.;
   result[1]=0.;
@@ -132,7 +132,7 @@ LogPolarTransform<TScalarType>
 ::TransformVector(const InputVnlVectorType &vector) const
 {
   OutputVnlVectorType result;
-  double theta = vector[0]*m_Scale[0]*CONST_PI/180.0;
+  double theta = vector[0]*m_Scale[0]*CONST_PI_180;
   double logRho   = vector[1]*m_Scale[1];
   result[0]=0.;
   result[1]=0.;

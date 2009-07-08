@@ -129,7 +129,7 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
         double notUsed1,notUsed2;
         double factor = 1;
         double palt = 1000.;
-        SIXSTraits::ComputeEnvironmentalContribution(rayleigh,aerosol,radiusMatrix(i,j),palt,vcl_cos(m_ZenithalViewingAngle*CONST_PI/180.),notUsed1,notUsed2,factor); //Call to 6S
+        SIXSTraits::ComputeEnvironmentalContribution(rayleigh,aerosol,radiusMatrix(i,j),palt,vcl_cos(m_ZenithalViewingAngle*CONST_PI_180),notUsed1,notUsed2,factor); //Call to 6S
         currentWeightingMatrix(i,j)=factor;
       }
     }

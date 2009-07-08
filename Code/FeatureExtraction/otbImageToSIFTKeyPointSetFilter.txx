@@ -785,7 +785,7 @@ ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
     if (dist<radius)
     {
       // rotate the pixel location to compensate sift orientation
-      float angle = orientation*CONST_PI/180.;
+      float angle = orientation*CONST_PI_180;
       float cosangle = vcl_cos(-angle);
       float sinangle = vcl_sin(-angle);
       float rdx = dx * cosangle - dy * sinangle;

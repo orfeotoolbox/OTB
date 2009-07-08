@@ -216,7 +216,7 @@ PolarimetricSynthesisFilter<TInputImageHH,TInputImageHV,TInputImageVH,TInputImag
   ComplexArrayType AEi, AEr;
 
   /** Conversion coefficient Degre To Radian */
-  double DTOR=CONST_PI/180;
+  double DTOR=CONST_PI_180;
   double real,imag;
 
   real = vcl_cos(DTOR*m_PsiI)*vcl_cos(DTOR*m_KhiI);

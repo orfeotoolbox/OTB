@@ -62,8 +62,8 @@ GaborFilterGenerator<TPrecision>
   PrecisionType coef,xr,yr,costheta,sintheta;
   unsigned int k = 0;
 
-  costheta = vcl_cos(m_Theta*CONST_PI/180.);
-  sintheta = vcl_sin(m_Theta*CONST_PI/180.);
+  costheta = vcl_cos(m_Theta*CONST_PI_180);
+  sintheta = vcl_sin(m_Theta*CONST_PI_180);
 
 
   for (PrecisionType y = - static_cast<PrecisionType>(m_Radius[1]);

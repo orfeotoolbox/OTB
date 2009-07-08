@@ -305,7 +305,7 @@ protected:
           otb_6s_integer month = static_cast<otb_6s_integer>(m_Month);
           int cr(0);
           cr = otb_6s_varsol_(&day, &month, &dsol);
-          coefTemp = vcl_cos(m_ZenithalSolarAngle*CONST_PI/180.)*static_cast<double>(dsol);
+          coefTemp = vcl_cos(m_ZenithalSolarAngle*CONST_PI_180)*static_cast<double>(dsol);
         }
         else
         {
@@ -314,7 +314,7 @@ protected:
       }
       else
       {
-        coefTemp = vcl_cos(m_ZenithalSolarAngle*CONST_PI/180.)*m_FluxNormalizationCoefficient*m_FluxNormalizationCoefficient;
+        coefTemp = vcl_cos(m_ZenithalSolarAngle*CONST_PI_180)*m_FluxNormalizationCoefficient*m_FluxNormalizationCoefficient;
       }
       functor.SetIlluminationCorrectionCoefficient(1. / coefTemp);
       functor.SetAlpha(m_Alpha[i]);
