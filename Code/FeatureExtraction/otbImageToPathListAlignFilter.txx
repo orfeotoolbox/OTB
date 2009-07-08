@@ -392,7 +392,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   {
     printf("side %d/4 ",side+1);
 
-    theta0 = 0.5*CONST_PI*(double)side;
+    theta0 = CONST_PI_2*(double)side;
     mx = ((side==0 || side==2)?1:0);
     my = ((side==1 || side==3)?1:0);
     ox = ((side==1)?nx-1:0);
