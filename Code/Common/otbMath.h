@@ -51,6 +51,7 @@ const double CONST_1_PI =     0.31830988618379067154;  /* 1/pi */
 const double CONST_2_PI =     0.63661977236758134308;  /* 2/pi */
 const double CONST_2PI =      6.28318530717958647693;  /* 2*pi */
 const double CONST_PI_180 =   0.01745329251994329577;  /* pi/180 */ 
+const double CONST_180_PI =   57.2957795130823208768;  /* 180/pi */ 
 const double CONST_2_SQRTPI = 1.12837916709551257390;  /* 2/sqrt(pi) */
 const double CONST_SQRT2 =    1.41421356237309504880;  /* sqrt(2) */
 const double CONST_SQRT1_2 =  0.70710678118654752440;  /* 1/sqrt(2) */
