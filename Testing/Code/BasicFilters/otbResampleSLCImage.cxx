@@ -29,8 +29,8 @@ int otbResampleSLCImage(int argc, char * argv[])
   const char* outputFilename = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef std::complex<float> InputPixelType;
-  typedef std::complex<float> OutputPixelType;
+  typedef std::complex<double> InputPixelType;
+  typedef std::complex<double> OutputPixelType;
 //   typedef double InterpolatorPrecisionType;
 
   typedef otb::Image<InputPixelType,Dimension> InputImageType;
