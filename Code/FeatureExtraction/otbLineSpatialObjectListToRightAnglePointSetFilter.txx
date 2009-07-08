@@ -38,7 +38,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
   this->SetNumberOfRequiredOutputs(1);
 
   m_ThresholdDistance = 20.;
-  m_ThresholdAngle = M_PI/30.;  //36 cause we want 6 degrees threshold
+  m_ThresholdAngle = CONST_PI/30.;  //36 cause we want 6 degrees threshold
 }
 
 /**
@@ -109,7 +109,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
 	      double Angle = this->ComputeAngleFormedBySegments(*itLinesListTest, *itLinesListCur);
 
 	      /** Check if the angle is a right one */
-                  if(vcl_abs(Angle - M_PI/2.) <= m_ThresholdAngle )
+                  if(vcl_abs(Angle - CONST_PI/2.) <= m_ThresholdAngle )
 		{
 		  /** Right angle coordinate*/
 		  PointType              RightAngleCoordinate;
@@ -200,7 +200,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
   double dy = Yp1 - Yp2 ;
   double orientation = vcl_atan2(dy,dx);
   if(orientation < 0) 
-    orientation += M_PI;
+    orientation += CONST_PI;
 
   return orientation ;   
 }

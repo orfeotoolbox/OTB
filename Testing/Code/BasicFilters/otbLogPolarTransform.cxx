@@ -65,7 +65,7 @@ int otbLogPolarTransform(int argc, char* argv[])
 
     PointType pprime;
 
-    double theta = (*it)[0]*angularStep*M_PI/180.0;
+    double theta = (*it)[0]*angularStep* otb::CONST_PI/180.0;
     double logRho   = (*it)[1]*radialStep;
 
     file <<"Rho: "<<logRho<<", Theta: "<<theta<<std::endl;

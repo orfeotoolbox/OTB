@@ -67,7 +67,7 @@ int otbCompacityPathSquare( int argc, char * argv[] )
   std::cout << "Compacity result: " << Result <<std::endl;
 
   RealType Error;
-  Error = vcl_abs(Result - static_cast<RealType>(M_PI_4) );
+  Error = vcl_abs(Result - static_cast<RealType>(otb::CONST_PI_4) );
 
   if (  Error > 1.E-9)
   {

@@ -47,7 +47,7 @@ public:
   {
 
     int accu = 0;
-    double surface = M_PI*size*size;
+    double surface = CONST_PI*size*size;
 
     if (pointSet->GetNumberOfPoints() != 0)
     {

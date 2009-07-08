@@ -46,7 +46,7 @@ int otbCompacityPathCircle( int argc, char * argv[] )
   RealType    deltaTheta;
   RealType    Rho = 100.0;
 
-  deltaTheta = 2.* M_PI / static_cast<RealType>(NbOfPoints);
+  deltaTheta = 2.* otb::CONST_PI / static_cast<RealType>(NbOfPoints);
 
   pathElt->Initialize();
 

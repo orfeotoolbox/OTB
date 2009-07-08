@@ -312,7 +312,7 @@ int main( int argc, char * argv[] )
   typedef otb::BreakAngularPathListFilter<PathType> BreakAngularPathType;
   BreakAngularPathType::Pointer breakAngularPathListFilter
   = BreakAngularPathType::New();
-  breakAngularPathListFilter->SetMaxAngle(M_PI/8.);
+  breakAngularPathListFilter->SetMaxAngle(otb::CONST_PI/8.);
   breakAngularPathListFilter->SetInput(simplifyPathListFilter->GetOutput());
 
   typedef otb::RemoveTortuousPathListFilter<PathType> RemoveTortuousPathType;
@@ -336,7 +336,7 @@ int main( int argc, char * argv[] )
   typedef otb::LinkPathListFilter<PathType> LinkPathType;
   LinkPathType::Pointer linkPathListFilter = LinkPathType::New();
   linkPathListFilter->SetDistanceThreshold(25.0/resolution);
-  linkPathListFilter->SetAngularThreshold(M_PI/8);
+  linkPathListFilter->SetAngularThreshold(otb::CONST_PI/8);
   linkPathListFilter->SetInput(removeTortuousPathListFilter->GetOutput());
 
   SimplifyPathType::Pointer simplifyPathListFilter2 = SimplifyPathType::New();

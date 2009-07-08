@@ -189,9 +189,9 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
   // La rotation nulle correspond a un contour horizontal -> 0 !!
   for (unsigned int i=0; i<NB_DIR; ++i)
   {
-    Theta[i] = (M_PI*(i/double(NB_DIR)));
-    /*    if(Theta[i]>M_PI)
-          Theta[i] = Theta[i]-M_PI;
+    Theta[i] = (CONST_PI*(i/double(NB_DIR)));
+    /*    if(Theta[i]>CONST_PI)
+          Theta[i] = Theta[i]-CONST_PI;
         if((i/double(NB_DIR))==0.5)
           Theta[i]=0.;*/
   }

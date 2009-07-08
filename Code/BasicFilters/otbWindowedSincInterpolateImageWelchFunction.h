@@ -55,7 +55,7 @@ public:
   inline TOutput operator()( const TInput & A ) const
   {
     double x = static_cast<double>(A);
-    double px = M_PI * x;
+    double px = CONST_PI * x;
     double temp = 1.0 - x * m_Factor * x;
     return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * vcl_sin(px) / px);
   }

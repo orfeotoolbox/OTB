@@ -189,8 +189,8 @@ ParallelLinePathListFilter<TPath>
   double alpha1 = vcl_atan2((v2[1]-v1[1]),(v2[0]-v1[0]));
   double alpha2 = vcl_atan2((v4[1]-v3[1]),(v4[0]-v3[0]));
 
-  alpha1 = (alpha1 >= 0)?alpha1:(alpha1+M_PI);
-  alpha2 = (alpha2 >= 0)?alpha2:(alpha2+M_PI);
+  alpha1 = (alpha1 >= 0)?alpha1:(alpha1+CONST_PI);
+  alpha2 = (alpha2 >= 0)?alpha2:(alpha2+CONST_PI);
 
   // Return true if the angle between the two lines is smaller than
   // the specified threshold.

@@ -23,7 +23,7 @@
 
 #include "otbMath.h"
 
-#define M_SQUARE(x) ((x)*(x))
+#define vnl_math_sqr(x) ((x)*(x))
 
 namespace otb
 {
@@ -67,7 +67,7 @@ public:
 
   double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
   {
-    return M_SQUARE((static_cast<double>(value1))
+    return vnl_math_sqr((static_cast<double>(value1))
                     - (static_cast<double>(value2)) );
   }
 

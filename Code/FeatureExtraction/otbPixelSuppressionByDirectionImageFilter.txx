@@ -246,10 +246,10 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
 
           Thetaxtyt = vcl_atan2( static_cast<double>(y), static_cast<double>(x) ); //result is [-PI,PI]
           while (Thetaxtyt < 0)
-            Thetaxtyt = M_PI + Thetaxtyt; // Theta is now [0,PI] as is
+            Thetaxtyt = CONST_PI + Thetaxtyt; // Theta is now [0,PI] as is
           // the result of detectors
-          while (Thetaxtyt > M_PI/2.0)
-            Thetaxtyt = Thetaxtyt-M_PI; // Theta is now [-PI/2,PI/2]
+          while (Thetaxtyt > CONST_PI/2.0)
+            Thetaxtyt = Thetaxtyt-CONST_PI; // Theta is now [-PI/2,PI/2]
 
 
           if ( (vcl_abs(vcl_cos(Thetaxtyt-ThetaXcYc)) >= vcl_cos(m_AngularBeam)) // this

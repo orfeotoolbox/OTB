@@ -18,11 +18,13 @@
 #ifndef __otbMultiChannelsPolarimetricSynthesisFilter_txx
 #define __otbMultiChannelsPolarimetricSynthesisFilter_txx
 
+#include <complex>
+
 #include "otbMultiChannelsPolarimetricSynthesisFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkProgressReporter.h"
-#include <complex>
+#include "otbMath.h"
 
 namespace otb
 {
@@ -239,7 +241,7 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage,TOutputImage,TFunction>
   ComplexArrayType AEi, AEr;
 
   /** Conversion coefficient Degre To Radian */
-  double DTOR=M_PI/180;
+  double DTOR=CONST_PI/180;
   double real,imag;
 
   real = vcl_cos(DTOR*m_PsiI)*vcl_cos(DTOR*m_KhiI);

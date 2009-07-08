@@ -104,7 +104,7 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
   {
 
 
-    breakAngularFilter->SetMaxAngle((*itAngle)*M_PI/180.);
+    breakAngularFilter->SetMaxAngle((*itAngle)* otb::CONST_PI/180.);
     breakAngularFilter->Update();
 
 

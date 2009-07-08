@@ -20,7 +20,7 @@
 #define __otbMRFEnergyEdgeFidelity_h
 
 #include "otbMRFEnergy.h"
-#define M_SQUARE(x) ((x)*(x))
+#define vnl_math_sqr(x) ((x)*(x))
 
 namespace otb
 {
@@ -64,7 +64,7 @@ public:
     double val1 = static_cast<double>(value1);
     double val2 = static_cast<double>(value2);
 
-    return M_SQUARE((val1 - val2))/(1+M_SQUARE(val1 - val2));
+    return vnl_math_sqr((val1 - val2))/(1+vnl_math_sqr(val1 - val2));
   }
 
 

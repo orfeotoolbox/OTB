@@ -55,7 +55,7 @@ ImageWidgetCircleForm
   {
     glBegin(GL_LINE_LOOP);
   }
-  for (double angle = 0;angle <= 2*M_PI;angle+=0.01/static_cast<double>(m_Radius))
+  for (double angle = 0;angle <= 2*CONST_PI;angle+=0.01/static_cast<double>(m_Radius))
   {
     double xi = m_Center[0]+static_cast<double>(m_Radius)*vcl_sin(angle);
     double yi = m_Center[1]+static_cast<double>(m_Radius)*vcl_cos(angle);

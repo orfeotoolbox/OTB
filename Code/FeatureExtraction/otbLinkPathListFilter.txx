@@ -232,15 +232,15 @@ LinkPathListFilter<TPath>
 
   if (m_ModuloPI)
   {
-    alpha1 = (alpha1 >= 0)?alpha1:(alpha1+M_PI);
-    alpha2 = (alpha2 >= 0)?alpha2:(alpha2+M_PI);
-    alpha3 = (alpha3 >= 0)?alpha3:(alpha3+M_PI);
+    alpha1 = (alpha1 >= 0)?alpha1:(alpha1+CONST_PI);
+    alpha2 = (alpha2 >= 0)?alpha2:(alpha2+CONST_PI);
+    alpha3 = (alpha3 >= 0)?alpha3:(alpha3+CONST_PI);
   }
   else
   {
-    alpha1 = (alpha1 >= 0)?alpha1:(alpha1+2.*M_PI);
-    alpha2 = (alpha2 >= 0)?alpha2:(alpha2+2.*M_PI);
-    alpha3 = (alpha3 >= 0)?alpha3:(alpha3+2.*M_PI);
+    alpha1 = (alpha1 >= 0)?alpha1:(alpha1+2.*CONST_PI);
+    alpha2 = (alpha2 >= 0)?alpha2:(alpha2+2.*CONST_PI);
+    alpha3 = (alpha3 >= 0)?alpha3:(alpha3+2.*CONST_PI);
   }
 
   bool resp = (vcl_abs(alpha1-alpha2) < static_cast<double>(m_AngularThreshold))

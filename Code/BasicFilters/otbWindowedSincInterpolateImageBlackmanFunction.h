@@ -41,8 +41,8 @@ public:
   void SetRadius(unsigned int radius)
   {
     m_Radius = radius;
-    m_Factor1 = M_PI / static_cast<double>(radius);
-    m_Factor2 = 2.0 * M_PI / static_cast<double>(radius);
+    m_Factor1 = CONST_PI / static_cast<double>(radius);
+    m_Factor2 = 2.0 * CONST_PI / static_cast<double>(radius);
   }
   unsigned int  GetRadius() const
   {
@@ -60,7 +60,7 @@ public:
   inline TOutput operator()( const TInput & A ) const
   {
     double x = static_cast<double>(A);
-    double px = M_PI * x;
+    double px = CONST_PI * x;
     double temp = 0.42 + 0.5 * vcl_cos(x * m_Factor1) + 0.08 * vcl_cos(x * m_Factor2);
     return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * vcl_sin(px) / px);
   }

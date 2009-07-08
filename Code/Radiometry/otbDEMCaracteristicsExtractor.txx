@@ -85,7 +85,7 @@ DEMCaracteristicsExtractor<TInputImage,TOutputImage>
 
   // Degrees To Radian _-> Radian To Degree coefficient
   double rad2degCoef;
-  rad2degCoef = 180/M_PI;
+  rad2degCoef = 180/CONST_PI;
 
   // Slop calculation
   GradientMagnitudeFilter->SetInput(inputPtr);

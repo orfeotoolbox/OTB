@@ -38,7 +38,7 @@ int otbOrientationPath( int argc, char * argv[] )
   PathType::ContinuousIndexType cindex;
   PathType::Pointer pathElt = PathType::New();
 
-  Theta *= M_PI/180.;
+  Theta *= otb::CONST_PI/180.;
 
   pathElt->Initialize();
 

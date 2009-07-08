@@ -602,7 +602,7 @@ ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
       double lWeightMagnitude = vcl_exp(-dist*dist/(2*lSigma*lSigma));
 
       // Compute the histogram bin index
-      unsigned int lHistoIndex = static_cast<unsigned int>(vcl_floor(nbBins*lOrientation/(2*M_PI)));
+      unsigned int lHistoIndex = static_cast<unsigned int>(vcl_floor(nbBins*lOrientation/(2*CONST_PI)));
 
       // Update the histogram value
       lHistogram[lHistoIndex] += lMagnitude*lWeightMagnitude;
@@ -785,7 +785,7 @@ ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
     if (dist<radius)
     {
       // rotate the pixel location to compensate sift orientation
-      float angle = orientation*M_PI/180.;
+      float angle = orientation*CONST_PI/180.;
       float cosangle = vcl_cos(-angle);
       float sinangle = vcl_sin(-angle);
       float rdx = dx * cosangle - dy * sinangle;
@@ -798,13 +798,13 @@ ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
       float compensatedOrientation =  lIterOrientation.Get()-angle;
       if (compensatedOrientation<0)
       {
-        compensatedOrientation+=2*M_PI;
+        compensatedOrientation+=2*CONST_PI;
       }
-      if (compensatedOrientation>=2*M_PI)
+      if (compensatedOrientation>=2*CONST_PI)
       {
-        compensatedOrientation-=2*M_PI;
+        compensatedOrientation-=2*CONST_PI;
       }
-      unsigned int histogramBin = static_cast<unsigned int>(vcl_floor(compensatedOrientation*nbBinsPerHistogram/(2*M_PI)));
+      unsigned int histogramBin = static_cast<unsigned int>(vcl_floor(compensatedOrientation*nbBinsPerHistogram/(2*CONST_PI)));
 
       // Compute the wheight of the pixel in the histogram
       double lWeightMagnitude = vcl_exp(-(dist*dist)/(2*lSigma*lSigma));

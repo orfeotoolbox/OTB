@@ -53,7 +53,7 @@ LineSegmentDetector<TInputImage,TPrecision >
 {
 
   m_DirectionsAllowed = 1./8.;
-  m_Prec = M_PI * m_DirectionsAllowed;
+  m_Prec = CONST_PI * m_DirectionsAllowed;
   m_Threshold = 2.;
 
   /** Compute the modulus and the orientation gradient images */
@@ -365,7 +365,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   for(n=0; n<5; ++n)
     {
       r[7] /= 2.0;
-      r[6] = M_PI * r[7];              // prec = rec[6]
+      r[6] = CONST_PI * r[7];              // prec = rec[6]
       nfa_new = this->ComputeRectNFA(r);
       if( nfa_new > NFA )
         {
@@ -441,7 +441,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   for(n=0; n<5; ++n)
     {
       r[7] /= 2.0;
-      r[6] = M_PI * r[7];              // prec = rec[]
+      r[6] = CONST_PI * r[7];              // prec = rec[]
       nfa_new = this->ComputeRectNFA(r);
       if( nfa_new > NFA )
         {
@@ -598,9 +598,9 @@ LineSegmentDetector<TInputImage, TPrecision>
   double diff = Angle - regionAngle;
 
   if( diff < 0.0 ) diff = -diff;
-  if( diff > 1.5*M_PI )
+  if( diff > 1.5*CONST_PI )
     {
-      diff -= 2*M_PI;
+      diff -= 2*CONST_PI;
       if( diff < 0.0 ) diff = -diff;
     }
 
@@ -794,7 +794,7 @@ LineSegmentDetector<TInputImage, TPrecision>
      so it could be wrong by 180 degrees.
      here is corrected if necessary */
 
-  if( this->angle_diff(theta,angleRegion) > m_Prec ) theta += M_PI;
+  if( this->angle_diff(theta,angleRegion) > m_Prec ) theta += CONST_PI;
 
   return theta;
 }
@@ -809,8 +809,8 @@ LineSegmentDetector<TInputImage, TPrecision>
 ::angle_diff(double a, double b) const
 {
   a -= b;
-  while( a <= -M_PI ) a += 2*M_PI;
-  while( a >   M_PI ) a -= 2*M_PI;
+  while( a <= -CONST_PI ) a += 2*CONST_PI;
+  while( a >   CONST_PI ) a -= 2*CONST_PI;
   if( a < 0.0 ) a = -a;
   return a;
 }
@@ -898,7 +898,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   val = -logNT - log10(betai((double)k,(double)(n-k+1),p));
 
   if(vnl_math_isinf(val)) /* approximate by the first term of the tail */
-    val = -logNT - ( factln(n) - factln(k) - factln(n-k) ) / M_LN10
+    val = -logNT - ( factln(n) - factln(k) - factln(n-k) ) / CONST_LN10
           - (double)k * log10(p) - (double)(n-k) * log10(1.0-p);
 
   return val;

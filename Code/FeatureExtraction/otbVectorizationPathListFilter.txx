@@ -266,11 +266,11 @@ VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
   if (direction > 0)
   {
     //find the direction in terms of 0,1,2,3
-    neighborhoodNumber = (int) (direction/(M_PI/4)-1);
+    neighborhoodNumber = (int) (direction/(CONST_PI/4)-1);
   }
   else
   {
-    neighborhoodNumber = (int) ((direction+M_PI)/(M_PI/4)-1);
+    neighborhoodNumber = (int) ((direction+CONST_PI)/(CONST_PI/4)-1);
     neighborhoodNumber = (neighborhoodNumber + 4);
     //if the direction was <0 need to convert to 4,5,6,7
   }
@@ -526,11 +526,11 @@ VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
   if (direction > 0)
   {
     //find the direction in terms of 0,1,2,3
-    neighborhoodNumber = (int) (direction/(M_PI/4)-1);
+    neighborhoodNumber = (int) (direction/(CONST_PI/4)-1);
   }
   else
   {
-    neighborhoodNumber = (int) ((direction+M_PI)/(M_PI/4)-1);
+    neighborhoodNumber = (int) ((direction+CONST_PI)/(CONST_PI/4)-1);
     neighborhoodNumber = (neighborhoodNumber + 4);
     //if the direction was <0 need to convert to 4,5,6,7
   }

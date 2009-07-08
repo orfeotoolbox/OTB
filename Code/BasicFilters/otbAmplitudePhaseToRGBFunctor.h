@@ -72,13 +72,13 @@ namespace otb
         {
 //           std::cout << amplitude << " - " << phase << std::endl;
           double hinc, sinc, vinc;
-          hinc=0.6/(2*M_PI);
+          hinc=0.6/(2*CONST_PI);
           sinc=0.0;
           vinc=0.0;
 
           double hue, sat, val;
 
-          hue = 0.6 - (phase+M_PI)*hinc;
+          hue = 0.6 - (phase+CONST_PI)*hinc;
           sat = 0.6*coherence+0.3;
           val = itk::NumericTraits<RGBComponentType>::max()/2
               * ( (amplitude-m_Minimum)/(m_Maximum-m_Minimum)+1.0);

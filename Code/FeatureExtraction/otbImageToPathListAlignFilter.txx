@@ -364,9 +364,9 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   test = tab(n,1.0/(double)(m_NbGradDirection),(double)(nx*ny)*(double)(nx*ny));
 
   /*** initialization ***/
-  prec = M_PI/(double)(m_NbGradDirection);
+  prec = CONST_PI/(double)(m_NbGradDirection);
   ntheta = m_NbLineDirection/2;  /* i.e. # directions of NON-ORIENTED lines */
-  dtheta = M_PI/(double)ntheta;
+  dtheta = CONST_PI/(double)ntheta;
 
   /******************** memory allocation ********************/
 
@@ -392,7 +392,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   {
     printf("side %d/4 ",side+1);
 
-    theta0 = 0.5*M_PI*(double)side;
+    theta0 = 0.5*CONST_PI*(double)side;
     mx = ((side==0 || side==2)?1:0);
     my = ((side==1 || side==3)?1:0);
     ox = ((side==1)?nx-1:0);
@@ -441,8 +441,8 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
             if (error>-100.0)
             {
               error -= theta;
-              while (error<=-M_PI) error += 2.0*M_PI;
-              while (error>M_PI) error -= 2.0*M_PI;
+              while (error<=-CONST_PI) error += 2.0*CONST_PI;
+              while (error>CONST_PI) error -= 2.0*CONST_PI;
               if (error<0.0) error = -error;
               if (error<prec)
               {

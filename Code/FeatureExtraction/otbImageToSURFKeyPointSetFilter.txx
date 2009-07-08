@@ -389,7 +389,7 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
 
         if (pt[0] + pt[1] != 0)
         {
-          angle = atan( pt[0]/pt[1] )*( Pi/M_PI);
+          angle = atan( pt[0]/pt[1] )*( Pi/CONST_PI);
           if (angle < 0 )
             angle += 2*Pi;
 
@@ -440,7 +440,7 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
   TransformType::Pointer eulerTransform = TransformType::New();
   TransformType::ParametersType  ParamVec(5);
   PointImageType pSrc , pDst;
-  double angle = O * M_PI / 180;
+  double angle = O * CONST_PI / 180;
 
 
 

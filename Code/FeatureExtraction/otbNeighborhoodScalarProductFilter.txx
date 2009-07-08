@@ -149,10 +149,10 @@ NeighborhoodScalarProductFilter<TInputImage,TOutputModulus,TOutputDirection>
         }
       }
       // Compute the direction
-      double angle = static_cast<double>((1+neighborhoodNumberMax)) * static_cast<double>(M_PI_4);
+      double angle = static_cast<double>((1+neighborhoodNumberMax)) * static_cast<double>(CONST_PI_4);
       if (flagPosNegDirection)
       {
-        angle -= M_PI;
+        angle -= CONST_PI;
       }
 
       // Set the ouptut values

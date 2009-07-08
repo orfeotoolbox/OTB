@@ -52,7 +52,7 @@ PointSetDensityFunction< TPointSet,   TOutput>
   index[1] = static_cast<long int>(input[1]);
 
   int accu = 0;
-  double surface = M_PI*vcl_pow(2.,static_cast<double>(m_Radius));
+  double surface = CONST_PI*vcl_pow(2.,static_cast<double>(m_Radius));
 
   if (this->GetPointSet()->GetNumberOfPoints() != 0)
   {
