@@ -248,7 +248,7 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
           while (Thetaxtyt < 0)
             Thetaxtyt = CONST_PI + Thetaxtyt; // Theta is now [0,PI] as is
           // the result of detectors
-          while (Thetaxtyt > CONST_PI/2.0)
+          while (Thetaxtyt > CONST_PI_2)
             Thetaxtyt = Thetaxtyt-CONST_PI; // Theta is now [-PI/2,PI/2]
 
 

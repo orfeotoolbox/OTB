@@ -109,7 +109,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
 	      double Angle = this->ComputeAngleFormedBySegments(*itLinesListTest, *itLinesListCur);
 
 	      /** Check if the angle is a right one */
-                  if(vcl_abs(Angle - CONST_PI/2.) <= m_ThresholdAngle )
+                  if(vcl_abs(Angle - CONST_PI_2) <= m_ThresholdAngle )
 		{
 		  /** Right angle coordinate*/
 		  PointType              RightAngleCoordinate;
