@@ -39,7 +39,7 @@ public:
   typedef SpectralAngleFunctor<TInputVectorPixel,TOutputPixel> Superclass;
 
   SqrtSpectralAngleFunctor() {};
-  ~SqrtSpectralAngleFunctor() {};
+  virtual ~SqrtSpectralAngleFunctor() {};
 
 protected:
   virtual TOutputPixel Evaluate(const TInputVectorPixel& inPix) const

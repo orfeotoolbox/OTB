@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,21 +30,21 @@
 
 namespace itk
 {
-  
+
 /** \class Transform
  * \brief Transform points and vector from an input space to an output space.
  *
- * This abstract class define the generic interface for a geometrical 
+ * This abstract class define the generic interface for a geometrical
  * transformation from one space to another. The class provides methods
- * for mapping points, vectors and covariant vectors from the input space 
- * to the output space. 
+ * for mapping points, vectors and covariant vectors from the input space
+ * to the output space.
  *
  * Given that transformation are not necesarily invertible, this basic
  * class does not provide the methods for back transfromation. Back transform
  * methods are implemented in derived classes where appropriate.
- * 
+ *
  * \par Registration Framework Support
- * Typically a Transform class has several methods for setting its 
+ * Typically a Transform class has several methods for setting its
  * parameters. For use in the registration framework, the parameters must
  * also be represented by an array of doubles to allow communication
  * with generic optimizers. The Array of transformation parameters is set using
@@ -61,7 +61,7 @@ namespace itk
  *
  */
 template <class TScalarType,
-          unsigned int NInputDimensions=3, 
+          unsigned int NInputDimensions=3,
           unsigned int NOutputDimensions=3>
 class ITK_EXPORT  Transform  : public TransformBase
 {
@@ -71,7 +71,7 @@ public:
   typedef TransformBase Superclass;
   typedef SmartPointer< Self >   Pointer;
   typedef SmartPointer< const Self >  ConstPointer;
-  
+
   /** New method for creating an object using a factory. */
   itkNewMacro(Self);
 
@@ -91,6 +91,8 @@ public:
   /** Type of the scalar representing coordinate and vector elements. */
   typedef  TScalarType     ScalarType;
 
+  typedef double CoordRepType;
+
   /** Type of the input parameters. */
   typedef  typename Superclass::ParametersType         ParametersType;
 
@@ -100,22 +102,22 @@ public:
   /** Standard vector type for this class. */
   typedef Vector<TScalarType, NInputDimensions>  InputVectorType;
   typedef Vector<TScalarType, NOutputDimensions> OutputVectorType;
-  
+
   /** Standard covariant vector type for this class */
   typedef CovariantVector<TScalarType, NInputDimensions>  InputCovariantVectorType;
   typedef CovariantVector<TScalarType, NOutputDimensions> OutputCovariantVectorType;
-  
+
   /** Standard vnl_vector type for this class. */
   typedef vnl_vector_fixed<TScalarType, NInputDimensions>  InputVnlVectorType;
   typedef vnl_vector_fixed<TScalarType, NOutputDimensions> OutputVnlVectorType;
-  
+
   /** Standard coordinate point type for this class */
-  typedef Point<TScalarType, NInputDimensions> InputPointType;
-  typedef Point<TScalarType, NOutputDimensions> OutputPointType;
-  
+  typedef Point<CoordRepType, NInputDimensions> InputPointType;
+  typedef Point<CoordRepType, NOutputDimensions> OutputPointType;
+
   /**  Method to transform a point. */
   virtual OutputPointType TransformPoint(const InputPointType  & ) const
-    { return OutputPointType(); } 
+    { return OutputPointType(); }
 
   /**  Method to transform a vector. */
   virtual OutputVectorType    TransformVector(const InputVectorType &) const
@@ -128,7 +130,7 @@ public:
   /**  Method to transform a CovariantVector. */
   virtual OutputCovariantVectorType TransformCovariantVector(
     const InputCovariantVectorType &) const
-    { return OutputCovariantVectorType(); } 
+    { return OutputCovariantVectorType(); }
 
   /** Set the transformation parameters and update internal transformation.
    * SetParameters gives the transform the option to set it's
@@ -137,37 +139,37 @@ public:
    * SetParametersByValue.
    * \sa SetParametersByValue
    */
-  virtual void SetParameters( const ParametersType & ) 
+  virtual void SetParameters( const ParametersType & )
     { itkExceptionMacro( << "Subclasses should override this method" ) }
 
-  /** Set the transformation parameters and update internal transformation. 
+  /** Set the transformation parameters and update internal transformation.
    * This method forces the transform to copy the parameters.  The
    * default implementation is to call SetParameters.  This call must
    * be overridden if the transform normally implements SetParameters
    * by keeping a reference to the parameters.
    * \sa SetParameters
    */
-  virtual void SetParametersByValue ( const ParametersType & p ) 
+  virtual void SetParametersByValue ( const ParametersType & p )
     { this->SetParameters ( p ); }
 
   /** Get the Transformation Parameters. */
   virtual const ParametersType& GetParameters(void) const
-    { 
+    {
     itkExceptionMacro( << "Subclasses should override this method" );
-    // Next line is needed to avoid errors due to: 
+    // Next line is needed to avoid errors due to:
     // "function must return a value".
-    return this->m_Parameters; 
+    return this->m_Parameters;
     }
 
   /** Set the fixed parameters and update internal transformation. */
-  virtual void SetFixedParameters( const ParametersType & ) 
+  virtual void SetFixedParameters( const ParametersType & )
     { itkExceptionMacro( << "Subclasses should override this method" ) }
 
   /** Get the Fixed Parameters. */
   virtual const ParametersType& GetFixedParameters(void) const
     {
     itkExceptionMacro( << "Subclasses should override this method" );
-    // Next line is needed to avoid errors due to: 
+    // Next line is needed to avoid errors due to:
     // "function must return a value".
     return this->m_FixedParameters;
     }
@@ -175,7 +177,7 @@ public:
   /** Compute the Jacobian of the transformation
    *
    * This method computes the Jacobian matrix of the transformation
-   * at a given input point. The rank of the Jacobian will also indicate 
+   * at a given input point. The rank of the Jacobian will also indicate
    * if the transform is invertible at this point.
    *
    * The Jacobian is be expressed as a matrix of partial derivatives of the
@@ -185,31 +187,31 @@ public:
    * \f[
    *
       J=\left[ \begin{array}{cccc}
-      \frac{\partial x_{1}}{\partial p_{1}} & 
-      \frac{\partial x_{1}}{\partial p_{2}} & 
+      \frac{\partial x_{1}}{\partial p_{1}} &
+      \frac{\partial x_{1}}{\partial p_{2}} &
       \cdots  & \frac{\partial x_{1}}{\partial p_{m}}\\
-      \frac{\partial x_{2}}{\partial p_{1}} & 
-      \frac{\partial x_{2}}{\partial p_{2}} & 
+      \frac{\partial x_{2}}{\partial p_{1}} &
+      \frac{\partial x_{2}}{\partial p_{2}} &
       \cdots  & \frac{\partial x_{2}}{\partial p_{m}}\\
       \vdots  & \vdots  & \ddots  & \vdots \\
-      \frac{\partial x_{n}}{\partial p_{1}} & 
-      \frac{\partial x_{n}}{\partial p_{2}} & 
+      \frac{\partial x_{n}}{\partial p_{1}} &
+      \frac{\partial x_{n}}{\partial p_{2}} &
       \cdots  & \frac{\partial x_{n}}{\partial p_{m}}
-      \end{array}\right] 
+      \end{array}\right]
    *
    * \f]
    * **/
   virtual const JacobianType & GetJacobian(const InputPointType  &) const
     {
     itkExceptionMacro( << "Subclass should override this method" );
-    // Next line is needed to avoid errors due to: 
+    // Next line is needed to avoid errors due to:
     // "function must return a value".
     return this->m_Jacobian;
-    } 
+    }
 
 
   /** Return the number of parameters that completely define the Transfom  */
-  virtual unsigned int GetNumberOfParameters(void) const 
+  virtual unsigned int GetNumberOfParameters(void) const
                       { return this->m_Parameters.Size(); }
 
   /** Returns a boolean indicating whether it is possible or not to compute the
@@ -217,7 +219,7 @@ public:
    * the transform is returned in the inverseTransform variable passed by the
    * user.  The inverse is recomputed if this current transform has been modified.
    * This method is intended to be overriden by derived classes.
-   * 
+   *
    */
   bool GetInverse(Self * inverseTransform) const {return false;}
 
@@ -231,16 +233,16 @@ public:
    * points P and Q, and scalar coefficients a and b, then
    *
    *           T( a*P + b*Q ) = a * T(P) + b * T(Q)
-   * 
+   *
    * By default, we assume this to NOT be the case for most transforms.
    * However, transforms for which this is true will overload and reimplement
    * this method accordingly.
-   * 
+   *
    **/
   virtual bool IsLinear() const { return false; }
 
 protected:
-  Transform(); 
+  Transform();
   Transform(unsigned int Dimension, unsigned int NumberOfParameters);
   virtual ~Transform() {}
 

@@ -41,7 +41,7 @@ public:
     m_MaxThreshold = 1.0;
   };
 
-  ~CloudDetectionFunctor() {};
+  virtual ~CloudDetectionFunctor() {};
   inline TOutputValue operator()(const TInput& inPix)
   {
     if ( (m_CloudEstimatorFunctor(inPix)>m_MinThreshold) && (m_CloudEstimatorFunctor(inPix)<=m_MaxThreshold) )

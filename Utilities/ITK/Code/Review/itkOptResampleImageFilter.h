@@ -100,12 +100,15 @@ public:
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension);
 
+  /** Image pixel value typedef. */
+  typedef typename TOutputImage::PixelType              PixelType;
+  typedef typename TInputImage::PixelType               InputPixelType;
 
   /**
    *  Transform typedef.
    */
   typedef double CoordRepType;
-  typedef Transform<CoordRepType,
+  typedef Transform<TInterpolatorPrecisionType,
                     itkGetStaticConstMacro(ImageDimension),
                     itkGetStaticConstMacro(ImageDimension)>       TransformType;
   typedef typename TransformType::ConstPointer             TransformPointerType;
@@ -121,7 +124,7 @@ public:
                                               LinearInterpolatorPointerType;
 
   typedef BSplineInterpolateImageFunction<InputImageType,
-                      CoordRepType>   BSplineInterpolatorType;
+                      CoordRepType,InputPixelType>   BSplineInterpolatorType;
   typedef typename BSplineInterpolatorType::Pointer
                                               BSplineInterpolatorPointerType;
 
@@ -134,10 +137,6 @@ public:
   /** Image point typedef. */
   typedef typename InterpolatorType::PointType          PointType;
   //typedef typename TOutputImage::PointType            PointType;
-
-  /** Image pixel value typedef. */
-  typedef typename TOutputImage::PixelType              PixelType;
-  typedef typename TInputImage::PixelType               InputPixelType;
 
   /** Typedef to describe the output image region type. */
   typedef typename TOutputImage::RegionType             OutputImageRegionType;
