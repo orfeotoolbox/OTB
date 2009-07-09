@@ -353,10 +353,11 @@ IF(OTB_USE_MAPNIK)
                         "Cannot find MAPNIK library. Please set MAPNIK_LIBRARY or SET OTB_USE_MAPNIK OFF.")
         ENDIF (NOT MAPNIK_LIBRARY)
 
-# Add compiler option
+        # Add compiler option
         ADD_DEFINITIONS(-DOTB_USE_MAPNIK)
 
         INCLUDE_DIRECTORIES(${MAPNIK_INCLUDE_DIR})
+
 
 ENDIF(OTB_USE_MAPNIK)
 
@@ -389,7 +390,7 @@ IF(OTB_USE_PQXX)
                         "Cannot find PQ library. Please set PQ_LIBRARY or SET OTB_USE_PQXX OFF.")
         ENDIF (NOT PQ_LIBRARY)
 
-	
+
 # Add compiler option
         ADD_DEFINITIONS(-DOTB_USE_PQXX)
 
@@ -405,6 +406,12 @@ ENDIF(OTB_USE_PQXX)
 # Option for internal/external BOOST
 OPTION(OTB_USE_EXTERNAL_BOOST "Use an outside build of Boost." OFF)
 MARK_AS_ADVANCED(OTB_USE_EXTERNAL_BOOST)
+
+IF (OTB_USE_MAPNIK)
+  IF(NOT OTB_USE_EXTERNAL_BOOST)
+    MESSAGE("You need to set OTB_USE_EXTERNAL_BOOST to ON when using MAPNIK")
+  ENDIF(NOT OTB_USE_EXTERNAL_BOOST)
+ENDIF(OTB_USE_MAPNIK)
 
 IF(OTB_USE_EXTERNAL_BOOST)
   FIND_PACKAGE(Boost)

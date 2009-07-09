@@ -957,8 +957,7 @@ TARGET_LINK_LIBRARIES(otbCommonTests8 OTBIO OTBTesting)
 
 IF(OTB_USE_MAPNIK)
 ADD_EXECUTABLE(otbCommonTests9 otbCommonTests9.cxx ${BasicCommon_SRCS9})
-#TODO this line should be refined when we will like to have this capability with windows
-TARGET_LINK_LIBRARIES(otbCommonTests9 OTBIO  OTBTesting ${MAPNIK_LIBRARY}/libmapnik.so)
+TARGET_LINK_LIBRARIES(otbCommonTests9 OTBIO  OTBTesting ${MAPNIK_LIBRARY})
 ENDIF(OTB_USE_MAPNIK)
 
 IF(OTB_USE_PQXX)
