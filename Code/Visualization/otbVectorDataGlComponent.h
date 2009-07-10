@@ -147,7 +147,7 @@ private:
   void operator=(const Self&);        // purposely not implemented
 
   // Function pointer typedef
-  typedef void (CALLBACK * FunctionPointerType)();
+  typedef GLvoid (CALLBACK * FunctionPointerType)();
 
   // Static Combine callback for tesselation
   static void CALLBACK TesselationCombineCallback(GLdouble coords[3],GLdouble * data[4], GLfloat weights[4],GLdouble **dataOut)
