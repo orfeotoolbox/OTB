@@ -52,9 +52,12 @@ const double CONST_2_PI =     0.63661977236758134308;  /* 2/pi */
 const double CONST_2PI =      6.28318530717958647693;  /* 2*pi */
 const double CONST_PI_180 =   0.01745329251994329577;  /* pi/180 */ 
 const double CONST_180_PI =   57.2957795130823208768;  /* 180/pi */ 
+const double CONST_LNPI =     std::log(CONST_PI);      /* ln(pi)*/
+const double CONST_SQRTPI =   std::sqrt(CONST_PI);     /* sqrt(pi)*/
 const double CONST_2_SQRTPI = 1.12837916709551257390;  /* 2/sqrt(pi) */
 const double CONST_SQRT2 =    1.41421356237309504880;  /* sqrt(2) */
 const double CONST_SQRT1_2 =  0.70710678118654752440;  /* 1/sqrt(2) */
+const double CONST_EULER =    0.57721566490153286060;  /* euler constant*/
 
 /* The above constants are not adequate for computation using `long double's.
    Therefore we provide as an extension constants with similar names as a
@@ -69,11 +72,18 @@ const double CONST_LN10l =     2.3025850929940456840179914546843642L;  /* log_e 
 const double CONST_PIl =       3.1415926535897932384626433832795029L;  /* pi */
 const double CONST_PI_2l =     1.5707963267948966192313216916397514L;  /* pi/2 */
 const double CONST_PI_4l =     0.7853981633974483096156608458198757L;  /* pi/4 */
+const double CONST_PI_8l =     0.3926990816987241548078304229099379L;  /* pi/8 */
 const double CONST_1_PIl =     0.3183098861837906715377675267450287L;  /* 1/pi */
 const double CONST_2_PIl =     0.6366197723675813430755350534900574L;  /* 2/pi */
+const double CONST_2PIl =      6.2831853071795864769252867665590058L;  /* 2*pi */
+const double CONST_PI_180l =   0.0174532925199432957692369076848861L;  /* pi/180 */ 
+const double CONST_180_PIl =   57.295779513082320876798154814105170L;  /* 180/pi */ 
+const double CONST_LNPIl =     std::log(CONST_PIl);                    /* ln(pi)*/
+const double CONST_SQRTPIl =   std::sqrt(CONST_PIl);                   /* sqrt(pi)*/
 const double CONST_2_SQRTPIl = 1.1283791670955125738961589031215452L;  /* 2/sqrt(pi) */
 const double CONST_SQRT2l =    1.4142135623730950488016887242096981L;  /* sqrt(2) */
 const double CONST_SQRT1_2l =  0.7071067811865475244008443621048490L;  /* 1/sqrt(2) */
+const double CONST_EULERl =    0.5772156649015328606065120900824024L;  /* euler constant*/
 
 #endif
 
