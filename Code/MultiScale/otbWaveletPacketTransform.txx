@@ -50,6 +50,7 @@ WaveletPacketTransform< TInputImage, TOutputImage, TFilter, FORWARD, TCost >
   /*
    * Start with a decomposition
    */
+
   m_WaveletPacketRule.clear();
   
   m_NumberOfFilters = 0;
@@ -59,6 +60,7 @@ WaveletPacketTransform< TInputImage, TOutputImage, TFilter, FORWARD, TCost >
   progress->SetMiniPipelineFilter(this);
 
   GenerateData( 0, this->GetInput(), progress );
+ 
 }
 
 template < class TInputImage, class TOutputImage, class TFilter, class TCost >
@@ -92,9 +94,10 @@ WaveletPacketTransform< TInputImage, TOutputImage, TFilter, FORWARD, TCost >
     accumulatorWeight /= 2.;
     progress->RegisterInternalFilter( filter, accumulatorWeight );
     filter->SetInput( outputPtr );
-
+    
     filter->Update();
-   
+
+    
     for ( unsigned int idx = 0; idx < filter->GetNumberOfOutputs(); idx++ )
     {
       GenerateData( depth+1, filter->GetOutput( idx ), progress );
@@ -116,28 +119,21 @@ WaveletPacketTransform< TInputImage, TOutputImage, TFilter, INVERSE, FullyDecomp
 ::WaveletPacketTransform ()
   : m_SubsampleImageFactor(2), m_NumberOfFilters(0), m_DepthOfDecomposition(0) 
 {
-  std::cout<<"WaveletPacketTransform INV NEW go"<<std::endl;
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfInputs(1);
   this->SetNumberOfOutputs(1);
   this->SetNthOutput(0,OutputImageType::New());
 
   m_FilterList = FilterListType::New();
-  std::cout<<"WaveletPacketTransform INV NEW"<<std::endl;
 }
 
 template < class TInputImage, class TOutputImage, class TFilter >
 void
 WaveletPacketTransform< TInputImage, TOutputImage, TFilter, INVERSE, FullyDecomposedWaveletPacketCost< TInputImage > >
 ::GenerateOutputInformation ()
-{  
-  std::cout<<"GenerateOutputInformation IN"<<std::endl;
+{
   if ( GetSubsampleImageFactor() == 1 )
-    {
-      std::cout<<"GenerateOutputInformation GetSubsampleImageFactor"<<std::endl; 
-      //Superclass::GenerateOutputInformation();
-      std::cout<<"GenerateOutputInformation GetSubsampleImageFactor"<<std::endl; 
-    }
+    Superclass::GenerateOutputInformation();
 
   if ( m_NumberOfFilters == 0 )
     InterpretRule();
@@ -158,13 +154,11 @@ WaveletPacketTransform< TInputImage, TOutputImage, TFilter, INVERSE, FullyDecomp
   }
 
   std::cerr << "Output Size [" << outputSize[0] << "," << outputSize[1] << "]\n";
-std::cout<<outputIndex<<std::endl;
-std::cout<<outputSize<<std::endl;
+
   OutputImageRegionType outputRegion;
   outputRegion.SetIndex( outputIndex );
   outputRegion.SetSize( outputSize );
   this->GetOutput()->SetRegions( outputRegion );
- std::cout<<"GenerateOutputInformation OUT"<<std::endl;
 }
 
 template < class TInputImage, class TOutputImage, class TFilter >
@@ -172,7 +166,6 @@ void
 WaveletPacketTransform< TInputImage, TOutputImage, TFilter, INVERSE, FullyDecomposedWaveletPacketCost< TInputImage > >
 ::GenerateData ()
 {
- std::cout<<"GenerateData IN"<<std::endl;
   if ( m_WaveletPacketRule[0] != true ) 
   {
     throw itk::ExceptionObject( __FILE__, __LINE__, 
@@ -198,7 +191,7 @@ WaveletPacketTransform< TInputImage, TOutputImage, TFilter, INVERSE, FullyDecomp
 
   unsigned int pos = 1; 
   SetInputFilters( pos, inputIterator, 0 );
-std::cout<<"GenerateData 1"<<std::endl;
+
   if ( pos != m_WaveletPacketRule.size() || inputIterator != this->GetInput()->End() )
   {
     throw itk::ExceptionObject( __FILE__, __LINE__, 
@@ -207,22 +200,18 @@ std::cout<<"GenerateData 1"<<std::endl;
   }
 
   m_FilterList->GetNthElement( 0 )->GraftOutput( this->GetOutput() );
-std::cout<<"GenerateData 1"<<std::endl;
+
   itk::ProgressAccumulator::Pointer progress = itk::ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
-std::cout<<"GenerateData FOR"<<std::endl;
+
   for ( pos = m_NumberOfFilters; pos > 0; pos-- )
   { 
-    std::cout<<pos<<" / "<<m_NumberOfFilters<<" ---- "<<m_FilterList->GetNthElement(pos-1)<<std::endl;
     FilterPointerType filter = m_FilterList->GetNthElement(pos-1);
     progress->RegisterInternalFilter( filter, 1.f/static_cast<float>( m_NumberOfFilters ) );
     filter->Update();
-    std::cout<<"pos done"<<std::endl;
-    
   }
 
   this->GraftOutput( m_FilterList->GetNthElement(0)->GetOutput() );
- std::cout<<"GenerateData OUT"<<std::endl;
 }
 
 template < class TInputImage, class TOutputImage, class TFilter >
