@@ -102,6 +102,7 @@ LayerBasedModel<TLayer>
       resp = it.Get();
       found = true;
       }
+    ++it;
     }
   return resp;
 }

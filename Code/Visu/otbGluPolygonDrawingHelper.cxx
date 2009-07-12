@@ -35,7 +35,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 extern "C"
 {
-  typedef void (CALLBACK * FunctionPointerType)();
+  typedef GLvoid (CALLBACK * FunctionPointerType)();
 
   void CALLBACK CombineCallback(GLdouble coords[3],GLdouble * data[4], GLfloat weights[4],GLdouble **dataOut)
   {
