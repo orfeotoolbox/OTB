@@ -131,14 +131,23 @@ ConvolutionImageFilter< TInputImage, TOutputImage, TBoundaryCondition>
     bit.GoToBegin();
     unsigned int neighborhoodSize = bit.Size();
 
+    // Compute the norm of the filter
+    if(m_NormalizeFilter)
+      {
+      norm = itk::NumericTraits<InputRealType>::Zero;
+      for (i = 0; i < neighborhoodSize; ++i)
+	{
+	 norm += static_cast<InputRealType>( m_Filter(i) );
+	}
+      }
+
     while ( ! bit.IsAtEnd() )
     {
       sum = itk::NumericTraits<InputRealType>::Zero;
-      norm = itk::NumericTraits<InputRealType>::Zero;
+
       for (i = 0; i < neighborhoodSize; ++i)
       {
         sum += static_cast<InputRealType>( bit.GetPixel(i)*m_Filter(i) );
-        norm += static_cast<InputRealType>( m_Filter(i) );
       }
 
       // get the mean value
