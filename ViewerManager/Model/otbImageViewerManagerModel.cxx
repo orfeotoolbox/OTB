@@ -240,6 +240,8 @@ ImageViewerManagerModel
   StandardRenderingFunctionType::ChannelListType channels;
   channels.resize(3);
   channels[0]=choice;
+  channels[1]=choice;
+  channels[2]=choice;
 
   StandardRenderingFunctionType::Pointer renderFunction;
   renderFunction = StandardRenderingFunctionType::New();
