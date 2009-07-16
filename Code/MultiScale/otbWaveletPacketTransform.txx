@@ -132,9 +132,6 @@ void
 WaveletPacketTransform< TInputImage, TOutputImage, TFilter, INVERSE, FullyDecomposedWaveletPacketCost< TInputImage > >
 ::GenerateOutputInformation ()
 {
-//  if ( GetSubsampleImageFactor() == 1 )
-//    Superclass::GenerateOutputInformation();
-
   if ( m_NumberOfFilters == 0 )
     InterpretRule();
 

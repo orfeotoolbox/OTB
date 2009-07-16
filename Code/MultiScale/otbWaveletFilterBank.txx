@@ -640,8 +640,6 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
     }
   }
 
-  //if ( GetSubsampleImageFactor() == 1 )
-    //return;
 
 #if __myDebug__
   otbGenericMsgDebugMacro( << " up sampling output regions by a factor of " << GetSubsampleImageFactor() );
