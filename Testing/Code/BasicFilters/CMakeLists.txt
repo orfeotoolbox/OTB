@@ -1532,6 +1532,28 @@ ADD_TEST(bfTvSubsampleImageFilter ${BASICFILTERS_TESTS12}
 		${TEMP}/bfSubsampleImageFilterOnePixelOutOf2.tif
 )
 
+# -----  otbImageAndVectorImageOperationFilter  --------------------------------------
+ADD_TEST(bfTuImageAndVectorImageOperationFilterNew ${BASICFILTERS_TESTS12}
+	otbImageAndVectorImageOperationFilterNew)
+
+ADD_TEST(bfTvImageAndVectorImageOperationFilterTest ${BASICFILTERS_TESTS12}
+	--compare-n-images ${NOTOL} 4
+		${TEMP}/bfTvImageAndVectorImageOperationFilterTestAdd.tif
+		${BASELINE}/bfTvImageAndVectorImageOperationFilterTestAdd.tif
+		${TEMP}/bfTvImageAndVectorImageOperationFilterTestSub.tif
+		${BASELINE}/bfTvImageAndVectorImageOperationFilterTestSub.tif
+		${TEMP}/bfTvImageAndVectorImageOperationFilterTestMul.tif
+		${BASELINE}/bfTvImageAndVectorImageOperationFilterTestMul.tif
+		${TEMP}/bfTvImageAndVectorImageOperationFilterTestDiv.tif
+		${BASELINE}/bfTvImageAndVectorImageOperationFilterTestDiv.tif
+	otbImageAndVectorImageOperationFilterTest
+		${INPUTDATA}/checkerboard_128_128.png
+		${INPUTDATA}/poupees_sub.png
+		${TEMP}/bfTvImageAndVectorImageOperationFilterTestAdd.tif
+		${TEMP}/bfTvImageAndVectorImageOperationFilterTestSub.tif
+		${TEMP}/bfTvImageAndVectorImageOperationFilterTestMul.tif
+		${TEMP}/bfTvImageAndVectorImageOperationFilterTestDiv.tif
+)
 
 
 # A enrichir
@@ -1734,6 +1756,8 @@ otbChangeLabelImageFilterNew.cxx
 otbChangeLabelImageFilter.cxx
 otbSubsampleImageFilterNew.cxx
 otbSubsampleImageFilter.cxx
+otbImageAndVectorImageOperationFilterNew.cxx
+otbImageAndVectorImageOperationFilterTest.cxx
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
