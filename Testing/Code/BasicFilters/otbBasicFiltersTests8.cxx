@@ -43,4 +43,5 @@ void RegisterTests()
   REGISTER_TEST(otbAmplitudePhaseToRGBFunctor);
   REGISTER_TEST(otbVarianceImageFilterNew);
   REGISTER_TEST(otbVarianceImageFilter);
+  REGISTER_TEST(otbBoxAndWhiskerImageFilterNew);
 }
