@@ -1,0 +1,138 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  See ITCopyright.txt for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+
+#ifndef __otbFlexibleDistanceWithMissingValue_txx
+#define __otbFlexibleDistanceWithMissingValue_txx
+
+#include <cmath>
+
+#include "itkNumericTraits.h"
+
+namespace otb {
+
+namespace Statistics {
+
+template< class TVector >
+inline double
+FlexibleDistanceWithMissingValue< TVector >
+::Evaluate(const TVector &x1, const TVector &x2) const
+{
+  if (IsEuclidean())
+    return  Superclass::Evaluate(x1,x2);
+
+  if( itk::MeasurementVectorTraits::GetLength( x1 ) != 
+    itk::MeasurementVectorTraits::GetLength( x2 ) )
+  {
+    itkExceptionMacro( << "Vector lengths must be equal." );
+  }
+
+  double temp, distance = itk::NumericTraits< double >::Zero ;
+
+  for(unsigned int i = 0 ; i < x1.Size(); i++ )
+  {
+    if ( !IsMissingValue( x1[i] ) && !IsMissingValue( x2[i] ) )
+    {
+      temp = pow( fabs( pow(x1[i],this->Alpha) - pow(x2[i],this->Alpha) ), this->Beta );
+      distance += temp ;
+    }
+  }
+
+  return distance ;
+}
+
+template< class TVector >
+inline double
+FlexibleDistanceWithMissingValue< TVector >
+::Evaluate(const TVector &x) const
+{
+  if ( IsEuclidean() )
+    return  Superclass::Evaluate(x);
+
+  MeasurementVectorSizeType 
+    measurementVectorSize = this->GetMeasurementVectorSize();
+
+  if(measurementVectorSize == 0) 
+  {
+    itkExceptionMacro( << "Please set the MeasurementVectorSize first" );
+  }
+
+  itk::MeasurementVectorTraits::Assert( this->m_Origin, measurementVectorSize, 
+    "EuclideanDistance::Evaluate Origin and input vector have different lengths");
+
+  double temp, distance = itk::NumericTraits< double >::Zero ;
+
+  for(unsigned int i = 0 ; i < measurementVectorSize ; i++ )
+  {
+    if ( !IsMissingValue( this->GetOrigin()[i] ) && !IsMissingValue( x[i] ) )
+    {
+      temp = pow(  fabs( pow(this->GetOrigin()[i],this->Alpha) - pow(x[i],this->Alpha) ), this->Beta) ;
+      distance += temp ;
+    }
+  }
+
+  return distance ;
+}
+
+template< class TVector >
+inline double
+FlexibleDistanceWithMissingValue< TVector >
+::Evaluate( const ValueType &a, const ValueType &b ) const
+{
+  if (IsEuclidean())
+    return Superclass::Evaluate(a,b);
+  
+  // FIXME throw NaN exception or not ??
+  if ( IsMissingValue( a ) || IsMissingValue( b ) )
+    return 0.0;
+
+  double temp = pow(fabs(pow(a,this->Alpha) - pow(b,this->Alpha)), this->Beta) ;
+  return temp ;
+}
+template< class TVector >
+void
+FlexibleDistanceWithMissingValue< TVector >
+::SetAlphaBeta ( double a, double b )
+{
+  Alpha = a;
+  Beta = b;
+}
+
+template< class TVector >
+bool
+FlexibleDistanceWithMissingValue< TVector >
+::IsEuclidean()
+{
+  if ((Alpha == 1.0) && (Beta == 2.0))
+  {
+    return true;
+  }
+  else
+  {  
+    return false;
+  }
+}
+
+} // end namespace statistics
+} // end namespace otb
+
+#endif
+
+
+
