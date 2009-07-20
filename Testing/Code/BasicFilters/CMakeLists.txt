@@ -821,9 +821,17 @@ ${TEMP}/bfTvVectorImageToAmplitudeImageFilterOutput.tif
   ADD_TEST(bfTuEuclideanDistanceWithMissingValueNew ${BASICFILTERS_TESTS8}
          otbEuclideanDistanceWithMissingValueNew)
 
-ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
+  ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
          otbEuclideanDistanceWithMissingValue)
 
+
+# -------            otb::FlexibleDistanceWithMissingValue   ----------------------------
+
+  ADD_TEST(bfTuFlexibleDistanceWithMissingValueNew ${BASICFILTERS_TESTS8}
+         otbFlexibleDistanceWithMissingValueNew)
+
+  ADD_TEST(bfTuFlexibleDistanceWithMissingValue ${BASICFILTERS_TESTS8}
+         otbFlexibleDistanceWithMissingValue)
 
 # -------            otb::LabelizeNeighborhoodConnectedImageFilter   ----------------------------
 
@@ -912,6 +920,11 @@ ADD_TEST(bfTvVarianceImageFilter ${BASICFILTERS_TESTS8}
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
         ${TEMP}/bfVarianceImageFilter.tif
 )
+
+# ------             otb::BoxAndWhiskerImageFilter -------------
+
+ADD_TEST(bfTuBoxAndWhiskerImageFilter ${BASICFILTERS_TESTS8}
+         otbBoxAndWhiskerImageFilterNew )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests9 ~~~~~~~~~~~~~~~~~~~~~~~~~~
