@@ -1694,6 +1694,9 @@ otbAmplitudePhaseToRGBFunctorNew.cxx
 otbAmplitudePhaseToRGBFunctor.cxx
 otbVarianceImageFilterNew.cxx
 otbVarianceImageFilter.cxx
+otbBoxAndWhiskerImageFilterNew.cxx
+otbFlexibleDistanceWithMissingValueNew.cxx
+otbFlexibleDistanceWithMissingValue.cxx
 )
 
 # A enrichir
