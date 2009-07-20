@@ -52,8 +52,3 @@ int otbSOMWithMissingValueNew ( int argc, char * argv[] )
 }
 
 
-    
-
-
-}
-
