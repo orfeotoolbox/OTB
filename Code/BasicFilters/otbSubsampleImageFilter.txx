@@ -73,7 +73,7 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   if ( !IsSubsampleFactorOne() )
   {
     OutputImageRegionType newRegion;
-    this->CallCopyInputRegionToOutputRegion( newRegion, this->GetInput()->GetRequestedRegion() );
+    this->CallCopyInputRegionToOutputRegion( newRegion, this->GetInput()->GetLargestPossibleRegion() );
     this->GetOutput()->SetRegions( newRegion );
   }
 }
@@ -172,7 +172,7 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       inputIter.SetSubsampleFactor( GetSubsampleFactor() );
       inputIter.GoToBegin();
 
-      while ( !inputIter.IsAtEnd() && !outputIter.IsAtEnd() )
+      while ( !inputIter.IsAtEnd() )
       {
         outputIter.SetLocation( 
           static_cast< typename SubsampledImageRegionIterator< OutputImageType >::OffsetType >
@@ -188,7 +188,7 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       inputIter.SetSubsampleFactor( 1 );
       inputIter.GoToBegin();
 
-      while ( !inputIter.IsAtEnd() && !outputIter.IsAtEnd() )
+      while ( !inputIter.IsAtEnd() )
       {
         InputImageIndexType inputIndex = inputIter.GetLocationIndex();
         OutputImageIndexType outputIndex;
