@@ -800,7 +800,7 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
       w *= (weights)[n][indx];
       coefficientIndex[n] = (evaluateIndex)[n][indx];
       }
-    interpolated += w * static_cast<TCoefficientType>(m_Coefficients->GetPixel(coefficientIndex));
+    interpolated += static_cast<TCoefficientType>(w * static_cast<double>(m_Coefficients->GetPixel(coefficientIndex)));
     }
 
   return(interpolated);
