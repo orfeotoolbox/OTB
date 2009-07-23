@@ -63,7 +63,7 @@ std::string PostGISFromStringTransactor::GetTransactionString() const
   return m_TransactionString;
 }
 
-void PostGISFromStringTransactor::SetTrsnactionString(const std::string& aName)
+void PostGISFromStringTransactor::SetTransactionString(const std::string& aName)
 {
   m_TransactionString = aName;
 }

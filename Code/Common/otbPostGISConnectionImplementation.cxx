@@ -31,7 +31,7 @@ PostGISConnectionImplementation::PostGISConnectionImplementation()
   m_DBName = "";
   m_User = "postgres";
   m_Password = "";
-  m_Port = "";
+  m_Port = "5432";
   m_Options = "";
 
   

@@ -61,7 +61,7 @@ public:
 
   std::string GetTransactionString() const;
 
-  void SetTrsnactionString(const std::string& trans);
+  void SetTransactionString(const std::string& trans);
 
 
   ResultType GetResult() const;

@@ -23,6 +23,9 @@
 #include <string>
 #include <vector>
 
+#include <cctype> // for toupper
+#include <algorithm>
+
 #include "ogrsf_frmts.h"
 
 namespace otb
@@ -147,9 +150,11 @@ private:
   OGRDataSource * m_DataSource;
 
   unsigned int m_Kept;
-
+  
+  /** ad by MG */
+  std::string m_Extension;
   /** Is this necessary ? */
-
+  
   /** Internal method to read header informations */
   /*   bool InternalReadHeaderInformation(std::fstream & file, const bool reportError); */
 

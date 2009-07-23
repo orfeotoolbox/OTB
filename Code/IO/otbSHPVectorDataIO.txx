@@ -32,6 +32,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkTimeProbe.h"
 #include "otbVectorDataKeywordlist.h"
 
+
+
 namespace otb
 {
 template<class TData>
@@ -702,8 +704,17 @@ bool SHPVectorDataIO<TData>::CanWriteFile( const char* filename )
     {
     return false;
     }
-  const std::string Extension = System::GetExtension(filename);
-  if ( (Extension == "shp") || (Extension == "SHP") )
+  
+  //add mg
+  //const std::string Extension = System::GetExtension(filename);
+    //m_Extension = System::GetExtension(filename).cstr();
+    //m_Extension = std::transform(System::GetExtension(filename).begin(), //System::GetExtension(filename).end(), System::GetExtension(filename).begin(), toupper);
+    //std::string Extension = System::GetExtension(filename);
+    m_Extension = System::GetExtension(filename);
+    std::transform(m_Extension.begin(), m_Extension.end(), m_Extension.begin(), toupper);
+    //m_Extension=Extension;
+    //std::cout << "my extension " << m_Extension <<std::endl;
+    if ( (m_Extension == "SHP") || (m_Extension == "GML") || (m_Extension == "TAB"))
     {
     return true;
     }
@@ -719,8 +730,27 @@ void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
   itk::TimeProbe chrono;
   chrono.Start();
   //  // try to create an ogr driver
+  //add by mg
+  /*
   OGRSFDriver * ogrDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName("ESRI Shapefile");
-
+  */
+  OGRSFDriver * ogrDriver;
+  if (m_Extension == "SHP") 
+    {
+      ogrDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName("ESRI Shapefile");
+    }
+    else if ( m_Extension == "TAB" ) 
+  {
+    ogrDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName("MapInfo File");
+  }   
+  else if ( m_Extension == "GML" ) 
+  {
+    ogrDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName("Geography Markup Language");
+  }   
+  else {
+    itkExceptionMacro(<<"Unknown extension "<<this->m_FileName);   
+  }
+  
   if (ogrDriver == NULL)
     {
     itkExceptionMacro(<<"No OGR driver found to write file "<<this->m_FileName);
