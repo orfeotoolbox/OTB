@@ -93,41 +93,14 @@ EuclideanDistanceWithMissingValuePow2< TVector >
   return temp * temp ;
 }
 
-#if defined(_MSC_VER) /* Microsoft Visual C++ */
-#include <float.h>
-
 template< class TVector >
 /*static */
 bool
 EuclideanDistanceWithMissingValuePow2< TVector >
 ::IsMissingValue ( const ValueType & v) 
 {
-  return static_cast<bool>( _isnan( static_cast<double>( v ) ) ); 
+  return static_cast<bool>( vnl_math_isnan( static_cast<double>( v ) ) ); 
 }
-
-#elif HAVE_IEEE_COMPARISONS
-
-template< class TVector >
-/*static */
-bool
-EuclideanDistanceWithMissingValuePow2< TVector >
-::IsMissingValue ( const ValueType & v) 
-{
-  return (v!=v);
-}
-
-#else
-
-template< class TVector >
-/*static */
-bool
-EuclideanDistanceWithMissingValuePow2< TVector >
-::IsMissingValue ( const ValueType & v) 
-{
-  return static_cast<bool>( isnan(v) );
-}
-
-#endif 
 
 template< class TVector >
 /* static */
