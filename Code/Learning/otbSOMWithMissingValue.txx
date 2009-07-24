@@ -46,7 +46,7 @@ void
 SOMWithMissingValue< TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor >
 ::UpdateMap( const NeuronType& sample, double beta, SizeType& radius )
 {
-  int i,j;
+  unsigned int i,j;
 
   // output map pointer
   MapPointerType map = this->GetOutput(0);
