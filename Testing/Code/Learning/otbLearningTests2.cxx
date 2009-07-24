@@ -41,4 +41,6 @@ void RegisterTests()
   REGISTER_TEST(otbPeriodicSOM);
   REGISTER_TEST(otbSOMActivationBuilderNew);
   REGISTER_TEST(otbSOMActivationBuilder);
+  REGISTER_TEST(otbSOMbasedImageFilterNew);
+  REGISTER_TEST(otbSOMWithMissingValueNew);
 }

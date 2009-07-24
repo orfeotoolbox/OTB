@@ -821,9 +821,17 @@ ${TEMP}/bfTvVectorImageToAmplitudeImageFilterOutput.tif
   ADD_TEST(bfTuEuclideanDistanceWithMissingValueNew ${BASICFILTERS_TESTS8}
          otbEuclideanDistanceWithMissingValueNew)
 
-ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
+  ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
          otbEuclideanDistanceWithMissingValue)
 
+
+# -------            otb::FlexibleDistanceWithMissingValue   ----------------------------
+
+  ADD_TEST(bfTuFlexibleDistanceWithMissingValueNew ${BASICFILTERS_TESTS8}
+         otbFlexibleDistanceWithMissingValueNew)
+
+  ADD_TEST(bfTuFlexibleDistanceWithMissingValue ${BASICFILTERS_TESTS8}
+         otbFlexibleDistanceWithMissingValue)
 
 # -------            otb::LabelizeNeighborhoodConnectedImageFilter   ----------------------------
 
@@ -912,6 +920,11 @@ ADD_TEST(bfTvVarianceImageFilter ${BASICFILTERS_TESTS8}
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
         ${TEMP}/bfVarianceImageFilter.tif
 )
+
+# ------             otb::BoxAndWhiskerImageFilter -------------
+
+ADD_TEST(bfTuBoxAndWhiskerImageFilter ${BASICFILTERS_TESTS8}
+         otbBoxAndWhiskerImageFilterNew )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests9 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1532,6 +1545,28 @@ ADD_TEST(bfTvSubsampleImageFilter ${BASICFILTERS_TESTS12}
 		${TEMP}/bfSubsampleImageFilterOnePixelOutOf2.tif
 )
 
+# -----  otbImageAndVectorImageOperationFilter  --------------------------------------
+ADD_TEST(bfTuImageAndVectorImageOperationFilterNew ${BASICFILTERS_TESTS12}
+	otbImageAndVectorImageOperationFilterNew)
+
+ADD_TEST(bfTvImageAndVectorImageOperationFilterTest ${BASICFILTERS_TESTS12}
+	--compare-n-images ${NOTOL} 4
+		${TEMP}/bfTvImageAndVectorImageOperationFilterTestAdd.tif
+		${BASELINE}/bfTvImageAndVectorImageOperationFilterTestAdd.tif
+		${TEMP}/bfTvImageAndVectorImageOperationFilterTestSub.tif
+		${BASELINE}/bfTvImageAndVectorImageOperationFilterTestSub.tif
+		${TEMP}/bfTvImageAndVectorImageOperationFilterTestMul.tif
+		${BASELINE}/bfTvImageAndVectorImageOperationFilterTestMul.tif
+		${TEMP}/bfTvImageAndVectorImageOperationFilterTestDiv.tif
+		${BASELINE}/bfTvImageAndVectorImageOperationFilterTestDiv.tif
+	otbImageAndVectorImageOperationFilterTest
+		${INPUTDATA}/checkerboard_128_128.png
+		${INPUTDATA}/poupees_sub.png
+		${TEMP}/bfTvImageAndVectorImageOperationFilterTestAdd.tif
+		${TEMP}/bfTvImageAndVectorImageOperationFilterTestSub.tif
+		${TEMP}/bfTvImageAndVectorImageOperationFilterTestMul.tif
+		${TEMP}/bfTvImageAndVectorImageOperationFilterTestDiv.tif
+)
 
 
 # A enrichir
@@ -1659,6 +1694,9 @@ otbAmplitudePhaseToRGBFunctorNew.cxx
 otbAmplitudePhaseToRGBFunctor.cxx
 otbVarianceImageFilterNew.cxx
 otbVarianceImageFilter.cxx
+otbBoxAndWhiskerImageFilterNew.cxx
+otbFlexibleDistanceWithMissingValueNew.cxx
+otbFlexibleDistanceWithMissingValue.cxx
 )
 
 # A enrichir
@@ -1734,6 +1772,8 @@ otbChangeLabelImageFilterNew.cxx
 otbChangeLabelImageFilter.cxx
 otbSubsampleImageFilterNew.cxx
 otbSubsampleImageFilter.cxx
+otbImageAndVectorImageOperationFilterNew.cxx
+otbImageAndVectorImageOperationFilterTest.cxx
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)

@@ -70,6 +70,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
   if ( GetSubsampleImageFactor() == 1 )
     return;
 
+
 #if __myDebug__ 
   otbGenericMsgDebugMacro( << " down sampling output regions by a factor of " << GetSubsampleImageFactor() );
   otbGenericMsgDebugMacro( << "initial region    " << this->GetInput()->GetLargestPossibleRegion().GetSize()[0]
@@ -484,9 +485,9 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
   if ( direction == 0 )
   {
     // The output image has to be allocated
-    // May be not valid on multithreaded process ?
+    // May be not valid on multithreaded process ???
     outputLowPass->SetRegions( outputImageRegion );
-    outputLowPass->Allocate();
+    outputLowPass->Allocate(); // FIXME Check this line...
     outputLowPass->FillBuffer(0);
   }
 
@@ -618,7 +619,6 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
   m_SubsampleImageFactor = 1;
 }
 
-
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
 WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
@@ -639,13 +639,12 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
     }
   }
 
-  if ( GetSubsampleImageFactor() == 1 )
-    return;
 
 #if __myDebug__
   otbGenericMsgDebugMacro( << " up sampling output regions by a factor of " << GetSubsampleImageFactor() );
 
-  otbGenericMsgDebugMacro( << "initial region    " << this->GetInput(0)->GetLargestPossibleRegion().GetSize()[0]
+  otbGenericMsgDebugMacro( << "initial region    " 
+    << this->GetInput(0)->GetLargestPossibleRegion().GetSize()[0]
     << "," << this->GetInput(0)->GetLargestPossibleRegion().GetSize()[1] );
 #endif
 

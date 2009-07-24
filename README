@@ -9,7 +9,7 @@ The OTB Development Team.
 
 
 
-***Notes for those who do not read the doc***
+**Notes for those who do not read the doc***
 
 We assume that you will install everything on a directory called
 INSTALL_DIR, which usually is /usr/local, /home/jordi/local or

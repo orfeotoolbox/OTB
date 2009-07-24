@@ -213,6 +213,17 @@ ADD_TEST(leTvSOMActivationBuilder ${LEARNING_TESTS2}
 	${TEMP}/leSOMPoupeesSubActivationMap1.hdr
 	32 32 10 10 5 1.0 0.1 128)
 
+# -------            otb::SOMbasedImageFilter -----------------------------------
+
+ADD_TEST(leTuSOMbasedImageFilterNew ${LEARNING_TESTS2}
+         otbSOMbasedImageFilterNew )
+
+
+# ------             otb::SOMWithMissingValue -----------------------------------
+
+ADD_TEST(leTuSOMWithMissingValueNew ${LEARNING_TESTS2}
+         otbSOMWithMissingValue )
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -417,6 +428,8 @@ otbPeriodicSOMNew.cxx
 otbPeriodicSOM.cxx
 otbSOMActivationBuilderNew.cxx
 otbSOMActivationBuilder.cxx
+otbSOMbasedImageFilterNew.cxx
+otbSOMWithMissingValueNew.cxx
 )
 SET(BasicLearning_SRCS3
 otbSOMClassifierNew.cxx
