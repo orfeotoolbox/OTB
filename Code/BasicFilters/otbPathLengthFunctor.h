@@ -15,54 +15,48 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolygonCompacityFunctor_h
-#define __otbPolygonCompacityFunctor_h
+
+#ifndef __otbPathLengthFunctor_h
+#define __otbPathLengthFunctor_h
 
 #include "otbMath.h"
 
 namespace otb
 {
 
-/** \class PolygonCompacityFunctor
- *  \brief Select polygons according to their compacity
+/** \class PathLengthFunctor
+ *  \brief Select paths according to their length
  *
-* This functor compute the compacity of a polygon
-* and return true is the distance is above the threshold, false otherwise.
-*
-* The compacity is defined as:
-*
-*  \f$ 4\pi \frac{A}{L^2}\f$
-*
-* where \f$ A \f$ is the area (obtained by the method GetArea() )
-* and \f$ L \f$ the perimeter (obtained by the method GetLength() ).
+ * This functor gets the length of a path
+ * and returns true if it is above the threshold, false otherwise.
  *
  *  \ingroup Functor
  */
 template <class TInput1>
-class PolygonCompacityFunctor
+class PathLengthFunctor
 {
 public:
+
   void SetThreshold(double threshold )
   {
     m_Threshold = threshold;
   }
-  double GetThreshold(void)const
+  double GetThreshold(void) const
   {
     return m_Threshold;
   }
 
-  PolygonCompacityFunctor()
+  PathLengthFunctor()
   {
-    m_Threshold = 0.2;
+    m_Threshold = 10;
   };
-  ~PolygonCompacityFunctor() {};
+  ~PathLengthFunctor() {};
 
   inline bool operator()(const TInput1 & input)
   {
-    double circularityRatio = 4*CONST_PI*input->GetArea()
-                              / vnl_math_sqr(input->GetLength());
+    double length = input->GetLength();
 
-    if (circularityRatio > m_Threshold)
+    if (length > m_Threshold)
     {
       return true;
     }

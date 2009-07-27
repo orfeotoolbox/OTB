@@ -52,10 +52,28 @@ StandardFilterWatcher
 {
   if (m_Process)
   {
-    int progressPercent = static_cast<int>(m_Process->GetProgress()*100);
-    std::string stars(static_cast<int>(m_Process->GetProgress()*m_StarsCount),'*');
-    std::string blanks(static_cast<int>(m_StarsCount - m_Process->GetProgress()*m_StarsCount),' ');
-    std::cout << "\rProcessing progress:" << progressPercent << "% [" << stars << blanks << "]" << std::flush;
+     int progressPercent = static_cast<int>(m_Process->GetProgress()*100);
+     int nbStars = static_cast<int>(m_Process->GetProgress()*m_StarsCount);
+     int nbBlanks = m_StarsCount - nbStars;
+
+     if(nbBlanks < 0)
+       {
+       nbBlanks = 0;
+       }
+
+     if(nbStars > m_StarsCount)
+       {
+       nbStars = m_StarsCount;
+       }
+
+     if(progressPercent > 100)
+       {
+       progressPercent = 100;
+       }
+
+     std::string stars(nbStars,'*');
+     std::string blanks(nbBlanks,' ');
+     std::cout << "\rProcessing progress: " << progressPercent << "% [" << stars << blanks<< "]" << std::flush;
   }
 }
 
@@ -72,10 +90,9 @@ void
 StandardFilterWatcher
 ::EndFilter()
 {
-  m_TimeProbe.Stop();
-  std::cout << std::endl << "Filter took "
-            << m_TimeProbe.GetMeanTime()
-            << " seconds." << std::endl;
+   m_TimeProbe.Stop();
+   std::cout << std::endl << "Filter took "
+             << m_TimeProbe.GetMeanTime()
+             << " seconds." << std::endl;
 }
-
 } // end namespace otb
