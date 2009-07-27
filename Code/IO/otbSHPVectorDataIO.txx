@@ -711,7 +711,7 @@ bool SHPVectorDataIO<TData>::CanWriteFile( const char* filename )
     //m_Extension = std::transform(System::GetExtension(filename).begin(), //System::GetExtension(filename).end(), System::GetExtension(filename).begin(), toupper);
     //std::string Extension = System::GetExtension(filename);
     m_Extension = System::GetExtension(filename);
-    std::transform(m_Extension.begin(), m_Extension.end(), m_Extension.begin(), toupper);
+    std::transform(m_Extension.begin(), m_Extension.end(), m_Extension.begin(), ::toupper);
     //m_Extension=Extension;
     //std::cout << "my extension " << m_Extension <<std::endl;
     if ( (m_Extension == "SHP") || (m_Extension == "GML") || (m_Extension == "TAB"))
