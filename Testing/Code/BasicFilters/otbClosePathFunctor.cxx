@@ -29,10 +29,10 @@
 #include "otbPolygon.h"
 #include "otbObjectList.h"
 #include "otbImageToEdgePathFilter.h"
-#include "otbPolygonCompacityFunctor.h"
-#include "otbUnaryFunctorObjectListBooleanFilter.h"
+#include "otbClosePathFunctor.h"
+#include "otbUnaryFunctorObjectListFilter.h"
 
-int otbPolygonCompacityFunctor( int argc, char * argv[] )
+int otbClosePathFunctor( int argc, char * argv[] )
 {
 
   if (argc !=3 )
@@ -78,11 +78,11 @@ int otbPolygonCompacityFunctor( int argc, char * argv[] )
     polygonList->PushBack(polygonFilter->GetOutput());
   }
 
-  typedef otb::PolygonCompacityFunctor<PolygonType::Pointer> CompacityFunctorType;
-  typedef otb::UnaryFunctorObjectListBooleanFilter<PolygonListType,PolygonListType,CompacityFunctorType> CompacityFilterType;
-  CompacityFilterType::Pointer compacityFilter = CompacityFilterType::New();
-  compacityFilter->SetInput(polygonList);
-  compacityFilter->Update();
+  typedef otb::ClosePathFunctor<PolygonType::Pointer, PolygonType::Pointer> LengthFunctorType;
+  typedef otb::UnaryFunctorObjectListFilter<PolygonListType,PolygonListType,LengthFunctorType> ClosePathFilterType;
+  ClosePathFilterType::Pointer closePathFilter = ClosePathFilterType::New();
+  closePathFilter->SetInput(polygonList);
+  closePathFilter->Update();
 
   const char * outfile = argv[2];
   std::ofstream file;
@@ -93,8 +93,8 @@ int otbPolygonCompacityFunctor( int argc, char * argv[] )
 
   typedef  PolygonListType::ConstIterator PolygonListIteratorType;
 
-  for (PolygonListIteratorType pIt = compacityFilter->GetOutput()->Begin();
-       pIt!=compacityFilter->GetOutput()->End();
+  for (PolygonListIteratorType pIt = closePathFilter->GetOutput()->Begin();
+       pIt!=closePathFilter->GetOutput()->End();
        ++pIt)
   {
     file<< "--- New Polygon ---" << std::endl;

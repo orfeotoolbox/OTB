@@ -985,7 +985,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(ioTuOtbImageTestSAR_ERS ${IO_TESTS9}
+ADD_TEST(ioTvOtbImageTestSAR_ERS ${IO_TESTS9}
    --compare-ascii ${EPS}  ${BASELINE_FILES}/ioOtbImageTestSAR_ERS.txt
                      ${TEMP}/ioOtbImageTestSAR_ERS.txt
          otbImageTest
@@ -993,7 +993,7 @@ ADD_TEST(ioTuOtbImageTestSAR_ERS ${IO_TESTS9}
          ${TEMP}/ioOtbImageTestSAR_ERS.txt)
 
 # ---  Otb::Image Test  ---
-ADD_TEST(ioTuOtbImageTestRadarsat ${IO_TESTS9}
+ADD_TEST(ioTvOtbImageTestRadarsat ${IO_TESTS9}
    --compare-ascii ${EPS}  ${BASELINE_FILES}/ioOtbImageTestRadarsat.txt
                      ${TEMP}/ioOtbImageTestRadarsat.txt
         otbImageTest
@@ -1001,7 +1001,7 @@ ADD_TEST(ioTuOtbImageTestRadarsat ${IO_TESTS9}
         ${TEMP}/ioOtbImageTestRadarsat.txt)
 
 # ---  Otb::VectorImage Test  ---
-ADD_TEST(ioTuOtbVectorImageTestRadarsat ${IO_TESTS9}
+ADD_TEST(ioTvOtbVectorImageTestRadarsat ${IO_TESTS9}
    --compare-ascii ${EPS}  ${TEMP}/ioOtbImageTestRadarsat.txt
                      ${TEMP}/ioOtbVectorImageTestRadarsat.txt
         otbVectorImageTest
@@ -1010,7 +1010,7 @@ ADD_TEST(ioTuOtbVectorImageTestRadarsat ${IO_TESTS9}
 
 
 # ---  Otb::VectorImage Test  ---
-ADD_TEST(ioTuOtbVectorImageTestSpot5 ${IO_TESTS9}
+ADD_TEST(ioTvOtbVectorImageTestSpot5 ${IO_TESTS9}
    --compare-ascii ${EPS}  ${BASELINE_FILES}/ioOtbVectorImageTestSpot5.txt
                      ${TEMP}/ioOtbVectorImageTestSpot5.txt
         otbVectorImageTest
@@ -1503,17 +1503,17 @@ ADD_TEST(ioTvDEMToOrthoImageGeneratorTest2 ${IO_TESTS12}
 ADD_TEST(ioTuPrepareSRTMDirectoryNew ${IO_TESTS12}
       otbPrepareSRTMDirectoryNew )
 
-ADD_TEST(ioTuPrepareSRTMDirectoryTest ${IO_TESTS12}
+ADD_TEST(ioTvPrepareSRTMDirectoryTest ${IO_TESTS12}
   --compare-n-ascii ${EPSILON_9} 3
 		    ${INPUTDATA}/DEM/srtm_directory/N44E007.hgt
-		    ${TEMP}/ioTuPrepareSRTMDirectoryTest/N44E007.hgt
+		    ${TEMP}/ioTvPrepareSRTMDirectoryTest/N44E007.hgt
 		    ${INPUTDATA}/DEM/srtm_directory/N46E007.hgt
-		    ${TEMP}/ioTuPrepareSRTMDirectoryTest/N46E007.hgt
+		    ${TEMP}/ioTvPrepareSRTMDirectoryTest/N46E007.hgt
 		    ${INPUTDATA}/DEM/srtm_directory/N45E007.hgt
-		    ${TEMP}/ioTuPrepareSRTMDirectoryTest/N45E007.hgt
+		    ${TEMP}/ioTvPrepareSRTMDirectoryTest/N45E007.hgt
   otbPrepareSRTMDirectoryTest
       ${INPUTDATA}/DEM/srtm_directory
-      ${TEMP}/ioTuPrepareSRTMDirectoryTest
+      ${TEMP}/ioTvPrepareSRTMDirectoryTest
       7.2
       45.2
       6.1
@@ -1779,7 +1779,7 @@ ADD_TEST(ioTvKMLVectorDataIOFileReaderLines ${IO_TESTS15}
         ${INPUTDATA}/lines.kml
         ${TEMP}/lines.kml)
 
-ADD_TEST(ioTuVectorDataKeywordlist ${IO_TESTS15}
+ADD_TEST(ioTvVectorDataKeywordlist ${IO_TESTS15}
         --compare-ascii ${EPSILON_9}
             ${BASELINE_FILES}/ioTuVectorDataKeywordlist.txt
             ${TEMP}/ioTuVectorDataKeywordlist.txt

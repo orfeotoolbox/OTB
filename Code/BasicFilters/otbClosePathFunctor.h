@@ -1,0 +1,79 @@
+/*=========================================================================
+
+Program:   ORFEO Toolbox
+Language:  C++
+Date:      $Date$
+Version:   $Revision$
+
+
+Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+See OTBCopyright.txt for details.
+
+
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+#ifndef __otbClosePathFunctor_h
+#define __otbClosePathFunctor_h
+
+#include "otbMath.h"
+
+namespace otb
+{
+
+/** \class ClosePathFunctor
+*    \brief This filter close the input path, making the last point equal to the first one.
+*
+* This filter may be useful when a truely closed polygon is needed (to draw it for example)
+*
+* \sa UnaryFunctorObjectListFilter
+*
+ *  \ingroup Functor
+ */
+template <class TInput, class TOutput>
+class ClosePathFunctor
+{
+public:
+
+  typedef typename TInput::ObjectType::VertexListType::ConstIterator VertexListConstIteratorType;
+  typedef typename TInput::ObjectType::VertexListType::ConstPointer VertexListConstPointerType;
+  typedef TOutput OutputPathPointerType;
+  typedef typename OutputPathPointerType::ObjectType OutputPathType;
+
+
+  ClosePathFunctor()
+  {};
+  ~ClosePathFunctor() {};
+
+  inline OutputPathPointerType operator()(const TInput & input)
+  {
+    OutputPathPointerType newPath = OutputPathType::New();
+    newPath->Initialize();
+    typename TInput::ObjectType::VertexType lastVertex;
+
+    for (VertexListConstIteratorType vertexIt = input->GetVertexList()->Begin();
+           vertexIt!= input->GetVertexList()->End();
+           ++vertexIt)
+    {
+      newPath->AddVertex(vertexIt.Value());
+      lastVertex = vertexIt.Value();
+    }
+    if (lastVertex != input->GetVertexList()->Begin().Value())
+    {
+      newPath->AddVertex(input->GetVertexList()->Begin().Value());
+    }
+
+
+
+    newPath->SetMetaDataDictionary(input->GetMetaDataDictionary());
+    return newPath;
+  }
+
+
+};
+
+}
+
+#endif
