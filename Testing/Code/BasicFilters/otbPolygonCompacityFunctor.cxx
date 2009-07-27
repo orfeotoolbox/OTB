@@ -78,9 +78,9 @@ int otbPolygonCompacityFunctor( int argc, char * argv[] )
     polygonList->PushBack(polygonFilter->GetOutput());
   }
 
-  typedef otb::PolygonCompacityFunctor<PolygonType::Pointer> CompatityFunctorType;
-  typedef otb::UnaryFunctorObjectListBooleanFilter<PolygonListType,PolygonListType,CompatityFunctorType> CompatityFilterType;
-  CompatityFilterType::Pointer compacityFilter = CompatityFilterType::New();
+  typedef otb::PolygonCompacityFunctor<PolygonType::Pointer> CompacityFunctorType;
+  typedef otb::UnaryFunctorObjectListBooleanFilter<PolygonListType,PolygonListType,CompacityFunctorType> CompacityFilterType;
+  CompacityFilterType::Pointer compacityFilter = CompacityFilterType::New();
   compacityFilter->SetInput(polygonList);
   compacityFilter->Update();
 
