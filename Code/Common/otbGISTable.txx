@@ -46,6 +46,14 @@ GISTable<TConnectionImplementation, SpatialDimension>
   os<<"Table name: "<< m_TableName<<std::endl;
 
 }
+
+template <class TConnectionImplementation, unsigned int SpatialDimension>
+bool
+GISTable<TConnectionImplementation, SpatialDimension>
+  ::Clear()
+{ //TODO implementation
+  return true;
+}
 } // end namespace otb
 
 #endif

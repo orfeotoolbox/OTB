@@ -14,48 +14,48 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelMapToVectorDataFilter_txx
-#define __otbLabelMapToVectorDataFilter_txx
+#ifndef __otbGISTableToVectorDataFilter_txx
+#define __otbGISTableToVectorDataFilter_txx
 
-#include "otbLabelMapToVectorDataFilter.h"
+#include "otbGISTableToVectorDataFilter.h"
 //#include "itkNumericTraits.h"
 //#include "itkProgressReporter.h"
 //#include "itkImageRegionConstIteratorWithIndex.h"
-
+//#include "otbGISTable.h"
 
 namespace otb {
 
-template<class TLabelMap, class TVectorData >
-LabelMapToVectorDataFilter<TLabelMap, TVectorData>
-  ::LabelMapToVectorDataFilter()
+template<class TGISTable, class TVectorData >
+GISTableToVectorDataFilter<TGISTable, TVectorData>
+  ::GISTableToVectorDataFilter()
 {/*
   m_BackgroundValue = NumericTraits<OutputImagePixelType>::NonpositiveMin();*/
 }
 
 
-template<class TLabelMap, class TVectorData >
+template<class TGISTable, class TVectorData >
 void
-LabelMapToVectorDataFilter<TLabelMap, TVectorData>
-  ::SetInput(const InputLabelMapType *input)
+GISTableToVectorDataFilter<TGISTable, TVectorData>
+  ::SetInput(const InputGISTableType *input)
 {
 // Process object is not const-correct so the const_cast is required here
   this->itk::ProcessObject::SetNthInput(0,
-                                        const_cast< InputLabelMapType * >( input ) );
+                                        const_cast< InputGISTableType * >( input ) );
 }
 
-template<class TLabelMap, class TVectorData >
+template<class TGISTable, class TVectorData >
 void
-LabelMapToVectorDataFilter<TLabelMap, TVectorData>
-  ::SetInput(unsigned int idx, const InputLabelMapType *input)
+GISTableToVectorDataFilter<TGISTable, TVectorData>
+  ::SetInput(unsigned int idx, const InputGISTableType *input)
 {
     // Process object is not const-correct so the const_cast is required here
   this->itk::ProcessObject::SetNthInput(idx,
-                                        const_cast< InputLabelMapType * >( input ) );
+                                         const_cast< InputGISTableType * >( input ) );
 }
 
-template<class TLabelMap, class TVectorData >
-    const typename LabelMapToVectorDataFilter<TLabelMap, TVectorData>::InputLabelMapType *
-LabelMapToVectorDataFilter<TLabelMap, TVectorData>
+template<class TGISTable, class TVectorData >
+    const typename GISTableToVectorDataFilter<TGISTable, TVectorData>::InputGISTableType *
+GISTableToVectorDataFilter<TGISTable, TVectorData>
   ::GetInput(void)
 {
   if (this->GetNumberOfInputs() < 1)
@@ -63,22 +63,22 @@ LabelMapToVectorDataFilter<TLabelMap, TVectorData>
     return 0;
   }
 
-  return static_cast<const TLabelMap * >
+  return static_cast<const TGISTable * >
       (this->itk::ProcessObject::GetInput(0) );
 }
 
-template<class TLabelMap, class TVectorData >
-    const typename LabelMapToVectorDataFilter<TLabelMap, TVectorData>::InputLabelMapType *
-LabelMapToVectorDataFilter<TLabelMap, TVectorData>
+template<class TGISTable, class TVectorData >
+const typename GISTableToVectorDataFilter<TGISTable, TVectorData>::InputGISTableType *
+GISTableToVectorDataFilter<TGISTable, TVectorData>
   ::GetInput(unsigned int idx)
 {
-  return static_cast<const TLabelMap * >
+  return static_cast<const TGISTable * >
       (this->itk::ProcessObject::GetInput(idx) );
 }
 
-template<class TLabelMap, class TVectorData >
+template<class TGISTable, class TVectorData >
 void 
-LabelMapToVectorDataFilter<TLabelMap, TVectorData>
+GISTableToVectorDataFilter<TGISTable, TVectorData>
 ::GenerateInputRequestedRegion()
 {/*
   // call the superclass' implementation of this method
@@ -102,9 +102,9 @@ LabelMapToVectorDataFilter<TInputImage, TVectorData>
 }
 */
 
-template<class TLabelMap, class TVectorData >
+template<class TGISTable, class TVectorData >
 void
-    LabelMapToVectorDataFilter<TLabelMap, TVectorData>
+GISTableToVectorDataFilter<TGISTable, TVectorData>
 ::GenerateData()
 {
   
@@ -112,16 +112,22 @@ void
   this->AllocateOutputs();
   
   OutputVectorDataType * output = this->GetOutput();
-  const InputLabelMapType * input = this->GetInput();
+  const InputGISTableType * input = this->GetInput();
   
   //ProgressReporter progress( this, 0, output->GetRequestedRegion().GetNumberOfPixels() );
 
   //AttributeAccessorType accessor;
 
   //output->FillBuffer( m_BackgroundValue );
-
-  typename InputLabelMapType::LabelObjectContainerType::const_iterator it;
-  const typename InputLabelMapType::LabelObjectContainerType & labelObjectContainer = input->GetLabelObjectContainer();
+  //typedef TConnectionImplementation ConnectionType;
+  //typedef typename ConnectionType::Pointer ConnectionPointerType;
+  typedef typename InputGISTableType::ConnectionType ConnectionType;
+  
+  typedef typename InputGISTableType::ConnectionPointerType ConnectionPointerType;
+  ConnectionPointerType conn = ConnectionType::New();
+  //input->GetConnection();
+  //typename InputGISTableType::LabelObjectContainerType::const_iterator it;
+  //const typename InputLabelMapType::LabelObjectContainerType & labelObjectContainer = //input->GetLabelObjectContainer();
   /*
   for( it = labelObjectContainer.begin(); it != labelObjectContainer.end(); it++ )
     {
@@ -147,9 +153,9 @@ void
 }
 
 
-template<class TLabelMap, class TVectorData >
+template<class TGISTable, class TVectorData >
 void
-LabelMapToVectorDataFilter<TLabelMap, TVectorData>
+GISTableToVectorDataFilter<TGISTable, TVectorData>
 ::PrintSelf(std::ostream &os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

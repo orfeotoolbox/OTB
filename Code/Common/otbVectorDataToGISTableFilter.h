@@ -14,49 +14,52 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelMapToVectorDataFilter_h
-#define __otbLabelMapToVectorDataFilter_h
+#ifndef __otbVectorDataToGISTableFilter_h
+#define __otbVectorDataToGISTableFilter_h
 
 //#include "itkImageToImageFilter.h"
 //#include "itkAttributeLabelObject.h"
-#include "otbVectorDataSource.h"
-#include "itkLabelMap.h"
-//include "otbVectorData.h"
+#include "otbGISTableSource.h"
+//#include "otbGISTable.h"
+//#include "otbVectorData.h"
 
 namespace otb {
 
-/** \class LabelMapToVectorDataFilter
+/** \class VectorDataToGISTableFilter
  * \brief Convert a LabelMap to a VectorData
  *
-   * LabelMapToVectorDataFilter converts a LabelMap to a
- * VectorData where all the pixels get the attribute value of the label object they belong.
+   * VectorDataToGISTableFilter converts  a
+   * VectorData to GIS Table (PostGIS...).
  *
  * \author Manuel GRIZONNET. CNES, France.
  *
  * \sa LabelMapToBinaryImageFilter, LabelMapMaskImageFilter
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  */
-template<class TLabelMap, class TVectorData >
-class ITK_EXPORT LabelMapToVectorDataFilter : 
-    public VectorDataSource< TVectorData >
+template<class TVectorData , class TGISTable>
+class ITK_EXPORT VectorDataToGISTableFilter : 
+    public GISTableSource< TGISTable >
 {
 public:
   /** Standard class typedefs. */
-  typedef LabelMapToVectorDataFilter Self;
-  typedef VectorDataSource< TVectorData >
+  typedef VectorDataToGISTableFilter Self;
+  typedef GISTableSource< TGISTable >
   Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
   /** Some convenient typedefs. */
-  typedef TLabelMap InputLabelMapType;
-  typedef TVectorData OutputVectorDataType;
-  //typedef typename InputImageType::Pointer         InputImagePointer;
-  //typedef typename InputImageType::ConstPointer    InputImageConstPointer;
+  typedef TVectorData InputVectorDataType;
+  typedef TGISTable OutputGISTableType;
+  typedef typename InputVectorDataType::Pointer         InputVectorDataPointer;
+  typedef typename InputVectorDataType::ConstPointer    InputVectorDataConstPointer;
   //typedef typename InputImageType::RegionType      InputImageRegionType;
   //typedef typename InputImageType::PixelType       InputImagePixelType;
-  typedef typename OutputVectorDataType::Pointer        OutputVectorDataPointer;
-  typedef typename OutputVectorDataType::ConstPointer   OutputVectorDataConstPointer;
+  typedef typename OutputGISTableType::Pointer        OutputGISTablePointer;
+  typedef typename OutputGISTableType::ConstPointer   OutputGISTableConstPointer;
+  
+  typedef typename InputVectorDataType::DataTreeType::TreeNodeType    InternalTreeNodeType;
+  typedef typename InternalTreeNodeType::ChildrenListType        ChildrenListType;
   //typedef typename OutputVectorDataType::RegionType     OutputVectorDataRegionType;
   //typedef typename OutputVectorDataType::PixelType      OutputVectorDataPixelType;
   //typedef typename OutputVectorDataType::IndexType      IndexType;
@@ -84,14 +87,14 @@ public:
   //itkGetConstMacro(BackgroundValue, OutputImagePixelType);
 
   /** Set/Get the LabelMap input of this process object.  */
-  virtual void SetInput( const InputLabelMapType *input);
-  virtual void SetInput( unsigned int idx, const InputLabelMapType *input);
-  const InputLabelMapType * GetInput(void);
-  const InputLabelMapType * GetInput(unsigned int idx);
+  virtual void SetInput( const InputVectorDataType *input);
+  virtual void SetInput( unsigned int idx, const InputVectorDataType *input);
+  const InputVectorDataType * GetInput(void);
+  const InputVectorDataType * GetInput(unsigned int idx);
   
 protected:
-  LabelMapToVectorDataFilter();
-  ~LabelMapToVectorDataFilter() {};
+  VectorDataToGISTableFilter();
+  ~VectorDataToGISTableFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** LabelMapToAttributeImageFilter needs the entire input be
@@ -108,17 +111,19 @@ protected:
   
 
 private:
-  LabelMapToVectorDataFilter(const Self&); //purposely not implemented
+  VectorDataToGISTableFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
+  
+  
+  void ProcessNode(InternalTreeNodeType * source);
   //OutputImagePixelType m_BackgroundValue;
 
 } ; // end of class
 
-} // end namespace itk
+} // end namespace otb
   
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "otbLabelMapToVectorDataFilter.txx"
+#include "otbVectorDataToGISTableFilter.txx"
 #endif
 
 #endif

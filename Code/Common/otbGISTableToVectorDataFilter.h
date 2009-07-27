@@ -14,42 +14,42 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbLabelMapToVectorDataFilter_h
-#define __otbLabelMapToVectorDataFilter_h
+#ifndef __otbGISTableToVectorDataFilter_h
+#define __otbGISTableToVectorDataFilter_h
 
 //#include "itkImageToImageFilter.h"
 //#include "itkAttributeLabelObject.h"
 #include "otbVectorDataSource.h"
-#include "itkLabelMap.h"
+#include "otbGISTable.h"
 //include "otbVectorData.h"
 
 namespace otb {
 
-/** \class LabelMapToVectorDataFilter
+/** \class GISTableToVectorDataFilter
  * \brief Convert a LabelMap to a VectorData
  *
-   * LabelMapToVectorDataFilter converts a LabelMap to a
- * VectorData where all the pixels get the attribute value of the label object they belong.
+   * GISTableToVectorDataFilter converts a GIS Table (PostGIS...) to a
+ * VectorData.
  *
  * \author Manuel GRIZONNET. CNES, France.
  *
  * \sa LabelMapToBinaryImageFilter, LabelMapMaskImageFilter
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  */
-template<class TLabelMap, class TVectorData >
-class ITK_EXPORT LabelMapToVectorDataFilter : 
+template<class TGISTable, class TVectorData >
+class ITK_EXPORT GISTableToVectorDataFilter : 
     public VectorDataSource< TVectorData >
 {
 public:
   /** Standard class typedefs. */
-  typedef LabelMapToVectorDataFilter Self;
+  typedef GISTableToVectorDataFilter Self;
   typedef VectorDataSource< TVectorData >
   Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
   /** Some convenient typedefs. */
-  typedef TLabelMap InputLabelMapType;
+  typedef TGISTable InputGISTableType;
   typedef TVectorData OutputVectorDataType;
   //typedef typename InputImageType::Pointer         InputImagePointer;
   //typedef typename InputImageType::ConstPointer    InputImageConstPointer;
@@ -84,14 +84,14 @@ public:
   //itkGetConstMacro(BackgroundValue, OutputImagePixelType);
 
   /** Set/Get the LabelMap input of this process object.  */
-  virtual void SetInput( const InputLabelMapType *input);
-  virtual void SetInput( unsigned int idx, const InputLabelMapType *input);
-  const InputLabelMapType * GetInput(void);
-  const InputLabelMapType * GetInput(unsigned int idx);
+  virtual void SetInput( const InputGISTableType *input);
+  virtual void SetInput( unsigned int idx, const InputGISTableType *input);
+  const InputGISTableType * GetInput(void);
+  const InputGISTableType * GetInput(unsigned int idx);
   
 protected:
-  LabelMapToVectorDataFilter();
-  ~LabelMapToVectorDataFilter() {};
+  GISTableToVectorDataFilter();
+  ~GISTableToVectorDataFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** LabelMapToAttributeImageFilter needs the entire input be
@@ -108,17 +108,17 @@ protected:
   
 
 private:
-  LabelMapToVectorDataFilter(const Self&); //purposely not implemented
+  GISTableToVectorDataFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   //OutputImagePixelType m_BackgroundValue;
 
 } ; // end of class
 
-} // end namespace itk
+} // end namespace otb
   
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "otbLabelMapToVectorDataFilter.txx"
+#include "otbGISTableToVectorDataFilter.txx"
 #endif
 
 #endif

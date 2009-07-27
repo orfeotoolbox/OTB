@@ -61,7 +61,8 @@ public:
   itkGetObjectMacro(Connection, ConnectionType);
   itkSetObjectMacro(Connection, ConnectionType);
 
-
+  /** Clear the vector data  not implemented yet*/
+  virtual bool Clear();
   
 
 protected:
