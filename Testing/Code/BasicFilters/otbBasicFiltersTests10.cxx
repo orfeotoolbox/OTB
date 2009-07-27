@@ -39,6 +39,7 @@ void RegisterTests()
   REGISTER_TEST(otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter);
 #endif
   REGISTER_TEST(otbPolygonCompacityFunctor);
+  REGISTER_TEST(otbPathLengthFunctor);
   REGISTER_TEST(otbPersistentVectorizationFilterNew);
   REGISTER_TEST(otbPersistentVectorizationFilter);
 }

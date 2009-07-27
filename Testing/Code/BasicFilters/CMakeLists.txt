@@ -1174,7 +1174,14 @@ ADD_TEST(bfTvPolygonCompacityFunctor ${BASICFILTERS_TESTS10}
 	 ${TEMP}/bfPolygonCompacityFunctorTest.txt
 )
 
-
+ADD_TEST(bfTvPathLengthFunctor ${BASICFILTERS_TESTS10}
+        --compare-ascii ${NOTOL}
+            ${BASELINE_FILES}/bfPathLengthFunctorTest.txt
+            ${TEMP}/bfPathLengthFunctorTest.txt
+         otbPathLengthFunctor
+         ${INPUTDATA}/polygon.png
+         ${TEMP}/bfPathLengthFunctorTest.txt
+)
 
 # -------            otb::PersistentVectorizationImageFilter   ----------------------------
 
@@ -1726,6 +1733,7 @@ otbScalarVectorImageTextureFunctor.cxx
 otbGaborFilterGeneratorNew.cxx
 otbGaborFilterGenerator.cxx
 otbPolygonCompacityFunctor.cxx
+otbPathLengthFunctor.cxx
 otbPersistentVectorizationFilterNew.cxx
 otbPersistentVectorizationFilter.cxx
 )
