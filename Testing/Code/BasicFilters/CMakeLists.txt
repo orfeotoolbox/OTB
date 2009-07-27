@@ -1183,6 +1183,15 @@ ADD_TEST(bfTvPathLengthFunctor ${BASICFILTERS_TESTS10}
          ${TEMP}/bfPathLengthFunctorTest.txt
 )
 
+ADD_TEST(bfTvClosePathFunctor ${BASICFILTERS_TESTS10}
+        --compare-ascii ${NOTOL}
+            ${BASELINE_FILES}/bfClosePathFunctorTest.txt
+            ${TEMP}/bfClosePathFunctorTest.txt
+         otbClosePathFunctor
+         ${INPUTDATA}/polygon.png
+         ${TEMP}/bfClosePathFunctorTest.txt
+)
+
 # -------            otb::PersistentVectorizationImageFilter   ----------------------------
 
 ADD_TEST(bfTuPersistentVectorizationImageFilterNew ${BASICFILTERS_TESTS10}
@@ -1734,6 +1743,7 @@ otbGaborFilterGeneratorNew.cxx
 otbGaborFilterGenerator.cxx
 otbPolygonCompacityFunctor.cxx
 otbPathLengthFunctor.cxx
+otbClosePathFunctor.cxx
 otbPersistentVectorizationFilterNew.cxx
 otbPersistentVectorizationFilter.cxx
 )
