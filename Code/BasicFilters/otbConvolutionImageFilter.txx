@@ -137,9 +137,11 @@ ConvolutionImageFilter< TInputImage, TOutputImage, TBoundaryCondition>
       norm = itk::NumericTraits<InputRealType>::Zero;
       for (i = 0; i < neighborhoodSize; ++i)
 	{
-	 norm += static_cast<InputRealType>( m_Filter(i) );
+	 norm += static_cast<InputRealType>( m_Filter(i)*m_Filter(i) );
 	}
+      norm = vcl_sqrt(norm);
       }
+    
 
     while ( ! bit.IsAtEnd() )
     {
