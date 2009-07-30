@@ -133,8 +133,8 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 
   if ((m_InputTransform.IsNull()) && ( !m_InputProjectionRef.empty() ))//map projection
   {
-    typedef otb::GenericMapProjection<otb::INVERSE> InverseMapProjectionType;
-    InverseMapProjectionType::Pointer mapTransform = InverseMapProjectionType::New();
+    typedef otb::GenericMapProjection<otb::INVERSE, ScalarType, InputSpaceDimension, InputSpaceDimension> InverseMapProjectionType;
+    typename InverseMapProjectionType::Pointer mapTransform = InverseMapProjectionType::New();
     mapTransform->SetWkt(m_InputProjectionRef);
     if (mapTransform->GetMapProjection() != NULL)
     {
@@ -180,8 +180,8 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     {
     if (m_OutputKeywordList.GetSize()  > 0)
       {
-      typedef otb::InverseSensorModel<double> InverseSensorModelType;
-      InverseSensorModelType::Pointer sensorModel = InverseSensorModelType::New();
+      typedef otb::InverseSensorModel<double, InputSpaceDimension, OutputSpaceDimension> InverseSensorModelType;
+      typename InverseSensorModelType::Pointer sensorModel = InverseSensorModelType::New();
       sensorModel->SetImageGeometry(m_OutputKeywordList);
       if ( !m_DEMDirectory.empty())
         {
@@ -200,8 +200,8 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 
   if ((m_OutputTransform.IsNull()) && ( !m_OutputProjectionRef.empty() ))//map projection
   {
-    typedef otb::GenericMapProjection<otb::FORWARD> ForwardMapProjectionType;
-    ForwardMapProjectionType::Pointer mapTransform = ForwardMapProjectionType::New();
+    typedef otb::GenericMapProjection<otb::FORWARD, ScalarType, InputSpaceDimension, OutputSpaceDimension> ForwardMapProjectionType;
+    typename ForwardMapProjectionType::Pointer mapTransform = ForwardMapProjectionType::New();
     mapTransform->SetWkt(m_OutputProjectionRef);
     if (mapTransform->GetMapProjection() != NULL)
     {

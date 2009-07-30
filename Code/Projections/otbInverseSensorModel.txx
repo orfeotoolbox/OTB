@@ -54,16 +54,20 @@ InverseSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
   {
 //       otbMsgDevMacro(<< "USING DEM ! ");
 //       otbMsgDevMacro(<< "Point : (" << point[1] << "," << point[0] << ")");
-    double height = this->m_DEMHandler->GetHeightAboveMSL(point);
+    itk::Point<double, 2> currentPoint;
+    currentPoint[0] = ossimGPoint.lon;
+    currentPoint[1] = ossimGPoint.lat;
+    double height = this->m_DEMHandler->GetHeightAboveMSL(currentPoint);
 //       otbMsgDevMacro(<< "height : " << height);
     ossimGPoint.height(height);
   }
-  else
+  else if (InputPointType::PointDimension == 3)
   {
-    if (this->m_AverageElevation != -10000)
-    {
-      ossimGPoint.height(this->m_AverageElevation);
-    }
+    ossimGPoint.height(point[2]);
+  }
+  else if (this->m_AverageElevation != -10000)
+  {
+    ossimGPoint.height(this->m_AverageElevation);
   }
 
 
