@@ -59,15 +59,14 @@ ForwardSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
     itkExceptionMacro(<<"TransformPoint(): Invalid Model pointer m_Model == NULL !");
   }
 
-  this->m_Model->lineSampleToWorld(ossimPoint, ossimGPoint);
-
-  if ((this->m_UseDEM) || (this->m_AverageElevation != -10000))
-
+  //Use of DEM: need iteration to reach the correct point
+  if (this->m_UseDEM)
   {
+    this->m_Model->lineSampleToWorld(ossimPoint, ossimGPoint);
     ossimGpt ossimGPointRef = ossimGPoint;
     double height(0.), heightTmp(0.);
     double diffHeight = 100; // arbitrary value
-    itk::Point<double, 2> point;
+    itk::Point<double, 2> currentPoint;
     int nbIter = 0;
 
     otbMsgDevMacro(<< "USING DEM ! ");
@@ -81,13 +80,13 @@ ForwardSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
 
 //       otbMsgDevMacro(<< "PointG Before iter : (" << ossimGPointRef.lat << "," << ossimGPointRef.lon <<")");
 
-      point[0] = ossimGPointRef.lon;
-      point[1] = ossimGPointRef.lat;
+      currentPoint[0] = ossimGPointRef.lon;
+      currentPoint[1] = ossimGPointRef.lat;
 
 //      otbMsgDevMacro(<< "PointP Before iter : (" << point[1] << "," << point[0] <<")");
       if (this->m_UseDEM)
       {
-        heightTmp = this->m_DEMHandler->GetHeightAboveMSL(point);
+        heightTmp = this->m_DEMHandler->GetHeightAboveMSL(currentPoint);
       }
       else
       {
@@ -102,9 +101,26 @@ ForwardSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
 
       ++nbIter;
     }
-
-    ossimGPoint = ossimGPointRef;
+     ossimGPoint = ossimGPointRef;
   }
+  //Altitude of the point is provided (in the sensor coordinate)
+  else if (InputPointType::PointDimension == 3)
+  {
+    this->m_Model->lineSampleHeightToWorld(ossimPoint, point[2], ossimGPoint);
+  }
+  //Use of average elevation
+  else if (this->m_AverageElevation != -10000)
+  {
+    this->m_Model->lineSampleHeightToWorld(ossimPoint, this->m_AverageElevation, ossimGPoint);
+  }
+  //Otherwise, just don't consider the altitude
+  else
+  {
+    this->m_Model->lineSampleToWorld(ossimPoint, ossimGPoint);
+  }
+
+
+
 
   // "OutputPointType" storage.
   OutputPointType outputPoint;
