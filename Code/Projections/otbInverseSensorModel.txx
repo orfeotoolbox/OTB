@@ -26,41 +26,23 @@
 namespace otb
 {
 
-template < class TScalarType,
-unsigned int NInputDimensions,
-unsigned int NOutputDimensions,
-unsigned int NParametersDimensions >
-InverseSensorModel< TScalarType,
-NInputDimensions,
-NOutputDimensions,
-NParametersDimensions>
+template < class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+InverseSensorModel< TScalarType, NInputDimensions, NOutputDimensions >
 ::InverseSensorModel()
 {
 }
 
-template < class TScalarType,
-unsigned int NInputDimensions,
-unsigned int NOutputDimensions,
-unsigned int NParametersDimensions >
-InverseSensorModel< TScalarType,
-NInputDimensions,
-NOutputDimensions,
-NParametersDimensions>
+template < class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+InverseSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
 ::~InverseSensorModel()
 {
 }
 
 
 
-template < class TScalarType,
-unsigned int NInputDimensions,
-unsigned int NOutputDimensions,
-unsigned int NParametersDimensions >
-typename InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>::OutputPointType
-InverseSensorModel< TScalarType,
-NInputDimensions,
-NOutputDimensions,
-NParametersDimensions>
+template < class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+typename InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions>::OutputPointType
+InverseSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
 ::TransformPoint(const InputPointType &point) const
 {
 //     otbMsgDevMacro(<< "Geographic point lon/lat : (" << point[0] << "," <<  point[1] << ")");
@@ -106,15 +88,9 @@ NParametersDimensions>
   return outputPoint;
 }
 
-template < class TScalarType,
-unsigned int NInputDimensions,
-unsigned int NOutputDimensions,
-unsigned int NParametersDimensions >
+template < class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void
-InverseSensorModel< TScalarType,
-NInputDimensions,
-NOutputDimensions,
-NParametersDimensions>
+InverseSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);

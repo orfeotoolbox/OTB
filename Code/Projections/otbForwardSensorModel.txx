@@ -26,45 +26,24 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 
-template < class TScalarType,
-unsigned int NInputDimensions,
-unsigned int NOutputDimensions,
-unsigned int NParametersDimensions >
-ForwardSensorModel< TScalarType,
-NInputDimensions,
-NOutputDimensions,
-NParametersDimensions>
+template < class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions >
+ForwardSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
 ::ForwardSensorModel()
 {
   m_Epsilon = 0.0001;
   m_NbIter = 1;
 }
 
-template < class TScalarType,
-unsigned int NInputDimensions,
-unsigned int NOutputDimensions,
-unsigned int NParametersDimensions >
-ForwardSensorModel< TScalarType,
-NInputDimensions,
-NOutputDimensions,
-NParametersDimensions>
+template < class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions >
+ForwardSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
 ::~ForwardSensorModel()
 {
 }
 
 
-template < class TScalarType,
-unsigned int NInputDimensions,
-unsigned int NOutputDimensions,
-unsigned int NParametersDimensions >
-typename ForwardSensorModel< TScalarType,
-NInputDimensions,
-NOutputDimensions,
-NParametersDimensions>::OutputPointType
-ForwardSensorModel< TScalarType,
-NInputDimensions,
-NOutputDimensions,
-NParametersDimensions>
+template < class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions >
+typename ForwardSensorModel< TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
+ForwardSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
 ::TransformPoint(const InputPointType &point) const
 {
 //   otbMsgDevMacro(<< "Point in sensor geometry: (" << point[0] << "," <<  point[1] << ")");
@@ -137,15 +116,9 @@ NParametersDimensions>
   return outputPoint;
 }
 
-template < class TScalarType,
-unsigned int NInputDimensions,
-unsigned int NOutputDimensions,
-unsigned int NParametersDimensions >
+template < class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions >
 void
-ForwardSensorModel< TScalarType,
-NInputDimensions,
-NOutputDimensions,
-NParametersDimensions>
+ForwardSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
