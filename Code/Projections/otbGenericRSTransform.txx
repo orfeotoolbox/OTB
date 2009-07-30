@@ -113,8 +113,8 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     {
     if (m_InputKeywordList.GetSize()  > 0)
       {
-      typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
-      ForwardSensorModelType::Pointer sensorModel = ForwardSensorModelType::New();
+      typedef otb::ForwardSensorModel<double, InputSpaceDimension, InputSpaceDimension> ForwardSensorModelType;
+      typename ForwardSensorModelType::Pointer sensorModel = ForwardSensorModelType::New();
       sensorModel->SetImageGeometry(m_InputKeywordList);
       if ( !m_DEMDirectory.empty())
         {
