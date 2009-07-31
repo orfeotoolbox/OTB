@@ -68,14 +68,11 @@ namespace otb
       typedef itk::Vector<double, 2> SpacingType;
       typedef itk::Point<double, 2> OriginType;
 
-      typedef itk::Transform<double, 2, 2> GenericTransformType;
+      typedef itk::Transform<double, NInputDimensions, NOutputDimensions> GenericTransformType;
       typedef typename GenericTransformType::Pointer GenericTransformPointerType;
       typedef otb::CompositeTransform<GenericTransformType, GenericTransformType> TransformType;
       typedef typename TransformType::Pointer                                     TransformPointerType;
 
-//       typedef itk::MetaDataDictionary MetaDataDictionary;
-//       typedef itk::SmartPointer<MetaDataDictionary> MetaDataDictionaryPointer;
-//       typedef itk::SmartPointer<const MetaDataDictionary> MetaDataDictionaryConstPointer;
       /** Method for creation through the object factory. */
       itkNewMacro( Self );
 
@@ -100,12 +97,6 @@ namespace otb
       itkGetStringMacro(DEMDirectory);
 
       /** Set/Get Dictionary*/
-
-//       itkSetConstObjectMacro(InputDictionary, MetaDataDictionary);
-//       itkGetConstObjectMacro(InputDictionary, MetaDataDictionary);
-//       itkSetObjectMacro(OutputDictionary, MetaDataDictionary);
-//       itkGetObjectMacro(OutputDictionary, MetaDataDictionary);
-
       const itk::MetaDataDictionary& GetInputDictionary() const
       {
         return m_InputDictionary;
@@ -128,7 +119,7 @@ namespace otb
         this->Modified();
       }
 
-
+     /** Set/Get Keywordlist*/
 
       itkGetMacro(InputKeywordList,ImageKeywordlist);
       void SetInputKeywordList(const ImageKeywordlist& kwl)
@@ -147,36 +138,24 @@ namespace otb
       /** Set the origin of the vector data.
       * \sa GetOrigin() */
       itkSetMacro(InputOrigin, OriginType);
-      virtual void SetInputOrigin( const double origin[2] );
-      virtual void SetInputOrigin( const float origin[2] );
-
       itkGetConstReferenceMacro(InputOrigin, OriginType);
 
 
       /** Set the spacing (size of a pixel) of the vector data.
         * \sa GetSpacing() */
-      virtual void SetInputSpacing (const SpacingType & spacing);
-      virtual void SetInputSpacing (const double spacing[2]);
-      virtual void SetInputSpacing (const float spacing[2]);
-
+      itkSetMacro(InputSpacing, SpacingType);
       itkGetConstReferenceMacro(InputSpacing, SpacingType);
 
 
       /** Set the origin of the vector data.
       * \sa GetOrigin() */
       itkSetMacro(OutputOrigin, OriginType);
-      virtual void SetOutputOrigin( const double origin[2] );
-      virtual void SetOutputOrigin( const float origin[2] );
-
       itkGetConstReferenceMacro(OutputOrigin, OriginType);
 
 
       /** Set the spacing (size of a pixel) of the vector data.
       * \sa GetSpacing() */
-      virtual void SetOutputSpacing (const SpacingType & spacing);
-      virtual void SetOutputSpacing (const double spacing[2]);
-      virtual void SetOutputSpacing (const float spacing[2]);
-
+      itkSetMacro(OutputSpacing, SpacingType);
       itkGetConstReferenceMacro(OutputSpacing, SpacingType);
 
       /** Check if the transform is up to date */
