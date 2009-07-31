@@ -64,20 +64,8 @@ PointSetFileReader<TOutputPointSet>
     throw itk::ImageFileReaderException(__FILE__, __LINE__, "FileName must be specified", ITK_LOCATION);
   }
 
+  this->TestFileExistanceAndReadability();
 
-
-  // Test if the file exists and if it can be open.
-  // An exception will be thrown otherwise.
-  //
-  try
-  {
-    m_ExceptionMessage = "";
-    this->TestFileExistanceAndReadability();
-  }
-  catch (itk::ExceptionObject &err)
-  {
-    m_ExceptionMessage = err.GetDescription();
-  }
 
   std::ifstream ifs;
   ifs.open(m_FileName.c_str(), std::ios::in | std::ios::binary);
