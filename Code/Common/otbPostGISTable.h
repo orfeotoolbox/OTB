@@ -69,7 +69,7 @@ public:
   /** Acessors */
 
   itkGetConstMacro(TableName, std::string);
-  //itkSetMacro(TableName, std::string);
+  itkSetMacro(TableName, std::string);
 
   itkGetObjectMacro(Connection, ConnectionType);
   itkSetObjectMacro(Connection, ConnectionType);
@@ -84,7 +84,7 @@ public:
   /** Add Point content to the GIS Table*/ //TODO implement
   void InsertBegin( std::stringstream & sqlCmd );
   void InsertPoint( const PointType &pt );
-//   virtual void InsertMultiPoint();
+  //void InsertMultiPoint();
   void InsertPolygons(PolygonConstPointerType polygonExtRing, PolygonListConstPointerType polygonListInteriorRing);
   void InsertLineString(LinePointerType l);
   
@@ -93,6 +93,8 @@ public:
   void EraseLastChar (std::stringstream &sqlCmd );
   
   void CreateTable ();
+  
+  void getGeometryType();
 protected:
 
   /** Constructor */

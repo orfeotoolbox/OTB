@@ -90,6 +90,8 @@ public:
   virtual void InsertLineString(LinePointerType l){};
   
   virtual void CreateTable(){};
+  
+  virtual void getGeometryType(){};
 protected:
   /** Constructor */
   GISTable();

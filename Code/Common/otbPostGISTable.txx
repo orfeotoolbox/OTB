@@ -36,19 +36,20 @@ namespace otb
 
 template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
  PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
-  ::PostGISTable() : PostGISTable::Superclass()  
+  ::PostGISTable() 
 {
   //super();
-  std::cout << "create postgistable" << std::endl;
-  m_TableName="VectorDataToPostGIS";
+  //std::cout << "create postgistable" << std::endl;
+  //m_TableName="VectorDataToPostGIS";
   
   m_Connection = ConnectionType::New();
-  
+  /*
   m_Connection->SetHost( "localhost" );
   m_Connection->SetDBName( "test" );
   m_Connection->SetUser( "postgres" );
   m_Connection->SetPassword( "postgres" );
   std::cout << "this: " << this->GetTableName()<< std::endl;
+  */
 }
 
   
@@ -204,41 +205,7 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   this->InsertGeometries(sqlCmd.str());
   std::cout << "geometries!!"  << std::endl;
 }
-/*
-template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
-    void
-        PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
-  ::InsertPolygon( LinePointerType l )
-{
-  std::stringstream sqlCmd;
-  this->InsertBegin ( sqlCmd );
-  sqlCmd << "LINESTRING( ";
-  
-  typedef LineType::VertexListConstIteratorType VertexIterator;
-  VertexIterator itVertex = l->GetVertexList()->Begin();
-  while (itVertex != l->GetVertexList()->End())
-  {
-    for (uint i=0 ; i < SpatialDimension ; i++)
-    {
-      sqlCmd << itVertex.Value()[i] << " "; 
-      ++itVertex;
-    } 
-    sqlCmd << ",";
-  }
-  //Erase the last ','
-  std::string insertCmd = sqlCmd.str();
-  insertCmd = insertCmd.str().erase(insertCmd.str().length() - 1, insertCmd.str().length() - 1 );
-  sqlCmd = sqlCmd.str(insertCmd);
-  
-  
-  sqlCmd << ")'," << srid << ") );" << std::endl;
-  //Execute the query
-  //this->ExecuteQuery(sqlCmd)
-  
-  /* Invalid (MULTI)Linestring 
 
-}
-*/
 
 template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
 void
@@ -247,9 +214,9 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
 {
   typedef otb::PostGISFromStringTransactor TransactorType;
   TransactorType myStringTransactor; 
-  std::cout << "transactor string"  << sqlCmd<< std::endl;
+  //std::cout << "transactor string"  << sqlCmd<< std::endl;
   myStringTransactor.SetTransactionString( sqlCmd );
-  this->GetConnection()->ConnectToDB();
+  //this->GetConnection()->ConnectToDB();
   this->GetConnection()->GetConnection()->perform( myStringTransactor ); 
 }
 
@@ -274,12 +241,11 @@ template <class TConnectionImplementation, class TPrecision, unsigned int Spatia
 
   //Instantiation
   TransactorType myTransactor;
-  /*
-  unsigned short dimension = 2;
-  myTransactor.SetDimension( dimension );
+  
+  myTransactor.SetDimension( SpatialDimension );
 
-  std::string name = "mytable";
-  myTransactor.SetTableName( name );
+  //std::string name = "mytable";
+  myTransactor.SetTableName( this->GetTableName() );
 
   int srid = -1;
   myTransactor.SetSRID( srid );
@@ -288,29 +254,29 @@ template <class TConnectionImplementation, class TPrecision, unsigned int Spatia
 
   myTransactor.SetRemoveExistingTable( true );
 
+  this->GetConnection()->GetConnection()->perform( myTransactor );
 
-
-  const std::string hostName = argv[1];
-  const std::string dbName = argv[2];
-  const std::string userName = argv[3];
-  const std::string userPassword = argv[4];
-
-
-  typedef otb::PostGISConnectionImplementation GISConnectionType;
-
-  //Instantiation
-  GISConnectionType::Pointer connection = GISConnectionType::New();
-
-  connection->SetHost( hostName );
-  connection->SetDBName( dbName );
-  connection->SetUser( userName );
-  connection->SetPassword( userPassword );
-
-  connection->ConnectToDB();
-
-  connection->PerformTransaction( myTransactor );
-*/
 }
+
+template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
+void
+PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
+::getGeometryType()
+{
+  //the geomtric column name is the_geom
+  std::string query="SELECT DISTINCT geometrytype(\"the_geom\") "
+      "FROM \""+ this->GetTableName() + "\" WHERE NOT geometrytype(\"the_geom\") IS NULL";
+  
+  typedef otb::PostGISFromStringTransactor TransactorType;
+  TransactorType myStringTransactor; 
+  //std::cout << "transactor string"  << sqlCmd<< std::endl;
+  myStringTransactor.SetTransactionString( query );
+  //this->GetConnection()->ConnectToDB();
+  
+  //typedef pqxx::result ResultType;
+  //ResultType R = this->GetConnection()->GetConnection()->perform( myStringTransactor ); 
+  
+}      
 } // end namespace otb
 
 #endif

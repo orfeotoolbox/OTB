@@ -63,7 +63,7 @@ void PostGISCreateTableTransactor::operator()(pqxx::nontransaction &T)
   std::stringstream createCommand;
 
   createCommand << "CREATE TABLE "<< m_TableName
-		<<" (id serial PRIMARY KEY,genre text);";
+		<<" (id serial PRIMARY KEY);";
 
   otbGenericMsgDebugMacro(<<"Create Command " << createCommand.str());
   m_Result = T.exec(createCommand.str());

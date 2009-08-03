@@ -66,7 +66,7 @@ void PostGISConnectionImplementation::ConnectToDB()
 
 void PostGISConnectionImplementation::PerformTransaction(const TransactorType& theTransaction) const
 {
-  assert(0); //do not use this method yet
+  //assert(0); //do not use this method yet
   //m_PostGISConnection->perform( theTransaction );
 }
 

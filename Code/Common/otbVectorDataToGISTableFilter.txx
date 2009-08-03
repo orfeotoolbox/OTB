@@ -22,15 +22,17 @@
 //#include "itkProgressReporter.h"
 //#include "itkImageRegionConstIteratorWithIndex.h"
 //#include "otbGISTable.h"
+#include "itkProgressReporter.h"
 
 namespace otb {
 
 template<class TVectorData , class TGISTable>
 VectorDataToGISTableFilter< TVectorData, TGISTable >
   ::VectorDataToGISTableFilter()
-{/*
-  m_BackgroundValue = NumericTraits<OutputImagePixelType>::NonpositiveMin();*/
-}
+{
+  m_InputGISConnection = InputGISConnectionType::New();
+}  
+  
 
 
 template<class TVectorData , class TGISTable>
@@ -114,28 +116,29 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
   OutputGISTableType * output = this->GetOutput();
   //std::cout << "after GetOutput" << std::endl;
   const InputVectorDataType * input = this->GetInput();
-  /*
-  //Delete the previous GIS Table if exist
-  if ( m_CreateGISTable )
-  {
-    ;  
-  }
-  //Copy DataNodes info into the GIS table
-  //
-  */
   
+  //Set the filter's Postgres connection
+  output->SetConnection (this->GetInputGISConnection ());
   
+  //Connection to the database
+  output->GetConnection()->ConnectToDB();
+  
+  //Name of the table is settedd automaticcaly to "vector_data_to_gis"
+  output->SetTableName ("vector_data_to_gis");
+  
+  //Create the PostgreSQL table
+  output->CreateTable();
+    
+  //Process filter for all inputs
   for (unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
   {
     if (this->GetInput(idx))
     {
       InputVectorDataConstPointer input = this->GetInput(idx);
       InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(input->GetDataTree()->GetRoot());
-      //std::cout << "ProcessNode" << std::endl;
-      ProcessNode(inputRoot);
       
-      //std::stringstream layerName;
-      //layerName << "layer-" << idx;
+      ProcessNode(inputRoot);
+
     }
   }
   
@@ -177,7 +180,6 @@ template<class TVectorData , class TGISTable>
       }
       case FEATURE_POINT:
       {
-        //InsertBegin(); 
         this->GetOutput()->InsertPoint( static_cast<typename TGISTable::PointType> (dataNode->GetPoint()) );
         break;
       }
@@ -199,17 +201,17 @@ template<class TVectorData , class TGISTable>
       }
       case FEATURE_MULTILINE:
       {
-        itkExceptionMacro(<<"This type (FEATURE_MULTILINE) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+        itkExceptionMacro(<<"This type (FEATURE_MULTILINE) is not handle (yet) by VectorDataToGISTableFilter(), please request for it");
         break;
       }
       case FEATURE_MULTIPOLYGON:
       {
-        itkExceptionMacro(<<"This type (FEATURE_MULTIPOLYGON) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+        itkExceptionMacro(<<"This type (FEATURE_MULTIPOLYGON) is not handle (yet) by VectorDataToGISTableFilter(), please request for it");
         break;
       }
       case FEATURE_COLLECTION:
       {
-        itkExceptionMacro(<<"This type (FEATURE_COLLECTION) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+        itkExceptionMacro(<<"This type (FEATURE_COLLECTION) is not handle (yet) by VectorDataToGISTableFilter(), please request for it");
         break;
       }
     }
@@ -222,11 +224,11 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
 ::PrintSelf(std::ostream &os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
+  //this->GetInputGISConnection()->PrintSelf (os, indent);
 /*
   os << indent << "BackgroundValue: "  << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_BackgroundValue) << std::endl;
   */
 }
-
 
 
 

@@ -20,7 +20,7 @@
 //#include "itkImageToImageFilter.h"
 //#include "itkAttributeLabelObject.h"
 #include "otbGISTableSource.h"
-//#include "otbGISTable.h"
+#include "otbGISConnectionImplementation.h"
 //#include "otbVectorData.h"
 #include <iostream>
 #include <sstream>
@@ -69,6 +69,9 @@ public:
   typedef typename InputVectorDataType::DataNodeType  DataNodeType;
   typedef typename DataNodeType::Pointer         DataNodePointerType;
   
+  
+  typedef typename OutputGISTableType::ConnectionType InputGISConnectionType;
+  typedef typename InputGISConnectionType::Pointer InputGISConnectionPointerType;
   /** ImageDimension constants */
   //itkStaticConstMacro(InputImageDimension, unsigned int,
   //                    TInputImage::ImageDimension);
@@ -88,11 +91,10 @@ public:
   itkSetMacro(CreateGISTable, bool);
   itkGetConstMacro(CreateGISTable, bool);
   
-  /**
-   * Set/Get the value of the SQL insert command 
-   */
-  //itkSetMacro(InsertCmd, std::stringstream);
-  //itkGetConstMacro(InsertCmd, std::stringstream);
+  itkGetObjectMacro(InputGISConnection, InputGISConnectionType);
+  itkSetObjectMacro(InputGISConnection, InputGISConnectionType);
+  
+  //void setConnection 
 
   /** Set/Get the LabelMap input of this process object.  */
   virtual void SetInput( const InputVectorDataType *input);
@@ -126,9 +128,7 @@ private:
   void ProcessNode(InternalTreeNodeType * source);
   bool m_CreateGISTable;
   
-  std::stringstream m_InsertCmd;
-  
-  
+  InputGISConnectionPointerType m_InputGISConnection;
 } ; // end of class
 
 } // end namespace otb

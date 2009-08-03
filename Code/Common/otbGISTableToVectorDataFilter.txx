@@ -121,9 +121,7 @@ GISTableToVectorDataFilter<TGISTable, TVectorData>
   //output->FillBuffer( m_BackgroundValue );
   //typedef TConnectionImplementation ConnectionType;
   //typedef typename ConnectionType::Pointer ConnectionPointerType;
-  typedef typename InputGISTableType::ConnectionType ConnectionType;
   
-  typedef typename InputGISTableType::ConnectionPointerType ConnectionPointerType;
   ConnectionPointerType conn = ConnectionType::New();
   
   //ConnectionType toto;

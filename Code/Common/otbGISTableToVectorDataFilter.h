@@ -60,7 +60,8 @@ public:
   //typedef typename OutputVectorDataType::RegionType     OutputVectorDataRegionType;
   //typedef typename OutputVectorDataType::PixelType      OutputVectorDataPixelType;
   //typedef typename OutputVectorDataType::IndexType      IndexType;
-  
+  typedef typename InputGISTableType::ConnectionType ConnectionType;
+  typedef typename InputGISTableType::ConnectionPointerType ConnectionPointerType;
   
   /** ImageDimension constants */
   //itkStaticConstMacro(InputImageDimension, unsigned int,
