@@ -27,8 +27,8 @@
 //    INPUTS: {QB_Suburb.png}
 //    INPUTS: {QB_SuburbRotated10.png}
 //    OUTPUTS: {ImageRegistration5Output.png}
-//    OUTPUTS: {ImageRegistration5DifferenceAfter.png}
 //    OUTPUTS: {ImageRegistration5DifferenceBefore.png}
+//    OUTPUTS: {ImageRegistration5DifferenceAfter.png}
 //    0.1
 //  Software Guide : EndCommandLineArgs
 
@@ -36,8 +36,8 @@
 //    INPUTS: {QB_Suburb.png}
 //    INPUTS: {QB_SuburbR10X13Y17.png}
 //    OUTPUTS: {ImageRegistration5Output2.png}
-//    OUTPUTS: {ImageRegistration5DifferenceAfter2.png}
 //    OUTPUTS: {ImageRegistration5DifferenceBefore2.png}
+//    OUTPUTS: {ImageRegistration5DifferenceAfter2.png}
 //    1.0
 //  Software Guide : EndCommandLineArgs
 
@@ -620,7 +620,7 @@ int main( int argc, char *argv[] )
     // fixed and moving image after registration.
     if ( argc > 4 )
     {
-      writer2->SetFileName( argv[4] );
+      writer2->SetFileName( argv[5] );
       writer2->Update();
     }
 
@@ -631,7 +631,7 @@ int main( int argc, char *argv[] )
     resample->SetTransform( identityTransform );
     if ( argc > 5 )
     {
-      writer2->SetFileName( argv[5] );
+      writer2->SetFileName( argv[4] );
       writer2->Update();
     }
   }
