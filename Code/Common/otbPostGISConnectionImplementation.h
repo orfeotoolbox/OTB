@@ -76,9 +76,9 @@ public:
 
   void ConnectToDB();
 
-  void PerformTransaction(const TransactorType& theTransaction);
+  void PerformTransaction(const TransactorType& theTransaction) const;
 
-  BasicConnectionType* GetConnection();
+  BasicConnectionType* GetConnection() const;
 
 
 protected:

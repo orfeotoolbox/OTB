@@ -125,7 +125,10 @@ GISTableToVectorDataFilter<TGISTable, TVectorData>
   
   typedef typename InputGISTableType::ConnectionPointerType ConnectionPointerType;
   ConnectionPointerType conn = ConnectionType::New();
-  //input->GetConnection();
+  
+  //ConnectionType toto;
+  input->GetConnection(); 
+  
   //typename InputGISTableType::LabelObjectContainerType::const_iterator it;
   //const typename InputLabelMapType::LabelObjectContainerType & labelObjectContainer = //input->GetLabelObjectContainer();
   /*

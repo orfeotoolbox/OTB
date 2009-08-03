@@ -64,13 +64,13 @@ void PostGISConnectionImplementation::ConnectToDB()
 
 }
 
-void PostGISConnectionImplementation::PerformTransaction(const TransactorType& theTransaction)
+void PostGISConnectionImplementation::PerformTransaction(const TransactorType& theTransaction) const
 {
   assert(0); //do not use this method yet
-//  m_PostGISConnection->perform( theTransaction );
+  //m_PostGISConnection->perform( theTransaction );
 }
 
-PostGISConnectionImplementation::BasicConnectionType* PostGISConnectionImplementation::GetConnection()
+PostGISConnectionImplementation::BasicConnectionType* PostGISConnectionImplementation::GetConnection() const
 {
   return m_PostGISConnection;
 }

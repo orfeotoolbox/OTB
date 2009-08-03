@@ -66,7 +66,7 @@ int otbPostGISCreateTableTransactorCreate(int argc, char * argv[])
 
   connection->ConnectToDB();
 
-  connection->GetConnection()->perform( myTransactor );
+  connection->PerformTransaction( myTransactor );
 
   return EXIT_SUCCESS;
 }

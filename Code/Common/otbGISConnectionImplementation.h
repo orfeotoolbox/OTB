@@ -71,7 +71,7 @@ public:
 
   virtual void ConnectToDB(){};
 
-  virtual void PerformTransaction(const TransactorType& theTransaction){};
+  virtual void PerformTransaction(const TransactorType& theTransaction) const {} ;
 
 
 

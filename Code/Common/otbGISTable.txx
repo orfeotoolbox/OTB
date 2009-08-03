@@ -25,8 +25,8 @@
 namespace otb
 {
 
-template <class TConnectionImplementation, unsigned int SpatialDimension>
-GISTable<TConnectionImplementation, SpatialDimension>
+  template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
+      GISTable<TConnectionImplementation, TPrecision, SpatialDimension>
 ::GISTable()
 {
   m_TableName = "";
@@ -34,9 +34,9 @@ GISTable<TConnectionImplementation, SpatialDimension>
 }
 
 
-template <class TConnectionImplementation, unsigned int SpatialDimension>
+template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
 void
-GISTable<TConnectionImplementation, SpatialDimension>
+    GISTable<TConnectionImplementation, TPrecision, SpatialDimension>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
@@ -47,13 +47,7 @@ GISTable<TConnectionImplementation, SpatialDimension>
 
 }
 
-template <class TConnectionImplementation, unsigned int SpatialDimension>
-bool
-GISTable<TConnectionImplementation, SpatialDimension>
-  ::Clear()
-{ //TODO implementation
-  return true;
-}
+
 } // end namespace otb
 
 #endif

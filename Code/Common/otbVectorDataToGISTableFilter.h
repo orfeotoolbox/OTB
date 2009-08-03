@@ -22,6 +22,9 @@
 #include "otbGISTableSource.h"
 //#include "otbGISTable.h"
 //#include "otbVectorData.h"
+#include <iostream>
+#include <sstream>
+#include <string>
 
 namespace otb {
 
@@ -63,7 +66,8 @@ public:
   //typedef typename OutputVectorDataType::RegionType     OutputVectorDataRegionType;
   //typedef typename OutputVectorDataType::PixelType      OutputVectorDataPixelType;
   //typedef typename OutputVectorDataType::IndexType      IndexType;
-  
+  typedef typename InputVectorDataType::DataNodeType  DataNodeType;
+  typedef typename DataNodeType::Pointer         DataNodePointerType;
   
   /** ImageDimension constants */
   //itkStaticConstMacro(InputImageDimension, unsigned int,
@@ -79,12 +83,16 @@ public:
   //           ImageToImageFilter);
 
   /**
-   * Set/Get the value used as "background" in the output image, if the input
-   * LabelMap use a background.
-   * Defaults to NumericTraits<PixelType>::NonpositiveMin().
+   * Set/Get the boolean value if you do not want to create the GIS table 
    */
-  //itkSetMacro(BackgroundValue, OutputImagePixelType);
-  //itkGetConstMacro(BackgroundValue, OutputImagePixelType);
+  itkSetMacro(CreateGISTable, bool);
+  itkGetConstMacro(CreateGISTable, bool);
+  
+  /**
+   * Set/Get the value of the SQL insert command 
+   */
+  //itkSetMacro(InsertCmd, std::stringstream);
+  //itkGetConstMacro(InsertCmd, std::stringstream);
 
   /** Set/Get the LabelMap input of this process object.  */
   virtual void SetInput( const InputVectorDataType *input);
@@ -109,15 +117,18 @@ protected:
    * to GrayscaleGeodesicErodeImageFilter. */
   void GenerateData();
   
-
+  
 private:
   VectorDataToGISTableFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
   
   void ProcessNode(InternalTreeNodeType * source);
-  //OutputImagePixelType m_BackgroundValue;
-
+  bool m_CreateGISTable;
+  
+  std::stringstream m_InsertCmd;
+  
+  
 } ; // end of class
 
 } // end namespace otb

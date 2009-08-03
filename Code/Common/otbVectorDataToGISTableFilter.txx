@@ -110,13 +110,34 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
   
   // Allocate the output
   this->AllocateOutputs();
-  
+  //std::cout << "before GetOutput" << std::endl;
   OutputGISTableType * output = this->GetOutput();
+  //std::cout << "after GetOutput" << std::endl;
   const InputVectorDataType * input = this->GetInput();
+  /*
+  //Delete the previous GIS Table if exist
+  if ( m_CreateGISTable )
+  {
+    ;  
+  }
+  //Copy DataNodes info into the GIS table
+  //
+  */
   
   
-  
-  InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(input->GetDataTree()->GetRoot());
+  for (unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
+  {
+    if (this->GetInput(idx))
+    {
+      InputVectorDataConstPointer input = this->GetInput(idx);
+      InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(input->GetDataTree()->GetRoot());
+      //std::cout << "ProcessNode" << std::endl;
+      ProcessNode(inputRoot);
+      
+      //std::stringstream layerName;
+      //layerName << "layer-" << idx;
+    }
+  }
   
  }
 
@@ -126,12 +147,11 @@ template<class TVectorData , class TGISTable>
   ::ProcessNode(InternalTreeNodeType * source)
 {
 
-  typedef otb::DataNode<double,2,double> DataNodeType; //FIXME check if it should be infered from the input type
-  typedef typename DataNodeType::Pointer DataNodePointerType;
+  
 
   // Get the children list from the input node
   ChildrenListType children = source->GetChildrenList();
-
+  
   // For each child
   for(typename ChildrenListType::iterator it = children.begin(); it!=children.end();++it)
   {
@@ -156,116 +176,20 @@ template<class TVectorData , class TGISTable>
         break;
       }
       case FEATURE_POINT:
-      {/*
-//           itkExceptionMacro(<<"This type (FEATURE_POINT) is not handle (yet) by VectorDataToImageFilter(), please request for it");
-//           std::cout << std::setprecision(15);
-//           std::cout << " ** Inserting new point **" << std::endl;
-
-        typedef mapnik::vertex<double,2> vertex2d;
-        typedef mapnik::point<vertex2d> point2d;
-        typedef boost::shared_ptr<point2d> point_ptr;
-        mapnik::geometry2d * point = new point2d;
-
-        point->move_to(dataNode->GetPoint()[0],dataNode->GetPoint()[1]);
-//           std::cout << dataNode->GetPoint()[0] << ", " << dataNode->GetPoint()[1] << std::endl;
-
-
-
-        typedef boost::shared_ptr<mapnik::raster> raster_ptr;
-        typedef mapnik::feature<mapnik::geometry2d,raster_ptr> Feature;
-        typedef boost::shared_ptr<Feature> feature_ptr;
-
-        feature_ptr mfeature = feature_ptr(new Feature(1));
-        mfeature->add_geometry(point);
-
-        mapnik::transcoder tr("ISO-8859-15");
-
-        if (dataNode->HasField("place_name"))
-          boost::put(*mfeature, "name", tr.transcode((dataNode->GetFieldAsString("place_name")).c_str()));
-
-        boost::put(*mfeature, "place", tr.transcode("city"));
-        boost::put(*mfeature, "capital", tr.transcode("yes"));//FIXME more a question of style
-
-        mDatasource->push(mfeature);
-*/
+      {
+        //InsertBegin(); 
+        this->GetOutput()->InsertPoint( static_cast<typename TGISTable::PointType> (dataNode->GetPoint()) );
         break;
       }
       case otb::FEATURE_LINE:
       {
-//           std::cout << std::setprecision(15);
-//           std::cout << " ** Inserting new line **" << std::endl;
-        /*typedef mapnik::vertex<double,2> vertex2d;
-        typedef mapnik::line_string<vertex2d,mapnik::vertex_vector2> line2d;
-        typedef boost::shared_ptr<line2d> line_ptr;
-        mapnik::geometry2d * line = new line2d;
-
-        typedef DataNodeType::LineType::VertexListConstIteratorType VertexIterator;
-        VertexIterator itVertex = dataNode->GetLine()->GetVertexList()->Begin();
-        while (itVertex != dataNode->GetLine()->GetVertexList()->End())
-        {
-//             std::cout << itVertex.Value()[0] << ", " << itVertex.Value()[1] << std::endl;
-          line->line_to(itVertex.Value()[0],m_SensorModelFlip*itVertex.Value()[1]);
-          ++itVertex;
-        }
-
-//           std::cout << "Num points: " << line->num_points() << std::endl;
-
-
-        typedef boost::shared_ptr<mapnik::raster> raster_ptr;
-        typedef mapnik::feature<mapnik::geometry2d,raster_ptr> Feature;
-        typedef boost::shared_ptr<Feature> feature_ptr;
-
-        feature_ptr mfeature = feature_ptr(new Feature(1));
-        mfeature->add_geometry(line);
-
-        mapnik::transcoder tr("ISO-8859-15");
-
-        if (dataNode->HasField("name"))
-          boost::put(*mfeature, "name", tr.transcode((dataNode->GetFieldAsString("name")).c_str()));
-        if (dataNode->HasField("NAME"))
-          boost::put(*mfeature, "name", tr.transcode((dataNode->GetFieldAsString("NAME")).c_str()));
-
-//           std::cout << mfeature->props().size() << std::endl;
-//           std::cout << " -> " << (*mfeature)["name"] << std::endl;
-
-//           std::cout << "Name: " << dataNode->GetFieldAsString("NAME") << std::endl;
-//           std::cout << "Type: " << dataNode->GetFieldAsString("TYPE") << std::endl;
-//           std::cout << "OSM ID: " << dataNode->GetFieldAsString("osm_id") << std::endl;
-
-        if (dataNode->HasField("type"))
-          boost::put(*mfeature, "highway", tr.transcode((dataNode->GetFieldAsString("type")).c_str()));
-        if (dataNode->HasField("TYPE"))
-          boost::put(*mfeature, "highway", tr.transcode((dataNode->GetFieldAsString("TYPE")).c_str()));
-
-
-        mDatasource->push(mfeature);
-*/
+        this->GetOutput()->InsertLineString( static_cast<typename TGISTable::LinePointerType> (dataNode->GetLine()) );
         break;
       }
       case FEATURE_POLYGON:
       {
-//         itkExceptionMacro(<<"This type (FEATURE_POLYGON) is not handle (yet) by VectorDataToImageFilter(), please request for it");
-        /*typedef mapnik::vertex<double,2> vertex2d;
-        typedef mapnik::polygon<vertex2d,mapnik::vertex_vector2> polygon2d;
-        typedef boost::shared_ptr<polygon2d> polygon_ptr;
-        mapnik::geometry2d * polygon = new polygon2d;
-
-        typedef DataNodeType::PolygonType::VertexListConstIteratorType VertexIterator;
-        VertexIterator itVertex = dataNode->GetPolygonExteriorRing()->GetVertexList()->Begin();
-        while (itVertex != dataNode->GetPolygonExteriorRing()->GetVertexList()->End())
-        {
-          polygon->line_to(itVertex.Value()[0],m_SensorModelFlip*itVertex.Value()[1]);
-          ++itVertex;
-        }
-
-        typedef boost::shared_ptr<mapnik::raster> raster_ptr;
-        typedef mapnik::feature<mapnik::geometry2d,raster_ptr> Feature;
-        typedef boost::shared_ptr<Feature> feature_ptr;
-
-        feature_ptr mfeature = feature_ptr(new Feature(1));
-        mfeature->add_geometry(polygon);
-        mDatasource->push(mfeature);
-*/
+        //std::cout << "before insert polygon" << std::endl;
+        this->GetOutput()->InsertPolygons( static_cast<typename TGISTable::PolygonConstPointerType> (dataNode->GetPolygonExteriorRing()), static_cast<typename TGISTable::PolygonListConstPointerType> (dataNode->GetPolygonInteriorRings()) );
         break;
       }
       case FEATURE_MULTIPOINT:
@@ -302,6 +226,9 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
   os << indent << "BackgroundValue: "  << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_BackgroundValue) << std::endl;
   */
 }
+
+
+
 
 }// end namespace otb
 #endif
