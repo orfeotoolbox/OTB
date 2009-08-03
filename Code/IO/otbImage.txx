@@ -147,7 +147,9 @@ Image<TPixel, VImageDimension>
 ::CopyInformation(const itk::DataObject * data)
 {
   Superclass::CopyInformation(data);
-  this->itk::Object::SetMetaDataDictionary(data->GetMetaDataDictionary());
+//   this->itk::Object::SetMetaDataDictionary(data->GetMetaDataDictionary());
+  itk::MetaDataDictionary dict = data->GetMetaDataDictionary();
+  this->itk::Object::SetMetaDataDictionary(dict);
 }
 
 template <class TPixel, unsigned int VImageDimension>

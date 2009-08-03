@@ -51,9 +51,9 @@ typedef enum
 
 template <class TFirstTransform,
 class TSecondTransform,
-class TScalarType=double,
-unsigned int NInputDimensions=2,
-unsigned int NOutputDimensions=2>
+class TScalarType= typename TFirstTransform::ScalarType,
+unsigned int NInputDimensions=TFirstTransform::InputSpaceDimension,
+unsigned int NOutputDimensions=TSecondTransform::OutputSpaceDimension>
 class ITK_EXPORT CompositeTransform: public itk::Transform<TScalarType,  // Data type for scalars
       NInputDimensions,       // Number of dimensions in the input space
       NOutputDimensions>      // Number of dimensions in the output space

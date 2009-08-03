@@ -1886,6 +1886,14 @@ ADD_TEST(ioTvPointSetFileReader ${IO_TESTS17}
         otbPointSetFileReader
   ${INPUTDATA}/srs.las
   ${TEMP}/ioPointSetFileReader.txt)
+
+ADD_TEST(ioTvPointSetFileReader2 ${IO_TESTS17}
+        --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioPointSetFileReader2.txt
+                        ${TEMP}/ioPointSetFileReader2.txt
+        otbPointSetFileReader2
+  ${INPUTDATA}/srs.las
+  ${TEMP}/ioPointSetFileReader2.txt)
+
 ENDIF(OTB_USE_LIBLAS)
 
 
@@ -2076,6 +2084,7 @@ otbImageSeriesFileReader.cxx
 SET(BasicIO_SRCS17
 otbPointSetFileReaderNew.cxx
 otbPointSetFileReader.cxx
+otbPointSetFileReader2.cxx
 otbImageMetadataInterfaceNew.cxx
 otbImageMetadataInterfaceTest.cxx
 otbImageMetadataInterfaceTest2.cxx
