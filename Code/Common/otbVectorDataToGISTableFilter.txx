@@ -31,6 +31,8 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
   ::VectorDataToGISTableFilter()
 {
   m_InputGISConnection = InputGISConnectionType::New();
+  m_DropExistingGISTable = false;
+  m_GISTableName = "otb_to_gis_sample";
 }  
   
 
@@ -124,10 +126,10 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
   output->GetConnection()->ConnectToDB();
   
   //Name of the table is settedd automaticcaly to "vector_data_to_gis"
-  output->SetTableName ("vector_data_to_gis");
+  output->SetTableName (this->GetGISTableName());
   
   //Create the PostgreSQL table
-  output->CreateTable();
+  output->CreateTable(m_DropExistingGISTable);
     
   //Process filter for all inputs
   for (unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
@@ -196,7 +198,7 @@ template<class TVectorData , class TGISTable>
       }
       case FEATURE_MULTIPOINT:
       {
-        itkExceptionMacro(<<"This type (FEATURE_MULTIPOINT) is not handle (yet) by VectorDataToImageFilter(), please request for it");
+//         this->GetOutput()->InsertMultiPoints( static_cast<typename TGISTable::PointType> (dataNode->GetPoint()) );
         break;
       }
       case FEATURE_MULTILINE:

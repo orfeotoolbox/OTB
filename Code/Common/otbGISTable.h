@@ -89,7 +89,7 @@ public:
   virtual void InsertPolygons(PolygonConstPointerType polygonExtRing, PolygonListConstPointerType polygonListInteriorRing){};
   virtual void InsertLineString(LinePointerType l){};
   
-  virtual void CreateTable(){};
+  virtual void CreateTable(bool dropExistingGISTable){};
   
   virtual void getGeometryType(){};
 protected:

@@ -24,7 +24,7 @@ namespace otb
 {
 /** \class PostGISTable
  * \brief this class represents a table of a geospatial database (PostGIS).
- *
+ *  
  * 
  * \sa GISTableFileReader
  * \sa GISTableFileWriter
@@ -48,17 +48,12 @@ public:
   itkTypeMacro(PostGISTable,GISTable);
   itkStaticConstMacro(Dimension, unsigned int, SpatialDimension);
 
-  /** Typedefs */
+  /** Some convenient typedefs */
   typedef TConnectionImplementation ConnectionType;
   typedef typename ConnectionType::Pointer ConnectionPointerType;
-  
-  //typedef TConnectionImplementation::TransactionType TransactionType;
-  
   typedef itk::Point<TPrecision , SpatialDimension > PointType;
   typedef PolyLineParametricPathWithValue < TPrecision , SpatialDimension >  LineType;
   typedef typename LineType::Pointer 	LinePointerType;
-  
-  
   typedef Polygon < TPrecision > 	        PolygonType;
   typedef typename PolygonType::Pointer 	                PolygonPointerType;
   typedef typename PolygonType::ConstPointer 	        PolygonConstPointerType;
@@ -74,26 +69,30 @@ public:
   itkGetObjectMacro(Connection, ConnectionType);
   itkSetObjectMacro(Connection, ConnectionType);
 
-  /** Clear the vector data  not implemented yet*/
+  /** Clear the table  not implemented yet*/
   bool Clear();
   
   /** Get attributes of the Table*/ //TODO implement
   
   /** Get srid of the geometric column*/ //TODO implement 
   //virtual 
-  /** Add Point content to the GIS Table*/ //TODO implement
+  /** Init basic SQL command*/
   void InsertBegin( std::stringstream & sqlCmd );
+  /** Add Point content to the GIS Table*/
   void InsertPoint( const PointType &pt );
   //void InsertMultiPoint();
+  /** Add Polygons to the GIS Table (exterior and interior ring)*/
   void InsertPolygons(PolygonConstPointerType polygonExtRing, PolygonListConstPointerType polygonListInteriorRing);
+  /** Add Line to the GIS Table*/
   void InsertLineString(LinePointerType l);
   
+  /** Execute the sqlCmd which add geometric rows to the gis table*/
   void InsertGeometries (const std::string &sqlCmd );
-  
+  /** Clean up SQL command*/
   void EraseLastChar (std::stringstream &sqlCmd );
-  
-  void CreateTable ();
-  
+  /** Effective Creation of the table*/
+  void CreateTable (bool dropExistingGISTable);
+  /** Get geometry column type Not implemented yet*/
   void getGeometryType();
 protected:
 
@@ -108,9 +107,8 @@ private:
   PostGISTable(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-
-    std::string m_TableName;
-    ConnectionPointerType m_Connection;
+  std::string m_TableName;
+  ConnectionPointerType m_Connection;
 
 };
 }// end namespace otb

@@ -235,7 +235,7 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
 template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
     void
         PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
-  ::CreateTable ()
+  ::CreateTable (bool dropExistingGISTable)
 {
   typedef otb::PostGISCreateTableTransactor TransactorType;
 
@@ -250,9 +250,7 @@ template <class TConnectionImplementation, class TPrecision, unsigned int Spatia
   int srid = -1;
   myTransactor.SetSRID( srid );
 
-  bool removeTable = true;
-
-  myTransactor.SetRemoveExistingTable( true );
+  myTransactor.SetRemoveExistingTable( dropExistingGISTable );
 
   this->GetConnection()->GetConnection()->perform( myTransactor );
 

@@ -31,9 +31,14 @@ namespace otb {
 /** \class VectorDataToGISTableFilter
  * \brief Convert a LabelMap to a VectorData
  *
-   * VectorDataToGISTableFilter converts  a
-   * VectorData to GIS Table (PostGIS...).
- *
+ * VectorDataToGISTableFilter converts  a
+ * VectorData to GIS Table (PostGIS...).
+ * Create first a PostGIS table (by default name=vector_data_to_gis_sample)
+ * The table is not drop if it already exist
+ * Structure of the PostGIS table:
+ * vector_data_to_postgis (id serial, the_geom geometry)
+ * with srid = -1
+ * multi geometries are not handle yet 
  * \author Manuel GRIZONNET. CNES, France.
  *
  * \sa LabelMapToBinaryImageFilter, LabelMapMaskImageFilter
@@ -56,16 +61,11 @@ public:
   typedef TGISTable OutputGISTableType;
   typedef typename InputVectorDataType::Pointer         InputVectorDataPointer;
   typedef typename InputVectorDataType::ConstPointer    InputVectorDataConstPointer;
-  //typedef typename InputImageType::RegionType      InputImageRegionType;
-  //typedef typename InputImageType::PixelType       InputImagePixelType;
   typedef typename OutputGISTableType::Pointer        OutputGISTablePointer;
   typedef typename OutputGISTableType::ConstPointer   OutputGISTableConstPointer;
   
   typedef typename InputVectorDataType::DataTreeType::TreeNodeType    InternalTreeNodeType;
   typedef typename InternalTreeNodeType::ChildrenListType        ChildrenListType;
-  //typedef typename OutputVectorDataType::RegionType     OutputVectorDataRegionType;
-  //typedef typename OutputVectorDataType::PixelType      OutputVectorDataPixelType;
-  //typedef typename OutputVectorDataType::IndexType      IndexType;
   typedef typename InputVectorDataType::DataNodeType  DataNodeType;
   typedef typename DataNodeType::Pointer         DataNodePointerType;
   
@@ -88,8 +88,11 @@ public:
   /**
    * Set/Get the boolean value if you do not want to create the GIS table 
    */
-  itkSetMacro(CreateGISTable, bool);
-  itkGetConstMacro(CreateGISTable, bool);
+  itkSetMacro(DropExistingGISTable, bool);
+  itkGetConstMacro(DropExistingGISTable, bool);
+  
+  itkSetMacro(GISTableName, std::string);
+  itkGetConstMacro(GISTableName, std::string);
   
   itkGetObjectMacro(InputGISConnection, InputGISConnectionType);
   itkSetObjectMacro(InputGISConnection, InputGISConnectionType);
@@ -124,11 +127,17 @@ private:
   VectorDataToGISTableFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
-  
+   /** Single-threaded version of GenerateData.  This filter delegates
+    * to GrayscaleGeodesicErodeImageFilter. */
   void ProcessNode(InternalTreeNodeType * source);
-  bool m_CreateGISTable;
   
+   /** Remove table before insertion if true  */
+  bool m_DropExistingGISTable;
+  
+  /** Connection parameters to the db  */
   InputGISConnectionPointerType m_InputGISConnection;
+  /** GIS table name  */
+  std::string m_GISTableName;
 } ; // end of class
 
 } // end namespace otb
