@@ -23,6 +23,7 @@
 #include "itkPoint.h"
 #include "otbPolyLineParametricPathWithValue.h"
 #include "otbPolygon.h"
+#include "otbObjectList.h"
 
 namespace otb
 {
@@ -73,7 +74,7 @@ public:
   itkGetConstMacro(TableName, std::string);
   itkSetMacro(TableName, std::string);
 
-  itkGetConstObjectMacro(Connection, ConnectionType);
+  itkGetObjectMacro(Connection, ConnectionType);
   itkSetObjectMacro(Connection, ConnectionType);
 
   /** Clear the vector data  not implemented yet*/

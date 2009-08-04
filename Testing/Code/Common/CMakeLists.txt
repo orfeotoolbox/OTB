@@ -97,7 +97,7 @@ ADD_TEST(coTuCmdLineArgParser_List2ArgBis ${COMMON_TESTS1}
 ADD_TEST(coTuLineSpatialObjectList ${COMMON_TESTS2}
         otbLineSpatialObjectList
         )
-
+ 
 
 # -------            otb::ExtractROI   ------------------------------
 
@@ -801,6 +801,15 @@ ADD_TEST(coTuGISTableNew ${COMMON_TESTS10}
 otbGISTableNew
 )
 
+ADD_TEST(coTuPostGISTableNew ${COMMON_TESTS10}
+otbPostGISTableNew
+)
+
+ADD_TEST(coTuVectorDataToGISTableFilterNew ${COMMON_TESTS10}
+otbVectorDataToGISTableFilterNew
+)
+
+
 ENDIF(OTB_USE_PQXX)
 
 
@@ -924,6 +933,8 @@ otbPostGISConnectionImplementationNew.cxx
 otbPostGISConnectionImplementationConnectToDB.cxx
 otbPostGISConnectionImplementationPerformTransaction.cxx
 otbGISTableNew.cxx
+otbPostGISTableNew.cxx
+otbVectorDataToGISTableFilterNew.cxx
 )
 ENDIF(OTB_USE_PQXX)
 
@@ -963,7 +974,7 @@ ENDIF(OTB_USE_MAPNIK)
 IF(OTB_USE_PQXX)
 ADD_EXECUTABLE(otbCommonTests10 otbCommonTests10.cxx ${BasicCommon_SRCS10})
 #TODO this line should be refined when we will like to have this capability with windows
-TARGET_LINK_LIBRARIES(otbCommonTests10 OTBIO  OTBTesting pq pqxx)
+TARGET_LINK_LIBRARIES(otbCommonTests10 OTBIO  OTBTesting OTBGeospatialAnalysis pq pqxx)
 ENDIF(OTB_USE_PQXX)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
