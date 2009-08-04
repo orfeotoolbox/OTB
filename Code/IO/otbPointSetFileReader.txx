@@ -126,8 +126,6 @@ template <class TOutputPointSet>
 void PointSetFileReader<TOutputPointSet>
 ::GenerateData()
 {
-
-
   typename TOutputPointSet::Pointer output = this->GetOutput();
 
   std::ifstream ifs;
@@ -162,7 +160,7 @@ void PointSetFileReader<TOutputPointSet>
 
     }
   }
-  //If the output pointset is of dimension 3, store the intensity as information
+  //If the output pointset is of dimension 3, store the altitude as information
   else if (PointType::PointDimension == 3)
   {
     while (reader.ReadNextPoint())
@@ -179,7 +177,7 @@ void PointSetFileReader<TOutputPointSet>
       output->SetPoint( i, point );
 
       PixelType V;
-      V = static_cast<PixelType>( p.GetIntensity() );
+      V = static_cast<PixelType>( p.GetZ() );
       output->SetPointData( i, V );
 
     }
