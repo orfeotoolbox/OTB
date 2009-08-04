@@ -182,6 +182,7 @@ template<class TVectorData , class TGISTable>
       }
       case FEATURE_POINT:
       {
+        otbGenericMsgDebugMacro(<<"Insert Point from vectorData");
         this->GetOutput()->InsertPoint( static_cast<typename TGISTable::PointType> (dataNode->GetPoint()) );
         break;
       }

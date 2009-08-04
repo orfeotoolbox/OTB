@@ -102,7 +102,7 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   
   
   //Execute the query
-  //this->ExecuteQuery(sqlCmd)
+  this->InsertGeometries(sqlCmd.str());
 }
 
 template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
@@ -132,7 +132,7 @@ template <class TConnectionImplementation, class TPrecision, unsigned int Spatia
   
   sqlCmd << ")'," << srid << ") );" << std::endl;
   //Execute the query
-  //this->ExecuteQuery(sqlCmd)
+  this->InsertGeometries(sqlCmd.str());
   
   /* Invalid (MULTI)Linestring */
 
@@ -200,10 +200,10 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   int srid=-1;
   
   sqlCmd << ")'," << srid << ") );" << std::endl;
-  std::cout << "sqlcmd: " << sqlCmd.str() << std::endl;
+  //std::cout << "sqlcmd: " << sqlCmd.str() << std::endl;
   //Insert the geometry
   this->InsertGeometries(sqlCmd.str());
-  std::cout << "geometries!!"  << std::endl;
+  //std::cout << "geometries!!"  << std::endl;
 }
 
 

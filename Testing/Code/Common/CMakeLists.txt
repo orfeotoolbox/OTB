@@ -772,6 +772,11 @@ ADD_TEST(coTvVectorDataToImageFilterWorld ${COMMON_TESTS9}
 
 ENDIF(OTB_USE_MAPNIK)
 
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests10 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # ----------------  PostGIS Interface ---------------------#
 IF(OTB_USE_PQXX)
 
@@ -809,9 +814,45 @@ ADD_TEST(coTuVectorDataToGISTableFilterNew ${COMMON_TESTS10}
 otbVectorDataToGISTableFilterNew
 )
 
+ADD_TEST(coTuVectorDataToGISTableFilter ${COMMON_TESTS10}
+otbVectorDataToGISTableFilter
+${INPUTDATA}/ToulousePoints-examples.shp
+test
+postgres
+postgres
+)
 
 ENDIF(OTB_USE_PQXX)
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests11 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# ----------------  AttributesMapLabelObject ---------------------#
+
+ADD_TEST(coTuAttributesMapLabelObjectNew ${COMMON_TESTS11}
+otbAttributesMapLabelObjectNew
+)
+
+ADD_TEST(coTuLabelObjectToPolygonFunctorNew ${COMMON_TESTS11}
+otbLabelObjectToPolygonFunctorNew
+)
+
+ADD_TEST(coTuRadiometricAttributesLabelMapFilterNew ${COMMON_TESTS11}
+otbRadiometricAttributesLabelMapFilterNew
+)
+
+# ADD_TEST(coTuShapeAttributesLabelMapFilterNew ${COMMON_TESTS11}
+# otbShapeAttributesLabelMapFilterNew
+# )
+
+ADD_TEST(coTuStatisticsAttributesLabelMapFilterNew ${COMMON_TESTS11}
+otbStatisticsAttributesLabelMapFilterNew
+)
+
+ADD_TEST(coTuAttributesMapOpeningLabelMapFilterNew ${COMMON_TESTS11}
+otbAttributesMapOpeningLabelMapFilterNew
+)
 
 
 # -------       Fichiers sources CXX -----------------------------------
@@ -935,8 +976,20 @@ otbPostGISConnectionImplementationPerformTransaction.cxx
 otbGISTableNew.cxx
 otbPostGISTableNew.cxx
 otbVectorDataToGISTableFilterNew.cxx
+otbVectorDataToGISTableFilter.cxx
 )
 ENDIF(OTB_USE_PQXX)
+
+
+SET(BasicCommon_SRCS11
+otbAttributesMapLabelObjectNew.cxx
+otbLabelObjectToPolygonFunctorNew.cxx
+otbRadiometricAttributesLabelMapFilterNew.cxx
+#otbShapeAttributesLabelMapFilterNew.cxx
+otbStatisticsAttributesLabelMapFilterNew.cxx
+otbAttributesMapOpeningLabelMapFilterNew.cxx
+)
+
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
@@ -976,5 +1029,8 @@ ADD_EXECUTABLE(otbCommonTests10 otbCommonTests10.cxx ${BasicCommon_SRCS10})
 #TODO this line should be refined when we will like to have this capability with windows
 TARGET_LINK_LIBRARIES(otbCommonTests10 OTBIO  OTBTesting OTBGeospatialAnalysis pq pqxx)
 ENDIF(OTB_USE_PQXX)
+
+ADD_EXECUTABLE(otbCommonTests11 otbCommonTests11.cxx ${BasicCommon_SRCS11})
+TARGET_LINK_LIBRARIES(otbCommonTests11 OTBIO  OTBTesting itkvcl)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -24,7 +24,8 @@
 
 namespace otb
 {
-/** \class PointSetFileReader
+/**
+ * \class PointSetFileReader
  * \brief Read a point set from a lidar file.
  *
  * \sa PointSetSource
