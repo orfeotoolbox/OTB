@@ -122,6 +122,15 @@ void
 
   typename InputLabelMapType::LabelObjectContainerType::const_iterator it;
   const typename InputLabelMapType::LabelObjectContainerType & labelObjectContainer = input->GetLabelObjectContainer();
+  
+  //typedef OutputVectorDataType::DataNodeType DataNodeType;
+  DataNodePointerType document = DataNodeType::New();
+  DataNodePointerType folder1 = DataNodeType::New();
+  
+  document->SetNodeType(DOCUMENT);
+  folder1->SetNodeType(FOLDER);
+  //typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType,PolygonType> FunctorType;
+  
   /*
   for( it = labelObjectContainer.begin(); it != labelObjectContainer.end(); it++ )
     {

@@ -21,7 +21,8 @@
 //#include "itkAttributeLabelObject.h"
 #include "otbVectorDataSource.h"
 #include "itkLabelMap.h"
-//include "otbVectorData.h"
+#include "otbPolygon.h"
+#include "otbLabelObjectToPolygonFunctor.h"
 
 namespace otb {
 
@@ -57,6 +58,14 @@ public:
   //typedef typename InputImageType::PixelType       InputImagePixelType;
   typedef typename OutputVectorDataType::Pointer        OutputVectorDataPointer;
   typedef typename OutputVectorDataType::ConstPointer   OutputVectorDataConstPointer;
+  
+  typedef typename InputLabelMapType::LabelObjectType   LabelObjectType;
+  typedef otb::Polygon<double>                                   PolygonType;
+      
+  typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType,PolygonType> FunctorType;
+  
+  typedef typename OutputVectorDataType::DataNodeType  DataNodeType;
+  typedef typename DataNodeType::Pointer         DataNodePointerType;
   //typedef typename OutputVectorDataType::RegionType     OutputVectorDataRegionType;
   //typedef typename OutputVectorDataType::PixelType      OutputVectorDataPixelType;
   //typedef typename OutputVectorDataType::IndexType      IndexType;
