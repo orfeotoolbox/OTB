@@ -37,7 +37,7 @@ template < class TScalarType,
 unsigned int NInputDimensions,
 unsigned int NOutputDimensions >
 SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions>
-::SensorModelBase()
+::SensorModelBase(): Superclass(OutputSpaceDimension, 0)
 {
   m_Model = NULL;
   m_DEMHandler = DEMHandlerType::New();

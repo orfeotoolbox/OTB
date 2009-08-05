@@ -172,7 +172,6 @@ void PointSetFileReader<TOutputPointSet>
       point[1] = p.GetY();
       point[2] = p.GetZ();
 
-
       unsigned long i = output->GetNumberOfPoints();
       output->SetPoint( i, point );
 

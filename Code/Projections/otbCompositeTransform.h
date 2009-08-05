@@ -39,15 +39,15 @@ namespace otb
 * \ingroup Transform
 */
 
-typedef enum
-{
-  PROJDEFAULT=0,
-  PROJIDENTITY=1,
-  PROJMAPFORWARD=2,
-  PROJMAPINVERSE=3,
-  PROJSENSORFORWARD=4,
-  PROJSENSORINVERSE=5
-} ProjectionTypeEnum;
+//typedef enum
+//{
+//  PROJDEFAULT=0,
+//  PROJIDENTITY=1,
+//  PROJMAPFORWARD=2,
+//  PROJMAPINVERSE=3,
+//  PROJSENSORFORWARD=4,
+//  PROJSENSORINVERSE=5
+//} ProjectionTypeEnum;
 
 template <class TFirstTransform,
 class TSecondTransform,
