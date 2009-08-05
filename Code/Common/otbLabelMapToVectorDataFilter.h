@@ -24,14 +24,20 @@
 #include "otbPolygon.h"
 #include "otbLabelObjectToPolygonFunctor.h"
 
+//#include "itkMinimumMaximumImageCalculator.h"
+
 namespace otb {
 
 /** \class LabelMapToVectorDataFilter
- * \brief Convert a LabelMap to a VectorData
+   * \brief This class vectorizes a LabelObject to a VectorData.
  *
    * LabelMapToVectorDataFilter converts a LabelMap to a
  * VectorData where all the pixels get the attribute value of the label object they belong.
- *
+   * It uses the class otbLabelObjectToPolygonFunctor wich follows a finite states machine described in 
+   *
+   * "An algorithm for the rapid computation of boundaries of run-length
+   * encoded regions", Francis K. H. Queck, in Pattern Recognition 33
+   * (2000), p 1637-1649.  
  * \author Manuel GRIZONNET. CNES, France.
  *
  * \sa LabelMapToBinaryImageFilter, LabelMapMaskImageFilter
@@ -52,10 +58,6 @@ public:
   /** Some convenient typedefs. */
   typedef TLabelMap InputLabelMapType;
   typedef TVectorData OutputVectorDataType;
-  //typedef typename InputImageType::Pointer         InputImagePointer;
-  //typedef typename InputImageType::ConstPointer    InputImageConstPointer;
-  //typedef typename InputImageType::RegionType      InputImageRegionType;
-  //typedef typename InputImageType::PixelType       InputImagePixelType;
   typedef typename OutputVectorDataType::Pointer        OutputVectorDataPointer;
   typedef typename OutputVectorDataType::ConstPointer   OutputVectorDataConstPointer;
   
@@ -66,6 +68,8 @@ public:
   
   typedef typename OutputVectorDataType::DataNodeType  DataNodeType;
   typedef typename DataNodeType::Pointer         DataNodePointerType;
+  
+  //typedef itk::MinimumMaximumImageCalculator<LabeledImageType>           MinMaxCalculatorType;
   //typedef typename OutputVectorDataType::RegionType     OutputVectorDataRegionType;
   //typedef typename OutputVectorDataType::PixelType      OutputVectorDataPixelType;
   //typedef typename OutputVectorDataType::IndexType      IndexType;

@@ -119,9 +119,7 @@ void
   //AttributeAccessorType accessor;
 
   //output->FillBuffer( m_BackgroundValue );
-
-  typename InputLabelMapType::LabelObjectContainerType::const_iterator it;
-  const typename InputLabelMapType::LabelObjectContainerType & labelObjectContainer = input->GetLabelObjectContainer();
+  FunctorType functor;
   
   //typedef OutputVectorDataType::DataNodeType DataNodeType;
   DataNodePointerType document = DataNodeType::New();
@@ -129,33 +127,27 @@ void
   
   document->SetNodeType(DOCUMENT);
   folder1->SetNodeType(FOLDER);
-  //typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType,PolygonType> FunctorType;
   
-  /*
-  for( it = labelObjectContainer.begin(); it != labelObjectContainer.end(); it++ )
+  DataNodePointerType root = output->GetDataTree()->GetRoot()->Get();
+
+  output->GetDataTree()->Add(document,root);
+  output->GetDataTree()->Add(folder1,document);
+  
+  for(unsigned int i = 1; i <input->GetNumberOfLabelObjects(); ++i)
+  {
+    if(input->GetLabelObject(i)->GetLabel() != input->GetBackgroundValue())
     {
-    const typename InputImageType::LabelObjectType * labeObject = it->second;
-    const AttributeValueType & attribute = accessor( labeObject );
-
-    typename InputImageType::LabelObjectType::LineContainerType::const_iterator lit;
-    const typename InputImageType::LabelObjectType::LineContainerType & lineContainer = labeObject->GetLineContainer();
-
-    for( lit = lineContainer.begin(); lit != lineContainer.end(); lit++ )
-      {
-      IndexType idx = lit->GetIndex();
-      unsigned long length = lit->GetLength();
-      for( unsigned int i=0; i<length; i++)
-        {
-        output->SetPixel( idx, static_cast<OutputImagePixelType>( attribute ) );
-        idx[0]++;
-        progress.CompletedPixel();
-        }
-      }
+      
+      PolygonType::Pointer polygon = functor(input->GetLabelObject(i));
+      DataNodePointerType node = DataNodeType::New();
+      node->SetNodeType(otb::FEATURE_POLYGON);
+      node->SetPolygonExteriorRing(polygon);
+      output->GetDataTree()->Add(node,folder1);
+      
     }
-  */
+  }
 }
-
-
+  
 template<class TLabelMap, class TVectorData >
 void
 LabelMapToVectorDataFilter<TLabelMap, TVectorData>
