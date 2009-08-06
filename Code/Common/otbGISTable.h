@@ -87,7 +87,7 @@ public:
   /** Add Point content to the GIS Table*/ //TODO implement
   virtual void InsertPoint( const PointType &pt ){};
   virtual void InsertMultiPoint(){};
-  virtual void InsertPolygons(PolygonConstPointerType polygonExtRing, PolygonListConstPointerType polygonListInteriorRing){};
+  virtual void InsertPolygons(PolygonConstPointerType polygonExtRing, PolygonListConstPointerType polygonListInteriorRing = 0){};
   virtual void InsertLineString(LinePointerType l){};
   
   virtual void CreateTable(bool dropExistingGISTable){};

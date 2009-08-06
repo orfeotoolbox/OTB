@@ -133,6 +133,25 @@ void
   output->GetDataTree()->Add(document,root);
   output->GetDataTree()->Add(folder1,document);
   
+  
+  // Lets begin by declaring the iterator for the objects in the image.
+  typename InputLabelMapType::LabelObjectContainerType::const_iterator it;
+  // And get the object container to reuse it later
+  const typename InputLabelMapType::LabelObjectContainerType & labelObjectContainer = input->GetLabelObjectContainer();
+  for( it = labelObjectContainer.begin(); it != labelObjectContainer.end(); it++ )
+  {
+    // the label is there if we need it, but it can also be found at labelObject->GetLabel().
+    // const PType & label = it->first;
+    
+    // the label object
+    LabelObjectType * labelObject = it->second;
+    typename PolygonType::Pointer polygon = functor(labelObject);
+    DataNodePointerType node = DataNodeType::New();
+    node->SetNodeType(otb::FEATURE_POLYGON);
+    node->SetPolygonExteriorRing(polygon);
+    output->GetDataTree()->Add(node,folder1);
+  }
+  /*
   for(unsigned int i = 1; i <input->GetNumberOfLabelObjects(); ++i)
   {
     if(input->GetLabelObject(i)->GetLabel() != input->GetBackgroundValue())
@@ -146,6 +165,7 @@ void
       
     }
   }
+  */
 }
   
 template<class TLabelMap, class TVectorData >

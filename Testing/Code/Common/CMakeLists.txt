@@ -822,6 +822,10 @@ postgres
 postgres
 )
 
+ADD_TEST(coTuLabelMapToGISTableFilterNew ${COMMON_TESTS10}
+otbLabelMapToGISTableFilterNew
+)
+
 ENDIF(OTB_USE_PQXX)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -853,6 +857,11 @@ otbStatisticsAttributesLabelMapFilterNew
 ADD_TEST(coTuAttributesMapOpeningLabelMapFilterNew ${COMMON_TESTS11}
 otbAttributesMapOpeningLabelMapFilterNew
 )
+
+ADD_TEST(coTuLabelMapToVectorDataFilterNew ${COMMON_TESTS11}
+otbLabelMapToVectorDataFilterNew
+)
+
 
 
 # -------       Fichiers sources CXX -----------------------------------
@@ -977,6 +986,7 @@ otbGISTableNew.cxx
 otbPostGISTableNew.cxx
 otbVectorDataToGISTableFilterNew.cxx
 otbVectorDataToGISTableFilter.cxx
+otbLabelMapToGISTableFilterNew.cxx
 )
 ENDIF(OTB_USE_PQXX)
 
@@ -988,6 +998,7 @@ otbRadiometricAttributesLabelMapFilterNew.cxx
 #otbShapeAttributesLabelMapFilterNew.cxx
 otbStatisticsAttributesLabelMapFilterNew.cxx
 otbAttributesMapOpeningLabelMapFilterNew.cxx
+otbLabelMapToVectorDataFilterNew.cxx
 )
 
 

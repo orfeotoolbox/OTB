@@ -82,7 +82,7 @@ public:
   void InsertPoint( const PointType &pt );
   //void InsertMultiPoint();
   /** Add Polygons to the GIS Table (exterior and interior ring)*/
-  void InsertPolygons(PolygonConstPointerType polygonExtRing, PolygonListConstPointerType polygonListInteriorRing);
+  void InsertPolygons(PolygonConstPointerType polygonExtRing, PolygonListConstPointerType polygonListInteriorRing=0);
   /** Add Line to the GIS Table*/
   void InsertLineString(LinePointerType l);
   

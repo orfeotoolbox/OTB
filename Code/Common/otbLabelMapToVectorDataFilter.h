@@ -21,8 +21,9 @@
 //#include "itkAttributeLabelObject.h"
 #include "otbVectorDataSource.h"
 #include "itkLabelMap.h"
-#include "otbPolygon.h"
+//#include "otbPolygon.h"
 #include "otbLabelObjectToPolygonFunctor.h"
+#include "otbDataNode.h"
 
 //#include "itkMinimumMaximumImageCalculator.h"
 
@@ -62,25 +63,20 @@ public:
   typedef typename OutputVectorDataType::ConstPointer   OutputVectorDataConstPointer;
   
   typedef typename InputLabelMapType::LabelObjectType   LabelObjectType;
-  typedef otb::Polygon<double>                                   PolygonType;
-      
-  typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType,PolygonType> FunctorType;
   
+  //typedef otb::Polygon<TVectorDataTPrecision>                                   PolygonType;
   typedef typename OutputVectorDataType::DataNodeType  DataNodeType;
   typedef typename DataNodeType::Pointer         DataNodePointerType;
+  typedef typename DataNodeType::PolygonType  PolygonType;    
   
-  //typedef itk::MinimumMaximumImageCalculator<LabeledImageType>           MinMaxCalculatorType;
-  //typedef typename OutputVectorDataType::RegionType     OutputVectorDataRegionType;
-  //typedef typename OutputVectorDataType::PixelType      OutputVectorDataPixelType;
-  //typedef typename OutputVectorDataType::IndexType      IndexType;
+  typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType,PolygonType> FunctorType;
   
   
+  
+  
+   
   /** ImageDimension constants */
-  //itkStaticConstMacro(InputImageDimension, unsigned int,
-  //                    TInputImage::ImageDimension);
-  //itkStaticConstMacro(OutputImageDimension, unsigned int,
-  //                    TOutputImage::ImageDimension);
-
+  
   /** Standard New method. */
   itkNewMacro(Self);  
 
@@ -115,8 +111,7 @@ protected:
   /** LabelMapToAttributeImageFilter will produce the entire output. */
   //void EnlargeOutputRequestedRegion(DataObject *itkNotUsed(output));
   
-  /** Single-threaded version of GenerateData.  This filter delegates
-   * to GrayscaleGeodesicErodeImageFilter. */
+  /** Single-threaded version of GenerateData.  The functor is not thread safe. */
   void GenerateData();
   
 
@@ -124,7 +119,6 @@ private:
   LabelMapToVectorDataFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  //OutputImagePixelType m_BackgroundValue;
 
 } ; // end of class
 
