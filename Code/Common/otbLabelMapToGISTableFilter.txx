@@ -1,0 +1,172 @@
+/*=========================================================================
+
+  Program:   Insight Segmentation & Registration Toolkit
+  Module:    $RCSfile: itkLabelMapToAttributeImageFilter.txx,v $
+  Language:  C++
+  Date:      $Date: 2005/08/23 15:09:03 $
+  Version:   $Revision: 1.6 $
+
+  Copyright (c) Insight Software Consortium. All rights reserved.
+  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+#ifndef __otbLabelMapToGISTableFilter_txx
+#define __otbLabelMapToGISTableFilter_txx
+
+#include "otbLabelMapToGISTableFilter.h"
+//#include "itkNumericTraits.h"
+//#include "itkProgressReporter.h"
+//#include "itkImageRegionConstIteratorWithIndex.h"
+//#include "otbGISTable.h"
+#include "itkProgressReporter.h"
+
+namespace otb {
+
+template<class TLabelMap , class TGISTable>
+LabelMapToGISTableFilter< TLabelMap, TGISTable >
+  ::LabelMapToGISTableFilter()
+{
+  m_InputGISConnection = InputGISConnectionType::New();
+  m_DropExistingGISTable = false;
+  //default value of the gis table name
+  m_GISTableName = "otb_to_gis_sample";
+}  
+  
+
+
+template<class TLabelMap , class TGISTable>
+void
+LabelMapToGISTableFilter< TLabelMap, TGISTable >
+  ::SetInput(const InputLabelMapType *input)
+{
+// Process object is not const-correct so the const_cast is required here
+  this->itk::ProcessObject::SetNthInput(0,
+                                        const_cast< InputLabelMapType * >( input ) );
+}
+
+template<class TLabelMap , class TGISTable>
+void
+LabelMapToGISTableFilter< TLabelMap, TGISTable >
+  ::SetInput(unsigned int idx, const InputLabelMapType *input)
+{
+    // Process object is not const-correct so the const_cast is required here
+  this->itk::ProcessObject::SetNthInput(idx,
+                                        const_cast< InputLabelMapType * >( input ) );
+}
+
+template<class TLabelMap , class TGISTable>
+    const typename LabelMapToGISTableFilter< TLabelMap, TGISTable >::InputLabelMapType *
+LabelMapToGISTableFilter< TLabelMap, TGISTable >
+  ::GetInput(void)
+{
+  if (this->GetNumberOfInputs() < 1)
+  {
+    return 0;
+  }
+
+  return static_cast<const TLabelMap * >
+      (this->itk::ProcessObject::GetInput(0) );
+}
+
+template<class TLabelMap , class TGISTable>
+    const typename LabelMapToGISTableFilter< TLabelMap, TGISTable >::InputLabelMapType *
+LabelMapToGISTableFilter< TLabelMap, TGISTable >
+  ::GetInput(unsigned int idx)
+{
+  return static_cast<const TLabelMap * >
+      (this->itk::ProcessObject::GetInput(idx) );
+}
+
+template<class TLabelMap , class TGISTable>
+void 
+LabelMapToGISTableFilter< TLabelMap, TGISTable >
+::GenerateInputRequestedRegion()
+{/*
+  // call the superclass' implementation of this method
+  Superclass::GenerateInputRequestedRegion();
+  
+  // We need all the input.
+  InputImagePointer input = const_cast<InputImageType *>(this->GetInput());
+  if ( !input )
+    { return; }
+  input->SetRequestedRegion( input->GetLargestPossibleRegion() );*/
+}
+
+/*
+template<class TInputImage, class TLabelMap >
+void 
+LabelMapToLabelMapFilter<TInputImage, TLabelMap>
+::EnlargeOutputRequestedRegion(DataObject *)
+{
+  this->GetOutput()
+    ->SetRequestedRegion( this->GetOutput()->GetLargestPossibleRegion() );
+}
+*/
+
+template<class TLabelMap , class TGISTable>
+void
+LabelMapToGISTableFilter< TLabelMap, TGISTable >
+::GenerateData()
+{
+  
+  // Allocate the output
+  this->AllocateOutputs();
+  //std::cout << "before GetOutput" << std::endl;
+  OutputGISTableType * output = this->GetOutput();
+  //std::cout << "after GetOutput" << std::endl;
+  const InputLabelMapType * input = this->GetInput();
+  
+  //Set the filter's Postgres connection
+  output->SetConnection (this->GetInputGISConnection ());
+  
+  //Connection to the database
+  output->GetConnection()->ConnectToDB();
+  
+  //Name of the table is settedd automaticcaly to "vector_data_to_gis"
+  output->SetTableName (this->GetGISTableName());
+  
+  //Create the PostgreSQL table
+  output->CreateTable(m_DropExistingGISTable);
+  
+  FunctorType functor;
+  
+  // Lets begin by declaring the iterator for the objects in the image.
+  typename InputLabelMapType::LabelObjectContainerType::const_iterator it;
+  // And get the object container to reuse it later
+  const typename InputLabelMapType::LabelObjectContainerType & labelObjectContainer = input->GetLabelObjectContainer();
+  for( it = labelObjectContainer.begin(); it != labelObjectContainer.end(); it++ )
+  {
+    // the label is there if we need it, but it can also be found at labelObject->GetLabel().
+    // const PType & label = it->first;
+    
+    // the label object
+    LabelObjectType * labelObject = it->second;
+    typename PolygonType::Pointer polygon = functor(labelObject);
+    this->GetOutput()->InsertPolygons( static_cast<typename TGISTable::PolygonConstPointerType> (polygon));
+    //Add polygon to the gis table
+  }
+  
+ }
+
+
+
+template<class TLabelMap , class TGISTable>
+void
+LabelMapToGISTableFilter< TLabelMap, TGISTable >
+::PrintSelf(std::ostream &os, itk::Indent indent) const
+{
+  Superclass::PrintSelf(os, indent);
+  //this->GetInputGISConnection()->PrintSelf (os, indent);
+/*
+  os << indent << "BackgroundValue: "  << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_BackgroundValue) << std::endl;
+  */
+}
+
+
+
+}// end namespace otb
+#endif
