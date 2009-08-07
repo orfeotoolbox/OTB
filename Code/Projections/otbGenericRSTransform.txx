@@ -265,6 +265,8 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   outputPoint[0] = (outputPoint[0] - m_OutputOrigin[0]) / m_OutputSpacing[0];
   outputPoint[1] = (outputPoint[1] - m_OutputOrigin[1]) / m_OutputSpacing[1];
 
+//  otbMsgDevMacro("GenericRSTransform: " << point << " -> " << outputPoint);
+
   return outputPoint;
 }
 

@@ -86,7 +86,10 @@ InverseSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
 
   outputPoint[0]=ossimDPoint.x;
   outputPoint[1]=ossimDPoint.y;
-
+  if (OutputPointType::PointDimension == 3)
+    {
+      outputPoint[2] = ossimGPoint.height();
+    }
 //     otbMsgDevMacro(<< "Point in sensor geometry: (" << outputPoint[0] << "," <<  outputPoint[1] << ")");
 
   return outputPoint;

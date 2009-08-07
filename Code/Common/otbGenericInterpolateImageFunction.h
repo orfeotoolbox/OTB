@@ -26,7 +26,7 @@ namespace otb
 {
 
 /** \class GenericInterpolateImageFunction
- * \brief Generic interpolation of an otb::image.
+ * \brief Generic interpolation of an otb::Image.
  *
  * GenericInterpolateImageFunction interpolates image intensity according to a
  * resampling profil.
