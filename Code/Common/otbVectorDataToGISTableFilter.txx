@@ -122,6 +122,10 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
   //Set the filter's Postgres connection
   output->SetConnection (this->GetInputGISConnection ());
   
+  
+  //Set the projection of the GIS table with the vector data projection informations
+  output->SetProjectionRef(input->GetProjectionRef());
+  
   //Connection to the database
   output->GetConnection()->ConnectToDB();
   

@@ -38,18 +38,7 @@ template <class TConnectionImplementation, class TPrecision, unsigned int Spatia
  PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   ::PostGISTable() 
 {
-  //super();
-  //std::cout << "create postgistable" << std::endl;
-  //m_TableName="VectorDataToPostGIS";
-  
   m_Connection = ConnectionType::New();
-  /*
-  m_Connection->SetHost( "localhost" );
-  m_Connection->SetDBName( "test" );
-  m_Connection->SetUser( "postgres" );
-  m_Connection->SetPassword( "postgres" );
-  std::cout << "this: " << this->GetTableName()<< std::endl;
-  */
 }
 
   
@@ -97,8 +86,8 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
     sqlCmd << pt[i] << " ";      
   }
   
-  int srid=-1;
-  sqlCmd << ")'," << srid << ") );" << std::endl;
+  //int this->GetSrid()=-1;
+  sqlCmd << ")'," << this->GetSrid() << ") );" << std::endl;
   
   
   //Execute the query
@@ -128,9 +117,9 @@ template <class TConnectionImplementation, class TPrecision, unsigned int Spatia
   //Erase the last ','
   EraseLastChar ( sqlCmd );
   
-  int srid=-1;
+  //int this->GetSrid()=-1;
   
-  sqlCmd << ")'," << srid << ") );" << std::endl;
+  sqlCmd << ")'," << this->GetSrid() << ") );" << std::endl;
   //Execute the query
   this->InsertGeometries(sqlCmd.str());
   
@@ -197,9 +186,9 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   //Erase the last ','
   EraseLastChar ( sqlCmd );
   
-  int srid=-1;
+  //int this->GetSrid()=-1;
   
-  sqlCmd << ")'," << srid << ") );" << std::endl;
+  sqlCmd << ")'," << this->GetSrid() << ") );" << std::endl;
   //std::cout << "sqlcmd: " << sqlCmd.str() << std::endl;
   //Insert the geometry
   this->InsertGeometries(sqlCmd.str());
@@ -247,8 +236,8 @@ template <class TConnectionImplementation, class TPrecision, unsigned int Spatia
   //std::string name = "mytable";
   myTransactor.SetTableName( this->GetTableName() );
 
-  int srid = -1;
-  myTransactor.SetSRID( srid );
+  //int this->GetSrid() = -1;
+  myTransactor.SetSRID( this->GetSrid() );
 
   myTransactor.SetRemoveExistingTable( dropExistingGISTable );
 
@@ -275,6 +264,45 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   //ResultType R = this->GetConnection()->GetConnection()->perform( myStringTransactor ); 
   
 }      
+
+/*
+template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
+ConnectionPointerType
+PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
+::GetConstConnection() const
+{
+  return m_Connection;
+}
+*/
+
+template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
+std::string
+PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
+::GetOGRStrConnection() const
+{
+  std::string connectionSTR="";
+  connectionSTR +="PG:";
+  connectionSTR +="dbname='";
+  connectionSTR += m_Connection->GetDBName();
+  connectionSTR += "' ";
+  connectionSTR +="host='";
+  connectionSTR += m_Connection->GetHost();
+  connectionSTR += "' ";
+  connectionSTR +="port='";
+  connectionSTR += m_Connection->GetPort();
+  connectionSTR += "' ";
+  connectionSTR +="user='";
+  connectionSTR += m_Connection->GetUser();
+  connectionSTR += "' ";
+  connectionSTR +="password='";
+  connectionSTR += m_Connection->GetPassword();
+  connectionSTR += "'";
+  connectionSTR +="tables=";
+  connectionSTR += m_TableName;
+  otbGenericMsgDebugMacro(<<"OGR connection string " << connectionSTR);
+  
+  return connectionSTR;
+}
 } // end namespace otb
 
 #endif

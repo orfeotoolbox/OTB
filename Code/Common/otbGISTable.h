@@ -73,6 +73,9 @@ public:
 
   itkGetConstMacro(TableName, std::string);
   itkSetMacro(TableName, std::string);
+  
+  itkGetConstMacro(Srid, unsigned int);
+  itkSetMacro(Srid, unsigned int);
 
   itkGetObjectMacro(Connection, ConnectionType);
   itkSetObjectMacro(Connection, ConnectionType);
@@ -93,6 +96,12 @@ public:
   virtual void CreateTable(bool dropExistingGISTable){};
   
   virtual void getGeometryType(){};
+  
+  virtual void SetProjectionRef(std::string projectionRef);
+  virtual std::string GetProjectionRef() const;
+  
+  /** Get string connection usable by OGR library*/
+  virtual std::string GetOGRStrConnection() const {};
 protected:
   /** Constructor */
   GISTable();
@@ -100,7 +109,9 @@ protected:
   virtual ~GISTable() {};
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
+  
+  unsigned int m_Srid;
+  
 private:
   GISTable(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -108,7 +119,7 @@ private:
 
   std::string m_TableName;
   ConnectionPointerType m_Connection;
-
+  
   
 };
 }// end namespace otb

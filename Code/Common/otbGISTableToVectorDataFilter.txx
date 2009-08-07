@@ -114,43 +114,13 @@ GISTableToVectorDataFilter<TGISTable, TVectorData>
   OutputVectorDataType * output = this->GetOutput();
   const InputGISTableType * input = this->GetInput();
   
-  //ProgressReporter progress( this, 0, output->GetRequestedRegion().GetNumberOfPixels() );
-
-  //AttributeAccessorType accessor;
-
-  //output->FillBuffer( m_BackgroundValue );
-  //typedef TConnectionImplementation ConnectionType;
-  //typedef typename ConnectionType::Pointer ConnectionPointerType;
+  SHPVectorDataIOPointerType gisReader=SHPVectorDataIOType::New();
   
-  ConnectionPointerType conn = ConnectionType::New();
+  const std::string inputOGRConnStr=input->GetOGRStrConnection();
+  //if ( gisReader->CanReadFile() ) 
+  gisReader->SetFileName(inputOGRConnStr);
   
-  //ConnectionType toto;
-  input->GetConnection(); 
-  
-  //typename InputGISTableType::LabelObjectContainerType::const_iterator it;
-  //const typename InputLabelMapType::LabelObjectContainerType & labelObjectContainer = //input->GetLabelObjectContainer();
-  /*
-  for( it = labelObjectContainer.begin(); it != labelObjectContainer.end(); it++ )
-    {
-    const typename InputImageType::LabelObjectType * labeObject = it->second;
-    const AttributeValueType & attribute = accessor( labeObject );
-
-    typename InputImageType::LabelObjectType::LineContainerType::const_iterator lit;
-    const typename InputImageType::LabelObjectType::LineContainerType & lineContainer = labeObject->GetLineContainer();
-
-    for( lit = lineContainer.begin(); lit != lineContainer.end(); lit++ )
-      {
-      IndexType idx = lit->GetIndex();
-      unsigned long length = lit->GetLength();
-      for( unsigned int i=0; i<length; i++)
-        {
-        output->SetPixel( idx, static_cast<OutputImagePixelType>( attribute ) );
-        idx[0]++;
-        progress.CompletedPixel();
-        }
-      }
-    }
-  */
+  gisReader->Read(output);
 }
 
 

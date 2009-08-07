@@ -66,6 +66,7 @@ public:
   itkGetConstMacro(TableName, std::string);
   itkSetMacro(TableName, std::string);
 
+  //itkGetConstObjectMacro(Connection, ConnectionType);
   itkGetObjectMacro(Connection, ConnectionType);
   itkSetObjectMacro(Connection, ConnectionType);
 
@@ -94,6 +95,12 @@ public:
   void CreateTable (bool dropExistingGISTable);
   /** Get geometry column type Not implemented yet*/
   void getGeometryType();
+  
+  /** Get string connection usable by OGR library*/
+  std::string GetOGRStrConnection() const;
+  
+  /** Get const string connection methos temp*/
+  //ConnectionPointerType GetConstConnection() const;
 protected:
 
   /** Constructor */

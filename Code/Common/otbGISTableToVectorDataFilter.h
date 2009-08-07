@@ -22,6 +22,7 @@
 #include "otbVectorDataSource.h"
 #include "otbGISTable.h"
 //include "otbVectorData.h"
+#include "otbSHPVectorDataIO.h"
 
 namespace otb {
 
@@ -63,6 +64,8 @@ public:
   typedef typename InputGISTableType::ConnectionType ConnectionType;
   typedef typename InputGISTableType::ConnectionPointerType ConnectionPointerType;
   
+  typedef SHPVectorDataIO<OutputVectorDataType> SHPVectorDataIOType;
+  typedef typename SHPVectorDataIOType::Pointer SHPVectorDataIOPointerType;
   /** ImageDimension constants */
   //itkStaticConstMacro(InputImageDimension, unsigned int,
   //                    TInputImage::ImageDimension);
