@@ -40,19 +40,21 @@ class ITK_EXPORT MRFSampler : public itk::Object
 {
 public:
 
-  typedef MRFSampler Self;
-  typedef itk::Object Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
+  typedef MRFSampler                     Self;
+  typedef itk::Object                    Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
-  typedef itk::ConstNeighborhoodIterator< TInput1 >  InputImageNeighborhoodIterator;
-  typedef typename TInput1::PixelType InputImagePixelType;
+  typedef itk::ConstNeighborhoodIterator
+                     < TInput1 >         InputImageNeighborhoodIterator;
+  typedef typename TInput1::PixelType    InputImagePixelType;
 
-  typedef itk::NeighborhoodIterator< TInput2 >  LabelledImageNeighborhoodIterator;
-  typedef typename TInput2::PixelType LabelledImagePixelType;
+  typedef itk::NeighborhoodIterator
+                     < TInput2 >         LabelledImageNeighborhoodIterator;
+  typedef typename TInput2::PixelType    LabelledImagePixelType;
 
-  typedef MRFEnergy<TInput1, TInput2>  EnergyFidelityType;
-  typedef MRFEnergy<TInput2, TInput2>  EnergyRegularizationType;
+  typedef MRFEnergy<TInput1, TInput2>    EnergyFidelityType;
+  typedef MRFEnergy<TInput2, TInput2>    EnergyRegularizationType;
 
   typedef typename EnergyFidelityType::Pointer EnergyFidelityPointer;
   typedef typename EnergyRegularizationType::Pointer EnergyRegularizationPointer;

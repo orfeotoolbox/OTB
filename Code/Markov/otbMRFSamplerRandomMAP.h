@@ -33,7 +33,7 @@ namespace otb
    *
    * The probability is defined from the energy as:
    *
-   *  \f[ P(X=x)= \frac{1}{Z} \exp^{-U(x)}  \f]
+   *  \f[ P(X=x)= \frac{1}{Z} \exp^{-U(x)} \f]
    *
    * where \f$ Z = \sum_x \exp^{-U(x)}\f$
    *
@@ -70,7 +70,7 @@ public:
 
   void SetNumberOfClasses(const unsigned int nClasses)
   {
-    if (nClasses != this->m_NumberOfClasses || m_EnergiesInvalid == true)
+    if ((nClasses != this->m_NumberOfClasses) || (m_EnergiesInvalid == true))
     {
       this->m_NumberOfClasses = nClasses;
       if (m_Energy != NULL)
@@ -118,12 +118,13 @@ public:
     //double select = (m_Generator->GetIntegerVariate()/(double(RAND_MAX)+1) * totalProba);
     double select = (m_Generator->GetIntegerVariate()/(double(itk::NumericTraits<RandomGeneratorType::IntegerType>::max())+1) * totalProba);
     valueCurrent = 0;
-    while ( valueCurrent<this->GetNumberOfClasses() && m_RepartitionFunction[valueCurrent] <= select)
+    while ( (valueCurrent < this->GetNumberOfClasses()) 
+         && (m_RepartitionFunction[valueCurrent] <= select))
     {
       valueCurrent++;
     }
 
-    if ( valueCurrent==this->GetNumberOfClasses() )
+    if ( valueCurrent == this->GetNumberOfClasses() )
     {
       valueCurrent = this->GetNumberOfClasses()-1;
     }

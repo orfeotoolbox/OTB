@@ -38,18 +38,20 @@ template< class TInput1, class TInput2 >
 class ITK_EXPORT MRFEnergy : public itk::Object
 {
 public:
-  typedef MRFEnergy                     Self;
-  typedef itk::Object                   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef MRFEnergy                             Self;
+  typedef itk::Object                           Superclass;
+  typedef itk::SmartPointer<Self>               Pointer;
+  typedef itk::SmartPointer<const Self>         ConstPointer;
 
   typedef TInput1                               InputImageType;
   typedef TInput2                               LabelledImageType;
   typedef typename InputImageType::PixelType    InputImagePixelType;
   typedef typename LabelledImageType::PixelType LabelledImagePixelType;
 
-  typedef itk::ConstNeighborhoodIterator< LabelledImageType > LabelledNeighborhoodIterator;
-  typedef itk::ConstNeighborhoodIterator< InputImageType >    InputNeighborhoodIterator;
+  typedef itk::ConstNeighborhoodIterator
+                      < LabelledImageType >     LabelledNeighborhoodIterator;
+  typedef itk::ConstNeighborhoodIterator
+                      < InputImageType >        InputNeighborhoodIterator;
 
   typedef itk::Array< double > ParametersType;
 
@@ -77,17 +79,17 @@ public:
     this->Modified();
   }
 
-  virtual double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
+  virtual double GetSingleValue(const InputImagePixelType & value1, const LabelledImagePixelType & value2)
   {
     itkExceptionMacro(<<"GetSingleValue() has to be declared in child classes.");
   }
 
-  double GetValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
+  double GetValue(const InputImagePixelType & value1, const LabelledImagePixelType & value2)
   {
     return GetSingleValue(value1, value2);
   }
 
-  double GetValue(const LabelledNeighborhoodIterator & it,  const LabelledImagePixelType & value2)
+  double GetValue(const LabelledNeighborhoodIterator & it, const LabelledImagePixelType & value2)
   {
     double result = 0.0;
     unsigned int centerIndex = it.GetCenterNeighborhoodIndex();
@@ -109,7 +111,7 @@ public:
     return result/insideNeighbors;
   }
 
-  double GetValue(const InputNeighborhoodIterator & it,  const LabelledImagePixelType & value2)
+  double GetValue(const InputNeighborhoodIterator & it, const LabelledImagePixelType & value2)
   {
     double result = 0.0;
     unsigned int centerIndex = it.GetCenterNeighborhoodIndex();
@@ -147,20 +149,21 @@ template< class TInput2>
 class ITK_EXPORT MRFEnergy<TInput2,TInput2> : public itk::Object
 {
 public:
-  typedef MRFEnergy                     Self;
-  typedef itk::Object                   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef MRFEnergy                              Self;
+  typedef itk::Object                            Superclass;
+  typedef itk::SmartPointer<Self>                Pointer;
+  typedef itk::SmartPointer<const Self>          ConstPointer;
 
-  typedef TInput2                               LabelledImageType;
-  typedef typename LabelledImageType::PixelType LabelledImagePixelType;
+  typedef TInput2                                LabelledImageType;
+  typedef typename LabelledImageType::PixelType  LabelledImagePixelType;
 
-  typedef itk::ConstNeighborhoodIterator< LabelledImageType >  LabelledNeighborhoodIterator;
-  typedef itk::Array< double >                                 ParametersType;
+  typedef itk::ConstNeighborhoodIterator
+                       < LabelledImageType >     LabelledNeighborhoodIterator;
+  typedef itk::Array< double >                   ParametersType;
 
   itkNewMacro(Self);
 
-  itkTypeMacro(MRFEnergy,itk::Object);
+  itkTypeMacro(MRFEnergy, itk::Object);
 
 
   itkSetMacro(NumberOfParameters, unsigned int);
@@ -185,17 +188,17 @@ public:
     this->Modified();
   }
 
-  virtual double GetSingleValue(const LabelledImagePixelType & value1,  const LabelledImagePixelType & value2)
+  virtual double GetSingleValue(const LabelledImagePixelType & value1, const LabelledImagePixelType & value2)
   {
     itkExceptionMacro(<<"GetSingleValue() has to be declared in child classes.");
   }
 
-  double GetValue(const LabelledImagePixelType & value1,  const LabelledImagePixelType & value2)
+  double GetValue(const LabelledImagePixelType & value1, const LabelledImagePixelType & value2)
   {
     return GetSingleValue(value1, value2);
   }
 
-  double GetValue(const LabelledNeighborhoodIterator & it,  const LabelledImagePixelType & value2)
+  double GetValue(const LabelledNeighborhoodIterator & it, const LabelledImagePixelType & value2)
   {
     double result = 0.0;
     unsigned int centerIndex = it.GetCenterNeighborhoodIndex();

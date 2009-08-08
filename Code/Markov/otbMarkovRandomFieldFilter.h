@@ -333,7 +333,7 @@ public:
 
 protected:
   MarkovRandomFieldFilter();
-  ~MarkovRandomFieldFilter();
+  ~MarkovRandomFieldFilter(){};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Allocate memory for labelled images. This is automatically called

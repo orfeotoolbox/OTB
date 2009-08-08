@@ -89,8 +89,7 @@ public:
       valueCurrent++;
     }
 
-
-    this->m_DeltaEnergy=  this->m_EnergyAfter - this->m_EnergyBefore;
+    this->m_DeltaEnergy =  this->m_EnergyAfter - this->m_EnergyBefore;
 
     return 0;
   }
@@ -98,8 +97,8 @@ public:
 
 protected:
   // The constructor and destructor.
-  MRFSamplerMAP() {}
-  virtual ~MRFSamplerMAP() {}
+  MRFSamplerMAP() {};
+  virtual ~MRFSamplerMAP() {};
 
 };
 

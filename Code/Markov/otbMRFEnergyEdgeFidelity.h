@@ -45,10 +45,10 @@ template< class TInput1, class TInput2>
 class ITK_EXPORT MRFEnergyEdgeFidelity : public MRFEnergy< TInput1, TInput2>
 {
 public:
-  typedef MRFEnergyEdgeFidelity         Self;
-  typedef MRFEnergy< TInput1, TInput2>                    Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef MRFEnergyEdgeFidelity                      Self;
+  typedef MRFEnergy< TInput1, TInput2>               Superclass;
+  typedef itk::SmartPointer<Self>                    Pointer;
+  typedef itk::SmartPointer<const Self>              ConstPointer;
 
   typedef itk::ConstNeighborhoodIterator< TInput1 >  NeighborhoodIterator;
   typedef typename TInput1::PixelType                InputImagePixelType;
@@ -58,7 +58,7 @@ public:
 
   itkTypeMacro(MRFEnergyEdgeFidelity, MRFEnergy);
 
-  double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
+  double GetSingleValue(const InputImagePixelType & value1, const LabelledImagePixelType & value2)
   {
     double val1 = static_cast<double>(value1);
     double val2 = static_cast<double>(value2);
