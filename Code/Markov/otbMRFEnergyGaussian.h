@@ -23,8 +23,6 @@
 
 #include "otbMath.h"
 
-#define vnl_math_sqr(x) ((x)*(x))
-
 namespace otb
 {
 /**

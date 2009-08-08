@@ -367,7 +367,6 @@ protected:
 
   unsigned int              m_NumberOfClasses;
   unsigned int              m_MaximumNumberOfIterations;
-  unsigned int              m_KernelSize;
 
   int                       m_ErrorCounter;
   double                    m_ImageDeltaEnergy;

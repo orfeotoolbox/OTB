@@ -94,16 +94,16 @@ protected:
 
 protected:
   // The constructor and destructor.
-  MRFSampler()
+  MRFSampler():
+    m_NumberOfClasses(1),
+    m_EnergyBefore(1.0),
+    m_EnergyAfter(1.0),
+    m_DeltaEnergy(1.0),
+    m_EnergyCurrent(1.0),
+    m_Lambda(1.0)
   {
     m_EnergyRegularization = EnergyRegularizationType::New();
-    m_EnergyFidelity =  EnergyFidelityType::New(),
-                        m_NumberOfClasses =1;
-    m_EnergyBefore = 1.;
-    m_EnergyAfter = 1.;
-    m_DeltaEnergy = 1.;
-    m_EnergyCurrent = 1.;
-    m_Lambda = 1.;
+    m_EnergyFidelity =  EnergyFidelityType::New();
   };
   virtual ~MRFSampler() {};
 

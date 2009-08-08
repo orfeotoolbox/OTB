@@ -20,7 +20,6 @@
 #define __otbMRFEnergyEdgeFidelity_h
 
 #include "otbMRFEnergy.h"
-#define vnl_math_sqr(x) ((x)*(x))
 
 namespace otb
 {

@@ -22,10 +22,9 @@
 
 namespace otb
 {
-/** ATTENTION : j'ai passe les initialisation dans le constructeur car certaines plateformes (dont NEMO) n'aiment cette maniere d'initialiser*/
 template<class TInputImage, class TClassifiedImage>
 MarkovRandomFieldFilter<TInputImage,TClassifiedImage>
-::MarkovRandomFieldFilter(void)/* :
+::MarkovRandomFieldFilter(void) :
   m_NumberOfClasses(0),
   m_MaximumNumberOfIterations(50),
   m_ErrorCounter(0),
@@ -34,24 +33,12 @@ MarkovRandomFieldFilter<TInputImage,TClassifiedImage>
   m_TotalNumberOfValidPixelsInOutputImage(1),
   m_TotalNumberOfPixelsInInputImage(1),
   m_ErrorTolerance(0.0),
-  m_SmoothingFactor(1),
+  m_SmoothingFactor(1.0),
   m_NumberOfIterations(0),
-  m_StopCondition(MaximumNumberOfIterations),
-  m_ExternalClassificationSet(false)
-             */
+  m_Lambda(1.0),
+  m_ExternalClassificationSet(false),
+  m_StopCondition(MaximumNumberOfIterations)
 {
-  m_NumberOfClasses = 0;
-  m_MaximumNumberOfIterations = 50;
-  m_ErrorCounter = 0;
-  m_ImageDeltaEnergy = 0.0;
-  m_NeighborhoodRadius = 1;
-  m_TotalNumberOfValidPixelsInOutputImage = 1;
-  m_TotalNumberOfPixelsInInputImage = 1;
-  m_ErrorTolerance = 0.0;
-  m_SmoothingFactor = 1;
-  m_NumberOfIterations = 0;
-  m_StopCondition = MaximumNumberOfIterations;
-  m_ExternalClassificationSet = false;
   m_Generator = RandomGeneratorType::New();
   m_Generator->SetSeed();
 

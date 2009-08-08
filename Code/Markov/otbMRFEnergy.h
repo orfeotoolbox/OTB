@@ -133,10 +133,10 @@ public:
 
 protected:
   // The constructor and destructor.
-  MRFEnergy()
-  {
-    m_NumberOfParameters = 1;
-  };
+  MRFEnergy() :
+    m_NumberOfParameters(1),
+    m_Parameters(0)
+  {};
   virtual ~MRFEnergy() {};
   unsigned int m_NumberOfParameters;
   ParametersType m_Parameters;
@@ -221,11 +221,10 @@ public:
 
 protected:
   // The constructor and destructor.
-  MRFEnergy()
-  {
-    m_NumberOfParameters = 1;
-    m_Parameters=0;
-  };
+  MRFEnergy():
+    m_NumberOfParameters(1),
+    m_Parameters(0)
+  {};
   virtual ~MRFEnergy() {};
   unsigned int m_NumberOfParameters;
   ParametersType m_Parameters;
