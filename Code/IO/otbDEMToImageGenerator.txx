@@ -70,6 +70,7 @@ void DEMToImageGenerator<TDEMImage>
   output->SetOrigin(m_OutputOrigin);
 }
 
+/*
 // GenerateData method
 template <class TDEMImage>
 void
@@ -112,7 +113,61 @@ DEMToImageGenerator<TDEMImage>
       DEMImage->SetPixel(currentindex, m_DefaultUnknownValue);
     }
   }
+}*/
+
+template <class TDEMImage>
+void
+DEMToImageGenerator<TDEMImage>
+::BeforeThreadedGenerateData()
+{
+  DEMImagePointerType  DEMImage = this->GetOutput();
+
+  // allocate the output buffer
+  DEMImage->SetBufferedRegion( DEMImage->GetRequestedRegion() );
+  DEMImage->Allocate();
+  DEMImage->FillBuffer(0);
 }
+
+template <class TDEMImage>
+void
+DEMToImageGenerator<TDEMImage>
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                       int threadId)
+{
+  DEMImagePointerType  DEMImage = this->GetOutput();
+
+  // Create an iterator that will walk the output region
+  ImageIteratorType outIt = ImageIteratorType(DEMImage,outputRegionForThread);
+
+  // Walk the output image, evaluating the height at each pixel
+  IndexType       currentindex;
+  PointType       phyPoint;
+  double      height;
+
+  for (outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt)
+  {
+    currentindex=outIt.GetIndex();
+    DEMImage->TransformIndexToPhysicalPoint(currentindex, phyPoint);
+
+//       otbMsgDevMacro(<< "PhyPoint : (" << phyPoint[0] << "," << phyPoint[1] << ")");
+
+    height=m_DEMHandler->GetHeightAboveMSL(phyPoint); // Altitude calculation
+//       otbMsgDevMacro(<< "height" << height);
+    // MNT sets a default value (-32768) at point where it doesn't have altitude information.
+    // OSSIM has chosen to change this default value in OSSIM_DBL_NAN (-4.5036e15).
+    if (!ossim::isnan(height))
+    {
+      // Fill the image
+      DEMImage->SetPixel(currentindex, static_cast<PixelType>(height) );
+    }
+    else
+    {
+      // Back to the MNT default value
+      DEMImage->SetPixel(currentindex, m_DefaultUnknownValue);
+    }
+  }
+}
+
 
 template <class TDEMImage>
 void
