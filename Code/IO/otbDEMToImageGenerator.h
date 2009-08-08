@@ -51,7 +51,6 @@ class ITK_EXPORT DEMToImageGenerator:
 {
 public :
   /** Standard class typedefs. */
-  typedef itk::Indent                  Indent;
   typedef TDEMImage                          DEMImageType;
   typedef typename DEMImageType::Pointer              DEMImagePointerType;
   typedef typename DEMImageType::PixelType                           PixelType;
@@ -60,7 +59,8 @@ public :
   typedef itk::ImageSource<DEMImageType> Superclass;
   typedef itk::SmartPointer<Self>                                    Pointer;
   typedef itk::SmartPointer<const Self>                              ConstPointer;
-  typedef Image<PixelType,2>                         OutputImageType;
+//   typedef Image<PixelType,2>                         OutputImageType;
+  typedef DEMImageType OutputImageType;
 
   typedef typename Superclass::Pointer                  OutputImagePointer;
   typedef typename OutputImageType::SpacingType               SpacingType;
@@ -100,9 +100,9 @@ public :
 
 protected:
   DEMToImageGenerator();
-  ~DEMToImageGenerator();
+  ~DEMToImageGenerator(){};
 
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
   void GenerateData();
   virtual void GenerateOutputInformation();
 

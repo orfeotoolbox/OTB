@@ -20,10 +20,10 @@
 
 #include "otbDEMToImageGenerator.h"
 #include "otbMacro.h"
+#include "base/ossimCommon.h"
 
 namespace otb
 {
-
 
 template<class TDEMImage>
 DEMToImageGenerator<TDEMImage>
@@ -37,13 +37,6 @@ DEMToImageGenerator<TDEMImage>
   m_OutputOrigin[0]=0;
   m_OutputOrigin[1]=0;
   m_DefaultUnknownValue = static_cast<PixelType>(-32768); // Value defined in the norm for points strm doesn't have information.
-}
-
-template<class TDEMImage>
-DEMToImageGenerator<TDEMImage>
-::~DEMToImageGenerator()
-{
-  // Nothing to be done...
 }
 
 // DEM folder specification method
@@ -124,7 +117,7 @@ DEMToImageGenerator<TDEMImage>
 template <class TDEMImage>
 void
 DEMToImageGenerator<TDEMImage>
-::PrintSelf(std::ostream& os, Indent indent) const
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
 

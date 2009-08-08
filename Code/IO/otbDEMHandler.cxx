@@ -18,25 +18,20 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbDEMHandler.h"
 #include "otbMacro.h"
 
+#include "elevation/ossimElevManager.h"
+#include "base/ossimGeoidManager.h"
+#include "base/ossimFilename.h"
+#include "base/ossimDirectory.h"
+#include "base/ossimGeoidEgm96.h"
+
 namespace otb
 {
 
-
 DEMHandler
-::DEMHandler()
+::DEMHandler():
+  m_ElevManager(ossimElevManager::instance())
 {
-  m_ElevManager=ossimElevManager::instance();
 }
-
-
-DEMHandler
-::~DEMHandler()
-{
-  // not needed, m_ElevManager created with instance() method
-  // delete m_ElevManager;
-}
-
-
 
 void
 DEMHandler
@@ -52,14 +47,27 @@ DEMHandler
     m_Mutex.Unlock();
     itkExceptionMacro("Failed to open DEM Directory: "<<ossimDEMDir);
   }
-
   m_Mutex.Unlock();
+}
+
+void
+DEMHandler
+::OpenGeoidFile(const char* geoidFile)
+{
+  ossimFilename geoid(geoidFile);
+  ossimGeoid* geoidPtr = new ossimGeoidEgm96(geoid);
+  if (geoidPtr->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
+  {
+     m_Mutex.Lock();
+     ossimGeoidManager::instance()->addGeoid(geoidPtr);
+     m_Mutex.Unlock();
+  }
 }
 
 
 double
 DEMHandler
-::GetHeightAboveMSL(const PointType& geoPoint)
+::GetHeightAboveMSL(const PointType& geoPoint) const
 {
   double height;
   ossimGpt ossimWorldPoint;
@@ -71,10 +79,23 @@ DEMHandler
   return height;
 }
 
+double
+DEMHandler
+::GetHeightAboveEllipsoid(const PointType& geoPoint) const
+{
+  double height;
+  ossimGpt ossimWorldPoint;
+  ossimWorldPoint.lon=geoPoint[0];
+  ossimWorldPoint.lat=geoPoint[1];
+  m_Mutex.Lock();
+  height=m_ElevManager->getHeightAboveEllipsoid(ossimWorldPoint);
+  m_Mutex.Unlock();
+  return height;
+}
 
 void
 DEMHandler
-::PrintSelf(std::ostream& os, Indent indent) const
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
   os << indent << "DEMHandler" << std::endl;
