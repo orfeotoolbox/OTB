@@ -21,6 +21,7 @@
 #include "otbDEMToImageGenerator.h"
 #include "otbMacro.h"
 #include "base/ossimCommon.h"
+#include "itkProgressReporter.h"
 
 namespace otb
 {
@@ -95,6 +96,9 @@ DEMToImageGenerator<TDEMImage>
   // Create an iterator that will walk the output region
   ImageIteratorType outIt = ImageIteratorType(DEMImage,outputRegionForThread);
 
+  // support progress methods/callbacks
+  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+
   // Walk the output image, evaluating the height at each pixel
   IndexType       currentindex;
   PointType       phyPoint;
@@ -121,6 +125,7 @@ DEMToImageGenerator<TDEMImage>
       // Back to the MNT default value
       DEMImage->SetPixel(currentindex, m_DefaultUnknownValue);
     }
+    progress.CompletedPixel();
   }
 }
 
