@@ -103,7 +103,6 @@ protected:
   ~DEMToImageGenerator(){};
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-//   void GenerateData();
   void BeforeThreadedGenerateData();
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId);

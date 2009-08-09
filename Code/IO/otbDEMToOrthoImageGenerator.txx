@@ -41,14 +41,6 @@ DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
   m_MapProjection = NULL;
 }
 
-template<class TDEMImage, class TMapProjection>
-DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
-::~DEMToOrthoImageGenerator()
-{
-  // Nothing to be done...
-}
-
-
 // GenerateOutputInformation method
 template <class TDEMImage, class TMapProjection>
 void DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
@@ -71,27 +63,37 @@ void DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
   output->SetOrigin(m_OutputOrigin);
 }
 
-// GenerateData method
 template <class TDEMImage, class TMapProjection>
 void
 DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
-::GenerateData()
+::BeforeThreadedGenerateData()
 {
-
   if (!m_MapProjection)
   {
     itkExceptionMacro( <<
                        "Please set map projection!" );
   }
-
   DEMImagePointerType  DEMImage = this->GetOutput();
 
   // allocate the output buffer
   DEMImage->SetBufferedRegion( DEMImage->GetRequestedRegion() );
   DEMImage->Allocate();
   DEMImage->FillBuffer(0);
+}
+
+// GenerateData method
+template <class TDEMImage, class TMapProjection>
+void
+DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                       int threadId)
+{
+
+
+  DEMImagePointerType  DEMImage = this->GetOutput();
+
   // Create an iterator that will walk the output region
-  ImageIteratorType outIt = ImageIteratorType(DEMImage,DEMImage->GetRequestedRegion());
+  ImageIteratorType outIt = ImageIteratorType(DEMImage, outputRegionForThread);
 
   // Walk the output image, evaluating the height at each pixel
   IndexType currentindex;

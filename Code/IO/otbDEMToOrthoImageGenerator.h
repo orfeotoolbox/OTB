@@ -100,11 +100,13 @@ public :
 
 protected:
   DEMToOrthoImageGenerator();
-  ~DEMToOrthoImageGenerator();
+  ~DEMToOrthoImageGenerator(){};
 
   void PrintSelf(std::ostream& os, Indent indent) const;
-  void GenerateData();
   virtual void GenerateOutputInformation();
+  void BeforeThreadedGenerateData();
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                       int threadId);
 
   DEMHandlerPointerType m_DEMHandler;
   PointType m_OutputOrigin;
