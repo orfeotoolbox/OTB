@@ -825,6 +825,9 @@ postgres
 ADD_TEST(coTuLabelMapToGISTableFilterNew ${COMMON_TESTS10}
 otbLabelMapToGISTableFilterNew
 )
+ADD_TEST(coTuGISTableToVectorDataFilterNew ${COMMON_TESTS10}
+otbGISTableToVectorDataFilterNew
+)
 
 ENDIF(OTB_USE_PQXX)
 
@@ -987,6 +990,7 @@ otbPostGISTableNew.cxx
 otbVectorDataToGISTableFilterNew.cxx
 otbVectorDataToGISTableFilter.cxx
 otbLabelMapToGISTableFilterNew.cxx
+otbGISTableToVectorDataFilterNew.cxx
 )
 ENDIF(OTB_USE_PQXX)
 

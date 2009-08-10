@@ -130,10 +130,10 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
   output->GetConnection()->ConnectToDB();
   
   //Name of the table is settedd automaticcaly to "vector_data_to_gis"
-  output->SetTableName (this->GetGISTableName());
+  output->SetTableName ("");
   
   //Create the PostgreSQL table
-  output->CreateTable(m_DropExistingGISTable);
+  //output->CreateTable(m_DropExistingGISTable);
     
   //Process filter for all inputs
   for (unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
@@ -143,8 +143,24 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
       InputVectorDataConstPointer input = this->GetInput(idx);
       InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(input->GetDataTree()->GetRoot());
       
-      ProcessNode(inputRoot);
+      //Old methods for processing translation to GIS table
+      //ProcessNode(inputRoot);
+      //New method for the filter, call the OGR driver
+      SHPVectorDataIOPointerType gisWriter=SHPVectorDataIOType::New();
+  
+      const std::string outputOGRConnStr=output->GetOGRStrConnection();
+      if ( gisWriter->CanWriteFile(outputOGRConnStr.data()) ) {
+        gisWriter->SetFileName(outputOGRConnStr);
+        otbGenericMsgDebugMacro(<<"Write vector data to GIS table " << outputOGRConnStr);
+        gisWriter->Write(input);
+      }
+      else 
+      {
+        itkGenericExceptionMacro(<< "Not valid connection string (PG:*) " << outputOGRConnStr);
 
+      }
+      
+      
     }
   }
   

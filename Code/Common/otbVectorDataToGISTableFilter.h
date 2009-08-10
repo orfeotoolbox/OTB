@@ -25,6 +25,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include "otbSHPVectorDataIO.h"
 
 namespace otb {
 
@@ -72,6 +73,9 @@ public:
   
   typedef typename OutputGISTableType::ConnectionType InputGISConnectionType;
   typedef typename InputGISConnectionType::Pointer InputGISConnectionPointerType;
+  
+  typedef SHPVectorDataIO<InputVectorDataType> SHPVectorDataIOType;
+  typedef typename SHPVectorDataIOType::Pointer SHPVectorDataIOPointerType;
   /** ImageDimension constants */
   //itkStaticConstMacro(InputImageDimension, unsigned int,
   //                    TInputImage::ImageDimension);

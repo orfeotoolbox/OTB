@@ -108,7 +108,7 @@ int otbVectorDataToGISTableFilter(int argc, char * argv[])
   
   myFilter->SetInputGISConnection(myConnection);
   myFilter->SetDropExistingGISTable (true);
-  myFilter->SetGISTableName ("test_filter");
+  //myFilter->SetGISTableName ("test_filter");
   myFilter->Update();
 
   

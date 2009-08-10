@@ -296,9 +296,12 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   connectionSTR += "' ";
   connectionSTR +="password='";
   connectionSTR += m_Connection->GetPassword();
-  connectionSTR += "'";
-  connectionSTR +="tables=";
-  connectionSTR += m_TableName;
+  connectionSTR += "' ";
+  if ( !m_TableName.empty() ) {
+    connectionSTR +="tables=";
+    connectionSTR += m_TableName;
+  }
+  
   otbGenericMsgDebugMacro(<<"OGR connection string " << connectionSTR);
   
   return connectionSTR;

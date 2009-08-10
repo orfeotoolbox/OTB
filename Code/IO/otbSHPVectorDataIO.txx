@@ -705,16 +705,23 @@ bool SHPVectorDataIO<TData>::CanWriteFile( const char* filename )
     return false;
     }
   
-  //add mg
-  //const std::string Extension = System::GetExtension(filename);
-    //m_Extension = System::GetExtension(filename).cstr();
-    //m_Extension = std::transform(System::GetExtension(filename).begin(), //System::GetExtension(filename).end(), System::GetExtension(filename).begin(), toupper);
-    //std::string Extension = System::GetExtension(filename);
-    m_Extension = System::GetExtension(filename);
-    std::transform(m_Extension.begin(), m_Extension.end(), m_Extension.begin(), ::toupper);
+    //Path connection to postgis PG: prefix
+    std::string prefix = lFileName.substr(0,3);
+    std::transform(prefix.begin(), prefix.end(), prefix.begin(), ::toupper);
+    if  ( prefix == "PG:" ) {
+      m_Extension = prefix; 
+    }
+    else 
+    {
+      // GIS file Register extension 
+      m_Extension = System::GetExtension(filename);
+      std::transform(m_Extension.begin(), m_Extension.end(), m_Extension.begin(), ::toupper);
     //m_Extension=Extension;
     //std::cout << "my extension " << m_Extension <<std::endl;
-    if ( (m_Extension == "SHP") || (m_Extension == "GML") || (m_Extension == "TAB"))
+    //Reading extension 
+    }  
+    
+    if ( (m_Extension == "SHP") || (m_Extension == "GML") || (m_Extension == "TAB") || (m_Extension == "PG:"))
     {
     return true;
     }
@@ -747,6 +754,10 @@ void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
   {
     ogrDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName("Geography Markup Language");
   }   
+  else if ( m_Extension == "PG:" ) 
+  {
+    ogrDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName("PostgreSQL");
+  }
   else {
     itkExceptionMacro(<<"Unknown extension "<<this->m_FileName);   
   }
@@ -757,19 +768,26 @@ void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
     }
 
   // free an existing previous data source, if any
-  if (m_DataSource != NULL)
+    //don't free the ogr source if it is a gis database
+    if (m_DataSource != NULL /*&& m_Extension != "PG:"*/) 
     {
     OGRDataSource::DestroyDataSource(m_DataSource);
     }
 
-  //if file exist, OGR can't overwrite: remove it  first
-  otb::FileName filename(this->m_FileName.c_str());
-  if (filename.exists())
-    {
-    filename.remove();
-    }
-
+  
+  //if the OGR source is a gis database, don't try to remove filename
+  if ( m_Extension != "PG:")
+  {
+    //if file exist, OGR can't overwrite: remove it  first
+    otb::FileName filename(this->m_FileName.c_str());
+    if (filename.exists())
+      {
+      filename.remove();
+      }
+  }
   // m_DataSource = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), TRUE);
+  otbGenericMsgDebugMacro(<<"Create OGR source " << this->m_FileName.c_str());
+
   m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(),NULL);
 
 
