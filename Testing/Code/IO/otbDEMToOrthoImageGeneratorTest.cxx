@@ -21,6 +21,7 @@
 #include "otbMapProjections.h"
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
+#include "otbStandardFilterWatcher.h"
 
 int otbDEMToOrthoImageGeneratorTest(int argc, char * argv[])
 {
@@ -69,6 +70,7 @@ int otbDEMToOrthoImageGeneratorTest(int argc, char * argv[])
   object->SetOutputSize(size);
   object->SetOutputSpacing(spacing);
   object->SetMapProjection(mapProj);
+  otb::StandardFilterWatcher watcher(object, "DEM to ortho image generator");
 
   writer->SetFileName( outputName );
   writer->SetInput( object->GetOutput() );

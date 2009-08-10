@@ -20,6 +20,7 @@
 #include "otbDEMToImageGenerator.h"
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
+#include "otbStandardFilterWatcher.h"
 
 int otbDEMToImageGeneratorTest(int argc, char * argv[])
 {
@@ -61,6 +62,7 @@ int otbDEMToImageGeneratorTest(int argc, char * argv[])
   object->SetOutputOrigin(origin);
   object->SetOutputSize(size);
   object->SetOutputSpacing(spacing);
+  otb::StandardFilterWatcher watcher(object, "DEM to image generator");
 
   writer->SetFileName( outputName );
   writer->SetInput( object->GetOutput() );
