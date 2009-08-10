@@ -71,20 +71,6 @@ void DEMToImageGenerator<TDEMImage>
   output->SetOrigin(m_OutputOrigin);
 }
 
-
-template <class TDEMImage>
-void
-DEMToImageGenerator<TDEMImage>
-::BeforeThreadedGenerateData()
-{
-  DEMImagePointerType  DEMImage = this->GetOutput();
-
-  // allocate the output buffer
-  DEMImage->SetBufferedRegion( DEMImage->GetRequestedRegion() );
-  DEMImage->Allocate();
-  DEMImage->FillBuffer(0);
-}
-
 template <class TDEMImage>
 void
 DEMToImageGenerator<TDEMImage>
@@ -94,7 +80,7 @@ DEMToImageGenerator<TDEMImage>
   DEMImagePointerType  DEMImage = this->GetOutput();
 
   // Create an iterator that will walk the output region
-  ImageIteratorType outIt = ImageIteratorType(DEMImage,outputRegionForThread);
+  ImageIteratorType outIt = ImageIteratorType(DEMImage, outputRegionForThread);
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());

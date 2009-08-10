@@ -1448,13 +1448,13 @@ ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
         otbOssimElevManagerTest
          ${INPUTDATA}/DEM/srtm_directory
          ${TEMP}/ioTvossimElevManagerTest.tif
-	 6.5
-         44.5
-	 0.002
-	 0.002
-	 500
-	 500
-         )
+        6.5
+        44.5
+        0.002
+        0.002
+        500
+        500
+        )
 
 ADD_TEST(ioTvossimElevManagerTest2 ${IO_TESTS12}
 --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvossimElevManagerTest2.txt

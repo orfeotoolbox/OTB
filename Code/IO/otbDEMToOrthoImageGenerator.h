@@ -104,6 +104,7 @@ protected:
 
   void PrintSelf(std::ostream& os, Indent indent) const;
   virtual void GenerateOutputInformation();
+//   void AllocateOutputs();
   void BeforeThreadedGenerateData();
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId);

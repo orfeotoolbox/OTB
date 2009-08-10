@@ -18,7 +18,7 @@
 #include "itkExceptionObject.h"
 
 #include "otbDEMToImageGenerator.h"
-#include "otbImageFileWriter.h"
+#include "otbStreamingImageFileWriter.h"
 #include "otbImage.h"
 #include "otbStandardFilterWatcher.h"
 
@@ -40,7 +40,7 @@ int otbDEMToImageGeneratorTest(int argc, char * argv[])
   typedef DEMHandlerType::PointType                PointType;
   typedef DEMToImageGeneratorType::SizeType        SizeType;
   typedef DEMToImageGeneratorType::SpacingType     SpacingType;
-  typedef otb::ImageFileWriter<ImageType>          WriterType;
+  typedef otb::StreamingImageFileWriter<ImageType>          WriterType;
 
   // Instantiating object
   DEMToImageGeneratorType::Pointer object = DEMToImageGeneratorType::New();

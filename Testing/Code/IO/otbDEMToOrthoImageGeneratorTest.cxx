@@ -19,7 +19,7 @@
 
 #include "otbDEMToOrthoImageGenerator.h"
 #include "otbMapProjections.h"
-#include "otbImageFileWriter.h"
+#include "otbStreamingImageFileWriter.h"
 #include "otbImage.h"
 #include "otbStandardFilterWatcher.h"
 
@@ -42,7 +42,7 @@ int otbDEMToOrthoImageGeneratorTest(int argc, char * argv[])
   typedef DEMHandlerType::PointType                                           PointType;
   typedef DEMToImageGeneratorType::SizeType                                   SizeType;
   typedef DEMToImageGeneratorType::SpacingType                                SpacingType;
-  typedef otb::ImageFileWriter<ImageType>                                     WriterType;
+  typedef otb::StreamingImageFileWriter<ImageType>                                     WriterType;
 
   // Instantiating object
   MapProjectionType::Pointer       mapProj = MapProjectionType::New();
@@ -76,7 +76,6 @@ int otbDEMToOrthoImageGeneratorTest(int argc, char * argv[])
   writer->SetInput( object->GetOutput() );
 
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }
