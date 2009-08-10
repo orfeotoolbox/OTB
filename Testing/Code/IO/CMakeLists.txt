@@ -1422,9 +1422,6 @@ ADD_TEST(ioTvDEMHandler ${IO_TESTS12}
 	3.6999 44.08
         )
 
-# ---  otb::ImageGeometryHandler ---
-ADD_TEST(ioTuImageGeometryHandlerNew ${IO_TESTS12} otbImageGeometryHandlerNew )
-
 # ---  otb::DEMToImageGenerator ---
 ADD_TEST(ioTuDEMToImageGeneratorNew ${IO_TESTS12} otbDEMToImageGeneratorNew )
 
@@ -2027,7 +2024,6 @@ otbDEMHandlerNew.cxx
 otbDEMHandlerTest.cxx
 otbDEMToImageGeneratorNew.cxx
 otbDEMToImageGeneratorTest.cxx
-otbImageGeometryHandlerNew.cxx
 otbOssimElevManagerTest.cxx
 otbOssimElevManagerTest2.cxx
 otbDEMToOrthoImageGeneratorNew.cxx
