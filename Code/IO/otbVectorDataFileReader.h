@@ -71,7 +71,7 @@ public:
  * appropriate suffix is enough to get the reader to instantiate the
  * correct VectorDataIO and read the file properly. However, some files (like
  * raw binary format) have no accepted suffix, so you will have to
- * manually create the ImageIO instance of the write type.
+ * manually create the VectorDataIO instance of the write type.
  *
  * \sa VectorDataIOBase
  *
