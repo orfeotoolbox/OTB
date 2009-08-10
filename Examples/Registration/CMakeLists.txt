@@ -540,8 +540,8 @@ ADD_TEST(reTeImageRegistration5Cas1ExampleTest ${EXE_TESTS}
 	${INPUTDATA}/QB_Suburb.png
         ${INPUTDATA}/QB_SuburbRotated10.png
 	${TEMP}/ImageRegistration5Output1.png
-	${TEMP}/ImageRegistration5DifferenceAfter1.png
-        ${TEMP}/ImageRegistration5DifferenceBefore1.png
+	${TEMP}/ImageRegistration5DifferenceBefore1.png
+        ${TEMP}/ImageRegistration5DifferenceAfter1.png
 )
 ADD_TEST(reTeImageRegistration5Cas2ExampleTest ${EXE_TESTS}
         --compare-image ${TOL}
@@ -551,8 +551,8 @@ ADD_TEST(reTeImageRegistration5Cas2ExampleTest ${EXE_TESTS}
 	${INPUTDATA}/QB_Suburb.png
         ${INPUTDATA}/QB_SuburbR10X13Y17.png
 	${TEMP}/ImageRegistration5Output2.png
-	${TEMP}/ImageRegistration5DifferenceAfter2.png
-        ${TEMP}/ImageRegistration5DifferenceBefore2.png
+	${TEMP}/ImageRegistration5DifferenceBefore2.png
+        ${TEMP}/ImageRegistration5DifferenceAfter2.png
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)

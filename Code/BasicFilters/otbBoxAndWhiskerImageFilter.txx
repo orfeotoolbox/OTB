@@ -147,7 +147,7 @@ BoxAndWhiskerImageFilter < TInputImage >
     this->GetInput()->GetNumberOfComponentsPerPixel() );
 
   this->GetOutput()->CopyInformation( this->GetInput() );
-  this->GetOutput()->SetRegions( this->GetInput()->GetLargestPossibleRegion() );
+
 }
 
 template < class TInputImage >
@@ -158,6 +158,7 @@ BoxAndWhiskerImageFilter < TInputImage >
   OutputImageType * output = this->GetOutput();
   output->SetNumberOfComponentsPerPixel(
     this->GetInput()->GetNumberOfComponentsPerPixel() );
+  output->SetBufferedRegion(output->GetRequestedRegion());
   output->Allocate();
 }
 

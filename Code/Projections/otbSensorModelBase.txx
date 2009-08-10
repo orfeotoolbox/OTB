@@ -35,10 +35,9 @@ namespace otb
 
 template < class TScalarType,
 unsigned int NInputDimensions,
-unsigned int NOutputDimensions,
-unsigned int NParametersDimensions >
-SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
-::SensorModelBase(): Superclass(OutputSpaceDimension, ParametersDimension)
+unsigned int NOutputDimensions >
+SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions>
+::SensorModelBase(): Superclass(OutputSpaceDimension, 0)
 {
   m_Model = NULL;
   m_DEMHandler = DEMHandlerType::New();
@@ -51,9 +50,8 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimen
 
 template < class TScalarType,
 unsigned int NInputDimensions,
-unsigned int NOutputDimensions,
-unsigned int NParametersDimensions >
-SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
+unsigned int NOutputDimensions >
+SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions>
 ::~SensorModelBase()
 {
   if ( m_Model != NULL)
@@ -67,10 +65,9 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimen
 /// Get the Geometry Keyword list
 template < class TScalarType,
 unsigned int NInputDimensions,
-unsigned int NOutputDimensions,
-unsigned int NParametersDimensions >
+unsigned int NOutputDimensions >
 ImageKeywordlist
-SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
+SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions>
 ::GetImageGeometryKeywordlist(void)const
 {
   return m_ImageKeywordlist;
@@ -79,10 +76,9 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimen
 /// Get the Geometry Keyword list
 template < class TScalarType,
 unsigned int NInputDimensions,
-unsigned int NOutputDimensions,
-unsigned int NParametersDimensions >
+unsigned int NOutputDimensions >
 ossimKeywordlist
-SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
+SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions>
 ::GetOssimKeywordlist(void)
 {
   ossimKeywordlist geom;
@@ -94,10 +90,9 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimen
 /// Get the ossim model
 template < class TScalarType,
 unsigned int NInputDimensions,
-unsigned int NOutputDimensions,
-unsigned int NParametersDimensions >
+unsigned int NOutputDimensions >
 ossimProjection*
-SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
+SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions>
 ::GetOssimModel(void)
 {
 
@@ -107,10 +102,9 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimen
 /** Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
 template < class TScalarType,
 unsigned int NInputDimensions,
-unsigned int NOutputDimensions,
-unsigned int NParametersDimensions >
+unsigned int NOutputDimensions >
 void
-SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
+SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions>
 ::SetImageGeometry(const ImageKeywordlist & image_kwl)
 {
   m_ImageKeywordlist = image_kwl;
@@ -120,10 +114,9 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimen
 /** Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
 template < class TScalarType,
 unsigned int NInputDimensions,
-unsigned int NOutputDimensions,
-unsigned int NParametersDimensions >
+unsigned int NOutputDimensions >
 void
-SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
+SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions>
 ::SetImageGeometry(const ossimKeywordlist & geom_kwl)
 {
   m_ImageKeywordlist.Clear();
@@ -135,10 +128,9 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimen
 /** Instatiate the sensor model from metadata. */
 template < class TScalarType,
 unsigned int NInputDimensions,
-unsigned int NOutputDimensions,
-unsigned int NParametersDimensions >
+unsigned int NOutputDimensions >
 void
-SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
+SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions>
 ::CreateProjection(const ImageKeywordlist & image_kwl)
 {
   ossimKeywordlist geom;
@@ -163,10 +155,9 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimen
  */
 template < class TScalarType,
 unsigned int NInputDimensions,
-unsigned int NOutputDimensions,
-unsigned int NParametersDimensions >
+unsigned int NOutputDimensions >
 void
-SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
+SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);

@@ -22,10 +22,9 @@
 
 namespace otb
 {
-/** ATTENTION : j'ai passe les initialisation dans le constructeur car certaines plateformes (dont NEMO) n'aiment cette maniere d'initialiser*/
 template<class TInputImage, class TClassifiedImage>
 MarkovRandomFieldFilter<TInputImage,TClassifiedImage>
-::MarkovRandomFieldFilter(void)/* :
+::MarkovRandomFieldFilter(void) :
   m_NumberOfClasses(0),
   m_MaximumNumberOfIterations(50),
   m_ErrorCounter(0),
@@ -34,24 +33,12 @@ MarkovRandomFieldFilter<TInputImage,TClassifiedImage>
   m_TotalNumberOfValidPixelsInOutputImage(1),
   m_TotalNumberOfPixelsInInputImage(1),
   m_ErrorTolerance(0.0),
-  m_SmoothingFactor(1),
+  m_SmoothingFactor(1.0),
   m_NumberOfIterations(0),
-  m_StopCondition(MaximumNumberOfIterations),
-  m_ExternalClassificationSet(false)
-             */
+  m_Lambda(1.0),
+  m_ExternalClassificationSet(false),
+  m_StopCondition(MaximumNumberOfIterations)
 {
-  m_NumberOfClasses = 0;
-  m_MaximumNumberOfIterations = 50;
-  m_ErrorCounter = 0;
-  m_ImageDeltaEnergy = 0.0;
-  m_NeighborhoodRadius = 1;
-  m_TotalNumberOfValidPixelsInOutputImage = 1;
-  m_TotalNumberOfPixelsInInputImage = 1;
-  m_ErrorTolerance = 0.0;
-  m_SmoothingFactor = 1;
-  m_NumberOfIterations = 0;
-  m_StopCondition = MaximumNumberOfIterations;
-  m_ExternalClassificationSet = false;
   m_Generator = RandomGeneratorType::New();
   m_Generator->SetSeed();
 
@@ -72,13 +59,6 @@ MarkovRandomFieldFilter<TInputImage,TClassifiedImage>
   //srand((unsigned)time(0));
 
 }
-
-template<class TInputImage, class TClassifiedImage>
-MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
-::~MarkovRandomFieldFilter(void)
-{
-}
-
 
 template<class TInputImage, class TClassifiedImage>
 void
@@ -146,7 +126,6 @@ void
 MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 ::GenerateInputRequestedRegion()
 {
-
   // this filter requires the all of the input images
   // to be at the size of the output requested region
   InputImagePointer inputPtr =
@@ -186,9 +165,6 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
   output->SetLargestPossibleRegion( input->GetLargestPossibleRegion() );
 }
 
-
-
-
 template<class TInputImage, class TClassifiedImage>
 void
 MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
@@ -209,8 +185,6 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 
 }// end GenerateData
 
-
-
 /**
 * Set the neighborhood radius from a single value
 */
@@ -221,7 +195,7 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 {
   //Set up the neighbor hood
   NeighborhoodRadiusType radius;
-  for (unsigned int i=0;i < InputImageDimension; ++i)
+  for (unsigned int i=0; i < InputImageDimension; ++i)
   {
     radius[i] = radiusValue;
   }
@@ -239,7 +213,7 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 ::SetNeighborhoodRadius( const unsigned long *radiusArray)
 {
   NeighborhoodRadiusType  radius;
-  for (unsigned int i=0;i < InputImageDimension; ++i)
+  for (unsigned int i=0; i < InputImageDimension; ++i)
   {
     radius[i] = radiusArray[i];
   }
@@ -247,7 +221,6 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
   this->SetNeighborhoodRadius( radius );
 
 }// end SetNeighborhoodRadius
-
 
 
 /**
@@ -259,7 +232,7 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 ::SetNeighborhoodRadius( const NeighborhoodRadiusType &radius)
 {
   //Set up the neighbor hood
-  for (unsigned int i=0;i < InputImageDimension; ++i)
+  for (unsigned int i=0; i < InputImageDimension; ++i)
   {
     m_InputImageNeighborhoodRadius[ i ] = radius[ i ];
     m_LabelledImageNeighborhoodRadius[ i ] =radius[ i ];
@@ -267,7 +240,6 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 
 }// end SetNeighborhoodRadius
 //-------------------------------------------------------
-
 
 
 /**
@@ -314,7 +286,6 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
   else //set to random value
   {
 //       srand((unsigned)time(0));
-
     while ( !outImageIt.IsAtEnd() )
     {
       LabelledImagePixelType randomvalue = static_cast<LabelledImagePixelType>(
@@ -324,9 +295,7 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
       ++outImageIt;
     }// end while
 
-
   }
-
 
 }// Allocate
 
@@ -410,30 +379,22 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
   while (( m_NumberOfIterations < m_MaximumNumberOfIterations ) &&
          ( m_ErrorCounter >= maxNumPixelError ) )
   {
-    otbMsgDebugMacro(<< "Iteration No." << m_NumberOfIterations);
-//       std::cerr <<  "Iteration No." << m_NumberOfIterations << std::endl;
+    otbMsgDevMacro(<< "Iteration No." << m_NumberOfIterations);
 
     this->MinimizeOnce();
 
-    otbMsgDebugMacro(<< "m_ErrorCounter/m_TotalNumberOfPixelsInInputImage: "
+    otbMsgDevMacro(<< "m_ErrorCounter/m_TotalNumberOfPixelsInInputImage: "
                      << m_ErrorCounter/((double)(m_TotalNumberOfPixelsInInputImage)));
-//       std::cerr << "m_ErrorCounter/m_TotalNumberOfPixelsInInputImage: "
-//            << m_ErrorCounter/((double)(m_TotalNumberOfPixelsInInputImage))
-//           << std::endl;
-//       std::cerr <<  "m_ImageDeltaEnergy: " << m_ImageDeltaEnergy << std::endl;
+    otbMsgDevMacro(<< "m_ImageDeltaEnergy: " << m_ImageDeltaEnergy); 
 
     ++m_NumberOfIterations;
 
   }
 
-  otbMsgDebugMacro(<< "m_NumberOfIterations: " << m_NumberOfIterations);
-  otbMsgDebugMacro(<< "m_MaximumNumberOfIterations: " << m_MaximumNumberOfIterations);
-  otbMsgDebugMacro(<< "m_ErrorCounter: " << m_ErrorCounter);
-  otbMsgDebugMacro(<< "maxNumPixelError: " << maxNumPixelError);
-//   std::cerr << "m_NumberOfIterations: " << m_NumberOfIterations << std::endl;
-//   std::cerr << "m_MaximumNumberOfIterations: " << m_MaximumNumberOfIterations << std::endl;
-//   std::cerr << "m_ErrorCounter: " << m_ErrorCounter << std::endl;
-//   std::cerr << "maxNumPixelError: " << maxNumPixelError << std::endl;
+  otbMsgDevMacro(<< "m_NumberOfIterations: " << m_NumberOfIterations);
+  otbMsgDevMacro(<< "m_MaximumNumberOfIterations: " << m_MaximumNumberOfIterations);
+  otbMsgDevMacro(<< "m_ErrorCounter: " << m_ErrorCounter);
+  otbMsgDevMacro(<< "maxNumPixelError: " << maxNumPixelError);
 
   //Determine stop condition
   if ( m_NumberOfIterations >= m_MaximumNumberOfIterations )

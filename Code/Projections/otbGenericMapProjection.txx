@@ -168,6 +168,10 @@ GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions
     outputPoint[0]=ossimGPoint.lon;
     outputPoint[1]=ossimGPoint.lat;
 //     otbMsgDevMacro(<< "Geographic coordinates (lon, lat) : (" << outputPoint[0] << "," << outputPoint[1] << ")");
+    if ((InputPointType::PointDimension == 3) && (OutputPointType::PointDimension == 3))
+    {
+      outputPoint[2] = point[2];
+    }
     break;
   }
   case FORWARD:
@@ -184,7 +188,10 @@ GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions
     outputPoint[1]=ossimDPoint.y;
 
 //     otbMsgDevMacro(<< "Cartographic coordinates: (" << outputPoint[0] << "," << outputPoint[1] << ")");
-
+    if ((InputPointType::PointDimension == 3) && (OutputPointType::PointDimension == 3))
+    {
+      outputPoint[2] = point[2];
+    }
     break;
   }
   default:

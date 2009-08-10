@@ -55,7 +55,7 @@ int otbVectorImageTest(int argc, char* argv[])
   ReaderType::Pointer reader = ReaderType::New();
 
   reader->SetFileName( inputFilename  );
-  reader->Update();
+  reader->UpdateOutputInformation();
 
   image = reader->GetOutput();
 

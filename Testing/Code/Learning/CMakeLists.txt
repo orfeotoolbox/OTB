@@ -222,7 +222,7 @@ ADD_TEST(leTuSOMbasedImageFilterNew ${LEARNING_TESTS2}
 # ------             otb::SOMWithMissingValue -----------------------------------
 
 ADD_TEST(leTuSOMWithMissingValueNew ${LEARNING_TESTS2}
-         otbSOMWithMissingValue )
+         otbSOMWithMissingValueNew )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

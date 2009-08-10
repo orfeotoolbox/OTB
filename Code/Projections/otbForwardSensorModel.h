@@ -42,21 +42,18 @@ namespace otb
 
 template <class TScalarType,
 unsigned int NInputDimensions=2,
-unsigned int NOutputDimensions=2,
-unsigned int NParametersDimensions=3>
+unsigned int NOutputDimensions=2>
 class ITK_EXPORT ForwardSensorModel : public SensorModelBase<TScalarType,
       NInputDimensions,
-      NOutputDimensions,
-      NParametersDimensions>
+      NOutputDimensions>
 {
 
 public :
   /** Standard class typedefs. */
   typedef ForwardSensorModel                         Self;
   typedef SensorModelBase< TScalarType,
-  NInputDimensions,
-  NOutputDimensions,
-  NParametersDimensions >   Superclass;
+                          NInputDimensions,
+                          NOutputDimensions>         Superclass;
   typedef itk::SmartPointer<Self>                    Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
 
@@ -71,7 +68,6 @@ public :
 
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
-  itkStaticConstMacro(ParametersDimension, unsigned int, NParametersDimensions); //A voir!!
 
   /** Compute the world coordinates. */
   OutputPointType TransformPoint(const InputPointType &point) const;
