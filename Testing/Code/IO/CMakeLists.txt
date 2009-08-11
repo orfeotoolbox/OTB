@@ -1432,7 +1432,7 @@ ADD_TEST(ioTvDEMToImageGeneratorTest ${IO_TESTS12}
          ${INPUTDATA}/DEM/srtm_directory
          ${TEMP}/ioTvDEMToImageGenerator.tif
         6.5
-        44.5
+        45.5
         500
         500
         0.002
