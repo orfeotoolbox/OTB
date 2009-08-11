@@ -25,6 +25,7 @@
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/imaging/ossimJpegTileSource.h>
 #include <ossim/imaging/ossimRadarSatTileSource.h>
+#include <ossim/imaging/ossimRadarSat2TileSource.h>
 #include <ossim/imaging/ossimTerraSarTileSource.h>
 
 static const ossimTrace traceDebug("ossimImageHandlerFactory:debug");
@@ -116,6 +117,20 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
          << std::endl;
    }
    result = new ossimRadarSatTileSource;
+   if(result->open(copyFilename))
+   {
+      return result;
+   }
+   delete result;
+
+    // test if Radarsat2
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "Radarsat2"
+         << std::endl;
+   }
+   result = new ossimRadarSat2TileSource;
    if(result->open(copyFilename))
    {
       return result;
@@ -476,6 +491,21 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
          << std::endl;
    }
    result = new ossimRadarSatTileSource;
+   if(result->loadState(kwl, prefix))
+   {
+      return result;
+   }
+
+   delete result;
+
+  // RadarSat2
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "trying RadarSat2"
+         << std::endl;
+   }
+   result = new ossimRadarSat2TileSource;
    if(result->loadState(kwl, prefix))
    {
       return result;
