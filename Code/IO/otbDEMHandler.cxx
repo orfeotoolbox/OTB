@@ -33,6 +33,11 @@ DEMHandler
 {
 }
 
+DEMHandler
+::~DEMHandler()
+{
+}
+
 void
 DEMHandler
 ::OpenDEMDirectory(const char* DEMDirectory)
@@ -54,13 +59,21 @@ void
 DEMHandler
 ::OpenGeoidFile(const char* geoidFile)
 {
-  ossimFilename geoid(geoidFile);
-  ossimGeoid* geoidPtr = new ossimGeoidEgm96(geoid);
-  if (geoidPtr->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
+  if ((ossimGeoidManager::instance()->findGeoidByShortName("geoid1996")) == 0)
   {
-     m_Mutex.Lock();
-     ossimGeoidManager::instance()->addGeoid(geoidPtr);
-     m_Mutex.Unlock();
+    otbMsgDevMacro( << "Opening geoid: " << geoidFile);
+    ossimFilename geoid(geoidFile);
+    ossimGeoid* geoidPtr = new ossimGeoidEgm96(geoid);
+    if (geoidPtr->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
+    {
+       m_Mutex.Lock();
+       ossimGeoidManager::instance()->addGeoid(geoidPtr);
+       m_Mutex.Unlock();
+    }
+    else
+    {
+      delete geoidPtr;
+    }
   }
 }
 
