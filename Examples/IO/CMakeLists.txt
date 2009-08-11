@@ -154,14 +154,14 @@ ADD_TEST(ioTeDEMToImageGeneratorTest ${EXE_TESTS1}
                         ${TEMP}/DEMToImageGenerator.tif
         DEMToImageGeneratorTest
          ${TEMP}/DEMToImageGenerator.tif
-	 ${TEMP}/pretty_DEMToImageGenerator.png
+         ${TEMP}/pretty_DEMToImageGenerator.png
          6.5
          45.5
          500
          500
-	 0.002
-	 -0.002
-	  ${INPUTDATA}/DEM_srtm
+         0.002
+         -0.002
+          ${INPUTDATA}/DEM_srtm
          )
 
 IF(OTB_USE_LIBLAS)
@@ -172,7 +172,7 @@ ADD_TEST(ioTeLidarToImageExampleTest ${EXE_TESTS1}
          LidarToImageExampleTest
          ${DATA}/TO_core_last_zoom.las
          ${TEMP}/lidar-image-4.hdr
-	 ${TEMP}/lidar-image-4.png
+         ${TEMP}/lidar-image-4.png
          1.0
          5
          4
@@ -183,7 +183,7 @@ ADD_TEST(ioTeLidarToImageExample2Test ${EXE_TESTS1}
          LidarToImageExampleTest
          ${DATA}/TO_core_last_zoom.las
          ${TEMP}/lidar-image-8.hdr
-	 ${TEMP}/lidar-image-8.png
+         ${TEMP}/lidar-image-8.png
          1.0
          5
          8
@@ -207,12 +207,10 @@ ENDIF( OTB_USE_CURL )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbIOExamplesTests1 otbIOExamplesTests1.cxx)
-# TARGET_LINK_LIBRARIES(otbIOExamplesTests1 OTBIO OTBBasicFilters OTBCommon OTBDisparityMap  OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBProjections ITKAlgorithms ITKStatistics  ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 TARGET_LINK_LIBRARIES(otbIOExamplesTests1 OTBIO OTBCommon OTBTesting)
 
 IF( OTB_USE_CURL )
   ADD_EXECUTABLE(otbIOExamplesTests2 otbIOExamplesTests2.cxx)
-#   TARGET_LINK_LIBRARIES(otbIOExamplesTests2 OTBCommon OTBIO ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES} ${CURL_LIBRARY} )
   TARGET_LINK_LIBRARIES(otbIOExamplesTests2 OTBCommon OTBIO ${CURL_LIBRARY}  OTBTesting)
 ENDIF( OTB_USE_CURL )
 
