@@ -86,9 +86,9 @@ DEMHandler
   ossimGpt ossimWorldPoint;
   ossimWorldPoint.lon=geoPoint[0];
   ossimWorldPoint.lat=geoPoint[1];
-//   m_Mutex.Lock();
+  m_Mutex.Lock();
   height=m_ElevManager->getHeightAboveMSL(ossimWorldPoint);
-//   m_Mutex.Unlock();
+  m_Mutex.Unlock();
   return height;
 }
 
