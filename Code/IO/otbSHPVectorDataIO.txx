@@ -733,7 +733,7 @@ bool SHPVectorDataIO<TData>::CanWriteFile( const char* filename )
 
 template<class TData>
 void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
-{
+{//std::cout << "write!" << std::endl;
   itk::TimeProbe chrono;
   chrono.Start();
   //  // try to create an ogr driver
@@ -785,6 +785,8 @@ void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
       filename.remove();
       }
   }
+    
+    //std::cout << "Overwrite!" << std::endl;
   // m_DataSource = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), TRUE);
   otbGenericMsgDebugMacro(<<"Create OGR source " << this->m_FileName.c_str());
 
