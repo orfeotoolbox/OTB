@@ -1417,9 +1417,9 @@ ADD_TEST(ioTvDEMHandler ${IO_TESTS12}
                         ${TEMP}/ioDEMGetHeightAboveMSL.txt
         otbDEMHandlerTest
         ${INPUTDATA}/DEM/srtm_directory
-        ${INPUTDATA}/DEM/egm96
+        ${INPUTDATA}/DEM/egm96.grd
         ${TEMP}/ioDEMGetHeightAboveMSL.txt
-	3.6999 44.08
+        3.6999 44.08
         )
 
 # ---  otb::DEMToImageGenerator ---
