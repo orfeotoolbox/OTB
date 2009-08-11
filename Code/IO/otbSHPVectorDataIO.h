@@ -33,7 +33,7 @@ namespace otb
 
 /** \class SHPVectorDataIO
  *
- * \brief ImageIO object for reading (not writing) SHP format vector data
+ * \brief ImageIO object for reading and writing SHP format vector data
  *
  */
 template <class TData> class ITK_EXPORT SHPVectorDataIO
@@ -79,8 +79,6 @@ public:
   typedef typename Superclass::SpacingType       SpacingType;
   typedef typename Superclass::PointType         OriginType;
 
-  /** */
-
 
   /*-------- This part of the interface deals with reading data. ------ */
 
@@ -106,7 +104,7 @@ public:
    * file specified. */
   virtual bool CanWriteFile(const char*);
 
-  /** Determine the file type. Returns true if the ImageIO can stream write the specified file */
+  /** Determine the file type. Returns true if the VectorDataIO can stream write the specified file */
   virtual bool CanStreamWrite()
   {
     return false;
@@ -116,8 +114,7 @@ public:
   /*    * Assumes SetFileName has been called with a valid file name. *\/ */
   /*   virtual void WriteVectorDataInformation(); */
 
-  /** Writes the data to disk from the memory buffer provided. Make sure
-   * that the IORegion has been set properly. */
+  /** Writes the data to disk from the memory buffer provided */
   virtual void Write(VectorDataConstPointerType data);
 
 protected:
@@ -151,11 +148,13 @@ private:
 
   unsigned int m_Kept;
   
-  /** ad by MG */
-  std::string m_Extension;
-  /** Is this necessary ? */
   
-  /** Internal method to read header informations */
+  /** ad by MG */
+
+ std::string m_Extension;
+  /** Is this necessary ? */
+
+    /* Internal method to read header informations */
   /*   bool InternalReadHeaderInformation(std::fstream & file, const bool reportError); */
 
   /*   bool    m_FlagWriteVectorDataInformation; */

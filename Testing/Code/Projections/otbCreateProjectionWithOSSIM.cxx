@@ -46,7 +46,6 @@
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkLinearInterpolateImageFunction.h"
 
-#include "otbImageGeometryHandler.h"
 #include "otbInverseSensorModel.h"
 
 // this is the most important class and is called as the first line of all applications.

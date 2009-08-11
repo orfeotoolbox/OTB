@@ -23,8 +23,6 @@
 
 #include "otbMath.h"
 
-#define vnl_math_sqr(x) ((x)*(x))
-
 namespace otb
 {
 /**
@@ -49,10 +47,10 @@ template< class TInput1, class TInput2>
 class ITK_EXPORT MRFEnergyGaussian:public MRFEnergy< TInput1, TInput2>
 {
 public:
-  typedef MRFEnergyGaussian                Self;
-  typedef MRFEnergy< TInput1, TInput2>  Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef MRFEnergyGaussian                     Self;
+  typedef MRFEnergy< TInput1, TInput2>          Superclass;
+  typedef itk::SmartPointer<Self>               Pointer;
+  typedef itk::SmartPointer<const Self>         ConstPointer;
 
   typedef TInput1                               InputImageType;
   typedef TInput2                               LabelledImageType;
@@ -65,7 +63,7 @@ public:
 
   itkNewMacro(Self);
 
-  double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
+  double GetSingleValue(const InputImagePixelType & value1, const LabelledImagePixelType & value2)
   {
     return vnl_math_sqr((static_cast<double>(value1))
                     - (static_cast<double>(value2)) );

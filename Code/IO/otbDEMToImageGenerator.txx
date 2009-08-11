@@ -20,10 +20,11 @@
 
 #include "otbDEMToImageGenerator.h"
 #include "otbMacro.h"
+#include "base/ossimCommon.h"
+#include "itkProgressReporter.h"
 
 namespace otb
 {
-
 
 template<class TDEMImage>
 DEMToImageGenerator<TDEMImage>
@@ -37,13 +38,6 @@ DEMToImageGenerator<TDEMImage>
   m_OutputOrigin[0]=0;
   m_OutputOrigin[1]=0;
   m_DefaultUnknownValue = static_cast<PixelType>(-32768); // Value defined in the norm for points strm doesn't have information.
-}
-
-template<class TDEMImage>
-DEMToImageGenerator<TDEMImage>
-::~DEMToImageGenerator()
-{
-  // Nothing to be done...
 }
 
 // DEM folder specification method
@@ -77,20 +71,19 @@ void DEMToImageGenerator<TDEMImage>
   output->SetOrigin(m_OutputOrigin);
 }
 
-// GenerateData method
 template <class TDEMImage>
 void
 DEMToImageGenerator<TDEMImage>
-::GenerateData()
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                       int threadId)
 {
   DEMImagePointerType  DEMImage = this->GetOutput();
 
-  // allocate the output buffer
-  DEMImage->SetBufferedRegion( DEMImage->GetRequestedRegion() );
-  DEMImage->Allocate();
-  DEMImage->FillBuffer(0);
   // Create an iterator that will walk the output region
-  ImageIteratorType outIt = ImageIteratorType(DEMImage,DEMImage->GetRequestedRegion());
+  ImageIteratorType outIt = ImageIteratorType(DEMImage, outputRegionForThread);
+
+  // support progress methods/callbacks
+  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Walk the output image, evaluating the height at each pixel
   IndexType       currentindex;
@@ -118,13 +111,15 @@ DEMToImageGenerator<TDEMImage>
       // Back to the MNT default value
       DEMImage->SetPixel(currentindex, m_DefaultUnknownValue);
     }
+    progress.CompletedPixel();
   }
 }
+
 
 template <class TDEMImage>
 void
 DEMToImageGenerator<TDEMImage>
-::PrintSelf(std::ostream& os, Indent indent) const
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
 

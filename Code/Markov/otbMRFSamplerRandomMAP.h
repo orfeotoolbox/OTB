@@ -31,9 +31,9 @@ namespace otb
    * This is one sampler to be used int he MRF framework. This sampler select the
    * value randomly according to the apriori probability.
    *
- * The probability is defined from the energy as:
+   * The probability is defined from the energy as:
    *
-   *  \f[ P(X=x)= \frac{1}{Z} \exp^{-U(x)}  \f]
+   *  \f[ P(X=x)= \frac{1}{Z} \exp^{-U(x)} \f]
    *
    * where \f$ Z = \sum_x \exp^{-U(x)}\f$
    *
@@ -70,15 +70,15 @@ public:
 
   void SetNumberOfClasses(const unsigned int nClasses)
   {
-    if (nClasses != this->m_NumberOfClasses || energiesInvalid == true)
+    if ((nClasses != this->m_NumberOfClasses) || (m_EnergiesInvalid == true))
     {
       this->m_NumberOfClasses = nClasses;
-      if (energy != NULL)
-        free(energy);
-      if (repartitionFunction != NULL)
-        free(repartitionFunction);
-      energy = (double *) calloc(this->m_NumberOfClasses, sizeof(double));
-      repartitionFunction = (double *) calloc(this->m_NumberOfClasses, sizeof(double));
+      if (m_Energy != NULL)
+        free(m_Energy);
+      if (m_RepartitionFunction != NULL)
+        free(m_RepartitionFunction);
+      m_Energy = (double *) calloc(this->m_NumberOfClasses, sizeof(double));
+      m_RepartitionFunction = (double *) calloc(this->m_NumberOfClasses, sizeof(double));
       this->Modified();
     }
   }
@@ -107,9 +107,9 @@ public:
       this->m_EnergyCurrent += this->m_Lambda
                                * this->m_EnergyRegularization->GetValue(itRegul, static_cast<LabelledImagePixelType>(valueCurrent));
 
-      energy[valueCurrent] = this->m_EnergyCurrent;
-      repartitionFunction[valueCurrent] = vcl_exp(-this->m_EnergyCurrent)+totalProba;
-      totalProba = repartitionFunction[valueCurrent];
+      m_Energy[valueCurrent] = this->m_EnergyCurrent;
+      m_RepartitionFunction[valueCurrent] = vcl_exp(-this->m_EnergyCurrent)+totalProba;
+      totalProba = m_RepartitionFunction[valueCurrent];
 
     }
 
@@ -118,12 +118,13 @@ public:
     //double select = (m_Generator->GetIntegerVariate()/(double(RAND_MAX)+1) * totalProba);
     double select = (m_Generator->GetIntegerVariate()/(double(itk::NumericTraits<RandomGeneratorType::IntegerType>::max())+1) * totalProba);
     valueCurrent = 0;
-    while ( valueCurrent<this->GetNumberOfClasses() && repartitionFunction[valueCurrent] <= select)
+    while ( (valueCurrent < this->GetNumberOfClasses()) 
+         && (m_RepartitionFunction[valueCurrent] <= select))
     {
       valueCurrent++;
     }
 
-    if ( valueCurrent==this->GetNumberOfClasses() )
+    if ( valueCurrent == this->GetNumberOfClasses() )
     {
       valueCurrent = this->GetNumberOfClasses()-1;
     }
@@ -132,7 +133,7 @@ public:
     if ( this->m_Value != static_cast<LabelledImagePixelType>(valueCurrent))
     {
       this->m_Value = static_cast<LabelledImagePixelType>(valueCurrent);
-      this->m_EnergyAfter = energy[static_cast<unsigned int>(valueCurrent)];
+      this->m_EnergyAfter = m_Energy[static_cast<unsigned int>(valueCurrent)];
     }
 
     this->m_DeltaEnergy=  this->m_EnergyAfter - this->m_EnergyBefore;
@@ -152,26 +153,26 @@ public:
 
 protected:
   // The constructor and destructor.
-  MRFSamplerRandomMAP()
+  MRFSamplerRandomMAP():
+    m_RepartitionFunction(NULL),
+    m_Energy(NULL),
+    m_EnergiesInvalid(true)
   {
-    energy=NULL;
-    repartitionFunction=NULL;
-    energiesInvalid = true;
     m_Generator = RandomGeneratorType::New();
     m_Generator->SetSeed();
   }
   virtual ~MRFSamplerRandomMAP()
   {
-    if (energy != NULL)
-      free(energy);
-    if (repartitionFunction != NULL)
-      free(repartitionFunction);
+    if (m_Energy != NULL)
+      free(m_Energy);
+    if (m_RepartitionFunction != NULL)
+      free(m_RepartitionFunction);
   }
 
 private:
-  double * repartitionFunction;
-  double * energy;
-  bool energiesInvalid;
+  double * m_RepartitionFunction;
+  double * m_Energy;
+  bool m_EnergiesInvalid;
   RandomGeneratorType::Pointer m_Generator;
 };
 }

@@ -40,19 +40,21 @@ class ITK_EXPORT MRFSampler : public itk::Object
 {
 public:
 
-  typedef MRFSampler Self;
-  typedef itk::Object Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
+  typedef MRFSampler                     Self;
+  typedef itk::Object                    Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
-  typedef itk::ConstNeighborhoodIterator< TInput1 >  InputImageNeighborhoodIterator;
-  typedef typename TInput1::PixelType InputImagePixelType;
+  typedef itk::ConstNeighborhoodIterator
+                     < TInput1 >         InputImageNeighborhoodIterator;
+  typedef typename TInput1::PixelType    InputImagePixelType;
 
-  typedef itk::NeighborhoodIterator< TInput2 >  LabelledImageNeighborhoodIterator;
-  typedef typename TInput2::PixelType LabelledImagePixelType;
+  typedef itk::NeighborhoodIterator
+                     < TInput2 >         LabelledImageNeighborhoodIterator;
+  typedef typename TInput2::PixelType    LabelledImagePixelType;
 
-  typedef MRFEnergy<TInput1, TInput2>  EnergyFidelityType;
-  typedef MRFEnergy<TInput2, TInput2>  EnergyRegularizationType;
+  typedef MRFEnergy<TInput1, TInput2>    EnergyFidelityType;
+  typedef MRFEnergy<TInput2, TInput2>    EnergyRegularizationType;
 
   typedef typename EnergyFidelityType::Pointer EnergyFidelityPointer;
   typedef typename EnergyRegularizationType::Pointer EnergyRegularizationPointer;
@@ -94,16 +96,16 @@ protected:
 
 protected:
   // The constructor and destructor.
-  MRFSampler()
+  MRFSampler():
+    m_NumberOfClasses(1),
+    m_EnergyBefore(1.0),
+    m_EnergyAfter(1.0),
+    m_DeltaEnergy(1.0),
+    m_EnergyCurrent(1.0),
+    m_Lambda(1.0)
   {
     m_EnergyRegularization = EnergyRegularizationType::New();
-    m_EnergyFidelity =  EnergyFidelityType::New(),
-                        m_NumberOfClasses =1;
-    m_EnergyBefore = 1.;
-    m_EnergyAfter = 1.;
-    m_DeltaEnergy = 1.;
-    m_EnergyCurrent = 1.;
-    m_Lambda = 1.;
+    m_EnergyFidelity =  EnergyFidelityType::New();
   };
   virtual ~MRFSampler() {};
 

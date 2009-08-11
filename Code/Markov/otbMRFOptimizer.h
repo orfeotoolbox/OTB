@@ -29,9 +29,9 @@ namespace otb
  * \brief This is the base class for optimizer used in the MRF framework.
  *
  * Derived class must reimplement Compute() method.
-   *
-   * This class is meant to be used in the MRF framework with the otb::MarkovRandomFieldFilter
-   *
+ *
+ * This class is meant to be used in the MRF framework with the otb::MarkovRandomFieldFilter
+ *
  * \ingroup Markov
  */
 
@@ -67,10 +67,10 @@ public:
   virtual bool Compute(double deltaEnergy) = 0;
 
 protected:
-  MRFOptimizer()
-  {
-    m_Parameters=1;
-  }
+  MRFOptimizer() :
+    m_NumberOfParameters(1),
+    m_Parameters(1)
+  {}
   virtual ~MRFOptimizer() {}
   unsigned int m_NumberOfParameters;
   ParametersType m_Parameters;
