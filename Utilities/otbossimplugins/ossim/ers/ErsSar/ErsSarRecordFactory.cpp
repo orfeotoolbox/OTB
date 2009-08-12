@@ -1,5 +1,8 @@
 #include "ers/ErsSar/ErsSarRecordFactory.h"
 
+namespace ossimplugins
+{
+
 ErsSarRecordFactory::ErsSarRecordFactory()
 {
 }
@@ -24,4 +27,5 @@ ErsSarRecord* ErsSarRecordFactory::Instanciate(int id)
 void ErsSarRecordFactory::RegisterRecord(int id, ErsSarRecord * record)
 {
 	_availableRecords[id] = record;
+}
 }

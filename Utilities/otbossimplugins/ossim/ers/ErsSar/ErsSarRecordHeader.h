@@ -4,6 +4,9 @@
 #include<iostream>
 #include<cstring>
 
+namespace ossimplugins
+{
+
 /**
  * @ingroup ErsSar
  * @brief This class is able to read a record header
@@ -125,5 +128,6 @@ private:
 
 
 };
+}
 
 #endif

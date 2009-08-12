@@ -4,6 +4,11 @@
 
 #include "ers/ErsSar/ErsSarRecordFactory.h"
 #include <map>
+
+
+namespace ossimplugins
+{
+
 /**
  * @ingroup ErsSarLeaderFile
  * @brief This class is a facory able to construct Record base classes
@@ -29,5 +34,6 @@ protected:
 
 private:
 };
+}
 
 #endif

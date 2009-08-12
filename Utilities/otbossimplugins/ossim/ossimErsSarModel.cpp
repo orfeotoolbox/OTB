@@ -18,7 +18,10 @@
 #include <otb/CivilDateTime.h>
 
 #include <ossim/base/ossimTrace.h>
-#include "ers/ErsSar/ErsSarLeader/ErsSarLeader.h"
+#include <otb/RefPoint.h>
+#include <ers/ErsSar/ErsSarLeader/ErsSarLeader.h>
+#include <otb/SensorParams.h>
+#include <otb/PlatformPosition.h>
 #include <ossim/base/ossimKeywordNames.h>
 
 
@@ -46,7 +49,7 @@ ossimErsSarModel::~ossimErsSarModel()
 
 ossimObject* ossimErsSarModel::dup() const
 {
-   return new ossimErsSarModel(*this);   
+   return new ossimErsSarModel(*this);
 }
 
 double ossimErsSarModel::getSlantRangeFromGeoreferenced(double col) const
@@ -130,9 +133,9 @@ bool ossimErsSarModel::open(const ossimFilename& file)
          << MODULE << " entered...\n"
          << "file: " << file << "\n";
   }
-   
+
   bool result = false;
-  
+
  /*
   * Creation of the class allowing to store Leader file metadata
   */
@@ -147,7 +150,7 @@ bool ossimErsSarModel::open(const ossimFilename& file)
   if ( file.exists() )
   {
     result = isErsLeader(file);
-     
+
     if (result == true)
     {
       if (traceDebug())
@@ -166,22 +169,22 @@ bool ossimErsSarModel::open(const ossimFilename& file)
       {
         ossimNotify(ossimNotifyLevel_DEBUG)
         << "End reading Leader file" << std::endl;
-      }      
+      }
     } // matches: if ( result=isErsLeader(file) == True )
-    
+
   } // matches: if ( file.exists() )
 
   if (traceDebug())
   {
     this->print(ossimNotify(ossimNotifyLevel_DEBUG));
-          
+
     ossimNotify(ossimNotifyLevel_DEBUG)
        << MODULE << " exit status = " << (result?"true":"false\n")
        << std::endl;
   }
-  
+
   return result;
-  
+
 }
 
 
@@ -200,15 +203,15 @@ bool ossimErsSarModel::saveState(ossimKeywordlist& kwl,
 	char name[64];
 
 	//kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimErsSarModel", true);
-	
+
   if (_ErsSarleader == NULL)
 	{
 		std::cout << "Error: ErsSarleader is NULL" << std::endl;
 		return false;
 	}
-	
+
 	result = _ErsSarleader->saveState(kwl);
-   
+
   if (traceDebug())
   {
     ossimNotify(ossimNotifyLevel_DEBUG)
@@ -520,7 +523,7 @@ bool ossimErsSarModel::isErsLeader(const ossimFilename& file)
 {
    std::ifstream candidate(file, ios::in | ios::binary);
    char ersFileName[16];
-   
+
    candidate.seekg(48);
    if ( candidate.bad() or candidate.eof() )
    {
@@ -532,7 +535,7 @@ bool ossimErsSarModel::isErsLeader(const ossimFilename& file)
      return false;
    }
    candidate.close();
-   
+
    ossimString ersString(ersFileName);
 
    if ( ( ersString.find("ERS") == 0 )   &&
@@ -545,5 +548,7 @@ bool ossimErsSarModel::isErsLeader(const ossimFilename& file)
    {
      return false;
    }
-   
+
 }
+}
+

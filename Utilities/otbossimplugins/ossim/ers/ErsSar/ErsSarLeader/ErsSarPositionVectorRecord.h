@@ -4,6 +4,10 @@
 #include <iostream>
 #include <cstdlib>
 #include "ers/ErsSar/ErsSarRecord.h"
+
+namespace ossimplugins
+{
+
 /**
  * @ingroup PlatformPositionDataRecord
  * @brief This class is able to read a position vector record
@@ -72,5 +76,5 @@ private:
 
 
 };
-
+}
 #endif

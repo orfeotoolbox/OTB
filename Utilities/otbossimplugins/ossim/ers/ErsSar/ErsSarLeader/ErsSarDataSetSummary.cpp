@@ -1,5 +1,8 @@
 #include "ers/ErsSar/ErsSarLeader/ErsSarDataSetSummary.h"
 
+namespace ossimplugins
+{
+
 ErsSarDataSetSummary::ErsSarDataSetSummary() : ErsSarRecord("dataset_sum_rec")
 {
 }
@@ -757,4 +760,5 @@ ErsSarDataSetSummary& ErsSarDataSetSummary::operator=(const ErsSarDataSetSummary
 
 
 	return *this;
+}
 }

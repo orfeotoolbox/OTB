@@ -6,6 +6,12 @@
 #include "ers/ErsSar/ErsSarRecord.h"
 
 #include <map>
+
+
+namespace ossimplugins
+{
+
+
 /**
  * @ingroup ErsSar
  * @brief This class is a facory able to construct Record base classes given the id of the record wanted
@@ -46,5 +52,6 @@ protected:
 
 private:
 };
+}
 
 #endif

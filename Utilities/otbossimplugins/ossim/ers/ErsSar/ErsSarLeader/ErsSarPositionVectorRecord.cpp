@@ -1,6 +1,9 @@
 #include "ers/ErsSar/ErsSarLeader/ErsSarPositionVectorRecord.h"
 
 
+namespace ossimplugins
+{
+
 ErsSarPositionVectorRecord::ErsSarPositionVectorRecord()
 {
 }
@@ -67,4 +70,5 @@ ErsSarPositionVectorRecord& ErsSarPositionVectorRecord::operator=(const ErsSarPo
 		_vel[i] = rhs._vel[i];
 	}
 	return *this;
+}
 }

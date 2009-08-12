@@ -6,6 +6,9 @@
 #include "ers/ErsSar/ErsSarLeader/ErsSarPlatformPositionData.h"
 #include "ers/ErsSar/ErsSarLeader/ErsSarFacilityData.h"
 
+namespace ossimplugins
+{
+
 ErsSarLeaderFactory::ErsSarLeaderFactory()
 {
 	RegisterRecord(5, new ErsSarFacilityData());
@@ -18,4 +21,5 @@ ErsSarLeaderFactory::ErsSarLeaderFactory()
 ErsSarLeaderFactory::~ErsSarLeaderFactory()
 {
 
+}
 }

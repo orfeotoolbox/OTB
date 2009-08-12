@@ -5,6 +5,10 @@
 #include <cstdlib>
 #include "ers/ErsSar/ErsSarRecordHeader.h"
 #include "ers/ErsSar/ErsSarRecord.h"
+
+namespace ossimplugins
+{
+
 /**
  * @ingroup ErsSarDataSetSummaryRecord
  * @brief This class is able to read the SAR leader data set summary record of the leader file
@@ -1052,5 +1056,6 @@ protected:
 private:
 
 };
+}
 
 #endif

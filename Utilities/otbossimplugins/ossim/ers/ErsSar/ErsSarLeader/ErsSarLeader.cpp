@@ -7,6 +7,9 @@
 #include "ers/ErsSar/ErsSarLeader/ErsSarMapProjectionData.h"
 #include "ers/ErsSar/ErsSarLeader/ErsSarFacilityData.h"
 
+namespace ossimplugins
+{
+
 const int ErsSarLeader::ErsSarFacilityDataID = 5;
 const int ErsSarLeader::ErsSarPlatformPositionDataID = 4;
 const int ErsSarLeader::ErsSarMapProjectionDataID = 3;
@@ -132,7 +135,7 @@ bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
 	{
 	  result = false;
   }
-	
+
 	/*
 	 * Adding metadata necessary to the sensor model in the keywordlist
 	 */
@@ -161,7 +164,7 @@ bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
 	{
 		result = false;
 	}
-	
+
 	ErsSarMapProjectionData *mapprojectiondata = get_ErsSarMapProjectionData();
 	if ( (mapprojectiondata != NULL) && (result == true) )
 	{
@@ -181,7 +184,7 @@ bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
 	{
 		result = false;
 	}
-	
+
 	ErsSarPlatformPositionData *platformposition = get_ErsSarPlatformPositionData();
 	if ( (mapprojectiondata != NULL) && (result == true) )
 	{
@@ -230,8 +233,8 @@ bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
 	{
 		result = false;
 	}
-  
-  /* 
+
+  /*
   if (traceDebug())
   {
     ossimNotify(ossimNotifyLevel_DEBUG)
@@ -265,4 +268,5 @@ ErsSarDataSetSummary * ErsSarLeader::get_ErsSarDataSetSummary() const
 ErsSarFileDescriptor * ErsSarLeader::get_ErsSarFileDescriptor() const
 {
 	return static_cast<ErsSarFileDescriptor*>(_records[ErsSarFileDescriptorID]);
+}
 }

@@ -4,6 +4,10 @@
 
 #include "ers/ErsSar/ErsSarRecordHeader.h"
 #include <iostream>
+
+namespace ossimplugins
+{
+
 /**
  * @ingroup ErsSar
  * @brief This class is the base class of all the record classes
@@ -60,5 +64,6 @@ protected:
 
 private:
 };
+}
 
 #endif

@@ -6,6 +6,11 @@
 #include "ers/ErsSar/ErsSarRecordHeader.h"
 
 #include "ers/ErsSar/ErsSarLeader/ErsSarPositionVectorRecord.h"
+
+
+namespace ossimplugins
+{
+
 /**
  * @ingroup PlatformPositionDataRecord
  * @brief This class is able to read a Platform position data record
@@ -280,4 +285,5 @@ protected:
 
 private:
 };
+}
 #endif

@@ -1,6 +1,9 @@
 #include "ers/ErsSar/ErsSarRecordHeader.h"
 
 
+namespace ossimplugins
+{
+
 ErsSarRecordHeader::ErsSarRecordHeader()
 {
 }
@@ -64,4 +67,5 @@ void ErsSarRecordHeader::SwitchEndian(unsigned int& value)
 	res[3] = buffer[0];
 
 	memcpy(&value,res,4);
+}
 }

@@ -1,5 +1,8 @@
 #include "ers/ErsSar/ErsSarLeader/ErsSarFacilityData.h"
 
+namespace ossimplugins
+{
+
 ErsSarFacilityData::ErsSarFacilityData() : ErsSarRecord("facility_data_rec")
 {
 }
@@ -1148,4 +1151,5 @@ ErsSarFacilityData& ErsSarFacilityData::operator=(const ErsSarFacilityData& rhs)
 	_range_time_origin_ant = rhs._range_time_origin_ant;
 
 	return *this;
+}
 }

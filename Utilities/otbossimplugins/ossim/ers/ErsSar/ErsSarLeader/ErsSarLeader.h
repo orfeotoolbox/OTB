@@ -12,6 +12,9 @@
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
 
+namespace ossimplugins
+{
+
 class ErsSarPlatformPositionData;
 class ErsSarMapProjectionData;
 class ErsSarDataSetSummary;
@@ -62,7 +65,7 @@ public:
 	 * @brief Remove all the previous records from the ErsSarLeader
 	 */
 	void ClearRecords();
-	
+
   /**
    * @brief Method to save object state to a keyword list.
    * @param kwl Keyword list to save to.
@@ -71,7 +74,7 @@ public:
    */
   virtual bool saveState(ossimKeywordlist& kwl,
                          const char* prefix=0) const;
-	
+
 	ErsSarFacilityData * get_ErsSarFacilityData() const;
 	ErsSarPlatformPositionData * get_ErsSarPlatformPositionData() const;
 	ErsSarMapProjectionData * get_ErsSarMapProjectionData() const;
@@ -91,5 +94,6 @@ protected:
 private:
 
 };
+}
 
 #endif

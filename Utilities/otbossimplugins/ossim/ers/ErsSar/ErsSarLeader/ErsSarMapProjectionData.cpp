@@ -1,5 +1,8 @@
 #include "ers/ErsSar/ErsSarLeader/ErsSarMapProjectionData.h"
 
+namespace ossimplugins
+{
+
 ErsSarMapProjectionData::ErsSarMapProjectionData() : ErsSarRecord("map_proj_data_rec")
 {
 }
@@ -191,4 +194,5 @@ ErsSarMapProjectionData& ErsSarMapProjectionData::operator=(const ErsSarMapProje
 	_last_line_first_pixel_lon = rhs._last_line_first_pixel_lon;
 
 	return *this;
+}
 }

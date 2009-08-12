@@ -1,6 +1,9 @@
 #include "ers/ErsSar/ErsSarLeader/ErsSarFileDescriptor.h"
 
 
+namespace ossimplugins
+{
+
 ErsSarFileDescriptor::ErsSarFileDescriptor() : ErsSarRecord("sar_desc_rec")
 {
 }
@@ -319,4 +322,5 @@ ErsSarFileDescriptor& ErsSarFileDescriptor::operator=(const ErsSarFileDescriptor
 	_n_fac_data = rhs._n_fac_data;
 	_l_fac_data = rhs._l_fac_data;
 	return *this;
+}
 }

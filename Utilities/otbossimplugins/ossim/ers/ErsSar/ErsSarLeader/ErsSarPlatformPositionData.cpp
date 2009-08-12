@@ -1,6 +1,9 @@
 #include "ers/ErsSar/ErsSarLeader/ErsSarPlatformPositionData.h"
 
 
+namespace ossimplugins
+{
+
 ErsSarPlatformPositionData::ErsSarPlatformPositionData() : ErsSarRecord("pos_data_rec")
 {
 }
@@ -232,4 +235,5 @@ ErsSarPlatformPositionData& ErsSarPlatformPositionData::operator=(const ErsSarPl
 	}
 
 	return *this;
+}
 }
