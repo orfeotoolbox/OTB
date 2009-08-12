@@ -155,6 +155,17 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
             {
                ossimNotify(ossimNotifyLevel_DEBUG)
                   << "isRadarSat2...\n";
+               ossimString s;
+               if ( rsDoc.getBeamModeMnemonic(xdoc, s) )
+               {
+                  ossimNotify(ossimNotifyLevel_DEBUG)
+                     << "beam_mode_mnemonic: " << s << "\n";
+               }
+               if ( rsDoc.getAcquisitionType(xdoc, s) )
+               {
+                  ossimNotify(ossimNotifyLevel_DEBUG)
+                     << "acquisition_type: " << s << "\n";
+               }
             }
 
             // Set the base class number of lines and samples

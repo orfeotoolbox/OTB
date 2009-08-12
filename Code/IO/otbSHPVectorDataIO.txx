@@ -36,12 +36,12 @@ namespace otb
 {
 template<class TData>
 SHPVectorDataIO<TData>
-::SHPVectorDataIO()
+::SHPVectorDataIO():
+  m_DataSource(NULL),
+  m_Kept(0)
 {
   // OGR factory registration
   OGRRegisterAll();
-  m_DataSource = NULL;
-
 }
 
 template<class TData>
@@ -57,8 +57,6 @@ template<class TData>
 bool
 SHPVectorDataIO<TData>::CanReadFile( const char* filename )
 {
-
-
   OGRDataSource * poDS = OGRSFDriverRegistrar::Open(filename, FALSE);
   if (poDS == NULL)
     {
@@ -556,6 +554,9 @@ SHPVectorDataIO<TData>
     }//end While feature
     otbMsgDevMacro(<<layer->GetFeatureCount()<<" features read, average insertion time "<<chrono.GetMeanTime()<<" s");
   }// end For each layer
+
+  OGRDataSource::DestroyDataSource(m_DataSource);
+  m_DataSource = NULL;
 }
 
 
@@ -578,9 +579,13 @@ SHPVectorDataIO<TData>
   otbPoint[1] = static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getY());
 
   if (DataNodeType::Dimension > 2)
+  {
+    if (PointType::PointDimension != 3)
     {
-    otbPoint[2]=static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getZ());
+      itkGenericExceptionMacro(<<"OTB vector data can't contain the OGR information (2D instead of 2.5D)");
     }
+    otbPoint[2]=static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getZ());
+  }
 
   DataNodePointerType node = DataNodeType::New();
   node->SetPoint(otbPoint);
@@ -615,9 +620,13 @@ SHPVectorDataIO<TData>
     vertex[1] = ogrTmpPoint->getY();
 
     if (DataNodeType::Dimension > 2)
+    {
+      if (LineType::VertexType::PointDimension != 3)
       {
-      vertex[2]= ogrTmpPoint->getZ();
+        itkGenericExceptionMacro(<<"OTB vector data can't contain the OGR information (2D instead of 2.5D)");
       }
+      vertex[2]= ogrTmpPoint->getZ();
+    }
 
     line->AddVertex(vertex);
     }
@@ -657,6 +666,10 @@ SHPVectorDataIO<TData>
 
     if (DataNodeType::Dimension > 2)
     {
+      if (PolygonType::VertexType::PointDimension != 3)
+      {
+        itkGenericExceptionMacro(<<"OTB vector data can't contain the OGR information (2D instead of 2.5D)");
+      }
       vertex[2]= ogrTmpPoint->getZ();
     }
 
@@ -678,6 +691,10 @@ SHPVectorDataIO<TData>
       vertex[1] = ogrTmpPoint->getY();
       if (DataNodeType::Dimension > 2)
       {
+        if (PolygonType::VertexType::PointDimension != 3)
+        {
+          itkGenericExceptionMacro(<<"OTB vector data can't contain the OGR information (2D instead of 2.5D)");
+        }
         vertex[2]= ogrTmpPoint->getZ();
       }
       ring->AddVertex(vertex);
@@ -787,38 +804,17 @@ void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
   OGRGeometryCollection * ogrCollection = NULL;
   // OGRGeometry * ogrCurrentGeometry = NULL;
 
-//   TreeIteratorType it(tree);
-//   it.GoToBegin();
   // Get the input tree root
   InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(tree->GetRoot());
   ProcessNodeWrite(inputRoot, ogrCollection, ogrCurrentLayer, oSRS);
 
-
-//   if (ogrCurrentLayer!=NULL && ogrCollection != NULL && !ogrFeatures.empty())
-//     {
-//     ogrFeatures.back()->SetGeometry(ogrCollection);
-//     delete ogrCollection;
-//     ogrCollection = NULL;
-//     }
-//
-//   if (ogrCurrentLayer!=NULL && ogrFeatures.size()>0)
-//     {
-//     std::vector<OGRFeature*>::iterator fIt = ogrFeatures.begin();
-//
-//     while (fIt!=ogrFeatures.end())
-//       {
-//       if (ogrCurrentLayer->CreateFeature(*fIt) != OGRERR_NONE)
-//         {
-//         itkExceptionMacro(<<"Failed to create ogr feature in file "<<this->m_FileName);
-//         }
-//       OGRFeature::DestroyFeature(*fIt);
-//       ++fIt;
-//       }
-//     }
-//   ogrFeatures.clear();
-
   OGRDataSource::DestroyDataSource( m_DataSource );
   m_DataSource = NULL;
+
+  if (oSRS != NULL)
+  {
+    delete oSRS;
+  }
 
   chrono.Stop();
   std::cout<<"SHPVectorDataIO: file saved in "<<chrono.GetMeanTime()<<" seconds. (" << m_Kept << " elements)"<<std::endl;

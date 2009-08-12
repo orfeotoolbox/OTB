@@ -1417,12 +1417,10 @@ ADD_TEST(ioTvDEMHandler ${IO_TESTS12}
                         ${TEMP}/ioDEMGetHeightAboveMSL.txt
         otbDEMHandlerTest
         ${INPUTDATA}/DEM/srtm_directory
+        ${INPUTDATA}/DEM/egm96.grd
         ${TEMP}/ioDEMGetHeightAboveMSL.txt
-	3.6999 44.08
+        3.6999 44.08
         )
-
-# ---  otb::ImageGeometryHandler ---
-ADD_TEST(ioTuImageGeometryHandlerNew ${IO_TESTS12} otbImageGeometryHandlerNew )
 
 # ---  otb::DEMToImageGenerator ---
 ADD_TEST(ioTuDEMToImageGeneratorNew ${IO_TESTS12} otbDEMToImageGeneratorNew )
@@ -1434,11 +1432,11 @@ ADD_TEST(ioTvDEMToImageGeneratorTest ${IO_TESTS12}
          ${INPUTDATA}/DEM/srtm_directory
          ${TEMP}/ioTvDEMToImageGenerator.tif
         6.5
-        44.5
+        45.5
         500
         500
         0.002
-        0.002
+        -0.002
         )
 
 ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
@@ -1447,13 +1445,13 @@ ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
         otbOssimElevManagerTest
          ${INPUTDATA}/DEM/srtm_directory
          ${TEMP}/ioTvossimElevManagerTest.tif
-	 6.5
-         44.5
-	 0.002
-	 0.002
-	 500
-	 500
-         )
+        6.5
+        45.5
+        0.002
+        -0.002
+        500
+        500
+        )
 
 ADD_TEST(ioTvossimElevManagerTest2 ${IO_TESTS12}
 --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvossimElevManagerTest2.txt
@@ -2026,7 +2024,6 @@ otbDEMHandlerNew.cxx
 otbDEMHandlerTest.cxx
 otbDEMToImageGeneratorNew.cxx
 otbDEMToImageGeneratorTest.cxx
-otbImageGeometryHandlerNew.cxx
 otbOssimElevManagerTest.cxx
 otbOssimElevManagerTest2.cxx
 otbDEMToOrthoImageGeneratorNew.cxx
