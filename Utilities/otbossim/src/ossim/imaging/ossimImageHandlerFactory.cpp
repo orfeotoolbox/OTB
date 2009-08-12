@@ -25,7 +25,7 @@
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/imaging/ossimJpegTileSource.h>
 #include <ossim/imaging/ossimRadarSatTileSource.h>
-#include <ossim/imaging/ossimRadarSat2TileSource.h>
+// #include <ossim/imaging/ossimRadarSat2TileSource.h>
 #include <ossim/imaging/ossimTerraSarTileSource.h>
 
 static const ossimTrace traceDebug("ossimImageHandlerFactory:debug");
@@ -54,9 +54,9 @@ ossimImageHandlerFactory* ossimImageHandlerFactory::instance()
 
 ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)const
 {
-   
+
    ossimFilename copyFilename = fileName;
-   
+
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -77,7 +77,7 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    // if we have any imagehandlers that require an encoded string and is contrlled in this factory then
    // we need to move this.
    if(!copyFilename.exists()) return 0;
-   
+
    if(copyFilename.ext() == "gz")
    {
       copyFilename = copyFilename.setExtension("");
@@ -93,7 +93,7 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
       return result;
    }
    delete result;
-   
+
 
    // test if TileMap
    if(traceDebug())
@@ -124,18 +124,18 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    delete result;
 
     // test if Radarsat2
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "Radarsat2"
-         << std::endl;
-   }
-   result = new ossimRadarSat2TileSource;
-   if(result->open(copyFilename))
-   {
-      return result;
-   }
-   delete result;
+//    if(traceDebug())
+//    {
+//       ossimNotify(ossimNotifyLevel_DEBUG)
+//          << "Radarsat2"
+//          << std::endl;
+//    }
+//    result = new ossimRadarSat2TileSource;
+//    if(result->open(copyFilename))
+//    {
+//       return result;
+//    }
+//    delete result;
 
       // test if TerraSAR
    if(traceDebug())
@@ -325,16 +325,16 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
       ossimNotify(ossimNotifyLevel_DEBUG)
       << "trying adrg" << std::endl;
    }
-   
+
    // test if ADRG
    result  = new ossimAdrgTileSource();
-   
+
    if(result->open(copyFilename))
    {
       return result;
    }
    delete result;
-   
+
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -346,7 +346,7 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    {
       return result;
    }
-   
+
    delete result;
    if(traceDebug())
    {
@@ -499,19 +499,19 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    delete result;
 
   // RadarSat2
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying RadarSat2"
-         << std::endl;
-   }
-   result = new ossimRadarSat2TileSource;
-   if(result->loadState(kwl, prefix))
-   {
-      return result;
-   }
-
-   delete result;
+//    if(traceDebug())
+//    {
+//       ossimNotify(ossimNotifyLevel_DEBUG)
+//          << "trying RadarSat2"
+//          << std::endl;
+//    }
+//    result = new ossimRadarSat2TileSource;
+//    if(result->loadState(kwl, prefix))
+//    {
+//       return result;
+//    }
+//
+//    delete result;
 
       // TerraSAR
    if(traceDebug())
@@ -540,9 +540,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    {
       return result;
    }
-   
+
    delete result;
-   
+
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -705,7 +705,7 @@ ossimObject* ossimImageHandlerFactory::createObject(const ossimString& typeName)
 void ossimImageHandlerFactory::getSupportedExtensions(ossimImageHandlerFactoryBase::UniqueStringList& extensionList)const
 {
    extensionList.push_back("img");
-   extensionList.push_back("ccf"); 
+   extensionList.push_back("ccf");
    extensionList.push_back("toc");
    extensionList.push_back("tif");
    extensionList.push_back("tiff");
