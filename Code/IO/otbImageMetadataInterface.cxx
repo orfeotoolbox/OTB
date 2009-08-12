@@ -904,9 +904,8 @@ ImageMetadataInterface::GetQuickbirdPhysicalGain( const MetaDataDictionaryType &
     }
   }
 
-    //Value computed from
-  // http://www.geoeye.com/CorpSite/assets/docs/technical-papers/2009/IKONOS_Esun_Calculations.pdf
-  // to get the equivalent of the SPOT alpha
+  //Value computed from
+  // http://groups.google.com/group/otb-users/browse_thread/thread/bdd88b418c5076f4?pli=1
   VariableLengthVectorType gain;
   gain.SetSize(5);
   if (isPost20030606)
