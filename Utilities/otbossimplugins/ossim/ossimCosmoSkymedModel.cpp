@@ -379,7 +379,7 @@ bool ossimCosmoSkymedModel::UtcDateTimeStringToCivilDate(const std::string &utcS
 	outputDate.set_year(atoi(year_str));
 	outputDate.set_month(atoi(month_str));
 	outputDate.set_day(atoi(day_str));
-	outputDate.set_second(0);
+	outputDate.set_second(0.0);
 	outputDate.set_decimal(0.0);
 
 	return true ;

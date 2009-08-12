@@ -41,8 +41,10 @@ int otbFlexibleDistanceWithMissingValue( int argc, char * argv[] )
   y.Fill( 2. );
 
   DistanceType::Pointer dist = DistanceType::New();
+  double distanceValue = dist->Evaluate( x, y );
+  std::cout << "Distance: " << distanceValue << std::endl;
 
-  if ( dist->Evaluate( x, y ) == 3. )
+  if ( distanceValue == 3. )
     return EXIT_SUCCESS;
   else
     return EXIT_FAILURE;
