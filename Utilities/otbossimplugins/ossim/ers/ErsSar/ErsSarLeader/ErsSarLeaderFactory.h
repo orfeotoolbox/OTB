@@ -1,3 +1,14 @@
+//----------------------------------------------------------------------------
+//
+// "Copyright Centre National d'Etudes Spatiales"
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
+//
+//----------------------------------------------------------------------------
+// $Id$
+
 #ifndef ErsSarLeaderFactory_h
 #define ErsSarLeaderFactory_h
 
@@ -12,9 +23,7 @@ namespace ossimplugins
 /**
  * @ingroup ErsSarLeaderFile
  * @brief This class is a facory able to construct Record base classes
- * @author Magellium, Pacome Dentraygues
- * @version 1.0
- * @date 23-11-07
+ *
  */
 class ErsSarLeaderFactory : public ErsSarRecordFactory
 {

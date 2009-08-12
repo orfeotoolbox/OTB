@@ -1,3 +1,14 @@
+//----------------------------------------------------------------------------
+//
+// "Copyright Centre National d'Etudes Spatiales"
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
+//
+//----------------------------------------------------------------------------
+// $Id$
+
 #ifndef ErsSarPlatformPositionData_h
 #define ErsSarPlatformPositionData_h
 
@@ -14,9 +25,7 @@ namespace ossimplugins
 /**
  * @ingroup PlatformPositionDataRecord
  * @brief This class is able to read a Platform position data record
- * @author Magellium, Pacome Dentraygues
- * @version 1.0
- * @date 02-12-07
+ *
  */
 class ErsSarPlatformPositionData : public ErsSarRecord
 {

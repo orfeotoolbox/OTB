@@ -1,3 +1,14 @@
+//----------------------------------------------------------------------------
+//
+// "Copyright Centre National d'Etudes Spatiales"
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
+//
+//----------------------------------------------------------------------------
+// $Id$
+
 #ifndef ErsSarFacilityData_h
 #define ErsSarFacilityData_h
 
@@ -12,9 +23,7 @@ namespace ossimplugins
 /**
  * @ingroup ErsSarFacilityDataRecord
  * @brief This class is able to read the SAR leader data set summary record of the leader file
- * @author Magellium, Pacome Dentraygues
- * @version 1.0
- * @date 23-11-07
+ *
  */
 class ErsSarFacilityData : public ErsSarRecord
 {

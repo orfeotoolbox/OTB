@@ -1,3 +1,14 @@
+//----------------------------------------------------------------------------
+//
+// "Copyright Centre National d'Etudes Spatiales"
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
+//
+//----------------------------------------------------------------------------
+// $Id$
+
 #include "ers/ErsSar/ErsSarRecord.h"
 #include <memory.h>
 

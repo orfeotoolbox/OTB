@@ -1,3 +1,14 @@
+//----------------------------------------------------------------------------
+//
+// "Copyright Centre National d'Etudes Spatiales"
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
+//
+//----------------------------------------------------------------------------
+// $Id$
+
 #ifndef ErsSarLeader_h
 #define ErsSarLeader_h
 
@@ -24,9 +35,7 @@ class ErsSarFacilityData;
 /**
  * @ingroup ErsSarLeaderFile
  * @brief This class is able to read the Leader file of the ErsSar file structure
- * @author Magellium, Pacome Dentraygues
- * @version 1.0
- * @date 23-11-07
+ *
  */
 class ErsSarLeader
 {

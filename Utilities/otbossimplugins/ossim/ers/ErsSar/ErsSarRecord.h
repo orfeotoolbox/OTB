@@ -1,3 +1,14 @@
+//----------------------------------------------------------------------------
+//
+// "Copyright Centre National d'Etudes Spatiales"
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
+//
+//----------------------------------------------------------------------------
+// $Id$
+
 #ifndef ErsSarRecord_h
 #define ErsSarRecord_h
 
@@ -11,9 +22,7 @@ namespace ossimplugins
 /**
  * @ingroup ErsSar
  * @brief This class is the base class of all the record classes
- * @author Magellium, Pacome Dentraygues
- * @version 1.0
- * @date 23-11-07
+ *
  */
 class ErsSarRecord
 {

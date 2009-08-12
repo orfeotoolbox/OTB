@@ -32,9 +32,7 @@ class RefPoint;
 class ErsSarLeader;
 /**
  * @brief This class is able to direct localisation and indirect localisation using the ErsSar sensor model
- * @author Magellium, Pacome Dentraygues
- * @version 1.0
- * @date 04-01-08
+ *
  */
 class ossimErsSarModel : public ossimGeometricSarSensorModel
 {

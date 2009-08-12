@@ -1,3 +1,14 @@
+//----------------------------------------------------------------------------
+//
+// "Copyright Centre National d'Etudes Spatiales"
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
+//
+//----------------------------------------------------------------------------
+// $Id$
+
 #ifndef ErsSarRecordHeader_h
 #define ErsSarRecordHeader_h
 
@@ -10,9 +21,7 @@ namespace ossimplugins
 /**
  * @ingroup ErsSar
  * @brief This class is able to read a record header
- * @author Magellium, Pacome Dentraygues
- * @version 1.0
- * @date 23-11-07
+ *
  */
 class ErsSarRecordHeader
 {
