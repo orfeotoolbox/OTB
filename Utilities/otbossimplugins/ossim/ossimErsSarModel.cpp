@@ -17,14 +17,14 @@
 #include <otb/GMSTDateTime.h>
 #include <otb/CivilDateTime.h>
 
-#include <otb/PlatformPosition.h>
-#include <otb/SensorParams.h>
-#include <otb/RefPoint.h>
-#include <otb/SarSensor.h>
-#include <ossim/base/ossimString.h>
+#include <ossim/base/ossimTrace.h>
+#include "ers/ErsSar/ErsSarLeader/ErsSarLeader.h"
+#include <ossim/base/ossimKeywordNames.h>
 
-#include <cmath>
-#include <cctype> // for toupper
+
+// Static trace for debugging
+static ossimTrace traceDebug("ossimErsSarModel:debug");
+
 #include <string>
 #include <algorithm>
 
@@ -42,6 +42,11 @@ ossimErsSarModel::ossimErsSarModel():
 
 ossimErsSarModel::~ossimErsSarModel()
 {
+}
+
+ossimObject* ossimErsSarModel::dup() const
+{
+   return new ossimErsSarModel(*this);   
 }
 
 double ossimErsSarModel::getSlantRangeFromGeoreferenced(double col) const
@@ -114,6 +119,106 @@ bool ossimErsSarModel::InitSensorParams(const ossimKeywordlist &kwl, const char 
 
 	return true;
 }
+
+bool ossimErsSarModel::open(const ossimFilename& file)
+{
+  static const char MODULE[] = "ossimErsSarModel::open";
+
+  if (traceDebug())
+  {
+    ossimNotify(ossimNotifyLevel_DEBUG)
+         << MODULE << " entered...\n"
+         << "file: " << file << "\n";
+  }
+   
+  bool result = false;
+  
+ /*
+  * Creation of the class allowing to store Leader file metadata
+  */
+	if(_ErsSarleader != NULL)
+	{
+		delete _ErsSarleader;
+		_ErsSarleader = NULL;
+	}
+
+	_ErsSarleader = new ErsSarLeader();
+
+  if ( file.exists() )
+  {
+    result = isErsLeader(file);
+     
+    if (result == true)
+    {
+      if (traceDebug())
+      {
+        ossimNotify(ossimNotifyLevel_DEBUG) << "is ERS leader file..."
+                            << "Begin reading Leader file" << std::endl;
+      }
+      /*
+       * Leader file data reading
+       */
+      std::ifstream leaderFile(file, ios::in|ios::binary);
+      leaderFile>>*_ErsSarleader;
+      leaderFile.close();
+
+      if(traceDebug())
+      {
+        ossimNotify(ossimNotifyLevel_DEBUG)
+        << "End reading Leader file" << std::endl;
+      }      
+    } // matches: if ( result=isErsLeader(file) == True )
+    
+  } // matches: if ( file.exists() )
+
+  if (traceDebug())
+  {
+    this->print(ossimNotify(ossimNotifyLevel_DEBUG));
+          
+    ossimNotify(ossimNotifyLevel_DEBUG)
+       << MODULE << " exit status = " << (result?"true":"false\n")
+       << std::endl;
+  }
+  
+  return result;
+  
+}
+
+
+bool ossimErsSarModel::saveState(ossimKeywordlist& kwl,
+                                   const char* prefix) const
+{
+   static const char MODULE[] = "ossimErsSarModel::saveState";
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
+   }
+
+  bool result;
+
+	char name[64];
+
+	//kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimErsSarModel", true);
+	
+  if (_ErsSarleader == NULL)
+	{
+		std::cout << "Error: ErsSarleader is NULL" << std::endl;
+		return false;
+	}
+	
+	result = _ErsSarleader->saveState(kwl);
+   
+  if (traceDebug())
+  {
+    ossimNotify(ossimNotifyLevel_DEBUG)
+       << MODULE << " exit status = " << (result?"true":"false\n")
+       << std::endl;
+  }
+
+  return result;
+}
+
 
 bool ossimErsSarModel::InitPlatformPosition(const ossimKeywordlist &kwl, const char *prefix)
 {
@@ -410,4 +515,35 @@ bool ossimErsSarModel::InitSRGR(const ossimKeywordlist &kwl, const char *prefix)
 
 	return true;
 }
+
+bool ossimErsSarModel::isErsLeader(const ossimFilename& file)
+{
+   std::ifstream candidate(file, ios::in | ios::binary);
+   char ersFileName[16];
+   
+   candidate.seekg(48);
+   if ( candidate.bad() or candidate.eof() )
+   {
+     return false;
+   }
+   candidate.read(ersFileName, 16);
+   if ( candidate.bad() or candidate.eof() )
+   {
+     return false;
+   }
+   candidate.close();
+   
+   ossimString ersString(ersFileName);
+
+   if ( ( ersString.find("ERS") == 0 )   &&
+        ( ersString.find(".SAR.") == 4 ) &&
+        ( ersString.find("LEAD") == 12 )    )
+   {
+     return true;
+   }
+   else
+   {
+     return false;
+   }
+   
 }
