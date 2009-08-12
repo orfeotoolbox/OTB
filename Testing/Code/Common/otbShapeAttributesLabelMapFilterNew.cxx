@@ -15,10 +15,12 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbShapeAttributesLabelMapFilter.h"
-#include "itkLabelMap.h"
-#include "otbAttributesMapLabelObject.h"
 
+//#include "itkLabelMap.h"
+#include "otbAttributesMapLabelObject.h"
+//#include "itkLabelMap.h"
+#include "otbShapeAttributesLabelMapFilter.h"
+// #include "itkLabelMap.h"
 int otbShapeAttributesLabelMapFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;

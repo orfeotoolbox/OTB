@@ -29,9 +29,10 @@ void RegisterTests()
   REGISTER_TEST(otbAttributesMapLabelObjectNew);
   REGISTER_TEST(otbLabelObjectToPolygonFunctorNew);
   REGISTER_TEST(otbRadiometricAttributesLabelMapFilterNew);
-//   REGISTER_TEST(otbShapeAttributesLabelMapFilterNew);
+  REGISTER_TEST(otbShapeAttributesLabelMapFilterNew);
   REGISTER_TEST(otbStatisticsAttributesLabelMapFilterNew);
   REGISTER_TEST(otbAttributesMapOpeningLabelMapFilterNew);
   REGISTER_TEST(otbLabelMapToVectorDataFilterNew);
+  REGISTER_TEST(otbLabelMapSourceNew);
 
 }

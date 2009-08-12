@@ -30,8 +30,9 @@
 #include "vnl/algo/vnl_symmetric_eigensystem.h"
 
 #include "otbMacro.h"
+#include <deque>
 
-
+// #include "itkObjectFactory.h"
 namespace otb {
 
 template <class TImage, class TLabelImage>

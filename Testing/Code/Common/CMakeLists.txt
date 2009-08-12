@@ -581,6 +581,11 @@ ADD_TEST(coTuVectorData ${COMMON_TESTS7}
      otbVectorDataNew
 )
 
+ADD_TEST(coTuVectorDataSource ${COMMON_TESTS7}
+     otbVectorDataSourceNew
+)
+
+
 ADD_TEST(coTvVectorData ${COMMON_TESTS7}
       --compare-ascii ${EPSILON_3}
             ${BASELINE_FILES}/coTvVectorData.txt
@@ -849,9 +854,9 @@ ADD_TEST(coTuRadiometricAttributesLabelMapFilterNew ${COMMON_TESTS11}
 otbRadiometricAttributesLabelMapFilterNew
 )
 
-# ADD_TEST(coTuShapeAttributesLabelMapFilterNew ${COMMON_TESTS11}
-# otbShapeAttributesLabelMapFilterNew
-# )
+ ADD_TEST(coTuShapeAttributesLabelMapFilterNew ${COMMON_TESTS11}
+ otbShapeAttributesLabelMapFilterNew
+ )
 
 ADD_TEST(coTuStatisticsAttributesLabelMapFilterNew ${COMMON_TESTS11}
 otbStatisticsAttributesLabelMapFilterNew
@@ -865,6 +870,9 @@ ADD_TEST(coTuLabelMapToVectorDataFilterNew ${COMMON_TESTS11}
 otbLabelMapToVectorDataFilterNew
 )
 
+ADD_TEST(coTuLabelMapSourceNew ${COMMON_TESTS11}
+otbLabelMapSourceNew
+)
 
 
 # -------       Fichiers sources CXX -----------------------------------
@@ -949,6 +957,7 @@ otbMirrorBoundaryConditionTest.cxx
 otbStandardFilterWatcherNew.cxx
 otbDataNodeTest.cxx
 otbVectorDataNew.cxx
+otbVectorDataSourceNew.cxx
 otbVectorData.cxx
 otbShiftScaleImageAdaptorNew.cxx
 otbShiftScaleImageAdaptor.cxx
@@ -999,10 +1008,11 @@ SET(BasicCommon_SRCS11
 otbAttributesMapLabelObjectNew.cxx
 otbLabelObjectToPolygonFunctorNew.cxx
 otbRadiometricAttributesLabelMapFilterNew.cxx
-#otbShapeAttributesLabelMapFilterNew.cxx
+otbShapeAttributesLabelMapFilterNew.cxx
 otbStatisticsAttributesLabelMapFilterNew.cxx
 otbAttributesMapOpeningLabelMapFilterNew.cxx
 otbLabelMapToVectorDataFilterNew.cxx
+otbLabelMapSourceNew.cxx
 )
 
 
