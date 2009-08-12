@@ -107,8 +107,16 @@ public:
    bool getSensor(const ossimXmlDocument* xdoc,
                   ossimString& s) const;
 
+   /** /product/sourceAttributes/beamModeMnemonic */
+   bool getBeamModeMnemonic(const ossimXmlDocument* xdoc,
+                            ossimString& s) const;
+
    bool getImageId(const ossimXmlDocument* xdoc,
                      ossimString& s) const;
+
+   /** /product/sourceAttributes/radarParameters/acquisitionType */
+   bool getAcquisitionType(const ossimXmlDocument* xdoc,
+                           ossimString& s) const;
 
    bool getRadarCenterFrequency(const ossimXmlDocument* xdoc,
                                 ossimString& s) const;
