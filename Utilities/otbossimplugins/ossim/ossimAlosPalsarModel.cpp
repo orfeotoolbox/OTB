@@ -20,7 +20,7 @@
 
 #include <ossim/base/ossimTrace.h>
 #include <otb/RefPoint.h>
-#include <ers/AlosPalsar/AlosPalsarLeader/AlosPalsarLeader.h>
+#include <AlosPalsar/AlosSarLeader.h>
 #include <otb/SensorParams.h>
 #include <otb/PlatformPosition.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -41,7 +41,7 @@ RTTI_DEF1(ossimAlosPalsarModel, "ossimAlosPalsarModel", ossimGeometricSarSensorM
 ossimAlosPalsarModel::ossimAlosPalsarModel():
   theNumberSRGR(0),
   thePixelSpacing(0),
-  theAlosPalsarleader(NULL)
+  theAlosSarLeader(NULL)
 {
   theSRGRCoeffset[0][0]=0.0;
   theSRGRCoeffset[0][1]=0.0;
@@ -150,13 +150,13 @@ bool ossimAlosPalsarModel::open(const ossimFilename& file)
  /*
   * Creation of the class allowing to store Leader file metadata
   */
-  if(theAlosPalsarleader != NULL)
+  if(theAlosSarLeader != NULL)
   {
-    delete theAlosPalsarleader;
-    theAlosPalsarleader = NULL;
+    delete theAlosSarLeader;
+    theAlosSarLeader = NULL;
   }
 
-  theAlosPalsarleader = new AlosPalsarLeader();
+  theAlosSarLeader = new AlosSarLeader();
 
   if ( leaFilename.exists() )
   {
@@ -178,7 +178,7 @@ bool ossimAlosPalsarModel::open(const ossimFilename& file)
        * Leader file data reading
        */
       std::ifstream leaderFile(leaFilename, ios::in|ios::binary);
-      leaderFile>>*theAlosPalsarleader;
+      leaderFile>>*theAlosSarLeader;
       leaderFile.close();
 
       if(traceDebug())
@@ -220,13 +220,13 @@ bool ossimAlosPalsarModel::saveState(ossimKeywordlist& kwl,
 
   //kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimAlosPalsarModel", true);
 
-  if (theAlosPalsarleader == NULL)
+  if (theAlosSarLeader == NULL)
   {
-    std::cout << "Error: AlosPalsarleader is NULL" << std::endl;
+    std::cout << "Error: AlosSarLeader is NULL" << std::endl;
     return false;
   }
 
-  result = theAlosPalsarleader->saveState(kwl);
+  result = theAlosSarLeader->saveState(kwl);
 
   if (traceDebug())
   {

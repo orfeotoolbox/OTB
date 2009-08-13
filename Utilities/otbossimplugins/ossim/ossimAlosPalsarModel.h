@@ -30,7 +30,7 @@ namespace ossimplugins
 class PlatformPosition;
 class SensorParams;
 class RefPoint;
-class AlosPalsarLeader;
+class AlosSarLeader;
 /**
  * @brief This class is able to direct localisation and indirect localisation using the AlosPalsar sensor model
  *
@@ -114,7 +114,7 @@ private:
   /**
    * @brief List of metadata contained in the Leader file
    */
-  AlosPalsarLeader *theAlosPalsarleader;
+  AlosSarLeader *theAlosSarLeader;
 
 
 
