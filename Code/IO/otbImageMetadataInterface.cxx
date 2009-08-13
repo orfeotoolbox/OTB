@@ -906,46 +906,124 @@ ImageMetadataInterface::GetQuickbirdPhysicalGain( const MetaDataDictionaryType &
 
   //Value computed from
   // http://groups.google.com/group/otb-users/browse_thread/thread/bdd88b418c5076f4?pli=1
-  VariableLengthVectorType gain;
-  gain.SetSize(5);
-  if (isPost20030606)
+  ossimString keywordStringBitsPerPixel = kwl.find("support_data.bits_per_pixel");
+  int bitsPerPixel = keywordStringBitsPerPixel.toInt();
+  if (bitsPerPixel != 16 && bitsPerPixel != 8)
   {
-    gain[0] = 1. / 0.16200;//Pan
-    gain[1] = 1. / 0.23590;//Blue
-    gain[2] = 1. / 0.14530;//Green
-    gain[3] = 1. / 0.17850;//Red
-    gain[4] = 1. / 0.13530;//NIR
+    itkExceptionMacro(<<"Invalid bitsPerPixel "<<bitsPerPixel);
   }
-  else
+
+  ossimString keywordStringTDILevel = kwl.find("support_data.TDI_level");
+  int TDILevel = keywordStringTDILevel.toInt();
+  if (TDILevel != 10 && TDILevel != 13 && TDILevel != 18 && TDILevel != 24 && TDILevel != 32)
   {
-    gain[0] = 1;//Pan
-    gain[1] = 1;//Blue
-    gain[2] = 1;//Green
-    gain[3] = 1;//Red
-    gain[4] = 1;//NIR
+    itkExceptionMacro(<<"Invalid TDILevel "<<TDILevel);
+  }
+  
+  std::string keyBId= "support_data.band_id";
+  ossimString keywordStringBId = kwl.find(keyBId.c_str());
+  if (keywordStringBId != ossimString("P") && keywordStringBId != ossimString("Multi"))
+  {
+    itkExceptionMacro(<<"Invalid bandID "<<keywordStringBId);
   }
 
   VariableLengthVectorType outputValuesVariableLengthVector;
-
-  std::string keyBId= "support_data.band_id";
-  ossimString keywordStringBId = kwl.find(keyBId.c_str());
-  if (keywordStringBId == ossimString("P") )
-  {
+  if (keywordStringBId != ossimString("P") )
     outputValuesVariableLengthVector.SetSize(1);
-    outputValuesVariableLengthVector[0]=gain[0];
-  }
-  // Multi spectral
-  else if(keywordStringBId == ossimString("Multi") )
+  else
+  	outputValuesVariableLengthVector.SetSize(4);
+  
+  if (!isPost20030606)
   {
-      outputValuesVariableLengthVector.SetSize(4);
-      outputValuesVariableLengthVector[0]=gain[1];
-      outputValuesVariableLengthVector[1]=gain[2];
-      outputValuesVariableLengthVector[2]=gain[3];
-      outputValuesVariableLengthVector[3]=gain[4];
-  }
+  	if(bitsPerPixel==16)
+  	{
+ 	  if (keywordStringBId != ossimString("P"))
+ 	  {
+ 	  	if (TDILevel != 10)
+ 	  		outputValuesVariableLengthVector[0] = 0.08381880;
+ 	  	else if (TDILevel != 13)
+ 	  		outputValuesVariableLengthVector[0] = 0.06447600;
+ 	  	else if (TDILevel != 18)
+ 	  		outputValuesVariableLengthVector[0] = 0.04656600;
+ 	  	else if (TDILevel != 24)
+ 	  		outputValuesVariableLengthVector[0] = 0.03494440;
+ 	  	else if (TDILevel != 32)
+ 	  		outputValuesVariableLengthVector[0] = 0.02618840;
+  	  }
+  	  else
+  	  {
+ 	  	outputValuesVariableLengthVector[0] = 0.01604120;
+   	  	outputValuesVariableLengthVector[1] = 0.01428470;
+ 	  	outputValuesVariableLengthVector[2] = 0.01267350;
+	  	outputValuesVariableLengthVector[3] = 0.01542420;
+ 	  }
+  		
+  	}
+  	else
+  	{
+ 	  if (keywordStringBId != ossimString("P"))
+ 	  {
+ 	  	if (TDILevel != 10)
+ 	  		outputValuesVariableLengthVector[0] = 1.02681367;
+ 	  	else if (TDILevel != 13)
+ 	  		outputValuesVariableLengthVector[0] = 1.02848939;
+ 	  	else if (TDILevel != 18)
+ 	  		outputValuesVariableLengthVector[0] = 1.02794702;
+ 	  	else if (TDILevel != 24)
+ 	  		outputValuesVariableLengthVector[0] = 1.02989685;
+ 	  	else if (TDILevel != 32)
+ 	  		outputValuesVariableLengthVector[0] = 1.02739898;
+
+		ossimString keywordStringAbsCalFactor = kwl.find("support_data.absCalFactor");
+  	  	outputValuesVariableLengthVector[0] *= keywordStringAbsCalFactor.toDouble(); 	  	  	
+  	  }
+  	  else
+  	  {
+  	    ossimString keywordStringAcalFact = kwl.find("support_data.B_band_absCalFactor");
+	    outputValuesVariableLengthVector[0] = 1.12097834 * keywordStringAcalFact.toDouble();
+    	keywordStringAcalFact = ossimString("support_data.G_band_absCalFactor");
+      	outputValuesVariableLengthVector[1] = 1.37652632 * keywordStringAcalFact.toDouble();
+      	keywordStringAcalFact = ossimString("support_data.R_band_absCalFactor");
+     	outputValuesVariableLengthVector[2] = 1.30954587 * keywordStringAcalFact.toDouble();
+     	keywordStringAcalFact = ossimString("support_data.N_band_absCalFactor");
+     	outputValuesVariableLengthVector[3] = 0.98368622 * keywordStringAcalFact.toDouble();
+  	  }  		
+  	}
+
+    
+   }
   else
   {
-     itkExceptionMacro(<<"Invalid bandID "<<keywordStringBId);
+ 	  if (keywordStringBId != ossimString("P"))
+ 	  {
+ 	  	ossimString keywordStringAbsCalFactor = kwl.find("support_data.absCalFactor");
+  	  	outputValuesVariableLengthVector[0] = keywordStringAbsCalFactor.toDouble(); 
+  	  }
+  	  else
+  	  {
+  	    ossimString keywordStringAcalFact = kwl.find("support_data.B_band_absCalFactor");
+	    outputValuesVariableLengthVector[0] = keywordStringAcalFact.toDouble();
+    	keywordStringAcalFact = ossimString("support_data.G_band_absCalFactor");
+      	outputValuesVariableLengthVector[1] = keywordStringAcalFact.toDouble();
+      	keywordStringAcalFact = ossimString("support_data.R_band_absCalFactor");
+     	outputValuesVariableLengthVector[2] = keywordStringAcalFact.toDouble();
+     	keywordStringAcalFact = ossimString("support_data.N_band_absCalFactor");
+     	outputValuesVariableLengthVector[3] = keywordStringAcalFact.toDouble();
+  	  }  		
+  }
+
+
+  if (keywordStringBId == ossimString("P") )
+  {  
+	outputValuesVariableLengthVector[0] = 0.398 / outputValuesVariableLengthVector[0];
+  }
+  // Multi spectral
+  else
+  {
+      outputValuesVariableLengthVector[0] = 0.068 / outputValuesVariableLengthVector[0];
+	  outputValuesVariableLengthVector[1] = 0.099 / outputValuesVariableLengthVector[1];
+      outputValuesVariableLengthVector[2] = 0.071 / outputValuesVariableLengthVector[2];
+      outputValuesVariableLengthVector[3] = 0.114 / outputValuesVariableLengthVector[3];
   }
 
   return outputValuesVariableLengthVector;
