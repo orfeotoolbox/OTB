@@ -103,7 +103,8 @@ private:
 	 */
 	virtual bool InitSRGR(const ossimKeywordlist &kwl, const char *prefix);
 
-	virtual bool isErsLeader(const ossimFilename& file);
+	virtual bool isErsLeader(const ossimFilename& file) const;
+        virtual ossimFilename findErsLeader(const ossimFilename& file) const;
 
 	TYPE_DATA
 

@@ -135,6 +135,7 @@ bool ossimErsSarModel::open(const ossimFilename& file)
   }
 
   bool result = false;
+  ossimFilename leaFilename = file;
 
  /*
   * Creation of the class allowing to store Leader file metadata
@@ -147,9 +148,14 @@ bool ossimErsSarModel::open(const ossimFilename& file)
 
 	_ErsSarleader = new ErsSarLeader();
 
-  if ( file.exists() )
+  if ( leaFilename.exists() )
   {
-    result = isErsLeader(file);
+    result = isErsLeader(leaFilename);
+    if (result == false)
+    {
+      leaFilename = findErsLeader(file);
+    }
+    result = isErsLeader(leaFilename);
 
     if (result == true)
     {
@@ -161,7 +167,7 @@ bool ossimErsSarModel::open(const ossimFilename& file)
       /*
        * Leader file data reading
        */
-      std::ifstream leaderFile(file, ios::in|ios::binary);
+      std::ifstream leaderFile(leaFilename, ios::in|ios::binary);
       leaderFile>>*_ErsSarleader;
       leaderFile.close();
 
@@ -519,7 +525,7 @@ bool ossimErsSarModel::InitSRGR(const ossimKeywordlist &kwl, const char *prefix)
 	return true;
 }
 
-bool ossimErsSarModel::isErsLeader(const ossimFilename& file)
+bool ossimErsSarModel::isErsLeader(const ossimFilename& file) const
 {
    std::ifstream candidate(file, ios::in | ios::binary);
    char ersFileName[16];
@@ -550,5 +556,26 @@ bool ossimErsSarModel::isErsLeader(const ossimFilename& file)
    }
 
 }
+
+ossimFilename ossimErsSarModel::findErsLeader(const ossimFilename& file) const
+{
+  ossimFilename leaFile = file;
+  ossimString datString("DAT_01");
+  ossimString nulString("NUL_DAT");
+  ossimString vdfString("VDF_DAT");
+  ossimString leaString("LEA_01");
+  if ((file.fileNoExtension() == datString)
+    || (file.fileNoExtension() == nulString)
+    || (file.fileNoExtension() == leaString))
+  {
+    leaFile.setFile(leaString);
+    if (leaFile.exists())
+    {
+      return leaFile;
+    }
+  }
+  return file;
+}
+
 }
 
