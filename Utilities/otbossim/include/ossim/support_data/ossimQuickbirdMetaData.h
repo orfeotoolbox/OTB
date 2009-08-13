@@ -114,6 +114,7 @@ private:
    ossimString   theTLCDate;
    ossim_float64 theSunAzimuth;
    ossim_float64 theSunElevation;
+   std::vector<ossim_float64> theAbsCalFactors;
    /*ossim_uint32  theNumBands;*/
    /*ossimString   theBandName;*/
   /*ossim_uint32  theNumBands;*/
