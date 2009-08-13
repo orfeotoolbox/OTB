@@ -213,9 +213,7 @@ bool ossimErsSarModel::saveState(ossimKeywordlist& kwl,
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
    }
 
-  bool result;
-
-  char name[64];
+  bool result(false);
 
   //kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimErsSarModel", true);
 
@@ -621,12 +619,12 @@ bool ossimErsSarModel::isErsLeader(const ossimFilename& file) const
    char ersFileName[16];
 
    candidate.seekg(48);
-   if ( candidate.bad() or candidate.eof() )
+   if ( candidate.bad() || candidate.eof() )
    {
      return false;
    }
    candidate.read(ersFileName, 16);
-   if ( candidate.bad() or candidate.eof() )
+   if ( candidate.bad() || candidate.eof() )
    {
      return false;
    }
