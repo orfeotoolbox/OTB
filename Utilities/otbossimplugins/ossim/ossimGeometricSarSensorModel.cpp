@@ -248,12 +248,12 @@ bool ossimGeometricSarSensorModel::optimizeModel(const std::list<ossimGpt> & gro
    //std::list<ossimDpt>::iterator itEstimatedCoords = inverseLocResults.begin() ;
    //while ((itActualCoords != imageCoordinates.end())&&(itEstimatedCoords != inverseLocResults.end())) {
    //
-   //	columnBias += (itActualCoords->x - itEstimatedCoords->x ) ;
-   //	lineBias += (itActualCoords->y - itEstimatedCoords->y ) ;
+   //  columnBias += (itActualCoords->x - itEstimatedCoords->x ) ;
+   //  lineBias += (itActualCoords->y - itEstimatedCoords->y ) ;
    //
-   //	nbPtsUsed++;
-   //	itActualCoords++;
-   //	itEstimatedCoords++;
+   //  nbPtsUsed++;
+   //  itActualCoords++;
+   //  itEstimatedCoords++;
    //}
 
    //// Computation of bias in line and column : mean deviations

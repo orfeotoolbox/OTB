@@ -18,7 +18,7 @@
 #include <ossim/imaging/ossimUsgsDemTileSource.h>
 #include <ossim/imaging/ossimLandsatTileSource.h>
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
-#include <ossim/imaging/ossimERSTileSource.h>
+// #include <ossim/imaging/ossimERSTileSource.h>
 #include <ossim/imaging/ossimVpfTileSource.h>
 #include <ossim/imaging/ossimTileMapTileSource.h>
 #include <ossim/base/ossimTrace.h>
@@ -281,17 +281,17 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    }
    delete result;
 
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying ERS" << std::endl;
-   }
-   result = new ossimERSTileSource;
-   if(result->open(copyFilename))
-   {
-      return result;
-   }
-   delete result;
+//    if(traceDebug())
+//    {
+//       ossimNotify(ossimNotifyLevel_DEBUG)
+//          << "trying ERS" << std::endl;
+//    }
+//    result = new ossimERSTileSource;
+//    if(result->open(copyFilename))
+//    {
+//       return result;
+//    }
+//    delete result;
 
    // Note:  SRTM should be in front of general raster...
    if(traceDebug())
@@ -592,17 +592,17 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    }
    delete result;
 
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying ERS" << std::endl;
-   }
-   result = new ossimERSTileSource;
-   if(result->loadState(kwl, prefix))
-   {
-      return result;
-   }
-   delete result;
+//    if(traceDebug())
+//    {
+//       ossimNotify(ossimNotifyLevel_DEBUG)
+//          << "trying ERS" << std::endl;
+//    }
+//    result = new ossimERSTileSource;
+//    if(result->loadState(kwl, prefix))
+//    {
+//       return result;
+//    }
+//    delete result;
    // Note:  SRTM should be in front of general raster...
    if(traceDebug())
    {
@@ -681,10 +681,10 @@ ossimObject* ossimImageHandlerFactory::createObject(const ossimString& typeName)
    {
       return new ossimLandsatTileSource();
    }
-   if(STATIC_TYPE_NAME(ossimERSTileSource) == typeName)
-   {
-      return new ossimERSTileSource();
-   }
+//    if(STATIC_TYPE_NAME(ossimERSTileSource) == typeName)
+//    {
+//       return new ossimERSTileSource();
+//    }
    if(STATIC_TYPE_NAME(ossimSrtmTileSource) == typeName)
    {
       return new ossimSrtmTileSource();
@@ -784,7 +784,7 @@ void ossimImageHandlerFactory::getTypeNameList(std::vector<ossimString>& typeLis
    typeList.push_back(STATIC_TYPE_NAME(ossimTiffTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimUsgsDemTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimLandsatTileSource));
-   typeList.push_back(STATIC_TYPE_NAME(ossimERSTileSource));
+//    typeList.push_back(STATIC_TYPE_NAME(ossimERSTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimSrtmTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimGeneralRasterTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimTileMapTileSource));

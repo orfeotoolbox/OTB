@@ -206,13 +206,13 @@ protected:
 
    /**
     * @brief Ellipsoid semi_major axis, m
-    *				Default : WGS84
+    *        Default : WGS84
     */
    double _semiMajorAxis;
 
    /**
     * @brief Ellipsoid semi_minor axis, m
-    *				Default : WGS84
+    *        Default : WGS84
     */
    double _semiMinorAxis;
 

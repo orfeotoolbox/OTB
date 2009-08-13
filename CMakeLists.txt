@@ -752,6 +752,17 @@ MARK_AS_ADVANCED(OTB_SHOW_ALL_MSG_DEBUG)
 #  ADD_DEFINITIONS(-DOTB_SHOW_ALL_MSG_DEBUG)
 # ENDIF( OTB_SHOW_ALL_MSG_DEBUG )
 
+OPTION(OTB_COMPILE_WITH_FULL_WARNING "OTB developers : Compilation with FULL warning (use only for otb developers)." OFF)
+MARK_AS_ADVANCED(OTB_COMPILE_WITH_FULL_WARNING)
+IF(OTB_COMPILE_WITH_FULL_WARNING)
+  IF(CMAKE_COMPILER_IS_GNUCXX)
+    SET(OTB_FULL_WARNING_LIST_PARAMETERS "-Wall -Wunused  -Wunused-function  -Wunused-label  -Wunused-parameter -Wunused-value -Wunused-variable -pedantic -Wuninitialized -Wparentheses -Wunknown-pragmas -Wswitch" CACHE STRING "List of compilation parameters.")
+    MARK_AS_ADVANCED(OTB_FULL_WARNING_LIST_PARAMETERS)
+  ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
+ENDIF(OTB_COMPILE_WITH_FULL_WARNING)
+
+
 #-----------------------------------------------------------------------------
 # Advanced option to avoid recompiling utilities at each cmake reconfiguration
 OPTION(OTB_DISABLE_UTILITIES_COMPILATION "Disable utilities compilation (developpers only - use at you own risk)" OFF)

@@ -17,7 +17,7 @@ namespace ossimplugins
 
 
 GMSTDateTime::GMSTDateTime():
-	_tms(0)
+  _tms(0)
 {
 }
 
@@ -26,26 +26,26 @@ GMSTDateTime::~GMSTDateTime()
 }
 
 GMSTDateTime::GMSTDateTime(const GMSTDateTime& rhs):
-	_tms(rhs._tms),
-	_origine(rhs._origine)
+  _tms(rhs._tms),
+  _origine(rhs._origine)
 {
 }
 
 GMSTDateTime::GMSTDateTime(double tms, Ori_TSM_Green origine):
-	_tms(tms),
-	_origine(origine)
+  _tms(tms),
+  _origine(origine)
 {
 }
 
 GMSTDateTime::GMSTDateTime(CivilDateTime& rhs)
 {
-	rhs.AsGMSTDateTime(this);
+  rhs.AsGMSTDateTime(this);
 }
 
 GMSTDateTime& GMSTDateTime::operator=(const GMSTDateTime& rhs)
 {
-	_tms = rhs._tms;
-	_origine = rhs._origine;
-	return *this;
+  _tms = rhs._tms;
+  _origine = rhs._origine;
+  return *this;
 }
 }

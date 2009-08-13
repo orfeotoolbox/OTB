@@ -21,20 +21,20 @@ namespace ossimplugins
 
 Sensor::Sensor(SensorParams* params, PlatformPosition* position)
 {
-	_params = params->Clone();
-	_position = position->Clone();
+  _params = params->Clone();
+  _position = position->Clone();
 }
 
 Sensor::~Sensor()
 {
-	if(_params != NULL)
-	{
-		delete _params;
-	}
+  if(_params != NULL)
+  {
+    delete _params;
+  }
 
-	if(_position != NULL)
-	{
-		delete _position;
-	}
+  if(_position != NULL)
+  {
+    delete _position;
+  }
 }
 }

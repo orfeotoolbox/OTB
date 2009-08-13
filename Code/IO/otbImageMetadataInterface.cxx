@@ -904,18 +904,17 @@ ImageMetadataInterface::GetQuickbirdPhysicalGain( const MetaDataDictionaryType &
     }
   }
 
-    //Value computed from
-  // http://www.geoeye.com/CorpSite/assets/docs/technical-papers/2009/IKONOS_Esun_Calculations.pdf
-  // to get the equivalent of the SPOT alpha
+  //Value computed from
+  // http://groups.google.com/group/otb-users/browse_thread/thread/bdd88b418c5076f4?pli=1
   VariableLengthVectorType gain;
   gain.SetSize(5);
   if (isPost20030606)
   {
-    gain[0] = 0.16200;//Pan
-    gain[1] = 0.23590;//Blue
-    gain[2] = 0.14530;//Green
-    gain[3] = 0.17850;//Red
-    gain[4] = 0.13530;//NIR
+    gain[0] = 1. / 0.16200;//Pan
+    gain[1] = 1. / 0.23590;//Blue
+    gain[2] = 1. / 0.14530;//Green
+    gain[3] = 1. / 0.17850;//Red
+    gain[4] = 1. / 0.13530;//NIR
   }
   else
   {
