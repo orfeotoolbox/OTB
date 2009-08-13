@@ -38,8 +38,8 @@ namespace ossimplugins
 RTTI_DEF1(ossimErsSarModel, "ossimErsSarModel", ossimGeometricSarSensorModel);
 
 ossimErsSarModel::ossimErsSarModel():
-  _n_srgr(0),
-  _pixel_spacing(0)
+  theNumberSRGR(0),
+  thePixelSpacing(0)
 {
 }
 
@@ -60,7 +60,7 @@ ossimObject* ossimErsSarModel::dup() const
 double ossimErsSarModel::getSlantRangeFromGeoreferenced(double col) const
 {
   const double c =  2.99792458e+8;
-  double tn = _srgr_coefset[0][0] + _srgr_coefset[0][1] * col + _srgr_coefset[0][2] * col*col ;
+  double tn = theSRGRCoeffset[0][0] + theSRGRCoeffset[0][1] * col + theSRGRCoeffset[0][2] * col*col ;
   return tn * (c/2.0);
 }
 
@@ -145,13 +145,13 @@ bool ossimErsSarModel::open(const ossimFilename& file)
  /*
   * Creation of the class allowing to store Leader file metadata
   */
-  if(_ErsSarleader != NULL)
+  if(theErsSarleader != NULL)
   {
-    delete _ErsSarleader;
-    _ErsSarleader = NULL;
+    delete theErsSarleader;
+    theErsSarleader = NULL;
   }
 
-  _ErsSarleader = new ErsSarLeader();
+  theErsSarleader = new ErsSarLeader();
 
   if ( leaFilename.exists() )
   {
@@ -173,7 +173,7 @@ bool ossimErsSarModel::open(const ossimFilename& file)
        * Leader file data reading
        */
       std::ifstream leaderFile(leaFilename, ios::in|ios::binary);
-      leaderFile>>*_ErsSarleader;
+      leaderFile>>*theErsSarleader;
       leaderFile.close();
 
       if(traceDebug())
@@ -215,13 +215,13 @@ bool ossimErsSarModel::saveState(ossimKeywordlist& kwl,
 
   //kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimErsSarModel", true);
 
-  if (_ErsSarleader == NULL)
+  if (theErsSarleader == NULL)
   {
     std::cout << "Error: ErsSarleader is NULL" << std::endl;
     return false;
   }
 
-  result = _ErsSarleader->saveState(kwl);
+  result = theErsSarleader->saveState(kwl);
 
   if (traceDebug())
   {
@@ -297,6 +297,21 @@ bool ossimErsSarModel::loadState (const ossimKeywordlist &kwl, const char *prefi
       }
     }
   }
+
+  if (result)
+  {
+    result = InitSRGR(kwl, prefix);
+    if (!result)
+    {
+      if (traceDebug())
+      {
+        ossimNotify(ossimNotifyLevel_WARN)
+           << MODULE
+           << "\nCan't init ref point \n";
+      }
+    }
+  }
+
   return result;
 }
 
@@ -576,7 +591,7 @@ bool ossimErsSarModel::InitSRGR(const ossimKeywordlist &kwl, const char *prefix)
    }
 
   // Number of SRGR Coef
-  _n_srgr = 3;
+  theNumberSRGR = 3;
 
   // Range time for first mid and last pixel
   double t1 = atof(kwl.find("zero_dop_range_time_f_pixel"))*1e-3;
@@ -589,9 +604,9 @@ bool ossimErsSarModel::InitSRGR(const ossimKeywordlist &kwl, const char *prefix)
   double x2 = atof(kwl.find("sc_pix")) - 1.0;
   double x3 = 2.0*(x2+1.0) -1.0 ;
 
-  _srgr_coefset[0][0] = t1;
-  _srgr_coefset[0][1] = ((t2-t1)/(x2*x2)+(t1-t3)/(x3*x3))/((1.0/x2)-(1.0/x3));
-  _srgr_coefset[0][2] = ((t2-t1)/x2 + (t1-t3)/x3)/(x2-x3);
+  theSRGRCoeffset[0][0] = t1;
+  theSRGRCoeffset[0][1] = ((t2-t1)/(x2*x2)+(t1-t3)/(x3*x3))/((1.0/x2)-(1.0/x3));
+  theSRGRCoeffset[0][2] = ((t2-t1)/x2 + (t1-t3)/x3)/(x2-x3);
 
   return true;
 }

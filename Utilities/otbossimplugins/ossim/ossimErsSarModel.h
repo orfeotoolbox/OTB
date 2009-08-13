@@ -88,33 +88,34 @@ public:
    virtual bool loadState (const ossimKeywordlist &kwl, const char *prefix=0);
 
 protected:
+  virtual bool InitPlatformPosition(const ossimKeywordlist &kwl, const char *prefix);
+  virtual bool InitSensorParams(const ossimKeywordlist &kwl, const char *prefix);
+  virtual bool InitRefPoint(const ossimKeywordlist &kwl, const char *prefix);
+   /**
+   * @brief Initializes the Slant Range for each Ground Range data sets : theNumberSRGR,theSRGRCoeffset,_srgr_update,thePixelSpacing,_isProductGeoreferenced
+   */
+  virtual bool InitSRGR(const ossimKeywordlist &kwl, const char *prefix);
+
+private:
   /**
    *  @brief Slant Range for each Ground Range (SRGR) number of coefficients sets
    */
-  int   _n_srgr;
+  int   theNumberSRGR;
   /**
    * @brief SRGR coefficient sets
    */
-  double _srgr_coefset[1][3];
+  double theSRGRCoeffset[1][3];
   /**
    * @brief Pixel spacing
    */
-  double _pixel_spacing;
+  double thePixelSpacing;
 
   /**
    * @brief List of metadata contained in the Leader file
    */
-  ErsSarLeader *_ErsSarleader;
+  ErsSarLeader *theErsSarleader;
 
 
-private:
-  virtual bool InitPlatformPosition(const ossimKeywordlist &kwl, const char *prefix);
-  virtual bool InitSensorParams(const ossimKeywordlist &kwl, const char *prefix);
-  virtual bool InitRefPoint(const ossimKeywordlist &kwl, const char *prefix);
-  /**
-   * @brief Initializes the Slant Range for each Ground Range data sets : _n_srgr,_srgr_coefset,_srgr_update,_pixel_spacing,_isProductGeoreferenced
-   */
-  virtual bool InitSRGR(const ossimKeywordlist &kwl, const char *prefix);
 
   virtual bool isErsLeader(const ossimFilename& file) const;
         virtual ossimFilename findErsLeader(const ossimFilename& file) const;
