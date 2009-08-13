@@ -1,3 +1,15 @@
+//----------------------------------------------------------------------------
+//
+// "Copyright Centre National d'Etudes Spatiales"
+// "Copyright Centre for Remote Imaging, Sensing and Processing"
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
+//
+//----------------------------------------------------------------------------
+// $Id$
+
 #ifndef AlosSarRecord_h
 #define AlosSarRecord_h
 
@@ -11,9 +23,6 @@ namespace ossimplugins
 /**
  * @ingroup AlosSar
  * @brief This class is the base class of all the record classes
- * @author Magellium, Pacome Dentraygues
- * @version 1.0
- * @date 23-11-07
  */
 class AlosSarRecord
 {

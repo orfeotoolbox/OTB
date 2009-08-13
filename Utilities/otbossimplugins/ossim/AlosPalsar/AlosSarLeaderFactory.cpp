@@ -1,3 +1,15 @@
+//----------------------------------------------------------------------------
+//
+// "Copyright Centre National d'Etudes Spatiales"
+// "Copyright Centre for Remote Imaging, Sensing and Processing"
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
+//
+//----------------------------------------------------------------------------
+// $Id$
+
 #include <AlosSarLeaderFactory.h>
 
 #include <AlosSarDataSetSummary.h>

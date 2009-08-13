@@ -1,3 +1,15 @@
+//----------------------------------------------------------------------------
+//
+// "Copyright Centre National d'Etudes Spatiales"
+// "Copyright Centre for Remote Imaging, Sensing and Processing"
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
+//
+//----------------------------------------------------------------------------
+// $Id$
+
 #ifndef AlosSarRecordFactory_h
 #define AlosSarRecordFactory_h
 
@@ -12,9 +24,6 @@ namespace ossimplugins
 /**
  * @ingroup AlosSar
  * @brief This class is a facory able to construct Record base classes given the id of the record wanted
- * @author Magellium, Pacome Dentraygues
- * @version 1.0
- * @date 23-11-07
  */
 class AlosSarRecordFactory
 {

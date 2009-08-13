@@ -1,3 +1,15 @@
+//----------------------------------------------------------------------------
+//
+// "Copyright Centre National d'Etudes Spatiales"
+// "Copyright Centre for Remote Imaging, Sensing and Processing"
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
+//
+//----------------------------------------------------------------------------
+// $Id$
+
 #ifndef AlosSarPositionVectorRecord_h
 #define AlosSarPositionVectorRecord_h
 
@@ -11,9 +23,6 @@ namespace ossimplugins
 /**
  * @ingroup PlatformPositionDataRecord
  * @brief This class is able to read a position vector record
- * @author Magellium, Pacome Dentraygues
- * @version 1.0
- * @date 23-11-07
  */
 class AlosSarPositionVectorRecord
 {

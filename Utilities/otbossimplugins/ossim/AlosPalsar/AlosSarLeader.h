@@ -1,3 +1,15 @@
+//----------------------------------------------------------------------------
+//
+// "Copyright Centre National d'Etudes Spatiales"
+// "Copyright Centre for Remote Imaging, Sensing and Processing"
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
+//
+//----------------------------------------------------------------------------
+// $Id$
+
 #ifndef AlosSarLeader_h
 #define AlosSarLeader_h
 
@@ -22,9 +34,6 @@ class AlosSarFacilityData;
 /**
  * @ingroup AlosSarLeaderFile
  * @brief This class is able to read the Leader file of the AlosSar file structure
- * @author Magellium, Pacome Dentraygues
- * @version 1.0
- * @date 23-11-07
  */
 class AlosSarLeader
 {
