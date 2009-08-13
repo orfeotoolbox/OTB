@@ -756,7 +756,7 @@ OPTION(OTB_COMPILE_WITH_FULL_WARNING "OTB developers : Compilation with FULL war
 MARK_AS_ADVANCED(OTB_COMPILE_WITH_FULL_WARNING)
 IF(OTB_COMPILE_WITH_FULL_WARNING)
   IF(CMAKE_COMPILER_IS_GNUCXX)
-    SET(OTB_FULL_WARNING_LIST_PARAMETERS "-Wall -Wunused  -Wunused-function  -Wunused-label  -Wunused-parameter -Wunused-value -Wunused-variable -pedantic -Wuninitialized -Wparentheses -Wunknown-pragmas -Wswitch" CACHE STRING "List of compilation parameters.")
+    SET(OTB_FULL_WARNING_LIST_PARAMETERS "-Wall -Wunused  -Wunused-function  -Wunused-label  -Wunused-parameter -Wunused-value -Wunused-variable -Wuninitialized -Wsign-compare -Wparentheses -Wunknown-pragmas -Wswitch" CACHE STRING "List of compilation parameters.")
     MARK_AS_ADVANCED(OTB_FULL_WARNING_LIST_PARAMETERS)
   ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
