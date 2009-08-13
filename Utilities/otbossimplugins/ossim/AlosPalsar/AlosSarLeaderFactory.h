@@ -4,6 +4,10 @@
 
 #include <AlosSarRecordFactory.h>
 #include <map>
+
+namespace ossimplugins
+{
+
 /**
  * @ingroup AlosSarLeaderFile
  * @brief This class is a facory able to construct Record base classes
@@ -14,14 +18,14 @@
 class AlosSarLeaderFactory : public AlosSarRecordFactory
 {
 public:
-	/**
-	 * @brief Contstructor
-	 */
-	AlosSarLeaderFactory();
-	/**
-	 * @brief Destructor
-	 */
-	~AlosSarLeaderFactory();
+  /**
+   * @brief Contstructor
+   */
+  AlosSarLeaderFactory();
+  /**
+   * @brief Destructor
+   */
+  ~AlosSarLeaderFactory();
 
 
 protected:
@@ -29,5 +33,5 @@ protected:
 
 private:
 };
-
+}
 #endif

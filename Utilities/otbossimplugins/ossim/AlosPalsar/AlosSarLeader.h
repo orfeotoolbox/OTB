@@ -10,6 +10,9 @@
 
 #include <map>
 
+namespace ossimplugins
+{
+
 class AlosSarPlatformPositionData;
 class AlosSarMapProjectionData;
 class AlosSarDataSetSummary;
@@ -26,56 +29,56 @@ class AlosSarFacilityData;
 class AlosSarLeader
 {
 public:
-	/**
-	 * @brief Constructor
-	 */
-	AlosSarLeader();
+  /**
+   * @brief Constructor
+   */
+  AlosSarLeader();
 
-	/**
-	 * @brief Destructor
-	 */
-	~AlosSarLeader();
+  /**
+   * @brief Destructor
+   */
+  ~AlosSarLeader();
 
-	/**
-	 * @brief This function write the AlosSarLeader in a stream
-	 */
-	friend std::ostream& operator<<(std::ostream& os, const AlosSarLeader& data);
+  /**
+   * @brief This function write the AlosSarLeader in a stream
+   */
+  friend std::ostream& operator<<(std::ostream& os, const AlosSarLeader& data);
 
-	/**
-	 * @brief This function read a AlosSarLeader from a stream
-	 */
-	friend std::istream& operator>>(std::istream& is, AlosSarLeader& data);
+  /**
+   * @brief This function read a AlosSarLeader from a stream
+   */
+  friend std::istream& operator>>(std::istream& is, AlosSarLeader& data);
 
-	/**
-	 * @brief Copy constructor
-	 */
-	AlosSarLeader(const AlosSarLeader& rhs);
+  /**
+   * @brief Copy constructor
+   */
+  AlosSarLeader(const AlosSarLeader& rhs);
 
-	/**
-	 * @brief Copy operator
-	 */
-	AlosSarLeader& operator=(const AlosSarLeader& rhs);
+  /**
+   * @brief Copy operator
+   */
+  AlosSarLeader& operator=(const AlosSarLeader& rhs);
 
-	/**
-	 * @brief Remove all the previous records from the AlosSarLeader
-	 */
-	void ClearRecords();
-	AlosSarFacilityData * get_AlosSarFacilityData();
-	AlosSarPlatformPositionData * get_AlosSarPlatformPositionData();
-//	AlosSarMapProjectionData * get_AlosSarMapProjectionData();
-	AlosSarDataSetSummary * get_AlosSarDataSetSummary();
-	AlosSarFileDescriptor * get_AlosSarFileDescriptor();
+  /**
+   * @brief Remove all the previous records from the AlosSarLeader
+   */
+  void ClearRecords();
+  AlosSarFacilityData * get_AlosSarFacilityData();
+  AlosSarPlatformPositionData * get_AlosSarPlatformPositionData();
+//  AlosSarMapProjectionData * get_AlosSarMapProjectionData();
+  AlosSarDataSetSummary * get_AlosSarDataSetSummary();
+  AlosSarFileDescriptor * get_AlosSarFileDescriptor();
 
 protected:
-	std::map<int, AlosSarRecord*> _records;
+  std::map<int, AlosSarRecord*> _records;
 
-	static const int AlosSarFacilityDataID;
-	static const int AlosSarPlatformPositionDataID;
-//	static const int AlosSarMapProjectionDataID;
-	static const int AlosSarDataSetSummaryID;
-	static const int AlosSarFileDescriptorID;
+  static const int AlosSarFacilityDataID;
+  static const int AlosSarPlatformPositionDataID;
+//  static const int AlosSarMapProjectionDataID;
+  static const int AlosSarDataSetSummaryID;
+  static const int AlosSarFileDescriptorID;
 private:
 
 };
-
+}
 #endif
