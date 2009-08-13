@@ -22,11 +22,11 @@ namespace ossimplugins
 
 ErsSarLeaderFactory::ErsSarLeaderFactory()
 {
-	RegisterRecord(5, new ErsSarFacilityData());
-	RegisterRecord(4, new ErsSarPlatformPositionData());
-	RegisterRecord(3, new ErsSarMapProjectionData());
-	RegisterRecord(2, new ErsSarDataSetSummary());
-	RegisterRecord(1, new ErsSarFileDescriptor());
+  RegisterRecord(5, new ErsSarFacilityData());
+  RegisterRecord(4, new ErsSarPlatformPositionData());
+  RegisterRecord(3, new ErsSarMapProjectionData());
+  RegisterRecord(2, new ErsSarDataSetSummary());
+  RegisterRecord(1, new ErsSarFileDescriptor());
 }
 
 ErsSarLeaderFactory::~ErsSarLeaderFactory()

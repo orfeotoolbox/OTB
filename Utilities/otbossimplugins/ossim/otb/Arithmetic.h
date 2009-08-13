@@ -20,7 +20,7 @@ namespace ossimplugins
 
 
 /*-------------------------------------------------------------------------*/
-/*          "closest integer" function, returns long		                  */
+/*          "closest integer" function, returns long                      */
 /*-------------------------------------------------------------------------*/
 
    long inint (double x)
@@ -29,7 +29,7 @@ namespace ossimplugins
    }
 
 /*-------------------------------------------------------------------------*/
-/*          "closest integer" function, returns double	                  */
+/*          "closest integer" function, returns double                    */
 /*-------------------------------------------------------------------------*/
 
    double fnint (double x)
@@ -38,7 +38,7 @@ namespace ossimplugins
    }
 
 /*-------------------------------------------------------------------------*/
-/*          Greatest Common Divisor						                        */
+/*          Greatest Common Divisor                                    */
 /*-------------------------------------------------------------------------*/
 
    long pgcd ( long n , long p )
@@ -75,7 +75,7 @@ namespace ossimplugins
    }
 
 /*-------------------------------------------------------------------------*/
-/*          Least Common Multiple					                           */
+/*          Least Common Multiple                                     */
 /*-------------------------------------------------------------------------*/
 
    long ppcm ( long n , long p )

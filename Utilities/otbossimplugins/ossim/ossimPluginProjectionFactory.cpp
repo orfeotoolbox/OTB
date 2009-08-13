@@ -86,19 +86,19 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
 {
 //    if (name == STATIC_TYPE_NAME(ossimRadarSatModel))
 //    {
-// 	   return new ossimRadarSatModel;
+//      return new ossimRadarSatModel;
 //    }
 //    else if (name == STATIC_TYPE_NAME(ossimEnvisatAsarModel))
 //    {
-// 	   return new ossimEnvisatAsarModel;
+//      return new ossimEnvisatAsarModel;
 //    }
-// 	else if (name == STATIC_TYPE_NAME(ossimTerraSarModel))
+//   else if (name == STATIC_TYPE_NAME(ossimTerraSarModel))
 //    {
-// 	   return new ossimTerraSarModel;
+//      return new ossimTerraSarModel;
 //    }
-   // 	else if (name == STATIC_TYPE_NAME(ossimCosmoSkymedModel))
+   //   else if (name == STATIC_TYPE_NAME(ossimCosmoSkymedModel))
    //    {
-   // 	   return new ossimCosmoSkymedModel;
+   //      return new ossimCosmoSkymedModel;
    //   }
    if (name == STATIC_TYPE_NAME(ossimRadarSat2Model))
    {

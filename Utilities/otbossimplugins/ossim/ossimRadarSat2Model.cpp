@@ -344,7 +344,7 @@ bool ossimRadarSat2Model::InitSensorParams(const ossimKeywordlist &kwl,
 
    //ellipsoid parameters
    const char* ellip_maj_str = kwl.find(prefix,"ellip_maj");
-   double ellip_maj = atof(ellip_maj_str) * 1000.0;	// km -> m
+   double ellip_maj = atof(ellip_maj_str) * 1000.0;  // km -> m
    const char* ellip_min_str = kwl.find(prefix,"ellip_min");
    double ellip_min = atof(ellip_min_str) * 1000.0;  // km -> m
 
@@ -487,8 +487,8 @@ bool ossimRadarSat2Model::InitRefPoint(const ossimKeywordlist &kwl,
       _refPoint = new RefPoint();
    }
 
-   _refPoint->set_pix_col(0);		// upper left corner
-   _refPoint->set_pix_line(0);	// upper left corner
+   _refPoint->set_pix_col(0);    // upper left corner
+   _refPoint->set_pix_line(0);  // upper left corner
 
    const char* zeroDopplerTimeFirstLine_str = kwl.find(prefix,"zeroDopplerTimeFirstLine");
    std::string zeroDopplerTimeFirstLine(zeroDopplerTimeFirstLine_str);
@@ -852,7 +852,7 @@ bool ossimRadarSat2Model::initRefPoint(const ossimXmlDocument* xdoc,
       // no reference point (e.g. scene center) is given in the annotation file
       // we choose to use the upper left corner as reference point
       _refPoint->set_pix_col(0);   // upper left corner
-      _refPoint->set_pix_line(0);	// upper left corner
+      _refPoint->set_pix_line(0);  // upper left corner
    }
 
    ossimString s;

@@ -91,9 +91,9 @@ ossimObject* ossimplugins::ossimTerraSarModel::dup() const
 }
 
 // Note : ground range to slant range coputation could be performed in three ways : 
-//		(1) Slant Range to Ground Range polynomial inversion (coefficients given at mid-scene)
-//		(2) use of a parabolic model from three geolocated points
-//		(3) interpolation from the geolocation grid (separate file, most precise technique) 
+//    (1) Slant Range to Ground Range polynomial inversion (coefficients given at mid-scene)
+//    (2) use of a parabolic model from three geolocated points
+//    (3) interpolation from the geolocation grid (separate file, most precise technique) 
 // In this version, (1) and (2) were implemented but (1) is imprecise on the test products. 
 double ossimplugins::ossimTerraSarModel::getSlantRangeFromGeoreferenced(double col) const
 {
@@ -611,41 +611,41 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
 }
 
 /* 
-//	Version (1)
+//  Version (1)
 double ossimplugins::ossimTerraSarModel::getSlantRangeFromGeoreferenced(double col) const
 {
-	// iterative polynomial inversion
-	const double CLUM        = 2.99792458e+8 ;
-	double EPSILON = 0.0000001 ;
-	double iterError = 1.0 ; 
-	int maxIter = 50, nIter=0 ;
-	double estimatedGroundRange, estimatedSlantRangeTime, actualGroundRange, estimatedSlantRange ; 
+  // iterative polynomial inversion
+  const double CLUM        = 2.99792458e+8 ;
+  double EPSILON = 0.0000001 ;
+  double iterError = 1.0 ; 
+  int maxIter = 50, nIter=0 ;
+  double estimatedGroundRange, estimatedSlantRangeTime, actualGroundRange, estimatedSlantRange ; 
 
-	
-	// actual ground range computation relative to the image near side
-	// in the case of Georeferenced images, _refPoint->get_distance() contains the ground range
-	actualGroundRange = _refPoint->get_distance() - _sensor->get_col_direction() * (col-_refPoint->get_pix_col()) * _SrToGr_scaling_factor ; 
+  
+  // actual ground range computation relative to the image near side
+  // in the case of Georeferenced images, _refPoint->get_distance() contains the ground range
+  actualGroundRange = _refPoint->get_distance() - _sensor->get_col_direction() * (col-_refPoint->get_pix_col()) * _SrToGr_scaling_factor ; 
 
-	estimatedSlantRangeTime = _sceneCenterRangeTime ;
-	while ((fabs(iterError)>EPSILON)&& (nIter<maxIter)) {
-		// estimated ground range computation from SrToGr
-		estimatedGroundRange = 0.0 ; 
-		for (int i=0; i<_SrToGr_coeffs.size(); i++) {
-			estimatedGroundRange += _SrToGr_coeffs[i]*pow(estimatedSlantRangeTime-_SrToGr_R0,_SrToGr_exponent[i]);
-		}
-		
-		// comparison between the estimated ground range and the actual ground range
-		iterError = actualGroundRange - estimatedGroundRange ;
+  estimatedSlantRangeTime = _sceneCenterRangeTime ;
+  while ((fabs(iterError)>EPSILON)&& (nIter<maxIter)) {
+    // estimated ground range computation from SrToGr
+    estimatedGroundRange = 0.0 ; 
+    for (int i=0; i<_SrToGr_coeffs.size(); i++) {
+      estimatedGroundRange += _SrToGr_coeffs[i]*pow(estimatedSlantRangeTime-_SrToGr_R0,_SrToGr_exponent[i]);
+    }
+    
+    // comparison between the estimated ground range and the actual ground range
+    iterError = actualGroundRange - estimatedGroundRange ;
 
-		// estimated slant range update
-		estimatedSlantRangeTime += iterError * 2.0 / CLUM ; 
+    // estimated slant range update
+    estimatedSlantRangeTime += iterError * 2.0 / CLUM ; 
 
-		nIter++;
-	}
+    nIter++;
+  }
 
-	estimatedSlantRange = estimatedSlantRangeTime* CLUM / 2.0 ;
+  estimatedSlantRange = estimatedSlantRangeTime* CLUM / 2.0 ;
 
-	return  estimatedSlantRange  ;
+  return  estimatedSlantRange  ;
 }
 */
 
@@ -667,7 +667,7 @@ bool ossimplugins::ossimTerraSarModel::InitSensorParams(
    
    //ellipsoid parameters
    const char* ellip_maj_str = kwl.find(prefix,"ellip_maj");
-   double ellip_maj = atof(ellip_maj_str) * 1000.0;	// km -> m
+   double ellip_maj = atof(ellip_maj_str) * 1000.0;  // km -> m
    const char* ellip_min_str = kwl.find(prefix,"ellip_min");
    double ellip_min = atof(ellip_min_str) * 1000.0;  // km -> m
    
@@ -796,7 +796,7 @@ bool ossimplugins::ossimTerraSarModel::InitPlatformPosition(
 
       ephemeris[i] = eph;
    }
-	
+  
    /*
     * Creation of the platform position interpolator
     */
@@ -895,7 +895,7 @@ bool ossimplugins::ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl,
       double actualPRF = theImageSize.y/(acq_msec_last-acq_msec_first) ;
       _sensor->set_nAzimuthLook(_sensor->get_prf()/actualPRF); 
    }
-   else 	
+   else   
       _sensor->set_nAzimuthLook(1.0);
 
    // Ground Control Points extracted from the model : scene center and corners
@@ -985,7 +985,7 @@ bool ossimplugins::ossimTerraSarModel::InitSRGR(const ossimKeywordlist &kwl, con
    _alt_srgr_coefset[0] = t1;
    _alt_srgr_coefset[1] = ((t2-t1)/(x2*x2)+(t1-t3)/(x3*x3))/((1.0/x2)-(1.0/x3));
    _alt_srgr_coefset[2] = ((t2-t1)/x2 + (t1-t3)/x3)/(x2-x3);
-	
+  
    return true;
 }
 
@@ -1407,5 +1407,5 @@ bool ossimplugins::ossimTerraSarModel::initRefPoint(
    return true;
 }
 
-	 
-	 
+   
+   

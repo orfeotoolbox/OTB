@@ -25,14 +25,14 @@ ErsSarPlatformPositionData::~ErsSarPlatformPositionData()
 
 std::ostream& operator<<(std::ostream& os, const ErsSarPlatformPositionData& data)
 {
-	os<<"orbit_ele_desg:"<<data._orbit_ele_desg.c_str()<<std::endl;
+  os<<"orbit_ele_desg:"<<data._orbit_ele_desg.c_str()<<std::endl;
 
-	for(int i=0;i<6;i++)
-	{
-		os<<"orbit_ele["<<i<<"]:"<<data._orbit_ele[i]<<std::endl;
-	}
+  for(int i=0;i<6;i++)
+  {
+    os<<"orbit_ele["<<i<<"]:"<<data._orbit_ele[i]<<std::endl;
+  }
 
-	os<<"ndata:"<<data._ndata<<std::endl;
+  os<<"ndata:"<<data._ndata<<std::endl;
 
     os<<"year:"<<data._year<<std::endl;
 
@@ -56,115 +56,115 @@ std::ostream& operator<<(std::ostream& os, const ErsSarPlatformPositionData& dat
 
     os<<"rad_poserr:"<<data._rad_poserr<<std::endl;
 
-	os<<"alt_velerr:"<<data._alt_velerr<<std::endl;
+  os<<"alt_velerr:"<<data._alt_velerr<<std::endl;
 
     os<<"crt_velerr:"<<data._crt_velerr<<std::endl;
 
     os<<"rad_velerr:"<<data._rad_velerr<<std::endl;
 
-	for (int i=0;i<64;i++)
-	{
-		os<<"pos_vect["<<i<<"]:"<<data._pos_vect[i]<<std::endl;
-	}
+  for (int i=0;i<64;i++)
+  {
+    os<<"pos_vect["<<i<<"]:"<<data._pos_vect[i]<<std::endl;
+  }
 
-	return os;
+  return os;
 }
 
 std::istream& operator>>(std::istream& is, ErsSarPlatformPositionData& data)
 {
-	char buf[1207];
-	buf[1206] = '\0';
+  char buf[1207];
+  buf[1206] = '\0';
 
-	is.read(buf,32);
-	buf[32] = '\0';
-	data._orbit_ele_desg = buf;
+  is.read(buf,32);
+  buf[32] = '\0';
+  data._orbit_ele_desg = buf;
 
-	for(int i=0;i<6;i++)
-	{
-		is.read(buf,16);
-		buf[16] = '\0';
-		data._orbit_ele[i] = atof(buf);
-	}
+  for(int i=0;i<6;i++)
+  {
+    is.read(buf,16);
+    buf[16] = '\0';
+    data._orbit_ele[i] = atof(buf);
+  }
 
-	is.read(buf,4);
-	buf[4] = '\0';
-	data._ndata = atoi(buf);
-
-    is.read(buf,4);
-	buf[4] = '\0';
-	data._year = atoi(buf);
+  is.read(buf,4);
+  buf[4] = '\0';
+  data._ndata = atoi(buf);
 
     is.read(buf,4);
-	buf[4] = '\0';
-	data._month = atoi(buf);
+  buf[4] = '\0';
+  data._year = atoi(buf);
 
     is.read(buf,4);
-	buf[4] = '\0';
-	data._day = atoi(buf);
+  buf[4] = '\0';
+  data._month = atoi(buf);
 
     is.read(buf,4);
-	buf[4] = '\0';
-	data._gmt_day = atoi(buf);
+  buf[4] = '\0';
+  data._day = atoi(buf);
+
+    is.read(buf,4);
+  buf[4] = '\0';
+  data._gmt_day = atoi(buf);
 
     is.read(buf,22);
-	buf[22] = '\0';
-	data._gmt_sec = atof(buf);
+  buf[22] = '\0';
+  data._gmt_sec = atof(buf);
 
     is.read(buf,22);
-	buf[22] = '\0';
-	data._data_int = atof(buf);
+  buf[22] = '\0';
+  data._data_int = atof(buf);
 
     is.read(buf,64);
-	buf[64] = '\0';
-	data._ref_coord = buf;
+  buf[64] = '\0';
+  data._ref_coord = buf;
 
     is.read(buf,22);
-	buf[22] = '\0';
-	data._hr_angle = atof(buf);
+  buf[22] = '\0';
+  data._hr_angle = atof(buf);
 
     is.read(buf,16);
-	buf[16] = '\0';
-	data._alt_poserr = atof(buf);
+  buf[16] = '\0';
+  data._alt_poserr = atof(buf);
 
     is.read(buf,16);
-	buf[16] = '\0';
-	data._crt_poserr = atof(buf);
+  buf[16] = '\0';
+  data._crt_poserr = atof(buf);
 
     is.read(buf,16);
-	buf[16] = '\0';
-	data._rad_poserr = atof(buf);
+  buf[16] = '\0';
+  data._rad_poserr = atof(buf);
 
     is.read(buf,16);
-	buf[16] = '\0';
-	data._alt_velerr = atof(buf);
+  buf[16] = '\0';
+  data._alt_velerr = atof(buf);
 
     is.read(buf,16);
-	buf[16] = '\0';
-	data._crt_velerr = atof(buf);
+  buf[16] = '\0';
+  data._crt_velerr = atof(buf);
 
     is.read(buf,16);
-	buf[16] = '\0';
-	data._rad_velerr = atof(buf);
+  buf[16] = '\0';
+  data._rad_velerr = atof(buf);
 
-	for (int i=0;i<data._ndata;i++)
-	{
-		is>>data._pos_vect[i];
-	}
+  for (int i=0;i<data._ndata;i++)
+  {
+    is>>data._pos_vect[i];
+  }
 
-	return is;
+  return is;
 }
 
 ErsSarPlatformPositionData::ErsSarPlatformPositionData(const ErsSarPlatformPositionData& rhs):
-	ErsSarRecord(rhs)
+  ErsSarRecord(rhs)
 {
-	_orbit_ele_desg = rhs._orbit_ele_desg;
+  _orbit_ele_desg = rhs._orbit_ele_desg;
 
-	for(int i=0;i<6;i++)
-	{
-		_orbit_ele[i] = rhs._orbit_ele[i];
-	}
+  for(int i=0;i<6;i++)
+  {
+    _orbit_ele[i] = rhs._orbit_ele[i];
+  }
 
-	_ndata = rhs._ndata;
+  _ndata = rhs._ndata;
 
     _year = rhs._year;
 
@@ -188,29 +188,29 @@ ErsSarPlatformPositionData::ErsSarPlatformPositionData(const ErsSarPlatformPosit
 
     _rad_poserr = rhs._rad_poserr;
 
-	_alt_velerr = rhs._alt_velerr;
+  _alt_velerr = rhs._alt_velerr;
 
     _crt_velerr = rhs._crt_velerr;
 
     _rad_velerr = rhs._rad_velerr;
 
-	for (int i=0;i<64;i++)
-	{
-		_pos_vect[i] = rhs._pos_vect[i];
-	}
+  for (int i=0;i<64;i++)
+  {
+    _pos_vect[i] = rhs._pos_vect[i];
+  }
 
 }
 
 ErsSarPlatformPositionData& ErsSarPlatformPositionData::operator=(const ErsSarPlatformPositionData& rhs)
 {
-		_orbit_ele_desg = rhs._orbit_ele_desg;
+    _orbit_ele_desg = rhs._orbit_ele_desg;
 
-	for(int i=0;i<6;i++)
-	{
-		_orbit_ele[i] = rhs._orbit_ele[i];
-	}
+  for(int i=0;i<6;i++)
+  {
+    _orbit_ele[i] = rhs._orbit_ele[i];
+  }
 
-	_ndata = rhs._ndata;
+  _ndata = rhs._ndata;
 
     _year = rhs._year;
 
@@ -234,17 +234,17 @@ ErsSarPlatformPositionData& ErsSarPlatformPositionData::operator=(const ErsSarPl
 
     _rad_poserr = rhs._rad_poserr;
 
-	_alt_velerr = rhs._alt_velerr;
+  _alt_velerr = rhs._alt_velerr;
 
     _crt_velerr = rhs._crt_velerr;
 
     _rad_velerr = rhs._rad_velerr;
 
-	for (int i=0;i<64;i++)
-	{
-		_pos_vect[i] = rhs._pos_vect[i];
-	}
+  for (int i=0;i<64;i++)
+  {
+    _pos_vect[i] = rhs._pos_vect[i];
+  }
 
-	return *this;
+  return *this;
 }
 }

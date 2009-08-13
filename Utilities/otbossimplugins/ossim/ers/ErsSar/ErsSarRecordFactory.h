@@ -31,33 +31,33 @@ namespace ossimplugins
 class ErsSarRecordFactory
 {
 public:
-	/**
-	 * @brief Constructor
-	 */
-	ErsSarRecordFactory();
-	/**
-	 * @brief Destructor
-	 */
-	~ErsSarRecordFactory();
+  /**
+   * @brief Constructor
+   */
+  ErsSarRecordFactory();
+  /**
+   * @brief Destructor
+   */
+  ~ErsSarRecordFactory();
 
-	/**
-	 * @brief Add a new Record type available in this factory
-	 * @param record Record to add in the factory
-	 * @param id Id of the new avalaible Record
-	 */
-	void RegisterRecord(int id, ErsSarRecord * record);
+  /**
+   * @brief Add a new Record type available in this factory
+   * @param record Record to add in the factory
+   * @param id Id of the new avalaible Record
+   */
+  void RegisterRecord(int id, ErsSarRecord * record);
 
-	/**
-	 * @brief Instanciate a new Record
-	 * @param id Id of the Record we want to instanciate
-	 */
-	ErsSarRecord* Instanciate(int id) ;
+  /**
+   * @brief Instanciate a new Record
+   * @param id Id of the Record we want to instanciate
+   */
+  ErsSarRecord* Instanciate(int id) ;
 protected:
 
-	/**
-	 * @brief Contain all the available Records for the factory
-	 */
-	std::map<int, ErsSarRecord*> _availableRecords;
+  /**
+   * @brief Contain all the available Records for the factory
+   */
+  std::map<int, ErsSarRecord*> _availableRecords;
 
 private:
 };

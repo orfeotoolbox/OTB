@@ -28,14 +28,14 @@ namespace ossimplugins
 class ErsSarLeaderFactory : public ErsSarRecordFactory
 {
 public:
-	/**
-	 * @brief Contstructor
-	 */
-	ErsSarLeaderFactory();
-	/**
-	 * @brief Destructor
-	 */
-	~ErsSarLeaderFactory();
+  /**
+   * @brief Contstructor
+   */
+  ErsSarLeaderFactory();
+  /**
+   * @brief Destructor
+   */
+  ~ErsSarLeaderFactory();
 
 
 protected:
