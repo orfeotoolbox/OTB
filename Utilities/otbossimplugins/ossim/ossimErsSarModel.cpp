@@ -47,6 +47,11 @@ ossimErsSarModel::~ossimErsSarModel()
 {
 }
 
+ossimString ossimErsSarModel::getClassName() const
+{
+   return ossimString("ossimErsSarModel");
+}
+
 ossimObject* ossimErsSarModel::dup() const
 {
    return new ossimErsSarModel(*this);
@@ -228,6 +233,72 @@ bool ossimErsSarModel::saveState(ossimKeywordlist& kwl,
   return result;
 }
 
+bool ossimErsSarModel::loadState (const ossimKeywordlist &kwl, const char *prefix)
+{
+     static const char MODULE[] = "ossimErsSarModel::loadState";
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
+   }
+
+   const char* lookup = 0;
+   ossimString s;
+
+   // Check the type first.
+   lookup = kwl.find(prefix, ossimKeywordNames::TYPE_KW);
+   if (lookup)
+   {
+      s = lookup;
+      if (s != getClassName())
+      {
+         return false;
+      }
+   }
+
+   // Load the base class.
+//    bool result = ossimGeometricSarSensorModel::loadState(kwl, prefix);
+  bool result = false;
+  result = InitPlatformPosition(kwl, prefix);
+  if (!result)
+  {
+    if (traceDebug())
+    {
+      ossimNotify(ossimNotifyLevel_WARN)
+         << MODULE
+         << "\nCan't init platform position \n";
+    }
+  }
+
+  if (result)
+  {
+    result = InitSensorParams(kwl, prefix);
+    if (!result)
+    {
+      if (traceDebug())
+      {
+        ossimNotify(ossimNotifyLevel_WARN)
+           << MODULE
+           << "\nCan't init sensor parameters \n";
+      }
+    }
+  }
+
+  if (result)
+  {
+    result = InitRefPoint(kwl, prefix);
+    if (!result)
+    {
+      if (traceDebug())
+      {
+        ossimNotify(ossimNotifyLevel_WARN)
+           << MODULE
+           << "\nCan't init ref point \n";
+      }
+    }
+  }
+  return result;
+}
 
 bool ossimErsSarModel::InitPlatformPosition(const ossimKeywordlist &kwl, const char *prefix)
 {

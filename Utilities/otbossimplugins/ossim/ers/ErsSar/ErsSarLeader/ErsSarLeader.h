@@ -84,6 +84,12 @@ public:
   virtual bool saveState(ossimKeywordlist& kwl,
                          const char* prefix=0) const;
 
+   /**
+    * @brief Method to the load (recreate) the state of the object from a
+    * keyword list. Return true if ok or false on error.
+    * @return true if load OK, false on error
+    */
+
   ErsSarFacilityData * get_ErsSarFacilityData() const;
   ErsSarPlatformPositionData * get_ErsSarPlatformPositionData() const;
   ErsSarMapProjectionData * get_ErsSarMapProjectionData() const;
@@ -93,7 +99,7 @@ public:
 protected:
   // Made mutable because the get_* methods need to access it.
   // (modifying the definition of the map might be another solution)
-  mutable std::map<int, ErsSarRecord*> _records;
+  mutable std::map<int, ErsSarRecord*> theRecords;
 
   static const int ErsSarFacilityDataID;
   static const int ErsSarPlatformPositionDataID;

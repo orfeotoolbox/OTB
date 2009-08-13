@@ -38,8 +38,8 @@ ErsSarLeader::~ErsSarLeader()
 
 std::ostream& operator<<(std::ostream& os, const ErsSarLeader& data)
 {
-  std::map<int, ErsSarRecord*>::const_iterator it = data._records.begin();
-  while(it != data._records.end())
+  std::map<int, ErsSarRecord*>::const_iterator it = data.theRecords.begin();
+  while(it != data.theRecords.end())
   {
     (*it).second->Write(os);
     ++it;
@@ -69,7 +69,7 @@ std::istream& operator>>(std::istream& is, ErsSarLeader& data)
       if (record != NULL)
       {
         record->Read(is);
-        data._records[header.get_rec_seq()] = record;
+        data.theRecords[header.get_rec_seq()] = record;
       }
       else
       {
@@ -85,10 +85,10 @@ std::istream& operator>>(std::istream& is, ErsSarLeader& data)
 
 ErsSarLeader::ErsSarLeader(const ErsSarLeader& rhs)
 {
-  std::map<int, ErsSarRecord*>::const_iterator it = rhs._records.begin();
-  while(it != rhs._records.end())
+  std::map<int, ErsSarRecord*>::const_iterator it = rhs.theRecords.begin();
+  while(it != rhs.theRecords.end())
   {
-    _records[(*it).first] = (*it).second->Clone();
+    theRecords[(*it).first] = (*it).second->Clone();
     ++it;
   }
 }
@@ -96,10 +96,10 @@ ErsSarLeader::ErsSarLeader(const ErsSarLeader& rhs)
 ErsSarLeader& ErsSarLeader::operator=(const ErsSarLeader& rhs)
 {
   ClearRecords();
-  std::map<int, ErsSarRecord*>::const_iterator it = rhs._records.begin();
-  while(it != rhs._records.end())
+  std::map<int, ErsSarRecord*>::const_iterator it = rhs.theRecords.begin();
+  while(it != rhs.theRecords.end())
   {
-    _records[(*it).first] = (*it).second->Clone();
+    theRecords[(*it).first] = (*it).second->Clone();
     ++it;
   }
 
@@ -108,13 +108,13 @@ ErsSarLeader& ErsSarLeader::operator=(const ErsSarLeader& rhs)
 
 void ErsSarLeader::ClearRecords()
 {
-  std::map<int, ErsSarRecord*>::const_iterator it = _records.begin();
-  while(it != _records.end())
+  std::map<int, ErsSarRecord*>::const_iterator it = theRecords.begin();
+  while(it != theRecords.end())
   {
     delete (*it).second;
     ++it;
   }
-  _records.clear();
+  theRecords.clear();
 }
 
 bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
@@ -257,27 +257,26 @@ bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
   return result;
 }
 
-
 ErsSarFacilityData * ErsSarLeader::get_ErsSarFacilityData() const
 {
-  return (ErsSarFacilityData*)_records[ErsSarFacilityDataID];
+  return (ErsSarFacilityData*)theRecords[ErsSarFacilityDataID];
 }
 ErsSarPlatformPositionData * ErsSarLeader::get_ErsSarPlatformPositionData() const
 {
-  return (ErsSarPlatformPositionData*)_records[ErsSarPlatformPositionDataID];
+  return (ErsSarPlatformPositionData*)theRecords[ErsSarPlatformPositionDataID];
 }
 ErsSarMapProjectionData * ErsSarLeader::get_ErsSarMapProjectionData() const
 {
-  return (ErsSarMapProjectionData*)_records[ErsSarMapProjectionDataID];
+  return (ErsSarMapProjectionData*)theRecords[ErsSarMapProjectionDataID];
 }
 
 ErsSarDataSetSummary * ErsSarLeader::get_ErsSarDataSetSummary() const
 {
-  return (ErsSarDataSetSummary*)_records[ErsSarDataSetSummaryID];
+  return (ErsSarDataSetSummary*)theRecords[ErsSarDataSetSummaryID];
 }
 
 ErsSarFileDescriptor * ErsSarLeader::get_ErsSarFileDescriptor() const
 {
-  return static_cast<ErsSarFileDescriptor*>(_records[ErsSarFileDescriptorID]);
+  return static_cast<ErsSarFileDescriptor*>(theRecords[ErsSarFileDescriptorID]);
 }
 }

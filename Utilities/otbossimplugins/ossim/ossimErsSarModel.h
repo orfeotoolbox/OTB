@@ -45,7 +45,13 @@ public:
   /**
    * @brief Destructor
    */
-  ~ossimErsSarModel();
+   virtual ~ossimErsSarModel();
+
+   /**
+    * @brief Method to return the class name.
+    * @return The name of this class.
+    */
+   virtual ossimString getClassName() const;
 
   /**
    * @brief Returns pointer to a new instance, copy of this.
@@ -73,6 +79,13 @@ public:
   */
   virtual bool saveState(ossimKeywordlist& kwl,
                          const char* prefix=0) const;
+
+   /**
+    * @brief Method to the load (recreate) the state of the object from a
+    * keyword list. Return true if ok or false on error.
+    * @return true if load OK, false on error
+    */
+   virtual bool loadState (const ossimKeywordlist &kwl, const char *prefix=0);
 
 protected:
   /**
