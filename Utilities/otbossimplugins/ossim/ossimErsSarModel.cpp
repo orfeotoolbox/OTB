@@ -39,8 +39,12 @@ RTTI_DEF1(ossimErsSarModel, "ossimErsSarModel", ossimGeometricSarSensorModel);
 
 ossimErsSarModel::ossimErsSarModel():
   theNumberSRGR(0),
-  thePixelSpacing(0)
+  thePixelSpacing(0),
+  theErsSarleader(NULL)
 {
+  theSRGRCoeffset[0][0]=0.0;
+  theSRGRCoeffset[0][1]=0.0;
+  theSRGRCoeffset[0][2]=0.0;
 }
 
 ossimErsSarModel::~ossimErsSarModel()
