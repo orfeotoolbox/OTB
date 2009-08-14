@@ -84,11 +84,11 @@ public:
   virtual bool saveState(ossimKeywordlist& kwl,
                          const char* prefix=0) const;
 
-  ErsSarFacilityData * get_ErsSarFacilityData() const;
-  ErsSarPlatformPositionData * get_ErsSarPlatformPositionData() const;
-  ErsSarMapProjectionData * get_ErsSarMapProjectionData() const;
-  ErsSarDataSetSummary * get_ErsSarDataSetSummary() const;
-  ErsSarFileDescriptor * get_ErsSarFileDescriptor() const;
+  const ErsSarFacilityData * get_ErsSarFacilityData() const;
+  const ErsSarPlatformPositionData * get_ErsSarPlatformPositionData() const;
+  const ErsSarMapProjectionData * get_ErsSarMapProjectionData() const;
+  const ErsSarDataSetSummary * get_ErsSarDataSetSummary() const;
+  const ErsSarFileDescriptor * get_ErsSarFileDescriptor() const;
 
 protected:
   // Made mutable because the get_* methods need to access it.
