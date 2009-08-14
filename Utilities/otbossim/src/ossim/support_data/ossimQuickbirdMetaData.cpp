@@ -440,8 +440,7 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
           ossimString bandCur = ossimString(nameChar).before("\n");
           if(!strstr && traceDebug())
 	      {	  				
-	    	std::cout<<"exceptionnnnnn"<<std::endl;
-			ossimNotify(ossimNotifyLevel_FATAL)
+	    	ossimNotify(ossimNotifyLevel_FATAL)
 	    				<< "FATAL ossimQuickbirdRpcModel::parseMetaData(data_file): "
 	    				<< "\n\tAborting construction. Error encountered parsing "
 	     				<< "presumed meta-data file." << std::endl;
@@ -454,7 +453,6 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
 	  			{
 	  			strptr = strstr(strptr, "\tabsCalFactor = ");
 	  			sscanf(strptr, "%16c %s", dummy, nameChar);
-	  			std::cout<<ossimString(nameChar).before(";").toFloat64()<<std::endl;
 	  			theAbsCalFactors[j] = ossimString(nameChar).before(";").toDouble();
 	  			}
             }

@@ -905,7 +905,7 @@ ImageMetadataInterface::GetQuickbirdPhysicalGain( const MetaDataDictionaryType &
   }
 
   //Value computed from
-  // http://groups.google.com/group/otb-users/browse_thread/thread/bdd88b418c5076f4?pli=1
+  // Radiance Conversion of QuickBird Data - Technical Note.
   ossimString keywordStringBitsPerPixel = kwl.find("support_data.bits_per_pixel");
   int bitsPerPixel = keywordStringBitsPerPixel.toInt();
   if (bitsPerPixel != 16 && bitsPerPixel != 8)
@@ -928,16 +928,17 @@ ImageMetadataInterface::GetQuickbirdPhysicalGain( const MetaDataDictionaryType &
   }
 
   VariableLengthVectorType outputValuesVariableLengthVector;
-  if (keywordStringBId != ossimString("P") )
+  if (keywordStringBId == ossimString("P") )
     outputValuesVariableLengthVector.SetSize(1);
   else
   	outputValuesVariableLengthVector.SetSize(4);
-  
+  outputValuesVariableLengthVector.Fill(1.);
+ 
   if (!isPost20030606)
   {
   	if(bitsPerPixel==16)
   	{
- 	  if (keywordStringBId != ossimString("P"))
+ 	  if (keywordStringBId == ossimString("P"))
  	  {
  	  	if (TDILevel != 10)
  	  		outputValuesVariableLengthVector[0] = 0.08381880;
@@ -953,7 +954,7 @@ ImageMetadataInterface::GetQuickbirdPhysicalGain( const MetaDataDictionaryType &
   	  else
   	  {
  	  	outputValuesVariableLengthVector[0] = 0.01604120;
-   	  	outputValuesVariableLengthVector[1] = 0.01428470;
+   	  	outputValuesVariableLengthVector[1] = 0.01438470;
  	  	outputValuesVariableLengthVector[2] = 0.01267350;
 	  	outputValuesVariableLengthVector[3] = 0.01542420;
  	  }
@@ -961,7 +962,7 @@ ImageMetadataInterface::GetQuickbirdPhysicalGain( const MetaDataDictionaryType &
   	}
   	else
   	{
- 	  if (keywordStringBId != ossimString("P"))
+ 	  if (keywordStringBId == ossimString("P"))
  	  {
  	  	if (TDILevel != 10)
  	  		outputValuesVariableLengthVector[0] = 1.02681367;
@@ -981,11 +982,11 @@ ImageMetadataInterface::GetQuickbirdPhysicalGain( const MetaDataDictionaryType &
   	  {
   	    ossimString keywordStringAcalFact = kwl.find("support_data.B_band_absCalFactor");
 	    outputValuesVariableLengthVector[0] = 1.12097834 * keywordStringAcalFact.toDouble();
-    	keywordStringAcalFact = ossimString("support_data.G_band_absCalFactor");
+    	keywordStringAcalFact = kwl.find("support_data.G_band_absCalFactor");
       	outputValuesVariableLengthVector[1] = 1.37652632 * keywordStringAcalFact.toDouble();
-      	keywordStringAcalFact = ossimString("support_data.R_band_absCalFactor");
+      	keywordStringAcalFact = kwl.find("support_data.R_band_absCalFactor");
      	outputValuesVariableLengthVector[2] = 1.30954587 * keywordStringAcalFact.toDouble();
-     	keywordStringAcalFact = ossimString("support_data.N_band_absCalFactor");
+     	keywordStringAcalFact = kwl.find("support_data.N_band_absCalFactor");
      	outputValuesVariableLengthVector[3] = 0.98368622 * keywordStringAcalFact.toDouble();
   	  }  		
   	}
@@ -994,7 +995,7 @@ ImageMetadataInterface::GetQuickbirdPhysicalGain( const MetaDataDictionaryType &
    }
   else
   {
- 	  if (keywordStringBId != ossimString("P"))
+ 	  if (keywordStringBId == ossimString("P"))
  	  {
  	  	ossimString keywordStringAbsCalFactor = kwl.find("support_data.absCalFactor");
   	  	outputValuesVariableLengthVector[0] = keywordStringAbsCalFactor.toDouble(); 
@@ -1003,21 +1004,19 @@ ImageMetadataInterface::GetQuickbirdPhysicalGain( const MetaDataDictionaryType &
   	  {
   	    ossimString keywordStringAcalFact = kwl.find("support_data.B_band_absCalFactor");
 	    outputValuesVariableLengthVector[0] = keywordStringAcalFact.toDouble();
-    	keywordStringAcalFact = ossimString("support_data.G_band_absCalFactor");
-      	outputValuesVariableLengthVector[1] = keywordStringAcalFact.toDouble();
-      	keywordStringAcalFact = ossimString("support_data.R_band_absCalFactor");
-     	outputValuesVariableLengthVector[2] = keywordStringAcalFact.toDouble();
-     	keywordStringAcalFact = ossimString("support_data.N_band_absCalFactor");
+      	keywordStringAcalFact = kwl.find("support_data.G_band_absCalFactor");
+    	outputValuesVariableLengthVector[1] = keywordStringAcalFact.toDouble();
+      	keywordStringAcalFact = kwl.find("support_data.R_band_absCalFactor");
+     	outputValuesVariableLengthVector[2] = keywordStringAcalFact.toDouble();     	
+     	keywordStringAcalFact = kwl.find("support_data.N_band_absCalFactor");
      	outputValuesVariableLengthVector[3] = keywordStringAcalFact.toDouble();
   	  }  		
   }
-
 
   if (keywordStringBId == ossimString("P") )
   {  
 	outputValuesVariableLengthVector[0] = 0.398 / outputValuesVariableLengthVector[0];
   }
-  // Multi spectral
   else
   {
       outputValuesVariableLengthVector[0] = 0.068 / outputValuesVariableLengthVector[0];
