@@ -160,18 +160,18 @@ bool ossimAlosPalsarModel::open(const ossimFilename& file)
 
   if ( leaFilename.exists() )
   {
-    result = isErsLeader(leaFilename);
+    result = isAlosPalsarLeader(leaFilename);
     if (result == false)
     {
-      leaFilename = findErsLeader(file);
+      leaFilename = findAlosPalsarLeader(file);
     }
-    result = isErsLeader(leaFilename);
+    result = isAlosPalsarLeader(leaFilename);
 
     if (result == true)
     {
       if (traceDebug())
       {
-        ossimNotify(ossimNotifyLevel_DEBUG) << "is ERS leader file..."
+        ossimNotify(ossimNotifyLevel_DEBUG) << "is AlosPalsar leader file..."
                             << "Begin reading Leader file" << std::endl;
       }
       /*
@@ -186,7 +186,14 @@ bool ossimAlosPalsarModel::open(const ossimFilename& file)
         ossimNotify(ossimNotifyLevel_DEBUG)
         << "End reading Leader file" << std::endl;
       }
-    } // matches: if ( result=isErsLeader(file) == True )
+
+      //To initialize the whole state, reusing saveState/loadState
+      //FIXME: This could be at the superclass level instead
+      ossimKeywordlist kwl;
+      saveState(kwl);
+      loadState(kwl);
+
+    } // matches: if ( result=isAlosPalsarLeader(file) == True )
 
   } // matches: if ( file.exists() )
 
@@ -198,6 +205,8 @@ bool ossimAlosPalsarModel::open(const ossimFilename& file)
        << MODULE << " exit status = " << (result?"true":"false\n")
        << std::endl;
   }
+
+
 
   return result;
 
@@ -616,7 +625,8 @@ bool ossimAlosPalsarModel::InitSRGR(const ossimKeywordlist &kwl, const char *pre
   return true;
 }
 
-bool ossimAlosPalsarModel::isErsLeader(const ossimFilename& file) const
+//TODO adapt the identification of the AlosPalsarLeader
+bool ossimAlosPalsarModel::isAlosPalsarLeader(const ossimFilename& file) const
 {
    std::ifstream candidate(file, ios::in | ios::binary);
    char ersFileName[16];
@@ -648,7 +658,8 @@ bool ossimAlosPalsarModel::isErsLeader(const ossimFilename& file) const
 
 }
 
-ossimFilename ossimAlosPalsarModel::findErsLeader(const ossimFilename& file) const
+//TODO adapt the search of the AlosPalsarLeader
+ossimFilename ossimAlosPalsarModel::findAlosPalsarLeader(const ossimFilename& file) const
 {
   ossimFilename leaFile = file;
   ossimString datString("DAT_01");
