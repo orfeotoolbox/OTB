@@ -93,7 +93,7 @@ public:
   /**
    * @brief ASCII flag
    */
-  std::string get_ascii_flag()
+  std::string get_ascii_flag() const
   {
     return _ascii_flag;
   };
@@ -101,7 +101,7 @@ public:
   /**
    * @brief Continuation flag
    */
-        std::string get_continuation_flag()
+        std::string get_continuation_flag() const
         {
                 return _continuation_flag;
         };
@@ -110,329 +110,329 @@ public:
   /**
    * @brief Format control documentation
    */
-  std::string get_format_doc()
+  std::string get_format_doc() const
   {
     return _format_doc;
   };
   /**
    * @brief Format doc version
    */
-  std::string   get_format_ver()
+  std::string   get_format_ver() const
   {
     return _format_ver;
   };
   /**
    * @brief Format doc revision
    */
-    std::string   get_design_rev()
+    std::string   get_design_rev() const
   {
     return _design_rev;
   };
   /**
    * @brief Software identifier
    */
-    std::string   get_software_id()
+    std::string   get_software_id() const
   {
     return _software_id;
   };
   /**
    * @brief File number
    */
-  int   get_file_num()
+  int   get_file_num() const
   {
     return _file_num ;
   };
   /**
    * @brief File name
    */
-    std::string   get_file_name()
+    std::string   get_file_name() const
   {
     return _file_name;
   };
   /**
    * @brief Record sequence/location flag
    */
-    std::string   get_rec_seq()
+    std::string   get_rec_seq() const
   {
     return _rec_seq;
   };
   /**
    * @brief Sequence number location
    */
-  int   get_seq_loc()
+  int   get_seq_loc() const
   {
     return _seq_loc;
   };
   /**
    * @brief Sequence number lenght
    */
-  int   get_seq_len()
+  int   get_seq_len() const
   {
     return _seq_len;
   };
   /**
    * @brief Record code/location flag
    */
-  std::string   get_rec_code()
+  std::string   get_rec_code() const
   {
     return _rec_code;
   };
   /**
    * @brief Record code location
    */
-  int   get_code_loc()
+  int   get_code_loc() const
   {
     return _code_loc;
   };
   /**
    * @brief Record code length
    */
-    int   get_code_len()
+    int   get_code_len() const
   {
     return _code_len;
   };
   /**
    * @brief Record length/location flag
    */
-  std::string get_rec_len()
+  std::string get_rec_len() const
   {
     return _rec_len;
   };
   /**
    * @brief Record lenght location
    */
-  int get_rlen_loc()
+  int get_rlen_loc() const
   {
     return _rlen_loc;
   };
   /**
    * @brief Record length, bytes
    */
-  int get_rlen_len()
+  int get_rlen_len() const
   {
     return _rlen_len;
   };
   /**
    * @brief Number of dataset summ records
    */
-  int get_n_dataset()
+  int get_n_dataset() const
   {
     return _n_dataset;
   };
   /**
    * @brief Data set summary record length, bytes
    */
-  int get_l_dataset()
+  int get_l_dataset() const
   {
     return _l_dataset;
   };
   /**
    * @brief Number of map proj records
    */
-  int get_n_map_proj()
+  int get_n_map_proj() const
   {
     return _n_map_proj;
   };
   /**
    * @brief Map projection record length, bytes
    */
-  int get_l_map_proj()
+  int get_l_map_proj() const
   {
     return _l_map_proj;
   };
   /**
    * @brief Number of platform position records
    */
-  int get_n_plat_pos()
+  int get_n_plat_pos() const
   {
     return _n_plat_pos;
   };
   /**
    * @brief Platform position record length, bytes
    */
-  int get_l_plat_pos()
+  int get_l_plat_pos() const
   {
     return _l_plat_pos;
   };
   /**
    * @brief Number of attitude data records
    */
-  int get_n_att_data()
+  int get_n_att_data() const
   {
     return _n_att_data;
   };
   /**
    * @brief Attitude data record length, bytes
    */
-  int get_l_att_data()
+  int get_l_att_data() const
   {
     return _l_att_data;
   };
   /**
    * @brief Number of radiometric data records
    */
-  int get_n_radi_data()
+  int get_n_radi_data() const
   {
     return _n_radi_data;
   };
   /**
    * @brief Radiometric data record length, bytes
    */
-  int get_l_radi_data()
+  int get_l_radi_data() const
   {
     return _l_radi_data;
   };
   /**
    * @brief Number of radiometric compensation records
    */
-  int get_n_radi_comp()
+  int get_n_radi_comp() const
   {
     return _n_radi_comp;
   };
   /**
    *  @brief Radiometric compensation record length, bytes
    */
-  int get_l_radi_comp()
+  int get_l_radi_comp() const
   {
     return _l_radi_comp;
   };
   /**
    * @brief Number of data quality summary records
    */
-  int get_n_qual_sum()
+  int get_n_qual_sum() const
   {
     return _n_qual_sum;
   };
   /**
    * @brief Data quality summary record length, bytes
    */
-  int get_l_qual_sum()
+  int get_l_qual_sum() const
   {
     return _l_qual_sum;
   };
   /**
    * @brief Number of data histogram records
    */
-  int get_n_data_his()
+  int get_n_data_his() const
   {
     return _n_data_his;
   };
   /**
    * @brief Data histogram record length, bytes
    */
-  int get_l_data_his()
+  int get_l_data_his() const
   {
     return _l_data_his;
   };
   /**
    * @brief Number of range spectra records
    */
-  int get_n_rang_spec()
+  int get_n_rang_spec() const
   {
     return _n_rang_spec ;
   };
   /**
    * @brief Range spectra record length, bytes
    */
-  int get_l_rang_spec()
+  int get_l_rang_spec() const
   {
     return _l_rang_spec;
   };
   /**
    * @brief Number of DEM descriptor records
    */
-  int get_n_dem_desc()
+  int get_n_dem_desc() const
   {
     return _n_dem_desc;
   };
   /**
    * @brief DEM desc record length, bytes
    */
-  int get_l_dem_desc()
+  int get_l_dem_desc() const
   {
     return _l_dem_desc;
   };
   /**
    * @brief Number of RADAR par records
    */
-  int get_n_radar_par()
+  int get_n_radar_par() const
   {
     return _n_radar_par;
   };
   /**
    * @brief RADAR par record length, bytes
    */
-  int get_l_radar_par()
+  int get_l_radar_par() const
   {
     return _l_radar_par;
   };
   /**
    * @brief Number of annotation data records
    */
-  int get_n_anno_data()
+  int get_n_anno_data() const
   {
     return _n_anno_data;
   };
   /**
    * @brief Annotation data record length, bytes
    */
-  int get_l_anno_data()
+  int get_l_anno_data() const
   {
     return _l_anno_data;
   };
   /**
    * @brief Number of processing parameter records
    */
-  int get_n_det_proc()
+  int get_n_det_proc() const
   {
     return _n_det_proc;
   };
   /**
    * @brief Processing parameter record length, bytes
    */
-  int get_l_det_proc()
+  int get_l_det_proc() const
   {
     return _l_det_proc;
   };
   /**
    * @brief Number of calibration records
    */
-  int get_n_cal()
+  int get_n_cal() const
   {
     return _n_cal;
   };
   /**
    * @brief Calibration record length, bytes
    */
-  int get_l_cal()
+  int get_l_cal() const
   {
     return _l_cal;
   };
   /**
    * @brief Number of GCP records
    */
-  int get_n_gcp()
+  int get_n_gcp() const
   {
     return _n_gcp;
   };
   /**
    * @brief GCP record length, bytes
    */
-  int get_l_gcp()
+  int get_l_gcp() const
   {
     return _l_gcp;
   };
   /**
    * @brief Number of facility data records
    */
-  int get_n_fac_data()
+  int get_n_fac_data() const
   {
     return _n_fac_data;
   };
   /**
    * @brief Fac data record length, bytes
    */
-  int get_l_fac_data()
+  int get_l_fac_data() const
   {
     return _l_fac_data;
   };

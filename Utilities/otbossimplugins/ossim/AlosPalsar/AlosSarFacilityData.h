@@ -93,7 +93,7 @@ public:
   /**
   * @brief name_of_facil_rec
   */
-  std::string   get_name_of_facil_rec()
+  std::string   get_name_of_facil_rec() const
   {
     return _name_of_facil_rec;
   };
@@ -101,84 +101,84 @@ public:
   /**
   * @brief last_release_qc_date
   */
-  std::string   get_last_release_qc_date()
+  std::string   get_last_release_qc_date() const
   {
     return _last_release_qc_date;
   };
   /**
   * @brief last_release_cal_date
   */
-  std::string   get_last_release_cal_date()
+  std::string   get_last_release_cal_date() const
   {
     return _last_release_cal_date;
   };
   /**
   * @brief qa_summary_flag
   */
-  int   get_qa_summary_flag()
+  int   get_qa_summary_flag() const
   {
     return _qa_summary_flag;
   };
   /**
   * @brief prf_code_change_flag
   */
-  int   get_prf_code_change_flag()
+  int   get_prf_code_change_flag() const
   {
     return _prf_code_change_flag;
   };
   /**
   * @brief sampling_win_change_flag
   */
-  int   get_sampling_win_change_flag()
+  int   get_sampling_win_change_flag() const
   {
     return _sampling_win_change_flag;
   };
   /**
   * @brief cal_gain_change_flag
   */
-  int   get_cal_gain_change_flag()
+  int   get_cal_gain_change_flag() const
   {
     return _cal_gain_change_flag;
   };
   /**
   * @brief quirp_qu_flag
   */
-  int   get_quirp_qu_flag()
+  int   get_quirp_qu_flag() const
   {
     return _quirp_qu_flag;
   };
   /**
   * @brief inp_data_stat_flag
   */
-  int   get_inp_data_stat_flag()
+  int   get_inp_data_stat_flag() const
   {
     return _inp_data_stat_flag;
   };
   /**
   * @brief dopp_cent_conf_meas_flag
   */
-  int   get_dopp_cent_conf_meas_flag()
+  int   get_dopp_cent_conf_meas_flag() const
   {
     return _dopp_cent_conf_meas_flag;
   };
   /**
   * @brief dopp_cent_val_flag
   */
-  int   get_dopp_cent_val_flag()
+  int   get_dopp_cent_val_flag() const
   {
     return _dopp_cent_val_flag;
   };
   /**
   * @brief dopp_ambig_conf_meas_flag
   */
-  int   get_dopp_ambig_conf_meas_flag()
+  int   get_dopp_ambig_conf_meas_flag() const
   {
     return _dopp_ambig_conf_meas_flag;
   };
   /**
   * @brief outp_data_mean_flag
   */
-  int   get_outp_data_mean_flag()
+  int   get_outp_data_mean_flag() const
   {
     return _outp_data_mean_flag;
   };
@@ -199,28 +199,28 @@ public:
   /**
   * @brief sampling_win_changes
   */
-  int   get_sampling_win_changes()
+  int   get_sampling_win_changes() const
   {
     return _sampling_win_changes;
   };
   /**
   * @brief cal_gain_changes
   */
-  int   get_cal_gain_changes()
+  int   get_cal_gain_changes() const
   {
     return _cal_gain_changes;
   };
   /**
   * @brief missing_lines
   */
-  int   get_missing_lines()
+  int   get_missing_lines() const
   {
     return _missing_lines;
   };
   /**
   * @brief rec_gain_changes
   */
-  int   get_rec_gain_changes()
+  int   get_rec_gain_changes() const
   {
     return _rec_gain_changes;
   };
@@ -248,14 +248,14 @@ public:
   /**
   * @brief dopp_cent_conf_meas
   */
-  double   get_dopp_cent_conf_meas()
+  double   get_dopp_cent_conf_meas() const
   {
     return _dopp_cent_conf_meas;
   };
   /**
   * @brief dopp_ambig_conf_meas
   */
-  double   get_dopp_ambig_conf_meas()
+  double   get_dopp_ambig_conf_meas() const
   {
     return _dopp_ambig_conf_meas;
   };
@@ -290,21 +290,21 @@ public:
   /**
   * @brief cal_sys_gain
   */
-  double   get_cal_sys_gain()
+  double   get_cal_sys_gain() const
   {
     return _cal_sys_gain;
   };
   /**
   * @brief first_rec_gain_read
   */
-  double   get_first_rec_gain_read()
+  double   get_first_rec_gain_read() const
   {
     return _first_rec_gain_read;
   };
   /**
   * @brief dopp_ambig_num
   */
-  double   get_dopp_ambig_num()
+  double   get_dopp_ambig_num() const
   {
     return _dopp_ambig_num;
   };
@@ -346,105 +346,105 @@ public:
   /**
   * @brief noise_power
   */
-  double   get_noise_power()
+  double   get_noise_power() const
   {
     return _noise_power;
   };
   /**
   * @brief int_cal_utc
   */
-  int   get_int_cal_utc()
+  int   get_int_cal_utc() const
   {
     return _int_cal_utc;
   };
   /**
   * @brief num_valid_cal_pulses
   */
-  int   get_num_valid_cal_pulses()
+  int   get_num_valid_cal_pulses() const
   {
     return _num_valid_cal_pulses;
   };
   /**
   * @brief num_valid_noise_pulses
   */
-  int   get_num_valid_noise_pulses()
+  int   get_num_valid_noise_pulses() const
   {
     return _num_valid_noise_pulses;
   };
   /**
   * @brief num_valid_replicas
   */
-  int   get_num_valid_replicas()
+  int   get_num_valid_replicas() const
   {
     return _num_valid_replicas;
   };
   /**
   * @brief first_replica_sample
   */
-  double   get_first_replica_sample()
+  double   get_first_replica_sample() const
   {
     return _first_replica_sample;
   };
   /**
   * @brief mean_cal_pulse_power
   */
-  double   get_mean_cal_pulse_power()
+  double   get_mean_cal_pulse_power() const
   {
     return _mean_cal_pulse_power;
   };
   /**
   * @brief mean_noise_power
   */
-  double   get_mean_noise_power()
+  double   get_mean_noise_power() const
   {
     return _mean_noise_power;
   };
   /**
   * @brief range_comp_norm_fact
   */
-  double   get_range_comp_norm_fact()
+  double   get_range_comp_norm_fact() const
   {
     return _range_comp_norm_fact;
   };
   /**
   * @brief replica_power
   */
-  double   get_replica_power()
+  double   get_replica_power() const
   {
     return _replica_power;
   };
   /**
   * @brief first_range_pixel_mid_az_inc
   */
-  double   get_first_range_pixel_mid_az_inc()
+  double   get_first_range_pixel_mid_az_inc() const
   {
     return _first_range_pixel_mid_az_inc;
   };
   /**
   * @brief center_range_pix_mid_az_inc
   */
-  double   get_center_range_pix_mid_az_inc()
+  double   get_center_range_pix_mid_az_inc() const
   {
     return _center_range_pix_mid_az_inc;
   };
   /**
   * @brief last_range_pix_mid_az_inc
   */
-  double   get_last_range_pix_mid_az_inc()
+  double   get_last_range_pix_mid_az_inc() const
   {
     return _last_range_pix_mid_az_inc;
   };
   /**
   * @brief norm_ref_range_ro
   */
-  double   get_norm_ref_range_ro()
+  double   get_norm_ref_range_ro() const
   {
     return _norm_ref_range_ro;
   };
   /**
   * @brief antenna_elev_flag
   */
-  int   get_antenna_elev_flag()
+  int   get_antenna_elev_flag() const
   {
     return _antenna_elev_flag;
   };
@@ -472,7 +472,7 @@ public:
   /**
   * @brief proc_noise_scale_fact
   */
-  double   get_proc_noise_scale_fact()
+  double   get_proc_noise_scale_fact() const
   {
     return _proc_noise_scale_fact;
   };
@@ -493,49 +493,49 @@ public:
   /**
   * @brief num_duplic_input_lines
   */
-  int   get_num_duplic_input_lines()
+  int   get_num_duplic_input_lines() const
   {
     return _num_duplic_input_lines;
   };
   /**
   * @brief estim_bit_error_rate
   */
-  double   get_estim_bit_error_rate()
+  double   get_estim_bit_error_rate() const
   {
     return _estim_bit_error_rate;
   };
   /**
   * @brief out_image_mean
   */
-  double   get_out_image_mean()
+  double   get_out_image_mean() const
   {
     return _out_image_mean;
   };
   /**
   * @brief out_image_std_dev
   */
-  double   get_out_image_std_dev()
+  double   get_out_image_std_dev() const
   {
     return _out_image_std_dev;
   };
   /**
   * @brief out_image_max_value
   */
-  double   get_out_image_max_value()
+  double   get_out_image_max_value() const
   {
     return _out_image_max_value;
   };
   /**
   * @brief time_raw_data_first_input
   */
-  std::string   get_time_raw_data_first_input()
+  std::string   get_time_raw_data_first_input() const
   {
     return _time_raw_data_first_input;
   };
   /**
   * @brief time_asc_node_state_vectors
   */
-  std::string   get_time_asc_node_state_vectors()
+  std::string   get_time_asc_node_state_vectors() const
   {
     return _time_asc_node_state_vectors;
   };
@@ -584,7 +584,7 @@ public:
   /**
   * @brief out_pixel_bit_length
   */
-  int   get_out_pixel_bit_length()
+  int   get_out_pixel_bit_length() const
   {
     return _out_pixel_bit_length;
   };
@@ -612,7 +612,7 @@ public:
   /**
   * @brief peak_loc_cross_correl_fun
   */
-  int   get_peak_loc_cross_correl_fun()
+  int   get_peak_loc_cross_correl_fun() const
   {
     return _peak_loc_cross_correl_fun;
   };
@@ -626,7 +626,7 @@ public:
   /**
   * @brief first_side_lobe_level
   */
-  double   get_first_side_lobe_level()
+  double   get_first_side_lobe_level() const
   {
     return _first_side_lobe_level;
   };
@@ -654,49 +654,49 @@ public:
   /**
   * @brief raw_data_correction_flag
   */
-  int   get_raw_data_correction_flag()
+  int   get_raw_data_correction_flag() const
   {
     return _raw_data_correction_flag;
   };
   /**
   * @brief look_detecion_flag
   */
-  int   get_look_detecion_flag()
+  int   get_look_detecion_flag() const
   {
     return _look_detecion_flag;
   };
   /**
   * @brief doppler_ambiguity_estimat_flag
   */
-  int   get_doppler_ambiguity_estimat_flag()
+  int   get_doppler_ambiguity_estimat_flag() const
   {
     return _doppler_ambiguity_estimat_flag;
   };
   /**
   * @brief azimuth_baseband_convers_flag
   */
-  int   get_azimuth_baseband_convers_flag()
+  int   get_azimuth_baseband_convers_flag() const
   {
     return _azimuth_baseband_convers_flag;
   };
   /**
   * @brief samples_per_line_used
   */
-  int   get_samples_per_line_used()
+  int   get_samples_per_line_used() const
   {
     return _samples_per_line_used;
   };
   /**
   * @brief range_lines_skip_factor
   */
-  int   get_range_lines_skip_factor()
+  int   get_range_lines_skip_factor() const
   {
     return _range_lines_skip_factor;
   };
   /**
   * @brief time_of_inp_state_vectors
   */
-  std::string   get_time_of_inp_state_vectors()
+  std::string   get_time_of_inp_state_vectors() const
   {
     return _time_of_inp_state_vectors;
   };
@@ -745,28 +745,28 @@ public:
   /**
   * @brief inp_state_vector_type_flag
   */
-  int   get_inp_state_vector_type_flag()
+  int   get_inp_state_vector_type_flag() const
   {
     return _inp_state_vector_type_flag;
   };
   /**
   * @brief win_coeff_for_range_match
   */
-  double   get_win_coeff_for_range_match()
+  double   get_win_coeff_for_range_match() const
   {
     return _win_coeff_for_range_match;
   };
   /**
   * @brief win_coeff_for_azi_match
   */
-  double   get_win_coeff_for_azi_match()
+  double   get_win_coeff_for_azi_match() const
   {
     return _win_coeff_for_azi_match;
   };
   /**
   * @brief update_period_range_match
   */
-  int   get_update_period_range_match()
+  int   get_update_period_range_match() const
   {
     return _update_period_range_match;
   };
@@ -829,14 +829,14 @@ public:
   /**
   * @brief samp_window_start_time_bias
   */
-  int   get_samp_window_start_time_bias()
+  int   get_samp_window_start_time_bias() const
   {
     return _samp_window_start_time_bias;
   };
   /**
   * @brief doppler_centroid_cubic_coeff
   */
-  double   get_doppler_centroid_cubic_coeff()
+  double   get_doppler_centroid_cubic_coeff() const
   {
     return _doppler_centroid_cubic_coeff;
   };
@@ -857,35 +857,35 @@ public:
   /**
   * @brief samp_win_start_first
   */
-  int   get_samp_win_start_first()
+  int   get_samp_win_start_first() const
   {
     return _samp_win_start_first;
   };
   /**
   * @brief samp_win_start_last
   */
-  int   get_samp_win_start_last()
+  int   get_samp_win_start_last() const
   {
     return _samp_win_start_last;
   };
   /**
   * @brief cal_syst_gain_last_proc
   */
-  int   get_cal_syst_gain_last_proc()
+  int   get_cal_syst_gain_last_proc() const
   {
     return _cal_syst_gain_last_proc;
   };
   /**
   * @brief receiver_gain_last_proc
   */
-  int   get_receiver_gain_last_proc()
+  int   get_receiver_gain_last_proc() const
   {
     return _receiver_gain_last_proc;
   };
   /**
   * @brief first_processed_range_sample
   */
-  int   get_first_processed_range_sample()
+  int   get_first_processed_range_sample() const
   {
     return _first_processed_range_sample;
   };
@@ -899,21 +899,21 @@ public:
   /**
   * @brief num_azimuth_blocks_proc
   */
-  int   get_num_azimuth_blocks_proc()
+  int   get_num_azimuth_blocks_proc() const
   {
     return _num_azimuth_blocks_proc;
   };
   /**
   * @brief num_input_raw_data_lines
   */
-  int   get_num_input_raw_data_lines()
+  int   get_num_input_raw_data_lines() const
   {
     return _num_input_raw_data_lines;
   };
   /**
   * @brief initial_doppler_ambiguity_num
   */
-  int   get_initial_doppler_ambiguity_num()
+  int   get_initial_doppler_ambiguity_num() const
   {
     return _initial_doppler_ambiguity_num;
   };
@@ -997,21 +997,21 @@ public:
   /**
   * @brief sat_binary_time_of_first
   */
-  int   get_sat_binary_time_of_first()
+  int   get_sat_binary_time_of_first() const
   {
     return _sat_binary_time_of_first;
   };
   /**
   * @brief num_valid_pixels_per_range
   */
-  int   get_num_valid_pixels_per_range()
+  int   get_num_valid_pixels_per_range() const
   {
     return _num_valid_pixels_per_range;
   };
   /**
   * @brief num_range_samp_discarded
   */
-  int   get_num_range_samp_discarded()
+  int   get_num_range_samp_discarded() const
   {
     return _num_range_samp_discarded;
   };
@@ -1060,49 +1060,49 @@ public:
   /**
   * @brief range_spread_loss_comp_flag
   */
-  int   get_range_spread_loss_comp_flag()
+  int   get_range_spread_loss_comp_flag() const
   {
     return _range_spread_loss_comp_flag;
   };
   /**
   * @brief datation_flag
   */
-  bool   get_datation_flag()
+  bool   get_datation_flag() const
   {
     return _datation_flag;
   };
   /**
   * @brief max_error_range_line_timing
   */
-  int   get_max_error_range_line_timing()
+  int   get_max_error_range_line_timing() const
   {
     return _max_error_range_line_timing;
   };
   /**
   * @brief form_num_range_line_used
   */
-  int   get_form_num_range_line_used()
+  int   get_form_num_range_line_used() const
   {
     return _form_num_range_line_used;
   };
   /**
   * @brief autom_look_scal_gain_flag
   */
-  bool   get_autom_look_scal_gain_flag()
+  bool   get_autom_look_scal_gain_flag() const
   {
     return _autom_look_scal_gain_flag;
   };
   /**
   * @brief max_value_look_scalar_gain
   */
-  int   get_max_value_look_scalar_gain()
+  int   get_max_value_look_scalar_gain() const
   {
     return _max_value_look_scalar_gain;
   };
   /**
   * @brief replica_norm_method_flag
   */
-  int   get_replica_norm_method_flag()
+  int   get_replica_norm_method_flag() const
   {
     return _replica_norm_method_flag;
   };
@@ -1172,7 +1172,7 @@ public:
   /**
   * @brief range_time_origin_ant
   */
-  double   get_range_time_origin_ant()
+  double   get_range_time_origin_ant() const
   {
     return _range_time_origin_ant;
   };
