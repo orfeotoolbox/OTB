@@ -19,8 +19,9 @@
 #include "AlosSarMapProjectionData.h"
 #include "AlosSarPlatformPositionData.h"
 #include "AlosSarFacilityData.h"
-
 #include <map>
+
+class ossimKeywordlist;
 
 namespace ossimplugins
 {
@@ -72,11 +73,23 @@ public:
    * @brief Remove all the previous records from the AlosSarLeader
    */
   void ClearRecords();
-  AlosSarFacilityData * get_AlosSarFacilityData();
-  AlosSarPlatformPositionData * get_AlosSarPlatformPositionData();
-//  AlosSarMapProjectionData * get_AlosSarMapProjectionData();
-  AlosSarDataSetSummary * get_AlosSarDataSetSummary();
-  AlosSarFileDescriptor * get_AlosSarFileDescriptor();
+
+
+  /**
+   * @brief Method to save object state to a keyword list.
+   * @param kwl Keyword list to save to.
+   * @param prefix added to keys when saved.
+   * @return true on success, false on error.
+   */
+  virtual bool saveState(ossimKeywordlist& kwl,
+                         const char* prefix=0) const;
+
+
+  AlosSarFacilityData * get_AlosSarFacilityData() const;
+  AlosSarPlatformPositionData * get_AlosSarPlatformPositionData() const;
+//  AlosSarMapProjectionData * get_AlosSarMapProjectionData() const;
+  AlosSarDataSetSummary * get_AlosSarDataSetSummary() const;
+  AlosSarFileDescriptor * get_AlosSarFileDescriptor() const;
 
 protected:
   std::map<int, AlosSarRecord*> _records;
