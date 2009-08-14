@@ -18,6 +18,13 @@
 #include "ers/ErsSar/ErsSarLeader/ErsSarMapProjectionData.h"
 #include "ers/ErsSar/ErsSarLeader/ErsSarFacilityData.h"
 
+#include <ossim/base/ossimTrace.h>
+#include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimKeywordNames.h>
+
+// Static trace for debugging
+static ossimTrace traceDebug("ossimErsSarLeader:debug");
+
 namespace ossimplugins
 {
 
@@ -120,14 +127,13 @@ void ErsSarLeader::ClearRecords()
 bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
                              const char* prefix) const
 {
-   /*
-   static const char MODULE[] = "ErsSarModel::saveState";
 
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
-   }
-   */
+  static const char MODULE[] = "ErsSarLeader::saveState";
+
+  if (traceDebug())
+  {
+    ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
+  }
 
   bool result = true;
 
@@ -245,14 +251,14 @@ bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
     result = false;
   }
 
-  /*
+
   if (traceDebug())
   {
     ossimNotify(ossimNotifyLevel_DEBUG)
        << MODULE << " exit status = " << (result?"true":"false\n")
        << std::endl;
   }
-  */
+
 
   return result;
 }
