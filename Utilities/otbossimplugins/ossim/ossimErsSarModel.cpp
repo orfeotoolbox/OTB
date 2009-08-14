@@ -198,6 +198,12 @@ bool ossimErsSarModel::open(const ossimFilename& file)
        << std::endl;
   }
 
+  //To initialize the whole state, reusing saveState/loadState
+  //FIXME: This could be at the superclass level instead
+  ossimKeywordlist kwl;
+  saveState(kwl);
+  loadState(kwl);
+
   return result;
 
 }
