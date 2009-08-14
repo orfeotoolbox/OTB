@@ -18,6 +18,13 @@
 #include "ers/ErsSar/ErsSarLeader/ErsSarMapProjectionData.h"
 #include "ers/ErsSar/ErsSarLeader/ErsSarFacilityData.h"
 
+#include <ossim/base/ossimTrace.h>
+#include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimKeywordNames.h>
+
+// Static trace for debugging
+static ossimTrace traceDebug("ossimErsSarLeader:debug");
+
 namespace ossimplugins
 {
 
@@ -120,14 +127,13 @@ void ErsSarLeader::ClearRecords()
 bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
                              const char* prefix) const
 {
-   /*
-   static const char MODULE[] = "ErsSarModel::saveState";
 
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
-   }
-   */
+  static const char MODULE[] = "ErsSarLeader::saveState";
+
+  if (traceDebug())
+  {
+    ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
+  }
 
   bool result = true;
 
@@ -137,7 +143,7 @@ bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
   /*
    * Adding metadata necessary to the sensor model in the keywordlist
    */
-  ErsSarFileDescriptor *leaderfiledesc = get_ErsSarFileDescriptor();
+  const ErsSarFileDescriptor *leaderfiledesc = get_ErsSarFileDescriptor();
   if (leaderfiledesc != NULL)
   {
     kwl.add(prefix, "filename",leaderfiledesc->get_file_name().c_str(),true);
@@ -150,7 +156,7 @@ bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
   /*
    * Adding metadata necessary to the sensor model in the keywordlist
    */
-  ErsSarDataSetSummary *datasetSummary = get_ErsSarDataSetSummary();
+  const ErsSarDataSetSummary *datasetSummary = get_ErsSarDataSetSummary();
   if ( (datasetSummary != NULL) && (result == true) )
   {
     kwl.add(prefix, "inp_sctim",(datasetSummary->get_inp_sctim()).c_str(),true);
@@ -176,7 +182,7 @@ bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
     result = false;
   }
 
-  ErsSarMapProjectionData *mapprojectiondata = get_ErsSarMapProjectionData();
+  const ErsSarMapProjectionData *mapprojectiondata = get_ErsSarMapProjectionData();
   if ( (mapprojectiondata != NULL) && (result == true) )
   {
     kwl.add(prefix, "map_proj_des",(mapprojectiondata->get_map_proj_des()).c_str(),true);
@@ -196,8 +202,8 @@ bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
     result = false;
   }
 
-  ErsSarPlatformPositionData *platformposition = get_ErsSarPlatformPositionData();
-  if ( (mapprojectiondata != NULL) && (result == true) )
+  const ErsSarPlatformPositionData *platformposition = get_ErsSarPlatformPositionData();
+  if ( (platformposition != NULL) && (result == true) )
   {
     kwl.add(prefix, "neph", platformposition->get_ndata(),true);
     kwl.add(prefix, "eph_year", platformposition->get_year(),true);
@@ -232,7 +238,7 @@ bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
   /*
    * Adding metadata necessary to the sensor model in the keywordlist
    */
-  ErsSarFacilityData *facilitydata = get_ErsSarFacilityData();
+  const ErsSarFacilityData *facilitydata = get_ErsSarFacilityData();
   if ( (facilitydata != NULL) && (result == true) )
   {
     kwl.add(prefix, "coef_ground_range_1",facilitydata->get_coef_ground_range_1(),true);
@@ -245,38 +251,38 @@ bool ErsSarLeader::saveState(ossimKeywordlist& kwl,
     result = false;
   }
 
-  /*
+
   if (traceDebug())
   {
     ossimNotify(ossimNotifyLevel_DEBUG)
        << MODULE << " exit status = " << (result?"true":"false\n")
        << std::endl;
   }
-  */
+
 
   return result;
 }
 
-ErsSarFacilityData * ErsSarLeader::get_ErsSarFacilityData() const
+const ErsSarFacilityData * ErsSarLeader::get_ErsSarFacilityData() const
 {
-  return (ErsSarFacilityData*)theRecords[ErsSarFacilityDataID];
+  return dynamic_cast<const ErsSarFacilityData*>(theRecords.find(ErsSarFacilityDataID)->second);
 }
-ErsSarPlatformPositionData * ErsSarLeader::get_ErsSarPlatformPositionData() const
+const ErsSarPlatformPositionData * ErsSarLeader::get_ErsSarPlatformPositionData() const
 {
-  return (ErsSarPlatformPositionData*)theRecords[ErsSarPlatformPositionDataID];
+  return dynamic_cast<const ErsSarPlatformPositionData*>(theRecords.find(ErsSarPlatformPositionDataID)->second);
 }
-ErsSarMapProjectionData * ErsSarLeader::get_ErsSarMapProjectionData() const
+const ErsSarMapProjectionData * ErsSarLeader::get_ErsSarMapProjectionData() const
 {
-  return (ErsSarMapProjectionData*)theRecords[ErsSarMapProjectionDataID];
-}
-
-ErsSarDataSetSummary * ErsSarLeader::get_ErsSarDataSetSummary() const
-{
-  return (ErsSarDataSetSummary*)theRecords[ErsSarDataSetSummaryID];
+  return dynamic_cast<const ErsSarMapProjectionData*>(theRecords.find(ErsSarMapProjectionDataID)->second);
 }
 
-ErsSarFileDescriptor * ErsSarLeader::get_ErsSarFileDescriptor() const
+const ErsSarDataSetSummary * ErsSarLeader::get_ErsSarDataSetSummary() const
 {
-  return static_cast<ErsSarFileDescriptor*>(theRecords[ErsSarFileDescriptorID]);
+  return dynamic_cast<const ErsSarDataSetSummary*>(theRecords.find(ErsSarDataSetSummaryID)->second);
+}
+
+const ErsSarFileDescriptor * ErsSarLeader::get_ErsSarFileDescriptor() const
+{
+  return dynamic_cast<const ErsSarFileDescriptor*>(theRecords.find(ErsSarFileDescriptorID)->second);
 }
 }

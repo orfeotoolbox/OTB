@@ -59,7 +59,7 @@ public:
   /**
    * @brief Data point position (m)
    */
-  double* get_pos()
+  const double* get_pos() const
   {
     return _pos;
   };
@@ -67,7 +67,7 @@ public:
   /**
    * @brief Data point velocity (mm/s)
    */
-  double* get_vel()
+  const double* get_vel() const
   {
     return _vel;
   };

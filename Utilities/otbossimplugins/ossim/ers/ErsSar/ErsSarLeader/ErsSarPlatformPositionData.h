@@ -94,126 +94,126 @@ public:
   /**
    * @brief Orbital elements designator
    */
-  std::string   get_orbit_ele_desg()
+  std::string   get_orbit_ele_desg() const
   {
     return _orbit_ele_desg;
   };
     /**
    * @brief Orbital elements
    */
-  double*   get_orbit_ele()
+  const double*   get_orbit_ele() const
   {
     return _orbit_ele;
   };
     /**
    * @brief Number of data points
    */
-  int  get_ndata()
+  int  get_ndata() const
   {
     return _ndata;
   };
     /**
    * @brief Year of data point
    */
-  int   get_year()
+  int   get_year() const
   {
     return _year;
   };
     /**
    * @brief Month of data point
    */
-  int   get_month()
+  int   get_month() const
   {
     return _month;
   };
     /**
    * @brief Day of data point
    */
-  int   get_day()
+  int   get_day() const
   {
     return _day;
   };
     /**
    * @brief Day of year
    */
-  int   get_gmt_day()
+  int   get_gmt_day() const
   {
     return _gmt_day;
   };
     /**
    * @brief Seconds of day
    */
-  double   get_gmt_sec()
+  double   get_gmt_sec() const
   {
     return _gmt_sec;
   };
     /**
    * @brief Data sampling interval
    */
-  double   get_data_int()
+  double   get_data_int() const
   {
     return _data_int;
   };
     /**
    * @brief Reference coordinate system
    */
-  std::string   get_ref_coord()
+  std::string   get_ref_coord() const
   {
     return _ref_coord;
   };
     /**
    * @brief Greenwich mean hour angle
    */
-  double   get_hr_angle()
+  double   get_hr_angle() const
   {
     return _hr_angle;
   };
     /**
    * @brief Along track position error
    */
-  double   get_alt_poserr()
+  double   get_alt_poserr() const
   {
     return _alt_poserr;
   };
     /**
    * @brief Cross track position error
    */
-  double   get_crt_poserr()
+  double   get_crt_poserr() const
   {
     return _crt_poserr;
   };
     /**
    * @brief Radial position error
    */
-  double   get_rad_poserr()
+  double   get_rad_poserr() const
   {
     return _rad_poserr;
   };
     /**
    * @brief Along track velocity error
    */
-  double   get_alt_velerr()
+  double   get_alt_velerr() const
   {
     return _alt_velerr;
   };
     /**
    * @brief Cross track velocity error
    */
-  double  get_crt_velerr()
+  double  get_crt_velerr() const
   {
     return _crt_velerr;
   };
     /**
    * @brief Radial velocity error
    */
-  double  get_rad_velerr()
+  double  get_rad_velerr() const
   {
     return _rad_velerr;
   };
     /**
    * @brief Data point position/velocity
    */
-  ErsSarPositionVectorRecord* get_pos_vect()
+  const ErsSarPositionVectorRecord* get_pos_vect() const
   {
     return _pos_vect;
   };

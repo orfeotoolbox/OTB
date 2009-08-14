@@ -185,6 +185,13 @@ bool ossimErsSarModel::open(const ossimFilename& file)
         ossimNotify(ossimNotifyLevel_DEBUG)
         << "End reading Leader file" << std::endl;
       }
+
+      //To initialize the whole state, reusing saveState/loadState
+      //FIXME: This could be at the superclass level instead
+      ossimKeywordlist kwl;
+      saveState(kwl);
+      loadState(kwl);
+
     } // matches: if ( result=isErsLeader(file) == True )
 
   } // matches: if ( file.exists() )
@@ -197,6 +204,8 @@ bool ossimErsSarModel::open(const ossimFilename& file)
        << MODULE << " exit status = " << (result?"true":"false\n")
        << std::endl;
   }
+
+
 
   return result;
 

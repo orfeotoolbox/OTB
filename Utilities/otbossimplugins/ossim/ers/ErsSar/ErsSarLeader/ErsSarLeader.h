@@ -20,8 +20,8 @@
 #include "ErsSarFacilityData.h"
 #include <map>
 
-#include <ossim/base/ossimKeywordlist.h>
-#include <ossim/base/ossimKeywordNames.h>
+class ossimKeywordlist;
+
 
 namespace ossimplugins
 {
@@ -84,17 +84,11 @@ public:
   virtual bool saveState(ossimKeywordlist& kwl,
                          const char* prefix=0) const;
 
-   /**
-    * @brief Method to the load (recreate) the state of the object from a
-    * keyword list. Return true if ok or false on error.
-    * @return true if load OK, false on error
-    */
-
-  ErsSarFacilityData * get_ErsSarFacilityData() const;
-  ErsSarPlatformPositionData * get_ErsSarPlatformPositionData() const;
-  ErsSarMapProjectionData * get_ErsSarMapProjectionData() const;
-  ErsSarDataSetSummary * get_ErsSarDataSetSummary() const;
-  ErsSarFileDescriptor * get_ErsSarFileDescriptor() const;
+  const ErsSarFacilityData * get_ErsSarFacilityData() const;
+  const ErsSarPlatformPositionData * get_ErsSarPlatformPositionData() const;
+  const ErsSarMapProjectionData * get_ErsSarMapProjectionData() const;
+  const ErsSarDataSetSummary * get_ErsSarDataSetSummary() const;
+  const ErsSarFileDescriptor * get_ErsSarFileDescriptor() const;
 
 protected:
   // Made mutable because the get_* methods need to access it.
