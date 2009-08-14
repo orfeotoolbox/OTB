@@ -628,33 +628,35 @@ bool ossimAlosPalsarModel::InitSRGR(const ossimKeywordlist &kwl, const char *pre
 //TODO adapt the identification of the AlosPalsarLeader
 bool ossimAlosPalsarModel::isAlosPalsarLeader(const ossimFilename& file) const
 {
-   std::ifstream candidate(file, ios::in | ios::binary);
-   char ersFileName[16];
+//    std::ifstream candidate(file, ios::in | ios::binary);
+//    char ersFileName[16];
+//
+//    candidate.seekg(48);
+//    if ( candidate.bad() or candidate.eof() )
+//    {
+//      return false;
+//    }
+//    candidate.read(ersFileName, 16);
+//    if ( candidate.bad() or candidate.eof() )
+//    {
+//      return false;
+//    }
+//    candidate.close();
+//
+//    ossimString ersString(ersFileName);
+//
+//    if ( ( ersString.find("ERS") == 0 )   &&
+//         ( ersString.find(".SAR.") == 4 ) &&
+//         ( ersString.find("LEAD") == 12 )    )
+//    {
+//      return true;
+//    }
+//    else
+//    {
+//      return false;
+//    }
 
-   candidate.seekg(48);
-   if ( candidate.bad() or candidate.eof() )
-   {
-     return false;
-   }
-   candidate.read(ersFileName, 16);
-   if ( candidate.bad() or candidate.eof() )
-   {
-     return false;
-   }
-   candidate.close();
-
-   ossimString ersString(ersFileName);
-
-   if ( ( ersString.find("ERS") == 0 )   &&
-        ( ersString.find(".SAR.") == 4 ) &&
-        ( ersString.find("LEAD") == 12 )    )
-   {
-     return true;
-   }
-   else
-   {
-     return false;
-   }
+   return true;
 
 }
 

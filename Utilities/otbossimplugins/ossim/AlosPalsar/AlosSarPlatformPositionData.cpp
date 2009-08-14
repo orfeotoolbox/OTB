@@ -35,33 +35,33 @@ std::ostream& operator<<(std::ostream& os, const AlosSarPlatformPositionData& da
 
   os<<"ndata:"<<data._ndata<<std::endl;
 
-    os<<"year:"<<data._year<<std::endl;
+  os<<"year:"<<data._year<<std::endl;
 
-    os<<"month:"<<data._month<<std::endl;
+  os<<"month:"<<data._month<<std::endl;
 
-    os<<"day:"<<data._day<<std::endl;
+  os<<"day:"<<data._day<<std::endl;
 
-    os<<"gmt_day:"<<data._gmt_day<<std::endl;
+  os<<"gmt_day:"<<data._gmt_day<<std::endl;
 
-    os<<"gmt_sec:"<<data._gmt_sec<<std::endl;
+  os<<"gmt_sec:"<<data._gmt_sec<<std::endl;
 
-    os<<"data_int:"<<data._data_int<<std::endl;
+  os<<"data_int:"<<data._data_int<<std::endl;
 
-    os<<"ref_coord:"<<data._ref_coord.c_str()<<std::endl;
+  os<<"ref_coord:"<<data._ref_coord.c_str()<<std::endl;
 
-    os<<"hr_angle:"<<data._hr_angle<<std::endl;
+  os<<"hr_angle:"<<data._hr_angle<<std::endl;
 
-    os<<"alt_poserr:"<<data._alt_poserr<<std::endl;
+  os<<"alt_poserr:"<<data._alt_poserr<<std::endl;
 
-    os<<"crt_poserr:"<<data._crt_poserr<<std::endl;
+  os<<"crt_poserr:"<<data._crt_poserr<<std::endl;
 
-    os<<"rad_poserr:"<<data._rad_poserr<<std::endl;
+  os<<"rad_poserr:"<<data._rad_poserr<<std::endl;
 
   os<<"alt_velerr:"<<data._alt_velerr<<std::endl;
 
-    os<<"crt_velerr:"<<data._crt_velerr<<std::endl;
+  os<<"crt_velerr:"<<data._crt_velerr<<std::endl;
 
-    os<<"rad_velerr:"<<data._rad_velerr<<std::endl;
+  os<<"rad_velerr:"<<data._rad_velerr<<std::endl;
 
   for (int i=0;i<64;i++)
   {
@@ -152,13 +152,10 @@ std::istream& operator>>(std::istream& is, AlosSarPlatformPositionData& data)
     is>>data._pos_vect[i];
   }
 
+  is.seekg(598, std::ios::cur);                      //skip the rest part of PlatformPostion//
+  is.seekg(12495744, std::ios::cur);            //data skip ubtil facility11//
+
   return is;
-
-
-    is.seekg(598, std::ios::cur);                      //skip the rest part of PlatformPostion//
-    is.seekg(12495744, std::ios::cur);            //data skip ubtil facility11//
-
-
 }
 
 AlosSarPlatformPositionData::AlosSarPlatformPositionData(const AlosSarPlatformPositionData& rhs):

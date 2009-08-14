@@ -11,6 +11,10 @@
 // $Id$
 
 #include <AlosSarRecordFactory.h>
+#include <ossim/base/ossimTrace.h>
+
+// Static trace for debugging
+static ossimTrace traceDebug("AlosSarRecordFactory:debug");
 
 namespace ossimplugins
 {
@@ -25,6 +29,10 @@ AlosSarRecordFactory::~AlosSarRecordFactory()
 
 AlosSarRecord* AlosSarRecordFactory::Instanciate(int id)
 {
+  if (traceDebug())
+  {
+    ossimNotify(ossimNotifyLevel_DEBUG)<< "Intanciate AlosPalsar record:" << id << "\n";
+  }
   AlosSarRecord* record = _availableRecords[id];
   if(record == NULL)
   {

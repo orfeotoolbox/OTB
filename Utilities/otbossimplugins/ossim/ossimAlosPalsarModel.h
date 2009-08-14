@@ -118,8 +118,8 @@ private:
 
 
 
-  virtual bool isErsLeader(const ossimFilename& file) const;
-        virtual ossimFilename findErsLeader(const ossimFilename& file) const;
+  virtual bool isAlosPalsarLeader(const ossimFilename& file) const;
+  virtual ossimFilename findAlosPalsarLeader(const ossimFilename& file) const;
 
   TYPE_DATA
 
