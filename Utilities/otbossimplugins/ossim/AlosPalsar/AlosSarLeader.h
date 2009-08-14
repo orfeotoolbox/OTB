@@ -85,14 +85,15 @@ public:
                          const char* prefix=0) const;
 
 
-  AlosSarFacilityData * get_AlosSarFacilityData() const;
-  AlosSarPlatformPositionData * get_AlosSarPlatformPositionData() const;
-//  AlosSarMapProjectionData * get_AlosSarMapProjectionData() const;
-  AlosSarDataSetSummary * get_AlosSarDataSetSummary() const;
-  AlosSarFileDescriptor * get_AlosSarFileDescriptor() const;
+  const AlosSarFacilityData * get_AlosSarFacilityData() const;
+  const AlosSarPlatformPositionData * get_AlosSarPlatformPositionData() const;
+//  const AlosSarMapProjectionData * get_AlosSarMapProjectionData() const;
+  const AlosSarDataSetSummary * get_AlosSarDataSetSummary() const;
+  const AlosSarFileDescriptor * get_AlosSarFileDescriptor() const;
 
 protected:
-  std::map<int, AlosSarRecord*> _records;
+  typedef std::map<int, AlosSarRecord*> RecordType;
+  RecordType _records;
 
   static const int AlosSarFacilityDataID;
   static const int AlosSarPlatformPositionDataID;

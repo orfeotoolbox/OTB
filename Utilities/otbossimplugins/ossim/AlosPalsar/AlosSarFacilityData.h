@@ -1109,63 +1109,63 @@ public:
   /**
   * @brief coef_ground_range_1
   */
-  double   get_coef_ground_range_1()
+  double   get_coef_ground_range_1() const
   {
     return _coef_ground_range_1;
   };
   /**
   * @brief coef_ground_range_2
   */
-  double   get_coef_ground_range_2()
+  double   get_coef_ground_range_2() const
   {
     return _coef_ground_range_2;
   };
   /**
   * @brief coef_ground_range_3
   */
-  double   get_coef_ground_range_3()
+  double   get_coef_ground_range_3() const
   {
     return _coef_ground_range_3;
   };
   /**
   * @brief coef_ground_range_4
   */
-  double   get_coef_ground_range_4()
+  double   get_coef_ground_range_4() const
   {
     return _coef_ground_range_4;
   };
   /**
   * @brief coef_ant_elev_1
   */
-  double   get_coef_ant_elev_1()
+  double   get_coef_ant_elev_1() const
   {
     return _coef_ant_elev_1;
   };
   /**
   * @brief coef_ant_elev_2
   */
-  double   get_coef_ant_elev_2()
+  double   get_coef_ant_elev_2() const
   {
     return _coef_ant_elev_2;
   };
   /**
   * @brief coef_ant_elev_3
   */
-  double   get_coef_ant_elev_3()
+  double   get_coef_ant_elev_3() const
   {
     return _coef_ant_elev_3;
   };
   /**
   * @brief coef_ant_elev_4
   */
-  double   get_coef_ant_elev_4()
+  double   get_coef_ant_elev_4() const
   {
     return _coef_ant_elev_4;
   };
   /**
   * @brief coef_ant_elev_5
   */
-  double   get_coef_ant_elev_5()
+  double   get_coef_ant_elev_5() const
   {
     return _coef_ant_elev_5;
   };

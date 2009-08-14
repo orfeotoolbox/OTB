@@ -144,7 +144,7 @@ bool AlosSarLeader::saveState(ossimKeywordlist& kwl,
   /*
    * Adding metadata necessary to the sensor model in the keywordlist
    */
-  AlosSarFileDescriptor *leaderfiledesc = get_AlosSarFileDescriptor();
+  const AlosSarFileDescriptor *leaderfiledesc = get_AlosSarFileDescriptor();
   if (leaderfiledesc != NULL)
   {
     kwl.add(prefix, "filename",leaderfiledesc->get_file_name().c_str(),true);
@@ -157,7 +157,7 @@ bool AlosSarLeader::saveState(ossimKeywordlist& kwl,
   /*
    * Adding metadata necessary to the sensor model in the keywordlist
    */
-  AlosSarDataSetSummary *datasetSummary = get_AlosSarDataSetSummary();
+  const AlosSarDataSetSummary *datasetSummary = get_AlosSarDataSetSummary();
   if ( (datasetSummary != NULL) && (result == true) )
   {
     kwl.add(prefix, "inp_sctim",(datasetSummary->get_inp_sctim()).c_str(),true);
@@ -174,37 +174,39 @@ bool AlosSarLeader::saveState(ossimKeywordlist& kwl,
     kwl.add(prefix, "pix_spacing", datasetSummary->get_pix_spacing(),true);
     kwl.add(prefix, "nlooks_az", datasetSummary->get_n_azilok(),true);
     kwl.add(prefix, "n_rnglok", datasetSummary->get_n_rnglok(),true);
-    kwl.add(prefix, "zero_dop_range_time_f_pixel", datasetSummary->get_zero_dop_range_time_f_pixel(),true);
-    kwl.add(prefix, "zero_dop_range_time_c_pixel", datasetSummary->get_zero_dop_range_time_c_pixel(),true);
-    kwl.add(prefix, "zero_dop_range_time_l_pixel", datasetSummary->get_zero_dop_range_time_l_pixel(),true);
+    //FIXME check if those data are available
+//     kwl.add(prefix, "zero_dop_range_time_f_pixel", datasetSummary->get_zero_dop_range_time_f_pixel(),true);
+//     kwl.add(prefix, "zero_dop_range_time_c_pixel", datasetSummary->get_zero_dop_range_time_c_pixel(),true);
+//     kwl.add(prefix, "zero_dop_range_time_l_pixel", datasetSummary->get_zero_dop_range_time_l_pixel(),true);
   }
   else
   {
     result = false;
   }
 
-  AlosSarMapProjectionData *mapprojectiondata = get_AlosSarMapProjectionData();
-  if ( (mapprojectiondata != NULL) && (result == true) )
-  {
-    kwl.add(prefix, "map_proj_des",(mapprojectiondata->get_map_proj_des()).c_str(),true);
-    kwl.add(prefix, "num_lines",(double) mapprojectiondata->get_num_lines(),true);
-    kwl.add(prefix, "num_pix",(double) mapprojectiondata->get_num_pix_in_line(),true);
-    kwl.add(prefix, "first_line_first_pixel_lat",mapprojectiondata->get_first_line_first_pixel_lat(), true);
-    kwl.add(prefix, "first_line_first_pixel_lon",mapprojectiondata->get_first_line_first_pixel_lon(), true);
-    kwl.add(prefix, "first_line_last_pixel_lat",mapprojectiondata->get_first_line_last_pixel_lat(), true);
-    kwl.add(prefix, "first_line_last_pixel_lon",mapprojectiondata->get_first_line_last_pixel_lon(), true);
-    kwl.add(prefix, "last_line_first_pixel_lat",mapprojectiondata->get_last_line_first_pixel_lat(), true);
-    kwl.add(prefix, "last_line_first_pixel_lon",mapprojectiondata->get_last_line_first_pixel_lon(), true);
-    kwl.add(prefix, "last_line_last_pixel_lat",mapprojectiondata->get_last_line_last_pixel_lat(), true);
-    kwl.add(prefix, "last_line_last_pixel_lon",mapprojectiondata->get_last_line_last_pixel_lon(), true);
-  }
-  else
-  {
-    result = false;
-  }
+  // FIXME do not handle Alos map projection information for now...
+//   const AlosSarMapProjectionData *mapprojectiondata = get_AlosSarMapProjectionData();
+//   if ( (mapprojectiondata != NULL) && (result == true) )
+//   {
+//     kwl.add(prefix, "map_proj_des",(mapprojectiondata->get_map_proj_des()).c_str(),true);
+//     kwl.add(prefix, "num_lines",(double) mapprojectiondata->get_num_lines(),true);
+//     kwl.add(prefix, "num_pix",(double) mapprojectiondata->get_num_pix_in_line(),true);
+//     kwl.add(prefix, "first_line_first_pixel_lat",mapprojectiondata->get_first_line_first_pixel_lat(), true);
+//     kwl.add(prefix, "first_line_first_pixel_lon",mapprojectiondata->get_first_line_first_pixel_lon(), true);
+//     kwl.add(prefix, "first_line_last_pixel_lat",mapprojectiondata->get_first_line_last_pixel_lat(), true);
+//     kwl.add(prefix, "first_line_last_pixel_lon",mapprojectiondata->get_first_line_last_pixel_lon(), true);
+//     kwl.add(prefix, "last_line_first_pixel_lat",mapprojectiondata->get_last_line_first_pixel_lat(), true);
+//     kwl.add(prefix, "last_line_first_pixel_lon",mapprojectiondata->get_last_line_first_pixel_lon(), true);
+//     kwl.add(prefix, "last_line_last_pixel_lat",mapprojectiondata->get_last_line_last_pixel_lat(), true);
+//     kwl.add(prefix, "last_line_last_pixel_lon",mapprojectiondata->get_last_line_last_pixel_lon(), true);
+//   }
+//   else
+//   {
+//     result = false;
+//   }
 
-  AlosSarPlatformPositionData *platformposition = get_AlosSarPlatformPositionData();
-  if ( (mapprojectiondata != NULL) && (result == true) )
+  const AlosSarPlatformPositionData *platformposition = get_AlosSarPlatformPositionData();
+  if ( (platformposition != NULL) && (result == true) )
   {
     kwl.add(prefix, "neph", platformposition->get_ndata(),true);
     kwl.add(prefix, "eph_year", platformposition->get_year(),true);
@@ -239,7 +241,7 @@ bool AlosSarLeader::saveState(ossimKeywordlist& kwl,
   /*
    * Adding metadata necessary to the sensor model in the keywordlist
    */
-  AlosSarFacilityData *facilitydata = get_AlosSarFacilityData();
+  const AlosSarFacilityData *facilitydata = get_AlosSarFacilityData();
   if ( (facilitydata != NULL) && (result == true) )
   {
     kwl.add(prefix, "coef_ground_range_1",facilitydata->get_coef_ground_range_1(),true);
@@ -264,31 +266,38 @@ bool AlosSarLeader::saveState(ossimKeywordlist& kwl,
   return result;
 }
 
-AlosSarFacilityData * AlosSarLeader::get_AlosSarFacilityData() const
+const AlosSarFacilityData * AlosSarLeader::get_AlosSarFacilityData() const
 {
-  return (AlosSarFacilityData*)_records[AlosSarFacilityDataID];
+//   return const_cast<const AlosSarFacilityData*>(dynamic_cast<AlosSarFacilityData*>(_records[AlosSarFacilityDataID]));
+//   RecordType::const_iterator it = _records.find(AlosSarFacilityDataID)->second;
+//   return dynamic_cast<const AlosSarFacilityData*>(it.find(AlosSarFacilityDataID));
+  return dynamic_cast<const AlosSarFacilityData*>(_records.find(AlosSarFacilityDataID)->second);
 }
-AlosSarPlatformPositionData * AlosSarLeader::get_AlosSarPlatformPositionData() const
+const AlosSarPlatformPositionData * AlosSarLeader::get_AlosSarPlatformPositionData() const
 {
-  return (AlosSarPlatformPositionData*)_records[AlosSarPlatformPositionDataID];
+//   return (AlosSarPlatformPositionData*)_records[AlosSarPlatformPositionDataID];
+  return dynamic_cast<const AlosSarPlatformPositionData*>(_records.find(AlosSarPlatformPositionDataID)->second);
 }
-/* AlosSarMapProjectionData * AlosSarLeader::get_AlosSarMapProjectionData() const
+/*const AlosSarMapProjectionData * AlosSarLeader::get_AlosSarMapProjectionData() const
 {
-  return (AlosSarMapProjectionData*)_records[AlosSarMapProjectionDataID];
+//   return (AlosSarMapProjectionData*)_records[AlosSarMapProjectionDataID];
+  return dynamic_cast<const AlosSarMapProjectionData*>(_records.find(AlosSarMapProjectionDataID)->second);
 }
 
 */
 
 //no map projection data
 
-AlosSarDataSetSummary * AlosSarLeader::get_AlosSarDataSetSummary() const
+const AlosSarDataSetSummary * AlosSarLeader::get_AlosSarDataSetSummary() const
 {
-  return (AlosSarDataSetSummary*)_records[AlosSarDataSetSummaryID];
+//   return (AlosSarDataSetSummary*)_records[AlosSarDataSetSummaryID];
+  return dynamic_cast<const AlosSarDataSetSummary*>(_records.find(AlosSarDataSetSummaryID)->second);
 }
 
-AlosSarFileDescriptor * AlosSarLeader::get_AlosSarFileDescriptor() const
+const AlosSarFileDescriptor * AlosSarLeader::get_AlosSarFileDescriptor() const
 {
-  return (AlosSarFileDescriptor*)_records[AlosSarFileDescriptorID];
+//   return (AlosSarFileDescriptor*)_records[AlosSarFileDescriptorID];
+  return dynamic_cast<const AlosSarFileDescriptor*>(_records.find(AlosSarFileDescriptorID)->second);
 }
 
 }
