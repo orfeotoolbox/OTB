@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbQuickBirdImageMetadataInterface_h
-#define __otbQuickBirdImageMetadataInterface_h
+#ifndef __otbSpotImageMetadataInterface_h
+#define __otbSpotImageMetadataInterface_h
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
@@ -27,16 +27,16 @@
 
 namespace otb
 {
-/** \class QuickBirdImageMetadataInterface
+/** \class SpotImageMetadataInterface
  *
- * \brief Creation of an "otb" QuickBirdImageMetadataInterface that gets metadata.
+ * \brief Creation of an "otb" SpotImageMetadataInterface that gets metadata.
  *
  */
-class ITK_EXPORT QuickBirdImageMetadataInterface : public ImageMetadataInterfaceBase
+class ITK_EXPORT SpotImageMetadataInterface : public ImageMetadataInterfaceBase
 {
 public:
 
-  typedef QuickBirdImageMetadataInterface Self;
+  typedef SpotImageMetadataInterface Self;
   typedef ImageMetadataInterfaceBase Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -45,7 +45,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(QuickBirdImageMetadataInterface, ImageMetadataInterfaceBase);
+  itkTypeMacro(SpotImageMetadataInterface, ImageMetadataInterfaceBase);
 
   typedef Superclass::ImageType                ImageType;
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
@@ -54,7 +54,7 @@ public:
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
 
-    /** Get the radiometric bias from the ossim metadata */
+  /** Get the radiometric bias from the ossim metadata */
   VariableLengthVectorType GetPhysicalBias( const MetaDataDictionaryType & dict ) const;
   
   /** Get the radiometric gain from the ossim metadata */
@@ -72,17 +72,17 @@ public:
   /** Get the imaging month from the ossim metadata */
   int GetYear( const MetaDataDictionaryType & dict ) const;
   
-  bool IsQuickBird( const MetaDataDictionaryType & dict) const;
-  
+  bool IsSpot( const MetaDataDictionaryType & dict) const;
 
+  
 protected:
-  QuickBirdImageMetadataInterface();
-  virtual ~QuickBirdImageMetadataInterface() {};
+  SpotImageMetadataInterface();
+  virtual ~SpotImageMetadataInterface() {};
 
   
 private:
 
-  QuickBirdImageMetadataInterface(const Self&); //purposely not implemented
+  SpotImageMetadataInterface(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
 };

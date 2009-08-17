@@ -484,7 +484,6 @@ ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent, cons
 
       os << indent << "---> " << keys[itkey] << std::endl;
       ossimvalue.Print(os);
-      // ossimvalue.Print(os);
       break;
     case MetaDataKey::TVECTORDATAKEYWORDLIST:
       itk::ExposeMetaData<VectorDataKeywordlist>(dict2, keys[itkey], vectorDataKeywordlistValue);

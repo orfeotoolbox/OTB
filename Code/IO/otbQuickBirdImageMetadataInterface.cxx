@@ -42,9 +42,25 @@ QuickBirdImageMetadataInterface
 }
 
 
+bool
+QuickBirdImageMetadataInterface::IsQuickBird( const MetaDataDictionaryType & dict ) const
+{
+  std::string sensorID = GetSensorID(dict);
+  if (sensorID.find("QB02") != std::string::npos)
+    return true;
+  else
+    return false;
+}
+
+
 QuickBirdImageMetadataInterface::VariableLengthVectorType
 QuickBirdImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryType & dict ) const
 {
+  if( !this->IsQuickBird( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+  }
+  
   ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
@@ -83,7 +99,11 @@ QuickBirdImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryTyp
 int
 QuickBirdImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) const
 {
-  //The image date in the ossim metadata has the form: 2007-10-03T03:17:16.973000
+  if( !this->IsQuickBird( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+  }
+  
   ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
@@ -114,7 +134,11 @@ QuickBirdImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) c
 int
 QuickBirdImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) const
 {
-  //The image date in the ossim metadata has the form: 2007-10-03T03:17:16.973000
+  if( !this->IsQuickBird( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+  }
+  
   ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
@@ -144,7 +168,11 @@ QuickBirdImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict )
 int
 QuickBirdImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) const
 {
-  //The image date in the ossim metadata has the form: 2007-10-03T03:17:16.973000
+  if( !this->IsQuickBird( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+  }
+  
   ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
@@ -176,6 +204,11 @@ QuickBirdImageMetadataInterface::VariableLengthVectorType
 QuickBirdImageMetadataInterface
 ::GetPhysicalBias( const MetaDataDictionaryType & dict ) const
 {
+  if( !this->IsQuickBird( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+  }
+  
   ImageKeywordlistType ImageKeywordlist;
 
  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
@@ -211,7 +244,11 @@ QuickBirdImageMetadataInterface::VariableLengthVectorType
 QuickBirdImageMetadataInterface
 ::GetPhysicalGain( const MetaDataDictionaryType & dict ) const
 {
-   //Values are different pre/post 2003-06-06 production date, find out where we are
+  if( !this->IsQuickBird( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+  }
+ 
   ImageKeywordlistType ImageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
