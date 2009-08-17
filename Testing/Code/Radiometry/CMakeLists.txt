@@ -950,6 +950,50 @@ ADD_TEST(raTvWaterSqrtSpectralAngleImageFilter ${RADIOMETRY_TESTS8}
         0 1 2 3
 )
 
+# -------            Aeronet New------------------------------
+ADD_TEST(raTuAeronetNew ${RADIOMETRY_TESTS8}
+        otbAeronetNew
+)
+
+# -------            Aeronet Seysses------------------------------
+ADD_TEST(raTvAeronetExtractData_BadDate ${RADIOMETRY_TESTS8}
+        otbAeronetExtractDataBadData
+        ${INPUTDATA}/AERONET/090101_091231_Seysses.lev15
+        23    # Day
+        2     # Month
+        2009  # Year
+        11    # Hour
+        0     # Minute
+        0.4   # Epsilon
+)
+
+# -------            Aeronet Seysses------------------------------
+ADD_TEST(raTvAeronetExtractData_BadHour ${RADIOMETRY_TESTS8}
+        otbAeronetExtractDataBadData
+        ${INPUTDATA}/AERONET/090101_091231_Seysses.lev15
+        16    # Day
+        2     # Month
+        2009  # Year
+        10    # Hour
+        0     # Minute
+        0.4   # Epsilon
+)
+
+# -------            Aeronet Seysses------------------------------
+ADD_TEST(raTvAeronetExtractData ${RADIOMETRY_TESTS8}
+   --compare-ascii ${EPSILON_10e6} ${BASELINE_FILES}/raAeronetExtractData_Seysses15_23_03_2009_11_00_00.txt
+                          ${TEMP}/raAeronetExtractData_Seysses15_23_03_2009_11_00_00.txt
+        otbAeronetExtractData
+        ${INPUTDATA}/AERONET/090101_091231_Seysses.lev15
+        23    # Day
+        3     # Month
+        2009  # Year
+        10    # Hour
+        0     # Minute
+        0.4   # Epsilon
+        ${TEMP}/raAeronetExtractData_Seysses15_23_03_2009_11_00_00.txt
+)
+
 
 
 
@@ -1031,6 +1075,9 @@ otbISUMultiChannelRAndNIRIndexImageFilter.cxx
 otbNDWIMultiChannelWaterIndexImageFilter.cxx
 otbNDWIWaterIndexImageFilter.cxx
 otbWaterSqrtSpectralAngleImageFilter.cxx
+otbAeronetNew.cxx
+otbAeronetExtractData.cxx
+otbAeronetExtractDataBadData.cxx
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
