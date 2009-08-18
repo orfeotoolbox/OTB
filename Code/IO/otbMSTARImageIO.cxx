@@ -673,20 +673,19 @@ void MSTARImageIO::ReadImageInformation()
 /** The write function is not implemented */
 void MSTARImageIO::WriteImageInformation(void)
 {
-
+    itkExceptionMacro(<< "Error: The MSTARImageIO::WriteImageInformation is not implemented!");
 }
 
 /** The write function is not implemented */
-void MSTARImageIO::Write( const void* buffer)
+void MSTARImageIO::Write( const void* /* *buffer*/)
 {
-
+    itkExceptionMacro(<< "Error: The MSTARImageIO::Write is not implemented!");
 }
 
 /** Print Self Method */
 void MSTARImageIO::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-
-
+  Superclass::PrintSelf(os,indent);
 }
 
 float  MSTARImageIO::byteswap_SR_IR(unsigned char *pointer)
