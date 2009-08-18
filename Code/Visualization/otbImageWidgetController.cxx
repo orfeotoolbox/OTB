@@ -15,9 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageWidgetController_cxx
-#define __otbImageWidgetController_cxx
-
 #include "otbImageWidgetController.h"
 #include "otbMacro.h"
 
@@ -127,5 +124,3 @@ void ImageWidgetController::PrintSelf(std::ostream& os, itk::Indent indent) cons
 
 
 } // end namespace otb
- 
-#endif
