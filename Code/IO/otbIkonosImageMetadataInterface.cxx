@@ -29,7 +29,8 @@
 #include "otbIkonosImageMetadataInterface.h"
 
 #include "itkMetaDataObject.h"
-
+#include "itkCreateObjectFunction.h"
+#include "itkVersion.h"
 
 
 namespace otb
@@ -42,7 +43,7 @@ IkonosImageMetadataInterface
 }
 
 bool
-IkonosImageMetadataInterface::IsIkonos( const MetaDataDictionaryType & dict ) const
+IkonosImageMetadataInterface::CanRead( const MetaDataDictionaryType & dict ) const
 {
   std::string sensorID = GetSensorID(dict);
   if (sensorID.find("IKONOS-2") != std::string::npos)
@@ -54,7 +55,7 @@ IkonosImageMetadataInterface::IsIkonos( const MetaDataDictionaryType & dict ) co
 IkonosImageMetadataInterface::VariableLengthVectorType
 IkonosImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsIkonos( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
@@ -102,7 +103,7 @@ IkonosImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryType &
 int
 IkonosImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsIkonos( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
@@ -140,7 +141,7 @@ IkonosImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) cons
 int
 IkonosImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsIkonos( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
@@ -178,7 +179,7 @@ IkonosImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) co
 int
 IkonosImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsIkonos( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
@@ -219,7 +220,7 @@ IkonosImageMetadataInterface::VariableLengthVectorType
 IkonosImageMetadataInterface
 ::GetPhysicalBias( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsIkonos( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
@@ -236,7 +237,7 @@ IkonosImageMetadataInterface::VariableLengthVectorType
 IkonosImageMetadataInterface
 ::GetPhysicalGain( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsIkonos( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
@@ -321,6 +322,34 @@ IkonosImageMetadataInterface
   return outputValuesVariableLengthVector;
 }
 
+/*************************************************
+******* IkonosImageMetadataInterfaceFactory ******
+**************************************************/
+IkonosImageMetadataInterfaceFactory
+::IkonosImageMetadataInterfaceFactory()
+{
+  this->RegisterOverride("ImageMetadataInterfaceBase",
+                         "otbIkonosImageMetadataInterface",
+                         "Ikonos Meteada Interface",
+                         1,
+                         itk::CreateObjectFunction<IkonosImageMetadataInterface >::New());
+}
 
+IkonosImageMetadataInterfaceFactory
+::~IkonosImageMetadataInterfaceFactory()
+{
+}
+
+const char*
+IkonosImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
+{
+  return ITK_SOURCE_VERSION;
+}
+
+const char*
+IkonosImageMetadataInterfaceFactory::GetDescription() const
+{
+  return "Ikonos Metadata Interface Factory, handle Ikonos metadata in OTB";
+}
 
 } // end namespace otb

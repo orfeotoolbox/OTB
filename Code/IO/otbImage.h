@@ -23,7 +23,7 @@
 #endif
 
 #include "itkImage.h"
-#include "otbImageMetadataInterface.h"
+#include "otbImageMetadataInterfaceBase.h"
 
 #include <string.h>
 
@@ -45,8 +45,8 @@ public:
   typedef itk::SmartPointer<const Self>  ConstPointer;
   typedef itk::WeakPointer<const Self>  ConstWeakPointer;
 
-  typedef ImageMetadataInterface::VectorType  VectorType;
-  typedef ImageMetadataInterface::ImageKeywordlistType  ImageKeywordlistType;
+  typedef ImageMetadataInterfaceBase::VectorType  VectorType;
+  typedef ImageMetadataInterfaceBase::ImageKeywordlistType  ImageKeywordlistType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -180,6 +180,8 @@ public:
 
 /// Copy metadata from a DataObject
   virtual void CopyInformation(const itk::DataObject *);
+  
+  virtual void UpdateOutputInformation();
 
 protected:
   Image();
@@ -189,7 +191,7 @@ protected:
 private:
   Image(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  typename ImageMetadataInterface::Pointer m_ImageMetadataInterface;
+  typename ImageMetadataInterfaceBase::Pointer m_ImageMetadataInterface;
 };
 
 

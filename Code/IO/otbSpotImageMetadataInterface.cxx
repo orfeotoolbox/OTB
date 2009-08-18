@@ -29,8 +29,8 @@
 #include "otbSpotImageMetadataInterface.h"
 
 #include "itkMetaDataObject.h"
-
-
+#include "itkCreateObjectFunction.h"
+#include "itkVersion.h"
 
 namespace otb
 {
@@ -42,7 +42,7 @@ SpotImageMetadataInterface
 }
 
 bool
-SpotImageMetadataInterface::IsSpot( const MetaDataDictionaryType & dict ) const
+SpotImageMetadataInterface::CanRead( const MetaDataDictionaryType & dict ) const
 {
   std::string sensorID = GetSensorID(dict);
   if (sensorID.find("Spot") != std::string::npos)
@@ -54,7 +54,7 @@ SpotImageMetadataInterface::IsSpot( const MetaDataDictionaryType & dict ) const
 SpotImageMetadataInterface::VariableLengthVectorType
 SpotImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsSpot( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
@@ -103,7 +103,7 @@ SpotImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryType & d
 int
 SpotImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsSpot( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
@@ -139,7 +139,7 @@ SpotImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) const
 int
 SpotImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsSpot( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
@@ -175,7 +175,7 @@ SpotImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) cons
 int
 SpotImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsSpot( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
@@ -211,7 +211,7 @@ SpotImageMetadataInterface::VariableLengthVectorType
 SpotImageMetadataInterface
 ::GetPhysicalBias( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsSpot( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
@@ -260,7 +260,7 @@ SpotImageMetadataInterface::VariableLengthVectorType
 SpotImageMetadataInterface
 ::GetPhysicalGain( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsSpot( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
@@ -303,6 +303,38 @@ SpotImageMetadataInterface
 
 
   return outputValuesVariableLengthVector;
+}
+
+
+
+/************************************************
+******* SpotImageMetadataInterfaceFactory *******
+*************************************************/
+SpotImageMetadataInterfaceFactory
+::SpotImageMetadataInterfaceFactory()
+{
+  this->RegisterOverride("ImageMetadataInterfaceBase",
+                         "otbSpotImageMetadataInterface",
+                         "Spot Meteada Interface",
+                         1,
+                         itk::CreateObjectFunction<SpotImageMetadataInterface >::New());
+}
+
+SpotImageMetadataInterfaceFactory
+::~SpotImageMetadataInterfaceFactory()
+{
+}
+
+const char*
+SpotImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
+{
+  return ITK_SOURCE_VERSION;
+}
+
+const char*
+SpotImageMetadataInterfaceFactory::GetDescription() const
+{
+  return "Spot Metadata Interface Factory, handle Spot metadata in OTB";
 }
 
 

@@ -166,6 +166,8 @@ public:
   virtual int GetYear( const MetaDataDictionaryType & dict ) const =0;
   otbMetadataGetMacro(Year, int);
 
+  virtual bool CanRead( const MetaDataDictionaryType & dict ) const =0;
+
   virtual void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const;
 
 protected:

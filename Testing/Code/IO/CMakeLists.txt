@@ -1906,10 +1906,6 @@ ADD_TEST(ioTuQuickBirdImageMetadataInterfaceNew ${IO_TESTS17}
         otbQuickBirdImageMetadataInterfaceNew
 )
 
-ADD_TEST(ioTuImageMetadataInterfaceNew ${IO_TESTS17}
-        otbImageMetadataInterfaceNew
-)
-
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvImageMetadataInterfaceQBTest ${IO_TESTS17}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceQB.txt
@@ -2101,7 +2097,6 @@ otbPointSetFileReader2.cxx
 otbSpotImageMetadataInterfaceNew.cxx
 otbQuickBirdImageMetadataInterfaceNew.cxx
 otbIkonosImageMetadataInterfaceNew.cxx
-otbImageMetadataInterfaceNew.cxx
 otbImageMetadataInterfaceTest.cxx
 otbImageMetadataInterfaceTest2.cxx
 )

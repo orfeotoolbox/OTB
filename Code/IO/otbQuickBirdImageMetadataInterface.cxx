@@ -29,7 +29,8 @@
 #include "otbQuickBirdImageMetadataInterface.h"
 
 #include "itkMetaDataObject.h"
-
+#include "itkCreateObjectFunction.h"
+#include "itkVersion.h"
 
 
 namespace otb
@@ -43,7 +44,7 @@ QuickBirdImageMetadataInterface
 
 
 bool
-QuickBirdImageMetadataInterface::IsQuickBird( const MetaDataDictionaryType & dict ) const
+QuickBirdImageMetadataInterface::CanRead( const MetaDataDictionaryType & dict ) const
 {
   std::string sensorID = GetSensorID(dict);
   if (sensorID.find("QB02") != std::string::npos)
@@ -56,7 +57,7 @@ QuickBirdImageMetadataInterface::IsQuickBird( const MetaDataDictionaryType & dic
 QuickBirdImageMetadataInterface::VariableLengthVectorType
 QuickBirdImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsQuickBird( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
@@ -99,7 +100,7 @@ QuickBirdImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryTyp
 int
 QuickBirdImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsQuickBird( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
@@ -134,7 +135,7 @@ QuickBirdImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) c
 int
 QuickBirdImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsQuickBird( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
@@ -168,7 +169,7 @@ QuickBirdImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict )
 int
 QuickBirdImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsQuickBird( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
@@ -204,7 +205,7 @@ QuickBirdImageMetadataInterface::VariableLengthVectorType
 QuickBirdImageMetadataInterface
 ::GetPhysicalBias( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsQuickBird( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
@@ -244,7 +245,7 @@ QuickBirdImageMetadataInterface::VariableLengthVectorType
 QuickBirdImageMetadataInterface
 ::GetPhysicalGain( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsQuickBird( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
@@ -412,5 +413,35 @@ QuickBirdImageMetadataInterface
 }
 
 
+
+/*************************************************
+***** QuickBirdImageMetadataInterfaceFactory *****
+**************************************************/
+QuickBirdImageMetadataInterfaceFactory
+::QuickBirdImageMetadataInterfaceFactory()
+{
+  this->RegisterOverride("ImageMetadataInterfaceBase",
+                         "otbQuickBirdImageMetadataInterface",
+                         "QuickBird Meteada Interface",
+                         1,
+                         itk::CreateObjectFunction<QuickBirdImageMetadataInterface >::New());
+}
+
+QuickBirdImageMetadataInterfaceFactory
+::~QuickBirdImageMetadataInterfaceFactory()
+{
+}
+
+const char*
+QuickBirdImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
+{
+  return ITK_SOURCE_VERSION;
+}
+
+const char*
+QuickBirdImageMetadataInterfaceFactory::GetDescription() const
+{
+  return "QuickBird Metadata Interface Factory, handle QuickBird metadata in OTB";
+}
 
 } // end namespace otb
