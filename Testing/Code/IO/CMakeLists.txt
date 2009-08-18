@@ -1894,10 +1894,19 @@ ADD_TEST(ioTvPointSetFileReader2 ${IO_TESTS17}
 
 ENDIF(OTB_USE_LIBLAS)
 
+ADD_TEST(ioTuSpotImageMetadataInterfaceNew ${IO_TESTS17}
+        otbSpotImageMetadataInterfaceNew
+)
+
+ADD_TEST(ioTuIkonosImageMetadataInterfaceNew ${IO_TESTS17}
+        otbIkonosImageMetadataInterfaceNew
+)
+
+ADD_TEST(ioTuQuickBirdImageMetadataInterfaceNew ${IO_TESTS17}
+        otbQuickBirdImageMetadataInterfaceNew
+)
 
 ADD_TEST(ioTuImageMetadataInterfaceNew ${IO_TESTS17}
-#         --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioPointSetFileReader.txt
-#                         ${TEMP}/ioPointSetFileReader.txt
         otbImageMetadataInterfaceNew
 )
 
@@ -1915,6 +1924,13 @@ ADD_TEST(ioTvImageMetadataInterfaceQBCevennesTest ${IO_TESTS17}
         otbImageMetadataInterfaceTest
         ${LARGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceQBCevennes.txt
+)
+ADD_TEST(ioTvImageMetadataInterfaceQBMULTest ${IO_TESTS17}
+         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceQBMUL.txt
+                         ${TEMP}/ioTvImageMetadataInterfaceQBMUL.txt
+        otbImageMetadataInterfaceTest
+        ${LARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${TEMP}/ioTvImageMetadataInterfaceQBMUL.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceIKONOSTest ${IO_TESTS17}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceIKONOS.txt
@@ -2082,6 +2098,9 @@ SET(BasicIO_SRCS17
 otbPointSetFileReaderNew.cxx
 otbPointSetFileReader.cxx
 otbPointSetFileReader2.cxx
+otbSpotImageMetadataInterfaceNew.cxx
+otbQuickBirdImageMetadataInterfaceNew.cxx
+otbIkonosImageMetadataInterfaceNew.cxx
 otbImageMetadataInterfaceNew.cxx
 otbImageMetadataInterfaceTest.cxx
 otbImageMetadataInterfaceTest2.cxx

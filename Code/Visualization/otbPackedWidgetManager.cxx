@@ -15,12 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPackedWidgetManager_cxx
-#define __otbPackedWidgetManager_cxx
-
 #include "otbPackedWidgetManager.h"
-
-
 
 namespace otb
 {
@@ -143,7 +138,4 @@ PackedWidgetManager
   m_PackedWidget->m_Window->copy_label(label);
 }
 
-
-
 }
-#endif

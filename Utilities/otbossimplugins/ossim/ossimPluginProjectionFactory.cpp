@@ -32,7 +32,7 @@ ossimPluginProjectionFactory* ossimPluginProjectionFactory::instance()
 }
 
 ossimProjection* ossimPluginProjectionFactory::createProjection(const ossimFilename& filename,
-                                                                ossim_uint32 entryIdx)const
+                                                                ossim_uint32 /*entryIdx*/)const
 {
    ossimProjection* result = 0;
 

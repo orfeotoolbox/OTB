@@ -34,6 +34,9 @@ void RegisterTests()
   REGISTER_TEST(otbNDWIMultiChannelWaterIndexImageFilter);
   REGISTER_TEST(otbNDWIWaterIndexImageFilter);
   REGISTER_TEST(otbWaterSqrtSpectralAngleImageFilter);
+  REGISTER_TEST(otbAeronetNew);
+  REGISTER_TEST(otbAeronetExtractData);
+  REGISTER_TEST(otbAeronetExtractDataBadData);
 }
 
 

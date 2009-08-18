@@ -37,7 +37,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~ErsSarMapProjectionData();
+  virtual ~ErsSarMapProjectionData();
 
   /**
    * @brief This function write the ErsSarMapProjectionData in a stream

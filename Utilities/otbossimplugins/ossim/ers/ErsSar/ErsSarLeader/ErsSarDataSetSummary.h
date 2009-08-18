@@ -36,7 +36,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~ErsSarDataSetSummary();
+  virtual ~ErsSarDataSetSummary();
 
   /**
    * @brief This function write the ErsSarDataSetSummary in a stream

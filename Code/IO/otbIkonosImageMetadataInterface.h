@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageMetadataInterface_h
-#define __otbImageMetadataInterface_h
+#ifndef __otbIkonosImageMetadataInterface_h
+#define __otbIkonosImageMetadataInterface_h
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
@@ -24,22 +24,19 @@
 
 #include "otbImageMetadataInterfaceBase.h"
 
-#include <string>
-
-
 
 namespace otb
 {
-/** \class ImageMetadataInterface
+/** \class IkonosImageMetadataInterface
  *
- * \brief Creation of an "otb" ImageMetadataInterface that gets metadata.
+ * \brief Creation of an "otb" IkonosImageMetadataInterface that gets metadata.
  *
  */
-class ITK_EXPORT ImageMetadataInterface : public ImageMetadataInterfaceBase
+class ITK_EXPORT IkonosImageMetadataInterface : public ImageMetadataInterfaceBase
 {
 public:
 
-  typedef ImageMetadataInterface Self;
+  typedef IkonosImageMetadataInterface Self;
   typedef ImageMetadataInterfaceBase Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -48,7 +45,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageMetadataInterface, ImageMetadataInterfaceBase);
+  itkTypeMacro(IkonosImageMetadataInterface, ImageMetadataInterfaceBase);
 
   typedef Superclass::ImageType                ImageType;
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
@@ -56,35 +53,38 @@ public:
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
+
   /** Get the radiometric bias from the ossim metadata */
   VariableLengthVectorType GetPhysicalBias( const MetaDataDictionaryType & dict ) const;
-
+ 
   /** Get the radiometric gain from the ossim metadata */
   VariableLengthVectorType GetPhysicalGain( const MetaDataDictionaryType & dict ) const;
-
+ 
   /** Get the solar irradiance from the ossim metadata */
   VariableLengthVectorType GetSolarIrradiance( const MetaDataDictionaryType & dict ) const;
-
-  /** Get the imaging day from the ossim metadata */
+ 
+   /** Get the imaging day from the ossim metadata */
   int GetDay( const MetaDataDictionaryType & dict ) const;
-
+ 
   /** Get the imaging month from the ossim metadata */
   int GetMonth( const MetaDataDictionaryType & dict ) const;
-
+ 
   /** Get the imaging month from the ossim metadata */
   int GetYear( const MetaDataDictionaryType & dict ) const;
-
-  void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const;
-
+ 
+  bool IsIkonos( const MetaDataDictionaryType & dict) const;
+  
+ 
 protected:
-  ImageMetadataInterface();
-  virtual ~ImageMetadataInterface() {};
+  IkonosImageMetadataInterface();
+  virtual ~IkonosImageMetadataInterface() {};
 
+  
 private:
 
-  ImageMetadataInterface(const Self&); //purposely not implemented
+  IkonosImageMetadataInterface(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
 };
 
 
