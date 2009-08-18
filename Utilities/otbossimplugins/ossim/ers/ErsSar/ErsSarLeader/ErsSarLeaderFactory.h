@@ -35,7 +35,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~ErsSarLeaderFactory();
+  virtual ~ErsSarLeaderFactory();
 
 
 protected:

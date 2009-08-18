@@ -34,7 +34,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~ErsSarRecordHeader();
+  virtual ~ErsSarRecordHeader();
 
   /**
    * @brief Copy constructor

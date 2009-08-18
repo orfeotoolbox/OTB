@@ -48,7 +48,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~ErsSarLeader();
+  virtual ~ErsSarLeader();
 
   /**
    * @brief This function write the ErsSarLeader in a stream

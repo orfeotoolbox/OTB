@@ -36,7 +36,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~ErsSarFacilityData();
+  virtual ~ErsSarFacilityData();
 
   /**
    * @brief This function write the ErsSarFacilityData in a stream

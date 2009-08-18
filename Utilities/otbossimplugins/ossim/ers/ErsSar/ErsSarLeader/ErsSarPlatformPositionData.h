@@ -38,7 +38,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~ErsSarPlatformPositionData();
+  virtual ~ErsSarPlatformPositionData();
 
   /**
    * @brief Copy constructor

@@ -35,7 +35,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~ErsSarPositionVectorRecord();
+  virtual ~ErsSarPositionVectorRecord();
 
   /**
    * @brief Copy constructor
