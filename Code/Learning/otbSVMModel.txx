@@ -30,27 +30,6 @@ namespace otb
 template <class TValue,class TLabel> 
 SVMModel<TValue,TLabel>::SVMModel()
 {
-  // Initialize model
-  m_Model = new struct svm_model;
-  m_Model->param.kernel_generic = NULL;
-  m_Model->param.kernel_composed = NULL;
-  m_Model->param.nr_weight = 0;
-  m_Model->param.weight_label = NULL;
-  m_Model->param.weight = NULL;
-  m_Model->delete_composed = false;
-  m_Model->l = 0;
-  m_Model->nr_class = 0;
-  m_Model->SV = NULL;
-  m_Model->sv_coef = NULL;
-  m_Model->rho = NULL;
-  m_Model->label = NULL;
-  m_Model->probA = NULL;
-  m_Model->probB = NULL;
-  m_Model->nSV = NULL;
-
-
-  m_ModelUpToDate = false;
-
   // Default parameters
   this->SetSVMType(C_SVC);
   this->SetKernelType(LINEAR);
@@ -66,12 +45,15 @@ SVMModel<TValue,TLabel>::SVMModel()
   this->DoShrinking(1);
   this->DoProbabilityEstimates(true);
 
-  // Intialize problem
-  m_Problem.l = 0;
-  m_Problem.y = NULL;
-  m_Problem.x = NULL;
+  m_Parameters.kernel_generic = NULL;
+  m_Parameters.kernel_composed = NULL;
+  m_Parameters.nr_weight = 0;
+  m_Parameters.weight_label = NULL;
+  m_Parameters.weight = NULL;
 
-  m_ProblemUpToDate = false;
+  m_Model = NULL;
+
+  this->Initialize();
 }
 
 template <class TValue,class TLabel> 
@@ -80,57 +62,61 @@ SVMModel<TValue,TLabel>::~SVMModel()
   this->DeleteModel();
   this->DeleteProblem();
 }
+template <class TValue,class TLabel> 
+void
+SVMModel<TValue,TLabel>::Initialize()
+{
+  // Initialize model
+  if(!m_Model)
+    {
+    m_Model = new struct svm_model;
+    m_Model->delete_composed = false;
+    m_Model->l = 0;
+    m_Model->nr_class = 0;
+    m_Model->SV = NULL;
+    m_Model->sv_coef = NULL;
+    m_Model->rho = NULL;
+    m_Model->label = NULL;
+    m_Model->probA = NULL;
+    m_Model->probB = NULL;
+    m_Model->nSV = NULL;
+
+    m_ModelUpToDate = false;
+
+  }
+
+  // Intialize problem
+  m_Problem.l = 0;
+  m_Problem.y = NULL;
+  m_Problem.x = NULL;
+
+  m_ProblemUpToDate = false;  
+}
+
+
+template <class TValue,class TLabel> 
+void
+SVMModel<TValue,TLabel>::Reset()
+{
+  this->DeleteProblem();
+  this->DeleteModel();
+
+  // Clear samples
+  m_Samples.clear();
+  
+  // Initialize values
+  this->Initialize();
+}
 
 template <class TValue,class TLabel> 
 void
 SVMModel<TValue,TLabel>::DeleteModel()
 { 
-  // Here we do not use svm_destroy_model because it delete memory
-  // without checking if actually allocated
-if(m_Model->free_sv && m_Model->l > 0)
-  {
-  if(m_Model->SV[0])
+  if(m_Model)
     {
-    delete [] (m_Model->SV[0]);
+    svm_destroy_model(m_Model);
+    m_Model = NULL;
     }
-  }
-  for(int i=0;i<m_Model->nr_class-1;i++)
-    {
-    delete [](m_Model->sv_coef[i]);
-    }
-  if ( m_Model->delete_composed == true)
-    {
-    delete m_Model->param.kernel_composed;
-    }
-  if(m_Model->SV)
-    {
-    delete [](m_Model->SV);
-    }
-  if(m_Model->sv_coef)
-    {
-    delete [](m_Model->sv_coef);
-    }
-  if(m_Model->rho)
-    {
-    delete [](m_Model->rho);
-    }
-  if(m_Model->label)
-    {
-    delete [](m_Model->label);
-    }
-  if(m_Model->probA)
-    {
-    delete [](m_Model->probA);
-    }
-  if(m_Model->probB)
-    {
-    delete [](m_Model->probB);
-    }
-  if(m_Model->nSV)
-    {
-    delete [](m_Model->nSV);
-    }
-  delete m_Model;
 }
 template <class TValue,class TLabel> 
 void
@@ -290,7 +276,7 @@ SVMModel<TValue,TLabel>::CrossValidation(unsigned int nbFolders)
     double *target = new double[length];
 
     // Do cross validation
-    svm_cross_validation(&m_Problem,&m_Model->param,nbFolders,target);
+    svm_cross_validation(&m_Problem,&m_Parameters,nbFolders,target);
 
     // Evaluate accuracy
     int i;
@@ -316,24 +302,14 @@ template <class TValue, class TLabel>
 void 
 SVMModel<TValue,TLabel>::ConsistencyCheck()
 {
-  if (m_Model->nr_class<2)
-  {
-  itkExceptionMacro(<<"Can not do SVM estimation with less than 2 classes");
-  }
-  
-  if (m_Model->param.svm_type == ONE_CLASS)
+  if (m_Parameters.svm_type == ONE_CLASS && this->GetDoProbabilityEstimates())
     {
-    if (m_Model->nr_class>2)
-      {
-      itkExceptionMacro(<<"Can not do ONE_CLASS SVM estimation with more than 2 classes");
-      }
-    if (this->GetDoProbabilityEstimates())
-      {
-      otbMsgDebugMacro(<<"Disabling SVM probability estimates for ONE_CLASS SVM type.");
-      this->DoProbabilityEstimates(false);
-      }
+    otbMsgDebugMacro(<<"Disabling SVM probability estimates for ONE_CLASS SVM type.");
+    this->DoProbabilityEstimates(false);
     }
-  const char* error_msg = svm_check_parameter(&m_Problem,&m_Model->param);
+  
+  const char* error_msg = svm_check_parameter(&m_Problem,&m_Parameters);
+  
   if (error_msg)
   {
     throw itk::ExceptionObject(__FILE__, __LINE__,error_msg,ITK_LOCATION);
@@ -357,13 +333,13 @@ SVMModel<TValue,TLabel>::Train()
   this->ConsistencyCheck();
   
   // retrieve parameters
-  struct svm_parameter parameters = m_Model->param;
+  struct svm_parameter parameters = m_Parameters;
   
   // train the model
   m_Model = svm_train(&m_Problem,&parameters);
   
   // Reset the parameters
-  m_Model->param = parameters;
+  m_Parameters = parameters;
     
   // Set the model as up-to-date
   m_ModelUpToDate = true;
@@ -519,12 +495,13 @@ void
 SVMModel<TValue,TLabel>::LoadModel(const char* model_file_name)
 {
   this->DeleteModel();
-  m_Model = svm_load_model(model_file_name, m_Model->param.kernel_generic);
+  m_Model = svm_load_model(model_file_name, m_Parameters.kernel_generic);
   if (m_Model == 0)
   {
     itkExceptionMacro( << "Problem while loading SVM model "
                        << std::string(model_file_name) );
   }
+  m_Parameters = m_Model->param;
   m_ModelUpToDate = true;
 }
 
