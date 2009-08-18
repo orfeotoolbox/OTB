@@ -67,7 +67,9 @@ public:
  *           37 : Angstrom value "440-870Angstrom"
  *           44 :  Solar zenith angle "Solar_Zenith_Angle"
  *  The datas start in the line number 6.
- *
+ *  
+ *  Aeronet files can be download here: http://aeronet.gsfc.nasa.gov/cgi-bin/webtool_opera_v2_new
+ * 
  * \sa AeronetData
  */
 class ITK_EXPORT AeronetFileReader : public itk::ProcessObject

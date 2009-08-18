@@ -37,7 +37,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~ErsSarFileDescriptor();
+  virtual ~ErsSarFileDescriptor();
 
   /**
    * @brief This function write the ErsSarFileDescriptor in a stream

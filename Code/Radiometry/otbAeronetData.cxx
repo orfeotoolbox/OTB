@@ -33,20 +33,18 @@ AeronetData
   /** Aerosol optical thickness data */
   m_AerosolOpticalThickness = 0.;
   /** Cloud estimation data */
-  bool m_CloudEstimation = false;
-
+  m_CloudEstimation = false;
   /** Solar Zenith Angle */
   m_SolarZenithAngle = 0.;
 
   /** Statistic : Standard deviation data */
   m_StdDev = 0.;
-
   /** Data Date */
   m_DataDate = "";
   /** Epsilon to select time */
   m_EpsilonDate = 0.;
   /** Number of date used */
- m_NumberOfDateUsed = 0;
+  m_NumberOfDateUsed = 0;
 
 };
 

@@ -38,7 +38,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~ErsSarRecordFactory();
+  virtual ~ErsSarRecordFactory();
 
   /**
    * @brief Add a new Record type available in this factory
