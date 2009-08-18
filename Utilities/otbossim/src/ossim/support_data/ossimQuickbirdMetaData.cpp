@@ -336,9 +336,9 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
       return false;
     }
 
-  char* strptr;
+  char* strptr(NULL);
   char dummy[80], name[80];
-  double value;
+  double value(0.);
 
   //---
   // Read the file into a buffer:
@@ -424,7 +424,7 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
       {
       	ossimString begin_group = "BEGIN_GROUP = BAND_" + bandList[j];
       	strptr = strstr(filebuf, begin_group.c_str());
-      	if(!strstr && traceDebug())
+      	if(!strptr && traceDebug())
 	    {	  				
 			ossimNotify(ossimNotifyLevel_FATAL)
 	    				<< "FATAL ossimQuickbirdRpcModel::parseMetaData(data_file): "
@@ -438,7 +438,7 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
           char dummy[80], nameChar[80];
           sscanf(strptr, "%19c %s", dummy, nameChar);
           ossimString bandCur = ossimString(nameChar).before("\n");
-          if(!strstr && traceDebug())
+          if(!strptr && traceDebug())
 	      {	  				
 	    	ossimNotify(ossimNotifyLevel_FATAL)
 	    				<< "FATAL ossimQuickbirdRpcModel::parseMetaData(data_file): "
