@@ -15,9 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPolarimetricData_cxx
-#define __otbPolarimetricData_cxx
-
 #include "otbPolarimetricData.h"
 
 
@@ -121,6 +118,3 @@ PolarimetricData
 }
 
 } // end namespace otb
-
-#endif
-
