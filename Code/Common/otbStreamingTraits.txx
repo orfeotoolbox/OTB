@@ -111,17 +111,17 @@ unsigned long StreamingTraits<TImage>
   case SET_TILING_WITH_SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS  : // Just like SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS
   case SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS :
   {
-    const unsigned long streamMaxSizeBufferForStreamingBytes = OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING;
-    const unsigned long streamImageSizeToActivateStreamingBytes = OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING;
+    const std::streamoff streamMaxSizeBufferForStreamingBytes = OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING;
+    const std::streamoff streamImageSizeToActivateStreamingBytes = OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING;
     //Convert in octet unit
-    unsigned long streamMaxSizeBufferForStreaming = streamMaxSizeBufferForStreamingBytes/8;
-    const unsigned long streamImageSizeToActivateStreaming = streamImageSizeToActivateStreamingBytes/8;
+    std::streamoff streamMaxSizeBufferForStreaming = streamMaxSizeBufferForStreamingBytes/8;
+    const std::streamoff streamImageSizeToActivateStreaming = streamImageSizeToActivateStreamingBytes/8;
 
-    unsigned long numberColumnsOfRegion = region.GetSize()[0]; // X dimension
-    const unsigned long sizeLine = numberColumnsOfRegion * \
-                                   image->GetNumberOfComponentsPerPixel() * \
-                                   sizeof(PixelType);
-    const unsigned long regionSize = region.GetSize()[1] * sizeLine;
+    std::streamoff numberColumnsOfRegion = region.GetSize()[0]; // X dimension
+    const std::streamoff sizeLine = static_cast<std::streamoff>(numberColumnsOfRegion) * \
+                                   static_cast<std::streamoff>(image->GetNumberOfComponentsPerPixel()) * \
+                                   static_cast<std::streamoff>(sizeof(PixelType));
+    const std::streamoff regionSize = region.GetSize()[1] * sizeLine;
     otbMsgDevMacro(<<"streamImageSizeToActivateStreaming in Bytes  = "<<streamImageSizeToActivateStreamingBytes);
     otbMsgDevMacro(<<"streamMaxSizeBufferForStreaming in Bytes     = "<<streamMaxSizeBufferForStreamingBytes);
     otbMsgDevMacro(<<"streamImageSizeToActivateStreaming           = "<<streamImageSizeToActivateStreaming);
