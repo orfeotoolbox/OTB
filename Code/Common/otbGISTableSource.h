@@ -40,10 +40,10 @@ namespace otb
 template <class TOutputGISTable>
 class ITK_EXPORT GISTableSource : public itk::ProcessObject
 {
-public :
+  public :
 
   /** Standard class typedefs. */
-  typedef GISTableSource                      Self;
+  typedef GISTableSource                        Self;
   typedef itk::ProcessObject                    Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
@@ -83,5 +83,3 @@ private:
 #endif
 
 #endif // __otbGISTableSource_h
-
-

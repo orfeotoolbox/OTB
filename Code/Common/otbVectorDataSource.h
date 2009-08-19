@@ -40,7 +40,7 @@ namespace otb
 template <class TOutputVectorData>
 class ITK_EXPORT VectorDataSource : public itk::ProcessObject
 {
-public :
+  public :
 
   /** Standard class typedefs. */
   typedef VectorDataSource                      Self;
@@ -54,7 +54,7 @@ public :
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorDataSource, itk::ProcessObject);
 
-  typedef TOutputVectorData     OutputVectorDataType;
+  typedef TOutputVectorData                   OutputVectorDataType;
   typedef typename TOutputVectorData::Pointer OutputVectorDataPointer;
 
   /** Overriding GetOutput() method */
@@ -83,5 +83,3 @@ private:
 #endif
 
 #endif // __otbVectorDataSource_h
-
-
