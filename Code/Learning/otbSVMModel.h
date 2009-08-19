@@ -88,12 +88,6 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(SVMModel,itk::DataObject);
 
-  /** Set the number of classes. */
-  void SetNumberOfClasses(const unsigned int nr_class)
-  {
-    m_Model->nr_class = (int)nr_class;
-  }
-
   /** Get the number of classes. */
   unsigned int GetNumberOfClasses(void) const
   {
@@ -119,12 +113,12 @@ public:
   /** Gets the parameters */
   struct svm_parameter & GetParameters()
   {
-    return m_Model->param;
+    return m_Parameters;
   }
   /** Gets the parameters */
   const struct svm_parameter & GetParameters() const
     {
-      return m_Model->param;
+      return m_Parameters;
     }
 
   /** Saves the model to a file */
@@ -140,14 +134,14 @@ public:
   /** Set the SVM type to C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR */
   void SetSVMType(int svmtype)
   {
-    m_Model->param.svm_type = svmtype;
+    m_Parameters.svm_type = svmtype;
     this->Modified();
   }
 
   /** Get the SVM type (C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR) */
   int GetSVMType(void) const
   {
-    return m_Model->param.svm_type;
+    return m_Parameters.svm_type;
   }
 
   /** Set the kernel type to LINEAR, POLY, RBF, SIGMOID
@@ -157,45 +151,45 @@ public:
   sigmoid: tanh(gamma*u'*v + coef0)*/
   void SetKernelType(int kerneltype)
   {
-    m_Model->param.kernel_type = kerneltype;
+    m_Parameters.kernel_type = kerneltype;
     this->Modified();
   }
 
   /** Get the kernel type */
   int GetKernelType(void) const
   {
-    return m_Model->param.kernel_type;
+    return m_Parameters.kernel_type;
   }
 
   /** Set the degree of the polynomial kernel */
   void SetPolynomialKernelDegree(int degree)
   {
-    m_Model->param.degree = degree;
+    m_Parameters.degree = degree;
     this->Modified();
   }
 
   /** Get the degree of the polynomial kernel */
   int GetPolynomialKernelDegree(void) const
   {
-    return m_Model->param.degree;
+    return m_Parameters.degree;
   }
 
   /** Set the gamma parameter for poly/rbf/sigmoid kernels */
   virtual void SetKernelGamma(double gamma)
   {
-    m_Model->param.gamma = gamma;
+    m_Parameters.gamma = gamma;
     this->Modified();
   }
   /** Get the gamma parameter for poly/rbf/sigmoid kernels */
   double GetKernelGamma(void) const
   {
-    return m_Model->param.gamma;
+    return m_Parameters.gamma;
   }
 
   /** Set the coef0 parameter for poly/sigmoid kernels */
   void SetKernelCoef0(double coef0)
   {
-    m_Model->param.coef0 = coef0;
+    m_Parameters.coef0 = coef0;
     this->Modified();
   }
 
@@ -203,13 +197,13 @@ public:
   double GetKernelCoef0(void) const
   {
     //return m_Parameters.coef0;
-    return m_Model->param.coef0;
+    return m_Parameters.coef0;
   }
 
   /** Set the Nu parameter for the training */
   void SetNu(double nu)
   {
-    m_Model->param.nu = nu;
+    m_Parameters.nu = nu;
     this->Modified();
   }
 
@@ -217,97 +211,96 @@ public:
   double GetNu(void) const
   {
     //return m_Parameters.nu;
-    return m_Model->param.nu;
+    return m_Parameters.nu;
   }
 
   /** Set the cache size in MB for the training */
   void SetCacheSize(int cSize)
   {
-    m_Model->param.cache_size = static_cast<double>(cSize);
+    m_Parameters.cache_size = static_cast<double>(cSize);
     this->Modified();
   }
 
   /** Get the cache size in MB for the training */
   int GetCacheSize(void) const
   {
-    return static_cast<int>(m_Model->param.cache_size);
+    return static_cast<int>(m_Parameters.cache_size);
   }
 
   /** Set the C parameter for the training for C_SVC, EPSILON_SVR and NU_SVR */
   void SetC(double c)
   {
-    m_Model->param.C = c;
+    m_Parameters.C = c;
     this->Modified();
   }
 
   /** Get the C parameter for the training for C_SVC, EPSILON_SVR and NU_SVR */
   double GetC(void) const
   {
-    return m_Model->param.C;
+    return m_Parameters.C;
   }
 
   /** Set the tolerance for the stopping criterion for the training*/
   void SetEpsilon(double eps)
   {
-    m_Model->param.eps = eps;
+    m_Parameters.eps = eps;
     this->Modified();
   }
 
   /** Get the tolerance for the stopping criterion for the training*/
   double GetEpsilon(void) const
   {
-    return m_Model->param.eps;
+    return m_Parameters.eps;
   }
 
   /* Set the value of p for EPSILON_SVR */
   void SetP(double p)
   {
-    m_Model->param.p = p;
+    m_Parameters.p = p;
     this->Modified();
   }
 
   /* Get the value of p for EPSILON_SVR */
   double GetP(void) const
   {
-    return m_Model->param.p;
+    return m_Parameters.p;
   }
 
   /** Use the shrinking heuristics for the training */
   void DoShrinking(bool s)
   {
-    m_Model->param.shrinking = static_cast<int>(s);
+    m_Parameters.shrinking = static_cast<int>(s);
     this->Modified();
   }
 
   /** Get Use the shrinking heuristics for the training boolea */
   bool GetDoShrinking(void) const
   {
-    return static_cast<bool>(m_Model->param.shrinking);
+    return static_cast<bool>(m_Parameters.shrinking);
   }
 
 
   /** Do probability estimates */
   void DoProbabilityEstimates(bool prob)
   {
-    m_Model->param.probability = static_cast<int>(prob);
+    m_Parameters.probability = static_cast<int>(prob);
     this->Modified();
   }
 
   /** Get Do probability estimates boolean */
   bool GetDoProbabilityEstimates(void) const
   {
-    return static_cast<bool>(m_Model->param.probability);
+    return static_cast<bool>(m_Parameters.probability);
   }
-
 
   /** Get/Set methods for generic kernel functor */
   virtual GenericKernelFunctorBase * GetKernelFunctor(void)const
   {
-    return m_Model->param.kernel_generic;
+    return m_Parameters.kernel_generic;
   }
   virtual void SetKernelFunctor(GenericKernelFunctorBase* pGenericKernelFunctor)
   {
-    m_Model->param.kernel_generic = pGenericKernelFunctor;
+    m_Parameters.kernel_generic = pGenericKernelFunctor;
     this->Modified();
   }
 
@@ -316,12 +309,7 @@ public:
   {
     return m_Model->l;
   }
-  /** Set number of support vectors */
-  void SetNumberOfSupportVectors(int l)
-  {
-    m_Model->l = l;
-  }
-
+ 
   /** Return rho values */
   double * GetRho(void) const
   {
@@ -348,14 +336,6 @@ public:
   {
     return m_Model->label;
   };
-
-  /** Set the number of SV per classes */
-  void SetNumberOfSVPerClasse( int * vect)
-  {
-    for (int i=0;i<m_Model->nr_class;++i)
-      m_Model->nSV[i] = vect[i];
-    this->Modified();
-  }
 
   /** Get the number of SV per classes */
   int * GetNumberOfSVPerClasse()
@@ -408,6 +388,10 @@ public:
   /** Set the samples vector */
   void SetSamples(const SamplesVectorType & samples);
 
+  /** Reset all the model, leaving it in the same state that just
+   * before constructor call */
+  void Reset();
+
 protected:
   /** Constructor */
   SVMModel();
@@ -416,11 +400,14 @@ protected:
   /** Display infos */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** Delete any allocated problem */
+/** Delete any allocated problem */
   void DeleteProblem();
-
+  
   /** Delete any allocated model */
   void DeleteModel();
+
+  /** Initializes default parameters */
+  void Initialize();
 
 private:
   SVMModel(const Self&); //purposely not implemented
@@ -434,6 +421,9 @@ private:
 
   /** Container of the SVM problem */
   struct svm_problem m_Problem;
+
+  /** Container of the SVM parameters */
+  struct svm_parameter m_Parameters;
 
   /** true if problem is up-to-date */
   bool m_ProblemUpToDate;

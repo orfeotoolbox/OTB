@@ -18,76 +18,55 @@
 #ifndef __otbImageMetadataInterface_h
 #define __otbImageMetadataInterface_h
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
-
+#include "itkObject.h"
 #include "otbImageMetadataInterfaceBase.h"
-
-#include <string>
-
 
 
 namespace otb
 {
 /** \class ImageMetadataInterface
- *
- * \brief Creation of an "otb" ImageMetadataInterface that gets metadata.
- *
+ * \brief Create instances of ImageMetadataInterface objects using an object factory.
  */
-class ITK_EXPORT ImageMetadataInterface : public ImageMetadataInterfaceBase
+class ITK_EXPORT ImageMetadataInterface : public itk::Object
 {
 public:
+  /** Standard class typedefs. */
+  typedef ImageMetadataInterface           Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef ImageMetadataInterface Self;
-  typedef ImageMetadataInterfaceBase Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
-
-  /** Method for creation through the object factory. */
-  itkNewMacro(Self);
+  /** Class Methods used to interface with the registered factories */
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageMetadataInterface, ImageMetadataInterfaceBase);
+  itkTypeMacro(ImageMetadataInterface, Object);
 
-  typedef Superclass::ImageType                ImageType;
-  typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
-  typedef Superclass::VectorType               VectorType;
-  typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
+  /** Convenient typedefs. */
+  typedef ImageMetadataInterfaceBase::ImageType                ImageType;
+  typedef ImageMetadataInterfaceBase::MetaDataDictionaryType   MetaDataDictionaryType;
+  typedef ImageMetadataInterfaceBase::VectorType               VectorType;
+  typedef ImageMetadataInterfaceBase::VariableLengthVectorType VariableLengthVectorType;
+  typedef ImageMetadataInterfaceBase::ImageKeywordlistType     ImageKeywordlistType;
+  typedef ImageMetadataInterfaceBase::Pointer 	               ImageMetadataInterfaceBasePointerType;
+ 
+  /** Create the appropriate ImageMetadataInterface depending on the particulars of the file. */
+  static ImageMetadataInterfaceBasePointerType CreateIMI( const MetaDataDictionaryType & dict );
 
-  /** Get the radiometric bias from the ossim metadata */
-  VariableLengthVectorType GetPhysicalBias( const MetaDataDictionaryType & dict ) const;
-
-  /** Get the radiometric gain from the ossim metadata */
-  VariableLengthVectorType GetPhysicalGain( const MetaDataDictionaryType & dict ) const;
-
-  /** Get the solar irradiance from the ossim metadata */
-  VariableLengthVectorType GetSolarIrradiance( const MetaDataDictionaryType & dict ) const;
-
-  /** Get the imaging day from the ossim metadata */
-  int GetDay( const MetaDataDictionaryType & dict ) const;
-
-  /** Get the imaging month from the ossim metadata */
-  int GetMonth( const MetaDataDictionaryType & dict ) const;
-
-  /** Get the imaging month from the ossim metadata */
-  int GetYear( const MetaDataDictionaryType & dict ) const;
-
-  void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const;
+  /** Register Built-in factories */
+  static void RegisterBuiltInFactories();
 
 protected:
   ImageMetadataInterface();
-  virtual ~ImageMetadataInterface() {};
+  ~ImageMetadataInterface();
 
 private:
-
   ImageMetadataInterface(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
 };
 
 
 } // end namespace otb
+
 
 #endif

@@ -99,6 +99,9 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
   // Get the pointer to the output model
   ModelType * outputPtr = this->GetModel();
 
+  // Reset the model
+  outputPtr->Reset();
+
   // Prepare data
   this->PrepareData();
  

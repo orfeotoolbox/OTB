@@ -16,24 +16,22 @@
 
 =========================================================================*/
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
 
+#include "itkExceptionObject.h"
 
-#include "otbTestMain.h"
+#include <iostream>
 
-//Use only if OTB_USE_LIBLAS is on
-void RegisterTests()
+#include "otbIkonosImageMetadataInterface.h"
+
+
+int otbIkonosImageMetadataInterfaceNew (int argc, char* argv[])
 {
-REGISTER_TEST(otbPointSetFileReaderNew);
-REGISTER_TEST(otbPointSetFileReader);
-REGISTER_TEST(otbPointSetFileReader2);
-REGISTER_TEST(otbSpotImageMetadataInterfaceNew);
-REGISTER_TEST(otbIkonosImageMetadataInterfaceNew);
-REGISTER_TEST(otbQuickBirdImageMetadataInterfaceNew);
-REGISTER_TEST(otbImageMetadataInterfaceTest);
-REGISTER_TEST(otbImageMetadataInterfaceTest2);
+
+  otb::IkonosImageMetadataInterface::Pointer lImageMetadata = otb::IkonosImageMetadataInterface::New();
+
+  return EXIT_SUCCESS;
+
 }

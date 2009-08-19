@@ -1894,11 +1894,16 @@ ADD_TEST(ioTvPointSetFileReader2 ${IO_TESTS17}
 
 ENDIF(OTB_USE_LIBLAS)
 
+ADD_TEST(ioTuSpotImageMetadataInterfaceNew ${IO_TESTS17}
+        otbSpotImageMetadataInterfaceNew
+)
 
-ADD_TEST(ioTuImageMetadataInterfaceNew ${IO_TESTS17}
-#         --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioPointSetFileReader.txt
-#                         ${TEMP}/ioPointSetFileReader.txt
-        otbImageMetadataInterfaceNew
+ADD_TEST(ioTuIkonosImageMetadataInterfaceNew ${IO_TESTS17}
+        otbIkonosImageMetadataInterfaceNew
+)
+
+ADD_TEST(ioTuQuickBirdImageMetadataInterfaceNew ${IO_TESTS17}
+        otbQuickBirdImageMetadataInterfaceNew
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
@@ -2089,7 +2094,9 @@ SET(BasicIO_SRCS17
 otbPointSetFileReaderNew.cxx
 otbPointSetFileReader.cxx
 otbPointSetFileReader2.cxx
-otbImageMetadataInterfaceNew.cxx
+otbSpotImageMetadataInterfaceNew.cxx
+otbQuickBirdImageMetadataInterfaceNew.cxx
+otbIkonosImageMetadataInterfaceNew.cxx
 otbImageMetadataInterfaceTest.cxx
 otbImageMetadataInterfaceTest2.cxx
 )
