@@ -27,10 +27,7 @@
 #include "otbMacro.h"
 
 #include "otbQuickBirdImageMetadataInterface.h"
-
 #include "itkMetaDataObject.h"
-#include "itkCreateObjectFunction.h"
-#include "itkVersion.h"
 
 
 namespace otb
@@ -410,38 +407,6 @@ QuickBirdImageMetadataInterface
   }
 
   return outputValuesVariableLengthVector;
-}
-
-
-
-/*************************************************
-***** QuickBirdImageMetadataInterfaceFactory *****
-**************************************************/
-QuickBirdImageMetadataInterfaceFactory
-::QuickBirdImageMetadataInterfaceFactory()
-{
-  this->RegisterOverride("ImageMetadataInterfaceBase",
-                         "otbQuickBirdImageMetadataInterface",
-                         "QuickBird Meteada Interface",
-                         1,
-                         itk::CreateObjectFunction<QuickBirdImageMetadataInterface >::New());
-}
-
-QuickBirdImageMetadataInterfaceFactory
-::~QuickBirdImageMetadataInterfaceFactory()
-{
-}
-
-const char*
-QuickBirdImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
-{
-  return ITK_SOURCE_VERSION;
-}
-
-const char*
-QuickBirdImageMetadataInterfaceFactory::GetDescription() const
-{
-  return "QuickBird Metadata Interface Factory, handle QuickBird metadata in OTB";
 }
 
 } // end namespace otb

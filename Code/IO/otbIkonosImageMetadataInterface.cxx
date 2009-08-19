@@ -27,11 +27,7 @@
 #include "otbMacro.h"
 
 #include "otbIkonosImageMetadataInterface.h"
-
 #include "itkMetaDataObject.h"
-#include "itkCreateObjectFunction.h"
-#include "itkVersion.h"
-
 
 namespace otb
 {
@@ -320,36 +316,6 @@ IkonosImageMetadataInterface
   }
 
   return outputValuesVariableLengthVector;
-}
-
-/*************************************************
-******* IkonosImageMetadataInterfaceFactory ******
-**************************************************/
-IkonosImageMetadataInterfaceFactory
-::IkonosImageMetadataInterfaceFactory()
-{
-  this->RegisterOverride("ImageMetadataInterfaceBase",
-                         "otbIkonosImageMetadataInterface",
-                         "Ikonos Meteada Interface",
-                         1,
-                         itk::CreateObjectFunction<IkonosImageMetadataInterface >::New());
-}
-
-IkonosImageMetadataInterfaceFactory
-::~IkonosImageMetadataInterfaceFactory()
-{
-}
-
-const char*
-IkonosImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
-{
-  return ITK_SOURCE_VERSION;
-}
-
-const char*
-IkonosImageMetadataInterfaceFactory::GetDescription() const
-{
-  return "Ikonos Metadata Interface Factory, handle Ikonos metadata in OTB";
 }
 
 } // end namespace otb

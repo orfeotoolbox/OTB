@@ -27,10 +27,8 @@
 #include "otbMacro.h"
 
 #include "otbSpotImageMetadataInterface.h"
-
 #include "itkMetaDataObject.h"
-#include "itkCreateObjectFunction.h"
-#include "itkVersion.h"
+
 
 namespace otb
 {
@@ -304,39 +302,6 @@ SpotImageMetadataInterface
 
   return outputValuesVariableLengthVector;
 }
-
-
-
-/************************************************
-******* SpotImageMetadataInterfaceFactory *******
-*************************************************/
-SpotImageMetadataInterfaceFactory
-::SpotImageMetadataInterfaceFactory()
-{
-  this->RegisterOverride("ImageMetadataInterfaceBase",
-                         "otbSpotImageMetadataInterface",
-                         "Spot Meteada Interface",
-                         1,
-                         itk::CreateObjectFunction<SpotImageMetadataInterface >::New());
-}
-
-SpotImageMetadataInterfaceFactory
-::~SpotImageMetadataInterfaceFactory()
-{
-}
-
-const char*
-SpotImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
-{
-  return ITK_SOURCE_VERSION;
-}
-
-const char*
-SpotImageMetadataInterfaceFactory::GetDescription() const
-{
-  return "Spot Metadata Interface Factory, handle Spot metadata in OTB";
-}
-
 
 
 } // end namespace otb

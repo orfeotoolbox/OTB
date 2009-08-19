@@ -159,23 +159,6 @@ VectorImage<TPixel, VImageDimension>::UpdateOutputInformation()
   Superclass::UpdateOutputInformation();
 
   m_ImageMetadataInterface = ImageMetadataInterface::CreateIMI( this->GetMetaDataDictionary() );
-    if ( m_ImageMetadataInterface.IsNull() )
-  {
-    itk::OStringStream msg;
-    msg << " Could not create Image Metadata Interface object.";
-    msg << "  Tried to create one of the following:" << std::endl;
-    std::list<itk::LightObject::Pointer> allobjects =
-        itk::ObjectFactoryBase::CreateAllInstance("otbVectorDataIOBase");
-    for (std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin(); i != allobjects.end(); ++i)
-    {
-       ImageMetadataInterfaceBase* io = dynamic_cast<ImageMetadataInterfaceBase*>(i->GetPointer());
-       msg << "    " << io->GetNameOfClass() << std::endl;
-    }
-    
-    itkGenericExceptionMacro(<<__FILE__<<" "<<__LINE__<<" "<<msg.str().c_str()<<" "<<ITK_LOCATION);
-    return;
-  }
-
 }
 
 

@@ -21,10 +21,12 @@
 #endif
 
 #include "otbImageMetadataInterface.h"
-#include "otbIkonosImageMetadataInterface.h"
-#include "otbSpotImageMetadataInterface.h"
-#include "otbQuickBirdImageMetadataInterface.h"
-
+#include "otbDefaultImageMetadataInterface.h"
+// Optical sensors
+#include "otbIkonosImageMetadataInterfaceFactory.h"
+#include "otbSpotImageMetadataInterfaceFactory.h"
+#include "otbQuickBirdImageMetadataInterfaceFactory.h"
+// SAR Sensors
 #include "itkObjectFactoryBase.h"
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
@@ -57,14 +59,14 @@ ImageMetadataInterface
   for (std::list<ImageMetadataInterfaceBasePointerType>::iterator k = possibleIMI.begin();
        k != possibleIMI.end(); ++k)
   {
-  	std::cout<<"I FOUND IT??????????"<<std::endl;
     if ((*k)->CanRead(dict))
     {
-    	std::cout<<"I FOUND IT!!!!!!!"<<std::endl;
       return *k;
     }
   }
-  return 0;
+  
+  DefaultImageMetadataInterface::Pointer defaultIMI = DefaultImageMetadataInterface::New();
+  return dynamic_cast<ImageMetadataInterfaceBase*>(static_cast<DefaultImageMetadataInterface*>(defaultIMI));
 }
 
 
@@ -84,6 +86,7 @@ ImageMetadataInterface
       itk::ObjectFactoryBase::RegisterFactory( IkonosImageMetadataInterfaceFactory::New() );
       itk::ObjectFactoryBase::RegisterFactory( SpotImageMetadataInterfaceFactory::New() );
       itk::ObjectFactoryBase::RegisterFactory( QuickBirdImageMetadataInterfaceFactory::New() );
+      //itk::ObjectFactoryBase::RegisterFactory( QuickBirdImageMetadataInterfaceFactory::New() );
       firstTime = false;
     }
   }

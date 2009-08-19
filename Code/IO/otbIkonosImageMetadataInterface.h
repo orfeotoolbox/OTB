@@ -23,7 +23,7 @@
 #endif
 
 #include "otbImageMetadataInterfaceBase.h"
-#include "itkObjectFactoryBase.h"
+
 
 namespace otb
 {
@@ -86,47 +86,6 @@ private:
   void operator=(const Self&); //purposely not implemented
 
 };
-
-
-/** \class IkonosImageMetadataInterfaceFactory
- * \brief Creating an instance of a ImageMetadataInterface object using object factory.
- */
-class ITK_EXPORT IkonosImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
-{
-public:
-  /** Standard class typedefs. */
-  typedef IkonosImageMetadataInterfaceFactory   Self;
-  typedef itk::ObjectFactoryBase  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
-
-  /** Class methods used to interface with the registered factories. */
-  virtual const char* GetITKSourceVersion(void) const;
-  virtual const char* GetDescription(void) const;
-
-  /** Method for class instantiation. */
-  itkFactorylessNewMacro(Self);
-
-  /** Run-time type information (and related methods). */
-  itkTypeMacro(IkonosImageMetadataInterfaceFactory, itk::ObjectFactoryBase);
-
-  /** Register one factory of this type  */
-  static void RegisterOneFactory(void)
-  {
-    IkonosImageMetadataInterfaceFactory::Pointer ikonosIMIFactory = IkonosImageMetadataInterfaceFactory::New();
-    itk::ObjectFactoryBase::RegisterFactory(ikonosIMIFactory);
-  }
-
-protected:
-  IkonosImageMetadataInterfaceFactory();
-  ~IkonosImageMetadataInterfaceFactory();
-
-private:
-  IkonosImageMetadataInterfaceFactory(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
-};
-
 
 } // end namespace otb
 

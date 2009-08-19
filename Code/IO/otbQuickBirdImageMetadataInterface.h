@@ -23,7 +23,6 @@
 #endif
 
 #include "otbImageMetadataInterfaceBase.h"
-#include "itkObjectFactoryBase.h"
 
 namespace otb
 {
@@ -86,49 +85,6 @@ private:
   void operator=(const Self&); //purposely not implemented
 
 };
-
-
-
-
-/** \class QuickBirdImageMetadataInterfaceFactory
- * \brief Creating an instance of a ImageMetadataInterface object using object factory.
- */
-class ITK_EXPORT QuickBirdImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
-{
-public:
-  /** Standard class typedefs. */
-  typedef QuickBirdImageMetadataInterfaceFactory   Self;
-  typedef itk::ObjectFactoryBase  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
-
-  /** Class methods used to interface with the registered factories. */
-  virtual const char* GetITKSourceVersion(void) const;
-  virtual const char* GetDescription(void) const;
-
-  /** Method for class instantiation. */
-  itkFactorylessNewMacro(Self);
-
-  /** Run-time type information (and related methods). */
-  itkTypeMacro(QuickBirdImageMetadataInterfaceFactory, itk::ObjectFactoryBase);
-
-  /** Register one factory of this type  */
-  static void RegisterOneFactory(void)
-  {
-    QuickBirdImageMetadataInterfaceFactory::Pointer quickBirdIMIFactory = QuickBirdImageMetadataInterfaceFactory::New();
-    itk::ObjectFactoryBase::RegisterFactory(quickBirdIMIFactory);
-  }
-
-protected:
-  QuickBirdImageMetadataInterfaceFactory();
-  ~QuickBirdImageMetadataInterfaceFactory();
-
-private:
-  QuickBirdImageMetadataInterfaceFactory(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
-};
-
 
 } // end namespace otb
 
