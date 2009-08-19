@@ -34,7 +34,9 @@ ImageViewerManagerController
 
 ImageViewerManagerController
 ::~ImageViewerManagerController()
-{}
+{
+  MsgReporter::GetInstance()->Hide();
+}
 
 
 
@@ -76,7 +78,7 @@ ImageViewerManagerController
 {
   try
     {
-      
+
     m_Model->UpdateRGBChannelOrder(redChoice,greenChoice,BlueChoice, selectedItem);
   }
   catch (itk::ExceptionObject & err)
@@ -91,7 +93,7 @@ ImageViewerManagerController
 {
   try
     {
-      
+
     m_Model->UpdateGrayScaleChannelOrder(choice, selectedItem);
   }
   catch (itk::ExceptionObject & err)
