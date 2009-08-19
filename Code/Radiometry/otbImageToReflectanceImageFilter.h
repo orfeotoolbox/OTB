@@ -244,7 +244,7 @@ protected:
   virtual void BeforeThreadedGenerateData(void)
   {
 
-    ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
+    ImageMetadataInterfaceBase::Pointer imageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(this->GetInput()->GetMetaDataDictionary());
     if(m_Alpha.GetSize() == 0)
     {
       m_Alpha = imageMetadataInterface->GetPhysicalGain(this->GetInput()->GetMetaDataDictionary());

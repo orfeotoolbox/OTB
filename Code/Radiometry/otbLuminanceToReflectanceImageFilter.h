@@ -29,6 +29,9 @@
 #include "itkNumericTraits.h"
 #include "itkVariableLengthVector.h"
 #include "otbMacro.h"
+#include "otbImageMetadataInterfaceBase.h"
+#include "otbImageMetadataInterfaceFactory.h"
+
 
 namespace otb
 {
@@ -221,7 +224,7 @@ protected:
   /** Update the functor list and input parameters */
   virtual void BeforeThreadedGenerateData(void)
   {
-    ImageMetadataInterface::Pointer imageMetadataInterface= ImageMetadataInterface::New();
+    ImageMetadataInterfaceBase::Pointer imageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(this->GetInput()->GetMetaDataDictionary());
     if ((m_Day == 0) && (!m_IsSetFluxNormalizationCoefficient))
     {
       m_Day = imageMetadataInterface->GetDay(this->GetInput()->GetMetaDataDictionary());
