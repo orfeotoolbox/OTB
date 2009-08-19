@@ -19,7 +19,7 @@
 
 #include <ossim/base/ossimTrace.h>
 #include <otb/RefPoint.h>
-#include <ers/ErsSar/ErsSarLeader/ErsSarLeader.h>
+#include <erssar/ErsSarLeader.h>
 #include <otb/SensorParams.h>
 #include <otb/PlatformPosition.h>
 #include <ossim/base/ossimKeywordNames.h>

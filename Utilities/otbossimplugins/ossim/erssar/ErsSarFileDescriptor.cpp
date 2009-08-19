@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include "ers/ErsSar/ErsSarLeader/ErsSarFileDescriptor.h"
+#include "erssar/ErsSarFileDescriptor.h"
 
 
 namespace ossimplugins

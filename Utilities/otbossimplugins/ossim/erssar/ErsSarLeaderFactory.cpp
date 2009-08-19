@@ -9,13 +9,13 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include "ers/ErsSar/ErsSarLeader/ErsSarLeaderFactory.h"
+#include "erssar/ErsSarLeaderFactory.h"
 
-#include "ers/ErsSar/ErsSarLeader/ErsSarDataSetSummary.h"
-#include "ers/ErsSar/ErsSarLeader/ErsSarFileDescriptor.h"
-#include "ers/ErsSar/ErsSarLeader/ErsSarMapProjectionData.h"
-#include "ers/ErsSar/ErsSarLeader/ErsSarPlatformPositionData.h"
-#include "ers/ErsSar/ErsSarLeader/ErsSarFacilityData.h"
+#include "erssar/ErsSarDataSetSummary.h"
+#include "erssar/ErsSarFileDescriptor.h"
+#include "erssar/ErsSarMapProjectionData.h"
+#include "erssar/ErsSarPlatformPositionData.h"
+#include "erssar/ErsSarFacilityData.h"
 
 namespace ossimplugins
 {

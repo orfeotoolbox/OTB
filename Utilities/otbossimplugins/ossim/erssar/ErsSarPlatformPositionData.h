@@ -13,10 +13,10 @@
 #define ErsSarPlatformPositionData_h
 
 #include <iostream>
-#include "ers/ErsSar/ErsSarRecord.h"
-#include "ers/ErsSar/ErsSarRecordHeader.h"
+#include "erssar/ErsSarRecord.h"
+#include "erssar/ErsSarRecordHeader.h"
 
-#include "ers/ErsSar/ErsSarLeader/ErsSarPositionVectorRecord.h"
+#include "erssar/ErsSarPositionVectorRecord.h"
 
 
 namespace ossimplugins

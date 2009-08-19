@@ -13,7 +13,7 @@
 #define ErsSarRecord_h
 
 
-#include "ers/ErsSar/ErsSarRecordHeader.h"
+#include "erssar/ErsSarRecordHeader.h"
 #include <iostream>
 
 namespace ossimplugins

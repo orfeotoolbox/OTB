@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include "ers/ErsSar/ErsSarLeader/ErsSarPositionVectorRecord.h"
+#include "erssar/ErsSarPositionVectorRecord.h"
 
 
 namespace ossimplugins

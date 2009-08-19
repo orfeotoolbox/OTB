@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include "ers/ErsSar/ErsSarRecord.h"
+#include "erssar/ErsSarRecord.h"
 #include <memory.h>
 
 namespace ossimplugins

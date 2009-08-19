@@ -13,8 +13,8 @@
 #define ErsSarRecordFactory_h
 
 
-#include "ers/ErsSar/ErsSarRecordHeader.h"
-#include "ers/ErsSar/ErsSarRecord.h"
+#include "erssar/ErsSarRecordHeader.h"
+#include "erssar/ErsSarRecord.h"
 
 #include <map>
 
