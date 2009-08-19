@@ -762,6 +762,33 @@ IF(OTB_COMPILE_WITH_FULL_WARNING)
 
 ENDIF(OTB_COMPILE_WITH_FULL_WARNING)
 
+OPTION(OTB_CPP_CHECK_SOURCE_FILE "OTB developers : Checking cpp source file (use only for otb developers)." OFF)
+MARK_AS_ADVANCED(OTB_CPP_CHECK_SOURCE_FILE)
+IF(OTB_CPP_CHECK_SOURCE_FILE)
+  FIND_PROGRAM(OTB_CPP_CHECK_PROG "")
+ENDIF(OTB_CPP_CHECK_SOURCE_FILE)
+
+FUNCTION(OTB_ADD_EXECUTABLE name sources libraries)
+#  MESSAGE(STATUS "name: ${name}")
+#  MESSAGE(STATUS "sources: ${sources}")
+#  MESSAGE(STATUS "libraries: ${libraries}")
+  ADD_EXECUTABLE(${name} ${sources})
+  TARGET_LINK_LIBRARIES(${name}  ${libraries})
+  IF(OTB_CPP_CHECK_SOURCE_FILE)
+#  SET_TARGET_PROPERTIES(otbBasicFiltersTests1  PROPERTIES "OTBBasicFilters")
+#  ADD_DEPENDENCIES(otbBasicFiltersTests1  OTBBasicFilters)
+    FOREACH( file ${sources})
+      ADD_CUSTOM_COMMAND(   TARGET ${name}
+                            PRE_BUILD 
+                            COMMAND ${OTB_CPP_CHECK_PROG}
+                            ARGS ${CMAKE_CURRENT_SOURCE_DIR}/${file}
+                            DEPENDS ${libraries}
+                            COMMENT "============== C++ checking ${file} source file...  =================="
+                            VERBATIM )
+    ENDFOREACH(file)
+  ENDIF(OTB_CPP_CHECK_SOURCE_FILE)
+ENDFUNCTION(OTB_ADD_EXECUTABLE)
+
 
 #-----------------------------------------------------------------------------
 # Advanced option to avoid recompiling utilities at each cmake reconfiguration

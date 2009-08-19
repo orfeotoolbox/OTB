@@ -28,7 +28,6 @@
 #include "itkRandomImageSource.h"
 #include "itkMeanImageFilter.h"
 
-
 int otbFrostFilterNew( int argc, char * argv[] )
 {
   typedef unsigned char                                   InputPixelType;
