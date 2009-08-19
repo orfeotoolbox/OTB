@@ -52,6 +52,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
 #   ${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim/projection
 # Add otbossimplugins/ossim/otb into the include directories path
   ${OTB_SOURCE_DIR}/Utilities/otbossimplugins/ossim
+  ${OTB_SOURCE_DIR}/Utilities/otbossimplugins/ossim/otb
   ${OTB_SOURCE_DIR}/Utilities/dxflib
   ${OTB_SOURCE_DIR}/Utilities/InsightJournal
   ${OTB_SOURCE_DIR}/Utilities/otb6S

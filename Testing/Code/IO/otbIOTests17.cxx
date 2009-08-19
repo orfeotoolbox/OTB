@@ -31,7 +31,9 @@ void RegisterTests()
 REGISTER_TEST(otbPointSetFileReaderNew);
 REGISTER_TEST(otbPointSetFileReader);
 REGISTER_TEST(otbPointSetFileReader2);
-REGISTER_TEST(otbImageMetadataInterfaceNew);
+REGISTER_TEST(otbSpotImageMetadataInterfaceNew);
+REGISTER_TEST(otbIkonosImageMetadataInterfaceNew);
+REGISTER_TEST(otbQuickBirdImageMetadataInterfaceNew);
 REGISTER_TEST(otbImageMetadataInterfaceTest);
 REGISTER_TEST(otbImageMetadataInterfaceTest2);
 }

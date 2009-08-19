@@ -950,6 +950,77 @@ ADD_TEST(raTvWaterSqrtSpectralAngleImageFilter ${RADIOMETRY_TESTS8}
         0 1 2 3
 )
 
+# -------            Aeronet New------------------------------
+ADD_TEST(raTuAeronetNew ${RADIOMETRY_TESTS8}
+        otbAeronetNew
+)
+
+# -------            Aeronet Seysses------------------------------
+ADD_TEST(raTvAeronetExtractData_BadDate ${RADIOMETRY_TESTS8}
+        otbAeronetExtractDataBadData
+        ${INPUTDATA}/AERONET/090101_091231_Seysses.lev15
+        23    # Day
+        2     # Month
+        2009  # Year
+        11    # Hour
+        0     # Minute
+        0.4   # Epsilon
+)
+
+# -------            Aeronet Seysses------------------------------
+ADD_TEST(raTvAeronetExtractData_BadHour ${RADIOMETRY_TESTS8}
+        otbAeronetExtractDataBadData
+        ${INPUTDATA}/AERONET/090101_091231_Seysses.lev15
+        16    # Day
+        2     # Month
+        2009  # Year
+        10    # Hour
+        0     # Minute
+        0.4   # Epsilon
+)
+
+# -------            Aeronet Seysses Level 15------------------------------
+ADD_TEST(raTvAeronet_SeyssesLevel15_ExtractData ${RADIOMETRY_TESTS8}
+   --compare-ascii ${EPSILON_10e6} ${BASELINE_FILES}/raAeronetExtractData_SeyssesLevel15_23_03_2009_11_00_00_epsilon_0dot4.txt
+                          ${TEMP}/raAeronetExtractData_SeyssesLevel15_23_03_2009_11_00_00_epsilon_0dot4.txt
+        otbAeronetExtractData
+        ${INPUTDATA}/AERONET/090101_091231_Seysses.lev15
+        23    # Day
+        3     # Month
+        2009  # Year
+        10    # Hour
+        0     # Minute
+        0.4   # Epsilon
+        ${TEMP}/raAeronetExtractData_SeyssesLevel15_23_03_2009_11_00_00_epsilon_0dot4.txt
+)
+
+ADD_TEST(raTvAeronet_ToulouseLevel20_ExtractData ${RADIOMETRY_TESTS8}
+   --compare-ascii ${EPSILON_10e6} ${BASELINE_FILES}/raAeronetExtractData_ToulouseLevel20_31_08_1999_16_30_epsilon_2.txt
+                          ${TEMP}/raAeronetExtractData_ToulouseLevel20_31_08_1999_16_30_epsilon_2.txt
+        otbAeronetExtractData
+        ${INPUTDATA}/AERONET/990101_011231_Toulouse.lev20
+        31    # Day
+        8     # Month
+        1999  # Year
+        16    # Hour
+        30     # Minute
+        2   # Epsilon
+        ${TEMP}/raAeronetExtractData_ToulouseLevel20_31_08_1999_16_30_epsilon_2.txt
+)
+ADD_TEST(raTvAeronet_ArcachonLevel10_ExtractData ${RADIOMETRY_TESTS8}
+   --compare-ascii ${EPSILON_10e6} ${BASELINE_FILES}/raAeronetExtractData_ArcachonLevel10_16_08_2009_13_00_epsilon_1.txt
+                          ${TEMP}/raAeronetExtractData_ArcachonLevel10_16_08_2009_13_00_epsilon_1.txt
+        otbAeronetExtractData
+        ${INPUTDATA}/AERONET/080101_091231_Arcachon.lev10
+        16    # Day
+        8     # Month
+        2009  # Year
+        13    # Hour
+        0     # Minute
+        1     # Epsilon
+        ${TEMP}/raAeronetExtractData_ArcachonLevel10_16_08_2009_13_00_epsilon_1.txt
+)
+
 
 
 
@@ -1031,6 +1102,9 @@ otbISUMultiChannelRAndNIRIndexImageFilter.cxx
 otbNDWIMultiChannelWaterIndexImageFilter.cxx
 otbNDWIWaterIndexImageFilter.cxx
 otbWaterSqrtSpectralAngleImageFilter.cxx
+otbAeronetNew.cxx
+otbAeronetExtractData.cxx
+otbAeronetExtractDataBadData.cxx
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)

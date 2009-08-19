@@ -26,49 +26,49 @@ class GeographicEphemeris;
 class GalileanEphemeris : public Ephemeris
 {
 public:
-	/**
-	 * @brief Constructor
-	 */
-	GalileanEphemeris();
+  /**
+   * @brief Constructor
+   */
+  GalileanEphemeris();
 
-	/**
-	  * @brief Destructor
-	  */
-	~GalileanEphemeris();
+  /**
+    * @brief Destructor
+    */
+  ~GalileanEphemeris();
 
-	/**
-	 * @brief Constructor with initialisations
-	 */
-	GalileanEphemeris(JSDDateTime date, double pos[3], double vitesse[3]);
+  /**
+   * @brief Constructor with initialisations
+   */
+  GalileanEphemeris(JSDDateTime date, double pos[3], double vitesse[3]);
 
-	/**
-	 * @brief Copy constructor
-	 */
-	GalileanEphemeris(const GalileanEphemeris& rhs);
+  /**
+   * @brief Copy constructor
+   */
+  GalileanEphemeris(const GalileanEphemeris& rhs);
 
-	GalileanEphemeris(GeographicEphemeris& rhs);
-	/**
-	 * @brief Affectation operator
-	 */
-	GalileanEphemeris& operator=(const GalileanEphemeris& rhs);
+  GalileanEphemeris(GeographicEphemeris& rhs);
+  /**
+   * @brief Affectation operator
+   */
+  GalileanEphemeris& operator=(const GalileanEphemeris& rhs);
 
-	/**
-	 * @brief This fonction converts the current ephemeris in the Geographic coordinates syst�m
-	 */
-	void ToGeographic(GeographicEphemeris* vGeo);
-	void ToGeographic(double greenwich,GeographicEphemeris* vGeo);
+  /**
+   * @brief This fonction converts the current ephemeris in the Geographic coordinates syst�m
+   */
+  void ToGeographic(GeographicEphemeris* vGeo);
+  void ToGeographic(double greenwich,GeographicEphemeris* vGeo);
 
-	operator GeographicEphemeris();
+  operator GeographicEphemeris();
 
-	/**
-	 * @brief This function creates a copy of the current class
-	 */
-	virtual Ephemeris* Clone()
-	{
-		return new GalileanEphemeris(*this);
-	};
+  /**
+   * @brief This function creates a copy of the current class
+   */
+  virtual Ephemeris* Clone()
+  {
+    return new GalileanEphemeris(*this);
+  };
 protected:
-	int p2nutt(int newcmb, double greenwich, double day, double p[], double pd[] );
+  int p2nutt(int newcmb, double greenwich, double day, double p[], double pd[] );
 private:
 };
 }

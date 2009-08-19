@@ -110,10 +110,16 @@ private:
 
    ossimString   theGenerationDate;
    ossimString   theBandId;
+   //ossim_uint16           theBitsPerPixel;
+   int           theBitsPerPixel;	
    ossimString   theSatID;
    ossimString   theTLCDate;
    ossim_float64 theSunAzimuth;
    ossim_float64 theSunElevation;
+   //ossim_uint16           theTDILevel;
+   int           theTDILevel;
+   std::vector<double> theAbsCalFactors;
+   
    /*ossim_uint32  theNumBands;*/
    /*ossimString   theBandName;*/
   /*ossim_uint32  theNumBands;*/

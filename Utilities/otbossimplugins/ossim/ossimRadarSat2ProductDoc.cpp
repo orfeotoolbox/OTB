@@ -218,7 +218,7 @@ bool ossimRadarSat2ProductDoc::initPlatformPosition(
             ephemeris[i] = eph;
             ++nbrData;
 
-	 } // matches:  for (int i = 0 ; i < nbrData; ++i)
+   } // matches:  for (int i = 0 ; i < nbrData; ++i)
 
          if (result)
          {

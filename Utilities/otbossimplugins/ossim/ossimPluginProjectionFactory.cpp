@@ -32,7 +32,7 @@ ossimPluginProjectionFactory* ossimPluginProjectionFactory::instance()
 }
 
 ossimProjection* ossimPluginProjectionFactory::createProjection(const ossimFilename& filename,
-                                                                ossim_uint32 entryIdx)const
+                                                                ossim_uint32 /*entryIdx*/)const
 {
    ossimProjection* result = 0;
 
@@ -64,6 +64,20 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(const ossimFilen
       }
    }
 
+   if ( !result )
+   {
+      ossimErsSarModel* model = new ossimErsSarModel();
+      if ( model->open(filename) )
+      {
+         result = model;
+      }
+      else
+      {
+         delete model;
+         model = 0;
+      }
+   }
+
    return result;
 }
 
@@ -72,19 +86,19 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
 {
 //    if (name == STATIC_TYPE_NAME(ossimRadarSatModel))
 //    {
-// 	   return new ossimRadarSatModel;
+//      return new ossimRadarSatModel;
 //    }
 //    else if (name == STATIC_TYPE_NAME(ossimEnvisatAsarModel))
 //    {
-// 	   return new ossimEnvisatAsarModel;
+//      return new ossimEnvisatAsarModel;
 //    }
-// 	else if (name == STATIC_TYPE_NAME(ossimTerraSarModel))
+//   else if (name == STATIC_TYPE_NAME(ossimTerraSarModel))
 //    {
-// 	   return new ossimTerraSarModel;
+//      return new ossimTerraSarModel;
 //    }
-   // 	else if (name == STATIC_TYPE_NAME(ossimCosmoSkymedModel))
+   //   else if (name == STATIC_TYPE_NAME(ossimCosmoSkymedModel))
    //    {
-   // 	   return new ossimCosmoSkymedModel;
+   //      return new ossimCosmoSkymedModel;
    //   }
    if (name == STATIC_TYPE_NAME(ossimRadarSat2Model))
    {
@@ -94,10 +108,10 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    {
       return new ossimTerraSarModel();
    }
-//    else if (name == STATIC_TYPE_NAME(ossimErsSarModel))
-//    {
-// 	   return new ossimErsSarModel;
-//    }
+   else if (name == STATIC_TYPE_NAME(ossimErsSarModel))
+   {
+     return new ossimErsSarModel;
+   }
    return 0;
 }
 
@@ -123,6 +137,15 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       else if (type == "ossimTerraSarModel")
       {
          result = new ossimTerraSarModel();
+         if ( !result->loadState(kwl, prefix) )
+         {
+            delete result;
+            result = 0;
+         }
+      }
+      else if (type == "ossimErsSarModel")
+      {
+         result = new ossimErsSarModel();
          if ( !result->loadState(kwl, prefix) )
          {
             delete result;

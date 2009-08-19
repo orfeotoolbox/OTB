@@ -23,7 +23,7 @@
 #endif
 
 #include "itkVectorImage.h"
-#include "otbImageMetadataInterface.h"
+#include "otbImageMetadataInterfaceBase.h"
 
 #include <string.h>
 
@@ -45,8 +45,8 @@ public:
   typedef itk::SmartPointer<const Self>  ConstPointer;
   typedef itk::WeakPointer<const Self> ConstWeakPointer;
 
-  typedef ImageMetadataInterface::VectorType  VectorType;
-  typedef ImageMetadataInterface::ImageKeywordlistType  ImageKeywordlistType;
+  typedef ImageMetadataInterfaceBase::VectorType  VectorType;
+  typedef ImageMetadataInterfaceBase::ImageKeywordlistType  ImageKeywordlistType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -174,6 +174,8 @@ public:
     return NeighborhoodAccessorFunctorType(this->GetNumberOfComponentsPerPixel());
   }
 
+  virtual void UpdateOutputInformation();
+
 protected:
   VectorImage();
   virtual ~VectorImage() {};
@@ -181,7 +183,7 @@ protected:
 private:
   VectorImage(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  typename ImageMetadataInterface::Pointer m_ImageMetadataInterface;
+  typename ImageMetadataInterfaceBase::Pointer m_ImageMetadataInterface;
 };
 
 

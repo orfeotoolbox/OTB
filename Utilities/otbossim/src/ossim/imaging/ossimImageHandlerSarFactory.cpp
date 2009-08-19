@@ -10,11 +10,11 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/imaging/ossimRadarSatTileSource.h>
-#include <ossim/imaging/ossimRadarSat2TileSource.h>
+// #include <ossim/imaging/ossimRadarSat2TileSource.h>
 #include <ossim/imaging/ossimTerraSarTileSource.h>
 //#include <ossim/imaging/ossimCosmoSkymedTileSource.h>
 #include <ossim/imaging/ossimEnvisatAsarTileSource.h>
-#include <ossim/imaging/ossimErsSarTileSource.h>
+// #include <ossim/imaging/ossimErsSarTileSource.h>
 
 
 
@@ -103,32 +103,32 @@ ossimImageHandler* ossimImageHandlerSarFactory::open(const ossimFilename& fileNa
    delete result;
 
    // Radarsat 2
-	if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying RadarSat2"
-         << std::endl;
-   }
-   result = new ossimRadarSat2TileSource;
-   if(result->open(copyFilename))
-   {
-      return result;
-   }
-   delete result;
+// 	if(traceDebug())
+//    {
+//       ossimNotify(ossimNotifyLevel_DEBUG)
+//          << "trying RadarSat2"
+//          << std::endl;
+//    }
+//    result = new ossimRadarSat2TileSource;
+//    if(result->open(copyFilename))
+//    {
+//       return result;
+//    }
+//    delete result;
 
    // ERS
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying Ers Sar"
-         << std::endl;
-   }
-   result = new ossimErsSarTileSource;
-   if(result->open(copyFilename))
-   {
-      return result;
-   }
-   delete result;
+//    if(traceDebug())
+//    {
+//       ossimNotify(ossimNotifyLevel_DEBUG)
+//          << "trying Ers Sar"
+//          << std::endl;
+//    }
+//    result = new ossimErsSarTileSource;
+//    if(result->open(copyFilename))
+//    {
+//       return result;
+//    }
+//    delete result;
 
    //// Cosmo Skymed
    //if(traceDebug())
@@ -189,18 +189,18 @@ ossimImageHandler* ossimImageHandlerSarFactory::open(const ossimKeywordlist& kwl
    }
    delete result;
 
-	if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying RadarSat2"
-         << std::endl;
-   }
-   result  = new ossimRadarSat2TileSource();
-   if(result->loadState(kwl, prefix))
-   {
-      return result;
-   }
-   delete result;
+// 	if(traceDebug())
+//    {
+//       ossimNotify(ossimNotifyLevel_DEBUG)
+//          << "trying RadarSat2"
+//          << std::endl;
+//    }
+//    result  = new ossimRadarSat2TileSource();
+//    if(result->loadState(kwl, prefix))
+//    {
+//       return result;
+//    }
+//    delete result;
 
 	if(traceDebug())
    {
@@ -215,18 +215,18 @@ ossimImageHandler* ossimImageHandlerSarFactory::open(const ossimKeywordlist& kwl
    }
    delete result;
 
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying Ers Sar"
-         << std::endl;
-   }
-   result  = new ossimErsSarTileSource();
-   if(result->loadState(kwl, prefix))
-   {
-      return result;
-   }
-   delete result;
+//    if(traceDebug())
+//    {
+//       ossimNotify(ossimNotifyLevel_DEBUG)
+//          << "trying Ers Sar"
+//          << std::endl;
+//    }
+//    result  = new ossimErsSarTileSource();
+//    if(result->loadState(kwl, prefix))
+//    {
+//       return result;
+//    }
+//    delete result;
 
    /*if(traceDebug())
    {
@@ -268,14 +268,14 @@ ossimObject* ossimImageHandlerSarFactory::createObject(const ossimString& typeNa
    {
       return new ossimCosmoSkymedTileSource();
    }*/
-   if(STATIC_TYPE_NAME(ossimErsSarTileSource) == typeName)
-   {
-      return new ossimErsSarTileSource();
-   }
-	if(STATIC_TYPE_NAME(ossimRadarSat2TileSource) == typeName)
-   {
-      return new ossimRadarSat2TileSource();
-   }
+//    if(STATIC_TYPE_NAME(ossimErsSarTileSource) == typeName)
+//    {
+//       return new ossimErsSarTileSource();
+//    }
+// 	if(STATIC_TYPE_NAME(ossimRadarSat2TileSource) == typeName)
+//    {
+//       return new ossimRadarSat2TileSource();
+//    }
    return (ossimObject*)NULL;
 }
 
@@ -338,6 +338,6 @@ void ossimImageHandlerSarFactory::getTypeNameList(std::vector<ossimString>& type
 	typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarTileSource));
 	typeList.push_back(STATIC_TYPE_NAME(ossimEnvisatAsarTileSource));
 	//typeList.push_back(STATIC_TYPE_NAME(ossimCosmoSkymedTileSource));
-	typeList.push_back(STATIC_TYPE_NAME(ossimErsSarTileSource));
-	typeList.push_back(STATIC_TYPE_NAME(ossimRadarSat2TileSource));
+// 	typeList.push_back(STATIC_TYPE_NAME(ossimErsSarTileSource));
+// 	typeList.push_back(STATIC_TYPE_NAME(ossimRadarSat2TileSource));
 }

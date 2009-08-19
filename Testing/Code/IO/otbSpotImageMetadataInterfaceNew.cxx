@@ -24,13 +24,13 @@
 
 #include <iostream>
 
-#include "otbImageMetadataInterface.h"
+#include "otbSpotImageMetadataInterface.h"
 
 
-int otbImageMetadataInterfaceNew (int argc, char* argv[])
+int otbSpotImageMetadataInterfaceNew (int argc, char* argv[])
 {
 
-  otb::ImageMetadataInterface::Pointer lImageMetadata = otb::ImageMetadataInterface::New();
+  otb::SpotImageMetadataInterface::Pointer lImageMetadata = otb::SpotImageMetadataInterface::New();
 
   return EXIT_SUCCESS;
 

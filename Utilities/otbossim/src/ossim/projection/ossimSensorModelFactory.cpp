@@ -50,8 +50,8 @@ static ossimTrace traceDebug = ossimTrace("ossimSensorModelFactory:debug");
 #include <ossim/projection/ossimEnvisatAsarModel.h>
 #include <ossim/projection/ossimTerraSarModel.h>
 //#include <ossim/projection/ossimCosmoSkymedModel.h>
-#include <ossim/projection/ossimRadarSat2Model.h>
-#include <ossim/projection/ossimErsSarModel.h>
+// #include <ossim/projection/ossimRadarSat2Model.h>
+// #include <ossim/projection/ossimErsSarModel.h>
 #include <ossim/projection/ossimTileMapModel.h>
 
 //***
@@ -208,14 +208,14 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
 //    {
 // 	   return new ossimCosmoSkymedModel;
 //   }
-	if (name == STATIC_TYPE_NAME(ossimRadarSat2Model))
-   {
-	   return new ossimRadarSat2Model;
-   }
-   if (name == STATIC_TYPE_NAME(ossimErsSarModel))
-   {
-	   return new ossimErsSarModel;
-   }
+// 	if (name == STATIC_TYPE_NAME(ossimRadarSat2Model))
+//    {
+// 	   return new ossimRadarSat2Model;
+//    }
+//    if (name == STATIC_TYPE_NAME(ossimErsSarModel))
+//    {
+// 	   return new ossimErsSarModel;
+//    }
    //***
    // ADD_MODEL: (Please leave this comment for the next programmer)
    //***
@@ -264,11 +264,11 @@ ossimSensorModelFactory::getTypeNameList(std::vector<ossimString>& typeList)
    typeList.push_back(STATIC_TYPE_NAME(ossimSpot5Model));
    typeList.push_back(STATIC_TYPE_NAME(ossimSarModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimRadarSatModel));
-   typeList.push_back(STATIC_TYPE_NAME(ossimRadarSat2Model));
+//    typeList.push_back(STATIC_TYPE_NAME(ossimRadarSat2Model));
    typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarModel));
    //   typeList.push_back(STATIC_TYPE_NAME(ossimCosmoSkymedModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimEnvisatAsarModel));
-   typeList.push_back(STATIC_TYPE_NAME(ossimErsSarModel));
+//    typeList.push_back(STATIC_TYPE_NAME(ossimErsSarModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimTileMapModel));
    //***
    // ADD_MODEL: Please leave this comment for the next programmer. Add above.

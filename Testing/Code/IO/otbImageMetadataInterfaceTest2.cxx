@@ -24,10 +24,10 @@
 
 #include <fstream>
 #include <iostream>
-#include "otbVectorImage.h"
+#include "otbImage.h"
 #include "otbImageFileReader.h"
+#include "otbImageMetadataInterfaceBase.h"
 #include "otbImageMetadataInterface.h"
-
 
 int otbImageMetadataInterfaceTest2 (int argc, char* argv[])
 {
@@ -35,21 +35,23 @@ int otbImageMetadataInterfaceTest2 (int argc, char* argv[])
   const char * inputFilename  = argv[1];
   const char * outputFilename  = argv[2];
 
-  typedef otb::VectorImage< double,  2 >                 InputImageType;
+  typedef otb::Image< double,  2 >                 InputImageType;
   typedef otb::ImageFileReader< InputImageType >         ImageReaderType;
 
   ImageReaderType::Pointer reader = ImageReaderType::New();
   reader->SetFileName( inputFilename  );
   reader->UpdateOutputInformation();
-  otb::ImageMetadataInterface::Pointer lImageMetadata = otb::ImageMetadataInterface::New();
 
+  otb::ImageMetadataInterfaceBase::Pointer lImageMetadata = otb::ImageMetadataInterface::CreateIMI(reader->GetOutput()->GetMetaDataDictionary());
+  
   std::ofstream file;
   file.open(outputFilename);
 
   //Test the image interface
   lImageMetadata->SetImage(reader->GetOutput());
-  file<< lImageMetadata->GetProjectionRef() << std::endl;
-  file.close();
+  //std::cout<<lImageMetadata->GetProjectionRef()<<std::endl;
+  file<< lImageMetadata->GetProjectionRef(reader->GetOutput()->GetMetaDataDictionary()) << std::endl;
+  //file.close();
 
   return EXIT_SUCCESS;
 

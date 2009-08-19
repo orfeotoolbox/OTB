@@ -23,6 +23,7 @@
 #endif
 
 #include "otbImage.h"
+#include "otbImageMetadataInterface.h"
 
 namespace otb
 {
@@ -30,7 +31,7 @@ namespace otb
 template <class TPixel, unsigned int VImageDimension>
 Image<TPixel,VImageDimension>::Image()
 {
-  m_ImageMetadataInterface = ImageMetadataInterface::New();
+   m_ImageMetadataInterface = NULL;
 }
 
 template <class TPixel, unsigned int VImageDimension>
@@ -150,6 +151,30 @@ Image<TPixel, VImageDimension>
 //   this->itk::Object::SetMetaDataDictionary(data->GetMetaDataDictionary());
   itk::MetaDataDictionary dict = data->GetMetaDataDictionary();
   this->itk::Object::SetMetaDataDictionary(dict);
+}
+
+template <class TPixel, unsigned int VImageDimension>
+void
+Image<TPixel, VImageDimension>::UpdateOutputInformation()
+{
+  Superclass::UpdateOutputInformation();
+  m_ImageMetadataInterface = ImageMetadataInterface::CreateIMI( this->GetMetaDataDictionary() );
+  std::cout<<m_ImageMetadataInterface<<std::endl;
+    if ( m_ImageMetadataInterface.IsNull() )
+  {
+    itk::OStringStream msg;
+    msg << " Could not create Image Metadata Interface object.";
+    msg << "  Tried to create one of the following:" << std::endl;
+    std::list<itk::LightObject::Pointer> allobjects =
+        itk::ObjectFactoryBase::CreateAllInstance("otbVectorDataIOBase");
+    for (std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin(); i != allobjects.end(); ++i)
+    {
+       ImageMetadataInterfaceBase* io = dynamic_cast<ImageMetadataInterfaceBase*>(i->GetPointer());
+       msg << "    " << io->GetNameOfClass() << std::endl;
+    }
+    itkGenericExceptionMacro(<<__FILE__<<" "<<__LINE__<<" "<<msg.str().c_str()<<" "<<ITK_LOCATION);
+    return;
+  }
 }
 
 template <class TPixel, unsigned int VImageDimension>

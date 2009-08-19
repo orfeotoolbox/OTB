@@ -15,9 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPostGISConnectionImplementation_cxx
-#define __otbPostGISConnectionImplementation_cxx
-
 #include "otbPostGISConnectionImplementation.h"
 #include <sstream>
 #include <sstream>
@@ -86,5 +83,3 @@ void PostGISConnectionImplementation::PrintSelf(std::ostream& os, itk::Indent in
 }
 
 } // end namespace otb
-
-#endif

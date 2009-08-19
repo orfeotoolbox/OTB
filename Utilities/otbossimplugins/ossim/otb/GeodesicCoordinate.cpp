@@ -34,11 +34,11 @@ GeodesicCoordinate::GeodesicCoordinate(const GeodesicCoordinate& rhs): Coordinat
 
 GeodesicCoordinate& GeodesicCoordinate::operator=(const GeodesicCoordinate& rhs)
 {
-	_x = rhs._x;
-	_y = rhs._x;
-	_z = rhs._x;
+  _x = rhs._x;
+  _y = rhs._x;
+  _z = rhs._x;
 
-	return *this;
+  return *this;
 }
 
 }
