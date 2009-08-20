@@ -23,7 +23,6 @@
 #endif
 
 #include "otbImage.h"
-#include "otbImageMetadataInterface.h"
 
 namespace otb
 {
@@ -31,7 +30,7 @@ namespace otb
 template <class TPixel, unsigned int VImageDimension>
 Image<TPixel,VImageDimension>::Image()
 {
-   m_ImageMetadataInterface = NULL;
+  m_ImageMetadataInterface = DefaultImageMetadataInterface::New();
 }
 
 template <class TPixel, unsigned int VImageDimension>
@@ -101,43 +100,50 @@ double Image<TPixel, VImageDimension>::GetGCPZ( unsigned int GCPnum ) const
 }
 
 template <class TPixel, unsigned int VImageDimension>
-ImageMetadataInterface::VectorType Image<TPixel, VImageDimension>::GetGeoTransform( void ) const
+typename Image<TPixel, VImageDimension>::VectorType
+Image<TPixel, VImageDimension>::GetGeoTransform( void ) const
 {
   return ( m_ImageMetadataInterface->GetGeoTransform( this->GetMetaDataDictionary() ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-ImageMetadataInterface::VectorType Image<TPixel, VImageDimension>::GetUpperLeftCorner( void ) const
+typename Image<TPixel, VImageDimension>::VectorType
+Image<TPixel, VImageDimension>::GetUpperLeftCorner( void ) const
 {
   return ( m_ImageMetadataInterface->GetUpperLeftCorner( this->GetMetaDataDictionary() ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-ImageMetadataInterface::VectorType Image<TPixel, VImageDimension>::GetUpperRightCorner( void ) const
+typename Image<TPixel, VImageDimension>::VectorType
+Image<TPixel, VImageDimension>::GetUpperRightCorner( void ) const
 {
   return ( m_ImageMetadataInterface->GetUpperRightCorner( this->GetMetaDataDictionary() ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-ImageMetadataInterface::VectorType Image<TPixel, VImageDimension>::GetLowerLeftCorner( void ) const
+typename Image<TPixel, VImageDimension>::VectorType
+Image<TPixel, VImageDimension>::GetLowerLeftCorner( void ) const
 {
   return ( m_ImageMetadataInterface->GetLowerLeftCorner( this->GetMetaDataDictionary() ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-ImageMetadataInterface::VectorType Image<TPixel, VImageDimension>::GetLowerRightCorner( void ) const
+typename Image<TPixel, VImageDimension>::VectorType
+Image<TPixel, VImageDimension>::GetLowerRightCorner( void ) const
 {
   return ( m_ImageMetadataInterface->GetLowerRightCorner( this->GetMetaDataDictionary() ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-ImageMetadataInterface::ImageKeywordlistType Image<TPixel, VImageDimension>::GetImageKeywordlist( void )
+typename Image<TPixel, VImageDimension>::ImageKeywordlistType
+Image<TPixel, VImageDimension>::GetImageKeywordlist( void )
 {
   return ( m_ImageMetadataInterface->GetImageKeywordlist( this->GetMetaDataDictionary() ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-const ImageMetadataInterface::ImageKeywordlistType Image<TPixel, VImageDimension>::GetImageKeywordlist( void ) const
+const typename Image<TPixel, VImageDimension>::ImageKeywordlistType
+Image<TPixel, VImageDimension>::GetImageKeywordlist( void ) const
 {
   return ( m_ImageMetadataInterface->GetImageKeywordlist( this->GetMetaDataDictionary() ) );
 }
@@ -151,30 +157,6 @@ Image<TPixel, VImageDimension>
 //   this->itk::Object::SetMetaDataDictionary(data->GetMetaDataDictionary());
   itk::MetaDataDictionary dict = data->GetMetaDataDictionary();
   this->itk::Object::SetMetaDataDictionary(dict);
-}
-
-template <class TPixel, unsigned int VImageDimension>
-void
-Image<TPixel, VImageDimension>::UpdateOutputInformation()
-{
-  Superclass::UpdateOutputInformation();
-  m_ImageMetadataInterface = ImageMetadataInterface::CreateIMI( this->GetMetaDataDictionary() );
-  std::cout<<m_ImageMetadataInterface<<std::endl;
-    if ( m_ImageMetadataInterface.IsNull() )
-  {
-    itk::OStringStream msg;
-    msg << " Could not create Image Metadata Interface object.";
-    msg << "  Tried to create one of the following:" << std::endl;
-    std::list<itk::LightObject::Pointer> allobjects =
-        itk::ObjectFactoryBase::CreateAllInstance("otbVectorDataIOBase");
-    for (std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin(); i != allobjects.end(); ++i)
-    {
-       ImageMetadataInterfaceBase* io = dynamic_cast<ImageMetadataInterfaceBase*>(i->GetPointer());
-       msg << "    " << io->GetNameOfClass() << std::endl;
-    }
-    itkGenericExceptionMacro(<<__FILE__<<" "<<__LINE__<<" "<<msg.str().c_str()<<" "<<ITK_LOCATION);
-    return;
-  }
 }
 
 template <class TPixel, unsigned int VImageDimension>

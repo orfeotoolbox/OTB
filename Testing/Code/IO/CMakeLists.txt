@@ -1365,11 +1365,11 @@ ADD_TEST(ioTvOSSIMImageQuickbirdMetaDataReader ${IO_TESTS12}
    --compare-n-ascii ${EPS} 2           ${BASELINE_FILES}/ioOSSIMImageQuickbirdMetaDataReader.txt
                                         ${TEMP}/ioOSSIMImageQuickbirdMetaDataReader.txt
                                         ${BASELINE_FILES}/ioOSSIMImageQuickbirdMetaDataReader.txt
-                                        ${TEMP}/ioOSSIMVectorImageQuickbirdMetaDataReader.txt
+                                        ${TEMP}/ioOSSIMImageQuickbirdMetaDataReader.txt
          otbOSSIMImageMetaDataReaderTest
          ${LARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 	 ${TEMP}/ioOSSIMImageQuickbirdMetaDataReader.txt
-	 ${TEMP}/ioOSSIMVectorImageQuickbirdMetaDataReader.txt
+	 ${TEMP}/ioOSSIMImageQuickbirdMetaDataReader.txt
          )
 
 # ---  Radarsat Metadata ---

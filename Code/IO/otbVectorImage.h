@@ -23,7 +23,7 @@
 #endif
 
 #include "itkVectorImage.h"
-#include "otbImageMetadataInterfaceBase.h"
+#include "otbDefaultImageMetadataInterface.h"
 
 #include <string.h>
 
@@ -45,8 +45,8 @@ public:
   typedef itk::SmartPointer<const Self>  ConstPointer;
   typedef itk::WeakPointer<const Self> ConstWeakPointer;
 
-  typedef ImageMetadataInterfaceBase::VectorType  VectorType;
-  typedef ImageMetadataInterfaceBase::ImageKeywordlistType  ImageKeywordlistType;
+  typedef DefaultImageMetadataInterface::VectorType  VectorType;
+  typedef DefaultImageMetadataInterface::ImageKeywordlistType  ImageKeywordlistType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -174,8 +174,6 @@ public:
     return NeighborhoodAccessorFunctorType(this->GetNumberOfComponentsPerPixel());
   }
 
-  virtual void UpdateOutputInformation();
-
 protected:
   VectorImage();
   virtual ~VectorImage() {};
@@ -183,7 +181,10 @@ protected:
 private:
   VectorImage(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  typename ImageMetadataInterfaceBase::Pointer m_ImageMetadataInterface;
+    /** Only here to have access to projection and coordinates datas. 
+  Those method will disappear.
+  Use Default because don't need to know the sensor type*/
+  typename DefaultImageMetadataInterface::Pointer m_ImageMetadataInterface;
 };
 
 

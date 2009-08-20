@@ -27,7 +27,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageMetadataInterfaceBase.h"
-#include "otbImageMetadataInterface.h"
+#include "otbImageMetadataInterfaceFactory.h"
 
 int otbImageMetadataInterfaceTest (int argc, char* argv[])
 {
@@ -42,8 +42,8 @@ int otbImageMetadataInterfaceTest (int argc, char* argv[])
   reader->SetFileName( inputFilename  );
   reader->UpdateOutputInformation();
 
-  otb::ImageMetadataInterfaceBase::Pointer lImageMetadata = otb::ImageMetadataInterface::CreateIMI(reader->GetOutput()->GetMetaDataDictionary());
-
+  otb::ImageMetadataInterfaceBase::Pointer lImageMetadata = otb::ImageMetadataInterfaceFactory::CreateIMI(reader->GetOutput()->GetMetaDataDictionary());
+  
   std::ofstream file;
   file.open(outputFilename);
 

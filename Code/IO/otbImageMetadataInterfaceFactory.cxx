@@ -20,7 +20,8 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbImageMetadataInterface.h"
+#include "otbImageMetadataInterfaceFactory.h"
+
 #include "otbDefaultImageMetadataInterface.h"
 // Optical sensors
 #include "otbIkonosImageMetadataInterfaceFactory.h"
@@ -33,8 +34,8 @@
 
 namespace otb
 {
-ImageMetadataInterface::ImageMetadataInterfaceBasePointerType
-ImageMetadataInterface
+ImageMetadataInterfaceFactory::ImageMetadataInterfaceBasePointerType
+ImageMetadataInterfaceFactory
 ::CreateIMI( const MetaDataDictionaryType & dict )
 {
   RegisterBuiltInFactories();
@@ -71,7 +72,7 @@ ImageMetadataInterface
 
 
 void
-ImageMetadataInterface
+ImageMetadataInterfaceFactory
 ::RegisterBuiltInFactories()
 {
   static bool firstTime = true;
