@@ -29,11 +29,11 @@ Equation::Equation():
 Equation::~Equation()
 {
   if (_coefficients != NULL)
-    delete _coefficients;
+    delete [] _coefficients;
   if(_order != NULL)
-    delete _order;
+    delete [] _order;
   if(_solutions != NULL)
-    delete _solutions;
+    delete [] _solutions;
 }
 
 Equation::Equation(int degree, std::complex<double>* coefficients):
@@ -50,13 +50,13 @@ void Equation::CreateEquation(int degree, std::complex<double>* coefficients)
 {
   if (_coefficients != NULL)
   {
-    delete _coefficients;
+    delete [] _coefficients;
   }
 
   if(_order != NULL)
-    delete _order;
+    delete [] _order;
   if(_solutions != NULL)
-    delete _solutions;
+    delete [] _solutions;
 
   _coefficients = new std::complex<double>[degree+1];
   _degree = degree;
@@ -225,13 +225,13 @@ void Equation::Solve1()
 {
   _nbrSol = 1;
   if(_order != NULL)
-    delete _order;
+    delete [] _order;
 
   _order = new int[1];
   _order[0] = 1;
 
   if(_solutions != NULL)
-    delete _solutions;
+    delete [] _solutions;
   _solutions = new std::complex<double>[1];
   _solutions[0] = Proche(-_coefficients[0], Epsilon);
 }
@@ -269,11 +269,11 @@ void Equation::Solve2()
     /* 1 double root */
 
     if(_solutions != NULL)
-      delete _solutions;
+      delete [] _solutions;
     _solutions = new std::complex<double>[1];
 
     if(_order != NULL)
-      delete _order;
+      delete [] _order;
     _order = new int[1];
 
 
@@ -287,11 +287,11 @@ void Equation::Solve2()
     /* 2 simple roots */
 
     if(_solutions != NULL)
-      delete _solutions;
+      delete [] _solutions;
     _solutions = new std::complex<double>[2];
 
     if(_order != NULL)
-      delete _order;
+      delete [] _order;
     _order = new int[2];
 
 
@@ -343,11 +343,11 @@ void Equation::Solve3(int d4)
   {
     /* 1 triple root */
     if(_solutions != NULL)
-      delete _solutions;
+      delete [] _solutions;
     _solutions = new std::complex<double>[1];
 
     if(_order != NULL)
-      delete _order;
+      delete [] _order;
     _order = new int[1];
 
     _nbrSol    = 1 ;
@@ -359,11 +359,11 @@ void Equation::Solve3(int d4)
     /* 1 simple root + 1 double root */
 
     if(_solutions != NULL)
-      delete _solutions;
+      delete [] _solutions;
     _solutions = new std::complex<double>[2];
 
     if(_order != NULL)
-      delete _order;
+      delete [] _order;
     _order = new int[2];
 
     u = (aa[1]* aa[2])/ std::complex<double>(6.0, 0.0) ;
@@ -452,11 +452,11 @@ void Equation::Solve3(int d4)
 
 
     if(_solutions != NULL)
-      delete _solutions;
+      delete [] _solutions;
     _solutions = new std::complex<double>[3];
 
     if(_order != NULL)
-      delete _order;
+      delete [] _order;
     _order = new int[3];
 
     _nbrSol   = 3 ;
@@ -547,11 +547,11 @@ void Equation::Solve4()
     /* 1 quadruple root */
 
     if(_solutions != NULL)
-      delete _solutions;
+      delete [] _solutions;
     _solutions = new std::complex<double>[1];
 
     if(_order != NULL)
-      delete _order;
+      delete [] _order;
     _order = new int[1];
 
     _nbrSol    = 1 ;
@@ -563,11 +563,11 @@ void Equation::Solve4()
     /* 2 double roots */
 
     if(_solutions != NULL)
-      delete _solutions;
+      delete [] _solutions;
     _solutions = new std::complex<double>[2];
 
     if(_order != NULL)
-      delete _order;
+      delete [] _order;
     _order = new int[2];
 
     u         = sqrt (k[1]/ std::complex<double>(-2.0, 0.0)) ;
@@ -582,11 +582,11 @@ void Equation::Solve4()
     /* 1 triple root + 1 simple root */
 
     if(_solutions != NULL)
-      delete _solutions;
+      delete [] _solutions;
     _solutions = new std::complex<double>[2];
 
     if(_order != NULL)
-      delete _order;
+      delete [] _order;
     _order = new int[2];
 
     u         = (k[2]* std::complex<double>(-3.0, 0.0)) / (k[1]* std::complex<double>(4.0, 0.0)) ;
@@ -602,11 +602,11 @@ void Equation::Solve4()
     /* 1 double root + 2 simple roots */
 
     if(_solutions != NULL)
-      delete _solutions;
+      delete [] _solutions;
     _solutions = new std::complex<double>[3];
 
     if(_order != NULL)
-      delete _order;
+      delete [] _order;
     _order = new int[3];
 
     if (abs (k[1]) <= Epsilon)
@@ -731,11 +731,11 @@ void Equation::Solve4()
     i1 = IndiceMin (2, h) ;
 
     if(_solutions != NULL)
-      delete _solutions;
+      delete [] _solutions;
     _solutions = new std::complex<double>[4];
 
     if(_order != NULL)
-      delete _order;
+      delete [] _order;
     _order = new int[4];
 
     for (i2 = 0; i2 < 4; i2++)
