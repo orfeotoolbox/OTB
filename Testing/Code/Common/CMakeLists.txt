@@ -1041,6 +1041,7 @@ IF(OTB_USE_MAPNIK)
 ENDIF(OTB_USE_MAPNIK)
 IF(OTB_USE_PQXX)
   #TODO this line should be refined when we will like to have this capability with windows
+OTB_ADD_EXECUTABLE(otbCommonTests10 "${BasicCommon_SRCS10}" "OTBIO;OTBTesting")
 TARGET_LINK_LIBRARIES(otbCommonTests10 OTBIO  OTBTesting OTBGeospatialAnalysis pq pqxx)
 ENDIF(OTB_USE_PQXX)
 

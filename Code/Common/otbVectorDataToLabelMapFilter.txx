@@ -168,8 +168,10 @@ void
       InputVectorDataConstPointer input = this->GetInput(idx);
       InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(input->GetDataTree()->GetRoot());
       //std::cout << "set background..."<<std::endl;    
-      output->SetBackgroundValue( m_BackgroundValue );
-      //m_lab = m_BackgroundValue+1;
+      //output->SetBackgroundValue( m_BackgroundValue );
+      //Use our own value for the background
+      output->SetBackgroundValue( itk::NumericTraits<LabelType>::max() );
+      m_lab = 0;
       ProcessNode(inputRoot);
 
     }

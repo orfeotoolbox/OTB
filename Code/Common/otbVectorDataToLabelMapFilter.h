@@ -163,12 +163,14 @@ private:
 
   void ProcessNode(InternalTreeNodeType * source);
   
+  /** Current label value incremented during vectorization */
   LabelType m_lab;
   
   //OriginType          m_Origin;
   SizeType            m_Size;
   IndexType           m_StartIndex;
   
+  /** Background value, not use presently background value=itk::NumericTraits<LabelType>::max()*/
   OutputLabelMapPixelType m_BackgroundValue;
   };
   
