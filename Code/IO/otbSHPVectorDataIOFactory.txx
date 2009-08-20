@@ -49,7 +49,7 @@ template<class TData>
 const char*
 SHPVectorDataIOFactory<TData>::GetDescription() const
 {
-  return "SHP VectorDataIO Factory, allows the loading of SHP vector data into OTB";
+  return "SHP VectorDataIO Factory, allows the loading of ESRI shapefile vector data into OTB";
 }
 
 } // end namespace otb

@@ -238,6 +238,7 @@ ADD_TEST(srTvPolygonListToRCC8GraphFilter2 ${SPATIALREASONING_TESTS2}
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicSpatialReasoning_SRCS1
+otbSpatialReasoningTests1.cxx
 otbImageToImageRCC8CalculatorNew.cxx
 otbImageToImageRCC8Calculator.cxx
 otbPolygonToPolygonRCC8CalculatorNew.cxx
@@ -252,6 +253,7 @@ otbRCC8GraphNew.cxx
 otbRCC8Graph.cxx
 )
 SET(BasicSpatialReasoning_SRCS2
+otbSpatialReasoningTests2.cxx
 otbRCC8GraphSourceNew.cxx
 otbRCC8GraphFileWriterNew.cxx
 otbRCC8GraphFileWriter.cxx
@@ -267,9 +269,7 @@ otbPolygonListToRCC8GraphFilter.cxx
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
-ADD_EXECUTABLE(otbSpatialReasoningTests1 otbSpatialReasoningTests1.cxx ${BasicSpatialReasoning_SRCS1})
-TARGET_LINK_LIBRARIES(otbSpatialReasoningTests1 OTBIO OTBSpatialReasoning OTBTesting)
-ADD_EXECUTABLE(otbSpatialReasoningTests2 otbSpatialReasoningTests2.cxx ${BasicSpatialReasoning_SRCS2})
-TARGET_LINK_LIBRARIES(otbSpatialReasoningTests2 OTBIO OTBSpatialReasoning OTBTesting)
+OTB_ADD_EXECUTABLE(otbSpatialReasoningTests1 "${BasicSpatialReasoning_SRCS1}" "OTBSpatialReasoning;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbSpatialReasoningTests2 "${BasicSpatialReasoning_SRCS2}" "OTBSpatialReasoning;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

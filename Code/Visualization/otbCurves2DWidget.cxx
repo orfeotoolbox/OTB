@@ -15,9 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otb2DCurvesWidget_cxx
-#define __otb2DCurvesWidget_cxx
-
 #include "otbCurves2DWidget.h"
 
 namespace otb
@@ -276,7 +273,4 @@ void Curves2DWidget::PrintSelf(std::ostream& os, itk::Indent indent) const
   Superclass::PrintSelf(os,indent);
 }
 } // end namespace otb
-
-#endif
-
 

@@ -42,15 +42,13 @@ template <class TInput1>
 class PolygonCompacityFunctor
 {
 public:
-
-
   void SetThreshold(double threshold )
   {
     m_Threshold = threshold;
   }
   double GetThreshold(void)const
   {
-    return (  m_Threshold );
+    return m_Threshold;
   }
 
   PolygonCompacityFunctor()
@@ -73,8 +71,6 @@ public:
       return false;
     }
   }
-
-
 
 private:
   double m_Threshold;

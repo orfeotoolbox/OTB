@@ -28,6 +28,7 @@ namespace Function
 /**
  * \class AlphaBlendingFunction
  * \brief Implements simple blending
+ *
  * For each channel the blending function is as follows:
  * \f[ P_{o} = (1 - \alpha) P_{i1} + \alpha P_{i2} \f]
  * with

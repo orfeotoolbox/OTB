@@ -223,7 +223,7 @@ bool ossimplugins::ossimTerraSarProductDoc::initPlatformPosition(
                ++nbrData;
             }  // matches: if (s == "1")
                
-	 } // matches: for (ossim_uint32 i = 0 ; i < COUNT; ++i)
+   } // matches: for (ossim_uint32 i = 0 ; i < COUNT; ++i)
 
          if (result && ev.size())
          {

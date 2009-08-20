@@ -15,12 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSplittedWidgetManager_cxx
-#define __otbSplittedWidgetManager_cxx
-
 #include "otbSplittedWidgetManager.h"
-
-
 
 namespace otb
 {
@@ -170,7 +165,4 @@ SplittedWidgetManager
   m_SplittedWidget->m_HistogramsGroup->remove(m_InternalCurveWidget);
 }
 
-
-
 }
-#endif

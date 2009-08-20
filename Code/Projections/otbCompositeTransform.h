@@ -39,21 +39,21 @@ namespace otb
 * \ingroup Transform
 */
 
-typedef enum
-{
-  PROJDEFAULT=0,
-  PROJIDENTITY=1,
-  PROJMAPFORWARD=2,
-  PROJMAPINVERSE=3,
-  PROJSENSORFORWARD=4,
-  PROJSENSORINVERSE=5
-} ProjectionTypeEnum;
+//typedef enum
+//{
+//  PROJDEFAULT=0,
+//  PROJIDENTITY=1,
+//  PROJMAPFORWARD=2,
+//  PROJMAPINVERSE=3,
+//  PROJSENSORFORWARD=4,
+//  PROJSENSORINVERSE=5
+//} ProjectionTypeEnum;
 
 template <class TFirstTransform,
 class TSecondTransform,
-class TScalarType=double,
-unsigned int NInputDimensions=2,
-unsigned int NOutputDimensions=2>
+class TScalarType= typename TFirstTransform::ScalarType,
+unsigned int NInputDimensions=TFirstTransform::InputSpaceDimension,
+unsigned int NOutputDimensions=TSecondTransform::OutputSpaceDimension>
 class ITK_EXPORT CompositeTransform: public itk::Transform<TScalarType,  // Data type for scalars
       NInputDimensions,       // Number of dimensions in the input space
       NOutputDimensions>      // Number of dimensions in the output space

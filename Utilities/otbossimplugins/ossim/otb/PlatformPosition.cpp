@@ -44,7 +44,7 @@ void PlatformPosition::Clear()
       {
          delete _data[i];
       }
-      delete _data;
+      delete [] _data;
    }
    _data = NULL;
    _nbrData = 0;

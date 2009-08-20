@@ -61,7 +61,6 @@ protected:
 */
    ossimQuickbirdMetaData* theSupportData;
 
-
 TYPE_DATA
 };
 

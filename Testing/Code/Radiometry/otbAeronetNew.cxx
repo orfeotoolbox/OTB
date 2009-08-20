@@ -15,34 +15,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "otbAeronetData.h"
+#include "otbAeronetFileReader.h"
 
-
-#include "otbImageGeometryHandler.h"
-#include "otbMacro.h"
-#include "imaging/ossimImageHandlerRegistry.h"
-
-namespace otb
+int otbAeronetNew(int argc, char * argv[])
 {
+  otb::AeronetData::Pointer data = otb::AeronetData::New();
+  otb::AeronetFileReader::Pointer reader = otb::AeronetFileReader::New();
 
-void ImageGeometryHandler::SetFileName(char *src)
-{
-  otbDebugMacro(<<"Creation handler... ");
-  handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(src));
-  if (!handler)
-  {
-    itkExceptionMacro(<< "Unable to open input image: " << src);
-  }
+  return EXIT_SUCCESS;
 }
-
-
-ossimKeywordlist ImageGeometryHandler::GetGeometryKeywordlist()
-{
-  otbDebugMacro( << "Get geometry handler " );
-  handler->getImageGeometry(m_geom_kwl);
-  return m_geom_kwl;
-}
-
-}
-
-
-

@@ -15,14 +15,23 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4786 )
+#endif
+
 #include "itkExceptionObject.h"
 
-#include "otbImageGeometryHandler.h"
+#include <iostream>
 
-int otbImageGeometryHandlerNew(int argc, char * argv[])
+#include "otbQuickBirdImageMetadataInterface.h"
+
+
+int otbQuickBirdImageMetadataInterfaceNew (int argc, char* argv[])
 {
-  // Instantiating object
-  otb::ImageGeometryHandler::Pointer object = otb::ImageGeometryHandler::New();
+
+  otb::QuickBirdImageMetadataInterface::Pointer lImageMetadata = otb::QuickBirdImageMetadataInterface::New();
 
   return EXIT_SUCCESS;
+
 }

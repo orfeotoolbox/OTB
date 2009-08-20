@@ -82,7 +82,7 @@ NOutputDimensions>
   SecondTransformOutputPointType outputPoint;
   outputPoint=m_SecondTransform->TransformPoint(geoPoint);
 
-//       otbMsgDevMacro(<< "Converting: " << point1 << " -> " <<  geoPoint<< " -> " << outputPoint);
+//  otbMsgDevMacro(<< std::setprecision(15) << "Converting: " << point1 << " -> " <<  geoPoint<< " -> " << outputPoint);
 
   return outputPoint;
 }

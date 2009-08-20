@@ -333,6 +333,7 @@ ADD_TEST(dmTvStreamingWarpImageFilter ${DISPARITYMAP_TESTS3}
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicDisparityMap_SRCS1
+otbDisparityMapTests1.cxx
 otbDisparityMapEstimationMethodNew.cxx
 otbDisparityMapEstimationMethod.cxx
 otbNCCRegistrationFilterNew.cxx
@@ -349,6 +350,7 @@ otbBSplinesInterpolateDeformationFieldGenerator.cxx
 otbPointSetWithTransformToDeformationFieldGeneratorNew.cxx
 )
 SET(BasicDisparityMap_SRCS2
+otbDisparityMapTests2.cxx
 otbNearestTransformDeformationFieldGeneratorNew.cxx
 otbNearestTransformDeformationFieldGenerator.cxx
 otbNNearestTransformsLinearInterpolateDeformationFieldGeneratorNew.cxx
@@ -360,17 +362,15 @@ otbBSplinesInterpolateTransformDeformationFieldGeneratorNew.cxx
 otbBSplinesInterpolateTransformDeformationFieldGenerator.cxx
 )
 SET(BasicDisparityMap_SRCS3
+otbDisparityMapTests3.cxx
 otbStreamingWarpImageFilterNew.cxx
 otbStreamingWarpImageFilter.cxx
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
-ADD_EXECUTABLE(otbDisparityMapTests1 otbDisparityMapTests1.cxx ${BasicDisparityMap_SRCS1})
-TARGET_LINK_LIBRARIES(otbDisparityMapTests1 OTBIO OTBDisparityMap OTBTesting)
-ADD_EXECUTABLE(otbDisparityMapTests2 otbDisparityMapTests2.cxx ${BasicDisparityMap_SRCS2})
-TARGET_LINK_LIBRARIES(otbDisparityMapTests2 OTBIO OTBDisparityMap OTBTesting)
-ADD_EXECUTABLE(otbDisparityMapTests3 otbDisparityMapTests3.cxx ${BasicDisparityMap_SRCS3})
-TARGET_LINK_LIBRARIES(otbDisparityMapTests3 OTBIO OTBDisparityMap OTBTesting)
+OTB_ADD_EXECUTABLE(otbDisparityMapTests1 "${BasicDisparityMap_SRCS1}" "OTBDisparityMap;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbDisparityMapTests2 "${BasicDisparityMap_SRCS2}" "OTBDisparityMap;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbDisparityMapTests3 "${BasicDisparityMap_SRCS3}" "OTBDisparityMap;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

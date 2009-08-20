@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageMetadataInterface_h
-#define __otbImageMetadataInterface_h
+#ifndef __otbImageMetadataInterfaceBase_h
+#define __otbImageMetadataInterfaceBase_h
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
@@ -44,37 +44,32 @@
 
 namespace otb
 {
-/** \class ImageMetadataInterface
+/** \class ImageMetadataInterfaceBase
  *
- * \brief Creation of an "otb" ImageMetadataInterface that gets metadata.
+ * \brief Base class for captor metadata reading.
  *
  */
-class ITK_EXPORT ImageMetadataInterface : public itk::Object
+class ITK_EXPORT ImageMetadataInterfaceBase : public itk::Object
 {
 public:
 
-  typedef ImageMetadataInterface Self;
+  typedef ImageMetadataInterfaceBase Self;
   typedef itk::Object Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
-  /** Method for creation through the object factory. */
-  itkNewMacro(Self);
-
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageMetadataInterface, itk::Object);
+  itkTypeMacro(ImageMetadataInterfaceBase, itk::Object);
 
-  typedef itk::ImageBase< 2 > ImageType;
-
-  typedef itk::MetaDataDictionary   MetaDataDictionaryType;
-
-  typedef MetaDataKey::VectorType  VectorType;
-  typedef MetaDataKey::VariableLengthVectorType  VariableLengthVectorType;
-
-  typedef ImageKeywordlist              ImageKeywordlistType;
+  typedef itk::ImageBase< 2 >                   ImageType;
+  typedef itk::MetaDataDictionary               MetaDataDictionaryType;
+  typedef MetaDataKey::VectorType               VectorType;
+  typedef MetaDataKey::VariableLengthVectorType VariableLengthVectorType;
+  typedef ImageKeywordlist                      ImageKeywordlistType;
 
   /** Set the image used to get the metadata */
   itkSetObjectMacro(Image,ImageType);
+
 
   /** Get the projection coordinate system of the image. */
   std::string GetProjectionRef( const MetaDataDictionaryType & dict ) const;
@@ -127,18 +122,6 @@ public:
   ImageKeywordlistType GetImageKeywordlist( MetaDataDictionaryType & dict );
   const ImageKeywordlistType GetImageKeywordlist(const MetaDataDictionaryType & dict ) const;
 
-  /** Get the radiometric bias from the ossim metadata */
-  VariableLengthVectorType GetPhysicalBias( const MetaDataDictionaryType & dict ) const;
-  otbMetadataGetMacro(PhysicalBias, VariableLengthVectorType);
-
-  /** Get the radiometric gain from the ossim metadata */
-  VariableLengthVectorType GetPhysicalGain( const MetaDataDictionaryType & dict ) const;
-  otbMetadataGetMacro(PhysicalGain, VariableLengthVectorType);
-
-  /** Get the solar irradiance from the ossim metadata */
-  VariableLengthVectorType GetSolarIrradiance( const MetaDataDictionaryType & dict ) const;
-  otbMetadataGetMacro(SolarIrradiance, VariableLengthVectorType);
-
   /** Get the sun elevation from the ossim metadata */
   double GetSunElevation( const MetaDataDictionaryType & dict ) const;
   otbMetadataGetMacro(SunElevation, double);
@@ -146,18 +129,6 @@ public:
   /** Get the sun azimuth from the ossim metadata */
   double GetSunAzimuth( const MetaDataDictionaryType & dict ) const;
   otbMetadataGetMacro(SunAzimuth, double);
-
-  /** Get the imaging day from the ossim metadata */
-  int GetDay( const MetaDataDictionaryType & dict ) const;
-  otbMetadataGetMacro(Day, int);
-
-  /** Get the imaging month from the ossim metadata */
-  int GetMonth( const MetaDataDictionaryType & dict ) const;
-  otbMetadataGetMacro(Month, int);
-
-  /** Get the imaging month from the ossim metadata */
-  int GetYear( const MetaDataDictionaryType & dict ) const;
-  otbMetadataGetMacro(Year, int);
 
   /** Get the sensor ID from the ossim metadata */
   std::string GetSensorID(const MetaDataDictionaryType & dict ) const;
@@ -171,30 +142,50 @@ public:
   std::vector<std::string> GetBandName(const MetaDataDictionaryType & dict ) const;
   otbMetadataGetMacro(BandName, std::vector<std::string>);
 
-  void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const;
+  /** Get the radiometric bias from the ossim metadata */
+  virtual VariableLengthVectorType GetPhysicalBias( const MetaDataDictionaryType & dict ) const =0;
+  otbMetadataGetMacro(PhysicalBias, VariableLengthVectorType);
+
+  /** Get the radiometric gain from the ossim metadata */
+  virtual VariableLengthVectorType GetPhysicalGain( const MetaDataDictionaryType & dict ) const =0;
+  otbMetadataGetMacro(PhysicalGain, VariableLengthVectorType);
+
+  /** Get the solar irradiance from the ossim metadata */
+  virtual VariableLengthVectorType GetSolarIrradiance( const MetaDataDictionaryType & dict ) const =0;
+  otbMetadataGetMacro(SolarIrradiance, VariableLengthVectorType);
+
+   /** Get the imaging day from the ossim metadata */
+  virtual int GetDay( const MetaDataDictionaryType & dict ) const =0;
+  otbMetadataGetMacro(Day, int);
+
+  /** Get the imaging month from the ossim metadata */
+  virtual int GetMonth( const MetaDataDictionaryType & dict ) const =0;
+  otbMetadataGetMacro(Month, int);
+
+  /** Get the imaging month from the ossim metadata */
+  virtual int GetYear( const MetaDataDictionaryType & dict ) const =0;
+  otbMetadataGetMacro(Year, int);
+
+  /** Get the sat elevation from the ossim metadata */
+  virtual double GetSatElevation( const MetaDataDictionaryType & dict ) const =0;
+  otbMetadataGetMacro(SatElevation, double);
+
+  /** Get the sat azimuth from the ossim metadata */
+  virtual double GetSatAzimuth( const MetaDataDictionaryType & dict ) const =0;
+  otbMetadataGetMacro(SatAzimuth, double);
+
+  virtual bool CanRead( const MetaDataDictionaryType & dict ) const =0;
+
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const;
 
 protected:
-  ImageMetadataInterface();
-  virtual ~ImageMetadataInterface() {};
+  ImageMetadataInterfaceBase();
+  virtual ~ImageMetadataInterfaceBase() {};
 
-  bool IsSpot( const MetaDataDictionaryType & dict) const;
-
-  bool IsIkonos( const MetaDataDictionaryType & dict) const;
-
-  bool IsQuickbird( const MetaDataDictionaryType & dict) const;
-
-  VariableLengthVectorType GetSpotPhysicalBias( const MetaDataDictionaryType & dict ) const;
-  VariableLengthVectorType GetSpotPhysicalGain( const MetaDataDictionaryType & dict ) const;
-
-  VariableLengthVectorType GetIkonosPhysicalBias( const MetaDataDictionaryType & dict ) const;
-  VariableLengthVectorType GetIkonosPhysicalGain( const MetaDataDictionaryType & dict ) const;
-
-  VariableLengthVectorType GetQuickbirdPhysicalBias( const MetaDataDictionaryType & dict ) const;
-  VariableLengthVectorType GetQuickbirdPhysicalGain( const MetaDataDictionaryType & dict ) const;
+//  bool IsSpot( const MetaDataDictionaryType & dict) const;
 
 private:
-
-  ImageMetadataInterface(const Self&); //purposely not implemented
+  ImageMetadataInterfaceBase(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   OTB_GCP m_GCP;

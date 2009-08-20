@@ -21,8 +21,6 @@
 #include "otbMRFEnergy.h"
 #include "otbMath.h"
 
-#define vnl_math_sqr(x) ((x)*(x))
-
 namespace otb
 {
 /**
@@ -46,10 +44,10 @@ template< class TInput1, class TInput2>
 class ITK_EXPORT MRFEnergyGaussianClassification:public MRFEnergy< TInput1, TInput2>
 {
 public:
-  typedef MRFEnergyGaussianClassification Self;
-  typedef MRFEnergy< TInput1, TInput2>    Superclass;
-  typedef itk::SmartPointer<Self>         Pointer;
-  typedef itk::SmartPointer<const Self>   ConstPointer;
+  typedef MRFEnergyGaussianClassification       Self;
+  typedef MRFEnergy< TInput1, TInput2>          Superclass;
+  typedef itk::SmartPointer<Self>               Pointer;
+  typedef itk::SmartPointer<const Self>         ConstPointer;
 
   typedef TInput1                               InputImageType;
   typedef TInput2                               LabelledImageType;
@@ -69,7 +67,7 @@ public:
   }
 
 
-  double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
+  double GetSingleValue(const InputImagePixelType & value1, const LabelledImagePixelType & value2)
   {
     if ((unsigned int)value2 >= this->GetNumberOfParameters()/2)
     {

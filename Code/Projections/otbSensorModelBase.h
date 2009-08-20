@@ -42,8 +42,7 @@ namespace otb
  */
 template <class TScalarType,
 unsigned int NInputDimensions=3,
-unsigned int NOutputDimensions=2,
-unsigned int NParametersDimensions=3>
+unsigned int NOutputDimensions=2>
 class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,
       NInputDimensions,
       NOutputDimensions>
@@ -73,7 +72,6 @@ public :
 
   itkStaticConstMacro(InputSpaceDimension,  unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
-  itkStaticConstMacro(ParametersDimension,  unsigned int, NParametersDimensions); //A voir!!
 
   /* Get the ImageKeywordlist */
   ImageKeywordlist GetImageGeometryKeywordlist(void) const;
@@ -87,19 +85,6 @@ public :
 
   /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
   virtual void SetImageGeometry(const ossimKeywordlist &geom_kwl);
-
-
-//      itkGetObjectMacro(DEMHandler, DEMHandlerType);
-
-  /*      virtual void SetDEMHandler(DEMHandlerType* _arg)
-            {
-            if (this->m_DEMHandler != _arg)
-            {
-            this->m_DEMHandler = _arg;
-            this->Modified();
-            this->UseDEM(true);
-        }
-        }*/
 
   /** Set/Get the average elevation if the DEM is not used*/
   itkSetMacro(AverageElevation, TScalarType);
@@ -155,10 +140,6 @@ protected:
 private :
   SensorModelBase(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
-
-
-
 
 };
 

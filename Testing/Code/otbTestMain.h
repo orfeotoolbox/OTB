@@ -309,7 +309,7 @@ int main(int ac, char* av[] )
       if (result!=EXIT_SUCCESS)
       {
         std::cout << "-> Test EXIT FAILURE ("<<result<<")."<<std::endl;
-        itkGenericExceptionMacro(<<"Bad function return, no regression test !");
+        itkGenericExceptionMacro(<<"Function returns EXIT_FAILURE (no regression test)");
       }
     }
     catch ( itk::ExceptionObject & e )
@@ -530,7 +530,7 @@ int main(int ac, char* av[] )
               std::map<std::string,int>::reverse_iterator baseline = baselines.rbegin();
               multiResult = 1;
               std::cout<<"Number of baseline files: "<<baselines.size()<<std::endl;
-	      
+
               while (baseline!=baselines.rend() && (multiResult!=0))
               {
                 std::cout<<"Testing non-regression on file: "<<(baseline->first).c_str()<<std::endl;
@@ -553,7 +553,7 @@ int main(int ac, char* av[] )
                                           lEpsilon,
                                           ignoredLines);
               }
-	      
+
               result += multiResult;
             }
           }

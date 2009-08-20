@@ -1174,7 +1174,23 @@ ADD_TEST(bfTvPolygonCompacityFunctor ${BASICFILTERS_TESTS10}
 	 ${TEMP}/bfPolygonCompacityFunctorTest.txt
 )
 
+ADD_TEST(bfTvPathLengthFunctor ${BASICFILTERS_TESTS10}
+        --compare-ascii ${NOTOL}
+            ${BASELINE_FILES}/bfPathLengthFunctorTest.txt
+            ${TEMP}/bfPathLengthFunctorTest.txt
+         otbPathLengthFunctor
+         ${INPUTDATA}/polygon.png
+         ${TEMP}/bfPathLengthFunctorTest.txt
+)
 
+ADD_TEST(bfTvClosePathFunctor ${BASICFILTERS_TESTS10}
+        --compare-ascii ${NOTOL}
+            ${BASELINE_FILES}/bfClosePathFunctorTest.txt
+            ${TEMP}/bfClosePathFunctorTest.txt
+         otbClosePathFunctor
+         ${INPUTDATA}/polygon.png
+         ${TEMP}/bfClosePathFunctorTest.txt
+)
 
 # -------            otb::PersistentVectorizationImageFilter   ----------------------------
 
@@ -1571,6 +1587,7 @@ ADD_TEST(bfTvImageAndVectorImageOperationFilterTest ${BASICFILTERS_TESTS12}
 
 # A enrichir
 SET(BasicFilters_SRCS1
+otbBasicFiltersTests1.cxx
 otbLeeFilter.cxx
 #otbFrostFilterTest.cxx
 otbFrostFilterNew.cxx
@@ -1587,6 +1604,7 @@ otbMeanFunctorImageTest.cxx
 
 # A enrichir
 SET(BasicFilters_SRCS2
+otbBasicFiltersTests2.cxx
 otbLogPolarTransformNew.cxx
 otbLogPolarTransform.cxx
 otbLogPolarTransformResample.cxx
@@ -1601,6 +1619,7 @@ otbSpatialObjectToImageDrawingFilter.cxx
 
 # A enrichir
 SET(BasicFilters_SRCS3
+otbBasicFiltersTests3.cxx
 otbImportGeoInformationImageFilterNew.cxx
 otbImportGeoInformationImageFilter.cxx
 otbImportGeoInformationImageFilterWithKeywordList.cxx
@@ -1616,6 +1635,7 @@ otbImageListToVectorImageFilter.cxx
 
 # A enrichir
 SET(BasicFilters_SRCS4
+otbBasicFiltersTests4.cxx
 otbImageListToImageListApplyFilterNew.cxx
 otbImageListToImageListApplyFilter.cxx
 otbPerBandVectorImageFilterNew.cxx
@@ -1629,6 +1649,7 @@ otbVectorImageTo3DScalarImageFilter.cxx
 
 # A enrichir
 SET(BasicFilters_SRCS5
+otbBasicFiltersTests5.cxx
 otbStreamingResampleImageFilterNew.cxx
 otbStreamingResampleImageFilter.cxx
 otbStreamingResampleImageFilterCompareWithITK.cxx
@@ -1646,6 +1667,7 @@ otbPrintableImageFilterWithMask.cxx
 
 # A enrichir
 SET(BasicFilters_SRCS6
+otbBasicFiltersTests6.cxx
 otbBSplineDecompositionImageFilterNew.cxx
 otbBSplineDecompositionImageFilter.cxx
 otbBSplineInterpolateImageFunctionNew.cxx
@@ -1661,6 +1683,7 @@ otbWindowedSincInterpolateImageHammingFunction.cxx
 
 # A enrichir
 SET(BasicFilters_SRCS7
+otbBasicFiltersTests7.cxx
 otbWindowedSincInterpolateImageCosineFunctionNew.cxx
 otbWindowedSincInterpolateImageCosineFunction.cxx
 otbWindowedSincInterpolateImageWelchFunctionNew.cxx
@@ -1678,6 +1701,7 @@ otbVectorImageToIntensityImageFilter.cxx
 
 # A enrichir
 SET(BasicFilters_SRCS8
+otbBasicFiltersTests8.cxx
 otbLabelizeConnectedThresholdImageFilterNew.cxx
 otbLabelizeConnectedThresholdImageFilter.cxx
 otbLabelizeNeighborhoodConnectedImageFilterNew.cxx
@@ -1701,6 +1725,7 @@ otbFlexibleDistanceWithMissingValue.cxx
 
 # A enrichir
 SET(BasicFilters_SRCS9
+otbBasicFiltersTests9.cxx
 otbContinuousMinimumMaximumImageCalculatorNew.cxx
 otbContinuousMinimumMaximumImageCalculatorTest.cxx
 otbMeanShiftImageFilterNew.cxx
@@ -1719,6 +1744,7 @@ otbEdgeDensityImageFilter.cxx
 
 # A enrichir
 SET(BasicFilters_SRCS10
+otbBasicFiltersTests10.cxx
 otbScalarImageTextureFunctorNew.cxx
 otbScalarImageTextureFunctor.cxx
 otbScalarVectorImageTextureFunctorNew.cxx
@@ -1726,6 +1752,8 @@ otbScalarVectorImageTextureFunctor.cxx
 otbGaborFilterGeneratorNew.cxx
 otbGaborFilterGenerator.cxx
 otbPolygonCompacityFunctor.cxx
+otbPathLengthFunctor.cxx
+otbClosePathFunctor.cxx
 otbPersistentVectorizationFilterNew.cxx
 otbPersistentVectorizationFilter.cxx
 )
@@ -1740,6 +1768,7 @@ otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter.cxx
 ENDIF(USE_FFTWD)
 
 SET(BasicFilters_SRCS11
+otbBasicFiltersTests11.cxx
 otbExtractROIResample.cxx
 #otbPointSetFunctionNew.cxx
 otbPointSetDensityFunctionNew.cxx
@@ -1766,6 +1795,7 @@ otbListSampleToHistogramListGenerator.cxx
 )
 
 SET(BasicFilters_SRCS12
+otbBasicFiltersTests12.cxx
 otbEdgeDetectorImageFilter.cxx
 otbEdgeDetectorImageFilterNew.cxx
 otbChangeLabelImageFilterNew.cxx
@@ -1778,40 +1808,18 @@ otbImageAndVectorImageOperationFilterTest.cxx
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
-ADD_EXECUTABLE(otbBasicFiltersTests1 otbBasicFiltersTests1.cxx ${BasicFilters_SRCS1})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests1  OTBBasicFilters OTBIO OTBTesting)
+OTB_ADD_EXECUTABLE(otbBasicFiltersTests1 "${BasicFilters_SRCS1}" "OTBBasicFilters;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbBasicFiltersTests2 "${BasicFilters_SRCS2}" "OTBBasicFilters;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbBasicFiltersTests3 "${BasicFilters_SRCS3}" "OTBBasicFilters;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbBasicFiltersTests4 "${BasicFilters_SRCS4}" "OTBBasicFilters;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbBasicFiltersTests5 "${BasicFilters_SRCS5}" "OTBBasicFilters;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbBasicFiltersTests6 "${BasicFilters_SRCS6}" "OTBBasicFilters;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbBasicFiltersTests7 "${BasicFilters_SRCS7}" "OTBBasicFilters;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbBasicFiltersTests8 "${BasicFilters_SRCS8}" "OTBBasicFilters;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbBasicFiltersTests9 "${BasicFilters_SRCS9}" "OTBBasicFilters;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbBasicFiltersTests10 "${BasicFilters_SRCS10}" "OTBBasicFilters;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbBasicFiltersTests11 "${BasicFilters_SRCS11}" "OTBBasicFilters;ITKAlgorithms;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbBasicFiltersTests12 "${BasicFilters_SRCS12}" "OTBBasicFilters;ITKAlgorithms;OTBIO;OTBTesting")
 
-ADD_EXECUTABLE(otbBasicFiltersTests2 otbBasicFiltersTests2.cxx ${BasicFilters_SRCS2})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests2  OTBBasicFilters  OTBIO  OTBTesting)
-
-ADD_EXECUTABLE(otbBasicFiltersTests3 otbBasicFiltersTests3.cxx ${BasicFilters_SRCS3})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests3  OTBBasicFilters  OTBIO  OTBTesting)
-
-ADD_EXECUTABLE(otbBasicFiltersTests4 otbBasicFiltersTests4.cxx ${BasicFilters_SRCS4})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests4  OTBBasicFilters  OTBIO  OTBTesting)
-
-ADD_EXECUTABLE(otbBasicFiltersTests5 otbBasicFiltersTests5.cxx ${BasicFilters_SRCS5})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests5  OTBBasicFilters  OTBIO  OTBTesting)
-
-ADD_EXECUTABLE(otbBasicFiltersTests6 otbBasicFiltersTests6.cxx ${BasicFilters_SRCS6})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests6  OTBBasicFilters  OTBIO  OTBTesting)
-
-ADD_EXECUTABLE(otbBasicFiltersTests7 otbBasicFiltersTests7.cxx ${BasicFilters_SRCS7})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests7  OTBBasicFilters  OTBIO  OTBTesting)
-
-ADD_EXECUTABLE(otbBasicFiltersTests8 otbBasicFiltersTests8.cxx ${BasicFilters_SRCS8})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests8  OTBBasicFilters  OTBIO  OTBTesting)
-
-ADD_EXECUTABLE(otbBasicFiltersTests9 otbBasicFiltersTests9.cxx ${BasicFilters_SRCS9})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests9  OTBBasicFilters  OTBIO  OTBTesting)
-
-ADD_EXECUTABLE(otbBasicFiltersTests10 otbBasicFiltersTests10.cxx ${BasicFilters_SRCS10})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests10  OTBBasicFilters  OTBIO  OTBTesting)
-
-ADD_EXECUTABLE(otbBasicFiltersTests11 otbBasicFiltersTests11.cxx ${BasicFilters_SRCS11})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests11  OTBBasicFilters ITKAlgorithms OTBIO  OTBTesting)
-
-ADD_EXECUTABLE(otbBasicFiltersTests12 otbBasicFiltersTests12.cxx ${BasicFilters_SRCS12})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests12  OTBBasicFilters ITKAlgorithms OTBIO  OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

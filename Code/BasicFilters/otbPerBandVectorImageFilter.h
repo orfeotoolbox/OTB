@@ -28,7 +28,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class PerBandVectorImageFilter
- *  \brief This filter is a helper class to apply per band a standard ImageToImageFilter to a VectorImage.
+ *  \brief This filter is a helper class to apply per band a standard itk::ImageToImageFilter to a VectorImage.
  *
  *  This filter is a composite filter composed of the following filters :
  *  - VectorImageToImageListFilter

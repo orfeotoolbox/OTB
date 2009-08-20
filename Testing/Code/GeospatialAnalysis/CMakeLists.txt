@@ -43,6 +43,7 @@ ADD_TEST(gfTuPostGISFromStringTransactorNew ${GEOSPATIALANALYSIS_TESTS}
 
 # -------       CXX source files -----------------------------------
 SET(GEOSPATIALANALYSIS_SRCS
+otbGeospatialAnalysisTests.cxx
 otbPostGISCreateTableTransactorNew.cxx
 otbPostGISCreateTableTransactorAccessors.cxx
 otbPostGISCreateTableTransactorCreate.cxx
@@ -51,9 +52,6 @@ otbPostGISFromStringTransactorNew.cxx
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
-# ${TIFF_LIBRARY}
-
-ADD_EXECUTABLE(otbGeospatialAnalysisTests otbGeospatialAnalysisTests.cxx ${GEOSPATIALANALYSIS_SRCS})
-TARGET_LINK_LIBRARIES(otbGeospatialAnalysisTests OTBGeospatialAnalysis OTBTesting OTBCommon pq pqxx)
+OTB_ADD_EXECUTABLE(otbGeospatialAnalysisTests "${GEOSPATIALANALYSIS_SRCS}" "OTBGeospatialAnalysis;OTBTesting;OTBCommon;pq;pqxx")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

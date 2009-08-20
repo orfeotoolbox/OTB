@@ -15,9 +15,6 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGlWidget_cxx
-#define __otbGlWidget_cxx
-
 #include "otbGlWidget.h"
 
 namespace otb
@@ -150,4 +147,3 @@ GlWidget::PointType GlWidget::GetMousePosition()
   return index;
 }
 }
-#endif

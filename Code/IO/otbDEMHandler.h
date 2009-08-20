@@ -23,12 +23,12 @@
 #include "otbImage.h"
 #include <iostream>
 #include <stdio.h>
-#include "elevation/ossimElevManager.h"
-#include "base/ossimFilename.h"
-#include "base/ossimDirectory.h"
+
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkIndent.h"
 #include "itkSimpleFastMutexLock.h"
+
+class ossimElevManager;
 
 namespace otb
 {
@@ -47,13 +47,12 @@ class ITK_EXPORT DEMHandler: public itk::Object
 {
 public :
   /** Standard class typedefs. */
-  typedef itk::Indent                            Indent;
   typedef DEMHandler                            Self;
-  typedef itk::Object                            Superclass;
+  typedef itk::Object                           Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
 
-  typedef itk::Point<double, 2>     PointType;
+  typedef itk::Point<double, 2>                 PointType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -64,14 +63,20 @@ public :
   /** Try to open the DEM directory. */
   virtual void OpenDEMDirectory(const char* DEMDirectory);
 
+  /** Open geoid file. */
+  virtual void OpenGeoidFile(const char* geoidFile);
+
   /** Compute the height above MSL(Mean Sea Level) of a geographic point. */
-  virtual double GetHeightAboveMSL(const PointType& geoPoint);
+  virtual double GetHeightAboveMSL(const PointType& geoPoint) const;
+
+  /** Compute the height above ellipsoid of a geographic point. */
+  virtual double GetHeightAboveEllipsoid(const PointType& geoPoint) const;
 
 protected:
   DEMHandler();
   ~DEMHandler();
 
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   ossimElevManager* m_ElevManager;
 

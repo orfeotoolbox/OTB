@@ -26,29 +26,29 @@ class GeodesicCoordinate;
  class RectangularCoordinate : public Coordinate
  {
  public:
-	/**
-	  * @brief Constructor
-	  */
-	RectangularCoordinate();
-	/**
-	 * @brief Destructor
-	 */
-	~RectangularCoordinate();
-	/**
-	 * @brief Cosntructor with initializations
-	 */
-	RectangularCoordinate(double x, double y, double z);
-	/**
-	 * @brief Copy constructor
-	 */
-	RectangularCoordinate(const RectangularCoordinate& rhs);
+  /**
+    * @brief Constructor
+    */
+  RectangularCoordinate();
+  /**
+   * @brief Destructor
+   */
+  ~RectangularCoordinate();
+  /**
+   * @brief Cosntructor with initializations
+   */
+  RectangularCoordinate(double x, double y, double z);
+  /**
+   * @brief Copy constructor
+   */
+  RectangularCoordinate(const RectangularCoordinate& rhs);
 
-	/**
-	 * @brief Affectation operator
-	 */
-	RectangularCoordinate& operator=(const RectangularCoordinate& rhs);
+  /**
+   * @brief Affectation operator
+   */
+  RectangularCoordinate& operator=(const RectangularCoordinate& rhs);
 
-	void AsGeodesicCoordinates(double demiGdAxe, double demiPtAxe, GeodesicCoordinate* geod);
+  void AsGeodesicCoordinates(double demiGdAxe, double demiPtAxe, GeodesicCoordinate* geod);
  protected:
  private:
  };

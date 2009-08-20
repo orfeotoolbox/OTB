@@ -70,7 +70,10 @@ public:
    void          getImageSize(ossimDpt& sz)               const;
    void          getLineSamplingPeriod(ossim_float64& pe) const;
    void          getIncidenceAngle(ossim_float64& ia)     const;
+   void          getViewingAngle(ossim_float64& va)       const;
+   void          getSceneOrientation(ossim_float64& so)   const;
    ossim_uint32  getNumberOfBands()                       const;
+   ossim_uint16  getStepCount()                           const;
    bool          isStarTrackerUsed()                      const;
    bool          isSwirDataUsed()                         const;
 
@@ -225,7 +228,9 @@ private:
    ossim_float64               theSunAzimuth;
    ossim_float64               theSunElevation;
    ossim_float64               theIncidenceAngle;
-
+   ossim_float64               theViewingAngle;
+   ossim_float64               theSceneOrientation;   
+   
    ossimDpt                    theImageSize;
 
    /** Center of frame on ground, if sub image it's the center of that. */
@@ -257,6 +262,8 @@ private:
    bool                        theSwirDataFlag;
    ossim_uint32                theNumBands;
    ossimString                 theAcquisitionDate;
+   ossim_uint16                theStepCount;
+   
 
    //---
    // Corner points:

@@ -222,7 +222,7 @@ ADD_TEST(leTuSOMbasedImageFilterNew ${LEARNING_TESTS2}
 # ------             otb::SOMWithMissingValue -----------------------------------
 
 ADD_TEST(leTuSOMWithMissingValueNew ${LEARNING_TESTS2}
-         otbSOMWithMissingValue )
+         otbSOMWithMissingValueNew )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -404,6 +404,7 @@ ADD_TEST(leTuExhaustiveExponentialOptimizerNew ${LEARNING_TESTS4}
 
 # A enrichir
 SET(BasicLearning_SRCS1
+otbLearningTests1.cxx
 otbSVMModelNew.cxx
 otbSVMModelLoad.cxx
 otbSVMModelAccessor.cxx
@@ -415,6 +416,7 @@ otbSVMImageModelEstimatorTrainOneClass.cxx
 otbSVMImageModelEstimatorModelAccessor.cxx
 )
 SET(BasicLearning_SRCS2
+otbLearningTests2.cxx
 otbSVMPointSetModelEstimatorNew.cxx
 otbSVMPointSetModelEstimatorTrain.cxx
 otbSVMClassifierNew.cxx
@@ -432,6 +434,7 @@ otbSOMbasedImageFilterNew.cxx
 otbSOMWithMissingValueNew.cxx
 )
 SET(BasicLearning_SRCS3
+otbLearningTests3.cxx
 otbSOMClassifierNew.cxx
 otbSOMClassifier.cxx
 otbSOMImageClassificationFilterNew.cxx
@@ -451,6 +454,7 @@ otbSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest.cxx
 
 
 SET(BasicLearning_SRCS4
+otbLearningTests4.cxx
 otbROIdataConversionNew.cxx
 otbROIdataConversion.cxx
 otbSVMCrossValidationCostFunctionNew.cxx
@@ -459,14 +463,10 @@ otbExhaustiveExponentialOptimizerNew.cxx
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
-ADD_EXECUTABLE(otbLearningTests1 otbLearningTests1.cxx ${BasicLearning_SRCS1})
-TARGET_LINK_LIBRARIES(otbLearningTests1 OTBLearning OTBIO OTBTesting)
-ADD_EXECUTABLE(otbLearningTests2 otbLearningTests2.cxx ${BasicLearning_SRCS2})
-TARGET_LINK_LIBRARIES(otbLearningTests2 OTBLearning OTBIO OTBTesting)
-ADD_EXECUTABLE(otbLearningTests3 otbLearningTests3.cxx ${BasicLearning_SRCS3})
-TARGET_LINK_LIBRARIES(otbLearningTests3 OTBLearning OTBIO OTBTesting)
-ADD_EXECUTABLE(otbLearningTests4 otbLearningTests4.cxx ${BasicLearning_SRCS4})
-TARGET_LINK_LIBRARIES(otbLearningTests4 OTBLearning OTBIO OTBTesting)
+OTB_ADD_EXECUTABLE(otbLearningTests1 "${BasicLearning_SRCS1}" "OTBLearning;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbLearningTests2 "${BasicLearning_SRCS2}" "OTBLearning;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbLearningTests3 "${BasicLearning_SRCS3}" "OTBLearning;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbLearningTests4 "${BasicLearning_SRCS4}" "OTBLearning;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 

@@ -47,11 +47,11 @@ class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
 {
 public:
 
-  typedef MRFOptimizerMetropolis Self;
-  typedef MRFOptimizer Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
+  typedef MRFOptimizerMetropolis         Self;
+  typedef MRFOptimizer                   Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
-  typedef Superclass::ParametersType ParametersType;
+  typedef Superclass::ParametersType     ParametersType;
 
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
 
@@ -104,7 +104,7 @@ protected:
   {
     this->m_NumberOfParameters = 1;
     this->m_Parameters.SetSize(1);
-    this->m_Parameters[0]=1.0;
+    this->m_Parameters[0] = 1.0;
     m_Generator = RandomGeneratorType::New();
     m_Generator->SetSeed();
   }

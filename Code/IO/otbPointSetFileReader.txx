@@ -64,20 +64,8 @@ PointSetFileReader<TOutputPointSet>
     throw itk::ImageFileReaderException(__FILE__, __LINE__, "FileName must be specified", ITK_LOCATION);
   }
 
+  this->TestFileExistanceAndReadability();
 
-
-  // Test if the file exists and if it can be open.
-  // An exception will be thrown otherwise.
-  //
-  try
-  {
-    m_ExceptionMessage = "";
-    this->TestFileExistanceAndReadability();
-  }
-  catch (itk::ExceptionObject &err)
-  {
-    m_ExceptionMessage = err.GetDescription();
-  }
 
   std::ifstream ifs;
   ifs.open(m_FileName.c_str(), std::ios::in | std::ios::binary);
@@ -138,8 +126,6 @@ template <class TOutputPointSet>
 void PointSetFileReader<TOutputPointSet>
 ::GenerateData()
 {
-
-
   typename TOutputPointSet::Pointer output = this->GetOutput();
 
   std::ifstream ifs;
@@ -153,24 +139,52 @@ void PointSetFileReader<TOutputPointSet>
 
   m_NumberOfPoints = header.GetPointRecordsCount();
 
-  while (reader.ReadNextPoint())
+  //If the output pointset is of dimension 2, altitude is stored as information
+  if (PointType::PointDimension == 2)
   {
-    liblas::LASPoint const& p = reader.GetPoint();
+    while (reader.ReadNextPoint())
+    {
+      liblas::LASPoint const& p = reader.GetPoint();
 
-    PointType point;
-    point[0] = p.GetX();
-    point[1] = p.GetY();
+      PointType point;
+      point[0] = p.GetX();
+      point[1] = p.GetY();
 
 
-    unsigned long i = output->GetNumberOfPoints();
-    output->SetPoint( i, point );
+      unsigned long i = output->GetNumberOfPoints();
+      output->SetPoint( i, point );
 
-    PixelType V;
-    V = static_cast<PixelType>( p.GetZ() );
-    output->SetPointData( i, V );
+      PixelType V;
+      V = static_cast<PixelType>( p.GetZ() );
+      output->SetPointData( i, V );
 
+    }
   }
+  //If the output pointset is of dimension 3, store the altitude as information
+  else if (PointType::PointDimension == 3)
+  {
+    while (reader.ReadNextPoint())
+    {
+      liblas::LASPoint const& p = reader.GetPoint();
 
+      PointType point;
+      point[0] = p.GetX();
+      point[1] = p.GetY();
+      point[2] = p.GetZ();
+
+      unsigned long i = output->GetNumberOfPoints();
+      output->SetPoint( i, point );
+
+      PixelType V;
+      V = static_cast<PixelType>( p.GetZ() );
+      output->SetPointData( i, V );
+
+    }
+  }
+  else
+  {
+    itkExceptionMacro(<<"Can't handle pointset dimension other than 2 and 3");
+  }
 
   ifs.close();
 }

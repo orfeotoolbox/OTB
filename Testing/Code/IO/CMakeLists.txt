@@ -985,7 +985,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(ioTuOtbImageTestSAR_ERS ${IO_TESTS9}
+ADD_TEST(ioTvOtbImageTestSAR_ERS ${IO_TESTS9}
    --compare-ascii ${EPS}  ${BASELINE_FILES}/ioOtbImageTestSAR_ERS.txt
                      ${TEMP}/ioOtbImageTestSAR_ERS.txt
          otbImageTest
@@ -993,7 +993,7 @@ ADD_TEST(ioTuOtbImageTestSAR_ERS ${IO_TESTS9}
          ${TEMP}/ioOtbImageTestSAR_ERS.txt)
 
 # ---  Otb::Image Test  ---
-ADD_TEST(ioTuOtbImageTestRadarsat ${IO_TESTS9}
+ADD_TEST(ioTvOtbImageTestRadarsat ${IO_TESTS9}
    --compare-ascii ${EPS}  ${BASELINE_FILES}/ioOtbImageTestRadarsat.txt
                      ${TEMP}/ioOtbImageTestRadarsat.txt
         otbImageTest
@@ -1001,7 +1001,7 @@ ADD_TEST(ioTuOtbImageTestRadarsat ${IO_TESTS9}
         ${TEMP}/ioOtbImageTestRadarsat.txt)
 
 # ---  Otb::VectorImage Test  ---
-ADD_TEST(ioTuOtbVectorImageTestRadarsat ${IO_TESTS9}
+ADD_TEST(ioTvOtbVectorImageTestRadarsat ${IO_TESTS9}
    --compare-ascii ${EPS}  ${TEMP}/ioOtbImageTestRadarsat.txt
                      ${TEMP}/ioOtbVectorImageTestRadarsat.txt
         otbVectorImageTest
@@ -1010,7 +1010,7 @@ ADD_TEST(ioTuOtbVectorImageTestRadarsat ${IO_TESTS9}
 
 
 # ---  Otb::VectorImage Test  ---
-ADD_TEST(ioTuOtbVectorImageTestSpot5 ${IO_TESTS9}
+ADD_TEST(ioTvOtbVectorImageTestSpot5 ${IO_TESTS9}
    --compare-ascii ${EPS}  ${BASELINE_FILES}/ioOtbVectorImageTestSpot5.txt
                      ${TEMP}/ioOtbVectorImageTestSpot5.txt
         otbVectorImageTest
@@ -1365,11 +1365,11 @@ ADD_TEST(ioTvOSSIMImageQuickbirdMetaDataReader ${IO_TESTS12}
    --compare-n-ascii ${EPS} 2           ${BASELINE_FILES}/ioOSSIMImageQuickbirdMetaDataReader.txt
                                         ${TEMP}/ioOSSIMImageQuickbirdMetaDataReader.txt
                                         ${BASELINE_FILES}/ioOSSIMImageQuickbirdMetaDataReader.txt
-                                        ${TEMP}/ioOSSIMVectorImageQuickbirdMetaDataReader.txt
+                                        ${TEMP}/ioOSSIMImageQuickbirdMetaDataReader.txt
          otbOSSIMImageMetaDataReaderTest
          ${LARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 	 ${TEMP}/ioOSSIMImageQuickbirdMetaDataReader.txt
-	 ${TEMP}/ioOSSIMVectorImageQuickbirdMetaDataReader.txt
+	 ${TEMP}/ioOSSIMImageQuickbirdMetaDataReader.txt
          )
 
 # ---  Radarsat Metadata ---
@@ -1417,12 +1417,10 @@ ADD_TEST(ioTvDEMHandler ${IO_TESTS12}
                         ${TEMP}/ioDEMGetHeightAboveMSL.txt
         otbDEMHandlerTest
         ${INPUTDATA}/DEM/srtm_directory
+        ${INPUTDATA}/DEM/egm96.grd
         ${TEMP}/ioDEMGetHeightAboveMSL.txt
-	3.6999 44.08
+        3.6999 44.08
         )
-
-# ---  otb::ImageGeometryHandler ---
-ADD_TEST(ioTuImageGeometryHandlerNew ${IO_TESTS12} otbImageGeometryHandlerNew )
 
 # ---  otb::DEMToImageGenerator ---
 ADD_TEST(ioTuDEMToImageGeneratorNew ${IO_TESTS12} otbDEMToImageGeneratorNew )
@@ -1434,11 +1432,11 @@ ADD_TEST(ioTvDEMToImageGeneratorTest ${IO_TESTS12}
          ${INPUTDATA}/DEM/srtm_directory
          ${TEMP}/ioTvDEMToImageGenerator.tif
         6.5
-        44.5
+        45.5
         500
         500
         0.002
-        0.002
+        -0.002
         )
 
 ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
@@ -1447,13 +1445,13 @@ ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
         otbOssimElevManagerTest
          ${INPUTDATA}/DEM/srtm_directory
          ${TEMP}/ioTvossimElevManagerTest.tif
-	 6.5
-         44.5
-	 0.002
-	 0.002
-	 500
-	 500
-         )
+        6.5
+        45.5
+        0.002
+        -0.002
+        500
+        500
+        )
 
 ADD_TEST(ioTvossimElevManagerTest2 ${IO_TESTS12}
 --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvossimElevManagerTest2.txt
@@ -1503,17 +1501,17 @@ ADD_TEST(ioTvDEMToOrthoImageGeneratorTest2 ${IO_TESTS12}
 ADD_TEST(ioTuPrepareSRTMDirectoryNew ${IO_TESTS12}
       otbPrepareSRTMDirectoryNew )
 
-ADD_TEST(ioTuPrepareSRTMDirectoryTest ${IO_TESTS12}
+ADD_TEST(ioTvPrepareSRTMDirectoryTest ${IO_TESTS12}
   --compare-n-ascii ${EPSILON_9} 3
 		    ${INPUTDATA}/DEM/srtm_directory/N44E007.hgt
-		    ${TEMP}/ioTuPrepareSRTMDirectoryTest/N44E007.hgt
+		    ${TEMP}/ioTvPrepareSRTMDirectoryTest/N44E007.hgt
 		    ${INPUTDATA}/DEM/srtm_directory/N46E007.hgt
-		    ${TEMP}/ioTuPrepareSRTMDirectoryTest/N46E007.hgt
+		    ${TEMP}/ioTvPrepareSRTMDirectoryTest/N46E007.hgt
 		    ${INPUTDATA}/DEM/srtm_directory/N45E007.hgt
-		    ${TEMP}/ioTuPrepareSRTMDirectoryTest/N45E007.hgt
+		    ${TEMP}/ioTvPrepareSRTMDirectoryTest/N45E007.hgt
   otbPrepareSRTMDirectoryTest
       ${INPUTDATA}/DEM/srtm_directory
-      ${TEMP}/ioTuPrepareSRTMDirectoryTest
+      ${TEMP}/ioTvPrepareSRTMDirectoryTest
       7.2
       45.2
       6.1
@@ -1779,7 +1777,7 @@ ADD_TEST(ioTvKMLVectorDataIOFileReaderLines ${IO_TESTS15}
         ${INPUTDATA}/lines.kml
         ${TEMP}/lines.kml)
 
-ADD_TEST(ioTuVectorDataKeywordlist ${IO_TESTS15}
+ADD_TEST(ioTvVectorDataKeywordlist ${IO_TESTS15}
         --compare-ascii ${EPSILON_9}
             ${BASELINE_FILES}/ioTuVectorDataKeywordlist.txt
             ${TEMP}/ioTuVectorDataKeywordlist.txt
@@ -1886,13 +1884,26 @@ ADD_TEST(ioTvPointSetFileReader ${IO_TESTS17}
         otbPointSetFileReader
   ${INPUTDATA}/srs.las
   ${TEMP}/ioPointSetFileReader.txt)
+
+ADD_TEST(ioTvPointSetFileReader2 ${IO_TESTS17}
+        --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioPointSetFileReader2.txt
+                        ${TEMP}/ioPointSetFileReader2.txt
+        otbPointSetFileReader2
+  ${INPUTDATA}/srs.las
+  ${TEMP}/ioPointSetFileReader2.txt)
+
 ENDIF(OTB_USE_LIBLAS)
 
+ADD_TEST(ioTuSpotImageMetadataInterfaceNew ${IO_TESTS17}
+        otbSpotImageMetadataInterfaceNew
+)
 
-ADD_TEST(ioTuImageMetadataInterfaceNew ${IO_TESTS17}
-#         --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioPointSetFileReader.txt
-#                         ${TEMP}/ioPointSetFileReader.txt
-        otbImageMetadataInterfaceNew
+ADD_TEST(ioTuIkonosImageMetadataInterfaceNew ${IO_TESTS17}
+        otbIkonosImageMetadataInterfaceNew
+)
+
+ADD_TEST(ioTuQuickBirdImageMetadataInterfaceNew ${IO_TESTS17}
+        otbQuickBirdImageMetadataInterfaceNew
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
@@ -1909,6 +1920,13 @@ ADD_TEST(ioTvImageMetadataInterfaceQBCevennesTest ${IO_TESTS17}
         otbImageMetadataInterfaceTest
         ${LARGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceQBCevennes.txt
+)
+ADD_TEST(ioTvImageMetadataInterfaceQBMULTest ${IO_TESTS17}
+         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceQBMUL.txt
+                         ${TEMP}/ioTvImageMetadataInterfaceQBMUL.txt
+        otbImageMetadataInterfaceTest
+        ${LARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${TEMP}/ioTvImageMetadataInterfaceQBMUL.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceIKONOSTest ${IO_TESTS17}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceIKONOS.txt
@@ -1936,6 +1954,7 @@ ADD_TEST(ioTvImageMetadataInterfaceTest ${IO_TESTS17}
 
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
+otbIOTests1.cxx
 otbImageFileReaderERS.cxx
 otbLUMImageIOTestCanRead.cxx
 otbLUMImageIOTestCanWrite.cxx
@@ -1947,6 +1966,7 @@ otbShortImageIOTest.cxx
 otbImageIOFactoryNew.cxx
 )
 SET(BasicIO_SRCS2
+otbIOTests2.cxx
 otbIntImageIOTest.cxx
 otbFloatImageIOTest.cxx
 otbImageFileReaderTest.cxx
@@ -1956,6 +1976,7 @@ otbStreamingImageFileWriterTest.cxx
 otbPipeline.cxx
 )
 SET(BasicIO_SRCS3
+otbIOTests3.cxx
 otbBSQImageIOTestCanRead.cxx
 otbBSQImageIOTestCanWrite.cxx
 otbImageFileReaderTest.cxx
@@ -1968,9 +1989,11 @@ otbShortRGBImageIOTest.cxx
 #)
 #CONTAINS THE BasicIO_SRCS2 include
 SET(BasicIO_SRCS5
+otbIOTests5.cxx
 otbGDALImageIOTestCanRead.cxx
 )
 SET(BasicIO_SRCS6
+otbIOTests6.cxx
 otbGDALImageIOTestCanWrite.cxx
 otbONERAImageIOTestCanRead.cxx
 otbImageFileReaderONERA.cxx
@@ -1981,16 +2004,19 @@ otbMSTARImageIOTestCanRead.cxx
 otbImageFileReaderMSTAR.cxx
 )
 SET(BasicIO_SRCS7
+otbIOTests7.cxx
 otbImageFileReaderTest.cxx
 otbImageFileReaderRGBTest.cxx
 )
 SET(BasicIO_SRCS8
+otbIOTests8.cxx
 otbImageFileWriterTest.cxx
 otbImageFileReaderTest.cxx
 otbImageFileReaderRGBTest.cxx
 otbImageFileWriterRGBTest.cxx
 )
 SET(BasicIO_SRCS9
+otbIOTests9.cxx
 otbImageTest.cxx
 otbVectorImageTest.cxx
 otbStreamingImageFilterTest.cxx
@@ -1998,11 +2024,13 @@ otbVectorImageFileReaderWriterTest.cxx
 otbStreamingShortImageFileWriterTest.cxx
 )
 SET(BasicIO_SRCS10
+otbIOTests10.cxx
 otbStreamingImageFileWriterTestCalculateNumberOfDivisions.cxx
 otbStreamingImageFileWriterWithFilterTest.cxx
 otbStreamingWithImageFileWriterTestCalculateNumberOfDivisions.cxx
 )
 SET(BasicIO_SRCS11
+otbIOTests11.cxx
 otbImageMetadataFileWriterTest.cxx
 otbImageMetadataStreamingFileWriterTest.cxx
 otbPipelineMetadataHandlingTest.cxx
@@ -2012,13 +2040,13 @@ otbSpatialObjectDXFReaderNew.cxx
 otbSpatialObjectDXFReader.cxx
 )
 SET(BasicIO_SRCS12
+otbIOTests12.cxx
 #otbMultiToMonoChannelExtractROISAR.cxx
 otbOSSIMImageMetaDataReaderTest.cxx
 otbDEMHandlerNew.cxx
 otbDEMHandlerTest.cxx
 otbDEMToImageGeneratorNew.cxx
 otbDEMToImageGeneratorTest.cxx
-otbImageGeometryHandlerNew.cxx
 otbOssimElevManagerTest.cxx
 otbOssimElevManagerTest2.cxx
 otbDEMToOrthoImageGeneratorNew.cxx
@@ -2030,6 +2058,7 @@ otbPrepareSRTMDirectoryTest.cxx
 
 IF(OTB_COMPILE_JPEG2000)
 SET(BasicIO_SRCS13
+otbIOTests13.cxx
 otbJPEG2000ImageIOTestCanRead.cxx
 otbJPEG2000ImageIOTestCanWrite.cxx
 )
@@ -2037,6 +2066,7 @@ ENDIF(OTB_COMPILE_JPEG2000)
 
 
 SET(BasicIO_SRCS14
+otbIOTests14.cxx
 otbGDALDriverDoubleWritingTest.cxx
 otbReadingComplexDataIntoComplexImageTest.cxx
 otbWritingComplexDataWithComplexImageTest.cxx
@@ -2045,6 +2075,7 @@ otbWritingComplexDataWithComplexImageTest.cxx
 
 
 SET(BasicIO_SRCS15
+otbIOTests15.cxx
 otbVectorDataSourceNew.cxx
 otbVectorDataFileReaderNew.cxx
 otbVectorDataFileReader.cxx
@@ -2062,6 +2093,7 @@ otbVectorDataKeywordlist.cxx
 )
 
 SET(BasicIO_SRCS16
+otbIOTests16.cxx
 otbRADImageIOTestCanRead.cxx
 otbImageFileReaderRADChar.cxx
 otbImageFileReaderRADInt.cxx
@@ -2074,50 +2106,31 @@ otbImageSeriesFileReader.cxx
 )
 
 SET(BasicIO_SRCS17
+otbIOTests17.cxx
 otbPointSetFileReaderNew.cxx
 otbPointSetFileReader.cxx
-otbImageMetadataInterfaceNew.cxx
+otbPointSetFileReader2.cxx
+otbSpotImageMetadataInterfaceNew.cxx
+otbQuickBirdImageMetadataInterfaceNew.cxx
+otbIkonosImageMetadataInterfaceNew.cxx
 otbImageMetadataInterfaceTest.cxx
 otbImageMetadataInterfaceTest2.cxx
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
-ADD_EXECUTABLE(otbIOTests1 otbIOTests1.cxx ${BasicIO_SRCS1})
-TARGET_LINK_LIBRARIES(otbIOTests1 OTBIO OTBTesting)
-
-ADD_EXECUTABLE(otbIOTests2 otbIOTests2.cxx ${BasicIO_SRCS2})
-TARGET_LINK_LIBRARIES(otbIOTests2 OTBIO  OTBTesting)
-
-ADD_EXECUTABLE(otbIOTests3 otbIOTests3.cxx ${BasicIO_SRCS3})
-TARGET_LINK_LIBRARIES(otbIOTests3 OTBIO  OTBTesting)
-
-#ADD_EXECUTABLE(otbIOTests4 otbIOTests4.cxx ${BasicIO_SRCS2})
-#TARGET_LINK_LIBRARIES(otbIOTests4 OTBIO  )
-
-ADD_EXECUTABLE(otbIOTests5 otbIOTests5.cxx ${BasicIO_SRCS5})
-TARGET_LINK_LIBRARIES(otbIOTests5 OTBIO  OTBTesting)
-
-ADD_EXECUTABLE(otbIOTests6 otbIOTests6.cxx ${BasicIO_SRCS6})
-TARGET_LINK_LIBRARIES(otbIOTests6 OTBIO  OTBTesting)
-
-ADD_EXECUTABLE(otbIOTests7 otbIOTests7.cxx ${BasicIO_SRCS7})
-TARGET_LINK_LIBRARIES(otbIOTests7 OTBIO  OTBTesting)
-
-ADD_EXECUTABLE(otbIOTests8 otbIOTests8.cxx ${BasicIO_SRCS8})
-TARGET_LINK_LIBRARIES(otbIOTests8 OTBIO  OTBTesting)
-
-ADD_EXECUTABLE(otbIOTests9 otbIOTests9.cxx ${BasicIO_SRCS9})
-TARGET_LINK_LIBRARIES(otbIOTests9 OTBIO  OTBTesting)
-
-ADD_EXECUTABLE(otbIOTests10 otbIOTests10.cxx ${BasicIO_SRCS10})
-TARGET_LINK_LIBRARIES(otbIOTests10 OTBIO  OTBTesting)
-
-ADD_EXECUTABLE(otbIOTests11 otbIOTests11.cxx ${BasicIO_SRCS11})
-TARGET_LINK_LIBRARIES(otbIOTests11 OTBIO  OTBTesting)
-
-ADD_EXECUTABLE(otbIOTests12 otbIOTests12.cxx ${BasicIO_SRCS12})
-TARGET_LINK_LIBRARIES(otbIOTests12 OTBIO  OTBTesting)
+OTB_ADD_EXECUTABLE(otbIOTests1 "${BasicIO_SRCS1}" "OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbIOTests2 "${BasicIO_SRCS2}" "OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbIOTests3 "${BasicIO_SRCS3}" "OTBIO;OTBTesting")
+#OTB_ADD_EXECUTABLE(otbIOTests4 "${BasicIO_SRCS4}" "OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbIOTests5 "${BasicIO_SRCS5}" "OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbIOTests6 "${BasicIO_SRCS6}" "OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbIOTests7 "${BasicIO_SRCS7}" "OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbIOTests8 "${BasicIO_SRCS8}" "OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbIOTests9 "${BasicIO_SRCS9}" "OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbIOTests10 "${BasicIO_SRCS10}" "OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbIOTests11 "${BasicIO_SRCS11}" "OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbIOTests12 "${BasicIO_SRCS12}" "OTBIO;OTBTesting")
 
 # Case for releae 2.2.1
 IF(OTB_COMPILE_JPEG2000)
@@ -2125,23 +2138,15 @@ IF(OTB_COMPILE_JPEG2000)
       ADD_DEFINITIONS(-DOPJ_STATIC)
    ENDIF(NOT BUILD_SHARED_LIBS)
 
-   ADD_EXECUTABLE(otbIOTests13 otbIOTests13.cxx ${BasicIO_SRCS13})
-   TARGET_LINK_LIBRARIES(otbIOTests13 OTBIO  OTBTesting)
+   OTB_ADD_EXECUTABLE(otbIOTests13 "${BasicIO_SRCS13}" "OTBIO;OTBTesting")
 ENDIF(OTB_COMPILE_JPEG2000)
 
-ADD_EXECUTABLE(otbIOTests14 otbIOTests14.cxx ${BasicIO_SRCS14})
-TARGET_LINK_LIBRARIES(otbIOTests14 OTBIO  OTBTesting)
-
-ADD_EXECUTABLE(otbIOTests15 otbIOTests15.cxx ${BasicIO_SRCS15})
-# TARGET_LINK_LIBRARIES(otbIOTests15 OTBIO otbossimplugins)
-TARGET_LINK_LIBRARIES(otbIOTests15 OTBIO OTBTesting)
-
-ADD_EXECUTABLE(otbIOTests16 otbIOTests16.cxx ${BasicIO_SRCS16})
-TARGET_LINK_LIBRARIES(otbIOTests16 OTBIO  OTBTesting)
+OTB_ADD_EXECUTABLE(otbIOTests14 "${BasicIO_SRCS14}" "OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbIOTests15 "${BasicIO_SRCS15}" "OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbIOTests16 "${BasicIO_SRCS16}" "OTBIO;OTBTesting")
 
 IF(OTB_USE_LIBLAS)
-ADD_EXECUTABLE(otbIOTests17 otbIOTests17.cxx ${BasicIO_SRCS17})
-TARGET_LINK_LIBRARIES(otbIOTests17 OTBIO OTBTesting)
+  OTB_ADD_EXECUTABLE(otbIOTests17 "${BasicIO_SRCS17}" "OTBIO;OTBTesting")
 ENDIF(OTB_USE_LIBLAS)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
