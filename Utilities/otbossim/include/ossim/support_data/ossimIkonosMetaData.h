@@ -101,6 +101,8 @@ public:
    bool parseRpcData(const ossimFilename& data_file);
    
 private:
+   ossim_float64 theNominalCollectionAzimuth;
+   ossim_float64 theNominalCollectionElevation;
    ossim_float64 theSunAzimuth;
    ossim_float64 theSunElevation;
    ossim_uint32  theNumBands;

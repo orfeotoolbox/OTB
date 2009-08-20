@@ -303,5 +303,65 @@ SpotImageMetadataInterface
   return outputValuesVariableLengthVector;
 }
 
+double
+SpotImageMetadataInterface::GetSatElevation( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "support_data.incident_angle";
+  ossimString keywordString = kwl.find(key.c_str());
+
+  return ( 90.-keywordString.toDouble() );
+}
+
+double
+SpotImageMetadataInterface::GetSatAzimuth( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "support_data.step_count";
+  ossimString keywordString = kwl.find(key.c_str());
+  int step = keywordString.toInt();
+ 
+ std::cout<<step<<std::endl;
+  key= "support_data.scene_orientation";
+  keywordString = kwl.find(key.c_str());
+  double satAz = keywordString.toDouble();
+ std::cout<<satAz<<std::endl;
+ 
+  if(step<0)
+  {
+	satAz += 90.;
+  }
+  else
+    satAz = satAz - 90.;
+ std::cout<<satAz<<std::endl;
+  return satAz;
+}
+
 
 } // end namespace otb

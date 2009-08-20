@@ -89,6 +89,18 @@ public:
   	itkExceptionMacro("GetYear not implemented in DefaultImageMetadataInterface, no captor type found");
   };
    
+  /** Get the sat elevation from the ossim metadata */
+  double GetSatElevation( const MetaDataDictionaryType & dict ) const
+  {
+  	itkExceptionMacro("GetSatElevation not implemented in DefaultImageMetadataInterface, no captor type found");
+  };
+  
+  /** Get the sat azimuth from the ossim metadata */
+  double GetSatAzimuth( const MetaDataDictionaryType & dict ) const
+  {
+  	itkExceptionMacro("GetSatElevation not implemented in DefaultImageMetadataInterface, no captor type found");
+  };
+   
   bool CanRead( const MetaDataDictionaryType & dict ) const
   {
 	// This clas is the default one, it has to be able to call every metadata

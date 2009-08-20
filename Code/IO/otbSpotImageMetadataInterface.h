@@ -71,6 +71,12 @@ public:
   
   /** Get the imaging month from the ossim metadata */
   int GetYear( const MetaDataDictionaryType & dict ) const;
+    
+  /** Get the sat elevation from the ossim metadata */
+  double GetSatElevation( const MetaDataDictionaryType & dict ) const;
+  
+  /** Get the sat azimuth from the ossim metadata */
+  double GetSatAzimuth( const MetaDataDictionaryType & dict ) const;
   
   bool CanRead( const MetaDataDictionaryType & dict) const;
 

@@ -29,6 +29,8 @@ static ossimTrace traceDebug ("ossimIkonosMetaData:debug");
 
 ossimIkonosMetaData::ossimIkonosMetaData()
   :
+  theNominalCollectionAzimuth(0.0),
+  theNominalCollectionElevation(0.0),
   theSunAzimuth(0.0),
   theSunElevation(0.0),
   theNumBands(0),
@@ -111,6 +113,8 @@ bool ossimIkonosMetaData::open(const ossimFilename& imageFile)
 
 void ossimIkonosMetaData::clearFields()
 {
+  theNominalCollectionAzimuth = 0.0;
+  theNominalCollectionElevation = 0.0;
   theSunAzimuth = 0.0;
   theSunElevation = 0.0;
   theNumBands = 0;
@@ -124,6 +128,8 @@ std::ostream& ossimIkonosMetaData::print(std::ostream& out) const
 
   out << "\n----------------- Info on Ikonos Image -------------------"
       << "\n  "
+      << "\n  Nominal Azimuth:    " << theNominalCollectionAzimuth
+      << "\n  Nominal Elevation:   " << theNominalCollectionElevation
       << "\n  Sun Azimuth:    " << theSunAzimuth
       << "\n  Sun Elevation:   " << theSunElevation
       << "\n  Number of bands:   " << theNumBands
@@ -150,6 +156,16 @@ bool ossimIkonosMetaData::saveState(ossimKeywordlist& kwl,
           "ossimIkonosMetaData",
           true);
 
+  kwl.add(prefix,
+          "nominal_collection_azimuth_angle",
+          theNominalCollectionAzimuth,
+          true);
+
+  kwl.add(prefix,
+          "nominal_collection_elevation_angle",
+          theNominalCollectionElevation,
+          true);
+          
   kwl.add(prefix,
           ossimKeywordNames::AZIMUTH_ANGLE_KW,
           theSunAzimuth,
@@ -200,6 +216,20 @@ bool ossimIkonosMetaData::loadState(const ossimKeywordlist& kwl,
      }
   }
 
+  lookup = kwl.find(prefix, "nominal_collection_azimuth_angle");
+  if (lookup)
+  {
+     s = lookup;
+     theNominalCollectionAzimuth = s.toFloat64();
+  }
+
+  lookup = kwl.find(prefix, "nominal_collection_elevation_angle");
+  if (lookup)
+  {
+     s = lookup;
+     theNominalCollectionElevation = s.toFloat64();
+  }
+  
   lookup = kwl.find(prefix, ossimKeywordNames::AZIMUTH_ANGLE_KW);
   if (lookup)
   {
@@ -325,7 +355,50 @@ bool ossimIkonosMetaData::parseMetaData(const ossimFilename& data_file)
   sscanf(strptr, "%8c %s", dummy, name);
   theSensorID = name;
 
-    //***
+
+   //***
+   // Nominal Azimuth:
+   //***
+  strptr = strstr(strptr, "\nNominal Collection Azimuth:");
+  if (!strptr)
+  {
+    if(traceDebug())
+    {
+      ossimNotify(ossimNotifyLevel_FATAL)
+          << "FATAL ossimIkonosRpcModel::parseMetaData(data_file): "
+          << "\n\tAborting construction. Error encountered parsing "
+          << "presumed meta-data file." << std::endl;
+
+      delete [] filebuf;
+      return false;
+    }
+  }
+
+  sscanf(strptr, "%28c %lf %s", dummy, &value, dummy);
+  theNominalCollectionAzimuth = value;
+
+   //***
+   // Nominal Elevation:
+   //***
+  strptr = strstr(strptr, "\nNominal Collection Elevation:");
+  if (!strptr)
+  {
+    if(traceDebug())
+    {
+      ossimNotify(ossimNotifyLevel_FATAL)
+          << "FATAL ossimIkonosRpcModel::parseMetaData(data_file): "
+          << "\n\tAborting construction. Error encountered parsing "
+          << "presumed meta-data file." << std::endl;
+
+      delete [] filebuf;
+      return false;
+    }
+  }
+  
+  sscanf(strptr, "%31c %lf %s", dummy, &value, dummy);
+  theNominalCollectionElevation = value;
+  
+   //***
    // Sun Azimuth:
    //***
   strptr = strstr(strptr, "\nSun Angle Azimuth:");
