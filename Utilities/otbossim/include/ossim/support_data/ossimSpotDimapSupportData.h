@@ -73,7 +73,7 @@ public:
    void          getViewingAngle(ossim_float64& va)       const;
    void          getSceneOrientation(ossim_float64& so)   const;
    ossim_uint32  getNumberOfBands()                       const;
-   ossim_int32   getStepCount()                           const;
+   ossim_uint16  getStepCount()                           const;
    bool          isStarTrackerUsed()                      const;
    bool          isSwirDataUsed()                         const;
 
@@ -262,7 +262,7 @@ private:
    bool                        theSwirDataFlag;
    ossim_uint32                theNumBands;
    ossimString                 theAcquisitionDate;
-   ossim_int32                 theStepCount;
+   ossim_uint16                theStepCount;
    
 
    //---

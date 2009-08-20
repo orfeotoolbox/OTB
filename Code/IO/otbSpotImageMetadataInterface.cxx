@@ -347,19 +347,17 @@ SpotImageMetadataInterface::GetSatAzimuth( const MetaDataDictionaryType & dict )
   ossimString keywordString = kwl.find(key.c_str());
   int step = keywordString.toInt();
  
- std::cout<<step<<std::endl;
   key= "support_data.scene_orientation";
   keywordString = kwl.find(key.c_str());
   double satAz = keywordString.toDouble();
- std::cout<<satAz<<std::endl;
  
-  if(step<0)
+  if( (step-48)<0 )
   {
 	satAz += 90.;
   }
   else
     satAz = satAz - 90.;
- std::cout<<satAz<<std::endl;
+
   return satAz;
 }
 

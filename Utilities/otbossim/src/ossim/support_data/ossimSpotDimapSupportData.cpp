@@ -943,7 +943,7 @@ ossim_uint32 ossimSpotDimapSupportData::getNumberOfBands() const
    return theNumBands;
 }
 
-ossim_int32 ossimSpotDimapSupportData::getStepCount() const
+ossim_uint16 ossimSpotDimapSupportData::getStepCount() const
 {
    return theStepCount;
 }
