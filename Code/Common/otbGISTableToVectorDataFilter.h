@@ -55,9 +55,7 @@ public:
   typedef TVectorData OutputVectorDataType;
   typedef typename OutputVectorDataType::Pointer        OutputVectorDataPointer;
   typedef typename OutputVectorDataType::ConstPointer   OutputVectorDataConstPointer;
-  //typedef typename OutputVectorDataType::RegionType     OutputVectorDataRegionType;
-  //typedef typename OutputVectorDataType::PixelType      OutputVectorDataPixelType;
-  //typedef typename OutputVectorDataType::IndexType      IndexType;
+  
   typedef typename InputGISTableType::ConnectionType ConnectionType;
   typedef typename InputGISTableType::ConnectionPointerType ConnectionPointerType;
   
@@ -76,15 +74,8 @@ public:
   //itkTypeMacro(LabelMapToAttributeImageFilter, 
   //           ImageToImageFilter);
 
-  /**
-   * Set/Get the value used as "background" in the output image, if the input
-   * LabelMap use a background.
-   * Defaults to NumericTraits<PixelType>::NonpositiveMin().
-   */
-  //itkSetMacro(BackgroundValue, OutputImagePixelType);
-  //itkGetConstMacro(BackgroundValue, OutputImagePixelType);
-
-  /** Set/Get the LabelMap input of this process object.  */
+  
+  /** Set/Get the GISTable input of this process object.  */
   virtual void SetInput( const InputGISTableType *input);
   virtual void SetInput( unsigned int idx, const InputGISTableType *input);
   const InputGISTableType * GetInput(void);
@@ -95,16 +86,13 @@ protected:
   ~GISTableToVectorDataFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** LabelMapToAttributeImageFilter needs the entire input be
+  /** GISTableToVectorDataFilter needs the entire input be
    * available. Thus, it needs to provide an implementation of
    * GenerateInputRequestedRegion(). */
   void GenerateInputRequestedRegion() ;
 
-  /** LabelMapToAttributeImageFilter will produce the entire output. */
-  //void EnlargeOutputRequestedRegion(DataObject *itkNotUsed(output));
-  
   /** Single-threaded version of GenerateData.  This filter delegates
-   * to GrayscaleGeodesicErodeImageFilter. */
+   * to the OGR driver. */
   void GenerateData();
   
 
@@ -112,7 +100,6 @@ private:
   GISTableToVectorDataFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  //OutputImagePixelType m_BackgroundValue;
 
 } ; // end of class
 
@@ -123,5 +110,3 @@ private:
 #endif
 
 #endif
-
-

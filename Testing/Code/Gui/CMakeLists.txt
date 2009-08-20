@@ -33,6 +33,7 @@ ADD_TEST(coTvFltkWriterWatcher ${GUI_TESTS}
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(Gui_SRCS
+otbGuiTests.cxx
 otbFltkFilterWatcher.cxx
 otbFltkWriterWatcher.cxx
 )
@@ -48,8 +49,6 @@ IF(APPLE)
       ENDFOREACH(c)
 ENDIF(APPLE)
 
-
-ADD_EXECUTABLE(otbGuiTests otbGuiTests.cxx ${Gui_SRCS})
-TARGET_LINK_LIBRARIES(otbGuiTests OTBIO OTBGui OTBTesting)
+OTB_ADD_EXECUTABLE(otbGuiTests "${Gui_SRCS}" "OTBIO;OTBGui;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

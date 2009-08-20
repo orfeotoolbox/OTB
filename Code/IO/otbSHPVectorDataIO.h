@@ -33,7 +33,7 @@ namespace otb
 
 /** \class SHPVectorDataIO
  *
- * \brief ImageIO object for reading and writing SHP format vector data
+ * \brief ImageIO object for reading and writing SHP format vector data (and almost all OGR layer...)
  *
  */
 template <class TData> class ITK_EXPORT SHPVectorDataIO

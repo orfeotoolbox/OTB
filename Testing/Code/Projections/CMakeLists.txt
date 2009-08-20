@@ -436,6 +436,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #=======================================================================================
 SET(Projections_SRCS1
+otbProjectionsTests1.cxx
 otbProjectionBaseNew.cxx
 otbMapProjectionsNew.cxx
 otbMapProjection.cxx
@@ -447,12 +448,14 @@ otbRegionProjectionResampler.cxx
 otbSensorModel.cxx
 )
 SET(Projections_SRCS2
+otbProjectionsTests2.cxx
 otbOrthoRectificationFilterNew.cxx
 otbOrthoRectificationFilter.cxx
 otbOrthoRectificationFilterWithDEM.cxx
 otbOrthoRectificationMonoThreadFilter.cxx
 )
 SET(Projections_SRCS3
+otbProjectionsTests3.cxx
 otbCompositeTransformNew.cxx
 otbCompositeTransform.cxx
 otbGenericMapProjectionNew.cxx
@@ -469,11 +472,8 @@ otbVectorDataExtractROIandProjection.cxx
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
-ADD_EXECUTABLE(otbProjectionsTests1 otbProjectionsTests1.cxx ${Projections_SRCS1})
-TARGET_LINK_LIBRARIES(otbProjectionsTests1  OTBProjections OTBIO OTBTesting)
-ADD_EXECUTABLE(otbProjectionsTests2 otbProjectionsTests2.cxx ${Projections_SRCS2})
-TARGET_LINK_LIBRARIES(otbProjectionsTests2  OTBProjections OTBIO OTBTesting)
-ADD_EXECUTABLE(otbProjectionsTests3 otbProjectionsTests3.cxx ${Projections_SRCS3})
-TARGET_LINK_LIBRARIES(otbProjectionsTests3  OTBProjections OTBIO OTBTesting)
+OTB_ADD_EXECUTABLE(otbProjectionsTests1 "${Projections_SRCS1}" "OTBProjections;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbProjectionsTests2 "${Projections_SRCS2}" "OTBProjections;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbProjectionsTests3 "${Projections_SRCS3}" "OTBProjections;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
