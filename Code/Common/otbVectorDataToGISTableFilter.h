@@ -33,7 +33,7 @@ namespace otb {
  * \brief Convert a LabelMap to a VectorData
  *
  * VectorDataToGISTableFilter converts  a
- * VectorData to GIS Table (PostGIS...).
+ * VectorData to GIS Table (PostGIS for example).
  * Create first a PostGIS table (by default name=vector_data_to_gis_sample)
  * The table is not drop if it already exist
  * Structure of the PostGIS table:
@@ -42,8 +42,8 @@ namespace otb {
  * multi geometries are not handle yet 
  * \author Manuel GRIZONNET. CNES, France.
  *
- * \sa LabelMapToBinaryImageFilter, LabelMapMaskImageFilter
- * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
+   * \sa GISTableSource
+ * \ingroup Common, GeospatialAnalysis
  */
 template<class TVectorData , class TGISTable>
 class ITK_EXPORT VectorDataToGISTableFilter : 
@@ -76,18 +76,9 @@ public:
   
   typedef SHPVectorDataIO<InputVectorDataType> SHPVectorDataIOType;
   typedef typename SHPVectorDataIOType::Pointer SHPVectorDataIOPointerType;
-  /** ImageDimension constants */
-  //itkStaticConstMacro(InputImageDimension, unsigned int,
-  //                    TInputImage::ImageDimension);
-  //itkStaticConstMacro(OutputImageDimension, unsigned int,
-  //                    TOutputImage::ImageDimension);
-
+  
   /** Standard New method. */
   itkNewMacro(Self);  
-
-  /** Runtime information support. */
-  //itkTypeMacro(LabelMapToAttributeImageFilter, 
-  //           ImageToImageFilter);
 
   /**
    * Set/Get the boolean value if you do not want to create the GIS table 
@@ -103,7 +94,7 @@ public:
   
   //void setConnection 
 
-  /** Set/Get the LabelMap input of this process object.  */
+  /** Set/Get the VectorData input of this process object.  */
   virtual void SetInput( const InputVectorDataType *input);
   virtual void SetInput( unsigned int idx, const InputVectorDataType *input);
   const InputVectorDataType * GetInput(void);
@@ -114,33 +105,27 @@ protected:
   ~VectorDataToGISTableFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** LabelMapToAttributeImageFilter needs the entire input be
+  /** VectorDataToGISTAbleFilter needs the entire input be
    * available. Thus, it needs to provide an implementation of
    * GenerateInputRequestedRegion(). */
   void GenerateInputRequestedRegion() ;
 
-  /** LabelMapToAttributeImageFilter will produce the entire output. */
-  //void EnlargeOutputRequestedRegion(DataObject *itkNotUsed(output));
-  
-  /** Single-threaded version of GenerateData.  This filter delegates
-   * to GrayscaleGeodesicErodeImageFilter. */
+ 
+  /** Single-threaded version of GenerateData.  */
   void GenerateData();
   
   
 private:
   VectorDataToGISTableFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+
   
-   /** Single-threaded version of GenerateData.  This filter delegates
-    * to GrayscaleGeodesicErodeImageFilter. */
-  void ProcessNode(InternalTreeNodeType * source);
-  
-   /** Remove table before insertion if true  */
+   /** Remove table before insertion if true  (Not use for now, need access to specific options of OGR connection*/
   bool m_DropExistingGISTable;
   
-  /** Connection parameters to the db  */
+  /** Connection parameters to the db*/
   InputGISConnectionPointerType m_InputGISConnection;
-  /** GIS table name  */
+  /** GIS table name */
   std::string m_GISTableName;
 } ; // end of class
 

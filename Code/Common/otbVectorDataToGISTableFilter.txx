@@ -18,10 +18,6 @@
 #define __otbVectorDataToGISTableFilter_txx
 
 #include "otbVectorDataToGISTableFilter.h"
-//#include "itkNumericTraits.h"
-//#include "itkProgressReporter.h"
-//#include "itkImageRegionConstIteratorWithIndex.h"
-//#include "otbGISTable.h"
 #include "itkProgressReporter.h"
 
 namespace otb {
@@ -114,23 +110,23 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
   
   // Allocate the output
   this->AllocateOutputs();
-  //std::cout << "before GetOutput" << std::endl;
+  
   OutputGISTableType * output = this->GetOutput();
-  //std::cout << "after GetOutput" << std::endl;
+  
   const InputVectorDataType * input = this->GetInput();
   
-  //Set the filter's Postgres connection
+  //Set the connection associated to the table
   output->SetConnection (this->GetInputGISConnection ());
   
   
   //Set the projection of the GIS table with the vector data projection informations
   output->SetProjectionRef(input->GetProjectionRef());
   
-  //Connection to the database
+  //Connection to the database (create a transactor to manage the connection)
   output->GetConnection()->ConnectToDB();
   
   //Name of the table is settedd automaticcaly to "vector_data_to_gis"
-  output->SetTableName ("");
+  output->SetTableName ("vector_data_to_gis");
   
   //Create the PostgreSQL table
   //output->CreateTable(m_DropExistingGISTable);
@@ -145,11 +141,14 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
       
       //Old methods for processing translation to GIS table
       //ProcessNode(inputRoot);
-      //New method for the filter, call the OGR driver
+      //New method for the filter, call the OGR driver for writing data to the Db
       SHPVectorDataIOPointerType gisWriter=SHPVectorDataIOType::New();
-  
+      
+      //Transform connection parametrers to the DB to an OGR connection string (based on PG: for PostGIS)"
       const std::string outputOGRConnStr=output->GetOGRStrConnection();
+      //Test if the driver is available
       if ( gisWriter->CanWriteFile(outputOGRConnStr.data()) ) {
+        //Write VectorData to the GIS Table using OGR translation 
         gisWriter->SetFileName(outputOGRConnStr);
         otbGenericMsgDebugMacro(<<"Write vector data to GIS table " << outputOGRConnStr);
         gisWriter->Write(input);
@@ -157,89 +156,12 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
       else 
       {
         itkGenericExceptionMacro(<< "Not valid connection string (PG:*) " << outputOGRConnStr);
-
       }
-      
-      
     }
   }
   
  }
 
-template<class TVectorData , class TGISTable>
-    void
-        VectorDataToGISTableFilter< TVectorData, TGISTable >
-  ::ProcessNode(InternalTreeNodeType * source)
-{
-
-  
-
-  // Get the children list from the input node
-  ChildrenListType children = source->GetChildrenList();
-  
-  // For each child
-  for(typename ChildrenListType::iterator it = children.begin(); it!=children.end();++it)
-  {
-    // Copy input DataNode info
-    DataNodePointerType dataNode = (*it)->Get();
-
-    switch(dataNode->GetNodeType())
-    {
-      case otb::ROOT:
-      {
-        ProcessNode((*it));
-        break;
-      }
-      case otb::DOCUMENT:
-      {
-        ProcessNode((*it));
-        break;
-      }
-      case otb::FOLDER:
-      {
-        ProcessNode((*it));
-        break;
-      }
-      case FEATURE_POINT:
-      {
-        otbGenericMsgDebugMacro(<<"Insert Point from vectorData");
-        this->GetOutput()->InsertPoint( static_cast<typename TGISTable::PointType> (dataNode->GetPoint()) );
-        break;
-      }
-      case otb::FEATURE_LINE:
-      {
-        this->GetOutput()->InsertLineString( static_cast<typename TGISTable::LinePointerType> (dataNode->GetLine()) );
-        break;
-      }
-      case FEATURE_POLYGON:
-      {
-        //std::cout << "before insert polygon" << std::endl;
-        this->GetOutput()->InsertPolygons( static_cast<typename TGISTable::PolygonConstPointerType> (dataNode->GetPolygonExteriorRing()), static_cast<typename TGISTable::PolygonListConstPointerType> (dataNode->GetPolygonInteriorRings()) );
-        break;
-      }
-      case FEATURE_MULTIPOINT:
-      {
-//         this->GetOutput()->InsertMultiPoints( static_cast<typename TGISTable::PointType> (dataNode->GetPoint()) );
-        break;
-      }
-      case FEATURE_MULTILINE:
-      {
-        itkExceptionMacro(<<"This type (FEATURE_MULTILINE) is not handle (yet) by VectorDataToGISTableFilter(), please request for it");
-        break;
-      }
-      case FEATURE_MULTIPOLYGON:
-      {
-        itkExceptionMacro(<<"This type (FEATURE_MULTIPOLYGON) is not handle (yet) by VectorDataToGISTableFilter(), please request for it");
-        break;
-      }
-      case FEATURE_COLLECTION:
-      {
-        itkExceptionMacro(<<"This type (FEATURE_COLLECTION) is not handle (yet) by VectorDataToGISTableFilter(), please request for it");
-        break;
-      }
-    }
-  }
-}
 
 template<class TVectorData , class TGISTable>
 void
@@ -247,13 +169,10 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
 ::PrintSelf(std::ostream &os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  //this->GetInputGISConnection()->PrintSelf (os, indent);
-/*
-  os << indent << "BackgroundValue: "  << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_BackgroundValue) << std::endl;
-  */
+  os << "Input VectorData:" << std::endl;
+  os << this->GetInput() << std::endl;
+  os << "Output GIS Table:" << std::endl;
+  os << this->GetOutput() << std::endl;
 }
-
-
-
 }// end namespace otb
 #endif

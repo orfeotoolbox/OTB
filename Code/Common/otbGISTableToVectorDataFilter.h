@@ -29,13 +29,14 @@ namespace otb {
 /** \class GISTableToVectorDataFilter
  * \brief Convert a LabelMap to a VectorData
  *
-   * GISTableToVectorDataFilter converts a GIS Table (PostGIS...) to a
+ * GISTableToVectorDataFilter converts a GIS Table (PostGIS...) to a
  * VectorData.
- *
+ * The translation is delegate to the SHPVectorDataIO class (OGRVectorDataIO)
+ * which calls the OGR driver to translate GIS layer to a vectorData structure
  * \author Manuel GRIZONNET. CNES, France.
  *
- * \sa LabelMapToBinaryImageFilter, LabelMapMaskImageFilter
- * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
+ * \sa VectorDataSource
+ * \ingroup Common, GeospatialAnalysis
  */
 template<class TGISTable, class TVectorData >
 class ITK_EXPORT GISTableToVectorDataFilter : 
@@ -52,10 +53,6 @@ public:
   /** Some convenient typedefs. */
   typedef TGISTable InputGISTableType;
   typedef TVectorData OutputVectorDataType;
-  //typedef typename InputImageType::Pointer         InputImagePointer;
-  //typedef typename InputImageType::ConstPointer    InputImageConstPointer;
-  //typedef typename InputImageType::RegionType      InputImageRegionType;
-  //typedef typename InputImageType::PixelType       InputImagePixelType;
   typedef typename OutputVectorDataType::Pointer        OutputVectorDataPointer;
   typedef typename OutputVectorDataType::ConstPointer   OutputVectorDataConstPointer;
   //typedef typename OutputVectorDataType::RegionType     OutputVectorDataRegionType;
