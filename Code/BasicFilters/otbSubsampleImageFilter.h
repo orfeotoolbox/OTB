@@ -100,6 +100,7 @@ protected:
   SubsampleImageFilter ()
   {
     m_SubsampleFactor.Fill( 1 );
+    //this->SetNumberOfThreads(1);
   }
   virtual ~SubsampleImageFilter() {}
 
