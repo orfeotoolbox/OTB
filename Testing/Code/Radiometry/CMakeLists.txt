@@ -1027,10 +1027,12 @@ ADD_TEST(raTvAeronet_ArcachonLevel10_ExtractData ${RADIOMETRY_TESTS8}
 
 # A enrichir
 SET(Radiometry_SRCS1
+otbRadiometryTests1.cxx
 otbMultiChannelRAndNIRVegetationIndexImageFilterNew.cxx
 otbMultiChannelRAndNIRVegetationIndexImageFilter.cxx
 )
 SET(Radiometry_SRCS2
+otbRadiometryTests2.cxx
 otbRAndBAndNIRVegetationIndexImageFilterNew.cxx
 otbRAndBAndNIRVegetationIndexImageFilter.cxx
 otbMultiChannelRAndBAndNIRVegetationIndexImageFilterNew.cxx
@@ -1046,6 +1048,7 @@ otbImageToReflectanceImageFilter.cxx
 otbImageToReflectanceImageFilterAuto.cxx
 )
 SET(Radiometry_SRCS3
+otbRadiometryTests3.cxx
 otbDEMCaracteristicsExtractorNew.cxx
 otbDEMCaracteristicsExtractor.cxx
 otbAtmosphericCorrectionParametersNew.cxx
@@ -1060,6 +1063,7 @@ otbSurfaceAdjencyEffect6SCorrectionSchemeFilter.cxx
 otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter.cxx
 )
 SET(Radiometry_SRCS4
+otbRadiometryTests4.cxx
 otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew.cxx
 otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.cxx
 otbAtmosphericCorrectionSequencement.cxx
@@ -1070,11 +1074,13 @@ otbTSARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx
 )
 
 SET(Radiometry_SRCS5
+otbRadiometryTests5.cxx
 otbRAndNIRVegetationIndexImageFilterNew.cxx
 otbRAndNIRVegetationIndexImageFilter.cxx
 )
 
 SET(Radiometry_SRCS6
+otbRadiometryTests6.cxx
 otbSetASetBRAndNIRVegetationIndexImageFilter.cxx
 otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter.cxx
 otbRAndGAndNIRVegetationIndexImageFilterNew.cxx
@@ -1086,6 +1092,7 @@ otbWDVIMultiChannelRAndNIRVegetationIndexImageFilter.cxx
 )
 
 SET(Radiometry_SRCS7
+otbRadiometryTests7.cxx
 otbGAndRIndexImageFilterNew.cxx
 otbGAndRIndexImageFilter.cxx
 otbMultiChannelGAndRIndexImageFilterNew.cxx
@@ -1095,6 +1102,7 @@ otbIBMultiChannelGAndRAndNIRIndexImageFilter.cxx
 )
 
 SET(Radiometry_SRCS8
+otbRadiometryTests8.cxx
 otbNDBITM4AndTM5IndexImageFilter.cxx
 otbNDBIMultiChannelTM4AndTM5IndexImageFilter.cxx
 otbISURAndNIRIndexImageFilter.cxx
@@ -1109,21 +1117,13 @@ otbAeronetExtractDataBadData.cxx
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
-ADD_EXECUTABLE(otbRadiometryTests1 otbRadiometryTests1.cxx ${Radiometry_SRCS1})
-TARGET_LINK_LIBRARIES(otbRadiometryTests1 OTBRadiometry OTBIO OTBTesting)
-ADD_EXECUTABLE(otbRadiometryTests2 otbRadiometryTests2.cxx ${Radiometry_SRCS2})
-TARGET_LINK_LIBRARIES(otbRadiometryTests2 OTBRadiometry OTBIO OTBTesting)
-ADD_EXECUTABLE(otbRadiometryTests3 otbRadiometryTests3.cxx ${Radiometry_SRCS3})
-TARGET_LINK_LIBRARIES(otbRadiometryTests3 OTBRadiometry OTBIO OTBTesting)
-ADD_EXECUTABLE(otbRadiometryTests4 otbRadiometryTests4.cxx ${Radiometry_SRCS4})
-TARGET_LINK_LIBRARIES(otbRadiometryTests4 OTBRadiometry OTBIO OTBTesting)
-ADD_EXECUTABLE(otbRadiometryTests5 otbRadiometryTests5.cxx ${Radiometry_SRCS5})
-TARGET_LINK_LIBRARIES(otbRadiometryTests5 OTBRadiometry OTBIO OTBTesting)
-ADD_EXECUTABLE(otbRadiometryTests6 otbRadiometryTests6.cxx ${Radiometry_SRCS6})
-TARGET_LINK_LIBRARIES(otbRadiometryTests6 OTBRadiometry OTBIO OTBTesting)
-ADD_EXECUTABLE(otbRadiometryTests7 otbRadiometryTests7.cxx ${Radiometry_SRCS7})
-TARGET_LINK_LIBRARIES(otbRadiometryTests7 OTBRadiometry OTBIO OTBTesting)
-ADD_EXECUTABLE(otbRadiometryTests8 otbRadiometryTests8.cxx ${Radiometry_SRCS8})
-TARGET_LINK_LIBRARIES(otbRadiometryTests8 OTBRadiometry OTBIO OTBTesting)
+OTB_ADD_EXECUTABLE(otbRadiometryTests1 "${Radiometry_SRCS1}" "OTBRadiometry;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbRadiometryTests2 "${Radiometry_SRCS2}" "OTBRadiometry;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbRadiometryTests3 "${Radiometry_SRCS3}" "OTBRadiometry;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbRadiometryTests4 "${Radiometry_SRCS4}" "OTBRadiometry;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbRadiometryTests5 "${Radiometry_SRCS5}" "OTBRadiometry;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbRadiometryTests6 "${Radiometry_SRCS6}" "OTBRadiometry;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbRadiometryTests7 "${Radiometry_SRCS7}" "OTBRadiometry;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbRadiometryTests8 "${Radiometry_SRCS8}" "OTBRadiometry;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -189,6 +189,7 @@ ADD_TEST(viTvImageViewerWithOverlay ${VISU_TESTS2}
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicVisu_SRCS1
+otbVisuTests1.cxx
 otbImageWidgetBaseNew.cxx
 otbFixedSizeFullImageWidgetNew.cxx
 otbFixedSizeFullImageWidget.cxx
@@ -201,6 +202,7 @@ otbImageViewerWithOtbImage.cxx
 otbImageViewerNew.cxx
 )
 SET(BasicVisu_SRCS2
+otbVisuTests2.cxx
 otbImageViewerWithMultiBandFilter.cxx
 otbDoubleImageViewerWithLink.cxx
 otbImageToGrayscaleAnaglyphImageFilterNew.cxx
@@ -218,9 +220,7 @@ otbImageViewerWithOverlay.cxx
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
-ADD_EXECUTABLE(otbVisuTests1 otbVisuTests1.cxx ${BasicVisu_SRCS1})
-TARGET_LINK_LIBRARIES(otbVisuTests1 OTBVisu OTBIO OTBTesting)
-ADD_EXECUTABLE(otbVisuTests2 otbVisuTests2.cxx ${BasicVisu_SRCS2})
-TARGET_LINK_LIBRARIES(otbVisuTests2 OTBVisu OTBIO OTBTesting)
+OTB_ADD_EXECUTABLE(otbVisuTests1 "${BasicVisu_SRCS1}" "OTBVisu;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbVisuTests2 "${BasicVisu_SRCS2}" "OTBVisu;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -50,7 +50,7 @@ int otbImageMetadataInterfaceTest2 (int argc, char* argv[])
 
   //Test the image interface
   lImageMetadata->SetImage(reader->GetOutput());
-  file<< lImageMetadata->GetProjectionRef(reader->GetOutput()->GetMetaDataDictionary()) << std::endl;
+  file<< lImageMetadata->GetProjectionRef() << std::endl;
   file.close();
 
   return EXIT_SUCCESS;

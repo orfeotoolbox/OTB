@@ -150,6 +150,7 @@ ADD_TEST(maTvMRFSamplerRandomMAP ${MARKOV_TESTS2}
 
 # A enrichir
 SET(Markov_SRCS1
+otbMarkovTests1.cxx
 otbMarkovRandomFieldFilterNew.cxx
 otbMarkovRandomFieldFilter.cxx
 otbMRFEnergyPottsNew.cxx
@@ -165,6 +166,7 @@ otbMRFOptimizerICM.cxx
 )
 
 SET(Markov_SRCS2
+otbMarkovTests2.cxx
 otbMRFOptimizerMetropolisNew.cxx
 otbMRFOptimizerMetropolis.cxx
 otbMRFSamplerMAPNew.cxx
@@ -177,10 +179,7 @@ otbMRFSamplerRandomMAP.cxx
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
-ADD_EXECUTABLE(otbMarkovTests1 otbMarkovTests1.cxx ${Markov_SRCS1})
-TARGET_LINK_LIBRARIES(otbMarkovTests1 OTBMarkov OTBIO OTBTesting)
-
-ADD_EXECUTABLE(otbMarkovTests2 otbMarkovTests2.cxx ${Markov_SRCS2})
-TARGET_LINK_LIBRARIES(otbMarkovTests2 OTBMarkov OTBIO OTBTesting)
+OTB_ADD_EXECUTABLE(otbMarkovTests1 "${Markov_SRCS1}" "OTBMarkov;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbMarkovTests2 "${Markov_SRCS2}" "OTBMarkov;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

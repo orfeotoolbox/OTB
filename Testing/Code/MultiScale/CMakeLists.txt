@@ -454,6 +454,7 @@ ADD_TEST(msTvWaveletPacketMultiScaleTransform ${MULTISCALE_TESTS4}
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicMultiScale_SRCS1
+otbMultiScaleTests1.cxx
 otbMorphologicalPyramidResamplerNew.cxx
 otbMorphologicalPyramidResampler.cxx
 otbMorphologicalPyramidAnalysisFilterNew.cxx
@@ -466,6 +467,7 @@ otbMorphologicalPyramidSegmenterNew.cxx
 otbMorphologicalPyramidSegmenter.cxx
 )
 SET(BasicMultiScale_SRCS2
+otbMultiScaleTests2.cxx
 otbMorphologicalPyramidSegmentationFilterNew.cxx
 otbMorphologicalPyramidSegmentationFilter.cxx
 otbGeodesicMorphologyDecompositionImageFilterNew.cxx
@@ -480,6 +482,7 @@ otbMorphologicalClosingProfileFilterNew.cxx
 otbMorphologicalClosingProfileFilter.cxx
 )
 SET(BasicMultiScale_SRCS3
+otbMultiScaleTests3.cxx
 otbProfileToProfileDerivativeFilterNew.cxx
 otbProfileToProfileDerivativeFilter.cxx
 otbProfileDerivativeToMultiScaleCharacteristicsFilterNew.cxx
@@ -490,6 +493,7 @@ otbGeodesicMorphologyIterativeDecompositionImageFilterNew.cxx
 otbGeodesicMorphologyIterativeDecompositionImageFilter.cxx
 )
 SET(BasicMultiScale_SRCS4
+otbMultiScaleTests4.cxx
 otbWaveletOperatorNew.cxx
 otbWaveletOperator.cxx
 otbWaveletFilterBankNew.cxx
@@ -505,13 +509,9 @@ otbWaveletPacketTransform.cxx
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
-ADD_EXECUTABLE(otbMultiScaleTests1 otbMultiScaleTests1.cxx ${BasicMultiScale_SRCS1})
-TARGET_LINK_LIBRARIES(otbMultiScaleTests1 OTBIO OTBMultiScale OTBTesting)
-ADD_EXECUTABLE(otbMultiScaleTests2 otbMultiScaleTests2.cxx ${BasicMultiScale_SRCS2})
-TARGET_LINK_LIBRARIES(otbMultiScaleTests2 OTBIO OTBMultiScale OTBTesting)
-ADD_EXECUTABLE(otbMultiScaleTests3 otbMultiScaleTests3.cxx ${BasicMultiScale_SRCS3})
-TARGET_LINK_LIBRARIES(otbMultiScaleTests3 OTBIO OTBMultiScale OTBTesting)
-ADD_EXECUTABLE(otbMultiScaleTests4 otbMultiScaleTests4.cxx ${BasicMultiScale_SRCS4})
-TARGET_LINK_LIBRARIES(otbMultiScaleTests4 OTBIO OTBMultiScale OTBTesting)
+OTB_ADD_EXECUTABLE(otbMultiScaleTests1 "${BasicMultiScale_SRCS1}" "OTBMultiScale;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbMultiScaleTests2 "${BasicMultiScale_SRCS2}" "OTBMultiScale;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbMultiScaleTests3 "${BasicMultiScale_SRCS3}" "OTBMultiScale;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbMultiScaleTests4 "${BasicMultiScale_SRCS4}" "OTBMultiScale;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
