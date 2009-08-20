@@ -1768,6 +1768,7 @@ ADD_TEST(feTvSqrtSpectralAngleImageFilter ${FEATUREEXTRACTION_TESTS15}
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
+otbFeatureExtractionTests1.cxx
 otbAlignImageToPath.cxx
 otbDrawPath.cxx
 otbDrawPathAlign.cxx
@@ -1781,6 +1782,7 @@ otbHuPathNew.cxx
 otbHuPath.cxx
 )
 SET(BasicFeatureExtraction_SRCS2
+otbFeatureExtractionTests2.cxx
 otbFlusserPathNew.cxx
 otbFlusserPath.cxx
 otbOrientationPathNew.cxx
@@ -1791,6 +1793,7 @@ otbCompacityPathSquare.cxx
 otbCompacityPathRectangle.cxx
 )
 SET(BasicFeatureExtraction_SRCS3
+otbFeatureExtractionTests3.cxx
 otbTouziEdgeDetectorNew.cxx
 otbTouziEdgeDetector.cxx
 otbTouziEdgeDetectorDirection.cxx
@@ -1803,6 +1806,7 @@ otbLineRatioDetectorLinear.cxx
 otbLineRatioDetector.cxx
 )
 SET(BasicFeatureExtraction_SRCS4
+otbFeatureExtractionTests4.cxx
 otbAssociativeSymmetricalSumNew.cxx
 otbAssociativeSymmetricalSum.cxx
 otbAssymmetricFusionOfLineDetectorNew.cxx
@@ -1813,6 +1817,7 @@ otbThresholdImageToPointSetFilterNew.cxx
 otbThresholdImageToPointSetTest.cxx
 )
 SET(BasicFeatureExtraction_SRCS5
+otbFeatureExtractionTests5.cxx
 otbHarrisToPointSet.cxx
 otbPixelSuppressionByDirectionNew.cxx
 otbPixelSuppressionByDirection.cxx
@@ -1825,6 +1830,7 @@ otbModulusAndDirectionImageFiltersNew.cxx
 otbHoughTransform2DLinesImageTest.cxx
 )
 SET(BasicFeatureExtraction_SRCS6
+otbFeatureExtractionTests6.cxx
 otbExtractSegmentsNew.cxx
 otbExtractSegments.cxx
 #otbFourierMellinImageFilterNew.cxx #Comment because generate error "duplicate vnl_fft_base<3...>" with otbFourierMellinImageFilter.cxx test on Mac OSX platform
@@ -1836,6 +1842,7 @@ otbNeighborhoodScalarProductFilterNew.cxx
 otbNeighborhoodScalarProductFilter.cxx
 )
 SET(BasicFeatureExtraction_SRCS7
+otbFeatureExtractionTests7.cxx
 otbRemoveIsolatedByDirectionFilterNew.cxx
 otbRemoveIsolatedByDirectionFilter.cxx
 otbRemoveWrongDirectionFilterNew.cxx
@@ -1850,6 +1857,7 @@ otbBreakAngularPathListFilterNew.cxx
 otbBreakAngularPathListFilter.cxx
 )
 SET(BasicFeatureExtraction_SRCS8
+otbFeatureExtractionTests8.cxx
 otbRemoveTortuousPathListFilterNew.cxx
 otbRemoveTortuousPathListFilter.cxx
 otbLinkPathListFilterNew.cxx
@@ -1865,6 +1873,7 @@ otbRemoveCarvingPathFilterNew.cxx
 otbImageToCarvingPathFilterNew.cxx
 )
 SET(BasicFeatureExtraction_SRCS9
+otbFeatureExtractionTests9.cxx
 otbImageToSIFTKeyPointSetFilterNew.cxx
 otbImageToSIFTKeyPointSetFilterDistanceMap.cxx
 otbImageToSIFTKeyPointSetFilterOutputInterestPointAscii.cxx
@@ -1878,6 +1887,7 @@ otbImageFittingPolygonListFilterNew.cxx
 otbSimplePointCountStrategyTest.cxx
 )
 SET(BasicFeatureExtraction_SRCS10
+otbFeatureExtractionTests10.cxx
 otbImageToSURFKeyPointSetFilterNew.cxx
 otbImageToSURFKeyPointSetFilterOutputInterestPointAscii.cxx
 otbImageToSURFKeyPointSetFilterOutputDescriptorAscii.cxx
@@ -1889,6 +1899,7 @@ otbKeyPointSetsMatchingFilter.cxx
 otbLandmarkNew.cxx
 )
 SET(BasicFeatureExtraction_SRCS11
+otbFeatureExtractionTests11.cxx
 otbCloudEstimatorFilterNew.cxx
 otbCloudEstimatorDefaultFilter.cxx
 otbCloudEstimatorFilter.cxx
@@ -1903,16 +1914,19 @@ otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.cxx
 #otbLineSpatialObjectListToRightAnglePointSetFilterOutputImage.cxx
 )
 SET(BasicFeatureExtraction_SRCS12
+otbFeatureExtractionTests12.cxx
 otbTextureFunctorBase.cxx
 otbTextureFunctor.cxx
 otbPanTexTextureImageFilterNew.cxx
 )
 
 SET(BasicFeatureExtraction_SRCS13
+otbFeatureExtractionTests13.cxx
 otbTextureImageFunction.cxx
 )
 
 SET(BasicFeatureExtraction_SRCS14
+otbFeatureExtractionTests14.cxx
 otbPanTexTextureImageFilterNew.cxx
 otbPanTexTextureImageFilter.cxx
 otbPanTexTextureImageFunctionFilterNew.cxx
@@ -1926,6 +1940,7 @@ otbRegionImageToRectangularPathListFilter.cxx
 )
 
 SET(BasicFeatureExtraction_SRCS15
+otbFeatureExtractionTests15.cxx
 otbImageToLineSegmentVectorDataNew.cxx
 otbImageToLineSegmentVectorData.cxx
 otbSqrtSpectralAngleImageFilter.cxx
@@ -1933,41 +1948,21 @@ otbSqrtSpectralAngleImageFilter.cxx
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
-ADD_EXECUTABLE(otbFeatureExtractionTests1 otbFeatureExtractionTests1.cxx ${BasicFeatureExtraction_SRCS1})
-TARGET_LINK_LIBRARIES(otbFeatureExtractionTests1  OTBFeatureExtraction OTBIO OTBTesting)
-ADD_EXECUTABLE(otbFeatureExtractionTests2 otbFeatureExtractionTests2.cxx ${BasicFeatureExtraction_SRCS2})
-TARGET_LINK_LIBRARIES(otbFeatureExtractionTests2  OTBFeatureExtraction OTBIO OTBTesting)
-ADD_EXECUTABLE(otbFeatureExtractionTests3 otbFeatureExtractionTests3.cxx ${BasicFeatureExtraction_SRCS3})
-TARGET_LINK_LIBRARIES(otbFeatureExtractionTests3  OTBFeatureExtraction OTBIO OTBTesting)
-ADD_EXECUTABLE(otbFeatureExtractionTests4 otbFeatureExtractionTests4.cxx ${BasicFeatureExtraction_SRCS4})
-TARGET_LINK_LIBRARIES(otbFeatureExtractionTests4  OTBFeatureExtraction OTBIO OTBTesting)
-ADD_EXECUTABLE(otbFeatureExtractionTests5 otbFeatureExtractionTests5.cxx ${BasicFeatureExtraction_SRCS5})
-TARGET_LINK_LIBRARIES(otbFeatureExtractionTests5  OTBFeatureExtraction OTBIO OTBTesting)
-ADD_EXECUTABLE(otbFeatureExtractionTests6 otbFeatureExtractionTests6.cxx ${BasicFeatureExtraction_SRCS6})
-TARGET_LINK_LIBRARIES(otbFeatureExtractionTests6  OTBFeatureExtraction OTBIO OTBTesting)
-ADD_EXECUTABLE(otbFeatureExtractionTests7 otbFeatureExtractionTests7.cxx ${BasicFeatureExtraction_SRCS7})
-TARGET_LINK_LIBRARIES(otbFeatureExtractionTests7  OTBFeatureExtraction OTBIO OTBTesting)
-ADD_EXECUTABLE(otbFeatureExtractionTests8 otbFeatureExtractionTests8.cxx ${BasicFeatureExtraction_SRCS8})
-TARGET_LINK_LIBRARIES(otbFeatureExtractionTests8  OTBFeatureExtraction OTBIO OTBTesting)
-ADD_EXECUTABLE(otbFeatureExtractionTests9 otbFeatureExtractionTests9.cxx ${BasicFeatureExtraction_SRCS9})
-TARGET_LINK_LIBRARIES(otbFeatureExtractionTests9  OTBFeatureExtraction OTBIO OTBTesting)
-ADD_EXECUTABLE(otbFeatureExtractionTests10 otbFeatureExtractionTests10.cxx ${BasicFeatureExtraction_SRCS10})
-TARGET_LINK_LIBRARIES(otbFeatureExtractionTests10  OTBFeatureExtraction OTBIO OTBTesting)
-ADD_EXECUTABLE(otbFeatureExtractionTests11 otbFeatureExtractionTests11.cxx ${BasicFeatureExtraction_SRCS11})
-TARGET_LINK_LIBRARIES(otbFeatureExtractionTests11  OTBFeatureExtraction OTBIO OTBTesting)
-ADD_EXECUTABLE(otbFeatureExtractionTests12 otbFeatureExtractionTests12.cxx ${BasicFeatureExtraction_SRCS12})
-TARGET_LINK_LIBRARIES(otbFeatureExtractionTests12  OTBFeatureExtraction OTBIO OTBTesting)
-ADD_EXECUTABLE(otbFeatureExtractionTests13 otbFeatureExtractionTests13.cxx ${BasicFeatureExtraction_SRCS13})
-TARGET_LINK_LIBRARIES(otbFeatureExtractionTests13  OTBFeatureExtraction OTBIO OTBTesting)
-ADD_EXECUTABLE(otbFeatureExtractionTests14 otbFeatureExtractionTests14.cxx ${BasicFeatureExtraction_SRCS14})
-TARGET_LINK_LIBRARIES(otbFeatureExtractionTests14  OTBFeatureExtraction OTBIO OTBTesting)
-ADD_EXECUTABLE(otbFeatureExtractionTests15 otbFeatureExtractionTests15.cxx ${BasicFeatureExtraction_SRCS15})
-TARGET_LINK_LIBRARIES(otbFeatureExtractionTests15  OTBFeatureExtraction OTBIO OTBTesting)
-
-
-# ADD_EXECUTABLE(roadDetect roadDetect.cxx)
-# TARGET_LINK_LIBRARIES(roadDetect  OTBFeatureExtraction OTBIO)
-
+OTB_ADD_EXECUTABLE(otbFeatureExtractionTests1 "${BasicFeatureExtraction_SRCS1}" "OTBFeatureExtraction;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbFeatureExtractionTests2 "${BasicFeatureExtraction_SRCS2}" "OTBFeatureExtraction;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbFeatureExtractionTests3 "${BasicFeatureExtraction_SRCS3}" "OTBFeatureExtraction;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbFeatureExtractionTests4 "${BasicFeatureExtraction_SRCS4}" "OTBFeatureExtraction;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbFeatureExtractionTests5 "${BasicFeatureExtraction_SRCS5}" "OTBFeatureExtraction;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbFeatureExtractionTests6 "${BasicFeatureExtraction_SRCS6}" "OTBFeatureExtraction;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbFeatureExtractionTests7 "${BasicFeatureExtraction_SRCS7}" "OTBFeatureExtraction;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbFeatureExtractionTests8 "${BasicFeatureExtraction_SRCS8}" "OTBFeatureExtraction;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbFeatureExtractionTests9 "${BasicFeatureExtraction_SRCS9}" "OTBFeatureExtraction;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbFeatureExtractionTests10 "${BasicFeatureExtraction_SRCS10}" "OTBFeatureExtraction;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbFeatureExtractionTests11 "${BasicFeatureExtraction_SRCS11}" "OTBFeatureExtraction;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbFeatureExtractionTests12 "${BasicFeatureExtraction_SRCS12}" "OTBFeatureExtraction;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbFeatureExtractionTests13 "${BasicFeatureExtraction_SRCS13}" "OTBFeatureExtraction;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbFeatureExtractionTests14 "${BasicFeatureExtraction_SRCS14}" "OTBFeatureExtraction;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbFeatureExtractionTests15 "${BasicFeatureExtraction_SRCS15}" "OTBFeatureExtraction;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 

@@ -129,7 +129,8 @@ ADD_TEST(cdTlKullbackLeiblerSupervizedDistanceImageFilter ${CHANGEDETECTION_TEST
 
 
 # -------       Fichiers sources CXX -----------------------------------
-SET(BasicChangeDetection_SRCS1
+SET(BasicChangeDetection_SRCS1 
+otbChangeDetectionTests1.cxx 
 otbCBAMIChangeDetectionTest.cxx
 otbCorrelChangeDetectionTest.cxx
 otbMeanDiffChangeDetectionTest.cxx
@@ -140,6 +141,7 @@ otbJHMIChangeDetectionTest.cxx
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicChangeDetection_SRCS2
+otbChangeDetectionTests2.cxx 
 otbKullbackLeiblerDistanceImageFilterNew.cxx
 otbKullbackLeiblerDistanceImageFilter.cxx
 otbKullbackLeiblerProfileImageFilterNew.cxx
@@ -151,10 +153,7 @@ otbKullbackLeiblerSupervizedDistanceImageFilter.cxx
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
-ADD_EXECUTABLE(otbChangeDetectionTests1 otbChangeDetectionTests1.cxx ${BasicChangeDetection_SRCS1})
-TARGET_LINK_LIBRARIES(otbChangeDetectionTests1 OTBChangeDetection OTBIO OTBTesting)
-
-ADD_EXECUTABLE(otbChangeDetectionTests2 otbChangeDetectionTests2.cxx ${BasicChangeDetection_SRCS2})
-TARGET_LINK_LIBRARIES(otbChangeDetectionTests2 OTBChangeDetection OTBIO OTBTesting)
+OTB_ADD_EXECUTABLE(otbChangeDetectionTests1 "${BasicChangeDetection_SRCS1}" "OTBChangeDetection;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbChangeDetectionTests2 "${BasicChangeDetection_SRCS2}" "OTBChangeDetection;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
