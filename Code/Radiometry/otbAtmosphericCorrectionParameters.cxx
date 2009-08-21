@@ -59,7 +59,18 @@ FilterFunctionValues
 AtmosphericCorrectionParameters
 ::AtmosphericCorrectionParameters()
 {
+  m_SolarZenithalAngle = 361.;
+  m_SolarAzimutalAngle = 361.;
+  m_ViewingZenithalAngle = 361.;
+  m_ViewingAzimutalAngle = 361.;
+  m_Month = 0;
+  m_Day = 0;
+  m_AtmosphericPressure = -1.;
+  m_WaterVaporAmount = -1.;
+  m_OzoneAmount = -1.;
   m_AerosolModel = CONTINENTAL;
+  m_AerosolOptical = -1.;
+
 }
 
 /**PrintSelf method */
