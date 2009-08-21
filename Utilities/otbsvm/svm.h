@@ -213,7 +213,7 @@ public:
   // index is the current value
   // isAtEnd to indicate that it's the last possible derivation
   // baseValue is the constant of the formula
-  virtual double derivative(const svm_node * /*x*/, const svm_node */*y*/, const svm_parameter& /*param*/, int /*degree*/, int /*index*/, bool /*isAtEnd*/, double /*constValue*/)const
+  virtual double derivative(const svm_node * /*x*/, const svm_node * /*y*/, const svm_parameter& /*param*/, int /*degree*/, int /*index*/, bool /*isAtEnd*/, double /*constValue*/)const
     {
       itkGenericExceptionMacro(<<"derivative method not definied (Null)");
       return 0.;
