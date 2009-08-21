@@ -36,6 +36,8 @@ ossimIkonosMetaData::ossimIkonosMetaData()
   theNumBands(0),
   theBandName("Unknown"),
   theProductionDate("Unknown"),
+  theAcquisitionDate("Unknown"),
+  theAcquisitionTime("Unknown"),
   theSensorID("Unknown")
 {
 }
@@ -120,6 +122,8 @@ void ossimIkonosMetaData::clearFields()
   theNumBands = 0;
   theBandName = "Unknown";
   theProductionDate = "Unknown";
+  theAcquisitionDate = "Unknown";
+  theAcquisitionTime = "Unknown";
   theSensorID = "Unknown";
 }
 
@@ -135,6 +139,8 @@ std::ostream& ossimIkonosMetaData::print(std::ostream& out) const
       << "\n  Number of bands:   " << theNumBands
       << "\n  Band name:   " << theBandName
       << "\n  Production date:   " << theProductionDate
+      << "\n  Acquisition date:   " << theAcquisitionDate
+      << "\n  Acquisition time:   " << theAcquisitionTime
       << "\n  Sensor Type:   " << theSensorID
       << "\n"
       << "\n---------------------------------------------------------"
@@ -190,6 +196,17 @@ bool ossimIkonosMetaData::saveState(ossimKeywordlist& kwl,
           "production_date",
           theProductionDate,
           true);
+
+  kwl.add(prefix,
+          "acquisition_date",
+          theAcquisitionDate,
+          true);
+
+  kwl.add(prefix,
+          "acquisition_time",
+          theAcquisitionTime,
+          true);
+
   kwl.add(prefix,
           "sensor",
           theSensorID,
@@ -263,6 +280,18 @@ bool ossimIkonosMetaData::loadState(const ossimKeywordlist& kwl,
      theProductionDate = lookup;
   }
   
+  lookup = kwl.find(prefix, "acquisition_date");
+  if (lookup)
+  {
+     theAcquisitionDate = lookup;
+  }
+
+  lookup = kwl.find(prefix, "acquisition_time");
+  if (lookup)
+  {
+     theAcquisitionTime = lookup;
+  }
+
   lookup = kwl.find(prefix, "sensor");
   if (lookup)
   {
@@ -439,6 +468,28 @@ bool ossimIkonosMetaData::parseMetaData(const ossimFilename& data_file)
 
   sscanf(strptr, "%21c %lf %s", dummy, &value, name);
   theSunElevation = value;
+
+  //---
+  // Acquisition date and time:
+  //---
+  strptr = strstr(filebuf, "\nAcquisition Date\/Time:");
+  if (!strptr)
+  {
+    if(traceDebug())
+    {
+      ossimNotify(ossimNotifyLevel_FATAL)
+          << "FATAL ossimIkonosRpcModel::parseMetaData(data_file): "
+          << "\n\tAborting construction. Error encountered parsing "
+          << "presumed meta-data file." << std::endl;
+
+      delete [] filebuf;
+      return false;
+    }
+  }
+  char name2[80];
+  sscanf(strptr, "%23c %s %s", dummy, name, name2);
+  theAcquisitionDate = name;
+  theAcquisitionTime = name2;
 
   delete [] filebuf;
   filebuf = 0;

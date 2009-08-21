@@ -204,6 +204,177 @@ SpotImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) const
   return year.toInt();
 }
 
+int
+SpotImageMetadataInterface::GetHour( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  std::string key;
+  ossimString separatorList;
+  key = "support_data.image_date";
+  separatorList = "-T:";
+
+  ossimString keywordString = kwl.find(key.c_str());
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+
+  if(  keywordStrings.size() <= 2 )
+    itkExceptionMacro("Invalid Hour");
+
+  ossimString hour = keywordStrings[3];
+
+  return hour.toInt();
+}
+
+int
+SpotImageMetadataInterface::GetMinute( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  std::string key;
+  ossimString separatorList;
+  key = "support_data.image_date";
+  separatorList = "-T:";
+
+  ossimString keywordString = kwl.find(key.c_str());
+  std::cout<<"SPOT: "<<keywordString<<std::endl;
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  std::cout<<"SPOT: "<<keywordString.size()<<std::endl;
+  if(  keywordStrings.size() <= 2 )
+    itkExceptionMacro("Invalid Minute");
+
+  ossimString minute = keywordStrings[4];
+
+  return minute.toInt();
+}
+
+int
+SpotImageMetadataInterface::GetProductionDay( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  std::string key;
+  ossimString separatorList;
+  key = "support_data.production_date";
+  separatorList = "-T:";
+
+  ossimString keywordString = kwl.find(key.c_str());
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+
+  if(keywordStrings.size() <= 2)
+    itkExceptionMacro(<<"Invalid Day");
+
+  ossimString day = keywordStrings[2];
+
+  return day.toInt();
+}
+
+int
+SpotImageMetadataInterface::GetProductionMonth( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  std::string key;
+  ossimString separatorList;
+  key = "support_data.production_date";
+  separatorList = "-T";
+
+  ossimString keywordString = kwl.find(key.c_str());
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+
+  if(keywordStrings.size() <= 2)
+    itkExceptionMacro(<<"Invalid Month");
+
+  ossimString month = keywordStrings[1];
+
+  return month.toInt();
+}
+
+
+int
+SpotImageMetadataInterface::GetProductionYear( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  std::string key;
+  ossimString separatorList;
+  key = "support_data.production_date";
+  separatorList = "-T";
+
+  ossimString keywordString = kwl.find(key.c_str());
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+
+  if(  keywordStrings.size() <= 2 )
+    itkExceptionMacro("Invalid Year");
+
+  ossimString year = keywordStrings[0];
+
+  return year.toInt();
+}
 
 SpotImageMetadataInterface::VariableLengthVectorType
 SpotImageMetadataInterface

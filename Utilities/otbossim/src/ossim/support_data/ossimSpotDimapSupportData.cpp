@@ -182,6 +182,7 @@ void ossimSpotDimapSupportData::clearFields()
    theMetadataVersion = OSSIM_SPOT_METADATA_VERSION_UNKNOWN;
    theImageID = "";
    theMetadataFile = "";
+   theProductionDate = "";
    theSunAzimuth = 0.0;
    theSunElevation = 0.0;
    theIncidenceAngle = 0.0;
@@ -851,6 +852,7 @@ void ossimSpotDimapSupportData::printInfo(ostream& os) const
       << "\n  "
       << "\n  Job Number (ID):      " << theImageID
       << "\n  Acquisition Date:     " << theAcquisitionDate
+      << "\n  Production Date:      " << theProductionDate
       << "\n  Number of Bands:      " << theNumBands
       << "\n  Geo Center Point:     " << theRefGroundPoint
       << "\n  Detector count:       " << theDetectorCount
@@ -896,6 +898,11 @@ ossimString   ossimSpotDimapSupportData::getMetadataVersionString() const
 ossimString ossimSpotDimapSupportData::getAcquisitionDate() const
 {
    return theAcquisitionDate;
+}
+
+ossimString ossimSpotDimapSupportData::getProductionDate() const
+{
+   return theProductionDate;
 }
 
 ossimString ossimSpotDimapSupportData::getImageID() const
@@ -1233,6 +1240,11 @@ bool ossimSpotDimapSupportData::saveState(ossimKeywordlist& kwl,
            true);
 
    kwl.add(prefix,
+           "production_date",
+           theProductionDate,
+           true);
+
+   kwl.add(prefix,
            "incident_angle",
            theIncidenceAngle,
            true);
@@ -1467,6 +1479,7 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    theSwirDataFlag    = ossimString(kwl.find(prefix, "swir_data_flag")).toBool();
    theNumBands        = ossimString(kwl.find(prefix, ossimKeywordNames::NUMBER_BANDS_KW)).toUInt32();
    theAcquisitionDate = kwl.find(prefix, ossimKeywordNames::IMAGE_DATE_KW);
+   theProductionDate  = kwl.find(prefix, "production_date");
    theStepCount       = ossimString(kwl.find(prefix, "step_count")).toInt32();
    
    theIncidenceAngle  = ossimString(kwl.find(prefix, "incident_angle")).toDouble();
@@ -1680,6 +1693,27 @@ bool ossimSpotDimapSupportData::parsePart1(
    }
    theAcquisitionDate = xml_nodes[0]->getText();
    convertTimeStamp(theAcquisitionDate, theRefLineTime);
+
+   //---
+   // Fetch the ProductionDate:
+   //---
+   xml_nodes.clear();
+   xpath = "/Dimap_Document/Production/DATASET_PRODUCTION_DATE";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " DEBUG:"
+            << "\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+   theProductionDate = xml_nodes[0]->getText();
+   
 
    return true;
 }

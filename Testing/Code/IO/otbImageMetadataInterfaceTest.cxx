@@ -46,13 +46,17 @@ int otbImageMetadataInterfaceTest (int argc, char* argv[])
   
   std::ofstream file;
   file.open(outputFilename);
-
   file<<"GetSensorID:        "<<lImageMetadata->GetSensorID(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
   file<<"GetPhysicalGain:    "<<lImageMetadata->GetPhysicalGain(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
   file<<"GetPhysicalBias:    "<<lImageMetadata->GetPhysicalBias(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
+  file<<"GetMinute:          "<<lImageMetadata->GetMinute(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
+  file<<"GetHour:            "<<lImageMetadata->GetHour(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
   file<<"GetDay:             "<<lImageMetadata->GetDay(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
   file<<"GetMonth:           "<<lImageMetadata->GetMonth(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
   file<<"GetYear:            "<<lImageMetadata->GetYear(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
+  file<<"GetProductionDay:   "<<lImageMetadata->GetProductionDay(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
+  file<<"GetProductionMonth: "<<lImageMetadata->GetProductionMonth(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
+  file<<"GetProductionYear:  "<<lImageMetadata->GetProductionYear(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
   file<<"GetSolarIrradiance: "<<lImageMetadata->GetSolarIrradiance(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
   file<<"GetSatElevation:    "<<lImageMetadata->GetSatElevation(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
   file<<"GetSatAzimuth:      "<<lImageMetadata->GetSatAzimuth(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;

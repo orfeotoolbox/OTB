@@ -62,14 +62,29 @@ public:
   /** Get the solar irradiance from the ossim metadata */
   VariableLengthVectorType GetSolarIrradiance( const MetaDataDictionaryType & dict ) const;
   
-   /** Get the imaging day from the ossim metadata */
+   /** Get the imaging acquisition day from the ossim metadata : TLCTime metadata value */
   int GetDay( const MetaDataDictionaryType & dict ) const;
   
-  /** Get the imaging month from the ossim metadata */
+  /** Get the imaging acquisition month from the ossim metadata : TLCTime metadata value */
   int GetMonth( const MetaDataDictionaryType & dict ) const;
   
-  /** Get the imaging month from the ossim metadata */
+  /** Get the imaging acquisition year from the ossim metadata : TLCTime metadata value */
   int GetYear( const MetaDataDictionaryType & dict ) const;
+  
+  /** Get the imaging acquisition hour from the ossim metadata : TLCTime metadata value */
+  int GetHour( const MetaDataDictionaryType & dict ) const;
+ 
+  /** Get the imaging acquisition year from the ossim metadata : TLCTime metadata value */
+  int GetMinute( const MetaDataDictionaryType & dict ) const;
+
+   /** Get the imaging production day from the ossim metadata : generationTime metadata value */
+  int GetProductionDay( const MetaDataDictionaryType & dict ) const;
+  
+  /** Get the imaging production month from the ossim metadata : generationTime metadata value */
+  int GetProductionMonth( const MetaDataDictionaryType & dict ) const;
+  
+  /** Get the imaging production year from the ossim metadata : generationTime metadata value */
+  int GetProductionYear( const MetaDataDictionaryType & dict ) const;
   
   /** Get the sat elevation from the ossim metadata */
   double GetSatElevation( const MetaDataDictionaryType & dict ) const;

@@ -108,6 +108,8 @@ private:
    ossim_uint32  theNumBands;
    ossimString   theBandName;
    ossimString   theProductionDate;
+   ossimString   theAcquisitionDate;
+   ossimString   theAcquisitionTime;
    ossimString   theSensorID;
    
 TYPE_DATA   
