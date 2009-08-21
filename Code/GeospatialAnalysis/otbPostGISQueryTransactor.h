@@ -15,19 +15,19 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPostGISFromStringTransactor_h
-#define __otbPostGISFromStringTransactor_h
+#ifndef __otbPostGISQueryTransactor_h
+#define __otbPostGISQueryTransactor_h
 
-#include <pqxx/pqxx>
+//#include <pqxx/pqxx>
 #include <string>
 
-
+#include "otbPostGISFromStringTransactor.h"
 
 namespace otb
 {
 
 
-/** \class PostGISFromStringTransactor
+/** \class PostGISQueryTransactor
  * \brief PQXX-based transactor for executing PostGIS queries. 
  *
  * 
@@ -39,37 +39,38 @@ namespace otb
  * \ingroup GISTransactors
  */
 
-class PostGISFromStringTransactor :
-     public pqxx::transactor<pqxx::nontransaction>
+class PostGISQueryTransactor :
+     public otb::PostGISFromStringTransactor
 {
   
 public:
+  
+  typedef PostGISFromStringTransactor Superclass;
+  //typedef pqxx::transactor<pqxx::nontransaction> Superclass;
+  //typedef pqxx::result ResultType;
+  PostGISQueryTransactor();
 
-  typedef pqxx::result ResultType;
+  PostGISQueryTransactor(const PostGISQueryTransactor& pgt);
 
-  typedef pqxx::transactor<pqxx::nontransaction> Superclass;
-
-  PostGISFromStringTransactor();
-
-  PostGISFromStringTransactor(const PostGISFromStringTransactor& pgt);
-
-  PostGISFromStringTransactor& operator=(const PostGISFromStringTransactor& pgt) throw();
+  PostGISQueryTransactor& operator=(const PostGISQueryTransactor& pgt) throw();
   
   void operator()(pqxx::nontransaction &T);
   
-  void on_commit();
+  void SetRemoveExistingView(bool val);
 
-  std::string GetTransactionString() const;
-
-  void SetTransactionString(const std::string& trans);
-
-
-  ResultType GetResult() const;
+  bool GetRemoveExistingView() const;
+  
+  void SetViewName(const std::string& aName);
+  
+  std::string GetViewName() const;
+  
+  //void CreateView(pqxx::nontransaction &T);
+  
+  
     
 protected:
-  
-  ResultType m_Result;
-  std::string m_TransactionString;
+  std::string m_ViewName;
+  bool m_RemoveExistingView;
 };
 
 } // end namespace otb

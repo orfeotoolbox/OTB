@@ -77,9 +77,6 @@ public:
 
   ResultType GetResult() const;
   
-  
-  
-  
   void CreateGISTIndex (pqxx::nontransaction &T);
     
 protected:
