@@ -37,6 +37,8 @@ ossimQuickbirdMetaData::ossimQuickbirdMetaData()
   theTLCDate("Unknown"),
   theSunAzimuth(0.0),
   theSunElevation(0.0),
+  theSatAzimuth(0.0),
+  theSatElevation(0.0),
   theTDILevel(0),
   theAbsCalFactors()
 {
@@ -84,6 +86,8 @@ void ossimQuickbirdMetaData::clearFields()
   theTLCDate = "Unknown",
   theSunAzimuth = 0.0;
   theSunElevation = 0.0;
+  theSatAzimuth = 0.0;
+  theSatElevation = 0.0;
   theTDILevel = 0;
   theAbsCalFactors.clear();
 }
@@ -100,6 +104,8 @@ std::ostream& ossimQuickbirdMetaData::print(std::ostream& out) const
       << "\n  TLC date:   " << theTLCDate
       << "\n  Sun Azimuth:    " << theSunAzimuth
       << "\n  Sun Elevation:   " << theSunElevation
+      << "\n  Sat Azimuth:    " << theSatAzimuth
+      << "\n  Sat Elevation:   " << theSatElevation
       << "\n  TDI Level: " << theTDILevel
       << "\n  abs Calibration Factors:   " 
       << std::endl;
@@ -158,6 +164,16 @@ bool ossimQuickbirdMetaData::saveState(ossimKeywordlist& kwl,
           theSunElevation,
           true);
 
+  kwl.add(prefix,
+          "sat_azimuth_angle",
+          theSatAzimuth,
+          true);
+
+  kwl.add(prefix,
+          "sat_elevation_angle",
+          theSatElevation,
+          true);
+          
   kwl.add(prefix,
           "TDI_level",
           theTDILevel,
@@ -263,6 +279,20 @@ bool ossimQuickbirdMetaData::loadState(const ossimKeywordlist& kwl,
       theSunElevation = s.toFloat64();
     }
 
+  lookup = kwl.find(prefix, "sat_azimuth_angle");
+  if (lookup)
+    {
+      s = lookup;
+      theSatAzimuth = s.toFloat64();
+    }
+
+  lookup = kwl.find(prefix, "sat_elevation_angle");
+  if (lookup)
+    {
+      s = lookup;
+      theSatElevation = s.toFloat64();
+    }
+    
   if(theBandId=="Multi")
   {
     theAbsCalFactors = std::vector<double>(4, 1.);
@@ -568,7 +598,105 @@ bool ossimQuickbirdMetaData::parseMetaData(const ossimFilename& data_file)
 	}
     }
 
-  //---
+   //***
+  // Sun Azimuth:
+  //***
+  if(getEndOfLine( strptr, ossimString("\n\tsunAz ="), "%9c %s", temp))
+    theSunAzimuth = ossimString(temp).before(";").toFloat64();
+  else
+    {
+      if(getEndOfLine( strptr, ossimString("\n\tmeanSunAz ="), "%13c %s", temp))
+	theSunAzimuth = ossimString(temp).before(";").toFloat64();
+      else
+	{
+	  if(traceDebug())
+	    {
+	      ossimNotify(ossimNotifyLevel_FATAL)
+		<< "FATAL ossimQuickbirdRpcModel::parseMetaData(data_file): "
+		<< "\n\tAborting construction. Error encountered parsing "
+		<< "presumed meta-data file." << std::endl;
+
+	      delete [] filebuf;
+	      return false;
+	    }
+	}
+    }
+
+  //***
+  // Sun Elevation:
+  //***
+  if(getEndOfLine( filebuf, ossimString("\n\tsunEl ="), "%9c %s", temp))
+    theSunElevation = ossimString(temp).before(";").toFloat64();
+  else
+    {
+      if(getEndOfLine( filebuf, ossimString("\n\tmeanSunEl ="), "%13c %s", temp))
+	theSunElevation = ossimString(temp).before(";").toFloat64();
+      else
+	{
+	  if(traceDebug())
+	    {
+	      ossimNotify(ossimNotifyLevel_FATAL)
+		<< "FATAL ossimQuickbirdRpcModel::parseMetaData(data_file): "
+		<< "\n\tAborting construction. Error encountered parsing "
+		<< "presumed meta-data file." << std::endl;
+
+	      delete [] filebuf;
+	      return false;
+	    }
+	}
+    }
+
+
+  //***
+  // Sat Azimuth:
+  //***
+  if(getEndOfLine( strptr, ossimString("\n\tsatAz ="), "%9c %s", temp))
+    theSatAzimuth = ossimString(temp).before(";").toFloat64();
+  else
+    {
+      if(getEndOfLine( strptr, ossimString("\n\tmeanSatAz ="), "%13c %s", temp))
+	    theSatAzimuth = ossimString(temp).before(";").toFloat64();
+      else
+	{
+	  if(traceDebug())
+	    {
+	      ossimNotify(ossimNotifyLevel_FATAL)
+		<< "FATAL ossimQuickbirdRpcModel::parseMetaData(data_file): "
+		<< "\n\tAborting construction. Error encountered parsing "
+		<< "presumed meta-data file." << std::endl;
+
+	      delete [] filebuf;
+	      return false;
+	    }
+	}
+    }
+
+  //***
+  // Sat Elevation:
+  //***
+  if(getEndOfLine( filebuf, ossimString("\n\tsatEl ="), "%9c %s", temp))
+    theSatElevation = ossimString(temp).before(";").toFloat64();
+  else
+    {
+      if(getEndOfLine( filebuf, ossimString("\n\tmeanSatEl ="), "%13c %s", temp))
+	theSatElevation = ossimString(temp).before(";").toFloat64();
+      else
+	{
+	  if(traceDebug())
+	    {
+	      ossimNotify(ossimNotifyLevel_FATAL)
+		<< "FATAL ossimQuickbirdRpcModel::parseMetaData(data_file): "
+		<< "\n\tAborting construction. Error encountered parsing "
+		<< "presumed meta-data file." << std::endl;
+
+	      delete [] filebuf;
+	      return false;
+	    }
+	}
+    }
+
+
+ //---
   // TDILevel:
   //---
   if(getEndOfLine( strptr, ossimString("\n\tTDILevel = "), "%13c %s", temp))

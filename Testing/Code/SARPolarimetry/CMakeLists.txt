@@ -123,6 +123,7 @@ ADD_TEST(sarTvMultiChannelsPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
 
 # A enrichir
 SET(SARPOLARIMETRY_SRCS1
+otbSARPolarimetryTests1.cxx
 otbPolarimetricSynthesisFilterNew.cxx
 otbPolarimetricSynthesisFilter.cxx
 otbHHnHVnVVPolarimetricSynthesisFilter.cxx
@@ -135,8 +136,6 @@ otbVectorMultiChannelsPolarimetricSynthesisFilter.cxx
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
-ADD_EXECUTABLE(otbSARPolarimetryTests1 otbSARPolarimetryTests1.cxx ${SARPOLARIMETRY_SRCS1})
-TARGET_LINK_LIBRARIES(otbSARPolarimetryTests1 OTBSARPolarimetry OTBIO OTBTesting)
-
+OTB_ADD_EXECUTABLE(otbSARPolarimetryTests1 "${SARPOLARIMETRY_SRCS1}" "OTBSARPolarimetry;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

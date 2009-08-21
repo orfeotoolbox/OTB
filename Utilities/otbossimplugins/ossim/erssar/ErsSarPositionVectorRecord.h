@@ -14,7 +14,7 @@
 
 #include <iostream>
 #include <cstdlib>
-#include "ers/ErsSar/ErsSarRecord.h"
+#include "erssar/ErsSarRecord.h"
 
 namespace ossimplugins
 {

@@ -99,38 +99,38 @@ public:
   typedef typename ExtractFilterType::Pointer                         ExtractFilterPointerType;
 
   /** Set/Get the image */
-  void SetImage(ImageType * img)
+  virtual void SetImage(ImageType * img)
   {
-    if(m_Image != img)
+    if(this->m_Image != img)
       {
-      m_Image = img;
-      m_ExtractFilter->SetInput(m_Image);
-      m_ScaledExtractFilter->SetInput(m_Image);
+      this-> m_Image = img;
+      this->m_ExtractFilter->SetInput(m_Image);
+      this->m_ScaledExtractFilter->SetInput(m_Image);
       }
   }
   itkGetObjectMacro(Image,ImageType);
 
   /** Set/Get the quicklook */
-  void SetQuicklook(ImageType * ql)
+  virtual void SetQuicklook(ImageType * ql)
   {
-    if(m_Quicklook != ql)
+    if(this->m_Quicklook != ql)
       {
-      m_Quicklook = ql;
-      m_QuicklookRenderingFilter->SetInput(m_Quicklook);
+      this->m_Quicklook = ql;
+      this->m_QuicklookRenderingFilter->SetInput(m_Quicklook);
       }
 
   }
   itkGetObjectMacro(Quicklook,ImageType);
 
   /** Get the histogram list */
-  HistogramListPointerType GetHistogramList()
+  virtual HistogramListPointerType GetHistogramList()
   {
     //FIXME Update condition?
     return m_RenderingFunction->GetHistogramList();
   }
 
   /** Set/Get the rendering function */
-  void SetRenderingFunction(RenderingFunctionType * function)
+  virtual void SetRenderingFunction(RenderingFunctionType * function)
   {
     m_RenderingFunction = function;
     m_RenderingFunction->SetListSample(this->GetListSample());

@@ -116,8 +116,8 @@ ConvolutionImageFilter< TInputImage, TOutputImage, TBoundaryCondition>
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
-  InputRealType sum;
-  InputRealType norm;
+  InputRealType sum = itk::NumericTraits<InputRealType>::Zero;
+  InputRealType norm = itk::NumericTraits<InputRealType>::Zero;
 
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.

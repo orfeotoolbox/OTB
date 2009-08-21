@@ -41,6 +41,8 @@ ossimSpotDimapSupportData::ossimSpotDimapSupportData ()
    theSunAzimuth(0.0),
    theSunElevation(0.0),
    theIncidenceAngle(0.0),
+   theViewingAngle(0.0),
+   theSceneOrientation(0.0),
    theImageSize(0.0, 0.0),
    theRefGroundPoint(0.0, 0.0, 0.0),
    theRefImagePoint(0.0, 0.0),
@@ -60,6 +62,7 @@ ossimSpotDimapSupportData::ossimSpotDimapSupportData ()
    theSwirDataFlag(false),
    theNumBands(0),
    theAcquisitionDate(),
+   theStepCount(0),
    theUlCorner(),
    theUrCorner(),
    theLrCorner(),
@@ -74,8 +77,10 @@ ossimSpotDimapSupportData::ossimSpotDimapSupportData(const ossimSpotDimapSupport
     theImageID(rhs.theImageID),
     theMetadataFile (rhs.theMetadataFile),
     theSunAzimuth(rhs.theSunAzimuth),
-    theSunElevation(rhs.theSunElevation),
+    theSunElevation(rhs.theSunElevation),  
     theIncidenceAngle(rhs.theIncidenceAngle),
+    theViewingAngle(rhs.theViewingAngle),
+    theSceneOrientation(rhs.theSceneOrientation),
     theImageSize(rhs.theImageSize),
     theRefGroundPoint(rhs.theRefGroundPoint),
     theRefImagePoint(rhs.theRefImagePoint),
@@ -95,6 +100,7 @@ ossimSpotDimapSupportData::ossimSpotDimapSupportData(const ossimSpotDimapSupport
     theSwirDataFlag (rhs.theSwirDataFlag),
     theNumBands(rhs.theNumBands),
     theAcquisitionDate(rhs.theAcquisitionDate),
+    theStepCount(rhs.theStepCount),
     theUlCorner(rhs.theUlCorner),
     theUrCorner(rhs.theUrCorner),
     theLrCorner(rhs.theLrCorner),
@@ -113,6 +119,8 @@ ossimSpotDimapSupportData::ossimSpotDimapSupportData (const ossimFilename& dimap
    theSunAzimuth(0.0),
    theSunElevation(0.0),
    theIncidenceAngle(0.0),
+   theViewingAngle(0.0),
+   theSceneOrientation(0.0),
    theImageSize(0.0, 0.0),
    theRefGroundPoint(0.0, 0.0, 0.0),
    theRefImagePoint(0.0, 0.0),
@@ -132,6 +140,7 @@ ossimSpotDimapSupportData::ossimSpotDimapSupportData (const ossimFilename& dimap
    theSwirDataFlag (processSwir),
    theNumBands(0),
    theAcquisitionDate(),
+   theStepCount(0),
    theUlCorner(),
    theUrCorner(),
    theLrCorner(),
@@ -173,8 +182,12 @@ void ossimSpotDimapSupportData::clearFields()
    theMetadataVersion = OSSIM_SPOT_METADATA_VERSION_UNKNOWN;
    theImageID = "";
    theMetadataFile = "";
+   theProductionDate = "";
    theSunAzimuth = 0.0;
    theSunElevation = 0.0;
+   theIncidenceAngle = 0.0;
+   theViewingAngle = 0.0;
+   theSceneOrientation = 0.0;
    theImageSize.makeNan();
    theRefGroundPoint.makeNan();
    theRefImagePoint.makeNan();
@@ -194,7 +207,7 @@ void ossimSpotDimapSupportData::clearFields()
    theSwirDataFlag = false;
    theNumBands = 0;
    theAcquisitionDate = "";
-   theIncidenceAngle = 0;
+   theStepCount = 0;
 
    //---
    // Corner points:
@@ -837,18 +850,22 @@ void ossimSpotDimapSupportData::printInfo(ostream& os) const
 
    os << "\n----------------- Info on SPOT5 Image -------------------"
       << "\n  "
-      << "\n  Job Number (ID):    " << theImageID
-      << "\n  Acquisition Date:   " << theAcquisitionDate
-      << "\n  Number of Bands:    " << theNumBands
-      << "\n  Geo Center Point:   " << theRefGroundPoint
-      << "\n  Detector count:     " << theDetectorCount
-      << "\n  Image Size:         " << theImageSize
-      << "\n  Incidence Angle:    " << theIncidenceAngle
-      << "\n  Corrected Attitude: " << corr_att
-      << "\n  Sun Azimuth:        " << theSunAzimuth
-      << "\n  Sun Elevation:      " << theSunElevation
-      << "\n  Sub image offset    " << theSubImageOffset
-      << "\n  PixelLookAngleX size:" << thePixelLookAngleX.size()
+      << "\n  Job Number (ID):      " << theImageID
+      << "\n  Acquisition Date:     " << theAcquisitionDate
+      << "\n  Production Date:      " << theProductionDate
+      << "\n  Number of Bands:      " << theNumBands
+      << "\n  Geo Center Point:     " << theRefGroundPoint
+      << "\n  Detector count:       " << theDetectorCount
+      << "\n  Image Size:           " << theImageSize
+      << "\n  Incidence Angle:      " << theIncidenceAngle
+      << "\n  Viewing Angle:        " << theViewingAngle      
+      << "\n  Scene Orientation:    " << theSceneOrientation 
+      << "\n  Corrected Attitude:   " << corr_att
+      << "\n  Sun Azimuth:          " << theSunAzimuth
+      << "\n  Sun Elevation:        " << theSunElevation
+      << "\n  Sub image offset:     " << theSubImageOffset
+      << "\n  Step Count:           " << theStepCount
+      << "\n  PixelLookAngleX size: " << thePixelLookAngleX.size()
       << "\n  thePosEcfSamples size:" << thePosEcfSamples.size()
       << "\n  Corner Points:"
       << "\n     UL: " << theUlCorner
@@ -881,6 +898,11 @@ ossimString   ossimSpotDimapSupportData::getMetadataVersionString() const
 ossimString ossimSpotDimapSupportData::getAcquisitionDate() const
 {
    return theAcquisitionDate;
+}
+
+ossimString ossimSpotDimapSupportData::getProductionDate() const
+{
+   return theProductionDate;
 }
 
 ossimString ossimSpotDimapSupportData::getImageID() const
@@ -928,9 +950,24 @@ ossim_uint32 ossimSpotDimapSupportData::getNumberOfBands() const
    return theNumBands;
 }
 
+ossim_uint16 ossimSpotDimapSupportData::getStepCount() const
+{
+   return theStepCount;
+}
+
 void ossimSpotDimapSupportData::getIncidenceAngle(ossim_float64& ia) const
 {
    ia = theIncidenceAngle;
+}
+
+void ossimSpotDimapSupportData::getViewingAngle(ossim_float64& va) const
+{
+   va = theViewingAngle;
+}
+
+void ossimSpotDimapSupportData::getSceneOrientation(ossim_float64& so) const
+{
+   so = theSceneOrientation;
 }
 
 void ossimSpotDimapSupportData::getRefGroundPoint(ossimGpt& gp) const
@@ -1203,10 +1240,30 @@ bool ossimSpotDimapSupportData::saveState(ossimKeywordlist& kwl,
            true);
 
    kwl.add(prefix,
+           "production_date",
+           theProductionDate,
+           true);
+
+   kwl.add(prefix,
            "incident_angle",
            theIncidenceAngle,
            true);
 
+   kwl.add(prefix,
+           "viewing_angle",
+           theViewingAngle,
+           true);
+
+   kwl.add(prefix,
+           "scene_orientation",
+           theSceneOrientation,
+           true);
+                      
+   kwl.add(prefix,
+           "step_count",
+           theStepCount,
+           true);
+           
    kwl.add(prefix,
            "ul_ground_point",
            ossimString::toString(theUlCorner.latd()) + " " +
@@ -1422,8 +1479,13 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    theSwirDataFlag    = ossimString(kwl.find(prefix, "swir_data_flag")).toBool();
    theNumBands        = ossimString(kwl.find(prefix, ossimKeywordNames::NUMBER_BANDS_KW)).toUInt32();
    theAcquisitionDate = kwl.find(prefix, ossimKeywordNames::IMAGE_DATE_KW);
+   theProductionDate  = kwl.find(prefix, "production_date");
+   theStepCount       = ossimString(kwl.find(prefix, "step_count")).toInt32();
+   
    theIncidenceAngle  = ossimString(kwl.find(prefix, "incident_angle")).toDouble();
-
+   theViewingAngle    = ossimString(kwl.find(prefix, "viewing_angle")).toDouble();
+   theSceneOrientation= ossimString(kwl.find(prefix, "scene_orientation")).toDouble();
+   
    theUlCorner =createGround( kwl.find(prefix, "ul_ground_point"));
    theUrCorner =createGround( kwl.find(prefix, "ur_ground_point"));
    theLrCorner =createGround( kwl.find(prefix, "lr_ground_point"));
@@ -1631,6 +1693,27 @@ bool ossimSpotDimapSupportData::parsePart1(
    }
    theAcquisitionDate = xml_nodes[0]->getText();
    convertTimeStamp(theAcquisitionDate, theRefLineTime);
+
+   //---
+   // Fetch the ProductionDate:
+   //---
+   xml_nodes.clear();
+   xpath = "/Dimap_Document/Production/DATASET_PRODUCTION_DATE";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " DEBUG:"
+            << "\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+   theProductionDate = xml_nodes[0]->getText();
+   
 
    return true;
 }
@@ -2425,6 +2508,44 @@ bool ossimSpotDimapSupportData::initSceneSource(
    }
    theIncidenceAngle = xml_nodes[0]->getText().toDouble();
 
+   //---
+   // Fetch viewing angle:
+   //---
+   xml_nodes.clear();
+   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/VIEWING_ANGLE";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG:\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+   theViewingAngle = xml_nodes[0]->getText().toDouble();
+
+   //---
+   // Fetch Step Count:
+   //---
+   xml_nodes.clear();
+   xpath = "/Dimap_Document/Data_Strip/Sensor_Configuration/Mirror_Position/STEP_COUNT";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG:\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+   theStepCount = xml_nodes[0]->getText().toInt();
+   
    return true;
 }
 
@@ -2530,6 +2651,26 @@ bool ossimSpotDimapSupportData::initFramePoints(
       return false;
    }
    theRefGroundPoint.lat = xml_nodes[0]->getText().toDouble();
+
+  
+   //---
+   // Fetch scene orientation:
+   //---
+   xml_nodes.clear();
+   xpath = "/Dimap_Document/Dataset_Frame/SCENE_ORIENTATION";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG:\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+   theSceneOrientation = xml_nodes[0]->getText().toDouble();  
 
    return true;
 }

@@ -62,6 +62,7 @@ ADD_TEST(fuTvSimpleRcsPanSharpeningFusionImageFilter ${FUSION_TESTS1}
 
 # A enrichir
 SET(Fusion_SRCS1
+otbFusionTests1.cxx
 otbFusionImageBaseNew.cxx
 otbBayesianFusionFilterNew.cxx
 otbBayesianFusionFilter.cxx
@@ -71,9 +72,7 @@ otbSimpleRcsPanSharpeningFusionImageFilter.cxx
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
-ADD_EXECUTABLE(otbFusionTests1 otbFusionTests1.cxx ${Fusion_SRCS1})
-TARGET_LINK_LIBRARIES(otbFusionTests1  OTBFusion OTBIO OTBTesting)
-
+OTB_ADD_EXECUTABLE(otbFusionTests1 "${Fusion_SRCS1}" "OTBFusion;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 

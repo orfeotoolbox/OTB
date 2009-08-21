@@ -19,7 +19,7 @@
 #define __otbImageLayerGenerator_txx
 
 #include "otbImageLayerGenerator.h"
-#include "otbImageMetadataInterface.h"
+
 
 #include "otbRenderingFunction.h"
 //FIXME just for the enum declaration, might need to move that

@@ -27,9 +27,7 @@
 #include "otbMacro.h"
 
 #include "otbQuickBirdImageMetadataInterface.h"
-
 #include "itkMetaDataObject.h"
-
 
 
 namespace otb
@@ -43,7 +41,7 @@ QuickBirdImageMetadataInterface
 
 
 bool
-QuickBirdImageMetadataInterface::IsQuickBird( const MetaDataDictionaryType & dict ) const
+QuickBirdImageMetadataInterface::CanRead( const MetaDataDictionaryType & dict ) const
 {
   std::string sensorID = GetSensorID(dict);
   if (sensorID.find("QB02") != std::string::npos)
@@ -56,7 +54,7 @@ QuickBirdImageMetadataInterface::IsQuickBird( const MetaDataDictionaryType & dic
 QuickBirdImageMetadataInterface::VariableLengthVectorType
 QuickBirdImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsQuickBird( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
@@ -99,7 +97,7 @@ QuickBirdImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryTyp
 int
 QuickBirdImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsQuickBird( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
@@ -134,7 +132,7 @@ QuickBirdImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) c
 int
 QuickBirdImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsQuickBird( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
@@ -168,7 +166,7 @@ QuickBirdImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict )
 int
 QuickBirdImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsQuickBird( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
@@ -199,12 +197,182 @@ QuickBirdImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) 
   return year.toInt();
 }
 
+int
+QuickBirdImageMetadataInterface::GetHour( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  std::string key;
+  ossimString separatorList;
+  key = "support_data.tlc_date";
+  separatorList = "-T:";
+
+  ossimString keywordString = kwl.find(key.c_str());
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+
+  if(  keywordStrings.size() <= 2 )
+    itkExceptionMacro("Invalid Hour");
+
+  ossimString hour = keywordStrings[3];
+
+  return hour.toInt();
+}
+
+int
+QuickBirdImageMetadataInterface::GetMinute( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+ 
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  std::string key;
+  ossimString separatorList;
+  key = "support_data.tlc_date";
+  separatorList = "-T:";
+  ossimString keywordString = kwl.find(key.c_str());
+ 
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+
+  if(  keywordStrings.size() <= 2 )
+    itkExceptionMacro("Invalid Minute");
+ 
+  ossimString minute = keywordStrings[4];
+
+  return minute.toInt();
+}
+
+int
+QuickBirdImageMetadataInterface::GetProductionDay( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  std::string key;
+  ossimString separatorList;
+  key = "support_data.generation_date";
+  separatorList = "-T";
+
+  ossimString keywordString = kwl.find(key.c_str());
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+
+  if(keywordStrings.size() <= 2)
+    itkExceptionMacro(<<"Invalid Day");
+
+ ossimString day = keywordStrings[2];
+
+  return day.toInt();
+}
+
+
+int
+QuickBirdImageMetadataInterface::GetProductionMonth( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  std::string key;
+  ossimString separatorList;
+  key = "support_data.generation_date";
+  separatorList = "-T";
+
+  ossimString keywordString = kwl.find(key.c_str());
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+
+  if(keywordStrings.size() <= 2)
+    itkExceptionMacro(<<"Invalid Month");
+
+  ossimString month = keywordStrings[1];
+
+  return month.toInt();
+}
+
+int
+QuickBirdImageMetadataInterface::GetProductionYear( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  std::string key;
+  ossimString separatorList;
+  key = "support_data.generation_date";
+  separatorList = "-T";
+
+  ossimString keywordString = kwl.find(key.c_str());
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+
+  if(  keywordStrings.size() <= 2 )
+    itkExceptionMacro("Invalid Year");
+
+  ossimString year = keywordStrings[0];
+
+  return year.toInt();
+}
 
 QuickBirdImageMetadataInterface::VariableLengthVectorType
 QuickBirdImageMetadataInterface
 ::GetPhysicalBias( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsQuickBird( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
@@ -244,34 +412,34 @@ QuickBirdImageMetadataInterface::VariableLengthVectorType
 QuickBirdImageMetadataInterface
 ::GetPhysicalGain( const MetaDataDictionaryType & dict ) const
 {
-  if( !this->IsQuickBird( dict ) )
+  if( !this->CanRead( dict ) )
   {
   	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
  
-  ImageKeywordlistType ImageKeywordlist;
+   ImageKeywordlistType ImageKeywordlist;
 
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
-  }
-  ossimKeywordlist kwl;
-  ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key= "support_data.generation_date";
-  ossimString keywordString = kwl.find(key.c_str());
-  std::string output(keywordString.chars());
+   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+   {
+     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
+   }
+   ossimKeywordlist kwl;
+   ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
+//   std::string key= "support_data.generation_date";
+//   ossimString keywordString = kwl.find(key.c_str());
+//   std::string output(keywordString.chars());
 
-  //The Ikonos production date has the format MM/DD/YY
-  ossimString separatorList = "-";
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
-  if (keywordStrings.size() < 3)
-  {
-    itkGenericExceptionMacro(<<"Could not retrieve the production date for Ikonos");
-  }
+//   //The Ikonos production date has the format MM/DD/YY
+//   ossimString separatorList = "-";
+//   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+//   if (keywordStrings.size() < 3)
+//   {
+//     itkGenericExceptionMacro(<<"Could not retrieve the production date for Ikonos");
+//   }
 
-  int productionYear = keywordStrings[0].toInt();
-  int productionMonth = keywordStrings[1].toInt();
-  int productionDay = keywordStrings[2].toInt();
+  int productionYear = this->GetProductionYear(dict);//keywordStrings[0].toInt();
+  int productionMonth = this->GetProductionMonth(dict);//keywordStrings[1].toInt();
+  int productionDay = this->GetProductionDay(dict);//keywordStrings[2].toInt();
   bool isPost20030606 = false;
   if(productionYear > 2003)
     isPost20030606 = true;
@@ -409,6 +577,52 @@ QuickBirdImageMetadataInterface
   }
 
   return outputValuesVariableLengthVector;
+}
+
+double
+QuickBirdImageMetadataInterface::GetSatElevation( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "support_data.sat_elevation_angle";
+  ossimString keywordString = kwl.find(key.c_str());
+
+  return keywordString.toDouble();
+}
+
+double
+QuickBirdImageMetadataInterface::GetSatAzimuth( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "support_data.sat_azimuth_angle";
+  ossimString keywordString = kwl.find(key.c_str());
+
+  return keywordString.toDouble();
 }
 
 

@@ -154,17 +154,47 @@ public:
   virtual VariableLengthVectorType GetSolarIrradiance( const MetaDataDictionaryType & dict ) const =0;
   otbMetadataGetMacro(SolarIrradiance, VariableLengthVectorType);
 
-   /** Get the imaging day from the ossim metadata */
+  /** Get the imaging acquisition day from the ossim metadata */
   virtual int GetDay( const MetaDataDictionaryType & dict ) const =0;
   otbMetadataGetMacro(Day, int);
 
-  /** Get the imaging month from the ossim metadata */
+  /** Get the imaging acquisition month from the ossim metadata */
   virtual int GetMonth( const MetaDataDictionaryType & dict ) const =0;
   otbMetadataGetMacro(Month, int);
 
-  /** Get the imaging month from the ossim metadata */
+  /** Get the imaging acquisition year from the ossim metadata */
   virtual int GetYear( const MetaDataDictionaryType & dict ) const =0;
   otbMetadataGetMacro(Year, int);
+
+  /** Get the imaging acquisition hour from the ossim metadata */
+  virtual int GetHour( const MetaDataDictionaryType & dict ) const =0;
+  otbMetadataGetMacro(Hour, int);
+
+  /** Get the imaging acquisition minute from the ossim metadata */
+  virtual int GetMinute( const MetaDataDictionaryType & dict ) const =0;
+  otbMetadataGetMacro(Minute, int);
+
+    /** Get the imaging production day from the ossim metadata */
+  virtual int GetProductionDay( const MetaDataDictionaryType & dict ) const =0;
+  otbMetadataGetMacro(ProductionDay, int);
+
+  /** Get the imaging production month from the ossim metadata */
+  virtual int GetProductionMonth( const MetaDataDictionaryType & dict ) const =0;
+  otbMetadataGetMacro(ProductionMonth, int);
+
+  /** Get the imaging production year from the ossim metadata */
+  virtual int GetProductionYear( const MetaDataDictionaryType & dict ) const =0;
+  otbMetadataGetMacro(ProductionYear, int);
+
+  /** Get the sat elevation from the ossim metadata */
+  virtual double GetSatElevation( const MetaDataDictionaryType & dict ) const =0;
+  otbMetadataGetMacro(SatElevation, double);
+
+  /** Get the sat azimuth from the ossim metadata */
+  virtual double GetSatAzimuth( const MetaDataDictionaryType & dict ) const =0;
+  otbMetadataGetMacro(SatAzimuth, double);
+
+  virtual bool CanRead( const MetaDataDictionaryType & dict ) const =0;
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const;
 

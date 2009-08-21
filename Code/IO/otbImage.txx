@@ -30,7 +30,7 @@ namespace otb
 template <class TPixel, unsigned int VImageDimension>
 Image<TPixel,VImageDimension>::Image()
 {
-  m_ImageMetadataInterface = ImageMetadataInterface::New();
+  m_ImageMetadataInterface = DefaultImageMetadataInterface::New();
 }
 
 template <class TPixel, unsigned int VImageDimension>
@@ -100,43 +100,50 @@ double Image<TPixel, VImageDimension>::GetGCPZ( unsigned int GCPnum ) const
 }
 
 template <class TPixel, unsigned int VImageDimension>
-ImageMetadataInterface::VectorType Image<TPixel, VImageDimension>::GetGeoTransform( void ) const
+typename Image<TPixel, VImageDimension>::VectorType
+Image<TPixel, VImageDimension>::GetGeoTransform( void ) const
 {
   return ( m_ImageMetadataInterface->GetGeoTransform( this->GetMetaDataDictionary() ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-ImageMetadataInterface::VectorType Image<TPixel, VImageDimension>::GetUpperLeftCorner( void ) const
+typename Image<TPixel, VImageDimension>::VectorType
+Image<TPixel, VImageDimension>::GetUpperLeftCorner( void ) const
 {
   return ( m_ImageMetadataInterface->GetUpperLeftCorner( this->GetMetaDataDictionary() ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-ImageMetadataInterface::VectorType Image<TPixel, VImageDimension>::GetUpperRightCorner( void ) const
+typename Image<TPixel, VImageDimension>::VectorType
+Image<TPixel, VImageDimension>::GetUpperRightCorner( void ) const
 {
   return ( m_ImageMetadataInterface->GetUpperRightCorner( this->GetMetaDataDictionary() ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-ImageMetadataInterface::VectorType Image<TPixel, VImageDimension>::GetLowerLeftCorner( void ) const
+typename Image<TPixel, VImageDimension>::VectorType
+Image<TPixel, VImageDimension>::GetLowerLeftCorner( void ) const
 {
   return ( m_ImageMetadataInterface->GetLowerLeftCorner( this->GetMetaDataDictionary() ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-ImageMetadataInterface::VectorType Image<TPixel, VImageDimension>::GetLowerRightCorner( void ) const
+typename Image<TPixel, VImageDimension>::VectorType
+Image<TPixel, VImageDimension>::GetLowerRightCorner( void ) const
 {
   return ( m_ImageMetadataInterface->GetLowerRightCorner( this->GetMetaDataDictionary() ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-ImageMetadataInterface::ImageKeywordlistType Image<TPixel, VImageDimension>::GetImageKeywordlist( void )
+typename Image<TPixel, VImageDimension>::ImageKeywordlistType
+Image<TPixel, VImageDimension>::GetImageKeywordlist( void )
 {
   return ( m_ImageMetadataInterface->GetImageKeywordlist( this->GetMetaDataDictionary() ) );
 }
 
 template <class TPixel, unsigned int VImageDimension>
-const ImageMetadataInterface::ImageKeywordlistType Image<TPixel, VImageDimension>::GetImageKeywordlist( void ) const
+const typename Image<TPixel, VImageDimension>::ImageKeywordlistType
+Image<TPixel, VImageDimension>::GetImageKeywordlist( void ) const
 {
   return ( m_ImageMetadataInterface->GetImageKeywordlist( this->GetMetaDataDictionary() ) );
 }

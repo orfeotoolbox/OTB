@@ -140,7 +140,6 @@ void
 SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::BeforeThreadedGenerateData ()
 {
-  // Fill output image with zeros !
   OutputImagePointerType output = this->GetOutput();
   output->FillBuffer(0);
 }
@@ -174,9 +173,9 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
       while ( !inputIter.IsAtEnd() )
       {
-        outputIter.SetLocation( 
+        outputIter.SetOffset( 
           static_cast< typename SubsampledImageRegionIterator< OutputImageType >::OffsetType >
-                            ( inputIter.GetLocationOffset() ) );
+                            ( inputIter.GetOffset() ) );
         outputIter.Set( static_cast< OutputPixelType >( inputIter.Get() ) );
         ++inputIter;
       }
@@ -190,13 +189,13 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
       while ( !inputIter.IsAtEnd() )
       {
-        InputImageIndexType inputIndex = inputIter.GetLocationIndex();
+        InputImageIndexType inputIndex = inputIter.GetIndex();
         OutputImageIndexType outputIndex;
         for ( unsigned int i = 0; i < OutputImageDimension; i++ )
         {
           outputIndex[i] = inputIndex[i] * m_SubsampleFactor[i];
         }
-        outputIter.SetLocation( outputIndex );
+        outputIter.SetIndex( outputIndex );
         outputIter.Set( static_cast< OutputPixelType >( inputIter.Get() ) );
         ++inputIter;
       }

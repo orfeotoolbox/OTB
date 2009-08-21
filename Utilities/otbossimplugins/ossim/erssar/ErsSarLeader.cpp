@@ -9,14 +9,14 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include "ers/ErsSar/ErsSarLeader/ErsSarLeader.h"
-#include "ers/ErsSar/ErsSarLeader/ErsSarLeaderFactory.h"
-#include "ers/ErsSar/ErsSarRecordHeader.h"
+#include "erssar/ErsSarLeader.h"
+#include "erssar/ErsSarLeaderFactory.h"
+#include "erssar/ErsSarRecordHeader.h"
 
-#include "ers/ErsSar/ErsSarLeader/ErsSarFileDescriptor.h"
-#include "ers/ErsSar/ErsSarLeader/ErsSarDataSetSummary.h"
-#include "ers/ErsSar/ErsSarLeader/ErsSarMapProjectionData.h"
-#include "ers/ErsSar/ErsSarLeader/ErsSarFacilityData.h"
+#include "erssar/ErsSarFileDescriptor.h"
+#include "erssar/ErsSarDataSetSummary.h"
+#include "erssar/ErsSarMapProjectionData.h"
+#include "erssar/ErsSarFacilityData.h"
 
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -82,7 +82,7 @@ std::istream& operator>>(std::istream& is, ErsSarLeader& data)
       {
         char* buff = new char[header.get_length()-12];
         is.read(buff, header.get_length()-12);
-        delete buff;
+        delete [] buff;
       }
     }
   }
