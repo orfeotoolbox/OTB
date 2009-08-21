@@ -50,10 +50,10 @@ class SimplifyPathFunctor
 {
 public:
 
-  typedef typename TInput::ObjectType::VertexListType::ConstIterator VertexListConstIteratorType;
-  typedef typename TInput::ObjectType::VertexListType::ConstPointer VertexListConstPointerType;
-  typedef TOutput OutputPathPointerType;
-  typedef typename OutputPathPointerType::ObjectType OutputPathType;
+  typedef typename TInput::VertexListType::ConstIterator VertexListConstIteratorType;
+  typedef typename TInput::VertexListType::ConstPointer  VertexListConstPointerType;
+  typedef TOutput                                        OutputPathType;
+  typedef typename OutputPathType::Pointer               OutputPathPointerType;
 
   void SetTolerance(double Tolerance )
   {
@@ -70,7 +70,7 @@ public:
   };
   ~SimplifyPathFunctor() {};
 
-  inline OutputPathPointerType operator()(const TInput & input)
+  inline OutputPathPointerType operator()(const TInput * input)
   {
 
     OutputPathPointerType newPath = OutputPathType::New();
