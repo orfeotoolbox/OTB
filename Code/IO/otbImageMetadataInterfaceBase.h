@@ -166,6 +166,14 @@ public:
   virtual int GetYear( const MetaDataDictionaryType & dict ) const =0;
   otbMetadataGetMacro(Year, int);
 
+  /** Get the sat elevation from the ossim metadata */
+  virtual double GetSatElevation( const MetaDataDictionaryType & dict ) const =0;
+  otbMetadataGetMacro(SatElevation, double);
+
+  /** Get the sat azimuth from the ossim metadata */
+  virtual double GetSatAzimuth( const MetaDataDictionaryType & dict ) const =0;
+  otbMetadataGetMacro(SatAzimuth, double);
+
   virtual bool CanRead( const MetaDataDictionaryType & dict ) const =0;
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const;

@@ -318,4 +318,51 @@ IkonosImageMetadataInterface
   return outputValuesVariableLengthVector;
 }
 
+double
+IkonosImageMetadataInterface::GetSatElevation( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "support_data.nominal_collection_elevation_angle";
+  ossimString keywordString = kwl.find(key.c_str());
+
+  return keywordString.toDouble();
+}
+
+double
+IkonosImageMetadataInterface::GetSatAzimuth( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "support_data.nominal_collection_azimuth_angle";
+  ossimString keywordString = kwl.find(key.c_str());
+
+  return keywordString.toDouble();
+}
+
+
 } // end namespace otb

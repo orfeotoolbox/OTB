@@ -97,37 +97,11 @@ public:
   typedef typename Superclass::IndexValueType IndexValueType;
 
   /** Default constructor. Needed since we provide a cast constructor. */
-  SubsampledImageRegionConstIterator() : itk::ImageRegionConstIterator<TImage> ()
-  {
-    m_SubsampleFactor.Fill(1);
-    m_SubSampledEndOffset = this->m_EndOffset;
-
-    const IndexType& startIndex = this->m_Region.GetIndex();
-    const SizeType& size = this->m_Region.GetSize();
-
-    for ( unsigned int i = 0; i < ImageIteratorDimension; ++i )
-    {
-      m_LastUsableIndex[i] = startIndex[i] + static_cast<IndexValueType>( size[i]-1 );
-    }
-  }
+  SubsampledImageRegionConstIterator() ;
 
   /** Constructor establishes an iterator to walk a particular image and a
    * particular region of that image. */
-  SubsampledImageRegionConstIterator ( const ImageType *ptr,
-                                        const RegionType &region)
-    : itk::ImageRegionConstIterator< TImage > ( ptr, region )
-  {
-    m_SubsampleFactor.Fill( 1 );
-    m_SubSampledEndOffset = this->m_EndOffset;
-
-    const IndexType& startIndex = this->m_Region.GetIndex();
-    const SizeType& size = this->m_Region.GetSize();
-
-    for ( unsigned int i = 0; i < ImageIteratorDimension; ++i )
-    {
-      m_LastUsableIndex[i] = startIndex[i] + static_cast<IndexValueType>( size[i]-1 );
-    }
-  }
+  SubsampledImageRegionConstIterator ( const ImageType *ptr, const RegionType &region);
 
   /** Constructor that can be used to cast from an ImageIterator to an
    * SubsampledImageRegionConstIterator. Many routines return an ImageIterator
@@ -135,20 +109,7 @@ public:
    * Rather than provide overloaded APIs that return different types of Iterators, itk
    * returns ImageIterators and uses constructors to cast from an
    * ImageIterator to a SubsampledImageRegionConstIterator. */
-  SubsampledImageRegionConstIterator( const itk::ImageIterator<TImage> &it )
-    : itk::ImageRegionConstIterator< TImage >( it )
-  {
-    m_SubsampleFactor.Fill( 1 );
-    m_SubSampledEndOffset = this->m_EndOffset;
-
-    const IndexType& startIndex = this->m_Region.GetIndex();
-    const SizeType& size = this->m_Region.GetSize();
-
-    for ( unsigned int i = 0; i < ImageIteratorDimension; ++i )
-    {
-      m_LastUsableIndex[i] = startIndex[i] + static_cast<IndexValueType>( size[i]-1 );
-    }
-  }
+  SubsampledImageRegionConstIterator( const itk::ImageIterator<TImage> &it );
 
   /** Constructor that can be used to cast from an ImageConstIterator to an
    * SubsampledImageRegionConstIterator. Many routines return an ImageIterator 
@@ -156,47 +117,13 @@ public:
    * Rather than provide overloaded APIs that return different types of Iterators, itk
    * returns ImageIterators and uses constructors to cast from an
    * ImageIterator to a SubsampledImageRegionConstIterator. */
-  SubsampledImageRegionConstIterator( const itk::ImageConstIterator<TImage> &it)
-    : itk::ImageRegionConstIterator< TImage >( it )
-  {
-    m_SubsampleFactor.Fill( 1 );
-
-    const IndexType& startIndex = this->m_Region.GetIndex();
-    const SizeType& size = this->m_Region.GetSize();
-
-    for ( unsigned int i = 0; i < ImageIteratorDimension; ++i )
-    {
-      m_LastUsableIndex[i] = startIndex[i] + static_cast<IndexValueType>( size[i]-1 );
-    }
-
-    m_SubSampledEndOffset = this->m_Image->ComputeOffset( m_LastUsableIndex ) + 1;
-  }
+  SubsampledImageRegionConstIterator( const itk::ImageConstIterator<TImage> &it );
 
   /** Set an isotropic subsampling factor */
-  void SetSubsampleFactor ( typename IndexType::IndexValueType factor )
-  {
-    IndexType index;
-    index.Fill( factor );
-    SetSubsampleFactor( index );
-  }
+  void SetSubsampleFactor ( typename IndexType::IndexValueType factor );
 
   /** Set / Get the subsample factor */
-  void SetSubsampleFactor ( const IndexType & factor )
-  {
-    this->m_SubsampleFactor = factor;
-
-    // Evaluate the last possible pixel.
-    const IndexType& startIndex = this->m_Region.GetIndex();
-    const SizeType& size = this->m_Region.GetSize();
-
-    for ( unsigned int i = 0; i < ImageIteratorDimension; ++i )
-    {
-      m_LastUsableIndex[i] = startIndex[i]
-        + static_cast<IndexValueType>( m_SubsampleFactor[i] * ( (size[i]-1) / m_SubsampleFactor[i] ) );
-    }
-
-    m_SubSampledEndOffset = this->m_Image->ComputeOffset( m_LastUsableIndex ) + 1;
-  }
+  void SetSubsampleFactor ( const IndexType & factor ); 
 
   const IndexType & GetSubsampleFactor () const
   {
@@ -205,27 +132,11 @@ public:
 
   /** Move an iterator to the beginning of the region. "Begin" is
   * defined as the first pixel in the region. */
-  void GoToBegin()
-  {
-    Superclass::GoToBegin();
-
-    const SizeType& size = this->m_Region.GetSize();
-
-    this->m_SpanBeginOffset = this->m_Offset;
-    this->m_SpanEndOffset = this->m_Offset 
-                            + static_cast<IndexValueType>( m_SubsampleFactor[0] * ((size[0]-1) / m_SubsampleFactor[0]) )
-                            + 1;
-  }
+  void GoToBegin();
 
   /** Move an iterator to the end of the region. "End" is defined as
   * one pixel past the last pixel of the region. */
-  void GoToEnd()
-  {
-    Superclass::GoToEnd();
-    this->m_Offset = m_SubSampledEndOffset - 1;
-    this->m_SpanEndOffset = this->m_Offset + 1;
-    this->m_SpanBeginOffset = this->m_Offset - m_LastUsableIndex[0];
-  }
+  void GoToEnd();
 
   /** Is the iterator at the beginning of the region? 
    * "Begin" is defined here as before the first pixel 
@@ -235,7 +146,7 @@ public:
    */
   bool IsAtBegin(void) const
   {
-    return ( this->m_Offset <= this->m_BeginOffset );
+    return ( this->m_Offset <= m_SubSampledBeginOffset );
   }
  
   /** Is the iterator at the end of the region? 
@@ -250,13 +161,17 @@ public:
     return ( this->m_Offset >= m_SubSampledEndOffset );
   }
 
-  /** Set the index. No bounds checking is performed. This is overridden
-   * from the parent because we have an extra ivar.
+  /** Set the index. 
+   * It is moved to the next available (usable) index.
    * \sa GetIndex */
-  void SetIndex(const IndexType &ind)
+  void SetIndex(const IndexType &ind) ;
+
+  /** Get the Index. */
+  IndexType GetIndex() const
   {
-    Superclass::SetIndex( ind );
+    return Superclass::GetIndex();
   }
+
 
   /** Increment (prefix) the fastest moving dimension of the iterator's index.
    * This operator will constrain the iterator within the region (i.e. the
@@ -307,70 +222,23 @@ public:
   /** This iterator give the possibility to Set/Get the current location if scanning.
    * No Bound checking is performed when setting the position.
    */
-  void SetLocation ( const OffsetType & location )
-  {
-    this->m_Offset = location;
-
-    const SizeType& size = this->m_Region.GetSize();
-    this->m_SpanEndOffset = this->m_Offset 
-                            + static_cast<IndexValueType>( m_SubsampleFactor[0] * ((size[0]-1) / m_SubsampleFactor[0]) )
-                            + 1;
-    this->m_SpanBeginOffset = this->m_Offset;
-  }
-
-  void SetLocation ( const IndexType & location )
-  {
-    this->m_Offset = this->m_Image->ComputeOffset( location );
-
-    const SizeType& size = this->m_Region.GetSize();
-    this->m_SpanEndOffset = this->m_Offset 
-                            + static_cast<IndexValueType>( m_SubsampleFactor[0] * ((size[0]-1) / m_SubsampleFactor[0]) )
-                            + 1;
-    this->m_SpanBeginOffset = this->m_Offset;
-  }
-
-  const OffsetType & GetLocationOffset() const
+  void SetOffset ( const OffsetType & offset );
+  const OffsetType & GetOffset() const
   {
     return this->m_Offset;
   }
 
-  IndexType GetLocationIndex() const
-  {
-    IndexType ind = this->m_Image->ComputeIndex( static_cast<IndexValueType>(this->m_Offset) );
-    return ind;
-  }
-
-  /** In order to help copy into a new Image, give the new region parameters
+  /** GenerateOutputInformation. 
+   * In order to help copy into a new Image, give the new region parameters
    */
-  RegionType GetNewRegion () const
-  {
-    IndexType startIndex = this->m_Region.GetIndex();
-    SizeType size = this->m_Region.GetSize();
-
-    for ( unsigned int i = 0; i < ImageIteratorDimension; ++i )
-    {
-      startIndex[i] /= m_SubsampleFactor[i];
-      --size[i];
-      size[i] /= m_SubsampleFactor[i];
-      ++size[i];
-    }
-
-    RegionType newRegion;
-    newRegion.SetIndex( startIndex );
-    newRegion.SetSize( size );
-
-    for ( unsigned int i = 0; i < ImageIteratorDimension; ++i )
-    {
-      otbGenericMsgDebugMacro(<<"NewRegionIndex[" << i << "] = " << startIndex[i]);
-      otbGenericMsgDebugMacro(<<"NewRegionSize [" << i << "] = " << size[i]);
-    }
-
-    return newRegion;
-  }
+  RegionType GenerateOutputInformation () const;
 
 protected:
   IndexType m_SubsampleFactor;
+  unsigned long m_SubSampledBeginOffset;
+  //unsigned long m_SubSampledReverseEndOffset;
   unsigned long m_SubSampledEndOffset;
+  IndexType m_FirstUsableIndex;
   IndexType m_LastUsableIndex;
 
 private:
