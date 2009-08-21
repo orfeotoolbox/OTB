@@ -17,6 +17,8 @@ FILE(GLOB_RECURSE ossim_dll_main_SRCS "dll_main/*.cpp")
 REMOVE(ossim_support_data_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/support_data/ossimDemPoint.cpp")
 REMOVE(ossim_plugin_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/plugin/ossimSharedObjectBridge.cpp")
 REMOVE(ossim_base_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/base/ossimFactoryBaseTemplate.cpp")
+REMOVE(ossim_imaging_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/imaging/ErsSar/*")
+REMOVE(ossim_imaging_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/imaging/RadarSat2/*")
 
 # Adjust the compiler flags to avoid problems with ossim code.
 IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -105,7 +107,7 @@ ${ossim_imaging_SRCS}
 ${ossim_parallel_SRCS}
 ${ossim_elevation_SRCS}
 )
-TARGET_LINK_LIBRARIES(otbossim ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${JPEG_LIBRARY} OpenThreads)
+TARGET_LINK_LIBRARIES(otbossim ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${JPEG_LIBRARY} ${OPENTHREADS_LIBRARY})
 
 IF(NOT OTB_INSTALL_NO_LIBRARIES)
  INSTALL(TARGETS otbossim

@@ -32,7 +32,7 @@ int otbImageLayerRenderingModelSingleLayer( int argc, char * argv[] )
   const char * extoutfname  = argv[3];
   const char * sextoutfname = argv[4];
 
-  // typedefs 
+  // typedefs
   typedef itk::RGBAPixel<unsigned char>               RGBPixelType;
   typedef otb::Image<RGBPixelType,2>                 OutputImageType;
   typedef otb::VectorImage<double,2>                 ImageType;
@@ -67,7 +67,18 @@ int otbImageLayerRenderingModelSingleLayer( int argc, char * argv[] )
 
   // Add the layer to the model
   model->AddLayer(generator->GetLayer());
-  
+
+  // Layer manipulation test
+  ModelType::LayerType::Pointer layer = model->GetLayer(0);
+  std::string layerName = layer->GetName();
+  ModelType::LayerType::Pointer layerByName = model->GetLayerByName(layerName);
+  if (layer != layerByName)
+  {
+    return EXIT_FAILURE;
+  }
+
+
+
   // Copute extract and scaled extract region
   ImageType::RegionType lregion = reader->GetOutput()->GetLargestPossibleRegion();
   ImageType::RegionType::IndexType index;
@@ -78,17 +89,17 @@ int otbImageLayerRenderingModelSingleLayer( int argc, char * argv[] )
 
   index[0] = lregion.GetSize()[0]/4;
   index[1] = lregion.GetSize()[1]/4;
-  
+
   ImageType::RegionType extractRegion;
   extractRegion.SetSize(size);
   extractRegion.SetIndex(index);
-  
+
   size[0]=25;
   size[1]=25;
 
   index[0] = 3 * lregion.GetSize()[0]/8;
   index[1] = 3 * lregion.GetSize()[1]/8;
-  
+
   ImageType::RegionType sextractRegion;
   sextractRegion.SetSize(size);
   sextractRegion.SetIndex(index);
@@ -112,7 +123,7 @@ int otbImageLayerRenderingModelSingleLayer( int argc, char * argv[] )
   writer->SetInput(model->GetRasterizedExtract());
   writer->SetFileName(extoutfname);
   writer->Update();
-  
+
   std::cout<<"Extract saved."<<std::endl;
 
   writer = WriterType::New();
@@ -121,6 +132,9 @@ int otbImageLayerRenderingModelSingleLayer( int argc, char * argv[] )
   writer->Update();
 
   std::cout<<"Scaled extract saved."<<std::endl;
+
+  // Layer manipulation test
+  model->GetLayerByName(layerName);
 
   return EXIT_SUCCESS;
 }

@@ -65,7 +65,7 @@ ImageMetadataInterfaceFactory
       return *k;
     }
   }
-  
+  std::cout<<"bothing found -> use default"<<std::endl;
   DefaultImageMetadataInterface::Pointer defaultIMI = DefaultImageMetadataInterface::New();
   return dynamic_cast<ImageMetadataInterfaceBase*>(static_cast<DefaultImageMetadataInterface*>(defaultIMI));
 }

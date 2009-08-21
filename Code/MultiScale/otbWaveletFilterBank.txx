@@ -58,6 +58,8 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
   
   m_UpSampleFilterFactor = 0;
   m_SubsampleImageFactor = 1;
+
+  //this->SetNumberOfThreads(1);
 }
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
@@ -139,21 +141,39 @@ void
 WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 ::BeforeThreadedGenerateData ()
 {
-  if ( m_SubsampleImageFactor > 1 && InputImageDimension > 1 )
+  if ( m_SubsampleImageFactor > 1 )
   {
-    // Internal images will be used only if m_SubsampledInputImages != 1
-    m_InternalImages.resize( InputImageDimension-1 );
-    for ( unsigned int i = 0; i < m_InternalImages.size(); i++ )
+    // Check the dimension
+    for ( unsigned int i = 0; i < InputImageDimension; i++ )
     {
-      // the size is linked to the SubsampleImageFactor that is assume to be 2!!!
-      m_InternalImages[InputImageDimension-2-i].resize( 1<<(i+1) );
+      if ( ( m_SubsampleImageFactor 
+            * ( this->GetInput()->GetRequestedRegion().GetSize()[i] / m_SubsampleImageFactor ) )
+          != this->GetInput()->GetRequestedRegion().GetSize()[i] )
+      {
+        itk::InvalidRequestedRegionError err ( __FILE__, __LINE__ );
+        err.SetLocation(ITK_LOCATION);
+        err.SetDescription("Requested region dimension cannot be used in multiresolution analysis (crop it).");
+        err.SetDataObject( const_cast< InputImageType* >( this->GetInput() ) );
+        throw err;
+      }
     }
 
-    OutputImageRegionType intermediateRegion;
-    this->Superclass::CallCopyInputRegionToOutputRegion( intermediateRegion, 
-      this->GetInput()->GetLargestPossibleRegion() );
+    if ( InputImageDimension > 1 )
+    {
+      // Internal images will be used only if m_SubsampledInputImages != 1
+      m_InternalImages.resize( InputImageDimension-1 );
+      for ( unsigned int i = 0; i < m_InternalImages.size(); i++ )
+      {
+        // the size is linked to the SubsampleImageFactor that is assume to be 2!!!
+        m_InternalImages[InputImageDimension-2-i].resize( 1<<(i+1) );
+      }
 
-    AllocateInternalData( intermediateRegion );
+      OutputImageRegionType intermediateRegion;
+      this->Superclass::CallCopyInputRegionToOutputRegion( intermediateRegion, 
+        this->GetInput()->GetLargestPossibleRegion() );
+
+      AllocateInternalData( intermediateRegion );
+    }
   }
 }
 
@@ -170,9 +190,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
     this->CallCopyInputRegionToOutputRegion( InputImageDimension-1-direction, 
         smallerRegion, largerRegion );
 
-    for ( unsigned int i = 0; 
-        i < m_InternalImages[direction].size(); 
-        ++i )
+    for ( unsigned int i = 0; i < m_InternalImages[direction].size(); i++ )
     {
       m_InternalImages[InputImageDimension-2-direction][i] = OutputImageType::New();
       m_InternalImages[InputImageDimension-2-direction][i]->SetRegions( smallerRegion );
@@ -370,8 +388,6 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 
   // Inner product
   InnerProductType innerProduct;
-  FaceCalculatorType faceCalculator;  
-  FaceListType faceList;
 
   // High pass part calculation
   HighPassOperatorType highPassOperator;
@@ -379,34 +395,27 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
   highPassOperator.SetUpSampleFactor( this->GetUpSampleFilterFactor() );
   highPassOperator.CreateDirectional();
 
-  faceList = faceCalculator( input, inputRegionForThread, highPassOperator.GetRadius() );
+  SubsampleIteratorType subItHighPass ( input, inputRegionForThread );
+  subItHighPass.SetSubsampleFactor( subsampling );
+  subItHighPass.GoToBegin();
 
-  for ( FaceListIterator faceIt = faceList.begin(); faceIt != faceList.end(); ++faceIt )
+  NeighborhoodIteratorType itHighPass ( highPassOperator.GetRadius(), input, inputRegionForThread );
+  itk::PeriodicBoundaryCondition< InputImageType > boundaryCondition;
+  //otb::MirrorBoundaryCondition< InputImageType > boundaryCondition;
+  itHighPass.OverrideBoundaryCondition( &boundaryCondition );
+
+  IteratorType outHighPass ( outputHighPass, subItHighPass.GenerateOutputInformation() );
+  outHighPass.GoToBegin();
+
+  while ( !subItHighPass.IsAtEnd() && !outHighPass.IsAtEnd() )
   {
-    SubsampleIteratorType subIt ( input, *faceIt );
-    subIt.SetSubsampleFactor( subsampling );
-    subIt.GoToBegin();
+    itHighPass.SetLocation( subItHighPass.GetIndex() );
+    outHighPass.Set( innerProduct( itHighPass, highPassOperator ) );
 
-    NeighborhoodIteratorType it ( highPassOperator.GetRadius(), input, *faceIt );
-    //itk::PeriodicBoundaryCondition< InputImageType > boundaryCondition;
-    //otb::MirrorBoundaryCondition< InputImageType > boundaryCondition;
-    //it.OverrideBoundaryCondition( &boundaryCondition );
+    ++subItHighPass;
+    ++outHighPass;
 
-    OutputImageRegionType outputImageRegion;
-    this->CallCopyInputRegionToOutputRegion( dir, outputImageRegion, *faceIt );
-    IteratorType out ( outputHighPass, outputImageRegion );
-    out.GoToBegin();
-
-    while ( !subIt.IsAtEnd() && !out.IsAtEnd() )
-    {
-      it.SetLocation( subIt.GetLocationIndex() );
-      out.Set( innerProduct( it, highPassOperator ) );
-
-      ++subIt;
-      ++out;
-
-      reporter.CompletedPixel();
-    }
+    reporter.CompletedPixel();
   }
 
   // Low pass part calculation
@@ -415,34 +424,25 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
   lowPassOperator.SetUpSampleFactor( this->GetUpSampleFilterFactor() );
   lowPassOperator.CreateDirectional();
 
-  faceList = faceCalculator( input, inputRegionForThread, lowPassOperator.GetRadius() );
+  SubsampleIteratorType subItLowPass ( input, inputRegionForThread );
+  subItLowPass.SetSubsampleFactor( subsampling );
+  subItLowPass.GoToBegin();
 
-  for ( FaceListIterator faceIt = faceList.begin(); faceIt != faceList.end(); ++faceIt )
+  NeighborhoodIteratorType itLowPass ( lowPassOperator.GetRadius(), input, inputRegionForThread );
+  itLowPass.OverrideBoundaryCondition( &boundaryCondition );
+
+  IteratorType outLowPass ( outputLowPass, subItLowPass.GenerateOutputInformation() );
+  outLowPass.GoToBegin();
+
+  while ( !subItLowPass.IsAtEnd() && !outLowPass.IsAtEnd() )
   {
-    SubsampleIteratorType subIt ( input, *faceIt );
-    subIt.SetSubsampleFactor( subsampling );
-    subIt.GoToBegin();
+    itLowPass.SetLocation( subItLowPass.GetIndex() );
+    outLowPass.Set( innerProduct( itLowPass, lowPassOperator ) );
 
-    NeighborhoodIteratorType it ( lowPassOperator.GetRadius(), input, *faceIt );
-    //itk::PeriodicBoundaryCondition< InputImageType > boundaryCondition;
-    //otb::MirrorBoundaryCondition< InputImageType > boundaryCondition;
-    //it.OverrideBoundaryCondition( &boundaryCondition );
+    ++subItLowPass;
+    ++outLowPass;
 
-    OutputImageRegionType outputImageRegion;
-    this->CallCopyInputRegionToOutputRegion( dir, outputImageRegion, *faceIt );
-    IteratorType out ( outputLowPass, outputImageRegion );
-    out.GoToBegin();
-
-    while ( !subIt.IsAtEnd() && !out.IsAtEnd() )
-    {
-      it.SetLocation( subIt.GetLocationIndex() );
-      out.Set( innerProduct( it, lowPassOperator ) );
-
-      ++subIt;
-      ++out;
-
-      reporter.CompletedPixel();
-    }
+    reporter.CompletedPixel();
   }
 
   if ( dir > 0 )
@@ -508,8 +508,6 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 
   // Inner products
   InnerProductType innerProduct;
-  FaceCalculatorType faceCalculator;  
-  FaceListType faceList;
 
   // High pass part calculation
   HighPassOperatorType highPassOperator;
@@ -517,35 +515,27 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
   highPassOperator.SetUpSampleFactor( this->GetUpSampleFilterFactor() );
   highPassOperator.CreateDirectional();
 
-  // Faces iterations
-  faceList = faceCalculator( input, outputRegionForThread, highPassOperator.GetRadius() );
+  SubsampleIteratorType subItHighPass ( input, outputRegionForThread );
+  subItHighPass.SetSubsampleFactor( subsampling );
+  subItHighPass.GoToBegin();
 
-  for ( FaceListIterator faceIt = faceList.begin(); faceIt != faceList.end(); ++faceIt )
+  NeighborhoodIteratorType itHighPass ( highPassOperator.GetRadius(), input, outputRegionForThread );
+  itk::PeriodicBoundaryCondition< OutputImageType > boundaryCondition;
+  //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
+  itHighPass.OverrideBoundaryCondition( &boundaryCondition );
+  
+  IteratorType outHighPass ( outputHighPass, subItHighPass.GenerateOutputInformation() );
+  outHighPass.GoToBegin();
+
+  while ( !subItHighPass.IsAtEnd() && !outHighPass.IsAtEnd() )
   {
-    SubsampleIteratorType subIt ( input, *faceIt );
-    subIt.SetSubsampleFactor( subsampling );
-    subIt.GoToBegin();
+    itHighPass.SetLocation( subItHighPass.GetIndex() );
+    outHighPass.Set( innerProduct( itHighPass, highPassOperator ) );
 
-    NeighborhoodIteratorType it ( highPassOperator.GetRadius(), input, *faceIt );
-    //itk::PeriodicBoundaryCondition< OutputImageType > boundaryCondition;
-    //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
-    //it.OverrideBoundaryCondition( &boundaryCondition );
-    
-    OutputImageRegionType localOutputRegion;
-    this->CallCopyInputRegionToOutputRegion( direction, localOutputRegion, *faceIt );
-    IteratorType out ( outputHighPass, localOutputRegion );
-    out.GoToBegin();
+    ++subItHighPass;
+    ++outHighPass;
 
-    while ( !subIt.IsAtEnd() && !out.IsAtEnd() )
-    {
-      it.SetLocation( subIt.GetLocationIndex() );
-      out.Set( innerProduct( it, highPassOperator ) );
-
-      ++subIt;
-      ++out;
-
-      reporter.CompletedPixel();
-    }
+    reporter.CompletedPixel();
   }
 
   // Low pass part calculation
@@ -554,34 +544,25 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
   lowPassOperator.SetUpSampleFactor( this->GetUpSampleFilterFactor() );
   lowPassOperator.CreateDirectional();
 
-  faceList = faceCalculator( input, outputRegionForThread, lowPassOperator.GetRadius() );
+  SubsampleIteratorType subItLowPass ( input, outputRegionForThread );
+  subItLowPass.SetSubsampleFactor( subsampling );
+  subItLowPass.GoToBegin();
 
-  for ( FaceListIterator faceIt = faceList.begin(); faceIt != faceList.end(); ++faceIt )
+  NeighborhoodIteratorType itLowPass ( lowPassOperator.GetRadius(), input, outputRegionForThread );
+  itLowPass.OverrideBoundaryCondition( &boundaryCondition );
+
+  IteratorType outLowPass ( outputLowPass, subItLowPass.GenerateOutputInformation() );
+  outLowPass.GoToBegin();
+
+  while ( !subItLowPass.IsAtEnd() && !outLowPass.IsAtEnd() )
   {
-    SubsampleIteratorType subIt ( input, *faceIt );
-    subIt.SetSubsampleFactor( subsampling );
-    subIt.GoToBegin();
+    itLowPass.SetLocation( subItLowPass.GetIndex() );
+    outLowPass.Set( innerProduct( itLowPass, lowPassOperator ) );
 
-    NeighborhoodIteratorType it ( lowPassOperator.GetRadius(), input, *faceIt );
-    //itk::PeriodicBoundaryCondition< OutputImageType > boundaryCondition;
-    //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
-    //it.OverrideBoundaryCondition( &boundaryCondition );
+    ++subItLowPass;
+    ++outLowPass;
 
-    OutputImageRegionType localOutputRegion;
-    this->CallCopyInputRegionToOutputRegion( direction, localOutputRegion, *faceIt );
-    IteratorType out ( outputLowPass, localOutputRegion );
-    out.GoToBegin();
-
-    while ( !subIt.IsAtEnd() && !out.IsAtEnd() )
-    {
-      it.SetLocation( subIt.GetLocationIndex() );
-      out.Set( innerProduct( it, lowPassOperator ) );
-
-      ++subIt;
-      ++out;
-
-      reporter.CompletedPixel();
-    }
+    reporter.CompletedPixel();
   }
 
   // Swap input and lowPassOutput
@@ -617,6 +598,8 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 
   m_UpSampleFilterFactor = 0;
   m_SubsampleImageFactor = 1;
+
+  //this->SetNumberOfThreads(1);
 }
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
@@ -740,9 +723,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
     this->CallCopyInputRegionToOutputRegion( direction, 
         largerRegion, smallerRegion );
 
-    for ( unsigned int i = 0; 
-        i < m_InternalImages[direction].size(); 
-        i++ )
+    for ( unsigned int i = 0; i < m_InternalImages[direction].size(); i++ )
     {
       m_InternalImages[direction][i] = OutputImageType::New();
       m_InternalImages[direction][i]->SetRegions( largerRegion );
@@ -955,51 +936,71 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
       delta.Fill(1);
       delta[ dir ] = this->GetSubsampleImageFactor();
 
+      InputImagePointerType cropedLowPass = InputImageType::New();
+      cropedLowPass->SetRegions( inputRegionForThread );
+      cropedLowPass->Allocate();
+      cropedLowPass->FillBuffer(0.);
+      itk::ImageRegionIterator< InputImageType > cropedLowPassIt ( cropedLowPass, inputRegionForThread );
+      itk::ImageRegionIterator< InputImageType > imgLowPassIt ( imgLowPass, inputRegionForThread );
+      for ( cropedLowPassIt.GoToBegin(), imgLowPassIt.GoToBegin();
+        !cropedLowPassIt.IsAtEnd() && !imgLowPassIt.IsAtEnd();
+        ++cropedLowPassIt, ++imgLowPassIt )
+      {
+        cropedLowPassIt.Set( imgLowPassIt.Get() );
+      }
+
       typename FilterType::Pointer overSampledLowPass = FilterType::New();
-      overSampledLowPass->SetInput( imgLowPass );
+      overSampledLowPass->SetInput( cropedLowPass );
       overSampledLowPass->SetSubsampleFactor( delta );
       overSampledLowPass->Update();
 
+      InputImagePointerType cropedHighPass = InputImageType::New();
+      cropedHighPass->SetRegions( inputRegionForThread );
+      cropedHighPass->Allocate();
+      cropedHighPass->FillBuffer(0.);
+      itk::ImageRegionIterator< InputImageType > cropedHighPassIt ( cropedHighPass, inputRegionForThread );
+      itk::ImageRegionIterator< InputImageType > imgHighPassIt ( imgHighPass, inputRegionForThread );
+      for ( cropedHighPassIt.GoToBegin(), imgHighPassIt.GoToBegin();
+        !cropedHighPassIt.IsAtEnd() && !imgHighPassIt.IsAtEnd();
+        ++cropedHighPassIt, ++imgHighPassIt )
+      {
+        cropedHighPassIt.Set( imgHighPassIt.Get() );
+      }
+
       typename FilterType::Pointer overSampledHighPass = FilterType::New();
-      overSampledHighPass->SetInput( imgHighPass );
+      overSampledHighPass->SetInput( cropedHighPass );
       overSampledHighPass->SetSubsampleFactor( delta );
       overSampledHighPass->Update();
 
-      FaceCalculatorType faceCalculator;  
-      FaceListType faceList;
-      faceList = faceCalculator( overSampledLowPass->GetOutput(), 
-                                  overSampledLowPass->GetOutput()->GetRequestedRegion(), 
-                                  radiusMax );
-
       InnerProductType innerProduct;
 
-      for ( FaceListIterator faceIt = faceList.begin(); faceIt != faceList.end(); ++faceIt )
-      {
-        itk::ImageRegionIterator< OutputImageType > out ( outputImage, *faceIt );
+      itk::ImageRegionIterator< OutputImageType > out 
+        ( outputImage, overSampledLowPass->GetOutput()->GetRequestedRegion() );
 
-        //itk::PeriodicBoundaryCondition< OutputImageType > boundaryCondition;
-        //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
-        NeighborhoodIteratorType lowIter ( lowPassOperator.GetRadius(), overSampledLowPass->GetOutput(), *faceIt );
-        //lowIter.OverrideBoundaryCondition( &boundaryCondition );
+      NeighborhoodIteratorType lowIter ( lowPassOperator.GetRadius(), 
+        overSampledLowPass->GetOutput(), overSampledLowPass->GetOutput()->GetRequestedRegion() );
+      itk::PeriodicBoundaryCondition< OutputImageType > boundaryCondition;
+      //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
+      lowIter.OverrideBoundaryCondition( &boundaryCondition );
 
-        NeighborhoodIteratorType highIter ( highPassOperator.GetRadius(), overSampledHighPass->GetOutput(), *faceIt );
-        //highIter.OverrideBoundaryCondition( &boundaryCondition );
+      NeighborhoodIteratorType highIter ( highPassOperator.GetRadius(), 
+        overSampledHighPass->GetOutput(), overSampledHighPass->GetOutput()->GetRequestedRegion()  );
+      highIter.OverrideBoundaryCondition( &boundaryCondition );
 
-        lowIter.GoToBegin();
-        highIter.GoToBegin();
-        out.GoToBegin();
+      lowIter.GoToBegin();
+      highIter.GoToBegin();
+      out.GoToBegin();
 
-        while ( !out.IsAtEnd() )
-        {  
-          out.Set( innerProduct( lowIter, lowPassOperator ) 
-                     + innerProduct( highIter, highPassOperator ) );
+      while ( !out.IsAtEnd() )
+      {  
+        out.Set( innerProduct( lowIter, lowPassOperator ) 
+                   + innerProduct( highIter, highPassOperator ) );
 
-          ++lowIter;
-          ++highIter;
-          ++out;
+        ++lowIter;
+        ++highIter;
+        ++out;
 
-          reporter.CompletedPixel();
-        }
+        reporter.CompletedPixel();
       }
     } // end for each overSampledLowPass/overSampledhighPass pair of entry
   }
@@ -1026,13 +1027,13 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
       {
         itk::ImageRegionIterator< OutputImageType > out ( outputImage, *faceIt );
 
-        //itk::PeriodicBoundaryCondition< OutputImageType > boundaryCondition;
-        //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
         NeighborhoodIteratorType lowIter ( lowPassOperator.GetRadius(), imgLowPass, *faceIt );
-        //lowIter.OverrideBoundaryCondition( &boundaryCondition );
+        itk::PeriodicBoundaryCondition< OutputImageType > boundaryCondition;
+        //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
+        lowIter.OverrideBoundaryCondition( &boundaryCondition );
 
         NeighborhoodIteratorType highIter ( highPassOperator.GetRadius(), imgHighPass, *faceIt );
-        //highIter.OverrideBoundaryCondition( &boundaryCondition );
+        highIter.OverrideBoundaryCondition( &boundaryCondition );
 
         lowIter.GoToBegin();
         highIter.GoToBegin();
@@ -1123,50 +1124,71 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
       delta.Fill(1);
       delta[ direction ] = this->GetSubsampleImageFactor();
 
+      InputImagePointerType cropedLowPass = InputImageType::New();
+      cropedLowPass->SetRegions( outputRegionForThread );
+      cropedLowPass->Allocate();
+      cropedLowPass->FillBuffer(0.);
+      itk::ImageRegionIterator< InputImageType > cropedLowPassIt ( cropedLowPass, outputRegionForThread );
+      itk::ImageRegionIterator< InputImageType > imgLowPassIt ( imgLowPass, outputRegionForThread );
+      for ( cropedLowPassIt.GoToBegin(), imgLowPassIt.GoToBegin();
+        !cropedLowPassIt.IsAtEnd() && !imgLowPassIt.IsAtEnd();
+        ++cropedLowPassIt, ++imgLowPassIt )
+      {
+        cropedLowPassIt.Set( imgLowPassIt.Get() );
+      }
+
       typename FilterType::Pointer overSampledLowPass = FilterType::New();
-      overSampledLowPass->SetInput( imgLowPass );
+      overSampledLowPass->SetInput( cropedLowPass );
       overSampledLowPass->SetSubsampleFactor( delta );
       overSampledLowPass->Update();
 
+      InputImagePointerType cropedHighPass = InputImageType::New();
+      cropedHighPass->SetRegions( outputRegionForThread );
+      cropedHighPass->Allocate();
+      cropedHighPass->FillBuffer(0.);
+      itk::ImageRegionIterator< InputImageType > cropedHighPassIt ( cropedHighPass, outputRegionForThread );
+      itk::ImageRegionIterator< InputImageType > imgHighPassIt ( imgHighPass, outputRegionForThread );
+      for ( cropedHighPassIt.GoToBegin(), imgHighPassIt.GoToBegin();
+        !cropedHighPassIt.IsAtEnd() && !imgHighPassIt.IsAtEnd();
+        ++cropedHighPassIt, ++imgHighPassIt )
+      {
+        cropedHighPassIt.Set( imgHighPassIt.Get() );
+      }
+
       typename FilterType::Pointer overSampledHighPass = FilterType::New();
-      overSampledHighPass->SetInput( imgHighPass );
+      overSampledHighPass->SetInput( cropedHighPass );
       overSampledHighPass->SetSubsampleFactor( delta );
       overSampledHighPass->Update();
 
       InnerProductType innerProduct;
-      FaceCalculatorType faceCalculator;  
-      FaceListType faceList;
-      faceList = faceCalculator( overSampledLowPass->GetOutput(), 
-                                  overSampledLowPass->GetOutput()->GetRequestedRegion(), 
-                                  radiusMax );
+        
+      itk::ImageRegionIterator< OutputImageType > out ( outputImage, 
+        overSampledLowPass->GetOutput()->GetRequestedRegion() );
 
-      for ( FaceListIterator faceIt = faceList.begin(); faceIt != faceList.end(); ++faceIt )
-      {
-        itk::ImageRegionIterator< OutputImageType > out ( outputImage, *faceIt );
+      NeighborhoodIteratorType lowIter ( lowPassOperator.GetRadius(), 
+        overSampledLowPass->GetOutput(), overSampledLowPass->GetOutput()->GetRequestedRegion() );
+      itk::PeriodicBoundaryCondition< OutputImageType > boundaryCondition;
+      //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
+      lowIter.OverrideBoundaryCondition( &boundaryCondition );
 
-        //itk::PeriodicBoundaryCondition< OutputImageType > boundaryCondition;
-        //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
-        NeighborhoodIteratorType lowIter ( lowPassOperator.GetRadius(), overSampledLowPass->GetOutput(), *faceIt );
-        //lowIter.OverrideBoundaryCondition( &boundaryCondition );
+      NeighborhoodIteratorType highIter ( highPassOperator.GetRadius(), 
+        overSampledHighPass->GetOutput(), overSampledHighPass->GetOutput()->GetRequestedRegion() );
+      highIter.OverrideBoundaryCondition( &boundaryCondition );
 
-        NeighborhoodIteratorType highIter ( highPassOperator.GetRadius(), overSampledHighPass->GetOutput(), *faceIt );
-        //highIter.OverrideBoundaryCondition( &boundaryCondition );
+      lowIter.GoToBegin();
+      highIter.GoToBegin();
+      out.GoToBegin();
 
-        lowIter.GoToBegin();
-        highIter.GoToBegin();
-        out.GoToBegin();
+      while ( !out.IsAtEnd() )
+      {  
+        out.Set( innerProduct( lowIter, lowPassOperator ) 
+                    + innerProduct( highIter, highPassOperator ) );
 
-        while ( !out.IsAtEnd() )
-        {  
-          out.Set( innerProduct( lowIter, lowPassOperator ) 
-                      + innerProduct( highIter, highPassOperator ) );
+        ++lowIter;
+        ++highIter;
+        ++out;
 
-          ++lowIter;
-          ++highIter;
-          ++out;
-
-          reporter.CompletedPixel();
-        }
+        reporter.CompletedPixel();
       }
     } // end for each overSampledLowPass/overSampledhighPass pair of entry
   }
@@ -1192,13 +1214,13 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
       {
         itk::ImageRegionIterator< OutputImageType > out ( outputImage, *faceIt );
 
-        //itk::PeriodicBoundaryCondition< OutputImageType > boundaryCondition;
-        //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
         NeighborhoodIteratorType lowIter ( lowPassOperator.GetRadius(), imgLowPass, *faceIt );
-        //lowIter.OverrideBoundaryCondition( &boundaryCondition );
+        itk::PeriodicBoundaryCondition< OutputImageType > boundaryCondition;
+        //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
+        lowIter.OverrideBoundaryCondition( &boundaryCondition );
 
         NeighborhoodIteratorType highIter ( highPassOperator.GetRadius(), imgHighPass, *faceIt );
-        //highIter.OverrideBoundaryCondition( &boundaryCondition );
+        highIter.OverrideBoundaryCondition( &boundaryCondition );
 
         lowIter.GoToBegin();
         highIter.GoToBegin();

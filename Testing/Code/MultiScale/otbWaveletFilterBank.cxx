@@ -45,12 +45,6 @@ int otbWaveletFilterBank( int argc, char * argv[] )
 
   /* Wavelet choice */
   //const otb::MotherWaveletOperatorEnum wvltID = otb::HAAR;
-  //const otb::MotherWaveletOperatorEnum wvltID = otb::DB4;
-  //const otb::MotherWaveletOperatorEnum wvltID = otb::DB6;
-  //const otb::MotherWaveletOperatorEnum wvltID = otb::DB8;
-  //const otb::MotherWaveletOperatorEnum wvltID = otb::DB12;
-  //const otb::MotherWaveletOperatorEnum wvltID = otb::SPLINE_BIORTHOGONAL_2_4;
-  //const otb::MotherWaveletOperatorEnum wvltID = otb::SPLINE_BIORTHOGONAL_4_4;
   const otb::MotherWaveletOperatorEnum wvltID = otb::SYMLET8;
 
   /* Forward Transformation */
