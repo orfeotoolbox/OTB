@@ -80,12 +80,12 @@ public:
   /** Init basic SQL command*/
   void InsertBegin( std::stringstream & sqlCmd );
   /** Add Point content to the GIS Table*/
-  void InsertPoint( const PointType &pt );
+  void InsertPoint( const PointType &pt , const std::string & attribute = 0);
   //void InsertMultiPoint();
   /** Add Polygons to the GIS Table (exterior and interior ring)*/
-  void InsertPolygons(PolygonConstPointerType polygonExtRing, PolygonListConstPointerType polygonListInteriorRing=0);
+  void InsertPolygons(PolygonConstPointerType polygonExtRing, PolygonListConstPointerType polygonListInteriorRing=0, const std::string & attribute = 0);
   /** Add Line to the GIS Table*/
-  void InsertLineString(LinePointerType l);
+  void InsertLineString(LinePointerType l, const std::string & attribute = 0);
   
   /** Execute the sqlCmd which add geometric rows to the gis table*/
   void InsertGeometries (const std::string &sqlCmd );
@@ -93,7 +93,7 @@ public:
   void EraseLastChar (std::stringstream &sqlCmd );
   /** Effective Creation of the table*/
   void CreateTable (bool dropExistingGISTable);
-  /** Get geometry column type Not implemented yet*/
+  /** Get geometry column type Not implemented yet in progress */
   void getGeometryType();
   
   /** Get string connection usable by OGR library*/
@@ -101,6 +101,12 @@ public:
   
   /** Get const string connection methos temp*/
   //ConnectionPointerType GetConstConnection() const;
+  
+  /** Add an alpha numeric column to the table */
+//   const std::string AddVarCharColumn(unsigned int size) ;
+  
+  /** Insert Alpha Numeric Data in the Car char column */
+//   void AddStrDataToVarCharColumn(std::string data) ;
 protected:
 
   /** Constructor */

@@ -92,9 +92,9 @@ GISTableToVectorDataFilter<TGISTable, TVectorData>
 }
 
 /*
-template<class TInputImage, class TVectorData >
-void 
-LabelMapToVectorDataFilter<TInputImage, TVectorData>
+template<class TGISTable, class TVectorData >
+void
+GISTableToVectorDataFilter<TGISTable, TVectorData>
 ::EnlargeOutputRequestedRegion(DataObject *)
 {
   this->GetOutput()
@@ -117,10 +117,18 @@ GISTableToVectorDataFilter<TGISTable, TVectorData>
   SHPVectorDataIOPointerType gisReader=SHPVectorDataIOType::New();
   
   const std::string inputOGRConnStr=input->GetOGRStrConnection();
-  //if ( gisReader->CanReadFile() ) 
-  gisReader->SetFileName(inputOGRConnStr);
+  //Try  if the Db is readable
+  if ( gisReader->CanReadFile( inputOGRConnStr.data() ) ) 
+  { 
+    //Read GISTable data and copy in the output VectorData
+    gisReader->SetFileName(inputOGRConnStr);
+    gisReader->Read(output);
+  }
+  else
+  {
+    itkExceptionMacro(<<"The OGR connection is not valid;ogrconnection = " << inputOGRConnStr);
+  }
   
-  gisReader->Read(output);
 }
 
 

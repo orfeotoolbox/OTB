@@ -22,6 +22,9 @@
 #include "otbGISTableSource.h"
 #include "otbGISConnectionImplementation.h"
 #include "otbLabelObjectToPolygonFunctor.h"
+
+#include "otbSimplifyPathFunctor.h"
+#include "otbClosePathFunctor.h"
 #include "itkLabelMap.h"
 #include <iostream>
 #include <sstream>
@@ -75,8 +78,11 @@ public:
   typedef typename InputGISConnectionType::Pointer InputGISConnectionPointerType;
   
   typedef typename OutputGISTableType::PolygonType  PolygonType;
+  typedef typename PolygonType::Pointer  PolygonPointerType;
   
   typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType,PolygonType> FunctorType;
+  typedef otb::SimplifyPathFunctor<PolygonPointerType,PolygonPointerType> SimplifyFunctorType;
+  typedef ClosePathFunctor <PolygonPointerType,PolygonPointerType> CloseFunctorType;
   /** ImageDimension constants */
   //itkStaticConstMacro(InputImageDimension, unsigned int,
   //                    TInputImage::ImageDimension);

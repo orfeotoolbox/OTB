@@ -18,7 +18,7 @@
 #define __otbGISTableToVectorDataFilter_h
 
 //#include "itkImageToImageFilter.h"
-//#include "itkAttributeLabelObject.h"
+#include "itkDataObject.h"
 #include "otbVectorDataSource.h"
 #include "otbGISTable.h"
 //include "otbVectorData.h"
@@ -62,17 +62,14 @@ public:
   typedef SHPVectorDataIO<OutputVectorDataType> SHPVectorDataIOType;
   typedef typename SHPVectorDataIOType::Pointer SHPVectorDataIOPointerType;
   /** ImageDimension constants */
-  //itkStaticConstMacro(InputImageDimension, unsigned int,
-  //                    TInputImage::ImageDimension);
-  //itkStaticConstMacro(OutputImageDimension, unsigned int,
-  //                    TOutputImage::ImageDimension);
+  
 
   /** Standard New method. */
   itkNewMacro(Self);  
 
   /** Runtime information support. */
-  //itkTypeMacro(LabelMapToAttributeImageFilter, 
-  //           ImageToImageFilter);
+  itkTypeMacro(GISTableToVectorDataFilter, 
+               VectorDataSource);
 
   
   /** Set/Get the GISTable input of this process object.  */

@@ -28,7 +28,7 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
 {
   m_InputGISConnection = InputGISConnectionType::New();
   m_DropExistingGISTable = false;
-  m_GISTableName = "otb_to_gis_sample";
+  m_GISTableName = "vectordata_to_gis";
 }  
   
 
@@ -108,30 +108,30 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
 ::GenerateData()
 {
   
-  // Allocate the output
+  /** Allocate the output*/
   this->AllocateOutputs();
   
   OutputGISTableType * output = this->GetOutput();
   
   const InputVectorDataType * input = this->GetInput();
   
-  //Set the connection associated to the table
+  /**Set the connection associated to the table*/
   output->SetConnection (this->GetInputGISConnection ());
   
   
-  //Set the projection of the GIS table with the vector data projection informations
+  /**Set the projection of the GIS table with the vector data projection informations*/
   output->SetProjectionRef(input->GetProjectionRef());
   
-  //Connection to the database (create a transactor to manage the connection)
+  /**Connection to the database (create a transactor to manage the connection)*/
   output->GetConnection()->ConnectToDB();
   
-  //Name of the table is settedd automaticcaly to "vector_data_to_gis"
+  /**Name of the table is settedd automaticcaly to "vector_data_to_gis"*/
   output->SetTableName ("vector_data_to_gis");
   
-  //Create the PostgreSQL table
+  /**Create the PostgreSQL table*/
   //output->CreateTable(m_DropExistingGISTable);
     
-  //Process filter for all inputs
+  /**Process filter for all inputs*/
   for (unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
   {
     if (this->GetInput(idx))
@@ -141,12 +141,13 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
       
       //Old methods for processing translation to GIS table
       //ProcessNode(inputRoot);
-      //New method for the filter, call the OGR driver for writing data to the Db
+      /**New method for the filter, call the OGR driver for writing data to the Db*/
       SHPVectorDataIOPointerType gisWriter=SHPVectorDataIOType::New();
       
-      //Transform connection parametrers to the DB to an OGR connection string (based on PG: for PostGIS)"
+      /**Transform connection parametrers to the DB to an OGR connection string (based on PG: for PostGIS)"*/
       const std::string outputOGRConnStr=output->GetOGRStrConnection();
-      //Test if the driver is available
+      
+      /**Test if the driver is available*/
       if ( gisWriter->CanWriteFile(outputOGRConnStr.data()) ) {
         //Write VectorData to the GIS Table using OGR translation 
         gisWriter->SetFileName(outputOGRConnStr);
@@ -169,10 +170,6 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
 ::PrintSelf(std::ostream &os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << "Input VectorData:" << std::endl;
-  os << this->GetInput() << std::endl;
-  os << "Output GIS Table:" << std::endl;
-  os << this->GetOutput() << std::endl;
 }
 }// end namespace otb
 #endif

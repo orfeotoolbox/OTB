@@ -33,7 +33,7 @@ LabelMapToGISTableFilter< TLabelMap, TGISTable >
   m_InputGISConnection = InputGISConnectionType::New();
   m_DropExistingGISTable = false;
   //default value of the gis table name
-  m_GISTableName = "otb_to_gis_sample";
+  m_GISTableName = "labelmap_to_gis_table";
 }  
   
 
@@ -133,7 +133,9 @@ LabelMapToGISTableFilter< TLabelMap, TGISTable >
   output->CreateTable(m_DropExistingGISTable);
   
   FunctorType functor;
-  
+  SimplifyFunctorType simplifyFunctor;
+  simplifyFunctor.SetTolerance (0.0);
+  CloseFunctorType closeFunctor;
   // Lets begin by declaring the iterator for the objects in the image.
   typename InputLabelMapType::LabelObjectContainerType::const_iterator it;
   // And get the object container to reuse it later
@@ -145,8 +147,22 @@ LabelMapToGISTableFilter< TLabelMap, TGISTable >
     
     // the label object
     LabelObjectType * labelObject = it->second;
-    typename PolygonType::Pointer polygon = functor(labelObject);
-    this->GetOutput()->InsertPolygons( static_cast<typename TGISTable::PolygonConstPointerType> (polygon));
+    PolygonPointerType polygon = functor(labelObject);
+    /**Store the label in column 'genre' of the Db*/
+    std::ostringstream oss;
+    oss << labelObject->GetLabel();
+    //std::cout << "label : " << oss.str() << std::endl;
+    //std::cout << "polygon : " << polygon << std::endl;
+    
+    //Simply polygon (erase aligned points)
+    PolygonPointerType simplifyPolygon = simplifyFunctor(polygon); 
+    //std::cout << "simplify polygon : " << simplifyPolygon << std::endl;
+    
+    //Close polygon if necessary
+    PolygonPointerType closePolygon = closeFunctor(simplifyPolygon); 
+    //std::cout << "simplify polygon : " << closePolygon << std::endl;
+    
+    this->GetOutput()->InsertPolygons( static_cast<typename TGISTable::PolygonConstPointerType> (closePolygon), static_cast<typename TGISTable::PolygonListConstPointerType> (0), oss.str());
     //Add polygon to the gis table
   }
   

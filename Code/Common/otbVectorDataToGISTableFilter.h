@@ -80,6 +80,10 @@ public:
   /** Standard New method. */
   itkNewMacro(Self);  
 
+  /** Runtime information support. */
+  itkTypeMacro(VectorDataToGISTableFilter, 
+               GISTableSource);
+  
   /**
    * Set/Get the boolean value if you do not want to create the GIS table 
    */

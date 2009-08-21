@@ -17,23 +17,23 @@
 #ifndef __otbLabelMapToVectorDataFilter_h
 #define __otbLabelMapToVectorDataFilter_h
 
-//#include "itkImageToImageFilter.h"
-//#include "itkAttributeLabelObject.h"
 #include "otbVectorDataSource.h"
 #include "itkLabelMap.h"
-//#include "otbPolygon.h"
 #include "otbLabelObjectToPolygonFunctor.h"
+#include "otbSimplifyPathFunctor.h"
+#include "otbClosePathFunctor.h"
 #include "otbDataNode.h"
 
-//#include "itkMinimumMaximumImageCalculator.h"
+#include <string>
+#include <sstream>
 
 namespace otb {
 
 /** \class LabelMapToVectorDataFilter
    * \brief This class vectorizes a LabelObject to a VectorData.
- *
+   *
    * LabelMapToVectorDataFilter converts a LabelMap to a
- * VectorData where all the pixels get the attribute value of the label object they belong.
+   * VectorData where all the pixels get the attribute value of the label object they belong.
    * It uses the class otbLabelObjectToPolygonFunctor wich follows a finite states machine described in 
    *
    * "An algorithm for the rapid computation of boundaries of run-length
@@ -41,8 +41,8 @@ namespace otb {
    * (2000), p 1637-1649.  
  * \author Manuel GRIZONNET. CNES, France.
  *
- * \sa LabelMapToBinaryImageFilter, LabelMapMaskImageFilter
- * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
+   * \sa VectorDataSource
+ * \ingroup GeoSpatialAnalysis
  */
 template<class TLabelMap, class TVectorData >
 class ITK_EXPORT LabelMapToVectorDataFilter : 
@@ -64,34 +64,24 @@ public:
   
   typedef typename InputLabelMapType::LabelObjectType   LabelObjectType;
   
-  //typedef otb::Polygon<TVectorDataTPrecision>                                   PolygonType;
   typedef typename OutputVectorDataType::DataNodeType  DataNodeType;
   typedef typename DataNodeType::Pointer         DataNodePointerType;
   typedef typename DataNodeType::PolygonType  PolygonType;    
-  
+  typedef typename PolygonType::Pointer  PolygonPointerType;
+  /** Some typedefs specific to functors*/
   typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType,PolygonType> FunctorType;
-  
-  
-  
-  
-   
+  typedef otb::SimplifyPathFunctor<PolygonPointerType,PolygonPointerType> SimplifyFunctorType;
+  typedef ClosePathFunctor <PolygonPointerType,PolygonPointerType> CloseFunctorType;
   /** ImageDimension constants */
   
   /** Standard New method. */
   itkNewMacro(Self);  
 
   /** Runtime information support. */
-  //itkTypeMacro(LabelMapToAttributeImageFilter, 
-  //           ImageToImageFilter);
+  itkTypeMacro(LabelMapToVectorDataFilter, 
+               VectorDataSource);
 
-  /**
-   * Set/Get the value used as "background" in the output image, if the input
-   * LabelMap use a background.
-   * Defaults to NumericTraits<PixelType>::NonpositiveMin().
-   */
-  //itkSetMacro(BackgroundValue, OutputImagePixelType);
-  //itkGetConstMacro(BackgroundValue, OutputImagePixelType);
-
+  
   /** Set/Get the LabelMap input of this process object.  */
   virtual void SetInput( const InputLabelMapType *input);
   virtual void SetInput( unsigned int idx, const InputLabelMapType *input);

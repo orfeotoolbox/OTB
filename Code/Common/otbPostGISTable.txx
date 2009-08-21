@@ -39,6 +39,7 @@ template <class TConnectionImplementation, class TPrecision, unsigned int Spatia
   ::PostGISTable() 
 {
   m_Connection = ConnectionType::New();
+  this->SetSrid(-1);
 }
 
   
@@ -70,24 +71,24 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
 ::InsertBegin( std::stringstream & sqlCmd )
 {
   sqlCmd.str("");
-  sqlCmd << "INSERT INTO \"" << this->GetTableName() << "\" ( \"the_geom\" ) VALUES (";
+  sqlCmd << "INSERT INTO \"" << this->GetTableName() << "\" ( \"the_geom\" , \"genre\" ) VALUES (";
   sqlCmd << "GeometryFromText('";
 }
 template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
 void
 PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
-  ::InsertPoint( const PointType &pt )
+  ::InsertPoint( const PointType &pt, const std::string & attribute )
 {
   std::stringstream sqlCmd;
   this->InsertBegin( sqlCmd );
   sqlCmd << "POINT( ";
   for (uint i=0 ; i < SpatialDimension ; i++)
   {
-    sqlCmd << pt[i] << " ";      
+    sqlCmd << pt[i] << " ";
   }
   
   //int this->GetSrid()=-1;
-  sqlCmd << ")'," << this->GetSrid() << ") );" << std::endl;
+  sqlCmd << ")'," << this->GetSrid() << ") ," << attribute << ");" << std::endl;
   
   
   //Execute the query
@@ -97,7 +98,7 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
 template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
     void
         PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
-  ::InsertLineString( LinePointerType l )
+  ::InsertLineString( LinePointerType l, const std::string & attribute )
 {
   std::stringstream sqlCmd;
   this->InsertBegin ( sqlCmd );
@@ -119,7 +120,7 @@ template <class TConnectionImplementation, class TPrecision, unsigned int Spatia
   
   //int this->GetSrid()=-1;
   
-  sqlCmd << ")'," << this->GetSrid() << ") );" << std::endl;
+  sqlCmd << ")'," << this->GetSrid() << ") ," << attribute << ");" << std::endl;
   //Execute the query
   this->InsertGeometries(sqlCmd.str());
   
@@ -130,7 +131,7 @@ template <class TConnectionImplementation, class TPrecision, unsigned int Spatia
 template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
 void
 PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
-::InsertPolygons(PolygonConstPointerType polygonExtRing, PolygonListConstPointerType polygonListInteriorRing)
+  ::InsertPolygons(PolygonConstPointerType polygonExtRing, PolygonListConstPointerType polygonListInteriorRing, const std::string & attribute)
 {
   std::stringstream sqlCmd;
   this->InsertBegin ( sqlCmd );
@@ -138,21 +139,25 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   //std::cout << "sqlcmd: " << sqlCmd.str() << std::endl;
   typedef typename PolygonType::VertexListConstIteratorType VertexIterator;
   VertexIterator itVertex = polygonExtRing->GetVertexList()->Begin();
+  //std::cout << "sizeof ext poly: " << polygonExtRing->GetVertexList()->Size()<< std::endl;
   while (itVertex != polygonExtRing->GetVertexList()->End())
   {
     //polygon->line_to(itVertex.Value()[0],m_SensorModelFlip*itVertex.Value()[1]);
-    for (uint i=0 ; i < SpatialDimension ; i++)
+    //std::cout << "vertex: " << itVertex.Value()<< std::endl;
+    for (uint i=0 ; i < SpatialDimension ; ++i)
     {
       sqlCmd << itVertex.Value()[i] << " "; 
-      ++itVertex;
+      //++itVertex;
     } 
     sqlCmd << ",";
     ++itVertex;
   }
   //Erase the last ','
+  //std::cout << "avt erase :  " << sqlCmd.str() << std::endl;
   EraseLastChar ( sqlCmd );
-  
+  //std::cout << "apres arase  " << sqlCmd.str() << std::endl;
   sqlCmd << "),";
+  //std::cout << "ext polygon: " << sqlCmd.str() << std::endl;
   //Add interior polygons 
   if ( !polygonListInteriorRing.IsNull() )
   {
@@ -180,7 +185,7 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
        
       sqlCmd << "),";
     }
-    //std::cout << "sqlcmd: " << sqlCmd.str() << std::endl;
+    //std::cout << "int polygon: " << sqlCmd.str() << std::endl;
     
   }
   //Erase the last ','
@@ -188,8 +193,8 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   
   //int this->GetSrid()=-1;
   
-  sqlCmd << ")'," << this->GetSrid() << ") );" << std::endl;
-  //std::cout << "sqlcmd: " << sqlCmd.str() << std::endl;
+  sqlCmd << ")'," << this->GetSrid() << ") ," << attribute << ");" << std::endl;
+  //std::cout << "sqlcmd polygon: " << sqlCmd.str() << std::endl;
   //Insert the geometry
   this->InsertGeometries(sqlCmd.str());
   //std::cout << "geometries!!"  << std::endl;
@@ -206,7 +211,9 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   //std::cout << "transactor string"  << sqlCmd<< std::endl;
   myStringTransactor.SetTransactionString( sqlCmd );
   //this->GetConnection()->ConnectToDB();
-  this->GetConnection()->GetConnection()->perform( myStringTransactor ); 
+this->GetConnection()->GetConnection()->perform( myStringTransactor ); 
+// this->GetConnection()->PerformTransaction( myStringTransactor );
+  //myStringTransactor ( *( this->GetConnection()->GetConnection() ) );
 }
 
 template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
@@ -242,7 +249,7 @@ template <class TConnectionImplementation, class TPrecision, unsigned int Spatia
   myTransactor.SetRemoveExistingTable( dropExistingGISTable );
 
   this->GetConnection()->GetConnection()->perform( myTransactor );
-
+//this->GetConnection()->PerformTransaction( myTransactor );
 }
 
 template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
@@ -265,15 +272,7 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   
 }      
 
-/*
-template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
-ConnectionPointerType
-PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
-::GetConstConnection() const
-{
-  return m_Connection;
-}
-*/
+
 
 template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
 std::string
@@ -307,5 +306,19 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   return connectionSTR;
 }
 } // end namespace otb
+/*
+template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
+const std::string
+PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
+::AddVarCharColumn(unsigned int size)
+{
+}
 
+template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
+void
+PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
+::AddStrDataToVarCharColumn(std::string data)
+{
+}
+*/
 #endif

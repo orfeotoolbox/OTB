@@ -18,9 +18,6 @@
 #define __otbLabelMapToVectorDataFilter_txx
 
 #include "otbLabelMapToVectorDataFilter.h"
-//#include "itkNumericTraits.h"
-//#include "itkProgressReporter.h"
-//#include "itkImageRegionConstIteratorWithIndex.h"
 
 
 namespace otb {
@@ -108,20 +105,18 @@ void
 ::GenerateData()
 {
   
-  // Allocate the output
+  /**Allocate the output*/
   this->AllocateOutputs();
   
   OutputVectorDataType * output = this->GetOutput();
   const InputLabelMapType * input = this->GetInput();
   
-  //ProgressReporter progress( this, 0, output->GetRequestedRegion().GetNumberOfPixels() );
-
-  //AttributeAccessorType accessor;
-
-  //output->FillBuffer( m_BackgroundValue );
+  /**create functors */
   FunctorType functor;
+  SimplifyFunctorType simplifyFunctor;
+  CloseFunctorType closeFunctor;
   
-  //typedef OutputVectorDataType::DataNodeType DataNodeType;
+  /**Create usual root elements of the output vectordata*/
   DataNodePointerType document = DataNodeType::New();
   DataNodePointerType folder1 = DataNodeType::New();
   
@@ -143,29 +138,32 @@ void
     // the label is there if we need it, but it can also be found at labelObject->GetLabel().
     // const PType & label = it->first;
     
-    // the label object
+    /**the label object*/
     LabelObjectType * labelObject = it->second;
+    
+    /**Get the polygon image of the labelobject using the functor*/
     typename PolygonType::Pointer polygon = functor(labelObject);
+    
+    /** Erase aligned points*/
+    PolygonPointerType simplifyPolygon = simplifyFunctor(polygon); 
+    //std::cout << "simplify polygon : " << simplifyPolygon << std::endl;
+    
+    /**Close polygon if necessary*/
+    PolygonPointerType closePolygon = closeFunctor(simplifyPolygon);
+    
     DataNodePointerType node = DataNodeType::New();
     node->SetNodeType(otb::FEATURE_POLYGON);
-    node->SetPolygonExteriorRing(polygon);
+    
+    /**Store the label in the NodeId*/
+    std::ostringstream oss;
+    oss << labelObject->GetLabel();
+    node->SetNodeId(oss.str());
+    //TODO hole in the polygon are not handle yet by the functor
+    node->SetPolygonExteriorRing(closePolygon);
+    
+    /**Add the polygon to the VectorData*/
     output->GetDataTree()->Add(node,folder1);
   }
-  /*
-  for(unsigned int i = 1; i <input->GetNumberOfLabelObjects(); ++i)
-  {
-    if(input->GetLabelObject(i)->GetLabel() != input->GetBackgroundValue())
-    {
-      
-      PolygonType::Pointer polygon = functor(input->GetLabelObject(i));
-      DataNodePointerType node = DataNodeType::New();
-      node->SetNodeType(otb::FEATURE_POLYGON);
-      node->SetPolygonExteriorRing(polygon);
-      output->GetDataTree()->Add(node,folder1);
-      
-    }
-  }
-  */
 }
   
 template<class TLabelMap, class TVectorData >
@@ -174,9 +172,6 @@ LabelMapToVectorDataFilter<TLabelMap, TVectorData>
 ::PrintSelf(std::ostream &os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-/*
-  os << indent << "BackgroundValue: "  << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_BackgroundValue) << std::endl;
-  */
 }
 
 }// end namespace otb
