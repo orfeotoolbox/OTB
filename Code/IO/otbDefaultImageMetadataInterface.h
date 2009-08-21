@@ -71,24 +71,54 @@ public:
   	itkExceptionMacro("GetSolarIrradiance not implemented in DefaultImageMetadataInterface, no captor type found");
   };
   
-   /** Get the imaging day from the ossim metadata */
+   /** Get the imaging acquisition day from the ossim metadata */
   int GetDay( const MetaDataDictionaryType & dict ) const
   {
   	itkExceptionMacro("GetDay not implemented in DefaultImageMetadataInterface, no captor type found");
   };
   
-  /** Get the imaging month from the ossim metadata */
+  /** Get the imaging acquisition month from the ossim metadata */
   int GetMonth( const MetaDataDictionaryType & dict ) const
   {
   	itkExceptionMacro("GetMonth not implemented in DefaultImageMetadataInterface, no captor type found");
   };
   
-  /** Get the imaging month from the ossim metadata */
+  /** Get the imaging acquisition year from the ossim metadata */
   int GetYear( const MetaDataDictionaryType & dict ) const
   {
   	itkExceptionMacro("GetYear not implemented in DefaultImageMetadataInterface, no captor type found");
   };
    
+  /** Get the imaging acquisition hour from the ossim metadata */
+  int GetHour( const MetaDataDictionaryType & dict ) const
+  {
+  	itkExceptionMacro("GetHour not implemented in DefaultImageMetadataInterface, no captor type found");
+  };
+  
+  /** Get the imaging acquisition minute from the ossim metadata */
+  int GetMinute( const MetaDataDictionaryType & dict ) const
+  {
+  	itkExceptionMacro("GetMinute not implemented in DefaultImageMetadataInterface, no captor type found");
+  };
+
+  /** Get the imaging production day from the ossim metadata */
+  int GetProductionDay( const MetaDataDictionaryType & dict ) const
+  {
+  	itkExceptionMacro("GetProductionDay not implemented in DefaultImageMetadataInterface, no captor type found");
+  };
+  
+  /** Get the imaging production month from the ossim metadata */
+  int GetProductionMonth( const MetaDataDictionaryType & dict ) const
+  {
+  	itkExceptionMacro("GetProductionMonth not implemented in DefaultImageMetadataInterface, no captor type found");
+  };
+  
+  /** Get the imaging production year from the ossim metadata */
+  int GetProductionYear( const MetaDataDictionaryType & dict ) const
+  {
+  	itkExceptionMacro("GetProductionYear not implemented in DefaultImageMetadataInterface, no captor type found");
+  };
+  
   /** Get the sat elevation from the ossim metadata */
   double GetSatElevation( const MetaDataDictionaryType & dict ) const
   {

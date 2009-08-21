@@ -117,8 +117,8 @@ IkonosImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) cons
   std::string key;
   ossimString separatorList;
  
-  key = "support_data.production_date";
-  separatorList = "/";
+  key = "support_data.acquisition_date";
+  separatorList = "-";
  
   ossimString keywordString = kwl.find(key.c_str());
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
@@ -126,9 +126,8 @@ IkonosImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) cons
   if(keywordStrings.size() <= 2)
     itkExceptionMacro(<<"Invalid Day");
 
+ // YYYY/MM/DD
  ossimString day = keywordStrings[2];
- // MM/DD/YY
- day = keywordStrings[1];
 
  return day.toInt();
 }
@@ -155,25 +154,202 @@ IkonosImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) co
   std::string key;
   ossimString separatorList;
 
-  key = "support_data.production_date";
-  separatorList = "/";
+  key = "support_data.acquisition_date";
+  separatorList = "-";
   ossimString keywordString = kwl.find(key.c_str());
-  //ossimString separatorList = "-T";
-  //std::string key= "support_data.image_date";
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
 
-  //assert(keywordStrings.size() > 2);
   if(keywordStrings.size() <= 2)
     itkExceptionMacro(<<"Invalid Month");
 
+  // YYYY/MM/DD
   ossimString month = keywordStrings[1];
-  month = keywordStrings[0];
 
   return month.toInt();
 }
 
 int
+IkonosImageMetadataInterface::GetHour( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  std::string key;
+  ossimString separatorList;
+
+  key = "support_data.acquisition_time";
+  separatorList = ":";
+  ossimString keywordString = kwl.find(key.c_str());
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+
+  if(keywordStrings.size() <= 1)
+    itkExceptionMacro(<<"Invalid Hour");
+
+  // HH:MM
+  ossimString hour = keywordStrings[0];
+
+  return hour.toInt();
+}
+
+
+int
+IkonosImageMetadataInterface::GetMinute( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  std::string key;
+  ossimString separatorList;
+
+  key = "support_data.acquisition_time";
+  separatorList = ":";
+  ossimString keywordString = kwl.find(key.c_str());
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+
+  if(keywordStrings.size() <= 1)
+    itkExceptionMacro(<<"Invalid Minute");
+
+  // HH:MM
+  ossimString minute = keywordStrings[1];
+
+  return minute.toInt();
+}
+
+
+int
 IkonosImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  std::string key;
+  ossimString separatorList;
+
+  key = "support_data.acquisition_date";
+  separatorList = "-";
+
+  ossimString keywordString = kwl.find(key.c_str());
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+
+  if(  keywordStrings.size() <= 2 )
+    itkExceptionMacro("Invalid Year");
+
+  // YYYY/MM/DD
+  ossimString year = keywordStrings[0];
+
+  return year.toInt();
+}
+
+int
+IkonosImageMetadataInterface::GetProductionDay( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  std::string key;
+  ossimString separatorList;
+ 
+  key = "support_data.production_date";
+  separatorList = "/";
+ 
+  ossimString keywordString = kwl.find(key.c_str());
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+ 
+  if(keywordStrings.size() <= 2)
+    itkExceptionMacro(<<"Invalid Day");
+
+ // MM/DD/YY
+ ossimString day = keywordStrings[1];
+
+ return day.toInt();
+}
+
+
+int
+IkonosImageMetadataInterface::GetProductionMonth( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  std::string key;
+  ossimString separatorList;
+
+  key = "support_data.production_date";
+  separatorList = "/";
+  ossimString keywordString = kwl.find(key.c_str());
+  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+
+  if(keywordStrings.size() <= 2)
+    itkExceptionMacro(<<"Invalid Month");
+
+  // MM/DD/YY
+  ossimString month = keywordStrings[0];
+
+  return month.toInt();
+}
+
+int
+IkonosImageMetadataInterface::GetProductionYear( const MetaDataDictionaryType & dict ) const
 {
   if( !this->CanRead( dict ) )
   {
@@ -198,19 +374,20 @@ IkonosImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) con
 
   ossimString keywordString = kwl.find(key.c_str());
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
-  //assert(keywordStrings.size() > 2);
+
   if(  keywordStrings.size() <= 2 )
     itkExceptionMacro("Invalid Year");
 
-  ossimString year = keywordStrings[0];
-  // For Ikonos 2002 is 02
+  // MM/DD/YY
+  int year = keywordStrings[2].toInt();
 
-  year = keywordStrings[2];
-  year = "20"+year;
+  if(year==99)
+    year += 1900;
+  else
+    year += 2000;
 
-  return year.toInt();
+  return year;
 }
-
 
 IkonosImageMetadataInterface::VariableLengthVectorType
 IkonosImageMetadataInterface
@@ -238,29 +415,9 @@ IkonosImageMetadataInterface
   	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
-  ImageKeywordlistType ImageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
-  }
-  ossimKeywordlist kwl;
-  ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key= "support_data.production_date";
-  ossimString keywordString = kwl.find(key.c_str());
-  std::string output(keywordString.chars());
-
-  //The Ikonos production date has the format MM/DD/YY
-  ossimString separatorList = "/";
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
-  if (keywordStrings.size() < 3)
-  {
-    itkGenericExceptionMacro(<<"Could not retrieve the production date for Ikonos");
-  }
-
-  int productionYear = keywordStrings[2].toInt();
-  int productionMonth = keywordStrings[0].toInt();
-  int productionDay = keywordStrings[1].toInt();
+  int productionYear = this->GetProductionYear(dict);
+  int productionMonth = this->GetProductionMonth(dict);
+  int productionDay = this->GetProductionDay(dict);
   bool isPost20010122 = false;
   if ((productionYear > 2) || (productionYear < 99)) isPost20010122 = true;
   else
@@ -273,7 +430,7 @@ IkonosImageMetadataInterface
     }
   }
 
-    //Value computed from
+  //Value computed from
   // http://www.geoeye.com/CorpSite/assets/docs/technical-papers/2009/IKONOS_Esun_Calculations.pdf
   // to get the equivalent of the SPOT alpha
   VariableLengthVectorType gain;
