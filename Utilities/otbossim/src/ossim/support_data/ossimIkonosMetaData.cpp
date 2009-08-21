@@ -472,7 +472,7 @@ bool ossimIkonosMetaData::parseMetaData(const ossimFilename& data_file)
   //---
   // Acquisition date and time:
   //---
-  strptr = strstr(filebuf, "\nAcquisition Date\/Time:");
+  strptr = strstr(filebuf, "\nAcquisition Date/Time:");
   if (!strptr)
   {
     if(traceDebug())
