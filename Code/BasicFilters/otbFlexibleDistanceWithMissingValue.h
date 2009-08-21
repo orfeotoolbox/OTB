@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,17 +30,17 @@ namespace Statistics {
 /** \class FlexibleDistanceWithMissingValue
  * \brief Non-Euclidean distance function facing missing value.
  *
- * This class is derived from EuclideanDistanceWithMissingValuePow2 class to 
- * deal with missing data. In addition, the initial Evaluate method performs 
+ * This class is derived from EuclideanDistanceWithMissingValuePow2 class to
+ * deal with missing data. In addition, the initial Evaluate method performs
  * a flexible calculation of distance when a component does contain data.
  *
- * The general formlation is defined as:
+ * The general formulation is defined as:
  * \f$
-    d(x,y) = \sum_i | x_i^a - y_i^a |^b. 
+    d(x,y) = \sum_i | x_i^a - y_i^a |^b.
   \f$
- * 
+ *
  * The class can be templated over any container that holds data elements, as
- * for template of EuclideanDistance. 
+ * for template of EuclideanDistance.
  *
  * The only restriction is that elements have to support '\code{NaN}'.
  *
@@ -54,7 +54,7 @@ class ITK_EXPORT FlexibleDistanceWithMissingValue :
     /** Standard "Self" typedef. */
     typedef FlexibleDistanceWithMissingValue Self;
     typedef otb::Statistics::EuclideanDistanceWithMissingValuePow2< TVector > Superclass;
-    typedef itk::SmartPointer< Self > Pointer ; 
+    typedef itk::SmartPointer< Self > Pointer ;
     typedef itk::SmartPointer<const Self> ConstPointer;
 
     typedef typename Superclass::MeasurementVectorSizeType MeasurementVectorSizeType;
@@ -75,7 +75,7 @@ class ITK_EXPORT FlexibleDistanceWithMissingValue :
     double Evaluate(const TVector &x1, const TVector &x2) const ;
 
     /** Gets the cooridnate distance between a and b. NOTE: a and b
-    * should be type of component */ 
+    * should be type of component */
     double Evaluate(const ValueType &a, const ValueType &b) const ;
 
     /** Returns true if the distance between x and the origin is less
@@ -84,10 +84,10 @@ class ITK_EXPORT FlexibleDistanceWithMissingValue :
       return Superclass::IsWithinRange( x, radius ); }
 
     /** Set the value of the parameter a and b.
-     * Those parameters are defined as static component in order to call it far 
+     * Those parameters are defined as static component in order to call it far
      * away from the instanciation of the class (through the SOM training for instance) */
     static double Alpha;
-    static double Beta;  
+    static double Beta;
     static void SetAlphaBeta( double a, double b);
 
     /** test if it is ordinary Euclidean distance */
@@ -95,7 +95,7 @@ class ITK_EXPORT FlexibleDistanceWithMissingValue :
 
   protected:
     FlexibleDistanceWithMissingValue() {}
-    virtual ~FlexibleDistanceWithMissingValue() {} 
+    virtual ~FlexibleDistanceWithMissingValue() {}
 };  // end of class
 
 /** Static variable instanciation */

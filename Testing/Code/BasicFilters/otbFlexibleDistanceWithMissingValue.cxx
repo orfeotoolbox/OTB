@@ -30,6 +30,8 @@ int otbFlexibleDistanceWithMissingValue( int argc, char * argv[] )
   typedef itk::VariableLengthVector< double > VectorType;
   typedef otb::Statistics::FlexibleDistanceWithMissingValue< VectorType > DistanceType;
 
+  const double epsilon = 0.00000001;
+
   float a = 2.0;
   float b = 0.5;
   DistanceType::SetAlphaBeta(a,b);
@@ -44,7 +46,7 @@ int otbFlexibleDistanceWithMissingValue( int argc, char * argv[] )
   double distanceValue = dist->Evaluate( x, y );
   std::cout << "Distance: " << distanceValue << std::endl;
 
-  if ( distanceValue == 3. )
+  if ( (distanceValue - 3.*vcl_pow(3,b)) < epsilon )
     return EXIT_SUCCESS;
   else
     return EXIT_FAILURE;

@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,7 +37,7 @@ FlexibleDistanceWithMissingValue< TVector >
   if (IsEuclidean())
     return  Superclass::Evaluate(x1,x2);
 
-  if( itk::MeasurementVectorTraits::GetLength( x1 ) != 
+  if( itk::MeasurementVectorTraits::GetLength( x1 ) !=
     itk::MeasurementVectorTraits::GetLength( x2 ) )
   {
     itkExceptionMacro( << "Vector lengths must be equal." );
@@ -49,7 +49,7 @@ FlexibleDistanceWithMissingValue< TVector >
   {
     if ( !IsMissingValue( x1[i] ) && !IsMissingValue( x2[i] ) )
     {
-      temp = pow( fabs( pow(x1[i],this->Alpha) - pow(x2[i],this->Alpha) ), this->Beta );
+      temp = vcl_pow( vcl_abs( vcl_pow(x1[i],this->Alpha) - vcl_pow(x2[i],this->Alpha) ), this->Beta );
       distance += temp ;
     }
   }
@@ -65,15 +65,15 @@ FlexibleDistanceWithMissingValue< TVector >
   if ( IsEuclidean() )
     return  Superclass::Evaluate(x);
 
-  MeasurementVectorSizeType 
+  MeasurementVectorSizeType
     measurementVectorSize = this->GetMeasurementVectorSize();
 
-  if(measurementVectorSize == 0) 
+  if(measurementVectorSize == 0)
   {
     itkExceptionMacro( << "Please set the MeasurementVectorSize first" );
   }
 
-  itk::MeasurementVectorTraits::Assert( this->m_Origin, measurementVectorSize, 
+  itk::MeasurementVectorTraits::Assert( this->m_Origin, measurementVectorSize,
     "EuclideanDistance::Evaluate Origin and input vector have different lengths");
 
   double temp, distance = itk::NumericTraits< double >::Zero ;
@@ -82,7 +82,7 @@ FlexibleDistanceWithMissingValue< TVector >
   {
     if ( !IsMissingValue( this->GetOrigin()[i] ) && !IsMissingValue( x[i] ) )
     {
-      temp = pow(  fabs( pow(this->GetOrigin()[i],this->Alpha) - pow(x[i],this->Alpha) ), this->Beta) ;
+      temp = vcl_pow(  vcl_abs( vcl_pow(this->GetOrigin()[i],this->Alpha) - vcl_pow(x[i],this->Alpha) ), this->Beta) ;
       distance += temp ;
     }
   }
@@ -97,12 +97,12 @@ FlexibleDistanceWithMissingValue< TVector >
 {
   if (IsEuclidean())
     return Superclass::Evaluate(a,b);
-  
+
   // FIXME throw NaN exception or not ??
   if ( IsMissingValue( a ) || IsMissingValue( b ) )
     return 0.0;
 
-  double temp = pow(fabs(pow(a,this->Alpha) - pow(b,this->Alpha)), this->Beta) ;
+  double temp = vcl_pow(vcl_abs(vcl_pow(a,this->Alpha) - vcl_pow(b,this->Alpha)), this->Beta) ;
   return temp ;
 }
 template< class TVector >
@@ -124,7 +124,7 @@ FlexibleDistanceWithMissingValue< TVector >
     return true;
   }
   else
-  {  
+  {
     return false;
   }
 }
