@@ -63,6 +63,7 @@ public:
    ossimString   getSensorID()                            const;
    ossimString   getMetadataVersionString()               const;
    ossimString   getAcquisitionDate()                     const;
+   ossimString   getProductionDate()                      const;
    ossimString   getImageID()                             const;
    ossimFilename getMetadataFile()                        const;
    void          getSunAzimuth(ossim_float64& az)         const;
@@ -208,6 +209,7 @@ private:
     * theUrCorner
     * theLrCorner
     * theLlCorner
+    * theViewingAngle
     *
     * Note that the theRefImagePoint will be the zero based center of the
     * frame.
@@ -219,6 +221,7 @@ private:
    ossimSpotMetadataVersion    theMetadataVersion;
    ossimString                 theImageID;
    ossimFilename               theMetadataFile;
+   ossimString                 theProductionDate;
 
    /*
     * From xml section:

@@ -1357,7 +1357,7 @@ ADD_TEST(ioTvSpatialObjectDXFReader ${IO_TESTS11}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS12 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# -------     Test pour la lecture des m�tadonn�es OSSIM  ------------------------
+# -------     metadatas OSSIM reading tests  ------------------------
 
 # ---  Quickbird Metadata ---
 IF(OTB_DATA_USE_LARGEINPUT)
@@ -1397,15 +1397,15 @@ ADD_TEST(ioTvOSSIMImageERS2MetaDataReader ${IO_TESTS12}
          )
 
 # ---  SPOT4 Metadata ---
-ADD_TEST(ioTvOSSIMImageSPOT4MetaDataReader ${IO_TESTS12}
-#   --compare-n-ascii ${EPS} 2           ${BASELINE_FILES}/ioOSSIMImageSPOT4MetaDataReader.txt
-#                                        ${TEMP}/ioOSSIMImageSPOT4MetaDataReader.txt
-#                                        ${BASELINE_FILES}/ioOSSIMImageSPOT4MetaDataReader.txt
-#                                        ${TEMP}/ioOSSIMVectorImageSPOT4MetaDataReader.txt
+ADD_TEST(ioTvOSSIMImageSPOT5MetaDataReader ${IO_TESTS12}
+   --compare-n-ascii ${EPS} 2           ${BASELINE_FILES}/ioOSSIMImageSPOT5MetaDataReader.txt
+                                        ${TEMP}/ioOSSIMImageSPOT5MetaDataReader.txt
+                                        ${BASELINE_FILES}/ioOSSIMImageSPOT5MetaDataReader.txt
+                                        ${TEMP}/ioOSSIMVectorImageSPOT5MetaDataReader.txt
          otbOSSIMImageMetaDataReaderTest
-         ${LARGEDATA}/SPOT4_SCENE01/IMAG_01.DAT
-	 ${TEMP}/ioOSSIMImageSPOT4MetaDataReader.txt
-	 ${TEMP}/ioOSSIMVectorImageSPOT4MetaDataReader.txt
+         ${LARGEDATA}/SPOT5_SCENE01/IMAGERY.TIF
+	 ${TEMP}/ioOSSIMImageSPOT5MetaDataReader.txt
+	 ${TEMP}/ioOSSIMVectorImageSPOT5MetaDataReader.txt
          )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
