@@ -134,7 +134,12 @@ int otbImageLayerRenderingModelSingleLayer( int argc, char * argv[] )
   std::cout<<"Scaled extract saved."<<std::endl;
 
   // Layer manipulation test
-  model->GetLayerByName(layerName);
+  model->DeleteLayerByName(layerName);
+  model->AddLayer(generator->GetLayer());
+  model->AddLayer(generator->GetLayer());
+  model->DeleteLayer(0);
+  model->DeleteLayer(0);
+  model->ClearLayers();
 
   return EXIT_SUCCESS;
 }
