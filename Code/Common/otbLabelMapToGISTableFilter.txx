@@ -96,7 +96,8 @@ LabelMapToGISTableFilter< TLabelMap, TGISTable >
   input->SetRequestedRegion( input->GetLargestPossibleRegion() );*/
 }
 
-/*
+/*Distance: 5.19615
+ -> Test EXIT SUCCESS.
 template<class TInputImage, class TLabelMap >
 void 
 LabelMapToLabelMapFilter<TInputImage, TLabelMap>

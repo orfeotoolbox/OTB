@@ -81,8 +81,8 @@ public:
   typedef typename PolygonType::Pointer  PolygonPointerType;
   
   typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType,PolygonType> FunctorType;
-  typedef otb::SimplifyPathFunctor<PolygonPointerType,PolygonPointerType> SimplifyFunctorType;
-  typedef ClosePathFunctor <PolygonPointerType,PolygonPointerType> CloseFunctorType;
+  typedef otb::SimplifyPathFunctor<PolygonType,PolygonType> SimplifyFunctorType;
+  typedef ClosePathFunctor <PolygonType,PolygonType> CloseFunctorType;
   /** ImageDimension constants */
   //itkStaticConstMacro(InputImageDimension, unsigned int,
   //                    TInputImage::ImageDimension);

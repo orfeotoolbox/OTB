@@ -35,8 +35,9 @@ template <class TVectorData, class TLabelMap >
 VectorDataToLabelMapFilter<TVectorData, TLabelMap >
   ::VectorDataToLabelMapFilter()
   {
-    m_BackgroundValue = itk::NumericTraits<OutputLabelMapPixelType>::NonpositiveMin();
-    m_lab = 0;
+    m_BackgroundValue = itk::NumericTraits<OutputLabelMapPixelType>::max();
+    //m_lab = 0;
+    m_lab = itk::NumericTraits<LabelType>::Zero;
     m_StartIndex.Fill( 0 );
     m_Size.Fill( 0 );
   }
