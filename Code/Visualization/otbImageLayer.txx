@@ -31,7 +31,7 @@ namespace otb
 
 template <class TImage, class TOutputImage>
 ImageLayer<TImage,TOutputImage>
-::ImageLayer() : m_Quicklook(), m_Image(), m_ListSample(), m_RenderingFunction(),
+::ImageLayer() : m_Quicklook(), m_Image(), m_ListSample(), m_ListSampleProvided(false), m_RenderingFunction(),
                  m_QuicklookRenderingFilter(), m_ExtractRenderingFilter(), m_ScaledExtractRenderingFilter(),
                  m_ExtractFilter(), m_ScaledExtractFilter()
 {
@@ -153,57 +153,60 @@ void
 ImageLayer<TImage,TOutputImage>
 ::UpdateListSample()
 {
-//   otbMsgDevMacro(<<"ImageLayer::UpdateListSample():"<<" ("<<this->GetName()<<")"<< " Entering method");
-  // Declare the source of the histogram
-  ImagePointerType histogramSource;
+  if(!m_ListSampleProvided)
+  {
+  //   otbMsgDevMacro(<<"ImageLayer::UpdateListSample():"<<" ("<<this->GetName()<<")"<< " Entering method");
+    // Declare the source of the histogram
+    ImagePointerType histogramSource;
 
-  // if there is a quicklook, use it for histogram generation
-  if(m_Quicklook.IsNotNull())
-    {
-    histogramSource = m_Quicklook;
-    }
-  else
-    {
-    // Else use the full image (update the data)
-    // REVIEW: Not sure the region is right here. Should be the
-    // largest ?
-    // REPLY: might be... didn't change anything
-    //
-    histogramSource = m_Image;
-    histogramSource->SetRequestedRegion(this->GetExtractRegion());
-    }
+    // if there is a quicklook, use it for histogram generation
+    if(m_Quicklook.IsNotNull())
+      {
+      histogramSource = m_Quicklook;
+      }
+    else
+      {
+      // Else use the full image (update the data)
+      // REVIEW: Not sure the region is right here. Should be the
+      // largest ?
+      // REPLY: might be... didn't change anything
+      //
+      histogramSource = m_Image;
+      histogramSource->SetRequestedRegion(this->GetExtractRegion());
+      }
 
-  // Check if we need to generate the histogram again
-  if( m_ListSample.IsNull() || m_ListSample->Size() == 0 || (histogramSource->GetUpdateMTime() < histogramSource->GetPipelineMTime()) )
-    {
-    otbMsgDevMacro(<<"ImageLayer::UpdateListSample():"<<" ("<<this->GetName()<<")"<< " Regenerating histogram due to pippeline update.");
+    // Check if we need to generate the histogram again
+    if( m_ListSample.IsNull() || m_ListSample->Size() == 0 || (histogramSource->GetUpdateMTime() < histogramSource->GetPipelineMTime()) )
+      {
+      otbMsgDevMacro(<<"ImageLayer::UpdateListSample():"<<" ("<<this->GetName()<<")"<< " Regenerating histogram due to pippeline update.");
 
-    // Update the histogram source
-    histogramSource->Update();
+      // Update the histogram source
+      histogramSource->Update();
 
-    // Iterate on the image
-    itk::ImageRegionConstIterator<ImageType> it(histogramSource,histogramSource->GetBufferedRegion());
+      // Iterate on the image
+      itk::ImageRegionConstIterator<ImageType> it(histogramSource,histogramSource->GetBufferedRegion());
 
-    // declare a list to store the samples
-    m_ListSample->Clear();
+      // declare a list to store the samples
+      m_ListSample->Clear();
 
-    unsigned int sampleSize = VisualizationPixelTraits::PixelSize(it.Get());
-    m_ListSample->SetMeasurementVectorSize(sampleSize);
+      unsigned int sampleSize = VisualizationPixelTraits::PixelSize(it.Get());
+      m_ListSample->SetMeasurementVectorSize(sampleSize);
 
-    // Fill the samples list
-    it.GoToBegin();
-    while(!it.IsAtEnd())
-    {
-      SampleType sample(sampleSize);
-      VisualizationPixelTraits::Convert( it.Get(), sample );
-      m_ListSample->PushBack(sample);
-      ++it;
-    }
-    otbMsgDevMacro(<<"ImageLayer::UpdateListSample()"<<" ("<<this->GetName()<<")"<< " Sample list generated ("<<m_ListSample->Size()<<" samples, "<< sampleSize <<" bands)");
+      // Fill the samples list
+      it.GoToBegin();
+      while(!it.IsAtEnd())
+      {
+        SampleType sample(sampleSize);
+        VisualizationPixelTraits::Convert( it.Get(), sample );
+        m_ListSample->PushBack(sample);
+        ++it;
+      }
+      otbMsgDevMacro(<<"ImageLayer::UpdateListSample()"<<" ("<<this->GetName()<<")"<< " Sample list generated ("<<m_ListSample->Size()<<" samples, "<< sampleSize <<" bands)");
 
-    m_RenderingFunction->SetListSample(m_ListSample);
+      m_RenderingFunction->SetListSample(m_ListSample);
 
-    }
+      }
+  }
 }
 
 
