@@ -9,11 +9,11 @@ Version:   $Revision$
 Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
-Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved. 
+Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved.
 See ITCopyright.txt for details.
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,21 +33,19 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /**
- * Update the output map with a new sample by including the case when some 
+ * Update the output map with a new sample by including the case when some
  * components of this new sample may be missing.
  * \param sample The new sample to learn,
  * \param beta The learning coefficient,
  * \param radius The radius of the nieghbourhood.
  */
 template < class TListSample, class TMap,
-     class TSOMLearningBehaviorFunctor, 
+     class TSOMLearningBehaviorFunctor,
      class TSOMNeighborhoodBehaviorFunctor >
 void
 SOMWithMissingValue< TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor >
 ::UpdateMap( const NeuronType& sample, double beta, SizeType& radius )
 {
-  int i,j;
-
   // output map pointer
   MapPointerType map = this->GetOutput(0);
 
@@ -61,7 +59,7 @@ SOMWithMissingValue< TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighbo
   typename MapType::RegionType mapRegion = map->GetLargestPossibleRegion();
   NeighborhoodIteratorType it ( radius, map, mapRegion );
 
-  // Here, the periodic update is achieved 'by hand' since 
+  // Here, the periodic update is achieved 'by hand' since
   // PeriodicBoundaryCondition does not allow to modifiy
   // VectorImage contents
   SizeType mapSize = mapRegion.GetSize();
@@ -70,22 +68,22 @@ SOMWithMissingValue< TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighbo
   // Iterate over the neighborhood ot the winner neuron
   it.SetLocation( position );
 
-  for ( i = 0; i < it.Size(); i++ )
+  for (unsigned int i = 0; i < it.Size(); i++ )
   {
     typename NeighborhoodIteratorType::OffsetType offset = it.GetOffset(i);
-    
+
     // The neighborhood is of elliptic shape
     double theDistance = itk::NumericTraits< double >::Zero;
-    for ( j = 0; j < MapType::ImageDimension; j++ )
+    for (int j = 0; j < MapType::ImageDimension; j++ )
       theDistance += pow( static_cast<double>( offset[j] ), 2.0 )
               / pow( static_cast<double>( radius[j] ), 2.0 );
 
     if ( theDistance <= 1.0 )
     {
-      for ( j = 0; j < MapType::ImageDimension; j++ )
+      for (int j = 0; j < MapType::ImageDimension; j++ )
       {
         int pos = offset[j] + position[j];
-        positionToUpdate[j] = ( pos >= 0 ) ? 
+        positionToUpdate[j] = ( pos >= 0 ) ?
           pos % mapSize[j] :
           ( mapSize[j] - ( (-pos) % mapSize[j] ) ) % mapSize[j];
       }
@@ -94,7 +92,7 @@ SOMWithMissingValue< TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighbo
       NeuronType newNeuron ( tempNeuron );
 
       double tempBeta = beta / ( 1.0 + theDistance );
-      for( j = 0; j < newNeuron.Size(); j++ )
+      for(unsigned int j = 0; j < newNeuron.Size(); j++ )
       {
         if ( !DistanceType::IsMissingValue( sample[j] ) )
           newNeuron[j] += static_cast<typename NeuronType::ValueType>(

@@ -25,8 +25,8 @@
 namespace otb
 {
 
-template <class TOutputImage>
-ImageLayerRenderingModel<TOutputImage>
+template <class TOutputImage, class TLayer>
+ImageLayerRenderingModel<TOutputImage, TLayer>
 ::ImageLayerRenderingModel() : m_Name("Default"), m_RasterizedQuicklook(), 
                                m_HasQuicklook(false),m_RasterizedExtract(),m_HasExtract(false),
                                m_ExtractRegion(), m_RasterizedScaledExtract(), m_HasScaledExtract(false),
@@ -40,14 +40,14 @@ ImageLayerRenderingModel<TOutputImage>
   m_ScaledExtractBlendingFilterList = BlendingFilterListType::New();
 }
 
-template <class TOutputImage>
-ImageLayerRenderingModel<TOutputImage>
+template <class TOutputImage, class TLayer>
+ImageLayerRenderingModel<TOutputImage, TLayer>
 ::~ImageLayerRenderingModel()
 {}
 
-template <class TOutputImage>
+template <class TOutputImage, class TLayer>
 void
-ImageLayerRenderingModel<TOutputImage>
+ImageLayerRenderingModel<TOutputImage, TLayer>
 ::Update()
 {
   // Multiple concurrent update guards
@@ -65,9 +65,9 @@ ImageLayerRenderingModel<TOutputImage>
 }
 
 
-template <class TOutputImage>
+template <class TOutputImage, class TLayer>
 void
-ImageLayerRenderingModel<TOutputImage>
+ImageLayerRenderingModel<TOutputImage, TLayer>
 ::Init()
 {
   m_QuicklookBlendingFilterList = BlendingFilterListType::New();
@@ -80,9 +80,9 @@ ImageLayerRenderingModel<TOutputImage>
 
 
 
-template <class TOutputImage>
+template <class TOutputImage, class TLayer>
 void
-ImageLayerRenderingModel<TOutputImage>
+ImageLayerRenderingModel<TOutputImage, TLayer>
 ::RenderVisibleLayers()
 {
   // Render all visible layers
@@ -105,9 +105,9 @@ ImageLayerRenderingModel<TOutputImage>
     }
 }
 
-template <class TOutputImage>
+template <class TOutputImage, class TLayer>
 void
-ImageLayerRenderingModel<TOutputImage>
+ImageLayerRenderingModel<TOutputImage, TLayer>
 ::RasterizeVisibleLayers()
 {
   // If there are no layer to render
@@ -240,9 +240,9 @@ ImageLayerRenderingModel<TOutputImage>
     }
 }
 
-template <class TOutputImage>
+template <class TOutputImage, class TLayer>
 void
-ImageLayerRenderingModel<TOutputImage>
+ImageLayerRenderingModel<TOutputImage, TLayer>
 ::Notify(ListenerType * listener)
 {
   // Notify the listener
@@ -251,9 +251,9 @@ ImageLayerRenderingModel<TOutputImage>
 }
 
 
-template <class TOutputImage>
+template <class TOutputImage, class TLayer>
 void
-ImageLayerRenderingModel<TOutputImage>
+ImageLayerRenderingModel<TOutputImage, TLayer>
 ::SetScaledExtractRegionCenter(const IndexType & index)
 {
   // Set the center of the scaled extract region
@@ -263,9 +263,9 @@ ImageLayerRenderingModel<TOutputImage>
   m_ScaledExtractRegion.SetIndex(newIndex);
 }
 
-template <class TOutputImage>
+template <class TOutputImage, class TLayer>
 void
-ImageLayerRenderingModel<TOutputImage>
+ImageLayerRenderingModel<TOutputImage, TLayer>
 ::SetExtractRegionCenter(const IndexType & index)
 {
   // Set the center of the extract region
@@ -281,9 +281,9 @@ ImageLayerRenderingModel<TOutputImage>
 }
 
 
-template <class TOutputImage>
+template <class TOutputImage, class TLayer>
 void
-ImageLayerRenderingModel<TOutputImage>
+ImageLayerRenderingModel<TOutputImage, TLayer>
 ::SetExtractRegionByIndex( const IndexType & startIndex, const IndexType & stopIndex )
 {
   RegionType lImageRegion;
@@ -307,9 +307,9 @@ ImageLayerRenderingModel<TOutputImage>
     }
 }
 
-template <class TOutputImage>
+template <class TOutputImage, class TLayer>
 unsigned int
-ImageLayerRenderingModel<TOutputImage>
+ImageLayerRenderingModel<TOutputImage, TLayer>
 ::GetSubsamplingRate()
 {
   if(this->GetNumberOfLayers() < 1)
@@ -323,10 +323,10 @@ ImageLayerRenderingModel<TOutputImage>
   return baseLayer->GetQuicklookSubsamplingRate();
 }
 
-template <class TOutputImage>
-typename ImageLayerRenderingModel<TOutputImage>
+template <class TOutputImage, class TLayer>
+typename ImageLayerRenderingModel<TOutputImage, TLayer>
 ::RegionType
-ImageLayerRenderingModel<TOutputImage>
+ImageLayerRenderingModel<TOutputImage, TLayer>
 ::ConstrainRegion(const RegionType & small, const RegionType & big)
 {
   RegionType resp = small;
@@ -365,9 +365,9 @@ ImageLayerRenderingModel<TOutputImage>
   return resp;
 }
 
-template <class TOutputImage>
+template <class TOutputImage, class TLayer>
 void
-ImageLayerRenderingModel<TOutputImage>
+ImageLayerRenderingModel<TOutputImage, TLayer>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
