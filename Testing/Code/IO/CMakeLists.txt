@@ -1357,58 +1357,6 @@ ADD_TEST(ioTvSpatialObjectDXFReader ${IO_TESTS11}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS12 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# -------     metadatas OSSIM reading tests  ------------------------
-
-# ---  Quickbird Metadata ---
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(ioTvOSSIMImageQuickbirdMetaDataReader ${IO_TESTS12}
-   --compare-n-ascii ${EPS} 2           ${BASELINE_FILES}/ioOSSIMImageQuickbirdMetaDataReader.txt
-                                        ${TEMP}/ioOSSIMImageQuickbirdMetaDataReader.txt
-                                        ${BASELINE_FILES}/ioOSSIMImageQuickbirdMetaDataReader.txt
-                                        ${TEMP}/ioOSSIMImageQuickbirdMetaDataReader.txt
-         otbOSSIMImageMetaDataReaderTest
-         ${LARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-	 ${TEMP}/ioOSSIMImageQuickbirdMetaDataReader.txt
-	 ${TEMP}/ioOSSIMImageQuickbirdMetaDataReader.txt
-         )
-
-# ---  Radarsat Metadata ---
-ADD_TEST(ioTvOSSIMImageRadarsatMetaDataReader ${IO_TESTS12}
-   --compare-n-ascii ${EPS} 2           ${BASELINE_FILES}/ioOSSIMImageRadarsatMetaDataReader.txt
-                                        ${TEMP}/ioOSSIMImageRadarsatMetaDataReader.txt
-                                        ${BASELINE_FILES}/ioOSSIMImageRadarsatMetaDataReader.txt
-                                        ${TEMP}/ioOSSIMVectorImageRadarsatMetaDataReader.txt
-         otbOSSIMImageMetaDataReaderTest
-         ${LARGEDATA}/RADARSAT2/SCENE01/DAT_01.001
-	 ${TEMP}/ioOSSIMImageRadarsatMetaDataReader.txt
-	 ${TEMP}/ioOSSIMVectorImageRadarsatMetaDataReader.txt
-         )
-
-# ---  ERS2 Metadata ---
-ADD_TEST(ioTvOSSIMImageERS2MetaDataReader ${IO_TESTS12}
-   --compare-n-ascii ${EPS} 2           ${BASELINE_FILES}/ioOSSIMImageERS2MetaDataReader.txt
-                                        ${TEMP}/ioOSSIMImageERS2MetaDataReader.txt
-                                        ${BASELINE_FILES}/ioOSSIMImageERS2MetaDataReader.txt
-                                        ${TEMP}/ioOSSIMVectorImageERS2MetaDataReader.txt
-         otbOSSIMImageMetaDataReaderTest
-         ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001
-	 ${TEMP}/ioOSSIMImageERS2MetaDataReader.txt
-	 ${TEMP}/ioOSSIMVectorImageERS2MetaDataReader.txt
-         )
-
-# ---  SPOT4 Metadata ---
-ADD_TEST(ioTvOSSIMImageSPOT5MetaDataReader ${IO_TESTS12}
-   --compare-n-ascii ${EPS} 2           ${BASELINE_FILES}/ioOSSIMImageSPOT5MetaDataReader.txt
-                                        ${TEMP}/ioOSSIMImageSPOT5MetaDataReader.txt
-                                        ${BASELINE_FILES}/ioOSSIMImageSPOT5MetaDataReader.txt
-                                        ${TEMP}/ioOSSIMVectorImageSPOT5MetaDataReader.txt
-         otbOSSIMImageMetaDataReaderTest
-         ${LARGEDATA}/SPOT5_SCENE01/IMAGERY.TIF
-	 ${TEMP}/ioOSSIMImageSPOT5MetaDataReader.txt
-	 ${TEMP}/ioOSSIMVectorImageSPOT5MetaDataReader.txt
-         )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-
 # ---  otb::DEMHandler ---
 ADD_TEST(ioTuDEMHandlerNew ${IO_TESTS12} otbDEMHandlerNew )
 
@@ -2041,8 +1989,6 @@ otbSpatialObjectDXFReader.cxx
 )
 SET(BasicIO_SRCS12
 otbIOTests12.cxx
-#otbMultiToMonoChannelExtractROISAR.cxx
-otbOSSIMImageMetaDataReaderTest.cxx
 otbDEMHandlerNew.cxx
 otbDEMHandlerTest.cxx
 otbDEMToImageGeneratorNew.cxx
