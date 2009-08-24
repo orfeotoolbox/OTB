@@ -130,6 +130,19 @@ public:
   {
   	itkExceptionMacro("GetSatElevation not implemented in DefaultImageMetadataInterface, no captor type found");
   };
+
+
+  /** Get the first wavelength for the spectral band definition */
+  VariableLengthVectorType GetFirstWavelengths( const MetaDataDictionaryType & dict ) const
+  {
+  	itkExceptionMacro("GetFirstWavelengths not implemented in DefaultImageMetadataInterface, no captor type found");
+  };
+
+  /** Get the last wavelength for the spectral band definition */
+  VariableLengthVectorType GetLastWavelengths( const MetaDataDictionaryType & dict ) const
+  {
+  	itkExceptionMacro("GetLastWavelengths not implemented in DefaultImageMetadataInterface, no captor type found");
+  };
    
   bool CanRead( const MetaDataDictionaryType & dict ) const
   {

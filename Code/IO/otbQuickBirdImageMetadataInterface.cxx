@@ -625,6 +625,101 @@ QuickBirdImageMetadataInterface::GetSatAzimuth( const MetaDataDictionaryType & d
   return keywordString.toDouble();
 }
 
+QuickBirdImageMetadataInterface::VariableLengthVectorType
+QuickBirdImageMetadataInterface
+::GetFirstWavelengths( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+  
+  VariableLengthVectorType wavel(1);
+  wavel.Fill(0.);
+  
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key = "support_data.band_id";
+  ossimString keywordStringBId = kwl.find(key.c_str());
+
+  if (keywordStringBId != ossimString("P") && keywordStringBId != ossimString("Multi"))
+  {
+    itkExceptionMacro(<<"Invalid bandID "<<keywordStringBId);
+  }
+
+  // Panchromatic case
+  if (keywordStringBId == ossimString("P") )
+  {
+    wavel.SetSize(1);
+    wavel.Fill(0.450);
+  }
+  else
+  {
+     wavel.SetSize(4);
+     wavel[0] = 0.450;
+     wavel[1] = 0.520;
+     wavel[2] = 0.630;
+     wavel[3] = 0.760;
+  }
+
+  return wavel;
+}
+
+
+QuickBirdImageMetadataInterface::VariableLengthVectorType
+QuickBirdImageMetadataInterface
+::GetLastWavelengths( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+  
+  VariableLengthVectorType wavel(1);
+  wavel.Fill(0.);
+  
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key = "support_data.band_id";
+  ossimString keywordStringBId = kwl.find(key.c_str());
+
+  if (keywordStringBId != ossimString("P") && keywordStringBId != ossimString("Multi"))
+  {
+    itkExceptionMacro(<<"Invalid bandID "<<keywordStringBId);
+  }
+
+  // Panchromatic case
+  if (keywordStringBId == ossimString("P") )
+  {
+    wavel.SetSize(1);
+    wavel.Fill(0.900);
+  }
+  else
+  {
+     wavel.SetSize(4);
+     wavel[0] = 0.520;
+     wavel[1] = 0.600;
+     wavel[2] = 0.690;
+     wavel[3] = 0.900;
+  }
+
+  return wavel;
+}
+
 
 
 } // end namespace otb

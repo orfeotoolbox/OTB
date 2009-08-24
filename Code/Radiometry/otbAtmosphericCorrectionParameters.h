@@ -90,6 +90,7 @@ public:
   /** Get user step between each wavelenght spectral band values. */
   itkGetMacro(UserStep,WavelenghtSpectralBandType);
 
+
 protected:
   /** Constructor */
   FilterFunctionValues();
@@ -103,8 +104,7 @@ protected:
 private:
   FilterFunctionValues(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
-
+     
   /** Vector that contains the filter function value. */
   ValuesVectorType m_FilterFunctionValues;
   /** Vector that contains the filter function value in 6S format (step of 0.0025µm).
@@ -242,6 +242,22 @@ public:
     return &m_WavelenghtSpectralBand;
   };
 
+  /** Read the aeronet data and extract aerosol optical and water vapor amount. */
+  void UpdateAeronetData( std::string file, int year, int month, int day, int hour, int minute, double epsi );
+  void UpdateAeronetData( std::string file, int year, int month, int day, int hour, int minute )
+  {
+  	this->UpdateAeronetData( file, year, month, day, hour, minute, 0.4 );
+  };
+  void UpdateAeronetData( std::string file, int year, int hour, int minute, double epsi )
+  {
+  	this->UpdateAeronetData( file, year, m_Month, m_Day, hour, minute, epsi );
+  };
+  void UpdateAeronetData( std::string file, int year, int hour, int minute )
+  {
+  	this->UpdateAeronetData( file, year, m_Month, m_Day, hour, minute, 0.4 );
+  };
+    
+  
   /** Constructor */
   AtmosphericCorrectionParameters();
   /** Destructor */
@@ -278,10 +294,8 @@ private:
   AerosolModelType m_AerosolModel;
   /** The Aerosol optical (radiative impact of aerosol for the reference wavelenght 550-nm) */
   double m_AerosolOptical;
-
   /** Wavelenght for the each spectral band definition */
   WavelenghtSpectralBandVectorType m_WavelenghtSpectralBand;
-
 };
 
 } // end namespace otb

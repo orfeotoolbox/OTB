@@ -532,5 +532,107 @@ SpotImageMetadataInterface::GetSatAzimuth( const MetaDataDictionaryType & dict )
   return satAz;
 }
 
+SpotImageMetadataInterface::VariableLengthVectorType
+SpotImageMetadataInterface
+::GetFirstWavelengths( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+  
+  VariableLengthVectorType wavel(1);
+  wavel.Fill(0.);
+
+  
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "support_data.number_bands";
+  int nbBands = ossimString(kwl.find(key.c_str())).toInt();
+  std::string sensorId = this->GetSensorID(dict);
+
+  // Panchromatic case
+  if(nbBands==1)
+  {
+    wavel.SetSize(1);
+    if(sensorId == "SPOT4")
+      wavel.Fill(0.610);
+    else if(sensorId == "SPOT5")
+      wavel.Fill(0.480);
+    else
+      itkExceptionMacro(<<"Invalid Spot Sensor ID");
+  }
+  else if(nbBands>1 && nbBands<5)
+  {
+     wavel.SetSize(4);
+     wavel[0] = 0.500;
+     wavel[1] = 0.610;
+     wavel[2] = 0.780;
+     wavel[3] = 1.580;
+  }
+  else
+    itkExceptionMacro(<<"Invalid number of bands...");
+
+  return wavel;
+}
+
+
+SpotImageMetadataInterface::VariableLengthVectorType
+SpotImageMetadataInterface
+::GetLastWavelengths( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+  
+  VariableLengthVectorType wavel(1);
+  wavel.Fill(0.);
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "support_data.number_bands";
+  int nbBands = ossimString(kwl.find(key.c_str())).toInt();
+  std::string sensorId = this->GetSensorID(dict);
+
+  // Panchromatic case
+  if(nbBands==1)
+  {
+    wavel.SetSize(1);
+    if(sensorId == "SPOT4")
+      wavel.Fill(0.680);
+    else if(sensorId == "SPOT5")
+      wavel.Fill(0.710);
+    else
+      itkExceptionMacro(<<"Invalid Spot Sensor ID");
+  }
+  else if(nbBands>1 && nbBands<5)
+  {
+     wavel.SetSize(4);
+     wavel[0] = 0.590;
+     wavel[1] = 0.680;
+     wavel[2] = 0.890;
+     wavel[3] = 1.750;
+  }
+  else
+    itkExceptionMacro(<<"Invalid number of bands...");
+
+  return wavel;
+}
+
 
 } // end namespace otb

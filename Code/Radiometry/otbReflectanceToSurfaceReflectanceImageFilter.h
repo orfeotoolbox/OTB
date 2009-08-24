@@ -158,6 +158,10 @@ public:
   typedef AtmosphericCorrectionParameters::Pointer                      CorrectionParametersPointerType;
   typedef AtmosphericRadiativeTerms::Pointer                            AtmosphericRadiativeTermsPointerType;
 
+  typedef FilterFunctionValues                                          FilterFunctionValuesType;
+  typedef FilterFunctionValuesType::ValuesVectorType                    CoefVectorType;
+  typedef std::vector<CoefVectorType>                                   FilterFunctionCoefVectorType;
+  
   typedef itk::MetaDataDictionary                                       MetaDataDictionaryType;
 
   /** Get/Set Atmospheric Radiative Terms. */
@@ -176,6 +180,21 @@ public:
   /** Get/Set Aeronet file name. */
   itkSetMacro(AeronetFileName, std::string);
   itkGetMacro(AeronetFileName, std::string);
+
+  /** Get/Set Aeronet file name. */
+  itkSetMacro(FilterFunctionValuesFileName, std::string);
+  itkGetMacro(FilterFunctionValuesFileName, std::string);
+
+  /** Get/Set Filter function coef. */
+  void SetFilterFunctionCoef( FilterFunctionCoefVectorType vect )
+  {
+  	m_FilterFunctionCoef = vect;
+  	this->Modified();
+  }
+  FilterFunctionCoefVectorType GetFilterFunctionCoef()
+  {
+  	return m_FilterFunctionCoef;
+  }
 
 protected:
   /** Constructor */
@@ -199,6 +218,12 @@ private:
   bool m_IsSetAtmosphericRadiativeTerms;
   /** Path to an Aeronet data file, allows to compute aerosol optical and water vapor amounts. */
   std::string m_AeronetFileName;
+  /** Path to an filter function values file. */
+  std::string m_FilterFunctionValuesFileName;
+  /** Contains the filter function values (each element is a vector and represnts the values for each channel) */
+  FilterFunctionCoefVectorType m_FilterFunctionCoef;
+  /** BeforeThreadedGenerateData executed once or not */
+  bool m_BeforeDone;
 };
 
 } // end namespace otb

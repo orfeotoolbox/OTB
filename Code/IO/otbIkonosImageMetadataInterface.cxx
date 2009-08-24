@@ -522,4 +522,93 @@ IkonosImageMetadataInterface::GetSatAzimuth( const MetaDataDictionaryType & dict
 }
 
 
+IkonosImageMetadataInterface::VariableLengthVectorType
+IkonosImageMetadataInterface
+::GetFirstWavelengths( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+     itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+  
+  VariableLengthVectorType wavel(1);
+  wavel.Fill(0.);
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "support_data.number_bands";
+  int nbBands = ossimString(kwl.find(key.c_str())).toInt();
+
+  // Panchromatic case
+  if(nbBands==1)
+  {
+    wavel.SetSize(1);
+    wavel.Fill(0.526);
+  }
+  else if(nbBands==4)
+  {
+     wavel.SetSize(4);
+     wavel[0] = 0.445;
+     wavel[1] = 0.506;
+     wavel[2] = 0.632;
+     wavel[3] = 0.757;
+  }
+  else
+    itkExceptionMacro(<<"Invalid number of bands...");
+
+  return wavel;
+}
+
+
+IkonosImageMetadataInterface::VariableLengthVectorType
+IkonosImageMetadataInterface
+::GetLastWavelengths( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+  
+  VariableLengthVectorType wavel(1);
+  wavel.Fill(0.);
+   
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "support_data.number_bands";
+  int nbBands = ossimString(kwl.find(key.c_str())).toInt();
+
+  // Panchromatic case
+  if(nbBands==1)
+  {
+    wavel.SetSize(1);
+    wavel.Fill(0.929);
+  }
+  else if(nbBands==4)
+  {
+     wavel.SetSize(4);
+     wavel[0] = 0.516;
+     wavel[1] = 0.595;
+     wavel[2] = 0.698;
+     wavel[3] = 0.853;
+  }
+  else
+    itkExceptionMacro(<<"Invalid number of bands...");
+
+  return wavel;
+}
+
 } // end namespace otb
