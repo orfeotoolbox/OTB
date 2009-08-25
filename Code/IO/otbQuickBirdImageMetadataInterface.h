@@ -91,6 +91,12 @@ public:
   
   /** Get the sat azimuth from the ossim metadata */
   double GetSatAzimuth( const MetaDataDictionaryType & dict ) const;
+
+  /** Get the first wavelength for the spectral band definition */
+  VariableLengthVectorType GetFirstWavelengths( const MetaDataDictionaryType & dict ) const;
+  
+  /** Get the last wavelength for the spectral band definition */
+  VariableLengthVectorType GetLastWavelengths( const MetaDataDictionaryType & dict ) const;
   
   bool CanRead( const MetaDataDictionaryType & dict) const;
   

@@ -56,7 +56,7 @@ public:
    * \param event The event
    * \return true if the event is handled
    */
-  virtual bool HandleWidgetEvent(std::string widgetId, int event)
+  virtual bool HandleWidgetEvent(std::string /*widgetId*/, int /*event*/)
   {
     return false;
   }
@@ -67,7 +67,7 @@ public:
    * \param y new y location
    * \return true if the event is handled
    */
-  virtual bool HandleWidgetMove(std::string widgetId,int x,int y)
+  virtual bool HandleWidgetMove(std::string /*widgetId*/,int /*x*/,int /*y*/)
   {
     return false;
   }
@@ -78,7 +78,7 @@ public:
    * \param h new height
    * \return true if the event is handled
    */
-  virtual bool HandleWidgetResize(std::string widgetId,int w, int h)
+  virtual bool HandleWidgetResize(std::string /*widgetId*/,int /*w*/, int /*h*/)
   {
     return false;
   }

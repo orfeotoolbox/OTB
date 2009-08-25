@@ -18,6 +18,12 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbAtmosphericCorrectionParameters.h"
 
+#include "otbAeronetFileReader.h"
+#include <fstream>
+#include <iostream>
+
+
+
 namespace otb
 {
 /***********************      FilterFunctionValues **************************/
@@ -26,6 +32,7 @@ FilterFunctionValues
 {
   m_MinSpectralValue = 0;
   m_MaxSpectralValue = 0;
+  m_UserStep = 0.0025;
   m_FilterFunctionValues.clear();
 }
 
@@ -59,8 +66,55 @@ FilterFunctionValues
 AtmosphericCorrectionParameters
 ::AtmosphericCorrectionParameters()
 {
-  m_AerosolModel = CONTINENTAL;
+  m_SolarZenithalAngle   = 361.;
+  m_SolarAzimutalAngle   = 361.;
+  m_ViewingZenithalAngle = 361.;
+  m_ViewingAzimutalAngle = 361.;
+  m_Month                = 0;
+  m_Day                  = 0;
+  m_AtmosphericPressure  = 1030.;
+  m_WaterVaporAmount     = 2.5;
+  m_OzoneAmount          = 0.28;
+  m_AerosolModel         = CONTINENTAL;
+  m_AerosolOptical       = 0.2;
 }
+
+/** Get data from aeronet file*/
+void
+AtmosphericCorrectionParameters
+::UpdateAeronetData( std::string file, int year, int month, int day, int hour, int minute, double epsi )
+{ 
+	if(file == "")
+	  itkExceptionMacro(<<"No Aeronet filename specified.");
+		
+    AeronetFileReader::Pointer reader = AeronetFileReader::New();
+    reader->SetFileName(file);
+    reader->SetDay(day);
+    reader->SetMonth(month);
+    reader->SetYear(year);
+    reader->SetHour(hour);
+    reader->SetMinute(minute);
+    reader->SetEpsilon(epsi);
+    std::cout<<day<<std::endl;
+    std::cout<<month<<std::endl;
+    std::cout<<year<<std::endl;
+    std::cout<<hour<<std::endl;
+    std::cout<<minute<<std::endl;
+    std::cout<<epsi<<std::endl;
+
+    std::cout<<reader->GetDay()<<std::endl;
+    std::cout<<reader->GetMonth()<<std::endl;
+    std::cout<<reader->GetYear()<<std::endl;
+    std::cout<<reader->GetHour()<<std::endl;
+    std::cout<<reader->GetMinute()<<std::endl;
+    std::cout<<reader->GetEpsilon()<<std::endl;
+                    
+    reader->Update();
+    
+    m_AerosolOptical = reader->GetOutput()->GetAerosolOpticalThickness();
+    m_WaterVaporAmount = reader->GetOutput()->GetWater();
+}
+
 
 /**PrintSelf method */
 void

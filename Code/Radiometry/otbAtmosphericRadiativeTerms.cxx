@@ -505,6 +505,15 @@ AtmosphericRadiativeTerms
   {
     os << indent << "Channel "<< i << " : "<< std::endl;
     //ValueType::(os,indent);
+    os << indent << "Intrinsic Atmospheric Reflectance        : " << m_Values[i]->GetIntrinsicAtmosphericReflectance() << std::endl;
+    os << indent << "Shperical Albedo of the Atmosphere       : " << m_Values[i]->GetSphericalAlbedo() << std::endl;
+    os << indent << "Total Gaseous Transmission               : " << m_Values[i]->GetTotalGaseousTransmission() << std::endl;
+    os << indent << "Downward Transmittance of the Atmospher  : " << m_Values[i]->GetDownwardTransmittance() << std::endl;
+    os << indent << "Upward Transmittance of the Atmospher    : " << m_Values[i]->GetUpwardTransmittance() << std::endl;
+    os << indent << "Upward diffuse transmittance             : " << m_Values[i]->GetUpwardDiffuseTransmittance() << std::endl;
+    os << indent << "Upward direct transmittance              : " << m_Values[i]->GetUpwardDirectTransmittance() << std::endl;
+    os << indent << "Upward diffuse transmittance for rayleigh: " << m_Values[i]->GetUpwardDiffuseTransmittanceForRayleigh() << std::endl;
+    os << indent << "Upward diffuse transmittance for aerosols: " << m_Values[i]->GetUpwardDiffuseTransmittanceForAerosol() << std::endl;
   }
 }
 

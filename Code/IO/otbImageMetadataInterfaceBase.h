@@ -194,6 +194,14 @@ public:
   virtual double GetSatAzimuth( const MetaDataDictionaryType & dict ) const =0;
   otbMetadataGetMacro(SatAzimuth, double);
 
+  /** Get the first wavelength for the spectral band definition */
+  virtual VariableLengthVectorType GetFirstWavelengths( const MetaDataDictionaryType & dict ) const =0;
+  otbMetadataGetMacro(FirstWavelengths, VariableLengthVectorType);
+
+  /** Get the last wavelength for the spectral band definition */
+  virtual VariableLengthVectorType GetLastWavelengths( const MetaDataDictionaryType & dict ) const =0;
+  otbMetadataGetMacro(LastWavelengths, VariableLengthVectorType);
+
   virtual bool CanRead( const MetaDataDictionaryType & dict ) const =0;
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const;

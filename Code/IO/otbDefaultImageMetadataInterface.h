@@ -54,84 +54,97 @@ public:
 
 
     /** Get the radiometric bias from the ossim metadata */
-  VariableLengthVectorType GetPhysicalBias( const MetaDataDictionaryType & dict ) const
+  VariableLengthVectorType GetPhysicalBias( const MetaDataDictionaryType & /*dict*/ ) const
   {
   	itkExceptionMacro("GetPhysicalBias not implemented in DefaultImageMetadataInterface, no captor type found");
   };
   
   /** Get the radiometric gain from the ossim metadata */
-  VariableLengthVectorType GetPhysicalGain( const MetaDataDictionaryType & dict ) const
+  VariableLengthVectorType GetPhysicalGain( const MetaDataDictionaryType & /*dict*/ ) const
   {
   	itkExceptionMacro("GetPhysicalGain not implemented in DefaultImageMetadataInterface, no captor type found");
   };
   
   /** Get the solar irradiance from the ossim metadata */
-  VariableLengthVectorType GetSolarIrradiance( const MetaDataDictionaryType & dict ) const
+  VariableLengthVectorType GetSolarIrradiance( const MetaDataDictionaryType & /*dict*/ ) const
   {
   	itkExceptionMacro("GetSolarIrradiance not implemented in DefaultImageMetadataInterface, no captor type found");
   };
   
    /** Get the imaging acquisition day from the ossim metadata */
-  int GetDay( const MetaDataDictionaryType & dict ) const
+  int GetDay( const MetaDataDictionaryType & /*dict*/ ) const
   {
   	itkExceptionMacro("GetDay not implemented in DefaultImageMetadataInterface, no captor type found");
   };
   
   /** Get the imaging acquisition month from the ossim metadata */
-  int GetMonth( const MetaDataDictionaryType & dict ) const
+  int GetMonth( const MetaDataDictionaryType & /*dict*/ ) const
   {
   	itkExceptionMacro("GetMonth not implemented in DefaultImageMetadataInterface, no captor type found");
   };
   
   /** Get the imaging acquisition year from the ossim metadata */
-  int GetYear( const MetaDataDictionaryType & dict ) const
+  int GetYear( const MetaDataDictionaryType & /*dict*/ ) const
   {
   	itkExceptionMacro("GetYear not implemented in DefaultImageMetadataInterface, no captor type found");
   };
    
   /** Get the imaging acquisition hour from the ossim metadata */
-  int GetHour( const MetaDataDictionaryType & dict ) const
+  int GetHour( const MetaDataDictionaryType & /*dict*/ ) const
   {
   	itkExceptionMacro("GetHour not implemented in DefaultImageMetadataInterface, no captor type found");
   };
   
   /** Get the imaging acquisition minute from the ossim metadata */
-  int GetMinute( const MetaDataDictionaryType & dict ) const
+  int GetMinute( const MetaDataDictionaryType & /*dict*/ ) const
   {
   	itkExceptionMacro("GetMinute not implemented in DefaultImageMetadataInterface, no captor type found");
   };
 
   /** Get the imaging production day from the ossim metadata */
-  int GetProductionDay( const MetaDataDictionaryType & dict ) const
+  int GetProductionDay( const MetaDataDictionaryType & /*dict*/ ) const
   {
   	itkExceptionMacro("GetProductionDay not implemented in DefaultImageMetadataInterface, no captor type found");
   };
   
   /** Get the imaging production month from the ossim metadata */
-  int GetProductionMonth( const MetaDataDictionaryType & dict ) const
+  int GetProductionMonth( const MetaDataDictionaryType & /*dict*/ ) const
   {
   	itkExceptionMacro("GetProductionMonth not implemented in DefaultImageMetadataInterface, no captor type found");
   };
   
   /** Get the imaging production year from the ossim metadata */
-  int GetProductionYear( const MetaDataDictionaryType & dict ) const
+  int GetProductionYear( const MetaDataDictionaryType & /*dict*/ ) const
   {
   	itkExceptionMacro("GetProductionYear not implemented in DefaultImageMetadataInterface, no captor type found");
   };
   
   /** Get the sat elevation from the ossim metadata */
-  double GetSatElevation( const MetaDataDictionaryType & dict ) const
+  double GetSatElevation( const MetaDataDictionaryType & /*dict*/ ) const
   {
   	itkExceptionMacro("GetSatElevation not implemented in DefaultImageMetadataInterface, no captor type found");
   };
   
   /** Get the sat azimuth from the ossim metadata */
-  double GetSatAzimuth( const MetaDataDictionaryType & dict ) const
+  double GetSatAzimuth( const MetaDataDictionaryType & /*dict*/ ) const
   {
   	itkExceptionMacro("GetSatElevation not implemented in DefaultImageMetadataInterface, no captor type found");
   };
+
+
+  /** Get the first wavelength for the spectral band definition */
+  VariableLengthVectorType GetFirstWavelengths( const MetaDataDictionaryType & /*dict*/ ) const
+  {
+  	itkExceptionMacro("GetFirstWavelengths not implemented in DefaultImageMetadataInterface, no captor type found");
+  };
+
+  /** Get the last wavelength for the spectral band definition */
+  VariableLengthVectorType GetLastWavelengths( const MetaDataDictionaryType & /*dict*/ ) const
+  {
+  	itkExceptionMacro("GetLastWavelengths not implemented in DefaultImageMetadataInterface, no captor type found");
+  };
    
-  bool CanRead( const MetaDataDictionaryType & dict ) const
+  bool CanRead( const MetaDataDictionaryType & /*dict*/ ) const
   {
 	// This clas is the default one, it has to be able to call every metadata
   	return true;

@@ -155,10 +155,10 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
   double upwardDirectTransmittance(0.);
   double upwardDiffuseTransmittanceForRayleigh(0.);
   double upwardDiffuseTransmittanceForAerosol(0.);
-
+  
   for (unsigned int i=0; i<NbBand; ++i)
   {
-    atmosphericReflectance = 0.;
+  	atmosphericReflectance = 0.;
     atmosphericSphericalAlbedo = 0.;
     totalGaseousTransmission = 0.;
     downwardTransmittance = 0.;

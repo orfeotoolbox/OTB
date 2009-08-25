@@ -77,7 +77,12 @@ public:
   typedef typename DataNodeType::Pointer DataNodePointerType;
   typedef itk::TreeContainer<DataNodePointerType> DataTreeType;
   typedef typename DataTreeType::Pointer DataTreePointerType;
+
   typedef typename DataNodeType::PointType PointType;
+  typedef typename DataNodeType::LineType LineType;
+  typedef typename DataNodeType::PolygonType PolygonType;
+
+
 
   typedef itk::Vector<double, 2> SpacingType;
   typedef itk::Point<double, 2> OriginType;

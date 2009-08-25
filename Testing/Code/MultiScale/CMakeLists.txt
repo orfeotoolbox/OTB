@@ -8,7 +8,8 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
-SET(EPSILON 0.00000001)
+SET(EPSILON6 0.000001)
+SET(EPSILON8 0.00000001)
 
 
 SET(MULTISCALE_TESTS1 ${CXX_TEST_PATH}/otbMultiScaleTests1)
@@ -25,7 +26,7 @@ ADD_TEST(msTuMorphoPyrResamplerNew ${MULTISCALE_TESTS1}
          otbMorphologicalPyramidResamplerNew)
 
 ADD_TEST(msTvMorphoPyrResampler ${MULTISCALE_TESTS1}
-  --compare-n-images ${EPSILON} 2
+  --compare-n-images ${EPSILON8} 2
 		   ${BASELINE}/msPyrResampler_IKO_LesHalles_256_2.hdr
 		   ${TEMP}/msPyrResampler_IKO_LesHalles_256_2.hdr
 		   ${BASELINE}/msPyrResampler_IKO_LesHalles_full.hdr
@@ -83,7 +84,7 @@ ADD_TEST(msTuMorphoPyrMRToMSConverterNew ${MULTISCALE_TESTS1}
          otbMorphologicalPyramidMRToMSConverterNew)
 
 ADD_TEST(msTvMorphoPyrMRToMSConverter ${MULTISCALE_TESTS1}
-   --compare-n-images ${EPSILON} 3
+   --compare-n-images ${EPSILON8} 3
  		   ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
  		   ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
 		   ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_if_full.hdr
@@ -359,13 +360,13 @@ ADD_TEST(msTvGeodesicMorphologyIterativeDecompositionImageFilter ${MULTISCALE_TE
 
 # -------            otb::WaveletOperator    ----------
 
-ADD_TEST(msTuWaveletOperatorNew ${MULTISCALE_TESTS4} 
+ADD_TEST(msTuWaveletOperatorNew ${MULTISCALE_TESTS4}
          otbWaveletOperatorNew )
 
 # Further tests ar skiped for the moment due to unexpected "Multiple Defined" errors...
 #IF(DESACTIVATED_FOR_NOW)
 
-ADD_TEST(msTuWaveletOperator ${MULTISCALE_TESTS4} 
+ADD_TEST(msTuWaveletOperator ${MULTISCALE_TESTS4}
          otbWaveletOperator )
 
 # -------            otb::WaveletFilterBankNew   ----------
@@ -376,7 +377,7 @@ ADD_TEST(msTuWaveletInverseFilterBankNew ${MULTISCALE_TESTS4}
          otbWaveletInverseFilterBankNew)
 
 ADD_TEST(msTvWaveletFilterBank ${MULTISCALE_TESTS4}
-        --compare-image ${TOL} 
+        --compare-image ${TOL}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_FilterBank.tif
          otbWaveletFilterBank
@@ -386,7 +387,7 @@ ADD_TEST(msTvWaveletFilterBank ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletMultiScaleFilterBank ${MULTISCALE_TESTS4}
-        --compare-image ${TOL} 
+        --compare-image ${EPSILON6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_FilterBankMultiScale.tif
          otbWaveletFilterBank
@@ -403,7 +404,7 @@ ADD_TEST(msTuWaveletInverseTransformNew ${MULTISCALE_TESTS4}
          otbWaveletInverseTransformNew)
 
 ADD_TEST(msTvWaveletTransform ${MULTISCALE_TESTS4}
-        --compare-image ${TOL} 
+        --compare-image ${EPSILON6}
 			  ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_Wvlt.tif
          otbWaveletTransform
@@ -413,7 +414,7 @@ ADD_TEST(msTvWaveletTransform ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletMultiScaleTransform ${MULTISCALE_TESTS4}
-        --compare-image ${TOL} 
+        --compare-image ${TOL}
 			  ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScale.tif
          otbWaveletTransform
@@ -430,7 +431,7 @@ ADD_TEST(msTuWaveletPacketInverseTransformNew ${MULTISCALE_TESTS4}
          otbWaveletPacketInverseTransformNew)
 
 ADD_TEST(msTvWaveletPacketTransform ${MULTISCALE_TESTS4}
-        --compare-image ${TOL} 
+        --compare-image ${EPSILON6}
 			  ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
 			  ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacket.tif
          otbWaveletPacketTransform
@@ -440,7 +441,7 @@ ADD_TEST(msTvWaveletPacketTransform ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletPacketMultiScaleTransform ${MULTISCALE_TESTS4}
-        --compare-image ${TOL} 
+        --compare-image ${EPSILON6}
 			  ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
 			  ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketMultiScale.tif
          otbWaveletPacketTransform

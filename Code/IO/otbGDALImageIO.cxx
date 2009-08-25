@@ -1035,7 +1035,7 @@ std::string GDALImageIO::GetGdalWriteImageFileName(std::string & extGDAL, std::s
   return gdalFileName;
 }
 
-bool GDALImageIO::GDALInfoReportCorner( const char * corner_name, double x, double y, double &GeoX, double &GeoY)
+bool GDALImageIO::GDALInfoReportCorner( const char * /*corner_name*/, double x, double y, double &GeoX, double &GeoY)
 {
   const char  *pszProjection;
   double  adfGeoTransform[6];
