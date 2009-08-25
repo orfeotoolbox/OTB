@@ -24,6 +24,7 @@ SET(RADIOMETRY_TESTS5 ${CXX_TEST_PATH}/otbRadiometryTests5)
 SET(RADIOMETRY_TESTS6 ${CXX_TEST_PATH}/otbRadiometryTests6)
 SET(RADIOMETRY_TESTS7 ${CXX_TEST_PATH}/otbRadiometryTests7)
 SET(RADIOMETRY_TESTS8 ${CXX_TEST_PATH}/otbRadiometryTests8)
+SET(RADIOMETRY_TESTS9 ${CXX_TEST_PATH}/otbRadiometryTests9)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1021,7 +1022,20 @@ ADD_TEST(raTvAeronet_ArcachonLevel10_ExtractData ${RADIOMETRY_TESTS8}
         ${TEMP}/raAeronetExtractData_ArcachonLevel10_16_08_2009_13_00_epsilon_1.txt
 )
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS9 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(raTvReflectanceToSurfaceReflectanceImageFilterQB ${RADIOMETRY_TESTS9}
+#   --compare-ascii ${EPSILON_10e6} ${BASELINE_FILES}/raAeronetExtractData_ArcachonLevel10_16_08_2009_13_00_epsilon_1.txt
+#                          ${TEMP}/raAeronetExtractData_ArcachonLevel10_16_08_2009_13_00_epsilon_1.txt
+        otbReflectanceToSurfaceReflectanceImageFilterQB
+        ${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${INPUTDATA}/AERONET/090101_091231_Seysses.lev15
+        test.tif
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 
@@ -1115,6 +1129,12 @@ otbAeronetExtractData.cxx
 otbAeronetExtractDataBadData.cxx
 )
 
+
+SET(Radiometry_SRCS9
+otbRadiometryTests9.cxx
+otbReflectanceToSurfaceReflectanceImageFilterQB.cxx
+)
+
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 OTB_ADD_EXECUTABLE(otbRadiometryTests1 "${Radiometry_SRCS1}" "OTBRadiometry;OTBIO;OTBTesting")
@@ -1125,5 +1145,6 @@ OTB_ADD_EXECUTABLE(otbRadiometryTests5 "${Radiometry_SRCS5}" "OTBRadiometry;OTBI
 OTB_ADD_EXECUTABLE(otbRadiometryTests6 "${Radiometry_SRCS6}" "OTBRadiometry;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbRadiometryTests7 "${Radiometry_SRCS7}" "OTBRadiometry;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbRadiometryTests8 "${Radiometry_SRCS8}" "OTBRadiometry;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbRadiometryTests9 "${Radiometry_SRCS9}" "OTBRadiometry;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

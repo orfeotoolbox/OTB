@@ -23,9 +23,11 @@
 #define __otbReflectanceToSurfaceReflectanceImageFilter_h
 
 
-#include "otbAtmosphericRadiativeTerms.h"
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 
+#include "otbAtmosphericRadiativeTerms.h"
+#include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"
+#include "itkMetaDataDictionary.h"
 
 namespace otb
 {
@@ -144,64 +146,90 @@ public:
   itkTypeMacro(ReflectanceToSurfaceReflectanceImageFilter, UnaryImageFunctorWithVectorImageFilter);
 
   /** Supported images definition. */
-  typedef typename InputImageType::PixelType                           InputPixelType;
-  typedef typename InputImageType::InternalPixelType                   InputInternalPixelType;
-  typedef typename InputImageType::RegionType                          InputImageRegionType;
-  typedef typename OutputImageType::PixelType                          OutputPixelType;
-  typedef typename OutputImageType::InternalPixelType                  OutputInternalPixelType;
-  typedef typename OutputImageType::RegionType                         OutputImageRegionType;
+  typedef typename InputImageType::PixelType                            InputPixelType;
+  typedef typename InputImageType::InternalPixelType                    InputInternalPixelType;
+  typedef typename InputImageType::RegionType                           InputImageRegionType;
+  typedef typename OutputImageType::PixelType                           OutputPixelType;
+  typedef typename OutputImageType::InternalPixelType                   OutputInternalPixelType;
+  typedef typename OutputImageType::RegionType                          OutputImageRegionType;
 
-  typedef AtmosphericRadiativeTerms::Pointer                           AtmosphericRadiativeTermsPointerType;
+  typedef AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms  Parameters2RadiativeTermsType;
+  typedef Parameters2RadiativeTermsType::Pointer                        Parameters2RadiativeTermsPointerType;
+  typedef AtmosphericCorrectionParameters::Pointer                      CorrectionParametersPointerType;
+  typedef AtmosphericRadiativeTerms::Pointer                            AtmosphericRadiativeTermsPointerType;
+
+  typedef FilterFunctionValues                                          FilterFunctionValuesType;
+  typedef FilterFunctionValuesType::ValuesVectorType                    CoefVectorType;
+  typedef std::vector<CoefVectorType>                                   FilterFunctionCoefVectorType;
+  
+  typedef itk::MetaDataDictionary                                       MetaDataDictionaryType;
 
   /** Get/Set Atmospheric Radiative Terms. */
   void SetAtmosphericRadiativeTerms(AtmosphericRadiativeTermsPointerType atmo)
   {
     m_AtmosphericRadiativeTerms = atmo;
     this->SetNthInput(1, m_AtmosphericRadiativeTerms);
+    m_IsSetAtmosphericRadiativeTerms = true;
     this->Modified();
   }
-  AtmosphericRadiativeTermsPointerType GetAtmosphericRadiativeTerms()
-  {
-    return m_AtmosphericRadiativeTerms;
-  }
 
+  /** Get/Set Atmospheric Correction Parameters. */
+  itkGetConstObjectMacro(AtmosphericRadiativeTerms, AtmosphericRadiativeTerms);
+  itkGetObjectMacro(CorrectionParameters, AtmosphericCorrectionParameters);
+
+  /** Get/Set Aeronet file name. */
+  itkSetMacro(AeronetFileName, std::string);
+  itkGetMacro(AeronetFileName, std::string);
+
+  /** Get/Set Aeronet file name. */
+  itkSetMacro(FilterFunctionValuesFileName, std::string);
+  itkGetMacro(FilterFunctionValuesFileName, std::string);
+
+  /** Get/Set Filter function coef. */
+  void SetFilterFunctionCoef( FilterFunctionCoefVectorType vect )
+  {
+  	m_FilterFunctionCoef = vect;
+  	this->Modified();
+  }
+  FilterFunctionCoefVectorType GetFilterFunctionCoef()
+  {
+  	return m_FilterFunctionCoef;
+  }
 
 protected:
   /** Constructor */
-  ReflectanceToSurfaceReflectanceImageFilter()
-  {
-    m_AtmosphericRadiativeTerms = AtmosphericRadiativeTerms::New();
-  };
+  ReflectanceToSurfaceReflectanceImageFilter();
   /** Destructor */
   virtual ~ReflectanceToSurfaceReflectanceImageFilter() {};
 
+  /** If empty, fill AtmosphericRadiativeTerms using image metadata*/
+  void UpdateAtmosphericRadiativeTerms( const MetaDataDictionaryType dict );
+
+  /** Read the aeronet data and extract aerosol optical and water vapor amount. */
+  void UpdateAeronetData( const MetaDataDictionaryType dict );
+
   /** Initialize the functor vector */
-  void BeforeThreadedGenerateData ()
-  {
-    this->GetFunctorVector().clear();
-    for (unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
-    {
-      double coef;
-      double res;
-      coef = static_cast<double>(m_AtmosphericRadiativeTerms->GetTotalGaseousTransmission(i)
-                                 * m_AtmosphericRadiativeTerms->GetDownwardTransmittance(i)
-                                 * m_AtmosphericRadiativeTerms->GetUpwardTransmittance(i)     );
-      coef = 1. / coef;
-      res = -m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectance(i) * coef;
-
-      FunctorType functor;
-      functor.SetCoefficient(coef);
-      functor.SetResidu(res);
-      functor.SetSphericalAlbedo(static_cast<double>(m_AtmosphericRadiativeTerms->GetSphericalAlbedo(i)));
-
-      this->GetFunctorVector().push_back(functor);
-    }
-  }
-
+  void BeforeThreadedGenerateData();
+ 
+  
 private:
   AtmosphericRadiativeTermsPointerType m_AtmosphericRadiativeTerms;
+  CorrectionParametersPointerType      m_CorrectionParameters;
+  bool m_IsSetAtmosphericRadiativeTerms;
+  /** Path to an Aeronet data file, allows to compute aerosol optical and water vapor amounts. */
+  std::string m_AeronetFileName;
+  /** Path to an filter function values file. */
+  std::string m_FilterFunctionValuesFileName;
+  /** Contains the filter function values (each element is a vector and represnts the values for each channel) */
+  FilterFunctionCoefVectorType m_FilterFunctionCoef;
+  /** BeforeThreadedGenerateData executed once or not */
+  bool m_BeforeDone;
 };
 
 } // end namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbReflectanceToSurfaceReflectanceImageFilter.txx"
+#endif
 
 #endif

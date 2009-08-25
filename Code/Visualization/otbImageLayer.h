@@ -179,6 +179,22 @@ public:
   /** Get the pixel location */
   virtual PointType GetPixelLocation(const IndexType & index);
 
+  /** Get the list sample used by the rendering function */
+  virtual ListSamplePointerType GetListSample()
+  {
+//     this->UpdateListSample();//FIXME condition to IsModified
+    return m_ListSample;
+  }
+
+  /** Set the list sample used by the rendering function */
+  virtual void SetListSample(ListSamplePointerType listSample)
+  {
+    m_ListSample = listSample;
+    m_ListSampleProvided = true;
+    m_RenderingFunction->SetListSample(m_ListSample);
+  }
+
+
 protected:
   /** Constructor */
   ImageLayer();
@@ -189,12 +205,6 @@ protected:
 
   /** Update the histogram */
   virtual void UpdateListSample();
-
-  virtual ListSamplePointerType GetListSample()
-  {
-//     this->UpdateListSample();//FIXME condition to IsModified
-    return m_ListSample;
-  }
 
   /** Update the images */
   virtual void RenderImages();
@@ -219,6 +229,7 @@ private:
 
   /** List sample used to compute the histogram by the rendering function*/
   ListSamplePointerType m_ListSample;
+  bool m_ListSampleProvided;//To remember if the list sample was provided manually by the user
 
   /** Rendering function */
   RenderingFunctionPointerType m_RenderingFunction;

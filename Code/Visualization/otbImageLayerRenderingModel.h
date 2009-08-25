@@ -40,14 +40,15 @@ namespace otb
 *  \ingroup Visualization
  */
 
-template <class TOutputImage = otb::Image<itk::RGBAPixel<unsigned char>,2 >  >
+template <class TOutputImage = otb::Image<itk::RGBAPixel<unsigned char>,2 >,
+          class TLayer = otb::ImageLayerBase<TOutputImage>  >
 class ImageLayerRenderingModel
-  : public MVCModelBase<ImageLayerRenderingModelListener>, public LayerBasedModel< ImageLayerBase<TOutputImage> >
+  : public MVCModelBase<ImageLayerRenderingModelListener>, public LayerBasedModel< TLayer >
 {
 public:
   /** Standard class typedefs */
   typedef ImageLayerRenderingModel                         Self;
-  typedef LayerBasedModel< ImageLayerBase <TOutputImage> > Superclass;
+  typedef LayerBasedModel<TLayer> Superclass;
   typedef itk::SmartPointer<Self>                          Pointer;
   typedef itk::SmartPointer<const Self>                    ConstPointer;
 
