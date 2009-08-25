@@ -237,6 +237,39 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 
     destRegion.SetIndex( destIndex );
     destRegion.SetSize( destSize );
+
+#if 0 
+    // Contrairement a INVERSE, ici ca ne sera a rien apparemment...
+
+    // Region Padding
+    LowPassOperatorType lowPassOperator;
+    lowPassOperator.SetDirection(0);
+    lowPassOperator.SetUpSampleFactor( this->GetUpSampleFilterFactor() );
+    lowPassOperator.CreateDirectional();
+
+    unsigned long radius [ InputImageDimension ];
+    radius[0] = lowPassOperator.GetRadius()[0];
+
+    HighPassOperatorType highPassOperator;
+    highPassOperator.SetDirection(0);
+    highPassOperator.SetUpSampleFactor( this->GetUpSampleFilterFactor() );
+    highPassOperator.CreateDirectional();
+
+    if ( radius[0] < highPassOperator.GetRadius()[0] )
+      radius[0] = highPassOperator.GetRadius()[0];
+
+    for ( unsigned int i = 1; i < InputImageDimension; i++ )
+      radius[i] = 0;
+
+    InputImageRegionType paddedRegion = destRegion;  
+    paddedRegion.PadByRadius( radius );
+
+    if ( paddedRegion.Crop( this->GetInput()->GetLargestPossibleRegion() ) )
+    {
+      destRegion = paddedRegion;
+    }
+#endif
+
   }
 }
 
@@ -771,6 +804,35 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
     destRegion.SetIndex( destIndex );
     destRegion.SetSize( destSize );
 
+#if 1
+    // Region Padding
+    LowPassOperatorType lowPassOperator;
+    lowPassOperator.SetDirection(0);
+    lowPassOperator.SetUpSampleFactor( this->GetUpSampleFilterFactor() );
+    lowPassOperator.CreateDirectional();
+
+    unsigned long radius [ InputImageDimension ];
+    radius[0] = lowPassOperator.GetRadius()[0];
+
+    HighPassOperatorType highPassOperator;
+    highPassOperator.SetDirection(0);
+    highPassOperator.SetUpSampleFactor( this->GetUpSampleFilterFactor() );
+    highPassOperator.CreateDirectional();
+
+    if ( radius[0] < highPassOperator.GetRadius()[0] )
+      radius[0] = highPassOperator.GetRadius()[0];
+
+    for ( unsigned int i = 1; i < InputImageDimension; i++ )
+      radius[i] = 0;
+
+    InputImageRegionType paddedRegion = destRegion;  
+    paddedRegion.PadByRadius( radius );
+
+    if ( paddedRegion.Crop( this->GetInput(0)->GetLargestPossibleRegion() ) )
+    {
+      destRegion = paddedRegion;
+    }
+#endif
   }
 }
 
