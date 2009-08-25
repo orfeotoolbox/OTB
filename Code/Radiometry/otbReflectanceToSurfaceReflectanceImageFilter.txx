@@ -36,7 +36,6 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
   m_AtmosphericRadiativeTerms = AtmosphericRadiativeTerms::New();
   m_CorrectionParameters      = AtmosphericCorrectionParameters::New();
   m_IsSetAtmosphericRadiativeTerms = false;
-  m_BeforeDone = false;
   m_AeronetFileName = "";
   m_FilterFunctionValuesFileName = "";
   m_FilterFunctionCoef.clear();
@@ -46,9 +45,11 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
-::UpdateAtmosphericRadiativeTerms( const MetaDataDictionaryType dict )
+::UpdateAtmosphericRadiativeTerms()
 {
-	 ImageMetadataInterfaceBase::Pointer imageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(dict);
+	MetaDataDictionaryType dict = this->GetInput()->GetMetaDataDictionary();
+	   std::cout<<"Tu passes?"<<std::endl;
+    ImageMetadataInterfaceBase::Pointer imageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(dict);
 	 
     if ((m_CorrectionParameters->GetDay() == 0))
     {
@@ -103,7 +104,7 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
    
     param2Terms->SetInput(m_CorrectionParameters);
     param2Terms->Update();
-   
+
     m_AtmosphericRadiativeTerms = param2Terms->GetOutput();
 }
 
@@ -111,20 +112,21 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
-::BeforeThreadedGenerateData()
+::GenerateOutputInformation()
 {
-  if(m_BeforeDone == true)
-	return;
-	
-  std::cout<<"BeforeThreadedGenerateData "<<this->GetNumberOfThreads()<<std::endl;
+  Superclass::GenerateOutputInformation();
+  
   if(m_IsSetAtmosphericRadiativeTerms==false)
-    this->UpdateAtmosphericRadiativeTerms(this->GetInput()->GetMetaDataDictionary());
-  
-      std::cout<<"m_CorrectionParameters: "<<std::endl;
-    std::cout<<m_CorrectionParameters<<std::endl;
-    std::cout<<"m_AtmosphericRadiativeTerms: "<<std::endl;    
-    std::cout<<m_AtmosphericRadiativeTerms<<std::endl;
-  
+    this->UpdateAtmosphericRadiativeTerms(); 
+ 
+  this->UpdateFunctors();
+}
+
+template <class TInputImage, class TOutputImage>
+void
+ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
+::UpdateFunctors()
+{
   this->GetFunctorVector().clear();
   for (unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
   {
@@ -143,8 +145,6 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
 
     this->GetFunctorVector().push_back(functor);
   }
-  m_BeforeDone = true;
-  std::cout<<"BeforeThreadedGenerateData FIN"<<std::endl;
 }
   
 }

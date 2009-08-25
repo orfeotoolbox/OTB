@@ -156,7 +156,8 @@ public:
   typedef AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms  Parameters2RadiativeTermsType;
   typedef Parameters2RadiativeTermsType::Pointer                        Parameters2RadiativeTermsPointerType;
   typedef AtmosphericCorrectionParameters::Pointer                      CorrectionParametersPointerType;
-  typedef AtmosphericRadiativeTerms::Pointer                            AtmosphericRadiativeTermsPointerType;
+   typedef AtmosphericRadiativeTerms::Pointer                            AtmosphericRadiativeTermsPointerType;
+
 
   typedef FilterFunctionValues                                          FilterFunctionValuesType;
   typedef FilterFunctionValuesType::ValuesVectorType                    CoefVectorType;
@@ -174,7 +175,7 @@ public:
   }
 
   /** Get/Set Atmospheric Correction Parameters. */
-  itkGetConstObjectMacro(AtmosphericRadiativeTerms, AtmosphericRadiativeTerms);
+  itkGetObjectMacro(AtmosphericRadiativeTerms, AtmosphericRadiativeTerms);
   itkGetObjectMacro(CorrectionParameters, AtmosphericCorrectionParameters);
 
   /** Get/Set Aeronet file name. */
@@ -196,20 +197,22 @@ public:
   	return m_FilterFunctionCoef;
   }
 
+  /** Fill AtmosphericRadiativeTerms using image metadata*/
+  void UpdateAtmosphericRadiativeTerms();
+  /** Update Functors parameters */
+  void UpdateFunctors();
+
 protected:
   /** Constructor */
   ReflectanceToSurfaceReflectanceImageFilter();
   /** Destructor */
   virtual ~ReflectanceToSurfaceReflectanceImageFilter() {};
 
-  /** If empty, fill AtmosphericRadiativeTerms using image metadata*/
-  void UpdateAtmosphericRadiativeTerms( const MetaDataDictionaryType dict );
-
   /** Read the aeronet data and extract aerosol optical and water vapor amount. */
-  void UpdateAeronetData( const MetaDataDictionaryType dict );
+  //void UpdateAeronetData( const MetaDataDictionaryType dict );
 
   /** Initialize the functor vector */
-  void BeforeThreadedGenerateData();
+  void GenerateOutputInformation();
  
   
 private:
@@ -222,8 +225,6 @@ private:
   std::string m_FilterFunctionValuesFileName;
   /** Contains the filter function values (each element is a vector and represnts the values for each channel) */
   FilterFunctionCoefVectorType m_FilterFunctionCoef;
-  /** BeforeThreadedGenerateData executed once or not */
-  bool m_BeforeDone;
 };
 
 } // end namespace otb

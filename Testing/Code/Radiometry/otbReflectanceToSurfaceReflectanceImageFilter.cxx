@@ -54,7 +54,6 @@ int otbReflectanceToSurfaceReflectanceImageFilter(int argc, char * argv[])
   DataVectorType downTrans;
   DataVectorType upTrans;
 
-  std::cout<<nbChannel<<std::endl;
   for ( unsigned int j=0; j<nbChannel; j++)
   {
     intrinsic.push_back(static_cast<double>(atof(argv[3+j])));

@@ -41,7 +41,6 @@ void
 FilterFunctionValues
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
   os << indent << "Minimum spectral value: " << m_MinSpectralValue << std::endl;
   os << indent << "Maximum spectral value: " << m_MaxSpectralValue << std::endl;
   os << indent << "User Step between each wavelenght spectral band values: " << m_UserStep << std::endl;
@@ -95,20 +94,7 @@ AtmosphericCorrectionParameters
     reader->SetHour(hour);
     reader->SetMinute(minute);
     reader->SetEpsilon(epsi);
-    std::cout<<day<<std::endl;
-    std::cout<<month<<std::endl;
-    std::cout<<year<<std::endl;
-    std::cout<<hour<<std::endl;
-    std::cout<<minute<<std::endl;
-    std::cout<<epsi<<std::endl;
 
-    std::cout<<reader->GetDay()<<std::endl;
-    std::cout<<reader->GetMonth()<<std::endl;
-    std::cout<<reader->GetYear()<<std::endl;
-    std::cout<<reader->GetHour()<<std::endl;
-    std::cout<<reader->GetMinute()<<std::endl;
-    std::cout<<reader->GetEpsilon()<<std::endl;
-                    
     reader->Update();
     
     m_AerosolOptical = reader->GetOutput()->GetAerosolOpticalThickness();
@@ -121,21 +107,20 @@ void
 AtmosphericCorrectionParameters
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
-  os << indent << "Solar zenithal angle: " << m_SolarZenithalAngle << std::endl;
-  os << indent << "Solar azimutal angle: " << m_SolarAzimutalAngle << std::endl;
-  os << indent << "Viewing zenithal angle: " << m_ViewingZenithalAngle << std::endl;
-  os << indent << "Viewing azimutal angle: " << m_ViewingAzimutalAngle << std::endl;
-  os << indent << "Month: " << m_Month << std::endl;
-  os << indent << "Day: " << m_Day << std::endl;
-  os << indent << "Atmospheric pressure: " << m_AtmosphericPressure << std::endl;
-  os << indent << "Water vapor amount: " << m_WaterVaporAmount << std::endl;
-  os << indent << "Ozone amount: " << m_OzoneAmount << std::endl;
-  os << indent << "Aerosol model: " << m_AerosolModel << std::endl;
-  os << indent << "Aerosol optical : " << m_AerosolOptical << std::endl;
+  os << "Solar zenithal angle  : " << m_SolarZenithalAngle << std::endl;
+  os << "Solar azimutal angle  : " << m_SolarAzimutalAngle << std::endl;
+  os << "Viewing zenithal angle: " << m_ViewingZenithalAngle << std::endl;
+  os << "Viewing azimutal angle: " << m_ViewingAzimutalAngle << std::endl;
+  os << "Month                 : " << m_Month << std::endl;
+  os << "Day                   : " << m_Day << std::endl;
+  os << "Atmospheric pressure  : " << m_AtmosphericPressure << std::endl;
+  os << "Water vapor amount    : " << m_WaterVaporAmount << std::endl;
+  os << "Ozone amount          : " << m_OzoneAmount << std::endl;
+  os << "Aerosol model         : " << m_AerosolModel << std::endl;
+  os << "Aerosol optical       : " << m_AerosolOptical << std::endl;
 
   // Function values print :
-  os << indent << "Filter function Values: " << std::endl;
+  os << "Filter function Values: " << std::endl;
   for (unsigned int i=0; i<m_WavelenghtSpectralBand.size(); ++i)
   {
     os << indent << "Channel : "<< i+1 <<" : " << std::endl;
