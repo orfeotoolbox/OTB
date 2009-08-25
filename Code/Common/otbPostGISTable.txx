@@ -279,8 +279,10 @@ std::string
 PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
 ::GetOGRStrConnection() const
 {
+  //std::cout << "getOGR: " << m_Connection << std::endl;
   std::string connectionSTR="";
   connectionSTR +="PG:";
+  
   connectionSTR +="dbname='";
   connectionSTR += m_Connection->GetDBName();
   connectionSTR += "' ";

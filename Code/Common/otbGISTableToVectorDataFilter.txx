@@ -30,6 +30,7 @@ GISTableToVectorDataFilter<TGISTable, TVectorData>
   ::GISTableToVectorDataFilter()
 {/*
   m_BackgroundValue = NumericTraits<OutputImagePixelType>::NonpositiveMin();*/
+  m_Reader = VectorDataFileReaderType::New();
 }
 
 
@@ -109,19 +110,35 @@ GISTableToVectorDataFilter<TGISTable, TVectorData>
 {
   
   // Allocate the output
-  this->AllocateOutputs();
+  //this->AllocateOutputs();
   
   OutputVectorDataType * output = this->GetOutput();
   const InputGISTableType * input = this->GetInput();
+  
+  /**Create usual root elements of the output vectordata*/
+//   DataNodePointerType document = DataNodeType::New();
+//   DataNodePointerType folder1 = DataNodeType::New();
+//   
+//   document->SetNodeType(DOCUMENT);
+//   folder1->SetNodeType(FOLDER);
+//   
+//   DataNodePointerType root = output->GetDataTree()->GetRoot()->Get();
+// 
+//   output->GetDataTree()->Add(document,root);
+//   output->GetDataTree()->Add(folder1,document);
+  
   
   SHPVectorDataIOPointerType gisReader=SHPVectorDataIOType::New();
   
   const std::string inputOGRConnStr=input->GetOGRStrConnection();
   //Try  if the Db is readable
+//   std::cout << "ogr connection: " << inputOGRConnStr[0] << std::endl;
   if ( gisReader->CanReadFile( inputOGRConnStr.data() ) ) 
   { 
     //Read GISTable data and copy in the output VectorData
+    
     gisReader->SetFileName(inputOGRConnStr);
+//     std::cout << "read ogr!!: " << inputOGRConnStr << std::endl;
     gisReader->Read(output);
   }
   else
@@ -129,6 +146,14 @@ GISTableToVectorDataFilter<TGISTable, TVectorData>
     itkExceptionMacro(<<"The OGR connection is not valid;ogrconnection = " << inputOGRConnStr);
   }
   
+//   const std::string inputOGRConnStr=input->GetOGRStrConnection();
+  //Try  if the Db is readable
+  //std::cout << "ogr connection: " << inputOGRConnStr[0] << std::endl;
+  
+//   m_Reader->SetFileName( inputOGRConnStr.data() );
+//   m_Reader->Update();
+  
+  output = m_Reader->GetOutput();
 }
 
 

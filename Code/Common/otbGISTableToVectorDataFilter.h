@@ -21,7 +21,7 @@
 #include "itkDataObject.h"
 #include "otbVectorDataSource.h"
 #include "otbGISTable.h"
-//include "otbVectorData.h"
+#include "otbVectorDataFileReader.h"
 #include "otbSHPVectorDataIO.h"
 
 namespace otb {
@@ -56,11 +56,16 @@ public:
   typedef typename OutputVectorDataType::Pointer        OutputVectorDataPointer;
   typedef typename OutputVectorDataType::ConstPointer   OutputVectorDataConstPointer;
   
+  typedef typename OutputVectorDataType::DataNodeType  DataNodeType;
+  typedef typename DataNodeType::Pointer         DataNodePointerType;
+  
   typedef typename InputGISTableType::ConnectionType ConnectionType;
   typedef typename InputGISTableType::ConnectionPointerType ConnectionPointerType;
   
   typedef SHPVectorDataIO<OutputVectorDataType> SHPVectorDataIOType;
   typedef typename SHPVectorDataIOType::Pointer SHPVectorDataIOPointerType;
+  
+  typedef VectorDataFileReader<OutputVectorDataType> VectorDataFileReaderType;
   /** ImageDimension constants */
   
 
@@ -97,7 +102,7 @@ private:
   GISTableToVectorDataFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-
+  typename VectorDataFileReaderType::Pointer m_Reader;
 } ; // end of class
 
 } // end namespace otb

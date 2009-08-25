@@ -78,7 +78,7 @@ int otbClosePathFunctor( int argc, char * argv[] )
     polygonList->PushBack(polygonFilter->GetOutput());
   }
 
-  typedef otb::ClosePathFunctor<PolygonType::Pointer, PolygonType::Pointer> LengthFunctorType;
+  typedef otb::ClosePathFunctor<PolygonType, PolygonType> LengthFunctorType;
   typedef otb::UnaryFunctorObjectListFilter<PolygonListType,PolygonListType,LengthFunctorType> ClosePathFilterType;
   ClosePathFilterType::Pointer closePathFilter = ClosePathFilterType::New();
   closePathFilter->SetInput(polygonList);

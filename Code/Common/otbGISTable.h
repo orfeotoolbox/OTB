@@ -54,6 +54,10 @@ public:
   itkStaticConstMacro(Dimension, unsigned int, SpatialDimension);
 
   /** Typedefs */
+  typedef TPrecision PrecisionType;
+  
+  
+  
   typedef TConnectionImplementation ConnectionType;
   typedef typename ConnectionType::Pointer ConnectionPointerType;
   
@@ -71,6 +75,9 @@ public:
   typedef typename PolygonListType::ConstPointer 	PolygonListConstPointerType;
   /** Acessors */
 
+  //itkStaticConstMacro(GISDimension, unsigned int, SpatialDimension);
+
+ 
   itkGetConstMacro(TableName, std::string);
   itkSetMacro(TableName, std::string);
   

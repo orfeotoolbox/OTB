@@ -136,6 +136,7 @@ LabelMapToGISTableFilter< TLabelMap, TGISTable >
   FunctorType functor;
   SimplifyFunctorType simplifyFunctor;
   simplifyFunctor.SetTolerance (0.0);
+  
   CloseFunctorType closeFunctor;
   // Lets begin by declaring the iterator for the objects in the image.
   typename InputLabelMapType::LabelObjectContainerType::const_iterator it;

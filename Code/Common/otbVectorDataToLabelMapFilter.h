@@ -106,6 +106,8 @@ public:
   /** Set the size of the output image. */
   itkSetMacro( Size, SizeType );
   
+  /** Set the starting index of the output image. */
+  itkSetMacro( StartIndex, IndexType );
   /**
    * Run-time type information (and related methods)
    */

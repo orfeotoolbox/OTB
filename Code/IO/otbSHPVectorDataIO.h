@@ -22,18 +22,17 @@
 #include <fstream>
 #include <string>
 #include <vector>
-
-#include <cctype> // for toupper
 #include <algorithm>
 
 #include "ogrsf_frmts.h"
+#include "otbOGRIOFunctor.h"
 
 namespace otb
 {
 
 /** \class SHPVectorDataIO
  *
- * \brief ImageIO object for reading and writing SHP format vector data (and almost all OGR layer...)
+ * \brief ImageIO object for reading and writing SHP format vector data
  *
  */
 template <class TData> class ITK_EXPORT SHPVectorDataIO
@@ -52,7 +51,9 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(SHPVectorDataIO, VectorDataIOBase);
-
+  
+  
+  
   /** Byte order typedef */
   typedef typename Superclass::ByteOrder  ByteOrder;
 
@@ -130,31 +131,31 @@ protected:
 
   /** Conversion tools */
 
-  DataNodePointerType ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry) const;
-
-  DataNodePointerType ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry) const;
-
-  DataNodePointerType ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry) const;
+//   DataNodePointerType ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry) const;
+// 
+//   DataNodePointerType ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry) const;
+// 
+//   DataNodePointerType ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry) const;
 
   /** end conversion tools */
 
-  void ProcessNodeWrite(InternalTreeNodeType * source, OGRGeometryCollection * ogrCollection, OGRLayer * ogrCurrentLayer, OGRSpatialReference * oSRS);
+//   void ProcessNodeWrite(InternalTreeNodeType * source, OGRGeometryCollection * ogrCollection, OGRLayer * ogrCurrentLayer, OGRSpatialReference * oSRS);
 
 private:
   SHPVectorDataIO(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
+  
+  std::string GetOGRDriverName(std::string name);
+      
   OGRDataSource * m_DataSource;
 
-  unsigned int m_Kept;
+  //unsigned int m_Kept;
   
-  
-  /** ad by MG */
+//   std::string m_OGRDriver;
 
- std::string m_Extension;
-  /** Is this necessary ? */
+  /* Is this necessary ? */
 
-    /* Internal method to read header informations */
+  /* Internal method to read header informations */
   /*   bool InternalReadHeaderInformation(std::fstream & file, const bool reportError); */
 
   /*   bool    m_FlagWriteVectorDataInformation; */
