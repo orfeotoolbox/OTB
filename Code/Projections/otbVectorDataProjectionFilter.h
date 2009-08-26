@@ -131,6 +131,9 @@ public:
   itkSetStringMacro(DEMDirectory);
   itkGetStringMacro(DEMDirectory);
 
+  itkSetMacro(AverageElevation, double);
+  itkGetMacro(AverageElevation, double);
+
 
   itkGetMacro(InputKeywordList,ImageKeywordlist);
   void SetInputKeywordList(ImageKeywordlist kwl)
@@ -209,7 +212,9 @@ private:
   std::string m_OutputProjectionRef;
   ImageKeywordlist m_InputKeywordList;
   ImageKeywordlist m_OutputKeywordList;
+
   std::string m_DEMDirectory;
+  double m_AverageElevation;
 
   SpacingType         m_InputSpacing;
   OriginType          m_InputOrigin;

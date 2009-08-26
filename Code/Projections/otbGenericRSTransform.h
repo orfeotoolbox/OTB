@@ -96,6 +96,9 @@ namespace otb
       itkSetStringMacro(DEMDirectory);
       itkGetStringMacro(DEMDirectory);
 
+      itkSetMacro(AverageElevation, double);
+      itkGetMacro(AverageElevation, double);
+
       /** Set/Get Dictionary*/
       const itk::MetaDataDictionary& GetInputDictionary() const
       {
@@ -207,6 +210,7 @@ namespace otb
       std::string m_InputProjectionRef;
       std::string m_OutputProjectionRef;
       std::string m_DEMDirectory;
+      double m_AverageElevation;
 
       SpacingType         m_InputSpacing;
       OriginType          m_InputOrigin;
