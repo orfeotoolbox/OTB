@@ -19,8 +19,9 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbAtmosphericCorrectionParameters.h"
 
 #include "otbAeronetFileReader.h"
+#include "base/ossimFilename.h"
 #include <fstream>
-#include <iostream>
+
 
 
 
@@ -41,15 +42,15 @@ void
 FilterFunctionValues
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  os << indent << "Minimum spectral value: " << m_MinSpectralValue << std::endl;
-  os << indent << "Maximum spectral value: " << m_MaxSpectralValue << std::endl;
-  os << indent << "User Step between each wavelenght spectral band values: " << m_UserStep << std::endl;
-  os << indent << "Filter function Vector Values: " << std::endl;
+  os << indent << "Minimum spectral value       : " << m_MinSpectralValue << std::endl;
+  os << indent << "Maximum spectral value       : " << m_MaxSpectralValue << std::endl;
+  os << indent << "Wavelenght spectral band step: " << m_UserStep << std::endl;
+  os << indent << "Filter function values: " << std::endl;
   for (unsigned int i=0; i<m_FilterFunctionValues.size(); ++i)
   {
     os << indent << m_FilterFunctionValues[i] <<std::endl;
   }
-  os << indent << "Filter function Vector Values 6S: " << std::endl;
+  os << indent << "6S Filter function values: " << std::endl;
   for (unsigned int i=0; i<m_FilterFunctionValues6S.size(); ++i)
   {
     os << indent << m_FilterFunctionValues6S[i] <<std::endl;
@@ -102,6 +103,62 @@ AtmosphericCorrectionParameters
 }
 
 
+/** Get data from filter function file*/
+void
+AtmosphericCorrectionParameters
+::LoadFilterFunctionValue( std::string filename )
+{
+  m_WavelenghtSpectralBand.clear();
+  FilterFunctionValues::Pointer ffv = FilterFunctionValues::New();
+  
+  ossimFilename fname(filename);
+  if(!fname.exists())
+    itkExceptionMacro("Filename "<<filename<<" doesn not exist.");
+  	
+  std::ifstream file( filename.c_str() );
+
+  if ( !file )
+    itkExceptionMacro("Enable to read "<<filename<<" file.");  
+
+  int bandId = 0;
+  std::string line;
+  ossimString separatorList = "\ ";
+  
+  FilterFunctionValues::Pointer function = FilterFunctionValues::New();
+  FilterFunctionValues::ValuesVectorType vect;
+  m_WavelenghtSpectralBand.clear();
+  vect.clear();
+  
+  while ( std::getline( file, line ) )
+  {
+  	ossimString osLine(line);
+    std::vector<ossimString> keywordStrings = osLine.split(separatorList);
+    
+    if(keywordStrings.size() == 2 || keywordStrings.size() == 3)
+    {
+      if(bandId != 0)
+      {
+ 	  	function->SetFilterFunctionValues(vect);
+ 	    m_WavelenghtSpectralBand.push_back(function);
+ 	  	function = FilterFunctionValues::New();
+ 	    vect.clear();
+ 	  }
+ 	  bandId++;
+ 	  function->SetMinSpectralValue(keywordStrings[0].toDouble());
+ 	  function->SetMaxSpectralValue(keywordStrings[1].toDouble());
+ 	  if(keywordStrings.size() == 3)
+	    function->SetUserStep(keywordStrings[2].toDouble());
+	}
+    else if(keywordStrings.size()==1)
+      vect.push_back(keywordStrings[0].toDouble());
+    else if(keywordStrings.size()!=0)
+	  itkExceptionMacro("File "<<filename<<" not valid.");
+    }
+  function->SetFilterFunctionValues(vect);
+  m_WavelenghtSpectralBand.push_back(function);
+}
+
+
 /**PrintSelf method */
 void
 AtmosphericCorrectionParameters
@@ -120,12 +177,11 @@ AtmosphericCorrectionParameters
   os << "Aerosol optical       : " << m_AerosolOptical << std::endl;
 
   // Function values print :
-  os << "Filter function Values: " << std::endl;
+  os << "Filter function values: " << std::endl;
   for (unsigned int i=0; i<m_WavelenghtSpectralBand.size(); ++i)
   {
-    os << indent << "Channel : "<< i+1 <<" : " << std::endl;
+    os << indent << "Channel "<< i+1 <<" : " << std::endl;
     os << indent << m_WavelenghtSpectralBand[i]<< std::endl;
   }
 }
 } // end namespace otb
-

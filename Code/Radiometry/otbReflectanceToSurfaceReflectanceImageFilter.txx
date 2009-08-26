@@ -21,7 +21,7 @@
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
 #include "otbImageMetadataInterfaceFactory.h"
 #include "otbImageMetadataInterfaceBase.h"
-#include "otbAeronetFileReader.h"
+
 
 namespace otb
 {
@@ -48,7 +48,7 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
 ::UpdateAtmosphericRadiativeTerms()
 {
 	MetaDataDictionaryType dict = this->GetInput()->GetMetaDataDictionary();
-	   std::cout<<"Tu passes?"<<std::endl;
+
     ImageMetadataInterfaceBase::Pointer imageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(dict);
 	 
     if ((m_CorrectionParameters->GetDay() == 0))
@@ -87,24 +87,34 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
       											 imageMetadataInterface->GetHour(dict),
       											 imageMetadataInterface->GetMinute(dict) );    
       
-    Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
-    
-    if( m_FilterFunctionCoef.size() != this->GetInput()->GetNumberOfComponentsPerPixel() )
-    	itkExceptionMacro(<<"Filter Function and image channels mismatch.");
-   
-    for(unsigned int i=0; i<this->GetInput()->GetNumberOfComponentsPerPixel(); i++)
+    // load fiter function values
+    if(m_FilterFunctionValuesFileName != "")
     {
-	  FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
-	  functionValues->SetFilterFunctionValues(m_FilterFunctionCoef[i]);
-      functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths(dict)[i]);
-      functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths(dict)[i]);
+        m_CorrectionParameters->LoadFilterFunctionValue( m_FilterFunctionValuesFileName );
+    } 
+    // the user has set the filter function values 
+    else
+    {
+      if( m_FilterFunctionCoef.size() != this->GetInput()->GetNumberOfComponentsPerPixel() )
+      {
+    	itkExceptionMacro(<<"Filter Function and image channels mismatch.");
+      }
+      for(unsigned int i=0; i<this->GetInput()->GetNumberOfComponentsPerPixel(); i++)
+      {
+	    FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
+	    functionValues->SetFilterFunctionValues(m_FilterFunctionCoef[i]);
+        functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths(dict)[i]);
+        functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths(dict)[i]);
 
-      m_CorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, functionValues);
+        m_CorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, functionValues);
+      }
     }
-   
+    
+    
+    Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
+       
     param2Terms->SetInput(m_CorrectionParameters);
     param2Terms->Update();
-
     m_AtmosphericRadiativeTerms = param2Terms->GetOutput();
 }
 

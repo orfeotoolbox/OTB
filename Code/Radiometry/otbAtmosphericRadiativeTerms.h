@@ -144,7 +144,6 @@ private:
 
   /** The upward diffuse transmittance for aerosols. */
   double m_UpwardDiffuseTransmittanceForAerosol;
-
 };
 
 
