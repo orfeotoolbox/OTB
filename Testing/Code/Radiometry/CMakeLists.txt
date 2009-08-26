@@ -1008,8 +1008,8 @@ ADD_TEST(raTvAeronet_ToulouseLevel20_ExtractData ${RADIOMETRY_TESTS8}
         ${TEMP}/raAeronetExtractData_ToulouseLevel20_31_08_1999_16_30_epsilon_2.txt
 )
 ADD_TEST(raTvAeronet_ArcachonLevel10_ExtractData ${RADIOMETRY_TESTS8}
-   --compare-ascii ${EPSILON_10e6} ${BASELINE_FILES}/raAeronetExtractData_ArcachonLevel10_16_08_2009_13_00_epsilon_1.txt
-                          ${TEMP}/raAeronetExtractData_ArcachonLevel10_16_08_2009_13_00_epsilon_1.txt
+   --compare-ascii ${EPSILON_10e6} ${BASELINE_FILES}/raAeronetExtractData_080101_091231_ArcachonLevel10_16_08_2009_13_00_epsilon_1.txt
+                          ${TEMP}/raAeronetExtractData_080101_091231_ArcachonLevel10_16_08_2009_13_00_epsilon_1.txt
         otbAeronetExtractData
         ${INPUTDATA}/AERONET/080101_091231_Arcachon.lev10
         16    # Day
@@ -1018,7 +1018,7 @@ ADD_TEST(raTvAeronet_ArcachonLevel10_ExtractData ${RADIOMETRY_TESTS8}
         13    # Hour
         0     # Minute
         1     # Epsilon
-        ${TEMP}/raAeronetExtractData_ArcachonLevel10_16_08_2009_13_00_epsilon_1.txt
+        ${TEMP}/raAeronetExtractData_080101_091231_ArcachonLevel10_16_08_2009_13_00_epsilon_1.txt
 )
 
 
