@@ -98,13 +98,14 @@ FlexibleDistanceWithMissingValue< TVector >
   if (IsEuclidean())
     return Superclass::Evaluate(a,b);
 
-  // FIXME throw NaN exception or not ??
+  // FIXME throw NaN exception instaed of returning 0. ??
   if ( IsMissingValue( a ) || IsMissingValue( b ) )
     return 0.0;
 
   double temp = vcl_pow(vcl_abs(vcl_pow(a,this->Alpha) - vcl_pow(b,this->Alpha)), this->Beta) ;
   return temp ;
 }
+
 template< class TVector >
 void
 FlexibleDistanceWithMissingValue< TVector >

@@ -34,19 +34,20 @@ int otbFlexibleDistanceWithMissingValue( int argc, char * argv[] )
 
   float a = 2.0;
   float b = 0.5;
+  unsigned int dim = 3;
   DistanceType::SetAlphaBeta(a,b);
 
-  VectorType x(3);
+  VectorType x( dim );
   x.Fill( 1. );
 
-  VectorType y(3);
+  VectorType y( dim );
   y.Fill( 2. );
 
   DistanceType::Pointer dist = DistanceType::New();
   double distanceValue = dist->Evaluate( x, y );
   std::cout << "Distance: " << distanceValue << std::endl;
 
-  if ( (distanceValue - 3.*vcl_pow(3,b)) < epsilon )
+  if ( (distanceValue - dim*vcl_pow(3,b)) < epsilon )
     return EXIT_SUCCESS;
   else
     return EXIT_FAILURE;
