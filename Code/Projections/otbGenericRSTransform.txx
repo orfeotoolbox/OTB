@@ -32,7 +32,7 @@ namespace otb
 
 template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
-::GenericRSTransform() : Superclass(SpaceDimension,ParametersDimension)
+::GenericRSTransform() : Superclass(SpaceDimension,ParametersDimension), m_DEMDirectory(""),  m_AverageElevation(-32768.0)
 {
   m_InputProjectionRef.clear();
   m_OutputProjectionRef.clear();
@@ -110,25 +110,29 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   //Set the input transformation
   //*****************************
   try
-    {
+  {
     if (m_InputKeywordList.GetSize()  > 0)
-      {
+    {
       typedef otb::ForwardSensorModel<double, InputSpaceDimension, InputSpaceDimension> ForwardSensorModelType;
       typename ForwardSensorModelType::Pointer sensorModel = ForwardSensorModelType::New();
       sensorModel->SetImageGeometry(m_InputKeywordList);
       if ( !m_DEMDirectory.empty())
-        {
+      {
         sensorModel->SetDEMDirectory(m_DEMDirectory);
-        }
+      }
+      else if (m_AverageElevation != -32768.0)
+      {
+        sensorModel->SetAverageElevation(m_AverageElevation);
+      }
       m_InputTransform = sensorModel.GetPointer();
       inputTransformIsSensor = true;
       otbMsgDevMacro(<< "Input projection set to sensor model.");
-      }
     }
+  }
   catch(itk::ExceptionObject &)
-    {
+  {
     otbMsgDevMacro(<<" Input keyword list does not describe a sensor model.");
-    }
+  }
 
 
   if ((m_InputTransform.IsNull()) && ( !m_InputProjectionRef.empty() ))//map projection
@@ -177,25 +181,29 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   //Set the output transformation
   //*****************************
   try
-    {
+  {
     if (m_OutputKeywordList.GetSize()  > 0)
-      {
+    {
       typedef otb::InverseSensorModel<double, InputSpaceDimension, OutputSpaceDimension> InverseSensorModelType;
       typename InverseSensorModelType::Pointer sensorModel = InverseSensorModelType::New();
       sensorModel->SetImageGeometry(m_OutputKeywordList);
       if ( !m_DEMDirectory.empty())
-        {
+      {
         sensorModel->SetDEMDirectory(m_DEMDirectory);
-        }
+      }
+      else if (m_AverageElevation != -32768.0)
+      {
+        sensorModel->SetAverageElevation(m_AverageElevation);
+      }
       m_OutputTransform = sensorModel.GetPointer();
       outputTransformIsSensor = true;
       otbMsgDevMacro(<< "Output projection set to sensor model");
-      }
     }
+  }
   catch(itk::ExceptionObject &)
-    {
+  {
     otbMsgDevMacro(<<" Output keyword list does not describe a sensor model.");
-    }
+  }
 
 
   if ((m_OutputTransform.IsNull()) && ( !m_OutputProjectionRef.empty() ))//map projection
@@ -239,7 +247,6 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   }
   else
   {
-
     m_TransformAccuracy = Projection::PRECISE;
   }
 
