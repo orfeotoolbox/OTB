@@ -18,7 +18,7 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbImageViewerManagerViewGUI_h
 #define __otbImageViewerManagerViewGUI_h
 
-#include "otbImageViewerManagerEventsListener.h"
+#include "otbListenerBase.h"
 
 // Disabling deprecation warning
 #ifdef _MSC_VER
@@ -56,12 +56,12 @@ namespace otb
  *
  */
   class ITK_EXPORT ImageViewerManagerViewGUI
-    : public ImageViewerManagerEventsListener, public ImageViewerManagerViewGroup
+    : public ListenerBase, public ImageViewerManagerViewGroup, public itk::Object
 {
 public:
   /** Standard typedefs */
   typedef ImageViewerManagerViewGUI                  Self;
-  typedef ImageViewerManagerEventsListener           Superclass;
+  typedef itk::Object          Superclass;
   typedef itk::SmartPointer<Self>                    Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
 
@@ -69,7 +69,7 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(ImageViewerManagerViewGUI,ImageViewerManagerEventListener);
+  itkTypeMacro(ImageViewerManagerViewGUI,Object);
 
   /** Controller */
   typedef ImageViewerManagerControllerInterface::Pointer  ImageViewerManagerControllerInterfacePointerType;
@@ -137,7 +137,7 @@ public:
   virtual void Show();
 
   // Update the display
-  virtual void ImageViewerManagerNotify();
+  virtual void Notify();
 
   //
   virtual void OpenImage(const char * inputFileName);

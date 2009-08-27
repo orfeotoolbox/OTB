@@ -56,9 +56,9 @@ ImageViewerManagerModel::GetInstance()
 
 void
 ImageViewerManagerModel
-::Notify(ImageViewerManagerEventsListener * listener)
+::Notify(ListenerBase * listener)
 {
-  listener->ImageViewerManagerNotify();
+  listener->Notify();
 }
 
 void

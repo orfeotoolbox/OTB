@@ -19,7 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbImageViewerManagerModel_h
 
 #include "otbMVCModel.h"
-#include "otbImageViewerManagerEventsListener.h"
+#include "otbListenerBase.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "itkRGBAPixel.h"
@@ -58,13 +58,13 @@ namespace otb
  */
 
 class ITK_EXPORT ImageViewerManagerModel
-      : public MVCModel<ImageViewerManagerEventsListener>
+      : public MVCModel<ListenerBase>, public itk::Object
 {
 
 public:
   /** Standard class typedefs */
   typedef ImageViewerManagerModel                         Self;
-  typedef MVCModel<ImageViewerManagerEventsListener>      Superclass;
+  typedef MVCModel<ListenerBase>      Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
@@ -191,7 +191,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   /** Notify a given listener of changes */
-  virtual void Notify(ImageViewerManagerEventsListener * listener);
+  virtual void Notify(ListenerBase * listener);
 
   /** The instance singleton */
   static Pointer Instance;

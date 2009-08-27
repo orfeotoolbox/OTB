@@ -153,7 +153,7 @@ ImageViewerManagerViewGUI
  */
 void
 ImageViewerManagerViewGUI
-::ImageViewerManagerNotify()
+::Notify()
 {
   if(m_ImageViewerManagerModel->GetHasImageOpened())
     this->AddImageListName();
