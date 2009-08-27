@@ -247,7 +247,7 @@ ImageLayerRenderingModel<TOutputImage, TLayer>
 {
   // Notify the listener
   otbMsgDevMacro(<<"ImageLayerRenderingModel::Notify(): Notifying listener");
-  listener->ImageLayerRenderingModelNotify();
+  listener->Notify();
 }
 
 

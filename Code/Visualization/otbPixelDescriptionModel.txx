@@ -81,7 +81,7 @@ void
 PixelDescriptionModel<TOutputImage>
 ::Notify(ListenerType * listener)
 {
-  listener->PixelDescriptionModelNotify();
+  listener->Notify();
 }
 
 } // end namespace otb

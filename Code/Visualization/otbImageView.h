@@ -19,7 +19,8 @@
 #define __otbImageView_h
 
 #include "otbImageWidget.h"
-#include "otbImageLayerRenderingModelListener.h"
+// #include "otbImageLayerRenderingModelListener.h"
+#include "otbListenerBase.h"
 #include "otbImageWidgetController.h"
 #include "otbRegionGlComponent.h"
 
@@ -34,7 +35,7 @@ namespace otb
 
 template <class TViewerModel >
 class ImageView
-  : public ImageLayerRenderingModelListener, public itk::Object
+  : public ListenerBase, public itk::Object
 {
 public:
   /** Standard class typedefs */
@@ -121,7 +122,7 @@ public:
   void UpdateZoomWidget();
 
   /** Handle notification from the viewer */
-  virtual void ImageLayerRenderingModelNotify();
+  virtual void Notify();
 
 private:
   ImageView(const Self&);      // purposely not implemented

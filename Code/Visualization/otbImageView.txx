@@ -93,7 +93,7 @@ ImageView<TViewerModel>
 template < class TViewerModel >
 void
 ImageView<TViewerModel>
-::ImageLayerRenderingModelNotify()
+::Notify()
 {
   this->Update();
 }

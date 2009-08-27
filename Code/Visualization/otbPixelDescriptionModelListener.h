@@ -34,7 +34,7 @@ public:
   typedef PixelDescriptionModelListener Self;
 
   // Update the display
-  virtual void PixelDescriptionModelNotify() = 0;
+  virtual void Notify() = 0;
 
 protected:
   /** Constructor */
