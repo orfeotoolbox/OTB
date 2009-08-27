@@ -38,7 +38,7 @@ public:
   {
     m_Alpha = 1.0;
   }
-  ~HessianToScalar() {};
+  virtual ~HessianToScalar() {};
   inline TOutput operator()( const TInput & Hessian )
   {
 

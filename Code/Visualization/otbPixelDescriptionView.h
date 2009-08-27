@@ -78,7 +78,7 @@ public:
   /** Constructor */
   PixelDescriptionView();
   /** Destructor */
-  ~PixelDescriptionView();
+  virtual ~PixelDescriptionView();
 
   /** Handle notification from the viewer */
   virtual void Notify();

@@ -79,7 +79,7 @@ public:
   }
 
   /** Destructor */
-  ~RenderingFunctor(){}
+  virtual ~RenderingFunctor(){}
 
   /** Set the rendering function
    *  \param function the Rendering function.

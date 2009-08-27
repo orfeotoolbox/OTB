@@ -155,7 +155,7 @@ protected:
   /** Constructor */
   ImageWidget();
   /** Destructor */
-  ~ImageWidget();
+  virtual ~ImageWidget();
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

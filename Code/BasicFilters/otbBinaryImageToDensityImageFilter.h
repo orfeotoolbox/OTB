@@ -82,7 +82,7 @@ protected:
   /** Constructor */
   BinaryImageToDensityImageFilter();
   /** Destructor */
-  ~BinaryImageToDensityImageFilter();
+  virtual ~BinaryImageToDensityImageFilter();
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

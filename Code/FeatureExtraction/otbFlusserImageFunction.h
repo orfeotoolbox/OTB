@@ -123,7 +123,7 @@ public:
 
 protected:
   FlusserImageFunction();
-  ~FlusserImageFunction() {};
+  virtual ~FlusserImageFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

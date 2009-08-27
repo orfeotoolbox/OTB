@@ -134,7 +134,7 @@ public:
 protected:
   /** Constructor and  destructor */
   ImageWidgetAffineTransferFunction() {}
-  ~ImageWidgetAffineTransferFunction() {}
+  virtual ~ImageWidgetAffineTransferFunction() {}
 private:
   ImageWidgetAffineTransferFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -185,7 +185,7 @@ public:
 protected:
   /** Constructor and  destructor */
   ImageWidgetSquareRootTransferFunction() {}
-  ~ImageWidgetSquareRootTransferFunction() {}
+  virtual ~ImageWidgetSquareRootTransferFunction() {}
 private:
   ImageWidgetSquareRootTransferFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -236,7 +236,7 @@ public:
 protected:
   /** Constructor and  destructor */
   ImageWidgetLogTransferFunction() {}
-  ~ImageWidgetLogTransferFunction() {}
+  virtual ~ImageWidgetLogTransferFunction() {}
 private:
   ImageWidgetLogTransferFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -287,7 +287,7 @@ public:
 protected:
   /** Constructor and  destructor */
   ImageWidgetSquareTransferFunction() {}
-  ~ImageWidgetSquareTransferFunction() {}
+  virtual ~ImageWidgetSquareTransferFunction() {}
 private:
   ImageWidgetSquareTransferFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

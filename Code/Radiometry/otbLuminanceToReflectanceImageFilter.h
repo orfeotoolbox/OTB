@@ -59,7 +59,7 @@ public:
     m_IlluminationCorrectionCoefficient(1.0)
   {};
 
-  ~LuminanceToReflectanceImageFunctor() {};
+  virtual ~LuminanceToReflectanceImageFunctor() {};
 
   void SetSolarIllumination(double solarIllumination)
   {

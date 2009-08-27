@@ -80,7 +80,7 @@ protected:
     this->SetRadius(radius);
 
   };
-  ~PanTexTextureImageFunctionFilter() {};
+  virtual ~PanTexTextureImageFunctionFilter() {};
   //void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

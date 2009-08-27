@@ -93,7 +93,7 @@ protected:
   /** Constructor */
   ImageWidgetController();
   /** Destructor */
-  ~ImageWidgetController();
+  virtual ~ImageWidgetController();
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

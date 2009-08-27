@@ -100,7 +100,7 @@ protected:
   /** Construtor.*/
   ONERAImageIO();
   /** Destructor.*/
-  ~ONERAImageIO();
+  virtual ~ONERAImageIO();
 
   bool OpenOneraDataFileForReading(const char* filename);
   bool OpenOneraHeaderFileForReading(const char* filename);

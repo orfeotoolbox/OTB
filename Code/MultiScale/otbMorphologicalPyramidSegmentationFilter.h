@@ -136,7 +136,7 @@ protected:
   /** Constructor */
   MorphologicalPyramidSegmentationFilter();
   /** Destructor */
-  ~MorphologicalPyramidSegmentationFilter();
+  virtual ~MorphologicalPyramidSegmentationFilter();
   virtual void GenerateOutputInformation() {}; // does nothing
   /** Main computation method */
   virtual void GenerateData();

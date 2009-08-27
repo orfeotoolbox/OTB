@@ -104,7 +104,7 @@ public:
 
 protected:
   ExtractROIBase();
-  ~ExtractROIBase() {};
+  virtual ~ExtractROIBase() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 

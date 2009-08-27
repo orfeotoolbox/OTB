@@ -51,7 +51,7 @@ public:
     m_BlueChannelIndex = 2;
   };
   /// Destructor
-  ~ColorAnaglyphFunctor() {};
+  virtual ~ColorAnaglyphFunctor() {};
 
   inline TOutputPixel operator()(const TInputPixel1& pixel1, const TInputPixel2& pixel2)
   {

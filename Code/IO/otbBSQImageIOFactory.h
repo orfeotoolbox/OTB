@@ -54,7 +54,7 @@ public:
 
 protected:
   BSQImageIOFactory();
-  ~BSQImageIOFactory();
+  virtual ~BSQImageIOFactory();
 
 private:
   BSQImageIOFactory(const Self&); //purposely not implemented

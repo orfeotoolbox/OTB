@@ -76,7 +76,7 @@ public:
 
 protected:
   PathFunction();
-  ~PathFunction() {}
+  virtual ~PathFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   InputPathConstPointer  m_Path;

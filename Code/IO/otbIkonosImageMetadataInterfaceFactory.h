@@ -57,7 +57,7 @@ public:
 
 protected:
   IkonosImageMetadataInterfaceFactory();
-  ~IkonosImageMetadataInterfaceFactory();
+  virtual ~IkonosImageMetadataInterfaceFactory();
 
 private:
   IkonosImageMetadataInterfaceFactory(const Self&); //purposely not implemented

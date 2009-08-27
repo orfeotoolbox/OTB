@@ -261,7 +261,7 @@ public:
   /// Constructor
   NDVI() {};
   /// Desctructor
-  ~NDVI() {};
+  virtual ~NDVI() {};
   // Operator on r and nir single pixel values
 protected:
   inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
@@ -290,7 +290,7 @@ class RVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   RVI() {};
-  ~RVI() {};
+  virtual ~RVI() {};
 protected:
   inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
   {
@@ -317,7 +317,7 @@ class PVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   PVI() {};
-  ~PVI() {};
+  virtual ~PVI() {};
   /** Set/Get A and B parameters */
   void SetA(const double A)
   {
@@ -367,7 +367,7 @@ class SAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   SAVI() : m_L(0.5) {};
-  ~SAVI() {};
+  virtual ~SAVI() {};
 
   /** Set/Get L correction */
   void SetL(const double L)
@@ -412,7 +412,7 @@ class TSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   TSAVI() : m_A(0.7), m_S(0.9), m_X(0.08) {};
-  ~TSAVI() {};
+  virtual ~TSAVI() {};
 
   /** Set/Get S and A parameters */
   void SetS(const double S)
@@ -477,7 +477,7 @@ class MSAVI2 : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   MSAVI2() {};
-  ~MSAVI2() {};
+  virtual ~MSAVI2() {};
 
 protected:
   inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
@@ -507,7 +507,7 @@ class GEMI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   GEMI() {};
-  ~GEMI() {};
+  virtual ~GEMI() {};
 
 protected:
   inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
@@ -553,7 +553,7 @@ public:
   /// Constructor
   WDVI() : m_S(0.4) {};
   /// Desctructor
-  ~WDVI() {};
+  virtual ~WDVI() {};
   // Operator on r and nir single pixel values
 /** Set/Get Slop of soil line */
   void SetS( const double s)
@@ -596,7 +596,7 @@ public:
   {
 	m_WDVIfunctor.SetS(m_S);
   };
-  ~MSAVI() {};
+  virtual ~MSAVI() {};
 /** Set/Get Slop of soil line */
   void SetS( const double s)
   {
@@ -660,7 +660,7 @@ class AVI : public RAndGAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
 {
 public:
   AVI() : m_LambdaG(560.), m_LambdaR(660.), m_LambdaNir(830.) {};
-  ~AVI() {};
+  virtual ~AVI() {};
 /** Set/Get Lambda red parameter*/
   void SetLambdaR(const double lr)
   {
@@ -747,7 +747,7 @@ class ARVI : public RAndBAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
 {
 public:
   ARVI() : m_Gamma(0.5) {};
-  ~ARVI() {};
+  virtual ~ARVI() {};
 
   /** Set/Get Gamma parameter */
   void SetGamma(const double gamma)
@@ -793,7 +793,7 @@ class TSARVI: public RAndBAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
 {
 public:
   TSARVI() : m_X(0.08), m_Gamma(0.5) {};
-  ~TSARVI() {};
+  virtual ~TSARVI() {};
 
   /** Set/Get A and B parameters */
   void SetA(const double A)
@@ -873,7 +873,7 @@ class EVI : public RAndBAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
 {
 public:
   EVI() : m_G(2.5), m_C1(6.0), m_C2(7.5), m_L(1.0) {};
-  ~EVI() {};
+  virtual ~EVI() {};
 /** Set/Get G parameter */
   void SetG(const double g)
   {
@@ -952,7 +952,7 @@ class IPVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   IPVI() {};
-  ~IPVI() {};
+  virtual ~IPVI() {};
 
 protected:
   inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
@@ -984,7 +984,7 @@ class TNDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 public:
   typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
   TNDVI() {};
-  ~TNDVI() {};
+  virtual ~TNDVI() {};
 
   NDVIFunctorType GetNDVI(void)const
   {

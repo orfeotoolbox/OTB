@@ -56,7 +56,7 @@ public:
     m_Beta(0.)
   {};
 
-  ~ImageToLuminanceImageFunctor() {};
+  virtual ~ImageToLuminanceImageFunctor() {};
 
   void SetAlpha(double alpha)
   {

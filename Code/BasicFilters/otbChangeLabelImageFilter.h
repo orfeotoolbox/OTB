@@ -46,7 +46,7 @@ public:
   typedef typename TOutput::ValueType ValueType;
 
   VectorChangeLabel() {};
-  ~VectorChangeLabel() {};
+  virtual ~VectorChangeLabel() {};
 
   typedef std::map<TInput, TOutput> ChangeMapType;
 
@@ -228,7 +228,7 @@ template< class TInput, class TOutput>
 {
 public:
   VectorChangeLabel() {m_NumberOfComponents=1;};
-  ~VectorChangeLabel() {};
+  virtual ~VectorChangeLabel() {};
 
 
   void SetNumberOfComponents(unsigned int nb)

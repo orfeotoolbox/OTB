@@ -78,7 +78,7 @@ public:
 
 protected:
   TransactorGISTableFunction();
-  ~TransactorGISTableFunction() {}
+  virtual ~TransactorGISTableFunction() {}
   void PrintSelf(std::ostream& os, Indent indent) const;
 
   /** Const pointer to the input Table. */

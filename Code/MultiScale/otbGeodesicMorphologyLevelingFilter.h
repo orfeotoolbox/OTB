@@ -38,7 +38,7 @@ public:
   /// Constructor
   LevelingFunctor() {};
   /// Destructor
-  ~LevelingFunctor() {};
+  virtual ~LevelingFunctor() {};
 
   inline TOutput operator()(const TInput& pixel, const TInputMap& convexPixel, const TInputMap& concavePixel)
   {

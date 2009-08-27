@@ -423,7 +423,7 @@ protected:
 
   // Constructor and destructor
   ImageViewerBase();
-  ~ImageViewerBase();
+  virtual ~ImageViewerBase();
 
   /** Line width*/
   double m_LineWidth;

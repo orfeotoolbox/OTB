@@ -111,7 +111,7 @@ class ITK_EXPORT TextureImageFunction :
 
 protected:
   TextureImageFunction();
-  ~TextureImageFunction() {};
+  virtual ~TextureImageFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

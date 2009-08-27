@@ -102,7 +102,7 @@ protected:
   /** Constructor */
   SVMImageModelEstimator();
   /** Destructor */
-  ~SVMImageModelEstimator();
+  virtual ~SVMImageModelEstimator();
   /** PrintSelf */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

@@ -82,7 +82,7 @@ protected:
   /**Constructor */
   ImageViewer();
   /** Destructor */
-  ~ImageViewer();
+  virtual ~ImageViewer();
 
 private:
   ImageViewer(const Self&); //purposely not implemented

@@ -116,7 +116,7 @@ public:
 
 protected:
   HuImageFunction();
-  ~HuImageFunction() {};
+  virtual ~HuImageFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

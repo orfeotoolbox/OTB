@@ -141,7 +141,7 @@ public:
 
 protected:
   ImportImageFilter();
-  ~ImportImageFilter();
+  virtual ~ImportImageFilter();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** This filter does not actually "produce" any data, rather it "wraps"

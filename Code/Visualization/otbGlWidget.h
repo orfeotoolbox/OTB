@@ -104,7 +104,7 @@ protected:
   /** Constructor */
   GlWidget();
   /** Destructor */
-  ~GlWidget();
+  virtual ~GlWidget();
   /** Printself method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Actually render the buffer to the screen. This method is

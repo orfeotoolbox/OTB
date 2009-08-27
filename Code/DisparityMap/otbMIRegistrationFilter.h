@@ -119,7 +119,7 @@ public:
 
 protected:
   MIRegistrationFilter();
-  ~MIRegistrationFilter() {}
+  virtual ~MIRegistrationFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Initialize the state of filter and equation before each iteration. */

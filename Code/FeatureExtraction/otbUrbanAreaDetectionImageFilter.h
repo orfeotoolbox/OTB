@@ -71,7 +71,7 @@ class RadiometricNonWaterNonVegetationIndexFunctor
                             m_WaterFunctor.SetNIRIndex(id); };
 
   RadiometricNonWaterNonVegetationIndexFunctor(){}
-  ~RadiometricNonWaterNonVegetationIndexFunctor(){};
+  virtual ~RadiometricNonWaterNonVegetationIndexFunctor(){};
   
   inline TOutput operator()(const TInput& pInPix)
     {
@@ -116,7 +116,7 @@ public:
     m_UpperThreshold = 1.0;
   };
 
-  ~RadiometricNonWaterNonVegetationDetectionFunctor() {};
+  virtual ~RadiometricNonWaterNonVegetationDetectionFunctor() {};
   inline TOutput operator()(const TInput& inPix)
   {
     // The vegetation and water areas are put to 0.

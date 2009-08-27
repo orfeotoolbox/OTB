@@ -76,7 +76,7 @@ public:
 
 protected:
   ImageFileReader();
-  ~ImageFileReader();
+  virtual ~ImageFileReader();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

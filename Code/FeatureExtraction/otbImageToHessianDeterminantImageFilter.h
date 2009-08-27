@@ -47,7 +47,7 @@ class HessianDeterminant
 {
 public:
   HessianDeterminant() {};
-  ~HessianDeterminant() {};
+  virtual ~HessianDeterminant() {};
 
   /*
    *

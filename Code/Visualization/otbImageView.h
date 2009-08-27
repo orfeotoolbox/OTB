@@ -108,7 +108,7 @@ public:
   /** Constructor */
   ImageView();
   /** Destructor */
-  ~ImageView();
+  virtual ~ImageView();
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

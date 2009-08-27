@@ -101,7 +101,7 @@ protected:
   /** Construtor.*/
   MWImageIO();
   /** Destructor.*/
-  ~MWImageIO();
+  virtual ~MWImageIO();
 
   bool OpenOneraDataFileForReading(const char* filename);
   bool OpenOneraHeaderFileForReading(const char* filename);

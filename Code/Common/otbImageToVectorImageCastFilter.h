@@ -38,7 +38,7 @@ class VectorCast
 public:
   typedef typename TOutput::ValueType OutputValueType;
   VectorCast() {};
-  ~VectorCast() {};
+  virtual ~VectorCast() {};
 
   bool operator!=(const VectorCast&) const
   {

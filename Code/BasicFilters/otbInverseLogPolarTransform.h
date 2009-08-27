@@ -107,7 +107,7 @@ protected:
   /** Constructor */
   InverseLogPolarTransform();
   /** Destructor */
-  ~InverseLogPolarTransform();
+  virtual ~InverseLogPolarTransform();
   /** PrintSelf method */
   void PrintSelf(std::ostream &os,itk::Indent indent) const;
 

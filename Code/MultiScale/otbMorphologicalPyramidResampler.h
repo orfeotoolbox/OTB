@@ -72,7 +72,7 @@ protected:
   /** Constructor */
   Resampler();
   /** Destructor */
-  ~Resampler() {};
+  virtual ~Resampler() {};
   /** Generate output information */
   virtual void GenerateOutputInformation();
   /** Configure input requested region to be the largest possible region */

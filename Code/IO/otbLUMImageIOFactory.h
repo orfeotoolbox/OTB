@@ -54,7 +54,7 @@ public:
 
 protected:
   LUMImageIOFactory();
-  ~LUMImageIOFactory();
+  virtual ~LUMImageIOFactory();
 
 private:
   LUMImageIOFactory(const Self&); //purposely not implemented

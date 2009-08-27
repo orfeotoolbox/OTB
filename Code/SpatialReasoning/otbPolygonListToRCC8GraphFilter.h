@@ -117,7 +117,7 @@ protected:
   /** Constructor */
   PolygonListToRCC8GraphFilter();
   /** Destructor */
-  ~PolygonListToRCC8GraphFilter();
+  virtual ~PolygonListToRCC8GraphFilter();
   /** Main computation method */
   virtual void GenerateData();
 

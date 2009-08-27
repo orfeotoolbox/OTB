@@ -30,7 +30,7 @@ class VectorToAmplitudeFunctor
 {
 public:
   VectorToAmplitudeFunctor() {};
-  ~VectorToAmplitudeFunctor() {};
+  virtual ~VectorToAmplitudeFunctor() {};
 
   inline TOutput operator()(const TInput & A)
   {

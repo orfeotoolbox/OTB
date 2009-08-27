@@ -38,7 +38,7 @@ public:
   {
     m_Coef = 1.0;
   }
-  ~MultiplyByScalar() {};
+  virtual ~MultiplyByScalar() {};
   inline TOutput operator()( const TInput & value )
   {
     TOutput result;

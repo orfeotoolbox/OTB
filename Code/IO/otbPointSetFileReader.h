@@ -76,7 +76,7 @@ public:
 
 protected:
   PointSetFileReader();
-  ~PointSetFileReader();
+  virtual ~PointSetFileReader();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   void TestFileExistanceAndReadability();

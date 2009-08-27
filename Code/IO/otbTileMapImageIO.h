@@ -157,7 +157,7 @@ protected:
   /** Construtor.*/
   TileMapImageIO();
   /** Destructor.*/
-  ~TileMapImageIO();
+  virtual ~TileMapImageIO();
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Read all information on the image*/

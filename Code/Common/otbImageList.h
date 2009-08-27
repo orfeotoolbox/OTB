@@ -67,7 +67,7 @@ protected:
   /** Constructor */
   ImageList() {};
   /** Destructor */
-  ~ImageList() {};
+  virtual ~ImageList() {};
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {

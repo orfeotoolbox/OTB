@@ -50,7 +50,7 @@ class BayesianFunctor
 {
 public:
   BayesianFunctor() {};
-  ~BayesianFunctor() {};
+  virtual ~BayesianFunctor() {};
   typedef typename TInputMultiSpectral::RealValueType  RealType;
   typedef typename itk::VariableSizeMatrix<RealType>   MatrixType;
 

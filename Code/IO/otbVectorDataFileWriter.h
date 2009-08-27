@@ -101,7 +101,7 @@ public :
 
 protected:
   VectorDataFileWriter();
-  ~VectorDataFileWriter();
+  virtual ~VectorDataFileWriter();
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

@@ -188,7 +188,7 @@ protected:
   /**
    * Destructor.
    */
-  ~ImageViewerZoomWidget()
+  virtual ~ImageViewerZoomWidget()
   {
     m_Parent = NULL;
   }

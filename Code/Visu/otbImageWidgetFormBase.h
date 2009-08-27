@@ -101,7 +101,7 @@ protected:
   };
 
   /** Destructor. */
-  ~ImageWidgetFormBase()
+  virtual ~ImageWidgetFormBase()
   {};
 
   ColorType m_Color;

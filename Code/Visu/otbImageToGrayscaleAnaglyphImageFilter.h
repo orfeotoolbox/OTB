@@ -42,7 +42,7 @@ public:
   /// Constructor
   GrayscaleAnaglyphFunctor() {};
   /// Destructor
-  ~GrayscaleAnaglyphFunctor() {};
+  virtual ~GrayscaleAnaglyphFunctor() {};
 
 
   inline TOutputPixel operator()(const TInputPixel1& pixel1, const TInputPixel2& pixel2)

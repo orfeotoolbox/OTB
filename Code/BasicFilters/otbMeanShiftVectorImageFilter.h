@@ -87,7 +87,7 @@ protected:
   /** Constructor */
   MeanShiftVectorImageFilter() {};
   /** destructor */
-  ~MeanShiftVectorImageFilter() {};
+  virtual ~MeanShiftVectorImageFilter() {};
 
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const

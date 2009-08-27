@@ -180,7 +180,7 @@ protected:
   /** Constructor */
   ImageWidgetBase();
   /** Destructor */
-  ~ImageWidgetBase();
+  virtual ~ImageWidgetBase();
 
   /** Draw the widget */
   virtual void draw(void);

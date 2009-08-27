@@ -502,7 +502,7 @@ protected:
   /**
    * Destructor.
    */
-  ~ImageViewerFullWidget()
+  virtual ~ImageViewerFullWidget()
   {
     m_Parent = NULL;
   }
