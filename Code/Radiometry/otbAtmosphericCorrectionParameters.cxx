@@ -83,10 +83,10 @@ AtmosphericCorrectionParameters
 void
 AtmosphericCorrectionParameters
 ::UpdateAeronetData( std::string file, int year, int month, int day, int hour, int minute, double epsi )
-{ 
+{
 	if(file == "")
 	  itkExceptionMacro(<<"No Aeronet filename specified.");
-		
+
     AeronetFileReader::Pointer reader = AeronetFileReader::New();
     reader->SetFileName(file);
     reader->SetDay(day);
@@ -97,7 +97,7 @@ AtmosphericCorrectionParameters
     reader->SetEpsilon(epsi);
 
     reader->Update();
-    
+
     m_AerosolOptical = reader->GetOutput()->GetAerosolOpticalThickness();
     m_WaterVaporAmount = reader->GetOutput()->GetWater();
 }
@@ -110,30 +110,30 @@ AtmosphericCorrectionParameters
 {
   m_WavelenghtSpectralBand.clear();
   FilterFunctionValues::Pointer ffv = FilterFunctionValues::New();
-  
+
   ossimFilename fname(filename);
   if(!fname.exists())
     itkExceptionMacro("Filename "<<filename<<" doesn not exist.");
-  	
+
   std::ifstream file( filename.c_str() );
 
   if ( !file )
-    itkExceptionMacro("Enable to read "<<filename<<" file.");  
+    itkExceptionMacro("Enable to read "<<filename<<" file.");
 
   int bandId = 0;
   std::string line;
-  ossimString separatorList = "\ ";
-  
+  ossimString separatorList = "\\ ";
+
   FilterFunctionValues::Pointer function = FilterFunctionValues::New();
   FilterFunctionValues::ValuesVectorType vect;
   m_WavelenghtSpectralBand.clear();
   vect.clear();
-  
+
   while ( std::getline( file, line ) )
   {
   	ossimString osLine(line);
     std::vector<ossimString> keywordStrings = osLine.split(separatorList);
-    
+
     if(keywordStrings.size() == 2 || keywordStrings.size() == 3)
     {
       if(bandId != 0)
