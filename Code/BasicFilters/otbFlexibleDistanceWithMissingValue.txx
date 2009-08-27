@@ -49,7 +49,7 @@ FlexibleDistanceWithMissingValue< TVector >
   {
     if ( !IsMissingValue( x1[i] ) && !IsMissingValue( x2[i] ) )
     {
-      temp = vcl_pow( vcl_abs( vcl_pow(x1[i],this->Alpha) - vcl_pow(x2[i],this->Alpha) ), this->Beta );
+      temp = vcl_pow( vcl_fabs( vcl_pow(x1[i],this->Alpha) - vcl_pow(x2[i],this->Alpha) ), this->Beta );
       distance += temp ;
     }
   }
@@ -82,7 +82,7 @@ FlexibleDistanceWithMissingValue< TVector >
   {
     if ( !IsMissingValue( this->GetOrigin()[i] ) && !IsMissingValue( x[i] ) )
     {
-      temp = vcl_pow(  vcl_abs( vcl_pow(this->GetOrigin()[i],this->Alpha) - vcl_pow(x[i],this->Alpha) ), this->Beta) ;
+      temp = vcl_pow(  vcl_fabs( vcl_pow(this->GetOrigin()[i],this->Alpha) - vcl_pow(x[i],this->Alpha) ), this->Beta) ;
       distance += temp ;
     }
   }
@@ -102,7 +102,7 @@ FlexibleDistanceWithMissingValue< TVector >
   if ( IsMissingValue( a ) || IsMissingValue( b ) )
     return 0.0;
 
-  double temp = vcl_pow(vcl_abs(vcl_pow(a,this->Alpha) - vcl_pow(b,this->Alpha)), this->Beta) ;
+  double temp = vcl_pow(vcl_fabs(vcl_pow(a,this->Alpha) - vcl_pow(b,this->Alpha)), this->Beta) ;
   return temp ;
 }
 
