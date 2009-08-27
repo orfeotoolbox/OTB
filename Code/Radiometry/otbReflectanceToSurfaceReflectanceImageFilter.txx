@@ -46,76 +46,76 @@ template <class TInputImage, class TOutputImage>
 void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
 ::UpdateAtmosphericRadiativeTerms()
-{
-	MetaDataDictionaryType dict = this->GetInput()->GetMetaDataDictionary();
-
-    ImageMetadataInterfaceBase::Pointer imageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(dict);
-	 
-    if ((m_CorrectionParameters->GetDay() == 0))
+{  std::cout<<"UpdateAtmosphericRadiativeTerms"<<std::endl;
+  MetaDataDictionaryType dict = this->GetInput()->GetMetaDataDictionary();
+  
+  ImageMetadataInterfaceBase::Pointer imageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(dict);
+  
+  if ((m_CorrectionParameters->GetDay() == 0))
     {
       m_CorrectionParameters->SetDay(imageMetadataInterface->GetDay(dict));
     }
-
-    if ((m_CorrectionParameters->GetMonth() == 0))
+  
+  if ((m_CorrectionParameters->GetMonth() == 0))
     {
       m_CorrectionParameters->SetMonth(imageMetadataInterface->GetMonth(dict));
     }
-
-    if ((m_CorrectionParameters->GetSolarZenithalAngle() == 361.))
+  
+  if ((m_CorrectionParameters->GetSolarZenithalAngle() == 361.))
     {
       m_CorrectionParameters->SetSolarZenithalAngle(90. - imageMetadataInterface->GetSunElevation(dict));
     }
-    
-    if ((m_CorrectionParameters->GetSolarAzimutalAngle() == 361.))
+  
+  if ((m_CorrectionParameters->GetSolarAzimutalAngle() == 361.))
     {
       m_CorrectionParameters->SetSolarAzimutalAngle(imageMetadataInterface->GetSunAzimuth(dict));
     }
-
-    if ((m_CorrectionParameters->GetViewingZenithalAngle() == 361.))
+  
+  if ((m_CorrectionParameters->GetViewingZenithalAngle() == 361.))
     {
       m_CorrectionParameters->SetViewingZenithalAngle(90. - imageMetadataInterface->GetSatElevation(dict));
     }
-    
-    if ((m_CorrectionParameters->GetViewingAzimutalAngle() == 361.))
+  
+  if ((m_CorrectionParameters->GetViewingAzimutalAngle() == 361.))
     {
       m_CorrectionParameters->SetViewingAzimutalAngle(imageMetadataInterface->GetSatAzimuth(dict));
     }
-    
-    if(m_AeronetFileName != "")
-      m_CorrectionParameters->UpdateAeronetData( m_AeronetFileName, 
-      											 imageMetadataInterface->GetYear(dict),
-      											 imageMetadataInterface->GetHour(dict),
-      											 imageMetadataInterface->GetMinute(dict) );    
-      
-    // load fiter function values
-    if(m_FilterFunctionValuesFileName != "")
+  
+  if(m_AeronetFileName != "")
+    m_CorrectionParameters->UpdateAeronetData( m_AeronetFileName, 
+					       imageMetadataInterface->GetYear(dict),
+					       imageMetadataInterface->GetHour(dict),
+					       imageMetadataInterface->GetMinute(dict) );    
+  
+  // load fiter function values
+  if(m_FilterFunctionValuesFileName != "")
     {
-        m_CorrectionParameters->LoadFilterFunctionValue( m_FilterFunctionValuesFileName );
+      m_CorrectionParameters->LoadFilterFunctionValue( m_FilterFunctionValuesFileName );
     } 
-    // the user has set the filter function values 
-    else
+  // the user has set the filter function values 
+  else
     {
       if( m_FilterFunctionCoef.size() != this->GetInput()->GetNumberOfComponentsPerPixel() )
-      {
-    	itkExceptionMacro(<<"Filter Function and image channels mismatch.");
-      }
+	{
+	  itkExceptionMacro(<<"Filter Function and image channels mismatch.");
+	}
       for(unsigned int i=0; i<this->GetInput()->GetNumberOfComponentsPerPixel(); i++)
-      {
-	    FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
-	    functionValues->SetFilterFunctionValues(m_FilterFunctionCoef[i]);
-        functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths(dict)[i]);
-        functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths(dict)[i]);
-
-        m_CorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, functionValues);
-      }
+	{
+	  FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
+	  functionValues->SetFilterFunctionValues(m_FilterFunctionCoef[i]);
+	  functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths(dict)[i]);
+	  functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths(dict)[i]);
+	  
+	  m_CorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, functionValues);
+	}
     }
-    
-    
-    Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
-       
-    param2Terms->SetInput(m_CorrectionParameters);
-    param2Terms->Update();
-    m_AtmosphericRadiativeTerms = param2Terms->GetOutput();
+  
+  
+  Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
+  
+  param2Terms->SetInput(m_CorrectionParameters);
+  param2Terms->Update();
+  this->SetAtmosphericRadiativeTerms( param2Terms->GetOutput() );
 }
 
 
@@ -125,10 +125,13 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
-  
+  std::cout<<"GENERATEOUTPUTINFO"<<std::endl;
   if(m_IsSetAtmosphericRadiativeTerms==false)
-    this->UpdateAtmosphericRadiativeTerms(); 
- 
+    {
+      this->UpdateAtmosphericRadiativeTerms();
+      m_IsSetAtmosphericRadiativeTerms = true;
+    }
+  
   this->UpdateFunctors();
 }
 
@@ -136,27 +139,42 @@ template <class TInputImage, class TOutputImage>
 void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
 ::UpdateFunctors()
-{
+{  
+std::cout<<"UpdateFunctors"<<std::endl;
   this->GetFunctorVector().clear();
+  std::cout<<"UpdateFunctors "<<this->GetInput()->GetNumberOfComponentsPerPixel()<<std::endl;
+  std::cout<<m_AtmosphericRadiativeTerms<<std::endl;
   for (unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
-  {
-    double coef;
-    double res;
-    coef = static_cast<double>(m_AtmosphericRadiativeTerms->GetTotalGaseousTransmission(i)
+    {
+std::cout<<"UpdateFunctors21"<<std::endl;
+ m_AtmosphericRadiativeTerms->GetTotalGaseousTransmission(i);
+std::cout<<"UpdateFunctors22"<<std::endl;
+ m_AtmosphericRadiativeTerms->GetDownwardTransmittance(i);
+std::cout<<"UpdateFunctors23"<<std::endl;
+ m_AtmosphericRadiativeTerms->GetUpwardTransmittance(i);
+std::cout<<"UpdateFunctors24"<<std::endl;
+ m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectance(i);
+std::cout<<"UpdateFunctors25"<<std::endl;
+      double coef;
+      double res;
+      coef = static_cast<double>(m_AtmosphericRadiativeTerms->GetTotalGaseousTransmission(i)
                                  * m_AtmosphericRadiativeTerms->GetDownwardTransmittance(i)
                                  * m_AtmosphericRadiativeTerms->GetUpwardTransmittance(i)     );
-    coef = 1. / coef;
-    res = -m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectance(i) * coef;
-
-    FunctorType functor;
+      coef = 1. / coef;
+      res = -m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectance(i) * coef;
+      std::cout<<"UpdateFunctors2"<<std::endl;
+      FunctorType functor;
     functor.SetCoefficient(coef);
     functor.SetResidu(res);
     functor.SetSphericalAlbedo(static_cast<double>(m_AtmosphericRadiativeTerms->GetSphericalAlbedo(i)));
-
+    
     this->GetFunctorVector().push_back(functor);
-  }
+    }
+
+std::cout<<"UpdateFunctors END"<<std::endl; 
 }
-  
+
+
 }
 
 #endif

@@ -34,7 +34,6 @@ FilterFunctionValues
   m_MinSpectralValue = 0;
   m_MaxSpectralValue = 0;
   m_UserStep = 0.0025;
-  m_FilterFunctionValues.clear();
 }
 
 /**PrintSelf method */
@@ -77,6 +76,7 @@ AtmosphericCorrectionParameters
   m_OzoneAmount          = 0.28;
   m_AerosolModel         = CONTINENTAL;
   m_AerosolOptical       = 0.2;
+  m_WavelenghtSpectralBand.clear();
 }
 
 /** Get data from aeronet file*/
@@ -84,22 +84,22 @@ void
 AtmosphericCorrectionParameters
 ::UpdateAeronetData( std::string file, int year, int month, int day, int hour, int minute, double epsi )
 { 
-	if(file == "")
-	  itkExceptionMacro(<<"No Aeronet filename specified.");
-		
-    AeronetFileReader::Pointer reader = AeronetFileReader::New();
-    reader->SetFileName(file);
-    reader->SetDay(day);
-    reader->SetMonth(month);
-    reader->SetYear(year);
-    reader->SetHour(hour);
-    reader->SetMinute(minute);
-    reader->SetEpsilon(epsi);
-
-    reader->Update();
-    
-    m_AerosolOptical = reader->GetOutput()->GetAerosolOpticalThickness();
-    m_WaterVaporAmount = reader->GetOutput()->GetWater();
+  if(file == "")
+    itkExceptionMacro(<<"No Aeronet filename specified.");
+  
+  AeronetFileReader::Pointer reader = AeronetFileReader::New();
+  reader->SetFileName(file);
+  reader->SetDay(day);
+  reader->SetMonth(month);
+  reader->SetYear(year);
+  reader->SetHour(hour);
+  reader->SetMinute(minute);
+  reader->SetEpsilon(epsi);
+  
+  reader->Update();
+  
+  m_AerosolOptical = reader->GetOutput()->GetAerosolOpticalThickness();
+  m_WaterVaporAmount = reader->GetOutput()->GetWater();
 }
 
 
@@ -122,7 +122,7 @@ AtmosphericCorrectionParameters
 
   int bandId = 0;
   std::string line;
-  ossimString separatorList = "\ ";
+  ossimString separatorList = " ";
   
   FilterFunctionValues::Pointer function = FilterFunctionValues::New();
   FilterFunctionValues::ValuesVectorType vect;

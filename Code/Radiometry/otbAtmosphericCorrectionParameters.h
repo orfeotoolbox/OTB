@@ -258,7 +258,7 @@ public:
     
   /** Read a file that contains filter function values.
    *  Format is MinSpectralValue MaxSpectralValue UserStep and then the list of coefficients for each band.
-   *  NB : if no UserStep writen, the default value will be 0,0025nm
+   *  NB : if no UserStep writen, the default value will be 0,0025µm
    */
    void LoadFilterFunctionValue( std::string filename );
      
