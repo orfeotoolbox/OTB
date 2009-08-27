@@ -209,8 +209,8 @@ RegionImageToRectangularPathListFilter<TInputImage,TOutputPath>
       double ax, ay;
       for (regionIterator = regionContainer.begin(); regionIterator != regionContainer.end(); ++regionIterator) {
         explorerIndex = *regionIterator;
-        ax = vcl_fabs(explorerIndex[0] - avgX);
-        ay = vcl_fabs(explorerIndex[1] - avgY);
+        ax = vcl_abs(explorerIndex[0] - avgX);
+        ay = vcl_abs(explorerIndex[1] - avgY);
         sumAX += ax;
         sumAY += ay;
         crossTermAXY += ax * ay;
@@ -266,10 +266,10 @@ RegionImageToRectangularPathListFilter<TInputImage,TOutputPath>
       // Compute equivalent length and width (based on equal area criterion)
       double length, width;
       if (al2 != 0) {
-        length = vcl_sqrt(vcl_fabs(al1 / al2) * n);
+        length = vcl_sqrt(vcl_abs(al1 / al2) * n);
         //length = vcl_sqrt(l1 / l2 * n);
         if (al1 != 0)
-          width = vcl_fabs(al2 / al1) * length;
+          width = vcl_abs(al2 / al1) * length;
         else { // l1 == 0 and l2 == 0
           length = width = vcl_sqrt(static_cast<double>(n)); // should happen only when n == 1 anyway
         }
@@ -316,8 +316,8 @@ RegionImageToRectangularPathListFilter<TInputImage,TOutputPath>
         explorerIndex = *regionIterator;
         vx = explorerIndex[0] - avgX;
         vy = explorerIndex[1] - avgY;
-        if (vcl_fabs(vx * x1 + vy * y1) <= halfLength
-         && vcl_fabs(vx * x2 + vy * y2) <= halfWidth)
+        if (vcl_abs(vx * x1 + vy * y1) <= halfLength
+         && vcl_abs(vx * x2 + vy * y2) <= halfWidth)
           countWithin ++;
       }
 

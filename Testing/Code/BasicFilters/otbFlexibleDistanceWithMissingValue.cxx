@@ -47,7 +47,7 @@ int otbFlexibleDistanceWithMissingValue( int argc, char * argv[] )
   double distanceValue = dist->Evaluate( x, y );
   std::cout << "Distance: " << distanceValue << std::endl;
 
-  if ( vcl_fabs(distanceValue - dim*vcl_pow(3,b)) < epsilon )
+  if ( vcl_abs(distanceValue - dim*vcl_pow(3,b)) < epsilon )
     return EXIT_SUCCESS;
   else
     return EXIT_FAILURE;
