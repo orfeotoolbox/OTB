@@ -88,7 +88,7 @@ public:
 
 protected:
   MultiToMonoChannelExtractROI();
-  ~MultiToMonoChannelExtractROI() {};
+  virtual ~MultiToMonoChannelExtractROI() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** ExtractImageFilter can produce an image which is a different

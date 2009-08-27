@@ -15,24 +15,31 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMVCModelBase_h
-#define __otbMVCModelBase_h
+#ifndef __otbMVCModel_h
+#define __otbMVCModel_h
 
 #include <set>
+#include "itkObject.h"
+#include "itkObjectFactory.h"
 
 namespace otb
 {
-/** \class MVCModelBase
- * \brief Interface class for MVC based modelling.
- *  Implements the registration and
+/** \class MVCModel
+ *
+ * Base class for MVC based modelling. Implements the registration and
  * Unregistration of listeners, as well as the NotifyAll method. A valid listener must
  * implement a Notify() method.
- *  \ingroup Visualization
  */
 template <class TListener>
-class MVCModelBase
+class MVCModel
 {
 public:
+  /** Standard class typedefs */
+  typedef MVCModel    Self;
+  typedef itk::Object Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
   // Define the listener type
   typedef TListener ListenerType;
 
@@ -68,15 +75,22 @@ public:
   }
 
   /** Notify changes to a given listerner */
-  virtual void Notify(ListenerType * listener) {};
+  virtual void Notify(ListenerType * listener)
+  {
+     listener->Notify();
+  };
 
 protected:
   /** Constructor */
-  MVCModelBase() {}
+  MVCModel() {}
   /** Destructor */
-  virtual ~MVCModelBase() {}
+  virtual ~MVCModel() {}
 
 private:
+  MVCModel(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
+
   /** Registered liteners */
   ListenersSetType m_RegisteredListeners;
 };

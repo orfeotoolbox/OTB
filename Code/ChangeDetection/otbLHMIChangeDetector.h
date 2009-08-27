@@ -77,7 +77,7 @@ public:
 
 
   LHMI() {};
-  ~LHMI() {};
+  virtual ~LHMI() {};
   inline TOutput operator()( const TInput1 & itA,
                              const TInput2 & itB)
   {

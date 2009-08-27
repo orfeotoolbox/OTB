@@ -102,7 +102,7 @@ public:
   
 protected:
   RegionImageToRectangularPathListFilter();
-  ~RegionImageToRectangularPathListFilter();
+  virtual ~RegionImageToRectangularPathListFilter();
 
   virtual void GenerateOutputInformation(){}; // do nothing
   virtual void GenerateData();

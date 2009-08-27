@@ -54,7 +54,7 @@ class MeanDifference
 {
 public:
   MeanDifference() {};
-  ~MeanDifference() {};
+  virtual ~MeanDifference() {};
   inline TOutput operator()( const TInput1 & itA,
                              const TInput2 & itB)
   {

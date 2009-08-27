@@ -80,7 +80,7 @@ namespace Function
       /** Constructor */
       MultiplyBlendingFunction() {}
       /** Destructor */
-      ~MultiplyBlendingFunction() {}
+      virtual ~MultiplyBlendingFunction() {}
     private:
       MultiplyBlendingFunction(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented

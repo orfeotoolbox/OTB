@@ -100,7 +100,7 @@ public :
 
 protected:
   DEMToImageGenerator();
-  ~DEMToImageGenerator(){};
+  virtual ~DEMToImageGenerator(){};
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,

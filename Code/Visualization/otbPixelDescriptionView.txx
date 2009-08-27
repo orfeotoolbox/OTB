@@ -65,7 +65,7 @@ PixelDescriptionView<TInputPixelDescription>
 template < class TInputPixelDescription >
 void
 PixelDescriptionView<TInputPixelDescription>
-::PixelDescriptionModelNotify()
+::Notify()
 {
   this->Update();
 }

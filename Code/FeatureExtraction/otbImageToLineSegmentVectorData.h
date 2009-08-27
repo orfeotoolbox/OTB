@@ -103,7 +103,7 @@ public PersistentImageFilter<TInputImage, TInputImage>
 
 protected:
   PersistentLineSegmentDetector();
-  ~PersistentLineSegmentDetector() {};
+  virtual ~PersistentLineSegmentDetector() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   virtual void  ThreadedGenerateData (const RegionType& outputRegionForThread,int threadId);
 

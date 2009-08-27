@@ -94,7 +94,7 @@ protected:
   /// Constructor
   SVMCrossValidationCostFunction();
   /// Destructor
-  ~SVMCrossValidationCostFunction();
+  virtual ~SVMCrossValidationCostFunction();
 
   /** Update svm parameters struct according to the input parameters
     */

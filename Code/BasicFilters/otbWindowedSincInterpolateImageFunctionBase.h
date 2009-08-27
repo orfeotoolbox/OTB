@@ -174,7 +174,7 @@ public:
 
 protected:
   WindowedSincInterpolateImageFunctionBase();
-  ~WindowedSincInterpolateImageFunctionBase();
+  virtual ~WindowedSincInterpolateImageFunctionBase();
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

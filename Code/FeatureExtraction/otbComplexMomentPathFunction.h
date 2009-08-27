@@ -98,7 +98,7 @@ public:
 
 protected:
   ComplexMomentPathFunction();
-  ~ComplexMomentPathFunction() {};
+  virtual ~ComplexMomentPathFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

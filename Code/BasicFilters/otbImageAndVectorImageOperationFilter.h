@@ -42,7 +42,7 @@ public:
     {
       m_Operator = ADDITION;//1;
     };
-  ~ImageAndVectorImageOperationFunctor(){};
+  virtual ~ImageAndVectorImageOperationFunctor(){};
 
  
   void SetOperator(OperatorType oper)
@@ -216,7 +216,7 @@ public:
 
 protected:
   ImageAndVectorImageOperationFilter();
-  ~ImageAndVectorImageOperationFilter();
+  virtual ~ImageAndVectorImageOperationFilter();
 
   /** This is a source, so it must set the spacing, size, and largest possible
    * region for the output image that it will produce.

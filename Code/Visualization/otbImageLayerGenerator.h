@@ -183,7 +183,7 @@ protected:
   /** Constructor */
   ImageLayerGenerator();
   /** Destructor */
-  ~ImageLayerGenerator();
+  virtual ~ImageLayerGenerator();
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

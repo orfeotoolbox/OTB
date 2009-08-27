@@ -94,7 +94,7 @@ public:
 
 protected:
   HuPathFunction();
-  ~HuPathFunction() {};
+  virtual ~HuPathFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

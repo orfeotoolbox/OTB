@@ -167,7 +167,7 @@ public:
 
 protected:
   PersistentMatrixTransposeMatrixImageFilter();
-  ~PersistentMatrixTransposeMatrixImageFilter() {};
+  virtual ~PersistentMatrixTransposeMatrixImageFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Multi-thread version GenerateData. */
   virtual void  ThreadedGenerateData (const RegionType& outputRegionForThread,int threadId);

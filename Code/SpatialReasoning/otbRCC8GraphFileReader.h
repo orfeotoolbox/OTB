@@ -87,7 +87,7 @@ protected:
   /** Constructor */
   RCC8GraphFileReader();
   /** Destructor */
-  ~RCC8GraphFileReader();
+  virtual ~RCC8GraphFileReader();
   /** Main computation method */
   virtual void GenerateData();
   /**

@@ -65,7 +65,7 @@ public:
 
 protected:
   PointSetDensityFunction();
-  ~PointSetDensityFunction() {};
+  virtual ~PointSetDensityFunction() {};
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

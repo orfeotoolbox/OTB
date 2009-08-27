@@ -55,7 +55,7 @@ public:
 
 protected:
   TileMapImageIOFactory();
-  ~TileMapImageIOFactory();
+  virtual ~TileMapImageIOFactory();
 
 private:
   TileMapImageIOFactory(const Self&); //purposely not implemented

@@ -120,7 +120,7 @@ public:
 
 protected:
   MultiChannelExtractROI();
-  ~MultiChannelExtractROI() {};
+  virtual ~MultiChannelExtractROI() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Reinitialize channels vector for multiple Update.*/

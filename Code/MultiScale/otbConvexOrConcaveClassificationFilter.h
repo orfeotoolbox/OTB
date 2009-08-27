@@ -68,7 +68,7 @@ public:
   /**
    * Destructor
    */
-  ~ConvexOrConcaveDecisionRule() {};
+  virtual ~ConvexOrConcaveDecisionRule() {};
   /**
    * Label the pixel to convex, concave or flat
    * \return The label of the pixel

@@ -125,7 +125,7 @@ protected:
   /** Construtor.*/
   GDALImageIO();
   /** Destructor.*/
-  ~GDALImageIO();
+  virtual ~GDALImageIO();
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Read all information on the image*/

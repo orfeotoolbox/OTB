@@ -102,7 +102,7 @@ protected:
   /** Construtor.*/
   RADImageIO();
   /** Destructor.*/
-  ~RADImageIO();
+  virtual ~RADImageIO();
 
   bool OpenOneraDataFileForReading(const char* filename);
   bool OpenOneraHeaderFileForReading(const char* filename);

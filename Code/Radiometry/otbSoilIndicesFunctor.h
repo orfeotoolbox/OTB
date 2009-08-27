@@ -185,7 +185,7 @@ public:
   /// Constructor
   IR() {};
   /// Desctructor
-  ~IR() {};
+  virtual ~IR() {};
   // Operator on r and nir single pixel values
 protected:
   inline TOutput Evaluate(const TInput1 &pGreen, const TInput2 &pRed) const
@@ -216,7 +216,7 @@ public:
   /// Constructor
   IC() {};
   /// Desctructor
-  ~IC() {};
+  virtual ~IC() {};
   // Operator on r and nir single pixel values
 protected:
   inline TOutput Evaluate(const TInput1 &pGreen, const TInput2 &pRed) const
@@ -247,7 +247,7 @@ public:
   /// Constructor
   IB() {};
   /// Desctructor
-  ~IB() {};
+  virtual ~IB() {};
   // Operator on r and nir single pixel values
 protected:
   inline TOutput Evaluate(const TInput1 &pGreen, const TInput2 &pRed) const
@@ -274,7 +274,7 @@ public:
   /// Constructor
   IB2() {};
   /// Desctructor
-  ~IB2() {};
+  virtual ~IB2() {};
   // Operator on r and nir single pixel values
 protected:
   inline TOutput Evaluate(const TInput1 &pGreen, const TInput2 &pRed, const TInput2 &pNir) const

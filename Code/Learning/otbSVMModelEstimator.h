@@ -297,7 +297,7 @@ protected:
   /** Constructor */
   SVMModelEstimator();
   /** Destructor */
-  ~SVMModelEstimator();
+  virtual ~SVMModelEstimator();
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Starts the modelling process */

@@ -35,7 +35,7 @@ public:
   typedef ImageLayerRenderingModelListener Self;
 
   // Update the display
-  virtual void ImageLayerRenderingModelNotify() = 0;
+  virtual void Notify() = 0;
 
 protected:
   /** Constructor */

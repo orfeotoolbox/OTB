@@ -79,7 +79,7 @@ protected:
   /** Constructor */
   ImageMultiSegmentationToRCC8GraphFilter();
   /** Destructor */
-  ~ImageMultiSegmentationToRCC8GraphFilter();
+  virtual ~ImageMultiSegmentationToRCC8GraphFilter();
   /** Main computation method */
   virtual void GenerateData();
   /** PrintSelf method */

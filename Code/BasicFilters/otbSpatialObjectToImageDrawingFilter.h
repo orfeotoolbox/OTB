@@ -137,7 +137,7 @@ public:
 
 protected:
   SpatialObjectToImageDrawingFilter();
-  ~SpatialObjectToImageDrawingFilter();
+  virtual ~SpatialObjectToImageDrawingFilter();
 
   virtual void GenerateOutputInformation(); // do nothing
   virtual void GenerateData();

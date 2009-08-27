@@ -125,7 +125,7 @@ protected:
   /** Constructor */
   GeodesicMorphologyIterativeDecompositionImageFilter();
   /** Destructor */
-  ~GeodesicMorphologyIterativeDecompositionImageFilter() {};
+  virtual ~GeodesicMorphologyIterativeDecompositionImageFilter() {};
   /** Generate output information */
   virtual void GenerateOutputInformation();
   /** Generate input requested region */

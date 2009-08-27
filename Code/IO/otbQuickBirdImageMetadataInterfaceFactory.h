@@ -57,7 +57,7 @@ public:
 
 protected:
   QuickBirdImageMetadataInterfaceFactory();
-  ~QuickBirdImageMetadataInterfaceFactory();
+  virtual ~QuickBirdImageMetadataInterfaceFactory();
 
 private:
   QuickBirdImageMetadataInterfaceFactory(const Self&); //purposely not implemented

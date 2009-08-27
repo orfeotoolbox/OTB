@@ -173,7 +173,7 @@ public:
 
 protected:
   StreamingImageFileWriter();
-  ~StreamingImageFileWriter();
+  virtual ~StreamingImageFileWriter();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Does the real work. */

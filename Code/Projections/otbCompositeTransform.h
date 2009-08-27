@@ -127,7 +127,7 @@ public :
 
 protected:
   CompositeTransform();
-  ~CompositeTransform();
+  virtual ~CompositeTransform();
 
   FirstTransformPointerType  m_FirstTransform;
   SecondTransformPointerType m_SecondTransform;

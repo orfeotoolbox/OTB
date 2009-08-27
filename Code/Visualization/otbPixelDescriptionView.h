@@ -78,10 +78,10 @@ public:
   /** Constructor */
   PixelDescriptionView();
   /** Destructor */
-  ~PixelDescriptionView();
+  virtual ~PixelDescriptionView();
 
   /** Handle notification from the viewer */
-  virtual void PixelDescriptionModelNotify();
+  virtual void Notify();
 
 private:
   PixelDescriptionView(const Self&);      // purposely not implemented

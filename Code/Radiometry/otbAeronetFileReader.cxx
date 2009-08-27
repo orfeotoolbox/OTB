@@ -150,7 +150,7 @@ AeronetFileReader
   ossimLocalTm current_date = ParseDate(line[col_date], line[col_time]);
   double dcurrent_date = current_date.getJulian();
   // Check hour +/- epsilon
-  if(vcl_fabs(dcurrent_date-ref_date) < epsilon)
+  if(vcl_abs(dcurrent_date-ref_date) < epsilon)
   {
     double dwater = atof(line[col_vapor].c_str());
     double dangst = atof(line[col_angst].c_str());

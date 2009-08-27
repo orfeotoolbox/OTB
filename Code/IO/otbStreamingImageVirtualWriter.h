@@ -126,7 +126,7 @@ public:
 
 protected:
   StreamingImageVirtualWriter();
-  ~StreamingImageVirtualWriter();
+  virtual ~StreamingImageVirtualWriter();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   virtual void GenerateData(void);

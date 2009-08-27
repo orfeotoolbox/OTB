@@ -121,7 +121,7 @@ public:
 
 protected:
   ImageRegionTileMapSplitter() {}
-  ~ImageRegionTileMapSplitter() {}
+  virtual ~ImageRegionTileMapSplitter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

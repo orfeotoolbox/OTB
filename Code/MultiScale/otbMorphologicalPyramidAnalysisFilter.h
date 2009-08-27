@@ -114,7 +114,7 @@ protected:
   /** Constructor */
   MorphologicalPyramidAnalysisFilter();
   /** Destructor */
-  ~MorphologicalPyramidAnalysisFilter();
+  virtual ~MorphologicalPyramidAnalysisFilter();
   virtual void GenerateOutputInformation() {}; // does nothing
   /** Main computation method */
   virtual void GenerateData();

@@ -162,7 +162,7 @@ protected:
   /** Constructor */
   SVMSampleListModelEstimator();
   /** Destructor */
-  ~SVMSampleListModelEstimator();
+  virtual ~SVMSampleListModelEstimator();
   /** PrintSelf */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

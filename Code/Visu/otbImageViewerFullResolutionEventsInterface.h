@@ -63,7 +63,7 @@ protected:
     m_ForwardEvents = false;
   }
   /** Destructor */
-  ~ImageViewerFullResolutionEventsInterface() {}
+  virtual ~ImageViewerFullResolutionEventsInterface() {}
 
 private:
   ImageViewerFullResolutionEventsInterface(const Self&); //purposely not implemented

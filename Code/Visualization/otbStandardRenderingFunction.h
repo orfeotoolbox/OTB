@@ -42,7 +42,7 @@ class Identity
 {
 public:
   Identity(){};
-  ~Identity(){};
+  virtual ~Identity(){};
   bool operator !=(const Identity &) const
   {
     return false;
@@ -347,7 +347,7 @@ protected:
                                 m_AutoMinMaxQuantile(0.02), m_DefaultChannelsAreSet(false), m_UTime()
   {}
   /** Destructor */
-  ~StandardRenderingFunction() {}
+  virtual ~StandardRenderingFunction() {}
 
   /** Perform the computation for a single value (this is done in
    * order to have the same code for vector and scalar version)

@@ -53,7 +53,7 @@ public:
 
 protected:
   SHPVectorDataIOFactory();
-  ~SHPVectorDataIOFactory();
+  virtual ~SHPVectorDataIOFactory();
 
 private:
   SHPVectorDataIOFactory(const Self&); //purposely not implemented

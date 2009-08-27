@@ -76,7 +76,7 @@ public:
 
 protected:
   PrepareSRTMDirectory();
-  ~PrepareSRTMDirectory() {};
+  virtual ~PrepareSRTMDirectory() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

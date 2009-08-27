@@ -89,7 +89,7 @@ public:
 
 protected:
   GISTableFunction();
-  ~GISTableFunction() {}
+  virtual ~GISTableFunction() {}
   void PrintSelf(std::ostream& os, Indent indent) const;
 
   /** Const pointer to the input table. */

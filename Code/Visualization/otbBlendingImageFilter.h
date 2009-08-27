@@ -62,7 +62,7 @@ public:
   }
 
   /** Destructor */
-  ~BlendingFunctor(){}
+  virtual ~BlendingFunctor(){}
 
   /** Set the rendering function
    *  \param function the Blending function.

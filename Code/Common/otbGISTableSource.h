@@ -63,7 +63,7 @@ public :
 
 protected:
   GISTableSource();
-  ~GISTableSource();
+  virtual ~GISTableSource();
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

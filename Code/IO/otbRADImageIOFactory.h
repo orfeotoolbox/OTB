@@ -54,7 +54,7 @@ public:
 
 protected:
   RADImageIOFactory();
-  ~RADImageIOFactory();
+  virtual ~RADImageIOFactory();
 
 private:
   RADImageIOFactory(const Self&); //purposely not implemented

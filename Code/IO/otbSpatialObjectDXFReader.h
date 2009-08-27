@@ -70,7 +70,7 @@ protected:
   /** Constructor */
   SpatialObjectDXFReader();
   /** Destructor */
-  ~SpatialObjectDXFReader();
+  virtual ~SpatialObjectDXFReader();
   /** Main computation method */
   virtual void GenerateData();
 

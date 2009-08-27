@@ -105,7 +105,7 @@ public:
 
 protected:
   ImageFileWriter();
-  ~ImageFileWriter();
+  virtual ~ImageFileWriter();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

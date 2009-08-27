@@ -67,7 +67,7 @@ protected:
   /** Constructor. */
   FixedSizeFullImageWidget();
   /** Destructor. */
-  ~FixedSizeFullImageWidget();
+  virtual ~FixedSizeFullImageWidget();
 
   /** Return the width and heigh of the displayed image (overloaded for scroll)*/
   int wDisplayed()

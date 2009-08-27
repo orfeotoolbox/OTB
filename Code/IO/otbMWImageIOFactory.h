@@ -54,7 +54,7 @@ public:
 
 protected:
   MWImageIOFactory();
-  ~MWImageIOFactory();
+  virtual ~MWImageIOFactory();
 
 private:
   MWImageIOFactory(const Self&); //purposely not implemented

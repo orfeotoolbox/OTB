@@ -199,7 +199,7 @@ protected:
   /** Constructor */
   ImageLayer();
   /** Destructor */
-  ~ImageLayer();
+  virtual ~ImageLayer();
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

@@ -15,35 +15,36 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPixelDescriptionModelListener_h
-#define __otbPixelDescriptionModelListener_h
+#ifndef __otbListenerBase_h
+#define __otbListenerBase_h
 
 namespace otb
 {
 /**
- * \class PixelDescriptionModelListener
- * \brief todo
+ * \class ListenerBase
+ *
+ *  Vectorization view interface specification for the model
  *
  *  \ingroup Visualization
  */
 
-class PixelDescriptionModelListener
+class ListenerBase
 {
 public:
   /** Standard class typedefs */
-  typedef PixelDescriptionModelListener Self;
+  typedef ListenerBase Self;
 
   // Update the display
   virtual void Notify() = 0;
 
 protected:
   /** Constructor */
-  PixelDescriptionModelListener() {};
+  ListenerBase() {};
   /** Destructor */
-  virtual ~PixelDescriptionModelListener() {};
+  virtual ~ListenerBase() {};
 
 private:
-  PixelDescriptionModelListener(const Self&); //purposely not implemented
+  ListenerBase(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 };
 

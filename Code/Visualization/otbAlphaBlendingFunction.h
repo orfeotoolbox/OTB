@@ -93,7 +93,7 @@ protected:
   /** Constructor */
   AlphaBlendingFunction() : m_Alpha(1.0) {}
   /** Destructor */
-  ~AlphaBlendingFunction() {}
+  virtual ~AlphaBlendingFunction() {}
 private:
   AlphaBlendingFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

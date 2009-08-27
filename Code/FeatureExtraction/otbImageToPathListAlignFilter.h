@@ -119,7 +119,7 @@ public:
 
 protected:
   ImageToPathListAlignFilter();
-  ~ImageToPathListAlignFilter();
+  virtual ~ImageToPathListAlignFilter();
 
   virtual void GenerateOutputInformation() {}; // do nothing
   virtual void GenerateData();

@@ -149,7 +149,7 @@ public:
 
 protected:
   NCCRegistrationFunction();
-  ~NCCRegistrationFunction() {}
+  virtual ~NCCRegistrationFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** FixedImage image neighborhood iterator type. */

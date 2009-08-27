@@ -50,7 +50,7 @@ public:
     m_Residu = 1.;
     m_SphericalAlbedo = 1.;
   };
-  ~ReflectanceToSurfaceReflectanceImageFunctor() {};
+  virtual ~ReflectanceToSurfaceReflectanceImageFunctor() {};
 
   /**
    * Set/Get the spherical albedo of the atmosphere.
