@@ -197,7 +197,7 @@ int otbAtmosphericCorrectionSequencementTest( int argc, char *argv[] )
 
   AtmosphericCorrectionParametersTo6SRadiativeTermsType::Pointer  filterAtmosphericCorrectionParametersTo6SRadiativeTerms = AtmosphericCorrectionParametersTo6SRadiativeTermsType::New();
   filterAtmosphericCorrectionParametersTo6SRadiativeTerms->SetInput( dataAtmosphericCorrectionParameters );
-
+  filterAtmosphericCorrectionParametersTo6SRadiativeTerms->Update();
 
 //-------------------------------
 

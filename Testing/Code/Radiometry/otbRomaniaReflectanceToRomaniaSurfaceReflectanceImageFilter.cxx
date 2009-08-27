@@ -146,6 +146,7 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
   }
 
   corrToRadia->SetInput( param );
+  corrToRadia->Update();
 
   // Instantiating object
   ReflectanceToSurfaceReflectanceImageFilterType::Pointer filter = ReflectanceToSurfaceReflectanceImageFilterType::New();
