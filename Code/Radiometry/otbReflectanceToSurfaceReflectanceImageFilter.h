@@ -197,10 +197,12 @@ public:
   	return m_FilterFunctionCoef;
   }
 
-  /** Fill AtmosphericRadiativeTerms using image metadata*/
-  void UpdateAtmosphericRadiativeTerms();
-  /** Update Functors parameters */
-  void UpdateFunctors();
+  /** Compute radiative terms if necessary and then updtae functors attibuts. */
+  void GenerateParameters();
+
+  /** Set/Get UseGenerateParameters. */
+  itkSetMacro(UseGenerateParameters, bool);
+  itkGetMacro(UseGenerateParameters, bool);
 
 protected:
   /** Constructor */
@@ -213,7 +215,11 @@ protected:
 
   /** Initialize the functor vector */
   void GenerateOutputInformation();
- 
+
+  /** Fill AtmosphericRadiativeTerms using image metadata*/
+  void UpdateAtmosphericRadiativeTerms();
+  /** Update Functors parameters */
+  void UpdateFunctors();
   
 private:
   AtmosphericRadiativeTermsPointerType m_AtmosphericRadiativeTerms;
@@ -225,6 +231,10 @@ private:
   std::string m_FilterFunctionValuesFileName;
   /** Contains the filter function values (each element is a vector and represnts the values for each channel) */
   FilterFunctionCoefVectorType m_FilterFunctionCoef;
+  /** Enable/Disable GenerateParameters in GenerateOutputInformation.
+   *  Usefull for image view that call GenerateOutputInformation each time you move the full area.
+   */
+  bool m_UseGenerateParameters;
 };
 
 } // end namespace otb

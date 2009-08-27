@@ -39,6 +39,7 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
   m_AeronetFileName = "";
   m_FilterFunctionValuesFileName = "";
   m_FilterFunctionCoef.clear();
+  m_UseGenerateParameters = true;
 }
 
 
@@ -46,7 +47,7 @@ template <class TInputImage, class TOutputImage>
 void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
 ::UpdateAtmosphericRadiativeTerms()
-{  std::cout<<"UpdateAtmosphericRadiativeTerms"<<std::endl;
+{
   MetaDataDictionaryType dict = this->GetInput()->GetMetaDataDictionary();
   
   ImageMetadataInterfaceBase::Pointer imageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(dict);
@@ -91,7 +92,7 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
   if(m_FilterFunctionValuesFileName != "")
     {
       m_CorrectionParameters->LoadFilterFunctionValue( m_FilterFunctionValuesFileName );
-    } 
+   } 
   // the user has set the filter function values 
   else
     {
@@ -115,7 +116,7 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
   
   param2Terms->SetInput(m_CorrectionParameters);
   param2Terms->Update();
-  this->SetAtmosphericRadiativeTerms( param2Terms->GetOutput() );
+  m_AtmosphericRadiativeTerms = param2Terms->GetOutput();
 }
 
 
@@ -125,14 +126,8 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
-  std::cout<<"GENERATEOUTPUTINFO"<<std::endl;
-  if(m_IsSetAtmosphericRadiativeTerms==false)
-    {
-      this->UpdateAtmosphericRadiativeTerms();
-      m_IsSetAtmosphericRadiativeTerms = true;
-    }
-  
-  this->UpdateFunctors();
+  if(m_UseGenerateParameters)
+    this->GenerateParameters();
 }
 
 template <class TInputImage, class TOutputImage>
@@ -140,21 +135,10 @@ void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
 ::UpdateFunctors()
 {  
-std::cout<<"UpdateFunctors"<<std::endl;
   this->GetFunctorVector().clear();
-  std::cout<<"UpdateFunctors "<<this->GetInput()->GetNumberOfComponentsPerPixel()<<std::endl;
-  std::cout<<m_AtmosphericRadiativeTerms<<std::endl;
+
   for (unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
     {
-std::cout<<"UpdateFunctors21"<<std::endl;
- m_AtmosphericRadiativeTerms->GetTotalGaseousTransmission(i);
-std::cout<<"UpdateFunctors22"<<std::endl;
- m_AtmosphericRadiativeTerms->GetDownwardTransmittance(i);
-std::cout<<"UpdateFunctors23"<<std::endl;
- m_AtmosphericRadiativeTerms->GetUpwardTransmittance(i);
-std::cout<<"UpdateFunctors24"<<std::endl;
- m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectance(i);
-std::cout<<"UpdateFunctors25"<<std::endl;
       double coef;
       double res;
       coef = static_cast<double>(m_AtmosphericRadiativeTerms->GetTotalGaseousTransmission(i)
@@ -162,18 +146,28 @@ std::cout<<"UpdateFunctors25"<<std::endl;
                                  * m_AtmosphericRadiativeTerms->GetUpwardTransmittance(i)     );
       coef = 1. / coef;
       res = -m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectance(i) * coef;
-      std::cout<<"UpdateFunctors2"<<std::endl;
       FunctorType functor;
-    functor.SetCoefficient(coef);
-    functor.SetResidu(res);
-    functor.SetSphericalAlbedo(static_cast<double>(m_AtmosphericRadiativeTerms->GetSphericalAlbedo(i)));
+      functor.SetCoefficient(coef);
+      functor.SetResidu(res);
+      functor.SetSphericalAlbedo(static_cast<double>(m_AtmosphericRadiativeTerms->GetSphericalAlbedo(i)));
     
-    this->GetFunctorVector().push_back(functor);
+      this->GetFunctorVector().push_back(functor);
     }
-
-std::cout<<"UpdateFunctors END"<<std::endl; 
 }
 
+
+template <class TInputImage, class TOutputImage>
+void
+ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
+::GenerateParameters()
+{
+  if(m_IsSetAtmosphericRadiativeTerms==false)
+    {
+      this->UpdateAtmosphericRadiativeTerms();
+    }
+  
+  this->UpdateFunctors();
+}
 
 }
 
