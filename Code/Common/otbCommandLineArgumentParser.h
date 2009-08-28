@@ -176,7 +176,7 @@ public:
 
 protected:
   CommandLineArgumentParseResult() {};
-  ~CommandLineArgumentParseResult() {};
+  virtual ~CommandLineArgumentParseResult() {};
 
 private:
 
@@ -261,7 +261,7 @@ public:
                    bool failOnUnknownTrailingParameters = true);
 protected:
   CommandLineArgumentParser();
-  ~CommandLineArgumentParser() {};
+  virtual ~CommandLineArgumentParser() {};
 
 private:
 

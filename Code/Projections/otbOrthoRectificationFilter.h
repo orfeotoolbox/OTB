@@ -127,7 +127,7 @@ public :
 
 protected:
   OrthoRectificationFilter();
-  ~OrthoRectificationFilter();
+  virtual ~OrthoRectificationFilter();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   virtual void GenerateInputRequestedRegion();

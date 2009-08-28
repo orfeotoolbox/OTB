@@ -98,7 +98,7 @@ protected:
   /// Constructor
   KeyPointSetsMatchingFilter();
   /// Destructor
-  ~KeyPointSetsMatchingFilter() {};
+  virtual ~KeyPointSetsMatchingFilter() {};
   /// PrintSelf method
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

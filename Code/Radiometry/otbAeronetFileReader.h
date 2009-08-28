@@ -119,7 +119,7 @@ protected:
   /** Constructor */
   AeronetFileReader();
   /** Destructor */
-  ~AeronetFileReader();
+  virtual ~AeronetFileReader();
   /** Main computation method */
   virtual void GenerateData();
 

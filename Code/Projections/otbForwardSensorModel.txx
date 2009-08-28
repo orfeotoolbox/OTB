@@ -109,7 +109,7 @@ ForwardSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
     this->m_Model->lineSampleHeightToWorld(ossimPoint, point[2], ossimGPoint);
   }
   //Use of average elevation
-  else if (this->m_AverageElevation != -10000)
+  else if (this->m_AverageElevation != -32768.0)
   {
     this->m_Model->lineSampleHeightToWorld(ossimPoint, this->m_AverageElevation, ossimGPoint);
   }

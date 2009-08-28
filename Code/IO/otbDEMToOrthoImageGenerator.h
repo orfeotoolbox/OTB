@@ -100,7 +100,7 @@ public :
 
 protected:
   DEMToOrthoImageGenerator();
-  ~DEMToOrthoImageGenerator(){};
+  virtual ~DEMToOrthoImageGenerator(){};
 
   void PrintSelf(std::ostream& os, Indent indent) const;
   virtual void GenerateOutputInformation();

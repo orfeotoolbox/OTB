@@ -107,7 +107,7 @@ IF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
   ELSE("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^2\\.4$")
       ADD_CUSTOM_COMMAND(
           OUTPUT ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h
-          COMMAND ${OTB_BINARY_DIR}/bin/version-config
+          COMMAND version-config
           ARGS "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimVersion.h" "${OSSIM_VERSION}"
           DEPENDS version-config
           COMMENT "Generating ossimVersion.h" )

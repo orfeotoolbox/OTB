@@ -71,7 +71,7 @@ public:
 
 protected:
   CompacityPathFunction() {};
-  ~CompacityPathFunction() {};
+  virtual ~CompacityPathFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

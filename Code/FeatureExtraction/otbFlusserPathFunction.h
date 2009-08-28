@@ -97,7 +97,7 @@ public:
 
 protected:
   FlusserPathFunction();
-  ~FlusserPathFunction() {};
+  virtual ~FlusserPathFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

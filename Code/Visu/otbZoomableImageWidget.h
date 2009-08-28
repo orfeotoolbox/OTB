@@ -77,7 +77,7 @@ protected:
   /** Constructor. */
   ZoomableImageWidget();
   /** Destructor. */
-  ~ZoomableImageWidget();
+  virtual ~ZoomableImageWidget();
 
 private:
   ZoomableImageWidget(const Self&);// purposely not implemented

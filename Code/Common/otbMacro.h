@@ -316,7 +316,7 @@ class Cleanup
 {
 public:
   Cleanup(std::strstream& ostr): m_StrStream(ostr) {}
-  ~Cleanup()
+  virtual ~Cleanup()
   {
     m_StrStream.rdbuf()->freeze(0);
   }

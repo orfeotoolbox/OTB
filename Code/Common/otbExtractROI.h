@@ -80,7 +80,7 @@ public:
 
 protected:
   ExtractROI();
-  ~ExtractROI() {};
+  virtual ~ExtractROI() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** ExtractROI

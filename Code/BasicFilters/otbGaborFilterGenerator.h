@@ -109,7 +109,7 @@ protected:
   /** constructor */
   GaborFilterGenerator();
   /** destructor */
-  ~GaborFilterGenerator() {}
+  virtual ~GaborFilterGenerator() {}
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;

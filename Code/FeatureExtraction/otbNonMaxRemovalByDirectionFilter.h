@@ -37,7 +37,7 @@ class NonMaxRemovalByDirectionFunctor
 {
 public:
   NonMaxRemovalByDirectionFunctor() {};
-  ~NonMaxRemovalByDirectionFunctor() {};
+  virtual ~NonMaxRemovalByDirectionFunctor() {};
   inline TOutput operator()(const TInput1 & itA, const TInput2 &itB)
   {
     TOutput resp = 0;

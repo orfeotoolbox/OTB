@@ -104,7 +104,7 @@ class WaterIndexFunctor : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   WaterIndexFunctor() {};
-  ~WaterIndexFunctor() {};
+  virtual ~WaterIndexFunctor() {};
 protected:
   inline TOutput Evaluate(const TInput1 &id1, const TInput2 &id2) const
   {
@@ -139,7 +139,7 @@ class SRWI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   SRWI() {};
-  ~SRWI() {};
+  virtual ~SRWI() {};
 protected:
   inline TOutput Evaluate(const TInput1 &rho860, const TInput2 &rho1240) const
   {
@@ -174,7 +174,7 @@ public:
   /// Constructor
   NDWI() {};
   /// Desctructor
-  ~NDWI() {};
+  virtual ~NDWI() {};
   WIFunctorType GetWIFunctor(void)const
   {
     return (m_WIFunctor);
@@ -227,7 +227,7 @@ public:
   /// Constructor
   NDWI2() {};
   /// Desctructor
-  ~NDWI2() {};
+  virtual ~NDWI2() {};
   WIFunctorType GetWIFunctor(void)const
   {
     return (m_WIFunctor);
@@ -279,7 +279,7 @@ public:
   /// Constructor
   MNDWI() {};
   /// Desctructor
-  ~MNDWI() {};
+  virtual ~MNDWI() {};
   WIFunctorType GetWIFunctor(void)const
   {
     return (m_WIFunctor);
@@ -332,7 +332,7 @@ public:
   /// Constructor
   NDPI() {};
   /// Desctructor
-  ~NDPI() {};
+  virtual ~NDPI() {};
   WIFunctorType GetWIFunctor(void)const
   {
     return (m_WIFunctor);
@@ -385,7 +385,7 @@ public:
   /// Constructor
   NDTI() {};
   /// Desctructor
-  ~NDTI() {};
+  virtual ~NDTI() {};
   WIFunctorType GetWIFunctor(void)const
   {
     return (m_WIFunctor);
@@ -452,7 +452,7 @@ public:
     reference[0] = 136.0; reference[1] = 132.0; reference[2] = 47.0; reference[3] = 24.0;
     this->SetReferenceWaterPixel( reference );
   };
-  ~WaterSqrtSpectralAngleFunctor() {};
+  virtual ~WaterSqrtSpectralAngleFunctor() {};
 
   /** Set Reference Pixel */
   void SetReferenceWaterPixel(InputVectorPixelType ref)

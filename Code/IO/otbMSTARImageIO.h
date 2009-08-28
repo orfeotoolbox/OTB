@@ -93,7 +93,7 @@ public:
 
 
   MSTARImageIO();
-  ~MSTARImageIO();
+  virtual ~MSTARImageIO();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

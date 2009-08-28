@@ -74,7 +74,7 @@ public :
 
 protected:
   DEMHandler();
-  ~DEMHandler();
+  virtual ~DEMHandler();
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

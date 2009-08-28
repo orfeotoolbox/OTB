@@ -78,7 +78,7 @@ protected:
   /** Constructor */
   StreamingShrinkImageFilter();
   /** Destructor */
-  ~StreamingShrinkImageFilter();
+  virtual ~StreamingShrinkImageFilter();
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

@@ -55,7 +55,7 @@ public:
 
 protected:
   GDALImageIOFactory();
-  ~GDALImageIOFactory();
+  virtual ~GDALImageIOFactory();
 
 private:
   GDALImageIOFactory(const Self&); //purposely not implemented

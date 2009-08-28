@@ -50,7 +50,7 @@ class ImageToReflectanceImageFunctor
 {
 public:
   ImageToReflectanceImageFunctor() {};
-  ~ImageToReflectanceImageFunctor() {};
+  virtual ~ImageToReflectanceImageFunctor() {};
 
   typedef Functor::ImageToLuminanceImageFunctor<TInput, TOutput>        ImToLumFunctorType;
   typedef Functor::LuminanceToReflectanceImageFunctor<TInput, TOutput>  LumToReflecFunctorType;

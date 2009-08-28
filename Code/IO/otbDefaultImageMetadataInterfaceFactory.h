@@ -58,7 +58,7 @@ public:
 
 protected:
   DefaultImageMetadataInterfaceFactory();
-  ~DefaultImageMetadataInterfaceFactory();
+  virtual ~DefaultImageMetadataInterfaceFactory();
 
 private:
   DefaultImageMetadataInterfaceFactory(const Self&); //purposely not implemented

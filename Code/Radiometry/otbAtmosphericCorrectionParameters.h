@@ -51,8 +51,8 @@ public:
   /** Creation through object factory macro */
   itkNewMacro(Self);
 
-  typedef double WavelenghtSpectralBandType;
-  typedef std::vector<WavelenghtSpectralBandType>    ValuesVectorType;
+  typedef double                                  WavelenghtSpectralBandType;
+  typedef std::vector<WavelenghtSpectralBandType> ValuesVectorType;
 
   /** Set vector that contains the filter function value. */
   void SetFilterFunctionValues(const ValuesVectorType & vect)
@@ -147,8 +147,7 @@ public:
   itkNewMacro(Self);
 
   typedef enum {NO_AEROSOL=0,CONTINENTAL=1,MARITIME=2,URBAN=3,DESERTIC=5} AerosolModelType;
-  typedef std::vector<FilterFunctionValues::Pointer>                               WavelenghtSpectralBandVectorType;
-  //typedef itk::VariableSizeMatrix<WavelenghtSpectralBandType>    WavelenghtSpectralBandMatrixType;
+  typedef std::vector<FilterFunctionValues::Pointer>                      WavelenghtSpectralBandVectorType;
 
   /**
    * Set/Get the solar zenithal angle.
@@ -257,7 +256,12 @@ public:
   	this->UpdateAeronetData( file, year, m_Month, m_Day, hour, minute, 0.4 );
   };
     
-  
+  /** Read a file that contains filter function values.
+   *  Format is MinSpectralValue MaxSpectralValue UserStep and then the list of coefficients for each band.
+   *  NB : if no UserStep writen, the default value will be 0,0025µm
+   */
+   void LoadFilterFunctionValue( std::string filename );
+     
   /** Constructor */
   AtmosphericCorrectionParameters();
   /** Destructor */

@@ -102,7 +102,7 @@ protected:
   /** Construtor.*/
   BSQImageIO();
   /** Destructor.*/
-  ~BSQImageIO();
+  virtual ~BSQImageIO();
 
   bool OpenOneraDataFileForReading(const char* filename);
   bool OpenOneraHeaderFileForReading(const char* filename);

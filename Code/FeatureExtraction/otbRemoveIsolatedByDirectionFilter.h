@@ -36,7 +36,7 @@ class RemoveIsolatedByDirectionFunctor
 {
 public:
   RemoveIsolatedByDirectionFunctor() {};
-  ~RemoveIsolatedByDirectionFunctor() {};
+  virtual ~RemoveIsolatedByDirectionFunctor() {};
   inline TOutput operator()(const TInput1 & itA, const TInput2 &itB)
   {
     double currentDirection = itB.GetCenterPixel();

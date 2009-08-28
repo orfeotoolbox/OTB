@@ -52,7 +52,7 @@ class MeanRatio
 {
 public:
   MeanRatio() {};
-  ~MeanRatio() {};
+  virtual ~MeanRatio() {};
   inline TOutput operator()( const TInput1 & itA,
                              const TInput2 & itB)
   {

@@ -45,7 +45,7 @@ class ComputeNeighborhoodContributionFunctor
 {
 public:
   ComputeNeighborhoodContributionFunctor() {};
-  ~ComputeNeighborhoodContributionFunctor() {};
+  virtual ~ComputeNeighborhoodContributionFunctor() {};
 
   typedef itk::VariableSizeMatrix<double>             WeightingMatrixType;
   typedef typename std::vector<WeightingMatrixType>   WeightingValuesContainerType;

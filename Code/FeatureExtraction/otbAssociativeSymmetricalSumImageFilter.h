@@ -47,7 +47,7 @@ class ITK_EXPORT AssociativeSymmetricalSum
 {
 public:
   AssociativeSymmetricalSum() {};
-  ~AssociativeSymmetricalSum() {};
+  virtual ~AssociativeSymmetricalSum() {};
 
   inline TOutput operator()( const TInput1 X,
                              const TInput2 Y)

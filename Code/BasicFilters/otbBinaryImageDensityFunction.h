@@ -104,7 +104,7 @@ class ITK_EXPORT BinaryImageDensityFunction :
  
 protected:
   BinaryImageDensityFunction();
-  ~BinaryImageDensityFunction(){};
+  virtual ~BinaryImageDensityFunction(){};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

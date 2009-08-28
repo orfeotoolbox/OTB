@@ -133,7 +133,7 @@ public:
 
 protected:
   ForwardFourierMellinTransformImageFilter();
-  ~ForwardFourierMellinTransformImageFilter() {};
+  virtual ~ForwardFourierMellinTransformImageFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Main Computation Method */
   void GenerateData();

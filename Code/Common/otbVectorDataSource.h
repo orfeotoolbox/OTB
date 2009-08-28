@@ -63,7 +63,7 @@ class ITK_EXPORT VectorDataSource : public itk::ProcessObject
 
 protected:
   VectorDataSource();
-  ~VectorDataSource();
+  virtual ~VectorDataSource();
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

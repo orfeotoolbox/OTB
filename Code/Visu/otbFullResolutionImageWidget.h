@@ -72,7 +72,7 @@ protected:
   /** Constructor. */
   FullResolutionImageWidget();
   /** Destructor. */
-  ~FullResolutionImageWidget();
+  virtual ~FullResolutionImageWidget();
 
 private:
   FullResolutionImageWidget(const Self&);// purposely not implemented

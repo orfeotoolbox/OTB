@@ -54,7 +54,7 @@ public:
 
 protected:
   ONERAImageIOFactory();
-  ~ONERAImageIOFactory();
+  virtual ~ONERAImageIOFactory();
 
 private:
   ONERAImageIOFactory(const Self&); //purposely not implemented

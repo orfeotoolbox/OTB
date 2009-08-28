@@ -125,7 +125,7 @@ public :
 
 protected:
   VectorDataFileReader();
-  ~VectorDataFileReader();
+  virtual ~VectorDataFileReader();
   std::string m_ExceptionMessage;
 
   typename VectorDataIOBaseType::Pointer m_VectorDataIO;

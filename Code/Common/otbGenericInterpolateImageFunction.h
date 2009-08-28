@@ -112,7 +112,7 @@ public:
 
 protected:
   GenericInterpolateImageFunction();
-  ~GenericInterpolateImageFunction();
+  virtual ~GenericInterpolateImageFunction();
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Call the superclass implementation and set the TablesHaveBeenGenerated

@@ -54,7 +54,7 @@ public:
 
 protected:
   JPEG2000ImageIOFactory();
-  ~JPEG2000ImageIOFactory();
+  virtual ~JPEG2000ImageIOFactory();
 
 private:
   JPEG2000ImageIOFactory(const Self&); //purposely not implemented

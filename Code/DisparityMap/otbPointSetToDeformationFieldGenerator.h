@@ -32,7 +32,7 @@ class DistanceComparisonFunctor
 {
 public:
   DistanceComparisonFunctor() {};
-  ~DistanceComparisonFunctor() {};
+  virtual ~DistanceComparisonFunctor() {};
   typedef std::vector<double> DistanceVectorType;
 
   void SetDistanceVector(DistanceVectorType &vec)

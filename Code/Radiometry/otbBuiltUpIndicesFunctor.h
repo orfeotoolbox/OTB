@@ -111,7 +111,7 @@ public:
   /// Constructor
   NDBI() {};
   /// Desctructor
-  ~NDBI() {};
+  virtual ~NDBI() {};
   // Operator on r and nir single pixel values
 protected:
   inline TOutput Evaluate(const TInput1 &pTM4, const TInput2 &pTM5) const
@@ -142,7 +142,7 @@ public:
   /// Constructor
   ISU() : m_A(100.), m_B(25.) {};
   /// Desctructor
-  ~ISU() {};
+  virtual ~ISU() {};
 
   /** Set/Get A correction */
   void SetA(const double pA)

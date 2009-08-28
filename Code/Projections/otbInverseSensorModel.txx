@@ -65,7 +65,7 @@ InverseSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
   {
     ossimGPoint.height(point[2]);
   }
-  else if (this->m_AverageElevation != -10000)
+  else if (this->m_AverageElevation != -32768.0)
   {
     ossimGPoint.height(this->m_AverageElevation);
   }

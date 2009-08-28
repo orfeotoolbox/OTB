@@ -101,7 +101,7 @@ protected:
   /** Construtor.*/
   JPEG2000ImageIO();
   /** Destructor.*/
-  ~JPEG2000ImageIO();
+  virtual ~JPEG2000ImageIO();
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

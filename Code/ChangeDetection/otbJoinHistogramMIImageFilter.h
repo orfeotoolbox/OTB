@@ -58,7 +58,7 @@ public:
   typedef double HistogramFrequencyType;
   typedef typename itk::Statistics::Histogram<HistogramFrequencyType, 2> HistogramType;
   JoinHistogramMI() {};
-  ~JoinHistogramMI() {};
+  virtual ~JoinHistogramMI() {};
   inline TOutput operator()( const TInput1 & itA,
                              const TInput2 & itB, const HistogramType* histogram)
   {

@@ -27,15 +27,15 @@ AtmosphericRadiativeTermsSingleChannel
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
-  os << indent << "Intrinsic Atmospheric Reflectance: " << m_IntrinsicAtmosphericReflectance << std::endl;
-  os << indent << "Shperical Albedo of the Atmosphere: " << m_SphericalAlbedo << std::endl;
-  os << indent << "Total Gaseous Transmission: " << m_TotalGaseousTransmission << std::endl;
-  os << indent << "Downward Transmittance of the Atmospher: " << m_DownwardTransmittance << std::endl;
-  os << indent << "Upward Transmittance of the Atmospher: " << m_UpwardTransmittance << std::endl;
-  os << indent << "Upward diffuse transmittance: " << m_UpwardDiffuseTransmittance << std::endl;
-  os << indent << "Upward direct transmittance: " << m_UpwardDirectTransmittance << std::endl;
-  os << indent << "Upward diffuse transmittance for rayleigh: " << m_UpwardDiffuseTransmittanceForRayleigh << std::endl;
-  os << indent << "Upward diffuse transmittance for aerosols: " << m_UpwardDiffuseTransmittanceForAerosol << std::endl;
+  os << indent << "Intrinsic Atmospheric Reflectance        : " << m_IntrinsicAtmosphericReflectance << std::endl;
+  os << indent << "Atmospher Shperical Albedo               : " << m_SphericalAlbedo << std::endl;
+  os << indent << "Total Gaseous Transmission               : " << m_TotalGaseousTransmission << std::endl;
+  os << indent << "Atmospher Downward Transmittance         : " << m_DownwardTransmittance << std::endl;
+  os << indent << "Atmospher Upward Transmittance           : " << m_UpwardTransmittance << std::endl;
+  os << indent << "Upward Diffuse Transmittance             : " << m_UpwardDiffuseTransmittance << std::endl;
+  os << indent << "Upward Direct Transmittance              : " << m_UpwardDirectTransmittance << std::endl;
+  os << indent << "Upward Diffuse Transmittance for Rayleigh: " << m_UpwardDiffuseTransmittanceForRayleigh << std::endl;
+  os << indent << "Upward Diffuse Transmittance for aerosols: " << m_UpwardDiffuseTransmittanceForAerosol << std::endl;
 }
 
 
@@ -503,7 +503,7 @@ AtmosphericRadiativeTerms
 {
   for (unsigned int i=0; i<m_Values.size(); ++i)
   {
-    os << indent << "Channel "<< i << " : "<< std::endl;
+    os << "Channel "<< i << " : "<< std::endl;
     //ValueType::(os,indent);
     os << indent << "Intrinsic Atmospheric Reflectance        : " << m_Values[i]->GetIntrinsicAtmosphericReflectance() << std::endl;
     os << indent << "Shperical Albedo of the Atmosphere       : " << m_Values[i]->GetSphericalAlbedo() << std::endl;

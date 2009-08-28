@@ -47,7 +47,7 @@ public:
   /// Constructor
   VectorAffineTransform() {}
   /// Desctructor
-  ~VectorAffineTransform() {}
+  virtual ~VectorAffineTransform() {}
 
   /// Accessors
   void SetOutputMaximum( TOutput a )

@@ -50,7 +50,7 @@ public:
     m_Residu = 1.;
     m_SphericalAlbedo = 1.;
   };
-  ~ReflectanceToSurfaceReflectanceImageFunctor() {};
+  virtual ~ReflectanceToSurfaceReflectanceImageFunctor() {};
 
   /**
    * Set/Get the spherical albedo of the atmosphere.
@@ -156,7 +156,8 @@ public:
   typedef AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms  Parameters2RadiativeTermsType;
   typedef Parameters2RadiativeTermsType::Pointer                        Parameters2RadiativeTermsPointerType;
   typedef AtmosphericCorrectionParameters::Pointer                      CorrectionParametersPointerType;
-  typedef AtmosphericRadiativeTerms::Pointer                            AtmosphericRadiativeTermsPointerType;
+   typedef AtmosphericRadiativeTerms::Pointer                            AtmosphericRadiativeTermsPointerType;
+
 
   typedef FilterFunctionValues                                          FilterFunctionValuesType;
   typedef FilterFunctionValuesType::ValuesVectorType                    CoefVectorType;
@@ -174,7 +175,7 @@ public:
   }
 
   /** Get/Set Atmospheric Correction Parameters. */
-  itkGetConstObjectMacro(AtmosphericRadiativeTerms, AtmosphericRadiativeTerms);
+  itkGetObjectMacro(AtmosphericRadiativeTerms, AtmosphericRadiativeTerms);
   itkGetObjectMacro(CorrectionParameters, AtmosphericCorrectionParameters);
 
   /** Get/Set Aeronet file name. */
@@ -196,21 +197,29 @@ public:
   	return m_FilterFunctionCoef;
   }
 
+  /** Compute radiative terms if necessary and then updtae functors attibuts. */
+  void GenerateParameters();
+
+  /** Set/Get UseGenerateParameters. */
+  itkSetMacro(UseGenerateParameters, bool);
+  itkGetMacro(UseGenerateParameters, bool);
+
 protected:
   /** Constructor */
   ReflectanceToSurfaceReflectanceImageFilter();
   /** Destructor */
   virtual ~ReflectanceToSurfaceReflectanceImageFilter() {};
 
-  /** If empty, fill AtmosphericRadiativeTerms using image metadata*/
-  void UpdateAtmosphericRadiativeTerms( const MetaDataDictionaryType dict );
-
   /** Read the aeronet data and extract aerosol optical and water vapor amount. */
-  void UpdateAeronetData( const MetaDataDictionaryType dict );
+  //void UpdateAeronetData( const MetaDataDictionaryType dict );
 
   /** Initialize the functor vector */
-  void BeforeThreadedGenerateData();
- 
+  void GenerateOutputInformation();
+
+  /** Fill AtmosphericRadiativeTerms using image metadata*/
+  void UpdateAtmosphericRadiativeTerms();
+  /** Update Functors parameters */
+  void UpdateFunctors();
   
 private:
   AtmosphericRadiativeTermsPointerType m_AtmosphericRadiativeTerms;
@@ -222,8 +231,10 @@ private:
   std::string m_FilterFunctionValuesFileName;
   /** Contains the filter function values (each element is a vector and represnts the values for each channel) */
   FilterFunctionCoefVectorType m_FilterFunctionCoef;
-  /** BeforeThreadedGenerateData executed once or not */
-  bool m_BeforeDone;
+  /** Enable/Disable GenerateParameters in GenerateOutputInformation.
+   *  Usefull for image view that call GenerateOutputInformation each time you move the full area.
+   */
+  bool m_UseGenerateParameters;
 };
 
 } // end namespace otb

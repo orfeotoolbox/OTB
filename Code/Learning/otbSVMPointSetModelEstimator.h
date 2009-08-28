@@ -98,7 +98,7 @@ protected:
   /** Constructor */
   SVMPointSetModelEstimator();
   /** Destructor */
-  ~SVMPointSetModelEstimator();
+  virtual ~SVMPointSetModelEstimator();
   /** PrintSelf */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Prepare data */

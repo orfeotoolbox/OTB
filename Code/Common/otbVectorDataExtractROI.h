@@ -103,7 +103,7 @@ public:
 
 protected:
   VectorDataExtractROI();
-  ~VectorDataExtractROI() {};
+  virtual ~VectorDataExtractROI() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
    /** Method to compare the projection embedded in the cartoRegion And the the InputVectorData*/

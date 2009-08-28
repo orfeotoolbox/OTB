@@ -19,8 +19,9 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbAtmosphericCorrectionParameters.h"
 
 #include "otbAeronetFileReader.h"
+#include "base/ossimFilename.h"
 #include <fstream>
-#include <iostream>
+
 
 
 
@@ -33,7 +34,6 @@ FilterFunctionValues
   m_MinSpectralValue = 0;
   m_MaxSpectralValue = 0;
   m_UserStep = 0.0025;
-  m_FilterFunctionValues.clear();
 }
 
 /**PrintSelf method */
@@ -41,16 +41,15 @@ void
 FilterFunctionValues
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
-  os << indent << "Minimum spectral value: " << m_MinSpectralValue << std::endl;
-  os << indent << "Maximum spectral value: " << m_MaxSpectralValue << std::endl;
-  os << indent << "User Step between each wavelenght spectral band values: " << m_UserStep << std::endl;
-  os << indent << "Filter function Vector Values: " << std::endl;
+  os << indent << "Minimum spectral value       : " << m_MinSpectralValue << std::endl;
+  os << indent << "Maximum spectral value       : " << m_MaxSpectralValue << std::endl;
+  os << indent << "Wavelenght spectral band step: " << m_UserStep << std::endl;
+  os << indent << "Filter function values: " << std::endl;
   for (unsigned int i=0; i<m_FilterFunctionValues.size(); ++i)
   {
     os << indent << m_FilterFunctionValues[i] <<std::endl;
   }
-  os << indent << "Filter function Vector Values 6S: " << std::endl;
+  os << indent << "6S Filter function values: " << std::endl;
   for (unsigned int i=0; i<m_FilterFunctionValues6S.size(); ++i)
   {
     os << indent << m_FilterFunctionValues6S[i] <<std::endl;
@@ -77,42 +76,86 @@ AtmosphericCorrectionParameters
   m_OzoneAmount          = 0.28;
   m_AerosolModel         = CONTINENTAL;
   m_AerosolOptical       = 0.2;
+  m_WavelenghtSpectralBand.clear();
 }
 
 /** Get data from aeronet file*/
 void
 AtmosphericCorrectionParameters
 ::UpdateAeronetData( std::string file, int year, int month, int day, int hour, int minute, double epsi )
-{ 
-	if(file == "")
-	  itkExceptionMacro(<<"No Aeronet filename specified.");
-		
-    AeronetFileReader::Pointer reader = AeronetFileReader::New();
-    reader->SetFileName(file);
-    reader->SetDay(day);
-    reader->SetMonth(month);
-    reader->SetYear(year);
-    reader->SetHour(hour);
-    reader->SetMinute(minute);
-    reader->SetEpsilon(epsi);
-    std::cout<<day<<std::endl;
-    std::cout<<month<<std::endl;
-    std::cout<<year<<std::endl;
-    std::cout<<hour<<std::endl;
-    std::cout<<minute<<std::endl;
-    std::cout<<epsi<<std::endl;
+{
+  if(file == "")
+    itkExceptionMacro(<<"No Aeronet filename specified.");
+  
+  AeronetFileReader::Pointer reader = AeronetFileReader::New();
+  reader->SetFileName(file);
+  reader->SetDay(day);
+  reader->SetMonth(month);
+  reader->SetYear(year);
+  reader->SetHour(hour);
+  reader->SetMinute(minute);
+  reader->SetEpsilon(epsi);
+  
+  reader->Update();
+  
+  m_AerosolOptical = reader->GetOutput()->GetAerosolOpticalThickness();
+  m_WaterVaporAmount = reader->GetOutput()->GetWater();
+}
 
-    std::cout<<reader->GetDay()<<std::endl;
-    std::cout<<reader->GetMonth()<<std::endl;
-    std::cout<<reader->GetYear()<<std::endl;
-    std::cout<<reader->GetHour()<<std::endl;
-    std::cout<<reader->GetMinute()<<std::endl;
-    std::cout<<reader->GetEpsilon()<<std::endl;
-                    
-    reader->Update();
-    
-    m_AerosolOptical = reader->GetOutput()->GetAerosolOpticalThickness();
-    m_WaterVaporAmount = reader->GetOutput()->GetWater();
+
+/** Get data from filter function file*/
+void
+AtmosphericCorrectionParameters
+::LoadFilterFunctionValue( std::string filename )
+{
+  m_WavelenghtSpectralBand.clear();
+  FilterFunctionValues::Pointer ffv = FilterFunctionValues::New();
+
+  ossimFilename fname(filename);
+  if(!fname.exists())
+    itkExceptionMacro("Filename "<<filename<<" doesn not exist.");
+
+  std::ifstream file( filename.c_str() );
+
+  if ( !file )
+    itkExceptionMacro("Enable to read "<<filename<<" file.");
+
+  int bandId = 0;
+  std::string line;
+  ossimString separatorList = " ";
+
+  FilterFunctionValues::Pointer function = FilterFunctionValues::New();
+  FilterFunctionValues::ValuesVectorType vect;
+  m_WavelenghtSpectralBand.clear();
+  vect.clear();
+  
+  while ( std::getline( file, line ) )
+  {
+  	ossimString osLine(line);
+    std::vector<ossimString> keywordStrings = osLine.split(separatorList);
+
+    if(keywordStrings.size() == 2 || keywordStrings.size() == 3)
+    {
+      if(bandId != 0)
+      {
+ 	  	function->SetFilterFunctionValues(vect);
+ 	    m_WavelenghtSpectralBand.push_back(function);
+ 	  	function = FilterFunctionValues::New();
+ 	    vect.clear();
+ 	  }
+ 	  bandId++;
+ 	  function->SetMinSpectralValue(keywordStrings[0].toDouble());
+ 	  function->SetMaxSpectralValue(keywordStrings[1].toDouble());
+ 	  if(keywordStrings.size() == 3)
+	    function->SetUserStep(keywordStrings[2].toDouble());
+	}
+    else if(keywordStrings.size()==1)
+      vect.push_back(keywordStrings[0].toDouble());
+    else if(keywordStrings.size()!=0)
+	  itkExceptionMacro("File "<<filename<<" not valid.");
+    }
+  function->SetFilterFunctionValues(vect);
+  m_WavelenghtSpectralBand.push_back(function);
 }
 
 
@@ -121,26 +164,24 @@ void
 AtmosphericCorrectionParameters
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
-  os << indent << "Solar zenithal angle: " << m_SolarZenithalAngle << std::endl;
-  os << indent << "Solar azimutal angle: " << m_SolarAzimutalAngle << std::endl;
-  os << indent << "Viewing zenithal angle: " << m_ViewingZenithalAngle << std::endl;
-  os << indent << "Viewing azimutal angle: " << m_ViewingAzimutalAngle << std::endl;
-  os << indent << "Month: " << m_Month << std::endl;
-  os << indent << "Day: " << m_Day << std::endl;
-  os << indent << "Atmospheric pressure: " << m_AtmosphericPressure << std::endl;
-  os << indent << "Water vapor amount: " << m_WaterVaporAmount << std::endl;
-  os << indent << "Ozone amount: " << m_OzoneAmount << std::endl;
-  os << indent << "Aerosol model: " << m_AerosolModel << std::endl;
-  os << indent << "Aerosol optical : " << m_AerosolOptical << std::endl;
+  os << "Solar zenithal angle  : " << m_SolarZenithalAngle << std::endl;
+  os << "Solar azimutal angle  : " << m_SolarAzimutalAngle << std::endl;
+  os << "Viewing zenithal angle: " << m_ViewingZenithalAngle << std::endl;
+  os << "Viewing azimutal angle: " << m_ViewingAzimutalAngle << std::endl;
+  os << "Month                 : " << m_Month << std::endl;
+  os << "Day                   : " << m_Day << std::endl;
+  os << "Atmospheric pressure  : " << m_AtmosphericPressure << std::endl;
+  os << "Water vapor amount    : " << m_WaterVaporAmount << std::endl;
+  os << "Ozone amount          : " << m_OzoneAmount << std::endl;
+  os << "Aerosol model         : " << m_AerosolModel << std::endl;
+  os << "Aerosol optical       : " << m_AerosolOptical << std::endl;
 
   // Function values print :
-  os << indent << "Filter function Values: " << std::endl;
+  os << "Filter function values: " << std::endl;
   for (unsigned int i=0; i<m_WavelenghtSpectralBand.size(); ++i)
   {
-    os << indent << "Channel : "<< i+1 <<" : " << std::endl;
+    os << indent << "Channel "<< i+1 <<" : " << std::endl;
     os << indent << m_WavelenghtSpectralBand[i]<< std::endl;
   }
 }
 } // end namespace otb
-

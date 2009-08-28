@@ -105,7 +105,7 @@ public:
 
 protected:
   ComplexMomentImageFunction();
-  ~ComplexMomentImageFunction() {};
+  virtual ~ComplexMomentImageFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

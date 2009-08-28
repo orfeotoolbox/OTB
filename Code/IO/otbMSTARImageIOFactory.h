@@ -54,7 +54,7 @@ public:
 
 protected:
   MSTARImageIOFactory();
-  ~MSTARImageIOFactory();
+  virtual ~MSTARImageIOFactory();
 
 private:
   MSTARImageIOFactory(const Self&); //purposely not implemented

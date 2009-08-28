@@ -101,7 +101,7 @@ protected:
   /** Construtor.*/
   LUMImageIO();
   /** Destructor.*/
-  ~LUMImageIO();
+  virtual ~LUMImageIO();
 
   bool OpenOneraDataFileForReading(const char* filename);
   bool OpenOneraHeaderFileForReading(const char* filename);

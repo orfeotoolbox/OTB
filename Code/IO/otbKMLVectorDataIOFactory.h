@@ -53,7 +53,7 @@ public:
 
 protected:
   KMLVectorDataIOFactory();
-  ~KMLVectorDataIOFactory();
+  virtual ~KMLVectorDataIOFactory();
 
 private:
   KMLVectorDataIOFactory(const Self&); //purposely not implemented

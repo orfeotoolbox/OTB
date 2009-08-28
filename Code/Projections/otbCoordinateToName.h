@@ -59,7 +59,7 @@ public:
 
 protected:
   CoordinateToName();
-  ~CoordinateToName() {};
+  virtual ~CoordinateToName() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   void RetrieveXML(std::ostringstream& urlStream);
   void ParseXMLGeonames();

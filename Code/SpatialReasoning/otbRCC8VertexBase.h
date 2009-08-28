@@ -77,7 +77,7 @@ protected:
   /** Constructor */
   RCC8VertexBase();
   /** Desctructor */
-  ~RCC8VertexBase() {};
+  virtual ~RCC8VertexBase() {};
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

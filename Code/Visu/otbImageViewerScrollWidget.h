@@ -143,7 +143,7 @@ protected:
   /**
    * Destructor.
    */
-  ~ImageViewerScrollWidget()
+  virtual ~ImageViewerScrollWidget()
   {
     m_Parent = NULL;
   }

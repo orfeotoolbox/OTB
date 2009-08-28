@@ -58,7 +58,7 @@ public:
 
 protected:
   SpotImageMetadataInterfaceFactory();
-  ~SpotImageMetadataInterfaceFactory();
+  virtual ~SpotImageMetadataInterfaceFactory();
 
 private:
   SpotImageMetadataInterfaceFactory(const Self&); //purposely not implemented

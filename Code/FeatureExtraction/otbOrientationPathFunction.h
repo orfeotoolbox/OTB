@@ -67,7 +67,7 @@ public:
 
 protected:
   OrientationPathFunction() {};
-  ~OrientationPathFunction() {};
+  virtual ~OrientationPathFunction() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

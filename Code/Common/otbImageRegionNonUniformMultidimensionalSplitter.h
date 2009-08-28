@@ -105,7 +105,7 @@ public:
 
 protected:
   ImageRegionNonUniformMultidimensionalSplitter() {}
-  ~ImageRegionNonUniformMultidimensionalSplitter() {}
+  virtual ~ImageRegionNonUniformMultidimensionalSplitter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

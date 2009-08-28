@@ -396,7 +396,7 @@ protected:
   /** Constructor */
   SVMModel();
   /** Destructor */
-  ~SVMModel();
+  virtual ~SVMModel();
   /** Display infos */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

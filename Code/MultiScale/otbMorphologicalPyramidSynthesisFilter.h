@@ -123,7 +123,7 @@ protected:
   /** Constructor */
   MorphologicalPyramidSynthesisFilter();
   /** Destructor */
-  ~MorphologicalPyramidSynthesisFilter();
+  virtual ~MorphologicalPyramidSynthesisFilter();
   virtual void GenerateOutputInformation() {}; // does nothing
   /** Main computation method */
   virtual void GenerateData();

@@ -150,7 +150,7 @@ public:
 
 protected:
   PersistentStatisticsImageFilter();
-  ~PersistentStatisticsImageFilter() {};
+  virtual ~PersistentStatisticsImageFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Multi-thread version GenerateData. */

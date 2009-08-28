@@ -77,7 +77,7 @@ protected:
   /** Constructor */
   UniformAlphaBlendingFunction() : m_Alpha(0.5) {}
   /** Destructor */
-  ~UniformAlphaBlendingFunction() {}
+  virtual ~UniformAlphaBlendingFunction() {}
 private:
   UniformAlphaBlendingFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

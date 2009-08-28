@@ -67,7 +67,7 @@ protected:
   /// Constructor
   Landmark() {}
   /// Destructor
-  ~Landmark() {}
+  virtual ~Landmark() {}
   /// PrintSelf method
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {

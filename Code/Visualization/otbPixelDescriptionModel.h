@@ -18,7 +18,7 @@
 #ifndef __otbPixelDescriptionModel_h
 #define __otbPixelDescriptionModel_h
 
-#include "otbMVCModelBase.h"
+#include "otbMVCModel.h"
 #include "otbLayerBasedModel.h"
 #include "otbPixelDescriptionModelListener.h"
 #include "otbImageLayerBase.h"
@@ -35,7 +35,7 @@ namespace otb
 
 template <class TOutputImage >
 class PixelDescriptionModel
-  : public MVCModelBase<PixelDescriptionModelListener>, public LayerBasedModel< ImageLayerBase< TOutputImage > >
+  : public MVCModel<PixelDescriptionModelListener>, public LayerBasedModel< ImageLayerBase< TOutputImage > >
 {
 public:
   /** Standard class typedefs */
