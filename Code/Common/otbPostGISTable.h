@@ -19,6 +19,7 @@
 #define __otbPostGISTable_h
 
 #include "otbGISTable.h"
+#include "otbCorrectPolygonFunctor.h"
 
 namespace otb
 {
@@ -60,6 +61,10 @@ public:
   typedef ObjectList< PolygonType > 	        PolygonListType;
   typedef typename PolygonListType::Pointer 	        PolygonListPointerType;
   typedef typename PolygonListType::ConstPointer 	PolygonListConstPointerType;
+  
+  /** typedefs for correct polygon */
+  typedef otb::CorrectPolygonFunctor<PolygonType> CorrectFunctorType;
+  
   
   /** Acessors */
 

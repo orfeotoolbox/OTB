@@ -170,7 +170,7 @@ SHPVectorDataIO<TData>
     InternalTreeNodeType * documentPtr = const_cast<InternalTreeNodeType *>(tree->GetNode(document));
     
     /** IO class functor to convert ogr layer*/
-    Functor::OGRIOFunctor<VectorDataType> IOFunctuor;
+    Functor::OGRIOHelper<VectorDataType> IOFunctuor;
     IOFunctuor.ConvertOGRLayerToDataTreeNode(layer, documentPtr);
     
   }// end For each layer
@@ -279,7 +279,7 @@ void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
   
   
   //Refactoring SHPIO Manuel
-  Functor::OGRIOFunctor<VectorDataType> IOFunctuor;
+  Functor::OGRIOHelper<VectorDataType> IOFunctuor;
   m_Kept = IOFunctuor.ProcessNodeWrite(inputRoot, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
   //ProcessNodeWrite(inputRoot, ogrCollection, ogrCurrentLayer, oSRS);
 

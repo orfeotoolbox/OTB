@@ -72,6 +72,8 @@ public:
   
   typedef typename OutputGISTableType::ConnectionType InputGISConnectionType;
   typedef typename InputGISConnectionType::Pointer InputGISConnectionPointerType;
+  
+  
   /** ImageDimension constants */
   //itkStaticConstMacro(InputImageDimension, unsigned int,
   //                    TInputImage::ImageDimension);
@@ -142,7 +144,7 @@ private:
 } // end namespace otb
   
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "otbVectorDataToGISTableFilter.txx"
+#include "otbVectorDataToGISTableFilter_old.txx"
 #endif
 
 #endif

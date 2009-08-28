@@ -197,13 +197,14 @@ template<class TVectorData , class TGISTable>
       }
       case FEATURE_POLYGON:
       {
-        //std::cout << "before insert polygon" << std::endl;
+        otbGenericMsgDebugMacro(<<"Insert polygons from vectorData");
+        
         this->GetOutput()->InsertPolygons( static_cast<typename TGISTable::PolygonConstPointerType> (dataNode->GetPolygonExteriorRing()), static_cast<typename TGISTable::PolygonListConstPointerType> (dataNode->GetPolygonInteriorRings()), dataNode->GetNodeId() );
         break;
       }
       case FEATURE_MULTIPOINT:
       {
-//         this->GetOutput()->InsertMultiPoints( static_cast<typename TGISTable::PointType> (dataNode->GetPoint()) );
+        itkExceptionMacro(<<"This type (FEATURE_MULTIPOINT) is not handle (yet) by VectorDataToGISTableFilter(), please request for it");
         break;
       }
       case FEATURE_MULTILINE:

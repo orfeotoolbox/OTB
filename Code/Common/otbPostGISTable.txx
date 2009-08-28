@@ -88,7 +88,7 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   }
   
   //int this->GetSrid()=-1;
-  sqlCmd << ")'," << this->GetSrid() << ") ," << attribute << ");" << std::endl;
+  sqlCmd << ")'," << this->GetSrid() << ") ,'" << attribute << "');" << std::endl;
   
   
   //Execute the query
@@ -120,7 +120,7 @@ template <class TConnectionImplementation, class TPrecision, unsigned int Spatia
   
   //int this->GetSrid()=-1;
   
-  sqlCmd << ")'," << this->GetSrid() << ") ," << attribute << ");" << std::endl;
+  sqlCmd << ")'," << this->GetSrid() << ") ,'" << attribute << "');" << std::endl;
   //Execute the query
   this->InsertGeometries(sqlCmd.str());
   
@@ -133,14 +133,19 @@ void
 PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   ::InsertPolygons(PolygonConstPointerType polygonExtRing, PolygonListConstPointerType polygonListInteriorRing, const std::string & attribute)
 {
+  
+  /** correct polygon exterior ring */
+  CorrectFunctorType correct;
+  PolygonPointerType correctPolygonExtRing = correct( polygonExtRing );
+  
   std::stringstream sqlCmd;
   this->InsertBegin ( sqlCmd );
   sqlCmd << "POLYGON( ( ";
   //std::cout << "sqlcmd: " << sqlCmd.str() << std::endl;
   typedef typename PolygonType::VertexListConstIteratorType VertexIterator;
-  VertexIterator itVertex = polygonExtRing->GetVertexList()->Begin();
+  VertexIterator itVertex = correctPolygonExtRing->GetVertexList()->Begin();
   //std::cout << "sizeof ext poly: " << polygonExtRing->GetVertexList()->Size()<< std::endl;
-  while (itVertex != polygonExtRing->GetVertexList()->End())
+  while (itVertex != correctPolygonExtRing->GetVertexList()->End())
   {
     //polygon->line_to(itVertex.Value()[0],m_SensorModelFlip*itVertex.Value()[1]);
     //std::cout << "vertex: " << itVertex.Value()<< std::endl;
@@ -167,9 +172,14 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
     typedef typename PolygonListType::ConstIterator 	PolygonListConstIteratorType;
     for (PolygonListConstIteratorType itPolygonList = polygonListInteriorRing->Begin();itPolygonList!=polygonListInteriorRing->End();++itPolygonList)
     {
+      /** correct current polygon interior ring */
+      CorrectFunctorType correctCurrentInt;
+      PolygonPointerType correctCurrentPolygonIntRing = correctCurrentInt( itPolygonList.Get() );
+      
       sqlCmd << "(";
-      itVertex = itPolygonList.Get()->GetVertexList()->Begin();
-      while (itVertex != itPolygonList.Get()->GetVertexList()->End())
+      
+      itVertex = correctCurrentPolygonIntRing->GetVertexList()->Begin();
+      while (itVertex != correctCurrentPolygonIntRing->GetVertexList()->End())
       {
     //polygon->line_to(itVertex.Value()[0],m_SensorModelFlip*itVertex.Value()[1]);
         for (uint i=0 ; i < SpatialDimension ; i++)
@@ -193,7 +203,7 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   
   //int this->GetSrid()=-1;
   
-  sqlCmd << ")'," << this->GetSrid() << ") ," << attribute << ");" << std::endl;
+  sqlCmd << ")'," << this->GetSrid() << ") ,'" << attribute << "');" << std::endl;
   //std::cout << "sqlcmd polygon: " << sqlCmd.str() << std::endl;
   //Insert the geometry
   this->InsertGeometries(sqlCmd.str());
@@ -308,19 +318,5 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   return connectionSTR;
 }
 } // end namespace otb
-/*
-template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
-const std::string
-PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
-::AddVarCharColumn(unsigned int size)
-{
-}
 
-template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
-void
-PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
-::AddStrDataToVarCharColumn(std::string data)
-{
-}
-*/
 #endif

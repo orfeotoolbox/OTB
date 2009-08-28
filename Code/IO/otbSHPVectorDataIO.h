@@ -25,7 +25,7 @@
 #include <algorithm>
 
 #include "ogrsf_frmts.h"
-#include "otbOGRIOFunctor.h"
+#include "otbOGRIOHelper.h"
 
 namespace otb
 {

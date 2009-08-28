@@ -22,10 +22,12 @@
 #include "itkProgressReporter.h"
 #include "itkBarrier.h"
 #include "itkConceptChecking.h"
+#include "itkContinuousIndex.h"
 //#include "itkDataObject.h"
 
 #include "otbLabelMapSource.h"
 #include "otbVectorData.h"
+#include "otbCorrectPolygonFunctor.h"
 
 #include <vector>
 #include <map>
@@ -42,9 +44,7 @@ namespace otb
  *
  * VectorDataToLabelMapFilter convert a vector data in a LabelMap.
  * Each distinct object is assigned a unique label. 
- * The final object labels start with 1 and are consecutive. Objects
- * that are reached earlier by a raster order scan have a lower
- * label.
+ * The final object labels start with 1 and are consecutive (depraced +10). 
  *
  * \author Manuel GRIZONNET, CNES, France.
  *
@@ -54,16 +54,14 @@ namespace otb
 template <class TVectorData, class TLabelMap >
 class ITK_EXPORT VectorDataToLabelMapFilter : 
     public LabelMapSource < TLabelMap >
-//     public itk::ImageToImageFilter<TLabelMap, TLabelMap>
 
 {
 public:
   /**
    * Standard "Self" & Superclass typedef.
    */
-  typedef VectorDataToLabelMapFilter                   Self;
-  typedef LabelMapSource < TLabelMap > Superclass;
-//   typedef itk::ImageToImageFilter<TLabelMap, TLabelMap> Superclass;
+  typedef VectorDataToLabelMapFilter                                  Self;
+  typedef LabelMapSource < TLabelMap >                                Superclass;
   
   /** Some convenient typedefs. */
   typedef TVectorData InputVectorDataType;
@@ -78,24 +76,28 @@ public:
   typedef typename InternalTreeNodeType::ChildrenListType             ChildrenListType;
   typedef typename InputVectorDataType::DataNodeType                  DataNodeType;
   typedef typename DataNodeType::Pointer                              DataNodePointerType;
+  typedef typename DataNodeType::PolygonType                          PolygonType;
+  typedef typename PolygonType::Pointer                               PolygonPointerType;
+  typedef typename OutputLabelMapType::LabelType                      LabelType;
   
-  typedef typename OutputLabelMapType::LabelType                               LabelType;
-  
-  //typedef typename InputVectorDataType::VDimension                             VDimension;
-  typedef typename OutputLabelMapType::IndexType                               IndexType;
-  typedef typename OutputLabelMapType::PixelType       OutputLabelMapPixelType;
-  typedef typename OutputLabelMapType::PointType       OriginType;
+
+  typedef typename OutputLabelMapType::IndexType                      IndexType;
+  typedef typename OutputLabelMapType::PixelType                      OutputLabelMapPixelType;
+  typedef typename OutputLabelMapType::PointType                      LabelMapPointType;
+  typedef typename OutputLabelMapType::SpacingType                    SpacingType;
+  /** typedefs for correct polygon */
+  typedef otb::CorrectPolygonFunctor<PolygonType>                     CorrectFunctorType;
   
   /** Number of dimensions. */
   itkStaticConstMacro(VectorDataDimension, unsigned int,
                       TVectorData::Dimension);
   
   /** Image size typedef. */
-  typedef itk::Size<itkGetStaticConstMacro(VectorDataDimension)> SizeType;
-  //typedef typename IndexType::Pointer                                 IndexPointerType;
+  typedef itk::Size<itkGetStaticConstMacro(VectorDataDimension)>        SizeType;
+
   
   typedef typename InputVectorDataType::PointType                     PointType;
-  //typedef typename PointType::Pointer                                 PointPointerType
+
   /** 
    * Smart pointer typedef support 
    */
@@ -155,7 +157,7 @@ protected:
    * Therefore it must provide an implementation of
    * EnlargeOutputRequestedRegion().
    * \sa ProcessObject::EnlargeOutputRequestedRegion() */
-  //void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output));
+  void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output));
 
   
   
@@ -165,23 +167,21 @@ private:
 
   void ProcessNode(InternalTreeNodeType * source);
   
-  /** Current label value incremented during vectorization */
+  /** Current label value incremented after the vectorization of a layer*/
   LabelType m_lab;
   
-  //OriginType          m_Origin;
+  //TODO donc need this attribute now compute with VectorDataProperties
   SizeType            m_Size;
   IndexType           m_StartIndex;
   
-  /** Background value, not use presently background value=itk::NumericTraits<LabelType>::max()*/
+  /** Background value, not use actually, background value=itk::NumericTraits<LabelType>::max()*/
   OutputLabelMapPixelType m_BackgroundValue;
   };
   
 } // end namespace itk
 
-#ifndef ITK_MANUAL_INSTANTIATION
-#if !defined(CABLE_CONFIGURATION)
+#ifndef OTB_MANUAL_INSTANTIATION
 #include "otbVectorDataToLabelMapFilter.txx"
-#endif
 #endif
 
 #endif
