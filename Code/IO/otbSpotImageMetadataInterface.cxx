@@ -262,9 +262,7 @@ SpotImageMetadataInterface::GetMinute( const MetaDataDictionaryType & dict ) con
   separatorList = "-T:";
 
   ossimString keywordString = kwl.find(key.c_str());
-  std::cout<<"SPOT: "<<keywordString<<std::endl;
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
-  std::cout<<"SPOT: "<<keywordString.size()<<std::endl;
   if(  keywordStrings.size() <= 2 )
     itkExceptionMacro("Invalid Minute");
 
