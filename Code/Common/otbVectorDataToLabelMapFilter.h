@@ -106,10 +106,10 @@ public:
   
   
   /** Set the size of the output image. */
-  itkSetMacro( Size, SizeType );
+//   itkSetMacro( Size, SizeType );
   
   /** Set the starting index of the output image. */
-  itkSetMacro( StartIndex, IndexType );
+//   itkSetMacro( StartIndex, IndexType );
   /**
    * Run-time type information (and related methods)
    */
@@ -151,13 +151,13 @@ protected:
   /** VectorDataToLabelMapFilter needs the entire input. Therefore
    * it must provide an implementation GenerateInputRequestedRegion().
    * \sa ProcessObject::GenerateInputRequestedRegion(). */
-  void GenerateInputRequestedRegion();
+//   void GenerateInputRequestedRegion();
 
   /** VectorDataToLabelMapFilter will produce all of the output.
    * Therefore it must provide an implementation of
    * EnlargeOutputRequestedRegion().
    * \sa ProcessObject::EnlargeOutputRequestedRegion() */
-  void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output));
+//   void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output));
 
   
   
@@ -171,8 +171,8 @@ private:
   LabelType m_lab;
   
   //TODO donc need this attribute now compute with VectorDataProperties
-  SizeType            m_Size;
-  IndexType           m_StartIndex;
+//   SizeType            m_Size;
+//   IndexType           m_StartIndex;
   
   /** Background value, not use actually, background value=itk::NumericTraits<LabelType>::max()*/
   OutputLabelMapPixelType m_BackgroundValue;

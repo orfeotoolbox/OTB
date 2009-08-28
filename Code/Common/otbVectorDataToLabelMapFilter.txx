@@ -32,8 +32,8 @@ VectorDataToLabelMapFilter<TVectorData, TLabelMap >
     m_BackgroundValue = itk::NumericTraits<OutputLabelMapPixelType>::max();
     //m_lab = 0;
     m_lab = itk::NumericTraits<LabelType>::Zero;
-    m_StartIndex.Fill( 0 );
-    m_Size.Fill( 0 );
+//     m_StartIndex.Fill( 0 );
+//     m_Size.Fill( 0 );
   }
   
 /** 
@@ -87,7 +87,7 @@ VectorDataToLabelMapFilter<TVectorData, TLabelMap >
     
     return;
   }
-
+/*
 template <class TVectorData, class TLabelMap >
 void
     VectorDataToLabelMapFilter<TVectorData, TLabelMap >
@@ -105,7 +105,8 @@ void
   }
   input->SetRequestedRegionToLargestPossibleRegion ();
 }
-
+*/
+  /*
 template <class TVectorData, class TLabelMap >
 void 
 VectorDataToLabelMapFilter<TVectorData, TLabelMap >
@@ -114,7 +115,7 @@ VectorDataToLabelMapFilter<TVectorData, TLabelMap >
   this->GetOutput()
     ->SetRequestedRegion( this->GetOutput()->GetLargestPossibleRegion() );
 }
-
+*/
 
 template<class TVectorData , class TLabelMap>
     void
@@ -276,6 +277,8 @@ VectorDataToLabelMapFilter< TVectorData, TLabelMap >
               //Get The index 
               index[0] += this->GetOutput()->GetOrigin()[0]; 
               index[1] += this->GetOutput()->GetOrigin()[1]; 
+              std::cout << "index" << index <<std::endl;
+              std::cout << "region" << this->GetOutput()->GetLargestPossibleRegion() <<std::endl;
               //Add a pixel to the current labelObject
               this->GetOutput()->SetPixel(index ,m_lab);
             }
