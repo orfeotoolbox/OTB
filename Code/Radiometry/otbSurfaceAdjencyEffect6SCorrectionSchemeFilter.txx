@@ -68,11 +68,11 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
 
   if (!inputPtr || !outputPtr)
     return;
-  outputPtr->SetNumberOfComponentsPerPixel(inputPtr->GetNumberOfComponentsPerPixel());
 
+  outputPtr->SetNumberOfComponentsPerPixel(inputPtr->GetNumberOfComponentsPerPixel());
   if(m_UseGenerateParameters)
     this->GenerateParameters();
-  
+
   if (!m_ParametersHaveBeenComputed)
     {
       this->ComputeParameters();
@@ -98,7 +98,7 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage,TOutputImage>
   MetaDataDictionaryType dict = this->GetInput()->GetMetaDataDictionary();
   
   ImageMetadataInterfaceBase::Pointer imageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(dict);
-  
+
   if ((m_CorrectionParameters->GetDay() == 0))
     {
       m_CorrectionParameters->SetDay(imageMetadataInterface->GetDay(dict));
@@ -113,7 +113,7 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage,TOutputImage>
     {
       m_CorrectionParameters->SetSolarZenithalAngle(90. - imageMetadataInterface->GetSunElevation(dict));
     }
-  
+
   if ((m_CorrectionParameters->GetSolarAzimutalAngle() == 361.))
     {
       m_CorrectionParameters->SetSolarAzimutalAngle(imageMetadataInterface->GetSunAzimuth(dict));
@@ -135,11 +135,13 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage,TOutputImage>
     }
   
   if(m_AeronetFileName != "")
-    m_CorrectionParameters->UpdateAeronetData( m_AeronetFileName, 
-					       imageMetadataInterface->GetYear(dict),
-					       imageMetadataInterface->GetHour(dict),
-					       imageMetadataInterface->GetMinute(dict) );    
-  
+    {
+      m_CorrectionParameters->UpdateAeronetData( m_AeronetFileName, 
+						 imageMetadataInterface->GetYear(dict),
+						 imageMetadataInterface->GetHour(dict),
+						 imageMetadataInterface->GetMinute(dict) );    
+    }
+
   // load fiter function values
   if(m_FilterFunctionValuesFileName != "")
     {
@@ -163,11 +165,11 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage,TOutputImage>
 	}
     }
   
-  
   Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
   
   param2Terms->SetInput(m_CorrectionParameters);
   param2Terms->Update();
+
   m_AtmosphericRadiativeTerms = param2Terms->GetOutput();
 }
 

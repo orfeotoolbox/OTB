@@ -111,7 +111,6 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
 	}
     }
   
-  
   Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
   
   param2Terms->SetInput(m_CorrectionParameters);
