@@ -106,10 +106,10 @@ VectorDataGlComponent<TVectorData>
    template <class TVectorData>   
 void 
 VectorDataGlComponent<TVectorData>
-::RenderPoint(const PointType & p, const RegionType & extent, const AffineTransformType * transform)
+::RenderPoint(DataNodePointerType dataNode, const RegionType & extent, const AffineTransformType * transform)
 {
   // Take into account pixel spacing and origin
-  PointType spacePoint = p;
+  PointType spacePoint = dataNode->GetPoint();
   spacePoint[0]*= m_Spacing[0];
   spacePoint[1]*= m_Spacing[1];
   spacePoint[0]+= m_Origin[0];
@@ -130,8 +130,9 @@ VectorDataGlComponent<TVectorData>
 template <class TVectorData>   
 void 
 VectorDataGlComponent<TVectorData>
-::RenderLine(const LineType * l, const RegionType & extent, const AffineTransformType * transform)
+::RenderLine(DataNodePointerType dataNode, const RegionType & extent, const AffineTransformType * transform)
 {
+  const LineType * l = dataNode->GetLine();
   // Iterate on the line
   typename LineType::VertexListType::ConstIterator vIt = l->GetVertexList()->Begin();
 
@@ -159,8 +160,10 @@ VectorDataGlComponent<TVectorData>
 template <class TVectorData>   
 void 
 VectorDataGlComponent<TVectorData>
-::RenderPolygon(const PolygonType * extRing, const PolygonListType * intRings, const RegionType & extent, const AffineTransformType * transform)
+::RenderPolygon(DataNodePointerType dataNode, const RegionType & extent, const AffineTransformType * transform)
 {
+  const PolygonType * extRing = dataNode->GetPolygonExteriorRing();
+  const PolygonListType * intRings = dataNode->GetPolygonInteriorRings();
   typedef std::vector<GLdouble * > VertexVectorType;
 
   // A buffer to hold vertex until they are rendered
@@ -264,19 +267,19 @@ VectorDataGlComponent<TVectorData>
     {
     case FEATURE_POINT:
     {
-    this->RenderPoint(node->Get()->GetPoint(),extent,space2ScreenTransform);
+//    this->RenderPoint(node->Get()->GetPoint(),extent,space2ScreenTransform);
+    this->RenderPoint(node->Get(), extent, space2ScreenTransform);
     break;
     
     }
     case FEATURE_LINE:
     {
-    this->RenderLine(node->Get()->GetLine(),extent,space2ScreenTransform);
+    this->RenderLine(node->Get(), extent, space2ScreenTransform);
     break;
     }
     case FEATURE_POLYGON:
     {
-    this->RenderPolygon(node->Get()->GetPolygonExteriorRing(),node->Get()->GetPolygonInteriorRings(),
-                        extent,space2ScreenTransform);
+    this->RenderPolygon(node->Get(), extent, space2ScreenTransform);
     break;
     }
     default:
@@ -292,7 +295,7 @@ VectorDataGlComponent<TVectorData>
   // Render each child
   for(typename ChildrenListType::iterator it = children.begin(); it!=children.end();++it)
     {
-    this->Render(*it,extent,space2ScreenTransform);
+    this->Render(*it, extent, space2ScreenTransform);
     }
 }
 
