@@ -123,20 +123,20 @@ protected:
   /** Destructor */
   virtual ~VectorDataGlComponent();
   /** Printself method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os,indent);
   }
 
   /// Render a point
-  void RenderPoint(const PointType & p, const RegionType & extent, const AffineTransformType * transform);
+  virtual void RenderPoint(const PointType & p, const RegionType & extent, const AffineTransformType * transform);
   /// Render a polyline
-  void RenderLine(const LineType * l, const RegionType & extent, const AffineTransformType * transform);
+  virtual void RenderLine(const LineType * l, const RegionType & extent, const AffineTransformType * transform);
   // Render a complex polygon (with holes)
-  void RenderPolygon(const PolygonType * extRing, const PolygonListType * intRings, const RegionType & extent, const AffineTransformType * transform);
+  virtual void RenderPolygon(const PolygonType * extRing, const PolygonListType * intRings, const RegionType & extent, const AffineTransformType * transform);
 
   // Recursive rendering method
-  void Render(InternalTreeNodeType * node, const RegionType & extent, const AffineTransformType * space2ScreenTransform);
+  virtual void Render(InternalTreeNodeType * node, const RegionType & extent, const AffineTransformType * space2ScreenTransform);
 
   /// Frame a given point using the frame width and color (point
   /// should be in gl screen coordinates)
