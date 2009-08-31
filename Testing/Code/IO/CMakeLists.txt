@@ -1394,7 +1394,7 @@ ADD_TEST(ioTvDEMToImageGeneratorTest2 ${IO_TESTS12}
         otbDEMToImageGeneratorTest
          ${INPUTDATA}/DEM/srtm_directory
          ${TEMP}/ioTvDEMToImageGenerator2.tif
-         -1.8870830 52.0135758 232 422  0.024363378967 -0.018457085039
+         -1.8 52 232 422  0.02 -0.018
 #          576378.080 5763132.837 232 422 2000 -2000 30 N
 # 3.765220920574784 44.224685913433
 )
@@ -1420,7 +1420,8 @@ ADD_TEST(ioTvossimElevManagerTest3 ${IO_TESTS12}
         otbOssimElevManagerTest
          ${INPUTDATA}/DEM/srtm_directory
          ${TEMP}/ioTvossimElevManagerTest3.tif
-        -1.8870830 52.0135758  0.024363378967 -0.018457085039 232 422
+         -1.8 52   0.02 -0.018 232 422
+#         -1.8870830 52.0135758  0.024363378967 -0.018457085039 232 422
         )
 
 ADD_TEST(ioTvossimElevManagerTest2 ${IO_TESTS12}
