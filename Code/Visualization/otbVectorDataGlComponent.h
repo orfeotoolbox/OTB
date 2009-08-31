@@ -72,6 +72,7 @@ public:
   typedef typename VectorDataType::Pointer        VectorDataPointerType;
   typedef typename VectorDataType::DataNodeType   DataNodeType;
   typedef typename DataNodeType::Pointer          DataNodePointerType;
+  typedef typename DataNodeType::ConstPointer          DataNodeConstPointerType;
   typedef typename VectorDataType::DataTreeType   DataTreeType;
   typedef typename DataNodeType::LineType         LineType;
   typedef typename DataNodeType::PolygonType      PolygonType;
@@ -129,11 +130,11 @@ protected:
   }
 
   /// Render a point
-  virtual void RenderPoint(const PointType & p, const RegionType & extent, const AffineTransformType * transform);
+  virtual void RenderPoint(DataNodePointerType dataNode, const RegionType & extent, const AffineTransformType * transform);
   /// Render a polyline
-  virtual void RenderLine(const LineType * l, const RegionType & extent, const AffineTransformType * transform);
+  virtual void RenderLine(DataNodePointerType dataNode, const RegionType & extent, const AffineTransformType * transform);
   // Render a complex polygon (with holes)
-  virtual void RenderPolygon(const PolygonType * extRing, const PolygonListType * intRings, const RegionType & extent, const AffineTransformType * transform);
+  virtual void RenderPolygon(DataNodePointerType dataNode, const RegionType & extent, const AffineTransformType * transform);
 
   // Recursive rendering method
   virtual void Render(InternalTreeNodeType * node, const RegionType & extent, const AffineTransformType * space2ScreenTransform);
