@@ -82,7 +82,7 @@ public:
    * \param windowh The window height,
    *  \param ss_rate The subsampling rate.
    */
-  virtual void Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh, unsigned int ss_rate) {};
+  virtual void Draw(double /*openGlZoom*/, unsigned int /*originx*/, unsigned int /*originy*/, unsigned int /*windowh*/, unsigned int /*ss_rate*/) {};
 
   virtual RegionType GetRegion(void)
   {
