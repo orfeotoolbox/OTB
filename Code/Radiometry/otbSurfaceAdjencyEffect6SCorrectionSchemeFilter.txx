@@ -34,8 +34,9 @@
 #include "itkProgressReporter.h"
 #include "otbImage.h"
 #include "otbSIXSTraits.h"
-#include "otbAtmosphericRadiativeTerms.h"
 #include "otbMath.h"
+#include "otbImageMetadataInterfaceFactory.h"
+#include "otbImageMetadataInterfaceBase.h"
 
 namespace otb
 {
@@ -46,8 +47,14 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
 {
   m_WindowRadius = 1;
   m_PixelSpacingInKilometers = 1.;
-  m_ZenithalViewingAngle = 0;
+  m_ZenithalViewingAngle = 361.;
   m_AtmosphericRadiativeTerms = AtmosphericRadiativeTermsType::New();
+  m_CorrectionParameters      = AtmosphericCorrectionParameters::New();
+  m_IsSetAtmosphericRadiativeTerms = false;
+  m_AeronetFileName = "";
+  m_FilterFunctionValuesFileName = "";
+  m_FilterFunctionCoef.clear();
+  m_UseGenerateParameters = true;
 }
 
 template <class TInputImage, class TOutputImage>
@@ -62,6 +69,15 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
   if (!inputPtr || !outputPtr)
     return;
   outputPtr->SetNumberOfComponentsPerPixel(inputPtr->GetNumberOfComponentsPerPixel());
+
+  if(m_UseGenerateParameters)
+    this->GenerateParameters();
+  
+  if (!m_ParametersHaveBeenComputed)
+    {
+      this->ComputeParameters();
+      m_ParametersHaveBeenComputed = true;
+    }
 }
 
 template <class TInputImage, class TOutputImage>
@@ -73,16 +89,98 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
   m_ParametersHaveBeenComputed  = false;
 }
 
+
 template <class TInputImage, class TOutputImage>
 void
-SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
-::BeforeThreadedGenerateData ()
+SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage,TOutputImage>
+::UpdateAtmosphericRadiativeTerms()
 {
-  if (!m_ParametersHaveBeenComputed)
-  {
-    this->ComputeParameters();
-    m_ParametersHaveBeenComputed = true;
-  }
+  MetaDataDictionaryType dict = this->GetInput()->GetMetaDataDictionary();
+  
+  ImageMetadataInterfaceBase::Pointer imageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(dict);
+  
+  if ((m_CorrectionParameters->GetDay() == 0))
+    {
+      m_CorrectionParameters->SetDay(imageMetadataInterface->GetDay(dict));
+    }
+  
+  if ((m_CorrectionParameters->GetMonth() == 0))
+    {
+      m_CorrectionParameters->SetMonth(imageMetadataInterface->GetMonth(dict));
+    }
+  
+  if ((m_CorrectionParameters->GetSolarZenithalAngle() == 361.))
+    {
+      m_CorrectionParameters->SetSolarZenithalAngle(90. - imageMetadataInterface->GetSunElevation(dict));
+    }
+  
+  if ((m_CorrectionParameters->GetSolarAzimutalAngle() == 361.))
+    {
+      m_CorrectionParameters->SetSolarAzimutalAngle(imageMetadataInterface->GetSunAzimuth(dict));
+    }
+  
+  if ((m_CorrectionParameters->GetViewingZenithalAngle() == 361.))
+    {
+      m_CorrectionParameters->SetViewingZenithalAngle(90. - imageMetadataInterface->GetSatElevation(dict));
+    }
+  
+  if( m_ZenithalViewingAngle == 361.)
+    {
+      this->SetZenithalViewingAngle(90. - imageMetadataInterface->GetSatElevation(dict));
+    }
+
+  if ((m_CorrectionParameters->GetViewingAzimutalAngle() == 361.))
+    {
+      m_CorrectionParameters->SetViewingAzimutalAngle(imageMetadataInterface->GetSatAzimuth(dict));
+    }
+  
+  if(m_AeronetFileName != "")
+    m_CorrectionParameters->UpdateAeronetData( m_AeronetFileName, 
+					       imageMetadataInterface->GetYear(dict),
+					       imageMetadataInterface->GetHour(dict),
+					       imageMetadataInterface->GetMinute(dict) );    
+  
+  // load fiter function values
+  if(m_FilterFunctionValuesFileName != "")
+    {
+      m_CorrectionParameters->LoadFilterFunctionValue( m_FilterFunctionValuesFileName );
+   } 
+  // the user has set the filter function values 
+  else
+    {
+      if( m_FilterFunctionCoef.size() != this->GetInput()->GetNumberOfComponentsPerPixel() )
+	{
+	  itkExceptionMacro(<<"Filter Function and image channels mismatch.");
+	}
+      for(unsigned int i=0; i<this->GetInput()->GetNumberOfComponentsPerPixel(); i++)
+	{
+	  FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
+	  functionValues->SetFilterFunctionValues(m_FilterFunctionCoef[i]);
+	  functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths(dict)[i]);
+	  functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths(dict)[i]);
+	  
+	  m_CorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, functionValues);
+	}
+    }
+  
+  
+  Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
+  
+  param2Terms->SetInput(m_CorrectionParameters);
+  param2Terms->Update();
+  m_AtmosphericRadiativeTerms = param2Terms->GetOutput();
+}
+
+
+template <class TInputImage, class TOutputImage>
+void
+SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage,TOutputImage>
+::GenerateParameters()
+{
+  if(m_IsSetAtmosphericRadiativeTerms==false)
+    {
+      this->UpdateAtmosphericRadiativeTerms();
+    }
 }
 
 template <class TInputImage, class TOutputImage>

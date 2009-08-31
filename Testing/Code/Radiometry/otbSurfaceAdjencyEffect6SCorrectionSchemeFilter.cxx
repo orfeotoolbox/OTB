@@ -91,6 +91,9 @@ int otbSurfaceAdjencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
   double aerosolOptical(0.);
 
 
+  std::vector<double> DVector(1,0);
+  std::vector< std::vector<double> > DVectorVector(1,DVector);
+
   std::ifstream fin;
   fin.open(paramFile);
   //Read input file parameters
@@ -124,6 +127,8 @@ int otbSurfaceAdjencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
   ValuesVectorType vect;
   for (unsigned int j=0; j<nbChannel; j++)
   {
+    DVector.clear();
+
     functionValues = FilterFunctionValuesType::New();
     vect.clear();
 
@@ -141,7 +146,7 @@ int otbSurfaceAdjencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
     while (!fin.eof() && fin.good())
     {
       fin >> value;
-      vect.push_back(value);
+      DVector/*vect*/.push_back(value);
     }
 
     fin.close();
@@ -149,17 +154,18 @@ int otbSurfaceAdjencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
     functionValues->SetMinSpectralValue(minSpectralValue);
     functionValues->SetMaxSpectralValue(maxSpectralValue);
     functionValues->SetUserStep( val );
-
+    DVectorVector.push_back(DVector);
     param->SetWavelenghtSpectralBandWithIndex(j, functionValues);
   }
 
   corrToRadia->SetInput( param );
   corrToRadia->Update();
 
-  filter->SetAtmosphericRadiativeTerms(corrToRadia->GetOutput());
+  //filter->SetAtmosphericRadiativeTerms(corrToRadia->GetOutput());
+  filter->SetFilterFunctionCoef(DVectorVector);
   filter->SetWindowRadius(atoi(argv[3]));
   filter->SetPixelSpacingInKilometers(static_cast<double>(atof(argv[4])));
-  filter->SetZenithalViewingAngle(param->GetViewingZenithalAngle());
+  //filter->SetZenithalViewingAngle(param->GetViewingZenithalAngle());
 
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());

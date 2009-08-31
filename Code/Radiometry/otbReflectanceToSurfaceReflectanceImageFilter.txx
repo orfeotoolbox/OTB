@@ -76,7 +76,7 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
     {
       m_CorrectionParameters->SetViewingZenithalAngle(90. - imageMetadataInterface->GetSatElevation(dict));
     }
-  
+
   if ((m_CorrectionParameters->GetViewingAzimutalAngle() == 361.))
     {
       m_CorrectionParameters->SetViewingAzimutalAngle(imageMetadataInterface->GetSatAzimuth(dict));

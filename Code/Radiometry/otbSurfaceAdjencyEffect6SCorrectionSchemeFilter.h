@@ -28,6 +28,7 @@
 #include "otbUnaryFunctorNeighborhoodImageFilter.h"
 #include "itkVariableSizeMatrix.h"
 #include "otbAtmosphericRadiativeTerms.h"
+#include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"
 
 namespace otb
 {
@@ -179,13 +180,22 @@ public:
 
   typedef AtmosphericRadiativeTerms                                    AtmosphericRadiativeTermsType;
   typedef typename AtmosphericRadiativeTermsType::Pointer              AtmosphericRadiativeTermsPointerType;
+  typedef AtmosphericCorrectionParameters::Pointer                     CorrectionParametersPointerType;
+  typedef AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms Parameters2RadiativeTermsType;
+  typedef Parameters2RadiativeTermsType::Pointer                       Parameters2RadiativeTermsPointerType;
+
+  typedef FilterFunctionValues                                         FilterFunctionValuesType;
+  typedef FilterFunctionValuesType::ValuesVectorType                   CoefVectorType;
+  typedef std::vector<CoefVectorType>                                  FilterFunctionCoefVectorType;
+  
+  typedef itk::MetaDataDictionary                                      MetaDataDictionaryType;
 
   /** Storage ponderation values types*/
-  typedef itk::VariableSizeMatrix<double>                               WeightingMatrixType;
-  typedef typename std::vector<WeightingMatrixType>                   WeightingValuesContainerType;
+  typedef itk::VariableSizeMatrix<double>                              WeightingMatrixType;
+  typedef typename std::vector<WeightingMatrixType>                    WeightingValuesContainerType;
 
   /** typedef for calculation*/
-  typedef typename itk::ConstNeighborhoodIterator<InputImageType>          NeighborIterType;
+  typedef typename itk::ConstNeighborhoodIterator<InputImageType>      NeighborIterType;
 
   /** Set/Get the Size of the neighbor window. */
   void SetWindowRadius(unsigned int rad)
@@ -208,16 +218,40 @@ public:
   {
     m_AtmosphericRadiativeTerms = atmo;
     this->SetNthInput(1, m_AtmosphericRadiativeTerms);
+    m_IsSetAtmosphericRadiativeTerms = true;
     this->Modified();
   }
-  AtmosphericRadiativeTermsPointerType GetAtmosphericRadiativeTerms()
+  itkGetObjectMacro(AtmosphericRadiativeTerms, AtmosphericRadiativeTerms);
+
+  /** Get/Set Atmospheric Correction Parameters. */
+  itkSetObjectMacro(CorrectionParameters, AtmosphericCorrectionParameters);
+  itkGetObjectMacro(CorrectionParameters, AtmosphericCorrectionParameters);
+
+    /** Get/Set Aeronet file name. */
+  itkSetMacro(AeronetFileName, std::string);
+  itkGetMacro(AeronetFileName, std::string);
+
+  /** Get/Set Aeronet file name. */
+  itkSetMacro(FilterFunctionValuesFileName, std::string);
+  itkGetMacro(FilterFunctionValuesFileName, std::string);
+
+  /** Get/Set Filter function coef. */
+  void SetFilterFunctionCoef( FilterFunctionCoefVectorType vect )
   {
-    return m_AtmosphericRadiativeTerms;
+  	m_FilterFunctionCoef = vect;
+  	this->Modified();
+  }
+  FilterFunctionCoefVectorType GetFilterFunctionCoef()
+  {
+  	return m_FilterFunctionCoef;
   }
 
   /** Compute the functor parameters */
   void ComputeParameters();
-
+  /** Compute radiative terms if necessary and then updtae functors attibuts. */
+  void GenerateParameters();
+  /** Fill AtmosphericRadiativeTerms using image metadata*/
+  void UpdateAtmosphericRadiativeTerms();
 
 protected:
   SurfaceAdjencyEffect6SCorrectionSchemeFilter();
@@ -228,13 +262,12 @@ protected:
   virtual void GenerateOutputInformation();
 
   /** Initialize some accumulators before the threads run. */
-  virtual void BeforeThreadedGenerateData();
+  //virtual void BeforeThreadedGenerateData();
 
   /** If modified, we need to compute the parameters again */
   virtual void Modified();
 
 private:
-
   /** Size of the window. */
   unsigned int m_WindowRadius;
   /** Weighting values for the neighbor pixels.*/
@@ -247,7 +280,19 @@ private:
   double m_ZenithalViewingAngle;
   /** Radiative terms object */
   AtmosphericRadiativeTermsPointerType m_AtmosphericRadiativeTerms;
-
+  bool m_IsSetAtmosphericRadiativeTerms;
+  /** Atmospheric Correction Parameters. */
+  CorrectionParametersPointerType      m_CorrectionParameters;
+  /** Path to an Aeronet data file, allows to compute aerosol optical and water vapor amounts. */
+  std::string m_AeronetFileName;
+  /** Path to an filter function values file. */
+  std::string m_FilterFunctionValuesFileName;
+  /** Contains the filter function values (each element is a vector and represnts the values for each channel) */
+  FilterFunctionCoefVectorType m_FilterFunctionCoef;
+  /** Enable/Disable GenerateParameters in GenerateOutputInformation.
+   *  Usefull for image view that call GenerateOutputInformation each time you move the full area.
+   */
+  bool m_UseGenerateParameters;
 };
 
 } // end namespace otb
