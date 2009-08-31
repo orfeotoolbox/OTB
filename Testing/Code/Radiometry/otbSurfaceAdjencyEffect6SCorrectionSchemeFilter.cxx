@@ -154,6 +154,7 @@ int otbSurfaceAdjencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
   }
 
   corrToRadia->SetInput( param );
+  corrToRadia->Update();
 
   filter->SetAtmosphericRadiativeTerms(corrToRadia->GetOutput());
   filter->SetWindowRadius(atoi(argv[3]));

@@ -42,11 +42,7 @@ int otbPostGISCreateTableTransactorCreate(int argc, char * argv[])
   int srid = -1;
   myTransactor.SetSRID( srid );
 
-  bool removeTable = true;
-
   myTransactor.SetRemoveExistingTable( true );
-
-
 
   const std::string hostName = argv[1];
   const std::string dbName = argv[2];

@@ -250,7 +250,24 @@ template <class TPrecision, unsigned int VDimension, class TValuePrecision>
   itk::ExposeMetaData< VectorDataKeywordlist >(this->GetMetaDataDictionary(),
       MetaDataKey::VectorDataKeywordlistKey,
       kwl);
-  kwl.AddField(key, value);
+  kwl.SetFieldAsString(key, value);
+  itk::EncapsulateMetaData< VectorDataKeywordlist >(this->GetMetaDataDictionary(),
+      MetaDataKey::VectorDataKeywordlistKey,
+      kwl);
+}
+
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+    void
+        DataNode<TPrecision,VDimension,TValuePrecision>
+  ::SetFieldAsInt(std::string key, int value)
+{
+  otb::VectorDataKeywordlist kwl;
+  itk::ExposeMetaData< VectorDataKeywordlist >(this->GetMetaDataDictionary(),
+      MetaDataKey::VectorDataKeywordlistKey,
+      kwl);
+  std::ostringstream os;
+  os << value;
+  kwl.SetFieldAsString(key,os.str() );//FIXME the int is currently saved as string in the OGR data
   itk::EncapsulateMetaData< VectorDataKeywordlist >(this->GetMetaDataDictionary(),
       MetaDataKey::VectorDataKeywordlistKey,
       kwl);
@@ -285,6 +302,24 @@ template <class TPrecision, unsigned int VDimension, class TValuePrecision>
     return keywordlist.GetFieldAsString(key);
   }
   return "";
+}
+
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+    int
+        DataNode<TPrecision,VDimension,TValuePrecision>
+  ::GetFieldAsInt(std::string key) const
+{
+  VectorDataKeywordlist keywordlist;
+  if (HasField(key))
+  {
+    itk::ExposeMetaData< VectorDataKeywordlist >(this->GetMetaDataDictionary(),
+                                              MetaDataKey::VectorDataKeywordlistKey, keywordlist);
+    std::istringstream is(keywordlist.GetFieldAsString(key));
+    int value;
+    is >> value;
+    return value;
+  }
+  return 0;
 }
 
 /*

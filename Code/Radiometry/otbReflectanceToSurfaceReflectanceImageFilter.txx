@@ -76,7 +76,7 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
     {
       m_CorrectionParameters->SetViewingZenithalAngle(90. - imageMetadataInterface->GetSatElevation(dict));
     }
-  
+
   if ((m_CorrectionParameters->GetViewingAzimutalAngle() == 361.))
     {
       m_CorrectionParameters->SetViewingAzimutalAngle(imageMetadataInterface->GetSatAzimuth(dict));
@@ -110,7 +110,6 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
 	  m_CorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, functionValues);
 	}
     }
-  
   
   Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
   

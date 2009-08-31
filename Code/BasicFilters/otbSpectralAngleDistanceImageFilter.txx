@@ -44,7 +44,7 @@ SpectralAngleDistanceImageFilter<TInputImage,TOutputImage>
 {
   if ( this->GetInput()->GetNumberOfComponentsPerPixel() == 1 )
   {
-    itkExceptionMacro(<<"Not valid input image : mono channel image not supported.");
+    itkExceptionMacro(<<"Not valid input image : mono channel image gives a nul output image.");
   }
 }
 
