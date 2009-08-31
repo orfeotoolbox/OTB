@@ -113,6 +113,37 @@ VectorDataKeywordlist
   return false;
 }
 
+void
+VectorDataKeywordlist
+  ::SetFieldAsString(std::string key,std::string value)
+{
+  if (HasField(key))
+  {
+    for (unsigned int i = 0; i < m_FieldList.size(); ++i)
+    {
+      if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
+      {
+        if (m_FieldList[i].first->GetType() == OFTString)
+        {
+          OGRField field;
+          char * cstr = new char[value.length() + 1];
+          strcpy(cstr, value.c_str());
+          field.String = cstr;
+          m_FieldList[i].second = field;
+        }
+        else
+        {
+          itkExceptionMacro(<<"This type is not of string type, can't add the element in it");
+        }
+      }
+    }
+  }
+  else
+  {
+    AddField(key,value);
+  }
+}
+
 VectorDataKeywordlist::FieldType
 VectorDataKeywordlist
   ::GetNthField(unsigned int index) const

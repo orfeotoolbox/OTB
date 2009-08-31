@@ -53,6 +53,11 @@ class VectorDataKeywordlist
 
 
     void AddField(OGRFieldDefn* fieldDefn, OGRField* field);
+
+    /**
+      * \param key The name of the field.
+      * \param value The value of the field.
+      */
     void AddField(std::string key,std::string value);
 
   /**
@@ -67,6 +72,12 @@ class VectorDataKeywordlist
     * \param key The name of the field.
     */
     bool HasField(std::string key) const;
+
+    /**
+      * \param key The name of the field.
+      * \param value The value of the field.
+      */
+    void SetFieldAsString(std::string key,std::string value);
 
   /**
     * \return the nth field of the node as a std::pair of (key,value).
