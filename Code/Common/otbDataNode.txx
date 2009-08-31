@@ -319,7 +319,7 @@ template <class TPrecision, unsigned int VDimension, class TValuePrecision>
     is >> value;
     return value;
   }
-  return "";
+  return 0;
 }
 
 /*
