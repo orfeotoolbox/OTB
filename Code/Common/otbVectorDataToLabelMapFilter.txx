@@ -30,11 +30,75 @@ VectorDataToLabelMapFilter<TVectorData, TLabelMap >
   ::VectorDataToLabelMapFilter()
   {
     m_BackgroundValue = itk::NumericTraits<OutputLabelMapPixelType>::max();
-    //m_lab = 0;
+    this->SetNumberOfRequiredInputs( 1 );
+    m_Spacing.Fill(1.0);
+    m_Origin.Fill(0.0);
+    m_Direction.SetIdentity();
+    m_Size.Fill( 0 );
+    m_StartIndex.Fill( 0 );
     m_lab = itk::NumericTraits<LabelType>::Zero;
-//     m_StartIndex.Fill( 0 );
-//     m_Size.Fill( 0 );
   }
+  
+//----------------------------------------------------------------------------
+template <class TVectorData, class TLabelMap >
+void
+VectorDataToLabelMapFilter<TVectorData, TLabelMap >
+::SetSpacing(const SpacingType & spacing )
+  {
+    if ( this->m_Spacing != spacing )
+    {
+      this->m_Spacing = spacing;
+      this->Modified();
+    }
+  }
+
+
+//----------------------------------------------------------------------------
+template <class TVectorData, class TLabelMap >
+void
+VectorDataToLabelMapFilter<TVectorData, TLabelMap >
+::SetSpacing(const double spacing[2] )
+  {
+    SpacingType s(spacing);
+    this->SetSpacing(s);
+  }
+
+
+//----------------------------------------------------------------------------
+template <class TVectorData, class TLabelMap >
+void
+VectorDataToLabelMapFilter<TVectorData, TLabelMap >
+::SetSpacing(const float spacing[2] )
+  {
+    itk::Vector<float, 2> sf(spacing);
+    SpacingType s;
+    s.CastFrom( sf );
+    this->SetSpacing(s);
+  }
+
+//----------------------------------------------------------------------------
+template <class TVectorData, class TLabelMap >
+void
+VectorDataToLabelMapFilter<TVectorData, TLabelMap >
+::SetOrigin(const double origin[2] )
+  {
+    OriginType p(origin);
+    this->SetOrigin( p );
+  }
+
+
+//----------------------------------------------------------------------------
+template <class TVectorData, class TLabelMap >
+void
+VectorDataToLabelMapFilter<TVectorData, TLabelMap >
+::SetOrigin(const float origin[2] )
+  {
+    itk::Point<float, 2> of(origin);
+    OriginType p;
+    p.CastFrom( of );
+    this->SetOrigin( p );
+  }
+  
   
 /** 
    * overloaded because pb during copyinformation
@@ -48,42 +112,27 @@ VectorDataToLabelMapFilter<TVectorData, TLabelMap >
   
     // get pointers to the input and output
     const InputVectorDataType * input  = this->GetInput();
-    OutputLabelMapType  *    output = this->GetOutput();
+    OutputLabelMapType  *    outputPtr = this->GetOutput();
     
-    if ( !output )
+    if ( !outputPtr )
     {
       return;
     }
     
-    //TODO Simplify the use of the class VectorDataProperties
-    //VectorDataProperties is needed to compute the ROI of the vectorData
-    typedef VectorDataProperties <InputVectorDataType> VectorDataPropertiesType;
-    typename VectorDataPropertiesType::Pointer p=VectorDataPropertiesType::New();
-    //set the input vectordata to the properties properties
-    p->SetVectorDataObject(input);
-    typedef typename PolygonType::RegionType RegionType;
-    RegionType region;
-    typename RegionType::IndexType index;
-    typename RegionType::SizeType size;
-    index.Fill( itk::NumericTraits<typename RegionType::Type>::ZeroValue() );
-    size.Fill( itk::NumericTraits<typename RegionType::Type>::ZeroValue() );
-    region.SetIndex(index);
-    region.SetSize(size);
-    p->SetBoundingRegion(region);
-    //Compute the global bounding box of the vectordata
-    p->ComputeBoundingRegion();
+    // Set the size of the output region
+    typename OutputLabelMapType::RegionType outputLargestPossibleRegion;
+    outputLargestPossibleRegion.SetSize( m_Size );
+    outputLargestPossibleRegion.SetIndex( m_StartIndex );
+    outputPtr->SetLargestPossibleRegion( outputLargestPossibleRegion );
     
-    //Set the largest possible region of the labelMap with the bounding region of the VectorData
-    output->SetLargestPossibleRegion( p->GetBoundingRegion().GetImageRegion() );
+    otbGenericMsgDebugMacro(<<"LargestPossibleRegion " << outputPtr->GetLargestPossibleRegion());
     
-    //Set output spacing
-    output->SetSpacing(input->GetSpacing());
-    LabelMapPointType origin;
-    
-    //Set Origin of the Labelmap output with the origin of the bounding region
-    origin[0] = p->GetBoundingRegion().GetImageRegion().GetIndex(0);
-    origin[1] = p->GetBoundingRegion().GetImageRegion().GetIndex(1);
-    output->SetOrigin( origin );
+    // Set spacing and origin
+    outputPtr->SetSpacing( m_Spacing );
+    outputPtr->SetOrigin( m_Origin );
+    outputPtr->SetDirection( m_Direction );
+
+
     
     return;
   }
@@ -105,8 +154,8 @@ void
   }
   input->SetRequestedRegionToLargestPossibleRegion ();
 }
-*/
-  /*
+
+  
 template <class TVectorData, class TLabelMap >
 void 
 VectorDataToLabelMapFilter<TVectorData, TLabelMap >
@@ -184,6 +233,10 @@ void
       output->SetBackgroundValue( itk::NumericTraits<OutputLabelMapPixelType>::max() );
       //Set the value of the first label
       m_lab = itk::NumericTraits<LabelType>::Zero ;
+//       otbGenericMsgDebugMacro(<<"input " <<  idx);
+      
+      //The projection information
+      output->SetMetaDataDictionary(input->GetMetaDataDictionary());
       ProcessNode(inputRoot);
 
     }
@@ -196,6 +249,8 @@ void
 VectorDataToLabelMapFilter< TVectorData, TLabelMap >
 ::ProcessNode(InternalTreeNodeType * source)
 {
+  
+  
   // Get the children list from the input node
   ChildrenListType children = source->GetChildrenList();
   
@@ -204,7 +259,7 @@ VectorDataToLabelMapFilter< TVectorData, TLabelMap >
   {
     // Copy input DataNode info
     DataNodePointerType dataNode = (*it)->Get();
-
+    otbGenericMsgDebugMacro(<<"Type of node " << dataNode->GetNodeType() << " id" << dataNode->GetNodeId());
     switch(dataNode->GetNodeType())
     {
       case otb::ROOT:
@@ -253,38 +308,41 @@ VectorDataToLabelMapFilter< TVectorData, TLabelMap >
         
         
         VertexType vertex;
+        std::cout << "Polygon bounding region " << polygonExtRingBoundReg<< std::endl;
+        std::cout << "output origin " << this->GetOutput()->GetOrigin()<< std::endl; 
+        std::cout << "spacing " << this->GetOutput()->GetSpacing()<< std::endl; 
         // For each position in the bounding region of the polygon
-        for (double i = polygonExtRingBoundReg.GetOrigin(0);i<polygonExtRingBoundReg.GetOrigin(0) + polygonExtRingBoundReg.GetSize(0);i+=this->GetOutput()->GetSpacing()[0])
+        
+        for (int i = polygonExtRingBoundReg.GetOrigin(0);i < polygonExtRingBoundReg.GetOrigin(0) + polygonExtRingBoundReg.GetSize(0) ;i+=this->GetOutput()->GetSpacing()[0])
         {
-          vertex[0] = i;
-          for (double j = polygonExtRingBoundReg.GetOrigin(1);j<polygonExtRingBoundReg.GetOrigin(1) + polygonExtRingBoundReg.GetSize(1);j+=this->GetOutput()->GetSpacing()[1])
+          vertex[0] = i ;
+          for (int j = polygonExtRingBoundReg.GetOrigin(1);j<polygonExtRingBoundReg.GetOrigin(1) + polygonExtRingBoundReg.GetSize(1) ;j+=this->GetOutput()->GetSpacing()[1])
           {
-            vertex[1] = j;
+            vertex[1] = j ;
             
             if (correctPolygonExtRing->IsInside(vertex) || correctPolygonExtRing->IsOnEdge (vertex))
             {
               IndexType index;
-              //TODO understand why physicalpointtoindex is outside the largest region (need to add the origin)
-              if (this->GetOutput()->TransformPhysicalPointToIndex(vertex, index) )
-              {
-//                 this->GetOutput()->SetPixel(index ,m_lab);
-//                 std::cout << "INSIDE"<<std::endl;
+              index[0] = vertex[0] - polygonExtRingBoundReg.GetOrigin(0);
+              index[1] = vertex[1] - polygonExtRingBoundReg.GetOrigin(1);
+//               index[0] += this->GetOutput()->GetOrigin()[0]; 
+//               index[1] += this->GetOutput()->GetOrigin()[1];
+              std::cout << "index " << index << std::endl;
+              if (this->GetOutput()->HasLabel( m_lab ) )
+              { 
+                if (!this->GetOutput()->GetLabelObject( m_lab )->HasIndex( index ))
+                {  //Add a pixel to the current labelObject
+                  this->GetOutput()->SetPixel(index ,m_lab);
+                }
               }
               else 
               {
-//                 std::cout << "INSIDE but outside region"<<std::endl;
+                //Add a pixel to the current labelObject
+                this->GetOutput()->SetPixel(index ,m_lab);
               }
-              //Get The index 
-              index[0] += this->GetOutput()->GetOrigin()[0]; 
-              index[1] += this->GetOutput()->GetOrigin()[1]; 
-              std::cout << "index" << index <<std::endl;
-              std::cout << "region" << this->GetOutput()->GetLargestPossibleRegion() <<std::endl;
-              //Add a pixel to the current labelObject
-              this->GetOutput()->SetPixel(index ,m_lab);
             }
           }
         }
-        //++m_lab;
         //Modify the label for the next layer
         m_lab+=10;
         break;

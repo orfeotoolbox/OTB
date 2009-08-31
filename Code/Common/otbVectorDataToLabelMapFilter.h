@@ -83,8 +83,11 @@ public:
 
   typedef typename OutputLabelMapType::IndexType                      IndexType;
   typedef typename OutputLabelMapType::PixelType                      OutputLabelMapPixelType;
-  typedef typename OutputLabelMapType::PointType                      LabelMapPointType;
+  typedef typename OutputLabelMapType::PointType                      OriginType;
   typedef typename OutputLabelMapType::SpacingType                    SpacingType;
+  typedef typename OutputLabelMapType::DirectionType                  DirectionType;
+  
+  
   /** typedefs for correct polygon */
   typedef otb::CorrectPolygonFunctor<PolygonType>                     CorrectFunctorType;
   
@@ -127,6 +130,28 @@ public:
   itkSetMacro(BackgroundValue, OutputLabelMapPixelType);
   itkGetConstMacro(BackgroundValue, OutputLabelMapPixelType);
   
+  /** Set the size of the output image. */
+  itkSetMacro( Size, SizeType );
+
+  /** Get the size of the output image. */
+  itkGetConstReferenceMacro( Size, SizeType );
+
+    /** Set the origin of the vector data.
+     * \sa GetOrigin() */
+  itkSetMacro(Origin, OriginType);
+  virtual void SetOrigin( const double origin[2] );
+  virtual void SetOrigin( const float origin[2] );
+
+  itkGetConstReferenceMacro(Origin, OriginType);
+
+
+    /** Set the spacing (size of a pixel) of the vector data.
+     * \sa GetSpacing() */
+  virtual void SetSpacing (const SpacingType & spacing);
+  virtual void SetSpacing (const double spacing[2]);
+  virtual void SetSpacing (const float spacing[2]);
+
+  itkGetConstReferenceMacro(Spacing, SpacingType);
   
   /** Set/Get the Vector data input of this process object.  */
   virtual void SetInput( const InputVectorDataType *input);
@@ -146,7 +171,7 @@ protected:
    */
   
   
-  void GenerateData();
+  virtual void GenerateData();
 
   /** VectorDataToLabelMapFilter needs the entire input. Therefore
    * it must provide an implementation GenerateInputRequestedRegion().
@@ -171,8 +196,11 @@ private:
   LabelType m_lab;
   
   //TODO donc need this attribute now compute with VectorDataProperties
-//   SizeType            m_Size;
-//   IndexType           m_StartIndex;
+  SpacingType         m_Spacing;
+  OriginType          m_Origin;
+  SizeType            m_Size;
+  IndexType           m_StartIndex;
+  DirectionType       m_Direction;
   
   /** Background value, not use actually, background value=itk::NumericTraits<LabelType>::max()*/
   OutputLabelMapPixelType m_BackgroundValue;

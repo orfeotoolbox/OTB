@@ -571,6 +571,7 @@ OGRLayer * ogrCurrentLayer, OGRSpatialReference * oSRS)
   {
     DataNodePointerType dataNode = (*it)->Get();
 //     std::cout << "Processing " << dataNode->GetNodeType() << " with Id: " << dataNode->GetNodeId() << std::endl;
+    otbGenericMsgDebugMacro(<<"Type of node " << dataNode->GetNodeType() << " id" << dataNode->GetNodeId());
     ++m_Kept;
     switch (dataNode->GetNodeType())
     {
