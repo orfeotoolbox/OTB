@@ -75,7 +75,6 @@ MsgReporter
 ::SendMsg(const std::string & msg)
 {
   this->textArea->insert(msg.c_str());
-  this->textArea->insert("\n");
   this->textArea->show_insert_position();
   Fl::check();
 }
@@ -87,7 +86,6 @@ MsgReporter
 {
   this->textArea->insert("ERROR: ");
   this->textArea->insert(msg.c_str());
-  this->textArea->insert("\n");
   this->textArea->show_insert_position();
   this->Show();
   Fl::check();
