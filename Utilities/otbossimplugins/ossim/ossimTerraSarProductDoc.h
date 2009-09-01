@@ -130,7 +130,10 @@ namespace ossimplugins
       
       bool getLookDirection(const ossimXmlDocument* xdoc,
                             ossimString& s) const;
-      
+
+      bool getGenerationTime(const ossimXmlDocument* xdoc,
+                            ossimString& s) const;
+
       /** one based??? */
       bool getRangeGateFirstPixel(const ossimXmlDocument* xdoc,
                                   ossimString& s) const;
