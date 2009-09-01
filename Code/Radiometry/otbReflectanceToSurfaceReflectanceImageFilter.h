@@ -205,6 +205,11 @@ public:
   itkSetMacro(UseGenerateParameters, bool);
   itkGetMacro(UseGenerateParameters, bool);
 
+  /** Set/Get IsSetAtmosphericRadiativeTerms */
+  itkSetMacro(IsSetAtmosphericRadiativeTerms, bool);
+  itkGetMacro(IsSetAtmosphericRadiativeTerms, bool);
+
+
 protected:
   /** Constructor */
   ReflectanceToSurfaceReflectanceImageFilter();
