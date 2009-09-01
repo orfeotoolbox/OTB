@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimilarity2DTransform.h,v $
   Language:  C++
-  Date:      $Date: 2006-06-07 16:06:32 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-04-09 09:23:21 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,7 +24,8 @@
 namespace itk
 {
 
-/** \brief Similarity2DTransform of a vector space (e.g. space coordinates)
+/** \class Similarity2DTransform
+ * \brief Similarity2DTransform of a vector space (e.g. space coordinates)
  *
  * This transform applies a homogenous scale and rigid transform in
  * 2D space. The transform is specified as a scale and rotation around
@@ -64,10 +65,10 @@ class ITK_EXPORT Similarity2DTransform :
 {
 public:
   /** Standard class typedefs. */
-  typedef Similarity2DTransform Self;
+  typedef Similarity2DTransform             Self;
   typedef Rigid2DTransform< TScalarType >   Superclass;
-  typedef SmartPointer<Self>        Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                Pointer;
+  typedef SmartPointer<const Self>          ConstPointer;
     
   /** New macro for creation of through a Smart Pointer. */
   itkNewMacro( Self );
@@ -113,6 +114,11 @@ public:
   typedef typename Superclass::InputVnlVectorType   InputVnlVectorType;
   typedef typename Superclass::OutputVnlVectorType  OutputVnlVectorType;
 
+  /** Base inverse transform type. This type should not be changed to the
+   * concrete inverse transform type or inheritance would be lost.*/
+  typedef typename Superclass::InverseTransformBaseType InverseTransformBaseType;
+  typedef typename InverseTransformBaseType::Pointer    InverseTransformBasePointer;
+
   /** Set the Scale part of the transform. */
   void SetScale( ScaleType scale );
   itkGetConstReferenceMacro( Scale, ScaleType );
@@ -151,13 +157,19 @@ public:
   /**
    * This method creates and returns a new Similarity2DTransform object
    * which is the inverse of self.
-   **/
+   */
   void CloneInverseTo( Pointer & newinverse ) const;
+
+  /** Get an inverse of this transform. */
+  bool GetInverse(Self* inverse) const;
+
+  /** Return an inverse of this transform. */
+  virtual InverseTransformBasePointer GetInverseTransform() const;
 
   /**
    * This method creates and returns a new Similarity2DTransform object
    * which has the same parameters.
-   **/
+   */
   void CloneTo( Pointer & clone ) const;
 
   /**
@@ -172,7 +184,7 @@ public:
    *
    * \sa MatrixOffsetTransformBase::SetMatrix()
    *
-   **/
+   */
   virtual void SetMatrix( const MatrixType & matrix );
 
 protected:

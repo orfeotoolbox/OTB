@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTransform.h,v $
   Language:  C++
-  Date:      $Date: 2008-06-29 12:58:58 $
-  Version:   $Revision: 1.64 $
+  Date:      $Date: 2009-04-10 16:47:58 $
+  Version:   $Revision: 1.69 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -67,9 +67,9 @@ class ITK_EXPORT  Transform  : public TransformBase
 {
 public:
   /** Standard class typedefs. */
-  typedef Transform  Self;
-  typedef TransformBase Superclass;
-  typedef SmartPointer< Self >   Pointer;
+  typedef Transform                   Self;
+  typedef TransformBase               Superclass;
+  typedef SmartPointer< Self >        Pointer;
   typedef SmartPointer< const Self >  ConstPointer;
 
   /** New method for creating an object using a factory. */
@@ -112,8 +112,18 @@ public:
   typedef vnl_vector_fixed<TScalarType, NOutputDimensions> OutputVnlVectorType;
 
   /** Standard coordinate point type for this class */
-  typedef Point<CoordRepType, NInputDimensions> InputPointType;
+  typedef Point<CoordRepType, NInputDimensions>  InputPointType;
   typedef Point<CoordRepType, NOutputDimensions> OutputPointType;
+
+  /** Base inverse transform type. This type should not be changed to the
+   * concrete inverse transform type or inheritance would be lost. */
+#if defined(_MSC_VER)
+  typedef TransformBase                                InverseTransformBaseType;
+#else
+  typedef Transform<
+    TScalarType, NOutputDimensions, NInputDimensions > InverseTransformBaseType;
+#endif
+  typedef typename InverseTransformBaseType::Pointer   InverseTransformBasePointer;
 
   /**  Method to transform a point. */
   virtual OutputPointType TransformPoint(const InputPointType  & ) const
@@ -186,26 +196,26 @@ public:
    *
    * \f[
    *
-      J=\left[ \begin{array}{cccc}
-      \frac{\partial x_{1}}{\partial p_{1}} &
-      \frac{\partial x_{1}}{\partial p_{2}} &
-      \cdots  & \frac{\partial x_{1}}{\partial p_{m}}\\
-      \frac{\partial x_{2}}{\partial p_{1}} &
-      \frac{\partial x_{2}}{\partial p_{2}} &
-      \cdots  & \frac{\partial x_{2}}{\partial p_{m}}\\
-      \vdots  & \vdots  & \ddots  & \vdots \\
-      \frac{\partial x_{n}}{\partial p_{1}} &
-      \frac{\partial x_{n}}{\partial p_{2}} &
-      \cdots  & \frac{\partial x_{n}}{\partial p_{m}}
-      \end{array}\right]
+  J=\left[ \begin{array}{cccc}
+  \frac{\partial x_{1}}{\partial p_{1}} &
+  \frac{\partial x_{1}}{\partial p_{2}} &
+  \cdots  & \frac{\partial x_{1}}{\partial p_{m}}\\
+  \frac{\partial x_{2}}{\partial p_{1}} &
+  \frac{\partial x_{2}}{\partial p_{2}} &
+  \cdots  & \frac{\partial x_{2}}{\partial p_{m}}\\
+  \vdots  & \vdots  & \ddots  & \vdots \\
+  \frac{\partial x_{n}}{\partial p_{1}} &
+  \frac{\partial x_{n}}{\partial p_{2}} &
+  \cdots  & \frac{\partial x_{n}}{\partial p_{m}}
+  \end{array}\right]
    *
    * \f]
-   * **/
+   * */
   virtual const JacobianType & GetJacobian(const InputPointType  &) const
     {
     itkExceptionMacro( << "Subclass should override this method" );
     // Next line is needed to avoid errors due to:
-    // "function must return a value".
+    // "function must return a value" .
     return this->m_Jacobian;
     }
 
@@ -223,6 +233,14 @@ public:
    */
   bool GetInverse(Self * inverseTransform) const {return false;}
 
+  /** Return an inverse of this transform. If the inverse has not been
+   *  implemented, return NULL. The type of the inverse transform
+   *  does not necessarily need to match the type of the forward
+   *  transform. This allows one to return a numeric inverse transform
+   *  instead.
+   */
+  virtual InverseTransformBasePointer GetInverseTransform() const { return NULL; }
+
   /** Generate a platform independant name */
   virtual std::string GetTransformTypeAsString() const;
 
@@ -238,7 +256,7 @@ public:
    * However, transforms for which this is true will overload and reimplement
    * this method accordingly.
    *
-   **/
+   */
   virtual bool IsLinear() const { return false; }
 
 protected:

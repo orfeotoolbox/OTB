@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkSpatialObjectToImageFilter.txx,v $
 Language:  C++
-Date:      $Date: 2008-10-18 16:11:13 $
-Version:   $Revision: 1.22 $
+Date:      $Date: 2009-04-01 22:14:59 $
+Version:   $Revision: 1.23 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -381,10 +381,10 @@ SpatialObjectToImageFilter<TInputSpatialObject, TOutputImage>
 
     double val = 0;
 
-    InputObject->ValueAt(objectPoint, val, m_ChildrenDepth);
+    bool evaluable = InputObject->ValueAt(objectPoint, val, m_ChildrenDepth);
     if( m_InsideValue != 0 || m_OutsideValue != 0 )
       {
-      if( val)
+      if(evaluable)
         {
         if(m_UseObjectValue)
           {

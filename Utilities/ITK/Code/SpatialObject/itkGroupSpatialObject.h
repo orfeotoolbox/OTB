@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGroupSpatialObject.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-28 20:10:27 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-04-07 14:33:59 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -36,7 +36,7 @@ namespace itk
  */
 
 template < unsigned int TDimension = 3 >
-class GroupSpatialObject 
+class ITK_EXPORT GroupSpatialObject 
   :public SpatialObject< TDimension >
 {
 

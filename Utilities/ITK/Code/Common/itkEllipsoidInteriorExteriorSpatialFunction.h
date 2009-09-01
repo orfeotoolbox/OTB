@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEllipsoidInteriorExteriorSpatialFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 12:03:53 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-04-25 12:24:05 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -62,11 +62,11 @@ public:
   typedef vnl_matrix_fixed<double, VDimension, VDimension> OrientationType;
    
   /** Set/Get and set the center of the ellipsoid. */
-  itkGetMacro(Center, InputType);
+  itkGetConstMacro(Center, InputType);
   itkSetMacro(Center, InputType);
   
   /** Get and set the axes lengths of the ellipsoid. */
-  itkGetMacro(Axes, InputType);
+  itkGetConstMacro(Axes, InputType);
   itkSetMacro(Axes, InputType);
   
   /** Set the orientation vectors (must be orthogonal) of the ellipsoid axes.

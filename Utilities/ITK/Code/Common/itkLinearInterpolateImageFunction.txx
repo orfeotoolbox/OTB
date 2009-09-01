@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLinearInterpolateImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-06 23:12:49 $
-  Version:   $Revision: 1.37 $
+  Date:      $Date: 2009-05-07 14:03:45 $
+  Version:   $Revision: 1.42 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -114,7 +114,9 @@ LinearInterpolateImageFunction< TInputImage, TCoordRep >
    * of the neighbor pixel with respect to a pixel centered on point.
    */
   RealType value = NumericTraits<RealType>::Zero;
-  RealType totalOverlap = NumericTraits<RealType>::Zero;
+
+  typedef typename NumericTraits<InputPixelType>::ScalarRealType ScalarRealType;
+  ScalarRealType totalOverlap = NumericTraits<ScalarRealType>::Zero;
 
   for( unsigned int counter = 0; counter < m_Neighbors; counter++ )
     {
@@ -130,11 +132,27 @@ LinearInterpolateImageFunction< TInputImage, TCoordRep >
       if ( upper & 1 )
         {
         neighIndex[dim] = baseIndex[dim] + 1;
+#ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
+        // Take care of the case where the pixel is just
+        // in the outer upper boundary of the image grid.
+        if( neighIndex[dim] > this->m_EndIndex[dim] )
+          {
+          neighIndex[dim] = this->m_EndIndex[dim];
+          }
+#endif
         overlap *= distance[dim];
         }
       else
         {
         neighIndex[dim] = baseIndex[dim];
+#ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
+        // Take care of the case where the pixel is just
+        // in the outer lower boundary of the image grid.
+        if( neighIndex[dim] < this->m_StartIndex[dim] )
+          {
+          neighIndex[dim] = this->m_StartIndex[dim];
+          }
+#endif
         overlap *= 1.0 - distance[dim];
         }
 
@@ -145,7 +163,7 @@ LinearInterpolateImageFunction< TInputImage, TCoordRep >
     // get neighbor value only if overlap is not zero
     if( overlap )
       {
-      value += overlap * static_cast<RealType>( this->GetInputImage()->GetPixel( neighIndex ) );
+      value += static_cast<RealType>( this->GetInputImage()->GetPixel( neighIndex ) ) * overlap;
       totalOverlap += overlap;
       }
 

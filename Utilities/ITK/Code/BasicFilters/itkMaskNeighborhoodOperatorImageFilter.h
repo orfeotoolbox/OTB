@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMaskNeighborhoodOperatorImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 18:05:25 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-25 12:27:30 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -112,7 +112,7 @@ public:
 
   /** Get the output value for the pixels that are not under the
    * mask. */
-  itkGetMacro( DefaultValue, OutputPixelType );
+  itkGetConstMacro( DefaultValue, OutputPixelType );
   
   /** Set the UseDefaultValue flag. If true, the pixels outside the
    *  mask will e set to m_DefaultValue. Otherwise, they will be set

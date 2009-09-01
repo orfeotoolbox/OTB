@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMinimumMaximumImageCalculator.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 19:33:41 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-04-25 12:27:32 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -78,10 +78,10 @@ public:
   void Compute(void);
 
   /** Return the minimum intensity value. */
-  itkGetMacro(Minimum,PixelType);
+  itkGetConstMacro(Minimum,PixelType);
   
   /** Return the maximum intensity value. */
-  itkGetMacro(Maximum,PixelType);
+  itkGetConstMacro(Maximum,PixelType);
 
   /** Return the index of the minimum intensity value. */
   itkGetConstReferenceMacro(IndexOfMinimum,IndexType);

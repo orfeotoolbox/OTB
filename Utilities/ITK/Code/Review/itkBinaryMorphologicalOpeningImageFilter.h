@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryMorphologicalOpeningImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-28 18:14:36 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-04-23 03:43:41 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -78,13 +78,13 @@ public:
  
   /** Get the value in the image considered as "foreground". Defaults to
    * maximum value of PixelType. */
-  itkGetMacro(ForegroundValue, PixelType);
+  itkGetConstMacro(ForegroundValue, PixelType);
  
   /** Set the value in eroded part of the image. Defaults to zero */
   itkSetMacro(BackgroundValue, PixelType);
  
   /** Set the value in eroded part of the image. Defaults to zero */
-  itkGetMacro(BackgroundValue, PixelType);
+  itkGetConstMacro(BackgroundValue, PixelType);
  
 protected:
   BinaryMorphologicalOpeningImageFilter();

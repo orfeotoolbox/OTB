@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkKappaStatisticImageToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 20:02:57 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-04-23 03:53:35 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -107,7 +107,7 @@ public:
   /** This method allows the user to set the foreground value.  The default 
    *  value is 255. */
   itkSetMacro(ForegroundValue, RealType); 
-  itkGetMacro(ForegroundValue, RealType);
+  itkGetConstMacro(ForegroundValue, RealType);
 
 
   /** Set/Get whether this metric returns 2*|A&B|/(|A|+|B|) 
@@ -116,7 +116,7 @@ public:
    * metric values use ComplementOn().  */
   itkSetMacro(Complement, bool);
   itkBooleanMacro(Complement);
-  itkGetMacro(Complement, bool);
+  itkGetConstMacro(Complement, bool);
   
 
 protected:

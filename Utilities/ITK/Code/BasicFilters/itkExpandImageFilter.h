@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExpandImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-14 19:20:33 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-05-19 18:31:17 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,10 +40,17 @@ namespace itk
  * SetInterpolator(). Note that the input interpolator must derive
  * from base class InterpolateImageFunction.
  *
- * When the LargestPossibleRegion is requested, the output image will
- * contain padding at the upper edge of each dimension. The width
- * of padding in the i'th dimension is (ExpandFactors[i] - 1). Users can
- * specify the padding value used by setting the EdgePaddingValue.
+ * \warning: The following is valid only when the flag
+ * ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY is OFF.
+ * When the LargestPossibleRegion is requested, the output image will contain
+ * padding at the upper edge of each dimension. The width of padding in the
+ * i'th dimension is (ExpandFactors[i] - 1). Users can specify the padding
+ * value used by setting the EdgePaddingValue.
+ *
+ * \warning: The following is valid only when the flag
+ * ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY is ON 
+ * The output image will not contain any padding, and therefore the
+ * EdgePaddingValue will not be used.
  *
  * This filter will produce an output with different pixel spacing
  * that its input image such that:
@@ -126,7 +133,7 @@ public:
   itkSetMacro( EdgePaddingValue, OutputPixelType );
 
   /** Get the edge padding value */
-  itkGetMacro( EdgePaddingValue, OutputPixelType );
+  itkGetConstMacro( EdgePaddingValue, OutputPixelType );
 
   /** ExpandImageFilter produces an image which is a different resolution and
    * with a different pixel spacing than its input image.  As such,

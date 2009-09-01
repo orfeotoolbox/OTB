@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageKmeansModelEstimator.txx,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 20:02:55 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-05-02 05:43:54 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -274,8 +274,13 @@ ImageKmeansModelEstimator<TInputImage, TMembershipFunction>
   for (unsigned int classIndex = 0; classIndex < numberOfModels; classIndex++)
     {
     membershipFunction = TMembershipFunction::New();
-    membershipFunction->SetNumberOfSamples( 0 );
+#ifdef ITK_USE_REVIEW_STATISTICS
+    typename TMembershipFunction::CentroidType centroid;
+    centroid = m_Centroid.get_row( classIndex);
+    membershipFunction->SetCentroid( centroid );
+#else
     membershipFunction->SetCentroid(m_Centroid.get_row( classIndex) );
+#endif
     this->AddMembershipFunction( membershipFunction ); 
     }  
 

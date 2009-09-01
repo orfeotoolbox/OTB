@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNormalVectorDiffusionFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 19:33:45 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-04-06 11:15:08 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -139,9 +139,9 @@ protected:
       areas with large curvature. */
   NodeValueType FluxStopFunction( const NodeValueType v ) const
     {
-    // the slow ::exp function could be replaced with a lookup table
+    // the slow exp function could be replaced with a lookup table
     if (v<=0.0) return NumericTraits<NodeValueType>::One;
-    else return static_cast<NodeValueType>(::exp(m_FluxStopConstant*v));
+    else return static_cast<NodeValueType>(vcl_exp(m_FluxStopConstant*v));
     }
   
 private:

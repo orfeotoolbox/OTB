@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkStandardDeviationProjectionImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-28 18:14:36 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-04-01 14:36:35 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -64,7 +64,7 @@ public:
     m_Values.clear();
     }
 
-  inline void operator()( const TInputPixel &input )
+  inline void operator()( const TInputPixel &input ) 
     {
     m_Sum = m_Sum + input;
     m_Values.push_back( input );

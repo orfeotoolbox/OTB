@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRecursiveSeparableImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-31 09:14:58 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2009-04-25 12:28:01 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -81,7 +81,7 @@ public:
   typedef TOutputImage      OutputImageType;
 
   /** Get the direction in which the filter is to be applied. */   
-  itkGetMacro(Direction, unsigned int);
+  itkGetConstMacro(Direction, unsigned int);
 
   /** Set the direction in which the filter is to be applied. */   
   itkSetMacro(Direction, unsigned int);

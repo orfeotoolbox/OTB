@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCosImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-13 18:54:27 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2009-04-06 00:05:54 $
+  Version:   $Revision: 1.25 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -57,9 +57,9 @@ public:
     {
     return !(*this != other);
     }
-  inline TOutput operator()( const TInput & A )
+  inline TOutput operator()( const TInput & A ) const
     {
-    return static_cast<TOutput>(cos( static_cast<double>(A)) );
+    return static_cast<TOutput>(vcl_cos( static_cast<double>(A)) );
     }
 }; 
 

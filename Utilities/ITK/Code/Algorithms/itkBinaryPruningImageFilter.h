@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryPruningImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-20 21:28:20 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-04-23 03:53:34 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -97,7 +97,7 @@ public:
 
   /** Set/Get the iteration value */
   itkSetMacro(Iteration, unsigned int);
-  itkGetMacro(Iteration, unsigned int);
+  itkGetConstMacro(Iteration, unsigned int);
 
   /** ImageDimension enumeration   */
   itkStaticConstMacro(InputImageDimension, unsigned int,

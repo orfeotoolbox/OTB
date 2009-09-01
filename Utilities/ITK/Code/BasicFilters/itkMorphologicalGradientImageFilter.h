@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMorphologicalGradientImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-28 18:14:36 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-04-28 14:36:31 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -102,6 +102,9 @@ public:
   /** Get the kernel (structuring element). */
   itkGetConstReferenceMacro(Kernel, KernelType);
 
+  /** Type of the pixels in the Kernel. */
+  typedef typename TKernel::PixelType            KernelPixelType;
+
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
   itkConceptMacro(SameDimensionCheck1,
@@ -116,8 +119,8 @@ public:
     (Concept::AdditiveOperators<InputImagePixelType>));
   itkConceptMacro(InputConvertibleToOutputCheck,
     (Concept::Convertible<InputImagePixelType, OutputImagePixelType>));
-  itkConceptMacro(KernelGreaterThanIntCheck,
-    (Concept::GreaterThanComparable<typename TKernel::PixelType, int>));
+  itkConceptMacro(KernelGreaterThanComparableCheck,
+    (Concept::GreaterThanComparable<KernelPixelType>));
   /** End concept checking */
 #endif
 

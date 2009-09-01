@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAffineTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2006-10-14 19:58:31 $
-  Version:   $Revision: 1.57 $
+  Date:      $Date: 2009-04-09 09:23:20 $
+  Version:   $Revision: 1.60 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -175,7 +175,7 @@ AffineTransform<TScalarType, NDimensions>
     }
   trans[axis1][axis1] =  vcl_cos(angle);
   trans[axis1][axis2] =  vcl_sin(angle);
-  trans[axis2][axis1] = -sin(angle);
+  trans[axis2][axis1] = -vcl_sin(angle);
   trans[axis2][axis2] =  vcl_cos(angle);
   if (pre) 
     {
@@ -204,8 +204,8 @@ AffineTransform<TScalarType, NDimensions>
   MatrixType trans;
 
   trans[0][0] =  vcl_cos(angle);
-  trans[0][1] = -sin(angle);
-  trans[1][0] = vcl_sin(angle);
+  trans[0][1] = -vcl_sin(angle);
+  trans[1][0] =  vcl_sin(angle);
   trans[1][1] =  vcl_cos(angle);
   if (pre) 
     {
@@ -306,6 +306,25 @@ AffineTransform<TScalarType, NDimensions>
   this->ComputeOffset();
   this->Modified();
   return;
+}
+
+/** Get an inverse of this transform. */
+template<class TScalarType, unsigned int NDimensions>
+bool
+AffineTransform<TScalarType, NDimensions>
+::GetInverse(Self* inverse) const
+{
+  return this->Superclass::GetInverse(inverse);
+}
+
+/** Return an inverse of this transform. */
+template<class TScalarType, unsigned int NDimensions>
+typename AffineTransform<TScalarType, NDimensions>::InverseTransformBasePointer
+AffineTransform<TScalarType, NDimensions>
+::GetInverseTransform() const
+{
+  Pointer inv = New();
+  return this->GetInverse(inv) ? inv.GetPointer() : NULL;
 }
 
 

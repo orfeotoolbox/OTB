@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBilateralImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 17:31:02 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2009-04-25 12:27:11 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -125,10 +125,10 @@ public:
    * DomainSigma is specified in the same units as the Image spacing.
    * RangeSigma is specified in the units of intensity. */
   itkSetMacro(DomainSigma, ArrayType);
-  itkGetMacro(DomainSigma, const ArrayType);
+  itkGetConstMacro(DomainSigma, const ArrayType);
   itkSetMacro(RangeSigma, double);
-  itkGetMacro(RangeSigma, double);
-  itkGetMacro(FilterDimensionality, unsigned int);
+  itkGetConstMacro(RangeSigma, double);
+  itkGetConstMacro(FilterDimensionality, unsigned int);
   itkSetMacro(FilterDimensionality, unsigned int);
   
   /** Convenience get/set methods for setting all domain parameters to the
@@ -144,7 +144,7 @@ public:
    * specified by the user.
    * \sa SetRadius() */
   itkBooleanMacro(AutomaticKernelSize);
-  itkGetMacro(AutomaticKernelSize, bool);
+  itkGetConstMacro(AutomaticKernelSize, bool);
   itkSetMacro(AutomaticKernelSize, bool);
 
   /** Set/Get the kernel radius, specified in pixels.  This parameter
@@ -158,7 +158,7 @@ public:
    * used for the range smoothing. Samples are only generated in the
    * range of [0, 4*m_RangeSigma]. Default is 100. */
   itkSetMacro(NumberOfRangeGaussianSamples, unsigned long);
-  itkGetMacro(NumberOfRangeGaussianSamples, unsigned long);
+  itkGetConstMacro(NumberOfRangeGaussianSamples, unsigned long);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

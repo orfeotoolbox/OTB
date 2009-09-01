@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorIndexSelectionCastImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 20:50:03 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-04-01 14:42:12 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -46,7 +46,7 @@ public:
     {
     return !(*this != other);
     }
-  inline TOutput operator()( const TInput & A )
+  inline TOutput operator()( const TInput & A ) const
     {
     return static_cast<TOutput>( A[m_Index] );
     }
@@ -56,7 +56,7 @@ private:
 }; 
 }
 
- /** \class VectorIndexSelectionCastImageFilter
+/** \class VectorIndexSelectionCastImageFilter
  *
  * \brief Extracts the selected index of the vector that is the input
  * pixel type

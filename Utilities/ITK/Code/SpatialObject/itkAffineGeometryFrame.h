@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAffineGeometryFrame.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-28 20:10:26 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-04-07 14:33:52 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,11 +29,11 @@ namespace itk
  * \brief Describes the geometry of a data object  
  */
 template <class TScalarType = double, unsigned int NDimensions = 3>
-class AffineGeometryFrame : public itk::Object
+class ITK_EXPORT AffineGeometryFrame : public Object
 {
 public:
   typedef AffineGeometryFrame       Self;
-  typedef itk::Object               Superclass;
+  typedef Object                    Superclass;
   typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
@@ -101,6 +101,7 @@ protected:
 
   AffineGeometryFrame();
   virtual ~AffineGeometryFrame();
+  void PrintSelf( std::ostream & os, Indent indent) const;
 
   /** used in clone to initialize the newly created geometry */
   virtual void InitializeGeometry(Self * newGeometry) const;

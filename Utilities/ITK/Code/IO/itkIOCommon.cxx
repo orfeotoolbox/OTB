@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIOCommon.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-02-21 20:36:26 $
-  Version:   $Revision: 1.28 $
+  Date:      $Date: 2009-04-05 10:56:48 $
+  Version:   $Revision: 1.29 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,6 +17,7 @@
 #include "itkIOCommon.h"
 #include <sys/stat.h>
 #include <cstring>
+#include <string.h>
 
 
 namespace itk

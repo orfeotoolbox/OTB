@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDenseFiniteDifferenceImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-11-07 19:39:44 $
-  Version:   $Revision: 1.32 $
+  Date:      $Date: 2009-05-04 14:42:56 $
+  Version:   $Revision: 1.33 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,7 +40,7 @@ DenseFiniteDifferenceImageFilter<TInputImage, TOutputImage>
     }
 
   // Check if we are doing in-place filtering
-  if ( this->GetInPlace() && (typeid(TInputImage) == typeid(TOutputImage)) )
+  if ( this->GetInPlace() && this->CanRunInPlace() )
     {
     typename TInputImage::Pointer tempPtr = 
       dynamic_cast<TInputImage *>( output.GetPointer() );

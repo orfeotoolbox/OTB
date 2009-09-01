@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuaternionOrientationAdapter.h,v $
   Language:  C++
-  Date:      $Date: 2005-10-31 17:52:09 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-03-03 15:08:22 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -28,45 +28,44 @@ namespace itk
 /** \class QuaternionOrientationAdapter
  *  \brief converts QuaternionOrientation flags to/from direction cosines
  */
-namespace QuaternionOrientationAdapterClasses
-  {
-    typedef QuaternionRigidTransform<double> TransformType;
-    typedef TransformType::Pointer TransformPointerType;
-  }
-template <int Dimension>
+namespace QuaternionOrientationAdapterClasses {
+typedef QuaternionRigidTransform<double> TransformType;
+typedef TransformType::Pointer           TransformPointerType;
+}
+template <int VDimension>
 class QuaternionOrientationAdapter : 
-    public OrientationAdapterBase<QuaternionOrientationAdapterClasses::TransformPointerType,Dimension>
+    public OrientationAdapterBase<QuaternionOrientationAdapterClasses::TransformPointerType,VDimension>
 {
 public:
   /** typedef for superclass */
   typedef QuaternionOrientationAdapter Self;
 
-  typedef OrientationAdapterBase<QuaternionOrientationAdapterClasses::TransformPointerType,Dimension>
-  SuperClass;
+  typedef OrientationAdapterBase<QuaternionOrientationAdapterClasses::TransformPointerType,VDimension>
+                                           SuperClass;
   typedef QuaternionRigidTransform<double> OrientationRootType;
-  typedef QuaternionOrientationAdapterClasses::TransformPointerType OrientationType;
+  typedef QuaternionOrientationAdapterClasses::TransformPointerType
+                                           OrientationType;
 
   /** The dimension of the input image must be 3. */
   itkConceptMacro(DimensionShouldBe3,
-    (Concept::SameDimension<Dimension,3>));
+    (Concept::SameDimension<VDimension,3>));
 
   /** typedef for direction cosines */
   typedef typename SuperClass::DirectionType DirectionType;
 
   /** convert from direction cosines. */
   virtual OrientationType FromDirectionCosines(const DirectionType &Dir)
-  {
+    {
     OrientationType q = OrientationRootType::New();
     q->SetMatrix(Dir);
     return q;
-  }
+    }
 
   /** convert to direction cosines. */
   virtual DirectionType ToDirectionCosines(const OrientationType &Or)
-  {
+    {
     return Or->GetMatrix();
-  }
-
+    }
 };
 
 } // namespace itk

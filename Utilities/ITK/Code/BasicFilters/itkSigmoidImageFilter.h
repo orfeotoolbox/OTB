@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSigmoidImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-24 08:14:12 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-04-01 14:36:31 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -68,7 +68,7 @@ public:
     return !(*this != other);
     }
 
-  inline TOutput operator()( const TInput & A )
+  inline TOutput operator()( const TInput & A ) const
     {
     const double x = ( static_cast<double>(A) - m_Beta ) / m_Alpha;
     const double e = 1.0 / ( 1.0 + vcl_exp(- x ) );

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSpatialObjectToPointSetFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-18 16:11:14 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-04-25 12:28:11 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -76,13 +76,13 @@ public:
    * PointSet?  A ChildrenDepth of 0 means to only include the object
    * itself. */
   itkSetMacro(ChildrenDepth, unsigned int);
-  itkGetMacro(ChildrenDepth, unsigned int);
+  itkGetConstMacro(ChildrenDepth, unsigned int);
 
 
   /* Set the sampling factor of the object. The resulting pointset will have a size
    * inversely proportional to the sampling factor.*/
   itkSetMacro(SamplingFactor, unsigned int);
-  itkGetMacro(SamplingFactor, unsigned int);
+  itkGetConstMacro(SamplingFactor, unsigned int);
 
 protected:
   SpatialObjectToPointSetFilter();

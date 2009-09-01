@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimplexMeshAdaptTopologyFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 20:49:56 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-05-12 17:22:53 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -354,7 +354,10 @@ SimplexMeshAdaptTopologyFilter<TInputMesh, TOutputMesh>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
-  os << indent << "ToDo: implement PrinSelf!!!";
+  os << indent << "Threshold: " << m_Threshold << std::endl;
+  os << indent << "SelectionMethod: " << m_SelectionMethod << std::endl;
+  os << indent << "ModifiedCount: " << m_ModifiedCount << std::endl;
+
 }
 
 

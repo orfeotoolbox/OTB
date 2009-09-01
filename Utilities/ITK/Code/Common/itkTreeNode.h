@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTreeNode.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:09 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-03-03 15:10:44 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -118,8 +118,8 @@ protected:
 
   TreeNode();
   virtual ~TreeNode();
-  TValueType m_Data;
-  Self* m_Parent;
+  TValueType       m_Data;
+  Self*            m_Parent;
   ChildrenListType m_Children;
 private:
   TreeNode(const Self&); //purposely not implemented

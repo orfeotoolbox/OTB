@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSmoothingRecursiveGaussianImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-31 09:14:58 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-04-25 12:28:09 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -112,11 +112,11 @@ public:
 
   /** Set Sigma value. Sigma is measured in the units of image spacing.  */
   void SetSigma( ScalarRealType sigma );
-  itkGetMacro(Sigma, ScalarRealType);
+  itkGetConstMacro(Sigma, ScalarRealType);
 
   /** Define which normalization factor will be used for the Gaussian */
   void SetNormalizeAcrossScale( bool normalizeInScaleSpace );
-  itkGetMacro( NormalizeAcrossScale, bool );
+  itkGetConstMacro( NormalizeAcrossScale, bool );
 
   void SetNumberOfThreads( int nb );
 

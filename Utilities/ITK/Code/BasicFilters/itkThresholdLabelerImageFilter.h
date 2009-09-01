@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkThresholdLabelerImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-18 16:11:15 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-05-12 17:22:57 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,7 +42,7 @@ namespace itk
 namespace Functor {  
   
 template< class TInput, class TOutput >
-class ThresholdLabeler
+class ITK_EXPORT ThresholdLabeler
 {
 public:
   ThresholdLabeler() { m_LabelOffset = NumericTraits<TOutput>::One; }
@@ -73,7 +73,7 @@ public:
     return !(*this != other);
     }
 
-  inline TOutput operator()( const TInput & A )
+  inline TOutput operator()( const TInput & A ) const
     {
     unsigned int size = m_Thresholds.size();
     if (size == 0)
@@ -188,7 +188,7 @@ public:
 
   /** Set the offset which labels have to start from. */
   itkSetClampMacro(LabelOffset,OutputPixelType, NumericTraits<OutputPixelType>::Zero,NumericTraits<OutputPixelType>::max() );
-  itkGetMacro(LabelOffset,OutputPixelType);
+  itkGetConstMacro(LabelOffset,OutputPixelType);
 
 protected:
   ThresholdLabelerImageFilter();

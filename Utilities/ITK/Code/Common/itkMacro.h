@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMacro.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 19:05:01 $
-  Version:   $Revision: 1.89 $
+  Date:      $Date: 2009-05-26 23:45:03 $
+  Version:   $Revision: 1.96 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -35,6 +35,11 @@
 
 #include <string>
 #include <cstdlib>
+#ifndef NDEBUG 
+#include <cassert>
+#endif
+
+#include "vnl/vnl_math.h"
 
 // Determine type of string stream to use.
 #if !defined(CMAKE_NO_ANSI_STRING_STREAM)
@@ -965,6 +970,20 @@ private:
 #endif
 
 
+namespace itk
+{
+namespace Math
+{
+inline int RoundHalfIntegerUp(float   x) { return vnl_math_rnd_halfintup(x); }
+inline int RoundHalfIntegerUp(double  x) { return vnl_math_rnd_halfintup(x); }
+inline int RoundHalfIntegerToEven(float   x) { return vnl_math_rnd_halfinttoeven(x); }
+inline int RoundHalfIntegerToEven(double  x) { return vnl_math_rnd_halfinttoeven(x); }
+inline int Round(float   x) { return RoundHalfIntegerUp(x); }
+inline int Round(double  x) { return RoundHalfIntegerUp(x); }
+} // end namespace Math
+} // end namespace itk
+
+
 #ifdef ITK_USE_TEMPLATE_META_PROGRAMMING_LOOP_UNROLLING
 //--------------------------------------------------------------------------------
 //  Helper macros for Template Meta-Programming techniques of for-loops unrolling
@@ -977,7 +996,7 @@ private:
 // No verification of size is performed. Casting is perfomed as part of the
 // assignment, by using the DestinationElementType as the casting type. 
 // Source and destination array types must have defined opearator[] in their API.
-#define itkFoorLoopAssignmentMacro(DestinationType,SourceType,DestinationElementType,DestinationArray,SourceArray,NumberOfIterations) \
+#define itkForLoopAssignmentMacro(DestinationType,SourceType,DestinationElementType,DestinationArray,SourceArray,NumberOfIterations) \
     for(unsigned int i=0;i < NumberOfIterations; ++i) \
       { \
       DestinationArray[i] = static_cast< DestinationElementType >( SourceArray[i] ); \
@@ -991,14 +1010,42 @@ private:
 // perfomed as part of the assignment, by using the DestinationElementType as
 // the casting type. 
 // Source and destination array types must have defined opearator[] in their API.
-#define itkFoorLoopRoundingAndAssignmentMacro(DestinationType,SourceType,DestinationElementType,DestinationArray,SourceArray,NumberOfIterations) \
+#ifdef ITK_USE_PORTABLE_ROUND
+#define itkForLoopRoundingAndAssignmentMacro(DestinationType,Sourcrnd_halfintup,DestinationElementType,DestinationArray,SourceArray,NumberOfIterations) \
     for(unsigned int i=0;i < NumberOfIterations; ++i) \
       { \
-      DestinationArray[i] = static_cast< DestinationElementType >( vnl_math_rnd( SourceArray[i] ) ); \
+      DestinationArray[i] = static_cast< DestinationElementType >( itk::Math::Round( SourceArray[i] ) ); \
       }
+#else
+#define itkForLoopRoundingAndAssignmentMacro(DestinationType,SourceType,DestinationElementType,DestinationArray,SourceArray,NumberOfIterations) \
+    for(unsigned int i=0;i < NumberOfIterations; ++i) \
+      { \
+      DestinationArray[i] = static_cast< DestinationElementType >( itk::Math::RoundHalfIntegerUp( SourceArray[i] ) ); \
+      }
+#endif
 
 #endif
 // end of Template Meta Programming helper macros
 
+
+#ifndef NDEBUG 
+
+#ifdef _POSIX_SOURCE
+#define itkAssertInDebugOrThrowInReleaseMacro(msg) __assert_fail (msg, __FILE__, __LINE__, __ASSERT_FUNCTION);
+#else
+#define itkAssertInDebugOrThrowInReleaseMacro(msg) itkGenericExceptionMacro( << msg );
+#endif
+
+#else 
+#define itkAssertInDebugOrThrowInReleaseMacro(msg) itkGenericExceptionMacro( << msg);
+#endif
+
+#define itkAssertOrThrowMacro(test, message) \
+   if( !(test) ) \
+     { \
+     ::itk::OStringStream msgstr; \
+     msgstr << message;      \
+     itkAssertInDebugOrThrowInReleaseMacro( msgstr.str().c_str() ); \
+     }
 
 #endif //end of itkMacro.h

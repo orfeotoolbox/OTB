@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWatershedMiniPipelineProgressCommand.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-01-27 19:30:18 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-05-12 20:21:46 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -47,4 +47,11 @@ void WatershedMiniPipelineProgressCommand
     }
 }
 
+void WatershedMiniPipelineProgressCommand
+::PrintSelf(std::ostream& os, Indent indent) const
+{
+  Superclass::PrintSelf(os,indent);
+  os << indent << "NumberOfFilters: " << m_NumberOfFilters << std::endl;
+  os << indent << "Count: " << m_Count << std::endl;
+}
 } // end namespace itk

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCurvatureFlowImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-23 16:15:23 $
-  Version:   $Revision: 1.37 $
+  Date:      $Date: 2009-04-23 03:53:34 $
+  Version:   $Revision: 1.38 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -133,7 +133,7 @@ public:
   itkSetMacro(TimeStep, TimeStepType);
 
   /** Get the timestep parameter. */
-  itkGetMacro(TimeStep, TimeStepType);
+  itkGetConstMacro(TimeStep, TimeStepType);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

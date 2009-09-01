@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScaleSkewVersor3DTransform.h,v $
   Language:  C++
-  Date:      $Date: 2007-06-10 12:02:30 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-03-03 15:09:08 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,7 +24,8 @@
 namespace itk
 {
 
-/** \brief ScaleSkewVersor3DTransform of a vector space (e.g. space coordinates)
+/** \class ScaleSkewVersor3DTransform
+ * \brief ScaleSkewVersor3DTransform of a vector space (e.g. space coordinates)
  *
  * This transform applies a versor rotation and translation & scale/skew
  * to the space
@@ -78,7 +79,7 @@ public:
   typedef typename Superclass::OutputVnlVectorType    OutputVnlVectorType;
   typedef typename Superclass::InputCovariantVectorType 
                                                       InputCovariantVectorType;
-  typedef typename Superclass::OutputCovariantVectorType      
+  typedef typename Superclass::OutputCovariantVectorType
                                                       OutputCovariantVectorType;
   typedef typename Superclass::MatrixType             MatrixType;
   typedef typename Superclass::InverseMatrixType      InverseMatrixType;
@@ -131,15 +132,15 @@ protected:
                              const OutputVectorType &offset);
   ScaleSkewVersor3DTransform(unsigned int outputDims,
                              unsigned int paramDims);
-  ~ScaleSkewVersor3DTransform(){};
+  ~ScaleSkewVersor3DTransform(){}
 
   void PrintSelf(std::ostream &os, Indent indent) const;
 
   void SetVarScale(const ScaleVectorType & scale)
-    { m_Scale = scale; };
+    { m_Scale = scale; }
 
   void SetVarSkew(const SkewVectorType & skew)
-    { m_Skew = skew; };
+    { m_Skew = skew; }
 
   /** Compute the components of the rotation matrix in the superclass. */
   void ComputeMatrix(void);

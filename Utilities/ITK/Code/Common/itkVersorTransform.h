@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVersorTransform.h,v $
   Language:  C++
-  Date:      $Date: 2006-08-09 04:35:32 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2009-03-03 15:11:51 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,7 +26,7 @@
 namespace itk
 {
 
-/**
+/** \class VersorTransform
  *
  * VersorTransform of a vector space (e.g. space coordinates)
  *
@@ -44,7 +44,7 @@ namespace itk
  *
  * \ingroup Transforms
  *
- **/
+ */
 template < class TScalarType=double >//Data type for scalars (float or double)
 class ITK_EXPORT VersorTransform : public Rigid3DTransform< TScalarType > 
 {

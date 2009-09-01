@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorLinearInterpolateImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-13 15:32:37 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-03-03 15:11:41 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,10 +44,10 @@ class ITK_EXPORT VectorLinearInterpolateImageFunction :
 {
 public:
   /** Standard class typedefs. */
-  typedef VectorLinearInterpolateImageFunction Self;
+  typedef VectorLinearInterpolateImageFunction                  Self;
   typedef VectorInterpolateImageFunction<TInputImage,TCoordRep> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                                    Pointer;
+  typedef SmartPointer<const Self>                              ConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  

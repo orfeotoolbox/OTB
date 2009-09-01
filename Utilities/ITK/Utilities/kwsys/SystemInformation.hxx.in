@@ -3,8 +3,8 @@
   Program:   KWSys - Kitware System Library
   Module:    $RCSfile: SystemInformation.hxx.in,v $
   Language:  C++
-  Date:      $Date: 2008-03-11 21:37:17 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-03-20 02:48:05 $
+  Version:   $Revision: 1.9 $
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
@@ -47,7 +47,7 @@ public:
   const char * GetExtendedProcessorName();
   const char * GetProcessorSerialNumber();
   int GetProcessorCacheSize();
-  int GetLogicalProcessorsPerPhysical();
+  unsigned int GetLogicalProcessorsPerPhysical();
   float GetProcessorClockFrequency();
   int GetProcessorAPICID();
   int GetProcessorCacheXSize(long int);

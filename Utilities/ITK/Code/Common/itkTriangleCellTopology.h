@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTriangleCellTopology.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:28 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-03-03 15:11:09 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -33,15 +33,14 @@ namespace itk
 
 class ITKCommon_EXPORT TriangleCellTopology
 {
-protected:
-   
-   /** Triangle topology data. */
-  static const int m_Edges[3][2];
-
-  
 public:
   TriangleCellTopology();
   ~TriangleCellTopology();
+  
+protected:
+   
+  /** Triangle topology data. */
+  static const int m_Edges[3][2];
   
 };
 

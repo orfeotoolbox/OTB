@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeasurementVectorTraits.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-26 23:43:03 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-03-04 15:24:02 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -256,7 +256,7 @@ public:
   static MeasurementVectorLength Assert( const Array< TValueType > &a, 
               const MeasurementVectorLength l, const char *errMsg="Length Mismatch")
     {
-    if( ((l!=0) && (a.Size()!=l)) || (a.Size()==0) )
+    if( ((l != 0) && (a.Size() != l)) || (a.Size() == 0) )
       {
       itkGenericExceptionMacro( << errMsg );
       }
@@ -271,7 +271,7 @@ public:
   static MeasurementVectorLength Assert( const Array< TValueType > *a, 
               const MeasurementVectorLength l, const char *errMsg="Length Mismatch")
     {
-    if( ((l!=0) && (a->Size()!=l)) || (a->Size()==0) )
+    if( ((l != 0) && (a->Size() != l)) || (a->Size() == 0) )
       {
       itkGenericExceptionMacro( << errMsg );
       }
@@ -286,7 +286,7 @@ public:
   static MeasurementVectorLength Assert( const VariableLengthVector< TValueType > &a, 
               const MeasurementVectorLength l, const char *errMsg="Length Mismatch")
     {
-    if( ((l!=0) && (a.Size()!=l)) || (a.Size()==0) )
+    if( ((l !=0 ) && (a.Size() != l)) || (a.Size() == 0) )
       {
       itkGenericExceptionMacro( << errMsg );
       }
@@ -301,7 +301,7 @@ public:
   static MeasurementVectorLength Assert( const VariableLengthVector< TValueType > *a, 
               const MeasurementVectorLength l, const char *errMsg="Length Mismatch")
     {
-    if( ((l!=0) && (a->Size()!=l)) || (a->Size()==0) )
+    if( ((l !=0 ) && (a->Size() != l)) || (a->Size() == 0) )
       {
       itkGenericExceptionMacro( << errMsg );
       }
@@ -311,11 +311,11 @@ public:
       }
     return 0;
     }
-   template< class TValueType >
+  template< class TValueType >
   static MeasurementVectorLength Assert( const std::vector< TValueType > &a, 
               const MeasurementVectorLength l, const char *errMsg="Length Mismatch")
     {
-    if( ((l!=0) && (a.size()!=l)) || (a.size()==0) )
+    if( ((l != 0) && (a.size() != l)) || (a.size() == 0) )
       {
       itkGenericExceptionMacro( << errMsg );
       }
@@ -330,7 +330,7 @@ public:
   static MeasurementVectorLength Assert( const std::vector< TValueType > *a, 
               const MeasurementVectorLength l, const char *errMsg="Length Mismatch")
     {
-    if( ((l!=0) && (a->size()!=l)) || (a->size()==0) )
+    if( ((l != 0) && (a->size() != l)) || (a->size() == 0) )
       {
       itkGenericExceptionMacro( << errMsg );
       }
@@ -340,9 +340,8 @@ public:
       }
     return 0;
     }
- };
+};
 
 } // namespace itk
 
 #endif  // __itkMeasurementVectorTraits_h
-

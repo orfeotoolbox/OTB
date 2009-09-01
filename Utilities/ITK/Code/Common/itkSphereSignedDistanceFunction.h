@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSphereSignedDistanceFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:09 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-03-03 15:09:42 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,15 +44,15 @@ class ITK_EXPORT SphereSignedDistanceFunction :
 {
 public:
   /** Standard class typedefs. */
-  typedef SphereSignedDistanceFunction Self;
+  typedef SphereSignedDistanceFunction                              Self;
   typedef ShapeSignedDistanceFunction< TCoordRep, VSpaceDimension > Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                                        Pointer;
+  typedef SmartPointer<const Self>                                  ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(SphereSignedDistanceFunction, ShapeSignedDistancFunction);
 
-  /** New macro for creation of through the object factory.*/
+  /** New macro for creation of through the object factory. */
   itkNewMacro( Self );
 
   /** OutputType typedef support. */

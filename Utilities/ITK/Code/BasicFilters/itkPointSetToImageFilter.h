@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPointSetToImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-11-08 13:12:22 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-25 12:27:54 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -115,7 +115,7 @@ public:
   * the output produced by this filter will be a mask with inside/outside values 
   * specified by the user. */
   itkSetMacro(InsideValue, ValueType);
-  itkGetMacro(InsideValue, ValueType);
+  itkGetConstMacro(InsideValue, ValueType);
 
   /** Set/Get the value for pixels outside the point-set.
   * By default, this filter will return an image
@@ -124,11 +124,11 @@ public:
   * the output produced by this filter will be a mask with inside/outside values
   * specified by the user. */
   itkSetMacro(OutsideValue, ValueType);
-  itkGetMacro(OutsideValue, ValueType);
+  itkGetConstMacro(OutsideValue, ValueType);
 
   /** Set/Get Size */
   itkSetMacro(Size,SizeType);
-  itkGetMacro(Size,SizeType);
+  itkGetConstMacro(Size,SizeType);
 
 protected:
   PointSetToImageFilter();

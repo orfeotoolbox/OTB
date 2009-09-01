@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptBSplineInterpolateImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-07 16:05:47 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-04-23 03:43:42 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -274,7 +274,7 @@ public:
   itkGetConstMacro(SplineOrder, int);
 
   void SetNumberOfThreads(unsigned int numThreads);
-  itkGetMacro(NumberOfThreads, int);
+  itkGetConstMacro(NumberOfThreads, int);
 
   /** Set the input image.  This must be set by the user. */
   virtual void SetInputImage(const TImageType * inputData);
@@ -293,7 +293,7 @@ public:
    * ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE is ON, and  OFF by default
    * when ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE is OFF). */
   itkSetMacro( UseImageDirection, bool );
-  itkGetMacro( UseImageDirection, bool );
+  itkGetConstMacro( UseImageDirection, bool );
   itkBooleanMacro( UseImageDirection );
 
 

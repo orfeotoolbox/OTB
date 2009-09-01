@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarConnectedComponentImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 20:49:55 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-04-01 14:36:31 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -60,7 +60,7 @@ public:
   void SetDistanceThreshold(const TInput &thresh) {m_Threshold = thresh;}
   TInput GetDistanceThreshold() {return (m_Threshold);}
   
-  bool operator()(const TInput &a, const TInput &b)
+  bool operator()(const TInput &a, const TInput &b) const
     {
     return (vnl_math_abs(a-b) <= m_Threshold);
     }

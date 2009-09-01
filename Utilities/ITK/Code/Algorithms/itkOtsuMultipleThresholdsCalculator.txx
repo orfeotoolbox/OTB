@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOtsuMultipleThresholdsCalculator.txx,v $
   Language:  C++
-  Date:      $Date: 2009-01-26 21:45:54 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-05-02 05:43:55 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -147,7 +147,11 @@ OtsuMultipleThresholdsCalculator<TInputHistogram>
 
   // TODO: as an improvement, the class could accept multi-dimensional histograms
   // and the user could specify the dimension to apply the algorithm to.
+#ifdef ITK_USE_REVIEW_STATISTICS
+  if (histogram->GetSize().Size() != 1)
+#else
   if (histogram->GetSize().GetSizeDimension() != 1)
+#endif
     {
     itkExceptionMacro(<<"Histogram must be 1-dimensional.");
     }

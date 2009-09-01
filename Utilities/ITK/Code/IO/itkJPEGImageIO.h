@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkJPEGImageIO.h,v $
   Language:  C++
-  Date:      $Date: 2007-03-29 18:39:28 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-25 12:25:42 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -49,11 +49,11 @@ public:
 
   /** Set/Get the level of quality for the output images. */
   itkSetMacro(Quality, int);
-  itkGetMacro(Quality, int);
+  itkGetConstMacro(Quality, int);
 
   /**  */
   itkSetMacro(Progressive, bool);
-  itkGetMacro(Progressive, bool);
+  itkGetConstMacro(Progressive, bool);
 
   /*-------- This part of the interface deals with reading data. ------ */
 

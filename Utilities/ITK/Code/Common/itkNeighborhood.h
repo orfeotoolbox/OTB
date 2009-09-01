@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNeighborhood.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-07 23:09:24 $
-  Version:   $Revision: 1.46 $
+  Date:      $Date: 2009-04-05 10:56:46 $
+  Version:   $Revision: 1.48 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,6 +25,8 @@
 #include "vnl/vnl_vector.h"
 #include "itkOffset.h"
 #include <vector>
+#include <stdlib.h>
+#include <string.h>
 
 namespace itk {
 
@@ -86,7 +88,15 @@ public:
   typedef SliceIterator<TPixel, Self> SliceIteratorType;
 
   /** Default constructor. */
-  Neighborhood() { m_Radius.Fill(0); m_Size.Fill(0);  }
+  Neighborhood()
+    {
+    m_Radius.Fill(0);
+    m_Size.Fill(0);
+    for (unsigned int i = 0; i < VDimension; i++)
+      {
+      m_StrideTable[i] = 0;
+      }
+    }
 
   /** Default destructor. */
   virtual ~Neighborhood() {}

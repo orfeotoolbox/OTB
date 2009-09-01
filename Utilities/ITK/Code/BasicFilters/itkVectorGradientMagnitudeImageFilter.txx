@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorGradientMagnitudeImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 16:30:55 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-04-06 00:19:17 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -176,7 +176,7 @@ VectorGradientMagnitudeImageFilter<TInputImage, TRealType, TOutputImage>
       {
       itkExceptionMacro( << "Component weights must be positive numbers" );
       }
-    m_SqrtComponentWeights[i] = ::sqrt(m_ComponentWeights[i]);
+    m_SqrtComponentWeights[i] = vcl_sqrt(m_ComponentWeights[i]);
     }
 
   

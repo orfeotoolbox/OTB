@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorGradientMagnitudeImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 16:30:55 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-04-25 12:28:12 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -209,7 +209,7 @@ public:
   /** Set/Get whether or not the filter will use the spacing of the input
       image in its calculations */
   void SetUseImageSpacing(bool);
-  itkGetMacro(UseImageSpacing, bool);
+  itkGetConstMacro(UseImageSpacing, bool);
 
   /** Directly Set/Get the array of weights used in the gradient calculations.
       Note that calling UseImageSpacingOn will clobber these values. */
@@ -227,7 +227,7 @@ public:
       to FALSE/OFF, the calculation is done as a square root of weighted sum of the
       derivatives squared.  Default is UsePrincipleComponents = true. */
   itkSetMacro(UsePrincipleComponents, bool);
-  itkGetMacro(UsePrincipleComponents, bool);
+  itkGetConstMacro(UsePrincipleComponents, bool);
   void SetUsePrincipleComponentsOn()
     {
     this->SetUsePrincipleComponents(true);

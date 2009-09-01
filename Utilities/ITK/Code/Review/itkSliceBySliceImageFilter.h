@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSliceBySliceImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-12-04 18:37:10 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-04-23 03:43:42 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -128,7 +128,7 @@ public:
                       InternalInputImageType::ImageDimension);
 
   itkSetMacro(Dimension, unsigned int);
-  itkGetMacro(Dimension, unsigned int);
+  itkGetConstMacro(Dimension, unsigned int);
 
   void SetFilter(InputFilterType * filter);
   InputFilterType * GetFilter()
@@ -151,7 +151,7 @@ public:
    * used with the IterationEvent sent before the processing of each object. It contains
    * a relevant value only during the filter update.
    */
-  itkGetMacro(SliceIndex, long);
+  itkGetConstMacro(SliceIndex, long);
 
 protected:
   SliceBySliceImageFilter();

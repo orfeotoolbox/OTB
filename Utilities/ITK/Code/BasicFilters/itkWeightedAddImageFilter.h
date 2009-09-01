@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWeightedAddImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 17:31:02 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-01 14:36:37 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -74,7 +74,7 @@ public:
     return !(*this != other);
     }
 
-  inline TOutput operator()( const TInput1 & A, const TInput2 & B)
+  inline TOutput operator()( const TInput1 & A, const TInput2 & B) const
     {
     const RealType sum1 = A * m_Alpha;
     const RealType sum2 = B * m_Beta;

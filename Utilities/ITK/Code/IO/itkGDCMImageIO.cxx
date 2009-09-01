@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGDCMImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-02-19 01:02:39 $
-  Version:   $Revision: 1.149 $
+  Date:      $Date: 2009-04-29 22:31:37 $
+  Version:   $Revision: 1.159 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,6 +42,8 @@
 #include "gdcmDictSet.h"  // access to dictionary
 #else
 #include "gdcmImageHelper.h"
+#include "gdcmDataSetHelper.h"
+#include "gdcmStringFilter.h"
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmImageChangePlanarConfiguration.h"
 #include "gdcmUnpacker12Bits.h"
@@ -70,8 +72,27 @@ public:
 };
 
 // Initialize static members
-bool GDCMImageIO::m_LoadSequencesDefault = false;
-bool GDCMImageIO::m_LoadPrivateTagsDefault = false;
+/*
+ * m_LoadPrivateTagsDefault:
+ * When this flag is set to false, GDCM will try to use the value stored in each private Group Length attribute value.
+ * This is a modest optimization feature that can be found in some ACR-NEMA file and/or DICOM pre-2008 file.
+ * Because it is required by the standard that DICOM file reader can read file where Group Length attribute value
+ * would be invalid, turning this flag to off, on the one hand might lead to some speed improvement, but on the
+ * other hand will make your DICOM implementation non-standard.
+ * Technically Group Length value could be incorrect and GDCM might even skipped over some public element and not
+ * just the desired current group of attributes. Do not turn this option to false unless you understand the 
+ * consequences.
+ *
+ * m_LoadSequencesDefault:
+ * Following the same idea (modest speed improvement), one can use a feature from DICOM and use the Value Length
+ * of a Sequence attribute to 'seek' over a large number of nested attributes.
+ * Again this feature can lead to some modest speed improvement, but seek'ing over public sequence is not 
+ * a good idea. For instance you could be reading some new Enhanced MR Image Storage, where the Pixel Spacing
+ * is stored within a Sequence attribute, therefore Pixel Spacing would not be correct after a call to
+ * ExecuteInformation.
+ */
+bool GDCMImageIO::m_LoadSequencesDefault = true;
+bool GDCMImageIO::m_LoadPrivateTagsDefault = true;
 
 
 #if GDCM_MAJOR_VERSION < 2
@@ -580,7 +601,10 @@ void GDCMImageIO::Read(void* buffer)
   gdcm::File *header = this->m_DICOMHeader->m_Header;
   if( !header->IsReadable() )
     {
-    itkExceptionMacro( "Cannot read the file");
+    itkExceptionMacro(<< "Could not read file: "
+                      << m_FileName << std::endl
+                      << "Reason: "
+                      << itksys::SystemTools::GetLastSystemError());
     }
   gdcm::FileHelper gfile(header);
 
@@ -745,7 +769,10 @@ void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
   //read header
   if ( ! this->OpenGDCMFileForReading(file, m_FileName.c_str()) )
     {
-    itkExceptionMacro(<< "Cannot read requested file");
+    itkExceptionMacro(<< "Could not read file: "
+                      << m_FileName << std::endl
+                      << "Reason: "
+                      << itksys::SystemTools::GetLastSystemError());
     }
 
   gdcm::File *header = new gdcm::File;
@@ -758,11 +785,17 @@ void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
   bool headerLoaded = header->Load();
   if ( !headerLoaded )
     {
-    itkExceptionMacro(<< "Cannot read requested file");
+    itkExceptionMacro(<< "Could not load header from file: "
+                      << m_FileName << std::endl
+                      << "Reason: "
+                      << itksys::SystemTools::GetLastSystemError());
     }
   if( !header->IsReadable() )
     {
-    itkExceptionMacro(<< "Cannot read requested file");
+    itkExceptionMacro(<< "Could not read header from file: "
+                      << m_FileName << std::endl
+                      << "Reason: "
+                      << itksys::SystemTools::GetLastSystemError());
     }
 
   // We don't need to positionate the Endian related stuff (by using
@@ -1000,6 +1033,18 @@ void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
 
 }
 #else
+
+// TODO: this function was not part of gdcm::Tag API as of gdcm 2.0.10:
+std::string PrintAsPipeSeparatedString(const gdcm::Tag& tag)
+{
+  itksys_ios::ostringstream os;
+  os << std::hex << std::setw( 4 ) << std::setfill( '0' )
+    << tag[0] << '|' << std::setw( 4 ) << std::setfill( '0' )
+    << tag[1];
+  std::string ret = os.str();
+  return ret;
+}
+
 void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
 {
   //read header
@@ -1019,7 +1064,8 @@ void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
     itkExceptionMacro(<< "Cannot read requested file");
     }
   const gdcm::Image &image = reader.GetImage();
-  //const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
+  const gdcm::File &f = reader.GetFile();
+  const gdcm::DataSet &ds = f.GetDataSet();
   const unsigned int *dims = image.GetDimensions();
 
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
@@ -1127,6 +1173,83 @@ void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
   this->SetDirection(0, rowDirection);
   this->SetDirection(1, columnDirection);
   this->SetDirection(2, sliceDirection);
+
+  //Now copying the gdcm dictionary to the itk dictionary:
+  MetaDataDictionary & dico = this->GetMetaDataDictionary();
+
+  gdcm::StringFilter sf;
+  sf.SetFile( f );
+  gdcm::DataSet::ConstIterator it = ds.Begin();
+
+  // Copy of the header->content
+  for(; it != ds.End(); ++it)
+    {
+    const gdcm::DataElement &ref = *it;
+    const gdcm::Tag &tag = ref.GetTag();
+    // Compute VR from the toplevel file, and the currently processed dataset:
+    gdcm::VR vr = gdcm::DataSetHelper::ComputeVR(f, ds, tag);
+
+    // Process binary field and encode them as mime64: only when we do not know of any better
+    // representation. VR::US is binary, but user want ASCII representation.
+    if ( vr & (gdcm::VR::OB | gdcm::VR::OF | gdcm::VR::OW | gdcm::VR::SQ | gdcm::VR::UN) )
+      {
+      // assert( vr & gdcm::VR::VRBINARY );
+      /*
+       * Old bahavior was to skip SQ, Pixel Data element. I decided that it is not safe to mime64
+       * VR::UN element. There used to be a bug in gdcm 1.2.0 and VR:UN element.
+       */
+      if ( tag.IsPublic() && vr != gdcm::VR::SQ && tag != gdcm::Tag(0x7fe0,0x0010) /* && vr != gdcm::VR::UN*/ )
+        {
+        const gdcm::ByteValue *bv = ref.GetByteValue();
+        if( bv )
+          {
+          // base64 streams have to be a multiple of 4 bytes long
+          int encodedLengthEstimate = 2 * bv->GetLength();
+          encodedLengthEstimate = ((encodedLengthEstimate / 4) + 1) * 4;
+
+          char *bin = new char[encodedLengthEstimate];
+          unsigned int encodedLengthActual = static_cast<unsigned int>(
+            itksysBase64_Encode(
+              (const unsigned char *) bv->GetPointer(),
+              static_cast< unsigned long>( bv->GetLength() ),
+              (unsigned char *) bin,
+              static_cast< int >( 0 ) ));
+          std::string encodedValue(bin, encodedLengthActual);
+          EncapsulateMetaData<std::string>(dico, PrintAsPipeSeparatedString(tag), encodedValue);
+          delete []bin;
+          }
+        }
+      }
+    else /* if ( vr & gdcm::VR::VRASCII ) */
+      {
+      // Only copying field from the public DICOM dictionary
+      if( tag.IsPublic() )
+        {
+        EncapsulateMetaData<std::string>(dico, PrintAsPipeSeparatedString(tag), sf.ToString( tag ) );
+        }
+      }
+
+    }
+
+
+  // Now is a good time to fill in the class member:
+  char name[512];
+  this->GetPatientName(name);
+  this->GetPatientID(name);
+  this->GetPatientSex(name);
+  this->GetPatientAge(name);
+  this->GetStudyID(name);
+  this->GetPatientDOB(name);
+  this->GetStudyDescription(name);
+  this->GetBodyPart(name);
+  this->GetNumberOfSeriesInStudy(name);
+  this->GetNumberOfStudyRelatedSeries(name);
+  this->GetStudyDate(name);
+  this->GetModality(name);
+  this->GetManufacturer(name);
+  this->GetInstitution(name);
+  this->GetModel(name);
+  this->GetScanOptions(name);
 
 }
 #endif
@@ -1473,8 +1596,20 @@ void GDCMImageIO::Write(const void* buffer)
           break;
 
           //Disabling INT and UINT for now...
-          //case ImageIOBase::INT:
-          //case ImageIOBase::UINT:
+        case ImageIOBase::INT:
+          bitsAllocated = "32"; // Bits Allocated
+          bitsStored    = "32"; // Bits Stored
+          highBit       = "31"; // High Bit
+          pixelRep      = "1";  // Pixel Representation
+          break;
+
+        case ImageIOBase::UINT:
+          bitsAllocated = "32"; // Bits Allocated
+          bitsStored    = "32"; // Bits Stored
+          highBit       = "31"; // High Bit
+          pixelRep      = "0";  // Pixel Representation
+          break;
+
         case ImageIOBase::FLOAT:
         case ImageIOBase::DOUBLE:
           // Disable that mode for now as we would need to compute on the fly the min/max of the image to
@@ -1542,6 +1677,14 @@ void GDCMImageIO::Write(const void* buffer)
   else if( type == "16S")
     {
     m_InternalComponentType = SHORT;
+    }
+  else if( type == "32U")
+    {
+    m_InternalComponentType = UINT;
+    }
+  else if( type == "32S")
+    {
+    m_InternalComponentType = INT;
     }
   else
     {
@@ -1723,7 +1866,32 @@ void GDCMImageIO::Write(const void* buffer)
     if ( b /*tag != gdcm::Tag(0xffff,0xffff)*/ /*dictEntry*/)
       {
       const gdcm::DictEntry &dictEntry = pubdict.GetDictEntry(tag);
-      if (dictEntry.GetVR() != gdcm::VR::OB && dictEntry.GetVR() != gdcm::VR::OW)
+      gdcm::VR::VRType vrtype = dictEntry.GetVR();
+      if ( dictEntry.GetVR() == gdcm::VR::SQ )
+        {
+        // How did we reach here ?
+        }
+      else if ( vrtype & (gdcm::VR::OB | gdcm::VR::OF | gdcm::VR::OW /*| gdcm::VR::SQ*/ | gdcm::VR::UN) )
+        {
+        // Custom VR::VRBINARY
+        // convert value from Base64
+        uint8_t *bin = new uint8_t[value.size()];
+        unsigned int decodedLengthActual = static_cast<unsigned int>(
+          itksysBase64_Decode(
+          (const unsigned char *) value.c_str(),
+          static_cast<unsigned long>( 0 ),
+          (unsigned char *) bin,
+          static_cast<unsigned long>( value.size())));
+        if( /*tag.GetGroup() != 0 ||*/ tag.GetElement() != 0) // ?
+          {
+          gdcm::DataElement de( tag );
+          de.SetByteValue( (char*)bin, decodedLengthActual );
+          de.SetVR( dictEntry.GetVR() );
+          header.Insert( de );
+          }
+        delete []bin;
+        }
+      else // VRASCII
         {
         // TODO, should we keep:
         // (0028,0106) US/SS 0                                        #   2, 1 SmallestImagePixelValue
@@ -1735,25 +1903,6 @@ void GDCMImageIO::Write(const void* buffer)
           de.SetVR( dictEntry.GetVR() );
           header.Insert( de ); //value, tag.GetGroup(), tag.GetElement());
           }
-        }
-      else
-        {
-        // convert value from Base64
-        uint8_t *bin = new uint8_t[value.size()];
-        unsigned int decodedLengthActual = static_cast<unsigned int>(
-          itksysBase64_Decode(
-          (const unsigned char *) value.c_str(),
-          static_cast<unsigned long>( 0 ),
-          (unsigned char *) bin,
-          static_cast<unsigned long>( value.size())));
-        if(tag.GetGroup() != 0 || tag.GetElement() != 0) // ?
-          {
-          gdcm::DataElement de( tag );
-          de.SetByteValue( (char*)bin, decodedLengthActual );
-          de.SetVR( dictEntry.GetVR() );
-          header.Insert( de );
-          }
-        delete []bin;
         }
       }
     else
@@ -1830,9 +1979,13 @@ void GDCMImageIO::Write(const void* buffer)
   case ImageIOBase::USHORT:
     pixeltype = gdcm::PixelFormat::UINT16;
     break;
-    //Disabling INT and UINT for now...
-    //case ImageIOBase::INT:
-    //case ImageIOBase::UINT:
+  case ImageIOBase::INT:
+    pixeltype = gdcm::PixelFormat::INT32;
+    break;
+  case ImageIOBase::UINT:
+    pixeltype = gdcm::PixelFormat::UINT32;
+    break;
+    //Disabling FLOAT and DOUBLE for now...
     //case ImageIOBase::FLOAT:
     //case ImageIOBase::DOUBLE:
   default:
@@ -1859,18 +2012,12 @@ void GDCMImageIO::Write(const void* buffer)
   image.SetPixelFormat( pixeltype );
   unsigned long len = image.GetBufferLength();
 
-  gdcm::ByteValue *bv = new gdcm::ByteValue(); // (char*)data->GetScalarPointer(), len );
-  bv->SetLength( len ); // allocate !
-
   size_t numberOfBytes = this->GetImageSizeInBytes();
   assert( len == numberOfBytes );
 
-  // only do a straight copy:
-  char *pointer = (char*)bv->GetPointer();
-  memcpy(pointer, buffer, numberOfBytes);
-
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
-  pixeldata.SetValue( *bv );
+  // only do a straight copy:
+  pixeldata.SetByteValue( (char*)buffer, numberOfBytes );
   image.SetDataElement( pixeldata );
 
   if( !m_KeepOriginalUID )
@@ -2062,8 +2209,7 @@ bool GDCMImageIO::GetLabelFromTag( const std::string & tag,
                                std::string & labelId )
 {
   gdcm::Tag t;
-  t.ReadFromPipeSeparatedString( tag.c_str() );
-  if( t.IsPublic() )
+  if( t.ReadFromPipeSeparatedString( tag.c_str() ) && t.IsPublic() )
     {
     const gdcm::Global &g = gdcm::Global::GetInstance();
     const gdcm::Dicts &dicts = g.GetDicts();

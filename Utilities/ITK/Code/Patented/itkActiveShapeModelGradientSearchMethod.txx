@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkActiveShapeModelGradientSearchMethod.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-01 13:08:40 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-05 23:09:19 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -269,7 +269,7 @@ ActiveShapeModelGradientSearchMethod<TImage>
 
     for(unsigned int j = 0; j < numberOfEigenValues; j++)
       {
-      if(fabs(m_Db[j]) >  m_Blimit[j])
+      if(vcl_fabs(m_Db[j]) >  m_Blimit[j])
         {
         m_Db[j] = ( m_Db[j] / vcl_fabs(m_Db[j]) ) * m_Blimit[j];
         }

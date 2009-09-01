@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLevelSetNeighborhoodExtractor.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 20:02:58 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2009-04-23 03:53:35 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -96,20 +96,20 @@ public:
   itkSetMacro( LevelSetValue, double );
 
   /** Get the value of the level set to be located. */
-  itkGetMacro( LevelSetValue, double );
+  itkGetConstMacro( LevelSetValue, double );
 
   /** Set the narrow band width. Default is 12. */
   itkSetClampMacro( NarrowBandwidth, double, 0.0, 
                     NumericTraits<double>::max());
 
   /** Get the narrow band width. */
-  itkGetMacro( NarrowBandwidth, double );
+  itkGetConstMacro( NarrowBandwidth, double );
 
   /** Set the narrowbanding flag. */
   itkSetMacro( NarrowBanding, bool );
 
   /** Get the narrowbanding flag. */
-  itkGetMacro( NarrowBanding, bool );
+  itkGetConstMacro( NarrowBanding, bool );
   itkBooleanMacro( NarrowBanding );
 
   /** Set/Get the input narrowband. A narrowband is represented as

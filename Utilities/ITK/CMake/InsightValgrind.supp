@@ -1,4 +1,43 @@
 {
+   Nrrd fflush 2.3
+   Memcheck:Param
+   write(buf)
+   fun:__write_nocancel
+   fun:_IO_file_write@@GLIBC_2.2.5
+   fun:_IO_do_write@@GLIBC_2.2.5
+   fun:_IO_file_sync@@GLIBC_2.2.5
+   fun:fflush
+   fun:itk__nrrdEncodingRaw_write
+   fun:itk__nrrdFormatNRRD_write
+   fun:itk_nrrdWrite
+   fun:itk_nrrdSave
+}
+{
+   Some 64 bit suppressions
+   Memcheck:Param
+   write(buf)
+   fun:__write_nocancel
+   obj:/usr/lib64/libstdc++.so.6.?.?
+}
+{
+   Some more 64 bit suppressions
+   Memcheck:Param
+   write(buf)
+   fun:__write_nocancel
+   fun:_IO_file_write@@GLIBC_2.2.5
+   fun:_IO_do_write@@GLIBC_2.2.5
+   fun:_IO_file_sync@@GLIBC_2.2.5
+   fun:fflush
+   fun:itk__nrrdEncodingRaw_write
+}
+{
+   Some zlib suppressions
+   Memcheck:Cond
+   fun:longest_match
+   fun:deflate_slow
+   fun:itk_zlib_deflate
+}
+{
    Some dl_relocate_object suppressions
    Memcheck:Cond
    fun:_dl_relocate_object
@@ -10,6 +49,13 @@
    fun:_dl_allocate_tls
    fun:pthread_create@@GLIBC_2.1
    fun:_ZN3itk13MultiThreader26DispatchSingleMethodThreadEPNS0_16ThreadInfoStructE
+}
+{
+   Another Error from the itk::MultiThreader::DispatchSingleMethodThread
+   Memcheck:Leak
+   fun:calloc
+   fun:_dl_allocate_tls
+   fun:pthread_create@@GLIBC_2.2.5
 }
 {
   Some Error from the itk::MultiThreader::SingleMethodExecute
@@ -137,6 +183,40 @@
   fun:Tcl_FindExecutable 
   fun:Tcl_Main 
 }
+
+{
+  CrazyTclError7
+  Memcheck:Leak
+  fun:realloc
+  fun:Tcl_AttemptSetObjLength
+}
+
+{
+  CrazyTclError8
+  Memcheck:Leak
+  fun:malloc
+  fun:Tcl_Alloc
+  fun:TclCreateExecEnv
+  fun:Tcl_CreateInterp  
+}
+
+{
+  CrazyTclError9
+  Memcheck:Leak
+  fun:realloc
+  fun:Tcl_Realloc
+  fun:Tcl_SetObjLength
+}
+
+{
+  CrazyTclError10
+  Memcheck:Leak
+  fun:malloc
+  fun:Tcl_Alloc
+  fun:TclAllocateFreeObjects
+  fun:Tcl_NewObj 
+}
+
 {
    <insert a suppression name here>
    Memcheck:Leak

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConnectedRegionsMeshFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-23 16:15:23 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2009-04-23 03:53:34 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -117,7 +117,7 @@ public:
    * a point be defined.
    */
   itkSetMacro( ExtractionMode, int );
-  itkGetMacro( ExtractionMode, int );
+  itkGetConstMacro( ExtractionMode, int );
 
   void SetExtractionModeToPointSeededRegions( void )
     {

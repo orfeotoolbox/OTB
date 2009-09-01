@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMetaDTITubeConverter.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-28 19:24:38 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-04-07 14:34:04 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,7 +26,7 @@ namespace itk
 {
 
 template <unsigned int NDimensions = 3>
-class MetaDTITubeConverter
+class ITK_EXPORT MetaDTITubeConverter
 {
 
 public:

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadrilateralCellTopology.cxx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:24 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-03-03 15:08:12 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -28,9 +28,6 @@ const int
 QuadrilateralCellTopology
 ::m_Edges[4][2] = { {0,1}, {1,2}, {2,3}, {3,0} };
 
-
-
-
 QuadrilateralCellTopology
 ::QuadrilateralCellTopology()
 {
@@ -41,6 +38,4 @@ QuadrilateralCellTopology
 {
 }
 
-
 } // end namespace itk
-

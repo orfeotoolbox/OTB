@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDiffusionTensor3DReconstructionImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006-07-19 15:11:41 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-04-06 11:51:06 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -158,7 +158,7 @@ void DiffusionTensor3DReconstructionImageFilter< TReferenceImagePixelType,
             }
           else
             {
-            B[i] = -log( static_cast<double>(b) / static_cast<double>(b0) )/this->m_BValue;
+            B[i] = - vcl_log( static_cast<double>(b) / static_cast<double>(b0) )/this->m_BValue;
             }
         
           ++(*gradientItContainer[i]);  
@@ -258,7 +258,7 @@ void DiffusionTensor3DReconstructionImageFilter< TReferenceImagePixelType,
             }
           else
             {
-            B[i] = -log( static_cast<double>(b[gradientind[i]]) / static_cast<double>(b0) ) / this->m_BValue;
+            B[i] = - vcl_log( static_cast<double>(b[gradientind[i]]) / static_cast<double>(b0) ) / this->m_BValue;
             }
           }
 

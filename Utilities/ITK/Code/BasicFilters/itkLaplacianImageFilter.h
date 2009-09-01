@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLaplacianImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 17:40:08 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-04-25 12:27:28 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -112,7 +112,7 @@ public:
   /** Set/Get whether or not the filter will use the spacing of the input
       image in its calculations */
   itkSetMacro(UseImageSpacing, bool);
-  itkGetMacro(UseImageSpacing, bool);
+  itkGetConstMacro(UseImageSpacing, bool);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

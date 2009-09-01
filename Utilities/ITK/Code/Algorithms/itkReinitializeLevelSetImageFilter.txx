@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkReinitializeLevelSetImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-01-26 21:45:57 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2009-03-31 19:41:49 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -150,7 +150,9 @@ ReinitializeLevelSetImageFilter<TLevelSet>
   // set the marcher output size
   m_Marcher->SetOutputSize( 
     outputPtr->GetRequestedRegion().GetSize() );
-
+  this->m_Marcher->SetOutputOrigin(this->GetInput()->GetOrigin());
+  this->m_Marcher->SetOutputSpacing(this->GetInput()->GetSpacing());
+  this->m_Marcher->SetOutputDirection(this->GetInput()->GetDirection());
 }
 
 

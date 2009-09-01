@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTDistribution.cxx,v $
   Language:  C++
-  Date:      $Date: 2007-02-24 13:47:32 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-04-06 11:15:09 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -71,14 +71,14 @@ TDistribution
     }
   else
     {
-    InvalidArgumentError exp(__FILE__, __LINE__);
+    InvalidArgumentError excp(__FILE__, __LINE__);
     ::itk::OStringStream message;
     message << "itk::ERROR: " << this->GetNameOfClass() 
             << "(" << this << "): "
           << "Invalid number of parameters to describe distribution.";
-    exp.SetDescription(message.str());
-    exp.SetLocation(ITK_LOCATION);
-    throw exp;
+    excp.SetDescription(message.str());
+    excp.SetLocation(ITK_LOCATION);
+    throw excp;
     }
   
   return 1;
@@ -94,7 +94,7 @@ TDistribution
   double pdf;
   
   pdf = (dgamma_(&dofplusoneon2) / dgamma_(&dofon2))
-      / (sqrt(dof*vnl_math::pi) * pow(1.0 + ((x*x)/dof), dofplusoneon2));
+      / (vcl_sqrt(dof*vnl_math::pi) * vcl_pow(1.0 + ((x*x)/dof), dofplusoneon2));
 
   return pdf;
 }
@@ -109,14 +109,14 @@ TDistribution
     }
   else
     {
-    InvalidArgumentError exp(__FILE__, __LINE__);
+    InvalidArgumentError excp(__FILE__, __LINE__);
     ::itk::OStringStream message;
     message << "itk::ERROR: " 
             << "TDistribution: "
           << "Invalid number of parameters to describe distribution.";
-    exp.SetDescription(message.str());
-    exp.SetLocation(ITK_LOCATION);
-    throw exp;
+    excp.SetDescription(message.str());
+    excp.SetLocation(ITK_LOCATION);
+    throw excp;
     }
 
   return 0.0;
@@ -180,14 +180,14 @@ TDistribution
     }
   else
     {
-    InvalidArgumentError exp(__FILE__, __LINE__);
+    InvalidArgumentError excp(__FILE__, __LINE__);
     ::itk::OStringStream message;
     message << "itk::ERROR: " 
             << "TDistribution: "
           << "Invalid number of parameters to describe distribution.";
-    exp.SetDescription(message.str());
-    exp.SetLocation(ITK_LOCATION);
-    throw exp;
+    excp.SetDescription(message.str());
+    excp.SetLocation(ITK_LOCATION);
+    throw excp;
     }
 
   return 0.0;
@@ -218,10 +218,10 @@ TDistribution
   dof4 = dof*dof3;
   
   gaussX = GaussianDistribution::InverseCDF(p);
-  gaussX3 = pow(gaussX, 3.0);
-  gaussX5 = pow(gaussX, 5.0);
-  gaussX7 = pow(gaussX, 7.0);
-  gaussX9 = pow(gaussX, 9.0);
+  gaussX3 = vcl_pow(gaussX, 3.0);
+  gaussX5 = vcl_pow(gaussX, 5.0);
+  gaussX7 = vcl_pow(gaussX, 7.0);
+  gaussX9 = vcl_pow(gaussX, 9.0);
 
   x = gaussX
     + (gaussX3 + gaussX) / (4.0 * dof)
@@ -279,14 +279,14 @@ TDistribution
     }
   else
     {
-    InvalidArgumentError exp(__FILE__, __LINE__);
+    InvalidArgumentError excp(__FILE__, __LINE__);
     ::itk::OStringStream message;
     message << "itk::ERROR: " 
             << "TDistribution: "
           << "Invalid number of parameters to describe distribution.";
-    exp.SetDescription(message.str());
-    exp.SetLocation(ITK_LOCATION);
-    throw exp;
+    excp.SetDescription(message.str());
+    excp.SetLocation(ITK_LOCATION);
+    throw excp;
     }
 
   return 0.0;
@@ -303,14 +303,14 @@ TDistribution
     }
   else
     {
-    InvalidArgumentError exp(__FILE__, __LINE__);
+    InvalidArgumentError excp(__FILE__, __LINE__);
     ::itk::OStringStream message;
     message << "itk::ERROR: " << this->GetNameOfClass() 
             << "(" << this << "): "
           << "Invalid number of parameters to describe distribution.";
-    exp.SetDescription(message.str());
-    exp.SetLocation(ITK_LOCATION);
-    throw exp;
+    excp.SetDescription(message.str());
+    excp.SetLocation(ITK_LOCATION);
+    throw excp;
     }
   return 0.0;
 }
@@ -325,14 +325,14 @@ TDistribution
     }
   else
     {
-    InvalidArgumentError exp(__FILE__, __LINE__);
+    InvalidArgumentError excp(__FILE__, __LINE__);
     ::itk::OStringStream message;
     message << "itk::ERROR: " << this->GetNameOfClass() 
             << "(" << this << "): "
           << "Invalid number of parameters to describe distribution.";
-    exp.SetDescription(message.str());
-    exp.SetLocation(ITK_LOCATION);
-    throw exp;
+    excp.SetDescription(message.str());
+    excp.SetLocation(ITK_LOCATION);
+    throw excp;
     }
   return 0.0;
 }
@@ -355,14 +355,14 @@ TDistribution
     }
   else
     {
-    InvalidArgumentError exp(__FILE__, __LINE__);
+    InvalidArgumentError excp(__FILE__, __LINE__);
     ::itk::OStringStream message;
     message << "itk::ERROR: " << this->GetNameOfClass() 
             << "(" << this << "): "
           << "Invalid number of parameters to describe distribution.";
-    exp.SetDescription(message.str());
-    exp.SetLocation(ITK_LOCATION);
-    throw exp;
+    excp.SetDescription(message.str());
+    excp.SetLocation(ITK_LOCATION);
+    throw excp;
     }
   return 0.0;
 }
@@ -377,14 +377,14 @@ TDistribution
     }
   else
     {
-    InvalidArgumentError exp(__FILE__, __LINE__);
+    InvalidArgumentError excp(__FILE__, __LINE__);
     ::itk::OStringStream message;
     message << "itk::ERROR: " << this->GetNameOfClass() 
             << "(" << this << "): "
           << "Invalid number of parameters to describe distribution.";
-    exp.SetDescription(message.str());
-    exp.SetLocation(ITK_LOCATION);
-    throw exp;
+    excp.SetDescription(message.str());
+    excp.SetLocation(ITK_LOCATION);
+    throw excp;
     }
   return 0.0;
 }
@@ -407,14 +407,14 @@ TDistribution
     }
   else
     {
-    InvalidArgumentError exp(__FILE__, __LINE__);
+    InvalidArgumentError excp(__FILE__, __LINE__);
     ::itk::OStringStream message;
     message << "itk::ERROR: " << this->GetNameOfClass() 
             << "(" << this << "): "
           << "Invalid number of parameters to describe distribution.";
-    exp.SetDescription(message.str());
-    exp.SetLocation(ITK_LOCATION);
-    throw exp;
+    excp.SetDescription(message.str());
+    excp.SetLocation(ITK_LOCATION);
+    throw excp;
     }
   return 0.0;
 }
@@ -429,14 +429,14 @@ TDistribution
     }
   else
     {
-    InvalidArgumentError exp(__FILE__, __LINE__);
+    InvalidArgumentError excp(__FILE__, __LINE__);
     ::itk::OStringStream message;
     message << "itk::ERROR: " << this->GetNameOfClass() 
             << "(" << this << "): "
           << "Invalid number of parameters to describe distribution.";
-    exp.SetDescription(message.str());
-    exp.SetLocation(ITK_LOCATION);
-    throw exp;
+    excp.SetDescription(message.str());
+    excp.SetLocation(ITK_LOCATION);
+    throw excp;
     }
   return 0.0;
 }
@@ -461,14 +461,14 @@ TDistribution
     }
   else
     {
-    InvalidArgumentError exp(__FILE__, __LINE__);
+    InvalidArgumentError excp(__FILE__, __LINE__);
     ::itk::OStringStream message;
     message << "itk::ERROR: " << this->GetNameOfClass() 
             << "(" << this << "): "
             << "Invalid number of parameters to describe distribution.";
-    exp.SetDescription(message.str());
-    exp.SetLocation(ITK_LOCATION);
-    throw exp;
+    excp.SetDescription(message.str());
+    excp.SetLocation(ITK_LOCATION);
+    throw excp;
     }
 
   return false;
@@ -500,14 +500,14 @@ TDistribution
     }
   else
     {
-    InvalidArgumentError exp(__FILE__, __LINE__);
+    InvalidArgumentError excp(__FILE__, __LINE__);
     ::itk::OStringStream message;
     message << "itk::ERROR: " << this->GetNameOfClass() 
             << "(" << this << "): "
           << "Invalid number of parameters to describe distribution.";
-    exp.SetDescription(message.str());
-    exp.SetLocation(ITK_LOCATION);
-    throw exp;
+    excp.SetDescription(message.str());
+    excp.SetLocation(ITK_LOCATION);
+    throw excp;
     }
 
   

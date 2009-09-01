@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNarrowBandImageFilterBase.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 19:33:44 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2009-05-12 17:22:53 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -401,6 +401,9 @@ NarrowBandImageFilterBase<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
+  os << indent << "IsoSurfaceValue: "
+     << static_cast<typename NumericTraits<ValueType>::PrintType>(m_IsoSurfaceValue)
+     << std::endl;
 }
 
 }// end namespace itk

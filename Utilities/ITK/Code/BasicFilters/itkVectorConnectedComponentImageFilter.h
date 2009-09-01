@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorConnectedComponentImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 16:30:53 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-04-01 14:36:37 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -59,7 +59,7 @@ public:
     {
     return !(*this != other);
     }
-  bool operator()(const TInput &a, const TInput &b)
+  bool operator()(const TInput &a, const TInput &b) const
     {
     typename TInput::ValueType dotProduct = vnl_math_abs(a * b);
     return (1.0 - dotProduct <= m_Threshold);

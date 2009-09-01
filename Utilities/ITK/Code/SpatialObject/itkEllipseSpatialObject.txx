@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEllipseSpatialObject.txx,v $
   Language:  C++
-  Date:      $Date: 2008-06-29 01:56:12 $
-  Version:   $Revision: 1.33 $
+  Date:      $Date: 2009-04-05 10:56:52 $
+  Version:   $Revision: 1.34 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,6 +18,7 @@
 #define __itkEllipseSpatialObject_txx
 
 #include "itkEllipseSpatialObject.h" 
+#include <string.h>
 
 namespace itk 
 { 

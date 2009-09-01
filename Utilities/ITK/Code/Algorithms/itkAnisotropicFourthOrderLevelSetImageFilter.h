@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAnisotropicFourthOrderLevelSetImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-04-20 13:36:35 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-04-23 03:53:34 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -107,7 +107,7 @@ public:
   /** The radius type for the neighborhoods. */
   typedef typename FunctionType::RadiusType RadiusType;
 
-  itkGetMacro(MaxFilterIteration,unsigned int);
+  itkGetConstMacro(MaxFilterIteration,unsigned int);
   itkSetMacro(MaxFilterIteration,unsigned int);
   
 protected:

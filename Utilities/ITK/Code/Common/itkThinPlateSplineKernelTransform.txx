@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkThinPlateSplineKernelTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2007-10-25 03:55:09 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2009-03-03 15:09:49 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkThinPlateSplineKernelTransform_txx
-#define _itkThinPlateSplineKernelTransform_txx
+#ifndef __itkThinPlateSplineKernelTransform_txx
+#define __itkThinPlateSplineKernelTransform_txx
 #include "itkThinPlateSplineKernelTransform.h"
 
 namespace itk
@@ -49,8 +49,6 @@ ComputeG(const InputVectorType & x, GMatrixType & gmatrix) const
     gmatrix[i][i] = r;
     }
 }
-
-
 
 template <class TScalarType, unsigned int NDimensions>
 void

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageTransformHelper.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 19:04:57 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-05-07 14:03:45 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -20,6 +20,7 @@
 #include "itkConceptChecking.h"
 #include "itkPoint.h"
 #include "itkMatrix.h"
+#include "vnl/vnl_math.h"
 
 namespace itk
 {
@@ -173,7 +174,11 @@ public:
     const DoublePoint &, DoublePoint &rindex, IndexType &index,
     const UniqueTypeBoolTrue& )
     {
-    index[R] = static_cast<typename IndexType::IndexValueType>(rindex[R]);
+#ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
+      index[R] = static_cast<typename IndexType::IndexValueType>( itk::Math::RoundHalfIntegerUp( rindex[R] ) );
+#else
+      index[R] = static_cast<typename IndexType::IndexValueType>(rindex[R]);
+#endif
     }
 
   //
@@ -308,7 +313,12 @@ public:
     const FloatPoint &, FloatPoint &rindex, IndexType &index,
     const UniqueTypeBoolTrue& )
     {
+#ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
+    index[R] = static_cast<typename IndexType::IndexValueType>(
+                     itk::Math::RoundHalfIntegerUp(rindex[R]) );
+#else
     index[R] = static_cast<typename IndexType::IndexValueType>(rindex[R]);
+#endif
     }
 
 };

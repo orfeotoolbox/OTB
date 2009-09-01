@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPolygonCell.h,v $
   Language:  C++
-  Date:      $Date: 2007-05-19 12:50:04 $
-  Version:   $Revision: 1.34 $
+  Date:      $Date: 2009-03-03 15:07:57 $
+  Version:   $Revision: 1.35 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -65,7 +65,7 @@ public:
   typedef LineCell< TCellInterface >              EdgeType;
   typedef typename EdgeType::SelfAutoPointer      EdgeAutoPointer;
     
-  typedef FixedArray<int,2> EdgeInfo;
+  typedef FixedArray<int,2>    EdgeInfo;
   typedef std::deque<EdgeInfo> EdgeInfoDQ;
   
  /** Need to add POLYGON_CELL into CellInterface. */
@@ -116,7 +116,7 @@ public:
   ~PolygonCell() {}
 
 protected:
-  std::vector<EdgeInfo> m_Edges;
+  std::vector<EdgeInfo>        m_Edges;
   std::vector<PointIdentifier> m_PointIds;
 
 private:
@@ -132,5 +132,3 @@ private:
 #endif
 
 #endif
-
-

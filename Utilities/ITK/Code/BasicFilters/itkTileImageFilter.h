@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTileImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-18 16:11:15 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-04-25 12:28:11 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -97,7 +97,7 @@ public:
    * the filter will compute a value that will acoomodate all of the
    * images. */
   itkSetMacro(Layout,LayoutArrayType);
-  itkGetMacro(Layout,LayoutArrayType);
+  itkGetConstMacro(Layout,LayoutArrayType);
 
   /** Set the pixel value for locations that are not covered by an
    * input image. The default default pixel value is Zero. */
@@ -105,7 +105,7 @@ public:
 
   /** Get the pixel value for locations that are not covered by an
    * input image. */
-  itkGetMacro(DefaultPixelValue,OutputPixelType);
+  itkGetConstMacro(DefaultPixelValue,OutputPixelType);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

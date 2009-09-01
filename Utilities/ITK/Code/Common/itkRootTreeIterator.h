@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRootTreeIterator.h,v $
   Language:  C++
-  Date:      $Date: 2004-12-11 20:29:19 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-03-03 15:09:06 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,7 +19,7 @@
 
 #include <itkTreeIteratorBase.h>
 
-namespace itk{
+namespace itk {
 
 template <class TTreeType>
 class RootTreeIterator : public TreeIteratorBase<TTreeType> 
@@ -27,9 +27,9 @@ class RootTreeIterator : public TreeIteratorBase<TTreeType>
 public:
 
   /** Typedefs */
-  typedef TreeIteratorBase<TTreeType>  Superclass;
-  typedef TTreeType TreeType;
-  typedef typename TTreeType::ValueType ValueType;
+  typedef TreeIteratorBase<TTreeType>       Superclass;
+  typedef TTreeType                         TreeType;
+  typedef typename TTreeType::ValueType     ValueType;
   typedef typename Superclass::TreeNodeType TreeNodeType;
 
   /** Constructor */

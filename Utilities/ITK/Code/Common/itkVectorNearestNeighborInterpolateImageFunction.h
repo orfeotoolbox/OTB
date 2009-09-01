@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorNearestNeighborInterpolateImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-13 15:32:37 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-03-03 15:11:45 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,10 +44,10 @@ class ITK_EXPORT VectorNearestNeighborInterpolateImageFunction :
 {
 public:
   /** Standard class typedefs. */
-  typedef VectorNearestNeighborInterpolateImageFunction Self;
+  typedef VectorNearestNeighborInterpolateImageFunction         Self;
   typedef VectorInterpolateImageFunction<TInputImage,TCoordRep> Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                                    Pointer;
+  typedef SmartPointer<const Self>                              ConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
@@ -88,11 +88,11 @@ public:
    * calling the method. */
   virtual OutputType EvaluateAtContinuousIndex( 
     const ContinuousIndexType & index ) const
-  {
-   IndexType nindex;
-   this->ConvertContinuousIndexToNearestIndex(index, nindex);
-   return static_cast<OutputType>( this->GetInputImage()->GetPixel( nindex ) );
-  }
+    {
+    IndexType nindex;
+    this->ConvertContinuousIndexToNearestIndex(index, nindex);
+    return static_cast<OutputType>( this->GetInputImage()->GetPixel( nindex ) );
+    }
 
 protected:
   VectorNearestNeighborInterpolateImageFunction(){};

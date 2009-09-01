@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSpecialCoordinatesImage.txx,v $
   Language:  C++
-  Date:      $Date: 2004-10-26 13:22:24 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-03-03 15:09:40 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkSpecialCoordinatesImage_txx
-#define _itkSpecialCoordinatesImage_txx
+#ifndef __itkSpecialCoordinatesImage_txx
+#define __itkSpecialCoordinatesImage_txx
 #include "itkSpecialCoordinatesImage.h"
 #include "itkProcessObject.h"
 #include "itkAffineTransform.h"
@@ -111,7 +111,7 @@ SpecialCoordinatesImage<TPixel, VImageDimension>
   os << indent << "PixelContainer: " << std::endl;
   m_Buffer->Print(os, indent.GetNextIndent());
 
-// m_Origin and m_Spacing are printed in the Superclass
+  // m_Origin and m_Spacing are printed in the Superclass
 }
 
 

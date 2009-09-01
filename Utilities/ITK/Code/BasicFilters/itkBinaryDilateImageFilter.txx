@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryDilateImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-08-13 12:37:50 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2009-04-17 18:58:09 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -103,7 +103,7 @@ BinaryDilateImageFilter< TInputImage, TOutputImage, TKernel>
     InputPixelType value = inIt.Get();
     // replace foreground pixels with the default background
     if (value == foregroundValue)
-      { outIt.Set( backgroundValue ); }
+      { outIt.Set( static_cast<OutputPixelType> ( backgroundValue ) ); }
     // keep all of the original background values intact
     else
       { outIt.Set( static_cast<OutputPixelType>( value ) ); }
@@ -258,7 +258,7 @@ BinaryDilateImageFilter< TInputImage, TOutputImage, TKernel>
           {
           IndexType idx = tmpRegIndexIt.GetIndex() + *itIdx;
           if( outputRegion.IsInside( idx ) )
-            { output->SetPixel( idx, foregroundValue ); }
+            { output->SetPixel( idx, static_cast<OutputPixelType> ( foregroundValue ) ); }
           }
  
         // add it to queue
@@ -329,7 +329,7 @@ BinaryDilateImageFilter< TInputImage, TOutputImage, TKernel>
                     {
                     IndexType idx = neighbIndex + *itIndex;
                     if( outputRegion.IsInside( idx ) )
-                      { output->SetPixel( idx, foregroundValue ); }
+                      { output->SetPixel( idx, static_cast<OutputPixelType> ( foregroundValue ) ); }
                     }
                   }
                 }
@@ -387,7 +387,7 @@ BinaryDilateImageFilter< TInputImage, TOutputImage, TKernel>
   
   // Define boundaries conditions
   ConstantBoundaryCondition<TOutputImage> obc;
-  obc.SetConstant( backgroundValue );
+  obc.SetConstant( static_cast<OutputPixelType> ( backgroundValue ) );
   
   NeighborhoodIterator<OutputImageType>
     onit( kernel.GetRadius(), output, outputRegion );
@@ -442,7 +442,7 @@ BinaryDilateImageFilter< TInputImage, TOutputImage, TKernel>
         if( !inputRegionForThread.IsInside( translatedIndex )
           || input->GetPixel( translatedIndex ) == foregroundValue )
           {
-          ouRegIndexIt.Set( foregroundValue );
+          ouRegIndexIt.Set( static_cast<OutputPixelType> ( foregroundValue ) );
           break; // Do not need to examine other offsets because at least one
           // input pixel has been translated on current output pixel.
           }
@@ -464,7 +464,7 @@ BinaryDilateImageFilter< TInputImage, TOutputImage, TKernel>
         if( inputRegionForThread.IsInside( translatedIndex )
           && input->GetPixel( translatedIndex ) == foregroundValue )
           {
-          ouRegIndexIt.Set( foregroundValue );
+          ouRegIndexIt.Set( static_cast<OutputPixelType> ( foregroundValue ) );
           break;
           }
         }

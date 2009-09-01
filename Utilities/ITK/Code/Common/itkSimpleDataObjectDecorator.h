@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimpleDataObjectDecorator.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:09 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-04-21 14:20:10 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -61,9 +61,9 @@ class ITK_EXPORT SimpleDataObjectDecorator : public DataObject
 public:
   /** Standard typedefs. */
   typedef SimpleDataObjectDecorator           Self;
-  typedef DataObject  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef DataObject                          Superclass;
+  typedef SmartPointer<Self>                  Pointer;
+  typedef SmartPointer<const Self>            ConstPointer;
 
   /** Typedef for the component type (object being decorated) */
   typedef T ComponentType;
@@ -79,7 +79,7 @@ public:
   
   /** Get the contained object */
   virtual T& Get() { return m_Component; }
-  virtual T Get() const { return m_Component; }
+  virtual const T& Get() const { return m_Component; }
 
   
 protected:
@@ -94,6 +94,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   ComponentType m_Component;
+  bool          m_Initialized;
 };
 
 } // end namespace itk
@@ -113,6 +114,4 @@ private:
 # include "itkSimpleDataObjectDecorator.txx"
 #endif
 
-
 #endif
-

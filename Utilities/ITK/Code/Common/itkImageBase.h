@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageBase.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-18 17:40:55 $
-  Version:   $Revision: 1.76 $
+  Date:      $Date: 2009-05-07 14:03:42 $
+  Version:   $Revision: 1.80 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -196,6 +196,14 @@ public:
    * 0. */
   itkGetConstReferenceMacro(Origin, PointType);
 
+  /** Allocate the image memory. The size of the image must
+   * already be set, e.g. by calling SetRegions().
+   *
+   * This method should be pure virtual, if backwards compatibility
+   *  was not required.
+   */
+  virtual void Allocate() {};
+
   /** Set the region object that defines the size and starting index
    * for the largest possible region this image could represent.  This
    * is used in determining how much memory would be needed to load an
@@ -344,8 +352,10 @@ public:
   virtual void SetSpacing (const float spacing[VImageDimension]);
 
 
-  /** Get the index (discrete) from a physical point.
-   * Floating point index results are truncated to integers.
+  /** Get the index (discrete) of a voxel from a physical point.
+   * Floating point index results are rounded to integers
+   * if ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY is on
+   * and truncated otherwise.
    * Returns true if the resulting index is within the image, false otherwise
    * \sa Transform */
 #ifdef ITK_USE_TEMPLATE_META_PROGRAMMING_LOOP_UNROLLING
@@ -374,7 +384,11 @@ public:
         {
         sum += this->m_PhysicalPointToIndex[i][j] * (point[j] - this->m_Origin[j]);
         }
+#ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
+      index[i] = static_cast< IndexValueType>( itk::Math::RoundHalfIntegerUp( sum ) );
+#else
       index[i] = static_cast< IndexValueType>( sum );
+#endif
       }
 
     // Now, check to see if the index is within allowed bounds

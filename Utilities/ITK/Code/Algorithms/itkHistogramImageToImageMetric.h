@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHistogramImageToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2008-12-21 19:13:12 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-05-02 05:43:54 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -71,7 +71,12 @@ public:
   /** Typedefs for histogram. This should have been defined as
       Histogram<RealType,2> but a bug in VC++7 produced an internal compiler
       error with such declaration. */
+#ifdef ITK_USE_REVIEW_STATISTICS
+  typedef Statistics::Histogram<double>                  HistogramType;
+#else
   typedef Statistics::Histogram<double, 2>               HistogramType;
+#endif
+
   typedef typename HistogramType::MeasurementVectorType  MeasurementVectorType;
   typedef typename HistogramType::SizeType               HistogramSizeType;
   typedef typename HistogramType::Pointer                HistogramPointer;
@@ -93,7 +98,7 @@ public:
   /** Factor to increase the upper bound for the samples in the histogram.
       Default value is 0.001 */
   itkSetMacro( UpperBoundIncreaseFactor, double );
-  itkGetMacro( UpperBoundIncreaseFactor, double );
+  itkGetConstMacro( UpperBoundIncreaseFactor, double );
 
   /** The padding value. */
   itkSetMacro( PaddingValue, FixedImagePixelType );
@@ -110,13 +115,13 @@ public:
       should be ignored when calculating the similarity measure. Those pixels
       in the fixed image which have the padding value will be ignored. */
   itkSetMacro( UsePaddingValue, bool );
-  itkGetMacro( UsePaddingValue, bool );
+  itkGetConstMacro( UsePaddingValue, bool );
 
   /** Sets the step length used to calculate the derivative. */
   itkSetMacro( DerivativeStepLength, double );
 
   /** Returns the step length used to calculate the derivative. */
-  itkGetMacro( DerivativeStepLength, double );
+  itkGetConstMacro( DerivativeStepLength, double );
 
   /** The scales type. */
   typedef Array<double> ScalesType;

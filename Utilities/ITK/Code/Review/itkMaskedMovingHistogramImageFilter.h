@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMaskedMovingHistogramImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-08-08 04:33:27 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-04-23 03:43:41 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -117,16 +117,16 @@ public:
   DataObject::Pointer MakeOutput(unsigned int idx);
 
   itkSetMacro(FillValue, OutputPixelType);
-  itkGetMacro(FillValue, OutputPixelType);
+  itkGetConstMacro(FillValue, OutputPixelType);
 
   itkSetMacro(MaskValue, MaskPixelType);
-  itkGetMacro(MaskValue, MaskPixelType);
+  itkGetConstMacro(MaskValue, MaskPixelType);
 
   itkSetMacro(BackgroundMaskValue, MaskPixelType);
-  itkGetMacro(BackgroundMaskValue, MaskPixelType);
+  itkGetConstMacro(BackgroundMaskValue, MaskPixelType);
 
   void SetGenerateOutputMask( bool );
-  itkGetMacro(GenerateOutputMask, bool);
+  itkGetConstMacro(GenerateOutputMask, bool);
 //   itkBooleanMacro(GenerateOutputMask);
 
 protected:

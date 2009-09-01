@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDeformableSimplexMesh3DGradientConstraintForceFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-04-10 19:50:04 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-05-12 17:26:20 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -85,7 +85,7 @@ public:
  */
 
 template <class TInputMesh, class TOutputMesh>
-class DeformableSimplexMesh3DGradientConstraintForceFilter : public DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>
+class ITK_EXPORT DeformableSimplexMesh3DGradientConstraintForceFilter : public DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>
 {
 public:
   /** Standard "Self" typedefs. */
@@ -127,7 +127,7 @@ public:
   typedef typename OriginalImageType::Pointer             OriginalImagePointer;
   /** control the range of search for Bresenham at normal line */
   itkSetMacro(Range, int);
-  itkGetMacro(Range, int);
+  itkGetConstMacro(Range, int);
   
   // full segment or half segment direction
   enum SIDE

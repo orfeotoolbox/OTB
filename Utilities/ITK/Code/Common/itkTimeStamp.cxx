@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTimeStamp.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-05-13 11:45:17 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2009-03-05 10:22:03 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,7 +24,7 @@
   #include "itkWindows.h"
 
 #elif defined(__APPLE__)
-  // OSAtomic.h optimizations only used in 10.5 and later
+// OSAtomic.h optimizations only used in 10.5 and later
   #include <AvailabilityMacros.h>
   #if MAC_OS_X_VERSION_MAX_ALLOWED >= 1050
     #include <libkern/OSAtomic.h>
@@ -67,12 +67,12 @@ void
 TimeStamp
 ::Modified()
 {
-// Windows optimization
+  // Windows optimization
 #if defined(WIN32) || defined(_WIN32)
   static LONG itkTimeStampTime = 0;
   m_ModifiedTime = (unsigned long)InterlockedIncrement(&itkTimeStampTime);
 
-// Mac optimization
+  // Mac optimization
 #elif defined(__APPLE__) && (MAC_OS_X_VERSION_MIN_REQUIRED >= 1050)
  #if __LP64__
   // "m_ModifiedTime" is "unsigned long", a type that changess sizes
@@ -88,8 +88,11 @@ TimeStamp
 
 // gcc optimization
 #elif defined(__GLIBCPP__) || defined(__GLIBCXX__)
-  static volatile _Atomic_word itkTimeStampTime = 0;
-  m_ModifiedTime = (unsigned long)__exchange_and_add(&itkTimeStampTime, 1)+1;
+  // We start from 1 since __exchange_and_add returns the old (non-incremented)
+  // value. This is not really necessary but will make the absolute value of the
+  // timestamp more consistent across platforms. 
+  static volatile _Atomic_word itkTimeStampTime = 1;
+  m_ModifiedTime = (unsigned long)__exchange_and_add(&itkTimeStampTime, 1);
 
 // General case
 #else

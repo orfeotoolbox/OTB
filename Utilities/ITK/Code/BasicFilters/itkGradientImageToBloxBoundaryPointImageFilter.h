@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGradientImageToBloxBoundaryPointImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:28:48 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-25 12:27:22 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -78,7 +78,7 @@ public:
 
   /** Get and set the number of times to repeat the filter. */
   itkSetMacro(Threshold, double);
-  itkGetMacro(Threshold, double);
+  itkGetConstMacro(Threshold, double);
 
   /** Get and set the resolution of the blox
    *  This is the number of input pixels "contained" within

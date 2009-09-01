@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMetaMeshConverter.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-28 19:24:56 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-04-07 14:34:08 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -30,7 +30,7 @@ template <unsigned int NDimensions,
           typename TMeshTraits = 
             DefaultStaticMeshTraits< PixelType , NDimensions, NDimensions >
          >
-class MetaMeshConverter
+class ITK_EXPORT MetaMeshConverter
 {
 
 public:

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorImageNeighborhoodAccessorFunctor.h,v $
   Language:  C++
-  Date:      $Date: 2005-10-31 22:16:43 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-03-03 15:11:40 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -123,10 +123,10 @@ public:
     }
    
 private:
-   VectorLengthType m_VectorLength; 
-   VectorLengthType m_OffsetMultiplier; // m_OffsetMultiplier = m_VectorLength-1
+  VectorLengthType m_VectorLength; 
+  VectorLengthType m_OffsetMultiplier; // m_OffsetMultiplier = m_VectorLength-1
                                         // (precomputed for speedup).
-   InternalPixelType *m_Begin; // Begin of the buffer. 
+  InternalPixelType *m_Begin; // Begin of the buffer. 
 };
 
 

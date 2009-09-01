@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGrayscaleFunctionDilateImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 16:45:09 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-04-28 14:36:23 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,18 +42,18 @@ GrayscaleFunctionDilateImageFilter<TInputImage, TOutputImage, TKernel>
   
   KernelIteratorType kernel_it;
 
-  for (i=0, kernel_it=kernelBegin; kernel_it<kernelEnd; ++kernel_it, ++i)
+  for( i=0, kernel_it=kernelBegin; kernel_it<kernelEnd; ++kernel_it, ++i )
     {
     // if structuring element is positive, use the pixel under that element
     // in the image plus the structuring element value
-    if (*kernel_it > 0)
+    if( *kernel_it > NumericTraits< KernelPixelType >::Zero )
       {
       // add the structuring element value to the pixel value, note we use
       // GetPixel() on SmartNeighborhoodIterator to respect boundary
       // conditions
       temp = nit.GetPixel(i) + (PixelType) *kernel_it;
 
-      if (temp > max)
+      if( temp > max )
         {
         max = temp;
         }

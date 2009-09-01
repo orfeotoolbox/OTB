@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCacheableScalarFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-03-29 19:37:00 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-05-12 17:19:41 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -52,7 +52,7 @@ namespace itk {
  * as an energy function. The bias field estimation requires calculation of 
  * energy values again and again for each iteration.
  */
-class CacheableScalarFunction
+class ITK_EXPORT CacheableScalarFunction
 {
 public:
   /** Constructor. */

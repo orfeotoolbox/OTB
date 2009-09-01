@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPNGImageIO.h,v $
   Language:  C++
-  Date:      $Date: 2007-08-13 21:39:37 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2009-04-25 12:25:44 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -50,7 +50,7 @@ public:
   /** Set/Get the level of compression for the output images.
    *  0-9; 0 = none, 9 = maximum. */
   itkSetMacro(CompressionLevel, int);
-  itkGetMacro(CompressionLevel, int);
+  itkGetConstMacro(CompressionLevel, int);
 
   /*-------- This part of the interface deals with reading data. ------ */
 

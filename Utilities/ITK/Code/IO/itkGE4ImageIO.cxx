@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGE4ImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-01-01 17:26:50 $
-  Version:   $Revision: 1.22 $
+  Date:      $Date: 2009-04-05 16:18:30 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,10 +24,13 @@
 #include "itkMvtSunf.h"
 #include "itkDirectory.h"
 #include <itksys/SystemTools.hxx>
+#include <string.h>
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <stdio.h>
+#include <stdlib.h>
 //From uiig library "The University of Iowa Imaging Group-UIIG"
 
 namespace itk 

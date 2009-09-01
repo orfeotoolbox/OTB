@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMovingHistogramImageFilterBase.h,v $
   Language:  C++
-  Date:      $Date: 2008-08-09 09:53:47 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-23 03:43:42 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -136,7 +136,7 @@ public:
   /** Set kernel (structuring element). */
   void SetKernel( const KernelType& kernel );
 
-  itkGetMacro(PixelsPerTranslation, unsigned long);
+  itkGetConstMacro(PixelsPerTranslation, unsigned long);
   
 protected:
   MovingHistogramImageFilterBase();

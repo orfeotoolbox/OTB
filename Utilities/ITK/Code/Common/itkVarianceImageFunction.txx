@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVarianceImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2006-02-06 22:01:58 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-03-03 15:11:31 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -90,8 +90,8 @@ VarianceImageFunction<TInputImage,TCoordRep>
   for (unsigned int i = 0; i < size; ++i)
     {
     const RealType value = static_cast<RealType>( it.GetPixel(i) );
-    sum           += value;
-    sumOfSquares  += value * value;
+    sum += value;
+    sumOfSquares += value * value;
     }
 
   const double num = static_cast<double>( size );

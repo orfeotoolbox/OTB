@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPathFunctions.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-19 19:41:23 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-06 00:08:10 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -100,7 +100,7 @@ void MakeFourierSeriesPathTraceChainCode( TFourierSeriesPath & FSPath,
   int         dimension =     OffsetType::GetOffsetDimension();
   unsigned    numSteps  =     chainPath.NumberOfSteps();
   
-  const double PI = 4.0 * atan( 1.0 );
+  const double PI = 4.0 * vcl_atan( 1.0 );
 
   FSPath.Clear();
   
@@ -126,8 +126,8 @@ void MakeFourierSeriesPathTraceChainCode( TFourierSeriesPath & FSPath,
         {
         indexVector[d] = index[d];
         }
-      cosCoefficient += indexVector * (cos(theta)/numSteps);
-      sinCoefficient += indexVector * (sin(theta)/numSteps);
+      cosCoefficient += indexVector * (vcl_cos(theta)/numSteps);
+      sinCoefficient += indexVector * (vcl_sin(theta)/numSteps);
       }
     
     FSPath.AddHarmonic( cosCoefficient, sinCoefficient );

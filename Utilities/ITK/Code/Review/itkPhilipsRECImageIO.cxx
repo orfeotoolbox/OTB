@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPhilipsRECImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-02-25 03:20:41 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-04-29 12:20:40 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -93,6 +93,8 @@ const char *const PAR_NumberOfScanningSequences =
 const char *const PAR_ScanningSequences = "PAR_ScanningSequences";
 const char *const PAR_ScanningSequenceImageTypeRescaleValues = 
   "PAR_ScanningSequenceImageTypeRescaleValues";
+const char *const PAR_NumberOfASLLabelTypes = "PAR_NumberOfASLLabelTypes";
+const char *const PAR_ASLLabelTypes = "PAR_ASLLabelTypes";
 
 static std::string
 GetExtension( const std::string& filename )
@@ -104,11 +106,24 @@ GetExtension( const std::string& filename )
   if(fileExt == std::string(".gz"))
     {
     fileExt = itksys::SystemTools::GetFilenameLastExtension(
-      itksys::SystemTools::GetFilenameLastExtension(filename));
+      itksys::SystemTools::GetFilenameWithoutLastExtension(filename));
     fileExt += ".gz";
     }
   // Check that a valid extension was found
-  if(fileExt != ".REC.gz" && fileExt != ".REC" && fileExt != ".PAR")
+  // Will check for either all caps or all lower-case.
+  // By default the Philips Pride Workstation outputs
+  // the filenames as all caps, but a user may change the
+  // filenames to lowercase.  This will allow one or the
+  // other.  Mixed caps/lower-case will always (with the 
+  // exception of the lower-case gz on the end which is 
+  // always assumed to be lower-case) fail on an OS with
+  // a case sensitive file system.
+  if(fileExt != ".REC.gz" 
+    && fileExt != ".REC" 
+    && fileExt != ".PAR"
+    && fileExt != ".rec.gz" 
+    && fileExt != ".rec" 
+    && fileExt != ".par")
     {
     return ( "" );
     }
@@ -138,8 +153,19 @@ GetRootName( const std::string& filename )
 static std::string
 GetHeaderFileName( const std::string & filename )
 {
-  std::string ImageFileName = GetRootName(filename);
-  ImageFileName += ".PAR";
+  std::string ImageFileName(filename);
+  const std::string fileExt = GetExtension(filename);
+  // Accomodate either all caps or all lower-case filenames.
+  if( (fileExt == ".REC") || (fileExt == ".REC.gz") ) 
+    {
+    ImageFileName = GetRootName(filename);
+    ImageFileName += ".PAR";
+    }
+  else if( (fileExt == ".rec") || (fileExt == ".rec.gz") )
+    {
+    ImageFileName = GetRootName(filename);
+    ImageFileName += ".par";
+    }
   return( ImageFileName );
 }
 
@@ -154,6 +180,11 @@ static std::string GetImageFileName( const std::string& filename )
     ImageFileName = GetRootName(filename);
     ImageFileName += ".REC";
     }
+  else if(fileExt == ".par")
+    {
+    ImageFileName = GetRootName(filename);
+    ImageFileName += ".rec";
+    }
   return( ImageFileName );
 }
 
@@ -162,8 +193,8 @@ static std::string GetImageFileName( const std::string& filename )
 // scanning sequence (randomly ordered in the REC).
 int PhilipsRECImageIOGetImageTypeOffset(int imageType, int scanSequence, 
   int volumeIndex, int slice, int numSlices, struct par_parameter parParam, 
-  PARSliceIndexImageTypeVector sliceImageTypesIndex,
-  PARSliceIndexScanSequenceVector sliceScanSequenceIndex)
+  PhilipsPAR::PARSliceIndexImageTypeVector sliceImageTypesIndex,
+  PhilipsPAR::PARSliceIndexScanSequenceVector sliceScanSequenceIndex)
 {
   int index = volumeIndex*parParam.num_slice_repetitions*numSlices + 
     slice*parParam.num_slice_repetitions;
@@ -184,9 +215,9 @@ int PhilipsRECImageIOGetImageTypeOffset(int imageType, int scanSequence,
 void PhilipsRECImageIOSetupSliceIndex(
   PhilipsRECImageIO::SliceIndexType *indexMatrix, int sortBlock,
   struct par_parameter parParam, 
-  PARImageTypeScanSequenceVector imageTypesScanSequenceIndex,
-  PARSliceIndexImageTypeVector sliceImageTypesIndex,
-  PARSliceIndexScanSequenceVector sliceScanSequenceIndex)
+  PhilipsPAR::PARImageTypeScanSequenceVector imageTypesScanSequenceIndex,
+  PhilipsPAR::PARSliceIndexImageTypeVector sliceImageTypesIndex,
+  PhilipsPAR::PARSliceIndexScanSequenceVector sliceScanSequenceIndex)
 {
   int index = 0;
   int actualSlices = parParam.slice;
@@ -195,27 +226,39 @@ void PhilipsRECImageIOSetupSliceIndex(
   if(indexMatrix->size() != 
     (PhilipsRECImageIO::SliceIndexType::size_type)parParam.dim[2])
     {
-    ExceptionObject exception(__FILE__, __LINE__);
-    std::string message="PhilipsRECImageIOSetupSliceIndex: indexMatrix->size() !"
-      "= parParam.dim[2]\n";
-    exception.SetDescription(message.c_str());
+    OStringStream message;
+    message << "indexMatrix->size(): "
+            << indexMatrix->size()
+            << " != parParam.dim[2]: "
+            << parParam.dim[2];
+    ExceptionObject exception(__FILE__, __LINE__,
+                              message.str(),
+                              ITK_LOCATION);
     throw exception;
     }
   if(parParam.dim[2] != (parParam.slice*parParam.image_blocks))
     {
-    ExceptionObject exception(__FILE__, __LINE__);
-    std::string message="PhilipsRECImageIOSetupSliceIndex: parParam.dim[2] != "
-      "(parParam.slice*parParam.image_blocks)\n";
-    exception.SetDescription(message.c_str());
+    OStringStream message;
+    message << "parParam.dim[2]: " 
+            << parParam.dim[2] 
+            << " != (parParam.slice*parParam.image_blocks): "
+            << parParam.slice * parParam.image_blocks;
+    ExceptionObject exception(__FILE__, __LINE__,
+                              message.str(),
+                              ITK_LOCATION);
     throw exception;
     }
   if(imageTypesScanSequenceIndex.size() != 
     (PhilipsRECImageIO::SliceIndexType::size_type)parParam.num_slice_repetitions)
     {
-    ExceptionObject exception(__FILE__, __LINE__);
-    std::string message="PhilipsRECImageIOSetupSliceIndex: "
-      "imageTypesScanSequenceIndex.size() != parParam.num_slice_repetitions\n";
-    exception.SetDescription(message.c_str());
+    OStringStream message;
+    message << "imageTypesScanSequenceIndex.size(): "
+            << imageTypesScanSequenceIndex.size()
+            << " != parParam.num_slice_repetitions "
+            << parParam.num_slice_repetitions;
+    ExceptionObject exception(__FILE__, __LINE__,
+                              message.str(),
+                              ITK_LOCATION);
     throw exception;
     }
   
@@ -316,8 +359,9 @@ PhilipsRECImageIO::SwapBytesIfNecessary( void* buffer,
           ((double*)buffer, numberOfPixels );
         break;
       default:
-        ExceptionObject exception(__FILE__, __LINE__);
-        exception.SetDescription("Pixel Type Unknown");
+        ExceptionObject exception(__FILE__, __LINE__,
+                                  "Component Type Unknown",
+                                  ITK_LOCATION);
         throw exception;
       }
     }
@@ -366,8 +410,9 @@ PhilipsRECImageIO::SwapBytesIfNecessary( void* buffer,
           ((double *)buffer, numberOfPixels );
         break;
       default:
-        ExceptionObject exception(__FILE__, __LINE__);
-        exception.SetDescription("Pixel Type Unknown");
+        ExceptionObject exception(__FILE__, __LINE__,
+                                  "Component Type Unknown",
+                                  ITK_LOCATION);
         throw exception;
       }
     }
@@ -425,12 +470,15 @@ void PhilipsRECImageIO::Read(void* buffer)
     }
 
   char * const p = static_cast<char *>(buffer);
-  //3 cases to handle
+  //6 cases to handle
   //1: given .PAR and image is .REC
   //2: given .REC
   //3: given .REC.gz
+  //4: given .par and image is .rec
+  //5: given .rec
+  //6: given .rec.gz
 
-  /* Returns proper name for cases 1,2,3 */
+  /* Returns proper name for cases 1,2,3,4,5,6 */
   std::string ImageFileName = GetImageFileName( this->m_FileName );
   //NOTE: gzFile operations act just like FILE * operations when the files
   // are not in gzip fromat.
@@ -441,14 +489,14 @@ void PhilipsRECImageIO::Read(void* buffer)
   gzFile file_p = ::gzopen( ImageFileName.c_str(), "rb" );
   if( file_p == NULL )
     {
-    ExceptionObject exception(__FILE__, __LINE__);
-    std::string message="Philips REC Data File can not be read: "
-      "The following files were attempted:\n ";
-    message += GetImageFileName( this->m_FileName );
-    message += '\n';
-    message += ImageFileName;
-    message += '\n';
-    exception.SetDescription(message.c_str());
+    OStringStream message;
+    message << "Philips REC Data File can not be opened. "
+            << "The following files were attempted:" << std::endl
+            << GetImageFileName( this->m_FileName ) << std::endl
+            << ImageFileName;
+    ExceptionObject exception(__FILE__, __LINE__,
+                              message.str(),
+                              ITK_LOCATION);
     throw exception;
     }
   
@@ -461,14 +509,14 @@ void PhilipsRECImageIO::Read(void* buffer)
     int realIndex = this->GetSliceIndex((int)slice);
     if( realIndex < 0 )
       {
-      ExceptionObject exception(__FILE__, __LINE__);
-      std::string message="Philips REC Data File can not be read: "
-        "The following files were attempted:\n ";
-      message += GetImageFileName( this->m_FileName );
-      message += '\n';
-      message += ImageFileName;
-      message += '\n';
-      exception.SetDescription(message.c_str());
+      OStringStream message;
+      message << "Philips REC Data File can not be read. "
+              << "The following files were attempted:" << std::endl
+              << GetImageFileName( this->m_FileName ) << std::endl
+              << ImageFileName;
+      ExceptionObject exception(__FILE__, __LINE__,
+                                message.str(),
+                                ITK_LOCATION);
       throw exception;
       }
     ::gzseek( file_p, (unsigned int)realIndex*imageSliceSizeInBytes, SEEK_SET );
@@ -485,8 +533,11 @@ bool PhilipsRECImageIO::CanReadFile( const char* FileNameToRead )
   // we check that the correct extension is given by the user
   std::string filenameext = GetExtension(filename);
   if(  filenameext != std::string(".PAR")
-       && filenameext != std::string(".REC")
-       && filenameext != std::string(".REC.gz") )
+    && filenameext != std::string(".REC")
+    && filenameext != std::string(".REC.gz") 
+    && filenameext != std::string(".par")
+    && filenameext != std::string(".rec")
+    && filenameext != std::string(".rec.gz"))
     {
     return false;
     }
@@ -498,12 +549,10 @@ bool PhilipsRECImageIO::CanReadFile( const char* FileNameToRead )
   // Zero out par_parameter.
   memset(&par,0, sizeof(struct par_parameter));
 
-  if( !ReadPAR(HeaderFileName, &par) )
+  PhilipsPAR::Pointer philipsPAR = PhilipsPAR::New();
+  try
     {
-    return false;
-    }
-  else
-    {
+    philipsPAR->ReadPAR(HeaderFileName, &par);
     // Check to see if there were any problems reading
     // the par file.
     if( par.problemreading )
@@ -511,7 +560,11 @@ bool PhilipsRECImageIO::CanReadFile( const char* FileNameToRead )
       return false;
       }
     }
-  
+  catch(ExceptionObject &)
+    {
+    return false;
+    }
+
   return true;
 }
 
@@ -519,18 +572,25 @@ void PhilipsRECImageIO::ReadImageInformation()
 {
   const std::string HeaderFileName = GetHeaderFileName( this->m_FileName );
   struct par_parameter par;
+
   // Zero out par_parameter.
   memset(&par,0, sizeof(struct par_parameter));
-  if( !ReadPAR( HeaderFileName, &par) )
+
+  // Read PAR file.
+  PhilipsPAR::Pointer philipsPAR = PhilipsPAR::New();
+  try
     {
-    ExceptionObject exception(__FILE__, __LINE__);
-    exception.SetDescription("Problem reading PAR file");
-    throw exception;
+   philipsPAR->ReadPAR( HeaderFileName, &par);
     }
-  else if( par.problemreading )
+  catch(itk::ExceptionObject &err)
     {
-    ExceptionObject exception(__FILE__, __LINE__);
-    exception.SetDescription("Problem reading PAR file");
+    throw err;
+    }
+  if( par.problemreading )
+    {
+    ExceptionObject exception(__FILE__, __LINE__,
+                              "Problem reading PAR file",
+                              ITK_LOCATION);
     throw exception;
     }
   
@@ -539,13 +599,27 @@ void PhilipsRECImageIO::ReadImageInformation()
     = GradientBvalueContainerType::New();
   GradientDirectionContainerType::Pointer diffusionGradientOrientationVector 
     = GradientDirectionContainerType::New();
-  if( !GetDiffusionGradientOrientationAndBValues(HeaderFileName,
+  if( !philipsPAR->GetDiffusionGradientOrientationAndBValues(HeaderFileName,
     diffusionGradientOrientationVector, diffusionBvalueVector) )
     {
-    ExceptionObject exception(__FILE__, __LINE__);
-    exception.SetDescription("Problem reading PAR file");
+    ExceptionObject exception(__FILE__, __LINE__,
+      "Problem reading diffusion gradients and b values from PAR file",
+      ITK_LOCATION);
     throw exception;
     }
+    
+  // Get ASL label types.
+  LabelTypesASLContainerType::Pointer labelTypesASLVector = 
+    LabelTypesASLContainerType::New();
+  if( !philipsPAR->GetLabelTypesASL(HeaderFileName, labelTypesASLVector) )
+    {
+    ExceptionObject exception(__FILE__, __LINE__,
+      "Problem reading ASL label types from PAR file",
+      ITK_LOCATION);
+    throw exception;
+    }
+    
+  // Get rescale values associated with each scanning sequence.
   ScanningSequenceImageTypeRescaleValuesContainerType::Pointer 
     scanningSequenceImageTypeRescaleVector = 
     ScanningSequenceImageTypeRescaleValuesContainerType::New();
@@ -556,11 +630,12 @@ void PhilipsRECImageIO::ReadImageInformation()
     {
     ImageTypeRescaleValuesContainerType::Pointer imageTypeRescaleValuesVector = 
       ImageTypeRescaleValuesContainerType::New();
-    if( !GetRECRescaleValues(HeaderFileName,imageTypeRescaleValuesVector,
+    if( !philipsPAR->GetRECRescaleValues(HeaderFileName,imageTypeRescaleValuesVector,
       par.scanning_sequences[scanIndex]) )
       {
-      ExceptionObject exception(__FILE__, __LINE__);
-      exception.SetDescription("Problem reading PAR file");
+      ExceptionObject exception(__FILE__, __LINE__,
+        "Problem reading recale values for each scanning sequence from PAR file",
+        ITK_LOCATION);
       throw exception;
       }
     (*scanningSequenceImageTypeRescaleVector)[scanIndex] = 
@@ -570,12 +645,12 @@ void PhilipsRECImageIO::ReadImageInformation()
   // Setup the slice index matrix.
   this->m_SliceIndex->clear();
   this->m_SliceIndex->resize(par.dim[2]);
-  PARSliceIndexImageTypeVector sliceImageTypesIndexes = 
-    GetRECSliceIndexImageTypes(HeaderFileName);
-  PARSliceIndexScanSequenceVector sliceScanSequencesIndexes = 
-    GetRECSliceIndexScanningSequence(HeaderFileName);
-  PARImageTypeScanSequenceVector imageTypesScanSequencesIndexes = 
-    GetImageTypesScanningSequence(HeaderFileName);
+  PhilipsPAR::PARSliceIndexImageTypeVector sliceImageTypesIndexes = 
+    philipsPAR->GetRECSliceIndexImageTypes(HeaderFileName);
+  PhilipsPAR::PARSliceIndexScanSequenceVector sliceScanSequencesIndexes = 
+    philipsPAR->GetRECSliceIndexScanningSequence(HeaderFileName);
+  PhilipsPAR::PARImageTypeScanSequenceVector imageTypesScanSequencesIndexes = 
+    philipsPAR->GetImageTypesScanningSequence(HeaderFileName);
   PhilipsRECImageIOSetupSliceIndex(this->m_SliceIndex,1,par,
     imageTypesScanSequencesIndexes,sliceImageTypesIndexes,
     sliceScanSequencesIndexes);
@@ -606,10 +681,14 @@ void PhilipsRECImageIO::ReadImageInformation()
       m_PixelType = SCALAR;
       break;
     default:
-      ExceptionObject exception(__FILE__, __LINE__);
-      exception.SetDescription("Unknown data type");
+      OStringStream message;
+      message << "Unknown data type. par.bit must be 8 or 16. " 
+              << "par.bit is "
+              << par.bit;
+      ExceptionObject exception(__FILE__, __LINE__,
+                                message.str(),
+                                ITK_LOCATION);
       throw exception;
-      break;
     }
   //
   // set up the dimension stuff
@@ -734,6 +813,10 @@ void PhilipsRECImageIO::ReadImageInformation()
       EncapsulateMetaData<std::string>(thisDic,PAR_Version,
         std::string("V4.1",6));
       break;
+    case RESEARCH_IMAGE_EXPORT_TOOL_V4_2:
+      EncapsulateMetaData<std::string>(thisDic,PAR_Version,
+        std::string("V4.2",6));
+      break;
     }
 
   EncapsulateMetaData<std::string>(thisDic,PAR_ExaminationName,
@@ -847,6 +930,10 @@ void PhilipsRECImageIO::ReadImageInformation()
   EncapsulateMetaData<ScanningSequenceImageTypeRescaleValuesContainerTypePtr>(
     thisDic,PAR_ScanningSequenceImageTypeRescaleValues,
     scanningSequenceImageTypeRescaleVector);
+  EncapsulateMetaData<int>(thisDic,PAR_NumberOfASLLabelTypes,
+    par.num_label_types);
+  EncapsulateMetaData<LabelTypesASLContainerType::Pointer>(thisDic,
+    PAR_ASLLabelTypes, labelTypesASLVector);
   
   return;
 }  

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSparseImage.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:26 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-03-03 15:09:33 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkSparseImage_txx_
-#define __itkSparseImage_txx_
+#ifndef __itkSparseImage_txx
+#define __itkSparseImage_txx
 
 #include "itkSparseImage.h"
 #include "itkSparseFieldLayer.h"

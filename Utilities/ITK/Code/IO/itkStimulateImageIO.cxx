@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkStimulateImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-05-13 18:46:18 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2009-03-23 16:50:04 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <itksys/SystemTools.hxx>
+#include <itksys/RegularExpression.hxx>
 #include "itkByteSwapper.h"
 
 namespace itk
@@ -199,6 +200,11 @@ void StimulateImageIO::Read(void* buffer)
 
   if( !OpenStimulateFileForReading( file_data, m_DataFileName.c_str()) )
     {
+    itkExceptionMacro("StimulateImageIO could not open file: "
+                      << m_DataFileName << " for reading."
+                      << std::endl
+                      << "Reason: "
+                      << itksys::SystemTools::GetLastSystemError());
     return;
     }
 
@@ -207,7 +213,8 @@ void StimulateImageIO::Read(void* buffer)
     itkExceptionMacro(<<"Read failed: Wanted " 
                       << this->GetImageSizeInBytes()
                       << " bytes, but read " 
-                      << file_data.gcount() << " bytes.");
+                      << file_data.gcount() << " bytes."
+                      << " from file " << m_DataFileName );
     }
 
   //byte swapping depending on pixel type:
@@ -243,10 +250,19 @@ void StimulateImageIO::InternalReadImageInformation(std::ifstream& file)
   std::string text;
 
   //read .sdt file (header)
+
   if ( ! this->OpenStimulateFileForReading(file, m_FileName.c_str()) )
     {
-    itkExceptionMacro(<< "Cannot read requested file");
+    itkExceptionMacro("StimulateImageIO could not open sdt file: "
+                      << m_FileName << " for reading."
+                      << std::endl
+                      << "Reason: "
+                      << itksys::SystemTools::GetLastSystemError());
     }
+
+  // re open in ascii mode
+  file.close();
+  file.open( m_FileName.c_str(), std::ios::in );
 
   //extract dimensions, spacing, origin
   unsigned int dim;
@@ -272,7 +288,6 @@ void StimulateImageIO::InternalReadImageInformation(std::ifstream& file)
   
   //char fidName[256] = "";   
   //char orient[256] = "";
-  char datafilename[256] = "";
 
   bool fov_specified = false;
   bool origin_specified = false;
@@ -433,10 +448,15 @@ void StimulateImageIO::InternalReadImageInformation(std::ifstream& file)
       //not documented
       itkDebugMacro(<<"mapTypeName was specified");
       }
-    else if ( text.find("stimFileName") < text.length())
+    else if ( text.find("stimFileName:") < text.length())
       {
       //file data name is explicitely specified
-      sscanf(line, "%*s %s", datafilename);
+      std::string datafilename;
+      // Remove leading and trailing blanks
+      itksys::RegularExpression regexp("stimFileName:[ ]*(.*)[ ]*$");
+      regexp.find(text);
+      datafilename = regexp.match(1);
+
       //if the data filename has a directory specified, use it as is,
       //otherwise prepend the path of the .spr file.
       std::string datafilenamePath =

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorInterpolateImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-14 09:26:05 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2009-03-03 15:11:40 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -73,17 +73,17 @@ public:
   typedef VectorInterpolateImageFunction Self;
   typedef ImageFunction<TInputImage,
     ITK_TYPENAME NumericTraits<typename TInputImage::PixelType>::RealType,
-    TCoordRep > Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+    TCoordRep >                          Superclass;
+  typedef SmartPointer<Self>             Pointer;
+  typedef SmartPointer<const Self>       ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorInterpolateImageFunction, ImageFunction);
 
   /** InputImageType typedef support. */
-  typedef typename Superclass::InputImageType InputImageType;
-  typedef typename InputImageType::PixelType  PixelType;
-  typedef typename PixelType::ValueType       ValueType;
+  typedef typename Superclass::InputImageType          InputImageType;
+  typedef typename InputImageType::PixelType           PixelType;
+  typedef typename PixelType::ValueType                ValueType;
   typedef typename NumericTraits<ValueType>::RealType  RealType;
 
   /** Point typedef support. */
@@ -159,5 +159,3 @@ private:
 } // end namespace itk
 
 #endif
-
-

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkInterpolateImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 16:45:11 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-05-11 21:18:31 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -156,7 +156,7 @@ InterpolateImageFilter<TInputImage,TOutputImage>
 
 
   intermediateRegion.SetIndex( ImageDimension, 1 );
-  intermediateRegion.SetSize( ImageDimension, 2 );
+  intermediateRegion.SetSize( ImageDimension, 1 );
 
   inIter = ImageRegionConstIteratorWithIndex<TInputImage>( this->GetInput2(), outputRegion );
   outIter = ImageRegionIteratorWithIndex<IntermediateImageType>( m_IntermediateImage,

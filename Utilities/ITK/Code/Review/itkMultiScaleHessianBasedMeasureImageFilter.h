@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiScaleHessianBasedMeasureImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-25 22:25:50 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-04-23 03:43:42 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -75,31 +75,40 @@ public:
 
   typedef typename TInputImage::PixelType                InputPixelType;
   typedef typename TOutputImage::PixelType               OutputPixelType;
-
+  typedef typename TOutputImage::RegionType              OutputRegionType;
+ 
   /** Image dimension. */
   itkStaticConstMacro(ImageDimension, unsigned int, ::itk::GetImageDimension<InputImageType>::ImageDimension);
- 
+
+  /** Types for Scales image */
+  typedef float                                          ScalesPixelType;
+  typedef Image<ScalesPixelType, itkGetStaticConstMacro(ImageDimension)>  ScalesImageType;
+
   /** Hessian computation filter. */
   typedef HessianRecursiveGaussianImageFilter< InputImageType, HessianImageType> HessianFilterType;
  
-  /** Update image buffer that holds the best objectness response */ 
+  /** Update image buffer that holds the best objectness response. This is not redundant from
+   the output image because the latter may not be of float type, which is required for the comparisons 
+   between responses at different scales. */ 
   typedef Image< double, itkGetStaticConstMacro(ImageDimension) > UpdateBufferType;
   typedef typename UpdateBufferType::ValueType                    BufferValueType;
-
+    
+  typedef typename Superclass::DataObjectPointer          DataObjectPointer;
+  
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   
   /** Set/Get macros for SigmaMin */
   itkSetMacro(SigmaMinimum, double);
-  itkGetMacro(SigmaMinimum, double);
+  itkGetConstMacro(SigmaMinimum, double);
   
   /** Set/Get macros for SigmaMax */
   itkSetMacro(SigmaMaximum, double);
-  itkGetMacro(SigmaMaximum, double);
+  itkGetConstMacro(SigmaMaximum, double);
 
   /** Set/Get macros for Number of Scales */
-  itkSetMacro(NumberOfSigmaSteps, int);
-  itkGetMacro(NumberOfSigmaSteps, int);
+  itkSetMacro(NumberOfSigmaSteps, unsigned int);
+  itkGetConstMacro(NumberOfSigmaSteps, unsigned int);
 
   /** Set/Get HessianToMeasureFilter. This will be a filter that takes 
    Hessian input image and produces enhanced output scalar image. The filter must derive from 
@@ -107,6 +116,15 @@ public:
   itkSetObjectMacro( HessianToMeasureFilter, HessianToMeasureFilterType); 
   itkGetObjectMacro( HessianToMeasureFilter, HessianToMeasureFilterType); 
 
+  /** Methods to turn on/off flag to inform the filter that the Hessian-based measure
+   is non-negative (classical measures like Sato's and Frangi's are), hence it has a minimum
+   at zero. In this case, the update buffer is initialized at zero, and the output scale and Hessian 
+   are zero in case the Hessian-based measure returns zero for all scales. Otherwise, the minimum 
+   output scale and Hessian are the ones obtained at scale SigmaMinimum. On by default. 
+   */
+  itkSetMacro(NonNegativeHessianBasedMeasure,bool);
+  itkGetConstMacro(NonNegativeHessianBasedMeasure,bool);
+  itkBooleanMacro(NonNegativeHessianBasedMeasure);
 
   typedef enum { EquispacedSigmaSteps = 0,
                  LogarithmicSigmaSteps = 1 } SigmaStepMethodType;
@@ -114,42 +132,38 @@ public:
   /** Set/Get the method used to generate scale sequence (Equispaced
    * or Logarithmic) */
   itkSetMacro(SigmaStepMethod, SigmaStepMethodType);
-  itkGetMacro(SigmaStepMethod, SigmaStepMethodType);
-  void SetSigmaStepMethodToEquispaced()
-    { 
-    this->SetSigmaStepMethod(Self::EquispacedSigmaSteps);
-    }
+  itkGetConstMacro(SigmaStepMethod, SigmaStepMethodType);
 
-  void SetSigmaStepMethodToLogarithmic()
-    {
-    this->SetSigmaStepMethod(Self::LogarithmicSigmaSteps);
-    }
+  /**Set equispaced sigma step method */
+  void SetSigmaStepMethodToEquispaced();
 
-  /** FIX ME: MOVE this to implementation file */
+  /**Set logartihmic sigma step method */
+  void SetSigmaStepMethodToLogarithmic();
+
   /** Get the image containing the Hessian computed at the best
    * response scale */
-  const HessianImageType* GetHessianOutput() const
-    {
-    return static_cast<const HessianImageType*>(this->ProcessObject::GetOutput(2));
-    }
+  const HessianImageType* GetHessianOutput() const;
  
   /** Get the image containing the scales at which each pixel gave the
    * best response */
-  const OutputImageType* GetScalesOutput() const
-    {
-    return static_cast<const OutputImageType*>(this->ProcessObject::GetOutput(1));
-    }
+  const ScalesImageType* GetScalesOutput() const;
+  
+  void EnlargeOutputRequestedRegion (DataObject *);
 
-  /** FIX ME : ADD DOCUMENTATION */
+  /** Methods to turn on/off flag to generate an image with scale values at
+   *  each pixel for the best vesselness response */
   itkSetMacro(GenerateScalesOutput,bool);
-  itkGetMacro(GenerateScalesOutput,bool);
+  itkGetConstMacro(GenerateScalesOutput,bool);
   itkBooleanMacro(GenerateScalesOutput);
 
-  /** FIX ME : ADD DOCUMENTATION */
+  /** Methods to turn on/off flag to generate an image with hessian values at 
+   *  each pixel for the best vesselness response */
   itkSetMacro(GenerateHessianOutput,bool);
-  itkGetMacro(GenerateHessianOutput,bool);
+  itkGetConstMacro(GenerateHessianOutput,bool);
   itkBooleanMacro(GenerateHessianOutput);
 
+  /** This is overloaded to create the Scales and Hessian output images */
+  virtual DataObjectPointer MakeOutput(unsigned int idx);
 
 protected:
   MultiScaleHessianBasedMeasureImageFilter();
@@ -161,7 +175,6 @@ protected:
 
 private:
   void UpdateMaximumResponse(double sigma);
-
   double ComputeSigmaValue(int scaleLevel);
   
   void AllocateUpdateBuffer();
@@ -170,10 +183,12 @@ private:
   MultiScaleHessianBasedMeasureImageFilter(const Self&); 
   void operator=(const Self&); //purposely not implemented
 
+  bool                        m_NonNegativeHessianBasedMeasure;
+
   double                      m_SigmaMinimum;
   double                      m_SigmaMaximum;
 
-  int                         m_NumberOfSigmaSteps;
+  unsigned int                m_NumberOfSigmaSteps;
   SigmaStepMethodType         m_SigmaStepMethod;
 
   typename HessianToMeasureFilterType::Pointer  m_HessianToMeasureFilter;

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDeformableMesh3DFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-12-08 16:00:51 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2009-04-28 17:42:50 $
+  Version:   $Revision: 1.29 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,6 +38,11 @@ namespace itk
  * The potential force is derived from the gradient information in the 
  * medical image and it will make the model deform to fit to the boundary
  * features.
+ *
+ * Computations are handled with points assumed to lie in index space,
+ * not physical space. Reverting to physical space compromises backward
+ * compatibility.
+ *
  * Inputs are:
  *  (1) A deformable triangular model (Mesh). Import using the SetInput method.
  *  (2) A gradient map that make the model deform to fit to the estimated boundary.
@@ -132,16 +137,16 @@ public:
 
   /** Set/Get routines. */
   itkSetMacro(Gradient, GradientImagePointer);
-  itkGetMacro(Gradient, GradientImagePointer);
+  itkGetConstMacro(Gradient, GradientImagePointer);
 
   itkSetMacro(StepThreshold, int);
-  itkGetMacro(StepThreshold, int);
+  itkGetConstMacro(StepThreshold, int);
 
   itkSetMacro(Stiffness, double2DVector);
-  itkGetMacro(Stiffness, double2DVector);
+  itkGetConstMacro(Stiffness, double2DVector);
 
   itkSetMacro(TimeStep, double);
-  itkGetMacro(TimeStep, double);
+  itkGetConstMacro(TimeStep, double);
 
   itkSetMacro(Scale, double3DVector);
 
@@ -150,7 +155,7 @@ public:
   itkSetMacro(PotentialOn, unsigned short);
   itkSetMacro(ObjectLabel, unsigned char);
 
-  itkGetMacro(Normals, InputMeshPointer);
+  itkGetConstMacro(Normals, InputMeshPointer);
 
 protected:
   DeformableMesh3DFilter();

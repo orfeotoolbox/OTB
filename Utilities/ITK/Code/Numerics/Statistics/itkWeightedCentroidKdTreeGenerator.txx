@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWeightedCentroidKdTreeGenerator.txx,v $
   Language:  C++
-  Date:      $Date: 2008-08-22 23:42:31 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-03-04 19:29:54 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
 #ifndef __itkWeightedCentroidKdTreeGenerator_txx
 #define __itkWeightedCentroidKdTreeGenerator_txx
 
-namespace itk{
-namespace Statistics{
+namespace itk {
+namespace Statistics {
 
 template< class TSample >
 WeightedCentroidKdTreeGenerator< TSample >

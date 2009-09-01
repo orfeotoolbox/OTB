@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshEdgeMergeDecimationFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-26 21:47:35 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-03-25 14:58:44 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -159,6 +159,7 @@ Extract()
     m_Priority = m_PriorityQueue->Peek( )->m_Priority;
 
     m_PriorityQueue->Pop();
+    delete m_QueueMapper[m_Element];
     m_QueueMapper.erase( m_Element );
     } while ( !IsEdgeOKToBeProcessed( m_Element ) );
 }

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorNeighborhoodInnerProduct.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:29 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-03-03 15:11:45 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -48,10 +48,10 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, TImage::ImageDimension);
 
   /** Extract the pixel type and scalar type from the image template parameter. */
-  typedef typename TImage::PixelType PixelType;
+  typedef typename TImage::PixelType    PixelType;
   typedef typename PixelType::ValueType ScalarValueType;
-  typedef Neighborhood<PixelType,
-                       itkGetStaticConstMacro(ImageDimension)> NeighborhoodType;
+  typedef Neighborhood<PixelType, itkGetStaticConstMacro(ImageDimension)>
+                                        NeighborhoodType;
   
   /** Extract the image and vector dimension from the image template parameter. */
   itkStaticConstMacro(VectorDimension, unsigned int,
@@ -70,7 +70,7 @@ public:
   PixelType operator()(const ConstNeighborhoodIterator<TImage> &it,
                        const OperatorType &op) const
     {
-      return this->operator()(std::slice(0, it.Size(), 1), it, op);
+    return this->operator()(std::slice(0, it.Size(), 1), it, op);
     }
 
   PixelType operator()(const std::slice &s, const NeighborhoodType &N,

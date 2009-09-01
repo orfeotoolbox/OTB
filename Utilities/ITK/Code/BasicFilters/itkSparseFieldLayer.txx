@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSparseFieldLayer.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-18 16:11:13 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-04-06 14:13:03 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,6 +18,7 @@
 #define __itkSparseFieldLayer_txx
 #include "itkSparseFieldLayer.h"
 #include <math.h>
+#include "vcl_cmath.h"
 
 namespace itk {
 
@@ -65,7 +66,8 @@ SparseFieldLayer<TNodeType>
   std::vector<RegionType> regionlist;
   unsigned int size, regionsize;
   size=Size();
-  regionsize=static_cast<unsigned int>(ceil(static_cast<float>(size)/static_cast<float>(num)));
+  regionsize=static_cast<unsigned int>(
+    vcl_ceil(static_cast<float>(size)/static_cast<float>(num)));
   ConstIterator position=Begin();
   ConstIterator last=End();
   

@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkRBFNetwork.h,v $
 Language:  C++
-Date:      $Date: 2009-01-28 21:04:59 $
-Version:   $Revision: 1.9 $
+Date:      $Date: 2009-05-02 05:43:55 $
+Version:   $Revision: 1.10 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -30,7 +30,11 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "itkSymmetricSigmoidTransferFunction.h"
 #include "itkTanHTransferFunction.h"
+#ifdef ITK_USE_REVIEW_STATISTICS
+#include "itkEuclideanDistanceMetric.h"
+#else
 #include "itkEuclideanDistance.h"
+#endif
 #include "itkRBFLayer.h"
 
 namespace itk
@@ -65,7 +69,11 @@ public:
   
   // Specializations for RBF Networks
   typedef Array<ValueType>                            ArrayType;
+#ifdef ITK_USE_REVIEW_STATISTICS
+  typedef EuclideanDistanceMetric<ArrayType>                DistanceMetricType;
+#else
   typedef EuclideanDistance<ArrayType>                DistanceMetricType;
+#endif
   typedef RadialBasisFunctionBase<ValueType>          RBFTransferFunctionType;
   typedef RBFLayer<TMeasurementVector, TTargetVector> HiddenLayerType;
 

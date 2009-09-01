@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptResampleImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-11-06 15:25:08 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-23 03:43:42 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -104,7 +104,7 @@ public:
   typedef typename TOutputImage::PixelType              PixelType;
   typedef typename TInputImage::PixelType               InputPixelType;
 
-  /**
+  /** 
    *  Transform typedef.
    */
   typedef double CoordRepType;
@@ -236,7 +236,7 @@ public:
 
   itkSetMacro(UseReferenceImage, bool);
   itkBooleanMacro(UseReferenceImage);
-  itkGetMacro(UseReferenceImage, bool);
+  itkGetConstMacro(UseReferenceImage, bool);
 
   /** ResampleImageFilter produces an image which is a different size
    * than its input.  As such, it needs to provide an implementation

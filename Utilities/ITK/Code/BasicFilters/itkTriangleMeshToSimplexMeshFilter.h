@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkTriangleMeshToSimplexMeshFilter.h,v $
 Language:  C++
-Date:      $Date: 2007-12-29 17:51:23 $
-Version:   $Revision: 1.5 $
+Date:      $Date: 2009-05-12 17:23:01 $
+Version:   $Revision: 1.6 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -45,7 +45,7 @@ namespace itk
  * 
  */
 template <class TInputMesh, class TOutputMesh>
-class TriangleMeshToSimplexMeshFilter : public MeshToMeshFilter<TInputMesh, TOutputMesh>
+class ITK_EXPORT TriangleMeshToSimplexMeshFilter : public MeshToMeshFilter<TInputMesh, TOutputMesh>
 {
 public:
   /** Standard "Self" typedef. */

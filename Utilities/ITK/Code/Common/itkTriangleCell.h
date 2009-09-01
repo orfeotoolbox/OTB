@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTriangleCell.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-19 14:52:53 $
-  Version:   $Revision: 1.61 $
+  Date:      $Date: 2009-03-03 15:11:01 $
+  Version:   $Revision: 1.62 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -110,17 +110,17 @@ public:
   PointType ComputeCenterOfGravity( PointsContainer* );
   PointType ComputeCircumCenter( PointsContainer* );
 
- public:
+public:
   TriangleCell() :
     m_PointIds( NumberOfPoints, NumericTraits<PointIdentifier>::max() )
     {}
   ~TriangleCell() {}
 
- protected:
+protected:
   /** Store the number of points needed for a triangle. */
   std::vector< PointIdentifier > m_PointIds;
 
- private:
+private:
   TriangleCell(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

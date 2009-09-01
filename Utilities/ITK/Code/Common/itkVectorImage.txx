@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorImage.txx,v $
   Language:  C++
-  Date:      $Date: 2005-12-07 11:21:47 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-03-03 15:11:40 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkVectorImage_txx
-#define _itkVectorImage_txx
+#ifndef __itkVectorImage_txx
+#define __itkVectorImage_txx
 #include "itkVectorImage.h"
 #include "itkProcessObject.h"
 
@@ -177,7 +177,7 @@ VectorImage<TPixel, VImageDimension>
   os << indent << "PixelContainer: " << std::endl;
   m_Buffer->Print(os, indent.GetNextIndent());
 
-// m_Origin and m_Spacing are printed in the Superclass
+  // m_Origin and m_Spacing are printed in the Superclass
 }
 } // end namespace itk
 

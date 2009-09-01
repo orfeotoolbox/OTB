@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPolyLineParametricPath.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:09 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-03-03 15:07:57 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkPolyLineParametricPathPath_h
-#define __itkPolyLineParametricPathPath_h
+#ifndef __itkPolyLineParametricPath_h
+#define __itkPolyLineParametricPath_h
 
 #include "itkParametricPath.h"
 #include "itkVectorContainer.h"
@@ -73,12 +73,12 @@ public:
   
   
   /** Basic data-structure types used */
-  typedef ContinuousIndex<double,VDimension>    ContinuousIndexType;           
-  typedef Index<  VDimension >                  IndexType;                     
-  typedef Offset< VDimension >                  OffsetType;                    
-  typedef Point<double,VDimension>              PointType;                    
-  typedef Vector<double,VDimension>             VectorType;                    
-  typedef ContinuousIndexType                   VertexType;                    
+  typedef ContinuousIndex<double,VDimension>    ContinuousIndexType;
+  typedef Index<  VDimension >                  IndexType;
+  typedef Offset< VDimension >                  OffsetType;
+  typedef Point<double,VDimension>              PointType;
+  typedef Vector<double,VDimension>             VectorType;
+  typedef ContinuousIndexType                   VertexType;
   typedef VectorContainer<unsigned, VertexType> VertexListType;
   typedef typename VertexListType::Pointer      VertexListPointer;
 

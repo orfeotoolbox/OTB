@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorFuzzyConnectednessImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-01-31 17:23:45 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-04-06 16:49:30 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -176,7 +176,7 @@ VectorFuzzyConnectednessImageFilter<TInputImage,TOutputImage>
         {
         if (ppptti1[tti1 + i][tti1 + j] == 0)
           {
-          tt1 = vcl_sqrt(pow(((double) i) * anisotropy_row,2.0) + vcl_pow(((double) j) * anisotropy_col, 2.0));
+          tt1 = vcl_sqrt(vcl_pow(((double) i) * anisotropy_row,2.0) + vcl_pow(((double) j) * anisotropy_col, 2.0));
           if (tt1 <= ((double) k) + 0.5)
             {
             m_CirclePointsNum[k] = m_CirclePointsNum[k] + 1;

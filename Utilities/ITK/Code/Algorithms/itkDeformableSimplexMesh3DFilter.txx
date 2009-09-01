@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDeformableSimplexMesh3DFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-12-08 16:00:52 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2009-05-22 18:02:19 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -49,6 +49,9 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>
   m_Damping = 0.65;
   m_Rigidity = 1;
  
+  m_ImageDepth = 0;
+  m_ImageHeight = 0;
+  m_ImageWidth = 0;
 
   this->ProcessObject::SetNumberOfRequiredInputs(1);
 
@@ -56,9 +59,7 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>
   this->ProcessObject::SetNumberOfRequiredOutputs(1);
   this->ProcessObject::SetNthOutput(0, output.GetPointer());
 
-  m_Data = NULL;
-  
-  
+  this->m_Data = NULL;
 }
 
 template <typename TInputMesh, typename TOutputMesh>
@@ -75,11 +76,33 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
-  os << indent << "alpha = " << m_Alpha << std::endl;
-  os << indent << "beta = " << m_Beta << std::endl;
-  os << indent << "gamma = " << m_Gamma << std::endl;
-  os << indent << "rigidity = " << m_Rigidity << std::endl;
-  os << indent << "No. of Iterations = " << m_Iterations << std::endl;
+  os << indent << "Alpha = " << m_Alpha << std::endl;
+  os << indent << "Beta = " << m_Beta << std::endl;
+  os << indent << "Gamma = " << m_Gamma << std::endl;
+  os << indent << "Rigidity = " << m_Rigidity << std::endl;
+  os << indent << "Iterations = " << m_Iterations << std::endl;
+  os << indent << "Step = " << m_Step << std::endl;
+  os << indent << "ImageDepth = " << m_ImageDepth << std::endl;
+  if( this->m_Gradient.IsNotNull() )
+    {
+    os << indent << "Gradient = " << this->m_Gradient << std::endl;
+    }
+  else
+    {
+    os << indent << "Gradient = " << "(None)" << std::endl;
+    }
+  os << indent << "ImageHeight = " << m_ImageHeight << std::endl;
+  os << indent << "ImageWidth = " << m_ImageWidth << std::endl;
+  os << indent << "Damping = " << m_Damping << std::endl;
+  if( this->m_Data.IsNotNull() )
+    {
+    os << indent << "Data = " << this->m_Data << std::endl;
+    }
+  else
+    {
+    os << indent << "Data = " << "(None)" << std::endl;
+    }
+
 
 }/* End PrintSelf. */
 
@@ -117,7 +140,7 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>
     {
     SimplexMeshGeometry * data;
     unsigned long idx = points.Index();
-    data = m_Data->GetElement(idx);
+    data = this->m_Data->GetElement(idx);
     delete data->neighborSet;
     points++;
     }
@@ -135,9 +158,9 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>
   InputPointsContainerPointer      myPoints = this->GetInput(0)->GetPoints();
   InputPointsContainerIterator     points = myPoints->Begin();
 
-  if ( m_Gradient.IsNotNull() ) 
+  if ( this->m_Gradient.IsNotNull() ) 
     {
-    GradientImageSizeType imageSize = m_Gradient->GetBufferedRegion().GetSize();
+    GradientImageSizeType imageSize = this->m_Gradient->GetBufferedRegion().GetSize();
     
     m_ImageWidth  = imageSize[0];
     m_ImageHeight = imageSize[1];
@@ -150,9 +173,9 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>
     m_ImageDepth  = 0;
     }
 
-  if (m_Data.IsNull() )
+  if( this->m_Data.IsNull() )
     {
-    m_Data = this->GetInput(0)->GetGeometryData();
+    this->m_Data = this->GetInput(0)->GetGeometryData();
     }
 
   while( points != myPoints->End() ) 
@@ -160,7 +183,7 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>
     SimplexMeshGeometry * data;
     unsigned long idx = points.Index();
 
-    data = m_Data->GetElement(idx);
+    data = this->m_Data->GetElement(idx);
     data->pos = points.Value();
 
     //        InputMeshType::ArrayType neighbors = this->GetInput(0)->GetNeighbors( points.Index() );
@@ -202,11 +225,11 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>
 
   InputMeshPointer inputMesh = this->GetInput(0);
 
-  typename GeometryMapType::Iterator  dataIt = m_Data->Begin();
+  typename GeometryMapType::Iterator  dataIt = this->m_Data->Begin();
 
   SimplexMeshGeometry* data;
 
-  while ( dataIt != m_Data->End() )
+  while ( dataIt != this->m_Data->End() )
     {
     //      idx = dataIt.Index();
     data = dataIt.Value();
@@ -262,11 +285,11 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>
 ::ComputeDisplacement()
 {
   InputMeshPointer inputMesh = this->GetInput(0);
-  typename GeometryMapType::Iterator dataIt = m_Data->Begin();
+  typename GeometryMapType::Iterator dataIt = this->m_Data->Begin();
   SimplexMeshGeometry * data;
   VectorType displacement;
 
-  while( dataIt != m_Data->End() ) 
+  while( dataIt != this->m_Data->End() ) 
     {
     data = dataIt.Value();
 
@@ -326,7 +349,7 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>
 
   while ( neighborIt != neighborSet->end() )
     {
-    phiRef += m_Data->GetElement(*neighborIt++)->phi;
+    phiRef += this->m_Data->GetElement(*neighborIt++)->phi;
     }
   phiRef /= (double) neighborSet->size();
 
@@ -435,7 +458,7 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>
   output->SetPoints(this->GetInput(0)->GetPoints());
   output->SetPointData(this->GetInput(0)->GetPointData());
   output->SetCells(this->GetInput(0)->GetCells());
-  output->SetGeometryData(m_Data);
+  output->SetGeometryData(this->m_Data);
   output->SetLastCellId( this->GetInput(0)->GetLastCellId() );
 }
 
@@ -455,16 +478,16 @@ DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>
   double H_N3;
   double H_Mean;
 
-  GeometryMapIterator dataIt = m_Data->Begin();
+  GeometryMapIterator dataIt = this->m_Data->Begin();
 
   SimplexMeshGeometry * data;
 
-  while ( dataIt != m_Data->End() )
+  while ( dataIt != this->m_Data->End() )
     {
     data = dataIt->Value();
-    H_N1 =((SimplexMeshGeometry*)(m_Data->GetElement(data->neighborIndices[0])))->meanCurvature;
-    H_N2 =((SimplexMeshGeometry*)(m_Data->GetElement(data->neighborIndices[1])))->meanCurvature;
-    H_N3 =((SimplexMeshGeometry*)(m_Data->GetElement(data->neighborIndices[2])))->meanCurvature;
+    H_N1 =((SimplexMeshGeometry*)(this->m_Data->GetElement(data->neighborIndices[0])))->meanCurvature;
+    H_N2 =((SimplexMeshGeometry*)(this->m_Data->GetElement(data->neighborIndices[1])))->meanCurvature;
+    H_N3 =((SimplexMeshGeometry*)(this->m_Data->GetElement(data->neighborIndices[2])))->meanCurvature;
     H = data->meanCurvature;
 
     H_Mean = (H_N1 + H_N2 + H_N3)/3.0;
@@ -519,7 +542,7 @@ double DeformableSimplexMesh3DFilter<TInputMesh, TOutputMesh>
   double tmpSqr = r2 + r2Minusd2 * tanPhi*tanPhi;
   if (tmpSqr > 0)
     {
-    double denom = eps*(sqrt(tmpSqr) + r);
+    double denom = eps*(vcl_sqrt(tmpSqr) + r);
     if ( denom != 0 ) 
       {
       L = (r2Minusd2 * tanPhi) / denom;

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHistogramToProbabilityImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-17 09:13:59 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-01 14:36:37 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkHistogramProbabilityFunction_h
-#define __itkHistogramProbabilityFunction_h
+#ifndef __itkHistogramToProbabilityImageFilter_h
+#define __itkHistogramToProbabilityImageFilter_h
 
 #include "itkHistogramToImageFilter.h"
 
@@ -61,11 +61,11 @@ public:
 
   ~HistogramProbabilityFunction() {};
 
-  inline OutputPixelType operator()( const TInput & A )
-  {
+  inline OutputPixelType operator()( const TInput & A ) const
+    {
     return static_cast<OutputPixelType>( static_cast<OutputPixelType>(A) / 
         static_cast<OutputPixelType>(m_TotalFrequency) );
-  }
+    }
 
   void SetTotalFrequency( unsigned long n ) 
     {
@@ -119,6 +119,3 @@ private:
 } // end namespace itk
 
 #endif
-
-
-

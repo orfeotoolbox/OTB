@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBioGene.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-20 21:28:21 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-05-02 14:24:28 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -46,7 +46,12 @@ public:
   typedef   double                                AffinityType;
   typedef   std::map< DomainType, AffinityType >  ProteinDomainsType;
 
-  typedef   struct { DomainType domain; bool type; } ControlDomainType;
+  typedef   struct 
+    { 
+    DomainType m_Domain; 
+    bool       m_Type;
+    }                                             ControlDomainType;
+
   typedef   std::vector< ControlDomainType >         GeneControlDomainsType;
 
 public:

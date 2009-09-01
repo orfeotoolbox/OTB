@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNeighborhoodConnectedImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 19:33:44 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-04-25 12:27:41 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -64,38 +64,28 @@ public:
   void PrintSelf ( std::ostream& os, Indent indent ) const;
 
   /** Clear the seeds */
-  void ClearSeeds()
-    {
-    m_Seeds.clear();
-    this->Modified();
-    }
+  void ClearSeeds();
+
   /** Set seed point. */
-  void SetSeed(const IndexType & seed)
-    {
-    this->ClearSeeds();
-    this->AddSeed ( seed );
-    }
+  void SetSeed(const IndexType & seed);
+
   /** Add a seed point */
-  void AddSeed ( const IndexType & seed )
-    {
-    m_Seeds.push_back ( seed );
-    this->Modified();
-    }
+  void AddSeed ( const IndexType & seed );
 
   /** Set/Get the lower threshold. The default is 0. */
   itkSetMacro(Lower, InputImagePixelType);
-  itkGetMacro(Lower, InputImagePixelType);
+  itkGetConstMacro(Lower, InputImagePixelType);
 
   /** Set/Get the upper threshold. The default is the largest possible
    *  value for the InputPixelType. */
   itkSetMacro(Upper, InputImagePixelType);
-  itkGetMacro(Upper, InputImagePixelType);
+  itkGetConstMacro(Upper, InputImagePixelType);
   
   /** Set/Get value to replace thresholded pixels. Pixels that lie *
    *  within Lower and Upper (inclusive) will be replaced with this
    *  value. The default is 1. */
   itkSetMacro(ReplaceValue, OutputImagePixelType);
-  itkGetMacro(ReplaceValue, OutputImagePixelType);
+  itkGetConstMacro(ReplaceValue, OutputImagePixelType);
 
   /** Set the radius of the neighborhood used for a mask. */
   itkSetMacro(Radius, InputImageSizeType);

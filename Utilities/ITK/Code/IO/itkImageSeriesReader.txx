@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageSeriesReader.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-27 16:07:26 $
-  Version:   $Revision: 1.34 $
+  Date:      $Date: 2009-04-06 00:19:17 $
+  Version:   $Revision: 1.35 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -215,7 +215,7 @@ void ImageSeriesReader<TOutputImage>
         {
         interSliceSpacing += vnl_math_sqr(position2[j] - position1[j]);
         }
-      interSliceSpacing = static_cast<float>(::sqrt(interSliceSpacing));
+      interSliceSpacing = static_cast<float>(vcl_sqrt(interSliceSpacing));
           
       if (interSliceSpacing == 0.0f)
         {

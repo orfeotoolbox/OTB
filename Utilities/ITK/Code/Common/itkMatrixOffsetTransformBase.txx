@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMatrixOffsetTransformBase.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 22:04:03 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-04-09 09:23:21 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -289,6 +289,18 @@ MatrixOffsetTransformBase<TScalarType, NInputDimensions, NOutputDimensions>
   inverse->ComputeMatrixParameters();
 
   return true;
+}
+
+// Return an inverse of this transform
+template<class TScalarType, unsigned int NInputDimensions,
+                            unsigned int NOutputDimensions>
+typename MatrixOffsetTransformBase<TScalarType, NInputDimensions,
+                                   NOutputDimensions>::InverseTransformBasePointer
+MatrixOffsetTransformBase<TScalarType, NInputDimensions, NOutputDimensions>
+::GetInverseTransform() const
+{
+  Pointer inv = New();
+  return GetInverse(inv) ? inv.GetPointer() : NULL;
 }
 
 

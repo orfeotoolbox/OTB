@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorGradientNDAnisotropicDiffusionFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 16:30:56 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-05-15 13:55:09 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -93,11 +93,17 @@ VectorGradientNDAnisotropicDiffusionFunction<TImage>
   // Calculate the directional and centralized derivatives.
   for (i = 0; i < ImageDimension; i++)
     {
+    // ``Half'' derivatives
     dx_forward[i] = it.GetPixel(m_Center + m_Stride[i])
       - it.GetPixel(m_Center);
+    dx_forward[i] = dx_forward[i]  * this->m_ScaleCoefficients[i];
     dx_backward[i]=  it.GetPixel(m_Center)
       - it.GetPixel(m_Center - m_Stride[i]);
+    dx_backward[i] = dx_backward[i] * this->m_ScaleCoefficients[i];
+
+    // Centralized differences
     dx[i]      = m_InnerProduct(x_slice[i], it, dx_op);
+    dx[i] = dx[i] * this->m_ScaleCoefficients[i];
     }
 
   // Calculate the conductance term for each dimension.
@@ -117,7 +123,9 @@ VectorGradientNDAnisotropicDiffusionFunction<TImage>
         if ( j != i)
           {
           dx_aug  = m_InnerProduct(xa_slice[j][i], it, dx_op);
+          dx_aug = dx_aug * this->m_ScaleCoefficients[j];
           dx_dim  = m_InnerProduct(xd_slice[j][i], it, dx_op);
+          dx_dim = dx_dim * this->m_ScaleCoefficients[j];
           GradMag += 0.25f * vnl_math_sqr( dx[j][k]+dx_aug[k] );
           GradMag_d += 0.25f * vnl_math_sqr( dx[j][k]+dx_dim[k] );
           }
@@ -131,8 +139,8 @@ VectorGradientNDAnisotropicDiffusionFunction<TImage>
       }
     else
       {
-      Cx[i]  = ::exp( GradMag   / m_K );
-      Cxd[i] = ::exp( GradMag_d / m_K ); 
+      Cx[i]  = vcl_exp( GradMag   / m_K );
+      Cxd[i] = vcl_exp( GradMag_d / m_K ); 
       }
     }
 

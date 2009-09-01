@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkProgressAccumulator.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-21 15:32:36 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-04-25 12:24:12 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -56,7 +56,7 @@ public:
   itkTypeMacro(ProgressAccumulator,Object);
   
   /** Get the total progress accumulated by this object */
-  itkGetMacro(AccumulatedProgress,float);
+  itkGetConstMacro(AccumulatedProgress,float);
 
   /** Set the mini-pipeline filter */
   itkSetObjectMacro(MiniPipelineFilter,ProcessObject);

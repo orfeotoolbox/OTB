@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGrayscaleGeodesicErodeImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 16:45:09 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-25 12:27:26 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -119,12 +119,12 @@ public:
    * convergence. When run to convergence, this filter is equivalent
    * to "reconstruction by erosion". Default is off. */
   itkSetMacro(RunOneIteration, bool);
-  itkGetMacro(RunOneIteration, bool);
+  itkGetConstMacro(RunOneIteration, bool);
   itkBooleanMacro(RunOneIteration);
 
   /** Get the number of iterations used to produce the current
    * output. */
-  itkGetMacro(NumberOfIterationsUsed, unsigned long);
+  itkGetConstMacro(NumberOfIterationsUsed, unsigned long);
 
   /**
    * Set/Get whether the connected components are defined strictly by

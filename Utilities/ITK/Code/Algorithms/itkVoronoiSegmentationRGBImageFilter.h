@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVoronoiSegmentationRGBImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-27 19:30:17 $
-  Version:   $Revision: 1.35 $
+  Date:      $Date: 2009-04-23 03:53:37 $
+  Version:   $Revision: 1.36 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -98,7 +98,7 @@ public:
    * default as 8 bit per channel, if it is different, need to be
    * set before doing anything. */
   itkSetMacro(MaxValueOfRGB,double);
-  itkGetMacro(MaxValueOfRGB,double);
+  itkGetConstMacro(MaxValueOfRGB,double);
 
   /** Set the three channels to test the mean and STD respectivley
    * 0:red, 1:green, 2:blue, 3:hue, 4:chroma, 5:value. */

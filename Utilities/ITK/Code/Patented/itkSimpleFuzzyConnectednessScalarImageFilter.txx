@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimpleFuzzyConnectednessScalarImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-01 13:08:41 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-04-06 11:15:09 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -76,7 +76,7 @@ SimpleFuzzyConnectednessScalarImageFilter<TInputImage,TOutputImage>
   if(this->GetWeight() == 1)
     {
     return( (NumericTraits<unsigned short>::max())* 
-            (exp(-0.5 * tmp1 * tmp1 / m_Variance)));
+            (vcl_exp(-0.5 * tmp1 * tmp1 / m_Variance)));
     }
   else
     {

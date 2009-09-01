@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSiemensVisionImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-05-13 18:46:18 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2009-04-05 23:09:19 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -211,7 +211,7 @@ GEImageHeader *SiemensVisionImageIO::ReadHeader(const char *FileNameToRead)
   
   if (strcmp(tmpStr, "Cor") == 0)
     {
-    if (fabs(atof(tmpStr4))<= 45.0)
+    if (vcl_fabs(atof(tmpStr4))<= 45.0)
       {
       //hdr->imagePlane = itk::IOCommon::ITK_ANALYZE_ORIENTATION_IRP_CORONAL;
       hdr->coordinateOrientation = itk::SpatialOrientation::ITK_COORDINATE_ORIENTATION_RSP;
@@ -232,7 +232,7 @@ GEImageHeader *SiemensVisionImageIO::ReadHeader(const char *FileNameToRead)
     }
   else if (strcmp(tmpStr, "Sag") == 0)
     {
-    if (fabs(atof(tmpStr4))<= 45.0)
+    if (vcl_fabs(atof(tmpStr4))<= 45.0)
       {
       //hdr->imagePlane = itk::SpatialOrientation::ITK_ANALYZE_ORIENTATION_IRP_SAGITTAL;
       hdr->coordinateOrientation = itk::SpatialOrientation::ITK_COORDINATE_ORIENTATION_AIR;
@@ -253,7 +253,7 @@ GEImageHeader *SiemensVisionImageIO::ReadHeader(const char *FileNameToRead)
     }
   else
     {
-    if (fabs(atof(tmpStr4))<= 45.0)
+    if (vcl_fabs(atof(tmpStr4))<= 45.0)
       {
       //hdr->imagePlane = itk::SpatialOrientation::ITK_ANALYZE_ORIENTATION_IRP_TRANSVERSE;
       hdr->coordinateOrientation = itk::SpatialOrientation::ITK_COORDINATE_ORIENTATION_RAI;

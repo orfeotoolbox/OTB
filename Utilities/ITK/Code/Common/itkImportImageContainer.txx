@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImportImageContainer.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 19:04:57 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-04-05 19:10:47 $
+  Version:   $Revision: 1.23 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -22,6 +22,8 @@
 
 #include "itkImportImageContainer.h"
 #include <cstring>
+#include <stdlib.h>
+#include <string.h>
 
 namespace itk
 {
@@ -36,15 +38,12 @@ ImportImageContainer<TElementIdentifier , TElement>
   m_Size = 0;
 }
 
-  
+
 template <typename TElementIdentifier, typename TElement>
 ImportImageContainer< TElementIdentifier , TElement >
 ::~ImportImageContainer()
 {
-  if (m_ImportPointer && m_ContainerManageMemory)
-    {
-    delete [] m_ImportPointer;
-    }
+  DeallocateManagedMemory();
 }
 
 
@@ -57,6 +56,9 @@ void
 ImportImageContainer< TElementIdentifier , TElement >
 ::Reserve(ElementIdentifier size)
 {
+  // Reserve has a Resize semantics. We keep it that way for
+  // backwards compatibility .
+  // See http://www.itk.org/Bug/view.php?id=2893 for details
   if (m_ImportPointer)
     {
     if (size > m_Capacity)
@@ -64,10 +66,9 @@ ImportImageContainer< TElementIdentifier , TElement >
       TElement* temp = this->AllocateElements(size);
       // only copy the portion of the data used in the old buffer
       memcpy(temp, m_ImportPointer, m_Size*sizeof(TElement));
-      if (m_ImportPointer && m_ContainerManageMemory)
-        {
-        delete [] m_ImportPointer;
-        }
+      
+      DeallocateManagedMemory();
+      
       m_ImportPointer = temp;
       m_ContainerManageMemory = true;
       m_Capacity = size;
@@ -104,15 +105,16 @@ ImportImageContainer< TElementIdentifier , TElement >
     {
     if (m_Size < m_Capacity)
       {
-      TElement* temp = this->AllocateElements(m_Size);
-      memcpy(temp, m_ImportPointer, m_Size*sizeof(TElement));
-      if (m_ContainerManageMemory)
-        {
-        delete [] m_ImportPointer;
-        }
+      const TElementIdentifier size = m_Size;
+      TElement* temp = this->AllocateElements(size);
+      memcpy(temp, m_ImportPointer, size*sizeof(TElement));
+
+      DeallocateManagedMemory();
+      
       m_ImportPointer = temp;
       m_ContainerManageMemory = true;
-      m_Capacity = m_Size;
+      m_Capacity = size;
+      m_Size = size;
 
       this->Modified();
       }
@@ -131,14 +133,9 @@ ImportImageContainer< TElementIdentifier , TElement >
 {
   if (m_ImportPointer)
     {
-    if (m_ContainerManageMemory)
-      {
-      delete [] m_ImportPointer;
-      }
-    m_ImportPointer = 0;
+    DeallocateManagedMemory();
+    
     m_ContainerManageMemory = true;
-    m_Capacity = 0;
-    m_Size = 0;
     
     this->Modified();
     }
@@ -159,10 +156,7 @@ ImportImageContainer< TElementIdentifier , TElement >
 ::SetImportPointer(TElement *ptr, TElementIdentifier num,
                    bool LetContainerManageMemory)
 {
-  if (m_ImportPointer && m_ContainerManageMemory)
-    {
-    delete [] m_ImportPointer;
-    }
+  DeallocateManagedMemory();
   m_ImportPointer = ptr;
   m_ContainerManageMemory = LetContainerManageMemory;
   m_Capacity = num;
@@ -196,6 +190,20 @@ TElement* ImportImageContainer< TElementIdentifier , TElement >
                                 ITK_LOCATION);
     }
   return data;
+}
+
+template <typename TElementIdentifier, typename TElement>
+void ImportImageContainer< TElementIdentifier , TElement >
+::DeallocateManagedMemory()
+{
+  // Encapsulate all image memory deallocation here
+  if (m_ImportPointer && m_ContainerManageMemory)
+    {
+    delete [] m_ImportPointer;
+    }
+  m_ImportPointer = 0;
+  m_Capacity = 0;
+  m_Size = 0;
 }
 
 template <typename TElementIdentifier, typename TElement>

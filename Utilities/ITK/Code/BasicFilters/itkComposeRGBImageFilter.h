@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkComposeRGBImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-14 18:39:05 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-04-01 14:36:10 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,7 +42,7 @@ public:
     }
   inline OutputType operator()(  const TInput & R, 
                                  const TInput & G,
-                                 const TInput & B)
+                                 const TInput & B) const
     {
     OutputType rgbPixel;
     rgbPixel.Set( R, G, B);

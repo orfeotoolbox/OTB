@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiResolutionPyramidImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-01-26 21:45:51 $
-  Version:   $Revision: 1.29 $
+  Date:      $Date: 2009-04-07 13:14:19 $
+  Version:   $Revision: 1.32 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,6 +23,7 @@
 #include "itkDiscreteGaussianImageFilter.h"
 #include "itkExceptionObject.h"
 #include "itkResampleImageFilter.h"
+#include "itkShrinkImageFilter.h"
 #include "itkIdentityTransform.h"
 
 #include "vnl/vnl_math.h"
@@ -40,6 +41,7 @@ MultiResolutionPyramidImageFilter<TInputImage, TOutputImage>
   m_NumberOfLevels = 0;
   this->SetNumberOfLevels( 2 );
   m_MaximumError = 0.1;
+  m_UseShrinkImageFilter = false;
 }
 
 
@@ -265,26 +267,49 @@ MultiResolutionPyramidImageFilter<TInputImage, TOutputImage>
   // Create caster, smoother and resampleShrinker filters
   typedef CastImageFilter<TInputImage, TOutputImage>              CasterType;
   typedef DiscreteGaussianImageFilter<TOutputImage, TOutputImage> SmootherType;
+
+  typedef ImageToImageFilter<TOutputImage,TOutputImage>           ImageToImageType;
   typedef ResampleImageFilter<TOutputImage,TOutputImage>          ResampleShrinkerType;
+  typedef ShrinkImageFilter<TOutputImage,TOutputImage>            ShrinkerType;
 
   typename CasterType::Pointer caster = CasterType::New();
   typename SmootherType::Pointer smoother = SmootherType::New();
-  typename ResampleShrinkerType::Pointer resampleShrinker = ResampleShrinkerType::New();
 
+  typename ImageToImageType::Pointer shrinkerFilter;
+  //
+  // only one of these pointers is going to be valid, depending on the
+  // value of UseShrinkImageFilter flag
+  typename ResampleShrinkerType::Pointer resampleShrinker;
+  typename ShrinkerType::Pointer shrinker;
+
+  if(this->GetUseShrinkImageFilter())
+    {
+    shrinker = ShrinkerType::New();
+    shrinkerFilter = shrinker.GetPointer();
+    }
+  else
+    {
+    resampleShrinker = ResampleShrinkerType::New();
+    typedef itk::LinearInterpolateImageFunction< OutputImageType, double >
+      LinearInterpolatorType;
+    typename LinearInterpolatorType::Pointer interpolator = 
+      LinearInterpolatorType::New();
+    resampleShrinker->SetInterpolator( interpolator );
+    resampleShrinker->SetDefaultPixelValue( 0 );
+    shrinkerFilter = resampleShrinker.GetPointer();
+    }
   // Setup the filters
   caster->SetInput( inputPtr );
 
-  smoother->SetUseImageSpacing( true );
+  smoother->SetUseImageSpacing( false );
   smoother->SetInput( caster->GetOutput() );
   smoother->SetMaximumError( m_MaximumError );
 
-  resampleShrinker->SetInput( smoother->GetOutput() );
+  shrinkerFilter->SetInput( smoother->GetOutput() );
 
   unsigned int ilevel, idim;
   unsigned int factors[ImageDimension];
   double       variance[ImageDimension];
-  typedef itk::LinearInterpolateImageFunction< OutputImageType, double >  LinearInterpolatorType;
-  typename LinearInterpolatorType::Pointer interpolator = LinearInterpolatorType::New();
 
   for( ilevel = 0; ilevel < m_NumberOfLevels; ilevel++ )
     {
@@ -296,8 +321,6 @@ MultiResolutionPyramidImageFilter<TInputImage, TOutputImage>
     outputPtr->SetBufferedRegion( outputPtr->GetRequestedRegion() );
     outputPtr->Allocate();
 
-    typedef itk::IdentityTransform<double,OutputImageType::ImageDimension> IdentityTransformType;
-    typename IdentityTransformType::Pointer identityTransform=IdentityTransformType::New();
     // compute shrink factors and variances
     for( idim = 0; idim < ImageDimension; idim++ )
       {
@@ -306,19 +329,28 @@ MultiResolutionPyramidImageFilter<TInputImage, TOutputImage>
                                      static_cast<float>( factors[idim] ) );
       }
 
+    if(!this->GetUseShrinkImageFilter())
+      {
+      typedef itk::IdentityTransform<double,OutputImageType::ImageDimension> 
+        IdentityTransformType;
+      typename IdentityTransformType::Pointer identityTransform =
+        IdentityTransformType::New();
+      resampleShrinker->SetOutputParametersFromImage( outputPtr );
+      resampleShrinker->SetTransform(identityTransform);
+      }
+    else
+      {
+      shrinker->SetShrinkFactors(factors);
+      }
     // use mini-pipeline to compute output
     smoother->SetVariance( variance );
 
-    resampleShrinker->SetInterpolator( interpolator );
-    resampleShrinker->SetDefaultPixelValue( 0 );
-    resampleShrinker->SetOutputParametersFromImage( outputPtr );
-    resampleShrinker->SetTransform(identityTransform);
-    resampleShrinker->GraftOutput( outputPtr );
+    shrinkerFilter->GraftOutput( outputPtr );
 
     // force to always update in case shrink factors are the same
-    resampleShrinker->Modified();
-    resampleShrinker->UpdateLargestPossibleRegion();
-    this->GraftNthOutput( ilevel, resampleShrinker->GetOutput() );
+    shrinkerFilter->Modified();
+    shrinkerFilter->UpdateLargestPossibleRegion();
+    this->GraftNthOutput( ilevel, shrinkerFilter->GetOutput() );
     }
 }
 
@@ -336,6 +368,7 @@ MultiResolutionPyramidImageFilter<TInputImage, TOutputImage>
   os << indent << "No. levels: " << m_NumberOfLevels << std::endl;
   os << indent << "Schedule: " << std::endl;
   os << m_Schedule << std::endl;
+  os << "Use ShrinkImageFilter= " << m_UseShrinkImageFilter << std::endl;
 }
 
 

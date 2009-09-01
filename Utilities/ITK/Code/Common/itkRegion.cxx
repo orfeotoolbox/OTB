@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRegion.cxx,v $
   Language:  C++
-  Date:      $Date: 2004-04-03 13:05:43 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-03-03 15:08:49 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -51,4 +51,3 @@ Region
 }
 
 } // end namespace itk
-

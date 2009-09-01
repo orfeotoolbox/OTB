@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMutualInformationImageToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-26 21:45:52 $
-  Version:   $Revision: 1.44 $
+  Date:      $Date: 2009-04-23 03:53:36 $
+  Version:   $Revision: 1.45 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -165,7 +165,7 @@ public:
    * Value is clamped to be always greater than zero. */
   itkSetClampMacro( FixedImageStandardDeviation, double,
                     NumericTraits<double>::NonpositiveMin(), NumericTraits<double>::max() );
-  itkGetMacro( FixedImageStandardDeviation, double );
+  itkGetConstMacro( FixedImageStandardDeviation, double );
 
   /** Set/Get the kernel function. This is used to calculate the joint
    * probability distribution. Default is the GaussianKernelFunction. */

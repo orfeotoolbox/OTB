@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTwoOutputExampleImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-18 16:11:15 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-04-25 12:28:11 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -64,7 +64,7 @@ public:
   itkSetMacro(OutsideValue,PixelType);
   
   /** Get the "outside" pixel value. */
-  itkGetMacro(OutsideValue,PixelType);
+  itkGetConstMacro(OutsideValue,PixelType);
                  
   /** The values greater than or equal to the value are set to OutsideValue. */
   void ThresholdAbove(PixelType &thresh);

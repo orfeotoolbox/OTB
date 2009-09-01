@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAbsImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 14:09:10 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-04-01 14:36:03 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,7 +44,7 @@ public:
     {
     return !(*this != other);
     }
-  inline TOutput operator()( const TInput & A )
+  inline TOutput operator()( const TInput & A ) const
     {
     return (TOutput)( ( A > 0 ) ? A : -A );
     }

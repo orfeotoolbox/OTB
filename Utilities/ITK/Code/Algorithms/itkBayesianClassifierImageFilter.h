@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBayesianClassifierImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-25 18:28:14 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-04-23 03:53:34 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -168,11 +168,11 @@ public:
   /** Set/ Get macros for the smoothing filter that may optionally be applied
    * to the posterior image */
   void SetSmoothingFilter( SmoothingFilterType * );
-  itkGetMacro( SmoothingFilter, SmoothingFilterPointer );
+  itkGetConstMacro( SmoothingFilter, SmoothingFilterPointer );
 
   /** Number of iterations to apply the smoothing filter */
   itkSetMacro( NumberOfSmoothingIterations, unsigned int );
-  itkGetMacro( NumberOfSmoothingIterations, unsigned int );
+  itkGetConstMacro( NumberOfSmoothingIterations, unsigned int );
 
   /** This is overloaded to create the Posteriors output image */
   virtual DataObjectPointer MakeOutput(unsigned int idx);
@@ -206,8 +206,6 @@ protected:
   /** Here is where the classification is computed. */
   virtual void GenerateData();
 
-  /** Allocate Memory for the Output. */
-  virtual void AllocateOutputs();
   virtual void GenerateOutputInformation(void);
 
   /** Methods for computing the labeled map for all combinations of conditions */

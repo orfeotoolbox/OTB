@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSpatialFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 23:39:53 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-03-03 15:09:33 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -47,10 +47,10 @@ class ITK_EXPORT SpatialFunction : public FunctionBase<TInput, TOutput>
 {
 public:
   /** Standard class typedefs. */
-  typedef SpatialFunction Self;
+  typedef SpatialFunction                Self;
   typedef FunctionBase< TInput, TOutput> Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>             Pointer;
+  typedef SmartPointer<const Self>       ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(SpatialFunction, FunctionBase);

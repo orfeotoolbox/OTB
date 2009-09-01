@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTransformIOBase.h,v $
   Language:  C++
-  Date:      $Date: 2007-08-10 15:40:36 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-05-11 16:37:30 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -75,13 +75,15 @@ public:
 
   /** Get the list of transforms resulting from a file read */
   TransformListType &GetTransformList() { return m_ReadTransformList; }
+  TransformListType &GetReadTransformList() { return m_ReadTransformList; }
+  ConstTransformListType &GetWriteTransformList() { return m_WriteTransformList; }
 
   /** Set the list of transforms before writing */
   void SetTransformList(ConstTransformListType &transformList);
 
   /** Set the writer to append to the specified file */
   itkSetMacro( AppendMode, bool );
-  itkGetMacro( AppendMode, bool );
+  itkGetConstMacro( AppendMode, bool );
   itkBooleanMacro( AppendMode );
 
 protected:
@@ -92,6 +94,7 @@ protected:
   void OpenStream(std::ofstream &out, bool binary);
   void CreateTransform(TransformPointer &ptr, const std::string &ClassName);
 
+private:
   std::string             m_FileName;
   TransformListType       m_ReadTransformList;
   ConstTransformListType  m_WriteTransformList;

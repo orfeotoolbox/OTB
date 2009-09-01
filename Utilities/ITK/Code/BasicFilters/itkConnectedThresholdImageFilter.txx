@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConnectedThresholdImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-17 11:02:28 $
-  Version:   $Revision: 1.29 $
+  Date:      $Date: 2009-04-21 12:29:36 $
+  Version:   $Revision: 1.30 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -48,6 +48,36 @@ ConnectedThresholdImageFilter<TInputImage, TOutputImage>
   typename InputPixelObjectType::Pointer upper = InputPixelObjectType::New();
   upper->Set( NumericTraits< InputImagePixelType >::max() );
   this->ProcessObject::SetNthInput( 2, upper );
+}
+
+template <class TInputImage, class TOutputImage>
+void
+ConnectedThresholdImageFilter<TInputImage, TOutputImage>
+::SetSeed ( const IndexType & seed )
+{
+  this->ClearSeeds();
+  this->AddSeed ( seed );
+}
+
+template <class TInputImage, class TOutputImage>
+void
+ConnectedThresholdImageFilter<TInputImage, TOutputImage>
+::AddSeed(const IndexType & seed)
+{
+  this->m_SeedList.push_back ( seed );
+  this->Modified();
+}
+
+template <class TInputImage, class TOutputImage>
+void
+ConnectedThresholdImageFilter<TInputImage, TOutputImage>
+::ClearSeeds ()
+{
+  if( m_SeedList.size() > 0 )
+    {
+    this->m_SeedList.clear();
+    this->Modified();
+    }
 }
 
 /**

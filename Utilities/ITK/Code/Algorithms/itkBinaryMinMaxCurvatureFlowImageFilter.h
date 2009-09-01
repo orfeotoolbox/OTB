@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryMinMaxCurvatureFlowImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-20 21:28:20 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-04-23 03:53:34 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -104,7 +104,7 @@ public:
 
   /** Set/Get the threshold value. */
   itkSetMacro( Threshold, double );
-  itkGetMacro( Threshold, double );
+  itkGetConstMacro( Threshold, double );
   
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

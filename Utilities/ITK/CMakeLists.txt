@@ -47,7 +47,7 @@ ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^2\\.4$")
 #-----------------------------------------------------------------------------
 # ITK version number.  An even minor number corresponds to releases.
 SET(ITK_VERSION_MAJOR "3")
-SET(ITK_VERSION_MINOR "12")
+SET(ITK_VERSION_MINOR "14")
 SET(ITK_VERSION_PATCH "0")
 
 # Version string should not include patch level.  The major.minor is
@@ -67,6 +67,7 @@ INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityCXX.cmake)
 # Configure Dart testing support.  This should be done before any
 # MESSAGE(FATAL_ERROR ...) commands are invoked.
 INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
+FIND_PACKAGE(Tclsh)
 MARK_AS_ADVANCED(TCL_TCLSH DART_ROOT)
 ENABLE_TESTING()
 IF(BUILD_TESTING)
@@ -209,6 +210,23 @@ MESSAGE("${msg}")
 ENDIF(ITK_USE_OPTIMIZED_REGISTRATION_METHODS)
 
 #-----------------------------------------------------------------------------
+# ITK use the new statistics framework
+OPTION( ITK_USE_REVIEW_STATISTICS "Use the experimental statistics framework." OFF)
+MARK_AS_ADVANCED( ITK_USE_REVIEW_STATISTICS )
+IF(ITK_USE_REVIEW_STATISTICS)
+  IF(NOT ITK_USE_REVIEW)
+    MESSAGE(FATAL_ERROR "ITK_USE_REVIEW is currently OFF but it should be ON if you want to use the experimental statistics framework.")
+  ENDIF(NOT ITK_USE_REVIEW)
+
+  # Warn the user about the implications of using the new statistics framework.
+  SET(msg "Attention: You have chosen to use the new statistics framework instead of the existing framework.")
+  SET(msg "${msg} The statistics classes have been re-designed/refactored and in several")
+  SET(msg "${msg} cases do not conform to the API of the older framework. You may need to")
+  SET(msg "${msg} change your code to use the new API.")
+  MESSAGE("${msg}")
+ENDIF(ITK_USE_REVIEW_STATISTICS)
+
+#-----------------------------------------------------------------------------
 # ITK turn on experimental version of accelerated image registration
 OPTION(ITK_USE_CONSOLIDATED_MORPHOLOGY "Turn on the experimental consolidated morphology." OFF)
 MARK_AS_ADVANCED(ITK_USE_CONSOLIDATED_MORPHOLOGY)
@@ -239,6 +257,31 @@ ENDIF(ITK_USE_TRANSFORM_IO_FACTORIES)
 # ITK turn on the correct usage of oriented images in gradient computations and image registration.
 OPTION(ITK_USE_ORIENTED_IMAGE_DIRECTION "Turn on correct use of oriented images direction in gradient computation and image registration." ON)
 MARK_AS_ADVANCED(ITK_USE_ORIENTED_IMAGE_DIRECTION)
+
+
+#-----------------------------------------------------------------------------
+# ITK turn on the correct usage of centered-pixel coordinates.
+OPTION(ITK_USE_PORTABLE_ROUND "Turn on round implementation that works in multiple-platforms." OFF)
+MARK_AS_ADVANCED(ITK_USE_PORTABLE_ROUND)
+
+
+#-----------------------------------------------------------------------------
+# ITK turn on the correct usage of centered-pixel coordinates.
+OPTION(ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY "Turn on correct usage of centered-pixel coordinates." OFF)
+MARK_AS_ADVANCED(ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY)
+IF(ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY)
+  MESSAGE("Attention: You enabled ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY This feature has not been fully tested and validated.")
+  IF(NOT ITK_USE_PORTABLE_ROUND)
+    MESSAGE(FATAL_ERROR "ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY is currently ON but ITK_USE_PORTABLE_ROUND is OFF, you should enable the portable round")
+  ENDIF(NOT ITK_USE_PORTABLE_ROUND)
+ENDIF(ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY)
+
+
+#-----------------------------------------------------------------------------
+# ITK turn on the correct usage of centered-pixel coordinates.
+OPTION(ITK_USE_REGION_VALIDATION_IN_ITERATORS "Turn on region validation in Iterator constructors." ON)
+MARK_AS_ADVANCED(ITK_USE_REGION_VALIDATION_IN_ITERATORS)
+
 
 #-----------------------------------------------------------------------------
 # ITK turn on the use of Template Meta Programming techniques for unrolling loops of array-like operations
@@ -457,6 +500,11 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
     MARK_AS_ADVANCED(ITK_USE_64BITS_APPLE_TRUNCATION_WARNING)
 
   ENDIF(APPLE)
+  
+  # gcc must have -msse2 option to enable sse2 support
+  IF(VNL_CONFIG_ENABLE_SSE2 OR VNL_CONFIG_ENABLE_SSE2_ROUNDING)
+    SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -msse2")
+  ENDIF(VNL_CONFIG_ENABLE_SSE2 OR VNL_CONFIG_ENABLE_SSE2_ROUNDING)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 IF(UNIX)
@@ -494,6 +542,17 @@ ENDIF(CMAKE_SYSTEM MATCHES "IRIX.*")
 IF(MINGW)
   LINK_LIBRARIES(gdi32)
 ENDIF(MINGW)
+
+# Add flags for the SUN compiler to provide all the methods for std::allocator.
+#
+INCLUDE(${ITK_SOURCE_DIR}/CMake/itkCheckCXXAcceptsFlags.cmake)
+itkCHECK_CXX_ACCEPTS_FLAGS("-features=no%anachronisms" SUN_COMPILER)
+IF(SUN_COMPILER)
+  itkCHECK_CXX_ACCEPTS_FLAGS("-library=stlport4" SUN_COMPILER_HAS_STL_PORT_4)
+  IF(SUN_COMPILER_HAS_STL_PORT_4)
+    SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -library=stlport4")
+  ENDIF(SUN_COMPILER_HAS_STL_PORT_4)
+ENDIF(SUN_COMPILER)
 
 # for the gnu compiler a -D_PTHREADS is needed on sun
 # for the native compiler a -mt flag is needed on the sun
@@ -726,7 +785,23 @@ IF(ITK_USE_SYSTEM_GDCM)
     IF( "${GDCM_MAJOR_VERSION}" LESS 2.0 )
       SET(ITK_GDCM_LIBRARIES gdcm)
     ELSE( "${GDCM_MAJOR_VERSION}" LESS 2.0 )
-      SET(ITK_GDCM_LIBRARIES gdcmMSFF)
+      IF(ITK_USE_SYSTEM_TIFF)
+        # Long story short. ITKIO is NOT linked to itkjpeg8 explicitely. itkjpeg8 dep is being
+        # pulled from linking to itktiff. However in case of ITK_SYSTEM_TIFF the FindTIFF module
+        # do not explicitely link to the system jpeg. One can check however that on most GNU/Linux system
+        # $ ldd /usr/lib/libtiff.so
+        #    linux-vdso.so.1 =>  (0x00007fff67fff000)
+        #    libjpeg.so.62 => /usr/lib/libjpeg.so.62 (0x00007f635f9f2000)
+        # As a side note, ITK_SYSTEM_TIFF is somewhat robust as itkjpeg8 dep can also be pulled from
+        # linking to the default gdcm libraries since they use the itkjpeg libraries.
+        # I do not know the correct fix:
+        # 1. Have FindTIFF link to jpeg8 (which would be the right thing to do for static system libtiff)
+        # 2. Have ITKIO explicitely link to itkjpeg8
+        # For the time being let's explicitely pull the dep to itkjpeg8 ourselves.
+        SET(ITK_GDCM_LIBRARIES gdcmMSFF itkjpeg8)
+      ELSE(ITK_USE_SYSTEM_TIFF)
+        SET(ITK_GDCM_LIBRARIES gdcmMSFF)
+      ENDIF(ITK_USE_SYSTEM_TIFF)
     ENDIF( "${GDCM_MAJOR_VERSION}" LESS 2.0 )
   ELSE(GDCM_FOUND)
     MESSAGE(FATAL_ERROR "Must set GDCM_DIR for ITK_USE_SYSTEM_GDCM.")

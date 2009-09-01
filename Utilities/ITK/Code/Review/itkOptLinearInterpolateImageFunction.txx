@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptLinearInterpolateImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-04 01:14:24 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-03-20 10:25:37 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -106,7 +106,9 @@ LinearInterpolateImageFunction< TInputImage, TCoordRep >
    * of the neighbor pixel with respect to a pixel centered on point.
    */
   RealType value = NumericTraits<RealType>::Zero;
-  RealType totalOverlap = NumericTraits<RealType>::Zero;
+
+  typedef typename NumericTraits<InputPixelType>::ScalarRealType ScalarRealType;
+  ScalarRealType totalOverlap = NumericTraits<ScalarRealType>::Zero;
 
   for( unsigned int counter = 0; counter < m_Neighbors; counter++ )
     {
@@ -137,7 +139,7 @@ LinearInterpolateImageFunction< TInputImage, TCoordRep >
     // get neighbor value only if overlap is not zero
     if( overlap )
       {
-      value += overlap * this->GetInputImage()->GetPixel( neighIndex );
+      value += static_cast<RealType>( this->GetInputImage()->GetPixel( neighIndex ) ) * overlap;
       totalOverlap += overlap;
       }
 

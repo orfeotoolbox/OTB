@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorResampleImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 20:50:03 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-04-25 12:28:12 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -141,7 +141,7 @@ public:
   itkSetMacro(DefaultPixelValue,PixelType);
 
   /** Get the pixel value when a transformed pixel is outside of the image */
-  itkGetMacro(DefaultPixelValue,PixelType);
+  itkGetConstMacro(DefaultPixelValue,PixelType);
 
   /** Set the output image spacing. */
   itkSetMacro(OutputSpacing, SpacingType);

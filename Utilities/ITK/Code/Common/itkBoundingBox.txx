@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBoundingBox.txx,v $
   Language:  C++
-  Date:      $Date: 2007-01-10 15:02:44 $
-  Version:   $Revision: 1.39 $
+  Date:      $Date: 2009-04-05 10:56:39 $
+  Version:   $Revision: 1.40 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -93,7 +93,7 @@ BoundingBox<TPointIdentifier , VPointDimension, TCoordRep, TPointsContainer >
     radius[i] = m_Bounds[2*i+1]-center[i];
     }
     
-  for(unsigned int j=0;j<pow(2.0,(double)VPointDimension);j++)
+  for(unsigned int j=0;j<vcl_pow(2.0,(double)VPointDimension);j++)
     {
     PointType pnt;
     for(unsigned int i=0; i<VPointDimension;i++)

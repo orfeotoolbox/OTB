@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNumericSeriesFileNames.h,v $
   Language:  C++
-  Date:      $Date: 2007-03-22 14:28:51 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-25 12:25:44 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -62,16 +62,16 @@ public:
   /** Use this method to set the starting index of the numeric series.
    * The default value is 1. */
   itkSetMacro(StartIndex,unsigned long);
-  itkGetMacro(StartIndex,unsigned long);
+  itkGetConstMacro(StartIndex,unsigned long);
 
   /** Set the end index of the numeric series. The default is 1. */
   itkSetMacro(EndIndex,unsigned long);
-  itkGetMacro(EndIndex,unsigned long);
+  itkGetConstMacro(EndIndex,unsigned long);
 
   /** Set the increment of the index of the numeric series. The
    * default value is 1.  */
   itkSetMacro(IncrementIndex,unsigned long);
-  itkGetMacro(IncrementIndex,unsigned long);
+  itkGetConstMacro(IncrementIndex,unsigned long);
 
   /** The format string used to generate the series. Different subclasses
    * require different characteristics of this string. For example, the

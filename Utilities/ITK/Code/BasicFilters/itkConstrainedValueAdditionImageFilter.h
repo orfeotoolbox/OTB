@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConstrainedValueAdditionImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-27 11:36:40 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-04-01 14:36:10 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -68,7 +68,7 @@ public:
     return !(*this != other);
     }
   inline TOutput operator()( const TInput1 & A, 
-                             const TInput2 & B)
+                             const TInput2 & B) const
     {
     const double dA = static_cast<double>( A );
     const double dB = static_cast<double>( B );

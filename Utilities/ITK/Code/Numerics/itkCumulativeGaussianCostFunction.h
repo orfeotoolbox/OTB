@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCumulativeGaussianCostFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-10-27 19:51:42 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-05-12 17:19:44 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -47,7 +47,7 @@ namespace itk
  * \ingroup Numerics Cost Functions
  */
 
-class CumulativeGaussianCostFunction : public MultipleValuedCostFunction
+class ITK_EXPORT CumulativeGaussianCostFunction : public MultipleValuedCostFunction
 {
 public:
 

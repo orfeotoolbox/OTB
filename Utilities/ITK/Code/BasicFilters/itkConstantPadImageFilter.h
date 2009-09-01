@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConstantPadImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-13 18:54:27 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-04-25 12:27:20 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -74,7 +74,7 @@ public:
 
   /** Set/Get the pad value.  Default is Zero. */
   itkSetMacro(Constant, OutputImagePixelType);
-  itkGetMacro(Constant, OutputImagePixelType);
+  itkGetConstMacro(Constant, OutputImagePixelType);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

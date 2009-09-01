@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCastImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-08-08 13:54:09 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-04-01 14:36:10 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -58,7 +58,7 @@ public:
     {
     return !(*this != other);
     }
-  inline TOutput operator()( const TInput & A )
+  inline TOutput operator()( const TInput & A ) const
     {
     return static_cast<TOutput>( A );
     }

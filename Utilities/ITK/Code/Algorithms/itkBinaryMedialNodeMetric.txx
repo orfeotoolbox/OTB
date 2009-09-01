@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryMedialNodeMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2007-04-20 13:36:35 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-05-12 20:21:45 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -199,6 +199,7 @@ BinaryMedialNodeMetric<VDimensions>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
+  os << indent << "Result: " << m_Result << std::endl;
 }
 
 

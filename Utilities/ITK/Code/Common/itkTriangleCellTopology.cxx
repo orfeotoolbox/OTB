@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTriangleCellTopology.cxx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:28 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-03-03 15:11:07 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,6 +38,4 @@ TriangleCellTopology
 {
 }
 
-
 } // end namespace itk
-

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCurvatureNDAnisotropicDiffusionFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-13 18:54:28 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-04-06 11:15:07 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -121,8 +121,8 @@ CurvatureNDAnisotropicDiffusionFunction<TImage>
         grad_mag_sq_d += 0.25f * (dx[j]+dx_dim) * (dx[j]+dx_dim);
         }
       }
-    grad_mag = ::sqrt(m_MIN_NORM + grad_mag_sq);
-    grad_mag_d = ::sqrt(m_MIN_NORM + grad_mag_sq_d);
+    grad_mag = vcl_sqrt(m_MIN_NORM + grad_mag_sq);
+    grad_mag_d = vcl_sqrt(m_MIN_NORM + grad_mag_sq_d);
 
     // Conductance Terms
     if (m_K == 0.0)
@@ -132,8 +132,8 @@ CurvatureNDAnisotropicDiffusionFunction<TImage>
       }
     else
       {
-      Cx  = ::exp( grad_mag_sq   / m_K );
-      Cxd = ::exp( grad_mag_sq_d / m_K );
+      Cx  = vcl_exp( grad_mag_sq   / m_K );
+      Cxd = vcl_exp( grad_mag_sq_d / m_K );
       }
     // First order normalized finite-difference conductance products
     dx_forward_Cn  = (dx_forward[i]  / grad_mag) * Cx;
@@ -162,7 +162,7 @@ CurvatureNDAnisotropicDiffusionFunction<TImage>
         + vnl_math_sqr( vnl_math_min(dx_forward[i],  0.0) );
       }
     }
-  return static_cast<PixelType>( ::sqrt(propagation_gradient) * speed );
+  return static_cast<PixelType>( vcl_sqrt(propagation_gradient) * speed );
 }
 
 } // end namespace itk

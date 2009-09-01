@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVanHerkGilWermanErodeDilateImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-08-07 03:20:20 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-04-23 03:43:42 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -78,7 +78,7 @@ public:
 
   /** Set/Get the boundary value. */
   void SetBoundary( const InputImagePixelType value );
-  itkGetMacro(Boundary, InputImagePixelType);
+  itkGetConstMacro(Boundary, InputImagePixelType);
 
 
 protected:

@@ -28,6 +28,7 @@ itkQuadEdgeMeshMacro.h Indent Disable
 itkExceptionObject.h Indent Disable
 itkBinaryThresholdImageFilter.h Indent Disable
 VNLIterativeSparseSolverTraits.h Namespace Disable
+itkMeasurementVectorTraits.h InternalVariables Disable
 itk.*\Test.*\.cxx Namespace Disable
 itk.*\Test.*\.h Namespace Disable
 itkBilateralImageFilter.txx Namespace Disable
@@ -91,3 +92,14 @@ itkNumericTraitsTensorPixel.h InternalVariables Disable
 itkNumericTraitsVectorPixel.h InternalVariables Disable
 itkNumericTraits.cxx Typedefs Disable
 itkObjectFactoryBase.cxx Namespace Disable
+itkSecondaryNodeList.h InternalVariables Disable
+itkSimplexMeshGeometry.h InternalVariables Disable
+itkSmartPointerForwardReferenceProcessObject.cxx Namespace Disable
+itkValarrayImageContainer.h DeclarationOrder Disable
+itkVectorContainer.h DeclarationOrder Disable
+itkVectorContainer.h Typedefs Disable
+itkXMLFileOutputWindow.cxx Indent Disable
+itkKdTreeGenerator.h InternalVariables Disable
+itkNormalVariateGenerator.h InternalVariables Disable
+itkStatisticsTypesTest.cxx Typedefs Disable
+itkLabelStatisticsImageFilter.h Indent Disable

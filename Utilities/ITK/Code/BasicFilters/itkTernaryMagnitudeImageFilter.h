@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTernaryMagnitudeImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-18 16:11:14 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2009-04-01 14:36:36 $
+  Version:   $Revision: 1.28 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -49,7 +49,7 @@ public:
     }
   inline TOutput operator()( const TInput1 & A, 
                              const TInput2 & B,
-                             const TInput3 & C)
+                             const TInput3 & C) const
     { return (TOutput) vcl_sqrt((double)(A*A + B*B + C*C) ); }
 }; 
 }

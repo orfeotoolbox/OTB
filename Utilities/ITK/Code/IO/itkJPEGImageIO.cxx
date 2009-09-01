@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkJPEGImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-10-24 16:21:55 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2009-04-23 15:21:52 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -32,6 +32,10 @@ extern "C"
   #include <itkjpeg/8/jpeglib.h>
   #include <setjmp.h>
 }
+
+#ifndef itk_secret_symbol_mangled_jpeg8
+#error Sorry something went wrong with your configuration, you are using a system jpeglib.h instead of the special mangled one
+#endif
 
 
 // create an error handler for jpeg that

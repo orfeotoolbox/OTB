@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTriangleMeshToBinaryImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-18 16:11:15 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-04-25 12:28:11 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -143,7 +143,7 @@ public:
   * the output produced by this filter will be a mask with inside/outside values 
   * specified by the user. */
   itkSetMacro(InsideValue, ValueType);
-  itkGetMacro(InsideValue, ValueType);
+  itkGetConstMacro(InsideValue, ValueType);
 
   /** Set/Get the value for pixels outside the spatial object.
   * By default, this filter will return an image
@@ -151,7 +151,7 @@ public:
   * the output produced by this filter will be a mask with inside/outside values
   * specified by the user. */
   itkSetMacro(OutsideValue, ValueType);
-  itkGetMacro(OutsideValue, ValueType);
+  itkGetConstMacro(OutsideValue, ValueType);
 
   /** The origin of the output image. The origin is the geometric
    * coordinates of the index (0,0,...,0).  It is stored internally
@@ -164,11 +164,11 @@ public:
   
   /** Set/Get Index */
   itkSetMacro(Index,IndexType);
-  itkGetMacro(Index,IndexType);
+  itkGetConstMacro(Index,IndexType);
 
   /** Set/Get Size */
   itkSetMacro(Size,SizeType);
-  itkGetMacro(Size,SizeType);
+  itkGetConstMacro(Size,SizeType);
 
   /** Set the mesh input of this process object.  */
   void SetInput(InputMeshType *input);
@@ -188,7 +188,7 @@ public:
 
   /* Set the tolerance for doing spatial searches of the polydata. */
   itkSetMacro(Tolerance, double);
-  itkGetMacro(Tolerance, double);
+  itkGetConstMacro(Tolerance, double);
     
 protected:
   TriangleMeshToBinaryImageFilter();

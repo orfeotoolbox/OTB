@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageMaskSpatialObject.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-28 19:25:07 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-07 14:34:01 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -35,7 +35,7 @@ namespace itk
  */
 
 template < unsigned int TDimension = 3 >
-class ImageMaskSpatialObject 
+class ITK_EXPORT ImageMaskSpatialObject 
   : public ImageSpatialObject< TDimension, unsigned char >
 {
 

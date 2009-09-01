@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCorrelationCoefficientHistogramImageToImageMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-23 16:15:23 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-05-05 17:51:18 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -124,6 +124,9 @@ CorrelationCoefficientHistogramImageToImageMetric<TFixedImage, TMovingImage>
     for (unsigned int i = 0; i < this->m_HistogramSize[0]; i++)
       {
       typename HistogramType::IndexType index;
+#ifdef ITK_USE_REVIEW_STATISTICS
+      index.SetSize(2);
+#endif
       index[0] = i;
       index[1] = j;
 

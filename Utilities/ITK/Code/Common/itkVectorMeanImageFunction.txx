@@ -3,8 +3,8 @@
     Program:   Insight Segmentation & Registration Toolkit
     Module:    $RCSfile: itkVectorMeanImageFunction.txx,v $
     Language:  C++
-    Date:      $Date: 2006-02-06 22:01:58 $
-    Version:   $Revision: 1.5 $
+    Date:      $Date: 2009-03-03 15:11:44 $
+    Version:   $Revision: 1.6 $
 
     Copyright (c) Insight Software Consortium. All rights reserved.
     See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,8 +25,8 @@ namespace itk
 {
 
 /**
-   * Constructor
-   */
+ * Constructor
+ */
 template <class TInputImage, class TCoordRep>
 VectorMeanImageFunction<TInputImage,TCoordRep>
 ::VectorMeanImageFunction()
@@ -36,8 +36,8 @@ VectorMeanImageFunction<TInputImage,TCoordRep>
 
 
 /**
-   *
-   */
+ *
+ */
 template <class TInputImage, class TCoordRep>
 void
 VectorMeanImageFunction<TInputImage,TCoordRep>

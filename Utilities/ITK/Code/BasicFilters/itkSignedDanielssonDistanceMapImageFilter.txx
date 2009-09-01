@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSignedDanielssonDistanceMapImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 20:49:56 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-03-10 14:26:16 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -35,9 +35,6 @@ SignedDanielssonDistanceMapImageFilter<TInputImage,TOutputImage>
 {
   this->SetNumberOfRequiredOutputs( 3 );
 
-  OutputImagePointer distanceMap = OutputImageType::New();
-  this->SetNthOutput( 0, distanceMap.GetPointer() );
-
   OutputImagePointer voronoiMap = OutputImageType::New();
   this->SetNthOutput( 1, voronoiMap.GetPointer() );
 
@@ -49,6 +46,20 @@ SignedDanielssonDistanceMapImageFilter<TInputImage,TOutputImage>
                                         //doesn't make sense in a SignedDaniel
   this->m_UseImageSpacing     = false;
   this->m_InsideIsPositive    = false;
+}
+
+ /** This is overloaded to create the VectorDistanceMap output image */
+template <class TInputImage,class TOutputImage>
+typename SignedDanielssonDistanceMapImageFilter<
+  TInputImage,TOutputImage>::DataObjectPointer
+SignedDanielssonDistanceMapImageFilter<TInputImage,TOutputImage>
+::MakeOutput(unsigned int idx)
+{
+  if  (idx == 2) 
+    {
+    return static_cast<DataObject*>(VectorImageType::New().GetPointer());
+    }
+  return Superclass::MakeOutput(idx);
 }
 
 /**
@@ -160,13 +171,13 @@ void SignedDanielssonDistanceMapImageFilter<TInputImage,TOutputImage>
 
   if ( m_InsideIsPositive )
     {
-    subtracter->SetInput1(filter2->GetOutput(0));
-    subtracter->SetInput2(filter1->GetOutput(0));
+    subtracter->SetInput1(filter2->GetDistanceMap());
+    subtracter->SetInput2(filter1->GetDistanceMap());
     }
   else
     {
-    subtracter->SetInput2(filter2->GetOutput(0));
-    subtracter->SetInput1(filter1->GetOutput(0));
+    subtracter->SetInput2(filter2->GetDistanceMap());
+    subtracter->SetInput1(filter1->GetDistanceMap());
     }
     
   subtracter->Update();
@@ -177,9 +188,12 @@ void SignedDanielssonDistanceMapImageFilter<TInputImage,TOutputImage>
   progress->RegisterInternalFilter(filter1,.5f);
   
   // Graft outputs
-  this->GraftNthOutput( 0, subtracter->GetOutput(0) );
-  this->GraftNthOutput( 1, filter1->GetOutput(1) );
-  this->GraftNthOutput( 2, filter1->GetOutput(2) );
+  this->GraftNthOutput( 0, subtracter->GetOutput() );
+
+  // we must use not use this->GetOutput method because the
+  // output's are of different types then ImageSource
+  this->GraftNthOutput( 1, filter1->GetVoronoiMap() );
+  this->GraftNthOutput( 2, filter1->GetVectorDistanceMap() );
   
 } 
 // end GenerateData()

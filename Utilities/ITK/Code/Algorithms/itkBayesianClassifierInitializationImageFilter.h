@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBayesianClassifierInitializationImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-04-20 13:36:35 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-05-02 05:43:54 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -22,7 +22,11 @@
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
+#ifdef ITK_USE_REVIEW_STATISTICS
+#include "itkMembershipFunctionBase.h"
+#else
 #include "itkDensityFunction.h"
+#endif
 
 namespace itk
 {
@@ -118,8 +122,13 @@ public:
   typedef Vector< InputPixelType, 1 >                     MeasurementVectorType;
 
   /** Type of the density functions */
+#ifdef ITK_USE_REVIEW_STATISTICS
+  typedef Statistics::MembershipFunctionBase< MeasurementVectorType > MembershipFunctionType;
+#else
   typedef Statistics::DensityFunction< MeasurementVectorType >
                                                         MembershipFunctionType;
+#endif
+
   typedef typename MembershipFunctionType::Pointer      MembershipFunctionPointer;
 
   /** Membership function container */
@@ -139,7 +148,7 @@ public:
 
   /** Set/Get methods for the number of classes. The user must supply this. */
   itkSetMacro( NumberOfClasses, unsigned int );
-  itkGetMacro( NumberOfClasses, unsigned int );
+  itkGetConstMacro( NumberOfClasses, unsigned int );
 
   virtual void GenerateOutputInformation(); 
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTimeProbesCollectorBase.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-10-24 18:11:22 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-03-03 15:09:52 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,14 +27,9 @@ TimeProbesCollectorBase
 {
 }
 
-
-
 TimeProbesCollectorBase
 ::~TimeProbesCollectorBase()
 {
 }
 
-
 } // end namespace itk
-
-

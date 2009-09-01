@@ -22,7 +22,7 @@
   Define KWSYS_HEADER macro to help the c and cxx files include kwsys
   headers from the configured namespace directory.  The macro can be
   used like this:
-  
+
   #include KWSYS_HEADER(Directory.hxx)
   #include KWSYS_HEADER(std/vector)
 */
@@ -39,5 +39,7 @@
 #define KWSYS_NAMESPACE_STRING1(x) #x
 
 #else
-# error "kwsysPrivate.h included multiple times."
+# ifndef __VMS /* Avoid strange false positive on VMS compiler.  */
+#  error "kwsysPrivate.h included multiple times."
+# endif
 #endif

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScatterMatrixImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-02-05 13:35:53 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-03-03 15:09:09 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -53,9 +53,9 @@ public:
   typedef ImageFunction<TInputImage, 
     vnl_matrix< 
       ITK_TYPENAME NumericTraits<typename TInputImage::PixelType::ValueType>::RealType >,
-    TCoordRep > Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+    TCoordRep >                      Superclass;
+  typedef SmartPointer<Self>         Pointer;
+  typedef SmartPointer<const Self>   ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(ScatterMatrixImageFunction, ImageFunction);
@@ -93,16 +93,16 @@ public:
   /** Evaluate the function at non-integer positions */
   virtual RealType Evaluate( const PointType& point ) const
     { 
-      IndexType index;
-      this->ConvertPointToNearestIndex( point, index );
-      return this->EvaluateAtIndex( index ); 
+    IndexType index;
+    this->ConvertPointToNearestIndex( point, index );
+    return this->EvaluateAtIndex( index ); 
     }
   virtual RealType EvaluateAtContinuousIndex( 
     const ContinuousIndexType& cindex ) const
     { 
-      IndexType index;
-      this->ConvertContinuousIndexToNearestIndex( cindex, index );
-      return this->EvaluateAtIndex( index ) ; 
+    IndexType index;
+    this->ConvertContinuousIndexToNearestIndex( cindex, index );
+    return this->EvaluateAtIndex( index ); 
     }
   
   /** Get/Set the radius of the neighborhood over which the
@@ -141,4 +141,3 @@ private:
 #endif
 
 #endif
-

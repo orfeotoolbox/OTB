@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAttributeMorphologyBaseImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-20 17:59:59 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-04-23 03:43:41 $
+  Version:   $Revision: 1.5 $
 
   Copyright ( c ) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -127,7 +127,7 @@ public:
    * are removed. Lambda defaults to 0.
    */
   itkSetMacro(Lambda, AttributeType);
-  itkGetMacro(Lambda, AttributeType);
+  itkGetConstMacro(Lambda, AttributeType);
 
 protected:
   AttributeMorphologyBaseImageFilter() 

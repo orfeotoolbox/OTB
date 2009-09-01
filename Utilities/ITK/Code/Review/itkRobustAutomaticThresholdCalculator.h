@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRobustAutomaticThresholdCalculator.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-18 14:34:10 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-04-23 03:43:42 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -82,7 +82,7 @@ public:
     }
 
   itkSetMacro(Pow, double);
-  itkGetMacro(Pow, double);
+  itkGetConstMacro(Pow, double);
 
   /** Compute moments of a new or modified image.
    * This method computes the moments of the image given as a

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinomialBlurImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-09 15:31:37 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-04-25 12:27:15 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -76,7 +76,7 @@ public:
 
   /** Get and set the number of times to repeat the filter. */
   itkSetMacro(Repetitions, unsigned int);
-  itkGetMacro(Repetitions, unsigned int);
+  itkGetConstMacro(Repetitions, unsigned int);
 
   /** This filter needs to request a larger input than its requested output.
    * If this filter runs "Repetitions" iterations, then it needs an input

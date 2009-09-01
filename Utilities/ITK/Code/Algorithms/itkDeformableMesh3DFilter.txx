@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDeformableMesh3DFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-12-08 16:00:52 $
-  Version:   $Revision: 1.59 $
+  Date:      $Date: 2009-05-22 17:54:15 $
+  Version:   $Revision: 1.64 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -41,6 +41,11 @@ DeformableMesh3DFilter<TInputMesh, TOutputMesh>
   m_TimeStep = 0.01;
   m_PotentialMagnitude = NumericTraits<PixelType>::One;
   m_GradientMagnitude = NumericTraits<PixelType>::One;
+
+  m_ImageDepth = 0;
+  m_ImageHeight = 0;
+  m_ImageWidth = 0;
+
   typename TOutputMesh::Pointer output = TOutputMesh::New();
   this->ProcessObject::SetNumberOfRequiredOutputs(1);
   this->ProcessObject::SetNthOutput(0, output.GetPointer());
@@ -95,6 +100,10 @@ DeformableMesh3DFilter<TInputMesh, TOutputMesh>
     {
     os << indent << "Gradient = " << "(None)" << std::endl;
     }
+  os << indent << "Step = " << m_Step << std::endl;
+  os << indent << "ImageDepth = " << m_ImageDepth << std::endl;
+  os << indent << "ImageHeight = " << m_ImageHeight << std::endl;
+  os << indent << "ImageWidth = " << m_ImageWidth << std::endl;
 }/* End PrintSelf. */
 
 /* Set default value of parameters and initialize local data container 
@@ -798,7 +807,7 @@ DeformableMesh3DFilter<TInputMesh, TOutputMesh>
             v2[0]*(v3[1]-v1[1]) +
             v3[0]*(v1[1]-v2[1]));
 
-    absvec = -sqrt ((double) ((coa*coa) + (cob*cob) + (coc*coc)));
+    absvec = -vcl_sqrt ((double) ((coa*coa) + (cob*cob) + (coc*coc)));
   
     assert (absvec != 0);
   

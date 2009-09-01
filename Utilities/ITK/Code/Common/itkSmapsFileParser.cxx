@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSmapsFileParser.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-10-24 18:11:22 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-04-05 10:56:46 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -16,6 +16,7 @@
 =========================================================================*/
 
 #include "itkSmapsFileParser.h"
+#include <stdlib.h>
 
 namespace itk
 {
@@ -282,7 +283,7 @@ ITKCommon_EXPORT std::istream& operator>>(std::istream &in, VMMapRecord &record)
 //bool ITKCommon_EXPORT ci_equal(char a, char b); // located in itkSmapsFileParser.cxx
 
 /** Binary functor to accumulate memory usage in kB
-*/
+ */
 template<class TFirstType>
 struct MapRecordPlusor{
   MapRecordPlusor<TFirstType>(const char * token = "Size")

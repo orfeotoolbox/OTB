@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDanielssonDistanceMapImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-14 19:20:32 $
-  Version:   $Revision: 1.38 $
+  Date:      $Date: 2009-04-06 00:19:17 $
+  Version:   $Revision: 1.39 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -279,7 +279,7 @@ DanielssonDistanceMapImageFilter<TInputImage,TOutputImage>
       }
     else
       {
-      dt.Set( static_cast<typename OutputImageType::PixelType>(sqrt( distance )) );
+      dt.Set( static_cast<typename OutputImageType::PixelType>(vcl_sqrt( distance )) );
       }
     ++ot;
     ++ct;

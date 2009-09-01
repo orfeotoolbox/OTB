@@ -327,22 +327,22 @@ template <class TOutputImage, class TLayer>
 typename ImageLayerRenderingModel<TOutputImage, TLayer>
 ::RegionType
 ImageLayerRenderingModel<TOutputImage, TLayer>
-::ConstrainRegion(const RegionType & small, const RegionType & big)
+::ConstrainRegion(const RegionType & region, const RegionType & largest)
 {
-  RegionType resp = small;
+  RegionType resp = region;
 
   // Else we can constrain it
   IndexType index = resp.GetIndex();
   typename RegionType::SizeType size = resp.GetSize();
 
-// If small is larger than big, then crop
-  if (small.GetSize()[0]>big.GetSize()[0])
+// If region is larger than big, then crop
+  if (region.GetSize()[0]>largest.GetSize()[0])
     {
-    size[0] = big.GetSize()[0];
+    size[0] = largest.GetSize()[0];
     }
-  if (small.GetSize()[1]>big.GetSize()[1])
+  if (region.GetSize()[1]>largest.GetSize()[1])
     {
-    size[1] = big.GetSize()[1];
+    size[1] = largest.GetSize()[1];
     }
 
   // Else we can constrain it
@@ -350,14 +350,14 @@ ImageLayerRenderingModel<TOutputImage, TLayer>
   for(unsigned int dim = 0; dim < RegionType::ImageDimension; ++dim)
     {
     // push left if necessary
-    if (small.GetIndex()[dim]<big.GetIndex()[dim])
+    if (region.GetIndex()[dim]<largest.GetIndex()[dim])
       {
-      index[dim]=big.GetIndex()[dim];
+      index[dim]=largest.GetIndex()[dim];
       }
     // push right if necessary
-    if (index[dim]+size[dim]>=big.GetIndex()[dim]+big.GetSize()[dim])
+    if (index[dim]+size[dim]>=largest.GetIndex()[dim]+largest.GetSize()[dim])
       {
-      index[dim]=big.GetIndex()[dim]+big.GetSize()[dim]-size[dim];
+      index[dim]=largest.GetIndex()[dim]+largest.GetSize()[dim]-size[dim];
       }
     }
   resp.SetSize(size);

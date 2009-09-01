@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPreOrderTreeIterator.h,v $
   Language:  C++
-  Date:      $Date: 2008-06-20 20:28:42 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-03-03 15:08:00 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,7 +19,7 @@
 
 #include <itkTreeIteratorBase.h>
 
-namespace itk{
+namespace itk {
 
 template <class TTreeType>
 class PreOrderTreeIterator : public TreeIteratorBase<TTreeType> 
@@ -27,8 +27,8 @@ class PreOrderTreeIterator : public TreeIteratorBase<TTreeType>
 public:
 
   /** Typedefs */
-  typedef typename TTreeType::ValueType  ValueType;
-  typedef TreeIteratorBase<TTreeType> Superclass;
+  typedef typename TTreeType::ValueType     ValueType;
+  typedef TreeIteratorBase<TTreeType>       Superclass;
   typedef typename Superclass::TreeNodeType TreeNodeType;
  
   /** Constructor */
@@ -114,9 +114,9 @@ PreOrderTreeIterator<TTreeType>::FindNextNode() const
 
   // Are we a subtree? Then we are done.
   if( parent && parent->ChildPosition( this->m_Root ) >= 0 )
-  {
+    {
     return NULL;
-  }
+    }
 
   int childPosition = parent->ChildPosition( child ); 
   int lastChildPosition = parent->CountChildren() - 1;

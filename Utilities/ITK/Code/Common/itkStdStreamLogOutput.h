@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkStdStreamLogOutput.h,v $
   Language:  C++
-  Date:      $Date: 2006-02-05 20:57:46 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-04-25 12:24:12 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -39,7 +39,7 @@ namespace itk
  *                     ISIS Center, Georgetown University.
  *
  *
- *  \ingroup OSSystemObjects LoggingObjects                    
+ *  \ingroup OSSystemObjects LoggingObjects
  */
 
 class ITKCommon_EXPORT StdStreamLogOutput : public LogOutput
@@ -47,9 +47,9 @@ class ITKCommon_EXPORT StdStreamLogOutput : public LogOutput
 
 public:
 
-  typedef StdStreamLogOutput Self;
-  typedef LogOutput  Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef StdStreamLogOutput        Self;
+  typedef LogOutput                 Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   typedef std::ostream  StreamType;
@@ -59,7 +59,7 @@ public:
   
   itkNewMacro(StdStreamLogOutput);
 
-  itkGetMacro(Stream, StreamPointerType);
+  itkGetConstMacro(Stream, StreamPointerType);
 
   /** Set a standard stream pointer */
   void SetStream(StreamType &Stream);

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVector.txx,v $
   Language:  C++
-  Date:      $Date: 2007-04-14 11:54:34 $
-  Version:   $Revision: 1.51 $
+  Date:      $Date: 2009-03-03 15:11:38 $
+  Version:   $Revision: 1.52 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkVector_txx
-#define _itkVector_txx
+#ifndef __itkVector_txx
+#define __itkVector_txx
 
 #include "itkVector.h" 
 #include "itkNumericTraits.h" 
@@ -100,8 +100,6 @@ Vector<T, TVectorDimension>
   return result;
 }
 
-
-
 /**
  * Returns a temporary copy of a vector
  */
@@ -117,8 +115,6 @@ Vector<T, TVectorDimension>
     }
   return result;
 }
-
-
 
 /**
  * Returns a temporary copy of a vector
@@ -153,8 +149,6 @@ Vector<T, TVectorDimension>
     }
   return sum;
 }
-
-
 
 /**
  * Returns vector's Euclidean Norm
@@ -325,10 +319,6 @@ Vector<T, TVectorDimension>
   return value;
 }
 
-
-
-
 } // end namespace itk
-
 
 #endif

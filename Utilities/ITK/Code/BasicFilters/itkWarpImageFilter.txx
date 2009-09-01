@@ -3,14 +3,14 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWarpImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 17:31:02 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2009-03-24 21:48:17 $
+  Version:   $Revision: 1.33 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,6 +22,10 @@
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
+#include "itkContinuousIndex.h"
+#include "vnl/vnl_math.h"
+
+#include "itkVariableLengthVector.h"
 
 namespace itk
 {
@@ -34,22 +38,21 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 ::WarpImageFilter()
 {
   // Setup the number of required inputs
-  this->SetNumberOfRequiredInputs( 2 );  
-  
+  this->SetNumberOfRequiredInputs( 2 );
+
   // Setup default values
   m_OutputSpacing.Fill( 1.0 );
   m_OutputOrigin.Fill( 0.0 );
   m_OutputDirection.SetIdentity();
-
+  m_OutputSize.Fill(0);
   m_EdgePaddingValue = NumericTraits<PixelType>::Zero;
-
+  m_OutputStartIndex.Fill(0);
   // Setup default interpolator
   typename DefaultInterpolatorType::Pointer interp =
     DefaultInterpolatorType::New();
 
-  m_Interpolator = 
+  m_Interpolator =
     static_cast<InterpolatorType*>( interp.GetPointer() );
-
 }
 
 /**
@@ -66,11 +69,13 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
   os << indent << "OutputSpacing: " << m_OutputSpacing << std::endl;
   os << indent << "OutputOrigin: " << m_OutputOrigin << std::endl;
   os << indent << "OutputDirection: " << m_OutputDirection << std::endl;
+  os << indent << "OutputSize: " << m_OutputSize << std::endl;
+  os << indent << "OutputStartIndex: " << m_OutputStartIndex << std::endl;
   os << indent << "EdgePaddingValue: "
      << static_cast<typename NumericTraits<PixelType>::PrintType>(m_EdgePaddingValue)
      << std::endl;
   os << indent << "Interpolator: " << m_Interpolator.GetPointer() << std::endl;
-  
+
 }
 
 
@@ -103,6 +108,19 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
   this->SetOutputOrigin(p);
 }
 
+/** Helper method to set the output parameters based on this image */
+template <class TInputImage,class TOutputImage,class TDeformationField>
+void
+WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
+::SetOutputParametersFromImage ( const ImageBaseType * image )
+{
+  this->SetOutputOrigin ( image->GetOrigin() );
+  this->SetOutputSpacing ( image->GetSpacing() );
+  this->SetOutputDirection ( image->GetDirection() );
+  this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
+  this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
+}
+
 /**
  * Set deformation field as Inputs[1] for this ProcessObject.
  *
@@ -114,7 +132,7 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
   const DeformationFieldType * field )
 {
   // const cast is needed because the pipeline is not const-correct.
-  DeformationFieldType * input =  
+  DeformationFieldType * input =
        const_cast< DeformationFieldType * >( field );
   this->ProcessObject::SetNthInput( 1, input );
 }
@@ -149,10 +167,24 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
     {
     itkExceptionMacro(<< "Interpolator not set");
     }
+  DeformationFieldPointer fieldPtr = this->GetDeformationField();
 
   // Connect input image to interpolator
   m_Interpolator->SetInputImage( this->GetInput() );
-
+  typename DeformationFieldType::RegionType defRegion =
+    fieldPtr->GetLargestPossibleRegion();
+  typename OutputImageType::RegionType outRegion =
+    this->GetOutput()->GetLargestPossibleRegion();
+  m_DefFieldSizeSame = outRegion == defRegion;
+  if(!m_DefFieldSizeSame)
+    {
+    m_StartIndex = fieldPtr->GetBufferedRegion().GetIndex();
+    for(unsigned i = 0; i < ImageDimension; i++)
+      {
+      m_EndIndex[i] = m_StartIndex[i] +
+        fieldPtr->GetBufferedRegion().GetSize()[i] - 1;
+      }
+    }
 }
 
 /**
@@ -165,9 +197,116 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 {
   // Disconnect input image from interpolator
   m_Interpolator->SetInputImage( NULL );
-
 }
 
+
+template <class TInputImage,class TOutputImage,class TDeformationField>
+typename WarpImageFilter<TInputImage,
+                         TOutputImage,
+                         TDeformationField>::DisplacementType
+WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
+::EvaluateDeformationAtPhysicalPoint(const PointType &point)
+{
+  DeformationFieldPointer fieldPtr = this->GetDeformationField();
+  ContinuousIndex<double,ImageDimension> index;
+  fieldPtr->TransformPhysicalPointToContinuousIndex(point,index);
+  unsigned int dim;  // index over dimension
+  /**
+   * Compute base index = closest index below point
+   * Compute distance from point to base index
+   */
+  signed long baseIndex[ImageDimension];
+  IndexType neighIndex;
+  double distance[ImageDimension];
+
+  for( dim = 0; dim < ImageDimension; dim++ )
+    {
+    baseIndex[dim] = (long) vcl_floor(index[dim] );
+
+    if( baseIndex[dim] >=  m_StartIndex[dim] )
+      {
+      if( baseIndex[dim] <  m_EndIndex[dim] )
+        {
+        distance[dim] = index[dim] - double( baseIndex[dim] );
+        }
+      else
+        {
+        baseIndex[dim] = m_EndIndex[dim];
+        distance[dim] = 0.0;
+        }
+      }
+    else
+      {
+      baseIndex[dim] = m_StartIndex[dim];
+      distance[dim] = 0.0;
+      }
+    }
+
+  /**
+   * Interpolated value is the weight some of each of the surrounding
+   * neighbors. The weight for each neighbour is the fraction overlap
+   * of the neighbor pixel with respect to a pixel centered on point.
+   */
+  DisplacementType output;
+  output.Fill(0);
+
+  double totalOverlap = 0.0;
+  unsigned int numNeighbors(1 << TInputImage::ImageDimension);
+
+  for( unsigned int counter = 0; counter < numNeighbors; counter++ )
+    {
+    double overlap = 1.0;          // fraction overlap
+    unsigned int upper = counter;  // each bit indicates upper/lower neighbour
+
+    // get neighbor index and overlap fraction
+    for( dim = 0; dim < ImageDimension; dim++ )
+      {
+
+      if( upper & 1 )
+        {
+        neighIndex[dim] = baseIndex[dim] + 1;
+        overlap *= distance[dim];
+        }
+      else
+        {
+        neighIndex[dim] = baseIndex[dim];
+        overlap *= 1.0 - distance[dim];
+        }
+
+      upper >>= 1;
+
+      }
+
+    // get neighbor value only if overlap is not zero
+    if( overlap )
+      {
+      const DisplacementType input =
+        fieldPtr->GetPixel( neighIndex );
+      for(unsigned int k = 0; k < PixelSizeFinder(input); k++ )
+        {
+        output[k] += overlap * static_cast<double>( input[k] );
+        }
+      totalOverlap += overlap;
+      }
+
+    if( totalOverlap == 1.0 )
+      {
+      // finished
+      break;
+      }
+
+    }
+  return ( output );
+}
+
+template <class PixelType> unsigned int PixelSizeFinder(itk::VariableLengthVector<PixelType> pix)
+{
+  return pix.Size();
+}
+template <class PixelType> unsigned int PixelSizeFinder(PixelType pix)
+{
+  return PixelType::Dimension;
+}
 
 /**
  * Compute the output for the region specified by outputRegionForThread.
@@ -186,50 +325,80 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 
   // support progress methods/callbacks
   ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-  
+
   // iterator for the output image
   ImageRegionIteratorWithIndex<OutputImageType> outputIt(
     outputPtr, outputRegionForThread );
-
-  // iterator for the deformation field
-  ImageRegionIterator<DeformationFieldType> fieldIt(
-    fieldPtr, outputRegionForThread );
-  
   IndexType index;
   PointType point;
   DisplacementType displacement;
-
-  while( !outputIt.IsAtEnd() )
+  if(this->m_DefFieldSizeSame)
     {
-    // get the output image index
-    index = outputIt.GetIndex();
-    outputPtr->TransformIndexToPhysicalPoint( index, point );
+    // iterator for the deformation field
+    ImageRegionIterator<DeformationFieldType>
+      fieldIt(fieldPtr, outputRegionForThread );
 
-    // get the required displacement
-    displacement = fieldIt.Get();
-
-    // compute the required input image point
-    for(unsigned int j = 0; j < ImageDimension; j++ )
+    while( !outputIt.IsAtEnd() )
       {
-      point[j] += displacement[j];
+      // get the output image index
+      index = outputIt.GetIndex();
+      outputPtr->TransformIndexToPhysicalPoint( index, point );
+
+      // get the required displacement
+      displacement = fieldIt.Get();
+
+      // compute the required input image point
+      for(unsigned int j = 0; j < ImageDimension; j++ )
+        {
+        point[j] += displacement[j];
+        }
+
+      // get the interpolated value
+      if( m_Interpolator->IsInsideBuffer( point ) )
+        {
+        PixelType value =
+          static_cast<PixelType>(m_Interpolator->Evaluate( point ) );
+        outputIt.Set( value );
+        }
+      else
+        {
+        outputIt.Set( m_EdgePaddingValue );
+        }
+      ++outputIt;
+      ++fieldIt;
+      progress.CompletedPixel();
       }
-
-    // get the interpolated value
-    if( m_Interpolator->IsInsideBuffer( point ) )
-      {
-      PixelType value = static_cast<PixelType>( 
-        m_Interpolator->Evaluate( point ) );
-      outputIt.Set( value );
-      }
-    else
-      {
-      outputIt.Set( m_EdgePaddingValue );
-      }   
-    ++outputIt;
-    ++fieldIt; 
-    progress.CompletedPixel();
     }
+  else
+    {
+    while( !outputIt.IsAtEnd() )
+      {
+      // get the output image index
+      index = outputIt.GetIndex();
+      outputPtr->TransformIndexToPhysicalPoint( index, point );
 
+      displacement = this->EvaluateDeformationAtPhysicalPoint(point);
+      // compute the required input image point
+      for(unsigned int j = 0; j < ImageDimension; j++ )
+        {
+        point[j] += displacement[j];
+        }
+
+      // get the interpolated value
+      if( m_Interpolator->IsInsideBuffer( point ) )
+        {
+        PixelType value =
+          static_cast<PixelType>(m_Interpolator->Evaluate( point ) );
+        outputIt.Set( value );
+        }
+      else
+        {
+        outputIt.Set( m_EdgePaddingValue );
+        }
+      ++outputIt;
+      progress.CompletedPixel();
+      }
+    }
 }
 
 
@@ -243,7 +412,7 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
   Superclass::GenerateInputRequestedRegion();
 
   // request the largest possible region for the input image
-  InputImagePointer inputPtr = 
+  InputImagePointer inputPtr =
     const_cast< InputImageType * >( this->GetInput() );
 
   if( inputPtr )
@@ -251,15 +420,18 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
     inputPtr->SetRequestedRegionToLargestPossibleRegion();
     }
 
-  // just propagate up the output requested region for the 
+  // just propagate up the output requested region for the
   // deformation field.
   DeformationFieldPointer fieldPtr = this->GetDeformationField();
   OutputImagePointer outputPtr = this->GetOutput();
-  if( fieldPtr )
+  if(fieldPtr.IsNotNull() )
     {
     fieldPtr->SetRequestedRegion( outputPtr->GetRequestedRegion() );
+    if(!fieldPtr->VerifyRequestedRegion())
+      {
+      fieldPtr->SetRequestedRegion(fieldPtr->GetLargestPossibleRegion());
+      }
     }
-
 }
 
 
@@ -278,12 +450,19 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
   outputPtr->SetDirection( m_OutputDirection );
 
   DeformationFieldPointer fieldPtr = this->GetDeformationField();
-  if( fieldPtr )
+  if( this->m_OutputSize[0] == 0 &&
+      fieldPtr.IsNotNull())
     {
     outputPtr->SetLargestPossibleRegion( fieldPtr->
                                          GetLargestPossibleRegion() );
     }
-
+  else
+    {
+    OutputImageRegionType region;
+    region.SetSize(this->m_OutputSize);
+    region.SetIndex(this->m_OutputStartIndex);
+    outputPtr->SetLargestPossibleRegion(region);
+    }
 }
 
 

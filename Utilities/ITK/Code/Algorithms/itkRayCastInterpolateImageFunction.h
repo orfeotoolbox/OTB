@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkRayCastInterpolateImageFunction.h,v $
 Language:  C++
-Date:      $Date: 2008-05-13 15:32:36 $
-Version:   $Revision: 1.16 $
+Date:      $Date: 2009-04-23 03:53:36 $
+Version:   $Revision: 1.17 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -141,12 +141,12 @@ public:
   /** Connect the Interpolator. */
   itkSetMacro( FocalPoint, InputPointType );
   /** Get a pointer to the Interpolator.  */
-  itkGetMacro( FocalPoint, InputPointType );
+  itkGetConstMacro( FocalPoint, InputPointType );
 
   /** Connect the Transform. */
   itkSetMacro( Threshold, double );
   /** Get a pointer to the Transform.  */
-  itkGetMacro( Threshold, double );
+  itkGetConstMacro( Threshold, double );
  
   /** Check if a point is inside the image buffer.
    * \warning For efficiency, no validity checking of

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRigid2DTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2008-12-19 16:34:40 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2009-04-09 09:23:21 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -112,7 +112,7 @@ Rigid2DTransform<TScalarType>
     m_Angle = -m_Angle;
     }
 
-  if(r[1][0]-sin(m_Angle) > 0.000001)
+  if(r[1][0]-vcl_sin(m_Angle) > 0.000001)
     {
     itkWarningMacro("Bad Rotation Matrix " << this->GetMatrix() ); 
     }
@@ -139,9 +139,35 @@ Rigid2DTransform<TScalarType>::
 CloneInverseTo( Pointer & result ) const
 {
   result = New();
-  result->SetCenter( this->GetCenter() );  // inverse have the same center
-  result->SetAngle( -this->GetAngle() );
-  result->SetTranslation( -( this->GetInverseMatrix() * this->GetTranslation() ) );
+  this->GetInverse(result.GetPointer());
+}
+
+// return an inverse transformation
+template<class TScalarType>
+bool
+Rigid2DTransform<TScalarType>::
+GetInverse( Self* inverse) const
+{
+  if(!inverse)
+    {
+    return false;
+    }
+
+  inverse->SetCenter( this->GetCenter() );  // inverse have the same center
+  inverse->SetAngle( -this->GetAngle() );
+  inverse->SetTranslation( -( this->GetInverseMatrix() * this->GetTranslation() ) );
+
+  return true;
+}
+
+// Return an inverse of this transform
+template<class TScalarType>
+typename Rigid2DTransform<TScalarType>::InverseTransformBasePointer
+Rigid2DTransform<TScalarType>
+::GetInverseTransform() const
+{
+  Pointer inv = New();
+  return GetInverse(inv) ? inv.GetPointer() : NULL;
 }
 
 // Create and return a clone of the transformation

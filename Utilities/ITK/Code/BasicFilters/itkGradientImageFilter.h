@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGradientImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 20:13:36 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2009-04-25 12:27:22 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -109,7 +109,7 @@ public:
   /** Set/Get whether or not the filter will use the spacing of the input
       image in its calculations */
   itkSetMacro(UseImageSpacing, bool);
-  itkGetMacro(UseImageSpacing, bool);
+  itkGetConstMacro(UseImageSpacing, bool);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -133,7 +133,7 @@ public:
    * and  OFF by default when ITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE is
    * OFF). */
   itkSetMacro( UseImageDirection, bool );
-  itkGetMacro( UseImageDirection, bool );
+  itkGetConstMacro( UseImageDirection, bool );
   itkBooleanMacro( UseImageDirection );
 
 protected:

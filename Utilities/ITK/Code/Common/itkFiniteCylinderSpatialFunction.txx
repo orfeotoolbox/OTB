@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkFiniteCylinderSpatialFunction.txx,v $
 Language:  C++
-Date:      $Date: 2008-10-16 23:25:41 $
-Version:   $Revision: 1.8 $
+Date:      $Date: 2009-04-06 16:49:29 $
+Version:   $Revision: 1.10 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -63,8 +63,8 @@ FiniteCylinderSpatialFunction<VDimension, TInput>
   //the point is within the length of the cylinder along the medial axis
   const double distanceFromCenter = dot_product( medialAxisVector.GetVnlVector(), pointVector.GetVnlVector() );
 
-  if(fabs(distanceFromCenter) <= (halfAxisLength) 
-     && m_Radius >= vcl_sqrt(pow(pointVector.GetVnlVector().magnitude(),2.0) - vcl_pow(distanceFromCenter,2.0)))
+  if(vcl_fabs(distanceFromCenter) <= (halfAxisLength) 
+     && m_Radius >= vcl_sqrt(vcl_pow(pointVector.GetVnlVector().magnitude(),2.0) - vcl_pow(distanceFromCenter,2.0)))
     {
     return 1;
     }

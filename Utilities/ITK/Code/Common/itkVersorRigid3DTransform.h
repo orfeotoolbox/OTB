@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVersorRigid3DTransform.h,v $
   Language:  C++
-  Date:      $Date: 2006-08-09 04:35:32 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2009-04-13 23:41:53 $
+  Version:   $Revision: 1.28 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -114,10 +114,6 @@ protected:
 
   void PrintSelf(std::ostream &os, Indent indent) const;
 
-  /** This method must be made protected here because it is not a safe way of
-   * initializing the Versor */
-  virtual void SetRotationMatrix(const MatrixType & matrix)
-    { this->Superclass::SetRotationMatrix( matrix ); }
  
 private:
   VersorRigid3DTransform(const Self&); //purposely not implemented

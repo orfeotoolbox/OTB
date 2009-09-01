@@ -4,8 +4,8 @@
   Module:    $RCSfile: gdcmFileHelper.cxx,v $
   Language:  C++
 
-  Date:      $Date: 2008-12-19 11:27:17 $
-  Version:   $Revision: 1.29 $
+  Date:      $Date: 2009-03-27 19:14:02 $
+  Version:   $Revision: 1.30 $
                                                                                 
   Copyright (c) CREATIS (Centre de Recherche et d'Applications en Traitement de
   l'Image). All rights reserved. See Doc/License.txt or
@@ -1636,7 +1636,7 @@ void FileHelper::CheckMandatoryElements()
                 os2 << *it;
                 }
               }
-            imagetype = os.str();
+            imagetype = os2.str();
             }
           }
         }

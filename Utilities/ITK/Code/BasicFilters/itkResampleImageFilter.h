@@ -3,14 +3,14 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkResampleImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-12-18 13:30:38 $
-  Version:   $Revision: 1.59 $
+  Date:      $Date: 2009-04-25 12:28:07 $
+  Version:   $Revision: 1.62 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -69,7 +69,7 @@ namespace itk
  * ProcessObject::GenerateInputRequestedRegion() and
  * ProcessObject::GenerateOutputInformation().
  *
- * This filter is implemented as a multithreaded filter.  It provides a
+ * This filter is implemented as a multithreaded filter.  It provides a 
  * ThreadedGenerateData() method for its implementation.
  *
  * \ingroup GeometricTransforms
@@ -94,7 +94,7 @@ public:
   typedef typename InputImageType::RegionType     InputImageRegionType;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);
+  itkNewMacro(Self);  
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ResampleImageFilter, ImageToImageFilter);
@@ -109,7 +109,7 @@ public:
   /** Transform typedef. */
   typedef double CoordRepType;
   typedef Transform<CoordRepType,
-    itkGetStaticConstMacro(ImageDimension),
+    itkGetStaticConstMacro(ImageDimension), 
     itkGetStaticConstMacro(ImageDimension)> TransformType;
   typedef typename TransformType::ConstPointer TransformPointerType;
 
@@ -130,7 +130,7 @@ public:
   /** Image pixel value typedef. */
   typedef typename TOutputImage::PixelType   PixelType;
   typedef typename TInputImage::PixelType    InputPixelType;
-
+  
   /** Typedef to describe the output image region type. */
   typedef typename TOutputImage::RegionType OutputImageRegionType;
 
@@ -139,6 +139,9 @@ public:
   typedef typename TOutputImage::PointType     OriginPointType;
   typedef typename TOutputImage::DirectionType DirectionType;
 
+  /** base type for images of the current ImageDimension */
+  typedef ImageBase<itkGetStaticConstMacro(ImageDimension)> ImageBaseType;
+  
   /** Set the coordinate transformation.
    * Set the coordinate transform to use for resampling.  Note that this must
    * be in physical coordinates and it is the output-to-input transform, NOT
@@ -146,7 +149,7 @@ public:
    * the filter uses an Identity transform. You must provide a different
    * transform here, before attempting to run the filter, if you do not want to
    * use the default Identity transform. */
-  itkSetConstObjectMacro( Transform, TransformType );
+  itkSetConstObjectMacro( Transform, TransformType ); 
 
   /** Get a pointer to the coordinate transform. */
   itkGetConstObjectMacro( Transform, TransformType );
@@ -167,7 +170,7 @@ public:
 
   /** Get the size of the output image. */
   itkGetConstReferenceMacro( Size, SizeType );
-
+     
   /** Set the pixel value when a transformed pixel is outside of the
    * image.  The default default pixel value is 0. */
   itkSetMacro( DefaultPixelValue, PixelType );
@@ -194,25 +197,13 @@ public:
   itkGetConstReferenceMacro( OutputDirection, DirectionType );
 
   /** Helper method to set the output parameters based on this image */
-  void SetOutputParametersFromImage ( typename OutputImageType::Pointer Image )
-    {
-    this->SetOutputOrigin ( Image->GetOrigin() );
-    this->SetOutputSpacing ( Image->GetSpacing() );
-    this->SetOutputDirection ( Image->GetDirection() );
-    this->SetOutputStartIndex ( Image->GetLargestPossibleRegion().GetIndex() );
-    this->SetSize ( Image->GetLargestPossibleRegion().GetSize() );
-    }
+  void SetOutputParametersFromImage ( const ImageBaseType * image );
 
-  /** Helper method to set the output parameters based on this image */
-  void SetOutputParametersFromConstImage ( typename OutputImageType::ConstPointer Image )
-    {
-    this->SetOutputOrigin ( Image->GetOrigin() );
-    this->SetOutputSpacing ( Image->GetSpacing() );
-    this->SetOutputDirection ( Image->GetDirection() );
-    this->SetOutputStartIndex ( Image->GetLargestPossibleRegion().GetIndex() );    this->SetSize ( Image->GetLargestPossibleRegion().GetSize() );
-    }
+  /** \deprecated in ITK 3.14, Please use SetOutputParametersFromImage().
+   * Helper method to set the output parameters based on this image. */
+  itkLegacyMacro( void SetOutputParametersFromConstImage ( const ImageBaseType * image ) );
 
-  /** Set the start index of the output largest possible region.
+  /** Set the start index of the output largest possible region. 
    * The default is an index of all zeros. */
   itkSetMacro( OutputStartIndex, IndexType );
 
@@ -223,14 +214,14 @@ public:
    *  the information is specified with the SetOutputSpacing, Origin,
    *  and Direction methods. UseReferenceImage must be On and a
    *  Reference image must be present to override the defaul behavior.
-   *  NOTE: This function seems redundant with the
+   *  NOTE: This function seems redundant with the 
    *  SetOutputParametersFromImage( image ) function */
   void SetReferenceImage ( const TOutputImage *image );
   const TOutputImage * GetReferenceImage( void ) const;
 
   itkSetMacro( UseReferenceImage, bool );
   itkBooleanMacro( UseReferenceImage );
-  itkGetMacro( UseReferenceImage, bool );
+  itkGetConstMacro( UseReferenceImage, bool );
 
   /** ResampleImageFilter produces an image which is a different size
    * than its input.  As such, it needs to provide an implementation
@@ -246,11 +237,11 @@ public:
    * \sa ProcessObject::GenerateInputRequestedRegion() */
   virtual void GenerateInputRequestedRegion( void );
 
-  /** This method is used to set the state of the filter before
+  /** This method is used to set the state of the filter before 
    * multi-threading. */
   virtual void BeforeThreadedGenerateData( void );
 
-  /** This method is used to set the state of the filter after
+  /** This method is used to set the state of the filter after 
    * multi-threading. */
   virtual void AfterThreadedGenerateData( void );
 
@@ -287,12 +278,12 @@ protected:
                                       int threadId );
 
   /** Implementation for resampling that works for with linear
-   *  transformation types.
+   *  transformation types. 
    */
   void LinearThreadedGenerateData( const OutputImageRegionType&
                                    outputRegionForThread,
                                    int threadId );
-
+  
 
 private:
   ResampleImageFilter( const Self& ); //purposely not implemented
@@ -313,13 +304,13 @@ private:
 
 };
 
-
+  
 } // end namespace itk
-
+  
 #ifndef ITK_MANUAL_INSTANTIATION
 #include "itkResampleImageFilter.txx"
 #endif
-
+  
 #endif
-
+  
 #endif

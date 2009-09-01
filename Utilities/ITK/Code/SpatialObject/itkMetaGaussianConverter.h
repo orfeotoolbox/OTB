@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMetaGaussianConverter.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-28 19:24:56 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-04-07 14:34:05 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,7 +24,7 @@ namespace itk
 {
 
 template <unsigned int NDimensions = 3>
-class MetaGaussianConverter
+class ITK_EXPORT MetaGaussianConverter
 {
 
 public:

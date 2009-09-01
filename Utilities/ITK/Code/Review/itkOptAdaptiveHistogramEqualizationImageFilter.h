@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptAdaptiveHistogramEqualizationImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-12-21 19:15:48 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-04-23 03:43:42 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -87,19 +87,19 @@ public:
    * histogram equalization (provided beta=0).  Alpha=1 produces an
    * unsharp mask. Default is 0.3. */
   itkSetMacro(Alpha, float);
-  itkGetMacro(Alpha, float);
+  itkGetConstMacro(Alpha, float);
 
   /** Set/Get the value of beta.  If beta=1 (and alpha=1),
    * then the output image matches the input image.  As beta
    * approaches 0, the filter behaves as an unsharp mask. Default is
    * 0.3. */
   itkSetMacro(Beta, float);
-  itkGetMacro(Beta, float);
+  itkGetConstMacro(Beta, float);
 
   /** Set/Get whether an optimized lookup table for the intensity
    * mapping function is used.  Default is off. */
   itkSetMacro(UseLookupTable, bool);
-  itkGetMacro(UseLookupTable, bool);
+  itkGetConstMacro(UseLookupTable, bool);
   itkBooleanMacro(UseLookupTable);
 
 protected:

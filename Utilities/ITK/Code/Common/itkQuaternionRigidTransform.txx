@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuaternionRigidTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2006-08-09 04:35:31 $
-  Version:   $Revision: 1.30 $
+  Date:      $Date: 2009-03-03 15:08:28 $
+  Version:   $Revision: 1.31 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkQuaternionRigidTransform_txx
-#define _itkQuaternionRigidTransform_txx
+#ifndef __itkQuaternionRigidTransform_txx
+#define __itkQuaternionRigidTransform_txx
 
 #include "itkQuaternionRigidTransform.h"
 
@@ -41,8 +41,6 @@ QuaternionRigidTransform( unsigned int outputSpaceDimension,
 {
   m_Rotation = VnlQuaternionType(0,0,0,1); // axis * vcl_sin(t/2), vcl_cos(t/2)
 }
-
-
 
 // Constructor with explicit arguments
 template<class TScalarType>
@@ -123,8 +121,6 @@ QuaternionRigidTransform<TScalarType>
   this->Modified();
 
 }
-
-
 
 // Set Parameters
 template <class TScalarType>

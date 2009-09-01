@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOtsuThresholdImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-26 21:45:54 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-04-23 03:53:36 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -82,22 +82,22 @@ public:
   itkSetMacro(OutsideValue,OutputPixelType);
   
   /** Get the "outside" pixel value. */
-  itkGetMacro(OutsideValue,OutputPixelType);
+  itkGetConstMacro(OutsideValue,OutputPixelType);
 
   /** Set the "inside" pixel value. The default value 
    * NumericTraits<OutputPixelType>::max() */
   itkSetMacro(InsideValue,OutputPixelType);
   
   /** Get the "inside" pixel value. */
-  itkGetMacro(InsideValue,OutputPixelType);
+  itkGetConstMacro(InsideValue,OutputPixelType);
 
   /** Set/Get the number of histogram bins. Defaults is 128. */
   itkSetClampMacro( NumberOfHistogramBins, unsigned long, 1, 
                     NumericTraits<unsigned long>::max() );
-  itkGetMacro( NumberOfHistogramBins, unsigned long );
+  itkGetConstMacro( NumberOfHistogramBins, unsigned long );
 
   /** Get the computed threshold. */
-  itkGetMacro(Threshold,InputPixelType);
+  itkGetConstMacro(Threshold,InputPixelType);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

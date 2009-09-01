@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRecursiveMultiResolutionPyramidImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-26 21:45:56 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-03-05 17:09:59 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,6 +38,11 @@ namespace itk
  * 
  * See documentation of MultiResolutionPyramidImageFilter
  * for information on how to specify a multi-resolution schedule.
+ *
+ * Note that unlike the MultiResolutionPyramidImageFilter,
+ * RecursiveMultiResolutionPyramidImageFilter will not smooth the output at
+ * the finest level if the shrink factors are all one and the schedule
+ * is downward divisible.
  * 
  * This class is templated over the input image type and the output image type.
  *

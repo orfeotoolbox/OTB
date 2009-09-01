@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkThresholdImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-18 16:11:15 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2009-04-25 12:28:11 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -73,7 +73,7 @@ public:
   itkSetMacro(OutsideValue,PixelType);
   
   /** Get the "outside" pixel value. */
-  itkGetMacro(OutsideValue,PixelType);
+  itkGetConstMacro(OutsideValue,PixelType);
                  
   /** The values greater than or equal to the value are set to OutsideValue. */
   void ThresholdAbove(const PixelType &thresh);
@@ -86,11 +86,11 @@ public:
   
   /** Set/Get methods to set the lower threshold */
   itkSetMacro(Lower, PixelType);
-  itkGetMacro(Lower, PixelType);
+  itkGetConstMacro(Lower, PixelType);
 
   /** Set/Get methods to set the upper threshold */
   itkSetMacro(Upper, PixelType);
-  itkGetMacro(Upper, PixelType);
+  itkGetConstMacro(Upper, PixelType);
 
   /** Some additional typedefs.  */
   typedef TImage                                InputImageType;

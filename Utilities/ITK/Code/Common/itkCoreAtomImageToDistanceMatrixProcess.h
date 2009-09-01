@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCoreAtomImageToDistanceMatrixProcess.h,v $
   Language:  C++
-  Date:      $Date: 2008-08-04 15:56:22 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-25 12:24:03 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -57,7 +57,7 @@ public:
   itkTypeMacro(CoreAtomImageToDistanceMatrixProcess, ProcessObject);
 
   //Get macro for m_NumNodes
-  itkGetMacro(NumberOfNodes, int);
+  itkGetConstMacro(NumberOfNodes, int);
 
   /** Typedef for core atom image */
   typedef TSourceImage                             CoreAtomImageType;

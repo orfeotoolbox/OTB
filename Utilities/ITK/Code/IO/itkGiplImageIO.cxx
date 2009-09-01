@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGiplImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-01-25 00:00:06 $
-  Version:   $Revision: 1.26 $  
+  Date:      $Date: 2009-04-05 10:56:48 $
+  Version:   $Revision: 1.27 $  
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,7 +19,7 @@
 #include "itkByteSwapper.h"
 #include <iostream>
 #include <list>
-#include <string>
+#include <string.h>
 #include <math.h>
 #include "itk_zlib.h"
 

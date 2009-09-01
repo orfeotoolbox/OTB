@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkReinitializeLevelSetImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-26 21:45:57 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-04-23 03:53:37 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -85,23 +85,23 @@ public:
   /** Set/Get the value of the level set to be located. The default value is
    *  0. */
   itkSetMacro( LevelSetValue, double );
-  itkGetMacro( LevelSetValue, double );
+  itkGetConstMacro( LevelSetValue, double );
 
   /** Set/Get the narrowbanding flag. By default, narrowbanding is switched
    * off. */
   itkSetMacro( NarrowBanding, bool );
-  itkGetMacro( NarrowBanding, bool );
+  itkGetConstMacro( NarrowBanding, bool );
   itkBooleanMacro( NarrowBanding );
 
   /** Set/Get the input narrow bandwidth. The default value is 12. */
   itkSetClampMacro( InputNarrowBandwidth, double, 0.0, 
                     NumericTraits<double>::max());
-  itkGetMacro( InputNarrowBandwidth, double );
+  itkGetConstMacro( InputNarrowBandwidth, double );
 
   /** Set/Get the output narrow bandwidth. The default value is 12. */
   itkSetClampMacro( OutputNarrowBandwidth, double, 0.0, 
                     NumericTraits<double>::max());
-  itkGetMacro( OutputNarrowBandwidth, double );
+  itkGetConstMacro( OutputNarrowBandwidth, double );
 
   /** Set the bandwidth for both the input and output narrowband,
    * By default, both the input and output are set to 12. */

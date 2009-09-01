@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineDeformableTransform.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 12:04:40 $
-  Version:   $Revision: 1.39 $
+  Date:      $Date: 2009-05-13 15:26:06 $
+  Version:   $Revision: 1.41 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -273,22 +273,18 @@ public:
 
   /** This method specifies the region over which the grid resides. */
   virtual void SetGridRegion( const RegionType& region );
-  itkGetMacro( GridRegion, RegionType );
   itkGetConstMacro( GridRegion, RegionType );
 
   /** This method specifies the grid spacing or resolution. */
   virtual void SetGridSpacing( const SpacingType& spacing );
-  itkGetMacro( GridSpacing, SpacingType );
   itkGetConstMacro( GridSpacing, SpacingType );
 
   /** This method specifies the grid directions . */
   virtual void SetGridDirection( const DirectionType & spacing );
-  itkGetMacro( GridDirection, DirectionType );
   itkGetConstMacro( GridDirection, DirectionType );
 
   /** This method specifies the grid origin. */
   virtual void SetGridOrigin( const OriginType& origin );
-  itkGetMacro( GridOrigin, OriginType );
   itkGetConstMacro( GridOrigin, OriginType );
 
   /** Typedef of the bulk transform. */
@@ -427,6 +423,7 @@ private:
   bool          m_SplineOrderOdd;
   SizeType      m_SupportSize;
   IndexType     m_ValidRegionLast;
+  IndexType     m_ValidRegionFirst;
   
   /** Array holding images wrapped from the flat parameters. */
   ImagePointer   m_WrappedImage[NDimensions];
