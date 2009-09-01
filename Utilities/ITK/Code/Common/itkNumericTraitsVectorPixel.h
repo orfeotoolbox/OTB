@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNumericTraitsVectorPixel.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-19 19:41:22 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-03-03 15:07:54 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -1547,4 +1547,3 @@ public:
 } // end namespace itk
 
 #endif // __itkNumericTraitsVectorPixel_h  
-

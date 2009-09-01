@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptGrayscaleDilateImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-09-30 18:07:03 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-04-23 03:43:42 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -105,11 +105,11 @@ public:
 
   /** Set/Get the boundary value. */
   void SetBoundary( const PixelType value );
-  itkGetMacro(Boundary, PixelType);
+  itkGetConstMacro(Boundary, PixelType);
   
   /** Set/Get the backend filter class. */
   void SetAlgorithm(int algo );
-  itkGetMacro(Algorithm, int);
+  itkGetConstMacro(Algorithm, int);
   
   /** GrayscaleDilateImageFilter need to set its internal filters as modified */
   virtual void Modified() const;

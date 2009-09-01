@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSpatialObjectToImageStatisticsCalculator.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-18 16:11:14 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-04-25 12:28:11 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -86,7 +86,7 @@ public:
 
   /** Set/Get the direction of the sample */
   itkSetMacro(SampleDirection,unsigned int);
-  itkGetMacro(SampleDirection,unsigned int);
+  itkGetConstMacro(SampleDirection,unsigned int);
 
   /** Set the input image. */
   itkSetConstObjectMacro(Image,ImageType);

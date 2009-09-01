@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSegmentationBorder.h,v $
   Language:  C++
-  Date:      $Date: 2006-02-06 22:01:58 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-03-03 15:09:09 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -45,9 +45,9 @@ class ITKCommon_EXPORT SegmentationBorder : public Object
 {
 public:
   /** Standard class typedefs. */
-  typedef SegmentationBorder   Self;
-  typedef Object Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef SegmentationBorder        Self;
+  typedef Object                    Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   /** Method for creation through the object factory. */

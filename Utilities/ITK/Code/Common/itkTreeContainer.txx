@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTreeContainer.txx,v $
   Language:  C++
-  Date:      $Date: 2008-06-20 20:28:54 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-03-03 15:10:35 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkTreeContainer_txx
-#define _itkTreeContainer_txx
+#ifndef __itkTreeContainer_txx
+#define __itkTreeContainer_txx
 
 #include "itkTreeContainer.h"
 
@@ -95,7 +95,6 @@ TreeContainer<TValueType>::Count() const
     ++it;
     }
   return size;
-return 0;
 }
 
 /** Swap the iterators */
@@ -148,7 +147,7 @@ TreeContainer<TValueType>::Contains( const TValueType element )
   it.GoToBegin();
   while(!it.IsAtEnd())
     {
-    if(it.Get()== element)
+    if(it.Get() == element)
       {
       return true;
       }

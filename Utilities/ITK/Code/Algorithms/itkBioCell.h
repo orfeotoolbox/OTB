@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBioCell.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-20 21:28:20 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-05-12 17:26:20 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -34,7 +34,7 @@ namespace bio {
  */
 
 template<unsigned int NSpaceDimension=3>
-class Cell : public CellBase 
+class ITK_EXPORT Cell : public CellBase 
 {
 public:
   typedef   CellBase                     Superclass;

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptBlackTopHatImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-28 18:14:36 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-04-23 03:43:42 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -91,7 +91,7 @@ public:
 
   /** Set/Get the backend filter class. */
   itkSetMacro(Algorithm, int);
-  itkGetMacro(Algorithm, int);
+  itkGetConstMacro(Algorithm, int);
   
   itkSetMacro(ForceAlgorithm, bool);
   itkGetConstReferenceMacro(ForceAlgorithm, bool);

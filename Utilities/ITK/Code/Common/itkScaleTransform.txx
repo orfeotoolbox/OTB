@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScaleTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2007-12-23 17:59:29 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2009-04-09 09:23:21 $
+  Version:   $Revision: 1.23 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkScaleTransform_txx
-#define _itkScaleTransform_txx
+#ifndef __itkScaleTransform_txx
+#define __itkScaleTransform_txx
 
 #include "itkScaleTransform.h"
 
@@ -80,8 +80,6 @@ ScaleTransform<TScalarType,NDimensions>
   return this->m_Parameters;
 }
 
-
-
 // Print self
 template<class ScalarType, unsigned int NDimensions>
 void
@@ -121,8 +119,6 @@ Scale(const ScaleType & scale, bool )
     }
   return;
 }
-
-
 
 // Transform a point
 template<class ScalarType, unsigned int NDimensions>
@@ -184,8 +180,6 @@ TransformCovariantVector(const InputCovariantVectorType &vect) const
   return result;
 }
 
-
-
 // Create and return an inverse transformation
 template<class ScalarType, unsigned int NDimensions>
 bool 
@@ -203,6 +197,16 @@ GetInverse(Self* inverse) const
     }
 
   return true;
+}
+
+// Return an inverse of this transform
+template<class ScalarType, unsigned int NDimensions>
+typename ScaleTransform<ScalarType, NDimensions>::InverseTransformBasePointer
+ScaleTransform<ScalarType, NDimensions>
+::GetInverseTransform() const
+{
+  Pointer inv = New();
+  return GetInverse(inv) ? inv.GetPointer() : NULL;
 }
 
 

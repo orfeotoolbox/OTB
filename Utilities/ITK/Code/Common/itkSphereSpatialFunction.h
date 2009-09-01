@@ -1,11 +1,10 @@
-
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSphereSpatialFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 23:39:53 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-04-25 12:24:12 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -37,11 +36,11 @@ class ITK_EXPORT SphereSpatialFunction
 {
 public:
   /** Standard class typedefs. */
-  typedef SphereSpatialFunction<VImageDimension,TInput> Self;
+  typedef SphereSpatialFunction<VImageDimension,TInput>           Self;
   typedef InteriorExteriorSpatialFunction<VImageDimension,TInput> Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
-    
+  typedef SmartPointer<Self>                                      Pointer;
+  typedef SmartPointer<const Self>                                ConstPointer;
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -58,11 +57,11 @@ public:
   OutputType Evaluate(const InputType& position) const;
 
   /** Get and set the center of the sphere. */
-  itkGetMacro( Center, InputType);
+  itkGetConstMacro( Center, InputType);
   itkSetMacro( Center, InputType);
   
   /** Get and set the radius of the sphere */
-  itkGetMacro( Radius, double);
+  itkGetConstMacro( Radius, double);
   itkSetMacro( Radius, double);
        
 protected:

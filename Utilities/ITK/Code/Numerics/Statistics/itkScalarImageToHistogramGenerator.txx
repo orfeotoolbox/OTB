@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarImageToHistogramGenerator.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-14 22:01:52 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-03-04 19:29:54 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkScalarImageToHistogramGenerator_txx
-#define _itkScalarImageToHistogramGenerator_txx
+#ifndef __itkScalarImageToHistogramGenerator_txx
+#define __itkScalarImageToHistogramGenerator_txx
 
 #include "itkScalarImageToHistogramGenerator.h"
 
@@ -32,8 +32,6 @@ ScalarImageToHistogramGenerator< TImage >
   m_HistogramGenerator = GeneratorType::New();
   m_HistogramGenerator->SetListSample( m_ImageToListAdaptor );
 }
-
-
 
 template < class TImage >
 void
@@ -52,8 +50,6 @@ ScalarImageToHistogramGenerator< TImage >
   return m_HistogramGenerator->GetOutput();
 }
 
-
-
 template < class TImage >
 void
 ScalarImageToHistogramGenerator< TImage >
@@ -61,8 +57,6 @@ ScalarImageToHistogramGenerator< TImage >
 {
   m_HistogramGenerator->Update();
 }
-
-
 
 template < class TImage >
 void
@@ -98,8 +92,6 @@ ScalarImageToHistogramGenerator< TImage >
   m_HistogramGenerator->SetHistogramMax( maxVector );
 }
 
-
-
 template < class TImage >
 void
 ScalarImageToHistogramGenerator< TImage >
@@ -107,9 +99,6 @@ ScalarImageToHistogramGenerator< TImage >
 {
   m_HistogramGenerator->SetMarginalScale( marginalScale );
 }
-
-
-
 
 template < class TImage >
 void
@@ -121,11 +110,7 @@ ScalarImageToHistogramGenerator< TImage >
   os << "HistogramGenerator = " << m_HistogramGenerator << std::endl;
 }
 
-
-
 } // end of namespace Statistics 
 } // end of namespace itk
 
 #endif
-
-

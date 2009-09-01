@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVoronoiSegmentationImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-27 19:30:17 $
-  Version:   $Revision: 1.34 $
+  Date:      $Date: 2009-04-23 03:53:37 $
+  Version:   $Revision: 1.35 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -79,29 +79,29 @@ public:
 
   /** Set/Get the Estimation of the mean pixel value for the object. */
   itkSetMacro(Mean, double);
-  itkGetMacro(Mean, double);
+  itkGetConstMacro(Mean, double);
 
   /** Set/Get the estimation of the STD of the pixel value for the
    *  object. */
   itkSetMacro(STD, double);
-  itkGetMacro(STD, double);
+  itkGetConstMacro(STD, double);
 
   /** Set/Get the Tolearance of Mean for classifying the regions. */
   itkSetMacro(MeanTolerance, double);
-  itkGetMacro(MeanTolerance, double);
+  itkGetConstMacro(MeanTolerance, double);
 
   /** Set the Tolearance of STD for classifying the regions. */
   itkSetMacro(STDTolerance, double);
 
   /** Get the Tolearance of Variance for classifying the regions. */
-  itkGetMacro(STDTolerance, double);
+  itkGetConstMacro(STDTolerance, double);
   
   /** Set/Get the mean percent error. */
   void SetMeanPercentError(double x);
-  itkGetMacro(MeanPercentError, double);
+  itkGetConstMacro(MeanPercentError, double);
 
   /** Set/Get the STD percent error. */
-  itkGetMacro(STDPercentError, double);
+  itkGetConstMacro(STDPercentError, double);
   void SetSTDPercentError(double x);
 
   /** Take a prior from other segmentation node, should be an

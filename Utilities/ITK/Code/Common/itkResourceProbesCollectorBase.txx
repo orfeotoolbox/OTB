@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkResourceProbesCollectorBase.txx,v $
   Language:  C++
-  Date:      $Date: 2008-11-10 13:54:35 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-03-03 15:08:55 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -94,8 +94,6 @@ ResourceProbesCollectorBase<TProbe>
     }
 
 }
-
-
 
 template <class TProbe>
 void

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWarpVectorImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 17:31:02 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-03-05 20:21:36 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -97,6 +97,23 @@ WarpVectorImageFilter<TInputImage,TOutputImage,TDeformationField>
 
 
 /** Set deformation field as Inputs[1] for this ProcessObject. */
+template <class TInputImage,class TOutputImage,class TDeformationField>
+void
+WarpVectorImageFilter<TInputImage,TOutputImage,TDeformationField>
+::SetDeformationField(
+  const DeformationFieldType * field )
+{
+  // const cast is needed because the pipeline is not const-correct.
+  DeformationFieldType * input =  
+       const_cast< DeformationFieldType * >( field );
+  this->ProcessObject::SetNthInput( 1, input );
+}
+
+
+/**
+ * Set deformation field as Inputs[1] for this ProcessObject
+ * (non const for backward compatibility)
+ */
 template <class TInputImage,class TOutputImage,class TDeformationField>
 void
 WarpVectorImageFilter<TInputImage,TOutputImage,TDeformationField>

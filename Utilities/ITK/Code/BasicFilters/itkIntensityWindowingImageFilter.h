@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIntensityWindowingImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 16:45:10 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-04-01 14:36:21 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -58,7 +58,7 @@ public:
   void SetOutputMaximum( TOutput max ) { m_OutputMaximum = max; }
   void SetWindowMinimum( TInput  min ) { m_WindowMinimum = min; }
   void SetWindowMaximum( TInput  max ) { m_WindowMaximum = max; }
-  inline TOutput operator()( const TInput & x )
+  inline TOutput operator()( const TInput & x ) const
     {
     if( x < m_WindowMinimum )
       {

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNarrowBand.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 19:33:42 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-04-06 13:59:00 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -21,6 +21,7 @@
 #define __itkNarrowBand_txx
 #include "itkNarrowBand.h"
 #include "math.h"
+#include "vcl_cmath.h"
 
 namespace itk
 {
@@ -45,7 +46,7 @@ NarrowBand<NodeType>
     {
     n = static_cast<unsigned int>( m_NodeContainer.size() );
     }
-  unsigned int regionsize = static_cast<unsigned int> (floor(static_cast<float>(m_NodeContainer.size())/static_cast<float>( n )));
+  unsigned int regionsize = static_cast<unsigned int> (vcl_floor(static_cast<float>(m_NodeContainer.size())/static_cast<float>( n )));
   if (regionsize == 0)
     {
     regionsize = 1;

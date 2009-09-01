@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTranslationTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2007-11-14 20:17:26 $
-  Version:   $Revision: 1.31 $
+  Date:      $Date: 2009-04-09 09:23:26 $
+  Version:   $Revision: 1.33 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkTranslationTransform_txx
-#define _itkTranslationTransform_txx
+#ifndef __itkTranslationTransform_txx
+#define __itkTranslationTransform_txx
 
 #include "itkTranslationTransform.h"
 
@@ -73,9 +73,6 @@ TranslationTransform<TScalarType, NDimensions>
     }
 }
 
-
-
-
 // Get the parameters
 template <class TScalarType, unsigned int NDimensions>
 const typename TranslationTransform<TScalarType, NDimensions>::ParametersType &
@@ -88,8 +85,6 @@ TranslationTransform<TScalarType, NDimensions>
     }  
   return this->m_Parameters;
 }
-
-
 
 // Print self
 template<class TScalarType, unsigned int NDimensions>
@@ -128,8 +123,6 @@ Translate(const OutputVectorType &offset, bool )
   this->SetParameters (newOffset);
   return;
 }
-
-
 
 // Transform a point
 template<class TScalarType, unsigned int NDimensions>
@@ -170,8 +163,6 @@ TransformCovariantVector(const InputCovariantVectorType &vect) const
   return  vect;
 }
 
-
-
 // return an inverse transformation
 template<class TScalarType, unsigned int NDimensions>
 bool
@@ -187,6 +178,16 @@ GetInverse( Self* inverse) const
   return true;
 }
 
+// Return an inverse of this transform
+template<class TScalarType, unsigned int NDimensions>
+typename TranslationTransform<TScalarType, NDimensions>::InverseTransformBasePointer
+TranslationTransform<TScalarType, NDimensions>
+::GetInverseTransform() const
+{
+  Pointer inv = New();
+  return GetInverse(inv) ? inv.GetPointer() : NULL;
+}
+
 // Compute the Jacobian in one position 
 template<class TScalarType, unsigned int NDimensions>
 const typename TranslationTransform<TScalarType, NDimensions>::JacobianType & 
@@ -197,8 +198,6 @@ GetJacobian( const InputPointType & ) const
   // initialized in the constructor, so we just need to return it here.
   return this->m_Jacobian;
 }
-
-
 
 // Set the parameters for an Identity transform of this class
 template<class TScalarType, unsigned int NDimensions>

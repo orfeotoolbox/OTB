@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryContourImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-14 22:00:53 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-04-23 03:43:41 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -134,14 +134,14 @@ public:
    * objects.
    */
   itkSetMacro(BackgroundValue, OutputImagePixelType);
-  itkGetMacro(BackgroundValue, OutputImagePixelType);
+  itkGetConstMacro(BackgroundValue, OutputImagePixelType);
 
   /**
    * Set/Get the foreground value used to identify the objects in the input and
    * output images.
    */
   itkSetMacro(ForegroundValue, InputImagePixelType);
-  itkGetMacro(ForegroundValue, InputImagePixelType);
+  itkGetConstMacro(ForegroundValue, InputImagePixelType);
 
 protected:
   BinaryContourImageFilter() 

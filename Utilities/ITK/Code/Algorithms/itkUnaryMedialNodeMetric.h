@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkUnaryMedialNodeMetric.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-27 19:30:16 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-05-12 17:26:21 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -45,7 +45,7 @@ namespace itk
  */
 
 template<int VDimensions = 3>
-class UnaryMedialNodeMetric : public LightObject 
+class ITK_EXPORT UnaryMedialNodeMetric : public LightObject 
 {
 public:
 

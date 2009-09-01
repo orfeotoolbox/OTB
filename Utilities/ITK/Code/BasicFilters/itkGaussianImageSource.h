@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianImageSource.h,v $
   Language:  C++
-  Date:      $Date: 2008-12-17 18:56:53 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2009-05-12 17:22:43 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -113,13 +113,13 @@ public:
   
   /** Gets and sets for gaussian parameters */
   itkSetMacro(Scale, double);
-  itkGetMacro(Scale, double);
+  itkGetConstReferenceMacro(Scale, double);
   itkSetMacro(Normalized, bool);
-  itkGetMacro(Normalized, bool);
+  itkGetConstReferenceMacro(Normalized, bool);
   itkSetMacro(Sigma, ArrayType);
-  itkGetMacro(Sigma, ArrayType);
+  itkGetConstReferenceMacro(Sigma, ArrayType);
   itkSetMacro(Mean, ArrayType);
-  itkGetMacro(Mean, ArrayType);
+  itkGetConstReferenceMacro(Mean, ArrayType);
   
 
 protected:

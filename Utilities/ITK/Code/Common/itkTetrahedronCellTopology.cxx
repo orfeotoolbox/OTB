@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTetrahedronCellTopology.cxx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:27 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-03-03 15:09:44 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -36,8 +36,6 @@ const int
 TetrahedronCellTopology
 ::m_Edges[6][2] = { {0,1}, {1,2}, {2,0}, {0,3}, {1,3}, {2,3} };
 
-
-
 TetrahedronCellTopology
 ::TetrahedronCellTopology()
 {
@@ -48,6 +46,4 @@ TetrahedronCellTopology
 {
 }
 
-
 } // end namespace itk
-

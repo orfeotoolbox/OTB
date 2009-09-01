@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkInPlaceImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 19:04:57 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-05-04 14:42:59 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -91,10 +91,13 @@ public:
   itkStaticConstMacro(OutputImageDimension, unsigned int,
                       TOutputImage::ImageDimension);
 
-  /** In place operation can be turned on and off. This only has an
-   * effect when the input and output image type match. */
+  /** In place operation can be turned on and off. Asking for
+   * in-place operation, i.e. calling SetInplace(true) or InplaceOn(),
+   * will be effective only if CanRunInPlace also returns true.
+   * By default CanRunInPlace checks whether the input and output
+   * image type match. */
   itkSetMacro(InPlace, bool);
-  itkGetMacro(InPlace, bool);
+  itkGetConstMacro(InPlace, bool);
   itkBooleanMacro(InPlace);
 
   /** Can the filter run in place? To do so, the filter's first input
@@ -102,8 +105,10 @@ public:
    * method can be used in conjunction with the InPlace ivar to
    * determine whether a particular use of the filter is really
    * running in place. Some filters may be able to optimize their
-   * operation if the InPlace is true and CanRunInPlace is true. */
-  bool CanRunInPlace() const
+   * operation if the InPlace is true and CanRunInPlace is true.
+   * CanRunInPlace may also be overridded by InPlaceImageFilter
+   * subclasses to fine tune its behavior. */
+  virtual bool CanRunInPlace() const
     {
     return (typeid(TInputImage) == typeid(TOutputImage));
     }

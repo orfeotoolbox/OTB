@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImagePCADecompositionCalculator.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 20:02:56 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-23 03:53:35 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -124,7 +124,7 @@ public:
   void Compute(void);
 
   /** Return the projection of the image. */
-  itkGetMacro(Projection,BasisVectorType);
+  itkGetConstMacro(Projection,BasisVectorType);
   
 
 protected:

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDistanceMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2005-11-21 02:40:48 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-03-04 15:23:46 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,8 +19,8 @@
 
 #include "itkDistanceMetric.h"
 
-namespace itk{ 
-namespace Statistics{
+namespace itk { 
+namespace Statistics {
 
 template< class TVector >
 DistanceMetric< TVector >
@@ -42,7 +42,7 @@ DistanceMetric< TVector >
           << " each measurement vector.");
       }
     }
-  m_Origin = x ;
+  m_Origin = x;
   this->m_MeasurementVectorSize = x.Size();
   this->Modified();
 }
@@ -81,10 +81,3 @@ DistanceMetric< TVector >
 } // end of namespace itk
 
 #endif
-
-
-
-
-
-
-

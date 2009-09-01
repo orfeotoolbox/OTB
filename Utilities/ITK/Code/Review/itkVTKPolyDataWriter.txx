@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVTKPolyDataWriter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-01-08 00:20:05 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-05-15 19:12:49 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,9 +25,9 @@
 namespace itk
 {
 
-// 
+//
 // Constructor
-// 
+//
 template<class TInputMesh>
 VTKPolyDataWriter<TInputMesh>
 ::VTKPolyDataWriter()
@@ -36,18 +36,18 @@ VTKPolyDataWriter<TInputMesh>
   this->m_FileName = "";
 }
 
-// 
+//
 // Destructor
-// 
+//
 template<class TInputMesh>
 VTKPolyDataWriter<TInputMesh>
 ::~VTKPolyDataWriter()
 {
 }
 
-// 
+//
 // Set the input mesh
-// 
+//
 template<class TInputMesh>
 void
 VTKPolyDataWriter<TInputMesh>
@@ -56,9 +56,9 @@ VTKPolyDataWriter<TInputMesh>
   this->m_Input = input;
 }
 
-// 
+//
 // Write the input mesh to the output file
-// 
+//
 template<class TInputMesh>
 void VTKPolyDataWriter<TInputMesh>
 ::Update()
@@ -66,9 +66,9 @@ void VTKPolyDataWriter<TInputMesh>
   this->GenerateData();
 }
 
-// 
+//
 // Write the input mesh to the output file
-// 
+//
 template<class TInputMesh>
 void VTKPolyDataWriter<TInputMesh>
 ::Write()
@@ -110,7 +110,7 @@ VTKPolyDataWriter<TInputMesh>
   outputFile << "POINTS " << numberOfPoints << " float" << std::endl;
 
   const PointsContainer * points = this->m_Input->GetPoints();
-  
+
   std::map< PointIdentifier, PointIdentifier > IdMap;
   PointIdentifier k = 0;
 
@@ -123,7 +123,20 @@ VTKPolyDataWriter<TInputMesh>
     while( pointIterator != pointEnd )
       {
       PointType point = pointIterator.Value();
-      outputFile << point[0] << " " << point[1] << " " << point[2] << std::endl;
+
+      outputFile << point[0] << " " << point[1];
+
+      if( TInputMesh::PointDimension > 2 )
+        {
+        outputFile << " " << point[2];
+        }
+      else
+        {
+        outputFile << " " << "0.0";
+        }
+
+      outputFile << std::endl;
+
       IdMap[ pointIterator.Index() ] = k++;
       pointIterator++;
       }
@@ -155,11 +168,11 @@ VTKPolyDataWriter<TInputMesh>
         case 2: //TRIANGLE_CELL:
         case 3: //QUADRILATERAL_CELL:
         case 4: //POLYGON_CELL:
-        case 8: //QUADRATIC_TRIANGLE_CELL: 
+        case 8: //QUADRATIC_TRIANGLE_CELL:
           numberOfPolygons++;
           break;
         default:
-          std::cerr << "Unhandled cell (volumic?)." << std::endl; 
+          std::cerr << "Unhandled cell (volumic?)." << std::endl;
         }
       cellIterator++;
       }
@@ -174,7 +187,7 @@ VTKPolyDataWriter<TInputMesh>
       {
       outputFile << "LINES " << numberOfEdges << " " << 3*numberOfEdges;
       outputFile << std::endl;
-    
+
       cellIterator = cells->Begin();
       while( cellIterator != cellEnd )
         {
@@ -206,14 +219,15 @@ VTKPolyDataWriter<TInputMesh>
     if( numberOfPolygons )
       {
       // This could be optimized but at least now any polygonal
-      // mesh can be saved. 
+      // mesh can be saved.
       cellIterator = cells->Begin();
 
       unsigned long n( 0 );
       while( cellIterator != cells->End() )
         {
         CellType * cellPointer = cellIterator.Value();
-        if( cellPointer->GetType() != 1 )
+        if( cellPointer->GetType() != CellType::VERTEX_CELL &&
+            cellPointer->GetType() != CellType::LINE_CELL )
           {
             n += cellPointer->GetNumberOfPoints();
           }
@@ -221,7 +235,7 @@ VTKPolyDataWriter<TInputMesh>
         }
       outputFile << "POLYGONS " << numberOfPolygons << " " << n+numberOfPolygons;
       outputFile << std::endl;
-    
+
       cellIterator = cells->Begin();
       while( cellIterator != cellEnd )
         {
@@ -231,7 +245,7 @@ VTKPolyDataWriter<TInputMesh>
           case 2: //TRIANGLE_CELL:
           case 3: //QUADRILATERAL_CELL:
           case 4: //POLYGON_CELL:
-          case 8: //QUADRATIC_TRIANGLE_CELL: 
+          case 8: //QUADRATIC_TRIANGLE_CELL:
               {
               PointIdIterator pointIdIterator = cellPointer->PointIdsBegin();
               PointIdIterator pointIdEnd = cellPointer->PointIdsEnd();

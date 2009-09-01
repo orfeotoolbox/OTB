@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiThreader.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-02-06 20:53:07 $
-  Version:   $Revision: 1.46 $
+  Date:      $Date: 2009-04-05 10:56:44 $
+  Version:   $Revision: 1.47 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -21,7 +21,7 @@
 #include "itkMultiThreader.h"
 #include "itkObjectFactory.h"
 #include "itksys/SystemTools.hxx"
-#include <vcl_cstdlib.h>
+#include <stdlib.h>
 
 #ifndef _WIN32
 #include <unistd.h>

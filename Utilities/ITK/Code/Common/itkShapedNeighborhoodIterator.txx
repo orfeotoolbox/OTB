@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShapedNeighborhoodIterator.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:25 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-03-03 15:09:17 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkShapedNeighborhoodIterator_txx
-#define _itkShapedNeighborhoodIterator_txx
+#ifndef __itkShapedNeighborhoodIterator_txx
+#define __itkShapedNeighborhoodIterator_txx
 #include "itkShapedNeighborhoodIterator.h"
 namespace itk {
 
@@ -33,4 +33,3 @@ ShapedNeighborhoodIterator<TImage, TBoundaryCondition>
 } // namespace itk
 
 #endif
- 

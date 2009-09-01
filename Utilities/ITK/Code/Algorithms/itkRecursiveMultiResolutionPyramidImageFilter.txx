@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRecursiveMultiResolutionPyramidImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-01-26 21:45:57 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-04-10 19:14:50 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,11 +18,13 @@
 #define __itkRecursiveMultiResolutionPyramidImageFilter_txx
 
 #include "itkRecursiveMultiResolutionPyramidImageFilter.h"
-#include "itkShrinkImageFilter.h"
 #include "itkGaussianOperator.h"
 #include "itkCastImageFilter.h"
 #include "itkDiscreteGaussianImageFilter.h"
 #include "itkExceptionObject.h"
+#include "itkResampleImageFilter.h"
+#include "itkShrinkImageFilter.h"
+#include "itkIdentityTransform.h"
 
 #include "vnl/vnl_math.h"
 
@@ -36,6 +38,7 @@ template <class TInputImage, class TOutputImage>
 RecursiveMultiResolutionPyramidImageFilter<TInputImage, TOutputImage>
 ::RecursiveMultiResolutionPyramidImageFilter()
 {
+  this->Superclass::m_UseShrinkImageFilter = true;
 }
 
 /**
@@ -57,21 +60,54 @@ RecursiveMultiResolutionPyramidImageFilter<TInputImage, TOutputImage>
   // Get the input and output pointers
   InputImageConstPointer  inputPtr = this->GetInput();
 
-  // Create caster, smoother and shrinker filters
+  // Create caster, smoother and resampleShrink filters
   typedef CastImageFilter<TInputImage, TOutputImage>              CasterType;
   typedef CastImageFilter<TOutputImage, TOutputImage>             CopierType;
   typedef DiscreteGaussianImageFilter<TOutputImage, TOutputImage> SmootherType;
+
+  typedef ImageToImageFilter<TOutputImage,TOutputImage>           ImageToImageType;
+  typedef ResampleImageFilter<TOutputImage,TOutputImage>          ResampleShrinkerType;
   typedef ShrinkImageFilter<TOutputImage,TOutputImage>            ShrinkerType;
 
   typename CasterType::Pointer   caster   = CasterType::New();
   typename CopierType::Pointer   copier   = CopierType::New();
   typename SmootherType::Pointer smoother = SmootherType::New();
-  typename ShrinkerType::Pointer shrinker = ShrinkerType::New();
+
+
+  typename ImageToImageType::Pointer shrinkerFilter;
+  //
+  // only one of these pointers is going to be valid, depending on the
+  // value of UseShrinkImageFilter flag
+  typename ResampleShrinkerType::Pointer resampleShrinker;
+  typename ShrinkerType::Pointer shrinker;
+
+  if(this->GetUseShrinkImageFilter())
+    {
+    shrinker = ShrinkerType::New();
+    shrinkerFilter = shrinker.GetPointer();
+    }
+  else
+    {
+    resampleShrinker = ResampleShrinkerType::New();
+    typedef itk::LinearInterpolateImageFunction< OutputImageType, double >
+      LinearInterpolatorType;
+    typename LinearInterpolatorType::Pointer interpolator = 
+      LinearInterpolatorType::New();
+    typedef itk::IdentityTransform<double,OutputImageType::ImageDimension>
+      IdentityTransformType;
+    typename IdentityTransformType::Pointer identityTransform =
+      IdentityTransformType::New();
+    resampleShrinker->SetInterpolator( interpolator );
+    resampleShrinker->SetDefaultPixelValue( 0 );
+    resampleShrinker->SetTransform(identityTransform);
+    shrinkerFilter = resampleShrinker.GetPointer();
+    }
 
   int ilevel;
   unsigned int idim;
   unsigned int factors[ImageDimension];
   double       variance[ImageDimension];
+
   bool         allOnes;
   OutputImagePointer   outputPtr;
   OutputImagePointer swapPtr;
@@ -79,7 +115,7 @@ RecursiveMultiResolutionPyramidImageFilter<TInputImage, TOutputImage>
 
   smoother->SetUseImageSpacing( false );
   smoother->SetMaximumError( this->GetMaximumError() );
-  shrinker->SetInput( smoother->GetOutput() );
+  shrinkerFilter->SetInput( smoother->GetOutput() );
 
   
   // recursively compute outputs starting from the last one
@@ -93,7 +129,7 @@ RecursiveMultiResolutionPyramidImageFilter<TInputImage, TOutputImage>
     outputPtr = this->GetOutput( ilevel );
     outputPtr->SetBufferedRegion( outputPtr->GetRequestedRegion() );
     outputPtr->Allocate();
-   
+    
     // cached a copy of the largest possible region
     LPRegion = outputPtr->GetLargestPossibleRegion();
 
@@ -168,15 +204,25 @@ RecursiveMultiResolutionPyramidImageFilter<TInputImage, TOutputImage>
 
       smoother->SetVariance( variance );
 
-      shrinker->SetShrinkFactors( factors );
-      shrinker->GraftOutput( outputPtr );
+      //      shrinker->SetShrinkFactors( factors );
+      //      shrinker->GraftOutput( outputPtr );
+      if(!this->GetUseShrinkImageFilter())
+        {
+        resampleShrinker->SetOutputParametersFromImage(outputPtr);
+        }
+      else
+        {
+        shrinker->SetShrinkFactors(factors);
+        }
+      shrinkerFilter->GraftOutput(outputPtr);
+      shrinkerFilter->Modified();
       // ensure only the requested region is updated
-      shrinker->GetOutput()->UpdateOutputInformation();
-      shrinker->GetOutput()->SetRequestedRegion(outputPtr->GetRequestedRegion());
-      shrinker->GetOutput()->PropagateRequestedRegion();
-      shrinker->GetOutput()->UpdateOutputData();
+      shrinkerFilter->GetOutput()->UpdateOutputInformation();
+      shrinkerFilter->GetOutput()->SetRequestedRegion(outputPtr->GetRequestedRegion());
+      shrinkerFilter->GetOutput()->PropagateRequestedRegion();
+      shrinkerFilter->GetOutput()->UpdateOutputData();
 
-      swapPtr = shrinker->GetOutput();
+      swapPtr = shrinkerFilter->GetOutput();
 
       }
 

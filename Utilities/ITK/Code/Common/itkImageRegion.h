@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRegion.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-18 21:13:25 $
-  Version:   $Revision: 1.30 $
+  Date:      $Date: 2009-05-13 15:27:49 $
+  Version:   $Revision: 1.32 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,6 +25,7 @@
 #include "itkIndex.h"
 #include "itkSize.h"
 #include "itkContinuousIndex.h"
+#include "vnl/vnl_math.h"
 
 namespace itk
 {
@@ -176,7 +177,7 @@ public:
         {
         return false;
         }
-      if( index[i] >= m_Index[i] + static_cast<long>(m_Size[i]) )
+      if( index[i] >= (m_Index[i] + static_cast<long>(m_Size[i])) )
         {
         return false;
         }
@@ -184,20 +185,33 @@ public:
     return true;
     }
 
-  /** Test if an index is inside */
+  /** Test if a continuous index is inside the region.
+   * If ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY is on,
+   * we take into account the fact that each voxel has its
+   * center at the integer coordinate and extends half way
+   * to the next integer coordinate. */
   template <typename TCoordRepType>
   bool
   IsInside(const ContinuousIndex<TCoordRepType,VImageDimension> &index) const
     {
     for(unsigned int i=0; i<ImageDimension; i++)
       {
+#ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
+      if( itk::Math::RoundHalfIntegerUp(index[i]) < static_cast<int>( m_Index[i] ) )
+#else
       if( index[i] < static_cast<TCoordRepType>( m_Index[i] ) )
+#endif
         {
         return false;
         }
       // bound is the last valid pixel location
+#ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
       const TCoordRepType bound = static_cast<TCoordRepType>(
-                            m_Index[i] + static_cast<long>(m_Size[i]) - 1);
+         m_Index[i] + m_Size[i] - 0.5);
+#else
+      const TCoordRepType bound = static_cast<TCoordRepType>(
+         m_Index[i] + static_cast<long>(m_Size[i]) - 1);
+#endif
 
       if( index[i] > bound )
         {
@@ -207,8 +221,7 @@ public:
     return true;
     }
 
-
-  /** Test if a region (the argument) is completly inside of this region */
+  /** Test if a region (the argument) is completely inside of this region */
   bool
   IsInside(const Self &region) const
     {

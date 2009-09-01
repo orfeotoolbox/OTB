@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshParam.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-03 22:03:41 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-05-13 21:52:25 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -165,7 +165,7 @@ void
 QuadEdgeMeshParam< TInputMesh, TOutputMesh, TSolverTraits >
 ::GenerateData( )
 {
-  Superclass::GenerateData( );
+  this->CopyInputMeshToOutputMesh( );
 
   InputMeshPointer input = this->GetInput( );
   OutputMeshType* output = this->GetOutput( );
@@ -177,10 +177,12 @@ QuadEdgeMeshParam< TInputMesh, TOutputMesh, TSolverTraits >
     m_BoundaryPtMap = m_BorderTransform->GetBoundaryPtMap( );
     }
 
-  assert( ( m_BoundaryPtMap.size( ) > 2 ) && ( m_Border.size( ) > 2 ) );
-  CopyToOutputBorder( );
+  itkAssertOrThrowMacro( ( ( m_BoundaryPtMap.size( ) > 2 ) && ( m_Border.size( ) > 2 ) ),
+    "BoundaryPtMap or Border have less than 2 elements" );
 
-  ComputeListOfInteriorVertices( );
+  this->CopyToOutputBorder( );
+
+  this->ComputeListOfInteriorVertices( );
 
   size_t NbOfInteriorPts = m_InternalPtMap.size( );
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVTKPolyDataReader.txx,v $
   Language:  C++
-  Date:      $Date: 2008-06-15 02:42:12 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-04-06 18:29:00 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -20,6 +20,7 @@
 #include "itkVTKPolyDataReader.h"
 #include <fstream>
 #include <stdio.h>
+#include <string.h>
 
 namespace itk
 {

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDemonsRegistrationFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-12-08 16:00:52 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-04-23 03:53:35 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -112,7 +112,7 @@ public:
   /** Switch between using the fixed image and moving image gradient
    * for computing the deformation field updates. */
   itkSetMacro( UseMovingImageGradient, bool );
-  itkGetMacro( UseMovingImageGradient, bool );
+  itkGetConstMacro( UseMovingImageGradient, bool );
   itkBooleanMacro( UseMovingImageGradient );
 
   /** Set/Get the threshold below which the absolute difference of

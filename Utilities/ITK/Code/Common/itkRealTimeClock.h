@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRealTimeClock.h,v $
   Language:  C++
-  Date:      $Date: 2006-05-10 20:27:16 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-03-03 15:08:48 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,21 +26,21 @@ namespace itk
 {
 
 /** \class RealTimeClock
-* \brief The RealTimeClock provides a timestamp from a real-time clock
-*
-* This class represents a real-time clock object
-* and provides a timestamp in platform-independent format.
-*
-* \author Hee-Su Kim, Compute Science Dept. Kyungpook National University,
-*                     ISIS Center, Georgetown University.
-*/
+ * \brief The RealTimeClock provides a timestamp from a real-time clock
+ *
+ * This class represents a real-time clock object
+ * and provides a timestamp in platform-independent format.
+ *
+ * \author Hee-Su Kim, Compute Science Dept. Kyungpook National University,
+ *                     ISIS Center, Georgetown University.
+ */
 
 class ITKCommon_EXPORT RealTimeClock : public Object
 {
 public:
-  typedef RealTimeClock Self;
-  typedef Object Superclass;
-  typedef SmartPointer< Self > Pointer;
+  typedef RealTimeClock              Self;
+  typedef Object                     Superclass;
+  typedef SmartPointer< Self >       Pointer;
   typedef SmartPointer< const Self > ConstPointer;
 
   /** Method for defining the name of the class */

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimpleDataObjectDecorator.txx,v $
   Language:  C++
-  Date:      $Date: 2004-03-18 19:24:08 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-04-12 18:42:40 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkSimpleDataObjectDecorator_txx
-#define _itkSimpleDataObjectDecorator_txx
+#ifndef __itkSimpleDataObjectDecorator_txx
+#define __itkSimpleDataObjectDecorator_txx
 
 #include "itkSimpleDataObjectDecorator.h"
 
@@ -32,7 +32,10 @@ template<class T>
 SimpleDataObjectDecorator<T>
 ::SimpleDataObjectDecorator() 
 {
-  m_Component = ComponentType(); // initialize here to avoid Purify UMR
+  this->m_Component = ComponentType(); // initialize here to avoid Purify UMR
+  this->m_Initialized = false;         // Still needed since not all objects
+                                       // are initialized at construction time.
+                                       // for example the itkArray.
 }
 
 
@@ -54,9 +57,10 @@ void
 SimpleDataObjectDecorator<T>
 ::Set(const T& val)
 {
-  if (m_Component != val)
+  if( !this->m_Initialized || ( this->m_Component != val) )
     {
-    m_Component = val;
+    this->m_Component = val;
+    this->m_Initialized = true;
     this->Modified();
     }
 }
@@ -71,7 +75,8 @@ SimpleDataObjectDecorator<T>
 {
   Superclass::PrintSelf(os,indent);
 
-  os << indent << "Component: " << typeid(m_Component).name() << std::endl;
+  os << indent << "Component  : " << typeid(this->m_Component).name() << std::endl;
+  os << indent << "Initialized: " << this->m_Initialized << std::endl;
 }
 
 } // end namespace itk

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIsolatedConnectedImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 16:45:11 $
-  Version:   $Revision: 1.28 $
+  Date:      $Date: 2009-04-21 12:29:37 $
+  Version:   $Revision: 1.29 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -97,6 +97,72 @@ IsolatedConnectedImageFilter<TInputImage,TOutputImage>
 {
   Superclass::EnlargeOutputRequestedRegion(output);
   output->SetRequestedRegionToLargestPossibleRegion();
+}
+
+template <class TInputImage, class TOutputImage>
+void 
+IsolatedConnectedImageFilter<TInputImage,TOutputImage>
+::SetSeed1(const IndexType & seed)
+{
+  this->ClearSeeds1();
+  this->AddSeed1( seed );
+}
+
+/** Clear all the seeds1. */
+template <class TInputImage, class TOutputImage>
+void 
+IsolatedConnectedImageFilter<TInputImage,TOutputImage>
+::ClearSeeds1()
+{
+  if( this->m_Seeds1.size() > 0 )
+    {
+    this->m_Seeds1.clear();
+    this->Modified();
+    }
+}
+
+/** Add seed point 1. */
+template <class TInputImage, class TOutputImage>
+void 
+IsolatedConnectedImageFilter<TInputImage,TOutputImage>
+::AddSeed1(const IndexType & seed)
+{
+  this->m_Seeds1.push_back( seed );
+  this->Modified();
+}
+
+/** Set seed point 2. This seed will be isolated from Seed1 (if possible).
+ *  This method is deprecated, please use AddSeed() */
+template <class TInputImage, class TOutputImage>
+void 
+IsolatedConnectedImageFilter<TInputImage,TOutputImage>
+::SetSeed2(const IndexType & seed)
+{
+  this->ClearSeeds2();
+  this->AddSeed2( seed );
+}
+  
+/** Clear all the seeds2. */
+template <class TInputImage, class TOutputImage>
+void 
+IsolatedConnectedImageFilter<TInputImage,TOutputImage>
+::ClearSeeds2()
+{
+  if( this->m_Seeds2.size() > 0 )
+    {
+    this->m_Seeds2.clear();
+    this->Modified();
+    }
+}
+
+/** Add seed point 2. */
+template <class TInputImage, class TOutputImage>
+void 
+IsolatedConnectedImageFilter<TInputImage,TOutputImage>
+::AddSeed2(const IndexType & seed)
+{
+  this->m_Seeds2.push_back( seed );
+  this->Modified();
 }
 
 template <class TInputImage, class TOutputImage>

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimilarity3DTransform.h,v $
   Language:  C++
-  Date:      $Date: 2006-08-09 04:35:32 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-03-03 15:09:20 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,7 +24,8 @@
 namespace itk
 {
 
-/** \brief Similarity3DTransform of a vector space (e.g. space coordinates)
+/** \class Similarity3DTransform
+ * \brief Similarity3DTransform of a vector space (e.g. space coordinates)
  *
  * This transform applies a rotation, translation and isotropic scaling to the space.
  *
@@ -78,7 +79,7 @@ public:
   typedef typename Superclass::OutputVnlVectorType    OutputVnlVectorType;
   typedef typename Superclass::InputCovariantVectorType 
                                                       InputCovariantVectorType;
-  typedef typename Superclass::OutputCovariantVectorType      
+  typedef typename Superclass::OutputCovariantVectorType
                                                       OutputCovariantVectorType;
   typedef typename Superclass::MatrixType             MatrixType;
   typedef typename Superclass::InverseMatrixType      InverseMatrixType;

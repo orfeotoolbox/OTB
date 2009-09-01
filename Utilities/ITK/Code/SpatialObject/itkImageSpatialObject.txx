@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageSpatialObject.txx,v $
   Language:  C++
-  Date:      $Date: 2008-11-02 16:03:30 $
-  Version:   $Revision: 1.60 $
+  Date:      $Date: 2009-04-07 14:34:02 $
+  Version:   $Revision: 1.61 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -352,6 +352,8 @@ ImageSpatialObject< TDimension,  PixelType >
   Superclass::PrintSelf(os,indent);
   os << "Image: " << std::endl;
   os << indent << m_Image << std::endl;
+  os << "Interpolator: " << std::endl;
+  os << indent << m_Interpolator << std::endl;
 }
 
 /** Get the modification time */

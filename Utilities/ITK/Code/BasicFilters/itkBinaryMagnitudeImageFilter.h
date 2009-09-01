@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryMagnitudeImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 17:31:02 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-04-01 14:36:09 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -62,7 +62,7 @@ public:
     return !(*this != other);
     }
   inline TOutput operator()( const TInput1 & A, 
-                             const TInput2 & B)
+                             const TInput2 & B) const
     {
     const double dA = static_cast<double>( A );
     const double dB = static_cast<double>( B );

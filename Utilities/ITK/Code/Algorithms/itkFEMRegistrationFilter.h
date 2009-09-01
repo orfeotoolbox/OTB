@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMRegistrationFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-12-21 19:13:11 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2009-04-23 03:53:35 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -542,7 +542,7 @@ protected :
 
   /** Set the solver's current load. */
 //  itkSetMacro( Load, ImageMetricLoadType* );
-  itkGetMacro( Load, ImageMetricLoadType* );
+  itkGetConstMacro( Load, ImageMetricLoadType* );
 
 
   void PrintSelf(std::ostream& os, Indent indent) const;

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAzimuthElevationToCartesianTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2006-10-14 19:58:31 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2009-04-05 10:56:39 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -131,14 +131,14 @@ AzimuthElevationToCartesianTransform<TScalarType, NDimensions>::
 TransformCartesianToAzEl(const OutputPointType &point) const 
 {
   InputPointType result;       // Converted point
-  result[0] = (atan(point[0] / point[2])) * (360 / (2*vnl_math::pi)) 
+  result[0] = (vcl_atan(point[0] / point[2])) * (360 / (2*vnl_math::pi)) 
                                             + ((m_MaxAzimuth-1)/2.0);
-  result[1] = (atan(point[1] / point[2])) * (360 / (2*vnl_math::pi)) 
+  result[1] = (vcl_atan(point[1] / point[2])) * (360 / (2*vnl_math::pi)) 
                                             + ((m_MaxElevation-1)/2.0);
-  result[2] = ((sqrt( point[0] * point[0] +
-                      point[1] * point[1] +
-                      point[2] * point[2]) / m_RadiusSampleSize) 
-                      - m_FirstSampleDistance);
+  result[2] = ((vcl_sqrt( point[0] * point[0] +
+                          point[1] * point[1] +
+                          point[2] * point[2]) / m_RadiusSampleSize) 
+                         - m_FirstSampleDistance);
   return result;
 }
 

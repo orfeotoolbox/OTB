@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMObjectFactory.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-30 21:10:19 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2009-04-05 10:56:50 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -21,6 +21,7 @@
 #include <string>
 #include <vector>
 #include <cstdlib>
+#include <stdlib.h>
 
 namespace itk {
 namespace fem {

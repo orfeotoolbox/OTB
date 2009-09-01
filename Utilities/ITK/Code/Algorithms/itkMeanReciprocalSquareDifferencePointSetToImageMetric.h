@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanReciprocalSquareDifferencePointSetToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 20:02:59 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-23 03:53:36 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -95,7 +95,7 @@ public:
 
   /**  Set/Get the lambda distance. (controls the capture radius of the metric).  */
   itkSetMacro( Lambda, double );
-  itkGetMacro( Lambda, double );
+  itkGetConstMacro( Lambda, double );
  
 
 protected:

@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkMultivariateLegendrePolynomial.h,v $
 Language:  C++
-Date:      $Date: 2009-01-25 12:45:06 $
-Version:   $Revision: 1.26 $
+Date:      $Date: 2009-05-12 17:19:47 $
+Version:   $Revision: 1.27 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -68,7 +68,7 @@ namespace itk {
  * (http://www.ia.unc.edu/~styner/docs/StynerTR97.pdf)
  */
 
-class MultivariateLegendrePolynomial
+class ITK_EXPORT MultivariateLegendrePolynomial
 {
 public:
   typedef MultivariateLegendrePolynomial Self;

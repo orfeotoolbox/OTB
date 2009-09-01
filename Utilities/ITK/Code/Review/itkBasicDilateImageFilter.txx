@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBasicDilateImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-09-30 16:55:24 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-04-28 14:36:41 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,11 +42,11 @@ BasicDilateImageFilter<TInputImage, TOutputImage, TKernel>
 
   KernelIteratorType kernel_it;
 
-  for (i=0, kernel_it=kernelBegin; kernel_it<kernelEnd; ++kernel_it, ++i)
+  for( i=0, kernel_it=kernelBegin; kernel_it<kernelEnd; ++kernel_it, ++i )
     {
     // if structuring element is positive, use the pixel under that element
     // in the image
-    if (*kernel_it)
+    if( *kernel_it > NumericTraits< KernelPixelType >::Zero )
       {
       // note we use GetPixel() on the SmartNeighborhoodIterator to
       // respect boundary conditions

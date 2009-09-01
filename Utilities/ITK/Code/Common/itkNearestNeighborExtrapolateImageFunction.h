@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNearestNeighborExtrapolateImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-06 20:53:10 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-05-16 16:05:13 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -92,7 +92,11 @@ public:
         }
       else
         {
-        nindex[j] = static_cast<ValueType>( vnl_math_rnd( index[j] ) );
+#ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
+        nindex[j] = static_cast<ValueType>( itk::Math::RoundHalfIntegerUp( index[j] ) );
+#else
+        nindex[j] = static_cast<ValueType>( vnl_math_rnd_halfintup( index[j] ) );
+#endif
         }
       }
     return static_cast<OutputType>( this->GetInputImage()->GetPixel( nindex ) );

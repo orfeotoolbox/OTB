@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHoughTransform2DLinesImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-11-07 19:39:44 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2009-04-06 00:19:17 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -75,7 +75,7 @@ HoughTransform2DLinesImageFilter<TInputPixelType,TOutputPixelType>
   // Compute the size of the output image
   typename InputImageType::RegionType region;
   Size<2> size;
-  size[0]= (long unsigned int)(sqrt(m_AngleResolution*m_AngleResolution+input->GetLargestPossibleRegion().GetSize()[0]*input->GetLargestPossibleRegion().GetSize()[0]));
+  size[0]= (long unsigned int)(vcl_sqrt(m_AngleResolution*m_AngleResolution+input->GetLargestPossibleRegion().GetSize()[0]*input->GetLargestPossibleRegion().GetSize()[0]));
   size[1]= (long unsigned int)m_AngleResolution;
   region.SetSize(size);
   region.SetIndex(input->GetLargestPossibleRegion().GetIndex());

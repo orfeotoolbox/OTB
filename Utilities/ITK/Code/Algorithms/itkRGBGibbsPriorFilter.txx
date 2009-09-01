@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRGBGibbsPriorFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-01-26 21:45:56 $
-  Version:   $Revision: 1.48 $
+  Date:      $Date: 2009-04-06 11:15:07 $
+  Version:   $Revision: 1.49 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -354,7 +354,7 @@ RGBGibbsPriorFilter<TInputImage, TClassifiedImage>
       {
       difenergy = energy[label]-energy[1-label];
       double rand_num = (double) (rand()/32768.0);
-      double energy_num = (double) (exp((double) (difenergy*0.5*size/(2*size-m_Temp))));
+      double energy_num = (double) (vcl_exp((double) (difenergy*0.5*size/(2*size-m_Temp))));
       if ( rand_num < energy_num )
         {
         m_LabelledImage->SetPixel(offsetIndex3D, 1-label);

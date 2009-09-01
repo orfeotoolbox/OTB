@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkParallelSparseFieldLevelSetImageFilter.h,v $
 Language:  C++
-Date:      $Date: 2008-10-17 16:30:48 $
-Version:   $Revision: 1.17 $
+Date:      $Date: 2009-04-25 12:27:47 $
+Version:   $Revision: 1.18 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -308,11 +308,11 @@ public:
    *  number of layers on ONE side of the active layer, so the total layers in
    *   the sparse field is 2 * NumberOfLayers + 1 */
   itkSetMacro(NumberOfLayers, StatusType);
-  itkGetMacro(NumberOfLayers, StatusType);
+  itkGetConstMacro(NumberOfLayers, StatusType);
 
   /** Set/Get the value of the isosurface to use in the input image. */
   itkSetMacro(IsoSurfaceValue, ValueType);
-  itkGetMacro(IsoSurfaceValue, ValueType);
+  itkGetConstMacro(IsoSurfaceValue, ValueType);
   
   LayerPointerType GetActiveListForIndex (const IndexType index)
     {

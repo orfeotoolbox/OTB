@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRGBAPixel.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:24 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-03-03 15:08:36 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,15 +14,15 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkRGBAPixel_txx
-#define _itkRGBAPixel_txx
+#ifndef __itkRGBAPixel_txx
+#define __itkRGBAPixel_txx
 #include "itkRGBAPixel.h"
 #include "itkNumericTraits.h"
 
 namespace itk
 {
 
-/*
+/**
  * Assignment Operator
  */
 template<class T>
@@ -74,7 +74,7 @@ operator<<(std::ostream& os,const RGBAPixel<TComponent> & c )
   os <<  c[0] << "  ";
   os <<  c[1] << "  ";
   os <<  c[2] << "  ";
-  os <<  c[3] ;
+  os <<  c[3];
   return os;
 }
 

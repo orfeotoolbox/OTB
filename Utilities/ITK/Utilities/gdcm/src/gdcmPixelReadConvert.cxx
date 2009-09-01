@@ -3,8 +3,8 @@
   Program:   gdcm
   Module:    $RCSfile: gdcmPixelReadConvert.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-12-01 10:49:28 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-03-24 21:56:26 $
+  Version:   $Revision: 1.14 $
                                                                                 
   Copyright (c) CREATIS (Centre de Recherche et d'Applications en Traitement de
   l'Image). All rights reserved. See Doc/License.txt or
@@ -491,7 +491,7 @@ bool PixelReadConvert::ReadAndDecompressJPEGFile( std::ifstream *fp )
        {
        if( (unsigned int)ZSize != JPEGInfo->GetFragmentCount() )
          {
-         gdcmErrorMacro( "Sorry GDCM does not handle this type of fragments" );
+         gdcmErrorMacro( "Sorry GDCM does not handle this type of fragments: " << ZSize << " vs " << JPEGInfo->GetFragmentCount() );
          return false;
          }
        // Hopefully every dicom fragment is *exactly* the j2k stream

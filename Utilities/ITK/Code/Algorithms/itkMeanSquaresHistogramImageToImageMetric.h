@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanSquaresHistogramImageToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 20:02:59 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-05-02 05:43:54 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -66,7 +66,11 @@ public:
   typedef typename Superclass::MovingImageConstPointer  MovingImageConstPointer;
 
   typedef typename Superclass::HistogramType            HistogramType;
+#ifdef ITK_USE_REVIEW_STATISTICS
+  typedef typename HistogramType::AbsoluteFrequencyType         HistogramFrequencyType;
+#else
   typedef typename HistogramType::FrequencyType         HistogramFrequencyType;
+#endif
   typedef typename HistogramType::Iterator              HistogramIteratorType;
   typedef typename HistogramType::MeasurementVectorType HistogramMeasurementVectorType;
 

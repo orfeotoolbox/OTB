@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNormalVariateGenerator.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:47 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-03-04 15:24:04 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -35,7 +35,7 @@ namespace Statistics {
  *
  * The followings are original comments.
  *
- *  Revision date 31 May 1996      
+ *  Revision date 31 May 1996
  *      This is a revised version of the algorithm decribed in
  *
  *      ACM Transactions on Mathematical Software, Vol 22, No 1
@@ -50,7 +50,7 @@ namespace Statistics {
  *                Has been tested for frequency of tail values which
  *        should occur once in a million. OK. Other usual tests OK.
  *        About 13 % faster than TOMS version.
- *        
+ *
  *        FAST GENERATOR OF PSEUDO-RANDOM UNIT NORMAL VARIATES
  *
  *                C.S.Wallace, Monash University, 1994
@@ -93,10 +93,10 @@ class ITK_EXPORT NormalVariateGenerator :
 {
 public:
   /** Standard class typedefs. */
-  typedef NormalVariateGenerator Self ;
+  typedef NormalVariateGenerator     Self;
   typedef RandomVariateGeneratorBase Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>         Pointer;
+  typedef SmartPointer<const Self>   ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(NormalVariateGenerator, 
@@ -106,36 +106,36 @@ public:
   itkNewMacro(Self);
     
   /** generate random number table */
-  void Initialize(int randomSeed) ;
+  void Initialize(int randomSeed);
 
   /** get a variate using FastNorm function */
-  double GetVariate() ;
+  double GetVariate();
     
 protected:
-  NormalVariateGenerator() ;
-  virtual ~NormalVariateGenerator() ; 
-  virtual void PrintSelf(std::ostream& os, Indent indent) const ;
+  NormalVariateGenerator();
+  virtual ~NormalVariateGenerator(); 
+  virtual void PrintSelf(std::ostream& os, Indent indent) const;
     
   /** get a variate */
-  double FastNorm (void) ;
+  double FastNorm (void);
     
 private:
-  double Scale ;
-  double Rscale ;
-  double Rcons ;
-  int ELEN ;
-  int LEN ;
-  int LMASK ;
-  int TLEN ;
+  double Scale;
+  double Rscale;
+  double Rcons;
+  int ELEN;
+  int LEN;
+  int LMASK;
+  int TLEN;
     
   int gaussfaze, *gausssave;
   double GScale;
     
-  int* vec1 ;
+  int* vec1;
   int nslew;
   int irs, lseed;
   double chic1, chic2, actualRSD;
-} ;  // end of class
+};  // end of class
   
 } // end of namespace Statistics
 } // end of namespace itk

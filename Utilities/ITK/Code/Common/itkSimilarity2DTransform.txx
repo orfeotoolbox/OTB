@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimilarity2DTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-24 05:12:41 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2009-04-09 09:23:21 $
+  Version:   $Revision: 1.25 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkSimilarity2DTransform_txx
-#define _itkSimilarity2DTransform_txx
+#ifndef __itkSimilarity2DTransform_txx
+#define __itkSimilarity2DTransform_txx
 
 #include "itkSimilarity2DTransform.h"
 #include "vnl/vnl_math.h"
@@ -97,8 +97,6 @@ Similarity2DTransform<TScalarType>
 
   return this->m_Parameters;
 }
-
-
 
 // Set Scale Part
 template <class TScalarType>
@@ -223,10 +221,36 @@ Similarity2DTransform<TScalarType>::
 CloneInverseTo( Pointer & result ) const
 {
   result = New();
-  result->SetCenter( this->GetCenter() );  // inverse have the same center
-  result->SetScale( 1.0 / this->GetScale() );
-  result->SetAngle( -this->GetAngle() );
-  result->SetTranslation( -( this->GetInverseMatrix() * this->GetTranslation() ) );
+  this->GetInverse(result.GetPointer());
+}
+
+// return an inverse transformation
+template<class TScalarType>
+bool
+Similarity2DTransform<TScalarType>::
+GetInverse( Self* inverse) const
+{
+  if(!inverse)
+    {
+    return false;
+    }
+
+  inverse->SetCenter( this->GetCenter() );  // inverse have the same center
+  inverse->SetScale( 1.0 / this->GetScale() );
+  inverse->SetAngle( -this->GetAngle() );
+  inverse->SetTranslation( -( this->GetInverseMatrix() * this->GetTranslation() ) );
+  
+  return true;
+}
+
+// Return an inverse of this transform
+template<class TScalarType>
+typename Similarity2DTransform<TScalarType>::InverseTransformBasePointer
+Similarity2DTransform<TScalarType>
+::GetInverseTransform() const
+{
+  Pointer inv = New();
+  return GetInverse(inv) ? inv.GetPointer() : NULL;
 }
 
 // Create and return a clone of the transformation

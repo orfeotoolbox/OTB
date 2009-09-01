@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConformalFlatteningMeshFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-09-29 18:36:37 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2009-04-06 00:19:17 $
+  Version:   $Revision: 1.28 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -540,7 +540,7 @@ ConformalFlatteningMeshFilter< TInputMesh, TOutputMesh >
         {
         uiMidPointIdx = numberOfPoints/2;
         }
-      this->m_MapScale = 1.0/sqrt(v_r2[uiMidPointIdx]);
+      this->m_MapScale = 1.0/vcl_sqrt(v_r2[uiMidPointIdx]);
       }
 
     i = 0;

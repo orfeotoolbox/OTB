@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNeighborhoodAccessorFunctor.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-06 20:53:11 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-04-21 15:46:16 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -84,7 +84,13 @@ public:
   
   void SetVectorLength( VectorLengthType length ) {}
   VectorLengthType SetVectorLength() { return 0; }
+
+  /** Constructor */
+  NeighborhoodAccessorFunctor() {}
   
+  /** Destructor */
+  virtual ~NeighborhoodAccessorFunctor() {}
+
 };
 
 } // end namespace itk

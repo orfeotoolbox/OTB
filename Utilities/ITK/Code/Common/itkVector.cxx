@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVector.cxx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:28 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-03-03 15:11:34 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -62,10 +62,4 @@ ITKCommon_EXPORT CrossProduct( const Vector<int,3> & a, const Vector<int,3> & b 
   return c;  
 }
 
-
-
-
-
 } // end namespace itk
-
-

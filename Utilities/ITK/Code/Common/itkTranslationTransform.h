@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTranslationTransform.h,v $
   Language:  C++
-  Date:      $Date: 2007-07-15 16:38:25 $
-  Version:   $Revision: 1.36 $
+  Date:      $Date: 2009-04-09 09:23:25 $
+  Version:   $Revision: 1.38 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,13 +23,11 @@
 #include "itkExceptionObject.h"
 #include "itkMatrix.h"
 
-
-
-
 namespace itk
 {
 
-/** \brief Translation transformation of a vector space (e.g. space coordinates)
+/** \class TranslationTransform
+ * \brief Translation transformation of a vector space (e.g. space coordinates)
  *
  * The same functionality could be obtained by using the Affine tranform,
  * but with a large difference in performace.
@@ -44,12 +42,12 @@ class ITK_EXPORT TranslationTransform :
 {
 public:
   /** Standard class typedefs. */
-  typedef TranslationTransform Self;
+  typedef TranslationTransform                               Self;
   typedef Transform< TScalarType, NDimensions, NDimensions > Superclass;
-  typedef SmartPointer<Self>        Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                                 Pointer;
+  typedef SmartPointer<const Self>                           ConstPointer;
       
-  /** New macro for creation of through the object factory.*/
+  /** New macro for creation of through the object factory. */
   itkNewMacro( Self );
 
   /** Run-time type information (and related methods). */
@@ -83,6 +81,11 @@ public:
   /** Standard coordinate point type for this class. */
   typedef Point<TScalarType, itkGetStaticConstMacro(SpaceDimension)> InputPointType;
   typedef Point<TScalarType, itkGetStaticConstMacro(SpaceDimension)> OutputPointType;
+
+  /** Base inverse transform type. This type should not be changed to the
+   * concrete inverse transform type or inheritance would be lost.*/
+  typedef typename Superclass::InverseTransformBaseType InverseTransformBaseType;
+  typedef typename InverseTransformBaseType::Pointer    InverseTransformBasePointer;
   
   /** This method returns the value of the offset of the
    * TranslationTransform. */
@@ -136,6 +139,9 @@ public:
    * false is returned.  */
   bool GetInverse(Self* inverse) const;
 
+  /** Return an inverse of this transform. */
+  virtual InverseTransformBasePointer GetInverseTransform() const;
+
   /** Compute the Jacobian Matrix of the transformation at one point */
   virtual const JacobianType & GetJacobian(const InputPointType  &point ) const;
 
@@ -153,20 +159,20 @@ public:
    */
   virtual bool IsLinear() const { return true; }
 
- /** Set the fixed parameters and update internal transformation.
+  /** Set the fixed parameters and update internal transformation.
    * The Translation Transform does not require fixed parameters,
    * therefore the implementation of this method is a null operation. */
   virtual void SetFixedParameters( const ParametersType & ) 
-    { /* purposely blank */ };
+    {}
 
   /** Get the Fixed Parameters. The TranslationTransform does not
-    * require Fixed parameters, therefore this method returns an
-    * parameters array of size zero. */
+   * require Fixed parameters, therefore this method returns an
+   * parameters array of size zero. */
   virtual const ParametersType& GetFixedParameters(void) const
     {
     this->m_FixedParameters.SetSize(0); 
-    return this->m_FixedParameters; 
-    };
+    return this->m_FixedParameters;
+    }
 
 protected:
   TranslationTransform();
@@ -193,9 +199,6 @@ BackTransform(const OutputPointType &point) const {
   return point - m_Offset;
 }
 
-
-
-
 // Back transform a vector
 template<class TScalarType, unsigned int NDimensions>
 inline
@@ -205,9 +208,6 @@ BackTransform(const OutputVectorType &vect ) const
 {
   return  vect;
 }
-
-
-
 
 // Back transform a vnl_vector
 template<class TScalarType, unsigned int NDimensions>

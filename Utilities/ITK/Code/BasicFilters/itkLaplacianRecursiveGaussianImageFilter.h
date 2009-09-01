@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLaplacianRecursiveGaussianImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 17:40:08 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-04-25 12:27:29 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -117,7 +117,7 @@ public:
 
   /** Define which normalization factor will be used for the Gaussian */
   void SetNormalizeAcrossScale( bool normalizeInScaleSpace );
-  itkGetMacro( NormalizeAcrossScale, bool );
+  itkGetConstMacro( NormalizeAcrossScale, bool );
 
   /** LaplacianRecursiveGaussianImageFilter needs all of the input to produce an
    * output. Therefore, LaplacianRecursiveGaussianImageFilter needs to provide

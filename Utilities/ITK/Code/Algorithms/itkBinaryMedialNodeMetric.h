@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryMedialNodeMetric.h,v $
   Language:  C++
-  Date:      $Date: 2007-04-20 13:36:35 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-05-12 17:26:20 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -32,7 +32,7 @@ namespace itk
  */
 
 template <int VDimensions>
-class BinaryMedialNodeMetric : public LightObject
+class ITK_EXPORT BinaryMedialNodeMetric : public LightObject
 {
 public:
 
@@ -77,7 +77,7 @@ public:
   /** Function to return the result of the metric calculations */
   double GetResult(){return m_Result;}
   //itkSetMacro(Result, double);
-  //itkGetMacro(Result, double);
+  //itkGetConstMacro(Result, double);
   
 
 protected:

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptMorphologyImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-08-06 08:50:58 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-04-23 03:43:42 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -130,7 +130,7 @@ public:
     }
   
   /** Get the current boundary condition. */
-  itkGetMacro(BoundaryCondition, ImageBoundaryConditionPointerType);
+  itkGetConstMacro(BoundaryCondition, ImageBoundaryConditionPointerType);
   
 protected:
   MorphologyImageFilter();

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSize.h,v $
   Language:  C++
-  Date:      $Date: 2008-04-22 18:23:01 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2009-03-03 15:09:26 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -145,7 +145,7 @@ public:
 
   /** Get the size. This provides a read only reference to the size.
    * \sa SetSize */
-  const SizeValueType *GetSize() const { return m_Size; };
+  const SizeValueType *GetSize() const { return m_Size; }
 
   /** Set the size.
    * Try to prototype this function so that val has to point to a block of

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSpatialObjectWriter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-16 11:37:57 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-04-25 12:25:45 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -70,14 +70,14 @@ public:
   void SetInput(SceneType * input){m_Scene=input;}
 
   itkSetMacro(BinaryPoints,bool);
-  itkGetMacro(BinaryPoints,bool);
+  itkGetConstMacro(BinaryPoints,bool);
 
   void SetTransformPrecision(unsigned int precision);
   unsigned int GetTransformPrecision();
 
   /** Set/Get if the images should be written in a different file */
   itkSetMacro(WriteImagesInSeparateFile,bool);
-  itkGetMacro(WriteImagesInSeparateFile,bool);
+  itkGetConstMacro(WriteImagesInSeparateFile,bool);
 
 
 protected:

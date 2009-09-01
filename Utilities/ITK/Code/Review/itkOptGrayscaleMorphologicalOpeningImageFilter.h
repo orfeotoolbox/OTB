@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptGrayscaleMorphologicalOpeningImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-09-29 19:07:46 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-04-23 03:43:42 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -106,7 +106,7 @@ public:
   
   /** Set/Get the backend filter class. */
   void SetAlgorithm(int algo );
-  itkGetMacro(Algorithm, int);
+  itkGetConstMacro(Algorithm, int);
   
   /** GrayscaleMorphologicalOpeningImageFilter need to set its internal filters as modified */
   virtual void Modified() const;

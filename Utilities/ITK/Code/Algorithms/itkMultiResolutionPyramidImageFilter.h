@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiResolutionPyramidImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-07 21:41:29 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2009-05-08 16:34:59 $
+  Version:   $Revision: 1.25 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -87,6 +87,10 @@ namespace itk
  * using a DiscreteGaussianImageFilter with variance (shrink factor / 2)^2. 
  * The smoothed image is then downsampled using a ResampleImageFilter.
  *
+ * Note that even if the shrink factors are all equal to one, a smoothing
+ * will still be applied. The output at the finest level of the pyramid
+ * will thus typically be a smoothed version of the input.
+ *
  * This class is templated over the input image type and the output image 
  * type.
  *
@@ -142,10 +146,10 @@ public:
    * 2^(nlevel - 1) for all dimension. These shrink factors are halved for
    * subsequent levels.  The number of levels is clamped to a minimum value
    * of 1.  All shrink factors are also clamped to a minimum value of 1. */
-  void SetNumberOfLevels(unsigned int num);
+  virtual void SetNumberOfLevels(unsigned int num);
 
   /** Get the number of multi-resolution levels. */
-  itkGetMacro(NumberOfLevels, unsigned int);
+  itkGetConstMacro(NumberOfLevels, unsigned int);
 
   /** Set a multi-resolution schedule.  The input schedule must have only
    * ImageDimension number of columns and NumberOfLevels number of rows.  For
@@ -153,7 +157,7 @@ public:
    * subsequent levels. This function will clamp shrink factors to satisify
    * this condition.  All shrink factors less than one will also be clamped
    * to the value of 1. */
-  void SetSchedule( const ScheduleType& schedule );
+  virtual void SetSchedule( const ScheduleType& schedule );
 
   /** Get the multi-resolution schedule. */
   itkGetConstReferenceMacro(Schedule, ScheduleType);
@@ -162,8 +166,8 @@ public:
    * level. The schedule is then populated with defaults values obtained by
    * halving the factors at the previous level.  All shrink factors are
    * clamped to a minimum value of 1. */
-  void SetStartingShrinkFactors( unsigned int factor );
-  void SetStartingShrinkFactors( unsigned int* factors );
+  virtual void SetStartingShrinkFactors( unsigned int factor );
+  virtual void SetStartingShrinkFactors( unsigned int* factors );
 
   /** Get the starting shrink factors */
   const unsigned int * GetStartingShrinkFactors() const;
@@ -198,6 +202,11 @@ public:
   itkSetMacro(MaximumError,double);
   itkGetConstReferenceMacro(MaximumError,double);
 
+  itkSetMacro(UseShrinkImageFilter,bool);
+  itkGetConstMacro(UseShrinkImageFilter,bool);
+  itkBooleanMacro(UseShrinkImageFilter);
+  
+
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
   itkConceptMacro(SameDimensionCheck,
@@ -206,6 +215,7 @@ public:
     (Concept::HasNumericTraits<typename TOutputImage::PixelType>));
   /** End concept checking */
 #endif
+
 protected:
   MultiResolutionPyramidImageFilter();
   ~MultiResolutionPyramidImageFilter() {};
@@ -217,6 +227,7 @@ protected:
   double          m_MaximumError; 
   unsigned int    m_NumberOfLevels;
   ScheduleType    m_Schedule;
+  bool            m_UseShrinkImageFilter;
 
 private:
   MultiResolutionPyramidImageFilter(const Self&); //purposely not implemented

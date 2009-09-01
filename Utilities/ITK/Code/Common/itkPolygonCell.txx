@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPolygonCell.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-17 15:30:17 $
-  Version:   $Revision: 1.35 $
+  Date:      $Date: 2009-03-03 15:07:57 $
+  Version:   $Revision: 1.36 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkPolygonCell_txx
-#define _itkPolygonCell_txx
+#ifndef __itkPolygonCell_txx
+#define __itkPolygonCell_txx
 #include "itkPolygonCell.h"
 
 
@@ -108,46 +108,44 @@ PolygonCell< TCellInterface >
   switch (dimension)
     {
     case 0: 
-    {
-    VertexAutoPointer vertexPointer;
-    if( this->GetVertex(featureId,vertexPointer) )
       {
-      TransferAutoPointer(cellPointer,vertexPointer);
-      return true;
+      VertexAutoPointer vertexPointer;
+      if( this->GetVertex(featureId,vertexPointer) )
+        {
+        TransferAutoPointer(cellPointer,vertexPointer);
+        return true;
+        }
+      else
+        {
+        cellPointer.Reset();
+        return false;
+        }
+      break;
       }
-    else
-      {
-      cellPointer.Reset();
-      return false;
-      }
-    break;
-    }
     case 1: 
-    {
-    EdgeAutoPointer edgePointer;
-    if( this->GetEdge(featureId,edgePointer) )
       {
-      TransferAutoPointer(cellPointer,edgePointer);
-      return true;
+      EdgeAutoPointer edgePointer;
+      if( this->GetEdge(featureId,edgePointer) )
+        {
+        TransferAutoPointer(cellPointer,edgePointer);
+        return true;
+        }
+      else
+        {
+        cellPointer.Reset();
+        return false;
+        }
+      break;
       }
-    else
+      
+    default: 
       {
       cellPointer.Reset();
       return false;
       }
-    break;
-    }
-
-    default: 
-    {
-    cellPointer.Reset();
-    return false;
-    }
     }
   return false;
 }
-
-
 
 /**
  * Standard CellInterface:
@@ -162,7 +160,7 @@ PolygonCell< TCellInterface >
 {
   PointIdConstIterator ii(first);
   m_PointIds.clear();
-  for(int i=0; i < num ; ++i)
+  for(int i=0; i < num; ++i)
     {
     m_PointIds.push_back(*ii++);
     }
@@ -207,7 +205,7 @@ PolygonCell< TCellInterface >
 ::SetPointIds(PointIdConstIterator first)
 {
   PointIdConstIterator ii(first);
-  for(unsigned int i=0; i < m_PointIds.size() ; ++i)
+  for(unsigned int i=0; i < m_PointIds.size(); ++i)
     {
     m_PointIds[i] = *ii++;
     }
@@ -426,14 +424,16 @@ PolygonCell< TCellInterface >
 {
   EdgeType * edge = new EdgeType;
   unsigned int max_pointId = this->GetNumberOfPoints() - 1;
-  if( edgeId < max_pointId ){
-  edge->SetPointId(0, m_PointIds[edgeId]);
-  edge->SetPointId(1, m_PointIds[edgeId+1]);
-  }
-  else if( edgeId == max_pointId ) {
-  edge->SetPointId(0, m_PointIds[max_pointId] );
-  edge->SetPointId(1, m_PointIds[0] );
-  }
+  if( edgeId < max_pointId )
+    {
+    edge->SetPointId(0, m_PointIds[edgeId]);
+    edge->SetPointId(1, m_PointIds[edgeId+1]);
+    }
+  else if( edgeId == max_pointId )
+    {
+    edge->SetPointId(0, m_PointIds[max_pointId] );
+    edge->SetPointId(1, m_PointIds[0] );
+    }
   edgePointer.TakeOwnership( edge ); 
   return true;
 }

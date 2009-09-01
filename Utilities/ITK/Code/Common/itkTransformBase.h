@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTransformBase.h,v $
   Language:  C++
-  Date:      $Date: 2008-06-29 12:58:58 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-03-03 15:10:26 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,9 +40,9 @@ class ITK_EXPORT  TransformBase  : public Object
 {
 public:
   /** Standard class typedefs. */
-  typedef TransformBase  Self;
-  typedef Object Superclass;
-  typedef SmartPointer< Self >   Pointer;
+  typedef TransformBase               Self;
+  typedef Object                      Superclass;
+  typedef SmartPointer< Self >        Pointer;
   typedef SmartPointer< const Self >  ConstPointer;
 
   /** Type of the input parameters. */

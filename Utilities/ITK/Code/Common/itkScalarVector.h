@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarVector.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:25 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2009-03-03 15:09:07 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -104,7 +104,7 @@ public:
     { m_Vector = vec; }
 
 private:
-  TScalar m_Scalar;
+  TScalar    m_Scalar;
   VectorType m_Vector;
 };
 

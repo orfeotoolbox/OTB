@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianTransferFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2005-08-02 19:17:37 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-04-06 11:15:09 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -45,7 +45,7 @@ ScalarType
 GaussianTransferFunction<ScalarType>
 ::Evaluate(const ScalarType& input)  const
 {
-  return static_cast<ScalarType>((exp(-1 * input * input)));
+  return static_cast<ScalarType>((vcl_exp(-1 * input * input)));
 }
 
 /** Evaluate derivatives function */

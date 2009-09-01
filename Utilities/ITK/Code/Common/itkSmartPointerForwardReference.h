@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSmartPointerForwardReference.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-06 15:07:34 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-03-03 15:09:30 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -106,12 +106,12 @@ private:
   
 };
   
-  template <typename T>
-  std::ostream& operator<< (std::ostream& os, SmartPointerForwardReference<T> p) 
-  {
-    p.Print(os); 
-    return os;
-  }
+template <typename T>
+std::ostream& operator<< (std::ostream& os, SmartPointerForwardReference<T> p) 
+{
+  p.Print(os); 
+  return os;
+}
 
 } // end namespace itk
   

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRandomImageSource.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-21 15:35:40 $
-  Version:   $Revision: 1.42 $
+  Date:      $Date: 2009-04-25 12:27:55 $
+  Version:   $Revision: 1.43 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -85,7 +85,7 @@ public:
                    NumericTraits<OutputImagePixelType>::max());
   
   /** Get the minimum possible pixel value. */
-  itkGetMacro(Min, OutputImagePixelType);
+  itkGetConstMacro(Min, OutputImagePixelType);
 
   /** Set the maximum possible pixel value. By default, it is
    * NumericTraits<TOutputImage::PixelType>::max(). */
@@ -94,7 +94,7 @@ public:
                    NumericTraits<OutputImagePixelType>::max());
   
   /** Get the maximum possible pixel value. */
-  itkGetMacro(Max, OutputImagePixelType);
+  itkGetConstMacro(Max, OutputImagePixelType);
 
 protected:
   RandomImageSource();

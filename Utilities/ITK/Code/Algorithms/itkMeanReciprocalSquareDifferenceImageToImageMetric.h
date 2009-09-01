@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanReciprocalSquareDifferenceImageToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 20:02:59 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-04-23 03:53:36 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -90,12 +90,12 @@ public:
 
   /** Set/Get Lambda value. This factor regulates the capture radius of 
       this metric */
-  itkGetMacro( Lambda, double );
+  itkGetConstMacro( Lambda, double );
   itkSetMacro( Lambda, double );
 
   /** Set/Get Delta value. This value is used as the differential in the
    * computation of the metric derivative using the finite differences method. */
-  itkGetMacro( Delta, double );
+  itkGetConstMacro( Delta, double );
   itkSetMacro( Delta, double );
 
 

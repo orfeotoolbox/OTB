@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRecursiveSeparableImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-31 09:14:58 $
-  Version:   $Revision: 1.42 $
+  Date:      $Date: 2009-04-06 13:46:37 $
+  Version:   $Revision: 1.43 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -226,8 +226,8 @@ RecursiveSeparableImageFilter<TInputImage,TOutputImage>
 
   // determine the actual number of pieces that will be generated
   typename TOutputImage::SizeType::SizeValueType range = requestedRegionSize[splitAxis];
-  int valuesPerThread = (int)::ceil(range/(double)num);
-  int maxThreadIdUsed = (int)::ceil(range/(double)valuesPerThread) - 1;
+  int valuesPerThread = (int)vcl_ceil(range/(double)num);
+  int maxThreadIdUsed = (int)vcl_ceil(range/(double)valuesPerThread) - 1;
 
   // Split the region
   if (i < maxThreadIdUsed)

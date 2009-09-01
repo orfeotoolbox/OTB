@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMetaEvent.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-16 11:37:59 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-04-07 14:34:04 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,7 +25,7 @@ namespace itk
 /** \class MetaEvent
  * \brief Event abstract class
  */
-class MetaEvent : public ::MetaEvent
+class ITK_EXPORT MetaEvent : public ::MetaEvent
 {
 
 public:

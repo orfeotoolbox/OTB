@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCoxDeBoorBSplineKernelFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-09-29 18:36:38 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-04-05 03:23:29 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -162,10 +162,12 @@ CoxDeBoorBSplineKernelFunction<VSplineOrder>
   Superclass::PrintSelf( os, indent );
   os << indent  << "Spline Order: " << this->m_SplineOrder << std::endl;
   os << indent  << "Piecewise Polynomial Pieces: " << std::endl;
+
+  RealType a = 0.0;
+  RealType b = 0.0;
+
   for ( unsigned int i = 0; i < this->m_BSplineShapeFunctions.rows(); i++ )
     {
-    RealType a = 0.0;
-    RealType b = 0.0;
     os << indent << indent;
 
     PolynomialType( this->m_BSplineShapeFunctions.get_row( i ) ).print( os );

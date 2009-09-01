@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCumulativeGaussianCostFunction.cxx,v $
   Language:  C++
-  Date:      $Date: 2007-03-29 19:37:00 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-04-05 10:56:48 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -68,7 +68,7 @@ CumulativeGaussianCostFunction
     {
     fitError += vcl_pow((setTestArray->get(i) - m_OriginalDataArray->get(i)), 2);
     }
-  return(sqrt((1/numberOfElements) * fitError));
+  return(vcl_sqrt((1/numberOfElements) * fitError));
 }
 
 double

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalableAffineTransform.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:09 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-04-09 09:23:21 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -67,10 +67,8 @@ public:
   typedef typename Superclass::ScalarType                ScalarType;
   typedef typename Superclass::InputVectorType           InputVectorType;
   typedef typename Superclass::OutputVectorType          OutputVectorType;
-  typedef typename Superclass::InputCovariantVectorType     
-                                                     InputCovariantVectorType;
-  typedef typename Superclass::OutputCovariantVectorType    
-                                                     OutputCovariantVectorType;
+  typedef typename Superclass::InputCovariantVectorType  InputCovariantVectorType;
+  typedef typename Superclass::OutputCovariantVectorType OutputCovariantVectorType;
   typedef typename Superclass::InputVnlVectorType        InputVnlVectorType;
   typedef typename Superclass::OutputVnlVectorType       OutputVnlVectorType;
   typedef typename Superclass::InputPointType            InputPointType;
@@ -80,6 +78,11 @@ public:
   typedef typename Superclass::CenterType                CenterType;
   typedef typename Superclass::OffsetType                OffsetType;
   typedef typename Superclass::TranslationType           TranslationType;
+
+  /** Base inverse transform type. This type should not be changed to the
+   * concrete inverse transform type or inheritance would be lost.*/
+  typedef typename Superclass::InverseTransformBaseType InverseTransformBaseType;
+  typedef typename InverseTransformBaseType::Pointer    InverseTransformBasePointer;
     
   /** Set the transformation to an Identity
    *
@@ -89,25 +92,25 @@ public:
   /** Set the scale of the transform */
   virtual void SetScale( const InputVectorType & scale );
   virtual void SetScaleComponent( const InputVectorType & scale )
-    { this->SetScale(scale); };
+    { this->SetScale(scale); }
 
   /** Set the scale of the transform */
   virtual void SetScale( const double scale[NDimensions] );
   virtual void SetScaleComponent( const double scale[NDimensions] )
-    { this->SetScale(scale); };
+    { this->SetScale(scale); }
 
-  /** Get the scale of the transform*/
-  virtual const double * GetScale() const 
-    { return m_Scale; };
+  /** Get the scale of the transform */
+  virtual const double * GetScale() const
+    { return m_Scale; }
   virtual const double * GetScaleComponent() const 
-    { return m_Scale; };
+    { return m_Scale; }
 
   /** Set the matrix of the transform. The matrix should not include
    *  scale.
    *
    *  \deprecated use SetMatrix instead */
   void SetMatrixComponent(const MatrixType &matrix)
-    { this->SetMatrix( matrix ); };
+    { this->SetMatrix( matrix ); }
   /** Get matrix of the transform.
    *
    * \deprecated use GetMatrix instead  */
@@ -118,13 +121,19 @@ public:
    *
    * \deprecated use SetTranslation instead. */
   void SetOffsetComponent(const OffsetType &offset)
-    { this->SetTranslation( offset ); };
+    { this->SetTranslation( offset ); }
 
   /** Get offset of the transform
    *
    * \deprecated use GetTranslation instead. */
   const OffsetType & GetOffsetComponent(void) const 
     { return this->GetTranslation(); }
+
+  /** Get an inverse of this transform. */
+  bool GetInverse(Self* inverse) const;
+
+  /** Return an inverse of this transform. */
+  virtual InverseTransformBasePointer GetInverseTransform() const;
 
 
 protected:
@@ -134,12 +143,12 @@ protected:
    * initializes the matrix and offset parts of the transformation
    * to values specified by the caller.  If the arguments are
    * omitted, then the AffineTransform is initialized to an identity
-   * transformation in the appropriate number of dimensions.   **/
+   * transformation in the appropriate number of dimensions. */
   ScalableAffineTransform(const MatrixType &matrix,
                           const OutputVectorType &offset);
   ScalableAffineTransform(unsigned int outputSpaceDimension,
                           unsigned int parametersDimension);
-  ScalableAffineTransform();      
+  ScalableAffineTransform();
    
   void ComputeMatrix();
 
@@ -150,7 +159,7 @@ protected:
   void PrintSelf(std::ostream &s, Indent indent) const;
 
   void SetVarScale(const double * scale)
-    { for(int i=0; i<InputSpaceDimension; i++) { m_Scale[i] = scale[i]; } };
+    { for(int i=0; i<InputSpaceDimension; i++) { m_Scale[i] = scale[i]; } }
 
 private:
 
@@ -180,4 +189,3 @@ private:
 #endif
 
 #endif /* __itkScalableAffineTransform_h */
-

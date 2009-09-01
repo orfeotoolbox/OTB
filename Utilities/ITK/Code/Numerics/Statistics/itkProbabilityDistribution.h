@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkProbabilityDistribution.h,v $
   Language:  C++
-  Date:      $Date: 2007-02-24 13:47:32 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-03-04 15:24:04 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -154,7 +154,7 @@ protected:
     {
     Superclass::PrintSelf(os,indent);
     os << indent << "Parameters: " << m_Parameters << std::endl;
-    };
+    }
 
   ParametersType m_Parameters;
 

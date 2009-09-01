@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkInterpolateImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 16:45:11 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-04-25 12:27:27 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -89,7 +89,7 @@ public:
   /** Set/Get the distance from the first image from which to generate
    * interpolated image. The default value is 0.5 */
   itkSetClampMacro( Distance, double, 0.0, 1.0 );
-  itkGetMacro( Distance, double );
+  itkGetConstMacro( Distance, double );
 
   /** Set the interpolator function */
   itkSetObjectMacro( Interpolator, InterpolatorType ) 

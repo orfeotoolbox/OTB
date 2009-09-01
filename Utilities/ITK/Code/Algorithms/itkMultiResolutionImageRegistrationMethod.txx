@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiResolutionImageRegistrationMethod.txx,v $
   Language:  C++
-  Date:      $Date: 2009-01-26 21:45:51 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-05-07 02:15:57 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -254,10 +254,10 @@ MultiResolutionImageRegistrationMethod<TFixedImage,TMovingImage>
   typedef typename FixedImageRegionType::IndexType        IndexType;
 
   ScheduleType schedule = m_FixedImagePyramid->GetSchedule();
-  std::cout << "FixedImage schedule: " << schedule << std::endl;
+  itkDebugMacro ( << "FixedImage schedule: " << schedule );
 
   ScheduleType movingschedule = m_MovingImagePyramid->GetSchedule();
-  std::cout << "MovingImage schedule: " << movingschedule << std::endl;
+  itkDebugMacro ( << "MovingImage schedule: " << movingschedule );
 
   SizeType  inputSize  = m_FixedImageRegion.GetSize();
   IndexType inputStart = m_FixedImageRegion.GetIndex();

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEuclideanDistancePointMetric.h,v $
   Language:  C++
-  Date:      $Date: 2008-12-17 18:52:03 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-04-23 03:53:35 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -100,7 +100,7 @@ public:
 
   /** Set/Get if the distance should be squared. Default is true for computation speed */
   itkSetMacro(ComputeSquaredDistance,bool);
-  itkGetMacro(ComputeSquaredDistance,bool);
+  itkGetConstMacro(ComputeSquaredDistance,bool);
   itkBooleanMacro(ComputeSquaredDistance);
 
 protected:

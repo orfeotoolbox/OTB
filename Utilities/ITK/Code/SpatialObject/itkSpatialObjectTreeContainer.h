@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSpatialObjectTreeContainer.h,v $
   Language:  C++
-  Date:      $Date: 2008-06-22 19:20:58 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-04-07 14:34:17 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -43,7 +43,7 @@ template< unsigned int TDimension>  class SpatialObject;
  * \ingroup DataRepresentation 
  */
 template <unsigned int TDimension>
-class SpatialObjectTreeContainer : 
+class ITK_EXPORT SpatialObjectTreeContainer : 
              public TreeContainer<itk::SpatialObject<TDimension>*>
 {
 

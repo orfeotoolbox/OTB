@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCylinderSpatialObject.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-06-29 13:04:07 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-04-05 10:56:52 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -15,6 +15,7 @@
 
 =========================================================================*/
 #include "itkCylinderSpatialObject.h"
+#include <string.h>
 
 namespace itk
 {

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLinearInterpolateImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 19:05:01 $
-  Version:   $Revision: 1.35 $
+  Date:      $Date: 2009-03-20 10:25:36 $
+  Version:   $Revision: 1.36 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -70,6 +70,9 @@ public:
 
   /** InputImageType typedef support. */
   typedef typename Superclass::InputImageType InputImageType;
+
+  /** InputPixelType typedef support. */
+  typedef typename Superclass::InputPixelType InputPixelType;
 
   /** RealType typedef support. */
   typedef typename Superclass::RealType RealType;

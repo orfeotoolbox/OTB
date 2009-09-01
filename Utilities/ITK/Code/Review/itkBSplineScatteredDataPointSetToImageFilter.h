@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineScatteredDataPointSetToImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-10 12:16:55 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-20 14:53:42 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,6 +18,7 @@
 #define __itkBSplineScatteredDataPointSetToImageFilter_h
 
 #include "itkPointSetToImageFilter.h"
+#include "itkBSplineKernelFunction.h"
 #include "itkCoxDeBoorBSplineKernelFunction.h"
 #include "itkFixedArray.h"
 #include "itkVariableSizeMatrix.h"
@@ -48,9 +49,7 @@ namespace itk
  * the number of control points for the coarsest level.  The algorithm
  * then increases the number of control points at each level so that
  * the B-spline n-D grid is refined to twice the previous level.  The
- * scattered data is specified by the pixel values.  Pixels which
- * are not to be included in the calculation of the B-spline grid must
- * have a value equal to that specified by the variable m_BackgroundValue.
+ * scattered data is specified by the pixel values.
  *
  * Note that the specified number of control points must be > m_SplineOrder.
  *
@@ -118,6 +117,10 @@ public:
    * Interpolation kernel type (default spline order = 3)
    */
   typedef CoxDeBoorBSplineKernelFunction<3>          KernelType;
+  typedef BSplineKernelFunction<0>                   KernelOrder0Type;
+  typedef BSplineKernelFunction<1>                   KernelOrder1Type;
+  typedef BSplineKernelFunction<2>                   KernelOrder2Type;
+  typedef BSplineKernelFunction<3>                   KernelOrder3Type;
 
   /** Helper functions */
 
@@ -213,11 +216,16 @@ private:
   ArrayType                                      m_SplineOrder;
   ArrayType                                      m_NumberOfLevels;
   typename WeightsContainerType::Pointer         m_PointWeights;
-  typename KernelType::Pointer                   m_Kernel[ImageDimension];
   typename PointDataImageType::Pointer           m_PhiLattice;
   typename PointDataImageType::Pointer           m_PsiLattice;
   typename PointDataContainerType::Pointer       m_InputPointData;
   typename PointDataContainerType::Pointer       m_OutputPointData;
+
+  typename KernelType::Pointer                   m_Kernel[ImageDimension];
+  typename KernelOrder0Type::Pointer             m_KernelOrder0;
+  typename KernelOrder1Type::Pointer             m_KernelOrder1;
+  typename KernelOrder2Type::Pointer             m_KernelOrder2;
+  typename KernelOrder3Type::Pointer             m_KernelOrder3;
 
   RealType                                       m_BSplineEpsilon;
 

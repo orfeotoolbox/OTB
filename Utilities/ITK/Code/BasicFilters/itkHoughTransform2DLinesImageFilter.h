@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHoughTransform2DLinesImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 16:45:10 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-04-25 12:27:26 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -111,7 +111,7 @@ public:
   itkSetMacro(Threshold,float);
 
   /** Get the threshold value */
-  itkGetMacro(Threshold,float);
+  itkGetConstMacro(Threshold,float);
 
   /** Set the resolution angle:
       The hough space descibes (in the angle direction) [-PI,PI[
@@ -119,7 +119,7 @@ public:
   itkSetMacro(AngleResolution,float);
 
   /** Get the resolution angle */
-  itkGetMacro(AngleResolution,float);
+  itkGetConstMacro(AngleResolution,float);
 
   /** Simplify the accumulator */
   void Simplify(void);
@@ -132,16 +132,16 @@ public:
 
   /** Set/Get the number of lines to extract */
   itkSetMacro(NumberOfLines,unsigned int);
-  itkGetMacro(NumberOfLines,unsigned int);
+  itkGetConstMacro(NumberOfLines,unsigned int);
 
   /** Set/Get the radius of the disc to remove from the accumulator
    *  for each line found */
   itkSetMacro(DiscRadius,float);
-  itkGetMacro(DiscRadius,float);
+  itkGetConstMacro(DiscRadius,float);
 
   /** Set the variance of the gaussian bluring for the accumulator */
   itkSetMacro(Variance,float);
-  itkGetMacro(Variance,float);
+  itkGetConstMacro(Variance,float);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

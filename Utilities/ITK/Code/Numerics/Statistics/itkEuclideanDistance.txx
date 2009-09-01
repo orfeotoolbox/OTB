@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEuclideanDistance.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:37:20 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-03-04 15:23:47 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,8 +18,8 @@
 #define __itkEuclideanDistance_txx
 
 
-namespace itk{ 
-namespace Statistics{
+namespace itk { 
+namespace Statistics {
 
 template< class TVector >
 inline double
@@ -32,15 +32,15 @@ EuclideanDistance< TVector >
     itkExceptionMacro( << "Vector lengths must be equal." );
     }
   
-  double temp, distance = NumericTraits< double >::Zero ;
+  double temp, distance = NumericTraits< double >::Zero;
   
-  for(unsigned int i = 0 ; i < x1.Size(); i++ )
+  for(unsigned int i = 0; i < x1.Size(); i++ )
     {
-    temp = x1[i] - x2[i] ;
-    distance += temp * temp ;
+    temp = x1[i] - x2[i];
+    distance += temp * temp;
     }
   
-  return vcl_sqrt(distance) ;
+  return vcl_sqrt(distance);
 }
 
 
@@ -58,15 +58,15 @@ EuclideanDistance< TVector >
   MeasurementVectorTraits::Assert( this->m_Origin, measurementVectorSize, 
     "EuclideanDistance::Evaluate Origin and input vector have different lengths");
   
-  double temp, distance = NumericTraits< double >::Zero ;
+  double temp, distance = NumericTraits< double >::Zero;
   
-  for(unsigned int i = 0 ; i < measurementVectorSize ; i++ )
+  for(unsigned int i = 0; i < measurementVectorSize; i++ )
     {
-    temp = this->GetOrigin()[i] - x[i] ;
-    distance += temp * temp ;
+    temp = this->GetOrigin()[i] - x[i];
+    distance += temp * temp;
     }
   
-  return vcl_sqrt(distance) ;
+  return vcl_sqrt(distance);
 }
 
 template< class TVector >
@@ -74,8 +74,8 @@ inline double
 EuclideanDistance< TVector >
 ::Evaluate(const ValueType &a, const ValueType &b) const
 {
-  double temp = a - b ;
-  return vcl_sqrt(temp * temp) ;
+  double temp = a - b;
+  return vcl_sqrt(temp * temp);
 }
 
 template< class TVector >
@@ -92,29 +92,22 @@ EuclideanDistance< TVector >
   MeasurementVectorTraits::Assert( this->m_Origin, measurementVectorSize, 
     "EuclideanDistance::IsWithinRange Origin and input vector have different lengths");
   
-  double squaredRadius = radius * radius ;
-  double sum = NumericTraits< double >::Zero ;
-  double temp ;
-  for ( unsigned int i = measurementVectorSize ; i > 0 ; --i )
+  double squaredRadius = radius * radius;
+  double sum = NumericTraits< double >::Zero;
+  double temp;
+  for ( unsigned int i = measurementVectorSize; i > 0; --i )
     {
-    temp = this->Evaluate( this->GetOrigin()[i-1], x[i-1] ) ;
-    sum += temp * temp ;
+    temp = this->Evaluate( this->GetOrigin()[i-1], x[i-1] );
+    sum += temp * temp;
     if (sum > squaredRadius)
       {
-      return false ;
+      return false;
       }
     }
-  return true ;
+  return true;
 }
 
 } // end of namespace Statistics 
 } // end of namespace itk
 
 #endif
-
-
-
-
-
-
-

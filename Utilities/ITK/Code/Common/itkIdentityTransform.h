@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIdentityTransform.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 19:04:56 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2009-04-09 09:23:21 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -104,6 +104,11 @@ public:
                 itkGetStaticConstMacro(InputSpaceDimension)> InputPointType;
   typedef Point<TScalarType,
                 itkGetStaticConstMacro(OutputSpaceDimension)> OutputPointType;
+
+  /** Base inverse transform type. This type should not be changed to the
+   * concrete inverse transform type or inheritance would be lost.*/
+  typedef typename Superclass::InverseTransformBaseType InverseTransformBaseType;
+  typedef typename InverseTransformBaseType::Pointer    InverseTransformBasePointer;
   
   /**  Method to transform a point. */
   virtual OutputPointType TransformPoint(const InputPointType  &point ) const
@@ -166,6 +171,12 @@ public:
     return this->m_Jacobian;
     }
 
+  /** Return an inverse of the identity transform - another identity transform. */
+  virtual InverseTransformBasePointer GetInverseTransform() const
+    {
+    return this->New().GetPointer();
+    }
+  
   /** Indicates that this transform is linear. That is, given two
    * points P and Q, and scalar coefficients a and b, then
    *

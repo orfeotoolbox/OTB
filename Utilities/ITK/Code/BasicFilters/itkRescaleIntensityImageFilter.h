@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRescaleIntensityImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 16:30:52 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-04-01 14:36:31 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -58,7 +58,7 @@ public:
     {
     return !(*this != other);
     }
-  inline TOutput operator()( const TInput & x )
+  inline TOutput operator()( const TInput & x ) const
     {
     RealType value  = static_cast<RealType>(x) * m_Factor + m_Offset;
     TOutput  result = static_cast<TOutput>( value );

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:  $RCSfile: itkSurfaceSpatialObject.h,v $
   Language:  C++
-  Date:    $Date: 2009-01-28 20:10:29 $
-  Version:   $Revision: 1.26 $
+  Date:    $Date: 2009-04-07 14:34:17 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -36,7 +36,7 @@ namespace itk
  */
 
 template < unsigned int TDimension = 3 >
-class SurfaceSpatialObject 
+class ITK_EXPORT SurfaceSpatialObject 
   :public PointBasedSpatialObject<  TDimension >
 {
 

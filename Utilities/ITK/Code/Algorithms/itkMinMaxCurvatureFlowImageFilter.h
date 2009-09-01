@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMinMaxCurvatureFlowImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 20:03:00 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-04-23 03:53:36 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -110,7 +110,7 @@ public:
 
   /** Set/Get the stencil radius. */
   itkSetMacro( StencilRadius, RadiusValueType );
-  itkGetMacro( StencilRadius, RadiusValueType );
+  itkGetConstMacro( StencilRadius, RadiusValueType );
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

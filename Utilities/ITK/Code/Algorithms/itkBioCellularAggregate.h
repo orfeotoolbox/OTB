@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBioCellularAggregate.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-20 21:28:20 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-05-12 17:26:20 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,7 +38,7 @@ namespace bio {
  * including bacterial colonies and pluricellular organisms 
  */
 template<unsigned int NSpaceDimension=3>
-class CellularAggregate : public CellularAggregateBase
+class ITK_EXPORT CellularAggregate : public CellularAggregateBase
 {
 public:
   /** Standard class typedefs. */

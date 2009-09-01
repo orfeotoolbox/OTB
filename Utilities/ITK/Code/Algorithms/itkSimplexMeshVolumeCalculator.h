@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkSimplexMeshVolumeCalculator.h,v $
 Language:  C++
-Date:      $Date: 2007-04-10 15:45:19 $
-Version:   $Revision: 1.4 $
+Date:      $Date: 2009-04-23 03:53:37 $
+Version:   $Revision: 1.5 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -170,10 +170,10 @@ public:
   void Compute(void);
     
   /** Return the computed volume. */
-  itkGetMacro(Volume, double);
+  itkGetConstMacro(Volume, double);
 
   /** Return the computed area. */
-  itkGetMacro(Area, double);
+  itkGetConstMacro(Area, double);
 
 protected:
   SimplexMeshVolumeCalculator();

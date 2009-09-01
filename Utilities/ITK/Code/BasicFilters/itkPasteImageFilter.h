@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPasteImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 16:30:48 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-25 12:27:48 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -92,12 +92,12 @@ public:
   /** Set/Get the destination index (where in the first input the second
    * input will be pasted. */
   itkSetMacro(DestinationIndex, InputImageIndexType);
-  itkGetMacro(DestinationIndex, InputImageIndexType);
+  itkGetConstMacro(DestinationIndex, InputImageIndexType);
 
   /** Set/Get the source region (what part of the second input will be
    * pasted. */
   itkSetMacro(SourceRegion, SourceImageRegionType);
-  itkGetMacro(SourceRegion, SourceImageRegionType);
+  itkGetConstMacro(SourceRegion, SourceImageRegionType);
 
   /** Set/Get the "destination" image.  This is the image that will be
    * obscured by the paste operation. */

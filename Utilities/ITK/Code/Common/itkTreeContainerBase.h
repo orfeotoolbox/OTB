@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTreeContainerBase.h,v $
   Language:  C++
-  Date:      $Date: 2008-06-20 20:28:54 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-03-03 15:10:35 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -32,9 +32,9 @@ class TreeContainerBase : public Object
  
 public:
 
-  typedef Object Superclass;
-  typedef TreeContainerBase Self;
-  typedef SmartPointer<Self>  Pointer;
+  typedef Object                    Superclass;
+  typedef TreeContainerBase         Self;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   typedef TValueType ValueType;
@@ -78,9 +78,6 @@ protected:
 
 };
 
-
-
 } // namespace itk
 
 #endif
-

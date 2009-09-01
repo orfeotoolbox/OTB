@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIsoContourDistanceImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-18 04:01:46 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-04-23 03:53:35 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -100,18 +100,18 @@ public:
  /** Set/Get the value of the level set to be located. The default value is
    *  0. */
   itkSetMacro( LevelSetValue, InputPixelType );
-  itkGetMacro( LevelSetValue, InputPixelType );
+  itkGetConstMacro( LevelSetValue, InputPixelType );
   
    /** Set/Get the value of the level set to be located. The default value is
    *  0. */
   itkSetMacro( FarValue, PixelType );
-  itkGetMacro( FarValue, PixelType );
+  itkGetConstMacro( FarValue, PixelType );
 
 
   /** Set/Get the narrowbanding flag. By default, narrowbanding is switched
    * off. */
   itkSetMacro( NarrowBanding, bool );
-  itkGetMacro( NarrowBanding, bool );
+  itkGetConstMacro( NarrowBanding, bool );
   itkBooleanMacro( NarrowBanding );
 
 

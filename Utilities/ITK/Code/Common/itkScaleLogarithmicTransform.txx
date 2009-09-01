@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScaleLogarithmicTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:36:59 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-03-03 15:09:08 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkScaleLogarithmicTransform_txx
-#define _itkScaleLogarithmicTransform_txx
+#ifndef __itkScaleLogarithmicTransform_txx
+#define __itkScaleLogarithmicTransform_txx
 
 #include "itkScaleLogarithmicTransform.h"
 
@@ -82,8 +82,6 @@ ScaleLogarithmicTransform<TScalarType,NDimensions>
 
   return this->m_Parameters;
 }
-
-
 
 // Print self
 template<class ScalarType, unsigned int NDimensions>

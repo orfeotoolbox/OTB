@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkBinaryMask3DMeshSource.txx,v $
 Language:  C++
-Date:      $Date: 2007-12-29 21:01:34 $
-Version:   $Revision: 1.28 $
+Date:      $Date: 2009-04-12 03:55:23 $
+Version:   $Revision: 1.29 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -1025,11 +1025,14 @@ void
 BinaryMask3DMeshSource<TInputImage,TOutputMesh>
 ::CreateMesh()
 {
-  if (this->GetNumberOfInputs() < 1)
-    {
-    std::cout << "BinaryMask3DMeshSource : Binary image mask not set" << std::endl;
-    return;
-    }
+  // NOTE ALEX: this is checked by the new pipeline
+  // through SetNumberOfRequiredInput
+  // if (this->GetNumberOfInputs() < 1)
+  //  {
+  //  std::cout << "BinaryMask3DMeshSource : Binary image mask not set";
+  //  std::cout << std::endl;
+  //  return;
+  //  }
 
   // Initialize variables
   m_NumberOfCells = 0;

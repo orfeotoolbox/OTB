@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSpatialOrientationAdapter.cxx,v $
   Language:  C++
-  Date:      $Date: 2007-12-24 16:46:28 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-03-03 15:09:34 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -136,4 +136,3 @@ SpatialOrientationAdapter
 }
 
 } // end namespace itk
-

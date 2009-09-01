@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorRescaleIntensityImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 20:50:03 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-04-01 14:36:37 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -47,7 +47,7 @@ public:
     {
     return !(*this != other);
     }
-  inline TOutput operator()( const TInput & x )
+  inline TOutput operator()( const TInput & x ) const
     {
     TOutput  result;
     for(unsigned int i=0; i<VectorDimension; i++)

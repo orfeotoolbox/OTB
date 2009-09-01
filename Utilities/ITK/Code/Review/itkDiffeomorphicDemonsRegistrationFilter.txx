@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDiffeomorphicDemonsRegistrationFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-11-07 19:39:44 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-04-05 23:09:19 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -255,7 +255,7 @@ DiffeomorphicDemonsRegistrationFilter<TFixedImage,TMovingImage,TDeformationField
 
   // Use time step if necessary. In many cases
   // the time step is one so this will be skipped
-  if ( fabs(dt - 1.0)>1.0e-4 )
+  if ( vcl_fabs(dt - 1.0)>1.0e-4 )
     {
     itkDebugMacro( "Using timestep: " << dt );
     m_Multiplier->SetConstant( dt );
@@ -341,7 +341,6 @@ DiffeomorphicDemonsRegistrationFilter<TFixedImage,TMovingImage,TDeformationField
 
   // Region passing stuff
   this->GraftOutput( m_Adder->GetOutput() );
-  this->GetOutput()->Modified();
   
   DemonsRegistrationFunctionType *drfp = this->DownCastDifferenceFunctionType();
 

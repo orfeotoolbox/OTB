@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCompose3DVectorImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-14 18:39:05 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-04-01 14:36:10 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,7 +42,7 @@ public:
     }
   inline OutputType operator()(  const TInput & s1, 
                                  const TInput & s2,
-                                 const TInput & s3)
+                                 const TInput & s3) const
     {
     OutputType v;
     v[0] = s1;

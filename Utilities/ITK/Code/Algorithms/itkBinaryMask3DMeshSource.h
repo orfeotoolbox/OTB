@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryMask3DMeshSource.h,v $
   Language:  C++
-  Date:      $Date: 2007-04-20 13:36:35 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2009-04-23 03:53:34 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -127,8 +127,8 @@ public:
   
   itkSetMacro(ObjectValue, InputPixelType);
 
-  itkGetMacro(NumberOfNodes, unsigned long);
-  itkGetMacro(NumberOfCells, unsigned long);
+  itkGetConstMacro(NumberOfNodes, unsigned long);
+  itkGetConstMacro(NumberOfCells, unsigned long);
 
   /** accept the input image */
   virtual void SetInput( const InputImageType * inputImage );

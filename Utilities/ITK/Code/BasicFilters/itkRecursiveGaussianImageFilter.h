@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRecursiveGaussianImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 16:30:50 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2009-04-25 12:28:00 $
+  Version:   $Revision: 1.28 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -74,7 +74,7 @@ public:
 
   /** Set/Get the Sigma, measured in world coordinates, of the Gaussian
    * kernel.  The default is 1.0.  */   
-  itkGetMacro( Sigma, ScalarRealType );
+  itkGetConstMacro( Sigma, ScalarRealType );
   itkSetMacro( Sigma, ScalarRealType );
 
   /** Enum type that indicates if the filter applies the equivalent operation
@@ -102,7 +102,7 @@ public:
   For analyzing an image across Scale Space you want to enable
       this flag.  It is disabled by default.  */
   itkSetMacro( NormalizeAcrossScale, bool );
-  itkGetMacro( NormalizeAcrossScale, bool );
+  itkGetConstMacro( NormalizeAcrossScale, bool );
 
   /** Set/Get the Order of the Gaussian to convolve with. 
       \li ZeroOrder is equivalent to convolving with a Gaussian.  This
@@ -111,7 +111,7 @@ public:
       \li SecondOrder is equivalent to convolving with the second derivative of a Gaussian.
     */
   itkSetMacro( Order, OrderEnumType );
-  itkGetMacro( Order, OrderEnumType );
+  itkGetConstMacro( Order, OrderEnumType );
 
   /** Explicitly set a zeroth order derivative. */
   void SetZeroOrder();

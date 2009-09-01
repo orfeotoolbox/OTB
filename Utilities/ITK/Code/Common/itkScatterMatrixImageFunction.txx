@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScatterMatrixImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2006-02-06 22:01:58 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-03-03 15:09:09 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,8 +25,8 @@ namespace itk
 {
 
 /**
-   * Constructor
-   */
+ * Constructor
+ */
 template <class TInputImage, class TCoordRep>
 ScatterMatrixImageFunction<TInputImage,TCoordRep>
 ::ScatterMatrixImageFunction()
@@ -34,10 +34,9 @@ ScatterMatrixImageFunction<TInputImage,TCoordRep>
   m_NeighborhoodRadius = 1;
 }
 
-
 /**
-   *
-   */
+ *
+ */
 template <class TInputImage, class TCoordRep>
 void
 ScatterMatrixImageFunction<TInputImage,TCoordRep>

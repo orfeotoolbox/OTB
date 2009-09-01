@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImagePCAShapeModelEstimator.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 20:02:56 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-04-23 03:53:35 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -122,14 +122,14 @@ public:
    * one outputs. Output index 0 represents the mean image and the
    * remaining outputs the requested principal components. */
   virtual void SetNumberOfPrincipalComponentsRequired( unsigned int n );
-  itkGetMacro( NumberOfPrincipalComponentsRequired, unsigned int );
+  itkGetConstMacro( NumberOfPrincipalComponentsRequired, unsigned int );
 
   /** Set/Get the number of training images in the input. */
   virtual void SetNumberOfTrainingImages( unsigned int n );
-  itkGetMacro(NumberOfTrainingImages, unsigned int);
+  itkGetConstMacro(NumberOfTrainingImages, unsigned int);
 
   /** Get the eigen values */
-  itkGetMacro(EigenValues, VectorOfDoubleType);  
+  itkGetConstMacro(EigenValues, VectorOfDoubleType);  
 
 protected: 
   ImagePCAShapeModelEstimator();

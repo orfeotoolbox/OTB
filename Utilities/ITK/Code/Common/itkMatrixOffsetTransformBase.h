@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMatrixOffsetTransformBase.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 22:04:02 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2009-04-09 09:23:21 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -155,6 +155,11 @@ public:
   typedef OutputVectorType                          OffsetType;
 
   typedef OutputVectorType                          TranslationType;
+
+  /** Base inverse transform type. This type should not be changed to the
+   * concrete inverse transform type or inheritance would be lost.*/
+  typedef typename Superclass::InverseTransformBaseType InverseTransformBaseType;
+  typedef typename InverseTransformBaseType::Pointer    InverseTransformBasePointer;
 
   /** Set the transformation to an Identity
    *
@@ -340,6 +345,8 @@ public:
    */
   bool GetInverse(Self * inverse) const;
 
+  /** Return an inverse of this transform. */
+  virtual InverseTransformBasePointer GetInverseTransform() const;
 
   /** \deprecated Use GetInverse instead.
    *

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNiftiImageIO.h,v $
   Language:  C++
-  Date:      $Date: 2008-03-04 03:07:42 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-04-25 12:25:44 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -102,7 +102,7 @@ public:
     * specified by the Mayo Clinic BIR laboratory.  By default this is set to false.
     */
   itkSetMacro(LegacyAnalyze75Mode,bool);
-  itkGetMacro(LegacyAnalyze75Mode,bool);
+  itkGetConstMacro(LegacyAnalyze75Mode,bool);
 
 protected:
   NiftiImageIO();

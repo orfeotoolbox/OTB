@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNaryMaximumImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 19:33:44 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-04-01 14:36:31 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -68,7 +68,7 @@ public:
   
   Maximum1() {}
   ~Maximum1() {}
-  inline TOutput operator()( const std::vector< TInput > & B)
+  inline TOutput operator()( const std::vector< TInput > & B) const
     {
     OutputValueType A = NumericTraits< TOutput >::NonpositiveMin();
     for( unsigned int i=0; i< B.size(); i++ )

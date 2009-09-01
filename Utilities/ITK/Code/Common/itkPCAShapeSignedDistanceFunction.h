@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPCAShapeSignedDistanceFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-19 19:41:22 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-04-25 12:24:12 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -132,7 +132,7 @@ public:
   /** Set/Get the number of principal components 
    * SetNumberOfPrincipalComponents must be called before SetParameters */
   void SetNumberOfPrincipalComponents(unsigned int n);
-  itkGetMacro(NumberOfPrincipalComponents, unsigned int);
+  itkGetConstMacro(NumberOfPrincipalComponents, unsigned int);
 
   /** Set/Get the mean image. */
   itkSetObjectMacro(MeanImage, ImageType);
@@ -147,7 +147,7 @@ public:
   /** Set/Get the principal component standard deviations. These values corresponds
    * to the square root of the eigenvalues of the principal components. */
   itkSetMacro(PrincipalComponentStandardDeviations, ParametersType);
-  itkGetMacro(PrincipalComponentStandardDeviations, ParametersType);
+  itkGetConstMacro(PrincipalComponentStandardDeviations, ParametersType);
 
   /** Set/Get transform. */
   itkSetObjectMacro(Transform, TransformType);

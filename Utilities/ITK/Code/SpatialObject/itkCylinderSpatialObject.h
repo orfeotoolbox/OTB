@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCylinderSpatialObject.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-28 20:10:27 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-04-07 14:33:56 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,7 +29,7 @@ namespace itk
  * 
  * \brief This class describe a cylinder in 3D only.
  */
-class CylinderSpatialObject 
+class ITK_EXPORT CylinderSpatialObject 
   : public SpatialObject< 3 >
 {
 

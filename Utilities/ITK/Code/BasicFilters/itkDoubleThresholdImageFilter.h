@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDoubleThresholdImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-14 19:20:33 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-04-25 12:27:21 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -80,14 +80,14 @@ public:
   itkSetMacro(OutsideValue,OutputPixelType);
   
   /** Get the "outside" pixel value. */
-  itkGetMacro(OutsideValue,OutputPixelType);
+  itkGetConstMacro(OutsideValue,OutputPixelType);
 
   /** Set the "inside" pixel value. The default value 
    * NumericTraits<OutputPixelType>::max() */
   itkSetMacro(InsideValue,OutputPixelType);
   
   /** Get the "inside" pixel value. */
-  itkGetMacro(InsideValue,OutputPixelType);
+  itkGetConstMacro(InsideValue,OutputPixelType);
 
   /** Set the thresholds. Four thresholds should be specified.  The
    * two lower thresholds default to
@@ -100,10 +100,10 @@ public:
   itkSetMacro( Threshold4, InputPixelType );
                  
   /** Get the threshold values. */
-  itkGetMacro( Threshold1, InputPixelType );
-  itkGetMacro( Threshold2, InputPixelType );
-  itkGetMacro( Threshold3, InputPixelType );
-  itkGetMacro( Threshold4, InputPixelType );
+  itkGetConstMacro( Threshold1, InputPixelType );
+  itkGetConstMacro( Threshold2, InputPixelType );
+  itkGetConstMacro( Threshold3, InputPixelType );
+  itkGetConstMacro( Threshold4, InputPixelType );
 
   /** \deprecated
    * Get the number of iterations used by the geodesic dilation to

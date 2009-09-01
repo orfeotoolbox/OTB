@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkThinPlateR2LogRSplineKernelTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2007-10-25 03:55:09 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-03-03 15:09:44 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkThinPlateR2LogRSplineKernelTransform_txx
-#define _itkThinPlateR2LogRSplineKernelTransform_txx
+#ifndef __itkThinPlateR2LogRSplineKernelTransform_txx
+#define __itkThinPlateR2LogRSplineKernelTransform_txx
 #include "itkThinPlateR2LogRSplineKernelTransform.h"
 
 namespace itk

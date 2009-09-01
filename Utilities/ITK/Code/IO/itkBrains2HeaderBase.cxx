@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBrains2HeaderBase.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-05-26 00:35:16 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-04-05 10:56:47 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -21,7 +21,7 @@
 #include "itkBrains2HeaderBase.h"
 #include "itkBrains2HeaderFactory.h"
 #include <iostream>
-#include <cstdlib>
+#include <stdlib.h>
 
 namespace itk {
 Brains2HeaderBase::Brains2HeaderBase()

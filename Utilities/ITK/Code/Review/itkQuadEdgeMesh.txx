@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMesh.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-07 23:16:29 $
-  Version:   $Revision: 1.53 $
+  Date:      $Date: 2009-04-08 23:10:22 $
+  Version:   $Revision: 1.54 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -108,6 +108,7 @@ QuadEdgeMesh< TPixel, VDimension, TTraits >
 
   this->m_FreePointIndexes = mesh->m_FreePointIndexes;
   this->m_FreeCellIndexes = mesh->m_FreeCellIndexes;
+  this->ClearCellsContainer();
   this->m_EdgeCellsContainer = mesh->m_EdgeCellsContainer;
   this->m_NumberOfFaces = mesh->m_NumberOfFaces;
   this->m_NumberOfEdges = mesh->m_NumberOfEdges;
@@ -1332,6 +1333,14 @@ template< typename TPixel, unsigned int VDimension, typename TTraits >
 QuadEdgeMesh< TPixel, VDimension, TTraits >
 ::~QuadEdgeMesh()
 {
+  this->ClearCellsContainer();
+}
+
+template< typename TPixel, unsigned int VDimension, typename TTraits >
+void
+QuadEdgeMesh< TPixel, VDimension, TTraits >
+::ClearCellsContainer()
+{
   if( m_EdgeCellsContainer->GetReferenceCount() == 1 )
     {
     CellsContainerIterator EdgeCell = m_EdgeCellsContainer->Begin();
@@ -1345,7 +1354,6 @@ QuadEdgeMesh< TPixel, VDimension, TTraits >
     m_EdgeCellsContainer->Initialize();
     }
 }
-
 
 /**
  */

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRedPixelAccessor.h,v $
   Language:  C++
-  Date:      $Date: 2007-04-16 23:35:10 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-03-03 15:08:48 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -59,20 +59,16 @@ public:
     { return input.GetRed(); }
 
   bool operator!=( const Self &) const
-  {
+    {
     return false;
-  }
+    }
 
   bool operator==( const Self & other ) const
-  {
+    {
     return !(*this != other);
-  }
+    }
 };
 
-  
-  
 }  // end namespace itk
 
-
 #endif
-

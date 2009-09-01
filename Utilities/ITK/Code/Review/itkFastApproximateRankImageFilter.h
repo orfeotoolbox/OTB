@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFastApproximateRankImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-08-11 09:11:32 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-04-23 03:43:41 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -82,7 +82,7 @@ public:
       this->Modified();
       }
     }
-  itkGetMacro(Rank, float);
+  itkGetConstMacro(Rank, float);
 
 protected:
   FastApproximateRankImageFilter()

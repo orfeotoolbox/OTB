@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPolygonGroupSpatialObject.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-28 20:10:27 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-04-07 14:34:14 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -51,8 +51,8 @@ namespace itk
  */
 
 
-template <unsigned int TDimension = 3> class 
-PolygonGroupSpatialObject
+template <unsigned int TDimension = 3>
+class ITK_EXPORT PolygonGroupSpatialObject
   :public GroupSpatialObject<TDimension>
 {
 public:

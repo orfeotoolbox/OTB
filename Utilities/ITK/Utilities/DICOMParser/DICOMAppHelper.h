@@ -3,8 +3,8 @@
   Program:   DICOMParser
   Module:    $RCSfile: DICOMAppHelper.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-25 12:03:31 $
-  Version:   $Revision: 1.31 $
+  Date:      $Date: 2009-04-05 10:56:56 $
+  Version:   $Revision: 1.32 $
 
   Copyright (c) 2003 Matt Turek
   All rights reserved.
@@ -25,7 +25,7 @@
 #endif 
 
 #include <vector>
-#include <string>
+#include <string.h>
 #include <cstring>
 
 #include "DICOMConfig.h"

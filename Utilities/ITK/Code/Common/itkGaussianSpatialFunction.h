@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianSpatialFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 01:08:45 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-04-25 12:24:09 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -70,13 +70,13 @@ public:
 
   /** Gets and sets for gaussian parameters */
   itkSetMacro(Scale, double);
-  itkGetMacro(Scale, double);
+  itkGetConstMacro(Scale, double);
   itkSetMacro(Normalized, bool);
-  itkGetMacro(Normalized, bool);
+  itkGetConstMacro(Normalized, bool);
   itkSetMacro(Sigma, ArrayType);
-  itkGetMacro(Sigma, ArrayType);
+  itkGetConstMacro(Sigma, ArrayType);
   itkSetMacro(Mean, ArrayType);
-  itkGetMacro(Mean, ArrayType);
+  itkGetConstMacro(Mean, ArrayType);
 
 protected:
   GaussianSpatialFunction();

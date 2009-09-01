@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDilateObjectMorphologyImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2005-01-16 15:10:52 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-04-28 14:36:19 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,9 +42,9 @@ DilateObjectMorphologyImageFilter<TInputImage, TOutputImage, TKernel>
   const KernelIteratorType kernelEnd = kernel.End();
 
   bool valid = true;
-  for (i=0, kernel_it=kernel.Begin(); kernel_it<kernelEnd; ++kernel_it, ++i)
+  for( i=0, kernel_it=kernel.Begin(); kernel_it<kernelEnd; ++kernel_it, ++i )
     {
-    if(*kernel_it>0)
+    if( *kernel_it > NumericTraits< KernelPixelType >::Zero )
       {
       nit.SetPixel(i, this->GetObjectValue(), valid);
       }

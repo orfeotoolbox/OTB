@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCompareHistogramImageToImageMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2004-02-20 13:35:13 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-05-05 17:47:30 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -96,12 +96,17 @@ CompareHistogramImageToImageMetric<TFixedImage, TMovingImage>
     }
 
   this->m_TrainingInterpolator->SetInputImage(GetTrainingMovingImage());
-//
-// Create the exact histogram structure as the one to be used
-// to evaluate the metric. This code is mostly copied
-// from itkHistogramImageToImageMetric
-//
+
+  // Create the exact histogram structure as the one to be used
+  // to evaluate the metric. This code is mostly copied
+  // from itkHistogramImageToImageMetric
+  
   this->m_TrainingHistogram = HistogramType::New();
+
+#ifdef ITK_USE_REVIEW_STATISTICS
+  this->m_TrainingHistogram->SetMeasurementVectorSize(2);
+#endif
+
   this->m_TrainingHistogram->Initialize(this->Superclass::m_HistogramSize,
                                         this->Superclass::m_LowerBound,
                                         this->Superclass::m_UpperBound);
@@ -139,6 +144,9 @@ CompareHistogramImageToImageMetric<TFixedImage, TMovingImage>
         NumberOfPixelsCounted++;
 
         typename HistogramType::MeasurementVectorType sample;
+#ifdef ITK_USE_REVIEW_STATISTICS
+        sample.SetSize(2);
+#endif
         sample[0] = TrainingFixedValue;
         sample[1] = TrainingMovingValue;
         this->m_TrainingHistogram->IncreaseFrequency(sample, 1);

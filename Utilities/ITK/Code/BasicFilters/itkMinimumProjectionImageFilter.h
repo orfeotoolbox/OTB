@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMinimumProjectionImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-28 18:14:36 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-04-01 14:36:31 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -56,7 +56,7 @@ public:
     m_Minimum = NumericTraits< TInputPixel >::max();
     }
 
-  inline void operator()( const TInputPixel &input )
+  inline void operator()( const TInputPixel &input ) 
     {
     m_Minimum = vnl_math_min( m_Minimum, input );
     }

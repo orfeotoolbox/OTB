@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRigid2DTransform.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-14 18:39:05 $
-  Version:   $Revision: 1.22 $
+  Date:      $Date: 2009-04-09 09:23:21 $
+  Version:   $Revision: 1.23 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -107,6 +107,11 @@ public:
   typedef typename Superclass::InputPointType  InputPointType;
   typedef typename Superclass::OutputPointType OutputPointType;
 
+  /** Base inverse transform type. This type should not be changed to the
+   * concrete inverse transform type or inheritance would be lost.*/
+  typedef typename Superclass::InverseTransformBaseType InverseTransformBaseType;
+  typedef typename InverseTransformBaseType::Pointer    InverseTransformBasePointer;
+
   /**
    * Set the rotation Matrix of a Rigid2D Transform
    *
@@ -202,6 +207,12 @@ public:
    * which is the inverse of self.
    */
   void CloneInverseTo( Pointer & newinverse ) const;
+
+  /** Get an inverse of this transform. */
+  bool GetInverse(Self* inverse) const;
+
+  /** Return an inverse of this transform. */
+  virtual InverseTransformBasePointer GetInverseTransform() const;
 
   /**
    * This method creates and returns a new Rigid2DTransform object

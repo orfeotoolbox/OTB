@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWatershedSegmentTree.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-27 19:30:19 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-04-17 16:12:25 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,7 +27,7 @@ namespace itk
 {
 namespace watershed
 {
-/* \class SegmentTree
+/** \class SegmentTree
  * A data structure for storing segment merge information used in filters of  
  * the watershed segmentation algorithm.  See itk::WatershedImageFilter for an
  * overview.
@@ -38,8 +38,11 @@ namespace watershed
  * component classes.  It holds a list of merges among image segments at
  * various saliency levels. The list is actually a representation of a binary
  * tree, whose nodes are segments and edges are saliencies.
+ *
  * \ingroup WatershedSegmentation
- * \sa itk::WatershedImageFilter */
+ * \sa itk::WatershedImageFilter 
+ *
+ */
 template <class TScalarType>
 class ITK_EXPORT SegmentTree : public DataObject
 {
@@ -73,6 +76,7 @@ public:
   struct merge_comp : public std::binary_function<bool, const merge_t&,
                       const merge_t& >
     {
+    merge_comp() {}
     bool operator()(const merge_t &a, const merge_t &b)
       {
       return b.saliency < a.saliency;

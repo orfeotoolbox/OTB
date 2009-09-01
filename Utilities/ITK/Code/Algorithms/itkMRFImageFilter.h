@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMRFImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-26 21:45:51 $
-  Version:   $Revision: 1.43 $
+  Date:      $Date: 2009-04-23 03:53:35 $
+  Version:   $Revision: 1.44 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -241,22 +241,22 @@ public:
 
   /** Set/Get the number of classes. */
   itkSetMacro(NumberOfClasses, unsigned int);
-  itkGetMacro(NumberOfClasses, unsigned int);
+  itkGetConstMacro(NumberOfClasses, unsigned int);
 
   /** Set/Get the number of iteration of the Iterated Conditional Mode
    * (ICM) algorithm. A default value is set at 50 iterations. */
   itkSetMacro(MaximumNumberOfIterations, unsigned int);
-  itkGetMacro(MaximumNumberOfIterations, unsigned int);
+  itkGetConstMacro(MaximumNumberOfIterations, unsigned int);
 
   /** Set/Get the error tollerance level which is used as a threshold
    * to quit the iterations */
   itkSetMacro(ErrorTolerance, double);
-  itkGetMacro(ErrorTolerance, double);
+  itkGetConstMacro(ErrorTolerance, double);
 
   /** Set/Get the degree of smoothing desired 
    * */
   itkSetMacro(SmoothingFactor, double);
-  itkGetMacro(SmoothingFactor, double);
+  itkGetConstMacro(SmoothingFactor, double);
 
   /** Set the neighborhood radius */
   void SetNeighborhoodRadius(const NeighborhoodRadiusType &);  

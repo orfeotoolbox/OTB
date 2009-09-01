@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSignedDanielssonDistanceMapImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 20:49:56 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-04-01 14:36:32 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -30,7 +30,7 @@ namespace Functor
 template <class InputPixelType> class InvertIntensityFunctor
 {
 public:
-  InputPixelType operator()( InputPixelType input )
+  InputPixelType operator()( InputPixelType input ) const
     {
     if (input)
       {
@@ -141,6 +141,10 @@ public:
   /** Pointer Type for the vector distance image. */
   typedef typename VectorImageType::Pointer VectorImagePointer;
 
+  /** Pointer Type for data object */
+  typedef typename Superclass::DataObjectPointer DataObjectPointer;
+
+
   /** Set if the distance should be squared. */
   itkSetMacro( SquaredDistance, bool );
 
@@ -191,6 +195,9 @@ public:
 
   /** Get vector field of distances. */
   VectorImageType * GetVectorDistanceMap(void);
+
+  /** This is overloaded to create the VectorDistanceMap output image */
+  virtual DataObjectPointer MakeOutput(unsigned int idx);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

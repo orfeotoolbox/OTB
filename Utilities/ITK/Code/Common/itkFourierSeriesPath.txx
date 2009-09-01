@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFourierSeriesPath.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 23:25:41 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-04-05 18:12:09 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -36,7 +36,7 @@ FourierSeriesPath<VDimension>
   numHarmonics = m_CosCoefficients->Size(); 
   output.Fill(0);
   
-  const double PI = 4.0 * atan( 1.0 );
+  const double PI = 4.0 * vcl_atan( 1.0 );
 
   if( numHarmonics > 0 ) { output += m_CosCoefficients->ElementAt(0); }
   
@@ -64,7 +64,7 @@ FourierSeriesPath<VDimension>
   numHarmonics = m_CosCoefficients->Size(); 
   output.Fill(0);
   
-  const double PI = 4.0 * atan( 1.0 );
+  const double PI = 4.0 * vcl_atan( 1.0 );
 
   for(int n=1; n<numHarmonics; n++)
     {

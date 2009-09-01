@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRobustAutomaticThresholdImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-18 14:37:10 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-04-23 03:43:42 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -91,20 +91,20 @@ public:
   itkSetMacro(OutsideValue,OutputPixelType);
 
   /** Get the "outside" pixel value. */
-  itkGetMacro(OutsideValue,OutputPixelType);
+  itkGetConstMacro(OutsideValue,OutputPixelType);
 
   /** Set the "inside" pixel value. The default value
    * NumericTraits<OutputPixelType>::max() */
   itkSetMacro(InsideValue,OutputPixelType);
 
   /** Get the "inside" pixel value. */
-  itkGetMacro(InsideValue,OutputPixelType);
+  itkGetConstMacro(InsideValue,OutputPixelType);
 
   /** Get the computed threshold. */
-  itkGetMacro(Threshold,InputPixelType);
+  itkGetConstMacro(Threshold,InputPixelType);
 
   itkSetMacro(Pow, double);
-  itkGetMacro(Pow, double);
+  itkGetConstMacro(Pow, double);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

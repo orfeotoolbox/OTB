@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPointSet.h,v $
   Language:  C++
-  Date:      $Date: 2007-02-07 13:52:47 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2009-04-25 12:24:12 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -41,7 +41,7 @@ namespace itk
 template <typename TPointSet>
 struct GetPointSetDimension
 {
-itkStaticConstMacro(PointDimension, unsigned int,  TPointSet::PointDimension);
+  itkStaticConstMacro(PointDimension, unsigned int,  TPointSet::PointDimension);
 }; 
   
 /** \class PointSet
@@ -92,9 +92,9 @@ class ITK_EXPORT PointSet: public DataObject
 {
 public:
   /** Standard class typedefs. */
-  typedef PointSet                Self;
-  typedef DataObject  Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef PointSet                  Self;
+  typedef DataObject                Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
     
   /** Method for creation through the object factory. */
@@ -104,7 +104,7 @@ public:
   itkTypeMacro(PointSet, Object);
 
   /** Hold on to the type information specified by the template parameters. */
-  typedef TMeshTraits   MeshTraits;
+  typedef TMeshTraits                                   MeshTraits;
   typedef typename MeshTraits::PixelType                PixelType;  
   
   /** Convenient typedefs obtained from TMeshTraits template parameter. */
@@ -218,11 +218,11 @@ public:
 
   /** Set/Get the Requested region */
   virtual void SetRequestedRegion( const RegionType & region );
-  itkGetMacro( RequestedRegion, RegionType );
+  itkGetConstMacro( RequestedRegion, RegionType );
 
   /** Set/Get the Buffered region */
   virtual void SetBufferedRegion( const RegionType & region );
-  itkGetMacro( BufferedRegion, RegionType );
+  itkGetConstMacro( BufferedRegion, RegionType );
 
 
 protected:

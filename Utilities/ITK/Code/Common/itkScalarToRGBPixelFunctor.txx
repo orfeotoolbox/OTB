@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarToRGBPixelFunctor.txx,v $
   Language:  C++
-  Date:      $Date: 2006-02-06 22:01:58 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-03-03 15:09:07 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -55,8 +55,10 @@ ScalarToRGBPixelFunctor<TScalar>
   if (this->m_IsBigEndian == true)
     { // swap bytes
     TScalar tmp;
-    for (j = sizeof(TScalar) - 1, i = 0; j >=0 ; j--, i++)
-      { ((unsigned char *)(&tmp))[i] = bytes[j];    }
+    for (j = sizeof(TScalar) - 1, i = 0; j >=0; j--, i++)
+      {
+      ((unsigned char *)(&tmp))[i] = bytes[j];
+      }
     buf = tmp;
     }
   

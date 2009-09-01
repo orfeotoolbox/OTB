@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCollidingFrontsImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-23 16:15:23 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-05-12 17:26:20 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,6 +44,11 @@ namespace itk
  * positive, the two fronts propagate in the same direction.  This can be used
  * to extract the region of space between two sets of points.
  * 
+ * If StopOnTargets is On, then each front will stop as soon as all seeds of
+ * the other front have been reached. This can markedly speed up the execution 
+ * of the filter, since wave propagation does not take place on the complete
+ * image. 
+ *
  * Optionally, a connectivity criterion can be applied to the resulting dot
  * product image. In this case, the only negative region in the output image is
  * the one connected to the seeds.
@@ -53,7 +58,7 @@ namespace itk
  *
  */
 template <typename TInputImage, typename TOutputImage>
-class CollidingFrontsImageFilter :
+class ITK_EXPORT CollidingFrontsImageFilter :
     public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -130,11 +135,15 @@ public:
     { return m_SeedPoints2; }
   
   itkSetMacro(NegativeEpsilon, double);
-  itkGetMacro(NegativeEpsilon, double);
+  itkGetConstMacro(NegativeEpsilon, double);
 
   itkSetMacro(ApplyConnectivity, bool);
-  itkGetMacro(ApplyConnectivity, bool);
+  itkGetConstMacro(ApplyConnectivity, bool);
   itkBooleanMacro(ApplyConnectivity);
+
+  itkSetMacro(StopOnTargets, bool);
+  itkGetConstMacro(StopOnTargets, bool);
+  itkBooleanMacro(StopOnTargets);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -158,6 +167,7 @@ private:
   NodeContainerPointer m_SeedPoints1;
   NodeContainerPointer m_SeedPoints2;
 
+  bool m_StopOnTargets;
   bool m_ApplyConnectivity;
 
   double m_NegativeEpsilon;

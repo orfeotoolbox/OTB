@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDistanceToCentroidMembershipFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2005-11-21 02:40:48 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-03-04 15:23:46 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,8 +19,8 @@
 
 #include "itkDistanceToCentroidMembershipFunction.h"
 
-namespace itk{ 
-namespace Statistics{
+namespace itk { 
+namespace Statistics {
 
 template < class TVector >
 DistanceToCentroidMembershipFunction< TVector >
@@ -73,7 +73,7 @@ const vnl_vector< double > &
 DistanceToCentroidMembershipFunction< TVector >
 ::GetCentroid() const
 {
-  return m_Centroid ;
+  return m_Centroid;
 }
 
 template < class TVector >
@@ -95,7 +95,7 @@ DistanceToCentroidMembershipFunction< TVector >
 
   temp = vcl_sqrt( temp );  
   
-  return temp ;
+  return temp;
 }
   
 template < class TVector >
@@ -109,7 +109,7 @@ DistanceToCentroidMembershipFunction< TVector >
   if ( this->m_MeasurementVectorSize && 
        m_Centroid.size() == this->m_MeasurementVectorSize )
     {
-    os << indent << "Centroid: [" ;
+    os << indent << "Centroid: [";
     for (i=0; i+1 < m_Centroid.size(); i++)
       {
       os << m_Centroid[i] << ", ";
@@ -118,7 +118,7 @@ DistanceToCentroidMembershipFunction< TVector >
     }
   else
     {
-    os <<  indent << "Centorid: not set or size doen't match." << std::endl ;
+    os <<  indent << "Centorid: not set or size doen't match." << std::endl;
     }
   
   os << indent << "Number of Samples: " << m_NumberOfSamples << std::endl;
@@ -126,7 +126,5 @@ DistanceToCentroidMembershipFunction< TVector >
 
 } // end namespace Statistics
 } // end of namespace itk
-
-
 
 #endif

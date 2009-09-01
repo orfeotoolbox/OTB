@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNaryAddImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 19:33:44 $
-  Version:   $Revision: 1.35 $
+  Date:      $Date: 2009-04-01 14:36:31 $
+  Version:   $Revision: 1.36 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -61,7 +61,7 @@ public:
   typedef typename NumericTraits< TInput >::AccumulateType AccumulatorType;
   Add1() {}
   ~Add1() {}
-  inline TOutput operator()( const std::vector< TInput > & B)
+  inline TOutput operator()( const std::vector< TInput > & B) const
     {
     AccumulatorType sum = NumericTraits< TOutput >::Zero;
     for( unsigned int i=0; i< B.size(); i++ )

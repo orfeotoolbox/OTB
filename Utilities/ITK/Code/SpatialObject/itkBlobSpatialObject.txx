@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBlobSpatialObject.txx,v $
   Language:  C++
-  Date:      $Date: 2008-06-29 01:56:12 $
-  Version:   $Revision: 1.34 $
+  Date:      $Date: 2009-04-05 10:56:50 $
+  Version:   $Revision: 1.35 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -171,7 +171,7 @@ BlobSpatialObject< TDimension >
         transformedPoint - it->GetPosition();
 
 
-      if(fabs(difference[0]) <= 0.5 && 
+      if(vcl_fabs(difference[0]) <= 0.5 && 
          vcl_fabs(difference[1]) <= 0.5)
         {
         if(TDimension == 3)

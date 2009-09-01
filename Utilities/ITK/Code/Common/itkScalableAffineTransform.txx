@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalableAffineTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2005-05-03 14:19:23 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-04-09 09:23:21 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkScalableAffineTransform_txx
-#define _itkScalableAffineTransform_txx
+#ifndef __itkScalableAffineTransform_txx
+#define __itkScalableAffineTransform_txx
 
 #include "itkNumericTraits.h"
 #include "itkScalableAffineTransform.h"
@@ -144,6 +144,25 @@ ScalableAffineTransform<TScalarType, NDimensions>
   this->Modified();
 }
 
+// Get an inverse of this transform
+template<class TScalarType, unsigned int NDimensions>
+bool
+ScalableAffineTransform<TScalarType, NDimensions>
+::GetInverse(Self* inverse) const
+{
+  return this->Superclass::GetInverse(inverse);
+}
+
+// Return an inverse of this transform
+template<class TScalarType, unsigned int NDimensions>
+typename ScalableAffineTransform<TScalarType, NDimensions>
+::InverseTransformBasePointer
+ScalableAffineTransform<TScalarType, NDimensions>
+::GetInverseTransform() const
+{
+  Pointer inv = New();
+  return this->GetInverse(inv) ? inv.GetPointer() : NULL;
+}
 
 /** Set the scale of the transformation */
 template<class TScalarType, unsigned int NDimensions>

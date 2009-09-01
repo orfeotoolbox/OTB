@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkKappaSigmaThresholdImageCalculator.h,v $
   Language:  C++
-  Date:      $Date: 2008-09-29 18:36:38 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-04-23 03:43:41 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -75,13 +75,13 @@ public:
   itkSetConstObjectMacro( Mask, MaskImageType );
 
   itkSetMacro(MaskValue, MaskPixelType);
-  itkGetMacro(MaskValue, MaskPixelType);
+  itkGetConstMacro(MaskValue, MaskPixelType);
 
   itkSetMacro(SigmaFactor, double);
-  itkGetMacro(SigmaFactor, double);
+  itkGetConstMacro(SigmaFactor, double);
 
   itkSetMacro(NumberOfIterations, unsigned int);
-  itkGetMacro(NumberOfIterations, unsigned int);
+  itkGetConstMacro(NumberOfIterations, unsigned int);
 
   /** Compute moments of a new or modified image.
    * This method computes the moments of the image given as a

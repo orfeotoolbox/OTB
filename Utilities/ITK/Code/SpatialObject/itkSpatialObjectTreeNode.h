@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSpatialObjectTreeNode.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-28 20:10:29 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-04-07 14:34:17 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -30,7 +30,7 @@ template <unsigned int TDimension> class SpatialObject;
  * \brief TODO
  */
 template <unsigned int TDimension>
-class SpatialObjectTreeNode : public TreeNode< SpatialObject<TDimension> * >
+class ITK_EXPORT SpatialObjectTreeNode : public TreeNode< SpatialObject<TDimension> * >
 {
 
 public:
@@ -78,6 +78,14 @@ protected:
   /** Constructor */
   SpatialObjectTreeNode();
   virtual ~SpatialObjectTreeNode(){};
+  void PrintSelf(std::ostream &os, Indent indent) const
+    {
+    this->Superclass::PrintSelf(os, indent);
+    os << indent << "NodeToParentNodeTransform: "
+       << m_NodeToParentNodeTransform << std::endl;
+    os << indent << "NodeToWorldTransform: "
+       << m_NodeToWorldTransform << std::endl;
+    }
 
   TransformPointer m_NodeToParentNodeTransform;
   TransformPointer m_NodeToWorldTransform;

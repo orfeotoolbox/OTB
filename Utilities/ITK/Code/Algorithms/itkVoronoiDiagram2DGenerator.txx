@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVoronoiDiagram2DGenerator.txx,v $
   Language:  C++
-  Date:      $Date: 2009-01-27 19:30:17 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2009-04-06 00:19:17 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -591,7 +591,7 @@ dist(FortuneSite *s1,FortuneSite *s2)
 {
   double dx = (s1->m_Coord[0])-(s2->m_Coord[0]);
   double dy = (s1->m_Coord[1])-(s2->m_Coord[1]);
-  return(sqrt(dx*dx+dy*dy));
+  return(vcl_sqrt(dx*dx+dy*dy));
 }
 
 template <typename TCoordRepType>

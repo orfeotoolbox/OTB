@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshToQuadEdgeMeshFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-07 23:16:29 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-04-22 01:41:45 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -37,7 +37,7 @@ QuadEdgeMeshToQuadEdgeMeshFilter< TInputMesh, TOutputMesh >
 template< class TInputMesh, class TOutputMesh >
 void 
 QuadEdgeMeshToQuadEdgeMeshFilter< TInputMesh, TOutputMesh >
-::GenerateData()
+::CopyInputMeshToOutputMesh()
 {
   InputMeshConstPointer in = this->GetInput();
   OutputMeshPointer out = this->GetOutput();

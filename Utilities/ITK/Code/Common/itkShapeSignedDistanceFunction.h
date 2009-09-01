@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShapeSignedDistanceFunction.h,v $
   Language:  C++
-  Date:      $Date: 2006-02-06 22:01:58 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-03-03 15:09:15 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -54,9 +54,9 @@ public:
   /** Standard class typedefs. */
   typedef ShapeSignedDistanceFunction Self;
   typedef SpatialFunction< double, VSpaceDimension, 
-                                   Point<TCoordRep,VSpaceDimension> > Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+                                      Point<TCoordRep,VSpaceDimension> > Superclass;
+  typedef SmartPointer<Self>          Pointer;
+  typedef SmartPointer<const Self>    ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(ShapeSignedDistanceFunction, SpatialFunction);

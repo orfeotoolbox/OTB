@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshDiscreteCurvatureEstimator.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-01 18:52:09 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-04-22 01:41:45 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -77,7 +77,9 @@ protected:
     OutputPointType p[3];
 
     for( int i = 0; i < 3; i++ )
+      {
       p[i] = output->GetPoint( id[i] );
+      }
 
     if( !TriangleType::IsObtuse( p[0], p[1], p[2] ) )
       {
@@ -101,15 +103,20 @@ protected:
         static_cast< OutputCurvatureType >(
           TriangleType::ComputeArea( p[0], p[1], p[2] ) );
       if( ( p[1] - p[0] ) * ( p[2] - p[0] ) < 0. )
+        {
         return 0.5 * area;
+        }
       else
+        {
         return 0.25 * area;
+        }
       }
     }
 
   virtual void GenerateData()
     {
-    Superclass::GenerateData();
+    this->CopyInputMeshToOutputMesh();
+
     OutputMeshPointer output = this->GetOutput();
 
     OutputPointsContainerPointer points = output->GetPoints();
@@ -125,6 +132,7 @@ protected:
 private:
   QuadEdgeMeshDiscreteCurvatureEstimator( const Self& ); // purposely not implemented
   void operator = ( const Self& ); // purposely not implemented
+
 };
 
 } // end namespace itk

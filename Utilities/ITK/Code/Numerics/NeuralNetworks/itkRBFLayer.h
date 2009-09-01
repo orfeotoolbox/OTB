@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkRBFLayer.h,v $
 Language:  C++
-Date:      $Date: 2009-01-28 21:04:59 $
-Version:   $Revision: 1.11 $
+Date:      $Date: 2009-05-02 05:43:55 $
+Version:   $Revision: 1.12 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -22,7 +22,11 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkObject.h"
 #include "itkMacro.h"
 #include "itkRadialBasisFunctionBase.h"
+#ifdef ITK_USE_REVIEW_STATISTICS
+#include "itkEuclideanDistanceMetric.h"
+#else
 #include "itkEuclideanDistance.h"
+#endif
 
 namespace itk
 {
@@ -55,7 +59,11 @@ public:
   typedef typename Superclass::TransferFunctionInterfaceType TransferFunctionInterfaceType;
 
   //Distance Metric
+#ifdef ITK_USE_REVIEW_STATISTICS
+  typedef EuclideanDistanceMetric<InternalVectorType> DistanceMetricType;
+#else
   typedef EuclideanDistance<InternalVectorType> DistanceMetricType;
+#endif
   typedef typename DistanceMetricType::Pointer  DistanceMetricPointer;
   typedef RadialBasisFunctionBase<ValueType>    RBFType;
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPlaneSpatialObject.txx,v $
   Language:  C++
-  Date:      $Date: 2008-06-29 01:56:12 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2009-04-07 14:34:13 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -183,6 +183,8 @@ PlaneSpatialObject< TDimension >
 ::PrintSelf( std::ostream& os, Indent indent ) const
 {
   Superclass::PrintSelf(os, indent);
+  os << indent << "LowerPoint: " << m_LowerPoint << std::endl;
+  os << indent << "UpperPoint: " << m_UpperPoint << std::endl;
 }
 
 } // end namespace itk

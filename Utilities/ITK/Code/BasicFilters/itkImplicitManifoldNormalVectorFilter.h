@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImplicitManifoldNormalVectorFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 16:45:10 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-05-12 17:22:49 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -68,7 +68,7 @@ namespace itk {
  * the NodeType has the following additional members: m_Flux. 
  */
 template <class TInputImage, class TSparseOutputImage>
-class ImplicitManifoldNormalVectorFilter  
+class ITK_EXPORT ImplicitManifoldNormalVectorFilter  
   : public FiniteDifferenceSparseImageFilter <TInputImage, TSparseOutputImage>
 {
 public:  
@@ -116,17 +116,17 @@ public:
   void SetNormalFunction( NormalFunctionType *nf );  
   
   itkSetMacro(MaxIteration, unsigned int);
-  itkGetMacro(MaxIteration, unsigned int);
+  itkGetConstMacro(MaxIteration, unsigned int);
   itkSetMacro(IsoLevelLow,  NodeValueType);
-  itkGetMacro(IsoLevelLow,  NodeValueType);
+  itkGetConstMacro(IsoLevelLow,  NodeValueType);
   itkSetMacro(IsoLevelHigh, NodeValueType);
-  itkGetMacro(IsoLevelHigh, NodeValueType);
+  itkGetConstMacro(IsoLevelHigh, NodeValueType);
   itkSetMacro(MinVectorNorm, NodeValueType);
-  itkGetMacro(MinVectorNorm, NodeValueType);
+  itkGetConstMacro(MinVectorNorm, NodeValueType);
   itkSetMacro(UnsharpMaskingFlag, bool);
-  itkGetMacro(UnsharpMaskingFlag, bool);
+  itkGetConstMacro(UnsharpMaskingFlag, bool);
   itkSetMacro(UnsharpMaskingWeight, NodeValueType);
-  itkGetMacro(UnsharpMaskingWeight, NodeValueType);
+  itkGetConstMacro(UnsharpMaskingWeight, NodeValueType);
  
 protected:   
   ImplicitManifoldNormalVectorFilter();  

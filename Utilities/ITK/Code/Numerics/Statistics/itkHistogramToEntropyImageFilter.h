@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHistogramToEntropyImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-17 09:13:59 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-04-01 14:36:37 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkHistogramEntropyFunction_h
-#define __itkHistogramEntropyFunction_h
+#ifndef __itkHistogramToEntropyImageFilter_h
+#define __itkHistogramToEntropyImageFilter_h
 
 #include "itkHistogramToImageFilter.h"
 
@@ -66,8 +66,8 @@ public:
   
   ~HistogramEntropyFunction() {};
   
-  inline OutputPixelType operator()( const TInput & A )
-  {
+  inline OutputPixelType operator()( const TInput & A ) const
+    {
     if( A ) 
       {
       const double p = static_cast<OutputPixelType>(A) / 
@@ -80,7 +80,7 @@ public:
         static_cast<OutputPixelType>(m_TotalFrequency);
       return static_cast<OutputPixelType>( (-1) * p * vcl_log(p) / vcl_log(2.0)); 
       }
-  }
+    }
 
   void SetTotalFrequency( const unsigned long n ) 
     {
@@ -134,6 +134,3 @@ private:
 } // end namespace itk
 
 #endif
-
-
-

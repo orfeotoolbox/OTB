@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHistogramImageToImageMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2008-12-21 19:13:12 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2009-05-05 17:47:30 $
+  Version:   $Revision: 1.30 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,6 +38,9 @@ HistogramImageToImageMetric<TFixedImage,TMovingImage>
   m_UpperBoundIncreaseFactor = 0.001;
   m_PaddingValue = NumericTraits<FixedImagePixelType>::Zero;
   m_Histogram = HistogramType::New(); 
+#ifdef ITK_USE_REVIEW_STATISTICS
+  m_Histogram->SetMeasurementVectorSize(2);
+#endif
   m_LowerBoundSetByUser = false;
   m_UpperBoundSetByUser = false;
 }
@@ -132,12 +135,18 @@ void HistogramImageToImageMetric<TFixedImage, TMovingImage>
     // Initialize the upper and lower bounds of the histogram.
     if( !m_LowerBoundSetByUser )
       {
+#ifdef ITK_USE_REVIEW_STATISTICS
+      m_LowerBound.SetSize(2);
+#endif
       m_LowerBound[0] = minFixed;
       m_LowerBound[1] = minMoving;
       }
 
     if( !m_UpperBoundSetByUser )
       {
+#ifdef ITK_USE_REVIEW_STATISTICS
+      m_UpperBound.SetSize(2);
+#endif
       m_UpperBound[0] =
         maxFixed + (maxFixed - minFixed ) * m_UpperBoundIncreaseFactor;
       m_UpperBound[1] =
@@ -200,11 +209,17 @@ HistogramImageToImageMetric<TFixedImage,TMovingImage>
                   DerivativeType::ValueType>::Zero);
 
   typename HistogramType::Pointer pHistogram = HistogramType::New();
+#ifdef ITK_USE_REVIEW_STATISTICS
+  pHistogram->SetMeasurementVectorSize(2);
+#endif
   this->ComputeHistogram(parameters, *pHistogram);
 
   for (unsigned int i = 0; i < ParametersDimension; i++)
     {
     typename HistogramType::Pointer pHistogram2 = HistogramType::New();
+#ifdef ITK_USE_REVIEW_STATISTICS
+    pHistogram2->SetMeasurementVectorSize(2);
+#endif
     this->CopyHistogram(*pHistogram2, *pHistogram);
       
     TransformParametersType newParameters = parameters;
@@ -215,6 +230,9 @@ HistogramImageToImageMetric<TFixedImage,TMovingImage>
     MeasureType e0 = EvaluateMeasure(*pHistogram2);
       
     pHistogram2 = HistogramType::New();
+#ifdef ITK_USE_REVIEW_STATISTICS
+    pHistogram2->SetMeasurementVectorSize(2);
+#endif
     this->CopyHistogram(*pHistogram2, *pHistogram);
 
     newParameters = parameters;
@@ -304,6 +322,9 @@ HistogramImageToImageMetric<TFixedImage,TMovingImage>
         this->m_NumberOfPixelsCounted++;
           
         typename HistogramType::MeasurementVectorType sample;
+#ifdef ITK_USE_REVIEW_STATISTICS
+        sample.SetSize(2);
+#endif
         sample[0] = fixedValue;
         sample[1] = movingValue;
         histogram.IncreaseFrequency(sample, 1);
@@ -328,6 +349,12 @@ HistogramImageToImageMetric<TFixedImage,TMovingImage>
 {
   // Initialize the target.
   typename HistogramType::MeasurementVectorType min, max;
+
+#ifdef ITK_USE_REVIEW_STATISTICS
+  min.SetSize(2);
+  max.SetSize(2);
+#endif
+
   typename HistogramType::SizeType size = source.GetSize();
 
   for (unsigned int i = 0; i < min.Size(); i++)
@@ -350,7 +377,12 @@ HistogramImageToImageMetric<TFixedImage,TMovingImage>
 
   while (sourceIt != sourceEnd && targetIt != targetEnd)
     {
-    typename HistogramType::FrequencyType freq = sourceIt.GetFrequency();
+#ifdef ITK_USE_REVIEW_STATISTICS
+    typename HistogramType::AbsoluteFrequencyType 
+#else
+    typename HistogramType::FrequencyType 
+#endif
+      freq = sourceIt.GetFrequency();
       
     if (freq > 0)
       {

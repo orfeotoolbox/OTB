@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRGBPixel.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-02 22:00:57 $
-  Version:   $Revision: 1.41 $
+  Date:      $Date: 2009-03-12 01:11:16 $
+  Version:   $Revision: 1.43 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -52,18 +52,28 @@ class RGBPixel: public FixedArray<TComponent,3>
 {
 public:
   /** Standard class typedefs. */
-  typedef RGBPixel  Self;
+  typedef RGBPixel                  Self;
   typedef FixedArray<TComponent, 3> Superclass;
   
-  /** Dimension of the vector space. */
-  itkStaticConstMacro(Dimension, unsigned int, 3);
-  itkStaticConstMacro(Length, unsigned int, 3);
-
   /** Convenience typedefs. */
   typedef FixedArray<TComponent, 3> BaseArray;
   
+  /** Dimension of the vector space. */
+#if defined(__BORLANDC__)
+  enum {Dimension = 3};
+#else
+  itkStaticConstMacro(Dimension, unsigned int, 3);
+#endif
+
+  /** Length of the pixel. */
+#if defined(__BORLANDC__)
+  enum {Length = 3};
+#else
+  itkStaticConstMacro(Length, unsigned int, 3);
+#endif
+
   /**  Define the component type. */
-  typedef TComponent ComponentType;
+  typedef TComponent                     ComponentType;
   typedef typename Superclass::ValueType ValueType;
   
   /** Default constructor has nothing to do */
@@ -106,10 +116,10 @@ public:
   /** Return the value for the Nth component. */
   ComponentType GetScalarValue() const
     {
-      return static_cast<ComponentType> (vcl_sqrt(
-        static_cast<double>(this->operator[](0)) * static_cast<double>(this->operator[](0)) +
-        static_cast<double>(this->operator[](1)) * static_cast<double>(this->operator[](1)) +
-        static_cast<double>(this->operator[](2)) * static_cast<double>(this->operator[](2)))); 
+    return static_cast<ComponentType> (vcl_sqrt(
+                                         static_cast<double>(this->operator[](0)) * static_cast<double>(this->operator[](0)) +
+                                         static_cast<double>(this->operator[](1)) * static_cast<double>(this->operator[](1)) +
+                                         static_cast<double>(this->operator[](2)) * static_cast<double>(this->operator[](2)))); 
     }
 
   /** Set the Nth component to v. */

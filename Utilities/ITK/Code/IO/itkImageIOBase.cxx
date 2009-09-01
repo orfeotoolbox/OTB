@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageIOBase.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-02-22 05:53:41 $
-  Version:   $Revision: 1.83 $
+  Date:      $Date: 2009-05-19 19:26:25 $
+  Version:   $Revision: 1.85 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -965,8 +965,8 @@ ImageIOBase::GetActualNumberOfSplitsForWritingCanStreamWrite(unsigned int number
   
   // determine the actual number of pieces that will be generated
   ImageIORegion::SizeType::value_type range = regionSize[splitAxis];
-  int valuesPerPiece = (int)::ceil(range/double(numberOfRequestedSplits));
-  int maxPieceUsed = (int)::ceil(range/double(valuesPerPiece)) - 1;
+  int valuesPerPiece = (int)vcl_ceil(range/double(numberOfRequestedSplits));
+  int maxPieceUsed = (int)vcl_ceil(range/double(valuesPerPiece)) - 1;
   
   return maxPieceUsed+1;
 }
@@ -1024,8 +1024,8 @@ ImageIOBase::GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece,
 
   // determine the actual number of pieces that will be generated
   ImageIORegion::SizeType::value_type range = regionSize[splitAxis];
-  int valuesPerPiece = (int)::ceil(range/(double)numberOfActualSplits);
-  int maxPieceUsed = (int)::ceil(range/(double)valuesPerPiece) - 1;
+  int valuesPerPiece = (int)vcl_ceil(range/(double)numberOfActualSplits);
+  int maxPieceUsed = (int)vcl_ceil(range/(double)valuesPerPiece) - 1;
 
   // Split the region
   if ((int) ithPiece < maxPieceUsed)
@@ -1073,29 +1073,45 @@ ImageIOBase
 {
   //
   // The default implementations determines that the streamable region is
-  // equal to the largest possible region of the image.
+  // equal to the minimal size of the image in the file. That is two
+  // say the return ImageIORegion::GetImageSizeInPixels() is equal to
+  // the number in the file.
   //
   
-  // Since the image in the file may have a dimension lower
-  // than the image type over which the ImageFileReader/Writer is
-  // being instantiated, we must fill in the co-dimensions in a
-  // consistent way.
+  // Since the image in the file may have a lower or higher dimension
+  // than the image type over which the ImageFileReader is
+  // being instantiated we must choose an image dimension which will
+  // represent all the pixels. That is we can trim trailing 1s.
+  
+  unsigned int minIODimension = this->m_NumberOfDimensions;
+  while (minIODimension) 
+    {
+    if (this->m_Dimensions[minIODimension-1] == 1)
+      {
+      --minIODimension;
+      }
+    else
+      {
+      break;
+      }
+    }
 
-  // First: allocate with the image IO number of dimensions
-  ImageIORegion streamableRegion( requested.GetImageDimension() );
+  // dimension size we use to represent the region
+  unsigned int maxDimension =
+    minIODimension > requested.GetImageDimension() ? minIODimension : requested.GetImageDimension();
 
-  // Second: copy only the number of dimension that the image has.
-  unsigned int maxDimensionToCopy =
-    this->m_NumberOfDimensions > requested.GetImageDimension() ?
-    requested.GetImageDimension() : this->m_NumberOfDimensions;
-  for( unsigned int i=0; i < maxDimensionToCopy; i++ )
+  // First: allocate with the correct dimensions
+  ImageIORegion streamableRegion( maxDimension );
+
+  // Second: copy only the number of dimension that the file has.
+  for( unsigned int i=0; i < minIODimension; i++ )
     {
     streamableRegion.SetSize( i, this->m_Dimensions[i] );
     streamableRegion.SetIndex( i, 0 );
     }
 
   // Third: set the rest to the default : start = 0, size = 1
-  for( unsigned int j=maxDimensionToCopy; j<requested.GetImageDimension(); j++ )
+  for( unsigned int j=minIODimension; j<streamableRegion.GetImageDimension(); j++ )
     {
     streamableRegion.SetSize( j, 1 );
     streamableRegion.SetIndex( j, 0 );

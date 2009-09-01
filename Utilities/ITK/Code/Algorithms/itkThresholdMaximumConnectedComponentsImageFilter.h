@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkThresholdMaximumConnectedComponentsImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-04-27 19:05:39 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-04-23 03:53:37 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -103,7 +103,7 @@ public:
    * noise from being counted as an object. The default value is
    * zero. */
   itkSetMacro( MinimumObjectSizeInPixels, unsigned int );
-  itkGetMacro( MinimumObjectSizeInPixels, unsigned int );
+  itkGetConstMacro( MinimumObjectSizeInPixels, unsigned int );
   
   /**
    * The following Set/Get methods are for the binary threshold
@@ -121,20 +121,20 @@ public:
   itkSetMacro( InsideValue, PixelType );
   itkSetMacro( OutsideValue, PixelType );
   itkSetMacro( UpperBoundary, PixelType );
-  itkGetMacro( InsideValue, PixelType );
-  itkGetMacro( OutsideValue, PixelType );
-  itkGetMacro( UpperBoundary, PixelType );
+  itkGetConstMacro( InsideValue, PixelType );
+  itkGetConstMacro( OutsideValue, PixelType );
+  itkGetConstMacro( UpperBoundary, PixelType );
 
   /**
    * Returns the number of objects in the image. This information is
    * only valid after the filter has executed. Useful if your counting
    * something */ 
- itkGetMacro( NumberOfObjects, unsigned long );
+ itkGetConstMacro( NumberOfObjects, unsigned long );
 
   /**
    * Returns the automatic threshold setpoint. This information is
    * only valid after the filter has executed. */
-  itkGetMacro( ThresholdValue, PixelType );
+  itkGetConstMacro( ThresholdValue, PixelType );
 
   /** Some additional typedefs.  */
   typedef TInputImage                           InputImageType;
