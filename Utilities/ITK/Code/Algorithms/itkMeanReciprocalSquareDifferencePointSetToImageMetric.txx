@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanReciprocalSquareDifferencePointSetToImageMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 20:02:59 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-04-06 16:49:21 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -182,7 +182,7 @@ MeanReciprocalSquareDifferencePointSetToImageMetric<TFixedPointSet,TMovingImage>
           //Will it be computationally more efficient to instead calculate the
           //derivative using finite differences ?
           sum -= jacobian( dim, par ) * 
-            gradient[dim] / (pow( lambdaSquared + diffSquared , 2));
+            gradient[dim] / (vcl_pow( lambdaSquared + diffSquared , 2));
           }
         derivative[par] += diff * sum;
         }

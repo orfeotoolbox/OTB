@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorCurvatureNDAnisotropicDiffusionFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 16:30:54 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-05-15 13:55:13 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -102,11 +102,14 @@ VectorCurvatureNDAnisotropicDiffusionFunction<TImage>
     // ``Half'' derivatives
     dx_forward[i] = it.GetPixel(m_Center + m_Stride[i])
       - it.GetPixel(m_Center);
+    dx_forward[i] = dx_forward[i] * this->m_ScaleCoefficients[i];
     dx_backward[i]= it.GetPixel(m_Center)
       - it.GetPixel(m_Center - m_Stride[i]);
+    dx_backward[i] = dx_backward[i] * this->m_ScaleCoefficients[i];
       
     // Centralized differences
     dx[i]         = m_InnerProduct(x_slice[i], it, dx_op);
+    dx[i] = dx[i] * this->m_ScaleCoefficients[i];
     }
 
   for (k = 0; k < VectorDimension; k++)
@@ -123,15 +126,17 @@ VectorCurvatureNDAnisotropicDiffusionFunction<TImage>
         if (j != i)
           {
           dx_aug = m_InnerProduct(xa_slice[j][i],it, dx_op);
+          dx_aug = dx_aug * this->m_ScaleCoefficients[j];
           dx_dim = m_InnerProduct(xd_slice[j][i],it, dx_op);
+          dx_dim = dx_dim * this->m_ScaleCoefficients[j];
           grad_mag_sq[k] += 0.25f * (dx[j][k]+dx_aug[k]) * (dx[j][k]+dx_aug[k]);
           grad_mag_sq_d[k] += 0.25f * (dx[j][k]+dx_dim[k]) * (dx[j][k]+dx_dim[k]);
           }
         }
       }
 
-    grad_mag[k]   = ::sqrt(m_MIN_NORM + grad_mag_sq[k]);
-    grad_mag_d[k] = ::sqrt(m_MIN_NORM + grad_mag_sq_d[k]);
+    grad_mag[k]   = vcl_sqrt(m_MIN_NORM + grad_mag_sq[k]);
+    grad_mag_d[k] = vcl_sqrt(m_MIN_NORM + grad_mag_sq_d[k]);
     // this grad mag should depend only on the current k
     for (i = 0; i < ImageDimension; i++)
       {
@@ -161,8 +166,8 @@ VectorCurvatureNDAnisotropicDiffusionFunction<TImage>
       }
     else
       {
-      Cx[i]  = ::exp( grad_mag_sq_tmp   / m_K );
-      Cxd[i] = ::exp( grad_mag_sq_d_tmp / m_K );
+      Cx[i]  = vcl_exp( grad_mag_sq_tmp   / m_K );
+      Cxd[i] = vcl_exp( grad_mag_sq_d_tmp / m_K );
       }
     }
 
@@ -201,7 +206,7 @@ VectorCurvatureNDAnisotropicDiffusionFunction<TImage>
       }
   
   
-    ans[k] = ::sqrt(propagation_gradient) * speed;
+    ans[k] = vcl_sqrt(propagation_gradient) * speed;
     }
   
   return ans;

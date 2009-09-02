@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFlipImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 17:31:02 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-04-25 12:27:21 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -81,14 +81,14 @@ public:
   /** Set/Get the axis to be flipped. The image is flipped along axes
    * for which array[i] is true. */
   itkSetMacro( FlipAxes, FlipAxesArrayType );
-  itkGetMacro( FlipAxes, FlipAxesArrayType );
+  itkGetConstMacro( FlipAxes, FlipAxesArrayType );
 
 /** Controls how the output origin is computed. If FlipAboutOrigin is
  * "on", the flip will occur about the origin of the axis, otherwise,
  * the flip will occur about the center of the axis.
  */
   itkBooleanMacro(FlipAboutOrigin);
-  itkGetMacro(FlipAboutOrigin, bool);
+  itkGetConstMacro(FlipAboutOrigin, bool);
   itkSetMacro(FlipAboutOrigin, bool);
 
   /** FlipImageFilter produces an image with different origin and

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiThreader.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-06 20:53:10 $
-  Version:   $Revision: 1.30 $
+  Date:      $Date: 2009-04-25 12:24:09 $
+  Version:   $Revision: 1.31 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -152,7 +152,7 @@ public:
    * [ 1, m_GlobalMaximumNumberOfThreads ], so the caller of this method should
    * check that the requested number of threads was accepted. */
   void SetNumberOfThreads( int numberOfThreads );
-  itkGetMacro( NumberOfThreads, int );
+  itkGetConstMacro( NumberOfThreads, int );
     
   /** Set/Get the maximum number of threads to use when multithreading.  It
    * will be clamped to the range [ 1, ITK_MAX_THREADS ] because several arrays

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRGBGibbsPriorFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-26 21:45:56 $
-  Version:   $Revision: 1.30 $
+  Date:      $Date: 2009-04-23 03:53:36 $
+  Version:   $Revision: 1.31 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -115,7 +115,7 @@ public:
   itkSetMacro(NumberOfClasses, unsigned int);
 
   /** Get the Number of classes. */
-  itkGetMacro(NumberOfClasses, unsigned int);
+  itkGetConstMacro(NumberOfClasses, unsigned int);
 
   /** Set/Get the number of iteration of the Iterated Conditional Mode
    * (ICM) algorithm. A default value is set at 50 iterations. */
@@ -123,7 +123,7 @@ public:
 
   /** Get the number of iterations of the Iterated Conditional Mode
    * (ICM) algorithm. */
-  itkGetMacro(MaximumNumberOfIterations, unsigned int);
+  itkGetConstMacro(MaximumNumberOfIterations, unsigned int);
 
   /** Set the threshold for the object size. */
   itkSetMacro(ClusterSize, unsigned int);
@@ -143,17 +143,17 @@ public:
 
   /** set and get the value for Clique weights */
   itkSetMacro(CliqueWeight_1, double);
-  itkGetMacro(CliqueWeight_1, double);
+  itkGetConstMacro(CliqueWeight_1, double);
   itkSetMacro(CliqueWeight_2, double);
-  itkGetMacro(CliqueWeight_2, double);
+  itkGetConstMacro(CliqueWeight_2, double);
   itkSetMacro(CliqueWeight_3, double);
-  itkGetMacro(CliqueWeight_3, double);
+  itkGetConstMacro(CliqueWeight_3, double);
   itkSetMacro(CliqueWeight_4, double);
-  itkGetMacro(CliqueWeight_4, double);
+  itkGetConstMacro(CliqueWeight_4, double);
   itkSetMacro(CliqueWeight_5, double);
-  itkGetMacro(CliqueWeight_5, double);
+  itkGetConstMacro(CliqueWeight_5, double);
   itkSetMacro(CliqueWeight_6, double);
-  itkGetMacro(CliqueWeight_6, double);
+  itkGetConstMacro(CliqueWeight_6, double);
 
 
   /** Specify the type of matrix to use. */

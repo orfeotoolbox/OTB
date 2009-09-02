@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMahalanobisDistanceMembershipFunction.h,v $
   Language:  C++
-  Date:      $Date: 2005-11-21 02:40:48 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-03-04 15:23:56 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -28,8 +28,8 @@
 #include "itkMembershipFunctionBase.h"
 
 
-namespace itk{ 
-namespace Statistics{
+namespace itk { 
+namespace Statistics {
 
 /** \class MahalanobisDistanceMembershipFunction
  * \brief MahalanobisDistanceMembershipFunction class represents MahalanobisDistance Density Function.
@@ -47,16 +47,16 @@ class ITK_EXPORT MahalanobisDistanceMembershipFunction :
 public:
   /** Standard class typedefs */
   typedef MahalanobisDistanceMembershipFunction Self;
-  typedef MembershipFunctionBase< TVector > Superclass ;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef MembershipFunctionBase< TVector >     Superclass;
+  typedef SmartPointer<Self>                    Pointer;
+  typedef SmartPointer<const Self>              ConstPointer;
 
   /** Strandard macros */
   itkTypeMacro(MahalanobisDistanceMembershipFunction, MembershipFunctionBase);
   itkNewMacro(Self);
   
   /** Typedef alias for the measurement vectors */
-  typedef TVector MeasurementVectorType ;
+  typedef TVector MeasurementVectorType;
 
   /** Typedef to represent the length of measurement vectors */
   typedef typename Superclass::MeasurementVectorSizeType MeasurementVectorSizeType;
@@ -71,8 +71,8 @@ public:
   virtual void SetMeasurementVectorSize( const MeasurementVectorSizeType );
   
   /** Method to set mean */
-  void SetMean(const MeanVectorType &mean) ;
-  void SetMean(const Array< double > &mean) ;
+  void SetMean(const MeanVectorType &mean);
+  void SetMean(const Array< double > &mean);
   
   /** Method to get mean */
   const MeanVectorType & GetMean() const;
@@ -107,7 +107,7 @@ public:
   double Evaluate(const MeasurementVectorType &measurement) const;
   
 protected:
-  MahalanobisDistanceMembershipFunction(void) ;
+  MahalanobisDistanceMembershipFunction(void);
   virtual ~MahalanobisDistanceMembershipFunction(void) {}
   void PrintSelf(std::ostream& os, Indent indent) const;
 

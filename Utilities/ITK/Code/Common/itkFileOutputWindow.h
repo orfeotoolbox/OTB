@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFileOutputWindow.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 23:25:41 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-04-25 12:24:06 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -59,7 +59,7 @@ public:
   
   /** Set/Get the buffer flushing mode */
   itkSetMacro(Flush,bool);
-  itkGetMacro(Flush,bool);
+  itkGetConstMacro(Flush,bool);
   itkBooleanMacro(Flush);
   
   /** Setting append will cause the log file to be 
@@ -67,7 +67,7 @@ public:
    * it will be overwritten each time the FileOutputWindow 
    * is created. */
   itkSetMacro(Append, bool);
-  itkGetMacro(Append, bool);
+  itkGetConstMacro(Append, bool);
   itkBooleanMacro(Append);
   
 protected:

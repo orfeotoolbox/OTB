@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMedialNodeTripletCorrespondenceProcess.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 20:03:00 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-05-12 17:26:20 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,7 +42,7 @@ namespace itk
  * \ingroup 
  */
 template< typename TSourceImage >
-class MedialNodeTripletCorrespondenceProcess : public ProcessObject
+class ITK_EXPORT MedialNodeTripletCorrespondenceProcess : public ProcessObject
 {
 public:
  

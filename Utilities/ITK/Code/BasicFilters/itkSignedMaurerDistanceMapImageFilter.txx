@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSignedMaurerDistanceMapImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-08-02 19:38:49 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2009-04-06 13:46:37 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -37,7 +37,7 @@ template <class InputPixelType>
 class InvertBinaryIntensityFunctor
 {
 public:
-  InputPixelType operator()( InputPixelType input )
+  InputPixelType operator()( InputPixelType input ) const
     {
     if( input )
       {
@@ -108,8 +108,8 @@ SignedMaurerDistanceMapImageFilter<TInputImage, TOutputImage>
 
   // determine the actual number of pieces that will be generated
   typename TOutputImage::SizeType::SizeValueType range = requestedRegionSize[splitAxis];
-  int valuesPerThread = (int)::ceil(range/(double)num);
-  int maxThreadIdUsed = (int)::ceil(range/(double)valuesPerThread) - 1;
+  int valuesPerThread = (int)vcl_ceil(range/(double)num);
+  int maxThreadIdUsed = (int)vcl_ceil(range/(double)valuesPerThread) - 1;
 
   // Split the region
   if (i < maxThreadIdUsed)
@@ -331,7 +331,7 @@ SignedMaurerDistanceMapImageFilter<TInputImage, TOutputImage>
       // double. cableswig currently fail to build it with msvc 7.1
       const OutputPixelType outputValue =
         static_cast<OutputPixelType>(
-          sqrt( static_cast<double>(vnl_math_abs( Ot.Get() ) ) ) );
+          vcl_sqrt( static_cast<double>(vnl_math_abs( Ot.Get() ) ) ) );
 
       if( It.Get() != this->m_BackgroundValue )
         {

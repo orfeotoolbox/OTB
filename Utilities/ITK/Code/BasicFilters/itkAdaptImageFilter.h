@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAdaptImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 14:09:10 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-04-01 14:36:06 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -47,7 +47,7 @@ public:
 
   /** operator().  This is the "call" method of the functor. */
   typedef typename TAccessor::ExternalType OutputType;
-  inline OutputType operator()( const TInput & A )
+  inline OutputType operator() ( const TInput & A ) const
     {
     return m_Accessor.Get( A );
     }

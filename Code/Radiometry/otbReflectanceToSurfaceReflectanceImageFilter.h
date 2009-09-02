@@ -156,7 +156,7 @@ public:
   typedef AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms  Parameters2RadiativeTermsType;
   typedef Parameters2RadiativeTermsType::Pointer                        Parameters2RadiativeTermsPointerType;
   typedef AtmosphericCorrectionParameters::Pointer                      CorrectionParametersPointerType;
-   typedef AtmosphericRadiativeTerms::Pointer                            AtmosphericRadiativeTermsPointerType;
+  typedef AtmosphericRadiativeTerms::Pointer                            AtmosphericRadiativeTermsPointerType;
 
 
   typedef FilterFunctionValues                                          FilterFunctionValuesType;
@@ -173,9 +173,10 @@ public:
     m_IsSetAtmosphericRadiativeTerms = true;
     this->Modified();
   }
+  itkGetObjectMacro(AtmosphericRadiativeTerms, AtmosphericRadiativeTerms);
 
   /** Get/Set Atmospheric Correction Parameters. */
-  itkGetObjectMacro(AtmosphericRadiativeTerms, AtmosphericRadiativeTerms);
+  itkSetObjectMacro(CorrectionParameters, AtmosphericCorrectionParameters);
   itkGetObjectMacro(CorrectionParameters, AtmosphericCorrectionParameters);
 
   /** Get/Set Aeronet file name. */
@@ -204,6 +205,11 @@ public:
   itkSetMacro(UseGenerateParameters, bool);
   itkGetMacro(UseGenerateParameters, bool);
 
+  /** Set/Get IsSetAtmosphericRadiativeTerms */
+  itkSetMacro(IsSetAtmosphericRadiativeTerms, bool);
+  itkGetMacro(IsSetAtmosphericRadiativeTerms, bool);
+
+
 protected:
   /** Constructor */
   ReflectanceToSurfaceReflectanceImageFilter();
@@ -215,7 +221,6 @@ protected:
 
   /** Initialize the functor vector */
   void GenerateOutputInformation();
-
   /** Fill AtmosphericRadiativeTerms using image metadata*/
   void UpdateAtmosphericRadiativeTerms();
   /** Update Functors parameters */

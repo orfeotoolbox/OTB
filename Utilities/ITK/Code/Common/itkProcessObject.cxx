@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkProcessObject.cxx,v $
   Language:  C++
-  Date:      $Date: 2007-12-23 17:59:29 $
-  Version:   $Revision: 1.74 $
+  Date:      $Date: 2009-03-03 15:08:01 $
+  Version:   $Revision: 1.75 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -288,8 +288,6 @@ ProcessObject
     this->Modified();
     }
 }
-
-
 
 void 
 ProcessObject
@@ -598,8 +596,6 @@ ProcessObject
   os << indent << "Multithreader: " << std::endl;
   m_Threader->PrintSelf(os, indent.GetNextIndent());
 }
-
-
 
 /**
  * The following methods are used to coordinate the execution of the
@@ -1131,8 +1127,5 @@ ProcessObject
     this->GetOutput(0)->Update();
     }
 }
-
-
-
 
 } // end namespace itk

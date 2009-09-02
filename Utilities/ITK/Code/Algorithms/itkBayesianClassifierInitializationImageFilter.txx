@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBayesianClassifierInitializationImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2007-04-20 13:36:35 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-05-02 05:43:54 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -22,7 +22,12 @@
 
 #include "itkBayesianClassifierInitializationImageFilter.h"
 #include "itkScalarImageKmeansImageFilter.h"
+
+#ifdef ITK_USE_REVIEW_STATISTICS
+#include "itkGaussianMembershipFunction.h"
+#else
 #include "itkGaussianDensityFunction.h"
+#endif
 
 namespace itk
 {
@@ -84,7 +89,12 @@ BayesianClassifierInitializationImageFilter<TInputImage,
                   KMeansOutputImageType >                ConstKMeansIteratorType;
   typedef Array< double >                                CovarianceArrayType;
   typedef Array< double >                                ClassCountArrayType;
+
+#ifdef ITK_USE_REVIEW_STATISTICS
+  typedef Statistics::GaussianMembershipFunction< 
+#else
   typedef Statistics::GaussianDensityFunction< 
+#endif
           MeasurementVectorType >                        GaussianMembershipFunctionType;
   typedef VectorContainer< unsigned short, ITK_TYPENAME 
     GaussianMembershipFunctionType::MeanType* >          MeanEstimatorsContainerType;
@@ -197,8 +207,14 @@ BayesianClassifierInitializationImageFilter<TInputImage,
     covarianceEstimators->Fill( estimatedCovariances[i] );
     typename GaussianMembershipFunctionType::Pointer gaussianDensityFunction
                                        = GaussianMembershipFunctionType::New();
+#ifdef ITK_USE_REVIEW_STATISTICS
+    gaussianDensityFunction->SetMean( *(meanEstimatorsContainer->GetElement( i )) );
+    gaussianDensityFunction->SetCovariance( *(covarianceEstimatorsContainer->GetElement( i )) );
+#else
     gaussianDensityFunction->SetMean( meanEstimatorsContainer->GetElement( i ) );
     gaussianDensityFunction->SetCovariance( covarianceEstimatorsContainer->GetElement( i ) );
+#endif
+
  
     m_MembershipFunctionContainer->InsertElement(i, 
             dynamic_cast< MembershipFunctionType * >( gaussianDensityFunction.GetPointer() ) );

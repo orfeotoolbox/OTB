@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSumOfSquaresImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2006-02-06 22:01:58 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-03-03 15:09:43 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -89,7 +89,7 @@ SumOfSquaresImageFunction<TInputImage,TCoordRep>
   for (unsigned int i = 0; i < size; ++i)
     {
     const RealType value = static_cast<RealType>( it.GetPixel(i) );
-    sumOfSquares  += value * value;
+    sumOfSquares += value * value;
     }
   
   return ( sumOfSquares );

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSingleValuedVnlCostFunctionAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2007-03-22 21:39:38 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-05-12 17:19:54 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -33,7 +33,7 @@ namespace itk
  *
  * \ingroup Numerics Optimizers
  */
-class SingleValuedVnlCostFunctionAdaptor : 
+class ITK_EXPORT SingleValuedVnlCostFunctionAdaptor : 
     public vnl_cost_function
 {
 public:

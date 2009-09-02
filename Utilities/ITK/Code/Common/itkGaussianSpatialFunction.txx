@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianSpatialFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 01:08:45 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-05-11 16:54:23 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,6 +18,7 @@
 #define __itkGaussianSpatialFunction_txx
 
 #include <math.h>
+#include "vnl/vnl_math.h"
 #include "itkGaussianSpatialFunction.h"
 
 namespace itk
@@ -51,22 +52,16 @@ GaussianSpatialFunction<TOutput, VImageDimension, TInput>
   // Normalizing the Gaussian is important for statistical applications
   // but is generally not desirable for creating images because of the
   // very small numbers involved (would need to use doubles)
-  double prefixDenom;
+  double prefixDenom = 1.0;
 
   if (m_Normalized)
     {
-    prefixDenom = m_Sigma[0];
+    const double squareRootOfTwoPi = vcl_sqrt( 2.0 * vnl_math::pi );
 
-    for(unsigned int i = 1; i < VImageDimension; i++)
+    for(unsigned int i = 0; i < VImageDimension; i++)
       {
-      prefixDenom *= m_Sigma[i];
+      prefixDenom *= m_Sigma[i] * squareRootOfTwoPi;
       }
-
-    prefixDenom *= 2 * 3.1415927;
-    }
-  else
-    {
-    prefixDenom = 1.0;
     }
 
   double suffixExp = 0;
@@ -89,21 +84,8 @@ GaussianSpatialFunction<TOutput, VImageDimension, TInput>
 {
   Superclass::PrintSelf(os,indent);
 
-  unsigned int i;
-  os << indent << "Sigma: [";
-  for( i=0; i+1 < VImageDimension; i++ )
-    {
-    os << m_Sigma[i] << ", ";
-    }
-  os << "]" << std::endl;
-
-  os << indent << "Mean: [";
-  for( i=0; i+1 < VImageDimension; i++ )
-    {
-    os << m_Mean[i] << ", ";
-    }
-  os << "]" << std::endl;
-
+  os << indent << "Sigma: " << m_Sigma << std::endl;
+  os << indent << "Mean: " << m_Mean << std::endl;
   os << indent << "Scale: " << m_Scale << std::endl;
   os << indent << "Normalized?: " << m_Normalized << std::endl;
 }

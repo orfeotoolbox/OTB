@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkInverseDeformationFieldImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 16:45:11 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-04-25 12:27:27 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -147,7 +147,7 @@ public:
    * precise computation of the inverse field at the price of large memory
    * consumption and long computational time. */
   itkSetMacro( SubsamplingFactor, unsigned int );
-  itkGetMacro( SubsamplingFactor, unsigned int );
+  itkGetConstMacro( SubsamplingFactor, unsigned int );
 
   /** InverseDeformationFieldImageFilter produces an image which is a different size
    * than its input.  As such, it needs to provide an implementation

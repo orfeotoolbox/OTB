@@ -3,8 +3,8 @@
   Program:   gdcm
   Module:    $RCSfile: gdcmPixelWriteConvert.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-05-14 12:25:32 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-04-30 08:27:02 $
+  Version:   $Revision: 1.15 $
                                                                                 
   Copyright (c) CREATIS (Centre de Recherche et d'Applications en Traitement de
   l'Image). All rights reserved. See Doc/License.txt or
@@ -28,6 +28,20 @@
 #include <stdlib.h>
 
 #define WITHOFFSETTABLE 1
+/*
+ * Note: WITHOFFSETTABLE rely on a proper implementation of std::stringstream.
+ * It requires that you can seekp the stream but do not truncate it. In
+ * kwsys/stringstream implementation based out of strstream this requirement
+ * is not respected. This typically happen on old SunOS compiler. 
+ * 
+ *   stringstream strstr;
+ *   strstr.write( (char*)array, narray );
+ *   strstr.seekp( narray / 2 ); // set position of put pointer in mid string
+ *   assert(strstr.str().size() == narray );
+ * 
+ * However there is a special flag '-stlport4' which seems to provide a better
+ * support for std::stringstream, this flag is the default now on ITK dashboard.
+ */
 
 namespace gdcm
 {
@@ -128,7 +142,7 @@ typedef std::vector<JpegPair> JpegVector;
 
 bool gdcm_write_JPEG2000_file (std::ostream *of, char *inputdata, size_t inputlength, 
   int image_width, int image_height, int numZ, int sample_pixel, int bitsallocated,
-  int sign, int quality);
+  int sign, int quality, size_t &);
 
 
 void WriteDICOMItems(std::ostream *fp, JpegVector &v)
@@ -239,7 +253,7 @@ void PixelWriteConvert::SetCompressJPEG2000UserData(uint8_t *data, size_t size, 
   Compressed = true;
   //char * userData = reinterpret_cast<char*>(UserData);
 
-   itksys_ios::ostringstream *of = new itksys_ios::ostringstream();
+   itksys_ios::stringstream *of = new itksys_ios::stringstream(); // ostringstream: debug / sunos
     int xsize = image->GetXSize();
    int ysize = image->GetYSize();
   int zsize =  image->GetZSize();
@@ -264,15 +278,23 @@ void PixelWriteConvert::SetCompressJPEG2000UserData(uint8_t *data, size_t size, 
      {
      WriteDICOMItems(of, JpegFragmentSize);
      size_t beg = of->tellp();
+     size_t nbbytes = 0;
      gdcm_write_JPEG2000_file(of, (char*)pImageData,size, 
        image->GetXSize(), image->GetYSize(), image->GetZSize(), image->GetSamplesPerPixel(),
-       image->GetBitsAllocated(), sign, 100);
+       image->GetBitsAllocated(), sign, 100, nbbytes);
      //userData, UserDataSize);
      //     CreateOneFrame(of, pImageData, fragment_size, xsize, ysize, zsize, 
      //       samplesPerPixel, quality, JpegFragmentSize);
      //assert( !(fragment_size % 2) );
      // Update the JpegVector with offset
      size_t end = of->tellp();
+     if( (end - beg) != nbbytes )
+       {
+       gdcmErrorMacro( "Go fix your compiler implementation of stringstream." );
+       UserData = 0;
+       UserDataSize = 0;
+       return;
+       }
      //static int i = 0;
      JpegPair &jp = JpegFragmentSize[i];
      jp.second = (uint32_t)(end-beg);
@@ -283,7 +305,6 @@ void PixelWriteConvert::SetCompressJPEG2000UserData(uint8_t *data, size_t size, 
        }
      assert( !(jp.second % 2) );
      //std::cerr << "DIFF: " << i <<" -> " << jp.second << std::endl;
-     //++i;
      pImageData += fragment_size;
      }
    CloseJpeg(of, JpegFragmentSize);
@@ -293,6 +314,7 @@ void PixelWriteConvert::SetCompressJPEG2000UserData(uint8_t *data, size_t size, 
 
 
    size_t of_size = of->str().size();
+   gdcmErrorMacro( "Of_size: " << of_size ); // FIXME: remote debug of sunos
    UserData = new uint8_t[of_size];
    memcpy(UserData, of->str().c_str(), of_size);
    UserDataSize = of_size;

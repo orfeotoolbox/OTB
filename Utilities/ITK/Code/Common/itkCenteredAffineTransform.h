@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredAffineTransform.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 12:04:56 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-04-09 09:23:20 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -75,6 +75,11 @@ public:
   typedef typename Superclass::MatrixType                   MatrixType;
   typedef typename Superclass::OffsetType                   OffsetType;
 
+  /** Base inverse transform type. This type should not be changed to the
+   * concrete inverse transform type or inheritance would be lost.*/
+  typedef typename Superclass::InverseTransformBaseType InverseTransformBaseType;
+  typedef typename InverseTransformBaseType::Pointer    InverseTransformBasePointer;
+
 
   
   /** Set/Get the transformation from a container of parameters.
@@ -95,6 +100,12 @@ public:
    * vector. The rank of the Jacobian will also indicate if the transform
    * is invertible at this point. */
   const JacobianType & GetJacobian(const InputPointType  &point ) const;
+
+  /** Get an inverse of this transform. */
+  bool GetInverse(Self* inverse) const;
+
+  /** Return an inverse of this transform. */
+  virtual InverseTransformBasePointer GetInverseTransform() const;
 
 protected:
   /** Construct an CenteredAffineTransform object */

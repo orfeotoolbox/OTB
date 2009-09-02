@@ -1,11 +1,10 @@
-
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTorusInteriorExteriorSpatialFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 23:39:53 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-04-25 12:24:12 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,11 +41,11 @@ class ITK_EXPORT TorusInteriorExteriorSpatialFunction:
 public:
 
   /** Standard class typedefs. */
-  typedef TorusInteriorExteriorSpatialFunction Self;
+  typedef TorusInteriorExteriorSpatialFunction        Self;
   typedef InteriorExteriorSpatialFunction<VDimension> Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
-    
+  typedef SmartPointer<Self>                          Pointer;
+  typedef SmartPointer<const Self>                    ConstPointer;
+
   /** Run time information. */
   itkTypeMacro(TorusInteriorExteriorSpatialFunction,InteriorExteriorSpatialFunction);
 
@@ -64,15 +63,15 @@ public:
 
   /** Set/Get the origin of the torus (the point from which the major
    * radius is measured). */
-  itkGetMacro( Origin, InputType);
+  itkGetConstMacro( Origin, InputType);
   itkSetMacro( Origin, InputType);
   
   /** Set/Get the major radius of the torus. */
-  itkGetMacro( MajorRadius, double);
+  itkGetConstMacro( MajorRadius, double);
   itkSetMacro( MajorRadius, double);
   
   /** Set/Get the major radius of the torus. */
-  itkGetMacro( MinorRadius, double);
+  itkGetConstMacro( MinorRadius, double);
   itkSetMacro( MinorRadius, double);
        
 protected:

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAsinImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 14:49:30 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2009-04-01 14:36:08 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -57,7 +57,7 @@ public:
     {
     return !(*this != other);
     }
-  inline TOutput operator()( const TInput & A )
+  inline TOutput operator()( const TInput & A ) const
     {
     return static_cast<TOutput>(
       vcl_asin(

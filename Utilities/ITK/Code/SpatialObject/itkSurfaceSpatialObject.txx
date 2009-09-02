@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSurfaceSpatialObject.txx,v $
   Language:  C++
-  Date:      $Date: 2008-06-29 01:56:15 $
-  Version:   $Revision: 1.30 $
+  Date:      $Date: 2009-04-06 00:19:18 $
+  Version:   $Revision: 1.31 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -377,7 +377,7 @@ SurfaceSpatialObject< TDimension >
             v2[0]*(v3[1]-v1[1]) +
             v3[0]*(v1[1]-v2[1]));
 
-      absvec = -sqrt ((double) ((coa*coa) + (cob*cob) + (coc*coc)));
+      absvec = -vcl_sqrt ((double) ((coa*coa) + (cob*cob) + (coc*coc)));
 
 
       if( absvec == 0)

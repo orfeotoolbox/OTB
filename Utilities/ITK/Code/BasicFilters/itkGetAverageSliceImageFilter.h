@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGetAverageSliceImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 16:45:07 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-04-25 12:27:22 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -60,7 +60,7 @@ public:
   itkTypeMacro(GetAverageSliceImageFilter, AccumulateImageFilter);
 
   /** Set the direction in which to reflect the data. */
-  itkGetMacro( AveragedOutDimension, unsigned int );
+  itkGetConstMacro( AveragedOutDimension, unsigned int );
   itkSetMacro( AveragedOutDimension, unsigned int );
   
 protected:

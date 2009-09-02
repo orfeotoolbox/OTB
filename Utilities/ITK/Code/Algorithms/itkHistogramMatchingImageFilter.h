@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHistogramMatchingImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-12-21 19:13:12 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-05-02 05:43:54 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -95,7 +95,11 @@ public:
   typedef typename OutputImageType::PixelType OutputPixelType;
 
   /** Histogram related typedefs. */
+#ifdef ITK_USE_REVIEW_STATISTICS
+  typedef Statistics::Histogram<THistogramMeasurement >   HistogramType;
+#else
   typedef Statistics::Histogram<THistogramMeasurement, 1> HistogramType;
+#endif
   typedef typename HistogramType::Pointer                 HistogramPointer;
 
   /** Set/Get the source image. */
@@ -110,11 +114,11 @@ public:
 
   /** Set/Get the number of histogram levels used. */
   itkSetMacro( NumberOfHistogramLevels, unsigned long );
-  itkGetMacro( NumberOfHistogramLevels, unsigned long );
+  itkGetConstMacro( NumberOfHistogramLevels, unsigned long );
 
   /** Set/Get the number of match points used. */
   itkSetMacro( NumberOfMatchPoints, unsigned long );
-  itkGetMacro( NumberOfMatchPoints, unsigned long );
+  itkGetConstMacro( NumberOfMatchPoints, unsigned long );
 
   /** Set/Get the threshold at mean intensity flag.
    * If true, only source (reference) pixels which are greater
@@ -122,7 +126,7 @@ public:
    * the histogram matching. If false, all pixels are
    * used. */
   itkSetMacro( ThresholdAtMeanIntensity, bool );
-  itkGetMacro( ThresholdAtMeanIntensity, bool );
+  itkGetConstMacro( ThresholdAtMeanIntensity, bool );
   itkBooleanMacro( ThresholdAtMeanIntensity );
 
   /** This filter requires all of the input to be in the buffer. */

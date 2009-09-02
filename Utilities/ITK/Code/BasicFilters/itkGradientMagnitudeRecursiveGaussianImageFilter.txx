@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGradientMagnitudeRecursiveGaussianImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 05:36:44 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2009-03-24 21:55:11 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -246,7 +246,11 @@ GradientMagnitudeRecursiveGaussianImageFilter<TInputImage,TOutputImage >
     m_SqrSpacingFilter->SetInput( cumulativeImage );
     
     // run the mini pipeline for that dimension
-    m_SqrSpacingFilter->Update();
+    // Note: we must take care to update the requested region. Without that, a second run of the
+    // filter with a smaller input than in the first run trigger an exception, because the filter
+    // ask for a larger region than available. TODO: there should be a way to do that only once
+    // per GenerateData() call.
+    m_SqrSpacingFilter->UpdateLargestPossibleRegion();
     
     // and user the result as the cumulative image
     cumulativeImage = m_SqrSpacingFilter->GetOutput();

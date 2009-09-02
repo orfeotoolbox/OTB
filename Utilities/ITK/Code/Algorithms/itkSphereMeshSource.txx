@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSphereMeshSource.txx,v $
   Language:  C++
-  Date:      $Date: 2009-01-27 19:30:16 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-04-06 16:49:23 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -89,7 +89,7 @@ SphereMeshSource<TOutputMesh>
       { 
       for (v=vbeg, j=0; j < m_ResolutionY; v += vstep, j++) 
         { 
-        if (cos(u) > 0) 
+        if (vcl_cos(u) > 0) 
           {
           signu = 1;
           } 
@@ -97,7 +97,7 @@ SphereMeshSource<TOutputMesh>
           {
           signu = -1;
           }
-        if (cos(v) > 0) 
+        if (vcl_cos(v) > 0) 
           {
           signv = 1;
           } 
@@ -106,10 +106,10 @@ SphereMeshSource<TOutputMesh>
           signv = -1;
           }
         
-        p1[0] = m_Scale[0]*signu*(pow((float)(fabs(cos(u))), (float) m_Squareness1))*signv* 
-          (pow((float)(fabs(cos(v))), (float) m_Squareness2)) + m_Center[0]; 
+        p1[0] = m_Scale[0]*signu*(vcl_pow((float)(vcl_fabs(vcl_cos(u))), (float) m_Squareness1))*signv* 
+          (vcl_pow((float)(vcl_fabs(vcl_cos(v))), (float) m_Squareness2)) + m_Center[0]; 
         
-        if (sin(v) > 0) 
+        if (vcl_sin(v) > 0) 
           {
           signv = 1;
           } 
@@ -118,10 +118,10 @@ SphereMeshSource<TOutputMesh>
           signv = -1;
           }
         
-        p1[1] = m_Scale[1]*signu*(pow((float)(fabs(cos(u))), (float) m_Squareness1))*signv* 
-          (pow((float)(fabs(sin(v))), (float) m_Squareness2)) + m_Center[1]; 
+        p1[1] = m_Scale[1]*signu*(vcl_pow((float)(vcl_fabs(vcl_cos(u))), (float) m_Squareness1))*signv* 
+          (vcl_pow((float)(vcl_fabs(vcl_sin(v))), (float) m_Squareness2)) + m_Center[1]; 
         
-        if (sin(u) > 0) 
+        if (vcl_sin(u) > 0) 
           {
           signu = 1;
           } 
@@ -130,7 +130,7 @@ SphereMeshSource<TOutputMesh>
           signu = -1;
           }
         
-        p1[2] = m_Scale[2]*signu*(pow((float)(fabs(sin(u))), (float) m_Squareness1)) + 
+        p1[2] = m_Scale[2]*signu*(vcl_pow((float)(vcl_fabs(vcl_sin(u))), (float) m_Squareness1)) + 
           m_Center[2];
         
         point.Value() = p1;
@@ -139,21 +139,21 @@ SphereMeshSource<TOutputMesh>
       }   
 
     // calculate the south pole node
-    p1[0] = (m_Scale[0]*(pow((float)(fabs(cos(-vnl_math::pi/2))),1.0f))* 
-             (pow((float)(fabs(cos(0.0))),1.0f)) + m_Center[0]); 
-    p1[1] = (m_Scale[1]*(pow((float)(fabs(cos(-vnl_math::pi/2))),1.0f))* 
-             (pow((float)(fabs(sin(0.0))),1.0f)) + m_Center[1]); 
-    p1[2] = (m_Scale[2]*-1*(pow((float)(fabs(sin(-vnl_math::pi/2))),1.0f)) 
+    p1[0] = (m_Scale[0]*(vcl_pow((float)(vcl_fabs(vcl_cos(-vnl_math::pi/2))),1.0f))* 
+             (vcl_pow((float)(vcl_fabs(vcl_cos(0.0))),1.0f)) + m_Center[0]); 
+    p1[1] = (m_Scale[1]*(vcl_pow((float)(vcl_fabs(vcl_cos(-vnl_math::pi/2))),1.0f))* 
+             (vcl_pow((float)(vcl_fabs(vcl_sin(0.0))),1.0f)) + m_Center[1]); 
+    p1[2] = (m_Scale[2]*-1*(vcl_pow((float)(vcl_fabs(vcl_sin(-vnl_math::pi/2))),1.0f)) 
              + m_Center[2]);
     point.Value() = p1;
     ++point;
     
     // calculate the north pole node
-    p1[0] = (m_Scale[0]*(pow((float)(fabs(cos(vnl_math::pi/2))),1.0f))* 
-             (pow(fabs(cos(0.0)),1.0)) + m_Center[0]); 
-    p1[1] = (m_Scale[1]*(pow((float)(fabs(cos(vnl_math::pi/2))),1.0f))* 
-             (pow(fabs(sin(0.0)),1.0)) + m_Center[1]); 
-    p1[2] = (m_Scale[2]*(pow((float)(fabs(sin(vnl_math::pi/2))),1.0f)) 
+    p1[0] = (m_Scale[0]*(vcl_pow((float)(vcl_fabs(vcl_cos(vnl_math::pi/2))),1.0f))* 
+             (vcl_pow(vcl_fabs(vcl_cos(0.0)),1.0)) + m_Center[0]); 
+    p1[1] = (m_Scale[1]*(vcl_pow((float)(vcl_fabs(vcl_cos(vnl_math::pi/2))),1.0f))* 
+             (vcl_pow(vcl_fabs(vcl_sin(0.0)),1.0)) + m_Center[1]); 
+    p1[2] = (m_Scale[2]*(vcl_pow((float)(vcl_fabs(vcl_sin(vnl_math::pi/2))),1.0f)) 
              + m_Center[2]);
     point.Value() = p1;
     ++point;

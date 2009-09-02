@@ -124,6 +124,10 @@ IF(NOT ITK_USE_SYSTEM_VXL)
 ENDIF(NOT ITK_USE_SYSTEM_VXL)
 
 #------------------------------------------------------------------------------
+# This directory depends on VXL V3p
+ADD_SUBDIRECTORY(netlib)
+
+#------------------------------------------------------------------------------
 # Build testing as needed
 IF (BUILD_TESTING)
   ADD_SUBDIRECTORY(Dart)

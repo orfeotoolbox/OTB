@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkObjectMorphologyImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-14 19:56:22 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-04-25 12:27:45 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -130,7 +130,7 @@ public:
   itkGetConstReferenceMacro(Kernel, KernelType);
 
   /** Get the pixel value being used to identify the object of interest */
-  itkGetMacro(ObjectValue, PixelType);
+  itkGetConstMacro(ObjectValue, PixelType);
 
   /** Set the pixel value being used to identify the object of interest */
   itkSetMacro(ObjectValue, PixelType);
@@ -156,7 +156,7 @@ public:
     { m_BoundaryCondition = &m_DefaultBoundaryCondition; }
   
   /** Get the current boundary condition. */
-  itkGetMacro(BoundaryCondition, ImageBoundaryConditionPointerType);
+  itkGetConstMacro(BoundaryCondition, ImageBoundaryConditionPointerType);
 
   /** Enable/disable the use of boundary condition.  Defaults to false.
    * if false, a neighborhood operator extends outside an image, it does
@@ -168,7 +168,7 @@ public:
    * if false, a neighborhood operator extends outside an image, it does
    * not consider that outside extent when determining if a pixel is on
    * an object's boundary. */
-  itkGetMacro(UseBoundaryCondition, bool);
+  itkGetConstMacro(UseBoundaryCondition, bool);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

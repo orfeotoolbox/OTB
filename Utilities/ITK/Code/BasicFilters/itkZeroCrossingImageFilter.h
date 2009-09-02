@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkZeroCrossingImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 17:31:03 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-04-25 12:28:13 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -100,11 +100,11 @@ public:
 
   /** Set/Get the label value for zero-crossing pixels. */
   itkSetMacro(ForegroundValue, OutputImagePixelType);
-  itkGetMacro(ForegroundValue, OutputImagePixelType);
+  itkGetConstMacro(ForegroundValue, OutputImagePixelType);
   
   /** Set/Get the label value for non-zero-crossing pixels. */
   itkSetMacro(BackgroundValue, OutputImagePixelType);
-  itkGetMacro(BackgroundValue, OutputImagePixelType);
+  itkGetConstMacro(BackgroundValue, OutputImagePixelType);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

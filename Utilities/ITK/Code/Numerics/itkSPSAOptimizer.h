@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSPSAOptimizer.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-26 12:19:14 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-05-12 17:19:52 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,7 +40,7 @@ namespace itk
  * \ingroup Optimizers
  */
   
-class SPSAOptimizer
+class ITK_EXPORT SPSAOptimizer
   : public SingleValuedNonLinearOptimizer
 {
 public:

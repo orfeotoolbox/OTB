@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPolygonSpatialObject.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-16 11:38:00 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-04-08 18:27:47 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,8 +26,8 @@ namespace itk
  * 
  * \brief TODO
  */
-template <unsigned int TDimension = 3> class 
-PolygonSpatialObject
+template <unsigned int TDimension = 3>
+class ITK_EXPORT PolygonSpatialObject
   :public BlobSpatialObject<TDimension>
 {
 public:
@@ -46,7 +46,7 @@ public:
   itkTypeMacro( PolygonSpatialObject, BlobSpatialObject );
   
   /** Method returning plane alignment of strand */
-  PolygonGroupOrientation Plane();
+  PolygonGroupOrientation Plane() const;
 
   /** Method sets the thickness of the current strand */
   itkSetMacro(Thickness,double);
@@ -55,50 +55,50 @@ public:
   itkGetMacro(Thickness,double);
 
   /** Returns if the polygon is closed */
-  bool IsClosed();
+  bool IsClosed() const;
 
   /** Returns the number of points of the polygon */
   unsigned int NumberOfPoints() const;
 
   /** Method returns the Point closest to the given point */
-  PointType ClosestPoint(PointType &curPoint);
+  PointType ClosestPoint( const PointType & curPoint ) const;
 
   /** Method returns area of polygon described by points */
-  double MeasureArea();
+  double MeasureArea() const;
 
   /** Method returns the volume of the strand */
-  double MeasureVolume();
+  double MeasureVolume() const;
 
   /** Method returns the length of the perimeter */
-  double MeasurePerimeter();
+  double MeasurePerimeter() const;
 
   /** Method deletes a point from the strand */
-  bool DeletePoint(PointType &pointToDelete);
+  bool DeletePoint( const PointType & pointToDelete );
 
   /** Method adds a point to the end of the strand */
-  bool AddPoint(PointType &pointToAdd);
+  bool AddPoint( const PointType & pointToAdd );
 
   /** Method inserts point after point1 */
-  bool InsertPoint(PointType &point1, PointType &pointToAdd);
+  bool InsertPoint( const PointType & point1, const PointType & pointToAdd );
 
   /** Method replaces a point */
-  bool ReplacePoint(PointType &oldpoint, PointType &newPoint);
+  bool ReplacePoint( const PointType & oldpoint, const PointType & newPoint );
 
   /** Method removes the series of points between startpoint and endpoint */
-  bool RemoveSegment(PointType &startpoint,PointType &endPoint);
+  bool RemoveSegment( const PointType & startpoint, const PointType & endPoint);
 
   /** Test whether a point is inside or outside the object. */ 
   virtual bool IsInside( const PointType & point,
                          unsigned int depth,
                          char * name) const;
 
-  /** Test whether a point is inside or outside the object 
-   *  For computational speed purposes, it is faster if the method does not
-   *  check the name of the class and the current depth */ 
-  virtual bool IsInside( const PointType & point) const
-    {
-    return this->IsInside(point, 0, NULL);
-    };
+  /** Test whether a point is inside or outside the object For
+   * computational speed purposes, it is faster if the method does not
+   * check the name of the class and the current depth. */ 
+  virtual bool IsInside( const PointType & point) const;
+
+protected:
+  void PrintSelf( std::ostream & os, Indent indent) const;
 
 private:
   PolygonSpatialObject(const Self&); //purposely not implemented

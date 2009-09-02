@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkKdTreeGenerator.txx,v $
   Language:  C++
-  Date:      $Date: 2008-08-20 13:02:09 $
-  Version:   $Revision: 1.22 $
+  Date:      $Date: 2009-03-04 15:23:51 $
+  Version:   $Revision: 1.23 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,8 +17,8 @@
 #ifndef __itkKdTreeGenerator_txx
 #define __itkKdTreeGenerator_txx
 
-namespace itk{
-namespace Statistics{
+namespace itk {
+namespace Statistics {
 
 template< class TSample >
 KdTreeGenerator< TSample >

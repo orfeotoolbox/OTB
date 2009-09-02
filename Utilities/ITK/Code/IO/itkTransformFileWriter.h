@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTransformFileWriter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-16 11:37:58 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-04-25 12:25:45 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -76,7 +76,7 @@ public:
 
   /** Set/Get the precision of the writing */
   itkSetMacro(Precision,unsigned int);
-  itkGetMacro(Precision,unsigned int);
+  itkGetConstMacro(Precision,unsigned int);
 
   /** Write out the transform */
   void Update();

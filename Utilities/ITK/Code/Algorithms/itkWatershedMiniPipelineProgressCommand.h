@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWatershedMiniPipelineProgressCommand.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-27 19:30:18 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-05-12 20:21:46 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,7 +27,7 @@ namespace itk {
  *  MiniPipeline.  Follows the progress of a series of filters
  *  and calls UpdateProgress on another filter (i.e. the filter
  * implementing the mini-pipeline). */
-class WatershedMiniPipelineProgressCommand : public Command
+class ITK_EXPORT WatershedMiniPipelineProgressCommand : public Command
 {
 public:
   /** Smart pointer declaration methods */
@@ -51,17 +51,18 @@ public:
 
   /** Set/Get the base count for stepping through filter progress values */
   itkSetMacro(Count, double);
-  itkGetMacro(Count, double);
+  itkGetConstMacro(Count, double);
 
   /** Set/Get the number of filters that this command will expect to be
    * observing */
   itkSetMacro(NumberOfFilters, double);
-  itkGetMacro(NumberOfFilters, double);
+  itkGetConstMacro(NumberOfFilters, double);
   
 protected:
   WatershedMiniPipelineProgressCommand() : m_Count(0.0), m_Filter(0),
                                            m_NumberOfFilters(1) {}
   virtual ~WatershedMiniPipelineProgressCommand() {}
+  void PrintSelf(std::ostream& os, Indent indent) const;
   
 private:
   double         m_Count;

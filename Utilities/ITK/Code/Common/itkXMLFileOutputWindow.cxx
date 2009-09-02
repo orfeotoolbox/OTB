@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkXMLFileOutputWindow.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-05-26 00:24:36 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-03-03 15:11:51 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -80,7 +80,7 @@ XMLFileOutputWindow
 ::DisplayXML(const char* tag, const char* text)
 {
   char *xmlText;
-
+  
   if(!text)
     {
     return;
@@ -99,27 +99,39 @@ XMLFileOutputWindow
     switch (*s)
       {
       case '&':
+        {
         strcat(x, "&amp;"); x += 5;
         break;
+        }
       case '"':
+        { 
         strcat(x, "&quot;"); x += 6;
         break;
+        }
       case '\'':
+        {
         strcat(x, "&apos;"); x += 6;
         break;
+        }
       case '<':
+        {
         strcat(x, "&lt;"); x += 4;
         break;
+        }
       case '>':
+        {
         strcat(x, "&gt;"); x += 4;
         break;
+        }
       default:
+        {
         *x = *s; x++;
         *x = '\0'; // explicitly terminate the new string
+        }
       }
     s++;
     }
-
+  
   if (!m_Stream)
     {
     this->Initialize();

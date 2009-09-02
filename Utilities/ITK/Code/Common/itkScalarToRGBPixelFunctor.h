@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarToRGBPixelFunctor.h,v $
   Language:  C++
-  Date:      $Date: 2006-02-06 22:01:58 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-03-03 15:09:07 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -52,13 +52,13 @@ public:
   RGBPixelType operator()( const TScalar &) const;
 
   void SetLittleEndian()
-  {
+    {
     m_IsBigEndian = false;
-  }
+    }
   void SetBigEndian()
-  {
+    {
     m_IsBigEndian = true;
-  }
+    }
   
 private:
   bool m_IsBigEndian;

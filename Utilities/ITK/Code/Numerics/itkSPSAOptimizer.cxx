@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSPSAOptimizer.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 21:04:35 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-05-26 23:45:04 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -70,6 +70,11 @@ SPSAOptimizer
   os << indent << "Alpha: " << m_Alpha << std::endl;
   os << indent << "c: " << m_Sc << std::endl;
   os << indent << "Gamma: " << m_Gamma << std::endl;
+  os << indent << "Tolerance: " << m_Tolerance << std::endl;
+  os << indent << "GradientMagnitude: " << m_GradientMagnitude << std::endl;
+  os << indent << "StateOfConvergenceDecayRate: " << m_StateOfConvergenceDecayRate << std::endl;
+  os << indent << "Gradient: " << m_Gradient << std::endl;
+  os << indent << "StateOfConvergence: " << m_StateOfConvergence << std::endl;
 
   os << indent << "NumberOfPerturbations: " << m_NumberOfPerturbations << std::endl;
 
@@ -344,9 +349,11 @@ void SPSAOptimizer
   for ( unsigned int j = 0; j < spaceDimension; j++ )
     {
     /** Generate randomly -1 or 1. */
-    // m_Delta[ j ] = 2 * vnl_math_rnd( vnl_sample_uniform(0.0f,1.0f) ) - 1;
-
+#ifdef ITK_USE_PORTABLE_ROUND
+    m_Delta[ j ] = 2 * Math::Round( this->m_Generator->GetUniformVariate (0.0f, 1.0f) ) - 1;
+#else
     m_Delta[ j ] = 2 * vnl_math_rnd ( this->m_Generator->GetUniformVariate (0.0f, 1.0f) ) - 1;
+#endif
 
     /**
      * Take scales into account. The perturbation of a parameter that has a

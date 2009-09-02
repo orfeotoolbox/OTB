@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageToListAdaptor.txx,v $
   Language:  C++
-  Date:      $Date: 2008-08-19 22:27:57 $
-  Version:   $Revision: 1.24 $
+  Date:      $Date: 2009-03-04 15:23:50 $
+  Version:   $Revision: 1.25 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,11 +14,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkImageToListAdaptor_txx
-#define _itkImageToListAdaptor_txx
+#ifndef __itkImageToListAdaptor_txx
+#define __itkImageToListAdaptor_txx
 
-namespace itk{ 
-namespace Statistics{
+namespace itk { 
+namespace Statistics {
 
 template < class TImage, class TMeasurementVector >
 ImageToListAdaptor< TImage, TMeasurementVector >
@@ -105,6 +105,3 @@ ImageToListAdaptor< TImage, TMeasurementVector >
 } // end of namespace itk
 
 #endif
-
-
-

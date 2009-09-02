@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPhilipsRECImageIOFactory.h,v $
   Language:  C++
-  Date:      $Date: 2008-06-23 22:04:35 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-03-18 15:10:38 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -58,9 +58,9 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
     {
-    PhilipsRECImageIOFactory::Pointer MINC2Factory = 
+    PhilipsRECImageIOFactory::Pointer factory = 
       PhilipsRECImageIOFactory::New();
-    ObjectFactoryBase::RegisterFactory(MINC2Factory);
+    ObjectFactoryBase::RegisterFactory(factory);
     }
   
 protected:

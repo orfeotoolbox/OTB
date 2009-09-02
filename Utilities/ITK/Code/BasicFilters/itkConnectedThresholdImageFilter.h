@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConnectedThresholdImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-16 21:17:18 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2009-04-25 12:27:20 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -67,33 +67,17 @@ public:
 
   
   /** Set seed point. */
-  void SetSeed ( const IndexType & seed )
-    {
-    this->ClearSeeds();
-    this->AddSeed ( seed );
-    }
-  void AddSeed(const IndexType & seed)
-    {
-    m_SeedList.push_back ( seed );
-    this->Modified();
-    }
+  void SetSeed ( const IndexType & seed );
+  void AddSeed(const IndexType & seed);
 
   /** Clear the seed list. */
-  void ClearSeeds ()
-    {
-    if (m_SeedList.size() > 0)
-      {
-      m_SeedList.clear();
-      this->Modified();
-      }
-    }
-
+  void ClearSeeds ();
   
   /** Set/Get value to replace thresholded pixels. Pixels that lie *
    *  within Lower and Upper (inclusive) will be replaced with this
    *  value. The default is 1. */
   itkSetMacro(ReplaceValue, OutputImagePixelType);
-  itkGetMacro(ReplaceValue, OutputImagePixelType);
+  itkGetConstMacro(ReplaceValue, OutputImagePixelType);
 
   /** Type of DataObjects to use for scalar inputs */
   typedef SimpleDataObjectDecorator<InputImagePixelType> InputPixelObjectType;
@@ -146,7 +130,7 @@ public:
   /** Type of connectivity to use (fully connected OR 4(2D), 6(3D), 
    * 2*N(ND) connectivity) */
   itkSetMacro( Connectivity, ConnectivityEnumType );
-  itkGetMacro( Connectivity, ConnectivityEnumType );
+  itkGetConstMacro( Connectivity, ConnectivityEnumType );
 #endif
 
 protected:

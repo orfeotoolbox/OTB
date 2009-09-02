@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkLabelStatisticsImageFilter.txx,v $
 Language:  C++
-Date:      $Date: 2008-10-17 01:43:11 $
-Version:   $Revision: 1.21 $
+Date:      $Date: 2009-05-08 16:17:51 $
+Version:   $Revision: 1.25 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,6 +40,9 @@ LabelStatisticsImageFilter<TInputImage, TLabelImage>
 {
   this->SetNumberOfRequiredInputs(2);
   m_UseHistograms = false;
+#ifdef ITK_USE_REVIEW_STATISTICS
+  m_NumBins.SetSize(1);
+#endif
   m_NumBins[0] = 20;
   m_LowerBound = static_cast<RealType>( NumericTraits<PixelType>::NonpositiveMin() );
   m_UpperBound = static_cast<RealType>( NumericTraits<PixelType>::max() );
@@ -192,6 +195,9 @@ LabelStatisticsImageFilter<TInputImage, TLabelImage>
       if (m_UseHistograms)
         {
         typename HistogramType::IndexType index;
+#ifdef ITK_USE_REVIEW_STATISTICS
+        index.SetSize(1);
+#endif
         for (unsigned int bin=0; bin<m_NumBins[0]; bin++)
           {
           index[0] = bin;
@@ -308,8 +314,15 @@ LabelStatisticsImageFilter<TInputImage, TLabelImage>
     if (m_UseHistograms)
       {
       typename HistogramType::MeasurementVectorType meas;
+#ifdef ITK_USE_REVIEW_STATISTICS
+      meas.SetSize(1);
+#endif
       meas[0] = value;
+#ifdef ITK_USE_REVIEW_STATISTICS
+      (*mapIt).second.m_Histogram->IncreaseFrequency(meas, 1);
+#else
       (*mapIt).second.m_Histogram->IncreaseFrequency(meas, 1.0F);
+#endif
       }
 
     ++it;
@@ -514,8 +527,17 @@ LabelStatisticsImageFilter<TInputImage, TLabelImage>
     }
   else
     {
+
+#ifdef ITK_USE_REVIEW_STATISTICS
+    typename HistogramType::SizeValueType bin = 0;
+#else
     typename HistogramType::SizeType::SizeValueType  bin = 0;
+#endif
+
     typename HistogramType::IndexType index;
+#ifdef ITK_USE_REVIEW_STATISTICS
+    index.SetSize(1);
+#endif
     RealType total = 0;
 
     // count bins until just over half the distribution is counted

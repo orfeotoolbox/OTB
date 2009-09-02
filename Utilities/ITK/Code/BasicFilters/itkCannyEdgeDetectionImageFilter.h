@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCannyEdgeDetectionImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-12-17 14:49:46 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2009-04-25 12:27:15 $
+  Version:   $Revision: 1.28 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -129,6 +129,7 @@ public:
     
   /** Typedef to describe the output image region type. */
   typedef typename TOutputImage::RegionType OutputImageRegionType;
+  typedef typename TInputImage::RegionType  InputImageRegionType;
     
   /** Run-time type information (and related methods). */
   itkTypeMacro(CannyEdgeDetectionImageFilter, ImageToImageFilter);
@@ -144,9 +145,9 @@ public:
 
   /** Standard get/set macros for filter parameters. */
   itkSetMacro(Variance, ArrayType);
-  itkGetMacro(Variance, const ArrayType);
+  itkGetConstMacro(Variance, const ArrayType);
   itkSetMacro(MaximumError, ArrayType);
-  itkGetMacro(MaximumError, const ArrayType);
+  itkGetConstMacro(MaximumError, const ArrayType);
   
   /** Set/Get the Variance parameter used by the Gaussian smoothing
       filter in this algorithm */
@@ -195,14 +196,14 @@ public:
 
   ///* Set the Threshold value for detected edges. */
   itkSetMacro(UpperThreshold, OutputImagePixelType );
-  itkGetMacro(UpperThreshold, OutputImagePixelType);
+  itkGetConstMacro(UpperThreshold, OutputImagePixelType);
 
   itkSetMacro(LowerThreshold, OutputImagePixelType );
-  itkGetMacro(LowerThreshold, OutputImagePixelType);
+  itkGetConstMacro(LowerThreshold, OutputImagePixelType);
 
   /* Set the Thresholdvalue for detected edges. */
   itkSetMacro(OutsideValue, OutputImagePixelType);
-  itkGetMacro(OutsideValue, OutputImagePixelType);
+  itkGetConstMacro(OutsideValue, OutputImagePixelType);
   
   OutputImageType * GetNonMaximumSuppressionImage()
     {
@@ -263,9 +264,6 @@ private:
   /** Edge linking funciton */
   void FollowEdge(IndexType index);
 
-  /** Check if the index is in bounds or not */
-  bool InBounds(IndexType index);
-  
 
   /** Calculate the second derivative of the smoothed image, it writes the 
    *  result to m_UpdateBuffer using the ThreadedCompute2ndDerivative() method

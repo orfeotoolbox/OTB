@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkTransformFactoryBase.cxx,v $
 Language:  C++
-Date:      $Date: 2008-07-03 13:38:44 $
-Version:   $Revision: 1.6 $
+Date:      $Date: 2009-03-03 15:10:27 $
+Version:   $Revision: 1.7 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,10 +44,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace itk
 {
-  TransformFactoryBase* TransformFactoryBase::m_Factory = 0;
-
-
-
+TransformFactoryBase* TransformFactoryBase::m_Factory = 0;
 
 TransformFactoryBase::TransformFactoryBase()
 {
@@ -135,4 +132,3 @@ TransformFactoryBase::GetDescription() const
 }
 
 } // end namespace itk
-

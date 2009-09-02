@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredEuler3DTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:07 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-04-09 09:23:20 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -200,6 +200,25 @@ GetJacobian( const InputPointType & p ) const
     }
 
   return this->m_Jacobian;
+}
+
+// Get an inverse of this transform
+template<class TScalarType>
+bool
+CenteredEuler3DTransform<TScalarType>
+::GetInverse(Self* inverse) const
+{
+  return this->Superclass::GetInverse(inverse);
+}
+   
+// Return an inverse of this transform
+template<class TScalarType>
+typename CenteredEuler3DTransform<TScalarType>::InverseTransformBasePointer
+CenteredEuler3DTransform<TScalarType>
+::GetInverseTransform() const
+{
+  Pointer inv = New();
+  return this->GetInverse(inv) ? inv.GetPointer() : NULL;
 }
 
 

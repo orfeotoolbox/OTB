@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshCleanFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-20 16:55:42 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-05-13 21:52:25 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -119,7 +119,8 @@ protected:
 
     if( ( m_AbsoluteTolerance == zeroValue ) && ( m_RelativeTolerance != zeroValue ) )
       {
-      assert( ( m_RelativeTolerance > zeroValue ) && ( m_RelativeTolerance < 1. ) );
+      itkAssertOrThrowMacro( ( m_RelativeTolerance > zeroValue ) && ( m_RelativeTolerance < 1. ),
+        "Relative tolerance out of range" );
       BoundingBoxPointer bounding_box = BoundingBoxType::New();
       bounding_box->SetPoints( this->GetInput()->GetPoints() );
       bounding_box->ComputeBoundingBox();

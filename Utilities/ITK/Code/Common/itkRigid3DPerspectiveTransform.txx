@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRigid3DPerspectiveTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2007-12-23 17:59:29 $
-  Version:   $Revision: 1.30 $
+  Date:      $Date: 2009-03-03 15:08:59 $
+  Version:   $Revision: 1.31 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkRigid3DPerspectiveTransform_txx
-#define _itkRigid3DPerspectiveTransform_txx
+#ifndef __itkRigid3DPerspectiveTransform_txx
+#define __itkRigid3DPerspectiveTransform_txx
 
 #include "itkRigid3DPerspectiveTransform.h"
 
@@ -116,9 +116,6 @@ Rigid3DPerspectiveTransform<TScalarType>
 
 }
 
-
-
-
 // Set Parameters
 template <class TScalarType>
 const typename Rigid3DPerspectiveTransform<TScalarType>::ParametersType &
@@ -140,8 +137,6 @@ Rigid3DPerspectiveTransform<TScalarType>
 
   return this->m_Parameters;
 }
-
-
 
 // Set rotation
 template<class TScalarType>
@@ -212,8 +207,6 @@ TransformPoint(const InputPointType &point) const
 
   return result;
 }
-
-
 
 // Transform a point
 template<class TScalarType>

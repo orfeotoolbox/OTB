@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCoreAtomImageToUnaryCorrespondenceMatrixProcess.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-23 16:15:23 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-05-12 20:21:45 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -262,6 +262,8 @@ CoreAtomImageToUnaryCorrespondenceMatrixProcess< TSourceImage >
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
+  os << indent << "Columns: " << this->GetColumns() << std::endl;
+  os << indent << "Rows: " << this->GetRows() << std::endl;
 }
 
 } // end namespace

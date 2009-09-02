@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWarpVectorImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 17:31:02 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-04-25 12:28:12 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -145,6 +145,9 @@ public:
   typedef typename TOutputImage::DirectionType     DirectionType;
 
   /** Set the deformation field. */
+  void SetDeformationField( const DeformationFieldType * field );
+
+  /** Set the deformation field (non const for backward compatibility). */
   void SetDeformationField( DeformationFieldType * field );
 
   /** Get a pointer the deformation field. */
@@ -178,7 +181,7 @@ public:
   itkSetMacro( EdgePaddingValue, PixelType );
 
   /** Get the edge padding value */
-  itkGetMacro( EdgePaddingValue, PixelType );
+  itkGetConstMacro( EdgePaddingValue, PixelType );
 
   /** WarpVectorImageFilter produces an image which is a different
    * size than its input image. As such, it needs to provide an

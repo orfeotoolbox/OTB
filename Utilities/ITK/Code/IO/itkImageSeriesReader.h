@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageSeriesReader.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-20 23:32:06 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-04-25 12:25:42 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -113,7 +113,7 @@ public:
   /** ReverseOrderOn changes the order of travesal of the file names
    * from last to first */
   itkSetMacro(ReverseOrder,bool);
-  itkGetMacro(ReverseOrder,bool);
+  itkGetConstMacro(ReverseOrder,bool);
   itkBooleanMacro(ReverseOrder);
 
   /** Set/Get the ImageIO helper class. By default, the

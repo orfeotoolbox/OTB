@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkUnaryCorrespondenceMatrix.h,v $
   Language:  C++
-  Date:      $Date: 2004-03-03 19:12:29 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-03-03 15:11:16 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -30,7 +30,7 @@ namespace itk
  *
  * \ingroup
  *
-*/
+ */
 
 template<typename TItemType>
 class UnaryCorrespondenceMatrix : public DataObject, public vnl_matrix<TItemType> {
@@ -38,8 +38,8 @@ public:
 
   /** Standard class typedefs. */
   typedef UnaryCorrespondenceMatrix Self;
-  typedef DataObject Superclass;
-  typedef SmartPointer<Self>   Pointer;
+  typedef DataObject                Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   /** Method for creation through the object factory. */

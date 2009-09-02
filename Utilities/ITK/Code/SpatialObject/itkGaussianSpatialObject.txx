@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianSpatialObject.txx,v $
   Language:  C++
-  Date:      $Date: 2008-06-29 01:56:12 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-04-02 14:51:02 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -31,6 +31,7 @@ GaussianSpatialObject< TDimension >
   this->SetTypeName("GaussianSpatialObject");
   this->SetDimension(TDimension);
   m_Radius = 1.0;
+  m_Sigma = 1.0;
   m_Maximum = 1.0;
 } 
 
@@ -63,7 +64,7 @@ GaussianSpatialObject< TDimension >
     {
     r += transformedPoint[i] * transformedPoint[i];
     }
-  return r;
+  return r / ( m_Sigma * m_Sigma );
 }
 
 /** Test whether a point is inside or outside the object 
@@ -74,6 +75,11 @@ bool
 GaussianSpatialObject< TDimension >
 ::IsInside( const PointType & point) const
 {
+  if( m_Radius < vnl_math::eps )
+    {
+    return false;
+    }
+
   this->ComputeLocalBoundingBox();
   if( !this->GetBounds()->IsInside(point) )
     {
@@ -91,21 +97,16 @@ GaussianSpatialObject< TDimension >
   double r = 0;
   for(unsigned int i=0;i<TDimension;i++)
     {
-    if(m_Radius!=0.0)
-      {
-      r += (transformedPoint[i]*transformedPoint[i])/(m_Radius*m_Radius);
-      }
-    else if(transformedPoint[i]>0.0)  // Degenerate ellipse
-      {
-      r = 2; // Keeps function from returning true here 
-      break;
-      }
+    r += transformedPoint[i] * transformedPoint[i];
     }
+
+  r /= ( m_Radius * m_Radius );
   
-  if(r<1)
+  if( r < 1.0 )
     {
     return true;
     }
+
   return false;
 }
 
@@ -276,7 +277,7 @@ GaussianSpatialObject< TDimension >
   Superclass::PrintSelf(os, indent);
   os << "Maximum: " << m_Maximum << std::endl;
   os << "Radius: " << m_Radius << std::endl;
-
+  os << "Sigma: " << m_Sigma << std::endl;
 }
 
 } // end namespace itk

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSignedMaurerDistanceMapImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-14 18:39:05 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-05-12 17:22:53 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -60,7 +60,7 @@ namespace itk
  */
 
 template <class TInputImage, class TOutputImage>
-class SignedMaurerDistanceMapImageFilter :
+class ITK_EXPORT SignedMaurerDistanceMapImageFilter :
     public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:

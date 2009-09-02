@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCropImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-13 18:54:28 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-04-25 12:27:20 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -74,9 +74,9 @@ public:
 
   /** Set/Get the cropping sizes for the upper and lower boundaries. */
   itkSetMacro(UpperBoundaryCropSize, SizeType);
-  itkGetMacro(UpperBoundaryCropSize, SizeType); 
+  itkGetConstMacro(UpperBoundaryCropSize, SizeType); 
   itkSetMacro(LowerBoundaryCropSize, SizeType);
-  itkGetMacro(LowerBoundaryCropSize, SizeType);
+  itkGetConstMacro(LowerBoundaryCropSize, SizeType);
 
   void SetBoundaryCropSize(const SizeType & s)
     {

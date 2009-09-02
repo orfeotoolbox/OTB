@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDifferenceImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 09:09:39 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-04-25 12:24:03 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -69,23 +69,23 @@ public:
   /** Set/Get the maximum distance away to look for a matching pixel.
       Default is 0. */
   itkSetMacro(ToleranceRadius, int);
-  itkGetMacro(ToleranceRadius, int);
+  itkGetConstMacro(ToleranceRadius, int);
   
   /** Set/Get the minimum threshold for pixels to be different.
       Default is 0. */
   itkSetMacro(DifferenceThreshold, OutputPixelType);
-  itkGetMacro(DifferenceThreshold, OutputPixelType);
+  itkGetConstMacro(DifferenceThreshold, OutputPixelType);
   
   /** Set/Get ignore boundary pixels.  Useful when resampling may have
    *    introduced difference pixel values along the image edge 
    *    Default = false */
   itkSetMacro(IgnoreBoundaryPixels, bool);
-  itkGetMacro(IgnoreBoundaryPixels, bool);
+  itkGetConstMacro(IgnoreBoundaryPixels, bool);
   
   /** Get parameters of the difference image after execution.  */
-  itkGetMacro(MeanDifference, RealType);
-  itkGetMacro(TotalDifference, AccumulateType);
-  itkGetMacro(NumberOfPixelsWithDifferences, unsigned long);
+  itkGetConstMacro(MeanDifference, RealType);
+  itkGetConstMacro(TotalDifference, AccumulateType);
+  itkGetConstMacro(NumberOfPixelsWithDifferences, unsigned long);
   
 protected:
   DifferenceImageFilter();

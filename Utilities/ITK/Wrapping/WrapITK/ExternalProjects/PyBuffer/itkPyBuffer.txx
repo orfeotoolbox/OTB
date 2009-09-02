@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPyBuffer.txx,v $
   Language:  C++
-  Date:      $Date: 2006-09-06 20:58:41 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-05-22 16:39:34 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -43,7 +43,7 @@ PyBuffer<TImage>
   
   image->Update();
 
-  import_array();
+  import_array1(0);
 
   PixelType * buffer = const_cast < PixelType * > ( image->GetBufferPointer() );
  
@@ -61,7 +61,7 @@ PyBuffer<TImage>
   int item_type = GetPyType();  // TODO find a way of doing this through pixel traits
   // figure out an appropriate type
 
-  PyObject * obj = PyArray_FromDimsAndData( ImageDimension, dimensions, item_type, data );
+  PyObject * obj = PyArray_SimpleNewFromData( ImageDimension, dimensions, item_type, data );
 
   return obj;
 }
@@ -74,7 +74,7 @@ PyBuffer<TImage>
 ::GetImageFromArray( PyObject *obj )
 {
 
-  import_array();
+  import_array1(0);
 
     int element_type = GetPyType();  ///PyArray_DOUBLE;  // change this with pixel traits.
 

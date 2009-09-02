@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIsolatedWatershedImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 20:02:57 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-04-23 03:53:35 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -85,29 +85,29 @@ public:
 
   /** Set/Get the Watershed threshold. The default is 0. */
   itkSetMacro(Threshold, double);
-  itkGetMacro(Threshold, double);
+  itkGetConstMacro(Threshold, double);
 
   /** Set/Get the precision required for the intensity threshold
    *  value. The default is .001. */
   itkSetMacro(IsolatedValueTolerance, double);
-  itkGetMacro(IsolatedValueTolerance, double);
+  itkGetConstMacro(IsolatedValueTolerance, double);
 
   /** Set/Get the limit on the upper waterlevel value. The default is
    *  1.0. */
   itkSetMacro(UpperValueLimit, double);
-  itkGetMacro(UpperValueLimit, double);
+  itkGetConstMacro(UpperValueLimit, double);
 
 
   /** Set/Get value to replace Seed1(Seed2) pixels, pixels that are
    *  within the basin that contains Seed1(Seed2) this  value. The
    *  default is 1(0). */
   itkSetMacro(ReplaceValue1, OutputImagePixelType);
-  itkGetMacro(ReplaceValue1, OutputImagePixelType);
+  itkGetConstMacro(ReplaceValue1, OutputImagePixelType);
   itkSetMacro(ReplaceValue2, OutputImagePixelType);
-  itkGetMacro(ReplaceValue2, OutputImagePixelType);
+  itkGetConstMacro(ReplaceValue2, OutputImagePixelType);
 
   /** Get value that isolates the two seeds. */
-  itkGetMacro(IsolatedValue, double);
+  itkGetConstMacro(IsolatedValue, double);
 
 protected:
   IsolatedWatershedImageFilter();

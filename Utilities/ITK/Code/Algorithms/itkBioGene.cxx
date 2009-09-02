@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBioGene.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-10-20 21:28:20 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-05-02 14:24:28 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -115,8 +115,8 @@ Gene
 ::AddGeneControlDomain( const DomainType & domain, bool type )
 {
   ControlDomainType controlDomain;
-  controlDomain.domain = domain;
-  controlDomain.type   = type;
+  controlDomain.m_Domain = domain;
+  controlDomain.m_Type   = type;
   m_ControlDomains.push_back( controlDomain );
 }
  

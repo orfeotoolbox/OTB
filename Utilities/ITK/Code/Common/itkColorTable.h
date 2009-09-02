@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkColorTable.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:07 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2009-04-25 12:24:02 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -61,7 +61,7 @@ public:
   void    useGray(unsigned int n=256){UseGrayColors(n);}
   void    useHeat(unsigned int n=256){UseHeatColors(n);}
 
-  itkGetMacro(NumberOfColors, unsigned int);
+  itkGetConstMacro(NumberOfColors, unsigned int);
   unsigned int     size(void);
 
   RGBPixel<TPixel>*          GetColor(unsigned int colorId);

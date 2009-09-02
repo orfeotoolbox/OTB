@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSubtractImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-18 16:11:14 $
-  Version:   $Revision: 1.28 $
+  Date:      $Date: 2009-04-01 14:36:35 $
+  Version:   $Revision: 1.29 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -49,7 +49,7 @@ public:
     {
     return !(*this != other);
     }
-  inline TOutput operator()( const TInput1 & A, const TInput2 & B)
+  inline TOutput operator()( const TInput1 & A, const TInput2 & B) const
     { return (TOutput)(A - B); }
 }; 
 }

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRegularExpressionSeriesFileNames.cxx,v $
   Language:  C++
-  Date:      $Date: 2007-03-29 18:39:28 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-04-05 10:56:48 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -22,7 +22,8 @@
 #endif
 
 #include <vector>
-#include <string>
+#include <string.h>
+#include <stdlib.h>
 #include <algorithm>
 
 #include <itksys/SystemTools.hxx>

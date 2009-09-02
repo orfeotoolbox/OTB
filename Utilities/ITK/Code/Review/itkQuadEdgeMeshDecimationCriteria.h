@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshDecimationCriteria.h,v $
   Language:  C++
-  Date:      $Date: 2008-09-30 22:27:57 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-04-23 03:43:42 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -61,7 +61,7 @@ public:
     this->m_MeasureBound = bound;
     }
 
-  itkGetMacro( TopologicalChange, bool );
+  itkGetConstMacro( TopologicalChange, bool );
   itkSetMacro( TopologicalChange, bool );
   
   virtual bool is_satisfied( MeshType* iMesh,

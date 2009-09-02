@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarImageToListAdaptor.txx,v $
   Language:  C++
-  Date:      $Date: 2008-08-19 22:27:57 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-03-04 19:29:54 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,11 +14,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkScalarImageToListAdaptor_txx
-#define _itkScalarImageToListAdaptor_txx
+#ifndef __itkScalarImageToListAdaptor_txx
+#define __itkScalarImageToListAdaptor_txx
 
-namespace itk{ 
-namespace Statistics{
+namespace itk { 
+namespace Statistics {
 
 template < class TImage >
 void
@@ -48,6 +48,3 @@ ScalarImageToListAdaptor< TImage >
 } // end of namespace itk
 
 #endif
-
-
-

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMetaArrayWriter.h,v $
   Language:  C++
-  Date:      $Date: 2007-03-22 14:28:51 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-04-25 12:25:44 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -63,7 +63,7 @@ public:
   itkSetMacro(Binary, bool);
   /** Returns true if the file to be produced will store the data in binary
    *    (instead of ascii) format */
-  itkGetMacro(Binary, bool);
+  itkGetConstMacro(Binary, bool);
 
   /** Set the input itk Array to write */
   template <typename TValueType>
@@ -148,7 +148,7 @@ public:
 
   /** Set/Get the precision of the writing */
   itkSetMacro(Precision, unsigned int);
-  itkGetMacro(Precision, unsigned int);
+  itkGetConstMacro(Precision, unsigned int);
 
   /** Set the data type written to the file */
   void ConvertTo(MET_ValueEnumType _metaElementType);

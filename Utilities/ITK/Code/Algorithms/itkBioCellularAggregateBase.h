@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBioCellularAggregateBase.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-20 21:28:20 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-05-12 17:26:20 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -31,7 +31,7 @@ class CellBase;
  * \brief Base class for the CellularAggregates. This base class is not
  * templated over the space dimension.
  */
-class CellularAggregateBase : public Object
+class ITK_EXPORT CellularAggregateBase : public Object
 {
 public:
   /** Standard class typedefs. */

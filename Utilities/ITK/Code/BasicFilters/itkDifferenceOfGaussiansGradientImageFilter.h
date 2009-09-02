@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDifferenceOfGaussiansGradientImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-14 19:20:33 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2009-04-25 12:27:21 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -73,7 +73,7 @@ public:
   typedef typename TInputImage::RegionType OutputImageRegionType;
 
   /** Set/Get the member variables. */
-  itkGetMacro(Width, unsigned int);
+  itkGetConstMacro(Width, unsigned int);
   itkSetMacro(Width, unsigned int);
 
 #ifdef ITK_USE_CONCEPT_CHECKING

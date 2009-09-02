@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkThreadLogger.h,v $
   Language:  C++
-  Date:      $Date: 2006-02-05 20:57:46 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-03-03 15:09:52 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -37,7 +37,7 @@ namespace itk
  *                     ISIS Center, Georgetown University.
  *
  *
- *  \ingroup OSSystemObjects LoggingObjects                    
+ *  \ingroup OSSystemObjects LoggingObjects
  */
 
 class ITKCommon_EXPORT ThreadLogger : public Logger
@@ -45,9 +45,9 @@ class ITKCommon_EXPORT ThreadLogger : public Logger
 
 public:
   
-  typedef ThreadLogger  Self;
-  typedef Logger  Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef ThreadLogger              Self;
+  typedef Logger                    Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   /** Run-time type information (and related methods). */
@@ -61,16 +61,15 @@ public:
   typedef  Logger::PriorityLevelType  PriorityLevelType;
 
   /** Definition of types of operations for ThreadLogger. */
-  typedef enum 
-  { 
+  typedef enum
+    {
     SET_PRIORITY_LEVEL,
     SET_LEVEL_FOR_FLUSHING,
     ADD_LOG_OUTPUT,
     WRITE,
     FLUSH
-  } OperationType;
-
-
+    } OperationType;
+  
   /** Set the priority level for the current logger. Only messages that have
    * priorities equal or greater than the one set here will be posted to the
    * current outputs */

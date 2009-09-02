@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAnnulusOperator.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-07 13:33:59 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-05 10:56:39 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -92,7 +92,7 @@ AnnulusOperator<TPixel, TDimension, TAllocator>
   double outerRadius = m_InnerRadius + m_Thickness;
   for (i=0; i < TDimension; ++i)
     {
-    r[i] = static_cast<SizeValueType>(ceil(outerRadius / m_Spacing[i]));
+    r[i] = static_cast<SizeValueType>(vcl_ceil(outerRadius / m_Spacing[i]));
     }
   this->SetRadius(r);
 

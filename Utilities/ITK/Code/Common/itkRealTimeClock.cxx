@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRealTimeClock.cxx,v $
   Language:  C++
-  Date:      $Date: 2005-11-29 14:51:11 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-03-03 15:08:47 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -89,12 +89,12 @@ RealTimeClock::RealTimeClock():m_Frequency(1)
     static_cast< TimeStampType >( (__int64)tick.QuadPart ) / 
     this->m_Frequency;
     
-  this->m_Origin +=  this->m_Difference;
+  this->m_Origin += this->m_Difference;
 
 
 #else
 
-  this->m_Frequency = 1e6;;
+  this->m_Frequency = 1e6;
 
 #endif  // defined(WIN32) || defined(_WIN32)
 }

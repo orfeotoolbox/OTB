@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineResampleImageFilterBase.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-09 20:43:43 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-25 12:27:07 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -122,7 +122,7 @@ public:
   void SetSplineOrder(int SplineOrder);
 
   /** Get the spline order */
-  itkGetMacro(SplineOrder, int);
+  itkGetConstMacro(SplineOrder, int);
 
 
 protected:

@@ -79,14 +79,15 @@ SIXSTraits::ComputeAtmosphericParameters(
   otb_6s_doublereal wlinf(0.), wlsup(0.);
   otb_6s_doublereal otb_ratm__(0.), sast(0.), tgasm(0.), sdtott(0.), sutott(0.);
   otb_6s_doublereal tdif_up(0.), tdir_up(0.), tdif_up_ray(0.), tdif_up_aer(0.);
+
+  // 6S official Wavelenght Spectral Band step value
+  const float SIXSStepOfWavelenghtSpectralBandValues = .0025;
+  // Generate 6s Wavelenght Spectral Band with the offcicial step value
+  ComputeWavelenghtSpectralBandValuesFor6S(       SIXSStepOfWavelenghtSpectralBandValues,
+                                                  WavelenghtSpectralBand // Update
+                                                  );
   try
   {
-    // 6S official Wavelenght Spectral Band step value
-    const float SIXSStepOfWavelenghtSpectralBandValues = .0025;
-    // Generate 6s Wavelenght Spectral Band with the offcicial step value
-    ComputeWavelenghtSpectralBandValuesFor6S(       SIXSStepOfWavelenghtSpectralBandValues,
-        WavelenghtSpectralBand // Update
-                                            );
 
     // 6S official tab size Wavelenght Spectral
     const unsigned int S_6S_SIZE=1501;
@@ -165,6 +166,16 @@ SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
   unsigned int j = 1;
   const double invStep = static_cast<double>(1./L_userStep);
   double value(0.);
+
+  if ( FilterFunctionValues.size() <= 1 )
+  {
+    itkGenericExceptionMacro(<<"The FilterFunctionValues vector must have more than 1 values !");
+  }
+  if( vcl_abs((static_cast<double>(FilterFunctionValues.size()-1)*L_userStep)-(L_max-L_min)  ) > .000001 )
+  {
+    itkGenericExceptionMacro(<<"The FilterFunctionValues vector size ( ("<<FilterFunctionValues.size()<<"-1) x userstep ("<<L_userStep<<") must be less than the Max spectral value ("<< L_max-L_min<<") !");
+  }
+
 
   // Generate WavelenghtSpectralBand if the step is not the offical 6S step value
   if ( vcl_abs(L_userStep-SIXSStepOfWavelenghtSpectralBandValues) > .000001 )

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDerivativeImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-14 19:20:33 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2009-04-25 12:27:20 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -83,9 +83,9 @@ public:
 
   /** Standard get/set macros for filter parameters. */
   itkSetMacro(Order, unsigned int);
-  itkGetMacro(Order, unsigned int);
+  itkGetConstMacro(Order, unsigned int);
   itkSetMacro(Direction, unsigned int);
-  itkGetMacro(Direction, unsigned int);
+  itkGetConstMacro(Direction, unsigned int);
 
   /** Use the image spacing information in calculations. Use this option if you
    *  want derivatives in physical space. Default is UseImageSpacingOn. */
@@ -100,7 +100,7 @@ public:
   /** Set/Get whether or not the filter will use the spacing of the input
       image in its calculations */
   itkSetMacro(UseImageSpacing, bool);
-  itkGetMacro(UseImageSpacing, bool);
+  itkGetConstMacro(UseImageSpacing, bool);
   
   /** DerivativeImageFilter needs a larger input requested region than
    * the output requested region (larger in the direction of the

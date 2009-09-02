@@ -32,7 +32,7 @@ FilterFunctionValues
 ::FilterFunctionValues()
 {
   m_MinSpectralValue = 0;
-  m_MaxSpectralValue = 0;
+  m_MaxSpectralValue = 1;
   m_UserStep = 0.0025;
 }
 

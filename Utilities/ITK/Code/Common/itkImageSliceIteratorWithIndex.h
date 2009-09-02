@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageSliceIteratorWithIndex.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 19:04:57 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-05-19 13:47:44 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -105,7 +105,7 @@ public:
   
   /** Set the pixel value */
   void Set( const PixelType & value) const  
-    { this->m_PixelAccessor.Set(*(const_cast<InternalPixelType *>(this->m_Position)),value); }
+    { this->m_PixelAccessorFunctor.Set(*(const_cast<InternalPixelType *>(this->m_Position)),value); }
 
   /** Return a reference to the pixel 
    * This method will provide the fastest access to pixel

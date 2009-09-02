@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCrossHelper.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-06 00:02:03 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-03-27 14:51:44 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -16,6 +16,8 @@
 =========================================================================*/
 #ifndef __itkCrossHelper_h
 #define __itkCrossHelper_h
+
+#include "itkNumericTraits.h"
 
 namespace itk
 {
@@ -45,18 +47,22 @@ public:
   VectorType operator ( ) ( const VectorType& iU,
                             const VectorType& iV ) const
     {
-    assert ( Dimension > 2 );
-
     VectorType oCross;
 
-    // *** Arnaud : InputVDimension == 3
-    oCross[0] = iU[1] * iV[2] - iV[1] * iU[2];
-    oCross[1] = iV[0] * iU[2] - iU[0] * iV[2];
-    oCross[2] = iU[0] * iV[1] - iV[0] * iU[1];
-
-    for( unsigned int dim = 3; dim < Dimension; dim++ )
+    if( Dimension > 2 )
       {
-      oCross[dim] = 0.0;
+      oCross[0] = iU[1] * iV[2] - iV[1] * iU[2];
+      oCross[1] = iV[0] * iU[2] - iU[0] * iV[2];
+      oCross[2] = iU[0] * iV[1] - iV[0] * iU[1];
+
+      for( unsigned int dim = 3; dim < Dimension; dim++ )
+        {
+        oCross[dim] = 0.0;
+        }
+      }
+    else
+      {
+      oCross.Fill( 0. );
       }
 
     return oCross;

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanShiftModeCacheMethod.h,v $
   Language:  C++
-  Date:      $Date: 2005-07-26 15:55:00 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-03-04 15:23:58 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,8 +23,8 @@
 #include "itkObject.h"
 #include "itkMeasurementVectorTraits.h"
 
-namespace itk{ 
-namespace Statistics{
+namespace itk { 
+namespace Statistics {
   
 /** \class MeanShiftModeCacheMethod
  * \brief This class stores mappings between a query point and its
@@ -60,88 +60,88 @@ class MeanShiftModeCacheMethod :
 public:
   /** Standard class typedefs. */
   typedef MeanShiftModeCacheMethod Self;
-  typedef Object Superclass ;
-  typedef SmartPointer<Self> Pointer;
+  typedef Object                   Superclass;
+  typedef SmartPointer<Self>       Pointer;
   typedef SmartPointer<const Self> ConstPointer;
 
   /** Standard Macros */
   itkTypeMacro(MeanShiftModeCacheMethod, Object);
-  itkNewMacro(Self) ;
+  itkNewMacro(Self);
   
-  typedef TMeasurementVector MeasurementVectorType ;
+  typedef TMeasurementVector MeasurementVectorType;
 
   struct LessMeasurementVector
-  {
+    {
     bool operator()(const MeasurementVectorType& mv1, 
                     const MeasurementVectorType& mv2) const
-    {
+      {
       // It is assumed that mv1 and mv2 are of the same length. For efficieny,
       // no checking is performed here.
-      for ( unsigned int i = 0 ; 
+      for ( unsigned int i = 0; 
             i < MeasurementVectorTraits::GetLength( &mv1 );
             ++i )
         {
         if (mv1[i] < mv2[i])
           {
-          return true ;
+          return true;
           }
         }
-      return false ;
-    }
-  } ; // end of struct
+      return false;
+      }
+  }; // end of struct
 
-  typedef std::map< MeasurementVectorType, MeasurementVectorType, LessMeasurementVector > CacheTableType ;
+  typedef std::map< MeasurementVectorType, MeasurementVectorType, LessMeasurementVector > CacheTableType;
 
   void SetMaximumConsecutiveFailures(unsigned int number)
-  { m_MaximumConsecutiveFailures = number ; }
+    { m_MaximumConsecutiveFailures = number; }
 
   unsigned int GetMaximumConsecutiveFailures()
-  { return m_MaximumConsecutiveFailures ; }
+    { return m_MaximumConsecutiveFailures; }
   
   void SetHitRatioThreshold(float threshold)
-  { m_HitRatioThreshold = threshold ; }
+    { m_HitRatioThreshold = threshold; }
 
   void SetMaximumEntries(unsigned int number)
-  { m_MaximumEntries = number ; }
+    { m_MaximumEntries = number; }
 
   unsigned int GetMaximumEntries()
-  { return m_MaximumEntries ; }
+    { return m_MaximumEntries; }
 
   bool SetMeasurementVector(MeasurementVectorType& source, 
-                            MeasurementVectorType& target) ;
+                            MeasurementVectorType& target);
 
   bool GetMeasurementVector(MeasurementVectorType& source,
-                            MeasurementVectorType& target) ;
+                            MeasurementVectorType& target);
 
-  bool IsFull() ;
+  bool IsFull();
 
-  void DestroyCacheTable() ;
+  void DestroyCacheTable();
 
 protected:
-  MeanShiftModeCacheMethod() ;
-  virtual ~MeanShiftModeCacheMethod() ;
+  MeanShiftModeCacheMethod();
+  virtual ~MeanShiftModeCacheMethod();
   void PrintSelf(std::ostream& os, Indent indent) const;
 
 private:
-  unsigned int m_MaximumEntries ;
-  float m_HitRatioThreshold ;
-  unsigned int m_MaximumConsecutiveFailures ;
+  unsigned int m_MaximumEntries;
+  float        m_HitRatioThreshold;
+  unsigned int m_MaximumConsecutiveFailures;
 
-  unsigned int m_NumberOfRequests ;
-  unsigned int m_ConsecutiveFailures ;
-  unsigned int m_HitsSuccess ;
+  unsigned int m_NumberOfRequests;
+  unsigned int m_ConsecutiveFailures;
+  unsigned int m_HitsSuccess;
 
-  unsigned long m_TotalHitsSuccess ;
-  unsigned long m_TotalHitsFailure ;
+  unsigned long m_TotalHitsSuccess;
+  unsigned long m_TotalHitsFailure;
 
-  unsigned long m_TotalTableSize ;
-  unsigned int m_TimesOfRebuilding ;
+  unsigned long m_TotalTableSize;
+  unsigned int  m_TimesOfRebuilding;
 
-  unsigned int m_TimesOfRebuildingByHitRatio ;
-  unsigned int m_TimesOfRebuildingByConsecutiveFailures ;
+  unsigned int m_TimesOfRebuildingByHitRatio;
+  unsigned int m_TimesOfRebuildingByConsecutiveFailures;
 
-  CacheTableType m_CacheTable ;
-} ; // end of class
+  CacheTableType m_CacheTable;
+}; // end of class
     
 } // end of namespace Statistics 
 } // end of namespace itk 
@@ -151,4 +151,3 @@ private:
 #endif
 
 #endif
-

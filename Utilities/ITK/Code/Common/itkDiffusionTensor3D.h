@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDiffusionTensor3D.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 09:09:39 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-03-23 21:43:57 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -86,7 +86,7 @@ public:
   /** Propagating some typedef from the superclass */
   typedef typename Superclass::ValueType             ValueType;
   typedef typename Superclass::ComponentType         ComponentType;
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (__GNUC__ == 3 && __GNUC_MINOR__ == 2 && __GNUC_PATCHLEVEL__ == 3)
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (__GNUC__ == 3)
   typedef ComponentType ComponentArrayType[6];
 #else
   typedef typename Superclass::ComponentArrayType    ComponentArrayType;

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShapePriorSegmentationLevelSetImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-27 19:30:16 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-04-23 03:53:37 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -137,7 +137,7 @@ public:
   * the particular type of ShapeSignedDistanceFunction used to determine
   * the meaning of the parameters. */
  itkSetMacro( InitialParameters, ParametersType );
- itkGetMacro( InitialParameters, ParametersType );
+ itkGetConstMacro( InitialParameters, ParametersType );
 
   /** Set/Get the scaling of the shape prior term. */
   void SetShapePriorScaling( ValueType v )

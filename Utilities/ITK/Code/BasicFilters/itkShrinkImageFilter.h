@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShrinkImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-12-17 19:58:02 $
-  Version:   $Revision: 1.44 $
+  Date:      $Date: 2009-04-09 18:34:25 $
+  Version:   $Revision: 1.46 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -49,7 +49,7 @@ namespace itk
  * This filter is implemented as a multithreaded filter.  It provides a 
  * ThreadedGenerateData() method for its implementation.
  * 
- * \ingroup GeometricTransforms
+ * \ingroup GeometricTransforms Streamed
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ShrinkImageFilter:
@@ -74,6 +74,10 @@ public:
   typedef typename OutputImageType::Pointer           OutputImagePointer;
   typedef typename InputImageType::Pointer            InputImagePointer;
   typedef typename InputImageType::ConstPointer       InputImageConstPointer;
+
+  typedef typename TOutputImage::IndexType            OutputIndexType;
+  typedef typename TInputImage::IndexType             InputIndexType;
+  typedef typename TOutputImage::OffsetType           OutputOffsetType;
 
   /** Typedef to describe the output image region type. */
   typedef typename TOutputImage::RegionType OutputImageRegionType;

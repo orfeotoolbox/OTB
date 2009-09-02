@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorExpandImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 16:30:54 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-05-19 20:36:25 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -41,10 +41,17 @@ namespace itk
  * SetInterpolator(). Note that the input interpolator must derive
  * from base class VectorInterpolateImageFunction.
  *
+ * \warning: The following is valid only when the flag
+ * ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY is OFF.
  * When the LargestPossibleRegion is requested, the output image will
  * contain padding at the upper edge of each dimension. The width
  * of padding in the i'th dimension is (ExpandFactors[i] - 1). Users can
  * specify the padding value used by setting the EdgePaddingValue.
+ *
+ * \warning: The following is valid only when the flag
+ * ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY is ON 
+ * The output image will not contain any padding, and therefore the
+ * EdgePaddingValue will not be used.
  *
  * This filter will produce an output with different pixel spacing
  * that its input image such that:

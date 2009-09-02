@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianSpatialObject.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-28 20:10:27 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-04-07 14:33:58 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -32,18 +32,18 @@ namespace itk
  *
  * The Gaussian function G(x) is given by
  * \f[
- * G(\vec{x}) = m e^{-\|\Sigma^{-1} \vec{x}\|^2 / 2},
+ * G(\vec{x}) = m e^{-\|\S^{-1} \vec{x}\|^2 / 2},
  * \f]
- * where m is a scaling factor set by SetMaximum(), and \f$\Sigma\f$ is
- * the (invertible) matrix associated to the IndexToObjectTransform of
- * the object.  If \f$\Sigma\f$ is symmetric and positive definite,
- * and m is chosen so that the integral of G(x) is 1, 
- * then G will denote a normal distribution with mean 0 and
- * covariance matrix \f$\Sigma\f$.
+ * where m is a scaling factor set by SetMaximum(), and \f$\S\f$ is the
+ * (invertible) matrix associated to the IndexToObjectTransform of the object
+ * multiplied by the Sigma parameter.  If \f$\S\f$ is symmetric and positive
+ * definite, and m is chosen so that the integral of G(x) is 1, then G will
+ * denote a normal distribution with mean 0 and covariance matrix \f$\S \times
+ * Sigma\f$.
  */
 
 template < unsigned int TDimension = 3 >
-class GaussianSpatialObject 
+class ITK_EXPORT GaussianSpatialObject 
   : public SpatialObject< TDimension >
 {
 
@@ -70,6 +70,11 @@ public:
    * z-score less than the radius are in the object.  */
   itkSetMacro(Radius,ScalarType);
   itkGetConstReferenceMacro(Radius,ScalarType);
+
+  /** The Sigma parameter determines the fallout of the Gaussian inside of the
+   * region defined by the Radius parameter. */
+  itkSetMacro(Sigma,ScalarType);
+  itkGetConstReferenceMacro(Sigma,ScalarType);
 
   /** The maximum value of the Gaussian (its value at the origin of
    * the spatial object coordinate system). */
@@ -119,6 +124,7 @@ protected:
 
   ScalarType m_Maximum;
   ScalarType m_Radius;
+  ScalarType m_Sigma;
 
   /** Print the object information in a stream. */
   virtual void PrintSelf( std::ostream& os, Indent indent ) const; 

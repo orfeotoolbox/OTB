@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEuler2DTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-13 15:36:31 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2009-04-09 09:23:20 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -47,9 +47,35 @@ Euler2DTransform<TScalarType>::
 CloneInverseTo( Pointer & result ) const
 {
   result = New();
-  result->SetCenter( this->GetCenter() );  // inverse have the same center
-  result->SetAngle( -this->GetAngle() );
-  result->SetTranslation( -( this->GetInverseMatrix() * this->GetTranslation() ) );
+  this->GetInverse(result.GetPointer());
+}
+
+// return an inverse transformation
+template<class TScalarType>
+bool
+Euler2DTransform<TScalarType>::
+GetInverse( Self* inverse) const
+{
+  if(!inverse)
+    {
+    return false;
+    }
+
+  inverse->SetCenter( this->GetCenter() );  // inverse have the same center
+  inverse->SetAngle( -this->GetAngle() );
+  inverse->SetTranslation( -( this->GetInverseMatrix() * this->GetTranslation() ) );
+  
+  return true;
+}
+
+// Return an inverse of this transform
+template<class TScalarType>
+typename Euler2DTransform<TScalarType>::InverseTransformBasePointer
+Euler2DTransform<TScalarType>
+::GetInverseTransform() const
+{
+  Pointer inv = New();
+  return GetInverse(inv) ? inv.GetPointer() : NULL;
 }
 
 // Create and return an inverse transformation

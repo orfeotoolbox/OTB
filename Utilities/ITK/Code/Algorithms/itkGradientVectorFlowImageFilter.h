@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGradientVectorFlowImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-11 06:19:49 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-04-23 03:53:35 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -95,13 +95,13 @@ public:
   itkSetMacro(LaplacianFilter, LaplacianFilterPointer);
 
   itkSetMacro(TimeStep, double);
-  itkGetMacro(TimeStep, double);
+  itkGetConstMacro(TimeStep, double);
 
   itkSetMacro(NoiseLevel, double);
-  itkGetMacro(NoiseLevel, double);
+  itkGetConstMacro(NoiseLevel, double);
 
   itkSetMacro(IterationNum, int);
-  itkGetMacro(IterationNum, int);
+  itkGetConstMacro(IterationNum, int);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

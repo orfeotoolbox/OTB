@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDeformableSimplexMesh3DBalloonForceFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-12-08 16:00:52 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-05-12 20:21:46 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -51,6 +51,7 @@ DeformableSimplexMesh3DBalloonForceFilter<TInputMesh, TOutputMesh>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf(os,indent); 
+  os << indent << "Kappa = " << m_Kappa << std::endl;
 }/* End PrintSelf. */
 
 /** Compute model Displacement according to image gradient forces */

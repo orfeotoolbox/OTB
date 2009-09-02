@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageIORegion.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-02-27 14:02:55 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-05-18 15:22:16 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -194,7 +194,9 @@ ImageIORegion
 ::IsInside(const IndexType &index) const
 {
   if (m_ImageDimension != index.size())
-      return false;
+    {
+    return false;
+    }
   for(unsigned int i=0; i<m_ImageDimension; i++)
     {
     if( index[i] < m_Index[i] ) 

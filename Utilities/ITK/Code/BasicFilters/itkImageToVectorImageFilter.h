@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageToVectorImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-13 18:32:19 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-05-20 16:21:47 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -84,6 +84,10 @@ protected:
     {
     Superclass::SetNthInput(num, input);
     }
+private:
+  ImageToVectorImageFilter(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+   
 };
 }
 

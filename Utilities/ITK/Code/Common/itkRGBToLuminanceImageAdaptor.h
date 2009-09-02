@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRGBToLuminanceImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2004-05-10 00:16:11 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-03-03 15:08:44 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -74,12 +74,12 @@ class ITK_EXPORT RGBToLuminanceImageAdaptor : public
 {
 public:
   /** Standard class typedefs. */
-  typedef RGBToLuminanceImageAdaptor  Self;
+  typedef RGBToLuminanceImageAdaptor                Self;
   typedef ImageAdaptor<TImage, Accessor::RGBToLuminancePixelAccessor<
                                typename TImage::PixelType,
                                TOutputPixelType> >  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                        Pointer;
+  typedef SmartPointer<const Self>                  ConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
@@ -87,11 +87,11 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro( RGBToLuminanceImageAdaptor, ImageAdaptor );
 
- protected:
+protected:
   RGBToLuminanceImageAdaptor() {}
   virtual ~RGBToLuminanceImageAdaptor() {}
   
- private:
+private:
   RGBToLuminanceImageAdaptor(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

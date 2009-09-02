@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkApproximateSignedDistanceMapImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 14:49:30 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-04-25 12:27:05 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -106,11 +106,11 @@ public:
   
   /** Set/Get intensity value representing the interior of objects in the mask */
   itkSetMacro(InsideValue, InputPixelType);
-  itkGetMacro(InsideValue, InputPixelType);
+  itkGetConstMacro(InsideValue, InputPixelType);
  
   /** Set/Get intensity value representing non-objects in the mask */
   itkSetMacro(OutsideValue, InputPixelType);
-  itkGetMacro(OutsideValue, InputPixelType);
+  itkGetConstMacro(OutsideValue, InputPixelType);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

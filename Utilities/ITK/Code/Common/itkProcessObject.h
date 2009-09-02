@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkProcessObject.h,v $
   Language:  C++
-  Date:      $Date: 2007-08-17 20:16:10 $
-  Version:   $Revision: 1.77 $
+  Date:      $Date: 2009-03-03 15:08:02 $
+  Version:   $Revision: 1.78 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -82,15 +82,15 @@ namespace itk
  *
  * \ingroup ITKSystemObjects
  * \ingroup DataProcessing 
- *       
+ *
  */
 class ITKCommon_EXPORT ProcessObject : public Object
 {
 public:
   /** Standard class typedefs. */
-  typedef ProcessObject       Self;
-  typedef Object  Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef ProcessObject             Self;
+  typedef Object                    Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
   
   /** Run-time type information (and related methods). */
@@ -426,14 +426,14 @@ private:
 
   /** An array of the inputs to the filter. */
   DataObjectPointerArray m_Inputs;
-  unsigned int m_NumberOfRequiredInputs;
+  unsigned int           m_NumberOfRequiredInputs;
 
   /** An array that caches the ReleaseDataFlags of the inputs */
   std::vector<bool> m_CachedInputReleaseDataFlags;
   
   /** An array of the outputs to the filter. */
   DataObjectPointerArray m_Outputs;
-  unsigned int m_NumberOfRequiredOutputs;
+  unsigned int           m_NumberOfRequiredOutputs;
   
   /** These support the progress method and aborting filter execution. */
   bool  m_AbortGenerateData;
@@ -442,7 +442,7 @@ private:
   /** Support processing data in multiple threads. Used by subclasses
    * (e.g., ImageSource). */
   MultiThreader::Pointer m_Threader;
-  int m_NumberOfThreads;
+  int                    m_NumberOfThreads;
 
   /** Memory management ivars */
   bool m_ReleaseDataBeforeUpdateFlag;
@@ -454,4 +454,3 @@ private:
 } // end namespace itk
 
 #endif
-

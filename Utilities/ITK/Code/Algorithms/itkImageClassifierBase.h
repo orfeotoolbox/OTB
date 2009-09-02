@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageClassifierBase.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 20:02:54 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-04-23 03:53:35 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -119,7 +119,7 @@ public:
   itkSetMacro(ClassifiedImage,ClassifiedImagePointer);
 
   /** Get the classified image. */
-  itkGetMacro(ClassifiedImage,ClassifiedImagePointer); 
+  itkGetConstMacro(ClassifiedImage,ClassifiedImagePointer); 
 
   /** Type definition for the vector associated with
     * input image pixel type. */

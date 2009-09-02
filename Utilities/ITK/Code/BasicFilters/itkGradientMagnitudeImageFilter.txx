@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGradientMagnitudeImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 16:45:08 $
-  Version:   $Revision: 1.34 $
+  Date:      $Date: 2009-04-06 00:19:17 $
+  Version:   $Revision: 1.35 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -188,7 +188,7 @@ GradientMagnitudeImageFilter< TInputImage, TOutputImage >
         const RealType g = SIP(x_slice[i], bit, op[i]);
         a += g * g;
         }
-      it.Value() = static_cast<OutputPixelType>(::sqrt(a));
+      it.Value() = static_cast<OutputPixelType>(vcl_sqrt(a));
       ++bit;
       ++it;
       progress.CompletedPixel();

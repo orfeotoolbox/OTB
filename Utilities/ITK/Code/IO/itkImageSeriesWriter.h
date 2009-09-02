@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageSeriesWriter.h,v $
   Language:  C++
-  Date:      $Date: 2007-04-19 13:58:17 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-05-11 19:26:54 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -136,12 +136,12 @@ public:
   /** Use this method to set the starting index of the series.
    * The default value is 1. */
   itkSetMacro(StartIndex,unsigned long);
-  itkGetMacro(StartIndex,unsigned long);
+  itkGetConstMacro(StartIndex,unsigned long);
 
   /** Set the increment of the index of the series. The
    * default value is 1.  */
   itkSetMacro(IncrementIndex,unsigned long);
-  itkGetMacro(IncrementIndex,unsigned long);
+  itkGetConstMacro(IncrementIndex,unsigned long);
 
   /** The format string used to generate each filename in the
    * series. The filename is built with sprintf(filename, SeriesFormat,
@@ -227,6 +227,12 @@ private:
 
   /** Array of MetaDataDictionary used for passing information to each slice */
   DictionaryArrayRawPointer  m_MetaDataDictionaryArray;
+
+  // These two methods provide now a common implementation for the
+  // GenerateNumericFileNamesAndWrite() and avoid the duplication of code that
+  // was leaving one of the code branches out of date.
+  void GenerateNumericFileNames(void);
+  void WriteFiles();
 };
 
   

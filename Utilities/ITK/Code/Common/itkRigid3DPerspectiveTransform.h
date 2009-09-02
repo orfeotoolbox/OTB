@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRigid3DPerspectiveTransform.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:09 $
-  Version:   $Revision: 1.30 $
+  Date:      $Date: 2009-03-03 15:08:57 $
+  Version:   $Revision: 1.31 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -91,7 +91,7 @@ public:
   typedef vnl_quaternion<TScalarType>           VnlQuaternionType;
 
   /** Versor type. */
-  typedef Versor<TScalarType>             VersorType;
+  typedef Versor<TScalarType>              VersorType;
   typedef typename VersorType::VectorType  AxisType;
   typedef typename VersorType::ValueType   AngleType;
   
@@ -182,18 +182,14 @@ private:
 
   /** Matrix representation of the rotation. */
   MatrixType          m_RotationMatrix;   
-
   
-  /** Fixed offset*/
+  /** Fixed offset */
   OffsetType m_FixedOffset;
 
   /** Center of rotation */
   InputPointType m_CenterOfRotation;
 
-
 }; //class Rigid3DPerspectiveTransform:
-
-
 
 }  // namespace itk
 

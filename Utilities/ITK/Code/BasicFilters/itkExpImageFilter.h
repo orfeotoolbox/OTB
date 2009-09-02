@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExpImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-14 19:20:33 $
-  Version:   $Revision: 1.24 $
+  Date:      $Date: 2009-04-01 14:36:18 $
+  Version:   $Revision: 1.25 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -53,7 +53,7 @@ public:
 #if defined(_MSC_VER) && (_MSC_VER == 1300)
 #pragma optimize("g",off)
 #endif
-  inline TOutput operator()( const TInput & A )
+  inline TOutput operator()( const TInput & A ) const
     {
     return (TOutput)vcl_exp((double)A);
     }

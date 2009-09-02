@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGrayscaleConnectedOpeningImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 16:45:08 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-04-25 12:27:25 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -80,7 +80,7 @@ public:
 
   /** Set/Get the seed pixel for the segmentation */
   itkSetMacro(Seed, InputImageIndexType);
-  itkGetMacro(Seed, InputImageIndexType);
+  itkGetConstMacro(Seed, InputImageIndexType);
   
   /** \deprecated
    * Get the number of iterations used to produce the current

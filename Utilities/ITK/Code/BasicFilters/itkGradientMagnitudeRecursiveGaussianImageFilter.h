@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGradientMagnitudeRecursiveGaussianImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-31 09:14:57 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-04-25 12:27:23 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -125,7 +125,7 @@ public:
 
   /** Define which normalization factor will be used for the Gaussian */
   void SetNormalizeAcrossScale( bool normalizeInScaleSpace );
-  itkGetMacro( NormalizeAcrossScale, bool );
+  itkGetConstMacro( NormalizeAcrossScale, bool );
   
   void SetNumberOfThreads( int nb );
 

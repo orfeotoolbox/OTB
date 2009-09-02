@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVertexCell.txx,v $
   Language:  C++
-  Date:      $Date: 2007-05-17 21:00:09 $
-  Version:   $Revision: 1.38 $
+  Date:      $Date: 2009-03-03 15:11:51 $
+  Version:   $Revision: 1.39 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -125,7 +125,8 @@ VertexCell< TCellInterface >
 
 
 /** Standard CellInterface:
- *  Get a begin iterator to the list of point identifiers used by the cell.*/
+ *  Get a begin iterator to the list of point identifiers used by the
+ *  cell. */
 template <typename TCellInterface>
 typename VertexCell< TCellInterface >::PointIdIterator
 VertexCell< TCellInterface >

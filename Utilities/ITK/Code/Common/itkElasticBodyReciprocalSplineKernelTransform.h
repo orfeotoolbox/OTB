@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkElasticBodyReciprocalSplineKernelTransform.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 12:03:53 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-04-25 12:24:05 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -73,7 +73,7 @@ public:
   itkSetMacro( Alpha, TScalarType );
   
   /** Get alpha */
-  itkGetMacro( Alpha, TScalarType );
+  itkGetConstMacro( Alpha, TScalarType );
   
   /** These (rather redundant) typedefs are needed because on SGI, typedefs
    * are not inherited */

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMaskedRankHistogram.h,v $
   Language:  C++
-  Date:      $Date: 2008-09-29 18:36:38 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-05-13 22:17:41 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -412,10 +412,12 @@ public:
 
   void RemovePixel(const TInputPixel &p)
     {
-    assert(p - NumericTraits< TInputPixel >::NonpositiveMin() >= 0);
-    assert(p - NumericTraits< TInputPixel >::NonpositiveMin() < (int)m_Vec.size());
-    assert(m_Entries >= 1);
-    m_Vec[ (long unsigned int)(p - NumericTraits< TInputPixel >::NonpositiveMin())  ]--; 
+    const long int q = p - NumericTraits< TInputPixel >::NonpositiveMin();
+    itkAssertOrThrowMacro( ( q >= 0 ), "Input pixel value is out of range");
+    itkAssertOrThrowMacro( ( q < (int)m_Vec.size() ), "Input pixel value is out of range");
+    itkAssertOrThrowMacro( (m_Entries >= 1), "Insufficient entries");
+
+    m_Vec[ static_cast<long unsigned int>(q)  ]--; 
     --m_Entries;
 
     if (m_Compare(p, m_RankValue) || p == m_RankValue)

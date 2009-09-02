@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGridForwardWarpImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-04 23:16:43 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-04-23 03:43:41 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -97,13 +97,13 @@ public:
   itkSetMacro( BackgroundValue, PixelType );
 
   /** Get the background value */
-  itkGetMacro( BackgroundValue, PixelType );
+  itkGetConstMacro( BackgroundValue, PixelType );
 
   /** Set the foreground value */
   itkSetMacro( ForegroundValue, PixelType );
 
   /** Get the foreground value */
-  itkGetMacro( ForegroundValue, PixelType );
+  itkGetConstMacro( ForegroundValue, PixelType );
 
 
 #ifdef ITK_USE_CONCEPT_CHECKING

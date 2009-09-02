@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkTriangleMeshToBinaryImageFilter.txx,v $
 Language:  C++
-Date:      $Date: 2008-10-06 14:59:58 $
-Version:   $Revision: 1.11 $
+Date:      $Date: 2009-04-06 13:46:37 $
+Version:   $Revision: 1.12 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -297,8 +297,8 @@ TriangleMeshToBinaryImageFilter<TInputMesh, TOutputImage>
       std::swap(p1,p2);
       }
 
-    int zmin = (int)(ceil(p1[2]));
-    int zmax = (int)(ceil(p2[2]));
+    int zmin = (int)(vcl_ceil(p1[2]));
+    int zmax = (int)(vcl_ceil(p2[2]));
 
     if (zmin > extent[5] || zmax < extent[4])
       {
@@ -377,8 +377,8 @@ TriangleMeshToBinaryImageFilter<TInputMesh, TOutputImage>
         continue;
         }  
       double temp = 1.0/(Y2 - Y1);
-      int ymin = (int)(ceil(Y1));
-      int ymax = (int)(ceil(Y2)); 
+      int ymin = (int)(vcl_ceil(Y1));
+      int ymax = (int)(vcl_ceil(Y2)); 
       for (int y = ymin; y < ymax; y++)
         {
         double r = (Y2 - y)*temp;
@@ -568,8 +568,8 @@ TriangleMeshToBinaryImageFilter<TInputMesh,TOutputImage>
       
       for (int i = 0; i < n; i++)
         {
-        int x1 = (int)(ceil(nlist[2*i]));
-        int x2 = (int)(floor(nlist[2*i+1]));
+        int x1 = (int)(vcl_ceil(nlist[2*i]));
+        int x2 = (int)(vcl_floor(nlist[2*i+1]));
         
         if (x2 < extent[0] || x1 > (extent[1]))
           {

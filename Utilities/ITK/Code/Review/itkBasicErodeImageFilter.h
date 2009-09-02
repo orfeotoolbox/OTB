@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBasicErodeImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-09-29 18:36:37 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-04-28 14:36:43 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -81,6 +81,9 @@ public:
   itkStaticConstMacro(KernelDimension, unsigned int,
                       TKernel::NeighborhoodDimension);
 
+  /** Type of the pixels in the Kernel. */
+  typedef typename TKernel::PixelType            KernelPixelType;
+
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
   itkConceptMacro(InputConvertibleToOutputCheck,
@@ -91,8 +94,8 @@ public:
     (Concept::SameDimension<InputImageDimension, KernelDimension>));
   itkConceptMacro(InputLessThanComparableCheck,
     (Concept::LessThanComparable<PixelType>));
-  itkConceptMacro(KernelGreaterThanIntCheck,
-    (Concept::GreaterThanComparable<typename TKernel::PixelType, int>));
+  itkConceptMacro(KernelGreaterThanComparableCheck,
+    (Concept::GreaterThanComparable<KernelPixelType>));
   /** End concept checking */
 #endif
 

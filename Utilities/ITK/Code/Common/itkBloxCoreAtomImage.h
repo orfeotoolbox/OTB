@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBloxCoreAtomImage.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 20:56:07 $
-  Version:   $Revision: 1.33 $
+  Date:      $Date: 2009-04-25 12:24:02 $
+  Version:   $Revision: 1.34 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -93,13 +93,13 @@ public:
   typedef CovariantVector<double, NDimension> GradientType;
 
   /** get macro for m_MedialNodeCount. */
-  itkGetMacro(MedialNodeCount, int);
+  itkGetConstMacro(MedialNodeCount, int);
 
   typedef std::vector<PixelType*>   NodePointerListType;
   typedef std::vector<PixelType*> * NodePointerListPointer;
 
   /** get macro for m_NodePointerList. */
-  itkGetMacro(NodePointerList, NodePointerListPointer);
+  itkGetConstMacro(NodePointerList, NodePointerListPointer);
 
   /** Convenient typedefs obtained from Superclass.
    * Note: Unlike "normal" images BloxCoreAtomImages support neither Scalar nor

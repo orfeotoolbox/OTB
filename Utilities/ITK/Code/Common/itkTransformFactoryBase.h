@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTransformFactoryBase.h,v $
   Language:  C++
-  Date:      $Date: 2005-04-01 15:52:35 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-03-03 15:10:27 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -32,9 +32,9 @@ class ITKCommon_EXPORT TransformFactoryBase : public ObjectFactoryBase
 {
 public:  
   /** Standard class typedefs. */
-  typedef TransformFactoryBase   Self;
-  typedef ObjectFactoryBase  Superclass;
-  typedef SmartPointer< Self >   Pointer;
+  typedef TransformFactoryBase        Self;
+  typedef ObjectFactoryBase           Superclass;
+  typedef SmartPointer< Self >        Pointer;
   typedef SmartPointer< const Self >  ConstPointer;
   
   /** Class methods used to interface with the registered factories. */
@@ -69,9 +69,9 @@ public:
       const char* description,
       bool enableFlag,
       CreateObjectFunctionBase* createFunction)
-  {
+    {
     this->RegisterOverride ( classOverride, overrideClassName, description, enableFlag, createFunction );
-  }
+    }
   
 protected:
   TransformFactoryBase();

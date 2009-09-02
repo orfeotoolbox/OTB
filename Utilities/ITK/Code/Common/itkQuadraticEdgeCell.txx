@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadraticEdgeCell.txx,v $
   Language:  C++
-  Date:      $Date: 2007-05-17 21:00:08 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-03-03 15:08:02 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkQuadraticEdgeCell_txx
-#define _itkQuadraticEdgeCell_txx
+#ifndef __itkQuadraticEdgeCell_txx
+#define __itkQuadraticEdgeCell_txx
 #include "itkQuadraticEdgeCell.h"
 
 namespace itk
@@ -92,25 +92,25 @@ QuadraticEdgeCell< TCellInterface >
   switch (dimension)
     {
     case 0: 
-    {
-    VertexAutoPointer vertexPointer;
-    if( this->GetVertex(featureId,vertexPointer) )
       {
-      TransferAutoPointer(cellPointer,vertexPointer);
-      return true;
+      VertexAutoPointer vertexPointer;
+      if( this->GetVertex(featureId,vertexPointer) )
+        {
+        TransferAutoPointer(cellPointer,vertexPointer);
+        return true;
+        }
+      else
+        {
+        cellPointer.Reset();
+        return false;
+        }
+      break;
       }
-    else
+    default: 
       {
       cellPointer.Reset();
       return false;
       }
-    break;
-    }
-    default: 
-    {
-    cellPointer.Reset();
-    return false;
-    }
     }
   return false;
 }
@@ -128,8 +128,10 @@ QuadraticEdgeCell< TCellInterface >
 ::SetPointIds(PointIdConstIterator first)
 {
   PointIdConstIterator ii(first);
-  for(unsigned int i=0; i < Self::NumberOfPoints ; ++i)
+  for(unsigned int i=0; i < Self::NumberOfPoints; ++i)
+    {
     m_PointIds[i] = *ii++;
+    }
 }
 
 
@@ -277,4 +279,3 @@ QuadraticEdgeCell< TCellInterface >
 } // end namespace itk
 
 #endif
-

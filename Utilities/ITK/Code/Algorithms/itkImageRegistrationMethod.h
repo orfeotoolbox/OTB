@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRegistrationMethod.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 20:02:56 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2009-04-23 03:53:35 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -173,7 +173,7 @@ public:
   itkGetConstReferenceMacro( FixedImageRegion, FixedImageRegionType );
   /** True if a region has been defined for the fixed image to which
    the ImageMetric will limit its computation */
-  itkGetMacro( FixedImageRegionDefined, bool );
+  itkGetConstMacro( FixedImageRegionDefined, bool );
   /** Turn on/off the use of a fixed image region to which
    the ImageMetric will limit its computation.
    \warning The region must have been previously defined using the

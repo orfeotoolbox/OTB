@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkConfidenceConnectedImageFilter.txx,v $
 Language:  C++
-Date:      $Date: 2008-10-13 18:54:27 $
-Version:   $Revision: 1.36 $
+Date:      $Date: 2009-04-21 12:29:35 $
+Version:   $Revision: 1.37 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -45,6 +45,36 @@ ConfidenceConnectedImageFilter<TInputImage, TOutputImage>
   m_ReplaceValue = NumericTraits<OutputImagePixelType>::One;
   m_Mean     = NumericTraits< InputRealType >::Zero;
   m_Variance = NumericTraits< InputRealType >::Zero;
+}
+
+template <class TInputImage, class TOutputImage>
+void
+ConfidenceConnectedImageFilter<TInputImage, TOutputImage>
+::SetSeed(const IndexType & seed)
+{
+  this->m_Seeds.clear();
+  this->AddSeed( seed );
+}
+  
+template <class TInputImage, class TOutputImage>
+void
+ConfidenceConnectedImageFilter<TInputImage, TOutputImage>
+::ClearSeeds()
+{
+  if( this->m_Seeds.size() > 0 )
+    {
+    this->m_Seeds.clear();
+    this->Modified();
+    }
+}
+
+template <class TInputImage, class TOutputImage>
+void
+ConfidenceConnectedImageFilter<TInputImage, TOutputImage>
+::AddSeed(const IndexType & seed)
+{
+  this->m_Seeds.push_back( seed );
+  this->Modified();
 }
 
 /**

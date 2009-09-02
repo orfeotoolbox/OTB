@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorContainer.txx,v $
   Language:  C++
-  Date:      $Date: 2008-01-07 13:33:59 $
-  Version:   $Revision: 1.43 $
+  Date:      $Date: 2009-03-03 15:11:40 $
+  Version:   $Revision: 1.44 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkVectorContainer_txx
-#define _itkVectorContainer_txx
+#ifndef __itkVectorContainer_txx
+#define __itkVectorContainer_txx
 #include "itkVectorContainer.h"
 
 #include "itkNumericTraits.h"
@@ -53,8 +53,6 @@ VectorContainer< TElementIdentifier , TElement >
 {
   return this->VectorType::operator[](id);
 }
-
-
 
 /**
  * Get a reference to the element at the given index.
@@ -136,8 +134,6 @@ VectorContainer< TElementIdentifier , TElement >
   return (NumericTraits<ElementIdentifier>::IsNonnegative(identifier)
           && (identifier < this->VectorType::size()));
 }
-
-
 
 /**
  * Check if the given index is in range of the STL vector.  If it is not,
@@ -277,8 +273,6 @@ VectorContainer< TElementIdentifier , TElement >
 {
   this->VectorType::clear();
 }
-
-
 
 /**
  *    Allocate memory for at the requested number of elements.

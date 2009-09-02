@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkContourSpatialObjectPoint.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-28 20:10:27 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-04-07 14:33:56 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -34,7 +34,7 @@ namespace itk
  * \sa SpatialObjectPoint 
  */ 
 template < unsigned int TPointDimension = 3 >
-class ContourSpatialObjectPoint 
+class ITK_EXPORT ContourSpatialObjectPoint 
   : public SpatialObjectPoint<TPointDimension>
 {
 

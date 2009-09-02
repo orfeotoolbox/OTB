@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPolyLineParametricPath.txx,v $
   Language:  C++
-  Date:      $Date: 2006-02-06 22:01:58 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-03-03 15:07:57 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -55,16 +55,12 @@ PolyLineParametricPath<VDimension>
   return output;
 }
 
-
-
 //template<unsigned int VDimension>
 //typename PolyLineParametricPath<VDimension>::VectorType
 //PolyLineParametricPath<VDimension>
 //::EvaluateDerivative(const InputType & input) const
 //{
 //}
-
-
 
 /**
  * Constructor
@@ -77,8 +73,6 @@ PolyLineParametricPath<VDimension>
   m_VertexList = VertexListType::New();
 }
 
-
-
 /**
  * Standard "PrintSelf" method
  */
@@ -90,8 +84,6 @@ PolyLineParametricPath<VDimension>
   Superclass::PrintSelf( os, indent );
   os << indent << "Verticies:  " << m_VertexList << std::endl;
 }
-
-
 
 } // end namespace itk
 

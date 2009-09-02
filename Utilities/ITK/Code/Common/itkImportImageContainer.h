@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImportImageContainer.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 19:04:57 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2009-04-25 12:24:09 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -101,6 +101,10 @@ public:
    * was passed in using "LetContainerManageMemory"=true. The new buffer's
    * memory management will be handled by the container from that point on.
    *
+   * In general, Reserve should not change the usable elements of the
+   * container. However, in this particular case, Reserve as a Resize
+   * semantics that is kept for backward compatibility reasons.
+   *
    * \sa SetImportPointer() */
   void Reserve(ElementIdentifier num);
   
@@ -126,7 +130,7 @@ public:
    *  flag. This may override your setting if you call this methods prematurely.
    *  \warning Improper use of these methods will result in memory leaks */
   itkSetMacro(ContainerManageMemory,bool);
-  itkGetMacro(ContainerManageMemory,bool);
+  itkGetConstMacro(ContainerManageMemory,bool);
   itkBooleanMacro(ContainerManageMemory);
 
 
@@ -140,6 +144,31 @@ protected:
   void PrintSelf(std::ostream& os, Indent indent) const;
 
   virtual TElement* AllocateElements(ElementIdentifier size) const;
+  virtual void DeallocateManagedMemory();
+
+  /* Set the m_Size member that represents the number of elements
+   * currently stored in the container. Use this function with great
+   * care since it only changes the m_Size member and not the actual size
+   * of the import pointer m_ImportPointer. It should typically
+   * be used only to override AllocateElements and
+   * DeallocateManagedMemory. */
+  itkSetMacro(Size,TElementIdentifier);
+   
+  /* Set the m_Capacity member that represents the capacity of
+   * the current container. Use this function with great care
+   * since it only changes the m_Capacity member and not the actual
+   * capacity of the import pointer m_ImportPointer. It should typically
+   * be used only to override AllocateElements and
+   * DeallocateManagedMemory. */
+  itkSetMacro(Capacity,TElementIdentifier);
+
+  
+  /* Set the m_ImportPointer member. Use this function with great care
+   * since it only changes the m_ImportPointer member but not the m_Size
+   * and m_Capacity members. It should typically be used only to override
+   * AllocateElements and DeallocateManagedMemory. */
+  void SetImportPointer(TElement *ptr){m_ImportPointer=ptr;}
+
 private:
   ImportImageContainer(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -148,7 +177,6 @@ private:
   TElementIdentifier   m_Size;
   TElementIdentifier   m_Capacity;
   bool                 m_ContainerManageMemory;
-
 };
 
 } // end namespace itk

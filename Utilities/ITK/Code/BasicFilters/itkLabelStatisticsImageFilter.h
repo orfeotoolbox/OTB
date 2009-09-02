@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelStatisticsImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 17:40:08 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-05-05 18:16:17 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -100,7 +100,12 @@ public:
   typedef std::vector<typename IndexType::IndexValueType> BoundingBoxType;
 
   /** Histogram-related typedefs */
+#ifdef ITK_USE_REVIEW_STATISTICS
+  typedef itk::Statistics::Histogram<RealType> HistogramType;
+#else
   typedef itk::Statistics::Histogram<RealType,1> HistogramType;
+#endif
+
   typedef typename HistogramType::Pointer        HistogramPointer;
 
   /** \class LabelStatistics
@@ -163,13 +168,19 @@ public:
           m_BoundingBox[i+1] = NumericTraits<ITK_TYPENAME IndexType::IndexValueType>::NonpositiveMin();
           }
 
-       // Histogram
+        // Histogram
         m_Histogram = HistogramType::New();
-        typename HistogramType::SizeType hsize;
-        hsize[0] = size;
+        typename HistogramType::SizeType              hsize;
         typename HistogramType::MeasurementVectorType lb;
-        lb[0] = lowerBound;
         typename HistogramType::MeasurementVectorType ub;
+#ifdef ITK_USE_REVIEW_STATISTICS
+        hsize.SetSize(1);
+        lb.SetSize(1);
+        ub.SetSize(1);
+        m_Histogram->SetMeasurementVectorSize(1);
+#endif
+        hsize[0] = size;
+        lb[0] = lowerBound;
         ub[0] = upperBound;
         m_Histogram->Initialize(hsize, lb, ub);
         }
@@ -223,7 +234,7 @@ public:
 
   // macros for Histogram enables
   itkSetMacro(UseHistograms, bool);
-  itkGetMacro(UseHistograms, bool);
+  itkGetConstMacro(UseHistograms, bool);
   itkBooleanMacro(UseHistograms);
   
   /** Set the label image */

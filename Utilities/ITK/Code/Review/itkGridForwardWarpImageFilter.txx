@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGridForwardWarpImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-05 00:35:59 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-05-26 23:45:04 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -129,7 +129,11 @@ GridForwardWarpImageFilter<TDeformationField,TOutputImage>
           inside = false;
           break;
           }
+#ifdef ITK_USE_PORTABLE_ROUND
+        refIndex[j] = Math::Round(contindex[j]);
+#else
         refIndex[j] = vnl_math_rnd(contindex[j]);
+#endif
         }
 
       if( inside )
@@ -156,7 +160,11 @@ GridForwardWarpImageFilter<TDeformationField,TOutputImage>
                 targetIn = false;
                 break;
                 }
+#ifdef ITK_USE_PORTABLE_ROUND
+              targetIndex[j] = Math::Round(contindex[j]);
+#else
               targetIndex[j] = vnl_math_rnd(contindex[j]);
+#endif
               }
 
             if( targetIn ) 

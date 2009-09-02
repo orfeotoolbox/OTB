@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPointSet.txx,v $
   Language:  C++
-  Date:      $Date: 2008-05-08 15:41:46 $
-  Version:   $Revision: 1.33 $
+  Date:      $Date: 2009-03-03 15:07:57 $
+  Version:   $Revision: 1.34 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -61,8 +61,6 @@ PointSet<TPixelType, VDimension, TMeshTraits>
     this->Modified();
     }
 }
-
-
 
 /**
  * Access routine to get the points container.
@@ -124,8 +122,6 @@ PointSet<TPixelType, VDimension, TMeshTraits>
                 << m_PointDataContainer );
   return m_PointDataContainer;
 }
-
-
 
 /**
  * Access routine to get the point data container.
@@ -234,8 +230,10 @@ PointSet<TPixelType, VDimension, TMeshTraits>
    * either.
    */
   if( !m_PointDataContainer )
+    {
     return false;
-  
+    }
+
   /**
    * Ask the container if the point identifier exists.
    */

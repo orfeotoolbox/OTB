@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSampleAlgorithmBase.txx,v $
   Language:  C++
-  Date:      $Date: 2005-07-26 15:55:04 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-03-04 19:29:53 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,8 +19,8 @@
 
 #include "itkSampleAlgorithmBase.h"
 
-namespace itk{ 
-namespace Statistics{
+namespace itk { 
+namespace Statistics {
 
 template< class TInputSample >
 SampleAlgorithmBase< TInputSample >
@@ -37,7 +37,7 @@ SampleAlgorithmBase< TInputSample >
 {
   Superclass::PrintSelf(os,indent);
 
-  os << indent << "Input Sample: " ;
+  os << indent << "Input Sample: ";
   if ( m_InputSample.IsNotNull() )
     {
     os << m_InputSample << std::endl;
@@ -45,7 +45,7 @@ SampleAlgorithmBase< TInputSample >
     }
   else
     {
-    os << "not set." << std::endl ;
+    os << "not set." << std::endl;
     }
 
 }
@@ -63,4 +63,3 @@ SampleAlgorithmBase< TInputSample >
 } // end of namespace itk
 
 #endif
-

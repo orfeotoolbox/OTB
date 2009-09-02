@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVoronoiDiagram2DGenerator.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-27 19:30:16 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2009-04-23 03:53:37 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -77,7 +77,7 @@ public:
   typedef typename VDMesh::VoronoiEdge   VoronoiEdge;
 
   /** Get the number of seed points. */
-  itkGetMacro(NumberOfSeeds,unsigned int);
+  itkGetConstMacro(NumberOfSeeds,unsigned int);
   
   /** Input the seeds information, will overwrite if seeds already
    * exists. */

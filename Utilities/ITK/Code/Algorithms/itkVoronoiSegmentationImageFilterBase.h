@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVoronoiSegmentationImageFilterBase.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-27 19:30:17 $
-  Version:   $Revision: 1.29 $
+  Date:      $Date: 2009-04-23 03:53:37 $
+  Version:   $Revision: 1.30 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -112,44 +112,44 @@ public:
     
   /** Set/Get the initial number of seeds for VD. */
   itkSetMacro(NumberOfSeeds, int);
-  itkGetMacro(NumberOfSeeds, int);
+  itkGetConstMacro(NumberOfSeeds, int);
 
   /** Set/Get the smallest region to be divided. */
   itkSetMacro(MinRegion, int);
-  itkGetMacro(MinRegion, int);
+  itkGetConstMacro(MinRegion, int);
 
   /** Set/Get the number of iterations to run (if set to 0: the classification
   * run process runs until no more cells can be divided). */
   itkSetMacro(Steps, int);
-  itkGetMacro(Steps, int);
+  itkGetConstMacro(Steps, int);
 
   /** Get the number of seeds before adding new ones. */
-  itkGetMacro(LastStepSeeds, int);
+  itkGetConstMacro(LastStepSeeds, int);
 
   /** Get the number of seeds to add. */
-  itkGetMacro(NumberOfSeedsToAdded, int); 
+  itkGetConstMacro(NumberOfSeedsToAdded, int); 
 
   /**  */
   itkSetMacro(UseBackgroundInAPrior, bool);
-  itkGetMacro(UseBackgroundInAPrior, bool);
+  itkGetConstMacro(UseBackgroundInAPrior, bool);
 
   /** Enable the generation of the output boundary. */
   itkSetMacro(OutputBoundary, bool);
-  itkGetMacro(OutputBoundary, bool);
+  itkGetConstMacro(OutputBoundary, bool);
 
   /** Output the segmentation on every iteration.  Useful for iteractive
       sessions. The setting of OutputBoundary determines the type of output. */
   itkSetMacro(InteractiveSegmentation, bool);
-  itkGetMacro(InteractiveSegmentation, bool);
+  itkGetConstMacro(InteractiveSegmentation, bool);
   itkBooleanMacro(InteractiveSegmentation);
   
   /** Set/Get the mean deviation. */
   itkSetMacro(MeanDeviation, double);
-  itkGetMacro(MeanDeviation, double);
+  itkGetConstMacro(MeanDeviation, double);
 
   /** Set/Get the region size. */
   itkSetMacro(Size,SizeType);
-  itkGetMacro(Size,SizeType);
+  itkGetConstMacro(Size,SizeType);
 
   /** Take a prior from other segmentation node. This should be a
    * binary object. */

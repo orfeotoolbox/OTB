@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianBlurImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 19:04:56 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-05-14 02:11:46 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -138,7 +138,7 @@ public:
    *  used in the Gaussian kernel
    */
   itkSetMacro( MaximumKernelWidth, int );
-  itkGetMacro( MaximumKernelWidth, int );
+  itkGetConstMacro( MaximumKernelWidth, int );
 
   /** Set/GetUseImageSpacing() This flag is used by the underling
    *  GaussianOperator to decide if the image spacing should be used
@@ -146,7 +146,7 @@ public:
    *  and UseImageSpacingOff() provide a similar functionality.
    */
   itkSetMacro( UseImageSpacing, bool );
-  itkGetMacro( UseImageSpacing, bool );
+  itkGetConstMacro( UseImageSpacing, bool );
   itkBooleanMacro( UseImageSpacing );
 
 
@@ -163,6 +163,9 @@ protected:
   void RecomputeContinuousGaussianKernel(const double* offset) const;
 
 private:
+
+  virtual TOutput EvaluateAtIndex( 
+    const IndexType & index, const OperatorArrayType & operatorArray ) const;
 
   SigmaArrayType                m_Sigma;
   OperatorImageFunctionPointer  m_OperatorImageFunction;

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMetaImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-02-24 03:54:35 $
-  Version:   $Revision: 1.94 $
+  Date:      $Date: 2009-05-20 12:16:44 $
+  Version:   $Revision: 1.100 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,6 +19,7 @@
 #endif
 
 #include <string>
+#include <stdlib.h>
 #include "itkMetaImageIO.h"
 #include "itkExceptionObject.h"
 #include "itkSpatialOrientation.h"
@@ -88,9 +89,11 @@ void MetaImageIO::ReadImageInformation()
 { 
   if(!m_MetaImage.Read(m_FileName.c_str(), false))
     {
-    ExceptionObject exception(__FILE__, __LINE__);
-    exception.SetDescription("File cannot be read");
-    throw exception;
+    itkExceptionMacro("File cannot be read: "
+                      << this->GetFileName() << " for reading."
+                      << std::endl
+                      << "Reason: "
+                      << itksys::SystemTools::GetLastSystemError());
     }
 
   if(m_MetaImage.BinaryData())
@@ -351,6 +354,19 @@ void MetaImageIO::ReadImageInformation()
         }
       this->SetNumberOfComponents(m_NumberOfComponents * m_NumberOfComponents);
       break;
+    }
+
+  // BUG: 8732
+  // The above use to MET_*_ARRAY may not be correct, as this MetaIO
+  // ElementType was not designed to indicate vectors, but something
+  // else
+  //
+  // if the file has multiple components then we default to a vector
+  // pixel type, support could be added to MetaIO format to define
+  // different pixel types   
+  if ( m_MetaImage.ElementNumberOfChannels() > 1 )
+    {
+    this->SetPixelType( VECTOR );
     }
   
   this->SetNumberOfDimensions(m_MetaImage.NDims());
@@ -830,28 +846,36 @@ void MetaImageIO::ReadImageInformation()
 void MetaImageIO::Read(void* buffer)
 { 
   const unsigned int nDims = this->GetNumberOfDimensions();
-  const unsigned int ioDims = this->m_IORegion.GetImageDimension();
-
-  const unsigned int minDimension = ( nDims > ioDims ) ? ioDims : nDims;
-
   
-  // this is a check to see if we are actually streaming
-  // we initialize with m_IORegion to match dimensions
-  ImageIORegion largestRegion(minDimension);
-  for(unsigned int i=0; i<minDimension; i++)
+  // this will check to see if we are actually streaming
+  // we initialize with the dimensions of the file, since if
+  // largestRegion and ioRegion don't match, we'll use the streaming
+  // path since the comparison will fail
+  ImageIORegion largestRegion(nDims);
+  for(unsigned int i=0; i<nDims; i++)
     {
     largestRegion.SetIndex(i, 0);
     largestRegion.SetSize(i, this->GetDimensions(i));
     }
+
   
   if(largestRegion != m_IORegion)
     {
-    int* indexMin = new int[minDimension];
-    int* indexMax = new int[minDimension];
-    for(unsigned int i=0;i<minDimension;i++)
+    int* indexMin = new int[nDims];
+    int* indexMax = new int[nDims];
+    for(unsigned int i=0;i<nDims;i++)
       {
-      indexMin[i] = m_IORegion.GetIndex()[i];
-      indexMax[i] = indexMin[i] + m_IORegion.GetSize()[i] - 1;
+      if ( i < m_IORegion.GetImageDimension() )
+        {
+        indexMin[i] = m_IORegion.GetIndex()[i];
+        indexMax[i] = indexMin[i] + m_IORegion.GetSize()[i] - 1;
+        }
+      else 
+        {
+        indexMin[i] = 0;
+        // this is zero since this is a (size - 1)
+        indexMax[i] = 0; 
+        }
       }
 
     if (!m_MetaImage.ReadROI(indexMin, indexMax, 
@@ -860,19 +884,23 @@ void MetaImageIO::Read(void* buffer)
       {
       delete [] indexMin;
       delete [] indexMax;
-      ExceptionObject exception(__FILE__, __LINE__);
-      exception.SetDescription("File ROI cannot be read");
-      throw exception;
+      itkExceptionMacro("File cannot be read: "
+                        << this->GetFileName() << " for reading."
+                        << std::endl
+                        << "Reason: "
+                        << itksys::SystemTools::GetLastSystemError());
       }
- 
+    
     delete [] indexMin;
     delete [] indexMax;
     }
   else if(!m_MetaImage.Read(m_FileName.c_str(), true, buffer))
     {
-    ExceptionObject exception(__FILE__, __LINE__);
-    exception.SetDescription("File cannot be read");
-    throw exception;
+    itkExceptionMacro("File cannot be read: "
+                      << this->GetFileName() << " for reading."
+                      << std::endl
+                      << "Reason: "
+                      << itksys::SystemTools::GetLastSystemError());
     }
 
   m_MetaImage.ElementByteOrderFix();
@@ -1336,6 +1364,9 @@ MetaImageIO
     int* indexMax = new int[nDims];
     for( unsigned int k=0; k<nDims; k++ )
       {
+      // the dimensions of m_IORegion should match out requested
+      // dimensions, but ImageIORegion will throw an
+      // exception if out of bounds 
       indexMin[k] = m_IORegion.GetIndex()[k];
       indexMax[k] = m_IORegion.GetIndex()[k] + m_IORegion.GetSize()[k] - 1;
       }
@@ -1344,9 +1375,11 @@ MetaImageIO
       {
       delete [] indexMin;
       delete [] indexMax;
-      ExceptionObject exception(__FILE__, __LINE__);
-      exception.SetDescription("File ROI cannot be written");
-      throw exception;
+      itkExceptionMacro("File ROI cannot be written: "
+                      << this->GetFileName()
+                      << std::endl
+                      << "Reason: "
+                      << itksys::SystemTools::GetLastSystemError());
       }
 
     delete [] indexMin;
@@ -1356,9 +1389,11 @@ MetaImageIO
     {
     if ( !m_MetaImage.Write(  m_FileName.c_str() ) ) 
       {
-      ExceptionObject exception(__FILE__, __LINE__);
-      exception.SetDescription("File cannot be written");
-      throw exception;
+      itkExceptionMacro("File cannot be written: "
+                      << this->GetFileName()
+                      << std::endl
+                      << "Reason: "
+                      << itksys::SystemTools::GetLastSystemError());
       }
     }
 
@@ -1459,9 +1494,14 @@ MetaImageIO::GetActualNumberOfSplitsForWriting(unsigned int numberOfRequestedSpl
       errorMessage = "File is compressed: " + m_FileName;
       }
     // 2)pixel type
-    else if (headerImageIOReader->GetPixelType() != this->GetPixelType() ||
-             headerImageIOReader->GetNumberOfComponents() != this->GetNumberOfComponents() ||
-             headerImageIOReader->GetComponentType() != this->GetComponentType()) 
+    // this->GetPixelType() is not verified becasue the metaio file format
+    // stores all multi-component types as arrays, so it does not
+    // distinguish between pixel types. Also as long as the compoent
+    // and number of compoents match we should be able to paste, that
+    // is the numbers should be the same it is just the interpretation
+    // that is not matching
+    else if ( headerImageIOReader->GetNumberOfComponents() != this->GetNumberOfComponents() ||
+              headerImageIOReader->GetComponentType() != this->GetComponentType() ) 
       {
       errorMessage = "Component type does not match in file: " + m_FileName;
       }
@@ -1494,6 +1534,12 @@ MetaImageIO::GetActualNumberOfSplitsForWriting(unsigned int numberOfRequestedSpl
     if (errorMessage.size()) 
       {
       itkExceptionMacro("Unable to paste because pasting file exists and is different. " << errorMessage);
+      }
+    else if ( headerImageIOReader->GetPixelType() != this->GetPixelType() ) 
+      {
+      // since there is currently poor support for pixel types in
+      // MetaIO we will just warn when it does not match
+      itkWarningMacro("Pixel types does not match file, but component type and number of components do.");
       }
     }
   else if (numberOfRequestedSplits != 1)  

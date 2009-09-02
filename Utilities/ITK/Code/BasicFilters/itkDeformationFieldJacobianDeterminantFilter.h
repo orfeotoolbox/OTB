@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDeformationFieldJacobianDeterminantFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-14 19:20:32 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-05-20 16:21:47 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -136,6 +136,8 @@ protected:
   virtual ~DeformationFieldJacobianDeterminantFilter() {}
 
 private:
+  DeformationFieldJacobianDeterminantFilter(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
 };
 
 } // end namespace itk

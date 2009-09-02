@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshToQuadEdgeMeshFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-08 22:13:48 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-04-22 01:41:45 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -87,7 +87,7 @@ protected:
   QuadEdgeMeshToQuadEdgeMeshFilter( );
   virtual ~QuadEdgeMeshToQuadEdgeMeshFilter( ) { }
 
-  virtual void GenerateData( );
+  virtual void CopyInputMeshToOutputMesh( );
 
 private:
   QuadEdgeMeshToQuadEdgeMeshFilter( const Self& ); // Not impl.

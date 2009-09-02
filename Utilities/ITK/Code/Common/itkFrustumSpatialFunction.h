@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFrustumSpatialFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 23:25:41 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-04-25 12:24:07 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -67,28 +67,28 @@ public:
   OutputType Evaluate(const InputType& position) const;
 
   /** Get and set the center of the sphere */
-  itkGetMacro( Apex, InputType);
+  itkGetConstMacro( Apex, InputType);
   itkSetMacro( Apex, InputType);
 
   /** Get and set the angle of the pyramid axis
    * with respect to the Z axis */
-  itkGetMacro( AngleZ, double);
+  itkGetConstMacro( AngleZ, double);
   itkSetMacro( AngleZ, double);
 
   /** Get and set the aperture angle in X */
-  itkGetMacro( ApertureAngleX, double);
+  itkGetConstMacro( ApertureAngleX, double);
   itkSetMacro( ApertureAngleX, double);
 
   /** Get and set the aperture angle in Y */
-  itkGetMacro( ApertureAngleY, double);
+  itkGetConstMacro( ApertureAngleY, double);
   itkSetMacro( ApertureAngleY, double);
 
   /** Get and set the top plane distance to the Apex */
-  itkGetMacro( TopPlane, double);
+  itkGetConstMacro( TopPlane, double);
   itkSetMacro( TopPlane, double);
 
   /** Get and set the bottom plane distance to the Apex */
-  itkGetMacro( BottomPlane, double);
+  itkGetConstMacro( BottomPlane, double);
   itkSetMacro( BottomPlane, double);
 
   /** Set macro to set the plane in which the frustum should rotate */

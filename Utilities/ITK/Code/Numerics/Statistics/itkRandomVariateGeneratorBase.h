@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRandomVariateGeneratorBase.h,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:47 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-03-04 15:24:04 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkRandomVariateGenerator_h
-#define __itkRandomVariateGenerator_h
+#ifndef __itkRandomVariateGeneratorBase_h
+#define __itkRandomVariateGeneratorBase_h
 
 #include "itkObject.h"
 
@@ -31,23 +31,23 @@ class ITK_EXPORT RandomVariateGeneratorBase : public Object
 {
 public:
   /** Standard class typedefs. */
-  typedef RandomVariateGeneratorBase Self ;
-  typedef Object Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef RandomVariateGeneratorBase Self;
+  typedef Object                     Superclass;
+  typedef SmartPointer<Self>         Pointer;
+  typedef SmartPointer<const Self>   ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(RandomVariateGeneratorBase, Object );
  
   /** get a variate using FastNorm function */
-  virtual double GetVariate() = 0 ;
+  virtual double GetVariate() = 0;
     
 protected:
   RandomVariateGeneratorBase() {} 
   virtual ~RandomVariateGeneratorBase() {}
     
 private:
-} ;  // end of class
+};  // end of class
   
 } // end of namespace Statistics
 } // end of namespace itk

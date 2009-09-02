@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSymmetricEllipsoidInteriorExteriorSpatialFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-30 23:39:53 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-04-25 12:24:12 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,10 +42,10 @@ class ITK_EXPORT SymmetricEllipsoidInteriorExteriorSpatialFunction:
 public:
   /** Standard class typedefs. */
   typedef SymmetricEllipsoidInteriorExteriorSpatialFunction Self;
-  typedef InteriorExteriorSpatialFunction<VDimension> Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
-  typedef Vector<double,VDimension> VectorType;
+  typedef InteriorExteriorSpatialFunction<VDimension>       Superclass;
+  typedef SmartPointer<Self>                                Pointer;
+  typedef SmartPointer<const Self>                          ConstPointer;
+  typedef Vector<double,VDimension>                         VectorType;
       
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -63,7 +63,7 @@ public:
   OutputType Evaluate(const InputType& position) const;
 
   /** Get and set the center of the ellipsoid. */
-  itkGetMacro(Center, InputType);
+  itkGetConstMacro(Center, InputType);
   itkSetMacro(Center, InputType);
   
   /** Set the orientation vector of the ellipsoid's unique axis and axes lengths.

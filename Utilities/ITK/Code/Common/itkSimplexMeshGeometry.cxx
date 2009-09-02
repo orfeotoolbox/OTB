@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimplexMeshGeometry.cxx,v $
   Language:  C++
-  Date:      $Date: 2005-01-14 05:17:43 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-03-03 15:09:26 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -92,9 +92,8 @@ SimplexMeshGeometry
   bXd.SetVnlVector( cross_3d<double>(b.GetVnlVector(),d.GetVnlVector()) );
 
   sphereTmp.SetVnlVector( d.GetSquaredNorm()* cXb.GetVnlVector() +
-                            b.GetSquaredNorm()* dXc.GetVnlVector() +
-                            c.GetSquaredNorm()* bXd.GetVnlVector()
-                          );
+                          b.GetSquaredNorm()* dXc.GetVnlVector() +
+                          c.GetSquaredNorm()* bXd.GetVnlVector());
   
   double val = 2 * (c[0]*(b[1]*d[2]-b[2]*d[1]) - 
                     c[1]*( b[0]*d[2]-b[2]*d[0] ) + 
@@ -109,12 +108,10 @@ SimplexMeshGeometry
 
   sphereRadius = sphereTmp.GetNorm()/val;
 
-  if (sphereRadius < 0) {
+  if (sphereRadius < 0)
+    {
     sphereRadius = -1 * sphereRadius;
-  }
+    }
 }
 
-
-
 }  // end namespace itk
-

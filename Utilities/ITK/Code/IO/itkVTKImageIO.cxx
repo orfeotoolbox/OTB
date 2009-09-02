@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVTKImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-10-10 14:30:00 $
-  Version:   $Revision: 1.46 $
+  Date:      $Date: 2009-04-05 10:56:48 $
+  Version:   $Revision: 1.48 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,6 +23,7 @@
 #include <itksys/ios/sstream>
 
 #include <stdio.h>
+#include <string.h>
 
 namespace itk
 {
@@ -64,7 +65,7 @@ bool VTKImageIO::OpenVTKFileForReading(std::ifstream& os,
 #if defined(_WIN32) && !defined(__MINGW32__) && !defined(__CYGWIN__)
   const int openMode = std::ios::in|std::ios::binary;
 #elif ( defined(__GNUC__) && __GNUC__ >= 3 ) || defined (__MWERKS__) || defined (__INTEL_COMPILER) || defined (__MINGW32__) || defined(__CYGWIN__)
-  const std::ios_base::openmode openMode = std::ios::in;
+  const std::ios_base::openmode openMode = std::ios::in|std::ios::binary;
 #else
   const int openMode = std::ios::in;
 #endif
@@ -106,7 +107,7 @@ bool VTKImageIO::OpenVTKFileForWriting(std::ofstream& os,
 #if defined(_WIN32) && !defined(__MINGW32__) && !defined(__CYGWIN__)
   const int openMode = std::ios::out|std::ios::binary;
 #elif (defined(__GNUC__) && __GNUC__ >= 3) || defined (__MWERKS__) || defined (__INTEL_COMPILER) || defined (__MINGW32__) || defined(__CYGWIN__)
-  const std::ios_base::openmode openMode =std::ios::out;
+  const std::ios_base::openmode openMode =std::ios::out|std::ios::binary;
 #else
   const int openMode = std::ios::out;
 #endif

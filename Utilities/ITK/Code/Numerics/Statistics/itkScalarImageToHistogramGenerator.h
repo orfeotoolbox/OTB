@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarImageToHistogramGenerator.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-16 11:37:58 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-03-04 19:29:54 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -35,16 +35,16 @@ class ScalarImageToHistogramGenerator : public Object
 {
 public:
   /** Standard typedefs */
-  typedef ScalarImageToHistogramGenerator  Self ;
-  typedef Object Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef ScalarImageToHistogramGenerator  Self;
+  typedef Object                           Superclass;
+  typedef SmartPointer<Self>               Pointer;
+  typedef SmartPointer<const Self>         ConstPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ScalarImageToHistogramGenerator, Object) ;
+  itkTypeMacro(ScalarImageToHistogramGenerator, Object);
 
   /** standard New() method support */
-  itkNewMacro(Self) ;
+  itkNewMacro(Self);
 
   typedef TImageType                                      ImageType;
   typedef itk::Statistics::ScalarImageToListAdaptor< 

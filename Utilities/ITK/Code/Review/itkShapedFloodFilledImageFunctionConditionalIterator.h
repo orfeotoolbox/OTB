@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShapedFloodFilledImageFunctionConditionalIterator.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-16 21:17:19 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-04-28 16:16:26 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,6 +25,9 @@ namespace itk
 /**
  * \class ShapedFloodFilledImageFunctionConditionalIterator
  * \brief Iterates over a flood-filled image function. 
+ *
+ * Contributed as a paper to the Insight Journal:
+ *  http://hdl.handle.net/1926/1320
  *
  * \ingroup ImageIterators
  *

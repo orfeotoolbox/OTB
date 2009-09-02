@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVector.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-12 21:11:21 $
-  Version:   $Revision: 1.82 $
+  Date:      $Date: 2009-03-03 15:11:37 $
+  Version:   $Revision: 1.83 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -59,12 +59,12 @@ class Vector : public FixedArray<T,NVectorDimension>
 {
 public:
   /** Standard class typedefs. */
-  typedef Vector  Self;
+  typedef Vector                          Self;
   typedef FixedArray<T,NVectorDimension>  Superclass;
 
   /** ValueType can be used to declare a variable that is the same type
    * as a data element held in an Vector.   */
-  typedef T ValueType;
+  typedef T                                               ValueType;
   typedef typename NumericTraits< ValueType >::RealType   RealValueType;
 
   /** Dimension of the vector space. */
@@ -216,13 +216,12 @@ public:
    *  Casting is done with C-Like rules  */
   template < typename TCoordRepB >
   void CastFrom( const Vector<TCoordRepB,NVectorDimension> & pa )
-  {
+    {
     for(unsigned int i=0; i<NVectorDimension; i++ )
       {
       (*this)[i] = static_cast<T>( pa[i] );
       }
-  }
-
+    }
 };
 
 /** Premultiply Operator for product of a vector and a scalar. 

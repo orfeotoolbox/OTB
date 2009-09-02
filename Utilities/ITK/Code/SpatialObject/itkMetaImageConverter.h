@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMetaImageConverter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-28 20:10:27 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-07 14:34:06 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,7 +29,7 @@ namespace itk
 {
 
 template <unsigned int NDimensions = 3, class PixelType = unsigned char>
-class MetaImageConverter
+class ITK_EXPORT MetaImageConverter
 {
 
 public:

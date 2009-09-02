@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNaryFunctorImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 19:33:44 $
-  Version:   $Revision: 1.22 $
+  Date:      $Date: 2009-03-05 09:46:31 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -51,26 +51,12 @@ NaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
   const unsigned int numberOfInputImages = 
     static_cast< unsigned int >( this->GetNumberOfInputs() );
   
-  OutputImagePointer outputPtr = this->GetOutput(0);
-  ImageRegionIterator<TOutputImage> outputIt(outputPtr, outputRegionForThread);
-
-
-  // Clear the content of the output
-  outputIt.GoToBegin();
-  while( !outputIt.IsAtEnd() )
-    {
-    outputIt.Set( itk::NumericTraits< OutputImagePixelType >::Zero );
-    ++outputIt;
-    }
-  
   typedef ImageRegionConstIterator<TInputImage> ImageRegionConstIteratorType;
   std::vector< ImageRegionConstIteratorType * > inputItrVector;
-  inputItrVector.resize(numberOfInputImages);
-  //Array< ImageRegionConstIteratorType > inputItrVector(numberOfInputImages);
+  inputItrVector.reserve( numberOfInputImages );
   
   // support progress methods/callbacks.
   // count the number of inputs that are non-null
-  unsigned int lastValidImage = 0;
   for (unsigned int i=0; i < numberOfInputImages; ++i)
     {
     InputImagePointer inputPtr =
@@ -78,49 +64,53 @@ NaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 
     if (inputPtr)
       {
-      ImageRegionConstIteratorType *inputIt = new ImageRegionConstIteratorType(inputPtr,outputRegionForThread);
-      lastValidImage = i;
-      inputItrVector[i] = reinterpret_cast< ImageRegionConstIteratorType * >( inputIt );
-      inputItrVector[i]->GoToBegin();
-      }
-    else
-      {
-      inputItrVector[i] = reinterpret_cast< ImageRegionConstIteratorType * >(NULL);
+      inputItrVector.push_back( new ImageRegionConstIteratorType(inputPtr,outputRegionForThread) );
       }
     }
   ProgressReporter progress(this, threadId,
                             outputRegionForThread.GetNumberOfPixels());
 
-  if( !inputItrVector[lastValidImage] )
+  const unsigned int numberOfValidInputImages = inputItrVector.size();
+     
+  if( numberOfValidInputImages==0 )
     { 
     //No valid regions in the thread
+    //(and no region iterators to delete)
     return;
     }
   
     
-  NaryArrayType naryInputArray; 
-  naryInputArray.resize( numberOfInputImages );
-    
-  outputIt.GoToBegin();
+  NaryArrayType naryInputArray( numberOfValidInputImages );
+
+  OutputImagePointer outputPtr = this->GetOutput(0);
+  ImageRegionIterator<TOutputImage> outputIt(outputPtr, outputRegionForThread);
+
+  typename std::vector< ImageRegionConstIteratorType * >::iterator regionIterators;
+  const typename std::vector< ImageRegionConstIteratorType * >::const_iterator regionItEnd
+     = inputItrVector.end();
+
+  typename NaryArrayType::iterator arrayIt;
   
-  while( !inputItrVector[lastValidImage]->IsAtEnd())  
+  while( !outputIt.IsAtEnd() )  
     {
-    for (unsigned int inputNumber=0; inputNumber < numberOfInputImages; inputNumber++)
+    arrayIt = naryInputArray.begin();
+    regionIterators = inputItrVector.begin();
+    while ( regionIterators != regionItEnd )
       {
-      naryInputArray[ inputNumber ] = inputItrVector[inputNumber]->Get();
-      ++(*inputItrVector[inputNumber]);
+      *arrayIt++ = (*regionIterators)->Get();
+      ++(*(*regionIterators));
+      ++regionIterators;
       }
     outputIt.Set( m_Functor( naryInputArray ) );
     ++outputIt;
     progress.CompletedPixel();
     }
-  
-  for (unsigned int i=0; i < numberOfInputImages; ++i)
+
+  // Free memory
+  regionIterators = inputItrVector.begin();
+  while ( regionIterators != regionItEnd )
     {
-    if (inputItrVector[i])
-      {
-      delete inputItrVector[i];
-      }
+    delete (*regionIterators++);
     }
 }
 

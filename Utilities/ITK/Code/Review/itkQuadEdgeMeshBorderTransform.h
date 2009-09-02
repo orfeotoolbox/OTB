@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshBorderTransform.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-19 00:09:47 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-04-23 03:43:42 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -103,10 +103,10 @@ public:
     };
 
   itkSetMacro( TransformType, BorderTransformType );
-  itkGetMacro( TransformType, BorderTransformType );
+  itkGetConstMacro( TransformType, BorderTransformType );
 
   itkSetMacro( Radius, InputCoordRepType );
-  itkGetMacro( Radius, InputCoordRepType );
+  itkGetConstMacro( Radius, InputCoordRepType );
 
   void ComputeTransform( );
   MapPointIdentifier GetBoundaryPtMap( );

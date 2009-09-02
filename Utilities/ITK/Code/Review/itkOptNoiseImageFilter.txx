@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptNoiseImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-08-05 12:13:44 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-04-06 00:19:18 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -94,7 +94,7 @@ NoiseImageFilter< TInputImage, TOutputImage>
       
       // calculate the standard deviation value
       var = (sumOfSquares - (sum*sum/num)) / (num - 1.0);
-      it.Set( static_cast<OutputPixelType>(sqrt(var)) );
+      it.Set( static_cast<OutputPixelType>(vcl_sqrt(var)) );
       
       ++bit;
       ++it;

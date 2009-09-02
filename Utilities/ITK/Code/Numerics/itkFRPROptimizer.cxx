@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFRPROptimizer.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-04-23 15:01:26 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-04-05 10:56:49 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -58,7 +58,7 @@ FRPROptimizer
       {
       len += (*xi)[i]*(*xi)[i];
       }
-    len = sqrt(len/this->GetSpaceDimension());
+    len = vcl_sqrt(len/this->GetSpaceDimension());
     for(unsigned int i=0; i<this->GetSpaceDimension(); i++)
       {
       (*xi)[i] /= len;

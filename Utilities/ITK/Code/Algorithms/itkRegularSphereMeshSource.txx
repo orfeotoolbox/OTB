@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRegularSphereMeshSource.txx,v $
   Language:  C++
-  Date:      $Date: 2009-01-26 21:45:57 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-04-08 23:03:40 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -137,9 +137,9 @@ RegularSphereMeshSource<TOutputMesh>
     v_pt[1] = &v[1];
     v_pt[2] = &v[2];
     const unsigned long *tp;
-    unsigned long pointIdx,cellIdx=0;
+    unsigned long cellIdx=0;
     unsigned long pointIdxOffset = outputMesh->GetNumberOfPoints();
-    pointIdx = pointIdxOffset;
+    unsigned long pointIdx = pointIdxOffset;
     unsigned long newIdx[3] = {0,1,2};
   
     // container for the processed edges

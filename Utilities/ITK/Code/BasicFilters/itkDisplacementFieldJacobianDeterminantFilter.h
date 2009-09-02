@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDisplacementFieldJacobianDeterminantFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-14 19:20:33 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-04-25 12:27:21 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -189,7 +189,7 @@ public:
   /** Set/Get whether or not the filter will use the spacing of the input
       image in its calculations */
   void SetUseImageSpacing(bool);
-  itkGetMacro(UseImageSpacing, bool);
+  itkGetConstMacro(UseImageSpacing, bool);
 
   /** Directly Set/Get the array of weights used in the gradient calculations.
       Note that calling UseImageSpacingOn will clobber these values. */

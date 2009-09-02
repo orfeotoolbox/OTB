@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVesselTubeSpatialObject.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-28 20:10:30 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-04-07 14:34:18 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,7 +38,7 @@ namespace itk
  */
 
 template < unsigned int TDimension = 3 >
-class VesselTubeSpatialObject 
+class ITK_EXPORT VesselTubeSpatialObject 
   :public TubeSpatialObject< TDimension, 
                              VesselTubeSpatialObjectPoint< TDimension >  >
 {

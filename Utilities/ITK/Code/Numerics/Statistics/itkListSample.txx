@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkListSample.txx,v $
   Language:  C++
-  Date:      $Date: 2008-04-28 00:21:00 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-03-04 15:23:53 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,8 +19,8 @@
 
 #include "itkListSample.h"
 
-namespace itk{ 
-namespace Statistics{
+namespace itk { 
+namespace Statistics {
 
 template< class TMeasurementVector >
 ListSample< TMeasurementVector >
@@ -36,7 +36,7 @@ ListSample< TMeasurementVector >
 {
   if ( identifier < m_InternalContainer.size() )
     {
-    return m_InternalContainer[identifier] ;
+    return m_InternalContainer[identifier];
     }
   itkExceptionMacro("Identifier " << identifier 
     << " is out of range 0:" << m_InternalContainer.size() ); 
@@ -51,7 +51,7 @@ ListSample< TMeasurementVector >
 {
   if ( identifier < m_InternalContainer.size() )
     {
-    m_InternalContainer[identifier][dim] = value ;
+    m_InternalContainer[identifier][dim] = value;
     }
 }
 
@@ -63,7 +63,7 @@ ListSample< TMeasurementVector >
 {
   if ( identifier < m_InternalContainer.size() )
     {
-    m_InternalContainer[identifier] = mv ;
+    m_InternalContainer[identifier] = mv;
     }
 }
 
@@ -74,11 +74,11 @@ ListSample< TMeasurementVector >
 {
   if ( identifier < m_InternalContainer.size() )
     {
-    return 1.0 ;
+    return 1.0;
     }
   else
     {
-    return 0.0 ;
+    return 0.0;
     }
 }
 

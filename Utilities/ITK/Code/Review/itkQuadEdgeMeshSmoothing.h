@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshSmoothing.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-25 21:17:07 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-04-23 03:43:42 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -85,8 +85,13 @@ public:
     { m_CoefficientsMethod = iMethod; }
 
   itkSetMacro( NumberOfIterations, unsigned int );
+  itkGetConstMacro( NumberOfIterations, unsigned int );
+
   itkSetMacro( DelaunayConforming, bool );
+  itkGetConstMacro( DelaunayConforming, bool );
+
   itkSetMacro( RelaxationFactor, OutputCoordType );
+  itkGetConstMacro( RelaxationFactor, OutputCoordType );
 
 protected:
   QuadEdgeMeshSmoothing();

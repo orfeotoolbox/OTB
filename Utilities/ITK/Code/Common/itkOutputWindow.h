@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOutputWindow.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-19 19:41:22 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2009-04-25 12:24:12 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -85,7 +85,7 @@ public:
    * is displayed, the user is asked if they want to keep getting
    * messages. */
   itkSetMacro(PromptUser,bool);
-  itkGetMacro(PromptUser,bool);
+  itkGetConstMacro(PromptUser,bool);
   itkBooleanMacro(PromptUser);
   
 protected:

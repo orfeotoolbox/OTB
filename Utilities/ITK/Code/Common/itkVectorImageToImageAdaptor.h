@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorImageToImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2008-08-04 15:56:22 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-03-03 15:11:40 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -87,8 +87,6 @@ private:
 
 } // end namespace Accessor
 
-
-
 /** \class VectorImageToImageAdaptor
  * \brief Presents a VectorImage and extracts a component from it into an image.
  *
@@ -113,12 +111,12 @@ class ITK_EXPORT VectorImageToImageAdaptor : public
 {
 public:
   /** Standard class typedefs. */
-  typedef VectorImageToImageAdaptor    Self;
-  typedef VectorImage< TPixelType, Dimension > VectorImageType;
+  typedef VectorImageToImageAdaptor                              Self;
+  typedef VectorImage< TPixelType, Dimension >                   VectorImageType;
   typedef ImageAdaptor< VectorImageType,
       Accessor::VectorImageToImagePixelAccessor< TPixelType >  > Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                                     Pointer;
+  typedef SmartPointer<const Self>                               ConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
@@ -128,8 +126,8 @@ public:
 
   /** PixelContainer typedef support. Used to construct a container for
    * the pixel data. */
-  typedef typename Superclass::PixelContainer        PixelContainer;
-  typedef typename Superclass::PixelContainerPointer PixelContainerPointer;
+  typedef typename Superclass::PixelContainer             PixelContainer;
+  typedef typename Superclass::PixelContainerPointer      PixelContainerPointer;
   typedef typename Superclass::PixelContainerConstPointer PixelContainerConstPointer;
   typedef typename Superclass::IOPixelType                IOPixelType;
 
@@ -148,11 +146,11 @@ public:
     return this->GetPixelAccessor().GetExtractComponentIdx();
     }
   
- protected:
+protected:
   VectorImageToImageAdaptor() {}
   virtual ~VectorImageToImageAdaptor() {}
   
- private:
+private:
   VectorImageToImageAdaptor(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

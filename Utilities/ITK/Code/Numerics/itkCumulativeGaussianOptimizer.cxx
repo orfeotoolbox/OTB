@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCumulativeGaussianOptimizer.cxx,v $
   Language:  C++
-  Date:      $Date: 2007-03-22 21:39:37 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-04-05 10:56:48 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -129,7 +129,7 @@ CumulativeGaussianOptimizer
     averageSumOfSquaredDifferences = FindAverageSumOfSquaredDifferences(extendedArray, extendedArrayCopy);
 
     // Stop if there is a very very very small change between iterations.
-    if(fabs(temp - averageSumOfSquaredDifferences) <= m_DifferenceTolerance)
+    if(vcl_fabs(temp - averageSumOfSquaredDifferences) <= m_DifferenceTolerance)
       break;
     }
   // Update the mean calculation.
@@ -209,7 +209,7 @@ CumulativeGaussianOptimizer
     if( i < startingPointForInsertion ||
         i >= startingPointForInsertion + (int)(originalArray->GetNumberOfElements()) )
       {
-      extendedArray->put(i, amplitude * vcl_exp(-(pow((i - mean),2) / (2 * vcl_pow(sd,2))))); 
+      extendedArray->put(i, amplitude * vcl_exp(-(vcl_pow((i - mean),2) / (2 * vcl_pow(sd,2))))); 
       }
     }
   return extendedArray;

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFastChamferDistanceImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-12-21 19:13:11 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-04-05 23:09:19 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -179,7 +179,7 @@ void FastChamferDistanceImageFilter<TInputImage,TOutputImage>
     // Update the narrow band 
     if (m_NarrowBand.IsNotNull())
       {
-      if (fabs((float)center_value) <= m_NarrowBand->GetTotalRadius()) 
+      if (vcl_fabs((float)center_value) <= m_NarrowBand->GetTotalRadius()) 
         {
         node.m_Index = it.GetIndex();
         //Check node state.
@@ -188,7 +188,7 @@ void FastChamferDistanceImageFilter<TInputImage,TOutputImage>
           {
           node.m_NodeState += SIGN_MASK;
           }
-        if (fabs((float)center_value) < m_NarrowBand->GetInnerRadius())  
+        if (vcl_fabs((float)center_value) < m_NarrowBand->GetInnerRadius())  
           {
           node.m_NodeState += INNER_MASK;
           }

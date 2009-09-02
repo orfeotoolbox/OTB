@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredSimilarity2DTransform.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 12:04:59 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-09 09:23:20 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -105,6 +105,11 @@ public:
   /** VnlVector type. */
   typedef typename Superclass::InputVnlVectorType   InputVnlVectorType;
   typedef typename Superclass::OutputVnlVectorType  OutputVnlVectorType;
+
+  /** Base inverse transform type. This type should not be changed to the
+   * concrete inverse transform type or inheritance would be lost.*/
+  typedef typename Superclass::InverseTransformBaseType InverseTransformBaseType;
+  typedef typename InverseTransformBaseType::Pointer    InverseTransformBasePointer;
   
   /** Set the transformation from a container of parameters
     * This is typically used by optimizers.
@@ -146,6 +151,12 @@ public:
    * This method creates and returns a new Rigid2DTransform object
    * which is the inverse of self. */
   void CloneInverseTo( Pointer & newinverse ) const;
+
+  /** Get an inverse of this transform. */
+  bool GetInverse(Self* inverse) const;
+
+  /** Return an inverse of this transform. */
+  virtual InverseTransformBasePointer GetInverseTransform() const;
 
   /**
    * This method creates and returns a new Rigid2DTransform object

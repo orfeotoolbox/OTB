@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExponentialDeformationFieldImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-20 17:45:32 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-04-29 18:56:44 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -115,7 +115,7 @@ ExponentialDeformationFieldImageFilter<TInputImage,TOutputImage>
       }
 
     // Divide the norm by the minimum pixel spacing
-    maxnorm2 /= minpixelspacing;
+    maxnorm2 /= vnl_math_sqr(minpixelspacing);
 
     InputPixelRealValueType numiterfloat = 2.0 +
        0.5 * vcl_log(maxnorm2)/vnl_math::ln2;

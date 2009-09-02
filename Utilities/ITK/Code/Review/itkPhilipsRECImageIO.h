@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPhilipsRECImageIO.h,v $
   Language:  C++
-  Date:      $Date: 2008-06-23 22:04:35 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-03-19 14:20:58 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -85,18 +85,20 @@ public:
   typedef vnl_vector_fixed< double, 3 >           ImageTypeRescaleValuesType;
   
   typedef VectorContainer< unsigned int, ImageTypeRescaleValuesType >
-                             ImageTypeRescaleValuesContainerType;
+                            ImageTypeRescaleValuesContainerType;
   typedef ImageTypeRescaleValuesContainerType::Pointer
-                             ImageTypeRescaleValuesContainerTypePtr;
+                            ImageTypeRescaleValuesContainerTypePtr;
   typedef VectorContainer< unsigned int, ImageTypeRescaleValuesContainerTypePtr >
-                             ScanningSequenceImageTypeRescaleValuesContainerType;
-  typedef double             GradientBvalueType;
+                            ScanningSequenceImageTypeRescaleValuesContainerType;
+  typedef double            GradientBvalueType;
   typedef VectorContainer< unsigned int, GradientBvalueType >
-                             GradientBvalueContainerType;
+                            GradientBvalueContainerType;
   typedef vnl_vector_fixed< double, 3 >
-                             GradientDirectionType;
+                            GradientDirectionType;
   typedef VectorContainer< unsigned int, GradientDirectionType >
-                             GradientDirectionContainerType;
+                            GradientDirectionContainerType;
+  typedef VectorContainer< unsigned int, int > 
+                            LabelTypesASLContainerType;
 
   /*-------- This part of the interfaces deals with reading data. ----- */
 
@@ -154,56 +156,6 @@ private:
   SliceIndexType *          m_SliceIndex;
   ImageIOBase::ByteOrder    m_MachineByteOrder;
 };
-
-extern const char *const PAR_Version;
-extern const char *const PAR_SliceOrientation;
-extern const char *const PAR_ExaminationName;
-extern const char *const PAR_ProtocolName;
-extern const char *const PAR_SeriesType;
-extern const char *const PAR_AcquisitionNr;
-extern const char *const PAR_ReconstructionNr;
-extern const char *const PAR_ScanDuration;
-extern const char *const PAR_MaxNumberOfCardiacPhases;
-extern const char *const PAR_TriggerTimes;
-extern const char *const PAR_MaxNumberOfEchoes;
-extern const char *const PAR_EchoTimes;
-extern const char *const PAR_MaxNumberOfDynamics;
-extern const char *const PAR_MaxNumberOfMixes;
-extern const char *const PAR_PatientPosition;
-extern const char *const PAR_PreparationDirection;
-extern const char *const PAR_Technique;
-extern const char *const PAR_ScanMode;
-extern const char *const PAR_NumberOfAverages;
-extern const char *const PAR_ScanResolution;
-extern const char *const PAR_RepetitionTimes;
-extern const char *const PAR_ScanPercentage;
-extern const char *const PAR_FOV;
-extern const char *const PAR_WaterFatShiftPixels;
-extern const char *const PAR_AngulationMidSlice;
-extern const char *const PAR_OffCentreMidSlice;
-extern const char *const PAR_FlowCompensation;
-extern const char *const PAR_Presaturation;
-extern const char *const PAR_CardiacFrequency;
-extern const char *const PAR_MinRRInterval;
-extern const char *const PAR_MaxRRInterval;
-extern const char *const PAR_PhaseEncodingVelocity;
-extern const char *const PAR_MTC;
-extern const char *const PAR_SPIR;
-extern const char *const PAR_EPIFactor;
-extern const char *const PAR_TurboFactor;
-extern const char *const PAR_DynamicScan;
-extern const char *const PAR_Diffusion;
-extern const char *const PAR_DiffusionEchoTime;
-extern const char *const PAR_MaxNumberOfDiffusionValues;
-extern const char *const PAR_GradientBValues;
-extern const char *const PAR_MaxNumberOfGradientOrients;
-extern const char *const PAR_GradientDirectionValues;
-extern const char *const PAR_InversionDelay;
-extern const char *const PAR_NumberOfImageTypes;
-extern const char *const PAR_ImageTypes;
-extern const char *const PAR_NumberOfScanningSequences;
-extern const char *const PAR_ScanningSequences;
-extern const char *const PAR_ScanningSequenceImageTypeRescaleValues;
 
 } // end namespace itk
 

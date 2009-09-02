@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkSimplexMeshAdaptTopologyFilter.h,v $
 Language:  C++
-Date:      $Date: 2008-10-17 20:49:56 $
-Version:   $Revision: 1.12 $
+Date:      $Date: 2009-05-12 17:22:53 $
+Version:   $Revision: 1.14 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -49,7 +49,7 @@ namespace itk
  * 
  */
 template <class TInputMesh, class TOutputMesh>
-class SimplexMeshAdaptTopologyFilter : public MeshToMeshFilter<TInputMesh, TOutputMesh>
+class ITK_EXPORT SimplexMeshAdaptTopologyFilter : public MeshToMeshFilter<TInputMesh, TOutputMesh>
 {
 
 public:
@@ -236,12 +236,12 @@ public:
 
 
     itkSetMacro(Threshold, double);
-    itkGetMacro(Threshold, double);
+    itkGetConstMacro(Threshold, double);
 
     itkSetMacro(SelectionMethod, int);
-    itkGetMacro(SelectionMethod, int);
+    itkGetConstMacro(SelectionMethod, int);
 
-    itkGetMacro(ModifiedCount, int);
+    itkGetConstMacro(ModifiedCount, int);
 
 
 protected:

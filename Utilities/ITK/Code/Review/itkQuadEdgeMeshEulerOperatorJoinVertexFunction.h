@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshEulerOperatorJoinVertexFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-16 20:22:11 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-04-23 03:43:42 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -94,8 +94,8 @@ public:
     EDGE_JOINING_DIFFERENT_BORDERS //10
     };
 
-  itkGetMacro( OldPointID, PointIdentifier );
-  itkGetMacro( EdgeStatus, EdgeStatusType );
+  itkGetConstMacro( OldPointID, PointIdentifier );
+  itkGetConstMacro( EdgeStatus, EdgeStatusType );
 
 protected:
   QuadEdgeMeshEulerOperatorJoinVertexFunction();

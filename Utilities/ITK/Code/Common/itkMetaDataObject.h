@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMetaDataObject.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-17 08:35:34 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2009-04-05 10:56:41 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,7 +26,7 @@
 #include "itkCommand.h"
 #include "itkFastMutexLock.h"
 
-#include <string>
+#include <string.h>
 #include <cstring>
 
 namespace itk

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOtsuMultipleThresholdsCalculator.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-26 21:45:54 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-05-12 17:26:21 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -37,7 +37,7 @@ namespace itk
  */
 
 template< class TInputHistogram >
-class OtsuMultipleThresholdsCalculator :
+class ITK_EXPORT OtsuMultipleThresholdsCalculator :
       public HistogramAlgorithmBase< TInputHistogram >
 {
 public:
@@ -48,7 +48,12 @@ public:
   typedef SmartPointer<const Self>                ConstPointer;
 
   typedef typename TInputHistogram::MeasurementType MeasurementType;
+
+#ifdef ITK_USE_REVIEW_STATISTICS
+  typedef typename TInputHistogram::AbsoluteFrequencyType   FrequencyType;
+#else
   typedef typename TInputHistogram::FrequencyType   FrequencyType;
+#endif
 
   typedef typename NumericTraits<MeasurementType>::RealType MeanType;
   typedef typename NumericTraits<MeasurementType>::RealType VarianceType;
@@ -71,7 +76,7 @@ public:
 
   /** Set/Get the number of thresholds. */
   itkSetClampMacro(NumberOfThresholds, unsigned long, 1, NumericTraits<unsigned long>::max() );
-  itkGetMacro(NumberOfThresholds,unsigned long);
+  itkGetConstMacro(NumberOfThresholds,unsigned long);
                                              
 protected:
   OtsuMultipleThresholdsCalculator();

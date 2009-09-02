@@ -116,7 +116,7 @@ public:
     itkExceptionMacro(<<"Subclasses should override this method");
   }
 
-  virtual void SetChannelList(std::vector<unsigned int>& channels)
+  virtual void SetChannelList(std::vector<unsigned int>& /*channels*/)
   {
     itkExceptionMacro(<<"Subclasses should override this method");
   }
@@ -126,7 +126,7 @@ public:
     itkExceptionMacro(<<"Subclasses should override this method");
   }
 
-  virtual void SetAutoMinMax(bool autoMinMax)
+  virtual void SetAutoMinMax(bool /*autoMinMax*/)
   {
     itkExceptionMacro(<<"Subclasses should override this method");
   }

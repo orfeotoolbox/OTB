@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIterativeInverseDeformationFieldImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 16:45:11 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-04-25 12:27:27 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -95,13 +95,13 @@ public:
   typedef typename FieldInterpolatorType::OutputType               FieldInterpolatorOutputType;
 
   itkSetMacro(NumberOfIterations, unsigned int);
-  itkGetMacro(NumberOfIterations, unsigned int);
+  itkGetConstMacro(NumberOfIterations, unsigned int);
   
   // If the error (in mm) between forward and backward mapping is smaller than the StopValue,
   // the algorithm stops.
   // This value can be used to speed up the calculation.
   itkSetMacro(StopValue, double);
-  itkGetMacro(StopValue, double);
+  itkGetConstMacro(StopValue, double);
 
   char* GetReport() {return this->m_Report;}
 

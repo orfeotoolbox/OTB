@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGDCMSeriesFileNames.h,v $
   Language:  C++
-  Date:      $Date: 2007-08-24 13:35:59 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2009-04-25 12:25:42 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -112,7 +112,7 @@ public:
 
   /** Recursively parse the input directory */
   itkSetMacro(Recursive, bool);
-  itkGetMacro(Recursive, bool);
+  itkGetConstMacro(Recursive, bool);
   itkBooleanMacro(Recursive);
   
   /** Use additional series information such as ProtocolName
@@ -163,7 +163,7 @@ public:
    *  sequences are not needed.
    */
   itkSetMacro(LoadSequences, bool);
-  itkGetMacro(LoadSequences, bool);
+  itkGetConstMacro(LoadSequences, bool);
   itkBooleanMacro(LoadSequences);
 
   /** Parse any private tags in the DICOM file. Defaults to false
@@ -171,7 +171,7 @@ public:
    * private tags are not needed.
    */
   itkSetMacro(LoadPrivateTags, bool);
-  itkGetMacro(LoadPrivateTags, bool);
+  itkGetConstMacro(LoadPrivateTags, bool);
   itkBooleanMacro(LoadPrivateTags);
 
 protected:

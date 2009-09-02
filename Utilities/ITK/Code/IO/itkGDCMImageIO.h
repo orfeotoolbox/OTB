@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGDCMImageIO.h,v $
   Language:  C++
-  Date:      $Date: 2008-11-25 13:32:34 $
-  Version:   $Revision: 1.36 $
+  Date:      $Date: 2009-04-25 12:25:42 $
+  Version:   $Revision: 1.39 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,27 +29,37 @@ namespace itk
 
 /** \class GDCMImageIO
  *
- *  \brief ImageIO class for reading and writing DICOM V3.0 and ACR/NEMA (V1.0 & V2.0) images
- *  This class is only an adaptor to the gdcm library (currently gdcm 1.2.x is used):
+ *  \brief ImageIO class for reading and writing DICOM V3.0 and ACR/NEMA 1&2 uncompressed images
+ *  This class is only an adaptor to the gdcm library (currently gdcm 1.2.x is used by default):
  *
+ * GDCM 1.2 can be found at:
  *  http://creatis-www.insa-lyon.fr/Public/Gdcm/
  *
  *  CREATIS INSA - Lyon 2003-2008
  *    http://www.creatis.insa-lyon.fr
  *
+ * Using the CMake variable: ITK_USE_SYSTEM_GDCM it is now possible to use a system installed
+ * GDCM 2.x release. GDCM 2.x is now being developped on sourceforge.net :
+ *
+ *         http://gdcm.sourceforge.net
+ *
+ * Documentation:
+ * - http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=ITK_USE_SYSTEM_GDCM
+ * - http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=GDCM_Release_2.0
+ *
  *  \warning There are several restrictions to this current writer:
- *           -  Basically you always need a DICOM as input to write a proper DICOM image file
- *              (As of 12/10/2004 this restriction is solved in GDCM CVS repository)
  *           -  Eventhough during the writing process you pass in a DICOM file as input
  *              The output file may not contains ALL DICOM field from the input file.
  *              In particular:
  *                             - The SeQuence DICOM field (SQ).
- *                             - Fields from Private Dictionary with unresolved Name (= unknown at runtime)
- *           -  As of 01/15 the binary fields are properly passed.
+ *                             - Fields from Private Dictionary 
  *           -  Some very long (>0xfff) binary fields are not loaded (typically 0029|0010), 
  *              you need to explicitely set the maximum length of elements to load to be bigger
  *              (see Get/SetMaxSizeLoadEntry)
  *           - GDCMImageIO was not handling rescale slope/intercept properly. This is fixed as of 11/12/2007
+ *           - In DICOM some field are stored directly using there binary representation. When loaded into
+ *             the MetaDataDict some fields are converted to ASCII (only VR: OB/OW/OF and UN are encoded as
+ *             mime64).
  *
  *  \ingroup IOFilters
  *
@@ -98,8 +108,8 @@ public:
   /** Macro to access Rescale Slope and Rescale Intercept. Which are
    * needed to rescale properly image when needed. User then need to 
    * Always check those value when access value from the DICOM header */
-  itkGetMacro(RescaleSlope, double);
-  itkGetMacro(RescaleIntercept, double);
+  itkGetConstMacro(RescaleSlope, double);
+  itkGetConstMacro(RescaleIntercept, double);
 
   /** Macro to access the DICOM UID prefix. By default this is the ITK
    *  root id. This default can be overriden if the exam is for example
@@ -116,12 +126,15 @@ public:
   /** Preserve the original DICOM UID of the input files
    */
   itkSetMacro(KeepOriginalUID,bool);
-  itkGetMacro(KeepOriginalUID,bool);
+  itkGetConstMacro(KeepOriginalUID,bool);
   itkBooleanMacro(KeepOriginalUID);
 
   /** Convenience methods to query patient information and scanner
    * information. These methods are here for compatibility with the
-   * DICOMImageIO2 class. */
+   * DICOMImageIO2 class and as such should not be used in any new code.
+   * They rely on properly preallocated buffer, which is not a good practice.
+   * Instead user are encourage to use directly the GetValueFromTag function
+   */
   void GetPatientName(char* name);
   void GetPatientID(char* id);
   void GetPatientSex(char* sex);
@@ -168,7 +181,7 @@ public:
    *  sequences are not needed.
    */
   itkSetMacro(LoadSequences, bool);
-  itkGetMacro(LoadSequences, bool);
+  itkGetConstMacro(LoadSequences, bool);
   itkBooleanMacro(LoadSequences);
 
   /** Parse any private tags in the DICOM file. Defaults to the value
@@ -176,7 +189,7 @@ public:
    * private tags are not needed.
    */
   itkSetMacro(LoadPrivateTags, bool);
-  itkGetMacro(LoadPrivateTags, bool);
+  itkGetConstMacro(LoadPrivateTags, bool);
   itkBooleanMacro(LoadPrivateTags);  
 
   /** Global method to define the default value for

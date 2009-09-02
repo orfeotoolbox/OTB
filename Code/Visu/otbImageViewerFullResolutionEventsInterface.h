@@ -52,9 +52,9 @@ public:
   itkGetMacro(ForwardEvents,bool);
 
   /** Users actions */
-  virtual void RegionSelected(const RegionType & region) {};
+  virtual void RegionSelected(const RegionType & ) {};
   virtual void ViewedRegionChanged() {};
-  virtual void PixelClicked(const IndexType& index) {};
+  virtual void PixelClicked(const IndexType& ) {};
 
 protected:
   /** Constructor */

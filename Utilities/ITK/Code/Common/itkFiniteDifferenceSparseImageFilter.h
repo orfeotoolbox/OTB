@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFiniteDifferenceSparseImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 19:04:56 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-04-25 12:24:07 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -107,7 +107,7 @@ public:
   void SetSparseFunction( SparseFunctionType *sf );
 
   itkSetMacro(PrecomputeFlag, bool);
-  itkGetMacro(PrecomputeFlag, bool);
+  itkGetConstMacro(PrecomputeFlag, bool);
 
 protected:
   FiniteDifferenceSparseImageFilter();

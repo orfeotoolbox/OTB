@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFastMarchingImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-12-21 19:13:11 $
-  Version:   $Revision: 1.39 $
+  Date:      $Date: 2009-04-23 03:53:35 $
+  Version:   $Revision: 1.40 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -222,7 +222,7 @@ public:
       factor. This allows the use of images with
       integer pixel types to represent the speed. */
   itkSetMacro( NormalizationFactor, double );
-  itkGetMacro( NormalizationFactor, double );
+  itkGetConstMacro( NormalizationFactor, double );
 
   /** Set the Fast Marching algorithm Stopping Value. The Fast Marching
    * algorithm is terminated when the value of the smallest trial point

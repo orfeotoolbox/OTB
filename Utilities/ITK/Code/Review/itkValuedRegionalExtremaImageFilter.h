@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkValuedRegionalExtremaImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-02-07 15:58:06 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-23 03:43:42 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -129,7 +129,7 @@ public:
   /**
    * Get whether the image is flat or not.
    */
-  itkGetMacro(Flat, bool);
+  itkGetConstMacro(Flat, bool);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

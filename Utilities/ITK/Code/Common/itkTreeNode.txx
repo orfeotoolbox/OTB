@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTreeNode.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-18 17:20:25 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-04-05 10:56:46 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,11 +14,12 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkTreeNode_txx
-#define _itkTreeNode_txx
+#ifndef __itkTreeNode_txx
+#define __itkTreeNode_txx
 
 #include "itkTreeNode.h"
 #include <cstring>
+#include <string.h>
 
 namespace itk
 {
@@ -38,10 +39,10 @@ TreeNode<TValueType>::~TreeNode()
     m_Parent->Remove(this);
     }
     
- for ( size_t i=m_Children.size() ; i > 0; i-- )
-   {
-   m_Children[i-1]->SetParent(NULL);
-   }
+  for ( size_t i=m_Children.size(); i > 0; i-- )
+    {
+    m_Children[i-1]->SetParent(NULL);
+    }
   m_Children.clear();
   m_Parent = NULL;
   m_Data = 0;
@@ -192,7 +193,7 @@ int TreeNode<TValueType>::ChildPosition( TValueType element ) const
 template <class TValueType>
 void TreeNode<TValueType>::AddChild( TreeNode<TValueType> *node ) 
 {
-  Pointer nodeKeepAlive = node;    
+  Pointer nodeKeepAlive = node;
   node->SetParent(this);
   m_Children.push_back(node);
 }

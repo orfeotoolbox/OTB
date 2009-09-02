@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBalloonForceFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-26 11:34:53 $
-  Version:   $Revision: 1.39 $
+  Date:      $Date: 2009-04-23 03:53:34 $
+  Version:   $Revision: 1.40 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -137,7 +137,7 @@ public:
 
   /** Set the output image. */
   itkSetMacro(ImageOutput, ImagePointer);
-  itkGetMacro(ImageOutput, ImagePointer);
+  itkGetConstMacro(ImageOutput, ImagePointer);
   itkSetMacro(Gradient, GradientImagePointer);
 
   /** Set/Get information for the algorithm. */
@@ -146,14 +146,14 @@ public:
   itkSetMacro(GradientBegin, int);
   itkSetMacro(Resolution, int);
   itkSetMacro(Center, IndexType);
-  itkGetMacro(Normals, InputMeshPointer);
+  itkGetConstMacro(Normals, InputMeshPointer);
   itkSetMacro(DistanceForGradient, float);
   itkSetMacro(DistanceToStop, float);
   itkSetMacro(Potential, ImagePointer);
-  itkGetMacro(Locations, InputMeshPointer);
-  itkGetMacro(Displacements, InputMeshPointer);
-  itkGetMacro(Derives, InputMeshPointer);
-  itkGetMacro(Forces, InputMeshPointer);
+  itkGetConstMacro(Locations, InputMeshPointer);
+  itkGetConstMacro(Displacements, InputMeshPointer);
+  itkGetConstMacro(Derives, InputMeshPointer);
+  itkGetConstMacro(Forces, InputMeshPointer);
 
 protected:
   BalloonForceFilter();

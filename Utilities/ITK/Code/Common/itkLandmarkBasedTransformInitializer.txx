@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLandmarkBasedTransformInitializer.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 19:05:00 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-04-05 18:12:09 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -54,7 +54,7 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage >
     return;
     }
 
-  const double PI = 4.0 * atan(1.0);
+  const double PI = 4.0 * vcl_atan(1.0);
   
   // We will do an explicit typeid check here (via dynamic_cast) to check
   // the transform type. The initialization scheme will generally be different

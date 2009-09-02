@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkObjectFactoryBase.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-05-26 00:24:36 $
-  Version:   $Revision: 1.57 $
+  Date:      $Date: 2009-04-05 10:56:46 $
+  Version:   $Revision: 1.58 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,7 +27,7 @@
 #include "itkVersion.h"
 #include <stdlib.h>
 #include <ctype.h>
-#include <cstring>
+#include <string.h>
 #include <algorithm>
 #include <map>
 

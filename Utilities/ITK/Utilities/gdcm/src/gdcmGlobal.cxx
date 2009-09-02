@@ -3,8 +3,8 @@
   Program:   gdcm
   Module:    $RCSfile: gdcmGlobal.cxx,v $
   Language:  C++
-  Date:      $Date: 2006-07-10 20:08:21 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-24 03:48:46 $
+  Version:   $Revision: 1.9 $
                                                                                 
   Copyright (c) CREATIS (Centre de Recherche et d'Applications en Traitement de
   l'Image). All rights reserved. See Doc/License.txt or
@@ -24,6 +24,9 @@
 #include "gdcmDictGroupName.h"
 #include "gdcmDictSet.h"
 #include "gdcmDicomDirElement.h"
+
+#include <stdlib.h> // srand
+#include <time.h>   // time
 
 namespace gdcm 
 {
@@ -72,6 +75,7 @@ Global::Global()
    TranSyn   = new TS();
    GroupName = new DictGroupName();
    ddElem    = new DicomDirElement();
+   srand( time(0) ); // rand() is used in the internal implementation of CreateUniqueUID
 }
 
 /**

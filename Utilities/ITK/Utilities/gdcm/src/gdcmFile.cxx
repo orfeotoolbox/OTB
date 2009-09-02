@@ -3,8 +3,8 @@
   Program:   gdcm
   Module:    $RCSfile: gdcmFile.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-12-11 15:03:30 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2009-04-29 21:40:53 $
+  Version:   $Revision: 1.28 $
                                                                                 
   Copyright (c) CREATIS (Centre de Recherche et d'Applications en Traitement de
   l'Image). All rights reserved. See Doc/License.txt or
@@ -523,6 +523,22 @@ bool File::GetSpacing(float &xspacing, float &yspacing, float &zspacing)
        zspacing = 1.;
        return false;
        }
+     return true;
+     }
+   else if( sopclassuid_used == "RT Dose Storage" )
+     {
+     // (3004,000c) DS [0.0\-2.5\-5.0\-7.5\-10.0\-12.5... # 132,23 GridFrameOffsetVector
+     DocEntry *p3 = GetDocEntry(0x3004,0x000c);
+     if( !p3 ) return false;
+     ContentEntry *entry2 = dynamic_cast<ContentEntry *>(p3);
+     std::string gridframeoffset = entry2->GetValue();
+     float z1, z2;
+     if ( sscanf( gridframeoffset.c_str(), "%f\\%f", &z1, &z2) != 2 )
+       {
+       zspacing = 1.;
+       return false;
+       }
+     zspacing = z2 - z1; // can be negative ...
      return true;
      }
 

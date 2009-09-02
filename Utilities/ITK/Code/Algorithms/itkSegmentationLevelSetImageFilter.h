@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSegmentationLevelSetImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-27 19:30:15 $
-  Version:   $Revision: 1.35 $
+  Date:      $Date: 2009-04-23 03:53:37 $
+  Version:   $Revision: 1.36 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -289,7 +289,7 @@ public:
    * expansion/contraction as appropriate to a particular application or data
    * set. */
   itkSetMacro(ReverseExpansionDirection, bool);
-  itkGetMacro(ReverseExpansionDirection, bool);
+  itkGetConstMacro(ReverseExpansionDirection, bool);
   itkBooleanMacro(ReverseExpansionDirection);
 
   /** Turn On/Off automatic generation of Speed and Advection terms when Update
@@ -298,7 +298,7 @@ public:
       GenerateSpeedImage() and GenerateAdvectionImage() should be called prior
       to updating the filter. */
   itkSetMacro(AutoGenerateSpeedAdvection, bool);
-  itkGetMacro(AutoGenerateSpeedAdvection, bool);
+  itkGetConstMacro(AutoGenerateSpeedAdvection, bool);
   itkBooleanMacro(AutoGenerateSpeedAdvection);
   
   /** Combined scaling of the propagation and advection speed

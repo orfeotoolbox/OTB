@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkChainCodeToFourierSeriesPathFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-13 18:54:26 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-04-06 00:05:53 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -89,8 +89,8 @@ ChainCodeToFourierSeriesPathFilter<TInputChainCodePath,TOutputFourierSeriesPath>
       for( int d=0; d<dimension; d++ )
         indexVector[d] = index[d];
       
-      cosCoefficient += indexVector * (cos(theta)/numSteps);
-      sinCoefficient += indexVector * (sin(theta)/numSteps);
+      cosCoefficient += indexVector * (vcl_cos(theta)/numSteps);
+      sinCoefficient += indexVector * (vcl_sin(theta)/numSteps);
       }
     
     outputPtr->AddHarmonic( cosCoefficient, sinCoefficient );

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBayesianClassifierImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-25 18:28:13 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-03-13 14:26:51 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -145,24 +145,9 @@ BayesianClassifierImageFilter<TInputVectorImage, TLabelsType,
     return;
     }
 
+  // the vector length is part of the output information that must be
+  // updated here
   this->GetPosteriorImage()->SetVectorLength( this->GetInput()->GetVectorLength() );
-}
-
-template < class TInputVectorImage, class TLabelsType, 
-           class TPosteriorsPrecisionType, class TPriorsPrecisionType >
-void 
-BayesianClassifierImageFilter<TInputVectorImage, TLabelsType, 
-                              TPosteriorsPrecisionType, TPriorsPrecisionType >
-::AllocateOutputs()
-{
-  // we overload this methods because outputs are of different types
-  // the the templated parameter to ImageSource<OutputImageType>
-  
-  this->GetOutput()->SetBufferedRegion( this->GetOutput()->GetRequestedRegion() );
-  this->GetOutput()->Allocate();
-
-  this->GetPosteriorImage()->SetBufferedRegion( this->GetPosteriorImage()->GetRequestedRegion() );
-  this->GetPosteriorImage()->Allocate();
 }
 
 /**

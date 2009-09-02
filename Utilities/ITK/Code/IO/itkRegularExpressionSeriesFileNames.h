@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRegularExpressionSeriesFileNames.h,v $
   Language:  C++
-  Date:      $Date: 2007-03-22 14:28:52 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-25 12:25:45 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -95,13 +95,13 @@ public:
   /** The index of the submatch that will be used to sort the
    * matches. */
   itkSetMacro(SubMatch, unsigned int);
-  itkGetMacro(SubMatch, unsigned int);
+  itkGetConstMacro(SubMatch, unsigned int);
 
   /** NumericSortOn changes the sort of the submatch field to a
    * numeric sort. NumericSortOff is the default, and sorts the
    * submatch alphabetically. */
   itkSetMacro(NumericSort,bool);
-  itkGetMacro(NumericSort,bool);
+  itkGetConstMacro(NumericSort,bool);
   itkBooleanMacro(NumericSort);
 
   /** Returns a vector containing the series' file names. The file

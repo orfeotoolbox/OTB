@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNeighborhoodConnectedImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 19:33:45 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-04-21 12:29:40 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -36,6 +36,36 @@ NeighborhoodConnectedImageFilter<TInputImage, TOutputImage>
   m_Upper = NumericTraits<InputImagePixelType>::max();
   m_ReplaceValue = NumericTraits<OutputImagePixelType>::One;
   m_Radius.Fill(1);
+}
+
+template <class TInputImage, class TOutputImage>
+void
+NeighborhoodConnectedImageFilter<TInputImage, TOutputImage>
+::ClearSeeds()
+{
+  if( this->m_Seeds.size() > 0 )
+    {
+    this->m_Seeds.clear();
+    this->Modified();
+    }
+}
+
+template <class TInputImage, class TOutputImage>
+void
+NeighborhoodConnectedImageFilter<TInputImage, TOutputImage>
+::SetSeed(const IndexType & seed)
+{
+  this->ClearSeeds();
+  this->AddSeed ( seed );
+}
+
+template <class TInputImage, class TOutputImage>
+void
+NeighborhoodConnectedImageFilter<TInputImage, TOutputImage>
+::AddSeed ( const IndexType & seed )
+{
+  this->m_Seeds.push_back ( seed );
+  this->Modified();
 }
 
 /**

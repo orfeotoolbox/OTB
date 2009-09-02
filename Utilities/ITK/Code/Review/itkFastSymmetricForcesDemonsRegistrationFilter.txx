@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFastSymmetricForcesDemonsRegistrationFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-11-07 19:39:44 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-04-05 23:09:19 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -232,8 +232,6 @@ void
 FastSymmetricForcesDemonsRegistrationFilter<TFixedImage,TMovingImage,TDeformationField>
 ::ApplyUpdate(TimeStepType dt)
 {
-  this->GetUpdateBuffer()->Modified();
-   
   // If we smooth the update buffer before applying it, then the are
   // approximating a viscuous problem as opposed to an elastic problem
   if ( this->GetSmoothUpdateField() )
@@ -242,7 +240,7 @@ FastSymmetricForcesDemonsRegistrationFilter<TFixedImage,TMovingImage,TDeformatio
     }
 
   // use time step if necessary
-  if ( fabs(dt - 1.0)>1.0e-4 )
+  if ( vcl_fabs(dt - 1.0)>1.0e-4 )
     {
     itkDebugMacro( "Using timestep: " << dt );
     m_Multiplier->SetConstant( dt );

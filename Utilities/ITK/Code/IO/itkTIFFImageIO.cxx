@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTIFFImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-09-13 21:11:48 $
-  Version:   $Revision: 1.64 $
+  Date:      $Date: 2009-04-05 10:56:48 $
+  Version:   $Revision: 1.65 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,6 +23,8 @@
 #include "itkRGBAPixel.h"
 #include <itksys/SystemTools.hxx>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include <sys/stat.h>
 

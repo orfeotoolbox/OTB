@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCovarianceCalculator.h,v $
   Language:  C++
-  Date:      $Date: 2008-06-30 15:34:57 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-03-04 15:23:43 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,8 +23,8 @@
 #include "itkArray.h"
 #include "itkVariableSizeMatrix.h"
 
-namespace itk{ 
-namespace Statistics{
+namespace itk { 
+namespace Statistics {
   
 /** \class CovarianceCalculator
  * \brief Calculates the covariance matrix of the target sample data.
@@ -55,10 +55,10 @@ class CovarianceCalculator :
 {
 public:
   /** Standard class typedefs. */
-  typedef CovarianceCalculator Self;
+  typedef CovarianceCalculator           Self;
   typedef SampleAlgorithmBase< TSample > Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef SmartPointer<Self>             Pointer;
+  typedef SmartPointer<const Self>       ConstPointer;
 
   /** Standard Macros */
   itkTypeMacro(CovarianceCalculator, SampleAlgorithmBase);
@@ -103,8 +103,8 @@ protected:
   void ComputeCovarianceWithoutGivenMean( void );
 
 private:
-  MeanType* m_Mean;
-  MeanType* m_InternalMean;
+  MeanType*  m_Mean;
+  MeanType*  m_InternalMean;
   OutputType m_Output;
 }; // end of class
     
@@ -116,4 +116,3 @@ private:
 #endif
 
 #endif
-

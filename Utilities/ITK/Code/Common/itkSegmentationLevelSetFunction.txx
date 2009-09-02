@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSegmentationLevelSetFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-03-03 13:58:53 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-03-03 15:09:09 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkSegmentationLevelSetFunction_txx_
-#define __itkSegmentationLevelSetFunction_txx_
+#ifndef __itkSegmentationLevelSetFunction_txx
+#define __itkSegmentationLevelSetFunction_txx
 
 #include "itkSegmentationLevelSetFunction.h"
 
@@ -113,7 +113,7 @@ SegmentationLevelSetFunction<TImageType, TFeatureImageType>
     return ( m_VectorCast(m_VectorInterpolator->EvaluateAtContinuousIndex(cdx)));
     }
   //Just return the default else
-    return ( m_AdvectionImage->GetPixel(idx) );
+  return ( m_AdvectionImage->GetPixel(idx) );
   
 }
 

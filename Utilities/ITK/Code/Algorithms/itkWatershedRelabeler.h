@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWatershedRelabeler.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-27 19:30:18 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-04-23 03:53:38 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -125,7 +125,7 @@ public:
   /** Set/Get the percentage of the maximum saliency level
    * to merge to. */
   itkSetClampMacro(FloodLevel, double, 0.0, 1.0);
-  itkGetMacro(FloodLevel, double);
+  itkGetConstMacro(FloodLevel, double);
 
   /** Standard ProcessObject method used in implementing mini-pipelines */
   void GraftOutput(ImageType *graft);

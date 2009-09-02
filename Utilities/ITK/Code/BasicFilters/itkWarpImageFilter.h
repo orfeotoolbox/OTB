@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWarpImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 17:31:02 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2009-04-25 12:28:12 $
+  Version:   $Revision: 1.30 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -16,7 +16,7 @@
 =========================================================================*/
 #ifndef __itkWarpImageFilter_h
 #define __itkWarpImageFilter_h
-
+#include "itkImageBase.h"
 #include "itkImageToImageFilter.h"
 #include "itkInterpolateImageFunction.h"
 #include "itkLinearInterpolateImageFunction.h"
@@ -76,7 +76,7 @@ namespace itk
  * \warning This filter assumes that the input type, output type
  * and deformation field type all have the same number of dimensions.
  *
- * \ingroup GeometricTransforms MultiThreaded
+ * \ingroup GeometricTransforms MultiThreaded Streamed
  */
 template <
   class TInputImage,
@@ -120,6 +120,8 @@ public:
                       TInputImage::ImageDimension );
   itkStaticConstMacro(DeformationFieldDimension, unsigned int,
                       TDeformationField::ImageDimension );
+  /** typedef for base image type at the current ImageDimension */
+  typedef ImageBase<itkGetStaticConstMacro(ImageDimension)> ImageBaseType;
 
   /** Deformation field typedef support. */
   typedef TDeformationField                        DeformationFieldType;
@@ -169,11 +171,27 @@ public:
   itkSetMacro(OutputDirection, DirectionType );
   itkGetConstReferenceMacro(OutputDirection, DirectionType );
 
+  /** Helper method to set the output parameters based on this image */
+  void SetOutputParametersFromImage ( const ImageBaseType *image );
+
+  /** Set the start index of the output largest possible region. 
+   * The default is an index of all zeros. */
+  itkSetMacro( OutputStartIndex, IndexType );
+
+  /** Get the start index of the output largest possible region. */
+  itkGetConstReferenceMacro( OutputStartIndex, IndexType );
+
+  /** Set the size of the output image. */
+  itkSetMacro( OutputSize, SizeType );
+
+  /** Get the size of the output image. */
+  itkGetConstReferenceMacro( OutputSize, SizeType );
+     
   /** Set the edge padding value */
   itkSetMacro( EdgePaddingValue, PixelType );
 
   /** Get the edge padding value */
-  itkGetMacro( EdgePaddingValue, PixelType );
+  itkGetConstMacro( EdgePaddingValue, PixelType );
 
   /** WarpImageFilter produces an image which is a different
    * size than its input image. As such, it needs to provide an
@@ -226,13 +244,24 @@ private:
   WarpImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  /** This function should be in an interpolator but none of the ITK
+   * interpolators at this point handle edge conditions properly
+   */
+  DisplacementType EvaluateDeformationAtPhysicalPoint(const PointType &p);
+
   PixelType                  m_EdgePaddingValue;
   SpacingType                m_OutputSpacing;
   PointType                  m_OutputOrigin;
   DirectionType              m_OutputDirection;
 
   InterpolatorPointer        m_Interpolator;
-  
+  SizeType                   m_OutputSize;        // Size of the output image
+  IndexType                  m_OutputStartIndex;  // output image start index
+  bool                       m_DefFieldSizeSame;
+  // variables for deffield interpoator
+  IndexType m_StartIndex,m_EndIndex;
+
+
 };
 
 } // end namespace itk

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPathToImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 16:30:49 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-04-25 12:27:50 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -78,9 +78,9 @@ public:
   /** Set/Get the value for pixels on and off the path. 
   * By default, this filter will return a "0" image with path pixels set to 1 */
   itkSetMacro(PathValue, ValueType);
-  itkGetMacro(PathValue, ValueType);
+  itkGetConstMacro(PathValue, ValueType);
   itkSetMacro(BackgroundValue, ValueType);
-  itkGetMacro(BackgroundValue, ValueType);
+  itkGetConstMacro(BackgroundValue, ValueType);
 
   /** The origin of the output image. The origin is the geometric
    * coordinates of the index (0,0,...,0).  It is stored internally
@@ -92,7 +92,7 @@ public:
 
   /** Set/Get Size */
   itkSetMacro(Size,SizeType);
-  itkGetMacro(Size,SizeType);
+  itkGetConstMacro(Size,SizeType);
 
 protected:
   PathToImageFilter();

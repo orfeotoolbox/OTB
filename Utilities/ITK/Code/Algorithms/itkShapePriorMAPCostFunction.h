@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShapePriorMAPCostFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-27 19:30:15 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-04-23 03:53:37 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -94,11 +94,11 @@ public:
 
   /** Set/Get the array of shape parameters mean. */
   itkSetMacro( ShapeParameterMeans, ArrayType );
-  itkGetMacro( ShapeParameterMeans, ArrayType );
+  itkGetConstMacro( ShapeParameterMeans, ArrayType );
 
   /** Set/Get the array of shape parameters standard deviation. */
   itkSetMacro( ShapeParameterStandardDeviations, ArrayType );
-  itkGetMacro( ShapeParameterStandardDeviations, ArrayType );
+  itkGetConstMacro( ShapeParameterStandardDeviations, ArrayType );
 
   /** Set/Get the weights for each term. Default is a vector of all ones. 
    * The weights are applied to terms in the following order:

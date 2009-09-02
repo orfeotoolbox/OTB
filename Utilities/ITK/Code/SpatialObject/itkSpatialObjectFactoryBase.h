@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSpatialObjectFactoryBase.h,v $
   Language:  C++
-  Date:      $Date: 2007-01-28 19:24:57 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-04-07 14:34:17 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -28,7 +28,7 @@ namespace itk
  * \brief Create instances of SpatialObjects
  */
 
-class SpatialObjectFactoryBase : public ObjectFactoryBase
+class ITK_EXPORT SpatialObjectFactoryBase : public ObjectFactoryBase
 {
 public:  
   /** Standard class typedefs. */

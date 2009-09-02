@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2007-11-20 20:08:16 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2009-03-03 15:10:26 $
+  Version:   $Revision: 1.28 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkTransform_txx
-#define _itkTransform_txx
+#ifndef __itkTransform_txx
+#define __itkTransform_txx
 
 #include "itkTransform.h"
 
@@ -37,8 +37,6 @@ Transform< TScalarType,NInputDimensions,NOutputDimensions>
 {
   itkWarningMacro(<< "Using default transform constructor.  Should specify NOutputDims and NParameters as args to constructor.");
 }
-
-
 
 /**
  * Constructor

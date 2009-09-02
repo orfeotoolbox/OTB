@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkProgressReporter.h,v $
   Language:  C++
-  Date:      $Date: 2006-07-24 11:41:15 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-03-03 15:08:02 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -95,14 +95,14 @@ public:
     }
 
 protected:
-  ProcessObject* m_Filter;
-  int m_ThreadId;
-  float m_InverseNumberOfPixels;
-  unsigned long m_CurrentPixel;
-  unsigned long m_PixelsPerUpdate;
-  unsigned long m_PixelsBeforeUpdate;
-  float  m_InitialProgress;
-  float  m_ProgressWeight;
+  ProcessObject*  m_Filter;
+  int             m_ThreadId;
+  float           m_InverseNumberOfPixels;
+  unsigned long   m_CurrentPixel;
+  unsigned long   m_PixelsPerUpdate;
+  unsigned long   m_PixelsBeforeUpdate;
+  float           m_InitialProgress;
+  float           m_ProgressWeight;
 
 private:
   ProgressReporter(); //purposely not implemented

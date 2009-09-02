@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimpleFilterWatcher.cxx,v $
   Language:  C++
-  Date:      $Date: 2005-12-10 13:48:34 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-03-03 15:09:25 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -267,4 +267,3 @@ SimpleFilterWatcher
 }
 
 } // end namespace itk
-

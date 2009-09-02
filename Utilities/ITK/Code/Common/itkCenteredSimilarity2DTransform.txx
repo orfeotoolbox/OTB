@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredSimilarity2DTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:36:58 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-04-09 09:23:20 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -194,11 +194,36 @@ CenteredSimilarity2DTransform<TScalarType>::
 CloneInverseTo( Pointer & result ) const
 {
   result = New();
-  result->SetCenter( this->GetCenter() );  // inverse have the same center
-  result->SetScale( 1.0 / this->GetScale() );
-  result->SetAngle( -this->GetAngle() );
-  result->SetTranslation( -( this->GetInverseMatrix() 
+  this->GetInverse(result.GetPointer());
+}
+
+// return an inverse transformation
+template<class TScalarType>
+bool
+CenteredSimilarity2DTransform<TScalarType>::
+GetInverse( Self* inverse) const
+{
+  if(!inverse)
+    {
+    return false;
+    }
+
+  inverse->SetCenter( this->GetCenter() );  // inverse have the same center
+  inverse->SetScale( 1.0 / this->GetScale() );
+  inverse->SetAngle( -this->GetAngle() );
+  inverse->SetTranslation( -( this->GetInverseMatrix() 
                                                   * this->GetTranslation() ) );
+  return true;
+}
+
+// Return an inverse of this transform
+template<class TScalarType>
+typename CenteredSimilarity2DTransform<TScalarType>::InverseTransformBasePointer
+CenteredSimilarity2DTransform<TScalarType>
+::GetInverseTransform() const
+{
+  Pointer inv = New();
+  return GetInverse(inv) ? inv.GetPointer() : NULL;
 }
 
 // Create and return a clone of the transformation

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorMeanImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2007-02-05 13:35:53 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-03-03 15:11:41 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -50,13 +50,13 @@ class ITK_EXPORT VectorMeanImageFunction :
 {
 public:
   /** Standard class typedefs. */
-  typedef VectorMeanImageFunction Self;
+  typedef VectorMeanImageFunction   Self;
   typedef ImageFunction<TInputImage, 
     FixedArray< 
       ITK_TYPENAME NumericTraits<typename TInputImage::PixelType::ValueType>::RealType,
       ::itk::GetVectorDimension<typename TInputImage::PixelType>::VectorDimension >,
-    TCoordRep > Superclass;
-  typedef SmartPointer<Self> Pointer;
+    TCoordRep >                     Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
   
   /** Run-time type information (and related methods). */
@@ -96,16 +96,16 @@ public:
   /** Evaluate the function at non-integer positions */
   virtual RealType Evaluate( const PointType& point ) const
     { 
-      IndexType index;
-      this->ConvertPointToNearestIndex( point, index );
-      return this->EvaluateAtIndex( index ); 
+    IndexType index;
+    this->ConvertPointToNearestIndex( point, index );
+    return this->EvaluateAtIndex( index ); 
     }
   virtual RealType EvaluateAtContinuousIndex( 
     const ContinuousIndexType& cindex ) const
     { 
-      IndexType index;
-      this->ConvertContinuousIndexToNearestIndex( cindex, index );
-      return this->EvaluateAtIndex( index ) ; 
+    IndexType index;
+    this->ConvertContinuousIndexToNearestIndex( cindex, index );
+    return this->EvaluateAtIndex( index ); 
     }
   
   /** Get/Set the radius of the neighborhood over which the
@@ -144,4 +144,3 @@ private:
 #endif
 
 #endif
-

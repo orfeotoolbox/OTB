@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSmartPointer.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-16 20:15:32 $
-  Version:   $Revision: 1.39 $
+  Date:      $Date: 2009-03-03 15:09:28 $
+  Version:   $Revision: 1.40 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -56,7 +56,7 @@ public:
   /** Constructor to pointer p  */
   SmartPointer (ObjectType *p):
     m_Pointer(p)
-    { this->Register(); }                             
+    { this->Register(); }
   
   /** Destructor  */
   ~SmartPointer ()
@@ -75,17 +75,17 @@ public:
   
   /** Test if the pointer has been initialized */
   bool IsNotNull() const
-  { return m_Pointer != 0; }
+    { return m_Pointer != 0; }
   bool IsNull() const
-  { return m_Pointer == 0; }
+    { return m_Pointer == 0; }
 
   /** Template comparison operators. */
-  template <typename R>
-  bool operator == ( R r ) const
+  template <typename TR>
+  bool operator == ( TR r ) const
     { return (m_Pointer == static_cast<const ObjectType*>(r) ); }
 
-  template <typename R>
-  bool operator != ( R r ) const
+  template <typename TR>
+  bool operator != ( TR r ) const
     { return (m_Pointer != static_cast<const ObjectType*>(r) ); }
     
   /** Access function to pointer. */
@@ -114,7 +114,7 @@ public:
   
   /** Overload operator assignment.  */
   SmartPointer &operator = (ObjectType *r)
-    {                                                              
+    {
     if (m_Pointer != r)
       {
       ObjectType* tmp = m_Pointer; //avoid recursive unregisters by retaining temporarily

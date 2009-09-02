@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiResolutionImageRegistrationMethod.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-26 21:45:51 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-04-23 03:53:36 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -186,10 +186,10 @@ public:
 
   /** Set/Get the number of multi-resolution levels. */
   void SetNumberOfLevels( unsigned long numberOfLevels );
-  itkGetMacro( NumberOfLevels, unsigned long );
+  itkGetConstMacro( NumberOfLevels, unsigned long );
 
   /** Get the current resolution level being processed. */
-  itkGetMacro( CurrentLevel, unsigned long );
+  itkGetConstMacro( CurrentLevel, unsigned long );
 
   /** Set/Get the initial transformation parameters. */
   itkSetMacro( InitialTransformParameters, ParametersType );

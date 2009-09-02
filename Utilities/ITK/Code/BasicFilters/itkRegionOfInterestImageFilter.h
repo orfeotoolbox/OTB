@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRegionOfInterestImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 16:30:51 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-04-25 12:28:05 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -73,7 +73,7 @@ public:
 
   /** Set/Get the output image region. */
   itkSetMacro(RegionOfInterest, RegionType);
-  itkGetMacro(RegionOfInterest, RegionType);
+  itkGetConstMacro(RegionOfInterest, RegionType);
 
   /** ImageDimension enumeration */
   itkStaticConstMacro(ImageDimension, unsigned int,

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageConstIterator.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 01:41:59 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2009-05-11 21:48:29 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -21,6 +21,7 @@
 #include "itkIndex.h"
 #include "itkSize.h"
 #include "itkOffset.h"
+#include "itkNumericTraits.h"
 
 namespace itk
 {
@@ -172,6 +173,15 @@ public:
     m_Image = ptr;
     m_Buffer = m_Image->GetBufferPointer();
     m_Region = region;
+
+#ifdef ITK_USE_REGION_VALIDATION_IN_ITERATORS
+    if( region.GetNumberOfPixels() > 0 ) // If region is non-empty
+      {
+      const RegionType & bufferedRegion = m_Image->GetBufferedRegion();
+      itkAssertOrThrowMacro( (bufferedRegion.IsInside( m_Region )),
+        "Region " << m_Region << " is outside of buffered region " << bufferedRegion );
+      }
+#endif
 
     // Compute the start offset
     m_Offset = m_Image->ComputeOffset( m_Region.GetIndex() );

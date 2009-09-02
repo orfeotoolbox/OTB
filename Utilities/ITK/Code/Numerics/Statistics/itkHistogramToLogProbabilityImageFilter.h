@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHistogramToLogProbabilityImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-17 09:13:59 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-04-06 11:51:06 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkHistogramLogProbabilityFunction_h
-#define __itkHistogramLogProbabilityFunction_h
+#ifndef __itkHistogramToLogProbabilityImageFilter_h
+#define __itkHistogramToLogProbabilityImageFilter_h
 
 #include "itkHistogramToImageFilter.h"
 
@@ -61,20 +61,19 @@ public:
     
   ~HistogramLogProbabilityFunction() {};
   
-  inline OutputPixelType operator()( const TInput & A )
-  {
+  inline OutputPixelType operator()( const TInput & A ) const
+    {
     if( A )
       {
-      return static_cast<OutputPixelType>(log( static_cast<OutputPixelType>(A) / 
+      return static_cast<OutputPixelType>(vcl_log( static_cast<OutputPixelType>(A) / 
         static_cast<OutputPixelType>(m_TotalFrequency)) / vcl_log(2.0) );
       }
     else
       { // Check for Log 0. Always assume that the frequency is atleast 1.
-      return static_cast<OutputPixelType>(log( static_cast<OutputPixelType>(A+1) / 
+      return static_cast<OutputPixelType>(vcl_log( static_cast<OutputPixelType>(A+1) / 
         static_cast<OutputPixelType>(m_TotalFrequency)) / vcl_log(2.0) );
       }
-       
-  }
+    }
 
   void SetTotalFrequency( unsigned long n ) 
     {
@@ -128,6 +127,3 @@ private:
 } // end namespace itk
 
 #endif
-
-
-

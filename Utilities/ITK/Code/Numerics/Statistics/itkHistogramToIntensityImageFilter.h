@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHistogramToIntensityImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-17 09:13:59 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-04-01 14:36:37 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkHistogramIntensityFunction_h
-#define __itkHistogramIntensityFunction_h
+#ifndef __itkHistogramToIntensityImageFilter_h
+#define __itkHistogramToIntensityImageFilter_h
 
 #include "itkHistogramToImageFilter.h"
 
@@ -42,18 +42,17 @@ class HistogramIntensityFunction
 public:
   
   //Intensity function returns pixels of unsigned long.. 
-  typedef TOutput  OutputPixelType   ;
-  
+  typedef TOutput  OutputPixelType;
   
   HistogramIntensityFunction(): 
       m_TotalFrequency(1) {}
 
   ~HistogramIntensityFunction() {};
  
-  inline OutputPixelType operator()( const TInput & A )
-  {
+  inline OutputPixelType operator()( const TInput & A ) const
+    {
     return static_cast<OutputPixelType>( A );
-  }
+    }
 
   void SetTotalFrequency( unsigned long n ) 
     {
@@ -108,6 +107,3 @@ private:
 } // end namespace itk
 
 #endif
-
-
-

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTransformFactory.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-03 13:37:55 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-03-03 15:10:26 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -43,7 +43,7 @@ public:
                            t->GetTransformTypeAsString().c_str(),
                            1,
                            CreateObjectFunction<T>::New() );
-    };
+    }
 };
 } // end namespace itk
 

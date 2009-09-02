@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptMatchCardinalityImageToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-18 22:25:42 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-04-23 03:43:42 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -123,7 +123,7 @@ public:
    * (MeasureMatchesOn). */
   itkSetMacro(MeasureMatches, bool);
   itkBooleanMacro(MeasureMatches);
-  itkGetMacro(MeasureMatches, bool);
+  itkGetConstMacro(MeasureMatches, bool);
   
   /** Return the multithreader used by this class. */
   MultiThreader * GetMultiThreader()
