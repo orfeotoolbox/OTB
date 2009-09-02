@@ -167,7 +167,7 @@ ADD_TEST(dmTuBSplinesInterpolateTransformDeformationFieldGeneratorNew ${DISPARIT
 	 otbBSplinesInterpolateTransformDeformationFieldGeneratorNew)
 
 ADD_TEST(dmTvBSplinesInterpolateTransformDeformationFieldGenerator ${DISPARITYMAP_TESTS2}
-              --compare-image ${EPSILON_10}
+              --compare-image ${EPSILON_4}
 		${BASELINE}/dmTvBSplinesInterpolateTransformDeformationFieldGenerator.hdr
 		${TEMP}/dmTvBSplinesInterpolateTransformDeformationFieldGenerator.hdr
 	 otbBSplinesInterpolateTransformDeformationFieldGenerator
