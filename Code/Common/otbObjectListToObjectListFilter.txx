@@ -128,7 +128,7 @@ ObjectListToObjectListFilter<TInputList,TOutputList>
 template <class TInputList, class TOutputList>
 void
 ObjectListToObjectListFilter<TInputList,TOutputList>
-::ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex,int threadId)
+::ThreadedGenerateData(unsigned int /*startIndex*/, unsigned int /*stopIndex*/,int /*threadId*/)
 {
   // The following code is equivalent to:
   // itkExceptionMacro("subclass should override this method!!!");

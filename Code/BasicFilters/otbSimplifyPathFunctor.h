@@ -87,7 +87,7 @@ public:
     {
       VertexListConstIteratorType endIt = beforeTheEndIt;
       // while the segment is not consistent, decrement endIt
-      while (!this->TestPathConsistency(vertexList,beginIt, endIt))
+      while (!this->TestPathConsistency(beginIt, endIt))
       {
         --endIt;
       }
@@ -105,9 +105,8 @@ public:
 private:
   double m_Tolerance;
 
-  bool TestPathConsistency(VertexListConstPointerType vertexList,
-                           VertexListConstIteratorType begin,
-                           VertexListConstIteratorType end)
+  bool TestPathConsistency(VertexListConstIteratorType begin,
+                           VertexListConstIteratorType end)const
   {
     VertexListConstIteratorType segmentIt = begin;
     ++segmentIt;

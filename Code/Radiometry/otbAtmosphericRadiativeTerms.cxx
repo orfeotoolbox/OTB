@@ -68,9 +68,9 @@ void
 AtmosphericRadiativeTerms
 ::ValuesInitialization(unsigned int nbChannel)
 {
-  ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
   for (unsigned int j=0; j<nbChannel; ++j)
   {
+    ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
     m_Values.push_back(temp);
   }
   m_IsInitialized = true;
