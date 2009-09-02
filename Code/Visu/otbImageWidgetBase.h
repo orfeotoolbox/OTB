@@ -162,7 +162,7 @@ public:
   virtual IndexType WindowToImageCoordinates(IndexType index);
 
   /** Initialize the widget */
-  virtual void Init(int x, int y, int w, int h, const char * l);
+  virtual void Init(int /*x*/, int /*y*/, int /*w*/, int /*h*/, const char * /*l*/);
 
   /** Get the buffer index from the iterator position and the buffered region */
   inline unsigned int GetBufferIndex(const IndexType& iteratorIndex)
@@ -218,7 +218,7 @@ protected:
   };
 
   /** Resize the widget */
-  virtual void resize(int x, int y, int w, int h) {};
+  virtual void resize(int /*x*/, int /*y*/, int /*w*/, int /*h*/) {};
 
   // END PURE VIRTUAL METHODS
 private:

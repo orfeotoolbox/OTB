@@ -107,7 +107,7 @@ ImageWidgetBase<TPixel>
 template <class TPixel>
 void
 ImageWidgetBase<TPixel>
-::Init(int x, int y, int w, int h, const char * l)
+::Init(int /*x*/, int /*y*/, int /*w*/, int /*h*/, const char * /*l*/)
 {
 #ifdef OTB_GL_USE_ACCEL
   otbMsgDevMacro(<<"Using OTB_GL_USE_ACCEL: ON");

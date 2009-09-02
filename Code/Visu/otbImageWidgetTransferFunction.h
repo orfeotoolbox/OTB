@@ -60,7 +60,7 @@ public:
    * \param value the value to map
    * \return the screen printable value
    */
-  virtual unsigned char Map(PixelType value)
+  virtual unsigned char Map(PixelType )
   {
     return 0;
   };
