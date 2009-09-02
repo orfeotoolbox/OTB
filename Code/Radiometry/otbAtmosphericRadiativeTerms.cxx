@@ -223,7 +223,6 @@ void
 AtmosphericRadiativeTerms
 ::SetIntrinsicAtmosphericReflectance(unsigned int id, const double & val)
 {
-  std::cout<<m_Values.size()<<"  "<<id+1<<std::endl;
   if ( m_Values.size()<id+1 )
   {
     for (unsigned int j=0; j<(id+1-m_Values.size());++j)
@@ -232,7 +231,6 @@ AtmosphericRadiativeTerms
       m_Values.push_back(temp);
     }
   }
- std::cout<<m_Values.size()<<"  "<<id+1<<std::endl;
   m_Values[id]->SetIntrinsicAtmosphericReflectance(val);
 }
 void
