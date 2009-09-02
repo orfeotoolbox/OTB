@@ -832,7 +832,7 @@ ${TEMP}/bfTvVectorImageToAmplitudeImageFilterOutput.tif
 
   ADD_TEST(bfTvFlexibleDistanceWithMissingValue ${BASICFILTERS_TESTS8}
           otbFlexibleDistanceWithMissingValue
-          0.0000001
+          0.000001
 )
 
 # -------            otb::LabelizeNeighborhoodConnectedImageFilter   ----------------------------
