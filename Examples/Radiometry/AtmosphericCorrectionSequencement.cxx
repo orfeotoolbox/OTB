@@ -419,6 +419,8 @@ int main( int argc, char *argv[] )
 
   filterAtmosphericCorrectionParametersTo6SRadiativeTerms->SetInput(
     dataAtmosphericCorrectionParameters );
+
+  filterAtmosphericCorrectionParametersTo6SRadiativeTerms->Update();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
