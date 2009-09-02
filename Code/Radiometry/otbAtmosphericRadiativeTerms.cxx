@@ -21,6 +21,22 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /*********************************** AtmosphericRadiativeTermsSingleChannel***********************************************/
+/** Constructor */
+AtmosphericRadiativeTermsSingleChannel
+::AtmosphericRadiativeTermsSingleChannel()
+{
+  m_IntrinsicAtmosphericReflectance       = 0.04;
+  m_SphericalAlbedo                       = 0.09;
+  m_TotalGaseousTransmission              = 0.95;
+  m_DownwardTransmittance                 = 0.91;
+  m_UpwardTransmittance                   = 0.94; 
+  m_UpwardDiffuseTransmittance            = 0.09;
+  m_UpwardDirectTransmittance             = 0.85; 
+  m_UpwardDiffuseTransmittanceForRayleigh = 0.05;
+  m_UpwardDiffuseTransmittanceForAerosol  = 0.04;
+}
+
+
 /**PrintSelf method */
 void
 AtmosphericRadiativeTermsSingleChannel
@@ -37,8 +53,6 @@ AtmosphericRadiativeTermsSingleChannel
   os << indent << "Upward Diffuse Transmittance for Rayleigh: " << m_UpwardDiffuseTransmittanceForRayleigh << std::endl;
   os << indent << "Upward Diffuse Transmittance for aerosols: " << m_UpwardDiffuseTransmittanceForAerosol << std::endl;
 }
-
-
 
 
 /*********************************** AtmosphericRadiativeTerms **********************************************************/

@@ -107,7 +107,7 @@ public:
 
 protected:
   /** Constructor */
-  AtmosphericRadiativeTermsSingleChannel() {};
+  AtmosphericRadiativeTermsSingleChannel();
   /** Destructor */
   ~AtmosphericRadiativeTermsSingleChannel() {};
   /**PrintSelf method */
