@@ -171,8 +171,10 @@ SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
   {
     itkGenericExceptionMacro(<<"The FilterFunctionValues vector must have more than 1 values !");
   }
-  if( vcl_abs((static_cast<double>(FilterFunctionValues.size()-1)*L_userStep)-(L_max-L_min)  ) > .000001 )
+  //if( vcl_abs((static_cast<double>(FilterFunctionValues.size()-1)*L_userStep)-(L_max-L_min)  ) > .000001 )
+  if( L_min+static_cast<double>(FilterFunctionValues.size()-1)*L_userStep < L_max )
   {
+    std::cout<<L_min+static_cast<double>(FilterFunctionValues.size()-1)*L_userStep<<"    "<<L_max<<std::endl;
     itkGenericExceptionMacro(<<"The FilterFunctionValues vector size ( ("<<FilterFunctionValues.size()<<"-1) x userstep ("<<L_userStep<<") must be less than the Max spectral value ("<< L_max-L_min<<") !");
   }
 
@@ -185,31 +187,31 @@ SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
     // Stop the interpolation at the max spectral value.
     value = i*SIXSStepOfWavelenghtSpectralBandValues;
     while (L_min+value <= L_max )
-    {
-      // Search the User interval that surround the StepOfWavelenghtSpectralBandValues current value.
-
-      // removed the <= here, might be wrong
-      while (j*L_userStep < value)
       {
-        ++j;
+	// Search the User interval that surround the StepOfWavelenghtSpectralBandValues current value.
+	
+	// removed the <= here, might be wrong
+	while (j*L_userStep < value)
+	  {
+	    ++j;
+	  }
+	
+	// Check if we are not out of bound
+	if (j>=FilterFunctionValues.size())
+	  {
+	    itkGenericExceptionMacro(<<"Index "<<j<<" out of bound for FilterFunctionValues vector (size: "<<FilterFunctionValues.size()<<").");
+	  }
+	
+	double valueTemp;
+	valueTemp = static_cast<double>(FilterFunctionValues[j-1])
+	  + ((static_cast<double>(FilterFunctionValues[j])-static_cast<double>(FilterFunctionValues[j-1]))*invStep)
+	  *(value-L_userStep*(j-1));
+	values.push_back(static_cast<WavelenghtSpectralBandType>(valueTemp));
+	
+	++i;
+	value = i*SIXSStepOfWavelenghtSpectralBandValues;
       }
-
-      // Check if we are not out of bound
-      if (j>=FilterFunctionValues.size())
-      {
-        itkGenericExceptionMacro(<<"Index "<<j<<" out of bound for FilterFunctionValues vector (size: "<<FilterFunctionValues.size()<<").");
-      }
-
-      double valueTemp;
-      valueTemp = static_cast<double>(FilterFunctionValues[j-1])
-                  + ((static_cast<double>(FilterFunctionValues[j])-static_cast<double>(FilterFunctionValues[j-1]))*invStep)
-                  *(value-L_userStep*(j-1));
-      values.push_back(static_cast<WavelenghtSpectralBandType>(valueTemp));
-
-      ++i;
-      value = i*SIXSStepOfWavelenghtSpectralBandValues;
-    }
-
+    
     if (L_min+(i-1)*SIXSStepOfWavelenghtSpectralBandValues != L_max)
     {
       values.push_back(0);
