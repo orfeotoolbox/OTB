@@ -143,8 +143,10 @@ public:
   virtual void SetOrigin( const float origin[2] );
 
   itkGetConstReferenceMacro(Origin, OriginType);
-
-
+  
+  /** Get/Set start index*/
+  itkGetConstReferenceMacro( StartIndex, IndexType );
+  itkSetMacro(StartIndex, IndexType);
     /** Set the spacing (size of a pixel) of the vector data.
      * \sa GetSpacing() */
   virtual void SetSpacing (const SpacingType & spacing);

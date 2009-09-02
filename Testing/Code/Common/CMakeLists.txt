@@ -819,17 +819,22 @@ ADD_TEST(coTuVectorDataToGISTableFilterNew ${COMMON_TESTS10}
 otbVectorDataToGISTableFilterNew
 )
 
-ADD_TEST(coTuVectorDataToGISTableFilter ${COMMON_TESTS10}
-otbVectorDataToGISTableFilter
-${INPUTDATA}/ToulousePoints-examples.shp
-test
-postgres
-postgres
-)
+# ADD_TEST(coTuVectorDataToGISTableFilter ${COMMON_TESTS10}
+# otbVectorDataToGISTableFilter
+# ${INPUTDATA}/ToulousePoints-examples.shp
+# test
+# postgres
+# postgres
+# )
 
 ADD_TEST(coTuLabelMapToGISTableFilterNew ${COMMON_TESTS10}
 otbLabelMapToGISTableFilterNew
 )
+
+ADD_TEST(coTuGISTableToLabelMapFilterNew ${COMMON_TESTS10}
+otbGISTableToLabelMapFilterNew
+)
+
 ADD_TEST(coTuGISTableToVectorDataFilterNew ${COMMON_TESTS10}
 otbGISTableToVectorDataFilterNew
 )
@@ -1007,8 +1012,9 @@ otbPostGISConnectionImplementationPerformTransaction.cxx
 otbGISTableNew.cxx
 otbPostGISTableNew.cxx
 otbVectorDataToGISTableFilterNew.cxx
-otbVectorDataToGISTableFilter.cxx
+# otbVectorDataToGISTableFilter.cxx
 otbLabelMapToGISTableFilterNew.cxx
+otbGISTableToLabelMapFilterNew.cxx
 otbGISTableToVectorDataFilterNew.cxx
 )
 ENDIF(OTB_USE_PQXX)
