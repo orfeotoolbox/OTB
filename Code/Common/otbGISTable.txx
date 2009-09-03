@@ -25,18 +25,43 @@
 namespace otb
 {
 
-template <class TConnectionImplementation, unsigned int SpatialDimension>
-GISTable<TConnectionImplementation, SpatialDimension>
+template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
+      GISTable<TConnectionImplementation, TPrecision, SpatialDimension>
 ::GISTable()
 {
   m_TableName = "";
   m_Connection = ConnectionType::New();
+  m_Srid = -1;
 }
 
 
-template <class TConnectionImplementation, unsigned int SpatialDimension>
+template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
 void
-GISTable<TConnectionImplementation, SpatialDimension>
+GISTable<TConnectionImplementation, TPrecision, SpatialDimension>
+  ::SetProjectionRef(std::string projectionRef)
+{
+  itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
+
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef );
+  this->Modified();
+}
+
+template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
+std::string
+GISTable<TConnectionImplementation, TPrecision, SpatialDimension>
+  ::GetProjectionRef() const
+{
+  const itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
+
+  std::string projectionRef;
+  itk::ExposeMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef );
+
+  return projectionRef;
+}
+
+template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
+void
+    GISTable<TConnectionImplementation, TPrecision, SpatialDimension>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
@@ -46,6 +71,8 @@ GISTable<TConnectionImplementation, SpatialDimension>
   os<<"Table name: "<< m_TableName<<std::endl;
 
 }
+
+
 } // end namespace otb
 
 #endif

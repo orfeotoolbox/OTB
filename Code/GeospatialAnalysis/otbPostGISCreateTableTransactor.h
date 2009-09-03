@@ -76,6 +76,8 @@ public:
   bool GetRemoveExistingTable() const;
 
   ResultType GetResult() const;
+  
+  void CreateGISTIndex (pqxx::nontransaction &T);
     
 protected:
   

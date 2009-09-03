@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkPostGISFromStringTransactor_h
-#define __itkPostGISFromStringTransactor_h
+#ifndef __otbPostGISFromStringTransactor_h
+#define __otbPostGISFromStringTransactor_h
 
 #include <pqxx/pqxx>
 #include <string>
@@ -61,7 +61,7 @@ public:
 
   std::string GetTransactionString() const;
 
-  void SetTrsnactionString(const std::string& trans);
+  void SetTransactionString(const std::string& trans);
 
 
   ResultType GetResult() const;
