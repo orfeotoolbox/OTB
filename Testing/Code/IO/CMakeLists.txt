@@ -1424,6 +1424,19 @@ ADD_TEST(ioTvossimElevManagerTest3 ${IO_TESTS12}
 #         -1.8870830 52.0135758  0.024363378967 -0.018457085039 232 422
         )
 
+#This test investigate the problem with the ossimElevManager
+# - differences between plaforms
+# - file descriptor leak
+ADD_TEST(ioTvossimElevManagerTest4 ${IO_TESTS12}
+--compare-image ${EPSILON_9}  ${BASELINE}/ioTvossimElevManagerTest3.tif
+                        ${TEMP}/ioTvossimElevManagerTest4.hdr
+        otbOssimElevManagerTest4
+         ${INPUTDATA}/DEM/srtm_directory
+         ${TEMP}/ioTvossimElevManagerTest4
+         -1.8 52   0.02 -0.018 232 422
+        )
+
+
 ADD_TEST(ioTvossimElevManagerTest2 ${IO_TESTS12}
 --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvossimElevManagerTest2.txt
                         ${TEMP}/ioTvossimElevManagerTest2.txt
@@ -2017,6 +2030,7 @@ otbDEMToImageGeneratorNew.cxx
 otbDEMToImageGeneratorTest.cxx
 otbOssimElevManagerTest.cxx
 otbOssimElevManagerTest2.cxx
+otbOssimElevManagerTest4.cxx
 otbDEMToOrthoImageGeneratorNew.cxx
 otbDEMToOrthoImageGeneratorTest.cxx
 otbPrepareSRTMDirectoryNew.cxx
