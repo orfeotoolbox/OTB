@@ -10,19 +10,21 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbLabelObjectToPolygonFunctor_txx
 #define __otbLabelObjectToPolygonFunctor_txx
 
+#include <cassert>
+
 #include "otbLabelObjectToPolygonFunctor.h"
 
 
 
-namespace otb 
+namespace otb
 {
 namespace Functor
 {
@@ -34,7 +36,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
 {
   bool resp = l2.GetIndex()[1]> l1.GetIndex()[1];
   resp = resp
-    || (l2.GetIndex()[1] == l1.GetIndex()[1] 
+    || (l2.GetIndex()[1] == l1.GetIndex()[1]
 	&& (l1.GetIndex()[0]+ static_cast<long>(l1.GetLength())) < l2.GetIndex()[0]);
   return resp;
 }
@@ -54,12 +56,12 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
 
     // Get the internal container
     LineContainerType lcontainer = labelObject->GetLineContainer();
- 
+
     // Sort it
     sort(lcontainer.begin(),lcontainer.end(),&LexicographicalLineCompare);
-    
+
     // Step 1: Fill the internal data set
-    
+
     // Iterates on the line container
     typename LineContainerType::const_iterator lIt = lcontainer.begin();
 
@@ -95,7 +97,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
     m_CurrentPoint = m_StartingPoint;
     m_CurrentRun.Fill(0);
     m_CurrentLine = 0;
-    
+
     bool goesOn = true;
 
     while(goesOn)
@@ -159,14 +161,14 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
 	IndexType firstCandidateRun = Within(m_CurrentPoint,m_CurrentLine+1);
 
 	if(IsRunIndexValid(firstCandidateRun))
-	  {  
+	  {
 	  // Second candidate run
 	  IndexType secondCandidateRun = LeftMostRightEndInside(m_CurrentLine,LeftEnd(m_CurrentRun),firstCandidateRun);
 
 	  if(IsRunIndexValid(secondCandidateRun))
 	    {
 	    // Up-Left case
-	    m_CurrentRun = secondCandidateRun;      
+	    m_CurrentRun = secondCandidateRun;
 	    m_CurrentState = UP_LEFT;
 	    m_PositionFlag = RIGHT_END;
 	    WalkLeft(m_CurrentLine+1,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);
@@ -283,7 +285,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
 	    m_CurrentRun = firstCandidateRun;
 	    m_CurrentState = UP_RIGHT;
 	    m_PositionFlag = RIGHT_END;
-	    WalkRight(m_CurrentLine,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);	    
+	    WalkRight(m_CurrentLine,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);
 	    }
 	  }
 	else
@@ -298,7 +300,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
 	    WalkLeft(m_CurrentLine,m_CurrentPoint,RightEnd(secondCandidateRun),polygon, m_CurrentState);
 	    m_CurrentLine--;
 	    m_CurrentRun = secondCandidateRun;
-	    
+
 	    }
 	  else
 	    {
@@ -306,7 +308,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
 	    m_CurrentState = DOWN_LEFT;
 	    m_PositionFlag = LEFT_END;
 	    WalkLeft(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
-	   
+
 	    }
 	  }
 	break;
@@ -341,7 +343,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
       resp[1]=-1;
       return resp;
       }
-    
+
     long leftoffset = 0;
     long rightoffset = 0;
 
@@ -358,7 +360,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
 
     typename RunsPerLineType::iterator it = m_InternalDataSet.at(line).begin();
     resp[1]=line;
-    
+
     while(resp[0] < 0 && it!= m_InternalDataSet.at(line).end())
       {
       if( point[0]>=(it->GetIndex()[0])+leftoffset && point[0]<(it->GetIndex()[0]+static_cast<long>(it->GetLength()))+rightoffset)
@@ -396,7 +398,7 @@ inline typename LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
 ::IndexType
 LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
 ::RightMostLeftEndInside(unsigned int line, const IndexType & point, const IndexType & run) const
-  {    
+  {
     unsigned int idx = 0;
     IndexType resp;
     resp[0]=-1;
@@ -411,13 +413,13 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
     resp[1]=line;
 
     LineType lrun = m_InternalDataSet.at(run[1]).at(run[0]);
-    
+
     while(resp[0]<0 && it!=m_InternalDataSet.at(line).end())
       {
       /// Index is a the right of point
-      if(it->GetIndex()[0] > point[0] 
+      if(it->GetIndex()[0] > point[0]
 	 /// Index is inside run range
-	 && it->GetIndex()[0]-1 >= lrun.GetIndex()[0] 
+	 && it->GetIndex()[0]-1 >= lrun.GetIndex()[0]
 	 && it->GetIndex()[0]-1 < lrun.GetIndex()[0]+ static_cast<long>(lrun.GetLength()))
 	{
 	resp[0]=idx;
@@ -448,13 +450,13 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
     resp[1]=line;
 
     LineType lrun = m_InternalDataSet.at(run[1]).at(run[0]);
-    
+
     while(resp[0]<0 && it!=m_InternalDataSet.at(line).rend())
       {
       /// Index is a the left of point
-      if(it->GetIndex()[0] + static_cast<long>(it->GetLength()) <= point[0] 
+      if(it->GetIndex()[0] + static_cast<long>(it->GetLength()) <= point[0]
 	 /// right end is inside run range
-	 && it->GetIndex()[0]+ static_cast<long>(it->GetLength()) >= lrun.GetIndex()[0] 
+	 && it->GetIndex()[0]+ static_cast<long>(it->GetLength()) >= lrun.GetIndex()[0]
 	 && it->GetIndex()[0]+ static_cast<long>(it->GetLength()) < lrun.GetIndex()[0]+ static_cast<long>(lrun.GetLength()))
 	{
 	resp[0]=idx;
@@ -503,7 +505,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
 
     m_CurrentPoint = startPoint;
     m_CurrentPoint[0]-=1;
-    
+
     if( m_CurrentPoint[0]> endPoint[0]+1)
       {
       m_CurrentPoint[1]=line+m_LineOffset;
@@ -520,15 +522,15 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
       newPoint+=offset;
       polygon->AddVertex(newPoint);
       }
-  
+
     if(m_CurrentPoint != endPoint)
       {
       m_CurrentPoint = endPoint;
       newPoint = m_CurrentPoint;
       newPoint+=offset;
       polygon->AddVertex(newPoint);
- 
-      }  
+
+      }
   }
 
 template<class TLabelObject, class TPolygon>
@@ -564,7 +566,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
 
     m_CurrentPoint = startPoint;
     m_CurrentPoint[0]+=1;
-    
+
     if(m_CurrentPoint[0]< endPoint[0]-1)
       {
       m_CurrentPoint[1]=line+m_LineOffset;
@@ -581,14 +583,14 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
       newPoint+=offset;
       polygon->AddVertex(newPoint);
       }
-  
+
     if(m_CurrentPoint!=endPoint)
       {
       m_CurrentPoint = endPoint;
       newPoint = m_CurrentPoint;
       newPoint+=offset;
       polygon->AddVertex(newPoint);
-      }    
+      }
   }
 
 } // end namespace Functor
