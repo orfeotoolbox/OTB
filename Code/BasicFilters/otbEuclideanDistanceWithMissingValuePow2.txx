@@ -108,7 +108,7 @@ void
 EuclideanDistanceWithMissingValuePow2< TVector >
 ::SetToMissingValue ( ValueType & v )
 {
-  double zero = 0.0;
+  static double zero;
   v = static_cast<ValueType>( 0.0/zero );
 }
 
