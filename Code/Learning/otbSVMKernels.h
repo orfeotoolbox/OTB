@@ -38,7 +38,7 @@ public:
   };
   virtual ~CustomKernelFunctor() {};
 
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& /*param*/) const
   {
     return ( dot(x, x) - 2.0 * dot( x, y) + dot(y, y) );
   }
@@ -107,7 +107,7 @@ public:
   };
   virtual ~SAMKernelFunctor() {};
 
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& /*param*/) const
   {
     double den = dot(x, x) * dot(y, y);
     if ( den <= 0. )

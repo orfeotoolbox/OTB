@@ -19,6 +19,7 @@
 #include <sstream>
 #include "otbMacro.h"
 
+#include <assert.h>
 
 namespace otb
 {
@@ -51,8 +52,9 @@ void PostGISCreateTableTransactor::operator()(pqxx::nontransaction &T)
     {
     std::stringstream dropCommand;
 
-    dropCommand << "DROP TABLE " << m_TableName;
-
+    //dropCommand << "DROP TABLE " << m_TableName;
+    dropCommand << "DROP TABLE IF EXISTS " << m_TableName;
+    
     otbGenericMsgDebugMacro(<<"Drop Command " << dropCommand.str());
 
     m_Result = T.exec(dropCommand.str());
@@ -61,7 +63,7 @@ void PostGISCreateTableTransactor::operator()(pqxx::nontransaction &T)
   std::stringstream createCommand;
 
   createCommand << "CREATE TABLE "<< m_TableName
-		<<" (id serial PRIMARY KEY,genre text);";
+		<<" (id serial PRIMARY KEY, genre TEXT);";
 
   otbGenericMsgDebugMacro(<<"Create Command " << createCommand.str());
   m_Result = T.exec(createCommand.str());
@@ -69,17 +71,27 @@ void PostGISCreateTableTransactor::operator()(pqxx::nontransaction &T)
   std::stringstream addGeometryCommand;
 
   addGeometryCommand << "SELECT AddGeometryColumn( '"<< m_TableName <<
-    "', 'geom', "<< m_SRID <<", 'GEOMETRY',"<< m_Dimension <<" );";
+    "', 'the_geom', "<< m_SRID <<", 'GEOMETRY',"<< m_Dimension <<" );";
 
+  
+  
+  
   m_Result = T.exec(addGeometryCommand.str());
 
+  /** creation index GIST */
+  std::stringstream addGISTIndexCommand;
+  
+  addGISTIndexCommand << "CREATE INDEX idx_" << m_TableName << "_the_geom ON " << m_TableName << " USING gist( the_geom );";
 
+  otbGenericMsgDebugMacro(<<"Create Command " << addGISTIndexCommand.str());
+  
+  m_Result = T.exec(addGISTIndexCommand.str());
 }
 
 void PostGISCreateTableTransactor::on_commit()
 {
   std::cout << "\t Table is created \t"  << std::endl;
-
+  //T.exec
 }
 
 std::string PostGISCreateTableTransactor::GetTableName() const
@@ -127,6 +139,20 @@ PostGISCreateTableTransactor::ResultType PostGISCreateTableTransactor::GetResult
   return m_Result;
 }
 
+
+
+void PostGISCreateTableTransactor::CreateGISTIndex (pqxx::nontransaction &T)
+{
+  /*
+  std::stringstream addGISTIndexCmd;
+  
+  addGISTIndexCmd << "CREATE INDEX idx_" << m_TableName << "_the_geom ON " << m_TableName << " USING gist( the_geom );";
+
+  otbGenericMsgDebugMacro(<<"Create Command " << addGISTIndexCmd.str());
+  T.exec(addGISTIndexCmd.str());
+  */
+  assert(0);
+}
 
 } // end namespace otb
 

@@ -25,7 +25,7 @@ int otbGISTableNew(int argc, char * argv[])
 {
   typedef otb::PostGISConnectionImplementation GISConnectionType;
 
-  typedef otb::GISTable<GISConnectionType, 2> GISTableType;
+  typedef otb::GISTable<GISConnectionType, double, 2> GISTableType;
 
   //Instantiation
   GISTableType::Pointer data = GISTableType::New();

@@ -26,7 +26,7 @@
 #include <ossim/imaging/ossimJpegTileSource.h>
 #include <ossim/imaging/ossimRadarSatTileSource.h>
 // #include <ossim/imaging/ossimRadarSat2TileSource.h>
-#include <ossim/imaging/ossimTerraSarTileSource.h>
+// #include <ossim/imaging/ossimTerraSarTileSource.h>
 
 static const ossimTrace traceDebug("ossimImageHandlerFactory:debug");
 
@@ -138,18 +138,18 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
 //    delete result;
 
       // test if TerraSAR
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying TerraSAR"
-         << std::endl;
-   }
-   result = new ossimTerraSarTileSource;
-   if(result->open(copyFilename))
-   {
-      return result;
-   }
-   delete result;
+//    if(traceDebug())
+//    {
+//       ossimNotify(ossimNotifyLevel_DEBUG)
+//          << "trying TerraSAR"
+//          << std::endl;
+//    }
+//    result = new ossimTerraSarTileSource;
+//    if(result->open(copyFilename))
+//    {
+//       return result;
+//    }
+//    delete result;
 
    // this must be checked first before the TIFF handler
    if(traceDebug())
@@ -514,19 +514,19 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
 //    delete result;
 
       // TerraSAR
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying TerraSAR"
-         << std::endl;
-   }
-   result = new ossimTerraSarTileSource;
-   if(result->loadState(kwl, prefix))
-   {
-      return result;
-   }
-
-   delete result;
+//    if(traceDebug())
+//    {
+//       ossimNotify(ossimNotifyLevel_DEBUG)
+//          << "trying TerraSAR"
+//          << std::endl;
+//    }
+//    result = new ossimTerraSarTileSource;
+//    if(result->loadState(kwl, prefix))
+//    {
+//       return result;
+//    }
+//
+//    delete result;
 
    // Must be before tiff...
    if(traceDebug())

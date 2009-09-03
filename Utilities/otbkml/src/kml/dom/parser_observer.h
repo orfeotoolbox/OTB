@@ -44,12 +44,12 @@ class ParserObserver {
   }
 
   // Called after this element is created by the parser.
-  virtual bool NewElement(const ElementPtr& element) {
+  virtual bool NewElement(const ElementPtr& /*element*/) {
     return true;  // Default implementation is a NOP: parse continues.
   }
 
   // Called after the given child has been set to the given parent.
-  virtual bool AddChild(const ElementPtr& parent, const ElementPtr& child) {
+  virtual bool AddChild(const ElementPtr& /*parent*/, const ElementPtr& /*child*/) {
     return true;  // Default implementation is a NOP: parse continues.
   }
 };

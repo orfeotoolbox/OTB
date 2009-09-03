@@ -20,6 +20,10 @@
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
+#include "itkPoint.h"
+#include "otbPolyLineParametricPathWithValue.h"
+#include "otbPolygon.h"
+#include "otbObjectList.h"
 
 namespace otb
 {
@@ -31,7 +35,7 @@ namespace otb
  * \sa GISTableFileWriter
  *
  */
-template <class TConnectionImplementation, unsigned int SpatialDimension =2>
+template <class TConnectionImplementation, class TPrecision = double, unsigned int SpatialDimension =2>
 class GISTable
       : public itk::DataObject
 {
@@ -50,20 +54,67 @@ public:
   itkStaticConstMacro(Dimension, unsigned int, SpatialDimension);
 
   /** Typedefs */
+  typedef TPrecision PrecisionType;
+  
+  
+  
   typedef TConnectionImplementation ConnectionType;
   typedef typename ConnectionType::Pointer ConnectionPointerType;
-
+  
+  //typedef TConnectionImplementation::TransactionType TransactionType;
+  
+  typedef itk::Point<TPrecision , SpatialDimension > PointType;
+  typedef PolyLineParametricPathWithValue < TPrecision , SpatialDimension >  LineType;
+  typedef typename LineType::Pointer 	LinePointerType;
+  
+  typedef Polygon < TPrecision > 	        PolygonType;
+  typedef typename PolygonType::Pointer 	                PolygonPointerType;
+  typedef typename PolygonType::ConstPointer 	        PolygonConstPointerType;
+  typedef ObjectList< PolygonType > 	        PolygonListType;
+  typedef typename PolygonListType::Pointer 	        PolygonListPointerType;
+  typedef typename PolygonListType::ConstPointer 	PolygonListConstPointerType;
   /** Acessors */
 
-  itkGetMacro(TableName, std::string);
+  //itkStaticConstMacro(GISDimension, unsigned int, SpatialDimension);
+
+ 
+  itkGetConstMacro(TableName, std::string);
   itkSetMacro(TableName, std::string);
+  
+  itkGetConstMacro(Srid, int);
+  itkSetMacro(Srid, int);
 
   itkGetObjectMacro(Connection, ConnectionType);
   itkSetObjectMacro(Connection, ConnectionType);
 
-
+  /** Clear the vector data  not implemented yet*/
+  virtual bool Clear(){};
   
-
+  /** Get attributes of the Table*/ //TODO implement
+  
+  /** Get srid of the geometric column*/ //TODO implement 
+  //virtual 
+  /** Add Point content to the GIS Table*/ //TODO implement
+  virtual void InsertPoint( const PointType &pt, const std::string & attribute = 0 ){};
+  virtual void InsertMultiPoint(){};
+  virtual void InsertPolygons(PolygonConstPointerType polygonExtRing, PolygonListConstPointerType polygonListInteriorRing = 0, const std::string & attribute = 0){};
+  virtual void InsertLineString(LinePointerType l, const std::string & attribute = 0){};
+  
+  virtual void CreateTable(bool dropExistingGISTable){};
+  
+  virtual void getGeometryType(){};
+  
+  virtual void SetProjectionRef(std::string projectionRef);
+  virtual std::string GetProjectionRef() const;
+  
+  /** Get string connection usable by OGR library*/
+  virtual std::string GetOGRStrConnection() const {};
+  
+  /** Add an alpha numeric column to the table */
+  virtual const std::string AddVarCharColumn(unsigned int size) {};
+  
+  /** Insert Alpha Numeric Data in the Car char column */
+  virtual void AddStrDataToVarCharColumn(std::string data) {};
 protected:
   /** Constructor */
   GISTable();
@@ -71,7 +122,9 @@ protected:
   virtual ~GISTable() {};
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
+  
+  int m_Srid;
+  
 private:
   GISTable(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -79,7 +132,7 @@ private:
 
   std::string m_TableName;
   ConnectionPointerType m_Connection;
-
+  
   
 };
 }// end namespace otb

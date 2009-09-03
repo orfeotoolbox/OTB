@@ -50,6 +50,7 @@ IF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
   # Removing sources not in use any more (switched to ossim plugins)
   REMOVE(ossim_imaging_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/src/ossim/imaging/ErsSar/*")
   REMOVE(ossim_imaging_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/src/ossim/imaging/RadarSat2/*")
+  REMOVE(ossim_imaging_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/src/ossim/imaging/TerraSar/*")
 
   # Adjust the compiler flags to avoid problems with ossim code.
   IF(CMAKE_COMPILER_IS_GNUCXX)
