@@ -19,6 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbAttributesMapLabelObject_h
 
 #include "itkLabelObject.h"
+#include "itkLabelMap.h"
 #include <map>
 
 namespace otb
@@ -183,8 +184,8 @@ public:
   */
   virtual void CopyDataFrom( const Self * src )
     {
-    Superclass::CopyDataFrom( src );
-    m_Attributes = src->m_Attributes;
+      Superclass::CopyDataFrom( src );
+      m_Attributes = src->m_Attributes;
     }
 
 protected:
