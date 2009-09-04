@@ -45,7 +45,7 @@ public:
 
   ClosePathFunctor()
   {};
-  ~ClosePathFunctor() {};
+  virtual ~ClosePathFunctor() {};
 
   inline OutputPathPointerType operator()(const TInput * input)
   {
