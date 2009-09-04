@@ -1909,12 +1909,12 @@ ADD_TEST(ioTvImageMetadataInterfaceTest ${IO_TESTS17}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(ioTvImageMetadataInterfaceTerraSar ${IO_TESTS18}
-         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvmageMetadataInterfaceTerraSar.txt
-                         ${TEMP}/ioTvImageMetadataInterfaceTerraSar.txt
-        otbImageMetadataInterfaceTerraSar
+ADD_TEST(ioTvTerraSarImageMetadataInterface ${IO_TESTS18}
+         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvTerraSarImageMetadataInterface.txt
+                         ${TEMP}/ioTvITerraSarImageMetadataInterface.txt
+        otbTerraSarImageMetadataInterface
         ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
-        ${TEMP}/ioTvImageMetadataInterfaceTerraSar.txt
+        ${TEMP}/ioTvTerraSarImageMetadataInterface.txt
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
@@ -2084,7 +2084,7 @@ otbImageMetadataInterfaceTest2.cxx
 
 SET(BasicIO_SRCS18
 otbIOTests18.cxx
-otbImageMetadataInterfaceTerraSar.cxx
+otbTerraSarImageMetadataInterface.cxx
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
