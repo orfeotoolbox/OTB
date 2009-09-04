@@ -86,7 +86,7 @@ public:
   
   OGRIOHelper():m_Kept(-1)
   {};
-  ~OGRIOHelper() {};
+  virtual ~OGRIOHelper() {};
   
   private:
   /** Number of layer in the Tree*/
