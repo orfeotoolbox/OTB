@@ -768,7 +768,7 @@ IF(OTB_CPP_CHECK_SOURCE_FILE)
   FIND_PROGRAM(OTB_CPP_CHECK_PROG "")
 ENDIF(OTB_CPP_CHECK_SOURCE_FILE)
 
-FUNCTION(OTB_ADD_EXECUTABLE name sources libraries)
+MACRO(OTB_ADD_EXECUTABLE name sources libraries)
 #  MESSAGE(STATUS "name: ${name}")
 #  MESSAGE(STATUS "sources: ${sources}")
 #  MESSAGE(STATUS "libraries: ${libraries}")
@@ -787,7 +787,7 @@ FUNCTION(OTB_ADD_EXECUTABLE name sources libraries)
                             VERBATIM )
     ENDFOREACH(file)
   ENDIF(OTB_CPP_CHECK_SOURCE_FILE)
-ENDFUNCTION(OTB_ADD_EXECUTABLE)
+ENDMACRO(OTB_ADD_EXECUTABLE)
 
 
 #-----------------------------------------------------------------------------
