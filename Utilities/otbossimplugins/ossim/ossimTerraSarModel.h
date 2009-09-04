@@ -168,6 +168,7 @@ namespace ossimplugins
       std::vector<double> _alt_srgr_coefset;
 
       ossimFilename theProductXmlFile;
+      ossimString   theGenerationTime;
 
       TYPE_DATA
 

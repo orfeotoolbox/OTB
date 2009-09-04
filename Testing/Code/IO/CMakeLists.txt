@@ -47,6 +47,8 @@ IF(OTB_USE_LIBLAS)
   SET(IO_TESTS17    ${CXX_TEST_PATH}/otbIOTests17)
 ENDIF(OTB_USE_LIBLAS)
 
+SET(IO_TESTS18    ${CXX_TEST_PATH}/otbIOTests18)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COMMON_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1935,6 +1937,21 @@ ADD_TEST(ioTvImageMetadataInterfaceTest ${IO_TESTS17}
         ${TEMP}/ioTvImageMetadataInterface.txt
 )
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS18 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(ioTvTerraSarImageMetadataInterface ${IO_TESTS18}
+         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvTerraSarImageMetadataInterface.txt
+                         ${TEMP}/ioTvITerraSarImageMetadataInterface.txt
+        otbTerraSarImageMetadataInterface
+        ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
+        ${TEMP}/ioTvTerraSarImageMetadataInterface.txt
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbIOTests1.cxx
@@ -2114,6 +2131,12 @@ OTB_ADD_EXECUTABLE(otbIOTests10 "${BasicIO_SRCS10}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests11 "${BasicIO_SRCS11}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests12 "${BasicIO_SRCS12}" "OTBIO;OTBTesting")
 
+
+SET(BasicIO_SRCS18
+otbIOTests18.cxx
+otbTerraSarImageMetadataInterface.cxx
+)
+
 # Case for releae 2.2.1
 IF(OTB_COMPILE_JPEG2000)
    IF(NOT BUILD_SHARED_LIBS)
@@ -2130,6 +2153,8 @@ OTB_ADD_EXECUTABLE(otbIOTests16 "${BasicIO_SRCS16}" "OTBIO;OTBTesting")
 IF(OTB_USE_LIBLAS)
   OTB_ADD_EXECUTABLE(otbIOTests17 "${BasicIO_SRCS17}" "OTBIO;OTBTesting")
 ENDIF(OTB_USE_LIBLAS)
+
+OTB_ADD_EXECUTABLE(otbIOTests18 "${BasicIO_SRCS18}" "OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
