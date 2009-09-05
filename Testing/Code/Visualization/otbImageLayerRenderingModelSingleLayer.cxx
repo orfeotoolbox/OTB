@@ -36,7 +36,7 @@ int otbImageLayerRenderingModelSingleLayer( int argc, char * argv[] )
   typedef itk::RGBAPixel<unsigned char>               RGBPixelType;
   typedef otb::Image<RGBPixelType,2>                 OutputImageType;
   typedef otb::VectorImage<double,2>                 ImageType;
-  typedef otb::ImageLayer<ImageType>                 LayerType;
+  typedef otb::ImageLayer<ImageType,OutputImageType> LayerType;
   typedef otb::ImageFileReader<ImageType>            ReaderType;
   typedef otb::ImageLayerGenerator<LayerType>        LayerGeneratorType;
   typedef otb::ImageLayerRenderingModel<OutputImageType>     ModelType;

@@ -35,8 +35,8 @@ int otbImageLayerScalar( int argc, char * argv[] )
 
 
   typedef otb::Image<double,2>                                              ImageType;
-  typedef otb::ImageLayer<ImageType>                                        LayerType;
-  typedef LayerType::OutputImageType                                        OutputImageType;
+  typedef otb::Image<itk::RGBAPixel<unsigned char>, 2 > OutputImageType;
+  typedef otb::ImageLayer<ImageType, OutputImageType> LayerType;
   typedef OutputImageType::PixelType                                        OutputPixelType;
   typedef otb::ImageFileReader<ImageType>                                   ReaderType;
   typedef otb::StreamingShrinkImageFilter<ImageType,ImageType>              ShrinkFilterType;

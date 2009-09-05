@@ -51,7 +51,7 @@ int otbImageViewerEndToEndTwoLayers( int argc, char * argv[] )
   typedef otb::Image<RGBPixelType,2>                 OutputImageType;
   typedef otb::VectorImage<PixelType,2>              ImageType;
   typedef otb::Image<PixelType,2>                    ScalarImageType;
-  typedef otb::ImageLayer<ImageType>                 LayerType;
+  typedef otb::ImageLayer<ImageType, OutputImageType> LayerType;
   typedef otb::ImageFileReader<ImageType>            ReaderType;
   typedef otb::ImageLayerGenerator<LayerType>        LayerGeneratorType;
   typedef otb::ImageLayerRenderingModel<OutputImageType>     ModelType;

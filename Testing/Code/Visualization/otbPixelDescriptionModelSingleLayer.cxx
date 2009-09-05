@@ -26,11 +26,12 @@ int otbPixelDescriptionModelSingleLayer( int argc, char * argv[] )
   // params
   const char * infname = argv[1];
 
-  typedef otb::VectorImage<double,2>                             ImageType;
-  typedef otb::ImageLayer<ImageType>                             LayerType;
-  typedef otb::ImageFileReader<ImageType>                        ReaderType;
-  typedef otb::ImageLayerGenerator<LayerType>                    LayerGeneratorType;
-  typedef otb::PixelDescriptionModel<LayerType::OutputImageType> ModelType;
+  typedef otb::VectorImage<double,2>                    ImageType;
+  typedef otb::Image<itk::RGBAPixel<unsigned char>, 2 > OutputImageType;
+  typedef otb::ImageLayer<ImageType, OutputImageType>   LayerType;
+  typedef otb::ImageFileReader<ImageType>               ReaderType;
+  typedef otb::ImageLayerGenerator<LayerType>           LayerGeneratorType;
+  typedef otb::PixelDescriptionModel<OutputImageType>   ModelType;
 
   // Instantiation
   ModelType::Pointer model = ModelType::New();

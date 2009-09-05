@@ -21,7 +21,8 @@ PURPOSE.  See the above copyright notices for more information.
 int otbImageLayerNew( int argc, char * argv[] )
 {
   typedef otb::Image<double,2> ImageType;
-  typedef otb::ImageLayer<ImageType> LayerType;
+  typedef otb::Image<itk::RGBAPixel<unsigned char>, 2 > OutputImageType;
+  typedef otb::ImageLayer<ImageType, OutputImageType> LayerType;
 
   LayerType::Pointer layer = LayerType::New();
 

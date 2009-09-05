@@ -93,7 +93,7 @@ public:
   typedef Image<RGBPixelType,2>                     OutputImageType;
 
   /** Image layer type */
-  typedef ImageLayer<ImageType>                     ImageLayerType;
+  typedef ImageLayer<ImageType, OutputImageType>    ImageLayerType;
   typedef typename ImageLayerType::Pointer          ImageLayerPointerType;
   typedef typename ImageLayerType::HistogramType    HistogramType;
 

@@ -40,7 +40,8 @@ namespace otb
 *  \ingroup Visualization
  */
 
-template <class TImage, class TOutputImage = otb::Image<itk::RGBAPixel<unsigned char>, 2 > >
+// template <class TImage, class TOutputImage = otb::Image<itk::RGBAPixel<unsigned char>, 2 > >
+template <class TImage, class TOutputImage>
 class ImageLayer
   : public ImageLayerBase<TOutputImage>
 {
