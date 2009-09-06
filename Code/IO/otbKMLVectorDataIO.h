@@ -88,16 +88,7 @@ public:
 
   /** Determine the file type. Returns true if this VectorDataIO can read the
    * file specified. */
-  virtual bool CanReadFile(const char*);
-
-  /** Determine the file type. Returns true if the VectorDataIO can stream read the specified file */
-  virtual bool CanStreamRead()
-  {
-    return false;
-  };
-
-  /*   /\** Set the spacing and dimention information for the set filename. *\/ */
-  /*   virtual void ReadVectorDataInformation(); */
+  virtual bool CanReadFile(const char*) const;
 
   /** Reads the data from disk into the data structure provided. */
   virtual void Read(VectorDataPointerType data);
@@ -106,17 +97,7 @@ public:
 
   /** Determine the file type. Returns true if this VectorDataIO can read the
    * file specified. */
-  virtual bool CanWriteFile(const char*);
-
-  /** Determine the file type. Returns true if the VectorDataIO can stream write the specified file */
-  virtual bool CanStreamWrite()
-  {
-    return false;
-  };
-
-  /*   /\** Writes the spacing and dimentions of the image. */
-  /*    * Assumes SetFileName has been called with a valid file name. *\/ */
-  /*   virtual void WriteVectorDataInformation(); */
+  virtual bool CanWriteFile(const char*) const;
 
   /** Writes the data to disk from the data structure provided */
   virtual void Write(VectorDataConstPointerType data);

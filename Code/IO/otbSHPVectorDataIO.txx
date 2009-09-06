@@ -1,18 +1,18 @@
 /*=========================================================================
 
-Program:   ORFEO Toolbox
-Language:  C++
-Date:      $Date$
-Version:   $Revision$
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
 
 
-Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-PURPOSE.  See the above copyright notices for more information.
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbSHPVectorDataIO_txx
@@ -26,7 +26,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbMacro.h"
 #include "otbSystem.h"
 #include "otbDataNode.h"
-#include "itkPreOrderTreeIterator.h"
 #include "otbMetaDataKey.h"
 #include "otbFileName.h"
 #include "itkTimeProbe.h"
@@ -37,8 +36,7 @@ namespace otb
 template<class TData>
 SHPVectorDataIO<TData>
 ::SHPVectorDataIO():
-  m_DataSource(NULL)//,
-  //m_Kept(0)
+  m_DataSource(NULL)
 {
   // OGR factory registration
   OGRRegisterAll();
@@ -55,7 +53,7 @@ SHPVectorDataIO<TData>::~SHPVectorDataIO()
 
 template<class TData>
 bool
-SHPVectorDataIO<TData>::CanReadFile( const char* filename )
+SHPVectorDataIO<TData>::CanReadFile( const char* filename ) const
 {
   OGRDataSource * poDS = OGRSFDriverRegistrar::Open(filename, FALSE);
   if (poDS == NULL)
@@ -180,7 +178,7 @@ SHPVectorDataIO<TData>
 }
 
 template<class TData>
-bool SHPVectorDataIO<TData>::CanWriteFile( const char* filename )
+bool SHPVectorDataIO<TData>::CanWriteFile( const char* filename ) const
 {
   
   std::string lFileName(filename);
@@ -265,9 +263,7 @@ void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
     }
   DataNodePointerType root = tree->GetRoot()->Get();
 
-  typedef itk::PreOrderTreeIterator<DataTreeType> TreeIteratorType;
-
-  unsigned int m_Kept = 0;
+  unsigned int kept = 0;
 
   OGRLayer * ogrCurrentLayer = NULL;
 //   OGRFeatureVectorType ogrFeatures;
@@ -280,7 +276,7 @@ void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
   
   //Refactoring SHPIO Manuel
   Functor::OGRIOHelper<VectorDataType> IOFunctuor;
-  m_Kept = IOFunctuor.ProcessNodeWrite(inputRoot, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
+  kept = IOFunctuor.ProcessNodeWrite(inputRoot, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
   //ProcessNodeWrite(inputRoot, ogrCollection, ogrCurrentLayer, oSRS);
 
   OGRDataSource::DestroyDataSource( m_DataSource );
@@ -292,7 +288,7 @@ void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
   }
 
   chrono.Stop();
-  std::cout<<"SHPVectorDataIO: file saved in "<<chrono.GetMeanTime()<<" seconds. (" << m_Kept << " elements)"<<std::endl;
+  otbMsgDevMacro(<<"SHPVectorDataIO: file saved in "<<chrono.GetMeanTime()<<" seconds. (" << kept << " elements)");
 
   otbMsgDevMacro( <<" SHPVectorDataIO::Write()  ");
 }
@@ -300,7 +296,7 @@ void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
 
 template<class TData>    
 std::string
-SHPVectorDataIO<TData>::GetOGRDriverName(std::string name)
+SHPVectorDataIO<TData>::GetOGRDriverName(std::string name) const
 {
   std::string extension;
   std::string driverOGR;

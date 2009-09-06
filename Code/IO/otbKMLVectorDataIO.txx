@@ -1,18 +1,18 @@
 /*=========================================================================
 
-Program:   ORFEO Toolbox
-Language:  C++
-Date:      $Date$
-Version:   $Revision$
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
 
 
-Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-PURPOSE.  See the above copyright notices for more information.
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbKMLVectorDataIO_txx
@@ -74,7 +74,7 @@ KMLVectorDataIO<TData>::~KMLVectorDataIO()
 }
 template<class TData>
 bool
-KMLVectorDataIO<TData>::CanReadFile( const char* filename )
+KMLVectorDataIO<TData>::CanReadFile( const char* filename ) const
 {
   std::string lFileName(filename);
   if ( System::IsADirName(lFileName) == true )
@@ -531,7 +531,7 @@ KMLVectorDataIO<TData>
 
 
 template<class TData>
-bool KMLVectorDataIO<TData>::CanWriteFile( const char* filename )
+bool KMLVectorDataIO<TData>::CanWriteFile( const char* filename ) const
 {
   std::string lFileName(filename);
   if ( System::IsADirName(lFileName) == true )

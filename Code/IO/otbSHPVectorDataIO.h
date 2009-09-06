@@ -52,8 +52,6 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(SHPVectorDataIO, VectorDataIOBase);
   
-  
-  
   /** Byte order typedef */
   typedef typename Superclass::ByteOrder  ByteOrder;
 
@@ -85,16 +83,7 @@ public:
 
   /** Determine the file type. Returns true if this VectorDataIO can read the
    * file specified. */
-  virtual bool CanReadFile(const char*);
-
-  /** Determine the file type. Returns true if the VectorDataIO can stream read the specified file */
-  virtual bool CanStreamRead()
-  {
-    return false;
-  };
-
-  /*   /\** Set the spacing and dimention information for the set filename. *\/ */
-  /*   virtual void ReadVectorDataInformation(); */
+  virtual bool CanReadFile(const char*) const;
 
   /** Reads the data from disk into the memory buffer provided. */
   virtual void Read(VectorDataPointerType data);
@@ -103,17 +92,7 @@ public:
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  virtual bool CanWriteFile(const char*);
-
-  /** Determine the file type. Returns true if the VectorDataIO can stream write the specified file */
-  virtual bool CanStreamWrite()
-  {
-    return false;
-  };
-
-  /*   /\** Writes the spacing and dimentions of the image. */
-  /*    * Assumes SetFileName has been called with a valid file name. *\/ */
-  /*   virtual void WriteVectorDataInformation(); */
+  virtual bool CanWriteFile(const char*) const;
 
   /** Writes the data to disk from the memory buffer provided */
   virtual void Write(VectorDataConstPointerType data);
@@ -128,39 +107,13 @@ protected:
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-
-  /** Conversion tools */
-
-//   DataNodePointerType ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry) const;
-// 
-//   DataNodePointerType ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry) const;
-// 
-//   DataNodePointerType ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry) const;
-
-  /** end conversion tools */
-
-//   void ProcessNodeWrite(InternalTreeNodeType * source, OGRGeometryCollection * ogrCollection, OGRLayer * ogrCurrentLayer, OGRSpatialReference * oSRS);
-
 private:
   SHPVectorDataIO(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
-  std::string GetOGRDriverName(std::string name);
-      
+  std::string GetOGRDriverName(std::string name) const;
+ 
   OGRDataSource * m_DataSource;
-
-  //unsigned int m_Kept;
-  
-//   std::string m_OGRDriver;
-
-  /* Is this necessary ? */
-
-  /* Internal method to read header informations */
-  /*   bool InternalReadHeaderInformation(std::fstream & file, const bool reportError); */
-
-  /*   bool    m_FlagWriteVectorDataInformation; */
-  /*   typename VectorDataIOBase<TData>::ByteOrder m_FileByteOrder; */
-  /*   std::fstream m_File; */
 
 };
 

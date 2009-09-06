@@ -113,11 +113,11 @@ public:
 
   /** Determine the file type. Returns true if this VectorDataIO can read the
    * file specified. */
-  virtual bool CanReadFile(const char*) = 0;
+  virtual bool CanReadFile(const char*) const = 0;
 
   /** Determine if the VectorDataIO can stream reading from this
       file. Default is false. */
-  virtual bool CanStreamRead()
+  virtual bool CanStreamRead() const
   {
     return false;
   }
@@ -134,11 +134,11 @@ public:
 
   /** Determine the file type. Returns true if this VectorDataIO can read the
    * file specified. */
-  virtual bool CanWriteFile(const char*)  = 0;
+  virtual bool CanWriteFile(const char*) const  = 0;
 
   /** Determine if the ImageIO can stream writing to this
       file. Default is false. */
-  virtual bool CanStreamWrite()
+  virtual bool CanStreamWrite() const
   {
     return false;
   }
