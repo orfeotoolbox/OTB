@@ -734,6 +734,14 @@ bool ossimplugins::ossimTerraSarProductDoc::getLookDirection(
    return ossim::getPath(path, xdoc, s);
 }
 
+bool ossimplugins::ossimTerraSarProductDoc::getGenerationTime(
+    const ossimXmlDocument* xdoc, ossimString& s) const
+{
+   ossimString path =
+      "/level1Product/generalHeader/generationTime";
+   return ossim::getPath(path, xdoc, s);
+}
+
 bool ossimplugins::ossimTerraSarProductDoc::getRangeGateFirstPixel(
    const ossimXmlDocument* xdoc, ossimString& s) const
 {
