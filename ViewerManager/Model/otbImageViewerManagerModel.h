@@ -81,7 +81,7 @@ public:
   typedef ImageType::Pointer                                                        ImagePointerType;
 
   /** typedef support for layers */
-  typedef otb::ImageLayer<ImageType>                                                 LayerType;
+  typedef otb::ImageLayer<ImageType,ViewerImageType>                                 LayerType;
   typedef LayerType::Pointer                                                         LayerPointerType;
 
   typedef otb::ImageLayerGenerator<LayerType>                                        LayerGeneratorType;
