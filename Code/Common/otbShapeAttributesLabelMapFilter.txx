@@ -82,7 +82,7 @@ ShapeAttributesLabelMapFilter<TImage, TLabelImage>
 template<class TImage, class TLabelImage>
 void
 ShapeAttributesLabelMapFilter<TImage, TLabelImage>
-::ThreadedGenerateData( LabelObjectType * labelObject )
+::ThreadedProcessLabelObject( LabelObjectType * labelObject )
 {
   ImageType * output = this->GetOutput();
   const LabelPixelType & label = labelObject->GetLabel();
