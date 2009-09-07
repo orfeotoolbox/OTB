@@ -108,7 +108,7 @@ InPlaceLabelMapFilter<TInputImage>
       assert( labeObject->GetLabel() == it->first );
 
       typename LabelObjectType::Pointer newLabelObject = LabelObjectType::New();
-      newLabelObject->CopyDataFrom( labeObject );
+      newLabelObject->CopyAllFrom( labeObject );
       
       output->AddLabelObject( newLabelObject );
       }
