@@ -18,6 +18,7 @@
 #define __itkShapeLabelObject_h
 
 #include "itkLabelObject.h"
+#include "itkLabelMap.h"
 #include "itkAffineTransform.h"
 #include "itkMatrix.h"
 
@@ -702,9 +703,9 @@ public:
 
 
 
-  virtual void CopyDataFrom( const Self * src )
+  virtual void CopyAttributesFrom( const Self * src )
     {
-    Superclass::CopyDataFrom( src );
+    Superclass::CopyAttributesFrom( src );
 
     m_Region = src->m_Region;
     m_Size = src->m_Size;
