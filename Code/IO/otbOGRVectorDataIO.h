@@ -32,7 +32,11 @@ namespace otb
 
 /** \class OGRVectorDataIO
  *
- * \brief ImageIO object for reading and writing SHP format vector data
+ * \brief ImageIO object for reading and writing OGR format vector data
+ *
+ * ImageIO object for reading and writing OGR format vector data: it can
+ * handle Esri Shapefile (shp), MapInfo (map) and Geography Markup Language (GML)
+ * and possibly other OGR formats.
  *
  */
 template <class TData> class ITK_EXPORT OGRVectorDataIO
@@ -51,7 +55,7 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(OGRVectorDataIO, VectorDataIOBase);
-  
+
   /** Byte order typedef */
   typedef typename Superclass::ByteOrder  ByteOrder;
 
@@ -110,9 +114,9 @@ protected:
 private:
   OGRVectorDataIO(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   std::string GetOGRDriverName(std::string name) const;
- 
+
   OGRDataSource * m_DataSource;
 
 };
