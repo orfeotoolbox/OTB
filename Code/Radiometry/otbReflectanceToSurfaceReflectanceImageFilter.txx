@@ -96,17 +96,26 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
   // the user has set the filter function values 
   else
     {
-      if( m_FilterFunctionCoef.size() != this->GetInput()->GetNumberOfComponentsPerPixel() )
-	{
-	  itkExceptionMacro(<<"Filter Function and image channels mismatch.");
-	}
+      bool ffvfOK = true;
+      if( m_FilterFunctionCoef.size() == 0 )
+	ffvfOK = false;
+      else if( m_FilterFunctionCoef.size() != this->GetInput()->GetNumberOfComponentsPerPixel() )
+	itkExceptionMacro(<<"Function Values and Input image size dismatch");
+
       for(unsigned int i=0; i<this->GetInput()->GetNumberOfComponentsPerPixel(); i++)
 	{
 	  FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
-	  functionValues->SetFilterFunctionValues(m_FilterFunctionCoef[i]);
+	  // if no ffvf set, set 1 as coef
+	  if(ffvfOK)
+	    functionValues->SetFilterFunctionValues(m_FilterFunctionCoef[i]);
+	    
 	  functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths(dict)[i]);
 	  functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths(dict)[i]);
-	  
+
+	  // if no ffvf set, compute the step to be sure that the valueswavelength are between min and max
+	  if(!ffvfOK)
+	    functionValues->SetUserStep( functionValues->GetMaxSpectralValue()-functionValues->GetMinSpectralValue()/2. );
+	    
 	  m_CorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, functionValues);
 	}
     }

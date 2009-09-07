@@ -33,6 +33,8 @@ FilterFunctionValues
 {
   m_MinSpectralValue = 0;
   m_MaxSpectralValue = 1;
+  // Fill with 1. Size 3 for 6S interpolation
+  m_FilterFunctionValues = ValuesVectorType(3,1.);
   m_UserStep = 0.0025;
 }
 
@@ -138,21 +140,21 @@ AtmosphericCorrectionParameters
     {
       if(bandId != 0)
       {
- 	  	function->SetFilterFunctionValues(vect);
- 	    m_WavelenghtSpectralBand.push_back(function);
- 	  	function = FilterFunctionValues::New();
- 	    vect.clear();
- 	  }
- 	  bandId++;
- 	  function->SetMinSpectralValue(keywordStrings[0].toDouble());
- 	  function->SetMaxSpectralValue(keywordStrings[1].toDouble());
- 	  if(keywordStrings.size() == 3)
-	    function->SetUserStep(keywordStrings[2].toDouble());
-	}
+	function->SetFilterFunctionValues(vect);
+	m_WavelenghtSpectralBand.push_back(function);
+	function = FilterFunctionValues::New();
+	vect.clear();
+      }
+      bandId++;
+      function->SetMinSpectralValue(keywordStrings[0].toDouble());
+      function->SetMaxSpectralValue(keywordStrings[1].toDouble());
+      if(keywordStrings.size() == 3)
+	function->SetUserStep(keywordStrings[2].toDouble());
+    }
     else if(keywordStrings.size()==1)
       vect.push_back(keywordStrings[0].toDouble());
     else if(keywordStrings.size()!=0)
-	  itkExceptionMacro("File "<<filename<<" not valid.");
+      itkExceptionMacro("File "<<filename<<" not valid.");
     }
   function->SetFilterFunctionValues(vect);
   m_WavelenghtSpectralBand.push_back(function);
