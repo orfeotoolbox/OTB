@@ -28,8 +28,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb 
 {
 
-namespace Functor
-{
+
 
 /** \class OGRIOHelper 
  *  \brief This class IO OGR
@@ -93,7 +92,7 @@ public:
   unsigned int m_Kept; 
 }; // end class OGRIOHelper
 
-} // end namespace Functor
+
 
 } // end namespace otb
 

@@ -38,7 +38,7 @@ template<class TData>
 SHPVectorDataIO<TData>
 ::SHPVectorDataIO():
   m_DataSource(NULL)//,
-  //m_Kept(0)
+  //layerKept(0)
 {
   // OGR factory registration
   OGRRegisterAll();
@@ -169,9 +169,9 @@ SHPVectorDataIO<TData>
     /// get a hook on the internal structure
     InternalTreeNodeType * documentPtr = const_cast<InternalTreeNodeType *>(tree->GetNode(document));
     
-    /** IO class functor to convert ogr layer*/
-    Functor::OGRIOHelper<VectorDataType> IOFunctuor;
-    IOFunctuor.ConvertOGRLayerToDataTreeNode(layer, documentPtr);
+    /** IO class helper to convert ogr layer*/
+    OGRIOHelper<VectorDataType> OGRConversion;
+    OGRConversion.ConvertOGRLayerToDataTreeNode(layer, documentPtr);
     
   }// end For each layer
 
@@ -267,7 +267,7 @@ void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
 
   typedef itk::PreOrderTreeIterator<DataTreeType> TreeIteratorType;
 
-  unsigned int m_Kept = 0;
+  unsigned int layerKept = 0;
 
   OGRLayer * ogrCurrentLayer = NULL;
 //   OGRFeatureVectorType ogrFeatures;
@@ -279,9 +279,8 @@ void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
   
   
   //Refactoring SHPIO Manuel
-  Functor::OGRIOHelper<VectorDataType> IOFunctuor;
-  m_Kept = IOFunctuor.ProcessNodeWrite(inputRoot, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
-  //ProcessNodeWrite(inputRoot, ogrCollection, ogrCurrentLayer, oSRS);
+  OGRIOHelper<VectorDataType> IOConversion;
+  layerKept = IOConversion.ProcessNodeWrite(inputRoot, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
 
   OGRDataSource::DestroyDataSource( m_DataSource );
   m_DataSource = NULL;
@@ -292,7 +291,7 @@ void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
   }
 
   chrono.Stop();
-  std::cout<<"SHPVectorDataIO: file saved in "<<chrono.GetMeanTime()<<" seconds. (" << m_Kept << " elements)"<<std::endl;
+  std::cout<<"SHPVectorDataIO: file saved in "<<chrono.GetMeanTime()<<" seconds. (" << layerKept << " elements)"<<std::endl;
 
   otbMsgDevMacro( <<" SHPVectorDataIO::Write()  ");
 }
