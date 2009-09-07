@@ -128,7 +128,7 @@ GISTableToVectorDataFilter<TGISTable, TVectorData>
 //   output->GetDataTree()->Add(folder1,document);
   
   
-  SHPVectorDataIOPointerType gisReader=SHPVectorDataIOType::New();
+  OGRVectorDataIOPointerType gisReader=OGRVectorDataIOType::New();
   
   const std::string inputOGRConnStr=input->GetOGRStrConnection();
   //Try  if the Db is readable

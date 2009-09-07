@@ -36,7 +36,7 @@ void RegisterTests()
   REGISTER_TEST(otbVectorDataFileWriterPolygons);
   REGISTER_TEST(otbVectorDataFileReaderWriter);
   REGISTER_TEST(otbVectorDataFileGeoReaderWriter);
-  REGISTER_TEST(otbSHPVectorDataIONew);
+  REGISTER_TEST(otbOGRVectorDataIONew);
   REGISTER_TEST(otbKMLVectorDataIONew);
   REGISTER_TEST(otbKMLVectorDataIOTestCanRead);
   REGISTER_TEST(otbKMLVectorDataIOTestCanWrite);

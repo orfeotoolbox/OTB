@@ -142,7 +142,7 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
       //Old methods for processing translation to GIS table
       //ProcessNode(inputRoot);
       /**New method for the filter, call the OGR driver for writing data to the Db*/
-      SHPVectorDataIOPointerType gisWriter=SHPVectorDataIOType::New();
+      OGRVectorDataIOPointerType gisWriter=OGRVectorDataIOType::New();
       
       /**Transform connection parametrers to the DB to an OGR connection string (based on PG: for PostGIS)"*/
       const std::string outputOGRConnStr=output->GetOGRStrConnection();

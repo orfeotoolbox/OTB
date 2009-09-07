@@ -23,7 +23,7 @@
 #endif
 
 #include "otbVectorDataIOFactory.h"
-#include "otbSHPVectorDataIOFactory.h"
+#include "otbOGRVectorDataIOFactory.h"
 #include "otbKMLVectorDataIOFactory.h"
 #include "itkObjectFactoryBase.h"
 #include "itkMutexLock.h"
@@ -91,7 +91,7 @@ VectorDataIOFactory<TData>
     itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder( mutex );
     if ( firstTime )
     {
-      itk::ObjectFactoryBase::RegisterFactory( SHPVectorDataIOFactory<TData>::New() );
+      itk::ObjectFactoryBase::RegisterFactory( OGRVectorDataIOFactory<TData>::New() );
       itk::ObjectFactoryBase::RegisterFactory( KMLVectorDataIOFactory<TData>::New() );
       firstTime = false;
     }

@@ -15,10 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSHPVectorDataIO_txx
-#define __otbSHPVectorDataIO_txx
+#ifndef __otbOGRVectorDataIO_txx
+#define __otbOGRVectorDataIO_txx
 
-#include "otbSHPVectorDataIO.h"
+#include "otbOGRVectorDataIO.h"
 
 #include <itksys/SystemTools.hxx>
 #include "itkExceptionObject.h"
@@ -34,8 +34,8 @@
 namespace otb
 {
 template<class TData>
-SHPVectorDataIO<TData>
-::SHPVectorDataIO():
+OGRVectorDataIO<TData>
+::OGRVectorDataIO():
   m_DataSource(NULL)
 {
   // OGR factory registration
@@ -43,7 +43,7 @@ SHPVectorDataIO<TData>
 }
 
 template<class TData>
-SHPVectorDataIO<TData>::~SHPVectorDataIO()
+OGRVectorDataIO<TData>::~OGRVectorDataIO()
 {
   if (m_DataSource != NULL)
     {
@@ -53,7 +53,7 @@ SHPVectorDataIO<TData>::~SHPVectorDataIO()
 
 template<class TData>
 bool
-SHPVectorDataIO<TData>::CanReadFile( const char* filename ) const
+OGRVectorDataIO<TData>::CanReadFile( const char* filename ) const
 {
   OGRDataSource * poDS = OGRSFDriverRegistrar::Open(filename, FALSE);
   if (poDS == NULL)
@@ -69,7 +69,7 @@ SHPVectorDataIO<TData>::CanReadFile( const char* filename ) const
 // Used to print information about this object
 template<class TData>
 void
-SHPVectorDataIO<TData>::PrintSelf(std::ostream& os, itk::Indent indent) const
+OGRVectorDataIO<TData>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }
@@ -77,7 +77,7 @@ SHPVectorDataIO<TData>::PrintSelf(std::ostream& os, itk::Indent indent) const
 // Read vector data
 template<class TData>
 void
-SHPVectorDataIO<TData>
+OGRVectorDataIO<TData>
 ::Read(VectorDataPointerType data)
 {
   // Destroy previous opened data source
@@ -178,7 +178,7 @@ SHPVectorDataIO<TData>
 }
 
 template<class TData>
-bool SHPVectorDataIO<TData>::CanWriteFile( const char* filename ) const
+bool OGRVectorDataIO<TData>::CanWriteFile( const char* filename ) const
 {
   
   std::string lFileName(filename);
@@ -191,7 +191,7 @@ bool SHPVectorDataIO<TData>::CanWriteFile( const char* filename ) const
 }
 
 template<class TData>
-void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
+void OGRVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
 {
   itk::TimeProbe chrono;
   chrono.Start();
@@ -288,15 +288,15 @@ void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
   }
 
   chrono.Stop();
-  otbMsgDevMacro(<<"SHPVectorDataIO: file saved in "<<chrono.GetMeanTime()<<" seconds. (" << kept << " elements)");
+  otbMsgDevMacro(<<"OGRVectorDataIO: file saved in "<<chrono.GetMeanTime()<<" seconds. (" << kept << " elements)");
 
-  otbMsgDevMacro( <<" SHPVectorDataIO::Write()  ");
+  otbMsgDevMacro( <<" OGRVectorDataIO::Write()  ");
 }
 
 
 template<class TData>    
 std::string
-SHPVectorDataIO<TData>::GetOGRDriverName(std::string name) const
+OGRVectorDataIO<TData>::GetOGRDriverName(std::string name) const
 {
   std::string extension;
   std::string driverOGR;
