@@ -181,11 +181,11 @@ public:
   /**
   * This method is overloaded to add the copy of the attributes map.
   */
-  virtual void CopyDataFrom( const Self * src )
+  virtual void CopyAttributesFrom( const Self * src)
     {
-    Superclass::CopyDataFrom( src );
+    Superclass::CopyAttributesFrom( src );
     m_Attributes = src->m_Attributes;
-    }
+   }
 
 protected:
   /** Constructor */
