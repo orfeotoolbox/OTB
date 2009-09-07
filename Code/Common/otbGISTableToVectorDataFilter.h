@@ -22,7 +22,7 @@
 #include "otbVectorDataSource.h"
 #include "otbGISTable.h"
 #include "otbVectorDataFileReader.h"
-#include "otbSHPVectorDataIO.h"
+#include "otbOGRVectorDataIO.h"
 
 namespace otb {
 
@@ -31,7 +31,7 @@ namespace otb {
  *
  * GISTableToVectorDataFilter converts a GIS Table (PostGIS...) to a
  * VectorData.
- * The translation is delegate to the SHPVectorDataIO class (OGRVectorDataIO)
+ * The translation is delegate to the OGRVectorDataIO class (OGRVectorDataIO)
  * which calls the OGR driver to translate GIS layer to a vectorData structure
  * \author Manuel GRIZONNET. CNES, France.
  *
@@ -62,8 +62,8 @@ public:
   typedef typename InputGISTableType::ConnectionType ConnectionType;
   typedef typename InputGISTableType::ConnectionPointerType ConnectionPointerType;
   
-  typedef SHPVectorDataIO<OutputVectorDataType> SHPVectorDataIOType;
-  typedef typename SHPVectorDataIOType::Pointer SHPVectorDataIOPointerType;
+  typedef OGRVectorDataIO<OutputVectorDataType> OGRVectorDataIOType;
+  typedef typename OGRVectorDataIOType::Pointer OGRVectorDataIOPointerType;
   
   typedef VectorDataFileReader<OutputVectorDataType> VectorDataFileReaderType;
   /** ImageDimension constants */

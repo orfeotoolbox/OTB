@@ -15,21 +15,21 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSHPVectorDataIOFactory_h
-#define __otbSHPVectorDataIOFactory_h
+#ifndef __otbOGRVectorDataIOFactory_h
+#define __otbOGRVectorDataIOFactory_h
 
 #include "itkObjectFactoryBase.h"
 
 namespace otb
 {
-/** \class SHPVectorDataIOFactory
- * \brief Creation d'un instance d'un objet VectorDataImageIO utilisant les object factory.
+/** \class OGRVectorDataIOFactory
+ * \brief Create an instance of an OGRVectorDataIOFactory.
  */
-template <class TData> class ITK_EXPORT SHPVectorDataIOFactory : public itk::ObjectFactoryBase
+template <class TData> class ITK_EXPORT OGRVectorDataIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
-  typedef SHPVectorDataIOFactory   Self;
+  typedef OGRVectorDataIOFactory   Self;
   typedef itk::ObjectFactoryBase  Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -42,21 +42,21 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SHPVectorDataIOFactory, itk::ObjectFactoryBase);
+  itkTypeMacro(OGRVectorDataIOFactory, itk::ObjectFactoryBase);
 
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    typename SHPVectorDataIOFactory<TData>::Pointer SHPFactory = SHPVectorDataIOFactory<TData>::New();
+    typename OGRVectorDataIOFactory<TData>::Pointer SHPFactory = OGRVectorDataIOFactory<TData>::New();
     itk::ObjectFactoryBase::RegisterFactory(SHPFactory);
   }
 
 protected:
-  SHPVectorDataIOFactory();
-  virtual ~SHPVectorDataIOFactory();
+  OGRVectorDataIOFactory();
+  virtual ~OGRVectorDataIOFactory();
 
 private:
-  SHPVectorDataIOFactory(const Self&); //purposely not implemented
+  OGRVectorDataIOFactory(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
 };
@@ -66,7 +66,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSHPVectorDataIOFactory.txx"
+#include "otbOGRVectorDataIOFactory.txx"
 #endif
 
 #endif

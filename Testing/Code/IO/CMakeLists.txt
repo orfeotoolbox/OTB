@@ -1638,7 +1638,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ADD_TEST(ioTuOGRVectorDataIO ${IO_TESTS15}
-        otbSHPVectorDataIONew )
+        otbOGRVectorDataIONew )
 
 ADD_TEST(ioTuVectorDataSourceNew ${IO_TESTS15}
         otbVectorDataSourceNew )
@@ -2083,7 +2083,7 @@ otbVectorDataFileWriter.cxx
 otbVectorDataFileWriterPolygons.cxx
 otbVectorDataFileReaderWriter.cxx
 otbVectorDataFileGeoReaderWriter.cxx
-otbSHPVectorDataIONew.cxx
+otbOGRVectorDataIONew.cxx
 otbKMLVectorDataIONew.cxx
 otbKMLVectorDataIOTestCanRead.cxx
 otbKMLVectorDataIOTestCanWrite.cxx

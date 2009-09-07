@@ -15,39 +15,39 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSHPVectorDataIOFactory_txx
-#define __otbSHPVectorDataIOFactory_txx
+#ifndef __otbOGRVectorDataIOFactory_txx
+#define __otbOGRVectorDataIOFactory_txx
 
-#include "otbSHPVectorDataIOFactory.h"
+#include "otbOGRVectorDataIOFactory.h"
 
 #include "itkCreateObjectFunction.h"
 #include "itkVersion.h"
-#include "otbSHPVectorDataIO.h"
+#include "otbOGRVectorDataIO.h"
 
 namespace otb
 {
 template<class TData>
-SHPVectorDataIOFactory<TData>::SHPVectorDataIOFactory()
+OGRVectorDataIOFactory<TData>::OGRVectorDataIOFactory()
 {
   this->RegisterOverride("otbVectorDataIOBase",
-                         "otbSHPVectorDataIO",
+                         "otbOGRVectorDataIO",
                          "SHP Vectordata IO",
                          1,
-                         itk::CreateObjectFunction<SHPVectorDataIO<TData> >::New());
+                         itk::CreateObjectFunction<OGRVectorDataIO<TData> >::New());
 }
 template<class TData>
-SHPVectorDataIOFactory<TData>::~SHPVectorDataIOFactory()
+OGRVectorDataIOFactory<TData>::~OGRVectorDataIOFactory()
 {
 }
 template<class TData>
 const char*
-SHPVectorDataIOFactory<TData>::GetITKSourceVersion(void) const
+OGRVectorDataIOFactory<TData>::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 template<class TData>
 const char*
-SHPVectorDataIOFactory<TData>::GetDescription() const
+OGRVectorDataIOFactory<TData>::GetDescription() const
 {
   return "SHP VectorDataIO Factory, allows the loading of ESRI shapefile vector data into OTB";
 }

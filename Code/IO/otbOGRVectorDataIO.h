@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSHPVectorDataIO_h
-#define __otbSHPVectorDataIO_h
+#ifndef __otbOGRVectorDataIO_h
+#define __otbOGRVectorDataIO_h
 
 #include "otbVectorDataIOBase.h"
 #include <fstream>
@@ -30,18 +30,22 @@
 namespace otb
 {
 
-/** \class SHPVectorDataIO
+/** \class OGRVectorDataIO
  *
- * \brief ImageIO object for reading and writing SHP format vector data
+ * \brief ImageIO object for reading and writing OGR format vector data
+ *
+ * ImageIO object for reading and writing OGR format vector data: it can
+ * handle Esri Shapefile (shp), MapInfo (map) and Geography Markup Language (GML)
+ * and possibly other OGR formats.
  *
  */
-template <class TData> class ITK_EXPORT SHPVectorDataIO
+template <class TData> class ITK_EXPORT OGRVectorDataIO
       : public VectorDataIOBase<TData>
 {
 public:
 
   /** Standard class typedefs. */
-  typedef SHPVectorDataIO          Self;
+  typedef OGRVectorDataIO          Self;
   typedef VectorDataIOBase<TData>  Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -50,8 +54,8 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SHPVectorDataIO, VectorDataIOBase);
-  
+  itkTypeMacro(OGRVectorDataIO, VectorDataIOBase);
+
   /** Byte order typedef */
   typedef typename Superclass::ByteOrder  ByteOrder;
 
@@ -99,20 +103,20 @@ public:
 
 protected:
   /** Construtor.*/
-  SHPVectorDataIO();
+  OGRVectorDataIO();
   /** Destructor.*/
-  virtual ~SHPVectorDataIO();
+  virtual ~OGRVectorDataIO();
 
   /*   virtual void InternalReadVectorDataInformation(){}; */
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  SHPVectorDataIO(const Self&); //purposely not implemented
+  OGRVectorDataIO(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   std::string GetOGRDriverName(std::string name) const;
- 
+
   OGRDataSource * m_DataSource;
 
 };
@@ -120,7 +124,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSHPVectorDataIO.txx"
+#include "otbOGRVectorDataIO.txx"
 #endif
 
-#endif // __otbSHPVectorDataIO_h
+#endif // __otbOGRVectorDataIO_h

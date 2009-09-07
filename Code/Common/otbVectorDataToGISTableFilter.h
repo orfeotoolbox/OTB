@@ -25,7 +25,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include "otbSHPVectorDataIO.h"
+#include "otbOGRVectorDataIO.h"
 
 namespace otb {
 
@@ -74,8 +74,8 @@ public:
   typedef typename OutputGISTableType::ConnectionType InputGISConnectionType;
   typedef typename InputGISConnectionType::Pointer InputGISConnectionPointerType;
   
-  typedef SHPVectorDataIO<InputVectorDataType> SHPVectorDataIOType;
-  typedef typename SHPVectorDataIOType::Pointer SHPVectorDataIOPointerType;
+  typedef OGRVectorDataIO<InputVectorDataType> OGRVectorDataIOType;
+  typedef typename OGRVectorDataIOType::Pointer OGRVectorDataIOPointerType;
   
   /** Standard New method. */
   itkNewMacro(Self);  
