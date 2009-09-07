@@ -31,6 +31,7 @@ ENDIF(OTB_USE_MAPNIK)
 IF(OTB_USE_PQXX)
   SET(COMMON_TESTS10 ${CXX_TEST_PATH}/otbCommonTests10)
 ENDIF(OTB_USE_PQXX)
+SET(COMMON_TESTS11 ${CXX_TEST_PATH}/otbCommonTests11)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

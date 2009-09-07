@@ -65,6 +65,8 @@ public:
    ossimString   getAcquisitionDate()                     const;
    ossimString   getProductionDate()                      const;
    ossimString   getImageID()                             const;
+   ossimString   getInstrument()                          const;
+   ossim_uint32  getInstrumentIndex()                     const;
    ossimFilename getMetadataFile()                        const;
    void          getSunAzimuth(ossim_float64& az)         const;
    void          getSunElevation(ossim_float64& el)       const;
@@ -74,7 +76,7 @@ public:
    void          getViewingAngle(ossim_float64& va)       const;
    void          getSceneOrientation(ossim_float64& so)   const;
    ossim_uint32  getNumberOfBands()                       const;
-   ossim_uint16  getStepCount()                           const;
+   ossim_uint32  getStepCount()                           const;
    bool          isStarTrackerUsed()                      const;
    bool          isSwirDataUsed()                         const;
 
@@ -222,6 +224,8 @@ private:
    ossimString                 theImageID;
    ossimFilename               theMetadataFile;
    ossimString                 theProductionDate;
+   ossimString                 theInstrument;
+   ossim_uint32                theInstrumentIndex;
 
    /*
     * From xml section:
@@ -265,7 +269,7 @@ private:
    bool                        theSwirDataFlag;
    ossim_uint32                theNumBands;
    ossimString                 theAcquisitionDate;
-   ossim_uint16                theStepCount;
+   ossim_uint32                theStepCount;
    
 
    //---

@@ -174,7 +174,6 @@ SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
   {
     itkGenericExceptionMacro(<<"The FilterFunctionValues vector must have more than 1 values !");
   }
-  //if( vcl_abs((static_cast<double>(FilterFunctionValues.size()-1)*L_userStep)-(L_max-L_min)  ) > .000001 )
   if( L_min+static_cast<double>(FilterFunctionValues.size()-1)*L_userStep < (L_max - epsilon ))
   {
     itkGenericExceptionMacro(<<"The following condition: "<<L_min<<"+("<<FilterFunctionValues.size()<<"-1)*"<<L_userStep<<" < ("<< L_max <<"-"<<epsilon<<") is not respected !");

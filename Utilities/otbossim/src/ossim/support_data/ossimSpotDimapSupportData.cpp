@@ -38,6 +38,9 @@ ossimSpotDimapSupportData::ossimSpotDimapSupportData ()
    theMetadataVersion(OSSIM_SPOT_METADATA_VERSION_UNKNOWN),
    theImageID(),
    theMetadataFile(),
+   theProductionDate(),
+   theInstrument(),
+   theInstrumentIndex(0),
    theSunAzimuth(0.0),
    theSunElevation(0.0),
    theIncidenceAngle(0.0),
@@ -74,7 +77,10 @@ ossimSpotDimapSupportData::ossimSpotDimapSupportData ()
 ossimSpotDimapSupportData::ossimSpotDimapSupportData(const ossimSpotDimapSupportData& rhs)
    :ossimErrorStatusInterface(rhs),
     theMetadataVersion(rhs.theMetadataVersion),
+    theProductionDate(rhs.theProductionDate),
     theImageID(rhs.theImageID),
+    theInstrument(rhs.theInstrument),
+    theInstrumentIndex(rhs.theInstrumentIndex),
     theMetadataFile (rhs.theMetadataFile),
     theSunAzimuth(rhs.theSunAzimuth),
     theSunElevation(rhs.theSunElevation),  
@@ -116,6 +122,9 @@ ossimSpotDimapSupportData::ossimSpotDimapSupportData (const ossimFilename& dimap
    theMetadataVersion(OSSIM_SPOT_METADATA_VERSION_UNKNOWN),
    theImageID(),
    theMetadataFile (dimapFile),
+   theInstrument(),
+   theInstrumentIndex(0),
+   theProductionDate(),
    theSunAzimuth(0.0),
    theSunElevation(0.0),
    theIncidenceAngle(0.0),
@@ -180,6 +189,8 @@ void ossimSpotDimapSupportData::clearFields()
    clearErrorStatus();
    theSensorID="Spot 5";
    theMetadataVersion = OSSIM_SPOT_METADATA_VERSION_UNKNOWN;
+   theInstrument = "";
+   theInstrumentIndex = 0;
    theImageID = "";
    theMetadataFile = "";
    theProductionDate = "";
@@ -852,6 +863,8 @@ void ossimSpotDimapSupportData::printInfo(ostream& os) const
       << "\n  "
       << "\n  Job Number (ID):      " << theImageID
       << "\n  Acquisition Date:     " << theAcquisitionDate
+      << "\n  Instrument:           " << theInstrument
+      << "\n  Instrument Index:     " << theInstrumentIndex
       << "\n  Production Date:      " << theProductionDate
       << "\n  Number of Bands:      " << theNumBands
       << "\n  Geo Center Point:     " << theRefGroundPoint
@@ -915,6 +928,16 @@ ossimFilename ossimSpotDimapSupportData::getMetadataFile() const
    return theMetadataFile;
 }
 
+ossimString ossimSpotDimapSupportData::getInstrument() const
+{
+   return theInstrument;
+}
+
+ossim_uint32 ossimSpotDimapSupportData::getInstrumentIndex() const
+{
+   return theInstrumentIndex;
+}
+
 void ossimSpotDimapSupportData::getSunAzimuth(ossim_float64& az) const
 {
    az = theSunAzimuth;
@@ -950,7 +973,7 @@ ossim_uint32 ossimSpotDimapSupportData::getNumberOfBands() const
    return theNumBands;
 }
 
-ossim_uint16 ossimSpotDimapSupportData::getStepCount() const
+ossim_uint32 ossimSpotDimapSupportData::getStepCount() const
 {
    return theStepCount;
 }
@@ -1235,6 +1258,16 @@ bool ossimSpotDimapSupportData::saveState(ossimKeywordlist& kwl,
            true);
 
    kwl.add(prefix,
+           "instrument",
+           theInstrument,
+           true);
+
+   kwl.add(prefix,
+           "instrument_index",
+           theInstrumentIndex,
+           true);
+
+   kwl.add(prefix,
            ossimKeywordNames::IMAGE_DATE_KW,
            theAcquisitionDate,
            true);
@@ -1321,6 +1354,7 @@ bool ossimSpotDimapSupportData::saveState(ossimKeywordlist& kwl,
    {
      tempString += (ossimString::toString(theSolarIrradiance[idx]) + " ");
    }
+
    kwl.add(prefix,
            "solar_irradiance",
            tempString,
@@ -1480,6 +1514,8 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    theNumBands        = ossimString(kwl.find(prefix, ossimKeywordNames::NUMBER_BANDS_KW)).toUInt32();
    theAcquisitionDate = kwl.find(prefix, ossimKeywordNames::IMAGE_DATE_KW);
    theProductionDate  = kwl.find(prefix, "production_date");
+   theInstrument      = kwl.find(prefix, "instrument");
+   theInstrumentIndex = ossimString(kwl.find(prefix, "instrument_index")).toUInt32();
    theStepCount       = ossimString(kwl.find(prefix, "step_count")).toInt32();
    
    theIncidenceAngle  = ossimString(kwl.find(prefix, "incident_angle")).toDouble();
@@ -1714,6 +1750,46 @@ bool ossimSpotDimapSupportData::parsePart1(
    }
    theProductionDate = xml_nodes[0]->getText();
    
+   //---
+   // Fetch the Instrument:
+   //---
+   xml_nodes.clear();
+   xpath = "/Dimap_Document/Dataset_Sources/INSTRUMENT";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " DEBUG:"
+            << "\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+   theInstrument = xml_nodes[0]->getText();
+
+   //---
+   // Fetch the Instrument Index:
+   //---
+   xml_nodes.clear();
+   xpath = "/Dimap_Document/Dataset_Sources/INSTRUMENT";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " DEBUG:"
+            << "\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+   theInstrumentIndex = xml_nodes[0]->getText().toUInt32();
+
 
    return true;
 }
