@@ -328,7 +328,7 @@ ENDIF(OTB_USE_CURL)
 #-------------------------------
 # Mapnik Library
 #-------------------------------
-OPTION(OTB_USE_MAPNIK "Use mapnik library (EXPERIMENTAL)." OFF)
+OPTION(OTB_USE_MAPNIK "Use mapnik library." OFF)
 MARK_AS_ADVANCED(OTB_USE_MAPNIK)
 IF(OTB_USE_MAPNIK)
 
@@ -422,8 +422,8 @@ ENDIF(OTB_USE_EXTERNAL_BOOST)
 # GDAL Library
 #-------------------------------
 
-# Option for internal/external BOOST
-OPTION(OTB_USE_EXTERNAL_GDAL "Use an outside build of GDAL." ON)
+# Option for internal/external GDAL
+OPTION(OTB_USE_EXTERNAL_GDAL "Use an outside build of GDAL. (OFF is EXPERIMENTAL)" ON)
 MARK_AS_ADVANCED(OTB_USE_EXTERNAL_GDAL)
 
 IF(OTB_USE_EXTERNAL_GDAL)
@@ -779,7 +779,7 @@ MACRO(OTB_ADD_EXECUTABLE name sources libraries)
 #  ADD_DEPENDENCIES(otbBasicFiltersTests1  OTBBasicFilters)
     FOREACH( file ${sources})
       ADD_CUSTOM_COMMAND(   TARGET ${name}
-                            PRE_BUILD 
+                            PRE_BUILD
                             COMMAND ${OTB_CPP_CHECK_PROG}
                             ARGS ${CMAKE_CURRENT_SOURCE_DIR}/${file}
                             DEPENDS ${libraries}
