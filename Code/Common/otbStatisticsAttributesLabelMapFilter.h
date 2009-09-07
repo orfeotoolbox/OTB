@@ -120,7 +120,7 @@ protected:
   /** Destructor */
   ~StatisticsAttributesLabelMapFilter() {};
   /** Threaded generate data */
-  virtual void ThreadedGenerateData( LabelObjectType * labelObject );
+  virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject );
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
