@@ -91,9 +91,15 @@ public:
   inline TOutput operator() (const TInput & inPixel)
   {
     TOutput outPixel;
-    double temp, temp2;
-    temp = static_cast<double>(inPixel)*m_Coefficient + m_Residu;
-    temp2 =  temp / (1. + m_SphericalAlbedo *  temp);
+//     outPixel.first = inPixel.first;
+    double temp, temp1, temp2;
+//     temp = static_cast<double>(inPixel)*m_Coefficient + m_Residu;
+//     temp2 =  temp / (1. + m_SphericalAlbedo *  temp);
+    
+    temp = 1 - static_cast<double>(inPixel) *m_SphericalAlbedo;
+    //temp1 =  1/temp;
+    temp2 = ( m_Coefficient*static_cast<double>(inPixel) + temp*m_Residu ) / temp;
+    
     outPixel = static_cast<TOutput>(temp2);
 
 

@@ -143,8 +143,9 @@ SurfaceReflectanceToReflectanceFilter<TInputImage,TOutputImage>
       coef = static_cast<double>(m_AtmosphericRadiativeTerms->GetTotalGaseousTransmission(i)
                                  * m_AtmosphericRadiativeTerms->GetDownwardTransmittance(i)
                                  * m_AtmosphericRadiativeTerms->GetUpwardTransmittance(i)     );
-      coef = 1. / coef;
-      res = -m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectance(i) * coef;
+      //coef = 1. / coef;
+//       res = -m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectance(i) * coef;
+      res = m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectance(i);
       FunctorType functor;
       functor.SetCoefficient(coef);
       functor.SetResidu(res);
