@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,7 +24,7 @@
 
 namespace otb
 {
-  
+
 template <class TVectorData, class TLabelMap >
 VectorDataToLabelMapFilter<TVectorData, TLabelMap >
   ::VectorDataToLabelMapFilter()
@@ -38,7 +38,7 @@ VectorDataToLabelMapFilter<TVectorData, TLabelMap >
     m_StartIndex.Fill( 0 );
     m_lab = itk::NumericTraits<LabelType>::Zero;
   }
-  
+
 //----------------------------------------------------------------------------
 template <class TVectorData, class TLabelMap >
 void
@@ -98,9 +98,9 @@ VectorDataToLabelMapFilter<TVectorData, TLabelMap >
     p.CastFrom( of );
     this->SetOrigin( p );
   }
-  
-  
-/** 
+
+
+/**
    * overloaded because pb during copyinformation
  */
 
@@ -109,31 +109,31 @@ VectorDataToLabelMapFilter<TVectorData, TLabelMap >
   ::GenerateOutputInformation()
   {
     // we can't call the superclass method here.
-  
+
     // get pointers to the input and output
     const InputVectorDataType * input  = this->GetInput();
     OutputLabelMapType  *    outputPtr = this->GetOutput();
-    
+
     if ( !outputPtr )
     {
       return;
     }
-    
+
     // Set the size of the output region
     typename OutputLabelMapType::RegionType outputLargestPossibleRegion;
     outputLargestPossibleRegion.SetSize( m_Size );
     outputLargestPossibleRegion.SetIndex( m_StartIndex );
     outputPtr->SetLargestPossibleRegion( outputLargestPossibleRegion );
-    
+
     otbGenericMsgDebugMacro(<<"LargestPossibleRegion " << outputPtr->GetLargestPossibleRegion());
-    
+
     // Set spacing and origin
     outputPtr->SetSpacing( m_Spacing );
     outputPtr->SetOrigin( m_Origin );
     outputPtr->SetDirection( m_Direction );
 
 
-    
+
     return;
   }
 /*
@@ -142,10 +142,10 @@ void
     VectorDataToLabelMapFilter<TVectorData, TLabelMap >
 ::GenerateInputRequestedRegion()
 {
-  
+
   //call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
-  
+
   // We need all the input.
   InputVectorDataPointer input = const_cast<InputVectorDataType *>(this->GetInput());
   if( !input )
@@ -155,9 +155,9 @@ void
   input->SetRequestedRegionToLargestPossibleRegion ();
 }
 
-  
+
 template <class TVectorData, class TLabelMap >
-void 
+void
 VectorDataToLabelMapFilter<TVectorData, TLabelMap >
 ::EnlargeOutputRequestedRegion(itk::DataObject *)
 {
@@ -216,17 +216,17 @@ void
 {
   // Allocate the output
   this->AllocateOutputs();
-  
+
   OutputLabelMapType * output = this->GetOutput();
-  
+
   const InputVectorDataType * input = this->GetInput();
-  
+
   //For each input
   for (unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
   {
     if (this->GetInput(idx))
     {
-      
+
       InputVectorDataConstPointer input = this->GetInput(idx);
       InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(input->GetDataTree()->GetRoot());
       //Use our own value for the background
@@ -234,7 +234,7 @@ void
       //Set the value of the first label
       m_lab = itk::NumericTraits<LabelType>::Zero ;
 //       otbGenericMsgDebugMacro(<<"input " <<  idx);
-      
+
       //The projection information
       output->SetMetaDataDictionary(input->GetMetaDataDictionary());
       ProcessNode(inputRoot);
@@ -249,11 +249,11 @@ void
 VectorDataToLabelMapFilter< TVectorData, TLabelMap >
 ::ProcessNode(InternalTreeNodeType * source)
 {
-  
-  
+
+
   // Get the children list from the input node
   ChildrenListType children = source->GetChildrenList();
-  
+
   // For each child
   for(typename ChildrenListType::iterator it = children.begin(); it!=children.end();++it)
   {
@@ -282,60 +282,60 @@ VectorDataToLabelMapFilter< TVectorData, TLabelMap >
         otbGenericMsgDebugMacro(<<"Insert Point from vectorData");
         IndexType index;
         this->GetOutput()->TransformPhysicalPointToIndex(dataNode->GetPoint(), index);
-        
+
         this->GetOutput()->SetPixel( index ,m_lab);
         m_lab+=10;
         break;
       }
       case otb::FEATURE_LINE:
       {
-        //TODO Bresenham 
-        itkExceptionMacro(<<"This type (FEATURE_LINE) is not handle (yet) by VectorDataToLabelMapFilter(), please request for it");   
+        //TODO Bresenham
+        itkExceptionMacro(<<"This type (FEATURE_LINE) is not handle (yet) by VectorDataToLabelMapFilter(), please request for it");
         break;
       }
       case FEATURE_POLYGON:
       {
-        
+
         /** correct polygon exterior ring (simplify and close the pokygon)*/
         CorrectFunctorType correct;
         PolygonPointerType correctPolygonExtRing = correct( dataNode->GetPolygonExteriorRing() );
-        
-        
+
+
         typedef typename DataNodeType::PolygonType                          PolygonType;
         typedef typename PolygonType::RegionType                   RegionType;
         typedef typename PolygonType::VertexType                    VertexType;
         RegionType polygonExtRingBoundReg = correctPolygonExtRing->GetBoundingRegion();
-        
-        
+
+
         VertexType vertex;
         std::cout << "Polygon bounding region " << polygonExtRingBoundReg<< std::endl;
-        std::cout << "output origin " << this->GetOutput()->GetOrigin()<< std::endl; 
-        std::cout << "spacing " << this->GetOutput()->GetSpacing()<< std::endl; 
+        std::cout << "output origin " << this->GetOutput()->GetOrigin()<< std::endl;
+        std::cout << "spacing " << this->GetOutput()->GetSpacing()<< std::endl;
         // For each position in the bounding region of the polygon
-        
+
         for (int i = polygonExtRingBoundReg.GetOrigin(0);i < polygonExtRingBoundReg.GetOrigin(0) + polygonExtRingBoundReg.GetSize(0) ;i+=this->GetOutput()->GetSpacing()[0])
         {
           vertex[0] = i ;
           for (int j = polygonExtRingBoundReg.GetOrigin(1);j<polygonExtRingBoundReg.GetOrigin(1) + polygonExtRingBoundReg.GetSize(1) ;j+=this->GetOutput()->GetSpacing()[1])
           {
             vertex[1] = j ;
-            
+
             if (correctPolygonExtRing->IsInside(vertex) || correctPolygonExtRing->IsOnEdge (vertex))
             {
               IndexType index;
               index[0] = vertex[0] - polygonExtRingBoundReg.GetOrigin(0);
               index[1] = vertex[1] - polygonExtRingBoundReg.GetOrigin(1);
-//               index[0] += this->GetOutput()->GetOrigin()[0]; 
+//               index[0] += this->GetOutput()->GetOrigin()[0];
 //               index[1] += this->GetOutput()->GetOrigin()[1];
               std::cout << "index " << index << std::endl;
               if (this->GetOutput()->HasLabel( m_lab ) )
-              { 
+              {
                 if (!this->GetOutput()->GetLabelObject( m_lab )->HasIndex( index ))
                 {  //Add a pixel to the current labelObject
                   this->GetOutput()->SetPixel(index ,m_lab);
                 }
               }
-              else 
+              else
               {
                 //Add a pixel to the current labelObject
                 this->GetOutput()->SetPixel(index ,m_lab);
@@ -349,7 +349,7 @@ VectorDataToLabelMapFilter< TVectorData, TLabelMap >
       }
       case FEATURE_MULTIPOINT:
       {
-        itkExceptionMacro(<<"This type (FEATURE_MULTIPOINT) is not handle (yet) by VectorDataToLabelMapFilter(), please request for it");   
+        itkExceptionMacro(<<"This type (FEATURE_MULTIPOINT) is not handle (yet) by VectorDataToLabelMapFilter(), please request for it");
         break;
       }
       case FEATURE_MULTILINE:
