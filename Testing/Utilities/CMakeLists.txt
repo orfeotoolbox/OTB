@@ -24,7 +24,7 @@ SET(UTILITIES_TESTS ${CXX_TEST_PATH}/otbUtilitiesTests)
 #ADD_TEST(utOssimIntegrationTest ${UTILITIES_TESTS}
 #        ossimIntegrationTest
 #        ossimTiffWriter
-#        ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+#        ${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 #        ${TEMP}/utOssimIntegration.tif
 #)
 
@@ -34,7 +34,7 @@ ADD_TEST(utTvOssimKeywordlistToulouseQuickBirdTest ${UTILITIES_TESTS}
 --compare-list ${EPSILON_10e6}  ${BASELINE_FILES}/utOssimKeywordlistToulouseQuickBird.txt
                         ${TEMP}/utOssimKeywordlistToulouseQuickBird.txt
         ossimKeywordlistTest
-        ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/utOssimKeywordlistToulouseQuickBird.txt
         )
 

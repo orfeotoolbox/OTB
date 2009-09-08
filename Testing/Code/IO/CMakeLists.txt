@@ -515,10 +515,10 @@ ADD_TEST(ioTuGDALImageIOCanRead_SAR_ERS2 ${IO_TESTS5} otbGDALImageIOTestCanRead
         ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 )
 
 ADD_TEST(ioTuGDALImageIOCanRead_QUICK_PAN ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF )
+        ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF )
 
 ADD_TEST(ioTuGDALImageIOCanRead_QUICK_XS ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF )
+        ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF )
 
 ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_PAN ${IO_TESTS5} otbGDALImageIOTestCanRead
         ${LARGEDATA}/PARIS/Ikonos/po_79039_pan_0000000.tif)
@@ -964,7 +964,7 @@ ADD_TEST(ioTvMultiChannelROI_QuickbirdPAN2TIFF ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_QuickbirdPAN2TIFF_1000_1000_100_150.tif
                      ${TEMP}/ioExtractROI_QuickbirdPAN2TIFF_1000_1000_100_150.tif
          otbMultiChannelExtractROI
-         -ushort ${LARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         -ushort ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          -ushort ${TEMP}/ioExtractROI_QuickbirdPAN2TIFF_1000_1000_100_150.tif
          -startX 1000 -startY 1000 -sizeX 100 -sizeY 150
          )
@@ -974,7 +974,7 @@ ADD_TEST(ioTvMultiChannelROI_QuickbirdXS2TIFF ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_QuickbirdXS2TIFF_1000_1000_100_150.tif
                      ${TEMP}/ioExtractROI_QuickbirdXS2TIFF_1000_1000_100_150.tif
          otbMultiChannelExtractROI
-         -ushort ${LARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+         -ushort ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
          -ushort ${TEMP}/ioExtractROI_QuickbirdXS2TIFF_1000_1000_100_150.tif
          -startX 1000 -startY 1000 -sizeX 100 -sizeY 150
          )
@@ -1651,7 +1651,7 @@ ADD_TEST(ioTvSHPVectorDataFileReader ${IO_TESTS15}
         --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioSHPVectorDataFileReader.txt
                         ${TEMP}/ioSHPVectorDataFileReader.txt
         otbVectorDataFileReader
-	${LARGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
+	${LARGEDATA}/QUICKBIRD/TOULOUSE/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
 	${TEMP}/ioSHPVectorDataFileReader.txt
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -1708,7 +1708,7 @@ ADD_TEST(ioTvVectorDataFileReaderWriter ${IO_TESTS15}
             ${BASELINE_FILES}/ioTvVectorDataFileReaderWriterOutput.shp
             ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp
         otbVectorDataFileReaderWriter
-            ${LARGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
+            ${LARGEDATA}/QUICKBIRD/TOULOUSE/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
             ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp
 	)
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -1896,7 +1896,7 @@ ADD_TEST(ioTvImageMetadataInterfaceQBTest ${IO_TESTS17}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceQB.txt
                          ${TEMP}/ioTvImageMetadataInterfaceQB.txt
         otbImageMetadataInterfaceTest
-        ${LARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceQB.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceQBCevennesTest ${IO_TESTS17}
@@ -1910,7 +1910,7 @@ ADD_TEST(ioTvImageMetadataInterfaceQBMULTest ${IO_TESTS17}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceQBMUL.txt
                          ${TEMP}/ioTvImageMetadataInterfaceQBMUL.txt
         otbImageMetadataInterfaceTest
-        ${LARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceQBMUL.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceIKONOSTest ${IO_TESTS17}

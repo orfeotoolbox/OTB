@@ -38,7 +38,7 @@ ADD_TEST(prTuSensorModelsNew ${PROJECTIONS_TESTS1}  otbSensorModelsNew )
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(prTvTestCreateProjectionWithOSSIM_Toulouse ${PROJECTIONS_TESTS1}
         otbCreateProjectionWithOSSIM
-        ${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         )
 
 ADD_TEST(prTvTestCreateProjectionWithOSSIM_Cevennes ${PROJECTIONS_TESTS1}
@@ -48,7 +48,7 @@ ADD_TEST(prTvTestCreateProjectionWithOSSIM_Cevennes ${PROJECTIONS_TESTS1}
 
 ADD_TEST(prTvTestCreateProjectionWithOTB_Toulouse ${PROJECTIONS_TESTS1}
         otbCreateProjectionWithOTB
-        ${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         )
 
 ADD_TEST(prTvTestCreateProjectionWithOTB_Cevennes ${PROJECTIONS_TESTS1}
@@ -58,7 +58,7 @@ ADD_TEST(prTvTestCreateProjectionWithOTB_Cevennes ${PROJECTIONS_TESTS1}
 
 ADD_TEST(prTvTestCreateInverseForwardSensorModel_Toulouse ${PROJECTIONS_TESTS1}
         otbCreateInverseForwardSensorModel
-        ${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         )
 
 ADD_TEST(prTvTestCreateInverseForwardSensorModel_Cevennes ${PROJECTIONS_TESTS1}
@@ -70,7 +70,7 @@ ADD_TEST(prTvRegionProjectionResamplerToulouse ${PROJECTIONS_TESTS1}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvRegionProjectionResamplerToulouse.tif
                           ${TEMP}/prTvRegionProjectionResamplerToulouse.tif
         otbRegionProjectionResampler
-        ${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvRegionProjectionResamplerToulouse.tif
 				1.44 43.6050 # Long/Lat of Toulouse, Capitole
         500
@@ -109,7 +109,7 @@ ADD_TEST(prTvSensorModelQuickbird ${PROJECTIONS_TESTS1}
          ${BASELINE_FILES}/prTvSensorModelQuickbird.txt
          ${TEMP}/prTvSensorModelQuickbird.txt
     otbSensorModel
-         ${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          ${TEMP}/prTvSensorModelQuickbird.txt
 )
 
@@ -203,7 +203,7 @@ ADD_TEST(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationToulouse_UTM.tif
                           ${TEMP}/prTvOrthoRectificationToulouse_UTM.tif
         otbOrthoRectificationFilter
-        ${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvOrthoRectificationToulouse_UTM.tif
         374100.8
         4829184.8
@@ -237,7 +237,7 @@ ADD_TEST(prTvOrthoRectificationToulouseWithDEM ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
                           ${TEMP}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
         otbOrthoRectificationFilterWithDEM
-	${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+	${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
         374100.8
         4829184.8
@@ -345,7 +345,7 @@ ADD_TEST(prTvCompositeTransform ${PROJECTIONS_TESTS3}
         --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvCompositeTransform.txt
         ${TEMP}/prTvCompositeTransform.txt
         otbCompositeTransform
-        ${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvCompositeTransform.txt
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -403,7 +403,7 @@ ADD_TEST(prTvVectorDataProjectionFilterFromMapToSensor ${PROJECTIONS_TESTS3}
             ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
         otbVectorDataProjectionFilterFromMapToSensor
         ${INPUTDATA}/ToulousePoints-examples.shp
-        ${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
