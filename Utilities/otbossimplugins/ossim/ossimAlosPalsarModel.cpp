@@ -171,8 +171,10 @@ bool ossimAlosPalsarModel::open(const ossimFilename& file)
     {
       if (traceDebug())
       {
-        ossimNotify(ossimNotifyLevel_DEBUG) << "is AlosPalsar leader file..."
-                            << "Begin reading Leader file" << std::endl;
+        ossimNotify(ossimNotifyLevel_DEBUG)
+          << leaFilename << " is AlosPalsar leader file..."
+          << std::endl
+          << "Begin reading Leader file" << std::endl;
       }
       /*
        * Leader file data reading
@@ -628,33 +630,33 @@ bool ossimAlosPalsarModel::InitSRGR(const ossimKeywordlist &kwl, const char *pre
 //TODO adapt the identification of the AlosPalsarLeader
 bool ossimAlosPalsarModel::isAlosPalsarLeader(const ossimFilename& file) const
 {
-//    std::ifstream candidate(file, ios::in | ios::binary);
-//    char ersFileName[16];
-//
-//    candidate.seekg(48);
-//    if ( candidate.bad() or candidate.eof() )
-//    {
-//      return false;
-//    }
-//    candidate.read(ersFileName, 16);
-//    if ( candidate.bad() or candidate.eof() )
-//    {
-//      return false;
-//    }
-//    candidate.close();
-//
-//    ossimString ersString(ersFileName);
-//
-//    if ( ( ersString.find("ERS") == 0 )   &&
-//         ( ersString.find(".SAR.") == 4 ) &&
-//         ( ersString.find("LEAD") == 12 )    )
-//    {
-//      return true;
-//    }
-//    else
-//    {
-//      return false;
-//    }
+    std::ifstream candidate(file, ios::in | ios::binary);
+    char alosFileName[16];
+
+    candidate.seekg(48);
+    if ( candidate.bad() or candidate.eof() )
+    {
+      return false;
+    }
+    candidate.read(alosFileName, 16);
+    if ( candidate.bad() or candidate.eof() )
+    {
+      return false;
+    }
+    candidate.close();
+
+    ossimString ersString(alosFileName);
+
+    if ( ( ersString.find("AL1 ") == 0 ) &&
+         ( ersString.find("PSR") == 4 )  &&
+         ( ersString.find("SARL") == 8 )    )
+      {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
 
    return true;
 
@@ -664,15 +666,24 @@ bool ossimAlosPalsarModel::isAlosPalsarLeader(const ossimFilename& file) const
 ossimFilename ossimAlosPalsarModel::findAlosPalsarLeader(const ossimFilename& file) const
 {
   ossimFilename leaFile = file;
-  ossimString datString("DAT_01");
-  ossimString nulString("NUL_DAT");
-  ossimString vdfString("VDF_DAT");
-  ossimString leaString("LEA_01");
-  if ((file.fileNoExtension() == datString)
-    || (file.fileNoExtension() == nulString)
-    || (file.fileNoExtension() == leaString))
+  ossimString imgPrefix("IMG");
+  ossimString trlPrefix("TRL");
+  ossimString volPrefix("VOL");
+  ossimString leaPrefix("LED");
+
+  ossimString filename = file.fileNoExtension();
+  ossimString prefix = filename.substr(0,3);
+  if ( (prefix == imgPrefix) ||
+       (prefix == trlPrefix) ||
+       (prefix == volPrefix)    )
   {
-    leaFile.setFile(leaString);
+    // Find the 2nd dash from the end of the string
+    // since ALOS files are of the form
+    // <prefix>-ALPSRP<identifier>-H<n.n>__A
+    int dash2_pos = filename.rfind('-', filename.rfind('-')-1);
+    filename.replace(0, dash2_pos, leaPrefix);
+
+    leaFile.setFile(filename);
     if (leaFile.exists())
     {
       return leaFile;
@@ -681,5 +692,4 @@ ossimFilename ossimAlosPalsarModel::findAlosPalsarLeader(const ossimFilename& fi
   return file;
 }
 
-}
-
+} // namespace ossimplugins
