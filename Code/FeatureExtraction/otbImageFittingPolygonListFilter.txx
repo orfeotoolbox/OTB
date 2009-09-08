@@ -86,7 +86,8 @@ ImageFittingPolygonListFilter<TPath, TImage>
   typename ImageType::IndexType start;
 
   //go through all the polygons in the list
-  for (IteratorType it = inputPtr->Begin(); it != inputPtr->End(); ++it)
+  IteratorType it = inputPtr->Begin();
+  while ( it != inputPtr->End() )
   {
     PathPointerType polygon = it.Get();
 
@@ -115,11 +116,13 @@ ImageFittingPolygonListFilter<TPath, TImage>
             start[0] = static_cast<long int>(currentPoint[0]-m_Radius);
             start[1] = static_cast<long int>(currentPoint[1]-m_Radius);
             region.SetIndex(start);
+	    region.Crop(inputImagePtr->GetLargestPossibleRegion());
 
             NeighborhoodIteratorType nIt(inputImagePtr, region);
             double maxValue=0.0;
             VertexType maxPoint = currentPoint;
-            for (nIt.GoToBegin();!nIt.IsAtEnd();++nIt)
+	    nIt.GoToBegin();
+            while( !nIt.IsAtEnd() )
             {
               if (regionLargest.IsInside(nIt.GetIndex()))
               {
@@ -131,6 +134,7 @@ ImageFittingPolygonListFilter<TPath, TImage>
                   maxPoint=middlePoint;
                 }
               }
+	      ++nIt;
             }
             currentPoint=maxPoint;
             newPolygon->AddVertex(maxPoint);
@@ -156,7 +160,9 @@ ImageFittingPolygonListFilter<TPath, TImage>
           NeighborhoodIteratorType nIt(inputImagePtr, region);
           double maxValue=0.0;
           VertexType maxPoint = currentPoint;
-          for (nIt.GoToBegin();!nIt.IsAtEnd();++nIt)
+	  nIt.GoToBegin();
+
+          while( !nIt.IsAtEnd() )
           {
             if (regionLargest.IsInside(nIt.GetIndex()))
             {
@@ -168,6 +174,7 @@ ImageFittingPolygonListFilter<TPath, TImage>
                 maxPoint=middlePoint;
               }
             }
+	    ++nIt;
           }
           currentPoint=maxPoint;
           newPolygon->AddVertex(maxPoint);
@@ -191,7 +198,8 @@ ImageFittingPolygonListFilter<TPath, TImage>
           NeighborhoodIteratorType nIt(inputImagePtr, region);
           double maxValue=0.0;
           VertexType maxPoint = currentPoint;
-          for (nIt.GoToBegin();!nIt.IsAtEnd();++nIt)
+	  nIt.GoToBegin();
+         while ( !nIt.IsAtEnd() )
           {
             if (regionLargest.IsInside(nIt.GetIndex()))
             {
@@ -203,6 +211,7 @@ ImageFittingPolygonListFilter<TPath, TImage>
                 maxPoint=middlePoint;
               }
             }
+	    ++nIt;
           }
           currentPoint=maxPoint;
           newPolygon->AddVertex(maxPoint);
@@ -215,9 +224,8 @@ ImageFittingPolygonListFilter<TPath, TImage>
 
     outputPtr->PushBack(polygon);
 
+    ++it;
   }//going through the polygon list
-
-
 }
 
 template <class TPath, class TImage>
