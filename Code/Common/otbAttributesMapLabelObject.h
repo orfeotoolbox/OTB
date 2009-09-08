@@ -19,6 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbAttributesMapLabelObject_h
 
 #include "itkLabelObject.h"
+#include "itkLabelMap.h"
 #include <map>
 
 namespace otb
@@ -181,11 +182,11 @@ public:
   /**
   * This method is overloaded to add the copy of the attributes map.
   */
-  virtual void CopyDataFrom( const Self * src )
+  virtual void CopyAttributesFrom( const Self * src)
     {
-    Superclass::CopyDataFrom( src );
+    Superclass::CopyAttributesFrom( src );
     m_Attributes = src->m_Attributes;
-    }
+   }
 
 protected:
   /** Constructor */

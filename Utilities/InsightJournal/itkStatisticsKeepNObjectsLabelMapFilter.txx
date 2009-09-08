@@ -19,6 +19,7 @@
 
 #include "itkStatisticsKeepNObjectsLabelMapFilter.h"
 #include "itkProgressReporter.h"
+#include "itkLabelObjectUtils.h"
 
 
 namespace itk {

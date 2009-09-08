@@ -134,7 +134,7 @@ protected:
   ~ShapeAttributesLabelMapFilter() {};
   
   /** Threaded GenerateData */
-  virtual void ThreadedGenerateData( LabelObjectType * labelObject );
+  virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject );
   virtual void BeforeThreadedGenerateData();
   virtual void AfterThreadedGenerateData();
 

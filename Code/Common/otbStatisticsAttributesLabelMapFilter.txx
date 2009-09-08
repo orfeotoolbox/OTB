@@ -43,9 +43,9 @@ StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 template <class TImage, class TFeatureImage>
 void
 StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
-::ThreadedGenerateData( LabelObjectType * labelObject )
+::ThreadedProcessLabelObject( LabelObjectType * labelObject )
 {
-  Superclass::ThreadedGenerateData( labelObject );
+  Superclass::ThreadedProcessLabelObject( labelObject );
 
   ImageType * output = this->GetOutput();
   const FeatureImageType * featureImage = this->GetFeatureImage();

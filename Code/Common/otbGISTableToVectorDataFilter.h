@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,13 +33,12 @@ namespace otb {
  * VectorData.
  * The translation is delegate to the OGRVectorDataIO class (OGRVectorDataIO)
  * which calls the OGR driver to translate GIS layer to a vectorData structure
- * \author Manuel GRIZONNET. CNES, France.
  *
  * \sa VectorDataSource
  * \ingroup Common, GeospatialAnalysis
  */
 template<class TGISTable, class TVectorData >
-class ITK_EXPORT GISTableToVectorDataFilter : 
+class ITK_EXPORT GISTableToVectorDataFilter :
     public VectorDataSource< TVectorData >
 {
 public:
@@ -55,37 +54,37 @@ public:
   typedef TVectorData OutputVectorDataType;
   typedef typename OutputVectorDataType::Pointer        OutputVectorDataPointer;
   typedef typename OutputVectorDataType::ConstPointer   OutputVectorDataConstPointer;
-  
+
   typedef typename OutputVectorDataType::DataNodeType  DataNodeType;
   typedef typename DataNodeType::Pointer         DataNodePointerType;
-  
+
   typedef typename InputGISTableType::ConnectionType ConnectionType;
   typedef typename InputGISTableType::ConnectionPointerType ConnectionPointerType;
-  
+
   typedef OGRVectorDataIO<OutputVectorDataType> OGRVectorDataIOType;
   typedef typename OGRVectorDataIOType::Pointer OGRVectorDataIOPointerType;
-  
+
   typedef VectorDataFileReader<OutputVectorDataType> VectorDataFileReaderType;
   /** ImageDimension constants */
-  
+
 
   /** Standard New method. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(GISTableToVectorDataFilter, 
+  itkTypeMacro(GISTableToVectorDataFilter,
                VectorDataSource);
 
-  
+
   /** Set/Get the GISTable input of this process object.  */
   virtual void SetInput( const InputGISTableType *input);
   virtual void SetInput( unsigned int idx, const InputGISTableType *input);
   const InputGISTableType * GetInput(void);
   const InputGISTableType * GetInput(unsigned int idx);
-  
+
 protected:
   GISTableToVectorDataFilter();
-  ~GISTableToVectorDataFilter() {};
+  virtual ~GISTableToVectorDataFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** GISTableToVectorDataFilter needs the entire input be
@@ -96,7 +95,7 @@ protected:
   /** Single-threaded version of GenerateData.  This filter delegates
    * to the OGR driver. */
   void GenerateData();
-  
+
 
 private:
   GISTableToVectorDataFilter(const Self&); //purposely not implemented
@@ -106,7 +105,7 @@ private:
 } ; // end of class
 
 } // end namespace otb
-  
+
 #ifndef ITK_MANUAL_INSTANTIATION
 #include "otbGISTableToVectorDataFilter.txx"
 #endif

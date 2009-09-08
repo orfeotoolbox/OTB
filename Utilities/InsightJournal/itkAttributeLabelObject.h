@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -53,7 +53,7 @@ public:
  *
  *\sa LabelObject, ShapeLabelObject, StatisticsLabelObject
  *
- * \ingroup DataRepresentation 
+ * \ingroup DataRepresentation
  */
 template < class TLabel, unsigned int VImageDimension, class TAttributeValue >
 class ITK_EXPORT AttributeLabelObject : public LabelObject< TLabel, VImageDimension >
@@ -104,9 +104,9 @@ public:
     }
 
 
-  virtual void CopyDataFrom( const Self * src )
+  virtual void CopyAttributesFrom( const Self * src )
     {
-    Superclass::CopyDataFrom( src );
+    Superclass::CopyAttributesFrom( src );
     m_Attribute = src->m_Attribute;
     }
 
@@ -115,7 +115,7 @@ protected:
     {
     // how to initialize the attribute ?
     }
-  
+
 
   void PrintSelf(std::ostream& os, Indent indent) const
     {
@@ -129,7 +129,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   AttributeValueType m_Attribute;
-  
+
 
 };
 

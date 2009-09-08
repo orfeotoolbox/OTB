@@ -457,9 +457,9 @@ public:
   typedef typename Superclass::CentroidType CentroidType;
 
 
-  virtual void CopyDataFrom( const Self * src )
+  virtual void CopyAttributesFrom( const Self * src )
     {
-    Superclass::CopyDataFrom( src );
+    Superclass::CopyAttributesFrom( src );
 
     m_Minimum = src->m_Minimum;
     m_Maximum = src->m_Maximum;
