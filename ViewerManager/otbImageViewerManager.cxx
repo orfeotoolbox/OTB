@@ -21,10 +21,15 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbCommandLineArgumentParser.h"
 #include "otbMsgReporter.h"
 
+#include <libintl.h>
+
 
 int main(int argc, char* argv[])
 {
-  
+      setlocale( LC_ALL, "" );
+      bindtextdomain( "messages", "/home/christop/OTB/OTB-Binary-Applications-Debug/locale" );
+      textdomain( "messages" );
+
   // Parse command line parameters
 //   typedef otb::CommandLineArgumentParser ParserType;
 //   ParserType::Pointer parser = ParserType::New();
@@ -53,7 +58,7 @@ int main(int argc, char* argv[])
 //     }
 //     return EXIT_FAILURE;
 //   }
-  
+
   typedef otb::ImageViewerManagerController ControllerType;
   typedef otb::ImageViewerManagerViewGUI ViewType;
 
@@ -62,7 +67,7 @@ int main(int argc, char* argv[])
   controller->SetView(view);
   view->SetImageViewerManagerController(controller);
   //otb::MsgReporter::GetInstance()->SetTitle("Image Viewer Manager application");
-  
+
   //
   view->Show();
   for (int i = 1; i<argc;++i)

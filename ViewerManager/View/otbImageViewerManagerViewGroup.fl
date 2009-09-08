@@ -1,5 +1,8 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
+version 1.0109 
+i18n_type 1 
+i18n_include <libintl.h> 
+i18n_function gettext 
 header_name {.h} 
 code_name {.cxx}
 class ImageViewerManagerViewGroup {open
@@ -8,8 +11,8 @@ class ImageViewerManagerViewGroup {open
   } {
     Fl_Window guiMainWindow {
       label otbImageViewerManagerView
-      callback {this->Quit()} open
-      xywh {833 76 610 460} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
+      callback {this->Quit()} open selected
+      xywh {666 76 610 460} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
     } {
       Fl_Text_Display guiViewerInformation {
         label Information
@@ -93,7 +96,7 @@ class ImageViewerManagerViewGroup {open
           callback {Diaporama();}
           tooltip {Launch the slideshow mode} xywh {490 215 95 25} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0x64 color 23 selection_color 23 labelcolor 186
         }
-        Fl_Group gBlanck2 {open selected
+        Fl_Group gBlanck2 {open
           xywh {500 288 75 12} resizable
         } {}
       }
@@ -168,7 +171,7 @@ class ImageViewerManagerViewGroup {open
     }
     Fl_Window guiLinkSetupWindow {
       label {Link Images} open
-      xywh {738 336 560 220} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
+      xywh {716 336 560 220} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
     } {
       Fl_Input guiLinkXOffset {
         label {X offset}
