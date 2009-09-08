@@ -66,3 +66,4 @@
 /* Use Visu/Gui configurations */
 #cmakedefine OTB_USE_VISU_GUI
 
+#cmakedefine OTB_I18N
