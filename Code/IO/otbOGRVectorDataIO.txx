@@ -263,8 +263,6 @@ void OGRVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
     }
   DataNodePointerType root = tree->GetRoot()->Get();
 
-  unsigned int kept = 0;
-
   unsigned int layerKept = 0;
   OGRLayer * ogrCurrentLayer = NULL;
 //   OGRFeatureVectorType ogrFeatures;
@@ -288,7 +286,7 @@ void OGRVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
   }
 
   chrono.Stop();
-  std::cout<<"SHPVectorDataIO: file saved in "<<chrono.GetMeanTime()<<" seconds. (" << layerKept << " elements)"<<std::endl;
+  std::cout<<"OGRVectorDataIO: file saved in "<<chrono.GetMeanTime()<<" seconds. (" << layerKept << " elements)"<<std::endl;
 
   otbMsgDevMacro( <<" OGRVectorDataIO::Write()  ");
 }
