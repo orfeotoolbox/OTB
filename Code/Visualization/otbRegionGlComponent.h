@@ -52,7 +52,7 @@ public:
   itkNewMacro(Self);
 
   /// Render the curve according to display extent and axis characteristics
-  virtual void  Render(const RegionType& extent,const AffineTransformType * space2ScreenTransform)
+  virtual void  Render(const RegionType& /*extent*/,const AffineTransformType * space2ScreenTransform)
   {
     PointType ip1, ip2, sp1,sp2;
 

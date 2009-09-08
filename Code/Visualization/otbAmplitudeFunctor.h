@@ -87,7 +87,7 @@ namespace otb
           return outPixel;
         }
 
-        virtual OutputPixelType operator()(ScalarType inPixel) const
+        virtual OutputPixelType operator()(ScalarType ) const
         {
           //FIXME we don't handle the std::complex<> yet
           itkExceptionMacro(<<"Can't compute amplitude from a scalar value");
