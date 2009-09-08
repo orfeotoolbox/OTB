@@ -77,11 +77,11 @@ ossimSpotDimapSupportData::ossimSpotDimapSupportData ()
 ossimSpotDimapSupportData::ossimSpotDimapSupportData(const ossimSpotDimapSupportData& rhs)
    :ossimErrorStatusInterface(rhs),
     theMetadataVersion(rhs.theMetadataVersion),
-    theProductionDate(rhs.theProductionDate),
     theImageID(rhs.theImageID),
+    theMetadataFile (rhs.theMetadataFile),
+    theProductionDate(rhs.theProductionDate),
     theInstrument(rhs.theInstrument),
     theInstrumentIndex(rhs.theInstrumentIndex),
-    theMetadataFile (rhs.theMetadataFile),
     theSunAzimuth(rhs.theSunAzimuth),
     theSunElevation(rhs.theSunElevation),  
     theIncidenceAngle(rhs.theIncidenceAngle),
@@ -122,9 +122,9 @@ ossimSpotDimapSupportData::ossimSpotDimapSupportData (const ossimFilename& dimap
    theMetadataVersion(OSSIM_SPOT_METADATA_VERSION_UNKNOWN),
    theImageID(),
    theMetadataFile (dimapFile),
+   theProductionDate(),
    theInstrument(),
    theInstrumentIndex(0),
-   theProductionDate(),
    theSunAzimuth(0.0),
    theSunElevation(0.0),
    theIncidenceAngle(0.0),
@@ -189,11 +189,11 @@ void ossimSpotDimapSupportData::clearFields()
    clearErrorStatus();
    theSensorID="Spot 5";
    theMetadataVersion = OSSIM_SPOT_METADATA_VERSION_UNKNOWN;
-   theInstrument = "";
-   theInstrumentIndex = 0;
    theImageID = "";
    theMetadataFile = "";
    theProductionDate = "";
+   theInstrument = "";
+   theInstrumentIndex = 0;
    theSunAzimuth = 0.0;
    theSunElevation = 0.0;
    theIncidenceAngle = 0.0;
@@ -1754,7 +1754,7 @@ bool ossimSpotDimapSupportData::parsePart1(
    // Fetch the Instrument:
    //---
    xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Sources/INSTRUMENT";
+   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/INSTRUMENT";
    xmlDocument->findNodes(xpath, xml_nodes);
    if (xml_nodes.size() == 0)
    {
@@ -1774,7 +1774,7 @@ bool ossimSpotDimapSupportData::parsePart1(
    // Fetch the Instrument Index:
    //---
    xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Sources/INSTRUMENT";
+   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/INSTRUMENT_INDEX";
    xmlDocument->findNodes(xpath, xml_nodes);
    if (xml_nodes.size() == 0)
    {
