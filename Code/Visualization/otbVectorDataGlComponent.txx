@@ -106,7 +106,7 @@ VectorDataGlComponent<TVectorData>
    template <class TVectorData>   
 void 
 VectorDataGlComponent<TVectorData>
-::RenderPoint(DataNodePointerType dataNode, const RegionType & extent, const AffineTransformType * transform)
+::RenderPoint(DataNodePointerType dataNode, const RegionType & /*extent*/, const AffineTransformType * transform)
 {
   // Take into account pixel spacing and origin
   PointType spacePoint = dataNode->GetPoint();
@@ -130,7 +130,7 @@ VectorDataGlComponent<TVectorData>
 template <class TVectorData>   
 void 
 VectorDataGlComponent<TVectorData>
-::RenderLine(DataNodePointerType dataNode, const RegionType & extent, const AffineTransformType * transform)
+::RenderLine(DataNodePointerType dataNode, const RegionType & /*extent*/, const AffineTransformType * transform)
 {
   const LineType * l = dataNode->GetLine();
   // Iterate on the line
@@ -160,7 +160,7 @@ VectorDataGlComponent<TVectorData>
 template <class TVectorData>   
 void 
 VectorDataGlComponent<TVectorData>
-::RenderPolygon(DataNodePointerType dataNode, const RegionType & extent, const AffineTransformType * transform)
+::RenderPolygon(DataNodePointerType dataNode, const RegionType & /*extent*/, const AffineTransformType * transform)
 {
   const PolygonType * extRing = dataNode->GetPolygonExteriorRing();
   const PolygonListType * intRings = dataNode->GetPolygonInteriorRings();

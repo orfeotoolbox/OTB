@@ -97,19 +97,19 @@ public:
   }
 
   template< class TScalarTypeInput >
-  static unsigned int PixelSize(const itk::RGBPixel<TScalarTypeInput>& in)
+  static unsigned int PixelSize(const itk::RGBPixel<TScalarTypeInput>& )
   {
     return 3;
   }
 
   template< class TScalarTypeInput >
-  static unsigned int PixelSize(const itk::RGBAPixel<TScalarTypeInput>& in)
+  static unsigned int PixelSize(const itk::RGBAPixel<TScalarTypeInput>& )
   {
     return 4;
   }
 
   template< class TScalarTypeInput >
-  static unsigned int PixelSize(const TScalarTypeInput in)
+  static unsigned int PixelSize(const TScalarTypeInput )
   {
     return 1;
   }
