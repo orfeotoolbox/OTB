@@ -167,9 +167,9 @@ OGRVectorDataIO<TData>
     /// get a hook on the internal structure
     InternalTreeNodeType * documentPtr = const_cast<InternalTreeNodeType *>(tree->GetNode(document));
     
-    /** IO class functor to convert ogr layer*/
-    Functor::OGRIOHelper<VectorDataType> IOFunctuor;
-    IOFunctuor.ConvertOGRLayerToDataTreeNode(layer, documentPtr);
+    /** IO class helper to convert ogr layer*/
+    OGRIOHelper<VectorDataType> OGRConversion;
+    OGRConversion.ConvertOGRLayerToDataTreeNode(layer, documentPtr);
     
   }// end For each layer
 
@@ -265,6 +265,7 @@ void OGRVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
 
   unsigned int kept = 0;
 
+  unsigned int layerKept = 0;
   OGRLayer * ogrCurrentLayer = NULL;
 //   OGRFeatureVectorType ogrFeatures;
   OGRGeometryCollection * ogrCollection = NULL;
@@ -275,9 +276,8 @@ void OGRVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
   
   
   //Refactoring SHPIO Manuel
-  Functor::OGRIOHelper<VectorDataType> IOFunctuor;
-  kept = IOFunctuor.ProcessNodeWrite(inputRoot, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
-  //ProcessNodeWrite(inputRoot, ogrCollection, ogrCurrentLayer, oSRS);
+  OGRIOHelper<VectorDataType> IOConversion;
+  layerKept = IOConversion.ProcessNodeWrite(inputRoot, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
 
   OGRDataSource::DestroyDataSource( m_DataSource );
   m_DataSource = NULL;
@@ -288,7 +288,7 @@ void OGRVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
   }
 
   chrono.Stop();
-  otbMsgDevMacro(<<"OGRVectorDataIO: file saved in "<<chrono.GetMeanTime()<<" seconds. (" << kept << " elements)");
+  std::cout<<"SHPVectorDataIO: file saved in "<<chrono.GetMeanTime()<<" seconds. (" << layerKept << " elements)"<<std::endl;
 
   otbMsgDevMacro( <<" OGRVectorDataIO::Write()  ");
 }

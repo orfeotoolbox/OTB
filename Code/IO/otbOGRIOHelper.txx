@@ -26,8 +26,7 @@
 
 namespace otb 
 {
-namespace Functor
-{
+
 
 template<class TVectorData>
 inline typename OGRIOHelper<TVectorData>
@@ -859,8 +858,6 @@ OGRIOHelper<TLabelObject,TPolygon>
    
 }
 */
-
-} // end namespace Functor
 
 } // end namespace otb
 
