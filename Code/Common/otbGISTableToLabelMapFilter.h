@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,13 +35,12 @@ namespace otb {
  * LabelMap.
  * The translation is delegate to the SHPLabelMapIO class (OGRLabelMapIO)
  * which calls the OGR driver to translate GIS layer to a LabelMap structure
- * \author Manuel GRIZONNET. CNES, France.
  *
  * \sa LabelMapSource
  * \ingroup Common, GeospatialAnalysis
  */
 template<class TGISTable, class TLabelMap >
-class ITK_EXPORT GISTableToLabelMapFilter : 
+class ITK_EXPORT GISTableToLabelMapFilter :
     public LabelMapSource< TLabelMap >
 {
 public:
@@ -61,52 +60,52 @@ public:
   typedef TLabelMap OutputLabelMapType;
   typedef typename OutputLabelMapType::Pointer        OutputLabelMapPointer;
   typedef typename OutputLabelMapType::ConstPointer   OutputLabelMapConstPointer;
-  
+
   typedef typename InputGISTableType::ConnectionType ConnectionType;
   typedef typename InputGISTableType::ConnectionPointerType ConnectionPointerType;
-  
+
   typedef typename OutputLabelMapType::PixelType       OutputLabelMapPixelType;
   typedef typename OutputLabelMapType::IndexType                               IndexType;
 
   /** Standard New method. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(GISTableToLabelMapFilter, 
+  itkTypeMacro(GISTableToLabelMapFilter,
                LabelMapSource);
 
-  
-  
+
+
   /** Image size typedef. */
   typedef itk::Size<TGISTable::Dimension> SizeType;
   //typedef typename IndexType::Pointer                                 IndexPointerType;
-  
+
   typedef typename InputGISTableType::PointType                     PointType;
-  
+
   /**
    * Set/Get the value used as "background" in the output image.
    * Defaults to NumericTraits<PixelType>::NonpositiveMin().
    */
   itkSetMacro(BackgroundValue, OutputLabelMapPixelType);
   itkGetConstMacro(BackgroundValue, OutputLabelMapPixelType);
-  
+
   /** Set the size of the output image. */
   itkSetMacro( Size, SizeType );
-  
+
   /** Set the starting index of the output image. */
   itkSetMacro( StartIndex, IndexType );
-  
+
   /** Set/Get the GISTable input of this process object.  */
   virtual void SetInput( const InputGISTableType *input);
   virtual void SetInput( unsigned int idx, const InputGISTableType *input);
   const InputGISTableType * GetInput(void);
   const InputGISTableType * GetInput(unsigned int idx);
-  
+
   virtual void GenerateOutputInformation();
-  
+
 protected:
   GISTableToLabelMapFilter();
-  ~GISTableToLabelMapFilter() {};
+  virtual ~GISTableToLabelMapFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** GISTableToLabelMapFilter needs the entire input be
@@ -117,7 +116,7 @@ protected:
   /** Single-threaded version of GenerateData.  This filter delegates
    * to the OGR driver. */
   void GenerateData();
-  
+
 
 private:
   GISTableToLabelMapFilter(const Self&); //purposely not implemented
@@ -125,15 +124,15 @@ private:
 
   typename GISTableToVectorDataFilterType::Pointer m_GISTableToVectorDataFilter;
   typename VectorDataToLabelMapFilterType::Pointer m_VectorDataToLabelMapFilter;
-  
+
   OutputLabelMapPixelType m_BackgroundValue;
-  
+
   SizeType            m_Size;
   IndexType           m_StartIndex;
 } ; // end of class
 
 } // end namespace otb
-  
+
 #ifndef ITK_MANUAL_INSTANTIATION
 #include "otbGISTableToLabelMapFilter.txx"
 #endif

@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,18 +34,17 @@ namespace otb {
    *
    * LabelMapToVectorDataFilter converts a LabelMap to a
    * VectorData where all the pixels get the attribute value of the label object they belong.
-   * It uses the class otbLabelObjectToPolygonFunctor wich follows a finite states machine described in 
+   * It uses the class otbLabelObjectToPolygonFunctor wich follows a finite states machine described in
    *
    * "An algorithm for the rapid computation of boundaries of run-length
    * encoded regions", Francis K. H. Queck, in Pattern Recognition 33
-   * (2000), p 1637-1649.  
- * \author Manuel GRIZONNET. CNES, France.
+   * (2000), p 1637-1649.
  *
    * \sa VectorDataSource
  * \ingroup GeoSpatialAnalysis
  */
 template<class TLabelMap, class TVectorData >
-class ITK_EXPORT LabelMapToVectorDataFilter : 
+class ITK_EXPORT LabelMapToVectorDataFilter :
     public VectorDataSource< TVectorData >
 {
 public:
@@ -61,36 +60,36 @@ public:
   typedef TVectorData OutputVectorDataType;
   typedef typename OutputVectorDataType::Pointer        OutputVectorDataPointer;
   typedef typename OutputVectorDataType::ConstPointer   OutputVectorDataConstPointer;
-  
+
   typedef typename InputLabelMapType::LabelObjectType   LabelObjectType;
-  
+
   typedef typename OutputVectorDataType::DataNodeType  DataNodeType;
   typedef typename DataNodeType::Pointer         DataNodePointerType;
-  typedef typename DataNodeType::PolygonType  PolygonType;    
+  typedef typename DataNodeType::PolygonType  PolygonType;
   typedef typename PolygonType::Pointer  PolygonPointerType;
   /** Some typedefs specific to functors*/
   typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType,PolygonType> FunctorType;
   typedef otb::SimplifyPathFunctor<PolygonType,PolygonType> SimplifyFunctorType;
   typedef ClosePathFunctor <PolygonType,PolygonType> CloseFunctorType;
   /** ImageDimension constants */
-  
+
   /** Standard New method. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelMapToVectorDataFilter, 
+  itkTypeMacro(LabelMapToVectorDataFilter,
                VectorDataSource);
 
-  
+
   /** Set/Get the LabelMap input of this process object.  */
   virtual void SetInput( const InputLabelMapType *input);
   virtual void SetInput( unsigned int idx, const InputLabelMapType *input);
   const InputLabelMapType * GetInput(void);
   const InputLabelMapType * GetInput(unsigned int idx);
-  
+
 protected:
   LabelMapToVectorDataFilter();
-  ~LabelMapToVectorDataFilter() {};
+  virtual ~LabelMapToVectorDataFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** LabelMapToAttributeImageFilter needs the entire input be
@@ -100,10 +99,10 @@ protected:
 
   /** LabelMapToAttributeImageFilter will produce the entire output. */
   //void EnlargeOutputRequestedRegion(DataObject *itkNotUsed(output));
-  
+
   /** Single-threaded version of GenerateData.  The functor is not thread safe. */
   void GenerateData();
-  
+
 
 private:
   LabelMapToVectorDataFilter(const Self&); //purposely not implemented
@@ -113,7 +112,7 @@ private:
 } ; // end of class
 
 } // end namespace itk
-  
+
 #ifndef ITK_MANUAL_INSTANTIATION
 #include "otbLabelMapToVectorDataFilter.txx"
 #endif
