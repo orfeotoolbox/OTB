@@ -521,19 +521,19 @@ ADD_TEST(ioTuGDALImageIOCanRead_QUICK_XS ${IO_TESTS5} otbGDALImageIOTestCanRead
         ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF )
 
 ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_PAN ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/PARIS/Ikonos/po_79039_pan_0000000.tif)
+        ${LARGEDATA}/IKONOS/PARIS/po_79039_pan_0000000.tif)
 
 ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_GRN ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/PARIS/Ikonos/po_79039_grn_0000000.tif)
+        ${LARGEDATA}/IKONOS/PARIS/po_79039_grn_0000000.tif)
 
 ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_BLU ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/PARIS/Ikonos/po_79039_blu_0000000.tif)
+        ${LARGEDATA}/IKONOS/PARIS/po_79039_blu_0000000.tif)
 
 ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_RED ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/PARIS/Ikonos/po_79039_red_0000000.tif)
+        ${LARGEDATA}/IKONOS/PARIS/po_79039_red_0000000.tif)
 
 ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_NIR ${IO_TESTS5} otbGDALImageIOTestCanRead
-        ${LARGEDATA}/PARIS/Ikonos/po_79039_nir_0000000.tif)
+        ${LARGEDATA}/IKONOS/PARIS/po_79039_nir_0000000.tif)
 
 ADD_TEST(ioTuGDALImageIOCanRead_SPOT4 ${IO_TESTS5} otbGDALImageIOTestCanRead
 # Filename identification is now set in the ImageFileReader class (Fiche 212)
@@ -897,7 +897,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosPAN2PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
                      ${TEMP}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/PARIS/Ikonos/po_79039_pan_0000000.tif
+         ${LARGEDATA}/IKONOS/PARIS/po_79039_pan_0000000.tif
          ${TEMP}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -907,7 +907,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosRED2PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
                             ${TEMP}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/PARIS/Ikonos/po_79039_red_0000000.tif
+         ${LARGEDATA}/IKONOS/PARIS/po_79039_red_0000000.tif
          ${TEMP}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -916,7 +916,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosGRN2PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
                      ${TEMP}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/PARIS/Ikonos/po_79039_grn_0000000.tif
+         ${LARGEDATA}/IKONOS/PARIS/po_79039_grn_0000000.tif
          ${TEMP}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -925,7 +925,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosBLU2PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
                      ${TEMP}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/PARIS/Ikonos/po_79039_blu_0000000.tif
+         ${LARGEDATA}/IKONOS/PARIS/po_79039_blu_0000000.tif
          ${TEMP}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -934,7 +934,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosNIR2PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
                      ${TEMP}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/PARIS/Ikonos/po_79039_nir_0000000.tif
+         ${LARGEDATA}/IKONOS/PARIS/po_79039_nir_0000000.tif
          ${TEMP}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -944,7 +944,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosNIR2LUM ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
                      ${TEMP}/ioExtractROI_IkonosNIR2LUM_100_100_77_300.lum
          otbMultiChannelExtractROI
-         ${LARGEDATA}/PARIS/Ikonos/po_79039_nir_0000000.tif
+         ${LARGEDATA}/IKONOS/PARIS/po_79039_nir_0000000.tif
          ${TEMP}/ioExtractROI_IkonosNIR2LUM_100_100_77_300.lum
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -954,7 +954,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosNIR2BSQ ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}       ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
                                 ${TEMP}/ioExtractROI_IkonosNIR2BSQ_100_100_77_300.hd
          otbMultiChannelExtractROI
-         ${LARGEDATA}/PARIS/Ikonos/po_79039_nir_0000000.tif
+         ${LARGEDATA}/IKONOS/PARIS/po_79039_nir_0000000.tif
          ${TEMP}/ioExtractROI_IkonosNIR2BSQ_100_100_77_300.hd
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
