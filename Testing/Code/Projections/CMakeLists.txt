@@ -163,7 +163,7 @@ ADD_TEST(prTvSensorModelRadarSat2 ${PROJECTIONS_TESTS1}
          ${BASELINE_FILES}/prTvSensorModelRadarSat2.txt
          ${TEMP}/prTvSensorModelRadarSat2.txt
     otbSensorModel
-         ${LARGEINPUT}/RADARSAT2/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
+         ${LARGEINPUT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
          ${TEMP}/prTvSensorModelRadarSat2.txt
 )
 
