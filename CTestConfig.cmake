@@ -10,6 +10,6 @@ set(CTEST_NIGHTLY_START_TIME "20:00:00 CEST")
 set(CTEST_NIGHTLY_IDENT_LOCATION "http://www.orfeo-toolbox.org/nightly/libNightlyNumber")
 
 set(CTEST_DROP_METHOD "http")
-set(CTEST_DROP_SITE "www.orfeo-toolbox.org")
-set(CTEST_DROP_LOCATION "/Dashboard/submit.php?project=OTB")
+set(CTEST_DROP_SITE "dash.orfeo-toolbox.org")
+set(CTEST_DROP_LOCATION "/submit.php?project=OTB")
 set(CTEST_DROP_SITE_CDASH TRUE)
