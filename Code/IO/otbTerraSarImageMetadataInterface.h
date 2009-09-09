@@ -51,7 +51,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageMetadataInterfaceBase, itk::Object);
+  itkTypeMacro(TerraSarImageMetadataInterface, itk::Object);
  
   typedef itk::ImageBase< 2 >                   ImageType;
   typedef itk::MetaDataDictionary               MetaDataDictionaryType;

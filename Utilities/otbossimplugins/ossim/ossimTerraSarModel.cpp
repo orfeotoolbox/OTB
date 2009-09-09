@@ -59,8 +59,7 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel()
      _sceneCenterRangeTime(0.0),
      _SrToGr_scaling_factor(0.0),
      _alt_srgr_coefset(3),
-     theProductXmlFile(),
-     theGenerationTime("")
+     theProductXmlFile()
 {
 }
 
@@ -73,8 +72,7 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel(
      _sceneCenterRangeTime(rhs._sceneCenterRangeTime),
      _SrToGr_scaling_factor(rhs._SrToGr_scaling_factor),
      _alt_srgr_coefset(rhs._alt_srgr_coefset),
-     theProductXmlFile(rhs.theProductXmlFile),
-     theGenerationTime(rhs.theGenerationTime)
+     theProductXmlFile(rhs.theProductXmlFile)
 {
 }
 
@@ -162,10 +160,6 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
             if (result)
             {
                result = tsDoc.getMission(xdoc, theSensorID);
-            }
-	    if(result)
-            {
-               result = tsDoc.getGenerationTime(xdoc, theGenerationTime);
             }
 
             // Set the base class gsd:
@@ -276,7 +270,6 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
       kwl.add(prefix, ALT_SR_GR_COEFFICIENT1_KW,  _alt_srgr_coefset[1]);
       kwl.add(prefix, ALT_SR_GR_COEFFICIENT2_KW,  _alt_srgr_coefset[2]);
       kwl.add(prefix, PRODUCT_XML_FILE_KW, theProductXmlFile.c_str());   
-      kwl.add(prefix, "generation_time", theGenerationTime.c_str());
 
       // Call base save state:
       result = ossimGeometricSarSensorModel::saveState(kwl, prefix);
@@ -343,13 +336,6 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
       }
    }
    
-   // Get the product.xml file name.
-   lookup = kwl.find(prefix, "generation_time");
-   if (lookup)
-   {
-      theGenerationTime = lookup;    
-   }
-
    // Load the base class.
    bool result = ossimGeometricSarSensorModel::loadState(kwl, prefix);
 
@@ -566,23 +552,6 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
          result = false;
       }
       
-      lookup = kwl.find(prefix, "generation_time");
-      if (lookup)
-      {
-         theGenerationTime = lookup;
-      }
-      else
-      {
-         if (traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_WARN)
-               << MODULE
-               << "\nRequired keyword not found: "
-               << "generation_time" << "\n";
-         } 
-         result = false;
-      }
-
    } // matches: if (result)
 
    if (traceDebug())
@@ -631,9 +600,8 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
        << ALT_SR_GR_COEFFICIENT0_KW << ": " << _alt_srgr_coefset[0] << "\n"
        << ALT_SR_GR_COEFFICIENT1_KW << ": " <<_alt_srgr_coefset[1] << "\n"
        << ALT_SR_GR_COEFFICIENT2_KW << ": " <<_alt_srgr_coefset[2] << "\n"
-       << PRODUCT_XML_FILE_KW << ": " << theProductXmlFile.c_str() << "\n"
-       << "Generation Time : " << theGenerationTime << "\n";
-
+       << PRODUCT_XML_FILE_KW << ": " << theProductXmlFile.c_str() << "\n";
+   
    ossimGeometricSarSensorModel::print(out);
    
    // Reset flags.
@@ -1386,18 +1354,6 @@ bool ossimplugins::ossimTerraSarModel::initRefPoint(
       if (tsDoc.getAzimuthStopTime(xdoc, s) )
       {
          if (! ossim::iso8601TimeStringToCivilDate(s, dateStop) )
-         {
-            result = false;
-         }
-      }
-      else
-      {
-         result = false;
-      }
-      
-      if (tsDoc.getGenerationTime(xdoc, s) )
-      {
-         if (! ossim::iso8601TimeStringToCivilDate(s, dateStart) )
          {
             result = false;
          }
