@@ -84,12 +84,12 @@ ADD_TEST(viTvImageViewerWithLargeOtbVectorImage ${VISU_TESTS1}
 
 ADD_TEST(viTvModulusImageViewerWithComplexImage ${VISU_TESTS1}
         otbImageViewer
-	${IMAGEDATA}/RADARSAT2/SCENE01/DAT_01.001 1
+	${IMAGEDATA}/RADARSAT1/PRODUCT2/SCENE01/DAT_01.001 1
         )
 
 ADD_TEST(viTvPhaseImageViewerWithComplexImage ${VISU_TESTS1}
         otbImageViewer
-	${IMAGEDATA}/RADARSAT2/SCENE01/DAT_01.001 2
+	${IMAGEDATA}/RADARSAT1/PRODUCT2/SCENE01/DAT_01.001 2
         )
 
 ADD_TEST(viTvImageViewerWithLargeOtbImage ${VISU_TESTS1}

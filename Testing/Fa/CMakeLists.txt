@@ -98,19 +98,19 @@ ADD_TEST(FA-00006-io_Poupees_R8_Double2UCharBis ${COMMON_TESTS}
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(FA-00006-io_Radarsat_UI2_UShort2UShort ${COMMON_TESTS}
          otbMultiToMonoChannelExtractROI
-         -ushort ${IMAGEDATA}/RADARSAT1/SCENE01/
+         -ushort ${IMAGEDATA}/RADARSAT1/PRODUCT1/SCENE01/
          -ushort ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_ui2.hdr
          -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
 
 ADD_TEST(FA-00006-io_Radarsat_UI2_Int2Int ${COMMON_TESTS}
          otbMultiToMonoChannelExtractROI
-         -int ${IMAGEDATA}/RADARSAT1/SCENE01/
+         -int ${IMAGEDATA}/RADARSAT1/PRODUCT1/SCENE01/
          -int ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_i4.hdr
          -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
 
 ADD_TEST(FA-00006-io_Radarsat_UI2_Double2Double_ ${COMMON_TESTS}
          otbMultiToMonoChannelExtractROI
-         -double ${IMAGEDATA}/RADARSAT1/SCENE01/
+         -double ${IMAGEDATA}/RADARSAT1/PRODUCT1/SCENE01/
          -double ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8.hdr
          -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
 
