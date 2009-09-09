@@ -118,7 +118,7 @@ ADD_TEST(prTvSensorModelIkonos ${PROJECTIONS_TESTS1}
          ${BASELINE_FILES}/prTvSensorModelIkonos.txt
          ${TEMP}/prTvSensorModelIkonos.txt
     otbSensorModel
-         ${LARGEINPUT}/IKONOS_BLOSSEVILLE/po_2619900_pan_0000000.tif
+         ${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
          ${TEMP}/prTvSensorModelIkonos.txt
 )
 

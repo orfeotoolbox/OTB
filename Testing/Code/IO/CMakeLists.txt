@@ -1917,7 +1917,7 @@ ADD_TEST(ioTvImageMetadataInterfaceIKONOSTest ${IO_TESTS17}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceIKONOS.txt
                          ${TEMP}/ioTvImageMetadataInterfaceIKONOS.txt
         otbImageMetadataInterfaceTest
-        ${LARGEDATA}/IKONOS_BLOSSEVILLE/po_2619900_blu_0000000.tif
+        ${LARGEDATA}/IKONOS/BLOSSEVILLE/po_2619900_blu_0000000.tif
         ${TEMP}/ioTvImageMetadataInterfaceIKONOS.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceSPOTTest ${IO_TESTS17}

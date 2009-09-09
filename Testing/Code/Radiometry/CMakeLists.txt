@@ -201,7 +201,7 @@ ADD_TEST(raTvImageToLuminanceImageFilterAutoIkonos ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoIkonos.tif
                           ${TEMP}/raTvImageToLuminanceImageFilterAutoIkonos.tif
         otbImageToLuminanceImageFilterAuto
-	${LARGEINPUT}/IKONOS_BLOSSEVILLE/po_2619900_pan_0000000.tif
+	${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
 	${TEMP}/raTvImageToLuminanceImageFilterAutoIkonos.tif
          )
 ENDIF(OTB_DATA_USE_LARGEINPUT)

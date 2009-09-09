@@ -42,7 +42,7 @@ ADD_TEST(utTvOssimKeywordlistBlossevilleIkonosTest ${UTILITIES_TESTS}
 --compare-list ${TOL}  ${BASELINE_FILES}/utOssimKeywordlistBlossevilleIkonos.txt
                         ${TEMP}/utOssimKeywordlistBlossevilleIkonos.txt
         ossimKeywordlistTest
-        ${IMAGEDATA}/IKONOS_BLOSSEVILLE/po_2619900_grn_0000000.tif
+        ${IMAGEDATA}/IKONOS/BLOSSEVILLE/po_2619900_grn_0000000.tif
         ${TEMP}/utOssimKeywordlistBlossevilleIkonos.txt
         )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
