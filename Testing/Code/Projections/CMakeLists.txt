@@ -43,7 +43,7 @@ ADD_TEST(prTvTestCreateProjectionWithOSSIM_Toulouse ${PROJECTIONS_TESTS1}
 
 ADD_TEST(prTvTestCreateProjectionWithOSSIM_Cevennes ${PROJECTIONS_TESTS1}
         otbCreateProjectionWithOSSIM
-        ${LARGEINPUT}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         )
 
 ADD_TEST(prTvTestCreateProjectionWithOTB_Toulouse ${PROJECTIONS_TESTS1}
@@ -53,7 +53,7 @@ ADD_TEST(prTvTestCreateProjectionWithOTB_Toulouse ${PROJECTIONS_TESTS1}
 
 ADD_TEST(prTvTestCreateProjectionWithOTB_Cevennes ${PROJECTIONS_TESTS1}
         otbCreateProjectionWithOTB
-        ${LARGEINPUT}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         )
 
 ADD_TEST(prTvTestCreateInverseForwardSensorModel_Toulouse ${PROJECTIONS_TESTS1}
@@ -63,7 +63,7 @@ ADD_TEST(prTvTestCreateInverseForwardSensorModel_Toulouse ${PROJECTIONS_TESTS1}
 
 ADD_TEST(prTvTestCreateInverseForwardSensorModel_Cevennes ${PROJECTIONS_TESTS1}
         otbCreateInverseForwardSensorModel
-        ${LARGEINPUT}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         )
 
 ADD_TEST(prTvRegionProjectionResamplerToulouse ${PROJECTIONS_TESTS1}
@@ -84,7 +84,7 @@ ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS1}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvRegionProjectionResamplerCevennes.tif
                           ${TEMP}/prTvRegionProjectionResamplerCevennes.tif
 				otbRegionProjectionResampler
-        ${LARGEINPUT}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         ${TEMP}/prTvRegionProjectionResamplerCevennes.tif
         3.7 44.08
         500
@@ -220,7 +220,7 @@ ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationCevennes_UTM.tif
                           ${TEMP}/prTvOrthoRectificationCevennes_UTM.tif
         otbOrthoRectificationFilter
-        ${LARGEINPUT}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         ${TEMP}/prTvOrthoRectificationCevennes_UTM.tif
         556046
         4.881e+06
@@ -256,7 +256,7 @@ ADD_TEST(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
                           ${TEMP}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
         otbOrthoRectificationFilterWithDEM
-        ${LARGEINPUT}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         ${TEMP}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
         556046
         4.881e+06

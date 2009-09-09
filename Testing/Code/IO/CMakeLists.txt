@@ -1903,7 +1903,7 @@ ADD_TEST(ioTvImageMetadataInterfaceQBCevennesTest ${IO_TESTS17}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceQBCevennes.txt
                          ${TEMP}/ioTvImageMetadataInterfaceQBCevennes.txt
         otbImageMetadataInterfaceTest
-        ${LARGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${LARGEDATA}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceQBCevennes.txt
 )
 ADD_TEST(ioTvImageMetadataInterfaceQBMULTest ${IO_TESTS17}
