@@ -537,8 +537,8 @@ ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_NIR ${IO_TESTS5} otbGDALImageIOTestCanRea
 
 ADD_TEST(ioTuGDALImageIOCanRead_SPOT4 ${IO_TESTS5} otbGDALImageIOTestCanRead
 # Filename identification is now set in the ImageFileReader class (Fiche 212)
-#        ${LARGEDATA}/SPOT4_SCENE01/ )
-        ${LARGEDATA}/SPOT4_SCENE01/IMAG_01.DAT )
+#        ${LARGEDATA}/SPOT4/RIO_DE_JANEIRO/ )
+        ${LARGEDATA}/SPOT4/RIO_DE_JANEIRO/IMAG_01.DAT )
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
@@ -810,7 +810,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT42PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
                      ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/SPOT4_SCENE01/
+         ${LARGEDATA}/SPOT4/RIO_DE_JANEIRO/
          ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
          -startX 700 -startY 60 -sizeX 77 -sizeY 489
          -channels 1 2 3 )
@@ -818,7 +818,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT42PNG_2 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
                      ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/SPOT4_SCENE01/
+         ${LARGEDATA}/SPOT4/RIO_DE_JANEIRO/
          ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
          -startX 700 -startY 60 -sizeX 77 -sizeY 489
          -channels 3 2 1 )
