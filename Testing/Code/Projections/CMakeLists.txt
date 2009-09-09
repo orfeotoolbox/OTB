@@ -100,7 +100,7 @@ ADD_TEST(prTvSensorModelSpot5 ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelSpot5.txt
 --ignore-lines-with 1 support_data.metadata_file
     otbSensorModel
-         ${LARGEINPUT}/SPOT5_SCENE01/IMAGERY.TIF
+         ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
          ${TEMP}/prTvSensorModelSpot5.txt
 )
 
@@ -277,7 +277,7 @@ ADD_TEST(prTlOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationSPOT5_UTM.tif
                           ${TEMP}/prTvOrthoRectificationSPOT5_UTM.tif
         otbOrthoRectificationFilter
-        ${LARGEINPUT}/SPOT5_SCENE01/IMAGERY.TIF
+        ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEMP}/prTvOrthoRectificationSPOT5_UTM.tif
         536187
         3950748
@@ -293,7 +293,7 @@ ADD_TEST(prTlOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationSPOT5_UTM.tif
                           ${TEMP}/prTvOrthoRectificationMonoThreadSPOT5_UTM.tif
         otbOrthoRectificationMonoThreadFilter
-        ${LARGEINPUT}/SPOT5_SCENE01/IMAGERY.TIF
+        ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEMP}/prTvOrthoRectificationMonoThreadSPOT5_UTM.tif
         536187
         3950748

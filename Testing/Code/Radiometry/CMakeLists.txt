@@ -191,7 +191,7 @@ ADD_TEST(raTvImageToLuminanceImageFilterAutoSpot5 ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoSpot5.tif
                           ${TEMP}/raTvImageToLuminanceImageFilterAutoSpot5.tif
         otbImageToLuminanceImageFilterAuto
-	${LARGEINPUT}/SPOT5_SCENE01/IMAGERY.TIF
+	${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
 	${TEMP}/raTvImageToLuminanceImageFilterAutoSpot5.tif
          )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -245,7 +245,7 @@ ADD_TEST(raTvLuminanceToReflectanceImageFilterAuto ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAuto.tif
                           ${TEMP}/raTvLuminanceToReflectanceImageFilterAuto.tif
         otbLuminanceToReflectanceImageFilterAuto
-	${LARGEINPUT}/SPOT5_SCENE01/IMAGERY.TIF
+	${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
 	${TEMP}/raTvLuminanceToReflectanceImageFilterAuto.tif
          )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -328,7 +328,7 @@ ADD_TEST(raTvImageToReflectanceImageFilterAuto ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON}  ${BASELINE}/raTvImageToReflectanceImageFilterAuto.tif
                           ${TEMP}/raTvImageToReflectanceImageFilterAuto.tif
         otbImageToReflectanceImageFilterAuto
-	${LARGEINPUT}/SPOT5_SCENE01/IMAGERY.TIF
+	${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
 	${TEMP}/raTvImageToReflectanceImageFilterAuto.tif
          )
 ENDIF(OTB_DATA_USE_LARGEINPUT)

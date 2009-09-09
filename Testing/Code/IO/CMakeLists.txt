@@ -854,7 +854,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/SPOT5_SCENE01/
+         ${LARGEDATA}/SPOT5/TEHERAN/
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 1 2 3 )
@@ -863,7 +863,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_2 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/SPOT5_SCENE01/
+         ${LARGEDATA}/SPOT5/TEHERAN/
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 1 )
@@ -871,7 +871,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_3 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/SPOT5_SCENE01/
+         ${LARGEDATA}/SPOT5/TEHERAN/
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 2 )
@@ -879,7 +879,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_4 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/SPOT5_SCENE01/
+         ${LARGEDATA}/SPOT5/TEHERAN/
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 3 )
@@ -887,7 +887,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_5 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
          otbMultiChannelExtractROI
-         ${LARGEDATA}/SPOT5_SCENE01/
+         ${LARGEDATA}/SPOT5/TEHERAN/
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 4 )
@@ -1016,7 +1016,7 @@ ADD_TEST(ioTvOtbVectorImageTestSpot5 ${IO_TESTS9}
    --compare-ascii ${EPS}  ${BASELINE_FILES}/ioOtbVectorImageTestSpot5.txt
                      ${TEMP}/ioOtbVectorImageTestSpot5.txt
         otbVectorImageTest
-        ${LARGEDATA}/SPOT5_SCENE01/
+        ${LARGEDATA}/SPOT5/TEHERAN/
         ${TEMP}/ioOtbVectorImageTestSpot5.txt)
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -1924,7 +1924,7 @@ ADD_TEST(ioTvImageMetadataInterfaceSPOTTest ${IO_TESTS17}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceSPOT.txt
                          ${TEMP}/ioTvImageMetadataInterfaceSPOT.txt
         otbImageMetadataInterfaceTest
-        ${LARGEDATA}/SPOT5_SCENE01/IMAGERY.TIF
+        ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEMP}/ioTvImageMetadataInterfaceSPOT.txt
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
