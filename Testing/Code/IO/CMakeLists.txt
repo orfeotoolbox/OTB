@@ -58,7 +58,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
 # ---  RADARSAT (GDAL)  ---
 ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT2ENVI ${COMMON_TESTS3}
          otbMultiToMonoChannelExtractROI
-         -ushort ${LARGEDATA}/RADARSAT1/PRODUCT1/SCENE01/
+         -ushort ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/
          -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
          -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
 
@@ -101,7 +101,7 @@ ADD_TEST(ioTvImageFileReaderRADARSAT ${IO_TESTS1}
    --compare-image ${EPSILON_9} ${BASELINE}/ioImageFileReaderRADARSAT.tif
                            ${TEMP}/ioImageFileReaderRADARSAT.tif
          otbImageFileReaderERS
-         ${LARGEDATA}/RADARSAT1/PRODUCT1/SCENE01/
+         ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/
          ${TEMP}/ioImageFileReaderRADARSAT.tif)
 
 ADD_TEST(ioTvImageFileReaderPALSAR ${IO_TESTS1}
@@ -506,8 +506,8 @@ IF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(ioTuGDALImageIOCanRead_RADARSAT ${IO_TESTS5} otbGDALImageIOTestCanRead
 # Filename identification is now set in the ImageFileReader class (Fiche 212)
-#        ${LARGEDATA}/RADARSAT1/PRODUCT1/SCENE01/ )
-        ${LARGEDATA}/RADARSAT1/PRODUCT1/SCENE01/DAT_01.001 )
+#        ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/ )
+        ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/DAT_01.001 )
 
 ADD_TEST(ioTuGDALImageIOCanRead_SAR_ERS2 ${IO_TESTS5} otbGDALImageIOTestCanRead
 # Filename identification is now set in the ImageFileReader class (Fiche 212)
@@ -999,7 +999,7 @@ ADD_TEST(ioTvOtbImageTestRadarsat ${IO_TESTS9}
    --compare-ascii ${EPS}  ${BASELINE_FILES}/ioOtbImageTestRadarsat.txt
                      ${TEMP}/ioOtbImageTestRadarsat.txt
         otbImageTest
-       	${LARGEDATA}/RADARSAT1/PRODUCT1/SCENE01/
+       	${LARGEDATA}/RADARSAT1/GOMA/SCENE01/
         ${TEMP}/ioOtbImageTestRadarsat.txt)
 
 # ---  Otb::VectorImage Test  ---
@@ -1007,7 +1007,7 @@ ADD_TEST(ioTvOtbVectorImageTestRadarsat ${IO_TESTS9}
    --compare-ascii ${EPS}  ${TEMP}/ioOtbImageTestRadarsat.txt
                      ${TEMP}/ioOtbVectorImageTestRadarsat.txt
         otbVectorImageTest
-        ${LARGEDATA}/RADARSAT1/PRODUCT1/SCENE01/
+        ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/
         ${TEMP}/ioOtbVectorImageTestRadarsat.txt)
 
 
@@ -1618,7 +1618,7 @@ ADD_TEST(ioTvGDALDriverDoubleWritingTest ${IO_TESTS14}
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvReadingComplexDataIntoComplexImage ${IO_TESTS14}
 		otbReadingComplexDataIntoComplexImageTest
-		${LARGEDATA}/RADARSAT1/PRODUCT2/SCENE01/DAT_01.001
+		${LARGEDATA}/RADARSAT1/GOMA2/SCENE01/DAT_01.001
 		1000 1000
 )
 
@@ -1627,7 +1627,7 @@ ADD_TEST(ioTvWritingComplexDataWithComplexImage ${IO_TESTS14}
 		${BASELINE}/ioWritingComplexDataWithComplexImageOutput.tif
 		${TEMP}/ioWritingComplexDataWithComplexImageOutput.tif
 		otbWritingComplexDataWithComplexImageTest
-		${LARGEDATA}/RADARSAT1/PRODUCT2/SCENE01/DAT_01.001
+		${LARGEDATA}/RADARSAT1/GOMA2/SCENE01/DAT_01.001
 		${TEMP}/ioWritingComplexDataWithComplexImageOutput.tif
 		1000 1000
 		500  500

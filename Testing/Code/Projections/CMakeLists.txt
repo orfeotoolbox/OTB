@@ -154,7 +154,7 @@ ADD_TEST(prTvSensorModelRadarSat1 ${PROJECTIONS_TESTS1}
          ${BASELINE_FILES}/prTvSensorModelRadarSat1.txt
          ${TEMP}/prTvSensorModelRadarSat1.txt
     otbSensorModel
-         ${LARGEINPUT}/RADARSAT1/PRODUCT1/SCENE01/DAT_01.001
+         ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/DAT_01.001
          ${TEMP}/prTvSensorModelRadarSat1.txt
 )
 
