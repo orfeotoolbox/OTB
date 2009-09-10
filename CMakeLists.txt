@@ -436,7 +436,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
 
   INCLUDE_DIRECTORIES(${GDAL_INCLUDE_DIRS})
 
-  FIND_LIBRARY(GDAL_LIBRARY NAMES gdal gdal1.6.0 gdal1.5.0 gdal1.4.0 gdal1.3.2 PATHS /usr/lib/gdal)
+  FIND_LIBRARY(GDAL_LIBRARY NAMES gdal gdal1.5.0 gdal1.4.0 gdal1.3.2 PATHS /usr/lib/gdal)
 
   IF (NOT GDAL_LIBRARY)
   MESSAGE(FATAL_ERROR
@@ -551,6 +551,18 @@ IF(OTB_USE_EXTERNAL_GDAL)
 ELSE(OTB_USE_EXTERNAL_GDAL)
 ENDIF(OTB_USE_EXTERNAL_GDAL)
 
+#Experimental
+FIND_PACKAGE(Gettext)
+IF(GETTEXT_FOUND)
+  SET(OTB_I18N 1)
+  SET(OTB_LANG "en" CACHE STRING "OTB internationalization (Experimental)")#might want to get the Locale from the system here
+  SET(OTB_LANG_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/I18n)
+  SUBDIRS(I18n)
+ELSE(GETTEXT_FOUND)
+  SET(OTB_I18N 0)
+  MESSAGE(STATUS
+              "Gettext not found, internationalization will not be available")
+ENDIF(GETTEXT_FOUND)
 
 #-------------------------------
 # End connections whith external libraries
