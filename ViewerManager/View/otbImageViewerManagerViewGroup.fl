@@ -187,7 +187,7 @@ class ImageViewerManagerViewGroup {open
         tooltip {Save the current link} xywh {84 175 90 30} box ROUND_UP_BOX color 23 selection_color 23 labelcolor 186
       }
       Fl_Browser guiLinkListLeft {
-        label {First Image}
+        label {First image}
         tooltip {List of image viewers already linked with the selected image viewer} xywh {10 25 235 75} type Hold box EMBOSSED_BOX color 54 selection_color 20 labelcolor 186 align 1 textcolor 187
       }
       Fl_Button guiLinkRemove {
