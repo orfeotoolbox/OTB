@@ -1,22 +1,20 @@
-# translation of otb-fr.po to Francais
-# French translations for PACKAGE package.
-# Copyright (C) 2009 THE PACKAGE'S COPYRIGHT HOLDER
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-# Emmanuel Christophe <emmanuel.christophe@orfeo-toolbox.org>, 2009.
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: otb-fr\n"
+"Project-Id-Version: otb 3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-09-10 13:40+0800\n"
-"PO-Revision-Date: 2009-09-10 15:05+0800\n"
-"Last-Translator: Emmanuel Christophe <emmanuel.christophe@orfeo-toolbox.org>\n"
-"Language-Team: American English <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 0.3\n"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:65
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:107
@@ -30,35 +28,35 @@ msgstr ""
 #: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:21
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:70
 msgid "File"
-msgstr "Fichier"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:66
 msgid "Load Left Image ..."
-msgstr "Charger image a gauche"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:67
 msgid "Load Right Image ..."
-msgstr "Charger image a droite"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:68
 msgid "Load SVM model ..."
-msgstr "Charger modèle SVM"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:69
 msgid "Import vector data ..."
-msgstr "Importer donnees vecteur"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:70
 msgid "Export vector data ..."
-msgstr "Exporter donnee vecteur"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:71
 msgid "Save SVM model ..."
-msgstr "Sauver modèle SVM"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:72
 msgid "Save result image ..."
-msgstr "Sauver image resultat"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:73
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:117
@@ -70,7 +68,7 @@ msgstr "Sauver image resultat"
 #: Segmentation/otbSegmentationApplicationViewGroup.cxx:95
 #: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:23
 msgid "Exit"
-msgstr "Quitter"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:342
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:273
@@ -100,7 +98,7 @@ msgstr ""
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:351
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:282
 msgid "linear"
-msgstr "lineaire"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:352
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:283
@@ -128,7 +126,7 @@ msgstr ""
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:513
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:484
 msgid "Clear"
-msgstr "Effacer"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:386
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:456
@@ -136,57 +134,57 @@ msgstr "Effacer"
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:523
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:531
 msgid "Clear the entire drawing."
-msgstr "Effacer tout le dessin"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:393
 msgid "Learn  "
-msgstr "Apprentisasage"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:394
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:503
 msgid "Learn the SVM model from the training set."
-msgstr "Apprentissage du SVM depuis l'ensemble d'entrainement"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:404
 msgid "Unchanged class"
-msgstr "Classe sans changements"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:405
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:427
 msgid "Choose changed class training set color."
-msgstr "Choix de la couleur de la classe changements"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:415
 msgid "Changed class"
-msgstr "Changer la classe"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:416
 msgid "Toggle changed class training set display."
-msgstr "Affiche la classe changements"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:426
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:434
 msgid "Color ..."
-msgstr "Couleur..."
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:435
 msgid "Choose unchanged class training set color."
-msgstr "Choix de la couleur de la classe sans changement"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:442
 #: LandCoverMap/otbLandCoverMapView.cxx:152
 msgid "Opacity"
-msgstr "Opacite"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:443
 msgid "Set the training set opacity."
-msgstr "Modifie l'opacite de l'ensemble d'entrainement"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:455
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:571
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:119
 msgid "Setup"
-msgstr "Configuration"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:463
 msgid "Use change detectors"
@@ -213,7 +211,7 @@ msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:502
 msgid "Display results "
-msgstr "Afficher resultats"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:514
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:586
@@ -223,7 +221,7 @@ msgstr ""
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:522
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:619
 msgid "End polygon"
-msgstr "Finir polygone"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:530
 msgid "Erase last polygon"
@@ -255,7 +253,7 @@ msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:585
 msgid "Color composition"
-msgstr "Composition coloree"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:590
 msgid "Left Viewer"
@@ -271,7 +269,7 @@ msgstr ""
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:347
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:311
 msgid "Grayscale mode"
-msgstr "Composition coloree"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:602
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:651
@@ -283,7 +281,7 @@ msgstr "Composition coloree"
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:357
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:321
 msgid "RGB composition mode"
-msgstr "Composition coloree"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:609
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:658
@@ -295,19 +293,19 @@ msgstr ""
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:665
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:714
 msgid "Red channel: "
-msgstr "Canal rouge:"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:623
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:672
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:721
 msgid "Green channel: "
-msgstr "Canal vert:"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:630
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:679
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:728
 msgid "Blue channel: "
-msgstr "Canal bleu:"
+msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:639
 msgid "Right Viewer"
@@ -409,9 +407,8 @@ msgstr ""
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:169
 #: Segmentation/otbSegmentationApplicationViewGroup.cxx:92
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:71
-#, fuzzy
 msgid "Open image"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:109
 msgid "Save result image"
@@ -734,7 +731,7 @@ msgstr ""
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:415
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:379
 msgid "Cancel"
-msgstr "Annuler"
+msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:818
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:902
@@ -785,7 +782,7 @@ msgstr ""
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:367
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:331
 msgid "Select the band to view in grayscale mode"
-msgstr "Selectionne la bande a afficher en niveaux de gris"
+msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:863
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:440
@@ -795,7 +792,7 @@ msgstr "Selectionne la bande a afficher en niveaux de gris"
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:373
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:337
 msgid "Red channel index "
-msgstr "Index du canal rouge"
+msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:864
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:441
@@ -805,7 +802,7 @@ msgstr "Index du canal rouge"
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:374
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:338
 msgid "Select band for red channel in RGB composition"
-msgstr "Selectionne la bande a afficher en rouge"
+msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:872
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:449
@@ -815,7 +812,7 @@ msgstr "Selectionne la bande a afficher en rouge"
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:381
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:345
 msgid "Green channel index "
-msgstr "Index du canal vert"
+msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:873
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:450
@@ -825,7 +822,7 @@ msgstr "Index du canal vert"
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:382
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:346
 msgid "Select band for green channel in RGB composition"
-msgstr "Selectionne la bande a afficher en vert"
+msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:881
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:458
@@ -843,7 +840,7 @@ msgstr ""
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:390
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:354
 msgid "Select band for blue channel in RGB composition"
-msgstr "Selectionne la bande a afficher en bleu"
+msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:891
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:1016
@@ -956,7 +953,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:1015
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:722
 msgid "Close"
-msgstr "Fermer"
+msgstr ""
 
 #: Common/otbMsgReporterGUI.cxx:7
 msgid "Msg Reporter"
@@ -982,7 +979,7 @@ msgstr ""
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:273
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:181
 msgid "Open Image"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:44
 #: OrthoFusion/otbOrthoFusionGUI.cxx:455 OrthoRectif/otbOrthoRectifGUI.cxx:427
@@ -990,7 +987,7 @@ msgstr "Ouvrir Image"
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:283
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:191
 msgid "Close Image"
-msgstr "Fermer Image"
+msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:45
 msgid "Save Result"
@@ -1011,7 +1008,7 @@ msgstr ""
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:221
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:493
 msgid "Quit"
-msgstr "Quitter"
+msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:593
 msgid "Touzi"
@@ -1407,7 +1404,7 @@ msgstr ""
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1433
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1569
 msgid "Red Channel Index:"
-msgstr "Index du canal rouge"
+msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:975
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:995
@@ -1527,7 +1524,7 @@ msgstr ""
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1557
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1577
 msgid "Green Channel Index:"
-msgstr "Index du canal vert:"
+msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1336
 msgid "lambda 1:"
@@ -1708,7 +1705,7 @@ msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1879
 msgid "Close image"
-msgstr "Fermer image"
+msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1880
 msgid "Erase Feature and Close Input Image."
@@ -1743,9 +1740,8 @@ msgid "Feature"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:43
-#, fuzzy
 msgid "Open Image Pair"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:44
 msgid "Save deformation field"
@@ -1753,16 +1749,15 @@ msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:45
 msgid "Save Registered Image"
-msgstr "Sauver l'image recalee"
+msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:167
 msgid "Fine registration application"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:174
-#, fuzzy
 msgid "Images"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:175
 msgid ""
@@ -1801,7 +1796,8 @@ msgid "Parameters"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:216
-msgid "This area allows you to tune parameters from the registration algorithm."
+msgid ""
+"This area allows you to tune parameters from the registration algorithm."
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:222
@@ -1811,7 +1807,8 @@ msgid "Number of iterations"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:223
-msgid "Allows you to tune the number of iterations of the registration algorithm."
+msgid ""
+"Allows you to tune the number of iterations of the registration algorithm."
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:232
@@ -1938,9 +1935,8 @@ msgid "Show or hide the deformation intensity iin the color composition."
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:396
-#, fuzzy
 msgid "Open image pair"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:419
 msgid "Fixed image"
@@ -2033,9 +2029,8 @@ msgstr ""
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:292
 #: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:176
-#, fuzzy
 msgid "Image"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:302
 msgid "Data Base"
@@ -2346,7 +2341,7 @@ msgstr ""
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:229
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:239
 msgid "Show / Hide"
-msgstr "Aff./Masq."
+msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:495 OrthoRectif/otbOrthoRectifGUI.cxx:467
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:240
@@ -2360,7 +2355,7 @@ msgstr ""
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:239
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:268
 msgid "Hide all"
-msgstr "Tout masquer"
+msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:505 OrthoRectif/otbOrthoRectifGUI.cxx:477
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:269
@@ -2403,18 +2398,16 @@ msgid "Remove Selected XS."
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:562
-#, fuzzy
 msgid "PAN Image"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:563
 msgid "Select a PAN Image."
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:567
-#, fuzzy
 msgid "XS Image"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:568
 msgid "Select a XS Image."
@@ -2537,9 +2530,8 @@ msgid "If checked, use the upper left output image pixel coodinates."
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:758 OrthoRectif/otbOrthoRectifGUI.cxx:692
-#, fuzzy
 msgid "Output Image"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:764 OrthoRectif/otbOrthoRectifGUI.cxx:699
 msgid " Size X:"
@@ -2677,14 +2669,12 @@ msgid "Normalize"
 msgstr ""
 
 #: Pireo/PreProcessParametersGUI.cxx:69
-#, fuzzy
 msgid "Fixed Image"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: Pireo/PreProcessParametersGUI.cxx:70 Pireo/PireoViewerGUI.cxx:712
-#, fuzzy
 msgid "Moving Image"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: Pireo/PreProcessParametersGUI.cxx:71
 msgid "Both Images"
@@ -2771,9 +2761,8 @@ msgid "Flip"
 msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:240
-#, fuzzy
 msgid "Flip Fixed Image"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:241 Pireo/PireoViewerGUI.cxx:245
 msgid "Flip X"
@@ -2905,9 +2894,8 @@ msgid "ZoomFixedImage"
 msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:534
-#, fuzzy
 msgid "FixedImage"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:545
 msgid "ZoomMovingImage"
@@ -2959,18 +2947,16 @@ msgid "Input Filenames"
 msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:710
-#, fuzzy
 msgid "Fixed Image:"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:717
 msgid "Save Registration Results"
 msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:738 Pireo/PireoViewerGUI.cxx:767
-#, fuzzy
 msgid "Image:"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:746
 msgid "Automatic save"
@@ -3306,7 +3292,7 @@ msgstr ""
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:498
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:306
 msgid "Red"
-msgstr "Rouge"
+msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:501
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:622
@@ -3417,7 +3403,7 @@ msgstr ""
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:618
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:316
 msgid "Green"
-msgstr "Vert"
+msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:739
 msgid "Blue"
@@ -3425,7 +3411,7 @@ msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:867
 msgid "Grayscale"
-msgstr "Niveaux de gris"
+msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:989
 msgid "Gain"
@@ -3449,43 +3435,39 @@ msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1038
 msgid "RGB"
-msgstr "RVB"
+msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1047
 msgid "Image file chooser"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1057
-#, fuzzy
 msgid "HH Image"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1058
 msgid "HH input image path."
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1066
-#, fuzzy
 msgid "HV Image"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1067
 msgid "HV input image path."
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1075
-#, fuzzy
 msgid "VH Image"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1076
 msgid "VH input image path."
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1084
-#, fuzzy
 msgid "VV Image"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1085
 msgid "VV input image path."
@@ -3508,9 +3490,8 @@ msgid "Choose the VV image file name."
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1133
-#, fuzzy
 msgid "Vector Image"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1134
 msgid "Vector input image path."
@@ -3529,18 +3510,16 @@ msgid "Hide the open images window."
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1175
-#, fuzzy
 msgid "Open Vector Image"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1176
 msgid "Import a polarimetric vector image."
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1185
-#, fuzzy
 msgid "Open Images"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1186
 msgid "Import images corresponding to the HH, HV, VH, VV channels."
@@ -3586,7 +3565,7 @@ msgstr ""
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:79
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:84
 msgid "Viewer Setup"
-msgstr "Configuration visu"
+msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:80
 msgid "Coef. Setup"
@@ -3642,9 +3621,8 @@ msgid "Result Pixel Information"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:360
-#, fuzzy
 msgid "Input Image"
-msgstr "Ouvrir Image"
+msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:368
 msgid "Luminance"
@@ -3671,7 +3649,7 @@ msgstr ""
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:201
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:305
 msgid "Viewer setup"
-msgstr "Vue"
+msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:488
 msgid "Radiometric Coefficients Setup"
@@ -3888,7 +3866,8 @@ msgid "Tolerance"
 msgstr ""
 
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:361
-msgid "Set the tolerance for segment consistency (tolerance in terms of distance)"
+msgid ""
+"Set the tolerance for segment consistency (tolerance in terms of distance)"
 msgstr ""
 
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:373
@@ -4203,7 +4182,7 @@ msgstr ""
 
 #: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:333
 msgid "Normalization (%)"
-msgstr "Normalisation (%)"
+msgstr ""
 
 #: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:353
 msgid "Insight"
@@ -4259,7 +4238,7 @@ msgstr ""
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:211
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:430
 msgid "Link setup"
-msgstr "Lien"
+msgstr ""
 
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:212
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:304
@@ -4284,7 +4263,7 @@ msgstr ""
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:258
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:506
 msgid "Slideshow"
-msgstr "Diaporama"
+msgstr ""
 
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:259
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:324
@@ -4296,7 +4275,7 @@ msgstr ""
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:213
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:278
 msgid "Viewers List"
-msgstr "Liste des viewers"
+msgstr ""
 
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:290
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:290
@@ -4591,7 +4570,7 @@ msgstr ""
 
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:675
 msgid "Select band for NIR channel in RGB composition"
-msgstr "Selectionne la bande pour le canal NIR dans la composition RVB"
+msgstr ""
 
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:199
 msgid "otbImageViewerManagerView"
@@ -4599,7 +4578,7 @@ msgstr ""
 
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:253
 msgid "Packed View"
-msgstr "Vue groupe"
+msgstr ""
 
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:254
 msgid "Toggle Packed  mode"
@@ -4607,7 +4586,7 @@ msgstr ""
 
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:262
 msgid "Splitted View"
-msgstr "Vue separe"
+msgstr ""
 
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:263
 msgid "Toggle Splitted mode"
@@ -4628,5 +4607,3 @@ msgstr ""
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:532
 msgid "SecondImage"
 msgstr ""
-
-

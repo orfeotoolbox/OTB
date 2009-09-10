@@ -57,4 +57,4 @@ foreach(locale ${locale_list})
         )
 endforeach(locale ${locale_list})
 
-add_custom_target(OTBIO DEPENDS ${mo_file})
+add_custom_target(OTBI18N ALL DEPENDS ${mo_files})
