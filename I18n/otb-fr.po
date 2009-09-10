@@ -8,9 +8,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: otb-fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-10 13:40+0800\n"
-"PO-Revision-Date: 2009-09-10 15:05+0800\n"
-"Last-Translator: Emmanuel Christophe <emmanuel.christophe@orfeo-toolbox.org>\n"
+"POT-Creation-Date: 2009-09-10 18:15+0800\n"
+"PO-Revision-Date: 2009-09-10 18:04+0800\n"
+"Last-Translator: Emmanuel Christophe <emmanuel.christophe@orfeo-toolbox."
+"org>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -54,7 +55,7 @@ msgstr "Exporter donnee vecteur"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:71
 msgid "Save SVM model ..."
-msgstr "Sauver modèle SVM"
+msgstr "Sauver modele SVM"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:72
 msgid "Save result image ..."
@@ -62,14 +63,28 @@ msgstr "Sauver image resultat"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:73
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:117
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:46
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1901
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:46
+#: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:66
+#: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:465
+#: LandCoverMap/otbLandCoverMapView.cxx:124
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:46
+#: OrthoFusion/otbOrthoFusionGUI.cxx:475 OrthoRectif/otbOrthoRectifGUI.cxx:447
 #: Pireo/PireoViewerGUI.cxx:237
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:255
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:76
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:172
 #: Segmentation/otbSegmentationApplicationViewGroup.cxx:95
 #: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:23
-msgid "Exit"
+#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:221
+#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:493
+#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:80
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:313
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:522
+#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:221
+#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:493
+msgid "Quit"
 msgstr "Quitter"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:342
@@ -265,7 +280,7 @@ msgstr ""
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:644
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:693
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:834
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:413
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:406
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:311
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:691
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:347
@@ -277,7 +292,7 @@ msgstr "Composition coloree"
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:651
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:700
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:845
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:423
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:416
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:321
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:701
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:357
@@ -294,19 +309,42 @@ msgstr ""
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:616
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:665
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:714
-msgid "Red channel: "
+#: Classification/otbSupervisedClassificationAppliGUI.cxx:863
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:433
+#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:337
+#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:667
+#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:717
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:373
+#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:337
+#, fuzzy
+msgid "Red channel "
 msgstr "Canal rouge:"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:623
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:672
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:721
-msgid "Green channel: "
+#: Classification/otbSupervisedClassificationAppliGUI.cxx:872
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:442
+#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:345
+#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:660
+#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:725
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:381
+#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:345
+#, fuzzy
+msgid "Green channel "
 msgstr "Canal vert:"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:630
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:679
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:728
-msgid "Blue channel: "
+#: Classification/otbSupervisedClassificationAppliGUI.cxx:881
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:451
+#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:353
+#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:733
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:389
+#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:353
+#, fuzzy
+msgid "Blue channel "
 msgstr "Canal bleu:"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:639
@@ -403,12 +441,19 @@ msgid "P "
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:108
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:43
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:57
+#: LandCoverMap/otbLandCoverMapView.cxx:68
+#: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:43
+#: OrthoFusion/otbOrthoFusionGUI.cxx:445 OrthoRectif/otbOrthoRectifGUI.cxx:417
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:253
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:71
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:169
 #: Segmentation/otbSegmentationApplicationViewGroup.cxx:92
+#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:181
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:71
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:273
+#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:181
 #, fuzzy
 msgid "Open image"
 msgstr "Ouvrir Image"
@@ -705,7 +750,7 @@ msgstr ""
 #: Pireo/PireoViewerGUI.cxx:657 Pireo/PireoViewerGUI.cxx:686
 #: Pireo/PireoViewerGUI.cxx:720 Pireo/PireoViewerGUI.cxx:749
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1157
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:467
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:460
 #: Segmentation/otbSegmentationApplicationViewGroup.cxx:306
 #: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:440
 #: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:486
@@ -724,7 +769,7 @@ msgstr ""
 #: Pireo/PireoViewerGUI.cxx:694 Pireo/PireoViewerGUI.cxx:728
 #: Pireo/PireoViewerGUI.cxx:757 Pireo/RegistrationParametersGUI.cxx:1289
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1166
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:477
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:470
 #: Segmentation/otbSegmentationApplicationViewGroup.cxx:314
 #: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:432
 #: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:493
@@ -738,7 +783,7 @@ msgstr "Annuler"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:818
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:902
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:478
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:471
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:380
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:621
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:752
@@ -752,7 +797,7 @@ msgid "Visualisation Setup"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:835
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:414
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:407
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:312
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:692
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:348
@@ -761,7 +806,7 @@ msgid "Swith the image viewer mode to grayscale"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:846
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:424
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:417
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:322
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:702
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:358
@@ -770,7 +815,7 @@ msgid "Switch the image viewer mode to RGB composition"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:855
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:432
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:425
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:330
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:710
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:366
@@ -779,7 +824,7 @@ msgid "Channel index "
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:856
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:433
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:426
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:331
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:711
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:367
@@ -787,18 +832,8 @@ msgstr ""
 msgid "Select the band to view in grayscale mode"
 msgstr "Selectionne la bande a afficher en niveaux de gris"
 
-#: Classification/otbSupervisedClassificationAppliGUI.cxx:863
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:440
-#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:337
-#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:667
-#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:717
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:373
-#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:337
-msgid "Red channel index "
-msgstr "Index du canal rouge"
-
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:864
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:441
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:434
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:338
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:668
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:718
@@ -807,18 +842,8 @@ msgstr "Index du canal rouge"
 msgid "Select band for red channel in RGB composition"
 msgstr "Selectionne la bande a afficher en rouge"
 
-#: Classification/otbSupervisedClassificationAppliGUI.cxx:872
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:449
-#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:345
-#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:660
-#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:725
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:381
-#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:345
-msgid "Green channel index "
-msgstr "Index du canal vert"
-
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:873
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:450
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:443
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:346
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:661
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:726
@@ -827,17 +852,8 @@ msgstr "Index du canal vert"
 msgid "Select band for green channel in RGB composition"
 msgstr "Selectionne la bande a afficher en vert"
 
-#: Classification/otbSupervisedClassificationAppliGUI.cxx:881
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:458
-#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:353
-#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:733
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:389
-#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:353
-msgid "Blue channel index "
-msgstr ""
-
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:882
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:459
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:452
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:354
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:734
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:390
@@ -847,7 +863,7 @@ msgstr "Selectionne la bande a afficher en bleu"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:891
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:1016
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:468
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:461
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:362
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:611
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:742
@@ -954,7 +970,7 @@ msgid "Accuracy"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:1015
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:722
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:714
 msgid "Close"
 msgstr "Fermer"
 
@@ -974,44 +990,18 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:43
-#: LandCoverMap/otbLandCoverMapView.cxx:68
-#: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:43
-#: OrthoFusion/otbOrthoFusionGUI.cxx:445 OrthoRectif/otbOrthoRectifGUI.cxx:417
-#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:181
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:273
-#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:181
-msgid "Open Image"
-msgstr "Ouvrir Image"
-
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:44
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1879
 #: OrthoFusion/otbOrthoFusionGUI.cxx:455 OrthoRectif/otbOrthoRectifGUI.cxx:427
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:191
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:283
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:191
-msgid "Close Image"
-msgstr "Fermer Image"
+msgid "Close image"
+msgstr "Fermer image"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:45
 msgid "Save Result"
 msgstr ""
-
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:46
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1901
-#: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:66
-#: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:465
-#: LandCoverMap/otbLandCoverMapView.cxx:124
-#: OrthoFusion/otbOrthoFusionGUI.cxx:475 OrthoRectif/otbOrthoRectifGUI.cxx:447
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:76
-#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:221
-#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:493
-#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:80
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:313
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:522
-#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:221
-#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:493
-msgid "Quit"
-msgstr "Quitter"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:593
 msgid "Touzi"
@@ -1325,7 +1315,7 @@ msgid "Feature Choice:"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:808
-msgid "Feature Parameters"
+msgid "Feature parameters"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:820
@@ -1406,8 +1396,9 @@ msgstr ""
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1397
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1433
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1569
-msgid "Red Channel Index:"
-msgstr "Index du canal rouge"
+#, fuzzy
+msgid "Red channel"
+msgstr "Canal rouge:"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:975
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:995
@@ -1423,8 +1414,9 @@ msgstr "Index du canal rouge"
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1440
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1489
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1517
-msgid "NIR Channel Index:"
-msgstr ""
+#, fuzzy
+msgid "NIR channel"
+msgstr "Canal rouge:"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1003
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1113
@@ -1482,8 +1474,9 @@ msgstr ""
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1172
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1207
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1268
-msgid "Blue Channel Index:"
-msgstr ""
+#, fuzzy
+msgid "Blue channel"
+msgstr "Canal bleu:"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1186
 msgid "gamma:"
@@ -1526,8 +1519,8 @@ msgstr ""
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1529
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1557
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1577
-msgid "Green Channel Index:"
-msgstr "Index du canal vert:"
+msgid "Green channel"
+msgstr "Canal vert"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1336
 msgid "lambda 1:"
@@ -1554,12 +1547,12 @@ msgid "Central wavelength of the NIR band (0.84 for Pleiade)"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1415
-msgid "TM4 Channel Index:"
-msgstr ""
+msgid "TM4 channel"
+msgstr "Canal TM4"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1422
-msgid "TM5 Channel Index:"
-msgstr ""
+msgid "TM5 channel"
+msgstr "Canal TM5"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1469
 msgid "Rho 860 Index:"
@@ -1572,8 +1565,8 @@ msgstr ""
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1497
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1537
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1549
-msgid "MIR Channel Index:"
-msgstr ""
+msgid "MIR channel"
+msgstr "Canal MIR"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1589
 msgid "Spectral Thresh.:"
@@ -1706,10 +1699,6 @@ msgstr ""
 msgid "Save the Composition."
 msgstr ""
 
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1879
-msgid "Close image"
-msgstr "Fermer image"
-
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1880
 msgid "Erase Feature and Close Input Image."
 msgstr ""
@@ -1743,8 +1732,9 @@ msgid "Feature"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:43
+#: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:396
 #, fuzzy
-msgid "Open Image Pair"
+msgid "Open image pair"
 msgstr "Ouvrir Image"
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:44
@@ -1752,7 +1742,8 @@ msgid "Save deformation field"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:45
-msgid "Save Registered Image"
+#, fuzzy
+msgid "Save registered image"
 msgstr "Sauver l'image recalee"
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:167
@@ -1801,7 +1792,8 @@ msgid "Parameters"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:216
-msgid "This area allows you to tune parameters from the registration algorithm."
+msgid ""
+"This area allows you to tune parameters from the registration algorithm."
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:222
@@ -1811,7 +1803,8 @@ msgid "Number of iterations"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:223
-msgid "Allows you to tune the number of iterations of the registration algorithm."
+msgid ""
+"Allows you to tune the number of iterations of the registration algorithm."
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:232
@@ -1937,16 +1930,13 @@ msgstr ""
 msgid "Show or hide the deformation intensity iin the color composition."
 msgstr ""
 
-#: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:396
-#, fuzzy
-msgid "Open image pair"
-msgstr "Ouvrir Image"
-
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:419
+#: Pireo/PreProcessParametersGUI.cxx:69
 msgid "Fixed image"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:426
+#: Pireo/PreProcessParametersGUI.cxx:70 Pireo/PireoViewerGUI.cxx:712
 msgid "Moving image"
 msgstr ""
 
@@ -1957,8 +1947,8 @@ msgstr ""
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1111
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1120
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1144
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:568
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:581
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:560
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:573
 #: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:462
 #: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:470
 msgid "..."
@@ -2106,7 +2096,7 @@ msgstr ""
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:472
 #: LandCoverMap/otbLandCoverMapView.cxx:113
 #: OrthoFusion/otbOrthoFusionGUI.cxx:465 OrthoRectif/otbOrthoRectifGUI.cxx:437
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:730
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:722
 msgid "OK"
 msgstr ""
 
@@ -2135,15 +2125,16 @@ msgid "Open a new input model."
 msgstr ""
 
 #: LandCoverMap/otbLandCoverMapView.cxx:135
-msgid "Scroll Image"
-msgstr ""
+#, fuzzy
+msgid "Scroll image"
+msgstr "Fermer image"
 
 #: LandCoverMap/otbLandCoverMapView.cxx:142
 msgid "Feature Selection"
 msgstr ""
 
 #: LandCoverMap/otbLandCoverMapView.cxx:164
-msgid "Full Resolution Image"
+msgid "Full Resolution image"
 msgstr ""
 
 #: LandCoverMap/otbLandCoverMapView.cxx:171
@@ -2167,8 +2158,9 @@ msgid "Shadows"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:44
-msgid "Save Label Image"
-msgstr ""
+#, fuzzy
+msgid "Save label image"
+msgstr "Sauver image resultat"
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:45
 msgid "Save Polygon"
@@ -2404,7 +2396,7 @@ msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:562
 #, fuzzy
-msgid "PAN Image"
+msgid "PAN image"
 msgstr "Ouvrir Image"
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:563
@@ -2413,7 +2405,7 @@ msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:567
 #, fuzzy
-msgid "XS Image"
+msgid "XS image"
 msgstr "Ouvrir Image"
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:568
@@ -2538,7 +2530,7 @@ msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:758 OrthoRectif/otbOrthoRectifGUI.cxx:692
 #, fuzzy
-msgid "Output Image"
+msgid "Output image"
 msgstr "Ouvrir Image"
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:764 OrthoRectif/otbOrthoRectifGUI.cxx:699
@@ -2676,26 +2668,16 @@ msgstr ""
 msgid "Normalize"
 msgstr ""
 
-#: Pireo/PreProcessParametersGUI.cxx:69
-#, fuzzy
-msgid "Fixed Image"
-msgstr "Ouvrir Image"
-
-#: Pireo/PreProcessParametersGUI.cxx:70 Pireo/PireoViewerGUI.cxx:712
-#, fuzzy
-msgid "Moving Image"
-msgstr "Ouvrir Image"
-
 #: Pireo/PreProcessParametersGUI.cxx:71
 msgid "Both Images"
 msgstr ""
 
 #: Pireo/PreProcessParametersGUI.cxx:83
-msgid "Pre-Processing Parameters"
+msgid "Pre-Processing parameters"
 msgstr ""
 
 #: Pireo/PreProcessParametersGUI.cxx:92
-msgid "Filter Parameters"
+msgid "Filter parameters"
 msgstr ""
 
 #: Pireo/PreProcessParametersGUI.cxx:98
@@ -2751,12 +2733,14 @@ msgid "&Accept"
 msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:230
-msgid "Load Fixed Image"
-msgstr ""
+#, fuzzy
+msgid "Load fixed image"
+msgstr "Ouvrir Image"
 
 #: Pireo/PireoViewerGUI.cxx:231
-msgid "Load Moving Image"
-msgstr ""
+#, fuzzy
+msgid "Load moving image"
+msgstr "Ouvrir Image"
 
 #: Pireo/PireoViewerGUI.cxx:234
 msgid "Auto Save"
@@ -2772,7 +2756,7 @@ msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:240
 #, fuzzy
-msgid "Flip Fixed Image"
+msgid "Flip fixed image"
 msgstr "Ouvrir Image"
 
 #: Pireo/PireoViewerGUI.cxx:241 Pireo/PireoViewerGUI.cxx:245
@@ -2784,8 +2768,9 @@ msgid "Flip Y"
 msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:244
-msgid "Flip Moving Image"
-msgstr ""
+#, fuzzy
+msgid "Flip moving image"
+msgstr "Ouvrir Image"
 
 #: Pireo/PireoViewerGUI.cxx:249
 msgid "Build"
@@ -2800,7 +2785,7 @@ msgid "Registration"
 msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:252
-msgid "Set Parameters"
+msgid "Set parameters"
 msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:253
@@ -2852,8 +2837,9 @@ msgid "Options"
 msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:273 Pireo/PireoViewerGUI.cxx:683
-msgid "Save Registration Parameters"
-msgstr ""
+#, fuzzy
+msgid "Save Registration parameters"
+msgstr "Sauver l'image recalee"
 
 #: Pireo/PireoViewerGUI.cxx:274
 msgid "Display Metric values"
@@ -2868,16 +2854,19 @@ msgid "Deactivate"
 msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:443 Pireo/PireoViewerGUI.cxx:465
-msgid "Filtered fixed Image"
-msgstr ""
+#, fuzzy
+msgid "Filtered fixed image"
+msgstr "Ouvrir Image"
 
 #: Pireo/PireoViewerGUI.cxx:444 Pireo/PireoViewerGUI.cxx:466
-msgid "Filtered moving Image"
-msgstr ""
+#, fuzzy
+msgid "Filtered moving image"
+msgstr "Ouvrir Image"
 
 #: Pireo/PireoViewerGUI.cxx:445 Pireo/PireoViewerGUI.cxx:467
-msgid "Deformed Image"
-msgstr ""
+#, fuzzy
+msgid "Deformed image"
+msgstr "Fermer image"
 
 #: Pireo/PireoViewerGUI.cxx:446 Pireo/PireoViewerGUI.cxx:468
 msgid "Blender (images in transparency)"
@@ -3073,7 +3062,7 @@ msgid "One Plus One Evolutionary Optimizer"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:694
-msgid "Registration Parameters"
+msgid "Registration parameters"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:703
@@ -3457,7 +3446,7 @@ msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1057
 #, fuzzy
-msgid "HH Image"
+msgid "HH image"
 msgstr "Ouvrir Image"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1058
@@ -3466,7 +3455,7 @@ msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1066
 #, fuzzy
-msgid "HV Image"
+msgid "HV image"
 msgstr "Ouvrir Image"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1067
@@ -3475,7 +3464,7 @@ msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1075
 #, fuzzy
-msgid "VH Image"
+msgid "VH image"
 msgstr "Ouvrir Image"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1076
@@ -3484,7 +3473,7 @@ msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1084
 #, fuzzy
-msgid "VV Image"
+msgid "VV image"
 msgstr "Ouvrir Image"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1085
@@ -3509,7 +3498,7 @@ msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1133
 #, fuzzy
-msgid "Vector Image"
+msgid "Vector image"
 msgstr "Ouvrir Image"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1134
@@ -3530,7 +3519,7 @@ msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1175
 #, fuzzy
-msgid "Open Vector Image"
+msgid "Open Vector image"
 msgstr "Ouvrir Image"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1176
@@ -3539,7 +3528,7 @@ msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1185
 #, fuzzy
-msgid "Open Images"
+msgid "Open images"
 msgstr "Ouvrir Image"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1186
@@ -3563,19 +3552,21 @@ msgid "Enable or disable the horizontcal emssion for the polarimetric data."
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:72
-msgid "Save Luminance Image"
+msgid "Save luminance image"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:73
-msgid "Save Reflectance TOA Image"
-msgstr ""
+#, fuzzy
+msgid "Save reflectance TOA image"
+msgstr "Sauver image resultat"
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:74
-msgid "Save Reflectance TOC Image"
-msgstr ""
+#, fuzzy
+msgid "Save reflectance TOC image"
+msgstr "Sauver image resultat"
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:75
-msgid "Save TOA-TOC Diff Image"
+msgid "Save TOA-TOC diff image"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:78
@@ -3592,77 +3583,78 @@ msgstr "Configuration visu"
 msgid "Coef. Setup"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:163
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:156
 msgid "NO AEROSOL"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:164
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:157
 msgid "CONTINENTAL"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:165
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:158
 msgid "MARITIME"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:166
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:159
 msgid "URBAN"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:167
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:160
 msgid "DESERTIC"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:214
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:207
 msgid "0"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:267
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:260
 msgid "Radiometric Calibration Application"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:288
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:281
 msgid "Navigation View"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:296
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:304
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:289
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:297
 msgid "Zoom View"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:312
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:305
 msgid "Histograms"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:320
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:313
 msgid "Pixel Information"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:328
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:321
 msgid "Result Pixel Information"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:360
-#, fuzzy
-msgid "Input Image"
-msgstr "Ouvrir Image"
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:353
+#: Segmentation/otbSVMBasedRegionGrowingSegmentationViewGroup.cxx:169
+#: Segmentation/otbRegionGrowingSegmentationViewGroup.cxx:187
+msgid "Input image"
+msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:368
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:361
 msgid "Luminance"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:376
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:369
 msgid "Reflect. TOA"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:384
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:377
 msgid "Reflect. TOC"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:392
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:385
 msgid "Diff. TOA/TOC"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:407
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:400
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:201
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:305
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:685
@@ -3673,151 +3665,151 @@ msgstr ""
 msgid "Viewer setup"
 msgstr "Vue"
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:488
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:481
 msgid "Radiometric Coefficients Setup"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:500
-msgid "Correction Parameters"
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:492
+msgid "Correction parameters"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:507
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:508
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:499
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:500
 msgid "Aerosol Model"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:516
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:517
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:508
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:509
 msgid "Ozone Amount"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:525
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:517
 msgid "Atmo. Pressure"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:526
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:518
 msgid "Atmospheric Pressure"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:539
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:531
 msgid "Aerosol Thickness"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:540
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:532
 msgid "Aerosol Optical Thickness"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:550
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:542
 msgid "Water Amount"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:551
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:543
 msgid "Water Vapor Amount"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:561
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:553
 msgid "Aeronet File"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:574
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:566
 msgid "Filter Function Values File"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:587
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:748
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:579
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:740
 msgid "Radiative Terms"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:593
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:585
 msgid "Channel Index"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:608
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:600
 msgid "Intrinsic Ref."
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:609
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:601
 msgid "Intrinsic Atmospheric Reflectance"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:619
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:611
 msgid "Albedo"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:620
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:612
 msgid "Shperical Albedo of the Atmosphere"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:630
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:622
 msgid "Gaseous Trans."
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:631
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:623
 msgid "Total Gaseous Transmission"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:641
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:633
 msgid "Down. Trans."
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:642
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:634
 msgid "Downward Transmittance of the Atmospher"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:652
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:644
 msgid "Up Trans."
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:653
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:645
 msgid "Upward Transmittance of the Atmospher"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:663
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:655
 msgid "Up diffuse Trans."
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:664
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:656
 msgid "Upward diffuse transmittance"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:674
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:666
 msgid "Up direct Trans."
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:675
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:667
 msgid "Upward direct Transmittance"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:685
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:677
 msgid "Up diff. Trans. (Rayleigh)"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:686
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:678
 msgid "Upward diffuse transmittance for Rayleigh"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:696
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:688
 msgid "Up diff Trans. (aerososl)"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:697
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:689
 msgid "Upward diffuse transmittance for aerosols"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:709
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:701
 msgid "Reload Channel Radiative Terms"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:723
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:715
 msgid "Close the window"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:731
-msgid "Set up Radiometric Parameters"
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:723
+msgid "Set up Radiometric parameters"
 msgstr ""
 
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:740
-msgid "Atmospheric Parameters"
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:732
+msgid "Atmospheric parameters"
 msgstr ""
 
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:170
@@ -3888,7 +3880,8 @@ msgid "Tolerance"
 msgstr ""
 
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:361
-msgid "Set the tolerance for segment consistency (tolerance in terms of distance)"
+msgid ""
+"Set the tolerance for segment consistency (tolerance in terms of distance)"
 msgstr ""
 
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:373
@@ -3944,7 +3937,7 @@ msgid "Controls"
 msgstr ""
 
 #: Segmentation/otbVectorizationViewGroup.cxx:19
-msgid "Vectorization Parameters"
+msgid "Vectorization parameters"
 msgstr ""
 
 #: Segmentation/otbVectorizationViewGroup.cxx:37
@@ -4015,7 +4008,7 @@ msgid "Gradient Magnitude"
 msgstr ""
 
 #: Segmentation/otbPreprocessingViewGroup.cxx:47
-msgid "Preprocessing Parameters"
+msgid "Preprocessing parameters"
 msgstr ""
 
 #: Segmentation/otbPreprocessingViewGroup.cxx:53
@@ -4076,11 +4069,6 @@ msgstr ""
 
 #: Segmentation/otbSVMBasedRegionGrowingSegmentationViewGroup.cxx:153
 msgid "Distance to hyperplane"
-msgstr ""
-
-#: Segmentation/otbSVMBasedRegionGrowingSegmentationViewGroup.cxx:169
-#: Segmentation/otbRegionGrowingSegmentationViewGroup.cxx:187
-msgid "Input image"
 msgstr ""
 
 #: Segmentation/otbSegmentationApplicationViewGroup.cxx:164
@@ -4622,11 +4610,43 @@ msgid "Link Images"
 msgstr ""
 
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:494
-msgid "First Image"
-msgstr ""
+#, fuzzy
+msgid "First image"
+msgstr "Fermer image"
 
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:532
 msgid "SecondImage"
 msgstr ""
 
+#, fuzzy
+#~ msgid "Input Image"
+#~ msgstr "Ouvrir Image"
 
+#~ msgid "Exit"
+#~ msgstr "Quitter"
+
+#~ msgid "Red channel index "
+#~ msgstr "Index du canal rouge"
+
+#~ msgid "Green channel index "
+#~ msgstr "Index du canal vert"
+
+#~ msgid "Open Image"
+#~ msgstr "Ouvrir Image"
+
+#~ msgid "Close Image"
+#~ msgstr "Fermer Image"
+
+#~ msgid "Red Channel Index:"
+#~ msgstr "Index du canal rouge"
+
+#~ msgid "Green Channel Index:"
+#~ msgstr "Index du canal vert:"
+
+#, fuzzy
+#~ msgid "Open Image Pair"
+#~ msgstr "Ouvrir Image"
+
+#, fuzzy
+#~ msgid "Open Images"
+#~ msgstr "Ouvrir Image"
