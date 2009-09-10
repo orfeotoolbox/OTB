@@ -1,9 +1,9 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109 
-i18n_type 1 
-i18n_include "otbI18n.h" 
-i18n_function otbGetTextMacro 
-header_name {.h} 
+version 1.0107
+i18n_type 1
+i18n_include "otbI18n.h"
+i18n_function otbGetTextMacro
+header_name {.h}
 code_name {.cxx}
 class ImageViewerManagerViewGroup {open
 } {
@@ -286,4 +286,4 @@ class ImageViewerManagerViewGroup {open
   } {}
   Function {PackedViewMode()} {open return_type {virtual void}
   } {}
-} 
+}
