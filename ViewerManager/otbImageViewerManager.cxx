@@ -21,14 +21,12 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbCommandLineArgumentParser.h"
 #include "otbMsgReporter.h"
 
-#include <libintl.h>
-
+#include "otbI18n.h"
 
 int main(int argc, char* argv[])
 {
-      setlocale( LC_ALL, "" );
-      bindtextdomain( "messages", "/home/christop/OTB/OTB-Binary-Applications-Debug/locale" );
-      textdomain( "messages" );
+
+    otbI18nMacro();
 
   // Parse command line parameters
 //   typedef otb::CommandLineArgumentParser ParserType;
