@@ -171,7 +171,7 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
 
             if (result)
             {
-               result = initSRGR(xdoc, tsDoc);
+               /*result = */initSRGR(xdoc, tsDoc);
 
                if (result)
                {
