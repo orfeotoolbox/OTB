@@ -556,8 +556,8 @@ FIND_PACKAGE(Gettext)
 IF(GETTEXT_FOUND)
   SET(OTB_I18N 1)
   SET(OTB_LANG "en" CACHE STRING "OTB internationalization (Experimental)")#might want to get the Locale from the system here
-  SET(OTB_LANG_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/Locale)
-  #TODO compile the po into mo
+  SET(OTB_LANG_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/I18n)
+  SUBDIRS(I18n)
 ELSE(GETTEXT_FOUND)
   SET(OTB_I18N 0)
   MESSAGE(STATUS

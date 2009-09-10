@@ -1,0 +1,330 @@
+# translation of fr.po to Francais
+# French translations for PACKAGE package.
+# Copyright (C) 2009 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Emmanuel Christophe <emmanuel.christophe@orfeo-toolbox.org>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: fr\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-09-08 14:20+0800\n"
+"PO-Revision-Date: 2009-09-08 14:52+0800\n"
+"Last-Translator: Emmanuel Christophe <emmanuel.christophe@orfeo-toolbox.org>\n"
+"Language-Team: Francais <fr@orfeo-toolbox.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:199
+msgid "otbImageViewerManagerView"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:205
+msgid "Information"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:206
+msgid "Selected image viewer information"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:213
+msgid "Viewers List"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:214
+msgid ""
+"List of opened image viewer (showed image viewer are prefixed with +, and "
+"hidden with -)"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:229
+msgid "Show / Hide"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:230
+msgid "Show or hide the selected image viewer"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:239
+msgid "Hide all"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:240
+msgid "Hide all the viewers"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:253
+msgid "Packed View"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:254
+msgid "Toggle Packed  mode"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:262
+msgid "Splitted View"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:263
+msgid "Toggle Splitted mode"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:273
+msgid "Open Image"
+msgstr "Ouvrir Image"
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:274
+msgid "Open an image in a  new image viewer"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:283
+msgid "Close Image"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:284
+msgid "Close the selected image"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:293
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:341
+msgid "Viewer setup"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:294
+msgid "Set up the selected viewer"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:303
+msgid "Link setup"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:304
+msgid "Add or remove links with the selected viewer"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:313
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:522
+msgid "Quit"
+msgstr "Quitter"
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:314
+msgid "Quit the viewer manager"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:323
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:545
+msgid "Slideshow"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:324
+msgid "Launch the slideshow mode"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:347
+msgid "Grayscale mode"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:348
+msgid "Swith the image viewer mode to grayscale"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:357
+msgid "RGB composition mode"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:358
+msgid "Switch the image viewer mode to RGB composition"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:366
+msgid "Channel index "
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:367
+msgid "Select the band to view in grayscale mode"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:373
+msgid "Red channel index "
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:374
+msgid "Select band for red channel in RGB composition"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:381
+msgid "Green channel index "
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:382
+msgid "Select band for green channel in RGB composition"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:389
+msgid "Blue channel index "
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:390
+msgid "Select band for blue channel in RGB composition"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:397
+msgid "Ok"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:398
+msgid "Save changes and leave viewer set up interface"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:407
+msgid "Viewer name"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:408
+msgid "Set a new name for the selected viewer"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:415
+msgid "Cancel"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:416
+msgid "Leave viewer set up interface without saving changes"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:424
+msgid "Complex composition mode"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:425
+msgid "Switch the image viewer mode to complex composition"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:433
+msgid "Real channel index "
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:434
+msgid "Select band for real channel in complex composition"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:441
+msgid "Imaginary channel index "
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:442
+msgid "Select band for imaginary channel in complex composition"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:449
+msgid "Amplitude"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:450
+msgid "Toggle modulus mode"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:457
+msgid "Phase"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:458
+msgid "Toggle phase mode"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:466
+msgid "Link Images"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:472
+msgid "X offset"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:473
+msgid "Set the x offset of the link"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:479
+msgid "Y offset"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:480
+msgid "Set the Y offset of the link"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:486
+msgid "Apply"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:487
+msgid "Save the current link"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:494
+msgid "First Image"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:495
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:533
+msgid "List of image viewers already linked with the selected image viewer"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:504
+msgid "Remove"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:505
+msgid "Remove the selected link"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:513
+msgid "Clear"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:514
+msgid "Clear all links for the selected image viewer"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:523
+msgid "Leave the link set up interface"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:532
+msgid "SecondImage"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:551
+msgid "Progress"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:552
+msgid "Position in diaporama"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:557
+msgid "Previous"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:558
+msgid "Previous image in diaporama"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:567
+msgid "Next"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:568
+msgid "Next image in diaporama"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:577
+msgid " Quit"
+msgstr ""
+
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:578
+msgid "Leave diaporama mode"
+msgstr ""
+
