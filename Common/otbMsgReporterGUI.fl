@@ -1,6 +1,9 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
-header_name {.h} 
+version 1.0107
+i18n_type 1
+i18n_include "otbI18n.h"
+i18n_function otbGetTextMacro
+header_name {.h}
 code_name {.cxx}
 class MsgReporterGUI {open
 } {
@@ -21,4 +24,4 @@ class MsgReporterGUI {open
   }
   Function {~MsgReporterGUI()} {open selected return_type virtual
   } {}
-} 
+}
