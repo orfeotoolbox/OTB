@@ -187,7 +187,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
 		${BASELINE}/bfTvStreamingShrinkImageFilterQBPANOutput.hdr
 		${TEMP}/bfTvStreamingShrinkImageFilterQBPANOutput.hdr
 	otbStreamingShrinkImageFilter
-	${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+	${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 	${TEMP}/bfTvStreamingShrinkImageFilterQBPANOutput.hdr
 	50
 )
@@ -197,7 +197,7 @@ ADD_TEST(bfTvStreamingShrinkImageFilterQBMUL ${BASICFILTERS_TESTS2}
 		${BASELINE}/bfTvStreamingShrinkImageFilterQBMULOutput.hdr
 		${TEMP}/bfTvStreamingShrinkImageFilterQBMULOutput.hdr
 		otbStreamingShrinkImageFilter
-	${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+	${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
 	${TEMP}/bfTvStreamingShrinkImageFilterQBMULOutput.hdr
 	20
 )
@@ -246,7 +246,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
 		${BASELINE_FILES}/ioOSSIMImageQuickbirdMetaDataReader.txt
                 ${TEMP}/bfTvImportGeoInformationKeywordListOutput.txt
          otbImportGeoInformationImageFilterWithKeywordList
-         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         ${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 	 ${TEMP}/bfTvImportGeoInformationKeywordListOutput.txt
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -397,7 +397,7 @@ ADD_TEST(bfTvStreamingStatisticsImageFilter ${BASICFILTERS_TESTS4}
  		   ${BASELINE_FILES}/bfStreamingStatisticsImageFilterResults.txt
  		   ${TEMP}/bfStreamingStatisticsImageFilterResults.txt
          otbStreamingStatisticsImageFilter
-#		${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+#		${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
                 ${INPUTDATA}/small_poupees_1canal.hd
 		${TEMP}/bfStreamingStatisticsImageFilterResults.txt)
 

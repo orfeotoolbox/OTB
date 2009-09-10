@@ -48,7 +48,56 @@ SpotImageMetadataInterface::CanRead( const MetaDataDictionaryType & dict ) const
   else
     return false;
 }
+ 
+std::string
+SpotImageMetadataInterface::GetInstrument( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+  }
   
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+  
+ ossimKeywordlist kwl;
+ imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+ std::string key = "support_data.instrument";
+ ossimString keywordString = kwl.find(key.c_str());
+
+ return keywordString;
+}
+
+unsigned int
+SpotImageMetadataInterface::GetInstrumentIndex( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+  }
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+  
+ ossimKeywordlist kwl;
+ imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+ std::string key = "support_data.instrument_index";
+ ossimString keywordString = kwl.find(key.c_str());
+
+ return static_cast<unsigned int>(keywordString.toUInt32());
+}
+
+ 
 SpotImageMetadataInterface::VariableLengthVectorType
 SpotImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryType & dict ) const
 {

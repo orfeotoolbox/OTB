@@ -851,7 +851,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 
   /** Get The Bounding Region*/
   OutputImageDirRegionType    region = rectangle->GetBoundingRegion();
-
+  region.Crop( m_OrientationFilter->GetOutput()->GetLargestPossibleRegion() );
   itk::ImageRegionIterator<OutputImageDirType> it(m_OrientationFilter->GetOutput(), region/*m_OrientationFilter->GetOutput()->GetRequestedRegion()*/);
   it.GoToBegin();
 

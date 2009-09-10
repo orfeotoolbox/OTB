@@ -38,39 +38,39 @@ ADD_TEST(prTuSensorModelsNew ${PROJECTIONS_TESTS1}  otbSensorModelsNew )
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(prTvTestCreateProjectionWithOSSIM_Toulouse ${PROJECTIONS_TESTS1}
         otbCreateProjectionWithOSSIM
-        ${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         )
 
 ADD_TEST(prTvTestCreateProjectionWithOSSIM_Cevennes ${PROJECTIONS_TESTS1}
         otbCreateProjectionWithOSSIM
-        ${LARGEINPUT}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         )
 
 ADD_TEST(prTvTestCreateProjectionWithOTB_Toulouse ${PROJECTIONS_TESTS1}
         otbCreateProjectionWithOTB
-        ${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         )
 
 ADD_TEST(prTvTestCreateProjectionWithOTB_Cevennes ${PROJECTIONS_TESTS1}
         otbCreateProjectionWithOTB
-        ${LARGEINPUT}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         )
 
 ADD_TEST(prTvTestCreateInverseForwardSensorModel_Toulouse ${PROJECTIONS_TESTS1}
         otbCreateInverseForwardSensorModel
-        ${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         )
 
 ADD_TEST(prTvTestCreateInverseForwardSensorModel_Cevennes ${PROJECTIONS_TESTS1}
         otbCreateInverseForwardSensorModel
-        ${LARGEINPUT}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         )
 
 ADD_TEST(prTvRegionProjectionResamplerToulouse ${PROJECTIONS_TESTS1}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvRegionProjectionResamplerToulouse.tif
                           ${TEMP}/prTvRegionProjectionResamplerToulouse.tif
         otbRegionProjectionResampler
-        ${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvRegionProjectionResamplerToulouse.tif
 				1.44 43.6050 # Long/Lat of Toulouse, Capitole
         500
@@ -84,7 +84,7 @@ ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS1}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvRegionProjectionResamplerCevennes.tif
                           ${TEMP}/prTvRegionProjectionResamplerCevennes.tif
 				otbRegionProjectionResampler
-        ${LARGEINPUT}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         ${TEMP}/prTvRegionProjectionResamplerCevennes.tif
         3.7 44.08
         500
@@ -100,7 +100,7 @@ ADD_TEST(prTvSensorModelSpot5 ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelSpot5.txt
 --ignore-lines-with 1 support_data.metadata_file
     otbSensorModel
-         ${LARGEINPUT}/SPOT5_SCENE01/IMAGERY.TIF
+         ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
          ${TEMP}/prTvSensorModelSpot5.txt
 )
 
@@ -109,7 +109,7 @@ ADD_TEST(prTvSensorModelQuickbird ${PROJECTIONS_TESTS1}
          ${BASELINE_FILES}/prTvSensorModelQuickbird.txt
          ${TEMP}/prTvSensorModelQuickbird.txt
     otbSensorModel
-         ${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          ${TEMP}/prTvSensorModelQuickbird.txt
 )
 
@@ -118,7 +118,7 @@ ADD_TEST(prTvSensorModelIkonos ${PROJECTIONS_TESTS1}
          ${BASELINE_FILES}/prTvSensorModelIkonos.txt
          ${TEMP}/prTvSensorModelIkonos.txt
     otbSensorModel
-         ${LARGEINPUT}/IKONOS_BLOSSEVILLE/po_2619900_pan_0000000.tif
+         ${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
          ${TEMP}/prTvSensorModelIkonos.txt
 )
 
@@ -154,7 +154,7 @@ ADD_TEST(prTvSensorModelRadarSat1 ${PROJECTIONS_TESTS1}
          ${BASELINE_FILES}/prTvSensorModelRadarSat1.txt
          ${TEMP}/prTvSensorModelRadarSat1.txt
     otbSensorModel
-         ${LARGEINPUT}/RADARSAT1/SCENE01/DAT_01.001
+         ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/DAT_01.001
          ${TEMP}/prTvSensorModelRadarSat1.txt
 )
 
@@ -163,7 +163,7 @@ ADD_TEST(prTvSensorModelRadarSat2 ${PROJECTIONS_TESTS1}
          ${BASELINE_FILES}/prTvSensorModelRadarSat2.txt
          ${TEMP}/prTvSensorModelRadarSat2.txt
     otbSensorModel
-         ${LARGEINPUT}/RSAT2/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
+         ${LARGEINPUT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
          ${TEMP}/prTvSensorModelRadarSat2.txt
 )
 
@@ -203,7 +203,7 @@ ADD_TEST(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationToulouse_UTM.tif
                           ${TEMP}/prTvOrthoRectificationToulouse_UTM.tif
         otbOrthoRectificationFilter
-        ${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvOrthoRectificationToulouse_UTM.tif
         374100.8
         4829184.8
@@ -220,7 +220,7 @@ ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationCevennes_UTM.tif
                           ${TEMP}/prTvOrthoRectificationCevennes_UTM.tif
         otbOrthoRectificationFilter
-        ${LARGEINPUT}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         ${TEMP}/prTvOrthoRectificationCevennes_UTM.tif
         556046
         4.881e+06
@@ -237,7 +237,7 @@ ADD_TEST(prTvOrthoRectificationToulouseWithDEM ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
                           ${TEMP}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
         otbOrthoRectificationFilterWithDEM
-	${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+	${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
         374100.8
         4829184.8
@@ -256,7 +256,7 @@ ADD_TEST(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
                           ${TEMP}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
         otbOrthoRectificationFilterWithDEM
-        ${LARGEINPUT}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         ${TEMP}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
         556046
         4.881e+06
@@ -277,7 +277,7 @@ ADD_TEST(prTlOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationSPOT5_UTM.tif
                           ${TEMP}/prTvOrthoRectificationSPOT5_UTM.tif
         otbOrthoRectificationFilter
-        ${LARGEINPUT}/SPOT5_SCENE01/IMAGERY.TIF
+        ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEMP}/prTvOrthoRectificationSPOT5_UTM.tif
         536187
         3950748
@@ -293,7 +293,7 @@ ADD_TEST(prTlOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationSPOT5_UTM.tif
                           ${TEMP}/prTvOrthoRectificationMonoThreadSPOT5_UTM.tif
         otbOrthoRectificationMonoThreadFilter
-        ${LARGEINPUT}/SPOT5_SCENE01/IMAGERY.TIF
+        ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEMP}/prTvOrthoRectificationMonoThreadSPOT5_UTM.tif
         536187
         3950748
@@ -345,7 +345,7 @@ ADD_TEST(prTvCompositeTransform ${PROJECTIONS_TESTS3}
         --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvCompositeTransform.txt
         ${TEMP}/prTvCompositeTransform.txt
         otbCompositeTransform
-        ${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvCompositeTransform.txt
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -403,7 +403,7 @@ ADD_TEST(prTvVectorDataProjectionFilterFromMapToSensor ${PROJECTIONS_TESTS3}
             ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
         otbVectorDataProjectionFilterFromMapToSensor
         ${INPUTDATA}/ToulousePoints-examples.shp
-        ${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)

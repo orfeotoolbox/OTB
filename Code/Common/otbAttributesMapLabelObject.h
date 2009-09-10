@@ -185,7 +185,7 @@ public:
   virtual void CopyAttributesFrom( const Self * src)
     {
     Superclass::CopyAttributesFrom( src );
-    m_Attributes = src->m_Attributes;
+      m_Attributes = src->m_Attributes;
    }
 
 protected:

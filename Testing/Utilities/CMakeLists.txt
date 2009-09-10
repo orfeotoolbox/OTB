@@ -24,7 +24,7 @@ SET(UTILITIES_TESTS ${CXX_TEST_PATH}/otbUtilitiesTests)
 #ADD_TEST(utOssimIntegrationTest ${UTILITIES_TESTS}
 #        ossimIntegrationTest
 #        ossimTiffWriter
-#        ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+#        ${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 #        ${TEMP}/utOssimIntegration.tif
 #)
 
@@ -34,7 +34,7 @@ ADD_TEST(utTvOssimKeywordlistToulouseQuickBirdTest ${UTILITIES_TESTS}
 --compare-list ${EPSILON_10e6}  ${BASELINE_FILES}/utOssimKeywordlistToulouseQuickBird.txt
                         ${TEMP}/utOssimKeywordlistToulouseQuickBird.txt
         ossimKeywordlistTest
-        ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/utOssimKeywordlistToulouseQuickBird.txt
         )
 
@@ -42,7 +42,7 @@ ADD_TEST(utTvOssimKeywordlistBlossevilleIkonosTest ${UTILITIES_TESTS}
 --compare-list ${TOL}  ${BASELINE_FILES}/utOssimKeywordlistBlossevilleIkonos.txt
                         ${TEMP}/utOssimKeywordlistBlossevilleIkonos.txt
         ossimKeywordlistTest
-        ${IMAGEDATA}/IKONOS_BLOSSEVILLE/po_2619900_grn_0000000.tif
+        ${IMAGEDATA}/IKONOS/BLOSSEVILLE/po_2619900_grn_0000000.tif
         ${TEMP}/utOssimKeywordlistBlossevilleIkonos.txt
         )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -140,7 +140,7 @@ ADD_TEST(utTvTinyXMLTest ${UTILITIES_TESTS}
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(utTvOssimRadarSatSupport ${UTILITIES_TESTS}
         ossimRadarSatSupport
-        ${IMAGEDATA}/RADARSAT2/SCENE01/DAT_01.001
+        ${IMAGEDATA}/RADARSAT1/GOMA2/SCENE01/DAT_01.001
         )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 

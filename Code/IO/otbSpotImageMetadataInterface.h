@@ -99,6 +99,12 @@ public:
   /** Get the last wavelength for the spectral band definition */
   VariableLengthVectorType GetLastWavelengths( const MetaDataDictionaryType & dict ) const;
 
+  /** Get Instrument */
+  std::string GetInstrument( const MetaDataDictionaryType & dict ) const;
+
+  /** Get Instrument Index */
+  unsigned int GetInstrumentIndex( const MetaDataDictionaryType & dict ) const;
+
   bool CanRead( const MetaDataDictionaryType & dict) const;
 
   

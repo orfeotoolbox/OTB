@@ -757,7 +757,7 @@ ADD_TEST(coTvVectorDataToImageFilterSensorModel ${COMMON_TESTS9}
                      ${TEMP}/coTvVectorDataToImageFilterSensorModel.png
    otbVectorDataToImageFilterSensorModel
         ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
-        ${LARGEINPUT}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 	${TEMP}/coTvVectorDataToImageFilterSensorModel.png
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
