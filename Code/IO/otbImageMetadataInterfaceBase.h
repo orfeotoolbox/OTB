@@ -210,8 +210,6 @@ protected:
   ImageMetadataInterfaceBase();
   virtual ~ImageMetadataInterfaceBase() {};
 
-//  bool IsSpot( const MetaDataDictionaryType & dict) const;
-
 private:
   ImageMetadataInterfaceBase(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

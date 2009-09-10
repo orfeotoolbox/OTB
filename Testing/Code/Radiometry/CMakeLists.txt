@@ -24,6 +24,8 @@ SET(RADIOMETRY_TESTS5 ${CXX_TEST_PATH}/otbRadiometryTests5)
 SET(RADIOMETRY_TESTS6 ${CXX_TEST_PATH}/otbRadiometryTests6)
 SET(RADIOMETRY_TESTS7 ${CXX_TEST_PATH}/otbRadiometryTests7)
 SET(RADIOMETRY_TESTS8 ${CXX_TEST_PATH}/otbRadiometryTests8)
+SET(RADIOMETRY_TESTS9 ${CXX_TEST_PATH}/otbRadiometryTests9)
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1022,7 +1024,23 @@ ADD_TEST(raTvAeronet_ArcachonLevel10_ExtractData ${RADIOMETRY_TESTS8}
 )
 
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS9 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# -------            TerraSarIntraCalibrationImageFilter   ------------------------------
+ADD_TEST(raTuTerraSarIntraCalibrationImageFilterNew ${RADIOMETRY_TESTS9}
+       otbTerraSarIntraCalibrationImageFilterNew
+)
+
+ADD_TEST(raTvTerraSarIntraCalibrationImageFilterTest ${RADIOMETRY_TESTS9}
+# --compare-image ${EPSILON}  
+#                               ${BASELINE}/raTvTerraSarIntraCalibrationImageFilterTest.tif
+#                               ${TEMP}/raTvTerraSarIntraCalibrationImageFilterTest.tif
+        otbTerraSarIntraCalibrationImageFilterTest
+		${INPUTDATA}/TerraSarExtract.tif
+		${TEMP}/raTvTerraSarIntraCalibrationImageFilterTest.tif
+)
 
 
 # A enrichir
@@ -1115,6 +1133,13 @@ otbAeronetExtractData.cxx
 otbAeronetExtractDataBadData.cxx
 )
 
+SET(Radiometry_SRCS9
+otbRadiometryTests9.cxx
+otbTerraSarIntraCalibrationImageFilterNew.cxx
+otbTerraSarIntraCalibrationImageFilterTest.cxx
+)
+
+
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 OTB_ADD_EXECUTABLE(otbRadiometryTests1 "${Radiometry_SRCS1}" "OTBRadiometry;OTBIO;OTBTesting")
@@ -1125,5 +1150,6 @@ OTB_ADD_EXECUTABLE(otbRadiometryTests5 "${Radiometry_SRCS5}" "OTBRadiometry;OTBI
 OTB_ADD_EXECUTABLE(otbRadiometryTests6 "${Radiometry_SRCS6}" "OTBRadiometry;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbRadiometryTests7 "${Radiometry_SRCS7}" "OTBRadiometry;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbRadiometryTests8 "${Radiometry_SRCS8}" "OTBRadiometry;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbRadiometryTests9 "${Radiometry_SRCS9}" "OTBRadiometry;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
