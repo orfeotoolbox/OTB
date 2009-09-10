@@ -67,12 +67,12 @@ class ImageViewerManagerViewGroup {open
         xywh {480 31 115 277}
       } {
         Fl_Button guiOpenImage {
-          label {Open Image}
+          label {Open image}
           callback {OpenImage();}
           tooltip {Open an image in a  new image viewer} xywh {489 46 95 24} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0x6f color 23 selection_color 23 labelcolor 186
         }
         Fl_Button guiCloseImage {
-          label {Close Image}
+          label {Close image}
           callback {CloseImage();}
           tooltip {Close the selected image} xywh {489 88 95 25} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0x63 color 23 selection_color 23 labelcolor 186
         }
@@ -120,15 +120,15 @@ class ImageViewerManagerViewGroup {open
         tooltip {Select the band to view in grayscale mode} xywh {118 73 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187
       } {}
       Fl_Input_Choice guiRedChannelChoice {
-        label {Red channel index } open
+        label {Red channel } open
         tooltip {Select band for red channel in RGB composition} xywh {602 51 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
       } {}
       Fl_Input_Choice guiGreenChannelChoice {
-        label {Green channel index } open
+        label {Green channel } open
         tooltip {Select band for green channel in RGB composition} xywh {602 73 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
       } {}
       Fl_Input_Choice guiBlueChannelChoice {
-        label {Blue channel index } open
+        label {Blue channel } open
         tooltip {Select band for blue channel in RGB composition} xywh {602 95 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
       } {}
       Fl_Return_Button guiViewerSetupOk {
