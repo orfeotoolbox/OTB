@@ -131,9 +131,6 @@ bool GDALImageIO::CanReadFile(const char* file)
   }
   else
   {
-
-std::cout<<"CanReadFile !!!!!!!!!!"<<std::endl;
-
     GDALClose(m_poDataset);
     m_poDataset = NULL;
     GDALDestroyDriverManager();
@@ -161,37 +158,21 @@ void GDALImageIO::ReadVolume(void*)
 void GDALImageIO::Read(void* buffer)
 {
   std::streamoff step = static_cast<std::streamoff>(this->GetNumberOfComponents());
-std::cout<< " PASSE DANS READ !!"<<std::endl;
-std::cout<< "step : "<<step<<std::endl;
   unsigned char * p = static_cast<unsigned char *>(buffer);
   if (p==NULL)
   {
     itkExceptionMacro(<<"Memory allocation error");
     return;
   }
-std::cout<< "buffer : "<< p <<std::endl;
+
   int lNbLines   = this->GetIORegion().GetSize()[1];
   int lNbColumns = this->GetIORegion().GetSize()[0];
   int lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
   int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
 
-//    int lNbLines   = 1354;
-//    int lNbColumns = 2030;
-//    int lFirstLine   = 0; // [1... ]
-//    int lFirstColumn = 0; // [1... ]
-// m_NumberOfComponents = 1;
-
-std::cout<< "Lig "<<lNbLines <<std::endl;
-std::cout<< "Col "<<lNbColumns<<std::endl;
-std::cout<< "FirstL " <<lFirstLine <<std::endl;
-std::cout<< "FirstC " <<lFirstColumn <<std::endl;
-std::cout<< "NbOctetPxl "<<m_NbOctetPixel<<std::endl;
 
   std::streamoff lNbPixels = (static_cast<std::streamoff>(lNbColumns))*(static_cast<std::streamoff>(lNbLines));
   std::streamoff lBufferSize = static_cast<std::streamoff>(m_NbOctetPixel)*lNbPixels;
-
-std::cout<< "lNbPixels "<<lNbPixels<<std::endl;
-std::cout<< "lBufferSize "<<lBufferSize<<std::endl;
 
   unsigned char* value = new unsigned char[lBufferSize];
   if (value==NULL)
@@ -206,7 +187,6 @@ std::cout<< "lBufferSize "<<lBufferSize<<std::endl;
 
   if ( GDALDataTypeIsComplex(m_PxType) )
   {
-std::cout<<"COMPLEX !!"<<std::endl;
     lCrGdal = m_poBands[0]->RasterIO( GF_Read,lFirstColumn,lFirstLine,lNbColumns, lNbLines, value , lNbColumns, lNbLines, m_PxType,0, 0 );
 
     if (lCrGdal == CE_Failure)
@@ -222,18 +202,12 @@ std::cout<<"COMPLEX !!"<<std::endl;
   }
   else
   {
-std::cout<<"NOT COMPLEX !!"<<std::endl;
     // Mise a jour du step
     step = step * static_cast<std::streamoff>(m_NbOctetPixel);
 
-m_NumberOfComponents = 1;
-std::cout<<"GetNumberOfComponents : "<<this->GetNumberOfComponents()<<std::endl;
-std::cout<<"Step : "<<step<<std::endl;
     for (unsigned int nbComponents = 0; nbComponents < this->GetNumberOfComponents(); ++nbComponents)
     {
-std::cout<<"INFO POUR RasterIO : FC:"<<lFirstColumn<<" FL:"<<lFirstLine<<" nbC:"<<lNbColumns<<" nbL:"<<lNbLines<<" pxltype:"<<m_PxType<<std::endl;
       lCrGdal = m_poBands[nbComponents]->RasterIO( GF_Read,lFirstColumn,lFirstLine,lNbColumns, lNbLines, value , lNbColumns, lNbLines, m_PxType,0, 0 );
-std::cout<<"lCrGdal : "<<lCrGdal<<std::endl;
       if (lCrGdal == CE_Failure)
       {
         itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str()<<".");
@@ -242,7 +216,6 @@ std::cout<<"lCrGdal : "<<lCrGdal<<std::endl;
       cpt = static_cast<std::streamoff>(nbComponents)*static_cast<std::streamoff>(m_NbOctetPixel);
       for ( std::streamoff  i=0; i < lBufferSize; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
       {
-//std::cout<<"val:"<<value[i] <<std::endl;
         memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)(m_NbOctetPixel));
         cpt += step;
       }
@@ -263,13 +236,6 @@ void GDALImageIO::InternalReadImageInformation()
 {
   int i;
 
-//GDALDatasetH    hDataset;
-int bSubCall = TRUE;
-const char      *pszSource=NULL;
-int argc;
-char ** argv;
-
-
   if (  m_FileName.empty() == true )
   {
     itkExceptionMacro(<<"GDAl read : empty image file name file.");
@@ -288,16 +254,6 @@ char ** argv;
     m_poDataset = NULL;
   }
   m_poDataset = static_cast<GDALDataset *>( GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly ));
-
-/* -------------------------------------------------------------------- */
-/*      Attempt to open source file.                                    */
-/* -------------------------------------------------------------------- */
-
-/// ATTENTION MODIFIE
-    //hDataset = GDALOpenShared( lFileNameGdal.c_str(), GA_ReadOnly );
-    m_poDataset = static_cast<GDALDataset *>( GDALOpenShared(lFileNameGdal.c_str(), GA_ReadOnly ));
-
-
   otbMsgDevMacro( <<"  GCPCount (original): " << m_poDataset->GetGCPCount());
   if (m_poDataset==NULL)
   {
@@ -310,8 +266,6 @@ char ** argv;
     // Get image dimensions
     m_width = m_poDataset->GetRasterXSize();
     m_height = m_poDataset->GetRasterYSize();
-
-printf("W / H : %d %d \n",m_width,m_height);
 
     if ( (m_width==0) || (m_height==0))
     {
@@ -328,76 +282,33 @@ printf("W / H : %d %d \n",m_width,m_height);
     m_NbBands = m_poDataset->GetRasterCount();
     if (m_NbBands==0)
     {
+//FIXME this happen in the case of a hdf file with SUBDATASETS
+// in this situation, at least the first dataset should be open (ideally all in an imagelist)
+//         char** papszMetadata;
+//         papszMetadata = m_poDataset->GetMetadata("SUBDATASETS");
+//         if( CSLCount(papszMetadata) > 0 )
+//         {
+//           std::string key;
+//           itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
+//           for( int cpt = 0; papszMetadata[cpt] != NULL; cpt++ )
+//           {
+//             std::cout << papszMetadata[cpt] << std::endl;
+//               ::itk::OStringStream lStream;
+//               lStream << MetaDataKey::SubMetadataKey << cpt;
+//               key = lStream.str();
+//
+//               itk::EncapsulateMetaData<std::string>(dict, key,
+//                   static_cast<std::string>( papszMetadata[cpt] ) );
+//           }
+//           std::cout << dict[dict.GetKeys()[0]] << std::endl;
+//           std::cout << key << std::endl;
+//         }
 
-// PART OF THE METADATAS
-/** papszMetadata avec m_poDataset->GetMetadata */
-        char** papszMetadata;
-        papszMetadata = m_poDataset->GetMetadata("SUBDATASETS");
-
-        if( CSLCount(papszMetadata) > 0 )
-        {
-          std::string key;
-          itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
-          for( int cpt = 0; papszMetadata[cpt] != NULL; cpt++ )
-          {
-            std::cout << papszMetadata[cpt] << std::endl;
-              ::itk::OStringStream lStream;
-              lStream << MetaDataKey::SubMetadataKey << cpt;
-              key = lStream.str();
-
-              itk::EncapsulateMetaData<std::string>(dict, key,
-                  static_cast<std::string>( papszMetadata[cpt] ) );
-          }
-          std::cout << dict[dict.GetKeys()[0]] << std::endl;
-          std::cout << key << std::endl;
-
-// PART OF THE SDS
-/** papszSubdatasets avec GDALGetMetadata */
-          char **papszSubdatasets = GDALGetMetadata(m_poDataset,"SUBDATASETS");
-          int cpt2;
-          for( cpt2 = 0; papszSubdatasets[cpt2] != NULL; cpt2 += 2 )
-          {
-                /* argv[iSrcFileArg] = strstr(papszSubdatasets[i],"=")+1; */
-            lFileNameGdal = strstr(papszSubdatasets[cpt2],"=")+1;
-  
-            std::cout<< "*--- SDS A LIRE : " << lFileNameGdal <<std::endl;
-            lFileNameGdal = "HDF4_SDS:EOS_SWATH:/home2/guillaume/ORFEO/OTB-Data/Input/Modis.hdf:MODIS_SWATH_Type_L1B:EV_1KM_RefSB";
-            //lFileNameGdal = "HDF4_SDS:MODIS_L1B:/home2/guillaume/ORFEO/OTB-Data/Input/Modis.hdf:1";
-            std::cout<< "*--- devient    : " <<lFileNameGdal << std::endl;
-            m_FileName = lFileNameGdal;
-  
-            // Read a SDS with GDAL
-            if (m_poDataset != NULL)
-            {
-              GDALClose(m_poDataset);
-              m_poDataset = NULL;
-            }
-            m_poDataset = static_cast<GDALDataset *>( GDALOpenShared(lFileNameGdal.c_str(), GA_ReadOnly ));
-            // Get image dimensions
-            m_width = m_poDataset->GetRasterXSize();
-            m_height = m_poDataset->GetRasterYSize();
-            std::cout<<"-----------W : " << m_width << " H :"<<m_height<<" nbBand : "<< m_NbBands<<std::endl;
-/// TRICHE
-            m_width = 2030;
-            m_height = 1354;
-            // Get Number of Bands
-            m_NbBands = m_poDataset->GetRasterCount();
-            std::cout<<"-----------W : " << m_width << " H :"<<m_height<<" nbBand : "<< m_NbBands<<std::endl;
-            break;
-          }
-        } // fin if CSLCount
-        else
-        {
-          itkExceptionMacro(<<"Zero band found in the dataset");
-          return;
-        }
-      //GDALClose( hDataset );
-      this->SetNumberOfComponents(m_NbBands);
+      itkExceptionMacro(<<"Zero band found in the dataset");
+      return;
     }
-    else
-    {
-        this->SetNumberOfComponents(m_NbBands);
-    }
+
+    this->SetNumberOfComponents(m_NbBands);
 
     // Set the number of dimensions (verify for the dim )
     this->SetNumberOfDimensions(2);
@@ -414,22 +325,13 @@ printf("W / H : %d %d \n",m_width,m_height);
       itkExceptionMacro(<<"Memory allocation error for the 'rasterBands'");
       return;
     }
-
     for (i=0; i<m_NbBands; ++i)
       m_poBands[i] = m_poDataset->GetRasterBand(i+1);
 
     // Get Data Type
     // Consider only the data type given by the first band!!!!!
     // Maybe be could changed (to check)
-
-/// MARCHE PAS
-//m_poBands[0]->SetRasterDataType(GDT_UInt16);
-
-/// A DECOMMENTER
-//    m_PxType = m_poBands[0]->GetRasterDataType();
-std::cout<< " JE TRICHE" <<std::endl;
-std::cout<< m_PxType <<std::endl;
-m_PxType = GDT_UInt16;
+    m_PxType = m_poBands[0]->GetRasterDataType();
 
     // Following the data type given by GDAL we set it for ImageIO
     // BE CAREFUL !!!! At this time the complex data type are regarded
@@ -524,12 +426,10 @@ m_PxType = GDT_UInt16;
       this-> SetNumberOfComponents(m_NbBands);
       if ( this->GetNumberOfComponents() == 1 )
       {
-std::cout<<"SCALAAAAAAAAAR" <<std::endl;
         this->SetPixelType(SCALAR);
       }
       else
       {
-std::cout<<"VECTOOOOOOOOOOOOOOR" <<std::endl;
         this->SetPixelType(VECTOR);
       }
     }
@@ -544,7 +444,7 @@ std::cout<<"VECTOOOOOOOOOOOOOOR" <<std::endl;
 
 
   /* -------------------------------------------------------------------- */
-  /*  Get Spacing                                                         */
+  /*  Get Spacing                */
   /* -------------------------------------------------------------------- */
 
   // Default Spacing
@@ -570,7 +470,7 @@ std::cout<<"VECTOOOOOOOOOOOOOOR" <<std::endl;
                                         static_cast<std::string>( GDALGetDriverLongName( hDriver ) ) );
 
   /* -------------------------------------------------------------------- */
-  /* Get the projection coordinate system of the image : ProjectionRef    */
+  /* Get the projection coordinate system of the image : ProjectionRef  */
   /* -------------------------------------------------------------------- */
 
   if ( m_poDataset->GetProjectionRef() != NULL )
