@@ -62,5 +62,7 @@ int otbTerraSarCalibrationImageFilterTest(int argc, char * argv[])
   writer->SetInput(filter->GetOutput());
   writer->Update(); 
 
+  std::cout<<filter<<std::endl;
+
   return EXIT_SUCCESS;
 }

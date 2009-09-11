@@ -56,30 +56,30 @@ public:
 
   /** Accessors */
   void SetCalFactor( double val ) { m_CalFactor = val; m_RadarBrightness.SetCalFactor(val); };
-  double GetCalFactor() { return m_CalFactor; };
+  double GetCalFactor() const { return m_CalFactor; };
   void SetNoiseRangeValidityMin( double val ) { m_NoiseRangeValidityMin = val; };
-  double GetNoiseRangeValidityMin() { return m_NoiseRangeValidityMin; };
+  double GetNoiseRangeValidityMin() const { return m_NoiseRangeValidityMin; };
   void SetNoiseRangeValidityMax( double val ) { m_NoiseRangeValidityMax = val; };
-  double GetNoiseRangeValidityMax() { return m_NoiseRangeValidityMax; };
+  double GetNoiseRangeValidityMax() const { return m_NoiseRangeValidityMax; };
   void SetNoiseRangeValidityRef( double val ) { m_NoiseRangeValidityRef = val; };
-  double GetNoiseRangeValidityRef() { return m_NoiseRangeValidityRef; };
+  double GetNoiseRangeValidityRef() const { return m_NoiseRangeValidityRef; };
   void SetLocalIncidentAngle( double val )
   { 
     m_LocalIncidentAngle = val; 
     m_SinLocalIncidentAngle = vcl_sin(m_LocalIncidentAngle*CONST_PI_180);
   };
-  double GetLocalIncidentAngle() { return m_LocalIncidentAngle; };
+  double GetLocalIncidentAngle() const { return m_LocalIncidentAngle; };
   double GetSinLocalIncidentAngle() const { return m_SinLocalIncidentAngle; };
   void SetNoisePolynomialCoefficientsList( DoubleVectorVectorType vect ) { m_NoisePolynomialCoefficientsList = vect; };
-  DoubleVectorVectorType GetNoisePolynomialCoefficientsList() { return m_NoisePolynomialCoefficientsList; };
+  DoubleVectorVectorType GetNoisePolynomialCoefficientsList() const { return m_NoisePolynomialCoefficientsList; };
   void SetImageSize( SizeType size ) { m_ImageSize = size; };
-  SizeType GetImageSize() { return m_ImageSize; };
+  SizeType GetImageSize() const { return m_ImageSize; };
   void SetUseFastCalibrationMethod( bool b ) { m_UseFastCalibrationMethod = b; };
-  bool GetUseFastCalibrationMethod() { return m_UseFastCalibrationMethod; };
+  bool GetUseFastCalibrationMethod() const { return m_UseFastCalibrationMethod; };
   void SetTimeUTC( LIntVectorType vect ) { m_TimeUTC = vect; };
-  LIntVectorType GetTimeUTC() { return m_TimeUTC; };
+  LIntVectorType GetTimeUTC() const { return m_TimeUTC; };
   void SetPRF( double val ) { m_PRF = val; m_InvPRF = 1./m_PRF; };
-  double GetPRF() { return m_PRF; };
+  double GetPRF() const { return m_PRF; };
   double GetInvPRF() const { return m_InvPRF; };
 
   double ComputeCurrentNoise( unsigned int colId );
@@ -167,35 +167,35 @@ public:
   /** Accessors */
   /** Calibration Factor */
   void SetCalFactor( double val );
-  double GetCalFactor();
+  double GetCalFactor() const;
   /** Noise minimal range validity */
   void SetNoiseRangeValidityMin( double val );
-  double GetNoiseRangeValidityMin() ;
+  double GetNoiseRangeValidityMin() const;
   /** Noise maximal range validity */
   void SetNoiseRangeValidityMax( double val );
-  double GetNoiseRangeValidityMax();
+  double GetNoiseRangeValidityMax() const;
   /** Noise reference range validity */
   void SetNoiseRangeValidityRef( double val );
-  double GetNoiseRangeValidityRef();
+  double GetNoiseRangeValidityRef() const;
   /** Sensor local incident angle in degree */
   void SetLocalIncidentAngle( double val );
-  double GetLocalIncidentAngle();
+  double GetLocalIncidentAngle() const;
   /** Sinus of the sensor local incident angle in degree */
   double GetSinLocalIncidentAngle() const;
   /** Vector of vector that contain noise polinomial coefficient */
   void SetNoisePolynomialCoefficientsList( DoubleVectorVectorType vect );
-  DoubleVectorVectorType GetNoisePolynomialCoefficientsList();
+  DoubleVectorVectorType GetNoisePolynomialCoefficientsList() const;
   /** Fast Calibration Method. If set to trus, will consider only the first noise coefficient else, 
    *  will use all of them and applied it according to its acquisition UTC time and the coordinates 
    *  of the pixel in the image. */
   void SetUseFastCalibrationMethod( bool b );
-  bool GetUseFastCalibrationMethod();
+  bool GetUseFastCalibrationMethod() const;
   /** TimeUTC for each noise coefficient acquisition (in second). */
   void SetTimeUTC( LIntVectorType vect );
-  LIntVectorType GetTimeUTC();
+  LIntVectorType GetTimeUTC() const;
   /** Pulse Repetition Frequency */
   void SetPRF( double val );
-  double GetPRF();
+  double GetPRF() const;
   /** Inverse Pulse Repetition Frequency */
   double GetInvPRF() const;
 

@@ -185,7 +185,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 double
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetCalFactor()
+::GetCalFactor() const
 { 
   return this->GetFunctor().GetCalFactor(); 
 }
@@ -202,7 +202,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 double
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetNoiseRangeValidityMin() 
+::GetNoiseRangeValidityMin() const 
 { 
   return this->GetFunctor().GetNoiseRangeValidityMin(); 
 }
@@ -219,7 +219,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 double
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetNoiseRangeValidityMax() 
+::GetNoiseRangeValidityMax() const
 { 
   return this->GetFunctor().GetNoiseRangeValidityMax();
 }
@@ -237,7 +237,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 double
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetNoiseRangeValidityRef()
+::GetNoiseRangeValidityRef() const
 { 
   return this->GetFunctor().GetNoiseRangeValidityRef(); 
 }
@@ -255,7 +255,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 double
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetLocalIncidentAngle() 
+::GetLocalIncidentAngle() const
 { 
   return this->GetFunctor().GetLocalIncidentAngle();
 }
@@ -281,7 +281,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 typename TerraSarCalibrationImageFilter<TInputImage,TOutputImage>::DoubleVectorVectorType
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetNoisePolynomialCoefficientsList()
+::GetNoisePolynomialCoefficientsList() const
 { 
   return this->GetFunctor().GetNoisePolynomialCoefficientsList();
 }
@@ -298,7 +298,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 bool
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetUseFastCalibrationMethod() 
+::GetUseFastCalibrationMethod() const 
 { 
   return this->GetFunctor().GetUseFastCalibrationMethod();
 }
@@ -317,7 +317,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 typename TerraSarCalibrationImageFilter<TInputImage,TOutputImage>::LIntVectorType
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetTimeUTC()
+::GetTimeUTC() const
 { 
   return this->GetFunctor().GetTimeUTC();
 }
@@ -336,7 +336,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 double
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetPRF()
+::GetPRF() const
 { 
   return this->GetFunctor().GetPRF();
 }
@@ -356,28 +356,39 @@ void
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-//   os << "Calibration Factor            : " << this->GetCalFact() << std::endl;
-//   os << "Sensor local incident angle   : " << this->GetLocalIncidentAngle() << std::endl;
-//   os << "Noise minimal range validity  : " << this->GetNoiseRangeValidityMin() << std::endl;
-//   os << "Noise maxinimal range validity: " << this->GetNoiseRangeValidityMax() << std::endl;
-//   os << "Noise reference range         : " << this->GetNoiseRangeValidityRef() << std::endl;
+  Superclass::PrintSelf(os, indent);
+
+  os << "Calibration Factor          : " << this->GetCalFactor()  << std::endl;
+  os << "Sensor local incident angle : " << this->GetLocalIncidentAngle() << std::endl;
+  os << "Noise minimal range validity: " << this->GetNoiseRangeValidityMin() << std::endl;
+  os << "Noise maximal range validity: " << this->GetNoiseRangeValidityMax() << std::endl;
+  os << "Noise reference range       : " << this->GetNoiseRangeValidityRef() << std::endl;
   
-//   if(this->GetUseFastCalibrationMethod())
-//     {
-//       os << "Noise polinomial coefficient  : " << this->GetNoisePolynomialCoefficientsList()[0] << std::endl;
-//       os << "Noise TimeUTC                 : " << this->GetTimeUTC()[0] << std::endl;
-//     }
-//   else
-//     {
-//       os << "Pulse Repetition Frequency    : " << this->GetPRF() << std::endl;
-//       os << "Noise acquisitions            : " << this->GetNoisePolynomialCoefficientsList().size() << std::endl;
-//       for (unsigned int i=0; i<this->GetNoisePolynomialCoefficientsList.size(); ++i)
-// 	{
-// 	  os << "Noise acquisition "<< i << ":" << std::endl;
-// 	  os << "Noise TimeUTC             : " << this->GetTimeUTC()[i] << std::endl;
-// 	  os << "Noise polinomial coeff.   : " << this->GetNoisePolynomialCoefficientsList()[i] << std::endl;
-// 	}
-//     }  
+  if(this->GetUseFastCalibrationMethod())
+    {
+      os << "Noise polinomial coefficient: [   ";
+      for (unsigned int i=0; i<this->GetNoisePolynomialCoefficientsList()[0].size(); ++i)
+	{
+	  os << this->GetNoisePolynomialCoefficientsList()[0][i] << "   ";
+	}
+      os << "]" << std::endl;
+    }
+  else
+    {
+      os << "Pulse Repetition Frequency  : " << this->GetPRF() << std::endl;
+      os << "Noise acquisitions          : " << this->GetNoisePolynomialCoefficientsList().size() << std::endl;
+      for (unsigned int i=0; i<this->GetNoisePolynomialCoefficientsList().size(); ++i)
+	{
+	  os << "Noise acquisition"<< i << ":" << std::endl;
+	  os << "Noise TimeUTC           : " << this->GetTimeUTC()[i] << std::endl;
+	  os << "Noise polinomial coefficient: [   ";
+	  for (unsigned int j=0; j<this->GetNoisePolynomialCoefficientsList()[j].size(); ++j)
+	    {
+	      os << this->GetNoisePolynomialCoefficientsList()[i][j] << "   ";
+	    }
+      os << "]" << std::endl;
+	}
+    }  
 }
 
 
