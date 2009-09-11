@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: otb-fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-10 18:15+0800\n"
-"PO-Revision-Date: 2009-09-10 18:04+0800\n"
+"POT-Creation-Date: 2009-09-11 17:45+0800\n"
+"PO-Revision-Date: 2009-09-11 17:41+0800\n"
 "Last-Translator: Emmanuel Christophe <emmanuel.christophe@orfeo-toolbox."
 "org>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -79,11 +79,14 @@ msgstr "Sauver image resultat"
 #: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:23
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:221
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:493
+#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:538
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:80
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:313
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:522
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:577
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:221
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:493
+#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:538
 msgid "Quit"
 msgstr "Quitter"
 
@@ -150,7 +153,8 @@ msgstr "Effacer"
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:515
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:523
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:531
-msgid "Clear the entire drawing."
+#, fuzzy
+msgid "Clear the entire drawing"
 msgstr "Effacer tout le dessin"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:393
@@ -159,7 +163,8 @@ msgstr "Apprentisasage"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:394
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:503
-msgid "Learn the SVM model from the training set."
+#, fuzzy
+msgid "Learn the SVM model from the training set"
 msgstr "Apprentissage du SVM depuis l'ensemble d'entrainement"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:404
@@ -168,7 +173,8 @@ msgstr "Classe sans changements"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:405
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:427
-msgid "Choose changed class training set color."
+#, fuzzy
+msgid "Choose changed class training set color"
 msgstr "Choix de la couleur de la classe changements"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:415
@@ -176,7 +182,8 @@ msgid "Changed class"
 msgstr "Changer la classe"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:416
-msgid "Toggle changed class training set display."
+#, fuzzy
+msgid "Toggle changed class training set display"
 msgstr "Affiche la classe changements"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:426
@@ -185,7 +192,8 @@ msgid "Color ..."
 msgstr "Couleur..."
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:435
-msgid "Choose unchanged class training set color."
+#, fuzzy
+msgid "Choose unchanged class training set color"
 msgstr "Choix de la couleur de la classe sans changement"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:442
@@ -194,7 +202,8 @@ msgid "Opacity"
 msgstr "Opacite"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:443
-msgid "Set the training set opacity."
+#, fuzzy
+msgid "Set the training set opacity"
 msgstr "Modifie l'opacite de l'ensemble d'entrainement"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:455
@@ -210,7 +219,7 @@ msgstr ""
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:464
 msgid ""
 "Enrich feature vector with mean-difference and mean-ratio change detectors "
-"attributes."
+"attributes"
 msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:475
@@ -309,13 +318,6 @@ msgstr ""
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:616
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:665
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:714
-#: Classification/otbSupervisedClassificationAppliGUI.cxx:863
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:433
-#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:337
-#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:667
-#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:717
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:373
-#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:337
 #, fuzzy
 msgid "Red channel "
 msgstr "Canal rouge:"
@@ -323,13 +325,6 @@ msgstr "Canal rouge:"
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:623
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:672
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:721
-#: Classification/otbSupervisedClassificationAppliGUI.cxx:872
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:442
-#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:345
-#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:660
-#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:725
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:381
-#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:345
 #, fuzzy
 msgid "Green channel "
 msgstr "Canal vert:"
@@ -337,12 +332,6 @@ msgstr "Canal vert:"
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:630
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:679
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:728
-#: Classification/otbSupervisedClassificationAppliGUI.cxx:881
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:451
-#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:353
-#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:733
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:389
-#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:353
 #, fuzzy
 msgid "Blue channel "
 msgstr "Canal bleu:"
@@ -378,12 +367,12 @@ msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:776
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:713
-msgid "SVM Type "
+msgid "SVM Type"
 msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:786
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:724
-msgid "Kernel Type "
+msgid "Kernel Type"
 msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:796
@@ -418,12 +407,12 @@ msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:839
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:778
-msgid " Shrinking"
+msgid "Shrinking"
 msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:847
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:786
-msgid " Probability Estimation"
+msgid "Probability Estimation"
 msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:855
@@ -545,7 +534,10 @@ msgid "Add a new class"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:433
-msgid " Remove"
+#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:475
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:504
+#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:475
+msgid "Remove"
 msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:434
@@ -820,8 +812,9 @@ msgstr ""
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:710
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:366
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:330
-msgid "Channel index "
-msgstr ""
+#, fuzzy
+msgid "Channel index"
+msgstr "Index du canal rouge"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:856
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:426
@@ -831,6 +824,31 @@ msgstr ""
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:331
 msgid "Select the band to view in grayscale mode"
 msgstr "Selectionne la bande a afficher en niveaux de gris"
+
+#: Classification/otbSupervisedClassificationAppliGUI.cxx:863
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:967
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:987
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1029
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1061
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1089
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1137
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1165
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1200
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1261
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1315
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1378
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1397
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1433
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1569
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:433
+#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:337
+#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:667
+#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:717
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:373
+#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:337
+#, fuzzy
+msgid "Red channel"
+msgstr "Canal rouge:"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:864
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:434
@@ -842,6 +860,23 @@ msgstr "Selectionne la bande a afficher en niveaux de gris"
 msgid "Select band for red channel in RGB composition"
 msgstr "Selectionne la bande a afficher en rouge"
 
+#: Classification/otbSupervisedClassificationAppliGUI.cxx:872
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1322
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1371
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1390
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1509
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1529
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1557
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1577
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:442
+#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:345
+#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:660
+#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:725
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:381
+#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:345
+msgid "Green channel"
+msgstr "Canal vert"
+
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:873
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:443
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:346
@@ -851,6 +886,19 @@ msgstr "Selectionne la bande a afficher en rouge"
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:346
 msgid "Select band for green channel in RGB composition"
 msgstr "Selectionne la bande a afficher en vert"
+
+#: Classification/otbSupervisedClassificationAppliGUI.cxx:881
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1172
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1207
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1268
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:451
+#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:353
+#: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:733
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:389
+#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:353
+#, fuzzy
+msgid "Blue channel"
+msgstr "Canal bleu:"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:882
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:452
@@ -890,8 +938,9 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:397
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:433
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:397
-msgid "Real channel index "
-msgstr ""
+#, fuzzy
+msgid "Real channel index"
+msgstr "Index du canal rouge"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:922
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:398
@@ -904,8 +953,9 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:405
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:441
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:405
-msgid "Imaginary channel index "
-msgstr ""
+#, fuzzy
+msgid "Imaginary channel index"
+msgstr "Index du canal vert"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:931
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:406
@@ -1019,6 +1069,7 @@ msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:596
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:617
+#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1651
 msgid "Variance"
 msgstr ""
 
@@ -1311,7 +1362,7 @@ msgid "Action"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:799
-msgid "Feature Choice:"
+msgid "Feature Choice"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:808
@@ -1322,83 +1373,71 @@ msgstr ""
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1630
 #: OrthoFusion/otbOrthoFusionGUI.cxx:833 OrthoFusion/otbOrthoFusionGUI.cxx:840
 #: OrthoRectif/otbOrthoRectifGUI.cxx:768 OrthoRectif/otbOrthoRectifGUI.cxx:775
-msgid "Radius:"
+#: Segmentation/otbRegionGrowingSegmentationViewGroup.cxx:124
+msgid "Radius"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:831
-msgid "Sigma D:"
+msgid "Sigma D"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:838
-msgid "Sigma I:"
+msgid "Sigma I"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:845
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1610
-msgid "Alpha:"
+#: RoadExtraction/otbRoadExtractionViewGroup.cxx:335
+msgid "Alpha"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:856
-msgid "Pixel coordinates:"
+msgid "Pixel coordinates"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:862
-msgid "Pixel value:"
+#: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1030
+#: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1031
+msgid "Pixel value"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:872
-msgid "Initial Value:"
+msgid "Initial Value"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:879
-msgid "Profile Size:"
+msgid "Profile Size"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:886
-msgid "Step:"
-msgstr ""
+#, fuzzy
+msgid "Step"
+msgstr "Configuration"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:897
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:929
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1669
-msgid "Radius along X:"
+msgid "Radius along X"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:905
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:937
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1677
-msgid "Radius along Y:"
+msgid "Radius along Y"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:917
-msgid "Sigma:"
-msgstr ""
+#, fuzzy
+msgid "Sigma"
+msgstr "Ouvrir Image"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:945
-msgid "Offset along X:"
+msgid "Offset along X"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:954
-msgid "Offset along Y:"
+msgid "Offset along Y"
 msgstr ""
-
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:967
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:987
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1029
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1061
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1089
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1137
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1165
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1200
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1261
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1315
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1378
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1397
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1433
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1569
-#, fuzzy
-msgid "Red channel"
-msgstr "Canal rouge:"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:975
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:995
@@ -1421,7 +1460,7 @@ msgstr "Canal rouge:"
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1003
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1113
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1447
-msgid "a:"
+msgid "a"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1004
@@ -1433,7 +1472,7 @@ msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1014
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1456
-msgid "b:"
+msgid "b"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1015
@@ -1444,23 +1483,23 @@ msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1045
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1230
-msgid "L:"
+msgid "L"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1046
 msgid ""
 "Correction factor. 0 for high vegetation cover, 1 for low, and usually L = "
-"0.5."
+"0.5"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1075
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1103
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1151
-msgid "s:"
+msgid "s"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1123
-msgid "x:"
+msgid "x"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1124
@@ -1471,15 +1510,8 @@ msgstr ""
 msgid "Slope of soil line"
 msgstr ""
 
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1172
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1207
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1268
-#, fuzzy
-msgid "Blue channel"
-msgstr "Canal bleu:"
-
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1186
-msgid "gamma:"
+msgid "gamma"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1187
@@ -1487,43 +1519,34 @@ msgid "gamma generally = 0.5 (default value) or 1 (depending on aerosols)"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1221
-msgid "G:"
+msgid "G"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1239
-msgid "C1:"
+msgid "C1"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1248
-msgid "C2:"
+msgid "C2"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1282
-msgid "a_rb:"
+msgid "a_rb"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1292
-msgid "b_rb:"
+msgid "b_rb"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1302
 #: Pireo/RegistrationParametersGUI.cxx:732
 #: Pireo/RegistrationParametersGUI.cxx:749
-msgid "X:"
+#: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:258
+msgid "X"
 msgstr ""
 
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1322
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1371
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1390
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1509
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1529
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1557
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1577
-msgid "Green channel"
-msgstr "Canal vert"
-
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1336
-msgid "lambda 1:"
+msgid "lambda 1"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1337
@@ -1531,7 +1554,7 @@ msgid "Central wavelength of the G band (0.55 for Pleiade)"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1346
-msgid "lambda 2:"
+msgid "lambda 2"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1347
@@ -1539,7 +1562,7 @@ msgid "Central wavelength of the R band (0.66  for Pleiade)"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1356
-msgid "lambda 3:"
+msgid "lambda 3"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1357
@@ -1555,11 +1578,11 @@ msgid "TM5 channel"
 msgstr "Canal TM5"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1469
-msgid "Rho 860 Index:"
+msgid "Rho 860 Index"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1477
-msgid "Rho 1240 Index:"
+msgid "Rho 1240 Index"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1497
@@ -1569,59 +1592,58 @@ msgid "MIR channel"
 msgstr "Canal MIR"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1589
-msgid "Spectral Thresh.:"
+msgid "Spectral Thresh"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1596
-msgid "Spatial Thresh.:"
+msgid "Spatial Thresh"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1603
-msgid "Nbr of Directions:"
+msgid "Nbr of Directions"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1618
-msgid "Ratio MaxCons. Nb:"
+msgid "Ratio MaxCons. Nb"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1637
-msgid "Max Thresh.:"
+msgid "Max Thresh"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1644
-msgid "Min Thresh.:"
-msgstr ""
-
-#: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1651
-msgid "Variance:"
+msgid "Min Thresh"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1658
-msgid "Max Error:"
+msgid "Max Error"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1685
-msgid "Lower Thresh.:"
+msgid "Lower Thresh"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1692
-msgid "Upper Thresh.:"
+msgid "Upper Thresh"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1704
-msgid "Spatial Radius:"
+#: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:203
+msgid "Spatial Radius"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1711
-msgid "Range Radius:"
+#: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:212
+msgid "Range Radius"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1719
-msgid "Min. Region Size:"
+msgid "Min. Region Size"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1726
-msgid "Scale:"
+#: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:221
+msgid "Scale"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1738
@@ -1629,7 +1651,7 @@ msgid "Channels Selection"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1750
-msgid "Add feature to list (one per selected channel)."
+msgid "Add feature to list (one per selected channel)"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1760
@@ -1656,7 +1678,7 @@ msgid ">>"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1808
-msgid "Add mono Channel Image to Intput List."
+msgid "Add mono Channel Image to Intput List"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1818
@@ -1665,7 +1687,7 @@ msgid "<<"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1819
-msgid "Remove Mono channel Image from Output List."
+msgid "Remove Mono channel Image from Output List"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1829
@@ -1673,7 +1695,7 @@ msgid "Selected Output Channels"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1830
-msgid "Contains each Selected Feature for Output Generation."
+msgid "Contains each Selected Feature for Output Generation"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1842
@@ -1682,7 +1704,7 @@ msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1843
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1854
-msgid "Change selected Feature Position in Output Image."
+msgid "Change selected Feature Position in Output Image"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1853
@@ -1696,11 +1718,11 @@ msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1869
 #: LandCoverMap/otbLandCoverMapView.cxx:114
-msgid "Save the Composition."
+msgid "Save the Composition"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1880
-msgid "Erase Feature and Close Input Image."
+msgid "Erase Feature and Close Input Image"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1890
@@ -1708,12 +1730,12 @@ msgid "Clear List"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1891
-msgid "Clear Feature List."
+msgid "Clear Feature List"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1902
 #: LandCoverMap/otbLandCoverMapView.cxx:125
-msgid "Quit Application."
+msgid "Quit Application"
 msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1913
@@ -1758,7 +1780,7 @@ msgstr "Ouvrir Image"
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:175
 msgid ""
 "This area displays a color composition of the fixed image, the moving image "
-"and the resampled image."
+"and the resampled image"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:195
@@ -1770,7 +1792,7 @@ msgstr ""
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:196
 msgid ""
 "This area allows to navigate through large images. Displays an anaglyph "
-"composition of the fixed and the moving image."
+"composition of the fixed and the moving image"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:205
@@ -1781,7 +1803,7 @@ msgstr ""
 msgid ""
 "This area shows a color composition of the deformation field values in X, Y "
 "and intensity. To display the deformation field, please trigger the run "
-"button."
+"button"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:215
@@ -1792,8 +1814,7 @@ msgid "Parameters"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:216
-msgid ""
-"This area allows you to tune parameters from the registration algorithm."
+msgid "This area allows you to tune parameters from the registration algorithm"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:222
@@ -1804,7 +1825,7 @@ msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:223
 msgid ""
-"Allows you to tune the number of iterations of the registration algorithm."
+"Allows you to tune the number of iterations of the registration algorithm"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:232
@@ -1814,7 +1835,7 @@ msgstr ""
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:233
 msgid ""
 "Allows you to tune the radius used to compute the normalized correlation in "
-"the first image direction."
+"the first image direction"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:243
@@ -1824,7 +1845,7 @@ msgstr ""
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:244
 msgid ""
 "Allows you to tune the radius used to compute the normalized correlation in "
-"the second image direction."
+"the second image direction"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:254
@@ -1837,7 +1858,7 @@ msgstr ""
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:255
 msgid ""
 "This button allows you to run the deformation field estimation on the image "
-"region displayed in the \"Images\" area."
+"region displayed in the \"Images\" area"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:265
@@ -1848,7 +1869,7 @@ msgstr ""
 msgid ""
 "This algorithm allows you to tune the maximum deformation in the first image "
 "direction. This is used to handle a security margin when streaming the "
-"algorithm on huge images."
+"algorithm on huge images"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:281
@@ -1859,7 +1880,7 @@ msgstr ""
 msgid ""
 "This algorithm allows you to tune the maximum deformation in the second "
 "image direction. This is used to handle a security margin when streaming the "
-"algorithm on huge images."
+"algorithm on huge images"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:300
@@ -1869,7 +1890,7 @@ msgstr ""
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:301
 msgid ""
 "This area allows you to select the color composition displayed in the "
-"\"Images\" area."
+"\"Images\" area"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:308
@@ -1877,7 +1898,7 @@ msgid "Fixed"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:309
-msgid "Show or hide the fixed image in the color composition."
+msgid "Show or hide the fixed image in the color composition"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:320
@@ -1885,7 +1906,7 @@ msgid "Moving"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:321
-msgid "Show or hide the moving image in the color composition."
+msgid "Show or hide the moving image in the color composition"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:332
@@ -1895,7 +1916,7 @@ msgstr ""
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:333
 msgid ""
 "Show or hide the resampled image in the color composition. If there is no "
-"deformation field computed yet, the resampled image is the moving image."
+"deformation field computed yet, the resampled image is the moving image"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:347
@@ -1909,7 +1930,7 @@ msgstr ""
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:355
 msgid ""
 "Show or hide the deformation in the first image direction in the color "
-"composition."
+"composition"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:367
@@ -1919,7 +1940,7 @@ msgstr ""
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:368
 msgid ""
 "Show or hide the deformation in the second image direction in the color "
-"composition."
+"composition"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:380
@@ -1927,7 +1948,7 @@ msgid "Intensity"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:381
-msgid "Show or hide the deformation intensity iin the color composition."
+msgid "Show or hide the deformation intensity iin the color composition"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:419
@@ -2006,7 +2027,7 @@ msgid "Extraction parameters"
 msgstr ""
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:268
-msgid "Angle Threshold"
+msgid "Angle threshold"
 msgstr ""
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:274
@@ -2014,7 +2035,7 @@ msgid "Segment Length "
 msgstr ""
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:280
-msgid "Max. Triplet Dist."
+msgid "Max. Triplet Dist"
 msgstr ""
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:286
@@ -2022,6 +2043,7 @@ msgid "Set Reference Data"
 msgstr ""
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:292
+#: Pireo/PireoViewerGUI.cxx:738 Pireo/PireoViewerGUI.cxx:767
 #: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:176
 #, fuzzy
 msgid "Image"
@@ -2055,8 +2077,9 @@ msgid "ClearAll"
 msgstr ""
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:362
-msgid "Clear all vector data."
-msgstr ""
+#, fuzzy
+msgid "Clear all vector data"
+msgstr "Importer donnees vecteur"
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:374
 msgid "Transform"
@@ -2074,7 +2097,7 @@ msgstr ""
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:416
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:390
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:398
-msgid "Pixel Value:"
+msgid "Pixel Value"
 msgstr ""
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:433
@@ -2109,25 +2132,26 @@ msgid "Input Image Name"
 msgstr ""
 
 #: LandCoverMap/otbLandCoverMapView.cxx:69
-msgid "Open a new input image."
-msgstr ""
+#, fuzzy
+msgid "Open a new input image"
+msgstr "Ouvrir Image"
 
 #: LandCoverMap/otbLandCoverMapView.cxx:90
 msgid "Input Model Name"
 msgstr ""
 
 #: LandCoverMap/otbLandCoverMapView.cxx:100
-msgid "Load Model"
-msgstr ""
+#, fuzzy
+msgid "Load model"
+msgstr "Charger modèle SVM"
 
 #: LandCoverMap/otbLandCoverMapView.cxx:101
-msgid "Open a new input model."
+msgid "Open a new input model"
 msgstr ""
 
 #: LandCoverMap/otbLandCoverMapView.cxx:135
-#, fuzzy
 msgid "Scroll image"
-msgstr "Fermer image"
+msgstr "Image de navigation"
 
 #: LandCoverMap/otbLandCoverMapView.cxx:142
 msgid "Feature Selection"
@@ -2198,24 +2222,12 @@ msgstr ""
 msgid "Minimum Region Size"
 msgstr ""
 
-#: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:203
-msgid "Spatial Radius"
-msgstr ""
-
-#: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:212
-msgid "Range Radius"
-msgstr ""
-
-#: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:221
-msgid "Scale"
-msgstr ""
-
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:240
-msgid "Reference Pixel:"
+msgid "Reference Pixel"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:247
-msgid "Threshold Value:"
+msgid "Threshold Value"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:259
@@ -2234,7 +2246,7 @@ msgid "Preview"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:271
-msgid "Run over the extracted image."
+msgid "Run over the extracted image"
 msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:279
@@ -2362,8 +2374,9 @@ msgid "Hide all the viewers"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:514
-msgid "Images List"
-msgstr ""
+#, fuzzy
+msgid "Images list"
+msgstr "Liste d'images"
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:515 OrthoRectif/otbOrthoRectifGUI.cxx:487
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:279
@@ -2374,24 +2387,28 @@ msgid ""
 "hidden with -)"
 msgstr ""
 
-#: OrthoFusion/otbOrthoFusionGUI.cxx:526 OrthoRectif/otbOrthoRectifGUI.cxx:498
-msgid "Preview Window"
+#: OrthoFusion/otbOrthoFusionGUI.cxx:526
+#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:290
+#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:290
+msgid "Preview window"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:539
-msgid "Add PAN Input Image."
-msgstr ""
+#, fuzzy
+msgid "Add PAN input image"
+msgstr "Ouvrir Image"
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:545
-msgid "Remove selected PAN."
+msgid "Remove selected PAN"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:551
-msgid "Add XS Input Image."
-msgstr ""
+#, fuzzy
+msgid "Add XS input image"
+msgstr "Ouvrir Image"
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:557
-msgid "Remove Selected XS."
+msgid "Remove Selected XS"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:562
@@ -2400,8 +2417,9 @@ msgid "PAN image"
 msgstr "Ouvrir Image"
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:563
-msgid "Select a PAN Image."
-msgstr ""
+#, fuzzy
+msgid "Select a PAN image"
+msgstr "Sauver image resultat"
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:567
 #, fuzzy
@@ -2409,107 +2427,108 @@ msgid "XS image"
 msgstr "Ouvrir Image"
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:568
-msgid "Select a XS Image."
-msgstr ""
+#, fuzzy
+msgid "Select a XS image"
+msgstr "Sauver image resultat"
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:578 OrthoRectif/otbOrthoRectifGUI.cxx:516
 msgid "Coordinates"
 msgstr ""
 
-#: OrthoFusion/otbOrthoFusionGUI.cxx:583 OrthoRectif/otbOrthoRectifGUI.cxx:521
-msgid "Map Projection"
+#: OrthoFusion/otbOrthoFusionGUI.cxx:583
+msgid "Map projection"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:584 OrthoRectif/otbOrthoRectifGUI.cxx:522
 msgid "Select the map projection type"
 msgstr ""
 
-#: OrthoFusion/otbOrthoFusionGUI.cxx:592 OrthoRectif/otbOrthoRectifGUI.cxx:530
-msgid "Cartographic Coordinates:"
+#: OrthoFusion/otbOrthoFusionGUI.cxx:592
+msgid "Cartographic coordinates"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:599 OrthoFusion/otbOrthoFusionGUI.cxx:642
 #: OrthoFusion/otbOrthoFusionGUI.cxx:664 OrthoRectif/otbOrthoRectifGUI.cxx:546
 #: OrthoRectif/otbOrthoRectifGUI.cxx:578 OrthoRectif/otbOrthoRectifGUI.cxx:627
-msgid " Easting:"
+msgid "Easting"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:600 OrthoFusion/otbOrthoFusionGUI.cxx:643
 #: OrthoFusion/otbOrthoFusionGUI.cxx:665 OrthoRectif/otbOrthoRectifGUI.cxx:547
 #: OrthoRectif/otbOrthoRectifGUI.cxx:579 OrthoRectif/otbOrthoRectifGUI.cxx:628
-msgid "Enter the easting of the output image center."
+msgid "Enter the easting of the output image center"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:608 OrthoFusion/otbOrthoFusionGUI.cxx:651
 #: OrthoFusion/otbOrthoFusionGUI.cxx:673 OrthoRectif/otbOrthoRectifGUI.cxx:555
 #: OrthoRectif/otbOrthoRectifGUI.cxx:587 OrthoRectif/otbOrthoRectifGUI.cxx:636
-msgid "Northing:"
+msgid "Northing"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:609 OrthoFusion/otbOrthoFusionGUI.cxx:652
 #: OrthoFusion/otbOrthoFusionGUI.cxx:674 OrthoRectif/otbOrthoRectifGUI.cxx:556
 #: OrthoRectif/otbOrthoRectifGUI.cxx:588 OrthoRectif/otbOrthoRectifGUI.cxx:637
-msgid "Enter the northing of the output image center."
+msgid "Enter the northing of the output image center"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:617 OrthoRectif/otbOrthoRectifGUI.cxx:537
-msgid "Zone:"
+msgid "Zone"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:618 OrthoRectif/otbOrthoRectifGUI.cxx:538
 msgid "Enter the zone number"
 msgstr ""
 
-#: OrthoFusion/otbOrthoFusionGUI.cxx:626 OrthoRectif/otbOrthoRectifGUI.cxx:564
-msgid "Northern Hemisphere"
+#: OrthoFusion/otbOrthoFusionGUI.cxx:626
+msgid "Northern hemisphere"
 msgstr ""
 
-#: OrthoFusion/otbOrthoFusionGUI.cxx:633 OrthoRectif/otbOrthoRectifGUI.cxx:570
-msgid "Southern Hemisphere"
+#: OrthoFusion/otbOrthoFusionGUI.cxx:633
+msgid "Southern hemisphere"
 msgstr ""
 
-#: OrthoFusion/otbOrthoFusionGUI.cxx:682 OrthoRectif/otbOrthoRectifGUI.cxx:600
-msgid "False Easting:"
+#: OrthoFusion/otbOrthoFusionGUI.cxx:682
+msgid "False easting"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:683 OrthoRectif/otbOrthoRectifGUI.cxx:601
 msgid "Enter false easting"
 msgstr ""
 
-#: OrthoFusion/otbOrthoFusionGUI.cxx:691 OrthoRectif/otbOrthoRectifGUI.cxx:609
-msgid "False Northing:"
+#: OrthoFusion/otbOrthoFusionGUI.cxx:691
+msgid "False northing"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:692 OrthoRectif/otbOrthoRectifGUI.cxx:610
 msgid "Enter false northing"
 msgstr ""
 
-#: OrthoFusion/otbOrthoFusionGUI.cxx:700 OrthoRectif/otbOrthoRectifGUI.cxx:618
-msgid "Scale Factor:"
+#: OrthoFusion/otbOrthoFusionGUI.cxx:700
+msgid "Scale factor"
 msgstr ""
 
-#: OrthoFusion/otbOrthoFusionGUI.cxx:701 OrthoRectif/otbOrthoRectifGUI.cxx:619
-msgid "Enter Scale Factor"
+#: OrthoFusion/otbOrthoFusionGUI.cxx:701
+msgid "Enter scale factor"
 msgstr ""
 
-#: OrthoFusion/otbOrthoFusionGUI.cxx:713 OrthoRectif/otbOrthoRectifGUI.cxx:649
-msgid "Geographical Coordinates:"
+#: OrthoFusion/otbOrthoFusionGUI.cxx:713
+msgid "Geographical coordinates"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:720 OrthoRectif/otbOrthoRectifGUI.cxx:656
-msgid "Longitude:"
+msgid "Longitude"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:721 OrthoRectif/otbOrthoRectifGUI.cxx:657
-msgid "Enter the longitude of the output image center."
+msgid "Enter the longitude of the output image center"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:729 OrthoRectif/otbOrthoRectifGUI.cxx:665
-msgid "Latitude:"
+msgid "Latitude"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:730 OrthoRectif/otbOrthoRectifGUI.cxx:666
-msgid "Enter the latitude of the output image center."
+msgid "Enter the latitude of the output image center"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:738 OrthoRectif/otbOrthoRectifGUI.cxx:674
@@ -2517,7 +2536,7 @@ msgid "Use Center Pixel"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:739 OrthoRectif/otbOrthoRectifGUI.cxx:675
-msgid "If checked, use the output center image coodinates."
+msgid "If checked, use the output center image coodinates"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:746 OrthoRectif/otbOrthoRectifGUI.cxx:681
@@ -2525,7 +2544,7 @@ msgid "Use Upper-Left Pixel"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:747 OrthoRectif/otbOrthoRectifGUI.cxx:682
-msgid "If checked, use the upper left output image pixel coodinates."
+msgid "If checked, use the upper left output image pixel coodinates"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:758 OrthoRectif/otbOrthoRectifGUI.cxx:692
@@ -2534,7 +2553,7 @@ msgid "Output image"
 msgstr "Ouvrir Image"
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:764 OrthoRectif/otbOrthoRectifGUI.cxx:699
-msgid " Size X:"
+msgid "Size X"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:765 OrthoRectif/otbOrthoRectifGUI.cxx:700
@@ -2542,7 +2561,7 @@ msgid "Enter the X output size"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:773 OrthoRectif/otbOrthoRectifGUI.cxx:708
-msgid "Size Y:"
+msgid "Size Y"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:774 OrthoRectif/otbOrthoRectifGUI.cxx:709
@@ -2550,7 +2569,7 @@ msgid "Enter the Y output size"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:782 OrthoRectif/otbOrthoRectifGUI.cxx:717
-msgid "Spacing X:"
+msgid "Spacing X"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:783 OrthoRectif/otbOrthoRectifGUI.cxx:718
@@ -2558,7 +2577,7 @@ msgid "Enter X spacing"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:791 OrthoRectif/otbOrthoRectifGUI.cxx:726
-msgid "Spacing Y:"
+msgid "Spacing Y"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:792 OrthoRectif/otbOrthoRectifGUI.cxx:727
@@ -2572,13 +2591,13 @@ msgid "Interpolator"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:801 OrthoFusion/otbOrthoFusionGUI.cxx:825
-#: OrthoRectif/otbOrthoRectifGUI.cxx:736 OrthoRectif/otbOrthoRectifGUI.cxx:760
-msgid "Select the Orthorectif Interpolator."
+msgid "Select the orthorectif interpolator"
 msgstr ""
 
-#: OrthoFusion/otbOrthoFusionGUI.cxx:809 OrthoRectif/otbOrthoRectifGUI.cxx:744
-msgid "Interpolator Parameters:"
-msgstr ""
+#: OrthoFusion/otbOrthoFusionGUI.cxx:809
+#, fuzzy
+msgid "Interpolator parameters"
+msgstr "Sauver l'image recalee"
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:853 OrthoRectif/otbOrthoRectifGUI.cxx:788
 msgid "DEM"
@@ -2588,37 +2607,34 @@ msgstr ""
 msgid "Use DEM"
 msgstr ""
 
-#: OrthoFusion/otbOrthoFusionGUI.cxx:870 OrthoRectif/otbOrthoRectifGUI.cxx:801
-msgid "DEM Path"
+#: OrthoFusion/otbOrthoFusionGUI.cxx:870 OrthoFusion/otbOrthoFusionGUI.cxx:882
+msgid "DEM path"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:871 OrthoRectif/otbOrthoRectifGUI.cxx:802
 msgid "Open a DEM directory"
 msgstr ""
 
-#: OrthoFusion/otbOrthoFusionGUI.cxx:882 OrthoRectif/otbOrthoRectifGUI.cxx:813
-msgid "DEM Path:"
-msgstr ""
-
 #: OrthoFusion/otbOrthoFusionGUI.cxx:887 OrthoRectif/otbOrthoRectifGUI.cxx:818
 msgid "Save DEM"
 msgstr ""
 
-#: OrthoFusion/otbOrthoFusionGUI.cxx:902 OrthoRectif/otbOrthoRectifGUI.cxx:844
-msgid "Use Average Elevation"
+#: OrthoFusion/otbOrthoFusionGUI.cxx:902
+msgid "Use average elevation"
 msgstr ""
 
-#: OrthoFusion/otbOrthoFusionGUI.cxx:907 OrthoRectif/otbOrthoRectifGUI.cxx:837
-msgid "Average Elevation:"
+#: OrthoFusion/otbOrthoFusionGUI.cxx:907
+msgid "Average elevation"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:908 OrthoRectif/otbOrthoRectifGUI.cxx:838
 msgid "Enter the Average Elevation Value"
 msgstr ""
 
-#: OrthoFusion/otbOrthoFusionGUI.cxx:920 OrthoRectif/otbOrthoRectifGUI.cxx:855
-msgid "Image Extent"
-msgstr ""
+#: OrthoFusion/otbOrthoFusionGUI.cxx:920
+#, fuzzy
+msgid "Image extent"
+msgstr "Liste d'images"
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:933 OrthoRectif/otbOrthoRectifGUI.cxx:868
 msgid "Advanced"
@@ -2629,7 +2645,7 @@ msgid "Work with 8bits"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:941 OrthoRectif/otbOrthoRectifGUI.cxx:876
-msgid "Work with unsigned char pixel type."
+msgid "Work with unsigned char pixel type"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:946 OrthoRectif/otbOrthoRectifGUI.cxx:881
@@ -2637,15 +2653,15 @@ msgid "Work with 16bits"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:947 OrthoRectif/otbOrthoRectifGUI.cxx:882
-msgid "Work with short pixel type."
+msgid "Work with short pixel type"
 msgstr ""
 
-#: OrthoFusion/otbOrthoFusionGUI.cxx:953 OrthoRectif/otbOrthoRectifGUI.cxx:888
-msgid "Maximum Tile Size (MB)"
+#: OrthoFusion/otbOrthoFusionGUI.cxx:953
+msgid "Maximum tile size (MB)"
 msgstr ""
 
-#: OrthoFusion/otbOrthoFusionGUI.cxx:954 OrthoRectif/otbOrthoRectifGUI.cxx:889
-msgid "From Streaming pipeline, precise the maximum tile size."
+#: OrthoFusion/otbOrthoFusionGUI.cxx:954
+msgid "From streaming pipeline, precise the maximum tile size"
 msgstr ""
 
 #: OrthoRectif/otbOrthoRectifGUI.cxx:411
@@ -2654,6 +2670,78 @@ msgstr ""
 
 #: OrthoRectif/otbOrthoRectifGUI.cxx:486
 msgid "Image List"
+msgstr ""
+
+#: OrthoRectif/otbOrthoRectifGUI.cxx:498
+msgid "Preview Window"
+msgstr ""
+
+#: OrthoRectif/otbOrthoRectifGUI.cxx:521
+msgid "Map Projection"
+msgstr ""
+
+#: OrthoRectif/otbOrthoRectifGUI.cxx:530
+msgid "Cartographic Coordinates"
+msgstr ""
+
+#: OrthoRectif/otbOrthoRectifGUI.cxx:564
+msgid "Northern Hemisphere"
+msgstr ""
+
+#: OrthoRectif/otbOrthoRectifGUI.cxx:570
+msgid "Southern Hemisphere"
+msgstr ""
+
+#: OrthoRectif/otbOrthoRectifGUI.cxx:600
+msgid "False Easting"
+msgstr ""
+
+#: OrthoRectif/otbOrthoRectifGUI.cxx:609
+msgid "False Northing"
+msgstr ""
+
+#: OrthoRectif/otbOrthoRectifGUI.cxx:618
+msgid "Scale Factor"
+msgstr ""
+
+#: OrthoRectif/otbOrthoRectifGUI.cxx:619
+msgid "Enter Scale Factor"
+msgstr ""
+
+#: OrthoRectif/otbOrthoRectifGUI.cxx:649
+msgid "Geographical Coordinates"
+msgstr ""
+
+#: OrthoRectif/otbOrthoRectifGUI.cxx:736 OrthoRectif/otbOrthoRectifGUI.cxx:760
+msgid "Select the Orthorectif Interpolator"
+msgstr ""
+
+#: OrthoRectif/otbOrthoRectifGUI.cxx:744
+msgid "Interpolator Parameters"
+msgstr ""
+
+#: OrthoRectif/otbOrthoRectifGUI.cxx:801 OrthoRectif/otbOrthoRectifGUI.cxx:813
+msgid "DEM Path"
+msgstr ""
+
+#: OrthoRectif/otbOrthoRectifGUI.cxx:837
+msgid "Average Elevation"
+msgstr ""
+
+#: OrthoRectif/otbOrthoRectifGUI.cxx:844
+msgid "Use Average Elevation"
+msgstr ""
+
+#: OrthoRectif/otbOrthoRectifGUI.cxx:855
+msgid "Image Extent"
+msgstr ""
+
+#: OrthoRectif/otbOrthoRectifGUI.cxx:888
+msgid "Maximum Tile Size (MB)"
+msgstr ""
+
+#: OrthoRectif/otbOrthoRectifGUI.cxx:889
+msgid "From Streaming pipeline, precise the maximum tile size"
 msgstr ""
 
 #: Pireo/PreProcessParametersGUI.cxx:41
@@ -2681,38 +2769,38 @@ msgid "Filter parameters"
 msgstr ""
 
 #: Pireo/PreProcessParametersGUI.cxx:98
-msgid "Select Filter:"
+msgid "Select Filter"
 msgstr ""
 
 #: Pireo/PreProcessParametersGUI.cxx:103
-msgid "Use Filter:"
+msgid "Use Filter"
 msgstr ""
 
-#: Pireo/PreProcessParametersGUI.cxx:109
+#: Pireo/PreProcessParametersGUI.cxx:109 Pireo/PireoViewerGUI.cxx:272
 #: Pireo/RegistrationParametersGUI.cxx:721
 #: Pireo/RegistrationParametersGUI.cxx:871
 #: Pireo/RegistrationParametersGUI.cxx:985
-msgid "Options:"
+msgid "Options"
 msgstr ""
 
 #: Pireo/PreProcessParametersGUI.cxx:116
-msgid "Set Variance:"
+msgid "Set Variance"
 msgstr ""
 
 #: Pireo/PreProcessParametersGUI.cxx:125
-msgid "Maximum Kernel Size:"
+msgid "Maximum Kernel Size"
 msgstr ""
 
 #: Pireo/PreProcessParametersGUI.cxx:134
-msgid "DiscreteGaussianImageFilter: Parameters:"
+msgid "DiscreteGaussianImageFilter: Parameters"
 msgstr ""
 
 #: Pireo/PreProcessParametersGUI.cxx:152
-msgid "Set Lower Threshold"
+msgid "Set Lower threshold"
 msgstr ""
 
 #: Pireo/PreProcessParametersGUI.cxx:160
-msgid "BinaryImageFilter: Parameters:"
+msgid "BinaryImageFilter: Parameters"
 msgstr ""
 
 #: Pireo/PreProcessParametersGUI.cxx:173
@@ -2832,10 +2920,6 @@ msgstr ""
 msgid "View loaded image filenames"
 msgstr ""
 
-#: Pireo/PireoViewerGUI.cxx:272
-msgid "Options"
-msgstr ""
-
 #: Pireo/PireoViewerGUI.cxx:273 Pireo/PireoViewerGUI.cxx:683
 #, fuzzy
 msgid "Save Registration parameters"
@@ -2931,7 +3015,7 @@ msgid "Grid / Vector"
 msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:672
-msgid "Input number of displayed points along each axe:"
+msgid "Input number of displayed points along each axe"
 msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:673
@@ -2940,7 +3024,7 @@ msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:701 Pireo/PireoViewerGUI.cxx:735
 #: Pireo/PireoViewerGUI.cxx:764
-msgid "Enter filename:"
+msgid "Enter filename"
 msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:707
@@ -2949,17 +3033,12 @@ msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:710
 #, fuzzy
-msgid "Fixed Image:"
+msgid "Fixed Image"
 msgstr "Ouvrir Image"
 
 #: Pireo/PireoViewerGUI.cxx:717
 msgid "Save Registration Results"
 msgstr ""
-
-#: Pireo/PireoViewerGUI.cxx:738 Pireo/PireoViewerGUI.cxx:767
-#, fuzzy
-msgid "Image:"
-msgstr "Ouvrir Image"
 
 #: Pireo/PireoViewerGUI.cxx:746
 msgid "Automatic save"
@@ -3074,32 +3153,33 @@ msgstr ""
 #: Pireo/RegistrationParametersGUI.cxx:859
 #: Pireo/RegistrationParametersGUI.cxx:973
 #: Pireo/RegistrationParametersGUI.cxx:1250
-msgid "Select:"
+msgid "Select"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:714
 #: Pireo/RegistrationParametersGUI.cxx:842
 #: Pireo/RegistrationParametersGUI.cxx:864
 #: Pireo/RegistrationParametersGUI.cxx:978
-msgid "Use:"
+msgid "Use"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:727
-msgid "Translation Transform: Parameters:"
+msgid "Translation Transform: Parameters"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:736
 #: Pireo/RegistrationParametersGUI.cxx:753
-msgid "Y:"
+msgid "Y"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:744
-msgid "Scale Transform: Parameters:"
-msgstr ""
+#, fuzzy
+msgid "Scale Transform: Parameters"
+msgstr "Sauver l'image recalee"
 
 #: Pireo/RegistrationParametersGUI.cxx:761
 #: Pireo/RegistrationParametersGUI.cxx:776
-msgid "Affine Transform: Parameters:"
+msgid "Affine Transform: Parameters"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:766
@@ -3108,7 +3188,7 @@ msgid "Initialize with image geometry"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:785
-msgid "BSpline Transform: Parameters:"
+msgid "BSpline Transform: Parameters"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:790
@@ -3116,11 +3196,11 @@ msgid "BSpline order"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:802
-msgid "Rigid Transform: Parameters:"
+msgid "Rigid Transform: Parameters"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:807
-msgid "Angle:"
+msgid "Angle"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:811
@@ -3128,11 +3208,11 @@ msgid "Initialize with image moments"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:853
-msgid "     Metric     "
+msgid "Metric"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:878
-msgid "Mutual Information Metric: Parameters:"
+msgid "Mutual Information Metric: Parameters"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:883
@@ -3142,7 +3222,7 @@ msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:897
 #: Pireo/RegistrationParametersGUI.cxx:924
-msgid "Number of Spatial Samples:"
+msgid "Number of Spatial Samples"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:910
@@ -3150,54 +3230,54 @@ msgid "NONE"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:919
-msgid "Mattes Mutual Information Metric: Parameters:"
+msgid "Mattes Mutual Information Metric: Parameters"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:934
-msgid "Number of Histogram Bins:"
+msgid "Number of Histogram Bins"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:948
-msgid "Mean Reciprocal Square Metric: Parameters:"
+msgid "Mean Reciprocal Square Metric: Parameters"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:953
-msgid "Lambda:"
+msgid "Lambda"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:968
-msgid "  Optimizer  "
+msgid "Optimizer"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:992
-msgid "Scaling Rotation Matrix:"
+msgid "Scaling Rotation Matrix"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:1026
 #: Pireo/RegistrationParametersGUI.cxx:1067
 #: Pireo/RegistrationParametersGUI.cxx:1149
-msgid "Scaling Translation X:"
+msgid "Scaling Translation X"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:1033
 #: Pireo/RegistrationParametersGUI.cxx:1072
 #: Pireo/RegistrationParametersGUI.cxx:1156
-msgid "Scaling Translation Y:"
+msgid "Scaling Translation Y"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:1040
-msgid "Scaling Center X:"
+msgid "Scaling Center X"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:1047
-msgid "Scaling Center Y:"
+msgid "Scaling Center Y"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:1054
 #: Pireo/RegistrationParametersGUI.cxx:1062
 #: Pireo/RegistrationParametersGUI.cxx:1081
 #: Pireo/RegistrationParametersGUI.cxx:1163
-msgid "Optimizer: Parameters:"
+msgid "Optimizer: Parameters"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:1086
@@ -3221,11 +3301,11 @@ msgid "Y center"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:1115
-msgid "Scaling, rotation, shearing Matrix:"
+msgid "Scaling, rotation, shearing Matrix"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:1183
-msgid "Generator Seed:"
+msgid "Generator Seed"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:1190
@@ -3235,31 +3315,32 @@ msgid "Maximize"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:1199
-msgid "Maximum Step Length:"
+msgid "Maximum Step Length"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:1206
-msgid "Minimum Step Length:"
+msgid "Minimum Step Length"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:1223
-msgid "Learning rate:"
-msgstr ""
+#, fuzzy
+msgid "Learning rate"
+msgstr "Apprentisasage"
 
 #: Pireo/RegistrationParametersGUI.cxx:1244
-msgid "   Others     "
+msgid "Others"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:1255
-msgid "Registration Number of Levels:"
+msgid "Registration Number of Levels"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:1263
-msgid "Number of Iterations:"
+msgid "Number of Iterations"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:1273
-msgid "Refresh GUI:"
+msgid "Refresh GUI"
 msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:1295
@@ -3279,13 +3360,13 @@ msgstr ""
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:468
 msgid ""
 "This area display a piece of the image at full resolution. You can change "
-"the displayed region by clicking on the scroll area."
+"the displayed region by clicking on the scroll area"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:479
 msgid ""
 "This area display a minimap of the full image, allowing you to change the "
-"region displayed by the full resolution area by clicking."
+"region displayed by the full resolution area by clicking"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:488
@@ -3319,7 +3400,7 @@ msgstr ""
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:629
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:750
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:877
-msgid "Change the incident Psi value (in degree)."
+msgid "Change the incident Psi value (in degree)"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:524
@@ -3337,7 +3418,7 @@ msgstr ""
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:646
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:767
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:894
-msgid "Change the incident Khi value (in degree)."
+msgid "Change the incident Khi value (in degree)"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:543
@@ -3351,14 +3432,14 @@ msgstr ""
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:671
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:792
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:919
-msgid "Change the reflected Psi value (in degree)."
+msgid "Change the reflected Psi value (in degree)"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:567
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:688
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:809
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:936
-msgid "Change the emitted Khi value (in degree)."
+msgid "Change the emitted Khi value (in degree)"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:586
@@ -3372,7 +3453,7 @@ msgstr ""
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:708
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:829
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:956
-msgid "Force cross polarization."
+msgid "Force cross polarization"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:595
@@ -3386,8 +3467,9 @@ msgstr ""
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:717
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:838
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:965
-msgid "Force co-polarization."
-msgstr ""
+#, fuzzy
+msgid "Force co-polarization"
+msgstr "Composition coloree"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:604
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:725
@@ -3400,7 +3482,7 @@ msgstr ""
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:726
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:847
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:974
-msgid "Allows any polarization."
+msgid "Allows any polarization"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:618
@@ -3425,15 +3507,7 @@ msgid "Poincare Sphere"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1022
-msgid "Drag the sphere to rotate it."
-msgstr ""
-
-#: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1030
-msgid "Pixel value"
-msgstr ""
-
-#: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1031
-msgid "Pixel value."
+msgid "Drag the sphere to rotate it"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1038
@@ -3450,8 +3524,9 @@ msgid "HH image"
 msgstr "Ouvrir Image"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1058
-msgid "HH input image path."
-msgstr ""
+#, fuzzy
+msgid "HH input image path"
+msgstr "Ouvrir Image"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1066
 #, fuzzy
@@ -3459,8 +3534,9 @@ msgid "HV image"
 msgstr "Ouvrir Image"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1067
-msgid "HV input image path."
-msgstr ""
+#, fuzzy
+msgid "HV input image path"
+msgstr "Ouvrir Image"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1075
 #, fuzzy
@@ -3468,8 +3544,9 @@ msgid "VH image"
 msgstr "Ouvrir Image"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1076
-msgid "VH input image path."
-msgstr ""
+#, fuzzy
+msgid "VH input image path"
+msgstr "Ouvrir Image"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1084
 #, fuzzy
@@ -3477,23 +3554,24 @@ msgid "VV image"
 msgstr "Ouvrir Image"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1085
-msgid "VV input image path."
-msgstr ""
+#, fuzzy
+msgid "VV input image path"
+msgstr "Ouvrir Image"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1094
-msgid "Choose the HH image file name."
+msgid "Choose the HH image file name"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1103
-msgid "Choose the HV image file name."
+msgid "Choose the HV image file name"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1112
-msgid "Choose the VH image file name."
+msgid "Choose the VH image file name"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1121
-msgid "Choose the VV image file name."
+msgid "Choose the VV image file name"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1133
@@ -3502,19 +3580,20 @@ msgid "Vector image"
 msgstr "Ouvrir Image"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1134
-msgid "Vector input image path."
-msgstr ""
+#, fuzzy
+msgid "Vector input image path"
+msgstr "Ouvrir Image"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1145
-msgid "Choose the vector image  file name."
+msgid "Choose the vector image  file name"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1158
-msgid "Load images into the application."
+msgid "Load images into the application"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1167
-msgid "Hide the open images window."
+msgid "Hide the open images window"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1175
@@ -3523,7 +3602,7 @@ msgid "Open Vector image"
 msgstr "Ouvrir Image"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1176
-msgid "Import a polarimetric vector image."
+msgid "Import a polarimetric vector image"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1185
@@ -3532,7 +3611,7 @@ msgid "Open images"
 msgstr "Ouvrir Image"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1186
-msgid "Import images corresponding to the HH, HV, VH, VV channels."
+msgid "Import images corresponding to the HH, HV, VH, VV channels"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1196
@@ -3540,7 +3619,7 @@ msgid "V Emission"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1197
-msgid "Enable or disable the vertical emssion for the polarimetric data."
+msgid "Enable or disable the vertical emssion for the polarimetric data"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1206
@@ -3548,7 +3627,7 @@ msgid "H Emission"
 msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1207
-msgid "Enable or disable the horizontcal emssion for the polarimetric data."
+msgid "Enable or disable the horizontcal emssion for the polarimetric data"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:72
@@ -3675,7 +3754,7 @@ msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:499
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:500
-msgid "Aerosol Model"
+msgid "Aerosol model"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:508
@@ -3725,7 +3804,7 @@ msgid "Channel Index"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:600
-msgid "Intrinsic Ref."
+msgid "Intrinsic Ref"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:601
@@ -3741,7 +3820,7 @@ msgid "Shperical Albedo of the Atmosphere"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:622
-msgid "Gaseous Trans."
+msgid "Gaseous Trans"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:623
@@ -3749,7 +3828,7 @@ msgid "Total Gaseous Transmission"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:633
-msgid "Down. Trans."
+msgid "Down. Trans"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:634
@@ -3757,7 +3836,7 @@ msgid "Downward Transmittance of the Atmospher"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:644
-msgid "Up Trans."
+msgid "Up Trans"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:645
@@ -3765,7 +3844,7 @@ msgid "Upward Transmittance of the Atmospher"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:655
-msgid "Up diffuse Trans."
+msgid "Up diffuse Trans"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:656
@@ -3773,7 +3852,7 @@ msgid "Upward diffuse transmittance"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:666
-msgid "Up direct Trans."
+msgid "Up direct Trans"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:667
@@ -3857,10 +3936,6 @@ msgstr ""
 msgid "Use water index"
 msgstr ""
 
-#: RoadExtraction/otbRoadExtractionViewGroup.cxx:335
-msgid "Alpha"
-msgstr ""
-
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:336
 msgid "Set the alpha value"
 msgstr ""
@@ -3921,7 +3996,7 @@ msgid "FirstMeanDistThr"
 msgstr ""
 
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:426
-msgid "First Mean Distance Threshold"
+msgid "First Mean Distance threshold"
 msgstr ""
 
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:438
@@ -3929,7 +4004,7 @@ msgid "SecondMeanDistThr"
 msgstr ""
 
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:439
-msgid "Second Mean Distance Threshold"
+msgid "Second Mean Distance threshold"
 msgstr ""
 
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:455
@@ -3952,7 +4027,7 @@ msgstr ""
 #: Segmentation/otbLevelSetSegmentationViewGroup.cxx:56
 #: Segmentation/otbSVMBasedRegionGrowingSegmentationViewGroup.cxx:69
 #: Segmentation/otbRegionGrowingSegmentationViewGroup.cxx:76
-msgid "Click on speed map for seeds selection."
+msgid "Click on speed map for seeds selection"
 msgstr ""
 
 #: Segmentation/otbLevelSetSegmentationViewGroup.cxx:55
@@ -4089,7 +4164,7 @@ msgid "Segment !"
 msgstr ""
 
 #: Segmentation/otbSegmentationApplicationViewGroup.cxx:246
-msgid "Trigger the segmentation once an area as been selected."
+msgid "Trigger the segmentation once an area as been selected"
 msgstr ""
 
 #: Segmentation/otbRegionGrowingSegmentationViewGroup.cxx:93
@@ -4098,10 +4173,6 @@ msgstr ""
 
 #: Segmentation/otbRegionGrowingSegmentationViewGroup.cxx:103
 msgid "Upper threshold"
-msgstr ""
-
-#: Segmentation/otbRegionGrowingSegmentationViewGroup.cxx:124
-msgid "Radius"
 msgstr ""
 
 #: Segmentation/otbRegionGrowingSegmentationViewGroup.cxx:143
@@ -4147,7 +4218,7 @@ msgid "Magnify"
 msgstr ""
 
 #: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:227
-msgid "Magnify the scene (nearest neighbours interpolation)."
+msgid "Magnify the scene (nearest neighbours interpolation)"
 msgstr ""
 
 #: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:242
@@ -4156,10 +4227,6 @@ msgstr ""
 
 #: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:243
 msgid "Resample the scene"
-msgstr ""
-
-#: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:258
-msgid "X"
 msgstr ""
 
 #: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:285
@@ -4286,11 +4353,6 @@ msgstr ""
 msgid "Viewers List"
 msgstr "Liste des viewers"
 
-#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:290
-#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:290
-msgid "Preview window"
-msgstr ""
-
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:371
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:407
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:371
@@ -4305,7 +4367,7 @@ msgstr ""
 
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:436
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:436
-msgid "Link to viewer: "
+msgid "Link to viewer:"
 msgstr ""
 
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:437
@@ -4361,12 +4423,6 @@ msgstr ""
 msgid "List of image viewers already linked with the selected image viewer"
 msgstr ""
 
-#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:475
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:504
-#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:475
-msgid "Remove"
-msgstr ""
-
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:476
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:505
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:476
@@ -4419,12 +4475,6 @@ msgstr ""
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:568
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:529
 msgid "Next image in diaporama"
-msgstr ""
-
-#: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:538
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:577
-#: ViewerManagerOld/otbImageViewerManagerGUI.cxx:538
-msgid " Quit"
 msgstr ""
 
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:539
@@ -4506,7 +4556,7 @@ msgid "SubSample"
 msgstr ""
 
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:465
-msgid "Control of the sub-sample factor."
+msgid "Control of the sub-sample factor"
 msgstr ""
 
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:484
@@ -4514,7 +4564,7 @@ msgid "Threshold"
 msgstr ""
 
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:490
-msgid "NonVeget/Water :"
+msgid "NonVeget/Water "
 msgstr ""
 
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:491
@@ -4524,7 +4574,7 @@ msgid ""
 msgstr ""
 
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:497
-msgid "Density :"
+msgid "Density "
 msgstr ""
 
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:498
@@ -4540,7 +4590,7 @@ msgid "Focus on the selected ROI"
 msgstr ""
 
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:588
-msgid "Modify the alpha blending between the input image and the result."
+msgid "Modify the alpha blending between the input image and the result"
 msgstr ""
 
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:604
@@ -4552,15 +4602,15 @@ msgid "Sobel Thresholds"
 msgstr ""
 
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:635
-msgid "Lower Threshold :"
+msgid "Lower Threshold "
 msgstr ""
 
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:636
-msgid "Lower threshold of the sobel edge detector."
+msgid "Lower threshold of the sobel edge detector"
 msgstr ""
 
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:643
-msgid "Upper Threshold :"
+msgid "Upper Threshold "
 msgstr ""
 
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:644
@@ -4574,8 +4624,9 @@ msgid "Indices Configuration"
 msgstr ""
 
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:674
-msgid "NIR channel index "
-msgstr ""
+#, fuzzy
+msgid "NIR channel index"
+msgstr "Index du canal rouge"
 
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:675
 msgid "Select band for NIR channel in RGB composition"
@@ -4619,17 +4670,11 @@ msgid "SecondImage"
 msgstr ""
 
 #, fuzzy
-#~ msgid "Input Image"
+#~ msgid "Image:"
 #~ msgstr "Ouvrir Image"
 
 #~ msgid "Exit"
 #~ msgstr "Quitter"
-
-#~ msgid "Red channel index "
-#~ msgstr "Index du canal rouge"
-
-#~ msgid "Green channel index "
-#~ msgstr "Index du canal vert"
 
 #~ msgid "Open Image"
 #~ msgstr "Ouvrir Image"

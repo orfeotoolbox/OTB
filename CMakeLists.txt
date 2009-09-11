@@ -300,7 +300,13 @@ ENDIF(OTB_USE_VISU_GUI)
 #-------------------------------
 # CURL Library
 #-------------------------------
-OPTION(OTB_USE_CURL "Use curl library." OFF)
+FIND_PACKAGE(CURL)
+IF(CURL_FOUND)
+  OPTION(OTB_USE_CURL "Use curl library." ON)
+ELSE(CURL_FOUND)
+  OPTION(OTB_USE_CURL "Use curl library." OFF)
+ENDIF(CURL_FOUND)
+
 MARK_AS_ADVANCED(OTB_USE_CURL)
 IF(OTB_USE_CURL)
 
