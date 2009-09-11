@@ -1048,11 +1048,11 @@ ADD_TEST(raTuTerraSarRadarBrightnessImageFilterNew ${RADIOMETRY_TESTS9}
 )
 
 ADD_TEST(raTvTerraSarRadarBrightnessImageFilterTest ${RADIOMETRY_TESTS9}
-# --compare-image ${EPSILON}  
-#                               ${BASELINE}/raTvTerraSarRadarBrightnessImageFilterTest.tif
-#                               ${TEMP}/raTvTerraSarRadarBrightnessImageFilterTest.tif
+    --compare-image ${EPSILON}  
+                ${BASELINE}/raTvTerraSarRadarBrightnessImageFilterTest.tif
+                ${TEMP}/raTvTerraSarRadarBrightnessImageFilterTest.tif
         otbTerraSarRadarBrightnessImageFilterTest
-        ${INPUTDATA}/TerraSarExtract.tif
+        ${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
         ${TEMP}/raTvTerraSarRadarBrightnessImageFilterTest.tif
 )
 
