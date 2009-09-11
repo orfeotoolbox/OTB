@@ -17,13 +17,13 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbTerraSarIntraCalibrationImageFilter.h"
+#include "otbTerraSarCalibrationImageFilter.h"
 #include "otbImage.h"
 
-int otbTerraSarIntraCalibrationImageFilterNew(int argc, char * argv[])
+int otbTerraSarCalibrationImageFilterNew(int argc, char * argv[])
 {
-  typedef otb::Image<double, 2>                                          ImageType;
-  typedef otb::TerraSarIntraCalibrationImageFilter<ImageType, ImageType> FilterType;
+  typedef otb::Image<double, 2>                                     ImageType;
+  typedef otb::TerraSarCalibrationImageFilter<ImageType, ImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 

@@ -24,7 +24,7 @@
 
 
 #include "itkUnaryFunctorImageFilter.h"
-#include "otbTerraSarIntraCalibrationImageFilter.h"
+#include "otbTerraSarCalibrationImageFilter.h"
 #include "itkMetaDataDictionary.h"
 #include "otbMath.h"
 
@@ -121,23 +121,23 @@ private:
 
 
 /**
-   * \class TerraSarIntraCalibrationComplexImageFunctor
+   * \class TerraSarCalibrationComplexImageFunctor
    *  \brief Compute the surface reflectance pixel from a TOA reflectance with complex images
    *
    * \ingroup Functor
    * \ingroup Radiometry
  */
 template <class TInput, class TOutput>
-class TerraSarIntraCalibrationComplexImageFunctor
+class TerraSarCalibrationComplexImageFunctor
 {
 public:
-  TerraSarIntraCalibrationComplexImageFunctor()
+  TerraSarCalibrationComplexImageFunctor()
   {
     m_SigmaNaughtFunctor = FunctorType::New();
   };
-  virtual ~TerraSarIntraCalibrationComplexImageFunctor() {};
+  virtual ~TerraSarCalibrationComplexImageFunctor() {};
 
-  typedef TerraSarIntraCalibrationImageFunctor<TInput, TOutput> FunctorType;
+  typedef TerraSarCalibrationImageFunctor<TInput, TOutput> FunctorType;
   typedef std::vector<double>           DoubleVectorType;
   typedef std::vector<DoubleVectorType> DoubleVectorVectorType;
   typedef itk::Size<2>                  SizeType;
