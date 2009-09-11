@@ -26,51 +26,11 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkMetaDataDictionary.h"
 #include "otbMath.h"
+#include "otbRadarFunctors.h"
 
 namespace otb
 {
-namespace Functor
-{
-/**
-   * \class TerraSarRadarBrightnessImageFunctor
-   *  \brief Compute the radar brightness from a TOA reflectance.
-   *
-   * \ingroup Functor
-   * \ingroup Radiometry
- */
-template <class TInput, class TOutput>
-class TerraSarRadarBrightnessImageFunctor
-{
-public:
-  TerraSarRadarBrightnessImageFunctor()
-  {
-    m_CalFactor = 1.;
-  };
-  virtual ~TerraSarRadarBrightnessImageFunctor() {};
 
-  typedef std::vector<double>           DoubleVectorType;
-  typedef std::vector<DoubleVectorType> DoubleVectorVectorType;
-  typedef itk::Size<2>                  SizeType;
-
-  /** Accessors */
-  void SetCalFactor( double val ) { m_CalFactor = val; };
-  double GetCalFactor() { return m_CalFactor; };
-
-
-  inline TOutput operator() (const TInput & inPix)
-  {
-    double squareInPix = vcl_pow( static_cast<double>(inPix), 2.);
-    // Beta naught computation
-    double beta = m_CalFactor*squareInPix;
-
-    return static_cast<TOutput>(beta);
-  }
-
-private:
-  /** Calibration Factor */
-  double m_CalFactor;
-};
-}
 
 /** \class TerraSarRadarBrightnessImageFilter
  *  \brief Calculates the intra calibration of TerraSar sensor images.
