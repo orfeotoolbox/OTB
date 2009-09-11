@@ -18,22 +18,25 @@
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
 
-#include "otbAtmosphericCorrectionsSpectralResponse.h"
+#include "otbAtmosphericCorrectionsReduceSpectralResponse.h"
 #include "otbSatelliteRSR.h"
-#include "otbReduceSpectralResponse.h"
+#include "otbSpectralResponse.h"
 
 int main(int argc, char * argv[])
 {
-  typedef otb::AtmosphericCorrectionsSpectralResponse< double,double>  ResponseType;
+  
+  typedef otb::SpectralResponse< double,double>  ResponseType;
   typedef ResponseType::Pointer  ResponsePointerType;
   
   typedef otb::SatelliteRSR< double,double>  SatRSRType;
   typedef SatRSRType::Pointer  SatRSRPointerType;
   
-  typedef otb::ReduceSpectralResponse < ResponseType,SatRSRType>  ReduceResponseType;
+  typedef otb::AtmosphericCorrectionsReduceSpectralResponse < ResponseType,SatRSRType>  ReduceResponseType;
   typedef ReduceResponseType::Pointer  ReduceResponseTypePointerType;
   
-  typedef ResponseType::AtmosphericCorrectionParametersType  AtmosphericCorrectionParametersType;
+  
+  
+  typedef ReduceResponseType::AtmosphericCorrectionParametersType  AtmosphericCorrectionParametersType;
   
   if ( argc!= 15 )
   {
@@ -107,11 +110,6 @@ int main(int argc, char * argv[])
   dataAtmosphericCorrectionParameters->SetAerosolModel(aerosolModel);
   dataAtmosphericCorrectionParameters->SetAerosolOptical(aerosolOptical);
   
-  myResponse->SetDataAtmosphericCorrectionParameters(dataAtmosphericCorrectionParameters);
-  std::cout << "Begin 6S!!" << std::endl; 
-  myResponse->Process6S();
-  
-  std::cout << "Response after "<< myResponse << std::endl; 
   ReduceResponseTypePointerType  myReduceResponse=ReduceResponseType::New();
   //Instantiation
   //ResponsePointerType  myResponse=ResponseType::New();
@@ -119,6 +117,20 @@ int main(int argc, char * argv[])
   myReduceResponse->SetInputSatRSR(myRSR);
   /** Load the spectral response of the object in the simulator*/
   myReduceResponse->SetInputSpectralResponse(myResponse);
+  
+  myReduceResponse->SetDataAtmosphericCorrectionParameters(dataAtmosphericCorrectionParameters);
+  std::cout << "Begin 6S!!" << std::endl; 
+  
+  /*
+  for (unsigned int i=0;i < myReduceResponse->m_InputSatRSR->GetNbBands();++i)
+  {
+    myReduceResponse->Process6S(i);
+  }
+  */
+  myReduceResponse->Process6S();
+  
+  std::cout << "Response after "<< myReduceResponse << std::endl; 
+  
   //
   myReduceResponse->CalculateResponse();
   
