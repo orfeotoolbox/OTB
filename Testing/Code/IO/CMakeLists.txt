@@ -1949,6 +1949,116 @@ ADD_TEST(ioTvTerraSarImageMetadataInterface ${IO_TESTS18}
         ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
         ${TEMP}/ioTvTerraSarImageMetadataInterface.txt
 )
+
+
+ADD_TEST(ioTvImageKeywordlistSpot5 ${IO_TESTS18}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/ioTvImageKeywordlistSpot5.txt
+         ${TEMP}/ioTvImageKeywordlistSpot5.txt
+--ignore-lines-with 1 support_data.metadata_file
+    otbImageKeywordlist
+         ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
+         ${TEMP}/ioTvImageKeywordlistSpot5.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistQuickbird ${IO_TESTS18}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/ioTvImageKeywordlistQuickbird.txt
+         ${TEMP}/ioTvImageKeywordlistQuickbird.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         ${TEMP}/ioTvImageKeywordlistQuickbird.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistIkonos ${IO_TESTS18}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/ioTvImageKeywordlistIkonos.txt
+         ${TEMP}/ioTvImageKeywordlistIkonos.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
+         ${TEMP}/ioTvImageKeywordlistIkonos.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistRapidEye ${IO_TESTS18}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/ioTvImageKeywordlistRapidEye.txt
+         ${TEMP}/ioTvImageKeywordlistRapidEye.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf
+         ${TEMP}/ioTvImageKeywordlistRapidEye.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistEnvisatAsar ${IO_TESTS18}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/ioTvImageKeywordlistEnvisatAsar.txt
+         ${TEMP}/ioTvImageKeywordlistEnvisatAsar.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1
+         ${TEMP}/ioTvImageKeywordlistEnvisatAsar.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistAlosPalsar ${IO_TESTS18}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/ioTvImageKeywordlistAlosPalsar.txt
+         ${TEMP}/ioTvImageKeywordlistAlosPalsar.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
+         ${TEMP}/ioTvImageKeywordlistAlosPalsar.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistRadarSat1 ${IO_TESTS18}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat1.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/DAT_01.001
+         ${TEMP}/ioTvImageKeywordlistRadarSat1.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistRadarSat2 ${IO_TESTS18}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat2.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat2.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
+         ${TEMP}/ioTvImageKeywordlistRadarSat2.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistTerraSarX ${IO_TESTS18}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX.txt
+         ${TEMP}/ioTvImageKeywordlistTerraSarX.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
+         ${TEMP}/ioTvImageKeywordlistTerraSarX.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistTerraSarX_Upsala ${IO_TESTS18}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Upsala.txt
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/TSX1_SAR__MGD.xml
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala.txt
+)
+ADD_TEST(ioTvImageKeywordlistTerraSarX_Toronto ${IO_TESTS18}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Toronto.txt
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistErs ${IO_TESTS18}
+  --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/ioTvImageKeywordlistErs.txt
+         ${TEMP}/ioTvImageKeywordlistErs.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001
+         ${TEMP}/ioTvImageKeywordlistErs.txt
+)
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
@@ -2116,6 +2226,12 @@ otbImageMetadataInterfaceTest.cxx
 otbImageMetadataInterfaceTest2.cxx
 )
 
+SET(BasicIO_SRCS18
+otbIOTests18.cxx
+otbImageKeywordlist.cxx
+otbTerraSarImageMetadataInterface.cxx
+)
+
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 OTB_ADD_EXECUTABLE(otbIOTests1 "${BasicIO_SRCS1}" "OTBIO;OTBTesting")
@@ -2132,10 +2248,6 @@ OTB_ADD_EXECUTABLE(otbIOTests11 "${BasicIO_SRCS11}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests12 "${BasicIO_SRCS12}" "OTBIO;OTBTesting")
 
 
-SET(BasicIO_SRCS18
-otbIOTests18.cxx
-otbTerraSarImageMetadataInterface.cxx
-)
 
 # Case for releae 2.2.1
 IF(OTB_COMPILE_JPEG2000)

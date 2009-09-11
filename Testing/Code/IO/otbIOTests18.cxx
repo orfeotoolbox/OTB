@@ -28,4 +28,5 @@
 void RegisterTests()
 {
 REGISTER_TEST(otbTerraSarImageMetadataInterface);
+REGISTER_TEST(otbImageKeywordlist);
 }
