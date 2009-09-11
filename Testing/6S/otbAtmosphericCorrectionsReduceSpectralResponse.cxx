@@ -22,6 +22,8 @@
 #include "otbSatelliteRSR.h"
 #include "otbSpectralResponse.h"
 
+#include "otbReduceSpectralResponseClassifierRAndNIR.h"
+
 int main(int argc, char * argv[])
 {
   
@@ -38,9 +40,9 @@ int main(int argc, char * argv[])
   
   typedef ReduceResponseType::AtmosphericCorrectionParametersType  AtmosphericCorrectionParametersType;
   
-  if ( argc!= 15 )
+  if ( argc!= 17 )
   {
-    std::cout << argv[0] << std::endl << "\t" << "<RSR_fileSRname>"  << "\t" << "<Gabarit_SAT_fileSRname>" << "\t" << "<nbBands>" << "\t" << "<day>"  << "\t" << "<month>"  << "\t" << "<zenithSolarAngle>"  << "\t" << "<azimutSolarAngle>"  << "\t" << "<viewingZenitalAngle>"  << "\t" << "<viewingAzimutalAngle>"  << "\t" << "<atmoPressure>"  << "\t" << "<waterVaporAmount>"  << "\t" << "<ozoneAmount>"  << "\t" << "<aerosolModelValue>"  << "\t" << "<aerosolOptical>"  <<  std::endl ;
+    std::cout << argv[0] << std::endl << "\t" << "<RSR_fileSRname>"  << "\t" << "<Gabarit_SAT_fileSRname>" << "\t" << "<nbBands>" << "\t" << "<day>"  << "\t" << "<month>"  << "\t" << "<zenithSolarAngle>"  << "\t" << "<azimutSolarAngle>"  << "\t" << "<viewingZenitalAngle>"  << "\t" << "<viewingAzimutalAngle>"  << "\t" << "<atmoPressure>"  << "\t" << "<waterVaporAmount>"  << "\t" << "<ozoneAmount>"  << "\t" << "<aerosolModelValue>"  << "\t" << "<aerosolOptical>"  << "\t" << "<rband>"<< "\t" << "<nirband>"<<  std::endl ;
     return EXIT_FAILURE;
   }
   
@@ -129,12 +131,32 @@ int main(int argc, char * argv[])
   */
   myReduceResponse->Process6S();
   
-  std::cout << "Response after "<< myReduceResponse << std::endl; 
-  
+  //std::cout << "Response after "<< myReduceResponse << std::endl; 
+//   std::cout << "6S response " << myReduceResponse->GetInputSpectralResponse()->GetResponse() << std::endl;
   //
   myReduceResponse->CalculateResponse();
   
   std::cout << "Reduce response " << myReduceResponse << std::endl;
+  
+  typedef otb::Functor::NDVI<double,double,double >               TFunctionType;
+  typedef otb::ReduceSpectralResponseClassifierRAndNIR <ReduceResponseType,TFunctionType> ReduceSpectralResponseClassifierRAndNIRType;
+  typedef ReduceSpectralResponseClassifierRAndNIRType::Pointer  ReduceSpectralResponseClassifierRAndNIRPointerType;
+  
+  ReduceSpectralResponseClassifierRAndNIRPointerType  myIndice=ReduceSpectralResponseClassifierRAndNIRType::New();
+  
+  myIndice->SetInputReduceSpectralResponse(myReduceResponse);
+  
+  //FunctorType
+  //myIndice->SetFunctor(myReduceResponse);
+  const int rband(::atoi(argv[15]));
+  const int nirband(::atoi(argv[16]));
+  
+  myIndice->SetRBandNumber(rband);
+  myIndice->SetNIRBandNumber(nirband);
+  
+  std::cout << "NDVI value " << (*myIndice)() << std::endl;
+             
+  
   
   return EXIT_SUCCESS;
 }
