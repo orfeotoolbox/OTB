@@ -24,7 +24,7 @@
 
 
 #include "otbUnaryFunctorNeighborhoodImageFilter.h"
-#include "otbTerraSarRadarBrightnessImageFilter.h"
+#include "otbRadarFunctors.h"
 #include "itkMetaDataDictionary.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "otbMath.h"
@@ -41,7 +41,7 @@ namespace Functor
    * \ingroup Radiometry
  */
 template<class TInputIt, class TOutput>
-class TerraSarCalibrationImageFunctor
+class TerraSarCalibrationImageFunctor<TInputIt, TOutput>
 {
 public:
   TerraSarCalibrationImageFunctor();
