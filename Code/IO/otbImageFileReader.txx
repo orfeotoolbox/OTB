@@ -92,10 +92,14 @@ ImageFileReader<TOutputImage>
 //otbMsgDebugMacro( <<"ImageFileReader<TOutputImage>::GenerateData : ");
 //otbMsgDebugMacro( <<" output->GetRequestedRegion() : "<<output->GetRequestedRegion());
 
+std::cout<< "ImageFileReader<TOutputImage>::GenerateData : " <<std::endl;
+std::cout<<" output->GetRequestedRegion() : "<<output->GetRequestedRegion() <<std::endl;
+
   // Test if the file exist and if it can be open.
   // and exception will be thrown otherwise.
   this->TestFileExistanceAndReadability();
 
+std::cout<<" FILENAME ?? " << this->m_FileName.c_str()<<std::endl;
   // Tell the ImageIO to read the file
   //
   OutputImagePixelType *buffer =
@@ -149,7 +153,7 @@ ImageFileReader<TOutputImage>
 
 //otbMsgDebugMacro( <<" Apres ioRegion : "<<ioRegion);
 
-
+std::cout<< "ioRegion : "<<ioRegion<<std::endl;
   this->m_ImageIO->SetIORegion(ioRegion);
 
   typedef itk::DefaultConvertPixelTraits< ITK_TYPENAME TOutputImage::IOPixelType >  ConvertPixelTraits;
@@ -228,6 +232,7 @@ ImageFileReader<TOutputImage>
   // !!!!  Update FileName
   std::string lFileName;
   bool found = GetGdalReadImageFileName(this->m_FileName,lFileName);
+std::cout<<" GenerateOutputInformation : filename " << lFileName << std::endl;
   if ( found == false )
   {
     otbMsgDebugMacro( <<"Filename was NOT unknowed. May be reconize by a Image factory ! ");
