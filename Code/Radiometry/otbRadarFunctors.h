@@ -24,7 +24,6 @@
 
 
 #include "itkUnaryFunctorImageFilter.h"
-#include "otbTerraSarCalibrationImageFilter.h"
 #include "itkMetaDataDictionary.h"
 #include "otbMath.h"
 
@@ -48,6 +47,10 @@ public:
     m_CalFactor = 1.;
   };
   virtual ~TerraSarRadarBrightnessImageFunctor() {};
+
+  typedef std::vector<double>           DoubleVectorType;
+  typedef std::vector<DoubleVectorType> DoubleVectorVectorType;
+  typedef itk::Size<2>                  SizeType;
 
   /** Accessors */
   void SetCalFactor( double val ) { m_CalFactor = val; };
@@ -84,7 +87,7 @@ public:
   TerraSarRadarBrightnessComplexImageFunctor() {};
   virtual ~TerraSarRadarBrightnessComplexImageFunctor() {};
 
-  typedef TerraSarRadarBrightnessImageFunctor<TInput, TOutput> FunctorType;
+  typedef TerraSarRadarBrightnessImageFunctor<TInput, TOutput> BetaNaughtFunctorType;
 
   /** Accessors */
   void SetCalFactor( double val ) { m_BetaNaughtFunctor->SetCalFactor(val); };
@@ -109,7 +112,92 @@ public:
 
 private:
   /** Calibration Factor */
-  FunctorType m_BetaNaughtFunctor;
+  BetaNaughtFunctorType m_BetaNaughtFunctor;
+};
+
+
+/**
+   * \class TerraSarCalibrationImageFunctor
+   *  \brief Compute the surface reflectance pixel from a TOA reflectance.
+   *
+   * \ingroup Functor
+   * \ingroup Radiometry
+ */
+template<class TInputIt, class TOutput>
+class TerraSarCalibrationImageFunctor
+{
+public:
+  TerraSarCalibrationImageFunctor();
+  virtual ~TerraSarCalibrationImageFunctor() {};
+
+  typedef std::vector<double>           DoubleVectorType;
+  typedef std::vector<DoubleVectorType> DoubleVectorVectorType;
+  typedef std::vector<long int>         LIntVectorType;
+  typedef itk::Size<2>                  SizeType;
+  typedef typename TInputIt::PixelType           InputPixelType;
+  typedef TerraSarRadarBrightnessImageFunctor<InputPixelType, TOutput> BrightnessFunctorType;
+
+  /** Accessors */
+  void SetCalFactor( double val ) { m_CalFactor = val; m_RadarBrightness.SetCalFactor(val); };
+  double GetCalFactor() const { return m_CalFactor; };
+  void SetNoiseRangeValidityMin( double val ) { m_NoiseRangeValidityMin = val; };
+  double GetNoiseRangeValidityMin() const { return m_NoiseRangeValidityMin; };
+  void SetNoiseRangeValidityMax( double val ) { m_NoiseRangeValidityMax = val; };
+  double GetNoiseRangeValidityMax() const { return m_NoiseRangeValidityMax; };
+  void SetNoiseRangeValidityRef( double val ) { m_NoiseRangeValidityRef = val; };
+  double GetNoiseRangeValidityRef() const { return m_NoiseRangeValidityRef; };
+  void SetLocalIncidentAngle( double val )
+  { 
+    m_LocalIncidentAngle = val; 
+    m_SinLocalIncidentAngle = vcl_sin(m_LocalIncidentAngle*CONST_PI_180);
+  };
+  double GetLocalIncidentAngle() const { return m_LocalIncidentAngle; };
+  double GetSinLocalIncidentAngle() const { return m_SinLocalIncidentAngle; };
+  void SetNoisePolynomialCoefficientsList( DoubleVectorVectorType vect ) { m_NoisePolynomialCoefficientsList = vect; };
+  DoubleVectorVectorType GetNoisePolynomialCoefficientsList() const { return m_NoisePolynomialCoefficientsList; };
+  void SetImageSize( SizeType size ) { m_ImageSize = size; };
+  SizeType GetImageSize() const { return m_ImageSize; };
+  void SetUseFastCalibrationMethod( bool b ) { m_UseFastCalibrationMethod = b; };
+  bool GetUseFastCalibrationMethod() const { return m_UseFastCalibrationMethod; };
+  void SetTimeUTC( LIntVectorType vect ) { m_TimeUTC = vect; };
+  LIntVectorType GetTimeUTC() const { return m_TimeUTC; };
+  void SetPRF( double val ) { m_PRF = val; m_InvPRF = 1./m_PRF; };
+  double GetPRF() const { return m_PRF; };
+  double GetInvPRF() const { return m_InvPRF; };
+
+  double ComputeCurrentNoise( unsigned int colId );
+  DoubleVectorType ComputeCurrentCoeffs( unsigned int lineId );
+  inline TOutput operator() (const TInputIt & inIt);
+
+private:
+  /** Calibration Factor */
+  double m_CalFactor;
+  /** Noise minimal range validity */
+  double m_NoiseRangeValidityMin;
+  /** Noise maxinimal range validity */
+  double m_NoiseRangeValidityMax;
+  /** Noise reference range */
+  double m_NoiseRangeValidityRef;
+  /** Sensor local incident angle in degree */
+  double m_LocalIncidentAngle;
+  /** sin of the LocalIncidentAngle */
+  double m_SinLocalIncidentAngle;
+  /** Vector of vector that contain noise polinomial coefficient */
+  DoubleVectorVectorType m_NoisePolynomialCoefficientsList;
+  /** Image Size */
+  SizeType m_ImageSize;
+  /** Fast Calibration Method. If set to trus, will consider only the first noise coefficient else, 
+   *  will use all of them and applied it according to its acquisition UTC time and the coordinates 
+   *  of the pixel in the image. */
+  bool m_UseFastCalibrationMethod;
+  /** TimeUTC for each noise coefficient acquisition (in second). */
+  LIntVectorType m_TimeUTC;
+  /** Pulse Repetition Frequency */
+  double m_PRF;
+  /** Inverse Pulse Repetition Frequency */
+  double m_InvPRF;
+  /** Radar Brightness functor */
+  BrightnessFunctorType m_RadarBrightness;
 };
 
 
@@ -127,10 +215,10 @@ public:
   TerraSarCalibrationComplexImageFunctor() {};
   virtual ~TerraSarCalibrationComplexImageFunctor() {};
 
-  typedef TerraSarCalibrationImageFunctor<TInput, TOutput> FunctorType;
   typedef std::vector<double>           DoubleVectorType;
   typedef std::vector<DoubleVectorType> DoubleVectorVectorType;
   typedef itk::Size<2>                  SizeType;
+  typedef TerraSarCalibrationImageFunctor<TInput, TOutput> SigmaNaughtFunctorType;
 
   /** Accessors */
   void SetCalFactor( double val ) { m_SigmaNaughtFunctor.SetCalFactor(val); };
@@ -167,10 +255,10 @@ public:
 
 private:
   /** Calibration Factor */
-  FunctorType m_SigmaNaughtFunctor;
+  SigmaNaughtFunctorType m_SigmaNaughtFunctor;
 };
 
-}
+}// end namespace functor
 } // end namespace otb
 
 
