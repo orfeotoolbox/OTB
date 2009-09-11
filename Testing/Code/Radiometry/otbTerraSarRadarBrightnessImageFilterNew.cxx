@@ -15,23 +15,17 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "itkExceptionObject.h"
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+#include "otbTerraSarRadarBrightnessImageFilter.h"
+#include "otbImage.h"
 
-
-#include "otbTestMain.h"
-
-void RegisterTests()
+int otbTerraSarRadarBrightnessImageFilterNew(int argc, char * argv[])
 {
-REGISTER_TEST(otbTerraSarIntraCalibrationImageFilterNew);
-REGISTER_TEST(otbTerraSarIntraCalibrationImageFilterTest);
-REGISTER_TEST(otbTerraSarRadarBrightnessImageFilterNew);
-REGISTER_TEST(otbTerraSarRadarBrightnessImageFilterTest);
+  typedef otb::Image<double, 2>                                          ImageType;
+  typedef otb::TerraSarRadarBrightnessImageFilter<ImageType, ImageType> FilterType;
+
+  FilterType::Pointer filter = FilterType::New();
+
+  return EXIT_SUCCESS;
 }
-
-
-
