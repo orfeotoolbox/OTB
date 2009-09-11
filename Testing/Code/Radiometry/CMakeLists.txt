@@ -1028,18 +1028,18 @@ ADD_TEST(raTvAeronet_ArcachonLevel10_ExtractData ${RADIOMETRY_TESTS8}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS9 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# -------            TerraSarIntraCalibrationImageFilter   ------------------------------
-ADD_TEST(raTuTerraSarIntraCalibrationImageFilterNew ${RADIOMETRY_TESTS9}
-       otbTerraSarIntraCalibrationImageFilterNew
+# -------            TerraSarCalibrationImageFilter   ------------------------------
+ADD_TEST(raTuTerraSarCalibrationImageFilterNew ${RADIOMETRY_TESTS9}
+       otbTerraSarCalibrationImageFilterNew
 )
 
-ADD_TEST(raTvTerraSarIntraCalibrationImageFilterTest ${RADIOMETRY_TESTS9}
+ADD_TEST(raTvTerraSarCalibrationImageFilterTest ${RADIOMETRY_TESTS9}
 # --compare-image ${EPSILON}  
-#                               ${BASELINE}/raTvTerraSarIntraCalibrationImageFilterTest.tif
-#                               ${TEMP}/raTvTerraSarIntraCalibrationImageFilterTest.tif
-        otbTerraSarIntraCalibrationImageFilterTest
-		${INPUTDATA}/TerraSarExtract.tif
-		${TEMP}/raTvTerraSarIntraCalibrationImageFilterTest.tif
+#                               ${BASELINE}/raTvTerraSarCalibrationImageFilterTest.tif
+#                               ${TEMP}/raTvTerraSarCalibrationImageFilterTest.tif
+        otbTerraSarCalibrationImageFilterTest
+		${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
+		${TEMP}/raTvTerraSarCalibrationImageFilterTest.tif
 )
 
 # -------            TerraSarRadarBrightnessImageFilter   ------------------------------
@@ -1148,8 +1148,8 @@ otbAeronetExtractDataBadData.cxx
 
 SET(Radiometry_SRCS9
 otbRadiometryTests9.cxx
-otbTerraSarIntraCalibrationImageFilterNew.cxx
-otbTerraSarIntraCalibrationImageFilterTest.cxx
+otbTerraSarCalibrationImageFilterNew.cxx
+otbTerraSarCalibrationImageFilterTest.cxx
 otbTerraSarRadarBrightnessImageFilterNew.cxx
 otbTerraSarRadarBrightnessImageFilterTest.cxx
 )
