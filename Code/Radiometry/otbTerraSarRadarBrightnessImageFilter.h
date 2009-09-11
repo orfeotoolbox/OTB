@@ -124,12 +124,12 @@ public:
 
 protected:
   /** Constructor */
-  TerraSarRadarBrightnessImageFilter(){};
+  TerraSarRadarBrightnessImageFilter();
   /** Destructor */
   virtual ~TerraSarRadarBrightnessImageFilter() {};
 
   /** Initialize the functor vector */
-  //void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData();
 
 private:
 
