@@ -86,6 +86,7 @@ public:
   /** Noise minimal range validity */
   void SetNoiseRangeValidityMin( double val );
   double GetNoiseRangeValidityMin() const;
+
   /** Noise maximal range validity */
   void SetNoiseRangeValidityMax( double val );
   double GetNoiseRangeValidityMax() const;
