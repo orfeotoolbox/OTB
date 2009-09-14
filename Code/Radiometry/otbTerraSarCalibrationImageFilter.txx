@@ -25,110 +25,6 @@
 
 namespace otb
 {
-/**************************************************************************
- ***************** TerraSarCalibrationImageFunctor *******************
- **************************************************************************/
-namespace Functor
-{
-/** Constructor */
-template <class TInputIt, class TOutput>
-TerraSarCalibrationImageFunctor<TInputIt, TOutput>
-::TerraSarCalibrationImageFunctor()
-{
-    m_CalFactor = 1.;
-    m_NoiseRangeValidityMin = 0.;
-    m_NoiseRangeValidityMax = 0.;
-    m_NoiseRangeValidityRef = 0.;
-    m_LocalIncidentAngle = 0.;
-    m_NoisePolynomialCoefficientsList.clear();
-    m_ImageSize.Fill(0);
-    m_UseFastCalibrationMethod = true;
-    m_TimeUTC.clear();
-    m_PRF = 1.;
-}
-
-  
-template <class TInputIt, class TOutput>
-double
-TerraSarCalibrationImageFunctor<TInputIt, TOutput>
-::ComputeCurrentNoise( unsigned int colId )
-  {
-    double curRange = 0.;
-    double width_2 = static_cast<double>(m_ImageSize[0])/2.;
-
-    if( colId < static_cast<unsigned int>(width_2) )
-      {
-	curRange = m_NoiseRangeValidityMin + ( m_NoiseRangeValidityRef-m_NoiseRangeValidityMin )/width_2 * static_cast<double>(colId);
-      }
-    else
-      {
-	curRange = m_NoiseRangeValidityRef + ( m_NoiseRangeValidityMax-m_NoiseRangeValidityRef )/width_2 * static_cast<double>(colId);
-      }
-    return curRange;
-  }
-
-   
-template <class TInputIt, class TOutput>
-typename TerraSarCalibrationImageFunctor<TInputIt, TOutput>::DoubleVectorType
-TerraSarCalibrationImageFunctor<TInputIt, TOutput>
-::ComputeCurrentCoeffs( unsigned int lineId )
-  {
-    DoubleVectorType curCoeffs;
-    if(m_UseFastCalibrationMethod)
-      { 
-	curCoeffs = m_NoisePolynomialCoefficientsList[0];
-      }
-    else
-      {
-	// m_ImageSize[1]-lineId because the first acquisition line is the last image one.
-	double coef = static_cast<double>(m_ImageSize[1]-lineId) / (static_cast<double>(m_ImageSize[1])/2.);
-	double currTimeUTC = m_TimeUTC[0] + static_cast<double>(lineId)*m_InvPRF;
-	unsigned int id = 1;
-	bool go = true;
-	while( id<m_TimeUTC.size() && go)
-	  { 
-	    if( currTimeUTC>=m_TimeUTC[id] )
-		go = false;
-	    id++;
-	  }
-	id--;
-	
-	for(unsigned int j=0; j<m_NoisePolynomialCoefficientsList.size(); j++)
-	  {
-	    curCoeffs.push_back( m_NoisePolynomialCoefficientsList[id-1][j] + (m_NoisePolynomialCoefficientsList[id][j] - m_NoisePolynomialCoefficientsList[id-1][j])*coef );
-	  }
-    }
-
-    return curCoeffs;
-  }
-
-template <class TInputIt, class TOutput>
-inline TOutput
-TerraSarCalibrationImageFunctor<TInputIt, TOutput>
-::operator() (const TInputIt & inIt)
-{
-  double diffCurRange = ComputeCurrentNoise( static_cast<unsigned int>(inIt.GetIndex()[0]) ) - m_NoiseRangeValidityRef;
-  DoubleVectorType curCoeff = ComputeCurrentCoeffs( static_cast<unsigned int>(inIt.GetIndex()[1]) );
-  
-  TOutput outRadBr = m_RadarBrightness( inIt.GetCenterPixel() );
-
-  double NEBN = 0.;
-  for(int i=0; i<curCoeff.size(); i++)
-    {
-      NEBN += curCoeff[i]*vcl_pow( diffCurRange, i);
-    }
-  double sigma = ( outRadBr - m_CalFactor*NEBN ) * m_SinLocalIncidentAngle;
-  
-  std::cout<<sigma<<std::endl;
-  
-  return static_cast<TOutput>(sigma);
-}
-  
-}// namespace Functor
-  
-/**************************************************************************
- **************** otbTerraSarCalibrationImageFilter ******************
- **************************************************************************/
 /**
  * Constructor
  */
@@ -137,7 +33,6 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::TerraSarCalibrationImageFilter()
 {
   this->SetRadius(0);
-  this->SetNumberOfThreads(1);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -159,8 +54,8 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 	    itkExceptionMacro(<<"Wrong noise polynomial coefficient, degrees mismatch.");
 	}
       
-      if( this->GetFunctor().GetTimeUTC().size() != size )
-	itkExceptionMacro(<<"Number of Time UTC and number of noise polygonls mismatch.");
+      if( this->GetFunctor().GetTimeUTC().size() != this->GetFunctor().GetNoisePolynomialCoefficientsList().size() )
+	itkExceptionMacro(<<"Number of Time UTC and number of noise polygonls mismatch."<<this->GetFunctor().GetTimeUTC().size()<<"  "<<this->GetFunctor().GetNoisePolynomialCoefficientsList().size());
 
       if(this->GetFunctor().GetPRF() == 0.)
 	itkExceptionMacro(<<"PRF can't be null.");
@@ -379,7 +274,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
       os << "Noise acquisitions          : " << this->GetNoisePolynomialCoefficientsList().size() << std::endl;
       for (unsigned int i=0; i<this->GetNoisePolynomialCoefficientsList().size(); ++i)
 	{
-	  os << "Noise acquisition"<< i << ":" << std::endl;
+	  os << "Noise acquisition "<< i << ":" << std::endl;
 	  os << "Noise TimeUTC           : " << this->GetTimeUTC()[i] << std::endl;
 	  os << "Noise polinomial coefficient: [   ";
 	  for (unsigned int j=0; j<this->GetNoisePolynomialCoefficientsList()[j].size(); ++j)

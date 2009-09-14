@@ -33,7 +33,7 @@ namespace Functor
 {
 /**
    * \class TerraSarRadarBrightnessImageFunctor
-   *  \brief Compute the radar brightness from a TOA reflectance.
+   *  \brief Compute the radar brightness from an modulus image.
    *
    * \ingroup Functor
    * \ingroup Radiometry
@@ -75,7 +75,7 @@ private:
 
 /**
    * \class TerraSarRadarBrightnessComplexImageFunctor
-   *  \brief Compute the radar brightness from a TOA reflectance.
+   *  \brief Compute the radar brightness from an complexe image.
    *
    * \ingroup Functor
    * \ingroup Radiometry
@@ -99,10 +99,10 @@ public:
 
 
     // Beta naught computation, will be the Modulus of the result
-    double beta = m_BetaNaughtFunctor(inPix.abs());
+    double beta = m_BetaNaughtFunctor(std::abs(inPix));
 
     // Phase 
-    double phase = inPix.arg();
+    double phase = std::arg(inPix);
 
     // We retrieve the complex value from the modulus and the phase.
     std::complex<double> res = std::complex<double>(beta*vcl_cos(phase), beta*vcl_sin(phase) );
@@ -118,7 +118,7 @@ private:
 
 /**
    * \class TerraSarCalibrationImageFunctor
-   *  \brief Compute the surface reflectance pixel from a TOA reflectance.
+   *  \brief Compute sigma naught coefficient from a modulus image.
    *
    * \ingroup Functor
    * \ingroup Radiometry
@@ -203,7 +203,7 @@ private:
 
 /**
    * \class TerraSarCalibrationComplexImageFunctor
-   *  \brief Compute the surface reflectance pixel from a TOA reflectance with complex images
+   *  \brief Compute sigma naught coefficient from a modulus image.
    *
    * \ingroup Functor
    * \ingroup Radiometry
@@ -242,10 +242,10 @@ public:
   {
 
     // Beta naught computation, will be the Modulus of the result
-    double sigma = m_SigmaNaughtFunctor(inPix.abs());
+    double sigma = m_SigmaNaughtFunctor(std::abs(inPix));
 
     // Phase 
-    double phase = inPix.arg();
+    double phase = std::arg(inPix);
 
     // We retrieve the complex value from the modulus and the phase.
     std::complex<double> res = std::complex<double>(sigma*vcl_cos(phase), sigma*vcl_sin(phase) );
@@ -261,5 +261,8 @@ private:
 }// end namespace functor
 } // end namespace otb
 
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbRadarFunctors.txx"
+#endif
 
 #endif
