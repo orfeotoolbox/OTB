@@ -112,7 +112,13 @@ MARK_AS_ADVANCED(OTB_USE_LIBLAS)
 # EXPAT Library
 #-------------------------------
 
-OPTION(OTB_USE_EXTERNAL_EXPAT "Use an outside build of EXPAT." OFF)
+FIND_PACKAGE(EXPAT)
+IF(EXPAT_FOUND)
+  OPTION(OTB_USE_EXTERNAL_EXPAT "Use an outside build of EXPAT." ON)
+ELSE(EXPAT_FOUND)
+  OPTION(OTB_USE_EXTERNAL_EXPAT "Use an outside build of EXPAT." OFF)
+ENDIF(EXPAT_FOUND)
+
 MARK_AS_ADVANCED(OTB_USE_EXTERNAL_EXPAT)
 
 IF(OTB_USE_EXTERNAL_EXPAT)
@@ -255,14 +261,18 @@ IF(OTB_USE_VISU_GUI)
         #-------------------------------
         # FLTK Library
         #-------------------------------
-
+        FIND_PACKAGE(FLTK)
+        IF(FLTK_FOUND)
+          OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." ON)
+        ELSE(FLTK_FOUND)
+          OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." OFF)
+        ENDIF(FLTK_FOUND)
         # Option for internal/external FLTK
-        OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." ON)
         MARK_AS_ADVANCED(OTB_USE_EXTERNAL_FLTK)
         # Add an option to use or not use FLTK (http://www.fltk.org)
         IF(OTB_USE_EXTERNAL_FLTK)
 
-                FIND_PACKAGE(FLTK)
+#                 FIND_PACKAGE(FLTK)
                 # Mingw Option doesn't exist in the FindFLTK.cmake default configuration file in CMake installationj directory.
                 # Copy  FLTK_PLATFORM_DEPENDENT_LIBS from FLTK CmakeList.txt
                 IF(MINGW)
@@ -408,9 +418,13 @@ ENDIF(OTB_USE_PQXX)
 #-------------------------------
 # Boost Library
 #-------------------------------
-
+FIND_PACKAGE(Boost)
+IF(Boost_FOUND)
+  OPTION(OTB_USE_EXTERNAL_BOOST "Use an outside build of Boost." ON)
+ELSE(Boost_FOUND)
+  OPTION(OTB_USE_EXTERNAL_BOOST "Use an outside build of Boost." OFF)
+ENDIF(Boost_FOUND)
 # Option for internal/external BOOST
-OPTION(OTB_USE_EXTERNAL_BOOST "Use an outside build of Boost." OFF)
 MARK_AS_ADVANCED(OTB_USE_EXTERNAL_BOOST)
 
 IF (OTB_USE_MAPNIK)
