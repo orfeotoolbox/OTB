@@ -1034,9 +1034,9 @@ ADD_TEST(raTuTerraSarCalibrationImageFilterNew ${RADIOMETRY_TESTS9}
 )
 
 ADD_TEST(raTvTerraSarCalibrationImageFilterTest ${RADIOMETRY_TESTS9}
-# --compare-image ${EPSILON}  
-#                               ${BASELINE}/raTvTerraSarCalibrationImageFilterTest.tif
-#                               ${TEMP}/raTvTerraSarCalibrationImageFilterTest.tif
+ --compare-image ${EPSILON}  
+                               ${BASELINE}/raTvTerraSarCalibrationImageFilterTest.tif
+                               ${TEMP}/raTvTerraSarCalibrationImageFilterTest.tif
         otbTerraSarCalibrationImageFilterTest
 		${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
 		${TEMP}/raTvTerraSarCalibrationImageFilterTest.tif
