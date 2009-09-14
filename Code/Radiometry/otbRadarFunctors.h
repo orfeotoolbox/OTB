@@ -261,5 +261,8 @@ private:
 }// end namespace functor
 } // end namespace otb
 
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbRadarFunctors.txx"
+#endif
 
 #endif
