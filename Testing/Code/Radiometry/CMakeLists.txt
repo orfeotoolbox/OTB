@@ -1056,6 +1056,20 @@ ADD_TEST(raTvTerraSarRadarBrightnessImageFilterTest ${RADIOMETRY_TESTS9}
         ${TEMP}/raTvTerraSarRadarBrightnessImageFilterTest.tif
 )
 
+# -------            TerraSarRadarBrightnessComplexImageFilter   ------------------------------
+ADD_TEST(raTuTerraSarRadarBrightnessComplexImageFilterNew ${RADIOMETRY_TESTS9}
+       otbTerraSarRadarBrightnessComplexImageFilterNew
+)
+
+ADD_TEST(raTvTerraSarRadarBrightnessComplexImageFilterTest ${RADIOMETRY_TESTS9}
+    --compare-image ${EPSILON}  
+                ${BASELINE}/raTvTerraSarRadarBrightnessComplexImageFilterTest.tif
+                ${TEMP}/raTvTerraSarRadarBrightnessComplexImageFilterTest.tif
+        otbTerraSarRadarBrightnessComplexImageFilterTest
+        ${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
+        ${TEMP}/raTvTerraSarRadarBrightnessComplexImageFilterTest.tif
+)
+
 # A enrichir
 SET(Radiometry_SRCS1
 otbRadiometryTests1.cxx
@@ -1152,6 +1166,8 @@ otbTerraSarCalibrationImageFilterNew.cxx
 otbTerraSarCalibrationImageFilterTest.cxx
 otbTerraSarRadarBrightnessImageFilterNew.cxx
 otbTerraSarRadarBrightnessImageFilterTest.cxx
+otbTerraSarRadarBrightnessComplexImageFilterNew.cxx
+otbTerraSarRadarBrightnessComplexImageFilterTest.cxx
 )
 
 
