@@ -17,14 +17,18 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbTerraSarRadarBrightnessImageFilter.h"
+#include "otbRadarFunctors.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "otbImage.h"
 
 int otbTerraSarRadarBrightnessComplexImageFilterNew(int argc, char * argv[])
 {
-  typedef otb::Image< std::complex<double>, 2 >                                                     ComplexImageType;
-  typedef otb::TerraSarRadarBrightnessComplexImageFunctor<ComplexImageType,ComplexImageType>        FunctorType;
-  typedef otb::TerraSarRadarBrightnessImageFilter<ComplexImageType, ComplexImageType, FunctorType > FilterType;
+  typedef std::complex<double>                                                                               ComplexPixelType;
+  typedef otb::Image< ComplexPixelType >                                                                     ComplexImageType;
+
+  typedef otb::Functor::TerraSarRadarBrightnessComplexImageFunctor< ComplexPixelType, ComplexPixelType >     FunctorType;
+
+  typedef itk::UnaryFunctorImageFilter<ComplexImageType, ComplexImageType, FunctorType >                     FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 

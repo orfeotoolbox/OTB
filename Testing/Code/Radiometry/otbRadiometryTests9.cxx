@@ -32,7 +32,7 @@ REGISTER_TEST(otbTerraSarCalibrationImageFilterTest);
 REGISTER_TEST(otbTerraSarRadarBrightnessImageFilterNew);
 REGISTER_TEST(otbTerraSarRadarBrightnessImageFilterTest);
 REGISTER_TEST(otbTerraSarRadarBrightnessComplexImageFilterNew);
-//REGISTER_TEST(otbTerraSarRadarBrightnessImageFilterTest);
+REGISTER_TEST(otbTerraSarRadarBrightnessComplexImageFilterTest);
 }
 
 

@@ -1066,7 +1066,8 @@ ADD_TEST(raTvTerraSarRadarBrightnessComplexImageFilterTest ${RADIOMETRY_TESTS9}
                 ${BASELINE}/raTvTerraSarRadarBrightnessComplexImageFilterTest.tif
                 ${TEMP}/raTvTerraSarRadarBrightnessComplexImageFilterTest.tif
         otbTerraSarRadarBrightnessComplexImageFilterTest
-        ${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
+        # complex image
+        ${INPUTDATA}/ExtractIMAGE_HH_SRA_spot_074.tif
         ${TEMP}/raTvTerraSarRadarBrightnessComplexImageFilterTest.tif
 )
 

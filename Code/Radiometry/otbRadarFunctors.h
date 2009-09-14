@@ -87,11 +87,11 @@ public:
   TerraSarRadarBrightnessComplexImageFunctor() {};
   virtual ~TerraSarRadarBrightnessComplexImageFunctor() {};
 
-  typedef TerraSarRadarBrightnessImageFunctor<TInput, TOutput> BetaNaughtFunctorType;
+  typedef TerraSarRadarBrightnessImageFunctor<double, double> BetaNaughtFunctorType;
 
   /** Accessors */
-  void SetCalFactor( double val ) { m_BetaNaughtFunctor->SetCalFactor(val); };
-  double GetCalFactor() { return m_BetaNaughtFunctor->GetCalFactor(); };
+  void SetCalFactor( double val ) { m_BetaNaughtFunctor.SetCalFactor(val); };
+  double GetCalFactor() { return m_BetaNaughtFunctor.GetCalFactor(); };
 
   /* We assume that the input pixel is a complex */
   inline TOutput operator() (const TInput & inPix)
@@ -99,7 +99,7 @@ public:
 
 
     // Beta naught computation, will be the Modulus of the result
-    double beta = m_BetaNaughtFunctor(std::abs(inPix));
+    double beta = m_BetaNaughtFunctor(static_cast<double>(std::abs(inPix)));
 
     // Phase 
     double phase = std::arg(inPix);
