@@ -24,27 +24,27 @@
 
 namespace otb
 {
+
 /**
  * Constructor
  */
-
 AeronetFileReader
-::AeronetFileReader()
+::AeronetFileReader():
+  m_FileName(""),
+  m_Day(1),
+  m_Month(1),
+  m_Year(2000),
+  m_Hour(12),
+  m_Minute(0),
+  m_Epsilon(0.4)
 {
   this->Superclass::SetNumberOfRequiredOutputs(1);
-  this->Superclass::SetNthOutput(0,AeronetData::New().GetPointer());
-  m_FileName="";
-  m_Day=1;
-  m_Month=1;
-  m_Year=2000;
-  m_Hour=12;
-  m_Minute=0;
-  m_Epsilon = 0.4;
+  this->Superclass::SetNthOutput(0, AeronetData::New().GetPointer());
 }
+
 /**
  * Destructor
  */
-
 AeronetFileReader
 ::~AeronetFileReader()
 {
@@ -128,7 +128,7 @@ AeronetFileReader
   word =  time[6];
   word += time[7];
   currentDate.setSec(word.toInt());
-  
+
   return currentDate;
 }
 
@@ -246,7 +246,7 @@ AeronetFileReader
   list_str = ParseLine(line);
   if(   (list_str[col_date] != "Date(dd-mm-yy)") ||
         (list_str[col_time] != "Time(hh:mm:ss)") ||
-        (list_str[col_670] != "AOT_675") || 
+        (list_str[col_670] != "AOT_675") ||
         (list_str[col_440] != "AOT_440") ||
         (list_str[col_angst] != "440-870Angstrom") ||
         (list_str[col_vapor] != "Water(cm)") ||
@@ -285,8 +285,8 @@ AeronetFileReader
     if(listStr.size() > 0)
     {
       ossimLocalTm currentDate = ParseDate(listStr[col_date],listStr[col_time]);
-      if( (listStr[col_670] != "N/A") &&  
-          (listStr[col_440] != "N/A") && 
+      if( (listStr[col_670] != "N/A") &&
+          (listStr[col_440] != "N/A") &&
           (static_cast<int>(currentDate.getJulian()) == static_cast<int>(dinputDate) )
       )
       {
@@ -329,7 +329,7 @@ AeronetFileReader
        ParseValidLine(dinputDate, current_line2, epsilon, water, angst, tau_day, solarZenithAngle);
   }
 
-  if ( tau_day.size() <=0 ) 
+  if ( tau_day.size() <=0 )
   {
     itkExceptionMacro(<<"The aeronet file ("<<m_FileName<<") doesn't contain valid data for the time (hh:mm:ss) "<<m_Hour<<":"<<m_Minute<<":00 with a tolerance of "<<m_Epsilon<<". Select an other file or increase the epsilon value.");
   }
