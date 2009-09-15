@@ -1755,6 +1755,11 @@ ADD_TEST(otbOGRVectorDataIOCanWrite ${IO_TESTS15}
 ADD_TEST(otbOGRVectorDataIOCanWrite ${IO_TESTS15}
         otbOGRVectorDataIOCanWrite
         ${INPUTDATA}/LOCALITY_POLYGON.tab)
+
+# Canwrite OGR PostGIS()
+ADD_TEST(otbOGRVectorDataIOCanWrite ${IO_TESTS15}
+        otbOGRVectorDataIOCanWrite
+        PG:"dbname='orfeotoolbox_test' host='localhost' port='5432' user='orfeotoolbox_test_user' password='Bidfeud0'")
         
 ADD_TEST(ioTuKMLVectorDataIO ${IO_TESTS15}
         otbKMLVectorDataIONew )
