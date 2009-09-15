@@ -880,6 +880,12 @@ ADD_TEST(coTuLabelMapSourceNew ${COMMON_TESTS11}
 otbLabelMapSourceNew
 )
 
+ADD_TEST(otbLabelObjectMapVectorizer ${COMMON_TESTS11}
+        otbLabelObjectMapVectorizer
+        ${INPUTDATA}/rcc8_mire1.png
+        rcc8_mire1_label_vectorizer.gml
+)
+
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
@@ -1030,6 +1036,7 @@ otbStatisticsAttributesLabelMapFilterNew.cxx
 otbAttributesMapOpeningLabelMapFilterNew.cxx
 otbLabelMapToVectorDataFilterNew.cxx
 otbLabelMapSourceNew.cxx
+otbLabelObjectMapVectorizer.cxx
 )
 
 

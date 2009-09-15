@@ -34,5 +34,5 @@ void RegisterTests()
   REGISTER_TEST(otbAttributesMapOpeningLabelMapFilterNew);
   REGISTER_TEST(otbLabelMapToVectorDataFilterNew);
   REGISTER_TEST(otbLabelMapSourceNew);
-
+  REGISTER_TEST(otbLabelObjectMapVectorizer);
 }
