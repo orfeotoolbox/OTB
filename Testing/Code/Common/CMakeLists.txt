@@ -842,7 +842,13 @@ ADD_TEST(coTuGISTableToVectorDataFilterNew ${COMMON_TESTS10}
 otbGISTableToVectorDataFilterNew
 )
 
-
+ADD_TEST(coTvLabelMapToGISTableFilter ${COMMON_TESTS10}
+otbLabelMapToGISTableFilter
+${INPUTDATA}/rcc8_mire1.png
+labelmaptogis_test 
+orfeotoolbox_test_user
+Bidfeud0
+)
 
 ENDIF(OTB_USE_PQXX)
 
@@ -1057,6 +1063,7 @@ otbVectorDataToGISTableFilterNew.cxx
 otbLabelMapToGISTableFilterNew.cxx
 otbGISTableToLabelMapFilterNew.cxx
 otbGISTableToVectorDataFilterNew.cxx
+otbLabelMapToGISTableFilter.cxx
 )
 ENDIF(OTB_USE_PQXX)
 
