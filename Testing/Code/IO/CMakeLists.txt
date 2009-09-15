@@ -1731,7 +1731,6 @@ ADD_TEST(ioTvVectorDataFileGeoReaderWriter2 ${IO_TESTS15}
             ${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput2.shp
 	)
 
-
 # CanRead OGR GML()
 ADD_TEST(otbOGRVectorDataIOTestCanRead ${IO_TESTS15}
         otbOGRVectorDataIOTestCanRead
@@ -1747,6 +1746,16 @@ ADD_TEST(otbOGRVectorDataIOTestCanRead ${IO_TESTS15}
         otbOGRVectorDataIOTestCanRead
         PG:"dbname='orfeotoolbox_test' host='localhost' port='5432' user='orfeotoolbox_test_user' password='Bidfeud0'")
 
+# CanWrite OGR GML()
+ADD_TEST(otbOGRVectorDataIOCanWrite ${IO_TESTS15}
+        otbOGRVectorDataIOCanWrite
+        ${INPUTDATA}/adressPoint.gml)
+
+# CanWrite OGR MapInfo()
+ADD_TEST(otbOGRVectorDataIOCanWrite ${IO_TESTS15}
+        otbOGRVectorDataIOCanWrite
+        ${INPUTDATA}/LOCALITY_POLYGON.tab)
+        
 ADD_TEST(ioTuKMLVectorDataIO ${IO_TESTS15}
         otbKMLVectorDataIONew )
 
@@ -2211,6 +2220,7 @@ otbVectorDataFileReaderWriter.cxx
 otbVectorDataFileGeoReaderWriter.cxx
 otbOGRVectorDataIONew.cxx
 otbOGRVectorDataIOCanRead.cxx
+otbOGRVectorDataIOCanWrite.cxx
 otbKMLVectorDataIONew.cxx
 otbKMLVectorDataIOTestCanRead.cxx
 otbKMLVectorDataIOTestCanWrite.cxx
