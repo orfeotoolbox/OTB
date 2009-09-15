@@ -37,4 +37,5 @@ void RegisterTests()
   REGISTER_TEST(otbUnaryFunctorWithIndexImageFilterNew);
   REGISTER_TEST(otbUnaryFunctorWithIndexImageFilter);
   REGISTER_TEST(otbLabelObjectMapVectorizer);
+  REGISTER_TEST(otbLabelMapToVectorDataFilter);
 }

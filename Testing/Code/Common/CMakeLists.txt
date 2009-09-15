@@ -842,6 +842,8 @@ ADD_TEST(coTuGISTableToVectorDataFilterNew ${COMMON_TESTS10}
 otbGISTableToVectorDataFilterNew
 )
 
+
+
 ENDIF(OTB_USE_PQXX)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -901,6 +903,12 @@ ADD_TEST(coTvUnaryFunctorWithIndexImageFilter ${COMMON_TESTS11}
 otbUnaryFunctorWithIndexImageFilter
        ${INPUTDATA}/poupees.tif
        ${TEMP}/coTvUnaryFunctorWithIndexImageFilter.tif
+)
+
+ADD_TEST(coTvLabelMapToVectorDataFilter ${COMMON_TESTS11}
+otbLabelMapToVectorDataFilter
+        ${INPUTDATA}/rcc8_mire1.png
+        ${TEMP}/rcc8_mire2_vectorizer.shp
 )
 
 # -------       Fichiers sources CXX -----------------------------------
@@ -1051,6 +1059,7 @@ otbShapeAttributesLabelMapFilterNew.cxx
 otbStatisticsAttributesLabelMapFilterNew.cxx
 otbAttributesMapOpeningLabelMapFilterNew.cxx
 otbLabelMapToVectorDataFilterNew.cxx
+otbLabelMapToVectorDataFilter.cxx
 otbLabelMapSourceNew.cxx
 otbUnaryFunctorWithIndexImageFilterNew.cxx
 otbUnaryFunctorWithIndexImageFilter.cxx
