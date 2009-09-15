@@ -23,10 +23,10 @@
 
 int otbTerraSarCalibrationCplxImageFilterNew(int argc, char * argv[])
 {
-  typedef std::complex<double>                                                       CplxType;
-  typedef otb::Image<CplxType, 2>                                                    CplxImageType;
-  typedef otb::Functor::TerraSarCalibrationComplexImageFunctor< CplxType, CplxType > FunctorType;
-  typedef otb::UnaryFunctorWithIndexImageFilter< CplxImageType,CplxImageType, >      CplxFilterType;
+  typedef std::complex<double>                                                             CplxType;
+  typedef otb::Image<CplxType, 2>                                                          CplxImageType;
+  typedef otb::Functor::TerraSarCalibrationComplexImageFunctor< CplxType, CplxType >       FunctorType;
+  typedef otb::UnaryFunctorWithIndexImageFilter< CplxImageType,CplxImageType, FunctorType> CplxFilterType;
 
   CplxFilterType::Pointer filterCplx = CplxFilterType::New();
 
