@@ -34,6 +34,8 @@ void RegisterTests()
   REGISTER_TEST(otbAttributesMapOpeningLabelMapFilterNew);
   REGISTER_TEST(otbLabelMapToVectorDataFilterNew);
   REGISTER_TEST(otbLabelMapSourceNew);
+  REGISTER_TEST(otbVectorDataToLabelMapFilterNew);
+  REGISTER_TEST(otbVectorDataToLabelMapFilter);
   REGISTER_TEST(otbUnaryFunctorWithIndexImageFilterNew);
   REGISTER_TEST(otbUnaryFunctorWithIndexImageFilter);
   REGISTER_TEST(otbLabelObjectMapVectorizer);

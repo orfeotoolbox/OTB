@@ -880,6 +880,10 @@ ADD_TEST(coTuLabelMapToVectorDataFilterNew ${COMMON_TESTS11}
 otbLabelMapToVectorDataFilterNew
 )
 
+ADD_TEST(coTuVectorDataToLabelMapFilterNew ${COMMON_TESTS11}
+otbVectorDataToLabelMapFilterNew
+)
+
 ADD_TEST(coTuLabelMapSourceNew ${COMMON_TESTS11}
 otbLabelMapSourceNew
 )
@@ -909,6 +913,12 @@ ADD_TEST(coTvLabelMapToVectorDataFilter ${COMMON_TESTS11}
 otbLabelMapToVectorDataFilter
         ${INPUTDATA}/rcc8_mire1.png
         ${TEMP}/rcc8_mire2_vectorizer.shp
+)
+
+ADD_TEST(coTvVectorDataToLabelMapFilter ${COMMON_TESTS11}
+otbLabelMapToVectorDataFilter
+        ${INPUTDATA}/vectorIOexample_gis_to_vec.shp
+        ${TEMP}/vectordataToLabelMap.png
 )
 
 # -------       Fichiers sources CXX -----------------------------------
@@ -1061,6 +1071,8 @@ otbAttributesMapOpeningLabelMapFilterNew.cxx
 otbLabelMapToVectorDataFilterNew.cxx
 otbLabelMapToVectorDataFilter.cxx
 otbLabelMapSourceNew.cxx
+otbVectorDataToLabelMapFilterNew.cxx
+otbVectorDataToLabelMapFilter.cxx
 otbUnaryFunctorWithIndexImageFilterNew.cxx
 otbUnaryFunctorWithIndexImageFilter.cxx
 otbLabelObjectMapVectorizer.cxx
