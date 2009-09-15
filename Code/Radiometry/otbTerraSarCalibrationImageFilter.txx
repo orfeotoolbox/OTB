@@ -32,7 +32,6 @@ template <class TInputImage, class TOutputImage>
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::TerraSarCalibrationImageFilter()
 {
-  this->SetRadius(0);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -285,6 +284,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 	}
     }  
 }
+
 
 
 } // namespace otb

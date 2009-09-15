@@ -779,6 +779,8 @@ ADD_TEST(coTvVectorDataToImageFilterWorld ${COMMON_TESTS9}
 ENDIF(OTB_USE_MAPNIK)
 
 
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests10 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -880,12 +882,26 @@ ADD_TEST(coTuLabelMapSourceNew ${COMMON_TESTS11}
 otbLabelMapSourceNew
 )
 
+
+
 ADD_TEST(otbLabelObjectMapVectorizer ${COMMON_TESTS11}
         otbLabelObjectMapVectorizer
         ${INPUTDATA}/rcc8_mire1.png
         rcc8_mire1_label_vectorizer.gml
 )
 
+ADD_TEST(coTuUnaryFunctorWithIndexImageFilterNew ${COMMON_TESTS11}
+otbUnaryFunctorWithIndexImageFilterNew
+)
+
+ADD_TEST(coTvUnaryFunctorWithIndexImageFilter ${COMMON_TESTS11}
+     --compare-image ${NOTOL}
+                     ${INPUTDATA}/poupees.tif
+                     ${TEMP}/coTvUnaryFunctorWithIndexImageFilter.tif
+otbUnaryFunctorWithIndexImageFilter
+       ${INPUTDATA}/poupees.tif
+       ${TEMP}/coTvUnaryFunctorWithIndexImageFilter.tif
+)
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
@@ -1036,6 +1052,8 @@ otbStatisticsAttributesLabelMapFilterNew.cxx
 otbAttributesMapOpeningLabelMapFilterNew.cxx
 otbLabelMapToVectorDataFilterNew.cxx
 otbLabelMapSourceNew.cxx
+otbUnaryFunctorWithIndexImageFilterNew.cxx
+otbUnaryFunctorWithIndexImageFilter.cxx
 otbLabelObjectMapVectorizer.cxx
 )
 

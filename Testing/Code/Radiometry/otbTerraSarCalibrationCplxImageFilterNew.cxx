@@ -17,15 +17,18 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbTerraSarCalibrationImageFilter.h"
 #include "otbImage.h"
+#include "otbUnaryFunctorWithIndexImageFilter.h"
+#include "otbRadarFunctors.h"
 
-int otbTerraSarCalibrationImageFilterNew(int argc, char * argv[])
+int otbTerraSarCalibrationCplxImageFilterNew(int argc, char * argv[])
 {
-  typedef otb::Image<double, 2>                                     ImageType;
-  typedef otb::TerraSarCalibrationImageFilter<ImageType, ImageType> FilterType;
+  typedef std::complex<double>                                                       CplxType;
+  typedef otb::Image<CplxType, 2>                                                    CplxImageType;
+  typedef otb::Functor::TerraSarCalibrationComplexImageFunctor< CplxType, CplxType > FunctorType;
+  typedef otb::UnaryFunctorWithIndexImageFilter< CplxImageType,CplxImageType, >      CplxFilterType;
 
-  FilterType::Pointer filter = FilterType::New();
-  
+  CplxFilterType::Pointer filterCplx = CplxFilterType::New();
+
   return EXIT_SUCCESS;
 }

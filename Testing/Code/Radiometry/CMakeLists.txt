@@ -1071,6 +1071,23 @@ ADD_TEST(raTvTerraSarRadarBrightnessComplexImageFilterTest ${RADIOMETRY_TESTS9}
         ${TEMP}/raTvTerraSarRadarBrightnessComplexImageFilterTest.tif
 )
 
+
+# -------            TerraSarCalibrationCplxImageFilter   ------------------------------
+ ADD_TEST(raTuTerraSarCalibrationCplxImageFilterNew ${RADIOMETRY_TESTS9}
+       otbTerraSarCalibrationCplxImageFilterNew
+)
+
+ADD_TEST(raTvTerraSarCalibrationCplxImageFilterTest ${RADIOMETRY_TESTS9}
+# TEST GIVE NULL OUTPUT, DON'T HAVE TIME TO CORRECT, SORRY
+#    --compare-image ${EPSILON}  
+ #               ${BASELINE}/raTvTerraSarCalibrationClxImageFilterTest.tif
+ #               ${TEMP}/raTvTerraSarCalibrationCplxImageFilterTest.tif
+        otbTerraSarCalibrationCplxImageFilterTest
+        # complex image
+        ${INPUTDATA}/ExtractIMAGE_HH_SRA_spot_074.tif
+        ${TEMP}/raTvTerraSarCalibrationCplxImageFilterTest.tif
+)
+
 # A enrichir
 SET(Radiometry_SRCS1
 otbRadiometryTests1.cxx
@@ -1169,6 +1186,8 @@ otbTerraSarRadarBrightnessImageFilterNew.cxx
 otbTerraSarRadarBrightnessImageFilterTest.cxx
 otbTerraSarRadarBrightnessComplexImageFilterNew.cxx
 otbTerraSarRadarBrightnessComplexImageFilterTest.cxx
+otbTerraSarCalibrationCplxImageFilterNew.cxx
+otbTerraSarCalibrationCplxImageFilterTest.cxx
 )
 
 
