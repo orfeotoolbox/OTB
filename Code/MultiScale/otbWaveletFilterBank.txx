@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,7 +32,7 @@
 #include "itkProgressReporter.h"
 
 // FIXME
-#define __myDebug__ 0 
+#define __myDebug__ 0
 #include "otbImageFileWriter.h"
 
 namespace otb {
@@ -55,7 +55,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
   {
     this->SetNthOutput(i,OutputImageType::New());
   }
-  
+
   m_UpSampleFilterFactor = 0;
   m_SubsampleImageFactor = 1;
 
@@ -73,7 +73,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
     return;
 
 
-#if __myDebug__ 
+#if __myDebug__
   otbGenericMsgDebugMacro( << " down sampling output regions by a factor of " << GetSubsampleImageFactor() );
   otbGenericMsgDebugMacro( << "initial region    " << this->GetInput()->GetLargestPossibleRegion().GetSize()[0]
     << "," << this->GetInput()->GetLargestPossibleRegion().GetSize()[1] );
@@ -95,7 +95,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
 WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
-::GenerateInputRequestedRegion () 
+::GenerateInputRequestedRegion ()
   throw ( itk::InvalidRequestedRegionError )
 {
   Superclass::GenerateInputRequestedRegion();
@@ -146,7 +146,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
     // Check the dimension
     for ( unsigned int i = 0; i < InputImageDimension; i++ )
     {
-      if ( ( m_SubsampleImageFactor 
+      if ( ( m_SubsampleImageFactor
             * ( this->GetInput()->GetRequestedRegion().GetSize()[i] / m_SubsampleImageFactor ) )
           != this->GetInput()->GetRequestedRegion().GetSize()[i] )
       {
@@ -169,7 +169,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
       }
 
       OutputImageRegionType intermediateRegion;
-      this->Superclass::CallCopyInputRegionToOutputRegion( intermediateRegion, 
+      this->Superclass::CallCopyInputRegionToOutputRegion( intermediateRegion,
         this->GetInput()->GetLargestPossibleRegion() );
 
       AllocateInternalData( intermediateRegion );
@@ -180,14 +180,14 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
 WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
-::AllocateInternalData 
+::AllocateInternalData
 ( const OutputImageRegionType& outputRegion )
 {
   OutputImageRegionType smallerRegion, largerRegion = outputRegion;
 
   for ( unsigned int direction = 0; direction < InputImageDimension-1; direction++ )
   {
-    this->CallCopyInputRegionToOutputRegion( InputImageDimension-1-direction, 
+    this->CallCopyInputRegionToOutputRegion( InputImageDimension-1-direction,
         smallerRegion, largerRegion );
 
     for ( unsigned int i = 0; i < m_InternalImages[direction].size(); i++ )
@@ -216,7 +216,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
 WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
-::CallCopyOutputRegionToInputRegion 
+::CallCopyOutputRegionToInputRegion
 ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion )
 {
   Superclass::CallCopyOutputRegionToInputRegion( destRegion, srcRegion );
@@ -238,7 +238,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
     destRegion.SetIndex( destIndex );
     destRegion.SetSize( destSize );
 
-#if 0 
+#if 0
     // Contrairement a INVERSE, ici ca ne sera a rien apparemment...
 
     // Region Padding
@@ -261,7 +261,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
     for ( unsigned int i = 1; i < InputImageDimension; i++ )
       radius[i] = 0;
 
-    InputImageRegionType paddedRegion = destRegion;  
+    InputImageRegionType paddedRegion = destRegion;
     paddedRegion.PadByRadius( radius );
 
     if ( paddedRegion.Crop( this->GetInput()->GetLargestPossibleRegion() ) )
@@ -276,7 +276,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
 WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
-::CallCopyOutputRegionToInputRegion 
+::CallCopyOutputRegionToInputRegion
 ( unsigned int direction,
   InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion )
 {
@@ -313,7 +313,7 @@ template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
 WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 ::CallCopyInputRegionToOutputRegion
-( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )	 
+( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )
 {
   Superclass::CallCopyInputRegionToOutputRegion( destRegion, srcRegion );
 
@@ -341,7 +341,7 @@ void
 WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 ::CallCopyInputRegionToOutputRegion
 ( unsigned int direction,
-  OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )	 
+  OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )
 {
   Superclass::CallCopyInputRegionToOutputRegion( destRegion, srcRegion );
 
@@ -375,7 +375,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
 WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
-::ThreadedGenerateData 
+::ThreadedGenerateData
 ( const OutputImageRegionType& outputRegionForThread, int threadId )
 {
   unsigned int dir = InputImageDimension-1;
@@ -388,7 +388,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
     throw itk::ExceptionObject( __FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION );
   }
 
-  itk::ProgressReporter reporter ( this, threadId, 
+  itk::ProgressReporter reporter ( this, threadId,
     outputRegionForThread.GetNumberOfPixels() * this->GetNumberOfOutputs() * 2 );
 
   const InputImageType * input = this->GetInput();
@@ -479,7 +479,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
   }
 
   if ( dir > 0 )
-  { 
+  {
     // Note that outputImageRegion correspond to the actual region of (local) input !
     OutputImageRegionType outputImageRegion;
     this->CallCopyInputRegionToOutputRegion( dir, outputImageRegion, inputRegionForThread );
@@ -528,7 +528,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
   typedef itk::ConstNeighborhoodIterator< OutputImageType > NeighborhoodIteratorType;
   typedef itk::NeighborhoodInnerProduct< OutputImageType > InnerProductType;
   typedef itk::ImageRegionIterator< OutputImageType > IteratorType;
-  typedef typename itk::NeighborhoodAlgorithm  
+  typedef typename itk::NeighborhoodAlgorithm
     ::ImageBoundaryFacesCalculator< OutputImageType > FaceCalculatorType;
   typedef typename FaceCalculatorType::FaceListType FaceListType;
   typedef typename FaceListType::iterator FaceListIterator;
@@ -556,7 +556,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
   itk::PeriodicBoundaryCondition< OutputImageType > boundaryCondition;
   //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
   itHighPass.OverrideBoundaryCondition( &boundaryCondition );
-  
+
   IteratorType outHighPass ( outputHighPass, subItHighPass.GenerateOutputInformation() );
   outHighPass.GoToBegin();
 
@@ -600,9 +600,9 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 
   // Swap input and lowPassOutput
   itk::ImageRegionConstIterator< OutputImageType > inIt ( outputLowPass, outputImageRegion );
-  IteratorType outIt ( ( direction != 0 && m_SubsampleImageFactor > 1 ) ? 
-                         static_cast<OutputImageType*>( m_InternalImages[direction-2][idx/(1<<(direction-1))] ) 
-                          : this->GetOutput( idx ), 
+  IteratorType outIt ( ( direction != 0 && m_SubsampleImageFactor > 1 ) ?
+                         static_cast<OutputImageType*>( m_InternalImages[direction-2][idx/(1<<(direction-1))] )
+                          : this->GetOutput( idx ),
                         outputImageRegion );
 
   for ( inIt.GoToBegin(), outIt.GoToBegin(); !inIt.IsAtEnd(); ++inIt, ++outIt )
@@ -649,7 +649,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
       if ( this->GetInput(0)->GetLargestPossibleRegion().GetSize()[dim]
           != this->GetInput(i)->GetLargestPossibleRegion().GetSize()[dim] )
       {
-        throw itk::ExceptionObject( __FILE__, __LINE__, 
+        throw itk::ExceptionObject( __FILE__, __LINE__,
           "Input images are not of the same dimension", ITK_LOCATION );
       }
     }
@@ -659,7 +659,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 #if __myDebug__
   otbGenericMsgDebugMacro( << " up sampling output regions by a factor of " << GetSubsampleImageFactor() );
 
-  otbGenericMsgDebugMacro( << "initial region    " 
+  otbGenericMsgDebugMacro( << "initial region    "
     << this->GetInput(0)->GetLargestPossibleRegion().GetSize()[0]
     << "," << this->GetInput(0)->GetLargestPossibleRegion().GetSize()[1] );
 #endif
@@ -676,7 +676,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
 WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
-::GenerateInputRequestedRegion () 
+::GenerateInputRequestedRegion ()
   throw ( itk::InvalidRequestedRegionError )
 {
   Superclass::GenerateInputRequestedRegion();
@@ -736,7 +736,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
     }
 
     OutputImageRegionType intermediateRegion;
-    Superclass::CallCopyInputRegionToOutputRegion( intermediateRegion, 
+    Superclass::CallCopyInputRegionToOutputRegion( intermediateRegion,
       this->GetInput(0)->GetLargestPossibleRegion() );
 
     AllocateInternalData( intermediateRegion );
@@ -746,14 +746,14 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
 WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
-::AllocateInternalData 
+::AllocateInternalData
 ( const OutputImageRegionType& outputRegion )
 {
   OutputImageRegionType largerRegion, smallerRegion = outputRegion;
 
   for ( unsigned int direction = 0; direction < InputImageDimension-1; direction++ )
   {
-    this->CallCopyInputRegionToOutputRegion( direction, 
+    this->CallCopyInputRegionToOutputRegion( direction,
         largerRegion, smallerRegion );
 
     for ( unsigned int i = 0; i < m_InternalImages[direction].size(); i++ )
@@ -782,7 +782,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
 WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
-::CallCopyOutputRegionToInputRegion 
+::CallCopyOutputRegionToInputRegion
 ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion )
 {
   Superclass::CallCopyOutputRegionToInputRegion( destRegion, srcRegion );
@@ -811,7 +811,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
     lowPassOperator.SetUpSampleFactor( this->GetUpSampleFilterFactor() );
     lowPassOperator.CreateDirectional();
 
-    unsigned long radius [ InputImageDimension ];
+    long int radius [ InputImageDimension ];
     radius[0] = lowPassOperator.GetRadius()[0];
 
     HighPassOperatorType highPassOperator;
@@ -825,7 +825,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
     for ( unsigned int i = 1; i < InputImageDimension; i++ )
       radius[i] = 0;
 
-    InputImageRegionType paddedRegion = destRegion;  
+    InputImageRegionType paddedRegion = destRegion;
     paddedRegion.PadByRadius( radius );
 
     if ( paddedRegion.Crop( this->GetInput(0)->GetLargestPossibleRegion() ) )
@@ -840,7 +840,7 @@ template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
 WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 ::CallCopyInputRegionToOutputRegion
-( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )	 
+( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )
 {
   Superclass::CallCopyInputRegionToOutputRegion( destRegion, srcRegion );
 
@@ -866,7 +866,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
 WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
-::CallCopyOutputRegionToInputRegion 
+::CallCopyOutputRegionToInputRegion
 ( unsigned int direction,
   InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion )
 {
@@ -904,7 +904,7 @@ void
 WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 ::CallCopyInputRegionToOutputRegion
 ( unsigned int direction,
-  OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )	 
+  OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )
 {
   Superclass::CallCopyInputRegionToOutputRegion( destRegion, srcRegion );
 
@@ -938,16 +938,16 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
 WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
-::ThreadedGenerateData 
+::ThreadedGenerateData
 ( const OutputImageRegionType& outputRegionForThread, int threadId )
 {
-  itk::ProgressReporter reporter ( this, threadId, 
+  itk::ProgressReporter reporter ( this, threadId,
     outputRegionForThread.GetNumberOfPixels() * this->GetNumberOfInputs() );
 
   InputImageRegionType inputRegionForThread;
 	this->CallCopyOutputRegionToInputRegion( inputRegionForThread, outputRegionForThread );
-  
-  unsigned int dir = 0; 
+
+  unsigned int dir = 0;
 
   // Low pass part calculation
   LowPassOperatorType lowPassOperator;
@@ -980,7 +980,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 
 
   // The multiresolution case requires a SubsampleImageFilter step
-  if ( m_SubsampleImageFactor > 1 ) 
+  if ( m_SubsampleImageFactor > 1 )
   {
     for ( unsigned int i = 0; i < this->GetNumberOfInputs(); i+=2 )
     {
@@ -1036,16 +1036,16 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 
       InnerProductType innerProduct;
 
-      itk::ImageRegionIterator< OutputImageType > out 
+      itk::ImageRegionIterator< OutputImageType > out
         ( outputImage, overSampledLowPass->GetOutput()->GetRequestedRegion() );
 
-      NeighborhoodIteratorType lowIter ( lowPassOperator.GetRadius(), 
+      NeighborhoodIteratorType lowIter ( lowPassOperator.GetRadius(),
         overSampledLowPass->GetOutput(), overSampledLowPass->GetOutput()->GetRequestedRegion() );
       itk::PeriodicBoundaryCondition< OutputImageType > boundaryCondition;
       //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
       lowIter.OverrideBoundaryCondition( &boundaryCondition );
 
-      NeighborhoodIteratorType highIter ( highPassOperator.GetRadius(), 
+      NeighborhoodIteratorType highIter ( highPassOperator.GetRadius(),
         overSampledHighPass->GetOutput(), overSampledHighPass->GetOutput()->GetRequestedRegion()  );
       highIter.OverrideBoundaryCondition( &boundaryCondition );
 
@@ -1054,8 +1054,8 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
       out.GoToBegin();
 
       while ( !out.IsAtEnd() )
-      {  
-        out.Set( innerProduct( lowIter, lowPassOperator ) 
+      {
+        out.Set( innerProduct( lowIter, lowPassOperator )
                    + innerProduct( highIter, highPassOperator ) );
 
         ++lowIter;
@@ -1079,7 +1079,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
         outputImage = m_InternalImages[0][i/2];
       }
 
-      FaceCalculatorType faceCalculator;  
+      FaceCalculatorType faceCalculator;
       FaceListType faceList;
       faceList = faceCalculator( imgLowPass, imgLowPass->GetRequestedRegion(), radiusMax );
 
@@ -1102,8 +1102,8 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
         out.GoToBegin();
 
         while ( !out.IsAtEnd() )
-        {  
-          out.Set( ( innerProduct( lowIter, lowPassOperator ) 
+        {
+          out.Set( ( innerProduct( lowIter, lowPassOperator )
                      + innerProduct( highIter, highPassOperator ) ) / 2. );
 
           ++lowIter;
@@ -1131,7 +1131,7 @@ template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
 WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 ::ThreadedGenerateDataAtDimensionN
-( unsigned int direction, 
+( unsigned int direction,
   itk::ProgressReporter & reporter,
   const OutputImageRegionType& outputRegionForThread, int threadId )
 {
@@ -1168,7 +1168,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
   }
 
   // The multiresolution case requires a SubsampleImageFilter step
-  if ( m_SubsampleImageFactor > 1 ) 
+  if ( m_SubsampleImageFactor > 1 )
   {
     for ( unsigned int i = 0; i < m_InternalImages[direction-1].size(); i+=2 )
     {
@@ -1223,17 +1223,17 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
       overSampledHighPass->Update();
 
       InnerProductType innerProduct;
-        
-      itk::ImageRegionIterator< OutputImageType > out ( outputImage, 
+
+      itk::ImageRegionIterator< OutputImageType > out ( outputImage,
         overSampledLowPass->GetOutput()->GetRequestedRegion() );
 
-      NeighborhoodIteratorType lowIter ( lowPassOperator.GetRadius(), 
+      NeighborhoodIteratorType lowIter ( lowPassOperator.GetRadius(),
         overSampledLowPass->GetOutput(), overSampledLowPass->GetOutput()->GetRequestedRegion() );
       itk::PeriodicBoundaryCondition< OutputImageType > boundaryCondition;
       //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
       lowIter.OverrideBoundaryCondition( &boundaryCondition );
 
-      NeighborhoodIteratorType highIter ( highPassOperator.GetRadius(), 
+      NeighborhoodIteratorType highIter ( highPassOperator.GetRadius(),
         overSampledHighPass->GetOutput(), overSampledHighPass->GetOutput()->GetRequestedRegion() );
       highIter.OverrideBoundaryCondition( &boundaryCondition );
 
@@ -1242,8 +1242,8 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
       out.GoToBegin();
 
       while ( !out.IsAtEnd() )
-      {  
-        out.Set( innerProduct( lowIter, lowPassOperator ) 
+      {
+        out.Set( innerProduct( lowIter, lowPassOperator )
                     + innerProduct( highIter, highPassOperator ) );
 
         ++lowIter;
@@ -1268,7 +1268,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
       }
 
       InnerProductType innerProduct;
-      FaceCalculatorType faceCalculator;  
+      FaceCalculatorType faceCalculator;
       FaceListType faceList;
       faceList = faceCalculator( imgLowPass, imgLowPass->GetRequestedRegion(), radiusMax );
 
@@ -1289,8 +1289,8 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
         out.GoToBegin();
 
         while ( !out.IsAtEnd() )
-        {  
-          out.Set( ( innerProduct( lowIter, lowPassOperator ) 
+        {
+          out.Set( ( innerProduct( lowIter, lowPassOperator )
                       + innerProduct( highIter, highPassOperator ) ) / 2. );
 
           ++lowIter;
