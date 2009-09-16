@@ -546,7 +546,7 @@ bool KMLVectorDataIO<TData>::CanWriteFile( const char* filename ) const
 }
 
 template<class TData>
-void KMLVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
+    void KMLVectorDataIO<TData>::Write(const VectorDataConstPointerType data, char ** papszOptions)
 {
   itk::TimeProbe chrono;
   chrono.Start();
