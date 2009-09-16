@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: otb 3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-11 17:45+0800\n"
+"POT-Creation-Date: 2009-09-16 12:53+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -80,7 +80,7 @@ msgstr ""
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:80
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:313
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:522
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:577
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:576
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:221
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:493
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:538
@@ -424,6 +424,7 @@ msgstr ""
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:43
 #: OrthoFusion/otbOrthoFusionGUI.cxx:445 OrthoRectif/otbOrthoRectifGUI.cxx:417
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:253
+#: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1185
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:71
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:169
 #: Segmentation/otbSegmentationApplicationViewGroup.cxx:92
@@ -795,6 +796,7 @@ msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:855
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:425
+#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:585
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:330
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:710
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:366
@@ -1870,6 +1872,7 @@ msgid ""
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:308
+#: Pireo/PireoViewerGUI.cxx:534
 msgid "Fixed"
 msgstr ""
 
@@ -1878,6 +1881,7 @@ msgid "Show or hide the fixed image in the color composition"
 msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:320
+#: Pireo/PireoViewerGUI.cxx:556
 msgid "Moving"
 msgstr ""
 
@@ -2280,7 +2284,7 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:182
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:274
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:182
-msgid "Open an image in a  new image viewer"
+msgid "Open an image in a new image viewer"
 msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:456 OrthoRectif/otbOrthoRectifGUI.cxx:428
@@ -2926,20 +2930,8 @@ msgstr ""
 msgid "VTK Window"
 msgstr ""
 
-#: Pireo/PireoViewerGUI.cxx:523
-msgid "ZoomFixedImage"
-msgstr ""
-
-#: Pireo/PireoViewerGUI.cxx:534
-msgid "FixedImage"
-msgstr ""
-
-#: Pireo/PireoViewerGUI.cxx:545
-msgid "ZoomMovingImage"
-msgstr ""
-
-#: Pireo/PireoViewerGUI.cxx:556
-msgid "MovingImage"
+#: Pireo/PireoViewerGUI.cxx:523 Pireo/PireoViewerGUI.cxx:545
+msgid "Zoom"
 msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:581 Pireo/PireoViewerGUI.cxx:630
@@ -3542,10 +3534,6 @@ msgstr ""
 msgid "Import a polarimetric vector image"
 msgstr ""
 
-#: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1185
-msgid "Open images"
-msgstr ""
-
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1186
 msgid "Import images corresponding to the HH, HV, VH, VV channels"
 msgstr ""
@@ -3731,10 +3719,6 @@ msgstr ""
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:579
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:740
 msgid "Radiative Terms"
-msgstr ""
-
-#: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:585
-msgid "Channel Index"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:600
@@ -4269,7 +4253,7 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:258
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:506
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:323
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:545
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:544
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:258
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:506
 msgid "Slideshow"
@@ -4352,7 +4336,6 @@ msgstr ""
 
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:466
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:495
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:533
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:466
 msgid "List of image viewers already linked with the selected image viewer"
 msgstr ""
@@ -4376,43 +4359,43 @@ msgid "Leave the link set up interface"
 msgstr ""
 
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:512
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:551
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:550
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:512
 msgid "Progress"
 msgstr ""
 
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:513
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:552
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:551
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:513
 msgid "Position in diaporama"
 msgstr ""
 
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:518
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:557
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:556
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:518
 msgid "Previous"
 msgstr ""
 
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:519
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:558
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:557
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:519
 msgid "Previous image in diaporama"
 msgstr ""
 
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:528
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:567
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:566
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:528
 msgid "Next"
 msgstr ""
 
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:529
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:568
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:567
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:529
 msgid "Next image in diaporama"
 msgstr ""
 
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:539
-#: ViewerManager/otbImageViewerManagerViewGroup.cxx:578
+#: ViewerManager/otbImageViewerManagerViewGroup.cxx:577
 #: ViewerManagerOld/otbImageViewerManagerGUI.cxx:539
 msgid "Leave diaporama mode"
 msgstr ""
@@ -4598,5 +4581,5 @@ msgid "First image"
 msgstr ""
 
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:532
-msgid "SecondImage"
+msgid "Second"
 msgstr ""
