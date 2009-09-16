@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkSimplexMeshToTriangleMeshFilter.h,v $
 Language:  C++
-Date:      $Date: 2009-05-12 17:22:53 $
-Version:   $Revision: 1.8 $
+Date:      $Date: 2009-06-13 17:42:56 $
+Version:   $Revision: 1.9 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -112,10 +112,13 @@ public:
      */
     void Visit(unsigned long cellId, SimplexPolygonType * poly)
       {
-      typedef typename SimplexPolygonType::PointIdIterator   PointIdIterator;
+      typedef typename SimplexPolygonType::PointIdIterator  PointIdIterator;
       PointIdIterator  it =  poly->PointIdsBegin();
-      InputPointType center,p;
+      InputPointType center;
       center.Fill(0);
+
+      InputPointType p;
+      p.Fill(0);
 
       while ( it != poly->PointIdsEnd() )
         {

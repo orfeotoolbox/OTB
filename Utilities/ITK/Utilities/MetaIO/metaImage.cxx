@@ -3,8 +3,8 @@
   Program:   MetaIO
   Module:    $RCSfile: metaImage.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-03-06 03:24:05 $
-  Version:   $Revision: 1.115 $
+  Date:      $Date: 2009-07-20 15:34:20 $
+  Version:   $Revision: 1.119 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -697,8 +697,12 @@ ElementNumberOfChannels(int _elementNumberOfChannels)
 //
 //
 void MetaImage::
-ElementByteOrderSwap(void)
+ElementByteOrderSwap(METAIO_STL::streamsize _quantity)
   {
+  
+  // use the user provided value if provided or the internal ivar
+  METAIO_STL::streamsize quantity = _quantity ? _quantity : m_Quantity;
+
   if(META_DEBUG)
     {
     METAIO_STREAM::cout << "MetaImage: ElementByteOrderSwap"
@@ -718,7 +722,7 @@ ElementByteOrderSwap(void)
     case 2:
       {
       int i;
-      for(i=0; i<m_Quantity*m_ElementNumberOfChannels; i++)
+      for(i=0; i<quantity*m_ElementNumberOfChannels; i++)
         {
         ((MET_USHORT_TYPE *)m_ElementData)[i] =
               MET_ByteOrderSwapShort(((MET_USHORT_TYPE *)m_ElementData)[i]);
@@ -728,7 +732,7 @@ ElementByteOrderSwap(void)
     case 4:
       {
       int i;
-      for(i=0; i<m_Quantity*m_ElementNumberOfChannels; i++)
+      for(i=0; i<quantity*m_ElementNumberOfChannels; i++)
         {
         ((MET_UINT_TYPE *)m_ElementData)[i] =
               MET_ByteOrderSwapLong(((MET_UINT_TYPE *)m_ElementData)[i]);
@@ -739,7 +743,7 @@ ElementByteOrderSwap(void)
       {
       int i;
       char* data = (char*)m_ElementData;
-      for(i=0; i<m_Quantity*m_ElementNumberOfChannels; i++)
+      for(i=0; i<quantity*m_ElementNumberOfChannels; i++)
         {
         MET_ByteOrderSwap8(data);
         data += 8;
@@ -751,11 +755,11 @@ ElementByteOrderSwap(void)
   }
 
 bool MetaImage::
-ElementByteOrderFix(void)
+ElementByteOrderFix(METAIO_STL::streamsize _quantity)
   {
   if(m_BinaryDataByteOrderMSB != MET_SystemByteOrderMSB())
     {
-    ElementByteOrderSwap();
+    ElementByteOrderSwap(_quantity);
     return true;
     }
   return true;
@@ -1257,8 +1261,9 @@ ReadStream(int _nDims,
         }
       for(i=0; i<nWrds; i++)
         {
-        delete [] wrds[i++];
+        delete [] wrds[i];
         }
+      delete [] wrds;
       if ( (fileImageDim == 0) || (fileImageDim > m_NDims) )
         {
         // if optional file dimension size is not give or is larger than
@@ -1377,6 +1382,11 @@ ReadStream(int _nDims,
         readStreamTemp->close();
         }
       delete readStreamTemp;
+      for(i=0; i<nWrds; i++)
+        {
+        delete [] wrds[i];
+        }
+      delete [] wrds;
       }
     else
       {
@@ -2789,8 +2799,9 @@ bool MetaImage::ReadROIStream(int * _indexMin, int * _indexMax,
         }
       for(i=0; i<nWrds; i++)
         {
-        delete [] wrds[i++];
+        delete [] wrds[i];
         }
+      delete [] wrds;
       if ( (fileImageDim == 0) || (fileImageDim > m_NDims) )
         {
         // if optional file dimension size is not give or is larger than
@@ -2961,8 +2972,9 @@ bool MetaImage::ReadROIStream(int * _indexMin, int * _indexMax,
      
       for(i=0; i<nWrds; i++)
         {
-        delete [] wrds[i++];
+        delete [] wrds[i];
         }
+      delete [] wrds;
           
       delete readStreamTemp;
       }

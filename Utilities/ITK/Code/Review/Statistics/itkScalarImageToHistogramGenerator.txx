@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarImageToHistogramGenerator.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-05 19:44:33 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-08-17 18:29:01 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -30,11 +30,7 @@ ScalarImageToHistogramGenerator< TImage >
 {
   m_ImageToListAdaptor = AdaptorType::New();
   m_HistogramGenerator = GeneratorType::New();
-#ifdef ITK_USE_REVIEW_STATISTICS
   m_HistogramGenerator->SetInput( m_ImageToListAdaptor );
-#else
-  m_HistogramGenerator->SetListSample( m_ImageToListAdaptor );
-#endif
 }
 
 template < class TImage >
@@ -68,14 +64,9 @@ ScalarImageToHistogramGenerator< TImage >
 ::SetNumberOfBins( unsigned int numberOfBins ) 
 {
   typename HistogramType::SizeType size;
-#ifdef ITK_USE_REVIEW_STATISTICS
   size.SetSize(1);
   size.Fill( numberOfBins );
   m_HistogramGenerator->SetHistogramSize( size );
-#else
-  size.Fill( numberOfBins );
-  m_HistogramGenerator->SetNumberOfBins( size );
-#endif
 }
 
 
@@ -84,10 +75,10 @@ void
 ScalarImageToHistogramGenerator< TImage >
 ::SetHistogramMin( RealPixelType minimumValue ) 
 {
-  typedef typename GeneratorType::MeasurementVectorType     MeasurementVectorType;
+  typedef typename GeneratorType::HistogramMeasurementVectorType     MeasurementVectorType;
   MeasurementVectorType minVector;
   minVector[0] = minimumValue;
-  m_HistogramGenerator->SetHistogramMin( minVector );
+  m_HistogramGenerator->SetHistogramBinMinimum( minVector );
 }
 
 
@@ -96,10 +87,10 @@ void
 ScalarImageToHistogramGenerator< TImage >
 ::SetHistogramMax( RealPixelType maximumValue ) 
 {
-  typedef typename GeneratorType::MeasurementVectorType     MeasurementVectorType;
+  typedef typename GeneratorType::HistogramMeasurementVectorType     MeasurementVectorType;
   MeasurementVectorType maxVector;
   maxVector[0] = maximumValue;
-  m_HistogramGenerator->SetHistogramMax( maxVector );
+  m_HistogramGenerator->SetHistogramBinMaximum( maxVector );
 }
 
 template < class TImage >

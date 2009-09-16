@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageBase.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-05 17:10:16 $
-  Version:   $Revision: 1.56 $
+  Date:      $Date: 2009-08-15 08:03:36 $
+  Version:   $Revision: 1.60 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -203,15 +203,23 @@ void
 ImageBase<VImageDimension>
 ::ComputeOffsetTable()
 {
+  // vxl_uint_64 num=1;
   OffsetValueType num=1;
   const SizeType& bufferSize = this->GetBufferedRegion().GetSize();
 
+  // m_OffsetTable[0] = (OffsetValueType)num;
   m_OffsetTable[0] = num;
   for (unsigned int i=0; i < VImageDimension; i++)
     {
     num *= bufferSize[i];
+    // m_OffsetTable[i+1] = (OffsetValueType)num;
     m_OffsetTable[i+1] = num;
     }
+  // if( num > NumericTraits<SizeValueType>::max() )
+  //   {
+  //   itkExceptionMacro(<< "Requested number of pixels (" << num
+  //     << ") is greater than the largest possible number of pixels (" << NumericTraits<SizeValueType>::max() << ").");
+  //   }
 }
 
 

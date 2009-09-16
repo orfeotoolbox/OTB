@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRGBAPixel.h,v $
   Language:  C++
-  Date:      $Date: 2009-03-12 01:11:14 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2009-07-31 12:54:40 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -82,7 +82,8 @@ public:
     { this->Fill(r);}
   
   /** Pass-through constructor for the Array base class. */
-  RGBAPixel(const Self& r): BaseArray(r) {}
+  template< class TRGBAPixelValueType >
+  RGBAPixel(const RGBAPixel< TRGBAPixelValueType >& r): BaseArray(r) {}
   RGBAPixel(const ComponentType  r[4]): BaseArray(r) {}  
     
   /** Pass-through assignment operator for the Array base class. */

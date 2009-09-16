@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAreaOpeningImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-20 17:33:49 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-06-17 12:17:54 $
+  Version:   $Revision: 1.4 $
 
   Copyright ( c ) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,6 +44,12 @@ namespace itk
  * Attempts at implementing the method from ISMM 2000 are also
  * included, but operation appears incorrect. Check the ifdefs if you
  * are interested.
+ *
+ * This code was contributed in the Insight Journal paper
+ *
+ * http://hdl.handle.net/1926/1316
+ * http://www.insight-journal.org/browse/publication/203
+ *
  *
  * \author Richard Beare. Department of Medicine, Monash University, Melbourne, Australia.
  *

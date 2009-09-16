@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptimizer.h,v $
   Language:  C++
-  Date:      $Date: 2008-04-23 12:49:10 $
-  Version:   $Revision: 1.38 $
+  Date:      $Date: 2009-06-24 12:02:54 $
+  Version:   $Revision: 1.39 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -79,6 +79,9 @@ public:
   /** Start optimization. */
   virtual void StartOptimization() {};
 
+  /** Get the reason for termination */
+  virtual const std::string GetStopConditionDescription() const;
+
 protected:
   Optimizer();
   virtual ~Optimizer() {};
@@ -100,7 +103,6 @@ private:
   
   ParametersType          m_InitialPosition;
   ScalesType              m_Scales;
-
 };
 
 } // end namespace itk

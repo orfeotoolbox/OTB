@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMaximumDecisionRule2.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-02 05:43:58 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-06-15 12:40:37 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,7 +38,7 @@ public:
   typedef SmartPointer<const Self>                  ConstPointer;
 
   /** Run-time type information (and related methods) */
-  itkTypeMacro(MaximumDecisionRule2, DecisionRuleBase);
+  itkTypeMacro(MaximumDecisionRule2, DecisionRule);
 
   /** Standard New() method support */
   itkNewMacro(Self);

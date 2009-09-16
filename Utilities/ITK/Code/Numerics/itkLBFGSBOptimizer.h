@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLBFGSBOptimizer.h,v $
   Language:  C++
-  Date:      $Date: 2007-11-13 14:56:49 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-06-24 12:02:52 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -159,6 +159,9 @@ public:
    * function. */
   itkGetConstReferenceMacro( InfinityNormOfProjectedGradient, double );
 
+  /** Get the reason for termination */
+  const std::string GetStopConditionDescription() const;
+
 protected:
   LBFGSBOptimizer();
   virtual ~LBFGSBOptimizer();
@@ -176,7 +179,7 @@ private:
 
   bool                     m_OptimizerInitialized;
   InternalOptimizerType  * m_VnlOptimizer;
-
+  mutable OStringStream    m_StopConditionDescription;
   BoundValueType           m_LowerBound;
   BoundValueType           m_UpperBound;
   BoundSelectionType       m_BoundSelection;

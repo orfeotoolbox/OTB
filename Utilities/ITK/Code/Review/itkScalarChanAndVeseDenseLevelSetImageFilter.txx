@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarChanAndVeseDenseLevelSetImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-20 22:03:45 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-08-06 01:46:47 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -22,33 +22,22 @@
 
 namespace itk
 {
-template < class TInput,
-  class TFeature,
-  class TFunction,
-  class TOutputPixel,
+template < class TInputImage, class TFeatureImage, class TOutputImage, class TFunction,
   class TSharedData >
 void
-ScalarChanAndVeseDenseLevelSetImageFilter< TInput, TFeature,
-  TFunction, TOutputPixel, TSharedData >::
+ScalarChanAndVeseDenseLevelSetImageFilter< TInputImage, TFeatureImage, TOutputImage,
+TFunction, TSharedData >::
 Initialize()
 {
   // Set the feature image for the individual level-set functions
-  for( unsigned int i = 0; i < this->m_FunctionCount; i++)
+  for( unsigned int fId = 0; fId < this->m_FunctionCount; ++fId )
     {
-    InputImagePointer input = this->m_LevelSet[i];
+    InputImagePointer input = this->m_LevelSet[fId];
     InputPointType origin = input->GetOrigin();
-    InputSpacingType spacing = input->GetSpacing();
 
     // In the context of the global coordinates
     FeatureIndexType start;
-
-    // FIXME: This is suspicious code. It looks like we should
-    // have used first IndexToPhysicalPoint and then PhysicalPointToIndex
-    // as it was done in the ShrinkImagefilter...
-    for ( unsigned int j = 0; j < ImageDimension; j++ )
-      {
-      start[j] = static_cast<FeatureIndexValueType>( origin[j]/spacing[j] );
-      }
+    this->GetInput()->TransformPhysicalPointToIndex( origin, start );
 
     // Defining roi region
     FeatureRegionType region;
@@ -57,14 +46,14 @@ Initialize()
 
     // Initialize the ROI filter with the feature image
     ROIFilterPointer roi = ROIFilterType::New();
-    roi->SetInput( this->GetFeatureImage() );
+    roi->SetInput( this->GetInput() );
     roi->SetRegionOfInterest( region );
     roi->Update();
 
     // Assign roi output
     FeatureImagePointer feature = roi->GetOutput();
-    this->m_DifferenceFunctions[i]->SetFeatureImage( feature );
-    this->m_DifferenceFunctions[i]->SetInitialImage( input );
+    this->m_DifferenceFunctions[fId]->SetFeatureImage( feature );
+    this->m_DifferenceFunctions[fId]->CalculateAdvectionImage();
     }
 
   // Initialize the function count in shared data
@@ -76,57 +65,46 @@ Initialize()
     this->m_SharedData->SetKdTree( this->m_KdTree );
     }
 
-  for ( unsigned int i = 0; i < this->m_FunctionCount; i++ )
+  for ( unsigned int fId = 0; fId < this->m_FunctionCount; ++fId )
     {
-    this->m_DifferenceFunctions[i]->SetFunctionId( i );
+    this->m_DifferenceFunctions[fId]->SetFunctionId( fId );
 
-    this->m_SharedData->CreateHeavisideFunctionOfLevelSetImage ( i, this->m_LevelSet[i] );
+    this->m_SharedData->CreateHeavisideFunctionOfLevelSetImage ( fId, this->m_LevelSet[fId] );
 
     // Share the this->m_SharedData structure
-    this->m_DifferenceFunctions[i]->SetSharedData( this->m_SharedData );
+    this->m_DifferenceFunctions[fId]->SetSharedData( this->m_SharedData );
     }
 
-  this->m_SharedData->AllocateListImage( this->GetFeatureImage() );
+  this->m_SharedData->AllocateListImage( this->GetInput() );
 
   this->m_SharedData->PopulateListImage();
 
   this->Superclass::Initialize();
-
-  for (unsigned int i = 0; i < this->m_FunctionCount; i++)
-    {
-    this->m_DifferenceFunctions[i]->UpdateSharedData(true);
-    }
-
-  for ( unsigned int i = 0; i < this->m_FunctionCount; i++ )
-    {
-    this->m_DifferenceFunctions[i]->UpdateSharedData( false );
-    }
 }
 
 
 /** Overrides parent implementation */
 // This function is called at the end of each iteration
-template < class TInput,
-  class TFeature,
-  class TFunction,
-  class TOutputPixel,
+template < class TInputImage, class TFeatureImage, class TOutputImage, class TFunction,
   class TSharedData >
 void
-ScalarChanAndVeseDenseLevelSetImageFilter< TInput, TFeature, TFunction, TOutputPixel, TSharedData >
+ScalarChanAndVeseDenseLevelSetImageFilter< TInputImage, TFeatureImage, TOutputImage,
+TFunction, TSharedData >
 ::InitializeIteration()
 {
   this->Superclass::InitializeIteration();
 
-  for( unsigned int i = 0; i < this->m_FunctionCount; i++ )
+  for( unsigned int fId = 0; fId < this->m_FunctionCount; ++fId )
     {
-    this->m_DifferenceFunctions[i]->SetInitialImage( this->m_LevelSet[i] );
-    this->m_DifferenceFunctions[i]->UpdateSharedData ( true );
+    this->m_DifferenceFunctions[fId]->SetInitialImage( this->m_LevelSet[fId] );
+    this->m_DifferenceFunctions[fId]->UpdateSharedData ( true );
     }
 
-  for( unsigned int i = 0; i < this->m_FunctionCount; i++ )
+  for( unsigned int fId = 0; fId < this->m_FunctionCount; ++fId )
     {
-    this->m_DifferenceFunctions[i]->UpdateSharedData ( false );
+    this->m_DifferenceFunctions[fId]->UpdateSharedData ( false );
     }
+
 }
 
 } /* end namespace itk */

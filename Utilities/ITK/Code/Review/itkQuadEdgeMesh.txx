@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMesh.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-08 23:10:22 $
-  Version:   $Revision: 1.54 $
+  Date:      $Date: 2009-07-13 22:57:53 $
+  Version:   $Revision: 1.55 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -1050,7 +1050,8 @@ QuadEdgeMesh< TPixel, VDimension, TTraits >
 {
   if( this->GetEdgeCells()->size() == 0 ) return( (QEPrimal*)0 );
 
-  CellsContainerIterator cit = this->GetEdgeCells()->Begin();
+  const CellsContainer * edgeCells = this->GetEdgeCells();
+  CellsContainerConstIterator cit = edgeCells->Begin();
   EdgeCellType* e = dynamic_cast< EdgeCellType* >( cit.Value( ) );
   return( e->GetQEGeom( ) );
 }

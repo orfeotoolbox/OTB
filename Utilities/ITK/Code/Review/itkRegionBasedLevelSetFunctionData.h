@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRegionBasedLevelSetFunctionData.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-14 21:46:48 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-06-08 04:36:32 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -104,8 +104,12 @@ public:
   typedef typename FeatureImageType::IndexType          FeatureIndexType;
   typedef typename FeatureImageType::PointType          FeaturePointType;
 
+  // Allocates m_HeavisideFunctionOfLevelSetImage to have same origin, 
+  // spacing and size as image. Also sets the m_Start and m_End indices.
   void CreateHeavisideFunctionOfLevelSetImage( const InputImageType * image );
 
+  // Checks if the given index lies in the domain of the current
+  // level-set function. The domain is defined by the start and end indices.
   template< class TIndex >
   bool VerifyInsideRegion( const TIndex& featureIndex )
     {
@@ -120,8 +124,10 @@ public:
     return true;
     }
 
+  // Get the index into the domain of the current level-set function
   InputIndexType GetIndex( const FeatureIndexType& featureIndex );
 
+  // Get the index in the domain of the feature image
   FeatureIndexType GetFeatureIndex( const InputIndexType& inputIndex );
 
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredTransformInitializer.h,v $
   Language:  C++
-  Date:      $Date: 2007-04-11 18:10:06 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-08-15 23:42:49 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -122,7 +122,7 @@ public:
 
 
   /** Initialize the transform using data from the images */
-  virtual void InitializeTransform() const;
+  virtual void InitializeTransform();
 
   /** Select between using the geometrical center of the images or 
       using the center of mass given by the image intensities. */
@@ -138,6 +138,8 @@ protected:
   ~CenteredTransformInitializer(){};
 
   void PrintSelf(std::ostream &os, Indent indent) const;
+
+  itkGetObjectMacro( Transform, TransformType );
 
 private:
   CenteredTransformInitializer(const Self&); //purposely not implemented

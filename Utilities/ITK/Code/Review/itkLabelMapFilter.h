@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelMapFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-16 22:19:30 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-08-15 16:50:00 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -22,6 +22,7 @@
 
 #include "itkImageToImageFilter.h"
 #include "itkProgressReporter.h"
+#include "itkFastMutexLock.h"
 
 namespace itk
 {
@@ -46,7 +47,9 @@ namespace itk
  * \ingroup LabeledImageFilters
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT LabelMapFilter : public ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT LabelMapFilter :
+public
+ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -54,7 +57,6 @@ public:
   typedef ImageToImageFilter<TInputImage, TOutputImage>  Superclass;
   typedef SmartPointer<Self>                             Pointer;
   typedef SmartPointer<const Self>                       ConstPointer;
-  
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(LabelMapFilter,ImageToImageFilter);
@@ -77,10 +79,8 @@ public:
   typedef typename OutputImageType::PixelType      OutputImagePixelType;
 
   /** ImageDimension constants */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** LabelMapFilter requires the entire input to be
    * available. Thus, it needs to provide an implementation of
@@ -113,11 +113,14 @@ protected:
 
   typename FastMutexLock::Pointer m_LabelObjectContainerLock;
 
+  typedef typename InputImageType::LabelObjectContainerType   LabelObjectContainerType;
+  typedef typename LabelObjectContainerType::const_iterator   LabelObjectContainerConstIterator;
+
 private:
   LabelMapFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  typename InputImageType::LabelObjectContainerType::const_iterator m_LabelObjectIterator;
+  LabelObjectContainerConstIterator   m_LabelObjectIterator;
 
   ProgressReporter * m_Progress;
 

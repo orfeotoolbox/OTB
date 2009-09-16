@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIndex.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-17 02:31:26 $
-  Version:   $Revision: 1.62 $
+  Date:      $Date: 2009-07-12 10:52:52 $
+  Version:   $Revision: 1.64 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -240,7 +240,7 @@ public:
    * \warning No bound checking is performed
    * \sa GetIndex()
    * \sa SetElement() */
-  IndexValueType GetElement( unsigned long element )
+  IndexValueType GetElement( unsigned long element ) const
     { return m_Index[ element ]; }
 
   /** Return a basis vector of the form [0, ..., 0, 1, 0, ... 0] where the "1"
@@ -260,20 +260,6 @@ public:
    *    Index<3> index = {5, 2, 7}; */
   IndexValueType m_Index[VIndexDimension];
   
-#ifndef ITK_USE_PORTABLE_ROUND
-  // The Windows implementaton of vnl_math_rnd() does not round the
-  // same way as other versions. It has an assembly "fast" implementation
-  // but with the drawback of rounding to the closest even number.
-  // See: http://www.musicdsp.org/showone.php?id=170
-  // For example 0.5 is rounded down to 0.0.
-  // This conditional code replaces the standard vnl implementation that uses
-  // assembler code. The code below will be slower for windows but will
-  // produce consistent results. This can be removed once vnl_math_rnd is
-  // fixed in VXL.
-#if (defined (VCL_VC) && !defined(__GCCXML__)) || (defined(_MSC_VER) && (_MSC_VER <= 1310))
-#define vnl_math_rnd_halfintup(x) ((x>=0.0)?(int)(x + 0.5):(int)(x - 0.5))
-#endif
-#endif
   /** Copy values from a FixedArray by rounding each one of the components */
   template <class TCoordRep>
   inline void CopyWithRound( const FixedArray<TCoordRep,VIndexDimension> & point )
@@ -283,19 +269,10 @@ public:
 #else
     for(unsigned int i=0;i < VIndexDimension; ++i)
       {
-#ifdef ITK_USE_PORTABLE_ROUND
       m_Index[i] = static_cast< IndexValueType>( itk::Math::Round( point[i] ) );
-#else
-      m_Index[i] = static_cast< IndexValueType>( vnl_math_rnd_halfintup( point[i] ) );
-#endif
       }
 #endif
     }
-#ifndef ITK_USE_PORTABLE_ROUND
-#if (defined (VCL_VC) && !defined(__GCCXML__)) || (defined(_MSC_VER) && (_MSC_VER <= 1310))
-#undef vnl_math_rnd_halfintup
-#endif
-#endif
 
   /** Copy values from a FixedArray by casting each one of the components */
   template <class TCoordRep>

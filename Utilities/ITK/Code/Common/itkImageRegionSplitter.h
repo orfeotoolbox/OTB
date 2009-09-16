@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRegionSplitter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-18 21:13:25 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-08-17 13:39:44 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,8 +40,8 @@ namespace itk
  * region can be divided.  You call GetNumberOfSplits with an argument
  * that is the number of subregions you want.  If the image region can
  * support that number of subregions, that number is returned.
- * Otherwise, the maximum number of splits a region can support will
- * be returned.  For example, if a region splitter class only divides
+ * Otherwise, the maximum number of splits less then or equal to the
+ * argumen  be returned.  For example, if a region splitter class only divides
  * a region into horizontal slabs, then the maximum number of splits
  * will be the number of rows in the region.
  *
@@ -106,7 +106,7 @@ public:
                                          unsigned int requestedNumber);
 
   /** Get a region definition that represents the ith piece a specified region.
-   * The "numberOfPieces" specified should be less than or equal to what
+   * The "numberOfPieces" must be equal to what
    * GetNumberOfSplits() returns. */
   virtual RegionType GetSplit(unsigned int i, unsigned int numberOfPieces,
                               const RegionType &region);

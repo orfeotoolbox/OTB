@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelObjectLine.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-13 14:48:22 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-07-07 17:47:10 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -37,13 +37,6 @@ void LabelObjectLine<VImageDimension>::SetIndex( const IndexType & idx )
 }
 
 template < unsigned int VImageDimension >
-typename LabelObjectLine<VImageDimension>::IndexType & 
-LabelObjectLine<VImageDimension>::GetIndex()
-{
-  return m_Index;
-}
-
-template < unsigned int VImageDimension >
 const typename LabelObjectLine<VImageDimension>::IndexType & 
 LabelObjectLine<VImageDimension>::GetIndex() const
 {
@@ -54,13 +47,6 @@ template < unsigned int VImageDimension >
 void LabelObjectLine<VImageDimension>::SetLength( const LengthType length )
 {
   m_Length = length;
-}
-
-template < unsigned int VImageDimension >
-typename LabelObjectLine<VImageDimension>::LengthType & 
-LabelObjectLine<VImageDimension>::GetLength()
-{
-  return m_Length;
 }
 
 template < unsigned int VImageDimension >

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExhaustiveOptimizer.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-05-06 09:42:44 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-06-24 23:35:49 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -37,6 +37,8 @@ ExhaustiveOptimizer
   m_CurrentIndex.Fill(0);
   m_Stop = false;
   m_NumberOfSteps.Fill(0);
+
+  m_StopConditionDescription.str("");
 }
 
 
@@ -56,6 +58,9 @@ ExhaustiveOptimizer
 {
   itkDebugMacro("StartWalking");
   this->InvokeEvent( StartEvent() );
+  m_StopConditionDescription.str("");
+  m_StopConditionDescription << this->GetNameOfClass() << ": Running";
+
 
   ParametersType initialPos = this->GetInitialPosition();
   m_MinimumMetricValuePosition = initialPos;
@@ -143,6 +148,10 @@ ExhaustiveOptimizer
       break;
       }
 
+    m_StopConditionDescription.str("");
+    m_StopConditionDescription << this->GetNameOfClass() << ": Running. ";
+    m_StopConditionDescription << "@ index " << this->GetCurrentIndex() << " value is " << this->GetCurrentValue();
+
     this->InvokeEvent( IterationEvent() );
     this->AdvanceOneStep();
     m_CurrentIteration++;
@@ -203,6 +212,9 @@ ExhaustiveOptimizer
   if( idx==spaceDimension )
     {
     m_Stop = true;
+    m_StopConditionDescription.str("");
+    m_StopConditionDescription << this->GetNameOfClass() << ": ";
+    m_StopConditionDescription << "Completed sampling of parametric space of size " << spaceDimension;
     }
 
   for(unsigned int i=0; i<spaceDimension; i++)
@@ -213,6 +225,13 @@ ExhaustiveOptimizer
     }
 }
 
+
+const std::string
+ExhaustiveOptimizer
+::GetStopConditionDescription() const
+{
+  return m_StopConditionDescription.str();
+}
 
 void
 ExhaustiveOptimizer

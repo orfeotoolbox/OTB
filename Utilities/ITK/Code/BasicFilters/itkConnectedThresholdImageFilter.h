@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConnectedThresholdImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-25 12:27:20 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2009-06-05 16:06:22 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -129,8 +129,8 @@ public:
 #ifdef ITK_USE_REVIEW
   /** Type of connectivity to use (fully connected OR 4(2D), 6(3D), 
    * 2*N(ND) connectivity) */
-  itkSetMacro( Connectivity, ConnectivityEnumType );
-  itkGetConstMacro( Connectivity, ConnectivityEnumType );
+  itkSetEnumMacro( Connectivity, ConnectivityEnumType );
+  itkGetEnumMacro( Connectivity, ConnectivityEnumType );
 #endif
 
 protected:

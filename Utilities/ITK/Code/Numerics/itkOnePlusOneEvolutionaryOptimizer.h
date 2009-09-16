@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOnePlusOneEvolutionaryOptimizer.h,v $
   Language:  C++
-  Date:      $Date: 2008-08-05 11:15:49 $
-  Version:   $Revision: 1.24 $
+  Date:      $Date: 2009-06-24 12:02:53 $
+  Version:   $Revision: 1.25 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,6 +19,7 @@
 
 #include <itkSingleValuedNonLinearOptimizer.h>
 #include <itkRandomVariateGeneratorBase.h>
+#include <string>
 
 namespace itk
 {
@@ -151,6 +152,8 @@ public:
   itkGetMacro(MetricWorstPossibleValue, double);
   itkSetMacro(MetricWorstPossibleValue, double);
 
+  const std::string GetStopConditionDescription() const;
+
 protected:
   OnePlusOneEvolutionaryOptimizer();
   OnePlusOneEvolutionaryOptimizer(const OnePlusOneEvolutionaryOptimizer&);
@@ -198,6 +201,9 @@ private:
    * By calling StopOptimization, this flag will be set true, and 
    * optimization will stop at the next iteration. */
   bool m_Stop;
+
+  /** Stop description */
+  OStringStream m_StopConditionDescription;
 
   /** Cache variable for reporting the Frobenius Norm
    */

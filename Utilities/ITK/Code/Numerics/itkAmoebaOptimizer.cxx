@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAmoebaOptimizer.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-01-26 13:33:10 $
-  Version:   $Revision: 1.31 $
+  Date:      $Date: 2009-09-12 20:00:29 $
+  Version:   $Revision: 1.33 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -48,6 +48,12 @@ AmoebaOptimizer
   delete m_VnlOptimizer;
 }
 
+const std::string
+AmoebaOptimizer
+::GetStopConditionDescription() const
+{
+  return m_StopConditionDescription.str();
+}
 
 /**
  * PrintSelf
@@ -67,7 +73,6 @@ AmoebaOptimizer
      << (m_AutomaticInitialSimplex ? "On" : "Off") << std::endl;
   os << indent << "InitialSimplexDelta: "
      << m_InitialSimplexDelta << std::endl;
-  
 }
   
 /** Return Current Value */
@@ -164,6 +169,7 @@ AmoebaOptimizer
   CostFunctionAdaptorType * adaptor = 
     new CostFunctionAdaptorType( numberOfParameters );
        
+  SingleValuedNonLinearOptimizer::SetCostFunction( costFunction );
   adaptor->SetCostFunction( costFunction );
 
   if( m_OptimizerInitialized )
@@ -193,6 +199,8 @@ AmoebaOptimizer
 {
     
   this->InvokeEvent( StartEvent() );
+  m_StopConditionDescription.str("");
+  m_StopConditionDescription << this->GetNameOfClass() << ": Running";
 
   if( this->GetMaximize() )
     {
@@ -245,6 +253,26 @@ AmoebaOptimizer
 
   this->SetCurrentPosition( parameters );
     
+  m_StopConditionDescription.str("");
+  m_StopConditionDescription << this->GetNameOfClass() << ": ";
+  if (static_cast<unsigned int>(m_VnlOptimizer->get_num_evaluations())
+      < m_MaximumNumberOfIterations)
+    {
+    m_StopConditionDescription << "Both parameters convergence tolerance ("
+                               << m_ParametersConvergenceTolerance
+                               << ") and function convergence tolerance ("
+                               << m_FunctionConvergenceTolerance
+                               << ") have been met in "
+                               << m_VnlOptimizer->get_num_evaluations()
+                               << " iterations.";
+    }
+  else
+    {
+    m_StopConditionDescription << "Maximum number of iterations exceeded."
+                               << " Number of iterations is "
+                               << m_MaximumNumberOfIterations;
+    
+    }
   this->InvokeEvent( EndEvent() );
 }
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFFTWComplexToComplexImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-18 20:51:59 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-08-13 03:19:20 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -155,13 +155,6 @@ FullMatrix()
   return false;
 }
 
-template <unsigned int NDimension>
-void
-FFTWComplexToComplexImageFilter<float,NDimension>::
-PrintSelf(std::ostream& os,Indent indent) const
-{
-}
-
 #endif // defined(USE_FFTWF)
 
 #if defined(USE_FFTWD)
@@ -268,13 +261,6 @@ FFTWComplexToComplexImageFilter<double,NDimension>::
 FullMatrix()
 {
   return false;
-}
-
-template <unsigned int NDimension>
-void
-FFTWComplexToComplexImageFilter<double,NDimension>::
-PrintSelf(std::ostream& os,Indent indent) const
-{
 }
 
 #endif // defined(USE_FFTWD)

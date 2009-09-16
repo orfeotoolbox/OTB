@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelOverlayImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2007-10-21 09:54:20 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-07-07 12:27:33 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -70,6 +70,41 @@ LabelOverlayImageFilter<TInputImage, TLabelImage, TOutputImage>
   return static_cast<LabelImageType*>(
     const_cast<DataObject *>(this->ProcessObject::GetInput(1))); 
 }
+
+/**
+ * Get number of colors in the LUT container
+ */
+template <class TInputImage, class TLabelImage, class TOutputImage>
+unsigned int
+LabelOverlayImageFilter<TInputImage, TLabelImage, TOutputImage>
+::GetNumberOfColors() const
+{ 
+  return this->GetFunctor().GetNumberOfColors(); 
+}
+
+/**
+ * Empty the color LUT container
+ */
+template <class TInputImage, class TLabelImage, class TOutputImage>
+void 
+LabelOverlayImageFilter<TInputImage, TLabelImage, TOutputImage>
+::ResetColors()
+{ 
+  this->GetFunctor().ResetColors(); 
+}
+
+
+/**
+ * Add a color to the LUT container
+ */
+template <class TInputImage, class TLabelImage, class TOutputImage>
+void 
+LabelOverlayImageFilter<TInputImage, TLabelImage, TOutputImage>
+::AddColor( ComponentType r, ComponentType g, ComponentType b )
+{ 
+  this->GetFunctor().AddColor( r, g, b ); 
+}
+
 
 /**
  * Standard PrintSelf method 

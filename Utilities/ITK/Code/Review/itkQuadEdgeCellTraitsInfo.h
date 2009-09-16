@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeCellTraitsInfo.h,v $
   Language:  C++
-  Date:      $Date: 2008-02-07 15:58:06 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-07-31 14:23:01 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,6 +18,11 @@
 #ifndef __itkQuadEdgeCellTraitsInfo_h
 #define __itkQuadEdgeCellTraitsInfo_h
 
+#include "itkQuadEdgeMeshPoint.h"
+#include "itkMapContainer.h"
+#include <set>
+#include "itkGeometricalQuadEdge.h"
+
 namespace itk
 {
 /** \class QuadEdgeMeshCellTraitsInfo
@@ -29,11 +34,16 @@ namespace itk
  * http://insight-journal.org/midas/handle.php?handle=1926/306
  *
  */
-template< int VPointDimension, typename TCoordRep,
-          typename TInterpolationWeight, typename TPointIdentifier,
-          typename TCellIdentifier, typename TCellFeatureIdentifier,
-          typename TPoint, typename TPointsContainer,
-          typename TUsingCellsContainer, typename TQE >
+template< int VPointDimension,
+          typename TCoordRep=float,
+          typename TInterpolationWeight=float,
+          typename TPointIdentifier=unsigned long,
+          typename TCellIdentifier=unsigned long,
+          typename TCellFeatureIdentifier=unsigned char,
+          typename TPoint=QuadEdgeMeshPoint< TCoordRep, VPointDimension >,
+          typename TPointsContainer=MapContainer< unsigned long, TPoint >,
+          typename TUsingCellsContainer=std::set< TPointIdentifier >,
+          typename TQE=GeometricalQuadEdge< unsigned long, unsigned long, bool, bool, true > >
 class QuadEdgeMeshCellTraitsInfo
 {
 public:

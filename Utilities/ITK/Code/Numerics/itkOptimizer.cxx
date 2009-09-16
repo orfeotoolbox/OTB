@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptimizer.cxx,v $
   Language:  C++
-  Date:      $Date: 2007-03-22 14:29:14 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-06-24 12:02:54 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -68,6 +68,15 @@ Optimizer
   this->Modified();
 }
 
+const std::string 
+Optimizer
+::GetStopConditionDescription() const
+{
+  OStringStream description;
+  description << this->GetNameOfClass() << ": "
+              << "Optimizer did not provide a stop condition description";
+  return description.str();
+}
 
 /**
  * Print Self method
@@ -93,6 +102,9 @@ Optimizer
     os << indent << "Scales: not defined (default 1)" 
        << std::endl;
     }
+
+  os << indent << "StopConditionDescription: " 
+     << this->GetStopConditionDescription() << std::endl;
 }
 
 } // end namespace itk

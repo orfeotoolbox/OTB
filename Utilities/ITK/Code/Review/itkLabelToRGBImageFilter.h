@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelToRGBImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-28 18:14:36 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-07-07 12:27:34 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -80,6 +80,18 @@ public:
   itkSetMacro( BackgroundColor, OutputPixelType );
   itkGetConstReferenceMacro( BackgroundColor, OutputPixelType );
 
+  /** Empty the color LUT container */
+  void ResetColors();
+  
+  /** Get number of colors in the LUT container */
+  unsigned int GetNumberOfColors() const;
+  
+  /** Type of the color component */
+  typedef typename OutputPixelType::ComponentType  ComponentType;
+
+  /** Add color to the LUT container */
+  void AddColor( ComponentType r, ComponentType g, ComponentType b );
+   
 protected:
   LabelToRGBImageFilter();
   virtual ~LabelToRGBImageFilter() {};

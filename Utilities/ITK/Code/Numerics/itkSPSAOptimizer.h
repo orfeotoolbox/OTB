@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSPSAOptimizer.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-12 17:19:52 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-06-24 12:02:54 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -193,6 +193,9 @@ public:
   itkSetMacro(Tolerance, double);
   itkGetConstMacro(Tolerance, double);
     
+  /** Get the reason for termination */
+  const std::string GetStopConditionDescription() const;
+
 protected:
 
   SPSAOptimizer();

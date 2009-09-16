@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPasteImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 16:30:48 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-07-14 11:49:10 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,6 +40,43 @@ PasteImageFilter<TInputImage,TSourceImage,TOutputImage>
   m_DestinationIndex.Fill(0);
 }
 
+template <class TInputImage, class TSourceImage, class TOutputImage>
+void 
+PasteImageFilter<TInputImage,TSourceImage,TOutputImage>
+::SetSourceImage(const SourceImageType *src)
+{
+  // Process object is not const-correct so the const casting is required.
+  this->SetNthInput(1, const_cast<SourceImageType *>( src ));
+}
+
+template <class TInputImage, class TSourceImage, class TOutputImage>
+const typename PasteImageFilter<TInputImage,TSourceImage,TOutputImage>::SourceImageType *
+PasteImageFilter<TInputImage,TSourceImage,TOutputImage>
+::GetSourceImage() const
+{
+  const SourceImageType * sourceImage =
+    dynamic_cast< const SourceImageType * >( this->ProcessObject::GetInput(1) );
+  return sourceImage;
+}
+
+template <class TInputImage, class TSourceImage, class TOutputImage>
+void 
+PasteImageFilter<TInputImage,TSourceImage,TOutputImage>
+::SetDestinationImage(const InputImageType *src)
+{
+  // Process object is not const-correct so the const casting is required.
+  this->SetNthInput(0, const_cast<InputImageType *>( src ));
+}
+
+template <class TInputImage, class TSourceImage, class TOutputImage>
+const typename PasteImageFilter<TInputImage,TSourceImage,TOutputImage>::InputImageType *
+PasteImageFilter<TInputImage,TSourceImage,TOutputImage>
+::GetDestinationImage() const
+{
+  const InputImageType * destinationImage =
+    dynamic_cast< const InputImageType * >( this->ProcessObject::GetInput(0) );
+  return destinationImage;
+}
 
 /**
  *
@@ -55,7 +92,6 @@ PasteImageFilter<TInputImage,TSourceImage,TOutputImage>
   os << indent << "SourceRegion: " << m_SourceRegion << std::endl;
 }
 
-
 /**
  *
  */
@@ -68,10 +104,8 @@ PasteImageFilter<TInputImage,TSourceImage,TOutputImage>
   Superclass::GenerateInputRequestedRegion();
 
   // get the pointers for the inputs and output
-  InputImagePointer  destPtr = 
-    const_cast< TInputImage * >( this->GetInput() );
-  SourceImagePointer  sourcePtr = 
-    const_cast< TSourceImage * >( this->GetSourceImage() );
+  InputImagePointer  destPtr = const_cast< InputImageType * >( this->GetInput() );
+  SourceImagePointer  sourcePtr = const_cast< SourceImageType * >( this->GetSourceImage() );
   OutputImagePointer outputPtr = this->GetOutput();
 
   if( !destPtr || !sourcePtr || !outputPtr )
@@ -174,9 +208,9 @@ PasteImageFilter<TInputImage,TSourceImage,TOutputImage>
   
   
   // Define iterators types
-  typedef ImageRegionIterator<TOutputImage>      OutputIterator;
-  typedef ImageRegionConstIterator<TInputImage>  InputIterator;
-  typedef ImageRegionConstIterator<TSourceImage> SourceIterator;
+  typedef ImageRegionIterator<OutputImageType>      OutputIterator;
+  typedef ImageRegionConstIterator<InputImageType>  InputIterator;
+  typedef ImageRegionConstIterator<SourceImageType> SourceIterator;
 
   // There are three cases that we need to consider:
   //

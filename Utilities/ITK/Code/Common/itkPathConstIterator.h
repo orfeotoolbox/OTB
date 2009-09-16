@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPathConstIterator.h,v $
   Language:  C++
-  Date:      $Date: 2004-11-01 21:16:31 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-07-12 10:52:52 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -216,7 +216,7 @@ protected: //made protected so other iterators can access
   SpacingType m_ImageSpacing;
 
   /** Size of the source image */
-  const unsigned long int* m_ImageSize;
+  const SizeValueType * m_ImageSize;
   
   /** Should GoToBegin() initially skip the first index of a closed path so that
    * the first index will only be visited once--at the end of the path?  If 

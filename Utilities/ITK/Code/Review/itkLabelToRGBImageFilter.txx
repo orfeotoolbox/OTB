@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelToRGBImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2007-10-22 12:54:03 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-07-07 12:27:34 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -32,6 +32,30 @@ LabelToRGBImageFilter<TLabelImage, TOutputImage>
 {
   m_BackgroundValue = NumericTraits<LabelPixelType>::Zero;
   m_BackgroundColor.Fill( NumericTraits<OutputPixelValueType>::Zero );
+}
+
+template <class TLabelImage, class TOutputImage>
+unsigned int
+LabelToRGBImageFilter<TLabelImage, TOutputImage>
+::GetNumberOfColors() const
+{ 
+  return this->GetFunctor().GetNumberOfColors(); 
+}
+
+template <class TLabelImage, class TOutputImage>
+void 
+LabelToRGBImageFilter<TLabelImage, TOutputImage>
+::ResetColors()
+{ 
+  this->GetFunctor().ResetColors(); 
+}
+
+template <class TLabelImage, class TOutputImage>
+void 
+LabelToRGBImageFilter<TLabelImage, TOutputImage>
+::AddColor( ComponentType r, ComponentType g, ComponentType b )
+{ 
+  this->GetFunctor().AddColor( r, g, b ); 
 }
 
 template <class TLabelImage, class TOutputImage>

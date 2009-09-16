@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBresenhamLine.h,v $
   Language:  C++
-  Date:      $Date: 2008-08-06 16:49:13 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-06-03 12:48:05 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -46,7 +46,7 @@ public:
   BresenhamLine(){}
   ~BresenhamLine(){}
 
-  OffsetArray buildLine(LType Direction, unsigned int length);
+  OffsetArray BuildLine(LType Direction, unsigned int length);
 
 };
 

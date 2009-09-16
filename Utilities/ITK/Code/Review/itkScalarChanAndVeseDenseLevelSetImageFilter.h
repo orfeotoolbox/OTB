@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarChanAndVeseDenseLevelSetImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-16 12:35:10 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-07-29 15:14:09 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -58,13 +58,14 @@ namespace itk
 template < class TInputImage, class TFeatureImage, class TOutputImage, class TFunction,
   class TSharedData >
 class ITK_EXPORT ScalarChanAndVeseDenseLevelSetImageFilter:
-  public MultiphaseDenseFiniteDifferenceImageFilter< TInputImage, TOutputImage, TFunction >
+  public MultiphaseDenseFiniteDifferenceImageFilter< TInputImage, TFeatureImage, TOutputImage,
+  TFunction >
 {
 public:
 
   typedef ScalarChanAndVeseDenseLevelSetImageFilter         Self;
-  typedef MultiphaseDenseFiniteDifferenceImageFilter<
-    TInputImage, TOutputImage, TFunction >                  Superclass;
+  typedef MultiphaseDenseFiniteDifferenceImageFilter< TInputImage,
+    TFeatureImage, TOutputImage, TFunction >                Superclass;
   typedef SmartPointer<Self>                                Pointer;
   typedef SmartPointer<const Self>                          ConstPointer;
 
@@ -78,6 +79,12 @@ public:
   itkStaticConstMacro( ImageDimension, unsigned int, TInputImage::ImageDimension );
 
   /** Inherited typedef from the superclass. */
+  typedef typename Superclass::InputImageType         InputImageType;
+  typedef typename Superclass::InputImagePointer      InputImagePointer;
+  typedef typename Superclass::InputPointType         InputPointType;
+  typedef typename Superclass::ValueType              ValueType;
+  typedef typename InputImageType::SpacingType        InputSpacingType;
+
   typedef TFeatureImage                               FeatureImageType;
   typedef typename FeatureImageType::Pointer          FeatureImagePointer;
   typedef typename FeatureImageType::PixelType        FeaturePixelType;
@@ -86,19 +93,13 @@ public:
   typedef typename FeatureImageType::RegionType       FeatureRegionType;
 
   /** Output image type typedefs */
-  typedef typename Superclass::InputImageType         InputImageType;
-  typedef typename Superclass::InputImagePointer      InputImagePointer;
-  typedef typename Superclass::InputPointType         InputPointType;
-  typedef typename Superclass::InputSpacingType       InputSpacingType;
-
   typedef TOutputImage                                OutputImageType;
-  typedef typename OutputImageType::ValueType         ValueType;
   typedef typename OutputImageType::IndexType         IndexType;
   typedef typename OutputImageType::PixelType         OutputPixelType;
 
   typedef typename Superclass::TimeStepType           TimeStepType;
-
-  typedef typename Superclass::FiniteDifferenceFunctionType FiniteDifferenceFunctionType;
+  typedef typename Superclass::FiniteDifferenceFunctionType
+                                                      FiniteDifferenceFunctionType;
 
   typedef TFunction                                   FunctionType;
   typedef typename FunctionType::Pointer              FunctionPointer;
@@ -110,7 +111,6 @@ public:
     FeatureImageType, FeatureImageType >              ROIFilterType;
   typedef typename ROIFilterType::Pointer             ROIFilterPointer;
 
-
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
   itkConceptMacro(OutputHasNumericTraitsCheck,
@@ -120,14 +120,9 @@ public:
 
   /** Set/Get the feature image to be used for speed function of the level set
    *  equation.  Equivalent to calling Set/GetInput(1, ..) */
-  virtual void SetFeatureImage(const FeatureImageType *f)
+  virtual void SetFeatureImage( const FeatureImagePointer f )
     {
-    this->ProcessObject::SetNthInput( 0, const_cast< FeatureImageType * >(f) );
-    }
-
-  virtual const FeatureImageType * GetFeatureImage() const
-    {
-    return (static_cast<const FeatureImageType *>(this->ProcessObject::GetInput(0)));
+    this->SetInput( f );
     }
 
 protected:

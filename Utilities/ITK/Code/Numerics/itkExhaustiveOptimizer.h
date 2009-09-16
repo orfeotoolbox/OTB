@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExhaustiveOptimizer.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 21:04:35 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-06-24 23:35:49 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -92,7 +92,7 @@ public:
   itkNewMacro(Self);
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro( ExhaustiveOptimizer,           SingleValuedNonLinearOptimizer   );
+  itkTypeMacro( ExhaustiveOptimizer, SingleValuedNonLinearOptimizer );
  
   virtual void    StartOptimization( void );
 
@@ -112,6 +112,8 @@ public:
   itkGetConstReferenceMacro( CurrentIndex, ParametersType );
   itkGetConstReferenceMacro( MaximumNumberOfIterations, unsigned long );
 
+  /** Get the reason for termination */
+  const std::string GetStopConditionDescription() const;
 
 protected:
   ExhaustiveOptimizer();
@@ -141,6 +143,7 @@ private:
   ExhaustiveOptimizer(const Self&); //purposely not implemented
   void operator=(const Self&);//purposely not implemented
 
+  OStringStream m_StopConditionDescription;
 };
 
 } // end namespace itk

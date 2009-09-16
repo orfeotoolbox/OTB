@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHMaximaImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 16:45:09 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-07-26 12:50:31 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -20,8 +20,8 @@
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkHMaximaImageFilter.h"
-//#include "itkGrayscaleGeodesicDilateImageFilter.h"
 #include "itkShiftScaleImageFilter.h"
+#include "itkCastImageFilter.h"
 #include "itkProgressAccumulator.h"
 #include "itkReconstructionByDilationImageFilter.h"
 
@@ -97,17 +97,23 @@ HMaximaImageFilter<TInputImage, TOutputImage>
   dilate->SetMaskImage( this->GetInput() );
   dilate->SetFullyConnected( m_FullyConnected );
 
-  // graft our output to the dilate filter to force the proper regions
+  // Must cast to the output type
+  typename CastImageFilter<TInputImage, TOutputImage>::Pointer cast
+    = CastImageFilter<TInputImage, TOutputImage>::New();
+  cast->SetInput( dilate->GetOutput() );
+  cast->InPlaceOn();
+
+  // graft our output to the cast filter to force the proper regions
   // to be generated
-  dilate->GraftOutput( this->GetOutput() );
+  cast->GraftOutput( this->GetOutput() );
 
   // reconstruction by dilation
-  dilate->Update();
+  cast->Update();
 
   // graft the output of the dilate filter back onto this filter's
   // output. this is needed to get the appropriate regions passed
   // back.
-  this->GraftOutput( dilate->GetOutput() );
+  this->GraftOutput( cast->GetOutput() );
 }
 
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshLineCell.txx,v $
   Language:  C++
-  Date:      $Date: 2007-10-08 21:38:18 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-07-30 21:17:33 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -96,17 +96,6 @@ QuadEdgeMeshLineCell< TCellInterface >
     {
     //Throw exception here
     }
-}
-
-// ---------------------------------------------------------------------
-template< class TCellInterface >
-typename QuadEdgeMeshLineCell< TCellInterface >::SelfAutoPointer
-QuadEdgeMeshLineCell< TCellInterface >
-::New()
-{
-  SelfAutoPointer ptr( new Self );
-  ptr.TakeOwnership();
-  return( ptr );
 }
 
 // ---------------------------------------------------------------------

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGDCMImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-04-29 22:31:37 $
-  Version:   $Revision: 1.159 $
+  Date:      $Date: 2009-08-20 08:20:53 $
+  Version:   $Revision: 1.161 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -79,7 +79,7 @@ public:
  * Because it is required by the standard that DICOM file reader can read file where Group Length attribute value
  * would be invalid, turning this flag to off, on the one hand might lead to some speed improvement, but on the
  * other hand will make your DICOM implementation non-standard.
- * Technically Group Length value could be incorrect and GDCM might even skipped over some public element and not
+ * Technically Group Length value could be incorrect and GDCM might even seek over some public element and not
  * just the desired current group of attributes. Do not turn this option to false unless you understand the 
  * consequences.
  *
@@ -1113,6 +1113,9 @@ void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
     case gdcm::PixelFormat::FLOAT32:
       m_ComponentType = ImageIOBase::FLOAT;
       break;
+    case gdcm::PixelFormat::FLOAT64:
+      m_ComponentType = ImageIOBase::DOUBLE;
+      break;
     default:
       itkExceptionMacro( "Unhandled PixelFormat: " << outputpt ); 
     }
@@ -1195,7 +1198,7 @@ void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
       {
       // assert( vr & gdcm::VR::VRBINARY );
       /*
-       * Old bahavior was to skip SQ, Pixel Data element. I decided that it is not safe to mime64
+       * Old behavior was to skip SQ, Pixel Data element. I decided that it is not safe to mime64
        * VR::UN element. There used to be a bug in gdcm 1.2.0 and VR:UN element.
        */
       if ( tag.IsPublic() && vr != gdcm::VR::SQ && tag != gdcm::Tag(0x7fe0,0x0010) /* && vr != gdcm::VR::UN*/ )

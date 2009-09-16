@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMetaImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-05-20 12:16:44 $
-  Version:   $Revision: 1.100 $
+  Date:      $Date: 2009-07-07 22:03:39 $
+  Version:   $Revision: 1.102 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,6 +26,7 @@
 #include "itkSpatialOrientationAdapter.h"
 #include "itkMetaDataObject.h"
 #include "itkIOCommon.h"
+#include <itksys/SystemTools.hxx>
 
 namespace itk
 {
@@ -903,7 +904,7 @@ void MetaImageIO::Read(void* buffer)
                       << itksys::SystemTools::GetLastSystemError());
     }
 
-  m_MetaImage.ElementByteOrderFix();
+  m_MetaImage.ElementByteOrderFix( m_IORegion.GetNumberOfPixels() );
 } 
 
 MetaImage * MetaImageIO::GetMetaImagePointer(void)

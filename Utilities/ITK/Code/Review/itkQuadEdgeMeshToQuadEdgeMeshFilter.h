@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshToQuadEdgeMeshFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-22 01:41:45 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-07-13 23:02:40 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -52,10 +52,19 @@ public:
   typedef typename InputMeshType::QEPrimal        InputQEPrimal;
   typedef typename InputMeshType::VectorType      InputVectorType;
 
+  typedef typename InputMeshType::PointDataContainer   InputPointDataContainer;
+  typedef typename InputMeshType::CellDataContainer    InputCellDataContainer;
+
+  typedef typename InputPointDataContainer::ConstPointer 
+    InputPointDataContainerConstPointer; 
   typedef typename InputMeshType::PointsContainerConstIterator
-      InputPointsContainerConstIterator;
+    InputPointsContainerConstIterator;
+  typedef typename InputMeshType::PointsContainerConstPointer
+    InputPointsContainerConstPointer;
   typedef typename InputMeshType::CellsContainerConstIterator
-      InputCellsContainerConstIterator;
+    InputCellsContainerConstIterator;
+  typedef typename InputMeshType::CellsContainerConstPointer
+    InputCellsContainerConstPointer; 
 
   typedef typename InputMeshType::EdgeCellType    InputEdgeCellType;
   typedef typename InputMeshType::PolygonCellType InputPolygonCellType;
@@ -78,16 +87,30 @@ public:
   typedef typename OutputQEPrimal::IteratorGeom     OutputQEIterator;
   typedef typename OutputMeshType::PointsContainerIterator
       OutputPointsContainerIterator;
+  typedef typename OutputMeshType::PointsContainerPointer
+      OutputPointsContainerPointer;
+  typedef typename OutputMeshType::PointsContainerConstPointer
+      OutputPointsContainerConstPointer;
+
+  typedef typename OutputMeshType::PointDataContainer  OutputPointDataContainer;
+  typedef typename OutputMeshType::CellDataContainer   OutputCellDataContainer;
 
 public:
   itkNewMacro( Self );
   itkTypeMacro( QuadEdgeMeshToQuadEdgeMeshFilter, MeshToMeshFilter );
 
 protected:
-  QuadEdgeMeshToQuadEdgeMeshFilter( );
-  virtual ~QuadEdgeMeshToQuadEdgeMeshFilter( ) { }
+  QuadEdgeMeshToQuadEdgeMeshFilter();
+  virtual ~QuadEdgeMeshToQuadEdgeMeshFilter() { }
 
-  virtual void CopyInputMeshToOutputMesh( );
+  virtual void CopyInputMeshToOutputMesh();
+  virtual void CopyInputMeshToOutputMeshGeometry();
+  virtual void CopyInputMeshToOutputMeshPoints();
+  virtual void CopyInputMeshToOutputMeshCells();
+  virtual void CopyInputMeshToOutputMeshEdgeCells();
+  virtual void CopyInputMeshToOutputMeshFieldData();
+  virtual void CopyInputMeshToOutputMeshPointData();
+  virtual void CopyInputMeshToOutputMeshCellData(); 
 
 private:
   QuadEdgeMeshToQuadEdgeMeshFilter( const Self& ); // Not impl.

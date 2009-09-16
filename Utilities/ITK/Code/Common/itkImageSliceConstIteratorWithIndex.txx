@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageSliceConstIteratorWithIndex.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 19:04:57 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-08-14 20:48:00 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -59,6 +59,22 @@ ImageSliceConstIteratorWithIndex<TImage>
 }
 
 //----------------------------------------------------------------------
+//  Go to the first pixel of the current slice
+//----------------------------------------------------------------------
+template<class TImage>
+void 
+ImageSliceConstIteratorWithIndex<TImage>
+::GoToBeginOfSlice(void)
+{
+  // Move to beginning of Slice
+  this->m_PositionIndex[m_Direction_B] = this->m_BeginIndex[m_Direction_B];   
+  this->m_Position -= m_LineJump *
+    ( this->m_EndIndex[ m_Direction_B ] - this->m_BeginIndex[ m_Direction_B ] ); 
+  
+}
+
+
+//----------------------------------------------------------------------
 //  Advance to next slice
 //----------------------------------------------------------------------
 template<class TImage>
@@ -68,11 +84,10 @@ ImageSliceConstIteratorWithIndex<TImage>
 {
 
   // Move to beginning of Slice
-  this->m_PositionIndex[m_Direction_B] = this->m_BeginIndex[m_Direction_B];   
   this->m_Position -= m_LineJump *
-    ( this->m_EndIndex[ m_Direction_B ] - this->m_BeginIndex[ m_Direction_B ] ); 
+    ( this->m_PositionIndex[ m_Direction_B ] - this->m_BeginIndex[ m_Direction_B ] ); 
+  this->m_PositionIndex[m_Direction_B] = this->m_BeginIndex[m_Direction_B];
   
-
   for( unsigned int n=0; n<TImage::ImageDimension; n++ )
     {
 

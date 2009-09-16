@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRegionBasedLevelSetFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-21 22:03:29 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2009-08-06 16:09:56 $
+  Version:   $Revision: 1.28 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -51,8 +51,8 @@ RegionBasedLevelSetFunction< TInput,
   m_OverlapPenaltyWeight = NumericTraits<ScalarValueType>::Zero;
   m_AreaWeight = NumericTraits<ScalarValueType>::Zero;
   m_VolumeMatchingWeight = NumericTraits<ScalarValueType>::Zero;
-  m_LaplacianSmoothingWeight = NumericTraits<ScalarValueType>::Zero;
-  m_CurvatureWeight = NumericTraits<ScalarValueType>::Zero;
+  m_ReinitializationSmoothingWeight = NumericTraits<ScalarValueType>::Zero;
+  m_CurvatureWeight = m_AdvectionWeight = NumericTraits<ScalarValueType>::Zero;
   m_Volume = NumericTraits<ScalarValueType>::Zero;
 
   m_FunctionId = 0;
@@ -60,7 +60,33 @@ RegionBasedLevelSetFunction< TInput,
   m_SharedData = 0;
   m_InitialImage = 0;
   m_FeatureImage = 0;
+  m_UpdateC = false;
+
+  for(unsigned int i = 0; i < ImageDimension; i++)
+    {
+    m_InvSpacing[i] = 1;
+    }
 }
+
+template < class TInput, class TFeature, class TSharedData >
+typename RegionBasedLevelSetFunction< TInput, TFeature, TSharedData >::VectorType
+RegionBasedLevelSetFunction< TInput, TFeature, TSharedData >
+::InitializeZeroVectorConstant()
+{
+  VectorType ans;
+  for (unsigned int i = 0; i < ImageDimension; ++i)
+    {
+    ans[i] = NumericTraits<ScalarValueType>::Zero;
+    }
+
+  return ans;
+}
+
+template < class TInput, class TFeature, class TSharedData >
+typename RegionBasedLevelSetFunction< TInput, TFeature, TSharedData >::VectorType
+RegionBasedLevelSetFunction< TInput, TFeature, TSharedData >
+::m_ZeroVectorConstant =
+RegionBasedLevelSetFunction< TInput, TFeature, TSharedData >::InitializeZeroVectorConstant();
 
 /* Computes the Heaviside function and stores it in m_HeavisideFunctionOfLevelSetImage */
 template < class TInput,
@@ -85,6 +111,7 @@ void RegionBasedLevelSetFunction< TInput, TFeature, TSharedData >
 
   while(  !constIt.IsAtEnd() )
     {
+    // Convention is inside of level-set function is negative
     ScalarValueType hVal = m_DomainFunction->Evaluate( - constIt.Get() );
     It.Set( hVal );
     ++It;
@@ -103,12 +130,19 @@ RegionBasedLevelSetFunction< TInput, TFeature, TSharedData >
     {
     // Must update all H before updating C
     this->ComputeHImage();
+    this->m_UpdateC = false;
     }
   else
     {
-    this->ComputeParameters();
+    if ( !this->m_UpdateC )
+      {
+      this->ComputeParameters();
+      this->m_UpdateC = true;
+      }
     this->UpdateSharedDataParameters();
     }
+
+  return;
 }
 
 template < class TInput,
@@ -126,9 +160,9 @@ RegionBasedLevelSetFunction< TInput, TFeature, TSharedData >
 
   if (vnl_math_abs(d->m_MaxCurvatureChange) > vnl_math::eps)
     {
-    if (d->m_MaxGlobalChange > vnl_math::eps)
+    if (d->m_MaxAdvectionChange > vnl_math::eps)
       {
-      dt = vnl_math_min( ( this->m_WaveDT / d->m_MaxGlobalChange ),
+      dt = vnl_math_min( (m_WaveDT / d->m_MaxAdvectionChange),
       ( this->m_DT / d->m_MaxCurvatureChange ) );
       }
     else
@@ -138,16 +172,17 @@ RegionBasedLevelSetFunction< TInput, TFeature, TSharedData >
     }
   else
     {
-    if (d->m_MaxGlobalChange > vnl_math::eps)
+    if (d->m_MaxAdvectionChange > vnl_math::eps)
       {
       //NOTE: What's the difference between this->m_WaveDT and this->m_DT?
-      dt = this->m_WaveDT / d->m_MaxGlobalChange;
+      dt = this->m_WaveDT / d->m_MaxAdvectionChange;
       }
     }
 
   // Reset the values
   d->m_MaxCurvatureChange   = NumericTraits<ScalarValueType>::Zero;
   d->m_MaxGlobalChange      = NumericTraits<ScalarValueType>::Zero;
+  d->m_MaxAdvectionChange   = NumericTraits<ScalarValueType>::Zero;
 
   return dt;
 }
@@ -159,12 +194,12 @@ typename RegionBasedLevelSetFunction< TInput,
 ScalarValueType
 RegionBasedLevelSetFunction< TInput,
   TFeature, TSharedData >::
-ComputeCurvatureTerm(
-  const NeighborhoodType &itkNotUsed(neighborhood),
+ComputeCurvature(
+  const NeighborhoodType &itkNotUsed(it),
   const FloatOffsetType &itkNotUsed(offset), GlobalDataStruct *gd)
 {
   // Calculate the mean curvature
-  ScalarValueType curvature_term = NumericTraits<ScalarValueType>::Zero;
+  ScalarValueType curvature = NumericTraits<ScalarValueType>::Zero;
 
   unsigned int i, j;
 
@@ -174,20 +209,22 @@ ComputeCurvatureTerm(
       {
       if(j != i)
         {
-        curvature_term -= gd->m_dx[i] * gd->m_dx[j] * gd->m_dxy[i][j];
-        curvature_term += gd->m_dxy[j][j] * gd->m_dx[i] * gd->m_dx[i];
+        curvature -= gd->m_dx[i] * gd->m_dx[j] * gd->m_dxy[i][j];
+        curvature += gd->m_dxy[j][j] * gd->m_dx[i] * gd->m_dx[i];
         }
       }
     }
 
-  if( gd->m_GradMagSqr > vnl_math::eps )
+  if( gd->m_GradMag > vnl_math::eps )
     {
-    return (curvature_term / gd->m_GradMagSqr );
+    curvature /= gd->m_GradMag * gd->m_GradMag * gd->m_GradMag;
     }
   else
     {
-    return 0.;
+    curvature /= 1 + gd->m_GradMagSqr;
     }
+
+  return curvature;
 }
 
 // Compute the Hessian matrix and various other derivatives.  Some of these
@@ -202,6 +239,7 @@ RegionBasedLevelSetFunction< TInput, TFeature, TSharedData >
   const ScalarValueType inputValue = it.GetCenterPixel();
 
   gd->m_GradMagSqr = 0.;
+  gd->m_GradMag = 0.;
   unsigned int i, j;
 
   for (i = 0; i < ImageDimension; i++)
@@ -211,12 +249,17 @@ RegionBasedLevelSetFunction< TInput, TFeature, TSharedData >
     const unsigned int positionB =
       static_cast< unsigned int >( this->m_Center - this->m_xStride[i] );
 
-    gd->m_dx[i] = 0.5 * ( it.GetPixel( positionA ) - it.GetPixel( positionB ) );
-    gd->m_dxy[i][i] =
-      it.GetPixel( positionA ) + it.GetPixel( positionB ) - 2.0 * inputValue;
-    gd->m_dx_forward[i]  = it.GetPixel( positionA ) - inputValue;
-    gd->m_dx_backward[i] = inputValue - it.GetPixel( positionB );
+    gd->m_dx[i] = 0.5 * ( this->m_InvSpacing[i] ) *
+      ( it.GetPixel( positionA ) - it.GetPixel( positionB ) );
+    gd->m_dx_forward[i]  = ( this->m_InvSpacing[i] ) *
+      ( it.GetPixel( positionA ) - inputValue );
+    gd->m_dx_backward[i] = ( this->m_InvSpacing[i] ) *
+      ( inputValue - it.GetPixel( positionB ) );
+
     gd->m_GradMagSqr += gd->m_dx[i] * gd->m_dx[i];
+
+    gd->m_dxy[i][i] = ( this->m_InvSpacing[i] ) *
+      ( gd->m_dx_forward[i] - gd->m_dx_backward[i] );
 
     for (j = i+1; j < ImageDimension; j++ )
       {
@@ -229,13 +272,13 @@ RegionBasedLevelSetFunction< TInput, TFeature, TSharedData >
       const unsigned int positionDa = static_cast<unsigned int>(
         this->m_Center + this->m_xStride[i] + this->m_xStride[j] );
 
-      gd->m_dxy[i][j] = gd->m_dxy[j][i] = 0.25 *(
-        it.GetPixel( positionAa ) -
-        it.GetPixel( positionBa ) -
-        it.GetPixel( positionCa ) +
-        it.GetPixel( positionDa ) );
+      gd->m_dxy[i][j] = gd->m_dxy[j][i] = 0.25 *
+       ( this->m_InvSpacing[i] ) * ( this->m_InvSpacing[j] ) *
+       ( it.GetPixel( positionAa ) - it.GetPixel( positionBa ) +
+        it.GetPixel( positionDa ) - it.GetPixel( positionCa ) );
       }
     }
+  gd->m_GradMag = vcl_sqrt( gd->m_GradMagSqr );
 }
 
 template < class TInput,
@@ -249,10 +292,12 @@ RegionBasedLevelSetFunction< TInput, TFeature, TSharedData >
   // Access the neighborhood center pixel of phi
   const ScalarValueType inputValue = it.GetCenterPixel();
 
-  ScalarValueType laplacian_term = 0.;
-  ScalarValueType curvature_term = 0.;
-  ScalarValueType curvature = 0.;
-  ScalarValueType globalTerm = 0.;
+  ScalarValueType laplacian_term = NumericTraits<ScalarValueType>::Zero;
+  ScalarValueType curvature_term = NumericTraits<ScalarValueType>::Zero;
+  ScalarValueType curvature = NumericTraits<ScalarValueType>::Zero;
+  ScalarValueType globalTerm = NumericTraits<ScalarValueType>::Zero;
+  VectorType advection_field;
+  ScalarValueType x_energy, advection_term = NumericTraits<ScalarValueType>::Zero;
 
   // Access the global data structure
   GlobalDataStruct *gd = (GlobalDataStruct *)globalData;
@@ -266,14 +311,9 @@ RegionBasedLevelSetFunction< TInput, TFeature, TSharedData >
   if ( ( dh != 0. ) &&
     ( this->m_CurvatureWeight != NumericTraits< ScalarValueType >::Zero ) )
     {
-    //NOTE: Why the curvature_term is multiplied by gd->m_GradMagSqr?
-    //NOTE: in ComputeCurvatureTerm the result has been divided by gd->m_GradMagSqr...
-    //NOTE: According to the definition of the mean curavture it must not be, so
-    // I commented this product
-    curvature = this->ComputeCurvatureTerm( it, offset, gd );
-    curvature_term *= this->m_CurvatureWeight * //gd->m_GradMagSqr *
-      this->CurvatureSpeed(it, offset) *
-      dh;
+    curvature = this->ComputeCurvature( it, offset, gd );
+    curvature_term = this->m_CurvatureWeight * curvature *
+      this->CurvatureSpeed(it,offset, gd) * dh;
 
     gd->m_MaxCurvatureChange =
       vnl_math_max( gd->m_MaxCurvatureChange, vnl_math_abs( curvature_term ) );
@@ -281,25 +321,37 @@ RegionBasedLevelSetFunction< TInput, TFeature, TSharedData >
 
   // Computing the laplacian term
   // Used in maintaining squared distance function
-  if( this->m_LaplacianSmoothingWeight != NumericTraits<ScalarValueType>::Zero)
+  if( this->m_ReinitializationSmoothingWeight != NumericTraits<ScalarValueType>::Zero )
     {
-    if( this->m_CurvatureWeight != NumericTraits< ScalarValueType >::Zero )
-      {
-      laplacian_term = this->ComputeLaplacian( gd ) - curvature;
-      }
-    else
-      {
-      laplacian_term = this->ComputeLaplacianTerm( it, offset, gd );
-      }
-    // Use the laplacian to maintain signed distance function
+    laplacian_term = this->ComputeLaplacian( gd ) - curvature;
 
-    laplacian_term *= this->m_LaplacianSmoothingWeight *
+    laplacian_term *= this->m_ReinitializationSmoothingWeight *
       this->LaplacianSmoothingSpeed(it,offset, gd);
     }
 
-  // Update value from curvature length and laplacian term
-  PixelType updateVal =
-    static_cast< PixelType >( curvature_term + laplacian_term );
+  if ( ( dh != 0. ) && ( m_AdvectionWeight != NumericTraits<ScalarValueType>::Zero ) )
+    {
+    advection_field = this->AdvectionField(it, offset, gd);
+
+    for( unsigned int i = 0; i < ImageDimension; i++ )
+      {
+      x_energy = m_AdvectionWeight * advection_field[i];
+
+      // TODO: Is this condition right ?
+      if (x_energy > NumericTraits<ScalarValueType>::Zero )
+        {
+        advection_term += advection_field[i] * gd->m_dx_backward[i];
+        }
+      else
+        {
+        advection_term += advection_field[i] * gd->m_dx_forward[i];
+        }
+
+      gd->m_MaxAdvectionChange
+        = vnl_math_max(gd->m_MaxAdvectionChange, vnl_math_abs(x_energy));
+      }
+    advection_term *= m_AdvectionWeight*dh;
+    }
 
   /* Compute the globalTerm - rms difference of image with c_0 or c_1*/
   if ( dh != 0. )
@@ -310,7 +362,8 @@ RegionBasedLevelSetFunction< TInput, TFeature, TSharedData >
   /* Final update value is the local terms of curvature lengths and laplacian
   squared distances - global terms of rms differences of image and piecewise
   constant regions*/
-  updateVal = updateVal - globalTerm;
+  PixelType updateVal =
+    static_cast< PixelType >( curvature_term + laplacian_term + globalTerm + advection_term );
 
   /* If MaxGlobalChange recorded is lower than the current globalTerm */
   if( vnl_math_abs( gd->m_MaxGlobalChange) < vnl_math_abs( globalTerm ) )
@@ -319,19 +372,6 @@ RegionBasedLevelSetFunction< TInput, TFeature, TSharedData >
     }
 
   return updateVal;
-}
-
-template < class TInput, class TFeature, class TSharedData >
-typename RegionBasedLevelSetFunction< TInput, TFeature, TSharedData >
-::ScalarValueType
-RegionBasedLevelSetFunction< TInput, TFeature, TSharedData >
-::ComputeLaplacianTerm( const NeighborhoodType &neighborhood,
-  const FloatOffsetType &offset, GlobalDataStruct *gd )
-{
-  ScalarValueType laplacian = ComputeLaplacian( gd );
-  ScalarValueType curvature = ComputeCurvatureTerm( neighborhood, offset, gd );
-
-  return laplacian - curvature;
 }
 
 
@@ -400,9 +440,7 @@ const InputIndexType& inputIndex )
   ScalarValueType regularizationTerm = this->m_VolumeMatchingWeight *
     ComputeVolumeRegularizationTerm() - this->m_AreaWeight;
 
-  //NOTE: regularizationTerm here MUST take into account the curvature term!!!
-
-  ScalarValueType globalTerm = - inTerm + outTerm - overlapTerm - regularizationTerm;
+  ScalarValueType globalTerm = + inTerm - outTerm + overlapTerm + regularizationTerm;
 
   return globalTerm;
 }

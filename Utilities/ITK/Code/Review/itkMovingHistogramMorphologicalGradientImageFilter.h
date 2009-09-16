@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMovingHistogramMorphologicalGradientImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-28 18:14:36 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-06-03 12:48:05 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,7 +29,7 @@ class MorphologicalGradientHistogram
 public:
   MorphologicalGradientHistogram()
     {
-    if( useVectorBasedAlgorithm() )
+    if( UseVectorBasedAlgorithm() )
       { initVector(); }
     }
   ~MorphologicalGradientHistogram(){}
@@ -51,7 +51,7 @@ public:
 
   inline void AddPixel( const TInputPixel &p )
     {
-    if( useVectorBasedAlgorithm() )
+    if( UseVectorBasedAlgorithm() )
       { AddPixelVector( p ); }
     else
       { AddPixelMap( p ); }
@@ -59,7 +59,7 @@ public:
 
   inline void RemovePixel( const TInputPixel &p )
     {
-    if( useVectorBasedAlgorithm() )
+    if( UseVectorBasedAlgorithm() )
       { RemovePixelVector( p ); }
     else
       { RemovePixelMap( p ); }
@@ -67,14 +67,14 @@ public:
 
   inline TInputPixel GetValue( const TInputPixel & )
     {
-    if( useVectorBasedAlgorithm() )
+    if( UseVectorBasedAlgorithm() )
       { return GetValueVector(); }
     else
       { return GetValueMap(); }
     }
 
 
-  static inline bool useVectorBasedAlgorithm()
+  static inline bool UseVectorBasedAlgorithm()
     {
     // bool, short and char are acceptable for vector based algorithm: they do not require
     // too much memory. Other types are not usable with that algorithm
@@ -243,7 +243,7 @@ public:
   /** Return true if the vector based algorithm is used, and
    * false if the map based algorithm is used */
   static bool GetUseVectorBasedAlgorithm()
-    { return Function::MorphologicalGradientHistogram< ITK_TYPENAME TInputImage::PixelType >::useVectorBasedAlgorithm(); }
+    { return Function::MorphologicalGradientHistogram< ITK_TYPENAME TInputImage::PixelType >::UseVectorBasedAlgorithm(); }
   
 protected:
   MovingHistogramMorphologicalGradientImageFilter() {};

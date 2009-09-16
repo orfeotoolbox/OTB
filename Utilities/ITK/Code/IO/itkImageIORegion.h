@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageIORegion.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-24 15:36:27 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2009-07-12 10:52:54 $
+  Version:   $Revision: 1.25 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -57,9 +57,10 @@ public:
   typedef ImageIORegion Self;
   typedef Region        Superclass;
 
-  /** these types correspond to those of itk::Size and itk::Index */
-  typedef unsigned long           SizeValueType;
-  typedef long                    IndexValueType;
+  /** these types correspond to those of itk::Size, itk::Offset and itk::Index */
+  typedef size_t                  SizeValueType;
+  typedef ptrdiff_t               IndexValueType;
+  typedef ptrdiff_t               OffsetValueType;
 
 
   /** Index typedef support. An index is used to access pixel values. */
@@ -138,6 +139,9 @@ public:
   /** Test if a region (the argument) is completly inside of this region */
   bool IsInside(const Self &region) const;
 
+  /** Get the number of pixels contained in this region. This just
+   * multiplies the size components. */
+  SizeValueType GetNumberOfPixels( void ) const;
 
 protected:
   /** Methods invoked by Print() to print information about the object

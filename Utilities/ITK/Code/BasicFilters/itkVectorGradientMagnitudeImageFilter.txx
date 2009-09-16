@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorGradientMagnitudeImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-06 00:19:17 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-08-07 15:27:43 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -315,7 +315,7 @@ VectorGradientMagnitudeImageFilter<TInputImage, TRealType, TOutputImage>
   // s are not necessarily sorted, and int is the number of distinct roots
   // found in s.
   int     num;
-  const double dpi = 3.14159265358979323846;
+  const double dpi = vnl_math::pi;
   const double epsilon = 1.0e-11;
 
   // Substitution of  x = y - c[2]/3 eliminate the quadric term  x^3 +px + q = 0

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageFileReader.h,v $
   Language:  C++
-  Date:      $Date: 2007-09-06 18:31:36 $
-  Version:   $Revision: 1.31 $
+  Date:      $Date: 2009-08-11 12:45:08 $
+  Version:   $Revision: 1.33 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -151,7 +151,7 @@ protected:
   void PrintSelf(std::ostream& os, Indent indent) const;
   
   /** Convert a block of pixels from one type to another. */
-  void DoConvertBuffer(void* buffer, unsigned long numberOfPixels);
+  void DoConvertBuffer(void* buffer, size_t numberOfPixels);
 
   /** Test whether the given filename exist and it is readable, this
     * is intended to be called before attempting to use  ImageIO
@@ -176,9 +176,9 @@ private:
   void operator=(const Self&); //purposely not implemented
   std::string m_ExceptionMessage;  
 
-  // The region that the ImageIO class will return when we ask it to produce a
-  // requested region.
-  ImageRegionType m_StreamableRegion; 
+  // The region that the ImageIO class will return when we ask to
+  // produce the requested region.
+  ImageIORegion m_ActualIORegion; 
 };
 
 

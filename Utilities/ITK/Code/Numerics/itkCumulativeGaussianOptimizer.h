@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCumulativeGaussianOptimizer.h,v $
   Language:  C++
-  Date:      $Date: 2007-03-29 19:37:00 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-06-24 12:02:50 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -86,6 +86,9 @@ public:
   /** Print an array. */
   void PrintArray(MeasureType * array);
 
+  /** Report the reason for stopping. */
+  const std::string GetStopConditionDescription() const;
+
 protected:
   CumulativeGaussianOptimizer();
   virtual ~CumulativeGaussianOptimizer();
@@ -157,6 +160,10 @@ private:
   
   /** Find the constant of the integrated sample. */
   double VerticalBestShift(MeasureType * originalArray, MeasureType * newArray);
+
+  /** Describe the stop condition */
+  OStringStream m_StopConditionDescription;
+
 };
 
 } // end namespace itk

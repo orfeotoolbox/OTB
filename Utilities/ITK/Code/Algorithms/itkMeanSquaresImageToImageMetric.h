@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanSquaresImageToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 20:03:00 $
-  Version:   $Revision: 1.32 $
+  Date:      $Date: 2009-07-15 08:45:50 $
+  Version:   $Revision: 1.33 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -39,7 +39,7 @@ namespace itk
  * This Class is templated over the type of the fixed and moving
  * images to be compared.
  *
- * This metric computes the sum of squared differences between pixels in
+ * This metric computes the mean of squared differences between pixels in
  * the moving image and pixels in the fixed image. The spatial correspondance 
  * between both images is established through a Transform. Pixel values are
  * taken from the Moving image. Their positions are mapped to the Fixed image

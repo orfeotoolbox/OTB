@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageIORegion.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-05-18 15:22:16 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-08-11 12:37:19 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -232,6 +232,22 @@ ImageIORegion
     return false;
     }
   return true;
+}
+
+/** Get the number of pixels contained in this region. This just
+   * multiplies the size components. */
+ImageIORegion::SizeValueType
+ImageIORegion
+::GetNumberOfPixels( void ) const 
+{
+  size_t numPixels=1;
+  
+  for ( unsigned int d = 0; d < this->GetImageDimension(); ++d )
+    {
+    numPixels *= m_Size[d];
+    }
+  
+  return numPixels;
 }
 
 

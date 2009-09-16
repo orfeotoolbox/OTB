@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRegionBasedLevelSetFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-13 15:27:45 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-08-06 01:46:47 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -57,7 +57,8 @@ namespace itk {
  *      http://www.insight-journal.org/browse/publication/323
  *      http://hdl.handle.net/1926/1533
  *
- *
+ * NOTE: The convention followed is
+ * inside of the level-set function is negative and outside is positive.
  */
 template < class TInput, // LevelSetImageType
   class TFeature, // FeatureImageType
@@ -100,14 +101,11 @@ public:
       ScalarValueType null_value = NumericTraits<ScalarValueType>::Zero;
 
       m_MaxCurvatureChange   = null_value;
+      m_MaxAdvectionChange   = null_value;
       m_MaxGlobalChange      = null_value;
       }
 
     ~GlobalDataStruct() {}
-
-//     ScalarValueType m_MaxAdvectionChange; // not used
-//     ScalarValueType m_MaxPropagationChange; // not used
-    ScalarValueType m_MaxCurvatureChange;
 
     vnl_matrix_fixed<ScalarValueType,
       itkGetStaticConstMacro(ImageDimension),
@@ -115,10 +113,14 @@ public:
 
     ScalarValueType m_dx[itkGetStaticConstMacro(ImageDimension)];
 
-    ScalarValueType m_dx_forward[itkGetStaticConstMacro(ImageDimension)];
-    ScalarValueType m_dx_backward[itkGetStaticConstMacro(ImageDimension)];
+    ScalarValueType m_dx_forward[ itkGetStaticConstMacro( ImageDimension ) ];
+    ScalarValueType m_dx_backward[ itkGetStaticConstMacro( ImageDimension ) ];
 
     ScalarValueType m_GradMagSqr;
+    ScalarValueType m_GradMag;
+
+    ScalarValueType m_MaxCurvatureChange;
+    ScalarValueType m_MaxAdvectionChange;
     ScalarValueType m_MaxGlobalChange;
     };
 
@@ -138,6 +140,7 @@ public:
   typedef typename FeatureImageType::ConstPointer   FeatureImageConstPointer;
   typedef typename FeatureImageType::PixelType      FeaturePixelType;
   typedef typename FeatureImageType::IndexType      FeatureIndexType;
+  typedef typename FeatureImageType::SpacingType    FeatureSpacingType;
   typedef typename FeatureImageType::OffsetType     FeatureOffsetType;
 
   typedef TSharedData                               SharedDataType;
@@ -196,7 +199,20 @@ public:
   virtual const FeatureImageType *GetFeatureImage() const
     { return m_FeatureImage.GetPointer(); }
   virtual void SetFeatureImage(const FeatureImageType *f)
-    {    m_FeatureImage = f;  }
+    {
+    m_FeatureImage = f;
+
+    FeatureSpacingType spacing = m_FeatureImage->GetSpacing();
+    for(unsigned int i = 0; i < ImageDimension; i++)
+      {
+      this->m_InvSpacing[i] = 1/spacing[i];
+      }
+    }
+
+  /** Advection field.  Default implementation returns a vector of zeros. */
+  virtual VectorType AdvectionField(const NeighborhoodType &,
+                                    const FloatOffsetType &, GlobalDataStruct * = 0)  const
+    { return this->m_ZeroVectorConstant; }
 
   /** Nu. Area regularization values */
   void SetAreaWeight( const ScalarValueType& nu)
@@ -228,11 +244,16 @@ public:
   ScalarValueType GetCurvatureWeight() const
     { return m_CurvatureWeight; }
 
+  void SetAdvectionWeight( const ScalarValueType& iA)
+    { this->m_AdvectionWeight = iA; }
+  ScalarValueType GetAdvectionWeight() const
+    { return this->m_AdvectionWeight; }
+
   /** Weight of the laplacian smoothing term */
-  void SetLaplacianSmoothingWeight(const ScalarValueType c)
-    { m_LaplacianSmoothingWeight = c; }
-  ScalarValueType GetLaplacianSmoothingWeight() const
-    { return m_LaplacianSmoothingWeight; }
+  void SetReinitializationSmoothingWeight(const ScalarValueType c)
+    { m_ReinitializationSmoothingWeight = c; }
+  ScalarValueType GetReinitializationSmoothingWeight() const
+    { return m_ReinitializationSmoothingWeight; }
 
   /** Volume matching weight.  */
   void SetVolumeMatchingWeight( const ScalarValueType& tau )
@@ -253,7 +274,7 @@ public:
   virtual void ReleaseGlobalDataPointer(void *GlobalData) const
   { delete (GlobalDataStruct *) GlobalData; }
 
-  virtual ScalarValueType ComputeCurvatureTerm(const NeighborhoodType &,
+  virtual ScalarValueType ComputeCurvature(const NeighborhoodType &,
     const FloatOffsetType &, GlobalDataStruct *gd );
 
   /** \brief Laplacian smoothing speed can be used to spatially modify the
@@ -269,6 +290,12 @@ public:
                                          const FloatOffsetType &, GlobalDataStruct * = 0
                                          ) const
     { return NumericTraits<ScalarValueType>::One; }
+
+  /** This method must be defined in a subclass to implement a working function
+   * object.  This method is called before the solver begins its work to
+   * produce the speed image used as the level set function's Advection field
+   * term.  See LevelSetFunction for more information. */
+  virtual void CalculateAdvectionImage() {}
 
 protected:
 
@@ -305,14 +332,17 @@ protected:
   /** Curvature Regularization Weight */
   ScalarValueType           m_CurvatureWeight;
 
+  ScalarValueType           m_AdvectionWeight;
+
   /** Laplacian Regularization Weight */
-  ScalarValueType           m_LaplacianSmoothingWeight;
+  ScalarValueType           m_ReinitializationSmoothingWeight;
 
   unsigned int              m_FunctionId;
 
   std::slice x_slice[itkGetStaticConstMacro(ImageDimension)];
   ::size_t m_Center;
   ::size_t m_xStride[itkGetStaticConstMacro(ImageDimension)];
+  double m_InvSpacing[itkGetStaticConstMacro(ImageDimension)];
 
   static double m_WaveDT;
   static double m_DT;
@@ -363,8 +393,6 @@ protected:
   YEAR = "2005",
   PAGES = "I: 430-436"}
   \endverbatim  */
-  ScalarValueType ComputeLaplacianTerm( const NeighborhoodType &,
-    const FloatOffsetType &, GlobalDataStruct *gd  );
 
   /** \brief Compute the laplacian
   \return \f$ \Delta \phi \f$ */
@@ -378,8 +406,17 @@ protected:
   virtual void ComputeParameters() = 0;
 
   /** \brief Update and save the inner and outer parameters in the shared data
-    data structure. */
+    structure. */
   virtual void UpdateSharedDataParameters() = 0;
+
+  bool m_UpdateC;
+
+  /** This method's only purpose is to initialize the zero vector
+   * constant. */
+  static VectorType InitializeZeroVectorConstant();
+
+  /** Zero vector constant. */
+  static VectorType m_ZeroVectorConstant;
 
 private:
   RegionBasedLevelSetFunction(const Self&); //purposely not implemented

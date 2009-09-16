@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageFileWriter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-11 15:37:05 $
-  Version:   $Revision: 1.59 $
+  Date:      $Date: 2009-08-24 18:08:39 $
+  Version:   $Revision: 1.62 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -338,7 +338,7 @@ ImageFileWriter<TInputImage>
     // write the data
     this->GenerateData();
     
-    this->UpdateProgress((float) piece / numDivisions );
+    this->UpdateProgress((float) (piece+1) / numDivisions );
     }
 
   

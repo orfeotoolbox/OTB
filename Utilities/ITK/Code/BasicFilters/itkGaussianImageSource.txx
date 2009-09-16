@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianImageSource.txx,v $
   Language:  C++
-  Date:      $Date: 2008-12-17 18:56:53 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2009-07-12 10:52:52 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -266,7 +266,7 @@ GaussianImageSource<TOutputImage>
 template<typename TOutputImage>
 void 
 GaussianImageSource<TOutputImage>
-::SetSize(const unsigned long* size)
+::SetSize(const SizeValueType * size)
 {
   unsigned int i; 
   for (i=0; i<TOutputImage::ImageDimension; i++)

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTIFFImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-04-05 10:56:48 $
-  Version:   $Revision: 1.65 $
+  Date:      $Date: 2009-07-03 18:41:50 $
+  Version:   $Revision: 1.67 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -1729,6 +1729,11 @@ void TIFFImageIO::InternalWrite(const void* buffer)
     TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, scomponents);
     TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, bps); // Fix for stype
     TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+    if(this->GetComponentType() == SHORT
+       || this->GetComponentType() == CHAR)
+      {
+      TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT,SAMPLEFORMAT_INT);
+      }
     TIFFSetField(tif, TIFFTAG_SOFTWARE, "InsightToolkit");
 
     if ( scomponents > 3 )

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConnectedComponentImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-27 22:58:48 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2009-06-26 16:37:45 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -137,7 +137,7 @@ public:
   itkConceptMacro(SameDimension,
     (Concept::SameDimension<itkGetStaticConstMacro(InputImageDimension),
        itkGetStaticConstMacro(OutputImageDimension)>));
-
+  itkConceptMacro(OutputImagePixelTypeIsInteger, (Concept::IsInteger<OutputImagePixelType>));
 
   void SetMaskImage(TMaskImage* mask)
     {

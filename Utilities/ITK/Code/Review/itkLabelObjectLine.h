@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelObjectLine.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-13 19:05:59 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-07-07 17:47:10 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -50,23 +50,21 @@ public:
   virtual ~LabelObjectLine() {};
   LabelObjectLine( const IndexType & idx, const LengthType & length );
 
-  //
-  // Set/Get Index
-  //
+  /**
+   * Set/Get Index
+   */
   void SetIndex( const IndexType & idx );
-  IndexType & GetIndex();
   const IndexType & GetIndex() const;
 
-  //
-  // SetGet Length
-  //
+  /**
+   * SetGet Length
+   */
   void SetLength( const LengthType length );
-  LengthType & GetLength();
   const LengthType & GetLength() const;
 
-  //
-  // Check for index
-  //
+  /**
+   *  Check for index
+   */
   bool HasIndex( const IndexType idx ) const;
   bool IsNextIndex( const IndexType & idx ) const;
 

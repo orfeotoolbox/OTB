@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkSimplexMeshVolumeCalculator.h,v $
 Language:  C++
-Date:      $Date: 2009-04-23 03:53:37 $
-Version:   $Revision: 1.5 $
+Date:      $Date: 2009-06-10 12:07:17 $
+Version:   $Revision: 1.6 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -123,6 +123,7 @@ public:
       PointIdIterator  it =  poly->PointIdsBegin();
       InputPointType center,p;
       center.Fill(0);
+      p.Fill(0.0);
 
       while ( it != poly->PointIdsEnd() )
         {

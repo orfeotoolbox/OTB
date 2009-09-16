@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkStimulateImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-03-23 16:50:04 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2009-05-27 17:48:12 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -295,6 +295,15 @@ void StimulateImageIO::InternalReadImageInformation(std::ifstream& file)
   while((file.getline(line, 255), file.gcount() > 0))
     {
     text = line;
+#ifdef __CYGWIN__
+    // If terminated with \r\n, getline only removes \n. Explictly
+    // strip \r.
+    if (text.size() > 0 
+        && (text[text.size() - 1] == '\r'))
+      {
+      text.resize(text.size() - 1);
+      }
+#endif
     
     if ( text.find("numDim") < text.length())
       {

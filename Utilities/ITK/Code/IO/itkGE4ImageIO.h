@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGE4ImageIO.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-03 13:13:08 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-06-14 12:30:10 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -90,20 +90,20 @@ public:
 
   /*-------- This part of the interfaces deals with writing data. ----- */
 
-  /** Determine if the file can be written with this ImageIO implementation.
+  /* * Determine if the file can be written with this ImageIO implementation.
    * \param FileNameToWrite The name of the file to test for writing.
    * \author Hans J. Johnson
    * \post Sets classes ImageIOBase::m_FileName variable to be FileNameToWrite
    * \return Returns true if this ImageIO can write the file specified.
-   */
+  */
   // Implemented in superclass
   // virtual bool CanWriteFile(const char * FileNameToWrite);
 
-  /** Set the spacing and dimension information for the set filename. */
+  /* * Set the spacing and dimension information for the set filename. */
   // Implemented in superclass
   // virtual void WriteImageInformation();
 
-  /** Writes the data to disk from the memory buffer provided. Make sure
+  /* * Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegions has been set properly. */
   // Implemented in superclass
   // virtual void Write(const void* buffer);

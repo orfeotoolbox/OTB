@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelOverlayFunctor.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-24 19:03:15 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-07-07 12:28:58 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -36,7 +36,7 @@ namespace Functor {
  *
  * \sa LabelOverlayImageFilter LabelToRGBFunctor
  *
- **/
+ */
 template< class TInputPixel, class TLabel, class TRGBPixel >
 class LabelOverlayFunctor
 {
@@ -94,6 +94,24 @@ public:
     { 
     m_BackgroundValue = v; 
     m_RGBFunctor.SetBackgroundValue( v );
+    }
+
+  void ResetColors() 
+    { 
+    m_RGBFunctor.ResetColors(); 
+    }
+
+  unsigned int GetNumberOfColors() const
+    {
+    return m_RGBFunctor.GetNumberOfColors();
+    }
+
+  /** type of the color component */
+  typedef typename TRGBPixel::ComponentType ComponentType;
+    
+  void AddColor( ComponentType r, ComponentType g, ComponentType b )
+    {
+    m_RGBFunctor.AddColor( r, g, b );
     }
 
 protected:

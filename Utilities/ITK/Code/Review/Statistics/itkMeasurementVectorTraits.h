@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeasurementVectorTraits.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-23 04:17:05 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-08-08 14:39:59 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -94,8 +94,7 @@ public:
       precision). Using double type will also ultimately fall into the same problem.
       Hence in the new statistics framework, InstanceIdentifier/FrequencyTypes are 
       set to the the largest possible integer on the machine */  
-  //typedef typename std::vector<int>::size_type   InstanceIdentifier;
-  typedef unsigned long  InstanceIdentifier;
+  typedef size_t      InstanceIdentifier;
 
   /** Type defined for representing the frequency of measurement vectors */
   typedef InstanceIdentifier                                      AbsoluteFrequencyType;

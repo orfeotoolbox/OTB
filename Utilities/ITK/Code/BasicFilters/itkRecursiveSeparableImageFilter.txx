@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRecursiveSeparableImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-06 13:46:37 $
-  Version:   $Revision: 1.43 $
+  Date:      $Date: 2009-08-21 20:27:43 $
+  Version:   $Revision: 1.44 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -155,28 +155,7 @@ RecursiveSeparableImageFilter<TInputImage,TOutputImage>
 
 
 //
-//
-//
-template <typename TInputImage, typename TOutputImage>
-void
-RecursiveSeparableImageFilter<TInputImage,TOutputImage>
-::GenerateInputRequestedRegion() throw(InvalidRequestedRegionError)
-{
-  // call the superclass' implementation of this method. this should
-  // copy the output requested region to the input requested region
-  Superclass::GenerateInputRequestedRegion();
-
-  // This filter needs all of the input
-  InputImagePointer image = const_cast<InputImageType *>( this->GetInput() );
-  if( image )
-    {
-    image->SetRequestedRegion( this->GetInput()->GetLargestPossibleRegion() );
-    }
-}
-
-
-//
-//
+// we need all of the image in just the "Direction" we are separated into
 //
 template <typename TInputImage, typename TOutputImage>
 void
@@ -187,7 +166,20 @@ RecursiveSeparableImageFilter<TInputImage,TOutputImage>
 
   if (out)
     {
-    out->SetRequestedRegion( out->GetLargestPossibleRegion() );
+    OutputImageRegionType outputRegion = out->GetRequestedRegion();
+    const OutputImageRegionType &largestOutputRegion = out->GetLargestPossibleRegion();
+
+    // verify sane parameter
+    if ( this->m_Direction >=  outputRegion.GetImageDimension() )
+      {
+      itkExceptionMacro("Direction selected for filtering is greater than ImageDimension")
+      }
+
+    // expand output region to match largest in the "Direction" dimension
+    outputRegion.SetIndex( m_Direction, largestOutputRegion.GetIndex(m_Direction) );
+    outputRegion.SetSize( m_Direction, largestOutputRegion.GetSize(m_Direction) );
+    
+    out->SetRequestedRegion( outputRegion );
     }
 }
 

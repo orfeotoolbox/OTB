@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredVersorTransformInitializer.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-18 20:13:58 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-08-17 23:21:05 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -30,27 +30,31 @@ CenteredVersorTransformInitializer<TFixedImage, TMovingImage >
   // Force to use Moments computation since we need here the second
   // order moments in order to estimate a rotation
   this->Superclass::MomentsOn();
+
+  this->m_ComputeRotation = false;
 }
 
 
 template < class TFixedImage, class TMovingImage >
 void 
 CenteredVersorTransformInitializer<TFixedImage, TMovingImage >
-::InitializeTransform() const
+::InitializeTransform()
 {
   // Compute moments and initialize center of rotaion and translation
   this->Superclass::InitializeTransform();
 
-  typedef typename Superclass::FixedImageCalculatorType::MatrixType   
-                                                             FixedMatrixType;
-  typedef typename Superclass::MovingImageCalculatorType::MatrixType  
-                                                            MovingMatrixType;
-  
-  FixedMatrixType   fixedPrincipalAxis  = 
-                              this->GetFixedCalculator()->GetPrincipalAxes(); 
-  MovingMatrixType  movingPrincipalAxis = 
-                             this->GetMovingCalculator()->GetPrincipalAxes(); 
-  
+  if( this->m_ComputeRotation )
+    {
+    typedef typename Superclass::FixedImageCalculatorType::MatrixType   FixedMatrixType;
+    typedef typename Superclass::MovingImageCalculatorType::MatrixType  MovingMatrixType;
+    
+    FixedMatrixType   fixedPrincipalAxis  = this->GetFixedCalculator()->GetPrincipalAxes(); 
+    MovingMatrixType  movingPrincipalAxis = this->GetMovingCalculator()->GetPrincipalAxes(); 
+    
+    MovingMatrixType  rotationMatrix = movingPrincipalAxis * fixedPrincipalAxis.GetInverse();
+
+    this->GetTransform()->SetMatrix( rotationMatrix );
+    }
 }
   
 
@@ -60,6 +64,7 @@ CenteredVersorTransformInitializer<TFixedImage, TMovingImage >
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
+  os << indent << "Compute Rotation " << this->m_ComputeRotation << std::endl;
 }
  
 }  // namespace itk

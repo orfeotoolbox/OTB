@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGeometricalQuadEdge.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-01 15:45:31 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-09-08 20:00:55 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,7 +42,7 @@ namespace itk
  * GeometricalQuadEdge<...> and GeometricalQuadEdge<...>::Dual would be the
  * same types (this is simply due to the very definition of
  * GeometricalQuadEdge<...>::Dual). This would in turn make the types QEType
- * and QEDual of \ref itkQE::Mesh identical and would prevent any algorithm
+ * and QEDual of \ref QuadEdgeMesh identical and would prevent any algorithm
  * requiring to distinguish those types (e.g. by relying on a
  * dynamic_cast<QEType*>) to be effective.  This justifies the existence of
  * last dummy template parameter and it's default value.

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSinRegularizedHeavisideStepFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-09 21:35:53 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-06-08 04:17:06 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -70,13 +70,13 @@ public:
   /** Evaluate at the specified input position */
   virtual OutputType Evaluate( const InputType& input ) const
     {
-    if( input > this->GetEpsilon() )
+    if( input >= this->GetEpsilon() )
       {
       return 1.0;
       }
     else
       {
-      if( input < -this->GetEpsilon() )
+      if( input <= -this->GetEpsilon() )
         {
         return 0.0;
         }
@@ -92,7 +92,7 @@ public:
   /** Evaluate the derivative at the specified input position */
   virtual OutputType EvaluateDerivative( const InputType& input ) const
     {
-    if( vnl_math_abs( input ) > this->GetEpsilon() )
+    if( vnl_math_abs( input ) >= this->GetEpsilon() )
       {
       return 0.0;
       }

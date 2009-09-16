@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiphaseDenseFiniteDifferenceImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-21 22:03:29 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-07-29 15:14:02 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,12 +23,10 @@
 namespace itk
 {
 
-template < class TInputImage,
-  class TOutputImage,
-  class TFunction,
-  typename TIdCell >
+template < class TInputImage, class TFeatureImage, class TOutputImage,
+  class TFunction, typename TIdCell >
 void
-MultiphaseDenseFiniteDifferenceImageFilter< TInputImage,
+MultiphaseDenseFiniteDifferenceImageFilter< TInputImage, TFeatureImage,
   TOutputImage, TFunction, TIdCell >
 ::CopyInputToOutput()
 {
@@ -36,20 +34,14 @@ MultiphaseDenseFiniteDifferenceImageFilter< TInputImage,
 
   for( IdCellType i = 0; i < this->m_FunctionCount; i++ )
     {
-    InputImagePointer input = this->m_LevelSet[i];
-    InputPointType origin = input->GetOrigin();
-    InputSpacingType spacing = input->GetSpacing();
-    InputSizeType size = input->GetLargestPossibleRegion().GetSize();
+    const InputImagePointer input = this->m_LevelSet[i];
+    const InputPointType origin = input->GetOrigin();
+    const InputSizeType size = input->GetBufferedRegion().GetSize();
 
+    // Find the index of the target image where this Level Set
+    // should be pasted.
     OutputIndexType start;
-
-    // FIXME: Review pixel centering policy here !!!
-    // Probably the PhysicalPointToIndex method should be used here...
-    //
-    for ( unsigned int j = 0; j < ImageDimension; j++ )
-      {
-      start[j] = static_cast<OutputIndexValueType>( origin[j]/spacing[j] );
-      }
+    output->TransformPhysicalPointToIndex( origin, start );
 
     OutputRegionType region;
     region.SetSize( size );
@@ -60,7 +52,7 @@ MultiphaseDenseFiniteDifferenceImageFilter< TInputImage,
       itkExceptionMacro ( << "Either input and/or output is NULL." );
       }
 
-    ImageRegionIterator< InputImageType > in( input, input->GetLargestPossibleRegion() );
+    ImageRegionConstIterator< InputImageType > in( input, input->GetBufferedRegion() );
     ImageRegionIterator< OutputImageType > out( output, region );
 
     // Fill the output pointer
@@ -85,12 +77,10 @@ MultiphaseDenseFiniteDifferenceImageFilter< TInputImage,
   }
 }
 
-template < class TInputImage,
-  class TOutputImage,
-  class TFunction,
-  typename TIdCell >
+template < class TInputImage, class TFeatureImage, class TOutputImage,
+  class TFunction, typename TIdCell >
 void
-MultiphaseDenseFiniteDifferenceImageFilter< TInputImage,
+MultiphaseDenseFiniteDifferenceImageFilter< TInputImage, TFeatureImage,
   TOutputImage, TFunction, TIdCell >
 ::AllocateUpdateBuffer()
 {
@@ -105,14 +95,11 @@ MultiphaseDenseFiniteDifferenceImageFilter< TInputImage,
     }
 }
 
-template < class TInputImage,
-  class TOutputImage,
-  class TFunction,
-  typename TIdCell >
-typename
-MultiphaseDenseFiniteDifferenceImageFilter< TInputImage,
+template < class TInputImage, class TFeatureImage, class TOutputImage,
+  class TFunction, typename TIdCell >
+typename MultiphaseDenseFiniteDifferenceImageFilter< TInputImage, TFeatureImage,
   TOutputImage, TFunction, TIdCell >::TimeStepType
-MultiphaseDenseFiniteDifferenceImageFilter< TInputImage,
+MultiphaseDenseFiniteDifferenceImageFilter< TInputImage, TFeatureImage,
   TOutputImage, TFunction, TIdCell >
 ::CalculateChange()
 {
@@ -120,7 +107,7 @@ MultiphaseDenseFiniteDifferenceImageFilter< TInputImage,
 
   for( IdCellType i = 0; i < this->m_FunctionCount; i++ )
     {
-    OutputImagePointer levelset = this->m_LevelSet[i];
+    InputImagePointer levelset = this->m_LevelSet[i];
 
     // Get the FiniteDifferenceFunction to use in calculations.
     const FiniteDifferenceFunctionPointer df = this->m_DifferenceFunctions[i];
@@ -148,7 +135,7 @@ MultiphaseDenseFiniteDifferenceImageFilter< TInputImage,
       {
       // Process the non-boundary region.
       NeighborhoodIteratorType nD ( radius, levelset, *fIt );
-      UpdateIteratorType nU ( m_UpdateBuffers[i], *fIt );
+      ImageRegionIterator< InputImageType > nU ( m_UpdateBuffers[i], *fIt );
 
       nD.GoToBegin();
       nU.GoToBegin();
@@ -178,12 +165,10 @@ MultiphaseDenseFiniteDifferenceImageFilter< TInputImage,
   return timeStep;
 }
 
-template< class TInputImage,
-  class TOutputImage,
-  class TFunction,
-  typename TIdCell >
+template< class TInputImage, class TFeatureImage, class TOutputImage,
+  class TFunction, typename TIdCell >
 void
-MultiphaseDenseFiniteDifferenceImageFilter< TInputImage,
+MultiphaseDenseFiniteDifferenceImageFilter< TInputImage, TFeatureImage,
   TOutputImage, TFunction, TIdCell >
 ::SetFunctionCount( const IdCellType& n )
 {
@@ -193,16 +178,14 @@ MultiphaseDenseFiniteDifferenceImageFilter< TInputImage,
 
   for( IdCellType i = 0; i < this->m_FunctionCount; i++ )
     {
-    this->m_UpdateBuffers[i] = UpdateBufferType::New();
+    this->m_UpdateBuffers[i] = InputImageType::New();
     }
 }
 
-template< class TInputImage,
-  class TOutputImage,
-  class TFunction,
-  typename TIdCell >
+template< class TInputImage, class TFeatureImage, class TOutputImage,
+  class TFunction, typename TIdCell >
 void
-MultiphaseDenseFiniteDifferenceImageFilter< TInputImage,
+MultiphaseDenseFiniteDifferenceImageFilter< TInputImage, TFeatureImage,
   TOutputImage, TFunction, TIdCell >
 ::ApplyUpdate ( TimeStepType dt )
 {
@@ -229,15 +212,15 @@ MultiphaseDenseFiniteDifferenceImageFilter< TInputImage,
     // it is this->m_LevelSet[i]->GetLargestPossibleRegion()
     InputRegionType region = this->m_LevelSet[i]->GetRequestedRegion();
 
-    ImageRegionIterator<UpdateBufferType> u ( m_UpdateBuffers[i], region );
-    ImageRegionIterator<OutputImageType>  o ( this->m_LevelSet[i], region );
+    ImageRegionIterator< InputImageType > u ( m_UpdateBuffers[i], region );
+    ImageRegionIterator< InputImageType >  o ( this->m_LevelSet[i], region );
 
     u.GoToBegin();
     o.GoToBegin();
 
     while( !u.IsAtEnd() )
       {
-      u.Set( o.Value() + static_cast<OutputPixelType> ( dt ) * u.Get() );
+      u.Set( o.Value() + static_cast< InputPixelType > ( dt ) * u.Get() );
       ++u;
       ++o;
       }
@@ -245,7 +228,7 @@ MultiphaseDenseFiniteDifferenceImageFilter< TInputImage,
     if ( this->GetElapsedIterations() % this->m_ReinitializeCounter == 0 )
       {
       ThresholdFilterPointer thresh = ThresholdFilterType::New();
-      thresh->SetLowerThreshold( NumericTraits< OutputPixelType >::NonpositiveMin() );
+      thresh->SetLowerThreshold( NumericTraits< InputPixelType >::NonpositiveMin() );
       thresh->SetUpperThreshold( 0 );
       thresh->SetInsideValue( 1 );
       thresh->SetOutsideValue( 0 );
@@ -259,12 +242,12 @@ MultiphaseDenseFiniteDifferenceImageFilter< TInputImage,
       maurer->SetInsideIsPositive( 0 );
       maurer->Update();
 
-      ImageRegionIterator< OutputImageType >  it ( maurer->GetOutput(), region );
+      ImageRegionIterator< InputImageType >  it ( maurer->GetOutput(), region );
 
       o.GoToBegin();
       it.GoToBegin();
 
-      OutputPixelType val;
+      InputPixelType val;
 
       while( !o.IsAtEnd() )
         {
@@ -280,12 +263,10 @@ MultiphaseDenseFiniteDifferenceImageFilter< TInputImage,
   this->SetRMSChange( vcl_sqrt(rms_change_accumulator / den ) );
 }
 
-template< class TInputImage,
-  class TOutputImage,
-  class TFunction,
-  typename TIdCell >
+template< class TInputImage, class TFeatureImage, class TOutputImage,
+  class TFunction, typename TIdCell >
 void
-MultiphaseDenseFiniteDifferenceImageFilter< TInputImage,
+MultiphaseDenseFiniteDifferenceImageFilter< TInputImage, TFeatureImage,
   TOutputImage, TFunction, TIdCell >
 ::PostProcessOutput()
 {

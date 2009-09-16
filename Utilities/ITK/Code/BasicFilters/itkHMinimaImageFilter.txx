@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHMinimaImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 16:45:09 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-07-26 12:50:33 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -22,6 +22,7 @@
 #include "itkHMinimaImageFilter.h"
 #include "itkReconstructionByErosionImageFilter.h"
 #include "itkShiftScaleImageFilter.h"
+#include "itkCastImageFilter.h"
 #include "itkProgressAccumulator.h"
 
 namespace itk {
@@ -96,17 +97,23 @@ HMinimaImageFilter<TInputImage, TOutputImage>
   erode->SetMaskImage( this->GetInput() );
   erode->SetFullyConnected( m_FullyConnected );
 
-  // graft our output to the erode filter to force the proper regions
+  // Must cast to the output type
+  typename CastImageFilter<TInputImage, TOutputImage>::Pointer cast
+    = CastImageFilter<TInputImage, TOutputImage>::New();
+  cast->SetInput( erode->GetOutput() );
+  cast->InPlaceOn();
+
+  // graft our output to the cast filter to force the proper regions
   // to be generated
-  erode->GraftOutput( this->GetOutput() );
+  cast->GraftOutput( this->GetOutput() );
 
   // reconstruction by erosion
-  erode->Update();
+  cast->Update();
 
   // graft the output of the erode filter back onto this filter's
   // output. this is needed to get the appropriate regions passed
   // back.
-  this->GraftOutput( erode->GetOutput() );
+  this->GraftOutput( cast->GetOutput() );
 }
 
 

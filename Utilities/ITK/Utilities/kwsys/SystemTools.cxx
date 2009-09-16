@@ -402,9 +402,36 @@ bool SystemTools::GetEnv(const char* key, kwsys_stl::string& result)
     }
 }
 
+class kwsysDeletingCharVector : public kwsys_stl::vector<char*>
+{
+public:
+  ~kwsysDeletingCharVector();
+};
+
+kwsysDeletingCharVector::~kwsysDeletingCharVector()
+{
+  for(kwsys_stl::vector<char*>::iterator i = this->begin();
+      i != this->end(); ++i)
+    {
+    delete []*i;
+    }
+}
+bool SystemTools::PutEnv(const char* value)
+{ 
+  static kwsysDeletingCharVector localEnvironment;
+  char* envVar = new char[strlen(value)+1];
+  strcpy(envVar, value);
+  int ret = putenv(envVar);
+  // save the pointer in the static vector so that it can
+  // be deleted on exit
+  localEnvironment.push_back(envVar);
+  return ret == 0;
+}
+
+
 const char* SystemTools::GetExecutableExtension()
 {
-#if defined(_WIN32) || defined(__CYGWIN__)
+#if defined(_WIN32) || defined(__CYGWIN__) || defined(__VMS)
   return ".exe";
 #else
   return "";
@@ -1456,12 +1483,38 @@ kwsys_stl::string SystemTools::EscapeChars(
   return n;
 }
 
+#ifdef __VMS
+static void ConvertVMSToUnix(kwsys_stl::string& path)
+{
+  kwsys_stl::string::size_type rootEnd = path.find(":[");
+  kwsys_stl::string::size_type pathEnd = path.find("]");
+  if(rootEnd != path.npos)
+    {
+    kwsys_stl::string root = path.substr(0, rootEnd);
+    kwsys_stl::string pathPart = path.substr(rootEnd+2, pathEnd - rootEnd-2);
+    const char* pathCString = pathPart.c_str();
+    const char* pos0 = pathCString;
+    for (kwsys_stl::string::size_type pos = 0; *pos0; ++ pos )
+      {
+      if ( *pos0 == '.' )
+        {
+        pathPart[pos] = '/';
+        }
+      pos0 ++;
+      }
+    path = "/"+ root + "/" + pathPart;
+    }
+}
+#endif
+
 // convert windows slashes to unix slashes 
 void SystemTools::ConvertToUnixSlashes(kwsys_stl::string& path)
 {
   const char* pathCString = path.c_str();
   bool hasDoubleSlash = false;
-
+#ifdef __VMS
+  ConvertVMSToUnix(path);
+#else
   const char* pos0 = pathCString;
   const char* pos1 = pathCString+1;
   for (kwsys_stl::string::size_type pos = 0; *pos0; ++ pos )
@@ -1495,7 +1548,7 @@ void SystemTools::ConvertToUnixSlashes(kwsys_stl::string& path)
     {
     SystemTools::ReplaceString(path, "//", "/");
     }
-  
+#endif
   // remove any trailing slash
   if(!path.empty())
     {
@@ -3272,18 +3325,18 @@ SystemTools
   // The first two components do not add a slash.
   if(first != last)
     {
-    result += *first++;
+    result.append(*first++);
     }
   if(first != last)
     {
-    result += *first++;
+    result.append(*first++);
     }
 
   // All remaining components are always separated with a slash.
   while(first != last)
     {
-    result += "/";
-    result += *first++;
+    result.append("/");
+    result.append((*first++));
     }
 
   // Return the concatenated result.
@@ -3910,7 +3963,6 @@ bool SystemTools::GetLineFromStream(kwsys_ios::istream& is,
 
     // Append the data read to the line.
     line.append(buffer);
-    sizeLimit = sizeLimit - static_cast<long>(length);
     }
 
   // Return the results.
@@ -4507,8 +4559,25 @@ SystemToolsManager::~SystemToolsManager()
     }
 }
 
+#if defined(__VMS)
+// On VMS we configure the run time C library to be more UNIX like.
+// http://h71000.www7.hp.com/doc/732final/5763/5763pro_004.html
+extern "C" int decc$feature_get_index(char *name);
+extern "C" int decc$feature_set_value(int index, int mode, int value);
+static int SetVMSFeature(char* name, int value)
+{
+  int i;
+  errno = 0;
+  i = decc$feature_get_index(name);
+  return i >= 0 && (decc$feature_set_value(i, 1, value) >= 0 || errno == 0);
+}
+#endif
+
 void SystemTools::ClassInitialize()
 {
+#ifdef __VMS
+  SetVMSFeature("DECC$FILENAME_UNIX_ONLY", 1);
+#endif
   // Allocate the translation map first.
   SystemTools::TranslationMap = new SystemToolsTranslationMap;
   SystemTools::LongPathMap = new SystemToolsTranslationMap;

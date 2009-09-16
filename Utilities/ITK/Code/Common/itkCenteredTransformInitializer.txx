@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredTransformInitializer.txx,v $
   Language:  C++
-  Date:      $Date: 2008-06-12 17:14:07 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2009-08-15 23:42:49 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -37,7 +37,7 @@ CenteredTransformInitializer<TTransform, TFixedImage, TMovingImage >
 template < class TTransform, class TFixedImage, class TMovingImage >
 void 
 CenteredTransformInitializer<TTransform, TFixedImage, TMovingImage >
-::InitializeTransform() const
+::InitializeTransform()
 {
   // Sanity check
   if( !m_FixedImage )

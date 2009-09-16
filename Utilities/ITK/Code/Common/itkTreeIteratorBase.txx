@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTreeIteratorBase.txx,v $
   Language:  C++
-  Date:      $Date: 2009-03-03 15:10:37 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-06-14 11:55:05 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -73,7 +73,7 @@ template <class TTreeType>
 void
 TreeIteratorBase<TTreeType>::Set(ValueType element) 
 {
-  assert(m_Position);
+//  assert(m_Position);
   m_Position->Set(element);
   m_Tree->Modified();
   m_Tree->InvokeEvent( TreeNodeChangeEvent<TTreeType>(*this) );  
