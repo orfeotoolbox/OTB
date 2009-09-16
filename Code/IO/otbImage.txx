@@ -31,7 +31,6 @@ template <class TPixel, unsigned int VImageDimension>
 Image<TPixel,VImageDimension>::Image()
 {
   m_ImageMetadataInterface = DefaultImageMetadataInterface::New();
-  m_MyMutex = itk::MutexLock::New();
 }
 
 template <class TPixel, unsigned int VImageDimension>
@@ -154,12 +153,10 @@ void
 Image<TPixel, VImageDimension>
 ::CopyInformation(const itk::DataObject * data)
 {
-  m_MyMutex->Lock();
   Superclass::CopyInformation(data);
 //   this->itk::Object::SetMetaDataDictionary(data->GetMetaDataDictionary());
   itk::MetaDataDictionary dict = data->GetMetaDataDictionary();
   this->itk::Object::SetMetaDataDictionary(dict);
-  m_MyMutex->Unlock();
 }
 
 template <class TPixel, unsigned int VImageDimension>
