@@ -819,11 +819,11 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
     highPassOperator.SetUpSampleFactor( this->GetUpSampleFilterFactor() );
     highPassOperator.CreateDirectional();
 
-    if ( radius[0] < highPassOperator.GetRadius()[0] )
-      radius[0] = highPassOperator.GetRadius()[0];
-
     for ( unsigned int i = 1; i < InputImageDimension; i++ )
-      radius[i] = 0;
+    {
+      if ( radius[i] < highPassOperator.GetRadius()[i] )
+        radius[i] = highPassOperator.GetRadius()[i];
+    }
 
     InputImageRegionType paddedRegion = destRegion;
     paddedRegion.PadByRadius( radius );
