@@ -191,7 +191,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   /** Notify a given listener of changes */
-  virtual void Notify(ListenerBase * listener);
+  virtual void NotifyListener(ListenerBase * listener);
 
   /** The instance singleton */
   static Pointer Instance;
