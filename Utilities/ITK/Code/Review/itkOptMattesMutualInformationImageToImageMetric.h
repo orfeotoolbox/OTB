@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptMattesMutualInformationImageToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2008-04-03 12:34:38 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-07-28 21:47:09 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -311,25 +311,25 @@ private:
   mutable bool                                  m_ImplicitDerivativesSecondPass;
 
 
-  inline void GetValueThreadPreProcess( unsigned int threadID,
+  virtual inline void GetValueThreadPreProcess( unsigned int threadID,
                                         bool withinSampleThread ) const;
-  inline bool GetValueThreadProcessSample( unsigned int threadID,
+  virtual inline bool GetValueThreadProcessSample( unsigned int threadID,
                                        unsigned long fixedImageSample,
                                        const MovingImagePointType & mappedPoint,
                                        double movingImageValue ) const;
-  inline void GetValueThreadPostProcess( unsigned int threadID,
+  virtual inline void GetValueThreadPostProcess( unsigned int threadID,
                                         bool withinSampleThread ) const;
 
-  inline void GetValueAndDerivativeThreadPreProcess( 
+  virtual inline void GetValueAndDerivativeThreadPreProcess( 
                                        unsigned int threadID,
                                        bool withinSampleThread ) const;
-  inline bool GetValueAndDerivativeThreadProcessSample( unsigned int threadID,
+  virtual inline bool GetValueAndDerivativeThreadProcessSample( unsigned int threadID,
                                        unsigned long fixedImageSample,
                                        const MovingImagePointType & mappedPoint,
                                        double movingImageValue,
                                        const ImageDerivativesType &
                                                movingImageGradientValue ) const;
-  inline void GetValueAndDerivativeThreadPostProcess( 
+  virtual inline void GetValueAndDerivativeThreadPostProcess( 
                                        unsigned int threadID,
                                        bool withinSampleThread ) const;
 

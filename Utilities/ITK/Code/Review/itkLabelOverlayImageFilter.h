@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelOverlayImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-02-07 15:58:06 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-07-07 12:27:33 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -110,6 +110,18 @@ public:
         typename OutputPixelType::ValueType>));
   /** End concept checking */
 #endif
+
+  /** Empty the color LUT container */
+  void ResetColors();
+
+  /** Get number of colors in the LUT container */
+  unsigned int GetNumberOfColors() const;
+
+  /** type of the color component */
+  typedef typename OutputPixelType::ComponentType ComponentType;
+
+  /** Add color to the LUT container */
+  void AddColor( ComponentType r, ComponentType g, ComponentType b );
  
 protected:
   LabelOverlayImageFilter();

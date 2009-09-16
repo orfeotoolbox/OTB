@@ -337,14 +337,19 @@ ENDIF(NOT CMAKE_COMPILER_IS_GNUCXX)
 
 #-----------------------------------------------------------------------------
 # Configure Large File Support.
+KWSYS_PLATFORM_CXX_TEST(KWSYS_CXX_HAS_CSTDIO
+  "Checking whether header cstdio is available" DIRECT)
 SET(KWSYS_LFS_AVAILABLE 0)
 IF(KWSYS_LFS_REQUESTED)
   # Large File Support is requested.
   SET(KWSYS_LFS_REQUESTED 1)
 
   # Check for large file support.
+  SET(KWSYS_PLATFORM_CXX_TEST_DEFINES
+    -DKWSYS_CXX_HAS_CSTDIO=${KWSYS_CXX_HAS_CSTDIO})
   KWSYS_PLATFORM_CXX_TEST_RUN(KWSYS_LFS_WORKS
     "Checking for Large File Support" DIRECT)
+  SET(KWSYS_PLATFORM_CXX_TEST_DEFINES)
 
   IF(KWSYS_LFS_WORKS)
     SET(KWSYS_LFS_AVAILABLE 1)
@@ -442,6 +447,11 @@ ELSE(KWSYS_IOS_USE_ANSI AND NOT WATCOM)
   KWSYS_PLATFORM_CXX_TEST(KWSYS_STL_STRING_HAVE_ISTREAM
     "Checking whether stl string has istream operator>>" DIRECT)
 ENDIF(KWSYS_IOS_USE_ANSI AND NOT WATCOM)
+SET(KWSYS_PLATFORM_CXX_TEST_DEFINES
+  -DKWSYS_IOS_USE_ANSI=${KWSYS_IOS_USE_ANSI}
+  -DKWSYS_IOS_HAVE_STD=${KWSYS_IOS_HAVE_STD})
+KWSYS_PLATFORM_CXX_TEST(KWSYS_IOS_HAVE_BINARY
+  "Checking whether ios has binary openmode" DIRECT)
 SET(KWSYS_PLATFORM_CXX_TEST_DEFINES)
 
 KWSYS_PLATFORM_CXX_TEST(KWSYS_CXX_HAS_NULL_TEMPLATE_ARGS
@@ -847,6 +857,12 @@ ENDIF(KWSYS_ENABLE_C AND KWSYS_C_SRCS)
 # For building kwsys itself, we use a macro defined on the command
 # line to configure the namespace in the C and C++ source files.
 ADD_DEFINITIONS("-DKWSYS_NAMESPACE=${KWSYS_NAMESPACE}")
+
+IF(KWSYS_USE_String)
+  # Activate code in "String.c".  See the comment in the source.
+  SET_SOURCE_FILES_PROPERTIES(String.c PROPERTIES
+    COMPILE_FLAGS "-DKWSYS_STRING_C")
+ENDIF(KWSYS_USE_String)
 
 #-----------------------------------------------------------------------------
 # Process execution on windows needs to build a forwarding executable

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryMask3DMeshSource.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-23 03:53:34 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-06-28 19:17:37 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -67,13 +67,7 @@ namespace itk
  * \par INPUT
  * The input should be a 3D binary image. 
  *
- *
- *  */
-#ifndef ITK_EXPLICIT_INSTANTIATION
-//This is already explicitly defined when ITK_EXPLICIT_INSTANTIATION is used.
-template class Image<unsigned short,3>;
-#endif
-
+ */
 template <class TInputImage, class TOutputMesh>
 class ITK_EXPORT BinaryMask3DMeshSource : public ImageToMeshFilter< TInputImage, TOutputMesh >
 {

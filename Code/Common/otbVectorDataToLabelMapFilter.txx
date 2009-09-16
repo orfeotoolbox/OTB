@@ -327,7 +327,7 @@ VectorDataToLabelMapFilter< TVectorData, TLabelMap >
               index[1] = vertex[1] - polygonExtRingBoundReg.GetOrigin(1);
 //               index[0] += this->GetOutput()->GetOrigin()[0];
 //               index[1] += this->GetOutput()->GetOrigin()[1];
-              std::cout << "index " << index << std::endl;
+//               std::cout << "index " << index << std::endl;
               if (this->GetOutput()->HasLabel( m_lab ) )
               {
                 if (!this->GetOutput()->GetLabelObject( m_lab )->HasIndex( index ))

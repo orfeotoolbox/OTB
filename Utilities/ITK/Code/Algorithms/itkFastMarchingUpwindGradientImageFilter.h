@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFastMarchingUpwindGradientImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2007-04-20 11:52:27 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-07-29 10:31:53 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -164,7 +164,10 @@ public:
   /** Get the number of targets. */
   itkGetConstReferenceMacro( NumberOfTargets, long );
 
-  /** Get the arrival time corresponding to the last reached target. */
+  /** Get the arrival time corresponding to the last reached target. 
+   *  If TargetReachedMode is set to NoTargets, TargetValue contains
+   *  the last (aka largest) Eikonal solution value generated. 
+   */
   itkGetConstReferenceMacro( TargetValue, double );
 
   enum

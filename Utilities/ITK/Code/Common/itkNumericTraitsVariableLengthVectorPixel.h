@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNumericTraitsVariableLengthVectorPixel.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-06 20:53:13 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-07-30 20:51:30 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -64,15 +64,15 @@ public: \
  \
   typedef ElementRealType ScalarRealType; \
  \
-  static const RealType max( const Self & a ) \
+  static const Self max( const Self & a ) \
     {  \
-      RealType b(a.Size());  \
+      Self b(a.Size());  \
       b.Fill( NumericTraits< T >::max() ); \
       return b; \
     } \
-  static const RealType min( const Self & a ) \
+  static const Self min( const Self & a ) \
     {  \
-      RealType b(a.Size());  \
+      Self b(a.Size());  \
       b.Fill( NumericTraits< T >::min() ); \
       return b; \
     } \

@@ -3,8 +3,8 @@
   Program:   MetaIO
   Module:    $RCSfile: metaImage.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-15 23:54:08 $
-  Version:   $Revision: 1.32 $
+  Date:      $Date: 2009-07-07 20:04:04 $
+  Version:   $Revision: 1.33 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -177,8 +177,12 @@ class METAIO_EXPORT MetaImage : public MetaObject
     //    ElemByteOrderSwap(), ElemByteOrderFix()
     //       The following functions are available only after
     //       ReadImageData() or if _read_and_close=TRUE when read
-    void  ElementByteOrderSwap(void);
-    bool  ElementByteOrderFix(void);
+    //
+    // if streaming is used, then the size of buffer in total number
+    // of elements, should be passed as an argument, otherwise the
+    // internal value Quantity() will be used
+    void  ElementByteOrderSwap( METAIO_STL::streamsize _quantity = 0);
+    bool  ElementByteOrderFix( METAIO_STL::streamsize _quantity = 0);
 
     //    Min(...) Max(...)
     //       The default max returned is the largest allowed by

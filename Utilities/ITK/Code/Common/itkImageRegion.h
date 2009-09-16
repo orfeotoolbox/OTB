@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRegion.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-13 15:27:49 $
-  Version:   $Revision: 1.32 $
+  Date:      $Date: 2009-07-12 23:19:57 $
+  Version:   $Revision: 1.35 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -68,19 +68,22 @@ public:
   /** Dimension one lower than the image unless the image is one dimensional
       in which case the SliceDimension is also one dimensional. */
   itkStaticConstMacro(SliceDimension, unsigned int,
-                      (VImageDimension - (VImageDimension > 1)));
+                      (ImageDimension - (ImageDimension > 1)));
 
   /** Dimension of the image available at run time. */
   static unsigned int GetImageDimension()
-    { return VImageDimension; }
+    { return ImageDimension; }
 
   /** Index typedef support. An index is used to access pixel values. */
-  typedef Index<VImageDimension>                  IndexType;
-  typedef typename IndexType::IndexValueType      IndexValueType;
+  typedef Index< itkGetStaticConstMacro( ImageDimension) >  IndexType;
+  typedef typename IndexType::IndexValueType                IndexValueType;
+  typedef IndexValueType                          IndexValueArrayType[ ImageDimension];
+  typedef typename IndexType::OffsetType          OffsetType;
+  typedef typename OffsetType::OffsetValueType    OffsetValueType;
 
   /** Size typedef support. A size is used to define region bounds. */
-  typedef Size<VImageDimension>                   SizeType;
-  typedef typename SizeType::SizeValueType        SizeValueType;
+  typedef Size< itkGetStaticConstMacro( ImageDimension ) >  SizeType;
+  typedef typename SizeType::SizeValueType                  SizeValueType;
 
   /** Slice region typedef. SliceRegion is one dimension less than Self. */
   typedef ImageRegion<itkGetStaticConstMacro(SliceDimension)> SliceRegion;
@@ -245,13 +248,13 @@ public:
 
   /** Get the number of pixels contained in this region. This just
    * multiplies the size components. */
-  unsigned long GetNumberOfPixels() const;
+  SizeValueType GetNumberOfPixels() const;
 
   /** Pad an image region by the specified radius. Region can be padded
    * uniformly in all dimensions or can be padded by different amounts
    * in each dimension. */
-  void PadByRadius(unsigned long radius);
-  void PadByRadius(const unsigned long radius[VImageDimension]);
+  void PadByRadius(IndexValueType radius);
+  void PadByRadius(const IndexValueArrayType radius);
   void PadByRadius(const SizeType &radius);
 
   /** Crop a region by another region. If this region is outside of the

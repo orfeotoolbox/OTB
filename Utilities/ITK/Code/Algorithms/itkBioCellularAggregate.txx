@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBioCellularAggregate.txx,v $
   Language:  C++
-  Date:      $Date: 2008-02-01 13:10:27 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-06-14 19:55:37 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -405,6 +405,7 @@ CellularAggregate<NSpaceDimension>
   CellsConstIterator end    = m_Mesh->GetPointData()->End();
 
   PointType position;
+  position.Fill(0);
 
   while( cellIt != end )
     {
@@ -442,6 +443,7 @@ CellularAggregate<NSpaceDimension>
     BioCellType     * cell1      =  cell1It.Value();
 
     PointType  position1;
+    position1.Fill(0);
     m_Mesh->GetPoint( cell1Id, &position1 );
 
     const double rA          = cell1->GetRadius();

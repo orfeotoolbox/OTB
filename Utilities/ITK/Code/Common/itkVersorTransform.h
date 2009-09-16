@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVersorTransform.h,v $
   Language:  C++
-  Date:      $Date: 2009-03-03 15:11:51 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-06-14 12:30:09 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -39,7 +39,7 @@ namespace itk
  * The serialization of the fixed parameters is an array of 3 elements defining
  * the center of rotation.
  *
- * \TODO Need to make sure that the translation parameters in the baseclass
+ * TODO: Need to make sure that the translation parameters in the baseclass
  * cannot be set to non-zero values.
  *
  * \ingroup Transforms

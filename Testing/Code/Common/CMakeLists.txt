@@ -842,6 +842,26 @@ ADD_TEST(coTuGISTableToVectorDataFilterNew ${COMMON_TESTS10}
 otbGISTableToVectorDataFilterNew
 )
 
+ADD_TEST(coTvLabelMapToGISTableFilter ${COMMON_TESTS10}
+otbLabelMapToGISTableFilter
+${INPUTDATA}/rcc8_mire1.png
+labelmaptogis_test_table 
+orfeotoolbox_test_user
+Bidfeud0
+)
+
+
+#need gdal 1.6 for POSTGIS tables connection via OGR string
+ADD_TEST(coTvGISTableToVectorDataFilter ${COMMON_TESTS10}
+otbGISTableToVectorDataFilter
+${TEMP}/gistabletovectordatafilter.shp
+orfeotoolbox_test
+labelmaptogis_test_table
+orfeotoolbox_test_user
+Bidfeud0
+)
+
+
 ENDIF(OTB_USE_PQXX)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -878,6 +898,10 @@ ADD_TEST(coTuLabelMapToVectorDataFilterNew ${COMMON_TESTS11}
 otbLabelMapToVectorDataFilterNew
 )
 
+ADD_TEST(coTuVectorDataToLabelMapFilterNew ${COMMON_TESTS11}
+otbVectorDataToLabelMapFilterNew
+)
+
 ADD_TEST(coTuLabelMapSourceNew ${COMMON_TESTS11}
 otbLabelMapSourceNew
 )
@@ -901,6 +925,18 @@ ADD_TEST(coTvUnaryFunctorWithIndexImageFilter ${COMMON_TESTS11}
 otbUnaryFunctorWithIndexImageFilter
        ${INPUTDATA}/poupees.tif
        ${TEMP}/coTvUnaryFunctorWithIndexImageFilter.tif
+)
+
+ADD_TEST(coTvLabelMapToVectorDataFilter ${COMMON_TESTS11}
+otbLabelMapToVectorDataFilter
+        ${INPUTDATA}/rcc8_mire1.png
+        ${TEMP}/rcc8_mire2_vectorizer.shp
+)
+
+ADD_TEST(coTvVectorDataToLabelMapFilter ${COMMON_TESTS11}
+otbLabelMapToVectorDataFilter
+        ${INPUTDATA}/vectorIOexample_gis_to_vec.shp
+        ${TEMP}/vectordataToLabelMap.png
 )
 
 # -------       Fichiers sources CXX -----------------------------------
@@ -1039,6 +1075,8 @@ otbVectorDataToGISTableFilterNew.cxx
 otbLabelMapToGISTableFilterNew.cxx
 otbGISTableToLabelMapFilterNew.cxx
 otbGISTableToVectorDataFilterNew.cxx
+otbLabelMapToGISTableFilter.cxx
+otbGISTableToVectorDataFilter.cxx
 )
 ENDIF(OTB_USE_PQXX)
 
@@ -1051,7 +1089,10 @@ otbShapeAttributesLabelMapFilterNew.cxx
 otbStatisticsAttributesLabelMapFilterNew.cxx
 otbAttributesMapOpeningLabelMapFilterNew.cxx
 otbLabelMapToVectorDataFilterNew.cxx
+otbLabelMapToVectorDataFilter.cxx
 otbLabelMapSourceNew.cxx
+otbVectorDataToLabelMapFilterNew.cxx
+otbVectorDataToLabelMapFilter.cxx
 otbUnaryFunctorWithIndexImageFilterNew.cxx
 otbUnaryFunctorWithIndexImageFilter.cxx
 otbLabelObjectMapVectorizer.cxx

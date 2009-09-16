@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkManhattanDistanceMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-23 04:17:05 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-08-08 15:48:18 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -39,7 +39,7 @@ ManhattanDistanceMetric< TVector >
   
   for(unsigned int i = 0; i < measurementVectorSize; i++)
     {
-    temp = fabs( this->GetOrigin()[i] - x[i] );
+    temp = vcl_abs( this->GetOrigin()[i] - x[i] );
     distance += temp;
     }
   return distance;
@@ -59,7 +59,7 @@ ManhattanDistanceMetric< TVector >
   double temp, distance = NumericTraits< double >::Zero;
   for(unsigned int i = 0; i < measurementVectorSize; i++)
     {
-    temp = fabs( x1[i] - x2[i] );
+    temp = vcl_abs( x1[i] - x2[i] );
     distance += temp;
     }
   return distance;

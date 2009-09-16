@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTestDriver.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-11-09 18:18:52 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-07-28 18:30:04 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -333,8 +333,6 @@ int main(int ac, char* av[] )
   std::vector< char* > args;
   typedef std::pair< char *, char *> ComparePairType;
   std::vector< ComparePairType > compareList;
-  // with putenv(), we must keep the string allocated
-  std::vector< std::string > envList;
   
   // parse the command line
   int i = 1;
@@ -357,8 +355,24 @@ int main(int ac, char* av[] )
         libpath += KWSYS_SHARED_FORWARD_PATH_SEP;
         libpath += oldenv;
         }
-      envList.push_back( libpath );
-      putenv( const_cast<char *>( envList.back().c_str() ) );
+      itksys::SystemTools::PutEnv( libpath.c_str() );
+      // on some 64 bit systems, LD_LIBRARY_PATH_64 is used before
+      // LD_LIBRARY_PATH if it is set. It can lead the test to load
+      // the system library instead of the expected one, so this
+      // var must also be set
+      if( std::string(KWSYS_SHARED_FORWARD_LDPATH) == "LD_LIBRARY_PATH" )
+        {
+        std::string libpath = "LD_LIBRARY_PATH_64";
+        libpath += "=";
+        libpath += av[i+1];
+        char * oldenv = getenv("LD_LIBRARY_PATH_64");
+        if( oldenv )
+          {
+          libpath += KWSYS_SHARED_FORWARD_PATH_SEP;
+          libpath += oldenv;
+          }
+        itksys::SystemTools::PutEnv( libpath.c_str() );
+        }
       i += 2;
       }
     else if( !skip && strcmp(av[i], "--add-before-env") == 0 )
@@ -377,8 +391,7 @@ int main(int ac, char* av[] )
         env += KWSYS_SHARED_FORWARD_PATH_SEP;
         env += oldenv;
         }
-      envList.push_back( env );
-      putenv( const_cast<char *>( envList.back().c_str() ) );
+      itksys::SystemTools::PutEnv( env.c_str() );
       i += 3;
       }
     else if( !skip && strcmp(av[i], "--compare") == 0 )

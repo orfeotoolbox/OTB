@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageKmeansModelEstimator.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-02 05:43:54 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-09-03 21:11:20 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -559,13 +559,13 @@ ImageKmeansModelEstimator<TInputImage, TMembershipFunction>
   // normalize the distortions 
   *distortion /= ( double ) totalNumVecsInInput;
 
+  delete [] tempVec;
+
   // check for bizarre errors 
   if ( *distortion < 0.0 ) 
     {
     itkExceptionMacro(<<"Computational overflow");
     }
-
-  delete [] tempVec;
 
 }// End nearest_neighbor_search_basic
 

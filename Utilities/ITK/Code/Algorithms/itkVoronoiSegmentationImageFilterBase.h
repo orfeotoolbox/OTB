@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVoronoiSegmentationImageFilterBase.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-23 03:53:37 $
-  Version:   $Revision: 1.30 $
+  Date:      $Date: 2009-06-16 14:57:53 $
+  Version:   $Revision: 1.31 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -169,6 +169,7 @@ public:
   VoronoiPointer GetVoronoiDiagram(void)
     { return m_WorkingVD; }
     
+#if !defined(CABLE_CONFIGURATION)  // generates invalid iterator instantiation with msvc
   /** Seeds positions are randomly set. 
    * If you need to set seeds position then use the SetSeeds method
    * after the InitializeSegment method .  */ 
@@ -176,6 +177,17 @@ public:
     { 
     m_NumberOfSeeds = num; 
     m_WorkingVD->SetSeeds(num,begin); 
+    } 
+#endif
+
+  /** Seeds positions are randomly set. 
+   * If you need to set seeds position then use the SetSeeds method
+   * after the InitializeSegment method .  */ 
+  void SetSeeds(SeedsType & seeds)
+    { 
+    m_NumberOfSeeds = seeds.size();
+    typename SeedsType::iterator it = seeds.begin();
+    m_WorkingVD->SetSeeds(m_NumberOfSeeds, it); 
     } 
     
   /** Get the point specified by the ID given. */

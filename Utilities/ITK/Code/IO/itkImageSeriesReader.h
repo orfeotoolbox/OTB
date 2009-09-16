@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageSeriesReader.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-25 12:25:42 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-07-30 20:00:00 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,6 +25,7 @@
 #include <vector>
 #include <string>
 #include "itkMetaDataDictionary.h"
+#include "itkImageFileReader.h"
 
 namespace itk
 {
@@ -160,7 +161,10 @@ protected:
   FileNamesContainer m_FileNames;
 
   /** The number of independent variables in the images that comprise
-   *  the series. */
+   *  the series. This is also used as the slice moving dimension
+   *  index for the output image. That is for reading a series of 2D
+   *  images into  a 3D image, the moving dimension index is 2.
+   */
   int m_NumberOfDimensionsInImage;
 
   /** Array of MetaDataDictionaries. This allows to hold information from the
@@ -172,6 +176,10 @@ protected:
 private:
   ImageSeriesReader(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+
+  typedef ImageFileReader<TOutputImage> ReaderType;
+
+  int ComputeMovingDimensionIndex( ReaderType * reader );
 };
 
 } //namespace ITK

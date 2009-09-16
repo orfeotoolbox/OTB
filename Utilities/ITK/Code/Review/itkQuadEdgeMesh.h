@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMesh.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-08 23:10:20 $
-  Version:   $Revision: 1.34 $
+  Date:      $Date: 2009-09-08 20:00:56 $
+  Version:   $Revision: 1.38 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -32,7 +32,7 @@
 #include "itkQuadEdgeMeshFrontIterator.h"
 #include "itkConceptChecking.h"
 
-/**
+/****
  * \brief Documentation of itkQE namespace
  * \todo More comments here !
  *
@@ -244,9 +244,10 @@ public:
   itkNewMacro( Self );
   itkTypeMacro( QuadEdgeMesh, Mesh );
 
+#if !defined(CABLE_CONFIGURATION)
   /** FrontIterator definitions */
   itkQEDefineFrontIteratorMethodsMacro( Self );
-
+#endif
 
 public:
 
@@ -261,9 +262,9 @@ public:
   /** another way of deleting all the cells */
   virtual void Clear();
 
-  CellsContainerPointer GetEdgeCells() {return m_EdgeCellsContainer;}
-  const CellsContainerPointer GetEdgeCells() const {return m_EdgeCellsContainer;}
-  void SetEdgeCells(CellsContainerPointer edgeCells)
+  CellsContainer * GetEdgeCells() {return m_EdgeCellsContainer;}
+  const CellsContainer * GetEdgeCells() const {return m_EdgeCellsContainer;}
+  void SetEdgeCells(CellsContainer * edgeCells)
     {m_EdgeCellsContainer = edgeCells;}
   void SetEdgeCell(CellIdentifier cellId, CellAutoPointer & cellPointer )
     {m_EdgeCellsContainer->InsertElement(cellId,cellPointer.ReleaseOwnership());}
@@ -284,6 +285,7 @@ public:
   /** overloaded method for backward compatibility */
   void BuildCellLinks() { }
 
+#if !defined(CABLE_CONFIGURATION)
   /** overloaded method for backward compatibility */
   void SetBoundaryAssignments(int dimension,
                               BoundaryAssignmentsContainer* container)
@@ -306,6 +308,7 @@ public:
     (void)dimension;
     return( (const BoundaryAssignmentsContainerPointer)0 );
     }
+#endif
 
   /** overloaded method for backward compatibility */
   void SetBoundaryAssignment(int dimension, CellIdentifier cellId,

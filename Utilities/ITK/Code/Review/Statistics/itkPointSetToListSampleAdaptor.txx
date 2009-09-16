@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkPointSetToListSampleAdaptor.txx,v $
 Language:  C++
-Date:      $Date: 2009-05-08 16:55:05 $
-Version:   $Revision: 1.2 $
+Date:      $Date: 2009-05-27 19:01:35 $
+Version:   $Revision: 1.3 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -88,14 +88,14 @@ PointSetToListSampleAdaptor< TPointSet >
 template < class TPointSet >
 inline const typename PointSetToListSampleAdaptor< TPointSet >::MeasurementVectorType & 
 PointSetToListSampleAdaptor< TPointSet >
-::GetMeasurementVector( InstanceIdentifier id ) const
+::GetMeasurementVector( InstanceIdentifier identifier ) const
 {
   if( m_PointSet.IsNull() )
     {
     itkExceptionMacro("Point set has not been set yet");
     }
 
-  m_PointSet->GetPoint(id, &m_TempPoint);
+  m_PointSet->GetPoint(identifier, &m_TempPoint);
   return (MeasurementVectorType&) m_TempPoint;
 }
 

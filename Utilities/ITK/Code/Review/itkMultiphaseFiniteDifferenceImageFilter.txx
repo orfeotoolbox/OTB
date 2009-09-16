@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiphaseFiniteDifferenceImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-20 22:03:45 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-09-08 20:09:41 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,11 +27,13 @@
 namespace itk {
 
 template < class TInputImage,
+  class TFeatureImage,
   class TOutputImage,
   class TFiniteDifferenceFunction,
   typename TIdCell >
 void
 MultiphaseFiniteDifferenceImageFilter< TInputImage,
+  TFeatureImage,
   TOutputImage,
   TFiniteDifferenceFunction,
   TIdCell >
@@ -68,7 +70,7 @@ MultiphaseFiniteDifferenceImageFilter< TInputImage,
       this->m_DifferenceFunctions[id]->SetScaleCoefficients(coeffs);
       }
 
-    // Allocate the output image -- inherited
+    // Allocate the output image -- inherited method
     this->AllocateOutputs();
 
     // Copy the input image to the output image.  Algorithms will operate
@@ -82,23 +84,23 @@ MultiphaseFiniteDifferenceImageFilter< TInputImage,
     // the subclass, since this class cannot define an update buffer type.
     this->AllocateUpdateBuffer();
 
-    this->SetInitializedState(true);
-
-    this->m_ElapsedIterations = 0;
+    this->SetInitializedState( true );
     }
 
   // Iterative algorithm
   TimeStepType dt;
 
+  // An optional method for precalculating global values, or setting
+  // up for the next iteration
+  this->InitializeIteration();
+  this->m_RMSChange = NumericTraits<double>::max();
+
   while ( ! this->Halt() )
     {
-    /* An optional method for precalculating global values, or setting
-    up for the next iteration*/
-    this->InitializeIteration();
-
     dt = this->CalculateChange();
 
     this->ApplyUpdate( dt );
+
     this->m_ElapsedIterations++;
 
     // Invoke the iteration event.
@@ -110,6 +112,8 @@ MultiphaseFiniteDifferenceImageFilter< TInputImage,
       this->ResetPipeline();
       throw ProcessAborted(__FILE__,__LINE__);
       }
+
+    this->InitializeIteration();
     }
 
   // Reset the state once execution is completed
@@ -126,11 +130,13 @@ MultiphaseFiniteDifferenceImageFilter< TInputImage,
  *
  */
 template < class TInputImage,
+  class TFeatureImage,
   class TOutputImage,
   class TFiniteDifferenceFunction,
   typename TIdCell >
 void
 MultiphaseFiniteDifferenceImageFilter< TInputImage,
+  TFeatureImage,
   TOutputImage,
   TFiniteDifferenceFunction,
   TIdCell >
@@ -141,8 +147,8 @@ MultiphaseFiniteDifferenceImageFilter< TInputImage,
   Superclass::GenerateInputRequestedRegion();
 
   // get pointers to the input
-  InputImagePointer  inputPtr  =
-    const_cast< InputImageType* >( this->GetInput(0) );
+  FeatureImagePointer  inputPtr  =
+    const_cast< FeatureImageType* >( this->GetInput(0) );
 
   if ( inputPtr.IsNull() )
     {
@@ -166,7 +172,7 @@ MultiphaseFiniteDifferenceImageFilter< TInputImage,
 
   // get a copy of the input requested region (should equal the output
   // requested region)
-  InputRegionType inputRequestedRegion;
+  FeatureRegionType inputRequestedRegion;
   inputRequestedRegion = inputPtr->GetRequestedRegion();
 
   // pad the input requested region by the operator radius
@@ -197,12 +203,14 @@ MultiphaseFiniteDifferenceImageFilter< TInputImage,
 }
 
 template < class TInputImage,
+  class TFeatureImage,
   class TOutputImage,
   class TFiniteDifferenceFunction,
   typename TIdCell >
-typename MultiphaseFiniteDifferenceImageFilter< TInputImage,
+typename MultiphaseFiniteDifferenceImageFilter< TInputImage, TFeatureImage,
   TOutputImage, TFiniteDifferenceFunction, TIdCell >::TimeStepType
 MultiphaseFiniteDifferenceImageFilter< TInputImage,
+  TFeatureImage,
   TOutputImage,
   TFiniteDifferenceFunction,
   TIdCell >
@@ -248,11 +256,13 @@ MultiphaseFiniteDifferenceImageFilter< TInputImage,
 }
 
 template < class TInputImage,
+  class TFeatureImage,
   class TOutputImage,
   class TFiniteDifferenceFunction,
   typename TIdCell >
 bool
 MultiphaseFiniteDifferenceImageFilter< TInputImage,
+  TFeatureImage,
   TOutputImage,
   TFiniteDifferenceFunction,
   TIdCell >
@@ -268,16 +278,18 @@ MultiphaseFiniteDifferenceImageFilter< TInputImage,
   this->UpdateProgress( progress );
 
   return ( (this->GetElapsedIterations() >= this->m_NumberOfIterations) ||
-      ( this->GetMaximumRMSError() >= m_RMSChange ) );
+      ( this->GetMaximumRMSError() >= this->m_RMSChange ) );
 }
 
 
 template < class TInputImage,
+  class TFeatureImage,
   class TOutputImage,
   class TFiniteDifferenceFunction,
   typename TIdCell >
 void
 MultiphaseFiniteDifferenceImageFilter< TInputImage,
+  TFeatureImage,
   TOutputImage,
   TFiniteDifferenceFunction,
   TIdCell >

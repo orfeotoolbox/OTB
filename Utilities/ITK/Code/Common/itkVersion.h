@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVersion.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-26 02:00:07 $
-  Version:   $Revision: 1.3044 $
+  Date:      $Date: 2009-09-15 02:00:06 $
+  Version:   $Revision: 1.3157 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -28,7 +28,7 @@
 #define ITK_VERSION ITK_VERSION_TO_STRING(ITK_VERSION_MAJOR) "." \
                     ITK_VERSION_TO_STRING(ITK_VERSION_MINOR) "." \
                     ITK_VERSION_TO_STRING(ITK_VERSION_PATCH)
-#define ITK_SOURCE_VERSION "itk version " ITK_VERSION ", itk source $Revision: 1.3044 $, $Date: 2009-05-26 02:00:07 $ (GMT)"
+#define ITK_SOURCE_VERSION "itk version " ITK_VERSION ", itk source $Revision: 1.3157 $, $Date: 2009-09-15 02:00:06 $ (GMT)"
 
 namespace itk
 {
@@ -62,11 +62,11 @@ public:
   /** Return the version of itk this object is a part of.
    * A variety of methods are included. GetITKSourceVersion returns a string
    * with an identifier which timestamps a particular source tree.  */
-  static const char *GetITKVersion() { return ITK_VERSION; }
-  static int GetITKMajorVersion() { return ITK_VERSION_MAJOR; }
-  static int GetITKMinorVersion() { return ITK_VERSION_MINOR; }
-  static int GetITKBuildVersion() { return ITK_VERSION_PATCH; }
-  static const char *GetITKSourceVersion() { return ITK_SOURCE_VERSION; }
+  static const char *GetITKVersion();
+  static int GetITKMajorVersion();
+  static int GetITKMinorVersion();
+  static int GetITKBuildVersion();
+  static const char *GetITKSourceVersion();
     
 protected:
   Version();

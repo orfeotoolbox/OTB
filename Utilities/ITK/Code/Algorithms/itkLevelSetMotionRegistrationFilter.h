@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLevelSetMotionRegistrationFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 20:02:58 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-06-14 12:30:08 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -77,7 +77,7 @@ namespace itk {
  * \warning This filter assumes that the fixed image type, moving image type
  * and deformation field type all have the same number of dimensions.
  *
- * \cite B.C. Vemuri, J. Ye, Y. Chen, C.M. Leonard. "Image
+ * Ref: B.C. Vemuri, J. Ye, Y. Chen, C.M. Leonard. "Image
  * registration via level-set motion: applications to atlas-based
  * segmentation". Medical Image Analysis. Vol. 7. pp. 1-20. 2003.
  * 

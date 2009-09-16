@@ -104,30 +104,26 @@ void
     LabelMapToVectorDataFilter<TLabelMap, TVectorData>
 ::GenerateData()
 {
-  
+//   std::cout << "ICI" << std::endl;
   /**Allocate the output*/
-  this->AllocateOutputs();
-  
+//   this->AllocateOutputs();
+//   std::cout << "ICI" << std::endl;
   OutputVectorDataType * output = this->GetOutput();
   const InputLabelMapType * input = this->GetInput();
-  
   /**create functors */
   FunctorType functor;
-  SimplifyFunctorType simplifyFunctor;
-  CloseFunctorType closeFunctor;
-  
+//   SimplifyFunctorType simplifyFunctor;
+//   CloseFunctorType closeFunctor;
+  CorrectFunctorType correctFunctor;
   /**Create usual root elements of the output vectordata*/
   DataNodePointerType document = DataNodeType::New();
   DataNodePointerType folder1 = DataNodeType::New();
   
   document->SetNodeType(DOCUMENT);
   folder1->SetNodeType(FOLDER);
-  
   DataNodePointerType root = output->GetDataTree()->GetRoot()->Get();
-
   output->GetDataTree()->Add(document,root);
   output->GetDataTree()->Add(folder1,document);
-  
   
   // Lets begin by declaring the iterator for the objects in the image.
   typename InputLabelMapType::LabelObjectContainerType::const_iterator it;
@@ -145,12 +141,15 @@ void
     typename PolygonType::Pointer polygon = functor(labelObject);
     
     /** Erase aligned points*/
-    PolygonPointerType simplifyPolygon = simplifyFunctor(polygon); 
-    //std::cout << "simplify polygon : " << simplifyPolygon << std::endl;
+//     PolygonPointerType simplifyPolygon = simplifyFunctor(polygon); 
+    
     
     /**Close polygon if necessary*/
-    PolygonPointerType closePolygon = closeFunctor(simplifyPolygon);
+//     PolygonPointerType closePolygon = closeFunctor(simplifyPolygon);
     
+    /**correct polygon if necessary*/
+    PolygonPointerType correctPolygon = correctFunctor(polygon);
+//     std::cout << "correct polygon : " << correctPolygon << std::endl;
     DataNodePointerType node = DataNodeType::New();
     node->SetNodeType(otb::FEATURE_POLYGON);
     
@@ -159,7 +158,7 @@ void
     oss << labelObject->GetLabel();
     node->SetNodeId(oss.str());
     //TODO hole in the polygon are not handle yet by the functor
-    node->SetPolygonExteriorRing(closePolygon);
+    node->SetPolygonExteriorRing(correctPolygon);
     
     /**Add the polygon to the VectorData*/
     output->GetDataTree()->Add(node,folder1);

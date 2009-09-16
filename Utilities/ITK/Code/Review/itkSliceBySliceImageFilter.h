@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSliceBySliceImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-23 03:43:42 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-06-20 08:06:34 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -74,7 +74,7 @@ template<class TInputImage,
   class TInputFilter=ImageToImageFilter< 
     Image< ITK_TYPENAME TInputImage::PixelType,  ::itk::GetImageDimension<TInputImage >::ImageDimension - 1 >,
     Image< ITK_TYPENAME TOutputImage::PixelType, ::itk::GetImageDimension<TOutputImage>::ImageDimension - 1 > >,
-  class TOutputFilter=TInputFilter,
+  class TOutputFilter=ITK_TYPENAME TInputFilter::Superclass,
   class TInternalInputImage=ITK_TYPENAME TInputFilter::InputImageType,
   class TInternalOutputImage=ITK_TYPENAME TOutputFilter::OutputImageType >
 class ITK_EXPORT SliceBySliceImageFilter : 

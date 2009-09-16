@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshScalarDataVTKPolyDataWriter.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-02 18:43:05 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-06-21 16:25:08 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -58,11 +58,17 @@ public:
   typedef typename MeshType::PointDataContainerConstPointer     PointDataContainerConstPointer;
   typedef typename MeshType::PointDataContainerIterator         PointDataContainerIterator;
 
-  typedef typename MeshType::CellsContainerPointer        CellsContainerPointer;
-  typedef typename MeshType::CellsContainerIterator       CellsContainerIterator;
+  typedef typename MeshType::CellsContainer                 CellsContainer;
+  typedef typename CellsContainer::Pointer                  CellsContainerPointer;
+  typedef typename CellsContainer::ConstPointer             CellsContainerConstPointer;
+  typedef typename CellsContainer::Iterator                 CellsContainerIterator;
+  typedef typename CellsContainer::ConstIterator            CellsContainerConstIterator;
 
-  typedef typename MeshType::CellDataContainerPointer     CellDataContainerPointer;
-  typedef typename MeshType::CellDataContainerIterator    CellDataContainerIterator;
+  typedef typename MeshType::CellDataContainer              CellDataContainer;
+  typedef typename CellDataContainer::Iterator              CellDataContainerIterator;
+  typedef typename CellDataContainer::ConstIterator         CellDataContainerConstIterator;
+  typedef typename CellDataContainer::Pointer               CellDataContainerPointer;
+  typedef typename CellDataContainer::ConstPointer          CellDataContainerConstPointer;
   
   /** Set/Get the name of the CellDataName where data are written. */
   itkSetStringMacro(CellDataName);

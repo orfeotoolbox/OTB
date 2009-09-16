@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRecursiveMultiResolutionPyramidImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-10 19:14:50 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-07-12 10:52:51 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -285,7 +285,9 @@ RecursiveMultiResolutionPyramidImageFilter<TInputImage, TOutputImage>
 
   int ilevel, idim;
   unsigned int factors[ImageDimension];
-  unsigned long radius[ImageDimension];
+  
+  typename TInputImage::SizeType radius;
+
   RegionType requestedRegion;
   SizeType   requestedSize;
   IndexType  requestedIndex;
@@ -438,7 +440,9 @@ RecursiveMultiResolutionPyramidImageFilter<TInputImage, TOutputImage>
   typedef GaussianOperator<OutputPixelType,ImageDimension> OperatorType;
 
   OperatorType *oper = new OperatorType;
-  unsigned long radius[ImageDimension];
+
+  typename TInputImage::SizeType radius;
+
   RegionType inputRequestedRegion = baseRegion;
   refLevel = 0;
 

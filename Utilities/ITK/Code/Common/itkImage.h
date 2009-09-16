@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImage.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 19:04:56 $
-  Version:   $Revision: 1.150 $
+  Date:      $Date: 2009-08-14 13:28:21 $
+  Version:   $Revision: 1.151 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -135,7 +135,8 @@ public:
   typedef typename Superclass::OffsetType OffsetType;
 
   /** Size typedef support. A size is used to define region bounds. */
-  typedef typename Superclass::SizeType  SizeType;
+  typedef typename Superclass::SizeType       SizeType;
+  typedef typename Superclass::SizeValueType  SizeValueType;
 
   /** Direction typedef support. A matrix of direction cosines. */
   typedef typename Superclass::DirectionType  DirectionType;

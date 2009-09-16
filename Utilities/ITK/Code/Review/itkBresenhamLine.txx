@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBresenhamLine.txx,v $
   Language:  C++
-  Date:      $Date: 2008-08-06 16:49:13 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-06-03 12:48:05 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,7 +24,7 @@ namespace itk {
 
 template<unsigned int VDimension>
 typename BresenhamLine<VDimension>::OffsetArray BresenhamLine<VDimension>
-::buildLine(LType Direction, unsigned int length)
+::BuildLine(LType Direction, unsigned int length)
 {
   // copied from the line iterator
   /** Variables that drive the Bresenham-Algorithm */

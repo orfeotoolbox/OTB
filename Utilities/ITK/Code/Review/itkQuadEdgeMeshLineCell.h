@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshLineCell.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-03 21:23:51 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-07-30 21:17:33 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -106,9 +106,6 @@ public:
   void SetIdent( CellIdentifier cid );
   
   CellIdentifier GetIdent();
-
-  /** Implement the standard CellInterface. */
-  SelfAutoPointer New();
 
   /** TCellInterface abstract methods definition. */
   virtual void Accept( unsigned long cellId, MultiVisitor* mv );

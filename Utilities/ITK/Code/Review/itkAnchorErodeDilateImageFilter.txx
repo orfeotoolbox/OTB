@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAnchorErodeDilateImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-20 16:32:08 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-06-03 12:48:05 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -106,7 +106,7 @@ AnchorErodeDilateImageFilter<TImage, TKernel, TFunction1, TFunction2>
   for (unsigned i = 0; i < decomposition.size(); i++)
     {
     typename KernelType::LType ThisLine = decomposition[i];
-    typename BresType::OffsetArray TheseOffsets = BresLine.buildLine(ThisLine, bufflength);
+    typename BresType::OffsetArray TheseOffsets = BresLine.BuildLine(ThisLine, bufflength);
 
     typedef typename KernelType::LType KernelLType;
 

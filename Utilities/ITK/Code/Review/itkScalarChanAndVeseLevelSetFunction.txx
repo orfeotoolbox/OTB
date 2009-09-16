@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarChanAndVeseLevelSetFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-22 16:46:18 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-06-12 09:44:02 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -22,6 +22,9 @@
 
 namespace itk {
 
+// Computes the foreground constant and background constant value. For the Dense 
+// image filter, this is called prior to the start of every iteration. For the
+// sparse filter, this is only called one during initialization.
 template < class TInputImage, class TFeatureImage, class TSharedData >
 void
 ScalarChanAndVeseLevelSetFunction< TInputImage, TFeatureImage, TSharedData >
@@ -33,7 +36,7 @@ ScalarChanAndVeseLevelSetFunction< TInputImage, TFeatureImage, TSharedData >
     {
     this->m_SharedData->m_LevelSetDataPointerVector[fId]->m_ForegroundConstantValues =
       this->m_SharedData->m_LevelSetDataPointerVector[fId]->m_WeightedSumOfPixelValuesInsideLevelSet /
-      this->m_SharedData->m_LevelSetDataPointerVector[fId]->m_WeightedNumberOfPixelsOutsideLevelSet;
+      this->m_SharedData->m_LevelSetDataPointerVector[fId]->m_WeightedNumberOfPixelsInsideLevelSet;
     }
   else
     {
@@ -50,42 +53,34 @@ ScalarChanAndVeseLevelSetFunction< TInputImage, TFeatureImage, TSharedData >
     {
     this->m_SharedData->m_LevelSetDataPointerVector[fId]->m_BackgroundConstantValues = 0;
     }
+
 }
 
+// update the foreground constant for pixel updates
+// Called only when sparse filters are used to prevent iteration through the
+// entire image
 template < class TInputImage, class TFeatureImage, class TSharedData >
 void
 ScalarChanAndVeseLevelSetFunction< TInputImage, TFeatureImage, TSharedData >
 ::UpdateSharedDataInsideParameters( const unsigned int& iId,
-    const bool& iA, const FeaturePixelType& iVal, const ScalarValueType& iH )
+    const FeaturePixelType& iVal, const ScalarValueType& iChange )
 {
-  if( iA )
-    {
-    this->m_SharedData->m_LevelSetDataPointerVector[iId]->m_WeightedNumberOfPixelsInsideLevelSet += iH;
-    this->m_SharedData->m_LevelSetDataPointerVector[iId]->m_WeightedSumOfPixelValuesInsideLevelSet += iVal * iH;
-    }
-  else
-    {
-    this->m_SharedData->m_LevelSetDataPointerVector[iId]->m_WeightedNumberOfPixelsInsideLevelSet -= iH;
-    this->m_SharedData->m_LevelSetDataPointerVector[iId]->m_WeightedSumOfPixelValuesInsideLevelSet -= iVal * iH;
-    }
+  // update the foreground constant calculation of the current level-set function
+  this->m_SharedData->m_LevelSetDataPointerVector[iId]->m_WeightedNumberOfPixelsInsideLevelSet += iChange;
+  this->m_SharedData->m_LevelSetDataPointerVector[iId]->m_WeightedSumOfPixelValuesInsideLevelSet += iVal * iChange;
 }
 
+// update the background constant for pixel updates
+// Called only when sparse filters are used to prevent iteration through the
+// entire image
 template < class TInputImage, class TFeatureImage, class TSharedData >
 void
 ScalarChanAndVeseLevelSetFunction< TInputImage, TFeatureImage, TSharedData >
 ::UpdateSharedDataOutsideParameters( const unsigned int& iId,
-    const bool& iA, const FeaturePixelType& iVal, const ScalarValueType& iH )
+    const FeaturePixelType& iVal, const ScalarValueType& iChange )
 {
-  if( iA )
-    {
-    this->m_SharedData->m_LevelSetDataPointerVector[iId]->m_WeightedNumberOfPixelsOutsideLevelSet += iH;
-    this->m_SharedData->m_LevelSetDataPointerVector[iId]->m_WeightedSumOfPixelValuesOutsideLevelSet += iVal * iH;
-    }
-  else
-    {
-    this->m_SharedData->m_LevelSetDataPointerVector[iId]->m_WeightedNumberOfPixelsOutsideLevelSet -= iH;
-    this->m_SharedData->m_LevelSetDataPointerVector[iId]->m_WeightedSumOfPixelValuesOutsideLevelSet -= iVal * iH;
-    }
+  this->m_SharedData->m_LevelSetDataPointerVector[iId]->m_WeightedNumberOfPixelsOutsideLevelSet += iChange;
+  this->m_SharedData->m_LevelSetDataPointerVector[iId]->m_WeightedSumOfPixelValuesOutsideLevelSet += iVal * iChange;
 }
 
 /* Calculates the numerator and denominator for c_i for each region. As part of
@@ -106,12 +101,7 @@ ScalarChanAndVeseLevelSetFunction< TInputImage, TFeatureImage, TSharedData >
   this->m_SharedData->m_LevelSetDataPointerVector[fId]->m_WeightedSumOfPixelValuesOutsideLevelSet = 0;
   this->m_SharedData->m_LevelSetDataPointerVector[fId]->m_BackgroundConstantValues = 0;
 
-  FeatureImageConstPointer featureImage = this->m_FeatureImage;
-
-  ImageIteratorType It( this->m_SharedData->m_LevelSetDataPointerVector[fId]->m_HeavisideFunctionOfLevelSetImage,
-    this->m_SharedData->m_LevelSetDataPointerVector[fId]->m_HeavisideFunctionOfLevelSetImage->GetLargestPossibleRegion() );
-  ConstFeatureIteratorType fIt( this->m_FeatureImage,
-    this->m_FeatureImage->GetLargestPossibleRegion() );
+  ConstFeatureIteratorType fIt( this->m_FeatureImage, this->m_FeatureImage->GetLargestPossibleRegion() );
 
   FeaturePixelType featureVal;
   FeatureIndexType globalIndex;
@@ -119,29 +109,18 @@ ScalarChanAndVeseLevelSetFunction< TInputImage, TFeatureImage, TSharedData >
   InputPixelType hVal;
   ListPixelType L;
 
-  // Reference:
-  // Dufour, Shinin, Tajbakhsh, Guillen-Aghion, Olivo-Marin
-  // Segmenting and Tracking Fluorescent Cells in Dynamic 3-D
-  // Microscopy With Coupled Active Surfaces
-  // IEEE Transactions on Image Processing, vol. 14, No 9, September 2005
-  // In the paper:
-  // m_WeightedSumOfPixelValuesInsideLevelSet = \sum I(x) * H(\phi_i(x))
-  // m_WeightedNumberOfPixelsInsideLevelSet = \sum H(\phi_i(x))
-  // m_WeightedSumOfPixelValuesOutsideLevelSet = \sum \left( I(x) \prod \left( 1 - H(\phi_i(x))\right) \right)
-  // m_WeightedNumberOfPixelsInsideLevelSet = \sum \prod \left( 1 - H(\phi_i(x))\right)
+  fIt.GoToBegin();
 
-  for( It.GoToBegin(), fIt.GoToBegin(); !It.IsAtEnd();
-    ++It, ++fIt )
+  while( !fIt.IsAtEnd() )
     {
     featureVal = fIt.Get();
-    inputIndex = It.GetIndex();
+    inputIndex = fIt.GetIndex();
     InputPixelType prod = 1.;
 
     globalIndex = this->m_SharedData->m_LevelSetDataPointerVector[fId]->GetFeatureIndex( inputIndex );
 
     L = this->m_SharedData->m_NearestNeighborListImage->GetPixel( globalIndex );
 
-//     bool inBgrnd = true; // assume the pixel is in background
     for( ListPixelConstIterator it = L.begin(); it != L.end(); ++it )
       {
       itInputIndex = this->m_SharedData->m_LevelSetDataPointerVector[*it]->GetIndex( globalIndex );
@@ -157,6 +136,8 @@ ScalarChanAndVeseLevelSetFunction< TInputImage, TFeatureImage, TSharedData >
 
     this->m_SharedData->m_LevelSetDataPointerVector[fId]->m_WeightedSumOfPixelValuesOutsideLevelSet += featureVal * prod;
     this->m_SharedData->m_LevelSetDataPointerVector[fId]->m_WeightedNumberOfPixelsOutsideLevelSet += prod;
+
+    ++fIt;
     }
 }
 

@@ -20,8 +20,9 @@
 #include "otbVectorDataSource.h"
 #include "itkLabelMap.h"
 #include "otbLabelObjectToPolygonFunctor.h"
-#include "otbSimplifyPathFunctor.h"
-#include "otbClosePathFunctor.h"
+// #include "otbSimplifyPathFunctor.h"
+// #include "otbClosePathFunctor.h"
+#include "otbCorrectPolygonFunctor.h"
 #include "otbDataNode.h"
 
 #include <string>
@@ -69,8 +70,9 @@ public:
   typedef typename PolygonType::Pointer  PolygonPointerType;
   /** Some typedefs specific to functors*/
   typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType,PolygonType> FunctorType;
-  typedef otb::SimplifyPathFunctor<PolygonType,PolygonType> SimplifyFunctorType;
-  typedef ClosePathFunctor <PolygonType,PolygonType> CloseFunctorType;
+  typedef otb::CorrectPolygonFunctor<PolygonType> CorrectFunctorType;
+//   typedef otb::SimplifyPathFunctor<PolygonType,PolygonType> SimplifyFunctorType;
+//   typedef ClosePathFunctor <PolygonType,PolygonType> CloseFunctorType;
   /** ImageDimension constants */
 
   /** Standard New method. */

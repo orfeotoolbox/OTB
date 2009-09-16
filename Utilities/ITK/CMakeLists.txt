@@ -47,7 +47,7 @@ ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^2\\.4$")
 #-----------------------------------------------------------------------------
 # ITK version number.  An even minor number corresponds to releases.
 SET(ITK_VERSION_MAJOR "3")
-SET(ITK_VERSION_MINOR "14")
+SET(ITK_VERSION_MINOR "16")
 SET(ITK_VERSION_PATCH "0")
 
 # Version string should not include patch level.  The major.minor is
@@ -197,7 +197,7 @@ IF(ITK_USE_OPTIMIZED_REGISTRATION_METHODS)
     MESSAGE(FATAL_ERROR "ITK_USE_REVIEW is currently OFF but it should be ON if you want to use the experimental optimized registration methods.")
   ENDIF(NOT ITK_USE_REVIEW)
   # Warn the user about the implications of turning optimized registration methods ON
-  SET(msg "Attention: You have chosen to enable the use of Optimizer Registration Methods.")
+  SET(msg "Attention: You have chosen to enable the use of Optimized Registration Methods.")
   SET(msg "${msg} These methods add multi-threading capabilities to several image metrics")
   SET(msg "${msg} as well as some Transforms and Interpolators. In order to take full advantage")
   SET(msg "${msg} of these new features you will have to also add some new calls to these components.")
@@ -261,21 +261,8 @@ MARK_AS_ADVANCED(ITK_USE_ORIENTED_IMAGE_DIRECTION)
 
 #-----------------------------------------------------------------------------
 # ITK turn on the correct usage of centered-pixel coordinates.
-OPTION(ITK_USE_PORTABLE_ROUND "Turn on round implementation that works in multiple-platforms." OFF)
-MARK_AS_ADVANCED(ITK_USE_PORTABLE_ROUND)
-
-
-#-----------------------------------------------------------------------------
-# ITK turn on the correct usage of centered-pixel coordinates.
-OPTION(ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY "Turn on correct usage of centered-pixel coordinates." OFF)
+OPTION(ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY "Turn on correct usage of centered-pixel coordinates." ON)
 MARK_AS_ADVANCED(ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY)
-IF(ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY)
-  MESSAGE("Attention: You enabled ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY This feature has not been fully tested and validated.")
-  IF(NOT ITK_USE_PORTABLE_ROUND)
-    MESSAGE(FATAL_ERROR "ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY is currently ON but ITK_USE_PORTABLE_ROUND is OFF, you should enable the portable round")
-  ENDIF(NOT ITK_USE_PORTABLE_ROUND)
-ENDIF(ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY)
-
 
 #-----------------------------------------------------------------------------
 # ITK turn on the correct usage of centered-pixel coordinates.
@@ -303,13 +290,41 @@ MARK_AS_ADVANCED(ITK_USE_DEPRECATED_LEVELSET_INTERPOLATION)
 # ITK_INSTALL_NO_DOCUMENTATION - do not install documentation files
 
 IF(NOT ITK_INSTALL_BIN_DIR)
+  # Solaris: unlike libraries, 64 bit executables should be installed in "bin${sun64}" only
+  # if the 32 version is installed in  "bin/sparcv7" or "bin/i86", and a isaexec
+  # is copied in "bin" with the name of the executable, so the system can choose the best
+  # executable. If only a 32 or 64 bit version is available, the executable should go in
+  # bin. So it seems better to let the packagers deal with that.
+  # Ref: http://docs.sun.com/app/docs/doc/816-5138/dev-env-13?a=view
   SET(ITK_INSTALL_BIN_DIR "/bin")
 ENDIF(NOT ITK_INSTALL_BIN_DIR)
 
 IF(NOT ITK_INSTALL_LIB_DIR)
+  # 64 bit libraries are not installed in the same directories on solaris
+  # Ref: http://docs.sun.com/app/docs/doc/816-5138/6mba6ua5m?a=view
+  SET(sun64 )
+  IF(CMAKE_SYSTEM MATCHES "SunOS.*" AND CMAKE_SIZEOF_VOID_P EQUAL 8)
+    EXEC_PROGRAM("uname"
+      ARGS "-p"
+      OUTPUT_VARIABLE sunproc
+    )
+    IF("${sunproc}" STREQUAL "sparc")
+      SET(sun64 "/sparcv9")
+    ENDIF("${sunproc}" STREQUAL "sparc")
+
+    IF("${sunproc}" STREQUAL "i386")
+      SET(sun64 "/amd64")
+    ENDIF("${sunproc}" STREQUAL "i386")
+
+    IF("${sun64}" STREQUAL "")
+      # sun64 is not set - solaris has been ported to a new architecture?
+      MESSAGE("Warning: Unknown processor '${sunproc}'. The libraries may not be installed in the right place.")
+    ENDIF("${sun64}" STREQUAL "")
+  ENDIF(CMAKE_SYSTEM MATCHES "SunOS.*" AND CMAKE_SIZEOF_VOID_P EQUAL 8)
+
 # OTB Modifications
-#  SET(ITK_INSTALL_LIB_DIR "/lib/InsightToolkit")
-  SET(ITK_INSTALL_LIB_DIR "/lib/otb")
+#   SET(ITK_INSTALL_LIB_DIR "/lib/InsightToolkit${sun64}")
+  SET(ITK_INSTALL_LIB_DIR "/lib/otb${sun64}")
 ENDIF(NOT ITK_INSTALL_LIB_DIR)
 
 IF(NOT ITK_INSTALL_DATA_DIR)
@@ -410,12 +425,30 @@ INCLUDE(${ITK_SOURCE_DIR}/Wrapping/itkWrapSetup.cmake)
 
 
 IF(WIN32)
+  # Some libraries (e.g. vxl libs) have no dllexport markup, so we can
+  # build full shared libraries only with the GNU toolchain.
+  IF(CMAKE_COMPILER_IS_GNUCXX)
+    # CMake adds --enable-all-exports on Cygwin (since Cygwin is
+    # supposed to be UNIX-like), but we need to add it explicitly for
+    # a native windows build with the MinGW tools.
+    IF(MINGW)
+      SET(CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS
+        "-shared -Wl,--export-all-symbols -Wl,--enable-auto-import")
+      SET(CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS
+        "-shared -Wl,--export-all-symbols -Wl,--enable-auto-import")
+      SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--enable-auto-import")
+    ENDIF(MINGW)
+    IF(CYGWIN)
+      SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--enable-auto-import")
+    ENDIF(CYGWIN)
+  ELSE(CMAKE_COMPILER_IS_GNUCXX)
    IF(BUILD_SHARED_LIBS)
      SET(ITK_COMMON_BUILD_TYPE "SHARED")
    ELSE(BUILD_SHARED_LIBS)
      SET(ITK_COMMON_BUILD_TYPE "STATIC")
    ENDIF(BUILD_SHARED_LIBS)
    SET(BUILD_SHARED_LIBS OFF)
+  ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(WIN32)
 
 # OTB Modifications
@@ -477,9 +510,9 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
   SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -ftemplate-depth-50 -Wall")
   INCLUDE(${ITK_SOURCE_DIR}/CMake/itkCheckCXXAcceptsFlags.cmake)
   itkCHECK_CXX_ACCEPTS_FLAGS("-Wno-deprecated" CXX_HAS_DEPRECATED_FLAG)
-  IF(CXX_HAS_DEPRECATED_FLAG)    
+  IF(CXX_HAS_DEPRECATED_FLAG)
     SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -Wno-deprecated")
-  ENDIF(CXX_HAS_DEPRECATED_FLAG)    
+  ENDIF(CXX_HAS_DEPRECATED_FLAG)
   IF(APPLE)
     # -no-cpp-precomp and -Wno-long-double were compiler flags present
     # only in Apple's gcc and not in the FSF gcc. The flags are obsolete
@@ -500,7 +533,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
     MARK_AS_ADVANCED(ITK_USE_64BITS_APPLE_TRUNCATION_WARNING)
 
   ENDIF(APPLE)
-  
+
   # gcc must have -msse2 option to enable sse2 support
   IF(VNL_CONFIG_ENABLE_SSE2 OR VNL_CONFIG_ENABLE_SSE2_ROUNDING)
     SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -msse2")
@@ -518,6 +551,14 @@ IF(UNIX)
     ENDIF(NO_ICC_IDYNAMIC_NEEDED)
   ENDIF(NOT CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(UNIX)
+
+
+#
+#  This line is required for gcc 4.3.3, since ITK uses deprecated header files
+#  by default.
+#
+INCLUDE(TestForANSIStreamHeaders)
+
 
 IF(BORLAND)
     SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -w- -whid -waus -wpar")
@@ -737,6 +778,14 @@ MARK_AS_ADVANCED(ITK_OSIRIX_DATA_ROOT)
 
 
 #-----------------------------------------------------------------------------
+# Configure the default ITK_VISIBLEHUMAN_DATA_ROOT for the location of Data from the Visible Human Project
+# When this data is available, additional Examples are enabled.
+FIND_PATH(ITK_VISIBLEHUMAN_DATA_ROOT Male/Fullcolor/fullbody
+  DOC "Directory with data taken from http://www.nlm.nih.gov/research/visible/getting_data.html")
+MARK_AS_ADVANCED(ITK_VISIBLEHUMAN_DATA_ROOT)
+
+
+#-----------------------------------------------------------------------------
 # This flag is used in particular, to enable some tests that require large memory to run.
 # This probably can be discovered at configuration time by CMake. (Check with CMake developers).
 SET(ITK_COMPUTER_MEMORY_SIZE 1 CACHE STRING "Provide here the size of your RAM Memory in GigaBytes")
@@ -865,3 +914,4 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
     ENDIF("${COMP_OPTION}" STREQUAL "-ffloat-store")
   ENDFOREACH(COMP_OPTION)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+

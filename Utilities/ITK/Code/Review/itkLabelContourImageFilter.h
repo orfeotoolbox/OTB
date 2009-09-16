@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelContourImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-23 03:43:41 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-07-22 16:57:52 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -84,11 +84,13 @@ public:
   /**
    * Image typedef support
    */
-  typedef TInputImage                       InputImageType;
-  typedef typename TInputImage::IndexType   IndexType;
-  typedef typename TInputImage::SizeType    SizeType;
-  typedef typename TInputImage::OffsetType  OffsetType;
-  typedef typename TInputImage::PixelType   InputImagePixelType;
+  typedef TInputImage                           InputImageType;
+  typedef typename TInputImage::IndexType       IndexType;
+  typedef typename TInputImage::SizeType        SizeType;
+  typedef typename TInputImage::OffsetType      OffsetType;
+  typedef typename TInputImage::PixelType       InputImagePixelType;
+  typedef typename TInputImage::SizeValueType   SizeValueType;
+  typedef typename TInputImage::OffsetValueType OffsetValueType;
 
   typedef TOutputImage                      OutputImageType;
   typedef typename TOutputImage::RegionType RegionType;

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelImageToLabelMapFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-14 21:08:43 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-07-08 15:58:33 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -31,10 +31,14 @@ namespace itk {
  * 
  * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France.
  *
+ * This implementation was taken from the Insight Journal paper:
+ * http://hdl.handle.net/1926/584  or 
+ * http://www.insight-journal.org/browse/publication/176
+ *
  * \sa BinaryImageToLabelMapFilter, LabelMapToLabelImageFilter
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  */
-template<class TInputImage, class TOutputImage=LabelMap< LabelObject< typename TInputImage::PixelType, ::itk::GetImageDimension<TInputImage>::ImageDimension::ImageDimension > > >
+template<class TInputImage, class TOutputImage=LabelMap< LabelObject< typename TInputImage::PixelType, ::itk::GetImageDimension<TInputImage>::ImageDimension > > >
 class ITK_EXPORT LabelImageToLabelMapFilter : 
     public ImageToImageFilter<TInputImage, TOutputImage>
 {

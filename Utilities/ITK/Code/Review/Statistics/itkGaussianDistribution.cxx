@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianDistribution.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-05-10 18:27:08 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-08-07 15:40:34 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -165,20 +165,16 @@ double
 GaussianDistribution
 ::PDF(double x)
 {
-  static const double oneonsqrttwopi = 1.0 / sqrt( 2.0 * vnl_math::pi );
-
-  return oneonsqrttwopi * vcl_exp(-0.5*x*x);
+  return vnl_math::one_over_sqrt2pi * vcl_exp(-0.5*x*x);
 }
 
 double
 GaussianDistribution
 ::PDF(double x, double mean, double variance)
 {
-  static const double oneonsqrttwopi = 1.0 / sqrt( 2.0 * vnl_math::pi );
-
   double xminusmean = x - mean;
   
-  return (oneonsqrttwopi / sqrt(variance))
+  return (vnl_math::one_over_sqrt2pi / vcl_sqrt(variance))
     * vcl_exp(-0.5*xminusmean*xminusmean / variance);
 }
 
@@ -213,7 +209,7 @@ GaussianDistribution
 ::CDF(double x, double mean, double variance)
 {
   // convert to zero mean unit variance
-  double u = (x - mean) / sqrt(variance);
+  double u = (x - mean) / vcl_sqrt(variance);
   
   return 0.5 * (vnl_erf(vnl_math::sqrt1_2 * u) + 1.0);
 }
@@ -262,7 +258,7 @@ GaussianDistribution
   
   /**  Step 1:  use 26.2.23 from Abramowitz and Stegun */
   
-  dt = sqrt( -2.0 * log(dp) );
+  dt = vcl_sqrt( -2.0 * vcl_log(dp) );
   dx = dt
     - ((.010328e+0*dt + .802853e+0)*dt + 2.515517e+0)
     /(((.001308e+0*dt + .189269e+0)*dt + 1.432788e+0)*dt + 1.e+0);
@@ -271,7 +267,7 @@ GaussianDistribution
   
   for( newt=0; newt < 3; newt++ )
     {
-    dq  = 0.5e+0 * vnl_erfc( dx / 1.414213562373095e+0 ) - dp;
+    dq  = 0.5e+0 * vnl_erfc( dx *vnl_math::sqrt1_2 ) - dp;
     ddq = vcl_exp( -0.5e+0 * dx * dx ) / 2.506628274631000e+0;
     dx  = dx + dq / ddq;
     }
@@ -306,7 +302,7 @@ GaussianDistribution
     {
     // apply the mean and variance to provide the value for the
     // prescribed Gaussian
-    x = x*sqrt(variance) + mean;
+    x = x*vcl_sqrt(variance) + mean;
     return x;
     }
 }

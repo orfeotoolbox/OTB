@@ -23,8 +23,9 @@
 #include "otbGISConnectionImplementation.h"
 #include "otbLabelObjectToPolygonFunctor.h"
 
-#include "otbSimplifyPathFunctor.h"
-#include "otbClosePathFunctor.h"
+// #include "otbSimplifyPathFunctor.h"
+// #include "otbClosePathFunctor.h"
+#include "otbCorrectPolygonFunctor.h"
 #include "itkLabelMap.h"
 #include <iostream>
 #include <sstream>
@@ -82,6 +83,7 @@ public:
   typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType,PolygonType> FunctorType;
   typedef otb::SimplifyPathFunctor<PolygonType,PolygonType> SimplifyFunctorType;
   typedef ClosePathFunctor <PolygonType,PolygonType> CloseFunctorType;
+  typedef CorrectPolygonFunctor <PolygonType> CorrectFunctorType;
   /** ImageDimension constants */
   //itkStaticConstMacro(InputImageDimension, unsigned int,
   //                    TInputImage::ImageDimension);

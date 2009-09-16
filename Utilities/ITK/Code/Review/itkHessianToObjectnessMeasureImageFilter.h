@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHessianToObjectnessMeasureImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-23 03:43:41 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-07-01 12:43:38 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -22,7 +22,7 @@
 
 namespace itk
 {
-/** \class HessianObjectnessMeasureImageFilter
+/** \class HessianToObjectnessMeasureImageFilter
  * \brief A filter to enhance M-dimensional objects in N-dimensional images 
  * 
  * The objectness measure is a generalization of Frangi's vesselness measure,

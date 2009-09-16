@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-07 14:03:42 $
-  Version:   $Revision: 1.48 $
+  Date:      $Date: 2009-06-01 13:39:10 $
+  Version:   $Revision: 1.49 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -160,8 +160,12 @@ public:
         {
         return false;
         }
+#ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
+      if( index[j] >= m_EndContinuousIndex[j] )
+#else
       if( index[j] > m_EndContinuousIndex[j] )
-        {
+#endif
+      {
         return false;
         }
       }

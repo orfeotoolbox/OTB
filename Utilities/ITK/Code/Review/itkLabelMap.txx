@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelMap.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-15 17:47:34 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-07-07 18:41:40 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -262,7 +262,6 @@ LabelMap<TLabelObject>
     labelObject->SetLabel( label );
     labelObject->AddIndex( idx );
     this->AddLabelObject( labelObject );
-//     std::cout<< m_LabelObjectContainer.size() << std::endl;
     }
   
 }
@@ -293,7 +292,6 @@ LabelMap<TLabelObject>
     labelObject->SetLabel( label );
     labelObject->AddLine( idx, length );
     this->AddLabelObject( labelObject );
-//     std::cout<< m_LabelObjectContainer.size() << std::endl;
     }
 }
 

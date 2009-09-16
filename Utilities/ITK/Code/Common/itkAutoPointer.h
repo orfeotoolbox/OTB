@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAutoPointer.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-18 18:06:14 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-08-05 19:52:39 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -171,7 +171,7 @@ public:
     { return (void*)m_Pointer >= (void*) r.m_Pointer; }
 
   /** Overload operator assignment.  */
-  AutoPointer &operator = (AutoPointer &r) const
+  AutoPointer &operator = (AutoPointer &r)
     { 
     AutoPointer( r ).Swap( *this );
     return *this;
@@ -183,13 +183,14 @@ public:
     { return (m_Pointer!=NULL); }
 
   /** Function to print object pointed to.  */
-  ObjectType *Print (std::ostream& os) const 
+/*  ObjectType *Print (std::ostream& os) const 
     { 
     // This prints the object pointed to by the pointer  
     (*m_Pointer).Print(os);  
     os << "Owner: " << m_IsOwner << std::endl;
     return m_Pointer;
     } 
+*/
 
 private:
 

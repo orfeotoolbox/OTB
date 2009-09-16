@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPoint.h,v $
   Language:  C++
-  Date:      $Date: 2009-03-03 15:07:54 $
-  Version:   $Revision: 1.68 $
+  Date:      $Date: 2009-06-14 11:52:00 $
+  Version:   $Revision: 1.69 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -151,7 +151,9 @@ public:
   /** Set the current point to a barycentric combination of the two points
    * given as arguments.
    *
-   * \param  \f$ \alpha \f$ = weight for the first point
+   * \param A First point
+   * \param B Second point
+   * \param alpha Weight for the first point
    * 
    * The first point is multiplied by \f$ \alpha \f$, the second is multiplied 
    * by * \f$ (1-\alpha) \f$, and the sum is stored in the Point on which the

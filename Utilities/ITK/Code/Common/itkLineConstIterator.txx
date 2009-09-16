@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLineConstIterator.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 19:05:01 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-07-12 10:52:52 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -43,7 +43,7 @@ LineConstIterator<TImage>
   int maxDistanceDimension = 0;
   for (i = 0; i < TImage::ImageDimension; ++i)
     {
-    IndexValueType distance = vcl_abs(difference[i]);
+    IndexValueType distance = vnl_math_abs(difference[i]);
     if (distance > maxDistance)
       {
       maxDistance = distance;

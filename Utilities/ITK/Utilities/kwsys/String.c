@@ -11,6 +11,14 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifdef KWSYS_STRING_C
+/*
+All code in this source file is conditionally compiled to work-around
+template definition auto-search on VMS.  Other source files in this
+directory that use the stl string cause the compiler to load this
+source to try to get the definition of the string template.  This
+condition blocks the compiler from seeing the symbols defined here.
+*/
 #include "kwsysPrivate.h"
 #include KWSYS_HEADER(String.h)
 
@@ -78,7 +86,7 @@ int kwsysString_strcasecmp(const char* lhs, const char* rhs)
   const char* const lower = kwsysString_strcasecmp_tolower;
   unsigned char const* us1 = (unsigned char const*)lhs;
   unsigned char const* us2 = (unsigned char const*)rhs;
-  int result = 0;
+  int result;
   while((result = lower[*us1] - lower[*us2++], result == 0) && *us1++)
     {
     }
@@ -105,3 +113,5 @@ int kwsysString_strncasecmp(const char* lhs, const char* rhs, size_t n)
   return result;
 #endif
 }
+
+#endif /* KWSYS_STRING_C */

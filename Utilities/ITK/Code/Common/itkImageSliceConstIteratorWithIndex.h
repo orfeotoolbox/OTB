@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageSliceConstIteratorWithIndex.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 19:04:57 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-08-14 20:48:00 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -163,6 +163,9 @@ public:
    * \sa operator++ \sa EndOfLine \sa End \sa NextSlice */
   void NextLine(void);
   
+  /** Go to the first pixel of the current slice */
+  void GoToBeginOfSlice(void);
+
   /** Go to the next slice
    * \sa operator++ \sa EndOfLine \sa End */
   void NextSlice(void);

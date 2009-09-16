@@ -147,7 +147,7 @@ protected:
   virtual void         RasterizeVisibleLayers(void);
 
   /** Notify a registered listener */
-  virtual  void         Notify(ListenerType * listener);
+  virtual  void         NotifyListener(ListenerType * listener);
 
   /** Constrains the given region to the largest possible one. */
   virtual RegionType    ConstrainRegion(const RegionType & region, const RegionType & largest);

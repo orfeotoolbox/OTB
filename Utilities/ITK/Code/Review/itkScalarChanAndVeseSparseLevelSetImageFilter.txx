@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarChanAndVeseSparseLevelSetImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-16 12:35:12 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-08-06 01:46:47 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -22,26 +22,22 @@
 
 namespace itk
 {
-template < class TInput, class TFeature, class TFunction,
-class TOutputPixel, class TSharedData, typename TIdCell >
+template < class TInputImage, class TFeatureImage, class TOutputImage, class TFunction,
+class TSharedData, typename TIdCell >
 void
-ScalarChanAndVeseSparseLevelSetImageFilter< TInput, TFeature, TFunction,
-TOutputPixel, TSharedData, TIdCell >::
+ScalarChanAndVeseSparseLevelSetImageFilter< TInputImage, TFeatureImage, TOutputImage,
+TFunction, TSharedData, TIdCell >::
 Initialize()
 {
   // Set the feature image for the individual level-set functions
-  for( IdCellType i = 0; i < this->m_FunctionCount; i++)
+  for( IdCellType fId = 0; fId < this->m_FunctionCount; ++fId )
     {
-    InputImagePointer input = this->m_LevelSet[i];
+    InputImagePointer input = this->m_LevelSet[fId];
     InputPointType origin = input->GetOrigin();
-    InputSpacingType spacing = input->GetSpacing();
 
     // In the context of the global coordinates
     FeatureIndexType start;
-    for( unsigned int j = 0; j < ImageDimension; j++ )
-      {
-      start[j] = static_cast<FeatureIndexValueType>( origin[j]/spacing[j] );
-      }
+    this->GetInput()->TransformPhysicalPointToIndex( origin, start );
 
     // Defining roi region
     FeatureRegionType region;
@@ -50,14 +46,15 @@ Initialize()
 
     // Initialize the ROI filter with the feature image
     ROIFilterPointer roi = ROIFilterType::New();
-    roi->SetInput( this->GetFeatureImage() );
+    roi->SetInput( this->GetInput() );
     roi->SetRegionOfInterest( region );
     roi->Update();
 
     // Assign roi output
-    FeatureImagePtr feature = roi->GetOutput();
-    this->m_DifferenceFunctions[i]->SetFeatureImage( feature );
-    this->m_DifferenceFunctions[i]->SetInitialImage( input );
+    FeatureImagePointer feature = roi->GetOutput();
+    this->m_DifferenceFunctions[fId]->SetFeatureImage( feature );
+    this->m_DifferenceFunctions[fId]->SetInitialImage( input );
+    this->m_DifferenceFunctions[fId]->CalculateAdvectionImage();
     }
 
   // Initialize the function count in m_SharedData
@@ -69,49 +66,49 @@ Initialize()
     this->m_SharedData->SetKdTree( this->m_KdTree );
     }
 
-  for ( IdCellType i = 0; i < this->m_FunctionCount; i++ )
+  for ( IdCellType fId = 0; fId < this->m_FunctionCount; ++fId )
     {
-    FunctionPtr typedPointer = this->m_DifferenceFunctions[i];
+    FunctionPtr typedPointer = this->m_DifferenceFunctions[fId];
 
-    typedPointer->SetFunctionId( i );
+    typedPointer->SetFunctionId( fId );
 
-    this->m_SharedData->CreateHeavisideFunctionOfLevelSetImage ( i, this->m_LevelSet[i] );
+    this->m_SharedData->CreateHeavisideFunctionOfLevelSetImage ( fId, this->m_LevelSet[fId] );
 
     // Share the m_SharedData structure
     typedPointer->SetSharedData( this->m_SharedData );
     }
 
-  this->m_SharedData->AllocateListImage( this->GetFeatureImage() );
+  this->m_SharedData->AllocateListImage( this->GetInput() );
 
   this->m_SharedData->PopulateListImage();
 
   Superclass::Initialize();
 
-  for (IdCellType i = 0; i < this->m_FunctionCount; i++)
+  for ( IdCellType fId = 0; fId < this->m_FunctionCount; ++fId )
     {
-    this->m_DifferenceFunctions[i]->UpdateSharedData(true);
+    this->m_DifferenceFunctions[fId]->UpdateSharedData(true);
     }
 
-  for ( IdCellType i = 0; i < this->m_FunctionCount; i++ )
+  for ( IdCellType fId = 0; fId < this->m_FunctionCount; ++fId )
     {
-    this->m_DifferenceFunctions[i]->UpdateSharedData( false );
+    this->m_DifferenceFunctions[fId]->UpdateSharedData( false );
     }
 }
 
 /** Overrides parent implementation */
 // This function is called at the end of each iteration
-template < class TInput, class TFeature, class TFunction,
-class TOutputPixel, class TSharedData, typename TIdCell >
+template <class TInputImage, class TFeatureImage, class TOutputImage, class TFunction,
+class TSharedData, typename TIdCell >
 void
-ScalarChanAndVeseSparseLevelSetImageFilter< TInput, TFeature,
-TFunction, TOutputPixel, TSharedData, TIdCell > ::
+ScalarChanAndVeseSparseLevelSetImageFilter<TInputImage, TFeatureImage, TOutputImage,
+TFunction, TSharedData, TIdCell > ::
 InitializeIteration()
 {
   Superclass::InitializeIteration();
 
-  for (IdCellType i = 0; i < this->m_FunctionCount; i++)
+  for (IdCellType fId = 0; fId < this->m_FunctionCount; ++fId)
     {
-    this->m_DifferenceFunctions[i]->UpdateSharedData( false );
+    this->m_DifferenceFunctions[fId]->UpdateSharedData( false );
     }
 
   // Estimate the progress of the filter
@@ -119,16 +116,16 @@ InitializeIteration()
     / ( float ) this->m_NumberOfIterations ) );
 }
 
-template < class TInput, class TFeature, class TFunction,
-class TOutputPixel, class TSharedData, typename TIdCell >
+template < class TInputImage, class TFeatureImage, class TOutputImage, class TFunction,
+class TSharedData, typename TIdCell >
 void
-ScalarChanAndVeseSparseLevelSetImageFilter< TInput, TFeature,
-TFunction, TOutputPixel, TSharedData, TIdCell > ::
-UpdatePixel ( unsigned int functionIndex, unsigned int idx,
-NeighborhoodIterator< OutputImageType > &iterator, ValueType &newValue,
+ScalarChanAndVeseSparseLevelSetImageFilter<TInputImage, TFeatureImage, TOutputImage,
+TFunction, TSharedData, TIdCell > ::
+UpdatePixel ( unsigned int fId, unsigned int idx,
+NeighborhoodIterator< InputImageType > &iterator, ValueType &newValue,
 bool &status )
 {
-  FunctionPtr typedPointer = this->m_DifferenceFunctions[functionIndex];
+  FunctionPtr typedPointer = this->m_DifferenceFunctions[fId];
   typedPointer->UpdatePixel( idx, iterator, newValue, status );
 
   iterator.SetPixel(idx, newValue, status);

@@ -191,7 +191,7 @@ bool OGRVectorDataIO<TData>::CanWriteFile( const char* filename ) const
 }
 
 template<class TData>
-void OGRVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
+    void OGRVectorDataIO<TData>::Write(const VectorDataConstPointerType data, char ** papszOptions)
 {
   itk::TimeProbe chrono;
   chrono.Start();
@@ -225,7 +225,7 @@ void OGRVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
      
     
   // m_DataSource = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), TRUE);
-  m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(),NULL);
+     m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(),papszOptions);
 
 
   // check the created data source

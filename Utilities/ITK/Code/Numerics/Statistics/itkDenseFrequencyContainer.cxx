@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDenseFrequencyContainer.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-03-04 15:23:44 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-08-08 20:19:11 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -76,8 +76,20 @@ DenseFrequencyContainer
     return false;
     }
   FrequencyType frequency = this->GetFrequency(id);
-  (*m_FrequencyContainer)[id] = frequency + value; 
+
+  const FrequencyType largestIntegerThatFitsInFloat = 16777216;
+
+  if( largestIntegerThatFitsInFloat - frequency < value )
+    {
+    itkExceptionMacro("Frequency container saturated for Instance ");
+    }
+  else
+    {
+    (*m_FrequencyContainer)[id] = frequency + value; 
+    }
+
   m_TotalFrequency += value;
+
   return true;
 }
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMattesMutualInformationImageToImageMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 20:02:59 $
-  Version:   $Revision: 1.61 $
+  Date:      $Date: 2009-08-25 11:48:26 $
+  Version:   $Revision: 1.63 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -732,7 +732,7 @@ MattesMutualInformationImageToImageMetric<TFixedImage,TMovingImage>
                           sampleOk, movingImageValue );
 
     ++nFixedImageSamples;
-
+    
     if( sampleOk )
       {
 
@@ -807,16 +807,18 @@ MattesMutualInformationImageToImageMetric<TFixedImage,TMovingImage>
       } //end if-block check sampleOk
     } // end iterating over fixed image spatial sample container for loop
 
-  itkDebugMacro( "Ratio of voxels mapping into moving image buffer: " 
-                 << nSamples << " / " << m_NumberOfSpatialSamples 
+  itkDebugMacro( "Ratio of voxels mapping into moving image buffer: "
+                 << nSamples << " / " << m_NumberOfSpatialSamples
                  << std::endl );
 
-  if( nSamples < m_NumberOfSpatialSamples / 4 )
+  if( nSamples < m_NumberOfSpatialSamples / 16 )
     {
     itkExceptionMacro( "Too many samples map outside moving image buffer: "
                        << nSamples << " / " << m_NumberOfSpatialSamples 
                        << std::endl );
     }
+
+  this->m_NumberOfPixelsCounted = nSamples;
 
 
   /**
@@ -1003,9 +1005,10 @@ MattesMutualInformationImageToImageMetric<TFixedImage,TMovingImage>
     bool sampleOk;
     double movingImageValue;
 
+    
     this->TransformPoint( nFixedImageSamples, parameters, mappedPoint, 
                           sampleOk, movingImageValue );
-
+    
     if( sampleOk )
       {
       ++nSamples; 
@@ -1103,7 +1106,7 @@ MattesMutualInformationImageToImageMetric<TFixedImage,TMovingImage>
                  << nSamples << " / " << m_NumberOfSpatialSamples 
                  << std::endl );
 
-  if( nSamples < m_NumberOfSpatialSamples / 4 )
+  if( nSamples < m_NumberOfSpatialSamples / 16 )
     {
     itkExceptionMacro( "Too many samples map outside moving image buffer: "
                        << nSamples << " / " << m_NumberOfSpatialSamples 

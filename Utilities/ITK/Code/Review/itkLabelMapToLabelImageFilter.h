@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelMapToLabelImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-16 22:19:31 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-07-30 22:54:24 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -22,7 +22,7 @@
 namespace itk {
 
 /** \class LabelMapToLabelImageFilter
- * \brief Convert a LabelMap to a labeled image
+ * \brief Converts a LabelMap to a labeled image.
  *
  * LabelMapToBinaryImageFilter to a label image.
  *
@@ -63,17 +63,14 @@ public:
   typedef typename OutputImageType::IndexType      IndexType;
   
   /** ImageDimension constants */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** Standard New method. */
   itkNewMacro(Self);  
 
   /** Runtime information support. */
-  itkTypeMacro(LabelMapToLabelImageFilter, 
-               ImageToImageFilter);
+  itkTypeMacro(LabelMapToLabelImageFilter, ImageToImageFilter);
 
 protected:
   LabelMapToLabelImageFilter();

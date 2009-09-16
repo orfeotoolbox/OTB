@@ -194,6 +194,7 @@ private:
   Those method will disappear.
   Use Default because don't need to know the sensor type*/
   typename DefaultImageMetadataInterface::Pointer m_ImageMetadataInterface;
+
 };
 
 
