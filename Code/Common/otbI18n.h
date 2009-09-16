@@ -28,7 +28,6 @@
 #define _QUOTEME(x) #x
 #define QUOTEME(x) _QUOTEME(x)
 
-
 #if defined(OTB_I18N)
 #define otbI18nMacro() \
   setlocale( LC_ALL, QUOTEME(OTB_LANG) );\
