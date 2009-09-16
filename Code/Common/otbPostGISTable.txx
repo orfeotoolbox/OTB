@@ -311,6 +311,7 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   if ( !m_TableName.empty() ) {
     connectionSTR +="tables=";
     connectionSTR += m_TableName;
+//     connectionSTR += "' ";
   }
   
   otbGenericMsgDebugMacro(<<"OGR connection string " << connectionSTR);

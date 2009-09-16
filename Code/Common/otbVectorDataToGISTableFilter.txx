@@ -126,8 +126,8 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
   output->GetConnection()->ConnectToDB();
   
   /**Name of the table is settedd automaticcaly to "vector_data_to_gis"*/
-  output->SetTableName ("vector_data_to_gis");
-  
+//   output->SetTableName ("vector_data_to_gis");
+  output->SetTableName (this->GetGISTableName());
   /**Create the PostgreSQL table*/
   //output->CreateTable(m_DropExistingGISTable);
     

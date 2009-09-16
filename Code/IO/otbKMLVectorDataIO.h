@@ -100,7 +100,7 @@ public:
   virtual bool CanWriteFile(const char*) const;
 
   /** Writes the data to disk from the data structure provided */
-  virtual void Write(VectorDataConstPointerType data);
+  virtual void Write(VectorDataConstPointerType data, char ** papszOptions = NULL);
 
 protected:
   /** Construtor.*/
