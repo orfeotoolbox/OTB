@@ -69,7 +69,7 @@ class ImageViewerManagerViewGroup {open
         Fl_Button guiOpenImage {
           label {Open image}
           callback {OpenImage();}
-          tooltip {Open an image in a  new image viewer} xywh {489 46 95 24} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0x6f color 23 selection_color 23 labelcolor 186
+          tooltip {Open an image in a new image viewer} xywh {489 46 95 24} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0x6f color 23 selection_color 23 labelcolor 186
         }
         Fl_Button guiCloseImage {
           label {Close image}
@@ -206,7 +206,7 @@ class ImageViewerManagerViewGroup {open
         tooltip {Leave the link set up interface} xywh {400 175 90 30} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0xff0d color 23 selection_color 23 labelcolor 186
       }
       Fl_Browser guiLinkListRight {
-        label SecondImage
+        label Second image
         tooltip {List of image viewers already linked with the selected image viewer} xywh {307 25 235 75} type Hold box EMBOSSED_BOX color 54 selection_color 20 labelcolor 186 align 1 textcolor 187
       }
     }
