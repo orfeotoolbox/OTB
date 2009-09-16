@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRegularStepGradientDescentBaseOptimizer.cxx,v $
   Language:  C++
-  Date:      $Date: 2007-09-10 16:22:23 $
-  Version:   $Revision: 1.24 $
+  Date:      $Date: 2009-06-24 12:02:54 $
+  Version:   $Revision: 1.25 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -47,7 +47,7 @@ RegularStepGradientDescentBaseOptimizer
   m_Gradient.Fill( 0.0f );
   m_PreviousGradient.Fill( 0.0f );
   m_RelaxationFactor = 0.5;
-
+  m_StopConditionDescription.str("");
 }
 
 /**
@@ -64,6 +64,8 @@ RegularStepGradientDescentBaseOptimizer
   m_CurrentIteration          = 0;
 
   m_StopCondition = Unknown;
+  m_StopConditionDescription.str("");
+  m_StopConditionDescription << this->GetNameOfClass() << ": ";
 
   // validity check for the value of GradientMagnitudeTolerance
   if( m_GradientMagnitudeTolerance < 0.0 )
@@ -104,6 +106,9 @@ RegularStepGradientDescentBaseOptimizer
     if( m_CurrentIteration >= m_NumberOfIterations )
       {
       m_StopCondition = MaximumNumberOfIterations;
+      m_StopConditionDescription << "Maximum number of iterations ("
+                                 << m_NumberOfIterations
+                                 << ") exceeded.";
       this->StopOptimization();
       break;
       }
@@ -118,6 +123,10 @@ RegularStepGradientDescentBaseOptimizer
     catch( ExceptionObject & excp )
       {
       m_StopCondition = CostFunctionError;
+      m_StopConditionDescription << "Cost function error after "
+                                 << m_CurrentIteration
+                                 << " iterations. "
+                                 << excp.GetDescription();
       this->StopOptimization();
       throw excp;
       }
@@ -207,6 +216,13 @@ RegularStepGradientDescentBaseOptimizer
   if( gradientMagnitude < m_GradientMagnitudeTolerance ) 
     {
     m_StopCondition = GradientMagnitudeTolerance;
+    m_StopConditionDescription << "Gradient magnitude tolerance met after "
+                               << m_CurrentIteration
+                               << " iterations. Gradient magnitude ("
+                               << gradientMagnitude
+                               << ") is less than gradient magnitude tolerance ("
+                               << m_GradientMagnitudeTolerance
+                               << ").";
     this->StopOptimization();
     return;
     }
@@ -229,6 +245,13 @@ RegularStepGradientDescentBaseOptimizer
   if( m_CurrentStepLength < m_MinimumStepLength )
     {
     m_StopCondition = StepTooSmall;
+    m_StopConditionDescription << "Step too small after "
+                               << m_CurrentIteration
+                               << " iterations. Current step (" 
+                               << m_CurrentStepLength 
+                               << ") is less than minimum step ("
+                               << m_MinimumStepLength
+                               << ").";
     this->StopOptimization();
     return;
     }
@@ -253,6 +276,14 @@ RegularStepGradientDescentBaseOptimizer
   this->InvokeEvent( IterationEvent() );
 
 }
+
+const std::string
+RegularStepGradientDescentBaseOptimizer
+::GetStopConditionDescription() const
+{
+  return m_StopConditionDescription.str();
+}
+
 
 void
 RegularStepGradientDescentBaseOptimizer

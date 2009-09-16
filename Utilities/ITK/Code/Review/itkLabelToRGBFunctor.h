@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelToRGBFunctor.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-24 19:03:15 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-07-07 12:27:34 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -123,6 +123,18 @@ public:
                   static_cast< ValueType >( static_cast< double >( g ) / 255 * m ),
                   static_cast< ValueType >( static_cast< double >( b ) / 255 * m ) );
     m_Colors.push_back( rgbPixel );
+    }
+
+  // Empty the color LUT
+  void ResetColors()
+    {
+    m_Colors.clear();
+    }
+
+  // Get number of colors in the LUT
+  unsigned int GetNumberOfColors() const
+    {
+    return m_Colors.size();
     }
 
   bool operator != (const Self &l) const

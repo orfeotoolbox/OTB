@@ -23,10 +23,10 @@
 #define __otbTerraSarCalibrationImageFilter_h
 
 
-#include "otbUnaryFunctorNeighborhoodImageFilter.h"
+#include "otbUnaryFunctorWithIndexImageFilter.h"
 #include "otbRadarFunctors.h"
 #include "itkMetaDataDictionary.h"
-#include "itkConstNeighborhoodIterator.h"
+//#include "itkConstNeighborhoodIterator.h"
 #include "otbMath.h"
 
 namespace otb
@@ -46,10 +46,10 @@ namespace otb
 
 template<class TInputImage, class TOutputImage >
 class ITK_EXPORT TerraSarCalibrationImageFilter :
-  public UnaryFunctorNeighborhoodImageFilter< 
+  public UnaryFunctorWithIndexImageFilter< 
     TInputImage,
     TOutputImage,
-    ITK_TYPENAME Functor::TerraSarCalibrationImageFunctor< ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage>, ITK_TYPENAME TOutputImage::InternalPixelType > >
+    ITK_TYPENAME Functor::TerraSarCalibrationImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType, ITK_TYPENAME TOutputImage::InternalPixelType > >
 {
 public:
   /** Extract input and output images dimensions.*/
@@ -59,20 +59,20 @@ public:
   /** "typedef" to simplify the variables definition and the declaration. */
   typedef TInputImage         InputImageType;
   typedef TOutputImage        OutputImageType;
-  typedef typename Functor::TerraSarCalibrationImageFunctor<ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage>,
+  typedef typename Functor::TerraSarCalibrationImageFunctor<ITK_TYPENAME InputImageType::InternalPixelType,
   ITK_TYPENAME OutputImageType::InternalPixelType>                                            FunctorType;
   /** "typedef" for standard classes. */
   typedef TerraSarCalibrationImageFilter                                                 Self;
-  typedef UnaryFunctorNeighborhoodImageFilter< InputImageType, OutputImageType, FunctorType > Superclass;
+  typedef UnaryFunctorWithIndexImageFilter< InputImageType, OutputImageType, FunctorType > Superclass;
   typedef itk::SmartPointer<Self>                                                             Pointer;
   typedef itk::SmartPointer<const Self>                                                       ConstPointer;
-
+  
   /** object factory method. */
   itkNewMacro(Self);
 
   /** return class name. */
   // Use a with neighborhood to have access to the pixel coordinates
-  itkTypeMacro(TerraSarCalibrationImageFilter, UnaryFunctorNeighborhoodImageFilter);
+  itkTypeMacro(TerraSarCalibrationImageFilter, UnaryFunctorWithIndexImageFilter);
 
   typedef itk::MetaDataDictionary                       MetaDataDictionaryType;
   typedef typename FunctorType::DoubleVectorType        DoubleVectorType;
@@ -86,6 +86,7 @@ public:
   /** Noise minimal range validity */
   void SetNoiseRangeValidityMin( double val );
   double GetNoiseRangeValidityMin() const;
+
   /** Noise maximal range validity */
   void SetNoiseRangeValidityMax( double val );
   double GetNoiseRangeValidityMax() const;
@@ -128,6 +129,8 @@ protected:
 private:
 
 };
+
+
 
 } // end namespace otb
 

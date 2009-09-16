@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkChiSquareDistribution.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-05-10 18:27:08 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-08-07 15:40:32 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -85,8 +85,8 @@ ChiSquareDistribution
 
   if (x >= 0.0)
     {
-    pdf = exp(-0.5*x) * pow(x, dofon2 - 1.0)
-      / (pow(2.0, dofon2) * dgamma_(&dofon2));
+    pdf = vcl_exp(-0.5*x) * vcl_pow(x, dofon2 - 1.0)
+      / (vcl_pow(2.0, dofon2) * dgamma_(&dofon2));
     }
   
   return pdf;
@@ -162,7 +162,7 @@ ChiSquareDistribution
   nx = GaussianDistribution::InverseCDF(p);
 
   double f = 2.0 / (9.0*dof);
-  x = dof*pow(1.0 - f + nx*sqrt(f), 3.0);
+  x = dof*vcl_pow(1.0 - f + nx*vcl_sqrt(f), 3.0);
 
 
   // The approximation above is only accurate for large degrees of

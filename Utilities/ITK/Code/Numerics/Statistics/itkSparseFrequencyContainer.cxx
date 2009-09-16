@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSparseFrequencyContainer.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-03-04 19:29:54 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-08-08 20:19:11 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -81,8 +81,20 @@ SparseFrequencyContainer
   // No need to test for bounds because in a map container the
   // element is allocated if the key doesn't exist yet
   FrequencyType frequency = this->GetFrequency(id);
-  m_FrequencyContainer[id] = frequency + value; 
+
+  const FrequencyType largestIntegerThatFitsInFloat = 16777216;
+
+  if( largestIntegerThatFitsInFloat - frequency < value )
+    {
+    itkExceptionMacro("Frequency container saturated for Instance ");
+    }
+  else
+    {
+    m_FrequencyContainer[id] = frequency + value;
+    }
+
   m_TotalFrequency += value;
+
   return true;
 }
 

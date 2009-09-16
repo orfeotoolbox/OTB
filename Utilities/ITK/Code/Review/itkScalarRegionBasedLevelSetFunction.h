@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarRegionBasedLevelSetFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-13 14:23:05 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-06-12 09:44:02 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -30,7 +30,8 @@ namespace itk {
  * \brief LevelSet function that computes a speed image based on regional integrals
  *
  * This class implements a level set function that computes the speed image by
- * integrating values on the image domain.
+ * integrating values on the image domain. NOTE: The convention followed is 
+ * inside of the level-set function is negative and outside is positive.
  *
  * Based on the paper:
  *
@@ -134,10 +135,14 @@ protected:
   ScalarValueType ComputeOverlapParameters( const FeatureIndexType& featIndex,
     ScalarValueType& product );
 
+  // update the background and foreground constants for pixel updates
+  // Called only when sparse filters are used to prevent iteration through the
+  // entire image
   virtual void UpdateSharedDataInsideParameters( const unsigned int& iId,
-    const bool& iBool, const FeaturePixelType& iVal, const ScalarValueType& iH ) = 0;
+    const FeaturePixelType& iVal, const ScalarValueType& iChange ) = 0;
   virtual void UpdateSharedDataOutsideParameters( const unsigned int& iId,
-    const bool& iBool, const FeaturePixelType& iVal, const ScalarValueType& iH ) = 0;
+    const FeaturePixelType& iVal, const ScalarValueType& iChange ) = 0;
+
 
 private:
   ScalarRegionBasedLevelSetFunction(const Self&); //purposely not implemented

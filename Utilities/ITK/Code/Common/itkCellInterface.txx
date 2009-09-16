@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCellInterface.txx,v $
   Language:  C++
-  Date:      $Date: 2006-03-18 18:06:25 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2009-08-08 20:42:15 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -114,6 +114,8 @@ CellInterface< TPixelType , TCellTraits >
 }
 
 
+#if !defined(CABLE_CONFIGURATION)
+
 /**
  * Get a begin iterator for the UsingCellsContainer.
  */
@@ -136,6 +138,8 @@ CellInterface< TPixelType , TCellTraits >
 {
   return m_UsingCells.end();
 }
+
+#endif
 
 } // end namespace itk
 

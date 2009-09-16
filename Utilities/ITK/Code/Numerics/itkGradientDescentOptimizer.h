@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGradientDescentOptimizer.h,v $
   Language:  C++
-  Date:      $Date: 2007-03-22 21:39:37 $
-  Version:   $Revision: 1.30 $
+  Date:      $Date: 2009-06-24 12:02:51 $
+  Version:   $Revision: 1.31 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,7 +18,7 @@
 #define __itkGradientDescentOptimizer_h
 
 #include "itkSingleValuedNonLinearOptimizer.h"
-
+#include <string>
 namespace itk
 {
   
@@ -109,17 +109,17 @@ public:
   itkGetConstReferenceMacro( NumberOfIterations, unsigned long );
 
   /** Get the current iteration number. */
-  itkGetConstMacro( CurrentIteration, unsigned int );
+  itkGetConstMacro( CurrentIteration, unsigned long );
 
   /** Get the current value. */
   itkGetConstReferenceMacro( Value, double );
 
   /** Get Stop condition. */
   itkGetConstReferenceMacro( StopCondition, StopConditionType );
+  const std::string GetStopConditionDescription() const;
 
-  /** Get Stop condition. */
+  /** Get Gradient condition. */
   itkGetConstReferenceMacro( Gradient, DerivativeType );
-
 
 protected:
   GradientDescentOptimizer();
@@ -141,7 +141,7 @@ private:
   StopConditionType             m_StopCondition;
   unsigned long                 m_NumberOfIterations;
   unsigned long                 m_CurrentIteration;
-
+  OStringStream                 m_StopConditionDescription;
 };
 
 } // end namespace itk

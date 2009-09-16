@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAffineTransform.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-09 09:23:20 $
-  Version:   $Revision: 1.70 $
+  Date:      $Date: 2009-06-17 12:17:33 $
+  Version:   $Revision: 1.71 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -89,7 +89,7 @@ namespace itk
  * transform parameters can also be set as an Array<double> of size
  * (NDimension + 1) * NDimension using method SetParameters(). 
  * The first (NDimension x NDimension) parameters defines the matrix in 
- * column-major order (where the column index) varies the fastest). 
+ * row-major order (where the column index varies the fastest). 
  * The last NDimension parameters defines the translation 
  * in each dimensions.
  *

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptMeanSquaresImageToImageMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2008-02-05 16:03:07 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-08-24 17:42:02 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,7 +44,8 @@ MeanSquaresImageToImageMetric<TFixedImage,TMovingImage>
 
   //  For backward compatibility, the default behavior is to use all the pixels
   //  in the fixed image.
-  this->UseAllPixelsOn();
+  //  This should be fixed in ITKv4 so that this metric behaves as the others.
+  this->SetUseAllPixels( true );
 }
 
 template < class TFixedImage, class TMovingImage >
@@ -110,14 +111,12 @@ MeanSquaresImageToImageMetric<TFixedImage,TMovingImage>
 template < class TFixedImage, class TMovingImage  >
 inline bool
 MeanSquaresImageToImageMetric<TFixedImage,TMovingImage>
-::GetValueThreadProcessSample(
-  unsigned int threadID,
-  unsigned long fixedImageSample,
-  const MovingImagePointType & itkNotUsed(mappedPoint),
-  double movingImageValue) const
+::GetValueThreadProcessSample( unsigned int threadID,
+                               unsigned long fixedImageSample,
+                               const MovingImagePointType & itkNotUsed(mappedPoint),
+                               double movingImageValue) const
 {
-  double diff = movingImageValue
-    - this->m_FixedImageSamples[fixedImageSample].value;
+  double diff = movingImageValue - this->m_FixedImageSamples[fixedImageSample].value;
 
   m_ThreaderMSE[threadID] += diff*diff;
 
@@ -149,15 +148,15 @@ MeanSquaresImageToImageMetric<TFixedImage,TMovingImage>
   this->GetValueMultiThreadedInitiate();
 
   itkDebugMacro( "Ratio of voxels mapping into moving image buffer: "
-                 << this->m_NumberOfMovingImageSamples << " / "
+                 << this->m_NumberOfPixelsCounted << " / "
                  << this->m_NumberOfFixedImageSamples
                  << std::endl );
 
-  if( this->m_NumberOfMovingImageSamples <
+  if( this->m_NumberOfPixelsCounted <
       this->m_NumberOfFixedImageSamples / 4 )
     {
     itkExceptionMacro( "Too many samples map outside moving image buffer: "
-                       << this->m_NumberOfMovingImageSamples << " / "
+                       << this->m_NumberOfPixelsCounted << " / "
                        << this->m_NumberOfFixedImageSamples
                        << std::endl );
     }
@@ -167,7 +166,7 @@ MeanSquaresImageToImageMetric<TFixedImage,TMovingImage>
     {
     mse += m_ThreaderMSE[t];
     }
-  mse /= this->m_NumberOfMovingImageSamples;
+  mse /= this->m_NumberOfPixelsCounted;
 
   return mse;
 }
@@ -176,17 +175,14 @@ MeanSquaresImageToImageMetric<TFixedImage,TMovingImage>
 template < class TFixedImage, class TMovingImage  >
 inline bool
 MeanSquaresImageToImageMetric<TFixedImage,TMovingImage>
-::GetValueAndDerivativeThreadProcessSample(
-  unsigned int threadID,
-  unsigned long fixedImageSample,
-  const MovingImagePointType & itkNotUsed(mappedPoint),
-  double movingImageValue,
-  const ImageDerivativesType &
-  movingImageGradientValue
-  ) const
+::GetValueAndDerivativeThreadProcessSample( unsigned int threadID,
+                                    unsigned long fixedImageSample,
+                                    const MovingImagePointType & itkNotUsed(mappedPoint),
+                                    double movingImageValue,
+                                    const ImageDerivativesType &
+                                    movingImageGradientValue ) const
 {
-  double diff = movingImageValue
-    - this->m_FixedImageSamples[fixedImageSample].value;
+  double diff = movingImageValue - this->m_FixedImageSamples[fixedImageSample].value;
 
   m_ThreaderMSE[threadID] += diff*diff;
 
@@ -271,15 +267,15 @@ MeanSquaresImageToImageMetric<TFixedImage,TMovingImage>
   this->GetValueAndDerivativeMultiThreadedInitiate();
 
   itkDebugMacro( "Ratio of voxels mapping into moving image buffer: "
-                 << this->m_NumberOfMovingImageSamples << " / "
+                 << this->m_NumberOfPixelsCounted << " / "
                  << this->m_NumberOfFixedImageSamples
                  << std::endl );
 
-  if( this->m_NumberOfMovingImageSamples <
+  if( this->m_NumberOfPixelsCounted <
       this->m_NumberOfFixedImageSamples / 4 )
     {
     itkExceptionMacro( "Too many samples map outside moving image buffer: "
-                       << this->m_NumberOfMovingImageSamples << " / "
+                       << this->m_NumberOfPixelsCounted << " / "
                        << this->m_NumberOfFixedImageSamples
                        << std::endl );
     }
@@ -295,11 +291,11 @@ MeanSquaresImageToImageMetric<TFixedImage,TMovingImage>
       }
     }
 
-  value /= this->m_NumberOfMovingImageSamples;
+  value /= this->m_NumberOfPixelsCounted;
   for(unsigned int parameter = 0; parameter < this->m_NumberOfParameters;
       parameter++)
     {
-    derivative[parameter] /= this->m_NumberOfMovingImageSamples;
+    derivative[parameter] /= this->m_NumberOfPixelsCounted;
     }
 }
 

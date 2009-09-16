@@ -78,7 +78,7 @@ protected:
   void         PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Notify a registered listener */
-   void        Notify(ListenerType * listener);
+   void        NotifyListener(ListenerType * listener);
 
 private:
   PixelDescriptionModel(const Self&);     // purposely not implemented

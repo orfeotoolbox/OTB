@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiScaleHessianBasedMeasureImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-20 12:54:12 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-08-26 19:09:35 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -181,9 +181,12 @@ MultiScaleHessianBasedMeasureImageFilter
 
   while (sigma <= m_SigmaMaximum)
     {
-    // TODO: change the to debug output
-    std::cout << "Computing measure for scale with sigma = "
-              << sigma << std::endl;
+    if ( m_NumberOfSigmaSteps == 0 )
+      {
+      break;
+      }
+
+    itkDebugMacro ( << "Computing measure for scale with sigma = " << sigma );
 
     m_HessianFilter->SetSigma( sigma );
 
@@ -196,6 +199,11 @@ MultiScaleHessianBasedMeasureImageFilter
     sigma  = this->ComputeSigmaValue( scaleLevel );
 
     scaleLevel++;
+
+    if ( m_NumberOfSigmaSteps == 1 )
+      {
+      break;
+      }
     }
 
   // Write out the best response to the output image
@@ -233,18 +241,20 @@ MultiScaleHessianBasedMeasureImageFilter
   ImageRegionIterator<UpdateBufferType> oit( m_UpdateBuffer, outputRegion );
 
   typename ScalesImageType::Pointer scalesImage = static_cast<ScalesImageType*>(this->ProcessObject::GetOutput(1));
-  ImageRegionIterator<ScalesImageType> osit (scalesImage, outputRegion );
+  ImageRegionIterator<ScalesImageType> osit;
 
   typename HessianImageType::Pointer hessianImage = static_cast<HessianImageType*>(this->ProcessObject::GetOutput(2));
-  ImageRegionIterator<HessianImageType> ohit( hessianImage, outputRegion );
+  ImageRegionIterator<HessianImageType> ohit;
 
   oit.GoToBegin();
   if (m_GenerateScalesOutput)
     {
+    osit = ImageRegionIterator<ScalesImageType> ( scalesImage, outputRegion );
     osit.GoToBegin();
     }
   if (m_GenerateHessianOutput)
     {
+    ohit = ImageRegionIterator<HessianImageType> ( hessianImage, outputRegion );
     ohit.GoToBegin();
     }
 

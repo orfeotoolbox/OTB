@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNarrowBand.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-06 13:59:00 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-06-19 19:46:56 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,14 +25,6 @@
 
 namespace itk
 {
-
-//template <class NodeType>
-//void 
-//NarrowBand<NodeType>
-//::PrintSelf(std::ostream& os, Indent indent) const
-//{
-//  Superclass::PrintSelf(os, indent);
-//}
 
 #if !defined(CABLE_CONFIGURATION)
 template <class NodeType >

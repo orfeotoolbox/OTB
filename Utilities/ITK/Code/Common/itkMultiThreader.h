@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiThreader.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-25 12:24:09 $
-  Version:   $Revision: 1.31 $
+  Date:      $Date: 2009-06-14 08:50:53 $
+  Version:   $Revision: 1.32 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -66,7 +66,8 @@ namespace itk
  * If ITK_USE_SPROC is defined, then sproc() will be used to create
  * multiple threads on an SGI. If ITK_USE_PTHREADS is defined, then
  * pthread_create() will be used to create multiple threads (on
- * a sun, for example). */
+ * a sun, for example).
+ */
 
 // The maximum number of threads allowed
 #ifdef ITK_USE_SPROC

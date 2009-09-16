@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageSeriesReader.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-06 00:19:17 $
-  Version:   $Revision: 1.35 $
+  Date:      $Date: 2009-07-30 20:00:00 $
+  Version:   $Revision: 1.38 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -16,9 +16,9 @@
 =========================================================================*/
 #ifndef __itkImageSeriesReader_txx
 #define __itkImageSeriesReader_txx
+
 #include "itkImageSeriesReader.h"
 
-#include "itkImageFileReader.h"
 #include "itkImageRegion.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
@@ -71,11 +71,38 @@ void ImageSeriesReader<TOutputImage>
 
 
 template <class TOutputImage>
+int ImageSeriesReader<TOutputImage>
+::ComputeMovingDimensionIndex( ReaderType * reader )
+{
+  // This method computes the the diminesion index which we are going
+  // to be moving in for slices
+
+  int movingDimension = reader->GetImageIO()->GetNumberOfDimensions();
+
+  if (movingDimension > TOutputImage::ImageDimension - 1)
+    {
+    movingDimension = TOutputImage::ImageDimension - 1;
+    }
+
+  SizeType dimSize = reader->GetOutput()->GetLargestPossibleRegion().GetSize();
+
+  // collapse the number of dimensions in image if any of the last
+  // dimensions are one
+  while (movingDimension > 0 && dimSize[movingDimension-1] == 1)
+    {
+    --movingDimension;
+    }
+
+  return movingDimension;
+}
+
+
+template <class TOutputImage>
 void ImageSeriesReader<TOutputImage>
 ::GenerateOutputInformation(void)
 {
   typename TOutputImage::Pointer output = this->GetOutput();
-  typedef ImageFileReader<TOutputImage> ReaderType;
+
   Array<float> position1(TOutputImage::ImageDimension); position1.Fill(0.0f);
   Array<float> position2(TOutputImage::ImageDimension); position2.Fill(0.0f);
 
@@ -136,35 +163,31 @@ void ImageSeriesReader<TOutputImage>
       origin = reader->GetOutput()->GetOrigin();
       direction = reader->GetOutput()->GetDirection();
       largestRegion = reader->GetOutput()->GetLargestPossibleRegion();
- 
-      m_NumberOfDimensionsInImage = reader->GetImageIO()->GetNumberOfDimensions();
+      // the slice moving direction for a single image can be the
+      // output image dimensions, since this will indicate that we can
+      // not move in the slice moving direction
+      this->m_NumberOfDimensionsInImage = reader->GetImageIO()->GetNumberOfDimensions();
+      if ( this->m_NumberOfDimensionsInImage > TOutputImage::ImageDimension )
+        {
+        this->m_NumberOfDimensionsInImage = TOutputImage::ImageDimension;
+        }
+
       }
     else if (i == 0) 
       {
       // ----------------------------
       // first of multiple slices
-
-      m_NumberOfDimensionsInImage = reader->GetImageIO()->GetNumberOfDimensions();
+      
       spacing = reader->GetOutput()->GetSpacing();
       direction = reader->GetOutput()->GetDirection(); 
       
       SizeType dimSize = reader->GetOutput()->GetLargestPossibleRegion().GetSize();
 
-      // collapse the number of dimensions in image if any of the last
-      // dimensions are one
-      int d;
-      for (d = static_cast<int>(m_NumberOfDimensionsInImage)-1; d >= 0; --d)
-        {
-        if (dimSize[d] == 1)
-          {
-          m_NumberOfDimensionsInImage--;
-          }
-        else
-          {
-          break;
-          }
-        }
-      dimSize[m_NumberOfDimensionsInImage] = m_FileNames.size();
+      // compute the moving dimensions index, or the number of image
+      // dimensions we are going to use
+      this->m_NumberOfDimensionsInImage = ComputeMovingDimensionIndex( reader );
+
+      dimSize[this->m_NumberOfDimensionsInImage] = m_FileNames.size();
       
       IndexType start;
       start.Fill(0);
@@ -223,7 +246,7 @@ void ImageSeriesReader<TOutputImage>
         }
         
       // set interslice spacing
-      spacing[m_NumberOfDimensionsInImage] = interSliceSpacing;
+      spacing[this->m_NumberOfDimensionsInImage] = interSliceSpacing;
         
       }
 
@@ -251,7 +274,7 @@ ImageSeriesReader<TOutputImage>
     {   
     out->SetRequestedRegion( requestedRegion );
     } 
-  else 
+  else
     {
     out->SetRequestedRegion( largestRegion );
     }
@@ -262,14 +285,11 @@ template <class TOutputImage>
 void ImageSeriesReader<TOutputImage>
 ::GenerateData()
 {
-  typedef ImageFileReader<TOutputImage> ReaderType;
-
   TOutputImage * output = this->GetOutput();
-  
   
   ImageRegionType requestedRegion = output->GetRequestedRegion();
   ImageRegionType largestRegion = output->GetLargestPossibleRegion();
-  ImageRegionType sliceRequestedRegion = output->GetRequestedRegion();
+  ImageRegionType sliceRegionToRequest = output->GetRequestedRegion();
 
   // Each file must have the same size.
   SizeType validSize = largestRegion.GetSize();
@@ -278,12 +298,12 @@ void ImageSeriesReader<TOutputImage>
   // will be less than the output dimension.  In this case, set
   // the last dimension that is other than 1 of validSize to 1.  However, if the
   // input and output have the same number of dimensions, this should
-  // not be done because it will lower the dimension of the image.
-  if (TOutputImage::ImageDimension != m_NumberOfDimensionsInImage)
+  // not be done because it will lower the dimension of the output image.
+  if (TOutputImage::ImageDimension != this->m_NumberOfDimensionsInImage)
     {
-    validSize[m_NumberOfDimensionsInImage] = 1;
-    sliceRequestedRegion.SetSize( m_NumberOfDimensionsInImage, 1 );
-    sliceRequestedRegion.SetIndex( m_NumberOfDimensionsInImage, 0 );
+    validSize[this->m_NumberOfDimensionsInImage] = 1;
+    sliceRegionToRequest.SetSize( this->m_NumberOfDimensionsInImage, 1 );
+    sliceRegionToRequest.SetIndex( this->m_NumberOfDimensionsInImage, 0 );
     }
 
   // Allocate the output buffer
@@ -307,13 +327,16 @@ void ImageSeriesReader<TOutputImage>
     }
   m_MetaDataDictionaryArray.clear();
 
-  
   ImageRegionIterator<TOutputImage> ot (output, requestedRegion );
   IndexType sliceStartIndex = requestedRegion.GetIndex();
   const int numberOfFiles = static_cast<int>(m_FileNames.size());
   for ( int i = 0; i != numberOfFiles; ++i )
     {
-    sliceStartIndex[m_NumberOfDimensionsInImage] = i;
+    
+    if (TOutputImage::ImageDimension != this->m_NumberOfDimensionsInImage)
+      {
+      sliceStartIndex[this->m_NumberOfDimensionsInImage] = i;
+      }
 
     // if this slice in not in the requested region then skip this file
     if( !requestedRegion.IsInside(sliceStartIndex) ) 
@@ -330,7 +353,7 @@ void ImageSeriesReader<TOutputImage>
       reader->SetImageIO( m_ImageIO );
       }
     reader->SetUseStreaming( m_UseStreaming );
-    reader->GetOutput()->SetRequestedRegion( sliceRequestedRegion );
+    reader->GetOutput()->SetRequestedRegion( sliceRegionToRequest );
     reader->Update();
 
     // Deep copy the MetaDataDictionary into the array
@@ -358,7 +381,7 @@ void ImageSeriesReader<TOutputImage>
     ot.SetIndex( sliceStartIndex );
     
     ImageRegionConstIterator<TOutputImage> it (reader->GetOutput(),
-                                               sliceRequestedRegion);
+                                               sliceRegionToRequest);
     while (!it.IsAtEnd())
       {
       ot.Set(it.Get());

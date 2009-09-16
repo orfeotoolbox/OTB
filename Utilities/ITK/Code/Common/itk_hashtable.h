@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itk_hashtable.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-05 10:56:47 $
-  Version:   $Revision: 1.32 $
+  Date:      $Date: 2009-08-16 20:30:38 $
+  Version:   $Revision: 1.34 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -173,6 +173,14 @@ struct hash<unsigned long>
 {
   size_t operator()(unsigned long x) const { return x; }
 };
+
+#ifdef _WIN64
+template<>
+struct hash<size_t>
+{
+  size_t operator()(size_t x) const { return x; }
+};
+#endif
 
 template <class Value>
 struct hashtable_node

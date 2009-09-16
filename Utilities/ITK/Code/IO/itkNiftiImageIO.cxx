@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNiftiImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-04-30 15:37:01 $
-  Version:   $Revision: 1.84 $
+  Date:      $Date: 2009-07-29 02:41:20 $
+  Version:   $Revision: 1.85 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -1173,7 +1173,7 @@ NiftiImageIO
   std::string FName(this->GetFileName());
   //
   // set the file type
-  char * tempextension=nifti_find_file_extension(FName.c_str());
+  const char * tempextension=nifti_find_file_extension(FName.c_str());
   if(tempextension == NULL)
     {
     itkExceptionMacro( <<

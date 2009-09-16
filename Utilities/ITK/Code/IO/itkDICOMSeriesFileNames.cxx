@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDICOMSeriesFileNames.cxx,v $
   Language:  C++
-  Date:      $Date: 2007-03-22 14:28:48 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-07-28 22:12:10 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -43,7 +43,7 @@ DICOMSeriesFileNames
 {
 }
 
-const std::vector<std::string> &
+const DICOMSeriesFileNames::FileNamesArrayType &
 DICOMSeriesFileNames
 ::GetFileNames(bool recursive)
 {
@@ -62,7 +62,7 @@ DICOMSeriesFileNames
 }
 
 
-const std::vector<std::string> &
+const DICOMSeriesFileNames::FileNamesArrayType &
 DICOMSeriesFileNames
 ::GetFileNames(const std::string &seriesUID, bool recursive)
 {
@@ -129,7 +129,7 @@ DICOMSeriesFileNames
 
 void
 DICOMSeriesFileNames
-::RecurseDirectory( std::string directory, std::vector<std::string> &filenames)
+::RecurseDirectory( std::string directory, FileNamesArrayType &filenames)
 {
   itksys::Directory dicomDir;
   if (!dicomDir.Load (directory.c_str()))
@@ -164,7 +164,7 @@ DICOMSeriesFileNames
 }
 
 
-const std::vector<std::string> &
+const DICOMSeriesFileNames::FileNamesArrayType &
 DICOMSeriesFileNames
 ::GetSeriesUIDs(bool recursive)
 {
@@ -190,7 +190,7 @@ DICOMSeriesFileNames
   m_AppHelper.Clear();
 
   // Scan directory for files
-  std::vector<std::string> filenames;
+  FileNamesArrayType filenames;
   for (unsigned long i = 0; i < dicomDir.GetNumberOfFiles(); i++)
     {
     // Only read files
@@ -209,7 +209,7 @@ DICOMSeriesFileNames
     }
 
   // Scan the header of each file
-  std::vector<std::string>::iterator iter;
+  FileNamesArrayType::iterator iter;
   for (iter = filenames.begin(); iter != filenames.end(); iter++)
     {
     const char* fn = (*iter).c_str();

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRGBGibbsPriorFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-06 11:15:07 $
-  Version:   $Revision: 1.49 $
+  Date:      $Date: 2009-06-19 12:13:12 $
+  Version:   $Revision: 1.50 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -140,6 +140,7 @@ RGBGibbsPriorFilter<TInputImage, TClassifiedImage>
   int numx;
   LabelType origin;
   LabelType neighbors[4];
+  neighbors[0] = neighbors[1] = neighbors[2] = neighbors[3] = 0;
 
   for (unsigned int rgb = 0; rgb < m_VecDim; rgb++) 
     {

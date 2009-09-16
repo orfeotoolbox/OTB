@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageBase.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-07 14:03:42 $
-  Version:   $Revision: 1.80 $
+  Date:      $Date: 2009-07-12 10:52:52 $
+  Version:   $Revision: 1.81 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -125,11 +125,13 @@ public:
    * spacing is the geometric distance between image samples. ITK only
    * supports positive spacing value: negative values may cause
    * undesirable results.  */
-  typedef Vector<double, VImageDimension>         SpacingType;
+  typedef double                                    SpacingValueType;
+  typedef Vector<SpacingValueType, VImageDimension> SpacingType;
 
   /** Origin typedef support.  The origin is the geometric coordinates
    * of the index (0,0). */
-  typedef Point<double, VImageDimension> PointType;
+  typedef double                                    PointValueType;
+  typedef Point<PointValueType, VImageDimension>    PointType;
 
   /** Direction typedef support.  The Direction is a matix of
    * direction cosines that specify the direction between samples.

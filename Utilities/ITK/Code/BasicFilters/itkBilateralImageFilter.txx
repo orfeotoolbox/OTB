@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBilateralImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 17:31:02 $
-  Version:   $Revision: 1.29 $
+  Date:      $Date: 2009-08-07 15:27:48 $
+  Version:   $Revision: 1.32 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,28 +24,6 @@
 #include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkProgressReporter.h"
 #include "itkStatisticsImageFilter.h"
-
-
-// anonymous namespace
-namespace
-{
-//--------------------------------------------------------------------------
-// The 'floor' function on x86 and mips is many times slower than these
-// and is used a lot in this code, optimize for different CPU architectures
-inline int BilateralFloor(double x)
-{
-#if defined mips || defined sparc || defined __ppc__
-  return (int)((unsigned int)(x + 2147483648.0) - 2147483648U);
-#elif defined i386 || defined _M_IX86
-  union { unsigned int hilo[2]; double d; } u;  
-  u.d = x + 103079215104.0;
-  return (int)((u.hilo[1]<<16)|(u.hilo[0]>>16));  
-#else
-  return int(floor(x));
-#endif
-}
-
-}
 
 
 namespace itk
@@ -169,7 +147,7 @@ BilateralImageFilter<TInputImage, TOutputImage>
   typename GaussianImageSource<GaussianImageType>::ArrayType sigma;
   
   gaussianImage = GaussianImageSource<GaussianImageType>::New();
-  gaussianImage->SetSize(domainKernelSize.GetSize());
+  gaussianImage->SetSize( domainKernelSize.GetSize() );
   gaussianImage->SetSpacing( inputSpacing );
   gaussianImage->SetOrigin( inputOrigin );
   gaussianImage->SetScale( 1.0 );
@@ -225,7 +203,7 @@ BilateralImageFilter<TInputImage, TOutputImage>
   
   // denominator (normalization factor) for Gaussian used for range
   double rangeGaussianDenom;
-  rangeGaussianDenom = m_RangeSigma*vcl_sqrt(2.0*3.1415927);
+  rangeGaussianDenom = m_RangeSigma*vcl_sqrt(2.0*vnl_math::pi);
 
   // Maximum delta for the dynamic range
   double tableDelta;
@@ -327,7 +305,7 @@ BilateralImageFilter<TInputImage, TOutputImage>
           {
           // look up the range gaussian in a table
           tableArg = rangeDistance * distanceToTableIndex;
-          rangeGaussian = m_RangeGaussianTable[BilateralFloor(tableArg)];
+          rangeGaussian = m_RangeGaussianTable[Math::Floor(tableArg)];
           
           // normalization factor so filter integrates to one
           // (product of the domain and the range gaussian)

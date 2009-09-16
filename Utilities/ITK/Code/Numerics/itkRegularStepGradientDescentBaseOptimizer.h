@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRegularStepGradientDescentBaseOptimizer.h,v $
   Language:  C++
-  Date:      $Date: 2007-08-14 17:08:31 $
-  Version:   $Revision: 1.22 $
+  Date:      $Date: 2009-06-24 12:02:54 $
+  Version:   $Revision: 1.23 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -96,6 +96,8 @@ public:
   itkGetConstReferenceMacro( Value, MeasureType );
   itkGetConstReferenceMacro( Gradient, DerivativeType );
   
+  /** Get the reason for termination */
+  virtual const std::string GetStopConditionDescription() const;
   
 protected:
   RegularStepGradientDescentBaseOptimizer();
@@ -141,8 +143,7 @@ protected:
   StopConditionType             m_StopCondition;
   unsigned long                 m_NumberOfIterations;
   unsigned long                 m_CurrentIteration;
-
-
+  OStringStream                 m_StopConditionDescription;
 };
 
 } // end namespace itk

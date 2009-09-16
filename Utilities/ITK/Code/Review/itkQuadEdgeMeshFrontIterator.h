@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshFrontIterator.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-10 05:07:49 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-08-05 20:26:37 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -107,7 +107,7 @@ protected:
       { }
       virtual ~FrontAtom( ) { }
       FrontAtom& operator=( const FrontAtom& r )
-      { m_Edge = r.m_Edge; m_Cost = r.m_Cost; }
+      { m_Edge = r.m_Edge; m_Cost = r.m_Cost; return *this; }
       bool operator==( const FrontAtom& r ) const
       { return( m_Edge == r.m_Edge ); }
       bool operator!=( const FrontAtom& r ) const
@@ -175,6 +175,8 @@ public:
   Self & operator++( );
 
   Self & operator++( int ) { return( this->operator++( ) ); }
+  
+  MeshType* GetMesh() const { return this->m_Mesh; }
 
 protected:
   /** Find a default seed by taking any edge (with proper type) in

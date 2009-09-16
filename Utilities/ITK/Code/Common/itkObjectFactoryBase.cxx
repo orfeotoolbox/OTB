@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkObjectFactoryBase.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-04-05 10:56:46 $
-  Version:   $Revision: 1.58 $
+  Date:      $Date: 2009-08-23 12:25:21 $
+  Version:   $Revision: 1.59 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -515,6 +515,7 @@ ObjectFactoryBase
       (*f)->UnRegister();
       }
     // And delete the library handles all at once
+#ifndef __CYGWIN__
     for ( std::list<void *>::iterator lib = libs.begin();
           lib != libs.end();
           ++lib)
@@ -524,6 +525,7 @@ ObjectFactoryBase
         DynamicLoader::CloseLibrary(static_cast<LibHandle>(*lib));
         }
       }
+#endif
     delete ObjectFactoryBase::m_RegisteredFactories;
     ObjectFactoryBase::m_RegisteredFactories = 0;
     }

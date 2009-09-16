@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarChanAndVeseLevelSetFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-14 21:46:50 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-06-12 09:44:02 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,13 +29,18 @@ namespace itk {
  * This class implements a level set function that computes the speed image by
  * integrating values on the image domain.
  *
- * Based on the paper:
+ * \author Mosaliganti K., Smith B., Gelas A., Gouaillard A., Megason S.
+ *
+ * Based on the papers:
  *
  *        "An active contour model without edges"
  *         T. Chan and L. Vese.
  *         In Scale-Space Theories in Computer Vision, pages 141–151, 1999.
  *
- * \author Mosaliganti K., Smith B., Gelas A., Gouaillard A., Megason S.
+ *         "Segmenting and Tracking Fluorescent Cells in Dynamic 3-D
+ *          Microscopy With Coupled Active Surfaces"
+ *          Dufour, Shinin, Tajbakhsh, Guillen-Aghion, Olivo-Marin
+ *          In IEEE Transactions on Image Processing, vol. 14, No 9, Sep. 2005
  *
  *  This code was taken from the Insight Journal paper:
  *
@@ -131,9 +136,9 @@ protected:
     const FeatureIndexType& iIdx );
 
   void UpdateSharedDataInsideParameters( const unsigned int& iId,
-    const bool& iBool, const FeaturePixelType&, const ScalarValueType& );
+    const FeaturePixelType& iVal, const ScalarValueType& iChange );
   void UpdateSharedDataOutsideParameters( const unsigned int& iId,
-    const bool& iBool, const FeaturePixelType&, const ScalarValueType& );
+    const FeaturePixelType& iVal, const ScalarValueType& iChange );
 
 private:
   ScalarChanAndVeseLevelSetFunction(const Self&); //purposely not implemented

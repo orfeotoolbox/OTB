@@ -79,7 +79,7 @@ PixelDescriptionModel<TOutputImage>
 template <class TOutputImage>
 void 
 PixelDescriptionModel<TOutputImage>
-::Notify(ListenerType * listener)
+::NotifyListener(ListenerType * listener)
 {
   listener->Notify();
 }

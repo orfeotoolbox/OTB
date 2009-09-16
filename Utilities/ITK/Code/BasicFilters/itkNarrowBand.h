@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNarrowBand.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 19:33:41 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-06-19 19:47:57 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -72,7 +72,7 @@ public:
   /** Returns an array of RegionStructs which represent contiguous
    * arrays of nodes within the narrow band. */
 #if !defined(CABLE_CONFIGURATION)
- std::vector<struct RegionStruct> SplitBand( unsigned int );
+ std::vector<RegionType> SplitBand( unsigned int );
 #endif
 
   Iterator Begin()

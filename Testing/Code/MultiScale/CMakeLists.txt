@@ -377,7 +377,7 @@ ADD_TEST(msTuWaveletInverseFilterBankNew ${MULTISCALE_TESTS4}
          otbWaveletInverseFilterBankNew)
 
 ADD_TEST(msTvWaveletFilterBank ${MULTISCALE_TESTS4}
-        --compare-image ${TOL}
+        --compare-image ${EPSILON6}
               ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_FilterBank.tif
          otbWaveletFilterBank

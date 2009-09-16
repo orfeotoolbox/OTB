@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRegionBasedLevelSetFunctionData.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-14 21:46:48 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-06-05 14:58:45 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,6 +38,7 @@ RegionBasedLevelSetFunctionData< TInputImage, TFeatureImage >
 ::CreateHeavisideFunctionOfLevelSetImage( const InputImageType * image )
 {
   const InputRegionType region = image->GetLargestPossibleRegion();
+
   this->m_HeavisideFunctionOfLevelSetImage = InputImageType::New();
   this->m_HeavisideFunctionOfLevelSetImage->CopyInformation( image );
   this->m_HeavisideFunctionOfLevelSetImage->SetRegions( region );
@@ -45,13 +46,11 @@ RegionBasedLevelSetFunctionData< TInputImage, TFeatureImage >
   this->m_HeavisideFunctionOfLevelSetImage->FillBuffer( 0 );
 
   const InputPointType origin = image->GetOrigin();
-  const InputSpacingType spacing = image->GetSpacing();
+
+  this->m_HeavisideFunctionOfLevelSetImage->TransformPhysicalPointToIndex( origin, this->m_Start );
 
   for( unsigned int i = 0; i < ImageDimension; i++ )
     {
-    // FIXME : This computation of Start index is suspicious.
-    //         See similar computation in the Shrink image filter.
-    this->m_Start[i] = static_cast< InputIndexValueType >( origin[i] / spacing[i] );
     this->m_End[i] = this->m_Start[i] + static_cast< InputIndexValueType >( region.GetSize()[i] ) - 1;
     }
 }

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSPSAOptimizer.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-05-26 23:45:04 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-06-24 12:02:54 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -349,11 +349,7 @@ void SPSAOptimizer
   for ( unsigned int j = 0; j < spaceDimension; j++ )
     {
     /** Generate randomly -1 or 1. */
-#ifdef ITK_USE_PORTABLE_ROUND
     m_Delta[ j ] = 2 * Math::Round( this->m_Generator->GetUniformVariate (0.0f, 1.0f) ) - 1;
-#else
-    m_Delta[ j ] = 2 * vnl_math_rnd ( this->m_Generator->GetUniformVariate (0.0f, 1.0f) ) - 1;
-#endif
 
     /**
      * Take scales into account. The perturbation of a parameter that has a
@@ -517,6 +513,34 @@ GuessParameters(
 
 } //end GuessParameters
 
+
+const std::string
+SPSAOptimizer::
+GetStopConditionDescription() const
+{
+  ::itk::OStringStream reason;
+  reason << this->GetNameOfClass() << ": ";
+  switch( m_StopCondition )
+    {
+    case Unknown:
+      reason << "Unknown stop condition";
+      break;
+    case MaximumNumberOfIterations:
+      reason << "Maximum number of iterations exceeded. Number of iterations is "
+             << m_MaximumNumberOfIterations;
+      break;
+    case BelowTolerance:
+      reason << "Below tolerance. " << "Tolerance is " << m_Tolerance;
+      break;
+    case MetricError:
+      reason << "Metric error";
+      break;
+    default:
+      reason << " No reason given for termination ";
+      break;
+    }
+  return reason.str();
+}
 
 } // end namespace itk
 

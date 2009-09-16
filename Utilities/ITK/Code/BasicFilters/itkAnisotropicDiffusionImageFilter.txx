@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAnisotropicDiffusionImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 14:49:30 $
-  Version:   $Revision: 1.29 $
+  Date:      $Date: 2009-08-16 02:05:44 $
+  Version:   $Revision: 1.30 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -77,7 +77,7 @@ AnisotropicDiffusionImageFilter<TInputImage, TOutputImage>
     //    f->SetTimeStep(1.0 / vcl_pow(2.0, static_cast<double>(ImageDimension))); 
     itkWarningMacro( << "Anisotropic diffusion unstable time step: "
                      << m_TimeStep << std::endl
-                     << "Minimum stable time step for this image is "
+                     << "Stable time step for this image must be smaller than "
                      << minSpacing / vcl_pow(2.0, static_cast<double>(ImageDimension+1)));
     }
   

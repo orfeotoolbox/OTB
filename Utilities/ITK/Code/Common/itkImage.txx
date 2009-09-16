@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImage.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-18 17:19:48 $
-  Version:   $Revision: 1.102 $
+  Date:      $Date: 2009-08-14 11:40:36 $
+  Version:   $Revision: 1.103 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -76,10 +76,10 @@ void
 Image<TPixel, VImageDimension>
 ::FillBuffer (const TPixel& value)
 {
-  const unsigned long numberOfPixels =
+  const SizeValueType numberOfPixels =
     this->GetBufferedRegion().GetNumberOfPixels();
 
-  for(unsigned int i=0; i<numberOfPixels; i++) 
+  for(SizeValueType i=0; i<numberOfPixels; i++) 
     {
     (*m_Buffer)[i] = value;
     }

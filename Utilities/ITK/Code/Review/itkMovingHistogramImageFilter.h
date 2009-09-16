@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMovingHistogramImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-08-06 11:33:08 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-06-03 12:48:05 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -152,7 +152,7 @@ protected:
   // declare the type used to store the histogram
   typedef THistogram HistogramType;
 
-  void pushHistogram(HistogramType * histogram, 
+  void PushHistogram(HistogramType * histogram, 
          const OffsetListType* addedList,
          const OffsetListType* removedList,
          const RegionType &inputRegion,
@@ -160,7 +160,7 @@ protected:
          const InputImageType* inputImage,
          const IndexType currentIdx);
 
-  void printHist(const HistogramType &H);
+  void PrintHistogram(const HistogramType &H);
 
 #endif
 

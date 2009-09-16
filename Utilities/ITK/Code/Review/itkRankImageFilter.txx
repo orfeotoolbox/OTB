@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRankImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-08-07 13:36:49 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-06-03 12:48:05 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -48,7 +48,7 @@ RankImageFilter<TInputImage, TOutputImage, TKernel>
 ::NewHistogram()
 {
   HistogramType * hist;
-  if (useVectorBasedHistogram())
+  if (UseVectorBasedHistogram())
     {
     hist = new VHistogram();
     }

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCorrespondingMedialNodeClique.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:05 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-06-16 13:33:34 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,7 +26,16 @@ template <unsigned int VImageDimension, unsigned int VCliqueSize>
 CorrespondingMedialNodeClique<VImageDimension, VCliqueSize>
 ::CorrespondingMedialNodeClique()
 {
+  m_NodeCoordinates = 0;
+  m_CenterOfMass = 0;
+  m_TransformMatrix = 0;
 
+  m_AverageDistance = 0;
+
+  for( unsigned int i = 0; i < VCliqueSize; i++ )
+    {
+    m_CorrespondenceValue[i] = 0;
+    }
 }
 
 template <unsigned int VImageDimension, unsigned int VCliqueSize>

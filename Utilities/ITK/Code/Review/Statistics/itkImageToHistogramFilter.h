@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageToHistogramFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-02 05:43:55 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-08-11 12:41:16 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -46,12 +46,12 @@ class ITK_EXPORT ImageToHistogramFilter : public ProcessObject
 public:
   /** Standard typedefs */
   typedef ImageToHistogramFilter        Self;
-  typedef Object                        Superclass;
+  typedef ProcessObject                 Superclass;
   typedef SmartPointer<Self>            Pointer;
   typedef SmartPointer<const Self>      ConstPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageToHistogramFilter, Object);
+  itkTypeMacro(ImageToHistogramFilter, ProcessObject);
 
   /** standard New() method support */
   itkNewMacro(Self);
@@ -60,7 +60,7 @@ public:
   typedef ImageToListSampleAdaptor< ImageType >             AdaptorType;
   typedef typename AdaptorType::Pointer                     AdaptorPointer;
   typedef typename ImageType::PixelType                     PixelType;
-  typedef typename PixelType::ValueType                     ValueType;
+  typedef typename NumericTraits< PixelType >::ValueType    ValueType;
   typedef typename NumericTraits< ValueType >::RealType     ValueRealType;
   typedef DenseFrequencyContainer2                          FrequencyContainerType;
 

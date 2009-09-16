@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkSimplexMesh.h,v $
 Language:  C++
-Date:      $Date: 2009-04-25 12:24:12 $
-Version:   $Revision: 1.13 $
+Date:      $Date: 2009-06-21 16:25:08 $
+Version:   $Revision: 1.14 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -120,7 +120,10 @@ public:
   typedef typename Superclass::PointsContainer::Iterator       PointsContainerIterator;
   typedef typename Superclass::PointsContainerConstIterator    PointsContainerConstIterator;
   typedef typename Superclass::CellsContainerPointer           CellsContainerPointer;
+  typedef typename Superclass::CellsContainerConstPointer      CellsContainerConstPointer;
   typedef typename Superclass::CellsContainerIterator          CellsContainerIterator;
+  typedef typename Superclass::CellsContainerConstIterator     CellsContainerConstIterator;
+
   /** set the map of geometrydata to the new pointer */
   itkSetMacro(GeometryData, GeometryMapPointer );
 

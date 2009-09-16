@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMRegistrationFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-05 23:09:18 $
-  Version:   $Revision: 1.58 $
+  Date:      $Date: 2009-06-15 22:11:29 $
+  Version:   $Revision: 1.59 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -1775,6 +1775,7 @@ void FEMRegistrationFilter<TMovingImage,TFixedImage>::MultiResSolve()
 
     SolverType SSS;
     typename FixedImageType::SizeType nextLevelSize;
+    nextLevelSize.Fill( 0 );
     typename FixedImageType::SizeType lastLevelSize;
 
     if (m_Maxiters[m_CurrentLevel] > 0)

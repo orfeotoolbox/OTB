@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSignedMaurerDistanceMapImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-12 17:22:53 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-06-14 12:30:08 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -50,7 +50,7 @@ namespace itk
  *  itkDanielssonDistanceImageFilterClass except is does not return the Voronoi
  *  map.
  *
- *  \cite C. R. Maurer, Jr., R. Qi, and V. Raghavan, "A Linear Time Algorithm
+ *  Ref: C. R. Maurer, Jr., R. Qi, and V. Raghavan, "A Linear Time Algorithm
  *  for Computing Exact Euclidean Distance Transforms of Binary Images in
  *  Arbitrary Dimensions", IEEE - Transactions on Pattern Analysis and Machine
  *  Intelligence, 25(2): 265-270, 2003.

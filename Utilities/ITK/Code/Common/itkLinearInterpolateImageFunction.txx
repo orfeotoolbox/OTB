@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLinearInterpolateImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-07 14:03:45 $
-  Version:   $Revision: 1.42 $
+  Date:      $Date: 2009-07-29 07:38:01 $
+  Version:   $Revision: 1.43 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,7 +23,7 @@
 #include "itkConfigure.h"
 
 // Second, redirect to the optimized version if necessary
-#if defined( ITK_USE_OPTIMIZED_REGISTRATION_METHODS ) && defined( LINEAR_INTERPOLATOR_FIXED )
+#ifdef ITK_USE_OPTIMIZED_REGISTRATION_METHODS
 #include "itkOptLinearInterpolateImageFunction.txx"
 #else
 
@@ -85,27 +85,11 @@ LinearInterpolateImageFunction< TInputImage, TCoordRep >
    */
   signed long baseIndex[ImageDimension];
   double distance[ImageDimension];
-  long tIndex;
 
   for( dim = 0; dim < ImageDimension; dim++ )
     {
-    // The following "if" block is equivalent to the following line without
-    // having to call floor.
-    //    baseIndex[dim] = (long) vcl_floor(index[dim] );
-    if (index[dim] >= 0.0)
-      {
-      baseIndex[dim] = (long) index[dim];
-      }
-    else
-      {
-      tIndex = (long) index[dim];
-      if (double(tIndex) != index[dim])
-        {
-        tIndex--;
-        }
-      baseIndex[dim] = tIndex;
-      }
-    distance[dim] = index[dim] - double( baseIndex[dim] );
+    baseIndex[dim] = Math::Floor( index[dim] );
+    distance[dim] = index[dim] - static_cast< double >( baseIndex[dim] );
     }
   
   /**

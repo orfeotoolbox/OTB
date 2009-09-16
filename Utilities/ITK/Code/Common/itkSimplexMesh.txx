@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkSimplexMesh.txx,v $
 Language:  C++
-Date:      $Date: 2009-03-03 15:09:26 $
-Version:   $Revision: 1.22 $
+Date:      $Date: 2009-06-21 16:25:08 $
+Version:   $Revision: 1.24 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -258,8 +258,8 @@ SimplexMesh<TPixelType, VDimension, TMeshTraits>
 
   os << indent << "LastCellId = " << m_LastCellId << std::endl;
 
-  CellsContainerPointer cells = this->GetCells();
-  CellsContainerIterator cellIt = cells->Begin();
+  CellsContainerConstPointer cells = this->GetCells();
+  CellsContainerConstIterator cellIt = cells->Begin();
 
   os << indent << "Cells Point Ids:" << std::endl;
   while ( cellIt != cells->End() )
@@ -442,6 +442,11 @@ SimplexMesh<TPixelType, VDimension, TMeshTraits>
 ::ComputeNormal(unsigned long idx ) const
 {
   PointType p,n1,n2,n3;
+
+  p.Fill(0);
+  n1.Fill(0);
+  n2.Fill(0);
+  n3.Fill(0);
 
   IndexArray neighbors = this->GetNeighbors( idx );  
   this->GetPoint(idx,&p);

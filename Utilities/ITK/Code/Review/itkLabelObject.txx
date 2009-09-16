@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelObject.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-23 23:52:55 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-08-10 16:38:36 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -41,7 +41,7 @@ LabelObject<TLabel, VImageDimension>::GetAttributeFromName( const std::string & 
     return LABEL;
     }
   // can't recognize the name
-  throw std::runtime_error("Unknown attribute.");
+  itkGenericExceptionMacro(<< "Unknown attribute: " << s);
 }
 
 template < class TLabel, unsigned int VImageDimension >
@@ -53,10 +53,9 @@ LabelObject<TLabel, VImageDimension>
     {
     case LABEL:
     return "Label";
-    break;
     }
   // can't recognize the namespace
-  throw std::runtime_error("Unknown attribute.");
+  itkGenericExceptionMacro(<< "Unknown attribute: " << a);
 }
 
 /**
@@ -170,7 +169,7 @@ LabelObject<TLabel, VImageDimension>::SetLineContainer( const LineContainerType 
 }
 
 template < class TLabel, unsigned int VImageDimension >
-int 
+typename LabelObject<TLabel, VImageDimension>::SizeValueType
 LabelObject<TLabel, VImageDimension>::GetNumberOfLines() const
 {
   return m_LineContainer.size();
@@ -179,20 +178,20 @@ LabelObject<TLabel, VImageDimension>::GetNumberOfLines() const
 template < class TLabel, unsigned int VImageDimension >
 const 
 typename LabelObject<TLabel, VImageDimension>::LineType & 
-LabelObject<TLabel, VImageDimension>::GetLine( int i ) const
+LabelObject<TLabel, VImageDimension>::GetLine( SizeValueType i ) const
 {
   return m_LineContainer[i];
 }
   
 template < class TLabel, unsigned int VImageDimension >
 typename LabelObject<TLabel, VImageDimension>::LineType & 
-LabelObject<TLabel, VImageDimension>::GetLine( int i )
+LabelObject<TLabel, VImageDimension>::GetLine( SizeValueType i )
 {
   return m_LineContainer[i];
 }
 
 template < class TLabel, unsigned int VImageDimension >
-int 
+typename LabelObject<TLabel, VImageDimension>::SizeValueType
 LabelObject<TLabel, VImageDimension>::Size() const
 {
   int size = 0;
@@ -204,18 +203,27 @@ LabelObject<TLabel, VImageDimension>::Size() const
     }
   return size;
 }
-  
+
+template < class TLabel, unsigned int VImageDimension >
+bool 
+LabelObject<TLabel, VImageDimension>::Empty() const
+{ 
+  return this->m_LineContainer.empty();
+}
+
 template < class TLabel, unsigned int VImageDimension >
 typename LabelObject<TLabel, VImageDimension>::IndexType 
-LabelObject<TLabel, VImageDimension>::GetIndex( int offset ) const
+LabelObject<TLabel, VImageDimension>::GetIndex( SizeValueType offset ) const
 {
-  int o = offset;
-  for( typename LineContainerType::const_iterator it=m_LineContainer.begin();
-    it != m_LineContainer.end();
-    it++ )
+  SizeValueType o = offset;
+
+  typename LineContainerType::const_iterator it = this->m_LineContainer.begin();
+
+  while( it != m_LineContainer.end() )
     {
-    int size = it->GetLength();
-    if( o > size)
+    SizeValueType size = it->GetLength();
+
+    if( o >= size)
       {
       o -= size;
       }
@@ -225,6 +233,8 @@ LabelObject<TLabel, VImageDimension>::GetIndex( int offset ) const
       idx[0] += o;
       return idx;
       }
+
+    it++;
     }
   itkGenericExceptionMacro(<< "Invalid offset: " << offset);
 }
@@ -235,7 +245,8 @@ void
 LabelObject<TLabel, VImageDimension>::CopyAttributesFrom( const Self * src )
 {
   itkAssertOrThrowMacro ( (src != NULL), "Null Pointer" );
-  // nothing to do here - this class has no attribute
+  m_Label = src->m_Label;
+
 }
    
 /** Copy the lines, the label and the attributes from another node. */
@@ -245,7 +256,6 @@ LabelObject<TLabel, VImageDimension>::CopyAllFrom( const Self * src )
 {
   itkAssertOrThrowMacro ( (src != NULL), "Null Pointer" );
   m_LineContainer = src->m_LineContainer;
-  m_Label = src->m_Label;
   // also copy the attributes
   this->CopyAttributesFrom( src );
 }
@@ -272,9 +282,9 @@ LabelObject<TLabel, VImageDimension>::Optimize()
     IndexType currentIdx = lineContainer.begin()->GetIndex();
     long int currentLength = lineContainer.begin()->GetLength();
     
-    for( typename LineContainerType::const_iterator it=lineContainer.begin(); 
-         it != lineContainer.end();
-         it++ )
+    typename LineContainerType::const_iterator it = lineContainer.begin(); 
+
+    while( it != lineContainer.end() )
       {
       const LineType & line = *it;
       IndexType idx = line.GetIndex();
@@ -300,15 +310,15 @@ LabelObject<TLabel, VImageDimension>::Optimize()
       else
         {
         // add the previous line to the new line container and use the new line index and size
-        // std::cout << currentIdx << "  " << currentLength << std::endl;
         this->AddLine( currentIdx, currentLength );
         currentIdx = idx;
         currentLength = length;
         }
-      // std::cout << line.GetIndex() << "  " << line.GetLength() << std::endl;
+
+      it++;
       }
+
     // complete the last line
-    // std::cout << currentIdx << "  " << currentLength << std::endl;
     this->AddLine( currentIdx, currentLength );
     }
 }

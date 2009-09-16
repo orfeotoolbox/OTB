@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCellInterface.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-10 19:09:39 $
-  Version:   $Revision: 1.67 $
+  Date:      $Date: 2009-08-08 20:13:35 $
+  Version:   $Revision: 1.72 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -51,12 +51,7 @@ virtual void Accept(unsigned long cellid, typename CellInterface<PixelType,\
   typedef AutoPointer<const Self>   ConstSelfAutoPointer;  \
   typedef AutoPointer<Self>         SelfAutoPointer;   \
   typedef Self *                    RawPointer;        \
-  typedef const Self *              ConstRawPointer;   \
-  SelfAutoPointer   New(void) {                        \
-                SelfAutoPointer ptr( new celltype );   \
-                ptr.TakeOwnership();                   \
-                return ptr;                            \
-                }                                      \
+  typedef const Self *              ConstRawPointer
 
 
 // Define a macro for the common typedefs required by the 
@@ -166,7 +161,7 @@ public:
   typedef Array<CoordRepType>                 ParametricCoordArrayType;
   typedef Array<InterpolationWeightType>      ShapeFunctionsArrayType;
 
-  static int GetNextUserCellId(); // never return > MAX_INTERFACE
+//  static int GetNextUserCellId(); // never return > MAX_INTERFACE
 
   /** \class MultiVisitor 
    * \brief A visitor that can visit different cell types in a mesh.
@@ -416,6 +411,7 @@ public:
    */
   virtual unsigned int GetNumberOfUsingCells(void);
 
+#if !defined(CABLE_CONFIGURATION)
   /**
    * Get a begin iterator for the UsingCellsContainer.
    */
@@ -425,7 +421,8 @@ public:
    * Get an end iterator for the UsingCellsContainer.
    */
   virtual UsingCellsContainerIterator UsingCellsEnd(void);
-    
+#endif
+
   /** Standard part of every itk Object. */
   itkTypeMacro(CellInterface, LightObject);
 
@@ -493,8 +490,10 @@ public:
 
 } // end namespace itk
 
-#ifndef ITK_MANUAL_INSTANTIATION
+#if !defined(CABLE_CONFIGURATION)
+# ifndef ITK_MANUAL_INSTANTIATION
 #include "itkCellInterface.txx"
+#endif
 #endif
 
 #endif

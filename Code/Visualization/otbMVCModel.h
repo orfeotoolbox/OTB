@@ -70,12 +70,12 @@ public:
          it!=m_RegisteredListeners.end();
          ++it)
     {
-      this->Notify(*it);
+      this->NotifyListener(*it);
     }
   }
 
   /** Notify changes to a given listerner */
-  virtual void Notify(ListenerType * listener)
+  virtual void NotifyListener(ListenerType * listener)
   {
      listener->Notify();
   };

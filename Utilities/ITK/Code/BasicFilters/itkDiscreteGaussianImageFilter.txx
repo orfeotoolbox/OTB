@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkDiscreteGaussianImageFilter.txx,v $
 Language:  C++
-Date:      $Date: 2008-12-10 01:58:48 $
-Version:   $Revision: 1.42 $
+Date:      $Date: 2009-07-29 12:44:26 $
+Version:   $Revision: 1.43 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,6 +17,7 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __itkDiscreteGaussianImageFilter_txx
 #define __itkDiscreteGaussianImageFilter_txx
 
+#include "itkDiscreteGaussianImageFilter.h"
 #include "itkNeighborhoodOperatorImageFilter.h"
 #include "itkGaussianOperator.h"
 #include "itkImageRegionIterator.h"

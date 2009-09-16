@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarConnectedComponentImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-01 14:36:31 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-07-05 17:36:22 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,8 +42,14 @@ class SimilarPixelsFunctor
 {
 public:
   SimilarPixelsFunctor()
-    {m_Threshold = itk::NumericTraits<TInput>::Zero;}
-  ~SimilarPixelsFunctor() {}
+    {
+    m_Threshold = NumericTraits<TInput>::Zero;
+    }
+
+  ~SimilarPixelsFunctor() 
+    {
+    }
+
   bool operator!=( const SimilarPixelsFunctor & other ) const
     {
     if( m_Threshold != other.m_Threshold )
@@ -52,17 +58,36 @@ public:
       }
     return false;
     }
+
   bool operator==( const SimilarPixelsFunctor & other ) const
     {
     return !(*this != other);
     }
 
-  void SetDistanceThreshold(const TInput &thresh) {m_Threshold = thresh;}
-  TInput GetDistanceThreshold() {return (m_Threshold);}
+  void SetDistanceThreshold(const TInput &thresh) 
+    {
+    m_Threshold = thresh;
+    }
+
+  TInput GetDistanceThreshold() 
+    {
+    return (m_Threshold);
+    }
   
   bool operator()(const TInput &a, const TInput &b) const
     {
-    return (vnl_math_abs(a-b) <= m_Threshold);
+    typedef typename NumericTraits<TInput>::RealType InputRealType;
+    TInput absDifference = static_cast<TInput>( vnl_math_abs( 
+                           static_cast<InputRealType>(a)
+                           - static_cast<InputRealType>(b) ) );
+    if( absDifference <= m_Threshold )
+      {
+      return true;
+      }
+    else
+      {
+      return false;
+      }
     }
 
 protected:

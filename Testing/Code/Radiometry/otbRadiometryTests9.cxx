@@ -27,10 +27,14 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbTerraSarCalibrationImageFilterNew);
-REGISTER_TEST(otbTerraSarCalibrationImageFilterTest);
-REGISTER_TEST(otbTerraSarRadarBrightnessImageFilterNew);
-REGISTER_TEST(otbTerraSarRadarBrightnessImageFilterTest);
+  REGISTER_TEST(otbTerraSarCalibrationImageFilterNew);
+  REGISTER_TEST(otbTerraSarCalibrationImageFilterTest);
+  REGISTER_TEST(otbTerraSarRadarBrightnessImageFilterNew);
+  REGISTER_TEST(otbTerraSarRadarBrightnessImageFilterTest);
+  REGISTER_TEST(otbTerraSarRadarBrightnessComplexImageFilterNew);
+  REGISTER_TEST(otbTerraSarRadarBrightnessComplexImageFilterTest);
+  REGISTER_TEST(otbTerraSarCalibrationCplxImageFilterNew);
+  REGISTER_TEST(otbTerraSarCalibrationCplxImageFilterTest);
 }
 
 

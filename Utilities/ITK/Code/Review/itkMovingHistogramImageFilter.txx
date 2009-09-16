@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMovingHistogramImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-09-30 18:07:03 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-06-03 12:48:05 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -270,7 +270,7 @@ MovingHistogramImageFilter<TInputImage, TOutputImage, TKernel, THistogram>
       IndexType currentIdx = InLineIt.GetIndex();
       outputImage->SetPixel(currentIdx, static_cast< OutputPixelType >( histRef->GetValue( inputImage->GetPixel( currentIdx ) ) ));
       stRegion.SetIndex( currentIdx - centerOffset );
-      pushHistogram(histRef, addedList, removedList, inputRegion, 
+      PushHistogram(histRef, addedList, removedList, inputRegion, 
               stRegion, inputImage, currentIdx);
       
       }
@@ -300,7 +300,7 @@ MovingHistogramImageFilter<TInputImage, TOutputImage, TKernel, THistogram>
     HistogramType *tmpHist = HistVec[LineDirection];
     stRegion.SetIndex(PrevLineStart - centerOffset);
     // Now move the histogram
-    pushHistogram(tmpHist, addedListLine, removedListLine, inputRegion, 
+    PushHistogram(tmpHist, addedListLine, removedListLine, inputRegion, 
       stRegion, inputImage, PrevLineStartHist);
 
     //PrevLineStartVec[LineDirection] = LineStart;
@@ -329,7 +329,7 @@ MovingHistogramImageFilter<TInputImage, TOutputImage, TKernel, THistogram>
 template<class TInputImage, class TOutputImage, class TKernel, class THistogram>
 void
 MovingHistogramImageFilter<TInputImage, TOutputImage, TKernel, THistogram>
-::pushHistogram(HistogramType * histogram, 
+::PushHistogram(HistogramType * histogram, 
     const OffsetListType* addedList,
     const OffsetListType* removedList,
     const RegionType &inputRegion,
@@ -371,8 +371,9 @@ MovingHistogramImageFilter<TInputImage, TOutputImage, TKernel, THistogram>
 
 template<class TInputImage, class TOutputImage, class TKernel, class THistogram>
 void
+
 MovingHistogramImageFilter<TInputImage, TOutputImage, TKernel, THistogram>
-::printHist(const HistogramType &H)
+::PrintHistogram(const HistogramType &H)
 {
   /*  std::cout << "Hist = " ;
   typename HistogramType::const_iterator mapIt;

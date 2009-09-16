@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPyBuffer.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-22 16:39:34 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-06-23 21:53:24 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -130,9 +130,10 @@ PyBuffer<TImage>
                         importImageFilterWillOwnTheBuffer );
 
     importer->Update();
-    importer->SetReleaseDataFlag( true );
+    ImagePointer output = importer->GetOutput();
+    output->DisconnectPipeline();
 
-    return ImagePointer(importer->GetOutput());
+    return output;
 }
 
 template<class TImage>

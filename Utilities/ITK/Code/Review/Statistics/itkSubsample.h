@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSubsample.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-22 12:55:07 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-06-15 12:40:37 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -46,7 +46,7 @@ public:
   typedef SmartPointer<const Self>                          ConstPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Subsample, Sample);
+  itkTypeMacro(Subsample, TSample);
 
   /** standard New() method support */
   itkNewMacro(Self);

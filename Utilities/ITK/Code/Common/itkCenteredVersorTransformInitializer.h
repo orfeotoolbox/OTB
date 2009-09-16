@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredVersorTransformInitializer.h,v $
   Language:  C++
-  Date:      $Date: 2007-04-11 18:10:06 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-08-16 23:09:27 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -88,7 +88,13 @@ public:
   typedef typename Superclass::OutputVectorType  OutputVectorType;
   
   /** Initialize the transform using data from the images */
-  void InitializeTransform() const;
+  void InitializeTransform();
+
+  /** Enable the use of the principal axes of each image to compute an
+   * initial rotation that will align them. */
+  itkSetMacro( ComputeRotation, bool );
+  itkGetMacro( ComputeRotation, bool );
+  itkBooleanMacro( ComputeRotation );
 
 protected:
   CenteredVersorTransformInitializer();
@@ -100,6 +106,7 @@ private:
   CenteredVersorTransformInitializer(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  bool         m_ComputeRotation;
 }; //class CenteredVersorTransformInitializer
 
 

@@ -26,6 +26,6 @@ int otbTerraSarCalibrationImageFilterNew(int argc, char * argv[])
   typedef otb::TerraSarCalibrationImageFilter<ImageType, ImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
-
+  
   return EXIT_SUCCESS;
 }

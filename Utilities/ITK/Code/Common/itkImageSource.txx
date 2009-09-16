@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageSource.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-05 10:56:39 $
-  Version:   $Revision: 1.67 $
+  Date:      $Date: 2009-08-26 19:09:35 $
+  Version:   $Revision: 1.68 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -84,8 +84,12 @@ typename ImageSource<TOutputImage>::OutputImageType *
 ImageSource<TOutputImage>
 ::GetOutput(unsigned int idx)
 {
-  return dynamic_cast<TOutputImage*>
+  TOutputImage* out = dynamic_cast<TOutputImage*>
     (this->ProcessObject::GetOutput(idx));
+  if ( out == NULL ) {
+    itkWarningMacro ( << "dynamic_cast to output type failed" );
+  }
+  return out;
 }
 
 /**

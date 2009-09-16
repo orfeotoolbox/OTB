@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarImageToTextureFeaturesFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-08 16:55:05 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-06-15 12:40:37 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -111,12 +111,12 @@ class ITK_EXPORT ScalarImageToTextureFeaturesFilter : public ProcessObject
 public:
   /** Standard typedefs */
   typedef ScalarImageToTextureFeaturesFilter        Self;
-  typedef Object                                    Superclass;
+  typedef ProcessObject                             Superclass;
   typedef SmartPointer<Self>                        Pointer;
   typedef SmartPointer<const Self>                  ConstPointer;
       
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ScalarImageToTextureFeaturesFilter, Object);
+  itkTypeMacro(ScalarImageToTextureFeaturesFilter, ProcessObject);
       
   /** standard New() method support */
   itkNewMacro(Self);

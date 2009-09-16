@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFixedArray.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 13:28:49 $
-  Version:   $Revision: 1.42 $
+  Date:      $Date: 2009-07-09 18:06:39 $
+  Version:   $Revision: 1.45 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -82,6 +82,8 @@ public:
   /** A const iterator through the array. */
   typedef const ValueType*  ConstIterator;
 
+  class ConstReverseIterator;
+
   /** \class ReverseIterator 
    * \brief A reverse iterator through the array. */
   class ReverseIterator
@@ -98,6 +100,7 @@ public:
       bool operator==(const ReverseIterator &rit) const {return m_Iterator == rit.m_Iterator;}
     private:
       Iterator m_Iterator;
+      friend class ConstReverseIterator;
     };
   
   /** \class ConstReverseIterator 
@@ -106,6 +109,7 @@ public:
     {
     public:
       explicit ConstReverseIterator(ConstIterator i): m_Iterator(i) {}
+      ConstReverseIterator(const ReverseIterator& rit) { m_Iterator = rit.m_Iterator; }
       ConstIterator operator++()         { return --m_Iterator; }
       ConstIterator operator++(int)      { return m_Iterator--; }
       ConstIterator operator--()         { return ++m_Iterator; }

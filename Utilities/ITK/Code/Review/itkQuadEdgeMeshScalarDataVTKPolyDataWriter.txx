@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshScalarDataVTKPolyDataWriter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-01-02 18:43:05 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-06-21 16:25:08 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -58,7 +58,7 @@ void
 QuadEdgeMeshScalarDataVTKPolyDataWriter<TMesh> 
 ::WriteCellData()
 {
-  CellDataContainerPointer celldata = this->m_Input->GetCellData();
+  CellDataContainerConstPointer celldata = this->m_Input->GetCellData();
 
   if( celldata )
     {
@@ -82,12 +82,12 @@ QuadEdgeMeshScalarDataVTKPolyDataWriter<TMesh>
 
       unsigned long k(0);
 
-      CellsContainerPointer cells = this->m_Input->GetCells();
-      CellsContainerIterator it = cells->Begin();
+      CellsContainerConstPointer cells = this->m_Input->GetCells();
+      CellsContainerConstIterator it = cells->Begin();
 
-      for( CellDataContainerIterator c_it = celldata->Begin();
-          c_it != celldata->End();
-          ++c_it, ++it )
+      CellDataContainerConstIterator c_it = celldata->Begin();
+
+      while( c_it != celldata->End() )
         {
         CellType* cellPointer = it.Value();
         if( cellPointer->GetType() != 1 )
@@ -98,6 +98,9 @@ QuadEdgeMeshScalarDataVTKPolyDataWriter<TMesh>
             outputFile <<std::endl;
             }
           }
+
+        ++c_it;
+        ++it;
         }
       outputFile <<std::endl;
       outputFile.close();

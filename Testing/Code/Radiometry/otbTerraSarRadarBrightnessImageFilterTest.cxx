@@ -19,10 +19,9 @@
 
 #include "otbTerraSarRadarBrightnessImageFilter.h"
 #include "otbImage.h"
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbVectorImageToAmplitudeImageFilter.h"
+
 
 int otbTerraSarRadarBrightnessImageFilterTest(int argc, char * argv[])
 {

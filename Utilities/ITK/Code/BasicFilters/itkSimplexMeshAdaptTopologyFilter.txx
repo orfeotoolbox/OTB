@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimplexMeshAdaptTopologyFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-12 17:22:53 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-06-14 19:55:37 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -149,6 +149,8 @@ void SimplexMeshAdaptTopologyFilter<TInputMesh, TOutputMesh>
       //create first new point
       InputPointType newMidPoint, helperPoint;
       InputPointType p1, p2;
+      p1.Fill(0);
+      p2.Fill(0);
       inputMesh->GetPoint(lineOneFirstIdx, &p1);
       inputMesh->GetPoint(lineOneSecondIdx, &p2);
 
@@ -370,6 +372,7 @@ SimplexMeshAdaptTopologyFilter<TInputMesh, TOutputMesh>
 
   InputVectorType tmp;
   InputPointType p1, p2, cellCenter;
+  p1.Fill(0);
   cellCenter.Fill(0);
 
   // compute the cell center first

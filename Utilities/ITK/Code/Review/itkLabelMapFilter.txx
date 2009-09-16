@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelMapFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-16 22:19:31 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-07-23 22:22:04 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,9 +26,6 @@
 namespace itk
 {
 
-/**
- *
- */
 template <class TInputImage, class TOutputImage>
 LabelMapFilter<TInputImage, TOutputImage>
 ::LabelMapFilter()
@@ -36,9 +33,6 @@ LabelMapFilter<TInputImage, TOutputImage>
   m_Progress = NULL;
 }
 
-/**
- *
- */
 template <class TInputImage, class TOutputImage>
 LabelMapFilter<TInputImage, TOutputImage>
 ::~LabelMapFilter()
@@ -74,8 +68,7 @@ void
 LabelMapFilter<TInputImage, TOutputImage>
 ::EnlargeOutputRequestedRegion(DataObject *)
 {
-  this->GetOutput()
-    ->SetRequestedRegion( this->GetOutput()->GetLargestPossibleRegion() );
+  this->GetOutput()->SetRequestedRegion( this->GetOutput()->GetLargestPossibleRegion() );
 }
 
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNearestNeighborExtrapolateImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-16 16:05:13 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-08-08 14:29:02 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -82,21 +82,14 @@ public:
     IndexType nindex;
     for ( unsigned int j = 0; j < ImageDimension; j++ )
       {
-      if ( index[j] < this->GetStartContinuousIndex()[j] ) 
+      nindex[j] = static_cast<ValueType>( itk::Math::RoundHalfIntegerUp( index[j] ) );
+      if ( nindex[j] < this->GetStartIndex()[j] ) 
         { 
         nindex[j] = this->GetStartIndex()[j]; 
         }
-      else if ( index[j] > this->GetEndContinuousIndex()[j] ) 
+      else if ( nindex[j] > this->GetEndIndex()[j] ) 
         { 
         nindex[j] = this->GetEndIndex()[j];
-        }
-      else
-        {
-#ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
-        nindex[j] = static_cast<ValueType>( itk::Math::RoundHalfIntegerUp( index[j] ) );
-#else
-        nindex[j] = static_cast<ValueType>( vnl_math_rnd_halfintup( index[j] ) );
-#endif
         }
       }
     return static_cast<OutputType>( this->GetInputImage()->GetPixel( nindex ) );

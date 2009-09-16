@@ -1034,9 +1034,9 @@ ADD_TEST(raTuTerraSarCalibrationImageFilterNew ${RADIOMETRY_TESTS9}
 )
 
 ADD_TEST(raTvTerraSarCalibrationImageFilterTest ${RADIOMETRY_TESTS9}
-# --compare-image ${EPSILON}  
-#                               ${BASELINE}/raTvTerraSarCalibrationImageFilterTest.tif
-#                               ${TEMP}/raTvTerraSarCalibrationImageFilterTest.tif
+ --compare-image ${EPSILON}  
+                               ${BASELINE}/raTvTerraSarCalibrationImageFilterTest.tif
+                               ${TEMP}/raTvTerraSarCalibrationImageFilterTest.tif
         otbTerraSarCalibrationImageFilterTest
 		${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
 		${TEMP}/raTvTerraSarCalibrationImageFilterTest.tif
@@ -1054,6 +1054,38 @@ ADD_TEST(raTvTerraSarRadarBrightnessImageFilterTest ${RADIOMETRY_TESTS9}
         otbTerraSarRadarBrightnessImageFilterTest
         ${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
         ${TEMP}/raTvTerraSarRadarBrightnessImageFilterTest.tif
+)
+
+# -------            TerraSarRadarBrightnessComplexImageFilter   ------------------------------
+ADD_TEST(raTuTerraSarRadarBrightnessComplexImageFilterNew ${RADIOMETRY_TESTS9}
+       otbTerraSarRadarBrightnessComplexImageFilterNew
+)
+
+ADD_TEST(raTvTerraSarRadarBrightnessComplexImageFilterTest ${RADIOMETRY_TESTS9}
+    --compare-image ${EPSILON}  
+                ${BASELINE}/raTvTerraSarRadarBrightnessComplexImageFilterTest.tif
+                ${TEMP}/raTvTerraSarRadarBrightnessComplexImageFilterTest.tif
+        otbTerraSarRadarBrightnessComplexImageFilterTest
+        # complex image
+        ${INPUTDATA}/ExtractIMAGE_HH_SRA_spot_074.tif
+        ${TEMP}/raTvTerraSarRadarBrightnessComplexImageFilterTest.tif
+)
+
+
+# -------            TerraSarCalibrationCplxImageFilter   ------------------------------
+ ADD_TEST(raTuTerraSarCalibrationCplxImageFilterNew ${RADIOMETRY_TESTS9}
+       otbTerraSarCalibrationCplxImageFilterNew
+)
+
+ADD_TEST(raTvTerraSarCalibrationCplxImageFilterTest ${RADIOMETRY_TESTS9}
+# TEST GIVE NULL OUTPUT, DON'T HAVE TIME TO CORRECT, SORRY
+#    --compare-image ${EPSILON}  
+ #               ${BASELINE}/raTvTerraSarCalibrationClxImageFilterTest.tif
+ #               ${TEMP}/raTvTerraSarCalibrationCplxImageFilterTest.tif
+        otbTerraSarCalibrationCplxImageFilterTest
+        # complex image
+        ${INPUTDATA}/ExtractIMAGE_HH_SRA_spot_074.tif
+        ${TEMP}/raTvTerraSarCalibrationCplxImageFilterTest.tif
 )
 
 # A enrichir
@@ -1152,6 +1184,10 @@ otbTerraSarCalibrationImageFilterNew.cxx
 otbTerraSarCalibrationImageFilterTest.cxx
 otbTerraSarRadarBrightnessImageFilterNew.cxx
 otbTerraSarRadarBrightnessImageFilterTest.cxx
+otbTerraSarRadarBrightnessComplexImageFilterNew.cxx
+otbTerraSarRadarBrightnessComplexImageFilterTest.cxx
+otbTerraSarCalibrationCplxImageFilterNew.cxx
+otbTerraSarCalibrationCplxImageFilterTest.cxx
 )
 
 

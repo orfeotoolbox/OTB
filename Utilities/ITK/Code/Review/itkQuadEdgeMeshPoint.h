@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshPoint.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-19 14:49:01 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-09-08 20:00:56 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,6 +19,7 @@
 
 #include "itkPoint.h"
 #include "itkConceptChecking.h"
+#include "itkGeometricalQuadEdge.h"
 
 namespace itk
 {
@@ -28,7 +29,7 @@ namespace itk
  * \brief Wrapper around a itk::Point in order to add a reference
  * to an entry in the edge ring.
  */
-template< class TCoordRep, unsigned int VPointDimension, typename TQuadEdge >
+template< class TCoordRep, unsigned int VPointDimension, typename TQuadEdge=GeometricalQuadEdge< unsigned long, unsigned long, bool, bool, true > >
 class QuadEdgeMeshPoint : public Point< TCoordRep, VPointDimension >
 {
 public:
@@ -52,8 +53,6 @@ public:
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
-  itkConceptMacro(DimensionShouldBe3,
-                  (Concept::SameDimension<itkGetStaticConstMacro(PointDimension),3>));
   /** End concept checking */
 #endif
 
@@ -71,10 +70,10 @@ public:
   Self & operator=( const ValueType r[VPointDimension] );
   
  
-  /** Accessor on \ref m_Edge */
+  /** Accessor on m_Edge */
   void SetEdge( TQuadEdge * inputEdge );
 
-  /** Accessor on \ref m_Edge */
+  /** Accessor on m_Edge */
   TQuadEdge * GetEdge();
   TQuadEdge * GetEdge() const;
 

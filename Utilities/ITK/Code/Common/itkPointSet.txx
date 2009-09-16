@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPointSet.txx,v $
   Language:  C++
-  Date:      $Date: 2009-03-03 15:07:57 $
-  Version:   $Revision: 1.34 $
+  Date:      $Date: 2009-06-21 23:14:46 $
+  Version:   $Revision: 1.35 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,7 +42,10 @@ PointSet<TPixelType, VDimension, TMeshTraits>
   os << indent << "Buffered Region: " << m_BufferedRegion << std::endl;
   os << indent << "Maximum Number Of Regions: " 
      << m_MaximumNumberOfRegions << std::endl;
-
+  os << indent << "Point Data Container pointer: "
+     << ((this->m_PointDataContainer) ?  this->m_PointDataContainer.GetPointer() : 0) << std::endl;
+  os << indent << "Size of Point Data Container: "
+     << ((this->m_PointDataContainer) ?  this->m_PointDataContainer->Size() : 0) << std::endl;
 }
 
 

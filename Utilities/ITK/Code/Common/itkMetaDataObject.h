@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMetaDataObject.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-05 10:56:41 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2009-06-14 09:20:22 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -118,7 +118,7 @@ public:
   /**
    * \author Hans J. Johnson
    * Function to set the stored value of type MetaDataObjectType.
-   * \param A constant reference to at MetaDataObjectType.
+   * \param NewValue A constant reference to at MetaDataObjectType.
    */
   void SetMetaDataObjectValue(const MetaDataObjectType & NewValue );
   /**
@@ -140,7 +140,9 @@ private:
 /**
  * EncapsulateMetaData is a convenience function that encapsulates raw MetaData into a
  * MetaDataObject that can be put into the MetaDataDictionary.
- * \param value the value of type T that is to be encapsulated.
+ * \param Dictionary TODO
+ * \param key TODO
+ * \param invalue the value of type T that is to be encapsulated.
  * \return A smartpointer ot a MetaDataObject that is suitable for
  * insertion into a MetaDataDictionary.
  */

@@ -56,7 +56,7 @@ public:
  * \class AeronetFileReader
  * \brief This class reads a Aeronet data from an Aeronet file.
  *
- *  This class reads a Aeronet data from an Aeronet file. 
+ *  This class reads a Aeronet data from an Aeronet file.
  *
  *  This file must contain the following fields (contains in the line 5)
  *    column 1  : The date "Date (dd/mm/yyyy)"
@@ -135,14 +135,14 @@ private:
 
   /** Parse the string and return a list of strings which separated by ',' char */
   VectorString ParseLine(const std::string & line)const;
-  
+
   /** Parse the string and return the date and time */
   ossimLocalTm ParseDate(const std::string & date, const std::string & time)const;
 
 /**
  * Parse valid line method
  */
-  void ParseValidLine(const double & ref_date, const VectorString & line, const double & epsilon, VectorDouble & water,VectorDouble & angst, VectorDouble & tau_day,VectorDouble & solarZenithAngle)const;
+  void ParseValidLine(const double & ref_date, const VectorString & line, const double & epsilon, VectorDouble & water, VectorDouble & angst, VectorDouble & tau_day, VectorDouble & solarZenithAngle)const;
 
 /**
  * Compute statistics method (mean and stddev)

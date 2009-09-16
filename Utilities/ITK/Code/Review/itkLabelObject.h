@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelObject.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-23 19:04:36 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-08-06 18:07:04 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,7 +27,7 @@ namespace itk
 {
 
 /** \class LabelObject
- *  \brief The base class for the representation of an labeled binary object in an image
+ *  \brief The base class for the representation of an labeled binary object in an image.
  * 
  * LabelObject is the base class to represent a labeled object in an image.
  * It should be used associated with the LabelMap.
@@ -77,11 +77,9 @@ public:
   typedef typename LineType::LengthType      LengthType;
   typedef typename std::deque< LineType >    LineContainerType;
   typedef unsigned int                       AttributeType;
+  typedef unsigned long                      SizeValueType;
 
-  enum
-    {
-    LABEL = 0
-    };
+  itkStaticConstMacro(LABEL, AttributeType, 0);
 
   static AttributeType GetAttributeFromName( const std::string & s );
   static std::string GetNameFromAttribute( const AttributeType & a );
@@ -121,15 +119,17 @@ public:
 
   void SetLineContainer( const LineContainerType & lineContainer );
 
-  int GetNumberOfLines() const;
+  SizeValueType GetNumberOfLines() const;
 
-  const LineType & GetLine( int i ) const;
+  const LineType & GetLine( SizeValueType i ) const;
   
-  LineType & GetLine( int i );
+  LineType & GetLine( SizeValueType i );
 
-  int Size() const;
+  SizeValueType Size() const;
+
+  bool Empty() const;
   
-  IndexType GetIndex( int offset ) const;
+  IndexType GetIndex( SizeValueType offset ) const;
   
   /** Copy the attributes of another node to this one */
   virtual void CopyAttributesFrom( const Self * src );

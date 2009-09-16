@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMesh.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-12 00:10:13 $
-  Version:   $Revision: 1.101 $
+  Date:      $Date: 2009-06-21 23:14:45 $
+  Version:   $Revision: 1.103 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,14 +40,14 @@ Mesh<TPixelType, VDimension, TMeshTraits>
      << ((m_CellLinksContainer) ?  m_CellLinksContainer->Size() : 0) << std::endl;
   os << indent << "Number Of Cells: "
      << ((m_CellsContainer) ?  m_CellsContainer->Size() : 0) << std::endl;
+  os << indent << "Cell Data Container pointer: "
+     << ((m_CellDataContainer) ?  m_CellDataContainer.GetPointer() : 0) << std::endl;
   os << indent << "Size of Cell Data Container: "
      << ((m_CellDataContainer) ?  m_CellDataContainer->Size() : 0) << std::endl;
   os << indent << "Number of explicit cell boundary assignments: "
      << static_cast<unsigned long>( m_BoundaryAssignmentsContainers.size() ) << std::endl;
-
   os << indent << "CellsAllocationMethod: "
      << m_CellsAllocationMethod << std::endl;
-
 }
 
 
@@ -71,7 +71,7 @@ Mesh<TPixelType, VDimension, TMeshTraits>
  * Access routines to get the cell links container.
  */
 template <typename TPixelType, unsigned int VDimension, typename TMeshTraits>
-typename Mesh<TPixelType, VDimension, TMeshTraits>::CellLinksContainerPointer
+typename Mesh<TPixelType, VDimension, TMeshTraits>::CellLinksContainer *
 Mesh<TPixelType, VDimension, TMeshTraits>
 ::GetCellLinks()
 {
@@ -80,7 +80,7 @@ Mesh<TPixelType, VDimension, TMeshTraits>
   return m_CellLinksContainer;
 }
 template <typename TPixelType, unsigned int VDimension, typename TMeshTraits>
-const typename Mesh<TPixelType, VDimension, TMeshTraits>::CellLinksContainerPointer
+const typename Mesh<TPixelType, VDimension, TMeshTraits>::CellLinksContainer *
 Mesh<TPixelType, VDimension, TMeshTraits>
 ::GetCellLinks() const
 {
@@ -112,7 +112,7 @@ Mesh<TPixelType, VDimension, TMeshTraits>
  * Access routines to get the cells container.
  */
 template <typename TPixelType, unsigned int VDimension, typename TMeshTraits>
-typename Mesh<TPixelType, VDimension, TMeshTraits>::CellsContainerPointer
+typename Mesh<TPixelType, VDimension, TMeshTraits>::CellsContainer *
 Mesh<TPixelType, VDimension, TMeshTraits>
 ::GetCells()
 {
@@ -120,7 +120,7 @@ Mesh<TPixelType, VDimension, TMeshTraits>
   return m_CellsContainer;
 }
 template <typename TPixelType, unsigned int VDimension, typename TMeshTraits>
-const typename Mesh<TPixelType, VDimension, TMeshTraits>::CellsContainerPointer
+const typename Mesh<TPixelType, VDimension, TMeshTraits>::CellsContainer *
 Mesh<TPixelType, VDimension, TMeshTraits>
 ::GetCells() const
 {
@@ -150,7 +150,7 @@ Mesh<TPixelType, VDimension, TMeshTraits>
  * Access routines to get the cell data container.
  */
 template <typename TPixelType, unsigned int VDimension, typename TMeshTraits>
-typename Mesh<TPixelType, VDimension, TMeshTraits>::CellDataContainerPointer
+typename Mesh<TPixelType, VDimension, TMeshTraits>::CellDataContainer *
 Mesh<TPixelType, VDimension, TMeshTraits>
 ::GetCellData()
 {
@@ -159,7 +159,7 @@ Mesh<TPixelType, VDimension, TMeshTraits>
   return m_CellDataContainer;
 }
 template <typename TPixelType, unsigned int VDimension, typename TMeshTraits>
-const typename Mesh<TPixelType, VDimension, TMeshTraits>::CellDataContainerPointer
+const typename Mesh<TPixelType, VDimension, TMeshTraits>::CellDataContainer *
 Mesh<TPixelType, VDimension, TMeshTraits>
 ::GetCellData() const
 {

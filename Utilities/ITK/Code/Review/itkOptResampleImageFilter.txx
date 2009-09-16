@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptResampleImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-11-15 11:06:55 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-08-24 13:49:19 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -754,12 +754,9 @@ ResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
   // get pointers to the input and output
   InputImagePointer  inputPtr  =
     const_cast< TInputImage *>( this->GetInput() );
-
+  
   // Request the entire input image
-  InputImageRegionType inputRegion;
-  inputRegion = inputPtr->GetLargestPossibleRegion();
-  inputPtr->SetLargestPossibleRegion(inputRegion);
-  inputPtr->SetRequestedRegion(inputRegion);
+  inputPtr->SetRequestedRegionToLargestPossibleRegion();
 
   return;
 }
@@ -854,6 +851,7 @@ ResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
     outputPtr->SetOrigin( m_OutputOrigin );
     outputPtr->SetDirection( m_OutputDirection );
     }
+
   return;
 }
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVersor.h,v $
   Language:  C++
-  Date:      $Date: 2007-12-20 19:19:18 $
-  Version:   $Revision: 1.22 $
+  Date:      $Date: 2009-06-14 10:20:48 $
+  Version:   $Revision: 1.23 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -95,13 +95,13 @@ public:
    quaternion where "w" is positive, since this is implicitly assumed in other
    sections of the code, in particular when "w" is computed from (x,y,z) via
    normalization. The reason why it is valid to negate all the components is
-   that the rotation by angle \theta, is represented by \sin(\frac{\theta}{2})
-   in the (x,y,z) components and by \cos(\frac{\theta}{2}) in the "w"
-   component. The rotation by any \theta should be equivalent to a rotation by
-   \theta + n \times \pi, therefore we should be able to replace
-   \sin(\frac{\theta}{2}) with \sin(\frac{\theta}{2} + n \times \pi ) and
-   \cos(\frac{\theta}{2}) with \cos(\frac{\theta}{2} + n \times \pi ). 
-   Considering that \cos( n \times \pi ) = (-1)^{n} we can conclude that if we 
+   that the rotation by angle \f$\theta\f$, is represented by \f$\sin(\frac{\theta}{2})\f$
+   in the (x,y,z) components and by \f$\cos(\frac{\theta}{2})\f$ in the "w"
+   component. The rotation by any \f$\theta\f$ should be equivalent to a rotation by
+   \f$\theta + n \times \pi\f$, therefore we should be able to replace
+   \f$\sin(\frac{\theta}{2})\f$ with \f$\sin(\frac{\theta}{2} + n \times \pi )\f$ and
+   \f$\cos(\frac{\theta}{2})\f$ with \f$\cos(\frac{\theta}{2} + n \times \pi )\f$. 
+   Considering that \f$\cos( n \times \pi ) = (-1)^{n}\f$ we can conclude that if we 
    simultaneously change the signs of all the Versor components, the rotation
    that it represents remains unchanged.
    */

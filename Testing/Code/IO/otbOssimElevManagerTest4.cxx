@@ -96,16 +96,35 @@ int otbOssimElevManagerTest4(int argc,char* argv[])
   headerName << outfname << ".hdr";
   std::ofstream  headerFile;
   headerFile.open(headerName.str().c_str());
-  headerFile << "ENVI\n";
-  headerFile << "samples = " << size[0] << "\n";
-  headerFile << "lines   = " << size[1] << "\n";
-  headerFile << "bands   = 1\n";
-  headerFile << "header offset = 0\n";
-  headerFile << "file type = ENVI Standard\n";
-  headerFile << "data type = 5\n";
-  headerFile << "interleave = bsq\n";
-  headerFile << "byte order = 0\n";
+  headerFile << "ENVI" << std::endl;
+  headerFile << "samples = " << size[0] << std::endl;
+  headerFile << "lines   = " << size[1] << std::endl;
+  headerFile << "bands   = 1" << std::endl;
+  headerFile << "header offset = 0" << std::endl;
+  headerFile << "file type = ENVI Standard" << std::endl;
+  headerFile << "data type = 5" << std::endl;
+  headerFile << "interleave = bsq" << std::endl;
+  headerFile << "byte order = 0" << std::endl;
+  headerFile << std::endl;
   headerFile.close();
+
+
+  //Check for the index 216,51 (difference of 4 in the output)
+  {
+    int i = 216;
+    int j = 51;
+    double point[2];
+    point[0] = origin[0]+i*spacing[0];
+    point[1] = origin[1]+j*spacing[1];
+
+    ossimGpt ossimWorldPoint;
+    ossimWorldPoint.lon=point[0];
+    ossimWorldPoint.lat=point[1];
+    double height = elevManager->getHeightAboveMSL(ossimWorldPoint);
+    std::cout << "Output value at (216,51): " << height << std::endl;
+    std::cout << "At lon: " << ossimWorldPoint.lon <<  " , lat: " << ossimWorldPoint.lat << std::endl;
+
+  }
 
   return EXIT_SUCCESS;
 }

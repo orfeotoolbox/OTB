@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFFTWComplexToComplexImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-03 18:41:16 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-08-13 03:19:20 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -103,8 +103,6 @@ protected:
   virtual bool FullMatrix();
 
 
-  void PrintSelf(std::ostream& os, Indent indent) const;
-
 private:
   FFTWComplexToComplexImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -158,8 +156,6 @@ protected:
       fftw_destroy_plan( this->m_Plan );
       }
     }
-
-  void PrintSelf(std::ostream& os, Indent indent) const;
 
   //
   // these should be defined in every FFT filter class

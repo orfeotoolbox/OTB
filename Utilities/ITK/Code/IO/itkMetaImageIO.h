@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMetaImageIO.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-25 12:25:44 $
-  Version:   $Revision: 1.37 $
+  Date:      $Date: 2009-06-14 12:30:13 $
+  Version:   $Revision: 1.38 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -145,7 +145,7 @@ public:
 
   /** Determing the subsampling factor in case
    *  we want a coarse version of the image/
-   * \Warning this is only used when streaming is on. */
+   * \warning this is only used when streaming is on. */
   itkSetMacro(SubSamplingFactor,unsigned int);
   itkGetConstMacro(SubSamplingFactor,unsigned int);
 

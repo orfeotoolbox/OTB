@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkSimplexMeshAdaptTopologyFilter.h,v $
 Language:  C++
-Date:      $Date: 2009-05-12 17:22:53 $
-Version:   $Revision: 1.14 $
+Date:      $Date: 2009-06-13 17:42:54 $
+Version:   $Revision: 1.15 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -176,6 +176,10 @@ public:
     double ComputeArea(unsigned long p1,unsigned long p2, unsigned long p3)
       {
       InputPointType v1,v2,v3;
+      v1.Fill(0);
+      v2.Fill(0);
+      v3.Fill(0);
+
       mesh->GetPoint(p1, &v1);
       mesh->GetPoint(p2, &v2);
       mesh->GetPoint(p3, &v3);

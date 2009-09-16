@@ -3,8 +3,8 @@
   Program:   MetaIO
   Module:    $RCSfile: metaForm.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-04-09 01:44:28 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-06-21 21:54:04 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,6 +14,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifdef _MSC_VER
+#pragma warning(disable:4702)
+#pragma warning(disable:4996)
+#endif
+
 #include "metaForm.h"
 
 #include <stdlib.h>

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiphaseSparseFiniteDifferenceImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-15 20:43:38 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-09-08 20:09:41 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -176,16 +176,17 @@ namespace itk {
  *      http://hdl.handle.net/1926/1533
  *
  */
-template < class TInputImage, class TOutputImage, class TFunction,
+template < class TInputImage, class TFeatureImage, class TOutputImage, class TFunction,
   typename TIdCell = unsigned int >
 class ITK_EXPORT MultiphaseSparseFiniteDifferenceImageFilter :
-  public MultiphaseFiniteDifferenceImageFilter< TInputImage, TOutputImage, TFunction, TIdCell >
+  public MultiphaseFiniteDifferenceImageFilter< TInputImage,
+  TFeatureImage, TOutputImage, TFunction, TIdCell >
 {
 public:
   /** Standard class typedefs */
   typedef MultiphaseSparseFiniteDifferenceImageFilter     Self;
-  typedef MultiphaseFiniteDifferenceImageFilter<
-    TInputImage, TOutputImage, TFunction, TIdCell >       Superclass;
+  typedef MultiphaseFiniteDifferenceImageFilter< TInputImage,
+    TFeatureImage, TOutputImage, TFunction, TIdCell >     Superclass;
   typedef SmartPointer<Self>                              Pointer;
   typedef SmartPointer<const Self>                        ConstPointer;
 
@@ -195,31 +196,40 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro( MultiphaseSparseFiniteDifferenceImageFilter, MultiphaseFiniteDifferenceImageFilter );
 
+  itkStaticConstMacro( ImageDimension, unsigned int, Superclass::ImageDimension );
+
   /**Typedefs from the superclass */
   typedef typename Superclass::TimeStepType               TimeStepType;
 
   /** Information derived from the image types. */
   typedef typename Superclass::InputImageType             InputImageType;
-  typedef typename Superclass::InputSizeType              InputSizeType;
   typedef typename Superclass::InputImagePointer          InputImagePointer;
   typedef typename Superclass::InputRegionType            InputRegionType;
-  typedef typename Superclass::InputSpacingType           InputSpacingType;
+  typedef typename Superclass::InputSizeType              InputSizeType;
+  typedef typename Superclass::InputSizeValueType         InputSizeValueType;
+  typedef typename Superclass::InputIndexType             InputIndexType;
+  typedef typename Superclass::InputIndexValueType        InputIndexValueType;
+  typedef typename Superclass::InputPixelType             InputPixelType;
   typedef typename Superclass::InputPointType             InputPointType;
+  typedef typename Superclass::InputSpacingType           InputSpacingType;
+
+  typedef typename Superclass::FeatureImageType           FeatureImageType;
+  typedef typename Superclass::FeatureSizeType            FeatureSizeType;
+  typedef typename Superclass::FeatureImagePointer        FeatureImagePointer;
+  typedef typename Superclass::FeatureRegionType          FeatureRegionType;
+  typedef typename Superclass::FeatureSpacingType         FeatureSpacingType;
+  typedef typename Superclass::FeaturePointType           FeaturePointType;
 
   typedef typename Superclass::OutputImageType            OutputImageType;
   typedef typename Superclass::OutputImagePointer         OutputImagePointer;
   typedef typename Superclass::OutputRegionType           OutputRegionType;
   typedef typename Superclass::OutputSizeType             OutputSizeType;
-  typedef typename Superclass::OutputSizeValueType        SizeValueType;
-  typedef typename OutputImageType::ValueType             ValueType;
   typedef typename Superclass::OutputIndexType            OutputIndexType;
   typedef typename Superclass::OutputIndexValueType       OutputIndexValueType;
   typedef typename Superclass::OutputPixelType            OutputPixelType;
 
+  typedef typename InputImageType::ValueType              ValueType;
   typedef typename Superclass::IdCellType                 IdCellType;
-
-
-  itkStaticConstMacro( ImageDimension, unsigned int, TOutputImage::ImageDimension );
 
   typedef typename Superclass::FiniteDifferenceFunctionType
     FiniteDifferenceFunctionType;
@@ -252,10 +262,12 @@ public:
                                                         StatusImageType;
   typedef typename StatusImageType::Pointer             StatusImagePointer;
 
-  typedef ZeroCrossingImageFilter<OutputImageType, OutputImageType>
+  typedef ZeroCrossingImageFilter< InputImageType, InputImageType>
     ZeroCrossingFilterType;
   typedef typename ZeroCrossingFilterType::Pointer
     ZeroCrossingFilterPointer;
+
+  typedef NeighborhoodAlgorithm::ImageBoundaryFacesCalculator< StatusImageType > BFCType;
 
   /** Memory pre-allocator used to manage layer nodes in a multi-threaded
    *  environment. */
@@ -265,6 +277,10 @@ public:
   /** Container type used to store updates to the active layer. */
   typedef std::vector< ValueType >                  UpdateBufferType;
   typedef typename UpdateBufferType::const_iterator UpdateBufferConstIterator;
+
+  typedef SparseFieldCityBlockNeighborList<
+    NeighborhoodIterator<OutputImageType> >       NeighborListType;
+  typedef typename NeighborListType::OffsetType   OffsetType;
 
   /** Set/Get the number of layers to use in the sparse field.  Argument is the
    *  number of layers on ONE side of the active layer, so the total layers in
@@ -339,10 +355,6 @@ protected:
       m_Index = index;
       }
 
-    /** Connectivity information for examining neighbor pixels.   */
-    SparseFieldCityBlockNeighborList< NeighborhoodIterator<OutputImageType> >
-      m_NeighborList;
-
     /** An array which contains all of the layers needed in the sparse
     * field. Layers are organized as follows: m_Layer[0] = active layer,
     * m_Layer[i:odd] = inside layer (i+1)/2, m_Layer[i:even] = outside layer i/2
@@ -352,17 +364,21 @@ protected:
     /** An image of status values used internally by the algorithm. */
     StatusImagePointer m_StatusImage;
 
-    OutputImagePointer m_ShiftedImage;
-
     /** Storage for layer node objects. */
     LayerNodeStoragePointer m_LayerNodeStore;
 
-    /** The update buffer used to store change values computed in
+    /** The update buffer used to store a vector of change values computed in
     *  CalculateChange. */
     UpdateBufferType m_UpdateBuffer;
 
     IdCellType m_Index;
     };
+
+  /** Connectivity information for examining neighbor pixels.   */
+  NeighborListType m_NeighborList;
+
+  /** Stores the distance between pixels in the neighborhood iterator. */
+  std::vector< ValueType > m_PixelDistance;
 
   /**This function allows a subclass to override the way in which updates to
    * output values are applied during each iteration.  The default simply
@@ -398,7 +414,7 @@ protected:
   void CopyInputToOutput();
 
   /** Reserves memory in the update buffer. Called before each iteration. */
-  void AllocateUpdateBuffer();
+  void AllocateUpdateBuffer(){}
 
   /** Applies the update buffer values to the active layer and reconstructs the
    *  sparse field layers for the next iteration. */
@@ -423,6 +439,10 @@ to);
   /** Initializes the values of the active layer set. */
   void InitializeActiveLayerValues();
 
+  /** Initializes the pixel constants that will be set outside the
+   *  sparse layer. */
+  void InitializeBackgroundConstants();
+
   /** Adjusts the values in a single layer "to" using values in a neighboring
    *  layer "from". The list of indicies in "to" are traversed and assigned
    *  new values appropriately. Any indicies in "to" without neighbors in
@@ -442,7 +462,7 @@ to);
   void PropagateFunctionLayerValues( unsigned int functionIndex );
 
   /** Updates the active layer values using m_UpdateBuffer. Also creates an
-   *  "up" and "down" list for promotion/demotion of indicies leaving the
+   *  "up" and "down" list for promotion/demotion of indices leaving the
    *  active set. */
   void UpdateActiveLayerValues( TimeStepType dt, LayerType *StatusUpList,
     LayerType *StatusDownList );
@@ -457,7 +477,7 @@ to);
   void InitializeIteration();
 
   virtual void UpdatePixel(unsigned int itkNotUsed(functionIndex), unsigned int itkNotUsed(idx),
-    NeighborhoodIterator<OutputImageType> & itkNotUsed(iterator), ValueType & itkNotUsed(newValue),
+    NeighborhoodIterator< InputImageType> & itkNotUsed(iterator), ValueType & itkNotUsed(newValue),
     bool & itkNotUsed(status) ){};
 
   itkGetConstMacro( ValueZero, ValueType );
@@ -503,6 +523,9 @@ to);
   /** The value in the input which represents the isosurface of interest. */
   ValueType m_IsoSurfaceValue;
 
+  /** The value of the pixel outside the sparse layers */
+  ValueType m_BackgroundValue;
+
   /** This flag tells the solver whether or not to interpolate for the actual
       surface location when calculating change at each active layer node.  By
       default this is turned on. Subclasses which do not sample propagation
@@ -514,6 +537,9 @@ private:
   void operator=(const Self&);      //purposely not implemented
 
   unsigned int    m_CurrentFunctionIndex;
+
+  double       m_RMSSum;
+  unsigned int m_RMSCounter;
 
   /** This flag is true when methods need to check boundary conditions and
       false when methods do not need to check for boundary conditions. */
