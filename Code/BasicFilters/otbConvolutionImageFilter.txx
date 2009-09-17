@@ -25,6 +25,7 @@
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkOffset.h"
 #include "itkProgressReporter.h"
+#include "itkConstantBoundaryCondition.h"
 
 namespace otb
 {
@@ -96,22 +97,11 @@ ConvolutionImageFilter< TInputImage, TOutputImage, TBoundaryCondition>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId)
 {
-
-  BoundaryConditionType nbc;
   unsigned int i;
-  itk::ConstNeighborhoodIterator<InputImageType> bit;
-  itk::ImageRegionIterator<OutputImageType> it;
 
   // Allocate output
   typename OutputImageType::Pointer output = this->GetOutput();
   typename  InputImageType::ConstPointer input  = this->GetInput();
-
-  // Find the data-set boundary "faces"
-  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType faceList;
-  itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> bC;
-  faceList = bC(input, outputRegionForThread, m_Radius);
-
-  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator fit;
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
@@ -119,51 +109,47 @@ ConvolutionImageFilter< TInputImage, TOutputImage, TBoundaryCondition>
   InputRealType sum = itk::NumericTraits<InputRealType>::Zero;
   InputRealType norm = itk::NumericTraits<InputRealType>::Zero;
 
-  // Process each of the boundary faces.  These are N-d regions which border
-  // the edge of the buffer.
-  for (fit=faceList.begin(); fit != faceList.end(); ++fit)
+  InputImageRegionType inputRegionForThread;
+  this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
+
+  itk::ConstNeighborhoodIterator<InputImageType, itk::ConstantBoundaryCondition<InputImageType> >  inputIt(m_Radius, input, inputRegionForThread);
+  itk::ImageRegionIterator<OutputImageType> outputIt(output, outputRegionForThread);
+
+  inputIt.GoToBegin();
+  unsigned int neighborhoodSize = inputIt.Size();
+
+  // Compute the norm of the filter
+  if(m_NormalizeFilter)
   {
-    bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius,
-          input, *fit);
-
-    it = itk::ImageRegionIterator<OutputImageType>(output, *fit);
-    bit.OverrideBoundaryCondition(&nbc);
-    bit.GoToBegin();
-    unsigned int neighborhoodSize = bit.Size();
-
-    // Compute the norm of the filter
-    if(m_NormalizeFilter)
-      {
-      norm = itk::NumericTraits<InputRealType>::Zero;
-      for (i = 0; i < neighborhoodSize; ++i)
-	{
-	 norm += static_cast<InputRealType>( vcl_abs(m_Filter(i)) );
-	}
-      }
-
-    while ( ! bit.IsAtEnd() )
+    norm = itk::NumericTraits<InputRealType>::Zero;
+    for (i = 0; i < neighborhoodSize; ++i)
     {
-      sum = itk::NumericTraits<InputRealType>::Zero;
-
-      for (i = 0; i < neighborhoodSize; ++i)
-      {
-        sum += static_cast<InputRealType>( bit.GetPixel(i)*m_Filter(i) );
-      }
-
-      // get the mean value
-      if (m_NormalizeFilter)
-      {
-        it.Set( static_cast<OutputPixelType>(sum / double(norm)) );
-      }
-      else
-      {
-        it.Set( static_cast<OutputPixelType>(sum));
-      }
-
-      ++bit;
-      ++it;
-      progress.CompletedPixel();
+     norm += static_cast<InputRealType>( vcl_abs(m_Filter(i)) );
     }
+  }
+
+  while ( ! inputIt.IsAtEnd() )
+  {
+    sum = itk::NumericTraits<InputRealType>::Zero;
+
+    for (i = 0; i < neighborhoodSize; ++i)
+    {
+      sum += static_cast<InputRealType>( inputIt.GetPixel(i)*m_Filter(i) );
+    }
+
+    // get the mean value
+    if (m_NormalizeFilter)
+    {
+      outputIt.Set( static_cast<OutputPixelType>(sum / double(norm)) );
+    }
+    else
+    {
+      outputIt.Set( static_cast<OutputPixelType>(sum));
+    }
+
+    ++inputIt;
+    ++outputIt;
+    progress.CompletedPixel();
   }
 }
 
