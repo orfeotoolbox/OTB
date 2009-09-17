@@ -50,7 +50,7 @@ int main(int argc, char * argv[])
   ResponsePointerType  myResponse=ResponseType::New();
   //Load file into vector
   const std::string file(argv[1]);
-  myResponse->Load(file);
+  myResponse->Load(file, 100.0);
   
   std::cout << "Input SpectResponse " << myResponse << std::endl;
   //rsr to image

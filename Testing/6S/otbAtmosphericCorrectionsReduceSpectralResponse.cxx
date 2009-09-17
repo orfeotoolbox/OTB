@@ -24,6 +24,10 @@
 
 #include "otbReduceSpectralResponseClassifierRAndNIR.h"
 
+/*
+bin/otbAtmosphericCorrectionsReduceSpectralResponse ~/manuel/Datas_Geos/Simulateur_Spectres/usgs_datas/JHU/becknic/soils/txt/0015c.txt ~/manuel/Datas_Geos/Rsr/SPOT5/HRG1/rep6S.dat 4 4 12 27.3 152.7 2.5 -77.0 1013. 2.48134 0.34400 1 0.199854 1 2 > a.out
+*/
+
 int main(int argc, char * argv[])
 {
   
@@ -69,7 +73,7 @@ int main(int argc, char * argv[])
   const std::string fileSatG(argv[2]);
   unsigned int nbBand = atoi(argv[3]);
   
-  myResponse->Load(fileSR);
+  myResponse->Load(fileSR, 100.0);
   
 //   std::cout << "Response before "<< myResponse << std::endl; 
   
@@ -129,6 +133,7 @@ int main(int argc, char * argv[])
     myReduceResponse->Process6S(i);
   }
   */
+  std::cout << "Response before "<< myReduceResponse << std::endl; 
   myReduceResponse->Process6S();
   
   //std::cout << "Response after "<< myReduceResponse << std::endl; 
@@ -136,7 +141,7 @@ int main(int argc, char * argv[])
   //
   myReduceResponse->CalculateResponse();
   
-  std::cout << "Reduce response " << myReduceResponse << std::endl;
+  std::cout << "Reduce response after 6S and calculate" << myReduceResponse << std::endl;
   
   typedef otb::Functor::NDVI<double,double,double >               TFunctionType;
   typedef otb::ReduceSpectralResponseClassifierRAndNIR <ReduceResponseType,TFunctionType> ReduceSpectralResponseClassifierRAndNIRType;

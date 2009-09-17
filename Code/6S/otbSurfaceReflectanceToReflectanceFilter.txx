@@ -163,6 +163,7 @@ SurfaceReflectanceToReflectanceFilter<TInputImage,TOutputImage>
 {
   if(m_IsSetAtmosphericRadiativeTerms==false)
     {
+      std::cout << "update radiative terms"<< std::endl;
       this->UpdateAtmosphericRadiativeTerms();
     }
   

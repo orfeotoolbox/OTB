@@ -96,13 +96,29 @@ public:
 //     temp = static_cast<double>(inPixel)*m_Coefficient + m_Residu;
 //     temp2 =  temp / (1. + m_SphericalAlbedo *  temp);
     
-    temp = 1 - static_cast<double>(inPixel) *m_SphericalAlbedo;
+    temp = 1. - (static_cast<double>(inPixel) * m_SphericalAlbedo);
     //temp1 =  1/temp;
-    temp2 = ( m_Coefficient*static_cast<double>(inPixel) + temp*m_Residu ) / temp;
     
+    std::cout << "------------------------------" << std::endl;
+    std::cout << "B "<< temp << std::endl;
+    std::cout << "B*residu "<< temp*m_Residu << std::endl;
+    std::cout << "m_Coefficient*static_cast<double>(inPixel) "<< m_Coefficient*static_cast<double>(inPixel) << std::endl;
+    std::cout << "albedo "<< m_SphericalAlbedo << std::endl;
+    std::cout << "all gaz "<< m_Coefficient << std::endl;
+    std::cout << "residu "<< m_Residu << std::endl;
+    //std::cout << "temp2 "<< temp2 << std::endl;
+    temp2 = m_Residu;
+    std::cout << "temp2 "<< temp2 << std::endl;
+    temp1 = 1. / temp;
+    std::cout << "temp1 "<< temp1 << std::endl;
+    temp2 += temp1*m_Coefficient*static_cast<double>(inPixel);
+//     std::cout << "1-row*S "<< temp << std::endl;
+//     outPixel = vcl_fabs (static_cast<TOutput>(temp2));
     outPixel = static_cast<TOutput>(temp2);
-
-
+    
+    std::cout << "in out "<< static_cast<double>(inPixel) << " ; " << static_cast<double>(outPixel)<< std::endl;
+    std::cout <<"plot " << m_Residu << "+" << m_Coefficient << "*(x/(1-x*" << m_SphericalAlbedo << "))" << std::endl;
+    std::cout << "------------------------------" << std::endl;
     return outPixel;
   }
 
