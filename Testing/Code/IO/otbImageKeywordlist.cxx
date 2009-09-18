@@ -60,23 +60,20 @@ int otbImageKeywordlist( int argc, char* argv[] )
     ->createProjection(ossimFilename(filename),0);
     if (!projection)
     {
-      otbMsgDevMacro( <<"OSSIM Instanciate projection FAILED ! ");
+      itkGenericExceptionMacro( <<"OSSIM Instanciate projection FAILED ! ");
       return EXIT_FAILURE;
     }
 
     hasMetaData = projection->saveState(geom_kwl);
-std::cout << "geom_kwl:"<<geom_kwl<<std::endl;
     otb::ImageKeywordlist otb_kwl;
     otb_kwl.SetKeywordlist( geom_kwl );
 
     otb_kwl.convertToOSSIMKeywordlist( geom_kwl2 ); 
-std::cout << "geom_kwl2:"<<geom_kwl2<<std::endl;
 
     hasMetaData = projection->loadState(geom_kwl2);
     hasMetaData = projection->saveState(geom_kwl3);
     otb::ImageKeywordlist otb_kwl2;
     otb_kwl2.SetKeywordlist( geom_kwl3 );
-std::cout << "geom_kwl3:"<<geom_kwl3<<std::endl;
 
   file << "*** KEYWORD LIST ***\n";
   file << otb_kwl;
