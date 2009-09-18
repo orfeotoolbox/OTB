@@ -823,6 +823,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
     {
       if ( radius[i] < highPassOperator.GetRadius()[i] )
         radius[i] = highPassOperator.GetRadius()[i];
+      std::cout << __FILE__ << ":" << __LINE__ << " -> "<< i << ": " << radius[i] << std::endl;
     }
 
     InputImageRegionType paddedRegion = destRegion;
