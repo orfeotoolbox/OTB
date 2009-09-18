@@ -36,8 +36,8 @@
 namespace otb
 {
 
-template <class TInputImage, class TOutputImage>
-OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage, class TBoundaryCondition>
+OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
 ::OverlapSaveConvolutionImageFilter()
 {
   m_Radius.Fill(1);
@@ -46,9 +46,9 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
   m_NormalizeFilter = false;
 }
 
-template <class TInputImage, class TOutputImage>
+template <class TInputImage, class TOutputImage, class TBoundaryCondition>
 void
-OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
+OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
 ::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
 {
 #if defined USE_FFTWD
@@ -98,9 +98,9 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
 #endif
 }
 
-template< class TInputImage, class TOutputImage>
+template< class TInputImage, class TOutputImage, class TBoundaryCondition>
 void
-OverlapSaveConvolutionImageFilter< TInputImage, TOutputImage>
+OverlapSaveConvolutionImageFilter< TInputImage, TOutputImage, TBoundaryCondition>
 /* TODO commented out since multi-threading is not supported for the moment
  * ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,int threadId) */
 ::GenerateData()
@@ -143,14 +143,13 @@ OverlapSaveConvolutionImageFilter< TInputImage, TOutputImage>
   typename InputImageType::SizeType inputSize =   inputRegionForThread.GetSize();
 
   //Iterator of input image
-  itk::ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;
-  itk::ConstNeighborhoodIterator<InputImageType> bit(m_Radius,input,inputRegionForThread);
-  bit.OverrideBoundaryCondition(&nbc);
-  bit.GoToBegin();
+  itk::ConstNeighborhoodIterator<InputImageType,BoundaryConditionType>
+                                         inputIt(m_Radius,input,inputRegionForThread);
+  inputIt.GoToBegin();
 
   //Iterator of output image
-  itk::ImageRegionIteratorWithIndex<OutputImageType> it;
-  it = itk::ImageRegionIteratorWithIndex<OutputImageType>(output,outputRegionForThread);
+  itk::ImageRegionIteratorWithIndex<OutputImageType> outputIt;
+  outputIt = itk::ImageRegionIteratorWithIndex<OutputImageType>(output,outputRegionForThread);
 
   //variables for loops
   unsigned int i,j,k,l;
@@ -179,12 +178,12 @@ OverlapSaveConvolutionImageFilter< TInputImage, TOutputImage>
   unsigned int topskip =  pieceSize[0]*static_cast<unsigned int>(std::max(0L,inputIndex[1]-pieceIndex[1]));
 
   // Filling the buffer with image values
-  for (l = 0;l<inputSize[1];++l)
+  for (l = 0; l<inputSize[1]; ++l)
   {
-    for (k = 0;k<inputSize[0];++k)
+    for (k = 0; k<inputSize[0]; ++k)
     {
-      inputPiece[topskip+pieceSize[0]*l+k+leftskip]=bit.GetCenterPixel();
-      ++bit;
+      inputPiece[topskip+pieceSize[0]*l+k+leftskip]=inputIt.GetCenterPixel();
+      ++inputIt;
     }
   }
 
@@ -251,13 +250,13 @@ OverlapSaveConvolutionImageFilter< TInputImage, TOutputImage>
   }
 
   // Fill the ouptut image
-  it.GoToBegin();
-  while (!it.IsAtEnd())
+  outputIt.GoToBegin();
+  while (!outputIt.IsAtEnd())
   {
-    typename InputImageType::IndexType index = it.GetIndex();
+    typename InputImageType::IndexType index = outputIt.GetIndex();
     unsigned int linearIndex = (index[1]+sizeOfFilter[1]-1-outputRegionForThread.GetIndex()[1])*pieceSize[0]-1+index[0]+sizeOfFilter[0]-outputRegionForThread.GetIndex()[0];
-    it.Set( static_cast<OutputPixelType>((inverseFFTpiece[linearIndex]/pieceNbOfPixel)*static_cast<double>(norm) ));
-    ++it;
+    outputIt.Set( static_cast<OutputPixelType>((inverseFFTpiece[linearIndex]/pieceNbOfPixel)*static_cast<double>(norm) ));
+    ++outputIt;
   }
 
   // destroy the FFT plans
@@ -278,7 +277,10 @@ OverlapSaveConvolutionImageFilter< TInputImage, TOutputImage>
 }
 
 /** Standard "PrintSelf" method */
-template <class TInputImage, class TOutput> void OverlapSaveConvolutionImageFilter<TInputImage, TOutput>::PrintSelf(std::ostream& os,itk::Indent indent) const
+template <class TInputImage, class TOutput, class TBoundaryCondition>
+void
+OverlapSaveConvolutionImageFilter<TInputImage, TOutput, TBoundaryCondition>
+::PrintSelf(std::ostream& os,itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
   os << indent << "Radius: " << m_Radius << std::endl;

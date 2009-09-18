@@ -34,7 +34,6 @@ template <class TInputImage, class TOutputImage, class TBoundaryCondition>
 ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
 ::ConvolutionImageFilter()
 {
-  typedef itk::ZeroFluxNeumannBoundaryCondition<InputImageType> DefaultBoundaryConditionType;
   m_Radius.Fill(1);
   m_Filter.SetSize(3*3);
   m_Filter.Fill(1);

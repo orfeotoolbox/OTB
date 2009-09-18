@@ -23,6 +23,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkNumericTraits.h"
 #include "itkArray.h"
 #include "itkFFTWCommon.h"
+#include "itkZeroFluxNeumannBoundaryCondition.h"
 
 namespace otb
 {
@@ -53,7 +54,8 @@ namespace otb
  * \ingroup Streamed
  * \ingroup IntensityImageFilters
  */
-template <class TInputImage,class TOutputImage>
+template <class TInputImage, class TOutputImage,
+          class TBoundaryCondition = itk::ZeroFluxNeumannBoundaryCondition<TInputImage> >
 class ITK_EXPORT OverlapSaveConvolutionImageFilter
       : public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
@@ -86,6 +88,7 @@ public:
   typedef typename OutputImageType::RegionType OutputImageRegionType;
   typedef typename InputImageType::SizeType InputSizeType;
   typedef typename itk::Array<InputRealType> ArrayType;
+  typedef TBoundaryCondition BoundaryConditionType;
 
   /** Set the radius of the neighborhood used to compute the mean. */
   virtual void SetRadius (const InputSizeType rad)
