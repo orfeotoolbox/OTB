@@ -31,6 +31,8 @@ class PlatformPosition;
 class SensorParams;
 class RefPoint;
 class AlosSarLeader;
+class AlosSarData;
+
 /**
  * @brief This class is able to direct localisation and indirect localisation using the AlosPalsar sensor model
  *
@@ -116,10 +118,16 @@ private:
    */
   AlosSarLeader *theAlosSarLeader;
 
-
+  /**
+   * @brief List of metadata contained in the Data file
+   */
+  AlosSarData *theAlosSarData;
 
   virtual bool isAlosPalsarLeader(const ossimFilename& file) const;
   virtual ossimFilename findAlosPalsarLeader(const ossimFilename& file) const;
+
+  virtual bool isAlosPalsarData(const ossimFilename& file) const;
+  virtual ossimFilename findAlosPalsarData(const ossimFilename& file) const;
 
   TYPE_DATA
 

@@ -21,6 +21,7 @@
 #include <ossim/base/ossimTrace.h>
 #include <otb/RefPoint.h>
 #include <AlosPalsar/AlosSarLeader.h>
+#include <AlosPalsar/AlosSarData.h>
 #include <otb/SensorParams.h>
 #include <otb/PlatformPosition.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -690,6 +691,16 @@ ossimFilename ossimAlosPalsarModel::findAlosPalsarLeader(const ossimFilename& fi
     }
   }
   return file;
+}
+
+bool ossimAlosPalsarModel::isAlosPalsarData(const ossimFilename& file) const
+{
+  //FIXME
+}
+
+ossimFilename ossimAlosPalsarModel::findAlosPalsarData(const ossimFilename& file) const
+{
+  //FIXME
 }
 
 } // namespace ossimplugins
