@@ -112,7 +112,7 @@ ConvolutionImageFilter< TInputImage, TOutputImage, TBoundaryCondition>
   InputImageRegionType inputRegionForThread;
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
 
-  itk::ConstNeighborhoodIterator<InputImageType>  inputIt(m_Radius, input, inputRegionForThread);
+  itk::ConstNeighborhoodIterator<InputImageType, BoundaryConditionType>  inputIt(m_Radius, input, inputRegionForThread);
   itk::ImageRegionIterator<OutputImageType> outputIt(output, outputRegionForThread);
 
   inputIt.GoToBegin();

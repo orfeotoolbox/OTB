@@ -86,8 +86,6 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage>
     // store what we tried to request (prior to trying to crop)
     inputPtr->SetRequestedRegion(inputRequestedRegion);
 
-
-
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     e.SetLocation(ITK_LOCATION);
