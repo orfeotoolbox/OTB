@@ -95,7 +95,7 @@ namespace otb
 #ifdef OTB_SHOW_ALL_MSG_DEBUG
 #define otbMsgDevMacro(x) \
     { { ::itk::OStringStream itkmsg; \
-      itkmsg << " Msg Dev: " x << "\n"; \
+      itkmsg << " Msg Dev: (" << __FILE__ << ":" << __LINE__ << ") " x << "\n"; \
       ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str());} \
      }
 #else
