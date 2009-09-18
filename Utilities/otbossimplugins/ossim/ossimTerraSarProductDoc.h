@@ -35,6 +35,7 @@ namespace ossimplugins
    class PlatformPosition;
    class RefPoint;
    class SensorParams;
+   class Noise;
 
    /** @brief Class to encapsulate parsing TerraSAR product xml file. */
    class ossimTerraSarProductDoc
@@ -201,6 +202,42 @@ namespace ossimplugins
       
       bool getGeodeticTerrainHeight(const ossimXmlDocument* xdoc,
                                     ossimString& s) const;
+
+      bool getProductType(const ossimXmlDocument* xdoc,
+                                    ossimString& s) const;
+
+      bool getRadiometricCorrection(const ossimXmlDocument* xdoc,
+                                    ossimString& s) const;
+      bool getImagingMode(const ossimXmlDocument* xdoc,
+                                    ossimString& s) const;
+      bool getAcquisitionSensor(const ossimXmlDocument* xdoc,
+                                    ossimString& s) const;
+      bool getPolarisationMode(const ossimXmlDocument* xdoc,
+                                    ossimString& s) const;
+      bool getPolLayer(const ossimXmlDocument* xdoc,
+                                    ossimString& s) const;
+      bool getCalFactor(const ossimXmlDocument* xdoc,
+                                    ossimString& s) const;
+
+      /**
+       * @brief Method to initialize Noise object from
+       * TerraSAR  product xml file.
+       * @param xdoc Opened product xml file.
+       * @param pos Pointer to PlatformPosition object.
+       * @return true on success, false on error.
+       */
+      bool initNoise(const ossimXmlDocument* xdoc,
+                                Noise* pos) const;
+
+/*
+      bool getImageNoiseTimeUTC(const ossimXmlDocument* xdoc, ossimString& s) const;
+      bool getImageNoiseValidityRangeMin(const ossimXmlDocument* xdoc, ossimString& s) const;
+      bool getImageNoiseValidityRangeMax(const ossimXmlDocument* xdoc, ossimString& s) const;
+      bool getImageNoiseReferencePoint(const ossimXmlDocument* xdoc, ossimString& s) const;
+      bool getImageNoisePolynomialCoefficient( const ossimXmlDocument* xdoc, std::vector<double>& polynomialCoefficient) const;
+
+*/
+
    };
 
 } // End: namespace ossimplugins

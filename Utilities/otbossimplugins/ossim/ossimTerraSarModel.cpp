@@ -37,6 +37,18 @@ static const char SR_GR_SF_KW[] = "sc_gr_sf";
 static const char ALT_SR_GR_COEFFICIENT0_KW[] = "alt_sr_gr_coeff0";
 static const char ALT_SR_GR_COEFFICIENT1_KW[] = "alt_sr_gr_coeff1";
 static const char ALT_SR_GR_COEFFICIENT2_KW[] = "alt_sr_gr_coeff2";
+static const char PRODUCT_TYPE[] = "product_type";
+static const char RADIOMETRIC_CORRECTION[] = "radiometricCorrection";
+
+static const char ACQUISITION_INFO[] = "acquisitionInfo.";
+static const char IMAGING_MODE[] = "imagingMode";
+static const char SENSOR[] = "sensor";
+static const char LOOK_DIRECTION[] = "lookDirection";
+static const char POLARISATION_MODE[] = "polarisationMode";
+static const char POL_LAYER[] = "polLayer";
+
+
+static const char CALIBRATION_CALFACTOR[] = "calibration.calibrationConstant.calFactor";
 
 using ::ossimString;
 using ::ossimXmlDocument;
@@ -59,6 +71,15 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel()
      _sceneCenterRangeTime(0.0),
      _SrToGr_scaling_factor(0.0),
      _alt_srgr_coefset(3),
+     _productType(),
+     _radiometricCorrection(),
+     _imagingMode(),
+     _acquisitionSensor(),
+     _lookDirection(),
+     _polarisationMode(),
+     _polLayer(),
+     _noise(0),
+     _calFactor(0.),
      theProductXmlFile()
 {
 }
@@ -72,12 +93,26 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel(
      _sceneCenterRangeTime(rhs._sceneCenterRangeTime),
      _SrToGr_scaling_factor(rhs._SrToGr_scaling_factor),
      _alt_srgr_coefset(rhs._alt_srgr_coefset),
+     _productType(rhs._productType),
+     _radiometricCorrection(rhs._radiometricCorrection),
+     _imagingMode(rhs._imagingMode),
+     _acquisitionSensor(rhs._acquisitionSensor),
+     _lookDirection(rhs._lookDirection),
+     _polarisationMode(rhs._polarisationMode),
+     _polLayer(rhs._polLayer),
+     _noise(rhs._noise),
+     _calFactor(rhs._calFactor),
      theProductXmlFile(rhs.theProductXmlFile)
 {
 }
 
 ossimplugins::ossimTerraSarModel::~ossimTerraSarModel()
 {
+   if (_noise != 0)
+   {
+      delete _noise;
+   }
+
 }
 
 ossimString ossimplugins::ossimTerraSarModel::getClassName() const
@@ -184,11 +219,39 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
                      if (result)
                      {
                         result = initRefPoint(xdoc, tsDoc);
+
+                        if (result)
+                        {
+                            result = tsDoc.getProductType(xdoc, _productType);
+
+                            if (result)
+                            {
+                              result = tsDoc.getRadiometricCorrection(xdoc, _radiometricCorrection);
+                              if (result)
+                              {
+                                result = initAcquisitionInfo(xdoc, tsDoc);
+                                if (result)
+                                {
+                                  result = initNoise(xdoc, tsDoc);
+                                  if (result)
+                                  {
+                                    ossimString s;
+                                    result = tsDoc.getCalFactor(xdoc, s);
+                                    _calFactor = s.toFloat64();
+                                  }
+                                }
+                              }
+                            }
+
+                        }
+
+
                      }
                   }
                }
             }
          }
+  
          
       } // matches: if ( xdoc->openFile(file) )
       
@@ -282,7 +345,26 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
    {
       // kwl.add(prefix, LOAD_FROM_PRODUCT_FILE_KW, "true");
    }
-   
+
+   kwl.add(prefix, PRODUCT_TYPE, _productType.c_str());
+   kwl.add(prefix, RADIOMETRIC_CORRECTION, _radiometricCorrection.c_str());
+
+   ossimString kw = ACQUISITION_INFO;
+   ossimString kw2 = kw + IMAGING_MODE;
+   kwl.add(prefix, kw2, _imagingMode.c_str());
+   kw2 = kw + SENSOR;
+   kwl.add(prefix, kw2, _acquisitionSensor.c_str());
+   kw2 = kw + LOOK_DIRECTION;
+   kwl.add(prefix, kw2, _lookDirection.c_str());
+   kw2 = kw + POLARISATION_MODE;
+   kwl.add(prefix, kw2, _polarisationMode.c_str());
+   kw2 = kw + POL_LAYER;
+   kwl.add(prefix, kw2, _polLayer.c_str());
+
+
+   _noise->saveState(kwl,prefix);
+
+   kwl.add(prefix, CALIBRATION_CALFACTOR, ossimString::toString(_calFactor).c_str());
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -554,6 +636,40 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
       
    } // matches: if (result)
 
+   // Load the base class.
+   if ( !_noise)
+   {
+      _noise = new Noise();
+   }
+   if ( _noise->loadState(kwl, prefix) == false )
+   {
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << MODULE
+            << "\n_noise->loadState failed!\n";
+      }
+      result = false;
+   }
+      lookup = kwl.find(prefix, CALIBRATION_CALFACTOR);
+      if (lookup)
+      {
+          s = lookup;
+         _calFactor = s.toDouble();
+      }
+      else
+      {
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE
+               << "\nRequired keyword not found: "
+               << CALIBRATION_CALFACTOR << "\n";
+         } 
+         result = false;
+      }
+
+
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -566,6 +682,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
 
 std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
 {
+   static const char MODULE[] = "ossimplugins::ossimTerraSarModel::print";
    // Capture the original flags.
    std::ios_base::fmtflags f = out.flags();
    
@@ -604,7 +721,34 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
    
    ossimGeometricSarSensorModel::print(out);
    
+   if ( _noise->print(out) == false )
+   {
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << MODULE
+            << "\n_noise->print failed!\n";
+      }
+   }
+
+   out << CALIBRATION_CALFACTOR <<  ": " << _calFactor << "\n";
    // Reset flags.
+
+
+   ossimString kw = ACQUISITION_INFO;
+   ossimString kw2 = kw + IMAGING_MODE;
+   out << kw2 <<  ": " << _imagingMode.c_str()<< "\n";
+   kw2 = kw + SENSOR;
+   out << kw2<<  ": " <<  _acquisitionSensor.c_str()<< "\n";
+   kw2 = kw + LOOK_DIRECTION;
+   out << kw2<<  ": " <<  _lookDirection.c_str()<< "\n";
+   kw2 = kw + POLARISATION_MODE;
+   out << kw2<<  ": " <<  _polarisationMode.c_str()<< "\n";
+   kw2 = kw + POL_LAYER;
+   out << kw2<<  ": " <<  _polLayer.c_str()<< "\n";
+
+
+
    out.setf(f);
 
    return out;
@@ -1407,5 +1551,76 @@ bool ossimplugins::ossimTerraSarModel::initRefPoint(
    return true;
 }
 
+bool ossimplugins::ossimTerraSarModel::initAcquisitionInfo(
+   const ossimXmlDocument* xdoc, const ossimTerraSarProductDoc& tsDoc)
+{
+  static const char MODULE[] = "ossimplugins::ossimTerraSarModel::initAcquisitionInfo";
+
+  if (traceDebug())
+  {
+      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
+  }   
    
    
+  bool result = tsDoc.getImagingMode(xdoc, _imagingMode);
+
+  if( result )
+  {
+    result = tsDoc.getAcquisitionSensor(xdoc, _acquisitionSensor);
+    if( result )
+    {
+      result = tsDoc.getLookDirection(xdoc, _lookDirection);
+      if( result )
+      {
+        result = tsDoc.getPolarisationMode(xdoc, _polarisationMode);
+        if( result )
+        {
+          result = tsDoc.getPolLayer(xdoc, _polLayer);
+        }
+      }
+    }
+  }
+
+
+  if (traceDebug())
+  {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << MODULE << " exit status = " << (result?"true":"false\n")
+         << std::endl;
+  }
+
+   return result;
+}
+
+bool ossimplugins::ossimTerraSarModel::initNoise(
+   const ossimXmlDocument* xdoc, const ossimTerraSarProductDoc& tsDoc)
+{
+   static const char MODULE[] = "ossimplugins::ossimTerraSarModel::initNoise";
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
+   }   
+   
+   // Initialize the platform position interpolator.
+   if (_noise)
+   {
+      delete _noise;
+   }
+   
+   _noise = new Noise();
+   
+   bool result = tsDoc.initNoise(xdoc, _noise);
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << MODULE << " exit status = " << (result?"true":"false\n")
+         << std::endl;
+   }
+
+   return result;
+}
+
+
+

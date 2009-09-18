@@ -24,6 +24,7 @@
 #include <list>
 
 #include <otb/CivilDateTime.h>
+#include <otb/Noise.h>
 
 // Forward class declarations outside of namespace ossimplugins.
 class ossimXmlDocument;
@@ -137,6 +138,24 @@ namespace ossimplugins
        */
       bool initRefPoint(const ossimXmlDocument* xdoc,
                         const ossimTerraSarProductDoc& rsDoc);
+      /**
+       * @brief Method to initialize AcquisitionInfo parameters from
+       * TerraSAR product xml file.
+       * @param xdoc Opened product xml file.
+       * @return true on success, false on error.
+       */
+      bool initAcquisitionInfo( const ossimXmlDocument* xdoc, 
+                        const ossimTerraSarProductDoc& tsDoc);
+
+      /**
+       * @brief Method to initialize ImageNoise parameters from
+       * TerraSAR product xml file.
+       * @param xdoc Opened product xml file.
+       * @return true on success, false on error.
+       */
+      bool initNoise(
+                        const ossimXmlDocument* xdoc, const ossimTerraSarProductDoc& tsDoc);
+
 
       /**
        * @brief Slant Range TO Ground Range Projection reference point
@@ -166,6 +185,51 @@ namespace ossimplugins
        * @brief alternative SRGR computation coefficients. Three doubles.
        */
       std::vector<double> _alt_srgr_coefset;
+
+      /**
+       * @brief ProductType.
+       */
+      ossimString _productType;
+
+      /**
+       * @brief RadiometricCorrection.
+       */
+      ossimString _radiometricCorrection;
+
+      /**
+       * @brief ImagingMode (AcquisitionInfo node).
+       */
+      ossimString _imagingMode;
+
+      /**
+       * @brief Sensor (AcquisitionInfo node).
+       */
+      ossimString _acquisitionSensor;
+
+      /**
+       * @brief LookDirection (AcquisitionInfo node).
+       */
+      ossimString _lookDirection;
+
+      /**
+       * @brief PolarisationMode (AcquisitionInfo node).
+       */
+      ossimString _polarisationMode;
+
+      /**
+       * @brief PolLayer (AcquisitionInfo node).
+       */
+      ossimString _polLayer;
+
+      /**
+       * @brief Noise (Noise node).
+       */
+      Noise *_noise;
+      
+      /**
+       * @brief CalFactor (Calibration node).
+       */
+      double _calFactor;
 
       ossimFilename theProductXmlFile;
 

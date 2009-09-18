@@ -14,14 +14,16 @@
 
 #include <ossimTerraSarProductDoc.h>
 #include <ossimPluginCommon.h>
-#include <otb/CivilDateTime.h>
 #include <otb/Ephemeris.h>
 #include <otb/GeographicEphemeris.h>
 #include <otb/JSDDateTime.h>
+#include <otb/CivilDateTime.h>
 #include <otb/PlatformPosition.h>
 #include <otb/SarSensor.h>
 #include <otb/SensorParams.h>
 #include <otb/RefPoint.h>
+#include <otb/Noise.h>
+#include <otb/ImageNoise.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimGpt.h>
@@ -704,6 +706,20 @@ bool ossimplugins::ossimTerraSarProductDoc::getProjection(
    return ossim::getPath(path, xdoc, s);
 }
 
+bool ossimplugins::ossimTerraSarProductDoc::getProductType(
+   const ossimXmlDocument* xdoc, ossimString& s) const
+{
+   ossimString path = "/level1Product/productInfo/productVariantInfo/productType";
+   return ossim::getPath(path, xdoc, s);
+}
+bool ossimplugins::ossimTerraSarProductDoc::getRadiometricCorrection(
+   const ossimXmlDocument* xdoc, ossimString& s) const
+{
+   ossimString path = "/level1Product/productInfo/productVariantInfo/radiometricCorrection";
+   return ossim::getPath(path, xdoc, s);
+}
+
+
 bool ossimplugins::ossimTerraSarProductDoc::getReferencePoint(
    const ossimXmlDocument* xdoc, ossimString& s) const
 {
@@ -893,3 +909,201 @@ bool ossimplugins::ossimTerraSarProductDoc::getRowSpacing(
       "/level1Product/productInfo/imageDataInfo/imageRaster/rowSpacing";
    return ossim::getPath(path, xdoc, s);
 }
+
+bool ossimplugins::ossimTerraSarProductDoc::getImagingMode(
+   const ossimXmlDocument* xdoc, ossimString& s) const
+{
+   ossimString path =
+      "/level1Product/productInfo/acquisitionInfo/imagingMode";
+   return ossim::getPath(path, xdoc, s);
+}
+bool ossimplugins::ossimTerraSarProductDoc::getAcquisitionSensor(
+   const ossimXmlDocument* xdoc, ossimString& s) const
+{
+   ossimString path =
+      "/level1Product/productInfo/acquisitionInfo/sensor";
+   return ossim::getPath(path, xdoc, s);
+}
+bool ossimplugins::ossimTerraSarProductDoc::getPolarisationMode(
+   const ossimXmlDocument* xdoc, ossimString& s) const
+{
+   ossimString path =
+      "/level1Product/productInfo/acquisitionInfo/polarisationMode";
+   return ossim::getPath(path, xdoc, s);
+}
+bool ossimplugins::ossimTerraSarProductDoc::getPolLayer(
+   const ossimXmlDocument* xdoc, ossimString& s) const
+{
+   ossimString path =
+      "/level1Product/productInfo/acquisitionInfo/polarisationList/polLayer";
+   return ossim::getPath(path, xdoc, s);
+}
+bool ossimplugins::ossimTerraSarProductDoc::getCalFactor(
+   const ossimXmlDocument* xdoc, ossimString& s) const
+{
+   ossimString path =
+      "/level1Product/calibration/calibrationConstant/calFactor";
+   return ossim::getPath(path, xdoc, s);
+}
+
+bool ossimplugins::ossimTerraSarProductDoc::initNoise(
+   const ossimXmlDocument* xdoc, ossimplugins::Noise* noise) const
+{
+   static const char MODULE[] =
+      "ossimplugins::ossimTerraSarProductDoc::initImageNoise";
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
+   }  
+
+   bool result = true;
+
+   if ( xdoc && noise )
+   {
+      ossimString path =
+      "/level1Product/noise/numberOfNoiseRecords";
+      ossimString s;
+      ossim::getPath(path, xdoc, s);
+      std::vector<ImageNoise> tabImageNoise;
+      tabImageNoise.clear();
+      noise->set_numberOfNoiseRecords(s.toInt32());
+
+      // Get all the stateVector nodes.
+      path =
+         "/level1Product/noise/imageNoise";
+      std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
+      xdoc->findNodes(path, xnodes);
+      if ( xnodes.size() )
+      {
+         const std::vector<ossimRefPtr<ossimXmlNode> >::size_type COUNT =
+            xnodes.size();
+//         ossim::iso8601TimeStringToCivilDate(
+         
+         int nbrData = 0; // to keep track of good stateVector count.
+
+         ossimRefPtr<ossimXmlNode> svNode = 0; // stateVector node
+
+         for (ossim_uint32 i = 0 ; i < COUNT; ++i)
+         { 
+            ImageNoise ev;
+            svNode = xnodes[i];
+            if ( !svNode )
+            {
+               result = false;
+               break;
+            }
+
+            ossimString s;
+
+               path = "timeUTC";
+               result = ossim::findFirstNode(path, svNode, s);
+               if (result)
+               {
+                  ev.set_timeUTC(s);
+               }
+               else
+               {
+                  result = false;
+                  ossimNotify(ossimNotifyLevel_WARN)
+                     << MODULE << " ERROR:\nNode not found: " << path
+                     << std::endl;
+                  break;
+               }
+
+               path = "noiseEstimate/validityRangeMin";
+               result = ossim::findFirstNode(path, svNode, s);
+               if (result)
+               {
+                  ev.set_validityRangeMin( s.toDouble() );
+               }
+               else
+               {
+                  result = false;
+                  ossimNotify(ossimNotifyLevel_WARN)
+                     << MODULE << " ERROR:\nNode not found: " << path
+                     << std::endl;
+                  break;
+               }
+               path = "noiseEstimate/validityRangeMax";
+               result = ossim::findFirstNode(path, svNode, s);
+               if (result)
+               {
+                  ev.set_validityRangeMax( s.toDouble() );
+               }
+               else
+               {
+                  result = false;
+                  ossimNotify(ossimNotifyLevel_WARN)
+                     << MODULE << " ERROR:\nNode not found: " << path
+                     << std::endl;
+                  break;
+               }
+               path = "noiseEstimate/referencePoint";
+               result = ossim::findFirstNode(path, svNode, s);
+               if (result)
+               {
+                  ev.set_referencePoint( s.toDouble() );
+               }
+               else
+               {
+                  result = false;
+                  ossimNotify(ossimNotifyLevel_WARN)
+                     << MODULE << " ERROR:\nNode not found: " << path
+                     << std::endl;
+                  break;
+               }
+               path = "noiseEstimate/polynomialDegree";
+               result = ossim::findFirstNode(path, svNode, s);
+               if (result)
+               {
+                  ev.set_polynomialDegree( s.toInt32() );
+               }
+               else
+               {
+                  result = false;
+                  ossimNotify(ossimNotifyLevel_WARN)
+                     << MODULE << " ERROR:\nNode not found: " << path
+                     << std::endl;
+                  break;
+               }
+               //Read Coefficient
+
+               ossimXmlNode::ChildListType nodelist;
+               svNode->findChildNodes("noiseEstimate/coefficient",nodelist);
+
+               ossimXmlNode::ChildListType::const_iterator child_iter = nodelist.begin();
+               std::vector<double> polynomialCoefficients;
+               while(child_iter != nodelist.end())
+               {
+                  double coefficient = ((*child_iter)->getText()).toDouble() ;
+                  polynomialCoefficients.push_back(coefficient);
+                  ++child_iter;
+               }                  
+               ev.set_polynomialCoefficients( polynomialCoefficients );
+
+              tabImageNoise.push_back(ev);
+               ++nbrData;
+
+               
+         } // matches: for (ossim_uint32 i = 0 ; i < COUNT; ++i)
+
+        noise->set_imageNoise(tabImageNoise);
+         
+      } // matches: if ( xnodes.size() )
+      
+   } // matches: if (xdoc && pos)
+   else
+   {
+      result = false;
+   }
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << MODULE << " exit status = " << (result?"true\n":"false\n");
+   } 
+
+   return result;
+}
+
+
