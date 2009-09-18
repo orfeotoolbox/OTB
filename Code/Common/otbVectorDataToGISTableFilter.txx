@@ -127,7 +127,8 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
   
   /**Name of the table is settedd automaticcaly to "vector_data_to_gis"*/
 //   output->SetTableName ("vector_data_to_gis");
-  output->SetTableName (this->GetGISTableName());
+  //output->SetTableName (this->GetGISTableName());
+  output->SetTableName ("");
   /**Create the PostgreSQL table*/
   //output->CreateTable(m_DropExistingGISTable);
     
@@ -152,7 +153,16 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
         //Write VectorData to the GIS Table using OGR translation 
         gisWriter->SetFileName(outputOGRConnStr);
         otbGenericMsgDebugMacro(<<"Write vector data to GIS table " << outputOGRConnStr);
-        gisWriter->Write(input);
+        
+        
+        //Write with overwrite =true option
+        std::string overStr("OVERWRITE=yes");
+        char *overOptions[]={ const_cast <char *> (overStr.c_str()) };
+//         std::cout << *overOptions << std::endl;
+        gisWriter->Write(input, overOptions);
+        
+        output->SetTableName (inputRoot->Get()->GetNodeId());
+        std::cout << "tablename " << output->GetTableName() << std::endl;
       }
       else 
       {

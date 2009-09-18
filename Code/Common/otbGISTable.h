@@ -88,7 +88,7 @@ public:
   itkSetObjectMacro(Connection, ConnectionType);
 
   /** Clear the vector data  not implemented yet*/
-  virtual bool Clear(){};
+  virtual bool Clear(){return true;};
   
   /** Get attributes of the Table*/ //TODO implement
   
@@ -108,7 +108,7 @@ public:
   virtual std::string GetProjectionRef() const;
   
   /** Get string connection usable by OGR library*/
-  virtual std::string GetOGRStrConnection() const {};
+  virtual std::string GetOGRStrConnection() const {return 0;};
   
   /** Add an alpha numeric column to the table */
   virtual const std::string AddVarCharColumn(unsigned int size) {};
