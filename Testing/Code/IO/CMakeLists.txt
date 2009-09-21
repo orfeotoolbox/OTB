@@ -1987,7 +1987,7 @@ ADD_TEST(ioTvImageKeywordlistSpot5 ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistSpot5.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistSpot5.txt
          ${TEMP}/ioTvImageKeywordlistSpot5_saveState_loadState.txt
---ignore-lines-with 1 support_data.metadata_file
+         --ignore-lines-with 1 support_data.metadata_file
     otbImageKeywordlist
          ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
          ${TEMP}/ioTvImageKeywordlistSpot5.txt

@@ -180,29 +180,21 @@ int main(int ac, char* av[] )
       testFilenamesAscii.reserve(1);
       baselineFilenamesAscii.push_back(av[3]);
       testFilenamesAscii.push_back(av[4]);
+      av += 4;
+      ac -= 4;
 
-      if ( ac > 5 )
+      if ( ac > 1 )
       {
-        if (strcmp(av[5], "--ignore-lines-with") == 0)
+        if (strcmp(av[1], "--ignore-lines-with") == 0)
         {
-          unsigned int nbIgnoredLines=(unsigned int)(::atoi(av[6]));
+          unsigned int nbIgnoredLines=(unsigned int)(::atoi(av[2]));
           for (unsigned int  i=0; i<nbIgnoredLines; ++i )
           {
-            ignoredLines.push_back(av[7+i]);
+            ignoredLines.push_back(av[3+i]);
           }
-          av += 6+nbIgnoredLines;
-          ac -= 6+nbIgnoredLines;
+          av += 2+nbIgnoredLines;
+          ac -= 2+nbIgnoredLines;
         }
-        else
-        {
-          av += 4;
-          ac -= 4;
-        }
-      }
-      else
-      {
-        av += 4;
-        ac -= 4;
       }
     }
     else if (strcmp(av[1], "--compare-n-ascii") == 0)
@@ -221,6 +213,21 @@ int main(int ac, char* av[] )
       }
       av+=3+2*nbComparisons;
       ac-=3+2*nbComparisons;
+
+      if ( ac > 1 )
+      {
+        if (strcmp(av[1], "--ignore-lines-with") == 0)
+        {
+          unsigned int nbIgnoredLines=(unsigned int)(::atoi(av[2]));
+          for (unsigned int  i=0; i<nbIgnoredLines; ++i )
+          {
+            ignoredLines.push_back(av[3+i]);
+          }
+          av += 2+nbIgnoredLines;
+          ac -= 2+nbIgnoredLines;
+        }
+      }
+
     }
     else if (strcmp(av[1], "--compare-list") == 0)
     {
@@ -230,29 +237,23 @@ int main(int ac, char* av[] )
       testFilenamesList.reserve(1);
       baselineFilenamesList.push_back(av[3]);
       testFilenamesList.push_back(av[4]);
-      if ( ac > 5 )
+      av += 4;
+      ac -= 4;
+
+      if ( ac > 1 )
       {
-        if (strcmp(av[5], "--ignore-lines-with") == 0)
+        if (strcmp(av[1], "--ignore-lines-with") == 0)
         {
-          unsigned int nbIgnoredLines=(unsigned int)(::atoi(av[6]));
+          unsigned int nbIgnoredLines=(unsigned int)(::atoi(av[2]));
           for (unsigned int  i=0; i<nbIgnoredLines; ++i )
           {
-            ignoredLines.push_back(av[7+i]);
+            ignoredLines.push_back(av[3+i]);
           }
-          av += 6+nbIgnoredLines;
-          ac -= 6+nbIgnoredLines;
-        }
-        else
-        {
-          av += 4;
-          ac -= 4;
+          av += 2+nbIgnoredLines;
+          ac -= 2+nbIgnoredLines;
         }
       }
-      else
-      {
-        av += 4;
-        ac -= 4;
-      }
+
     }
 
     else if (strcmp(av[1], "--compare-n-list") == 0)
@@ -271,6 +272,20 @@ int main(int ac, char* av[] )
       }
       av+=3+2*nbComparisons;
       ac-=3+2*nbComparisons;
+
+      if ( ac > 1 )
+      {
+        if (strcmp(av[1], "--ignore-lines-with") == 0)
+        {
+          unsigned int nbIgnoredLines=(unsigned int)(::atoi(av[2]));
+          for (unsigned int  i=0; i<nbIgnoredLines; ++i )
+          {
+            ignoredLines.push_back(av[3+i]);
+          }
+          av += 2+nbIgnoredLines;
+          ac -= 2+nbIgnoredLines;
+        }
+      }
     }
     else if (strcmp(av[1], "--compare-metadata") == 0)
     {
