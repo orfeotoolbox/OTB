@@ -111,7 +111,7 @@ public:
   virtual std::string GetOGRStrConnection() const {return 0;};
   
   /** Add an alpha numeric column to the table */
-  virtual const std::string AddVarCharColumn(unsigned int size) {};
+  virtual const std::string AddVarCharColumn(unsigned int size) {return 0;};
   
   /** Insert Alpha Numeric Data in the Car char column */
   virtual void AddStrDataToVarCharColumn(std::string data) {};

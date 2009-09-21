@@ -111,7 +111,6 @@ VectorDataToLabelMapFilter<TVectorData, TLabelMap >
     // we can't call the superclass method here.
 
     // get pointers to the input and output
-    const InputVectorDataType * input  = this->GetInput();
     OutputLabelMapType  *    outputPtr = this->GetOutput();
 
     if ( !outputPtr )
@@ -219,8 +218,6 @@ void
 
   OutputLabelMapType * output = this->GetOutput();
 
-  const InputVectorDataType * input = this->GetInput();
-
   //For each input
   for (unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
   {
@@ -301,9 +298,11 @@ VectorDataToLabelMapFilter< TVectorData, TLabelMap >
         PolygonPointerType correctPolygonExtRing = correct( dataNode->GetPolygonExteriorRing() );
 
 
-        typedef typename DataNodeType::PolygonType                          PolygonType;
-        typedef typename PolygonType::RegionType                   RegionType;
-        typedef typename PolygonType::VertexType                    VertexType;
+        typedef typename DataNodeType::PolygonType                PolygonType;
+        typedef typename PolygonType::RegionType                  RegionType;
+        typedef typename PolygonType::VertexType                  VertexType;
+        typedef typename IndexType::IndexValueType                IndexValueType;
+        typedef typename VertexType::ValueType                    VertexValueType;
         RegionType polygonExtRingBoundReg = correctPolygonExtRing->GetBoundingRegion();
 
 
@@ -313,18 +312,18 @@ VectorDataToLabelMapFilter< TVectorData, TLabelMap >
         std::cout << "spacing " << this->GetOutput()->GetSpacing()<< std::endl;
         // For each position in the bounding region of the polygon
 
-        for (int i = polygonExtRingBoundReg.GetOrigin(0);i < polygonExtRingBoundReg.GetOrigin(0) + polygonExtRingBoundReg.GetSize(0) ;i+=this->GetOutput()->GetSpacing()[0])
+        for (unsigned int i = polygonExtRingBoundReg.GetOrigin(0);i < polygonExtRingBoundReg.GetOrigin(0) + polygonExtRingBoundReg.GetSize(0) ;i+=this->GetOutput()->GetSpacing()[0])
         {
-          vertex[0] = i ;
-          for (int j = polygonExtRingBoundReg.GetOrigin(1);j<polygonExtRingBoundReg.GetOrigin(1) + polygonExtRingBoundReg.GetSize(1) ;j+=this->GetOutput()->GetSpacing()[1])
+          vertex[0] = static_cast<VertexValueType>(i) ;
+          for (unsigned int j = polygonExtRingBoundReg.GetOrigin(1);j<polygonExtRingBoundReg.GetOrigin(1) + polygonExtRingBoundReg.GetSize(1) ;j+=this->GetOutput()->GetSpacing()[1])
           {
-            vertex[1] = j ;
+            vertex[1] = static_cast<VertexValueType>(j) ;
 
             if (correctPolygonExtRing->IsInside(vertex) || correctPolygonExtRing->IsOnEdge (vertex))
             {
               IndexType index;
-              index[0] = vertex[0] - polygonExtRingBoundReg.GetOrigin(0);
-              index[1] = vertex[1] - polygonExtRingBoundReg.GetOrigin(1);
+              index[0] = static_cast<IndexValueType>(vertex[0] - polygonExtRingBoundReg.GetOrigin(0));
+              index[1] = static_cast<IndexValueType>(vertex[1] - polygonExtRingBoundReg.GetOrigin(1));
 //               index[0] += this->GetOutput()->GetOrigin()[0];
 //               index[1] += this->GetOutput()->GetOrigin()[1];
 //               std::cout << "index " << index << std::endl;
