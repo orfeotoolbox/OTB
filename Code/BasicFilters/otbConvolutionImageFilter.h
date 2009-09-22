@@ -117,7 +117,7 @@ public:
   itkGetConstReferenceMacro(Radius, InputSizeType);
 
   /** Set the input filter */
-  void SetFilter( ArrayType filter )
+  virtual void SetFilter( ArrayType filter )
   {
     if (filter.Size()!= m_Filter.Size())
     {
