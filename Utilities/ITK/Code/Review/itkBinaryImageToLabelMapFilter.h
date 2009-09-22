@@ -26,8 +26,6 @@
 #include "itkProgressReporter.h"
 #include "itkBarrier.h"
 
-//patch OTB 
-#include "itkLabelMap.h"
 namespace itk
 {
 
