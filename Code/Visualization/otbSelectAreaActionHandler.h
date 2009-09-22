@@ -76,7 +76,7 @@ public:
         return true;
       }
 
-    if( m_Model.IsNotNull() )
+    if( m_Model.IsNotNull() && this->GetIsActive() )
       {
         if(widgetId == m_Widget->GetIdentifier() )
           {

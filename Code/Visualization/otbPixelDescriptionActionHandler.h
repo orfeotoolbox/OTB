@@ -62,7 +62,7 @@ public:
    */
   virtual bool HandleWidgetEvent(std::string widgetId, int event)
   {
-    if(m_Model.IsNotNull() &&  m_View.IsNotNull())
+    if(m_Model.IsNotNull() &&  m_View.IsNotNull() && this->GetIsActive())
       {
       // Find the source widget
       WidgetPointerType sourceWidget;

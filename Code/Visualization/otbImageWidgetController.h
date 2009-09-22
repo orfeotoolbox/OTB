@@ -89,6 +89,14 @@ public:
    */
   void HandleWidgetMove(std::string widgetId, int x, int y);
 
+  /** Activate action all the handlers */
+  void ActivateActionHandlers();
+ 
+  /** Deactivate action all the handlers */
+  void DeactivateActionHandlers();
+
+ 
+  
 protected:
   /** Constructor */
   ImageWidgetController();

@@ -83,9 +83,14 @@ public:
     return false;
   }
 
+  /** IsActive Accessors */
+  itkSetMacro(IsActive,bool);
+  itkGetMacro(IsActive,bool);
+  itkBooleanMacro(IsActive);
+
 protected:
   /** Constructor */
-  ImageWidgetActionHandler(){}
+  ImageWidgetActionHandler(){m_IsActive = true;}
   /** Destructor */
   virtual ~ImageWidgetActionHandler(){}
   /** Printself method */
@@ -97,6 +102,10 @@ protected:
 private:
   ImageWidgetActionHandler(const Self&);    // purposely not implemented
   void operator=(const Self&); // purposely not implemented
+
+  /** The handler is active or not */
+  bool m_IsActive;
+
 }; // end class
 } // end namespace otb
 #endif

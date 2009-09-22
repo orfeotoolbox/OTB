@@ -65,7 +65,7 @@ public:
    */
   virtual bool HandleWidgetResize(std::string widgetId, int w, int h)
   {
-    if(m_Model.IsNotNull() && m_View.IsNotNull())
+    if(m_Model.IsNotNull() && m_View.IsNotNull() && this->GetIsActive())
       {
       // If resizing the scroll widget, nothing has to be done.
       if(widgetId == m_View->GetScrollWidget()->GetIdentifier() )
