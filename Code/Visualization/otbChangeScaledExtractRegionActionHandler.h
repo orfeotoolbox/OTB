@@ -64,7 +64,7 @@ public:
    */
   virtual bool HandleWidgetEvent(std::string widgetId, int event)
   {
-    if( m_View.IsNotNull() && m_Model.IsNotNull() )
+    if( m_View.IsNotNull() && m_Model.IsNotNull() && this->GetIsActive() )
       {
       if(widgetId == m_View->GetFullWidget()->GetIdentifier()
          && event == FL_PUSH && Fl::event_button() == m_MouseButton)

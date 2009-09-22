@@ -116,6 +116,45 @@ void ImageWidgetController::HandleWidgetMove(std::string widgetId, int x, int y)
 }
 
 
+void ImageWidgetController::ActivateActionHandlers()
+{
+  otbMsgDevMacro(<<"ImageWidgetController::DectivateActionHandler(): ("<<widgetId<<")");
+  // Define an iterator on the action handlers list
+  ActionHandlerListType::Iterator it = m_ActionHandlersList->Begin();
+  
+  // The action handler found
+  ActionHandlerType * handler;
+
+  while(it!=m_ActionHandlersList->End())
+    {
+    // Get the current handler
+    handler = it.Get();
+    // Check if it listens to (widget,event)
+    handler->SetIsActive(true);
+    ++it;
+    }
+}
+
+void ImageWidgetController::DeactivateActionHandlers()
+{
+  otbMsgDevMacro(<<"ImageWidgetController::DectivateActionHandler(): ("<<widgetId<<")");
+  // Define an iterator on the action handlers list
+  ActionHandlerListType::Iterator it = m_ActionHandlersList->Begin();
+  
+  // The action handler found
+  ActionHandlerType * handler;
+
+  while(it!=m_ActionHandlersList->End())
+    {
+    // Get the current handler
+    handler = it.Get();
+    // Check if it listens to (widget,event)
+    handler->SetIsActive(false);
+    ++it;
+    }
+}
+
+
 void ImageWidgetController::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);

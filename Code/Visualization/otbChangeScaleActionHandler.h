@@ -64,7 +64,7 @@ public:
    */
   virtual bool HandleWidgetEvent(std::string widgetId, int event)
   {
-    if( m_View.IsNotNull() && m_Model.IsNotNull() )
+    if( m_View.IsNotNull() && m_Model.IsNotNull() && this->GetIsActive() )
       {
       if(widgetId == m_View->GetZoomWidget()->GetIdentifier()
          && event == FL_MOUSEWHEEL)
