@@ -373,7 +373,7 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
   //define the boundaries
   RegionList *regionList        = edisonProcessor.GetBoundaries();
   int        *regionIndeces;
-  int        numRegions         = regionList->GetNumRegions();
+  unsigned int        numRegions         = regionList->GetNumRegions();
 
   typename LabeledOutputType::IndexType boundIndex;
 
