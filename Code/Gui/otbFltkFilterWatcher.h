@@ -65,8 +65,9 @@ protected:
     if (m_Process)
     {
       m_Progress->value(m_Process->GetProgress());
-      Fl::check();
+/*       Fl::check(); */
     }
+
   }
 
   /** Callback method to show the StartEvent */
