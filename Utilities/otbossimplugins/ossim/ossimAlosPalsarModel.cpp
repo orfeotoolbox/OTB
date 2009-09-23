@@ -147,6 +147,7 @@ bool ossimAlosPalsarModel::open(const ossimFilename& file)
 
   bool result = false;
   ossimFilename leaFilename = file;
+  ossimFilename datFilename;
 
  /*
   * Creation of the class allowing to store Leader file metadata
@@ -158,6 +159,7 @@ bool ossimAlosPalsarModel::open(const ossimFilename& file)
   }
 
   theAlosSarLeader = new AlosSarLeader();
+  theAlosSarData = new AlosSarData();
 
   if ( leaFilename.exists() )
   {
@@ -190,6 +192,31 @@ bool ossimAlosPalsarModel::open(const ossimFilename& file)
         << "End reading Leader file" << std::endl;
       }
 
+      datFilename = findAlosPalsarData(leaFilename);
+      result = isAlosPalsarData(datFilename);
+      if (result == true)
+      {
+        if (traceDebug())
+        {
+          ossimNotify(ossimNotifyLevel_DEBUG)
+            << datFilename << " is AlosPalsar data file..."
+            << std::endl
+            << "Begin reading Data file header" << std::endl;
+        }
+        /*
+         * Read header of data file for image size info
+         */
+        std::ifstream dataFile(datFilename, ios::in|ios::binary);
+        dataFile>>*theAlosSarData;
+        dataFile.close();
+
+        if (traceDebug())
+        {
+          ossimNotify(ossimNotifyLevel_DEBUG)
+          << "End reading Data file header" << std::endl;
+        }
+      } // matches: if ( result=isAlosPalsarData(datFilename) == true )
+
       //To initialize the whole state, reusing saveState/loadState
       //FIXME: This could be at the superclass level instead
       ossimKeywordlist kwl;
@@ -208,8 +235,6 @@ bool ossimAlosPalsarModel::open(const ossimFilename& file)
        << MODULE << " exit status = " << (result?"true":"false\n")
        << std::endl;
   }
-
-
 
   return result;
 
@@ -239,6 +264,16 @@ bool ossimAlosPalsarModel::saveState(ossimKeywordlist& kwl,
   }
 
   result = theAlosSarLeader->saveState(kwl);
+
+  if (result == true)
+  {
+    if (theAlosSarData == NULL)
+    {
+      std::cout << "Error: AlosSarData is NULL" << std::endl;
+      return false;
+    }
+    result = theAlosSarData->saveState(kwl);
+  }
 
   if (traceDebug())
   {
@@ -628,7 +663,6 @@ bool ossimAlosPalsarModel::InitSRGR(const ossimKeywordlist &kwl, const char *pre
   return true;
 }
 
-//TODO adapt the identification of the AlosPalsarLeader
 bool ossimAlosPalsarModel::isAlosPalsarLeader(const ossimFilename& file) const
 {
     std::ifstream candidate(file, ios::in | ios::binary);
@@ -663,7 +697,6 @@ bool ossimAlosPalsarModel::isAlosPalsarLeader(const ossimFilename& file) const
 
 }
 
-//TODO adapt the search of the AlosPalsarLeader
 ossimFilename ossimAlosPalsarModel::findAlosPalsarLeader(const ossimFilename& file) const
 {
   ossimFilename leaFile = file;
@@ -695,12 +728,65 @@ ossimFilename ossimAlosPalsarModel::findAlosPalsarLeader(const ossimFilename& fi
 
 bool ossimAlosPalsarModel::isAlosPalsarData(const ossimFilename& file) const
 {
-  //FIXME
+  std::ifstream candidate(file, ios::in | ios::binary);
+  char alosFileName[16];
+
+  candidate.seekg(48);
+  if ( candidate.bad() or candidate.eof() )
+  {
+    return false;
+  }
+  candidate.read(alosFileName, 16);
+  if ( candidate.bad() or candidate.eof() )
+  {
+    return false;
+  }
+  candidate.close();
+
+  ossimString ersString(alosFileName);
+
+  if ( ( ersString.find("AL1 ") == 0 ) &&
+       ( ersString.find("PSR") == 4 )  &&
+       ( ersString.find("IMOP") == 8 )    )
+    {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+
+ return true;
 }
 
 ossimFilename ossimAlosPalsarModel::findAlosPalsarData(const ossimFilename& file) const
 {
   //FIXME
+  ossimFilename dataFile = file;
+  ossimString imgPrefix("IMG-HH"); // Assume the ALOS data always has at least the HH
+  ossimString trlPrefix("TRL");
+  ossimString volPrefix("VOL");
+  ossimString leaPrefix("LED");
+
+  ossimString filename = file.fileNoExtension();
+  ossimString prefix = filename.substr(0,3);
+  if ( (prefix == leaPrefix) ||
+       (prefix == trlPrefix) ||
+       (prefix == volPrefix)    )
+  {
+    // Find the 2nd dash from the end of the string
+    // since ALOS files are of the form
+    // <prefix>-ALPSRP<identifier>-H<n.n>__A
+    int dash2_pos = filename.rfind('-', filename.rfind('-')-1);
+    filename.replace(0, dash2_pos, imgPrefix);
+
+    dataFile.setFile(filename);
+    if (dataFile.exists())
+    {
+      return dataFile;
+    }
+  }
+  return file;
 }
 
 } // namespace ossimplugins

@@ -91,12 +91,12 @@ public:
   };
 
 
-  int get_num_pix_in_line()
+  int get_num_pix_in_line() const
   {
     return _num_pix_in_line;
   };
 
-  int get_num_lines()
+  int get_num_lines() const
   {
     return _num_lines;
   };

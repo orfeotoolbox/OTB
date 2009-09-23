@@ -14,11 +14,7 @@
 #define AlosSarData_h
 
 #include <iostream>
-#include "AlosSarFileDescriptor.h"
-#include "AlosSarDataSetSummary.h"
-#include "AlosSarMapProjectionData.h"
-#include "AlosSarPlatformPositionData.h"
-#include "AlosSarFacilityData.h"
+#include "AlosSarDataFileDescriptor.h"
 #include <map>
 
 class ossimKeywordlist;
@@ -85,7 +81,7 @@ public:
                          const char* prefix=0) const;
 
 
-  const AlosSarFileDescriptor * get_AlosSarDataFileDescriptor() const;
+  const AlosSarDataFileDescriptor * get_AlosSarDataFileDescriptor() const;
 
 protected:
   typedef std::map<int, AlosSarRecord*> RecordType;

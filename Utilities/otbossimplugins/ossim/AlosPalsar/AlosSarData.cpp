@@ -137,9 +137,9 @@ bool AlosSarData::saveState(ossimKeywordlist& kwl,
    * Adding metadata necessary to the sensor model in the keywordlist
    */
   const AlosSarDataFileDescriptor *datafiledesc = get_AlosSarDataFileDescriptor();
-  if (leaderfiledesc != NULL)
+  if (datafiledesc != NULL)
   {
-    kwl.add(prefix, "num_lines",datafiledesc->get_num_lines(),true);
+    kwl.add(prefix, "num_lines", datafiledesc->get_num_lines(),true);
     kwl.add(prefix, "num_pix_in_line", datafiledesc->get_num_pix_in_line(),true);
   }
   else
@@ -151,9 +151,9 @@ bool AlosSarData::saveState(ossimKeywordlist& kwl,
 }
 
 
-const AlosSarFileDescriptor * AlosSarData::get_AlosSarDataFileDescriptor() const
+const AlosSarDataFileDescriptor * AlosSarData::get_AlosSarDataFileDescriptor() const
 {
-  return dynamic_cast<const AlosSarFileDescriptor*>(_records.find(AlosSarDataFileDescriptorID)->second);
+  return dynamic_cast<const AlosSarDataFileDescriptor*>(_records.find(AlosSarDataFileDescriptorID)->second);
 }
 
 }
