@@ -57,22 +57,22 @@ int main(int argc, char * argv[])
   const int dim = 2;
 
   typedef unsigned short PixelType;
-  
+
   typedef otb::Image< PixelType, dim > ImageType;
 
   typedef itk::LabelObject< PixelType, dim > LabelObjectType;
   typedef itk::LabelMap< LabelObjectType > LabelMapType;
-  
+
   typedef itk::ImageFileReader< ImageType > ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( argv[1] );
-  
+
   typedef itk::BinaryImageToLabelMapFilter< ImageType, LabelMapType> I2LType;
   I2LType::Pointer i2l = I2LType::New();
   i2l->SetInput( reader->GetOutput() );
   i2l->SetFullyConnected( atoi(argv[5]) );
-  i2l->SetForegroundValue( atoi(argv[6]) );
-  i2l->SetBackgroundValue( atoi(argv[7]) );
+  i2l->SetInputForegroundValue( atoi(argv[6]) );
+  i2l->SetOutputBackgroundValue( atoi(argv[7]) );
 
   typedef itk::LabelMapToLabelImageFilter< LabelMapType, ImageType> L2IType;
   L2IType::Pointer l2i = L2IType::New();

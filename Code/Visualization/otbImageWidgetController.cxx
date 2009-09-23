@@ -82,7 +82,7 @@ void ImageWidgetController::HandleWidgetResize(std::string widgetId, int w, int 
 {
   // Define an iterator on the action handlers list
   ActionHandlerListType::Iterator it = m_ActionHandlersList->Begin();
-  
+
    // The action handler found
   ActionHandlerType * handler;
 
@@ -93,7 +93,7 @@ void ImageWidgetController::HandleWidgetResize(std::string widgetId, int w, int 
     // try to handle the event with the current handler
     handler->HandleWidgetResize(widgetId,w,h);
     ++it;
-    }   
+    }
 }
 
 void ImageWidgetController::HandleWidgetMove(std::string widgetId, int x, int y)
@@ -101,7 +101,7 @@ void ImageWidgetController::HandleWidgetMove(std::string widgetId, int x, int y)
   otbMsgDevMacro(<<"ImageWidgetController::HandleWidgetMove(): ("<<widgetId<<", "<<x<<", "<<y<<")");
   // Define an iterator on the action handlers list
   ActionHandlerListType::Iterator it = m_ActionHandlersList->Begin();
-  
+
   // The action handler found
   ActionHandlerType * handler;
 
@@ -118,10 +118,10 @@ void ImageWidgetController::HandleWidgetMove(std::string widgetId, int x, int y)
 
 void ImageWidgetController::ActivateActionHandlers()
 {
-  otbMsgDevMacro(<<"ImageWidgetController::DectivateActionHandler(): ("<<widgetId<<")");
+//   otbMsgDevMacro(<<"ImageWidgetController::DectivateActionHandler(): ("<<widgetId<<")");
   // Define an iterator on the action handlers list
   ActionHandlerListType::Iterator it = m_ActionHandlersList->Begin();
-  
+
   // The action handler found
   ActionHandlerType * handler;
 
@@ -137,10 +137,10 @@ void ImageWidgetController::ActivateActionHandlers()
 
 void ImageWidgetController::DeactivateActionHandlers()
 {
-  otbMsgDevMacro(<<"ImageWidgetController::DectivateActionHandler(): ("<<widgetId<<")");
+//   otbMsgDevMacro(<<"ImageWidgetController::DectivateActionHandler(): ("<<widgetId<<")");
   // Define an iterator on the action handlers list
   ActionHandlerListType::Iterator it = m_ActionHandlersList->Begin();
-  
+
   // The action handler found
   ActionHandlerType * handler;
 

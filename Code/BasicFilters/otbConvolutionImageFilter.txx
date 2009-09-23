@@ -27,6 +27,8 @@
 #include "itkProgressReporter.h"
 #include "itkConstantBoundaryCondition.h"
 
+#include "otbMacro.h"
+
 namespace otb
 {
 

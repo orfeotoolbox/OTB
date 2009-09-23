@@ -45,7 +45,7 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
     m_PRF = 1.;
 }
 
-  
+
 template <class TInput, class TOutput>
 double
 TerraSarCalibrationImageFunctor<TInput, TOutput>
@@ -63,11 +63,11 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
       {
 	curRange = m_NoiseRangeValidityRef + ( m_NoiseRangeValidityMax-m_NoiseRangeValidityRef )/width_2 * (static_cast<double>(colId+1) - width_2 );
       }
- 
+
     return curRange;
   }
 
-   
+
 template <class TInput, class TOutput>
 typename TerraSarCalibrationImageFunctor<TInput, TOutput>::DoubleVectorType
 TerraSarCalibrationImageFunctor<TInput, TOutput>
@@ -75,7 +75,7 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
   {
     DoubleVectorType curCoeffs;
     if(m_UseFastCalibrationMethod)
-      { 
+      {
 	curCoeffs = m_NoisePolynomialCoefficientsList[0];
       }
     else
@@ -89,7 +89,7 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
 	bool go = true;
 	// deduct the corresponding noise acquisition index
 	while( id<m_TimeUTC.size() && go)
-	  { 
+	  {
 	    if( currTimeUTC < m_TimeUTC[id] )
 		go = false;
 	    id++;
@@ -114,19 +114,19 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
 {
   double diffCurRange = ComputeCurrentNoise( static_cast<unsigned int>(index[0]) ) - m_NoiseRangeValidityRef;
   DoubleVectorType curCoeff = ComputeCurrentCoeffs( static_cast<unsigned int>(index[1]) );
-  
+
   TOutput outRadBr = m_RadarBrightness( inPix );
 
   double NEBN = 0.;
-  for(int i=0; i<curCoeff.size(); i++)
+  for(unsigned int i=0; i<curCoeff.size(); i++)
     {
       NEBN += curCoeff[i]*vcl_pow( diffCurRange, i);
     }
   double sigma = ( outRadBr - m_CalFactor*NEBN ) * m_SinLocalIncidentAngle;
-  
+
   return static_cast<TOutput>(sigma);
 }
- 
+
 
 /** Constructor */
 template <class TInput, class TOutput>
@@ -145,7 +145,7 @@ TerraSarCalibrationComplexImageFunctor<TInput, TOutput>
     m_PRF = 1.;
 }
 
-  
+
 template <class TInput, class TOutput>
 double
 TerraSarCalibrationComplexImageFunctor<TInput, TOutput>
@@ -163,11 +163,11 @@ TerraSarCalibrationComplexImageFunctor<TInput, TOutput>
       {
 	curRange = m_NoiseRangeValidityRef + ( m_NoiseRangeValidityMax-m_NoiseRangeValidityRef )/width_2 * (static_cast<double>(colId+1) - width_2 );
       }
- 
+
     return curRange;
   }
 
-   
+
 template <class TInput, class TOutput>
 typename TerraSarCalibrationComplexImageFunctor<TInput, TOutput>::DoubleVectorType
 TerraSarCalibrationComplexImageFunctor<TInput, TOutput>
@@ -175,7 +175,7 @@ TerraSarCalibrationComplexImageFunctor<TInput, TOutput>
   {
     DoubleVectorType curCoeffs;
     if(m_UseFastCalibrationMethod)
-      { 
+      {
 	curCoeffs = m_NoisePolynomialCoefficientsList[0];
       }
     else
@@ -189,7 +189,7 @@ TerraSarCalibrationComplexImageFunctor<TInput, TOutput>
 	bool go = true;
 	// deduct the corresponding noise acquisition index
 	while( id<m_TimeUTC.size() && go)
-	  { 
+	  {
 	    if( currTimeUTC < m_TimeUTC[id] )
 		go = false;
 	    id++;
@@ -214,7 +214,7 @@ TerraSarCalibrationComplexImageFunctor<TInput, TOutput>
 {
   double diffCurRange = this->ComputeCurrentNoise( static_cast<unsigned int>(index[0]) ) - this->GetNoiseRangeValidityRef();
   DoubleVectorType curCoeff = this->ComputeCurrentCoeffs( static_cast<unsigned int>(index[1]) );
-  
+
   double modulus = std::abs(inPix);
   double outRadBr = static_cast<double>(m_RadarBrightness( modulus ));
 
@@ -224,15 +224,15 @@ TerraSarCalibrationComplexImageFunctor<TInput, TOutput>
       NEBN += curCoeff[i]*vcl_pow( diffCurRange, i);
     }
   double sigma = ( outRadBr - this->GetCalFactor()*NEBN ) * this->GetSinLocalIncidentAngle();
-  
+
   double phase = std::arg(inPix);
 
   TOutput out(sigma*vcl_cos(phase), sigma*vcl_sin(phase));
 
   return out;
 }
- 
+
 }// namespace Functor
-  
+
 } // namespace otb
 #endif

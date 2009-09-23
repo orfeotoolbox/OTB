@@ -312,10 +312,10 @@ VectorDataToLabelMapFilter< TVectorData, TLabelMap >
         std::cout << "spacing " << this->GetOutput()->GetSpacing()<< std::endl;
         // For each position in the bounding region of the polygon
 
-        for (unsigned int i = polygonExtRingBoundReg.GetOrigin(0);i < polygonExtRingBoundReg.GetOrigin(0) + polygonExtRingBoundReg.GetSize(0) ;i+=this->GetOutput()->GetSpacing()[0])
+        for (double i = polygonExtRingBoundReg.GetOrigin(0);i < polygonExtRingBoundReg.GetOrigin(0) + polygonExtRingBoundReg.GetSize(0) ;i+=this->GetOutput()->GetSpacing()[0])
         {
           vertex[0] = static_cast<VertexValueType>(i) ;
-          for (unsigned int j = polygonExtRingBoundReg.GetOrigin(1);j<polygonExtRingBoundReg.GetOrigin(1) + polygonExtRingBoundReg.GetSize(1) ;j+=this->GetOutput()->GetSpacing()[1])
+          for (double j = polygonExtRingBoundReg.GetOrigin(1);j<polygonExtRingBoundReg.GetOrigin(1) + polygonExtRingBoundReg.GetSize(1) ;j+=this->GetOutput()->GetSpacing()[1])
           {
             vertex[1] = static_cast<VertexValueType>(j) ;
 
