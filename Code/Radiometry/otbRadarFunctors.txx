@@ -120,7 +120,7 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
   double NEBN = 0.;
   for(unsigned int i=0; i<curCoeff.size(); i++)
     {
-      NEBN += curCoeff[i]*vcl_pow( diffCurRange, i);
+      NEBN += curCoeff[i]*vcl_pow( diffCurRange, static_cast<double>(i));
     }
   double sigma = ( outRadBr - m_CalFactor*NEBN ) * m_SinLocalIncidentAngle;
 
