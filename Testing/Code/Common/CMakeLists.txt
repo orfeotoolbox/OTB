@@ -845,6 +845,7 @@ otbGISTableToVectorDataFilterNew
 ADD_TEST(coTvLabelMapToGISTableFilter ${COMMON_TESTS10}
 otbLabelMapToGISTableFilter
 ${INPUTDATA}/rcc8_mire1.png
+orfeotoolbox_test
 labelmaptogis_test_table 
 orfeotoolbox_test_user
 Bidfeud0
