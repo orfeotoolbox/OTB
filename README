@@ -77,14 +77,14 @@ NB: On some linux plateforms, you may (and should) use the official distribution
 	  --> set BUILD_SHARED_LIBS to OFF within CMake
 	  --> set BUILD_TESTING to OFF within CMake
 	  --> set CMAKE_INSTALL_PREFIX to INSTALL_DIR within CMake
-	  --> set GDAL_INCLUDE_DIRS to INSTALL_DIR/include within CMake
+	  --> set GDAL_INCLUDE_DIR to INSTALL_DIR/include within CMake
 	  --> set GDAL_LIBRARY to INSTALL_DIR/lib/ gdal library within CMake
 	  --> set OTB_USE_EXTERNAL_ITK to OFF within CMake
 	  --> set FLTK_DIR to INSTALL_DIR/Fltk-Binary within CMake
 	  --> generate the configuration with 'g'
        make
        make install
-      
+
 
 Installation on Microsoft Visual Studio .NET 2003 (7.1)
 -------------------------------------------------------
@@ -97,7 +97,7 @@ Installation on Microsoft Visual Studio .NET 2003 (7.1)
 	Load the solution (.sln file) and build the gdal project.
 	More details can be found at http://vterrain.org/Distrib/gdal.html.
 
-  Moreover, ORFEO Toolbox project provides for you windows binaries for gdal1.6.0 library. These files can 
+  Moreover, ORFEO Toolbox project provides for you windows binaries for gdal1.6.0 library. These files can
   be downloaded at http://www.orfeo-toolbox.org/packages
 
 2. Install Fltk
@@ -117,15 +117,15 @@ Installation on Microsoft Visual Studio .NET 2005 (8.0)
 1. Install GDAL
 
         Open a MS-DOS prompt.
-        Run the VCVARS32.bat script that comes with the compiler (it can be found in 
+        Run the VCVARS32.bat script that comes with the compiler (it can be found in
         Microsoft Visual Studio 8/VC/bin).
-        Then, go to the GDAL root directory, and tape : 
+        Then, go to the GDAL root directory, and tape :
                 nmake /f makefile.vc
         Once the build is successful, tape this line to install GDAL :
                 nmake /f makefile.vc install
-   
+
         More details about this install can be found at www.gdal.org/gdal_building.html.
-                
+
 2. Install Fltk
 
 	Use CMake on Windows to generate MSVC++ 8.0 project files from fltk sources.
@@ -142,14 +142,14 @@ Installation with MinGW on Windows platform
 
 0. Install MinGW
 
-	Download the lastest version of mingw and msys at http://www.mingw.org and install those 
+	Download the lastest version of mingw and msys at http://www.mingw.org and install those
 	two programs.
 	Then, launch MinGW : a promp appears (similar to Linux one).
 
 1. Install GDAL
 
 	To compile GDAL, at configure step, use these options :
-		./configure -prefix=INSTALL_DIR --host=mingw32 --without-libtool 
+		./configure -prefix=INSTALL_DIR --host=mingw32 --without-libtool
 		--without-python --with-png=internal --with-libtiff=internal
 		--with-jpeg=internal
 
