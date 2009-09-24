@@ -119,9 +119,9 @@ Installation on Microsoft Visual Studio .NET 2005 (8.0)
         Open a MS-DOS prompt.
         Run the VCVARS32.bat script that comes with the compiler (it can be found in
         Microsoft Visual Studio 8/VC/bin).
-        Then, go to the GDAL root directory, and tape :
+        Then, go to the GDAL root directory, and type :
                 nmake /f makefile.vc
-        Once the build is successful, tape this line to install GDAL :
+        Once the build is successful, type this line to install GDAL :
                 nmake /f makefile.vc install
 
         More details about this install can be found at www.gdal.org/gdal_building.html.
@@ -158,7 +158,7 @@ Installation with MinGW on Windows platform
 2. Install Fltk
 
 	Generate MSYS Makefiles with CMake (Windows version) from fltk sources.
-	Then, under prompt, tape make and make install where you have generated Makefiles with CMake.
+	Then, under prompt, type make and make install where you have generated Makefiles with CMake.
 
 3. Install OTB
 
