@@ -134,7 +134,7 @@ void
 SurfaceReflectanceToReflectanceFilter<TInputImage,TOutputImage>
 ::UpdateFunctors()
 {  
-  this->GetFunctorVector().clear();
+  //this->GetFunctor().clear();
 
   for (unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
     {
@@ -151,7 +151,8 @@ SurfaceReflectanceToReflectanceFilter<TInputImage,TOutputImage>
       functor.SetResidu(res);
       functor.SetSphericalAlbedo(static_cast<double>(m_AtmosphericRadiativeTerms->GetSphericalAlbedo(i)));
     
-      this->GetFunctorVector().push_back(functor);
+      //this->GetFunctor().push_back(functor);
+      this->SetFunctor(functor);
     }
 }
 

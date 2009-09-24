@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
-#include "otbVectorImage.h"
+#include "otbImage.h"
 #include "itkImageRegionIterator.h"
 #include "otbSpectralResponse.h"
 
@@ -34,7 +34,7 @@ int main(int argc, char * argv[])
   
   const unsigned int                            Dimension = 1;
   typedef double                                PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
+  typedef otb::Image<PixelType,Dimension> ImageType;
 
   typedef itk::ImageRegionIterator< ImageType > IteratorType;
   //typedef ResponseType::PairType    PairType;
@@ -125,7 +125,7 @@ int main(int argc, char * argv[])
   IteratorType iterator2( myFilter->GetOutput(), myFilter->GetOutput()->GetRequestedRegion() );
   for ( iterator2.GoToBegin(); !iterator2.IsAtEnd(); ++iterator2 )
   {
-    myResponse->GetResponse()[i]->second = iterator2.Get()[0];
+    myResponse->GetResponse()[i]->second = iterator2.Get();
     ++i;
   }
   

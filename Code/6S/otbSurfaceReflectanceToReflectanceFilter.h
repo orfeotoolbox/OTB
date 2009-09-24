@@ -23,7 +23,7 @@
 #define __otbSurfaceReflectanceToReflectanceFilter_h
 
 
-#include "otbUnaryImageFunctorWithVectorImageFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
 
 #include "otbAtmosphericRadiativeTerms.h"
 #include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"
@@ -44,6 +44,10 @@ template <class TInput, class TOutput>
 class ReflectanceToSurfaceReflectanceImageFunctor
 {
 public:
+  
+  /** "typedef" for standard classes. */
+  typedef ReflectanceToSurfaceReflectanceImageFunctor                                                     Self;
+  
   ReflectanceToSurfaceReflectanceImageFunctor()
   {
     m_Coefficient = 1.;
@@ -121,6 +125,17 @@ public:
     std::cout << "------------------------------" << std::endl;
     return outPixel;
   }
+  /** Compare two indices. */
+  bool operator==(const Self &func) const
+  {
+    return ( (m_SphericalAlbedo == func.m_SphericalAlbedo) && (m_Coefficient == func.m_Coefficient) && (m_Residu == func.m_Residu) );
+  }
+
+  /** Compare two indices. */
+  bool operator!=(const Self &func) const
+  {
+    return ( (m_SphericalAlbedo != func.m_SphericalAlbedo) && (m_Coefficient != func.m_Coefficient) && (m_Residu != func.m_Residu) );
+  }
 
 private:
   double m_SphericalAlbedo;
@@ -140,7 +155,7 @@ private:
  */
 template <class TInputImage, class TOutputImage >
 class ITK_EXPORT SurfaceReflectanceToReflectanceFilter :
-      public UnaryImageFunctorWithVectorImageFilter< TInputImage,
+      public itk::UnaryFunctorImageFilter< TInputImage,
       TOutputImage,
       ITK_TYPENAME Functor::ReflectanceToSurfaceReflectanceImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType,
       ITK_TYPENAME TOutputImage::InternalPixelType > >
@@ -157,7 +172,7 @@ public:
   ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
   /** "typedef" for standard classes. */
   typedef SurfaceReflectanceToReflectanceFilter                                                     Self;
-  typedef UnaryImageFunctorWithVectorImageFilter< InputImageType, OutputImageType, FunctorType >    Superclass;
+  typedef itk::UnaryFunctorImageFilter< InputImageType, OutputImageType, FunctorType >    Superclass;
   typedef itk::SmartPointer<Self>                                                                        Pointer;
   typedef itk::SmartPointer<const Self>                                                                  ConstPointer;
 
