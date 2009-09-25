@@ -55,30 +55,20 @@ std::istream& operator>>(std::istream& is, AlosSarData& data)
   data.ClearRecords();
 
   AlosSarRecordHeader header;
-  bool eof = false;
-  while(!eof)
+
+  is>>header;
+
+  AlosSarRecord* record = new AlosSarDataFileDescriptor;
+  if (record != NULL)
   {
-    is>>header;
-    if(is.eof())
-    {
-      eof = true;
-    }
-    else
-    {
-      AlosSarRecord* record = new AlosSarDataFileDescriptor;
-      if (record != NULL)
-      {
-        record->Read(is);
-        data._records[header.get_rec_seq()] = record;
-        eof = true;
-      }
-      else
-      {
-        char* buff = new char[header.get_length()-12];
-        is.read(buff, header.get_length()-12);
-        delete buff;
-      }
-    }
+    record->Read(is);
+    data._records[header.get_rec_seq()] = record;
+  }
+  else
+  {
+    char* buff = new char[header.get_length()-12];
+    is.read(buff, header.get_length()-12);
+    delete buff;
   }
   return is;
 }
@@ -133,7 +123,6 @@ bool AlosSarData::saveState(ossimKeywordlist& kwl,
 
   char name[64];
 
-  kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimAlosSarModel", true);
   /*
    * Adding metadata necessary to the sensor model in the keywordlist
    */

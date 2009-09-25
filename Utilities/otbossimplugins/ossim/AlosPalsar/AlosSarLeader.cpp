@@ -140,7 +140,7 @@ bool AlosSarLeader::saveState(ossimKeywordlist& kwl,
 
   char name[64];
 
-  kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimAlosSarModel", true);
+  //kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimAlosPalsarModel", true);
   /*
    * Adding metadata necessary to the sensor model in the keywordlist
    */

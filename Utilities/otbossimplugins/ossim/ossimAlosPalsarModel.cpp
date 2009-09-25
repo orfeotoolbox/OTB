@@ -255,7 +255,7 @@ bool ossimAlosPalsarModel::saveState(ossimKeywordlist& kwl,
 
   char name[64];
 
-  //kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimAlosPalsarModel", true);
+  kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimAlosPalsarModel", true);
 
   if (theAlosSarLeader == NULL)
   {
@@ -761,7 +761,6 @@ bool ossimAlosPalsarModel::isAlosPalsarData(const ossimFilename& file) const
 
 ossimFilename ossimAlosPalsarModel::findAlosPalsarData(const ossimFilename& file) const
 {
-  //FIXME
   ossimFilename dataFile = file;
   ossimString imgPrefix("IMG-HH"); // Assume the ALOS data always has at least the HH
   ossimString trlPrefix("TRL");

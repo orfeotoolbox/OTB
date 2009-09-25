@@ -49,8 +49,6 @@ std::istream& operator>>(std::istream& is, AlosSarDataFileDescriptor& data)
 
   is.read(buf6,6);
   data._num_lines = atoi(buf6);
-  // FIXME debug
-  std::cout << std::endl << "buf6: {" << buf6 << "}" << std::endl;
 
   is.read(buf94,94);
 
@@ -58,8 +56,6 @@ std::istream& operator>>(std::istream& is, AlosSarDataFileDescriptor& data)
   is.read(buf8,8);
   tmpval = atoi(buf8);
   data._num_pix_in_line = tmpval/8; // Assume data always in 8-byte complex format
-  // FIXME debug
-  std::cout << std::endl << "buf8: {" << buf8 << "}" << std::endl;
 
   char buf432[433];
   buf432[432] = '\0';
