@@ -40,25 +40,6 @@
 
 #include "ogrsf_frmts.h"
 
-using kmldom::ElementPtr;
-using kmldom::FeaturePtr;
-using kmldom::KmlPtr;
-using kmldom::KmlFactory;
-using kmldom::DocumentPtr;
-using kmldom::FolderPtr;
-using kmldom::ContainerPtr;
-using kmldom::GeometryPtr;
-using kmldom::MultiGeometryPtr;
-using kmldom::PlacemarkPtr;
-using kmldom::CoordinatesPtr;
-using kmldom::LineStringPtr;
-using kmldom::LinearRingPtr;
-using kmldom::PolygonPtr;
-using kmldom::ModelPtr;
-using kmldom::OuterBoundaryIsPtr;
-using kmldom::InnerBoundaryIsPtr;
-
-
 namespace otb
 {
 template<class TData>
@@ -94,10 +75,10 @@ KMLVectorDataIO<TData>::CanReadFile( const char* filename ) const
 
 // Get the features of the kml file, read into the root
 template<class TData>
-const FeaturePtr
-KMLVectorDataIO<TData>::GetRootFeature(const ElementPtr& root)
+const kmldom::FeaturePtr
+KMLVectorDataIO<TData>::GetRootFeature(const kmldom::ElementPtr& root)
 {
-  const KmlPtr kml = kmldom::AsKml(root);
+  const kmldom::KmlPtr kml = kmldom::AsKml(root);
   if (kml && kml->has_feature())
   {
     return kml->get_feature();
@@ -119,18 +100,18 @@ KMLVectorDataIO<TData>::PrintIndented(std::string item, int depth)
 
 template<class TData>
 void
-KMLVectorDataIO<TData>::WalkFeature(const FeaturePtr& feature, DataNodePointerType father)
+KMLVectorDataIO<TData>::WalkFeature(const kmldom::FeaturePtr& feature, DataNodePointerType father)
 {
 
   DataNodePointerType node = NULL;
 
   if (feature)
   {
-    if (const ContainerPtr container = kmldom::AsContainer(feature))
+    if (const kmldom::ContainerPtr container = kmldom::AsContainer(feature))
     {
       WalkContainer(container,father);
     }
-    else if (const PlacemarkPtr placemark = kmldom::AsPlacemark(feature))
+    else if (const kmldom::PlacemarkPtr placemark = kmldom::AsPlacemark(feature))
     {
       WalkGeometry(placemark->get_geometry(),father);
     }
@@ -144,14 +125,14 @@ KMLVectorDataIO<TData>::WalkFeature(const FeaturePtr& feature, DataNodePointerTy
 
 template<class TData>
 void
-KMLVectorDataIO<TData>::WalkContainer(const ContainerPtr& container, DataNodePointerType father)
+KMLVectorDataIO<TData>::WalkContainer(const kmldom::ContainerPtr& container, DataNodePointerType father)
 {
 
   DataNodePointerType node = NULL;
 
   for (size_t i = 0; i < container->get_feature_array_size(); ++i)
   {
-    FeaturePtr feature = container->get_feature_array_at(i);
+    kmldom::FeaturePtr feature = container->get_feature_array_at(i);
     switch (feature->Type())
     {
     case kmldom::Type_Document:
@@ -217,7 +198,7 @@ KMLVectorDataIO<TData>::WalkContainer(const ContainerPtr& container, DataNodePoi
 // Walk through a geometry and create a GeometryNode
 template<class TData>
 void
-KMLVectorDataIO<TData>::WalkGeometry(const GeometryPtr& geometry, DataNodePointerType father)
+KMLVectorDataIO<TData>::WalkGeometry(const kmldom::GeometryPtr& geometry, DataNodePointerType father)
 {
 
   // Creation of a node
@@ -268,7 +249,7 @@ KMLVectorDataIO<TData>::WalkGeometry(const GeometryPtr& geometry, DataNodePointe
   }
 
   // Recurse into <MultiGeometry>.
-  if (const MultiGeometryPtr multigeometry = kmldom::AsMultiGeometry(geometry))
+  if (const kmldom::MultiGeometryPtr multigeometry = kmldom::AsMultiGeometry(geometry))
   {
     DataNodePointerType multi = DataNodeType::New();
     multi->SetNodeType(FEATURE_COLLECTION);
@@ -285,12 +266,12 @@ template<class TData>
 typename KMLVectorDataIO<TData>
 ::DataNodePointerType
 KMLVectorDataIO<TData>
-::ConvertGeometryToPointNode(const GeometryPtr& geometry)
+::ConvertGeometryToPointNode(const kmldom::GeometryPtr& geometry)
 {
 
   if (geometry == NULL)
   {
-    itkGenericExceptionMacro(<<"Failed to convert GeometryPtr to PointNode");
+    itkGenericExceptionMacro(<<"Failed to convert kmldom::GeometryPtr to PointNode");
   }
 
   const kmldom::PointPtr pt = kmldom::AsPoint(geometry);
@@ -314,16 +295,16 @@ template<class TData>
 typename KMLVectorDataIO<TData>
 ::DataNodePointerType
 KMLVectorDataIO<TData>
-::ConvertGeometryToLineStringNode(const GeometryPtr& geometry)
+::ConvertGeometryToLineStringNode(const kmldom::GeometryPtr& geometry)
 {
 
   if (geometry == NULL)
   {
-    itkGenericExceptionMacro(<<"Failed to convert GeometryPtr to LineNode");
+    itkGenericExceptionMacro(<<"Failed to convert kmldom::GeometryPtr to LineNode");
   }
 
-  const LineStringPtr ls = kmldom::AsLineString(geometry);
-  const CoordinatesPtr coords = ls->get_coordinates();
+  const kmldom::LineStringPtr ls = kmldom::AsLineString(geometry);
+  const kmldom::CoordinatesPtr coords = ls->get_coordinates();
   int array_size = coords->get_coordinates_array_size();
 
   LinePointerType line = LineType::New();
@@ -350,16 +331,16 @@ template<class TData>
 typename KMLVectorDataIO<TData>
 ::DataNodePointerType
 KMLVectorDataIO<TData>
-::ConvertGeometryToLinearRingNode(const GeometryPtr& geometry)
+::ConvertGeometryToLinearRingNode(const kmldom::GeometryPtr& geometry)
 {
 
   if (geometry == NULL)
   {
-    itkGenericExceptionMacro(<<"Failed to convert GeometryPtr to LineNode");
+    itkGenericExceptionMacro(<<"Failed to convert kmldom::GeometryPtr to LineNode");
   }
 
-  const LinearRingPtr lr = kmldom::AsLinearRing(geometry);
-  const CoordinatesPtr coords = lr->get_coordinates();
+  const kmldom::LinearRingPtr lr = kmldom::AsLinearRing(geometry);
+  const kmldom::CoordinatesPtr coords = lr->get_coordinates();
   int array_size = coords->get_coordinates_array_size();
 
   LinePointerType line = LineType::New();
@@ -386,27 +367,27 @@ template<class TData>
 typename KMLVectorDataIO<TData>
 ::DataNodePointerType
 KMLVectorDataIO<TData>
-::ConvertGeometryToPolygonNode(const GeometryPtr& geometry)
+::ConvertGeometryToPolygonNode(const kmldom::GeometryPtr& geometry)
 {
 
   if (geometry == NULL)
   {
-    itkGenericExceptionMacro(<<"Failed to convert GeometryPtr to LineNode");
+    itkGenericExceptionMacro(<<"Failed to convert kmldom::GeometryPtr to LineNode");
   }
 
   // Get the polygon
-  const PolygonPtr polygonKml = kmldom::AsPolygon(geometry);
+  const kmldom::PolygonPtr polygonKml = kmldom::AsPolygon(geometry);
   PolygonPointerType extRing = PolygonType::New();
   PolygonListPointerType intRings = PolygonListType::New();
 
   // Read the outerboundaryis of the polygon
   if ( polygonKml->has_outerboundaryis())
   {
-    const OuterBoundaryIsPtr outerboundaryis = polygonKml->get_outerboundaryis();
+    const kmldom::OuterBoundaryIsPtr outerboundaryis = polygonKml->get_outerboundaryis();
     if (outerboundaryis->has_linearring())
     {
-      const LinearRingPtr lr = outerboundaryis->get_linearring();
-      const CoordinatesPtr coords = lr->get_coordinates();
+      const kmldom::LinearRingPtr lr = outerboundaryis->get_linearring();
+      const kmldom::CoordinatesPtr coords = lr->get_coordinates();
       int array_size = coords->get_coordinates_array_size();
 
 
@@ -428,11 +409,11 @@ KMLVectorDataIO<TData>
   // Read the innerboundaryis of the polygon
   for (unsigned int intRingIndex=0;intRingIndex<polygonKml->get_innerboundaryis_array_size();++intRingIndex)
   {
-    const InnerBoundaryIsPtr innerboundaryis = polygonKml->get_innerboundaryis_array_at(intRingIndex);
+    const kmldom::InnerBoundaryIsPtr innerboundaryis = polygonKml->get_innerboundaryis_array_at(intRingIndex);
     if (innerboundaryis->has_linearring())
     {
-      const LinearRingPtr lr = innerboundaryis->get_linearring();
-      const CoordinatesPtr coords = lr->get_coordinates();
+      const kmldom::LinearRingPtr lr = innerboundaryis->get_linearring();
+      const kmldom::CoordinatesPtr coords = lr->get_coordinates();
       int array_size = coords->get_coordinates_array_size();
       PolygonPointerType ring = PolygonType::New();
 
@@ -489,7 +470,7 @@ KMLVectorDataIO<TData>
 
   // Parse the file.
   std::string errors;
-  ElementPtr root = kmldom::Parse(kml, &errors);
+  kmldom::ElementPtr root = kmldom::Parse(kml, &errors);
 
   if (!root)
   {
@@ -503,7 +484,7 @@ KMLVectorDataIO<TData>
   itk::MetaDataDictionary & dict = data->GetMetaDataDictionary();
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef );
 
-  const FeaturePtr feature = GetRootFeature(root);
+  const kmldom::FeaturePtr feature = GetRootFeature(root);
   if (feature)
   {
 
@@ -564,13 +545,13 @@ template<class TData>
   m_Kept = 0;
 
   //Create the factory
-  KmlFactory* factory = KmlFactory::GetFactory();
+  kmldom::KmlFactory* factory = kmldom::KmlFactory::GetFactory();
   if (factory == NULL)
   {
     itkExceptionMacro(<<"Impossible to create the KML Factory to write file "<<this->m_FileName);
   }
 
-  KmlPtr kml = factory->CreateKml();
+  kmldom::KmlPtr kml = factory->CreateKml();
 
   // Retrieving root node
   DataTreeConstPointerType tree = data->GetDataTree();
@@ -581,9 +562,9 @@ template<class TData>
   TreeIteratorType it(tree);
   it.GoToBegin();
 
-  DocumentPtr currentDocument = NULL;
-  FolderPtr currentFolder = NULL;
-  MultiGeometryPtr currentMultiGeometry = NULL;
+  kmldom::DocumentPtr currentDocument = NULL;
+  kmldom::FolderPtr currentFolder = NULL;
+  kmldom::MultiGeometryPtr currentMultiGeometry = NULL;
 
 
   InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(tree->GetRoot());
@@ -606,7 +587,7 @@ template<class TData>
 }
 
 template<class TData>
-    void KMLVectorDataIO<TData>::ProcessNodeWrite(InternalTreeNodeType * source, KmlFactory* factory, KmlPtr kml, DocumentPtr currentDocument, FolderPtr currentFolder, MultiGeometryPtr currentMultiGeometry)
+    void KMLVectorDataIO<TData>::ProcessNodeWrite(InternalTreeNodeType * source, kmldom::KmlFactory* factory, kmldom::KmlPtr kml, kmldom::DocumentPtr currentDocument, kmldom::FolderPtr currentFolder, kmldom::MultiGeometryPtr currentMultiGeometry)
 {
    // Note that we force a precise structure when we write a kml file.
   // We will necessary have a <document> that will contain a <folder>.
@@ -630,7 +611,7 @@ template<class TData>
       }
       case DOCUMENT:
       {
-        DocumentPtr document = factory->CreateDocument();
+        kmldom::DocumentPtr document = factory->CreateDocument();
         if (dataNode->HasField("name"))
         {
           std::string fieldname = dataNode->GetFieldAsString("name");
@@ -643,7 +624,7 @@ template<class TData>
       }
       case FOLDER:
       {
-        FolderPtr folder = factory->CreateFolder();
+        kmldom::FolderPtr folder = factory->CreateFolder();
         std::string fieldname = dataNode->GetFieldAsString("name");
         folder->set_name(fieldname);
         currentDocument->add_feature(folder);
@@ -654,7 +635,7 @@ template<class TData>
       case FEATURE_POINT:
       {
       // Create <coordinates>
-        CoordinatesPtr coordinates = factory->CreateCoordinates();
+        kmldom::CoordinatesPtr coordinates = factory->CreateCoordinates();
         PointType pointCoord = dataNode->GetPoint();
         if (DataNodeType::Dimension>2)
         {
@@ -676,7 +657,7 @@ template<class TData>
         else
         {
 
-          PlacemarkPtr placemark = factory->CreatePlacemark();
+          kmldom::PlacemarkPtr placemark = factory->CreatePlacemark();
           placemark->set_geometry(point);
           if (currentFolder!= NULL)
           {
@@ -696,8 +677,8 @@ template<class TData>
         VertexListConstPointerType vertexList = dataNode->GetLine()->GetVertexList();
 
       // Create <coordinates>
-        CoordinatesPtr coordinates = factory->CreateCoordinates();
-        LineStringPtr line = factory->CreateLineString();
+        kmldom::CoordinatesPtr coordinates = factory->CreateCoordinates();
+        kmldom::LineStringPtr line = factory->CreateLineString();
 
         typename VertexListType::ConstIterator vIt = vertexList->Begin();
 
@@ -722,7 +703,7 @@ template<class TData>
         }
         else
         {
-          PlacemarkPtr placemark = factory->CreatePlacemark();
+          kmldom::PlacemarkPtr placemark = factory->CreatePlacemark();
           placemark->set_geometry(line);
           if (currentFolder!= NULL)
           {
@@ -739,15 +720,15 @@ template<class TData>
       {//TODO refine the solution of drawing the polygon 1m above the ground
       // In a polygon we just can find any LinearRings
 
-        LinearRingPtr line = factory->CreateLinearRing();
-        PolygonPtr polygon = factory->CreatePolygon();
+        kmldom::LinearRingPtr line = factory->CreateLinearRing();
+        kmldom::PolygonPtr polygon = factory->CreatePolygon();
 
         polygon->set_extrude(true);
         polygon->set_altitudemode(1);//ALTITUDEMODE_RELATIVETOGROUND
 
-        CoordinatesPtr coordinates = factory->CreateCoordinates();
-        OuterBoundaryIsPtr outerboundaryis = factory->CreateOuterBoundaryIs();
-        InnerBoundaryIsPtr innerboundaryis = factory->CreateInnerBoundaryIs();
+        kmldom::CoordinatesPtr coordinates = factory->CreateCoordinates();
+        kmldom::OuterBoundaryIsPtr outerboundaryis = factory->CreateOuterBoundaryIs();
+        kmldom::InnerBoundaryIsPtr innerboundaryis = factory->CreateInnerBoundaryIs();
 
         VertexListConstPointerType vertexList = dataNode->GetPolygonExteriorRing()->GetVertexList();
 
@@ -843,7 +824,7 @@ template<class TData>
         }
         else
         {
-          PlacemarkPtr placemark = factory->CreatePlacemark();
+          kmldom::PlacemarkPtr placemark = factory->CreatePlacemark();
           placemark->set_geometry(polygon);
           if (currentFolder!= NULL)
           {
@@ -859,9 +840,9 @@ template<class TData>
     // MultiGeometry
       case FEATURE_COLLECTION:
       {
-        MultiGeometryPtr multi = factory->CreateMultiGeometry();
+        kmldom::MultiGeometryPtr multi = factory->CreateMultiGeometry();
         currentMultiGeometry = multi;
-        PlacemarkPtr placemark = factory->CreatePlacemark();
+        kmldom::PlacemarkPtr placemark = factory->CreatePlacemark();
         placemark->set_geometry(multi);
         if (currentFolder!= NULL)
         {
