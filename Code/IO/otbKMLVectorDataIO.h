@@ -26,11 +26,6 @@
 
 #include "kml/dom.h"
 #include "kml/base/file.h"
-using kmldom::KmlPtr;
-using kmldom::ElementPtr;
-using kmldom::FeaturePtr;
-using kmldom::GeometryPtr;
-using kmldom::ContainerPtr;
 
 namespace otb
 {
@@ -110,34 +105,30 @@ protected:
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  static const FeaturePtr GetRootFeature(const ElementPtr& root);
+  static const kmldom::FeaturePtr GetRootFeature(const kmldom::ElementPtr& root);
 
   static void PrintIndented(std::string item, int depth);
 
-  static void PrintFeature(const FeaturePtr& feature, int depth);
+  static void PrintFeature(const kmldom::FeaturePtr& feature, int depth);
 
-  void WalkGeometry(const GeometryPtr& geometry, DataNodePointerType father);
+  void WalkGeometry(const kmldom::GeometryPtr& geometry, DataNodePointerType father);
 
-  void WalkFeature(const FeaturePtr& feature, DataNodePointerType father);
+  void WalkFeature(const kmldom::FeaturePtr& feature, DataNodePointerType father);
 
-  void WalkContainer(const ContainerPtr& container, DataNodePointerType father);
+  void WalkContainer(const kmldom::ContainerPtr& container, DataNodePointerType father);
 
 
   /** Conversion tools */
-  DataNodePointerType ConvertGeometryToPointNode(const GeometryPtr& geometry);
-  DataNodePointerType ConvertGeometryToLineStringNode(const GeometryPtr& geometry);
-  DataNodePointerType ConvertGeometryToLinearRingNode(const GeometryPtr& geometry);
-  DataNodePointerType ConvertGeometryToPolygonNode(const GeometryPtr& geometry);
+  DataNodePointerType ConvertGeometryToPointNode(const kmldom::GeometryPtr& geometry);
+  DataNodePointerType ConvertGeometryToLineStringNode(const kmldom::GeometryPtr& geometry);
+  DataNodePointerType ConvertGeometryToLinearRingNode(const kmldom::GeometryPtr& geometry);
+  DataNodePointerType ConvertGeometryToPolygonNode(const kmldom::GeometryPtr& geometry);
   /** end conversion tools */
 
-  typedef kmldom::KmlPtr KmlPtr;
-  typedef kmldom::KmlFactory KmlFactory;
-  typedef kmldom::DocumentPtr DocumentPtr;
-  typedef kmldom::FolderPtr FolderPtr;
-  typedef kmldom::MultiGeometryPtr MultiGeometryPtr;
-  void ProcessNodeWrite(InternalTreeNodeType * source, KmlFactory* factory,
-                        KmlPtr kml, DocumentPtr currentDocument, FolderPtr currentFolder,
-                        MultiGeometryPtr currentMultiGeometry);
+
+  void ProcessNodeWrite(InternalTreeNodeType * source, kmldom::KmlFactory* factory,
+                        kmldom::KmlPtr kml, kmldom::DocumentPtr currentDocument, kmldom::FolderPtr currentFolder,
+                        kmldom::MultiGeometryPtr currentMultiGeometry);
 
 private:
   KMLVectorDataIO(const Self&); //purposely not implemented

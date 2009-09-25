@@ -45,12 +45,12 @@ namespace otb
 template<class TData>
 KMLVectorDataIO<TData>
 ::KMLVectorDataIO()
-{
-}
+{}
+
 template<class TData>
 KMLVectorDataIO<TData>::~KMLVectorDataIO()
-{
-}
+{}
+
 template<class TData>
 bool
 KMLVectorDataIO<TData>::CanReadFile( const char* filename ) const
