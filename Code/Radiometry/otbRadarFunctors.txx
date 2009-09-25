@@ -219,7 +219,7 @@ TerraSarCalibrationComplexImageFunctor<TInput, TOutput>
   double outRadBr = static_cast<double>(m_RadarBrightness( modulus ));
 
   double NEBN = 0.;
-  for(int i=0; i<curCoeff.size(); i++)
+  for(unsigned int i=0; i<curCoeff.size(); i++)
     {
       NEBN += curCoeff[i]*vcl_pow( diffCurRange, i);
     }
