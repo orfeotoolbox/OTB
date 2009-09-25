@@ -51,14 +51,12 @@ using kmldom::GeometryPtr;
 using kmldom::MultiGeometryPtr;
 using kmldom::PlacemarkPtr;
 using kmldom::CoordinatesPtr;
-using kmldom::PointPtr;
 using kmldom::LineStringPtr;
 using kmldom::LinearRingPtr;
 using kmldom::PolygonPtr;
 using kmldom::ModelPtr;
 using kmldom::OuterBoundaryIsPtr;
 using kmldom::InnerBoundaryIsPtr;
-
 
 
 namespace otb
@@ -295,7 +293,7 @@ KMLVectorDataIO<TData>
     itkGenericExceptionMacro(<<"Failed to convert GeometryPtr to PointNode");
   }
 
-  const PointPtr pt = kmldom::AsPoint(geometry);
+  const kmldom::PointPtr pt = kmldom::AsPoint(geometry);
 
   PointType otbPoint;
   otbPoint.Fill(0);
@@ -668,7 +666,7 @@ template<class TData>
         }
 
       // Create <Point> and give it <coordinates>.
-        PointPtr point = factory->CreatePoint();
+        kmldom::PointPtr point = factory->CreatePoint();
         point->set_coordinates(coordinates);
 
         if (currentMultiGeometry != NULL)
