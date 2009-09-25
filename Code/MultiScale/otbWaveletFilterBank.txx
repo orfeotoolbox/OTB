@@ -811,7 +811,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
     lowPassOperator.SetUpSampleFactor( this->GetUpSampleFilterFactor() );
     lowPassOperator.CreateDirectional();
 
-    unsigned long int radius [ InputImageDimension ];
+    long int radius [ InputImageDimension ];
     //radius[0] = lowPassOperator.GetRadius()[0];
 
     HighPassOperatorType highPassOperator;
