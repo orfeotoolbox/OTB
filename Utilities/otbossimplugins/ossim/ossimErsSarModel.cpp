@@ -49,6 +49,11 @@ ossimErsSarModel::ossimErsSarModel():
 
 ossimErsSarModel::~ossimErsSarModel()
 {
+  if(theErsSarleader != NULL)
+  {
+    delete theErsSarleader;
+    theErsSarleader = NULL;
+  }
 }
 
 ossimString ossimErsSarModel::getClassName() const
