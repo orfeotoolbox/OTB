@@ -183,7 +183,8 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 ::AllocateInternalData
 ( const OutputImageRegionType& outputRegion )
 {
-  OutputImageRegionType smallerRegion, largerRegion = outputRegion;
+  OutputImageRegionType smallerRegion;
+  OutputImageRegionType largerRegion = outputRegion;
 
   for ( unsigned int direction = 0; direction < InputImageDimension-1; direction++ )
   {
@@ -749,7 +750,8 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 ::AllocateInternalData
 ( const OutputImageRegionType& outputRegion )
 {
-  OutputImageRegionType largerRegion, smallerRegion = outputRegion;
+  OutputImageRegionType largerRegion;
+  OutputImageRegionType smallerRegion = outputRegion;
 
   for ( unsigned int direction = 0; direction < InputImageDimension-1; direction++ )
   {
@@ -812,19 +814,25 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
     lowPassOperator.CreateDirectional();
 
     long int radius [ InputImageDimension ];
-    //radius[0] = lowPassOperator.GetRadius()[0];
+    radius[0] = lowPassOperator.GetRadius()[0];
 
     HighPassOperatorType highPassOperator;
     highPassOperator.SetDirection(0);
     highPassOperator.SetUpSampleFactor( this->GetUpSampleFilterFactor() );
     highPassOperator.CreateDirectional();
 
-    for ( unsigned int i = 0; i < InputImageDimension; i++ )
-    {
-      radius[i] = lowPassOperator.GetRadius()[0];
-      if ( radius[i] < highPassOperator.GetRadius()[0] )
-        radius[i] = highPassOperator.GetRadius()[0];
-    }
+    if ( radius[0] < highPassOperator.GetRadius()[0] )
+      radius[0] = highPassOperator.GetRadius()[0];
+
+    for ( unsigned int i = 1; i < InputImageDimension; i++ )
+      radius[i] = 0;
+
+//     for ( unsigned int i = 0; i < InputImageDimension; i++ )
+//     {
+//       radius[i] = lowPassOperator.GetRadius()[i];
+//       if ( radius[i] < highPassOperator.GetRadius()[i] )
+//         radius[i] = highPassOperator.GetRadius()[i];
+//     }
 
     InputImageRegionType paddedRegion = destRegion;
     paddedRegion.PadByRadius( radius );
