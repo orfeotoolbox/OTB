@@ -80,11 +80,9 @@ private:
   std::string VectorToString(otb::MetaDataKey::VectorType vector) const;
   bool CompareLines(std::string strRef, std::string strTest) const;
 
-  void ogrReportOnLayer(OGRLayer *, const char *, OGRGeometry *) const;
   void
       ogrReportOnLayer(OGRLayer * ref_poLayer, const char *ref_pszWHERE, OGRGeometry *ref_poSpatialFilter,
-          OGRLayer * test_poLayer, const char *test_pszWHERE, OGRGeometry *test_poSpatialFilter, int & nbdiff,
-          int bVerbose) const;
+          OGRLayer * test_poLayer, const char *test_pszWHERE, OGRGeometry *test_poSpatialFilter, int & nbdiff) const;
 
   double m_EpsilonBoundaryChecking;
   bool m_ReportErrors;

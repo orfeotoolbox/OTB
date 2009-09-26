@@ -1210,7 +1210,6 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   const char *ref_pszWHERE = NULL;
   const char *test_pszWHERE = NULL;
   int bReadOnly = FALSE;
-  int bVerbose = m_ReportErrors;
   int nbdiff(0);
   /* -------------------------------------------------------------------- */
   /*      Open data source.                                               */
@@ -1228,7 +1227,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   if (ref_poDS == NULL && !bReadOnly)
   {
     ref_poDS = OGRSFDriverRegistrar::Open(ref_pszDataSource, FALSE, &ref_poDriver);
-    if (ref_poDS != NULL && bVerbose)
+    if (ref_poDS != NULL && m_ReportErrors)
     {
       std::cout << "Had to open REF data source read-only.\n";
       bReadOnly = TRUE;
@@ -1238,7 +1237,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   if (test_poDS == NULL && !bReadOnly)
   {
     test_poDS = OGRSFDriverRegistrar::Open(test_pszDataSource, FALSE, &test_poDriver);
-    if (test_poDS != NULL && bVerbose)
+    if (test_poDS != NULL && m_ReportErrors)
     {
       std::cout << "Had to open REF data source read-only.\n";
       bReadOnly = TRUE;
@@ -1251,7 +1250,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   {
     OGRSFDriverRegistrar *ref_poR = OGRSFDriverRegistrar::GetRegistrar();
 
-    if (bVerbose)
+    if (m_ReportErrors)
       std::cout << "FAILURE:\n"
         "Unable to open REF datasource `" << ref_pszDataSource << "' with the following drivers." << std::endl;
     for (int iDriver = 0; iDriver < ref_poR->GetDriverCount(); ++iDriver)
@@ -1265,7 +1264,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   {
     OGRSFDriverRegistrar *test_poR = OGRSFDriverRegistrar::GetRegistrar();
 
-    if (bVerbose)
+    if (m_ReportErrors)
       std::cout << "FAILURE:\n"
         "Unable to open TEST datasource `" << test_pszDataSource << "' with the following drivers." << std::endl;
     for (int iDriver = 0; iDriver < test_poR->GetDriverCount(); ++iDriver)
@@ -1278,21 +1277,21 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   /* -------------------------------------------------------------------- */
   /*      Some information messages.                                      */
   /* -------------------------------------------------------------------- */
-  otbCheckStringValue("INFO: using driver", ref_poDriver->GetName(),test_poDriver->GetName(),nbdiff,bVerbose );
+  otbCheckStringValue("INFO: using driver", ref_poDriver->GetName(),test_poDriver->GetName(),nbdiff,m_ReportErrors );
 
-  //    otbCheckStringValue("INFO: Internal data source name", ref_poDS->GetName(),test_poDS->GetName(),nbdiff,bVerbose );
+  //    otbCheckStringValue("INFO: Internal data source name", ref_poDS->GetName(),test_poDS->GetName(),nbdiff,m_ReportErrors );
   std::string strRefName(ref_poDS->GetName());
   std::string strTestName(test_poDS->GetName());
   if (strRefName != strTestName)
   {
-    if (!bVerbose)
+    if (!m_ReportErrors)
       otbPrintDiff("WARNING: INFO: Internal data source name poDS->GetName() were different",strRefName,strTestName);
   }
 
   /* -------------------------------------------------------------------- */
   /*      Process each data source layer.                                 */
   /* -------------------------------------------------------------------- */
-  otbCheckValue("GetLayerCount()", ref_poDS->GetLayerCount(),test_poDS->GetLayerCount(),nbdiff,bVerbose );
+  otbCheckValue("GetLayerCount()", ref_poDS->GetLayerCount(),test_poDS->GetLayerCount(),nbdiff,m_ReportErrors );
 
   for (int iLayer = 0; iLayer < ref_poDS->GetLayerCount(); ++iLayer)
   {
@@ -1301,20 +1300,20 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
 
     if (ref_poLayer == NULL)
     {
-      if (bVerbose)
+      if (m_ReportErrors)
         std::cout << "FAILURE: Couldn't fetch advertised layer " << iLayer << " for REF data source" << std::endl;
       return (1);
     }
     if (test_poLayer == NULL)
     {
-      if (bVerbose)
+      if (m_ReportErrors)
         std::cout << "FAILURE: Couldn't fetch advertised layer " << iLayer << " for REF data source" << std::endl;
       return (1);
     }
 
     //Check Layer inforamtion
     ogrReportOnLayer(ref_poLayer, ref_pszWHERE, ref_poSpatialFilter, test_poLayer, test_pszWHERE, test_poSpatialFilter,
-        nbdiff, bVerbose);
+        nbdiff);
 
     //If no difference, check the feature
     if (nbdiff == 0)
@@ -1367,7 +1366,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
         nbFeature++;
       }
       // If no verbose and an diff was found, exit checking. The full checking will be executed in verbose mode
-      if ((!bVerbose) && (nbdiff != 0))
+      if ((!m_ReportErrors) && (nbdiff != 0))
         return (1);
     } //if(nbdiff == 0)
 
@@ -1570,7 +1569,7 @@ std::string TestHelper::VectorToString(otb::MetaDataKey::VectorType vector) cons
 /************************************************************************/
 
 void TestHelper::ogrReportOnLayer(OGRLayer * ref_poLayer, const char *ref_pszWHERE, OGRGeometry *ref_poSpatialFilter,
-    OGRLayer * test_poLayer, const char *test_pszWHERE, OGRGeometry *test_poSpatialFilter, int & nbdiff, int bVerbose) const
+    OGRLayer * test_poLayer, const char *test_pszWHERE, OGRGeometry *test_poSpatialFilter, int & nbdiff) const
 
 {
   OGRFeatureDefn *ref_poDefn = ref_poLayer->GetLayerDefn();
@@ -1579,7 +1578,7 @@ void TestHelper::ogrReportOnLayer(OGRLayer * ref_poLayer, const char *ref_pszWHE
   /* -------------------------------------------------------------------- */
   /*      Set filters if provided.                                        */
   /* -------------------------------------------------------------------- */
-  otbCheckStringValue("pszWHERE",ref_pszWHERE,test_pszWHERE,nbdiff,bVerbose);
+  otbCheckStringValue("pszWHERE",ref_pszWHERE,test_pszWHERE,nbdiff,m_ReportErrors);
 
   if (ref_pszWHERE != NULL)
     ref_poLayer->SetAttributeFilter(ref_pszWHERE);
@@ -1598,23 +1597,23 @@ void TestHelper::ogrReportOnLayer(OGRLayer * ref_poLayer, const char *ref_pszWHE
   /* -------------------------------------------------------------------- */
   printf("\n");
 
-  otbCheckStringValue("Layer name", ref_poDefn->GetName() ,test_poDefn->GetName() ,nbdiff,bVerbose);
+  otbCheckStringValue("Layer name", ref_poDefn->GetName() ,test_poDefn->GetName() ,nbdiff,m_ReportErrors);
 
-  otbCheckStringValue( "Geometry", OGRGeometryTypeToName( ref_poDefn->GetGeomType() ), OGRGeometryTypeToName( test_poDefn->GetGeomType() ) ,nbdiff,bVerbose );
+  otbCheckStringValue( "Geometry", OGRGeometryTypeToName( ref_poDefn->GetGeomType() ), OGRGeometryTypeToName( test_poDefn->GetGeomType() ),nbdiff, m_ReportErrors );
 
-  otbCheckValue("Feature Count", ref_poLayer->GetFeatureCount(),test_poLayer->GetFeatureCount() ,nbdiff,bVerbose);
+  otbCheckValue("Feature Count", ref_poLayer->GetFeatureCount(),test_poLayer->GetFeatureCount(),nbdiff ,m_ReportErrors);
 
   OGREnvelope ref_oExt;
   OGREnvelope test_oExt;
 
-  otbCheckValue("GetExtent",ref_poLayer->GetExtent(&ref_oExt, TRUE),test_poLayer->GetExtent(&test_oExt, TRUE),nbdiff,bVerbose);
+  otbCheckValue("GetExtent",ref_poLayer->GetExtent(&ref_oExt, TRUE),test_poLayer->GetExtent(&test_oExt, TRUE), nbdiff, m_ReportErrors);
 
   if (ref_poLayer->GetExtent(&ref_oExt, TRUE) == OGRERR_NONE)
   {
-    otbCheckValue("Extent: MinX",ref_oExt.MinX,test_oExt.MinX,nbdiff,bVerbose);
-    otbCheckValue("Extent: MinY",ref_oExt.MinY,test_oExt.MinY,nbdiff,bVerbose);
-    otbCheckValue("Extent: MaxX",ref_oExt.MaxX,test_oExt.MaxX,nbdiff,bVerbose);
-    otbCheckValue("Extent: MaxY",ref_oExt.MaxY,test_oExt.MaxY,nbdiff,bVerbose);
+    otbCheckValue("Extent: MinX",ref_oExt.MinX,test_oExt.MinX,nbdiff,m_ReportErrors);
+    otbCheckValue("Extent: MinY",ref_oExt.MinY,test_oExt.MinY,nbdiff,m_ReportErrors);
+    otbCheckValue("Extent: MaxX",ref_oExt.MaxX,test_oExt.MaxX,nbdiff,m_ReportErrors);
+    otbCheckValue("Extent: MaxY",ref_oExt.MaxY,test_oExt.MaxY,nbdiff,m_ReportErrors);
   }
 
   char *ref_pszWKT;
@@ -1633,14 +1632,14 @@ void TestHelper::ogrReportOnLayer(OGRLayer * ref_poLayer, const char *ref_pszWHE
     test_poLayer->GetSpatialRef()->exportToPrettyWkt(&test_pszWKT);
   }
 
-  otbCheckStringValue( "Layer SRS WKT", ref_pszWKT,test_pszWKT ,nbdiff,bVerbose);
+  otbCheckStringValue( "Layer SRS WKT", ref_pszWKT,test_pszWKT ,nbdiff,m_ReportErrors);
 
   CPLFree(ref_pszWKT);
   CPLFree(test_pszWKT);
 
-  otbCheckStringValue( "FID Column", ref_poLayer->GetFIDColumn(),test_poLayer->GetFIDColumn() ,nbdiff,bVerbose);
-  otbCheckStringValue( "Geometry Column", ref_poLayer->GetGeometryColumn(),test_poLayer->GetGeometryColumn() ,nbdiff,bVerbose);
-  otbCheckValue("GetFieldCount",ref_poDefn->GetFieldCount(),test_poDefn->GetFieldCount(),nbdiff,bVerbose);
+  otbCheckStringValue( "FID Column", ref_poLayer->GetFIDColumn(),test_poLayer->GetFIDColumn() ,nbdiff,m_ReportErrors);
+  otbCheckStringValue( "Geometry Column", ref_poLayer->GetGeometryColumn(),test_poLayer->GetGeometryColumn() ,nbdiff,m_ReportErrors);
+  otbCheckValue("GetFieldCount",ref_poDefn->GetFieldCount(),test_poDefn->GetFieldCount(),nbdiff,m_ReportErrors);
   if (ref_poDefn->GetFieldCount() == test_poDefn->GetFieldCount())
   {
     for (int iAttr = 0; iAttr < ref_poDefn->GetFieldCount(); ++iAttr)
@@ -1648,10 +1647,10 @@ void TestHelper::ogrReportOnLayer(OGRLayer * ref_poLayer, const char *ref_pszWHE
       OGRFieldDefn *ref_poField = ref_poDefn->GetFieldDefn(iAttr);
       OGRFieldDefn *test_poField = test_poDefn->GetFieldDefn(iAttr);
 
-      otbCheckStringValue( "Field GetName",ref_poField->GetNameRef(),test_poField->GetNameRef(),nbdiff,bVerbose);
-      otbCheckStringValue( "Field GetFieldTypeName",ref_poField->GetFieldTypeName( ref_poField->GetType() ),test_poField->GetFieldTypeName( test_poField->GetType() ),nbdiff,bVerbose);
-      otbCheckValue( "Field GetWidth",ref_poField->GetWidth(),test_poField->GetWidth(),nbdiff,bVerbose);
-      otbCheckValue( "Field GetPrecision",ref_poField->GetPrecision(),test_poField->GetPrecision(),nbdiff,bVerbose);
+      otbCheckStringValue( "Field GetName",ref_poField->GetNameRef(),test_poField->GetNameRef(),nbdiff,m_ReportErrors);
+      otbCheckStringValue( "Field GetFieldTypeName",ref_poField->GetFieldTypeName( ref_poField->GetType() ),test_poField->GetFieldTypeName( test_poField->GetType() ),nbdiff,m_ReportErrors);
+      otbCheckValue( "Field GetWidth",ref_poField->GetWidth(),test_poField->GetWidth(),nbdiff,m_ReportErrors);
+      otbCheckValue( "Field GetPrecision",ref_poField->GetPrecision(),test_poField->GetPrecision(),nbdiff,m_ReportErrors);
     }
   }
 
