@@ -73,7 +73,7 @@ namespace otb
 {
 
 int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselineAsciiFileName,
-    int reportErrors, const double epsilon, std::vector<std::string> ignoredLines) const
+    const double epsilon, std::vector<std::string> ignoredLines) const
 {
   std::ifstream fluxfiletest(testAsciiFileName);
   std::ifstream fluxfileref(baselineAsciiFileName);
@@ -85,7 +85,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
   std::string diffAsciiFileName(testAsciiFileName);
   diffAsciiFileName += ".diff.txt";
   std::ofstream fluxfilediff;
-  if (reportErrors)
+  if (m_ReportErrors)
   {
     fluxfilediff.open(diffAsciiFileName.c_str());
   }
@@ -174,7 +174,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
             {
               if (!isScientificNumeric(strTest))
               {
-                if (reportErrors)
+                if (m_ReportErrors)
                 {
                   fluxfilediff << "Diff at line " << numLine << " : compare numeric value with no numeric value ("
                       << strRef << strRef << " != " << strTest << ")" << std::endl;
@@ -186,7 +186,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
               else if ((strRef != strTest) && (vcl_abs(atof(strRef.c_str())) > m_EpsilonBoundaryChecking) && (vcl_abs(
                   atof(strRef.c_str()) - atof(strTest.c_str())) > epsilon * vcl_abs(atof(strRef.c_str()))))//epsilon as relative error
               {
-                if (reportErrors)
+                if (m_ReportErrors)
                 {
                   fluxfilediff << "Diff at line " << numLine << " : vcl_abs ( (" << strRef << ") - (" << strTest
                       << ") ) > " << epsilon << std::endl;
@@ -220,7 +220,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
                 {
                   if (strCharRef != strCharTest)
                   {
-                    if (reportErrors)
+                    if (m_ReportErrors)
                     {
                       fluxfilediff << "Diff at line " << numLine << " : " << strCharRef << " != " << strCharTest
                           << std::endl;
@@ -243,7 +243,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
                       && (vcl_abs(atof(strNumRef.c_str()) - atof(strNumTest.c_str())) > epsilon * vcl_abs(atof(
                           strNumRef.c_str())))) //epsilon as relative error
                   {
-                    if (reportErrors)
+                    if (m_ReportErrors)
                     {
                       fluxfilediff << "Diff at line " << numLine << " : vcl_abs ( (" << strNumRef << ") - ("
                           << strNumTest << ") ) > " << epsilon << std::endl;
@@ -285,7 +285,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
                   if ((strRef != strTest) && (vcl_abs(atof(strRef.c_str())) > m_EpsilonBoundaryChecking) && (vcl_abs(
                       atof(strRef.c_str()) - atof(strTest.c_str())) > epsilon * vcl_abs(atof(strRef.c_str())))) //epsilon as relative error
                   {
-                    if (reportErrors)
+                    if (m_ReportErrors)
                     {
                       fluxfilediff << "Diff at line " << numLine << " : vcl_abs( (" << strRef << ") - (" << strTest
                           << ") ) > " << epsilon << std::endl;
@@ -298,7 +298,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
                 {
                   if (strRef != strTest)
                   {
-                    if (reportErrors)
+                    if (m_ReportErrors)
                     {
                       fluxfilediff << "Diff at line " << numLine << " : " << strRef << " != " << strTest << std::endl;
                       nblinediff++;
@@ -311,7 +311,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
           } // if(!isHexaPointerAddress(strRef))
           else
           {
-            if (reportErrors)
+            if (m_ReportErrors)
             {
               fluxfilediff << "Pointer address found at line " << numLine << " : " << strRef
                   << " -> comparison skipped." << std::endl;
@@ -321,7 +321,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
 
         numLine++;
         //Store alls differences lines
-        if (nblinediff != 0 && reportErrors)
+        if (nblinediff != 0 && m_ReportErrors)
         {
           listStrDiffLineFileRef.push_back(strfileref);
           listStrDiffLineFileTest.push_back(strfiletest);
@@ -342,7 +342,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
     fluxfilediff << "Additional line in test file: " << numLine << " : " << strTest << std::endl;
     nblinediff++;
     nbdiff++;
-    if (nblinediff != 0 && reportErrors)
+    if (nblinediff != 0 && m_ReportErrors)
     {
       listStrDiffLineFileRef.push_back(strfileref);
       listStrDiffLineFileTest.push_back(strfiletest);
@@ -351,12 +351,12 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
 
   fluxfiletest.close();
   fluxfileref.close();
-  if (reportErrors)
+  if (m_ReportErrors)
   {
     fluxfilediff.close();
   }
 
-  if (nbdiff != 0 && reportErrors)
+  if (nbdiff != 0 && m_ReportErrors)
   {
     std::cout << "<DartMeasurement name=\"ASCIIFileError\" type=\"numeric/int\">";
     std::cout << nbdiff;
@@ -383,7 +383,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
 /******************************************/
 /******************************************/
 int TestHelper::RegressionTestListFile(const char * testListFileName, const char * baselineListFileName,
-    int reportErrors, const double epsilon, std::vector<std::string> ignoredLines) const
+    const double epsilon, std::vector<std::string> ignoredLines) const
 {
   std::ifstream fluxfileref(baselineListFileName);
   // stores the line number of the tested file that has already matched a line of the baseline
@@ -400,7 +400,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
   diffListFileName += ".diff.txt";
   std::ofstream fluxfilediff;
 
-  if (reportErrors)
+  if (m_ReportErrors)
   {
     fluxfilediff.open(diffListFileName.c_str());
   }
@@ -724,7 +724,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
     }
   }
 
-  if (nbdiff != 0 && reportErrors)
+  if (nbdiff != 0 && m_ReportErrors)
   {
     std::cout << "<DartMeasurement name=\"ListFileError\" type=\"numeric/int\">";
     std::cout << nbdiff;
@@ -758,7 +758,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
     }
   }
 
-  if (reportErrors)
+  if (m_ReportErrors)
   {
     fluxfilediff.close();
   }
@@ -770,8 +770,7 @@ int TestHelper::RegressionTestListFile(const char * testListFileName, const char
 /******************************************/
 /******************************************/
 
-int TestHelper::RegressionTestBinaryFile(const char * testBinaryFileName, const char * baselineBinaryFileName,
-    int reportErrors) const
+int TestHelper::RegressionTestBinaryFile(const char * testBinaryFileName, const char * baselineBinaryFileName) const
 {
   int nbdiff(0);
   std::ifstream fluxfiletest(testBinaryFileName, std::ifstream::binary);
@@ -794,7 +793,7 @@ int TestHelper::RegressionTestBinaryFile(const char * testBinaryFileName, const 
   fluxfiletest.close();
   fluxfileref.close();
 
-  if (nbdiff != 0 && reportErrors)
+  if (nbdiff != 0 && m_ReportErrors)
   {
     std::cout << "<DartMeasurement name=\"BINARYFileError\" type=\"numeric/int\">";
     std::cout << nbdiff;
@@ -804,7 +803,7 @@ int TestHelper::RegressionTestBinaryFile(const char * testBinaryFileName, const 
 }
 
 int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, const char *baselineImageFilename,
-    int reportErrors, const double toleranceDiffPixelImage) const
+    const double toleranceDiffPixelImage) const
 {
   // Use the factory mechanism to read the test and baseline files and convert them to double
 
@@ -865,14 +864,14 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
   unsigned long numberOfPixelsWithDifferences = diff->GetNumberOfPixelsWithDifferences();
 
   //Write only one this message
-  if (reportErrors == 0)
+  if (m_ReportErrors == 0)
   {
     otbGenericMsgDebugMacro(<< "RegressionTestImage DifferenceThreshold: "<<toleranceDiffPixelImage);
     otbGenericMsgDebugMacro(<< "Status diff->GetTotalDifference:         "
         << status <<" for "<<numberOfPixelsWithDifferences<<" pixel(s)." );
   }
   // if there are discrepencies, create an diff image
-  if (status.GetSquaredNorm() > 0 && reportErrors)
+  if (status.GetSquaredNorm() > 0 && m_ReportErrors)
   {
     typedef otb::PrintableImageFilter<ImageType> RescaleType;
     typedef RescaleType::OutputImageType OutputType;
@@ -980,7 +979,7 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
 }
 
 int TestHelper::RegressionTestMetaData(const char *testImageFilename, const char *baselineImageFilename,
-    int reportErrors, const double toleranceDiffPixelImage) const
+    const double toleranceDiffPixelImage) const
 {
   // Use the factory mechanism to read the test and baseline files and convert them to double
   typedef otb::Image<double, ITK_TEST_DIMENSION_MAX> ImageType;
@@ -1203,7 +1202,7 @@ std::map<std::string, int> TestHelper::RegressionTestbaselines(char *baselineFil
   return baselines;
 }
 
-int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *baselineOgrFilename, int reportErrors,
+int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *baselineOgrFilename,
     const double toleranceDiffValue) const
 {
   const char *ref_pszDataSource = baselineOgrFilename;
@@ -1211,7 +1210,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   const char *ref_pszWHERE = NULL;
   const char *test_pszWHERE = NULL;
   int bReadOnly = FALSE;
-  int bVerbose = reportErrors;
+  int bVerbose = m_ReportErrors;
   int nbdiff(0);
   /* -------------------------------------------------------------------- */
   /*      Open data source.                                               */
@@ -1362,7 +1361,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
         //Check ASCII comparaison
         std::vector<std::string> ignoredLines;
         ignoredLines.clear();
-        nbdiff = RegressionTestAsciiFile(test_filename.c_str(), ref_filename.c_str(), bVerbose, toleranceDiffValue,
+        nbdiff = RegressionTestAsciiFile(test_filename.c_str(), ref_filename.c_str(), toleranceDiffValue,
             ignoredLines);
 
         nbFeature++;

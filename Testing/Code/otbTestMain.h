@@ -390,9 +390,9 @@ int main(int ac, char* av[] )
               while (baseline!=baselines.rend() && (multiResult!=0))
               {
                 std::cout<<"Testing non-regression on image: "<<(baseline->first).c_str()<<std::endl;
+                testHelper.ReportErrorsOff();
                 baseline->second = testHelper.RegressionTestImage(cpt,testFilenameImage.c_str(),
                                                        (baseline->first).c_str(),
-                                                       0,
                                                        lToleranceDiffValue);
 
                 multiResult = baseline->second;
@@ -401,10 +401,10 @@ int main(int ac, char* av[] )
               if (multiResult != 0)
               {
                 baseline = baselines.rbegin();
+                testHelper.ReportErrorsOn();
                 baseline->second
                     = testHelper.RegressionTestImage(cpt,testFilenameImage.c_str(),
                                       (baseline->first).c_str(),
-                                      1,
                                       lToleranceDiffValue);
               }
               cpt++;
@@ -434,9 +434,9 @@ int main(int ac, char* av[] )
               while (baseline!=baselines.rend() && (multiResult!=0))
               {
                 std::cout<<"Testing non-regression on image: "<<(baseline->first).c_str()<<std::endl;
+                testHelper.ReportErrorsOff();
                 baseline->second = testHelper.RegressionTestMetaData(testFilenameImage.c_str(),
                                    (baseline->first).c_str(),
-                                   0,
                                    lToleranceDiffValue);
 
                 multiResult = baseline->second;
@@ -445,10 +445,10 @@ int main(int ac, char* av[] )
               if (multiResult != 0)
               {
                 baseline = baselines.rbegin();
+                testHelper.ReportErrorsOn();
                 baseline->second
                     = testHelper.RegressionTestMetaData(testFilenameImage.c_str(),
                                          (baseline->first).c_str(),
-                                         1,
                                          lToleranceDiffValue);
               }
               result += multiResult;
@@ -490,9 +490,9 @@ int main(int ac, char* av[] )
               while (baseline!=baselines.rend() && (multiResult!=0))
               {
                 std::cout<<"Testing non-regression on file: "<<(baseline->first).c_str()<<std::endl;
+                testHelper.ReportErrorsOff();
                 baseline->second = testHelper.RegressionTestAsciiFile(testFilenameAscii.c_str(),
                                    (baseline->first).c_str(),
-                                   0,
                                    lEpsilon,
                                    ignoredLines);
 
@@ -502,10 +502,10 @@ int main(int ac, char* av[] )
               if (multiResult != 0)
               {
                 baseline = baselines.rbegin();
+                testHelper.ReportErrorsOn();
                 baseline->second
                     = testHelper.RegressionTestAsciiFile(testFilenameAscii.c_str(),
                                           (baseline->first).c_str(),
-                                          1,
                                           lEpsilon,
                                           ignoredLines);
               }
@@ -549,9 +549,9 @@ int main(int ac, char* av[] )
               while (baseline!=baselines.rend() && (multiResult!=0))
               {
                 std::cout<<"Testing non-regression on file: "<<(baseline->first).c_str()<<std::endl;
+                testHelper.ReportErrorsOff();
                 baseline->second = testHelper.RegressionTestListFile(testFilenameList.c_str(),
                                    (baseline->first).c_str(),
-                                   0,
                                    lEpsilon,
                                    ignoredLines);
 
@@ -561,10 +561,10 @@ int main(int ac, char* av[] )
 	      if (multiResult != 0)
               {
                 baseline = baselines.rbegin();
+                testHelper.ReportErrorsOn();
                 baseline->second
                     = testHelper.RegressionTestListFile(testFilenameList.c_str(),
                                           (baseline->first).c_str(),
-                                          1,
                                           lEpsilon,
                                           ignoredLines);
               }
@@ -597,9 +597,9 @@ int main(int ac, char* av[] )
               while (baseline!=baselines.rend() && (multiResult!=0))
               {
                 std::cout<<"Testing non-regression on file: "<<(baseline->first).c_str()<<std::endl;
+                testHelper.ReportErrorsOff();
                 baseline->second = testHelper.RegressionTestBinaryFile(testFilenameBinary.c_str(),
-                                   (baseline->first).c_str(),
-                                   0);
+                                   (baseline->first).c_str());
 
                 multiResult = baseline->second;
                 ++baseline;
@@ -607,10 +607,10 @@ int main(int ac, char* av[] )
               if (multiResult != 0)
               {
                 baseline = baselines.rbegin();
+                testHelper.ReportErrorsOn();
                 baseline->second
                     = testHelper.RegressionTestBinaryFile(testFilenameBinary.c_str(),
-                                           (baseline->first).c_str(),
-                                           1);
+                                           (baseline->first).c_str());
               }
               result += multiResult;
             }
@@ -636,9 +636,9 @@ int main(int ac, char* av[] )
               while (baseline!=baselines.rend() && (multiResult!=0))
               {
                 std::cout<<"Testing non-regression on OGR file: "<<(baseline->first).c_str()<<std::endl;
+                testHelper.ReportErrorsOff();
                 baseline->second = testHelper.RegressionTestOgrFile(testFilenameOgr.c_str(),
                                     (baseline->first).c_str(),
-                                    0,
                                     lToleranceDiffValue);
 
                 multiResult = baseline->second;
@@ -647,10 +647,10 @@ int main(int ac, char* av[] )
               if (multiResult != 0)
               {
                 baseline = baselines.rbegin();
+                testHelper.ReportErrorsOn();
                 baseline->second
                     = testHelper.RegressionTestOgrFile(testFilenameOgr.c_str(),
                                             (baseline->first).c_str(),
-                                            1,
                                             lToleranceDiffValue);
               }
               result += multiResult;

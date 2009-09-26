@@ -35,29 +35,39 @@ class /*ITK_EXPORT*/TestHelper
 {
 public:
   TestHelper() :
-    m_EpsilonBoundaryChecking(1.0e-30)
+    m_EpsilonBoundaryChecking(1.0e-30),
+    m_ReportErrors(false)
   {}
 
   ~TestHelper(){}
 
   std::map<std::string, int> RegressionTestbaselines(char *baselineFilename) const;
 
-  int RegressionTestImage(int cpt, const char *testImageFilename, const char *baselineImageFilename, int reportErrors,
+  int RegressionTestImage(int cpt, const char *testImageFilename, const char *baselineImageFilename,
       const double toleranceDiffPixelImage) const;
 
-  int RegressionTestOgrFile(const char *, const char *, int, const double) const;
+  int RegressionTestOgrFile(const char *testOgrFilename, const char *baselineOgrFilename,
+    const double toleranceDiffValue) const;
 
-  int
-      RegressionTestBinaryFile(const char * testBinaryFileName, const char * baselineBinaryFileName, int reportErrors) const;
+  int RegressionTestBinaryFile(const char * testBinaryFileName, const char * baselineBinaryFileName) const;
 
-  int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselineAsciiFileName, int reportErrors,
+  int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselineAsciiFileName,
       const double epsilon, std::vector<std::string> ignoredLines) const;
 
-  int RegressionTestListFile(const char * testListFileName, const char * baselineListFileName, int reportErrors,
+  int RegressionTestListFile(const char * testListFileName, const char * baselineListFileName,
       const double epsilon, std::vector<std::string> ignoredLines) const;
 
-  int RegressionTestMetaData(const char *testImageFilename, const char *baselineImageFilename, int reportErrors,
+  int RegressionTestMetaData(const char *testImageFilename, const char *baselineImageFilename,
       const double toleranceDiffPixelImage) const;
+
+  void ReportErrorsOn()
+  {
+    m_ReportErrors=true;
+  }
+  void ReportErrorsOff()
+  {
+    m_ReportErrors=false;
+  }
 
 private:
   bool isNumber(int i) const;
@@ -77,6 +87,7 @@ private:
           int bVerbose) const;
 
   double m_EpsilonBoundaryChecking;
+  bool m_ReportErrors;
 
 };
 }
