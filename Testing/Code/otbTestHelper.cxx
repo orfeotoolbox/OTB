@@ -106,24 +106,40 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
 
   TypeEtat etatPrec(ETAT_NUM), etatCour(ETAT_NUM);
 
+  std::vector<std::string> listLineFileRef;
+  std::vector<std::string> listLineFileTest;
+  while (std::getline(fluxfileref, strfileref) != 0)
+  {
+    listLineFileRef.push_back(strfileref);
+  }
+  while (std::getline(fluxfiletest, strfiletest) != 0)
+  {
+    listLineFileTest.push_back(strfiletest);
+  }
+
   std::vector<std::string> listStrDiffLineFileRef;
   std::vector<std::string> listStrDiffLineFileTest;
 
-  while (std::getline(fluxfileref, strfileref) != 0)
+  std::vector<std::string>::iterator itRef = listLineFileRef.begin();
+  std::vector<std::string>::iterator itTest = listLineFileTest.begin();
+//   while (std::getline(fluxfileref, strfileref) != 0)
+  while ((itRef != listLineFileRef.end()) && (itTest != listLineFileTest.end()))
   {
+    strfileref = *itRef;
+    strfiletest = *itTest;
     otb::StringStream buffstreamRef, buffstreamTest;
     buffstreamRef << strfileref;
 
     //check if we've reach end of test file
-    if (std::getline(fluxfiletest, strfiletest) == 0)
-    {
-      std::string strRef = "";
-
-      buffstreamRef >> strRef;
-      fluxfilediff << "Line missing in test file: " << numLine << " : " << strRef << std::endl;
-      nbdiff++;
-    }
-    else
+//     if (std::getline(fluxfiletest, strfiletest) == 0)
+//     {
+//       std::string strRef = "";
+//
+//       buffstreamRef >> strRef;
+//       fluxfilediff << "Line missing in test file: " << numLine << " : " << strRef << std::endl;
+//       nbdiff++;
+//     }
+//     else
     {
 
       bool foundexpr = false;
@@ -329,11 +345,30 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
 
       }
     }
-
+    ++itRef;
+    ++itTest;
   }
 
-  while (std::getline(fluxfiletest, strfiletest) != 0)
+  while (itRef != listLineFileRef.end())
   {
+    strfileref = *itRef;
+    int nblinediff(0);
+    otb::StringStream buffstreamRef;
+    std::string strRef = "";
+    buffstreamRef << strfileref;
+    buffstreamRef >> strRef;
+    fluxfilediff << "Additional line in ref file: " << numLine << " : " << strRef << std::endl;
+    nblinediff++;
+    nbdiff++;
+    if (nblinediff != 0 && m_ReportErrors)
+    {
+      listStrDiffLineFileRef.push_back(strfileref);
+    }
+  }
+
+  while (itTest != listLineFileTest.end())
+  {
+    strfiletest = *itTest;
     int nblinediff(0);
     otb::StringStream buffstreamTest;
     std::string strTest = "";
@@ -344,7 +379,6 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
     nbdiff++;
     if (nblinediff != 0 && m_ReportErrors)
     {
-      listStrDiffLineFileRef.push_back(strfileref);
       listStrDiffLineFileTest.push_back(strfiletest);
     }
   }
