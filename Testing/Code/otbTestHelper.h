@@ -31,39 +31,54 @@
 
 namespace otb
 {
-  class /*ITK_EXPORT*/ TestHelper
-  {
-    public:
-      TestHelper() : m_EpsilonBoundaryChecking(1.0e-30){};
-      ~TestHelper(){};
+class /*ITK_EXPORT*/TestHelper
+{
+public:
+  TestHelper() :
+    m_EpsilonBoundaryChecking(1.0e-30)
+  {}
 
-      std::map<std::string,int> RegressionTestbaselines (char *baselineFilename) const;
-      int RegressionTestImage (int, const char *, const char *, int, const double) const;
-      int RegressionTestOgrFile (const char *, const char *, int, const double) const;
-      int RegressionTestBinaryFile(const char *, const char *, int) const;
-      int RegressionTestAsciiFile(const char *, const char *, int, const double, std::vector<std::string> ignoredLines) const;
-      int RegressionTestListFile(const char *, const char *, int, const double, std::vector<std::string> ignoredLines) const;
-      int RegressionTestMetaData(const char *, const char *,int,const double) const;
+  ~TestHelper(){}
 
-    private:
-      bool isNumber(int i) const;
-      bool isHexaNumber(int i) const;
-      bool isPoint(int i) const;
-      bool isMinusSign(int i) const;
-      bool isNumeric(std::string str) const;
-      bool isScientificNumeric(std::string str) const;
-      bool isHexaPointerAddress(std::string str) const;
-      std::string VectorToString(otb::MetaDataKey::VectorType vector) const;
+  std::map<std::string, int> RegressionTestbaselines(char *baselineFilename) const;
 
-      void ogrReportOnLayer( OGRLayer *, const char *, OGRGeometry * ) const;
-      void ogrReportOnLayer( 
-        OGRLayer * ref_poLayer,   const char *ref_pszWHERE,   OGRGeometry *ref_poSpatialFilter,
-        OGRLayer * test_poLayer,  const char *test_pszWHERE,  OGRGeometry *test_poSpatialFilter,
-                           int & nbdiff, int bVerbose ) const;
+  int RegressionTestImage(int cpt, const char *testImageFilename, const char *baselineImageFilename, int reportErrors,
+      const double toleranceDiffPixelImage) const;
 
-      double m_EpsilonBoundaryChecking;
+  int RegressionTestOgrFile(const char *, const char *, int, const double) const;
 
-  };
+  int
+      RegressionTestBinaryFile(const char * testBinaryFileName, const char * baselineBinaryFileName, int reportErrors) const;
+
+  int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselineAsciiFileName, int reportErrors,
+      const double epsilon, std::vector<std::string> ignoredLines) const;
+
+  int RegressionTestListFile(const char * testListFileName, const char * baselineListFileName, int reportErrors,
+      const double epsilon, std::vector<std::string> ignoredLines) const;
+
+  int RegressionTestMetaData(const char *testImageFilename, const char *baselineImageFilename, int reportErrors,
+      const double toleranceDiffPixelImage) const;
+
+private:
+  bool isNumber(int i) const;
+  bool isHexaNumber(int i) const;
+  bool isPoint(int i) const;
+  bool isMinusSign(int i) const;
+  bool isNumeric(std::string str) const;
+  bool isScientificNumeric(std::string str) const;
+  bool isHexaPointerAddress(std::string str) const;
+  std::string VectorToString(otb::MetaDataKey::VectorType vector) const;
+  bool CompareLines(std::string strRef, std::string strTest) const;
+
+  void ogrReportOnLayer(OGRLayer *, const char *, OGRGeometry *) const;
+  void
+      ogrReportOnLayer(OGRLayer * ref_poLayer, const char *ref_pszWHERE, OGRGeometry *ref_poSpatialFilter,
+          OGRLayer * test_poLayer, const char *test_pszWHERE, OGRGeometry *test_poSpatialFilter, int & nbdiff,
+          int bVerbose) const;
+
+  double m_EpsilonBoundaryChecking;
+
+};
 }
 
 #endif
