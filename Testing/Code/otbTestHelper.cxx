@@ -106,17 +106,23 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
 
   TypeEtat etatPrec(ETAT_NUM), etatCour(ETAT_NUM);
 
+
+  //fill up a vector of string, in which each element is one line of the file
   std::vector<std::string> listLineFileRef;
   std::vector<std::string> listLineFileTest;
   while (std::getline(fluxfileref, strfileref) != 0)
   {
     listLineFileRef.push_back(strfileref);
   }
+  fluxfileref.close();
+
   while (std::getline(fluxfiletest, strfiletest) != 0)
   {
     listLineFileTest.push_back(strfiletest);
   }
+  fluxfiletest.close();
 
+  //These are to save up the differences
   std::vector<std::string> listStrDiffLineFileRef;
   std::vector<std::string> listStrDiffLineFileTest;
 
@@ -130,237 +136,248 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
     otb::StringStream buffstreamRef, buffstreamTest;
     buffstreamRef << strfileref;
 
-    //check if we've reach end of test file
-//     if (std::getline(fluxfiletest, strfiletest) == 0)
-//     {
-//       std::string strRef = "";
-//
-//       buffstreamRef >> strRef;
-//       fluxfilediff << "Line missing in test file: " << numLine << " : " << strRef << std::endl;
-//       nbdiff++;
-//     }
-//     else
+
+    //Check is the current line should be ignored
+    bool ignoreCurrentLineRef = false;
+    bool ignoreCurrentLineTest = false;
+    if (ignoredLines.size() > 0)
     {
-
-      bool foundexpr = false;
-      if (ignoredLines.size() > 0)
+      for (std::vector<std::string>::iterator itIgnoredLines = ignoredLines.begin();
+           itIgnoredLines != ignoredLines.end(); ++itIgnoredLines)
       {
-
-        for (std::vector<std::string>::iterator itIgnoredLines = ignoredLines.begin(); (itIgnoredLines
-            != ignoredLines.end()); ++itIgnoredLines)
+        std::string ignoredLinesAscii = (*itIgnoredLines);
+        std::string::size_type loc = strfileref.find(ignoredLinesAscii);
+        if (loc != std::string::npos)
         {
-          std::string ignoredLinesAscii = (*itIgnoredLines);
-          std::string::size_type loc = strfileref.find(ignoredLinesAscii);
-          if (loc != std::string::npos)
-          {
-            foundexpr = true;
-          }
-
+          ignoreCurrentLineRef = true;
         }
-
-      }
-
-      if (foundexpr == false)
-      {
-        buffstreamTest << strfiletest;
-        int nblinediff(0);
-
-        while (buffstreamRef.peek() != EOF)
+        loc = strfiletest.find(ignoredLinesAscii);
+        if (loc != std::string::npos)
         {
-          std::string strRef = "";
-          std::string strTest = "";
-
-          std::string strNumRef = "";
-          std::string strCharRef = "";
-          std::string strNumTest = "";
-          std::string strCharTest = "";
-
-          buffstreamRef >> strRef;
-          buffstreamTest >> strTest;
-
-          bool chgt = false;
-          std::string charTmpRef = "";
-          std::string charTmpTest = "";
-          unsigned int i = 0;
-
-          if (!isHexaPointerAddress(strRef))
-          {
-            //Analyse if strRef contains scientific value (ex: "-142.124e-012")
-            if (isScientificNumeric(strRef))
-            {
-              if (!isScientificNumeric(strTest))
-              {
-                if (m_ReportErrors)
-                {
-                  fluxfilediff << "Diff at line " << numLine << " : compare numeric value with no numeric value ("
-                      << strRef << strRef << " != " << strTest << ")" << std::endl;
-                  nblinediff++;
-                }
-                nbdiff++;
-
-              }
-              else if ((strRef != strTest) && (vcl_abs(atof(strRef.c_str())) > m_EpsilonBoundaryChecking) && (vcl_abs(
-                  atof(strRef.c_str()) - atof(strTest.c_str())) > epsilon * vcl_abs(atof(strRef.c_str()))))//epsilon as relative error
-              {
-                if (m_ReportErrors)
-                {
-                  fluxfilediff << "Diff at line " << numLine << " : vcl_abs ( (" << strRef << ") - (" << strTest
-                      << ") ) > " << epsilon << std::endl;
-                  nblinediff++;
-                }
-                nbdiff++;
-              }
-            }
-            else
-            {
-              while (i < strRef.size())
-              {
-                charTmpRef = strRef[i];
-
-                if (i < strTest.size())
-                {
-                  charTmpTest = strTest[i];
-                }
-
-                if (isNumeric(charTmpRef))
-                  etatCour = ETAT_NUM;
-                else
-                  etatCour = ETAT_CHAR;
-
-                // "reference" state initialisation.
-                if (i == 0)
-                  etatPrec = etatCour;
-
-                // Case where there's a number after characteres.
-                if ((etatCour == ETAT_NUM) && (etatPrec == ETAT_CHAR))
-                {
-                  if (strCharRef != strCharTest)
-                  {
-                    if (m_ReportErrors)
-                    {
-                      fluxfilediff << "Diff at line " << numLine << " : " << strCharRef << " != " << strCharTest
-                          << std::endl;
-                      nblinediff++;
-                    }
-                    nbdiff++;
-                  }
-
-                  strCharRef = "";
-                  strCharTest = "";
-                  strNumRef = charTmpRef;
-                  strNumTest = charTmpTest;
-                  chgt = true;
-                }
-                // Case where there's a character after numbers.
-                else if ((etatCour == ETAT_CHAR) && (etatPrec == ETAT_NUM))
-                {
-
-                  if ((strNumRef != strNumTest) && (vcl_abs(atof(strNumRef.c_str())) > m_EpsilonBoundaryChecking)
-                      && (vcl_abs(atof(strNumRef.c_str()) - atof(strNumTest.c_str())) > epsilon * vcl_abs(atof(
-                          strNumRef.c_str())))) //epsilon as relative error
-                  {
-                    if (m_ReportErrors)
-                    {
-                      fluxfilediff << "Diff at line " << numLine << " : vcl_abs ( (" << strNumRef << ") - ("
-                          << strNumTest << ") ) > " << epsilon << std::endl;
-                      nblinediff++;
-                    }
-                    nbdiff++;
-                  }
-
-                  strNumRef = "";
-                  strNumTest = "";
-                  strCharRef = charTmpRef;
-                  strCharTest = charTmpTest;
-                  chgt = true;
-                }
-                else if (etatCour == etatPrec)
-                {
-                  if (etatCour == ETAT_CHAR)
-                  {
-                    strCharRef += charTmpRef;
-                    strCharTest += charTmpTest;
-                  }
-                  else
-                  {
-                    strNumRef += charTmpRef;
-                    strNumTest += charTmpTest;
-                  }
-                }
-
-                etatPrec = etatCour;
-                ++i;
-              }
-
-              // Simpliest case : string characters or numeric value between 2 separators
-              if (!chgt)
-              {
-                if (isNumeric(strRef))
-                {
-
-                  if ((strRef != strTest) && (vcl_abs(atof(strRef.c_str())) > m_EpsilonBoundaryChecking) && (vcl_abs(
-                      atof(strRef.c_str()) - atof(strTest.c_str())) > epsilon * vcl_abs(atof(strRef.c_str())))) //epsilon as relative error
-                  {
-                    if (m_ReportErrors)
-                    {
-                      fluxfilediff << "Diff at line " << numLine << " : vcl_abs( (" << strRef << ") - (" << strTest
-                          << ") ) > " << epsilon << std::endl;
-                      nblinediff++;
-                    }
-                    nbdiff++;
-                  }
-                }
-                else
-                {
-                  if (strRef != strTest)
-                  {
-                    if (m_ReportErrors)
-                    {
-                      fluxfilediff << "Diff at line " << numLine << " : " << strRef << " != " << strTest << std::endl;
-                      nblinediff++;
-                    }
-                    nbdiff++;
-                  }
-                }
-              }
-            } // else
-          } // if(!isHexaPointerAddress(strRef))
-          else
-          {
-            if (m_ReportErrors)
-            {
-              fluxfilediff << "Pointer address found at line " << numLine << " : " << strRef
-                  << " -> comparison skipped." << std::endl;
-            }
-          }
+          ignoreCurrentLineTest = true;
         }
-
-        numLine++;
-        //Store alls differences lines
-        if (nblinediff != 0 && m_ReportErrors)
-        {
-          listStrDiffLineFileRef.push_back(strfileref);
-          listStrDiffLineFileTest.push_back(strfiletest);
-        }
-
       }
     }
-    ++itRef;
-    ++itTest;
+
+    //Compare the lines only if none is supposed to be ignored
+    //Note: the iterator increment will take care of moving only the
+    //ignored one if the order does not matter
+    if ((!ignoreCurrentLineRef) && (!ignoreCurrentLineTest))
+    {
+      buffstreamTest << strfiletest;
+      //Number of differences in the current line
+      bool differenceFoundInCurrentLine = false;
+
+      while (buffstreamRef.peek() != EOF)
+      {
+        std::string strRef = "";
+        std::string strTest = "";
+
+        std::string strNumRef = "";
+        std::string strCharRef = "";
+        std::string strNumTest = "";
+        std::string strCharTest = "";
+
+        buffstreamRef >> strRef;
+        buffstreamTest >> strTest;
+
+        bool chgt = false;
+        std::string charTmpRef = "";
+        std::string charTmpTest = "";
+
+
+        if (!isHexaPointerAddress(strRef))
+        {
+          //Analyse if strRef contains scientific value (ex: "-142.124e-012")
+          if (isScientificNumeric(strRef))
+          {
+            if (!isScientificNumeric(strTest))
+            {
+              if (m_ReportErrors)
+              {
+                fluxfilediff << "Diff at line " << numLine << " : compare numeric value with no numeric value ("
+                    << strRef << strRef << " != " << strTest << ")" << std::endl;
+                differenceFoundInCurrentLine = true;
+              }
+              nbdiff++;
+
+            }
+            else if ((strRef != strTest) && (vcl_abs(atof(strRef.c_str())) > m_EpsilonBoundaryChecking) && (vcl_abs(
+                atof(strRef.c_str()) - atof(strTest.c_str())) > epsilon * vcl_abs(atof(strRef.c_str()))))//epsilon as relative error
+            {
+              if (m_ReportErrors)
+              {
+                fluxfilediff << "Diff at line " << numLine << " : vcl_abs ( (" << strRef << ") - (" << strTest
+                    << ") ) > " << epsilon << std::endl;
+                differenceFoundInCurrentLine = true;
+              }
+              nbdiff++;
+            }
+          }
+          else
+          {
+            unsigned int i = 0;
+            while (i < strRef.size())
+            {
+              charTmpRef = strRef[i];
+
+              if (i < strTest.size())
+              {
+                charTmpTest = strTest[i];
+              }
+
+              if (isNumeric(charTmpRef))
+                etatCour = ETAT_NUM;
+              else
+                etatCour = ETAT_CHAR;
+
+              // "reference" state initialisation.
+              if (i == 0)
+                etatPrec = etatCour;
+
+              // Case where there's a number after characteres.
+              if ((etatCour == ETAT_NUM) && (etatPrec == ETAT_CHAR))
+              {
+                if (strCharRef != strCharTest)
+                {
+                  if (m_ReportErrors)
+                  {
+                    fluxfilediff << "Diff at line " << numLine << " : " << strCharRef << " != " << strCharTest
+                        << std::endl;
+                    differenceFoundInCurrentLine = true;
+                  }
+                  nbdiff++;
+                }
+
+                strCharRef = "";
+                strCharTest = "";
+                strNumRef = charTmpRef;
+                strNumTest = charTmpTest;
+                chgt = true;
+              }
+              // Case where there's a character after numbers.
+              else if ((etatCour == ETAT_CHAR) && (etatPrec == ETAT_NUM))
+              {
+
+                if ((strNumRef != strNumTest) && (vcl_abs(atof(strNumRef.c_str())) > m_EpsilonBoundaryChecking)
+                    && (vcl_abs(atof(strNumRef.c_str()) - atof(strNumTest.c_str())) > epsilon * vcl_abs(atof(
+                        strNumRef.c_str())))) //epsilon as relative error
+                {
+                  if (m_ReportErrors)
+                  {
+                    fluxfilediff << "Diff at line " << numLine << " : vcl_abs ( (" << strNumRef << ") - ("
+                        << strNumTest << ") ) > " << epsilon << std::endl;
+                    differenceFoundInCurrentLine = true;
+                  }
+                  nbdiff++;
+                }
+
+                strNumRef = "";
+                strNumTest = "";
+                strCharRef = charTmpRef;
+                strCharTest = charTmpTest;
+                chgt = true;
+              }
+              else if (etatCour == etatPrec)
+              {
+                if (etatCour == ETAT_CHAR)
+                {
+                  strCharRef += charTmpRef;
+                  strCharTest += charTmpTest;
+                }
+                else
+                {
+                  strNumRef += charTmpRef;
+                  strNumTest += charTmpTest;
+                }
+              }
+
+              etatPrec = etatCour;
+              ++i;
+            }
+
+            // Simpliest case : string characters or numeric value between 2 separators
+            if (!chgt)
+            {
+              if (isNumeric(strRef))
+              {
+
+                if ((strRef != strTest) && (vcl_abs(atof(strRef.c_str())) > m_EpsilonBoundaryChecking) && (vcl_abs(
+                    atof(strRef.c_str()) - atof(strTest.c_str())) > epsilon * vcl_abs(atof(strRef.c_str())))) //epsilon as relative error
+                {
+                  if (m_ReportErrors)
+                  {
+                    fluxfilediff << "Diff at line " << numLine << " : vcl_abs( (" << strRef << ") - (" << strTest
+                        << ") ) > " << epsilon << std::endl;
+                    differenceFoundInCurrentLine = true;
+                  }
+                  nbdiff++;
+                }
+              }
+              else
+              {
+                if (strRef != strTest)
+                {
+                  if (m_ReportErrors)
+                  {
+                    fluxfilediff << "Diff at line " << numLine << " : " << strRef << " != " << strTest << std::endl;
+                    differenceFoundInCurrentLine = true;
+                  }
+                  nbdiff++;
+                }
+              }
+            }
+          } // else
+        } // if(!isHexaPointerAddress(strRef))
+        else
+        {
+          if (m_ReportErrors)
+          {
+            fluxfilediff << "Pointer address found at line " << numLine << " : " << strRef
+                << " -> comparison skipped." << std::endl;
+          }
+        }
+      }
+
+      numLine++;
+      //Store alls differences lines
+      if (differenceFoundInCurrentLine && m_ReportErrors)
+      {
+        listStrDiffLineFileRef.push_back(strfileref);
+        listStrDiffLineFileTest.push_back(strfiletest);
+      }
+
+    }
+
+    if (m_IgnoreLineOrder)
+    {
+      if (ignoreCurrentLineRef) ++itRef;
+      if (ignoreCurrentLineTest) ++itTest;
+
+      //TODO: if the lines were different, find out which one
+      // should progress (by comparison)
+    }
+    else
+    {
+      ++itRef;
+      ++itTest;
+    }
+
   }
+
+  //Here, the line by line comparison is finished and at least one (ref or test) is at the end
+  //we simply output the content of the other one
 
   while (itRef != listLineFileRef.end())
   {
     strfileref = *itRef;
-    int nblinediff(0);
     otb::StringStream buffstreamRef;
     std::string strRef = "";
     buffstreamRef << strfileref;
     buffstreamRef >> strRef;
     fluxfilediff << "Additional line in ref file: " << numLine << " : " << strRef << std::endl;
-    nblinediff++;
     nbdiff++;
-    if (nblinediff != 0 && m_ReportErrors)
+    if (m_ReportErrors)
     {
       listStrDiffLineFileRef.push_back(strfileref);
     }
@@ -369,22 +386,19 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
   while (itTest != listLineFileTest.end())
   {
     strfiletest = *itTest;
-    int nblinediff(0);
     otb::StringStream buffstreamTest;
     std::string strTest = "";
     buffstreamTest << strfiletest;
     buffstreamTest >> strTest;
     fluxfilediff << "Additional line in test file: " << numLine << " : " << strTest << std::endl;
-    nblinediff++;
     nbdiff++;
-    if (nblinediff != 0 && m_ReportErrors)
+    if (m_ReportErrors)
     {
       listStrDiffLineFileTest.push_back(strfiletest);
     }
   }
 
-  fluxfiletest.close();
-  fluxfileref.close();
+
   if (m_ReportErrors)
   {
     fluxfilediff.close();

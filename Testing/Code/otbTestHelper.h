@@ -36,7 +36,8 @@ class /*ITK_EXPORT*/TestHelper
 public:
   TestHelper() :
     m_EpsilonBoundaryChecking(1.0e-30),
-    m_ReportErrors(false)
+    m_ReportErrors(false),
+    m_IgnoreLineOrder(false)
   {}
 
   ~TestHelper(){}
@@ -69,6 +70,15 @@ public:
     m_ReportErrors=false;
   }
 
+  void IgnoreLineOrderOn()
+  {
+    m_IgnoreLineOrder=true;
+  }
+  void IgnoreLineOrderOff()
+  {
+    m_IgnoreLineOrder=false;
+  }
+
 private:
   bool isNumber(int i) const;
   bool isHexaNumber(int i) const;
@@ -86,6 +96,7 @@ private:
 
   double m_EpsilonBoundaryChecking;
   bool m_ReportErrors;
+  bool m_IgnoreLineOrder;
 
 };
 }
