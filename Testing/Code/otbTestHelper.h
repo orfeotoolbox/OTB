@@ -88,7 +88,10 @@ private:
   bool isScientificNumeric(std::string str) const;
   bool isHexaPointerAddress(std::string str) const;
   std::string VectorToString(otb::MetaDataKey::VectorType vector) const;
-  bool CompareLines(std::string strRef, std::string strTest) const;
+  //FIXME parameters have to be cleaned up later (this is the first step of refactoring)
+  bool CompareLines(std::string strfileref, std::string strfiletest, int& nbdiff, std::ofstream& fluxfilediff, int& numLine,
+       std::vector<std::string>& listStrDiffLineFileRef, std::vector<std::string>& listStrDiffLineFileTest,
+       double epsilon) const;
 
   void
       ogrReportOnLayer(OGRLayer * ref_poLayer, const char *ref_pszWHERE, OGRGeometry *ref_poSpatialFilter,
