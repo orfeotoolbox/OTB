@@ -158,6 +158,8 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
     bool differenceFoundInCurrentLine = false;
     if ((!ignoreCurrentLineRef) && (!ignoreCurrentLineTest))
     {
+//       std::cout << "Ref line:  " << strfileref << std::endl;
+//       std::cout << "Test line: " << strfiletest << std::endl;
       differenceFoundInCurrentLine = CompareLines(strfileref,strfiletest, nbdiff, fluxfilediff, numLine,
        listStrDiffLineFileRef, listStrDiffLineFileTest, epsilon);
     }
@@ -204,6 +206,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
     {
       listStrDiffLineFileRef.push_back(strfileref);
     }
+    ++itRef;
   }
 
   while (itTest != listLineFileTest.end())
@@ -219,6 +222,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
     {
       listStrDiffLineFileTest.push_back(strfiletest);
     }
+    ++itTest;
   }
 
 
