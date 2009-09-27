@@ -133,9 +133,6 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
   {
     strfileref = *itRef;
     strfiletest = *itTest;
-    otb::StringStream buffstreamRef, buffstreamTest;
-    buffstreamRef << strfileref;
-
 
     //Check is the current line should be ignored
     bool ignoreCurrentLineRef = false;
@@ -164,6 +161,8 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
     //ignored one if the order does not matter
     if ((!ignoreCurrentLineRef) && (!ignoreCurrentLineTest))
     {
+      otb::StringStream buffstreamRef, buffstreamTest;
+      buffstreamRef << strfileref;
       buffstreamTest << strfiletest;
       //Number of differences in the current line
       bool differenceFoundInCurrentLine = false;
