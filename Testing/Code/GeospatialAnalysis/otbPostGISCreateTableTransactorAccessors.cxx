@@ -10,11 +10,12 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the above copyright notices for more information.
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
 
@@ -28,7 +29,7 @@ int otbPostGISCreateTableTransactorAccessors(int argc, char * argv[])
   TransactorType myTransactor;
 
   unsigned short dimension = 2;
-  
+
   myTransactor.SetDimension( dimension );
 
   if( dimension != myTransactor.GetDimension() )
@@ -48,7 +49,7 @@ int otbPostGISCreateTableTransactorAccessors(int argc, char * argv[])
 
   if( srid != myTransactor.GetSRID() )
     return EXIT_FAILURE;
-  
+
 
   return EXIT_SUCCESS;
 }
