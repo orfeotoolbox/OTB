@@ -15,17 +15,34 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include <iostream>
+#include <fstream>
 
-// this file defines the otbGISFiltersTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+#include "itkExceptionObject.h"
+#include "otbMacro.h"
 
-#include "otbTestMain.h"
-
-void RegisterTests()
+int otbCompareAsciiTests2(int argc, char * argv[])
 {
-  REGISTER_TEST(otbCompareAsciiTests);
-  REGISTER_TEST(otbCompareAsciiTests2);
+  if ( argc != 3 )
+  {
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " referenceFile testFile" << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  std::ofstream fileRef;
+  fileRef.open(argv[1]);
+  fileRef << "1\n";
+  fileRef << "2\n";
+  fileRef.close();
+
+
+  std::ofstream fileTest;
+  fileTest.open(argv[2]);
+  fileTest << "1\n";
+  fileTest << "2\n";
+  fileTest << "3\n";
+  fileTest.close();
+
+  return EXIT_SUCCESS;
 }

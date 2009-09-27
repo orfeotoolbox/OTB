@@ -28,12 +28,22 @@ ADD_TEST(tsTvCompareAscii ${TESTSYSTEM_TESTS}
        ${TEMP}/tsTvCompareAsciiTest.txt
   )
 
+ADD_TEST(tsTvCompareAscii2 ${TESTSYSTEM_TESTS}
+   --compare-ascii ${NOTOL}
+       ${TEMP}/tsTvCompareAsciiRef2.txt
+       ${TEMP}/tsTvCompareAsciiTest2.txt
+     otbCompareAsciiTests2
+       ${TEMP}/tsTvCompareAsciiRef2.txt
+       ${TEMP}/tsTvCompareAsciiTest2.txt
+  )
 
+SET_TESTS_PROPERTIES(tsTvCompareAscii2 PROPERTIES WILL_FAIL true)
 
 # -------       CXX source files -----------------------------------
 SET(TESTSYSTEM_SRCS
 otbTestSystemTests.cxx
 otbCompareAsciiTests.cxx
+otbCompareAsciiTests2.cxx
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
