@@ -15,6 +15,7 @@ Radiometry
 Fusion
 Markov
 SARPolarimetry
+TestSystem
 )
 
 IF(OTB_USE_VISU_GUI)

@@ -155,9 +155,10 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
     //Compare the lines only if none is supposed to be ignored
     //Note: the iterator increment will take care of moving only the
     //ignored one if the order does not matter
+    bool differenceFoundInCurrentLine = false;
     if ((!ignoreCurrentLineRef) && (!ignoreCurrentLineTest))
     {
-      CompareLines(strfileref,strfiletest, nbdiff, fluxfilediff, numLine,
+      differenceFoundInCurrentLine = CompareLines(strfileref,strfiletest, nbdiff, fluxfilediff, numLine,
        listStrDiffLineFileRef, listStrDiffLineFileTest, epsilon);
     }
 
@@ -165,9 +166,19 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
     {
       if (ignoreCurrentLineRef) ++itRef;
       if (ignoreCurrentLineTest) ++itTest;
-
-      //TODO: if the lines were different, find out which one
-      // should progress (by comparison)
+      if ((!ignoreCurrentLineRef) && (!ignoreCurrentLineTest))
+      {
+        if (differenceFoundInCurrentLine)
+        {
+          //TODO: if the lines were different, find out which one
+          // should progress (by comparison)
+        }
+        else
+        {
+          ++itRef;
+          ++itTest;
+        }
+      }
     }
     else
     {
@@ -1592,6 +1603,8 @@ bool TestHelper::CompareLines(std::string strfileref, std::string strfiletest, i
     listStrDiffLineFileRef.push_back(strfileref);
     listStrDiffLineFileTest.push_back(strfiletest);
   }
+
+  return differenceFoundInCurrentLine;
 }
 
 std::string TestHelper::VectorToString(otb::MetaDataKey::VectorType vector) const
