@@ -243,11 +243,23 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
     std::cout << "Tolerance value     : " << epsilon << std::endl;
     std::cout << "Tolerance max check : " << m_EpsilonBoundaryChecking << std::endl;
 
-    std::cout << "Nb lines differents : " << listStrDiffLineFileRef.size() << std::endl;
-    for (unsigned int i = 0; i < listStrDiffLineFileRef.size(); ++i)
+    //FIXME won't be intuitive for the non order case
+    unsigned int numLineDiff = std::min(listStrDiffLineFileRef.size(), listStrDiffLineFileTest.size());
+    std::cout << "Nb lines differents : " << numLineDiff << std::endl;
+    for (unsigned int i = 0; i < numLineDiff; ++i)
     {
       std::cout << "   -------------------------------" << std::endl;
       std::cout << "   Base << " << listStrDiffLineFileRef[i] << std::endl;
+      std::cout << "   Test >> " << listStrDiffLineFileTest[i] << std::endl;
+    }
+    for (unsigned int i = numLineDiff; i < listStrDiffLineFileRef.size(); ++i)
+    {
+      std::cout << "   -------------------------------" << std::endl;
+      std::cout << "   Base << " << listStrDiffLineFileRef[i] << std::endl;
+    }
+    for (unsigned int i = numLineDiff; i < listStrDiffLineFileTest.size(); ++i)
+    {
+      std::cout << "   -------------------------------" << std::endl;
       std::cout << "   Test >> " << listStrDiffLineFileTest[i] << std::endl;
     }
   }
