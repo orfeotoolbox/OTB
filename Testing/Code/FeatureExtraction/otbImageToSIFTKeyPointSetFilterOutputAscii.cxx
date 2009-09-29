@@ -65,6 +65,10 @@ int otbImageToSIFTKeyPointSetFilterOutputAscii(int argc, char * argv[])
   filter->Update();
 
   PointsIteratorType pIt = filter->GetOutput()->GetPoints()->Begin();
+  if (filter->GetOutput()->GetPointData() == NULL)
+  {
+    return EXIT_FAILURE;//Avoid the subsequent segfault, but need to check if that what the test want to do
+  }
   PointDataIteratorType pDataIt = filter->GetOutput()->GetPointData()->Begin();
 
   std::ofstream outfile(outfname);
