@@ -319,6 +319,7 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   Utilities/otbliblas/include
   Utilities/otbedison
   Utilities/otbsiftfast
+  Utilities/dxflib
 )
 
 IF(OTB_COMPILE_JPEG2000)
