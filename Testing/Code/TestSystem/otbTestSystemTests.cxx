@@ -28,4 +28,5 @@ void RegisterTests()
 {
   REGISTER_TEST(otbCompareAsciiTests);
   REGISTER_TEST(otbCompareAsciiTests2);
+  REGISTER_TEST(otbCompareAsciiTests3);
 }
