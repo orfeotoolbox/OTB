@@ -116,7 +116,7 @@ int otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii(int argc, char * ar
     while (itDescriptor < stopVal )
     //while (itDescriptor < static_cast<int>((*itData).size()-2) )
      {
-	  outfile << std::fixed << std::setprecision(3) << (*itData)[itDescriptor+2] << " ";
+	  outfile << std::fixed << std::setprecision(5) << (*itData)[itDescriptor+2] << " ";
       itDescriptor++;
     }
     outfile << "]" << std::endl;

@@ -10,6 +10,8 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 SET(NOTOL 0.0)
 
 #Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
+SET(EPSILON_1 0.1)
+SET(EPSILON_2 0.01)
 SET(EPSILON_3 0.001)
 
 #Tolerance sur diff pixel image
@@ -980,8 +982,9 @@ ADD_TEST(feTvImageToSURFKeyPointSetFilterSceneOutputDescriptorAscii ${FEATUREEXT
 ADD_TEST(feTuImageToFastSIFTKeyPointSetFilterNew ${FEATUREEXTRACTION_TESTS10}
          otbImageToFastSIFTKeyPointSetFilterNew)
 
+#Note the epsilon is according to relative difference
 ADD_TEST(feTvImageToFastSIFTKeyPointSetFilterSceneOutputDescriptorAscii ${FEATUREEXTRACTION_TESTS10}
---compare-list ${EPSILON_3}
+--ignore-order --epsilon-boundary 0.0001 --compare-ascii ${EPSILON_2}
 		${BASELINE_FILES}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
 		${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
          otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii
