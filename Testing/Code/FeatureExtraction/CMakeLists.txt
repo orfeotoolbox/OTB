@@ -808,7 +808,7 @@ ADD_TEST(feTlImageToSIFTKeyPointSetFilterDistanceMap ${FEATUREEXTRACTION_TESTS9}
 )
 
 ADD_TEST(feTvImageToSIFTKeyPointSetFilterSceneOutputInterestPointAscii ${FEATUREEXTRACTION_TESTS9}
---compare-ascii ${EPSILON_3}
+--ignore-order --compare-ascii ${EPSILON_3}
 		${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt
 		${TEMP}/feTvImageToSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt
          otbImageToSIFTKeyPointSetFilterOutputInterestPointAscii
@@ -818,7 +818,7 @@ ADD_TEST(feTvImageToSIFTKeyPointSetFilterSceneOutputInterestPointAscii ${FEATURE
 )
 
 ADD_TEST(feTvImageToSIFTKeyPointSetFilterSceneDescriptorAscii ${FEATUREEXTRACTION_TESTS9}
---compare-ascii ${EPSILON_3}
+--ignore-order --compare-ascii ${EPSILON_3}
 		${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
 		${TEMP}/feTvImageToSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
          otbImageToSIFTKeyPointSetFilterOutputDescriptorAscii
