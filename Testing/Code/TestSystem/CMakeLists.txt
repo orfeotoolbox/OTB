@@ -15,7 +15,8 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 SET(NOTOL 0.0)
 
 #Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
-SET(EPS 0.001)
+SET(EPSILON_2 0.01)
+SET(EPSILON_3 0.001)
 
 SET(TESTSYSTEM_TESTS ${CXX_TEST_PATH}/otbTestSystemTests)
 
@@ -75,12 +76,59 @@ ADD_TEST(tsTvCompareAscii3order ${TESTSYSTEM_TESTS}
 
 SET_TESTS_PROPERTIES(tsTvCompareAscii3order PROPERTIES WILL_FAIL true)
 
+#Check precision
+#without tolerance, it should not pass
+ADD_TEST(tsTvCompareAscii4 ${TESTSYSTEM_TESTS}
+   --compare-ascii ${NOTOL}
+       ${TEMP}/tsTvCompareAsciiRef4.txt
+       ${TEMP}/tsTvCompareAsciiTest4.txt
+     otbCompareAsciiTests4
+       ${TEMP}/tsTvCompareAsciiRef4.txt
+       ${TEMP}/tsTvCompareAsciiTest4.txt
+  )
+
+SET_TESTS_PROPERTIES(tsTvCompareAscii4 PROPERTIES WILL_FAIL true)
+
+# 10 ^-2 is just enough to make it work
+ADD_TEST(tsTvCompareAscii4epsilon2 ${TESTSYSTEM_TESTS}
+   --compare-ascii ${EPSILON_2}
+       ${TEMP}/tsTvCompareAsciiRef4epsilon2.txt
+       ${TEMP}/tsTvCompareAsciiTest4epsilon2.txt
+     otbCompareAsciiTests4
+       ${TEMP}/tsTvCompareAsciiRef4epsilon2.txt
+       ${TEMP}/tsTvCompareAsciiTest4epsilon2.txt
+  )
+
+# 10 ^-3 will fail on the last value and only this one
+ADD_TEST(tsTvCompareAscii4epsilon3 ${TESTSYSTEM_TESTS}
+   --compare-ascii ${EPSILON_3}
+       ${TEMP}/tsTvCompareAsciiRef4epsilon3.txt
+       ${TEMP}/tsTvCompareAsciiTest4epsilon3.txt
+     otbCompareAsciiTests4
+       ${TEMP}/tsTvCompareAsciiRef4epsilon3.txt
+       ${TEMP}/tsTvCompareAsciiTest4epsilon3.txt
+  )
+
+SET_TESTS_PROPERTIES(tsTvCompareAscii4epsilon3 PROPERTIES WILL_FAIL true)
+
+#Check that the order and the tolerance works together
+ADD_TEST(tsTvCompareAscii5epsilon2 ${TESTSYSTEM_TESTS}
+  --ignore-order  --compare-ascii ${EPSILON_2}
+       ${TEMP}/tsTvCompareAsciiRef5epsilon2.txt
+       ${TEMP}/tsTvCompareAsciiTest5epsilon2.txt
+     otbCompareAsciiTests5
+       ${TEMP}/tsTvCompareAsciiRef5epsilon2.txt
+       ${TEMP}/tsTvCompareAsciiTest5epsilon2.txt
+  )
+
 # -------       CXX source files -----------------------------------
 SET(TESTSYSTEM_SRCS
 otbTestSystemTests.cxx
 otbCompareAsciiTests.cxx
 otbCompareAsciiTests2.cxx
 otbCompareAsciiTests3.cxx
+otbCompareAsciiTests4.cxx
+otbCompareAsciiTests5.cxx
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
