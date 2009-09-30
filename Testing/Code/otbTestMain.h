@@ -58,6 +58,7 @@ int main(int ac, char* av[] )
   bool lFlagRegression(false);
   double lToleranceDiffValue(0);
   double lEpsilon(0);
+  bool lIgnoreOrder(false);
 
   std::vector<std::string> baselineFilenamesBinary;
   std::vector<std::string> testFilenamesBinary;
@@ -116,6 +117,13 @@ int main(int ac, char* av[] )
     else if (strcmp(av[1], "--without-threads") == 0)
     {
       itk::MultiThreader::SetGlobalDefaultNumberOfThreads(1);
+      av += 1;
+      ac -= 1;
+    }
+    if (strcmp(av[1], "--ignore-order") == 0)
+    {
+      std::cout << "******************* Order option identified" << std::endl;
+      lIgnoreOrder = true;
       av += 1;
       ac -= 1;
     }
@@ -367,6 +375,14 @@ int main(int ac, char* av[] )
           std::cout << "-------------  Start control baseline tests    -------------"<<std::endl;
           // Make a list of possible baselines
 
+          if (lIgnoreOrder)
+          {
+            testHelper.IgnoreLineOrderOn();
+          }
+          else
+          {
+            testHelper.IgnoreLineOrderOff();
+          }
           // Non regression test for images
           if ((baselineFilenamesImage.size()>0) && (testFilenamesImage.size()>0))
           {

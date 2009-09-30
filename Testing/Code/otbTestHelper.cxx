@@ -118,6 +118,12 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
   }
   fluxfiletest.close();
 
+  if(m_IgnoreLineOrder)
+  {
+    std::sort(listLineFileRef.begin(), listLineFileRef.end());
+    std::sort(listLineFileTest.begin(), listLineFileTest.end());
+  }
+
   //These are to save up the differences
   std::vector<std::string> listStrDiffLineFileRef;
   std::vector<std::string> listStrDiffLineFileTest;
@@ -172,8 +178,16 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
       {
         if (differenceFoundInCurrentLine)
         {
-          //TODO: if the lines were different, find out which one
-          // should progress (by comparison)
+          if (*itRef > *itTest)
+          {
+            fluxfilediff << "Additional line in test file: " << " : " << *itTest << std::endl;
+            ++itTest;
+          }
+          else
+          {
+            fluxfilediff << "Additional line in ref file: " << " : " << *itTest << std::endl;
+            ++itRef;
+          }
         }
         else
         {
